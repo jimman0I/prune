@@ -1,0 +1,15 @@
+{
+  "name": "unrevo-desktop",
+  "version": "0.1.0",
+  "private": true,
+  "description": "unrevo desktop app",
+  "main": "main.cjs",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder -c electron-builder.config.cjs"
+  },
+  "devDependencies": {
+    "electron": "^44.0.0",
+    "electron-builder": "^24.13.3"
+  }
+}
