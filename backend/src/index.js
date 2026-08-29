@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import { createServer } from 'node:http';
+import programsRoutes from './routes/programs.js';
 
 const PORT = process.env.UNREVO_BACKEND_PORT || 3101;
 
@@ -17,6 +18,7 @@ app.use(cors());
 app.use(express.json());
 
 app.get('/api/health', (req, res) => res.json({ ok: true }));
+app.use('/api/programs', programsRoutes);
 
 const server = createServer(app);
 server.listen(PORT, '127.0.0.1', () => {
