@@ -1,67 +1,88 @@
 const API_URL = 'http://127.0.0.1:3101/api';
 
 export async function fetchPrograms() {
-  const response = await fetch(`${API_URL}/programs`);
-  if (!response.ok) throw new Error('Failed to fetch programs');
-  return response.json();
+  const res = await fetch(`${API_URL}/programs`);
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
+  return data.programs;
 }
 
 export async function scanForLeftovers(name, publisher) {
-  const response = await fetch(`${API_URL}/scan`, {
+  const res = await fetch(`${API_URL}/leftovers/scan`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ name, publisher }),
+    body: JSON.stringify({ name, publisher })
   });
-  if (!response.ok) throw new Error('Failed to scan for leftovers');
-  return response.json();
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
+  return data;
 }
 
 export async function removeQuarantined({ programName, files, registryKeys }) {
-  const response = await fetch(`${API_URL}/quarantine/remove`, {
+  const res = await fetch(`${API_URL}/quarantine/remove`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ programName, files, registryKeys }),
+    body: JSON.stringify({ programName, files, registryKeys })
   });
-  if (!response.ok) throw new Error('Failed to remove quarantined items');
-  return response.json();
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
+  return data;
 }
 
 export async function fetchQuarantineBatches() {
-  const response = await fetch(`${API_URL}/quarantine/batches`);
-  if (!response.ok) throw new Error('Failed to fetch quarantine batches');
-  return response.json();
+  const res = await fetch(`${API_URL}/quarantine`);
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
+  return data.batches;
 }
 
 export async function restoreQuarantineBatch(batchDirName) {
-  const response = await fetch(`${API_URL}/quarantine/restore`, {
+  const res = await fetch(`${API_URL}/quarantine/${encodeURIComponent(batchDirName)}/restore`, { method: 'POST' });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
+  return data;
+}
+
+/** One line of an SSE block. `field` is 'event' or 'data'; anything else
+ * (including a blank line, the block separator) is not a recognized
+ * field and returns null. The SSE spec strips exactly one leading space
+ * after the colon, not all leading whitespace. Exported for testing. */
+export function parseSSELine(line) {
+  const match = line.match(/^(event|data): ?(.*)$/);
+  if (!match) return null;
+  return { field: match[1], value: match[2] };
+}
+
+/** Streams POST /api/uninstall, calling onEvent(type, data) for each SSE
+ * block as it arrives. Mirrors Re:Route's own SSE parsing shape (this
+ * project's sibling app), adapted to this project's simpler two-field
+ * (event/data) block format. */
+export async function streamUninstall(uninstallString, onEvent) {
+  const res = await fetch(`${API_URL}/uninstall`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ batchDirName }),
+    body: JSON.stringify({ uninstallString })
   });
-  if (!response.ok) throw new Error('Failed to restore quarantine batch');
-  return response.json();
-}
+  if (!res.ok || !res.body) throw new Error(`Request failed: ${res.status}`);
 
-export function parseSSELine(line) {
-  if (!line || line.startsWith(':')) return null;
-  const [field, ...rest] = line.split(':');
-  const value = rest.join(':').trimStart();
-  if (field === 'data') {
-    try {
-      return JSON.parse(value);
-    } catch {
-      return value || null;
+  const reader = res.body.getReader();
+  const decoder = new TextDecoder();
+  let buf = '';
+  let currentEvent = 'message';
+
+  for (;;) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    buf += decoder.decode(value, { stream: true });
+
+    let sep;
+    while ((sep = buf.indexOf('\n')) >= 0) {
+      const line = buf.slice(0, sep);
+      buf = buf.slice(sep + 1);
+      const parsed = parseSSELine(line);
+      if (!parsed) continue;
+      if (parsed.field === 'event') currentEvent = parsed.value;
+      else if (parsed.field === 'data') onEvent(currentEvent, JSON.parse(parsed.value));
     }
   }
-  return null;
-}
-
-export function streamUninstall(uninstallString, onEvent) {
-  const eventSource = new EventSource(`${API_URL}/uninstall/stream?cmd=${encodeURIComponent(uninstallString)}`);
-  eventSource.onmessage = (e) => {
-    const parsed = parseSSELine(e.data);
-    if (parsed) onEvent(parsed);
-  };
-  eventSource.onerror = () => eventSource.close();
-  return () => eventSource.close();
 }

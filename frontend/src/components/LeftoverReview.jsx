@@ -1,77 +1,64 @@
-import { useState } from 'react';
+const GROUPS = [
+  { key: 'files', label: 'Files & folders' },
+  { key: 'registryKeys', label: 'Registry keys' },
+  { key: 'scheduledTasks', label: 'Scheduled tasks' }
+];
 
+/** `scanResult` is { files, registryKeys, scheduledTasks }, each
+ * { ok, items }. `selected` is a Set of "group:index" keys — all checked
+ * by default is the caller's job (UninstallModal seeds it), not this
+ * component's. */
 export default function LeftoverReview({ scanResult, selected, onToggle, onConfirm, onSkip }) {
-  const [allSelected, setAllSelected] = useState(true);
+  const totalItems = GROUPS.reduce((sum, g) => sum + (scanResult[g.key]?.items?.length || 0), 0);
 
-  const toggleAll = () => {
-    const newState = !allSelected;
-    setAllSelected(newState);
-    if (onToggle) {
-      const allKeys = new Set([
-        ...(scanResult.files || []),
-        ...(scanResult.registryKeys || []),
-        ...(scanResult.scheduledTasks || []),
-      ]);
-      if (!newState) allKeys.clear();
-      onToggle(allKeys);
-    }
-  };
-
-  const renderGroup = (title, items) => (
-    <div className="mb-6">
-      <h3 className="text-lg font-semibold mb-2">{title}</h3>
-      <ul className="space-y-2">
-        {items?.map((item, i) => (
-          <li key={i} className="flex items-center">
-            <input
-              type="checkbox"
-              className="checkbox-sleek mr-2"
-              checked={selected.has(item)}
-              onChange={() => {
-                const newSet = new Set(selected);
-                if (newSet.has(item)) newSet.delete(item);
-                else newSet.add(item);
-                onToggle(newSet);
-              }}
-            />
-            <span className="font-mono text-sm">{item}</span>
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
+  if (totalItems === 0) {
+    return (
+      <div>
+        <p style={{ color: 'var(--text-secondary)', fontSize: 13 }}>No leftovers found.</p>
+        <button className="btn-primary" onClick={onSkip}>Done</button>
+      </div>
+    );
+  }
 
   return (
-    <div className="glass-panel">
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-bold">Review Leftovers</h2>
-        <div className="flex items-center space-x-2">
-          <input
-            type="checkbox"
-            id="selectAll"
-            className="checkbox-sleek"
-            checked={allSelected}
-            onChange={toggleAll}
-          />
-          <label htmlFor="selectAll" className="text-sm">
-            Select All
-          </label>
-        </div>
-      </div>
-      {renderGroup('Files', scanResult.files)}
-      {renderGroup('Registry Keys', scanResult.registryKeys)}
-      {renderGroup('Scheduled Tasks', scanResult.scheduledTasks)}
-      <div className="flex justify-end space-x-2 mt-6">
-        <button onClick={onSkip} className="btn btn-ghost">
-          Skip
-        </button>
-        <button
-          onClick={onConfirm}
-          className="btn btn-danger"
-          disabled={selected.size === 0}
-        >
-          Remove Selected
-        </button>
+    <div>
+      {GROUPS.map(({ key, label }) => {
+        const group = scanResult[key];
+        if (!group) return null;
+        if (!group.ok) {
+          return (
+            <div key={key} style={{ marginBottom: 16 }}>
+              <div style={{ color: 'var(--text-muted)', fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.14em', marginBottom: 6 }}>{label}</div>
+              <div style={{ color: 'var(--warning)', fontSize: 12 }}>Couldn't check this.</div>
+            </div>
+          );
+        }
+        if (group.items.length === 0) return null;
+        return (
+          <div key={key} style={{ marginBottom: 16 }}>
+            <div style={{ color: 'var(--text-muted)', fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.14em', marginBottom: 6 }}>{label}</div>
+            {group.items.map((item, i) => {
+              const itemKey = `${key}:${i}`;
+              return (
+                <label key={itemKey} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '4px 0', cursor: 'pointer' }}>
+                  <input
+                    type="checkbox"
+                    className="sleek"
+                    checked={selected.has(itemKey)}
+                    onChange={() => onToggle(itemKey)}
+                  />
+                  <span className="font-mono" style={{ fontSize: 12, color: 'var(--text-secondary)' }}>
+                    {item.path || item.name}
+                  </span>
+                </label>
+              );
+            })}
+          </div>
+        );
+      })}
+      <div style={{ display: 'flex', gap: 8, marginTop: 16 }}>
+        <button className="btn-primary" onClick={onConfirm}>Remove selected</button>
+        <button className="btn-ghost" onClick={onSkip}>Skip</button>
       </div>
     </div>
   );
