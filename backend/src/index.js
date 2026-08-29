@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import { createServer } from 'node:http';
 import programsRoutes from './routes/programs.js';
+import uninstallRoutes from './routes/uninstall.js';
 
 const PORT = process.env.UNREVO_BACKEND_PORT || 3101;
 
@@ -19,6 +20,7 @@ app.use(express.json());
 
 app.get('/api/health', (req, res) => res.json({ ok: true }));
 app.use('/api/programs', programsRoutes);
+app.use('/api/uninstall', uninstallRoutes);
 
 const server = createServer(app);
 server.listen(PORT, '127.0.0.1', () => {
