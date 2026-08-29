@@ -70,7 +70,24 @@ app.use(express.json());
 
 app.get('/api/health', (req, res) => res.json({ ok: true }));
 
+// A `server.listen()` failure (most commonly EADDRINUSE — something else,
+// or a second copy of this same backend, already bound to the port) fires
+// as an 'error' EVENT on the server object, not a promise rejection — the
+// unhandledRejection handler above never sees it. With no listener here,
+// Node's default behavior for an unhandled EventEmitter 'error' is to
+// throw, crashing the whole process instantly and silently. Loaded
+// in-process inside Electron's main process, this crashes the ENTIRE APP
+// during startup with no window and no visible reason beyond a native
+// "a JavaScript error occurred" crash dialog.
 const server = createServer(app);
+server.on('error', (err) => {
+  if (err.code === 'EADDRINUSE') {
+    console.error(`Port ${PORT} is already in use — is another copy of unrevo (or its backend) already running? Close it and try again.`);
+  } else {
+    console.error('Backend server error:', err);
+  }
+  process.exitCode = 1;
+});
 server.listen(PORT, '127.0.0.1', () => {
   console.log(`unrevo backend listening on http://127.0.0.1:${PORT}`);
 });
@@ -2296,10 +2313,20 @@ async function createWindow() {
     }
   });
 
+  // Dev-mode navigation to the Vite dev server can genuinely fail (started
+  // `npm start` before `npm run dev` was ready, Vite still restarting after
+  // an HMR crash, wrong port) — a bare, uncaught rejection here left NO
+  // trace of why beyond the window's own static `title` staying "unrevo"
+  // as a fallback, which reads as "it loaded" when it didn't. Logged, not
+  // silently swallowed; packaged mode (loadFile, a local file that either
+  // exists or the build is broken) doesn't need the same handling.
   if (app.isPackaged) {
     await win.loadFile(path.join(process.resourcesPath, 'frontend-dist', 'index.html'));
   } else {
-    await win.loadURL('http://localhost:5174');
+    win.webContents.on('did-fail-load', (_event, errorCode, errorDescription) => {
+      console.error(`Failed to load the dev server at http://localhost:5174 (${errorDescription}, code ${errorCode}). Is "npm run dev" running in frontend/?`);
+    });
+    await win.loadURL('http://localhost:5174').catch(() => {}); // the did-fail-load listener above already reports this
   }
 }
 

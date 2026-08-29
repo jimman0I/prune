@@ -62,10 +62,20 @@ async function createWindow() {
     }
   });
 
+  // Dev-mode navigation to the Vite dev server can genuinely fail (started
+  // `npm start` before `npm run dev` was ready, Vite still restarting after
+  // an HMR crash, wrong port) — a bare, uncaught rejection here left NO
+  // trace of why beyond the window's own static `title` staying "unrevo"
+  // as a fallback, which reads as "it loaded" when it didn't. Logged, not
+  // silently swallowed; packaged mode (loadFile, a local file that either
+  // exists or the build is broken) doesn't need the same handling.
   if (app.isPackaged) {
     await win.loadFile(path.join(process.resourcesPath, 'frontend-dist', 'index.html'));
   } else {
-    await win.loadURL('http://localhost:5174');
+    win.webContents.on('did-fail-load', (_event, errorCode, errorDescription) => {
+      console.error(`Failed to load the dev server at http://localhost:5174 (${errorDescription}, code ${errorCode}). Is "npm run dev" running in frontend/?`);
+    });
+    await win.loadURL('http://localhost:5174').catch(() => {}); // the did-fail-load listener above already reports this
   }
 }
 
