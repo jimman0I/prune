@@ -4,6 +4,7 @@ import { createServer } from 'node:http';
 import programsRoutes from './routes/programs.js';
 import uninstallRoutes from './routes/uninstall.js';
 import leftoversRoutes from './routes/leftovers.js';
+import quarantineRoutes from './routes/quarantine.js';
 
 const PORT = process.env.UNREVO_BACKEND_PORT || 3101;
 
@@ -23,6 +24,7 @@ app.get('/api/health', (req, res) => res.json({ ok: true }));
 app.use('/api/programs', programsRoutes);
 app.use('/api/uninstall', uninstallRoutes);
 app.use('/api/leftovers', leftoversRoutes);
+app.use('/api/quarantine', quarantineRoutes);
 
 const server = createServer(app);
 server.listen(PORT, '127.0.0.1', () => {
