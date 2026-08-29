@@ -29,7 +29,34 @@ export async function listInstalledPrograms() {
   const raw = await runPowerShellJson(ENUMERATE_SCRIPT);
   if (!raw) return [];
   const items = Array.isArray(raw) ? raw : [raw];
-  return items.map(normalizeProgram);
+  return dedupeIds(items.map(normalizeProgram));
+}
+
+/** Real bug, found dogfooding (2026-08-29): PSChildName (the registry
+ * subkey name used as `id`) is NOT guaranteed unique across the three
+ * hives this reads — confirmed live with 7-Zip, whose installer uses the
+ * literal key name "7-Zip" in BOTH the native 64-bit Uninstall hive and
+ * WOW6432Node for its 32-bit build, so two genuinely different entries
+ * (7-Zip 22.01 and 7-Zip 25.01 (x64)) collided on id: '7-Zip'. React
+ * (ProgramList.jsx) uses `id` as its list key, and the duplicate produced
+ * a real, reproducible rendering bug — a stale row from one entry
+ * bleeding into a search-filtered view of the other, plus a console
+ * warning naming "7-Zip" specifically. Fixed by guaranteeing uniqueness
+ * as a post-processing step regardless of what the source data looks
+ * like, rather than trying to derive a naturally-unique key from the
+ * registry (there isn't one, and a future collision in some other
+ * program is just as plausible) — same "don't trust third-party registry
+ * data, defend at the boundary" philosophy parseRegistryDate below
+ * already uses. Order-stable: the first program with a given id keeps it
+ * unchanged; only later collisions get a suffix, so re-running this on
+ * an already-unique list is a no-op. Exported for testing. */
+export function dedupeIds(programs) {
+  const seen = new Map();
+  return programs.map((program) => {
+    const count = seen.get(program.id) ?? 0;
+    seen.set(program.id, count + 1);
+    return count === 0 ? program : { ...program, id: `${program.id}#${count + 1}` };
+  });
 }
 
 /** Exported for direct testing — the raw-registry-shape-to-app-shape
