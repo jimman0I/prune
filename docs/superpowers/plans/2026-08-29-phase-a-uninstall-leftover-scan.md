@@ -918,8 +918,10 @@ describe('quarantineAndDelete', () => {
 
     await expect(execFileAsync('reg', ['query', TEST_KEY])).rejects.toThrow();
     expect(manifest.registryKeys).toEqual(['HKCU:\\Software\\unrevo-test']);
-    expect(manifest.regFilePath).toBeTruthy();
-    const regContent = await readFile(manifest.regFilePath, 'utf8');
+    expect(manifest.regFiles).toHaveLength(1);
+    // reg.exe writes .reg files as UTF-16LE, not UTF-8 — reading it as utf8
+    // would produce mojibake and this assertion would silently never match.
+    const regContent = await readFile(manifest.regFiles[0], 'utf16le');
     expect(regContent).toMatch(/unrevo-test/i);
   });
 
@@ -993,12 +995,20 @@ function toRegExeKeyPath(psPath) {
 
 /** Creates one quarantine batch: moves every listed file into it (atomic
  * rename, not copy-then-delete — no window where a file exists in both
- * places), exports every listed registry key into a single combined
- * `.reg` file BEFORE deleting any of them, so restoring the registry side
- * is one double-click, not N. A key that fails to export/delete (already
- * gone, access denied) is skipped rather than aborting the whole batch —
- * same partial-results-over-total-failure philosophy as the leftover
- * scanner. */
+ * places), exports every listed registry key BEFORE deleting any of them.
+ *
+ * `reg export` requires a real disk FileName — it does NOT support a
+ * Unix-style `-`-for-stdout convention (confirmed via `reg export /?`).
+ * Passing `-` just creates a literal file named `-`; the real export never
+ * happens. Each key gets its OWN `.reg` file in the batch dir instead of
+ * being combined into one — simpler than concatenating raw exports would
+ * be anyway (each has its own `Windows Registry Editor Version 5.00`
+ * header; naively joining them produces an invalid combined file).
+ * Restoring means re-importing each of a batch's `.reg` files.
+ *
+ * A key that fails to export/delete (already gone, access denied) is
+ * skipped rather than aborting the whole batch — same
+ * partial-results-over-total-failure philosophy as the leftover scanner. */
 export async function quarantineAndDelete({ programName, files, registryKeys }) {
   const batchDir = join(quarantineRoot(), `${Date.now()}-${safeSegment(programName)}`);
   await mkdir(batchDir, { recursive: true });
@@ -1011,35 +1021,33 @@ export async function quarantineAndDelete({ programName, files, registryKeys }) 
     movedFiles.push({ originalPath: filePath, quarantinedPath: dest });
   }
 
-  const regFilePath = join(batchDir, 'registry-backup.reg');
   const exportedKeys = [];
-  const regParts = [];
+  const regFiles = [];
   for (const keyPath of registryKeys) {
+    const regFilePath = join(batchDir, `registry-${regFiles.length}.reg`);
     try {
-      const { stdout } = await execFileAsync('reg', ['export', toRegExeKeyPath(keyPath), '-', '/y'], { maxBuffer: 8 * 1024 * 1024 });
-      regParts.push(stdout);
+      await execFileAsync('reg', ['export', toRegExeKeyPath(keyPath), regFilePath, '/y']);
       await execFileAsync('reg', ['delete', toRegExeKeyPath(keyPath), '/f']);
       exportedKeys.push(keyPath);
+      regFiles.push(regFilePath);
     } catch {
       // skipped — see doc comment above
     }
   }
-  if (regParts.length > 0) await writeFile(regFilePath, regParts.join('\n'), 'utf8');
 
   const manifest = {
     programName, createdAt: Date.now(), batchDir,
-    files: movedFiles, registryKeys: exportedKeys,
-    regFilePath: regParts.length > 0 ? regFilePath : null
+    files: movedFiles, registryKeys: exportedKeys, regFiles
   };
   await writeFile(join(batchDir, 'manifest.json'), JSON.stringify(manifest, null, 2), 'utf8');
   return manifest;
 }
 
 /** Reverses one quarantine batch: moves every file back to its original
- * path and re-imports the .reg backup if one exists. Reads the manifest
- * written by quarantineAndDelete rather than taking a file list as a
- * caller-supplied argument, so a restore always operates on exactly what
- * was actually quarantined. */
+ * path and re-imports every one of the batch's `.reg` backups. Reads the
+ * manifest written by quarantineAndDelete rather than taking a file list
+ * as a caller-supplied argument, so a restore always operates on exactly
+ * what was actually quarantined. */
 export async function restoreQuarantine(batchDir) {
   const manifestPath = join(batchDir, 'manifest.json');
   const manifest = JSON.parse(await readFile(manifestPath, 'utf8'));
@@ -1047,8 +1055,8 @@ export async function restoreQuarantine(batchDir) {
   for (const { originalPath, quarantinedPath } of manifest.files) {
     if (existsSync(quarantinedPath)) await rename(quarantinedPath, originalPath);
   }
-  if (manifest.regFilePath && existsSync(manifest.regFilePath)) {
-    await execFileAsync('reg', ['import', manifest.regFilePath]);
+  for (const regFilePath of manifest.regFiles ?? []) {
+    if (existsSync(regFilePath)) await execFileAsync('reg', ['import', regFilePath]);
   }
   return manifest;
 }
@@ -2386,7 +2394,7 @@ Note any failures found during this pass — this is the point at which real sys
 
 **Placeholder scan:** none found — every step has real, complete code or an exact command with expected output.
 
-**Type consistency:** `program.uninstallString`/`.name`/`.publisher` (from `normalizeProgram`, Task 3) match what `UninstallModal.jsx` (Task 18) reads. `scanResult.{files,registryKeys,scheduledTasks}.{ok,items}` (from `scanForLeftovers`, Task 7) match what `LeftoverReview.jsx` (Task 17) and `UninstallModal.jsx`'s `allItemKeys` (Task 18) read. `manifest.{batchDir,programName,createdAt,files,registryKeys,regFilePath}` (from `quarantineAndDelete`, Task 9) match what `routes/quarantine.js` (Task 11) and `QuarantinePanel.jsx` (Task 19) read.
+**Type consistency:** `program.uninstallString`/`.name`/`.publisher` (from `normalizeProgram`, Task 3) match what `UninstallModal.jsx` (Task 18) reads. `scanResult.{files,registryKeys,scheduledTasks}.{ok,items}` (from `scanForLeftovers`, Task 7) match what `LeftoverReview.jsx` (Task 17) and `UninstallModal.jsx`'s `allItemKeys` (Task 18) read. `manifest.{batchDir,programName,createdAt,files,registryKeys,regFiles}` (from `quarantineAndDelete`, Task 9) match what `routes/quarantine.js` (Task 11) and `QuarantinePanel.jsx` (Task 19) read.
 
 ---
 

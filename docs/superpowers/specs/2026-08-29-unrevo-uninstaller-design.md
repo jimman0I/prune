@@ -175,9 +175,11 @@ real safety net is quarantine + `.reg` export, which never gets throttled:
 - Every file slated for deletion is **moved** there (atomic move, not
   copy-then-delete), with its original path preserved as metadata for
   restore.
-- Every registry key slated for deletion is exported via `reg export` to a
-  `.reg` file in that same folder *before* `reg delete` runs — restoring is
-  just double-clicking the file in Explorer.
+- Every registry key slated for deletion is exported via `reg export` to
+  its own `.reg` file in that same folder *before* `reg delete` runs
+  (`reg export` requires a real disk file — it has no stdout convention —
+  and one file per key avoids invalidly concatenating multiple `.reg`
+  headers into one); restoring re-imports each of a batch's `.reg` files.
 - A "Recently removed" panel (inside Settings for Phase A, not its own nav
   item) lists quarantine folders with a Restore button.
 - Quarantine folders are not auto-deleted in Phase A — a cleanup pass is a
