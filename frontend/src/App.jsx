@@ -8,8 +8,8 @@ export default function App() {
   const [quarantineOpen, setQuarantineOpen] = useState(false);
 
   return (
-    <div className="App grain">
-      <div className="px-12 py-10 max-w-[1400px]">
+    <div className="App grain h-screen overflow-hidden flex flex-col">
+      <div className="px-12 py-10 max-w-[1400px] overflow-y-auto flex-1 min-h-0">
         <div className="flex items-baseline justify-between mb-8">
           <div>
             <div className="text-[11px] text-[#71717a] font-mono uppercase tracking-[0.16em] mb-2">
