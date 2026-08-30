@@ -37,42 +37,31 @@ export default function QuarantinePanel() {
     }
   };
 
-  if (loading) return <div style={{ color: 'var(--text-muted)' }}>Loading quarantine batches…</div>;
-  if (error) return <div style={{ color: 'var(--danger)' }}>Error: {error}</div>;
+  if (loading) return <div className="text-[13px] text-[#71717a] py-4">Loading quarantine batches…</div>;
+  if (error) return <div className="text-[13px] text-[#fca5a5] py-4">Error: {error}</div>;
+
+  if (batches.length === 0) {
+    return <p className="text-[13px] text-[#a1a1aa] py-2">No quarantined items.</p>;
+  }
 
   return (
-    <div>
-      <h2 style={{ color: 'var(--text-primary)', fontSize: 18, fontWeight: 600, marginBottom: 16 }}>
-        Quarantine
-      </h2>
-      {batches.length === 0 ? (
-        <p style={{ color: 'var(--text-secondary)', fontSize: 13 }}>No quarantined items.</p>
-      ) : (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-          {batches.map((batch) => (
-            <div key={batch.dirName} style={{ padding: 12, borderRadius: 8, background: 'var(--bg-zinc-hi)' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <div>
-                  <div style={{ color: 'var(--text-primary)', fontSize: 13, fontWeight: 500 }}>
-                    {batch.programName}
-                  </div>
-                  <div className="font-mono" style={{ color: 'var(--text-muted)', fontSize: 11 }}>
-                    {batch.timestamp}
-                  </div>
-                </div>
-                <div style={{ display: 'flex', gap: 8 }}>
-                  <button className="btn-ghost" onClick={() => handleRestore(batch.dirName)}>
-                    Restore
-                  </button>
-                  <button className="btn-danger" onClick={() => handleRemove(batch)}>
-                    Remove
-                  </button>
-                </div>
-              </div>
-            </div>
-          ))}
+    <div className="card divide-y divide-[#18181b]">
+      {batches.map((batch) => (
+        <div key={batch.dirName} className="flex items-center justify-between gap-4 px-4 py-3">
+          <div className="min-w-0">
+            <div className="text-[13px] font-medium text-white truncate">{batch.programName}</div>
+            <div className="font-mono text-[11px] text-[#71717a] truncate">{batch.timestamp}</div>
+          </div>
+          <div className="flex items-center gap-2 shrink-0">
+            <button className="btn-ghost px-3.5 py-1.5 rounded-lg text-[12px] font-medium" onClick={() => handleRestore(batch.dirName)}>
+              Restore
+            </button>
+            <button className="btn-danger px-3.5 py-1.5 rounded-lg text-[12px] font-medium" onClick={() => handleRemove(batch)}>
+              Remove
+            </button>
+          </div>
         </div>
-      )}
+      ))}
     </div>
   );
 }
