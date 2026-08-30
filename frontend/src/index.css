@@ -1,5 +1,9 @@
 @import url(https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800&display=swap);
 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 :root {
   --bg-obsidian: #09090b;
   --bg-zinc: #18181b;
@@ -28,6 +32,38 @@ body {
   letter-spacing: -0.01em;
   -webkit-font-smoothing: antialiased;
   overflow: hidden;
+  position: relative;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: 
+    radial-gradient(circle at 10% 10%, rgba(6, 182, 212, 0.08), transparent 30%),
+    radial-gradient(circle at 90% 90%, rgba(168, 85, 247, 0.06), transparent 30%);
+  pointer-events: none;
+  z-index: -1;
+}
+
+.grain {
+  position: relative;
+}
+
+.grain::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48ZmlsdGVyIGlkPSJub2lzZSI+PGZlVHVyYnVsZW5jZSB0eXBlPSJmcmFjdGFsTm9pc2UiIGJhc2VGcmVxdWVuY3k9IjAuOCIgbnVtT2N0YXZlcz0iNCIgc3RpdGNoVGlsZXM9InN0aXRjaCIvPjxmZUZ1bmN0aW9uIGluPSJub2lzZSIgdHlwZT0idHJhbnNwYXJlbmN5Ii8+PC9maWx0ZXI+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsdGVyPSJ1cmwoI25vaXNlKSIgb3BhY2l0eT0iMCIvPjwvc3ZnPg==');
+  opacity: 0.035;
+  mix-blend-mode: overlay;
+  pointer-events: none;
+}
+
+.card {
+  background: var(--bg-zinc);
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
 }
 
 .font-mono {
