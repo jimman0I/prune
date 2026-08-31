@@ -15,10 +15,10 @@ export default function QuarantinePanel() {
     return () => { cancelled = true; };
   }, []);
 
-  const handleRestore = async (batchDirName) => {
+  const handleRestore = async (batchDir) => {
     try {
-      await restoreQuarantineBatch(batchDirName);
-      setBatches(batches.filter(batch => batch.batchDir !== batchDirName));
+      await restoreQuarantineBatch(batchDir);
+      setBatches(batches.filter(batch => batch.batchDir !== batchDir));
     } catch (err) {
       setError(err.message);
     }
@@ -53,7 +53,7 @@ export default function QuarantinePanel() {
             <div className="font-mono text-[11px] text-[#71717a] truncate">{batch.timestamp}</div>
           </div>
           <div className="flex items-center gap-2 shrink-0">
-            <button className="btn-ghost px-3.5 py-1.5 rounded-lg text-[12px] font-medium" onClick={() => handleRestore(batch.dirName)}>
+            <button className="btn-ghost px-3.5 py-1.5 rounded-lg text-[12px] font-medium" onClick={() => handleRestore(batch.batchDir)}>
               Restore
             </button>
             <button className="btn-danger px-3.5 py-1.5 rounded-lg text-[12px] font-medium" onClick={() => handleRemove(batch)}>
