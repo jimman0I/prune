@@ -18,7 +18,7 @@ export default function QuarantinePanel() {
   const handleRestore = async (batchDirName) => {
     try {
       await restoreQuarantineBatch(batchDirName);
-      setBatches(batches.filter(batch => batch.dirName !== batchDirName));
+      setBatches(batches.filter(batch => batch.batchDir !== batchDirName));
     } catch (err) {
       setError(err.message);
     }
@@ -31,7 +31,7 @@ export default function QuarantinePanel() {
         files: batch.files,
         registryKeys: batch.registryKeys
       });
-      setBatches(batches.filter(b => b.dirName !== batch.dirName));
+      setBatches(batches.filter(b => b.batchDir !== batch.batchDir));
     } catch (err) {
       setError(err.message);
     }
@@ -47,7 +47,7 @@ export default function QuarantinePanel() {
   return (
     <div className="card divide-y divide-[#18181b]">
       {batches.map((batch) => (
-        <div key={batch.dirName} className="flex items-center justify-between gap-4 px-4 py-3">
+        <div key={batch.batchDir} className="flex items-center justify-between gap-4 px-4 py-3">
           <div className="min-w-0">
             <div className="text-[13px] font-medium text-white truncate">{batch.programName}</div>
             <div className="font-mono text-[11px] text-[#71717a] truncate">{batch.timestamp}</div>
