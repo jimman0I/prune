@@ -10,22 +10,27 @@ function formatBytes(bytes) {
   return `${parseFloat((bytes / Math.pow(k, i)).toFixed(1))} ${sizes[i]}`;
 }
 
-export default function ProgramList({ onUninstall }) {
-  const [programs, setPrograms] = useState([]);
-  const [loading, setLoading] = useState(true);
+export default function ProgramList({ programs: initialPrograms, onUninstall }) {
+  const [programs, setPrograms] = useState(initialPrograms || []);
+  const [loading, setLoading] = useState(!initialPrograms);
   const [error, setError] = useState(null);
   const [query, setQuery] = useState('');
   const [sortBy, setSortBy] = useState('name');
   const [filter, setFilter] = useState('all');
 
   useEffect(() => {
-    let cancelled = false;
-    fetchPrograms()
-      .then((result) => { if (!cancelled) setPrograms(result); })
-      .catch((err) => { if (!cancelled) setError(err.message); })
-      .finally(() => { if (!cancelled) setLoading(false); });
-    return () => { cancelled = true; };
-  }, []);
+    if (initialPrograms) {
+      setPrograms(initialPrograms);
+      setLoading(false);
+    } else {
+      let cancelled = false;
+      fetchPrograms()
+        .then((result) => { if (!cancelled) setPrograms(result); })
+        .catch((err) => { if (!cancelled) setError(err.message); })
+        .finally(() => { if (!cancelled) setLoading(false); });
+      return () => { cancelled = true; };
+    }
+  }, [initialPrograms]);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
