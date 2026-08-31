@@ -62,6 +62,12 @@ async function createWindow() {
     }
   });
 
+  // Electron's stock File/Edit/View/Window menu bar is a dev-tooling
+  // default (Reload, Toggle DevTools, Zoom…) — nothing unrevo's own UI
+  // offers, and it doesn't belong on a native desktop utility that isn't a
+  // browser. Same call Re:Route's own main.cjs already makes.
+  win.removeMenu();
+
   // Dev-mode navigation to the Vite dev server can genuinely fail (started
   // `npm start` before `npm run dev` was ready, Vite still restarting after
   // an HMR crash, wrong port) — a bare, uncaught rejection here left NO
