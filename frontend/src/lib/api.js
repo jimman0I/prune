@@ -50,6 +50,13 @@ export async function fetchDiskSpace() {
   return data;
 }
 
+export async function fetchDiskScan(path) {
+  const res = await fetch(`${API_URL}/disk-scan?path=${encodeURIComponent(path)}`);
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
+  return data;
+}
+
 export async function fetchUninstallHistory() {
   const res = await fetch(`${API_URL}/uninstall-history`);
   const data = await res.json();

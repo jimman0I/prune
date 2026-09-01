@@ -109,6 +109,20 @@ body::before {
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 }
 
+/* Disk Map treemap hover tooltip -- same glass recipe as .glass-panel, but
+   a coral border (not the default) and no giant radius, since this floats
+   at cursor size rather than framing a whole section. */
+.diskmap-tooltip {
+  background: var(--glass-bg);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid var(--accent-coral-glow);
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  padding: 10px 14px;
+  pointer-events: none;
+}
+
 /* Buttons */
 .btn-primary {
   background: linear-gradient(180deg, var(--accent-coral), #e8624f);

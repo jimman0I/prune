@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import NavRail from './components/NavRail.jsx';
 import Dashboard from './components/Dashboard.jsx';
+import DiskMap from './components/DiskMap.jsx';
 import ProgramList from './components/ProgramList.jsx';
 import UninstallModal from './components/UninstallModal.jsx';
 import QuarantinePanel from './components/QuarantinePanel.jsx';
@@ -39,6 +40,7 @@ export default function App() {
       <NavRail screen={screen} onNavigate={setScreen} />
       <div className="flex-1 overflow-y-auto min-h-0">
         {screen === 'dashboard' && <Dashboard programs={programs} totalSize={totalSize} />}
+        {screen === 'diskmap' && <DiskMap />}
         {screen === 'applications' && (
           <div className="px-12 py-10 max-w-[1400px]">
             <div className="flex items-baseline justify-between mb-8">
