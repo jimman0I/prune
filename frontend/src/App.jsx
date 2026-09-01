@@ -7,6 +7,7 @@ import ProgramList from './components/ProgramList.jsx';
 import UninstallModal from './components/UninstallModal.jsx';
 import QuarantineManager from './components/QuarantineManager.jsx';
 import SettingsPage from './components/SettingsPage.jsx';
+import DeepClean from './components/DeepClean.jsx';
 import { fetchPrograms } from './lib/api.js';
 
 function formatBytes(bytes) {
@@ -45,6 +46,7 @@ export default function App() {
         {screen === 'cleanup' && <SmartCleanup />}
         {screen === 'quarantine' && <QuarantineManager />}
         {screen === 'settings' && <SettingsPage />}
+        {screen === 'deepclean' && <DeepClean />}
         {screen === 'applications' && (
           <div className="px-12 py-10 max-w-[1400px]">
             <div className="flex items-baseline justify-between mb-8">

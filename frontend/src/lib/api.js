@@ -82,6 +82,24 @@ export async function runSandboxTest() {
   return data;
 }
 
+export async function fetchDeepCleanScan() {
+  const res = await fetch(`${API_URL}/deep-clean/scan`);
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
+  return data.categories;
+}
+
+export async function executeDeepClean(ruleIds) {
+  const res = await fetch(`${API_URL}/deep-clean/execute`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ ruleIds })
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
+  return data;
+}
+
 export async function fetchDiskSpace() {
   const res = await fetch(`${API_URL}/disk-space`);
   const data = await res.json();
