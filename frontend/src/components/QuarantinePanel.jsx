@@ -37,20 +37,20 @@ export default function QuarantinePanel() {
     }
   };
 
-  if (loading) return <div className="text-[13px] text-[#71717a] py-4">Loading quarantine batches…</div>;
-  if (error) return <div className="text-[13px] text-[#fca5a5] py-4">Error: {error}</div>;
+  if (loading) return <div className="text-[13px] text-[color:var(--text-muted)] py-4">Loading quarantine batches…</div>;
+  if (error) return <div className="text-[13px] text-[#f7a8b0] py-4">Error: {error}</div>;
 
   if (batches.length === 0) {
-    return <p className="text-[13px] text-[#a1a1aa] py-2">No quarantined items.</p>;
+    return <p className="text-[13px] text-[color:var(--text-secondary)] py-2">No quarantined items.</p>;
   }
 
   return (
-    <div className="card divide-y divide-[#18181b]">
+    <div className="card divide-y divide-[color:var(--border-subtle)]">
       {batches.map((batch) => (
         <div key={batch.batchDir} className="flex items-center justify-between gap-4 px-4 py-3">
           <div className="min-w-0">
             <div className="text-[13px] font-medium text-white truncate">{batch.programName}</div>
-            <div className="font-mono text-[11px] text-[#71717a] truncate">{batch.timestamp}</div>
+            <div className="font-mono text-[11px] text-[color:var(--text-muted)] truncate">{batch.timestamp}</div>
           </div>
           <div className="flex items-center gap-2 shrink-0">
             <button className="btn-ghost px-3.5 py-1.5 rounded-lg text-[12px] font-medium" onClick={() => handleRestore(batch.batchDir)}>
