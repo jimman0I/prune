@@ -12,7 +12,7 @@ export function settingsPath() {
     || join(process.env.LOCALAPPDATA || process.cwd(), 'unrevo', 'settings.json');
 }
 
-const DEFAULT_SETTINGS = { excludeFolders: [], autoQuarantine: true, theme: 'dark', accentColor: null };
+const DEFAULT_SETTINGS = { excludeFolders: [], autoQuarantine: true, theme: 'dark', accentColor: null, minimizeToTray: true };
 
 /** Persisted app settings, or the default shape if nothing has ever been
  * saved. Never throws on a missing file -- "never configured" is a normal,

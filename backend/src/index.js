@@ -12,6 +12,7 @@ import { scanRouter as cleanupScanRoutes, executeRouter as cleanupExecuteRoutes 
 import settingsRoutes from './routes/settings.js';
 import sandboxTestRoutes from './routes/sandboxTest.js';
 import deepCleanRoutes from './routes/deepClean.js';
+import { initTray } from './lib/trayManager.js';
 
 const PORT = process.env.UNREVO_BACKEND_PORT || 3101;
 
@@ -73,3 +74,14 @@ server.on('error', (err) => {
 server.listen(PORT, '127.0.0.1', () => {
   console.log(`unrevo backend listening on http://127.0.0.1:${PORT}`);
 });
+
+// v2.0 Phase 1: this is the one line in this file that isn't a route
+// mount. trayManager.js's own initTray() is a guarded no-op outside a
+// real Electron process (see its own doc comment), so this is safe in
+// every runtime this file supports -- standalone `node src/index.js`,
+// `vitest run`, and packaged/dev-Electron alike. There's no automation.js
+// route yet to trigger this as an import side effect (that's a later
+// Phase 2 mission), and electron/main.cjs -- the only other place that
+// could call it -- is locked for this feature, so this direct call is
+// the only place left.
+initTray();

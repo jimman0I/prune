@@ -18,7 +18,7 @@ afterEach(() => {
 describe('getSettings', () => {
   it('returns the default shape when no settings file exists yet', async () => {
     const settings = await getSettings();
-    expect(settings).toEqual({ excludeFolders: [], autoQuarantine: true, theme: 'dark', accentColor: null });
+    expect(settings).toEqual({ excludeFolders: [], autoQuarantine: true, theme: 'dark', accentColor: null, minimizeToTray: true });
   });
 });
 
@@ -40,6 +40,11 @@ describe('updateSettings', () => {
 
   it('returns the full updated settings object, not just the partial that was passed in', async () => {
     const result = await updateSettings({ theme: 'light' });
-    expect(result).toEqual({ excludeFolders: [], autoQuarantine: true, theme: 'light', accentColor: null });
+    expect(result).toEqual({ excludeFolders: [], autoQuarantine: true, theme: 'light', accentColor: null, minimizeToTray: true });
+  });
+
+  it('supports the minimizeToTray preference the tray close-handler reads', async () => {
+    const result = await updateSettings({ minimizeToTray: false });
+    expect(result.minimizeToTray).toBe(false);
   });
 });
