@@ -1,8 +1,8 @@
-# unrevo
+# Prune
 
 A local, offline uninstaller and cleanup utility for Windows.
 
-unrevo runs a program's own registered uninstaller, then goes further than
+Prune runs a program's own registered uninstaller, then goes further than
 Windows' own "Apps & features": it scans for what that uninstaller leaves
 behind — stray files, registry keys, scheduled tasks — and gives you a
 safe, reversible way to remove them. Nothing is deleted outright by

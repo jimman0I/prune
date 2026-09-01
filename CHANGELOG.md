@@ -1,10 +1,22 @@
 # Changelog
 
-All notable changes to unrevo are documented here.
+All notable changes to Prune (formerly named unrevo -- rebranded 2026-09-01,
+see v1.0.1 below) are documented here.
+
+## v1.0.1
+
+Rebranded from "unrevo" to "Prune" -- new name, new mark (a navy circle
+with a teal geometric leaf, replacing the earlier coral badge), across
+every user-visible surface: window title, taskbar/tray icon, tray
+tooltip and context menu ("Open Prune"), the sidebar, the installer/
+uninstaller, and every package identifier (npm package names,
+electron-builder's `appId`/`productName`). No feature changes --
+everything documented under v1.0.0 below still applies, just under the
+new name.
 
 ## v1.0.0
 
-First stable release. unrevo is a local, offline uninstaller and cleanup
+First stable release, shipped as "unrevo". Prune is a local, offline uninstaller and cleanup
 utility for Windows: it reads the real Uninstall registry (HKLM 64-bit,
 HKLM WOW6432Node, HKCU), runs each program's own registered uninstaller,
 then goes further than Windows' own "Apps & features" by scanning for what
