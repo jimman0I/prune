@@ -1,0 +1,99 @@
+[
+  {
+    "id": "discord_cache",
+    "category": "Applications",
+    "name": "Discord Cache",
+    "description": "Clears cached images and data from Discord.",
+    "paths": ["%APPDATA%\\discord\\Cache", "%APPDATA%\\discord\\Code Cache"],
+    "is_safe": true
+  },
+  {
+    "id": "spotify_cache",
+    "category": "Applications",
+    "name": "Spotify Cache",
+    "description": "Clears Spotify's local song/artwork cache. Music re-downloads on next play.",
+    "paths": ["%LOCALAPPDATA%\\Spotify\\Storage", "%LOCALAPPDATA%\\Spotify\\Data"],
+    "is_safe": true
+  },
+  {
+    "id": "steam_cache",
+    "category": "Applications",
+    "name": "Steam Web Cache",
+    "description": "Clears the cached HTML/JS the Steam client's built-in browser (store, friends list) keeps.",
+    "paths": ["%PROGRAMFILES(X86)%\\Steam\\config\\htmlcache"],
+    "is_safe": true
+  },
+  {
+    "id": "vscode_cache",
+    "category": "Applications",
+    "name": "VS Code Cache",
+    "description": "Clears VS Code's GPU/code cache. Rebuilt automatically on next launch.",
+    "paths": ["%APPDATA%\\Code\\Cache", "%APPDATA%\\Code\\CachedData"],
+    "is_safe": true
+  },
+  {
+    "id": "chrome_deep_cache",
+    "category": "Browsers",
+    "name": "Chrome Cache & Code Cache",
+    "description": "Deeper pass than Smart Cleanup's own Browser Cache category -- also clears Chrome's compiled-script Code Cache.",
+    "paths": [
+      "%LOCALAPPDATA%\\Google\\Chrome\\User Data\\Default\\Cache",
+      "%LOCALAPPDATA%\\Google\\Chrome\\User Data\\Default\\Code Cache"
+    ],
+    "is_safe": true
+  },
+  {
+    "id": "edge_deep_cache",
+    "category": "Browsers",
+    "name": "Edge Cache & Code Cache",
+    "description": "Deeper pass than Smart Cleanup's own Browser Cache category -- also clears Edge's compiled-script Code Cache.",
+    "paths": [
+      "%LOCALAPPDATA%\\Microsoft\\Edge\\User Data\\Default\\Cache",
+      "%LOCALAPPDATA%\\Microsoft\\Edge\\User Data\\Default\\Code Cache"
+    ],
+    "is_safe": true
+  },
+  {
+    "id": "firefox_deep_cache",
+    "category": "Browsers",
+    "name": "Firefox Cache",
+    "description": "Clears every Firefox profile's cache2 folder. Profile folder names are randomized by Firefox, so this matches all of them.",
+    "paths": ["%LOCALAPPDATA%\\Mozilla\\Firefox\\Profiles\\*\\cache2"],
+    "is_safe": true
+  },
+  {
+    "id": "memory_dumps",
+    "category": "System",
+    "name": "Memory Dumps",
+    "description": "Removes crash dump files Windows writes after an application or system crash.",
+    "paths": ["%LOCALAPPDATA%\\CrashDumps", "%SYSTEMROOT%\\Minidump"],
+    "is_safe": true
+  },
+  {
+    "id": "windows_error_reporting",
+    "category": "System",
+    "name": "Windows Error Reporting",
+    "description": "Clears queued and archived Windows Error Reporting crash reports.",
+    "paths": [
+      "%LOCALAPPDATA%\\Microsoft\\Windows\\WER\\ReportArchive",
+      "%LOCALAPPDATA%\\Microsoft\\Windows\\WER\\ReportQueue"
+    ],
+    "is_safe": true
+  },
+  {
+    "id": "dns_cache",
+    "category": "System",
+    "name": "DNS Cache",
+    "description": "Flushes the Windows DNS resolver cache. Nothing to quarantine -- runs ipconfig /flushdns directly.",
+    "command": "ipconfig /flushdns",
+    "is_safe": true
+  },
+  {
+    "id": "thumbnail_cache_deep",
+    "category": "System",
+    "name": "Thumbnail Cache (Deep)",
+    "description": "Removes every cached thumbnail database file. A deeper pass than Smart Cleanup's own quick Thumbnail Cache category.",
+    "paths": ["%LOCALAPPDATA%\\Microsoft\\Windows\\Explorer\\thumbcache_*.db"],
+    "is_safe": true
+  }
+]
