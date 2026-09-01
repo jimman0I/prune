@@ -55,6 +55,18 @@ const ITEMS = [
 export default function NavRail({ screen, onNavigate }) {
   return (
     <nav className="glass-panel flex flex-col items-center gap-2 py-6 w-[72px] shrink-0" aria-label="Main">
+      {/* The Prune mark already reads as a self-contained badge (navy
+          circle, teal leaf) at this size -- the rail is only 72px wide,
+          too narrow for the wordmark next to it without wrapping or
+          shrinking the mark itself, so it stands alone here.
+          Real bug, found live-verifying this (2026-09-01): a root-
+          relative "/logo.png" resolves against the filesystem root
+          (file:///C:/logo.png) once packaged, since the app loads over
+          file:// -- it's not rewritten by Vite's own base:'./' config,
+          which only rewrites what it directly processes (index.html
+          tags, module imports), not a raw string literal in JSX. "./"
+          matches index.html's own already-correct favicon link. */}
+      <img src="./logo.png" alt="Prune" className="w-9 h-9 mb-4 shrink-0" />
       {ITEMS.map((item) => {
         const active = screen === item.id;
         return (

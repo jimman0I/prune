@@ -2,13 +2,13 @@ import { useEffect, useState } from 'react';
 import { fetchSettings, updateSettings, runSandboxTest } from '../lib/api.js';
 
 // electron/package.json is this app's real, single source of truth for
-// name/version (checked 2026-09-01, Phase 5 v1.0.0 release: productName
-// "unrevo", version "1.0.0") -- hand-copied here rather than wired
-// through Vite's build pipeline, matching this codebase's existing
+// name/version (checked 2026-09-01, rebranded from "unrevo" to "Prune":
+// productName "Prune", version "1.0.1") -- hand-copied here rather than
+// wired through Vite's build pipeline, matching this codebase's existing
 // convention of small hand-curated constants over new plumbing for a
 // value that changes on release cadence, not per-request.
-const APP_NAME = 'unrevo';
-const APP_VERSION = '1.0.0';
+const APP_NAME = 'Prune';
+const APP_VERSION = '1.0.1';
 
 const TABS = [
   { id: 'general', label: 'General' },
@@ -167,7 +167,7 @@ export default function SettingsPage() {
               <div className="glass-panel p-6">
                 <h2 className="text-[14px] font-medium text-[color:var(--text-primary)] mb-1">Appearance</h2>
                 <p className="text-[12.5px] text-[color:var(--text-secondary)] leading-relaxed">
-                  unrevo currently ships one fixed theme, Aurora Deck (dark). There's no light-mode
+                  Prune currently ships one fixed theme, Aurora Deck (dark). There's no light-mode
                   stylesheet yet, so a theme toggle here would flip a setting that has nothing to switch to.
                   This tab will grow a real toggle once a second theme exists.
                 </p>
@@ -178,7 +178,7 @@ export default function SettingsPage() {
                   <div>
                     <div className="text-[14px] font-medium text-[color:var(--text-primary)]">Minimize to Tray</div>
                     <p className="text-[12.5px] text-[color:var(--text-secondary)] mt-1">
-                      Closing the window sends unrevo to the system tray instead of quitting.
+                      Closing the window sends Prune to the system tray instead of quitting.
                     </p>
                   </div>
                   <Toggle
