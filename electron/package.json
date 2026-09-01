@@ -1,12 +1,13 @@
 {
   "name": "unrevo-desktop",
-  "version": "0.1.0",
+  "productName": "unrevo",
+  "version": "1.0.0",
   "private": true,
   "description": "unrevo desktop app",
   "main": "main.cjs",
   "scripts": {
     "start": "electron .",
-    "dist": "electron-builder -c electron-builder.config.cjs"
+    "dist": "node scripts/build-installer.mjs"
   },
   "devDependencies": {
     "electron": "^44.0.0",

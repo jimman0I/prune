@@ -2,13 +2,13 @@ import { useEffect, useState } from 'react';
 import { fetchSettings, updateSettings, runSandboxTest } from '../lib/api.js';
 
 // electron/package.json is this app's real, single source of truth for
-// name/version (checked 2026-09-01: name "unrevo-desktop", version
-// "0.1.0") -- hand-copied here rather than wired through Vite's build
-// pipeline, matching this codebase's existing convention of small
-// hand-curated constants over new plumbing for a value that changes on
-// release cadence, not per-request.
+// name/version (checked 2026-09-01, Phase 5 v1.0.0 release: productName
+// "unrevo", version "1.0.0") -- hand-copied here rather than wired
+// through Vite's build pipeline, matching this codebase's existing
+// convention of small hand-curated constants over new plumbing for a
+// value that changes on release cadence, not per-request.
 const APP_NAME = 'unrevo';
-const APP_VERSION = '0.1.0';
+const APP_VERSION = '1.0.0';
 
 const TABS = [
   { id: 'general', label: 'General' },

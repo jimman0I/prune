@@ -19,11 +19,21 @@ function quarantineRoot() {
   return app.isPackaged ? path.join(app.getPath('userData'), 'quarantine') : null;
 }
 
+/** Same reasoning as quarantineRoot() above -- without this override,
+ * settings.js's own default falls back to the raw %LOCALAPPDATA%\unrevo\
+ * settings.json, a DIFFERENT folder from quarantine's userData-based
+ * root (Roaming, not Local). Both belong under the same app-data root. */
+function settingsPath() {
+  return app.isPackaged ? path.join(app.getPath('userData'), 'settings.json') : null;
+}
+
 /** Starts the Express backend in-process (it's ESM, loaded via dynamic
  * import) — same pattern as Re:Route's electron/main.cjs. */
 async function startBackend() {
   const quarantineDir = quarantineRoot();
   if (quarantineDir) process.env.UNREVO_QUARANTINE_ROOT = quarantineDir;
+  const settingsFile = settingsPath();
+  if (settingsFile) process.env.UNREVO_SETTINGS_PATH = settingsFile;
   const entry = pathToFileURL(backendEntryPath()).href;
   await import(entry); // side effect: calls server.listen()
 }
