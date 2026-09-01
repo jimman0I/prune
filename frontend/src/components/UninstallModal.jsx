@@ -9,13 +9,13 @@ import LeftoverReview from './LeftoverReview.jsx';
 function ProgressPhase({ title, command, progress }) {
   return (
     <div className="flex flex-col items-center justify-center py-10">
-      <div className="w-14 h-14 rounded-2xl bg-[#06b6d4]/10 border border-[#06b6d4]/25 flex items-center justify-center mb-5">
-        <div className="w-6 h-6 border-2 border-[#06b6d4] border-t-transparent rounded-full animate-spin"></div>
+      <div className="w-14 h-14 rounded-2xl bg-[color:var(--accent-coral)]/10 border border-[color:var(--accent-coral)]/25 flex items-center justify-center mb-5">
+        <div className="w-6 h-6 border-2 border-[color:var(--accent-coral)] border-t-transparent rounded-full animate-spin"></div>
       </div>
       <p className="text-[15px] font-medium mb-1">{title}</p>
-      <p className="text-[12.5px] text-[#a1a1aa] font-mono mb-6">{command}</p>
-      <div className="w-full max-w-sm h-1 rounded-full bg-[#18181b] overflow-hidden">
-        <div className="h-full rounded-full bg-gradient-to-r from-[#0891b2] to-[#22d3ee] transition-all duration-500" style={{ width: `${progress}%` }}></div>
+      <p className="text-[12.5px] text-[color:var(--text-secondary)] font-mono mb-6">{command}</p>
+      <div className="w-full max-w-sm h-1 rounded-full bg-[color:var(--bg-panel)] overflow-hidden">
+        <div className="h-full rounded-full bg-gradient-to-r from-[color:var(--accent-coral)] to-[#e8624f] transition-all duration-500" style={{ width: `${progress}%` }}></div>
       </div>
     </div>
   );
@@ -83,8 +83,8 @@ export default function UninstallModal({ program, onClose }) {
   const command = `MsiExec.exe /X${displayId.toUpperCase()} /qn`;
 
   return (
-    <div className="glass-strong rounded-2xl overflow-hidden max-w-[680px] w-full flex flex-col">
-      <div className="flex items-center justify-between px-6 py-5 border-b border-[#27272a]">
+    <div className="glass-panel rounded-2xl overflow-hidden max-w-[680px] w-full flex flex-col">
+      <div className="flex items-center justify-between px-6 py-5 border-b border-[color:var(--border-subtle)]">
         <h2 className="text-[15px] font-semibold tracking-tight text-white truncate">
           Uninstall {program.name}
         </h2>
@@ -95,12 +95,12 @@ export default function UninstallModal({ program, onClose }) {
       <div className="px-6 py-6">
         {step === 'confirm' && (
           <div>
-            <p className="text-[13px] text-[#a1a1aa] mb-1">
+            <p className="text-[13px] text-[color:var(--text-secondary)] mb-1">
               This runs {program.name}'s own uninstaller, then scans for anything it leaves behind.
             </p>
-            <p className="text-[11.5px] text-[#71717a] font-mono mb-6">{command}</p>
+            <p className="text-[11.5px] text-[color:var(--text-muted)] font-mono mb-6">{command}</p>
             {error && (
-              <p className="text-[12.5px] text-[#fca5a5] mb-4">Uninstall failed: {error}</p>
+              <p className="text-[12.5px] text-[#f7a8b0] mb-4">Uninstall failed: {error}</p>
             )}
             <button className="btn-primary" onClick={startUninstall}>Start uninstall</button>
           </div>
