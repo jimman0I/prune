@@ -1,4 +1,4 @@
-import { mkdir, rename, readFile, writeFile } from 'node:fs/promises';
+import { mkdir, rename, readFile, writeFile, stat, rm, readdir } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import { join, basename } from 'node:path';
 import { execFile } from 'node:child_process';
@@ -56,9 +56,13 @@ export async function quarantineAndDelete({ programName, files, registryKeys }) 
   const movedFiles = [];
   for (const filePath of files) {
     if (!existsSync(filePath)) continue;
+    // Stat BEFORE the rename -- same file either side of a same-volume move
+    // (rename never changes size), but stat-ing after would be one more
+    // opportunity to race a file that vanishes between the two calls.
+    const sizeBytes = (await stat(filePath)).size;
     const dest = join(batchDir, `file-${movedFiles.length}-${basename(filePath)}`);
     await rename(filePath, dest);
-    movedFiles.push({ originalPath: filePath, quarantinedPath: dest });
+    movedFiles.push({ originalPath: filePath, quarantinedPath: dest, sizeBytes });
   }
 
   const exportedKeys = [];
@@ -77,7 +81,8 @@ export async function quarantineAndDelete({ programName, files, registryKeys }) 
 
   const manifest = {
     programName, createdAt: Date.now(), batchDir,
-    files: movedFiles, registryKeys: exportedKeys, regFiles
+    files: movedFiles, registryKeys: exportedKeys, regFiles,
+    totalSizeBytes: movedFiles.reduce((sum, f) => sum + f.sizeBytes, 0)
   };
   await writeFile(join(batchDir, 'manifest.json'), JSON.stringify(manifest, null, 2), 'utf8');
   return manifest;
@@ -87,7 +92,20 @@ export async function quarantineAndDelete({ programName, files, registryKeys }) 
  * path and re-imports every one of the batch's `.reg` backups. Reads the
  * manifest written by quarantineAndDelete rather than taking a file list
  * as a caller-supplied argument, so a restore always operates on exactly
- * what was actually quarantined. */
+ * what was actually quarantined.
+ *
+ * Real bug, found dogfooding Phase 4 (2026-09-01): this used to leave the
+ * batch directory (and its manifest.json) sitting under quarantineRoot()
+ * after a successful restore -- nothing was actually left IN it (every
+ * file/key was moved/re-imported out), but GET /api/quarantine still
+ * listed it forever afterward, since it only reads whatever manifest.json
+ * files exist on disk. Confirmed live: restoring a real batch through the
+ * UI, the batch never left the Quarantine screen -- indistinguishable from
+ * "Restore did nothing" even though the file WAS back. Once every file/key
+ * is out, there is nothing left to restore a second time (same
+ * "successfully restored" contract deletePermanently already has for
+ * "successfully deleted") -- so this now removes the now-empty batch
+ * directory before returning, same as deletePermanently's own cleanup. */
 export async function restoreQuarantine(batchDir) {
   const manifestPath = join(batchDir, 'manifest.json');
   const manifest = JSON.parse(await readFile(manifestPath, 'utf8'));
@@ -98,5 +116,52 @@ export async function restoreQuarantine(batchDir) {
   for (const regFilePath of manifest.regFiles ?? []) {
     if (existsSync(regFilePath)) await execFileAsync('reg', ['import', regFilePath]);
   }
+  await rm(batchDir, { recursive: true, force: true });
   return manifest;
+}
+
+/** Really, permanently deletes one quarantine batch -- the quarantined file
+ * copies, the .reg backups, and the manifest itself, all gone. This is NOT
+ * another quarantine step; there is nothing left to restore afterward.
+ * Reads totalSizeBytes from the manifest for the freedBytes it reports
+ * rather than re-stat-ing every file on the way out, matching
+ * quarantineAndDelete's own "compute once, trust it" convention. A batch
+ * that's already gone (bad batchDir, already deleted) returns
+ * `{ deleted: false, freedBytes: 0 }` rather than throwing -- same
+ * partial-results-over-total-failure philosophy the rest of this file
+ * already uses. */
+export async function deletePermanently(batchDir) {
+  const manifestPath = join(batchDir, 'manifest.json');
+  if (!existsSync(manifestPath)) return { deleted: false, freedBytes: 0 };
+  let freedBytes = 0;
+  try {
+    const manifest = JSON.parse(await readFile(manifestPath, 'utf8'));
+    freedBytes = manifest.totalSizeBytes ?? 0;
+  } catch {
+    // A corrupted manifest still gets its directory removed below --
+    // freedBytes just can't be reported accurately for it.
+  }
+  await rm(batchDir, { recursive: true, force: true });
+  return { deleted: true, freedBytes };
+}
+
+/** Permanently deletes EVERY batch currently under quarantineRoot() --
+ * deletePermanently applied to the whole quarantine folder at once. Missing
+ * quarantineRoot() itself (nothing has ever been quarantined) is the same
+ * as an empty one: zero batches, zero bytes, no error. */
+export async function emptyQuarantine() {
+  const root = quarantineRoot();
+  if (!existsSync(root)) return { deletedCount: 0, freedBytes: 0 };
+  const entries = await readdir(root, { withFileTypes: true });
+  let deletedCount = 0;
+  let freedBytes = 0;
+  for (const entry of entries) {
+    if (!entry.isDirectory()) continue;
+    const result = await deletePermanently(join(root, entry.name));
+    if (result.deleted) {
+      deletedCount++;
+      freedBytes += result.freedBytes;
+    }
+  }
+  return { deletedCount, freedBytes };
 }

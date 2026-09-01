@@ -5,7 +5,7 @@ import { mkdtemp, rm, readFile, writeFile } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { quarantineAndDelete, restoreQuarantine } from './quarantine.js';
+import { quarantineAndDelete, restoreQuarantine, deletePermanently, emptyQuarantine } from './quarantine.js';
 
 const execFileAsync = promisify(execFile);
 const TEST_KEY = 'HKCU\\Software\\unrevo-test';
@@ -53,6 +53,20 @@ describe('quarantineAndDelete', () => {
     const manifest = await quarantineAndDelete({ programName: 'OldApp', files: [join(scratchDir, 'nope.txt')], registryKeys: [] });
     expect(manifest.files).toEqual([]);
   });
+
+  it('records each moved file\'s real byte size and a correct totalSizeBytes', async () => {
+    const a = join(scratchDir, 'a.txt');
+    const b = join(scratchDir, 'b.txt');
+    await writeFile(a, '12345'); // 5 bytes
+    await writeFile(b, '1234567890'); // 10 bytes
+
+    const manifest = await quarantineAndDelete({ programName: 'OldApp', files: [a, b], registryKeys: [] });
+
+    const sizeFor = (originalPath) => manifest.files.find(f => f.originalPath === originalPath).sizeBytes;
+    expect(sizeFor(a)).toBe(5);
+    expect(sizeFor(b)).toBe(10);
+    expect(manifest.totalSizeBytes).toBe(15);
+  });
 });
 
 describe('restoreQuarantine', () => {
@@ -67,6 +81,17 @@ describe('restoreQuarantine', () => {
     expect(await readFile(filePath, 'utf8')).toBe('restore content');
   });
 
+  it('removes the now-empty batch directory so a restored batch stops appearing as quarantined', async () => {
+    const filePath = join(scratchDir, 'gone-after-restore.txt');
+    await writeFile(filePath, 'x', 'utf8');
+    const manifest = await quarantineAndDelete({ programName: 'OldApp', files: [filePath], registryKeys: [] });
+    expect(existsSync(manifest.batchDir)).toBe(true); // sanity: it's really there first
+
+    await restoreQuarantine(manifest.batchDir);
+
+    expect(existsSync(manifest.batchDir)).toBe(false);
+  });
+
   it('re-imports a quarantined registry key', async () => {
     const manifest = await quarantineAndDelete({ programName: 'OldApp', files: [], registryKeys: ['HKCU:\\Software\\unrevo-test'] });
     await expect(execFileAsync('reg', ['query', TEST_KEY])).rejects.toThrow();
@@ -75,5 +100,46 @@ describe('restoreQuarantine', () => {
 
     const { stdout } = await execFileAsync('reg', ['query', TEST_KEY, '/v', 'Marker']);
     expect(stdout).toMatch(/test-value/);
+  });
+});
+
+describe('deletePermanently', () => {
+  it('really, permanently removes the whole batch directory from disk', async () => {
+    const filePath = join(scratchDir, 'gone-forever.txt');
+    await writeFile(filePath, '12345'); // 5 bytes
+    const manifest = await quarantineAndDelete({ programName: 'OldApp', files: [filePath], registryKeys: [] });
+    expect(existsSync(manifest.batchDir)).toBe(true); // sanity: it's really there first
+
+    const result = await deletePermanently(manifest.batchDir);
+
+    expect(result).toEqual({ deleted: true, freedBytes: 5 });
+    expect(existsSync(manifest.batchDir)).toBe(false); // the batch dir itself is gone, not just emptied
+  });
+
+  it('handles an already-missing batch directory without throwing', async () => {
+    const result = await deletePermanently(join(scratchDir, 'never-existed'));
+    expect(result.deleted).toBe(false);
+  });
+});
+
+describe('emptyQuarantine', () => {
+  it('permanently removes every batch under quarantineRoot() and sums their sizes', async () => {
+    const a = join(scratchDir, 'a.txt');
+    const b = join(scratchDir, 'b.txt');
+    await writeFile(a, '12345'); // 5 bytes
+    await writeFile(b, '1234567890'); // 10 bytes
+    const batch1 = await quarantineAndDelete({ programName: 'App1', files: [a], registryKeys: [] });
+    const batch2 = await quarantineAndDelete({ programName: 'App2', files: [b], registryKeys: [] });
+
+    const result = await emptyQuarantine();
+
+    expect(result).toEqual({ deletedCount: 2, freedBytes: 15 });
+    expect(existsSync(batch1.batchDir)).toBe(false);
+    expect(existsSync(batch2.batchDir)).toBe(false);
+  });
+
+  it('returns zeros rather than throwing when quarantine is already empty', async () => {
+    const result = await emptyQuarantine();
+    expect(result).toEqual({ deletedCount: 0, freedBytes: 0 });
   });
 });
