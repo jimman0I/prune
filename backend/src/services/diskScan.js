@@ -20,7 +20,7 @@ function scanNode(entryPath, name, depthRemaining) {
   }
 
   if (!stat.isDirectory()) {
-    return { name, size: stat.size };
+    return { name, size: stat.size, type: 'file' };
   }
 
   let entryNames;
@@ -32,7 +32,7 @@ function scanNode(entryPath, name, depthRemaining) {
     // present with size 0 rather than dropped silently: an entry that
     // visibly exists but is opaque is more honest than one that vanishes
     // from its parent's total with no trace.
-    return { name, size: 0, children: [] };
+    return { name, size: 0, type: 'directory', children: [] };
   }
 
   const children = [];
@@ -42,7 +42,11 @@ function scanNode(entryPath, name, depthRemaining) {
   }
   const size = children.reduce((sum, c) => sum + c.size, 0);
 
-  return depthRemaining > 0 ? { name, size, children } : { name, size };
+  // `type: 'directory'` still applies at the depth cap (no `children` key)
+  // -- it's what lets a caller tell a capped directory (clickable, worth a
+  // fresh scan to go deeper) apart from a plain file (never has children),
+  // since both would otherwise collapse to the same { name, size } shape.
+  return depthRemaining > 0 ? { name, size, type: 'directory', children } : { name, size, type: 'directory' };
 }
 
 /** Recursively scans `dirPath`, returning a hierarchical

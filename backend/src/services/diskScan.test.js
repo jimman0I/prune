@@ -30,23 +30,38 @@ describe('scanDirectory (real file I/O)', () => {
     rmSync(dir, { recursive: true, force: true });
   });
 
-  it('returns { name, size } for a single file', () => {
+  it('returns { name, size, type: "file" } for a single file', () => {
     const filePath = join(dir, 'a.txt');
     writeFileSync(filePath, 'hello'); // 5 bytes
-    expect(scanDirectory(filePath)).toEqual({ name: 'a.txt', size: 5 });
+    expect(scanDirectory(filePath)).toEqual({ name: 'a.txt', size: 5, type: 'file' });
   });
 
-  it('returns a hierarchical tree with correct total sizes', () => {
+  it('returns a hierarchical tree with correct total sizes and per-node types', () => {
     writeFileSync(join(dir, 'top.txt'), '12345'); // 5 bytes
     mkdirSync(join(dir, 'sub'));
     writeFileSync(join(dir, 'sub', 'nested.txt'), '1234567890'); // 10 bytes
 
     const result = scanDirectory(dir);
+    expect(result.type).toBe('directory');
     expect(result.size).toBe(15);
     expect(result.children.map(c => c.name).sort()).toEqual(['sub', 'top.txt']);
     const sub = result.children.find(c => c.name === 'sub');
+    expect(sub.type).toBe('directory');
     expect(sub.size).toBe(10);
-    expect(sub.children).toEqual([{ name: 'nested.txt', size: 10 }]);
+    expect(sub.children).toEqual([{ name: 'nested.txt', size: 10, type: 'file' }]);
+  });
+
+  // A depth-capped directory and a plain file both end up shaped
+  // { name, size, type } with no `children` key -- `type` is what lets the
+  // frontend still tell them apart (a capped directory is clickable to
+  // drill into via a fresh scan; a file never is).
+  it('marks a depth-capped node as type "directory" even without a children array', () => {
+    mkdirSync(join(dir, 'a', 'b'), { recursive: true });
+    writeFileSync(join(dir, 'a', 'b', 'deep.txt'), '123');
+
+    const result = scanDirectory(dir, 1);
+    const a = result.children.find(c => c.name === 'a');
+    expect(a).toEqual({ name: 'a', size: 3, type: 'directory' });
   });
 
   it('omits an entry it cannot stat, without crashing the whole scan', () => {
@@ -75,7 +90,7 @@ describe('scanDirectory (real file I/O)', () => {
 
     const result = scanDirectory(dir);
     const opaque = result.children.find(c => c.name === 'opaque');
-    expect(opaque).toEqual({ name: 'opaque', size: 0, children: [] });
+    expect(opaque).toEqual({ name: 'opaque', size: 0, type: 'directory', children: [] });
     // Its unreadable contents contribute nothing we can't verify -- 0 is honest.
     const visible = result.children.find(c => c.name === 'visible.txt');
     expect(visible.size).toBe(2);
