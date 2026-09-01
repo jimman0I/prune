@@ -1,6 +1,12 @@
 node_modules/
 dist/
-build/
+# electron/build/ holds two different things: the real, committed app
+# icon (build/icon.png) electron-builder's own convention expects there,
+# and build/backend-prod/, a throwaway directory build-installer.mjs
+# regenerates from scratch on every packaging run. Only the latter is
+# ignored -- a bare `build/` here would have also hidden the icon from
+# git, which is exactly the kind of real asset that belongs committed.
+electron/build/backend-prod/
 .superpowers/
 *.log
 

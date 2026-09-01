@@ -9,11 +9,14 @@ const execFileAsync = promisify(execFile);
 /** Root directory quarantine operations write into. A function, not a
  * constant — read at call time, not import time — so tests can point it
  * at a scratch temp dir via UNREVO_QUARANTINE_ROOT without touching the
- * real %LOCALAPPDATA%\unrevo\quarantine on the dev machine. Same
- * env-var-override pattern Re:Route's REROUTE_DATA_DIR uses. */
+ * real %LOCALAPPDATA%\Prune\quarantine on the dev machine. Same
+ * env-var-override pattern Re:Route's REROUTE_DATA_DIR uses. Packaged
+ * mode never hits this fallback -- electron/main.cjs sets
+ * UNREVO_QUARANTINE_ROOT from app.getPath('userData') instead, which
+ * resolves to %APPDATA%\Prune since the "unrevo" -> "Prune" rebrand. */
 export function quarantineRoot() {
   return process.env.UNREVO_QUARANTINE_ROOT
-    || join(process.env.LOCALAPPDATA || process.cwd(), 'unrevo', 'quarantine');
+    || join(process.env.LOCALAPPDATA || process.cwd(), 'Prune', 'quarantine');
 }
 
 function safeSegment(text) {

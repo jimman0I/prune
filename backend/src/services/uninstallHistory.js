@@ -7,7 +7,7 @@ import { dirname, join } from 'node:path';
  * matching quarantine.js's own UNREVO_QUARANTINE_ROOT override pattern. */
 function historyFilePath() {
   return process.env.UNREVO_HISTORY_FILE
-    || join(process.env.LOCALAPPDATA || process.cwd(), 'unrevo', 'uninstall-history.jsonl');
+    || join(process.env.LOCALAPPDATA || process.cwd(), 'Prune', 'uninstall-history.jsonl');
 }
 
 /** Appends one completed-uninstall record as a JSON line. A flat

@@ -1,12 +1,22 @@
 import { freemem, totalmem } from 'node:os';
+import { join, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { getSystemDriveSpace } from '../services/diskSpace.js';
 
-// A pre-generated, real, valid 32x32 solid-coral PNG -- not something to
-// invent inline as a base64 literal (a hand-typed string is an easy way
-// to ship a corrupt image); this one was actually built and verified via
-// zlib + manual PNG chunk/CRC writing before being pasted here.
-const TRAY_ICON_DATA_URL =
-  'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAL0lEQVR4nO3OIQEAAAgDMEITgNooiHEzMb/a6UsqAQEBAQEBAQEBAQEBAQGBdOABieCwpuoqh8YAAAAASUVORK5CYII=';
+const here = dirname(fileURLToPath(import.meta.url));
+
+/** Same packaged-vs-dev path split as main.cjs's own iconPath() -- the
+ * real app icon (the Prune mark -- a navy circle with a teal geometric leaf),
+ * shipped as a real extraResource (see electron-builder.config.cjs) so
+ * both this file and main.cjs point at the exact same asset instead of
+ * two different hand-maintained copies. `app` is only known to be real
+ * here, not at module-load time, so this takes it as a parameter rather
+ * than importing 'electron' a second time. */
+function iconPath(app) {
+  return app.isPackaged
+    ? join(process.resourcesPath, 'icon.png')
+    : join(here, '..', '..', '..', 'electron', 'build', 'icon.png');
+}
 
 const TOOLTIP_REFRESH_MS = 10_000;
 
@@ -26,7 +36,7 @@ async function buildTooltip() {
     // tooltip is the last place that should ever crash the app -- keep
     // the fallback text rather than propagate.
   }
-  return `unrevo\nRAM: ${formatGB(ramFree)} free / ${formatGB(ramTotal)}\n${diskLine}`;
+  return `Prune - System Optimizer\nRAM: ${formatGB(ramFree)} free / ${formatGB(ramTotal)}\n${diskLine}`;
 }
 
 let initialized = false;
@@ -66,7 +76,7 @@ export async function initTray() {
   if (!app) return;
   await app.whenReady();
 
-  const icon = nativeImage.createFromDataURL(TRAY_ICON_DATA_URL);
+  const icon = nativeImage.createFromPath(iconPath(app));
   const tray = new Tray(icon);
 
   const refreshTooltip = () => { buildTooltip().then((text) => tray.setToolTip(text)); };
@@ -81,7 +91,7 @@ export async function initTray() {
   };
 
   const menu = Menu.buildFromTemplate([
-    { label: 'Open Unrevo', click: showMainWindow },
+    { label: 'Open Prune', click: showMainWindow },
     {
       label: 'Quick Clean (Temp Files)',
       click: async () => {

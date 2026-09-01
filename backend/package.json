@@ -1,6 +1,6 @@
 {
-  "name": "unrevo-backend",
-  "version": "1.0.0",
+  "name": "prune-backend",
+  "version": "1.0.1",
   "type": "module",
   "scripts": {
     "start": "node src/index.js",

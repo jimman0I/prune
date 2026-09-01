@@ -34,7 +34,7 @@ router.post('/remove', async (req, res) => {
   const { programName, files, registryKeys } = req.body || {};
   if (!programName) { res.status(400).json({ error: 'programName is required' }); return; }
   try {
-    const restorePoint = await tryCreateRestorePoint(`unrevo: forced removal of ${programName}`);
+    const restorePoint = await tryCreateRestorePoint(`Prune: forced removal of ${programName}`);
     const manifest = await quarantineAndDelete({ programName, files: files || [], registryKeys: registryKeys || [] });
     res.json({ ...manifest, restorePoint });
   } catch (err) {

@@ -1,9 +1,9 @@
 {
-  "name": "unrevo-desktop",
-  "productName": "unrevo",
-  "version": "1.0.0",
+  "name": "prune-desktop",
+  "productName": "Prune",
+  "version": "1.0.1",
   "private": true,
-  "description": "unrevo desktop app",
+  "description": "Prune desktop app -- a local, offline uninstaller and cleanup utility for Windows.",
   "main": "main.cjs",
   "scripts": {
     "start": "electron .",

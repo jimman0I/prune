@@ -11,6 +11,17 @@ function backendEntryPath() {
     : path.join(__dirname, '..', 'backend', 'src', 'index.js');
 }
 
+/** Same packaged-vs-dev path split as backendEntryPath() above. The icon
+ * itself (the Prune mark -- a navy circle with a teal geometric leaf) is
+ * shipped as a real extraResource, not inlined as base64 here -- keeping
+ * this file readable mattered more than avoiding one more resourcesPath
+ * call, and it's the same pattern this file already uses for the backend. */
+function iconPath() {
+  return app.isPackaged
+    ? path.join(process.resourcesPath, 'icon.png')
+    : path.join(__dirname, 'build', 'icon.png');
+}
+
 /** Where quarantine/backup data lives — outside the install directory so
  * an app upgrade never deletes it. Same reasoning as Re:Route's own
  * dataDir.js: userData survives upgrades, an install-relative path
@@ -20,7 +31,7 @@ function quarantineRoot() {
 }
 
 /** Same reasoning as quarantineRoot() above -- without this override,
- * settings.js's own default falls back to the raw %LOCALAPPDATA%\unrevo\
+ * settings.js's own default falls back to the raw %LOCALAPPDATA%\Prune\
  * settings.json, a DIFFERENT folder from quarantine's userData-based
  * root (Roaming, not Local). Both belong under the same app-data root. */
 function settingsPath() {
@@ -64,8 +75,9 @@ async function createWindow() {
     height: 860,
     minWidth: 900,
     minHeight: 560,
-    title: 'unrevo',
+    title: 'Prune',
     backgroundColor: '#09090b',
+    icon: iconPath(),
     webPreferences: {
       contextIsolation: true,
       nodeIntegration: false
@@ -73,7 +85,7 @@ async function createWindow() {
   });
 
   // Electron's stock File/Edit/View/Window menu bar is a dev-tooling
-  // default (Reload, Toggle DevTools, Zoom…) — nothing unrevo's own UI
+  // default (Reload, Toggle DevTools, Zoom…) — nothing Prune's own UI
   // offers, and it doesn't belong on a native desktop utility that isn't a
   // browser. Same call Re:Route's own main.cjs already makes.
   win.removeMenu();
@@ -81,7 +93,7 @@ async function createWindow() {
   // Dev-mode navigation to the Vite dev server can genuinely fail (started
   // `npm start` before `npm run dev` was ready, Vite still restarting after
   // an HMR crash, wrong port) — a bare, uncaught rejection here left NO
-  // trace of why beyond the window's own static `title` staying "unrevo"
+  // trace of why beyond the window's own static `title` staying "Prune"
   // as a fallback, which reads as "it loaded" when it didn't. Logged, not
   // silently swallowed; packaged mode (loadFile, a local file that either
   // exists or the build is broken) doesn't need the same handling.

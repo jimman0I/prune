@@ -56,9 +56,9 @@ ship a stale one.
 ## Where user data lives
 
 `quarantineRoot()` and `settingsPath()` in `main.cjs` both resolve to
-`app.getPath('userData')` when packaged (`%APPDATA%\unrevo` —
-`productName: "unrevo"` in `package.json` is what makes that folder name
-`unrevo`, not `unrevo-desktop`), passed to the backend as
+`app.getPath('userData')` when packaged (`%APPDATA%\Prune` —
+`productName: "Prune"` in `package.json` is what makes that folder name
+`Prune`, not `prune-desktop`), passed to the backend as
 `UNREVO_QUARANTINE_ROOT`/`UNREVO_SETTINGS_PATH`. Never inside the install
 directory, so an app upgrade never touches or deletes them. In
 development (`app.isPackaged` false) both return `null` and the backend
@@ -66,7 +66,7 @@ falls back to its own dev defaults.
 
 ## Running the packaged build without a full install
 
-`dist/win-unpacked/unrevo.exe` is the exact same files an NSIS install
+`dist/win-unpacked/Prune.exe` is the exact same files an NSIS install
 produces, just not wrapped in the installer or registered in "Apps &
 features" — useful for a quick verification pass without touching the
 system.

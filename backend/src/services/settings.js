@@ -5,11 +5,17 @@ import { dirname, join } from 'node:path';
 /** Path to the settings file. A function, not a constant -- read at call
  * time, not import time -- so tests can point it at a scratch temp file
  * via UNREVO_SETTINGS_PATH without touching the real
- * %LOCALAPPDATA%\unrevo\settings.json on the dev machine. Same
- * env-var-override pattern quarantine.js's quarantineRoot() uses. */
+ * %LOCALAPPDATA%\Prune\settings.json on the dev machine. Same
+ * env-var-override pattern quarantine.js's quarantineRoot() uses. This
+ * fallback only matters running standalone (`node src/index.js`) --
+ * packaged mode always sets UNREVO_SETTINGS_PATH from electron/main.cjs's
+ * own app.getPath('userData'), which already resolves to %APPDATA%\Prune
+ * now that electron/package.json's productName is "Prune". Env var names
+ * themselves (UNREVO_*) are internal-only and were deliberately left
+ * unrenamed in the "unrevo" -> "Prune" rebrand -- no user ever sees them. */
 export function settingsPath() {
   return process.env.UNREVO_SETTINGS_PATH
-    || join(process.env.LOCALAPPDATA || process.cwd(), 'unrevo', 'settings.json');
+    || join(process.env.LOCALAPPDATA || process.cwd(), 'Prune', 'settings.json');
 }
 
 const DEFAULT_SETTINGS = { excludeFolders: [], autoQuarantine: true, theme: 'dark', accentColor: null, minimizeToTray: true };

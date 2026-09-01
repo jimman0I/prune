@@ -65,14 +65,14 @@ app.use('/api/deep-clean', deepCleanRoutes);
 const server = createServer(app);
 server.on('error', (err) => {
   if (err.code === 'EADDRINUSE') {
-    console.error(`Port ${PORT} is already in use — is another copy of unrevo (or its backend) already running? Close it and try again.`);
+    console.error(`Port ${PORT} is already in use — is another copy of Prune (or its backend) already running? Close it and try again.`);
   } else {
     console.error('Backend server error:', err);
   }
   process.exitCode = 1;
 });
 server.listen(PORT, '127.0.0.1', () => {
-  console.log(`unrevo backend listening on http://127.0.0.1:${PORT}`);
+  console.log(`Prune backend listening on http://127.0.0.1:${PORT}`);
 });
 
 // v2.0 Phase 1: this is the one line in this file that isn't a route
