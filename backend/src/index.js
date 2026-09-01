@@ -8,6 +8,7 @@ import quarantineRoutes from './routes/quarantine.js';
 import diskSpaceRoutes from './routes/diskSpace.js';
 import uninstallHistoryRoutes from './routes/uninstallHistory.js';
 import diskScanRoutes from './routes/diskScan.js';
+import { scanRouter as cleanupScanRoutes, executeRouter as cleanupExecuteRoutes } from './routes/cleanup.js';
 
 const PORT = process.env.UNREVO_BACKEND_PORT || 3101;
 
@@ -31,6 +32,8 @@ app.use('/api/quarantine', quarantineRoutes);
 app.use('/api/disk-space', diskSpaceRoutes);
 app.use('/api/uninstall-history', uninstallHistoryRoutes);
 app.use('/api/disk-scan', diskScanRoutes);
+app.use('/api/cleanup-scan', cleanupScanRoutes);
+app.use('/api/cleanup-execute', cleanupExecuteRoutes);
 
 // Real bug, found dogfooding (2026-08-29): a `server.listen()` failure
 // (most commonly EADDRINUSE — something else, or a second copy of this
