@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { fetchDiskSpace, fetchUninstallHistory } from '../lib/api.js';
 import { formatRelativeTime } from '../lib/formatRelativeTime.js';
+import StatCard from './StatCard.jsx';
 
 function formatBytes(bytes) {
   if (bytes === null || bytes === undefined) return '—';
@@ -78,32 +79,35 @@ export default function Dashboard({ programs, totalSize }) {
       </div>
 
       <div className="grid grid-cols-3 gap-4 mb-6">
-        <div className="glass-panel p-6">
-          <div className="text-[11px] text-[color:var(--text-muted)] uppercase tracking-[0.1em] font-medium mb-2">Total Storage</div>
-          {diskSpace ? (
-            <>
+        <StatCard
+          label="Total Storage"
+          value={
+            diskSpace ? (
               <div className="text-[18px] font-medium text-[color:var(--text-primary)] mb-2">
                 {formatBytes(diskSpace.totalBytes - diskSpace.freeBytes)} Used / {formatBytes(diskSpace.totalBytes)} Total
               </div>
-              <div className="h-1.5 rounded-full bg-white/10 overflow-hidden">
-                <div
-                  className="h-full rounded-full"
-                  style={{ width: `${Math.round((1 - diskSpace.freeBytes / diskSpace.totalBytes) * 100)}%`, background: 'var(--accent-coral)' }}
-                />
-              </div>
-            </>
-          ) : (
-            <div className="text-[13px] text-[color:var(--text-secondary)]">{diskSpaceError || 'Loading…'}</div>
+            ) : (
+              <div className="text-[13px] text-[color:var(--text-secondary)]">{diskSpaceError || 'Loading…'}</div>
+            )
+          }
+        >
+          {diskSpace && (
+            <div className="h-1.5 rounded-full bg-white/10 overflow-hidden">
+              <div
+                className="h-full rounded-full"
+                style={{ width: `${Math.round((1 - diskSpace.freeBytes / diskSpace.totalBytes) * 100)}%`, background: 'var(--accent-coral)' }}
+              />
+            </div>
           )}
-        </div>
-        <div className="glass-panel p-6">
-          <div className="text-[11px] text-[color:var(--text-muted)] uppercase tracking-[0.1em] font-medium mb-2">Installed Apps</div>
-          <div className="display-heading text-[28px] text-[color:var(--text-primary)]">{programs.length}</div>
-        </div>
-        <div className="glass-panel p-6">
-          <div className="text-[11px] text-[color:var(--text-muted)] uppercase tracking-[0.1em] font-medium mb-2">Junk Files</div>
-          <div className="text-[13px] text-[color:var(--text-secondary)]">Run Smart Cleanup to find out.</div>
-        </div>
+        </StatCard>
+        <StatCard
+          label="Installed Apps"
+          value={<div className="display-heading text-[28px] text-[color:var(--text-primary)]">{programs.length}</div>}
+        />
+        <StatCard
+          label="Junk Files"
+          value={<div className="text-[13px] text-[color:var(--text-secondary)]">Run Smart Cleanup to find out.</div>}
+        />
       </div>
 
       <div className="flex items-center gap-3 mb-6">
