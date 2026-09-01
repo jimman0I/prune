@@ -5,6 +5,7 @@ import programsRoutes from './routes/programs.js';
 import uninstallRoutes from './routes/uninstall.js';
 import leftoversRoutes from './routes/leftovers.js';
 import quarantineRoutes from './routes/quarantine.js';
+import diskSpaceRoutes from './routes/diskSpace.js';
 
 const PORT = process.env.UNREVO_BACKEND_PORT || 3101;
 
@@ -25,6 +26,7 @@ app.use('/api/programs', programsRoutes);
 app.use('/api/uninstall', uninstallRoutes);
 app.use('/api/leftovers', leftoversRoutes);
 app.use('/api/quarantine', quarantineRoutes);
+app.use('/api/disk-space', diskSpaceRoutes);
 
 // Real bug, found dogfooding (2026-08-29): a `server.listen()` failure
 // (most commonly EADDRINUSE — something else, or a second copy of this
