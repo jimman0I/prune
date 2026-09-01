@@ -43,6 +43,20 @@ export async function restoreQuarantineBatch(batchDirName) {
   return data;
 }
 
+export async function fetchDiskSpace() {
+  const res = await fetch(`${API_URL}/disk-space`);
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
+  return data;
+}
+
+export async function fetchUninstallHistory() {
+  const res = await fetch(`${API_URL}/uninstall-history`);
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
+  return data.entries;
+}
+
 /** One line of an SSE block. `field` is 'event' or 'data'; anything else
  * (including a blank line, the block separator) is not a recognized
  * field and returns null. The SSE spec strips exactly one leading space
