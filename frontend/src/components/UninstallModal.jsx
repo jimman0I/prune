@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { scanForLeftovers, streamUninstall } from '../lib/api.js';
+import { scanForLeftovers, streamUninstall, appendHistoryEntry } from '../lib/api.js';
 import LeftoverReview from './LeftoverReview.jsx';
 
 /** Shared spinner + live-command UI for both the "running the native
@@ -32,6 +32,11 @@ export default function UninstallModal({ program, onClose }) {
     setStep('uninstalling');
     try {
       await streamUninstall(program.uninstallString, () => {});
+      appendHistoryEntry({ programName: program.name, publisher: program.publisher, sizeBytes: program.sizeBytes }).catch(() => {
+        // Best-effort logging -- a failed history write must never block
+        // or fail the uninstall flow itself, the uninstall already
+        // genuinely succeeded by this point.
+      });
       setStep('scanning');
       const result = await scanForLeftovers(program.name, program.publisher);
       setScanResult(result);

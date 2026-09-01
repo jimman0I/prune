@@ -57,6 +57,17 @@ export async function fetchUninstallHistory() {
   return data.entries;
 }
 
+export async function appendHistoryEntry({ programName, publisher, sizeBytes }) {
+  const res = await fetch(`${API_URL}/uninstall-history`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ programName, publisher, sizeBytes })
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
+  return data;
+}
+
 /** One line of an SSE block. `field` is 'event' or 'data'; anything else
  * (including a blank line, the block separator) is not a recognized
  * field and returns null. The SSE spec strips exactly one leading space
