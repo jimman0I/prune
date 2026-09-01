@@ -43,6 +43,45 @@ export async function restoreQuarantineBatch(batchDirName) {
   return data;
 }
 
+export async function deleteQuarantineBatch(batchDirName) {
+  const res = await fetch(`${API_URL}/quarantine/${encodeURIComponent(batchDirName)}`, { method: 'DELETE' });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
+  return data;
+}
+
+export async function emptyQuarantine() {
+  const res = await fetch(`${API_URL}/quarantine/empty`, { method: 'POST' });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
+  return data;
+}
+
+export async function fetchSettings() {
+  const res = await fetch(`${API_URL}/settings`);
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
+  return data;
+}
+
+export async function updateSettings(partial) {
+  const res = await fetch(`${API_URL}/settings`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(partial)
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
+  return data;
+}
+
+export async function runSandboxTest() {
+  const res = await fetch(`${API_URL}/sandbox-test`, { method: 'POST' });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
+  return data;
+}
+
 export async function fetchDiskSpace() {
   const res = await fetch(`${API_URL}/disk-space`);
   const data = await res.json();

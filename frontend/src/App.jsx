@@ -5,7 +5,8 @@ import DiskMap from './components/DiskMap.jsx';
 import SmartCleanup from './components/SmartCleanup.jsx';
 import ProgramList from './components/ProgramList.jsx';
 import UninstallModal from './components/UninstallModal.jsx';
-import QuarantinePanel from './components/QuarantinePanel.jsx';
+import QuarantineManager from './components/QuarantineManager.jsx';
+import SettingsPage from './components/SettingsPage.jsx';
 import { fetchPrograms } from './lib/api.js';
 
 function formatBytes(bytes) {
@@ -20,7 +21,6 @@ function formatBytes(bytes) {
 export default function App() {
   const [screen, setScreen] = useState('dashboard');
   const [selectedProgram, setSelectedProgram] = useState(null);
-  const [quarantineOpen, setQuarantineOpen] = useState(false);
   const [programs, setPrograms] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -43,6 +43,8 @@ export default function App() {
         {screen === 'dashboard' && <Dashboard programs={programs} totalSize={totalSize} />}
         {screen === 'diskmap' && <DiskMap />}
         {screen === 'cleanup' && <SmartCleanup />}
+        {screen === 'quarantine' && <QuarantineManager />}
+        {screen === 'settings' && <SettingsPage />}
         {screen === 'applications' && (
           <div className="px-12 py-10 max-w-[1400px]">
             <div className="flex items-baseline justify-between mb-8">
@@ -58,7 +60,7 @@ export default function App() {
                   <span className="text-[color:var(--text-primary)] font-medium">{formatBytes(totalSize)}</span> installed
                 </p>
               </div>
-              <button className="btn-ghost" onClick={() => setQuarantineOpen(true)}>Quarantine</button>
+              <button className="btn-ghost" onClick={() => setScreen('quarantine')}>Quarantine</button>
             </div>
             <ProgramList programs={programs} onUninstall={setSelectedProgram} />
           </div>
@@ -67,16 +69,6 @@ export default function App() {
       {selectedProgram && (
         <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
           <UninstallModal program={selectedProgram} onClose={() => setSelectedProgram(null)} />
-        </div>
-      )}
-      {quarantineOpen && (
-        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', justifyContent: 'center', alignItems: 'center' }} onClick={(e) => { if (e.target === e.currentTarget) setQuarantineOpen(false); }}>
-          <div className="glass-panel" style={{ padding: 24, width: 'min(560px, 90vw)', maxHeight: '80vh', overflowY: 'auto' }}>
-            <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 8 }}>
-              <button className="btn-ghost" onClick={() => setQuarantineOpen(false)}>Close</button>
-            </div>
-            <QuarantinePanel />
-          </div>
         </div>
       )}
     </div>
