@@ -50,8 +50,13 @@ export async function fetchDiskSpace() {
   return data;
 }
 
-export async function fetchDiskScan(path) {
-  const res = await fetch(`${API_URL}/disk-scan?path=${encodeURIComponent(path)}`);
+// `signal` (optional AbortSignal) lets a caller actually cancel the
+// underlying HTTP request -- e.g. DiskMap.jsx aborts on unmount/path
+// change, so navigating away from a huge in-flight scan really does stop
+// it server-side (backend/src/routes/diskScan.js listens for the request
+// closing early), instead of leaving it running to completion unheard.
+export async function fetchDiskScan(path, signal) {
+  const res = await fetch(`${API_URL}/disk-scan?path=${encodeURIComponent(path)}`, { signal });
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
   return data;

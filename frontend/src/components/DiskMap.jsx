@@ -88,14 +88,23 @@ export default function DiskMap() {
   const [hovered, setHovered] = useState(null);
 
   useEffect(() => {
-    let cancelled = false;
+    // A real AbortController, not just a `cancelled` flag -- this is what
+    // actually closes the underlying HTTP connection when the path changes
+    // or the component unmounts, so the backend's own req.on('close')
+    // handler (backend/src/routes/diskScan.js) really does stop scanning
+    // instead of running an unwatched request to completion. Found live:
+    // repeatedly navigating away from Disk Map and back left every earlier
+    // scan still running server-side, all competing for the same tiny fs
+    // thread pool -- exactly the kind of pile-up this is supposed to
+    // prevent.
+    const controller = new AbortController();
     setLoading(true);
     setError(null);
-    fetchDiskScan(currentPath)
-      .then((result) => { if (!cancelled) setTree(attachFullPaths(result, currentPath)); })
-      .catch((err) => { if (!cancelled) setError(err.message); })
-      .finally(() => { if (!cancelled) setLoading(false); });
-    return () => { cancelled = true; };
+    fetchDiskScan(currentPath, controller.signal)
+      .then((result) => setTree(attachFullPaths(result, currentPath)))
+      .catch((err) => { if (err.name !== 'AbortError') setError(err.message); })
+      .finally(() => { if (!controller.signal.aborted) setLoading(false); });
+    return () => controller.abort();
   }, [currentPath]);
 
   const handleHover = useCallback((node, e) => {
@@ -133,6 +142,19 @@ export default function DiskMap() {
       {!loading && error && (
         <div className="glass-panel p-6">
           <p className="text-[13px] text-[color:var(--danger)]">Couldn't scan "{currentPath}": {error}</p>
+        </div>
+      )}
+
+      {!loading && !error && tree?.truncated && (
+        <div className="flex items-center gap-2.5 mb-4 px-3.5 py-3 rounded-xl bg-[color:var(--warning-soft)] border border-[color:var(--warning)]/25">
+          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="text-[color:var(--warning)] shrink-0">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="8" x2="12" y2="12"></line>
+            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+          </svg>
+          <div className="text-[12.5px] text-[color:var(--warning)]">
+            This scan took too long and was stopped early — sizes shown are a real but possibly incomplete lower bound.
+          </div>
         </div>
       )}
 
