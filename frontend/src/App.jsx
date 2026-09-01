@@ -35,23 +35,42 @@ export default function App() {
   const totalSize = programs.reduce((sum, program) => sum + (program.sizeBytes || 0), 0);
 
   return (
-    <div className="App grain h-screen overflow-hidden flex">
-      <NavRail screen={screen} onNavigate={setScreen} />
+    <div className="App grain h-screen overflow-hidden flex flex-col">
+      <div className="px-12 py-10 max-w-[1400px] overflow-y-auto flex-1 min-h-0">
+        <div className="flex items-baseline justify-between mb-8">
+          <div>
+            <div className="text-[11px] text-[#71717a] font-mono uppercase tracking-[0.16em] mb-2">
+              Application Manager
+            </div>
+            <h1 className="display-heading text-[30px] leading-none">
+              Installed applications
+            </h1>
+            <p className="text-[13px] text-[#a1a1aa] mt-2.5">
+              <span className="text-white font-medium">{programs.length}</span> applications ·
+              <span className="text-white font-medium">{formatBytes(totalSize)}</span> installed
+            </p>
+          </div>
+          <button className="btn-ghost" onClick={() => setQuarantineOpen(true)}>Quarantine</button>
+        </div>
+        <div className="flex-1">
+          <NavRail screen={screen} onNavigate={setScreen} />
+        </div>
+      </div>
       <div className="flex-1 overflow-y-auto min-h-0">
         {screen === 'dashboard' && <Dashboard programs={programs} totalSize={totalSize} />}
         {screen === 'applications' && (
           <div className="px-12 py-10 max-w-[1400px]">
             <div className="flex items-baseline justify-between mb-8">
               <div>
-                <div className="text-[11px] text-[color:var(--text-muted)] font-mono uppercase tracking-[0.16em] mb-2">
+                <div className="text-[11px] text-[#71717a] font-mono uppercase tracking-[0.16em] mb-2">
                   Application Manager
                 </div>
                 <h1 className="display-heading text-[30px] leading-none">
                   Installed applications
                 </h1>
-                <p className="text-[13px] text-[color:var(--text-secondary)] mt-2.5">
-                  <span className="text-[color:var(--text-primary)] font-medium">{programs.length}</span> applications ·
-                  <span className="text-[color:var(--text-primary)] font-medium">{formatBytes(totalSize)}</span> installed
+                <p className="text-[13px] text-[#a1a1aa] mt-2.5">
+                  <span className="text-white font-medium">{programs.length}</span> applications ·
+                  <span className="text-white font-medium">{formatBytes(totalSize)}</span> installed
                 </p>
               </div>
               <button className="btn-ghost" onClick={() => setQuarantineOpen(true)}>Quarantine</button>

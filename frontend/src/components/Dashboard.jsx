@@ -14,7 +14,7 @@ function formatBytes(bytes) {
 function HealthGauge({ percent }) {
   const radius = 54;
   const circumference = 2 * Math.PI * radius;
-  const offset = percent == null ? circumference : circumference * (1 - percent / 100);
+  const offset = percent != null ? circumference * (1 - percent / 100) : circumference;
   return (
     <div className="relative w-[140px] h-[140px] shrink-0">
       <svg width="140" height="140" viewBox="0 0 140 140" className="-rotate-90">

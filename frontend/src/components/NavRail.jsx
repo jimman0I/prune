@@ -27,7 +27,9 @@ export default function NavRail({ screen, onNavigate }) {
             onClick={() => onNavigate(item.id)}
             aria-current={active ? 'page' : undefined}
             title={item.label}
-            className={`w-11 h-11 rounded-xl flex items-center justify-center transition-colors ${active ? 'bg-[color:var(--accent-coral-soft)] text-[color:var(--accent-coral)]' : 'text-[color:var(--text-secondary)] hover:text-[color:var(--text-primary)] hover:bg-white/[0.04]'}`}
+            className={`w-11 h-11 rounded-xl flex items-center justify-center transition-colors ${
+              active ? 'bg-[color:var(--accent-coral-soft)] text-[color:var(--accent-coral)]' : 'text-[color:var(--text-secondary)] hover:text-[color:var(--text-primary)] hover:bg-white/[0.04]'
+            }`}
           >
             {item.icon}
           </button>
