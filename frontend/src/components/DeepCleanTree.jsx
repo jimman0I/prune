@@ -27,6 +27,30 @@ function Checkbox({ checked, onChange, label }) {
   );
 }
 
+/** Three genuinely different answers that all used to render as "0 B":
+ *   - the app isn't installed on this machine at all
+ *   - it's installed and there's nothing cached right now
+ *   - it exists but Windows won't let us look inside without admin
+ * Only the middle one actually means "nothing to clean". Prefetch is the
+ * everyday example of the third: it routinely holds hundreds of MB and
+ * reads as empty to an unelevated process. */
+function SizeLabel({ item }) {
+  if (item.sizeBytes === null) {
+    return <div className="font-mono text-[12px] shrink-0 text-[color:var(--text-muted)]">—</div>;
+  }
+  if (item.accessible === false) {
+    return <div className="font-mono text-[12px] shrink-0 text-[color:var(--warning)]">needs admin</div>;
+  }
+  if (item.present === false) {
+    return <div className="font-mono text-[12px] shrink-0 text-[color:var(--text-muted)]">not installed</div>;
+  }
+  return (
+    <div className={`font-mono text-[12px] shrink-0 ${item.sizeBytes ? 'text-[color:var(--text-secondary)]' : 'text-[color:var(--text-muted)]'}`}>
+      {formatBytes(item.sizeBytes)}
+    </div>
+  );
+}
+
 function formatBytes(bytes) {
   if (bytes === null || bytes === undefined) return '—';
   if (bytes === 0) return '0 B';
@@ -91,15 +115,13 @@ function CategorySection({ category, items, selected, onToggle, onToggleCategory
             {items.map((item) => (
               <div key={item.id} className="flex items-center gap-3.5 px-5 py-3">
                 <Checkbox checked={selected.has(item.id)} onChange={() => onToggle(item.id)} label={item.name} />
-                <div className="min-w-0 flex-1">
+                <div className={`min-w-0 flex-1 ${item.present === false ? 'opacity-45' : ''}`}>
                   <div className="text-[13px] text-[color:var(--text-primary)]">{item.name}</div>
                   {item.description && (
                     <div className="text-[11.5px] text-[color:var(--text-muted)] mt-0.5 truncate">{item.description}</div>
                   )}
                 </div>
-                <div className={`font-mono text-[12px] shrink-0 ${item.sizeBytes ? 'text-[color:var(--text-secondary)]' : 'text-[color:var(--text-muted)]'}`}>
-                  {formatBytes(item.sizeBytes)}
-                </div>
+                <SizeLabel item={item} />
               </div>
             ))}
           </div>

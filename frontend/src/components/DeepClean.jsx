@@ -55,7 +55,12 @@ export default function DeepClean() {
     setSelected((prev) => {
       const next = new Set(prev);
       for (const item of group.items) {
-        if (checked) next.add(item.id); else next.delete(item.id);
+        // Select All skips rules for software that isn't on this machine.
+        // Selecting them is harmless but meaningless -- they'd clean
+        // nothing -- and with a rule set this size it would otherwise bury
+        // the handful that actually matter under a pile of no-ops.
+        if (checked) { if (item.present !== false) next.add(item.id); }
+        else next.delete(item.id);
       }
       return next;
     });
