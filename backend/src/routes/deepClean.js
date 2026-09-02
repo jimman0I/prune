@@ -49,6 +49,33 @@ router.get('/scan/stream', async (req, res) => {
   }
 });
 
+/** The rule list itself, grouped, with no sizes and no filesystem work.
+ *
+ * Deep Clean used to show an empty panel until someone ran a scan, so the
+ * screen a user first meets said nothing about what the feature even
+ * cleans -- and the scan behind it takes half a minute. The rules are
+ * just a JSON file, so the tree can be on screen immediately and the
+ * sizes filled in afterwards, which is how BleachBit behaves and what
+ * this was asked to match.
+ *
+ * Every rule reports sizeBytes: null, which the tree already renders as a
+ * dash. That is the honest state: not measured, as opposed to measured
+ * and empty. */
+router.get('/rules', (req, res) => {
+  try {
+    const grouped = [];
+    for (const rule of loadCleanerRules()) {
+      const item = { ...rule, sizeBytes: null, fileCount: null };
+      const group = grouped.find((g) => g.category === rule.category);
+      if (group) group.items.push(item);
+      else grouped.push({ category: rule.category, items: [item] });
+    }
+    res.json({ categories: grouped });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 router.get('/scan', (req, res) => {
   try {
     res.json({ categories: scanAllRules() });
