@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { fetchDiskSpace, fetchDiskHealth, fetchUninstallHistory } from '../lib/api.js';
+import { fetchDiskSpace, fetchDiskHealth, unlockDiskWear, fetchUninstallHistory } from '../lib/api.js';
 import { formatRelativeTime } from '../lib/formatRelativeTime.js';
 import StatCard from './StatCard.jsx';
 
@@ -96,6 +96,38 @@ export default function Dashboard({ programs, totalSize }) {
     return () => { cancelled = true; };
   }, []);
 
+  const [unlocking, setUnlocking] = useState(false);
+  const [unlockNote, setUnlockNote] = useState(null);
+
+  /** Explicit click only. This raises a real UAC prompt, so it can never
+   * live in an effect -- an unrequested consent dialog is how software
+   * trains people to click "Yes" without reading it. */
+  const handleUnlockWear = async () => {
+    setUnlocking(true);
+    setUnlockNote(null);
+    try {
+      const result = await unlockDiskWear();
+      if (result.cancelled) {
+        setUnlockNote('Not approved — still showing what Windows reports.');
+      } else if (result.error) {
+        setUnlockNote(result.error);
+      } else if (!result.reliabilityAvailable) {
+        // Real possibility, not a bug: plenty of consumer NVMe firmware
+        // never implements the counters Windows asks for, so even an
+        // administrator gets nothing back.
+        setUnlockNote("This drive doesn't report wear data, even as administrator.");
+        setDiskHealth(result);
+      } else {
+        setUnlockNote(null);
+        setDiskHealth(result);
+      }
+    } catch (err) {
+      setUnlockNote(err.message);
+    } finally {
+      setUnlocking(false);
+    }
+  };
+
   const primaryDisk = diskHealth?.disks?.[0] || null;
   const verdict = driveVerdict(primaryDisk);
 
@@ -137,6 +169,19 @@ export default function Dashboard({ programs, totalSize }) {
                 <div className="text-[13px] text-[color:var(--text-secondary)] mt-1">
                   Windows reports this drive <span className="text-[color:var(--text-primary)]">{primaryDisk.healthStatus || 'status unknown'}</span>.
                   {' '}Wear, temperature and power-on hours need administrator access — Prune won't show a made-up figure instead.
+                </div>
+              )}
+
+              {primaryDisk.lifeRemainingPercent == null && (
+                <div className="mt-3 flex items-center gap-3">
+                  <button
+                    className="btn-ghost px-3.5 py-1.5 rounded-lg text-[12px] font-medium disabled:opacity-50"
+                    onClick={handleUnlockWear}
+                    disabled={unlocking}
+                  >
+                    {unlocking ? 'Waiting for approval…' : 'Read drive wear (admin)'}
+                  </button>
+                  {unlockNote && <span className="text-[12px] text-[color:var(--text-muted)]">{unlockNote}</span>}
                 </div>
               )}
 

@@ -107,6 +107,15 @@ export async function fetchDiskHealth() {
   return data;
 }
 
+/** Raises a real UAC prompt on the user's machine, so it must only ever be
+ * called from an explicit click -- never a mount effect or a refresh. */
+export async function unlockDiskWear() {
+  const res = await fetch(`${API_URL}/disk-health/elevated`, { method: 'POST' });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
+  return data;
+}
+
 export async function fetchDiskSpace() {
   const res = await fetch(`${API_URL}/disk-space`);
   const data = await res.json();
