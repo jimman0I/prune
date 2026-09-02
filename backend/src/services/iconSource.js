@@ -31,21 +31,27 @@ export function parseIconSource(displayIcon) {
   return { path, index };
 }
 
-/** Where to get one program's icon from, or null if there's nowhere.
- *
- * DisplayIcon first, since that's the icon the vendor actually chose. 36
- * of the 129 programs here don't set one, and for those the uninstaller
- * executable is usually still the app's own binary with its own icon --
- * a roughly-right icon beats a coloured letter.
- *
- * The fallback deliberately refuses msiexec and PATH-resolved commands.
- * Extracting from msiexec.exe would succeed and give every MSI-installed
- * program on the machine the same generic Windows Installer icon, which
- * looks like a bug rather than a fallback. */
+/** The icon the vendor explicitly registered, or null. Always the first
+ * choice -- it's the one they chose. */
 export function iconSourceForProgram(program) {
-  const fromDisplayIcon = parseIconSource(program.displayIcon);
-  if (fromDisplayIcon) return fromDisplayIcon;
+  return parseIconSource(program.displayIcon);
+}
 
+/** The program's uninstaller as an icon source. LAST resort, after both
+ * DisplayIcon and the real binary in InstallLocation.
+ *
+ * Found by looking at the list (2026-09-02): this used to rank above the
+ * InstallLocation search, and it cost Discord its icon. Discord's
+ * uninstaller is Squirrel's Update.exe -- an absolute path to a real
+ * non-MSI executable, so it satisfied this fallback and stopped the
+ * search -- but Update.exe carries no icon at all, while Discord.exe sits
+ * one folder away in `app-1.0.9255`. An uninstaller is a plausible source
+ * and a poor one; the application's own binary should always win.
+ *
+ * Refuses msiexec and PATH-resolved commands. Extracting from msiexec.exe
+ * SUCCEEDS and hands every MSI-installed program the same generic Windows
+ * Installer glyph, which reads as a bug rather than a fallback. */
+export function iconSourceFromUninstaller(program) {
   const { executable, isMsi } = parseUninstallerPath(program.uninstallString);
   if (!executable || isMsi) return null;
   // Same reasoning as programHealth.js: a bare command name is resolved

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { parseIconSource, iconSourceForProgram } from './iconSource.js';
+import { parseIconSource, iconSourceForProgram, iconSourceFromUninstaller } from './iconSource.js';
 
 describe('parseIconSource', () => {
   it('reads a bare executable path', () => {
@@ -53,7 +53,7 @@ describe('parseIconSource', () => {
 });
 
 describe('iconSourceForProgram', () => {
-  it('prefers the registry DisplayIcon', () => {
+  it('uses the registry DisplayIcon', () => {
     expect(iconSourceForProgram({
       displayIcon: 'C:\\Program Files\\App\\app.exe,1',
       installLocation: 'C:\\Program Files\\App',
@@ -61,25 +61,34 @@ describe('iconSourceForProgram', () => {
     })).toEqual({ path: 'C:\\Program Files\\App\\app.exe', index: 1 });
   });
 
-  // 36 of the 129 programs on this machine register no DisplayIcon at all.
-  // Their uninstaller is still a real executable with an icon in it, and a
-  // roughly-right icon beats a coloured letter.
-  it('falls back to the uninstaller executable', () => {
-    expect(iconSourceForProgram({
+  // 36 of the 129 programs here are in this position. The caller then
+  // searches InstallLocation, and only after that looks at the
+  // uninstaller -- see iconSourceFromUninstaller below for why that
+  // order matters.
+  it('returns null when no DisplayIcon is registered', () => {
+    expect(iconSourceForProgram({ uninstallString: '"C:\\App\\uninstall.exe"' })).toBeNull();
+    expect(iconSourceForProgram({ displayIcon: '' })).toBeNull();
+    expect(iconSourceForProgram({})).toBeNull();
+  });
+});
+
+describe('iconSourceFromUninstaller', () => {
+  it('uses the uninstaller executable', () => {
+    expect(iconSourceFromUninstaller({
       uninstallString: '"C:\\Program Files\\App\\uninstall.exe" /S'
     })).toEqual({ path: 'C:\\Program Files\\App\\uninstall.exe', index: 0 });
   });
 
-  it('does not fall back to msiexec, which would give every MSI program the same icon', () => {
-    expect(iconSourceForProgram({ uninstallString: 'MsiExec.exe /X{GUID}' })).toBeNull();
+  it('refuses msiexec, which would give every MSI program the same icon', () => {
+    expect(iconSourceFromUninstaller({ uninstallString: 'MsiExec.exe /X{GUID}' })).toBeNull();
   });
 
-  it('does not fall back to a PATH-resolved command', () => {
-    expect(iconSourceForProgram({ uninstallString: 'winget uninstall' })).toBeNull();
+  it('refuses a PATH-resolved command', () => {
+    expect(iconSourceFromUninstaller({ uninstallString: 'winget uninstall' })).toBeNull();
   });
 
-  it('returns null when there is nothing to extract from', () => {
-    expect(iconSourceForProgram({})).toBeNull();
-    expect(iconSourceForProgram({ displayIcon: '', uninstallString: null })).toBeNull();
+  it('returns null when there is no uninstall command', () => {
+    expect(iconSourceFromUninstaller({})).toBeNull();
+    expect(iconSourceFromUninstaller({ uninstallString: null })).toBeNull();
   });
 });

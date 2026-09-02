@@ -4,7 +4,8 @@ import { mkdtempSync, writeFileSync, readFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { listInstalledPrograms } from './programs.js';
-import { iconSourceForProgram } from './iconSource.js';
+import { iconSourceForProgram, iconSourceFromUninstaller } from './iconSource.js';
+import { findMainExecutable } from './findMainExecutable.js';
 
 const execFileAsync = promisify(execFile);
 const TIMEOUT_MS = 60_000;
@@ -107,7 +108,29 @@ export async function getProgramIcons(programs) {
   const pending = new Map();
 
   for (const program of list) {
-    const source = iconSourceForProgram(program);
+    // Three sources, in descending order of how likely they are to be the
+    // icon a person would recognise:
+    //
+    //   1. DisplayIcon -- what the vendor explicitly registered.
+    //   2. The real binary in InstallLocation. This is what rescues the
+    //      recognisable names: Discord and Epic Games Launcher both
+    //      register no DisplayIcon, and their actual icon-bearing
+    //      executables sit in there.
+    //   3. The uninstaller, as a last resort.
+    //
+    // The order matters more than it looks. With the uninstaller ranked
+    // second, Discord got no icon at all: Squirrel's Update.exe is an
+    // absolute non-MSI path, so it satisfied the fallback and stopped the
+    // search, and then turned out to carry no icon.
+    let source = iconSourceForProgram(program);
+
+    if (!source && program.installLocation) {
+      const executable = await findMainExecutable(program.installLocation, program.name);
+      if (executable) source = { path: executable, index: 0 };
+    }
+
+    if (!source) source = iconSourceFromUninstaller(program);
+
     if (!source) continue;
     const key = `${source.path}|${source.index}`;
     keyForProgram.set(program.id, key);
