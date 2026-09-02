@@ -1,5 +1,5 @@
 import { runPowerShellJson } from './powershell.js';
-import { runElevatedPowerShellJson } from '../lib/elevatedPowerShell.js';
+import { runElevatedPowerShellJson } from '../lib/elevated.js';
 
 /** Real physical-disk health, via the same PowerShell chokepoint every
  * other backend service uses. Two tiers, because Windows splits this data

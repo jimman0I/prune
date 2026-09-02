@@ -107,6 +107,80 @@ ${script}
   }
 }
 
+/** Runs a Node script ELEVATED and returns the JSON it writes.
+ *
+ * Same elevation mechanism and same contract as the PowerShell version
+ * above -- including that it must never be called without a real user
+ * action behind it -- but for work PowerShell simply can't do. The MFT
+ * scan is the case: it reads and parses hundreds of megabytes of binary
+ * records, which is fine in Node and hopeless in a PowerShell script.
+ *
+ * The script is invoked with its own arguments plus the output path as
+ * the last one, and is expected to write JSON there.
+ *
+ * Two Windows details this has to get right:
+ *
+ *  - In a PACKAGED app there is no node.exe to run. Electron's own
+ *    executable becomes a plain Node interpreter when ELECTRON_RUN_AS_NODE
+ *    is set, so that's the interpreter here.
+ *
+ *  - `Start-Process -Verb RunAs` goes through the elevation broker, and
+ *    relying on it to carry an environment variable through is asking for
+ *    trouble. A tiny .cmd shim sets the variable in the elevated process
+ *    itself, where it definitely applies.
+ */
+export async function runElevatedNodeJson(scriptPath, args = [], { timeoutMs = DEFAULT_TIMEOUT_MS } = {}) {
+  let workDir;
+  try {
+    workDir = mkdtempSync(join(tmpdir(), 'prune-elevated-node-'));
+  } catch (err) {
+    return { ok: false, error: `Couldn't create a temp directory: ${err.message}` };
+  }
+
+  const outPath = join(workDir, 'out.json');
+  const shimPath = join(workDir, 'run.cmd');
+
+  try {
+    const quotedArgs = [scriptPath, ...args, outPath].map((a) => `"${a}"`).join(' ');
+    const shim = [
+      '@echo off',
+      'set ELECTRON_RUN_AS_NODE=1',
+      `"${process.execPath}" ${quotedArgs}`,
+      ''
+    ].join('\r\n');
+    writeFileSync(shimPath, shim, 'utf8');
+
+    const launcher = `Start-Process -FilePath ${quote(shimPath)} -Verb RunAs -WindowStyle Hidden -Wait`;
+
+    try {
+      await execFileAsync('powershell.exe', ['-NoProfile', '-NonInteractive', '-Command', launcher], { timeout: timeoutMs });
+    } catch (err) {
+      const message = `${err.message || ''}`;
+      if (/canceled by the user|cancelled by the user|1223/i.test(message)) {
+        return { ok: false, cancelled: true };
+      }
+      return { ok: false, error: message.trim() || 'The elevated helper failed to start.' };
+    }
+
+    if (!existsSync(outPath)) return { ok: false, cancelled: true };
+
+    const raw = readFileSync(outPath, 'utf8').trim();
+    if (!raw) return { ok: false, error: 'The elevated helper returned nothing.' };
+
+    let parsed;
+    try {
+      parsed = JSON.parse(raw);
+    } catch (err) {
+      return { ok: false, error: `The elevated helper returned non-JSON output: ${err.message}` };
+    }
+    if (parsed && parsed.__error) return { ok: false, error: parsed.__error };
+
+    return { ok: true, data: parsed };
+  } finally {
+    try { rmSync(workDir, { recursive: true, force: true }); } catch { /* best-effort */ }
+  }
+}
+
 /** PowerShell single-quoted literal: the only escape inside one is a
  * doubled quote, and nothing else is interpreted -- which is exactly why
  * paths go in single quotes here rather than double. */

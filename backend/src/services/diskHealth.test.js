@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, afterEach } from 'vitest';
 import { getDiskHealth, getElevatedDiskHealth } from './diskHealth.js';
 import * as powershell from './powershell.js';
-import * as elevated from '../lib/elevatedPowerShell.js';
+import * as elevated from '../lib/elevated.js';
 
 const ELEVATED_DISK = {
   deviceId: '0',

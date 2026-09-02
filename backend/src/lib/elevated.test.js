@@ -4,7 +4,7 @@ import { readdirSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 
 // execFile is promisified at module load, so it has to be mocked before
-// elevatedPowerShell.js is imported. The mock stands in for the elevated
+// elevated.js is imported. The mock stands in for the elevated
 // child: the real one writes its JSON to the temp out.json path baked into
 // the launcher string, so each test's fake does exactly that.
 vi.mock('node:child_process', async (importOriginal) => {
@@ -12,7 +12,7 @@ vi.mock('node:child_process', async (importOriginal) => {
   return { ...actual, execFile: vi.fn() };
 });
 
-const { runElevatedPowerShellJson } = await import('./elevatedPowerShell.js');
+const { runElevatedPowerShellJson } = await import('./elevated.js');
 const { writeFileSync } = await import('node:fs');
 
 /** Pulls the out.json path back out of the launcher command the code
