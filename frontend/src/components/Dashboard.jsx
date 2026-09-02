@@ -74,6 +74,58 @@ function driveVerdict(disk) {
   return { percent: null, statusLabel: status || 'Unknown', tone };
 }
 
+function formatCount(value) {
+  return typeof value === 'number' ? value.toLocaleString() : '—';
+}
+
+/** The drive's own SMART attributes, the set CrystalDiskInfo shows.
+ *
+ * Read straight from the NVMe SMART log page, which needs no elevation --
+ * so unlike the old wear button, this is simply here. Media errors and
+ * unsafe shutdowns are called out in colour when non-zero: those are the
+ * two an ordinary person should actually act on, and the rest is context
+ * for them. */
+function SmartAttributes({ smart }) {
+  const tb = (bytes) => (typeof bytes === 'number' ? `${(bytes / 1e12).toFixed(1)} TB` : '—');
+
+  const rows = [
+    ['Power-on hours', formatCount(smart.powerOnHours)],
+    ['Power cycles', formatCount(smart.powerCycles)],
+    ['Data written', tb(smart.bytesWritten)],
+    ['Data read', tb(smart.bytesRead)],
+    ['Spare blocks', smart.availableSparePercent != null ? `${smart.availableSparePercent}%` : '—'],
+    ['Unsafe shutdowns', formatCount(smart.unsafeShutdowns), smart.unsafeShutdowns > 0 ? 'warn' : null],
+    ['Media errors', formatCount(smart.mediaErrors), smart.mediaErrors > 0 ? 'bad' : 'good'],
+    ['Error log entries', formatCount(smart.errorLogEntries)]
+  ];
+
+  return (
+    <div className="mt-4 pt-4 border-t border-[color:var(--border-subtle)]">
+      <div className="text-[10.5px] font-mono uppercase tracking-[0.14em] text-[color:var(--text-muted)] mb-2.5">
+        Reported by the drive
+      </div>
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-2">
+        {rows.map(([label, value, tone]) => (
+          <div key={label} className="min-w-0">
+            <div className="text-[10.5px] text-[color:var(--text-muted)] truncate">{label}</div>
+            <div
+              className={`text-[13px] font-mono ${
+                tone === 'bad' ? 'text-[color:var(--danger)]'
+                  : tone === 'warn' ? 'text-[color:var(--warning)]'
+                  : tone === 'good' ? 'text-[color:var(--success)]'
+                  : 'text-[color:var(--text-primary)]'
+              }`}
+              style={{ fontVariantNumeric: 'tabular-nums' }}
+            >
+              {value}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export default function Dashboard({ programs, totalSize, onNavigate = () => {} }) {
   const [diskSpace, setDiskSpace] = useState(null);
   const [diskSpaceError, setDiskSpaceError] = useState(null);
@@ -184,6 +236,8 @@ export default function Dashboard({ programs, totalSize, onNavigate = () => {} }
                   {unlockNote && <span className="text-[12px] text-[color:var(--text-muted)]">{unlockNote}</span>}
                 </div>
               )}
+
+              {primaryDisk.smart && <SmartAttributes smart={primaryDisk.smart} />}
 
               {(primaryDisk.readErrorsUncorrected > 0 || primaryDisk.writeErrorsUncorrected > 0) && (
                 <div className="text-[12.5px] text-[color:var(--danger)] mt-1.5">
