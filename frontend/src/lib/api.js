@@ -100,6 +100,47 @@ export async function runSandboxTest() {
   return data;
 }
 
+/** The deep-clean scan, streamed a rule at a time.
+ *
+ * fetchDeepCleanScan below takes ~19 seconds and returns nothing until
+ * it is completely finished, which on screen is indistinguishable from
+ * being stuck. This calls `onEvent(type, data)` as each rule's real size
+ * comes back, so the tree can fill in while the scan is still running.
+ *
+ * `signal` aborts it. The server watches for the disconnect and stops
+ * walking the filesystem, so this is a real cancel rather than just
+ * ignoring the rest of the answer.
+ *
+ * Events: 'start' { total }, 'rule' (one scanned rule), 'done'
+ * { aborted, total, scanned }, 'error' { message }. */
+export async function streamDeepCleanScan(onEvent, signal) {
+  const res = await fetch(`${API_URL}/deep-clean/scan/stream`, { signal });
+  if (!res.ok || !res.body) throw new Error(`Request failed: ${res.status}`);
+
+  const reader = res.body.getReader();
+  const decoder = new TextDecoder();
+  let buf = '';
+  let currentEvent = 'message';
+
+  for (;;) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    buf += decoder.decode(value, { stream: true });
+
+    // Line-buffered on purpose: a chunk boundary lands mid-event often
+    // enough that parsing whatever arrived would drop rules at random.
+    let sep;
+    while ((sep = buf.indexOf('\n')) >= 0) {
+      const line = buf.slice(0, sep);
+      buf = buf.slice(sep + 1);
+      const parsed = parseSSELine(line);
+      if (!parsed) continue;
+      if (parsed.field === 'event') currentEvent = parsed.value;
+      else if (parsed.field === 'data') onEvent(currentEvent, JSON.parse(parsed.value));
+    }
+  }
+}
+
 export async function fetchDeepCleanScan() {
   const res = await fetch(`${API_URL}/deep-clean/scan`);
   const data = await res.json();

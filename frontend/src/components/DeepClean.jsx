@@ -1,7 +1,74 @@
-import { useState } from 'react';
-import { fetchDeepCleanScan, executeDeepClean } from '../lib/api.js';
+import { useEffect, useRef, useState } from 'react';
+import { streamDeepCleanScan, executeDeepClean } from '../lib/api.js';
 import { defaultSelection, selectableIds } from '../lib/defaultSelection.js';
+import { appendScannedRule, scanLogLine } from '../lib/scanLog.js';
 import DeepCleanTree from './DeepCleanTree.jsx';
+
+const LOG_TONE = {
+  size: 'text-[color:var(--accent-coral)]',
+  warning: 'text-[color:var(--warning)]',
+  muted: 'text-[color:var(--text-muted)]'
+};
+
+/** The live scan log. Each rule appears the moment its real size comes
+ * back, which is what turns a nineteen-second wait from "is this stuck?"
+ * into something you can watch. Auto-scrolls, but only while pinned to
+ * the bottom -- yanking the view back down while someone is reading
+ * further up is worse than not scrolling at all. */
+function ScanLog({ lines, scanning, scanned, total }) {
+  const boxRef = useRef(null);
+  const pinnedRef = useRef(true);
+
+  useEffect(() => {
+    const box = boxRef.current;
+    if (box && pinnedRef.current) box.scrollTop = box.scrollHeight;
+  }, [lines.length]);
+
+  const onScroll = () => {
+    const box = boxRef.current;
+    if (!box) return;
+    pinnedRef.current = box.scrollHeight - box.scrollTop - box.clientHeight < 24;
+  };
+
+  return (
+    <div className="glass-panel flex flex-col min-h-0 overflow-hidden">
+      <div className="flex items-center justify-between gap-3 px-4 py-3 border-b border-[color:var(--border-subtle)] shrink-0">
+        <span className="text-[11px] font-mono uppercase tracking-[0.14em] text-[color:var(--text-muted)]">
+          Scan output
+        </span>
+        {total > 0 && (
+          <span className="text-[11.5px] font-mono text-[color:var(--text-secondary)]">
+            {scanned} / {total}
+          </span>
+        )}
+      </div>
+
+      {total > 0 && (
+        <div className="h-[2px] bg-white/[0.06] shrink-0">
+          <div
+            className="h-full bg-[color:var(--accent-coral)] transition-[width] duration-200"
+            style={{ width: `${Math.round((scanned / total) * 100)}%` }}
+          />
+        </div>
+      )}
+
+      <div ref={boxRef} onScroll={onScroll} className="flex-1 overflow-y-auto min-h-0 px-4 py-3 space-y-1">
+        {lines.length === 0 && (
+          <p className="text-[12px] text-[color:var(--text-muted)] font-mono">
+            {scanning ? 'Starting…' : 'Nothing scanned yet.'}
+          </p>
+        )}
+        {lines.map((line, i) => (
+          <div key={i} className="flex items-baseline gap-2 text-[11.5px] font-mono leading-relaxed">
+            <span className="text-[color:var(--text-secondary)] truncate">{line.label}</span>
+            <span className="flex-1 border-b border-dashed border-white/[0.07] translate-y-[-3px]" />
+            <span className={`${LOG_TONE[line.tone]} shrink-0`}>{line.detail}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
 
 function formatBytes(bytes) {
   if (bytes === null || bytes === undefined) return '—';
@@ -23,14 +90,59 @@ export default function DeepClean() {
   const [cleaning, setCleaning] = useState(false);
   const [cleanResult, setCleanResult] = useState(null);
   const [cleanError, setCleanError] = useState(null);
+  const [logLines, setLogLines] = useState([]);
+  const [scanned, setScanned] = useState(0);
+  const [total, setTotal] = useState(0);
+  const abortRef = useRef(null);
 
-  const runPreview = async () => {
+  // Aborting the fetch closes the connection, and the route watches for
+  // that -- so Stop really does stop the filesystem walk server-side
+  // rather than just ignoring the rest of the answer.
+  const stopPreview = () => abortRef.current?.abort();
+
+  // Same reason on unmount: navigating away shouldn't leave a scan
+  // running for an answer nobody will see.
+  useEffect(() => () => abortRef.current?.abort(), []);
+
+  /** `reselect: false` is for the rescan that follows a clean -- the user
+   * just acted on those rules, and re-ticking them would invite doing it
+   * twice. */
+  const runPreview = async ({ reselect = true } = {}) => {
+    // Each rule's size streams back as it's measured, so the tree and the
+    // log fill in during the scan instead of after it. The whole run takes
+    // about nineteen seconds on a real machine and one rule (a 33 GB
+    // shader cache) accounts for a big slice of that -- with no output
+    // until the end, there was no way to tell it from a hang.
+    const controller = new AbortController();
+    abortRef.current = controller;
+
     setScanning(true);
     setScanError(null);
     setCleanResult(null);
+    setLogLines([]);
+    setScanned(0);
+    setTotal(0);
+
+    // Accumulated outside state: the stream delivers 40 events in ~19s and
+    // the final selection needs the complete set, which a stale closure
+    // over `categories` would not have.
+    let built = [];
+
     try {
-      const result = await fetchDeepCleanScan();
-      setCategories(result);
+      await streamDeepCleanScan((type, data) => {
+        if (type === 'start') {
+          setTotal(data.total);
+          setCategories([]);
+        } else if (type === 'rule') {
+          built = appendScannedRule(built, data);
+          setCategories(built);
+          setLogLines((prev) => [...prev, scanLogLine(data)]);
+          setScanned((n) => n + 1);
+        } else if (type === 'error') {
+          setScanError(data.message);
+        }
+      }, controller.signal);
+
       // Pre-tick the recommended rules that are actually here. Without
       // this, a scan that found 54 GB across 40 rules left the footer
       // reading "Total space to free: 0 B" with Clean disabled -- a
@@ -40,13 +152,18 @@ export default function DeepClean() {
       // A rescan after a clean shouldn't silently re-tick everything the
       // user just removed, so an existing selection is kept (minus any id
       // the fresh scan no longer has) rather than replaced.
-      const validIds = new Set(result.flatMap((g) => g.items.map((i) => i.id)));
-      setSelected((prev) => (prev.size > 0
-        ? new Set([...prev].filter((id) => validIds.has(id)))
-        : defaultSelection(result)));
+      const validIds = new Set(built.flatMap((g) => g.items.map((i) => i.id)));
+      setSelected((prev) => {
+        const kept = new Set([...prev].filter((id) => validIds.has(id)));
+        if (kept.size > 0 || !reselect) return kept;
+        return defaultSelection(built);
+      });
     } catch (err) {
-      setScanError(err.message);
+      // Aborting is the user pressing Stop, not a failure. Whatever was
+      // measured before that point is real and stays on screen.
+      if (err.name !== 'AbortError') setScanError(err.message);
     } finally {
+      abortRef.current = null;
       setScanning(false);
     }
   };
@@ -83,11 +200,15 @@ export default function DeepClean() {
       const result = await executeDeepClean([...selected]);
       setCleanResult(result);
       setSelected(new Set());
+      setCleaning(false);
+      setConfirmClean(false);
       // Re-scan so the numbers on screen reflect what's actually left on
       // disk, not a stale pre-clean snapshot -- same convention Smart
-      // Cleanup's own handleClean already follows.
-      const fresh = await fetchDeepCleanScan();
-      setCategories(fresh);
+      // Cleanup's own handleClean already follows. Streamed like any other
+      // scan, so this one shows its progress too rather than freezing the
+      // screen for another nineteen seconds after the clean.
+      await runPreview({ reselect: false });
+      return;
     } catch (err) {
       setCleanError(err.message);
     } finally {
@@ -102,7 +223,7 @@ export default function DeepClean() {
 
   return (
     <div className="h-full flex flex-col">
-      <div className="flex-1 overflow-y-auto min-h-0 px-12 py-10 max-w-[1400px]">
+      <div className="flex-1 flex flex-col min-h-0 px-12 pt-10 pb-6 max-w-[1600px] w-full">
         <div className="text-[11px] text-[color:var(--text-muted)] font-mono uppercase tracking-[0.16em] mb-2">Maintenance</div>
         <h1 className="display-heading text-[30px] leading-none mb-2">Deep Clean</h1>
         <p className="text-[13px] text-[color:var(--text-secondary)] mb-6 max-w-[62ch]">
@@ -133,32 +254,32 @@ export default function DeepClean() {
           </div>
         )}
 
-        {scanning && !categories && (
-          <div className="glass-panel flex flex-col items-center justify-center py-16">
-            <div className="w-14 h-14 rounded-2xl bg-[color:var(--accent-coral)]/10 border border-[color:var(--accent-coral)]/25 flex items-center justify-center mb-5">
-              <div className="w-6 h-6 border-2 border-[color:var(--accent-coral)] border-t-transparent rounded-full animate-spin"></div>
-            </div>
-            <p className="text-[13px] text-[color:var(--text-secondary)]">Scanning deep caches…</p>
-          </div>
-        )}
+        {/* Tree on the left, live scan output on the right -- so what the
+            scan is doing is visible while it does it, instead of a
+            spinner that says nothing for nineteen seconds. */}
+        <div className="flex-1 grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_360px] gap-5 min-h-0">
+          <div className="overflow-y-auto min-h-0 pr-1">
+            {!categories && !scanError && (
+              <div className="glass-panel p-10 text-center">
+                <p className="text-[13.5px] text-[color:var(--text-secondary)]">Nothing scanned yet.</p>
+                <p className="text-[12.5px] text-[color:var(--text-muted)] mt-1.5">
+                  Click Preview below to calculate real sizes for every category.
+                </p>
+              </div>
+            )}
 
-        {!scanning && !categories && !scanError && (
-          <div className="glass-panel p-10 text-center">
-            <p className="text-[13.5px] text-[color:var(--text-secondary)]">Nothing scanned yet.</p>
-            <p className="text-[12.5px] text-[color:var(--text-muted)] mt-1.5">
-              Click Preview below to calculate real sizes for every category.
-            </p>
+            {categories && (
+              <DeepCleanTree
+                categories={categories}
+                selected={selected}
+                onToggle={handleToggle}
+                onToggleCategory={handleToggleCategory}
+              />
+            )}
           </div>
-        )}
 
-        {categories && (
-          <DeepCleanTree
-            categories={categories}
-            selected={selected}
-            onToggle={handleToggle}
-            onToggleCategory={handleToggleCategory}
-          />
-        )}
+          <ScanLog lines={logLines} scanning={scanning} scanned={scanned} total={total} />
+        </div>
       </div>
 
       <div
@@ -206,9 +327,25 @@ export default function DeepClean() {
             </>
           ) : (
             <>
-              <button className="btn-ghost px-4 py-2 rounded-lg text-[12.5px] font-medium disabled:opacity-50" onClick={runPreview} disabled={scanning}>
-                {scanning ? 'Scanning…' : 'Preview'}
-              </button>
+              {/* Stop replaces Preview mid-scan rather than sitting beside
+                  it greyed out: during those nineteen seconds it's the only
+                  thing the button can usefully do. */}
+              {scanning ? (
+                <button
+                  className="btn-ghost px-4 py-2 rounded-lg text-[12.5px] font-medium flex items-center gap-2"
+                  onClick={stopPreview}
+                >
+                  <span className="w-2 h-2 rounded-[2px] bg-[color:var(--danger)]" />
+                  Stop
+                </button>
+              ) : (
+                <button
+                  className="btn-ghost px-4 py-2 rounded-lg text-[12.5px] font-medium"
+                  onClick={runPreview}
+                >
+                  {categories ? 'Rescan' : 'Preview'}
+                </button>
+              )}
               <button
                 className="btn-primary px-5 py-2 text-[12.5px] font-medium disabled:opacity-50"
                 onClick={() => setConfirmClean(true)}
