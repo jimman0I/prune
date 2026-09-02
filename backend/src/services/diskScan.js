@@ -57,8 +57,28 @@ async function scanNode(entryPath, name, depthRemaining, signal) {
   // fix for "the backend freezes" -- other requests get serviced in the
   // gaps, they just don't race this scan for the same 4 I/O threads.
   const children = [];
-  for (const entryName of entryNames) {
-    if (signal?.aborted) break; // stop discovering more siblings once aborted
+  for (let i = 0; i < entryNames.length; i++) {
+    if (signal?.aborted) {
+      // Real showstopper found running the packaged app unelevated
+      // (2026-09-02): the loop used to just `break` here, dropping every
+      // sibling it hadn't reached. Scanning C:\ hit the 30s budget
+      // alphabetically at "Games" and returned 35.7 GB for a drive with
+      // 845 GB in use -- Users (528 GB), Program Files (x86) (225 GB),
+      // ProgramData (155 GB) and Windows weren't shown as unknown, they
+      // were simply gone, so the treemap reported Games as 82% of the
+      // disk with total confidence. A truncated scan is fine; one that
+      // silently deletes most of the drive from its own answer is not.
+      //
+      // `scanned: false` is the load-bearing part. Size 0 does NOT mean
+      // empty here, and the UI has to be able to tell the difference --
+      // same distinction the cleaner rules already draw between "nothing
+      // to clean" and "we couldn't look".
+      for (const skipped of entryNames.slice(i)) {
+        children.push({ name: skipped, size: 0, type: 'directory', scanned: false });
+      }
+      break;
+    }
+    const entryName = entryNames[i];
     const child = await scanNode(join(entryPath, entryName), entryName, depthRemaining - 1, signal);
     if (child) children.push(child);
   }

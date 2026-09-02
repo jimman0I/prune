@@ -156,6 +156,45 @@ describe('scanDirectory (real file I/O, async)', () => {
       expect(Array.isArray(result.children)).toBe(true);
     });
 
+    // Real showstopper found running the packaged app unelevated
+    // (2026-09-02): scanning C:\ hit the 30s budget alphabetically at
+    // "Games" and returned 35.7 GB for a drive with 845 GB in use. Users
+    // (528 GB), Program Files (x86) (225 GB), ProgramData (155 GB) and
+    // Windows were not shown as unknown -- they were absent entirely, so
+    // the treemap confidently reported Games as 82% of the disk. Entries
+    // the walk never reached must survive as visibly unmeasured rather
+    // than vanishing.
+    it('keeps siblings it never reached, marked unscanned, instead of dropping them', async () => {
+      writeFileSync(join(dir, 'a.txt'), '12345');
+      mkdirSync(join(dir, 'sub'));
+      writeFileSync(join(dir, 'sub', 'b.txt'), '1234567890');
+      writeFileSync(join(dir, 'z-never-reached.txt'), '123');
+
+      const controller = new AbortController();
+      let readdirCalls = 0;
+      fs.promises.readdir.mockImplementation((p, ...rest) => {
+        readdirCalls++;
+        if (readdirCalls === 2) controller.abort();
+        return fs.__actualPromises.readdir(p, ...rest);
+      });
+
+      const result = await scanDirectory(dir, undefined, controller.signal);
+      const names = result.children.map(c => c.name);
+      // Every entry the directory really has is still represented.
+      expect(names).toContain('z-never-reached.txt');
+      const unreached = result.children.find(c => c.name === 'z-never-reached.txt');
+      expect(unreached.scanned).toBe(false);
+      // Size 0 is not a claim that it's empty -- `scanned: false` is what
+      // says "we never looked", and the UI has to render that difference.
+      expect(unreached.size).toBe(0);
+    });
+
+    it('does not mark anything unscanned on a scan that completed', async () => {
+      writeFileSync(join(dir, 'a.txt'), '12345');
+      const result = await scanDirectory(dir);
+      expect(result.children.every(c => c.scanned === undefined)).toBe(true);
+    });
+
     it('never rejects/throws just because the signal was aborted', async () => {
       const controller = new AbortController();
       controller.abort();
