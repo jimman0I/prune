@@ -186,6 +186,19 @@ export async function streamDeepCleanScan(onEvent, signal) {
   }
 }
 
+/** The rule list, grouped, with no sizes.
+ *
+ * Reads a JSON file and touches no disk, so it comes back in a few tens
+ * of milliseconds. That is what lets Deep Clean show its tree the moment
+ * the tab opens instead of an empty panel, with the half-minute
+ * measurement filling the sizes in afterwards. */
+export async function fetchDeepCleanRules() {
+  const res = await fetch(`${API_URL}/deep-clean/rules`);
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
+  return data.categories;
+}
+
 export async function fetchDeepCleanScan() {
   const res = await fetch(`${API_URL}/deep-clean/scan`);
   const data = await res.json();

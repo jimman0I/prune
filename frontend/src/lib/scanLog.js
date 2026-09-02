@@ -7,19 +7,33 @@ function formatBytes(bytes) {
   return `${parseFloat((bytes / Math.pow(k, i)).toFixed(1))} ${sizes[i]}`;
 }
 
-/** Folds one streamed rule into the grouped tree the UI renders, so the
- * categories build up while the scan is still running rather than
- * appearing all at once at the end.
+/** Folds one streamed rule into the grouped tree the UI renders, so sizes
+ * appear while the scan is still running rather than all at once at the
+ * end.
+ *
+ * An UPDATE where it used to be an append. The tree is now on screen
+ * before any scan runs -- built from the rule list, every size a dash --
+ * so a scanned rule has a placeholder waiting for it. Appending would
+ * have listed all forty rules twice. Matching on id and leaving the row
+ * where it is also keeps the tree still while it fills in, instead of
+ * reordering itself under the reader.
  *
  * Returns a new array every time. The tree is rendered from React state
  * mid-scan, and mutating the previous one in place would leave counts and
  * sizes stale until something unrelated happened to trigger a render. */
-export function appendScannedRule(categories, item) {
+export function mergeScannedRule(categories, item) {
   const index = categories.findIndex((group) => group.category === item.category);
   if (index === -1) return [...categories, { category: item.category, items: [item] }];
-  return categories.map((group, i) => (
-    i === index ? { ...group, items: [...group.items, item] } : group
-  ));
+
+  return categories.map((group, i) => {
+    if (i !== index) return group;
+    const at = group.items.findIndex((existing) => existing.id === item.id);
+    if (at === -1) return { ...group, items: [...group.items, item] };
+    return {
+      ...group,
+      items: group.items.map((existing, j) => (j === at ? { ...existing, ...item } : existing))
+    };
+  });
 }
 
 /** One line of the live scan log: what was just looked at, and what was

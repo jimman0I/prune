@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
-import { streamDeepCleanScan, executeDeepClean } from '../lib/api.js';
+import { fetchDeepCleanRules, streamDeepCleanScan, executeDeepClean } from '../lib/api.js';
 import { defaultSelection, selectableIds } from '../lib/defaultSelection.js';
-import { appendScannedRule, scanLogLine } from '../lib/scanLog.js';
+import { selectionTotal } from '../lib/selectionTotal.js';
+import { mergeScannedRule, scanLogLine } from '../lib/scanLog.js';
 import DeepCleanTree from './DeepCleanTree.jsx';
 
 const LOG_TONE = {
@@ -92,8 +93,34 @@ export default function DeepClean() {
   const [cleanError, setCleanError] = useState(null);
   const [logLines, setLogLines] = useState([]);
   const [scanned, setScanned] = useState(0);
+  // Whether sizes have actually been measured, which is no longer the
+  // same question as whether the tree exists.
+  const [hasScanned, setHasScanned] = useState(false);
   const [total, setTotal] = useState(0);
   const abortRef = useRef(null);
+
+  // The tree is on screen before anything is measured. It is built from
+  // the rule list, which is a JSON file the backend reads in about forty
+  // milliseconds, so every category and every rule is there to read and
+  // tick immediately -- sizes show a dash until a scan fills them in.
+  //
+  // Deep Clean used to open on an empty panel and stay there until
+  // someone found the Preview button and waited half a minute, which is
+  // how it came to be reported as not working. Showing what the feature
+  // cleans should not cost thirty seconds of disk walking.
+  useEffect(() => {
+    let cancelled = false;
+    fetchDeepCleanRules()
+      .then((listed) => {
+        if (cancelled) return;
+        // Only as the starting state: a scan already running owns the
+        // tree, and this must not overwrite measured sizes with dashes.
+        setCategories((prev) => prev ?? listed);
+        setSelected((prev) => (prev.size > 0 ? prev : defaultSelection(listed)));
+      })
+      .catch(() => { /* Preview still builds the tree from scratch */ });
+    return () => { cancelled = true; };
+  }, []);
 
   // Aborting the fetch closes the connection, and the route watches for
   // that -- so Stop really does stop the filesystem walk server-side
@@ -123,19 +150,28 @@ export default function DeepClean() {
     setScanned(0);
     setTotal(0);
 
-    // Accumulated outside state: the stream delivers 40 events in ~19s and
-    // the final selection needs the complete set, which a stale closure
-    // over `categories` would not have.
+    // Mirrors the tree outside state: the stream delivers 40 events in
+    // ~19s and the final selection step needs the complete set, which a
+    // stale closure over `categories` would not have.
     let built = [];
 
     try {
       await streamDeepCleanScan((type, data) => {
         if (type === 'start') {
           setTotal(data.total);
-          setCategories([]);
+          // Deliberately NOT cleared. The listed tree is already the right
+          // shape and each result merges into it by id, so the rules stay
+          // put and readable while their sizes arrive.
+          setCategories((prev) => prev ?? []);
         } else if (type === 'rule') {
-          built = appendScannedRule(built, data);
-          setCategories(built);
+          // Merged through the state updater rather than into a local
+          // copy, so each result lands on the tree that is actually on
+          // screen -- the listed one. Merging by id is idempotent, so
+          // React invoking this twice in development changes nothing.
+          setCategories((prev) => {
+            built = mergeScannedRule(prev ?? [], data);
+            return built;
+          });
           setLogLines((prev) => [...prev, scanLogLine(data)]);
           setScanned((n) => n + 1);
         } else if (type === 'error') {
@@ -152,7 +188,14 @@ export default function DeepClean() {
       // A rescan after a clean shouldn't silently re-tick everything the
       // user just removed, so an existing selection is kept (minus any id
       // the fresh scan no longer has) rather than replaced.
-      const validIds = new Set(built.flatMap((g) => g.items.map((i) => i.id)));
+      setHasScanned(true);
+
+      // Now that the sizes are known, drop anything the scan proved there
+      // is no point cleaning. Before a scan the tree is listed but
+      // unmeasured, so the defaults have to tick rules that may turn out
+      // to be uninstalled or unreadable -- keeping them selected
+      // afterwards would put rules in the batch that free nothing.
+      const validIds = selectableIds(built);
       setSelected((prev) => {
         const kept = new Set([...prev].filter((id) => validIds.has(id)));
         if (kept.size > 0 || !reselect) return kept;
@@ -217,9 +260,7 @@ export default function DeepClean() {
     }
   };
 
-  const totalBytes = categories
-    ? categories.flatMap((g) => g.items).filter((i) => selected.has(i.id)).reduce((sum, i) => sum + (i.sizeBytes || 0), 0)
-    : 0;
+  const cleanTotal = selectionTotal(categories, selected);
 
   return (
     <div className="h-full flex flex-col">
@@ -303,7 +344,17 @@ export default function DeepClean() {
       >
         <div className="flex items-center gap-3 min-w-0">
           <div className="text-[13px] text-[color:var(--text-secondary)]">
-            Total space to free: <span className="text-[color:var(--text-primary)] font-medium font-mono">{formatBytes(totalBytes)}</span>
+            {/* "0 B" would be a claim here, not a result: with the tree
+                listed but unmeasured, nothing has been asked of the disk
+                yet. Same rule as the version column -- say what is not
+                known rather than print a confident zero. */}
+            Total space to free:{' '}
+            <span className="text-[color:var(--text-primary)] font-medium font-mono">
+              {cleanTotal.anyMeasured ? formatBytes(cleanTotal.bytes) : 'not measured yet'}
+            </span>
+            {cleanTotal.anyMeasured && cleanTotal.unmeasured > 0 && (
+              <span className="text-[color:var(--text-muted)]"> · {cleanTotal.unmeasured} not measured</span>
+            )}
           </div>
           {categories && (
             // One click to take everything or nothing. Reaching the
@@ -358,7 +409,7 @@ export default function DeepClean() {
                   className="btn-ghost px-4 py-2 rounded-lg text-[12.5px] font-medium"
                   onClick={() => runPreview()}
                 >
-                  {categories ? 'Rescan' : 'Preview'}
+                  {hasScanned ? 'Rescan' : 'Preview'}
                 </button>
               )}
               <button
