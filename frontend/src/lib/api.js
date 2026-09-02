@@ -7,6 +7,23 @@ export async function fetchPrograms() {
   return data.programs;
 }
 
+/** Every installed program's real icon, as { programId: dataUri }.
+ *
+ * A separate call from fetchPrograms on purpose: the backend has to spawn
+ * PowerShell and read ~90 executables to build this, and making the
+ * program list wait on that would trade a fast list for a prettier one.
+ * Fetch it after the rows are on screen and let the icons fill in.
+ *
+ * A program with no extractable icon is simply absent from the map --
+ * 35 of 129 on this machine, mostly MSI redistributables that register
+ * no icon at all -- and keeps its lettered tile. */
+export async function fetchProgramIcons() {
+  const res = await fetch(`${API_URL}/programs/icons`);
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
+  return data.icons;
+}
+
 export async function scanForLeftovers(name, publisher) {
   const res = await fetch(`${API_URL}/leftovers/scan`, {
     method: 'POST',

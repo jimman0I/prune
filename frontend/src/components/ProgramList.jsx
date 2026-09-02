@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { fetchPrograms } from '../lib/api.js';
+import { fetchPrograms, fetchProgramIcons } from '../lib/api.js';
 import { sizeBadgeTone } from '../lib/sizeBadgeTone.js';
 
 function formatBytes(bytes) {
@@ -18,6 +18,50 @@ const SIZE_BADGE_CLASSES = {
   coral: 'bg-[color:var(--accent-coral)]/12 text-[color:var(--accent-coral)]'
 };
 
+/** The program's own icon, pulled from its executable, falling back to a
+ * lettered tile.
+ *
+ * Two different fallbacks, both needed. `src` is absent for a program
+ * whose icon couldn't be extracted at all (35 of 129 here -- mostly MSI
+ * redistributables that register no icon). `onError` covers the rarer
+ * case of a data URI that arrived but won't decode; without it the row
+ * would show a broken-image glyph, which looks worse than the letter it
+ * replaced. */
+function ProgramIcon({ program, src }) {
+  const [failed, setFailed] = useState(false);
+
+  if (src && !failed) {
+    return (
+      // A neutral, near-transparent well rather than the coral gradient:
+      // real icons bring their own colour, and a tinted plate behind
+      // ninety different palettes makes all of them look grubby.
+      <div className="w-9 h-9 rounded-lg flex items-center justify-center bg-white/[0.04] border border-[color:var(--border-subtle)] overflow-hidden">
+        <img
+          src={src}
+          alt=""
+          width={28}
+          height={28}
+          className="w-7 h-7 object-contain"
+          onError={() => setFailed(true)}
+        />
+      </div>
+    );
+  }
+
+  return (
+    <div
+      className="w-9 h-9 rounded-lg flex items-center justify-center text-[11px] font-bold tracking-tight"
+      style={{
+        background: `linear-gradient(135deg, ${program.color || '#f98074'}dd, ${program.color || '#f98074'}88)`,
+        color: '#fff',
+        boxShadow: `0 4px 10px -4px ${program.color || '#f98074'}55, inset 0 1px 0 rgba(255,255,255,0.15)`
+      }}
+    >
+      {program.icon || program.name.charAt(0)}
+    </div>
+  );
+}
+
 export default function ProgramList({ programs: initialPrograms, onUninstall }) {
   const [programs, setPrograms] = useState(initialPrograms || []);
   const [loading, setLoading] = useState(!initialPrograms);
@@ -25,6 +69,19 @@ export default function ProgramList({ programs: initialPrograms, onUninstall }) 
   const [query, setQuery] = useState('');
   const [sortBy, setSortBy] = useState('name');
   const [filter, setFilter] = useState('all');
+  // Fetched separately from the list and rendered when they arrive: the
+  // backend spawns PowerShell and reads ~90 executables to build these,
+  // and blocking the rows on that would trade a fast list for a prettier
+  // one. An empty map just means every row keeps its lettered tile.
+  const [icons, setIcons] = useState({});
+
+  useEffect(() => {
+    let cancelled = false;
+    fetchProgramIcons()
+      .then((result) => { if (!cancelled) setIcons(result); })
+      .catch(() => { /* icons are decoration -- never break the list over them */ });
+    return () => { cancelled = true; };
+  }, []);
 
   useEffect(() => {
     if (initialPrograms) {
@@ -121,16 +178,7 @@ export default function ProgramList({ programs: initialPrograms, onUninstall }) 
               key={program.id}
               className="glass-panel grid grid-cols-[48px_1fr_140px_140px_120px_140px] gap-4 items-center px-4 py-3 group transition-all hover:-translate-y-0.5 hover:shadow-[-4px_0_20px_rgba(249,128,116,0.3)]"
             >
-              <div
-                className="w-9 h-9 rounded-lg flex items-center justify-center text-[11px] font-bold tracking-tight"
-                style={{
-                  background: `linear-gradient(135deg, ${program.color || '#f98074'}dd, ${program.color || '#f98074'}88)`,
-                  color: '#fff',
-                  boxShadow: `0 4px 10px -4px ${program.color || '#f98074'}55, inset 0 1px 0 rgba(255,255,255,0.15)`
-                }}
-              >
-                {program.icon || program.name.charAt(0)}
-              </div>
+              <ProgramIcon program={program} src={icons[program.id]} />
               <div className="min-w-0">
                 <div className="flex items-center gap-2">
                   <div className="text-[13.5px] font-medium truncate">{program.name}</div>
