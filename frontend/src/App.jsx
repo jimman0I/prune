@@ -1,9 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import NavRail from './components/NavRail.jsx';
 import Dashboard from './components/Dashboard.jsx';
 import DiskMap from './components/DiskMap.jsx';
 import SmartCleanup from './components/SmartCleanup.jsx';
 import ProgramList from './components/ProgramList.jsx';
+import BatchUninstallModal from './components/BatchUninstallModal.jsx';
 import UninstallModal from './components/UninstallModal.jsx';
 import QuarantineManager from './components/QuarantineManager.jsx';
 import SettingsPage from './components/SettingsPage.jsx';
@@ -22,6 +23,7 @@ function formatBytes(bytes) {
 export default function App() {
   const [screen, setScreen] = useState('dashboard');
   const [selectedProgram, setSelectedProgram] = useState(null);
+  const [batchPrograms, setBatchPrograms] = useState(null);
   const [programs, setPrograms] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -40,6 +42,12 @@ export default function App() {
     return () => { cancelled = true; };
   }, []);
 
+  // Named so the batch can call it when it finishes: the list on screen
+  // would otherwise still show programs that are no longer installed.
+  const refreshPrograms = useCallback(() => {
+    fetchPrograms().then(setPrograms).catch((err) => setError(err.message));
+  }, []);
+
   useEffect(() => {
     let cancelled = false;
     fetchPrograms()
@@ -55,7 +63,7 @@ export default function App() {
     <div className="App grain h-screen overflow-hidden flex">
       <NavRail screen={screen} onNavigate={setScreen} />
       <div className="flex-1 overflow-y-auto min-h-0">
-        {screen === 'dashboard' && <Dashboard programs={programs} totalSize={totalSize} />}
+        {screen === 'dashboard' && <Dashboard programs={programs} totalSize={totalSize} onNavigate={setScreen} />}
         {screen === 'diskmap' && <DiskMap />}
         {screen === 'cleanup' && <SmartCleanup />}
         {screen === 'quarantine' && <QuarantineManager />}
@@ -78,10 +86,24 @@ export default function App() {
               </div>
               <button className="btn-ghost" onClick={() => setScreen('quarantine')}>Quarantine</button>
             </div>
-            <ProgramList programs={programs} icons={icons} onUninstall={setSelectedProgram} />
+            <ProgramList
+              programs={programs}
+              icons={icons}
+              onUninstall={setSelectedProgram}
+              onBatchUninstall={setBatchPrograms}
+            />
           </div>
         )}
       </div>
+      {batchPrograms && (
+        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', justifyContent: 'center', alignItems: 'center', padding: 24 }}>
+          <BatchUninstallModal
+            programs={batchPrograms}
+            onClose={() => setBatchPrograms(null)}
+            onFinished={refreshPrograms}
+          />
+        </div>
+      )}
       {selectedProgram && (
         <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
           <UninstallModal program={selectedProgram} onClose={() => setSelectedProgram(null)} />

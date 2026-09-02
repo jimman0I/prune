@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { fetchPrograms } from '../lib/api.js';
 import { sizeBadgeTone } from '../lib/sizeBadgeTone.js';
 import { sortPrograms, nextSortState } from '../lib/sortPrograms.js';
+import { canBatchUninstall, batchIneligibleReason, batchSummary } from '../lib/batchSelection.js';
 
 function formatBytes(bytes) {
   if (bytes === null || bytes === undefined) return '—';
@@ -23,7 +24,8 @@ const SIZE_TONE_TEXT = {
  * A column's `sort` key is what makes its header clickable; the ones
  * without a key (the website, the action) aren't meaningfully sortable. */
 const COLUMNS = [
-  { key: 'name', label: 'Application', sort: 'name', width: 'minmax(220px,1fr)' },
+  { key: 'select', label: '', width: '30px' },
+  { key: 'name', label: 'Application', sort: 'name', width: 'minmax(200px,1fr)' },
   { key: 'size', label: 'Size', sort: 'sizeBytes', width: '92px', align: 'right' },
   { key: 'version', label: 'Version', sort: 'version', width: '104px' },
   { key: 'architecture', label: 'Type', sort: 'architecture', width: '68px' },
@@ -72,6 +74,38 @@ function ProgramIcon({ program, src }) {
   );
 }
 
+/** Row checkbox. Not a native input, matching DeepCleanTree's own bespoke
+ * control -- and it needs a disabled state a native one styles badly.
+ *
+ * A disabled box carries the reason as its accessible label rather than a
+ * tooltip: a control that refuses to tick and says nothing is a dead end,
+ * and this codebase doesn't use native hover text. */
+function RowCheckbox({ checked, disabled, label, onChange }) {
+  return (
+    <button
+      type="button"
+      role="checkbox"
+      aria-checked={checked}
+      aria-label={label}
+      disabled={disabled}
+      onClick={onChange}
+      className={`w-[15px] h-[15px] rounded-[4px] flex items-center justify-center shrink-0 border transition-colors ${
+        disabled
+          ? 'border-[color:var(--border-subtle)] opacity-30 cursor-not-allowed'
+          : checked
+            ? 'bg-[color:var(--accent-coral)] border-[color:var(--accent-coral)]'
+            : 'bg-white/[0.03] border-[color:var(--border-subtle)] hover:border-white/25'
+      }`}
+    >
+      {checked && !disabled && (
+        <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
+          <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+      )}
+    </button>
+  );
+}
+
 function SortArrow({ active, direction }) {
   if (!active) return null;
   return (
@@ -81,13 +115,14 @@ function SortArrow({ active, direction }) {
   );
 }
 
-export default function ProgramList({ programs: initialPrograms, icons = {}, onUninstall }) {
+export default function ProgramList({ programs: initialPrograms, icons = {}, onUninstall, onBatchUninstall }) {
   const [programs, setPrograms] = useState(initialPrograms || []);
   const [loading, setLoading] = useState(!initialPrograms);
   const [error, setError] = useState(null);
   const [query, setQuery] = useState('');
   const [filter, setFilter] = useState('all');
   const [sort, setSort] = useState({ column: 'sizeBytes', direction: 'desc' });
+  const [selected, setSelected] = useState(new Set());
 
   useEffect(() => {
     if (initialPrograms) {
@@ -119,6 +154,33 @@ export default function ProgramList({ programs: initialPrograms, icons = {}, onU
     () => filtered.reduce((sum, p) => sum + (p.sizeBytes || 0), 0),
     [filtered]
   );
+
+  // Only what's both selected AND still on screen. Selecting rows, then
+  // filtering them away, then hitting Uninstall should not remove things
+  // the user can no longer see.
+  const selectedPrograms = useMemo(
+    () => filtered.filter((p) => selected.has(p.id)),
+    [filtered, selected]
+  );
+  const selectable = useMemo(() => filtered.filter(canBatchUninstall), [filtered]);
+  const allSelected = selectable.length > 0 && selectable.every((p) => selected.has(p.id));
+
+  const toggleRow = (program) => setSelected((prev) => {
+    const next = new Set(prev);
+    if (next.has(program.id)) next.delete(program.id); else next.add(program.id);
+    return next;
+  });
+
+  const toggleAll = () => setSelected((prev) => {
+    const next = new Set(prev);
+    // Acts on the filtered view only, which is the set the header sits
+    // above -- "select all" over rows you can't see would be a surprise.
+    if (allSelected) for (const p of selectable) next.delete(p.id);
+    else for (const p of selectable) next.add(p.id);
+    return next;
+  });
+
+  const summary = batchSummary(selectedPrograms);
 
   if (loading) return <div style={{ color: 'var(--text-muted)' }}>Loading installed programs…</div>;
   if (error) return <div style={{ color: 'var(--danger)' }}>Couldn't load programs: {error}</div>;
@@ -168,6 +230,17 @@ export default function ProgramList({ programs: initialPrograms, icons = {}, onU
           style={{ gridTemplateColumns: GRID_TEMPLATE }}
         >
           {COLUMNS.map((col) => {
+            if (col.key === 'select') {
+              return (
+                <RowCheckbox
+                  key={col.key}
+                  checked={allSelected}
+                  disabled={selectable.length === 0}
+                  label={allSelected ? 'Clear selection' : 'Select all shown'}
+                  onChange={toggleAll}
+                />
+              );
+            }
             const active = sort.column === col.sort;
             const content = (
               <>
@@ -205,6 +278,13 @@ export default function ProgramList({ programs: initialPrograms, icons = {}, onU
               className="grid gap-3 px-4 py-1.5 items-center group hover:bg-white/[0.04] transition-colors"
               style={{ gridTemplateColumns: GRID_TEMPLATE }}
             >
+              <RowCheckbox
+                checked={selected.has(program.id)}
+                disabled={!canBatchUninstall(program)}
+                label={batchIneligibleReason(program) || `Select ${program.name}`}
+                onChange={() => toggleRow(program)}
+              />
+
               <div className="flex items-center gap-2.5 min-w-0">
                 <ProgramIcon program={program} src={icons[program.id]} />
                 <span className="text-[12.5px] truncate">{program.name}</span>
@@ -265,14 +345,43 @@ export default function ProgramList({ programs: initialPrograms, icons = {}, onU
         {/* Revo puts the installation count at the bottom of the window,
             and it earns the space: it's the one number that changes as
             you filter. */}
-        <div className="flex items-center justify-between gap-4 px-4 py-2 border-t border-[color:var(--border-subtle)] bg-white/[0.02] shrink-0 text-[11.5px] font-mono text-[color:var(--text-muted)]">
-          <span>
-            {filtered.length === programs.length
-              ? `Installations: ${programs.length}`
-              : `Showing ${filtered.length} of ${programs.length}`}
-          </span>
-          <span>{formatBytes(totalBytes)} total</span>
-        </div>
+        {summary.count > 0 ? (
+          // The footer becomes the batch bar once anything is ticked,
+          // rather than a separate strip appearing and pushing the table:
+          // it's the same row of information, about a smaller set.
+          <div className="flex items-center justify-between gap-4 px-4 py-2 border-t border-[color:var(--accent-coral)]/25 bg-[color:var(--accent-coral)]/[0.07] shrink-0">
+            <span className="text-[12px] text-[color:var(--text-secondary)]">
+              <span className="text-[color:var(--text-primary)] font-medium">{summary.count}</span> selected ·{' '}
+              <span className="font-mono">{formatBytes(summary.totalBytes)}</span>
+              {summary.unknownSizes > 0 && (
+                <span className="text-[color:var(--text-muted)]"> + {summary.unknownSizes} of unknown size</span>
+              )}
+            </span>
+            <div className="flex items-center gap-2.5">
+              <button
+                className="text-[11.5px] text-[color:var(--text-secondary)] hover:text-[color:var(--accent-coral)] transition-colors"
+                onClick={() => setSelected(new Set())}
+              >
+                Clear
+              </button>
+              <button
+                className="btn-danger px-3.5 py-1.5 rounded-lg text-[12px] font-medium"
+                onClick={() => onBatchUninstall?.(selectedPrograms)}
+              >
+                Uninstall {summary.count} program{summary.count === 1 ? '' : 's'}
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div className="flex items-center justify-between gap-4 px-4 py-2 border-t border-[color:var(--border-subtle)] bg-white/[0.02] shrink-0 text-[11.5px] font-mono text-[color:var(--text-muted)]">
+            <span>
+              {filtered.length === programs.length
+                ? `Installations: ${programs.length}`
+                : `Showing ${filtered.length} of ${programs.length}`}
+            </span>
+            <span>{formatBytes(totalBytes)} total</span>
+          </div>
+        )}
       </div>
     </div>
   );

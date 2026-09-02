@@ -74,7 +74,7 @@ function driveVerdict(disk) {
   return { percent: null, statusLabel: status || 'Unknown', tone };
 }
 
-export default function Dashboard({ programs, totalSize }) {
+export default function Dashboard({ programs, totalSize, onNavigate = () => {} }) {
   const [diskSpace, setDiskSpace] = useState(null);
   const [diskSpaceError, setDiskSpaceError] = useState(null);
   const [diskHealth, setDiskHealth] = useState(null);
@@ -228,9 +228,13 @@ export default function Dashboard({ programs, totalSize }) {
       </div>
 
       <div className="flex items-center gap-3 mb-6">
-        <button className="btn-primary" disabled title="Coming in a future update">Smart Scan</button>
-        <button className="btn-ghost" disabled title="Coming in a future update">Disk Analyzer</button>
-        <button className="btn-ghost" disabled title="Coming in a future update">Batch Uninstall</button>
+        {/* All three were disabled placeholders carrying native `title`
+            hover text. Every one of them now has a real screen behind it,
+            so they navigate -- and the title attributes are gone, which
+            this codebase doesn't use anywhere. */}
+        <button className="btn-primary" onClick={() => onNavigate('cleanup')}>Smart Scan</button>
+        <button className="btn-ghost" onClick={() => onNavigate('diskmap')}>Disk Analyzer</button>
+        <button className="btn-ghost" onClick={() => onNavigate('applications')}>Batch Uninstall</button>
       </div>
 
       <div className="glass-panel p-6">
