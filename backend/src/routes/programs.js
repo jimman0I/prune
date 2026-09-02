@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { listInstalledPrograms } from '../services/programs.js';
 import { getProgramIcons } from '../services/programIcons.js';
+import { getProgramSizes } from '../services/programSizes.js';
 
 const router = Router();
 
@@ -23,6 +24,21 @@ router.get('/', async (req, res) => {
 router.get('/icons', async (req, res) => {
   try {
     res.json({ icons: await getProgramIcons() });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+/** Measured install-folder sizes for the programs whose registry entry
+ * has no EstimatedSize, as { programId: bytes }.
+ *
+ * Separate from the list for the same reason the icons are: this walks
+ * install folders and takes ~13 seconds on this machine, and the list
+ * must not wait on it. A program that can't be measured safely is absent
+ * from the map and keeps its honest blank. */
+router.get('/sizes', async (req, res) => {
+  try {
+    res.json({ sizes: await getProgramSizes() });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

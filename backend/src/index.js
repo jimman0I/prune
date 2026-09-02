@@ -18,6 +18,7 @@ import mftScanRoutes from './routes/mftScan.js';
 import fileIconsRoutes from './routes/fileIcons.js';
 import { initTray } from './lib/trayManager.js';
 import { getProgramIcons } from './services/programIcons.js';
+import { getProgramSizes } from './services/programSizes.js';
 
 const PORT = process.env.UNREVO_BACKEND_PORT || 3101;
 
@@ -83,6 +84,7 @@ server.on('error', (err) => {
 server.listen(PORT, '127.0.0.1', () => {
   console.log(`Prune backend listening on http://127.0.0.1:${PORT}`);
   warmProgramIcons();
+  warmProgramSizes();
 });
 
 /** Extracts every program's icon in the background as soon as the server
@@ -98,6 +100,16 @@ function warmProgramIcons() {
   getProgramIcons()
     .then((icons) => console.log(`Prepared ${Object.keys(icons).length} program icons.`))
     .catch(() => { /* decoration only */ });
+}
+
+/** Same idea for the sizes 40 of the 130 registry entries simply don't
+ * record. Measuring their install folders means walking ~124 GB, about
+ * thirteen seconds -- worth starting now rather than when someone opens
+ * the list and waits for numbers to appear. */
+function warmProgramSizes() {
+  getProgramSizes()
+    .then((sizes) => console.log(`Measured ${Object.keys(sizes).length} install folders.`))
+    .catch(() => { /* the rows keep their blank */ });
 }
 
 // v2.0 Phase 1: this is the one line in this file that isn't a route
