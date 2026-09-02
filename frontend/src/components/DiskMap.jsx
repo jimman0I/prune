@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Treemap, ResponsiveContainer } from 'recharts';
-import { fetchDiskScan } from '../lib/api.js';
+import { fetchDiskScan, scanDriveFast } from '../lib/api.js';
 import { attachFullPaths, topLevelCells } from '../lib/diskMapTree.js';
+import { subtreeForPath } from '../lib/mftSubtree.js';
 import { colorForNode } from '../lib/diskMapColors.js';
 
 const DEFAULT_ROOT = 'C:\\';
@@ -86,8 +87,52 @@ export default function DiskMap() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [hovered, setHovered] = useState(null);
+  // The whole drive, read from the MFT in one pass. While this is set,
+  // browsing is pure navigation through data already in memory -- no
+  // further disk access at all.
+  const [fastTree, setFastTree] = useState(null);
+  const [fastStats, setFastStats] = useState(null);
+  const [fastScanning, setFastScanning] = useState(false);
+  const [fastNote, setFastNote] = useState(null);
+
+  /** Explicit click only. This raises a real UAC prompt, so it can never
+   * live in an effect -- see api.js. */
+  const handleFastScan = async () => {
+    setFastScanning(true);
+    setFastNote(null);
+    try {
+      const result = await scanDriveFast(DEFAULT_ROOT.slice(0, 1));
+      if (result.cancelled) {
+        setFastNote('Not approved — still using the folder-by-folder scan.');
+        return;
+      }
+      setFastTree(attachFullPaths(result.tree, DEFAULT_ROOT));
+      setFastStats(result.stats);
+      setCurrentPath(DEFAULT_ROOT);
+      setError(null);
+    } catch (err) {
+      setFastNote(err.message);
+    } finally {
+      setFastScanning(false);
+    }
+  };
 
   useEffect(() => {
+    // Already have the whole drive in memory: this folder is a lookup,
+    // not a scan. Falling through to the recursive scanner here would
+    // undo the entire point of having read the MFT.
+    if (fastTree) {
+      const subtree = subtreeForPath(fastTree, currentPath);
+      if (subtree) {
+        setTree(subtree);
+        setLoading(false);
+        setError(null);
+        return;
+      }
+      // Deeper than the fast scan expanded, so fall through and scan this
+      // folder for real rather than drawing it as empty.
+    }
+
     // A real AbortController, not just a `cancelled` flag -- this is what
     // actually closes the underlying HTTP connection when the path changes
     // or the component unmounts, so the backend's own req.on('close')
@@ -105,7 +150,7 @@ export default function DiskMap() {
       .catch((err) => { if (err.name !== 'AbortError') setError(err.message); })
       .finally(() => { if (!controller.signal.aborted) setLoading(false); });
     return () => controller.abort();
-  }, [currentPath]);
+  }, [currentPath, fastTree]);
 
   const handleHover = useCallback((node, e) => {
     setHovered({ node, clientX: e.clientX, clientY: e.clientY });
@@ -119,7 +164,41 @@ export default function DiskMap() {
   return (
     <div className="px-12 py-10 max-w-[1400px]">
       <div className="text-[11px] text-[color:var(--text-muted)] font-mono uppercase tracking-[0.16em] mb-2">Disk Map</div>
-      <h1 className="display-heading text-[30px] leading-none mb-6">Disk Usage</h1>
+      <div className="flex items-start justify-between gap-6 mb-6">
+        <div>
+          <h1 className="display-heading text-[30px] leading-none mb-2">Disk Usage</h1>
+          {fastStats ? (
+            <p className="text-[12px] text-[color:var(--text-secondary)]">
+              {fastStats.recordsRead?.toLocaleString()} files and folders read from the drive's own index.
+              {' '}Browsing is instant from here.
+              {fastStats.mftComplete === false && (
+                <span className="text-[color:var(--warning)]">
+                  {' '}Part of the index couldn't be read, so totals are a lower bound.
+                </span>
+              )}
+            </p>
+          ) : (
+            <p className="text-[12px] text-[color:var(--text-secondary)] max-w-[62ch]">
+              Scanning folder by folder. A fast scan reads the drive's own file index instead —
+              the whole drive at once, in seconds — but Windows only allows that with
+              administrator access.
+            </p>
+          )}
+        </div>
+        <button
+          className="btn-ghost px-3.5 py-2 rounded-lg text-[12.5px] font-medium shrink-0 disabled:opacity-50"
+          onClick={handleFastScan}
+          disabled={fastScanning}
+        >
+          {fastScanning ? 'Scanning drive…' : fastStats ? 'Rescan drive (admin)' : 'Fast scan (admin)'}
+        </button>
+      </div>
+
+      {fastNote && (
+        <div className="mb-5 px-3.5 py-3 rounded-xl bg-[color:var(--warning-soft)] border border-[color:var(--warning)]/25">
+          <p className="text-[12.5px] text-[color:var(--warning)]">{fastNote}</p>
+        </div>
+      )}
 
       <div className="flex items-center flex-wrap gap-1.5 text-[12.5px] font-mono mb-6">
         {breadcrumbSegments(currentPath).map((seg, i, arr) => (

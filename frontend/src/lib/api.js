@@ -146,6 +146,27 @@ export async function fetchDiskSpace() {
 // change, so navigating away from a huge in-flight scan really does stop
 // it server-side (backend/src/routes/diskScan.js listens for the request
 // closing early), instead of leaving it running to completion unheard.
+/** Whole-drive scan read straight from the NTFS Master File Table.
+ *
+ * Raises a UAC prompt -- Windows won't open a raw volume handle for an
+ * unelevated process, which is why WizTree asks for administrator too. So
+ * this must only ever be called from a button the user pressed, never a
+ * background refresh: a consent dialog nobody asked for is how software
+ * teaches people to approve them without reading.
+ *
+ * A declined prompt resolves to { cancelled: true } rather than throwing.
+ * The user answered the question; the answer was no. */
+export async function scanDriveFast(driveLetter = 'C') {
+  const res = await fetch(`${API_URL}/mft-scan`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ driveLetter })
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
+  return data;
+}
+
 export async function fetchDiskScan(path, signal) {
   const res = await fetch(`${API_URL}/disk-scan?path=${encodeURIComponent(path)}`, { signal });
   const data = await res.json();
