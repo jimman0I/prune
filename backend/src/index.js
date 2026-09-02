@@ -19,6 +19,7 @@ import fileIconsRoutes from './routes/fileIcons.js';
 import { initTray } from './lib/trayManager.js';
 import { getProgramIcons } from './services/programIcons.js';
 import { getProgramSizes } from './services/programSizes.js';
+import { getProgramVersions } from './services/programVersions.js';
 
 const PORT = process.env.UNREVO_BACKEND_PORT || 3101;
 
@@ -85,6 +86,7 @@ server.listen(PORT, '127.0.0.1', () => {
   console.log(`Prune backend listening on http://127.0.0.1:${PORT}`);
   warmProgramIcons();
   warmProgramSizes();
+  warmProgramVersions();
 });
 
 /** Extracts every program's icon in the background as soon as the server
@@ -109,6 +111,16 @@ function warmProgramIcons() {
 function warmProgramSizes() {
   getProgramSizes()
     .then((sizes) => console.log(`Measured ${Object.keys(sizes).length} install folders.`))
+    .catch(() => { /* the rows keep their blank */ });
+}
+
+/** And the versions the other 15 entries don't record either. Reading
+ * resource tables is quick -- under two seconds -- but it has to find the
+ * right binary first, and that means opening install folders. Same deal
+ * as the other two: better now than when someone clicks the tab. */
+function warmProgramVersions() {
+  getProgramVersions()
+    .then((versions) => console.log(`Read ${Object.keys(versions).length} versions from program binaries.`))
     .catch(() => { /* the rows keep their blank */ });
 }
 

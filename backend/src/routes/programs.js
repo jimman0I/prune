@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { listInstalledPrograms } from '../services/programs.js';
 import { getProgramIcons } from '../services/programIcons.js';
 import { getProgramSizes } from '../services/programSizes.js';
+import { getProgramVersions } from '../services/programVersions.js';
 
 const router = Router();
 
@@ -39,6 +40,22 @@ router.get('/icons', async (req, res) => {
 router.get('/sizes', async (req, res) => {
   try {
     res.json({ sizes: await getProgramSizes() });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+/** Versions read off the application binaries of programs whose registry
+ * entry has no DisplayVersion, as { programId: version }.
+ *
+ * Separate from the list for the same reason as the icons and sizes: it
+ * searches install folders for the right binary before it can read
+ * anything. Cheaper than the sizes -- under two seconds, since it reads
+ * resource tables rather than walking every file -- but still not
+ * something the list should wait behind. */
+router.get('/versions', async (req, res) => {
+  try {
+    res.json({ versions: await getProgramVersions() });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
