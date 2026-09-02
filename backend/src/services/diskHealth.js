@@ -1,5 +1,7 @@
 import { runPowerShellJson } from './powershell.js';
 import { runElevatedPowerShellJson } from '../lib/elevated.js';
+import { getNvmeSmart } from './nvmeSmart.js';
+import { lifeRemainingFromWear } from '../lib/nvme/smartLog.js';
 
 /** Real physical-disk health, via the same PowerShell chokepoint every
  * other backend service uses. Two tiers, because Windows splits this data
@@ -58,7 +60,47 @@ export async function getDiskHealth() {
   } catch {
     return null; // PowerShell itself unavailable -- honest "unknown", not a guess
   }
-  return normalizeDisks(raw);
+  const normalized = normalizeDisks(raw);
+  if (!normalized) return null;
+
+  // The drive's own SMART log, read without elevation. This is layered on
+  // top rather than replacing the query above because it only exists for
+  // NVMe -- SATA and spinning disks still need the Windows figures.
+  let smart = {};
+  try {
+    smart = await getNvmeSmart();
+  } catch {
+    // Best-effort enrichment: the Windows-reported view stands on its own.
+  }
+
+  return { ...normalized, disks: normalized.disks.map((disk) => withSmart(disk, smart[disk.deviceId])) };
+}
+
+/** Merges a drive's own SMART log over what Windows reported.
+ *
+ * SMART wins on wear, and that is not a stylistic preference. Measured on
+ * this machine: Get-StorageReliabilityCounter reported Wear = 0 while the
+ * drive's own log page reported 12% used, after 12,428 power-on hours and
+ * 126 TB written. The dashboard was showing "100% life remaining" for a
+ * drive that has spent an eighth of its rated endurance. The counter is a
+ * thin wrapper many drives barely populate; the log page is the drive
+ * speaking for itself.
+ *
+ * It also fills in everything the wrapper left null here -- power-on
+ * hours, power cycles, host reads and writes, unsafe shutdowns, media
+ * errors -- none of which that API returned for this drive even when
+ * elevated. */
+function withSmart(disk, smart) {
+  if (!smart) return disk;
+  return {
+    ...disk,
+    wearPercent: smart.percentageUsed,
+    lifeRemainingPercent: lifeRemainingFromWear(smart.percentageUsed),
+    temperatureC: smart.temperatureC ?? disk.temperatureC,
+    powerOnHours: smart.powerOnHours,
+    smart,
+    smartAvailable: true
+  };
 }
 
 function normalizeDisks(raw) {

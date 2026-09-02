@@ -1,7 +1,16 @@
-import { describe, it, expect, vi, afterEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { getDiskHealth, getElevatedDiskHealth } from './diskHealth.js';
 import * as powershell from './powershell.js';
 import * as elevated from '../lib/elevated.js';
+import * as nvme from './nvmeSmart.js';
+
+// The NVMe SMART read is real and unelevated, so without this it runs
+// during every test and overrides the mocked Windows figures with this
+// machine's actual drive. These cases are about the Windows-reported
+// path; the SMART merge has its own tests at the bottom.
+beforeEach(() => {
+  vi.spyOn(nvme, 'getNvmeSmart').mockResolvedValue({});
+});
 
 const ELEVATED_DISK = {
   deviceId: '0',
@@ -136,5 +145,63 @@ describe('getElevatedDiskHealth', () => {
 
     expect(result.reliabilityAvailable).toBe(false);
     expect(result.disks[0].lifeRemainingPercent).toBeNull();
+  });
+});
+
+
+describe('NVMe SMART enrichment', () => {
+  const WINDOWS_DISK = {
+    deviceId: '0', model: 'Micron 2300 NVMe 1024GB', mediaType: 'SSD', busType: 'NVMe',
+    sizeBytes: 1024209543168, healthStatus: 'Healthy', operationalStatus: 'OK',
+    wearPercent: null, temperatureC: null, powerOnHours: null,
+    readErrorsUncorrected: null, writeErrorsUncorrected: null, reliabilityAvailable: false
+  };
+
+  // The reason this exists. Measured on this machine:
+  // Get-StorageReliabilityCounter reported Wear = 0 while the drive's own
+  // SMART log reported 12% used, after 12,428 hours and 126 TB written.
+  // The dashboard was showing "100% life remaining" for a drive that has
+  // spent an eighth of its rated endurance.
+  it('prefers the drive-reported wear figure over the Windows counter', async () => {
+    vi.spyOn(powershell, 'runPowerShellJson').mockResolvedValue([{ ...WINDOWS_DISK, wearPercent: 0 }]);
+    vi.spyOn(nvme, 'getNvmeSmart').mockResolvedValue({
+      0: { percentageUsed: 12, temperatureC: 52, powerOnHours: 12428 }
+    });
+
+    const result = await getDiskHealth();
+    expect(result.disks[0].wearPercent).toBe(12);
+    expect(result.disks[0].lifeRemainingPercent).toBe(88);
+  });
+
+  it('fills in the counters Windows left null', async () => {
+    vi.spyOn(powershell, 'runPowerShellJson').mockResolvedValue([WINDOWS_DISK]);
+    vi.spyOn(nvme, 'getNvmeSmart').mockResolvedValue({
+      0: { percentageUsed: 12, temperatureC: 52, powerOnHours: 12428, mediaErrors: 0 }
+    });
+
+    const disk = (await getDiskHealth()).disks[0];
+    expect(disk.powerOnHours).toBe(12428);
+    expect(disk.temperatureC).toBe(52);
+    expect(disk.smart.mediaErrors).toBe(0);
+    expect(disk.smartAvailable).toBe(true);
+  });
+
+  // SATA SSDs and spinning disks have no such log page, and an NVMe
+  // behind a controller that refuses the passthrough has none either.
+  it('leaves a drive untouched when it reports no SMART log', async () => {
+    vi.spyOn(powershell, 'runPowerShellJson').mockResolvedValue([{ ...WINDOWS_DISK, wearPercent: 3 }]);
+    vi.spyOn(nvme, 'getNvmeSmart').mockResolvedValue({});
+
+    const disk = (await getDiskHealth()).disks[0];
+    expect(disk.wearPercent).toBe(3);
+    expect(disk.smartAvailable).toBeUndefined();
+  });
+
+  it('still returns the Windows view when the SMART read throws', async () => {
+    vi.spyOn(powershell, 'runPowerShellJson').mockResolvedValue([WINDOWS_DISK]);
+    vi.spyOn(nvme, 'getNvmeSmart').mockRejectedValue(new Error('passthrough refused'));
+
+    const result = await getDiskHealth();
+    expect(result.disks[0].model).toBe('Micron 2300 NVMe 1024GB');
   });
 });
