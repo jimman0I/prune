@@ -3,7 +3,11 @@ import { useState } from 'react';
 const GROUPS = [
   { key: 'files', label: 'Files & folders' },
   { key: 'registryKeys', label: 'Registry keys' },
-  { key: 'scheduledTasks', label: 'Scheduled tasks' }
+  // Reported, never removed. Quarantine works by moving files and
+  // exporting registry keys, both of which a restore can put back; a
+  // scheduled task has no equivalent reversible operation, so offering a
+  // checkbox here would promise something the removal can't deliver.
+  { key: 'scheduledTasks', label: 'Scheduled tasks', removable: false }
 ];
 
 function formatBytes(bytes) {
@@ -62,7 +66,7 @@ export default function LeftoverReview({ scanResult, selected, onToggle, onConfi
       ))}
 
       <div className="space-y-3">
-        {groupsWithItems.map(({ key, label, group }) => {
+        {groupsWithItems.map(({ key, label, group, removable = true }) => {
           const open = openGroups[key];
           return (
             <div key={key} className="rounded-xl border border-[color:var(--border-subtle)] overflow-hidden bg-[color:var(--bg-panel)]">
@@ -75,6 +79,9 @@ export default function LeftoverReview({ scanResult, selected, onToggle, onConfi
                 </svg>
                 <span className="text-[13px] font-medium">{label}</span>
                 <span className="text-[11px] text-[color:var(--text-muted)] font-mono">({group.items.length})</span>
+                {!removable && (
+                  <span className="text-[10.5px] text-[color:var(--text-muted)] ml-auto">found, not removed</span>
+                )}
               </button>
               {open && (
                 <div className="divide-y divide-[color:var(--border-subtle)] border-t border-[color:var(--border-subtle)]">
@@ -82,17 +89,29 @@ export default function LeftoverReview({ scanResult, selected, onToggle, onConfi
                     const itemKey = `${key}:${i}`;
                     const size = formatBytes(item.sizeBytes);
                     return (
-                      <label key={itemKey} className="flex items-center gap-3 px-4 py-2.5 cursor-pointer hover:bg-white/[0.02] transition">
+                      <label
+                        key={itemKey}
+                        className={`flex items-center gap-3 px-4 py-2.5 transition ${removable ? 'cursor-pointer hover:bg-white/[0.02]' : 'opacity-60'}`}
+                      >
                         <input
                           type="checkbox"
                           className="sleek"
-                          checked={selected.has(itemKey)}
+                          checked={removable && selected.has(itemKey)}
+                          disabled={!removable}
                           onChange={() => onToggle(itemKey)}
                         />
                         <div className="flex-1 min-w-0">
                           <div className="font-mono text-[11.5px] text-[color:var(--text-primary)] truncate">
                             {item.path || item.name}
                           </div>
+                          {item.isUninstallEntry && (
+                            // Worth calling out: this is the key that makes
+                            // Windows list the program at all, and it's the
+                            // reason a dead entry never goes away on its own.
+                            <div className="text-[10.5px] text-[color:var(--accent-coral)] mt-0.5">
+                              Add/Remove Programs entry
+                            </div>
+                          )}
                         </div>
                         <div className="text-[11px] font-mono text-[color:var(--text-muted)] shrink-0">
                           {size || label.toUpperCase()}

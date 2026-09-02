@@ -18,6 +18,24 @@ export async function scanForLeftovers(name, publisher) {
   return data;
 }
 
+/** Leftover scan for a program whose own uninstaller can't run -- broken,
+ * missing, or never registered. Same scanner the normal uninstall flow
+ * uses afterward, plus the program's own Add/Remove Programs entry, which
+ * a working uninstaller would have removed itself.
+ *
+ * Scans only. Removal is removeQuarantined below, the same call the
+ * ordinary flow makes. */
+export async function scanForcedUninstall({ name, publisher, registryKey }) {
+  const res = await fetch(`${API_URL}/forced-uninstall/scan`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name, publisher, registryKey })
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
+  return data;
+}
+
 export async function removeQuarantined({ programName, files, registryKeys }) {
   const res = await fetch(`${API_URL}/quarantine/remove`, {
     method: 'POST',

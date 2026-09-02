@@ -40,12 +40,15 @@ export default function ProgramList({ programs: initialPrograms, onUninstall }) 
     }
   }, [initialPrograms]);
 
+  const brokenCount = useMemo(() => programs.filter(p => p.health?.orphaned).length, [programs]);
+
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
     let list = q
       ? programs.filter(p => p.name.toLowerCase().includes(q) || p.publisher.toLowerCase().includes(q))
       : programs;
     if (filter === 'unused') list = list.filter(p => p.unused);
+    if (filter === 'broken') list = list.filter(p => p.health?.orphaned);
     list = [...list].sort((a, b) => {
       if (sortBy === 'size') return b.sizeBytes - a.sizeBytes;
       if (sortBy === 'name') return a.name.localeCompare(b.name);
@@ -74,7 +77,15 @@ export default function ProgramList({ programs: initialPrograms, onUninstall }) 
           />
         </div>
         <div className="flex items-center gap-1 p-1 bg-[color:var(--bg-panel)] border border-[color:var(--border-subtle)] rounded-xl">
-          {[{ id: 'all', label: 'All' }, { id: 'unused', label: 'Unused' }].map(f => (
+          {[
+            { id: 'all', label: 'All' },
+            { id: 'unused', label: 'Unused' },
+            // Only offered when there's something to see. On a healthy
+            // machine this filter would return an empty list every time,
+            // and a permanently-empty view teaches people to ignore it --
+            // when it does appear, it means something.
+            ...(brokenCount > 0 ? [{ id: 'broken', label: `Broken (${brokenCount})` }] : [])
+          ].map(f => (
             <button
               key={f.id}
               onClick={() => setFilter(f.id)}
@@ -124,8 +135,17 @@ export default function ProgramList({ programs: initialPrograms, onUninstall }) 
                 <div className="flex items-center gap-2">
                   <div className="text-[13.5px] font-medium truncate">{program.name}</div>
                   {program.unused && <span className="text-[9.5px] font-mono uppercase tracking-wider px-1.5 py-0.5 rounded bg-[color:var(--warning-soft)] text-[color:var(--warning)] border border-[color:var(--warning)]/25">Unused</span>}
+                  {program.health?.orphaned && (
+                    <span className="text-[9.5px] font-mono uppercase tracking-wider px-1.5 py-0.5 rounded bg-[color:var(--danger-soft)] text-[color:var(--danger)] border border-[color:var(--danger)]/25 shrink-0">Broken</span>
+                  )}
                 </div>
-                <div className="text-[11.5px] text-[color:var(--text-muted)] font-mono truncate mt-0.5">{program.publisher}</div>
+                <div className="text-[11.5px] text-[color:var(--text-muted)] font-mono truncate mt-0.5">
+                  {/* The reason replaces the publisher here rather than adding a
+                      row: for a dead entry, "why is this broken" is the only
+                      thing worth reading, and the publisher of software that
+                      isn't installed any more tells you nothing. */}
+                  {program.health?.orphaned ? program.health.reason : program.publisher}
+                </div>
               </div>
               <div className="text-[12px] font-mono text-[color:var(--text-secondary)]">{program.installDate ? new Date(program.installDate).toLocaleDateString() : 'N/A'}</div>
               <div className="text-[12px] font-mono text-[color:var(--text-secondary)] truncate">{program.version || 'N/A'}</div>
@@ -142,7 +162,7 @@ export default function ProgramList({ programs: initialPrograms, onUninstall }) 
                   onClick={() => onUninstall(program)}
                   className="btn-danger px-3.5 py-1.5 rounded-lg text-[12px] font-medium opacity-0 group-hover:opacity-100 transition-opacity"
                 >
-                  Uninstall
+                  {program.health?.orphaned ? 'Force remove' : 'Uninstall'}
                 </button>
               </div>
             </div>
