@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { Treemap, ResponsiveContainer } from 'recharts';
 import { fetchDiskScan, scanDriveFast, fetchDiskSpace, fetchFileTypeIcons } from '../lib/api.js';
 import { attachFullPaths, topLevelCells } from '../lib/diskMapTree.js';
@@ -6,6 +7,7 @@ import { subtreeForPath } from '../lib/mftSubtree.js';
 import { withUnscannedRemainder, scanCoverage } from '../lib/unscannedRemainder.js';
 import { colorForNode } from '../lib/diskMapColors.js';
 import { iconKeyForNode, extensionsInCells } from '../lib/fileTypeIcon.js';
+import { limitCells } from '../lib/limitCells.js';
 
 const DEFAULT_ROOT = 'C:\\';
 
@@ -67,19 +69,24 @@ function LoadingState() {
  * nothing to draw for it. */
 const ICON_SIZE = 16;
 
-function TreemapCell({ x, y, width, height, depth, name, size, type, scanned, fullPath, icons, onHover, onLeave, onDrillDown }) {
+/** How many rectangles to actually draw. See limitCells.js -- past this
+ * the cells are a few pixels wide and cost far more than they say. */
+const MAX_CELLS = 120;
+
+function TreemapCell({ x, y, width, height, depth, name, size, type, scanned, aggregated, fullPath, icons, onHover, onLeave, onDrillDown }) {
   if (depth === 0 || !(width > 0) || !(height > 0)) return null;
-  const fill = colorForNode({ name, type, scanned });
+  const fill = colorForNode({ name, type, scanned: scanned === false || aggregated ? false : scanned });
   // An unscanned block is a hole in the picture, not a folder. Clicking
   // it would scan a path that may not even exist (the whole-drive
   // remainder isn't a real directory), and its size is a subtraction
-  // rather than a measurement.
-  const canDrillDown = scanned !== false && type === 'directory' && Boolean(fullPath);
+  // rather than a measurement. The aggregate cell is the same: a count,
+  // not a place.
+  const canDrillDown = scanned !== false && !aggregated && type === 'directory' && Boolean(fullPath);
 
   // The icon needs room for itself AND for the label to still say
   // something; below that the cell reads better as a plain block of
   // colour than as a mystery glyph with two letters next to it.
-  const iconSrc = icons?.[iconKeyForNode({ name, type, scanned })];
+  const iconSrc = aggregated ? null : icons?.[iconKeyForNode({ name, type, scanned })];
   const showIcon = Boolean(iconSrc) && width > 74 && height > 26;
 
   const textX = x + (showIcon ? ICON_SIZE + 10 : 6);
@@ -90,8 +97,13 @@ function TreemapCell({ x, y, width, height, depth, name, size, type, scanned, fu
 
   return (
     <g
-      onMouseEnter={(e) => onHover({ name, size, fullPath, type, scanned }, e)}
-      onMouseMove={(e) => onHover({ name, size, fullPath, type, scanned }, e)}
+      // onMouseEnter only. This used to also fire on every mousemove,
+      // which set React state and re-rendered every cell in the treemap
+      // -- 1,903 of them inside C:\Windows\System32. A 60-move sweep took
+      // over three minutes. The tooltip still follows the cursor; it's
+      // moved by a single listener on the container that writes to the
+      // element's style directly, without a render.
+      onMouseEnter={(e) => onHover({ name, size, fullPath, type, scanned, aggregated }, e)}
       onMouseLeave={onLeave}
       onClick={() => canDrillDown && onDrillDown(fullPath)}
       style={{ cursor: canDrillDown ? 'pointer' : 'default' }}
@@ -227,7 +239,11 @@ export default function DiskMap() {
     return () => controller.abort();
   }, [currentPath, fastTree]);
 
-  const cells = tree ? topLevelCells(tree) : [];
+  // Capped: a folder like System32 has ~1,900 direct children, and
+  // drawing every one produced 10,086 DOM nodes and made the whole view
+  // crawl. Past this many the rects are a few pixels wide and say
+  // nothing that the aggregate cell doesn't say better.
+  const cells = tree ? limitCells(topLevelCells(tree), MAX_CELLS) : [];
 
   useEffect(() => {
     const missing = extensionsInCells(cells).filter((ext) => !(ext in typeIcons));
@@ -248,8 +264,22 @@ export default function DiskMap() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tree]);
 
+  const tooltipRef = useRef(null);
+
   const handleHover = useCallback((node, e) => {
+    // Content only. Position is written straight to the element below,
+    // so moving the cursor never triggers a render.
     setHovered({ node, clientX: e.clientX, clientY: e.clientY });
+  }, []);
+
+  /** Moves the tooltip by writing to the DOM directly.
+   *
+   * One listener on the container, not one per cell, and no state: with
+   * ~1,900 cells a state update per mousemove re-rendered the entire
+   * treemap and made the view unusable. */
+  const handleContainerMouseMove = useCallback((e) => {
+    const el = tooltipRef.current;
+    if (el) el.style.transform = `translate(${e.clientX + 14}px, ${e.clientY + 14}px)`;
   }, []);
   const handleLeave = useCallback(() => setHovered(null), []);
   const coverage = scanCoverage(tree);
@@ -351,7 +381,7 @@ export default function DiskMap() {
       )}
 
       {!loading && !error && tree && (
-        <div className="glass-panel p-4" style={{ position: 'relative' }}>
+        <div className="glass-panel p-4" style={{ position: 'relative' }} onMouseMove={handleContainerMouseMove}>
           <ResponsiveContainer width="100%" height={520}>
             <Treemap
               data={cells}
@@ -360,23 +390,45 @@ export default function DiskMap() {
               content={<TreemapCell icons={typeIcons} onHover={handleHover} onLeave={handleLeave} onDrillDown={handleDrillDown} />}
             />
           </ResponsiveContainer>
-          {hovered && (
-            <div
-              className="diskmap-tooltip"
-              style={{ position: 'fixed', left: hovered.clientX + 14, top: hovered.clientY + 14, zIndex: 50 }}
-            >
-              <div className="text-[13px] font-medium text-[color:var(--text-primary)] mb-1">{hovered.node.name}</div>
-              <div className="text-[12px] text-[color:var(--accent-coral)] mb-1">
-                {hovered.node.scanned === false ? `${formatBytes(hovered.node.size)} not measured` : formatBytes(hovered.node.size)}
-              </div>
-              <div className="text-[11px] font-mono text-[color:var(--text-muted)] break-all max-w-[320px]">
-                {hovered.node.scanned === false
-                  ? 'The scan stopped before reaching this. Its real size is unknown.'
-                  : hovered.node.fullPath}
-              </div>
-            </div>
-          )}
         </div>
+      )}
+
+      {/* Rendered into <body>, not beside the treemap.
+          `position: fixed` is resolved against the nearest ancestor that
+          establishes a containing block, and .glass-panel has
+          `backdrop-filter: blur(24px)` -- which does exactly that, the
+          same way `transform` does. So the tooltip's viewport coordinates
+          were being measured from the panel's top-left corner instead,
+          and it appeared offset from the cursor by however far down the
+          page the panel sat. A portal puts it back in the viewport's own
+          coordinate space, and also stops the panel's bounds clipping it
+          near an edge. */}
+      {hovered && createPortal(
+        <div
+          ref={tooltipRef}
+          className="diskmap-tooltip"
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            transform: `translate(${hovered.clientX + 14}px, ${hovered.clientY + 14}px)`,
+            zIndex: 50,
+            pointerEvents: 'none'
+          }}
+        >
+          <div className="text-[13px] font-medium text-[color:var(--text-primary)] mb-1">{hovered.node.name}</div>
+          <div className="text-[12px] text-[color:var(--accent-coral)] mb-1">
+            {hovered.node.scanned === false ? `${formatBytes(hovered.node.size)} not measured` : formatBytes(hovered.node.size)}
+          </div>
+          <div className="text-[11px] font-mono text-[color:var(--text-muted)] break-all max-w-[320px]">
+            {hovered.node.aggregated
+              ? 'The smallest entries in this folder, grouped together.'
+              : hovered.node.scanned === false
+                ? 'The scan stopped before reaching this. Its real size is unknown.'
+                : hovered.node.fullPath}
+          </div>
+        </div>,
+        document.body
       )}
     </div>
   );
