@@ -69,6 +69,7 @@ export async function quarantineAndDelete({ programName, files, registryKeys }) 
   }
 
   const exportedKeys = [];
+  const failedKeys = [];
   const regFiles = [];
   for (const keyPath of registryKeys) {
     const regFilePath = join(batchDir, `registry-${regFiles.length}.reg`);
@@ -78,13 +79,18 @@ export async function quarantineAndDelete({ programName, files, registryKeys }) 
       exportedKeys.push(keyPath);
       regFiles.push(regFilePath);
     } catch {
-      // skipped — see doc comment above
+      // Still skipped rather than thrown — one unremovable key must not
+      // abort the batch — but RECORDED, not swallowed. HKLM keys need
+      // admin and quietly fail without it, so a caller that only reads
+      // `registryKeys` would report a clean removal while the entry is
+      // still there. Callers can now say which ones didn't go.
+      failedKeys.push(keyPath);
     }
   }
 
   const manifest = {
     programName, createdAt: Date.now(), batchDir,
-    files: movedFiles, registryKeys: exportedKeys, regFiles,
+    files: movedFiles, registryKeys: exportedKeys, failedRegistryKeys: failedKeys, regFiles,
     totalSizeBytes: movedFiles.reduce((sum, f) => sum + f.sizeBytes, 0)
   };
   await writeFile(join(batchDir, 'manifest.json'), JSON.stringify(manifest, null, 2), 'utf8');

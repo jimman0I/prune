@@ -1,5 +1,4 @@
 import { scanForLeftovers } from './leftoverScan.js';
-import { quarantineAndDelete } from './quarantine.js';
 
 /** Forced uninstall: removing software whose own uninstaller can no longer
  * do it.
@@ -37,35 +36,12 @@ export async function scanForcedUninstall({ name, publisher, registryKey }) {
   return { ...scan, registryKeys: { ...scan.registryKeys, items } };
 }
 
-/** Quarantines exactly what the caller selected -- moved and exported, not
- * deleted, so a wrong match is recoverable from the Quarantine screen the
- * same way a normal uninstall's leftover removal already is.
- *
- * `failedRegistryKeys` is the part that matters for honesty.
- * quarantineAndDelete deliberately swallows a failed `reg delete` so one
- * bad key can't abort a whole batch, which means a key needing admin comes
- * back simply missing from the manifest. Diffing what was asked for
- * against what the manifest actually confirms is the only way the UI can
- * tell the user their Add/Remove entry is still there -- reporting a clean
- * removal that didn't happen is the same class of lie as inventing a
- * number for a directory we couldn't read. */
-export async function executeForcedUninstall({ name, files = [], registryKeys = [] }) {
-  const trimmed = typeof name === 'string' ? name.trim() : '';
-  if (!trimmed) throw new Error('A program name is required.');
-  if (files.length === 0 && registryKeys.length === 0) {
-    throw new Error('Nothing was selected to remove.');
-  }
-
-  const manifest = await quarantineAndDelete({ programName: trimmed, files, registryKeys });
-
-  const removed = new Set((manifest.registryKeys || []).map((k) => k.toLowerCase()));
-  const failedRegistryKeys = registryKeys.filter((k) => !removed.has(k.toLowerCase()));
-
-  return {
-    freedBytes: manifest.totalSizeBytes,
-    quarantineBatch: manifest.batchDir,
-    removedFiles: manifest.files?.length ?? 0,
-    removedRegistryKeys: manifest.registryKeys ?? [],
-    failedRegistryKeys
-  };
-}
+/* There is deliberately no execute function here. Removal goes through the
+ * EXISTING POST /api/quarantine/remove, which already quarantines files and
+ * registry keys and creates a system restore point first -- a forced
+ * uninstall is the case that most needs that restore point, so routing
+ * around it to save an import would have been strictly worse. What was
+ * missing was honest reporting of keys that couldn't be removed, and that
+ * now lives in quarantineAndDelete itself (manifest.failedRegistryKeys),
+ * where the failure actually happens, so the ordinary uninstall flow gets
+ * it too rather than only this one. */

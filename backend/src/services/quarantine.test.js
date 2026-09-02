@@ -47,6 +47,24 @@ describe('quarantineAndDelete', () => {
     // would produce mojibake and this assertion would silently never match.
     const regContent = await readFile(manifest.regFiles[0], 'utf16le');
     expect(regContent).toMatch(/unrevo-test/i);
+    expect(manifest.failedRegistryKeys).toEqual([]);
+  });
+
+  // A key whose `reg export`/`reg delete` fails is skipped so one bad key
+  // can't abort the batch -- but silently, which meant callers could only
+  // tell by diffing their own request against the manifest, and none did.
+  // A forced uninstall reporting a clean removal while the Add/Remove
+  // Programs entry is still sitting there is the same class of lie as
+  // reporting 0 bytes for a directory we couldn't read.
+  it('records a registry key it could not remove instead of dropping it silently', async () => {
+    const manifest = await quarantineAndDelete({
+      programName: 'OldApp',
+      files: [],
+      registryKeys: ['HKCU:\\Software\\unrevo-test', 'HKCU:\\Software\\unrevo-does-not-exist']
+    });
+
+    expect(manifest.registryKeys).toEqual(['HKCU:\\Software\\unrevo-test']);
+    expect(manifest.failedRegistryKeys).toEqual(['HKCU:\\Software\\unrevo-does-not-exist']);
   });
 
   it('skips a file that no longer exists rather than throwing', async () => {
