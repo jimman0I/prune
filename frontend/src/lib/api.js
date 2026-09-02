@@ -24,6 +24,20 @@ export async function fetchProgramIcons() {
   return data.icons;
 }
 
+/** Measured install-folder sizes for the programs whose registry entry
+ * records none, as { programId: bytes }.
+ *
+ * A separate call from fetchPrograms on purpose: the backend walks real
+ * install folders to produce this (~13 seconds here), and the list must
+ * not wait on it. A program that can't be measured safely is absent and
+ * keeps its blank. */
+export async function fetchProgramSizes() {
+  const res = await fetch(`${API_URL}/programs/sizes`);
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
+  return data.sizes;
+}
+
 export async function scanForLeftovers(name, publisher) {
   const res = await fetch(`${API_URL}/leftovers/scan`, {
     method: 'POST',

@@ -9,7 +9,8 @@ import UninstallModal from './components/UninstallModal.jsx';
 import QuarantineManager from './components/QuarantineManager.jsx';
 import SettingsPage from './components/SettingsPage.jsx';
 import DeepClean from './components/DeepClean.jsx';
-import { fetchPrograms, fetchProgramIcons } from './lib/api.js';
+import { fetchPrograms, fetchProgramIcons, fetchProgramSizes } from './lib/api.js';
+import { mergeMeasuredSizes } from './lib/mergeSizes.js';
 
 function formatBytes(bytes) {
   if (bytes === null || bytes === undefined) return '—';
@@ -33,6 +34,20 @@ export default function App() {
   // The backend also warms this cache the moment it boots, so by the
   // time anyone reaches that screen both ends are already done.
   const [icons, setIcons] = useState({});
+
+  // Sizes for the 40 entries whose registry record has none. Measured by
+  // walking their install folders, so it takes a while and arrives after
+  // the list -- the rows show their real blank until it does, rather than
+  // the list waiting on it.
+  useEffect(() => {
+    let cancelled = false;
+    fetchProgramSizes()
+      .then((sizes) => {
+        if (!cancelled) setPrograms((prev) => mergeMeasuredSizes(prev, sizes));
+      })
+      .catch(() => { /* the rows keep their honest blank */ });
+    return () => { cancelled = true; };
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
