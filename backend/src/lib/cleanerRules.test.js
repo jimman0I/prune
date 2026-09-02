@@ -347,3 +347,59 @@ describe('scanRule presence detection', () => {
     expect(scanRule({ id: 'discord_cache', paths: ['%APPDATA%\\discord\\Cache'] }).accessible).toBe(true);
   });
 });
+
+/** The default selection decides what a user removes when they trust the
+ * app, so the classification is worth pinning down rather than leaving to
+ * whoever edits cleaners.json next.
+ *
+ * Real problem this came from (2026-09-02): Preview found 54.46 GB across
+ * 40 rules and pre-selected none of them, so the footer read "Total space
+ * to free: 0 B" and Clean sat disabled. After a 19-second scan that looks
+ * exactly like a broken feature. */
+describe('recommended defaults', () => {
+  const rules = loadCleanerRules();
+
+  it('marks every rule explicitly, so a new one is never recommended by omission', () => {
+    for (const rule of rules) {
+      expect(typeof rule.recommended, rule.id).toBe('boolean');
+    }
+  });
+
+  it('recommends enough to make a scan immediately actionable', () => {
+    expect(rules.filter(r => r.recommended).length).toBeGreaterThan(rules.length / 2);
+  });
+
+  it('never recommends a rule that costs a large re-download', () => {
+    // Developer package caches restore on demand, but that restore can be
+    // tens of gigabytes over the network. The user gets to choose.
+    for (const id of ['npm_cache', 'yarn_cache', 'pip_cache', 'nuget_cache', 'gradle_cache', 'electron_builder_cache']) {
+      expect(rules.find(r => r.id === id).recommended, id).toBe(false);
+    }
+  });
+
+  it('never recommends a rule that loses something the user can see', () => {
+    expect(rules.find(r => r.id === 'recent_items_jumplists').recommended).toBe(false);
+  });
+
+  it('never recommends a rule that makes the machine slower afterwards', () => {
+    expect(rules.find(r => r.id === 'windows_prefetch').recommended).toBe(false);
+    expect(rules.find(r => r.id === 'windows_font_cache').recommended).toBe(false);
+  });
+
+  it('never recommends a command rule, which frees nothing', () => {
+    for (const rule of rules.filter(r => r.command)) {
+      expect(rule.recommended, rule.id).toBe(false);
+    }
+  });
+
+  it('recommends the ordinary regenerating caches', () => {
+    for (const id of ['discord_cache', 'chrome_deep_cache', 'nvidia_shader_cache', 'thumbnail_cache_deep']) {
+      expect(rules.find(r => r.id === id).recommended, id).toBe(true);
+    }
+  });
+
+  it('carries `recommended` through the scan to the frontend', () => {
+    const item = scanAllRules().flatMap(g => g.items).find(i => i.id === 'discord_cache');
+    expect(item.recommended).toBe(true);
+  }, 30000);
+});
