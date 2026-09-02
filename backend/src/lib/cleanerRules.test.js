@@ -10,7 +10,8 @@ import {
   scanRule,
   scanAllRules,
   executeRule,
-  executeRules
+  executeRules,
+  scanRulesProgressively
 } from './cleanerRules.js';
 
 // node:fs's ESM namespace is frozen -- vi.spyOn can't redefine its exports
@@ -402,4 +403,57 @@ describe('recommended defaults', () => {
     const item = scanAllRules().flatMap(g => g.items).find(i => i.id === 'discord_cache');
     expect(item.recommended).toBe(true);
   }, 30000);
+});
+
+describe('scanRulesProgressively', () => {
+  it('reports every rule one at a time, in cleaners.json order', async () => {
+    const seen = [];
+    await scanRulesProgressively((item) => seen.push(item));
+    const expected = loadCleanerRules().map(r => r.id);
+    expect(seen.map(i => i.id)).toEqual(expected);
+  }, 60000);
+
+  it('gives each item the same shape the one-shot scan produces', async () => {
+    const seen = [];
+    await scanRulesProgressively((item) => seen.push(item));
+    for (const item of seen) {
+      expect(item).toHaveProperty('category');
+      expect(item).toHaveProperty('name');
+      expect(item).toHaveProperty('present');
+      expect(item).toHaveProperty('recommended');
+    }
+  }, 60000);
+
+  // The scan holds the event loop for ~19 seconds on a real machine. If
+  // it never yielded, nothing written to the response would reach the
+  // browser until the whole thing finished -- which is a progress bar
+  // that appears only once there is no longer any progress to report.
+  it('yields to the event loop between rules so output can actually flush', async () => {
+    let ticked = false;
+    setImmediate(() => { ticked = true; });
+    let tickedByFirstItem = null;
+    await scanRulesProgressively(() => {
+      if (tickedByFirstItem === null) tickedByFirstItem = ticked;
+    });
+    // A timer scheduled before the scan started got to run during it.
+    expect(ticked).toBe(true);
+  }, 60000);
+
+  it('stops early when the caller aborts, without throwing', async () => {
+    const controller = new AbortController();
+    const seen = [];
+    const result = await scanRulesProgressively((item) => {
+      seen.push(item);
+      if (seen.length === 3) controller.abort();
+    }, { signal: controller.signal });
+
+    expect(result.aborted).toBe(true);
+    expect(seen.length).toBeLessThan(loadCleanerRules().length);
+  }, 60000);
+
+  it('reports not aborted when it runs to completion', async () => {
+    const result = await scanRulesProgressively(() => {});
+    expect(result.aborted).toBe(false);
+    expect(result.total).toBe(loadCleanerRules().length);
+  }, 60000);
 });

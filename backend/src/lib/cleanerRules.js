@@ -297,3 +297,39 @@ export async function executeRules(ruleIds) {
   }
   return { freedBytes, results };
 }
+
+/** Scans every rule, handing each result to `onItem` as soon as it's
+ * known rather than returning the whole set at the end.
+ *
+ * scanAllRules above takes ~19 seconds on a real machine, and it does it
+ * with synchronous fs calls -- so it holds the event loop for the whole
+ * run. Anything written to a response during that time sits in a buffer
+ * until the scan finishes, which is a progress report delivered only once
+ * there is no longer any progress to report. The `await` between rules is
+ * what makes streaming possible at all: it hands control back so the
+ * socket can flush, and incidentally lets the rest of the backend answer
+ * requests between rules instead of being frozen for the duration.
+ *
+ * It does NOT make an individual rule interruptible -- one large tree
+ * (the 33 GB NVIDIA shader cache is the worst here) still blocks until
+ * it's done. Per-rule granularity is the honest limit of this change.
+ *
+ * `signal` lets a caller stop early, which is what the UI's Abort button
+ * and a client hanging up both come down to. Returns a summary rather
+ * than throwing on abort -- a cancelled scan is an ordinary outcome. */
+export async function scanRulesProgressively(onItem, { signal } = {}) {
+  const rules = loadCleanerRules();
+  let scanned = 0;
+
+  for (const rule of rules) {
+    if (signal?.aborted) return { aborted: true, total: rules.length, scanned };
+    onItem({ ...rule, ...scanRule(rule) });
+    scanned++;
+    // setImmediate, not a 0ms timer: it runs after I/O callbacks in the
+    // same loop iteration, so a pending socket write goes out before the
+    // next rule starts hogging the thread again.
+    await new Promise((resolve) => setImmediate(resolve));
+  }
+
+  return { aborted: false, total: rules.length, scanned };
+}
