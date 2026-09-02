@@ -1,8 +1,9 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Treemap, ResponsiveContainer } from 'recharts';
-import { fetchDiskScan, scanDriveFast } from '../lib/api.js';
+import { fetchDiskScan, scanDriveFast, fetchDiskSpace } from '../lib/api.js';
 import { attachFullPaths, topLevelCells } from '../lib/diskMapTree.js';
 import { subtreeForPath } from '../lib/mftSubtree.js';
+import { withUnscannedRemainder, scanCoverage } from '../lib/unscannedRemainder.js';
 import { colorForNode } from '../lib/diskMapColors.js';
 
 const DEFAULT_ROOT = 'C:\\';
@@ -31,6 +32,22 @@ export function breadcrumbSegments(path) {
   }));
 }
 
+/** "C:\" or "C:" -- the only place a whole-drive used-space figure is the
+ * right thing to reconcile a scan against.
+ *
+ * Written without a regex on purpose. The obvious one needs an escaped
+ * backslash, and an earlier version of this line shipped as
+ * `/^[a-z]:\?$/i` -- an optional literal QUESTION MARK rather than an
+ * optional separator, so it silently returned false for every path and
+ * the unscanned remainder never appeared. It cost a rebuild and a live
+ * probe to find, because nothing throws: the feature just quietly
+ * doesn't happen. */
+export function isDriveRoot(path) {
+  if (typeof path !== 'string') return false;
+  const trimmed = path.replace(/[/\\]+$/, '');
+  return trimmed.length === 2 && trimmed[1] === ':' && /^[a-z]$/i.test(trimmed[0]);
+}
+
 function LoadingState() {
   return (
     <div className="glass-panel flex flex-col items-center justify-center py-16">
@@ -47,18 +64,22 @@ function LoadingState() {
  * carried (name, size, type, fullPath). depth 0 is the synthetic outer
  * container recharts wraps a single-root `data` array in -- there's
  * nothing to draw for it. */
-function TreemapCell({ x, y, width, height, depth, name, size, type, fullPath, onHover, onLeave, onDrillDown }) {
+function TreemapCell({ x, y, width, height, depth, name, size, type, scanned, fullPath, onHover, onLeave, onDrillDown }) {
   if (depth === 0 || !(width > 0) || !(height > 0)) return null;
-  const fill = colorForNode({ name, type });
-  const canDrillDown = type === 'directory' && Boolean(fullPath);
+  const fill = colorForNode({ name, type, scanned });
+  // An unscanned block is a hole in the picture, not a folder. Clicking
+  // it would scan a path that may not even exist (the whole-drive
+  // remainder isn't a real directory), and its size is a subtraction
+  // rather than a measurement.
+  const canDrillDown = scanned !== false && type === 'directory' && Boolean(fullPath);
   const label = width > 60 && height > 22 && name.length > Math.floor(width / 7)
     ? `${name.slice(0, Math.floor(width / 7))}…`
     : name;
 
   return (
     <g
-      onMouseEnter={(e) => onHover({ name, size, fullPath, type }, e)}
-      onMouseMove={(e) => onHover({ name, size, fullPath, type }, e)}
+      onMouseEnter={(e) => onHover({ name, size, fullPath, type, scanned }, e)}
+      onMouseMove={(e) => onHover({ name, size, fullPath, type, scanned }, e)}
       onMouseLeave={onLeave}
       onClick={() => canDrillDown && onDrillDown(fullPath)}
       style={{ cursor: canDrillDown ? 'pointer' : 'default' }}
@@ -94,6 +115,15 @@ export default function DiskMap() {
   const [fastStats, setFastStats] = useState(null);
   const [fastScanning, setFastScanning] = useState(false);
   const [fastNote, setFastNote] = useState(null);
+  // Real used space, so a truncated scan can show how much of the drive
+  // it never got to instead of presenting a fragment as the whole thing.
+  //
+  // A ref rather than state on purpose: as a dependency of the scan
+  // effect it would land mid-scan, abort the 30-second walk already in
+  // flight and start the whole thing again. /api/disk-space answers in
+  // milliseconds while the scan takes half a minute, so the value is
+  // always here long before the scan's .then() reads it.
+  const usedBytesRef = useRef(null);
 
   /** Explicit click only. This raises a real UAC prompt, so it can never
    * live in an effect -- see api.js. */
@@ -116,6 +146,20 @@ export default function DiskMap() {
       setFastScanning(false);
     }
   };
+
+  useEffect(() => {
+    let cancelled = false;
+    fetchDiskSpace()
+      .then((d) => {
+        // The API reports free and total; used is the subtraction. Read
+        // straight off the response rather than assumed -- there is no
+        // `usedBytes` field, and reading one gave undefined silently.
+        if (cancelled || typeof d?.totalBytes !== 'number' || typeof d?.freeBytes !== 'number') return;
+        usedBytesRef.current = d.totalBytes - d.freeBytes;
+      })
+      .catch(() => { /* the remainder block is an enhancement, never a blocker */ });
+    return () => { cancelled = true; };
+  }, []);
 
   useEffect(() => {
     // Already have the whole drive in memory: this folder is a lookup,
@@ -146,7 +190,12 @@ export default function DiskMap() {
     setLoading(true);
     setError(null);
     fetchDiskScan(currentPath, controller.signal)
-      .then((result) => setTree(attachFullPaths(result, currentPath)))
+      .then((result) => setTree(attachFullPaths(
+        // Only at a drive root: a truncated scan of a subfolder has no
+        // used-space figure to reconcile against.
+        isDriveRoot(currentPath) ? withUnscannedRemainder(result, usedBytesRef.current) : result,
+        currentPath
+      )))
       .catch((err) => { if (err.name !== 'AbortError') setError(err.message); })
       .finally(() => { if (!controller.signal.aborted) setLoading(false); });
     return () => controller.abort();
@@ -156,6 +205,7 @@ export default function DiskMap() {
     setHovered({ node, clientX: e.clientX, clientY: e.clientY });
   }, []);
   const handleLeave = useCallback(() => setHovered(null), []);
+  const coverage = scanCoverage(tree);
   const handleDrillDown = useCallback((fullPath) => {
     setHovered(null);
     setCurrentPath(fullPath);
@@ -232,7 +282,23 @@ export default function DiskMap() {
             <line x1="12" y1="16" x2="12.01" y2="16"></line>
           </svg>
           <div className="text-[12.5px] text-[color:var(--warning)]">
-            This scan took too long and was stopped early — sizes shown are a real but possibly incomplete lower bound.
+            {coverage
+              // The concrete number matters more than the warning does. "Possibly
+              // incomplete" reads as a rounding caveat; "measured 34.5 GB of 850 GB"
+              // tells you immediately that the picture is nearly all hole.
+              ? <>This scan ran out of time: it measured <span className="font-medium text-white">{formatBytes(coverage.measured)}</span> of
+                the <span className="font-medium text-white">{formatBytes(coverage.used)}</span> in use ({coverage.percent}%).
+                What it measured is real; the rest is shown as unscanned, not as empty.</>
+              : <>This scan ran out of time before it finished the drive. Everything it did measure
+                is real, but folders it never reached are shown as unscanned rather than as empty —
+                don't read this as a full picture of what's using your space.</>}
+            {' '}<button
+              className="underline underline-offset-2 hover:text-[color:var(--text-primary)] transition-colors disabled:opacity-50"
+              onClick={handleFastScan}
+              disabled={fastScanning}
+            >
+              {fastScanning ? 'Scanning drive…' : 'Run a fast scan instead'}
+            </button>
           </div>
         </div>
       )}
@@ -253,9 +319,13 @@ export default function DiskMap() {
               style={{ position: 'fixed', left: hovered.clientX + 14, top: hovered.clientY + 14, zIndex: 50 }}
             >
               <div className="text-[13px] font-medium text-[color:var(--text-primary)] mb-1">{hovered.node.name}</div>
-              <div className="text-[12px] text-[color:var(--accent-coral)] mb-1">{formatBytes(hovered.node.size)}</div>
+              <div className="text-[12px] text-[color:var(--accent-coral)] mb-1">
+                {hovered.node.scanned === false ? `${formatBytes(hovered.node.size)} not measured` : formatBytes(hovered.node.size)}
+              </div>
               <div className="text-[11px] font-mono text-[color:var(--text-muted)] break-all max-w-[320px]">
-                {hovered.node.fullPath}
+                {hovered.node.scanned === false
+                  ? 'The scan stopped before reaching this. Its real size is unknown.'
+                  : hovered.node.fullPath}
               </div>
             </div>
           )}

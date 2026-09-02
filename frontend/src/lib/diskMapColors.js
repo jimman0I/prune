@@ -12,11 +12,16 @@ const COLOR_APP = '#3b82f6';
 const COLOR_MEDIA = '#8b5cf6';
 const COLOR_DOCUMENT = '#06b6d4';
 const COLOR_UNKNOWN = '#545f6c';
+// Deliberately not one of the palette colors above: an unscanned region
+// is not a category of content, it's an absence of knowledge, and it has
+// to read that way at a glance rather than looking like another folder.
+const COLOR_UNSCANNED = '#2b3440';
 
 /** The fill color for one disk-map node. Directories are always the
  * "system/unknown" gray -- the interesting color-coding is about what's
  * actually TAKING UP the space (files), not the folders containing it. */
 export function colorForNode(node) {
+  if (node?.scanned === false) return COLOR_UNSCANNED;
   if (!node || node.type !== 'file') return COLOR_UNKNOWN;
   const match = /\.([a-z0-9]+)$/i.exec(node.name ?? '');
   const ext = match ? match[1].toLowerCase() : '';
