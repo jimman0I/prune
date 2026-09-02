@@ -15,6 +15,7 @@ import deepCleanRoutes from './routes/deepClean.js';
 import diskHealthRoutes from './routes/diskHealth.js';
 import forcedUninstallRoutes from './routes/forcedUninstall.js';
 import mftScanRoutes from './routes/mftScan.js';
+import fileIconsRoutes from './routes/fileIcons.js';
 import { initTray } from './lib/trayManager.js';
 
 const PORT = process.env.UNREVO_BACKEND_PORT || 3101;
@@ -47,6 +48,7 @@ app.use('/api/deep-clean', deepCleanRoutes);
 app.use('/api/disk-health', diskHealthRoutes);
 app.use('/api/forced-uninstall', forcedUninstallRoutes);
 app.use('/api/mft-scan', mftScanRoutes);
+app.use('/api/file-icons', fileIconsRoutes);
 
 // Real bug, found dogfooding (2026-08-29): a `server.listen()` failure
 // (most commonly EADDRINUSE — something else, or a second copy of this
