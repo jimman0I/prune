@@ -20,7 +20,7 @@ Get-ItemProperty -Path $paths -ErrorAction SilentlyContinue |
     @{N='publisher';E={$_.Publisher}}, @{N='version';E={$_.DisplayVersion}},
     @{N='installDate';E={$_.InstallDate}}, @{N='estimatedSizeKb';E={$_.EstimatedSize}},
     @{N='uninstallString';E={$_.UninstallString}}, @{N='installLocation';E={$_.InstallLocation}},
-    @{N='psPath';E={$_.PSPath}} |
+    @{N='psPath';E={$_.PSPath}}, @{N='displayIcon';E={$_.DisplayIcon}} |
   ConvertTo-Json -Compress
 `;
 
@@ -80,7 +80,11 @@ export function normalizeProgram(raw) {
     sizeBytes: typeof raw.estimatedSizeKb === 'number' ? raw.estimatedSizeKb * 1024 : null,
     uninstallString: raw.uninstallString || null,
     installLocation: raw.installLocation || null,
-    registryKey: toPowerShellRegistryPath(raw.psPath)
+    registryKey: toPowerShellRegistryPath(raw.psPath),
+    // Where the vendor's own icon lives. Kept raw here -- parsing it is
+    // iconSource.js's job, and the icons are fetched separately so the
+    // program list never waits on icon extraction.
+    displayIcon: raw.displayIcon || null
   };
 }
 

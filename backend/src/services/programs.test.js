@@ -37,13 +37,15 @@ describe('normalizeProgram', () => {
       id: '{GUID}', name: 'Google Chrome', publisher: 'Google LLC', version: '129.0',
       installDate: '20230115', estimatedSizeKb: 620000, uninstallString: 'MsiExec.exe /X{GUID}',
       installLocation: 'C:\\Program Files\\Google\\Chrome',
-      psPath: 'Microsoft.PowerShell.Core\\Registry::HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\{GUID}'
+      psPath: 'Microsoft.PowerShell.Core\\Registry::HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\{GUID}',
+      displayIcon: 'C:\\Program Files\\Google\\Chrome\\chrome.exe,0'
     });
     expect(result).toEqual({
       id: '{GUID}', name: 'Google Chrome', publisher: 'Google LLC', version: '129.0',
       installDate: '2023-01-15', sizeBytes: 620000 * 1024,
       uninstallString: 'MsiExec.exe /X{GUID}', installLocation: 'C:\\Program Files\\Google\\Chrome',
-      registryKey: 'HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\{GUID}'
+      registryKey: 'HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\{GUID}',
+      displayIcon: 'C:\\Program Files\\Google\\Chrome\\chrome.exe,0'
     });
   });
 
