@@ -242,6 +242,19 @@ export default function BatchUninstallModal({ programs, onClose, onFinished }) {
               </div>
             </div>
 
+            {/* Verified by testing the round-trip on this machine: a
+                System Restore point needs administrator, so unelevated it
+                fails every time with "Access denied". Saying nothing here
+                would imply a safety net that isn't there -- the Quarantine
+                is, and it restores byte-for-byte, which is what this says
+                instead. */}
+            {removal.restorePoint?.created === false && (
+              <p className="text-[12px] text-[color:var(--text-muted)] mb-5">
+                No system restore point was created ({removal.restorePoint.reason?.trim() || 'not available'}).
+                Everything above is still in Quarantine and can be put back.
+              </p>
+            )}
+
             {removal.failedRegistryKeys?.length > 0 && (
               <div className="mb-5 px-3.5 py-3 rounded-xl bg-[color:var(--warning-soft)] border border-[color:var(--warning)]/25">
                 <p className="text-[12.5px] text-[color:var(--warning)]">
