@@ -8,7 +8,7 @@ import UninstallModal from './components/UninstallModal.jsx';
 import QuarantineManager from './components/QuarantineManager.jsx';
 import SettingsPage from './components/SettingsPage.jsx';
 import DeepClean from './components/DeepClean.jsx';
-import { fetchPrograms } from './lib/api.js';
+import { fetchPrograms, fetchProgramIcons } from './lib/api.js';
 
 function formatBytes(bytes) {
   if (bytes === null || bytes === undefined) return '—';
@@ -25,6 +25,20 @@ export default function App() {
   const [programs, setPrograms] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  // Fetched at app start, not when the Application Manager opens.
+  // Extraction takes ~2s across ~90 executables, and doing it on tab
+  // click meant watching the icons appear a beat after the list did.
+  // The backend also warms this cache the moment it boots, so by the
+  // time anyone reaches that screen both ends are already done.
+  const [icons, setIcons] = useState({});
+
+  useEffect(() => {
+    let cancelled = false;
+    fetchProgramIcons()
+      .then((result) => { if (!cancelled) setIcons(result); })
+      .catch(() => { /* icons are decoration -- never block the app */ });
+    return () => { cancelled = true; };
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
@@ -48,8 +62,8 @@ export default function App() {
         {screen === 'settings' && <SettingsPage />}
         {screen === 'deepclean' && <DeepClean />}
         {screen === 'applications' && (
-          <div className="px-12 py-10 max-w-[1400px]">
-            <div className="flex items-baseline justify-between mb-8">
+          <div className="px-12 py-10 h-full flex flex-col min-h-0">
+            <div className="flex items-baseline justify-between mb-6 shrink-0">
               <div>
                 <div className="text-[11px] text-[color:var(--text-muted)] font-mono uppercase tracking-[0.16em] mb-2">
                   Application Manager
@@ -64,7 +78,7 @@ export default function App() {
               </div>
               <button className="btn-ghost" onClick={() => setScreen('quarantine')}>Quarantine</button>
             </div>
-            <ProgramList programs={programs} onUninstall={setSelectedProgram} />
+            <ProgramList programs={programs} icons={icons} onUninstall={setSelectedProgram} />
           </div>
         )}
       </div>

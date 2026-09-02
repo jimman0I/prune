@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
-import { fetchPrograms, fetchProgramIcons } from '../lib/api.js';
+import { fetchPrograms } from '../lib/api.js';
 import { sizeBadgeTone } from '../lib/sizeBadgeTone.js';
+import { sortPrograms, nextSortState } from '../lib/sortPrograms.js';
 
 function formatBytes(bytes) {
   if (bytes === null || bytes === undefined) return '—';
@@ -11,18 +12,33 @@ function formatBytes(bytes) {
   return `${parseFloat((bytes / Math.pow(k, i)).toFixed(1))} ${sizes[i]}`;
 }
 
-const SIZE_BADGE_CLASSES = {
-  cyan: 'bg-[color:var(--accent-cyan)]/12 text-[color:var(--accent-cyan)]',
-  blue: 'bg-[color:var(--accent-blue)]/12 text-[color:var(--accent-blue)]',
-  amber: 'bg-[color:var(--warning)]/12 text-[color:var(--warning)]',
-  coral: 'bg-[color:var(--accent-coral)]/12 text-[color:var(--accent-coral)]'
+const SIZE_TONE_TEXT = {
+  cyan: 'text-[color:var(--accent-cyan)]',
+  blue: 'text-[color:var(--accent-blue)]',
+  amber: 'text-[color:var(--warning)]',
+  coral: 'text-[color:var(--accent-coral)]'
 };
 
-/** The program's own icon, pulled from its executable, falling back to a
- * lettered tile.
+/** The grid, defined once so the header and every row cannot drift apart.
+ * A column's `sort` key is what makes its header clickable; the ones
+ * without a key (the website, the action) aren't meaningfully sortable. */
+const COLUMNS = [
+  { key: 'name', label: 'Application', sort: 'name', width: 'minmax(220px,1fr)' },
+  { key: 'size', label: 'Size', sort: 'sizeBytes', width: '92px', align: 'right' },
+  { key: 'version', label: 'Version', sort: 'version', width: '104px' },
+  { key: 'architecture', label: 'Type', sort: 'architecture', width: '68px' },
+  { key: 'installDate', label: 'Installed', sort: 'installDate', width: '96px' },
+  { key: 'publisher', label: 'Company', sort: 'publisher', width: 'minmax(130px,0.7fr)' },
+  { key: 'website', label: 'Website', width: 'minmax(120px,0.6fr)' },
+  { key: 'action', label: '', width: '104px', align: 'right' }
+];
+
+const GRID_TEMPLATE = COLUMNS.map((c) => c.width).join(' ');
+
+/** The program's own icon, falling back to a lettered tile.
  *
  * Two different fallbacks, both needed. `src` is absent for a program
- * whose icon couldn't be extracted at all (35 of 129 here -- mostly MSI
+ * whose icon couldn't be extracted at all (28 of 129 here -- mostly MSI
  * redistributables that register no icon). `onError` covers the rarer
  * case of a data URI that arrived but won't decode; without it the row
  * would show a broken-image glyph, which looks worse than the letter it
@@ -32,56 +48,46 @@ function ProgramIcon({ program, src }) {
 
   if (src && !failed) {
     return (
-      // A neutral, near-transparent well rather than the coral gradient:
-      // real icons bring their own colour, and a tinted plate behind
-      // ninety different palettes makes all of them look grubby.
-      <div className="w-9 h-9 rounded-lg flex items-center justify-center bg-white/[0.04] border border-[color:var(--border-subtle)] overflow-hidden">
-        <img
-          src={src}
-          alt=""
-          width={28}
-          height={28}
-          className="w-7 h-7 object-contain"
-          onError={() => setFailed(true)}
-        />
-      </div>
+      <img
+        src={src}
+        alt=""
+        width={20}
+        height={20}
+        className="w-5 h-5 object-contain shrink-0"
+        onError={() => setFailed(true)}
+      />
     );
   }
 
   return (
     <div
-      className="w-9 h-9 rounded-lg flex items-center justify-center text-[11px] font-bold tracking-tight"
+      className="w-5 h-5 rounded-[4px] flex items-center justify-center text-[9px] font-bold shrink-0"
       style={{
         background: `linear-gradient(135deg, ${program.color || '#f98074'}dd, ${program.color || '#f98074'}88)`,
-        color: '#fff',
-        boxShadow: `0 4px 10px -4px ${program.color || '#f98074'}55, inset 0 1px 0 rgba(255,255,255,0.15)`
+        color: '#fff'
       }}
     >
-      {program.icon || program.name.charAt(0)}
+      {program.name.charAt(0)}
     </div>
   );
 }
 
-export default function ProgramList({ programs: initialPrograms, onUninstall }) {
+function SortArrow({ active, direction }) {
+  if (!active) return null;
+  return (
+    <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.2" className="shrink-0">
+      {direction === 'asc' ? <polyline points="18 15 12 9 6 15" /> : <polyline points="6 9 12 15 18 9" />}
+    </svg>
+  );
+}
+
+export default function ProgramList({ programs: initialPrograms, icons = {}, onUninstall }) {
   const [programs, setPrograms] = useState(initialPrograms || []);
   const [loading, setLoading] = useState(!initialPrograms);
   const [error, setError] = useState(null);
   const [query, setQuery] = useState('');
-  const [sortBy, setSortBy] = useState('name');
   const [filter, setFilter] = useState('all');
-  // Fetched separately from the list and rendered when they arrive: the
-  // backend spawns PowerShell and reads ~90 executables to build these,
-  // and blocking the rows on that would trade a fast list for a prettier
-  // one. An empty map just means every row keeps its lettered tile.
-  const [icons, setIcons] = useState({});
-
-  useEffect(() => {
-    let cancelled = false;
-    fetchProgramIcons()
-      .then((result) => { if (!cancelled) setIcons(result); })
-      .catch(() => { /* icons are decoration -- never break the list over them */ });
-    return () => { cancelled = true; };
-  }, []);
+  const [sort, setSort] = useState({ column: 'sizeBytes', direction: 'desc' });
 
   useEffect(() => {
     if (initialPrograms) {
@@ -106,21 +112,20 @@ export default function ProgramList({ programs: initialPrograms, onUninstall }) 
       : programs;
     if (filter === 'unused') list = list.filter(p => p.unused);
     if (filter === 'broken') list = list.filter(p => p.health?.orphaned);
-    list = [...list].sort((a, b) => {
-      if (sortBy === 'size') return b.sizeBytes - a.sizeBytes;
-      if (sortBy === 'name') return a.name.localeCompare(b.name);
-      if (sortBy === 'installed') return new Date(b.installDate) - new Date(a.installDate);
-      return 0;
-    });
-    return list;
-  }, [programs, query, sortBy, filter]);
+    return sortPrograms(list, sort.column, sort.direction);
+  }, [programs, query, sort, filter]);
+
+  const totalBytes = useMemo(
+    () => filtered.reduce((sum, p) => sum + (p.sizeBytes || 0), 0),
+    [filtered]
+  );
 
   if (loading) return <div style={{ color: 'var(--text-muted)' }}>Loading installed programs…</div>;
   if (error) return <div style={{ color: 'var(--danger)' }}>Couldn't load programs: {error}</div>;
 
   return (
-    <div>
-      <div className="flex items-center gap-3 mb-5">
+    <div className="flex flex-col min-h-0">
+      <div className="flex items-center gap-3 mb-4 shrink-0">
         <div className="flex-1 max-w-md relative">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[color:var(--text-muted)]">
             <circle cx="11" cy="11" r="8"></circle>
@@ -130,7 +135,7 @@ export default function ProgramList({ programs: initialPrograms, onUninstall }) 
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search applications…"
-            className="w-full bg-[color:var(--bg-panel)] border border-[color:var(--border-subtle)] rounded-xl pl-10 pr-4 py-2.5 text-[13.5px] placeholder:text-[color:var(--text-muted)] focus:outline-none focus:border-[color:var(--accent-coral)] focus:ring-4 focus:ring-[color:var(--accent-coral)]/10 transition"
+            className="w-full bg-[color:var(--bg-panel)] border border-[color:var(--border-subtle)] rounded-xl pl-10 pr-4 py-2 text-[13px] placeholder:text-[color:var(--text-muted)] focus:outline-none focus:border-[color:var(--accent-coral)] focus:ring-4 focus:ring-[color:var(--accent-coral)]/10 transition"
           />
         </div>
         <div className="flex items-center gap-1 p-1 bg-[color:var(--bg-panel)] border border-[color:var(--border-subtle)] rounded-xl">
@@ -152,69 +157,121 @@ export default function ProgramList({ programs: initialPrograms, onUninstall }) 
             </button>
           ))}
         </div>
-        <button
-          onClick={() => setSortBy(sortBy === 'size' ? 'name' : sortBy === 'name' ? 'installed' : 'size')}
-          className="btn-ghost px-3.5 py-2.5 rounded-xl text-[12.5px] font-medium flex items-center gap-2"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M3 8V6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v2M3 18v-2a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v2M12 12l-3-3m0 0-3 3m3-3v12"></path>
-          </svg>
-          Sort: {sortBy === 'size' ? 'Size' : sortBy === 'name' ? 'Name' : 'Install date'}
-        </button>
       </div>
-      <div>
-        <div className="grid grid-cols-[48px_1fr_140px_140px_120px_140px] gap-4 px-4 py-2 text-[10.5px] text-[color:var(--text-muted)] font-mono uppercase tracking-[0.14em]">
-          <span></span>
-          <span>Application</span>
-          <span>Installed</span>
-          <span>Version</span>
-          <span className="text-right">Size</span>
-          <span className="text-right">Action</span>
+
+      <div className="glass-panel overflow-hidden flex flex-col min-h-0">
+        {/* Sticky header. Sorting lives here rather than in a separate
+            control: with eight columns on screen, the thing you want to
+            sort by is already in front of you. */}
+        <div
+          className="grid gap-3 px-4 py-2 border-b border-[color:var(--border-subtle)] bg-white/[0.02] shrink-0"
+          style={{ gridTemplateColumns: GRID_TEMPLATE }}
+        >
+          {COLUMNS.map((col) => {
+            const active = sort.column === col.sort;
+            const content = (
+              <>
+                {col.label}
+                <SortArrow active={active} direction={sort.direction} />
+              </>
+            );
+            const classes = `flex items-center gap-1 text-[10.5px] font-mono uppercase tracking-[0.13em] ${
+              active ? 'text-[color:var(--accent-coral)]' : 'text-[color:var(--text-muted)]'
+            } ${col.align === 'right' ? 'justify-end' : ''}`;
+
+            return col.sort ? (
+              <button
+                key={col.key}
+                onClick={() => setSort((s) => nextSortState(s, col.sort))}
+                className={`${classes} hover:text-[color:var(--text-primary)] transition-colors`}
+              >
+                {content}
+              </button>
+            ) : (
+              <span key={col.key} className={classes}>{content}</span>
+            );
+          })}
         </div>
-        {filtered.length === 0 && <div className="text-center py-20 text-[color:var(--text-muted)] text-[13px]">No applications match your filters.</div>}
-        <div className="space-y-2">
+
+        <div className="overflow-y-auto min-h-0 divide-y divide-[color:var(--border-subtle)]">
+          {filtered.length === 0 && (
+            <div className="text-center py-16 text-[color:var(--text-muted)] text-[13px]">
+              No applications match your filters.
+            </div>
+          )}
           {filtered.map((program) => (
             <div
               key={program.id}
-              className="glass-panel grid grid-cols-[48px_1fr_140px_140px_120px_140px] gap-4 items-center px-4 py-3 group transition-all hover:-translate-y-0.5 hover:shadow-[-4px_0_20px_rgba(249,128,116,0.3)]"
+              className="grid gap-3 px-4 py-1.5 items-center group hover:bg-white/[0.04] transition-colors"
+              style={{ gridTemplateColumns: GRID_TEMPLATE }}
             >
-              <ProgramIcon program={program} src={icons[program.id]} />
-              <div className="min-w-0">
-                <div className="flex items-center gap-2">
-                  <div className="text-[13.5px] font-medium truncate">{program.name}</div>
-                  {program.unused && <span className="text-[9.5px] font-mono uppercase tracking-wider px-1.5 py-0.5 rounded bg-[color:var(--warning-soft)] text-[color:var(--warning)] border border-[color:var(--warning)]/25">Unused</span>}
-                  {program.health?.orphaned && (
-                    <span className="text-[9.5px] font-mono uppercase tracking-wider px-1.5 py-0.5 rounded bg-[color:var(--danger-soft)] text-[color:var(--danger)] border border-[color:var(--danger)]/25 shrink-0">Broken</span>
-                  )}
-                </div>
-                <div className="text-[11.5px] text-[color:var(--text-muted)] font-mono truncate mt-0.5">
-                  {/* The reason replaces the publisher here rather than adding a
-                      row: for a dead entry, "why is this broken" is the only
-                      thing worth reading, and the publisher of software that
-                      isn't installed any more tells you nothing. */}
-                  {program.health?.orphaned ? program.health.reason : program.publisher}
-                </div>
+              <div className="flex items-center gap-2.5 min-w-0">
+                <ProgramIcon program={program} src={icons[program.id]} />
+                <span className="text-[12.5px] truncate">{program.name}</span>
+                {program.health?.orphaned && (
+                  <span className="text-[9px] font-mono uppercase tracking-wider px-1 py-px rounded bg-[color:var(--danger-soft)] text-[color:var(--danger)] border border-[color:var(--danger)]/25 shrink-0">
+                    Broken
+                  </span>
+                )}
+                {program.unused && !program.health?.orphaned && (
+                  <span className="text-[9px] font-mono uppercase tracking-wider px-1 py-px rounded bg-[color:var(--warning-soft)] text-[color:var(--warning)] border border-[color:var(--warning)]/25 shrink-0">
+                    Unused
+                  </span>
+                )}
               </div>
-              <div className="text-[12px] font-mono text-[color:var(--text-secondary)]">{program.installDate ? new Date(program.installDate).toLocaleDateString() : 'N/A'}</div>
-              <div className="text-[12px] font-mono text-[color:var(--text-secondary)] truncate">{program.version || 'N/A'}</div>
-              <div className="text-right">
-                <span
-                  className={`inline-block px-2 py-0.5 rounded-full text-[12px] font-medium ${SIZE_BADGE_CLASSES[sizeBadgeTone(program.sizeBytes)]}`}
-                  style={{ fontVariantNumeric: 'tabular-nums' }}
-                >
-                  {formatBytes(program.sizeBytes)}
-                </span>
+
+              <div
+                className={`text-[12px] font-mono text-right ${SIZE_TONE_TEXT[sizeBadgeTone(program.sizeBytes)]}`}
+                style={{ fontVariantNumeric: 'tabular-nums' }}
+              >
+                {formatBytes(program.sizeBytes)}
               </div>
+
+              <div className="text-[11.5px] font-mono text-[color:var(--text-secondary)] truncate">
+                {program.version || '—'}
+              </div>
+
+              {/* Blank rather than a guess: a per-user registry entry
+                  carries no architecture, and a wrong "64-bit" is a fact
+                  stated confidently and incorrectly. */}
+              <div className="text-[11.5px] font-mono text-[color:var(--text-muted)]">
+                {program.architecture || '—'}
+              </div>
+
+              <div className="text-[11.5px] font-mono text-[color:var(--text-secondary)]">
+                {program.installDate ? new Date(program.installDate).toLocaleDateString() : '—'}
+              </div>
+
+              <div className="text-[11.5px] text-[color:var(--text-secondary)] truncate">
+                {program.publisher}
+              </div>
+
+              <div className="text-[11.5px] font-mono text-[color:var(--text-muted)] truncate">
+                {program.website ? program.website.replace(/^https?:\/\//, '') : '—'}
+              </div>
+
               <div className="text-right">
                 <button
                   onClick={() => onUninstall(program)}
-                  className="btn-danger px-3.5 py-1.5 rounded-lg text-[12px] font-medium opacity-0 group-hover:opacity-100 transition-opacity"
+                  className="btn-danger px-2.5 py-1 rounded-md text-[11px] font-medium opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity"
                 >
                   {program.health?.orphaned ? 'Force remove' : 'Uninstall'}
                 </button>
               </div>
             </div>
           ))}
+        </div>
+
+        {/* Revo puts the installation count at the bottom of the window,
+            and it earns the space: it's the one number that changes as
+            you filter. */}
+        <div className="flex items-center justify-between gap-4 px-4 py-2 border-t border-[color:var(--border-subtle)] bg-white/[0.02] shrink-0 text-[11.5px] font-mono text-[color:var(--text-muted)]">
+          <span>
+            {filtered.length === programs.length
+              ? `Installations: ${programs.length}`
+              : `Showing ${filtered.length} of ${programs.length}`}
+          </span>
+          <span>{formatBytes(totalBytes)} total</span>
         </div>
       </div>
     </div>
