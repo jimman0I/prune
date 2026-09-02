@@ -12,6 +12,7 @@ import { scanRouter as cleanupScanRoutes, executeRouter as cleanupExecuteRoutes 
 import settingsRoutes from './routes/settings.js';
 import sandboxTestRoutes from './routes/sandboxTest.js';
 import deepCleanRoutes from './routes/deepClean.js';
+import diskHealthRoutes from './routes/diskHealth.js';
 import { initTray } from './lib/trayManager.js';
 
 const PORT = process.env.UNREVO_BACKEND_PORT || 3101;
@@ -41,6 +42,7 @@ app.use('/api/cleanup-execute', cleanupExecuteRoutes);
 app.use('/api/settings', settingsRoutes);
 app.use('/api/sandbox-test', sandboxTestRoutes);
 app.use('/api/deep-clean', deepCleanRoutes);
+app.use('/api/disk-health', diskHealthRoutes);
 
 // Real bug, found dogfooding (2026-08-29): a `server.listen()` failure
 // (most commonly EADDRINUSE — something else, or a second copy of this
