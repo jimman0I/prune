@@ -113,3 +113,65 @@ describe('getProgramSizes', () => {
     expect(sizes.two).toBe(2048);
   });
 });
+
+describe('shared launcher folders', () => {
+  // The bug that made this obvious: Warframe, Marvel Rivals and Spacewar
+  // all register the SAME uninstall command -- steam.exe with a protocol
+  // URL -- so the "measure the uninstaller's folder" fallback handed each
+  // of them the entire 152.7 GB Steam directory, and the list showed
+  // three different games at an identical, wildly wrong size.
+  it('refuses a fallback folder that several programs would share', async () => {
+    await file(join('Launcher3', 'launcher.exe'), 100);
+    await file(join('Launcher3', 'games', 'a', 'big.bin'), 60000);
+    const shared = `"${join(root, 'Launcher3', 'launcher.exe')}" launch://uninstall/1`;
+
+    const sizes = await getProgramSizes([
+      { id: 'g1', sizeBytes: null, uninstallString: shared },
+      { id: 'g2', sizeBytes: null, uninstallString: shared },
+      { id: 'g3', sizeBytes: null, uninstallString: shared }
+    ]);
+
+    expect(sizes).toEqual({});
+  });
+
+  it('still measures a folder only one program points at', async () => {
+    await file(join('Solo', 'app.bin'), 700);
+    const sizes = await getProgramSizes([
+      { id: 'solo', sizeBytes: null, uninstallString: `"${join(root, 'Solo', 'uninstall.exe')}"` }
+    ]);
+    expect(sizes.solo).toBe(700);
+  });
+
+  // An InstallLocation is per-program and recorded by the installer, so a
+  // genuinely shared one (two components of the same suite) is a real
+  // statement rather than an artefact of a launcher's uninstall command.
+  it('does not apply the rule to a shared InstallLocation', async () => {
+    await file(join('Suite', 'x.bin'), 1234);
+    const location = join(root, 'Suite');
+    const sizes = await getProgramSizes([
+      { id: 'part1', sizeBytes: null, installLocation: location },
+      { id: 'part2', sizeBytes: null, installLocation: location }
+    ]);
+    expect(sizes.part1).toBe(1234);
+    expect(sizes.part2).toBe(1234);
+  });
+});
+
+describe('the launcher itself', () => {
+  // Regression: the first version of the shared-folder rule counted Steam
+  // games toward Steam's own folder, so Steam refused to measure itself
+  // and showed a blank. Games are sized from their manifests and never
+  // use the folder route, so they must not count toward its share.
+  it('measures the launcher even though its games name the same folder', async () => {
+    await file(join('SteamLike', 'steam.exe'), 400);
+    const gameCommand = `"${join(root, 'SteamLike', 'steam.exe')}" steam://uninstall/999`;
+
+    const sizes = await getProgramSizes([
+      { id: 'steam', name: 'Steam', sizeBytes: null, uninstallString: `"${join(root, 'SteamLike', 'uninstall.exe')}"` },
+      { id: 'game1', sizeBytes: null, uninstallString: gameCommand },
+      { id: 'game2', sizeBytes: null, uninstallString: gameCommand }
+    ]);
+
+    expect(sizes.steam).toBe(400);
+  });
+});

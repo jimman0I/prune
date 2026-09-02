@@ -1,46 +1,86 @@
 import { listInstalledPrograms } from './programs.js';
 import { measureFolder, sizeSourceFor } from './installSize.js';
+import { getSteamApps, parseSteamAppId, steamRootFrom } from './steamApps.js';
 
 /** Measured folder sizes, keyed by folder. Survives for the process's
  * life: walking 124 GB of install folders takes about thirteen seconds
  * and the answer doesn't change while the app is open. */
 const cache = new Map();
 
-/** Real folder sizes for the programs whose registry entry has no
+/** Real sizes for the programs whose registry entry has no
  * EstimatedSize, as { programId: bytes }.
  *
  * 40 of the 130 entries on this machine report no size at all --
- * EstimatedSize is optional and plenty of installers never write it --
- * so those rows showed a blank where the interesting number belongs.
+ * EstimatedSize is optional and plenty of installers never write it.
  *
- * Its own endpoint, like the icons, and for the same reason: this is
- * ~13 seconds of walking the filesystem, and the program list must not
- * wait on it. Anything that can't be measured safely is simply absent
- * from the map and the row keeps its honest blank.
+ * Three sources, in order of how much they can be trusted:
  *
- * Every other program's install folder is excluded from each measure, so
- * nested installs don't have their bytes counted twice -- see
- * measureFolder. */
+ *   1. Steam's own app manifest, for anything installed through Steam.
+ *      Instant, exact, and the number Steam itself shows.
+ *   2. The program's InstallLocation, measured on disk.
+ *   3. The folder the uninstaller lives in -- but only when no other
+ *      program points at the same one.
+ *
+ * Its own endpoint, like the icons, and for the same reason: this walks
+ * the filesystem and the program list must not wait on it. Anything that
+ * can't be sized safely is simply absent and the row keeps its blank. */
 export async function getProgramSizes(programs) {
   const list = programs ?? await listInstalledPrograms();
 
-  // Every known install folder, so a measure can exclude the ones that
-  // belong to someone else. Built from ALL programs, not just the
-  // sizeless ones: the folder nested inside usually reports its own size
-  // perfectly well, which is exactly why the outer one must not re-count
-  // it.
+  // Steam games all register the identical uninstall command, so their
+  // real sizes have to come from Steam rather than from any folder the
+  // registry points at.
+  let steamApps = {};
+  try {
+    steamApps = await getSteamApps(steamRootFrom(list));
+  } catch {
+    // No Steam, or an unreadable library -- the folder paths below still
+    // apply to everything else.
+  }
+
+  // How many programs would fall back to each folder. A folder several
+  // entries share is a launcher's directory, not any one program's
+  // install, and measuring it hands every one of them the same wrong
+  // number.
+  const fallbackUsers = new Map();
+  for (const program of list) {
+    if (program.installLocation) continue;
+    // A Steam app is sized from its manifest and never touches the
+    // folder route, so it must not count toward the folder's share.
+    // Without this, Steam's own entry sees its directory "shared" with
+    // every game installed through it and refuses to measure itself.
+    if (parseSteamAppId(program.uninstallString)) continue;
+    const folder = sizeSourceFor(program);
+    if (folder) fallbackUsers.set(folder, (fallbackUsers.get(folder) || 0) + 1);
+  }
+
+  // Every folder that belongs to something, so a measure can exclude the
+  // ones that aren't its own. Steam game folders are included: without
+  // them, Steam's own entry counts every installed game as part of Steam.
   const allFolders = [];
   for (const program of list) {
     const folder = sizeSourceFor(program);
     if (folder) allFolders.push(folder);
+  }
+  for (const app of Object.values(steamApps)) {
+    if (app.path) allFolders.push(app.path);
   }
 
   const sizes = {};
   for (const program of list) {
     if (typeof program.sizeBytes === 'number') continue;
 
+    const appId = parseSteamAppId(program.uninstallString);
+    if (appId) {
+      // Steam knows exactly, and the folder route would be wrong anyway.
+      const app = steamApps[appId];
+      if (app?.sizeBytes) sizes[program.id] = app.sizeBytes;
+      continue;
+    }
+
     const folder = sizeSourceFor(program);
     if (!folder) continue;
+    if (!program.installLocation && (fallbackUsers.get(folder) || 0) > 1) continue;
 
     if (!cache.has(folder)) {
       const nested = allFolders.filter((other) => other !== folder && isStrictlyInside(other, folder));
