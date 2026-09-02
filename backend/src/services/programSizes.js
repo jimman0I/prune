@@ -1,6 +1,9 @@
 import { listInstalledPrograms } from './programs.js';
 import { measureFolder, sizeSourceFor } from './installSize.js';
 import { getSteamApps, parseSteamAppId, steamRootFrom } from './steamApps.js';
+import { getEpicApps } from './epicApps.js';
+import { getGogApps } from './gogApps.js';
+import { matchLauncherApp } from './launcherMatch.js';
 
 /** Measured folder sizes, keyed by folder. Survives for the process's
  * life: walking 124 GB of install folders takes about thirteen seconds
@@ -38,6 +41,21 @@ export async function getProgramSizes(programs) {
     // apply to everything else.
   }
 
+  // Epic and GOG both keep their own record of what they installed and
+  // where. Each returns [] when that launcher isn't present, which is the
+  // common case and not an error.
+  //
+  // They differ in what they can offer. Epic records an InstallSize, so
+  // its games are sized without touching the disk. GOG records only the
+  // folder -- but a GOG game gets its own directory, so measuring it is
+  // safe in a way it never is for Steam or Ubisoft, where the path the
+  // registry points at is the launcher's and holds every game.
+  const [epicApps, gogApps] = await Promise.all([
+    getEpicApps().catch(() => []),
+    getGogApps().catch(() => [])
+  ]);
+  const launcherApps = [...epicApps, ...gogApps];
+
   // How many programs would fall back to each folder. A folder several
   // entries share is a launcher's directory, not any one program's
   // install, and measuring it hands every one of them the same wrong
@@ -65,6 +83,9 @@ export async function getProgramSizes(programs) {
   for (const app of Object.values(steamApps)) {
     if (app.path) allFolders.push(app.path);
   }
+  for (const app of launcherApps) {
+    if (app.installLocation) allFolders.push(app.installLocation);
+  }
 
   const sizes = {};
   for (const program of list) {
@@ -78,9 +99,22 @@ export async function getProgramSizes(programs) {
       continue;
     }
 
-    const folder = sizeSourceFor(program);
+    // Epic gives a size outright. GOG gives a folder, which is measured
+    // below like any other -- but a launcher-supplied folder is the
+    // game's own, so it bypasses the shared-folder refusal that exists
+    // for uninstaller paths.
+    const launcherApp = matchLauncherApp(program, launcherApps);
+    if (launcherApp?.sizeBytes) {
+      sizes[program.id] = launcherApp.sizeBytes;
+      continue;
+    }
+
+    const folder = launcherApp?.installLocation || sizeSourceFor(program);
     if (!folder) continue;
-    if (!program.installLocation && (fallbackUsers.get(folder) || 0) > 1) continue;
+    // The shared-folder refusal only applies to a folder guessed from the
+    // uninstaller. A launcher naming the game's own directory is a real
+    // record, not a guess.
+    if (!launcherApp && !program.installLocation && (fallbackUsers.get(folder) || 0) > 1) continue;
 
     if (!cache.has(folder)) {
       const nested = allFolders.filter((other) => other !== folder && isStrictlyInside(other, folder));
