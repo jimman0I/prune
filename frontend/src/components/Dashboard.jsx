@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { fetchDiskSpace, fetchUninstallHistory } from '../lib/api.js';
+import { fetchDiskSpace, fetchDiskHealth, fetchUninstallHistory } from '../lib/api.js';
 import { formatRelativeTime } from '../lib/formatRelativeTime.js';
 import StatCard from './StatCard.jsx';
 
@@ -12,35 +12,73 @@ function formatBytes(bytes) {
   return `${parseFloat((bytes / Math.pow(k, i)).toFixed(1))} ${sizes[i]}`;
 }
 
-function HealthGauge({ percent }) {
+/** Maps a real drive verdict to a semantic colour. Deliberately NOT the
+ * coral accent the old free-space gauge used -- index.css's own token
+ * comment reserves coral for "primary actions ONLY", and a health readout
+ * is status, not an action. */
+function toneColor(tone) {
+  if (tone === 'danger') return 'var(--danger)';
+  if (tone === 'warning') return 'var(--warning)';
+  if (tone === 'success') return 'var(--success)';
+  return 'var(--text-muted)';
+}
+
+/** Shows a real percentage when one exists, and a short status word when
+ * it doesn't -- never a stand-in number. An SSD life gauge that invents a
+ * figure is worse than one that admits it can't read the drive. */
+function HealthGauge({ percent, statusLabel, tone }) {
   const radius = 54;
   const circumference = 2 * Math.PI * radius;
-  const offset = percent != null ? circumference * (1 - percent / 100) : circumference;
+  const offset = percent != null ? circumference * (1 - percent / 100) : 0;
+  const color = toneColor(tone);
   return (
     <div className="relative w-[140px] h-[140px] shrink-0">
       <svg width="140" height="140" viewBox="0 0 140 140" className="-rotate-90">
         <circle cx="70" cy="70" r={radius} fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="10" />
-        {percent != null && (
+        {(percent != null || statusLabel) && (
           <circle
             cx="70" cy="70" r={radius} fill="none"
-            stroke="var(--accent-coral)" strokeWidth="10" strokeLinecap="round"
+            stroke={color} strokeWidth="10" strokeLinecap="round"
             strokeDasharray={circumference} strokeDashoffset={offset}
-            style={{ transition: 'stroke-dashoffset 500ms ease' }}
+            // A status-only ring draws full: there's no partial value to
+            // represent, and a ring stuck at 0% would read as "failing".
+            style={{ transition: 'stroke-dashoffset 500ms ease', opacity: percent != null ? 1 : 0.55 }}
           />
         )}
       </svg>
-      <div className="absolute inset-0 flex items-center justify-center">
-        <span className="display-heading text-[32px] text-[color:var(--text-primary)]">
-          {percent != null ? `${percent}%` : '—'}
-        </span>
+      <div className="absolute inset-0 flex items-center justify-center px-3 text-center">
+        {percent != null ? (
+          <span className="display-heading text-[32px]" style={{ color }}>{percent}%</span>
+        ) : (
+          <span className="text-[15px] font-medium leading-tight" style={{ color }}>
+            {statusLabel || '—'}
+          </span>
+        )}
       </div>
     </div>
   );
 }
 
+/** Real drive verdict -> gauge inputs. Wear is the honest signal when the
+ * drive gives it up; Windows' own HealthStatus is the fallback, and
+ * "unknown" is a legitimate third answer rather than something to paper
+ * over with a number. */
+function driveVerdict(disk) {
+  if (!disk) return { percent: null, statusLabel: null, tone: 'muted' };
+  if (disk.lifeRemainingPercent != null) {
+    const pct = disk.lifeRemainingPercent;
+    return { percent: pct, statusLabel: null, tone: pct <= 10 ? 'danger' : pct <= 25 ? 'warning' : 'success' };
+  }
+  const status = disk.healthStatus;
+  const tone = status === 'Healthy' ? 'success' : status === 'Warning' ? 'warning' : status ? 'danger' : 'muted';
+  return { percent: null, statusLabel: status || 'Unknown', tone };
+}
+
 export default function Dashboard({ programs, totalSize }) {
   const [diskSpace, setDiskSpace] = useState(null);
   const [diskSpaceError, setDiskSpaceError] = useState(null);
+  const [diskHealth, setDiskHealth] = useState(null);
+  const [diskHealthError, setDiskHealthError] = useState(null);
   const [history, setHistory] = useState([]);
   const [historyOpen, setHistoryOpen] = useState(true);
 
@@ -49,13 +87,17 @@ export default function Dashboard({ programs, totalSize }) {
     fetchDiskSpace()
       .then((result) => { if (!cancelled) setDiskSpace(result); })
       .catch((err) => { if (!cancelled) setDiskSpaceError(err.message); });
+    fetchDiskHealth()
+      .then((result) => { if (!cancelled) setDiskHealth(result); })
+      .catch((err) => { if (!cancelled) setDiskHealthError(err.message); });
     fetchUninstallHistory()
       .then((entries) => { if (!cancelled) setHistory(entries); })
       .catch(() => { /* Recent Activity just shows empty on failure -- not worth a second error banner on a Dashboard already showing a disk-space one if that also failed */ });
     return () => { cancelled = true; };
   }, []);
 
-  const healthScore = diskSpace ? Math.round((diskSpace.freeBytes / diskSpace.totalBytes) * 100) : null;
+  const primaryDisk = diskHealth?.disks?.[0] || null;
+  const verdict = driveVerdict(primaryDisk);
 
   return (
     <div className="px-12 py-10 max-w-[1400px]">
@@ -65,16 +107,46 @@ export default function Dashboard({ programs, totalSize }) {
       <h1 className="display-heading text-[36px] leading-none mb-8">Dashboard</h1>
 
       <div className="glass-panel flex items-center gap-6 p-8 mb-6">
-        <HealthGauge percent={healthScore} />
-        <div>
-          <div className="text-[18px] font-medium text-[color:var(--text-primary)] mb-1">System Health</div>
-          <div className="text-[13px] text-[color:var(--text-secondary)]">
-            {diskSpaceError
-              ? "Couldn't read disk space."
-              : healthScore != null
-                ? `${healthScore}% of your system drive is free.`
-                : 'Reading disk space…'}
-          </div>
+        <HealthGauge percent={verdict.percent} statusLabel={verdict.statusLabel} tone={verdict.tone} />
+        <div className="min-w-0">
+          <div className="text-[18px] font-medium text-[color:var(--text-primary)] mb-1">Drive Health</div>
+
+          {diskHealthError && (
+            <div className="text-[13px] text-[color:var(--text-secondary)]">Couldn't read drive health: {diskHealthError}</div>
+          )}
+
+          {!diskHealthError && !primaryDisk && (
+            <div className="text-[13px] text-[color:var(--text-secondary)]">Reading drive health…</div>
+          )}
+
+          {primaryDisk && (
+            <>
+              <div className="text-[13px] text-[color:var(--text-primary)] truncate">
+                {primaryDisk.model}
+                {primaryDisk.mediaType && <span className="text-[color:var(--text-secondary)]"> · {primaryDisk.mediaType}</span>}
+                {primaryDisk.busType && <span className="text-[color:var(--text-secondary)]"> · {primaryDisk.busType}</span>}
+              </div>
+
+              {primaryDisk.lifeRemainingPercent != null ? (
+                <div className="text-[13px] text-[color:var(--text-secondary)] mt-1">
+                  {primaryDisk.lifeRemainingPercent}% life remaining
+                  {primaryDisk.temperatureC != null && ` · ${primaryDisk.temperatureC} °C`}
+                  {primaryDisk.powerOnHours != null && ` · ${primaryDisk.powerOnHours.toLocaleString()} h powered on`}
+                </div>
+              ) : (
+                <div className="text-[13px] text-[color:var(--text-secondary)] mt-1">
+                  Windows reports this drive <span className="text-[color:var(--text-primary)]">{primaryDisk.healthStatus || 'status unknown'}</span>.
+                  {' '}Wear, temperature and power-on hours need administrator access — Prune won't show a made-up figure instead.
+                </div>
+              )}
+
+              {(primaryDisk.readErrorsUncorrected > 0 || primaryDisk.writeErrorsUncorrected > 0) && (
+                <div className="text-[12.5px] text-[color:var(--danger)] mt-1.5">
+                  {primaryDisk.readErrorsUncorrected || 0} uncorrected read · {primaryDisk.writeErrorsUncorrected || 0} uncorrected write errors
+                </div>
+              )}
+            </>
+          )}
         </div>
       </div>
 

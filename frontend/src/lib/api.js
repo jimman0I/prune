@@ -100,6 +100,13 @@ export async function executeDeepClean(ruleIds) {
   return data;
 }
 
+export async function fetchDiskHealth() {
+  const res = await fetch(`${API_URL}/disk-health`);
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
+  return data;
+}
+
 export async function fetchDiskSpace() {
   const res = await fetch(`${API_URL}/disk-space`);
   const data = await res.json();
