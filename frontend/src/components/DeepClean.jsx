@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { fetchDeepCleanScan, executeDeepClean } from '../lib/api.js';
+import { defaultSelection, selectableIds } from '../lib/defaultSelection.js';
 import DeepCleanTree from './DeepCleanTree.jsx';
 
 function formatBytes(bytes) {
@@ -30,10 +31,19 @@ export default function DeepClean() {
     try {
       const result = await fetchDeepCleanScan();
       setCategories(result);
-      // A rule no longer present in a fresh scan (rare, but cleaners.json
-      // could change between scans) shouldn't leave a phantom id selected.
+      // Pre-tick the recommended rules that are actually here. Without
+      // this, a scan that found 54 GB across 40 rules left the footer
+      // reading "Total space to free: 0 B" with Clean disabled -- a
+      // nineteen-second wait ending in a dead end, which is how this got
+      // reported as the feature not working at all.
+      //
+      // A rescan after a clean shouldn't silently re-tick everything the
+      // user just removed, so an existing selection is kept (minus any id
+      // the fresh scan no longer has) rather than replaced.
       const validIds = new Set(result.flatMap((g) => g.items.map((i) => i.id)));
-      setSelected((prev) => new Set([...prev].filter((id) => validIds.has(id))));
+      setSelected((prev) => (prev.size > 0
+        ? new Set([...prev].filter((id) => validIds.has(id)))
+        : defaultSelection(result)));
     } catch (err) {
       setScanError(err.message);
     } finally {
@@ -155,8 +165,33 @@ export default function DeepClean() {
         className="shrink-0 glass-panel flex items-center justify-between gap-4 px-12 py-4"
         style={{ borderRadius: 0, borderLeft: 'none', borderRight: 'none', borderBottom: 'none' }}
       >
-        <div className="text-[13px] text-[color:var(--text-secondary)]">
-          Total space to free: <span className="text-[color:var(--text-primary)] font-medium font-mono">{formatBytes(totalBytes)}</span>
+        <div className="flex items-center gap-3 min-w-0">
+          <div className="text-[13px] text-[color:var(--text-secondary)]">
+            Total space to free: <span className="text-[color:var(--text-primary)] font-medium font-mono">{formatBytes(totalBytes)}</span>
+          </div>
+          {categories && (
+            // One click to take everything or nothing. Reaching the
+            // non-recommended rules used to mean finding the small
+            // "Select All" link inside each of the four category headers.
+            <div className="flex items-center gap-2 text-[11.5px] shrink-0">
+              <span className="text-[color:var(--text-muted)]">·</span>
+              <button
+                className="text-[color:var(--text-secondary)] hover:text-[color:var(--accent-coral)] transition-colors"
+                onClick={() => setSelected(selectableIds(categories))}
+              >
+                Select everything
+              </button>
+              <span className="text-[color:var(--border-subtle)]">·</span>
+              <button
+                className="text-[color:var(--text-secondary)] hover:text-[color:var(--accent-coral)] transition-colors disabled:opacity-40"
+                onClick={() => setSelected(new Set())}
+                disabled={selected.size === 0}
+              >
+                Clear
+              </button>
+              <span className="text-[color:var(--text-muted)] font-mono">{selected.size} selected</span>
+            </div>
+          )}
         </div>
         <div className="flex items-center gap-2.5">
           {confirmClean ? (
