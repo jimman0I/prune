@@ -1,9 +1,40 @@
 import { runPowerShellJson } from './powershell.js';
 
+/** Each entry is a PowerShell expression, and every one is DOUBLE-QUOTED
+ * so a path containing spaces stays a single array element.
+ *
+ * Real bug, found dogfooding (2026-09-02): the Start Menu root used to be
+ * interpolated bare, and "Start Menu" has a space in it, so the generated
+ * array literal was a PowerShell syntax error -- "Unexpected token
+ * '\Microsoft\Windows\Start'". That took down the ENTIRE file scan, which
+ * scanForLeftovers catches and reports as { ok: false }, rendered by the
+ * UI as "Couldn't check files & folders." Every uninstall since this
+ * feature was written found registry keys and scheduled tasks and never
+ * once found a file. The whole test suite for this module mocks
+ * runPowerShellJson, so the broken script was never executed by a test --
+ * see leftoverScan.roots.test.js, which runs it for real.
+ *
+ * `%LOCALAPPDATA%\Programs` is new alongside it: that's where Electron and
+ * Squirrel installers put things (VS Code, Discord, Slack, and the
+ * TriClaude entry that prompted this), and since the scan looks exactly
+ * one level down, an app living there was invisible even to a working
+ * scan. */
 const SEARCH_ROOTS = [
-  '$env:ProgramFiles', '${env:ProgramFiles(x86)}', '$env:APPDATA',
-  '$env:LOCALAPPDATA', '$env:ProgramData', "$env:APPDATA\\Microsoft\\Windows\\Start Menu\\Programs"
+  '"$env:ProgramFiles"',
+  '"${env:ProgramFiles(x86)}"',
+  '"$env:APPDATA"',
+  '"$env:LOCALAPPDATA"',
+  '"$env:LOCALAPPDATA\\Programs"',
+  '"$env:ProgramData"',
+  '"$env:APPDATA\\Microsoft\\Windows\\Start Menu\\Programs"'
 ];
+
+/** The `@(...)` array literal the scan scripts interpolate. Exported so a
+ * test can hand it to real PowerShell and prove it parses -- the mistake
+ * above was invisible to every mocked test in this module. */
+export function buildRootsExpression() {
+  return `@(${SEARCH_ROOTS.join(',')})`;
+}
 
 /** Heuristic leftover scan: files/folders and registry keys whose name
  * matches the program's name or publisher, plus scheduled tasks the
@@ -28,9 +59,8 @@ async function scanFiles(name, publisher) {
   const terms = [name, publisher].filter(Boolean).map(escapeForRegex);
   if (terms.length === 0) return { ok: true, items: [] };
   const pattern = terms.join('|');
-  const roots = SEARCH_ROOTS.join(',');
   const script = `
-$roots = @(${roots}) | Where-Object { $_ -and (Test-Path $_) }
+$roots = ${buildRootsExpression()} | Where-Object { $_ -and (Test-Path $_) }
 $pattern = '${pattern}'
 $roots | ForEach-Object {
   Get-ChildItem -Path $_ -Directory -ErrorAction SilentlyContinue |
