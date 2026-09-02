@@ -191,7 +191,14 @@ describe('scanAllRules', () => {
     for (const item of allItems) {
       expect(item).toHaveProperty('sizeBytes');
     }
-  });
+    // Deliberately generous: this one walks the REAL filesystem for all 40
+    // rules, which on a machine with a large shader or npm cache takes
+    // several seconds. It passed alone and intermittently failed in the
+    // full suite at vitest's 5s default -- a timing flake, not a bug, but
+    // one that would eventually be "fixed" by someone deleting the test.
+    // The point of the test is that no rule in cleaners.json is silently
+    // broken, and that's worth waiting for.
+  }, 30000);
 });
 
 describe('executeRule', () => {

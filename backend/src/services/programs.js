@@ -1,4 +1,5 @@
 import { runPowerShellJson } from './powershell.js';
+import { assessProgramHealth } from './programHealth.js';
 
 // Reads all three Uninstall registry locations Windows actually uses:
 // HKLM 64-bit (machine-wide), HKLM WOW6432Node (32-bit apps on 64-bit
@@ -18,7 +19,8 @@ Get-ItemProperty -Path $paths -ErrorAction SilentlyContinue |
   Select-Object @{N='id';E={$_.PSChildName}}, @{N='name';E={$_.DisplayName}},
     @{N='publisher';E={$_.Publisher}}, @{N='version';E={$_.DisplayVersion}},
     @{N='installDate';E={$_.InstallDate}}, @{N='estimatedSizeKb';E={$_.EstimatedSize}},
-    @{N='uninstallString';E={$_.UninstallString}}, @{N='installLocation';E={$_.InstallLocation}} |
+    @{N='uninstallString';E={$_.UninstallString}}, @{N='installLocation';E={$_.InstallLocation}},
+    @{N='psPath';E={$_.PSPath}} |
   ConvertTo-Json -Compress
 `;
 
@@ -29,7 +31,13 @@ export async function listInstalledPrograms() {
   const raw = await runPowerShellJson(ENUMERATE_SCRIPT);
   if (!raw) return [];
   const items = Array.isArray(raw) ? raw : [raw];
-  return dedupeIds(items.map(normalizeProgram));
+  // The health check is a couple of existsSync calls per program -- a few
+  // milliseconds across a whole machine's worth of entries, cheap enough
+  // to run on every list rather than making callers ask for it separately.
+  return dedupeIds(items.map(normalizeProgram)).map((program) => ({
+    ...program,
+    health: assessProgramHealth(program)
+  }));
 }
 
 /** Real bug, found dogfooding (2026-08-29): PSChildName (the registry
@@ -71,8 +79,29 @@ export function normalizeProgram(raw) {
     // EstimatedSize is KB in the registry; the rest of the app works in bytes.
     sizeBytes: typeof raw.estimatedSizeKb === 'number' ? raw.estimatedSizeKb * 1024 : null,
     uninstallString: raw.uninstallString || null,
-    installLocation: raw.installLocation || null
+    installLocation: raw.installLocation || null,
+    registryKey: toPowerShellRegistryPath(raw.psPath)
   };
+}
+
+/** Converts the registry provider's own PSPath into the `HKLM:\...` form
+ * quarantine.js's toRegExeKeyPath understands. PowerShell reports the key
+ * as `Microsoft.PowerShell.Core\Registry::HKEY_LOCAL_MACHINE\SOFTWARE\...`
+ * (confirmed live against this machine's registry, not assumed).
+ *
+ * This is what makes a dead Uninstall entry removable at all -- without
+ * the key's own path there is nothing to hand the quarantine system, and
+ * an orphaned entry would stay in Add/Remove Programs forever.
+ *
+ * Returns null for an unrecognized hive instead of guessing. The output
+ * goes to `reg delete /f`, and a half-understood registry path is far
+ * more dangerous than admitting we don't know this one. */
+export function toPowerShellRegistryPath(psPath) {
+  if (typeof psPath !== 'string') return null;
+  const match = psPath.match(/Registry::(HKEY_LOCAL_MACHINE|HKEY_CURRENT_USER)\\(.+)$/i);
+  if (!match) return null;
+  const hive = match[1].toUpperCase() === 'HKEY_LOCAL_MACHINE' ? 'HKLM:' : 'HKCU:';
+  return `${hive}\\${match[2]}`;
 }
 
 /** Registry InstallDate is YYYYMMDD (a plain string) or absent. Returns an

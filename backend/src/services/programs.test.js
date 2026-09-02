@@ -3,10 +3,32 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 const runPowerShellJsonMock = vi.fn();
 vi.mock('./powershell.js', () => ({ runPowerShellJson: (...args) => runPowerShellJsonMock(...args) }));
 
-let listInstalledPrograms, normalizeProgram, dedupeIds;
+let listInstalledPrograms, normalizeProgram, dedupeIds, toPowerShellRegistryPath;
 beforeEach(async () => {
   runPowerShellJsonMock.mockReset();
-  ({ listInstalledPrograms, normalizeProgram, dedupeIds } = await import('./programs.js'));
+  ({ listInstalledPrograms, normalizeProgram, dedupeIds, toPowerShellRegistryPath } = await import('./programs.js'));
+});
+
+describe('toPowerShellRegistryPath', () => {
+  // Format confirmed live against this machine's registry, not assumed.
+  it('converts a real HKLM PSPath into the HKLM:\\ form the quarantine service expects', () => {
+    expect(toPowerShellRegistryPath(
+      'Microsoft.PowerShell.Core\\Registry::HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\MCHOSE'
+    )).toBe('HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\MCHOSE');
+  });
+
+  it('converts an HKCU PSPath', () => {
+    expect(toPowerShellRegistryPath(
+      'Microsoft.PowerShell.Core\\Registry::HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\App'
+    )).toBe('HKCU:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\App');
+  });
+
+  it('returns null for a missing or unrecognized hive rather than a half-converted path', () => {
+    // A path we can't convert with confidence must not be handed to
+    // `reg delete` -- half a registry path is more dangerous than none.
+    expect(toPowerShellRegistryPath(null)).toBeNull();
+    expect(toPowerShellRegistryPath('Registry::HKEY_CLASSES_ROOT\\Thing')).toBeNull();
+  });
 });
 
 describe('normalizeProgram', () => {
@@ -14,12 +36,14 @@ describe('normalizeProgram', () => {
     const result = normalizeProgram({
       id: '{GUID}', name: 'Google Chrome', publisher: 'Google LLC', version: '129.0',
       installDate: '20230115', estimatedSizeKb: 620000, uninstallString: 'MsiExec.exe /X{GUID}',
-      installLocation: 'C:\\Program Files\\Google\\Chrome'
+      installLocation: 'C:\\Program Files\\Google\\Chrome',
+      psPath: 'Microsoft.PowerShell.Core\\Registry::HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\{GUID}'
     });
     expect(result).toEqual({
       id: '{GUID}', name: 'Google Chrome', publisher: 'Google LLC', version: '129.0',
       installDate: '2023-01-15', sizeBytes: 620000 * 1024,
-      uninstallString: 'MsiExec.exe /X{GUID}', installLocation: 'C:\\Program Files\\Google\\Chrome'
+      uninstallString: 'MsiExec.exe /X{GUID}', installLocation: 'C:\\Program Files\\Google\\Chrome',
+      registryKey: 'HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\{GUID}'
     });
   });
 
@@ -54,6 +78,17 @@ describe('listInstalledPrograms', () => {
     runPowerShellJsonMock.mockResolvedValue([{ id: 'a', name: 'A' }, { id: 'b', name: 'B' }]);
     const result = await listInstalledPrograms();
     expect(result.map(p => p.name)).toEqual(['A', 'B']);
+  });
+
+  it('attaches a health verdict to every program', async () => {
+    // The uninstaller path here is deliberately one that cannot exist, so
+    // this asserts the real assessProgramHealth ran rather than a stub.
+    runPowerShellJsonMock.mockResolvedValue([
+      { id: 'a', name: 'Dead Entry', uninstallString: '"Z:\\nope\\uninstall.exe" /S' }
+    ]);
+    const [program] = await listInstalledPrograms();
+    expect(program.health.orphaned).toBe(true);
+    expect(program.health.uninstallerMissing).toBe(true);
   });
 
   // Real bug, found dogfooding (2026-08-29): 7-Zip's own installer uses the
