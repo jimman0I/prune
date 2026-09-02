@@ -192,6 +192,23 @@ export async function unlockDiskWear() {
   return data;
 }
 
+/** Windows' own icons for the given file extensions, plus the folder and
+ * generic-file icons, as { key: dataUri }.
+ *
+ * Keys are the extension itself (".mp4"), or "folder" / "file". Anything
+ * the shell can't resolve is simply absent and the caller keeps drawing
+ * its plain coloured cell. */
+export async function fetchFileTypeIcons(extensions) {
+  const res = await fetch(`${API_URL}/file-icons`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ extensions })
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
+  return data.icons;
+}
+
 export async function fetchDiskSpace() {
   const res = await fetch(`${API_URL}/disk-space`);
   const data = await res.json();

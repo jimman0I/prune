@@ -1,10 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Treemap, ResponsiveContainer } from 'recharts';
-import { fetchDiskScan, scanDriveFast, fetchDiskSpace } from '../lib/api.js';
+import { fetchDiskScan, scanDriveFast, fetchDiskSpace, fetchFileTypeIcons } from '../lib/api.js';
 import { attachFullPaths, topLevelCells } from '../lib/diskMapTree.js';
 import { subtreeForPath } from '../lib/mftSubtree.js';
 import { withUnscannedRemainder, scanCoverage } from '../lib/unscannedRemainder.js';
 import { colorForNode } from '../lib/diskMapColors.js';
+import { iconKeyForNode, extensionsInCells } from '../lib/fileTypeIcon.js';
 
 const DEFAULT_ROOT = 'C:\\';
 
@@ -64,7 +65,9 @@ function LoadingState() {
  * carried (name, size, type, fullPath). depth 0 is the synthetic outer
  * container recharts wraps a single-root `data` array in -- there's
  * nothing to draw for it. */
-function TreemapCell({ x, y, width, height, depth, name, size, type, scanned, fullPath, onHover, onLeave, onDrillDown }) {
+const ICON_SIZE = 16;
+
+function TreemapCell({ x, y, width, height, depth, name, size, type, scanned, fullPath, icons, onHover, onLeave, onDrillDown }) {
   if (depth === 0 || !(width > 0) || !(height > 0)) return null;
   const fill = colorForNode({ name, type, scanned });
   // An unscanned block is a hole in the picture, not a folder. Clicking
@@ -72,9 +75,18 @@ function TreemapCell({ x, y, width, height, depth, name, size, type, scanned, fu
   // remainder isn't a real directory), and its size is a subtraction
   // rather than a measurement.
   const canDrillDown = scanned !== false && type === 'directory' && Boolean(fullPath);
-  const label = width > 60 && height > 22 && name.length > Math.floor(width / 7)
-    ? `${name.slice(0, Math.floor(width / 7))}…`
-    : name;
+
+  // The icon needs room for itself AND for the label to still say
+  // something; below that the cell reads better as a plain block of
+  // colour than as a mystery glyph with two letters next to it.
+  const iconSrc = icons?.[iconKeyForNode({ name, type, scanned })];
+  const showIcon = Boolean(iconSrc) && width > 74 && height > 26;
+
+  const textX = x + (showIcon ? ICON_SIZE + 10 : 6);
+  const roomForText = Math.max(0, x + width - textX - 4);
+  const showLabel = width > 60 && height > 22 && roomForText > 18;
+  const maxChars = Math.floor(roomForText / 6.4);
+  const label = name.length > maxChars ? `${name.slice(0, Math.max(1, maxChars - 1))}…` : name;
 
   return (
     <g
@@ -85,10 +97,20 @@ function TreemapCell({ x, y, width, height, depth, name, size, type, scanned, fu
       style={{ cursor: canDrillDown ? 'pointer' : 'default' }}
     >
       <rect x={x} y={y} width={width} height={height} fill={fill} stroke="var(--bg-navy)" strokeWidth={1.5} rx={3} />
-      {width > 60 && height > 22 && (
-        <text
+      {showIcon && (
+        <image
+          href={iconSrc}
           x={x + 6}
-          y={y + 16}
+          y={y + 5}
+          width={ICON_SIZE}
+          height={ICON_SIZE}
+          style={{ pointerEvents: 'none' }}
+        />
+      )}
+      {showLabel && (
+        <text
+          x={textX}
+          y={y + 17}
           fontSize={11}
           fill="#fff"
           fillOpacity={0.85}
@@ -124,6 +146,10 @@ export default function DiskMap() {
   // milliseconds while the scan takes half a minute, so the value is
   // always here long before the scan's .then() reads it.
   const usedBytesRef = useRef(null);
+  // Windows' own file-type icons, keyed by extension (plus "folder" and
+  // "file"). Fetched for whatever is on screen and accumulated, so
+  // drilling into a folder only ever asks about types not already held.
+  const [typeIcons, setTypeIcons] = useState({});
 
   /** Explicit click only. This raises a real UAC prompt, so it can never
    * live in an effect -- see api.js. */
@@ -200,6 +226,27 @@ export default function DiskMap() {
       .finally(() => { if (!controller.signal.aborted) setLoading(false); });
     return () => controller.abort();
   }, [currentPath, fastTree]);
+
+  const cells = tree ? topLevelCells(tree) : [];
+
+  useEffect(() => {
+    const missing = extensionsInCells(cells).filter((ext) => !(ext in typeIcons));
+    // "folder" and "file" ride along with every response, so an empty
+    // icon map still needs one initial call.
+    if (missing.length === 0 && Object.keys(typeIcons).length > 0) return;
+
+    let cancelled = false;
+    fetchFileTypeIcons(missing)
+      .then((result) => {
+        if (cancelled) return;
+        // Merged, not replaced: a later folder's response carries only
+        // the types it asked about, and replacing would drop the rest.
+        setTypeIcons((prev) => ({ ...prev, ...result }));
+      })
+      .catch(() => { /* icons are decoration -- the map works without them */ });
+    return () => { cancelled = true; };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tree]);
 
   const handleHover = useCallback((node, e) => {
     setHovered({ node, clientX: e.clientX, clientY: e.clientY });
@@ -307,10 +354,10 @@ export default function DiskMap() {
         <div className="glass-panel p-4" style={{ position: 'relative' }}>
           <ResponsiveContainer width="100%" height={520}>
             <Treemap
-              data={topLevelCells(tree)}
+              data={cells}
               dataKey="size"
               isAnimationActive={false}
-              content={<TreemapCell onHover={handleHover} onLeave={handleLeave} onDrillDown={handleDrillDown} />}
+              content={<TreemapCell icons={typeIcons} onHover={handleHover} onLeave={handleLeave} onDrillDown={handleDrillDown} />}
             />
           </ResponsiveContainer>
           {hovered && (
