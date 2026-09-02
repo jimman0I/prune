@@ -16,6 +16,7 @@ function mockDeps(versions) {
     parseSteamAppId: () => null,
     steamRootFrom: () => null
   }));
+  vi.doMock('./gogApps.js', () => ({ getGogApps: async () => [] }));
   vi.doMock('./powershell.js', () => ({
     runPowerShellJson: async () => versions
   }));
@@ -74,6 +75,7 @@ describe('getProgramVersions', () => {
       parseSteamAppId: () => null,
       steamRootFrom: () => null
     }));
+    vi.doMock('./gogApps.js', () => ({ getGogApps: async () => [] }));
     vi.doMock('./powershell.js', () => ({
       runPowerShellJson: async () => { throw new Error('powershell unavailable'); }
     }));
@@ -106,6 +108,7 @@ describe('the file a version is read from', () => {
     vi.doMock('./steamApps.js', () => ({
       getSteamApps: async () => ({}), parseSteamAppId: () => null, steamRootFrom: () => null
     }));
+    vi.doMock('./gogApps.js', () => ({ getGogApps: async () => [] }));
     const asked = [];
     vi.doMock('./powershell.js', () => ({
       runPowerShellJson: async (script) => { asked.push(script); return []; }
@@ -134,6 +137,7 @@ describe('the file a version is read from', () => {
     vi.doMock('./steamApps.js', () => ({
       getSteamApps: async () => ({}), parseSteamAppId: () => null, steamRootFrom: () => null
     }));
+    vi.doMock('./gogApps.js', () => ({ getGogApps: async () => [] }));
     vi.doMock('./powershell.js', () => ({
       runPowerShellJson: async () => [{ path: 'C:\\Apps\\7-Zip\\7zFM.exe', fileVersion: '25.01', productVersion: '' }]
     }));
@@ -142,5 +146,35 @@ describe('the file a version is read from', () => {
       { id: 'z', name: '7-Zip', version: '', displayIcon: 'C:\\Apps\\7-Zip\\7zFM.exe,0' }
     ]);
     expect(versions.z).toBe('25.01');
+  });
+});
+
+describe('a launcher that records its own version', () => {
+  beforeEach(() => { vi.resetModules(); });
+
+  // GOG is the only launcher here that writes a version. It beats reading
+  // a binary, because it is the number GOG itself shows and therefore the
+  // one the user will compare against.
+  it('prefers the GOG record over the binary', async () => {
+    vi.doMock('./findMainExecutable.js', () => ({
+      findMainExecutable: async (folder) => `${folder}\app.exe`
+    }));
+    vi.doMock('./steamApps.js', () => ({
+      getSteamApps: async () => ({}), parseSteamAppId: () => null, steamRootFrom: () => null
+    }));
+    vi.doMock('./gogApps.js', () => ({
+      getGogApps: async () => [
+        { name: 'Witcher 3', version: '4.0.0.1', installLocation: 'D:\GOG\Witcher 3' }
+      ]
+    }));
+    vi.doMock('./powershell.js', () => ({
+      runPowerShellJson: async () => [{ path: 'D:\GOG\Witcher 3\app.exe', fileVersion: '1.2.3', productVersion: '' }]
+    }));
+
+    const { getProgramVersions } = await import('./programVersions.js');
+    const versions = await getProgramVersions([
+      { id: 'w', name: 'Witcher 3', version: '', installLocation: 'D:\GOG\Witcher 3' }
+    ]);
+    expect(versions.w).toBe('4.0.0.1');
   });
 });

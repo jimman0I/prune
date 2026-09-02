@@ -4,6 +4,8 @@ import { findMainExecutable } from './findMainExecutable.js';
 import { getSteamApps, parseSteamAppId, steamRootFrom } from './steamApps.js';
 import { iconSourceForProgram } from './iconSource.js';
 import { normalizeFileVersion } from './versionText.js';
+import { getGogApps } from './gogApps.js';
+import { matchLauncherApp } from './launcherMatch.js';
 
 /** Files that carry a version resource. A DisplayIcon often points at a
  * .ico, which has no version in it. */
@@ -159,8 +161,22 @@ async function resolveVersions(programs) {
     // No Steam, or an unreadable library. Everything else still resolves.
   }
 
+  // GOG records a version per game in its own registry keys, and it is
+  // the only launcher here that does. A launcher's own record beats
+  // reading a binary: it is what the launcher shows and what the user
+  // will compare against. Absent GOG, this is an empty list.
+  const gogApps = await getGogApps().catch(() => []);
+  const versions = {};
+
   const sources = new Map();
   for (const program of wanted) {
+    const fromLauncher = matchLauncherApp(program, gogApps)?.version;
+    const declared = fromLauncher ? normalizeFileVersion(fromLauncher) : null;
+    if (declared) {
+      versions[program.id] = declared;
+      continue;
+    }
+
     const appId = parseSteamAppId(program.uninstallString);
     const folder = program.installLocation || (appId ? steamApps[appId]?.path : null) || null;
     const path = await versionSourceFor(program, folder);
@@ -176,7 +192,6 @@ async function resolveVersions(programs) {
     if (version) byPath.set(row.path, version);
   }
 
-  const versions = {};
   for (const [id, path] of sources) {
     const version = byPath.get(path);
     if (version) versions[id] = version;

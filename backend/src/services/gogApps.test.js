@@ -11,6 +11,7 @@ describe('normalizeGogGame', () => {
     })).toEqual({
       gameId: '1207658930',
       name: 'The Witcher 3: Wild Hunt',
+      version: null,
       installLocation: 'D:\\GOG Games\\The Witcher 3 Wild Hunt'
     });
   });
@@ -64,5 +65,20 @@ describe('getGogApps', () => {
     }));
     const { getGogApps } = await import('./gogApps.js');
     expect(await getGogApps()).toEqual([]);
+  });
+});
+
+describe('normalizeGogGame version', () => {
+  // GOG is the only launcher here that records a version of its own, and
+  // it is a clean one. Worth carrying: these games' Windows uninstall
+  // entries frequently have no DisplayVersion, and unlike the Riot and
+  // Ubisoft titles their binaries are not the only place left to look.
+  it('carries the version GOG recorded', () => {
+    expect(normalizeGogGame({ gameName: 'X', path: 'C:/GOG/X', ver: '4.0.0.1' }).version).toBe('4.0.0.1');
+  });
+
+  it('reports no version rather than an empty string', () => {
+    expect(normalizeGogGame({ gameName: 'X', path: 'C:/GOG/X' }).version).toBeNull();
+    expect(normalizeGogGame({ gameName: 'X', path: 'C:/GOG/X', ver: '   ' }).version).toBeNull();
   });
 });

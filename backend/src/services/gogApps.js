@@ -24,6 +24,7 @@ $games = Get-ItemProperty -Path $paths -ErrorAction SilentlyContinue |
       gameName = [string]$_.gameName
       path = [string]$_.path
       workingDir = [string]$_.workingDir
+      ver = [string]$_.ver
     }
   }
 ConvertTo-Json -InputObject @($games) -Compress -Depth 3
@@ -32,7 +33,10 @@ ConvertTo-Json -InputObject @($games) -Compress -Depth 3
 /** Normalizes one raw registry row into a usable app, or null.
  *
  * There is no size in these keys -- GOG records where the game is, not
- * how big it is -- so the caller measures the folder. That's safe here in
+ * how big it is -- so the caller measures the folder. There IS a version:
+ * GOG writes `ver` per game, and it is the only launcher here that does,
+ * so it is carried through for the rows whose registry uninstall entry
+ * has no DisplayVersion. That's safe here in
  * a way it isn't for Steam or Ubisoft: each GOG game gets its own
  * directory, so measuring one never sweeps up another's bytes. */
 export function normalizeGogGame(raw) {
@@ -42,6 +46,7 @@ export function normalizeGogGame(raw) {
   return {
     gameId: raw.gameId || null,
     name: raw.gameName || null,
+    version: (raw.ver || '').trim() || null,
     installLocation: folder.replace(/\//g, '\\').replace(/\\+$/, '')
   };
 }
