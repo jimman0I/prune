@@ -4,7 +4,23 @@ module.exports = {
   directories: { output: 'dist' },
   files: ['main.cjs'],
   extraResources: [
-    { from: '../backend/src', to: 'backend/src' },
+    // NOTE the source: this copies from ../backend/src DIRECTLY, not from
+    // the build/backend-prod/ staging directory build-installer.mjs
+    // populates -- that one exists only to produce a dev-free
+    // node_modules. Anything meant to be kept out of the shipped backend
+    // has to be excluded HERE; filtering it during the staging copy looks
+    // right and does nothing (confirmed by inspecting the built app).
+    //
+    // Test files and fakeVolume.js (a synthetic NTFS volume builder that
+    // exists purely so the MFT parser can be tested without an elevated
+    // process) are test tooling, and 27 of them were shipping inside
+    // every installer. The default is to take the whole tree, so nothing
+    // else was ever going to stop them.
+    {
+      from: '../backend/src',
+      to: 'backend/src',
+      filter: ['**/*', '!**/*.test.js', '!**/fakeVolume.js']
+    },
     // Production-only install, built by scripts/build-installer.mjs into
     // build/backend-prod/ -- NOT the shared ../backend/node_modules dev
     // install, which also carries vitest and its whole dependency tree.
