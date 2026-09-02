@@ -45,7 +45,9 @@ describe('normalizeProgram', () => {
       installDate: '2023-01-15', sizeBytes: 620000 * 1024,
       uninstallString: 'MsiExec.exe /X{GUID}', installLocation: 'C:\\Program Files\\Google\\Chrome',
       registryKey: 'HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\{GUID}',
-      displayIcon: 'C:\\Program Files\\Google\\Chrome\\chrome.exe,0'
+      displayIcon: 'C:\\Program Files\\Google\\Chrome\\chrome.exe,0',
+      architecture: '64-bit',
+      website: null
     });
   });
 
@@ -134,5 +136,54 @@ describe('dedupeIds', () => {
     const input = [original, { id: 'x' }];
     dedupeIds(input);
     expect(original).toEqual({ id: 'x' }); // untouched
+  });
+});
+
+describe('architecture', () => {
+  // Revo shows a 32/64-bit column. Windows records it structurally rather
+  // than as a value: a 32-bit program on 64-bit Windows is registered
+  // under WOW6432Node, and everything else in HKLM is native.
+  it('reads 32-bit from the WOW6432Node hive', () => {
+    expect(normalizeProgram({
+      id: 'x', name: 'Old App',
+      psPath: 'Microsoft.PowerShell.Core\\Registry::HKEY_LOCAL_MACHINE\\SOFTWARE\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\{G}'
+    }).architecture).toBe('32-bit');
+  });
+
+  it('reads 64-bit from the native hive', () => {
+    expect(normalizeProgram({
+      id: 'x', name: 'New App',
+      psPath: 'Microsoft.PowerShell.Core\\Registry::HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\{G}'
+    }).architecture).toBe('64-bit');
+  });
+
+  it('is null when the hive does not say', () => {
+    // A per-user HKCU entry carries no architecture information, and
+    // guessing would put a wrong badge on the row.
+    expect(normalizeProgram({
+      id: 'x', name: 'User App',
+      psPath: 'Microsoft.PowerShell.Core\\Registry::HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\{G}'
+    }).architecture).toBeNull();
+    expect(normalizeProgram({ id: 'x', name: 'No Path' }).architecture).toBeNull();
+  });
+});
+
+describe('website', () => {
+  it('prefers the about URL', () => {
+    expect(normalizeProgram({
+      id: 'x', name: 'App', urlInfoAbout: 'https://example.com', helpLink: 'https://help.example.com'
+    }).website).toBe('https://example.com');
+  });
+
+  it('falls back to the help link', () => {
+    expect(normalizeProgram({ id: 'x', name: 'App', helpLink: 'https://help.example.com' }).website)
+      .toBe('https://help.example.com');
+  });
+
+  it('ignores a non-http value', () => {
+    // These fields are third-party-controlled and do turn up holding
+    // things that are not URLs at all.
+    expect(normalizeProgram({ id: 'x', name: 'App', urlInfoAbout: 'not a url' }).website).toBeNull();
+    expect(normalizeProgram({ id: 'x', name: 'App' }).website).toBeNull();
   });
 });

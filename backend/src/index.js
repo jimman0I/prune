@@ -17,6 +17,7 @@ import forcedUninstallRoutes from './routes/forcedUninstall.js';
 import mftScanRoutes from './routes/mftScan.js';
 import fileIconsRoutes from './routes/fileIcons.js';
 import { initTray } from './lib/trayManager.js';
+import { getProgramIcons } from './services/programIcons.js';
 
 const PORT = process.env.UNREVO_BACKEND_PORT || 3101;
 
@@ -81,7 +82,23 @@ server.on('error', (err) => {
 });
 server.listen(PORT, '127.0.0.1', () => {
   console.log(`Prune backend listening on http://127.0.0.1:${PORT}`);
+  warmProgramIcons();
 });
+
+/** Extracts every program's icon in the background as soon as the server
+ * is up, so the Application Manager has them the moment it opens instead
+ * of popping them in a second or two later.
+ *
+ * It reads ~90 executables and takes about two seconds, which is exactly
+ * why it shouldn't happen when someone clicks the tab. Fire-and-forget:
+ * the cache inside programIcons.js is the point, the return value is
+ * discarded, and a failure is swallowed because icons are decoration and
+ * must never affect whether the backend starts. */
+function warmProgramIcons() {
+  getProgramIcons()
+    .then((icons) => console.log(`Prepared ${Object.keys(icons).length} program icons.`))
+    .catch(() => { /* decoration only */ });
+}
 
 // v2.0 Phase 1: this is the one line in this file that isn't a route
 // mount. trayManager.js's own initTray() is a guarded no-op outside a

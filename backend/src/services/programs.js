@@ -20,7 +20,8 @@ Get-ItemProperty -Path $paths -ErrorAction SilentlyContinue |
     @{N='publisher';E={$_.Publisher}}, @{N='version';E={$_.DisplayVersion}},
     @{N='installDate';E={$_.InstallDate}}, @{N='estimatedSizeKb';E={$_.EstimatedSize}},
     @{N='uninstallString';E={$_.UninstallString}}, @{N='installLocation';E={$_.InstallLocation}},
-    @{N='psPath';E={$_.PSPath}}, @{N='displayIcon';E={$_.DisplayIcon}} |
+    @{N='psPath';E={$_.PSPath}}, @{N='displayIcon';E={$_.DisplayIcon}},
+    @{N='urlInfoAbout';E={$_.URLInfoAbout}}, @{N='helpLink';E={$_.HelpLink}} |
   ConvertTo-Json -Compress
 `;
 
@@ -84,8 +85,40 @@ export function normalizeProgram(raw) {
     // Where the vendor's own icon lives. Kept raw here -- parsing it is
     // iconSource.js's job, and the icons are fetched separately so the
     // program list never waits on icon extraction.
-    displayIcon: raw.displayIcon || null
+    displayIcon: raw.displayIcon || null,
+    architecture: architectureFrom(raw.psPath),
+    website: firstHttpUrl(raw.urlInfoAbout, raw.helpLink)
   };
+}
+
+/** 32-bit or 64-bit, read from WHERE the entry lives rather than from any
+ * value in it -- Windows records this structurally. A 32-bit program on
+ * 64-bit Windows is registered under WOW6432Node; anything else in HKLM
+ * is native.
+ *
+ * A per-user HKCU entry carries no architecture information at all, and
+ * returns null rather than a guess: a wrong "64-bit" badge on a row is a
+ * fact stated confidently and incorrectly, which is worse than a blank
+ * cell. */
+function architectureFrom(psPath) {
+  if (typeof psPath !== 'string') return null;
+  if (!/HKEY_LOCAL_MACHINE/i.test(psPath)) return null;
+  return /WOW6432Node/i.test(psPath) ? '32-bit' : '64-bit';
+}
+
+/** The program's website. URLInfoAbout is the vendor's own product page;
+ * HelpLink is the support page and a reasonable second choice.
+ *
+ * Both are third-party-controlled and genuinely do hold things that
+ * aren't URLs, so anything that isn't http(s) is dropped rather than
+ * rendered as a dead link. */
+function firstHttpUrl(...candidates) {
+  for (const candidate of candidates) {
+    if (typeof candidate === 'string' && /^https?:\/\/\S/i.test(candidate.trim())) {
+      return candidate.trim();
+    }
+  }
+  return null;
 }
 
 /** Converts the registry provider's own PSPath into the `HKLM:\...` form
