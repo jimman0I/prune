@@ -27,7 +27,7 @@ const COLUMNS = [
   { key: 'select', label: '', width: '30px' },
   { key: 'name', label: 'Application', sort: 'name', width: 'minmax(200px,1fr)' },
   { key: 'size', label: 'Size', sort: 'sizeBytes', width: '92px', align: 'right' },
-  { key: 'version', label: 'Version', sort: 'version', width: '104px' },
+  { key: 'version', label: 'Version', sort: 'version', width: '128px' },
   { key: 'architecture', label: 'Type', sort: 'architecture', width: '68px' },
   { key: 'installDate', label: 'Installed', sort: 'installDate', width: '96px' },
   { key: 'publisher', label: 'Company', sort: 'publisher', width: 'minmax(130px,0.7fr)' },

@@ -1,7 +1,8 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import NavRail from './components/NavRail.jsx';
 import Dashboard from './components/Dashboard.jsx';
 import DiskMap from './components/DiskMap.jsx';
+import Screen from './components/Screen.jsx';
 import SmartCleanup from './components/SmartCleanup.jsx';
 import ProgramList from './components/ProgramList.jsx';
 import BatchUninstallModal from './components/BatchUninstallModal.jsx';
@@ -9,8 +10,10 @@ import UninstallModal from './components/UninstallModal.jsx';
 import QuarantineManager from './components/QuarantineManager.jsx';
 import SettingsPage from './components/SettingsPage.jsx';
 import DeepClean from './components/DeepClean.jsx';
-import { fetchPrograms, fetchProgramIcons, fetchProgramSizes } from './lib/api.js';
+import { fetchPrograms, fetchProgramIcons, fetchProgramSizes, fetchProgramVersions } from './lib/api.js';
 import { mergeMeasuredSizes } from './lib/mergeSizes.js';
+import { mergeBinaryVersions } from './lib/mergeVersions.js';
+import { rememberVisited } from './lib/visitedScreens.js';
 
 function formatBytes(bytes) {
   if (bytes === null || bytes === undefined) return '—';
@@ -23,9 +26,34 @@ function formatBytes(bytes) {
 
 export default function App() {
   const [screen, setScreen] = useState('dashboard');
+
+  // Which tabs have been opened. A screen is built the first time it is
+  // asked for and then kept in the DOM, hidden, so switching away no
+  // longer throws its state out -- the Disk Map used to rescan the drive
+  // every time it was reopened, for a result it had already produced.
+  const [visited, setVisited] = useState(() => new Set(['dashboard']));
+  useEffect(() => { setVisited((prev) => rememberVisited(prev, screen)); }, [screen]);
   const [selectedProgram, setSelectedProgram] = useState(null);
   const [batchPrograms, setBatchPrograms] = useState(null);
-  const [programs, setPrograms] = useState([]);
+  const [rawPrograms, setPrograms] = useState([]);
+
+  // Sizes and versions are kept as they arrive rather than folded into
+  // the program list, and merged at render instead.
+  //
+  // Folding them in was a real bug: both endpoints cache their answer on
+  // the backend, so a warmed one replies in under two milliseconds while
+  // the program list itself takes over a second. The merge then ran
+  // against an empty array and the list that arrived afterwards wiped it
+  // out -- versions the backend had correctly found never reached the
+  // screen. Deriving the merge means the order the three land in cannot
+  // matter.
+  const [measuredSizes, setMeasuredSizes] = useState({});
+  const [binaryVersions, setBinaryVersions] = useState({});
+
+  const programs = useMemo(
+    () => mergeBinaryVersions(mergeMeasuredSizes(rawPrograms, measuredSizes), binaryVersions),
+    [rawPrograms, measuredSizes, binaryVersions]
+  );
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   // Fetched at app start, not when the Application Manager opens.
@@ -43,7 +71,21 @@ export default function App() {
     let cancelled = false;
     fetchProgramSizes()
       .then((sizes) => {
-        if (!cancelled) setPrograms((prev) => mergeMeasuredSizes(prev, sizes));
+        if (!cancelled) setMeasuredSizes(sizes || {});
+      })
+      .catch(() => { /* the rows keep their honest blank */ });
+    return () => { cancelled = true; };
+  }, []);
+
+  // Versions for the 15 entries whose registry record has none -- almost
+  // all of them launcher-installed games, which is exactly where a blank
+  // Version column is most noticeable. Read off each program's own
+  // binary, so like the sizes it arrives after the list.
+  useEffect(() => {
+    let cancelled = false;
+    fetchProgramVersions()
+      .then((versions) => {
+        if (!cancelled) setBinaryVersions(versions || {});
       })
       .catch(() => { /* the rows keep their honest blank */ });
     return () => { cancelled = true; };
@@ -78,13 +120,15 @@ export default function App() {
     <div className="App grain h-screen overflow-hidden flex">
       <NavRail screen={screen} onNavigate={setScreen} />
       <div className="flex-1 overflow-y-auto min-h-0">
-        {screen === 'dashboard' && <Dashboard programs={programs} totalSize={totalSize} onNavigate={setScreen} />}
-        {screen === 'diskmap' && <DiskMap />}
-        {screen === 'cleanup' && <SmartCleanup />}
-        {screen === 'quarantine' && <QuarantineManager />}
-        {screen === 'settings' && <SettingsPage />}
-        {screen === 'deepclean' && <DeepClean />}
-        {screen === 'applications' && (
+        <Screen active={screen === 'dashboard'} visited={visited.has('dashboard')}>
+          <Dashboard programs={programs} totalSize={totalSize} onNavigate={setScreen} />
+        </Screen>
+        <Screen active={screen === 'diskmap'} visited={visited.has('diskmap')}><DiskMap /></Screen>
+        <Screen active={screen === 'cleanup'} visited={visited.has('cleanup')}><SmartCleanup /></Screen>
+        <Screen active={screen === 'quarantine'} visited={visited.has('quarantine')}><QuarantineManager /></Screen>
+        <Screen active={screen === 'settings'} visited={visited.has('settings')}><SettingsPage /></Screen>
+        <Screen active={screen === 'deepclean'} visited={visited.has('deepclean')}><DeepClean /></Screen>
+        <Screen active={screen === 'applications'} visited={visited.has('applications')}>
           <div className="px-12 py-10 h-full flex flex-col min-h-0">
             <div className="flex items-baseline justify-between mb-6 shrink-0">
               <div>
@@ -108,7 +152,7 @@ export default function App() {
               onBatchUninstall={setBatchPrograms}
             />
           </div>
-        )}
+        </Screen>
       </div>
       {batchPrograms && (
         <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', justifyContent: 'center', alignItems: 'center', padding: 24 }}>

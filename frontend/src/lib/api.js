@@ -38,6 +38,20 @@ export async function fetchProgramSizes() {
   return data.sizes;
 }
 
+/** Versions read off the program's own binary, for the entries whose
+ * registry record has none.
+ *
+ * Separate from fetchPrograms for the same reason the sizes are: the
+ * backend has to find the right executable inside each install folder
+ * before it can read anything. A program whose binary reports nothing
+ * usable is absent and keeps its blank. */
+export async function fetchProgramVersions() {
+  const res = await fetch(`${API_URL}/programs/versions`);
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
+  return data.versions;
+}
+
 export async function scanForLeftovers(name, publisher) {
   const res = await fetch(`${API_URL}/leftovers/scan`, {
     method: 'POST',
