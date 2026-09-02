@@ -1,4 +1,5 @@
 import { runPowerShellJson } from './powershell.js';
+import { runElevatedPowerShellJson } from '../lib/elevatedPowerShell.js';
 
 /** Real physical-disk health, via the same PowerShell chokepoint every
  * other backend service uses. Two tiers, because Windows splits this data
@@ -22,44 +23,52 @@ import { runPowerShellJson } from './powershell.js';
  * HealthStatus instead -- same "honest unavailable over a fabricated
  * number" rule diskSpace.js's own getSystemDriveSpace() already follows.
  * An SSD life gauge is exactly the wrong place to invent a figure. */
-export async function getDiskHealth() {
-  const script = `
-    $disks = Get-PhysicalDisk | ForEach-Object {
-      $d = $_
-      $rc = $null
-      try { $rc = $d | Get-StorageReliabilityCounter -ErrorAction Stop } catch { }
-      [PSCustomObject]@{
-        deviceId = $d.DeviceId
-        model = $d.FriendlyName
-        mediaType = [string]$d.MediaType
-        busType = [string]$d.BusType
-        sizeBytes = $d.Size
-        healthStatus = [string]$d.HealthStatus
-        operationalStatus = [string]$d.OperationalStatus
-        wearPercent = if ($rc) { $rc.Wear } else { $null }
-        temperatureC = if ($rc) { $rc.Temperature } else { $null }
-        powerOnHours = if ($rc) { $rc.PowerOnHours } else { $null }
-        readErrorsUncorrected = if ($rc) { $rc.ReadErrorsUncorrected } else { $null }
-        writeErrorsUncorrected = if ($rc) { $rc.WriteErrorsUncorrected } else { $null }
-        reliabilityAvailable = ($rc -ne $null)
-      }
+/** One query, run two ways -- unelevated by getDiskHealth() and through a
+ * UAC prompt by getElevatedDiskHealth(). Identical either way: the only
+ * difference is whether Get-StorageReliabilityCounter is allowed to
+ * answer, which is precisely what the inner try/catch absorbs. */
+const DISK_QUERY = `
+  $disks = Get-PhysicalDisk | ForEach-Object {
+    $d = $_
+    $rc = $null
+    try { $rc = $d | Get-StorageReliabilityCounter -ErrorAction Stop } catch { }
+    [PSCustomObject]@{
+      deviceId = $d.DeviceId
+      model = $d.FriendlyName
+      mediaType = [string]$d.MediaType
+      busType = [string]$d.BusType
+      sizeBytes = $d.Size
+      healthStatus = [string]$d.HealthStatus
+      operationalStatus = [string]$d.OperationalStatus
+      wearPercent = if ($rc) { $rc.Wear } else { $null }
+      temperatureC = if ($rc) { $rc.Temperature } else { $null }
+      powerOnHours = if ($rc) { $rc.PowerOnHours } else { $null }
+      readErrorsUncorrected = if ($rc) { $rc.ReadErrorsUncorrected } else { $null }
+      writeErrorsUncorrected = if ($rc) { $rc.WriteErrorsUncorrected } else { $null }
+      reliabilityAvailable = ($rc -ne $null)
     }
-    ConvertTo-Json -InputObject @($disks) -Compress -Depth 3
-  `;
+  }
+  ConvertTo-Json -InputObject @($disks) -Compress -Depth 3
+`;
 
+export async function getDiskHealth() {
   let raw;
   try {
-    raw = await runPowerShellJson(script);
+    raw = await runPowerShellJson(DISK_QUERY);
   } catch {
     return null; // PowerShell itself unavailable -- honest "unknown", not a guess
   }
+  return normalizeDisks(raw);
+}
+
+function normalizeDisks(raw) {
   if (!raw) return null;
 
   // Real gotcha, confirmed live: `@($disks) | ConvertTo-Json` PIPED emits a
   // bare object for a one-disk machine and an array for several, so the
-  // shape silently changes with the hardware it runs on. The script above
-  // avoids it with -InputObject, but normalizing here too means a
-  // single-disk laptop can never crash this code path.
+  // shape silently changes with the hardware it runs on. DISK_QUERY avoids
+  // it with -InputObject, but normalizing here too means a single-disk
+  // laptop can never crash this code path.
   const list = Array.isArray(raw) ? raw : [raw];
 
   const disks = list.map((d) => ({
@@ -85,6 +94,27 @@ export async function getDiskHealth() {
     // answers with an external drive that doesn't.
     reliabilityAvailable: disks.some((d) => d.reliabilityAvailable)
   };
+}
+
+/** The same query, run through one UAC prompt so the reliability counters
+ * are actually readable. Only ever called from an explicit user action --
+ * see runElevatedPowerShellJson's own note on why that matters.
+ *
+ * Returns the same shape as getDiskHealth() on success, so the frontend
+ * swaps one result for the other with no special-casing, plus the two
+ * ordinary non-success outcomes: the user declined the prompt, or the
+ * drive genuinely doesn't expose wear even to an administrator (real
+ * possibility -- plenty of consumer NVMe firmware doesn't implement the
+ * counters Windows asks for). */
+export async function getElevatedDiskHealth() {
+  const result = await runElevatedPowerShellJson(DISK_QUERY);
+  if (!result.ok) {
+    if (result.cancelled) return { cancelled: true };
+    return { error: result.error };
+  }
+  const normalized = normalizeDisks(result.data);
+  if (!normalized) return { error: 'The elevated query returned no disks.' };
+  return normalized;
 }
 
 function numberOrNull(value) {

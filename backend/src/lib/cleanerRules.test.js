@@ -78,6 +78,23 @@ describe('expandPath', () => {
   it('leaves a path with no recognized token untouched', () => {
     expect(expandPath('C:\\Windows\\Minidump')).toBe('C:\\Windows\\Minidump');
   });
+
+  it('expands every token the real cleaners.json actually uses', () => {
+    // A token the rule set references but expandPath doesn't know stays
+    // literal, so the path silently never matches and the rule reads as a
+    // permanent "0 B / not installed" -- a dud nobody notices. This walks
+    // the real rule set and fails if any token slipped in unsupported.
+    const tokens = new Set();
+    for (const rule of loadCleanerRules()) {
+      for (const rawPath of rule.paths || []) {
+        for (const match of rawPath.match(/%[A-Z_()0-9]+%/gi) || []) tokens.add(match.toUpperCase());
+      }
+    }
+    expect(tokens.size).toBeGreaterThan(0);
+    for (const token of tokens) {
+      expect(expandPath(token), `${token} is used in cleaners.json but expandPath leaves it literal`).not.toContain('%');
+    }
+  });
 });
 
 describe('loadCleanerRules', () => {
@@ -253,5 +270,73 @@ describe('executeRules', () => {
     const summary = await executeRules(['not_a_real_rule']);
     expect(summary.results[0].error).toBeTruthy();
     expect(summary.freedBytes).toBe(0);
+  });
+});
+
+describe('scanRule presence detection', () => {
+  it('reports present:false for an app that is not installed at all', async () => {
+    const rule = { id: 'ghost', paths: ['%APPDATA%\\NeverInstalled\\Cache'] };
+    const result = scanRule(rule);
+    expect(result.present).toBe(false);
+    expect(result.sizeBytes).toBe(0);
+  });
+
+  it('distinguishes an installed-but-empty cache from a missing one', async () => {
+    // Both scan to 0 bytes; only `present` tells them apart, which is the
+    // whole point -- "nothing to clean" and "not installed" are different
+    // answers and the UI renders them differently.
+    const dir = join(appDataDir, 'discord', 'Cache');
+    await mkdir(dir, { recursive: true });
+
+    const result = scanRule({ id: 'discord_cache', paths: ['%APPDATA%\\discord\\Cache'] });
+
+    expect(result.present).toBe(true);
+    expect(result.sizeBytes).toBe(0);
+  });
+
+  it('reports present:true as soon as ONE of several paths exists', async () => {
+    await mkdir(join(appDataDir, 'Code', 'Cache'), { recursive: true });
+
+    const result = scanRule({
+      id: 'vscode_cache',
+      paths: ['%APPDATA%\\Code\\Cache', '%APPDATA%\\Code\\CachedData']
+    });
+
+    expect(result.present).toBe(true);
+  });
+
+  it('treats a command rule as always applicable', () => {
+    expect(scanRule({ id: 'dns_cache', command: 'ipconfig /flushdns' }).present).toBe(true);
+  });
+
+  it('reports accessible:false for a directory that exists but refuses to be listed', async () => {
+    // The real case this exists for is C:\Windows\Prefetch: it exists, it
+    // routinely holds hundreds of MB, and listing it throws EPERM unless
+    // Prune is elevated. Before this, that scanned as a flat "0 B" -- a
+    // number that reads as "nothing to clean" and is simply wrong.
+    const dir = join(appDataDir, 'Locked');
+    await mkdir(dir, { recursive: true });
+
+    const realReaddir = fs.readdirSync;
+    vi.spyOn(fs, 'readdirSync').mockImplementation((target, options) => {
+      if (String(target) === dir) {
+        throw Object.assign(new Error('EPERM: operation not permitted'), { code: 'EPERM' });
+      }
+      return realReaddir(target, options);
+    });
+
+    const result = scanRule({ id: 'locked', paths: ['%APPDATA%\\Locked'] });
+
+    expect(result.present).toBe(true);      // it's really there
+    expect(result.sizeBytes).toBe(0);       // ...but 0 here means "unknown"
+    expect(result.accessible).toBe(false);  // ...which is what this says out loud
+  });
+
+  it('reports accessible:true for an ordinary readable rule', async () => {
+    const dir = join(appDataDir, 'discord', 'Cache');
+    await mkdir(dir, { recursive: true });
+    await writeFile(join(dir, 'a.bin'), '12345');
+
+    expect(scanRule({ id: 'discord_cache', paths: ['%APPDATA%\\discord\\Cache'] }).accessible).toBe(true);
   });
 });

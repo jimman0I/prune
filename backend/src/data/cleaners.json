@@ -3,81 +3,358 @@
     "id": "discord_cache",
     "category": "Applications",
     "name": "Discord Cache",
-    "description": "Clears cached images and data from Discord.",
-    "paths": ["%APPDATA%\\discord\\Cache", "%APPDATA%\\discord\\Code Cache"],
+    "description": "Cached images, attachments and compiled scripts from Discord.",
+    "paths": ["%APPDATA%\\discord\\Cache", "%APPDATA%\\discord\\Code Cache", "%APPDATA%\\discord\\GPUCache"],
     "is_safe": true
   },
   {
     "id": "spotify_cache",
     "category": "Applications",
     "name": "Spotify Cache",
-    "description": "Clears Spotify's local song/artwork cache. Music re-downloads on next play.",
-    "paths": ["%LOCALAPPDATA%\\Spotify\\Storage", "%LOCALAPPDATA%\\Spotify\\Data"],
+    "description": "Locally cached tracks and artwork. Music re-downloads on next play.",
+    "paths": ["%LOCALAPPDATA%\\Spotify\\Storage", "%LOCALAPPDATA%\\Spotify\\Data", "%APPDATA%\\Spotify\\Cache"],
     "is_safe": true
   },
   {
     "id": "steam_cache",
     "category": "Applications",
     "name": "Steam Web Cache",
-    "description": "Clears the cached HTML/JS the Steam client's built-in browser (store, friends list) keeps.",
-    "paths": ["%PROGRAMFILES(X86)%\\Steam\\config\\htmlcache"],
+    "description": "Cached HTML/JS for Steam's built-in browser (store, friends, community).",
+    "paths": [
+      "%PROGRAMFILES(X86)%\\Steam\\config\\htmlcache",
+      "%PROGRAMFILES(X86)%\\Steam\\appcache\\httpcache",
+      "%LOCALAPPDATA%\\Steam\\htmlcache"
+    ],
     "is_safe": true
   },
   {
     "id": "vscode_cache",
     "category": "Applications",
     "name": "VS Code Cache",
-    "description": "Clears VS Code's GPU/code cache. Rebuilt automatically on next launch.",
-    "paths": ["%APPDATA%\\Code\\Cache", "%APPDATA%\\Code\\CachedData"],
+    "description": "GPU, code and CachedData caches. Rebuilt automatically on next launch.",
+    "paths": [
+      "%APPDATA%\\Code\\Cache",
+      "%APPDATA%\\Code\\CachedData",
+      "%APPDATA%\\Code\\GPUCache",
+      "%APPDATA%\\Code\\Code Cache",
+      "%APPDATA%\\Code\\logs"
+    ],
+    "is_safe": true
+  },
+  {
+    "id": "telegram_cache",
+    "category": "Applications",
+    "name": "Telegram Cache",
+    "description": "Cached photos, videos and documents from Telegram Desktop.",
+    "paths": ["%APPDATA%\\Telegram Desktop\\tdata\\user_data\\cache", "%APPDATA%\\Telegram Desktop\\tdata\\emoji"],
+    "is_safe": true
+  },
+  {
+    "id": "slack_cache",
+    "category": "Applications",
+    "name": "Slack Cache",
+    "description": "Cached avatars, files and compiled scripts from the Slack desktop app.",
+    "paths": ["%APPDATA%\\Slack\\Cache", "%APPDATA%\\Slack\\Code Cache", "%APPDATA%\\Slack\\GPUCache", "%APPDATA%\\Slack\\logs"],
+    "is_safe": true
+  },
+  {
+    "id": "teams_cache",
+    "category": "Applications",
+    "name": "Microsoft Teams Cache",
+    "description": "Cached images, compiled scripts and logs from Teams.",
+    "paths": [
+      "%APPDATA%\\Microsoft\\Teams\\Cache",
+      "%APPDATA%\\Microsoft\\Teams\\Code Cache",
+      "%APPDATA%\\Microsoft\\Teams\\GPUCache",
+      "%APPDATA%\\Microsoft\\Teams\\logs"
+    ],
+    "is_safe": true
+  },
+  {
+    "id": "zoom_cache",
+    "category": "Applications",
+    "name": "Zoom Data & Logs",
+    "description": "Zoom's cached data and diagnostic logs. Meeting history is untouched.",
+    "paths": ["%APPDATA%\\Zoom\\data\\cache", "%APPDATA%\\Zoom\\logs"],
+    "is_safe": true
+  },
+  {
+    "id": "epic_games_cache",
+    "category": "Applications",
+    "name": "Epic Games Launcher Cache",
+    "description": "The launcher's web cache and store front assets.",
+    "paths": [
+      "%LOCALAPPDATA%\\EpicGamesLauncher\\Saved\\webcache",
+      "%LOCALAPPDATA%\\EpicGamesLauncher\\Saved\\webcache_4430",
+      "%LOCALAPPDATA%\\EpicGamesLauncher\\Saved\\Logs"
+    ],
+    "is_safe": true
+  },
+  {
+    "id": "riot_client_logs",
+    "category": "Applications",
+    "name": "Riot Client Logs",
+    "description": "Diagnostic logs from the Riot Client and its games.",
+    "paths": ["%LOCALAPPDATA%\\Riot Games\\Riot Client\\Logs"],
+    "is_safe": true
+  },
+  {
+    "id": "overwolf_cache",
+    "category": "Applications",
+    "name": "Overwolf Cache & Logs",
+    "description": "Overwolf's browser cache and app logs.",
+    "paths": ["%LOCALAPPDATA%\\Overwolf\\Log", "%LOCALAPPDATA%\\Overwolf\\CrashDumps"],
+    "is_safe": true
+  },
+  {
+    "id": "nvidia_shader_cache",
+    "category": "Applications",
+    "name": "NVIDIA Shader Cache",
+    "description": "Compiled GPU shaders. Rebuilt automatically -- the first launch of each game is slightly slower afterwards.",
+    "paths": ["%LOCALAPPDATA%\\NVIDIA\\DXCache", "%LOCALAPPDATA%\\NVIDIA\\GLCache", "%LOCALAPPDATA%\\NVIDIA Corporation\\NV_Cache"],
+    "is_safe": true
+  },
+  {
+    "id": "directx_shader_cache",
+    "category": "Applications",
+    "name": "DirectX Shader Cache",
+    "description": "Windows' own compiled shader cache. Rebuilt automatically.",
+    "paths": ["%LOCALAPPDATA%\\D3DSCache"],
+    "is_safe": true
+  },
+  {
+    "id": "adobe_media_cache",
+    "category": "Applications",
+    "name": "Adobe Media Cache",
+    "description": "Peak files and conformed audio Adobe apps generate while editing. Regenerated on demand, and often very large.",
+    "paths": ["%APPDATA%\\Adobe\\Common\\Media Cache", "%APPDATA%\\Adobe\\Common\\Media Cache Files"],
+    "is_safe": true
+  },
+  {
+    "id": "jetbrains_caches",
+    "category": "Applications",
+    "name": "JetBrains IDE Caches",
+    "description": "Index and local-history caches across every installed JetBrains IDE.",
+    "paths": ["%LOCALAPPDATA%\\JetBrains\\*\\caches", "%LOCALAPPDATA%\\JetBrains\\*\\log"],
+    "is_safe": true
+  },
+  {
+    "id": "npm_cache",
+    "category": "Developer",
+    "name": "npm Cache",
+    "description": "npm's package tarball cache (_cacache). Re-downloaded on demand; frequently gigabytes on a dev machine.",
+    "paths": ["%LOCALAPPDATA%\\npm-cache\\_cacache", "%APPDATA%\\npm-cache\\_cacache"],
+    "is_safe": true
+  },
+  {
+    "id": "yarn_cache",
+    "category": "Developer",
+    "name": "Yarn Cache",
+    "description": "Yarn's global package cache. Re-downloaded on demand.",
+    "paths": ["%LOCALAPPDATA%\\Yarn\\Cache"],
+    "is_safe": true
+  },
+  {
+    "id": "pip_cache",
+    "category": "Developer",
+    "name": "pip Cache",
+    "description": "Python wheel and HTTP cache. Re-downloaded on demand.",
+    "paths": ["%LOCALAPPDATA%\\pip\\Cache"],
+    "is_safe": true
+  },
+  {
+    "id": "nuget_cache",
+    "category": "Developer",
+    "name": "NuGet Cache",
+    "description": ".NET package cache. Restored on demand.",
+    "paths": ["~\\.nuget\\packages", "%LOCALAPPDATA%\\NuGet\\Cache"],
+    "is_safe": true
+  },
+  {
+    "id": "gradle_cache",
+    "category": "Developer",
+    "name": "Gradle Cache",
+    "description": "Gradle's downloaded dependency cache. Re-downloaded on the next build.",
+    "paths": ["~\\.gradle\\caches"],
+    "is_safe": true
+  },
+  {
+    "id": "electron_builder_cache",
+    "category": "Developer",
+    "name": "electron-builder Cache",
+    "description": "Downloaded Electron binaries and packaging tools. Re-fetched on the next build.",
+    "paths": ["%LOCALAPPDATA%\\electron-builder\\Cache", "%LOCALAPPDATA%\\electron\\Cache"],
     "is_safe": true
   },
   {
     "id": "chrome_deep_cache",
     "category": "Browsers",
-    "name": "Chrome Cache & Code Cache",
-    "description": "Deeper pass than Smart Cleanup's own Browser Cache category -- also clears Chrome's compiled-script Code Cache.",
+    "name": "Chrome Cache",
+    "description": "Page cache, compiled scripts and GPU cache across every Chrome profile. Logins and history are untouched.",
     "paths": [
-      "%LOCALAPPDATA%\\Google\\Chrome\\User Data\\Default\\Cache",
-      "%LOCALAPPDATA%\\Google\\Chrome\\User Data\\Default\\Code Cache"
+      "%LOCALAPPDATA%\\Google\\Chrome\\User Data\\*\\Cache",
+      "%LOCALAPPDATA%\\Google\\Chrome\\User Data\\*\\Code Cache",
+      "%LOCALAPPDATA%\\Google\\Chrome\\User Data\\*\\GPUCache",
+      "%LOCALAPPDATA%\\Google\\Chrome\\User Data\\*\\Service Worker\\CacheStorage"
     ],
     "is_safe": true
   },
   {
     "id": "edge_deep_cache",
     "category": "Browsers",
-    "name": "Edge Cache & Code Cache",
-    "description": "Deeper pass than Smart Cleanup's own Browser Cache category -- also clears Edge's compiled-script Code Cache.",
+    "name": "Edge Cache",
+    "description": "Page cache, compiled scripts and GPU cache across every Edge profile.",
     "paths": [
-      "%LOCALAPPDATA%\\Microsoft\\Edge\\User Data\\Default\\Cache",
-      "%LOCALAPPDATA%\\Microsoft\\Edge\\User Data\\Default\\Code Cache"
+      "%LOCALAPPDATA%\\Microsoft\\Edge\\User Data\\*\\Cache",
+      "%LOCALAPPDATA%\\Microsoft\\Edge\\User Data\\*\\Code Cache",
+      "%LOCALAPPDATA%\\Microsoft\\Edge\\User Data\\*\\GPUCache",
+      "%LOCALAPPDATA%\\Microsoft\\Edge\\User Data\\*\\Service Worker\\CacheStorage"
     ],
+    "is_safe": true
+  },
+  {
+    "id": "brave_cache",
+    "category": "Browsers",
+    "name": "Brave Cache",
+    "description": "Page cache, compiled scripts and GPU cache across every Brave profile.",
+    "paths": [
+      "%LOCALAPPDATA%\\BraveSoftware\\Brave-Browser\\User Data\\*\\Cache",
+      "%LOCALAPPDATA%\\BraveSoftware\\Brave-Browser\\User Data\\*\\Code Cache",
+      "%LOCALAPPDATA%\\BraveSoftware\\Brave-Browser\\User Data\\*\\GPUCache"
+    ],
+    "is_safe": true
+  },
+  {
+    "id": "opera_cache",
+    "category": "Browsers",
+    "name": "Opera Cache",
+    "description": "Opera's page and compiled-script cache.",
+    "paths": ["%LOCALAPPDATA%\\Opera Software\\Opera Stable\\Cache", "%LOCALAPPDATA%\\Opera Software\\Opera Stable\\Code Cache"],
+    "is_safe": true
+  },
+  {
+    "id": "vivaldi_cache",
+    "category": "Browsers",
+    "name": "Vivaldi Cache",
+    "description": "Vivaldi's page and compiled-script cache.",
+    "paths": ["%LOCALAPPDATA%\\Vivaldi\\User Data\\*\\Cache", "%LOCALAPPDATA%\\Vivaldi\\User Data\\*\\Code Cache"],
     "is_safe": true
   },
   {
     "id": "firefox_deep_cache",
     "category": "Browsers",
     "name": "Firefox Cache",
-    "description": "Clears every Firefox profile's cache2 folder. Profile folder names are randomized by Firefox, so this matches all of them.",
-    "paths": ["%LOCALAPPDATA%\\Mozilla\\Firefox\\Profiles\\*\\cache2"],
+    "description": "Every Firefox profile's cache2 and startup cache. Profile folder names are randomized, so this matches all of them.",
+    "paths": [
+      "%LOCALAPPDATA%\\Mozilla\\Firefox\\Profiles\\*\\cache2",
+      "%LOCALAPPDATA%\\Mozilla\\Firefox\\Profiles\\*\\startupCache",
+      "%APPDATA%\\Mozilla\\Firefox\\Profiles\\*\\startupCache"
+    ],
     "is_safe": true
   },
   {
     "id": "memory_dumps",
     "category": "System",
     "name": "Memory Dumps",
-    "description": "Removes crash dump files Windows writes after an application or system crash.",
-    "paths": ["%LOCALAPPDATA%\\CrashDumps", "%SYSTEMROOT%\\Minidump"],
+    "description": "Crash dumps Windows writes after an application or system crash.",
+    "paths": ["%LOCALAPPDATA%\\CrashDumps", "%SYSTEMROOT%\\Minidump", "%SYSTEMROOT%\\MEMORY.DMP"],
     "is_safe": true
   },
   {
     "id": "windows_error_reporting",
     "category": "System",
     "name": "Windows Error Reporting",
-    "description": "Clears queued and archived Windows Error Reporting crash reports.",
+    "description": "Queued and archived crash reports waiting to be sent to Microsoft.",
     "paths": [
       "%LOCALAPPDATA%\\Microsoft\\Windows\\WER\\ReportArchive",
-      "%LOCALAPPDATA%\\Microsoft\\Windows\\WER\\ReportQueue"
+      "%LOCALAPPDATA%\\Microsoft\\Windows\\WER\\ReportQueue",
+      "%PROGRAMDATA%\\Microsoft\\Windows\\WER\\ReportArchive",
+      "%PROGRAMDATA%\\Microsoft\\Windows\\WER\\ReportQueue"
     ],
+    "is_safe": true
+  },
+  {
+    "id": "windows_update_leftovers",
+    "category": "System",
+    "name": "Windows Update Leftovers",
+    "description": "Installer payloads Windows Update already applied and no longer needs. Often several gigabytes.",
+    "paths": ["%SYSTEMROOT%\\SoftwareDistribution\\Download"],
+    "is_safe": true
+  },
+  {
+    "id": "delivery_optimization_cache",
+    "category": "System",
+    "name": "Delivery Optimization Cache",
+    "description": "Update chunks Windows keeps to share with other PCs on the network.",
+    "paths": ["%SYSTEMROOT%\\SoftwareDistribution\\DeliveryOptimization"],
+    "is_safe": true
+  },
+  {
+    "id": "windows_prefetch",
+    "category": "System",
+    "name": "Prefetch",
+    "description": "Launch-timing data Windows uses to speed up app startup. Rebuilt over the next few launches, which are marginally slower.",
+    "paths": ["%SYSTEMROOT%\\Prefetch"],
+    "is_safe": true
+  },
+  {
+    "id": "windows_font_cache",
+    "category": "System",
+    "name": "Font Cache",
+    "description": "Rendered font atlases. Rebuilt automatically on next sign-in.",
+    "paths": ["%LOCALAPPDATA%\\FontCache", "%SYSTEMROOT%\\ServiceProfiles\\LocalService\\AppData\\Local\\FontCache"],
+    "is_safe": true
+  },
+  {
+    "id": "thumbnail_cache_deep",
+    "category": "System",
+    "name": "Thumbnail Cache (Deep)",
+    "description": "Every cached thumbnail database. A deeper pass than Smart Cleanup's quick Thumbnail Cache category.",
+    "paths": ["%LOCALAPPDATA%\\Microsoft\\Windows\\Explorer\\thumbcache_*.db"],
+    "is_safe": true
+  },
+  {
+    "id": "icon_cache",
+    "category": "System",
+    "name": "Icon Cache",
+    "description": "Explorer's cached icon atlases. Rebuilt automatically; fixes stale or blank icons as a side effect.",
+    "paths": ["%LOCALAPPDATA%\\Microsoft\\Windows\\Explorer\\iconcache_*.db", "%LOCALAPPDATA%\\IconCache.db"],
+    "is_safe": true
+  },
+  {
+    "id": "windows_temp_internet_files",
+    "category": "System",
+    "name": "Internet Explorer / WinINet Cache",
+    "description": "The legacy WinINet cache still used by Windows components and older installers.",
+    "paths": ["%LOCALAPPDATA%\\Microsoft\\Windows\\INetCache", "%LOCALAPPDATA%\\Microsoft\\Windows\\INetCookies"],
+    "is_safe": true
+  },
+  {
+    "id": "windows_cbs_logs",
+    "category": "System",
+    "name": "Component Store (CBS) Logs",
+    "description": "Servicing logs from Windows Update and DISM. Diagnostic only.",
+    "paths": ["%SYSTEMROOT%\\Logs\\CBS", "%SYSTEMROOT%\\Logs\\DISM"],
+    "is_safe": true
+  },
+  {
+    "id": "recent_items_jumplists",
+    "category": "System",
+    "name": "Recent Items & Jump Lists",
+    "description": "The recently-opened file list Explorer and taskbar jump lists show. Removes traces of which files you opened, not the files.",
+    "paths": [
+      "%APPDATA%\\Microsoft\\Windows\\Recent\\*.lnk",
+      "%APPDATA%\\Microsoft\\Windows\\Recent\\AutomaticDestinations",
+      "%APPDATA%\\Microsoft\\Windows\\Recent\\CustomDestinations"
+    ],
+    "is_safe": true
+  },
+  {
+    "id": "windows_installer_orphans",
+    "category": "System",
+    "name": "Downloaded Installers (Temp)",
+    "description": "Setup payloads installers unpack into Temp and leave behind.",
+    "paths": ["%LOCALAPPDATA%\\Temp\\*.msi", "%LOCALAPPDATA%\\Temp\\*.msp", "%LOCALAPPDATA%\\Temp\\Low"],
     "is_safe": true
   },
   {
@@ -86,14 +363,6 @@
     "name": "DNS Cache",
     "description": "Flushes the Windows DNS resolver cache. Nothing to quarantine -- runs ipconfig /flushdns directly.",
     "command": "ipconfig /flushdns",
-    "is_safe": true
-  },
-  {
-    "id": "thumbnail_cache_deep",
-    "category": "System",
-    "name": "Thumbnail Cache (Deep)",
-    "description": "Removes every cached thumbnail database file. A deeper pass than Smart Cleanup's own quick Thumbnail Cache category.",
-    "paths": ["%LOCALAPPDATA%\\Microsoft\\Windows\\Explorer\\thumbcache_*.db"],
     "is_safe": true
   }
 ]

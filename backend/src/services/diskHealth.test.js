@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, afterEach } from 'vitest';
-import { getDiskHealth } from './diskHealth.js';
+import { getDiskHealth, getElevatedDiskHealth } from './diskHealth.js';
 import * as powershell from './powershell.js';
+import * as elevated from '../lib/elevatedPowerShell.js';
 
 const ELEVATED_DISK = {
   deviceId: '0',
@@ -103,5 +104,37 @@ describe('getDiskHealth', () => {
   it('returns null rather than throwing when PowerShell itself fails', async () => {
     vi.spyOn(powershell, 'runPowerShellJson').mockRejectedValue(new Error('PowerShell command failed'));
     expect(await getDiskHealth()).toBeNull();
+  });
+});
+
+describe('getElevatedDiskHealth', () => {
+  afterEach(() => { vi.restoreAllMocks(); });
+
+  it('returns the same shape as getDiskHealth when the elevated read succeeds', async () => {
+    vi.spyOn(elevated, 'runElevatedPowerShellJson').mockResolvedValue({ ok: true, data: [ELEVATED_DISK] });
+
+    const result = await getElevatedDiskHealth();
+
+    expect(result.reliabilityAvailable).toBe(true);
+    expect(result.disks[0].lifeRemainingPercent).toBe(93);
+  });
+
+  it('reports a declined UAC prompt as cancelled, not as a failure', async () => {
+    vi.spyOn(elevated, 'runElevatedPowerShellJson').mockResolvedValue({ ok: false, cancelled: true });
+    expect(await getElevatedDiskHealth()).toEqual({ cancelled: true });
+  });
+
+  it('passes a real elevated failure through as an error', async () => {
+    vi.spyOn(elevated, 'runElevatedPowerShellJson').mockResolvedValue({ ok: false, error: 'nope' });
+    expect(await getElevatedDiskHealth()).toEqual({ error: 'nope' });
+  });
+
+  it('still reports null wear when even an ADMIN read finds no counters -- some drives never expose them', async () => {
+    vi.spyOn(elevated, 'runElevatedPowerShellJson').mockResolvedValue({ ok: true, data: [UNELEVATED_DISK] });
+
+    const result = await getElevatedDiskHealth();
+
+    expect(result.reliabilityAvailable).toBe(false);
+    expect(result.disks[0].lifeRemainingPercent).toBeNull();
   });
 });

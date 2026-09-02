@@ -1,4 +1,4 @@
-import { readFileSync, readdirSync, statSync } from 'node:fs';
+import { readFileSync, readdirSync, statSync, existsSync } from 'node:fs';
 import * as fs from 'node:fs';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
@@ -24,6 +24,7 @@ export function expandPath(rawPath) {
     .replace(/%APPDATA%/gi, process.env.APPDATA || '')
     .replace(/%LOCALAPPDATA%/gi, process.env.LOCALAPPDATA || '')
     .replace(/%SYSTEMROOT%/gi, process.env.SYSTEMROOT || process.env.WINDIR || '')
+    .replace(/%PROGRAMDATA%/gi, process.env.ProgramData || '')
     .replace(/%PROGRAMFILES\(X86\)%/gi, process.env['ProgramFiles(x86)'] || '')
     .replace(/%PROGRAMFILES%/gi, process.env.ProgramFiles || '');
   if (expanded.startsWith('~')) {
@@ -87,11 +88,12 @@ function pathToSegments(expandedPath) {
  * (permission error, gone by the time it's visited), it contributes
  * nothing -- same partial-over-total-failure convention cleanup.js's own
  * dirSize/leftoverScan.js already use. */
-function collectFiles(targetPath, out) {
+function collectFiles(targetPath, out, denied) {
   let st;
   try {
     st = statSync(targetPath);
-  } catch {
+  } catch (err) {
+    if (isAccessDenied(err)) denied.push(targetPath);
     return;
   }
   if (st.isFile()) {
@@ -102,21 +104,32 @@ function collectFiles(targetPath, out) {
   let entries;
   try {
     entries = readdirSync(targetPath, { withFileTypes: true });
-  } catch {
+  } catch (err) {
+    // A directory that exists but refuses to be listed is NOT an empty
+    // one, and reporting it as 0 bytes is the same lie as inventing a
+    // number. C:\Windows\Prefetch is the everyday case: it exists, it
+    // often holds hundreds of MB, and enumerating it throws
+    // UnauthorizedAccessException unless Prune is elevated.
+    if (isAccessDenied(err)) denied.push(targetPath);
     return;
   }
   for (const entry of entries) {
     const full = join(targetPath, entry.name);
     if (entry.isDirectory()) {
-      collectFiles(full, out);
+      collectFiles(full, out, denied);
     } else if (entry.isFile()) {
       try {
         out.push({ path: full, sizeBytes: statSync(full).size });
-      } catch {
-        /* gone/inaccessible between readdir and stat -- skip */
+      } catch (err) {
+        if (isAccessDenied(err)) denied.push(full);
+        /* otherwise gone between readdir and stat -- skip */
       }
     }
   }
+}
+
+function isAccessDenied(err) {
+  return err && (err.code === 'EPERM' || err.code === 'EACCES');
 }
 
 /** Every real file a `paths`-based rule currently matches, as
@@ -125,6 +138,7 @@ function collectFiles(targetPath, out) {
  * exactly what Clean would actually free. */
 function resolveRuleFiles(rule) {
   const files = [];
+  const denied = [];
   for (const rawPath of rule.paths) {
     const expanded = expandPath(rawPath);
     // Real bug, found running this: path.join('', 'C:') on win32 does NOT
@@ -136,10 +150,10 @@ function resolveRuleFiles(rule) {
     const [driveSegment, ...rest] = pathToSegments(expanded);
     if (!driveSegment) continue;
     for (const match of resolveGlob(driveSegment, rest)) {
-      collectFiles(match, files);
+      collectFiles(match, files, denied);
     }
   }
-  return files;
+  return { files, denied };
 }
 
 /** Computes one rule's current size without touching anything -- Preview
@@ -147,13 +161,40 @@ function resolveRuleFiles(rule) {
  * 0 would falsely claim "there is nothing to free", null honestly says
  * "there is nothing to preview". */
 export function scanRule(rule) {
-  if (rule.command) return { id: rule.id, sizeBytes: null, fileCount: null };
-  const files = resolveRuleFiles(rule);
+  // A command rule has nothing to look for on disk, so it's always
+  // applicable -- `ipconfig /flushdns` works whether or not anything is
+  // cached.
+  if (rule.command) return { id: rule.id, sizeBytes: null, fileCount: null, present: true, accessible: true };
+  const { files, denied } = resolveRuleFiles(rule);
   return {
     id: rule.id,
     sizeBytes: files.reduce((sum, f) => sum + f.sizeBytes, 0),
-    fileCount: files.length
+    fileCount: files.length,
+    present: rulePathsExist(rule),
+    // False means "this exists but Windows wouldn't let us look inside",
+    // which the UI must show as needing admin rather than as 0 bytes.
+    accessible: denied.length === 0
   };
+}
+
+/** Whether any of a rule's target paths exists at all -- which is a
+ * genuinely different question from whether it has anything in it.
+ *
+ * "Discord isn't installed" and "Discord's cache is already empty" both
+ * scan to 0 bytes, and showing both as a flat "0 B" tells the user
+ * nothing. BleachBit's own UI makes the same distinction (it greys out
+ * cleaners that don't apply to the machine), and with a rule set this
+ * size most rules won't apply to any given user -- so the difference
+ * carries most of the list's signal. */
+function rulePathsExist(rule) {
+  for (const rawPath of rule.paths) {
+    const [driveSegment, ...rest] = pathToSegments(expandPath(rawPath));
+    if (!driveSegment) continue;
+    for (const match of resolveGlob(driveSegment, rest)) {
+      if (existsSync(match)) return true;
+    }
+  }
+  return false;
 }
 
 /** Every rule from cleaners.json, scanned and grouped by category -- the
@@ -205,7 +246,7 @@ export async function executeRule(rule) {
     }
   }
 
-  const candidates = resolveRuleFiles(rule);
+  const { files: candidates } = resolveRuleFiles(rule);
   const accessible = [];
   const skipped = [];
   for (const file of candidates) {
