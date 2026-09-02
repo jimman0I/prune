@@ -259,12 +259,27 @@ export default function DeepClean() {
             spinner that says nothing for nineteen seconds. */}
         <div className="flex-1 grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_360px] gap-5 min-h-0">
           <div className="overflow-y-auto min-h-0 pr-1">
+            {/* The action lives IN the empty state, not only in the
+                footer. Reported as "Deep Clean doesn't work" from exactly
+                this screen: the panel says click a button that is a
+                corner of the window away, so the screen reads as broken
+                rather than as waiting. The scan does take about half a
+                minute, which is worth saying up front -- an unexplained
+                wait that long is indistinguishable from a hang. */}
             {!categories && !scanError && (
               <div className="glass-panel p-10 text-center">
                 <p className="text-[13.5px] text-[color:var(--text-secondary)]">Nothing scanned yet.</p>
-                <p className="text-[12.5px] text-[color:var(--text-muted)] mt-1.5">
-                  Click Preview below to calculate real sizes for every category.
+                <p className="text-[12.5px] text-[color:var(--text-muted)] mt-1.5 max-w-[380px] mx-auto">
+                  Prune measures every category on disk for real rather than estimating,
+                  which takes about half a minute.
                 </p>
+                <button
+                  className="btn-primary px-5 py-2 text-[12.5px] font-medium mt-5 disabled:opacity-50"
+                  onClick={() => runPreview()}
+                  disabled={scanning}
+                >
+                  {scanning ? 'Scanning…' : 'Preview'}
+                </button>
               </div>
             )}
 
@@ -341,7 +356,7 @@ export default function DeepClean() {
               ) : (
                 <button
                   className="btn-ghost px-4 py-2 rounded-lg text-[12.5px] font-medium"
-                  onClick={runPreview}
+                  onClick={() => runPreview()}
                 >
                   {categories ? 'Rescan' : 'Preview'}
                 </button>
