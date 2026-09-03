@@ -195,6 +195,16 @@ function ProgramRow({ program, iconSrc, checked, running, onToggle, onUninstall 
           {program.browser}
         </span>
       )}
+      {/* Only shown when the reader actually knows. Gecko records an
+          add-on's enabled state in the same index it lists them from;
+          Chromium keeps it somewhere this reader does not look, so those
+          rows say nothing rather than guessing "enabled". A disabled
+          add-on still occupies disk, which is what this list is about. */}
+      {program.source === 'extension' && program.enabled === false && (
+        <span className="text-[9px] font-mono uppercase tracking-wider px-1 py-px rounded bg-white/[0.06] text-[color:var(--text-muted)] border border-[color:var(--border-subtle)] shrink-0">
+          Disabled
+        </span>
+      )}
       {program.unused && !program.health?.orphaned && (
         <span className="text-[9px] font-mono uppercase tracking-wider px-1 py-px rounded bg-[color:var(--warning-soft)] text-[color:var(--warning)] border border-[color:var(--warning)]/25 shrink-0">
           Unused
