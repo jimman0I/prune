@@ -5,9 +5,10 @@ import { fetchDiskScan, scanDriveFast, fetchDiskSpace, fetchFileTypeIcons } from
 import { attachFullPaths, topLevelCells } from '../lib/diskMapTree.js';
 import { subtreeForPath } from '../lib/mftSubtree.js';
 import { extensionBreakdown, NO_EXTENSION } from '../lib/extensionBreakdown.js';
+import { largestFiles } from '../lib/largestFiles.js';
 import { withUnscannedRemainder, scanCoverage } from '../lib/unscannedRemainder.js';
 import { colorForNode } from '../lib/diskMapColors.js';
-import { iconKeyForNode, extensionsInCells } from '../lib/fileTypeIcon.js';
+import { iconKeyForNode, extensionsInCells, extensionOf, GENERIC_FILE_KEY } from '../lib/fileTypeIcon.js';
 import { limitCells } from '../lib/limitCells.js';
 
 const DEFAULT_ROOT = 'C:\\';
@@ -77,6 +78,11 @@ const MAX_CELLS = 120;
 /** How many file types the panel lists. Past this the rows are a long
  * tail of single files and the panel stops being scannable. */
 const PANEL_ROWS = 14;
+
+/** How many files the list shows. WizTree's is unbounded and virtualised;
+ * this is the honest depth for a plain list -- past it the sizes flatten
+ * out and nothing on screen is worth acting on. */
+const FILE_ROWS = 60;
 
 function TreemapCell({ x, y, width, height, depth, name, size, type, scanned, aggregated, fullPath, icons, onHover, onLeave, onDrillDown }) {
   if (depth === 0 || !(width > 0) || !(height > 0)) return null;
@@ -215,6 +221,63 @@ function ExtensionPanel({ breakdown, shown, icons }) {
   );
 }
 
+
+/** The biggest individual files, WizTree's second tab.
+ *
+ * A treemap is good at showing that a folder is enormous and bad at
+ * showing that one file inside it is the reason. Satisfactory's 8.4 GB
+ * .ucas is a quarter of everything scanned here and the map draws it as
+ * an indistinguishable slab inside Games.
+ *
+ * Paths are shown in full and are the point of the view: this is the list
+ * you act on, and "FactoryGame-Windows.ucas" without its folder is not
+ * something anyone can find again. */
+function LargestFilesView({ files, icons }) {
+
+  if (files.length === 0) {
+    return (
+      <div className="glass-panel p-6 text-[13px] text-[color:var(--text-muted)]">
+        The scan found no files to list.
+      </div>
+    );
+  }
+
+  return (
+    <div className="glass-panel p-4 min-w-0">
+      <div className="flex flex-col">
+        {files.map((file) => (
+          <div
+            key={file.fullPath || file.name}
+            className="flex items-center gap-2.5 py-[5px] border-b border-[color:var(--border-subtle)] last:border-b-0"
+          >
+            {icons?.[extensionOf(file.name) ?? GENERIC_FILE_KEY] ? (
+              <img
+                src={icons[extensionOf(file.name) ?? GENERIC_FILE_KEY]}
+                alt="" width={16} height={16}
+                className="w-4 h-4 shrink-0 object-contain"
+              />
+            ) : (
+              <div className="w-4 h-4 shrink-0" />
+            )}
+            <div
+              className="font-mono text-[12px] text-[color:var(--accent-coral)] w-[86px] text-right shrink-0"
+              style={{ fontVariantNumeric: 'tabular-nums' }}
+            >
+              {formatBytes(file.size)}
+            </div>
+            <div className="min-w-0 flex-1">
+              <div className="text-[12.5px] text-[color:var(--text-primary)] truncate">{file.name}</div>
+              {file.fullPath && (
+                <div className="text-[11px] font-mono text-[color:var(--text-muted)] truncate">{file.fullPath}</div>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export default function DiskMap() {
   const [currentPath, setCurrentPath] = useState(DEFAULT_ROOT);
   const [tree, setTree] = useState(null);
@@ -241,6 +304,7 @@ export default function DiskMap() {
   // "file"). Fetched for whatever is on screen and accumulated, so
   // drilling into a folder only ever asks about types not already held.
   const [typeIcons, setTypeIcons] = useState({});
+  const [view, setView] = useState('map');
 
   /** Explicit click only. This raises a real UAC prompt, so it can never
    * live in an effect -- see api.js. */
@@ -328,6 +392,7 @@ export default function DiskMap() {
   // ask for exactly the types the panel is about to show.
   const breakdown = useMemo(() => extensionBreakdown(tree), [tree]);
   const shownExtensions = useMemo(() => breakdown.rows.slice(0, PANEL_ROWS), [breakdown]);
+  const topFiles = useMemo(() => largestFiles(tree, { limit: FILE_ROWS }), [tree]);
 
   useEffect(() => {
     const wanted = [
@@ -335,7 +400,10 @@ export default function DiskMap() {
       // The by-file-type panel names types that need not appear anywhere
       // in the top-level cells -- .pdb is 41% of this drive and not a
       // single top-level folder is called that.
-      ...shownExtensions.map((row) => row.extension).filter((ext) => ext !== NO_EXTENSION)
+      ...shownExtensions.map((row) => row.extension).filter((ext) => ext !== NO_EXTENSION),
+      // And the file list names types that need not be in the top 14
+      // either: one enormous .iso is unremarkable by total size.
+      ...topFiles.map((file) => extensionOf(file.name)).filter(Boolean)
     ];
     const missing = [...new Set(wanted)].filter((ext) => !(ext in typeIcons));
     // "folder" and "file" ride along with every response, so an empty
@@ -471,8 +539,33 @@ export default function DiskMap() {
         </div>
       )}
 
+      {/* WizTree splits the same data into a Tree View and a File View, and
+          the split earns its place: the map answers "which folder" and the
+          list answers "which file". */}
+      {!loading && !error && tree && (
+        <div className="flex items-center gap-1 mb-3">
+          {[['map', 'Map'], ['files', 'Largest files']].map(([key, label]) => (
+            <button
+              key={key}
+              onClick={() => setView(key)}
+              aria-pressed={view === key}
+              className={`px-3 py-1.5 rounded-lg text-[12px] font-medium transition-colors ${
+                view === key
+                  ? 'bg-[color:var(--accent-coral)] text-white'
+                  : 'text-[color:var(--text-secondary)] hover:bg-white/[0.06]'
+              }`}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+      )}
+
       {!loading && !error && tree && (
         <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_400px] items-start">
+          {view === 'files' ? (
+            <LargestFilesView files={topFiles} icons={typeIcons} />
+          ) : (
           <div className="glass-panel p-4" style={{ position: 'relative' }} onMouseMove={handleContainerMouseMove}>
             <ResponsiveContainer width="100%" height={520}>
               <Treemap
@@ -483,6 +576,7 @@ export default function DiskMap() {
               />
             </ResponsiveContainer>
           </div>
+          )}
           <ExtensionPanel breakdown={breakdown} shown={shownExtensions} icons={typeIcons} />
         </div>
       )}
