@@ -87,6 +87,14 @@ export async function fetchBrowserExtensions() {
   return data.extensions;
 }
 
+/** Everything Windows launches at sign-in. */
+export async function fetchStartupItems() {
+  const res = await fetch(`${API_URL}/programs/startup`);
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
+  return data.items;
+}
+
 export async function scanForLeftovers(name, publisher) {
   const res = await fetch(`${API_URL}/leftovers/scan`, {
     method: 'POST',

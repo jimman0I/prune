@@ -10,6 +10,7 @@ import UninstallModal from './components/UninstallModal.jsx';
 import QuarantineManager from './components/QuarantineManager.jsx';
 import SettingsPage from './components/SettingsPage.jsx';
 import DeepClean from './components/DeepClean.jsx';
+import StartupItems from './components/StartupItems.jsx';
 import { fetchPrograms, fetchProgramIcons, fetchProgramSizes, fetchProgramVersions, fetchProgramInstallDates, fetchStoreApps, fetchBrowserExtensions } from './lib/api.js';
 import { mergeMeasuredSizes } from './lib/mergeSizes.js';
 import { mergeBinaryVersions } from './lib/mergeVersions.js';
@@ -174,6 +175,7 @@ export default function App() {
         <Screen active={screen === 'cleanup'} visited={visited.has('cleanup')}><SmartCleanup /></Screen>
         <Screen active={screen === 'quarantine'} visited={visited.has('quarantine')}><QuarantineManager /></Screen>
         <Screen active={screen === 'settings'} visited={visited.has('settings')}><SettingsPage /></Screen>
+        <Screen active={screen === 'startup'} visited={visited.has('startup')}><StartupItems /></Screen>
         <Screen active={screen === 'deepclean'} visited={visited.has('deepclean')}><DeepClean /></Screen>
         <Screen active={screen === 'applications'} visited={visited.has('applications')}>
           <div className="px-12 py-10 h-full flex flex-col min-h-0">
