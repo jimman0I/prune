@@ -19,6 +19,9 @@ export function batchIneligibleReason(program) {
     // of what to delete -- not something to run unattended across a queue.
     return 'Its uninstaller is broken — use Force remove instead.';
   }
+  if (program?.source === 'extension') {
+    return 'Browser extensions are removed from the browser itself.';
+  }
   if (program?.source === 'store') {
     // Technically it has no uninstall command, but saying so would be
     // misleading: a Store app has a perfectly good way to be removed, it

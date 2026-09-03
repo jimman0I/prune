@@ -10,7 +10,7 @@ import UninstallModal from './components/UninstallModal.jsx';
 import QuarantineManager from './components/QuarantineManager.jsx';
 import SettingsPage from './components/SettingsPage.jsx';
 import DeepClean from './components/DeepClean.jsx';
-import { fetchPrograms, fetchProgramIcons, fetchProgramSizes, fetchProgramVersions, fetchProgramInstallDates, fetchStoreApps } from './lib/api.js';
+import { fetchPrograms, fetchProgramIcons, fetchProgramSizes, fetchProgramVersions, fetchProgramInstallDates, fetchStoreApps, fetchBrowserExtensions } from './lib/api.js';
 import { mergeMeasuredSizes } from './lib/mergeSizes.js';
 import { mergeBinaryVersions } from './lib/mergeVersions.js';
 import { mergeInstallDates } from './lib/mergeInstallDates.js';
@@ -52,6 +52,7 @@ export default function App() {
   const [binaryVersions, setBinaryVersions] = useState({});
   const [keyInstallDates, setKeyInstallDates] = useState({});
   const [storeApps, setStoreApps] = useState([]);
+  const [extensions, setExtensions] = useState([]);
 
   const programs = useMemo(
     () => [
@@ -124,6 +125,19 @@ export default function App() {
     return () => { cancelled = true; };
   }, []);
 
+  // Browser extensions, which no uninstall list mentions at all. Kept out
+  // of `programs` on purpose: an extension is not an installed program,
+  // and folding 24 of them into the list would dilute the count and the
+  // total. They get their own filter instead, the way Revo gives them
+  // their own module.
+  useEffect(() => {
+    let cancelled = false;
+    fetchBrowserExtensions()
+      .then((list) => { if (!cancelled) setExtensions(list || []); })
+      .catch(() => { /* the program list is unaffected */ });
+    return () => { cancelled = true; };
+  }, []);
+
   useEffect(() => {
     let cancelled = false;
     fetchProgramIcons()
@@ -180,6 +194,7 @@ export default function App() {
             </div>
             <ProgramList
               programs={programs}
+              extensions={extensions}
               icons={icons}
               onUninstall={setSelectedProgram}
               onBatchUninstall={setBatchPrograms}

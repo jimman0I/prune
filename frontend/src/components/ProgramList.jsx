@@ -147,6 +147,13 @@ function ProgramRow({ program, iconSrc, checked, onToggle, onUninstall }) {
           Store
         </span>
       )}
+      {/* Which browser it belongs to is the identifying fact here -- the
+          same extension is often installed in two of them. */}
+      {program.source === 'extension' && (
+        <span className="text-[9px] font-mono uppercase tracking-wider px-1 py-px rounded bg-[color:var(--accent-cyan)]/15 text-[color:var(--accent-cyan)] border border-[color:var(--accent-cyan)]/25 shrink-0">
+          {program.browser}
+        </span>
+      )}
       {program.unused && !program.health?.orphaned && (
         <span className="text-[9px] font-mono uppercase tracking-wider px-1 py-px rounded bg-[color:var(--warning-soft)] text-[color:var(--warning)] border border-[color:var(--warning)]/25 shrink-0">
           Unused
@@ -196,7 +203,10 @@ function ProgramRow({ program, iconSrc, checked, onToggle, onUninstall }) {
     </div>
 
     <div className="text-right">
-      {program.source === 'store' ? (
+      {program.source === 'extension' ? (
+        // Removing one is a browser operation, not an uninstaller.
+        <span className="text-[11px] font-mono text-[color:var(--text-muted)]">via browser</span>
+      ) : program.source === 'store' ? (
         // No button rather than a dead one. Removing a Store app is
         // Remove-AppxPackage, which Prune does not do yet, and a disabled
         // Uninstall would suggest the row is broken when it is not.
@@ -242,7 +252,7 @@ function GroupHeader({ label, count, collapsed, onToggle }) {
   );
 }
 
-export default function ProgramList({ programs: initialPrograms, icons = {}, onUninstall, onBatchUninstall }) {
+export default function ProgramList({ programs: initialPrograms, extensions = [], icons = {}, onUninstall, onBatchUninstall }) {
   const [programs, setPrograms] = useState(initialPrograms || []);
   const [loading, setLoading] = useState(!initialPrograms);
   const [error, setError] = useState(null);
@@ -270,15 +280,20 @@ export default function ProgramList({ programs: initialPrograms, icons = {}, onU
   const storeCount = useMemo(() => programs.filter(p => p.source === 'store').length, [programs]);
 
   const filtered = useMemo(() => {
+    // Extensions are their own list, not part of the program list. Revo
+    // gives them their own module for the same reason: an extension is
+    // not an installed program, and mixing 24 of them in would dilute
+    // both the count and the total.
+    const source = filter === 'extensions' ? extensions : programs;
     const q = query.trim().toLowerCase();
     let list = q
-      ? programs.filter(p => p.name.toLowerCase().includes(q) || p.publisher.toLowerCase().includes(q))
-      : programs;
+      ? source.filter(p => p.name.toLowerCase().includes(q) || (p.publisher || '').toLowerCase().includes(q))
+      : source;
     if (filter === 'unused') list = list.filter(p => p.unused);
     if (filter === 'broken') list = list.filter(p => p.health?.orphaned);
     if (filter === 'store') list = list.filter(p => p.source === 'store');
     return sortPrograms(list, sort.column, sort.direction);
-  }, [programs, query, sort, filter]);
+  }, [programs, extensions, query, sort, filter]);
 
   const totalBytes = useMemo(
     () => filtered.reduce((sum, p) => sum + (p.sizeBytes || 0), 0),
@@ -367,6 +382,7 @@ export default function ProgramList({ programs: initialPrograms, icons = {}, onU
             // and a permanently-empty view teaches people to ignore it --
             // when it does appear, it means something.
             ...(storeCount > 0 ? [{ id: 'store', label: `Store (${storeCount})` }] : []),
+            ...(extensions.length > 0 ? [{ id: 'extensions', label: `Extensions (${extensions.length})` }] : []),
             ...(brokenCount > 0 ? [{ id: 'broken', label: `Broken (${brokenCount})` }] : [])
           ].map(f => (
             <button
@@ -488,7 +504,10 @@ export default function ProgramList({ programs: initialPrograms, icons = {}, onU
             <span>
               {filtered.length === programs.length
                 ? `Installations: ${programs.length}`
-                : `Showing ${filtered.length} of ${programs.length}`}
+                // Against the list actually being filtered. Extensions are
+                // their own list, so "24 of 210" would be comparing them
+                // against a total they are not part of.
+                : `Showing ${filtered.length} of ${(filter === 'extensions' ? extensions : programs).length}`}
             </span>
             <span>{formatBytes(totalBytes)} total</span>
           </div>

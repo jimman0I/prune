@@ -76,6 +76,17 @@ export async function fetchStoreApps() {
   return data.apps;
 }
 
+/** Browser extensions, which no uninstall list mentions.
+ *
+ * Separate again: they live in browser profile folders rather than the
+ * registry, and Prune reads them straight off disk. */
+export async function fetchBrowserExtensions() {
+  const res = await fetch(`${API_URL}/programs/extensions`);
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
+  return data.extensions;
+}
+
 export async function scanForLeftovers(name, publisher) {
   const res = await fetch(`${API_URL}/leftovers/scan`, {
     method: 'POST',
