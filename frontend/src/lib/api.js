@@ -122,6 +122,14 @@ export async function fetchPackageIcons() {
   return data.icons;
 }
 
+/** Opens Windows' own Installed apps page, where Store apps are removed. */
+export async function openInstalledAppsSettings() {
+  const res = await fetch(`${API_URL}/programs/apps-settings`, { method: 'POST' });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
+  return data;
+}
+
 export async function scanForLeftovers(name, publisher) {
   const res = await fetch(`${API_URL}/leftovers/scan`, {
     method: 'POST',

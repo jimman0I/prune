@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { fetchPrograms, revealInExplorer } from '../lib/api.js';
+import { fetchPrograms, revealInExplorer, openInstalledAppsSettings } from '../lib/api.js';
 import { sizeBadgeTone } from '../lib/sizeBadgeTone.js';
 import { sortPrograms, nextSortState } from '../lib/sortPrograms.js';
 import { canBatchUninstall, batchIneligibleReason, batchSummary } from '../lib/batchSelection.js';
@@ -240,10 +240,17 @@ function ProgramRow({ program, iconSrc, checked, onToggle, onUninstall }) {
         // Removing one is a browser operation, not an uninstaller.
         <span className="text-[11px] font-mono text-[color:var(--text-muted)]">via browser</span>
       ) : program.source === 'store' ? (
-        // No button rather than a dead one. Removing a Store app is
-        // Remove-AppxPackage, which Prune does not do yet, and a disabled
-        // Uninstall would suggest the row is broken when it is not.
-        <span className="text-[11px] font-mono text-[color:var(--text-muted)]">via Windows</span>
+        // Not a dead Uninstall button, and not a bare label either.
+        // Removing a Store app is Remove-AppxPackage, which Prune does not
+        // do -- but saying "via Windows" and leaving someone to find the
+        // page is half an answer, so this opens it.
+        <button
+          onClick={() => { openInstalledAppsSettings().catch(() => {}); }}
+          aria-label={`Open Windows settings to remove ${program.name}`}
+          className="btn-ghost px-2 py-1 rounded-md text-[11px] font-medium opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity"
+        >
+          In Windows
+        </button>
       ) : (
         <button
           onClick={() => onUninstall(program)}
