@@ -1,9 +1,10 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { Treemap, ResponsiveContainer } from 'recharts';
 import { fetchDiskScan, scanDriveFast, fetchDiskSpace, fetchFileTypeIcons } from '../lib/api.js';
 import { attachFullPaths, topLevelCells } from '../lib/diskMapTree.js';
 import { subtreeForPath } from '../lib/mftSubtree.js';
+import { extensionBreakdown, NO_EXTENSION } from '../lib/extensionBreakdown.js';
 import { withUnscannedRemainder, scanCoverage } from '../lib/unscannedRemainder.js';
 import { colorForNode } from '../lib/diskMapColors.js';
 import { iconKeyForNode, extensionsInCells } from '../lib/fileTypeIcon.js';
@@ -73,6 +74,10 @@ const ICON_SIZE = 16;
  * the cells are a few pixels wide and cost far more than they say. */
 const MAX_CELLS = 120;
 
+/** How many file types the panel lists. Past this the rows are a long
+ * tail of single files and the panel stops being scannable. */
+const PANEL_ROWS = 14;
+
 function TreemapCell({ x, y, width, height, depth, name, size, type, scanned, aggregated, fullPath, icons, onHover, onLeave, onDrillDown }) {
   if (depth === 0 || !(width > 0) || !(height > 0)) return null;
   const fill = colorForNode({ name, type, scanned: scanned === false || aggregated ? false : scanned });
@@ -133,6 +138,80 @@ function TreemapCell({ x, y, width, height, depth, name, size, type, scanned, ag
         </text>
       )}
     </g>
+  );
+}
+
+
+/** What the space went TO, beside the map that shows where it went.
+ *
+ * WizTree puts this next to its treemap and it answers a question the map
+ * cannot: a folder view will never reveal that a third of the drive is
+ * .pdb files spread across a dozen projects.
+ *
+ * The footer is not decoration. These rows only cover files the scan
+ * actually reached as leaves, and the folder-by-folder scanner stops at a
+ * depth limit -- 33.4 GB categorised out of a 35.1 GB tree here. A panel
+ * that printed only the first number would be quietly claiming the
+ * second. */
+function ExtensionPanel({ breakdown, shown, icons }) {
+  const { rows, totalBytes, totalFiles, uncategorizedBytes } = breakdown;
+  if (rows.length === 0) return null;
+
+  return (
+    <div className="glass-panel p-4 min-w-0">
+      <div className="flex items-baseline justify-between gap-3 mb-3">
+        <div className="text-[11px] font-mono uppercase tracking-[0.14em] text-[color:var(--text-secondary)]">
+          By file type
+        </div>
+        <div className="text-[11px] font-mono text-[color:var(--text-muted)]">
+          {rows.length} types
+        </div>
+      </div>
+
+      <div className="flex flex-col gap-1.5">
+        {shown.map((row) => (
+          <div key={row.extension} className="flex items-center gap-2.5">
+            {icons?.[row.extension] ? (
+              <img src={icons[row.extension]} alt="" width={16} height={16} className="w-4 h-4 shrink-0 object-contain" />
+            ) : (
+              <div className="w-4 h-4 shrink-0" />
+            )}
+            <div className="font-mono text-[11.5px] text-[color:var(--text-primary)] w-[74px] shrink-0 truncate">
+              {row.extension === NO_EXTENSION ? 'no type' : row.extension}
+            </div>
+
+            {/* The bar carries the comparison; the number carries the
+                fact. Sharing one row keeps both readable at a glance. */}
+            <div className="flex-1 h-[6px] rounded-full bg-white/[0.05] overflow-hidden min-w-0">
+              <div
+                className="h-full rounded-full bg-[color:var(--accent-coral)]"
+                style={{ width: `${Math.max(row.percent, 0.6)}%` }}
+              />
+            </div>
+
+            <div
+              className="font-mono text-[11.5px] text-[color:var(--text-secondary)] w-[68px] text-right shrink-0"
+              style={{ fontVariantNumeric: 'tabular-nums' }}
+            >
+              {formatBytes(row.sizeBytes)}
+            </div>
+            <div
+              className="font-mono text-[11px] text-[color:var(--text-muted)] w-[46px] text-right shrink-0"
+              style={{ fontVariantNumeric: 'tabular-nums' }}
+            >
+              {row.percent.toFixed(1)}%
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div className="mt-3 pt-3 border-t border-[color:var(--border-subtle)] text-[11px] font-mono text-[color:var(--text-muted)]">
+        {formatBytes(totalBytes)} across {totalFiles.toLocaleString()} files
+        {uncategorizedBytes > 0 && (
+          <> · {formatBytes(uncategorizedBytes)} in folders the scan did not open</>
+        )}
+      </div>
+    </div>
   );
 }
 
@@ -245,8 +324,20 @@ export default function DiskMap() {
   // nothing that the aggregate cell doesn't say better.
   const cells = tree ? limitCells(topLevelCells(tree), MAX_CELLS) : [];
 
+  // Computed here rather than inside the panel so the icon fetch below can
+  // ask for exactly the types the panel is about to show.
+  const breakdown = useMemo(() => extensionBreakdown(tree), [tree]);
+  const shownExtensions = useMemo(() => breakdown.rows.slice(0, PANEL_ROWS), [breakdown]);
+
   useEffect(() => {
-    const missing = extensionsInCells(cells).filter((ext) => !(ext in typeIcons));
+    const wanted = [
+      ...extensionsInCells(cells),
+      // The by-file-type panel names types that need not appear anywhere
+      // in the top-level cells -- .pdb is 41% of this drive and not a
+      // single top-level folder is called that.
+      ...shownExtensions.map((row) => row.extension).filter((ext) => ext !== NO_EXTENSION)
+    ];
+    const missing = [...new Set(wanted)].filter((ext) => !(ext in typeIcons));
     // "folder" and "file" ride along with every response, so an empty
     // icon map still needs one initial call.
     if (missing.length === 0 && Object.keys(typeIcons).length > 0) return;
@@ -381,15 +472,18 @@ export default function DiskMap() {
       )}
 
       {!loading && !error && tree && (
-        <div className="glass-panel p-4" style={{ position: 'relative' }} onMouseMove={handleContainerMouseMove}>
-          <ResponsiveContainer width="100%" height={520}>
-            <Treemap
-              data={cells}
-              dataKey="size"
-              isAnimationActive={false}
-              content={<TreemapCell icons={typeIcons} onHover={handleHover} onLeave={handleLeave} onDrillDown={handleDrillDown} />}
-            />
-          </ResponsiveContainer>
+        <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_400px] items-start">
+          <div className="glass-panel p-4" style={{ position: 'relative' }} onMouseMove={handleContainerMouseMove}>
+            <ResponsiveContainer width="100%" height={520}>
+              <Treemap
+                data={cells}
+                dataKey="size"
+                isAnimationActive={false}
+                content={<TreemapCell icons={typeIcons} onHover={handleHover} onLeave={handleLeave} onDrillDown={handleDrillDown} />}
+              />
+            </ResponsiveContainer>
+          </div>
+          <ExtensionPanel breakdown={breakdown} shown={shownExtensions} icons={typeIcons} />
         </div>
       )}
 
