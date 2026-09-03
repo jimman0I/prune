@@ -318,7 +318,18 @@ export default function ProgramList({ programs: initialPrograms, icons = {}, onU
                 {program.architecture || '—'}
               </div>
 
-              <div className="text-[11.5px] font-mono text-[color:var(--text-secondary)]">
+              {/* An inferred date is shown muted. Two thirds of these come
+                  from the uninstall key's write time rather than from
+                  anything the installer declared, and that is a weaker
+                  claim -- an update rewrites the key too. Revo shows both
+                  identically; saying which is which costs nothing. */}
+              <div
+                className={`text-[11.5px] font-mono ${
+                  program.installDateApproximate
+                    ? 'text-[color:var(--text-muted)]'
+                    : 'text-[color:var(--text-secondary)]'
+                }`}
+              >
                 {program.installDate ? new Date(program.installDate).toLocaleDateString() : '—'}
               </div>
 

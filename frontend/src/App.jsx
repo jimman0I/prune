@@ -10,9 +10,10 @@ import UninstallModal from './components/UninstallModal.jsx';
 import QuarantineManager from './components/QuarantineManager.jsx';
 import SettingsPage from './components/SettingsPage.jsx';
 import DeepClean from './components/DeepClean.jsx';
-import { fetchPrograms, fetchProgramIcons, fetchProgramSizes, fetchProgramVersions } from './lib/api.js';
+import { fetchPrograms, fetchProgramIcons, fetchProgramSizes, fetchProgramVersions, fetchProgramInstallDates } from './lib/api.js';
 import { mergeMeasuredSizes } from './lib/mergeSizes.js';
 import { mergeBinaryVersions } from './lib/mergeVersions.js';
+import { mergeInstallDates } from './lib/mergeInstallDates.js';
 import { rememberVisited } from './lib/visitedScreens.js';
 
 function formatBytes(bytes) {
@@ -49,10 +50,14 @@ export default function App() {
   // matter.
   const [measuredSizes, setMeasuredSizes] = useState({});
   const [binaryVersions, setBinaryVersions] = useState({});
+  const [keyInstallDates, setKeyInstallDates] = useState({});
 
   const programs = useMemo(
-    () => mergeBinaryVersions(mergeMeasuredSizes(rawPrograms, measuredSizes), binaryVersions),
-    [rawPrograms, measuredSizes, binaryVersions]
+    () => mergeInstallDates(
+      mergeBinaryVersions(mergeMeasuredSizes(rawPrograms, measuredSizes), binaryVersions),
+      keyInstallDates
+    ),
+    [rawPrograms, measuredSizes, binaryVersions, keyInstallDates]
   );
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -87,6 +92,17 @@ export default function App() {
       .then((versions) => {
         if (!cancelled) setBinaryVersions(versions || {});
       })
+      .catch(() => { /* the rows keep their honest blank */ });
+    return () => { cancelled = true; };
+  }, []);
+
+  // Install dates for the 67 entries whose registry record has none -- more
+  // than half the list, which is why the Installed column read as mostly
+  // dashes next to Revo's.
+  useEffect(() => {
+    let cancelled = false;
+    fetchProgramInstallDates()
+      .then((dates) => { if (!cancelled) setKeyInstallDates(dates || {}); })
       .catch(() => { /* the rows keep their honest blank */ });
     return () => { cancelled = true; };
   }, []);

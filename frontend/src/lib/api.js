@@ -52,6 +52,18 @@ export async function fetchProgramVersions() {
   return data.versions;
 }
 
+/** Install dates for the entries whose registry record declared none.
+ *
+ * Read from each uninstall key's own last-write time, which means opening
+ * every key in three hives -- quick (~1.6s) but still not something the
+ * program list should wait behind. */
+export async function fetchProgramInstallDates() {
+  const res = await fetch(`${API_URL}/programs/install-dates`);
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
+  return data.installDates;
+}
+
 export async function scanForLeftovers(name, publisher) {
   const res = await fetch(`${API_URL}/leftovers/scan`, {
     method: 'POST',
