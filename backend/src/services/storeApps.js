@@ -47,6 +47,15 @@ $rows = foreach ($p in $apps) {
       Measure-Object Length -Sum).Sum
   } catch { $size = $null }
 
+  # Appx records no install date, so the package folder's creation time
+  # stands in -- the folder is created when the package is staged, which
+  # is the install. Same class of approximation as the registry rows that
+  # take theirs from the uninstall key's write time.
+  $installed = ''
+  try {
+    $installed = (Get-Item $p.InstallLocation -ErrorAction Stop).CreationTime.ToString('yyyy-MM-dd')
+  } catch { $installed = '' }
+
   [PSCustomObject]@{
     name = [string]$p.Name
     packageFullName = [string]$p.PackageFullName
@@ -56,6 +65,7 @@ $rows = foreach ($p in $apps) {
     displayName = $display
     architecture = [string]$p.Architecture
     sizeBytes = $size
+    installDate = $installed
   }
 }
 ConvertTo-Json -InputObject @($rows) -Compress -Depth 3
@@ -134,6 +144,10 @@ export function normalizeStoreApp(raw) {
     // ACL-restricted and a folder we could not open has no known size.
     sizeBytes: Number.isFinite(size) && size > 0 ? size : null,
     architecture: architectureOf(raw.architecture),
+    // Marked approximate for the same reason the registry rows are: it is
+    // when the package folder appeared, not a date anyone declared.
+    installDate: /^\d{4}-\d{2}-\d{2}$/.test(raw.installDate || '') ? raw.installDate : null,
+    installDateApproximate: /^\d{4}-\d{2}-\d{2}$/.test(raw.installDate || '') || undefined,
     packageFullName: raw.packageFullName,
     packageName: raw.name || null,
     source: 'store'

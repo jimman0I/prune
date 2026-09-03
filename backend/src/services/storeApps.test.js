@@ -123,3 +123,31 @@ describe('getStoreApps', () => {
     expect(apps[0].name).toBe('Paint');
   });
 });
+
+describe('store app install dates', () => {
+  const base = {
+    name: 'Microsoft.Paint',
+    packageFullName: 'Microsoft.Paint_11_x64__8wekyb3d8bbwe',
+    publisher: 'CN=Microsoft Corporation',
+    version: '11.0.0.0',
+    installLocation: 'C:\\Program Files\\WindowsApps\\Microsoft.Paint_11',
+    displayName: 'Paint',
+    architecture: 'X64',
+    sizeBytes: 1000
+  };
+
+  // Appx records no install date. The package folder's creation time is
+  // when it was staged, which is the install -- the same class of
+  // approximation the registry rows already use, and marked the same way.
+  it('takes the date from the package folder and marks it approximate', () => {
+    const app = normalizeStoreApp({ ...base, installDate: '2026-04-21' });
+    expect(app.installDate).toBe('2026-04-21');
+    expect(app.installDateApproximate).toBe(true);
+  });
+
+  it('reports no date rather than a malformed one', () => {
+    expect(normalizeStoreApp({ ...base, installDate: '' }).installDate).toBeNull();
+    expect(normalizeStoreApp({ ...base, installDate: 'yesterday' }).installDate).toBeNull();
+    expect(normalizeStoreApp({ ...base }).installDateApproximate).toBeUndefined();
+  });
+});
