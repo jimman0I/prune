@@ -453,6 +453,17 @@
     "recommended": true
   },
   {
+    "id": "epic_crash_reports",
+    "category": "Epic Games",
+    "name": "Crash reports",
+    "description": "Reports written when the launcher crashed.",
+    "paths": [
+      "%LOCALAPPDATA%\\EpicGamesLauncher\\Saved\\Crashes"
+    ],
+    "is_safe": true,
+    "recommended": true
+  },
+  {
     "id": "riot_client_logs",
     "category": "Riot Client",
     "name": "Riot Client Logs",
@@ -795,6 +806,29 @@
     "recommended": true
   },
   {
+    "id": "windows_servicing_logs",
+    "category": "Windows",
+    "name": "Update and servicing logs",
+    "description": "Windows Update and DISM logs. Diagnostic only; Windows writes fresh ones as it goes.",
+    "paths": [
+      "%SYSTEMROOT%\\Logs\\WindowsUpdate",
+      "%SYSTEMROOT%\\Logs\\DISM"
+    ],
+    "is_safe": true,
+    "recommended": true
+  },
+  {
+    "id": "windows_system_temp",
+    "category": "Windows",
+    "name": "System temp folder",
+    "description": "The machine-wide temp folder, as opposed to your own. Anything still in use is skipped.",
+    "paths": [
+      "%SYSTEMROOT%\\Temp"
+    ],
+    "is_safe": true,
+    "recommended": true
+  },
+  {
     "id": "malwarebytes_logs",
     "category": "Malwarebytes",
     "name": "Service logs",
@@ -824,6 +858,39 @@
     "description": "Execution log. Torrents, settings and queued downloads are untouched.",
     "paths": [
       "%LOCALAPPDATA%\\qBittorrent\\logs"
+    ],
+    "is_safe": true,
+    "recommended": true
+  },
+  {
+    "id": "blitz_cache",
+    "category": "Blitz",
+    "name": "Cache",
+    "description": "Cached champion data, images and overlays. Re-downloaded on next launch.",
+    "paths": [
+      "%APPDATA%\\Blitz\\Cache"
+    ],
+    "is_safe": true,
+    "recommended": true
+  },
+  {
+    "id": "ubisoft_connect_cache",
+    "category": "Ubisoft Connect",
+    "name": "Cache",
+    "description": "Cached store pages, artwork and news for the launcher.",
+    "paths": [
+      "%LOCALAPPDATA%\\Ubisoft Game Launcher\\cache"
+    ],
+    "is_safe": true,
+    "recommended": true
+  },
+  {
+    "id": "league_of_legends_logs",
+    "category": "League of Legends",
+    "name": "Game logs",
+    "description": "Per-match client and game logs. Kept indefinitely, read almost never.",
+    "paths": [
+      "C:\\Riot Games\\League of Legends\\Logs"
     ],
     "is_safe": true,
     "recommended": true
