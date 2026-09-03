@@ -6,6 +6,8 @@ import { attachFullPaths, topLevelCells } from '../lib/diskMapTree.js';
 import { subtreeForPath } from '../lib/mftSubtree.js';
 import { extensionBreakdown, NO_EXTENSION } from '../lib/extensionBreakdown.js';
 import { largestFiles } from '../lib/largestFiles.js';
+import { folderTableRows } from '../lib/folderTable.js';
+import { sortFolderRows, nextFolderSort } from '../lib/sortFolderRows.js';
 import { withUnscannedRemainder, scanCoverage } from '../lib/unscannedRemainder.js';
 import { colorForNode } from '../lib/diskMapColors.js';
 import { iconKeyForNode, extensionsInCells, extensionOf, GENERIC_FILE_KEY } from '../lib/fileTypeIcon.js';
@@ -270,6 +272,128 @@ function LargestFilesView({ files, icons }) {
               {file.fullPath && (
                 <div className="text-[11px] font-mono text-[color:var(--text-muted)] truncate">{file.fullPath}</div>
               )}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+
+/** WizTree's Tree View: what is directly inside the folder in view, as a
+ * sortable table.
+ *
+ * The map answers "which of these is big" and nothing else. It cannot say
+ * that a 29 GB folder holds 52,780 items, or when it was last touched,
+ * and those are what decide whether a folder is worth opening.
+ *
+ * Two of WizTree's columns are deliberately absent. Allocated size was
+ * measured in this project and thrown out -- it summed to 1270 GB on a
+ * 952.9 GB volume, so it fails its own sanity check. Windows file
+ * attributes are not on a Node stat and nothing in the scan carries them.
+ * An empty column would be worse than no column. */
+const FOLDER_COLUMNS = [
+  { key: 'name', label: 'Folder', align: 'left', width: 'minmax(180px,1fr)' },
+  { key: 'percentOfParent', label: '% of parent', align: 'right', width: '104px' },
+  { key: 'size', label: 'Size', align: 'right', width: '96px' },
+  { key: 'items', label: 'Items', align: 'right', width: '84px' },
+  { key: 'files', label: 'Files', align: 'right', width: '84px' },
+  { key: 'folders', label: 'Folders', align: 'right', width: '84px' },
+  { key: 'modified', label: 'Modified', align: 'right', width: '104px' }
+];
+
+const FOLDER_GRID = FOLDER_COLUMNS.map((c) => c.width).join(' ');
+
+/** A count that was never taken reads as a dash, never as zero. */
+function Count({ value }) {
+  if (value === null || value === undefined) {
+    return <span className="text-[color:var(--text-muted)]">—</span>;
+  }
+  return <>{value.toLocaleString()}</>;
+}
+
+function FolderTable({ tree, onDrillDown }) {
+  const [sort, setSort] = useState({ column: 'size', direction: 'desc' });
+  const rows = useMemo(
+    () => sortFolderRows(folderTableRows(tree), sort.column, sort.direction),
+    [tree, sort]
+  );
+
+  if (rows.length === 0) {
+    return (
+      <div className="glass-panel p-6 text-[13px] text-[color:var(--text-muted)]">
+        Nothing to list inside this folder.
+      </div>
+    );
+  }
+
+  return (
+    <div className="glass-panel overflow-hidden min-w-0">
+      <div
+        className="grid gap-3 px-4 py-2 border-b border-[color:var(--border-subtle)] bg-white/[0.02]"
+        style={{ gridTemplateColumns: FOLDER_GRID }}
+      >
+        {FOLDER_COLUMNS.map((col) => (
+          <button
+            key={col.key}
+            onClick={() => setSort((s) => nextFolderSort(s, col.key))}
+            className={`flex items-center gap-1 text-[10.5px] font-mono uppercase tracking-[0.12em] text-[color:var(--text-muted)] hover:text-[color:var(--text-primary)] transition-colors ${
+              col.align === 'right' ? 'justify-end' : ''
+            }`}
+          >
+            {col.label}
+            {sort.column === col.key && (
+              <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.2" className="shrink-0">
+                {sort.direction === 'asc' ? <polyline points="18 15 12 9 6 15" /> : <polyline points="6 9 12 15 18 9" />}
+              </svg>
+            )}
+          </button>
+        ))}
+      </div>
+
+      <div className="max-h-[520px] overflow-y-auto divide-y divide-[color:var(--border-subtle)]">
+        {rows.map((row) => (
+          <div
+            key={row.fullPath || row.name}
+            className={`grid gap-3 px-4 py-[7px] items-center ${
+              row.scanned && row.type === 'directory' && row.fullPath
+                ? 'cursor-pointer hover:bg-white/[0.04] transition-colors'
+                : ''
+            }`}
+            style={{ gridTemplateColumns: FOLDER_GRID }}
+            onClick={() => {
+              // Only a folder the scan actually opened is worth drilling
+              // into -- clicking an unscanned block would scan a path we
+              // have no evidence even exists.
+              if (row.scanned && row.type === 'directory' && row.fullPath) onDrillDown(row.fullPath);
+            }}
+          >
+            <div className="text-[12.5px] text-[color:var(--text-primary)] truncate min-w-0">
+              {row.name}
+              {!row.scanned && (
+                <span className="ml-2 text-[10px] font-mono uppercase tracking-wider text-[color:var(--text-muted)]">
+                  not scanned
+                </span>
+              )}
+            </div>
+            <div className="text-[11.5px] font-mono text-right text-[color:var(--text-muted)]" style={{ fontVariantNumeric: 'tabular-nums' }}>
+              {row.scanned ? `${row.percentOfParent.toFixed(1)}%` : '—'}
+            </div>
+            <div className="text-[12px] font-mono text-right text-[color:var(--accent-coral)]" style={{ fontVariantNumeric: 'tabular-nums' }}>
+              {row.scanned ? formatBytes(row.size) : '—'}
+            </div>
+            <div className="text-[11.5px] font-mono text-right text-[color:var(--text-secondary)]" style={{ fontVariantNumeric: 'tabular-nums' }}>
+              <Count value={row.items} />
+            </div>
+            <div className="text-[11.5px] font-mono text-right text-[color:var(--text-secondary)]" style={{ fontVariantNumeric: 'tabular-nums' }}>
+              <Count value={row.files} />
+            </div>
+            <div className="text-[11.5px] font-mono text-right text-[color:var(--text-secondary)]" style={{ fontVariantNumeric: 'tabular-nums' }}>
+              <Count value={row.folders} />
+            </div>
+            <div className="text-[11.5px] font-mono text-right text-[color:var(--text-muted)]" style={{ fontVariantNumeric: 'tabular-nums' }}>
+              {row.modified ? new Date(row.modified).toLocaleDateString() : '—'}
             </div>
           </div>
         ))}
@@ -544,7 +668,7 @@ export default function DiskMap() {
           list answers "which file". */}
       {!loading && !error && tree && (
         <div className="flex items-center gap-1 mb-3">
-          {[['map', 'Map'], ['files', 'Largest files']].map(([key, label]) => (
+          {[['map', 'Map'], ['folders', 'Folders'], ['files', 'Largest files']].map(([key, label]) => (
             <button
               key={key}
               onClick={() => setView(key)}
@@ -565,6 +689,8 @@ export default function DiskMap() {
         <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_400px] items-start">
           {view === 'files' ? (
             <LargestFilesView files={topFiles} icons={typeIcons} />
+          ) : view === 'folders' ? (
+            <FolderTable tree={tree} onDrillDown={handleDrillDown} />
           ) : (
           <div className="glass-panel p-4" style={{ position: 'relative' }} onMouseMove={handleContainerMouseMove}>
             <ResponsiveContainer width="100%" height={520}>
