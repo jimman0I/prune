@@ -7,6 +7,7 @@ import { getProgramInstallDates } from '../services/installDates.js';
 import { getStoreApps } from '../services/storeApps.js';
 import { getBrowserExtensions } from '../services/browserExtensions.js';
 import { getStartupItems } from '../services/startupItems.js';
+import { revealPath } from '../services/revealPath.js';
 
 const router = Router();
 
@@ -127,6 +128,27 @@ router.get('/extensions', async (req, res) => {
 router.get('/startup', async (req, res) => {
   try {
     res.json({ items: await getStartupItems() });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+/** Opens File Explorer on a program's folder.
+ *
+ * Revo puts this behind its More Commands button and it is the most-used
+ * thing there: the list says a program is 55 GB and the next question is
+ * always where. POST rather than GET because it has an effect on the
+ * machine -- a window opens -- and nothing with an effect should be
+ * reachable by a prefetch or a retry.
+ *
+ * Opening a folder is the only thing it does. It cannot delete, move or
+ * run anything, and the path is handed to CreateProcess as an argument
+ * vector rather than through a shell. */
+router.post('/reveal', async (req, res) => {
+  try {
+    const result = await revealPath(req.body?.path);
+    if (!result.ok) return res.status(400).json(result);
+    res.json(result);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
