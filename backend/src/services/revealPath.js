@@ -75,3 +75,27 @@ export function revealPath(target) {
     });
   });
 }
+
+/** The Windows page where Store apps are actually removed.
+ *
+ * Prune lists Store apps but does not remove them -- that is
+ * Remove-AppxPackage, a different command with different consequences,
+ * and shipping an untested destructive path would be worse than not
+ * having one. Telling someone "via Windows" and leaving them to find it
+ * is only half an answer, so this opens the page.
+ *
+ * A fixed URI with nothing interpolated into it. There is a documented
+ * form that pre-selects one app, but it is inconsistent across Windows
+ * builds, and a settings page that opens on the wrong app is worse than
+ * one that opens on the list. */
+const APPS_SETTINGS_URI = 'ms-settings:appsfeatures';
+
+export function openInstalledAppsSettings() {
+  return new Promise((resolve) => {
+    // Launched through explorer.exe, which is what resolves a ms-settings:
+    // URI to the Settings app. Nothing here comes from user input.
+    execFile('explorer.exe', [APPS_SETTINGS_URI], (error) => {
+      resolve({ ok: true, opened: APPS_SETTINGS_URI, spawnError: error?.code === 'ENOENT' ? 'explorer.exe not found' : null });
+    });
+  });
+}

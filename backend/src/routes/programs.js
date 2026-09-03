@@ -7,7 +7,7 @@ import { getProgramInstallDates } from '../services/installDates.js';
 import { getStoreApps } from '../services/storeApps.js';
 import { getBrowserExtensions } from '../services/browserExtensions.js';
 import { getStartupItems } from '../services/startupItems.js';
-import { revealPath } from '../services/revealPath.js';
+import { revealPath, openInstalledAppsSettings } from '../services/revealPath.js';
 import { getPackageIcons } from '../services/packageIcons.js';
 
 const router = Router();
@@ -167,6 +167,19 @@ router.post('/reveal', async (req, res) => {
 router.get('/package-icons', async (req, res) => {
   try {
     res.json({ icons: await getPackageIcons() });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+/** Opens Windows' own Installed apps page.
+ *
+ * Where Store apps are removed. Prune lists them but does not remove them,
+ * and pointing at the place without opening it is half an answer. Takes no
+ * input at all -- the URI is fixed. */
+router.post('/apps-settings', async (req, res) => {
+  try {
+    res.json(await openInstalledAppsSettings());
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
