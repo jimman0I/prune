@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { fetchPrograms } from '../lib/api.js';
+import { fetchPrograms, revealInExplorer } from '../lib/api.js';
 import { sizeBadgeTone } from '../lib/sizeBadgeTone.js';
 import { sortPrograms, nextSortState } from '../lib/sortPrograms.js';
 import { canBatchUninstall, batchIneligibleReason, batchSummary } from '../lib/batchSelection.js';
@@ -33,7 +33,7 @@ const COLUMNS = [
   { key: 'installDate', label: 'Installed', sort: 'installDate', width: '96px' },
   { key: 'publisher', label: 'Company', sort: 'publisher', width: 'minmax(130px,0.7fr)' },
   { key: 'website', label: 'Website', width: 'minmax(120px,0.6fr)' },
-  { key: 'action', label: '', width: '104px', align: 'right' }
+  { key: 'action', label: '', width: '164px', align: 'right' }
 ];
 
 const GRID_TEMPLATE = COLUMNS.map((c) => c.width).join(' ');
@@ -119,6 +119,38 @@ function SortArrow({ active, direction }) {
 /** One program's row. Extracted when the list gained group headings: the
  * body renders from a `row` union now, and a component keeps the row's own
  * markup readable instead of reaching through it. */
+/** Opens the program's folder in Explorer.
+ *
+ * Revo keeps this behind More Commands and it is the most-used thing
+ * there: the row says a program is 55 GB and the next question is always
+ * where. Shown only when there is a folder to open -- most Store apps and
+ * every extension have one, but plenty of registry entries record none,
+ * and a button that cannot work is worse than no button. */
+function RevealButton({ program }) {
+  const [failed, setFailed] = useState(null);
+  const target = program.installLocation;
+  if (!target) return null;
+
+  return (
+    <button
+      onClick={async () => {
+        setFailed(null);
+        try {
+          await revealInExplorer(target);
+        } catch (error) {
+          // The usual cause is a folder that is gone, which is worth
+          // saying: it means the entry is stale.
+          setFailed(error.message);
+        }
+      }}
+      aria-label={`Open the folder for ${program.name}`}
+      className="btn-ghost px-2 py-1 rounded-md text-[11px] font-medium opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity"
+    >
+      {failed ? 'Not found' : 'Folder'}
+    </button>
+  );
+}
+
 function ProgramRow({ program, iconSrc, checked, onToggle, onUninstall }) {
   return (
     <div
@@ -202,7 +234,8 @@ function ProgramRow({ program, iconSrc, checked, onToggle, onUninstall }) {
       {program.website ? program.website.replace(/^https?:\/\//, '') : '—'}
     </div>
 
-    <div className="text-right">
+    <div className="text-right flex items-center justify-end gap-1.5">
+      <RevealButton program={program} />
       {program.source === 'extension' ? (
         // Removing one is a browser operation, not an uninstaller.
         <span className="text-[11px] font-mono text-[color:var(--text-muted)]">via browser</span>

@@ -95,6 +95,22 @@ export async function fetchStartupItems() {
   return data.items;
 }
 
+/** Opens File Explorer on a folder.
+ *
+ * Goes through the backend because the renderer cannot reach Electron's
+ * shell -- contextIsolation is on, nodeIntegration off, no preload, and
+ * that is the right way round. */
+export async function revealInExplorer(path) {
+  const res = await fetch(`${API_URL}/programs/reveal`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ path })
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
+  return data;
+}
+
 export async function scanForLeftovers(name, publisher) {
   const res = await fetch(`${API_URL}/leftovers/scan`, {
     method: 'POST',
