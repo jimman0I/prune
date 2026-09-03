@@ -1,7 +1,295 @@
 [
   {
+    "id": "brave_cache",
+    "category": "Brave",
+    "name": "Cache",
+    "description": "Cached pages, scripts and images. Rebuilt as you browse.",
+    "paths": [
+      "%LOCALAPPDATA%\\BraveSoftware\\Brave-Browser\\User Data\\*\\Cache",
+      "%LOCALAPPDATA%\\BraveSoftware\\Brave-Browser\\User Data\\*\\Code Cache",
+      "%LOCALAPPDATA%\\BraveSoftware\\Brave-Browser\\User Data\\*\\GPUCache",
+      "%LOCALAPPDATA%\\BraveSoftware\\Brave-Browser\\User Data\\*\\Service Worker\\CacheStorage"
+    ],
+    "is_safe": true,
+    "recommended": true
+  },
+  {
+    "id": "brave_favicons",
+    "category": "Brave",
+    "name": "Site icons",
+    "description": "The small icons shown beside bookmarks and tabs. Re-downloaded on next visit.",
+    "paths": [
+      "%LOCALAPPDATA%\\BraveSoftware\\Brave-Browser\\User Data\\*\\Favicons",
+      "%LOCALAPPDATA%\\BraveSoftware\\Brave-Browser\\User Data\\*\\Favicons-journal"
+    ],
+    "is_safe": true,
+    "recommended": true
+  },
+  {
+    "id": "brave_history",
+    "category": "Brave",
+    "name": "Browsing history",
+    "description": "The list of pages visited, plus the most-visited shortcuts on the new tab page.",
+    "paths": [
+      "%LOCALAPPDATA%\\BraveSoftware\\Brave-Browser\\User Data\\*\\History",
+      "%LOCALAPPDATA%\\BraveSoftware\\Brave-Browser\\User Data\\*\\History-journal",
+      "%LOCALAPPDATA%\\BraveSoftware\\Brave-Browser\\User Data\\*\\Top Sites",
+      "%LOCALAPPDATA%\\BraveSoftware\\Brave-Browser\\User Data\\*\\Top Sites-journal",
+      "%LOCALAPPDATA%\\BraveSoftware\\Brave-Browser\\User Data\\*\\Visited Links"
+    ],
+    "is_safe": false,
+    "risky": true,
+    "recommended": false
+  },
+  {
+    "id": "brave_cookies",
+    "category": "Brave",
+    "name": "Cookies",
+    "description": "Signs you out of every site that remembered you.",
+    "paths": [
+      "%LOCALAPPDATA%\\BraveSoftware\\Brave-Browser\\User Data\\*\\Network\\Cookies",
+      "%LOCALAPPDATA%\\BraveSoftware\\Brave-Browser\\User Data\\*\\Network\\Cookies-journal",
+      "%LOCALAPPDATA%\\BraveSoftware\\Brave-Browser\\User Data\\*\\Cookies",
+      "%LOCALAPPDATA%\\BraveSoftware\\Brave-Browser\\User Data\\*\\Cookies-journal"
+    ],
+    "is_safe": false,
+    "risky": true,
+    "recommended": false
+  },
+  {
+    "id": "brave_sessions",
+    "category": "Brave",
+    "name": "Open tabs and session",
+    "description": "Loses the tabs currently open and the ones \"restore last session\" would bring back.",
+    "paths": [
+      "%LOCALAPPDATA%\\BraveSoftware\\Brave-Browser\\User Data\\*\\Sessions",
+      "%LOCALAPPDATA%\\BraveSoftware\\Brave-Browser\\User Data\\*\\Session Storage"
+    ],
+    "is_safe": false,
+    "risky": true,
+    "recommended": false
+  },
+  {
+    "id": "brave_form_history",
+    "category": "Brave",
+    "name": "Autofill and form history",
+    "description": "Saved addresses, card entries and anything the browser offers to complete for you.",
+    "paths": [
+      "%LOCALAPPDATA%\\BraveSoftware\\Brave-Browser\\User Data\\*\\Web Data",
+      "%LOCALAPPDATA%\\BraveSoftware\\Brave-Browser\\User Data\\*\\Web Data-journal"
+    ],
+    "is_safe": false,
+    "risky": true,
+    "recommended": false
+  },
+  {
+    "id": "brave_site_data",
+    "category": "Brave",
+    "name": "Site data",
+    "description": "Per-site storage. Sites forget your preferences and some sign you out.",
+    "paths": [
+      "%LOCALAPPDATA%\\BraveSoftware\\Brave-Browser\\User Data\\*\\Local Storage\\leveldb",
+      "%LOCALAPPDATA%\\BraveSoftware\\Brave-Browser\\User Data\\*\\IndexedDB"
+    ],
+    "is_safe": false,
+    "risky": true,
+    "recommended": false
+  },
+  {
+    "id": "chrome_cache",
+    "category": "Chrome",
+    "name": "Cache",
+    "description": "Cached pages, scripts and images. Rebuilt as you browse.",
+    "paths": [
+      "%LOCALAPPDATA%\\Google\\Chrome\\User Data\\*\\Cache",
+      "%LOCALAPPDATA%\\Google\\Chrome\\User Data\\*\\Code Cache",
+      "%LOCALAPPDATA%\\Google\\Chrome\\User Data\\*\\GPUCache",
+      "%LOCALAPPDATA%\\Google\\Chrome\\User Data\\*\\Service Worker\\CacheStorage"
+    ],
+    "is_safe": true,
+    "recommended": true
+  },
+  {
+    "id": "chrome_favicons",
+    "category": "Chrome",
+    "name": "Site icons",
+    "description": "The small icons shown beside bookmarks and tabs. Re-downloaded on next visit.",
+    "paths": [
+      "%LOCALAPPDATA%\\Google\\Chrome\\User Data\\*\\Favicons",
+      "%LOCALAPPDATA%\\Google\\Chrome\\User Data\\*\\Favicons-journal"
+    ],
+    "is_safe": true,
+    "recommended": true
+  },
+  {
+    "id": "chrome_history",
+    "category": "Chrome",
+    "name": "Browsing history",
+    "description": "The list of pages visited, plus the most-visited shortcuts on the new tab page.",
+    "paths": [
+      "%LOCALAPPDATA%\\Google\\Chrome\\User Data\\*\\History",
+      "%LOCALAPPDATA%\\Google\\Chrome\\User Data\\*\\History-journal",
+      "%LOCALAPPDATA%\\Google\\Chrome\\User Data\\*\\Top Sites",
+      "%LOCALAPPDATA%\\Google\\Chrome\\User Data\\*\\Top Sites-journal",
+      "%LOCALAPPDATA%\\Google\\Chrome\\User Data\\*\\Visited Links"
+    ],
+    "is_safe": false,
+    "risky": true,
+    "recommended": false
+  },
+  {
+    "id": "chrome_cookies",
+    "category": "Chrome",
+    "name": "Cookies",
+    "description": "Signs you out of every site that remembered you.",
+    "paths": [
+      "%LOCALAPPDATA%\\Google\\Chrome\\User Data\\*\\Network\\Cookies",
+      "%LOCALAPPDATA%\\Google\\Chrome\\User Data\\*\\Network\\Cookies-journal",
+      "%LOCALAPPDATA%\\Google\\Chrome\\User Data\\*\\Cookies",
+      "%LOCALAPPDATA%\\Google\\Chrome\\User Data\\*\\Cookies-journal"
+    ],
+    "is_safe": false,
+    "risky": true,
+    "recommended": false
+  },
+  {
+    "id": "chrome_sessions",
+    "category": "Chrome",
+    "name": "Open tabs and session",
+    "description": "Loses the tabs currently open and the ones \"restore last session\" would bring back.",
+    "paths": [
+      "%LOCALAPPDATA%\\Google\\Chrome\\User Data\\*\\Sessions",
+      "%LOCALAPPDATA%\\Google\\Chrome\\User Data\\*\\Session Storage"
+    ],
+    "is_safe": false,
+    "risky": true,
+    "recommended": false
+  },
+  {
+    "id": "chrome_form_history",
+    "category": "Chrome",
+    "name": "Autofill and form history",
+    "description": "Saved addresses, card entries and anything the browser offers to complete for you.",
+    "paths": [
+      "%LOCALAPPDATA%\\Google\\Chrome\\User Data\\*\\Web Data",
+      "%LOCALAPPDATA%\\Google\\Chrome\\User Data\\*\\Web Data-journal"
+    ],
+    "is_safe": false,
+    "risky": true,
+    "recommended": false
+  },
+  {
+    "id": "chrome_site_data",
+    "category": "Chrome",
+    "name": "Site data",
+    "description": "Per-site storage. Sites forget your preferences and some sign you out.",
+    "paths": [
+      "%LOCALAPPDATA%\\Google\\Chrome\\User Data\\*\\Local Storage\\leveldb",
+      "%LOCALAPPDATA%\\Google\\Chrome\\User Data\\*\\IndexedDB"
+    ],
+    "is_safe": false,
+    "risky": true,
+    "recommended": false
+  },
+  {
+    "id": "edge_cache",
+    "category": "Edge",
+    "name": "Cache",
+    "description": "Cached pages, scripts and images. Rebuilt as you browse.",
+    "paths": [
+      "%LOCALAPPDATA%\\Microsoft\\Edge\\User Data\\*\\Cache",
+      "%LOCALAPPDATA%\\Microsoft\\Edge\\User Data\\*\\Code Cache",
+      "%LOCALAPPDATA%\\Microsoft\\Edge\\User Data\\*\\GPUCache",
+      "%LOCALAPPDATA%\\Microsoft\\Edge\\User Data\\*\\Service Worker\\CacheStorage"
+    ],
+    "is_safe": true,
+    "recommended": true
+  },
+  {
+    "id": "edge_favicons",
+    "category": "Edge",
+    "name": "Site icons",
+    "description": "The small icons shown beside bookmarks and tabs. Re-downloaded on next visit.",
+    "paths": [
+      "%LOCALAPPDATA%\\Microsoft\\Edge\\User Data\\*\\Favicons",
+      "%LOCALAPPDATA%\\Microsoft\\Edge\\User Data\\*\\Favicons-journal"
+    ],
+    "is_safe": true,
+    "recommended": true
+  },
+  {
+    "id": "edge_history",
+    "category": "Edge",
+    "name": "Browsing history",
+    "description": "The list of pages visited, plus the most-visited shortcuts on the new tab page.",
+    "paths": [
+      "%LOCALAPPDATA%\\Microsoft\\Edge\\User Data\\*\\History",
+      "%LOCALAPPDATA%\\Microsoft\\Edge\\User Data\\*\\History-journal",
+      "%LOCALAPPDATA%\\Microsoft\\Edge\\User Data\\*\\Top Sites",
+      "%LOCALAPPDATA%\\Microsoft\\Edge\\User Data\\*\\Top Sites-journal",
+      "%LOCALAPPDATA%\\Microsoft\\Edge\\User Data\\*\\Visited Links"
+    ],
+    "is_safe": false,
+    "risky": true,
+    "recommended": false
+  },
+  {
+    "id": "edge_cookies",
+    "category": "Edge",
+    "name": "Cookies",
+    "description": "Signs you out of every site that remembered you.",
+    "paths": [
+      "%LOCALAPPDATA%\\Microsoft\\Edge\\User Data\\*\\Network\\Cookies",
+      "%LOCALAPPDATA%\\Microsoft\\Edge\\User Data\\*\\Network\\Cookies-journal",
+      "%LOCALAPPDATA%\\Microsoft\\Edge\\User Data\\*\\Cookies",
+      "%LOCALAPPDATA%\\Microsoft\\Edge\\User Data\\*\\Cookies-journal"
+    ],
+    "is_safe": false,
+    "risky": true,
+    "recommended": false
+  },
+  {
+    "id": "edge_sessions",
+    "category": "Edge",
+    "name": "Open tabs and session",
+    "description": "Loses the tabs currently open and the ones \"restore last session\" would bring back.",
+    "paths": [
+      "%LOCALAPPDATA%\\Microsoft\\Edge\\User Data\\*\\Sessions",
+      "%LOCALAPPDATA%\\Microsoft\\Edge\\User Data\\*\\Session Storage"
+    ],
+    "is_safe": false,
+    "risky": true,
+    "recommended": false
+  },
+  {
+    "id": "edge_form_history",
+    "category": "Edge",
+    "name": "Autofill and form history",
+    "description": "Saved addresses, card entries and anything the browser offers to complete for you.",
+    "paths": [
+      "%LOCALAPPDATA%\\Microsoft\\Edge\\User Data\\*\\Web Data",
+      "%LOCALAPPDATA%\\Microsoft\\Edge\\User Data\\*\\Web Data-journal"
+    ],
+    "is_safe": false,
+    "risky": true,
+    "recommended": false
+  },
+  {
+    "id": "edge_site_data",
+    "category": "Edge",
+    "name": "Site data",
+    "description": "Per-site storage. Sites forget your preferences and some sign you out.",
+    "paths": [
+      "%LOCALAPPDATA%\\Microsoft\\Edge\\User Data\\*\\Local Storage\\leveldb",
+      "%LOCALAPPDATA%\\Microsoft\\Edge\\User Data\\*\\IndexedDB"
+    ],
+    "is_safe": false,
+    "risky": true,
+    "recommended": false
+  },
+  {
     "id": "discord_cache",
-    "category": "Applications",
+    "category": "Discord",
     "name": "Discord Cache",
     "description": "Cached images, attachments and compiled scripts from Discord.",
     "paths": [
@@ -14,7 +302,7 @@
   },
   {
     "id": "spotify_cache",
-    "category": "Applications",
+    "category": "Spotify",
     "name": "Spotify Cache",
     "description": "Locally cached tracks and artwork. Music re-downloads on next play.",
     "paths": [
@@ -27,7 +315,7 @@
   },
   {
     "id": "steam_cache",
-    "category": "Applications",
+    "category": "Steam",
     "name": "Steam Web Cache",
     "description": "Cached HTML/JS for Steam's built-in browser (store, friends, community).",
     "paths": [
@@ -40,7 +328,7 @@
   },
   {
     "id": "vscode_cache",
-    "category": "Applications",
+    "category": "Visual Studio Code",
     "name": "VS Code Cache",
     "description": "GPU, code and CachedData caches. Rebuilt automatically on next launch.",
     "paths": [
@@ -55,7 +343,7 @@
   },
   {
     "id": "telegram_cache",
-    "category": "Applications",
+    "category": "Telegram",
     "name": "Telegram Cache",
     "description": "Cached photos, videos and documents from Telegram Desktop.",
     "paths": [
@@ -67,7 +355,7 @@
   },
   {
     "id": "slack_cache",
-    "category": "Applications",
+    "category": "Slack",
     "name": "Slack Cache",
     "description": "Cached avatars, files and compiled scripts from the Slack desktop app.",
     "paths": [
@@ -81,7 +369,7 @@
   },
   {
     "id": "teams_cache",
-    "category": "Applications",
+    "category": "Microsoft Teams",
     "name": "Microsoft Teams Cache",
     "description": "Cached images, compiled scripts and logs from Teams.",
     "paths": [
@@ -95,7 +383,7 @@
   },
   {
     "id": "zoom_cache",
-    "category": "Applications",
+    "category": "Zoom",
     "name": "Zoom Data & Logs",
     "description": "Zoom's cached data and diagnostic logs. Meeting history is untouched.",
     "paths": [
@@ -107,7 +395,7 @@
   },
   {
     "id": "epic_games_cache",
-    "category": "Applications",
+    "category": "Epic Games",
     "name": "Epic Games Launcher Cache",
     "description": "The launcher's web cache and store front assets.",
     "paths": [
@@ -120,7 +408,7 @@
   },
   {
     "id": "riot_client_logs",
-    "category": "Applications",
+    "category": "Riot Client",
     "name": "Riot Client Logs",
     "description": "Diagnostic logs from the Riot Client and its games.",
     "paths": [
@@ -131,7 +419,7 @@
   },
   {
     "id": "overwolf_cache",
-    "category": "Applications",
+    "category": "Overwolf",
     "name": "Overwolf Cache & Logs",
     "description": "Overwolf's browser cache and app logs.",
     "paths": [
@@ -143,7 +431,7 @@
   },
   {
     "id": "nvidia_shader_cache",
-    "category": "Applications",
+    "category": "NVIDIA",
     "name": "NVIDIA Shader Cache",
     "description": "Compiled GPU shaders. Rebuilt automatically -- the first launch of each game is slightly slower afterwards.",
     "paths": [
@@ -156,7 +444,7 @@
   },
   {
     "id": "directx_shader_cache",
-    "category": "Applications",
+    "category": "DirectX",
     "name": "DirectX Shader Cache",
     "description": "Windows' own compiled shader cache. Rebuilt automatically.",
     "paths": [
@@ -167,7 +455,7 @@
   },
   {
     "id": "adobe_media_cache",
-    "category": "Applications",
+    "category": "Adobe",
     "name": "Adobe Media Cache",
     "description": "Peak files and conformed audio Adobe apps generate while editing. Regenerated on demand, and often very large.",
     "paths": [
@@ -179,7 +467,7 @@
   },
   {
     "id": "jetbrains_caches",
-    "category": "Applications",
+    "category": "JetBrains",
     "name": "JetBrains IDE Caches",
     "description": "Index and local-history caches across every installed JetBrains IDE.",
     "paths": [
@@ -191,7 +479,7 @@
   },
   {
     "id": "npm_cache",
-    "category": "Developer",
+    "category": "Developer tools",
     "name": "npm Cache",
     "description": "npm's package tarball cache (_cacache). Re-downloaded on demand; frequently gigabytes on a dev machine.",
     "paths": [
@@ -203,7 +491,7 @@
   },
   {
     "id": "yarn_cache",
-    "category": "Developer",
+    "category": "Developer tools",
     "name": "Yarn Cache",
     "description": "Yarn's global package cache. Re-downloaded on demand.",
     "paths": [
@@ -214,7 +502,7 @@
   },
   {
     "id": "pip_cache",
-    "category": "Developer",
+    "category": "Developer tools",
     "name": "pip Cache",
     "description": "Python wheel and HTTP cache. Re-downloaded on demand.",
     "paths": [
@@ -225,7 +513,7 @@
   },
   {
     "id": "nuget_cache",
-    "category": "Developer",
+    "category": "Developer tools",
     "name": "NuGet Cache",
     "description": ".NET package cache. Restored on demand.",
     "paths": [
@@ -237,7 +525,7 @@
   },
   {
     "id": "gradle_cache",
-    "category": "Developer",
+    "category": "Developer tools",
     "name": "Gradle Cache",
     "description": "Gradle's downloaded dependency cache. Re-downloaded on the next build.",
     "paths": [
@@ -248,7 +536,7 @@
   },
   {
     "id": "electron_builder_cache",
-    "category": "Developer",
+    "category": "Developer tools",
     "name": "electron-builder Cache",
     "description": "Downloaded Electron binaries and packaging tools. Re-fetched on the next build.",
     "paths": [
@@ -259,49 +547,8 @@
     "recommended": false
   },
   {
-    "id": "chrome_deep_cache",
-    "category": "Browsers",
-    "name": "Chrome Cache",
-    "description": "Page cache, compiled scripts and GPU cache across every Chrome profile. Logins and history are untouched.",
-    "paths": [
-      "%LOCALAPPDATA%\\Google\\Chrome\\User Data\\*\\Cache",
-      "%LOCALAPPDATA%\\Google\\Chrome\\User Data\\*\\Code Cache",
-      "%LOCALAPPDATA%\\Google\\Chrome\\User Data\\*\\GPUCache",
-      "%LOCALAPPDATA%\\Google\\Chrome\\User Data\\*\\Service Worker\\CacheStorage"
-    ],
-    "is_safe": true,
-    "recommended": true
-  },
-  {
-    "id": "edge_deep_cache",
-    "category": "Browsers",
-    "name": "Edge Cache",
-    "description": "Page cache, compiled scripts and GPU cache across every Edge profile.",
-    "paths": [
-      "%LOCALAPPDATA%\\Microsoft\\Edge\\User Data\\*\\Cache",
-      "%LOCALAPPDATA%\\Microsoft\\Edge\\User Data\\*\\Code Cache",
-      "%LOCALAPPDATA%\\Microsoft\\Edge\\User Data\\*\\GPUCache",
-      "%LOCALAPPDATA%\\Microsoft\\Edge\\User Data\\*\\Service Worker\\CacheStorage"
-    ],
-    "is_safe": true,
-    "recommended": true
-  },
-  {
-    "id": "brave_cache",
-    "category": "Browsers",
-    "name": "Brave Cache",
-    "description": "Page cache, compiled scripts and GPU cache across every Brave profile.",
-    "paths": [
-      "%LOCALAPPDATA%\\BraveSoftware\\Brave-Browser\\User Data\\*\\Cache",
-      "%LOCALAPPDATA%\\BraveSoftware\\Brave-Browser\\User Data\\*\\Code Cache",
-      "%LOCALAPPDATA%\\BraveSoftware\\Brave-Browser\\User Data\\*\\GPUCache"
-    ],
-    "is_safe": true,
-    "recommended": true
-  },
-  {
     "id": "opera_cache",
-    "category": "Browsers",
+    "category": "Opera",
     "name": "Opera Cache",
     "description": "Opera's page and compiled-script cache.",
     "paths": [
@@ -313,7 +560,7 @@
   },
   {
     "id": "vivaldi_cache",
-    "category": "Browsers",
+    "category": "Vivaldi",
     "name": "Vivaldi Cache",
     "description": "Vivaldi's page and compiled-script cache.",
     "paths": [
@@ -325,7 +572,7 @@
   },
   {
     "id": "firefox_deep_cache",
-    "category": "Browsers",
+    "category": "Firefox",
     "name": "Firefox Cache",
     "description": "Every Firefox profile's cache2 and startup cache. Profile folder names are randomized, so this matches all of them.",
     "paths": [
@@ -338,7 +585,7 @@
   },
   {
     "id": "memory_dumps",
-    "category": "System",
+    "category": "Windows",
     "name": "Memory Dumps",
     "description": "Crash dumps Windows writes after an application or system crash.",
     "paths": [
@@ -351,7 +598,7 @@
   },
   {
     "id": "windows_error_reporting",
-    "category": "System",
+    "category": "Windows",
     "name": "Windows Error Reporting",
     "description": "Queued and archived crash reports waiting to be sent to Microsoft.",
     "paths": [
@@ -365,7 +612,7 @@
   },
   {
     "id": "windows_update_leftovers",
-    "category": "System",
+    "category": "Windows",
     "name": "Windows Update Leftovers",
     "description": "Installer payloads Windows Update already applied and no longer needs. Often several gigabytes.",
     "paths": [
@@ -376,7 +623,7 @@
   },
   {
     "id": "delivery_optimization_cache",
-    "category": "System",
+    "category": "Windows",
     "name": "Delivery Optimization Cache",
     "description": "Update chunks Windows keeps to share with other PCs on the network.",
     "paths": [
@@ -387,7 +634,7 @@
   },
   {
     "id": "windows_prefetch",
-    "category": "System",
+    "category": "Windows",
     "name": "Prefetch",
     "description": "Launch-timing data Windows uses to speed up app startup. Rebuilt over the next few launches, which are marginally slower.",
     "paths": [
@@ -398,7 +645,7 @@
   },
   {
     "id": "windows_font_cache",
-    "category": "System",
+    "category": "Windows",
     "name": "Font Cache",
     "description": "Rendered font atlases. Rebuilt automatically on next sign-in.",
     "paths": [
@@ -410,7 +657,7 @@
   },
   {
     "id": "thumbnail_cache_deep",
-    "category": "System",
+    "category": "Windows",
     "name": "Thumbnail Cache (Deep)",
     "description": "Every cached thumbnail database. A deeper pass than Smart Cleanup's quick Thumbnail Cache category.",
     "paths": [
@@ -421,7 +668,7 @@
   },
   {
     "id": "icon_cache",
-    "category": "System",
+    "category": "Windows",
     "name": "Icon Cache",
     "description": "Explorer's cached icon atlases. Rebuilt automatically; fixes stale or blank icons as a side effect.",
     "paths": [
@@ -433,7 +680,7 @@
   },
   {
     "id": "windows_temp_internet_files",
-    "category": "System",
+    "category": "Windows",
     "name": "Internet Explorer / WinINet Cache",
     "description": "The legacy WinINet cache still used by Windows components and older installers.",
     "paths": [
@@ -445,7 +692,7 @@
   },
   {
     "id": "windows_cbs_logs",
-    "category": "System",
+    "category": "Windows",
     "name": "Component Store (CBS) Logs",
     "description": "Servicing logs from Windows Update and DISM. Diagnostic only.",
     "paths": [
@@ -457,7 +704,7 @@
   },
   {
     "id": "recent_items_jumplists",
-    "category": "System",
+    "category": "Windows",
     "name": "Recent Items & Jump Lists",
     "description": "The recently-opened file list Explorer and taskbar jump lists show. Removes traces of which files you opened, not the files.",
     "paths": [
@@ -470,7 +717,7 @@
   },
   {
     "id": "windows_installer_orphans",
-    "category": "System",
+    "category": "Windows",
     "name": "Downloaded Installers (Temp)",
     "description": "Setup payloads installers unpack into Temp and leave behind.",
     "paths": [
@@ -483,7 +730,7 @@
   },
   {
     "id": "dns_cache",
-    "category": "System",
+    "category": "Windows",
     "name": "DNS Cache",
     "description": "Flushes the Windows DNS resolver cache. Nothing to quarantine -- runs ipconfig /flushdns directly.",
     "command": "ipconfig /flushdns",

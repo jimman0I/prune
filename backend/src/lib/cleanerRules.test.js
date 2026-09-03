@@ -182,10 +182,14 @@ describe('scanAllRules', () => {
   it('groups every real rule from cleaners.json by category', () => {
     const grouped = scanAllRules();
     expect(Array.isArray(grouped)).toBe(true);
+    // Grouped per application now, the way BleachBit lists cleaners, so
+    // the headings are app names rather than the four broad buckets they
+    // used to be.
     const categories = grouped.map(g => g.category);
-    expect(categories).toContain('Applications');
-    expect(categories).toContain('Browsers');
-    expect(categories).toContain('System');
+    expect(categories).toContain('Brave');
+    expect(categories).toContain('Discord');
+    expect(categories).toContain('Windows');
+    expect(categories).toContain('Developer tools');
     const allItems = grouped.flatMap(g => g.items);
     expect(allItems.length).toBe(loadCleanerRules().length);
     // every item carries a real computed size, not a stale/undefined one
@@ -394,8 +398,31 @@ describe('recommended defaults', () => {
   });
 
   it('recommends the ordinary regenerating caches', () => {
-    for (const id of ['discord_cache', 'chrome_deep_cache', 'nvidia_shader_cache', 'thumbnail_cache_deep']) {
+    for (const id of ['discord_cache', 'chrome_cache', 'nvidia_shader_cache', 'thumbnail_cache_deep']) {
       expect(rules.find(r => r.id === id).recommended, id).toBe(true);
+    }
+  });
+
+  // The browsers split into separate options, and the ones that lose
+  // something the user would notice must never be ticked for them. Clean
+  // moves everything to Quarantine first, but "recoverable" is not
+  // "wanted" -- being signed out of every site is not a surprise a
+  // cleaning tool should spring on anyone.
+  it('never recommends an option that loses data', () => {
+    const risky = rules.filter(r => r.risky);
+    expect(risky.length).toBeGreaterThan(0);
+    for (const rule of risky) {
+      expect(rule.recommended, rule.id).toBe(false);
+    }
+  });
+
+  it('marks the browser options that sign you out or lose tabs', () => {
+    for (const id of ['brave_cookies', 'brave_sessions', 'chrome_history', 'edge_form_history']) {
+      expect(rules.find(r => r.id === id)?.risky, id).toBe(true);
+    }
+    // ...and does not mark the ones that simply rebuild themselves.
+    for (const id of ['brave_cache', 'brave_favicons']) {
+      expect(rules.find(r => r.id === id)?.risky, id).toBeUndefined();
     }
   });
 
