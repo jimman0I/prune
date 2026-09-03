@@ -9,6 +9,7 @@ import { getBrowserExtensions } from '../services/browserExtensions.js';
 import { getStartupItems } from '../services/startupItems.js';
 import { revealPath, openInstalledAppsSettings } from '../services/revealPath.js';
 import { getPackageIcons } from '../services/packageIcons.js';
+import { getRunningPrograms } from '../services/runningPrograms.js';
 
 const router = Router();
 
@@ -180,6 +181,23 @@ router.get('/package-icons', async (req, res) => {
 router.post('/apps-settings', async (req, res) => {
   try {
     res.json(await openInstalledAppsSettings());
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+/** Which installed programs are running right now, as
+ * { programId: { count, names } }.
+ *
+ * Revo warns before uninstalling something that is open, and the warning
+ * earns its place: an uninstaller for a running program either fails or
+ * half-succeeds and leaves files the next launch recreates.
+ *
+ * Never cached, unlike everything else the list fetches. This is the one
+ * answer that is only true at the moment it is asked. */
+router.get('/running', async (req, res) => {
+  try {
+    res.json({ running: await getRunningPrograms() });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
