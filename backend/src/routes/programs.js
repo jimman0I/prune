@@ -8,6 +8,7 @@ import { getStoreApps } from '../services/storeApps.js';
 import { getBrowserExtensions } from '../services/browserExtensions.js';
 import { getStartupItems } from '../services/startupItems.js';
 import { revealPath } from '../services/revealPath.js';
+import { getPackageIcons } from '../services/packageIcons.js';
 
 const router = Router();
 
@@ -149,6 +150,23 @@ router.post('/reveal', async (req, res) => {
     const result = await revealPath(req.body?.path);
     if (!result.ok) return res.status(400).json(result);
     res.json(result);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+/** Icons for the rows that do not come from the registry.
+ *
+ * The Store apps and browser extensions arrived with lettered tiles beside
+ * registry programs showing their real icons, which made the new rows look
+ * half-finished. Their icons are ordinary files inside the package or
+ * extension folder, so this is plain file reading rather than icon
+ * extraction. 100 of 105 resolve here.
+ *
+ * Its own endpoint like /icons, and merged into the same map by the UI. */
+router.get('/package-icons', async (req, res) => {
+  try {
+    res.json({ icons: await getPackageIcons() });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

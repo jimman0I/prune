@@ -22,6 +22,7 @@ import { getProgramSizes } from './services/programSizes.js';
 import { getProgramVersions } from './services/programVersions.js';
 import { getProgramInstallDates } from './services/installDates.js';
 import { getStoreApps } from './services/storeApps.js';
+import { getPackageIcons } from './services/packageIcons.js';
 
 const PORT = process.env.UNREVO_BACKEND_PORT || 3101;
 
@@ -91,6 +92,7 @@ server.listen(PORT, '127.0.0.1', () => {
   warmProgramVersions();
   warmInstallDates();
   warmStoreApps();
+  warmPackageIcons();
 });
 
 /** Extracts every program's icon in the background as soon as the server
@@ -144,6 +146,15 @@ function warmStoreApps() {
   getStoreApps()
     .then((apps) => console.log(`Found ${apps.length} Microsoft Store apps.`))
     .catch(() => { /* the list still shows every registry program */ });
+}
+
+/** And the icons for those Store apps and the browser extensions. Reading
+ * a hundred small PNGs out of package folders takes a few seconds, and
+ * the rows look unfinished without them. */
+function warmPackageIcons() {
+  getPackageIcons()
+    .then((icons) => console.log(`Read ${Object.keys(icons).length} package icons.`))
+    .catch(() => { /* decoration only */ });
 }
 
 // v2.0 Phase 1: this is the one line in this file that isn't a route
