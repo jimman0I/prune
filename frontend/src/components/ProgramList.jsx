@@ -3,6 +3,7 @@ import { fetchPrograms } from '../lib/api.js';
 import { sizeBadgeTone } from '../lib/sizeBadgeTone.js';
 import { sortPrograms, nextSortState } from '../lib/sortPrograms.js';
 import { canBatchUninstall, batchIneligibleReason, batchSummary } from '../lib/batchSelection.js';
+import { splitRecentPrograms, RECENT_DAYS } from '../lib/recentPrograms.js';
 
 function formatBytes(bytes) {
   if (bytes === null || bytes === undefined) return '—';
@@ -115,6 +116,118 @@ function SortArrow({ active, direction }) {
   );
 }
 
+/** One program's row. Extracted when the list gained group headings: the
+ * body renders from a `row` union now, and a component keeps the row's own
+ * markup readable instead of reaching through it. */
+function ProgramRow({ program, iconSrc, checked, onToggle, onUninstall }) {
+  return (
+    <div
+    className="grid gap-3 px-4 py-1.5 items-center group hover:bg-white/[0.04] transition-colors"
+    style={{ gridTemplateColumns: GRID_TEMPLATE }}
+  >
+    <RowCheckbox
+      checked={checked}
+      disabled={!canBatchUninstall(program)}
+      label={batchIneligibleReason(program) || `Select ${program.name}`}
+      onChange={onToggle}
+    />
+
+    <div className="flex items-center gap-2.5 min-w-0">
+      <ProgramIcon program={program} src={iconSrc} />
+      <span className="text-[12.5px] truncate">{program.name}</span>
+      {program.health?.orphaned && (
+        <span className="text-[9px] font-mono uppercase tracking-wider px-1 py-px rounded bg-[color:var(--danger-soft)] text-[color:var(--danger)] border border-[color:var(--danger)]/25 shrink-0">
+          Broken
+        </span>
+      )}
+      {program.unused && !program.health?.orphaned && (
+        <span className="text-[9px] font-mono uppercase tracking-wider px-1 py-px rounded bg-[color:var(--warning-soft)] text-[color:var(--warning)] border border-[color:var(--warning)]/25 shrink-0">
+          Unused
+        </span>
+      )}
+    </div>
+
+    <div
+      className={`text-[12px] font-mono text-right ${SIZE_TONE_TEXT[sizeBadgeTone(program.sizeBytes)]}`}
+      style={{ fontVariantNumeric: 'tabular-nums' }}
+    >
+      {formatBytes(program.sizeBytes)}
+    </div>
+
+    <div className="text-[11.5px] font-mono text-[color:var(--text-secondary)] truncate">
+      {program.version || '—'}
+    </div>
+
+    {/* Blank rather than a guess: a per-user registry entry
+        carries no architecture, and a wrong "64-bit" is a fact
+        stated confidently and incorrectly. */}
+    <div className="text-[11.5px] font-mono text-[color:var(--text-muted)]">
+      {program.architecture || '—'}
+    </div>
+
+    {/* An inferred date is shown muted. Two thirds of these come
+        from the uninstall key's write time rather than from
+        anything the installer declared, and that is a weaker
+        claim -- an update rewrites the key too. Revo shows both
+        identically; saying which is which costs nothing. */}
+    <div
+      className={`text-[11.5px] font-mono ${
+        program.installDateApproximate
+          ? 'text-[color:var(--text-muted)]'
+          : 'text-[color:var(--text-secondary)]'
+      }`}
+    >
+      {program.installDate ? new Date(program.installDate).toLocaleDateString() : '—'}
+    </div>
+
+    <div className="text-[11.5px] text-[color:var(--text-secondary)] truncate">
+      {program.publisher}
+    </div>
+
+    <div className="text-[11.5px] font-mono text-[color:var(--text-muted)] truncate">
+      {program.website ? program.website.replace(/^https?:\/\//, '') : '—'}
+    </div>
+
+    <div className="text-right">
+      <button
+        onClick={() => onUninstall(program)}
+        className="btn-danger px-2.5 py-1 rounded-md text-[11px] font-medium opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity"
+      >
+        {program.health?.orphaned ? 'Force remove' : 'Uninstall'}
+      </button>
+    </div>
+  </div>
+  );
+}
+
+/** A group heading inside the list.
+ *
+ * Revo divides its list the same way and puts the count in the heading,
+ * which is the useful part: "New Programs: 16" answers a question the rows
+ * themselves cannot. Collapsible, because the recent group is the one
+ * someone opens this tab for and the rest is a long tail. */
+function GroupHeader({ label, count, collapsed, onToggle }) {
+  return (
+    <button
+      type="button"
+      onClick={onToggle}
+      aria-expanded={!collapsed}
+      className="w-full flex items-center gap-2 px-4 py-1.5 bg-white/[0.03] hover:bg-white/[0.06] transition-colors text-left"
+    >
+      <svg
+        width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.2"
+        className={`shrink-0 text-[color:var(--text-muted)] transition-transform ${collapsed ? '-rotate-90' : ''}`}
+      >
+        <polyline points="6 9 12 15 18 9" />
+      </svg>
+      <span className="text-[11px] font-mono uppercase tracking-[0.14em] text-[color:var(--text-secondary)]">
+        {label}
+      </span>
+      <span className="text-[11px] font-mono text-[color:var(--text-muted)]">{count}</span>
+    </button>
+  );
+}
+
 export default function ProgramList({ programs: initialPrograms, icons = {}, onUninstall, onBatchUninstall }) {
   const [programs, setPrograms] = useState(initialPrograms || []);
   const [loading, setLoading] = useState(!initialPrograms);
@@ -123,6 +236,7 @@ export default function ProgramList({ programs: initialPrograms, icons = {}, onU
   const [filter, setFilter] = useState('all');
   const [sort, setSort] = useState({ column: 'sizeBytes', direction: 'desc' });
   const [selected, setSelected] = useState(new Set());
+  const [collapsed, setCollapsed] = useState(() => new Set());
 
   useEffect(() => {
     if (initialPrograms) {
@@ -154,6 +268,34 @@ export default function ProgramList({ programs: initialPrograms, icons = {}, onU
     () => filtered.reduce((sum, p) => sum + (p.sizeBytes || 0), 0),
     [filtered]
   );
+
+  // Recently installed first, under its own heading, the way Revo splits
+  // its list. Only shown when there is something in it -- a heading over an
+  // empty group is noise, and on a machine nobody has touched this week
+  // both headings would be pure decoration.
+  const rows = useMemo(() => {
+    const { recent, rest } = splitRecentPrograms(filtered);
+    if (recent.length === 0) return filtered.map((program) => ({ type: 'program', program }));
+
+    const out = [];
+    for (const [key, label, group] of [
+      ['recent', `Installed in the last ${RECENT_DAYS} days`, recent],
+      ['rest', 'Everything else', rest]
+    ]) {
+      if (group.length === 0) continue;
+      out.push({ type: 'header', key, label, count: group.length });
+      if (!collapsed.has(key)) {
+        for (const program of group) out.push({ type: 'program', program });
+      }
+    }
+    return out;
+  }, [filtered, collapsed]);
+
+  const toggleGroup = (key) => setCollapsed((prev) => {
+    const next = new Set(prev);
+    if (next.has(key)) next.delete(key); else next.add(key);
+    return next;
+  });
 
   // Only what's both selected AND still on screen. Selecting rows, then
   // filtering them away, then hitting Uninstall should not remove things
@@ -272,84 +414,25 @@ export default function ProgramList({ programs: initialPrograms, icons = {}, onU
               No applications match your filters.
             </div>
           )}
-          {filtered.map((program) => (
-            <div
-              key={program.id}
-              className="grid gap-3 px-4 py-1.5 items-center group hover:bg-white/[0.04] transition-colors"
-              style={{ gridTemplateColumns: GRID_TEMPLATE }}
-            >
-              <RowCheckbox
-                checked={selected.has(program.id)}
-                disabled={!canBatchUninstall(program)}
-                label={batchIneligibleReason(program) || `Select ${program.name}`}
-                onChange={() => toggleRow(program)}
+          {rows.map((row) => (
+            row.type === 'header' ? (
+              <GroupHeader
+                key={`group-${row.key}`}
+                label={row.label}
+                count={row.count}
+                collapsed={collapsed.has(row.key)}
+                onToggle={() => toggleGroup(row.key)}
               />
-
-              <div className="flex items-center gap-2.5 min-w-0">
-                <ProgramIcon program={program} src={icons[program.id]} />
-                <span className="text-[12.5px] truncate">{program.name}</span>
-                {program.health?.orphaned && (
-                  <span className="text-[9px] font-mono uppercase tracking-wider px-1 py-px rounded bg-[color:var(--danger-soft)] text-[color:var(--danger)] border border-[color:var(--danger)]/25 shrink-0">
-                    Broken
-                  </span>
-                )}
-                {program.unused && !program.health?.orphaned && (
-                  <span className="text-[9px] font-mono uppercase tracking-wider px-1 py-px rounded bg-[color:var(--warning-soft)] text-[color:var(--warning)] border border-[color:var(--warning)]/25 shrink-0">
-                    Unused
-                  </span>
-                )}
-              </div>
-
-              <div
-                className={`text-[12px] font-mono text-right ${SIZE_TONE_TEXT[sizeBadgeTone(program.sizeBytes)]}`}
-                style={{ fontVariantNumeric: 'tabular-nums' }}
-              >
-                {formatBytes(program.sizeBytes)}
-              </div>
-
-              <div className="text-[11.5px] font-mono text-[color:var(--text-secondary)] truncate">
-                {program.version || '—'}
-              </div>
-
-              {/* Blank rather than a guess: a per-user registry entry
-                  carries no architecture, and a wrong "64-bit" is a fact
-                  stated confidently and incorrectly. */}
-              <div className="text-[11.5px] font-mono text-[color:var(--text-muted)]">
-                {program.architecture || '—'}
-              </div>
-
-              {/* An inferred date is shown muted. Two thirds of these come
-                  from the uninstall key's write time rather than from
-                  anything the installer declared, and that is a weaker
-                  claim -- an update rewrites the key too. Revo shows both
-                  identically; saying which is which costs nothing. */}
-              <div
-                className={`text-[11.5px] font-mono ${
-                  program.installDateApproximate
-                    ? 'text-[color:var(--text-muted)]'
-                    : 'text-[color:var(--text-secondary)]'
-                }`}
-              >
-                {program.installDate ? new Date(program.installDate).toLocaleDateString() : '—'}
-              </div>
-
-              <div className="text-[11.5px] text-[color:var(--text-secondary)] truncate">
-                {program.publisher}
-              </div>
-
-              <div className="text-[11.5px] font-mono text-[color:var(--text-muted)] truncate">
-                {program.website ? program.website.replace(/^https?:\/\//, '') : '—'}
-              </div>
-
-              <div className="text-right">
-                <button
-                  onClick={() => onUninstall(program)}
-                  className="btn-danger px-2.5 py-1 rounded-md text-[11px] font-medium opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity"
-                >
-                  {program.health?.orphaned ? 'Force remove' : 'Uninstall'}
-                </button>
-              </div>
-            </div>
+            ) : (
+            <ProgramRow
+              key={row.program.id}
+              program={row.program}
+              iconSrc={icons[row.program.id]}
+              checked={selected.has(row.program.id)}
+              onToggle={() => toggleRow(row.program)}
+              onUninstall={onUninstall}
+            />
+            )
           ))}
         </div>
 
