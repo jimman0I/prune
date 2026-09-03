@@ -65,7 +65,11 @@ describe('scanDirectory (real file I/O, async)', () => {
 
     const result = await scanDirectory(dir, 1);
     const a = result.children.find(c => c.name === 'a');
-    expect(a).toEqual({ name: 'a', size: 3, type: 'directory' });
+    // `modified` rides along on every directory now (the folder table
+    // needs it, and the stat that produces it already ran).
+    expect(a).toMatchObject({ name: 'a', size: 3, type: 'directory' });
+    expect(a.children).toBeUndefined();
+    expect(typeof a.modified).toBe('number');
   });
 
   it('omits an entry it cannot stat, without crashing the whole scan', async () => {
@@ -94,7 +98,13 @@ describe('scanDirectory (real file I/O, async)', () => {
 
     const result = await scanDirectory(dir);
     const opaque = result.children.find(c => c.name === 'opaque');
-    expect(opaque).toEqual({ name: 'opaque', size: 0, type: 'directory', children: [] });
+    // `readable: false` is what tells a caller this is different from a
+    // directory that really is empty -- both otherwise arrive as an empty
+    // children array, and the folder table would report "0 items" for
+    // somewhere it could not look at all.
+    expect(opaque).toEqual({
+      name: 'opaque', size: 0, type: 'directory', readable: false, children: []
+    });
     const visible = result.children.find(c => c.name === 'visible.txt');
     expect(visible.size).toBe(2);
   });
@@ -200,5 +210,35 @@ describe('scanDirectory (real file I/O, async)', () => {
       controller.abort();
       await expect(scanDirectory(dir, undefined, controller.signal)).resolves.toBeDefined();
     });
+  });
+});
+
+describe('directory timestamps', () => {
+  let dir;
+  beforeEach(() => { dir = mkdtempSync(join(tmpdir(), 'unrevo-mtime-')); });
+  afterEach(() => { rmSync(dir, { recursive: true, force: true }); });
+
+  // Free data: scanNode already stats every entry and was discarding the
+  // modified time. The folder table needs it.
+  it('reports when a directory was last written', async () => {
+    mkdirSync(join(dir, 'sub'), { recursive: true });
+    writeFileSync(join(dir, 'sub', 'a.txt'), 'x');
+
+    const tree = await scanDirectory(dir);
+    const sub = tree.children.find((c) => c.name === 'sub');
+    expect(typeof sub.modified).toBe('number');
+    expect(sub.modified).toBeGreaterThan(Date.now() - 60000);
+  });
+
+  // Directories only. The same field on every file node would add about a
+  // megabyte to a 4.4 MB response, for data no folder table shows -- and
+  // the tree is sent whole.
+  it('does not put a timestamp on file nodes', async () => {
+    writeFileSync(join(dir, 'a.txt'), 'x');
+
+    const tree = await scanDirectory(dir);
+    const file = tree.children.find((c) => c.name === 'a.txt');
+    expect(file.type).toBe('file');
+    expect(file.modified).toBeUndefined();
   });
 });

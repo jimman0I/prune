@@ -45,7 +45,13 @@ async function scanNode(entryPath, name, depthRemaining, signal) {
     // mid-readdir). Reported as present with size 0 rather than dropped
     // silently: an entry that visibly exists but is opaque is more honest
     // than one that vanishes from its parent's total with no trace.
-    return { name, size: 0, type: 'directory', children: [] };
+    //
+    // `readable: false` distinguishes it from a directory that really is
+    // empty. Both used to come back as `children: []`, which the folder
+    // table then reported as "0 items" -- stating that we looked and
+    // found nothing, when we could not look at all. Windows' "Documents
+    // and Settings" junction is the everyday example.
+    return { name, size: 0, type: 'directory', readable: false, children: [] };
   }
 
   // Sequential, not Promise.all -- Node's fs thread pool (UV_THREADPOOL_SIZE,
@@ -84,11 +90,23 @@ async function scanNode(entryPath, name, depthRemaining, signal) {
   }
   const size = children.reduce((sum, c) => sum + c.size, 0);
 
+  // When a directory was last written, for the folder table. Free: the
+  // stat above already ran and this value was being discarded.
+  //
+  // Directories ONLY, deliberately. The same field on every file node
+  // would add roughly a megabyte to a 4.4 MB response for data no folder
+  // table ever shows -- and the tree is sent whole.
+  const modified = Number.isFinite(stat.mtimeMs) && stat.mtimeMs > 0
+    ? Math.round(stat.mtimeMs)
+    : null;
+
   // `type: 'directory'` still applies at the depth cap (no `children` key)
   // -- it's what lets a caller tell a capped directory (clickable, worth a
   // fresh scan to go deeper) apart from a plain file (never has children),
   // since both would otherwise collapse to the same { name, size } shape.
-  return depthRemaining > 0 ? { name, size, type: 'directory', children } : { name, size, type: 'directory' };
+  return depthRemaining > 0
+    ? { name, size, type: 'directory', modified, children }
+    : { name, size, type: 'directory', modified };
 }
 
 /** Recursively scans `dirPath`, returning a hierarchical
