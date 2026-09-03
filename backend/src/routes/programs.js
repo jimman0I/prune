@@ -6,6 +6,7 @@ import { getProgramVersions } from '../services/programVersions.js';
 import { getProgramInstallDates } from '../services/installDates.js';
 import { getStoreApps } from '../services/storeApps.js';
 import { getBrowserExtensions } from '../services/browserExtensions.js';
+import { getStartupItems } from '../services/startupItems.js';
 
 const router = Router();
 
@@ -112,6 +113,20 @@ router.get('/store', async (req, res) => {
 router.get('/extensions', async (req, res) => {
   try {
     res.json({ extensions: await getBrowserExtensions() });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+/** Everything Windows launches at sign-in.
+ *
+ * Revo keeps an autorun manager under Tools, and it belongs beside an
+ * uninstaller: these entries outlive the programs that create them, so a
+ * carelessly removed program leaves Windows trying to launch a file that
+ * is not there at every sign-in. Read-only, and quick (0.5s). */
+router.get('/startup', async (req, res) => {
+  try {
+    res.json({ items: await getStartupItems() });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
