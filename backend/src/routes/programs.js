@@ -5,6 +5,7 @@ import { getProgramSizes } from '../services/programSizes.js';
 import { getProgramVersions } from '../services/programVersions.js';
 import { getProgramInstallDates } from '../services/installDates.js';
 import { getStoreApps } from '../services/storeApps.js';
+import { getBrowserExtensions } from '../services/browserExtensions.js';
 
 const router = Router();
 
@@ -95,6 +96,22 @@ router.get('/install-dates', async (req, res) => {
 router.get('/store', async (req, res) => {
   try {
     res.json({ apps: await getStoreApps() });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+/** Browser extensions, which no uninstall list mentions anywhere.
+ *
+ * Revo gives them a module of their own, and they are a real blind spot:
+ * 24 of them here across Brave, Chrome and Edge totalling 390 MB, one of
+ * which is 305 MB on its own. Pure filesystem work, about a second.
+ *
+ * They come back shaped like programs so the same list renders them,
+ * marked source: 'extension'. */
+router.get('/extensions', async (req, res) => {
+  try {
+    res.json({ extensions: await getBrowserExtensions() });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
