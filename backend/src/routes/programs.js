@@ -3,6 +3,7 @@ import { listInstalledPrograms } from '../services/programs.js';
 import { getProgramIcons } from '../services/programIcons.js';
 import { getProgramSizes } from '../services/programSizes.js';
 import { getProgramVersions } from '../services/programVersions.js';
+import { getProgramInstallDates } from '../services/installDates.js';
 
 const router = Router();
 
@@ -56,6 +57,26 @@ router.get('/sizes', async (req, res) => {
 router.get('/versions', async (req, res) => {
   try {
     res.json({ versions: await getProgramVersions() });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+/** Install dates for the programs whose registry entry never declared one,
+ * as { programId: 'YYYY-MM-DD' }.
+ *
+ * More than half the list on this machine -- 67 of 129 -- so the column
+ * read as mostly empty next to Revo, which fills every row. Taken from the
+ * uninstall key's own last-write time, which is what Revo uses too: its
+ * dates for Steam, Ubisoft Connect, Rainbow Six and Wuthering Waves match
+ * these exactly.
+ *
+ * Separate from the list for the same reason as the sizes and versions,
+ * though this one is cheap (~1.6s): it opens every uninstall key in three
+ * hives, and the list should not wait behind it. */
+router.get('/install-dates', async (req, res) => {
+  try {
+    res.json({ installDates: await getProgramInstallDates() });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

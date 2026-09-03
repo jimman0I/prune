@@ -20,6 +20,7 @@ import { initTray } from './lib/trayManager.js';
 import { getProgramIcons } from './services/programIcons.js';
 import { getProgramSizes } from './services/programSizes.js';
 import { getProgramVersions } from './services/programVersions.js';
+import { getProgramInstallDates } from './services/installDates.js';
 
 const PORT = process.env.UNREVO_BACKEND_PORT || 3101;
 
@@ -87,6 +88,7 @@ server.listen(PORT, '127.0.0.1', () => {
   warmProgramIcons();
   warmProgramSizes();
   warmProgramVersions();
+  warmInstallDates();
 });
 
 /** Extracts every program's icon in the background as soon as the server
@@ -121,6 +123,15 @@ function warmProgramSizes() {
 function warmProgramVersions() {
   getProgramVersions()
     .then((versions) => console.log(`Read ${Object.keys(versions).length} versions from program binaries.`))
+    .catch(() => { /* the rows keep their blank */ });
+}
+
+/** And the install dates two thirds of the entries never declared. Opening
+ * every uninstall key in three hives takes about a second and a half --
+ * better spent now than when someone opens the list. */
+function warmInstallDates() {
+  getProgramInstallDates()
+    .then((dates) => console.log(`Recovered ${Object.keys(dates).length} install dates from key write times.`))
     .catch(() => { /* the rows keep their blank */ });
 }
 
