@@ -116,7 +116,20 @@ function CategorySection({ category, items, selected, onToggle, onToggleCategory
               <div key={item.id} className="flex items-center gap-3.5 px-5 py-3">
                 <Checkbox checked={selected.has(item.id)} onChange={() => onToggle(item.id)} label={item.name} />
                 <div className={`min-w-0 flex-1 ${item.present === false ? 'opacity-45' : ''}`}>
-                  <div className="text-[13px] text-[color:var(--text-primary)]">{item.name}</div>
+                  <div className="text-[13px] text-[color:var(--text-primary)] flex items-center gap-2">
+                    {item.name}
+                    {/* Marked because "recoverable" is not "wanted". Clean
+                        moves everything to Quarantine first, so nothing
+                        here is unrecoverable -- but being signed out of
+                        every site is not a surprise a cleaning tool should
+                        spring on anyone. None of these is ticked by
+                        default; this says why. */}
+                    {item.risky && (
+                      <span className="text-[9px] font-mono uppercase tracking-wider px-1 py-px rounded bg-[color:var(--warning-soft)] text-[color:var(--warning)] border border-[color:var(--warning)]/25 shrink-0">
+                        Loses data
+                      </span>
+                    )}
+                  </div>
                   {item.description && (
                     <div className="text-[11.5px] text-[color:var(--text-muted)] mt-0.5 truncate">{item.description}</div>
                   )}
