@@ -64,6 +64,18 @@ export async function fetchProgramInstallDates() {
   return data.installDates;
 }
 
+/** Microsoft Store apps, which the uninstall registry does not list.
+ *
+ * Separate from fetchPrograms because the backend enumerates and measures
+ * 81 package folders to build it (~5s). They arrive shaped like programs,
+ * marked with source: 'store'. */
+export async function fetchStoreApps() {
+  const res = await fetch(`${API_URL}/programs/store`);
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
+  return data.apps;
+}
+
 export async function scanForLeftovers(name, publisher) {
   const res = await fetch(`${API_URL}/leftovers/scan`, {
     method: 'POST',

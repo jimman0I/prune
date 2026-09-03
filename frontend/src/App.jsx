@@ -10,7 +10,7 @@ import UninstallModal from './components/UninstallModal.jsx';
 import QuarantineManager from './components/QuarantineManager.jsx';
 import SettingsPage from './components/SettingsPage.jsx';
 import DeepClean from './components/DeepClean.jsx';
-import { fetchPrograms, fetchProgramIcons, fetchProgramSizes, fetchProgramVersions, fetchProgramInstallDates } from './lib/api.js';
+import { fetchPrograms, fetchProgramIcons, fetchProgramSizes, fetchProgramVersions, fetchProgramInstallDates, fetchStoreApps } from './lib/api.js';
 import { mergeMeasuredSizes } from './lib/mergeSizes.js';
 import { mergeBinaryVersions } from './lib/mergeVersions.js';
 import { mergeInstallDates } from './lib/mergeInstallDates.js';
@@ -51,13 +51,20 @@ export default function App() {
   const [measuredSizes, setMeasuredSizes] = useState({});
   const [binaryVersions, setBinaryVersions] = useState({});
   const [keyInstallDates, setKeyInstallDates] = useState({});
+  const [storeApps, setStoreApps] = useState([]);
 
   const programs = useMemo(
-    () => mergeInstallDates(
-      mergeBinaryVersions(mergeMeasuredSizes(rawPrograms, measuredSizes), binaryVersions),
-      keyInstallDates
-    ),
-    [rawPrograms, measuredSizes, binaryVersions, keyInstallDates]
+    () => [
+      ...mergeInstallDates(
+        mergeBinaryVersions(mergeMeasuredSizes(rawPrograms, measuredSizes), binaryVersions),
+        keyInstallDates
+      ),
+      // Appended rather than merged: a Store app is not a registry entry
+      // and none of the three fallbacks above apply to it -- it already
+      // carries its own name, version and measured size.
+      ...storeApps
+    ],
+    [rawPrograms, measuredSizes, binaryVersions, keyInstallDates, storeApps]
   );
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -104,6 +111,16 @@ export default function App() {
     fetchProgramInstallDates()
       .then((dates) => { if (!cancelled) setKeyInstallDates(dates || {}); })
       .catch(() => { /* the rows keep their honest blank */ });
+    return () => { cancelled = true; };
+  }, []);
+
+  // Store apps, which the uninstall registry does not list at all -- 81 of
+  // them here, entirely invisible to Prune before this.
+  useEffect(() => {
+    let cancelled = false;
+    fetchStoreApps()
+      .then((apps) => { if (!cancelled) setStoreApps(apps || []); })
+      .catch(() => { /* the registry programs still list fine */ });
     return () => { cancelled = true; };
   }, []);
 

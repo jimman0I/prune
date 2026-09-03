@@ -140,6 +140,13 @@ function ProgramRow({ program, iconSrc, checked, onToggle, onUninstall }) {
           Broken
         </span>
       )}
+      {/* Marked, because how you remove one is genuinely different --
+          a Store app has no uninstaller to run. */}
+      {program.source === 'store' && (
+        <span className="text-[9px] font-mono uppercase tracking-wider px-1 py-px rounded bg-[color:var(--accent-blue)]/15 text-[color:var(--accent-blue)] border border-[color:var(--accent-blue)]/25 shrink-0">
+          Store
+        </span>
+      )}
       {program.unused && !program.health?.orphaned && (
         <span className="text-[9px] font-mono uppercase tracking-wider px-1 py-px rounded bg-[color:var(--warning-soft)] text-[color:var(--warning)] border border-[color:var(--warning)]/25 shrink-0">
           Unused
@@ -189,12 +196,19 @@ function ProgramRow({ program, iconSrc, checked, onToggle, onUninstall }) {
     </div>
 
     <div className="text-right">
-      <button
-        onClick={() => onUninstall(program)}
-        className="btn-danger px-2.5 py-1 rounded-md text-[11px] font-medium opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity"
-      >
-        {program.health?.orphaned ? 'Force remove' : 'Uninstall'}
-      </button>
+      {program.source === 'store' ? (
+        // No button rather than a dead one. Removing a Store app is
+        // Remove-AppxPackage, which Prune does not do yet, and a disabled
+        // Uninstall would suggest the row is broken when it is not.
+        <span className="text-[11px] font-mono text-[color:var(--text-muted)]">via Windows</span>
+      ) : (
+        <button
+          onClick={() => onUninstall(program)}
+          className="btn-danger px-2.5 py-1 rounded-md text-[11px] font-medium opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity"
+        >
+          {program.health?.orphaned ? 'Force remove' : 'Uninstall'}
+        </button>
+      )}
     </div>
   </div>
   );
@@ -253,6 +267,7 @@ export default function ProgramList({ programs: initialPrograms, icons = {}, onU
   }, [initialPrograms]);
 
   const brokenCount = useMemo(() => programs.filter(p => p.health?.orphaned).length, [programs]);
+  const storeCount = useMemo(() => programs.filter(p => p.source === 'store').length, [programs]);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -261,6 +276,7 @@ export default function ProgramList({ programs: initialPrograms, icons = {}, onU
       : programs;
     if (filter === 'unused') list = list.filter(p => p.unused);
     if (filter === 'broken') list = list.filter(p => p.health?.orphaned);
+    if (filter === 'store') list = list.filter(p => p.source === 'store');
     return sortPrograms(list, sort.column, sort.direction);
   }, [programs, query, sort, filter]);
 
@@ -350,6 +366,7 @@ export default function ProgramList({ programs: initialPrograms, icons = {}, onU
             // machine this filter would return an empty list every time,
             // and a permanently-empty view teaches people to ignore it --
             // when it does appear, it means something.
+            ...(storeCount > 0 ? [{ id: 'store', label: `Store (${storeCount})` }] : []),
             ...(brokenCount > 0 ? [{ id: 'broken', label: `Broken (${brokenCount})` }] : [])
           ].map(f => (
             <button

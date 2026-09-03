@@ -19,6 +19,12 @@ export function batchIneligibleReason(program) {
     // of what to delete -- not something to run unattended across a queue.
     return 'Its uninstaller is broken — use Force remove instead.';
   }
+  if (program?.source === 'store') {
+    // Technically it has no uninstall command, but saying so would be
+    // misleading: a Store app has a perfectly good way to be removed, it
+    // is just not the one this queue runs.
+    return 'Store apps are removed through Windows, not an uninstaller.';
+  }
   if (!program?.uninstallString) {
     return 'No uninstall command is registered for this program.';
   }

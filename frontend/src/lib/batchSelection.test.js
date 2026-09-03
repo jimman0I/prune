@@ -51,3 +51,18 @@ describe('batchSummary', () => {
     expect(batchSummary([])).toEqual({ count: 0, totalBytes: 0, unknownSizes: 0 });
   });
 });
+
+describe('Store apps in a batch', () => {
+  // A Store app is an Appx package: no uninstall string, and removing one
+  // is Remove-AppxPackage rather than running a vendor uninstaller.
+  it('cannot be batch uninstalled', () => {
+    expect(canBatchUninstall({ id: 'store:x', name: 'Paint', source: 'store' })).toBe(false);
+  });
+
+  it('says why in terms that are actually true of it', () => {
+    // "No uninstall command is registered" is technically right and
+    // misleading -- there is a way to remove it, just not this one.
+    expect(batchIneligibleReason({ id: 'store:x', source: 'store' }))
+      .toBe('Store apps are removed through Windows, not an uninstaller.');
+  });
+});
