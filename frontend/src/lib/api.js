@@ -130,6 +130,17 @@ export async function openInstalledAppsSettings() {
   return data;
 }
 
+/** Which programs are running right now.
+ *
+ * Not cached anywhere -- it is the one answer that is only true at the
+ * moment it is asked. */
+export async function fetchRunningPrograms() {
+  const res = await fetch(`${API_URL}/programs/running`);
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
+  return data.running;
+}
+
 export async function scanForLeftovers(name, publisher) {
   const res = await fetch(`${API_URL}/leftovers/scan`, {
     method: 'POST',

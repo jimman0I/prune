@@ -151,7 +151,7 @@ function RevealButton({ program }) {
   );
 }
 
-function ProgramRow({ program, iconSrc, checked, onToggle, onUninstall }) {
+function ProgramRow({ program, iconSrc, checked, running, onToggle, onUninstall }) {
   return (
     <div
     className="grid gap-3 px-4 py-1.5 items-center group hover:bg-white/[0.04] transition-colors"
@@ -170,6 +170,15 @@ function ProgramRow({ program, iconSrc, checked, onToggle, onUninstall }) {
       {program.health?.orphaned && (
         <span className="text-[9px] font-mono uppercase tracking-wider px-1 py-px rounded bg-[color:var(--danger-soft)] text-[color:var(--danger)] border border-[color:var(--danger)]/25 shrink-0">
           Broken
+        </span>
+      )}
+      {/* Revo warns before uninstalling something that is open, and the
+          warning earns its place: an uninstaller for a running program
+          either fails, or half-succeeds and leaves files behind that the
+          next launch recreates. */}
+      {running && (
+        <span className="text-[9px] font-mono uppercase tracking-wider px-1 py-px rounded bg-[color:var(--accent-cyan)]/15 text-[color:var(--accent-cyan)] border border-[color:var(--accent-cyan)]/25 shrink-0">
+          Running
         </span>
       )}
       {/* Marked, because how you remove one is genuinely different --
@@ -292,7 +301,7 @@ function GroupHeader({ label, count, collapsed, onToggle }) {
   );
 }
 
-export default function ProgramList({ programs: initialPrograms, extensions = [], icons = {}, onUninstall, onBatchUninstall }) {
+export default function ProgramList({ programs: initialPrograms, extensions = [], icons = {}, running = {}, onUninstall, onBatchUninstall }) {
   const [programs, setPrograms] = useState(initialPrograms || []);
   const [loading, setLoading] = useState(!initialPrograms);
   const [error, setError] = useState(null);
@@ -502,6 +511,7 @@ export default function ProgramList({ programs: initialPrograms, extensions = []
               program={row.program}
               iconSrc={icons[row.program.id]}
               checked={selected.has(row.program.id)}
+              running={Boolean(running[row.program.id])}
               onToggle={() => toggleRow(row.program)}
               onUninstall={onUninstall}
             />

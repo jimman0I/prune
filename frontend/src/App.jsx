@@ -11,7 +11,7 @@ import QuarantineManager from './components/QuarantineManager.jsx';
 import SettingsPage from './components/SettingsPage.jsx';
 import DeepClean from './components/DeepClean.jsx';
 import StartupItems from './components/StartupItems.jsx';
-import { fetchPrograms, fetchProgramIcons, fetchProgramSizes, fetchProgramVersions, fetchProgramInstallDates, fetchStoreApps, fetchBrowserExtensions, fetchPackageIcons } from './lib/api.js';
+import { fetchPrograms, fetchProgramIcons, fetchProgramSizes, fetchProgramVersions, fetchProgramInstallDates, fetchStoreApps, fetchBrowserExtensions, fetchPackageIcons, fetchRunningPrograms } from './lib/api.js';
 import { mergeMeasuredSizes } from './lib/mergeSizes.js';
 import { mergeBinaryVersions } from './lib/mergeVersions.js';
 import { mergeInstallDates } from './lib/mergeInstallDates.js';
@@ -54,6 +54,7 @@ export default function App() {
   const [keyInstallDates, setKeyInstallDates] = useState({});
   const [storeApps, setStoreApps] = useState([]);
   const [extensions, setExtensions] = useState([]);
+  const [running, setRunning] = useState({});
 
   const programs = useMemo(
     () => [
@@ -142,6 +143,19 @@ export default function App() {
   // Icons for the Store apps and extensions, merged into the same map.
   // Separate request because they come from a different place entirely --
   // files inside each package, rather than extracted from a binary.
+  // What is running right now. Refreshed on a timer rather than fetched
+  // once: everything else in this list is stable while the app is open,
+  // and this is the one thing that changes underneath it.
+  useEffect(() => {
+    let cancelled = false;
+    const load = () => fetchRunningPrograms()
+      .then((result) => { if (!cancelled) setRunning(result || {}); })
+      .catch(() => { /* no badges is better than wrong badges */ });
+    load();
+    const timer = setInterval(load, 15000);
+    return () => { cancelled = true; clearInterval(timer); };
+  }, []);
+
   useEffect(() => {
     let cancelled = false;
     fetchPackageIcons()
@@ -212,6 +226,7 @@ export default function App() {
             <ProgramList
               programs={programs}
               extensions={extensions}
+              running={running}
               icons={icons}
               onUninstall={setSelectedProgram}
               onBatchUninstall={setBatchPrograms}
@@ -230,7 +245,11 @@ export default function App() {
       )}
       {selectedProgram && (
         <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-          <UninstallModal program={selectedProgram} onClose={() => setSelectedProgram(null)} />
+          <UninstallModal
+            program={selectedProgram}
+            running={Boolean(running[selectedProgram.id])}
+            onClose={() => setSelectedProgram(null)}
+          />
         </div>
       )}
     </div>

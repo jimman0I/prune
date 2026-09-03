@@ -44,7 +44,7 @@ export function selectionToRemoval(scanResult, selected) {
   return { files: pick('files'), registryKeys: pick('registryKeys') };
 }
 
-export default function UninstallModal({ program, onClose }) {
+export default function UninstallModal({ program, running = false, onClose }) {
   // A program whose own uninstaller can't run doesn't get the normal
   // flow's confirm step at all -- there is nothing to confirm running.
   const broken = program.health?.orphaned === true;
@@ -155,6 +155,26 @@ export default function UninstallModal({ program, onClose }) {
       <div className="px-6 py-6">
         {step === 'confirm' && (
           <div>
+            {/* Where the warning actually bites. Revo warns before
+                uninstalling something that is open, because an uninstaller
+                for a running program either fails outright or
+                half-succeeds and leaves files the next launch recreates.
+                Stated, not enforced: only the person looking at it knows
+                whether the process it found is the part that matters. */}
+            {running && (
+              <div className="flex items-start gap-2.5 mb-5 px-3.5 py-3 rounded-xl bg-[color:var(--warning-soft)] border border-[color:var(--warning)]/25">
+                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="text-[color:var(--warning)] mt-0.5 shrink-0">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="12" y1="8" x2="12" y2="12"></line>
+                  <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                </svg>
+                <div className="text-[12.5px] text-[color:var(--warning)] leading-relaxed">
+                  {program.name} is running right now. Close it first — an uninstaller
+                  usually fails on a program that is open, and can leave files behind
+                  that the next launch recreates.
+                </div>
+              </div>
+            )}
             {broken ? (
               <>
                 <div className="flex items-start gap-2.5 mb-5 px-3.5 py-3 rounded-xl bg-[color:var(--warning-soft)] border border-[color:var(--warning)]/25">
