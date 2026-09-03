@@ -111,6 +111,17 @@ export async function revealInExplorer(path) {
   return data;
 }
 
+/** Icons for the Store apps and browser extensions.
+ *
+ * Read from files inside each package rather than extracted from a
+ * binary, and merged into the same icon map the registry programs use. */
+export async function fetchPackageIcons() {
+  const res = await fetch(`${API_URL}/programs/package-icons`);
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
+  return data.icons;
+}
+
 export async function scanForLeftovers(name, publisher) {
   const res = await fetch(`${API_URL}/leftovers/scan`, {
     method: 'POST',

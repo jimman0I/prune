@@ -11,7 +11,7 @@ import QuarantineManager from './components/QuarantineManager.jsx';
 import SettingsPage from './components/SettingsPage.jsx';
 import DeepClean from './components/DeepClean.jsx';
 import StartupItems from './components/StartupItems.jsx';
-import { fetchPrograms, fetchProgramIcons, fetchProgramSizes, fetchProgramVersions, fetchProgramInstallDates, fetchStoreApps, fetchBrowserExtensions } from './lib/api.js';
+import { fetchPrograms, fetchProgramIcons, fetchProgramSizes, fetchProgramVersions, fetchProgramInstallDates, fetchStoreApps, fetchBrowserExtensions, fetchPackageIcons } from './lib/api.js';
 import { mergeMeasuredSizes } from './lib/mergeSizes.js';
 import { mergeBinaryVersions } from './lib/mergeVersions.js';
 import { mergeInstallDates } from './lib/mergeInstallDates.js';
@@ -139,10 +139,25 @@ export default function App() {
     return () => { cancelled = true; };
   }, []);
 
+  // Icons for the Store apps and extensions, merged into the same map.
+  // Separate request because they come from a different place entirely --
+  // files inside each package, rather than extracted from a binary.
+  useEffect(() => {
+    let cancelled = false;
+    fetchPackageIcons()
+      .then((result) => {
+        // Merged, not replaced: the registry icons land in this same map
+        // and whichever response arrives second must not drop the first.
+        if (!cancelled) setIcons((prev) => ({ ...prev, ...result }));
+      })
+      .catch(() => { /* the rows keep their lettered tiles */ });
+    return () => { cancelled = true; };
+  }, []);
+
   useEffect(() => {
     let cancelled = false;
     fetchProgramIcons()
-      .then((result) => { if (!cancelled) setIcons(result); })
+      .then((result) => { if (!cancelled) setIcons((prev) => ({ ...prev, ...result })); })
       .catch(() => { /* icons are decoration -- never block the app */ });
     return () => { cancelled = true; };
   }, []);
