@@ -1,5 +1,8 @@
 import { describe, it, expect } from 'vitest';
-import { resolveExtensionName, newestVersionDir } from './browserExtensions.js';
+import { mkdtempSync, mkdirSync, writeFileSync, rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import { resolveExtensionName, newestVersionDir, getBrowserExtensions } from './browserExtensions.js';
 
 describe('resolveExtensionName', () => {
   it('keeps a plain name', () => {
@@ -52,5 +55,47 @@ describe('newestVersionDir', () => {
     expect(newestVersionDir(['2.3.10'])).toBe('2.3.10');
     expect(newestVersionDir([])).toBeNull();
     expect(newestVersionDir(null)).toBeNull();
+  });
+});
+
+describe('Gecko extensions merged into the same list', () => {
+  // The list a person wants is "my extensions", not "my extensions, by
+  // engine". Chromium and Gecko store them completely differently, so
+  // this covers that the two readers actually come back as one list.
+  it('includes a Firefox add-on alongside the Chromium ones', async () => {
+    const root = mkdtempSync(join(tmpdir(), 'prune-merge-'));
+    const originalAppData = process.env.APPDATA;
+    // LOCALAPPDATA is redirected too, so the real Chromium browsers on
+    // this machine are not walked. Without it the test measured 26 real
+    // extension folders and timed out under full-suite load -- and it
+    // would also have depended on what happens to be installed.
+    const originalLocal = process.env.LOCALAPPDATA;
+    try {
+      const profile = join(root, 'Mozilla', 'Firefox', 'Profiles', 'a.default');
+      mkdirSync(join(profile, 'extensions'), { recursive: true });
+      writeFileSync(join(profile, 'extensions', 'big@example.com.xpi'), 'x'.repeat(4096));
+      writeFileSync(join(profile, 'extensions.json'), JSON.stringify({
+        addons: [{
+          id: 'big@example.com',
+          location: 'app-profile',
+          type: 'extension',
+          version: '3.0',
+          defaultLocale: { name: 'Merged Add-on' }
+        }]
+      }));
+
+      process.env.APPDATA = root;
+      process.env.LOCALAPPDATA = root;
+      const list = await getBrowserExtensions();
+      const gecko = list.filter((e) => e.browser === 'Firefox');
+
+      expect(list).toHaveLength(1);
+      expect(gecko).toHaveLength(1);
+      expect(gecko[0]).toMatchObject({ name: 'Merged Add-on', sizeBytes: 4096, source: 'extension' });
+    } finally {
+      process.env.APPDATA = originalAppData;
+      process.env.LOCALAPPDATA = originalLocal;
+      rmSync(root, { recursive: true, force: true });
+    }
   });
 });

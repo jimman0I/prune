@@ -1,4 +1,5 @@
 import { readdir, readFile, stat } from 'node:fs/promises';
+import { getFirefoxExtensions } from './firefoxExtensions.js';
 import { join } from 'node:path';
 
 /** Where the Chromium-family browsers keep their profiles.
@@ -10,10 +11,9 @@ import { join } from 'node:path';
  *
  * All of these store extensions identically, because they are all
  * Chromium: <User Data>\<Profile>\Extensions\<id>\<version>\manifest.json.
- * Firefox is deliberately absent -- it uses a completely different layout
- * (extensions.json in the profile) and is not installed here to test
- * against, and a guess at a format nobody has verified is worth less than
- * an honest gap. */
+ * The Gecko browsers store nothing like it and are read separately, by
+ * firefoxExtensions.js -- see the honest limit recorded at the top of that
+ * file. */
 const BROWSERS = [
   { id: 'brave', name: 'Brave', from: 'LOCALAPPDATA', path: 'BraveSoftware\\Brave-Browser\\User Data' },
   { id: 'chrome', name: 'Chrome', from: 'LOCALAPPDATA', path: 'Google\\Chrome\\User Data' },
@@ -185,5 +185,10 @@ export async function getBrowserExtensions() {
     }
   }
 
-  return found.sort((a, b) => b.sizeBytes - a.sizeBytes);
+  // The Gecko browsers keep one JSON index per profile instead of a folder
+  // per extension, so they are read separately and merged here -- the list
+  // a person wants is "my extensions", not "my extensions, by engine".
+  const gecko = await getFirefoxExtensions().catch(() => []);
+
+  return [...found, ...gecko].sort((a, b) => b.sizeBytes - a.sizeBytes);
 }
