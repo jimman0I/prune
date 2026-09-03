@@ -24,6 +24,12 @@ export function expandPath(rawPath) {
     .replace(/%APPDATA%/gi, process.env.APPDATA || '')
     .replace(/%LOCALAPPDATA%/gi, process.env.LOCALAPPDATA || '')
     .replace(/%SYSTEMROOT%/gi, process.env.SYSTEMROOT || process.env.WINDIR || '')
+    // %WINDIR% is the same folder under its other name, and Windows
+    // accepts both everywhere. Left out originally, which made a rule
+    // written with it fail silently: the token stayed in the string, the
+    // path never matched, and the rule reported itself as "not installed"
+    // rather than as broken.
+    .replace(/%WINDIR%/gi, process.env.WINDIR || process.env.SYSTEMROOT || '')
     .replace(/%PROGRAMDATA%/gi, process.env.ProgramData || '')
     .replace(/%PROGRAMFILES\(X86\)%/gi, process.env['ProgramFiles(x86)'] || '')
     .replace(/%PROGRAMFILES%/gi, process.env.ProgramFiles || '');

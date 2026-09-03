@@ -301,6 +301,18 @@
     "recommended": true
   },
   {
+    "id": "discord_logs",
+    "category": "Discord",
+    "name": "Logs and crash reports",
+    "description": "Diagnostic logs and crash reports from the Discord client.",
+    "paths": [
+      "%APPDATA%\\discord\\logs",
+      "%APPDATA%\\discord\\error.log"
+    ],
+    "is_safe": true,
+    "recommended": true
+  },
+  {
     "id": "spotify_cache",
     "category": "Spotify",
     "name": "Spotify Cache",
@@ -322,6 +334,40 @@
       "%PROGRAMFILES(X86)%\\Steam\\config\\htmlcache",
       "%PROGRAMFILES(X86)%\\Steam\\appcache\\httpcache",
       "%LOCALAPPDATA%\\Steam\\htmlcache"
+    ],
+    "is_safe": true,
+    "recommended": true
+  },
+  {
+    "id": "steam_shader_cache",
+    "category": "Steam",
+    "name": "Shader cache",
+    "description": "Compiled shaders for installed games. Rebuilt the next time each game runs.",
+    "paths": [
+      "%PROGRAMFILES(X86)%\\Steam\\steamapps\\shadercache"
+    ],
+    "is_safe": true,
+    "recommended": true
+  },
+  {
+    "id": "steam_depot_cache",
+    "category": "Steam",
+    "name": "Download leftovers",
+    "description": "Depot chunks kept after an install or update finished.",
+    "paths": [
+      "%PROGRAMFILES(X86)%\\Steam\\depotcache"
+    ],
+    "is_safe": true,
+    "recommended": true
+  },
+  {
+    "id": "steam_logs",
+    "category": "Steam",
+    "name": "Logs and crash dumps",
+    "description": "Client logs and the dumps written when Steam or a game crashed.",
+    "paths": [
+      "%PROGRAMFILES(X86)%\\Steam\\logs",
+      "%PROGRAMFILES(X86)%\\Steam\\dumps"
     ],
     "is_safe": true,
     "recommended": true
@@ -736,5 +782,50 @@
     "command": "ipconfig /flushdns",
     "is_safe": true,
     "recommended": false
+  },
+  {
+    "id": "windows_setup_logs",
+    "category": "Windows",
+    "name": "Setup logs",
+    "description": "Logs written during Windows installs and feature updates. Kept forever, read once.",
+    "paths": [
+      "%WINDIR%\\Panther"
+    ],
+    "is_safe": true,
+    "recommended": true
+  },
+  {
+    "id": "malwarebytes_logs",
+    "category": "Malwarebytes",
+    "name": "Service logs",
+    "description": "Scan and service logs. Scan history in the app itself is unaffected.",
+    "paths": [
+      "%PROGRAMDATA%\\Malwarebytes\\MBAMService\\logs"
+    ],
+    "is_safe": true,
+    "recommended": true
+  },
+  {
+    "id": "office_web_cache",
+    "category": "Microsoft Office",
+    "name": "Web and document cache",
+    "description": "Cached copies of online documents and web content. Re-fetched when reopened.",
+    "paths": [
+      "%LOCALAPPDATA%\\Microsoft\\Office\\16.0\\WebServiceCache",
+      "%LOCALAPPDATA%\\Microsoft\\Office\\16.0\\OfficeFileCache"
+    ],
+    "is_safe": true,
+    "recommended": true
+  },
+  {
+    "id": "qbittorrent_logs",
+    "category": "qBittorrent",
+    "name": "Logs",
+    "description": "Execution log. Torrents, settings and queued downloads are untouched.",
+    "paths": [
+      "%LOCALAPPDATA%\\qBittorrent\\logs"
+    ],
+    "is_safe": true,
+    "recommended": true
   }
 ]

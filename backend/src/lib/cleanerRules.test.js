@@ -484,3 +484,26 @@ describe('scanRulesProgressively', () => {
     expect(result.total).toBe(loadCleanerRules().length);
   }, 60000);
 });
+
+describe('expandPath tokens', () => {
+  // A token expandPath does not know stays in the string verbatim, so the
+  // path never matches and the rule reports "not installed" rather than
+  // "this rule is broken". Caught exactly that way: a Windows setup-logs
+  // rule written with %WINDIR% measured 0 bytes while the folder held
+  // 1.1 GB.
+  it('expands both names for the Windows folder', () => {
+    const windows = process.env.WINDIR || process.env.SYSTEMROOT;
+    expect(expandPath('%WINDIR%\Panther')).toBe(`${windows}\Panther`);
+    expect(expandPath('%SYSTEMROOT%\Panther')).toBe(`${windows}\Panther`);
+  });
+
+  it('leaves no known token unexpanded in any shipped rule', () => {
+    // The general form of the same bug: any rule whose path still
+    // contains a %TOKEN% after expansion can never match anything.
+    for (const rule of loadCleanerRules()) {
+      for (const path of rule.paths || []) {
+        expect(expandPath(path), `${rule.id}: ${path}`).not.toMatch(/%[A-Za-z_()0-9]+%/);
+      }
+    }
+  });
+});
