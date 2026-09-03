@@ -21,6 +21,7 @@ import { getProgramIcons } from './services/programIcons.js';
 import { getProgramSizes } from './services/programSizes.js';
 import { getProgramVersions } from './services/programVersions.js';
 import { getProgramInstallDates } from './services/installDates.js';
+import { getStoreApps } from './services/storeApps.js';
 
 const PORT = process.env.UNREVO_BACKEND_PORT || 3101;
 
@@ -89,6 +90,7 @@ server.listen(PORT, '127.0.0.1', () => {
   warmProgramSizes();
   warmProgramVersions();
   warmInstallDates();
+  warmStoreApps();
 });
 
 /** Extracts every program's icon in the background as soon as the server
@@ -133,6 +135,15 @@ function warmInstallDates() {
   getProgramInstallDates()
     .then((dates) => console.log(`Recovered ${Object.keys(dates).length} install dates from key write times.`))
     .catch(() => { /* the rows keep their blank */ });
+}
+
+/** And the Store apps, which the registry never mentions. Enumerating and
+ * measuring 81 packages takes about five seconds -- the same argument as
+ * the others for doing it before anyone asks. */
+function warmStoreApps() {
+  getStoreApps()
+    .then((apps) => console.log(`Found ${apps.length} Microsoft Store apps.`))
+    .catch(() => { /* the list still shows every registry program */ });
 }
 
 // v2.0 Phase 1: this is the one line in this file that isn't a route

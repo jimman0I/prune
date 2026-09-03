@@ -4,6 +4,7 @@ import { getProgramIcons } from '../services/programIcons.js';
 import { getProgramSizes } from '../services/programSizes.js';
 import { getProgramVersions } from '../services/programVersions.js';
 import { getProgramInstallDates } from '../services/installDates.js';
+import { getStoreApps } from '../services/storeApps.js';
 
 const router = Router();
 
@@ -77,6 +78,23 @@ router.get('/versions', async (req, res) => {
 router.get('/install-dates', async (req, res) => {
   try {
     res.json({ installDates: await getProgramInstallDates() });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+/** Microsoft Store apps, which the uninstall registry does not list at all.
+ *
+ * 81 of them on this machine, 6.28 GB, entirely invisible to Prune until
+ * now while Revo gives them a module of their own. They come back shaped
+ * like the registry programs so the same list can render them, marked with
+ * source: 'store' because how you remove one is genuinely different.
+ *
+ * Its own endpoint like the rest of the late-arriving data: it measures 81
+ * package folders and takes about five seconds. */
+router.get('/store', async (req, res) => {
+  try {
+    res.json({ apps: await getStoreApps() });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
