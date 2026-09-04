@@ -837,7 +837,7 @@ export default function DiskMap() {
             top: 0,
             left: 0,
             transform: `translate(${hovered.clientX + 14}px, ${hovered.clientY + 14}px)`,
-            zIndex: 50,
+            zIndex: 'var(--z-tooltip)',
             pointerEvents: 'none'
           }}
         >

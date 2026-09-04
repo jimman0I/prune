@@ -41,7 +41,25 @@
   --success: #5db872;
 
   --border-subtle: rgba(255, 255, 255, 0.08);
+
+  /* A named stacking order, so nothing has to guess.
+   *
+   * Every layer in this app previously picked its own number in isolation
+   * -- the treemap tooltip took 50, the nav flyout 30, and the modal
+   * overlay had none at all and worked only because it happened to be last
+   * in App.jsx's DOM order. That is fine until something is inserted after
+   * it. The tooltip sits above the modal deliberately: the Disk Map's
+   * tooltip follows the cursor and must never be occluded by anything,
+   * including a dialog opened over it. */
+  --z-sticky: 20;
+  --z-flyout: 30;
+  --z-modal: 40;
+  --z-tooltip: 50;
 }
+
+.z-flyout { z-index: var(--z-flyout); }
+.z-modal { z-index: var(--z-modal); }
+.z-tooltip { z-index: var(--z-tooltip); }
 
 * { box-sizing: border-box; }
 

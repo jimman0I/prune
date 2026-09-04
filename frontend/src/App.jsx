@@ -5,6 +5,7 @@ import DiskMap from './components/DiskMap.jsx';
 import Screen from './components/Screen.jsx';
 import ProgramList from './components/ProgramList.jsx';
 import BatchUninstallModal from './components/BatchUninstallModal.jsx';
+import ModalOverlay from './components/ModalOverlay.jsx';
 import UninstallModal from './components/UninstallModal.jsx';
 import QuarantineManager from './components/QuarantineManager.jsx';
 import SettingsPage from './components/SettingsPage.jsx';
@@ -229,23 +230,34 @@ export default function App() {
           </div>
         </Screen>
       </div>
+      {/* Both dialogs used to be a bare inline-styled fixed div: no
+          role, no Escape, no focus trap, no initial focus. Tab from an
+          open uninstall dialog moved focus into the program list behind
+          it, so the user was driving the table they were about to delete
+          from while the dialog was still up. */}
       {batchPrograms && (
-        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', justifyContent: 'center', alignItems: 'center', padding: 24 }}>
+        <ModalOverlay
+          label={`Uninstall ${batchPrograms.length} programs`}
+          onClose={() => setBatchPrograms(null)}
+        >
           <BatchUninstallModal
             programs={batchPrograms}
             onClose={() => setBatchPrograms(null)}
             onFinished={refreshPrograms}
           />
-        </div>
+        </ModalOverlay>
       )}
       {selectedProgram && (
-        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <ModalOverlay
+          label={`Uninstall ${selectedProgram.name}`}
+          onClose={() => setSelectedProgram(null)}
+        >
           <UninstallModal
             program={selectedProgram}
             running={Boolean(running[selectedProgram.id])}
             onClose={() => setSelectedProgram(null)}
           />
-        </div>
+        </ModalOverlay>
       )}
     </div>
   );
