@@ -5,6 +5,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { extractIcons } from './iconExtract.js';
 import { getFileTypeIcons } from './fileTypeIcons.js';
+import { typeIconExtension } from './iconTypeFallback.js';
 
 const execFileAsync = promisify(execFile);
 const TIMEOUT_MS = 30_000;
@@ -92,6 +93,11 @@ function isShortcutFile(path) {
   return /\.(lnk|url)$/i.test(path || '');
 }
 
+// Re-exported so this stays the one place the startup screen's icon rules
+// are read from, even though the rule itself is now shared with the
+// Applications tab.
+export { typeIconExtension };
+
 /** The icon index a command carries, if it carries one.
  *
  * A Run value pointing at "shell32.dll,42" means the forty-third icon in
@@ -109,36 +115,6 @@ function iconIndexFrom(command) {
   if (text.startsWith('"')) return 0;
   const match = /,(\d{1,4})\s*$/.exec(text);
   return match ? Number(match[1]) : 0;
-}
-
-/** File types whose icon lives inside the file, so the shell's answer for
- * the TYPE is worth nothing.
- *
- * This is not a tidiness rule, it is a measured bug. The shell's icon for
- * ".exe" is a single generic glyph, and on this machine it was handed to
- * both Discord's Update.exe and RtkAudUService64.exe -- neither of which
- * carries an icon -- so two unrelated programs rendered as the same
- * picture, one row claiming to be the other. A lettered tile carrying the
- * entry's own initial is strictly more informative than a glyph that is
- * identical for everything that failed.
- *
- * Scripts are the opposite case and the reason the fallback exists at
- * all: a .cmd has no icon of its own, "what a batch file looks like" IS
- * the answer, and a script running at sign-in is exactly the entry worth
- * recognising on sight. */
-const OWN_ICON_TYPES = new Set(['.exe', '.dll', '.com', '.scr', '.cpl', '.ocx', '.ico', '.mun']);
-
-/** The extension a file-type icon can be asked for, or null.
- *
- * Null rather than a guess when there is no extension: `hosts` has no
- * type and no icon, and handing the row a generic page glyph would be
- * claiming to know something. The lettered tile at least carries the
- * entry's initial. */
-export function typeIconExtension(path) {
-  const match = /(\.[A-Za-z0-9_-]{1,12})$/.exec(String(path || ''));
-  if (!match) return null;
-  const extension = match[1].toLowerCase();
-  return OWN_ICON_TYPES.has(extension) ? null : extension;
 }
 
 /** Where each entry's icon should come from, as entryId -> source.
