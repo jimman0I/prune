@@ -3,7 +3,7 @@ import { fetchPrograms, revealInExplorer, openInstalledAppsSettings } from '../l
 import { sizeBadgeTone } from '../lib/sizeBadgeTone.js';
 import { sortPrograms, nextSortState } from '../lib/sortPrograms.js';
 import { canBatchUninstall, batchIneligibleReason, batchSummary } from '../lib/batchSelection.js';
-import { splitRecentPrograms, RECENT_DAYS } from '../lib/recentPrograms.js';
+import { isRecentlyInstalled, RECENT_DAYS } from '../lib/recentPrograms.js';
 
 function formatBytes(bytes) {
   if (bytes === null || bytes === undefined) return '—';
@@ -23,16 +23,35 @@ const SIZE_TONE_TEXT = {
 
 /** The grid, defined once so the header and every row cannot drift apart.
  * A column's `sort` key is what makes its header clickable; the ones
- * without a key (the website, the action) aren't meaningfully sortable. */
+ * without a key (the website, the action) aren't meaningfully sortable.
+ *
+ * Every width here is measured against what the column actually holds on
+ * this machine, not estimated. Several were roughly a third wider than
+ * their widest value -- Size reserved 92px to render 58px of text -- and
+ * the table paid for that with a horizontal scrollbar under the rows at
+ * the default window size, before the New column made it worse. The
+ * fixed columns now sit just above their real content, and the three
+ * flexible ones keep the slack. */
 const COLUMNS = [
   { key: 'select', label: '', width: '30px' },
-  { key: 'name', label: 'Application', sort: 'name', width: 'minmax(200px,1fr)' },
-  { key: 'size', label: 'Size', sort: 'sizeBytes', width: '92px', align: 'right' },
+  { key: 'name', label: 'Application', sort: 'name', width: 'minmax(190px,1fr)' },
+  { key: 'size', label: 'Size', sort: 'sizeBytes', width: '72px', align: 'right' },
+  // Kept wide: "2026.08.19.11.06" is 138px and still truncates here. A
+  // version is read left-to-right, so losing the tail costs least.
   { key: 'version', label: 'Version', sort: 'version', width: '128px' },
-  { key: 'architecture', label: 'Type', sort: 'architecture', width: '68px' },
-  { key: 'installDate', label: 'Installed', sort: 'installDate', width: '96px' },
-  { key: 'publisher', label: 'Company', sort: 'publisher', width: 'minmax(130px,0.7fr)' },
-  { key: 'website', label: 'Website', width: 'minmax(120px,0.6fr)' },
+  { key: 'architecture', label: 'Type', sort: 'architecture', width: '52px' },
+  { key: 'installDate', label: 'Installed', sort: 'installDate', width: '74px' },
+  // Recency used to be a grouping: recent installs sat under their own
+  // collapsible heading above everything else. It is a column now because
+  // a grouping owns the order of the whole table -- sort by size and the
+  // heading is still there, splitting the answer in two -- while a column
+  // sits beside the date it comes from and brings the same rows to the top
+  // only when you click it. Sorted by it, this is Revo's New Programs list.
+  // 46px is the header, not the badge: NEW plus its sort arrow is wider
+  // than the badge it sits over.
+  { key: 'recent', label: 'New', sort: 'recent', width: '46px' },
+  { key: 'publisher', label: 'Company', sort: 'publisher', width: 'minmax(112px,0.7fr)' },
+  { key: 'website', label: 'Website', width: 'minmax(92px,0.6fr)' },
   { key: 'action', label: '', width: '164px', align: 'right' }
 ];
 
@@ -151,10 +170,10 @@ function RevealButton({ program }) {
   );
 }
 
-function ProgramRow({ program, iconSrc, checked, running, onToggle, onUninstall }) {
+function ProgramRow({ program, iconSrc, checked, running, isNew, onToggle, onUninstall }) {
   return (
     <div
-    className="grid gap-3 px-4 py-1.5 items-center group hover:bg-white/[0.04] transition-colors"
+    className="grid gap-2.5 px-4 py-1.5 items-center group hover:bg-white/[0.04] transition-colors"
     style={{ gridTemplateColumns: GRID_TEMPLATE }}
   >
     <RowCheckbox
@@ -245,6 +264,19 @@ function ProgramRow({ program, iconSrc, checked, running, onToggle, onUninstall 
       {program.installDate ? new Date(program.installDate).toLocaleDateString() : '—'}
     </div>
 
+    {/* Blank, not a dash, for everything else. A dash means "we have no
+        value here"; almost nothing is new, and 120 dashes down a column
+        would read as 120 unknowns. */}
+    <div className="flex items-center">
+      {isNew && (
+        <span
+          className="text-[9px] font-mono uppercase tracking-wider px-1 py-px rounded bg-[color:var(--accent-coral)]/15 text-[color:var(--accent-coral)] border border-[color:var(--accent-coral)]/25"
+        >
+          New
+        </span>
+      )}
+    </div>
+
     <div className="text-[11.5px] text-[color:var(--text-secondary)] truncate">
       {program.publisher}
     </div>
@@ -283,34 +315,6 @@ function ProgramRow({ program, iconSrc, checked, running, onToggle, onUninstall 
   );
 }
 
-/** A group heading inside the list.
- *
- * Revo divides its list the same way and puts the count in the heading,
- * which is the useful part: "New Programs: 16" answers a question the rows
- * themselves cannot. Collapsible, because the recent group is the one
- * someone opens this tab for and the rest is a long tail. */
-function GroupHeader({ label, count, collapsed, onToggle }) {
-  return (
-    <button
-      type="button"
-      onClick={onToggle}
-      aria-expanded={!collapsed}
-      className="w-full flex items-center gap-2 px-4 py-1.5 bg-white/[0.03] hover:bg-white/[0.06] transition-colors text-left"
-    >
-      <svg
-        width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.2"
-        className={`shrink-0 text-[color:var(--text-muted)] transition-transform ${collapsed ? '-rotate-90' : ''}`}
-      >
-        <polyline points="6 9 12 15 18 9" />
-      </svg>
-      <span className="text-[11px] font-mono uppercase tracking-[0.14em] text-[color:var(--text-secondary)]">
-        {label}
-      </span>
-      <span className="text-[11px] font-mono text-[color:var(--text-muted)]">{count}</span>
-    </button>
-  );
-}
-
 export default function ProgramList({ programs: initialPrograms, extensions = [], icons = {}, running = {}, onUninstall, onBatchUninstall }) {
   const [programs, setPrograms] = useState(initialPrograms || []);
   const [loading, setLoading] = useState(!initialPrograms);
@@ -319,7 +323,6 @@ export default function ProgramList({ programs: initialPrograms, extensions = []
   const [filter, setFilter] = useState('all');
   const [sort, setSort] = useState({ column: 'sizeBytes', direction: 'desc' });
   const [selected, setSelected] = useState(new Set());
-  const [collapsed, setCollapsed] = useState(() => new Set());
 
   useEffect(() => {
     if (initialPrograms) {
@@ -359,33 +362,14 @@ export default function ProgramList({ programs: initialPrograms, extensions = []
     [filtered]
   );
 
-  // Recently installed first, under its own heading, the way Revo splits
-  // its list. Only shown when there is something in it -- a heading over an
-  // empty group is noise, and on a machine nobody has touched this week
-  // both headings would be pure decoration.
-  const rows = useMemo(() => {
-    const { recent, rest } = splitRecentPrograms(filtered);
-    if (recent.length === 0) return filtered.map((program) => ({ type: 'program', program }));
-
-    const out = [];
-    for (const [key, label, group] of [
-      ['recent', `Installed in the last ${RECENT_DAYS} days`, recent],
-      ['rest', 'Everything else', rest]
-    ]) {
-      if (group.length === 0) continue;
-      out.push({ type: 'header', key, label, count: group.length });
-      if (!collapsed.has(key)) {
-        for (const program of group) out.push({ type: 'program', program });
-      }
-    }
-    return out;
-  }, [filtered, collapsed]);
-
-  const toggleGroup = (key) => setCollapsed((prev) => {
-    const next = new Set(prev);
-    if (next.has(key)) next.delete(key); else next.add(key);
-    return next;
-  });
+  // Which rows carry the New badge, decided once per render rather than
+  // per row: every one of them would otherwise build its own Date to ask
+  // the same question about the same clock.
+  const newIds = useMemo(() => {
+    const ids = new Set();
+    for (const program of filtered) if (isRecentlyInstalled(program)) ids.add(program.id);
+    return ids;
+  }, [filtered]);
 
   // Only what's both selected AND still on screen. Selecting rows, then
   // filtering them away, then hitting Uninstall should not remove things
@@ -460,7 +444,7 @@ export default function ProgramList({ programs: initialPrograms, extensions = []
             control: with eight columns on screen, the thing you want to
             sort by is already in front of you. */}
         <div
-          className="grid gap-3 px-4 py-2 border-b border-[color:var(--border-subtle)] bg-white/[0.02] shrink-0"
+          className="grid gap-2.5 px-4 py-2 border-b border-[color:var(--border-subtle)] bg-white/[0.02] shrink-0"
           style={{ gridTemplateColumns: GRID_TEMPLATE }}
         >
           {COLUMNS.map((col) => {
@@ -506,26 +490,17 @@ export default function ProgramList({ programs: initialPrograms, extensions = []
               No applications match your filters.
             </div>
           )}
-          {rows.map((row) => (
-            row.type === 'header' ? (
-              <GroupHeader
-                key={`group-${row.key}`}
-                label={row.label}
-                count={row.count}
-                collapsed={collapsed.has(row.key)}
-                onToggle={() => toggleGroup(row.key)}
-              />
-            ) : (
+          {filtered.map((program) => (
             <ProgramRow
-              key={row.program.id}
-              program={row.program}
-              iconSrc={icons[row.program.id]}
-              checked={selected.has(row.program.id)}
-              running={Boolean(running[row.program.id])}
-              onToggle={() => toggleRow(row.program)}
+              key={program.id}
+              program={program}
+              iconSrc={icons[program.id]}
+              checked={selected.has(program.id)}
+              running={Boolean(running[program.id])}
+              isNew={newIds.has(program.id)}
+              onToggle={() => toggleRow(program)}
               onUninstall={onUninstall}
             />
-            )
           ))}
         </div>
 
@@ -568,6 +543,14 @@ export default function ProgramList({ programs: initialPrograms, extensions = []
                 // their own list, so "24 of 210" would be comparing them
                 // against a total they are not part of.
                 : `Showing ${filtered.length} of ${(filter === 'extensions' ? extensions : programs).length}`}
+              {/* The count the old New Programs heading used to carry, and
+                  the only place the column's window is spelled out. A
+                  badge saying New is not self-explanatory about how new. */}
+              {newIds.size > 0 && (
+                <span className="text-[color:var(--accent-coral)]">
+                  {' · '}{newIds.size} new in {RECENT_DAYS} days
+                </span>
+              )}
             </span>
             <span>{formatBytes(totalBytes)} total</span>
           </div>
