@@ -50,6 +50,30 @@ describe('scanForcedUninstall', () => {
     expect(result.registryKeys.items.filter((i) => i.path === key)).toHaveLength(1);
   });
 
+  // Found live (2026-09-04): the registry scan now matches an uninstall
+  // entry on its DisplayName, so it finds the very key this function is
+  // handed -- and reports it as Get-ChildItem spells it,
+  // HKEY_CURRENT_USER\Software\..., while the program list carries
+  // PowerShell's HKCU:\SOFTWARE\... The review listed one key twice, as two
+  // tickable rows, and removing it would have tried to delete it twice.
+  it('does not duplicate the uninstall entry when the scan found it under its other spelling', async () => {
+    scanForLeftoversMock.mockResolvedValue({
+      ...emptyScan,
+      registryKeys: {
+        ok: true,
+        items: [{ path: 'HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\{X}', isUninstallEntry: true }]
+      }
+    });
+
+    const result = await scanForcedUninstall({
+      name: 'Dead App',
+      registryKey: 'HKCU:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\{X}'
+    });
+
+    expect(result.registryKeys.items).toHaveLength(1);
+    expect(result.registryKeys.items[0].isUninstallEntry).toBe(true);
+  });
+
   it('works with no registryKey at all (a program with no Add/Remove entry left)', async () => {
     scanForLeftoversMock.mockResolvedValue(emptyScan);
     const result = await scanForcedUninstall({ name: 'Ghost' });

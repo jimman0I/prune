@@ -1,4 +1,5 @@
 import { runPowerShellJson } from './powershell.js';
+import { buildSearchPattern } from './leftoverPattern.js';
 
 /** Where a program's registry leftovers actually live.
  *
@@ -111,10 +112,6 @@ export function isProtectedKey(path) {
   const canonical = canonicalKeyPath(path);
   if (canonical.split('\\').filter(Boolean).length < 3) return true;
   return PROTECTED_KEYS.has(canonical);
-}
-
-function escapeForRegex(text) {
-  return text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
 /** A PowerShell array literal of single-quoted paths. Several of these
@@ -230,11 +227,11 @@ export function normalizeRegistryItems(raw) {
  * Same contract as the other leftover scans: { ok, items }, and a failure
  * is the caller's to downgrade rather than this function's to hide. */
 export async function scanRegistryLeftovers(name, publisher) {
-  const terms = [name, publisher].filter(Boolean).map(escapeForRegex);
+  const pattern = buildSearchPattern(name, publisher);
   // An empty pattern matches every key on the machine.
-  if (terms.length === 0) return { ok: true, items: [] };
+  if (pattern === null) return { ok: true, items: [] };
 
-  const raw = await runPowerShellJson(buildRegistryScript(terms.join('|')));
+  const raw = await runPowerShellJson(buildRegistryScript(pattern));
   const list = raw ? (Array.isArray(raw) ? raw : [raw]) : [];
   return { ok: true, items: normalizeRegistryItems(list) };
 }

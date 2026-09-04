@@ -1,4 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { buildSearchPattern } from './leftoverPattern.js';
 
 const runPowerShellJsonMock = vi.fn();
 vi.mock('./powershell.js', () => ({ runPowerShellJson: (...args) => runPowerShellJsonMock(...args) }));
@@ -135,7 +136,12 @@ describe('scanRegistryLeftovers', () => {
   it('searches on the publisher as well as the name', async () => {
     runPowerShellJsonMock.mockResolvedValueOnce(null);
     await scanRegistryLeftovers('OldApp', 'Old Inc');
-    expect(runPowerShellJsonMock.mock.calls[0][0]).toContain("$pattern = 'OldApp|Old Inc'");
+    // The pattern itself is leftoverPattern.js's business and tested
+    // there -- what matters here is that both terms reach the script.
+    const script = runPowerShellJsonMock.mock.calls[0][0];
+    expect(script).toContain(buildSearchPattern('OldApp', 'Old Inc'));
+    expect(script).toContain('OldApp');
+    expect(script).toContain('Old Inc');
   });
 
   it('escapes regex metacharacters in the program name', async () => {

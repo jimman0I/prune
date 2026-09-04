@@ -1,4 +1,5 @@
 import { scanForLeftovers } from './leftoverScan.js';
+import { canonicalKeyPath } from './registryLeftovers.js';
 
 /** Forced uninstall: removing software whose own uninstaller can no longer
  * do it.
@@ -28,7 +29,15 @@ export async function scanForcedUninstall({ name, publisher, registryKey }) {
 
   const items = scan.registryKeys.items.map((item) => ({ ...item }));
   if (registryKey) {
-    const existing = items.find((i) => i.path?.toLowerCase() === registryKey.toLowerCase());
+    // Compared canonically, not case-insensitively. The registry scan now
+    // matches an uninstall entry on its DisplayName, so it usually finds
+    // this exact key on its own -- and reports it the way Get-ChildItem
+    // spells it, HKEY_CURRENT_USER\Software\..., while the program list
+    // carries PowerShell's HKCU:\SOFTWARE\... Comparing the raw strings
+    // saw two different keys and listed one key twice, as two tickable
+    // rows over the same thing.
+    const target = canonicalKeyPath(registryKey);
+    const existing = items.find((i) => canonicalKeyPath(i.path) === target);
     if (existing) existing.isUninstallEntry = true;
     else items.unshift({ path: registryKey, isUninstallEntry: true });
   }

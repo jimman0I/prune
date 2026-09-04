@@ -1,5 +1,6 @@
 import { runPowerShellJson } from './powershell.js';
 import { scanRegistryLeftovers } from './registryLeftovers.js';
+import { buildSearchPattern } from './leftoverPattern.js';
 
 /** Each entry is a PowerShell expression, and every one is DOUBLE-QUOTED
  * so a path containing spaces stays a single array element.
@@ -53,14 +54,9 @@ export async function scanForLeftovers({ name, publisher }) {
   return { files, registryKeys, scheduledTasks };
 }
 
-function escapeForRegex(text) {
-  return text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-}
-
 async function scanFiles(name, publisher) {
-  const terms = [name, publisher].filter(Boolean).map(escapeForRegex);
-  if (terms.length === 0) return { ok: true, items: [] };
-  const pattern = terms.join('|');
+  const pattern = buildSearchPattern(name, publisher);
+  if (pattern === null) return { ok: true, items: [] };
   const script = `
 $roots = ${buildRootsExpression()} | Where-Object { $_ -and (Test-Path $_) }
 $pattern = '${pattern}'
@@ -78,8 +74,8 @@ $roots | ForEach-Object {
 }
 
 async function scanScheduledTasks(name) {
-  if (!name) return { ok: true, items: [] };
-  const pattern = escapeForRegex(name);
+  const pattern = buildSearchPattern(name);
+  if (pattern === null) return { ok: true, items: [] };
   const script = `
 $pattern = '${pattern}'
 Get-ScheduledTask -ErrorAction SilentlyContinue |
