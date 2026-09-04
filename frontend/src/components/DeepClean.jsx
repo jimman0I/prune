@@ -1,5 +1,6 @@
-import { useEffect, useRef, useState } from 'react';
-import { fetchDeepCleanRules, streamDeepCleanScan, executeDeepClean } from '../lib/api.js';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { visibleCategories, hiddenRuleCount } from '../lib/visibleRules.js';
+import { fetchDeepCleanRules, streamDeepCleanScan, executeDeepClean, fetchSettings } from '../lib/api.js';
 import { defaultSelection, selectableIds } from '../lib/defaultSelection.js';
 import { selectionTotal } from '../lib/selectionTotal.js';
 import { mergeScannedRule, scanLogLine } from '../lib/scanLog.js';
@@ -97,6 +98,29 @@ export default function DeepClean() {
   // same question as whether the tree exists.
   const [hasScanned, setHasScanned] = useState(false);
   const [total, setTotal] = useState(0);
+  // BleachBit's "hide irrelevant cleaners". Read once on mount rather than
+  // watched: it changes on the Settings screen, and coming back to this
+  // one remounts it.
+  const [hideUnavailable, setHideUnavailable] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetchSettings()
+      .then((s) => { if (!cancelled) setHideUnavailable(s?.hideUnavailableRules === true); })
+      // The filter is an enhancement, never a blocker -- if settings
+      // cannot be read the list simply shows everything.
+      .catch(() => {});
+    return () => { cancelled = true; };
+  }, []);
+
+  const shownCategories = useMemo(
+    () => (categories ? visibleCategories(categories, hideUnavailable) : null),
+    [categories, hideUnavailable]
+  );
+  const hiddenCount = useMemo(
+    () => hiddenRuleCount(categories, hideUnavailable),
+    [categories, hideUnavailable]
+  );
   const abortRef = useRef(null);
 
   // The tree is on screen before anything is measured. It is built from
@@ -324,9 +348,19 @@ export default function DeepClean() {
               </div>
             )}
 
-            {categories && (
+            {categories && hiddenCount > 0 && (
+              // Without this the setting is invisible from the screen it
+              // affects: someone who turned it on and forgot cannot tell
+              // "Prune has no cleaner for this" from "Prune is hiding it".
+              <p className="text-[12px] text-[color:var(--text-muted)] mb-2.5">
+                {hiddenCount} cleaner{hiddenCount === 1 ? '' : 's'} hidden because the software isn't
+                installed. Settings › Cleanup to show them.
+              </p>
+            )}
+
+            {shownCategories && (
               <DeepCleanTree
-                categories={categories}
+                categories={shownCategories}
                 selected={selected}
                 onToggle={handleToggle}
                 onToggleCategory={handleToggleCategory}

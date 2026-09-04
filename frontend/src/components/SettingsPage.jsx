@@ -198,7 +198,9 @@ export default function SettingsPage() {
                   <div>
                     <div className="text-[14px] font-medium text-[color:var(--text-primary)]">Auto-Quarantine</div>
                     <p className="text-[12.5px] text-[color:var(--text-secondary)] mt-1">
-                      Send removed files to Quarantine instead of deleting them outright.
+                      Deep Clean moves what it takes into Prune's Quarantine, where you can put it
+                      back. Turn this off and it goes to the Windows Recycle Bin instead — still
+                      recoverable, just somewhere you already know how to empty.
                     </p>
                   </div>
                   <Toggle
@@ -210,9 +212,71 @@ export default function SettingsPage() {
               </div>
 
               <div className="glass-panel p-6">
+                <div className="flex items-center justify-between gap-4">
+                  <div className="min-w-0">
+                    <div className="text-[14px] font-medium text-[color:var(--text-primary)]">Leave recent files alone</div>
+                    <p className="text-[12.5px] text-[color:var(--text-secondary)] mt-1">
+                      Skip anything modified in the last few hours. In a temp folder a file being
+                      written right now looks exactly like one abandoned two years ago — this is what
+                      stops a half-finished install being swept up. 0 turns it off.
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-2 shrink-0">
+                    <input
+                      type="number"
+                      min="0"
+                      max="720"
+                      value={settings.skipRecentHours}
+                      onChange={(e) => save({ skipRecentHours: Math.max(0, Number(e.target.value) || 0) })}
+                      aria-label="Hours to leave recent files alone"
+                      className="w-[72px] font-mono text-[12.5px] px-2.5 py-2 rounded-lg bg-white/[0.04] border border-[color:var(--border-subtle)] text-[color:var(--text-primary)] focus:outline-none focus:border-[color:var(--accent-coral)]/50"
+                      style={{ fontVariantNumeric: 'tabular-nums' }}
+                    />
+                    <span className="text-[12.5px] text-[color:var(--text-muted)]">hours</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="glass-panel p-6">
+                <div className="flex items-center justify-between gap-4">
+                  <div className="min-w-0">
+                    <div className="text-[14px] font-medium text-[color:var(--text-primary)]">Create a restore point first</div>
+                    <p className="text-[12.5px] text-[color:var(--text-secondary)] mt-1">
+                      Before a forced removal, so Windows itself can roll the machine back. Costs a
+                      few seconds, and does nothing at all if System Protection is turned off.
+                    </p>
+                  </div>
+                  <Toggle
+                    checked={settings.createRestorePoint}
+                    onChange={() => save({ createRestorePoint: !settings.createRestorePoint })}
+                    label="Create a restore point first"
+                  />
+                </div>
+              </div>
+
+              <div className="glass-panel p-6">
+                <div className="flex items-center justify-between gap-4">
+                  <div className="min-w-0">
+                    <div className="text-[14px] font-medium text-[color:var(--text-primary)]">Hide cleaners that don't apply</div>
+                    <p className="text-[12.5px] text-[color:var(--text-secondary)] mt-1">
+                      Most of the list is for software this machine doesn't have. Hiding those leaves
+                      only what is actually here.
+                    </p>
+                  </div>
+                  <Toggle
+                    checked={settings.hideUnavailableRules}
+                    onChange={() => save({ hideUnavailableRules: !settings.hideUnavailableRules })}
+                    label="Hide cleaners that don't apply"
+                  />
+                </div>
+              </div>
+
+              <div className="glass-panel p-6">
                 <div className="text-[14px] font-medium text-[color:var(--text-primary)] mb-1">Exclude Folders</div>
                 <p className="text-[12.5px] text-[color:var(--text-secondary)] mb-4">
-                  Folders Smart Cleanup and the leftover scanner will never touch.
+                  Folders Deep Clean will never take a file from, on top of the ones Prune already
+                  protects — System Volume Information, antivirus quarantines, the component store
+                  and a dozen others.
                 </p>
 
                 <div className="flex items-center gap-2 mb-4">
