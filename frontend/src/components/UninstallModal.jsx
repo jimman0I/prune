@@ -36,12 +36,24 @@ function formatBytes(bytes) {
  * is no equivalent reversible operation for a scheduled task, so they are
  * reported but never removed (LeftoverReview says so on screen). */
 export function selectionToRemoval(scanResult, selected) {
-  const pick = (groupKey) =>
+  const chosen = (groupKey) =>
     (scanResult[groupKey]?.items || [])
       .filter((_, i) => selected.has(`${groupKey}:${i}`))
-      .map((item) => item.path)
-      .filter(Boolean);
-  return { files: pick('files'), registryKeys: pick('registryKeys') };
+      .filter((item) => item.path);
+
+  return {
+    files: chosen('files').map((item) => item.path),
+    // A whole key travels as a bare path, the way it always has -- there
+    // is nothing for an object form to carry, and wrapping it would make
+    // new manifests disagree with every quarantine batch already on disk
+    // about how the same key is written. A VALUE cannot: a startup entry
+    // is one value inside HKCU\...\Run, a key every program that starts
+    // with Windows shares, so flattening it to its path would ask the
+    // remover to delete all of them.
+    registryKeys: chosen('registryKeys').map((item) =>
+      item.valueName ? { path: item.path, valueName: item.valueName } : item.path
+    )
+  };
 }
 
 export default function UninstallModal({ program, running = false, onClose }) {

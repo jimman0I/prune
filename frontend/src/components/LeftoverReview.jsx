@@ -18,6 +18,18 @@ function formatBytes(bytes) {
   return `${parseFloat((bytes / Math.pow(k, i)).toFixed(1))} ${sizes[i]}`;
 }
 
+/** The one line a leftover needs beyond its path, or nothing.
+ *
+ * Both cases are about a row whose path does not say what removing it
+ * actually does. Everything else is exactly what it looks like. */
+export function leftoverItemNote(item) {
+  if (item?.valueName) {
+    return `Only the value "${item.valueName}" — the key it sits in is shared and stays`;
+  }
+  if (item?.isUninstallEntry) return 'Add/Remove Programs entry';
+  return null;
+}
+
 /** `scanResult` is { files, registryKeys, scheduledTasks }, each
  * { ok, items }. `selected` is a Set of "group:index" keys — all checked
  * by default is the caller's job (UninstallModal seeds it), not this
@@ -104,12 +116,14 @@ export default function LeftoverReview({ scanResult, selected, onToggle, onConfi
                           <div className="font-mono text-[11.5px] text-[color:var(--text-primary)] truncate">
                             {item.path || item.name}
                           </div>
-                          {item.isUninstallEntry && (
-                            // Worth calling out: this is the key that makes
-                            // Windows list the program at all, and it's the
-                            // reason a dead entry never goes away on its own.
+                          {leftoverItemNote(item) && (
+                            // A path alone doesn't say what removing this
+                            // does: an uninstall entry is the key that
+                            // makes Windows list the program at all, and a
+                            // value's path is a key shared with every
+                            // other program that starts with Windows.
                             <div className="text-[10.5px] text-[color:var(--accent-coral)] mt-0.5">
-                              Add/Remove Programs entry
+                              {leftoverItemNote(item)}
                             </div>
                           )}
                         </div>

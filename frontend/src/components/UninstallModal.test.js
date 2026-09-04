@@ -40,4 +40,28 @@ describe('selectionToRemoval', () => {
     const odd = { files: { ok: true, items: [{ sizeBytes: 5 }] }, registryKeys: { ok: true, items: [] } };
     expect(selectionToRemoval(odd, new Set(['files:0'])).files).toEqual([]);
   });
+
+  // A startup entry is one VALUE inside HKCU\...\Run, a key every program
+  // that starts with Windows shares. Flattening it to its path would ask
+  // the remover to delete that whole key.
+  it('keeps a registry value addressed as a value, not as its key', () => {
+    const withValue = {
+      files: { ok: true, items: [] },
+      registryKeys: {
+        ok: true,
+        items: [{ path: 'HKCU:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run', valueName: 'DeadUpdater' }]
+      }
+    };
+    expect(selectionToRemoval(withValue, new Set(['registryKeys:0'])).registryKeys).toEqual([
+      { path: 'HKCU:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run', valueName: 'DeadUpdater' }
+    ]);
+  });
+
+  it('sends a plain key as a bare path, the way it always has', () => {
+    // The remover accepts both, and there is nothing for the object form
+    // to carry here -- an extra wrapper would only make the manifest and
+    // every existing quarantine batch disagree about the same key.
+    const selected = new Set(['registryKeys:0']);
+    expect(selectionToRemoval(scanResult, selected).registryKeys).toEqual(['HKCU:\\SOFTWARE\\Dead']);
+  });
 });
