@@ -105,9 +105,15 @@ export default function LeftoverReview({ scanResult, selected, onToggle, onConfi
                         key={itemKey}
                         className={`flex items-center gap-3 px-4 py-2.5 transition ${removable ? 'cursor-pointer hover:bg-white/[0.02]' : 'opacity-60'}`}
                       >
+                        {/* The same coral square every other tickable
+                            control in this app uses. This was the one
+                            screen still on the native `.sleek` checkbox,
+                            which is cyan -- so the review that decides
+                            what gets deleted looked like a different
+                            product from the list that selected it. */}
                         <input
                           type="checkbox"
-                          className="sleek"
+                          className="prune-check"
                           checked={removable && selected.has(itemKey)}
                           disabled={!removable}
                           onChange={() => onToggle(itemKey)}

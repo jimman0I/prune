@@ -497,8 +497,28 @@ export default function ProgramList({ programs: initialPrograms, extensions = []
 
         <div className="overflow-y-auto min-h-0 divide-y divide-[color:var(--border-subtle)]">
           {filtered.length === 0 && (
-            <div className="text-center py-16 text-[color:var(--text-muted)] text-[13px]">
-              No applications match your filters.
+            // An empty result on this screen is almost always a filter the
+            // user forgot, not an empty machine -- there are 210 programs
+            // behind it. So it says which filter is responsible and offers
+            // to undo it, rather than reporting the absence and stopping.
+            <div className="text-center py-16 px-6">
+              <p className="text-[13px] text-[color:var(--text-secondary)]">
+                Nothing matches
+                {query.trim() && <> “<span className="text-[color:var(--text-primary)]">{query.trim()}</span>”</>}
+                {query.trim() && filter !== 'all' && ' in '}
+                {filter !== 'all' && <span className="text-[color:var(--text-primary)]">{filter}</span>}
+                .
+              </p>
+              <p className="text-[12.5px] text-[color:var(--text-muted)] mt-1.5">
+                {(filter === 'extensions' ? extensions : programs).length} entries are hidden by the
+                current filter.
+              </p>
+              <button
+                className="btn-ghost mt-4 px-3.5 py-2 rounded-lg text-[12.5px] font-medium"
+                onClick={() => { setQuery(''); setFilter('all'); }}
+              >
+                Clear search and filters
+              </button>
             </div>
           )}
           {filtered.map((program) => (

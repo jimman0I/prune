@@ -158,8 +158,18 @@ export default function StartupItems() {
       )}
 
       {!error && items && items.length === 0 && (
-        <div className="glass-panel p-6 text-[13px] text-[color:var(--text-muted)]">
-          Nothing is set to run at sign-in.
+        // Genuinely empty is a real and good outcome here, so this says so
+        // plainly AND says what was looked at -- otherwise "nothing" is
+        // indistinguishable from "this screen is broken", which is the
+        // more common reason a list comes back empty.
+        <div className="glass-panel p-8 text-center">
+          <p className="text-[13.5px] text-[color:var(--text-secondary)]">
+            Nothing runs at sign-in.
+          </p>
+          <p className="text-[12.5px] text-[color:var(--text-muted)] mt-1.5 max-w-[52ch] mx-auto">
+            Prune checked the Run and RunOnce keys in both registry hives and both Startup
+            folders. A program that adds itself later will appear here.
+          </p>
         </div>
       )}
 

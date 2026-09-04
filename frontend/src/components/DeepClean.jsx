@@ -416,7 +416,19 @@ export default function DeepClean() {
         <div className="flex items-center gap-2.5">
           {confirmClean ? (
             <>
-              <span className="text-[12.5px] text-[color:var(--danger)] mr-1">Move {selected.size} item{selected.size === 1 ? '' : 's'} to Quarantine?</span>
+              {/* The confirm carries the SIZE, not just the count. "Move
+                  47 items to Quarantine?" is not a decision anyone can
+                  make -- 47 items is a browser cache or most of a game
+                  install. And when nothing has been measured it says so
+                  rather than omitting the number and letting the reader
+                  assume it is small. */}
+              <span className="text-[12.5px] text-[color:var(--danger)] mr-1">
+                Move {selected.size} item{selected.size === 1 ? '' : 's'}
+                {cleanTotal.anyMeasured
+                  ? <> (<span className="font-mono">{formatBytes(cleanTotal.bytes)}</span>)</>
+                  : <> (<span className="font-mono">size not measured</span>)</>}
+                {' '}to Quarantine?
+              </span>
               <button className="btn-ghost px-4 py-2 rounded-lg text-[12.5px] font-medium" onClick={() => setConfirmClean(false)} disabled={cleaning}>
                 Cancel
               </button>

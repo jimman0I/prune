@@ -55,13 +55,33 @@ export function isDriveRoot(path) {
   return trimmed.length === 2 && trimmed[1] === ':' && /^[a-z]$/i.test(trimmed[0]);
 }
 
-function LoadingState() {
+/** A spinner and the word "Scanning" is the wrong answer to a wait this
+ * long. Walking a folder tree has no progress to report -- the scanner
+ * does not know how many directories are below it until it has been in
+ * them -- so instead of faking a bar this says what is being read, how
+ * long it can take, and what the faster option is. A minute of silence is
+ * where people decide software has hung. */
+function LoadingState({ path, onFastScan, fastScanning }) {
   return (
-    <div className="glass-panel flex flex-col items-center justify-center py-16">
+    <div className="glass-panel flex flex-col items-center justify-center py-16 px-6 text-center">
       <div className="w-14 h-14 rounded-2xl bg-[color:var(--accent-coral)]/10 border border-[color:var(--accent-coral)]/25 flex items-center justify-center mb-5">
         <div className="w-6 h-6 border-2 border-[color:var(--accent-coral)] border-t-transparent rounded-full animate-spin"></div>
       </div>
-      <p className="text-[13px] text-[color:var(--text-secondary)]">Scanning disk…</p>
+      <p className="text-[13px] text-[color:var(--text-primary)]">Reading every folder under</p>
+      <p className="font-mono text-[12px] text-[color:var(--accent-coral)] mt-1 max-w-[46ch] truncate">{path}</p>
+      <p className="text-[12.5px] text-[color:var(--text-secondary)] mt-3 max-w-[52ch]">
+        One directory at a time, which is the only way to do it without administrator access.
+        A whole drive can take a minute and may not finish.
+      </p>
+      {onFastScan && (
+        <button
+          className="btn-ghost mt-4 px-3.5 py-2 rounded-lg text-[12.5px] font-medium disabled:opacity-50"
+          onClick={onFastScan}
+          disabled={fastScanning}
+        >
+          {fastScanning ? 'Reading the drive…' : 'Read the drive index instead (admin)'}
+        </button>
+      )}
     </div>
   );
 }
@@ -313,14 +333,23 @@ function LargestFilesView({ files, icons }) {
  * 952.9 GB volume, so it fails its own sanity check. Windows file
  * attributes are not on a Node stat and nothing in the scan carries them.
  * An empty column would be worse than no column. */
+/** Sized to fit beside the file-type panel rather than to a comfortable
+ * ideal. All seven columns at their old widths came to 840px in a pane
+ * that is about 680px wide, so Folders and Modified were sliced off the
+ * right edge and the table carried a horizontal scrollbar it should never
+ * have needed -- the same overflow the Applications table had, in a pane
+ * that is narrower because the type panel sits beside it.
+ *
+ * Every width here is measured against the content: "3.6%", "29.4 GB",
+ * "59,502" and "8/17/2026" are the widest real values in their columns. */
 const FOLDER_COLUMNS = [
-  { key: 'name', label: 'Folder', align: 'left', width: 'minmax(180px,1fr)' },
-  { key: 'percentOfParent', label: '% of parent', align: 'right', width: '104px' },
-  { key: 'size', label: 'Size', align: 'right', width: '96px' },
-  { key: 'items', label: 'Items', align: 'right', width: '84px' },
-  { key: 'files', label: 'Files', align: 'right', width: '84px' },
-  { key: 'folders', label: 'Folders', align: 'right', width: '84px' },
-  { key: 'modified', label: 'Modified', align: 'right', width: '104px' }
+  { key: 'name', label: 'Folder', align: 'left', width: 'minmax(150px,1fr)' },
+  { key: 'percentOfParent', label: '%', align: 'right', width: '54px' },
+  { key: 'size', label: 'Size', align: 'right', width: '84px' },
+  { key: 'items', label: 'Items', align: 'right', width: '68px' },
+  { key: 'files', label: 'Files', align: 'right', width: '64px' },
+  { key: 'folders', label: 'Folders', align: 'right', width: '68px' },
+  { key: 'modified', label: 'Modified', align: 'right', width: '84px' }
 ];
 
 const FOLDER_GRID = FOLDER_COLUMNS.map((c) => c.width).join(' ');
@@ -351,7 +380,7 @@ function FolderTable({ tree, onDrillDown }) {
   return (
     <div className="glass-panel overflow-hidden min-w-0">
       <div
-        className="grid gap-3 px-4 py-2 border-b border-[color:var(--border-subtle)] bg-white/[0.02]"
+        className="grid gap-2.5 px-4 py-2 border-b border-[color:var(--border-subtle)] bg-white/[0.02]"
         style={{ gridTemplateColumns: FOLDER_GRID }}
       >
         {FOLDER_COLUMNS.map((col) => (
@@ -652,9 +681,11 @@ export default function DiskMap() {
           )}
         </div>
         {/* Hidden exactly where the panel below is offering the same thing.
-            Two "Fast scan (admin)" buttons on one screen is not two ways to
-            do it, it's a question about whether they do the same thing. */}
-        {!(!loading && !error && !tree && isDriveRoot(currentPath)) && (
+            Two "(admin)" buttons on one screen is not two ways to do it,
+            it's a question about whether they do the same thing. That is
+            true of the drive-root chooser AND of the scanning panel, which
+            now carries its own escape hatch. */}
+        {!loading && !(!error && !tree && isDriveRoot(currentPath)) && (
           <button
             className="btn-ghost px-3.5 py-2 rounded-lg text-[12.5px] font-medium shrink-0 disabled:opacity-50"
             onClick={handleFastScan}
@@ -687,7 +718,9 @@ export default function DiskMap() {
         ))}
       </div>
 
-      {loading && <LoadingState />}
+      {loading && (
+        <LoadingState path={currentPath} onFastScan={handleFastScan} fastScanning={fastScanning} />
+      )}
 
       {/* The drive root, before a choice has been made. Nothing is scanning
           and nothing is going to until one of these is pressed. */}
@@ -800,7 +833,7 @@ export default function DiskMap() {
               beneath them -- WizTree's proportions, and the right ones: the
               two tables are read row by row and want height, the map is
               read as a picture and wants area. */}
-          <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_400px] items-start">
+          <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_360px] items-start">
             <FolderTable tree={tree} onDrillDown={handleDrillDown} />
             <ExtensionPanel breakdown={breakdown} shown={shownExtensions} icons={typeIcons} typeColors={typeColors} />
           </div>

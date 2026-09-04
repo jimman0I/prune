@@ -288,27 +288,44 @@ body::before {
 .btn-danger:active:not(:disabled) { transform: translateY(1px); background: rgba(236, 81, 98, 0.28); }
 .btn-danger:disabled { opacity: 0.45; cursor: not-allowed; }
 
-input[type="checkbox"].sleek {
+/* The app's one checkbox.
+ *
+ * There were two. The program list and the Deep Clean tree drew their own
+ * coral square in JSX; the leftover review -- the screen that decides what
+ * actually gets deleted after an uninstall -- used a native input styled
+ * cyan. Two tick colours across three screens for the same act of choosing
+ * something, and the cyan one was on the screen where getting it wrong
+ * costs the most.
+ *
+ * Coral, because that is this app's interactive accent and every other
+ * selectable thing already uses it. Cyan stays what it is elsewhere: a
+ * state readout (Startup's enabled column), never a control. */
+input[type="checkbox"].prune-check {
   appearance: none;
-  width: 16px;
-  height: 16px;
-  border: 1.5px solid var(--text-muted);
+  width: 15px;
+  height: 15px;
+  border: 1px solid var(--border-subtle);
   border-radius: 4px;
-  background: var(--bg-navy);
+  background: rgba(255, 255, 255, 0.03);
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  transition: all 140ms;
+  transition: background-color 140ms ease, border-color 140ms ease;
   flex-shrink: 0;
 }
-input[type="checkbox"].sleek:hover:not(:disabled) { border-color: var(--text-secondary); }
-input[type="checkbox"].sleek:disabled { opacity: 0.4; cursor: not-allowed; }
-input[type="checkbox"].sleek:checked { background: var(--accent-cyan); border-color: var(--accent-cyan); }
-input[type="checkbox"].sleek:checked::after {
+input[type="checkbox"].prune-check:hover:not(:disabled) { border-color: rgba(255, 255, 255, 0.25); }
+input[type="checkbox"].prune-check:disabled { opacity: 0.3; cursor: not-allowed; }
+input[type="checkbox"].prune-check:checked {
+  background: var(--accent-coral);
+  border-color: var(--accent-coral);
+}
+input[type="checkbox"].prune-check:checked::after {
   content: '';
   width: 4px;
   height: 8px;
+  /* The dark ink from .btn-primary, so the tick reads on coral the same
+     way the primary button's label does. */
   border: solid #1a0604;
   border-width: 0 2px 2px 0;
   transform: rotate(45deg) translate(-1px, -1px);
