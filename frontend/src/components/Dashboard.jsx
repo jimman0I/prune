@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { fetchDiskSpace, fetchDiskHealth, unlockDiskWear, fetchUninstallHistory } from '../lib/api.js';
 import { formatRelativeTime } from '../lib/formatRelativeTime.js';
 import StatCard from './StatCard.jsx';
@@ -127,6 +127,12 @@ function SmartAttributes({ smart }) {
 }
 
 export default function Dashboard({ programs, totalSize, onNavigate = () => {} }) {
+  // The one fact on the Installed Apps card worth crossing the app for: an
+  // entry whose uninstaller is gone, which Windows will list forever.
+  const brokenCount = useMemo(
+    () => (programs || []).filter((p) => p.health?.orphaned).length,
+    [programs]
+  );
   const [diskSpace, setDiskSpace] = useState(null);
   const [diskSpaceError, setDiskSpaceError] = useState(null);
   const [diskHealth, setDiskHealth] = useState(null);
@@ -260,6 +266,15 @@ export default function Dashboard({ programs, totalSize, onNavigate = () => {} }
           }
         >
           {diskSpace && (
+            <p className="text-[12px] text-[color:var(--text-secondary)] mt-1.5 mb-3">
+              {/* The figure someone actually came to this card for. "815.8
+                  of 952.9" is two numbers you then have to subtract. */}
+              <span className="text-[color:var(--text-primary)] font-medium">
+                {formatBytes(diskSpace.freeBytes)}
+              </span>{' '}free
+            </p>
+          )}
+          {diskSpace && (
             <div className="h-1.5 rounded-full bg-white/10 overflow-hidden">
               <div
                 className="h-full rounded-full"
@@ -271,11 +286,54 @@ export default function Dashboard({ programs, totalSize, onNavigate = () => {} }
         <StatCard
           label="Installed Apps"
           value={<div className="display-heading text-[28px] text-[color:var(--text-primary)]">{programs.length}</div>}
-        />
+          sublabel={
+            // A bare count is not actionable; a broken entry is the one
+            // thing on this card worth crossing the app for.
+            brokenCount > 0 ? (
+              <p className="text-[12px] text-[color:var(--danger)] mt-1.5">
+                {brokenCount} left behind by a failed uninstall
+              </p>
+            ) : (
+              <p className="text-[12px] text-[color:var(--text-secondary)] mt-1.5">
+                No broken entries.
+              </p>
+            )
+          }
+        >
+          <button
+            className="btn-ghost mt-3 px-3 py-1.5 rounded-lg text-[12px] font-medium"
+            onClick={() => onNavigate('applications')}
+          >
+            {brokenCount > 0 ? 'Review' : 'Manage'}
+          </button>
+        </StatCard>
+        {/* This tile used to read "Run Deep Clean to find out." -- a card
+            whose entire content was an instruction to go somewhere else,
+            sitting between two that carry real numbers.
+
+            It cannot show a number: measuring junk means walking 74 rule
+            paths across the disk, which takes about half a minute and is
+            not something the front page should start on its own. So it
+            says what is true and carries the control, the same shape the
+            Disk Map's drive root uses. */}
         <StatCard
           label="Junk Files"
-          value={<div className="text-[13px] text-[color:var(--text-secondary)]">Run Deep Clean to find out.</div>}
-        />
+          value={
+            <div className="font-mono text-[15px] text-[color:var(--text-muted)]">not measured</div>
+          }
+          sublabel={
+            <p className="text-[12px] text-[color:var(--text-secondary)] mt-1.5">
+              Measuring walks every cleaner path on the disk — about half a minute.
+            </p>
+          }
+        >
+          <button
+            className="btn-ghost mt-3 px-3 py-1.5 rounded-lg text-[12px] font-medium"
+            onClick={() => onNavigate('deepclean')}
+          >
+            Measure
+          </button>
+        </StatCard>
       </div>
 
       <div className="flex items-center gap-3 mb-6">
