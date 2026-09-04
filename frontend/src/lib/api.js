@@ -95,6 +95,38 @@ export async function fetchStartupItems() {
   return data.items;
 }
 
+/** Switches one startup entry on or off.
+ *
+ * Returns a result instead of throwing, unlike everything else in this
+ * file. The two most likely non-successes here are the user declining a
+ * UAC prompt and Windows refusing the write, and neither is an exception:
+ * one is a decision the user just made and the other is an answer about
+ * their machine. Thrown, they would both arrive at the screen as the same
+ * red banner, which is how a deliberate "no" ends up looking like a
+ * crash. */
+export async function setStartupItemEnabled(id, enabled) {
+  try {
+    const res = await fetch(`${API_URL}/programs/startup/toggle`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id, enabled })
+    });
+
+    let data = null;
+    try {
+      data = await res.json();
+    } catch {
+      // A 500 from an unhandled throw has no JSON body at all.
+      return { ok: false, error: `The change failed (${res.status}).` };
+    }
+
+    if (!res.ok) return { ok: false, error: data?.error || `The change failed (${res.status}).` };
+    return data;
+  } catch (err) {
+    return { ok: false, error: err.message };
+  }
+}
+
 /** Opens File Explorer on a folder.
  *
  * Goes through the backend because the renderer cannot reach Electron's

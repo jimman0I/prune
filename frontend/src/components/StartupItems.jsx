@@ -1,6 +1,7 @@
-import { useEffect, useMemo, useState } from 'react';
-import { fetchStartupItems } from '../lib/api.js';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { fetchStartupItems, setStartupItemEnabled } from '../lib/api.js';
 import { groupStartupItems, startupCounts } from '../lib/groupStartupItems.js';
+import { applyEnabled, toggleOutcome } from '../lib/startupToggleState.js';
 import TableSkeleton from './TableSkeleton.jsx';
 
 /** What Windows launches when you sign in.
@@ -12,16 +13,19 @@ import TableSkeleton from './TableSkeleton.jsx';
  * there at every sign-in -- the same orphan the Applications tab already
  * looks for, in a different place.
  *
- * Read-only. Disabling an entry means writing to StartupApproved, and
- * shipping a write path nobody has tested is worse than showing the state
- * accurately and saying where the switch lives.
+ * The first column switches entries on and off, which is what Revo's own
+ * checkbox does and what this screen was missing. Disabling writes to
+ * StartupApproved rather than deleting anything: the Run value and the
+ * shortcut stay exactly where they are, which is what "disable" means to
+ * Windows and is why the change is reversible from here, from Task
+ * Manager, or from Settings.
  */
 
 /** The columns, defined once so the header and the rows cannot drift.
  * Revo's own: name, what it launches, what the file says it is, who signed
  * it, and whether it is running right now. */
 const COLUMNS = [
-  { key: 'state', label: '', width: '26px' },
+  { key: 'state', label: '', width: '30px' },
   { key: 'name', label: 'Startup name', width: 'minmax(150px,0.9fr)' },
   { key: 'command', label: 'Launch path', width: 'minmax(180px,1.3fr)' },
   { key: 'description', label: 'Description', width: 'minmax(130px,0.9fr)' },
@@ -31,16 +35,13 @@ const COLUMNS = [
 
 const GRID = COLUMNS.map((c) => c.width).join(' ');
 
-/** Whether Windows will run it: the state Task Manager's Startup tab shows
- * and the one this reads, not a control. Rendered as a filled or hollow
- * mark rather than a checkbox, because a checkbox that does not toggle is
- * a broken control rather than an indicator. */
-function EnabledMark({ enabled }) {
+/** The tick itself, shared by the switch and the fixed indicator so the
+ * two cannot drift apart visually. */
+function Tick({ on }) {
   return (
-    <div
-      aria-label={enabled ? 'Enabled' : 'Disabled'}
-      className={`w-[13px] h-[13px] rounded-[3px] border flex items-center justify-center shrink-0 ${
-        enabled
+    <span
+      className={`w-[13px] h-[13px] rounded-[3px] border flex items-center justify-center shrink-0 transition-colors ${
+        on
           ? 'bg-[color:var(--accent-cyan)] border-[color:var(--accent-cyan)]'
           : 'bg-transparent border-[color:var(--border-subtle)]'
       }`}
@@ -48,12 +49,51 @@ function EnabledMark({ enabled }) {
       {/* The tick, not just a fill. A tinted square on a dark ground reads
           as an empty box at a glance, which inverts the one fact this
           column carries. */}
-      {enabled && (
+      {on && (
         <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="var(--bg-navy)" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round">
           <polyline points="20 6 9 17 4 12" />
         </svg>
       )}
-    </div>
+    </span>
+  );
+}
+
+/** Whether Windows will run this entry, and the control that changes it.
+ *
+ * Cyan rather than the coral every other tickable control in this app
+ * uses, deliberately. Coral here means "selected for removal" -- it is
+ * what the program list and Deep Clean mark things with -- and a coral
+ * tick against "runs at sign-in" would attach the removal colour to the
+ * entries that are working normally. Cyan is this app's "active" colour
+ * and already marks the Running pill two columns over.
+ *
+ * Not `disabled` while the change is in flight: a machine-wide entry waits
+ * on a UAC prompt, and disabling the control the user's focus is sitting
+ * on drops that focus to the page body. It stays focusable, says it is
+ * busy, and ignores a second click. */
+function EnabledSwitch({ item, pending, onToggle }) {
+  if (item.toggleNote) {
+    // Not a switch at all. An inert checkbox is a broken control; the row
+    // says why in words instead, next to the name.
+    return <Tick on={item.enabled} />;
+  }
+
+  return (
+    <button
+      type="button"
+      role="switch"
+      aria-checked={item.enabled}
+      aria-busy={pending || undefined}
+      aria-label={`${item.enabled ? 'Disable' : 'Enable'} ${item.name} at sign-in`}
+      onClick={() => !pending && onToggle(item)}
+      // 24px, not the 13px the tick occupies: that is the floor WCAG 2.2
+      // sets for a target, and the mark itself is half of it.
+      className={`flex items-center justify-center w-6 h-6 -ml-[5px] rounded-md transition-colors hover:bg-white/[0.07] ${
+        pending ? 'opacity-50' : ''
+      }`}
+    >
+      <Tick on={item.enabled} />
+    </button>
   );
 }
 
@@ -93,19 +133,32 @@ function StatusPill({ item }) {
   return <span className="text-[10.5px] font-mono text-[color:var(--text-muted)]">Not running</span>;
 }
 
-function StartupRow({ item }) {
+function StartupRow({ item, pending, error, onToggle }) {
   return (
     <div
-      className={`grid gap-3 px-5 py-2 items-center hover:bg-white/[0.03] transition-colors ${
+      className={`grid gap-3 px-5 py-2 items-center transition-colors ${
         item.enabled ? '' : 'opacity-55'
-      }`}
+      } ${error ? 'bg-[color:var(--danger-soft)]' : 'hover:bg-white/[0.03]'}`}
       style={{ gridTemplateColumns: GRID }}
     >
-      <EnabledMark enabled={item.enabled} />
+      <EnabledSwitch item={item} pending={pending} onToggle={onToggle} />
 
-      <div className="text-[12.5px] text-[color:var(--text-primary)] truncate">{item.name}</div>
+      <div className="min-w-0">
+        <div className="text-[12.5px] text-[color:var(--text-primary)] truncate">{item.name}</div>
+        {/* Both of these say something the row cannot show any other way,
+            so they are written out rather than hidden behind a hover --
+            a reason nobody can find is the same as no reason. */}
+        {item.toggleNote && (
+          <div className="text-[10.5px] text-[color:var(--text-muted)] leading-snug mt-0.5">
+            {item.toggleNote}
+          </div>
+        )}
+        {error && (
+          <div className="text-[10.5px] text-[color:var(--danger)] leading-snug mt-0.5">{error}</div>
+        )}
+      </div>
 
-      <div className="text-[11px] font-mono text-[color:var(--text-muted)] truncate" >
+      <div className="text-[11px] font-mono text-[color:var(--text-muted)] truncate">
         {item.command}
       </div>
 
@@ -125,6 +178,11 @@ function StartupRow({ item }) {
 export default function StartupItems() {
   const [items, setItems] = useState(null);
   const [error, setError] = useState(null);
+  // Keyed by entry id, both of them: several rows can be mid-change at
+  // once, and an error belongs to the row that produced it rather than to
+  // the screen.
+  const [pending, setPending] = useState({});
+  const [rowErrors, setRowErrors] = useState({});
 
   useEffect(() => {
     let cancelled = false;
@@ -132,6 +190,39 @@ export default function StartupItems() {
       .then((result) => { if (!cancelled) setItems(result || []); })
       .catch((err) => { if (!cancelled) setError(err.message); });
     return () => { cancelled = true; };
+  }, []);
+
+  /** Moves the row first, then checks the machine agreed.
+   *
+   * The optimistic move is not cosmetic: the write spawns PowerShell, and
+   * a machine-wide entry waits on a UAC prompt the user has to read, so a
+   * switch that only moved on success would sit still for seconds after
+   * every click. If the machine disagrees -- the prompt was declined, the
+   * write was refused, the state came back wrong -- the row goes back
+   * exactly where it was. */
+  const onToggle = useCallback(async (item) => {
+    const wanted = !item.enabled;
+
+    setPending((p) => ({ ...p, [item.id]: true }));
+    setRowErrors((e) => {
+      if (!(item.id in e)) return e;
+      const next = { ...e };
+      delete next[item.id];
+      return next;
+    });
+    setItems((current) => applyEnabled(current, item.id, wanted));
+
+    const result = await setStartupItemEnabled(item.id, wanted);
+    const { revert, message } = toggleOutcome(result, wanted);
+
+    if (revert) setItems((current) => applyEnabled(current, item.id, item.enabled));
+    if (message) setRowErrors((e) => ({ ...e, [item.id]: message }));
+
+    setPending((p) => {
+      const next = { ...p };
+      delete next[item.id];
+      return next;
+    });
   }, []);
 
   const groups = useMemo(() => groupStartupItems(items), [items]);
@@ -218,19 +309,36 @@ export default function StartupItems() {
                   <span className="text-[11px] font-mono text-[color:var(--text-muted)]">
                     {group.enabledCount} of {group.items.length} enabled
                   </span>
+                  {/* Said once per group rather than on every row. These
+                      entries live in HKLM, which nobody can write to
+                      unelevated, so the switch raises a consent prompt --
+                      worth knowing before it appears, not after. */}
+                  {group.key.endsWith('|machine') && (
+                    <span className="text-[11px] text-[color:var(--text-muted)] ml-auto">
+                      Changing these asks for administrator
+                    </span>
+                  )}
                 </div>
                 <div className="divide-y divide-[color:var(--border-subtle)]">
-                  {group.items.map((item) => <StartupRow key={item.id} item={item} />)}
+                  {group.items.map((item) => (
+                    <StartupRow
+                      key={item.id}
+                      item={item}
+                      pending={Boolean(pending[item.id])}
+                      error={rowErrors[item.id]}
+                      onToggle={onToggle}
+                    />
+                  ))}
                 </div>
               </div>
             ))}
           </div>
 
           <p className="text-[11.5px] text-[color:var(--text-muted)] mt-4 max-w-[68ch]">
-            Prune reads these from StartupApproved, the same place Windows' own Startup Apps
-            settings and Task Manager record them, so what you see here is what those show.
-            Prune does not switch them off yet — those two do, and they write the change where
-            Windows expects it.
+            Switching an entry off records the decision in StartupApproved, the same place
+            Windows' own Startup Apps settings and Task Manager read and write. Nothing is
+            deleted: the Run value or the shortcut stays where it is, so the change is
+            reversible from here or from either of those.
           </p>
         </>
       )}
