@@ -3,6 +3,7 @@ import { fetchStartupItems, fetchStartupIcons, setStartupItemEnabled } from '../
 import { groupStartupItems, startupCounts } from '../lib/groupStartupItems.js';
 import { applyEnabled, toggleOutcome } from '../lib/startupToggleState.js';
 import TableSkeleton from './TableSkeleton.jsx';
+import { tileLetter } from '../lib/iconTileLetter.js';
 
 /** What Windows launches when you sign in.
  *
@@ -132,7 +133,7 @@ function StartupIcon({ item, src }) {
       className="w-5 h-5 rounded-[4px] flex items-center justify-center text-[9px] font-bold shrink-0"
       style={{ background: 'linear-gradient(135deg, #f98074dd, #f9807488)', color: '#fff' }}
     >
-      {item.name.charAt(0).toUpperCase()}
+      {tileLetter(item.name, item.publisher)}
     </div>
   );
 }

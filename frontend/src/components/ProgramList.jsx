@@ -5,6 +5,7 @@ import { sortPrograms, nextSortState } from '../lib/sortPrograms.js';
 import { canBatchUninstall, batchIneligibleReason, batchSummary } from '../lib/batchSelection.js';
 import { isRecentlyInstalled, RECENT_DAYS } from '../lib/recentPrograms.js';
 import TableSkeleton from './TableSkeleton.jsx';
+import { tileLetter } from '../lib/iconTileLetter.js';
 
 function formatBytes(bytes) {
   if (bytes === null || bytes === undefined) return '—';
@@ -61,11 +62,17 @@ const GRID_TEMPLATE = COLUMNS.map((c) => c.width).join(' ');
 /** The program's own icon, falling back to a lettered tile.
  *
  * Two different fallbacks, both needed. `src` is absent for a program
- * whose icon couldn't be extracted at all (28 of 129 here -- mostly MSI
- * redistributables that register no icon). `onError` covers the rarer
- * case of a data URI that arrived but won't decode; without it the row
- * would show a broken-image glyph, which looks worse than the letter it
- * replaced. */
+ * whose icon couldn't be extracted at all (mostly MSI redistributables
+ * that register no icon anywhere, plus the ones whose only registered
+ * icon turned out to be an installer's generic glyph). `onError` covers
+ * the rarer case of a data URI that arrived but won't decode; without it
+ * the row would show a broken-image glyph, which looks worse than the
+ * letter it replaced.
+ *
+ * The letter skips a leading vendor word -- see iconTileLetter.js. It
+ * matters more than one character usually would: the programs that reach
+ * this tile are almost all system components named after their vendor,
+ * and twenty-six of the forty-six tiles here were the same "M". */
 function ProgramIcon({ program, src }) {
   const [failed, setFailed] = useState(false);
 
@@ -90,7 +97,7 @@ function ProgramIcon({ program, src }) {
         color: '#fff'
       }}
     >
-      {program.name.charAt(0)}
+      {tileLetter(program.name, program.publisher)}
     </div>
   );
 }
