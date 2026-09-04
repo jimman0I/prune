@@ -41,17 +41,32 @@ const ITEMS = [
       <path d="M18.4 6.6a9 9 0 1 1-12.8 0"></path>
     </svg>
   ) },
+  // A brush, not the mouse cursor this used to be. The old glyph was the
+  // standard arrow-pointer shape, which in a nav rail reads as "select" --
+  // it named the wrong action for the one screen in the app that deletes
+  // the most at once.
   { id: 'deepclean', label: 'Deep Clean', icon: (
     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z"></path>
-      <path d="M11 13l6 6"></path>
+      <path d="M9.5 14.5 3.5 20.5"></path>
+      <path d="M14.6 3.9a2 2 0 0 1 2.8 0l2.7 2.7a2 2 0 0 1 0 2.8l-5.3 5.3-5.5-5.5 5.3-5.3z"></path>
+      <path d="M8.4 15.6 6.2 13.4a1.5 1.5 0 0 1 0-2.1l1.4-1.4 5.5 5.5-1.4 1.4a1.5 1.5 0 0 1-2.1 0z"></path>
     </svg>
   ) }
 ];
 
 export default function NavRail({ screen, onNavigate }) {
   return (
-    <nav className="glass-panel flex flex-col items-center gap-2 py-6 w-[72px] shrink-0" aria-label="Main">
+    <nav className="relative flex flex-col items-center gap-2 py-6 w-[72px] shrink-0" aria-label="Main">
+      {/* The glass is a background LAYER here, not the container itself.
+          `backdrop-filter` establishes a containing block and clips
+          absolutely positioned descendants to its own border box, so with
+          .glass-panel on the <nav> every flyout label was sliced off at
+          the rail's edge -- visible as "Deep Cle". The same property
+          already caught this codebase once, in the treemap tooltip, which
+          escapes via a portal. A nav label does not need a portal; it
+          needs the blurred surface to be a sibling rather than an
+          ancestor. */}
+      <div className="glass-panel absolute inset-0" aria-hidden="true" />
       {/* The Prune mark already reads as a self-contained badge (navy
           circle, teal leaf) at this size -- the rail is only 72px wide,
           too narrow for the wordmark next to it without wrapping or
@@ -63,21 +78,39 @@ export default function NavRail({ screen, onNavigate }) {
           which only rewrites what it directly processes (index.html
           tags, module imports), not a raw string literal in JSX. "./"
           matches index.html's own already-correct favicon link. */}
-      <img src="./logo.png" alt="Prune" className="w-9 h-9 mb-4 shrink-0" />
+      <img src="./logo.png" alt="Prune" className="relative w-9 h-9 mb-4 shrink-0" />
       {ITEMS.map((item) => {
         const active = screen === item.id;
         return (
-          <button
-            key={item.id}
-            onClick={() => onNavigate(item.id)}
-            aria-current={active ? 'page' : undefined}
-            aria-label={item.label}
-            className={`w-11 h-11 rounded-xl flex items-center justify-center transition-colors ${
-              active ? 'bg-[color:var(--accent-coral-soft)] text-[color:var(--accent-coral)]' : 'text-[color:var(--text-secondary)] hover:text-[color:var(--text-primary)] hover:bg-white/[0.04]'
-            }`}
-          >
-            {item.icon}
-          </button>
+          // The label is a real element, not a `title` attribute -- this
+          // codebase does not use native hover text anywhere, and a
+          // 72px rail of seven unlabelled glyphs is otherwise a memory
+          // test. It sits OUTSIDE the rail's own bounds, so it needs the
+          // group to be positioned and the label to escape via
+          // translate rather than by widening anything.
+          <div key={item.id} className="relative group">
+            <button
+              onClick={() => onNavigate(item.id)}
+              aria-current={active ? 'page' : undefined}
+              aria-label={item.label}
+              className={`w-11 h-11 rounded-xl flex items-center justify-center transition-colors ${
+                active ? 'bg-[color:var(--accent-coral-soft)] text-[color:var(--accent-coral)]' : 'text-[color:var(--text-secondary)] hover:text-[color:var(--text-primary)] hover:bg-white/[0.04]'
+              }`}
+            >
+              {item.icon}
+            </button>
+
+            {/* Shown on hover AND on keyboard focus: someone tabbing the
+                rail needs the name at least as much as someone pointing
+                at it. `pointer-events-none` so it can never sit between
+                the cursor and the button underneath it. */}
+            <span
+              aria-hidden="true"
+              className="pointer-events-none absolute left-full top-1/2 -translate-y-1/2 ml-2 px-2 py-1 rounded-md whitespace-nowrap text-[11.5px] font-medium bg-[color:var(--bg-panel)] text-[color:var(--text-primary)] border border-[color:var(--border-subtle)] shadow-lg opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity duration-150 z-30"
+            >
+              {item.label}
+            </span>
+          </div>
         );
       })}
     </nav>

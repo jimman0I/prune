@@ -208,9 +208,6 @@ export default function App() {
           <div className="px-12 py-10 h-full flex flex-col min-h-0">
             <div className="flex items-baseline justify-between mb-6 shrink-0">
               <div>
-                <div className="text-[11px] text-[color:var(--text-muted)] font-mono uppercase tracking-[0.16em] mb-2">
-                  Application Manager
-                </div>
                 <h1 className="display-heading text-[30px] leading-none">
                   Installed applications
                 </h1>

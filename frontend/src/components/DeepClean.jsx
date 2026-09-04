@@ -289,12 +289,11 @@ export default function DeepClean() {
   return (
     <div className="h-full flex flex-col">
       <div className="flex-1 flex flex-col min-h-0 px-12 pt-10 pb-6 max-w-[1600px] w-full">
-        <div className="text-[11px] text-[color:var(--text-muted)] font-mono uppercase tracking-[0.16em] mb-2">Maintenance</div>
         <h1 className="display-heading text-[30px] leading-none mb-2">Deep Clean</h1>
         <p className="text-[13px] text-[color:var(--text-secondary)] mb-6 max-w-[62ch]">
-          Deep application caches, browser code caches, memory dumps, and error reports --
-          beyond what Smart Cleanup's own quick pass covers. Nothing is deleted outright:
-          everything Clean removes goes to Quarantine first.
+          Every cache, log, dump and leftover Prune knows how to find, measured on this
+          machine rather than estimated. Nothing is deleted outright — everything Clean
+          takes goes to Quarantine first, where you can put it back.
         </p>
 
         {scanError && (

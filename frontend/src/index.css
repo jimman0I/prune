@@ -1,4 +1,4 @@
-@import url(https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800&family=IBM+Plex+Serif:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap);
+@import url(https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=IBM+Plex+Serif:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap);
 
 @tailwind base;
 @tailwind components;
@@ -14,10 +14,14 @@
   /* Text */
   --text-primary: #faf9f5;
   --text-secondary: #a09d96;
-  --text-muted: #71717a; /* kept -- Aurora Deck's brief doesn't specify a
-                             third text tier, and several components need
-                             one shade below --text-secondary for the
-                             quietest labels (column headers, placeholders) */
+  /* The third text tier: column headers, placeholders, units, dashes.
+     Was #71717a, which measured 3.69:1 against the navy ground -- under
+     the 4.5:1 WCAG AA floor for body text, and this token is used for
+     PLACEHOLDERS, which need the full ratio rather than the large-text
+     3:1. Raised until it clears AA on every ground it actually sits on:
+     5.09:1 on the panel, and still 4.70:1 on the lightest table row tint
+     (white/[0.06]). Same cool neutral, just legible. */
+  --text-muted: #8d8d99;
 
   /* Functional accent -- coral, primary actions ONLY */
   --accent-coral: #f98074;
@@ -46,9 +50,24 @@ html, body, #root { height: 100%; margin: 0; }
 body {
   background: var(--bg-navy);
   color: var(--text-primary);
-  font-family: 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  font-feature-settings: 'cv11', 'ss01', 'ss03';
-  letter-spacing: -0.01em;
+  /* Archivo, not Geist.
+   *
+   * Geist is Vercel's typeface and reads as exactly one thing: a modern
+   * SaaS product. That is the look this app is explicitly not meant to
+   * have, and a face carries that association harder than any other single
+   * choice on the page.
+   *
+   * Archivo comes out of grotesque signage rather than software branding.
+   * It is engineered-looking without being retro, holds up at the 11-12px
+   * this app spends most of its time at, and sits on a real contrast axis
+   * with IBM Plex Serif rather than competing with it. Both have an
+   * institutional, drawn-for-a-purpose quality, which is the register a
+   * tool that deletes things should be in.
+   *
+   * The old `cv11/ss01/ss03` feature settings went with it -- those are
+   * Inter/Geist stylistic sets and were doing nothing for any other face. */
+  font-family: 'Archivo', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+  letter-spacing: -0.006em;
   -webkit-font-smoothing: antialiased;
   overflow: hidden;
   position: relative;
@@ -138,6 +157,61 @@ body::before {
   pointer-events: none;
 }
 
+/* Keyboard focus, everywhere, once.
+ *
+ * There was no focus style anywhere in this stylesheet -- not a ring, not
+ * an outline, nothing -- so tabbing through the app moved an invisible
+ * cursor. That matters more here than in most apps: the destructive
+ * controls (Uninstall, Remove selected, Empty quarantine) are reachable by
+ * keyboard, and a user who cannot see which one is focused is one Enter
+ * away from removing the wrong thing.
+ *
+ * `:focus-visible`, not `:focus`, so a mouse click never leaves a ring
+ * behind -- that is the reason the rule was removed from most codebases in
+ * the first place, and the reason it should not have been.
+ *
+ * Coral is the interactive accent and reads 7.11:1 on the navy ground, so
+ * the ring is visible without a second color. The offset keeps it clear of
+ * the control's own border rather than sitting on top of it. */
+:focus-visible {
+  outline: 2px solid var(--accent-coral);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* A control that already draws its own round shape keeps the ring on that
+   shape rather than around a square that doesn't exist. */
+.btn-primary:focus-visible,
+.btn-danger:focus-visible { border-radius: 9999px; }
+.btn-ghost:focus-visible,
+.glass-panel:focus-visible { border-radius: 12px; }
+
+/* Motion is state feedback here, never decoration -- so when it is turned
+   off, nothing is lost but the movement itself. Transitions collapse to
+   near-instant rather than to zero: a 1ms transition still fires
+   transitionend, which some components rely on, where `none` does not. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* The loading skeleton's one piece of motion: a slow fade in place, not a
+   sweeping shimmer. A shimmer conveys nothing the row count below it does
+   not already say, and this is a tool people open when something is wrong
+   -- a loading state that draws attention to itself is the wrong instinct.
+   The reduced-motion block above collapses this to a static block. */
+@keyframes skeleton-settle {
+  0%, 100% { opacity: 0.55; }
+  50% { opacity: 1; }
+}
+.skeleton-row {
+  animation: skeleton-settle 1.8s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
 /* Buttons */
 .btn-primary {
   background: linear-gradient(180deg, var(--accent-coral), #e8624f);
@@ -171,9 +245,17 @@ body::before {
   border-radius: 12px;
   padding: 8px 16px;
   cursor: pointer;
-  transition: all 160ms ease;
+  /* Named properties rather than `all`. `all` animates whatever happens to
+     change, including layout properties, and quietly costs a frame on
+     every one of them. */
+  transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease, transform 120ms cubic-bezier(0.2, 0.9, 0.3, 1);
 }
-.btn-ghost:hover { background: rgba(255, 255, 255, 0.04); border-color: rgba(255, 255, 255, 0.16); }
+.btn-ghost:hover:not(:disabled) { background: rgba(255, 255, 255, 0.04); border-color: rgba(255, 255, 255, 0.16); }
+/* Press feedback. Both of these had a hover state and nothing at all on
+   mousedown, so a click on a slow action read as "did that register?" --
+   the exact moment a user clicks a destructive control twice. */
+.btn-ghost:active:not(:disabled) { transform: translateY(1px); background: rgba(255, 255, 255, 0.07); }
+.btn-ghost:disabled { opacity: 0.45; cursor: not-allowed; }
 
 .btn-danger {
   background: var(--danger-soft);
@@ -182,9 +264,11 @@ body::before {
   border-radius: 9999px;
   padding: 6px 14px;
   cursor: pointer;
-  transition: all 160ms ease;
+  transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease, transform 120ms cubic-bezier(0.2, 0.9, 0.3, 1);
 }
-.btn-danger:hover { background: rgba(236, 81, 98, 0.2); color: #fbc7cc; }
+.btn-danger:hover:not(:disabled) { background: rgba(236, 81, 98, 0.2); color: #fbc7cc; border-color: rgba(236, 81, 98, 0.45); }
+.btn-danger:active:not(:disabled) { transform: translateY(1px); background: rgba(236, 81, 98, 0.28); }
+.btn-danger:disabled { opacity: 0.45; cursor: not-allowed; }
 
 input[type="checkbox"].sleek {
   appearance: none;
@@ -200,6 +284,8 @@ input[type="checkbox"].sleek {
   transition: all 140ms;
   flex-shrink: 0;
 }
+input[type="checkbox"].sleek:hover:not(:disabled) { border-color: var(--text-secondary); }
+input[type="checkbox"].sleek:disabled { opacity: 0.4; cursor: not-allowed; }
 input[type="checkbox"].sleek:checked { background: var(--accent-cyan); border-color: var(--accent-cyan); }
 input[type="checkbox"].sleek:checked::after {
   content: '';

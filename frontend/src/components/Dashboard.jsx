@@ -185,9 +185,6 @@ export default function Dashboard({ programs, totalSize, onNavigate = () => {} }
 
   return (
     <div className="px-12 py-10 max-w-[1400px]">
-      <div className="text-[11px] text-[color:var(--text-muted)] font-mono uppercase tracking-[0.16em] mb-2">
-        Overview
-      </div>
       <h1 className="display-heading text-[36px] leading-none mb-8">Dashboard</h1>
 
       <div className="glass-panel flex items-center gap-6 p-8 mb-6">
@@ -282,13 +279,18 @@ export default function Dashboard({ programs, totalSize, onNavigate = () => {} }
       </div>
 
       <div className="flex items-center gap-3 mb-6">
-        {/* All three were disabled placeholders carrying native `title`
-            hover text. Every one of them now has a real screen behind it,
-            so they navigate -- and the title attributes are gone, which
-            this codebase doesn't use anywhere. */}
-        <button className="btn-primary" onClick={() => onNavigate('cleanup')}>Smart Scan</button>
-        <button className="btn-ghost" onClick={() => onNavigate('diskmap')}>Disk Analyzer</button>
-        <button className="btn-ghost" onClick={() => onNavigate('applications')}>Batch Uninstall</button>
+        {/* These are navigation, so they are named for where they go.
+            They previously invented a third set of names for screens that
+            already have two -- "Smart Scan" for a screen called Deep Clean,
+            "Disk Analyzer" for one called Disk Map -- which leaves the
+            reader matching synonyms instead of reading.
+
+            "Smart Scan" also pointed at 'cleanup', the Smart Cleanup screen
+            that no longer exists, so the primary action on the app's front
+            page navigated nowhere at all. */}
+        <button className="btn-primary" onClick={() => onNavigate('deepclean')}>Deep Clean</button>
+        <button className="btn-ghost" onClick={() => onNavigate('diskmap')}>Disk Map</button>
+        <button className="btn-ghost" onClick={() => onNavigate('applications')}>Applications</button>
       </div>
 
       <div className="glass-panel p-6">

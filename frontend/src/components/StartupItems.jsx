@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { fetchStartupItems } from '../lib/api.js';
 import { groupStartupItems, startupCounts } from '../lib/groupStartupItems.js';
+import TableSkeleton from './TableSkeleton.jsx';
 
 /** What Windows launches when you sign in.
  *
@@ -138,9 +139,6 @@ export default function StartupItems() {
 
   return (
     <div className="px-12 py-10 max-w-[1400px]">
-      <div className="text-[11px] text-[color:var(--text-muted)] font-mono uppercase tracking-[0.16em] mb-2">
-        Startup
-      </div>
       <h1 className="display-heading text-[30px] leading-none mb-2">Runs at sign-in</h1>
       <p className="text-[13px] text-[color:var(--text-secondary)] mb-6 max-w-[62ch]">
         The Run keys and Startup folders Windows reads when you sign in, grouped by where they
@@ -156,7 +154,7 @@ export default function StartupItems() {
       )}
 
       {!error && items === null && (
-        <div className="glass-panel p-6 text-[13px] text-[color:var(--text-muted)]">Reading startup entries…</div>
+        <TableSkeleton columns={COLUMNS.filter((c) => c.label)} rows={7} label="Reading startup entries…" />
       )}
 
       {!error && items && items.length === 0 && (

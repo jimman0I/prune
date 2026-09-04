@@ -632,7 +632,6 @@ export default function DiskMap() {
 
   return (
     <div className="px-12 py-10 max-w-[1400px]">
-      <div className="text-[11px] text-[color:var(--text-muted)] font-mono uppercase tracking-[0.16em] mb-2">Disk Map</div>
       <div className="flex items-start justify-between gap-6 mb-6">
         <div>
           <h1 className="display-heading text-[30px] leading-none mb-2">Disk Usage</h1>

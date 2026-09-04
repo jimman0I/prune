@@ -93,9 +93,6 @@ export default function QuarantineManager() {
     <div className="px-12 py-10 max-w-[1400px]">
       <div className="flex items-baseline justify-between mb-8">
         <div>
-          <div className="text-[11px] text-[color:var(--text-muted)] font-mono uppercase tracking-[0.16em] mb-2">
-            Recovery
-          </div>
           <h1 className="display-heading text-[30px] leading-none">Quarantine</h1>
           {!loading && !error && (
             <p className="text-[13px] text-[color:var(--text-secondary)] mt-2.5">
@@ -155,7 +152,8 @@ export default function QuarantineManager() {
             <div className="glass-panel p-10 text-center">
               <p className="text-[13.5px] text-[color:var(--text-secondary)]">Nothing in quarantine.</p>
               <p className="text-[12.5px] text-[color:var(--text-muted)] mt-1.5">
-                Files removed via forced uninstall or Smart Cleanup land here first, before anything is permanently deleted.
+                Anything an uninstall or a Deep Clean removes lands here first. It stays until
+                you empty it, so a file taken by mistake is always recoverable.
               </p>
             </div>
           ) : (

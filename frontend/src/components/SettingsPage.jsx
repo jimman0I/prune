@@ -120,7 +120,6 @@ export default function SettingsPage() {
 
   return (
     <div className="px-12 py-10 max-w-[1400px]">
-      <div className="text-[11px] text-[color:var(--text-muted)] font-mono uppercase tracking-[0.16em] mb-2">Configuration</div>
       <h1 className="display-heading text-[30px] leading-none mb-6">Settings</h1>
 
       <div className="flex items-center gap-1.5 mb-6">

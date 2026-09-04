@@ -4,6 +4,7 @@ import { sizeBadgeTone } from '../lib/sizeBadgeTone.js';
 import { sortPrograms, nextSortState } from '../lib/sortPrograms.js';
 import { canBatchUninstall, batchIneligibleReason, batchSummary } from '../lib/batchSelection.js';
 import { isRecentlyInstalled, RECENT_DAYS } from '../lib/recentPrograms.js';
+import TableSkeleton from './TableSkeleton.jsx';
 
 function formatBytes(bytes) {
   if (bytes === null || bytes === undefined) return '—';
@@ -398,7 +399,17 @@ export default function ProgramList({ programs: initialPrograms, extensions = []
 
   const summary = batchSummary(selectedPrograms);
 
-  if (loading) return <div style={{ color: 'var(--text-muted)' }}>Loading installed programs…</div>;
+  // The shape of the table that is coming, not a line of text where it
+  // will be. The list takes about a second to arrive and the header,
+  // filters and column set are all known before it does -- showing them
+  // immediately means nothing moves when the rows land.
+  if (loading) {
+    return (
+      <div className="flex flex-col min-h-0">
+        <TableSkeleton columns={COLUMNS.filter((c) => c.label)} rows={10} label="Reading installed programs…" />
+      </div>
+    );
+  }
   if (error) return <div style={{ color: 'var(--danger)' }}>Couldn't load programs: {error}</div>;
 
   return (
