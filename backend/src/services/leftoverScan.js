@@ -1,4 +1,5 @@
 import { runPowerShellJson } from './powershell.js';
+import { scanRegistryLeftovers } from './registryLeftovers.js';
 
 /** Each entry is a PowerShell expression, and every one is DOUBLE-QUOTED
  * so a path containing spaces stays a single array element.
@@ -36,16 +37,17 @@ export function buildRootsExpression() {
   return `@(${SEARCH_ROOTS.join(',')})`;
 }
 
-/** Heuristic leftover scan: files/folders and registry keys whose name
- * matches the program's name or publisher, plus scheduled tasks the
- * program registered. NOT a full before/after system snapshot — that's
- * Hunter mode (Phase B), deliberately deferred. Each of the three checks
- * runs independently so one failing (e.g. a locked directory) doesn't
- * take the other two down. */
+/** Heuristic leftover scan: files and folders whose name matches the
+ * program's name or publisher, the registry keys and values that belong to
+ * it (registryLeftovers.js, which is a search of its own), and scheduled
+ * tasks the program registered. NOT a full before/after system snapshot —
+ * that's Hunter mode (Phase B), deliberately deferred. Each of the three
+ * checks runs independently so one failing (e.g. a locked directory)
+ * doesn't take the other two down. */
 export async function scanForLeftovers({ name, publisher }) {
   const [files, registryKeys, scheduledTasks] = await Promise.all([
     scanFiles(name, publisher).catch(() => ({ ok: false, items: [] })),
-    scanRegistry(name, publisher).catch(() => ({ ok: false, items: [] })),
+    scanRegistryLeftovers(name, publisher).catch(() => ({ ok: false, items: [] })),
     scanScheduledTasks(name).catch(() => ({ ok: false, items: [] }))
   ]);
   return { files, registryKeys, scheduledTasks };
@@ -73,23 +75,6 @@ $roots | ForEach-Object {
   const raw = await runPowerShellJson(script);
   const items = raw ? (Array.isArray(raw) ? raw : [raw]) : [];
   return { ok: true, items: items.map(i => ({ path: i.path, sizeBytes: i.sizeBytes || 0 })) };
-}
-
-async function scanRegistry(name, publisher) {
-  const terms = [name, publisher].filter(Boolean).map(escapeForRegex);
-  if (terms.length === 0) return { ok: true, items: [] };
-  const pattern = terms.join('|');
-  const script = `
-$pattern = '${pattern}'
-$roots = @('HKCU:\\Software', 'HKLM:\\Software')
-$roots | ForEach-Object {
-  Get-ChildItem -Path $_ -ErrorAction SilentlyContinue |
-    Where-Object { $_.PSChildName -match $pattern }
-} | Select-Object @{N='path';E={$_.Name}} | ConvertTo-Json -Compress
-`;
-  const raw = await runPowerShellJson(script);
-  const items = raw ? (Array.isArray(raw) ? raw : [raw]) : [];
-  return { ok: true, items: items.map(i => ({ path: i.path })) };
 }
 
 async function scanScheduledTasks(name) {

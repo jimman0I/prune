@@ -67,6 +67,73 @@ describe('quarantineAndDelete', () => {
     expect(manifest.failedRegistryKeys).toEqual(['HKCU:\\Software\\unrevo-does-not-exist']);
   });
 
+  // Startup entries are VALUES inside HKCU\...\Run, a key that every
+  // program starting with Windows shares. Removing one by deleting its key
+  // would take every other program's startup entry with it, so a leftover
+  // can name a single value and only that value comes out.
+  it('deletes a single registry value and leaves its neighbours alone', async () => {
+    await execFileAsync('reg', ['add', TEST_KEY, '/v', 'Keep', '/d', 'keep-me', '/f']);
+
+    const manifest = await quarantineAndDelete({
+      programName: 'OldApp',
+      files: [],
+      registryKeys: [{ path: 'HKCU:\\Software\\unrevo-test', valueName: 'Marker' }]
+    });
+
+    const { stdout } = await execFileAsync('reg', ['query', TEST_KEY]);
+    expect(stdout).not.toMatch(/Marker/);
+    expect(stdout).toMatch(/Keep/);
+    expect(manifest.registryKeys).toEqual([{ path: 'HKCU:\\Software\\unrevo-test', valueName: 'Marker' }]);
+    expect(manifest.failedRegistryKeys).toEqual([]);
+  });
+
+  it('backs up the whole key a deleted value lived in, so the value can come back', async () => {
+    const manifest = await quarantineAndDelete({
+      programName: 'OldApp',
+      files: [],
+      registryKeys: [{ path: 'HKCU:\\Software\\unrevo-test', valueName: 'Marker' }]
+    });
+
+    // reg.exe writes .reg files as UTF-16LE; reading it as utf8 would
+    // produce mojibake and this assertion would silently never match.
+    const regContent = await readFile(manifest.regFiles[0], 'utf16le');
+    expect(regContent).toMatch(/Marker/);
+    expect(regContent).toMatch(/test-value/);
+  });
+
+  it('reports a value it could not remove, naming the value and not just the key', async () => {
+    const manifest = await quarantineAndDelete({
+      programName: 'OldApp',
+      files: [],
+      registryKeys: [{ path: 'HKCU:\\Software\\unrevo-test', valueName: 'NoSuchValue' }]
+    });
+
+    expect(manifest.registryKeys).toEqual([]);
+    expect(manifest.failedRegistryKeys).toEqual([
+      { path: 'HKCU:\\Software\\unrevo-test', valueName: 'NoSuchValue' }
+    ]);
+    // The key itself must still be there: a failed value delete is not
+    // permission to fall back to deleting the whole key.
+    await expect(execFileAsync('reg', ['query', TEST_KEY])).resolves.toBeTruthy();
+  });
+
+  // The scanner already refuses to offer these, so reaching here means a
+  // caller built the list some other way -- a stale scan result, a bug, a
+  // hand-made request to the route. The remover is the last thing standing
+  // between that and a machine that no longer boots, so it checks too.
+  it('refuses to delete a key that belongs to Windows rather than to a program', async () => {
+    const manifest = await quarantineAndDelete({
+      programName: 'OldApp',
+      files: [],
+      registryKeys: ['HKLM:\\Software\\Microsoft', 'HKCU:\\Software\\unrevo-test']
+    });
+
+    expect(manifest.registryKeys).toEqual(['HKCU:\\Software\\unrevo-test']);
+    expect(manifest.failedRegistryKeys).toEqual(['HKLM:\\Software\\Microsoft']);
+    // Nothing was even exported for it -- the refusal comes before reg.exe.
+    expect(manifest.regFiles).toHaveLength(1);
+  });
+
   it('skips a file that no longer exists rather than throwing', async () => {
     const manifest = await quarantineAndDelete({ programName: 'OldApp', files: [join(scratchDir, 'nope.txt')], registryKeys: [] });
     expect(manifest.files).toEqual([]);

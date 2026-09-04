@@ -3,6 +3,7 @@ import { existsSync } from 'node:fs';
 import { join, basename } from 'node:path';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
+import { isProtectedKey } from './registryLeftovers.js';
 
 const execFileAsync = promisify(execFile);
 
@@ -28,6 +29,20 @@ function safeSegment(text) {
  * path-separator convention for the registry root. */
 function toRegExeKeyPath(psPath) {
   return psPath.replace(/^HKCU:\\?/i, 'HKCU\\').replace(/^HKLM:\\?/i, 'HKLM\\');
+}
+
+/** A registry target, however the caller spelled it.
+ *
+ * A leftover is usually a whole key, and callers have always passed those
+ * as a bare string. A startup entry is not: Run and RunOnce are keys that
+ * every program starting with Windows shares, so those leftovers name one
+ * value inside a key, `{ path, valueName }`, and only that value comes
+ * out. Both spellings are accepted so the older callers keep working
+ * unchanged and the manifest keeps recording exactly what it was asked
+ * for. */
+function toRegistryTarget(entry) {
+  if (typeof entry === 'string') return { path: entry, valueName: null };
+  return { path: entry?.path, valueName: entry?.valueName || null };
 }
 
 /** Creates one quarantine batch: moves every listed file into it (atomic
@@ -71,12 +86,32 @@ export async function quarantineAndDelete({ programName, files, registryKeys }) 
   const exportedKeys = [];
   const failedKeys = [];
   const regFiles = [];
-  for (const keyPath of registryKeys) {
+  for (const entry of registryKeys) {
+    const { path: keyPath, valueName } = toRegistryTarget(entry);
+    // Before reg.exe is touched at all. The scanner already refuses to
+    // offer these, so a protected key arriving here means the list was
+    // built some other way -- a stale scan result, a hand-made request to
+    // the route -- and this is the last thing between that and a machine
+    // that no longer boots. Running unelevated is not the protection it
+    // looks like: Prune can relaunch itself elevated, and then
+    // `reg delete HKLM\Software\Microsoft /f` would simply succeed.
+    if (!valueName && isProtectedKey(keyPath)) {
+      failedKeys.push(entry);
+      continue;
+    }
+
     const regFilePath = join(batchDir, `registry-${regFiles.length}.reg`);
     try {
+      // The export is always of the whole key, even when only one value is
+      // being removed: `reg export` has no per-value form, and re-importing
+      // the key is what puts the value back. Import merges rather than
+      // replaces, so restoring one of these cannot clobber a value some
+      // other program has added to the same key since.
       await execFileAsync('reg', ['export', toRegExeKeyPath(keyPath), regFilePath, '/y']);
-      await execFileAsync('reg', ['delete', toRegExeKeyPath(keyPath), '/f']);
-      exportedKeys.push(keyPath);
+      await execFileAsync('reg', valueName
+        ? ['delete', toRegExeKeyPath(keyPath), '/v', valueName, '/f']
+        : ['delete', toRegExeKeyPath(keyPath), '/f']);
+      exportedKeys.push(entry);
       regFiles.push(regFilePath);
     } catch {
       // Still skipped rather than thrown — one unremovable key must not
@@ -84,7 +119,7 @@ export async function quarantineAndDelete({ programName, files, registryKeys }) 
       // admin and quietly fail without it, so a caller that only reads
       // `registryKeys` would report a clean removal while the entry is
       // still there. Callers can now say which ones didn't go.
-      failedKeys.push(keyPath);
+      failedKeys.push(entry);
     }
   }
 
