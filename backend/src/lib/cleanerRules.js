@@ -6,6 +6,8 @@ import { homedir } from 'node:os';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { quarantineAndDelete } from '../services/quarantine.js';
+import { partitionCleanableFiles } from './cleanGuards.js';
+import { sendToRecycleBin } from '../services/recycleBin.js';
 
 const execFileAsync = promisify(execFile);
 const here = dirname(fileURLToPath(import.meta.url));
@@ -108,7 +110,7 @@ function collectFiles(targetPath, out, denied) {
     return;
   }
   if (st.isFile()) {
-    out.push({ path: targetPath, sizeBytes: st.size });
+    out.push({ path: targetPath, sizeBytes: st.size, mtimeMs: st.mtimeMs });
     return;
   }
   if (!st.isDirectory()) return;
@@ -130,7 +132,12 @@ function collectFiles(targetPath, out, denied) {
       collectFiles(full, out, denied);
     } else if (entry.isFile()) {
       try {
-        out.push({ path: full, sizeBytes: statSync(full).size });
+        // mtime as well as size: the "ignore anything touched in the
+        // last N hours" guard needs it, and this stat is already being
+        // paid for -- asking again later would be a second syscall per
+        // file across tens of thousands of them.
+        const stat = statSync(full);
+        out.push({ path: full, sizeBytes: stat.size, mtimeMs: stat.mtimeMs });
       } catch (err) {
         if (isAccessDenied(err)) denied.push(full);
         /* otherwise gone between readdir and stat -- skip */
@@ -147,7 +154,7 @@ function isAccessDenied(err) {
  * {path, sizeBytes} -- the single source of truth both scanRule (sums it)
  * and executeRule (quarantines it) build on, so a preview always shows
  * exactly what Clean would actually free. */
-function resolveRuleFiles(rule) {
+function resolveRuleFiles(rule, guards = {}) {
   const files = [];
   const denied = [];
   for (const rawPath of rule.paths) {
@@ -164,23 +171,33 @@ function resolveRuleFiles(rule) {
       collectFiles(match, files, denied);
     }
   }
-  return { files, denied };
+
+  // The guards apply HERE, in the one function both the preview and the
+  // removal are built on, rather than in each of them separately. The
+  // preview promising a number the removal then doesn't free is exactly
+  // the drift this shared resolver exists to prevent.
+  const { cleanable, held } = partitionCleanableFiles(files, guards);
+  return { files: cleanable, denied, held };
 }
 
 /** Computes one rule's current size without touching anything -- Preview
  * Mode. A command-based rule (nothing to size) returns null, not 0 --
  * 0 would falsely claim "there is nothing to free", null honestly says
  * "there is nothing to preview". */
-export function scanRule(rule) {
+export function scanRule(rule, guards = {}) {
   // A command rule has nothing to look for on disk, so it's always
   // applicable -- `ipconfig /flushdns` works whether or not anything is
   // cached.
   if (rule.command) return { id: rule.id, sizeBytes: null, fileCount: null, present: true, accessible: true };
-  const { files, denied } = resolveRuleFiles(rule);
+  const { files, denied, held } = resolveRuleFiles(rule, guards);
   return {
     id: rule.id,
     sizeBytes: files.reduce((sum, f) => sum + f.sizeBytes, 0),
     fileCount: files.length,
+    // What the guards held back, so the panel can say "and 12 files left
+    // alone" rather than quietly reporting a smaller number than the user
+    // can see in Explorer.
+    heldCount: held.length,
     present: rulePathsExist(rule),
     // False means "this exists but Windows wouldn't let us look inside",
     // which the UI must show as needing admin rather than as 0 bytes.
@@ -210,11 +227,11 @@ function rulePathsExist(rule) {
 
 /** Every rule from cleaners.json, scanned and grouped by category -- the
  * shape GET /api/deep-clean/scan hands straight to the frontend tree. */
-export function scanAllRules() {
+export function scanAllRules(guards = {}) {
   const rules = loadCleanerRules();
   const byCategory = new Map();
   for (const rule of rules) {
-    const scanned = scanRule(rule);
+    const scanned = scanRule(rule, guards);
     const item = { ...rule, ...scanned };
     if (!byCategory.has(rule.category)) byCategory.set(rule.category, []);
     byCategory.get(rule.category).push(item);
@@ -247,7 +264,7 @@ async function isFileAccessible(filePath) {
  * deleted outright, so a bad match is always recoverable the same way an
  * uninstall's own leftover removal already is. A `command` rule (DNS
  * flush) just runs the command; there is no file to quarantine. */
-export async function executeRule(rule) {
+export async function executeRule(rule, guards = {}) {
   if (rule.command) {
     try {
       await execFileAsync(rule.command.split(' ')[0], rule.command.split(' ').slice(1));
@@ -257,15 +274,37 @@ export async function executeRule(rule) {
     }
   }
 
-  const { files: candidates } = resolveRuleFiles(rule);
+  const { files: candidates, held } = resolveRuleFiles(rule, guards);
   const accessible = [];
-  const skipped = [];
+  // Seeded with what the guards refused, each carrying its own reason.
+  // Reported rather than dropped: the only way a user ever discovers that
+  // their own exclusion is what held a file back is being told.
+  const skipped = [...held];
   for (const file of candidates) {
     if (await isFileAccessible(file.path)) accessible.push(file.path);
     else skipped.push({ path: file.path, reason: 'locked or inaccessible' });
   }
 
   if (accessible.length === 0) return { id: rule.id, freedBytes: 0, skipped };
+
+  // The other half of `autoQuarantine`, which used to be a switch in
+  // Settings that decided nothing at all. Off means the Recycle Bin rather
+  // than Prune's own quarantine -- Revo offers the same choice ("Delete to
+  // bin") and the bin is the right alternative: the user gets the space
+  // back from somewhere they already know how to empty, and a file taken
+  // by mistake is still recoverable through a UI they already trust.
+  if (guards.autoQuarantine === false) {
+    const sizeOf = new Map(candidates.map((f) => [f.path, f.sizeBytes]));
+    const { recycled, failed, error } = await sendToRecycleBin(accessible);
+    for (const path of failed) skipped.push({ path, reason: error ? `could not be recycled: ${error}` : 'could not be recycled' });
+    return {
+      id: rule.id,
+      // Summed from what actually went, not from what was asked for.
+      freedBytes: recycled.reduce((sum, path) => sum + (sizeOf.get(path) || 0), 0),
+      recycled: true,
+      skipped
+    };
+  }
 
   try {
     const manifest = await quarantineAndDelete({
@@ -292,7 +331,7 @@ export async function executeRule(rule) {
  * error entry rather than thrown -- same "don't trust a caller-supplied
  * id blindly, but don't blow up on it either" posture cleanup.js's own
  * executeCleanup already uses for its category ids. */
-export async function executeRules(ruleIds) {
+export async function executeRules(ruleIds, guards = {}) {
   const rules = loadCleanerRules();
   const results = [];
   let freedBytes = 0;
@@ -302,7 +341,7 @@ export async function executeRules(ruleIds) {
       results.push({ id, error: `Unknown rule id "${id}"` });
       continue;
     }
-    const result = await executeRule(rule);
+    const result = await executeRule(rule, guards);
     freedBytes += result.freedBytes || 0;
     results.push(result);
   }
@@ -328,13 +367,13 @@ export async function executeRules(ruleIds) {
  * `signal` lets a caller stop early, which is what the UI's Abort button
  * and a client hanging up both come down to. Returns a summary rather
  * than throwing on abort -- a cancelled scan is an ordinary outcome. */
-export async function scanRulesProgressively(onItem, { signal } = {}) {
+export async function scanRulesProgressively(onItem, { signal, ...guards } = {}) {
   const rules = loadCleanerRules();
   let scanned = 0;
 
   for (const rule of rules) {
     if (signal?.aborted) return { aborted: true, total: rules.length, scanned };
-    onItem({ ...rule, ...scanRule(rule) });
+    onItem({ ...rule, ...scanRule(rule, guards) });
     scanned++;
     // setImmediate, not a 0ms timer: it runs after I/O callbacks in the
     // same loop iteration, so a pending socket write goes out before the

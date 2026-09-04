@@ -4,6 +4,7 @@ import { join, basename } from 'node:path';
 import { existsSync } from 'node:fs';
 import { quarantineAndDelete, restoreQuarantine, quarantineRoot, deletePermanently, emptyQuarantine } from '../services/quarantine.js';
 import { tryCreateRestorePoint } from '../services/restorePoint.js';
+import { getSettings } from '../services/settings.js';
 
 // Real bug, found dogfooding Phase 4 (2026-09-01): `manifest.batchDir` (the
 // field every list/restore/delete client-side call keys off) is the FULL
@@ -34,7 +35,14 @@ router.post('/remove', async (req, res) => {
   const { programName, files, registryKeys } = req.body || {};
   if (!programName) { res.status(400).json({ error: 'programName is required' }); return; }
   try {
-    const restorePoint = await tryCreateRestorePoint(`Prune: forced removal of ${programName}`);
+    // Revo's SRInCP, which it ships on. Prune already made one before
+    // every forced removal -- it just made one unconditionally, which is a
+    // slow no-op on a machine where System Protection is turned off, and
+    // there was no way to say so.
+    const settings = await getSettings();
+    const restorePoint = settings.createRestorePoint === false
+      ? { created: false, reason: 'turned off in Settings' }
+      : await tryCreateRestorePoint(`Prune: forced removal of ${programName}`);
     const manifest = await quarantineAndDelete({ programName, files: files || [], registryKeys: registryKeys || [] });
     res.json({ ...manifest, restorePoint });
   } catch (err) {

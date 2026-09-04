@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { scanAllRules, executeRules, scanRulesProgressively, loadCleanerRules } from '../lib/cleanerRules.js';
+import { getSettings, cleanGuardsFrom } from '../services/settings.js';
 
 const router = Router();
 
@@ -39,7 +40,7 @@ router.get('/scan/stream', async (req, res) => {
     sendEvent(res, 'start', { total: rules.length });
     const summary = await scanRulesProgressively(
       (item) => sendEvent(res, 'rule', item),
-      { signal: controller.signal }
+      { signal: controller.signal, ...cleanGuardsFrom(await getSettings()) }
     );
     if (!controller.signal.aborted) sendEvent(res, 'done', summary);
   } catch (err) {
@@ -76,9 +77,9 @@ router.get('/rules', (req, res) => {
   }
 });
 
-router.get('/scan', (req, res) => {
+router.get('/scan', async (req, res) => {
   try {
-    res.json({ categories: scanAllRules() });
+    res.json({ categories: scanAllRules(cleanGuardsFrom(await getSettings())) });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -91,7 +92,7 @@ router.post('/execute', async (req, res) => {
     return;
   }
   try {
-    res.json(await executeRules(ruleIds));
+    res.json(await executeRules(ruleIds, cleanGuardsFrom(await getSettings())));
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

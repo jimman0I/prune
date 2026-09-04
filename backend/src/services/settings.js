@@ -18,7 +18,56 @@ export function settingsPath() {
     || join(process.env.LOCALAPPDATA || process.cwd(), 'Prune', 'settings.json');
 }
 
-const DEFAULT_SETTINGS = { excludeFolders: [], autoQuarantine: true, theme: 'dark', accentColor: null, minimizeToTray: true };
+/** Every setting, and what it does when nobody has touched it.
+ *
+ * Two of these used to be written by the Settings screen and read by
+ * nothing at all -- `excludeFolders` and `autoQuarantine` were saved to
+ * disk, shown back to the user, and had no effect on a single line of
+ * behaviour. A control that does nothing is worse than a missing one,
+ * because the user stops checking whether any of the others work either.
+ * Both are wired now, and nothing goes in this object that isn't.
+ *
+ * The three new ones are lifted from what Revo and BleachBit ship enabled
+ * rather than from what they merely offer:
+ *
+ *   skipRecentHours -- Revo's "ignore the last 24 hours", on by default
+ *   there and worth copying: in a temp folder, a file being written right
+ *   now is indistinguishable from one abandoned two years ago.
+ *
+ *   createRestorePoint -- Revo's SRInCP, also on. Prune already made one
+ *   before every forced removal; it just made one unconditionally, which
+ *   is wrong on a machine where System Protection is off and the attempt
+ *   is a slow no-op.
+ *
+ *   hideUnavailableRules -- BleachBit's "hide irrelevant cleaners". Most
+ *   of a 74-rule list is for software the user does not have. */
+const DEFAULT_SETTINGS = {
+  excludeFolders: [],
+  autoQuarantine: true,
+  theme: 'dark',
+  accentColor: null,
+  minimizeToTray: true,
+  skipRecentHours: 24,
+  createRestorePoint: true,
+  hideUnavailableRules: false
+};
+
+/** The subset of settings the cleaner needs, in the shape it takes.
+ *
+ * A named translation rather than passing the whole settings object down:
+ * the guards should not have to know that a field is called
+ * `skipRecentHours`, and a typo in that name would otherwise silently mean
+ * "no guard" rather than failing anywhere visible. */
+export function cleanGuardsFrom(settings) {
+  const hours = Number(settings?.skipRecentHours);
+  return {
+    excludeFolders: Array.isArray(settings?.excludeFolders) ? settings.excludeFolders : [],
+    skipRecentHours: Number.isFinite(hours) && hours > 0 ? hours : 0,
+    // Only an explicit false turns quarantining off. A settings file
+    // written before this key existed must keep the safer behaviour.
+    autoQuarantine: settings?.autoQuarantine !== false
+  };
+}
 
 /** Persisted app settings, or the default shape if nothing has ever been
  * saved. Never throws on a missing file -- "never configured" is a normal,
