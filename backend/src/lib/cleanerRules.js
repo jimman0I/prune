@@ -31,6 +31,11 @@ export function expandPath(rawPath) {
     // rather than as broken.
     .replace(/%WINDIR%/gi, process.env.WINDIR || process.env.SYSTEMROOT || '')
     .replace(/%PROGRAMDATA%/gi, process.env.ProgramData || '')
+    // "C:" with no trailing separator, which is how Windows itself sets it.
+    // The Recycle Bin is the only rule that needs it, and it needs it
+    // because the bin lives at the root of each volume rather than
+    // anywhere under a profile.
+    .replace(/%SYSTEMDRIVE%/gi, process.env.SystemDrive || (process.env.SYSTEMROOT || 'C:').slice(0, 2))
     .replace(/%PROGRAMFILES\(X86\)%/gi, process.env['ProgramFiles(x86)'] || '')
     .replace(/%PROGRAMFILES%/gi, process.env.ProgramFiles || '');
   if (expanded.startsWith('~')) {

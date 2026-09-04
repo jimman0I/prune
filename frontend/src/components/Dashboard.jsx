@@ -277,7 +277,7 @@ export default function Dashboard({ programs, totalSize, onNavigate = () => {} }
         />
         <StatCard
           label="Junk Files"
-          value={<div className="text-[13px] text-[color:var(--text-secondary)]">Run Smart Cleanup to find out.</div>}
+          value={<div className="text-[13px] text-[color:var(--text-secondary)]">Run Deep Clean to find out.</div>}
         />
       </div>
 

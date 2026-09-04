@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { fetchQuarantineBatches, restoreQuarantineBatch, deleteQuarantineBatch, emptyQuarantine } from '../lib/api.js';
 
-// Duplicated locally rather than imported from Dashboard.jsx/SmartCleanup.jsx
+// Duplicated locally rather than imported from Dashboard.jsx/DeepClean.jsx
 // (both off-limits for this task) -- matches this codebase's own existing
 // convention of a small per-component formatBytes copy.
 function formatBytes(bytes) {

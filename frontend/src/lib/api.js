@@ -379,24 +379,6 @@ export async function fetchDiskScan(path, signal) {
   return data;
 }
 
-export async function fetchCleanupScan() {
-  const res = await fetch(`${API_URL}/cleanup-scan`);
-  const data = await res.json();
-  if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
-  return data;
-}
-
-export async function executeCleanupCategories(categoryIds) {
-  const res = await fetch(`${API_URL}/cleanup-execute`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ categoryIds })
-  });
-  const data = await res.json();
-  if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
-  return data;
-}
-
 export async function fetchUninstallHistory() {
   const res = await fetch(`${API_URL}/uninstall-history`);
   const data = await res.json();

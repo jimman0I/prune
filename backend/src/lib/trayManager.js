@@ -95,8 +95,14 @@ export async function initTray() {
     {
       label: 'Quick Clean (Temp Files)',
       click: async () => {
-        const { executeCleanup } = await import('../services/cleanup.js');
-        await executeCleanup(['tempFiles']);
+        // Runs the Deep Clean rule rather than a category of its own. The
+        // Smart Cleanup screen this used to share code with is gone --
+        // BleachBit's model, one list of everything with a checkbox each,
+        // replaced it -- and there is no reason for the tray to keep a
+        // second definition of "temp files" alive behind it.
+        const { loadCleanerRules, executeRule } = await import('./cleanerRules.js');
+        const rule = loadCleanerRules().find((r) => r.id === 'user_temp');
+        if (rule) await executeRule(rule);
       }
     },
     { label: 'Quit', click: () => app.quit() }

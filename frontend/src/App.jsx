@@ -3,7 +3,6 @@ import NavRail from './components/NavRail.jsx';
 import Dashboard from './components/Dashboard.jsx';
 import DiskMap from './components/DiskMap.jsx';
 import Screen from './components/Screen.jsx';
-import SmartCleanup from './components/SmartCleanup.jsx';
 import ProgramList from './components/ProgramList.jsx';
 import BatchUninstallModal from './components/BatchUninstallModal.jsx';
 import UninstallModal from './components/UninstallModal.jsx';
@@ -201,7 +200,6 @@ export default function App() {
           <Dashboard programs={programs} totalSize={totalSize} onNavigate={setScreen} />
         </Screen>
         <Screen active={screen === 'diskmap'} visited={visited.has('diskmap')}><DiskMap /></Screen>
-        <Screen active={screen === 'cleanup'} visited={visited.has('cleanup')}><SmartCleanup /></Screen>
         <Screen active={screen === 'quarantine'} visited={visited.has('quarantine')}><QuarantineManager /></Screen>
         <Screen active={screen === 'settings'} visited={visited.has('settings')}><SettingsPage /></Screen>
         <Screen active={screen === 'startup'} visited={visited.has('startup')}><StartupItems /></Screen>

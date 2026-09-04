@@ -16,9 +16,9 @@ const TABS = [
   { id: 'about', label: 'About' }
 ];
 
-/** Same bespoke on/off switch as SmartCleanup.jsx's own local Toggle --
- * duplicated rather than imported since SmartCleanup.jsx is off-limits for
- * this task (Phase 4 scope manifest). */
+/** The same bespoke on/off switch DeepCleanTree.jsx uses, duplicated
+ * rather than imported -- this codebase keeps small controls local to the
+ * component that draws them rather than in a shared UI module. */
 function Toggle({ checked, onChange, label }) {
   return (
     <button

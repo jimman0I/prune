@@ -894,5 +894,28 @@
     ],
     "is_safe": true,
     "recommended": true
+  },
+  {
+    "id": "recycle_bin",
+    "category": "Windows",
+    "name": "Recycle Bin",
+    "description": "Files you have already deleted, still using the space until the bin is emptied. Emptying it is the point, so nothing here comes back on its own.",
+    "paths": [
+      "%SYSTEMDRIVE%\\$Recycle.Bin\\*"
+    ],
+    "is_safe": true,
+    "recommended": false,
+    "risky": true
+  },
+  {
+    "id": "user_temp",
+    "category": "Windows",
+    "name": "Temp folder",
+    "description": "The scratch folder Windows, installers and half the programs on the machine write into and rarely clean up after themselves.",
+    "paths": [
+      "%LOCALAPPDATA%\\Temp\\*"
+    ],
+    "is_safe": true,
+    "recommended": true
   }
 ]

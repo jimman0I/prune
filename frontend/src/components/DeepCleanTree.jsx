@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 /** Custom checkbox -- coral fill + white check when checked, glass border
  * when not. Not a native <input type="checkbox">, same "build the control
- * ourselves" convention SmartCleanup.jsx's own Toggle already establishes
+ * ourselves" convention SettingsPage.jsx's own Toggle already establishes
  * for this codebase's bespoke controls. */
 function Checkbox({ checked, onChange, label }) {
   return (
