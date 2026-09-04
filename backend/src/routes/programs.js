@@ -8,6 +8,7 @@ import { getStoreApps } from '../services/storeApps.js';
 import { getBrowserExtensions } from '../services/browserExtensions.js';
 import { getStartupItems, getStartupEntries } from '../services/startupItems.js';
 import { setStartupEnabled } from '../services/startupToggle.js';
+import { getStartupIcons } from '../services/startupIcons.js';
 import { revealPath, openInstalledAppsSettings } from '../services/revealPath.js';
 import { getPackageIcons } from '../services/packageIcons.js';
 import { getRunningPrograms } from '../services/runningPrograms.js';
@@ -131,6 +132,26 @@ router.get('/extensions', async (req, res) => {
 router.get('/startup', async (req, res) => {
   try {
     res.json({ items: await getStartupItems() });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+/** Icons for the startup entries, as { entryId: dataUri }.
+ *
+ * Its own endpoint like /icons and /package-icons, and for the same
+ * reason: it spawns PowerShell twice -- once to resolve Startup-folder
+ * shortcuts, once to read every executable in the list -- and the rows
+ * should be on screen long before any of that finishes.
+ *
+ * It matters more here than on the Applications tab. These entries are
+ * named by whatever string a program chose to write into a registry
+ * value, so "RtkAudUService", "SunJavaUpdateSched" and "vgtray" are the
+ * names, and the icon is often the only thing that says what any of them
+ * actually is. */
+router.get('/startup/icons', async (req, res) => {
+  try {
+    res.json({ icons: await getStartupIcons(await getStartupEntries()) });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
