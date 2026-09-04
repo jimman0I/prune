@@ -95,6 +95,27 @@ export async function fetchStartupItems() {
   return data.items;
 }
 
+/** Icons for the startup entries, as { entryId: dataUri }.
+ *
+ * A separate call from fetchStartupItems for the same reason the program
+ * icons are: the backend resolves shortcuts and opens every executable in
+ * the list to build this, and the rows must not wait on it.
+ *
+ * Never throws. Icons are decoration on a screen whose job is the list,
+ * and the lettered tiles are a complete fallback on their own -- a failed
+ * extraction must not be the thing that empties the rows. An entry with
+ * no icon is simply absent from the map. */
+export async function fetchStartupIcons() {
+  try {
+    const res = await fetch(`${API_URL}/programs/startup/icons`);
+    if (!res.ok) return {};
+    const data = await res.json();
+    return data?.icons || {};
+  } catch {
+    return {};
+  }
+}
+
 /** Switches one startup entry on or off.
  *
  * Returns a result instead of throwing, unlike everything else in this

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { fetchStartupItems, setStartupItemEnabled } from '../lib/api.js';
+import { fetchStartupItems, fetchStartupIcons, setStartupItemEnabled } from '../lib/api.js';
 import { groupStartupItems, startupCounts } from '../lib/groupStartupItems.js';
 import { applyEnabled, toggleOutcome } from '../lib/startupToggleState.js';
 import TableSkeleton from './TableSkeleton.jsx';
@@ -26,6 +26,7 @@ import TableSkeleton from './TableSkeleton.jsx';
  * it, and whether it is running right now. */
 const COLUMNS = [
   { key: 'state', label: '', width: '30px' },
+  { key: 'icon', label: '', width: '20px' },
   { key: 'name', label: 'Startup name', width: 'minmax(150px,0.9fr)' },
   { key: 'command', label: 'Launch path', width: 'minmax(180px,1.3fr)' },
   { key: 'description', label: 'Description', width: 'minmax(130px,0.9fr)' },
@@ -97,6 +98,45 @@ function EnabledSwitch({ item, pending, onToggle }) {
   );
 }
 
+/** The entry's own icon, falling back to a lettered tile.
+ *
+ * It carries more weight on this screen than on the Applications tab.
+ * These entries are named by whatever string a program chose to write
+ * into a registry value, so the names really are "RtkAudUService",
+ * "SunJavaUpdateSched" and "vgtray", and the icon is frequently the only
+ * thing in the row that says what the program actually is.
+ *
+ * Two fallbacks, both needed and both borrowed from ProgramIcon, which
+ * hit each of them in practice: `src` is absent for an entry whose icon
+ * could not be read at all, and `onError` covers a data URI that arrived
+ * but will not decode, which would otherwise render a broken-image glyph
+ * -- worse than the letter it replaced. */
+function StartupIcon({ item, src }) {
+  const [failed, setFailed] = useState(false);
+
+  if (src && !failed) {
+    return (
+      <img
+        src={src}
+        alt=""
+        width={20}
+        height={20}
+        className="w-5 h-5 object-contain shrink-0"
+        onError={() => setFailed(true)}
+      />
+    );
+  }
+
+  return (
+    <div
+      className="w-5 h-5 rounded-[4px] flex items-center justify-center text-[9px] font-bold shrink-0"
+      style={{ background: 'linear-gradient(135deg, #f98074dd, #f9807488)', color: '#fff' }}
+    >
+      {item.name.charAt(0).toUpperCase()}
+    </div>
+  );
+}
+
 /** Three different facts, deliberately not merged into one column.
  *
  * A startup entry that is switched on may not be running (it crashed, it
@@ -133,7 +173,7 @@ function StatusPill({ item }) {
   return <span className="text-[10.5px] font-mono text-[color:var(--text-muted)]">Not running</span>;
 }
 
-function StartupRow({ item, pending, error, onToggle }) {
+function StartupRow({ item, iconSrc, pending, error, onToggle }) {
   return (
     <div
       className={`grid gap-3 px-5 py-2 items-center transition-colors ${
@@ -142,6 +182,8 @@ function StartupRow({ item, pending, error, onToggle }) {
       style={{ gridTemplateColumns: GRID }}
     >
       <EnabledSwitch item={item} pending={pending} onToggle={onToggle} />
+
+      <StartupIcon item={item} src={iconSrc} />
 
       <div className="min-w-0">
         <div className="text-[12.5px] text-[color:var(--text-primary)] truncate">{item.name}</div>
@@ -177,6 +219,7 @@ function StartupRow({ item, pending, error, onToggle }) {
 
 export default function StartupItems() {
   const [items, setItems] = useState(null);
+  const [icons, setIcons] = useState({});
   const [error, setError] = useState(null);
   // Keyed by entry id, both of them: several rows can be mid-change at
   // once, and an error belongs to the row that produced it rather than to
@@ -189,6 +232,13 @@ export default function StartupItems() {
     fetchStartupItems()
       .then((result) => { if (!cancelled) setItems(result || []); })
       .catch((err) => { if (!cancelled) setError(err.message); });
+
+    // Fired alongside the list rather than after it. The two calls are
+    // independent -- the backend re-reads the startup locations for the
+    // icons anyway -- and chaining them would add the list's own second
+    // to a wait the rows do not need to serialise on.
+    fetchStartupIcons().then((result) => { if (!cancelled) setIcons(result); });
+
     return () => { cancelled = true; };
   }, []);
 
@@ -324,6 +374,7 @@ export default function StartupItems() {
                     <StartupRow
                       key={item.id}
                       item={item}
+                      iconSrc={icons[item.id]}
                       pending={Boolean(pending[item.id])}
                       error={rowErrors[item.id]}
                       onToggle={onToggle}
