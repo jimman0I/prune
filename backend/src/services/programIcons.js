@@ -5,6 +5,7 @@ import { extractIcons } from './iconExtract.js';
 import { getFileTypeIcons } from './fileTypeIcons.js';
 import { typeIconExtension } from './iconTypeFallback.js';
 import { productCodeFrom, getMsiProductIcons } from './msiProductIcon.js';
+import { genericIconIds } from './genericIcon.js';
 
 /** Extraction is pure function of the file it reads, and those files don't
  * change while the app is open -- so this survives for the process's life
@@ -89,10 +90,26 @@ export async function getProgramIcons(programs) {
     }
   }
 
+  // Icons that turned out to identify nothing -- an installer's default
+  // glyph rather than any one program's picture. Judged after extraction
+  // because it can only be judged on the images themselves: nineteen
+  // programs here have a real DisplayIcon that extracts the same WiX
+  // setup glyph, and nothing about any one of those nineteen entries says
+  // so on its own.
+  const nameById = new Map(list.map((program) => [program.id, program.name]));
+  const rejected = genericIconIds(
+    [...keyForProgram].map(([programId, key]) => ({
+      id: programId,
+      name: nameById.get(programId),
+      path: key.slice(0, key.lastIndexOf('|')),
+      picture: cache.get(key)
+    }))
+  );
+
   const icons = {};
   const needsType = new Map();
   for (const [programId, key] of keyForProgram) {
-    const dataUri = cache.get(key);
+    const dataUri = rejected.has(programId) ? null : cache.get(key);
     if (dataUri) {
       icons[programId] = dataUri;
       continue;
