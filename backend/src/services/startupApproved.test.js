@@ -71,6 +71,24 @@ describe('approvedKindFor', () => {
     expect(approvedKindFor({ source: 'registry', registryKey: '' })).toBe('Run');
     expect(approvedKindFor(null)).toBe('Run');
   });
+
+  it('sends a RunOnce entry nowhere, because Windows records none', () => {
+    // Both hives on this machine hold Run, Run32 and StartupFolder, and no
+    // RunOnce subkey -- Windows does not track these at all, which is also
+    // why Task Manager's Startup tab never lists them. Answering "Run"
+    // here reads a DIFFERENT entry's state whenever a Run value shares the
+    // name, and on the write side would switch that other entry off.
+    expect(approvedKindFor({
+      source: 'registry',
+      location: 'RunOnce',
+      registryKey: 'HKCU:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\RunOnce'
+    })).toBeNull();
+    expect(approvedKindFor({
+      source: 'registry',
+      location: 'RunOnce',
+      registryKey: 'HKLM:\\SOFTWARE\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\RunOnce'
+    })).toBeNull();
+  });
 });
 
 describe('approvedLookupKey', () => {
@@ -99,5 +117,21 @@ describe('approvedLookupKey', () => {
     const base = { source: 'registry', registryKey: 'HKLM:\\...\\Run', name: 'Discord' };
     expect(approvedLookupKey({ ...base, scope: 'machine' }))
       .not.toBe(approvedLookupKey({ ...base, scope: 'user' }));
+  });
+
+  it('cannot collide a RunOnce entry with a Run value of the same name', () => {
+    // The reason this matters: RunOnce has no StartupApproved record, so
+    // a lookup key that said "Run" would read the Run value's state and
+    // report a RunOnce entry as switched off because something else is.
+    const runOnce = {
+      scope: 'user', source: 'registry', name: 'Discord', approvedName: 'Discord',
+      location: 'RunOnce',
+      registryKey: 'HKCU:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\RunOnce'
+    };
+    expect(approvedLookupKey(runOnce)).not.toBe('user|Run|Discord');
+    // And it matches nothing in a real map, so the entry reads as enabled
+    // -- which it always is, since Windows runs it and then deletes it.
+    expect(isStartupEnabled({ 'user|Run|Discord': [3, 0, 0, 0] }[approvedLookupKey(runOnce)] ?? null))
+      .toBe(true);
   });
 });

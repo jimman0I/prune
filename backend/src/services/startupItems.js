@@ -4,6 +4,7 @@ import { parseUninstallerPath } from './uninstallerPath.js';
 import { expandPath } from '../lib/cleanerRules.js';
 import { isStartupEnabled, approvedLookupKey } from './startupApproved.js';
 import { getStartupDetails } from './startupDetails.js';
+import { toggleRefusal } from './startupToggle.js';
 
 /** Everything Windows runs when you sign in.
  *
@@ -139,27 +140,40 @@ export function normalizeStartupItem(raw) {
   };
 }
 
-/** Attaches each entry's on/off state from the StartupApproved map.
+/** Attaches each entry's on/off state from the StartupApproved map, and
+ * the reason it cannot be switched when there is one.
  *
  * Separate from normalizeStartupItem because it needs the whole map, and
  * because "is this entry switched on" is a different question from "what
  * does this entry say" -- one comes from the Run key, the other from a
- * decision recorded somewhere else entirely. */
+ * decision recorded somewhere else entirely.
+ *
+ * `toggleNote` is the same question one step further: an entry Windows
+ * keeps no record for cannot be switched at all, and the screen needs the
+ * reason rather than an inert control. Computed here because it comes
+ * from the same lookup -- the entries with no note are exactly the ones
+ * whose state was read from a real key. */
 export function attachEnabledState(items, approved) {
   const map = approved || {};
   return items.map((item) => ({
     ...item,
     enabled: isStartupEnabled(
       map[approvedLookupKey({ ...item, scope: item.rawScope })] ?? null
-    )
+    ),
+    toggleNote: toggleRefusal(item)
   }));
 }
 
-/** Everything set to run at sign-in.
+/** The entries themselves, without the second pass for version resources
+ * and running processes.
  *
- * Broken entries sort first: they are the reason to look at this list at
- * all, and everything else here is working as intended. */
-export async function getStartupItems() {
+ * Split out for the toggle. Switching an entry off needs to know exactly
+ * which registry value the click meant, and the honest way to answer that
+ * is to look again rather than to trust an id posted by the UI -- an id
+ * the UI made up would otherwise name a registry write target. The extra
+ * columns cost about a second and a half and answer nothing the write
+ * needs, so they are not read for it. */
+export async function getStartupEntries() {
   let raw;
   try {
     raw = await runPowerShellJson(STARTUP_QUERY);
@@ -172,7 +186,16 @@ export async function getStartupItems() {
   // { items, approved }. Both shapes are read so a packaged app running an
   // older backend against a newer frontend still lists something.
   const rows = Array.isArray(raw) ? raw : (Array.isArray(raw.items) ? raw.items : [raw]);
-  const base = attachEnabledState(rows.map(normalizeStartupItem).filter(Boolean), raw.approved);
+  return attachEnabledState(rows.map(normalizeStartupItem).filter(Boolean), raw.approved);
+}
+
+/** Everything set to run at sign-in.
+ *
+ * Broken entries sort first: they are the reason to look at this list at
+ * all, and everything else here is working as intended. */
+export async function getStartupItems() {
+  const base = await getStartupEntries();
+  if (base.length === 0) return [];
 
   // A second pass over the executables, for the three columns Revo shows
   // that the registry cannot answer: what the file says it is, who signed

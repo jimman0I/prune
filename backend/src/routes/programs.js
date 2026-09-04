@@ -6,7 +6,8 @@ import { getProgramVersions } from '../services/programVersions.js';
 import { getProgramInstallDates } from '../services/installDates.js';
 import { getStoreApps } from '../services/storeApps.js';
 import { getBrowserExtensions } from '../services/browserExtensions.js';
-import { getStartupItems } from '../services/startupItems.js';
+import { getStartupItems, getStartupEntries } from '../services/startupItems.js';
+import { setStartupEnabled } from '../services/startupToggle.js';
 import { revealPath, openInstalledAppsSettings } from '../services/revealPath.js';
 import { getPackageIcons } from '../services/packageIcons.js';
 import { getRunningPrograms } from '../services/runningPrograms.js';
@@ -132,6 +133,45 @@ router.get('/startup', async (req, res) => {
     res.json({ items: await getStartupItems() });
   } catch (err) {
     res.status(500).json({ error: err.message });
+  }
+});
+
+/** Switches one startup entry on or off.
+ *
+ * POST because it changes the machine, and because a machine-wide entry
+ * raises a UAC prompt -- neither belongs behind something a refresh can
+ * repeat.
+ *
+ * The body names an entry by id and nothing else. The registry key, the
+ * value name and the hive are all looked up again here from a fresh read
+ * of the real startup locations, so the client can only ask for a change
+ * to something that genuinely exists; it cannot describe a registry write
+ * target of its own. That costs a second and buys the guarantee.
+ *
+ * A declined UAC prompt is a 200 with { ok: false, cancelled: true }, the
+ * convention /disk-health/elevated already uses: the request did what it
+ * was asked to, and the user said no. */
+router.post('/startup/toggle', async (req, res) => {
+  try {
+    const { id, enabled } = req.body || {};
+    if (typeof id !== 'string' || !id || typeof enabled !== 'boolean') {
+      res.status(400).json({ ok: false, error: 'Needs an entry id and enabled: true or false.' });
+      return;
+    }
+
+    const entries = await getStartupEntries();
+    const item = entries.find((entry) => entry.id === id);
+    if (!item) {
+      // Not an error state worth a 500: the list on screen is a snapshot,
+      // and an entry can genuinely be gone by the time it is clicked.
+      res.status(404).json({ ok: false, error: 'That entry is no longer in the startup locations.' });
+      return;
+    }
+
+    const result = await setStartupEnabled(item, enabled);
+    res.json(result);
+  } catch (err) {
+    res.status(500).json({ ok: false, error: err.message });
   }
 });
 

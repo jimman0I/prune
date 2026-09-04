@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { normalizeStartupItem } from './startupItems.js';
+import { normalizeStartupItem, attachEnabledState } from './startupItems.js';
 
 const base = {
   name: 'KeePassXC',
@@ -73,5 +73,40 @@ describe('normalizeStartupItem', () => {
     expect(normalizeStartupItem({ ...base, command: '   ' })).toBeNull();
     expect(normalizeStartupItem({ ...base, name: '' })).toBeNull();
     expect(normalizeStartupItem(null)).toBeNull();
+  });
+});
+
+describe('attachEnabledState', () => {
+  const entry = (over = {}) => ({
+    name: 'Discord',
+    approvedName: 'Discord',
+    source: 'registry',
+    location: 'Run',
+    rawScope: 'user',
+    registryKey: 'HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run',
+    ...over
+  });
+
+  it('reads an entry Windows has switched off as disabled', () => {
+    const [item] = attachEnabledState([entry()], { 'user|Run|Discord': [3, 0, 0, 0] });
+    expect(item.enabled).toBe(false);
+  });
+
+  it('reads an entry Windows has no record of as enabled', () => {
+    expect(attachEnabledState([entry()], {})[0].enabled).toBe(true);
+    expect(attachEnabledState([entry()], null)[0].enabled).toBe(true);
+  });
+
+  it('leaves no note on an entry the user can switch', () => {
+    // The note IS the disabled reason for the control. Present means the
+    // checkbox must not be a checkbox.
+    expect(attachEnabledState([entry()], {})[0].toggleNote).toBeNull();
+  });
+
+  it('notes why a RunOnce entry has no switch', () => {
+    const [item] = attachEnabledState([entry({ location: 'RunOnce' })], {});
+    expect(item.toggleNote).toMatch(/RunOnce/);
+    // And it still reads as enabled, because Windows does run it.
+    expect(item.enabled).toBe(true);
   });
 });

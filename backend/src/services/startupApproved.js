@@ -59,15 +59,27 @@ function firstByteOf(value) {
   return null;
 }
 
-/** Which StartupApproved key holds the decision for one entry.
+/** Which StartupApproved key holds the decision for one entry, or null
+ * when Windows keeps no decision for it at all.
  *
  * Three keys, and an entry is only ever in one of them: a Startup-folder
  * shortcut is recorded by its file name under StartupFolder, a 64-bit Run
  * value under Run, and a 32-bit one under Run32. Looking in the wrong key
  * finds nothing, which reads as "enabled" -- the same silent wrong answer
- * as not looking at all. */
+ * as not looking at all.
+ *
+ * RunOnce is the fourth case and belongs in none of them. Both hives on
+ * this machine hold exactly those three subkeys and no RunOnce, which is
+ * also why Task Manager's Startup tab never lists a RunOnce entry:
+ * Windows runs them once and deletes them, so there is nothing to record.
+ * Answering "Run" for one is not a harmless miss -- it reads a DIFFERENT
+ * entry's state whenever a Run value shares the name, and a writer using
+ * the same answer would switch that other entry off. */
 export function approvedKindFor(item) {
   if (item?.source === 'folder') return 'StartupFolder';
+  if (/^RunOnce$/i.test(item?.location || '') || /\\RunOnce$/i.test(item?.registryKey || '')) {
+    return null;
+  }
   // The registry path, not the display label. `location` is the friendly
   // kind ("Run (32-bit)"), and matching WOW6432Node against that finds
   // nothing -- which reads as enabled, the silent wrong answer again.
