@@ -6,6 +6,7 @@ import { canBatchUninstall, batchIneligibleReason, batchSummary } from '../lib/b
 import { isRecentlyInstalled, RECENT_DAYS } from '../lib/recentPrograms.js';
 import TableSkeleton from './TableSkeleton.jsx';
 import { tileLetter } from '../lib/iconTileLetter.js';
+import { tileColor, TILE_INK } from '../lib/programTileColor.js';
 
 function formatBytes(bytes) {
   if (bytes === null || bytes === undefined) return '—';
@@ -92,10 +93,7 @@ function ProgramIcon({ program, src }) {
   return (
     <div
       className="w-5 h-5 rounded-[4px] flex items-center justify-center text-[9px] font-bold shrink-0"
-      style={{
-        background: `linear-gradient(135deg, ${program.color || '#f98074'}dd, ${program.color || '#f98074'}88)`,
-        color: '#fff'
-      }}
+      style={{ background: tileColor(program.name), color: TILE_INK }}
     >
       {tileLetter(program.name, program.publisher)}
     </div>

@@ -17,7 +17,7 @@
  * around the wheel at a similar lightness so no one type looks more
  * important than another; the eye should read area, which is the quantity,
  * rather than brightness, which is not. */
-const PALETTE = [
+export const PALETTE = [
   '#e0685f', '#4a92e0', '#5fb85f', '#d9b03a', '#9366d9', '#3bb3c4',
   '#e08a3c', '#d95f9e', '#a8bf3f', '#6d7fe0', '#3fbf95', '#c064cc',
   '#c47a5a', '#5fa8a0', '#b58fd4', '#8a9bb0'
@@ -44,8 +44,12 @@ export const DIRECTORY_COLOR = COLOR_DIRECTORY;
 /** FNV-1a, 32-bit. Any stable string hash would do; this one is four
  * lines, has no dependencies, and spreads short similar strings (which is
  * all extensions are -- "dll", "dl_", "dat") across the palette instead of
- * clustering them the way a sum-of-characters hash would. */
-function hash(text) {
+ * clustering them the way a sum-of-characters hash would.
+ *
+ * Exported because the program tiles need the same property for the same
+ * reason: their names cluster even harder than extensions do, being a
+ * shared prefix with a version welded on the end. */
+export function hash(text) {
   let value = 0x811c9dc5;
   for (let i = 0; i < text.length; i++) {
     value ^= text.charCodeAt(i);
