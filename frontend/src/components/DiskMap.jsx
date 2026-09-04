@@ -9,7 +9,7 @@ import { largestFiles } from '../lib/largestFiles.js';
 import { folderTableRows } from '../lib/folderTable.js';
 import { sortFolderRows, nextFolderSort } from '../lib/sortFolderRows.js';
 import { withUnscannedRemainder, scanCoverage } from '../lib/unscannedRemainder.js';
-import { colorForNode } from '../lib/diskMapColors.js';
+import { buildTypeColors, colorForExtension, colorForNode, NO_EXTENSION_COLOR } from '../lib/fileTypeColors.js';
 import { iconKeyForNode, extensionsInCells, extensionOf, GENERIC_FILE_KEY } from '../lib/fileTypeIcon.js';
 import { limitCells } from '../lib/limitCells.js';
 
@@ -86,9 +86,9 @@ const PANEL_ROWS = 14;
  * out and nothing on screen is worth acting on. */
 const FILE_ROWS = 60;
 
-function TreemapCell({ x, y, width, height, depth, name, size, type, scanned, aggregated, fullPath, icons, onHover, onLeave, onDrillDown }) {
+function TreemapCell({ x, y, width, height, depth, name, size, type, scanned, aggregated, fullPath, icons, typeColors, onHover, onLeave, onDrillDown }) {
   if (depth === 0 || !(width > 0) || !(height > 0)) return null;
-  const fill = colorForNode({ name, type, scanned: scanned === false || aggregated ? false : scanned });
+  const fill = colorForNode({ name, type, scanned: scanned === false || aggregated ? false : scanned }, typeColors);
   // An unscanned block is a hole in the picture, not a folder. Clicking
   // it would scan a path that may not even exist (the whole-drive
   // remainder isn't a real directory), and its size is a subtraction
@@ -161,7 +161,7 @@ function TreemapCell({ x, y, width, height, depth, name, size, type, scanned, ag
  * depth limit -- 33.4 GB categorised out of a 35.1 GB tree here. A panel
  * that printed only the first number would be quietly claiming the
  * second. */
-function ExtensionPanel({ breakdown, shown, icons }) {
+function ExtensionPanel({ breakdown, shown, icons, typeColors }) {
   const { rows, totalBytes, totalFiles, uncategorizedBytes } = breakdown;
   if (rows.length === 0) return null;
 
@@ -179,12 +179,20 @@ function ExtensionPanel({ breakdown, shown, icons }) {
       <div className="flex flex-col gap-1.5">
         {shown.map((row) => (
           <div key={row.extension} className="flex items-center gap-2.5">
+            {/* The swatch is what makes this a legend rather than a second
+                table. Every cell of that type on the map is painted this
+                colour, so "which folders hold my .pak files" is answered
+                by looking, not by clicking. */}
+            <div
+              className="w-[10px] h-[10px] rounded-[2px] shrink-0"
+              style={{ background: row.extension === NO_EXTENSION ? NO_EXTENSION_COLOR : colorForExtension(row.extension, typeColors) }}
+            />
             {icons?.[row.extension] ? (
               <img src={icons[row.extension]} alt="" width={16} height={16} className="w-4 h-4 shrink-0 object-contain" />
             ) : (
               <div className="w-4 h-4 shrink-0" />
             )}
-            <div className="font-mono text-[11.5px] text-[color:var(--text-primary)] w-[74px] shrink-0 truncate">
+            <div className="font-mono text-[11.5px] text-[color:var(--text-primary)] w-[62px] shrink-0 truncate">
               {row.extension === NO_EXTENSION ? 'no type' : row.extension}
             </div>
 
@@ -192,22 +200,34 @@ function ExtensionPanel({ breakdown, shown, icons }) {
                 fact. Sharing one row keeps both readable at a glance. */}
             <div className="flex-1 h-[6px] rounded-full bg-white/[0.05] overflow-hidden min-w-0">
               <div
-                className="h-full rounded-full bg-[color:var(--accent-coral)]"
-                style={{ width: `${Math.max(row.percent, 0.6)}%` }}
+                className="h-full rounded-full"
+                style={{
+                  width: `${Math.max(row.percent, 0.6)}%`,
+                  background: row.extension === NO_EXTENSION ? NO_EXTENSION_COLOR : colorForExtension(row.extension, typeColors)
+                }}
               />
             </div>
 
             <div
-              className="font-mono text-[11.5px] text-[color:var(--text-secondary)] w-[68px] text-right shrink-0"
+              className="font-mono text-[11.5px] text-[color:var(--text-secondary)] w-[62px] text-right shrink-0"
               style={{ fontVariantNumeric: 'tabular-nums' }}
             >
               {formatBytes(row.sizeBytes)}
             </div>
             <div
-              className="font-mono text-[11px] text-[color:var(--text-muted)] w-[46px] text-right shrink-0"
+              className="font-mono text-[11px] text-[color:var(--text-muted)] w-[42px] text-right shrink-0"
               style={{ fontVariantNumeric: 'tabular-nums' }}
             >
               {row.percent.toFixed(1)}%
+            </div>
+            {/* WizTree's own Files column. A type can be big because one
+                file is enormous or because there are 391,670 of them, and
+                those are different problems with different fixes. */}
+            <div
+              className="font-mono text-[11px] text-[color:var(--text-muted)] w-[52px] text-right shrink-0"
+              style={{ fontVariantNumeric: 'tabular-nums' }}
+            >
+              {row.fileCount?.toLocaleString() ?? '—'}
             </div>
           </div>
         ))}
@@ -429,6 +449,9 @@ export default function DiskMap() {
   // drilling into a folder only ever asks about types not already held.
   const [typeIcons, setTypeIcons] = useState({});
   const [view, setView] = useState('map');
+  // Set only by the button that says so. A whole-drive crawl is opt-in
+  // now; see the effect below.
+  const [crawlRoot, setCrawlRoot] = useState(false);
 
   /** Explicit click only. This raises a real UAC prompt, so it can never
    * live in an effect -- see api.js. */
@@ -491,6 +514,28 @@ export default function DiskMap() {
     // scan still running server-side, all competing for the same tiny fs
     // thread pool -- exactly the kind of pile-up this is supposed to
     // prevent.
+    // A drive root is not worth crawling. Measured on this machine: the
+    // folder-by-folder scan spent its whole time limit and reached 36 GB of
+    // the 813.8 GB in use -- 4% -- so the default experience was a minute of
+    // waiting for a picture that is 96% "unknown". The scan is not bad, it
+    // is being asked the wrong question: it walks directories one at a time,
+    // which is fine for a folder and hopeless for a volume.
+    //
+    // So at a drive root nothing runs until the user picks: the fast scan
+    // (which reads the MFT and does the whole drive in seconds, and needs
+    // admin for it) or the crawl anyway. Below a drive root this doesn't
+    // apply -- the crawl is the right tool there and needs no elevation.
+    //
+    // Deliberately NOT an automatic elevation request. A UAC prompt that
+    // appears because a tab was opened is how software teaches people to
+    // click Yes without reading.
+    if (isDriveRoot(currentPath) && !crawlRoot) {
+      setTree(null);
+      setLoading(false);
+      setError(null);
+      return;
+    }
+
     const controller = new AbortController();
     setLoading(true);
     setError(null);
@@ -504,7 +549,7 @@ export default function DiskMap() {
       .catch((err) => { if (err.name !== 'AbortError') setError(err.message); })
       .finally(() => { if (!controller.signal.aborted) setLoading(false); });
     return () => controller.abort();
-  }, [currentPath, fastTree]);
+  }, [currentPath, fastTree, crawlRoot]);
 
   // Capped: a folder like System32 has ~1,900 direct children, and
   // drawing every one produced 10,086 DOM nodes and made the whole view
@@ -516,6 +561,20 @@ export default function DiskMap() {
   // ask for exactly the types the panel is about to show.
   const breakdown = useMemo(() => extensionBreakdown(tree), [tree]);
   const shownExtensions = useMemo(() => breakdown.rows.slice(0, PANEL_ROWS), [breakdown]);
+
+  // The colours the map is painted with AND the legend's swatch column --
+  // one assignment, built from the breakdown's own order so the biggest
+  // types get the most distinct colours. Reading "14.2% .pak" in the list
+  // and seeing where the .pak is on the map only works if both sides got
+  // their colour from here.
+  //
+  // The no-extension key is dropped rather than ranked: it is the absence
+  // of a type, and giving it a palette slot would put it in competition
+  // with the real ones.
+  const typeColors = useMemo(
+    () => buildTypeColors(breakdown.rows.map((r) => r.extension).filter((e) => e !== NO_EXTENSION)),
+    [breakdown]
+  );
   const topFiles = useMemo(() => largestFiles(tree, { limit: FILE_ROWS }), [tree]);
 
   useEffect(() => {
@@ -589,19 +648,22 @@ export default function DiskMap() {
             </p>
           ) : (
             <p className="text-[12px] text-[color:var(--text-secondary)] max-w-[62ch]">
-              Scanning folder by folder. A fast scan reads the drive's own file index instead —
-              the whole drive at once, in seconds — but Windows only allows that with
-              administrator access.
+              What is using the space on this drive, and where.
             </p>
           )}
         </div>
-        <button
-          className="btn-ghost px-3.5 py-2 rounded-lg text-[12.5px] font-medium shrink-0 disabled:opacity-50"
-          onClick={handleFastScan}
-          disabled={fastScanning}
-        >
-          {fastScanning ? 'Scanning drive…' : fastStats ? 'Rescan drive (admin)' : 'Fast scan (admin)'}
-        </button>
+        {/* Hidden exactly where the panel below is offering the same thing.
+            Two "Fast scan (admin)" buttons on one screen is not two ways to
+            do it, it's a question about whether they do the same thing. */}
+        {!(!loading && !error && !tree && isDriveRoot(currentPath)) && (
+          <button
+            className="btn-ghost px-3.5 py-2 rounded-lg text-[12.5px] font-medium shrink-0 disabled:opacity-50"
+            onClick={handleFastScan}
+            disabled={fastScanning}
+          >
+            {fastScanning ? 'Scanning drive…' : fastStats ? 'Rescan drive (admin)' : 'Fast scan (admin)'}
+          </button>
+        )}
       </div>
 
       {fastNote && (
@@ -627,6 +689,41 @@ export default function DiskMap() {
       </div>
 
       {loading && <LoadingState />}
+
+      {/* The drive root, before a choice has been made. Nothing is scanning
+          and nothing is going to until one of these is pressed. */}
+      {!loading && !error && !tree && isDriveRoot(currentPath) && (
+        <div className="glass-panel p-6">
+          <h3 className="text-[15px] font-medium text-[color:var(--text-primary)] mb-2">
+            Read the whole drive
+          </h3>
+          <p className="text-[13px] text-[color:var(--text-secondary)] leading-relaxed max-w-[62ch] mb-1">
+            A fast scan reads the drive's own file index — every file on {currentPath.replace(/\\+$/, '')} in
+            a few seconds, which is how WizTree does it. Windows only lets a program read that index with
+            administrator access, so this raises a UAC prompt.
+          </p>
+          <p className="text-[12.5px] text-[color:var(--text-muted)] leading-relaxed max-w-[62ch] mb-5">
+            The alternative walks folders one at a time. It needs no permission and is the right tool for a
+            single folder, but it cannot finish a volume: on this drive it reached 4% of what's in use before
+            running out of time, and the other 96% shows as unscanned rather than as anything useful.
+          </p>
+
+          <div className="flex items-center flex-wrap gap-2.5">
+            <button className="btn-primary px-4 py-2 rounded-lg text-[13px] font-medium disabled:opacity-50"
+              onClick={handleFastScan}
+              disabled={fastScanning}
+            >
+              {fastScanning ? 'Reading the drive…' : 'Fast scan (admin)'}
+            </button>
+            <button
+              className="btn-ghost px-3.5 py-2 rounded-lg text-[12.5px] font-medium"
+              onClick={() => setCrawlRoot(true)}
+            >
+              Walk folders instead
+            </button>
+          </div>
+        </div>
+      )}
 
       {!loading && error && (
         <div className="glass-panel p-6">
@@ -663,12 +760,21 @@ export default function DiskMap() {
         </div>
       )}
 
-      {/* WizTree splits the same data into a Tree View and a File View, and
-          the split earns its place: the map answers "which folder" and the
-          list answers "which file". */}
+      {/* WizTree's own split, and only its own: Tree View and File View.
+          The three panels that used to be tabs here -- map, folder table,
+          file types -- are three readings of ONE folder, and WizTree shows
+          all three at once for a reason. The table says a folder is 105 GB,
+          the type list says the drive is 14% .pak, and the map is where you
+          see that those are the same fact. Behind tabs, the reader has to
+          hold one panel in their head while looking at another, which is
+          the work the layout is supposed to be doing for them.
+
+          The flat file list stays a tab, exactly as it is in WizTree: it is
+          not a reading of this folder, it is a different question ("which
+          single file is biggest") asked of the whole subtree. */}
       {!loading && !error && tree && (
         <div className="flex items-center gap-1 mb-3">
-          {[['map', 'Map'], ['folders', 'Folders'], ['files', 'Largest files']].map(([key, label]) => (
+          {[['map', 'Tree'], ['files', 'Files']].map(([key, label]) => (
             <button
               key={key}
               onClick={() => setView(key)}
@@ -685,25 +791,31 @@ export default function DiskMap() {
         </div>
       )}
 
-      {!loading && !error && tree && (
-        <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_400px] items-start">
-          {view === 'files' ? (
-            <LargestFilesView files={topFiles} icons={typeIcons} />
-          ) : view === 'folders' ? (
+      {!loading && !error && tree && view === 'files' && (
+        <LargestFilesView files={topFiles} icons={typeIcons} />
+      )}
+
+      {!loading && !error && tree && view !== 'files' && (
+        <div className="flex flex-col gap-4">
+          {/* Folder table and file types side by side, the map full width
+              beneath them -- WizTree's proportions, and the right ones: the
+              two tables are read row by row and want height, the map is
+              read as a picture and wants area. */}
+          <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_400px] items-start">
             <FolderTable tree={tree} onDrillDown={handleDrillDown} />
-          ) : (
+            <ExtensionPanel breakdown={breakdown} shown={shownExtensions} icons={typeIcons} typeColors={typeColors} />
+          </div>
+
           <div className="glass-panel p-4" style={{ position: 'relative' }} onMouseMove={handleContainerMouseMove}>
-            <ResponsiveContainer width="100%" height={520}>
+            <ResponsiveContainer width="100%" height={420}>
               <Treemap
                 data={cells}
                 dataKey="size"
                 isAnimationActive={false}
-                content={<TreemapCell icons={typeIcons} onHover={handleHover} onLeave={handleLeave} onDrillDown={handleDrillDown} />}
+                content={<TreemapCell icons={typeIcons} typeColors={typeColors} onHover={handleHover} onLeave={handleLeave} onDrillDown={handleDrillDown} />}
               />
             </ResponsiveContainer>
           </div>
-          )}
-          <ExtensionPanel breakdown={breakdown} shown={shownExtensions} icons={typeIcons} />
         </div>
       )}
 
