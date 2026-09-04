@@ -2,6 +2,8 @@ import { existsSync } from 'node:fs';
 import { runPowerShellJson } from './powershell.js';
 import { parseUninstallerPath } from './uninstallerPath.js';
 import { expandPath } from '../lib/cleanerRules.js';
+import { isStartupEnabled, approvedLookupKey } from './startupApproved.js';
+import { getStartupDetails } from './startupDetails.js';
 
 /** Everything Windows runs when you sign in.
  *
@@ -35,6 +37,7 @@ foreach ($k in $keys) {
     if ($p.Name -like 'PS*') { continue }
     $out += [PSCustomObject]@{
       name = [string]$p.Name
+      approvedName = [string]$p.Name
       command = [string]$p.Value
       scope = $k.scope
       location = $k.kind
@@ -54,6 +57,9 @@ foreach ($f in $folders) {
     if ($item.Name -eq 'desktop.ini') { continue }
     $out += [PSCustomObject]@{
       name = [string]$item.BaseName
+      # StartupApproved records a folder entry by its FILE name, extension
+      # and all. The list shows "FxSound"; the key is "FxSound.lnk".
+      approvedName = [string]$item.Name
       command = [string]$item.FullName
       scope = $f.scope
       location = 'Startup folder'
@@ -63,7 +69,29 @@ foreach ($f in $folders) {
   }
 }
 
-ConvertTo-Json -InputObject @($out) -Compress -Depth 3
+# Which of these Windows will actually run. Disabling a startup item does
+# not remove it -- the Run value or the shortcut stays exactly where it is
+# and the decision is recorded separately, here. A list that reads only the
+# Run keys reports every switched-off entry as running at sign-in.
+$approved = @{}
+$approvedRoots = @(
+  @{ path = 'HKCU:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\StartupApproved'; scope = 'user' },
+  @{ path = 'HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\StartupApproved'; scope = 'machine' }
+)
+foreach ($r in $approvedRoots) {
+  foreach ($kind in @('Run','Run32','StartupFolder')) {
+    $kp = Join-Path $r.path $kind
+    if (-not (Test-Path $kp)) { continue }
+    $ap = Get-ItemProperty -Path $kp -ErrorAction SilentlyContinue
+    if (-not $ap) { continue }
+    foreach ($p in $ap.PSObject.Properties) {
+      if ($p.Name -like 'PS*') { continue }
+      $approved[('{0}|{1}|{2}' -f $r.scope, $kind, $p.Name)] = @($p.Value)
+    }
+  }
+}
+
+ConvertTo-Json -InputObject ([PSCustomObject]@{ items = @($out); approved = $approved }) -Compress -Depth 4
 `;
 
 /** One raw entry, normalized, or null.
@@ -95,9 +123,13 @@ export function normalizeStartupItem(raw) {
   return {
     id: `${raw.source}:${raw.scope}:${raw.location}:${raw.name}`,
     name: raw.name,
+    approvedName: raw.approvedName || raw.name,
     command,
     executable: expanded,
     scope: raw.scope === 'machine' ? 'All users' : 'This user',
+    // Kept raw as well as prettified. `scope` is a label for the screen;
+    // the StartupApproved lookup needs the machine/user word itself.
+    rawScope: raw.scope === 'machine' ? 'machine' : 'user',
     location: raw.location,
     source: raw.source,
     registryKey: raw.registryKey || null,
@@ -105,6 +137,22 @@ export function normalizeStartupItem(raw) {
     // true, false, or null when there is nothing that can be checked.
     exists: checkable ? existsSync(expanded) : null
   };
+}
+
+/** Attaches each entry's on/off state from the StartupApproved map.
+ *
+ * Separate from normalizeStartupItem because it needs the whole map, and
+ * because "is this entry switched on" is a different question from "what
+ * does this entry say" -- one comes from the Run key, the other from a
+ * decision recorded somewhere else entirely. */
+export function attachEnabledState(items, approved) {
+  const map = approved || {};
+  return items.map((item) => ({
+    ...item,
+    enabled: isStartupEnabled(
+      map[approvedLookupKey({ ...item, scope: item.rawScope })] ?? null
+    )
+  }));
 }
 
 /** Everything set to run at sign-in.
@@ -120,8 +168,27 @@ export async function getStartupItems() {
   }
   if (!raw) return [];
 
-  const rows = Array.isArray(raw) ? raw : [raw];
-  const items = rows.map(normalizeStartupItem).filter(Boolean);
+  // The query used to return a bare array and now returns
+  // { items, approved }. Both shapes are read so a packaged app running an
+  // older backend against a newer frontend still lists something.
+  const rows = Array.isArray(raw) ? raw : (Array.isArray(raw.items) ? raw.items : [raw]);
+  const base = attachEnabledState(rows.map(normalizeStartupItem).filter(Boolean), raw.approved);
+
+  // A second pass over the executables, for the three columns Revo shows
+  // that the registry cannot answer: what the file says it is, who signed
+  // it, and whether it is running right now. One call for the whole list.
+  const details = await getStartupDetails(base.map((item) => item.executable));
+  const items = base.map((item) => {
+    const detail = (item.executable && details[item.executable]) || {};
+    return {
+      ...item,
+      description: detail.description ?? null,
+      publisher: detail.publisher ?? null,
+      // Explicitly false rather than null: the process snapshot covered
+      // every entry, so "not in it" is an answer, not a gap.
+      running: detail.running === true
+    };
+  });
 
   return items.sort((a, b) => {
     if (a.exists === false && b.exists !== false) return -1;
