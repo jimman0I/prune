@@ -116,6 +116,20 @@ export async function fetchStartupIcons() {
   }
 }
 
+/** One reading of CPU, memory and disk throughput.
+ *
+ * Polled rather than streamed: the reading costs microseconds on the
+ * backend and the disk figure is whatever its single background counter
+ * last reported, so a request does no work beyond copying three numbers.
+ * Asking is also what keeps that counter alive -- it shuts down when the
+ * requests stop. */
+export async function fetchResources() {
+  const res = await fetch(`${API_URL}/resources`);
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
+  return data;
+}
+
 /** The scheduled run's status: when it next fires, when it last did, and
  * how many windows went by while the machine was off. */
 export async function fetchAutomation() {

@@ -58,6 +58,7 @@ export const keys = {
   quarantine: ['quarantine'],
   settings: ['settings'],
   automation: ['automation'],
+  resources: ['resources'],
   diskSpace: ['disk', 'space'],
   deepCleanRules: ['deepClean', 'rules'],
   deepCleanScan: ['deepClean', 'scan'],

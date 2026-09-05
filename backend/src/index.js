@@ -7,6 +7,7 @@ import leftoversRoutes from './routes/leftovers.js';
 import quarantineRoutes from './routes/quarantine.js';
 import duplicateRoutes from './routes/duplicates.js';
 import automationRoutes from './routes/automation.js';
+import resourceRoutes from './routes/resources.js';
 import { startScheduler, checkSchedule } from './services/scheduleRunner.js';
 import diskSpaceRoutes from './routes/diskSpace.js';
 import uninstallHistoryRoutes from './routes/uninstallHistory.js';
@@ -47,6 +48,7 @@ app.use('/api/leftovers', leftoversRoutes);
 app.use('/api/quarantine', quarantineRoutes);
 app.use('/api/duplicates', duplicateRoutes);
 app.use('/api/automation', automationRoutes);
+app.use('/api/resources', resourceRoutes);
 
 // The schedule catches up on start as well as on its timer: the window
 // most likely to have been missed is one that passed while the machine

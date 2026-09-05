@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { fetchDiskSpace, fetchDiskHealth, unlockDiskWear, fetchUninstallHistory } from '../lib/api.js';
 import { formatRelativeTime } from '../lib/formatRelativeTime.js';
 import StatCard from './StatCard.jsx';
+import ResourceMonitor from './ResourceMonitor.jsx';
 import { useQuery } from '@tanstack/react-query';
 import { fetchAutomation } from '../lib/api.js';
 import { keys } from '../lib/queryClient.js';
@@ -247,7 +248,14 @@ export default function Dashboard({ programs, totalSize, onNavigate = () => {} }
         <ScheduleBadge onNavigate={onNavigate} />
       </div>
 
-      <div className="glass-panel flex items-center gap-6 p-8 mb-6">
+      {/* The live gauges sit BESIDE drive health rather than as a fourth
+          stat card. Making that row four-up squeezed the existing three
+          enough to wrap "819.2 GB Used / 952.9 GB Total" onto two lines,
+          and this panel had a conspicuously empty right half already --
+          the two readouts also belong together: one is what the drive has
+          been through, the other is what it is doing now. */}
+      <div className="flex items-stretch gap-4 mb-6">
+        <div className="glass-panel flex items-center gap-6 p-8 flex-1 min-w-0">
         <HealthGauge percent={verdict.percent} statusLabel={verdict.statusLabel} tone={verdict.tone} />
         <div className="min-w-0">
           <div className="text-[18px] font-medium text-[color:var(--text-primary)] mb-1">Drive Health</div>
@@ -303,7 +311,10 @@ export default function Dashboard({ programs, totalSize, onNavigate = () => {} }
               )}
             </>
           )}
+          </div>
         </div>
+
+        <ResourceMonitor />
       </div>
 
       {/* Staggered on entry. The delay is small and one-directional --
