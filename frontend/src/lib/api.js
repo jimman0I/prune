@@ -529,14 +529,27 @@ export function parseSSELine(line) {
 /** Streams POST /api/uninstall, calling onEvent(type, data) for each SSE
  * block as it arrives. Mirrors Re:Route's own SSE parsing shape (this
  * project's sibling app), adapted to this project's simpler two-field
- * (event/data) block format. */
-export async function streamUninstall(uninstallString, onEvent) {
+ * (event/data) block format.
+ *
+ * Takes a program id, not an uninstall command. The command is read out
+ * of the uninstall registry by the backend, which will not run a string
+ * a client sent it -- see routes/uninstall.js. */
+export async function streamUninstall(programId, onEvent) {
   const res = await fetch(`${API_URL}/uninstall`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ uninstallString })
+    body: JSON.stringify({ programId })
   });
-  if (!res.ok || !res.body) throw new Error(`Request failed: ${res.status}`);
+  // A refusal arrives as JSON with a real status, before any stream
+  // starts, and its sentence is written to be shown to a person -- "Thing
+  // is no longer in the uninstall registry" says what happened, where
+  // "Request failed: 404" says only that this app is confused. Parsed
+  // only on the failure path: on success the body is the stream.
+  if (!res.ok) {
+    const data = await res.json().catch(() => ({}));
+    throw new Error(data.error || `Request failed: ${res.status}`);
+  }
+  if (!res.body) throw new Error(`Request failed: ${res.status}`);
 
   const reader = res.body.getReader();
   const decoder = new TextDecoder();

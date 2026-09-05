@@ -61,7 +61,7 @@ export default function BatchUninstallModal({ programs, onClose, onFinished }) {
     for (const program of programs) {
       setStatus(program.id, { state: 'running' });
       try {
-        await streamUninstall(program.uninstallString, () => {});
+        await streamUninstall(program.id, () => {});
         appendHistoryEntry({
           programName: program.name,
           publisher: program.publisher,

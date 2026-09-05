@@ -81,7 +81,7 @@ export default function UninstallModal({ program, running = false, onClose }) {
     setError(null);
     setStep('uninstalling');
     try {
-      await streamUninstall(program.uninstallString, () => {});
+      await streamUninstall(program.id, () => {});
       appendHistoryEntry({ programName: program.name, publisher: program.publisher, sizeBytes: program.sizeBytes }).catch(() => {
         // Best-effort logging -- a failed history write must never block
         // or fail the uninstall flow itself, the uninstall already
