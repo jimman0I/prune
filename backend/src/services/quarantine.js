@@ -150,6 +150,33 @@ export async function quarantineAndDelete({ programName, files, registryKeys }) 
  * "successfully restored" contract deletePermanently already has for
  * "successfully deleted") -- so this now removes the now-empty batch
  * directory before returning, same as deletePermanently's own cleanup. */
+/** Every quarantine batch, newest first.
+ *
+ * Lifted out of the route it used to live inside when the retention purge
+ * needed the same list. It is real logic, not plumbing: a batch is a
+ * directory holding a manifest, a directory without one is not a batch,
+ * and a manifest that will not parse is skipped rather than failing the
+ * whole listing -- one corrupted file must not hide the other nine
+ * batches the user might want to restore. */
+export async function listQuarantineBatches() {
+  const root = quarantineRoot();
+  if (!existsSync(root)) return [];
+
+  const entries = await readdir(root, { withFileTypes: true });
+  const batches = [];
+  for (const entry of entries) {
+    if (!entry.isDirectory()) continue;
+    const manifestPath = join(root, entry.name, 'manifest.json');
+    if (!existsSync(manifestPath)) continue;
+    try {
+      batches.push(JSON.parse(await readFile(manifestPath, 'utf8')));
+    } catch { /* skip a corrupted manifest rather than failing the whole list */ }
+  }
+
+  batches.sort((a, b) => b.createdAt - a.createdAt);
+  return batches;
+}
+
 export async function restoreQuarantine(batchDir) {
   const manifestPath = join(batchDir, 'manifest.json');
   const manifest = JSON.parse(await readFile(manifestPath, 'utf8'));

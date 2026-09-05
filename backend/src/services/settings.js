@@ -49,7 +49,13 @@ const DEFAULT_SETTINGS = {
   minimizeToTray: true,
   skipRecentHours: 24,
   createRestorePoint: true,
-  hideUnavailableRules: false
+  hideUnavailableRules: false,
+  /* Days before a quarantine batch is deleted for good, or null for
+     never. Off by default and off for every ambiguous value -- see
+     quarantineRetention.js. Quarantine is this app's undo, and a
+     retention that runs when it should not destroys the only copy of
+     something the user removed by accident. */
+  quarantineRetentionDays: null
 };
 
 /** The subset of settings the cleaner needs, in the shape it takes.

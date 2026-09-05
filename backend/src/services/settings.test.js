@@ -20,7 +20,8 @@ describe('getSettings', () => {
     const settings = await getSettings();
     expect(settings).toEqual({
       excludeFolders: [], autoQuarantine: true, theme: 'dark', accentColor: null,
-      minimizeToTray: true, skipRecentHours: 24, createRestorePoint: true, hideUnavailableRules: false
+      minimizeToTray: true, skipRecentHours: 24, createRestorePoint: true, hideUnavailableRules: false,
+      quarantineRetentionDays: null
     });
   });
 });
@@ -45,7 +46,8 @@ describe('updateSettings', () => {
     const result = await updateSettings({ theme: 'light' });
     expect(result).toEqual({
       excludeFolders: [], autoQuarantine: true, theme: 'light', accentColor: null,
-      minimizeToTray: true, skipRecentHours: 24, createRestorePoint: true, hideUnavailableRules: false
+      minimizeToTray: true, skipRecentHours: 24, createRestorePoint: true, hideUnavailableRules: false,
+      quarantineRetentionDays: null
     });
   });
 

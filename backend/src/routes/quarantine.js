@@ -2,9 +2,10 @@ import { Router } from 'express';
 import { readdir, readFile } from 'node:fs/promises';
 import { join, basename } from 'node:path';
 import { existsSync } from 'node:fs';
-import { quarantineAndDelete, restoreQuarantine, quarantineRoot, deletePermanently, emptyQuarantine } from '../services/quarantine.js';
+import { quarantineAndDelete, restoreQuarantine, quarantineRoot, deletePermanently, emptyQuarantine, listQuarantineBatches } from '../services/quarantine.js';
 import { tryCreateRestorePoint } from '../services/restorePoint.js';
 import { getSettings } from '../services/settings.js';
+import { purgeExpiredQuarantine } from '../services/quarantineRetention.js';
 
 // Real bug, found dogfooding Phase 4 (2026-09-01): `manifest.batchDir` (the
 // field every list/restore/delete client-side call keys off) is the FULL
@@ -51,20 +52,11 @@ router.post('/remove', async (req, res) => {
 });
 
 router.get('/', async (req, res) => {
-  const root = quarantineRoot();
-  if (!existsSync(root)) { res.json({ batches: [] }); return; }
-  const entries = await readdir(root, { withFileTypes: true });
-  const batches = [];
-  for (const entry of entries) {
-    if (!entry.isDirectory()) continue;
-    const manifestPath = join(root, entry.name, 'manifest.json');
-    if (!existsSync(manifestPath)) continue;
-    try {
-      batches.push(JSON.parse(await readFile(manifestPath, 'utf8')));
-    } catch { /* skip a corrupted manifest rather than failing the whole list */ }
+  try {
+    res.json({ batches: await listQuarantineBatches() });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
-  batches.sort((a, b) => b.createdAt - a.createdAt);
-  res.json({ batches });
 });
 
 router.post('/:batchDir/restore', async (req, res) => {
@@ -87,6 +79,25 @@ router.delete('/:batchDir', async (req, res) => {
     res.json(result);
   } catch (err) {
     res.status(500).json({ error: err.message });
+  }
+});
+
+/** Deletes every batch past the retention window.
+ *
+ * POST, and it reports which programs' backups it removed rather than a
+ * count: "purged 3 batches" is not something anyone can check or dispute,
+ * and this is the one operation in the app with no undo behind it.
+ *
+ * Reads the window from settings rather than the body. A client that
+ * could name its own retention could pass 0 and empty the quarantine
+ * through a route whose name says otherwise. */
+router.post('/purge', async (req, res) => {
+  try {
+    const result = await purgeExpiredQuarantine(await getSettings());
+    if (!result.ok) { res.status(500).json(result); return; }
+    res.json(result);
+  } catch (err) {
+    res.status(500).json({ ok: false, error: err.message });
   }
 });
 
