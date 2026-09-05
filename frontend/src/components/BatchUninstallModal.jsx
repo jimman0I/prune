@@ -17,7 +17,7 @@ function formatBytes(bytes) {
 
 const STATUS_STYLE = {
   pending: 'text-[color:var(--text-muted)]',
-  running: 'text-[color:var(--accent-coral)]',
+  running: 'text-[color:var(--accent-primary)]',
   done: 'text-[color:var(--success)]',
   failed: 'text-[color:var(--danger)]'
 };

@@ -64,11 +64,11 @@ export function isDriveRoot(path) {
 function LoadingState({ path, onFastScan, fastScanning }) {
   return (
     <div className="glass-panel flex flex-col items-center justify-center py-16 px-6 text-center">
-      <div className="w-14 h-14 rounded-2xl bg-[color:var(--accent-coral)]/10 border border-[color:var(--accent-coral)]/25 flex items-center justify-center mb-5">
-        <div className="w-6 h-6 border-2 border-[color:var(--accent-coral)] border-t-transparent rounded-full animate-spin"></div>
+      <div className="w-14 h-14 rounded-2xl bg-[color:var(--accent-primary)]/10 border border-[color:var(--accent-primary)]/25 flex items-center justify-center mb-5">
+        <div className="w-6 h-6 border-2 border-[color:var(--accent-primary)] border-t-transparent rounded-full animate-spin"></div>
       </div>
       <p className="text-[13px] text-[color:var(--text-primary)]">Reading every folder under</p>
-      <p className="font-mono text-[12px] text-[color:var(--accent-coral)] mt-1 max-w-[46ch] truncate">{path}</p>
+      <p className="font-mono text-[12px] text-[color:var(--accent-primary)] mt-1 max-w-[46ch] truncate">{path}</p>
       <p className="text-[12.5px] text-[color:var(--text-secondary)] mt-3 max-w-[52ch]">
         One directory at a time, which is the only way to do it without administrator access.
         A whole drive can take a minute and may not finish.
@@ -141,7 +141,7 @@ function TreemapCell({ x, y, width, height, depth, name, size, type, scanned, ag
       onClick={() => canDrillDown && onDrillDown(fullPath)}
       style={{ cursor: canDrillDown ? 'pointer' : 'default' }}
     >
-      <rect x={x} y={y} width={width} height={height} fill={fill} stroke="var(--bg-navy)" strokeWidth={1.5} rx={3} />
+      <rect x={x} y={y} width={width} height={height} fill={fill} stroke="var(--bg-base)" strokeWidth={1.5} rx={3} />
       {showIcon && (
         <image
           href={iconSrc}
@@ -302,7 +302,7 @@ function LargestFilesView({ files, icons }) {
               <div className="w-4 h-4 shrink-0" />
             )}
             <div
-              className="font-mono text-[12px] text-[color:var(--accent-coral)] w-[86px] text-right shrink-0"
+              className="font-mono text-[12px] text-[color:var(--accent-primary)] w-[86px] text-right shrink-0"
               style={{ fontVariantNumeric: 'tabular-nums' }}
             >
               {formatBytes(file.size)}
@@ -429,7 +429,7 @@ function FolderTable({ tree, onDrillDown }) {
             <div className="text-[11.5px] font-mono text-right text-[color:var(--text-muted)]" style={{ fontVariantNumeric: 'tabular-nums' }}>
               {row.scanned ? `${row.percentOfParent.toFixed(1)}%` : '—'}
             </div>
-            <div className="text-[12px] font-mono text-right text-[color:var(--accent-coral)]" style={{ fontVariantNumeric: 'tabular-nums' }}>
+            <div className="text-[12px] font-mono text-right text-[color:var(--accent-primary)]" style={{ fontVariantNumeric: 'tabular-nums' }}>
               {row.scanned ? formatBytes(row.size) : '—'}
             </div>
             <div className="text-[11.5px] font-mono text-right text-[color:var(--text-secondary)]" style={{ fontVariantNumeric: 'tabular-nums' }}>
@@ -707,7 +707,7 @@ export default function DiskMap() {
           <span key={seg.path} className="flex items-center gap-1.5">
             <button
               onClick={() => setCurrentPath(seg.path)}
-              className={`hover:text-[color:var(--accent-coral)] transition-colors ${
+              className={`hover:text-[color:var(--accent-primary)] transition-colors ${
                 i === arr.length - 1 ? 'text-[color:var(--text-primary)]' : 'text-[color:var(--text-secondary)]'
               }`}
             >
@@ -813,7 +813,7 @@ export default function DiskMap() {
               aria-pressed={view === key}
               className={`px-3 py-1.5 rounded-lg text-[12px] font-medium transition-colors ${
                 view === key
-                  ? 'bg-[color:var(--accent-coral)] text-white'
+                  ? 'bg-[color:var(--accent-primary)] text-white'
                   : 'text-[color:var(--text-secondary)] hover:bg-white/[0.06]'
               }`}
             >
@@ -875,7 +875,7 @@ export default function DiskMap() {
           }}
         >
           <div className="text-[13px] font-medium text-[color:var(--text-primary)] mb-1">{hovered.node.name}</div>
-          <div className="text-[12px] text-[color:var(--accent-coral)] mb-1">
+          <div className="text-[12px] text-[color:var(--accent-primary)] mb-1">
             {hovered.node.scanned === false ? `${formatBytes(hovered.node.size)} not measured` : formatBytes(hovered.node.size)}
           </div>
           <div className="text-[11px] font-mono text-[color:var(--text-muted)] break-all max-w-[320px]">

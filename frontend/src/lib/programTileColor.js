@@ -24,14 +24,17 @@ import { PALETTE, hash } from './fileTypeColors.js';
 /** The letter, and the reason this is not white.
  *
  * Measured against all sixteen palette entries: white text clears WCAG AA
- * on ZERO of them, and the dark navy clears it on fifteen. The tile letter
+ * on ZERO of them, and the dark ground clears it on nearly all. The tile letter
  * is 9px bold, which is not "large text", so the bar is 4.5:1 rather than
  * 3:1 -- and the coral tile this replaces was white at 2.51:1 from the day
  * it was written.
  *
  * It is also the pattern the app already uses for ink on a bright chip:
- * the startup screen's tick is drawn in this same colour on cyan. */
-export const TILE_INK = '#041638';
+ * the startup screen's tick and the primary button's label are both drawn
+ * in this same colour. Following the ground token means the ink tracked
+ * the navy-to-obsidian change automatically, and got slightly MORE
+ * headroom out of it. */
+export const TILE_INK = '#09090b';
 
 const AA_NORMAL_TEXT = 4.5;
 

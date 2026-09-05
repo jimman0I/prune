@@ -67,7 +67,7 @@ export default function NavRail({ screen, onNavigate }) {
           needs the blurred surface to be a sibling rather than an
           ancestor. */}
       <div className="glass-panel absolute inset-0" aria-hidden="true" />
-      {/* The Prune mark already reads as a self-contained badge (navy
+      {/* The Prune mark already reads as a self-contained badge (dark
           circle, teal leaf) at this size -- the rail is only 72px wide,
           too narrow for the wordmark next to it without wrapping or
           shrinking the mark itself, so it stands alone here.
@@ -94,7 +94,7 @@ export default function NavRail({ screen, onNavigate }) {
               aria-current={active ? 'page' : undefined}
               aria-label={item.label}
               className={`w-11 h-11 rounded-xl flex items-center justify-center transition-colors ${
-                active ? 'bg-[color:var(--accent-coral-soft)] text-[color:var(--accent-coral)]' : 'text-[color:var(--text-secondary)] hover:text-[color:var(--text-primary)] hover:bg-white/[0.04]'
+                active ? 'bg-[color:var(--accent-primary-soft)] text-[color:var(--accent-primary)]' : 'text-[color:var(--text-secondary)] hover:text-[color:var(--text-primary)] hover:bg-white/[0.04]'
               }`}
             >
               {item.icon}

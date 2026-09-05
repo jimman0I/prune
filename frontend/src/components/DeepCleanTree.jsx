@@ -1,7 +1,8 @@
 import { useState } from 'react';
 
-/** Custom checkbox -- coral fill + white check when checked, glass border
- * when not. Not a native <input type="checkbox">, same "build the control
+/** Custom checkbox -- primary-accent fill + DARK check when checked, glass
+ * border when not. The check is dark, not white: white on the accent is
+ * 2.43:1, which is a tick you cannot see. Not a native <input type="checkbox">, same "build the control
  * ourselves" convention SettingsPage.jsx's own Toggle already establishes
  * for this codebase's bespoke controls. */
 function Checkbox({ checked, onChange, label }) {
@@ -14,12 +15,12 @@ function Checkbox({ checked, onChange, label }) {
       onClick={onChange}
       className={`w-[18px] h-[18px] rounded-[5px] flex items-center justify-center shrink-0 transition-colors border ${
         checked
-          ? 'bg-[color:var(--accent-coral)] border-[color:var(--accent-coral)]'
+          ? 'bg-[color:var(--accent-primary)] border-[color:var(--accent-primary)]'
           : 'bg-white/[0.03] border-[color:var(--border-subtle)] hover:border-white/25'
       }`}
     >
       {checked && (
-        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#09090b" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
           <polyline points="20 6 9 17 4 12"></polyline>
         </svg>
       )}
@@ -88,14 +89,14 @@ function CategorySection({ category, items, selected, onToggle, onToggleCategory
         </button>
         <div className="flex items-center gap-2 shrink-0">
           <button
-            className="text-[11.5px] text-[color:var(--text-secondary)] hover:text-[color:var(--accent-coral)] transition-colors"
+            className="text-[11.5px] text-[color:var(--text-secondary)] hover:text-[color:var(--accent-primary)] transition-colors"
             onClick={() => onToggleCategory(category, true)}
           >
             Select All
           </button>
           <span className="text-[color:var(--border-subtle)]">·</span>
           <button
-            className="text-[11.5px] text-[color:var(--text-secondary)] hover:text-[color:var(--accent-coral)] transition-colors"
+            className="text-[11.5px] text-[color:var(--text-secondary)] hover:text-[color:var(--accent-primary)] transition-colors"
             onClick={() => onToggleCategory(category, false)}
           >
             Deselect All

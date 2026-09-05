@@ -105,7 +105,7 @@ export default function LeftoverReview({ scanResult, selected, onToggle, onConfi
                         key={itemKey}
                         className={`flex items-center gap-3 px-4 py-2.5 transition ${removable ? 'cursor-pointer hover:bg-white/[0.02]' : 'opacity-60'}`}
                       >
-                        {/* The same coral square every other tickable
+                        {/* The same square every other tickable
                             control in this app uses. This was the one
                             screen still on the native `.sleek` checkbox,
                             which is cyan -- so the review that decides
@@ -128,7 +128,7 @@ export default function LeftoverReview({ scanResult, selected, onToggle, onConfi
                             // makes Windows list the program at all, and a
                             // value's path is a key shared with every
                             // other program that starts with Windows.
-                            <div className="text-[10.5px] text-[color:var(--accent-coral)] mt-0.5">
+                            <div className="text-[10.5px] text-[color:var(--accent-primary)] mt-0.5">
                               {leftoverItemNote(item)}
                             </div>
                           )}
@@ -150,7 +150,7 @@ export default function LeftoverReview({ scanResult, selected, onToggle, onConfi
         <div className="text-[12px] text-[color:var(--text-secondary)]">
           <span className="text-white font-medium">{selectedCount}</span> items selected
           {selectedSize > 0 && (
-            <> · <span className="text-[color:var(--accent-coral)] font-medium">{formatBytes(selectedSize)}</span> reclaimable</>
+            <> · <span className="text-[color:var(--accent-primary)] font-medium">{formatBytes(selectedSize)}</span> reclaimable</>
           )}
         </div>
         <div className="flex items-center gap-2.5">

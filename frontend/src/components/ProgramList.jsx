@@ -17,11 +17,18 @@ function formatBytes(bytes) {
   return `${parseFloat((bytes / Math.pow(k, i)).toFixed(1))} ${sizes[i]}`;
 }
 
+/** The severity bands, painted.
+ *
+ * A real ramp now: quiet neutral, then blue, amber, red. The old mapping
+ * ran cyan -> blue -> amber -> coral, which had the biggest programs
+ * wearing the PRIMARY action colour -- the same one on every button --
+ * and the smallest wearing what is now that colour. Neither said anything
+ * about size. Ascending temperature does. */
 const SIZE_TONE_TEXT = {
-  cyan: 'text-[color:var(--accent-cyan)]',
-  blue: 'text-[color:var(--accent-blue)]',
-  amber: 'text-[color:var(--warning)]',
-  coral: 'text-[color:var(--accent-coral)]'
+  low: 'text-[color:var(--text-secondary)]',
+  moderate: 'text-[color:var(--accent-blue)]',
+  high: 'text-[color:var(--warning)]',
+  peak: 'text-[color:var(--danger)]'
 };
 
 /** The grid, defined once so the header and every row cannot drift apart.
@@ -119,12 +126,12 @@ function RowCheckbox({ checked, disabled, label, onChange }) {
         disabled
           ? 'border-[color:var(--border-subtle)] opacity-30 cursor-not-allowed'
           : checked
-            ? 'bg-[color:var(--accent-coral)] border-[color:var(--accent-coral)]'
+            ? 'bg-[color:var(--accent-primary)] border-[color:var(--accent-primary)]'
             : 'bg-white/[0.03] border-[color:var(--border-subtle)] hover:border-white/25'
       }`}
     >
       {checked && !disabled && (
-        <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
+        <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#09090b" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
           <polyline points="20 6 9 17 4 12"></polyline>
         </svg>
       )}
@@ -202,7 +209,7 @@ function ProgramRow({ program, iconSrc, checked, running, isNew, onToggle, onUni
           either fails, or half-succeeds and leaves files behind that the
           next launch recreates. */}
       {running && (
-        <span className="text-[9px] font-mono uppercase tracking-wider px-1 py-px rounded bg-[color:var(--accent-cyan)]/15 text-[color:var(--accent-cyan)] border border-[color:var(--accent-cyan)]/25 shrink-0">
+        <span className="text-[9px] font-mono uppercase tracking-wider px-1 py-px rounded bg-[color:var(--success-soft)] text-[color:var(--success)] border border-[color:var(--success)]/25 shrink-0">
           Running
         </span>
       )}
@@ -216,7 +223,7 @@ function ProgramRow({ program, iconSrc, checked, running, isNew, onToggle, onUni
       {/* Which browser it belongs to is the identifying fact here -- the
           same extension is often installed in two of them. */}
       {program.source === 'extension' && (
-        <span className="text-[9px] font-mono uppercase tracking-wider px-1 py-px rounded bg-[color:var(--accent-cyan)]/15 text-[color:var(--accent-cyan)] border border-[color:var(--accent-cyan)]/25 shrink-0">
+        <span className="text-[9px] font-mono uppercase tracking-wider px-1 py-px rounded bg-[color:var(--accent-purple)]/15 text-[color:var(--accent-purple)] border border-[color:var(--accent-purple)]/25 shrink-0">
           {program.browser}
         </span>
       )}
@@ -276,7 +283,7 @@ function ProgramRow({ program, iconSrc, checked, running, isNew, onToggle, onUni
     <div className="flex items-center">
       {isNew && (
         <span
-          className="text-[9px] font-mono uppercase tracking-wider px-1 py-px rounded bg-[color:var(--accent-coral)]/15 text-[color:var(--accent-coral)] border border-[color:var(--accent-coral)]/25"
+          className="text-[9px] font-mono uppercase tracking-wider px-1 py-px rounded bg-[color:var(--accent-primary)]/15 text-[color:var(--accent-primary)] border border-[color:var(--accent-primary)]/25"
         >
           New
         </span>
@@ -429,7 +436,7 @@ export default function ProgramList({ programs: initialPrograms, extensions = []
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search applications…"
-            className="w-full bg-[color:var(--bg-panel)] border border-[color:var(--border-subtle)] rounded-xl pl-10 pr-4 py-2 text-[13px] placeholder:text-[color:var(--text-muted)] focus:outline-none focus:border-[color:var(--accent-coral)] focus:ring-4 focus:ring-[color:var(--accent-coral)]/10 transition"
+            className="w-full bg-[color:var(--bg-panel)] border border-[color:var(--border-subtle)] rounded-xl pl-10 pr-4 py-2 text-[13px] placeholder:text-[color:var(--text-muted)] focus:outline-none focus:border-[color:var(--accent-primary)] focus:ring-4 focus:ring-[color:var(--accent-primary)]/10 transition"
           />
         </div>
         <div className="flex items-center gap-1 p-1 bg-[color:var(--bg-panel)] border border-[color:var(--border-subtle)] rounded-xl">
@@ -483,7 +490,7 @@ export default function ProgramList({ programs: initialPrograms, extensions = []
               </>
             );
             const classes = `flex items-center gap-1 text-[10.5px] font-mono uppercase tracking-[0.13em] ${
-              active ? 'text-[color:var(--accent-coral)]' : 'text-[color:var(--text-muted)]'
+              active ? 'text-[color:var(--accent-primary)]' : 'text-[color:var(--text-muted)]'
             } ${col.align === 'right' ? 'justify-end' : ''}`;
 
             return col.sort ? (
@@ -547,7 +554,7 @@ export default function ProgramList({ programs: initialPrograms, extensions = []
           // The footer becomes the batch bar once anything is ticked,
           // rather than a separate strip appearing and pushing the table:
           // it's the same row of information, about a smaller set.
-          <div className="flex items-center justify-between gap-4 px-4 py-2 border-t border-[color:var(--accent-coral)]/25 bg-[color:var(--accent-coral)]/[0.07] shrink-0">
+          <div className="flex items-center justify-between gap-4 px-4 py-2 border-t border-[color:var(--accent-primary)]/25 bg-[color:var(--accent-primary)]/[0.07] shrink-0">
             <span className="text-[12px] text-[color:var(--text-secondary)]">
               <span className="text-[color:var(--text-primary)] font-medium">{summary.count}</span> selected ·{' '}
               <span className="font-mono">{formatBytes(summary.totalBytes)}</span>
@@ -557,7 +564,7 @@ export default function ProgramList({ programs: initialPrograms, extensions = []
             </span>
             <div className="flex items-center gap-2.5">
               <button
-                className="text-[11.5px] text-[color:var(--text-secondary)] hover:text-[color:var(--accent-coral)] transition-colors"
+                className="text-[11.5px] text-[color:var(--text-secondary)] hover:text-[color:var(--accent-primary)] transition-colors"
                 onClick={() => setSelected(new Set())}
               >
                 Clear
@@ -583,7 +590,7 @@ export default function ProgramList({ programs: initialPrograms, extensions = []
                   the only place the column's window is spelled out. A
                   badge saying New is not self-explanatory about how new. */}
               {newIds.size > 0 && (
-                <span className="text-[color:var(--accent-coral)]">
+                <span className="text-[color:var(--accent-primary)]">
                   {' · '}{newIds.size} new in {RECENT_DAYS} days
                 </span>
               )}

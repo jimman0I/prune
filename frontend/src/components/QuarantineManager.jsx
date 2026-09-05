@@ -127,8 +127,8 @@ export default function QuarantineManager() {
 
       {loading && (
         <div className="glass-panel flex flex-col items-center justify-center py-16">
-          <div className="w-14 h-14 rounded-2xl bg-[color:var(--accent-coral)]/10 border border-[color:var(--accent-coral)]/25 flex items-center justify-center mb-5">
-            <div className="w-6 h-6 border-2 border-[color:var(--accent-coral)] border-t-transparent rounded-full animate-spin"></div>
+          <div className="w-14 h-14 rounded-2xl bg-[color:var(--accent-primary)]/10 border border-[color:var(--accent-primary)]/25 flex items-center justify-center mb-5">
+            <div className="w-6 h-6 border-2 border-[color:var(--accent-primary)] border-t-transparent rounded-full animate-spin"></div>
           </div>
           <p className="text-[13px] text-[color:var(--text-secondary)]">Loading quarantine…</p>
         </div>

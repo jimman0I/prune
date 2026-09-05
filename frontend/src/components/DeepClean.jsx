@@ -7,7 +7,7 @@ import { mergeScannedRule, scanLogLine } from '../lib/scanLog.js';
 import DeepCleanTree from './DeepCleanTree.jsx';
 
 const LOG_TONE = {
-  size: 'text-[color:var(--accent-coral)]',
+  size: 'text-[color:var(--accent-primary)]',
   warning: 'text-[color:var(--warning)]',
   muted: 'text-[color:var(--text-muted)]'
 };
@@ -48,7 +48,7 @@ function ScanLog({ lines, scanning, scanned, total }) {
       {total > 0 && (
         <div className="h-[2px] bg-white/[0.06] shrink-0">
           <div
-            className="h-full bg-[color:var(--accent-coral)] transition-[width] duration-200"
+            className="h-full bg-[color:var(--accent-primary)] transition-[width] duration-200"
             style={{ width: `${Math.round((scanned / total) * 100)}%` }}
           />
         </div>
@@ -396,14 +396,14 @@ export default function DeepClean() {
             <div className="flex items-center gap-2 text-[11.5px] shrink-0">
               <span className="text-[color:var(--text-muted)]">·</span>
               <button
-                className="text-[color:var(--text-secondary)] hover:text-[color:var(--accent-coral)] transition-colors"
+                className="text-[color:var(--text-secondary)] hover:text-[color:var(--accent-primary)] transition-colors"
                 onClick={() => setSelected(selectableIds(categories))}
               >
                 Select everything
               </button>
               <span className="text-[color:var(--border-subtle)]">·</span>
               <button
-                className="text-[color:var(--text-secondary)] hover:text-[color:var(--accent-coral)] transition-colors disabled:opacity-40"
+                className="text-[color:var(--text-secondary)] hover:text-[color:var(--accent-primary)] transition-colors disabled:opacity-40"
                 onClick={() => setSelected(new Set())}
                 disabled={selected.size === 0}
               >

@@ -45,7 +45,7 @@ function Tick({ on }) {
     <span
       className={`w-[13px] h-[13px] rounded-[3px] border flex items-center justify-center shrink-0 transition-colors ${
         on
-          ? 'bg-[color:var(--accent-cyan)] border-[color:var(--accent-cyan)]'
+          ? 'bg-[color:var(--success)] border-[color:var(--success)]'
           : 'bg-transparent border-[color:var(--border-subtle)]'
       }`}
     >
@@ -53,7 +53,7 @@ function Tick({ on }) {
           as an empty box at a glance, which inverts the one fact this
           column carries. */}
       {on && (
-        <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="var(--bg-navy)" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round">
+        <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="var(--bg-base)" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round">
           <polyline points="20 6 9 17 4 12" />
         </svg>
       )}
@@ -63,12 +63,18 @@ function Tick({ on }) {
 
 /** Whether Windows will run this entry, and the control that changes it.
  *
- * Cyan rather than the coral every other tickable control in this app
- * uses, deliberately. Coral here means "selected for removal" -- it is
- * what the program list and Deep Clean mark things with -- and a coral
- * tick against "runs at sign-in" would attach the removal colour to the
- * entries that are working normally. Cyan is this app's "active" colour
- * and already marks the Running pill two columns over.
+ * Green rather than the primary accent every other tickable control in
+ * this app uses, deliberately -- and the reasoning survived the palette
+ * change intact even though the colours in it all moved.
+ *
+ * The primary accent is what the program list and Deep Clean mark things
+ * with, and there it means "selected for removal". Wearing it here would
+ * attach the removal colour to the entries that are working normally.
+ * This switch wants the app's "on" colour instead, which is the same
+ * green as the Running pill two columns over.
+ *
+ * It used to be cyan on exactly that argument. Cyan is the primary accent
+ * now, so keeping it would have inverted the point.
  *
  * Not `disabled` while the change is in flight: a machine-wide entry waits
  * on a UAC prompt, and disabling the control the user's focus is sitting
@@ -158,7 +164,7 @@ function StatusPill({ item }) {
   }
   if (item.running) {
     return (
-      <span className={`${base} bg-[color:var(--accent-cyan)]/15 text-[color:var(--accent-cyan)] border-[color:var(--accent-cyan)]/25`}>
+      <span className={`${base} bg-[color:var(--success-soft)] text-[color:var(--success)] border-[color:var(--success)]/25`}>
         Running
       </span>
     );

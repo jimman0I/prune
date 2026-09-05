@@ -28,7 +28,7 @@ function Toggle({ checked, onChange, label }) {
       aria-label={label}
       onClick={onChange}
       className={`relative w-10 h-6 rounded-full transition-colors shrink-0 ${
-        checked ? 'bg-[color:var(--accent-coral)]' : 'bg-white/10'
+        checked ? 'bg-[color:var(--accent-primary)]' : 'bg-white/10'
       }`}
     >
       <span
@@ -129,7 +129,7 @@ export default function SettingsPage() {
             onClick={() => setTab(t.id)}
             className={`px-4 py-2 rounded-lg text-[13px] font-medium transition-colors ${
               tab === t.id
-                ? 'bg-[color:var(--accent-coral-soft)] text-[color:var(--accent-coral)]'
+                ? 'bg-[color:var(--accent-primary-soft)] text-[color:var(--accent-primary)]'
                 : 'text-[color:var(--text-secondary)] hover:text-[color:var(--text-primary)] hover:bg-white/[0.04]'
             }`}
           >
@@ -140,8 +140,8 @@ export default function SettingsPage() {
 
       {loading && (
         <div className="glass-panel flex flex-col items-center justify-center py-16">
-          <div className="w-14 h-14 rounded-2xl bg-[color:var(--accent-coral)]/10 border border-[color:var(--accent-coral)]/25 flex items-center justify-center mb-5">
-            <div className="w-6 h-6 border-2 border-[color:var(--accent-coral)] border-t-transparent rounded-full animate-spin"></div>
+          <div className="w-14 h-14 rounded-2xl bg-[color:var(--accent-primary)]/10 border border-[color:var(--accent-primary)]/25 flex items-center justify-center mb-5">
+            <div className="w-6 h-6 border-2 border-[color:var(--accent-primary)] border-t-transparent rounded-full animate-spin"></div>
           </div>
           <p className="text-[13px] text-[color:var(--text-secondary)]">Loading settings…</p>
         </div>
@@ -228,7 +228,7 @@ export default function SettingsPage() {
                       value={settings.skipRecentHours}
                       onChange={(e) => save({ skipRecentHours: Math.max(0, Number(e.target.value) || 0) })}
                       aria-label="Hours to leave recent files alone"
-                      className="w-[72px] font-mono text-[12.5px] px-2.5 py-2 rounded-lg bg-white/[0.04] border border-[color:var(--border-subtle)] text-[color:var(--text-primary)] focus:outline-none focus:border-[color:var(--accent-coral)]/50"
+                      className="w-[72px] font-mono text-[12.5px] px-2.5 py-2 rounded-lg bg-white/[0.04] border border-[color:var(--border-subtle)] text-[color:var(--text-primary)] focus:outline-none focus:border-[color:var(--accent-primary)]/50"
                       style={{ fontVariantNumeric: 'tabular-nums' }}
                     />
                     <span className="text-[12.5px] text-[color:var(--text-muted)]">hours</span>
@@ -285,7 +285,7 @@ export default function SettingsPage() {
                     onChange={(e) => setNewFolder(e.target.value)}
                     onKeyDown={(e) => { if (e.key === 'Enter') handleAddFolder(); }}
                     placeholder="C:\Path\To\Folder"
-                    className="flex-1 min-w-0 font-mono text-[12.5px] px-3 py-2 rounded-lg bg-white/[0.04] border border-[color:var(--border-subtle)] text-[color:var(--text-primary)] placeholder:text-[color:var(--text-muted)] focus:outline-none focus:border-[color:var(--accent-coral)]/50"
+                    className="flex-1 min-w-0 font-mono text-[12.5px] px-3 py-2 rounded-lg bg-white/[0.04] border border-[color:var(--border-subtle)] text-[color:var(--text-primary)] placeholder:text-[color:var(--text-muted)] focus:outline-none focus:border-[color:var(--accent-primary)]/50"
                   />
                   <button className="btn-ghost px-3.5 py-2 rounded-lg text-[12px] font-medium shrink-0" onClick={handleAddFolder}>
                     Add

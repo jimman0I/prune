@@ -13,9 +13,9 @@ function formatBytes(bytes) {
 }
 
 /** Maps a real drive verdict to a semantic colour. Deliberately NOT the
- * coral accent the old free-space gauge used -- index.css's own token
- * comment reserves coral for "primary actions ONLY", and a health readout
- * is status, not an action. */
+ * primary accent the old free-space gauge used -- index.css's own token
+ * comment reserves it for "primary actions ONLY", and a health readout is
+ * status, not an action. */
 function toneColor(tone) {
   if (tone === 'danger') return 'var(--danger)';
   if (tone === 'warning') return 'var(--warning)';
@@ -278,7 +278,7 @@ export default function Dashboard({ programs, totalSize, onNavigate = () => {} }
             <div className="h-1.5 rounded-full bg-white/10 overflow-hidden">
               <div
                 className="h-full rounded-full"
-                style={{ width: `${Math.round((1 - diskSpace.freeBytes / diskSpace.totalBytes) * 100)}%`, background: 'var(--accent-coral)' }}
+                style={{ width: `${Math.round((1 - diskSpace.freeBytes / diskSpace.totalBytes) * 100)}%`, background: 'var(--accent-primary)' }}
               />
             </div>
           )}

@@ -10,13 +10,13 @@ import LeftoverReview from './LeftoverReview.jsx';
 function ProgressPhase({ title, command, progress }) {
   return (
     <div className="flex flex-col items-center justify-center py-10">
-      <div className="w-14 h-14 rounded-2xl bg-[color:var(--accent-coral)]/10 border border-[color:var(--accent-coral)]/25 flex items-center justify-center mb-5">
-        <div className="w-6 h-6 border-2 border-[color:var(--accent-coral)] border-t-transparent rounded-full animate-spin"></div>
+      <div className="w-14 h-14 rounded-2xl bg-[color:var(--accent-primary)]/10 border border-[color:var(--accent-primary)]/25 flex items-center justify-center mb-5">
+        <div className="w-6 h-6 border-2 border-[color:var(--accent-primary)] border-t-transparent rounded-full animate-spin"></div>
       </div>
       <p className="text-[15px] font-medium mb-1">{title}</p>
       <p className="text-[12.5px] text-[color:var(--text-secondary)] font-mono mb-6 max-w-full truncate px-6">{command}</p>
       <div className="w-full max-w-sm h-1 rounded-full bg-[color:var(--bg-panel)] overflow-hidden">
-        <div className="h-full rounded-full bg-gradient-to-r from-[color:var(--accent-coral)] to-[#e8624f] transition-all duration-500" style={{ width: `${progress}%` }}></div>
+        <div className="h-full rounded-full bg-gradient-to-r from-[color:var(--accent-primary)] to-[#e8624f] transition-all duration-500" style={{ width: `${progress}%` }}></div>
       </div>
     </div>
   );
@@ -210,7 +210,7 @@ export default function UninstallModal({ program, running = false, onClose }) {
                 <input
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full bg-[color:var(--bg-panel)] border border-[color:var(--border-subtle)] rounded-xl px-3.5 py-2.5 text-[13px] font-mono focus:outline-none focus:border-[color:var(--accent-coral)] focus:ring-4 focus:ring-[color:var(--accent-coral)]/10 transition"
+                  className="w-full bg-[color:var(--bg-panel)] border border-[color:var(--border-subtle)] rounded-xl px-3.5 py-2.5 text-[13px] font-mono focus:outline-none focus:border-[color:var(--accent-primary)] focus:ring-4 focus:ring-[color:var(--accent-primary)]/10 transition"
                 />
                 <p className="text-[12px] text-[color:var(--text-muted)] mt-1.5 mb-6">
                   {/* Explaining why this differs from the name above matters:

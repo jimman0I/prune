@@ -54,6 +54,33 @@ not a confetti animation.
 - **Not a toy.** No mascots, no emoji as iconography, no bouncy motion, no
   celebratory language. It is holding a knife.
 
+## Visual System — Aurora Deck
+
+Obsidian ground (`#09090b`), a single functional accent in cyan (`#06b6d4`),
+Geist for UI, IBM Plex Serif for display headings, JetBrains Mono for anything
+the machine produced — sizes, paths, counts, registry keys.
+
+Chosen over the navy-and-coral build it replaced after rendering both. The
+deciding fact was not taste: the three ambient radial gradients sit at 10–16%
+opacity, navy was bright enough to swallow them, and against near-black they
+finally read as the aurora the system is named for. Every text token gained
+roughly a point of contrast in the move.
+
+Two rules hold this together, and both were nearly broken by the change itself:
+
+- **The primary accent is never a status colour.** Cyan means "the thing you
+  click". It previously also meant "running", "newest", and "largest", which
+  put the action colour on four unrelated readouts at once. Running is green,
+  a browser badge is purple, and size is a severity ramp — neutral, blue,
+  amber, red.
+- **Ambient accents are never an interactive element's colour.** Purple and
+  blue exist for the backdrop and for categorical data — the disk map's file
+  types, the icon tiles. They never mark a control.
+
+Known exception, not yet resolved: the NEW badge and the "n new in 7 days"
+count still use the primary accent, which by the first rule they should not.
+That predates the palette change and is a real inconsistency.
+
 ## Design Principles
 
 1. **Measured, not estimated.** Show what was actually read. "Not measured" is a

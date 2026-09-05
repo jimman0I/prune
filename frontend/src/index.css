@@ -1,46 +1,68 @@
-@import url(https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=IBM+Plex+Serif:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap);
+@import url(https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=IBM+Plex+Serif:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap);
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  /* Surfaces */
-  --bg-navy: #041638;
-  --bg-panel: #181715;
-  --glass-bg: rgba(4, 22, 56, 0.6);
-  --glass-border: rgba(255, 255, 255, 0.08);
+  /* Surfaces.
+   *
+   * Obsidian rather than the navy this shipped with. The reason is not
+   * taste: the three radial gradients below sit at 10-16% and navy was
+   * bright enough to swallow them, which is why their opacities had once
+   * been doubled to compensate (see the note on body::before). Against a
+   * near-black ground the same gradients read as the aurora they were
+   * always meant to be, and every text token gains about 1.1 points of
+   * contrast for free. */
+  --bg-base: #09090b;
+  --bg-panel: #131316;
+  --glass-bg: rgba(9, 9, 11, 0.6);
+  --glass-border: rgba(255, 255, 255, 0.06);
 
   /* Text */
-  --text-primary: #faf9f5;
-  --text-secondary: #a09d96;
+  --text-primary: #fafafa;
+  --text-secondary: #a1a1aa;
   /* The third text tier: column headers, placeholders, units, dashes.
-     Was #71717a, which measured 3.69:1 against the navy ground -- under
-     the 4.5:1 WCAG AA floor for body text, and this token is used for
-     PLACEHOLDERS, which need the full ratio rather than the large-text
-     3:1. Raised until it clears AA on every ground it actually sits on:
-     5.09:1 on the panel, and still 4.70:1 on the lightest table row tint
-     (white/[0.06]). Same cool neutral, just legible. */
-  --text-muted: #8d8d99;
+     This token is used for PLACEHOLDERS, which need the full 4.5:1 rather
+     than the large-text 3:1, so it is measured against every ground it
+     actually sits on rather than against the body alone.
 
-  /* Functional accent -- coral, primary actions ONLY */
-  --accent-coral: #f98074;
-  --accent-coral-glow: rgba(249, 128, 116, 0.35);
-  --accent-coral-soft: rgba(249, 128, 116, 0.12);
+     #71717a was the original value and is still not usable -- 4.12:1 on
+     obsidian, which is closer than the 3.69:1 it managed on navy but
+     still under the floor. #85858f clears all three: 5.45:1 on the body,
+     5.08:1 on a panel, and 4.85:1 on the lightest table row tint
+     (white/[0.06]). Darker than the navy build's #8d8d99, which the new
+     ground affords, and the extra step down buys real separation from
+     --text-secondary instead of two tiers that read alike. */
+  --text-muted: #85858f;
 
-  /* Ambient / data-viz accents -- decorative and size-band coloring only,
-     never an interactive element's color */
+  /* Functional accent -- primary actions ONLY.
+   *
+   * Cyan. The coral it replaces was the same token, and the swap is the
+   * whole point of the palette change; what it costs is that cyan can no
+   * longer mean "active" as well, because a colour cannot be both the
+   * thing you click and the state you are reading. Every status that used
+   * to be cyan has moved: running is green, an extension's browser badge
+   * is purple, and the size bands are a severity ramp. */
+  --accent-primary: #06b6d4;
+  --accent-primary-glow: rgba(6, 182, 212, 0.35);
+  --accent-primary-soft: rgba(6, 182, 212, 0.12);
+
+  /* Ambient / data-viz accents -- decorative and categorical coloring
+     only, never an interactive element's color. Cyan is deliberately NOT
+     here any more: it is the primary accent now, and leaving an alias
+     behind is how the two meanings creep back together. */
   --accent-purple: #8b5cf6;
   --accent-blue: #3b82f6;
-  --accent-cyan: #06b6d4;
 
   --danger: #ec5162;
   --danger-soft: rgba(236, 81, 98, 0.12);
   --warning: #f59e0b;
   --warning-soft: rgba(245, 158, 11, 0.12);
   --success: #5db872;
+  --success-soft: rgba(93, 184, 114, 0.15);
 
-  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-subtle: rgba(255, 255, 255, 0.06);
 
   /* A named stacking order, so nothing has to guess.
    *
@@ -66,25 +88,30 @@
 html, body, #root { height: 100%; margin: 0; }
 
 body {
-  background: var(--bg-navy);
+  background: var(--bg-base);
   color: var(--text-primary);
-  /* Archivo, not Geist.
+  /* Geist, chosen over Archivo after seeing both rendered.
    *
-   * Geist is Vercel's typeface and reads as exactly one thing: a modern
-   * SaaS product. That is the look this app is explicitly not meant to
-   * have, and a face carries that association harder than any other single
-   * choice on the page.
+   * This reverses an earlier note here, so the reasoning that note gave is
+   * worth answering rather than deleting. It argued that Geist is Vercel's
+   * typeface and reads as a modern SaaS product, which is a register this
+   * app should not be in. That objection is real and has not gone away.
    *
-   * Archivo comes out of grotesque signage rather than software branding.
-   * It is engineered-looking without being retro, holds up at the 11-12px
-   * this app spends most of its time at, and sits on a real contrast axis
-   * with IBM Plex Serif rather than competing with it. Both have an
-   * institutional, drawn-for-a-purpose quality, which is the register a
-   * tool that deletes things should be in.
+   * What outweighs it: the SaaS association comes overwhelmingly from
+   * Geist on a white or cream ground at large marketing sizes. This app is
+   * a near-black desktop tool rendering 11-12px UI text and a serif
+   * display face, and in that setting Geist reads as the neutral, slightly
+   * technical grotesque it also is. It carries the dense tabular screens
+   * -- the program list, the startup table -- a little better than Archivo
+   * did, whose wider signage proportions cost horizontal room in columns
+   * that had none to spare.
    *
-   * The old `cv11/ss01/ss03` feature settings went with it -- those are
-   * Inter/Geist stylistic sets and were doing nothing for any other face. */
-  font-family: 'Archivo', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+   * IBM Plex Serif still carries the display headings, so the contrast
+   * axis the previous note was protecting is unchanged.
+   *
+   * `cv11/ss01/ss03` stay off. They are Inter stylistic sets; Geist has
+   * its own and none of them are wanted here. */
+  font-family: 'Geist', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
   letter-spacing: -0.006em;
   -webkit-font-smoothing: antialiased;
   overflow: hidden;
@@ -103,8 +130,16 @@ body {
    doubled and spread widened; a third accent (--accent-blue, already
    defined but unused here) added for more surface to catch across a
    wide dashboard. Still decorative-only and low-key -- Aurora Deck's own
-   rule that purple/cyan/blue are ambient accents, never an interactive
-   element's color, is unchanged. */
+   rule that these are ambient accents, never an interactive element's
+   color, is unchanged.
+
+   Kept at these opacities on the obsidian ground rather than halved back.
+   The doubling was compensation for navy swallowing them, and against
+   near-black the same values finally read as the aurora they are named
+   for -- which is most of what the ground change bought. The cyan stop
+   here is the one remaining ambient use of that hue and is deliberate: it
+   is a 14%-opacity wash behind everything, not a mark on a control, so it
+   cannot be mistaken for the primary accent it now shares a value with. */
 body::before {
   content: '';
   position: fixed;
@@ -162,13 +197,14 @@ body::before {
 }
 
 /* Disk Map treemap hover tooltip -- same glass recipe as .glass-panel, but
-   a coral border (not the default) and no giant radius, since this floats
+   a primary-accent border (not the default) and no giant radius, since
+   this floats
    at cursor size rather than framing a whole section. */
 .diskmap-tooltip {
   background: var(--glass-bg);
   backdrop-filter: blur(24px) saturate(180%);
   -webkit-backdrop-filter: blur(24px) saturate(180%);
-  border: 1px solid var(--accent-coral-glow);
+  border: 1px solid var(--accent-primary-glow);
   border-radius: 10px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
   padding: 10px 14px;
@@ -188,11 +224,11 @@ body::before {
  * behind -- that is the reason the rule was removed from most codebases in
  * the first place, and the reason it should not have been.
  *
- * Coral is the interactive accent and reads 7.11:1 on the navy ground, so
- * the ring is visible without a second color. The offset keeps it clear of
- * the control's own border rather than sitting on top of it. */
+ * The interactive accent reads 8.19:1 on the obsidian ground, so the ring
+ * is visible without a second color. The offset keeps it clear of the
+ * control's own border rather than sitting on top of it. */
 :focus-visible {
-  outline: 2px solid var(--accent-coral);
+  outline: 2px solid var(--accent-primary);
   outline-offset: 2px;
   border-radius: 4px;
 }
@@ -232,12 +268,15 @@ body::before {
 
 /* Buttons */
 .btn-primary {
-  background: linear-gradient(180deg, var(--accent-coral), #e8624f);
-  color: #1a0604;
+  background: linear-gradient(180deg, var(--accent-primary), #0596ae);
+  /* Dark ink, not white. White on this cyan is 2.43:1 -- the same trap the
+     coral it replaced had, and the reason that one already used dark ink.
+     Obsidian on #06b6d4 is 8.19:1. */
+  color: #09090b;
   border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.25),
-    0 8px 24px -8px var(--accent-coral-glow),
+    0 8px 24px -8px var(--accent-primary-glow),
     0 2px 6px rgba(0, 0, 0, 0.35);
   transition: transform 140ms cubic-bezier(0.2, 0.9, 0.3, 1), box-shadow 200ms ease;
   font-weight: 600;
@@ -250,7 +289,7 @@ body::before {
   transform: translateY(-1px);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.3),
-    0 12px 32px -8px var(--accent-coral-glow),
+    0 12px 32px -8px var(--accent-primary-glow),
     0 4px 10px rgba(0, 0, 0, 0.4);
 }
 .btn-primary:active { transform: translateY(0); }
@@ -291,15 +330,15 @@ body::before {
 /* The app's one checkbox.
  *
  * There were two. The program list and the Deep Clean tree drew their own
- * coral square in JSX; the leftover review -- the screen that decides what
- * actually gets deleted after an uninstall -- used a native input styled
- * cyan. Two tick colours across three screens for the same act of choosing
- * something, and the cyan one was on the screen where getting it wrong
- * costs the most.
+ * square in JSX; the leftover review -- the screen that decides what
+ * actually gets deleted after an uninstall -- used a differently coloured
+ * native input. Two tick colours across three screens for the same act of
+ * choosing something, and the odd one out was on the screen where getting
+ * it wrong costs the most.
  *
- * Coral, because that is this app's interactive accent and every other
- * selectable thing already uses it. Cyan stays what it is elsewhere: a
- * state readout (Startup's enabled column), never a control. */
+ * The primary accent, because every other selectable thing already uses
+ * it. A state readout never does -- Startup's enabled column is green,
+ * which is the one place that distinction has to hold. */
 input[type="checkbox"].prune-check {
   appearance: none;
   width: 15px;
@@ -317,21 +356,21 @@ input[type="checkbox"].prune-check {
 input[type="checkbox"].prune-check:hover:not(:disabled) { border-color: rgba(255, 255, 255, 0.25); }
 input[type="checkbox"].prune-check:disabled { opacity: 0.3; cursor: not-allowed; }
 input[type="checkbox"].prune-check:checked {
-  background: var(--accent-coral);
-  border-color: var(--accent-coral);
+  background: var(--accent-primary);
+  border-color: var(--accent-primary);
 }
 input[type="checkbox"].prune-check:checked::after {
   content: '';
   width: 4px;
   height: 8px;
-  /* The dark ink from .btn-primary, so the tick reads on coral the same
-     way the primary button's label does. */
-  border: solid #1a0604;
+  /* The dark ink from .btn-primary, so the tick reads on the primary
+     accent the same way the button's label does. */
+  border: solid #09090b;
   border-width: 0 2px 2px 0;
   transform: rotate(45deg) translate(-1px, -1px);
 }
 
 ::-webkit-scrollbar { width: 10px; height: 10px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(--border-subtle); border-radius: 8px; border: 2px solid var(--bg-navy); }
+::-webkit-scrollbar-thumb { background: var(--border-subtle); border-radius: 8px; border: 2px solid var(--bg-base); }
 ::-webkit-scrollbar-thumb:hover { background: #3f3f46; }
