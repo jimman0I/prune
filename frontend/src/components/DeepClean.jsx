@@ -1,11 +1,12 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { visibleCategories, hiddenRuleCount } from '../lib/visibleRules.js';
-import { fetchDeepCleanRules, streamDeepCleanScan, executeDeepClean, fetchSettings } from '../lib/api.js';
+import { executeDeepClean } from '../lib/api.js';
+import { useDeepCleanScan } from '../hooks/useDeepCleanScan.js';
+import { useSettings } from '../hooks/useSystemQueries.js';
 import { lockedFileSummary } from '../lib/lockedFiles.js';
 import { useToasts } from '../hooks/useToasts.jsx';
-import { defaultSelection, selectableIds } from '../lib/defaultSelection.js';
+import { defaultSelection } from '../lib/defaultSelection.js';
 import { selectionTotal } from '../lib/selectionTotal.js';
-import { mergeScannedRule, scanLogLine } from '../lib/scanLog.js';
 import DeepCleanTree from './DeepCleanTree.jsx';
 
 const LOG_TONE = {
@@ -86,35 +87,26 @@ function formatBytes(bytes) {
 export default function DeepClean() {
   // No auto-scan on mount, per spec -- the tree stays empty until the
   // user explicitly clicks Preview.
-  const [categories, setCategories] = useState(null);
   const [selected, setSelected] = useState(new Set());
-  const [scanning, setScanning] = useState(false);
-  const [scanError, setScanError] = useState(null);
   const [confirmClean, setConfirmClean] = useState(false);
   const [cleaning, setCleaning] = useState(false);
   const [cleanResult, setCleanResult] = useState(null);
-  const toasts = useToasts();
   const [cleanError, setCleanError] = useState(null);
-  const [logLines, setLogLines] = useState([]);
-  const [scanned, setScanned] = useState(0);
-  // Whether sizes have actually been measured, which is no longer the
-  // same question as whether the tree exists.
-  const [hasScanned, setHasScanned] = useState(false);
-  const [total, setTotal] = useState(0);
-  // BleachBit's "hide irrelevant cleaners". Read once on mount rather than
-  // watched: it changes on the Settings screen, and coming back to this
-  // one remounts it.
-  const [hideUnavailable, setHideUnavailable] = useState(false);
+  const toasts = useToasts();
 
-  useEffect(() => {
-    let cancelled = false;
-    fetchSettings()
-      .then((s) => { if (!cancelled) setHideUnavailable(s?.hideUnavailableRules === true); })
-      // The filter is an enhancement, never a blocker -- if settings
-      // cannot be read the list simply shows everything.
-      .catch(() => {});
-    return () => { cancelled = true; };
-  }, []);
+  // The tree, the scan and its cancellation all live in the hook now --
+  // see hooks/useDeepCleanScan.js. What useQuery buys here is the thing
+  // the stream needed most: an AbortSignal with a real lifecycle, so Stop
+  // still closes the connection and the backend still stops walking.
+  const {
+    tree: categories, scanning, hasScanned, log: logLines,
+    scanned, total, error: scanError, start, stop: stopPreview, selectableIds: scannedIds
+  } = useDeepCleanScan();
+
+  // BleachBit's "hide irrelevant cleaners". Most of a 74-rule list is for
+  // software this machine does not have.
+  const { settings } = useSettings();
+  const hideUnavailable = settings?.hideUnavailableRules === true;
 
   const shownCategories = useMemo(
     () => (categories ? visibleCategories(categories, hideUnavailable) : null),
@@ -124,119 +116,41 @@ export default function DeepClean() {
     () => hiddenRuleCount(categories, hideUnavailable),
     [categories, hideUnavailable]
   );
-  const abortRef = useRef(null);
 
-  // The tree is on screen before anything is measured. It is built from
-  // the rule list, which is a JSON file the backend reads in about forty
-  // milliseconds, so every category and every rule is there to read and
-  // tick immediately -- sizes show a dash until a scan fills them in.
-  //
-  // Deep Clean used to open on an empty panel and stay there until
-  // someone found the Preview button and waited half a minute, which is
-  // how it came to be reported as not working. Showing what the feature
-  // cleans should not cost thirty seconds of disk walking.
+  // The listed tree arrives before anything is measured, so the default
+  // ticks land as soon as there is something to tick.
   useEffect(() => {
-    let cancelled = false;
-    fetchDeepCleanRules()
-      .then((listed) => {
-        if (cancelled) return;
-        // Only as the starting state: a scan already running owns the
-        // tree, and this must not overwrite measured sizes with dashes.
-        setCategories((prev) => prev ?? listed);
-        setSelected((prev) => (prev.size > 0 ? prev : defaultSelection(listed)));
-      })
-      .catch(() => { /* Preview still builds the tree from scratch */ });
-    return () => { cancelled = true; };
-  }, []);
-
-  // Aborting the fetch closes the connection, and the route watches for
-  // that -- so Stop really does stop the filesystem walk server-side
-  // rather than just ignoring the rest of the answer.
-  const stopPreview = () => abortRef.current?.abort();
-
-  // Same reason on unmount: navigating away shouldn't leave a scan
-  // running for an answer nobody will see.
-  useEffect(() => () => abortRef.current?.abort(), []);
+    if (!categories) return;
+    setSelected((prev) => (prev.size > 0 ? prev : defaultSelection(categories)));
+  }, [categories]);
 
   /** `reselect: false` is for the rescan that follows a clean -- the user
    * just acted on those rules, and re-ticking them would invite doing it
    * twice. */
   const runPreview = async ({ reselect = true } = {}) => {
-    // Each rule's size streams back as it's measured, so the tree and the
-    // log fill in during the scan instead of after it. The whole run takes
-    // about nineteen seconds on a real machine and one rule (a 33 GB
-    // shader cache) accounts for a big slice of that -- with no output
-    // until the end, there was no way to tell it from a hang.
-    const controller = new AbortController();
-    abortRef.current = controller;
-
-    setScanning(true);
-    setScanError(null);
     setCleanResult(null);
-    setLogLines([]);
-    setScanned(0);
-    setTotal(0);
-
-    // Mirrors the tree outside state: the stream delivers 40 events in
-    // ~19s and the final selection step needs the complete set, which a
-    // stale closure over `categories` would not have.
-    let built = [];
-
-    try {
-      await streamDeepCleanScan((type, data) => {
-        if (type === 'start') {
-          setTotal(data.total);
-          // Deliberately NOT cleared. The listed tree is already the right
-          // shape and each result merges into it by id, so the rules stay
-          // put and readable while their sizes arrive.
-          setCategories((prev) => prev ?? []);
-        } else if (type === 'rule') {
-          // Merged through the state updater rather than into a local
-          // copy, so each result lands on the tree that is actually on
-          // screen -- the listed one. Merging by id is idempotent, so
-          // React invoking this twice in development changes nothing.
-          setCategories((prev) => {
-            built = mergeScannedRule(prev ?? [], data);
-            return built;
-          });
-          setLogLines((prev) => [...prev, scanLogLine(data)]);
-          setScanned((n) => n + 1);
-        } else if (type === 'error') {
-          setScanError(data.message);
-        }
-      }, controller.signal);
-
-      // Pre-tick the recommended rules that are actually here. Without
-      // this, a scan that found 54 GB across 40 rules left the footer
-      // reading "Total space to free: 0 B" with Clean disabled -- a
-      // nineteen-second wait ending in a dead end, which is how this got
-      // reported as the feature not working at all.
-      //
-      // A rescan after a clean shouldn't silently re-tick everything the
-      // user just removed, so an existing selection is kept (minus any id
-      // the fresh scan no longer has) rather than replaced.
-      setHasScanned(true);
-
-      // Now that the sizes are known, drop anything the scan proved there
-      // is no point cleaning. Before a scan the tree is listed but
-      // unmeasured, so the defaults have to tick rules that may turn out
-      // to be uninstalled or unreadable -- keeping them selected
-      // afterwards would put rules in the batch that free nothing.
-      const validIds = selectableIds(built);
-      setSelected((prev) => {
-        const kept = new Set([...prev].filter((id) => validIds.has(id)));
-        if (kept.size > 0 || !reselect) return kept;
-        return defaultSelection(built);
-      });
-    } catch (err) {
-      // Aborting is the user pressing Stop, not a failure. Whatever was
-      // measured before that point is real and stays on screen.
-      if (err.name !== 'AbortError') setScanError(err.message);
-    } finally {
-      abortRef.current = null;
-      setScanning(false);
-    }
+    await start();
   };
+
+  // Once a scan has measured everything, drop any tick the scan proved
+  // there is no point cleaning. Before a scan the tree is listed but
+  // unmeasured, so the defaults have to tick rules that may turn out to be
+  // uninstalled or unreadable -- keeping those selected afterwards would
+  // put rules in the batch that free nothing.
+  //
+  // Without this, a scan that found 54 GB across 40 rules left the footer
+  // reading "Total space to free: 0 B" with Clean disabled: a nineteen
+  // second wait ending in a dead end, which is how this got reported as
+  // the feature not working at all.
+  useEffect(() => {
+    if (!hasScanned || scanning) return;
+    const validIds = scannedIds();
+    if (validIds.size === 0) return;
+    setSelected((prev) => {
+      const kept = new Set([...prev].filter((id) => validIds.has(id)));
+      return kept.size > 0 ? kept : defaultSelection(categories ?? []);
+    });
+  }, [hasScanned, scanning]);
 
   const handleToggle = (ruleId) => {
     setSelected((prev) => {

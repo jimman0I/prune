@@ -58,5 +58,7 @@ export const keys = {
   quarantine: ['quarantine'],
   settings: ['settings'],
   diskSpace: ['disk', 'space'],
-  deepCleanRules: ['deepClean', 'rules']
+  deepCleanRules: ['deepClean', 'rules'],
+  deepCleanScan: ['deepClean', 'scan'],
+  diskScan: (path) => ['disk', 'scan', path]
 };

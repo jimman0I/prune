@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { Treemap, ResponsiveContainer } from 'recharts';
+import { useQuery } from '@tanstack/react-query';
+import { keys } from '../lib/queryClient.js';
 import { fetchDiskScan, scanDriveFast, fetchDiskSpace, fetchFileTypeIcons } from '../lib/api.js';
 import { attachFullPaths, topLevelCells } from '../lib/diskMapTree.js';
 import { subtreeForPath } from '../lib/mftSubtree.js';
@@ -459,9 +461,6 @@ function FolderTable({ tree, onDrillDown }) {
 
 export default function DiskMap() {
   const [currentPath, setCurrentPath] = useState(DEFAULT_ROOT);
-  const [tree, setTree] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const [hovered, setHovered] = useState(null);
   // The whole drive, read from the MFT in one pass. While this is set,
   // browsing is pure navigation through data already in memory -- no
@@ -502,7 +501,6 @@ export default function DiskMap() {
       setFastTree(attachFullPaths(result.tree, DEFAULT_ROOT));
       setFastStats(result.stats);
       setCurrentPath(DEFAULT_ROOT);
-      setError(null);
     } catch (err) {
       setFastNote(err.message);
     } finally {
@@ -524,67 +522,68 @@ export default function DiskMap() {
     return () => { cancelled = true; };
   }, []);
 
-  useEffect(() => {
-    // Already have the whole drive in memory: this folder is a lookup,
-    // not a scan. Falling through to the recursive scanner here would
-    // undo the entire point of having read the MFT.
-    if (fastTree) {
-      const subtree = subtreeForPath(fastTree, currentPath);
-      if (subtree) {
-        setTree(subtree);
-        setLoading(false);
-        setError(null);
-        return;
-      }
-      // Deeper than the fast scan expanded, so fall through and scan this
-      // folder for real rather than drawing it as empty.
-    }
+  // Already have the whole drive in memory? Then this folder is a lookup,
+  // not a scan. Falling through to the recursive scanner here would undo
+  // the entire point of having read the MFT.
+  const fastSubtree = useMemo(
+    () => (fastTree ? subtreeForPath(fastTree, currentPath) : null),
+    [fastTree, currentPath]
+  );
 
-    // A real AbortController, not just a `cancelled` flag -- this is what
-    // actually closes the underlying HTTP connection when the path changes
-    // or the component unmounts, so the backend's own req.on('close')
-    // handler (backend/src/routes/diskScan.js) really does stop scanning
-    // instead of running an unwatched request to completion. Found live:
-    // repeatedly navigating away from Disk Map and back left every earlier
-    // scan still running server-side, all competing for the same tiny fs
-    // thread pool -- exactly the kind of pile-up this is supposed to
-    // prevent.
-    // A drive root is not worth crawling. Measured on this machine: the
-    // folder-by-folder scan spent its whole time limit and reached 36 GB of
-    // the 813.8 GB in use -- 4% -- so the default experience was a minute of
-    // waiting for a picture that is 96% "unknown". The scan is not bad, it
-    // is being asked the wrong question: it walks directories one at a time,
-    // which is fine for a folder and hopeless for a volume.
-    //
-    // So at a drive root nothing runs until the user picks: the fast scan
-    // (which reads the MFT and does the whole drive in seconds, and needs
-    // admin for it) or the crawl anyway. Below a drive root this doesn't
-    // apply -- the crawl is the right tool there and needs no elevation.
-    //
-    // Deliberately NOT an automatic elevation request. A UAC prompt that
-    // appears because a tab was opened is how software teaches people to
-    // click Yes without reading.
-    if (isDriveRoot(currentPath) && !crawlRoot) {
-      setTree(null);
-      setLoading(false);
-      setError(null);
-      return;
-    }
+  // A drive root is not worth crawling. Measured on this machine: the
+  // folder-by-folder scan spent its whole time limit and reached 36 GB of
+  // the 813.8 GB in use -- 4% -- so the default experience was a minute of
+  // waiting for a picture that is 96% "unknown". The scan is not bad, it
+  // is being asked the wrong question: it walks directories one at a time,
+  // which is fine for a folder and hopeless for a volume.
+  //
+  // So at a drive root nothing runs until the user picks: the fast scan
+  // (which reads the MFT and does the whole drive in seconds, and needs
+  // admin for it) or the crawl anyway. Deliberately NOT an automatic
+  // elevation request -- a UAC prompt that appears because a tab was
+  // opened is how software teaches people to click Yes without reading.
+  const shouldScan = Boolean(currentPath)
+    && !fastSubtree
+    && !(isDriveRoot(currentPath) && !crawlRoot);
 
-    const controller = new AbortController();
-    setLoading(true);
-    setError(null);
-    fetchDiskScan(currentPath, controller.signal)
-      .then((result) => setTree(attachFullPaths(
+  // The signal this query provides is the whole reason it is a query.
+  // Changing path or leaving the screen aborts it, which closes the HTTP
+  // connection, which is what the backend's own req.on('close') handler
+  // in routes/diskScan.js watches for -- so an abandoned scan really does
+  // stop walking the filesystem instead of running to completion
+  // unwatched. Found live: repeatedly navigating away from Disk Map and
+  // back left every earlier scan still running server-side, all competing
+  // for the same tiny fs thread pool.
+  //
+  // Keying on the path also means going back up to a folder already
+  // scanned is now a cache read rather than a second walk of it, which is
+  // the same pile-up from the other direction.
+  const scanQuery = useQuery({
+    queryKey: keys.diskScan(currentPath),
+    enabled: shouldScan,
+    retry: false,
+    staleTime: Infinity,
+    queryFn: async ({ signal }) => {
+      const result = await fetchDiskScan(currentPath, signal);
+      return attachFullPaths(
         // Only at a drive root: a truncated scan of a subfolder has no
         // used-space figure to reconcile against.
         isDriveRoot(currentPath) ? withUnscannedRemainder(result, usedBytesRef.current) : result,
         currentPath
-      )))
-      .catch((err) => { if (err.name !== 'AbortError') setError(err.message); })
-      .finally(() => { if (!controller.signal.aborted) setLoading(false); });
-    return () => controller.abort();
-  }, [currentPath, fastTree, crawlRoot]);
+      );
+    }
+  });
+
+  const tree = fastSubtree ?? scanQuery.data ?? null;
+  const loading = shouldScan && scanQuery.isFetching;
+  // A failed crawl is not worth reporting once the fast scan has answered
+  // the same question -- the old code cleared this by hand after the MFT
+  // read succeeded, and a derived error has to account for that itself.
+  // An abort is the user changing folder, never a failure.
+  const error = (!fastSubtree && scanQuery.error && !/abort/i.test(scanQuery.error.message || ''))
+    ? scanQuery.error.message
+    : null;
+
 
   // Capped: a folder like System32 has ~1,900 direct children, and
   // drawing every one produced 10,086 DOM nodes and made the whole view
