@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { visibleCategories, hiddenRuleCount } from '../lib/visibleRules.js';
 import { fetchDeepCleanRules, streamDeepCleanScan, executeDeepClean, fetchSettings } from '../lib/api.js';
+import { lockedFileSummary } from '../lib/lockedFiles.js';
+import { useToasts } from '../hooks/useToasts.jsx';
 import { defaultSelection, selectableIds } from '../lib/defaultSelection.js';
 import { selectionTotal } from '../lib/selectionTotal.js';
 import { mergeScannedRule, scanLogLine } from '../lib/scanLog.js';
@@ -91,6 +93,7 @@ export default function DeepClean() {
   const [confirmClean, setConfirmClean] = useState(false);
   const [cleaning, setCleaning] = useState(false);
   const [cleanResult, setCleanResult] = useState(null);
+  const toasts = useToasts();
   const [cleanError, setCleanError] = useState(null);
   const [logLines, setLogLines] = useState([]);
   const [scanned, setScanned] = useState(0);
@@ -266,6 +269,20 @@ export default function DeepClean() {
     try {
       const result = await executeDeepClean([...selected]);
       setCleanResult(result);
+
+      // Say what happened, and say it in numbers. The freed figure used
+      // to be the whole story and the failures were a passive clause
+      // appended to it -- "some files were skipped (in use)" -- with no
+      // count, no paths, and nothing to act on.
+      toasts.success(`Cleanup complete. Freed ${formatBytes(result.freedBytes)}.`);
+      const locked = lockedFileSummary(result);
+      if (locked) {
+        // A warning, and one that does not expire: the whole point is
+        // that these files are still there, and a notice that vanishes
+        // after five seconds is how nobody finds out.
+        toasts.warn(locked.message, { detail: locked.detail, paths: locked.paths, ttl: 0 });
+      }
+
       setSelected(new Set());
       setCleaning(false);
       setConfirmClean(false);
@@ -312,8 +329,8 @@ export default function DeepClean() {
           <div className="flex items-center gap-2.5 mb-5 px-3.5 py-3 rounded-xl bg-[color:var(--success)]/10 border border-[color:var(--success)]/25">
             <div className="text-[12.5px] text-[color:var(--success)]">
               Freed {formatBytes(cleanResult.freedBytes)}
-              {cleanResult.results.some((r) => r.skipped?.length > 0) &&
-                ` — some files were skipped (in use)`}
+              {lockedFileSummary(cleanResult) &&
+                ` — ${lockedFileSummary(cleanResult).message.toLowerCase().replace(/\.$/, '')}`}
             </div>
           </div>
         )}

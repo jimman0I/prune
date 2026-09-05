@@ -3,6 +3,7 @@ import NavRail from './components/NavRail.jsx';
 import Dashboard from './components/Dashboard.jsx';
 import DiskMap from './components/DiskMap.jsx';
 import Screen from './components/Screen.jsx';
+import ToastHost from './components/ToastHost.jsx';
 import ProgramList from './components/ProgramList.jsx';
 import BatchUninstallModal from './components/BatchUninstallModal.jsx';
 import ModalOverlay from './components/ModalOverlay.jsx';
@@ -195,6 +196,7 @@ export default function App() {
 
   return (
     <div className="App grain h-screen overflow-hidden flex">
+      <ToastHost />
       <NavRail screen={screen} onNavigate={setScreen} />
       <div className="flex-1 overflow-y-auto min-h-0">
         <Screen active={screen === 'dashboard'} visited={visited.has('dashboard')}>
