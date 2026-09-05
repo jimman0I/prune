@@ -1,8 +1,9 @@
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import NavRail from './components/NavRail.jsx';
 import Dashboard from './components/Dashboard.jsx';
 import DiskMap from './components/DiskMap.jsx';
 import Screen from './components/Screen.jsx';
+import { useProgramData } from './hooks/usePrograms.js';
 import ToastHost from './components/ToastHost.jsx';
 import ProgramList from './components/ProgramList.jsx';
 import BatchUninstallModal from './components/BatchUninstallModal.jsx';
@@ -12,10 +13,6 @@ import QuarantineManager from './components/QuarantineManager.jsx';
 import SettingsPage from './components/SettingsPage.jsx';
 import DeepClean from './components/DeepClean.jsx';
 import StartupItems from './components/StartupItems.jsx';
-import { fetchPrograms, fetchProgramIcons, fetchProgramSizes, fetchProgramVersions, fetchProgramInstallDates, fetchStoreApps, fetchBrowserExtensions, fetchPackageIcons, fetchRunningPrograms } from './lib/api.js';
-import { mergeMeasuredSizes } from './lib/mergeSizes.js';
-import { mergeBinaryVersions } from './lib/mergeVersions.js';
-import { mergeInstallDates } from './lib/mergeInstallDates.js';
 import { rememberVisited } from './lib/visitedScreens.js';
 
 function formatBytes(bytes) {
@@ -38,161 +35,15 @@ export default function App() {
   useEffect(() => { setVisited((prev) => rememberVisited(prev, screen)); }, [screen]);
   const [selectedProgram, setSelectedProgram] = useState(null);
   const [batchPrograms, setBatchPrograms] = useState(null);
-  const [rawPrograms, setPrograms] = useState([]);
 
-  // Sizes and versions are kept as they arrive rather than folded into
-  // the program list, and merged at render instead.
-  //
-  // Folding them in was a real bug: both endpoints cache their answer on
-  // the backend, so a warmed one replies in under two milliseconds while
-  // the program list itself takes over a second. The merge then ran
-  // against an empty array and the list that arrived afterwards wiped it
-  // out -- versions the backend had correctly found never reached the
-  // screen. Deriving the merge means the order the three land in cannot
-  // matter.
-  const [measuredSizes, setMeasuredSizes] = useState({});
-  const [binaryVersions, setBinaryVersions] = useState({});
-  const [keyInstallDates, setKeyInstallDates] = useState({});
-  const [storeApps, setStoreApps] = useState([]);
-  const [extensions, setExtensions] = useState([]);
-  const [running, setRunning] = useState({});
+  // Eight endpoints, merged at render. See hooks/usePrograms.js -- the
+  // separation is load-bearing, not tidiness: these all cache on the
+  // backend, so a warmed one can reply before the program list does, and
+  // folding them into shared state used to let the slow list overwrite
+  // the fast answer.
+  const { programs, icons, totalSize, extensions, running, loading, error, refresh: refreshPrograms } =
+    useProgramData();
 
-  const programs = useMemo(
-    () => [
-      ...mergeInstallDates(
-        mergeBinaryVersions(mergeMeasuredSizes(rawPrograms, measuredSizes), binaryVersions),
-        keyInstallDates
-      ),
-      // Appended rather than merged: a Store app is not a registry entry
-      // and none of the three fallbacks above apply to it -- it already
-      // carries its own name, version and measured size.
-      ...storeApps
-    ],
-    [rawPrograms, measuredSizes, binaryVersions, keyInstallDates, storeApps]
-  );
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  // Fetched at app start, not when the Application Manager opens.
-  // Extraction takes ~2s across ~90 executables, and doing it on tab
-  // click meant watching the icons appear a beat after the list did.
-  // The backend also warms this cache the moment it boots, so by the
-  // time anyone reaches that screen both ends are already done.
-  const [icons, setIcons] = useState({});
-
-  // Sizes for the 40 entries whose registry record has none. Measured by
-  // walking their install folders, so it takes a while and arrives after
-  // the list -- the rows show their real blank until it does, rather than
-  // the list waiting on it.
-  useEffect(() => {
-    let cancelled = false;
-    fetchProgramSizes()
-      .then((sizes) => {
-        if (!cancelled) setMeasuredSizes(sizes || {});
-      })
-      .catch(() => { /* the rows keep their honest blank */ });
-    return () => { cancelled = true; };
-  }, []);
-
-  // Versions for the 15 entries whose registry record has none -- almost
-  // all of them launcher-installed games, which is exactly where a blank
-  // Version column is most noticeable. Read off each program's own
-  // binary, so like the sizes it arrives after the list.
-  useEffect(() => {
-    let cancelled = false;
-    fetchProgramVersions()
-      .then((versions) => {
-        if (!cancelled) setBinaryVersions(versions || {});
-      })
-      .catch(() => { /* the rows keep their honest blank */ });
-    return () => { cancelled = true; };
-  }, []);
-
-  // Install dates for the 67 entries whose registry record has none -- more
-  // than half the list, which is why the Installed column read as mostly
-  // dashes next to Revo's.
-  useEffect(() => {
-    let cancelled = false;
-    fetchProgramInstallDates()
-      .then((dates) => { if (!cancelled) setKeyInstallDates(dates || {}); })
-      .catch(() => { /* the rows keep their honest blank */ });
-    return () => { cancelled = true; };
-  }, []);
-
-  // Store apps, which the uninstall registry does not list at all -- 81 of
-  // them here, entirely invisible to Prune before this.
-  useEffect(() => {
-    let cancelled = false;
-    fetchStoreApps()
-      .then((apps) => { if (!cancelled) setStoreApps(apps || []); })
-      .catch(() => { /* the registry programs still list fine */ });
-    return () => { cancelled = true; };
-  }, []);
-
-  // Browser extensions, which no uninstall list mentions at all. Kept out
-  // of `programs` on purpose: an extension is not an installed program,
-  // and folding 24 of them into the list would dilute the count and the
-  // total. They get their own filter instead, the way Revo gives them
-  // their own module.
-  useEffect(() => {
-    let cancelled = false;
-    fetchBrowserExtensions()
-      .then((list) => { if (!cancelled) setExtensions(list || []); })
-      .catch(() => { /* the program list is unaffected */ });
-    return () => { cancelled = true; };
-  }, []);
-
-  // Icons for the Store apps and extensions, merged into the same map.
-  // Separate request because they come from a different place entirely --
-  // files inside each package, rather than extracted from a binary.
-  // What is running right now. Refreshed on a timer rather than fetched
-  // once: everything else in this list is stable while the app is open,
-  // and this is the one thing that changes underneath it.
-  useEffect(() => {
-    let cancelled = false;
-    const load = () => fetchRunningPrograms()
-      .then((result) => { if (!cancelled) setRunning(result || {}); })
-      .catch(() => { /* no badges is better than wrong badges */ });
-    load();
-    const timer = setInterval(load, 15000);
-    return () => { cancelled = true; clearInterval(timer); };
-  }, []);
-
-  useEffect(() => {
-    let cancelled = false;
-    fetchPackageIcons()
-      .then((result) => {
-        // Merged, not replaced: the registry icons land in this same map
-        // and whichever response arrives second must not drop the first.
-        if (!cancelled) setIcons((prev) => ({ ...prev, ...result }));
-      })
-      .catch(() => { /* the rows keep their lettered tiles */ });
-    return () => { cancelled = true; };
-  }, []);
-
-  useEffect(() => {
-    let cancelled = false;
-    fetchProgramIcons()
-      .then((result) => { if (!cancelled) setIcons((prev) => ({ ...prev, ...result })); })
-      .catch(() => { /* icons are decoration -- never block the app */ });
-    return () => { cancelled = true; };
-  }, []);
-
-  // Named so the batch can call it when it finishes: the list on screen
-  // would otherwise still show programs that are no longer installed.
-  const refreshPrograms = useCallback(() => {
-    fetchPrograms().then(setPrograms).catch((err) => setError(err.message));
-  }, []);
-
-  useEffect(() => {
-    let cancelled = false;
-    fetchPrograms()
-      .then((result) => { if (!cancelled) setPrograms(result); })
-      .catch((err) => { if (!cancelled) setError(err.message); })
-      .finally(() => { if (!cancelled) setLoading(false); });
-    return () => { cancelled = true; };
-  }, []);
-
-  const totalSize = programs.reduce((sum, program) => sum + (program.sizeBytes || 0), 0);
 
   return (
     <div className="App grain h-screen overflow-hidden flex">

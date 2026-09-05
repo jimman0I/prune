@@ -1,7 +1,6 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { fetchStartupItems, fetchStartupIcons, setStartupItemEnabled } from '../lib/api.js';
+import { useCallback, useMemo, useState } from 'react';
 import { groupStartupItems, startupCounts } from '../lib/groupStartupItems.js';
-import { applyEnabled, toggleOutcome } from '../lib/startupToggleState.js';
+import { useStartupItems, useStartupToggle } from '../hooks/useSystemQueries.js';
 import TableSkeleton from './TableSkeleton.jsx';
 import { tileLetter } from '../lib/iconTileLetter.js';
 import { tileColor, TILE_INK } from '../lib/programTileColor.js';
@@ -226,62 +225,40 @@ function StartupRow({ item, iconSrc, pending, error, onToggle }) {
 }
 
 export default function StartupItems() {
-  const [items, setItems] = useState(null);
-  const [icons, setIcons] = useState({});
-  const [error, setError] = useState(null);
-  // Keyed by entry id, both of them: several rows can be mid-change at
-  // once, and an error belongs to the row that produced it rather than to
-  // the screen.
-  const [pending, setPending] = useState({});
+  // An error belongs to the row that produced it rather than to the
+  // screen: several rows can be mid-change at once.
   const [rowErrors, setRowErrors] = useState({});
 
-  useEffect(() => {
-    let cancelled = false;
-    fetchStartupItems()
-      .then((result) => { if (!cancelled) setItems(result || []); })
-      .catch((err) => { if (!cancelled) setError(err.message); });
+  const { items, icons, error } = useStartupItems();
 
-    // Fired alongside the list rather than after it. The two calls are
-    // independent -- the backend re-reads the startup locations for the
-    // icons anyway -- and chaining them would add the list's own second
-    // to a wait the rows do not need to serialise on.
-    fetchStartupIcons().then((result) => { if (!cancelled) setIcons(result); });
+  const toggle = useStartupToggle({
+    onProblem: (id, message) => setRowErrors((e) => ({ ...e, [id]: message }))
+  });
 
-    return () => { cancelled = true; };
-  }, []);
-
-  /** Moves the row first, then checks the machine agreed.
+  /** The row moves first and the mutation decides whether that held.
    *
-   * The optimistic move is not cosmetic: the write spawns PowerShell, and
-   * a machine-wide entry waits on a UAC prompt the user has to read, so a
+   * The optimism is not cosmetic: the write spawns PowerShell, and a
+   * machine-wide entry waits on a UAC prompt the user has to read, so a
    * switch that only moved on success would sit still for seconds after
-   * every click. If the machine disagrees -- the prompt was declined, the
-   * write was refused, the state came back wrong -- the row goes back
-   * exactly where it was. */
-  const onToggle = useCallback(async (item) => {
-    const wanted = !item.enabled;
-
-    setPending((p) => ({ ...p, [item.id]: true }));
+   * every click. The rollback, the "did the machine agree" check and the
+   * silent handling of a declined prompt all live in useStartupToggle now
+   * -- this only has to clear the row's stale error and ask. */
+  const onToggle = useCallback((item) => {
     setRowErrors((e) => {
       if (!(item.id in e)) return e;
       const next = { ...e };
       delete next[item.id];
       return next;
     });
-    setItems((current) => applyEnabled(current, item.id, wanted));
+    toggle.mutate({ id: item.id, enabled: !item.enabled });
+  }, [toggle]);
 
-    const result = await setStartupItemEnabled(item.id, wanted);
-    const { revert, message } = toggleOutcome(result, wanted);
-
-    if (revert) setItems((current) => applyEnabled(current, item.id, item.enabled));
-    if (message) setRowErrors((e) => ({ ...e, [item.id]: message }));
-
-    setPending((p) => {
-      const next = { ...p };
-      delete next[item.id];
-      return next;
-    });
-  }, []);
+  // Which rows are mid-flight. Read off the mutation rather than tracked
+  // separately, so it cannot disagree with what is actually in progress.
+  const pending = useMemo(() => {
+    const id = toggle.isPending ? toggle.variables?.id : null;
+    return id ? { [id]: true } : {};
+  }, [toggle.isPending, toggle.variables]);
 
   const groups = useMemo(() => groupStartupItems(items), [items]);
   const counts = useMemo(() => startupCounts(items), [items]);

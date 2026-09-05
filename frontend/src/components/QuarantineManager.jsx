@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { fetchQuarantineBatches, restoreQuarantineBatch, deleteQuarantineBatch, emptyQuarantine } from '../lib/api.js';
+import { useState } from 'react';
+import { useQuarantine } from '../hooks/useSystemQueries.js';
 
 // Duplicated locally rather than imported from Dashboard.jsx/DeepClean.jsx
 // (both off-limits for this task) -- matches this codebase's own existing
@@ -26,66 +26,38 @@ function formatDate(ms) {
 }
 
 export default function QuarantineManager() {
-  const [batches, setBatches] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const [actionError, setActionError] = useState(null);
-  const [busyDir, setBusyDir] = useState(null);
   const [confirmDeleteDir, setConfirmDeleteDir] = useState(null);
   const [confirmEmpty, setConfirmEmpty] = useState(false);
-  const [emptying, setEmptying] = useState(false);
 
-  const load = () => {
-    setLoading(true);
-    setError(null);
-    return fetchQuarantineBatches()
-      .then((result) => setBatches(result))
-      .catch((err) => setError(err.message))
-      .finally(() => setLoading(false));
-  };
+  const { batches, loading, error, restore, remove, empty } = useQuarantine();
 
-  useEffect(() => { load(); }, []);
+  // Which row is mid-action. Read off the mutations rather than tracked
+  // separately, so it cannot disagree with what is actually running.
+  const busyDir = (restore.isPending && restore.variables)
+    || (remove.isPending && remove.variables)
+    || null;
+  const emptying = empty.isPending;
 
-  const handleRestore = async (batch) => {
+  /** Each action invalidates the list rather than splicing the row out.
+   *
+   * The old version removed the row locally on success, which is faster
+   * to write and quietly wrong: restoring a batch puts files back on disk
+   * and the quarantine folder is the source of truth for what is left. A
+   * re-read cannot disagree with it; a local splice can. */
+  const runAction = (mutation, argument, after) => {
     setActionError(null);
-    setBusyDir(batch.batchDir);
-    try {
-      await restoreQuarantineBatch(batch.batchDir);
-      setBatches((prev) => prev.filter((b) => b.batchDir !== batch.batchDir));
-    } catch (err) {
-      setActionError(err.message);
-    } finally {
-      setBusyDir(null);
-    }
+    mutation.mutate(argument, {
+      onError: (err) => setActionError(err.message),
+      onSettled: after
+    });
   };
 
-  const handleDeletePermanently = async (batch) => {
-    setActionError(null);
-    setBusyDir(batch.batchDir);
-    try {
-      await deleteQuarantineBatch(batch.batchDir);
-      setBatches((prev) => prev.filter((b) => b.batchDir !== batch.batchDir));
-    } catch (err) {
-      setActionError(err.message);
-    } finally {
-      setBusyDir(null);
-      setConfirmDeleteDir(null);
-    }
-  };
-
-  const handleEmptyQuarantine = async () => {
-    setActionError(null);
-    setEmptying(true);
-    try {
-      await emptyQuarantine();
-      setBatches([]);
-    } catch (err) {
-      setActionError(err.message);
-    } finally {
-      setEmptying(false);
-      setConfirmEmpty(false);
-    }
-  };
+  const handleRestore = (batch) => runAction(restore, batch.batchDir);
+  const handleDeletePermanently = (batch) =>
+    runAction(remove, batch.batchDir, () => setConfirmDeleteDir(null));
+  const handleEmptyQuarantine = () =>
+    runAction(empty, undefined, () => setConfirmEmpty(false));
 
   const totalBytes = batches.reduce((sum, b) => sum + (b.totalSizeBytes || 0), 0);
 

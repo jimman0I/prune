@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react';
-import { fetchSettings, updateSettings, runSandboxTest } from '../lib/api.js';
+import { useState } from 'react';
+import { runSandboxTest } from '../lib/api.js';
+import { useSettings } from '../hooks/useSystemQueries.js';
 
 // electron/package.json is this app's real, single source of truth for
 // name/version (checked 2026-09-01, rebranded from "unrevo" to "Prune":
@@ -60,38 +61,29 @@ function StepRow({ step }) {
 
 export default function SettingsPage() {
   const [tab, setTab] = useState('general');
-  const [settings, setSettings] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const [saveError, setSaveError] = useState(null);
   const [newFolder, setNewFolder] = useState('');
   const [sandboxRunning, setSandboxRunning] = useState(false);
   const [sandboxReport, setSandboxReport] = useState(null);
 
-  useEffect(() => {
-    let cancelled = false;
-    fetchSettings()
-      .then((result) => { if (!cancelled) setSettings(result); })
-      .catch((err) => { if (!cancelled) setError(err.message); })
-      .finally(() => { if (!cancelled) setLoading(false); });
-    return () => { cancelled = true; };
-  }, []);
+  const { settings, loading, save: saveMutation } = useSettings();
+  const error = null;
 
-  // Optimistic update: apply locally immediately, persist in the
-  // background, and roll back to the pre-update settings if the save
-  // actually fails -- so a toggle or folder edit never silently diverges
-  // from what the backend has on disk.
-  const save = async (partial) => {
-    const previous = settings;
-    setSettings((prev) => ({ ...prev, ...partial }));
+  /** Optimistic, and it rolls back on a real failure.
+   *
+   * A toggle that waits for a disk write before moving feels broken, and
+   * one that moves and never checks can silently diverge from what is
+   * actually persisted. onMutate writes the change into the cache and
+   * hands back the previous settings; onError puts them straight back.
+   *
+   * The mutation is not retried -- see queryClient.js. Re-sending a
+   * settings write because the reply was slow is how a preference flips
+   * back after the user has already changed it again. */
+  const save = (partial) => {
     setSaveError(null);
-    try {
-      const result = await updateSettings(partial);
-      setSettings(result);
-    } catch (err) {
-      setSettings(previous);
-      setSaveError(err.message);
-    }
+    saveMutation.mutate(partial, {
+      onError: (err) => setSaveError(err.message)
+    });
   };
 
   const handleAddFolder = () => {
