@@ -1,5 +1,6 @@
 import express from 'express';
 import cors from 'cors';
+import { localOnly } from './lib/localOnly.js';
 import { createServer } from 'node:http';
 import programsRoutes from './routes/programs.js';
 import uninstallRoutes from './routes/uninstall.js';
@@ -38,7 +39,32 @@ process.on('unhandledRejection', (err) => {
 });
 
 const app = express();
-app.use(cors());
+
+/** Only Prune's own window may call this API.
+ *
+ * Listening on 127.0.0.1 is not the protection it sounds like -- every
+ * web page the user has open can reach loopback too. This server used to
+ * send `Access-Control-Allow-Origin: *` and check nothing, so any site
+ * the user was browsing could read their installed programs, toggle
+ * startup entries, run a Deep Clean, move a folder through
+ * /quarantine/path, or empty the quarantine and destroy every undo the
+ * app holds. See lib/localOnly.js.
+ *
+ * Before express.json(), so a refused request is rejected on its headers
+ * and its body is never parsed. */
+app.use(localOnly(PORT));
+
+/** CORS with an explicit reflector rather than a wildcard.
+ *
+ * localOnly has already refused anything untrusted by this point, so this
+ * only ever answers Prune's own window -- but a wildcard header would
+ * still be a standing invitation, and the preflight has to succeed for
+ * the app's own POSTs to work. */
+app.use(cors({
+  origin: (origin, callback) => callback(null, origin || true),
+  credentials: false
+}));
+
 app.use(express.json());
 
 app.get('/api/health', (req, res) => res.json({ ok: true }));
