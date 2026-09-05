@@ -130,6 +130,12 @@ function TreemapCell({ x, y, width, height, depth, name, size, type, scanned, ag
 
   return (
     <g
+      className="treemap-cell"
+      // Delay taken from the cell's own position rather than an index, so
+      // the reveal sweeps across the map instead of firing in whatever
+      // order the layout happened to emit. Capped: the largest cells sit
+      // top-left and should not wait on the long tail.
+      style={{ animationDelay: `${Math.min(260, (x + y) * 0.22)}ms` }}
       // onMouseEnter only. This used to also fire on every mousemove,
       // which set React state and re-rendered every cell in the treemap
       // -- 1,903 of them inside C:\Windows\System32. A 60-move sweep took
@@ -838,7 +844,7 @@ export default function DiskMap() {
             <ExtensionPanel breakdown={breakdown} shown={shownExtensions} icons={typeIcons} typeColors={typeColors} />
           </div>
 
-          <div className="glass-panel p-4" style={{ position: 'relative' }} onMouseMove={handleContainerMouseMove}>
+          <div className="glass-panel p-4 treemap-cells" style={{ position: 'relative' }} onMouseMove={handleContainerMouseMove}>
             <ResponsiveContainer width="100%" height={420}>
               <Treemap
                 data={cells}

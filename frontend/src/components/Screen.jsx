@@ -14,7 +14,7 @@ export default function Screen({ active, visited, children }) {
   if (!visited) return null;
 
   return (
-    <div style={{ display: active ? 'contents' : 'none' }}>
+    <div className="screen" style={{ display: active ? 'contents' : 'none' }}>
       {children}
     </div>
   );

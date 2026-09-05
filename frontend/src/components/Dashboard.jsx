@@ -42,7 +42,19 @@ function HealthGauge({ percent, statusLabel, tone }) {
             strokeDasharray={circumference} strokeDashoffset={offset}
             // A status-only ring draws full: there's no partial value to
             // represent, and a ring stuck at 0% would read as "failing".
-            style={{ transition: 'stroke-dashoffset 500ms ease', opacity: percent != null ? 1 : 0.55 }}
+            //
+            // Animated, not transitioned. This carried
+            // `transition: stroke-dashoffset` for a long time and it could
+            // never have fired: the percentage arrives from a fetch, so
+            // this circle is not rendered at all until the value is known,
+            // and a transition cannot animate an element's first paint.
+            // The keyframe reads its start from --ring-empty and its end
+            // from the offset already set above.
+            style={{
+              '--ring-empty': circumference,
+              animation: 'ring-fill 900ms var(--ease-out-expo) both',
+              opacity: percent != null ? 1 : 0.55
+            }}
           />
         )}
       </svg>
@@ -252,7 +264,13 @@ export default function Dashboard({ programs, totalSize, onNavigate = () => {} }
         </div>
       </div>
 
-      <div className="grid grid-cols-3 gap-4 mb-6">
+      {/* Staggered on entry. The delay is small and one-directional --
+          60ms apart, rising, no overshoot -- so it reads as the panel
+          settling rather than as three separate animations competing.
+          Runs again on every return to this tab, because Screen.jsx hides
+          inactive tabs with `display: none` and an animation restarts
+          when its element is displayed again. */}
+      <div className="grid grid-cols-3 gap-4 mb-6 stagger">
         <StatCard
           label="Total Storage"
           value={

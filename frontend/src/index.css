@@ -248,7 +248,15 @@ body::before {
   *, *::before, *::after {
     animation-duration: 1ms !important;
     animation-iteration-count: 1 !important;
+    /* Delays too, not just durations. A staggered group with its delays
+       left in still arrives in sequence -- the dashboard's cards would
+       appear 60ms apart over an eighth of a second, which is motion, just
+       quieter. Collapsing the delay is what makes the group land at once.
+       Negative rather than zero so anything mid-flight jumps to its end
+       instead of restarting. */
+    animation-delay: -1ms !important;
     transition-duration: 1ms !important;
+    transition-delay: 0ms !important;
     scroll-behavior: auto !important;
   }
 }
@@ -258,6 +266,107 @@ body::before {
    not already say, and this is a tool people open when something is wrong
    -- a loading state that draws attention to itself is the wrong instinct.
    The reduced-motion block above collapses this to a static block. */
+/* ---------------------------------------------------------------------
+   Motion.
+   
+   All of it is CSS. There is no animation library here and adding one for
+   this would be a poor trade: every effect below is a compositor-friendly
+   transform/opacity change, and the one place motion genuinely mattered
+   for performance -- the treemap's hover focus -- specifically must NOT
+   go through React at all (see .treemap-cells).
+
+   Every keyframe declares only `from`. The implicit `to` is the element's
+   own computed value, so a component never has to state its target twice
+   and the animation cannot drift out of sync with the style it animates.
+
+   `prefers-reduced-motion` is already handled globally further down this
+   file: durations collapse to 1ms, and because these all use `both` the
+   final frame still holds. Nothing is lost but the movement.
+   --------------------------------------------------------------------- */
+
+/* The easing used throughout: ease-out-expo. Fast to start, long settle,
+   no overshoot -- a tool that deletes things should not bounce. */
+:root { --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1); }
+
+@keyframes rise-in {
+  from { opacity: 0; transform: translateY(10px); }
+}
+
+@keyframes screen-in {
+  from { opacity: 0; transform: translateY(6px); }
+}
+
+@keyframes cell-in {
+  from { opacity: 0; transform: scale(0.86); }
+}
+
+/* The health ring drawing itself.
+ *
+ * `--ring-empty` is the full circumference, which is what an undrawn ring
+ * offsets to; the target is the element's own inline stroke-dashoffset.
+ *
+ * This replaces a `transition: stroke-dashoffset` that could never have
+ * fired. The percentage arrives from a fetch, so the circle is not
+ * rendered at all until then -- and a transition cannot animate an
+ * element's first paint. The property was there, correct-looking, and
+ * dead. An animation runs on mount, which is what was wanted. */
+@keyframes ring-fill {
+  from { stroke-dashoffset: var(--ring-empty); }
+}
+
+/* A screen becoming visible.
+ *
+ * No JavaScript and no mount/unmount. Screen.jsx keeps every visited tab
+ * in the DOM under `display: none` so the Disk Map does not rescan the
+ * drive every time it is reopened -- which rules out the usual
+ * enter/exit approach entirely. It also hands this one for free: an
+ * element inside a `display: none` subtree runs no animations, and
+ * starts them when it is displayed again. Switching tabs restarts this
+ * by itself. */
+.screen > * {
+  animation: screen-in 240ms var(--ease-out-expo) both;
+}
+
+/* Staggered children. The delay is per-item rather than per-container so
+   a list can set it from an index; the nth-child fallbacks cover the
+   fixed-size groups (the dashboard's three stat cards) that have no index
+   to give. */
+.stagger > * {
+  animation: rise-in 420ms var(--ease-out-expo) both;
+}
+.stagger > *:nth-child(1) { animation-delay: 0ms; }
+.stagger > *:nth-child(2) { animation-delay: 60ms; }
+.stagger > *:nth-child(3) { animation-delay: 120ms; }
+.stagger > *:nth-child(4) { animation-delay: 180ms; }
+.stagger > *:nth-child(5) { animation-delay: 240ms; }
+
+/* Treemap cells: reveal, and hover focus.
+ *
+ * The focus effect is pure CSS for a measured reason. TreemapCell carries
+ * a note about hover once firing on every mousemove, setting React state
+ * and re-rendering all 1,903 cells inside C:\Windows\System32 -- a
+ * 60-move sweep took over three minutes. "Dim every other block on hover"
+ * is that same bug wearing a different hat if it goes through state. Two
+ * selectors do it with no render at all: the container's own :hover dims
+ * everything, and the cell's :hover takes itself back.
+ *
+ * `transform-box: fill-box` is required on SVG. Without it the transform
+ * origin is the viewport's, not the cell's, and scaling throws every
+ * rectangle toward the top-left corner instead of growing it in place. */
+.treemap-cell {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: cell-in 320ms var(--ease-out-expo) both;
+  transition: opacity 140ms ease-out;
+}
+.treemap-cells:hover .treemap-cell { opacity: 0.4; }
+.treemap-cells .treemap-cell:hover { opacity: 1; }
+.treemap-cells .treemap-cell:hover > rect {
+  stroke: var(--accent-primary);
+  stroke-width: 2.5;
+  filter: drop-shadow(0 0 6px var(--accent-primary-glow));
+}
+
 @keyframes skeleton-settle {
   0%, 100% { opacity: 0.55; }
   50% { opacity: 1; }
