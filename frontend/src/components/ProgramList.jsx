@@ -436,6 +436,10 @@ export default function ProgramList({ programs: initialPrograms, extensions = []
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search applications…"
+            // Named so the global Ctrl+K can find it without a ref
+            // threaded through App, ProgramList and the header. The
+            // shortcut is app-wide; the box belongs to one screen.
+            data-app-search="applications"
             className="w-full bg-[color:var(--bg-panel)] border border-[color:var(--border-subtle)] rounded-xl pl-10 pr-4 py-2 text-[13px] placeholder:text-[color:var(--text-muted)] focus:outline-none focus:border-[color:var(--accent-primary)] focus:ring-4 focus:ring-[color:var(--accent-primary)]/10 transition"
           />
         </div>

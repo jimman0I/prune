@@ -5,6 +5,8 @@ import DiskMap from './components/DiskMap.jsx';
 import Screen from './components/Screen.jsx';
 import { useProgramData } from './hooks/usePrograms.js';
 import ToastHost from './components/ToastHost.jsx';
+import ShortcutsModal from './components/ShortcutsModal.jsx';
+import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts.js';
 import ProgramList from './components/ProgramList.jsx';
 import BatchUninstallModal from './components/BatchUninstallModal.jsx';
 import ModalOverlay from './components/ModalOverlay.jsx';
@@ -43,6 +45,27 @@ export default function App() {
   // the fast answer.
   const { programs, icons, totalSize, extensions, running, loading, error, refresh: refreshPrograms } =
     useProgramData();
+
+  const [showShortcuts, setShowShortcuts] = useState(false);
+
+  /** The app's global chords.
+   *
+   * Search focuses whichever search box is on screen rather than jumping
+   * to a fixed one: the shortcut means "find the box here", and sending
+   * someone to another tab's box would be a worse answer than doing
+   * nothing. Only a VISIBLE box qualifies -- inactive screens stay mounted
+   * and hidden, so their inputs are still in the DOM and still focusable
+   * by script, which would put the caret somewhere nobody can see. */
+  useKeyboardShortcuts({
+    onSearch: () => {
+      const box = [...document.querySelectorAll('[data-app-search]')]
+        .find((input) => input.offsetParent !== null);
+      box?.focus();
+      box?.select?.();
+    },
+    onSettings: () => setScreen('settings'),
+    onHelp: () => setShowShortcuts(true)
+  });
 
 
   return (
@@ -88,6 +111,8 @@ export default function App() {
           open uninstall dialog moved focus into the program list behind
           it, so the user was driving the table they were about to delete
           from while the dialog was still up. */}
+      {showShortcuts && <ShortcutsModal onClose={() => setShowShortcuts(false)} />}
+
       {batchPrograms && (
         <ModalOverlay
           label={`Uninstall ${batchPrograms.length} programs`}

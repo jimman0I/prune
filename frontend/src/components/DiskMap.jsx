@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom';
 import { Treemap, ResponsiveContainer } from 'recharts';
 import { useQuery } from '@tanstack/react-query';
 import { keys } from '../lib/queryClient.js';
+import { breadcrumbTrail } from '../lib/breadcrumbTrail.js';
 import { fetchDiskScan, scanDriveFast, fetchDiskSpace, fetchFileTypeIcons } from '../lib/api.js';
 import { attachFullPaths, topLevelCells } from '../lib/diskMapTree.js';
 import { subtreeForPath } from '../lib/mftSubtree.js';
@@ -28,17 +29,6 @@ function formatBytes(bytes) {
   const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
   const i = Math.floor(Math.log(bytes) / Math.log(k));
   return `${parseFloat((bytes / Math.pow(k, i)).toFixed(1))} ${sizes[i]}`;
-}
-
-/** "C:\Users\Jim" -> [{label:'C:', path:'C:\\'}, {label:'Users', path:'C:\\Users'}, {label:'Jim', path:'C:\\Users\\Jim'}].
- * Exported for testing. */
-export function breadcrumbSegments(path) {
-  const clean = path.replace(/\\+$/, '');
-  const parts = clean.split('\\').filter(Boolean);
-  return parts.map((part, i) => ({
-    label: part,
-    path: i === 0 ? `${part}\\` : parts.slice(0, i + 1).join('\\')
-  }));
 }
 
 /** "C:\" or "C:" -- the only place a whole-drive used-space figure is the
@@ -133,11 +123,20 @@ function TreemapCell({ x, y, width, height, depth, name, size, type, scanned, ag
   return (
     <g
       className="treemap-cell"
+      // ONE style prop. There were briefly two -- an animationDelay added
+      // beside the existing cursor -- and JSX silently keeps the last, so
+      // the stagger was dropped and every cell revealed at once. It looked
+      // fine, which is why it survived a live check that read the computed
+      // delay as "0s" without anyone asking why.
+      //
       // Delay taken from the cell's own position rather than an index, so
       // the reveal sweeps across the map instead of firing in whatever
       // order the layout happened to emit. Capped: the largest cells sit
       // top-left and should not wait on the long tail.
-      style={{ animationDelay: `${Math.min(260, (x + y) * 0.22)}ms` }}
+      style={{
+        animationDelay: `${Math.min(260, (x + y) * 0.22)}ms`,
+        cursor: canDrillDown ? 'pointer' : 'default'
+      }}
       // onMouseEnter only. This used to also fire on every mousemove,
       // which set React state and re-rendered every cell in the treemap
       // -- 1,903 of them inside C:\Windows\System32. A 60-move sweep took
@@ -147,7 +146,6 @@ function TreemapCell({ x, y, width, height, depth, name, size, type, scanned, ag
       onMouseEnter={(e) => onHover({ name, size, fullPath, type, scanned, aggregated }, e)}
       onMouseLeave={onLeave}
       onClick={() => canDrillDown && onDrillDown(fullPath)}
-      style={{ cursor: canDrillDown ? 'pointer' : 'default' }}
     >
       <rect x={x} y={y} width={width} height={height} fill={fill} stroke="var(--bg-base)" strokeWidth={1.5} rx={3} />
       {showIcon && (
@@ -708,7 +706,7 @@ export default function DiskMap() {
       )}
 
       <div className="flex items-center flex-wrap gap-1.5 text-[12.5px] font-mono mb-6">
-        {breadcrumbSegments(currentPath).map((seg, i, arr) => (
+        {breadcrumbTrail(currentPath).map((seg, i, arr) => (
           <span key={seg.path} className="flex items-center gap-1.5">
             <button
               onClick={() => setCurrentPath(seg.path)}
