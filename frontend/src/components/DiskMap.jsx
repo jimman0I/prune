@@ -1,10 +1,13 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { Treemap, ResponsiveContainer } from 'recharts';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { keys } from '../lib/queryClient.js';
 import { breadcrumbTrail } from '../lib/breadcrumbTrail.js';
-import { fetchDiskScan, scanDriveFast, fetchDiskSpace, fetchFileTypeIcons } from '../lib/api.js';
+import { fetchDiskScan, scanDriveFast, fetchDiskSpace, fetchFileTypeIcons, quarantineDiskPath, revealInExplorer } from '../lib/api.js';
+import { useToasts } from '../hooks/useToasts.jsx';
+import ContextMenu from './ContextMenu.jsx';
+import ModalOverlay from './ModalOverlay.jsx';
 import { attachFullPaths, topLevelCells } from '../lib/diskMapTree.js';
 import { subtreeForPath } from '../lib/mftSubtree.js';
 import { extensionBreakdown, NO_EXTENSION } from '../lib/extensionBreakdown.js';
@@ -98,7 +101,7 @@ const PANEL_ROWS = 14;
  * out and nothing on screen is worth acting on. */
 const FILE_ROWS = 60;
 
-function TreemapCell({ x, y, width, height, depth, name, size, type, scanned, aggregated, fullPath, icons, typeColors, onHover, onLeave, onDrillDown }) {
+function TreemapCell({ x, y, width, height, depth, name, size, type, scanned, aggregated, fullPath, icons, typeColors, onHover, onLeave, onDrillDown, onContextMenu }) {
   if (depth === 0 || !(width > 0) || !(height > 0)) return null;
   const fill = colorForNode({ name, type, scanned: scanned === false || aggregated ? false : scanned }, typeColors);
   // An unscanned block is a hole in the picture, not a folder. Clicking
@@ -146,6 +149,14 @@ function TreemapCell({ x, y, width, height, depth, name, size, type, scanned, ag
       onMouseEnter={(e) => onHover({ name, size, fullPath, type, scanned, aggregated }, e)}
       onMouseLeave={onLeave}
       onClick={() => canDrillDown && onDrillDown(fullPath)}
+      // An unscanned or aggregate block is not a place -- there is no path
+      // to open, copy or remove -- so it gets no menu rather than a menu
+      // of disabled items.
+      onContextMenu={(e) => {
+        if (!fullPath || aggregated || scanned === false) return;
+        e.preventDefault();
+        onContextMenu({ name, size, fullPath, type }, e);
+      }}
     >
       <rect x={x} y={y} width={width} height={height} fill={fill} stroke="var(--bg-base)" strokeWidth={1.5} rx={3} />
       {showIcon && (
@@ -657,6 +668,51 @@ export default function DiskMap() {
   }, []);
   const handleLeave = useCallback(() => setHovered(null), []);
   const coverage = scanCoverage(tree);
+  // Right-click target and menu position. One piece of state: the menu is
+  // either open on something or closed, and two flags would let those
+  // disagree.
+  const [menu, setMenu] = useState(null);
+  const [pendingRemoval, setPendingRemoval] = useState(null);
+  const toasts = useToasts();
+  const queryClient = useQueryClient();
+
+  const handleContextMenu = useCallback((node, event) => {
+    setMenu({ node, x: event.clientX, y: event.clientY });
+  }, []);
+
+  /** Removal goes to quarantine and is confirmed first.
+   *
+   * This is the only removal in the app that acts on whatever was
+   * right-clicked rather than on a curated target, so it gets both: a
+   * dialog naming the exact path, and a backend guard that refuses
+   * Windows, the program folders, a whole profile and a drive root
+   * regardless of what the client asks for. The guard is the real
+   * protection -- the dialog is only the part the user sees. */
+  const confirmRemoval = useCallback(async () => {
+    const node = pendingRemoval;
+    setPendingRemoval(null);
+    if (!node) return;
+
+    const result = await quarantineDiskPath(node.fullPath, node.size ?? null);
+
+    if (result.ok) {
+      toasts.success(`Moved to quarantine: ${node.name}`, {
+        detail: 'Restore it from the Quarantine screen.'
+      });
+      // The picture is now wrong -- that folder is gone. Re-read rather
+      // than splicing the cell out: the parent's size changed too.
+      queryClient.invalidateQueries({ queryKey: keys.diskScan(currentPath) });
+      queryClient.invalidateQueries({ queryKey: keys.quarantine });
+      return;
+    }
+
+    // A refusal is not a failure. The guard returns a reason and the whole
+    // point is to show it -- "that is Windows itself" is information, and
+    // a generic error message in its place reads as the app being broken.
+    if (result.protected) toasts.warn(result.error, { detail: node.fullPath, ttl: 0 });
+    else toasts.error(result.error || 'That could not be moved.', { detail: node.fullPath });
+  }, [pendingRemoval, toasts, queryClient, currentPath]);
+
   const handleDrillDown = useCallback((fullPath) => {
     setHovered(null);
     setCurrentPath(fullPath);
@@ -847,7 +903,7 @@ export default function DiskMap() {
                 data={cells}
                 dataKey="size"
                 isAnimationActive={false}
-                content={<TreemapCell icons={typeIcons} typeColors={typeColors} onHover={handleHover} onLeave={handleLeave} onDrillDown={handleDrillDown} />}
+                content={<TreemapCell icons={typeIcons} typeColors={typeColors} onHover={handleHover} onLeave={handleLeave} onDrillDown={handleDrillDown} onContextMenu={handleContextMenu} />}
               />
             </ResponsiveContainer>
           </div>
@@ -890,6 +946,69 @@ export default function DiskMap() {
           </div>
         </div>,
         document.body
+      )}
+
+      <ContextMenu
+        open={Boolean(menu)}
+        x={menu?.x ?? 0}
+        y={menu?.y ?? 0}
+        onClose={() => setMenu(null)}
+        items={menu ? [
+          {
+            label: 'Open in Explorer',
+            onSelect: () => revealInExplorer(menu.node.fullPath)
+              .catch((err) => toasts.error(err.message, { detail: menu.node.fullPath }))
+          },
+          {
+            label: 'Copy path',
+            onSelect: () => navigator.clipboard?.writeText(menu.node.fullPath)
+              .then(() => toasts.info('Path copied.', { detail: menu.node.fullPath }))
+              .catch(() => toasts.error('Could not copy that path.'))
+          },
+          {
+            label: 'Move to quarantine…',
+            danger: true,
+            // Never removed straight from the menu. A right-click is one
+            // gesture and this is the only removal in the app aimed at
+            // whatever happened to be under the cursor.
+            onSelect: () => setPendingRemoval(menu.node)
+          }
+        ] : []}
+      />
+
+      {pendingRemoval && (
+        <ModalOverlay label="Move to quarantine" onClose={() => setPendingRemoval(null)}>
+          <div className="glass-panel w-full max-w-[520px] p-6">
+            <h2 className="display-heading text-[20px] mb-2">Move this to quarantine?</h2>
+            <p className="text-[12.5px] text-[color:var(--text-secondary)] mb-3">
+              It is moved, not deleted — restore it from the Quarantine screen at any time.
+            </p>
+            {/* The exact path, in full and wrapped rather than truncated.
+                A confirmation for an arbitrary folder is worth nothing if
+                it hides which folder. */}
+            <p className="font-mono text-[11.5px] text-[color:var(--text-primary)] bg-white/[0.04] border border-[color:var(--border-subtle)] rounded-lg px-3 py-2 mb-2 break-all">
+              {pendingRemoval.fullPath}
+            </p>
+            <p className="text-[11.5px] text-[color:var(--text-muted)] mb-5">
+              {pendingRemoval.type === 'directory' ? 'Folder' : 'File'}
+              {pendingRemoval.size ? ` · ${formatBytes(pendingRemoval.size)}` : ''}
+            </p>
+            <div className="flex items-center justify-end gap-2.5">
+              <button
+                className="btn-ghost px-4 py-2 rounded-lg text-[12.5px] font-medium"
+                onClick={() => setPendingRemoval(null)}
+              >
+                Cancel
+              </button>
+              <button
+                className="btn-danger px-4 py-2 rounded-lg text-[12.5px] font-medium"
+                onClick={confirmRemoval}
+              >
+                Move to quarantine
+              </button>
+            </div>
+          </div>
+        </ModalOverlay>
       )}
     </div>
   );

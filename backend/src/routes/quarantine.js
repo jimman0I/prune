@@ -6,6 +6,7 @@ import { quarantineAndDelete, restoreQuarantine, quarantineRoot, deletePermanent
 import { tryCreateRestorePoint } from '../services/restorePoint.js';
 import { getSettings } from '../services/settings.js';
 import { purgeExpiredQuarantine } from '../services/quarantineRetention.js';
+import { quarantinePath } from '../services/quarantinePath.js';
 
 // Real bug, found dogfooding Phase 4 (2026-09-01): `manifest.batchDir` (the
 // field every list/restore/delete client-side call keys off) is the FULL
@@ -79,6 +80,31 @@ router.delete('/:batchDir', async (req, res) => {
     res.json(result);
   } catch (err) {
     res.status(500).json({ error: err.message });
+  }
+});
+
+/** Moves one arbitrary path into quarantine.
+ *
+ * The Disk Map's context menu is the only caller. It is the only removal
+ * in this app that acts on whatever the user right-clicked rather than on
+ * a curated target, so it goes through pathGuard before anything is
+ * touched -- and into quarantine, never to a delete.
+ *
+ * A refusal is a 200 with { ok: false, protected: true } and a reason.
+ * The client has to be able to SAY why rather than showing a generic
+ * failure: "that cannot be deleted" reads as the app being broken, and
+ * "that is Windows itself" reads as the app being careful.
+ */
+router.post('/path', async (req, res) => {
+  try {
+    const { path, reportedSizeBytes } = req.body || {};
+    const result = await quarantinePath({
+      path,
+      reportedSizeBytes: typeof reportedSizeBytes === 'number' ? reportedSizeBytes : null
+    });
+    res.json(result);
+  } catch (err) {
+    res.status(500).json({ ok: false, error: err.message });
   }
 });
 

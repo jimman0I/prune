@@ -116,6 +116,27 @@ export async function fetchStartupIcons() {
   }
 }
 
+/** Moves one path from the Disk Map into quarantine.
+ *
+ * Never throws, and a refusal is not an error. The guard returns a REASON
+ * -- "That is Windows itself" -- and the screen has to be able to say it;
+ * collapsing that into a thrown exception would lose the one piece of
+ * information worth showing. */
+export async function quarantineDiskPath(path, reportedSizeBytes) {
+  try {
+    const res = await fetch(`${API_URL}/quarantine/path`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ path, reportedSizeBytes })
+    });
+    const data = await res.json().catch(() => null);
+    if (!data) return { ok: false, error: `The removal failed (${res.status}).` };
+    return data;
+  } catch (err) {
+    return { ok: false, error: err.message };
+  }
+}
+
 /** Switches one startup entry on or off.
  *
  * Returns a result instead of throwing, unlike everything else in this
