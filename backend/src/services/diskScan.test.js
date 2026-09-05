@@ -242,3 +242,67 @@ describe('directory timestamps', () => {
     expect(file.modified).toBeUndefined();
   });
 });
+
+describe('scanDirectory exclusions', () => {
+  it('skips a folder the user excluded, and says it did', async () => {
+    // The setting was half-true before this: the cleaner read it and the
+    // disk map did not, so an excluded folder still appeared in the
+    // picture, still counted toward the totals, and still offered a
+    // Delete in its own context menu.
+    const root = mkdtempSync(join(tmpdir(), 'prune-excl-'));
+    try {
+      mkdirSync(join(root, 'Games'), { recursive: true });
+      mkdirSync(join(root, 'Keep'), { recursive: true });
+      writeFileSync(join(root, 'Games', 'big.bin'), 'x'.repeat(500), 'utf8');
+      writeFileSync(join(root, 'Keep', 'small.bin'), 'y'.repeat(10), 'utf8');
+
+      const tree = await scanDirectory(root, 5, undefined, {
+        excludeFolders: [join(root, 'Games')],
+        excludeExtensions: []
+      });
+
+      const games = tree.children.find((c) => c.name === 'Games');
+      const keep = tree.children.find((c) => c.name === 'Keep');
+      // Marked, not dropped. An entry vanishing from its parent's total
+      // with no trace is the same dishonesty as reporting an unreadable
+      // folder as empty.
+      expect(games.excluded).toBe(true);
+      expect(games.size).toBe(0);
+      expect(games.children).toEqual([]);
+      expect(keep.size).toBe(10);
+    } finally {
+      rmSync(root, { recursive: true, force: true });
+    }
+  }, 30000);
+
+  it('skips files of an excluded type', async () => {
+    const root = mkdtempSync(join(tmpdir(), 'prune-excl-ext-'));
+    try {
+      writeFileSync(join(root, 'disc.iso'), 'x'.repeat(400), 'utf8');
+      writeFileSync(join(root, 'notes.txt'), 'y'.repeat(20), 'utf8');
+
+      const tree = await scanDirectory(root, 5, undefined, {
+        excludeFolders: [],
+        excludeExtensions: ['.iso']
+      });
+
+      expect(tree.children.find((c) => c.name === 'disc.iso').excluded).toBe(true);
+      expect(tree.children.find((c) => c.name === 'notes.txt').size).toBe(20);
+    } finally {
+      rmSync(root, { recursive: true, force: true });
+    }
+  }, 30000);
+
+  it('behaves exactly as before when no exclusions are passed', async () => {
+    // Every existing caller, and the MFT path, pass nothing.
+    const root = mkdtempSync(join(tmpdir(), 'prune-excl-none-'));
+    try {
+      mkdirSync(join(root, 'Games'), { recursive: true });
+      writeFileSync(join(root, 'Games', 'big.bin'), 'x'.repeat(500), 'utf8');
+      const tree = await scanDirectory(root, 5);
+      expect(tree.children.find((c) => c.name === 'Games').size).toBe(500);
+    } finally {
+      rmSync(root, { recursive: true, force: true });
+    }
+  }, 30000);
+});

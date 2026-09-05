@@ -43,6 +43,12 @@ export function settingsPath() {
  *   of a 74-rule list is for software the user does not have. */
 const DEFAULT_SETTINGS = {
   excludeFolders: [],
+  /* File types the cleaner and the disk scanner both skip, stored as
+     '.iso'. Separate from excludeFolders because they are matched
+     differently -- a suffix on the name versus a prefix on the path --
+     and a single list would have to guess which at match time, on every
+     file of every scan. See lib/exclusionInput.js. */
+  excludeExtensions: [],
   autoQuarantine: true,
   theme: 'dark',
   accentColor: null,
@@ -68,6 +74,7 @@ export function cleanGuardsFrom(settings) {
   const hours = Number(settings?.skipRecentHours);
   return {
     excludeFolders: Array.isArray(settings?.excludeFolders) ? settings.excludeFolders : [],
+    excludeExtensions: Array.isArray(settings?.excludeExtensions) ? settings.excludeExtensions : [],
     skipRecentHours: Number.isFinite(hours) && hours > 0 ? hours : 0,
     // Only an explicit false turns quarantining off. A settings file
     // written before this key existed must keep the safer behaviour.

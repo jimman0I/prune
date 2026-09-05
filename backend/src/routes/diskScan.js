@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { scanDirectory, DEFAULT_MAX_DEPTH } from '../services/diskScan.js';
+import { getSettings } from '../services/settings.js';
 
 const router = Router();
 
@@ -31,7 +32,14 @@ router.get('/', async (req, res) => {
   req.on('close', () => controller.abort());
 
   try {
-    const result = await scanDirectory(path, DEFAULT_MAX_DEPTH, controller.signal);
+    // The user's own exclusions, read per scan rather than cached: they
+    // are edited on the Settings screen and a stale copy would show a
+    // folder the user has just told the app to ignore.
+    const settings = await getSettings();
+    const result = await scanDirectory(path, DEFAULT_MAX_DEPTH, controller.signal, {
+      excludeFolders: settings.excludeFolders,
+      excludeExtensions: settings.excludeExtensions
+    });
     if (!result) {
       if (controller.signal.aborted) {
         return res.status(504).json({

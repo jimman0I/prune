@@ -19,7 +19,7 @@ describe('getSettings', () => {
   it('returns the default shape when no settings file exists yet', async () => {
     const settings = await getSettings();
     expect(settings).toEqual({
-      excludeFolders: [], autoQuarantine: true, theme: 'dark', accentColor: null,
+      excludeFolders: [], excludeExtensions: [], autoQuarantine: true, theme: 'dark', accentColor: null,
       minimizeToTray: true, skipRecentHours: 24, createRestorePoint: true, hideUnavailableRules: false,
       quarantineRetentionDays: null
     });
@@ -45,7 +45,7 @@ describe('updateSettings', () => {
   it('returns the full updated settings object, not just the partial that was passed in', async () => {
     const result = await updateSettings({ theme: 'light' });
     expect(result).toEqual({
-      excludeFolders: [], autoQuarantine: true, theme: 'light', accentColor: null,
+      excludeFolders: [], excludeExtensions: [], autoQuarantine: true, theme: 'light', accentColor: null,
       minimizeToTray: true, skipRecentHours: 24, createRestorePoint: true, hideUnavailableRules: false,
       quarantineRetentionDays: null
     });

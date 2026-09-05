@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { runSandboxTest } from '../lib/api.js';
+import { classifyExclusion } from '../lib/exclusionInput.js';
 import { useSettings } from '../hooks/useSystemQueries.js';
 
 // electron/package.json is this app's real, single source of truth for
@@ -62,7 +63,8 @@ function StepRow({ step }) {
 export default function SettingsPage() {
   const [tab, setTab] = useState('general');
   const [saveError, setSaveError] = useState(null);
-  const [newFolder, setNewFolder] = useState('');
+  const [newExclusion, setNewExclusion] = useState('');
+  const [exclusionError, setExclusionError] = useState(null);
   const [sandboxRunning, setSandboxRunning] = useState(false);
   const [sandboxReport, setSandboxReport] = useState(null);
 
@@ -86,16 +88,50 @@ export default function SettingsPage() {
     });
   };
 
-  const handleAddFolder = () => {
-    const path = newFolder.trim();
-    if (!path || settings.excludeFolders.includes(path)) return;
-    save({ excludeFolders: [...settings.excludeFolders, path] });
-    setNewFolder('');
+  /** One field, two stores.
+   *
+   * "Add an exclusion" is one idea to a person, but a folder is matched
+   * as a path prefix and an extension as a filename suffix, so they are
+   * kept apart on disk. classifyExclusion decides once, here, where the
+   * user's intent is clearest -- rather than every file of every scan
+   * having to guess whether "C:
+ode.js" is a folder or a file type.
+   *
+   * A bare word is refused with a message rather than guessed at, and the
+   * message says the format. Guessing has two silent failure modes:
+   * "temp" as a folder excludes nothing, and as an extension excludes
+   * every .temp file on the machine. */
+  const handleAddExclusion = () => {
+    const parsed = classifyExclusion(newExclusion);
+    if (!parsed) {
+      setExclusionError(
+        newExclusion.trim()
+          ? 'Write a full folder path (D:\Games) or a file type (*.iso).'
+          : null
+      );
+      return;
+    }
+
+    setExclusionError(null);
+    const key = parsed.kind === 'extension' ? 'excludeExtensions' : 'excludeFolders';
+    const current = settings[key] ?? [];
+    if (current.includes(parsed.value)) { setNewExclusion(''); return; }
+
+    save({ [key]: [...current, parsed.value] });
+    setNewExclusion('');
   };
 
-  const handleRemoveFolder = (path) => {
-    save({ excludeFolders: settings.excludeFolders.filter((f) => f !== path) });
+  const handleRemoveExclusion = (kind, value) => {
+    const key = kind === 'extension' ? 'excludeExtensions' : 'excludeFolders';
+    save({ [key]: (settings[key] ?? []).filter((v) => v !== value) });
   };
+
+  // One list for the screen, each row remembering which store it came
+  // from so removing it puts the change back in the right place.
+  const exclusions = [
+    ...(settings?.excludeFolders ?? []).map((value) => ({ kind: 'folder', value })),
+    ...(settings?.excludeExtensions ?? []).map((value) => ({ kind: 'extension', value }))
+  ];
 
   const handleRunSandboxTest = async () => {
     setSandboxRunning(true);
@@ -265,35 +301,52 @@ export default function SettingsPage() {
               <div className="glass-panel p-6">
                 <div className="text-[14px] font-medium text-[color:var(--text-primary)] mb-1">Exclude Folders</div>
                 <p className="text-[12.5px] text-[color:var(--text-secondary)] mb-4">
-                  Folders Deep Clean will never take a file from, on top of the ones Prune already
-                  protects — System Volume Information, antivirus quarantines, the component store
-                  and a dozen others.
+                  Folders and file types Prune will leave alone — skipped by Deep Clean and left
+                  out of the Disk Map — on top of the ones it already protects: System Volume
+                  Information, antivirus quarantines, the component store and a dozen others.
                 </p>
 
-                <div className="flex items-center gap-2 mb-4">
+                <div className="flex items-center gap-2 mb-1">
                   <input
                     type="text"
-                    value={newFolder}
-                    onChange={(e) => setNewFolder(e.target.value)}
-                    onKeyDown={(e) => { if (e.key === 'Enter') handleAddFolder(); }}
-                    placeholder="C:\Path\To\Folder"
+                    value={newExclusion}
+                    onChange={(e) => { setNewExclusion(e.target.value); setExclusionError(null); }}
+                    onKeyDown={(e) => { if (e.key === 'Enter') handleAddExclusion(); }}
+                    placeholder="D:\Games   or   *.iso"
+                    aria-label="Folder path or file type to exclude"
+                    aria-invalid={Boolean(exclusionError)}
                     className="flex-1 min-w-0 font-mono text-[12.5px] px-3 py-2 rounded-lg bg-white/[0.04] border border-[color:var(--border-subtle)] text-[color:var(--text-primary)] placeholder:text-[color:var(--text-muted)] focus:outline-none focus:border-[color:var(--accent-primary)]/50"
                   />
-                  <button className="btn-ghost px-3.5 py-2 rounded-lg text-[12px] font-medium shrink-0" onClick={handleAddFolder}>
+                  <button className="btn-ghost px-3.5 py-2 rounded-lg text-[12px] font-medium shrink-0" onClick={handleAddExclusion}>
                     Add
                   </button>
                 </div>
 
-                {settings.excludeFolders.length === 0 ? (
-                  <p className="text-[12.5px] text-[color:var(--text-muted)]">No excluded folders.</p>
+                {/* Says the format rather than just refusing. A bare word
+                    is genuinely ambiguous and the user is the only one who
+                    can resolve it. */}
+                <p className={`text-[11.5px] mb-4 ${exclusionError ? 'text-[color:var(--danger)]' : 'text-[color:var(--text-muted)]'}`}>
+                  {exclusionError || 'A full folder path, or a file type written as *.iso'}
+                </p>
+
+                {exclusions.length === 0 ? (
+                  <p className="text-[12.5px] text-[color:var(--text-muted)]">Nothing excluded.</p>
                 ) : (
                   <div className="flex flex-col gap-1.5">
-                    {settings.excludeFolders.map((path) => (
-                      <div key={path} className="flex items-center justify-between gap-3 px-3 py-2 rounded-lg bg-white/[0.03]">
-                        <div className="font-mono text-[12px] text-[color:var(--text-secondary)] truncate min-w-0">{path}</div>
+                    {exclusions.map(({ kind, value }) => (
+                      <div key={`${kind}:${value}`} className="flex items-center justify-between gap-3 px-3 py-2 rounded-lg bg-white/[0.03]">
+                        <div className="flex items-center gap-2 min-w-0">
+                          {/* Which kind, at a glance. The two behave
+                              differently and the row should not need to be
+                              parsed to tell them apart. */}
+                          <span className="text-[9px] font-mono uppercase tracking-wider px-1.5 py-px rounded border shrink-0 border-[color:var(--border-subtle)] text-[color:var(--text-muted)]">
+                            {kind === 'extension' ? 'Type' : 'Folder'}
+                          </span>
+                          <span className="font-mono text-[12px] text-[color:var(--text-secondary)] truncate min-w-0">{value}</span>
+                        </div>
                         <button
-                          aria-label={`Remove ${path}`}
-                          onClick={() => handleRemoveFolder(path)}
+                          aria-label={`Stop excluding ${value}`}
+                          onClick={() => handleRemoveExclusion(kind, value)}
                           className="text-[color:var(--text-muted)] hover:text-[color:var(--danger)] transition-colors shrink-0 text-[13px] leading-none px-1"
                         >
                           ✕

@@ -1,3 +1,5 @@
+import { matchesExtension } from './exclusionInput.js';
+
 /** The two things that stop a cleaner from taking a file it shouldn't.
  *
  * Both are lifted from Revo, which ships them as defaults rather than as
@@ -72,7 +74,11 @@ export function toExcludePattern(folder) {
  * appear at any depth ("/quarantine/" is a folder inside an antivirus's
  * own install, wherever that is), while a user's entry is absolute and so
  * only ever matches at the front anyway. One test covers both. */
-export function isExcluded(filePath, userFolders = []) {
+export function isExcluded(filePath, userFolders = [], userExtensions = []) {
+  // Extensions first and cheaply: it is one string compare against the
+  // file's own suffix, where the folder check normalises the whole path.
+  if (matchesExtension(filePath, userExtensions)) return true;
+
   const haystack = normalizePath(filePath);
   if (haystack === '') return false;
 
@@ -108,13 +114,21 @@ export function isTooRecent(mtimeMs, hours, now = Date.now()) {
  * six is the kind of small dishonesty that makes people stop trusting a
  * number, and the reason is also the only way anyone would ever discover
  * that their own exclusion is what held a file back. */
-export function partitionCleanableFiles(files, { excludeFolders = [], skipRecentHours = 0, now = Date.now() } = {}) {
+export function partitionCleanableFiles(files, { excludeFolders = [], excludeExtensions = [], skipRecentHours = 0, now = Date.now() } = {}) {
   const cleanable = [];
   const held = [];
 
   for (const file of files || []) {
-    if (isExcluded(file?.path, excludeFolders)) {
-      held.push({ path: file.path, reason: 'in an excluded folder' });
+    if (isExcluded(file?.path, excludeFolders, excludeExtensions)) {
+      // The reason distinguishes the two, because they are fixed
+      // differently: one is a folder the user listed, the other is a file
+      // type. "Excluded" alone leaves them hunting the wrong setting.
+      held.push({
+        path: file.path,
+        reason: matchesExtension(file?.path, excludeExtensions)
+          ? 'an excluded file type'
+          : 'in an excluded folder'
+      });
       continue;
     }
     if (isTooRecent(file?.mtimeMs, skipRecentHours, now)) {

@@ -11,14 +11,32 @@ import { join, basename } from 'node:path';
  * directory blows past any depth cap in file count, not depth) -- that's
  * what the `signal` parameter below is for. See the route's own
  * SCAN_TIMEOUT_MS for the real time budget. */
+import { normalizePath, toExcludePattern } from '../lib/cleanGuards.js';
+import { matchesExtension } from '../lib/exclusionInput.js';
+
 export const DEFAULT_MAX_DEPTH = 12;
 
-async function scanNode(entryPath, name, depthRemaining, signal) {
+async function scanNode(entryPath, name, depthRemaining, signal, exclusions) {
   // Checked BEFORE starting new work, not just relied on to reject an
   // in-flight fs call -- an already-aborted signal should stop growing the
   // tree immediately rather than spend one more stat/readdir round-trip
   // finding that out the slow way.
   if (signal?.aborted) return null;
+
+  // The user's exclusions, honoured by the SCANNER and not only by the
+  // cleaner. They were read by the cleaner alone, which made the setting
+  // half-true: a folder someone had excluded still appeared in the disk
+  // map, still counted toward the totals, and still offered a Delete in
+  // its context menu. Skipping it here costs nothing and saves walking
+  // it -- an excluded D:\Games is usually the largest thing on the drive.
+  //
+  // Marked rather than dropped. An entry that vanishes from its parent's
+  // total with no trace is the same dishonesty as an unreadable folder
+  // reported as empty, and the map already has a shape for "present but
+  // not counted".
+  if (isExcludedEntry(entryPath, exclusions)) {
+    return { name, size: 0, type: 'directory', excluded: true, children: [] };
+  }
 
   let stat;
   try {
@@ -85,7 +103,7 @@ async function scanNode(entryPath, name, depthRemaining, signal) {
       break;
     }
     const entryName = entryNames[i];
-    const child = await scanNode(join(entryPath, entryName), entryName, depthRemaining - 1, signal);
+    const child = await scanNode(join(entryPath, entryName), entryName, depthRemaining - 1, signal, exclusions);
     if (child) children.push(child);
   }
   const size = children.reduce((sum, c) => sum + c.size, 0);
@@ -123,6 +141,30 @@ async function scanNode(entryPath, name, depthRemaining, signal) {
  * doesn't throw or discard progress: the tree returned reflects whatever
  * was genuinely visited before the signal fired, an honest partial result
  * rather than an error or a silently-inaccurate "complete" one. */
-export async function scanDirectory(dirPath, maxDepth = DEFAULT_MAX_DEPTH, signal) {
-  return scanNode(dirPath, basename(dirPath) || dirPath, maxDepth, signal);
+export async function scanDirectory(dirPath, maxDepth = DEFAULT_MAX_DEPTH, signal, exclusions = null) {
+  return scanNode(dirPath, basename(dirPath) || dirPath, maxDepth, signal, exclusions);
+}
+
+/** Whether the scanner should skip this entry outright.
+ *
+ * Only the USER's own exclusions, not cleanGuards' DEFAULT_EXCLUDED. Those
+ * defaults exist to stop a cleaner taking files out of places like
+ * WinSxS; they are not a statement that the disk map should pretend
+ * WinSxS is empty. A disk map that hid the component store would be
+ * lying about where the space went, which is the one thing it is for.
+ *
+ * Null exclusions means the caller did not ask for any -- every existing
+ * test and the MFT path included -- so the walk behaves exactly as before.
+ */
+function isExcludedEntry(entryPath, exclusions) {
+  if (!exclusions) return false;
+  const folders = exclusions.excludeFolders ?? [];
+  const extensions = exclusions.excludeExtensions ?? [];
+  if (folders.length === 0 && extensions.length === 0) return false;
+
+  if (matchesExtension(entryPath, extensions)) return true;
+
+  const haystack = normalizePath(entryPath);
+  if (haystack === '') return false;
+  return folders.map(toExcludePattern).filter(Boolean).some((p) => haystack.includes(p));
 }
