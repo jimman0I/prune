@@ -116,6 +116,18 @@ export async function fetchStartupIcons() {
   }
 }
 
+/** Duplicate files under one folder.
+ *
+ * Takes the signal useQuery provides, so leaving the screen or pressing
+ * Stop closes the connection -- and the route watches for that, which is
+ * what actually halts the hashing rather than abandoning its result. */
+export async function fetchDuplicates(path, signal) {
+  const res = await fetch(`${API_URL}/duplicates?path=${encodeURIComponent(path)}`, { signal });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
+  return data;
+}
+
 /** Moves one path from the Disk Map into quarantine.
  *
  * Never throws, and a refusal is not an error. The guard returns a REASON

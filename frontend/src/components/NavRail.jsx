@@ -41,6 +41,14 @@ const ITEMS = [
       <path d="M18.4 6.6a9 9 0 1 1-12.8 0"></path>
     </svg>
   ) },
+  // Two overlapping sheets: the one glyph that reads as "copies" without
+  // needing a label, which matters in a 72px rail.
+  { id: 'duplicates', label: 'Duplicates', icon: (
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="9" y="9" width="11" height="11" rx="2"></rect>
+      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+    </svg>
+  ) },
   // A brush, not the mouse cursor this used to be. The old glyph was the
   // standard arrow-pointer shape, which in a nav rail reads as "select" --
   // it named the wrong action for the one screen in the app that deletes

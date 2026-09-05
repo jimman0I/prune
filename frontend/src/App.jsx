@@ -14,6 +14,7 @@ import UninstallModal from './components/UninstallModal.jsx';
 import QuarantineManager from './components/QuarantineManager.jsx';
 import SettingsPage from './components/SettingsPage.jsx';
 import DeepClean from './components/DeepClean.jsx';
+import Duplicates from './components/Duplicates.jsx';
 import StartupItems from './components/StartupItems.jsx';
 import { rememberVisited } from './lib/visitedScreens.js';
 
@@ -81,6 +82,7 @@ export default function App() {
         <Screen active={screen === 'settings'} visited={visited.has('settings')}><SettingsPage /></Screen>
         <Screen active={screen === 'startup'} visited={visited.has('startup')}><StartupItems /></Screen>
         <Screen active={screen === 'deepclean'} visited={visited.has('deepclean')}><DeepClean /></Screen>
+        <Screen active={screen === 'duplicates'} visited={visited.has('duplicates')}><Duplicates /></Screen>
         <Screen active={screen === 'applications'} visited={visited.has('applications')}>
           <div className="px-12 py-10 h-full flex flex-col min-h-0">
             <div className="flex items-baseline justify-between mb-6 shrink-0">
