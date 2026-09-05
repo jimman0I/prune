@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { runSandboxTest } from '../lib/api.js';
 import { classifyExclusion } from '../lib/exclusionInput.js';
+import AutomationSettings from './AutomationSettings.jsx';
 import { useSettings } from '../hooks/useSystemQueries.js';
 
 // electron/package.json is this app's real, single source of truth for
@@ -220,6 +221,10 @@ ode.js" is a folder or a file type.
 
           {tab === 'cleanup' && (
             <div className="flex flex-col gap-4">
+              <div className="glass-panel p-6">
+                <AutomationSettings settings={settings} save={save} />
+              </div>
+
               <div className="glass-panel p-6">
                 <div className="flex items-center justify-between gap-4 mb-4">
                   <div>

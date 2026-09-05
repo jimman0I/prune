@@ -61,7 +61,22 @@ const DEFAULT_SETTINGS = {
      quarantineRetention.js. Quarantine is this app's undo, and a
      retention that runs when it should not destroys the only copy of
      something the user removed by accident. */
-  quarantineRetentionDays: null
+  quarantineRetentionDays: null,
+  /* The scheduled run. IN-APP: it catches up when Prune is running rather
+     than firing with the app closed, because there is no headless entry
+     point for a Windows task to invoke. lastRunAt and lastResult live here
+     rather than in a second file so one write persists both the schedule
+     and its history. */
+  automation: {
+    enabled: false,
+    frequency: 'weekly',
+    weekday: 0,
+    hour: 2,
+    minute: 0,
+    task: 'scan',
+    lastRunAt: null,
+    lastResult: null
+  }
 };
 
 /** The subset of settings the cleaner needs, in the shape it takes.

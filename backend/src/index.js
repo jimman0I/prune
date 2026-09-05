@@ -6,6 +6,8 @@ import uninstallRoutes from './routes/uninstall.js';
 import leftoversRoutes from './routes/leftovers.js';
 import quarantineRoutes from './routes/quarantine.js';
 import duplicateRoutes from './routes/duplicates.js';
+import automationRoutes from './routes/automation.js';
+import { startScheduler, checkSchedule } from './services/scheduleRunner.js';
 import diskSpaceRoutes from './routes/diskSpace.js';
 import uninstallHistoryRoutes from './routes/uninstallHistory.js';
 import diskScanRoutes from './routes/diskScan.js';
@@ -44,6 +46,13 @@ app.use('/api/uninstall', uninstallRoutes);
 app.use('/api/leftovers', leftoversRoutes);
 app.use('/api/quarantine', quarantineRoutes);
 app.use('/api/duplicates', duplicateRoutes);
+app.use('/api/automation', automationRoutes);
+
+// The schedule catches up on start as well as on its timer: the window
+// most likely to have been missed is one that passed while the machine
+// was off, and the app opening is the first moment anything can notice.
+startScheduler();
+checkSchedule().catch(() => { /* a failed check must never stop the server booting */ });
 app.use('/api/disk-space', diskSpaceRoutes);
 app.use('/api/uninstall-history', uninstallHistoryRoutes);
 app.use('/api/disk-scan', diskScanRoutes);

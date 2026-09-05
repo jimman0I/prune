@@ -116,6 +116,25 @@ export async function fetchStartupIcons() {
   }
 }
 
+/** The scheduled run's status: when it next fires, when it last did, and
+ * how many windows went by while the machine was off. */
+export async function fetchAutomation() {
+  const res = await fetch(`${API_URL}/automation`);
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
+  return data;
+}
+
+/** Catches up a run that is due. Deliberately not "run now": a button
+ * that ignored the schedule would be a second, hidden way to clean, and
+ * the Deep Clean screen already exists for that. */
+export async function checkAutomation() {
+  const res = await fetch(`${API_URL}/automation/check`, { method: 'POST' });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
+  return data;
+}
+
 /** Duplicate files under one folder.
  *
  * Takes the signal useQuery provides, so leaving the screen or pressing

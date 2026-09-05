@@ -2,6 +2,9 @@ import { useEffect, useMemo, useState } from 'react';
 import { fetchDiskSpace, fetchDiskHealth, unlockDiskWear, fetchUninstallHistory } from '../lib/api.js';
 import { formatRelativeTime } from '../lib/formatRelativeTime.js';
 import StatCard from './StatCard.jsx';
+import { useQuery } from '@tanstack/react-query';
+import { fetchAutomation } from '../lib/api.js';
+import { keys } from '../lib/queryClient.js';
 
 function formatBytes(bytes) {
   if (bytes === null || bytes === undefined) return '—';
@@ -10,6 +13,42 @@ function formatBytes(bytes) {
   const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
   const i = Math.floor(Math.log(bytes) / Math.log(k));
   return `${parseFloat((bytes / Math.pow(k, i)).toFixed(1))} ${sizes[i]}`;
+}
+
+
+/** Says something only when there is something to say.
+ *
+ * Three states, and only two of them render. A schedule that is off, or
+ * on and up to date, shows nothing -- a badge reading "next run Sunday"
+ * on every visit is furniture. It appears when a run is DUE and the app
+ * was not open for it, and when windows went by while the machine was
+ * off, which is the case the brief calls "skipped" and the one most
+ * likely to look like the feature having failed.
+ */
+function ScheduleBadge({ onNavigate }) {
+  const { data } = useQuery({
+    queryKey: keys.automation,
+    queryFn: fetchAutomation,
+    refetchInterval: 60_000,
+    staleTime: 0,
+    retry: 1
+  });
+
+  if (!data?.automation?.enabled) return null;
+  if (!data.due && data.missed === 0) return null;
+
+  const missed = data.missed;
+  return (
+    <button
+      onClick={() => onNavigate('settings')}
+      className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[color:var(--warning-soft)] border border-[color:var(--warning)]/25 text-[12px] text-[color:var(--warning)] hover:bg-[color:var(--warning)]/20 transition-colors shrink-0"
+    >
+      <span className="w-1.5 h-1.5 rounded-full bg-[color:var(--warning)] shrink-0" />
+      {missed > 0
+        ? `${missed} scheduled ${missed === 1 ? 'run was' : 'runs were'} missed while this PC was off`
+        : 'A scheduled run is due'}
+    </button>
+  );
 }
 
 /** Maps a real drive verdict to a semantic colour. Deliberately NOT the
@@ -203,7 +242,10 @@ export default function Dashboard({ programs, totalSize, onNavigate = () => {} }
 
   return (
     <div className="px-12 py-10 max-w-[1400px]">
-      <h1 className="display-heading text-[36px] leading-none mb-8">Dashboard</h1>
+      <div className="flex items-baseline justify-between gap-4 mb-8">
+        <h1 className="display-heading text-[36px] leading-none">Dashboard</h1>
+        <ScheduleBadge onNavigate={onNavigate} />
+      </div>
 
       <div className="glass-panel flex items-center gap-6 p-8 mb-6">
         <HealthGauge percent={verdict.percent} statusLabel={verdict.statusLabel} tone={verdict.tone} />

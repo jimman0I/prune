@@ -57,6 +57,7 @@ export const keys = {
   startupIcons: ['startup', 'icons'],
   quarantine: ['quarantine'],
   settings: ['settings'],
+  automation: ['automation'],
   diskSpace: ['disk', 'space'],
   deepCleanRules: ['deepClean', 'rules'],
   deepCleanScan: ['deepClean', 'scan'],

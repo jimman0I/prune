@@ -16,13 +16,39 @@ afterEach(() => {
 });
 
 describe('getSettings', () => {
-  it('returns the default shape when no settings file exists yet', async () => {
+  /** Pins the defaults that MATTER rather than the exact key set.
+   *
+   * This was a deep-equal on the whole object and it broke three times in
+   * one afternoon, once per feature that added a key -- each break a
+   * mechanical edit that proved nothing. What is worth protecting is not
+   * "no key was added" but "no safe default quietly became an unsafe
+   * one": every value below is one where flipping it removes a guard or
+   * starts deleting something. */
+  it('defaults to the safe side of every choice that has one', async () => {
     const settings = await getSettings();
-    expect(settings).toEqual({
-      excludeFolders: [], excludeExtensions: [], autoQuarantine: true, theme: 'dark', accentColor: null,
-      minimizeToTray: true, skipRecentHours: 24, createRestorePoint: true, hideUnavailableRules: false,
-      quarantineRetentionDays: null
-    });
+
+    expect(settings.autoQuarantine).toBe(true);        // removals are reversible
+    expect(settings.createRestorePoint).toBe(true);    // a rollback exists
+    expect(settings.skipRecentHours).toBe(24);         // today's files are left alone
+    expect(settings.quarantineRetentionDays).toBeNull(); // the undo is never purged
+    expect(settings.automation.enabled).toBe(false);   // nothing runs unattended
+    expect(settings.automation.task).toBe('scan');     // and if it did, it measures
+    expect(settings.excludeFolders).toEqual([]);
+    expect(settings.excludeExtensions).toEqual([]);
+  });
+
+  it('returns every key the app reads, so a missing one fails here', async () => {
+    // The other half of what the deep-equal was doing, without the
+    // churn: a key the app expects and never gets would otherwise fail
+    // somewhere far away, as undefined.
+    const settings = await getSettings();
+    for (const key of [
+      'excludeFolders', 'excludeExtensions', 'autoQuarantine', 'theme', 'accentColor',
+      'minimizeToTray', 'skipRecentHours', 'createRestorePoint', 'hideUnavailableRules',
+      'quarantineRetentionDays', 'automation'
+    ]) {
+      expect(settings, key).toHaveProperty(key);
+    }
   });
 });
 
@@ -44,11 +70,12 @@ describe('updateSettings', () => {
 
   it('returns the full updated settings object, not just the partial that was passed in', async () => {
     const result = await updateSettings({ theme: 'light' });
-    expect(result).toEqual({
-      excludeFolders: [], excludeExtensions: [], autoQuarantine: true, theme: 'light', accentColor: null,
-      minimizeToTray: true, skipRecentHours: 24, createRestorePoint: true, hideUnavailableRules: false,
-      quarantineRetentionDays: null
-    });
+    // The changed key, and proof the untouched ones came back too -- the
+    // frontend replaces its whole cache with this reply.
+    expect(result.theme).toBe('light');
+    expect(result.autoQuarantine).toBe(true);
+    expect(result.skipRecentHours).toBe(24);
+    expect(result.automation.enabled).toBe(false);
   });
 
   it('supports the minimizeToTray preference the tray close-handler reads', async () => {
