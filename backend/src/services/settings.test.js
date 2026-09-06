@@ -45,6 +45,7 @@ describe('getSettings', () => {
     for (const key of [
       'excludeFolders', 'excludeExtensions', 'autoQuarantine', 'theme',
       'minimizeToTray', 'skipRecentHours', 'createRestorePoint', 'hideUnavailableRules',
+      'acknowledgedCleanWarnings',
       'quarantineRetentionDays', 'quarantineMaxSizeGb', 'automation'
     ]) {
       expect(settings, key).toHaveProperty(key);

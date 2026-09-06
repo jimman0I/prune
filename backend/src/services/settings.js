@@ -55,6 +55,14 @@ const DEFAULT_SETTINGS = {
   skipRecentHours: 24,
   createRestorePoint: true,
   hideUnavailableRules: false,
+  /* Deep Clean rules whose "this loses data" warning the user has ticked
+     "remember my choice" on, by rule id. Sixteen rules are marked risky
+     -- history, cookies, sessions, autofill and site data across three
+     browsers, plus the Recycle Bin -- and ticking one opens a dialog
+     naming the consequence. This is the list of the ones that no longer
+     ask. Per rule, never per category: agreeing to lose cookies is not
+     agreeing to lose browsing history. See lib/cleanWarning.js. */
+  acknowledgedCleanWarnings: [],
   /* Days before a quarantine batch is deleted for good, or null for
      never. Off by default and off for every ambiguous value -- see
      quarantineRetention.js. Quarantine is this app's undo, and a
