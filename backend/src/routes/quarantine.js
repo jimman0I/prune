@@ -12,9 +12,9 @@ import { quarantinePath } from '../services/quarantinePath.js';
 // Real bug, found dogfooding Phase 4 (2026-09-01): `manifest.batchDir` (the
 // field every list/restore/delete client-side call keys off) is the FULL
 // ABSOLUTE path written by quarantineAndDelete -- `join(quarantineRoot(),
-// '<ts>-<program>')` -- not a bare directory name. The pre-existing
-// QuarantinePanel.jsx already passes that value straight through as the
-// :batchDir route param, so `join(quarantineRoot(), req.params.batchDir)`
+// '<ts>-<program>')` -- not a bare directory name. The quarantine screen
+// passes that value straight through as the :batchDir route param, so
+// `join(quarantineRoot(), req.params.batchDir)`
 // below was joining an absolute path onto quarantineRoot() a SECOND time --
 // path.join does not special-case an absolute later segment, it just
 // concatenates and normalizes, so the result was a doubled, nonexistent

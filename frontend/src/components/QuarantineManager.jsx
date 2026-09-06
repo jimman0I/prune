@@ -14,10 +14,11 @@ function formatBytes(bytes) {
 }
 
 // manifest.createdAt (a real backend field -- see quarantine.js's service)
-// -- NOT `batch.timestamp`, a field that doesn't exist anywhere in the
-// manifest. The pre-existing QuarantinePanel.jsx reads batch.timestamp and
-// so has always rendered a blank date; this component deliberately reads
-// the real field instead of repeating that bug.
+// -- NOT `batch.timestamp`, which does not exist anywhere in the manifest.
+// The earlier version of this screen read that name and so rendered a
+// blank date on every row for as long as it existed. Worth naming even
+// though that file is gone: the two fields are equally plausible, and
+// nothing about a blank date says which one was wrong.
 function formatDate(ms) {
   if (!ms) return '—';
   return new Date(ms).toLocaleString(undefined, {
