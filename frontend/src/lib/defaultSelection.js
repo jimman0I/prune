@@ -1,3 +1,5 @@
+import { needsWarning } from './cleanWarning.js';
+
 /** Whether a scanned rule is something the user could actually clean.
  *
  * `present: false` means the software isn't on this machine, and
@@ -35,12 +37,21 @@ export function defaultSelection(categories) {
 
 /** Everything a "select all" could reach. Deliberately wider than the
  * defaults -- an explicit click may take the non-recommended rules too --
- * but still never the ones that would clean nothing. */
-export function selectableIds(categories) {
+ * but still never the ones that would clean nothing.
+ *
+ * And never the ones that lose something, unless the user has already
+ * said to stop asking about that rule. A single click on Select All is
+ * the opposite of the deliberate choice the warning dialog exists to
+ * capture; sweeping "signs you out of every site that remembered you"
+ * into a batch without a word would make the dialog pointless in the one
+ * case it matters most. */
+export function selectableIds(categories, acknowledged) {
   const ids = new Set();
   for (const group of categories || []) {
     for (const item of group.items || []) {
-      if (isSelectable(item)) ids.add(item.id);
+      if (!isSelectable(item)) continue;
+      if (needsWarning(item, { checking: true, acknowledged })) continue;
+      ids.add(item.id);
     }
   }
   return ids;

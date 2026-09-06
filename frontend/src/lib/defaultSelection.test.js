@@ -67,4 +67,29 @@ describe('selectableIds', () => {
   it('returns an empty set when there is nothing scanned', () => {
     expect(selectableIds(null)).toEqual(new Set());
   });
+
+  it('leaves out a rule that loses data', () => {
+    // One click on Select All is the opposite of the deliberate choice
+    // the warning dialog exists to capture. Sweeping "signs you out of
+    // every site that remembered you" into a batch without a word would
+    // make that dialog pointless in the case it matters most -- and the
+    // rules it skips are the ones already wearing a "Loses data" badge,
+    // so what stays unticked is visible on the row.
+    const risky = [{ category: 'Brave', items: [
+      { id: 'brave_cache', name: 'Cache' },
+      { id: 'brave_cookies', name: 'Cookies', risky: true }
+    ] }];
+    expect(selectableIds(risky)).toEqual(new Set(['brave_cache']));
+  });
+
+  it('includes a risky rule once the user has said to stop asking', () => {
+    // "Remember my choice" is remembered here too. Having answered the
+    // question for that rule, a bulk select is no longer answering it on
+    // their behalf.
+    const risky = [{ category: 'Brave', items: [
+      { id: 'brave_cache', name: 'Cache' },
+      { id: 'brave_cookies', name: 'Cookies', risky: true }
+    ] }];
+    expect(selectableIds(risky, ['brave_cookies'])).toEqual(new Set(['brave_cache', 'brave_cookies']));
+  });
 });

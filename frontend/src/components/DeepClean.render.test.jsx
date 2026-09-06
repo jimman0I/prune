@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { screen, waitFor } from '@testing-library/react';
+import { screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { renderScreen } from '../testSupport/renderScreen.jsx';
 
@@ -21,15 +21,15 @@ import { renderScreen } from '../testSupport/renderScreen.jsx';
 const executeDeepClean = vi.fn(async () => ({ removed: 2, freedBytes: 1024, locked: [] }));
 const fetchDeepCleanRules = vi.fn();
 const streamDeepCleanScan = vi.fn();
+const fetchSettings = vi.fn();
+const updateSettings = vi.fn(async (p) => p);
 
 vi.mock('../lib/api.js', () => ({
   fetchDeepCleanRules: (...a) => fetchDeepCleanRules(...a),
   streamDeepCleanScan: (...a) => streamDeepCleanScan(...a),
   executeDeepClean: (...a) => executeDeepClean(...a),
-  fetchSettings: vi.fn(async () => ({
-    excludeFolders: [], excludeExtensions: [], hideUnavailableRules: false, skipRecentHours: 24
-  })),
-  updateSettings: vi.fn(async (p) => p),
+  fetchSettings: (...a) => fetchSettings(...a),
+  updateSettings: (...a) => updateSettings(...a),
   fetchStartupItems: vi.fn(), fetchStartupIcons: vi.fn(), setStartupItemEnabled: vi.fn(),
   fetchQuarantineBatches: vi.fn(), restoreQuarantineBatch: vi.fn(),
   deleteQuarantineBatch: vi.fn(), emptyQuarantine: vi.fn(),
@@ -48,6 +48,10 @@ const rules = [{
 
 beforeEach(() => {
   vi.clearAllMocks();
+  fetchSettings.mockResolvedValue({
+    excludeFolders: [], excludeExtensions: [], hideUnavailableRules: false,
+    skipRecentHours: 24, acknowledgedCleanWarnings: []
+  });
   // The array itself, not { categories }. fetchDeepCleanRules unwraps the
   // response before the hook ever sees it.
   fetchDeepCleanRules.mockResolvedValue(rules);
@@ -133,5 +137,146 @@ describe('the gate in front of a clean', () => {
     const [ids] = executeDeepClean.mock.calls[0];
     expect(Array.isArray(ids)).toBe(true);
     expect(ids.length).toBeGreaterThan(0);
+  });
+});
+
+describe('the warning in front of a rule that loses data', () => {
+  // Each item carries its own `category`, the way the real /deep-clean/
+  // rules payload does -- the group heading is not the only place it
+  // lives, and the dialog title reads it off the item.
+  const riskyRules = [{
+    category: 'Brave',
+    items: [
+      {
+        id: 'brave_cache', category: 'Brave', name: 'Cache',
+        description: 'Regenerates on its own.', sizeBytes: null, fileCount: null
+      },
+      {
+        id: 'brave_cookies', category: 'Brave', name: 'Cookies', risky: true,
+        description: 'Signs you out of every site that remembered you.',
+        sizeBytes: null, fileCount: null
+      }
+    ]
+  }];
+
+  const tick = async (user, label) => {
+    await screen.findByText('Cookies');
+    await user.click(screen.getByRole('checkbox', { name: label }));
+  };
+
+  it('asks before ticking one, naming the browser and the consequence', async () => {
+    // The row already carries this sentence, but as eleven-point muted
+    // text under a name, beside a badge that says only "Loses data".
+    fetchDeepCleanRules.mockResolvedValue(riskyRules);
+    const user = userEvent.setup();
+    renderScreen(<DeepClean />);
+    await tick(user, 'Cookies');
+
+    // Scoped to the dialog, because the row underneath carries the same
+    // sentence -- which is the point. The dialog repeats what the row
+    // already says quietly, at the moment the choice is being made.
+    const dialog = within(screen.getByRole('dialog'));
+    expect(dialog.getByText('Enable Brave — Cookies')).toBeTruthy();
+    expect(dialog.getByText('Signs you out of every site that remembered you.')).toBeTruthy();
+    expect(dialog.getByLabelText('Remember my choice for Brave — Cookies')).toBeTruthy();
+  });
+
+  it('does not tick the box while the question is still open', async () => {
+    // The dialog is the question. A box that ticked itself first and
+    // asked afterwards would have already given the answer.
+    fetchDeepCleanRules.mockResolvedValue(riskyRules);
+    const user = userEvent.setup();
+    renderScreen(<DeepClean />);
+    await tick(user, 'Cookies');
+
+    expect(screen.getByRole('checkbox', { name: 'Cookies' }).getAttribute('aria-checked')).toBe('false');
+    expect(cleanButton().disabled).toBe(true);
+  });
+
+  it('leaves it unticked on Cancel', async () => {
+    fetchDeepCleanRules.mockResolvedValue(riskyRules);
+    const user = userEvent.setup();
+    renderScreen(<DeepClean />);
+    await tick(user, 'Cookies');
+    await user.click(screen.getByRole('button', { name: 'Cancel' }));
+
+    expect(screen.queryByRole('dialog')).toBeNull();
+    expect(screen.getByRole('checkbox', { name: 'Cookies' }).getAttribute('aria-checked')).toBe('false');
+  });
+
+  it('ticks it on Enable anyway', async () => {
+    fetchDeepCleanRules.mockResolvedValue(riskyRules);
+    const user = userEvent.setup();
+    renderScreen(<DeepClean />);
+    await tick(user, 'Cookies');
+    await user.click(screen.getByRole('button', { name: 'Enable anyway' }));
+
+    expect(screen.queryByRole('dialog')).toBeNull();
+    await waitFor(() =>
+      expect(screen.getByRole('checkbox', { name: 'Cookies' }).getAttribute('aria-checked')).toBe('true'));
+  });
+
+  it('never asks when UNticking, which cannot lose anything', async () => {
+    // A dialog in front of the safe direction is how people learn to
+    // click through the one in front of the unsafe direction.
+    fetchDeepCleanRules.mockResolvedValue(riskyRules);
+    const user = userEvent.setup();
+    renderScreen(<DeepClean />);
+    await tick(user, 'Cookies');
+    await user.click(screen.getByRole('button', { name: 'Enable anyway' }));
+    await waitFor(() =>
+      expect(screen.getByRole('checkbox', { name: 'Cookies' }).getAttribute('aria-checked')).toBe('true'));
+
+    await user.click(screen.getByRole('checkbox', { name: 'Cookies' }));
+    expect(screen.queryByRole('dialog')).toBeNull();
+    expect(screen.getByRole('checkbox', { name: 'Cookies' }).getAttribute('aria-checked')).toBe('false');
+  });
+
+  it('saves the acknowledgement only when the box was ticked', async () => {
+    // A settings write per checkbox click that changed nothing would be a
+    // disk write per checkbox click.
+    fetchDeepCleanRules.mockResolvedValue(riskyRules);
+    const user = userEvent.setup();
+    renderScreen(<DeepClean />);
+    await tick(user, 'Cookies');
+    await user.click(screen.getByRole('button', { name: 'Enable anyway' }));
+    expect(updateSettings).not.toHaveBeenCalled();
+  });
+
+  it('remembers one rule by id when asked, not the whole category', async () => {
+    // Agreeing to lose cookies is not agreeing to lose browsing history.
+    fetchDeepCleanRules.mockResolvedValue(riskyRules);
+    const user = userEvent.setup();
+    renderScreen(<DeepClean />);
+    await tick(user, 'Cookies');
+    await user.click(screen.getByLabelText('Remember my choice for Brave — Cookies'));
+    await user.click(screen.getByRole('button', { name: 'Enable anyway' }));
+
+    await waitFor(() => expect(updateSettings).toHaveBeenCalledTimes(1));
+    expect(updateSettings.mock.calls[0][0]).toEqual({ acknowledgedCleanWarnings: ['brave_cookies'] });
+  });
+
+  it('stops asking about a rule already acknowledged', async () => {
+    fetchSettings.mockResolvedValue({
+      excludeFolders: [], excludeExtensions: [], hideUnavailableRules: false,
+      skipRecentHours: 24, acknowledgedCleanWarnings: ['brave_cookies']
+    });
+    fetchDeepCleanRules.mockResolvedValue(riskyRules);
+    const user = userEvent.setup();
+    renderScreen(<DeepClean />);
+    await tick(user, 'Cookies');
+
+    expect(screen.queryByRole('dialog')).toBeNull();
+    expect(screen.getByRole('checkbox', { name: 'Cookies' }).getAttribute('aria-checked')).toBe('true');
+  });
+
+  it('does not ask about an ordinary rule', async () => {
+    fetchDeepCleanRules.mockResolvedValue(riskyRules);
+    const user = userEvent.setup();
+    renderScreen(<DeepClean />);
+    await tick(user, 'Cache');
+
+    expect(screen.queryByRole('dialog')).toBeNull();
+    expect(screen.getByRole('checkbox', { name: 'Cache' }).getAttribute('aria-checked')).toBe('true');
   });
 });

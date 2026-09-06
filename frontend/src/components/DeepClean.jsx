@@ -7,7 +7,9 @@ import { lockedFileSummary } from '../lib/lockedFiles.js';
 import { useToasts } from '../hooks/useToasts.jsx';
 import { defaultSelection } from '../lib/defaultSelection.js';
 import { selectionTotal } from '../lib/selectionTotal.js';
+import { needsWarning, rememberedWith } from '../lib/cleanWarning.js';
 import DeepCleanTree from './DeepCleanTree.jsx';
+import CleanWarningDialog from './CleanWarningDialog.jsx';
 
 const LOG_TONE = {
   size: 'text-[color:var(--accent-primary)]',
@@ -92,6 +94,8 @@ export default function DeepClean() {
   const [cleaning, setCleaning] = useState(false);
   const [cleanResult, setCleanResult] = useState(null);
   const [cleanError, setCleanError] = useState(null);
+  // The rule a warning dialog is currently open for, or null.
+  const [warnAbout, setWarnAbout] = useState(null);
   const toasts = useToasts();
 
   // The tree, the scan and its cancellation all live in the hook now --
@@ -105,7 +109,7 @@ export default function DeepClean() {
 
   // BleachBit's "hide irrelevant cleaners". Most of a 74-rule list is for
   // software this machine does not have.
-  const { settings } = useSettings();
+  const { settings, save: saveSettings } = useSettings();
   const hideUnavailable = settings?.hideUnavailableRules === true;
 
   const shownCategories = useMemo(
@@ -152,12 +156,49 @@ export default function DeepClean() {
     });
   }, [hasScanned, scanning]);
 
+  /** One rule by id, from the unfiltered set.
+   *
+   * `categories` rather than the visible subset: a rule hidden by the
+   * "hide cleaners that don't apply" filter cannot be clicked, but
+   * looking it up in the filtered list would silently return undefined
+   * and skip its warning if it ever could be. */
+  const findRule = (ruleId) =>
+    (categories ?? []).flatMap((group) => group.items ?? []).find((item) => item.id === ruleId);
+
+  /** Ticks a rule, asking first if ticking it loses something.
+   *
+   * The question is only ever in front of turning a risky rule ON.
+   * Unticking cannot lose anything, and a dialog in front of the safe
+   * direction is how people learn to click through the one in front of
+   * the unsafe direction. See lib/cleanWarning.js. */
   const handleToggle = (ruleId) => {
+    const item = findRule(ruleId);
+    const checking = !selected.has(ruleId);
+    if (needsWarning(item, { checking, acknowledged: settings?.acknowledgedCleanWarnings })) {
+      setWarnAbout(item);
+      return;
+    }
+    applyToggle(ruleId);
+  };
+
+  const applyToggle = (ruleId) => {
     setSelected((prev) => {
       const next = new Set(prev);
       if (next.has(ruleId)) next.delete(ruleId); else next.add(ruleId);
       return next;
     });
+  };
+
+  /** The user said yes. Tick it, and stop asking about this one rule if
+   * they said so -- one rule, not the category: agreeing to lose cookies
+   * is not agreeing to lose browsing history. */
+  const confirmWarning = (remember) => {
+    const rule = warnAbout;
+    setWarnAbout(null);
+    if (!rule) return;
+    applyToggle(rule.id);
+    const updated = rememberedWith(settings?.acknowledgedCleanWarnings, rule.id, remember);
+    if (updated) saveSettings.mutate({ acknowledgedCleanWarnings: updated });
   };
 
   const handleToggleCategory = (category, checked) => {
@@ -170,8 +211,19 @@ export default function DeepClean() {
         // Selecting them is harmless but meaningless -- they'd clean
         // nothing -- and with a rule set this size it would otherwise bury
         // the handful that actually matter under a pile of no-ops.
-        if (checked) { if (item.present !== false) next.add(item.id); }
-        else next.delete(item.id);
+        //
+        // It also skips the risky ones, unless the user has already said
+        // to stop asking about that particular rule. A bulk click is the
+        // opposite of the deliberate choice the warning exists to
+        // capture, and popping five dialogs in a row for one click on
+        // "Select all" would train anyone to dismiss them unread. The
+        // rules it skips are the ones already wearing a "Loses data"
+        // badge, so what is left unticked is visible on the row.
+        if (checked) {
+          if (item.present === false) continue;
+          if (needsWarning(item, { checking: true, acknowledged: settings?.acknowledgedCleanWarnings })) continue;
+          next.add(item.id);
+        } else next.delete(item.id);
       }
       return next;
     });
@@ -328,7 +380,10 @@ export default function DeepClean() {
               <span className="text-[color:var(--text-muted)]">·</span>
               <button
                 className="text-[color:var(--text-secondary)] hover:text-[color:var(--accent-primary)] transition-colors"
-                onClick={() => setSelected(selectableIds(categories))}
+                // Same rule as a category's own Select All: never sweeps
+                // in a rule that loses something the user has not already
+                // said to stop asking about.
+                onClick={() => setSelected(selectableIds(categories, settings?.acknowledgedCleanWarnings))}
               >
                 Select everything
               </button>
@@ -399,6 +454,14 @@ export default function DeepClean() {
           )}
         </div>
       </div>
+
+      {warnAbout && (
+        <CleanWarningDialog
+          item={warnAbout}
+          onCancel={() => setWarnAbout(null)}
+          onConfirm={confirmWarning}
+        />
+      )}
     </div>
   );
 }
