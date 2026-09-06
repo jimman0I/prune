@@ -1,6 +1,20 @@
 module.exports = {
   appId: 'com.jimman0i.prune',
   productName: 'Prune',
+  // Found by installing 2.1.0 from its own release and looking at the
+  // result: without this, electron-builder writes no Publisher into the
+  // uninstall registry entry, and Prune listed ITSELF as "Unknown
+  // Publisher" in its own Applications tab -- alongside Windows' own
+  // Apps & features and any other uninstaller. A poor look for a tool
+  // whose job is showing you that column. electron-builder derives it
+  // from package.json's `author`, which was absent; the build had been
+  // saying so on every run ("author is missed in the package.json") and
+  // nothing was reading the warning.
+  //
+  // InstallLocation is still empty, which electron-builder's NSIS target
+  // does not write and there is no flag for. It only costs Prune's own
+  // "Folder" button for its own row, so it is recorded rather than
+  // worked around with a custom NSIS include.
   directories: { output: 'dist' },
   files: ['main.cjs'],
   extraResources: [

@@ -4,6 +4,7 @@
   "version": "2.1.0",
   "private": true,
   "description": "Prune desktop app -- a local, offline uninstaller and cleanup utility for Windows.",
+  "author": "jimman0I",
   "main": "main.cjs",
   "scripts": {
     "start": "electron .",
