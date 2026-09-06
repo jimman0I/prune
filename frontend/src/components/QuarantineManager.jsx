@@ -30,7 +30,7 @@ export default function QuarantineManager() {
   const [confirmDeleteDir, setConfirmDeleteDir] = useState(null);
   const [confirmEmpty, setConfirmEmpty] = useState(false);
 
-  const { batches, loading, error, restore, remove, empty } = useQuarantine();
+  const { batches, totals, loading, error, restore, remove, empty } = useQuarantine();
 
   // Which row is mid-action. Read off the mutations rather than tracked
   // separately, so it cannot disagree with what is actually running.
@@ -59,7 +59,11 @@ export default function QuarantineManager() {
   const handleEmptyQuarantine = () =>
     runAction(empty, undefined, () => setConfirmEmpty(false));
 
-  const totalBytes = batches.reduce((sum, b) => sum + (b.totalSizeBytes || 0), 0);
+  // From the backend rather than added up here. It is the same figure the
+  // size cap is enforced against, and a second sum on this side could
+  // disagree with it about what an unmeasured batch is worth.
+  const { totalBytes, unknownSizeCount, exact, maxBytes } = totals;
+  const overCap = maxBytes !== null && totalBytes > maxBytes;
 
   return (
     <div className="px-12 py-10 max-w-[1400px]">
@@ -67,10 +71,33 @@ export default function QuarantineManager() {
         <div>
           <h1 className="display-heading text-[30px] leading-none">Quarantine</h1>
           {!loading && !error && (
+            <>
             <p className="text-[13px] text-[color:var(--text-secondary)] mt-2.5">
               <span className="text-[color:var(--text-primary)] font-medium">{batches.length}</span> batch{batches.length === 1 ? '' : 'es'} ·{' '}
+              {/* "at least" when a batch carries no recorded size. Rounding
+                  an unknown down to zero and printing the result as exact
+                  would understate the total while looking precise. */}
+              {!exact && 'at least '}
               <span className="text-[color:var(--text-primary)] font-medium">{formatBytes(totalBytes)}</span> held
+              {maxBytes !== null && <> of {formatBytes(maxBytes)}</>}
+              {unknownSizeCount > 0 && (
+                <span className="text-[color:var(--text-muted)]">
+                  {' '}· {unknownSizeCount} unmeasured
+                </span>
+              )}
             </p>
+            {/* Only when the cap genuinely does not hold, which happens when
+                one batch is larger than the whole budget -- the newest is
+                never dropped to make room, so a big thing just quarantined
+                stays recoverable. Saying so beats a limit that quietly
+                does not apply. */}
+            {overCap && (
+              <p className="text-[12.5px] text-[color:var(--warning,var(--text-secondary))] mt-1.5">
+                Over the {formatBytes(maxBytes)} limit. The most recent backup is never removed to
+                make room, so this stays until you restore or delete it.
+              </p>
+            )}
+            </>
           )}
         </div>
 

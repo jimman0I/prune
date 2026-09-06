@@ -86,7 +86,17 @@ export function useQuarantine() {
   const batches = useQuery({ queryKey: keys.quarantine, queryFn: fetchQuarantineBatches });
 
   return {
-    batches: batches.data ?? [],
+    batches: batches.data?.batches ?? [],
+    /* Totalled by the backend, not here: the same code that enforces the
+       size cap, so the number on screen and the number the purge acts on
+       cannot drift apart. `exact` is false when a batch carries no
+       recorded size, which is what lets the screen say "at least". */
+    totals: {
+      totalBytes: batches.data?.totalBytes ?? 0,
+      unknownSizeCount: batches.data?.unknownSizeCount ?? 0,
+      exact: batches.data?.exact !== false,
+      maxBytes: batches.data?.maxBytes ?? null
+    },
     loading: batches.isPending,
     error: batches.error ? batches.error.message : null,
     refresh: invalidate,

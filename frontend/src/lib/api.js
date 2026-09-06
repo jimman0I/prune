@@ -300,11 +300,25 @@ export async function removeQuarantined({ programName, files, registryKeys }) {
   return data;
 }
 
+/** The quarantine, and what it adds up to.
+ *
+ * Returns the whole payload rather than just the batches. The totals and
+ * the cap come from the backend because they are computed by the same
+ * code that enforces the cap -- a second implementation here could
+ * disagree with it about what an unmeasured batch is worth, and then the
+ * figure above the list would not be the figure the purge acts on. */
 export async function fetchQuarantineBatches() {
   const res = await fetch(`${API_URL}/quarantine`);
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
-  return data.batches;
+  return {
+    batches: data.batches ?? [],
+    totalBytes: data.totalBytes ?? 0,
+    batchCount: data.batchCount ?? (data.batches?.length ?? 0),
+    unknownSizeCount: data.unknownSizeCount ?? 0,
+    exact: data.exact !== false,
+    maxBytes: data.maxBytes ?? null
+  };
 }
 
 export async function restoreQuarantineBatch(batchDirName) {

@@ -9,7 +9,12 @@ export default function QuarantinePanel() {
   useEffect(() => {
     let cancelled = false;
     fetchQuarantineBatches()
-      .then((result) => { if (!cancelled) setBatches(result); })
+      // fetchQuarantineBatches returns the whole payload -- batches plus
+      // the totals and the size cap. This component is superseded by
+      // QuarantineManager.jsx and is currently imported by nothing; the
+      // line is kept correct rather than left as a landmine for whoever
+      // reaches for it next.
+      .then((result) => { if (!cancelled) setBatches(result.batches); })
       .catch((err) => { if (!cancelled) setError(err.message); })
       .finally(() => { if (!cancelled) setLoading(false); });
     return () => { cancelled = true; };

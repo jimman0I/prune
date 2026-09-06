@@ -10,19 +10,19 @@ describe('quarantine API functions', () => {
   });
 
   describe('fetchQuarantineBatches', () => {
-    it('returns batches with batchDir field from API response', async () => {
-      const mockBatches = [
-        {
-          programName: 'TestApp',
-          timestamp: '2024-01-15T10:30:00.000Z',
-          batchDir: '/full/path/to/quarantine/1705312200000-TestApp',
-          createdAt: 1705312200000,
-          files: [{ originalPath: 'C:\\Program Files\\TestApp\\test.exe', quarantinedPath: '/quarantine/path/file-0-test.exe' }],
-          registryKeys: ['HKCU\\Software\\TestApp'],
-          regFiles: ['/quarantine/path/registry-0.reg']
-        }
-      ];
+    const mockBatches = [
+      {
+        programName: 'TestApp',
+        timestamp: '2024-01-15T10:30:00.000Z',
+        batchDir: '/full/path/to/quarantine/1705312200000-TestApp',
+        createdAt: 1705312200000,
+        files: [{ originalPath: 'C:\\Program Files\\TestApp\\test.exe', quarantinedPath: '/quarantine/path/file-0-test.exe' }],
+        registryKeys: ['HKCU\\Software\\TestApp'],
+        regFiles: ['/quarantine/path/registry-0.reg']
+      }
+    ];
 
+    it('returns batches with batchDir field from API response', async () => {
       fetch.mockResolvedValueOnce({
         ok: true,
         json: async () => ({ batches: mockBatches })
@@ -30,10 +30,36 @@ describe('quarantine API functions', () => {
 
       const result = await fetchQuarantineBatches();
 
-      expect(result).toEqual(mockBatches);
+      expect(result.batches).toEqual(mockBatches);
       // Critical: verify the field name is batchDir, not dirName
-      expect(result[0]).toHaveProperty('batchDir');
-      expect(result[0]).not.toHaveProperty('dirName');
+      expect(result.batches[0]).toHaveProperty('batchDir');
+      expect(result.batches[0]).not.toHaveProperty('dirName');
+    });
+
+    it('falls back sensibly when a response carries no totals', async () => {
+      // A backend older than the size cap, or a listing that failed to
+      // total. "No limit" and "nothing held" are the safe readings: they
+      // make the screen say less, not something untrue.
+      fetch.mockResolvedValueOnce({ ok: true, json: async () => ({ batches: mockBatches }) });
+      const result = await fetchQuarantineBatches();
+      expect(result.maxBytes).toBeNull();
+      expect(result.totalBytes).toBe(0);
+      expect(result.batchCount).toBe(1);
+      expect(result.exact).toBe(true);
+    });
+
+    it('carries the totals and the cap through', async () => {
+      fetch.mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({
+          batches: mockBatches, totalBytes: 4096, batchCount: 1,
+          unknownSizeCount: 2, exact: false, maxBytes: 1024
+        })
+      });
+      const result = await fetchQuarantineBatches();
+      expect(result).toMatchObject({
+        totalBytes: 4096, unknownSizeCount: 2, exact: false, maxBytes: 1024
+      });
     });
 
     it('throws on API error', async () => {

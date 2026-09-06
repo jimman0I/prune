@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { runSandboxTest } from '../lib/api.js';
 import { classifyExclusion } from '../lib/exclusionInput.js';
+import { positiveOrOff } from '../lib/limitInput.js';
 import AutomationSettings from './AutomationSettings.jsx';
 import { useSettings } from '../hooks/useSystemQueries.js';
 
@@ -300,6 +301,67 @@ ode.js" is a folder or a file type.
                     onChange={() => save({ hideUnavailableRules: !settings.hideUnavailableRules })}
                     label="Hide cleaners that don't apply"
                   />
+                </div>
+              </div>
+
+              {/* The two limits on the quarantine. Both empty by default,
+                  and both read "blank means keep everything" -- the same
+                  rule the backend applies to every ambiguous value, for
+                  the same reason: a limit that fails to run wastes disk,
+                  and one that runs when it should not destroys the only
+                  copy of something removed by accident. */}
+              <div className="glass-panel p-6">
+                <div className="flex items-center justify-between gap-4">
+                  <div className="min-w-0">
+                    <div className="text-[14px] font-medium text-[color:var(--text-primary)]">How long to keep undo</div>
+                    <p className="text-[12.5px] text-[color:var(--text-secondary)] mt-1">
+                      Everything Prune removes goes to Quarantine first, and stays until you empty
+                      it. Set a number of days to drop backups older than that. Leave it blank to
+                      keep them forever.
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-2 shrink-0">
+                    <input
+                      type="number"
+                      min="0"
+                      max="3650"
+                      value={settings.quarantineRetentionDays ?? ''}
+                      placeholder="Never"
+                      onChange={(e) => save({ quarantineRetentionDays: positiveOrOff(e.target.value) })}
+                      aria-label="Days to keep quarantine backups"
+                      className="w-[88px] font-mono text-[12.5px] px-2.5 py-2 rounded-lg bg-white/[0.04] border border-[color:var(--border-subtle)] text-[color:var(--text-primary)] focus:outline-none focus:border-[color:var(--accent-primary)]/50"
+                      style={{ fontVariantNumeric: 'tabular-nums' }}
+                    />
+                    <span className="text-[12.5px] text-[color:var(--text-muted)]">days</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="glass-panel p-6">
+                <div className="flex items-center justify-between gap-4">
+                  <div className="min-w-0">
+                    <div className="text-[14px] font-medium text-[color:var(--text-primary)]">How much undo to keep</div>
+                    <p className="text-[12.5px] text-[color:var(--text-secondary)] mt-1">
+                      A cap on the whole Quarantine folder. Over it, the oldest backups go first —
+                      the most recent one is never dropped, so something big you just removed stays
+                      recoverable even if it is larger than the cap on its own. Leave it blank for
+                      no limit.
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-2 shrink-0">
+                    <input
+                      type="number"
+                      min="0"
+                      step="0.5"
+                      value={settings.quarantineMaxSizeGb ?? ''}
+                      placeholder="No limit"
+                      onChange={(e) => save({ quarantineMaxSizeGb: positiveOrOff(e.target.value) })}
+                      aria-label="Maximum quarantine size in gigabytes"
+                      className="w-[88px] font-mono text-[12.5px] px-2.5 py-2 rounded-lg bg-white/[0.04] border border-[color:var(--border-subtle)] text-[color:var(--text-primary)] focus:outline-none focus:border-[color:var(--accent-primary)]/50"
+                      style={{ fontVariantNumeric: 'tabular-nums' }}
+                    />
+                    <span className="text-[12.5px] text-[color:var(--text-muted)]">GB</span>
+                  </div>
                 </div>
               </div>
 
