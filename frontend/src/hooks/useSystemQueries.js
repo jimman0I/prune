@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   fetchStartupItems, fetchStartupIcons, setStartupItemEnabled,
@@ -51,10 +51,25 @@ export function useStartupItems() {
 export function useStartupToggle({ onProblem } = {}) {
   const queryClient = useQueryClient();
 
-  return useMutation({
+  /* Which rows are mid-write, as a set of ids.
+   *
+   * Derived from `mutation.variables` before this, which holds only the
+   * LATEST call -- so toggling a second row cleared the first row's busy
+   * state while its write was still running. That is not just a wrong
+   * spinner: the switch ignores clicks while busy, so the row became
+   * clickable again mid-write and could be toggled a second time. */
+  const [pendingIds, setPendingIds] = useState(() => new Set());
+  const markPending = (id, busy) => setPendingIds((current) => {
+    const next = new Set(current);
+    if (busy) next.add(id); else next.delete(id);
+    return next;
+  });
+
+  const mutation = useMutation({
     mutationFn: ({ id, enabled }) => setStartupItemEnabled(id, enabled),
 
     onMutate: async ({ id, enabled }) => {
+      markPending(id, true);
       await queryClient.cancelQueries({ queryKey: keys.startupItems });
       const previous = queryClient.getQueryData(keys.startupItems);
       queryClient.setQueryData(keys.startupItems, (current) => applyEnabled(current, id, enabled));
@@ -93,8 +108,25 @@ export function useStartupToggle({ onProblem } = {}) {
         }
       }
       if (outcome.message) onProblem?.(variables.id, outcome.message);
+
+      /* Re-read the real startup locations once the write has settled.
+       *
+       * Everything above this is an optimistic guess corrected by the
+       * backend's own read-back, which is enough to make the row right --
+       * but only for the row that was clicked. Toggling an entry can
+       * change others: disabling a program's launcher can take its
+       * companion entries with it, and nothing here would have noticed.
+       *
+       * Cheap enough to be worth it, and deliberately after the rollback
+       * rather than instead of it: the refetch takes about a second, and
+       * the row has to be correct immediately rather than a second from
+       * now. */
+      queryClient.invalidateQueries({ queryKey: keys.startupItems });
+      markPending(variables.id, false);
     }
   });
+
+  return { mutation, pendingIds };
 }
 
 /* ----------------------------------------------------------- quarantine */

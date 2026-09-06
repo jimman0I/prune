@@ -231,7 +231,7 @@ function StartupItems() {
 
   const { items, icons, error } = useStartupItems();
 
-  const toggle = useStartupToggle({
+  const { mutation: toggle, pendingIds } = useStartupToggle({
     onProblem: (id, message) => setRowErrors((e) => ({ ...e, [id]: message }))
   });
 
@@ -253,12 +253,17 @@ function StartupItems() {
     toggle.mutate({ id: item.id, enabled: !item.enabled });
   }, [toggle]);
 
-  // Which rows are mid-flight. Read off the mutation rather than tracked
-  // separately, so it cannot disagree with what is actually in progress.
+  // Which rows are mid-flight, from the hook's own set.
+  //
+  // This used to read mutation.variables, which holds only the LATEST
+  // call -- so toggling a second row cleared the first row's busy state
+  // while its write was still running, and the switch (which ignores
+  // clicks while busy) became clickable again mid-write.
   const pending = useMemo(() => {
-    const id = toggle.isPending ? toggle.variables?.id : null;
-    return id ? { [id]: true } : {};
-  }, [toggle.isPending, toggle.variables]);
+    const map = {};
+    for (const id of pendingIds) map[id] = true;
+    return map;
+  }, [pendingIds]);
 
   const groups = useMemo(() => groupStartupItems(items), [items]);
   const counts = useMemo(() => startupCounts(items), [items]);

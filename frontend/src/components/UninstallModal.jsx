@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useSingleFlight } from '../hooks/useSingleFlight.js';
 import { scanForLeftovers, scanForcedUninstall, streamUninstall, removeQuarantined, appendHistoryEntry } from '../lib/api.js';
 import { deriveSearchTerm } from '../lib/searchTerm.js';
 import LeftoverReview from './LeftoverReview.jsx';
@@ -77,7 +78,11 @@ export default function UninstallModal({ program, running = false, onClose }) {
     setSelected(new Set(keys));
   };
 
-  const startUninstall = async () => {
+  /* Single-flight: this runs the program's real uninstaller, and its only
+   * protection was the confirm view unmounting on setStep. The most
+   * destructive click in the app deserves a guard that does not depend on
+   * a re-render winning a race with a second click. */
+  const startUninstall = useSingleFlight(async () => {
     setError(null);
     setStep('uninstalling');
     try {
@@ -100,7 +105,7 @@ export default function UninstallModal({ program, running = false, onClose }) {
       setError(err.message);
       setStep('confirm');
     }
-  };
+  });
 
   const startForcedScan = async () => {
     setError(null);
@@ -135,7 +140,12 @@ export default function UninstallModal({ program, running = false, onClose }) {
    * floor. It now performs the removal it has been offering all along,
    * through the same quarantine call (moved and exported, never deleted)
    * that a restore can undo. */
-  const handleConfirm = async () => {
+  /* Single-flight for the same reason the batch run is: the only thing
+   * stopping a second click was this view unmounting when the phase
+   * changed, which is a rendering side effect standing in for a guard.
+   * This one creates a quarantine batch, so a second pass would make a
+   * second batch and then fail finding the files already moved. */
+  const handleConfirm = useSingleFlight(async () => {
     const { files, registryKeys } = selectionToRemoval(scanResult, selected);
     if (files.length === 0 && registryKeys.length === 0) { onClose(); return; }
     setError(null);
@@ -148,7 +158,7 @@ export default function UninstallModal({ program, running = false, onClose }) {
       setError(err.message);
       setStep('review');
     }
-  };
+  });
 
   const command = broken
     ? 'No working uninstaller — searching by name instead'

@@ -1,10 +1,13 @@
 import { useCallback, useEffect, useMemo, useRef, useState, memo } from 'react';
+import { useSingleFlight } from '../hooks/useSingleFlight.js';
+import { tooltipPosition } from '../lib/tooltipPosition.js';
+import { useDiskSpace } from '../hooks/useSystemQueries.js';
 import { createPortal } from 'react-dom';
 import { Treemap, ResponsiveContainer } from 'recharts';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { keys } from '../lib/queryClient.js';
 import { breadcrumbTrail } from '../lib/breadcrumbTrail.js';
-import { fetchDiskScan, scanDriveFast, fetchDiskSpace, fetchFileTypeIcons, quarantineDiskPath, revealInExplorer } from '../lib/api.js';
+import { fetchDiskScan, scanDriveFast, fetchFileTypeIcons, quarantineDiskPath, revealInExplorer } from '../lib/api.js';
 import { useToasts } from '../hooks/useToasts.jsx';
 import ContextMenu from './ContextMenu.jsx';
 import ModalOverlay from './ModalOverlay.jsx';
@@ -146,6 +149,36 @@ function TreemapCell({ x, y, width, height, depth, name, size, type, scanned, ag
       // over three minutes. The tooltip still follows the cursor; it's
       // moved by a single listener on the container that writes to the
       // element's style directly, without a render.
+      /* Reachable and operable without a mouse.
+       *
+       * The map was pointer-only: no cell was focusable, so a keyboard
+       * user could see the picture and do nothing with it -- not drill
+       * into a folder, not reach the removal menu. Only the cells that
+       * actually DO something are put in the tab order; a cell that
+       * cannot be opened is a coloured rectangle, and stopping on it
+       * would be a tab stop that leads nowhere.
+       *
+       * Enter and Space activate, matching the click. Focus also raises
+       * the tooltip, so what the pointer reveals on hover is not
+       * information only a mouse can get at. */
+      tabIndex={canDrillDown ? 0 : undefined}
+      role={canDrillDown ? 'button' : undefined}
+      aria-label={canDrillDown ? `Open ${name}` : undefined}
+      onFocus={(e) => {
+        const box = e.currentTarget.getBoundingClientRect();
+        onHover({ name, size, fullPath, type, scanned, aggregated }, {
+          clientX: box.left + box.width / 2,
+          clientY: box.top + box.height / 2
+        });
+      }}
+      onBlur={onLeave}
+      onKeyDown={(e) => {
+        if (!canDrillDown) return;
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          onDrillDown(fullPath);
+        }
+      }}
       onMouseEnter={(e) => onHover({ name, size, fullPath, type, scanned, aggregated }, e)}
       onMouseLeave={onLeave}
       onClick={() => canDrillDown && onDrillDown(fullPath)}
@@ -517,19 +550,24 @@ function DiskMap() {
     }
   };
 
+  /* Through the query layer, sharing the Dashboard's cached reading
+   * rather than issuing a second request for the same numbers.
+   *
+   * This was a bare useEffect + fetch while useDiskSpace already existed
+   * -- the same defect that was fixed on the Dashboard one round earlier
+   * and missed here, which is what an incomplete fix looks like.
+   *
+   * Still a ref rather than state: the used figure only feeds the
+   * unscanned-remainder calculation, and holding it in state would
+   * re-render the whole treemap when it lands. */
+  const { diskSpace } = useDiskSpace();
   useEffect(() => {
-    let cancelled = false;
-    fetchDiskSpace()
-      .then((d) => {
-        // The API reports free and total; used is the subtraction. Read
-        // straight off the response rather than assumed -- there is no
-        // `usedBytes` field, and reading one gave undefined silently.
-        if (cancelled || typeof d?.totalBytes !== 'number' || typeof d?.freeBytes !== 'number') return;
-        usedBytesRef.current = d.totalBytes - d.freeBytes;
-      })
-      .catch(() => { /* the remainder block is an enhancement, never a blocker */ });
-    return () => { cancelled = true; };
-  }, []);
+    // The API reports free and total; used is the subtraction. Read off
+    // the response rather than assumed -- there is no `usedBytes` field,
+    // and reading one gave undefined silently.
+    if (typeof diskSpace?.totalBytes !== 'number' || typeof diskSpace?.freeBytes !== 'number') return;
+    usedBytesRef.current = diskSpace.totalBytes - diskSpace.freeBytes;
+  }, [diskSpace]);
 
   // Already have the whole drive in memory? Then this folder is a lookup,
   // not a scan. Falling through to the recursive scanner here would undo
@@ -664,7 +702,20 @@ function DiskMap() {
    * treemap and made the view unusable. */
   const handleContainerMouseMove = useCallback((e) => {
     const el = tooltipRef.current;
-    if (el) el.style.transform = `translate(${e.clientX + 14}px, ${e.clientY + 14}px)`;
+    if (!el) return;
+    // Clamped HERE as well as in the JSX, and this is the one that
+    // matters: this handler overwrites the rendered transform on every
+    // mousemove, so a clamp applied only at render time would be undone
+    // by the first pixel of movement. The element is measured each time
+    // because its width follows the path it is showing.
+    const box = el.getBoundingClientRect();
+    const { left, top } = tooltipPosition({
+      x: e.clientX,
+      y: e.clientY,
+      size: { width: box.width, height: box.height },
+      viewport: { width: window.innerWidth, height: window.innerHeight }
+    });
+    el.style.transform = `translate(${left}px, ${top}px)`;
   }, []);
   const handleLeave = useCallback(() => setHovered(null), []);
   const coverage = scanCoverage(tree);
@@ -688,7 +739,14 @@ function DiskMap() {
    * Windows, the program folders, a whole profile and a drive root
    * regardless of what the client asks for. The guard is the real
    * protection -- the dialog is only the part the user sees. */
-  const confirmRemoval = useCallback(async () => {
+  /* Wrapped in useSingleFlight, because clearing pendingRemoval is not a
+   * guard. setPendingRemoval schedules a re-render; it does not change the
+   * value THIS closure captured, so two clicks before that re-render both
+   * saw the node and both called the backend. The second failed with
+   * "that path is no longer there" -- the first had already moved it --
+   * and put an error toast on screen straight after a removal that
+   * worked. */
+  const confirmRemoval = useSingleFlight(useCallback(async () => {
     const node = pendingRemoval;
     setPendingRemoval(null);
     if (!node) return;
@@ -711,7 +769,7 @@ function DiskMap() {
     // a generic error message in its place reads as the app being broken.
     if (result.protected) toasts.warn(result.error, { detail: node.fullPath, ttl: 0 });
     else toasts.error(result.error || 'That could not be moved.', { detail: node.fullPath });
-  }, [pendingRemoval, toasts, queryClient, currentPath]);
+  }, [pendingRemoval, toasts, queryClient, currentPath]));
 
   const handleDrillDown = useCallback((fullPath) => {
     setHovered(null);
@@ -928,7 +986,21 @@ function DiskMap() {
             position: 'fixed',
             top: 0,
             left: 0,
-            transform: `translate(${hovered.clientX + 14}px, ${hovered.clientY + 14}px)`,
+            /* Flipped away from whichever edge it would cross, rather
+               than sent straight down-right off the screen. Measured from
+               the element itself so a long path -- the widest thing it
+               ever shows -- is accounted for; before the first measure
+               the size reads 0 and it simply lands beside the cursor. */
+            transform: (() => {
+              const box = tooltipRef.current?.getBoundingClientRect();
+              const { left, top } = tooltipPosition({
+                x: hovered.clientX,
+                y: hovered.clientY,
+                size: { width: box?.width ?? 0, height: box?.height ?? 0 },
+                viewport: { width: window.innerWidth, height: window.innerHeight }
+              });
+              return `translate(${left}px, ${top}px)`;
+            })(),
             zIndex: 'var(--z-tooltip)',
             pointerEvents: 'none'
           }}

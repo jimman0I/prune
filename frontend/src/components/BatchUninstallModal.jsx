@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useSingleFlight } from '../hooks/useSingleFlight.js';
 import { streamUninstall, scanForLeftovers, removeQuarantined, appendHistoryEntry } from '../lib/api.js';
 import { deriveSearchTerm } from '../lib/searchTerm.js';
 import { mergeLeftovers } from '../lib/mergeLeftovers.js';
@@ -54,7 +55,13 @@ export default function BatchUninstallModal({ programs, onClose, onFinished }) {
   const summary = batchSummary(programs);
   const setStatus = (id, value) => setStatuses((prev) => ({ ...prev, [id]: value }));
 
-  const runBatch = async () => {
+  /* Single-flight, because the only thing stopping a second click was
+   * this button unmounting when setPhase('running') re-rendered. That is
+   * a rendering side effect standing in for a guard: it holds while the
+   * re-render beats the second click and says nothing about what happens
+   * when it does not. This is a loop that uninstalls N programs, so a
+   * second pass would run every one of them again. */
+  const runBatch = useSingleFlight(async () => {
     setPhase('running');
     const scans = [];
 
@@ -88,9 +95,14 @@ export default function BatchUninstallModal({ programs, onClose, onFinished }) {
     }
     setSelected(new Set(keys));
     setPhase('review');
-  };
+  });
 
-  const handleRemoveLeftovers = async () => {
+  /* Single-flight for the same reason the batch run is: the only thing
+   * stopping a second click was this view unmounting when the phase
+   * changed, which is a rendering side effect standing in for a guard.
+   * This one creates a quarantine batch, so a second pass would make a
+   * second batch and then fail finding the files already moved. */
+  const handleRemoveLeftovers = useSingleFlight(async () => {
     const { files, registryKeys } = selectionToRemoval(leftovers, selected);
     if (files.length === 0 && registryKeys.length === 0) {
       onFinished?.();
@@ -111,7 +123,7 @@ export default function BatchUninstallModal({ programs, onClose, onFinished }) {
       setError(err.message);
       setPhase('review');
     }
-  };
+  });
 
   const handleToggle = (key) => {
     setSelected((prev) => {

@@ -50,6 +50,21 @@ function ScanLog({ lines, scanning, scanned, total }) {
         )}
       </div>
 
+      {/* Announced, not just drawn. The scan takes about nineteen seconds
+          and its only progress signals were a "12 / 74" counter and a
+          2px bar -- both invisible to a screen reader, so the wait was
+          indistinguishable from the app having stopped.
+          
+          `polite` rather than `assertive`: this should be read at a
+          natural pause, not interrupt whatever is being spoken. Only the
+          start and the end are announced rather than every rule, because
+          seventy-four interruptions is not progress, it is noise. */}
+      <div className="sr-only" role="status" aria-live="polite">
+        {scanning
+          ? `Scanning ${total} locations.`
+          : scanned > 0 ? `Scan finished. ${scanned} of ${total} locations measured.` : ''}
+      </div>
+
       {total > 0 && (
         <div className="h-[2px] bg-white/[0.06] shrink-0">
           <div
