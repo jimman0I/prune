@@ -51,7 +51,6 @@ const DEFAULT_SETTINGS = {
   excludeExtensions: [],
   autoQuarantine: true,
   theme: 'dark',
-  accentColor: null,
   minimizeToTray: true,
   skipRecentHours: 24,
   createRestorePoint: true,

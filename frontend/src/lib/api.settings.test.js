@@ -7,7 +7,7 @@ describe('fetchSettings', () => {
   beforeEach(() => { vi.resetAllMocks(); });
 
   it('returns the settings object on success', async () => {
-    const settings = { excludeFolders: [], autoQuarantine: true, theme: 'dark', accentColor: null };
+    const settings = { excludeFolders: [], autoQuarantine: true, theme: 'dark' };
     fetch.mockResolvedValueOnce({ ok: true, json: async () => settings });
     const result = await fetchSettings();
     expect(result).toEqual(settings);
@@ -23,7 +23,7 @@ describe('updateSettings', () => {
   beforeEach(() => { vi.resetAllMocks(); });
 
   it('PUTs the partial update and returns the full settings object', async () => {
-    const updated = { excludeFolders: [], autoQuarantine: false, theme: 'dark', accentColor: null };
+    const updated = { excludeFolders: [], autoQuarantine: false, theme: 'dark' };
     fetch.mockResolvedValueOnce({ ok: true, json: async () => updated });
     const result = await updateSettings({ autoQuarantine: false });
     expect(fetch).toHaveBeenCalledWith(

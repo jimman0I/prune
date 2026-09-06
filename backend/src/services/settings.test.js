@@ -43,9 +43,9 @@ describe('getSettings', () => {
     // somewhere far away, as undefined.
     const settings = await getSettings();
     for (const key of [
-      'excludeFolders', 'excludeExtensions', 'autoQuarantine', 'theme', 'accentColor',
+      'excludeFolders', 'excludeExtensions', 'autoQuarantine', 'theme',
       'minimizeToTray', 'skipRecentHours', 'createRestorePoint', 'hideUnavailableRules',
-      'quarantineRetentionDays', 'automation'
+      'quarantineRetentionDays', 'quarantineMaxSizeGb', 'automation'
     ]) {
       expect(settings, key).toHaveProperty(key);
     }
