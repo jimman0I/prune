@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { errorResponse, jsonErrors } from './jsonErrors.js';
+import { errorResponse, jsonErrors, notFound } from './jsonErrors.js';
 
 /** app.errors.test.js drives this through a real server, which covers
  * what a client actually receives. Two things it cannot reach are here:
@@ -48,6 +48,43 @@ describe('errorResponse', () => {
   it('does not blame the caller for a fault of ours, or the reverse', () => {
     expect(errorResponse({ status: 400 }).body.error).toMatch(/could not be understood/);
     expect(errorResponse({ status: 500 }).body.error).toMatch(/inside Prune/);
+  });
+});
+
+describe('notFound', () => {
+  const fakeRes = () => {
+    const res = {
+      statusCode: null,
+      sent: null,
+      status(code) { res.statusCode = code; return res; },
+      json(body) { res.sent = body; return res; }
+    };
+    return res;
+  };
+
+  it('names the method and the path', () => {
+    const res = fakeRes();
+    notFound()({ method: 'GET', originalUrl: '/api/uninstall' }, res);
+    expect(res.statusCode).toBe(404);
+    expect(res.sent).toEqual({ error: 'Prune has no GET /api/uninstall endpoint.' });
+  });
+
+  it('truncates a path rather than repeating whatever arrived', () => {
+    const res = fakeRes();
+    notFound()({ method: 'GET', originalUrl: `/api/${'x'.repeat(5000)}` }, res);
+    expect(res.sent.error.length).toBeLessThan(200);
+    expect(res.sent.error).toContain('...');
+  });
+
+  it('still answers when there is no url to name', () => {
+    // Every real request has both, but this is the app's last handler
+    // before the error one -- it is the wrong place to be the thing that
+    // throws.
+    const res = fakeRes();
+    notFound()({}, res);
+    expect(res.statusCode).toBe(404);
+    expect(typeof res.sent.error).toBe('string');
+    expect(res.sent.error).not.toContain('undefined');
   });
 });
 

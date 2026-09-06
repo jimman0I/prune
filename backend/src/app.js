@@ -13,7 +13,7 @@
 import express from 'express';
 import cors from 'cors';
 import { localOnly } from './lib/localOnly.js';
-import { jsonErrors } from './lib/jsonErrors.js';
+import { jsonErrors, notFound } from './lib/jsonErrors.js';
 import programsRoutes from './routes/programs.js';
 import uninstallRoutes from './routes/uninstall.js';
 import leftoversRoutes from './routes/leftovers.js';
@@ -80,6 +80,10 @@ export function createApp({ port } = {}) {
   app.use('/api/forced-uninstall', forcedUninstallRoutes);
   app.use('/api/mft-scan', mftScanRoutes);
   app.use('/api/file-icons', fileIconsRoutes);
+
+  /** Anything still unanswered is a path this app does not serve. After
+   * every route, so it can only see what none of them matched. */
+  app.use(notFound());
 
   /** Last, because an Express error handler only sees what was raised by
    * middleware mounted before it. See lib/jsonErrors.js -- without this,

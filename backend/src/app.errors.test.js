@@ -100,6 +100,52 @@ describe('a body too large to accept', () => {
   });
 });
 
+describe('a request for something that is not there', () => {
+  it('is a 404 in the same shape as every other answer', async () => {
+    // Express's own fallback renders "Cannot GET /api/nope" as HTML. It
+    // leaks nothing, but it is the one response in the app a client
+    // cannot read the way it reads all the others.
+    const res = await server.call('/nope');
+    expect(res.status).toBe(404);
+    expect(res.headers.get('content-type')).toMatch(/application\/json/);
+    expect(typeof res.body.error).toBe('string');
+    expect(JSON.stringify(res.body)).not.toContain('<pre>');
+  });
+
+  it('says which method and path, because the answer is usually the method', async () => {
+    // /uninstall exists; GET is what does not. "There is no such
+    // endpoint" would send someone checking the path they already had
+    // right.
+    const res = await server.call('/uninstall');
+    expect(res.status).toBe(404);
+    expect(res.body.error).toContain('GET');
+    expect(res.body.error).toContain('/api/uninstall');
+  });
+
+  it('does not echo an unbounded path back', async () => {
+    // The path is the caller's own string. Repeating it is useful and is
+    // what the rest of this app's messages do, but a URL has no length
+    // limit worth trusting and a log line does.
+    const res = await server.call(`/${'x'.repeat(4000)}`);
+    expect(res.status).toBe(404);
+    expect(res.body.error.length).toBeLessThan(300);
+  });
+
+  it('does not intercept a route that does exist', async () => {
+    const res = await server.call('/health');
+    expect(res.status).toBe(200);
+    expect(res.body).toEqual({ ok: true });
+  });
+
+  it('still comes second to the guard', async () => {
+    // A web page asking for a path that does not exist gets 403, not
+    // 404. Which endpoints this app does and does not have is not
+    // something an untrusted caller gets to map.
+    const res = await server.callAsWebPage('/nope');
+    expect(res.status).toBe(403);
+  });
+});
+
 describe('the handlers that had no try/catch of their own', () => {
   // An async handler that rejects does not reach an Express 4 error
   // handler. Before these were fixed the request was never answered at

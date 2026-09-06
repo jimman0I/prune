@@ -61,6 +61,47 @@ export function errorResponse(err) {
   };
 }
 
+/** How much of the caller's own path to repeat back.
+ *
+ * Repeating it is what makes the message useful, and it is what the rest
+ * of this app's messages do -- "Could not read C:\nope", '"Thing" is no
+ * longer in the uninstall registry'. But a URL has no length worth
+ * trusting, and this string goes into a log line as well as a response. */
+const PATH_LIMIT = 120;
+
+function shortPath(url) {
+  const value = String(url ?? '');
+  return value.length > PATH_LIMIT ? `${value.slice(0, PATH_LIMIT)}...` : value;
+}
+
+/** Ordinary middleware, mounted after every route and before the error
+ * handler: anything still unanswered here is a path this app does not
+ * serve.
+ *
+ * Express's own fallback renders "Cannot GET /api/nope" as an HTML page.
+ * Unlike the error page it leaks nothing -- no stack, no filesystem --
+ * but it is the one response in the API a client cannot read the way it
+ * reads every other one, and `data.error` comes back undefined.
+ *
+ * The method is named as well as the path because the method is usually
+ * the answer. Every endpoint here that changes the machine is POST-only
+ * on purpose, so a wrong-method request is the likely mistake, and "there
+ * is no such endpoint" would send someone checking a path they already
+ * had right. */
+export function notFound() {
+  return (req, res) => {
+    // Assembled from whatever is actually there rather than interpolated
+    // blind. Every real request carries both, but this is the last
+    // handler before the error one and the wrong place in the app to be
+    // the thing that throws -- or that answers "Prune has no undefined
+    // endpoint", which is what a plain template produced.
+    const target = [req?.method, shortPath(req?.originalUrl)].filter(Boolean).join(' ');
+    res.status(404).json({
+      error: target ? `Prune has no ${target} endpoint.` : 'Prune has no such endpoint.'
+    });
+  };
+}
+
 /** Express error middleware. Four arguments, and they matter: Express
  * identifies an error handler by arity, and dropping the unused `next`
  * would silently turn this into an ordinary middleware that never runs. */
