@@ -3,6 +3,40 @@
 All notable changes to Prune (formerly named unrevo -- rebranded 2026-09-01,
 see v1.0.1 below) are documented here.
 
+## v2.1.3
+
+More fixes and hardening from a second audit, this time of the frontend
+only. No new features.
+
+### Fixed
+
+- **A second click on a destructive button no longer starts a second
+  operation.** Removing a folder from the Disk Map, uninstalling, batch
+  uninstalling and removing leftovers all relied on their button
+  disappearing to stop a double-click, which only works if the screen
+  redraws faster than you can click twice. The Disk Map one showed: a
+  successful removal was followed by an error saying the folder was not
+  there, because the second click had gone looking for what the first had
+  already moved.
+- **The Disk Map's tooltip stays on screen.** Near the right or bottom
+  edge it ran off the window, taking the full path — the part worth
+  reading — with it. It now flips to the other side of the cursor.
+- **The Startup list re-reads the machine after a switch is toggled**, so
+  entries that changed as a side effect of the one you touched are no
+  longer left showing stale states. A row also stays marked busy until
+  its own change finishes, rather than until the next row is toggled.
+
+### Accessibility
+
+- **The Disk Map can be used without a mouse.** Folder blocks take focus
+  and open with Enter or Space, and focusing one shows the same tooltip
+  hovering does. Blocks that cannot be opened are skipped rather than
+  becoming tab stops that lead nowhere.
+- **Deep Clean announces its scan.** Nineteen seconds whose only progress
+  signals were a small counter and a two-pixel bar, neither of which a
+  screen reader can see, so the wait was indistinguishable from the app
+  having stopped.
+
 ## v2.1.2
 
 Bug fixes and hardening from a full audit of the frontend. No new

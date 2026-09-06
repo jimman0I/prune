@@ -6,8 +6,8 @@ import AutomationSettings from './AutomationSettings.jsx';
 import { useSettings } from '../hooks/useSystemQueries.js';
 
 // electron/package.json is this app's real, single source of truth for
-// name/version (checked 2026-09-06 for the 2.1.2 release: productName
-// "Prune", version "2.1.2") -- hand-copied here rather than wired through
+// name/version (checked 2026-09-06 for the 2.1.3 release: productName
+// "Prune", version "2.1.3") -- hand-copied here rather than wired through
 // Vite's build pipeline, matching this codebase's existing convention of
 // small hand-curated constants over new plumbing for a value that changes
 // on release cadence, not per-request.
@@ -17,7 +17,7 @@ import { useSettings } from '../hooks/useSystemQueries.js';
 // it is not -- the About panel simply reports the previous release. It
 // was already a release behind once.
 const APP_NAME = 'Prune';
-const APP_VERSION = '2.1.2';
+const APP_VERSION = '2.1.3';
 
 const TABS = [
   { id: 'general', label: 'General' },
