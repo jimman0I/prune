@@ -16,6 +16,7 @@ const frontendRoot = join(repoRoot, 'frontend');
 const backendRoot = join(repoRoot, 'backend');
 const buildRoot = join(electronRoot, 'build');
 const backendProdRoot = join(buildRoot, 'backend-prod');
+const distRoot = join(electronRoot, 'dist');
 
 const started = Date.now();
 const elapsed = () => `${((Date.now() - started) / 1000).toFixed(1)}s`;
@@ -34,7 +35,24 @@ function step(label, fn) {
 // invocation below (npm.cmd, npx.cmd).
 const winShell = { shell: process.platform === 'win32' };
 
-step('1/4 Building frontend (vite build)', () => {
+// electron-builder overwrites its OWN outputs but leaves every other
+// version's alone, so dist/ accumulates rather than reflecting the build
+// that just ran. Found live (2026-09-06): it still held "unrevo Setup
+// 1.0.0.exe" -- an installer under the app's pre-rebrand name -- beside
+// 1.0.0 and 1.0.1 Prune builds, 1.2 GB in total. A folder someone
+// publishes out of is the wrong place to keep three superseded releases
+// and a brand the app no longer uses: the risk is not the disk, it is
+// uploading or linking the wrong file.
+//
+// Everything in here is reproducible by running this script, and nothing
+// in it is tracked (electron/dist is gitignored), so a clean slate costs
+// nothing. Note this is dist/ specifically, NOT build/ -- build/ holds
+// icon.ico and icon.png, which are committed source.
+step('1/5 Clearing dist/, so it holds only what this build produced', () => {
+  rmSync(distRoot, { recursive: true, force: true });
+});
+
+step('2/5 Building frontend (vite build)', () => {
   execFileSync(process.platform === 'win32' ? 'npm.cmd' : 'npm', ['run', 'build'], {
     cwd: frontendRoot,
     stdio: 'inherit',
@@ -42,7 +60,7 @@ step('1/4 Building frontend (vite build)', () => {
   });
 });
 
-step('2/4 Copying backend source into a clean build-only directory', () => {
+step('3/5 Copying backend source into a clean build-only directory', () => {
   // A FRESH copy every run, not a reused/incrementally-updated one -- a
   // stale file left over from a previous build (or from a manual edit
   // made directly in build/backend-prod/ by mistake) must never survive
@@ -55,7 +73,7 @@ step('2/4 Copying backend source into a clean build-only directory', () => {
   if (existsSync(lockfile)) cpSync(lockfile, join(backendProdRoot, 'package-lock.json'));
 });
 
-step('3/4 Installing production-only backend dependencies (npm ci --omit=dev)', () => {
+step('4/5 Installing production-only backend dependencies (npm ci --omit=dev)', () => {
   // This installs into build/backend-prod/ -- a throwaway directory, never
   // the real backend/node_modules the dev environment (and its test
   // suite) depends on. Falls back to `npm install` when there's no
@@ -66,7 +84,7 @@ step('3/4 Installing production-only backend dependencies (npm ci --omit=dev)', 
   execFileSync(cmd, args, { cwd: backendProdRoot, stdio: 'inherit', ...winShell });
 });
 
-step('4/4 Running electron-builder', () => {
+step('5/5 Running electron-builder', () => {
   // -c explicitly: electron-builder does not auto-detect a .cjs config
   // file and says nothing when it fails to find one -- it just builds
   // with defaults, producing an app with no backend inside it.

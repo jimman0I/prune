@@ -16,10 +16,18 @@ module.exports = {
     // process) are test tooling, and 27 of them were shipping inside
     // every installer. The default is to take the whole tree, so nothing
     // else was ever going to stop them.
+    //
+    // testSupport/ is excluded by directory rather than by filename,
+    // because that is what it is: a directory whose whole contents are
+    // test-only. The `*.test.js` pattern catches files that say so in
+    // their name and nothing else -- routeServer.js does not, and shipped
+    // in the 2.0.0 build until this line was added. A filter that only
+    // matches a naming convention keeps missing anything that does not
+    // follow it, so new test-only tooling belongs in here.
     {
       from: '../backend/src',
       to: 'backend/src',
-      filter: ['**/*', '!**/*.test.js', '!**/fakeVolume.js']
+      filter: ['**/*', '!**/*.test.js', '!**/fakeVolume.js', '!testSupport/**']
     },
     // Production-only install, built by scripts/build-installer.mjs into
     // build/backend-prod/ -- NOT the shared ../backend/node_modules dev
