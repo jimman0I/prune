@@ -1,7 +1,7 @@
 {
   "name": "prune-desktop",
   "productName": "Prune",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "private": true,
   "description": "Prune desktop app -- a local, offline uninstaller and cleanup utility for Windows.",
   "author": "Prune",

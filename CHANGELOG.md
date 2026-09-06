@@ -3,6 +3,52 @@
 All notable changes to Prune (formerly named unrevo -- rebranded 2026-09-01,
 see v1.0.1 below) are documented here.
 
+## v2.1.2
+
+Bug fixes and hardening from a full audit of the frontend. No new
+features, and nothing here changes how anything is used.
+
+### Fixed
+
+- **A Deep Clean rule you enabled through the warning dialog no longer
+  disappears when a scan finishes.** The screen narrows its selection
+  after every Preview, and that filter was reusing the rule that keeps
+  Select All away from data-losing options — so a rule you had
+  deliberately confirmed, including one you had permanently
+  acknowledged, was quietly unticked. Introduced in 2.1.0 and fixed
+  before it reached a second release.
+- **A failed startup toggle now returns the row to what it actually
+  was.** It reverted by flipping the value instead, which is right for a
+  single click and wrong for the second of a quick pair: two fast clicks
+  on one row could leave it showing a state it had never been in.
+- **A malformed or unexpected reply from the backend no longer takes a
+  screen down.** Fourteen readers assumed their payload key was present
+  and handed back `undefined` when it was not; the Dashboard's activity
+  list crashed the whole screen on one. They now fall back to an empty
+  list, which reads as "nothing here" rather than a blank screen.
+
+### Accessibility
+
+- **Animations honour the system's reduce-motion setting.** Three
+  components animate through framer-motion rather than CSS, and the
+  app's reduced-motion rules only ever governed the CSS ones — so the
+  toast slide, the right-click menu and the resource gauges ran at full
+  strength for anyone who had asked their machine for less.
+- The Duplicates folder box and the Applications search box have real
+  labels instead of relying on their placeholder text, which screen
+  readers do not reliably announce and which vanishes as soon as you
+  type.
+
+### Performance
+
+- **Switching tabs no longer re-renders every screen you have opened.**
+  Screens stay loaded so your work survives a tab switch; the cost was
+  that each switch re-rendered all of them, including the Disk Map.
+  Measured before and after: a hidden Disk Map went from rendering on
+  every switch to not rendering at all.
+- The global keyboard-shortcut listener is attached once rather than
+  rebuilt on every render.
+
 ## v2.1.1
 
 Installer metadata only. The app itself is unchanged from 2.1.0 — if you
