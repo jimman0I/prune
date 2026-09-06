@@ -61,10 +61,16 @@ function formatBytes(bytes) {
   return `${parseFloat((bytes / Math.pow(k, i)).toFixed(1))} ${sizes[i]}`;
 }
 
-// No framer-motion (or `motion`) dependency exists in this project's
-// package.json, and this feature isn't reason enough to add one -- a
-// grid-template-rows 0fr/1fr transition is the well-known dependency-free
-// way to animate a block from/to its intrinsic height.
+// A grid-template-rows 0fr/1fr transition, which is the dependency-free
+// way to animate a block from and to its intrinsic height.
+//
+// framer-motion IS a dependency now -- ContextMenu, ToastHost and
+// ResourceMonitor all use it, and this comment used to say it did not.
+// Kept as CSS anyway: animating to auto height is the one thing the CSS
+// approach does better, and swapping it for a library call would be churn
+// for a worse result. Reduced motion reaches both kinds now -- CSS
+// through the media query in index.css, framer-motion through the
+// MotionConfig in main.jsx.
 function CategorySection({ category, items, selected, onToggle, onToggleCategory }) {
   const [expanded, setExpanded] = useState(true);
   const reduceMotion = typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;

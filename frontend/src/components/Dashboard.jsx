@@ -1,11 +1,12 @@
 import { useEffect, useMemo, useState } from 'react';
-import { fetchDiskSpace, fetchDiskHealth, unlockDiskWear, fetchUninstallHistory } from '../lib/api.js';
+import { unlockDiskWear, fetchUninstallHistory } from '../lib/api.js';
 import { formatRelativeTime } from '../lib/formatRelativeTime.js';
 import StatCard from './StatCard.jsx';
 import ResourceMonitor from './ResourceMonitor.jsx';
 import { useQuery } from '@tanstack/react-query';
 import { fetchAutomation } from '../lib/api.js';
 import { keys } from '../lib/queryClient.js';
+import { useDiskSpace, useDiskHealth } from '../hooks/useSystemQueries.js';
 
 function formatBytes(bytes) {
   if (bytes === null || bytes === undefined) return '—';
@@ -185,21 +186,20 @@ export default function Dashboard({ programs, totalSize, onNavigate = () => {} }
     () => (programs || []).filter((p) => p.health?.orphaned).length,
     [programs]
   );
-  const [diskSpace, setDiskSpace] = useState(null);
-  const [diskSpaceError, setDiskSpaceError] = useState(null);
-  const [diskHealth, setDiskHealth] = useState(null);
-  const [diskHealthError, setDiskHealthError] = useState(null);
+  /* Through the query layer like every other read in the app.
+   *
+   * These two used to be local state filled by a bare useEffect + fetch,
+   * while useDiskSpace and useDiskHealth sat in hooks/useSystemQueries.js
+   * exported and imported by nothing. That cost the cache, the shared
+   * retry policy and deduplication -- and the drive-health read is a
+   * SMART query, the slowest thing on this screen. */
+  const { diskSpace, error: diskSpaceError } = useDiskSpace();
+  const { health: diskHealth, error: diskHealthError, setHealth: setDiskHealth } = useDiskHealth();
   const [history, setHistory] = useState([]);
   const [historyOpen, setHistoryOpen] = useState(true);
 
   useEffect(() => {
     let cancelled = false;
-    fetchDiskSpace()
-      .then((result) => { if (!cancelled) setDiskSpace(result); })
-      .catch((err) => { if (!cancelled) setDiskSpaceError(err.message); });
-    fetchDiskHealth()
-      .then((result) => { if (!cancelled) setDiskHealth(result); })
-      .catch((err) => { if (!cancelled) setDiskHealthError(err.message); });
     fetchUninstallHistory()
       .then((entries) => { if (!cancelled) setHistory(entries); })
       .catch(() => { /* Recent Activity just shows empty on failure -- not worth a second error banner on a Dashboard already showing a disk-space one if that also failed */ });

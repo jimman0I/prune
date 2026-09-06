@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { matchShortcut } from '../lib/shortcutMatch.js';
 
 /** The app's global chords, in one listener.
@@ -14,14 +14,28 @@ import { matchShortcut } from '../lib/shortcutMatch.js';
  * having the feature.
  */
 export function useKeyboardShortcuts({ onSearch, onSettings, onHelp }) {
+  /* The handlers live in a ref so the listener is bound once.
+   *
+   * They arrive as inline arrows from App, which means a new identity on
+   * every render -- and with them in the dependency array, the effect
+   * tore the document-level keydown listener down and added it again
+   * after every single App render. Not a leak, since the cleanup ran, but
+   * pointless churn on the hot path, and a dependency array that claimed
+   * to describe when the binding changes while really meaning "always".
+   *
+   * Read through the ref at call time, so the handler that runs is always
+   * the current one -- which is the thing a dependency array was
+   * protecting against, achieved without rebinding. */
+  const handlersRef = useRef(null);
+  handlersRef.current = { search: onSearch, settings: onSettings, help: onHelp };
+
   useEffect(() => {
-    const handlers = { search: onSearch, settings: onSettings, help: onHelp };
 
     const onKeyDown = (event) => {
       const action = matchShortcut(event);
       if (!action) return;
 
-      const handler = handlers[action];
+      const handler = handlersRef.current[action];
       if (!handler) return;
 
       // Only prevented once a handler has actually claimed it. Calling
@@ -34,7 +48,8 @@ export function useKeyboardShortcuts({ onSearch, onSettings, onHelp }) {
 
     document.addEventListener('keydown', onKeyDown, true);
     return () => document.removeEventListener('keydown', onKeyDown, true);
-  }, [onSearch, onSettings, onHelp]);
+    // Empty, and honestly so: nothing this effect closes over changes.
+  }, []);
 }
 
 /** What the help modal lists. Data rather than markup so the list cannot

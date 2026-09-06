@@ -280,3 +280,56 @@ describe('the warning in front of a rule that loses data', () => {
     expect(screen.getByRole('checkbox', { name: 'Cache' }).getAttribute('aria-checked')).toBe('true');
   });
 });
+
+describe('what a finished scan does to the selection', () => {
+  const riskyRules = [{
+    category: 'Brave',
+    items: [
+      { id: 'brave_cache', category: 'Brave', name: 'Cache', description: 'Regenerates.', sizeBytes: null, fileCount: null },
+      {
+        id: 'brave_cookies', category: 'Brave', name: 'Cookies', risky: true,
+        description: 'Signs you out of every site that remembered you.',
+        sizeBytes: null, fileCount: null
+      }
+    ]
+  }];
+
+  it('keeps a risky rule the user enabled on purpose', async () => {
+    // The regression this pins. DeepClean narrows the selection after
+    // every Preview, and while that filter went through selectableIds --
+    // which deliberately skips rules that lose data -- a rule the user
+    // had just confirmed through the dialog was silently unticked the
+    // moment the scan finished. An explicit choice, undone by a
+    // background step, with nothing on screen to say so.
+    fetchDeepCleanRules.mockResolvedValue(riskyRules);
+    // The real signature: streamDeepCleanScan(onEvent, signal), with
+    // onEvent(type, data) and types 'start' | 'rule' | 'error'. Each rule
+    // carries its category, because mergeScannedRule groups by it.
+    //
+    // Getting this wrong is how the first version of this test passed
+    // against the bug: a mock with invented handler names fired nothing,
+    // scannedTree stayed null, and the effect returned early on an empty
+    // id set without ever filtering anything.
+    streamDeepCleanScan.mockImplementation(async (onEvent) => {
+      onEvent('start', { total: 2 });
+      onEvent('rule', { id: 'brave_cache', category: 'Brave', name: 'Cache', sizeBytes: 10, present: true, accessible: true });
+      onEvent('rule', { id: 'brave_cookies', category: 'Brave', name: 'Cookies', risky: true, sizeBytes: 20, present: true, accessible: true });
+    });
+
+    const user = userEvent.setup();
+    renderScreen(<DeepClean />);
+    await screen.findByText('Cookies');
+
+    await user.click(screen.getByRole('checkbox', { name: 'Cookies' }));
+    await user.click(screen.getByRole('button', { name: 'Enable anyway' }));
+    await waitFor(() =>
+      expect(screen.getByRole('checkbox', { name: 'Cookies' }).getAttribute('aria-checked')).toBe('true'));
+
+    await user.click(screen.getByRole('button', { name: 'Preview' }));
+
+    // Still ticked. The scan measured it; the user chose it; neither of
+    // those is a reason to drop it.
+    await waitFor(() =>
+      expect(screen.getByRole('checkbox', { name: 'Cookies' }).getAttribute('aria-checked')).toBe('true'));
+  });
+});

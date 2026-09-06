@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState, memo } from 'react';
 import { groupStartupItems, startupCounts } from '../lib/groupStartupItems.js';
 import { useStartupItems, useStartupToggle } from '../hooks/useSystemQueries.js';
 import TableSkeleton from './TableSkeleton.jsx';
@@ -224,7 +224,7 @@ function StartupRow({ item, iconSrc, pending, error, onToggle }) {
   );
 }
 
-export default function StartupItems() {
+function StartupItems() {
   // An error belongs to the row that produced it rather than to the
   // screen: several rows can be mid-change at once.
   const [rowErrors, setRowErrors] = useState({});
@@ -381,3 +381,18 @@ export default function StartupItems() {
     </div>
   );
 }
+
+/** Memoised because App owns the active-screen state.
+ *
+ * Screens stay mounted once visited (see Screen.jsx), so every setScreen
+ * re-renders App and React then reconciles every screen that has ever
+ * been opened -- hidden ones skip layout and paint, not render. Measured
+ * before this was added: a hidden Disk Map rendered twice across two tab
+ * switches, once per switch, and that cost grows with every tab the user
+ * has visited.
+ *
+ * Safe here specifically because this component takes no props at all, so
+ * the comparison is between two empty objects and can never produce a
+ * stale screen. A component with unstable props would gain nothing from
+ * this and is deliberately left alone. */
+export default memo(StartupItems);

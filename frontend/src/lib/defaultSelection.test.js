@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { defaultSelection, selectableIds } from './defaultSelection.js';
+import { defaultSelection, selectableIds, cleanableIds } from './defaultSelection.js';
 
 const categories = [
   {
@@ -91,5 +91,45 @@ describe('selectableIds', () => {
       { id: 'brave_cookies', name: 'Cookies', risky: true }
     ] }];
     expect(selectableIds(risky, ['brave_cookies'])).toEqual(new Set(['brave_cache', 'brave_cookies']));
+  });
+});
+
+describe('cleanableIds', () => {
+  // The question the post-scan filter asks, which is NOT the question
+  // Select All asks. After a Preview, DeepClean narrows the selection to
+  // rules the scan proved are worth cleaning -- and a rule the user
+  // deliberately ticked through the warning dialog must survive that.
+  const scanned = [{ category: 'Brave', items: [
+    { id: 'brave_cache', name: 'Cache' },
+    { id: 'brave_cookies', name: 'Cookies', risky: true },
+    { id: 'gone', name: 'Not installed', present: false },
+    { id: 'locked', name: 'Needs admin', accessible: false }
+  ] }];
+
+  it('keeps a risky rule, because the user may have chosen it on purpose', () => {
+    // The bug this exists for: filtering the selection through
+    // selectableIds silently unticked a rule the user had just enabled
+    // through the dialog -- including one they had permanently
+    // acknowledged -- the moment a scan finished.
+    expect(cleanableIds(scanned).has('brave_cookies')).toBe(true);
+  });
+
+  it('still drops what a scan proved cannot be cleaned', () => {
+    expect(cleanableIds(scanned).has('gone')).toBe(false);
+    expect(cleanableIds(scanned).has('locked')).toBe(false);
+    expect(cleanableIds(scanned).has('brave_cache')).toBe(true);
+  });
+
+  it('differs from selectableIds exactly on the risky rules', () => {
+    // Two questions, two functions. Select All asks "what should one
+    // click reach"; this asks "what is still valid". Collapsing them is
+    // what caused the bug.
+    const bulk = selectableIds(scanned);
+    const valid = cleanableIds(scanned);
+    expect([...valid].filter((id) => !bulk.has(id))).toEqual(['brave_cookies']);
+  });
+
+  it('returns an empty set for nothing scanned', () => {
+    expect(cleanableIds(null)).toEqual(new Set());
   });
 });

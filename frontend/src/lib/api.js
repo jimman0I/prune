@@ -4,7 +4,7 @@ export async function fetchPrograms() {
   const res = await fetch(`${API_URL}/programs`);
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
-  return data.programs;
+  return data.programs ?? [];
 }
 
 /** Every installed program's real icon, as { programId: dataUri }.
@@ -21,7 +21,7 @@ export async function fetchProgramIcons() {
   const res = await fetch(`${API_URL}/programs/icons`);
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
-  return data.icons;
+  return data.icons ?? {};
 }
 
 /** Measured install-folder sizes for the programs whose registry entry
@@ -35,7 +35,7 @@ export async function fetchProgramSizes() {
   const res = await fetch(`${API_URL}/programs/sizes`);
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
-  return data.sizes;
+  return data.sizes ?? {};
 }
 
 /** Versions read off the program's own binary, for the entries whose
@@ -49,7 +49,7 @@ export async function fetchProgramVersions() {
   const res = await fetch(`${API_URL}/programs/versions`);
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
-  return data.versions;
+  return data.versions ?? {};
 }
 
 /** Install dates for the entries whose registry record declared none.
@@ -61,7 +61,7 @@ export async function fetchProgramInstallDates() {
   const res = await fetch(`${API_URL}/programs/install-dates`);
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
-  return data.installDates;
+  return data.installDates ?? {};
 }
 
 /** Microsoft Store apps, which the uninstall registry does not list.
@@ -73,7 +73,7 @@ export async function fetchStoreApps() {
   const res = await fetch(`${API_URL}/programs/store`);
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
-  return data.apps;
+  return data.apps ?? [];
 }
 
 /** Browser extensions, which no uninstall list mentions.
@@ -84,7 +84,7 @@ export async function fetchBrowserExtensions() {
   const res = await fetch(`${API_URL}/programs/extensions`);
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
-  return data.extensions;
+  return data.extensions ?? [];
 }
 
 /** Everything Windows launches at sign-in. */
@@ -92,7 +92,7 @@ export async function fetchStartupItems() {
   const res = await fetch(`${API_URL}/programs/startup`);
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
-  return data.items;
+  return data.items ?? [];
 }
 
 /** Icons for the startup entries, as { entryId: dataUri }.
@@ -238,7 +238,7 @@ export async function fetchPackageIcons() {
   const res = await fetch(`${API_URL}/programs/package-icons`);
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
-  return data.icons;
+  return data.icons ?? {};
 }
 
 /** Opens Windows' own Installed apps page, where Store apps are removed. */
@@ -257,7 +257,7 @@ export async function fetchRunningPrograms() {
   const res = await fetch(`${API_URL}/programs/running`);
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
-  return data.running;
+  return data.running ?? {};
 }
 
 export async function scanForLeftovers(name, publisher) {
@@ -418,14 +418,14 @@ export async function fetchDeepCleanRules() {
   const res = await fetch(`${API_URL}/deep-clean/rules`);
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
-  return data.categories;
+  return data.categories ?? [];
 }
 
 export async function fetchDeepCleanScan() {
   const res = await fetch(`${API_URL}/deep-clean/scan`);
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
-  return data.categories;
+  return data.categories ?? [];
 }
 
 export async function executeDeepClean(ruleIds) {
@@ -469,7 +469,7 @@ export async function fetchFileTypeIcons(extensions) {
   });
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
-  return data.icons;
+  return data.icons ?? {};
 }
 
 export async function fetchDiskSpace() {
@@ -516,7 +516,7 @@ export async function fetchUninstallHistory() {
   const res = await fetch(`${API_URL}/uninstall-history`);
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
-  return data.entries;
+  return data.entries ?? [];
 }
 
 export async function appendHistoryEntry({ programName, publisher, sizeBytes }) {

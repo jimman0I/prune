@@ -35,6 +35,30 @@ export function defaultSelection(categories) {
   return selected;
 }
 
+/** Every rule a finished scan proved is still worth cleaning.
+ *
+ * Deliberately NOT the same question as selectableIds, and keeping them
+ * apart is the whole point of this function existing. Select All asks
+ * "what should one click reach", and the answer excludes rules that lose
+ * data. This asks "what is still valid after a scan", and the answer
+ * includes them: the user may have ticked one on purpose, through a
+ * dialog that made them confirm it.
+ *
+ * Collapsing the two is a real bug that shipped. DeepClean narrows the
+ * selection through this after every Preview, and while it went through
+ * selectableIds a rule the user had just enabled -- including one they
+ * had permanently acknowledged -- was silently unticked the moment a scan
+ * finished. */
+export function cleanableIds(categories) {
+  const ids = new Set();
+  for (const group of categories || []) {
+    for (const item of group.items || []) {
+      if (isSelectable(item)) ids.add(item.id);
+    }
+  }
+  return ids;
+}
+
 /** Everything a "select all" could reach. Deliberately wider than the
  * defaults -- an explicit click may take the non-recommended rules too --
  * but still never the ones that would clean nothing.

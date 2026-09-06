@@ -12,6 +12,21 @@ export function applyEnabled(items, id, enabled) {
   return (items || []).map((item) => (item.id === id ? { ...item, enabled } : item));
 }
 
+/** One entry's recorded state, by id, or null if there isn't one.
+ *
+ * Null rather than false for a missing entry, and the distinction is the
+ * point: a row that has left the list since the click has no prior state
+ * to return to, and writing `false` would invent one the machine never
+ * reported. A caller rolling back should leave such a row alone.
+ *
+ * Exists so a failed toggle can revert to what the row ACTUALLY was
+ * rather than to the inverse of what was asked. Those differ the moment
+ * two clicks on one row overlap -- see the test beside this. */
+export function enabledStateOf(items, id) {
+  const found = (items || []).find((item) => item.id === id);
+  return typeof found?.enabled === 'boolean' ? found.enabled : null;
+}
+
 /** What to do with what came back from the backend.
  *
  * The row moves the moment it is clicked, because a switch that waits a

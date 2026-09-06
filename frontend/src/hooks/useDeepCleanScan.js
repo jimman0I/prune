@@ -2,7 +2,7 @@ import { useCallback, useMemo, useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { fetchDeepCleanRules, streamDeepCleanScan } from '../lib/api.js';
 import { mergeScannedRule, scanLogLine } from '../lib/scanLog.js';
-import { selectableIds } from '../lib/defaultSelection.js';
+import { cleanableIds } from '../lib/defaultSelection.js';
 import { keys } from '../lib/queryClient.js';
 
 /** The Deep Clean tree, and the scan that measures it.
@@ -44,6 +44,14 @@ export function useDeepCleanScan() {
   const [armed, setArmed] = useState(false);
 
   const tree = scannedTree ?? rulesQuery.data ?? null;
+
+  /* Stable identity, so the consumer's effect can list it as a dependency
+   * and mean it. Returned as a fresh arrow before this, which forced
+   * DeepClean's post-scan effect to omit it from its dependency array --
+   * correct only by accident of when that effect happens to fire, and
+   * exactly the kind of omission that hides a stale closure until
+   * something else changes. */
+  const stableCleanableIds = useCallback(() => cleanableIds(scannedTree ?? []), [scannedTree]);
 
   const scanQuery = useQuery({
     queryKey: keys.deepCleanScan,
@@ -132,7 +140,14 @@ export function useDeepCleanScan() {
     stop,
     /** The ids a scan proved are worth cleaning. Before a scan the tree
      * is listed but unmeasured, so the defaults have to tick rules that
-     * may turn out to be uninstalled or unreadable. */
-    selectableIds: () => selectableIds(scannedTree ?? [])
+     * may turn out to be uninstalled or unreadable.
+     *
+     * cleanableIds, not selectableIds. The two answer different
+     * questions and only one of them is right here: this filters what
+     * the user has ALREADY chosen, so a rule they deliberately enabled
+     * through the warning dialog has to survive it. Select All's
+     * narrower answer, which skips rules that lose data, would untick
+     * that choice the moment a scan finished. */
+    cleanableIds: stableCleanableIds
   };
 }

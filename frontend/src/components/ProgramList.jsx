@@ -436,6 +436,11 @@ export default function ProgramList({ programs: initialPrograms, extensions = []
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search applications…"
+            // Not labelled by the placeholder alone -- that is not an
+            // accessible name, and it disappears the moment anything is
+            // typed, so the field goes anonymous exactly when it has
+            // content worth describing.
+            aria-label="Search applications"
             // Named so the global Ctrl+K can find it without a ref
             // threaded through App, ProgramList and the header. The
             // shortcut is app-wide; the box belongs to one screen.

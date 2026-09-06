@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, memo } from 'react';
 import { createPortal } from 'react-dom';
 import { Treemap, ResponsiveContainer } from 'recharts';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
@@ -468,7 +468,7 @@ function FolderTable({ tree, onDrillDown }) {
   );
 }
 
-export default function DiskMap() {
+function DiskMap() {
   const [currentPath, setCurrentPath] = useState(DEFAULT_ROOT);
   const [hovered, setHovered] = useState(null);
   // The whole drive, read from the MFT in one pass. While this is set,
@@ -1013,3 +1013,18 @@ export default function DiskMap() {
     </div>
   );
 }
+
+/** Memoised because App owns the active-screen state.
+ *
+ * Screens stay mounted once visited (see Screen.jsx), so every setScreen
+ * re-renders App and React then reconciles every screen that has ever
+ * been opened -- hidden ones skip layout and paint, not render. Measured
+ * before this was added: a hidden Disk Map rendered twice across two tab
+ * switches, once per switch, and that cost grows with every tab the user
+ * has visited.
+ *
+ * Safe here specifically because this component takes no props at all, so
+ * the comparison is between two empty objects and can never produce a
+ * stale screen. A component with unstable props would gain nothing from
+ * this and is deliberately left alone. */
+export default memo(DiskMap);

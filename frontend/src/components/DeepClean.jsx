@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState, memo } from 'react';
 import { visibleCategories, hiddenRuleCount } from '../lib/visibleRules.js';
 import { executeDeepClean } from '../lib/api.js';
 import { useDeepCleanScan } from '../hooks/useDeepCleanScan.js';
@@ -86,7 +86,7 @@ function formatBytes(bytes) {
   return `${parseFloat((bytes / Math.pow(k, i)).toFixed(1))} ${sizes[i]}`;
 }
 
-export default function DeepClean() {
+function DeepClean() {
   // No auto-scan on mount, per spec -- the tree stays empty until the
   // user explicitly clicks Preview.
   const [selected, setSelected] = useState(new Set());
@@ -104,7 +104,7 @@ export default function DeepClean() {
   // still closes the connection and the backend still stops walking.
   const {
     tree: categories, scanning, hasScanned, log: logLines,
-    scanned, total, error: scanError, start, stop: stopPreview, selectableIds: scannedIds
+    scanned, total, error: scanError, start, stop: stopPreview, cleanableIds: scannedIds
   } = useDeepCleanScan();
 
   // BleachBit's "hide irrelevant cleaners". Most of a 74-rule list is for
@@ -154,7 +154,11 @@ export default function DeepClean() {
       const kept = new Set([...prev].filter((id) => validIds.has(id)));
       return kept.size > 0 ? kept : defaultSelection(categories ?? []);
     });
-  }, [hasScanned, scanning]);
+    // scannedIds and categories are both listed now that the hook returns
+    // a stable reader. They were omitted before, which happened to be
+    // correct only because of when this effect fires -- the kind of
+    // omission that stays right until someone changes the timing.
+  }, [hasScanned, scanning, scannedIds, categories]);
 
   /** One rule by id, from the unfiltered set.
    *
@@ -465,3 +469,18 @@ export default function DeepClean() {
     </div>
   );
 }
+
+/** Memoised because App owns the active-screen state.
+ *
+ * Screens stay mounted once visited (see Screen.jsx), so every setScreen
+ * re-renders App and React then reconciles every screen that has ever
+ * been opened -- hidden ones skip layout and paint, not render. Measured
+ * before this was added: a hidden Disk Map rendered twice across two tab
+ * switches, once per switch, and that cost grows with every tab the user
+ * has visited.
+ *
+ * Safe here specifically because this component takes no props at all, so
+ * the comparison is between two empty objects and can never produce a
+ * stale screen. A component with unstable props would gain nothing from
+ * this and is deliberately left alone. */
+export default memo(DeepClean);

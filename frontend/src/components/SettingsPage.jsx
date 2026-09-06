@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, memo } from 'react';
 import { runSandboxTest } from '../lib/api.js';
 import { classifyExclusion } from '../lib/exclusionInput.js';
 import { positiveOrOff } from '../lib/limitInput.js';
@@ -67,7 +67,7 @@ function StepRow({ step }) {
   );
 }
 
-export default function SettingsPage() {
+function SettingsPage() {
   const [tab, setTab] = useState('general');
   const [saveError, setSaveError] = useState(null);
   const [newExclusion, setNewExclusion] = useState('');
@@ -481,3 +481,18 @@ ode.js" is a folder or a file type.
     </div>
   );
 }
+
+/** Memoised because App owns the active-screen state.
+ *
+ * Screens stay mounted once visited (see Screen.jsx), so every setScreen
+ * re-renders App and React then reconciles every screen that has ever
+ * been opened -- hidden ones skip layout and paint, not render. Measured
+ * before this was added: a hidden Disk Map rendered twice across two tab
+ * switches, once per switch, and that cost grows with every tab the user
+ * has visited.
+ *
+ * Safe here specifically because this component takes no props at all, so
+ * the comparison is between two empty objects and can never produce a
+ * stale screen. A component with unstable props would gain nothing from
+ * this and is deliberately left alone. */
+export default memo(SettingsPage);

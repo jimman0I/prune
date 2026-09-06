@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { applyEnabled, toggleOutcome } from './startupToggleState.js';
+import { applyEnabled, toggleOutcome, enabledStateOf } from './startupToggleState.js';
 
 const items = [
   { id: 'registry:user:Run:Discord', name: 'Discord', enabled: true },
@@ -66,5 +66,61 @@ describe('toggleOutcome', () => {
   it('rolls back when the request never produced a result', () => {
     expect(toggleOutcome(null, false).revert).toBe(true);
     expect(toggleOutcome(undefined, true).message).toBeTruthy();
+  });
+});
+
+describe('enabledStateOf', () => {
+  const items = [
+    { id: 'a', name: 'Discord', enabled: true },
+    { id: 'b', name: 'Discord', enabled: false }
+  ];
+
+  it('reads one entry state by id', () => {
+    expect(enabledStateOf(items, 'a')).toBe(true);
+    expect(enabledStateOf(items, 'b')).toBe(false);
+  });
+
+  it('is null for an entry that is not there', () => {
+    // Distinct from false. A row that has since left the list must not
+    // roll back to "disabled" -- there is nothing to roll back to, and
+    // writing false would invent a state the machine never reported.
+    expect(enabledStateOf(items, 'gone')).toBeNull();
+    expect(enabledStateOf(null, 'a')).toBeNull();
+    expect(enabledStateOf(undefined, 'a')).toBeNull();
+  });
+
+  it('is null when the entry never recorded a state', () => {
+    expect(enabledStateOf([{ id: 'c', name: 'Thing' }], 'c')).toBeNull();
+  });
+});
+
+describe('rolling back one row rather than guessing its inverse', () => {
+  // The bug: onSettled reverted with applyEnabled(current, id, !requested),
+  // which is only right when the row's prior state was exactly the
+  // opposite of what was asked. Two fast clicks on one row break that --
+  // the second rollback writes a value the row never had.
+  it('restores what the row actually was, across two interleaved toggles', () => {
+    const original = [{ id: 'a', name: 'Discord', enabled: false }];
+
+    // Click 1 turns it on optimistically; click 2 turns it back off.
+    const afterFirst = applyEnabled(original, 'a', true);
+    const afterSecond = applyEnabled(afterFirst, 'a', false);
+
+    // Both fail. Reverting by the inverse of each request lands wrong:
+    // the second rollback asks for !false = true, a state the row was
+    // never in before either click.
+    const byInverse = applyEnabled(applyEnabled(afterSecond, 'a', false), 'a', true);
+    expect(enabledStateOf(byInverse, 'a')).toBe(true);
+    expect(enabledStateOf(byInverse, 'a')).not.toBe(enabledStateOf(original, 'a'));
+
+    // Reverting each to the state captured before its own mutation lands
+    // back where the machine actually was.
+    const byCapture = applyEnabled(
+      applyEnabled(afterSecond, 'a', enabledStateOf(afterFirst, 'a')),
+      'a',
+      enabledStateOf(original, 'a')
+    );
+    expect(enabledStateOf(byCapture, 'a')).toBe(false);
+    expect(enabledStateOf(byCapture, 'a')).toBe(enabledStateOf(original, 'a'));
   });
 });

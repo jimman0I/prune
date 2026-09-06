@@ -1,3 +1,4 @@
+import { useCallback } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   fetchStartupItems, fetchStartupIcons, setStartupItemEnabled,
@@ -6,7 +7,7 @@ import {
   fetchDiskSpace, fetchDiskHealth
 } from '../lib/api.js';
 import { keys } from '../lib/queryClient.js';
-import { applyEnabled, toggleOutcome } from '../lib/startupToggleState.js';
+import { applyEnabled, toggleOutcome, enabledStateOf } from '../lib/startupToggleState.js';
 
 /** The screens whose data is one request and a couple of actions.
  *
@@ -69,8 +70,27 @@ export function useStartupToggle({ onProblem } = {}) {
         : toggleOutcome(result, variables.enabled);
 
       if (outcome.revert) {
-        queryClient.setQueryData(keys.startupItems, (current) =>
-          applyEnabled(current, variables.id, !variables.enabled));
+        // Back to what this row ACTUALLY was before this mutation, read
+        // off the list captured in onMutate -- not to the inverse of what
+        // was asked.
+        //
+        // The two differ as soon as two clicks on one row overlap. The
+        // inverse assumes the prior state was the opposite of the
+        // request, which is true for a single click and false for the
+        // second of a pair: reverting it writes a value the row was never
+        // in. useSettings below already avoids exactly this, and says so.
+        //
+        // Only this row is touched, rather than restoring the whole
+        // captured list: another row may have changed successfully while
+        // this one was in flight, and a wholesale restore would undo it.
+        const wasEnabled = enabledStateOf(context?.previous, variables.id);
+        // null means the row is no longer in the list -- nothing to
+        // return it to, and inventing a state would be worse than
+        // leaving it.
+        if (wasEnabled !== null) {
+          queryClient.setQueryData(keys.startupItems, (current) =>
+            applyEnabled(current, variables.id, wasEnabled));
+        }
       }
       if (outcome.message) onProblem?.(variables.id, outcome.message);
     }
@@ -81,7 +101,14 @@ export function useStartupToggle({ onProblem } = {}) {
 
 export function useQuarantine() {
   const queryClient = useQueryClient();
-  const invalidate = () => queryClient.invalidateQueries({ queryKey: keys.quarantine });
+  // Stable, because it is handed out as `refresh`. A fresh function every
+  // render defeats any consumer that memoises on it, and makes it useless
+  // as an effect dependency -- an effect depending on it would run on
+  // every render of the screen.
+  const invalidate = useCallback(
+    () => queryClient.invalidateQueries({ queryKey: keys.quarantine }),
+    [queryClient]
+  );
 
   const batches = useQuery({ queryKey: keys.quarantine, queryFn: fetchQuarantineBatches });
 
@@ -145,10 +172,34 @@ export function useSettings() {
 
 export function useDiskSpace() {
   const query = useQuery({ queryKey: keys.diskSpace, queryFn: fetchDiskSpace, retry: 1 });
-  return { diskSpace: query.data ?? null, loading: query.isPending };
+  return {
+    diskSpace: query.data ?? null,
+    loading: query.isPending,
+    // Surfaced rather than swallowed: "could not read disk space" and
+    // "this machine has no disks" must not render the same way.
+    error: query.error ? query.error.message : null
+  };
 }
 
+/** Drive health, and a way to replace it with an elevated read.
+ *
+ * `setHealth` exists because unlocking wear data raises a UAC prompt and
+ * returns a BETTER answer for the same question -- same shape, more
+ * fields. Writing it into the cache keeps one source of truth for the
+ * screen; before this the Dashboard held disk health in local state
+ * beside a query cache that also knew about it, and the two could
+ * disagree.
+ *
+ * Not a mutation: there is nothing to invalidate afterwards. The reply
+ * IS the new value, and re-fetching would throw away the elevated read
+ * and put the unprivileged one back. */
 export function useDiskHealth() {
+  const queryClient = useQueryClient();
   const query = useQuery({ queryKey: keys.diskHealth, queryFn: fetchDiskHealth, retry: 1 });
-  return { health: query.data ?? null, loading: query.isPending };
+  return {
+    health: query.data ?? null,
+    loading: query.isPending,
+    error: query.error ? query.error.message : null,
+    setHealth: (next) => queryClient.setQueryData(keys.diskHealth, next)
+  };
 }

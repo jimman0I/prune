@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, memo } from 'react';
 import { useQuarantine } from '../hooks/useSystemQueries.js';
 
 // Duplicated locally rather than imported from Dashboard.jsx/DeepClean.jsx
@@ -26,7 +26,7 @@ function formatDate(ms) {
   });
 }
 
-export default function QuarantineManager() {
+function QuarantineManager() {
   const [actionError, setActionError] = useState(null);
   const [confirmDeleteDir, setConfirmDeleteDir] = useState(null);
   const [confirmEmpty, setConfirmEmpty] = useState(false);
@@ -230,3 +230,18 @@ export default function QuarantineManager() {
     </div>
   );
 }
+
+/** Memoised because App owns the active-screen state.
+ *
+ * Screens stay mounted once visited (see Screen.jsx), so every setScreen
+ * re-renders App and React then reconciles every screen that has ever
+ * been opened -- hidden ones skip layout and paint, not render. Measured
+ * before this was added: a hidden Disk Map rendered twice across two tab
+ * switches, once per switch, and that cost grows with every tab the user
+ * has visited.
+ *
+ * Safe here specifically because this component takes no props at all, so
+ * the comparison is between two empty objects and can never produce a
+ * stale screen. A component with unstable props would gain nothing from
+ * this and is deliberately left alone. */
+export default memo(QuarantineManager);
