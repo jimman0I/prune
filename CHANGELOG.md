@@ -3,6 +3,42 @@
 All notable changes to Prune (formerly named unrevo -- rebranded 2026-09-01,
 see v1.0.1 below) are documented here.
 
+## v2.1.0
+
+### Deep Clean asks before a rule that loses data is ticked
+
+Sixteen of the seventy-four rules are marked as losing something —
+browsing history, cookies, open tabs, autofill and per-site storage across
+Brave, Chrome and Edge, plus the Recycle Bin. Until now the whole
+protection was a "Loses data" badge and not being selected by default: one
+click on a checkbox, and the next Clean signed you out of every site you
+use.
+
+Nothing there is unrecoverable — Clean moves everything to Quarantine
+first — but recoverable is not the same as wanted, and having to restore a
+batch to get your sessions back is still an afternoon interrupted by a
+tool that was supposed to help.
+
+So ticking one now opens a dialog naming the rule and what it costs:
+"Enable Brave — Cookies", "Signs you out of every site that remembered
+you." Cancel is the safe default; "Enable anyway" is the deliberate one.
+Ticking a box is not cleaning, and the Clean button's own confirmation
+still stands between this and any file moving.
+
+- **Only on the way on.** Unticking cannot lose anything, and a dialog in
+  front of the safe direction is how people learn to click through the one
+  in front of the unsafe direction.
+- **"Remember my choice" is per rule, not per category.** Agreeing to lose
+  cookies is not agreeing to lose browsing history. The rules that have
+  stopped asking are kept in Settings as `acknowledgedCleanWarnings`.
+- **Select All no longer sweeps in a rule that loses data**, unless you
+  have already said to stop asking about that one. A single bulk click is
+  the opposite of the deliberate choice the dialog exists to capture, and
+  five dialogs in a row would train anyone to dismiss them unread. It
+  already skipped rules for software this machine does not have; this is
+  the same idea applied to rules that need an answer nobody has given.
+  What it leaves unticked is visible on the row, wearing the badge.
+
 ## v2.0.0
 
 The largest release since 1.0. One feature was removed and replaced, three
