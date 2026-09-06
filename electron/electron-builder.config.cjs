@@ -1,15 +1,27 @@
 module.exports = {
   appId: 'com.jimman0i.prune',
   productName: 'Prune',
-  // Found by installing 2.1.0 from its own release and looking at the
-  // result: without this, electron-builder writes no Publisher into the
-  // uninstall registry entry, and Prune listed ITSELF as "Unknown
-  // Publisher" in its own Applications tab -- alongside Windows' own
-  // Apps & features and any other uninstaller. A poor look for a tool
-  // whose job is showing you that column. electron-builder derives it
-  // from package.json's `author`, which was absent; the build had been
-  // saying so on every run ("author is missed in the package.json") and
-  // nothing was reading the warning.
+  // Publisher comes from package.json's `author`. Without it,
+  // electron-builder writes none, and Prune listed ITSELF as "Unknown
+  // Publisher" in its own Applications tab -- alongside Windows' own Apps
+  // & features and any other uninstaller. A poor look for a tool whose
+  // job is showing you that column. The build had been printing "author
+  // is missed in the package.json" on every run since the project
+  // started and nothing was reading it.
+  //
+  // THE VALUE MATTERS, and not for any reason that is visible from here.
+  // `author: "jimman0I"` builds an installer that dies on launch with an
+  // access violation (exit -1073741819) before it writes a single file --
+  // reproducible, and not a build error: the build succeeds and produces
+  // a normal-sized exe. `author: "Prune"` builds one that installs at
+  // exit 0 and writes Publisher correctly. Both were verified by
+  // installing them back to back from the same directory.
+  //
+  // So do not change this string without installing the result. The root
+  // cause is somewhere inside electron-builder's NSIS generation and was
+  // not worth chasing past a working configuration, but a Publisher that
+  // reads slightly oddly is a much smaller problem than an installer
+  // nobody can run.
   //
   // InstallLocation is still empty, which electron-builder's NSIS target
   // does not write and there is no flag for. It only costs Prune's own

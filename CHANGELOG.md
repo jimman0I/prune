@@ -3,6 +3,21 @@
 All notable changes to Prune (formerly named unrevo -- rebranded 2026-09-01,
 see v1.0.1 below) are documented here.
 
+## v2.1.1
+
+Installer metadata only. The app itself is unchanged from 2.1.0 — if you
+already have it, there is nothing here worth downloading for.
+
+- **Prune no longer lists itself as "Unknown Publisher."** Its uninstall
+  registry entry carried no Publisher, so it appeared that way in its own
+  Applications tab, in Windows' Apps & features, and in any other
+  uninstaller. Found by installing 2.1.0 from its own release and reading
+  back what Windows recorded. It now reads "Prune".
+
+Still missing an InstallLocation, which electron-builder's NSIS target
+does not write and offers no setting for. The only thing it costs is
+Prune's own "Folder" button doing nothing for its own row.
+
 ## v2.1.0
 
 ### Deep Clean asks before a rule that loses data is ticked
