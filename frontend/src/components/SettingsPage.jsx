@@ -6,13 +6,18 @@ import AutomationSettings from './AutomationSettings.jsx';
 import { useSettings } from '../hooks/useSystemQueries.js';
 
 // electron/package.json is this app's real, single source of truth for
-// name/version (checked 2026-09-01, rebranded from "unrevo" to "Prune":
-// productName "Prune", version "1.0.1") -- hand-copied here rather than
-// wired through Vite's build pipeline, matching this codebase's existing
-// convention of small hand-curated constants over new plumbing for a
-// value that changes on release cadence, not per-request.
+// name/version (checked 2026-09-06 for the 2.0.0 release: productName
+// "Prune", version "2.0.0") -- hand-copied here rather than wired through
+// Vite's build pipeline, matching this codebase's existing convention of
+// small hand-curated constants over new plumbing for a value that changes
+// on release cadence, not per-request.
+//
+// The cost of that convention is that this has to be bumped by hand with
+// the three package.json files and their lockfiles, and nothing fails if
+// it is not -- the About panel simply reports the previous release. It
+// was already a release behind once.
 const APP_NAME = 'Prune';
-const APP_VERSION = '1.0.1';
+const APP_VERSION = '2.0.0';
 
 const TABS = [
   { id: 'general', label: 'General' },

@@ -3,6 +3,240 @@
 All notable changes to Prune (formerly named unrevo -- rebranded 2026-09-01,
 see v1.0.1 below) are documented here.
 
+## v2.0.0
+
+The largest release since 1.0. One feature was removed and replaced, three
+screens are new, the whole interface was redesigned, and the API the app
+talks to itself over stopped accepting requests from anywhere else.
+
+### Removed
+
+- **Smart Cleanup is gone**, replaced by Deep Clean. Its four hard-coded
+  categories (Temp, Thumbnail Cache, Recycle Bin, Browser Cache) were a
+  fraction of what is actually reclaimable, and the parts of it that
+  genuinely could not be expressed as a rule moved into Deep Clean rather
+  than being dropped.
+
+### Deep Clean (new, replacing Smart Cleanup)
+
+- **74 rules across 29 categories** — the browsers split per application
+  rather than lumped as "browser cache", plus Discord, Spotify, Steam,
+  Epic, Riot, Ubisoft Connect, League of Legends, Overwolf, NVIDIA,
+  DirectX, Adobe, JetBrains, VS Code, Office, Teams, Zoom, Slack,
+  Telegram, qBittorrent, Malwarebytes and Windows' own caches.
+- **The scan streams a rule at a time.** The one-shot version took about
+  nineteen seconds and said nothing until it finished, which is
+  indistinguishable from being stuck. The tree now fills in as each rule's
+  real size is known, in a two-pane layout with live output and a Stop
+  button that actually stops the filesystem walk.
+- **A rule that cannot be measured says why** — "not installed" or "needs
+  admin" — instead of reporting 0 B. Reporting zero for something the app
+  could not see is a claim about the machine rather than an admission
+  about the scan.
+- Rules are marked for whether they are safe to select by default and for
+  whether they lose data (saved sessions, logins), so the destructive ones
+  are never swept up by a select-all.
+- The rule tree is on screen immediately, before any scanning, with sizes
+  filled in afterwards — the screen used to be blank until someone ran a
+  scan that took half a minute.
+
+### Startup (new screen)
+
+- Lists everything Windows launches at sign-in, across the Run, Run32 and
+  Startup-folder locations, grouped by where each entry lives.
+- **Reads whether Windows will actually run each entry**, from the
+  `StartupApproved` store Task Manager itself writes — not just whether
+  the entry exists.
+- **Switch entries on and off**, the same way Windows does, writing the
+  same 12-byte record. A machine-wide entry raises a UAC prompt, and
+  declining it is reported as a decision rather than an error.
+- Real icons, resolved through Startup-folder shortcuts to their targets,
+  with a lettered tile when a program has none. These entries are named by
+  whatever string a program wrote into a registry value, so
+  "RtkAudUService" and "vgtray" are the names — the icon is often the only
+  thing that says what one actually is.
+
+### Duplicates (new screen)
+
+- Finds duplicate files under a folder you choose, in three passes: group
+  by size, then compare a 64 KB sample, then hash in full. Almost nothing
+  is read completely — a file with a unique size is never opened at all.
+- A folder, never a whole drive by default. Hashing is the expensive part
+  and the honest scope for it is somewhere you picked.
+- Selection keeps the oldest copy of each group by default, and the scan
+  is bounded and abortable.
+
+### Applications
+
+- **A dense, sortable grid** in place of the card list, with the columns a
+  Revo-style uninstaller needs, and **batch uninstall** with row selection.
+- **Real icons, extracted from each program's own executable** — including
+  Windows Installer's own product icons, a file-type fallback for the
+  rest, and a lettered tile when there is genuinely nothing to show.
+- **The blanks filled in.** Sizes measured from install folders for the
+  entries with no recorded size (with Epic and GOG install records read
+  directly), versions read off program binaries, and install dates
+  recovered from the uninstall key's own write time — two thirds of the
+  list had no date at all.
+- **Microsoft Store apps and browser extensions**, neither of which the
+  uninstall registry mentions anywhere. Both listed and marked for what
+  they are, with their own icons and filters, and a button that opens
+  Windows' own Installed apps page where a Store app is actually removed.
+- **Running programs are detected and flagged**, with a warning before
+  uninstalling one — an uninstaller for a running program either fails or
+  half-succeeds.
+- **Forced removal for orphaned entries** whose own uninstaller is gone,
+  and a Folder button that opens any program's install location.
+- A New column marking recent installs.
+
+### Disk Map
+
+- **Full-drive scan by reading the NTFS MFT directly**, the way WizTree
+  does — a whole drive in seconds instead of a directory walk, behind a
+  UAC prompt because reading the MFT requires it.
+- One screen, coloured by file type, browsable instantly at a drive root
+  instead of crawling.
+- **A largest-files view, a folder table, and a breakdown by file type**
+  beside the map, plus Windows' own icon for each file type.
+- **Right-click to remove**, routed through Quarantine and the path guard
+  — never a delete. This is the one removal in the app that acts on
+  whatever happened to be under the cursor, so it refuses protected paths
+  with a reason rather than a generic failure.
+- A truncated scan now says which part of the drive it never reached,
+  instead of quietly leaving it out of the answer.
+
+### Quarantine
+
+- **A retention window and a size cap**, both off by default. Over the
+  cap the oldest backups go first, and the newest is never dropped even
+  when it alone exceeds the limit — otherwise quarantining a 60 GB folder
+  under a 5 GB cap would destroy it with the feature meant to keep it
+  safe. When the cap cannot hold, the screen says so.
+- Both limits are applied where the quarantine actually grows (after a
+  removal) and once on start, for a window that expired while the app was
+  closed. Every batch removed is named along with which rule took it.
+- The screen shows what is held against the limit, and says "at least"
+  when a batch carries no recorded size rather than rounding an unknown
+  down to zero.
+- **Restore and permanent delete work over HTTP at all now.** A manifest's
+  `batchDir` is a full absolute path, and joining it onto the quarantine
+  root a second time produced a doubled, nonexistent path — so both had
+  only ever worked in direct unit tests, never through the app.
+- Registry keys that could not be removed are recorded rather than
+  swallowed, so a removal cannot report success while an HKLM entry is
+  still there.
+
+### Automation (new)
+
+- **A scheduled scan or clean**, daily or weekly, which catches up on a
+  run that was missed rather than skipping it — and reports how many were
+  missed, because a desktop asleep at 2 AM did not fail its schedule, it
+  simply was not there for it.
+- It admits what it cannot do: the run happens while Prune is open, since
+  there is no headless entry point for a Windows task to invoke.
+
+### Dashboard
+
+- **Real drive health, replacing free-space-as-health.** Free space is not
+  health, and presenting it as such was the single most misleading number
+  in the app. Reads the drive's own NVMe SMART log and its SMART
+  attributes, with an explicit admin unlock for wear data.
+- **Live CPU, memory and disk throughput**, from a single streaming
+  performance counter rather than a sampled call per request — measured
+  first, because the naive version cost 1.7 seconds per reading.
+- A broken-entry count, and three cards that each say something.
+
+### Settings
+
+- **Exclusions now cover file types as well as folders**, and both are
+  honoured by Deep Clean, the disk scanner and the duplicate finder alike.
+- Three guards taken from what Revo and BleachBit ship enabled rather than
+  merely offer: leave recently-modified files alone, create a restore
+  point first, and hide cleaners for software this machine does not have.
+- Controls for both quarantine limits.
+- **Two settings that did nothing are wired.** `excludeFolders` and
+  `autoQuarantine` were written to disk, shown back, and read by no line
+  of behaviour. A control that does nothing is worse than a missing one.
+
+### Design
+
+- **A complete visual redesign** — Aurora Deck, on obsidian, with cyan as
+  the one action colour.
+- Entrance and hover motion throughout, written in CSS with no animation
+  library, and honoured `prefers-reduced-motion`.
+- Toasts, global keyboard shortcuts with a shortcut list, breadcrumbs,
+  and empty states that say what to do rather than that there is nothing.
+- **Accessibility work**: visible focus states, muted text raised to WCAG
+  AA contrast, real dialog semantics with a focus trap and Escape, and
+  every destructive confirmation as an inline two-step rather than a
+  native `window.confirm`.
+
+### Security
+
+- **The API only answers Prune's own window.** It previously sent
+  `Access-Control-Allow-Origin: *` and checked nothing, so any website
+  open in a browser could read the installed program list and the disk
+  contents, toggle startup entries, run a Deep Clean, move a folder
+  through quarantine, or empty the quarantine outright. Both the Origin
+  and the Host header are now checked — the second defeats DNS rebinding,
+  where an attacker's domain resolves to 127.0.0.1 and no Origin is sent
+  at all.
+- **Uninstalling takes a program id, not a command.** The route used to
+  hand a string from the request body to `cmd.exe`. Nothing was reachable
+  through it that a local process could not already do directly, but a
+  client should not be able to describe a command — only point at a
+  program the machine already agrees is installed.
+- Errors and unknown paths answer as JSON. A malformed request body used
+  to return Express's default HTML error page, which included a stack
+  trace naming the install directory and the internals of its
+  dependencies.
+
+### Under the hood
+
+- Every read path moved onto TanStack Query, including the two streaming
+  scans, with cancellation intact.
+- The route layer has tests for the first time — seventeen route files
+  had none, which is where validation, trust decisions and error mapping
+  all live.
+- Four handlers that never answered at all were fixed. An async handler
+  that rejects does not reach an Express 4 error handler, so the request
+  was left unanswered and the socket open until the client gave up.
+- Test files are no longer shipped inside the installer.
+
+### Fixed
+
+- **The leftover file scan never worked.** A space in a search root broke
+  it, so it found registry keys and never files — which is most of what a
+  leftover scan is for.
+- **Steam games all reported the size of Steam itself.** Their uninstall
+  string points at Steam's own binary, so every one of them measured the
+  same folder.
+- The widened registry scan no longer matches other programs' keys.
+- Nineteen programs no longer share one meaningless icon, and the
+  lettered tile is legible — it was white on coral at 2.5:1 contrast, and
+  skips a vendor word the Company column already repeats.
+- PowerShell output is forced to UTF-8, so non-Latin program names survive
+  the query.
+- The Disk Map tooltip follows the cursor again, and the map no longer
+  crawls.
+- A rule token that silently disabled a Deep Clean rule.
+
+### Known limitations
+
+- Windows only. No macOS/Linux support (the entire feature set is built on
+  the Windows registry, `reg.exe`, and `powershell.exe`).
+- Microsoft Store apps are listed, dated and sized, but are removed
+  through Windows' own Installed apps page rather than by Prune.
+- Browser extensions are listed but are removed from the browser itself.
+- Leftover scanning is heuristic (name/publisher matching), not a full
+  before/after filesystem snapshot.
+- Scheduled runs happen while Prune is open. There is no headless entry
+  point for a Windows scheduled task to invoke.
+- A folder on another drive cannot be quarantined — Windows cannot rename
+  across volumes, and copying 40 GB to make it look atomic would be worse.
+- The unsigned installer will trigger a Windows SmartScreen warning on
+  first run.
+
 ## v1.0.1
 
 Rebranded from "unrevo" to "Prune" -- new name, new mark (a navy circle
