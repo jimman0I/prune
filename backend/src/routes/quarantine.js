@@ -5,7 +5,8 @@ import { existsSync } from 'node:fs';
 import { quarantineAndDelete, restoreQuarantine, quarantineRoot, deletePermanently, emptyQuarantine, listQuarantineBatches } from '../services/quarantine.js';
 import { tryCreateRestorePoint } from '../services/restorePoint.js';
 import { getSettings } from '../services/settings.js';
-import { purgeExpiredQuarantine } from '../services/quarantineRetention.js';
+import { enforceQuarantineLimits } from '../services/quarantineLimits.js';
+import { quarantineTotals, maxBytesFrom } from '../services/quarantineSizeCap.js';
 import { quarantinePath } from '../services/quarantinePath.js';
 
 // Real bug, found dogfooding Phase 4 (2026-09-01): `manifest.batchDir` (the
@@ -46,7 +47,13 @@ router.post('/remove', async (req, res) => {
       ? { created: false, reason: 'turned off in Settings' }
       : await tryCreateRestorePoint(`Prune: forced removal of ${programName}`);
     const manifest = await quarantineAndDelete({ programName, files: files || [], registryKeys: registryKeys || [] });
-    res.json({ ...manifest, restorePoint });
+    // The moment the quarantine grows is the moment it can exceed what
+    // the user allowed it to hold, so the limits are applied here rather
+    // than only on a timer. Awaited, and reported: something the user
+    // kept may have just been destroyed as a consequence of this
+    // removal, and they should be told by the response that caused it.
+    const limits = await enforceQuarantineLimits(settings);
+    res.json({ ...manifest, restorePoint, limits });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -54,7 +61,12 @@ router.post('/remove', async (req, res) => {
 
 router.get('/', async (req, res) => {
   try {
-    res.json({ batches: await listQuarantineBatches() });
+    const batches = await listQuarantineBatches();
+    // The screen already added these up itself. Sending them means the
+    // cap and the total are computed by the same code that enforces the
+    // cap, rather than by a second implementation that can disagree with
+    // it about what an unmeasured batch is worth.
+    res.json({ batches, ...quarantineTotals(batches), maxBytes: maxBytesFrom(await getSettings()) });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -102,24 +114,32 @@ router.post('/path', async (req, res) => {
       path,
       reportedSizeBytes: typeof reportedSizeBytes === 'number' ? reportedSizeBytes : null
     });
-    res.json(result);
+    // Only when something was actually moved in. A refusal did not grow
+    // the quarantine, and running a purge because a removal was declined
+    // would destroy a backup for no reason at all.
+    if (!result.ok) { res.json(result); return; }
+    res.json({ ...result, limits: await enforceQuarantineLimits(await getSettings()) });
   } catch (err) {
     res.status(500).json({ ok: false, error: err.message });
   }
 });
 
-/** Deletes every batch past the retention window.
+/** Brings the quarantine back inside both limits: the retention window
+ * and the size cap.
  *
- * POST, and it reports which programs' backups it removed rather than a
- * count: "purged 3 batches" is not something anyone can check or dispute,
- * and this is the one operation in the app with no undo behind it.
+ * POST, and it reports which programs' backups it removed and under which
+ * rule rather than a count: "purged 3 batches" is not something anyone
+ * can check or dispute, this is the one operation in the app with no undo
+ * behind it, and "too old" and "too big" are different facts -- only one
+ * of them is fixed by raising a number.
  *
- * Reads the window from settings rather than the body. A client that
- * could name its own retention could pass 0 and empty the quarantine
+ * Reads both limits from settings rather than the body. A client that
+ * could name its own retention could pass 0, and one that could name its
+ * own cap could pass a byte, either of which would empty the quarantine
  * through a route whose name says otherwise. */
 router.post('/purge', async (req, res) => {
   try {
-    const result = await purgeExpiredQuarantine(await getSettings());
+    const result = await enforceQuarantineLimits(await getSettings());
     if (!result.ok) { res.status(500).json(result); return; }
     res.json(result);
   } catch (err) {

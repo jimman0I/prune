@@ -62,6 +62,16 @@ const DEFAULT_SETTINGS = {
      retention that runs when it should not destroys the only copy of
      something the user removed by accident. */
   quarantineRetentionDays: null,
+  /* The most the quarantine may hold, in GB, or null for no limit. Off
+     by default and off for every ambiguous value, same as the retention
+     window -- see quarantineSizeCap.js. A second, independent limit
+     rather than a replacement: a weekly user with a 30-day window can
+     still fill a drive in an afternoon by uninstalling four games, and a
+     machine used twice a year keeps its undo for exactly as long as it
+     should and never approaches any cap.
+     1024-based, so it agrees with the figure the Quarantine screen
+     prints above it. */
+  quarantineMaxSizeGb: null,
   /* The scheduled run. IN-APP: it catches up when Prune is running rather
      than firing with the app closed, because there is no headless entry
      point for a Windows task to invoke. lastRunAt and lastResult live here

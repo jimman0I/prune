@@ -1,6 +1,8 @@
 import { createServer } from 'node:http';
 import { createApp } from './app.js';
 import { startScheduler, checkSchedule } from './services/scheduleRunner.js';
+import { enforceQuarantineLimits } from './services/quarantineLimits.js';
+import { getSettings } from './services/settings.js';
 import { initTray } from './lib/trayManager.js';
 import { getProgramIcons } from './services/programIcons.js';
 import { getProgramSizes } from './services/programSizes.js';
@@ -29,6 +31,26 @@ const app = createApp({ port: PORT });
 // was off, and the app opening is the first moment anything can notice.
 startScheduler();
 checkSchedule().catch(() => { /* a failed check must never stop the server booting */ });
+
+// The quarantine's two limits, applied once on start.
+//
+// They are also applied every time a batch is created, which is the
+// moment either can be crossed. This covers the other case: a retention
+// window that expired while the app was closed. Without it, a machine
+// left off for a month would come back holding batches it was supposed to
+// have dropped weeks ago, and would keep them until the next uninstall.
+//
+// Fire-and-forget, like checkSchedule above, and for the same reason: a
+// housekeeping pass that cannot run is not a reason for the app not to
+// start. It is a no-op when neither limit is set, which is the default.
+getSettings()
+  .then((settings) => enforceQuarantineLimits(settings))
+  .then((result) => {
+    for (const batch of result.purged) {
+      console.log(`Dropped quarantine backup for ${batch.programName} (${batch.reason}).`);
+    }
+  })
+  .catch(() => { /* the backups simply stay until the next attempt */ });
 
 // Real bug, found dogfooding (2026-08-29): a `server.listen()` failure
 // (most commonly EADDRINUSE — something else, or a second copy of this

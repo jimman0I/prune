@@ -40,9 +40,11 @@ vi.mock('../services/settings.js', () => ({
   updateSettings: async (partial) => ({ ...settings, ...partial })
 }));
 
-const purgeExpiredQuarantine = vi.fn(async () => ({ ok: true, purged: ['Thing'] }));
-vi.mock('../services/quarantineRetention.js', () => ({
-  purgeExpiredQuarantine: (...a) => purgeExpiredQuarantine(...a)
+const enforceQuarantineLimits = vi.fn(async () => ({
+  ok: true, purged: [], failed: [], errors: [], stillOverCap: false
+}));
+vi.mock('../services/quarantineLimits.js', () => ({
+  enforceQuarantineLimits: (...a) => enforceQuarantineLimits(...a)
 }));
 
 const quarantinePath = vi.fn(async () => ({ ok: true, movedTo: 'somewhere' }));
@@ -178,27 +180,69 @@ describe('POST /quarantine/path', () => {
 });
 
 describe('POST /quarantine/purge', () => {
-  it('takes the retention window from settings and ignores the body', async () => {
-    // A client that could name its own retention could pass 0 and empty
-    // the whole quarantine through an endpoint whose name says it only
-    // removes expired batches.
-    await postJson('/quarantine/purge', { quarantineRetentionDays: 0, retentionDays: 0 });
-    expect(purgeExpiredQuarantine).toHaveBeenCalledWith(settings);
+  it('takes both limits from settings and ignores the body', async () => {
+    // A client that could name its own retention could pass 0, and one
+    // that could name its own cap could pass a byte -- either empties the
+    // whole quarantine through an endpoint whose name says it only
+    // removes what is past a limit the USER set.
+    await postJson('/quarantine/purge', {
+      quarantineRetentionDays: 0, retentionDays: 0, quarantineMaxSizeGb: 0.000001, maxBytes: 1
+    });
+    expect(enforceQuarantineLimits).toHaveBeenCalledWith(settings);
   });
 
   it('reports a failed purge as a 500 with the service result', async () => {
-    purgeExpiredQuarantine.mockResolvedValueOnce({ ok: false, error: 'EPERM' });
+    enforceQuarantineLimits.mockResolvedValueOnce({ ok: false, errors: ['EPERM'], purged: [], failed: [] });
     const res = await postJson('/quarantine/purge', {});
     expect(res.status).toBe(500);
-    expect(res.body).toEqual({ ok: false, error: 'EPERM' });
+    expect(res.body.errors).toEqual(['EPERM']);
+  });
+});
+
+describe('the limits, applied where the quarantine actually grows', () => {
+  it('runs them after a forced removal, and reports what they took', async () => {
+    // The moment a batch is created is the moment the quarantine can
+    // exceed what the user allowed. Reported in the same response,
+    // because something they were keeping may have just been destroyed
+    // as a consequence of this removal.
+    enforceQuarantineLimits.mockResolvedValueOnce({
+      ok: true, purged: [{ programName: 'Ancient', reason: 'age' }], failed: [], errors: [], stillOverCap: false
+    });
+    const res = await postJson('/quarantine/remove', { programName: 'Thing' });
+    expect(enforceQuarantineLimits).toHaveBeenCalledWith(settings);
+    expect(res.body.limits.purged).toEqual([{ programName: 'Ancient', reason: 'age' }]);
+  });
+
+  it('runs them after a Disk Map removal', async () => {
+    const res = await postJson('/quarantine/path', { path: 'C:\\Users\\x\\Downloads\\big' });
+    expect(enforceQuarantineLimits).toHaveBeenCalled();
+    expect(res.body.limits).toBeDefined();
+  });
+
+  it('does NOT run them when the removal was refused', async () => {
+    // A refusal did not grow the quarantine. Purging because a removal
+    // was declined would destroy a backup for no reason at all.
+    quarantinePath.mockResolvedValueOnce({ ok: false, protected: true, reason: 'That is Windows itself.' });
+    const res = await postJson('/quarantine/path', { path: 'C:\\Windows' });
+    expect(res.status).toBe(200);
+    expect(res.body.ok).toBe(false);
+    expect(enforceQuarantineLimits).not.toHaveBeenCalled();
   });
 });
 
 describe('the rest', () => {
-  it('lists batches', async () => {
+  it('lists batches, with what they add up to and the cap they are under', async () => {
+    // Totalled by the same code that enforces the cap. A second
+    // implementation on the screen could disagree with this one about
+    // what an unmeasured batch is worth, and then the number above the
+    // list would not be the number the purge acts on.
     const res = await server.call('/quarantine');
     expect(res.status).toBe(200);
-    expect(res.body).toEqual({ batches: [{ batchDir: 'x', programName: 'Thing' }] });
+    expect(res.body.batches).toEqual([{ batchDir: 'x', programName: 'Thing' }]);
+    expect(res.body.batchCount).toBe(1);
+    expect(res.body.unknownSizeCount).toBe(1);
+    expect(res.body.exact).toBe(false);
+    expect(res.body.maxBytes).toBeNull();
   });
 
   it('empties the quarantine only on POST, never on GET', async () => {
