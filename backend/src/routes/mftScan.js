@@ -15,17 +15,28 @@ router.post('/', async (req, res) => {
     return res.status(400).json({ error: 'driveLetter must be a single letter.' });
   }
 
-  const result = await scanDriveViaMft({ driveLetter, maxDepth });
+  // Wrapped like every other handler in this app. scanDriveViaMft reports
+  // an expected failure through result.ok, but it can still reject --
+  // spawning an elevated process has its own ways to go wrong -- and an
+  // async handler's rejection does not reach the error middleware, since
+  // Express 4 forwards only what a handler throws synchronously. Without
+  // this the request was never answered at all, which from the Disk Map
+  // is indistinguishable from a scan still running.
+  try {
+    const result = await scanDriveViaMft({ driveLetter, maxDepth });
 
-  // A declined prompt is a 200 carrying { cancelled: true }, not an error
-  // status: the user answered the question, and the answer was no. Same
-  // convention /disk-health/elevated already uses.
-  if (!result.ok) {
-    if (result.cancelled) return res.json({ cancelled: true });
-    return res.status(500).json({ error: result.error });
+    // A declined prompt is a 200 carrying { cancelled: true }, not an
+    // error status: the user answered the question, and the answer was
+    // no. Same convention /disk-health/elevated already uses.
+    if (!result.ok) {
+      if (result.cancelled) return res.json({ cancelled: true });
+      return res.status(500).json({ error: result.error });
+    }
+
+    res.json({ tree: result.tree, stats: result.stats, driveLetter: result.driveLetter });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
-
-  res.json({ tree: result.tree, stats: result.stats, driveLetter: result.driveLetter });
 });
 
 export default router;

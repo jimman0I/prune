@@ -89,11 +89,9 @@ describe('a malformed request is a 400', () => {
   });
 
   it('does not fall over on a history POST with no body at all', async () => {
-    // This route is the one that destructures req.body without a `|| {}`
-    // fallback, so it depends on express.json() having left an object
-    // there. It does -- an empty body parses to {} -- but that is a
-    // property of the middleware, not of the route, and nothing else was
-    // holding it still.
+    // Two things have to hold for this: express.json() leaves {} for an
+    // empty body, and the route no longer relies on that -- it defaults
+    // the destructure itself, like the rest of them do.
     const res = await post('/uninstall-history', undefined);
     expect(res.status).toBe(400);
     expect(appendHistoryEntry).not.toHaveBeenCalled();

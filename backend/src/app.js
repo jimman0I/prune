@@ -13,6 +13,7 @@
 import express from 'express';
 import cors from 'cors';
 import { localOnly } from './lib/localOnly.js';
+import { jsonErrors } from './lib/jsonErrors.js';
 import programsRoutes from './routes/programs.js';
 import uninstallRoutes from './routes/uninstall.js';
 import leftoversRoutes from './routes/leftovers.js';
@@ -79,6 +80,12 @@ export function createApp({ port } = {}) {
   app.use('/api/forced-uninstall', forcedUninstallRoutes);
   app.use('/api/mft-scan', mftScanRoutes);
   app.use('/api/file-icons', fileIconsRoutes);
+
+  /** Last, because an Express error handler only sees what was raised by
+   * middleware mounted before it. See lib/jsonErrors.js -- without this,
+   * a truncated POST body got an HTML page containing a stack trace and
+   * this machine's filesystem paths. */
+  app.use(jsonErrors());
 
   return app;
 }
