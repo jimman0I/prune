@@ -48,7 +48,7 @@ export default function TableSkeleton({ columns, rows = 8, label }) {
             {columns.map((col) => (
               <div
                 key={col.key}
-                className="h-[9px] rounded-full bg-[color:var(--surface-hover)]"
+                className="h-[9px] rounded-full skeleton-shimmer"
                 // Varied widths, seeded off the row and column rather than
                 // random: a re-render must not reshuffle the bars, which
                 // would read as content changing.

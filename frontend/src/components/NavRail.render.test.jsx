@@ -26,10 +26,20 @@ import NavRail from './NavRail.jsx';
 
 const LABELS = ['Dashboard', 'Disk Map', 'Applications', 'Quarantine', 'Settings', 'Startup', 'Duplicates', 'Deep Clean'];
 
-/** The flyout for one item: the span sitting next to that item's button. */
+/** The flyout for one item: the span that is a SIBLING of that item's
+ * button, not a descendant of it.
+ *
+ * The first version of this asked for `button.parentElement
+ * .querySelector('span')`, which happened to be the flyout only while the
+ * button had no spans of its own. The moment the active-tab indicator and
+ * an icon wrapper moved inside it, the helper started returning the icon
+ * and three tests failed for a reason that had nothing to do with what
+ * they were testing. Selecting a direct child of the wrapper says what is
+ * actually meant. */
 function flyoutFor(label) {
   const button = screen.getByRole('button', { name: label });
-  return { button, flyout: button.parentElement.querySelector('span') };
+  const flyout = [...button.parentElement.children].find((el) => el.tagName === 'SPAN');
+  return { button, flyout };
 }
 
 describe('nav rail flyout labels', () => {

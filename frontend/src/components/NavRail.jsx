@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion';
 const ITEMS = [
   { id: 'dashboard', label: 'Dashboard', icon: (
     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
@@ -108,11 +109,28 @@ export default function NavRail({ screen, onNavigate }) {
               onClick={() => onNavigate(item.id)}
               aria-current={active ? 'page' : undefined}
               aria-label={item.label}
-              className={`peer w-11 h-11 rounded-xl flex items-center justify-center transition-colors ${
-                active ? 'bg-[color:var(--accent-primary-soft)] text-[color:var(--accent-primary)]' : 'text-[color:var(--text-secondary)] hover:text-[color:var(--text-primary)] hover:bg-[color:var(--surface-hover)]'
+              className={`peer relative w-11 h-11 rounded-xl flex items-center justify-center transition-colors ${
+                active ? 'text-[color:var(--accent-primary)]' : 'text-[color:var(--text-secondary)] hover:text-[color:var(--text-primary)] hover:bg-[color:var(--surface-hover)]'
               }`}
             >
-              {item.icon}
+              {/* The active tint is its own element with a shared
+                  layoutId, so framer-motion animates it BETWEEN buttons
+                  rather than fading one out and another in -- the mark
+                  slides down the rail to the tab you picked. Only one of
+                  these exists at a time, which is what makes the shared
+                  layout work.
+
+                  Behind the glyph and aria-hidden: it is decoration for a
+                  state `aria-current` already reports. */}
+              {active && (
+                <motion.span
+                  layoutId="nav-active"
+                  aria-hidden="true"
+                  className="absolute inset-0 rounded-xl bg-[color:var(--accent-primary-soft)]"
+                  transition={{ type: 'spring', stiffness: 420, damping: 34 }}
+                />
+              )}
+              <span className="relative">{item.icon}</span>
             </button>
 
             {/* Shown on hover AND on keyboard focus: someone tabbing the

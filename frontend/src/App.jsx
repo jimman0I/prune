@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import NavRail from './components/NavRail.jsx';
 import TitleBar from './components/TitleBar.jsx';
 import Dashboard from './components/Dashboard.jsx';
@@ -58,6 +58,53 @@ export default function App() {
    * and prefetchQuery is a no-op once the data is fresh. */
   useIdlePrefetch();
 
+  /* The screen-change transition.
+   *
+   * Not AnimatePresence, and the reason is this app's architecture rather
+   * than preference. Screens STAY MOUNTED once visited (see Screen.jsx) so
+   * the Disk Map's scan and Deep Clean's results survive a tab switch.
+   * AnimatePresence animates things in and out of the tree, and keying a
+   * wrapper on `screen` would remount every screen on every switch --
+   * throwing away exactly the state that design protects. So the CONTAINER
+   * plays a short enter while its children are left alone.
+   *
+   * Web Animations rather than framer-motion, for one concrete reason:
+   * framer-motion writes its keyframe values as INLINE STYLES, so a
+   * cancelled or stalled run leaves `opacity: 0` sitting on the element
+   * permanently. WAAPI at the default `fill: none` writes nothing -- once
+   * the animation ends or is cancelled, the element is back to its
+   * stylesheet value with no residue.
+   *
+   * That is NOT the same as "safe if it never runs". An animation that is
+   * running but not progressing holds its first keyframe, whichever API
+   * drives it, so a screen mid-transition in a context that never
+   * composites shows opacity 0 either way. The cleanup below is what
+   * bounds that: leaving the screen cancels the animation and the element
+   * returns to visible immediately.
+   *
+   * The cancel is also a real fix rather than tidiness. Without it every
+   * tab switch stacks another animation on the same element -- measured
+   * three live at once after three switches -- and they fight over the
+   * same properties.
+   *
+   * Reduced motion is checked directly. MotionConfig covers framer-motion
+   * and index.css covers CSS transitions; neither reaches a WAAPI call. */
+  const stageRef = useRef(null);
+  useEffect(() => {
+    const stage = stageRef.current;
+    if (!stage?.animate) return undefined;
+    if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return undefined;
+
+    const animation = stage.animate(
+      [
+        { opacity: 0, transform: 'translateY(12px)' },
+        { opacity: 1, transform: 'translateY(0)' }
+      ],
+      { duration: 300, easing: 'cubic-bezier(0.22, 1, 0.36, 1)' }
+    );
+    return () => animation.cancel();
+  }, [screen]);
+
   const [showShortcuts, setShowShortcuts] = useState(false);
 
   /** The app's global chords.
@@ -90,7 +137,7 @@ export default function App() {
       <div className="flex-1 flex min-h-0">
       <ToastHost />
       <NavRail screen={screen} onNavigate={setScreen} />
-      <div className="flex-1 overflow-y-auto min-h-0">
+      <div ref={stageRef} className="flex-1 overflow-y-auto min-h-0">
         <Screen active={screen === 'dashboard'} visited={visited.has('dashboard')}>
           <Dashboard programs={programs} totalSize={totalSize} onNavigate={setScreen} />
         </Screen>

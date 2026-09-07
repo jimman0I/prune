@@ -10,7 +10,7 @@
  * Total Storage's usage bar. */
 export default function StatCard({ label, value, sublabel, children }) {
   return (
-    <div className="glass-panel p-6">
+    <div className="glass-panel lift p-6">
       <div className="text-[11px] text-[color:var(--text-muted)] uppercase tracking-[0.1em] font-medium mb-2">{label}</div>
       {value}
       {sublabel}

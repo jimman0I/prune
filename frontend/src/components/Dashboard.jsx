@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { unlockDiskWear, fetchUninstallHistory } from '../lib/api.js';
 import { formatRelativeTime } from '../lib/formatRelativeTime.js';
 import StatCard from './StatCard.jsx';
+import { useCountUp } from '../hooks/useCountUp.js';
 import ResourceMonitor from './ResourceMonitor.jsx';
 import { useQuery } from '@tanstack/react-query';
 import { fetchAutomation } from '../lib/api.js';
@@ -180,6 +181,16 @@ function SmartAttributes({ smart }) {
 }
 
 export default function Dashboard({ programs, totalSize, onNavigate = () => {} }) {
+  /* The count settles rather than snapping.
+   *
+   * It arrives a second or so after the card does, and appearing fully
+   * formed gave no sign anything had happened -- on a panel with three
+   * figures on it, the one that changed was easy to miss. Counting from
+   * the value already on screen, so a poll that moves 210 to 211 ticks by
+   * one instead of restarting from zero. `tabular-nums` on the element
+   * keeps the digits from reflowing while it runs. */
+  const shownPrograms = useCountUp(programs?.length ?? 0);
+
   // The one fact on the Installed Apps card worth crossing the app for: an
   // entry whose uninstaller is gone, which Windows will list forever.
   const brokenCount = useMemo(
@@ -356,7 +367,7 @@ export default function Dashboard({ programs, totalSize, onNavigate = () => {} }
         </StatCard>
         <StatCard
           label="Installed Apps"
-          value={<div className="display-heading text-[28px] text-[color:var(--text-primary)]">{programs.length}</div>}
+          value={<div className="display-heading text-[28px] text-[color:var(--text-primary)] tabular-nums">{Math.round(shownPrograms)}</div>}
           sublabel={
             // A bare count is not actionable; a broken entry is the one
             // thing on this card worth crossing the app for.
