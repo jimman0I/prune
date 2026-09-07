@@ -69,7 +69,7 @@ function ScanLog({ lines, scanning, scanned, total }) {
       </div>
 
       {total > 0 && (
-        <div className="h-[2px] bg-white/[0.06] shrink-0">
+        <div className="h-[2px] bg-[color:var(--surface-hover)] shrink-0">
           <div
             className="h-full bg-[color:var(--accent-primary)] transition-[width] duration-200"
             style={{ width: `${Math.round((scanned / total) * 100)}%` }}
@@ -86,7 +86,7 @@ function ScanLog({ lines, scanning, scanned, total }) {
         {lines.map((line, i) => (
           <div key={i} className="flex items-baseline gap-2 text-[11.5px] font-mono leading-relaxed">
             <span className="text-[color:var(--text-secondary)] truncate">{line.label}</span>
-            <span className="flex-1 border-b border-dashed border-white/[0.07] translate-y-[-3px]" />
+            <span className="flex-1 border-b border-dashed border-[color:var(--border-subtle)] translate-y-[-3px]" />
             <span className={`${LOG_TONE[line.tone]} shrink-0`}>{line.detail}</span>
           </div>
         ))}

@@ -3,6 +3,7 @@ import { runSandboxTest } from '../lib/api.js';
 import { classifyExclusion } from '../lib/exclusionInput.js';
 import { positiveOrOff } from '../lib/limitInput.js';
 import AutomationSettings from './AutomationSettings.jsx';
+import ThemeToggle from './ThemeToggle.jsx';
 import { useSettings } from '../hooks/useSystemQueries.js';
 
 // electron/package.json is this app's real, single source of truth for
@@ -37,7 +38,7 @@ function Toggle({ checked, onChange, label }) {
       aria-label={label}
       onClick={onChange}
       className={`relative w-10 h-6 rounded-full transition-colors shrink-0 ${
-        checked ? 'bg-[color:var(--accent-primary)]' : 'bg-white/10'
+        checked ? 'bg-[color:var(--accent-primary)]' : 'bg-[color:var(--surface-strong)]'
       }`}
     >
       <span
@@ -165,13 +166,38 @@ ode.js" is a folder or a file type.
             className={`px-4 py-2 rounded-lg text-[13px] font-medium transition-colors ${
               tab === t.id
                 ? 'bg-[color:var(--accent-primary-soft)] text-[color:var(--accent-primary)]'
-                : 'text-[color:var(--text-secondary)] hover:text-[color:var(--text-primary)] hover:bg-white/[0.04]'
+                : 'text-[color:var(--text-secondary)] hover:text-[color:var(--text-primary)] hover:bg-[color:var(--surface-hover)]'
             }`}
           >
             {t.label}
           </button>
         ))}
       </div>
+
+      {/* Outside the settings gate, deliberately. Everything below waits
+          on the backend, and this panel does not: the theme lives in
+          localStorage and is applied before React renders. Gating it too
+          meant the one control that still works when the backend is down
+          was the one control you could not reach -- and a spinner where a
+          theme switch should be is a worse answer than the switch. */}
+      {tab === 'general' && (
+        <div className="flex flex-col gap-4 mb-4">
+              <div className="glass-panel p-6">
+                <div className="flex items-center justify-between gap-4">
+                  <div className="min-w-0">
+                    <h2 className="text-[14px] font-medium text-[color:var(--text-primary)] mb-1">Appearance</h2>
+                    <p className="text-[12.5px] text-[color:var(--text-secondary)] leading-relaxed max-w-[62ch]">
+                      Aurora Deck in dark or daylight. Both are real palettes rather than one
+                      inverted: the accent darkens for the light ground so a button can keep white
+                      text on it, and every tier was measured against the surfaces it actually sits
+                      on. Prune follows your system setting until you pick one here.
+                    </p>
+                  </div>
+                  <ThemeToggle />
+                </div>
+              </div>
+        </div>
+      )}
 
       {loading && (
         <div className="glass-panel flex flex-col items-center justify-center py-16">
@@ -198,14 +224,6 @@ ode.js" is a folder or a file type.
 
           {tab === 'general' && (
             <div className="flex flex-col gap-4">
-              <div className="glass-panel p-6">
-                <h2 className="text-[14px] font-medium text-[color:var(--text-primary)] mb-1">Appearance</h2>
-                <p className="text-[12.5px] text-[color:var(--text-secondary)] leading-relaxed">
-                  Prune currently ships one fixed theme, Aurora Deck (dark). There's no light-mode
-                  stylesheet yet, so a theme toggle here would flip a setting that has nothing to switch to.
-                  This tab will grow a real toggle once a second theme exists.
-                </p>
-              </div>
 
               <div className="glass-panel p-6">
                 <div className="flex items-center justify-between gap-4">
@@ -267,7 +285,7 @@ ode.js" is a folder or a file type.
                       value={settings.skipRecentHours}
                       onChange={(e) => save({ skipRecentHours: Math.max(0, Number(e.target.value) || 0) })}
                       aria-label="Hours to leave recent files alone"
-                      className="w-[72px] font-mono text-[12.5px] px-2.5 py-2 rounded-lg bg-white/[0.04] border border-[color:var(--border-subtle)] text-[color:var(--text-primary)] focus:outline-none focus:border-[color:var(--accent-primary)]/50"
+                      className="w-[72px] font-mono text-[12.5px] px-2.5 py-2 rounded-lg bg-[color:var(--surface-hover)] border border-[color:var(--border-subtle)] text-[color:var(--text-primary)] focus:outline-none focus:border-[color:var(--accent-primary)]/50"
                       style={{ fontVariantNumeric: 'tabular-nums' }}
                     />
                     <span className="text-[12.5px] text-[color:var(--text-muted)]">hours</span>
@@ -334,7 +352,7 @@ ode.js" is a folder or a file type.
                       placeholder="Never"
                       onChange={(e) => save({ quarantineRetentionDays: positiveOrOff(e.target.value) })}
                       aria-label="Days to keep quarantine backups"
-                      className="w-[88px] font-mono text-[12.5px] px-2.5 py-2 rounded-lg bg-white/[0.04] border border-[color:var(--border-subtle)] text-[color:var(--text-primary)] focus:outline-none focus:border-[color:var(--accent-primary)]/50"
+                      className="w-[88px] font-mono text-[12.5px] px-2.5 py-2 rounded-lg bg-[color:var(--surface-hover)] border border-[color:var(--border-subtle)] text-[color:var(--text-primary)] focus:outline-none focus:border-[color:var(--accent-primary)]/50"
                       style={{ fontVariantNumeric: 'tabular-nums' }}
                     />
                     <span className="text-[12.5px] text-[color:var(--text-muted)]">days</span>
@@ -362,7 +380,7 @@ ode.js" is a folder or a file type.
                       placeholder="No limit"
                       onChange={(e) => save({ quarantineMaxSizeGb: positiveOrOff(e.target.value) })}
                       aria-label="Maximum quarantine size in gigabytes"
-                      className="w-[88px] font-mono text-[12.5px] px-2.5 py-2 rounded-lg bg-white/[0.04] border border-[color:var(--border-subtle)] text-[color:var(--text-primary)] focus:outline-none focus:border-[color:var(--accent-primary)]/50"
+                      className="w-[88px] font-mono text-[12.5px] px-2.5 py-2 rounded-lg bg-[color:var(--surface-hover)] border border-[color:var(--border-subtle)] text-[color:var(--text-primary)] focus:outline-none focus:border-[color:var(--accent-primary)]/50"
                       style={{ fontVariantNumeric: 'tabular-nums' }}
                     />
                     <span className="text-[12.5px] text-[color:var(--text-muted)]">GB</span>
@@ -387,7 +405,7 @@ ode.js" is a folder or a file type.
                     placeholder="D:\Games   or   *.iso"
                     aria-label="Folder path or file type to exclude"
                     aria-invalid={Boolean(exclusionError)}
-                    className="flex-1 min-w-0 font-mono text-[12.5px] px-3 py-2 rounded-lg bg-white/[0.04] border border-[color:var(--border-subtle)] text-[color:var(--text-primary)] placeholder:text-[color:var(--text-muted)] focus:outline-none focus:border-[color:var(--accent-primary)]/50"
+                    className="flex-1 min-w-0 font-mono text-[12.5px] px-3 py-2 rounded-lg bg-[color:var(--surface-hover)] border border-[color:var(--border-subtle)] text-[color:var(--text-primary)] placeholder:text-[color:var(--text-muted)] focus:outline-none focus:border-[color:var(--accent-primary)]/50"
                   />
                   <button className="btn-ghost px-3.5 py-2 rounded-lg text-[12px] font-medium shrink-0" onClick={handleAddExclusion}>
                     Add
@@ -406,7 +424,7 @@ ode.js" is a folder or a file type.
                 ) : (
                   <div className="flex flex-col gap-1.5">
                     {exclusions.map(({ kind, value }) => (
-                      <div key={`${kind}:${value}`} className="flex items-center justify-between gap-3 px-3 py-2 rounded-lg bg-white/[0.03]">
+                      <div key={`${kind}:${value}`} className="flex items-center justify-between gap-3 px-3 py-2 rounded-lg bg-[color:var(--surface-subtle)]">
                         <div className="flex items-center gap-2 min-w-0">
                           {/* Which kind, at a glance. The two behave
                               differently and the row should not need to be

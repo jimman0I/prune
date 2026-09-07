@@ -109,7 +109,7 @@ export default function NavRail({ screen, onNavigate }) {
               aria-current={active ? 'page' : undefined}
               aria-label={item.label}
               className={`peer w-11 h-11 rounded-xl flex items-center justify-center transition-colors ${
-                active ? 'bg-[color:var(--accent-primary-soft)] text-[color:var(--accent-primary)]' : 'text-[color:var(--text-secondary)] hover:text-[color:var(--text-primary)] hover:bg-white/[0.04]'
+                active ? 'bg-[color:var(--accent-primary-soft)] text-[color:var(--accent-primary)]' : 'text-[color:var(--text-secondary)] hover:text-[color:var(--text-primary)] hover:bg-[color:var(--surface-hover)]'
               }`}
             >
               {item.icon}

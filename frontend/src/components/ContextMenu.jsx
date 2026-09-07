@@ -84,7 +84,7 @@ export default function ContextMenu({ open, x, y, items, onClose }) {
                   ? 'text-[color:var(--text-muted)] opacity-50 cursor-not-allowed'
                   : item.danger
                     ? 'text-[color:var(--danger)] hover:bg-[color:var(--danger-soft)]'
-                    : 'text-[color:var(--text-secondary)] hover:bg-white/[0.06] hover:text-[color:var(--text-primary)]'
+                    : 'text-[color:var(--text-secondary)] hover:bg-[color:var(--surface-hover)] hover:text-[color:var(--text-primary)]'
               }`}
             >
               <span>{item.label}</span>

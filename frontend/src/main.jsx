@@ -9,6 +9,7 @@ import './index.css';
 import App from './App.jsx';
 import { queryClient } from './lib/queryClient.js';
 import { ToastProvider } from './hooks/useToasts.jsx';
+import { ThemeProvider, applyTheme, initialTheme } from './hooks/useTheme.jsx';
 
 /** `reducedMotion="user"` makes every framer-motion component in the app
  * honour the operating system's reduce-motion setting.
@@ -28,13 +29,22 @@ import { ToastProvider } from './hooks/useToasts.jsx';
  * distinction the setting actually asks for: people who set it are
  * usually avoiding vestibular triggers, not dimming.
  */
+/* The theme goes on the root element BEFORE the first render, not in an
+ * effect. An effect runs after the first paint, so the app would show one
+ * frame of dark and then flip -- the flash every theme implementation has
+ * to deal with. Reading localStorage synchronously here is cheap and
+ * happens once. */
+applyTheme(initialTheme());
+
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
       <MotionConfig reducedMotion="user">
-        <ToastProvider>
-          <App />
-        </ToastProvider>
+        <ThemeProvider>
+          <ToastProvider>
+            <App />
+          </ToastProvider>
+        </ThemeProvider>
       </MotionConfig>
     </QueryClientProvider>
   </React.StrictMode>

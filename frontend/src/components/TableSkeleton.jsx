@@ -19,7 +19,7 @@ export default function TableSkeleton({ columns, rows = 8, label }) {
           -- withholding them to look "loading" would be pretending to know
           less than we do. */}
       <div
-        className="grid gap-3 px-5 py-2 border-b border-[color:var(--border-subtle)] bg-white/[0.02]"
+        className="grid gap-3 px-5 py-2 border-b border-[color:var(--border-subtle)] bg-[color:var(--surface-subtle)]"
         style={{ gridTemplateColumns: columns.map((c) => c.width).join(' ') }}
       >
         {columns.map((col) => (
@@ -48,7 +48,7 @@ export default function TableSkeleton({ columns, rows = 8, label }) {
             {columns.map((col) => (
               <div
                 key={col.key}
-                className="h-[9px] rounded-full bg-white/[0.07]"
+                className="h-[9px] rounded-full bg-[color:var(--surface-hover)]"
                 // Varied widths, seeded off the row and column rather than
                 // random: a re-render must not reshuffle the bars, which
                 // would read as content changing.

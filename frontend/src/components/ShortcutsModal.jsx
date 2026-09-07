@@ -17,7 +17,7 @@ function Keys({ keys }) {
       {keys.map((key, i) => (
         <span key={key} className="inline-flex items-center gap-1">
           {i > 0 && <span className="text-[10px] text-[color:var(--text-muted)]">+</span>}
-          <kbd className="font-mono text-[10.5px] px-1.5 py-0.5 rounded border border-[color:var(--border-subtle)] bg-white/[0.05] text-[color:var(--text-secondary)]">
+          <kbd className="font-mono text-[10.5px] px-1.5 py-0.5 rounded border border-[color:var(--border-subtle)] bg-[color:var(--surface-hover)] text-[color:var(--text-secondary)]">
             {key}
           </kbd>
         </span>

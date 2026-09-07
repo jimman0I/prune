@@ -28,7 +28,15 @@ module.exports = {
   // "Folder" button for its own row, so it is recorded rather than
   // worked around with a custom NSIS include.
   directories: { output: 'dist' },
-  files: ['main.cjs'],
+  /* Both entry points, and preload.cjs is easy to forget here.
+   *
+   * This array is an allowlist: anything not named is left out of the
+   * asar. main.cjs points BrowserWindow at preload.cjs, so omitting it
+   * produces a build that runs, looks correct in dark mode, and silently
+   * drops the one thing the preload does -- repainting the window's own
+   * buttons for the light theme. It would have worked in dev, where the
+   * file is loaded straight off disk, and failed only once packaged. */
+  files: ['main.cjs', 'preload.cjs'],
   extraResources: [
     // NOTE the source: this copies from ../backend/src DIRECTLY, not from
     // the build/backend-prod/ staging directory build-installer.mjs

@@ -167,7 +167,7 @@ export default function UninstallModal({ program, running = false, onClose }) {
   return (
     <div className="glass-panel rounded-2xl overflow-hidden max-w-[680px] w-full flex flex-col">
       <div className="flex items-center justify-between px-6 py-5 border-b border-[color:var(--border-subtle)]">
-        <h2 className="text-[15px] font-semibold tracking-tight text-white truncate">
+        <h2 className="text-[15px] font-semibold tracking-tight text-[color:var(--text-primary)] truncate">
           {broken ? 'Force remove' : 'Uninstall'} {program.name}
         </h2>
         <button onClick={onClose} className="btn-ghost px-3 py-1.5 rounded-lg text-[12px] font-medium">
@@ -229,7 +229,7 @@ export default function UninstallModal({ program, running = false, onClose }) {
                   product, not the release. Edit it if the results look wrong.
                 </p>
 
-                {error && <p className="text-[12.5px] text-[#f7a8b0] mb-4">Scan failed: {error}</p>}
+                {error && <p className="text-[12.5px] text-[color:var(--danger)] mb-4">Scan failed: {error}</p>}
                 <button className="btn-primary" onClick={startForcedScan} disabled={!searchTerm.trim()}>
                   Search for leftovers
                 </button>
@@ -240,7 +240,7 @@ export default function UninstallModal({ program, running = false, onClose }) {
                   This runs {program.name}'s own uninstaller, then scans for anything it leaves behind.
                 </p>
                 <p className="text-[11.5px] text-[color:var(--text-muted)] font-mono mb-6 break-all">{command}</p>
-                {error && <p className="text-[12.5px] text-[#f7a8b0] mb-4">Uninstall failed: {error}</p>}
+                {error && <p className="text-[12.5px] text-[color:var(--danger)] mb-4">Uninstall failed: {error}</p>}
                 <button className="btn-primary" onClick={startUninstall} disabled={!program.uninstallString}>
                   Start uninstall
                 </button>
@@ -267,7 +267,7 @@ export default function UninstallModal({ program, running = false, onClose }) {
         )}
         {step === 'review' && scanResult && (
           <>
-            {error && <p className="text-[12.5px] text-[#f7a8b0] mb-4">Removal failed: {error}</p>}
+            {error && <p className="text-[12.5px] text-[color:var(--danger)] mb-4">Removal failed: {error}</p>}
             <LeftoverReview
               scanResult={scanResult}
               selected={selected}

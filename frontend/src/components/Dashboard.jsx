@@ -346,7 +346,7 @@ export default function Dashboard({ programs, totalSize, onNavigate = () => {} }
             </p>
           )}
           {diskSpace && (
-            <div className="h-1.5 rounded-full bg-white/10 overflow-hidden">
+            <div className="h-1.5 rounded-full bg-[color:var(--surface-strong)] overflow-hidden">
               <div
                 className="h-full rounded-full"
                 style={{ width: `${Math.round((1 - diskSpace.freeBytes / diskSpace.totalBytes) * 100)}%`, background: 'var(--accent-primary)' }}
@@ -435,7 +435,7 @@ export default function Dashboard({ programs, totalSize, onNavigate = () => {} }
             {history.length === 0 ? (
               <p className="text-[13px] text-[color:var(--text-secondary)]">No uninstalls yet.</p>
             ) : (
-              <div className="divide-y divide-white/[0.06]">
+              <div className="divide-y divide-[color:var(--border-subtle)]">
                 {history.map((entry) => (
                   <div key={entry.timestamp} className="flex items-center justify-between py-2.5">
                     <div>

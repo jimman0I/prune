@@ -127,7 +127,7 @@ function Duplicates() {
           placeholder={DEFAULT_FOLDER}
           data-app-search="duplicates"
           aria-label="Folder to search for duplicates"
-          className="flex-1 min-w-0 font-mono text-[12.5px] px-3 py-2 rounded-lg bg-white/[0.04] border border-[color:var(--border-subtle)] text-[color:var(--text-primary)] placeholder:text-[color:var(--text-muted)] focus:outline-none focus:border-[color:var(--accent-primary)]/50"
+          className="flex-1 min-w-0 font-mono text-[12.5px] px-3 py-2 rounded-lg bg-[color:var(--surface-hover)] border border-[color:var(--border-subtle)] text-[color:var(--text-primary)] placeholder:text-[color:var(--text-muted)] focus:outline-none focus:border-[color:var(--accent-primary)]/50"
         />
         {scan.isFetching ? (
           <button
@@ -224,7 +224,7 @@ function Duplicates() {
 
                   <div className="flex flex-col gap-1">
                     {group.files.map((file) => (
-                      <label key={file.path} className="flex items-center gap-3 px-2 py-1.5 rounded-lg hover:bg-white/[0.03] cursor-pointer">
+                      <label key={file.path} className="flex items-center gap-3 px-2 py-1.5 rounded-lg hover:bg-[color:var(--surface-subtle)] cursor-pointer">
                         <input
                           type="checkbox"
                           className="prune-check"

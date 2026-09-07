@@ -2,6 +2,7 @@ import { afterEach } from 'vitest';
 import { render, cleanup } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ToastProvider } from '../hooks/useToasts.jsx';
+import { ThemeProvider } from '../hooks/useTheme.jsx';
 
 /** Rendering a screen the way the app mounts it.
  *
@@ -33,16 +34,23 @@ export function makeTestClient() {
   });
 }
 
-/** Both providers App.jsx mounts, in the same order.
+/** Every provider App.jsx mounts, in the same order.
  *
  * ToastProvider is here rather than opt-in because useToasts throws
  * outside it, so a screen that raises a toast anywhere in its tree cannot
  * be rendered without one -- and which screens those are is not something
- * a test author should have to know before the failure tells them. */
+ * a test author should have to know before the failure tells them.
+ *
+ * ThemeProvider is here for exactly the same reason, and arrived the same
+ * way: useTheme throws outside it, so the moment Settings grew a theme
+ * toggle, nine tests that had nothing to do with themes started failing
+ * on a missing provider. */
 export function renderScreen(ui, { client = makeTestClient() } = {}) {
   const result = render(
     <QueryClientProvider client={client}>
-      <ToastProvider>{ui}</ToastProvider>
+      <ThemeProvider>
+        <ToastProvider>{ui}</ToastProvider>
+      </ThemeProvider>
     </QueryClientProvider>
   );
   return { ...result, client };

@@ -268,7 +268,7 @@ function ExtensionPanel({ breakdown, shown, icons, typeColors }) {
 
             {/* The bar carries the comparison; the number carries the
                 fact. Sharing one row keeps both readable at a glance. */}
-            <div className="flex-1 h-[6px] rounded-full bg-white/[0.05] overflow-hidden min-w-0">
+            <div className="flex-1 h-[6px] rounded-full bg-[color:var(--surface-hover)] overflow-hidden min-w-0">
               <div
                 className="h-full rounded-full"
                 style={{
@@ -430,7 +430,7 @@ function FolderTable({ tree, onDrillDown }) {
   return (
     <div className="glass-panel overflow-hidden min-w-0">
       <div
-        className="grid gap-2.5 px-4 py-2 border-b border-[color:var(--border-subtle)] bg-white/[0.02]"
+        className="grid gap-2.5 px-4 py-2 border-b border-[color:var(--border-subtle)] bg-[color:var(--surface-subtle)]"
         style={{ gridTemplateColumns: FOLDER_GRID }}
       >
         {FOLDER_COLUMNS.map((col) => (
@@ -457,7 +457,7 @@ function FolderTable({ tree, onDrillDown }) {
             key={row.fullPath || row.name}
             className={`grid gap-3 px-4 py-[7px] items-center ${
               row.scanned && row.type === 'directory' && row.fullPath
-                ? 'cursor-pointer hover:bg-white/[0.04] transition-colors'
+                ? 'cursor-pointer hover:bg-[color:var(--surface-hover)] transition-colors'
                 : ''
             }`}
             style={{ gridTemplateColumns: FOLDER_GRID }}
@@ -892,8 +892,8 @@ function DiskMap() {
               // The concrete number matters more than the warning does. "Possibly
               // incomplete" reads as a rounding caveat; "measured 34.5 GB of 850 GB"
               // tells you immediately that the picture is nearly all hole.
-              ? <>This scan ran out of time: it measured <span className="font-medium text-white">{formatBytes(coverage.measured)}</span> of
-                the <span className="font-medium text-white">{formatBytes(coverage.used)}</span> in use ({coverage.percent}%).
+              ? <>This scan ran out of time: it measured <span className="font-medium text-[color:var(--text-primary)]">{formatBytes(coverage.measured)}</span> of
+                the <span className="font-medium text-[color:var(--text-primary)]">{formatBytes(coverage.used)}</span> in use ({coverage.percent}%).
                 What it measured is real; the rest is shown as unscanned, not as empty.</>
               : <>This scan ran out of time before it finished the drive. Everything it did measure
                 is real, but folders it never reached are shown as unscanned rather than as empty —
@@ -930,8 +930,8 @@ function DiskMap() {
               aria-pressed={view === key}
               className={`px-3 py-1.5 rounded-lg text-[12px] font-medium transition-colors ${
                 view === key
-                  ? 'bg-[color:var(--accent-primary)] text-white'
-                  : 'text-[color:var(--text-secondary)] hover:bg-white/[0.06]'
+                  ? 'bg-[color:var(--accent-primary)] text-[color:var(--accent-ink)]'
+                  : 'text-[color:var(--text-secondary)] hover:bg-[color:var(--surface-hover)]'
               }`}
             >
               {label}
@@ -1058,7 +1058,7 @@ function DiskMap() {
             {/* The exact path, in full and wrapped rather than truncated.
                 A confirmation for an arbitrary folder is worth nothing if
                 it hides which folder. */}
-            <p className="font-mono text-[11.5px] text-[color:var(--text-primary)] bg-white/[0.04] border border-[color:var(--border-subtle)] rounded-lg px-3 py-2 mb-2 break-all">
+            <p className="font-mono text-[11.5px] text-[color:var(--text-primary)] bg-[color:var(--surface-hover)] border border-[color:var(--border-subtle)] rounded-lg px-3 py-2 mb-2 break-all">
               {pendingRemoval.fullPath}
             </p>
             <p className="text-[11.5px] text-[color:var(--text-muted)] mb-5">

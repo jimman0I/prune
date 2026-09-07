@@ -47,6 +47,8 @@
   --accent-primary: #06b6d4;
   --accent-primary-glow: rgba(6, 182, 212, 0.35);
   --accent-primary-soft: rgba(6, 182, 212, 0.12);
+  /* The darker stop of the primary button's gradient. */
+  --accent-primary-deep: #0596ae;
 
   /* Ambient / data-viz accents -- decorative and categorical coloring
      only, never an interactive element's color. Cyan is deliberately NOT
@@ -63,6 +65,48 @@
   --success-soft: rgba(93, 184, 114, 0.15);
 
   --border-subtle: rgba(255, 255, 255, 0.06);
+  /* The border a control shows when you point at it -- one step up from
+     subtle, not a colour change. */
+  --border-hover: rgba(255, 255, 255, 0.25);
+
+  /* Tinted surfaces -- table stripes, row hovers, group headers.
+   *
+   * These were forty-four literal `bg-white/[0.0x]` utilities spread
+   * across the components, in eight different alpha values, and every one
+   * of them was invisible the moment the ground stopped being near-black:
+   * white at 4% over white is white. They are the single reason a light
+   * mode could not just be a palette swap.
+   *
+   * Collapsed to three tiers rather than preserved one-for-one. The eight
+   * values ran 0.02 to 0.12 and the gaps between neighbours -- 0.02 vs
+   * 0.03, 0.04 vs 0.05 -- are below what anyone can see on this ground;
+   * keeping all eight would have meant eight tokens encoding a precision
+   * the design never had. */
+  --surface-subtle: rgba(255, 255, 255, 0.025);
+  --surface-hover: rgba(255, 255, 255, 0.05);
+  --surface-strong: rgba(255, 255, 255, 0.11);
+
+  /* The ink on a filled accent control -- a tick inside a checked box, a
+   * label on a primary button. Near-black against cyan in dark mode,
+   * because white on this accent is 2.43:1 and invisible. Light mode
+   * flips it: its accent is dark enough that white reads 5.36:1. */
+  --accent-ink: #09090b;
+
+  /* Depth. Dark mode leans on a large soft shadow to separate a panel
+   * from the aurora behind it; light mode needs a tighter, layered one,
+   * because a single diffuse shadow on white reads as smudge rather than
+   * lift. */
+  --shadow-panel: 0 8px 32px rgba(0, 0, 0, 0.2);
+  --shadow-raised: 0 12px 36px rgba(0, 0, 0, 0.28);
+
+  /* The three ambient washes behind everything. Named here so the light
+   * theme can retune them rather than inherit values chosen for
+   * near-black. */
+  --aurora-1: rgba(139, 92, 246, 0.16);
+  --aurora-2: rgba(59, 130, 246, 0.1);
+  --aurora-3: rgba(6, 182, 212, 0.14);
+  --grain-opacity: 0.035;
+  --grain-blend: overlay;
 
   /* A named stacking order, so nothing has to guess.
    *
@@ -77,6 +121,133 @@
   --z-flyout: 30;
   --z-modal: 40;
   --z-tooltip: 50;
+}
+
+/* Aurora Deck, daylight.
+ *
+ * Not an inversion. Every value here was measured against the grounds it
+ * actually sits on, the same way the dark palette's own notes do, and the
+ * numbers are in the comments rather than in a commit message because
+ * they are the reason these are the values.
+ *
+ * The ground is warm off-white rather than pure white, and the text is a
+ * warm near-black rather than a neutral one: on a tool that renders
+ * 11-12px tabular text for minutes at a time, #ffffff on #000000 is the
+ * combination that makes people's eyes hurt first. The warmth is slight
+ * -- roughly two points of chroma -- and is there to take the glare off,
+ * not to make the app beige.
+ *
+ * The accent DARKENS rather than staying put. #06b6d4 is right on a
+ * near-black ground and is 2.2:1 on white, which fails as text, fails as
+ * a focus ring and fails as a button ground. #0e7490 is the same hue
+ * carrying 5.36:1 with white on it, which is what lets the primary button
+ * keep white text and the focus ring keep its 3:1 against the page. */
+:root[data-theme='light'] {
+  --bg-base: #f7f6f4;
+  --bg-panel: #ffffff;
+  /* Glass over a light ground has to be MORE opaque, not less: at 60% the
+     aurora behind it showed through as coloured haze rather than as depth. */
+  --glass-bg: rgba(255, 255, 255, 0.72);
+  --glass-border: rgba(28, 25, 23, 0.08);
+
+  /* 16.19:1 on the body, 17.49:1 on a panel. */
+  --text-primary: #1c1917;
+  /* 7.06:1 and 7.63:1. */
+  --text-secondary: #57534e;
+  /* The tier that had to be argued for. The brief this was built from
+     suggested #a8a29e, which is 2.51:1 on white -- it is used for
+     PLACEHOLDERS, so the bar is the full 4.5:1 rather than the large-text
+     3:1, and it would have failed by half. #6b655f measures 5.32:1 on the
+     body, 5.75:1 on a panel, and 4.79:1 on the strongest tinted row,
+     which is the worst ground it ever sits on. */
+  --text-muted: #6b655f;
+
+  --accent-primary: #0e7490;
+  --accent-primary-glow: rgba(14, 116, 144, 0.28);
+  /* 0.1 put the active tab's own label at 4.34:1 on it -- the same
+     badge trap the status colours fell into. 0.07 lifts it to 4.71. */
+  --accent-primary-soft: rgba(14, 116, 144, 0.07);
+  --accent-primary-deep: #0b5f76;
+  --accent-ink: #ffffff;
+
+  /* The ambient and categorical hues darken too. At their dark-mode
+     values they are pastel on white and stop reading as categories. */
+  --accent-purple: #7c3aed;
+  --accent-blue: #2563eb;
+
+  /* Status, and the check that nearly got skipped.
+   *
+   * The first values here were chosen against a PANEL and cleared it --
+   * 5.18, 4.92, 5.02. They still failed, because the place these colours
+   * actually appear is a badge: the same hue as text on a 10% wash of
+   * itself, which is a far tighter ground than white. Measured there they
+   * were 4.48, 4.32 and 4.38, all under the floor, and a runtime audit
+   * walking every rendered text node is what found it -- the static check
+   * had asked the wrong question.
+   *
+   * One step darker each. Measured on all three grounds they sit on:
+   *   danger   6.01 on its badge, 7.08 on a panel, 6.55 on the body
+   *   warning  6.14 / 7.15 / 6.62
+   *   success  6.08 / 7.07 / 6.55 */
+  --danger: #a32f06;
+  --danger-soft: rgba(163, 47, 6, 0.1);
+  --warning: #7d4d05;
+  --warning-soft: rgba(125, 77, 5, 0.1);
+  --success: #116632;
+  --success-soft: rgba(17, 102, 50, 0.1);
+
+  --border-subtle: rgba(28, 25, 23, 0.1);
+  --border-hover: rgba(28, 25, 23, 0.32);
+
+  /* Tints go DOWN from the surface rather than up. Lower alphas than the
+     dark side's, because dark ink on white separates at less strength
+     than white ink on black does. */
+  --surface-subtle: rgba(28, 25, 23, 0.028);
+  --surface-hover: rgba(28, 25, 23, 0.05);
+  --surface-strong: rgba(28, 25, 23, 0.09);
+
+  /* Layered rather than one diffuse cast. A single large soft shadow on
+     white reads as a smudge under the panel; two offsets read as lift. */
+  --shadow-panel: 0 1px 2px rgba(28, 25, 23, 0.05), 0 8px 24px -8px rgba(28, 25, 23, 0.12);
+  --shadow-raised: 0 2px 4px rgba(28, 25, 23, 0.06), 0 16px 32px -12px rgba(28, 25, 23, 0.18);
+
+  /* A third of the dark side's strength. The same washes that read as an
+     aurora on obsidian read as spilled watercolour on white. */
+  --aurora-1: rgba(124, 58, 237, 0.05);
+  --aurora-2: rgba(37, 99, 235, 0.04);
+  --aurora-3: rgba(14, 116, 144, 0.05);
+  /* `overlay` lightens on a light ground, so the grain vanishes and then
+     starts washing the page out. Multiply keeps it as texture. */
+  --grain-opacity: 0.022;
+  --grain-blend: multiply;
+}
+
+/* The switch itself, and the reason this is a class rather than `*`.
+ *
+ * A blanket `* { transition: background-color .5s, color .5s, ... }` is
+ * the usual recipe and it is a bad trade: it puts a half-second lag on
+ * every hover in the app, makes a 55-row table animate its stripes on
+ * every re-render, and asks the compositor to interpolate colour on
+ * hundreds of nodes at once. It is only wanted for the fraction of a
+ * second when the theme actually changes.
+ *
+ * So: the toggle stamps this class on the root, the transition runs, and
+ * a timer takes it off again. Everything else in the app keeps whatever
+ * transition it declared for itself. Reduced motion drops the whole
+ * thing -- an instant swap is the honest fallback for someone who has
+ * asked not to be animated. */
+:root.theme-switching *,
+:root.theme-switching *::before,
+:root.theme-switching *::after {
+  transition: background-color 420ms ease, color 420ms ease,
+              border-color 420ms ease, box-shadow 420ms ease,
+              fill 420ms ease, stroke 420ms ease !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root.theme-switching *,
+  :root.theme-switching *::before,
+  :root.theme-switching *::after { transition: none !important; }
 }
 
 .z-flyout { z-index: var(--z-flyout); }
@@ -145,9 +316,9 @@ body::before {
   position: fixed;
   inset: 0;
   background-image:
-    radial-gradient(circle at 10% 10%, rgba(139, 92, 246, 0.16), transparent 45%),
-    radial-gradient(circle at 90% 15%, rgba(59, 130, 246, 0.1), transparent 40%),
-    radial-gradient(circle at 90% 90%, rgba(6, 182, 212, 0.14), transparent 45%);
+    radial-gradient(circle at 10% 10%, var(--aurora-1), transparent 45%),
+    radial-gradient(circle at 90% 15%, var(--aurora-2), transparent 40%),
+    radial-gradient(circle at 90% 90%, var(--aurora-3), transparent 45%);
   pointer-events: none;
   z-index: -1;
 }
@@ -161,8 +332,8 @@ body::before {
   position: fixed;
   inset: 0;
   background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48ZmlsdGVyIGlkPSJub2lzZSI+PGZlVHVyYnVsZW5jZSB0eXBlPSJmcmFjdGFsTm9pc2UiIGJhc2VGcmVxdWVuY3k9IjAuOCIgbnVtT2N0YXZlcz0iNCIgc3RpdGNoVGlsZXM9InN0aXRjaCIvPjxmZUZ1bmN0aW9uIGluPSJub2lzZSIgdHlwZT0idHJhbnNwYXJlbmN5Ii8+PC9maWx0ZXI+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsdGVyPSJ1cmwoI25vaXNlKSIgb3BhY2l0eT0iMCIvPjwvc3ZnPg==');
-  opacity: 0.035;
-  mix-blend-mode: overlay;
+  opacity: var(--grain-opacity);
+  mix-blend-mode: var(--grain-blend);
   pointer-events: none;
 }
 
@@ -193,7 +364,7 @@ body::before {
   -webkit-backdrop-filter: blur(24px) saturate(180%);
   border: 1px solid var(--glass-border);
   border-radius: 12px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--shadow-panel);
 }
 
 /* Disk Map treemap hover tooltip -- same glass recipe as .glass-panel, but
@@ -377,11 +548,11 @@ body::before {
 
 /* Buttons */
 .btn-primary {
-  background: linear-gradient(180deg, var(--accent-primary), #0596ae);
+  background: linear-gradient(180deg, var(--accent-primary), var(--accent-primary-deep));
   /* Dark ink, not white. White on this cyan is 2.43:1 -- the same trap the
      coral it replaced had, and the reason that one already used dark ink.
      Obsidian on #06b6d4 is 8.19:1. */
-  color: #09090b;
+  color: var(--accent-ink);
   border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.25),
@@ -416,11 +587,11 @@ body::before {
      every one of them. */
   transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease, transform 120ms cubic-bezier(0.2, 0.9, 0.3, 1);
 }
-.btn-ghost:hover:not(:disabled) { background: rgba(255, 255, 255, 0.04); border-color: rgba(255, 255, 255, 0.16); }
+.btn-ghost:hover:not(:disabled) { background: var(--surface-hover); border-color: var(--border-hover); }
 /* Press feedback. Both of these had a hover state and nothing at all on
    mousedown, so a click on a slow action read as "did that register?" --
    the exact moment a user clicks a destructive control twice. */
-.btn-ghost:active:not(:disabled) { transform: translateY(1px); background: rgba(255, 255, 255, 0.07); }
+.btn-ghost:active:not(:disabled) { transform: translateY(1px); background: var(--surface-strong); }
 .btn-ghost:disabled { opacity: 0.45; cursor: not-allowed; }
 
 .btn-danger {
@@ -454,7 +625,7 @@ input[type="checkbox"].prune-check {
   height: 15px;
   border: 1px solid var(--border-subtle);
   border-radius: 4px;
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--surface-subtle);
   cursor: pointer;
   display: inline-flex;
   align-items: center;
@@ -462,7 +633,7 @@ input[type="checkbox"].prune-check {
   transition: background-color 140ms ease, border-color 140ms ease;
   flex-shrink: 0;
 }
-input[type="checkbox"].prune-check:hover:not(:disabled) { border-color: rgba(255, 255, 255, 0.25); }
+input[type="checkbox"].prune-check:hover:not(:disabled) { border-color: var(--border-hover); }
 input[type="checkbox"].prune-check:disabled { opacity: 0.3; cursor: not-allowed; }
 input[type="checkbox"].prune-check:checked {
   background: var(--accent-primary);

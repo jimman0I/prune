@@ -96,7 +96,7 @@ function EnabledSwitch({ item, pending, onToggle }) {
       onClick={() => !pending && onToggle(item)}
       // 24px, not the 13px the tick occupies: that is the floor WCAG 2.2
       // sets for a target, and the mark itself is half of it.
-      className={`flex items-center justify-center w-6 h-6 -ml-[5px] rounded-md transition-colors hover:bg-white/[0.07] ${
+      className={`flex items-center justify-center w-6 h-6 -ml-[5px] rounded-md transition-colors hover:bg-[color:var(--surface-hover)] ${
         pending ? 'opacity-50' : ''
       }`}
     >
@@ -172,7 +172,7 @@ function StatusPill({ item }) {
     // Resolved through PATH at launch, so whether the file is there has no
     // answer from here. Saying nothing is the honest option.
     return (
-      <span className={`${base} bg-white/[0.05] text-[color:var(--text-muted)] border-[color:var(--border-subtle)]`}>
+      <span className={`${base} bg-[color:var(--surface-hover)] text-[color:var(--text-muted)] border-[color:var(--border-subtle)]`}>
         Not checked
       </span>
     );
@@ -185,7 +185,7 @@ function StartupRow({ item, iconSrc, pending, error, onToggle }) {
     <div
       className={`grid gap-3 px-5 py-2 items-center transition-colors ${
         item.enabled ? '' : 'opacity-55'
-      } ${error ? 'bg-[color:var(--danger-soft)]' : 'hover:bg-white/[0.03]'}`}
+      } ${error ? 'bg-[color:var(--danger-soft)]' : 'hover:bg-[color:var(--surface-subtle)]'}`}
       style={{ gridTemplateColumns: GRID }}
     >
       <EnabledSwitch item={item} pending={pending} onToggle={onToggle} />
@@ -325,7 +325,7 @@ function StartupItems() {
 
           <div className="glass-panel overflow-hidden">
             <div
-              className="grid gap-3 px-5 py-2 border-b border-[color:var(--border-subtle)] bg-white/[0.02]"
+              className="grid gap-3 px-5 py-2 border-b border-[color:var(--border-subtle)] bg-[color:var(--surface-subtle)]"
               style={{ gridTemplateColumns: GRID }}
             >
               {COLUMNS.map((col) => (
@@ -342,7 +342,7 @@ function StartupItems() {
               <div key={group.key}>
                 {/* Revo puts the count in the heading and it is the useful
                     part: "3 of 11 enabled" answers a question no row can. */}
-                <div className="flex items-baseline gap-2 px-5 py-1.5 bg-white/[0.03] border-y border-[color:var(--border-subtle)]">
+                <div className="flex items-baseline gap-2 px-5 py-1.5 bg-[color:var(--surface-subtle)] border-y border-[color:var(--border-subtle)]">
                   <span className="text-[11px] font-mono uppercase tracking-[0.14em] text-[color:var(--text-secondary)]">
                     {group.label}
                   </span>

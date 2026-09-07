@@ -1,4 +1,4 @@
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('node:path');
 const http = require('node:http');
 const { pathToFileURL } = require('node:url');
@@ -69,6 +69,19 @@ function waitForBackend(timeoutMs = 15000) {
   });
 }
 
+/* The two palettes Windows paints its own buttons in.
+ *
+ * These duplicate two values from index.css and cannot read them: the
+ * title bar overlay is a native surface configured in the main process,
+ * where no stylesheet exists. Kept next to each other here, and named
+ * after the themes they belong to, so the duplication is at least
+ * visible -- `color` is the strip behind the buttons and has to match
+ * --bg-base, `symbolColor` is the glyphs and matches --text-secondary. */
+const OVERLAY_COLORS = {
+  dark: { color: '#09090b', symbolColor: '#a1a1aa' },
+  light: { color: '#f7f6f4', symbolColor: '#57534e' }
+};
+
 async function createWindow() {
   const win = new BrowserWindow({
     width: 1280,
@@ -98,13 +111,13 @@ async function createWindow() {
      * The cost is that the glyphs are Windows' rather than ours. They are
      * thin strokes in the same weight either way.
      *
-     * Colours are fixed because the app ships one theme. A second theme
-     * would need win.setTitleBarOverlay() -- these are not CSS and do not
-     * follow the stylesheet. */
+     * Dark is only the STARTING palette. These colours are not CSS and no
+     * stylesheet reaches them, so the renderer tells the main process when
+     * the theme changes and the handler below repaints them -- otherwise
+     * light mode leaves three dark glyphs on a light strip. */
     titleBarStyle: 'hidden',
     titleBarOverlay: {
-      color: '#09090b',
-      symbolColor: '#a1a1aa',
+      ...OVERLAY_COLORS.dark,
       // 40, not the ~60 the reference design uses. Prune's screens are
       // dense -- tables, a treemap, a 55-row startup list -- and 20px of
       // permanent vertical chrome costs more here than on a page with one
@@ -113,7 +126,11 @@ async function createWindow() {
     },
     webPreferences: {
       contextIsolation: true,
-      nodeIntegration: false
+      nodeIntegration: false,
+      // One channel, one string. See preload.cjs -- the window's own
+      // buttons are painted by Windows and cannot be reached from CSS, so
+      // the renderer has to tell the main process when the theme changes.
+      preload: path.join(__dirname, 'preload.cjs')
     }
   });
 
@@ -122,6 +139,24 @@ async function createWindow() {
   // offers, and it doesn't belong on a native desktop utility that isn't a
   // browser. Same call Re:Route's own main.cjs already makes.
   win.removeMenu();
+
+  /* Repaint the native buttons when the app changes theme.
+   *
+   * Validated against the fixed list rather than passed through: this
+   * value crosses from the renderer, and setTitleBarOverlay takes colours
+   * it will happily apply. An unknown theme is ignored rather than
+   * guessed at. */
+  ipcMain.on('prune:theme', (event, theme) => {
+    if (event.sender !== win.webContents) return;
+    const colors = OVERLAY_COLORS[theme];
+    if (!colors || win.isDestroyed()) return;
+    try {
+      win.setTitleBarOverlay(colors);
+    } catch {
+      // Only Windows implements this. Elsewhere the call throws and the
+      // app is otherwise fine, so it is not worth surfacing.
+    }
+  });
 
   // Dev-mode navigation to the Vite dev server can genuinely fail (started
   // `npm start` before `npm run dev` was ready, Vite still restarting after

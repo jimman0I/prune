@@ -26,7 +26,7 @@ function Field({ label, children }) {
 }
 
 const selectClass =
-  'font-mono text-[12.5px] px-3 py-2 rounded-lg bg-white/[0.04] border border-[color:var(--border-subtle)] text-[color:var(--text-primary)] focus:outline-none focus:border-[color:var(--accent-primary)]/50';
+  'font-mono text-[12.5px] px-3 py-2 rounded-lg bg-[color:var(--surface-hover)] border border-[color:var(--border-subtle)] text-[color:var(--text-primary)] focus:outline-none focus:border-[color:var(--accent-primary)]/50';
 
 export default function AutomationSettings({ settings, save }) {
   const automation = settings?.automation ?? {};
@@ -60,7 +60,7 @@ export default function AutomationSettings({ settings, save }) {
           aria-checked={automation.enabled === true}
           onClick={() => set({ enabled: !automation.enabled })}
           className={`w-[38px] h-[21px] rounded-full relative transition-colors shrink-0 ${
-            automation.enabled ? 'bg-[color:var(--accent-primary)]' : 'bg-white/[0.12]'
+            automation.enabled ? 'bg-[color:var(--accent-primary)]' : 'bg-[color:var(--surface-strong)]'
           }`}
         >
           <span

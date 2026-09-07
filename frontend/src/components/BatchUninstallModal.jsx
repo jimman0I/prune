@@ -139,7 +139,7 @@ export default function BatchUninstallModal({ programs, onClose, onFinished }) {
   return (
     <div className="glass-panel rounded-2xl overflow-hidden max-w-[720px] w-full flex flex-col max-h-[85vh]">
       <div className="flex items-center justify-between px-6 py-5 border-b border-[color:var(--border-subtle)] shrink-0">
-        <h2 className="text-[15px] font-semibold tracking-tight text-white">
+        <h2 className="text-[15px] font-semibold tracking-tight text-[color:var(--text-primary)]">
           Uninstall {programs.length} program{programs.length === 1 ? '' : 's'}
         </h2>
         <button
@@ -193,7 +193,7 @@ export default function BatchUninstallModal({ programs, onClose, onFinished }) {
             {programs.map((program) => {
               const status = statuses[program.id] || { state: 'pending' };
               return (
-                <div key={program.id} className="flex items-center justify-between gap-4 px-3.5 py-2 rounded-lg bg-white/[0.02]">
+                <div key={program.id} className="flex items-center justify-between gap-4 px-3.5 py-2 rounded-lg bg-[color:var(--surface-subtle)]">
                   <span className="text-[12.5px] truncate">{program.name}</span>
                   <span className={`text-[11.5px] font-mono shrink-0 ${STATUS_STYLE[status.state]}`}>
                     {STATUS_LABEL[status.state]}
@@ -231,7 +231,7 @@ export default function BatchUninstallModal({ programs, onClose, onFinished }) {
             )}
 
             {error && (
-              <p className="text-[12.5px] text-[#f7a8b0] mb-4">Couldn't remove leftovers: {error}</p>
+              <p className="text-[12.5px] text-[color:var(--danger)] mb-4">Couldn't remove leftovers: {error}</p>
             )}
 
             <LeftoverReview

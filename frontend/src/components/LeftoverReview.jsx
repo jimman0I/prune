@@ -68,7 +68,7 @@ export default function LeftoverReview({ scanResult, selected, onToggle, onConfi
           <line x1="12" y1="16" x2="12.01" y2="16"></line>
         </svg>
         <div className="text-[12.5px] text-[color:var(--warning)] leading-relaxed">
-          Found <span className="font-semibold text-white">{totalItems} leftover items</span> the
+          Found <span className="font-semibold text-[color:var(--text-primary)]">{totalItems} leftover items</span> the
           native uninstaller missed. Review before purging.
         </div>
       </div>
@@ -84,7 +84,7 @@ export default function LeftoverReview({ scanResult, selected, onToggle, onConfi
             <div key={key} className="rounded-xl border border-[color:var(--border-subtle)] overflow-hidden bg-[color:var(--bg-panel)]">
               <button
                 onClick={() => setOpenGroups(o => ({ ...o, [key]: !o[key] }))}
-                className="w-full flex items-center gap-2 px-4 py-3 text-left hover:bg-white/[0.02] transition"
+                className="w-full flex items-center gap-2 px-4 py-3 text-left hover:bg-[color:var(--surface-subtle)] transition"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className={`text-[color:var(--text-muted)] transition-transform ${open ? 'rotate-90' : ''}`}>
                   <polyline points="9 18 15 12 9 6"></polyline>
@@ -103,7 +103,7 @@ export default function LeftoverReview({ scanResult, selected, onToggle, onConfi
                     return (
                       <label
                         key={itemKey}
-                        className={`flex items-center gap-3 px-4 py-2.5 transition ${removable ? 'cursor-pointer hover:bg-white/[0.02]' : 'opacity-60'}`}
+                        className={`flex items-center gap-3 px-4 py-2.5 transition ${removable ? 'cursor-pointer hover:bg-[color:var(--surface-subtle)]' : 'opacity-60'}`}
                       >
                         {/* The same square every other tickable
                             control in this app uses. This was the one
@@ -148,7 +148,7 @@ export default function LeftoverReview({ scanResult, selected, onToggle, onConfi
 
       <div className="flex items-center justify-between mt-5 pt-4 border-t border-[color:var(--border-subtle)]">
         <div className="text-[12px] text-[color:var(--text-secondary)]">
-          <span className="text-white font-medium">{selectedCount}</span> items selected
+          <span className="text-[color:var(--text-primary)] font-medium">{selectedCount}</span> items selected
           {selectedSize > 0 && (
             <> · <span className="text-[color:var(--accent-primary)] font-medium">{formatBytes(selectedSize)}</span> reclaimable</>
           )}

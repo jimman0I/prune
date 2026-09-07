@@ -127,11 +127,11 @@ function RowCheckbox({ checked, disabled, label, onChange }) {
           ? 'border-[color:var(--border-subtle)] opacity-30 cursor-not-allowed'
           : checked
             ? 'bg-[color:var(--accent-primary)] border-[color:var(--accent-primary)]'
-            : 'bg-white/[0.03] border-[color:var(--border-subtle)] hover:border-white/25'
+            : 'bg-[color:var(--surface-subtle)] border-[color:var(--border-subtle)] hover:border-[color:var(--border-hover)]'
       }`}
     >
       {checked && !disabled && (
-        <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#09090b" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
+        <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="var(--accent-ink)" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
           <polyline points="20 6 9 17 4 12"></polyline>
         </svg>
       )}
@@ -186,7 +186,7 @@ function RevealButton({ program }) {
 function ProgramRow({ program, iconSrc, checked, running, isNew, onToggle, onUninstall }) {
   return (
     <div
-    className="grid gap-2.5 px-4 py-1.5 items-center group hover:bg-white/[0.04] transition-colors"
+    className="grid gap-2.5 px-4 py-1.5 items-center group hover:bg-[color:var(--surface-hover)] transition-colors"
     style={{ gridTemplateColumns: GRID_TEMPLATE }}
   >
     <RowCheckbox
@@ -233,7 +233,7 @@ function ProgramRow({ program, iconSrc, checked, running, isNew, onToggle, onUni
           rows say nothing rather than guessing "enabled". A disabled
           add-on still occupies disk, which is what this list is about. */}
       {program.source === 'extension' && program.enabled === false && (
-        <span className="text-[9px] font-mono uppercase tracking-wider px-1 py-px rounded bg-white/[0.06] text-[color:var(--text-muted)] border border-[color:var(--border-subtle)] shrink-0">
+        <span className="text-[9px] font-mono uppercase tracking-wider px-1 py-px rounded bg-[color:var(--surface-hover)] text-[color:var(--text-muted)] border border-[color:var(--border-subtle)] shrink-0">
           Disabled
         </span>
       )}
@@ -463,7 +463,7 @@ export default function ProgramList({ programs: initialPrograms, extensions = []
             <button
               key={f.id}
               onClick={() => setFilter(f.id)}
-              className={`px-3 py-1.5 rounded-lg text-[12.5px] font-medium transition ${filter === f.id ? 'bg-white/[0.06] text-white' : 'text-[color:var(--text-muted)] hover:text-white'}`}
+              className={`px-3 py-1.5 rounded-lg text-[12.5px] font-medium transition ${filter === f.id ? 'bg-[color:var(--surface-hover)] text-[color:var(--text-primary)]' : 'text-[color:var(--text-muted)] hover:text-[color:var(--text-primary)]'}`}
             >
               {f.label}
             </button>
@@ -476,7 +476,7 @@ export default function ProgramList({ programs: initialPrograms, extensions = []
             control: with eight columns on screen, the thing you want to
             sort by is already in front of you. */}
         <div
-          className="grid gap-2.5 px-4 py-2 border-b border-[color:var(--border-subtle)] bg-white/[0.02] shrink-0"
+          className="grid gap-2.5 px-4 py-2 border-b border-[color:var(--border-subtle)] bg-[color:var(--surface-subtle)] shrink-0"
           style={{ gridTemplateColumns: GRID_TEMPLATE }}
         >
           {COLUMNS.map((col) => {
@@ -587,7 +587,7 @@ export default function ProgramList({ programs: initialPrograms, extensions = []
             </div>
           </div>
         ) : (
-          <div className="flex items-center justify-between gap-4 px-4 py-2 border-t border-[color:var(--border-subtle)] bg-white/[0.02] shrink-0 text-[11.5px] font-mono text-[color:var(--text-muted)]">
+          <div className="flex items-center justify-between gap-4 px-4 py-2 border-t border-[color:var(--border-subtle)] bg-[color:var(--surface-subtle)] shrink-0 text-[11.5px] font-mono text-[color:var(--text-muted)]">
             <span>
               {filtered.length === programs.length
                 ? `Installations: ${programs.length}`

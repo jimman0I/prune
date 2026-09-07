@@ -44,16 +44,16 @@ function Checkbox({ state, onChange, label, size = 16 }) {
       className={`rounded-[4px] flex items-center justify-center shrink-0 transition-colors border ${
         filled
           ? 'bg-[color:var(--accent-primary)] border-[color:var(--accent-primary)]'
-          : 'bg-white/[0.03] border-[color:var(--border-subtle)] hover:border-white/25'
+          : 'bg-[color:var(--surface-subtle)] border-[color:var(--border-subtle)] hover:border-[color:var(--border-hover)]'
       }`}
     >
       {state === 'all' && (
-        <svg width={size - 6} height={size - 6} viewBox="0 0 24 24" fill="none" stroke="#09090b" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
+        <svg width={size - 6} height={size - 6} viewBox="0 0 24 24" fill="none" stroke="var(--accent-ink)" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
           <polyline points="20 6 9 17 4 12"></polyline>
         </svg>
       )}
       {state === 'some' && (
-        <svg width={size - 6} height={size - 6} viewBox="0 0 24 24" fill="none" stroke="#09090b" strokeWidth="3.5" strokeLinecap="round">
+        <svg width={size - 6} height={size - 6} viewBox="0 0 24 24" fill="none" stroke="var(--accent-ink)" strokeWidth="3.5" strokeLinecap="round">
           <line x1="5" y1="12" x2="19" y2="12"></line>
         </svg>
       )}
@@ -184,7 +184,7 @@ function CategorySection({ category, items, iconSrc, selected, onToggle, onToggl
           {items.map((item) => (
             <div
               key={item.id}
-              className={`flex items-center gap-2.5 pl-[38px] pr-3 py-[3px] hover:bg-white/[0.03] ${
+              className={`flex items-center gap-2.5 pl-[38px] pr-3 py-[3px] hover:bg-[color:var(--surface-subtle)] ${
                 item.present === false ? 'opacity-45' : ''
               }`}
             >
