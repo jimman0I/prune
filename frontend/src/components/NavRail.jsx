@@ -101,7 +101,7 @@ export default function NavRail({ screen, onNavigate }) {
               onClick={() => onNavigate(item.id)}
               aria-current={active ? 'page' : undefined}
               aria-label={item.label}
-              className={`w-11 h-11 rounded-xl flex items-center justify-center transition-colors ${
+              className={`peer w-11 h-11 rounded-xl flex items-center justify-center transition-colors ${
                 active ? 'bg-[color:var(--accent-primary-soft)] text-[color:var(--accent-primary)]' : 'text-[color:var(--text-secondary)] hover:text-[color:var(--text-primary)] hover:bg-white/[0.04]'
               }`}
             >
@@ -111,10 +111,28 @@ export default function NavRail({ screen, onNavigate }) {
             {/* Shown on hover AND on keyboard focus: someone tabbing the
                 rail needs the name at least as much as someone pointing
                 at it. `pointer-events-none` so it can never sit between
-                the cursor and the button underneath it. */}
+                the cursor and the button underneath it.
+
+                The keyboard half is `peer-focus-visible`, not
+                `group-focus-within`, and the difference was a real bug:
+                clicking a nav button focuses it, and that focus outlives
+                the pointer leaving, so the label of whichever screen you
+                had just opened sat there over the content until you
+                clicked something else. `:focus-within` cannot tell those
+                apart -- it is `:focus`, which a mouse sets. Chromium
+                already draws the distinction we want (measured live: after
+                a click, `:focus-within` true, `:focus-visible` false), so
+                asking for `:focus-visible` keeps the label for the tabbing
+                user and drops it for the clicking one.
+
+                It hangs off `peer` rather than the wrapper's `group`
+                because the group is a div: only the button can be focused,
+                and only an element that matches the pseudo-class can drive
+                a variant. Hover stays on the group, which is the whole
+                target area. */}
             <span
               aria-hidden="true"
-              className="pointer-events-none absolute left-full top-1/2 -translate-y-1/2 ml-2 px-2 py-1 rounded-md whitespace-nowrap text-[11.5px] font-medium bg-[color:var(--bg-panel)] text-[color:var(--text-primary)] border border-[color:var(--border-subtle)] shadow-lg opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity duration-150 z-flyout"
+              className="pointer-events-none absolute left-full top-1/2 -translate-y-1/2 ml-2 px-2 py-1 rounded-md whitespace-nowrap text-[11.5px] font-medium bg-[color:var(--bg-panel)] text-[color:var(--text-primary)] border border-[color:var(--border-subtle)] shadow-lg opacity-0 group-hover:opacity-100 peer-focus-visible:opacity-100 transition-opacity duration-150 z-flyout"
             >
               {item.label}
             </span>

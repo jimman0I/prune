@@ -176,7 +176,7 @@ function RevealButton({ program }) {
         }
       }}
       aria-label={`Open the folder for ${program.name}`}
-      className="btn-ghost px-2 py-1 rounded-md text-[11px] font-medium opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity"
+      className="btn-ghost px-2 py-1 rounded-md text-[11px] font-medium opacity-0 group-hover:opacity-100 focus-visible:opacity-100 transition-opacity"
     >
       {failed ? 'Not found' : 'Folder'}
     </button>
@@ -311,14 +311,14 @@ function ProgramRow({ program, iconSrc, checked, running, isNew, onToggle, onUni
         <button
           onClick={() => { openInstalledAppsSettings().catch(() => {}); }}
           aria-label={`Open Windows settings to remove ${program.name}`}
-          className="btn-ghost px-2 py-1 rounded-md text-[11px] font-medium opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity"
+          className="btn-ghost px-2 py-1 rounded-md text-[11px] font-medium opacity-0 group-hover:opacity-100 focus-visible:opacity-100 transition-opacity"
         >
           In Windows
         </button>
       ) : (
         <button
           onClick={() => onUninstall(program)}
-          className="btn-danger px-2.5 py-1 rounded-md text-[11px] font-medium opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity"
+          className="btn-danger px-2.5 py-1 rounded-md text-[11px] font-medium opacity-0 group-hover:opacity-100 focus-visible:opacity-100 transition-opacity"
         >
           {program.health?.orphaned ? 'Force remove' : 'Uninstall'}
         </button>
