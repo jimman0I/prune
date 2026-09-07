@@ -5,6 +5,7 @@ import { expandPath } from '../lib/cleanerRules.js';
 import { isStartupEnabled, approvedLookupKey } from './startupApproved.js';
 import { getStartupDetails } from './startupDetails.js';
 import { toggleRefusal } from './startupToggle.js';
+import { appxDisplayName } from './appxName.js';
 
 /** Everything Windows runs when you sign in.
  *
@@ -14,11 +15,26 @@ import { toggleRefusal } from './startupToggle.js';
  * key behind, and Windows goes on trying to launch a file that is not
  * there at every single sign-in.
  *
- * Read from the four places that actually matter: the Run and RunOnce keys
- * in both machine hives and the user hive, and the two Startup folders.
- * Scheduled tasks are deliberately absent -- there are hundreds of them,
- * almost all of them Windows' own, and a list nobody can read is not a
- * feature. */
+ * Read from seven places: the Run and RunOnce keys in both machine hives
+ * and the user hive, the two Startup folders, scheduled tasks, services
+ * set to start automatically, and the startup tasks Windows Store apps
+ * register.
+ *
+ * The last three were absent, on the reasoning that "there are hundreds
+ * of them, almost all of them Windows' own, and a list nobody can read is
+ * not a feature". The premise was right and the conclusion was not: there
+ * are 202 scheduled tasks on this machine and 81 automatic services, and
+ * filtering out the ones under \Microsoft\ and in system32 leaves 10 and
+ * 20 -- all of them things a person installed. Skipping the whole
+ * location to avoid the noise also skipped the signal, and left Prune
+ * showing 15 entries where Revo showed 77.
+ *
+ * All three are read-only here. Each is switchable somewhere -- Task
+ * Scheduler, services.msc, the app's own settings -- but none through
+ * StartupApproved, which is the only thing this app knows how to write.
+ * They carry a `toggleNote` saying where to go instead, which the screen
+ * renders as a fixed tick and a sentence rather than a control that does
+ * nothing. */
 const STARTUP_QUERY = `
 $out = @()
 
@@ -70,6 +86,88 @@ foreach ($f in $folders) {
   }
 }
 
+# Scheduled tasks, minus Microsoft's own.
+#
+# These were left out on the grounds that "there are hundreds of them,
+# almost all of them Windows' own, and a list nobody can read is not a
+# feature". True of all 202 on this machine; false once the \Microsoft\
+# tree is excluded, which leaves 11 -- every one of them something a
+# person installed. Revo lists them for the same reason.
+#
+# Keyed by full path, not by name: task names are only unique within their
+# folder.
+foreach ($t in (Get-ScheduledTask -ErrorAction SilentlyContinue)) {
+  if ($t.TaskPath -like '\\Microsoft\\*') { continue }
+  $action = $t.Actions | Where-Object { $_.Execute } | Select-Object -First 1
+  if (-not $action) { continue }
+  $cmd = [string]$action.Execute
+  if ($action.Arguments) { $cmd = $cmd + ' ' + [string]$action.Arguments }
+  $out += [PSCustomObject]@{
+    name = [string]$t.TaskName
+    key = [string]$t.TaskPath + [string]$t.TaskName
+    command = $cmd
+    scope = 'machine'
+    location = 'Scheduled task'
+    source = 'task'
+    enabled = ($t.State -ne 'Disabled')
+    description = [string]$t.Description
+    registryKey = ''
+  }
+}
+
+# Services set to start automatically, minus Windows' own.
+#
+# system32 is the line between "a program set itself to run" and "Windows
+# is Windows" -- without it this is 81 rows, most of them the operating
+# system describing itself.
+#
+# Keyed by service short name because DISPLAY names are not unique: two
+# different services on this machine are both called "Gaming Services".
+foreach ($s in (Get-CimInstance Win32_Service -ErrorAction SilentlyContinue)) {
+  if ($s.StartMode -ne 'Auto') { continue }
+  if (-not $s.PathName) { continue }
+  if ($s.PathName -match '^"?C:\\\\WINDOWS\\\\[Ss]ystem32\\\\') { continue }
+  $out += [PSCustomObject]@{
+    name = [string]$s.DisplayName
+    key = [string]$s.Name
+    command = [string]$s.PathName
+    scope = 'machine'
+    location = 'Service'
+    source = 'service'
+    enabled = $true
+    description = [string]$s.Description
+    registryKey = ''
+  }
+}
+
+# Startup tasks registered by Windows Store apps.
+#
+# State 2 is enabled; 0 and 1 are the two ways of being off (off, and
+# turned off by the user). Verified against this machine's own list by
+# comparing every row with the ticks Revo shows for the same apps.
+#
+# There is no command line for any of these: a Store app declares a
+# startup task by package identity and Windows launches it through the
+# package. The row says what it can and claims nothing else.
+$appRoot = 'HKCU:\\SOFTWARE\\Classes\\Local Settings\\Software\\Microsoft\\Windows\\CurrentVersion\\AppModel\\SystemAppData'
+foreach ($pkg in (Get-ChildItem $appRoot -ErrorAction SilentlyContinue)) {
+  foreach ($taskKey in (Get-ChildItem $pkg.PSPath -ErrorAction SilentlyContinue)) {
+    $props = Get-ItemProperty $taskKey.PSPath -ErrorAction SilentlyContinue
+    if ($null -eq $props -or $null -eq $props.State) { continue }
+    $out += [PSCustomObject]@{
+      name = ($pkg.PSChildName -split '_')[0]
+      key = [string]$pkg.PSChildName + '\\' + [string]$taskKey.PSChildName
+      command = ''
+      scope = 'user'
+      location = 'Windows app'
+      source = 'appx'
+      enabled = ([int]$props.State -eq 2)
+      description = [string]$taskKey.PSChildName
+      registryKey = ''
+    }
+  }
+}
+
 # Which of these Windows will actually run. Disabling a startup item does
 # not remove it -- the Run value or the shortcut stays exactly where it is
 # and the decision is recorded separately, here. A list that reads only the
@@ -107,10 +205,14 @@ ConvertTo-Json -InputObject ([PSCustomObject]@{ items = @($out); approved = $app
  * shortcut itself. Saying a shortcut exists when it does is honest;
  * claiming to know whether its target resolves would not be. */
 export function normalizeStartupItem(raw) {
-  if (!raw?.name || !raw?.command) return null;
+  if (!raw?.name) return null;
 
-  const command = String(raw.command).trim();
-  if (!command) return null;
+  const command = String(raw.command || '').trim();
+  // For a Run value or a Startup-folder shortcut the command IS the entry,
+  // so an empty one is malformed. A Windows Store app registers its
+  // startup task by package identity and has no command line anywhere --
+  // dropping those would silently lose every one of them.
+  if (!command && raw.source !== 'appx') return null;
 
   const isShortcut = /\.(lnk|url)$/i.test(command);
   const { executable } = parseUninstallerPath(command);
@@ -121,9 +223,20 @@ export function normalizeStartupItem(raw) {
   // means "unanswerable" rather than "missing".
   const checkable = Boolean(expanded) && (/^[a-z]:[\\/]/i.test(expanded) || expanded.startsWith('\\\\'));
 
+  // A Store app arrives as its package family name. Prettified here
+  // rather than in the query so the rule is a testable pure function
+  // rather than a line of PowerShell.
+  const name = raw.source === 'appx' ? appxDisplayName(raw.name) : raw.name;
+
   return {
-    id: `${raw.source}:${raw.scope}:${raw.location}:${raw.name}`,
-    name: raw.name,
+    // `key` where the source can supply something guaranteed unique --
+    // a service's short name, a task's full path -- because display names
+    // are not. Two distinct services on this machine are both shown as
+    // "Gaming Services"; keyed by name they collapse into one row, which
+    // is a duplicate React key and a toggle acting on whichever was found
+    // first.
+    id: `${raw.source}:${raw.scope}:${raw.location}:${raw.key || raw.name}`,
+    name,
     approvedName: raw.approvedName || raw.name,
     command,
     executable: expanded,
@@ -136,7 +249,11 @@ export function normalizeStartupItem(raw) {
     registryKey: raw.registryKey || null,
     isShortcut,
     // true, false, or null when there is nothing that can be checked.
-    exists: checkable ? existsSync(expanded) : null
+    exists: checkable ? existsSync(expanded) : null,
+    // Present only for the sources that know their own state. undefined
+    // means "ask StartupApproved", which is right for Run keys and
+    // Startup folders and wrong for everything else.
+    reportedEnabled: typeof raw.enabled === 'boolean' ? raw.enabled : undefined
   };
 }
 
@@ -157,7 +274,11 @@ export function attachEnabledState(items, approved) {
   const map = approved || {};
   return items.map((item) => ({
     ...item,
-    enabled: isStartupEnabled(
+    // A source that knows its own state wins. StartupApproved records Run,
+    // Run32 and StartupFolder entries and nothing else, so reading a
+    // scheduled task or a Store app's state out of it would report every
+    // one of them as enabled -- including the ones that are switched off.
+    enabled: item.reportedEnabled ?? isStartupEnabled(
       map[approvedLookupKey({ ...item, scope: item.rawScope })] ?? null
     ),
     toggleNote: toggleRefusal(item)

@@ -21,12 +21,17 @@ const scanRulesProgressively = vi.fn(async (emit) => {
   emit({ id: 'thumbs', sizeBytes: 20 });
   return { totalBytes: 30 };
 });
+// Presence is a real filesystem question, asked per rule by the /rules
+// route. These fixtures name no real paths, so the honest default is
+// false; individual tests override it.
+const rulePathsExist = vi.fn(() => false);
 
 vi.mock('../lib/cleanerRules.js', () => ({
   executeRules: (...a) => executeRules(...a),
   scanAllRules: (...a) => scanAllRules(...a),
   loadCleanerRules: (...a) => loadCleanerRules(...a),
-  scanRulesProgressively: (...a) => scanRulesProgressively(...a)
+  scanRulesProgressively: (...a) => scanRulesProgressively(...a),
+  rulePathsExist: (...a) => rulePathsExist(...a)
 }));
 
 const guards = { excludeFolders: ['C:\\Keep'], excludeExtensions: ['.psd'] };
@@ -77,8 +82,12 @@ describe('POST /deep-clean/execute', () => {
 describe('GET /deep-clean/rules', () => {
   it('groups the rules by category with sizes left honestly unmeasured', async () => {
     // null renders as a dash. That is "not measured", which is a
-    // different statement from "measured and empty" -- and this endpoint
-    // touches no filesystem at all.
+    // different statement from "measured and empty".
+    //
+    // The endpoint does now touch the filesystem, which it did not when
+    // this test was written: it asks whether each rule's paths EXIST,
+    // which is an existsSync per path rather than the directory walk a
+    // size needs. 74 rules in 126ms, against most of a minute for sizes.
     const res = await server.call('/deep-clean/rules');
     expect(res.status).toBe(200);
     expect(res.body.categories.map((c) => c.category)).toEqual(['System', 'Browsers']);
@@ -89,6 +98,19 @@ describe('GET /deep-clean/rules', () => {
         expect(item.fileCount).toBeNull();
       }
     }
+  });
+
+  it('says whether each rule applies to this machine, before any scan', async () => {
+    // Without this the "hide cleaners that don't apply" setting had
+    // nothing to filter on until a full scan finished, so the list opened
+    // showing Firefox, Opera and Vivaldi to someone who has none of them
+    // and the setting looked broken.
+    rulePathsExist.mockImplementation((rule) => rule.id === 'temp');
+    const res = await server.call('/deep-clean/rules');
+
+    const items = res.body.categories.flatMap((c) => c.items);
+    expect(items.find((i) => i.id === 'temp').present).toBe(true);
+    expect(items.filter((i) => i.present === false).length).toBe(items.length - 1);
   });
 });
 

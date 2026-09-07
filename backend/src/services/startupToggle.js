@@ -32,6 +32,20 @@ const FILETIME_EPOCH_OFFSET_MS = 11644473600000n;
 export function toggleRefusal(item) {
   if (!item) return 'There is no entry to switch.';
 
+  // The three sources Prune reads but does not write. Each is switchable
+  // somewhere -- Task Scheduler, services.msc, the app's own settings --
+  // and none of them through StartupApproved, which is the only thing
+  // this module knows how to write. Listing them read-only is honest;
+  // offering a switch that silently writes to the wrong place would not
+  // be. Checked BEFORE the name check so each gets its own reason rather
+  // than a generic one.
+  const BY_SOURCE = {
+    task: 'This is a scheduled task. Windows keeps its on/off state on the task itself, not with the sign-in entries — change it in Task Scheduler.',
+    service: 'This is a Windows service. It starts with the machine rather than at sign-in, and its startup type is changed in Services.',
+    appx: 'This is a Store app’s own startup task. It is switched from the app’s settings or from Windows’ Startup Apps page.'
+  };
+  if (BY_SOURCE[item.source]) return BY_SOURCE[item.source];
+
   const name = item.approvedName || item.name;
   if (!name) {
     return 'Windows files its decision under the entry name, and this entry has none.';

@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { scanAllRules, executeRules, scanRulesProgressively, loadCleanerRules } from '../lib/cleanerRules.js';
+import { scanAllRules, executeRules, scanRulesProgressively, loadCleanerRules, rulePathsExist } from '../lib/cleanerRules.js';
 import { getSettings, cleanGuardsFrom } from '../services/settings.js';
 import { getCleanerCategoryIcons } from '../services/cleanerCategoryIcons.js';
 
@@ -67,7 +67,19 @@ router.get('/rules', (req, res) => {
   try {
     const grouped = [];
     for (const rule of loadCleanerRules()) {
-      const item = { ...rule, sizeBytes: null, fileCount: null };
+      // `present` is computed here, cheaply, even though sizeBytes is
+      // not. The two are very different costs: presence is an existsSync
+      // per path (74 rules in 126ms, measured on this machine), while a
+      // size needs a full directory walk and takes the better part of a
+      // minute for the set.
+      //
+      // Worth the 126ms because without it "hide cleaners that don't
+      // apply" could not do anything until a scan had run -- the flag it
+      // filters on did not exist yet -- so the list opened showing
+      // Firefox, Opera and Vivaldi to someone who has none of them, and
+      // the setting looked broken. Six of the 29 categories on this
+      // machine are for software that is not installed.
+      const item = { ...rule, sizeBytes: null, fileCount: null, present: rulePathsExist(rule) };
       const group = grouped.find((g) => g.category === rule.category);
       if (group) group.items.push(item);
       else grouped.push({ category: rule.category, items: [item] });

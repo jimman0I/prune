@@ -214,7 +214,7 @@ export function scanRule(rule, guards = {}) {
  * cleaners that don't apply to the machine), and with a rule set this
  * size most rules won't apply to any given user -- so the difference
  * carries most of the list's signal. */
-function rulePathsExist(rule) {
+export function rulePathsExist(rule) {
   for (const rawPath of rule.paths) {
     const [driveSegment, ...rest] = pathToSegments(expandPath(rawPath));
     if (!driveSegment) continue;
