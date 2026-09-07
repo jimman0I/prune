@@ -5,11 +5,28 @@ see v1.0.1 below) are documented here.
 
 ## v2.2.0
 
-A much fuller startup list, a rebuilt Deep Clean list, application icons
-wherever a row is an app, and two icons that were never going to load
-fixed at the source.
+A light theme, the app's own title bar, motion throughout, a much fuller
+startup list, a rebuilt Deep Clean list, and application icons wherever a
+row is an app.
 
 ### Added
+
+- **A light theme.** Aurora Deck in daylight, and a real palette rather
+  than the dark one inverted: the accent darkens so buttons can keep white
+  text, the ambient washes drop to a third of their strength, and every
+  text tier was measured against the surfaces it actually sits on. Every
+  screen was checked in both themes and every piece of text meets WCAG AA.
+  Prune follows your system setting until you pick one in Settings >
+  Appearance, and remembers your choice after that.
+- **Prune draws its own title bar**, with the mark and name where Windows
+  used to put a small icon and the word "Prune". The window buttons are
+  still Windows' own, so Snap Layouts and edge-snapping behave exactly as
+  they always did, and they repaint to match the theme.
+- **Motion.** Screens fade and rise as you switch tabs, the marker in the
+  sidebar slides to the tab you picked, the dashboard's counts settle
+  instead of snapping into place, loading rows shimmer, and the glow
+  behind everything drifts slowly. All of it stops if your system asks for
+  reduced motion.
 
 - **The startup screen now shows scheduled tasks, automatic services and
   the startup tasks Windows Store apps register.** It listed 15 things and
