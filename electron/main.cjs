@@ -78,6 +78,39 @@ async function createWindow() {
     title: 'Prune',
     backgroundColor: '#09090b',
     icon: iconPath(),
+
+    /* The window's own title bar, drawn by the app.
+     *
+     * `titleBarStyle: 'hidden'` with a `titleBarOverlay` rather than
+     * `frame: false` with hand-drawn buttons, and the difference is worth
+     * recording because the second one is what "custom title bar" usually
+     * means.
+     *
+     * Windows still draws minimize/maximize/close here, in the colours
+     * given below, over a bar this app owns the rest of. That keeps three
+     * things that hand-drawn buttons lose: Snap Layouts (hovering maximize
+     * on Windows 11 opens the tiling menu), correct hit-testing at the
+     * screen edge for a maximized window, and keyboard and screen-reader
+     * behaviour that comes free. It also needs no IPC -- a frameless
+     * window has to expose minimize/maximize/close to the renderer, which
+     * is a new surface on an app that currently exposes none at all.
+     *
+     * The cost is that the glyphs are Windows' rather than ours. They are
+     * thin strokes in the same weight either way.
+     *
+     * Colours are fixed because the app ships one theme. A second theme
+     * would need win.setTitleBarOverlay() -- these are not CSS and do not
+     * follow the stylesheet. */
+    titleBarStyle: 'hidden',
+    titleBarOverlay: {
+      color: '#09090b',
+      symbolColor: '#a1a1aa',
+      // 40, not the ~60 the reference design uses. Prune's screens are
+      // dense -- tables, a treemap, a 55-row startup list -- and 20px of
+      // permanent vertical chrome costs more here than on a page with one
+      // panel in the middle of it.
+      height: 40
+    },
     webPreferences: {
       contextIsolation: true,
       nodeIntegration: false

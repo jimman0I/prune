@@ -87,18 +87,13 @@ export default function NavRail({ screen, onNavigate }) {
           needs the blurred surface to be a sibling rather than an
           ancestor. */}
       <div className="glass-panel absolute inset-0" aria-hidden="true" />
-      {/* The Prune mark already reads as a self-contained badge (dark
-          circle, teal leaf) at this size -- the rail is only 72px wide,
-          too narrow for the wordmark next to it without wrapping or
-          shrinking the mark itself, so it stands alone here.
-          Real bug, found live-verifying this (2026-09-01): a root-
-          relative "/logo.png" resolves against the filesystem root
-          (file:///C:/logo.png) once packaged, since the app loads over
-          file:// -- it's not rewritten by Vite's own base:'./' config,
-          which only rewrites what it directly processes (index.html
-          tags, module imports), not a raw string literal in JSX. "./"
-          matches index.html's own already-correct favicon link. */}
-      <img src="./logo.png" alt="Prune" className="relative w-9 h-9 mb-4 shrink-0" />
+      {/* The mark used to be here, alone, because a 72px rail is too
+          narrow for the wordmark beside it without shrinking one or
+          wrapping the other. The window's own title bar is full width and
+          has room for both, so the logo moved there (TitleBar.jsx) and
+          the rail got the 52px back for the things it exists for. Two
+          copies of the same mark, one directly above the other, was the
+          alternative and said nothing twice. */}
       {ITEMS.map((item) => {
         const active = screen === item.id;
         return (

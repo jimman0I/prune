@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import NavRail from './components/NavRail.jsx';
+import TitleBar from './components/TitleBar.jsx';
 import Dashboard from './components/Dashboard.jsx';
 import DiskMap from './components/DiskMap.jsx';
 import Screen from './components/Screen.jsx';
@@ -80,7 +81,13 @@ export default function App() {
 
 
   return (
-    <div className="App grain h-screen overflow-hidden flex">
+    /* Column, then row. The title bar spans the full width above
+       everything -- including the nav rail -- because it is the WINDOW's
+       bar, not the content area's, and Windows draws its buttons across
+       the whole top edge regardless of what is underneath them. */
+    <div className="App grain h-screen overflow-hidden flex flex-col">
+      <TitleBar />
+      <div className="flex-1 flex min-h-0">
       <ToastHost />
       <NavRail screen={screen} onNavigate={setScreen} />
       <div className="flex-1 overflow-y-auto min-h-0">
@@ -117,6 +124,7 @@ export default function App() {
             />
           </div>
         </Screen>
+      </div>
       </div>
       {/* Both dialogs used to be a bare inline-styled fixed div: no
           role, no Escape, no focus trap, no initial focus. Tab from an
