@@ -1,0 +1,128 @@
+{
+  "_comment": "Where each Deep Clean category's icon comes from. Candidates are tried in order and the first one that exists on the machine wins, so a category can cover both the per-user and machine-wide install of the same program without knowing which one is here. A category with no entry, or whose candidates all miss, keeps the lettered tile -- that is an ordinary outcome, not a failure. Paths use the same tokens cleaners.json does and are expanded by expandPath.",
+
+  "Brave": [
+    "%PROGRAMFILES%\\BraveSoftware\\Brave-Browser\\Application\\brave.exe",
+    "%PROGRAMFILES(X86)%\\BraveSoftware\\Brave-Browser\\Application\\brave.exe",
+    "%LOCALAPPDATA%\\BraveSoftware\\Brave-Browser\\Application\\brave.exe"
+  ],
+  "Chrome": [
+    "%PROGRAMFILES%\\Google\\Chrome\\Application\\chrome.exe",
+    "%PROGRAMFILES(X86)%\\Google\\Chrome\\Application\\chrome.exe",
+    "%LOCALAPPDATA%\\Google\\Chrome\\Application\\chrome.exe"
+  ],
+  "Edge": [
+    "%PROGRAMFILES(X86)%\\Microsoft\\Edge\\Application\\msedge.exe",
+    "%PROGRAMFILES%\\Microsoft\\Edge\\Application\\msedge.exe"
+  ],
+  "Firefox": [
+    "%PROGRAMFILES%\\Mozilla Firefox\\firefox.exe",
+    "%PROGRAMFILES(X86)%\\Mozilla Firefox\\firefox.exe"
+  ],
+  "Opera": [
+    "%LOCALAPPDATA%\\Programs\\Opera\\opera.exe",
+    "%PROGRAMFILES%\\Opera\\opera.exe"
+  ],
+  "Vivaldi": [
+    "%LOCALAPPDATA%\\Vivaldi\\Application\\vivaldi.exe",
+    "%PROGRAMFILES%\\Vivaldi\\Application\\vivaldi.exe"
+  ],
+
+  "Discord": [
+    "%LOCALAPPDATA%\\Discord\\app.ico",
+    "%PROGRAMDATA%\\SquirrelMachineInstalls\\Discord.exe"
+  ],
+  "Slack": [
+    "%LOCALAPPDATA%\\slack\\app.ico",
+    "%PROGRAMFILES%\\Slack\\slack.exe"
+  ],
+  "Telegram": [
+    "%APPDATA%\\Telegram Desktop\\Telegram.exe"
+  ],
+  "Microsoft Teams": [
+    "%LOCALAPPDATA%\\Microsoft\\Teams\\current\\Teams.exe",
+    "%PROGRAMFILES%\\WindowsApps\\MSTeams_x64__8wekyb3d8bbwe\\ms-teams.exe"
+  ],
+  "Zoom": [
+    "%APPDATA%\\Zoom\\bin\\Zoom.exe",
+    "%PROGRAMFILES%\\Zoom\\bin\\Zoom.exe"
+  ],
+
+  "Spotify": [
+    "%APPDATA%\\Spotify\\Spotify.exe",
+    "%LOCALAPPDATA%\\Microsoft\\WindowsApps\\Spotify.exe"
+  ],
+  "Steam": [
+    "%PROGRAMFILES(X86)%\\Steam\\steam.exe",
+    "%PROGRAMFILES%\\Steam\\steam.exe"
+  ],
+  "Epic Games": [
+    "%PROGRAMFILES(X86)%\\Epic Games\\Launcher\\Portal\\Binaries\\Win32\\EpicGamesLauncher.exe",
+    "%PROGRAMFILES%\\Epic Games\\Launcher\\Portal\\Binaries\\Win64\\EpicGamesLauncher.exe"
+  ],
+  "Riot Client": [
+    "%SYSTEMDRIVE%\\Riot Games\\Riot Client\\RiotClientServices.exe",
+    "%PROGRAMFILES%\\Riot Games\\Riot Client\\RiotClientServices.exe",
+    "%PROGRAMFILES(X86)%\\Riot Games\\Riot Client\\RiotClientServices.exe"
+  ],
+  "League of Legends": [
+    "%SYSTEMDRIVE%\\Riot Games\\League of Legends\\LeagueClient.exe",
+    "%PROGRAMFILES%\\Riot Games\\League of Legends\\LeagueClient.exe",
+    "%PROGRAMFILES(X86)%\\Riot Games\\League of Legends\\LeagueClient.exe"
+  ],
+  "Ubisoft Connect": [
+    "%PROGRAMFILES(X86)%\\Ubisoft\\Ubisoft Game Launcher\\UbisoftConnect.exe",
+    "%PROGRAMFILES(X86)%\\Ubisoft\\Ubisoft Game Launcher\\upc.exe"
+  ],
+  "Overwolf": [
+    "%PROGRAMFILES(X86)%\\Overwolf\\OverwolfLauncher.exe",
+    "%PROGRAMFILES%\\Overwolf\\OverwolfLauncher.exe",
+    "%LOCALAPPDATA%\\Overwolf\\OverwolfLauncher.exe"
+  ],
+  "Blitz": [
+    "%LOCALAPPDATA%\\Programs\\Blitz\\Blitz.exe",
+    "%LOCALAPPDATA%\\Blitz\\Blitz.exe"
+  ],
+
+  "Visual Studio Code": [
+    "%LOCALAPPDATA%\\Programs\\Microsoft VS Code\\Code.exe",
+    "%PROGRAMFILES%\\Microsoft VS Code\\Code.exe"
+  ],
+  "JetBrains": [
+    "%LOCALAPPDATA%\\JetBrains\\Toolbox\\bin\\jetbrains-toolbox.exe",
+    "%PROGRAMFILES%\\JetBrains\\JetBrains Toolbox\\jetbrains-toolbox.exe"
+  ],
+  "qBittorrent": [
+    "%PROGRAMFILES%\\qBittorrent\\qbittorrent.exe",
+    "%PROGRAMFILES(X86)%\\qBittorrent\\qbittorrent.exe"
+  ],
+  "Malwarebytes": [
+    "%PROGRAMFILES%\\Malwarebytes\\Anti-Malware\\mbam.exe",
+    "%PROGRAMFILES(X86)%\\Malwarebytes\\Anti-Malware\\mbam.exe"
+  ],
+  "Adobe": [
+    "%PROGRAMFILES%\\Adobe\\Adobe Creative Cloud\\ACC\\Creative Cloud.exe",
+    "%PROGRAMFILES(X86)%\\Adobe\\Adobe Creative Cloud\\ACC\\Creative Cloud.exe",
+    "%PROGRAMFILES%\\Common Files\\Adobe\\Adobe Desktop Common\\ADS\\Adobe Desktop Service.exe"
+  ],
+  "NVIDIA": [
+    "%PROGRAMFILES%\\NVIDIA Corporation\\NVIDIA app\\CEF\\NVIDIA app.exe",
+    "%PROGRAMFILES%\\NVIDIA Corporation\\NVIDIA GeForce Experience\\NVIDIA GeForce Experience.exe",
+    "%PROGRAMFILES%\\NVIDIA Corporation\\NVIDIA Broadcast\\NVIDIA Broadcast.exe",
+    "%PROGRAMFILES%\\NVIDIA Corporation\\Control Panel Client\\nvcplui.exe"
+  ],
+  "Microsoft Office": [
+    "%PROGRAMFILES%\\Microsoft Office\\root\\Office16\\WINWORD.EXE",
+    "%PROGRAMFILES(X86)%\\Microsoft Office\\root\\Office16\\WINWORD.EXE"
+  ],
+
+  "Windows": [
+    "%SYSTEMROOT%\\explorer.exe"
+  ],
+  "DirectX": [
+    "%SYSTEMROOT%\\System32\\dxdiag.exe"
+  ],
+  "Developer tools": [
+    "%SYSTEMROOT%\\System32\\WindowsPowerShell\\v1.0\\powershell.exe"
+  ]
+}

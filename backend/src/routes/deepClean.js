@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { scanAllRules, executeRules, scanRulesProgressively, loadCleanerRules } from '../lib/cleanerRules.js';
 import { getSettings, cleanGuardsFrom } from '../services/settings.js';
+import { getCleanerCategoryIcons } from '../services/cleanerCategoryIcons.js';
 
 const router = Router();
 
@@ -72,6 +73,21 @@ router.get('/rules', (req, res) => {
       else grouped.push({ category: rule.category, items: [item] });
     }
     res.json({ categories: grouped });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+/** The icon for each category, as { category: dataUri }.
+ *
+ * Its own endpoint rather than a field on /rules, for the same reason the
+ * program and startup icons have theirs: it opens twenty-odd executables
+ * through PowerShell, and the list should be on screen long before any of
+ * that finishes. A category whose program is not installed is simply
+ * absent from the map and keeps its lettered tile. */
+router.get('/category-icons', async (req, res) => {
+  try {
+    res.json({ icons: await getCleanerCategoryIcons() });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
