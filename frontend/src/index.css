@@ -59,6 +59,16 @@
 
   --danger: #ec5162;
   --danger-soft: rgba(236, 81, 98, 0.12);
+  /* The destructive button's own three states. Its ink is LIGHTER than
+     --danger here rather than equal to it, because the text sits on a
+     tinted-dark ground; the light theme inverts that relationship, which
+     is exactly why these are tokens and not literals. */
+  --danger-ink: #f7a8b0;
+  --danger-ink-hover: #fbc7cc;
+  --danger-edge: rgba(236, 81, 98, 0.25);
+  --danger-edge-hover: rgba(236, 81, 98, 0.45);
+  --danger-soft-hover: rgba(236, 81, 98, 0.2);
+  --danger-soft-active: rgba(236, 81, 98, 0.28);
   --warning: #f59e0b;
   --warning-soft: rgba(245, 158, 11, 0.12);
   --success: #5db872;
@@ -96,6 +106,13 @@
    * from the aurora behind it; light mode needs a tighter, layered one,
    * because a single diffuse shadow on white reads as smudge rather than
    * lift. */
+  /* The scrim behind a modal. Near-black at 62% works on a dark ground
+     and is far too heavy on a light one: the dialog's own glass is 72%
+     opaque, so a scrim this dark composites THROUGH it and turns a white
+     panel grey -- which then drags every colour inside the dialog below
+     its contrast floor. */
+  --scrim: rgba(2, 8, 20, 0.62);
+
   --shadow-panel: 0 8px 32px rgba(0, 0, 0, 0.2);
   --shadow-raised: 0 12px 36px rgba(0, 0, 0, 0.28);
 
@@ -191,6 +208,15 @@
    *   success  6.08 / 7.07 / 6.55 */
   --danger: #a32f06;
   --danger-soft: rgba(163, 47, 6, 0.1);
+  /* Darker than --danger on hover, not lighter. On a light tinted ground
+     the ink has to go further from the background, and that is the
+     opposite direction from the dark theme's. */
+  --danger-ink: #a32f06;
+  --danger-ink-hover: #7d2405;
+  --danger-edge: rgba(163, 47, 6, 0.3);
+  --danger-edge-hover: rgba(163, 47, 6, 0.55);
+  --danger-soft-hover: rgba(163, 47, 6, 0.16);
+  --danger-soft-active: rgba(163, 47, 6, 0.22);
   --warning: #7d4d05;
   --warning-soft: rgba(125, 77, 5, 0.1);
   --success: #116632;
@@ -208,6 +234,11 @@
 
   /* Layered rather than one diffuse cast. A single large soft shadow on
      white reads as a smudge under the panel; two offsets read as lift. */
+  /* Warm and much lighter. Still unmistakably a scrim -- it dims the page
+     and the blur behind it does the rest -- but it leaves the dialog's
+     glass reading as white rather than as concrete. */
+  --scrim: rgba(28, 25, 23, 0.32);
+
   --shadow-panel: 0 1px 2px rgba(28, 25, 23, 0.05), 0 8px 24px -8px rgba(28, 25, 23, 0.12);
   --shadow-raised: 0 2px 4px rgba(28, 25, 23, 0.06), 0 16px 32px -12px rgba(28, 25, 23, 0.18);
 
@@ -377,7 +408,9 @@ body::before {
   -webkit-backdrop-filter: blur(24px) saturate(180%);
   border: 1px solid var(--accent-primary-glow);
   border-radius: 10px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  /* Themed rather than a flat black cast: at 40% black this floated over
+     a light page as a smudge rather than as lift. */
+  box-shadow: var(--shadow-raised);
   padding: 10px 14px;
   pointer-events: none;
 }
@@ -596,15 +629,15 @@ body::before {
 
 .btn-danger {
   background: var(--danger-soft);
-  color: #f7a8b0;
-  border: 1px solid rgba(236, 81, 98, 0.25);
+  color: var(--danger-ink);
+  border: 1px solid var(--danger-edge);
   border-radius: 9999px;
   padding: 6px 14px;
   cursor: pointer;
   transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease, transform 120ms cubic-bezier(0.2, 0.9, 0.3, 1);
 }
-.btn-danger:hover:not(:disabled) { background: rgba(236, 81, 98, 0.2); color: #fbc7cc; border-color: rgba(236, 81, 98, 0.45); }
-.btn-danger:active:not(:disabled) { transform: translateY(1px); background: rgba(236, 81, 98, 0.28); }
+.btn-danger:hover:not(:disabled) { background: var(--danger-soft-hover); color: var(--danger-ink-hover); border-color: var(--danger-edge-hover); }
+.btn-danger:active:not(:disabled) { transform: translateY(1px); background: var(--danger-soft-active); }
 .btn-danger:disabled { opacity: 0.45; cursor: not-allowed; }
 
 /* The app's one checkbox.

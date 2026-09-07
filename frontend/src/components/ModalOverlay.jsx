@@ -100,7 +100,7 @@ export default function ModalOverlay({ label, onClose, dismissible = true, child
   // nav rail's labels.
   return createPortal(
     <div
-      className="fixed inset-0 z-modal flex items-center justify-center p-6 bg-[rgba(2,8,20,0.62)] backdrop-blur-[2px]"
+      className="fixed inset-0 z-modal flex items-center justify-center p-6 bg-[color:var(--scrim)] backdrop-blur-[2px]"
       // The backdrop is inert on purpose; see the note above.
       aria-hidden="false"
     >
