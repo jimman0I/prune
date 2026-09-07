@@ -17,6 +17,7 @@ import DeepClean from './components/DeepClean.jsx';
 import Duplicates from './components/Duplicates.jsx';
 import StartupItems from './components/StartupItems.jsx';
 import { rememberVisited } from './lib/visitedScreens.js';
+import { useStartupPrefetch } from './hooks/useStartupPrefetch.js';
 
 function formatBytes(bytes) {
   if (bytes === null || bytes === undefined) return '—';
@@ -46,6 +47,15 @@ export default function App() {
   // the fast answer.
   const { programs, icons, totalSize, extensions, running, loading, error, refresh: refreshPrograms } =
     useProgramData();
+
+  /* Reads the startup screen's list and icons while the app is idle.
+   *
+   * Both take seconds and both spawn PowerShell, and nothing asked for
+   * either until the tab was opened -- so the first visit showed lettered
+   * tiles that swapped to real icons while the user was already reading
+   * the table. Warming it here costs nothing visible: it waits for idle,
+   * and prefetchQuery is a no-op once the data is fresh. */
+  useStartupPrefetch();
 
   const [showShortcuts, setShowShortcuts] = useState(false);
 
