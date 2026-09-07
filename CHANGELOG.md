@@ -3,6 +3,53 @@
 All notable changes to Prune (formerly named unrevo -- rebranded 2026-09-01,
 see v1.0.1 below) are documented here.
 
+## v2.2.0
+
+A rebuilt Deep Clean list, application icons wherever a row is an app, and
+two icons that were never going to load fixed at the source.
+
+### Added
+
+- **Every Deep Clean heading now carries its application's icon.** The list
+  groups 74 rules under 29 headings, and the headings were the one place in
+  the app where a row is an application and had nothing but its name --
+  "Chrome", "Edge", "Opera" and "Vivaldi" are four headings of nearly
+  identical shape. Twenty of the twenty-nine resolve on a typical machine;
+  the rest are software that is not installed, and those keep a lettered
+  tile.
+- **The Startup and Deep Clean screens load their icons before you open
+  them.** Both were read only once you clicked the tab, so the first visit
+  showed a table of lettered tiles that swapped to real icons a second or
+  two later. They are now read while the app is idle, so the tab opens with
+  them already there.
+
+### Changed
+
+- **The Deep Clean list is much denser.** Rows went from about 48px in
+  their own card to 24px, and from roughly six visible at once to nineteen.
+  One scrolling list instead of a stack of panels, and one tri-state
+  checkbox per application instead of a pair of "Select All / Deselect All"
+  links. Nothing was dropped to get there: the measured size, the
+  not-installed / needs-admin distinction and the plain-English description
+  are all still on the row, now on a single line.
+- **Category headings stay put while their rules scroll past**, so it is
+  always clear which application you are looking at.
+- **The Deep Clean tab has a new icon** -- a broom rather than a
+  paintbrush.
+
+### Fixed
+
+- **Discord's startup entry shows Discord's icon.** It runs through a
+  launcher stub that contains no icon at all, so the row fell back to a
+  lettered "D" while the real icon sat one directory away. Prune now
+  follows the stub to the program it launches, which fixes this for every
+  app that installs the same way -- Slack, GitHub Desktop, Signal and Teams
+  among them.
+- **A hover label no longer sticks after you click.** Clicking a tab in the
+  sidebar left that tab's name floating over the page until you clicked
+  something else. The same fix applies to the buttons that fade in on a
+  program row.
+
 ## v2.1.3
 
 More fixes and hardening from a second audit, this time of the frontend

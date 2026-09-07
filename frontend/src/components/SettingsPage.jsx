@@ -17,7 +17,7 @@ import { useSettings } from '../hooks/useSystemQueries.js';
 // it is not -- the About panel simply reports the previous release. It
 // was already a release behind once.
 const APP_NAME = 'Prune';
-const APP_VERSION = '2.1.3';
+const APP_VERSION = '2.2.0';
 
 const TABS = [
   { id: 'general', label: 'General' },
