@@ -5,7 +5,8 @@
 // (vitest and its whole dependency tree included) and never rebuild
 // frontend/dist first, silently shipping a stale UI.
 import { execFileSync } from 'node:child_process';
-import { existsSync, rmSync, mkdirSync, cpSync } from 'node:fs';
+import { existsSync, rmSync, mkdirSync, cpSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { createHash } from 'node:crypto';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -48,11 +49,11 @@ const winShell = { shell: process.platform === 'win32' };
 // in it is tracked (electron/dist is gitignored), so a clean slate costs
 // nothing. Note this is dist/ specifically, NOT build/ -- build/ holds
 // icon.ico and icon.png, which are committed source.
-step('1/5 Clearing dist/, so it holds only what this build produced', () => {
+step('1/6 Clearing dist/, so it holds only what this build produced', () => {
   rmSync(distRoot, { recursive: true, force: true });
 });
 
-step('2/5 Building frontend (vite build)', () => {
+step('2/6 Building frontend (vite build)', () => {
   execFileSync(process.platform === 'win32' ? 'npm.cmd' : 'npm', ['run', 'build'], {
     cwd: frontendRoot,
     stdio: 'inherit',
@@ -60,7 +61,7 @@ step('2/5 Building frontend (vite build)', () => {
   });
 });
 
-step('3/5 Copying backend source into a clean build-only directory', () => {
+step('3/6 Copying backend source into a clean build-only directory', () => {
   // A FRESH copy every run, not a reused/incrementally-updated one -- a
   // stale file left over from a previous build (or from a manual edit
   // made directly in build/backend-prod/ by mistake) must never survive
@@ -73,7 +74,7 @@ step('3/5 Copying backend source into a clean build-only directory', () => {
   if (existsSync(lockfile)) cpSync(lockfile, join(backendProdRoot, 'package-lock.json'));
 });
 
-step('4/5 Installing production-only backend dependencies (npm ci --omit=dev)', () => {
+step('4/6 Installing production-only backend dependencies (npm ci --omit=dev)', () => {
   // This installs into build/backend-prod/ -- a throwaway directory, never
   // the real backend/node_modules the dev environment (and its test
   // suite) depends on. Falls back to `npm install` when there's no
@@ -84,7 +85,7 @@ step('4/5 Installing production-only backend dependencies (npm ci --omit=dev)', 
   execFileSync(cmd, args, { cwd: backendProdRoot, stdio: 'inherit', ...winShell });
 });
 
-step('5/5 Running electron-builder', () => {
+step('5/6 Running electron-builder', () => {
   // -c explicitly: electron-builder does not auto-detect a .cjs config
   // file and says nothing when it fails to find one -- it just builds
   // with defaults, producing an app with no backend inside it.
@@ -107,6 +108,45 @@ step('5/5 Running electron-builder', () => {
     env: { ...process.env, CSC_IDENTITY_AUTO_DISCOVERY: 'false' },
     ...winShell
   });
+});
+
+/* Checksums for whatever this build actually produced.
+ *
+ * Prune ships unsigned by choice, so Windows warns on first run and the
+ * warning never clears. A hash is not a substitute for a signature -- it
+ * says nothing about WHO built the file -- but it is the one guarantee
+ * still available without a certificate: that the download arrived
+ * byte-for-byte as it left here. Published with the release so anyone can
+ * check before running it.
+ *
+ * Generated rather than written by hand, because a checksum file that
+ * disagrees with its artifacts is worse than none at all: it teaches
+ * people that a mismatch is normal.
+ *
+ * One file is read at a time rather than all of them up front. These are
+ * 115MB and 154MB, and holding both would be a third of a gigabyte for no
+ * reason. */
+step('6/6 Writing SHA256SUMS.txt for the release artifacts', () => {
+  const artifacts = readdirSync(distRoot)
+    .filter((name) => /\.(exe|zip)$/i.test(name))
+    .sort();
+
+  if (artifacts.length === 0) {
+    // Not a silent skip. Reaching here with nothing to hash means the step
+    // above produced no installer, which is a failed build wearing a
+    // success message.
+    throw new Error('No .exe or .zip found in dist/ to checksum.');
+  }
+
+  const lines = artifacts.map((name) => {
+    const hash = createHash('sha256').update(readFileSync(join(distRoot, name))).digest('hex');
+    // Two spaces before the name is the sha256sum format, so this can be
+    // verified with `sha256sum -c` as well as read by eye.
+    return `${hash}  ${name}`;
+  });
+
+  writeFileSync(join(distRoot, 'SHA256SUMS.txt'), `${lines.join('\n')}\n`, 'utf8');
+  for (const line of lines) console.log(`  ${line}`);
 });
 
 console.log(`\n[build-installer] All done in ${elapsed()}.`);

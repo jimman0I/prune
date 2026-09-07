@@ -31,9 +31,11 @@ default; it's quarantined first, so a bad match is always recoverable.
   so the tree fills in as it goes. A rule that cannot be measured says
   whether the software is missing or the read needs admin, rather than
   reporting 0 B.
-- **Startup** — everything Windows launches at sign-in, whether it is
-  actually enabled, and a switch that writes the same record Task Manager
-  does.
+- **Startup** — the Run keys and Startup folders Windows reads at
+  sign-in, with a switch that writes the same record Task Manager does,
+  plus scheduled tasks, automatic services and the startup tasks Store
+  apps register. Those last three are read-only and say where to change
+  them, since none of them is switched through the sign-in record.
 - **Duplicates** — duplicate files under a folder you choose, found by
   size, then a 64 KB sample, then a full hash, so almost nothing is read
   completely.
@@ -50,6 +52,52 @@ default; it's quarantined first, so a bad match is always recoverable.
 - Windows 10 or 11.
 - Node.js 18+ (development only — the packaged app bundles its own
   runtime via Electron).
+
+## Installing
+
+Download `Prune.Setup.<version>.exe` from the
+[latest release](https://github.com/jimman0I/prune/releases/latest) and run
+it. The `-win.zip` beside it is the same application without an installer:
+unzip it anywhere and run `Prune.exe`.
+
+### Windows will warn you, and here is why
+
+Prune is **not code-signed**, so the first time you run the installer
+Windows shows:
+
+> **Windows protected your PC**
+> Microsoft Defender SmartScreen prevented an unrecognised app from
+> starting.
+
+Click **More info**, then **Run anyway**.
+
+This warning is about the absence of a certificate, not about anything
+found in the file. SmartScreen flags every unsigned installer it has not
+seen before, and unlike a reputation warning it does not go away as more
+people download it — an unsigned binary stays unrecognised. A code-signing
+certificate is a paid, identity-verified purchase, and Prune does not have
+one.
+
+You do not have to take that on trust. Every release lists the SHA-256 of
+both files, and you can check the one you downloaded matches before you
+run it:
+
+```powershell
+Get-FileHash .\Prune.Setup.*.exe -Algorithm SHA256
+```
+
+Compare the result with `SHA256SUMS.txt` on the release page. `Get-FileHash`
+prints the digest in **uppercase** and the file lists it in lowercase — the
+same hash, so compare them case-insensitively.
+
+Be clear about what that does and does not prove: it confirms the file
+reached you byte-for-byte as it was built, so a corrupted or altered
+download is caught. It does **not** prove who built it — only a signature
+does that, and there isn't one.
+
+If you would rather not run an unsigned binary, the alternative is to
+build it yourself from source: see [Building an installer](#building-an-installer)
+below. The result is the same application.
 
 ## Development
 
@@ -98,7 +146,9 @@ build pipeline works and what it does differently from a plain
   out to `reg.exe`/`powershell.exe` — binaries every Windows machine
   already has, nothing to bundle or rebuild per platform.
 - `frontend/` — React + Vite + Tailwind, the Aurora Deck design system
-  (navy, coral accent, glass panels).
+  (obsidian ground, cyan accent, glass panels), in dark and light. Both
+  palettes are defined as CSS custom properties in `src/index.css` and
+  every text tier in each is measured against the surfaces it sits on.
 - `electron/` — the desktop shell. Quarantine data and settings live under
   `app.getPath('userData')`, never inside the install directory, so an
   app upgrade never touches or deletes them.
@@ -106,11 +156,13 @@ build pipeline works and what it does differently from a plain
 ## Known limitations
 
 - Windows only.
-- Store/UWP apps aren't listed or uninstallable — only classic Win32
-  registry-based installs.
+- Store/UWP apps are listed, but cannot be removed from inside Prune:
+  that is `Remove-AppxPackage`, not an uninstaller, so those rows open
+  Windows' own Installed Apps page instead of pretending to handle it.
 - Leftover scanning is heuristic (name/publisher matching), not a full
   before/after filesystem snapshot.
-- The installer is unsigned, so Windows SmartScreen will warn on first
-  run.
+- The installer is unsigned, so Windows SmartScreen warns on first run and
+  keeps warning — see [Installing](#installing) for what the warning means
+  and how to verify the download instead.
 
 See [CHANGELOG.md](CHANGELOG.md) for release notes.
