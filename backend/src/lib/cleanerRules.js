@@ -215,7 +215,16 @@ export function scanRule(rule, guards = {}) {
  * size most rules won't apply to any given user -- so the difference
  * carries most of the list's signal. */
 export function rulePathsExist(rule) {
-  for (const rawPath of rule.paths) {
+  // A command rule has no paths to look for, and is always applicable:
+  // `ipconfig /flushdns` works whether or not anything is cached. scanRule
+  // returns present:true for these BEFORE it gets here, which is why this
+  // function never had to know -- until /deep-clean/rules started calling
+  // it on its own and threw "rule.paths is not iterable" on the one
+  // command rule in the set. The guard belongs with the function rather
+  // than with each caller.
+  if (rule?.command) return true;
+
+  for (const rawPath of rule?.paths || []) {
     const [driveSegment, ...rest] = pathToSegments(expandPath(rawPath));
     if (!driveSegment) continue;
     for (const match of resolveGlob(driveSegment, rest)) {

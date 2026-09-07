@@ -5,11 +5,20 @@ see v1.0.1 below) are documented here.
 
 ## v2.2.0
 
-A rebuilt Deep Clean list, application icons wherever a row is an app, and
-two icons that were never going to load fixed at the source.
+A much fuller startup list, a rebuilt Deep Clean list, application icons
+wherever a row is an app, and two icons that were never going to load
+fixed at the source.
 
 ### Added
 
+- **The startup screen now shows scheduled tasks, automatic services and
+  the startup tasks Windows Store apps register.** It listed 15 things and
+  now lists 55. The three new kinds are read-only: each one is switchable,
+  but in Task Scheduler, in Services, or in the app's own settings rather
+  than through the record Windows keeps for sign-in entries, so each row
+  says where to go instead of offering a switch that would not work.
+  Windows' own tasks and services are left out -- with them the list is
+  283 rows, nearly all of it the operating system describing itself.
 - **Every Deep Clean heading now carries its application's icon.** The list
   groups 74 rules under 29 headings, and the headings were the one place in
   the app where a row is an application and had nothing but its name --
@@ -36,6 +45,17 @@ two icons that were never going to load fixed at the source.
   always clear which application you are looking at.
 - **The Deep Clean tab has a new icon** -- a broom rather than a
   paintbrush.
+- **Ticking an application in Deep Clean now selects everything under it**,
+  asking about each rule that loses data as it goes. It used to skip those
+  rules silently, which meant ticking a browser gave you two of its seven
+  cleaners and a half-filled box that looked broken. Every warning is
+  still shown and still answered one at a time; declining one moves on to
+  the next rather than giving up on the rest.
+- **Deep Clean knows which cleaners apply to your machine before you scan.**
+  "Hide cleaners that don't apply" had nothing to work with until a full
+  scan had finished, so the list opened showing Firefox, Opera and Vivaldi
+  to people who have none of them. The check costs a fraction of a second
+  and runs as the list loads.
 
 ### Fixed
 
