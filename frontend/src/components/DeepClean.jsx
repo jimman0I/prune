@@ -10,6 +10,7 @@ import { useToasts } from '../hooks/useToasts.jsx';
 import { defaultSelection } from '../lib/defaultSelection.js';
 import { selectionTotal } from '../lib/selectionTotal.js';
 import { needsWarning, rememberedWith } from '../lib/cleanWarning.js';
+import { categoryTickPlan } from '../lib/categoryTickPlan.js';
 import DeepCleanTree from './DeepCleanTree.jsx';
 import CleanWarningDialog from './CleanWarningDialog.jsx';
 
@@ -123,7 +124,12 @@ function DeepClean() {
   const [cleanResult, setCleanResult] = useState(null);
   const [cleanError, setCleanError] = useState(null);
   // The rule a warning dialog is currently open for, or null.
-  const [warnAbout, setWarnAbout] = useState(null);
+  /* A QUEUE, not one rule. Ticking a whole application can owe the user
+   * several questions -- Brave alone has five rules that lose data -- and
+   * they are asked one after another rather than collapsed into one
+   * dialog or, as before, skipped entirely. warnAbout is the head of it. */
+  const [warnQueue, setWarnQueue] = useState([]);
+  const warnAbout = warnQueue[0] ?? null;
   const toasts = useToasts();
 
   // The tree, the scan and its cancellation all live in the hook now --
@@ -207,7 +213,7 @@ function DeepClean() {
     const item = findRule(ruleId);
     const checking = !selected.has(ruleId);
     if (needsWarning(item, { checking, acknowledged: settings?.acknowledgedCleanWarnings })) {
-      setWarnAbout(item);
+      setWarnQueue([item]);
       return;
     }
     applyToggle(ruleId);
@@ -226,39 +232,62 @@ function DeepClean() {
    * is not agreeing to lose browsing history. */
   const confirmWarning = (remember) => {
     const rule = warnAbout;
-    setWarnAbout(null);
+    // Pop the head either way -- the next question, if there is one, is
+    // now in front of the user.
+    setWarnQueue((queue) => queue.slice(1));
     if (!rule) return;
-    applyToggle(rule.id);
+    // add, not toggle: reached from a bulk tick, the rule is known to be
+    // unselected, and toggling would be a coin flip if that ever changed.
+    setSelected((prev) => new Set(prev).add(rule.id));
     const updated = rememberedWith(settings?.acknowledgedCleanWarnings, rule.id, remember);
     if (updated) saveSettings.mutate({ acknowledgedCleanWarnings: updated });
   };
 
+  /** Declining one question moves to the next rather than abandoning the
+   * rest of the queue. Saying no to losing cookies is not saying no to
+   * being asked about history. */
+  const dismissWarning = () => setWarnQueue((queue) => queue.slice(1));
+
+  /** Ticks or clears a whole application.
+   *
+   * Ticking selects EVERY rule under it and asks about each risky one in
+   * turn. It used to skip the risky ones outright, on the reasoning that
+   * a bulk click is the opposite of the deliberate choice the warning
+   * exists to capture -- but the concern there was dialogs being clicked
+   * through unread, not dialogs being absent, and skipping meant the box
+   * could never fill and the click looked like it had failed. Queuing
+   * keeps the questions and fixes the surprise.
+   *
+   * Read from the VISIBLE groups rather than the full set. With "hide
+   * cleaners that don't apply" on, the unfiltered group holds rules that
+   * are not on screen, and ticking a heading would silently select rules
+   * the user cannot see. */
   const handleToggleCategory = (category, checked) => {
-    const group = categories.find((g) => g.category === category);
+    const group = (shownCategories ?? []).find((g) => g.category === category);
     if (!group) return;
-    setSelected((prev) => {
-      const next = new Set(prev);
-      for (const item of group.items) {
-        // Select All skips rules for software that isn't on this machine.
-        // Selecting them is harmless but meaningless -- they'd clean
-        // nothing -- and with a rule set this size it would otherwise bury
-        // the handful that actually matter under a pile of no-ops.
-        //
-        // It also skips the risky ones, unless the user has already said
-        // to stop asking about that particular rule. A bulk click is the
-        // opposite of the deliberate choice the warning exists to
-        // capture, and popping five dialogs in a row for one click on
-        // "Select all" would train anyone to dismiss them unread. The
-        // rules it skips are the ones already wearing a "Loses data"
-        // badge, so what is left unticked is visible on the row.
-        if (checked) {
-          if (item.present === false) continue;
-          if (needsWarning(item, { checking: true, acknowledged: settings?.acknowledgedCleanWarnings })) continue;
-          next.add(item.id);
-        } else next.delete(item.id);
-      }
-      return next;
-    });
+
+    if (!checked) {
+      setSelected((prev) => {
+        const next = new Set(prev);
+        for (const item of group.items) next.delete(item.id);
+        return next;
+      });
+      // Anything still queued was asked on behalf of this category and is
+      // now moot -- leaving it up would ask about rules that have just
+      // been cleared.
+      setWarnQueue([]);
+      return;
+    }
+
+    const plan = categoryTickPlan(group.items, selected, settings?.acknowledgedCleanWarnings);
+    if (plan.selectNow.length > 0) {
+      setSelected((prev) => {
+        const next = new Set(prev);
+        for (const id of plan.selectNow) next.add(id);
+        return next;
+      });
+    }
+    if (plan.askAbout.length > 0) setWarnQueue(plan.askAbout);
   };
 
   const handleClean = async () => {
@@ -499,7 +528,7 @@ function DeepClean() {
       {warnAbout && (
         <CleanWarningDialog
           item={warnAbout}
-          onCancel={() => setWarnAbout(null)}
+          onCancel={dismissWarning}
           onConfirm={confirmWarning}
         />
       )}
