@@ -1,27 +1,60 @@
 import { useState } from 'react';
+import { categorySelectionState, nextCategoryChecked } from '../lib/categorySelection.js';
+import { tileLetter } from '../lib/iconTileLetter.js';
+import { tileColor, TILE_INK } from '../lib/programTileColor.js';
+
+/** The Deep Clean list.
+ *
+ * Rebuilt against BleachBit's tree, which is denser than what was here and
+ * denser in the ways that matter for 74 rules under 29 headings: one
+ * scroll region rather than a stack of cards, a single tri-state checkbox
+ * per application rather than two text links, and one line per rule.
+ * Before this, six rows of a single application filled the panel.
+ *
+ * What was NOT taken from BleachBit is the row content. BleachBit shows a
+ * name and nothing else -- no size until you run Preview, and no
+ * explanation ever, so "Cookies" tells a non-expert exactly nothing. This
+ * keeps the measured size, the three-way not-installed / needs-admin /
+ * real-bytes distinction, and the plain-English description, and pays for
+ * them by putting the description on the same line as the name instead of
+ * on a second one. Denser than what it replaces AND more informative than
+ * the thing it was modelled on.
+ */
 
 /** Custom checkbox -- primary-accent fill + DARK check when checked, glass
  * border when not. The check is dark, not white: white on the accent is
- * 2.43:1, which is a tick you cannot see. Not a native <input type="checkbox">, same "build the control
- * ourselves" convention SettingsPage.jsx's own Toggle already establishes
- * for this codebase's bespoke controls. */
-function Checkbox({ checked, onChange, label }) {
+ * 2.43:1, which is a tick you cannot see. Not a native
+ * <input type="checkbox">, same "build the control ourselves" convention
+ * SettingsPage.jsx's own Toggle already establishes for this codebase.
+ *
+ * `state` is 'none' | 'all' | 'some'. The partial state draws a dash
+ * rather than a tick, which is the one shape that cannot be mistaken for
+ * either of the other two. */
+function Checkbox({ state, onChange, label, size = 16 }) {
+  const filled = state === 'all' || state === 'some';
+
   return (
     <button
       type="button"
       role="checkbox"
-      aria-checked={checked}
+      aria-checked={state === 'some' ? 'mixed' : state === 'all'}
       aria-label={label}
       onClick={onChange}
-      className={`w-[18px] h-[18px] rounded-[5px] flex items-center justify-center shrink-0 transition-colors border ${
-        checked
+      style={{ width: size, height: size }}
+      className={`rounded-[4px] flex items-center justify-center shrink-0 transition-colors border ${
+        filled
           ? 'bg-[color:var(--accent-primary)] border-[color:var(--accent-primary)]'
           : 'bg-white/[0.03] border-[color:var(--border-subtle)] hover:border-white/25'
       }`}
     >
-      {checked && (
-        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#09090b" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+      {state === 'all' && (
+        <svg width={size - 6} height={size - 6} viewBox="0 0 24 24" fill="none" stroke="#09090b" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
           <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+      )}
+      {state === 'some' && (
+        <svg width={size - 6} height={size - 6} viewBox="0 0 24 24" fill="none" stroke="#09090b" strokeWidth="3.5" strokeLinecap="round">
+          <line x1="5" y1="12" x2="19" y2="12"></line>
         </svg>
       )}
     </button>
@@ -37,18 +70,18 @@ function Checkbox({ checked, onChange, label }) {
  * reads as empty to an unelevated process. */
 function SizeLabel({ item }) {
   if (item.sizeBytes === null) {
-    return <div className="font-mono text-[12px] shrink-0 text-[color:var(--text-muted)]">—</div>;
+    return <span className="font-mono text-[11px] shrink-0 text-[color:var(--text-muted)]">—</span>;
   }
   if (item.accessible === false) {
-    return <div className="font-mono text-[12px] shrink-0 text-[color:var(--warning)]">needs admin</div>;
+    return <span className="font-mono text-[11px] shrink-0 text-[color:var(--warning)]">needs admin</span>;
   }
   if (item.present === false) {
-    return <div className="font-mono text-[12px] shrink-0 text-[color:var(--text-muted)]">not installed</div>;
+    return <span className="font-mono text-[11px] shrink-0 text-[color:var(--text-muted)]">not installed</span>;
   }
   return (
-    <div className={`font-mono text-[12px] shrink-0 ${item.sizeBytes ? 'text-[color:var(--text-secondary)]' : 'text-[color:var(--text-muted)]'}`}>
+    <span className={`font-mono text-[11px] shrink-0 ${item.sizeBytes ? 'text-[color:var(--text-secondary)]' : 'text-[color:var(--text-muted)]'}`}>
       {formatBytes(item.sizeBytes)}
-    </div>
+    </span>
   );
 }
 
@@ -61,92 +94,135 @@ function formatBytes(bytes) {
   return `${parseFloat((bytes / Math.pow(k, i)).toFixed(1))} ${sizes[i]}`;
 }
 
-// A grid-template-rows 0fr/1fr transition, which is the dependency-free
-// way to animate a block from and to its intrinsic height.
-//
-// framer-motion IS a dependency now -- ContextMenu, ToastHost and
-// ResourceMonitor all use it, and this comment used to say it did not.
-// Kept as CSS anyway: animating to auto height is the one thing the CSS
-// approach does better, and swapping it for a library call would be churn
-// for a worse result. Reduced motion reaches both kinds now -- CSS
-// through the media query in index.css, framer-motion through the
-// MotionConfig in main.jsx.
-function CategorySection({ category, items, selected, onToggle, onToggleCategory }) {
-  const [expanded, setExpanded] = useState(true);
-  const reduceMotion = typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+/** The application's own icon, falling back to a lettered tile.
+ *
+ * Same two fallbacks the program and startup lists use, and needed for the
+ * same reasons: `src` is absent for a category whose program is not
+ * installed (or which is not a program at all -- Windows, DirectX,
+ * Developer tools), and onError covers a data URI that arrived but will
+ * not decode, which would otherwise draw a broken-image glyph. */
+function CategoryIcon({ category, src }) {
+  const [failed, setFailed] = useState(false);
+
+  if (src && !failed) {
+    return (
+      <img
+        src={src}
+        alt=""
+        width={18}
+        height={18}
+        className="w-[18px] h-[18px] object-contain shrink-0"
+        onError={() => setFailed(true)}
+      />
+    );
+  }
 
   return (
-    <div className="glass-panel overflow-hidden">
-      <div className="flex items-center justify-between gap-4 px-5 py-4">
+    <div
+      className="w-[18px] h-[18px] rounded-[4px] flex items-center justify-center text-[9px] font-bold shrink-0"
+      style={{ background: tileColor(category), color: TILE_INK }}
+    >
+      {tileLetter(category)}
+    </div>
+  );
+}
+
+function CategorySection({ category, items, iconSrc, selected, onToggle, onToggleCategory }) {
+  const [expanded, setExpanded] = useState(true);
+  const state = categorySelectionState(items, selected);
+
+  return (
+    <div>
+      {/* Opaque, not the translucent tint the rest of the list uses. A
+          sticky heading is the one row that has other rows sliding under
+          it, and at 2.5% white over glass the row beneath read straight
+          through the text. backdrop-blur does not save it either: the
+          panel is already a backdrop-filter surface, so the heading was
+          blurring a backdrop that had itself been blurred. */}
+      <div className="flex items-center gap-2.5 px-3 py-1.5 bg-[color:var(--bg-panel)] border-y border-[color:var(--border-subtle)] sticky top-0 z-10">
+        {/* Ticking this often lands on 'some' rather than 'all', and that
+            is correct rather than a stuck control: onToggleCategory
+            deliberately skips the risky rules and the ones for software
+            that is not installed, so a category like Brave -- five of
+            whose seven rules lose data -- fills to two. The box reports
+            what is actually ticked. Every row it left alone is wearing a
+            "Loses data" badge saying why, and each still takes a
+            deliberate individual click that raises the warning dialog. */}
+        <Checkbox
+          state={state}
+          size={16}
+          label={`Select everything under ${category}`}
+          onChange={() => onToggleCategory(category, nextCategoryChecked(state))}
+        />
         <button
           type="button"
           onClick={() => setExpanded((e) => !e)}
-          className="flex items-center gap-2.5 min-w-0 text-left"
+          aria-expanded={expanded}
+          className="flex items-center gap-2 min-w-0 flex-1 text-left"
         >
           <svg
-            width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"
-            className="text-[color:var(--text-muted)] shrink-0 transition-transform"
-            style={{ transform: expanded ? 'rotate(90deg)' : 'rotate(0deg)', transition: reduceMotion ? 'none' : 'transform 200ms ease' }}
+            width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
+            className="text-[color:var(--text-muted)] shrink-0"
+            style={{ transform: expanded ? 'rotate(90deg)' : 'rotate(0deg)' }}
           >
             <polyline points="9 18 15 12 9 6"></polyline>
           </svg>
-          <span className="text-[13.5px] font-medium text-[color:var(--text-primary)]">{category}</span>
-          <span className="text-[11.5px] text-[color:var(--text-muted)] font-mono">{items.length}</span>
+          <CategoryIcon category={category} src={iconSrc} />
+          <span className="text-[12.5px] font-medium text-[color:var(--text-primary)] truncate">{category}</span>
+          <span className="text-[10.5px] text-[color:var(--text-muted)] font-mono shrink-0">{items.length}</span>
         </button>
-        <div className="flex items-center gap-2 shrink-0">
-          <button
-            className="text-[11.5px] text-[color:var(--text-secondary)] hover:text-[color:var(--accent-primary)] transition-colors"
-            onClick={() => onToggleCategory(category, true)}
-          >
-            Select All
-          </button>
-          <span className="text-[color:var(--border-subtle)]">·</span>
-          <button
-            className="text-[11.5px] text-[color:var(--text-secondary)] hover:text-[color:var(--accent-primary)] transition-colors"
-            onClick={() => onToggleCategory(category, false)}
-          >
-            Deselect All
-          </button>
-        </div>
       </div>
 
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateRows: expanded ? '1fr' : '0fr',
-          transition: reduceMotion ? 'none' : 'grid-template-rows 260ms cubic-bezier(0.16, 1, 0.3, 1)'
-        }}
-      >
-        <div className="overflow-hidden">
-          <div className="border-t border-[color:var(--border-subtle)] divide-y divide-[color:var(--border-subtle)]">
-            {items.map((item) => (
-              <div key={item.id} className="flex items-center gap-3.5 px-5 py-3">
-                <Checkbox checked={selected.has(item.id)} onChange={() => onToggle(item.id)} label={item.name} />
-                <div className={`min-w-0 flex-1 ${item.present === false ? 'opacity-45' : ''}`}>
-                  <div className="text-[13px] text-[color:var(--text-primary)] flex items-center gap-2">
-                    {item.name}
-                    {/* Marked because "recoverable" is not "wanted". Clean
-                        moves everything to Quarantine first, so nothing
-                        here is unrecoverable -- but being signed out of
-                        every site is not a surprise a cleaning tool should
-                        spring on anyone. None of these is ticked by
-                        default; this says why. */}
-                    {item.risky && (
-                      <span className="text-[9px] font-mono uppercase tracking-wider px-1 py-px rounded bg-[color:var(--warning-soft)] text-[color:var(--warning)] border border-[color:var(--warning)]/25 shrink-0">
-                        Loses data
-                      </span>
-                    )}
-                  </div>
-                  {item.description && (
-                    <div className="text-[11.5px] text-[color:var(--text-muted)] mt-0.5 truncate">{item.description}</div>
-                  )}
-                </div>
-                <SizeLabel item={item} />
-              </div>
-            ))}
-          </div>
+      {/* Plain conditional, not the 0fr/1fr height transition this used to
+          animate. With every category expanded by default and 29 of them
+          in one scroll region, animating a collapse moves everything below
+          it -- the cost is paid by rows the user was not looking at. The
+          chevron still turns, which is the part that reads as a state
+          change. */}
+      {expanded && (
+        <div>
+          {items.map((item) => (
+            <div
+              key={item.id}
+              className={`flex items-center gap-2.5 pl-[38px] pr-3 py-[3px] hover:bg-white/[0.03] ${
+                item.present === false ? 'opacity-45' : ''
+              }`}
+            >
+              <Checkbox
+                state={selected.has(item.id) ? 'all' : 'none'}
+                size={14}
+                label={item.name}
+                onChange={() => onToggle(item.id)}
+              />
+              <span className="text-[12px] text-[color:var(--text-primary)] shrink-0">{item.name}</span>
+
+              {/* Marked because "recoverable" is not "wanted". Clean moves
+                  everything to Quarantine first, so nothing here is
+                  unrecoverable -- but being signed out of every site is
+                  not a surprise a cleaning tool should spring on anyone.
+                  None of these is ticked by default; this says why. */}
+              {item.risky && (
+                <span className="text-[8.5px] font-mono uppercase tracking-wider px-1 rounded bg-[color:var(--warning-soft)] text-[color:var(--warning)] border border-[color:var(--warning)]/25 shrink-0">
+                  Loses data
+                </span>
+              )}
+
+              {/* On the name's own line rather than under it. This is what
+                  buys the density back: BleachBit's rows are one line
+                  because they say nothing but the name, and these stay one
+                  line while still saying what the rule does. */}
+              {item.description && (
+                <span className="text-[11px] text-[color:var(--text-muted)] truncate min-w-0 flex-1">
+                  {item.description}
+                </span>
+              )}
+              {!item.description && <span className="flex-1" />}
+
+              <SizeLabel item={item} />
+            </div>
+          ))}
         </div>
-      </div>
+      )}
     </div>
   );
 }
@@ -154,15 +230,18 @@ function CategorySection({ category, items, selected, onToggle, onToggleCategory
 /** Controlled, purely presentational -- selection state lives in the
  * parent (DeepClean.jsx). `categories` is the scanned tree from
  * GET /api/deep-clean/scan: [{ category, items: [{id, name, description,
- * sizeBytes, ...}] }]. */
-export default function DeepCleanTree({ categories, selected, onToggle, onToggleCategory }) {
+ * sizeBytes, ...}] }]. `icons` is { category: dataUri } from
+ * GET /api/deep-clean/category-icons, and is allowed to be empty or to
+ * arrive late -- every heading renders either way. */
+export default function DeepCleanTree({ categories, selected, onToggle, onToggleCategory, icons = {} }) {
   return (
-    <div className="flex flex-col gap-4">
+    <div className="glass-panel rounded-xl overflow-y-auto min-h-0">
       {categories.map((group) => (
         <CategorySection
           key={group.category}
           category={group.category}
           items={group.items}
+          iconSrc={icons[group.category]}
           selected={selected}
           onToggle={onToggle}
           onToggleCategory={onToggleCategory}

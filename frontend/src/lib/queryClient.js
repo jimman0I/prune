@@ -62,5 +62,6 @@ export const keys = {
   diskSpace: ['disk', 'space'],
   deepCleanRules: ['deepClean', 'rules'],
   deepCleanScan: ['deepClean', 'scan'],
+  deepCleanCategoryIcons: ['deepClean', 'categoryIcons'],
   diskScan: (path) => ['disk', 'scan', path]
 };

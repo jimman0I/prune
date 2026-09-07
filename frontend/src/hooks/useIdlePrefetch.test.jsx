@@ -16,10 +16,12 @@ import { keys } from '../lib/queryClient.js';
 
 const fetchStartupItems = vi.fn(async () => [{ id: 'a', name: 'Discord' }]);
 const fetchStartupIcons = vi.fn(async () => ({ a: 'data:image/png;base64,AAA' }));
+const fetchCleanerCategoryIcons = vi.fn(async () => ({ Brave: 'data:image/png;base64,BBB' }));
 
 vi.mock('../lib/api.js', () => ({
   fetchStartupItems: (...a) => fetchStartupItems(...a),
   fetchStartupIcons: (...a) => fetchStartupIcons(...a),
+  fetchCleanerCategoryIcons: (...a) => fetchCleanerCategoryIcons(...a),
   setStartupItemEnabled: vi.fn(),
   fetchQuarantineBatches: vi.fn(), restoreQuarantineBatch: vi.fn(),
   deleteQuarantineBatch: vi.fn(), emptyQuarantine: vi.fn(),
@@ -27,7 +29,7 @@ vi.mock('../lib/api.js', () => ({
   fetchDiskSpace: vi.fn(), fetchDiskHealth: vi.fn()
 }));
 
-const { useStartupPrefetch } = await import('./useStartupPrefetch.js');
+const { useIdlePrefetch } = await import('./useIdlePrefetch.js');
 
 let client;
 const wrapper = ({ children }) => (
@@ -45,19 +47,29 @@ afterEach(() => {
   client.clear();
 });
 
-describe('useStartupPrefetch', () => {
+describe('useIdlePrefetch', () => {
   it('fetches the list and the icons without the screen being open', async () => {
-    renderHook(() => useStartupPrefetch({ delayMs: 10 }), { wrapper });
+    renderHook(() => useIdlePrefetch({ delayMs: 10 }), { wrapper });
 
     await waitFor(() => expect(fetchStartupItems).toHaveBeenCalledTimes(1));
     await waitFor(() => expect(fetchStartupIcons).toHaveBeenCalledTimes(1));
+  });
+
+  it('warms the Deep Clean application icons too', async () => {
+    // Same problem on a different screen: the Deep Clean list groups by
+    // application, so its headings pop from lettered tiles to real icons
+    // if the read waits until that tab is opened.
+    renderHook(() => useIdlePrefetch({ delayMs: 10 }), { wrapper });
+
+    await waitFor(() => expect(fetchCleanerCategoryIcons).toHaveBeenCalledTimes(1));
+    expect(client.getQueryData(keys.deepCleanCategoryIcons)).toEqual({ Brave: 'data:image/png;base64,BBB' });
   });
 
   it('leaves the answers in the cache under the keys the screen reads', async () => {
     // The prefetch is worth nothing if it lands somewhere the screen does
     // not look. Same keys, so the screen's own useQuery finds them warm
     // and never enters a pending state at all.
-    renderHook(() => useStartupPrefetch({ delayMs: 10 }), { wrapper });
+    renderHook(() => useIdlePrefetch({ delayMs: 10 }), { wrapper });
 
     await waitFor(() => {
       expect(client.getQueryData(keys.startupItems)).toEqual([{ id: 'a', name: 'Discord' }]);
@@ -73,7 +85,7 @@ describe('useStartupPrefetch', () => {
     client.setQueryData(keys.startupItems, [{ id: 'existing' }]);
     client.setQueryData(keys.startupIcons, { existing: 'x' });
 
-    renderHook(() => useStartupPrefetch({ delayMs: 10 }), { wrapper });
+    renderHook(() => useIdlePrefetch({ delayMs: 10 }), { wrapper });
 
     await new Promise((resolve) => setTimeout(resolve, 60));
     expect(fetchStartupItems).not.toHaveBeenCalled();
@@ -83,7 +95,7 @@ describe('useStartupPrefetch', () => {
   it('asks once, however often the app re-renders', async () => {
     // App re-renders on every tab switch, and each of those must not
     // spawn another pair of PowerShell reads.
-    const { rerender } = renderHook(() => useStartupPrefetch({ delayMs: 10 }), { wrapper });
+    const { rerender } = renderHook(() => useIdlePrefetch({ delayMs: 10 }), { wrapper });
     await waitFor(() => expect(fetchStartupItems).toHaveBeenCalledTimes(1));
 
     rerender();
@@ -100,7 +112,7 @@ describe('useStartupPrefetch', () => {
     // the effect cleanup cancelling the pending callback -- verified by
     // mutation, since an in-callback guard turned out to be unreachable
     // and its removal changed nothing.
-    const { unmount } = renderHook(() => useStartupPrefetch({ delayMs: 40 }), { wrapper });
+    const { unmount } = renderHook(() => useIdlePrefetch({ delayMs: 40 }), { wrapper });
     unmount();
 
     await new Promise((resolve) => setTimeout(resolve, 120));
@@ -127,7 +139,7 @@ describe('useStartupPrefetch', () => {
     process.on('unhandledRejection', onUnhandled);
 
     try {
-      renderHook(() => useStartupPrefetch({ delayMs: 10 }), { wrapper });
+      renderHook(() => useIdlePrefetch({ delayMs: 10 }), { wrapper });
       await waitFor(() => expect(fetchStartupItems).toHaveBeenCalledTimes(1));
       await new Promise((resolve) => setTimeout(resolve, 60));
 

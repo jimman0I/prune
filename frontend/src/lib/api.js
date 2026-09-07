@@ -421,6 +421,23 @@ export async function fetchDeepCleanRules() {
   return data.categories ?? [];
 }
 
+/** The icon for each Deep Clean category, as { category: dataUri }.
+ *
+ * Never throws, for the same reason the startup icons don't: these are
+ * decoration on a list whose job is the rules, and every heading has a
+ * lettered tile to fall back to. A category with no icon is simply absent
+ * from the map. */
+export async function fetchCleanerCategoryIcons() {
+  try {
+    const res = await fetch(`${API_URL}/deep-clean/category-icons`);
+    if (!res.ok) return {};
+    const data = await res.json();
+    return data?.icons ?? {};
+  } catch {
+    return {};
+  }
+}
+
 export async function fetchDeepCleanScan() {
   const res = await fetch(`${API_URL}/deep-clean/scan`);
   const data = await res.json();

@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useRef, useState, memo } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { visibleCategories, hiddenRuleCount } from '../lib/visibleRules.js';
-import { executeDeepClean } from '../lib/api.js';
+import { executeDeepClean, fetchCleanerCategoryIcons } from '../lib/api.js';
+import { keys } from '../lib/queryClient.js';
 import { useDeepCleanScan } from '../hooks/useDeepCleanScan.js';
 import { useSettings } from '../hooks/useSystemQueries.js';
 import { lockedFileSummary } from '../lib/lockedFiles.js';
@@ -105,6 +107,17 @@ function DeepClean() {
   // No auto-scan on mount, per spec -- the tree stays empty until the
   // user explicitly clicks Preview.
   const [selected, setSelected] = useState(new Set());
+
+  /* The application icon for each heading. Its own query, never blocking
+   * the list: the headings render with lettered tiles and swap to real
+   * icons if and when these arrive. Usually they have already arrived --
+   * useIdlePrefetch warms this key while the app is idle, so opening the
+   * tab finds it cached rather than pending. */
+  const categoryIcons = useQuery({
+    queryKey: keys.deepCleanCategoryIcons,
+    queryFn: fetchCleanerCategoryIcons,
+    retry: 1
+  });
   const [confirmClean, setConfirmClean] = useState(false);
   const [cleaning, setCleaning] = useState(false);
   const [cleanResult, setCleanResult] = useState(null);
@@ -324,7 +337,15 @@ function DeepClean() {
             scan is doing is visible while it does it, instead of a
             spinner that says nothing for nineteen seconds. */}
         <div className="flex-1 grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_360px] gap-5 min-h-0">
-          <div className="overflow-y-auto min-h-0 pr-1">
+          {/* Column, not a scroller. The tree does its own scrolling now,
+              which is what lets its category headings stick: a sticky
+              element positions against its nearest SCROLLING ancestor, and
+              an `overflow-hidden` wrapper in between silently becomes that
+              ancestor without ever scrolling -- so the heading had nowhere
+              to move and simply scrolled away. Verified by walking the
+              ancestor chain in the running app rather than by reading it
+              off the markup. */}
+          <div className="flex flex-col min-h-0 pr-1">
             {/* The action lives IN the empty state, not only in the
                 footer. Reported as "Deep Clean doesn't work" from exactly
                 this screen: the panel says click a button that is a
@@ -365,6 +386,7 @@ function DeepClean() {
                 selected={selected}
                 onToggle={handleToggle}
                 onToggleCategory={handleToggleCategory}
+                icons={categoryIcons.data ?? {}}
               />
             )}
           </div>

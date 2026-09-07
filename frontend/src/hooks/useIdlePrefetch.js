@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { keys } from '../lib/queryClient.js';
-import { fetchStartupItems, fetchStartupIcons } from '../lib/api.js';
+import { fetchStartupItems, fetchStartupIcons, fetchCleanerCategoryIcons } from '../lib/api.js';
 
 /** Reads the startup screen's data before anyone opens the startup screen.
  *
@@ -29,7 +29,7 @@ import { fetchStartupItems, fetchStartupIcons } from '../lib/api.js';
  * available in the Electron runtime this ships in; the timer is for jsdom,
  * which has no such thing, and would otherwise leave this untested.
  */
-export function useStartupPrefetch({ delayMs = 1200, timeout = 4000 } = {}) {
+export function useIdlePrefetch({ delayMs = 1200, timeout = 4000 } = {}) {
   const queryClient = useQueryClient();
 
   useEffect(() => {
@@ -48,6 +48,14 @@ export function useStartupPrefetch({ delayMs = 1200, timeout = 4000 } = {}) {
       // deduplicates against them rather than asking again.
       queryClient.prefetchQuery({ queryKey: keys.startupItems, queryFn: fetchStartupItems });
       queryClient.prefetchQuery({ queryKey: keys.startupIcons, queryFn: fetchStartupIcons });
+
+      // Deep Clean's application icons, warmed on the same tick and for
+      // the same reason: the list groups by app, and the headings pop from
+      // lettered tiles to real icons if this is left until the tab opens.
+      queryClient.prefetchQuery({
+        queryKey: keys.deepCleanCategoryIcons,
+        queryFn: fetchCleanerCategoryIcons
+      });
     };
 
     const idle = typeof requestIdleCallback === 'function';

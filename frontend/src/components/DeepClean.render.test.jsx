@@ -30,6 +30,7 @@ vi.mock('../lib/api.js', () => ({
   executeDeepClean: (...a) => executeDeepClean(...a),
   fetchSettings: (...a) => fetchSettings(...a),
   updateSettings: (...a) => updateSettings(...a),
+  fetchCleanerCategoryIcons: vi.fn(async () => ({})),
   fetchStartupItems: vi.fn(), fetchStartupIcons: vi.fn(), setStartupItemEnabled: vi.fn(),
   fetchQuarantineBatches: vi.fn(), restoreQuarantineBatch: vi.fn(),
   deleteQuarantineBatch: vi.fn(), emptyQuarantine: vi.fn(),

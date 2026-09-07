@@ -49,15 +49,27 @@ const ITEMS = [
       <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
     </svg>
   ) },
-  // A brush, not the mouse cursor this used to be. The old glyph was the
-  // standard arrow-pointer shape, which in a nav rail reads as "select" --
-  // it named the wrong action for the one screen in the app that deletes
-  // the most at once.
+  // A broom. It has been a mouse cursor and then a paintbrush, and both
+  // named the wrong action for the one screen in the app that deletes the
+  // most at once -- the pointer read as "select", and the brush read as
+  // paint, which is the opposite of removing something.
+  //
+  // The head FLARES WIDER toward the bottom, which is the whole difference
+  // between a broom and a bucket. A first attempt tapered it inward and
+  // read unmistakably as a bucket -- rendered at 20px and looked at, not
+  // guessed.
+  //
+  // The handle is vertical rather than angled for the same reason. An
+  // angled handle is more broom-like on paper and was the version I
+  // expected to win; rasterised at the 20px this actually ships at, the
+  // angle collapses into a stubby off-centre mark and the extra bristle
+  // strokes merge into noise. Straight survives the size.
   { id: 'deepclean', label: 'Deep Clean', icon: (
     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M9.5 14.5 3.5 20.5"></path>
-      <path d="M14.6 3.9a2 2 0 0 1 2.8 0l2.7 2.7a2 2 0 0 1 0 2.8l-5.3 5.3-5.5-5.5 5.3-5.3z"></path>
-      <path d="M8.4 15.6 6.2 13.4a1.5 1.5 0 0 1 0-2.1l1.4-1.4 5.5 5.5-1.4 1.4a1.5 1.5 0 0 1-2.1 0z"></path>
+      <path d="M12 2.5v7.5"></path>
+      <path d="M8.8 10h6.4l2.8 10.5H6z"></path>
+      <path d="M7.8 14.2h8.4"></path>
+      <path d="M12 14.2v6.3"></path>
     </svg>
   ) }
 ];

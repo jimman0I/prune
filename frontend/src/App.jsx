@@ -17,7 +17,7 @@ import DeepClean from './components/DeepClean.jsx';
 import Duplicates from './components/Duplicates.jsx';
 import StartupItems from './components/StartupItems.jsx';
 import { rememberVisited } from './lib/visitedScreens.js';
-import { useStartupPrefetch } from './hooks/useStartupPrefetch.js';
+import { useIdlePrefetch } from './hooks/useIdlePrefetch.js';
 
 function formatBytes(bytes) {
   if (bytes === null || bytes === undefined) return '—';
@@ -55,7 +55,7 @@ export default function App() {
    * tiles that swapped to real icons while the user was already reading
    * the table. Warming it here costs nothing visible: it waits for idle,
    * and prefetchQuery is a no-op once the data is fresh. */
-  useStartupPrefetch();
+  useIdlePrefetch();
 
   const [showShortcuts, setShowShortcuts] = useState(false);
 
