@@ -6,6 +6,7 @@ import { join } from 'node:path';
 import { extractIcons } from './iconExtract.js';
 import { getFileTypeIcons } from './fileTypeIcons.js';
 import { typeIconExtension } from './iconTypeFallback.js';
+import { resolveSquirrelStub } from './squirrelStub.js';
 
 const execFileAsync = promisify(execFile);
 const TIMEOUT_MS = 30_000;
@@ -32,6 +33,10 @@ const TIMEOUT_MS = 30_000;
  *      Scripts are the case that matters: a .cmd or .vbs running at
  *      sign-in is exactly the entry worth recognising on sight, and
  *      Windows already has an answer for what one looks like.
+ *   4. A Squirrel launcher stub, followed to the versioned executable it
+ *      hands off to. See squirrelStub.js -- the stub carries no icon at
+ *      all, by design, so this is the difference between Discord's icon
+ *      and a lettered "D".
  */
 
 /** Extraction is a pure function of the file it reads, and those files do
@@ -140,6 +145,27 @@ export function startupIconSources(items) {
   return sources;
 }
 
+/** Swaps a Squirrel stub for the executable it launches, where there is
+ * one.
+ *
+ * A pre-pass rather than a branch inside startupIconSources, so that
+ * function stays pure and stays testable without a filesystem: by the
+ * time it runs, an entry that pointed at Update.exe simply points at
+ * app-1.0.9256\Discord.exe instead, and nothing downstream needs to know
+ * the difference. A stub is never a .lnk, so this cannot collide with the
+ * shortcut path below.
+ *
+ * The item is copied rather than mutated. `items` here is the same array
+ * the toggle route reads entries out of, and quietly rewriting an
+ * entry's `executable` would change what a later caller thinks the
+ * machine is configured to run. */
+function followSquirrelStubs(items) {
+  return (items || []).map((item) => {
+    const resolved = resolveSquirrelStub(item?.executable, item?.command);
+    return resolved ? { ...item, executable: resolved } : item;
+  });
+}
+
 async function resolveShortcuts(paths) {
   if (paths.length === 0) return {};
 
@@ -172,7 +198,7 @@ async function resolveShortcuts(paths) {
  * with no icon is simply absent from the map and keeps its lettered tile.
  */
 export async function getStartupIcons(items) {
-  const sources = startupIconSources(items);
+  const sources = startupIconSources(followSquirrelStubs(items));
   if (sources.size === 0) return {};
 
   // One resolution pass for every shortcut in the list, then the sources
