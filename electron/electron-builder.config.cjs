@@ -76,7 +76,19 @@ module.exports = {
     // so main.cjs can set it as the BrowserWindow icon and trayManager.js
     // can set it as the tray icon -- `files: ['main.cjs']` above means
     // nothing under build/ reaches the packaged app otherwise.
-    { from: 'build/icon.png', to: 'icon.png' }
+    { from: 'build/icon.png', to: 'icon.png' },
+    /* The licence itself, shipped with the app rather than left in the
+     * repository.
+     *
+     * MIT asks for the copyright notice to be included "in all copies or
+     * substantial portions of the Software", and an installer is a copy.
+     * Someone who downloads the .exe and never sees the repository would
+     * otherwise have no statement of what they are permitted to do with
+     * it, which is the situation the licence exists to end.
+     *
+     * At the root of resources/ rather than beside the backend, because
+     * it covers the whole application and not one part of it. */
+    { from: '../LICENSE', to: 'LICENSE' }
   ],
   // Both an NSIS installer (.exe) and a portable build (.zip) -- Phase 5's
   // explicit requirement. electron-builder does not auto-detect this

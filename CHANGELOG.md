@@ -3,6 +3,49 @@
 All notable changes to Prune (formerly named unrevo -- rebranded 2026-09-01,
 see v1.0.1 below) are documented here.
 
+## v2.2.1
+
+A maintenance release. Nothing in the app looks or behaves differently;
+this exists because 2.2.0 shipped a dependency with two open advisories
+in it, and because the project needed a licence before anyone else could
+legally run it.
+
+### Fixed
+
+- **A vulnerable version of `qs` no longer ships.** 2.2.0's installer
+  contained `qs` 6.15.3, which has two moderate advisories against it: an
+  array-limit bypass via bracket-key comma parsing, and a denial of
+  service through an attacker-controlled `isBuffer`. Both are fixed in
+  6.16.0. `npm audit fix` reached only half of it — Express 4.22.2 is the
+  last of its line and pins `qs` to a range that excludes the fix, so
+  getting there needed an explicit override.
+
+  Real exposure was low and it is worth saying why rather than implying a
+  narrow escape: Prune's server listens on 127.0.0.1 only, behind a guard
+  that checks the `Host` header before a request body is ever parsed, so
+  nothing off the machine can reach the parser at all.
+
+### Added
+
+- **Prune is MIT licensed.** There was no licence at all before, which
+  under default copyright meant nobody had permission to use, copy or
+  redistribute it — including the people downloading the installer.
+- **A security policy**, with a private way to report a flaw rather than
+  a public issue, and a plain statement of what is in scope: the local
+  API, the cleaner's path guards, how commands are built around the
+  uninstall string, the elevation path, and quarantine restore.
+- **Contributing and release documentation**, including the rule this
+  project actually runs on — break your own test before sending it, and
+  say so in a comment when something genuinely cannot be tested.
+
+### Changed
+
+- **The tests no longer collide with each other.** A handful of them
+  create and delete a real registry key, and every one used the same
+  name, so two test runs on one machine tore down each other's fixture
+  and produced twelve failures that looked like bugs in the quarantine
+  code. The key is now unique per process.
+
 ## v2.2.0
 
 A light theme, the app's own title bar, motion throughout, a much fuller
