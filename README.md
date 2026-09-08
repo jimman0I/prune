@@ -182,4 +182,7 @@ build pipeline works and what it does differently from a plain
 - [SECURITY.md](SECURITY.md) — where to report a vulnerability privately,
   what is in scope, and a note on what Prune does not do (nothing leaves
   the machine).
+- [RELEASING.md](RELEASING.md) — the checklist around a release, and the
+  handful of steps that only become possible once the repository is
+  public.
 - [CHANGELOG.md](CHANGELOG.md) — release notes.
