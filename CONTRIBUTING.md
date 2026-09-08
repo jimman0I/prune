@@ -33,6 +33,15 @@ cd frontend && npm test
 That is 1,587 of them, roughly half a minute per suite. There is no CI,
 so running both is on you.
 
+**Run one suite at a time.** A handful of backend tests create and delete
+a real registry key, because the thing being tested is that Prune removes
+something Windows actually holds — a mock cannot prove that. The key name
+is unique per process, so two runs no longer destroy each other's
+fixture, but they still both drive `reg.exe`, and two suites racing it
+will occasionally lose. Measured: one failure across three concurrent
+pairs, on a different test each time. If a quarantine test fails and you
+have another run going, that is why.
+
 ## How code is written here
 
 Read a few files before writing any. The conventions are visible and

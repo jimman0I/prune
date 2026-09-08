@@ -8,11 +8,42 @@ import { join } from 'node:path';
 import { quarantineAndDelete, restoreQuarantine, deletePermanently, emptyQuarantine } from './quarantine.js';
 
 const execFileAsync = promisify(execFile);
-const TEST_KEY = 'HKCU\\Software\\unrevo-test';
+
+/* A key name unique to this process, not a fixed one.
+ *
+ * These tests create and delete a REAL registry key -- the point of them
+ * is that quarantine.js exports and removes something Windows actually
+ * holds, which a mock cannot prove. A fixed name means two concurrent
+ * runs of this suite on one machine tear down each other's fixture, and
+ * the failures land in the assertions rather than in the setup: the key
+ * is still there after the call, or the manifest comes back empty.
+ *
+ * Found exactly that way -- twelve failures from a second vitest process
+ * sweeping this file at the same time, and all sixteen green when run
+ * alone. Two terminals, or an editor's watcher beside a manual run, is
+ * enough to hit it.
+ *
+ * This removes the deterministic half of that and not all of it. Measured
+ * after the change, over three concurrent pairs: two pairs fully green,
+ * one pair with a single failure, and the failing test MOVED between runs
+ * -- which is reg.exe contention rather than shared state, since the keys
+ * no longer overlap. Whatever these tests do, they drive one machine-wide
+ * tool, and two suites racing it will occasionally lose. Run one suite at
+ * a time; CONTRIBUTING.md says so.
+ *
+ * The name also no longer says "unrevo", which is what the app was called
+ * before the rebrand. */
+const TEST_KEY_NAME = `prune-test-${process.pid}`;
+const TEST_KEY = `HKCU\\Software\\${TEST_KEY_NAME}`;
+/* The same key as PowerShell spells it, which is the form quarantine.js
+ * takes. Derived from one name rather than written out twice, so the two
+ * spellings cannot drift apart. */
+const PS_KEY = `HKCU:\\Software\\${TEST_KEY_NAME}`;
+const PS_MISSING_KEY = `HKCU:\\Software\\${TEST_KEY_NAME}-does-not-exist`;
 
 let scratchDir;
 beforeEach(async () => {
-  scratchDir = await mkdtemp(join(tmpdir(), 'unrevo-quarantine-test-'));
+  scratchDir = await mkdtemp(join(tmpdir(), `prune-quarantine-test-${process.pid}-`));
   process.env.UNREVO_QUARANTINE_ROOT = scratchDir;
   await execFileAsync('reg', ['add', TEST_KEY, '/v', 'Marker', '/d', 'test-value', '/f']);
 });
@@ -38,15 +69,15 @@ describe('quarantineAndDelete', () => {
   });
 
   it('exports and deletes a real registry key, writing a restorable .reg file', async () => {
-    const manifest = await quarantineAndDelete({ programName: 'OldApp', files: [], registryKeys: ['HKCU:\\Software\\unrevo-test'] });
+    const manifest = await quarantineAndDelete({ programName: 'OldApp', files: [], registryKeys: [PS_KEY] });
 
     await expect(execFileAsync('reg', ['query', TEST_KEY])).rejects.toThrow();
-    expect(manifest.registryKeys).toEqual(['HKCU:\\Software\\unrevo-test']);
+    expect(manifest.registryKeys).toEqual([PS_KEY]);
     expect(manifest.regFiles).toHaveLength(1);
     // reg.exe writes .reg files as UTF-16LE, not UTF-8 — reading it as utf8
     // would produce mojibake and this assertion would silently never match.
     const regContent = await readFile(manifest.regFiles[0], 'utf16le');
-    expect(regContent).toMatch(/unrevo-test/i);
+    expect(regContent).toMatch(new RegExp(TEST_KEY_NAME, 'i'));
     expect(manifest.failedRegistryKeys).toEqual([]);
   });
 
@@ -60,11 +91,11 @@ describe('quarantineAndDelete', () => {
     const manifest = await quarantineAndDelete({
       programName: 'OldApp',
       files: [],
-      registryKeys: ['HKCU:\\Software\\unrevo-test', 'HKCU:\\Software\\unrevo-does-not-exist']
+      registryKeys: [PS_KEY, PS_MISSING_KEY]
     });
 
-    expect(manifest.registryKeys).toEqual(['HKCU:\\Software\\unrevo-test']);
-    expect(manifest.failedRegistryKeys).toEqual(['HKCU:\\Software\\unrevo-does-not-exist']);
+    expect(manifest.registryKeys).toEqual([PS_KEY]);
+    expect(manifest.failedRegistryKeys).toEqual([PS_MISSING_KEY]);
   });
 
   // Startup entries are VALUES inside HKCU\...\Run, a key that every
@@ -77,13 +108,13 @@ describe('quarantineAndDelete', () => {
     const manifest = await quarantineAndDelete({
       programName: 'OldApp',
       files: [],
-      registryKeys: [{ path: 'HKCU:\\Software\\unrevo-test', valueName: 'Marker' }]
+      registryKeys: [{ path: PS_KEY, valueName: 'Marker' }]
     });
 
     const { stdout } = await execFileAsync('reg', ['query', TEST_KEY]);
     expect(stdout).not.toMatch(/Marker/);
     expect(stdout).toMatch(/Keep/);
-    expect(manifest.registryKeys).toEqual([{ path: 'HKCU:\\Software\\unrevo-test', valueName: 'Marker' }]);
+    expect(manifest.registryKeys).toEqual([{ path: PS_KEY, valueName: 'Marker' }]);
     expect(manifest.failedRegistryKeys).toEqual([]);
   });
 
@@ -91,7 +122,7 @@ describe('quarantineAndDelete', () => {
     const manifest = await quarantineAndDelete({
       programName: 'OldApp',
       files: [],
-      registryKeys: [{ path: 'HKCU:\\Software\\unrevo-test', valueName: 'Marker' }]
+      registryKeys: [{ path: PS_KEY, valueName: 'Marker' }]
     });
 
     // reg.exe writes .reg files as UTF-16LE; reading it as utf8 would
@@ -105,12 +136,12 @@ describe('quarantineAndDelete', () => {
     const manifest = await quarantineAndDelete({
       programName: 'OldApp',
       files: [],
-      registryKeys: [{ path: 'HKCU:\\Software\\unrevo-test', valueName: 'NoSuchValue' }]
+      registryKeys: [{ path: PS_KEY, valueName: 'NoSuchValue' }]
     });
 
     expect(manifest.registryKeys).toEqual([]);
     expect(manifest.failedRegistryKeys).toEqual([
-      { path: 'HKCU:\\Software\\unrevo-test', valueName: 'NoSuchValue' }
+      { path: PS_KEY, valueName: 'NoSuchValue' }
     ]);
     // The key itself must still be there: a failed value delete is not
     // permission to fall back to deleting the whole key.
@@ -125,10 +156,10 @@ describe('quarantineAndDelete', () => {
     const manifest = await quarantineAndDelete({
       programName: 'OldApp',
       files: [],
-      registryKeys: ['HKLM:\\Software\\Microsoft', 'HKCU:\\Software\\unrevo-test']
+      registryKeys: ['HKLM:\\Software\\Microsoft', PS_KEY]
     });
 
-    expect(manifest.registryKeys).toEqual(['HKCU:\\Software\\unrevo-test']);
+    expect(manifest.registryKeys).toEqual([PS_KEY]);
     expect(manifest.failedRegistryKeys).toEqual(['HKLM:\\Software\\Microsoft']);
     // Nothing was even exported for it -- the refusal comes before reg.exe.
     expect(manifest.regFiles).toHaveLength(1);
@@ -178,7 +209,7 @@ describe('restoreQuarantine', () => {
   });
 
   it('re-imports a quarantined registry key', async () => {
-    const manifest = await quarantineAndDelete({ programName: 'OldApp', files: [], registryKeys: ['HKCU:\\Software\\unrevo-test'] });
+    const manifest = await quarantineAndDelete({ programName: 'OldApp', files: [], registryKeys: [PS_KEY] });
     await expect(execFileAsync('reg', ['query', TEST_KEY])).rejects.toThrow();
 
     await restoreQuarantine(manifest.batchDir);
