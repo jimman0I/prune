@@ -1,0 +1,68 @@
+name: Feature request
+description: Something Prune should do that it does not
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Worth knowing before you write: Prune is one person's project, and
+        most requests are declined or sit for a long time. That is not a
+        reflection on the idea. Saying so up front is better than leaving
+        an issue open for a year without a reply.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: What are you trying to do?
+      description: >
+        The situation, not the solution. What were you doing when you
+        wanted this, and what did you do instead? A described problem
+        often has an answer nobody thought to ask for.
+      placeholder: |
+        I uninstall a lot of games and want to know which ones I have not
+        launched in months. Right now I check each install date by hand.
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: What would you like Prune to do?
+      description: If you have a specific idea, describe it. If not, leave this blank.
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: checked
+    attributes:
+      label: Before filing
+      options:
+        - label: >-
+            I checked that Prune does not already do this. Several things
+            are on screens people do not expect — Store apps and browser
+            extensions are in Applications, and the exclusion list is in
+            Settings.
+          required: true
+        - label: >-
+            I searched the existing issues, open and closed.
+          required: true
+
+  - type: markdown
+    attributes:
+      value: |
+        **Things that are already decided, and not open to a request:**
+
+        - **Code signing.** Prune ships unsigned deliberately. A
+          certificate is a paid, identity-verified purchase, and the
+          README says what that costs the user and how to verify a
+          download instead.
+        - **Telemetry or an update check.** Nothing Prune does leaves the
+          machine, and that is a design commitment rather than an
+          unfinished feature. See [SECURITY.md](../SECURITY.md).
+        - **Removing Store apps from inside Prune.** That is
+          `Remove-AppxPackage`, not an uninstaller. Those rows open
+          Windows' own Installed Apps page instead of pretending to
+          handle it.
+        - **macOS or Linux.** Prune reads the Windows registry, the NTFS
+          MFT and Windows' own startup records. There is no version of
+          this for another platform.

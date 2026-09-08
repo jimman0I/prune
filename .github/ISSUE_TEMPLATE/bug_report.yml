@@ -1,0 +1,100 @@
+name: Bug report
+description: Something Prune did that it should not have, or did not do that it should
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        If this is a **security** problem — something that lets a website
+        or another program reach Prune's API, escape the cleaner's path
+        guards, or get more out of a UAC prompt than it asked for — please
+        do not file it here. Use
+        [private reporting](https://github.com/jimman0I/prune/security/advisories/new)
+        instead, so it is not public while it is still exploitable.
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: What you did, what you expected, and what Prune did instead.
+      placeholder: |
+        I clicked Uninstall on Steam. The progress panel sat at "Running
+        Steam's uninstaller" and never moved. Steam was still installed
+        afterwards.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: screen
+    attributes:
+      label: Which screen
+      options:
+        - Applications
+        - Deep Clean
+        - Disk Map
+        - Duplicates
+        - Quarantine
+        - Startup
+        - Dashboard
+        - Settings
+        - The window itself (title bar, theme, resizing)
+        - Installing or launching Prune
+        - Somewhere else / not sure
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: Prune version
+      description: Bottom of Settings, or the installer's filename.
+      placeholder: "2.2.0"
+    validations:
+      required: true
+
+  - type: input
+    id: windows
+    attributes:
+      label: Windows version
+      description: Run `winver`, or Settings › System › About. Include the build number.
+      placeholder: "Windows 11 Pro 24H2, build 26100.2314"
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: circumstances
+    attributes:
+      label: Anything that applies
+      description: >
+        Each of these changes what Prune can see and do, and several bugs
+        only happen under one of them.
+      options:
+        - label: A UAC prompt appeared (and I accepted it)
+        - label: A UAC prompt appeared and I declined it
+        - label: I was running Prune as administrator
+        - label: The program involved was still running at the time
+        - label: It happens every time
+        - label: It happened once and I cannot reproduce it
+
+  - type: textarea
+    id: destructive
+    attributes:
+      label: Did anything get removed that should not have been?
+      description: >
+        If so, say what — and check the Quarantine screen before doing
+        anything else. Prune moves files there rather than deleting them,
+        so it is very likely recoverable, and knowing what it took is the
+        most useful thing in a report like this.
+    validations:
+      required: false
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Anything Prune printed
+      description: >
+        Optional. If Prune showed an error message or a toast, paste it.
+        Paths in it are fine to redact — say so where you did.
+      render: text
+    validations:
+      required: false

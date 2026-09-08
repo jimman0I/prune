@@ -1,0 +1,15 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Report a security vulnerability
+    url: https://github.com/jimman0I/prune/security/advisories/new
+    about: >-
+      Privately, so it is not public while it is still exploitable. Use this
+      for anything that reaches Prune's local API from outside its own
+      window, escapes the cleaner's path guards, or does more under a UAC
+      prompt than the prompt described.
+  - name: Windows warned me the installer is unrecognised
+    url: https://github.com/jimman0I/prune#windows-will-warn-you-and-here-is-why
+    about: >-
+      Expected. Prune ships unsigned, so SmartScreen warns on first run and
+      keeps warning. The README explains what that means and how to verify
+      the download instead.

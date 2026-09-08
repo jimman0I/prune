@@ -127,9 +127,12 @@ npm start
 Run tests:
 
 ```bash
-cd backend && npm test      # vitest
-cd frontend && npx vitest run
+cd backend && npm test
+cd frontend && npm test
 ```
+
+1,587 tests, roughly half a minute per suite. There is no CI, so running
+both is on you.
 
 ## Building an installer
 
@@ -171,4 +174,12 @@ build pipeline works and what it does differently from a plain
   keeps warning — see [Installing](#installing) for what the warning means
   and how to verify the download instead.
 
-See [CHANGELOG.md](CHANGELOG.md) for release notes.
+## Contributing and security
+
+- [CONTRIBUTING.md](CONTRIBUTING.md) — how to run it, how code is written
+  here, and how to work on the parts that delete things without deleting
+  your own.
+- [SECURITY.md](SECURITY.md) — where to report a vulnerability privately,
+  what is in scope, and a note on what Prune does not do (nothing leaves
+  the machine).
+- [CHANGELOG.md](CHANGELOG.md) — release notes.
