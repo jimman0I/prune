@@ -1,6 +1,7 @@
 {
   "name": "prune-backend",
   "version": "2.2.0",
+  "license": "MIT",
   "type": "module",
   "scripts": {
     "start": "node src/index.js",

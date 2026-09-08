@@ -2,6 +2,7 @@
   "name": "prune-frontend",
   "private": true,
   "version": "2.2.0",
+  "license": "MIT",
   "type": "module",
   "scripts": {
     "dev": "vite",

@@ -105,3 +105,8 @@ Backend and frontend changes are committed separately.
 Do not open a pull request that fixes a vulnerability before it has been
 reported and discussed — the diff discloses it. See
 [SECURITY.md](SECURITY.md).
+
+## License
+
+Prune is MIT licensed. Anything you contribute is contributed under the
+same terms — there is no CLA to sign, and no separate assignment.

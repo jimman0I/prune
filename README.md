@@ -186,3 +186,9 @@ build pipeline works and what it does differently from a plain
   handful of steps that only become possible once the repository is
   public.
 - [CHANGELOG.md](CHANGELOG.md) — release notes.
+
+## License
+
+MIT — see [LICENSE](LICENSE). Use it, fork it, sell it; keep the copyright
+notice. It comes with no warranty, which is worth reading rather than
+skipping for a program whose job is deleting things.
