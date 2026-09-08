@@ -86,9 +86,15 @@ run it:
 Get-FileHash .\Prune.Setup.*.exe -Algorithm SHA256
 ```
 
-Compare the result with `SHA256SUMS.txt` on the release page. `Get-FileHash`
-prints the digest in **uppercase** and the file lists it in lowercase — the
-same hash, so compare them case-insensitively.
+Compare the result with `SHA256SUMS.txt` on the release page. Two things
+about that file look like mismatches and are not:
+
+- `Get-FileHash` prints the digest in **uppercase** and the file lists it
+  in lowercase. Same hash — compare them case-insensitively.
+- The file names the installer `Prune Setup <version>.exe`, with spaces,
+  because that is what the build produced. GitHub replaces spaces with
+  dots in release assets, so the file you downloaded is
+  `Prune.Setup.<version>.exe`. Same file — the hash is what identifies it.
 
 Be clear about what that does and does not prove: it confirms the file
 reached you byte-for-byte as it was built, so a corrupted or altered
