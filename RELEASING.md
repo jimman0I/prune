@@ -47,23 +47,33 @@ Get-FileHash ".\electron\dist\Prune Setup <version>.exe" -Algorithm SHA256
    checksum file still names it with spaces. That is expected, and the
    README says so, but confirm the hashes still match what was uploaded.
 
-## Once, when the repository first goes public
+## Weeks before going public, not at the moment of it
 
-These cannot be done on a private repository and are easy to miss at the
-moment they become possible.
-
-- **Enable private vulnerability reporting.** Settings › Code security.
-  [SECURITY.md](SECURITY.md) tells people to report through it, and that
-  link is dead until it is switched on. The API returns 404 for a private
-  repository, so this genuinely cannot be done in advance.
 - **Submit the installer to Microsoft for analysis** at
   <https://www.microsoft.com/en-us/wdsi/filesubmission>, as a software
   developer requesting a review. Prune is unsigned, deletes files in
   bulk, writes to the registry and spawns PowerShell — the exact
   behavioural profile heuristic antivirus flags. SmartScreen's warning is
   documented and expected; Defender quarantining the installer is a
-  louder failure and worth pre-empting rather than discovering through a
-  bug report.
+  louder failure.
+
+  **Do this first, and wait for the verdict before publishing.** The form
+  takes a file, not a repository, so nothing about it requires the source
+  to be public — and the turnaround is days. Submitting at the same moment
+  the repository opens means the earliest downloads are exactly the ones
+  that get quarantined, which is the worst possible first impression and
+  entirely avoidable. An earlier draft of this file listed it under the
+  section below; that was wrong.
+
+## Once, when the repository first goes public
+
+These genuinely cannot be done on a private repository, and are easy to
+miss at the moment they become possible.
+
+- **Enable private vulnerability reporting.** Settings › Code security.
+  [SECURITY.md](SECURITY.md) tells people to report through it, and that
+  link is dead until it is switched on. The API returns 404 for a private
+  repository.
 - **Check that the repository has a license.** Without one, default
   copyright applies and nobody may legally use or redistribute the
   binaries being published.
