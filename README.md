@@ -12,8 +12,9 @@ outright: it is quarantined first, so a bad match is always recoverable.
 
 <br/>
 
-![Platform](https://img.shields.io/badge/Windows-10%20%7C%2011-0ea5e9?style=for-the-badge&logo=windows&logoColor=white)
-![License](https://img.shields.io/badge/License-MIT-eab308?style=for-the-badge)
+[![Latest release](https://img.shields.io/github/v/release/jimman0I/prune?style=for-the-badge&color=0ea5e9&label=release)](https://github.com/jimman0I/prune/releases/latest)
+![Platform](https://img.shields.io/badge/Windows-10%20%7C%2011-1e293b?style=for-the-badge&logo=windows&logoColor=white)
+[![License](https://img.shields.io/github/license/jimman0I/prune?style=for-the-badge&color=eab308)](LICENSE)
 ![Tests](https://img.shields.io/badge/tests-1%2C587%20passing-22c55e?style=for-the-badge)
 ![Telemetry](https://img.shields.io/badge/telemetry-none-64748b?style=for-the-badge)
 

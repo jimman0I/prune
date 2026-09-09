@@ -70,26 +70,31 @@ Get-FileHash ".\electron\dist\Prune Setup <version>.exe" -Algorithm SHA256
 These genuinely cannot be done on a private repository, and are easy to
 miss at the moment they become possible.
 
-- **Enable private vulnerability reporting.** Settings › Code security.
-  [SECURITY.md](SECURITY.md) tells people to report through it, and that
-  link is dead until it is switched on. The API returns 404 for a private
-  repository.
+- ~~**Enable private vulnerability reporting.**~~ Done, the moment the
+  repository went public. [SECURITY.md](SECURITY.md) sends people through
+  it, so that link was dead until this was switched on.
 - **Check that the repository has a license.** Without one, default
   copyright applies and nobody may legally use or redistribute the
   binaries being published.
-- **Re-read the README's screenshots for anything personal.** They are
-  captures of a real machine, which is what makes them worth having and
-  also what makes them worth checking. `docs/screenshots/startup-dark.png`
-  contains the Windows username in six launch paths; the Applications and
-  Deep Clean shots list what is installed. None of that matters in a
-  private repository and all of it becomes public at the same moment the
-  repository does.
-- **Swap the static badges for live ones.** The README's badges are
-  hand-written `img.shields.io/badge/…` because the dynamic
-  `img.shields.io/github/…` forms cannot read a private repository — they
-  render the literal text "repo not found", which is worse than no badge.
-  Once public, the version, license and release badges can come from the
-  repository itself and stop needing to be updated by hand.
+- **Re-read the README's screenshots for anything personal**, on every
+  release that adds one. They are captures of a real machine, which is
+  what makes them worth having and what makes them worth checking.
+
+  Checked for 2.2.1 and left as they are.
+  `docs/screenshots/startup-dark.png` shows the Windows username in six
+  launch paths — but every commit in this repository is authored by
+  `jimmanol05@gmail.com`, so the git history already exposes that name far
+  more thoroughly than one screenshot does. Redacting the image while the
+  log says the same thing would be theatre. Worth re-checking for anything
+  that is NOT already in the log: tokens, licence keys, private paths,
+  someone else's name.
+- ~~**Swap the static badges for live ones.**~~ Done. The release and
+  licence badges now read from the repository, so neither needs updating
+  by hand again. The platform, test-count and telemetry badges stay
+  static: there is no CI to report a test count and the other two are
+  claims rather than metrics. **The test-count badge is therefore the one
+  thing in the README that can silently go stale — update it when the
+  number moves.**
 
 ## What is deliberately not part of this
 
