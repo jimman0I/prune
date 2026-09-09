@@ -67,6 +67,19 @@ moment they become possible.
 - **Check that the repository has a license.** Without one, default
   copyright applies and nobody may legally use or redistribute the
   binaries being published.
+- **Re-read the README's screenshots for anything personal.** They are
+  captures of a real machine, which is what makes them worth having and
+  also what makes them worth checking. `docs/screenshots/startup-dark.png`
+  contains the Windows username in six launch paths; the Applications and
+  Deep Clean shots list what is installed. None of that matters in a
+  private repository and all of it becomes public at the same moment the
+  repository does.
+- **Swap the static badges for live ones.** The README's badges are
+  hand-written `img.shields.io/badge/…` because the dynamic
+  `img.shields.io/github/…` forms cannot read a private repository — they
+  render the literal text "repo not found", which is worse than no badge.
+  Once public, the version, license and release badges can come from the
+  repository itself and stop needing to be updated by hand.
 
 ## What is deliberately not part of this
 

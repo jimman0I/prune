@@ -1,57 +1,139 @@
+<div align="center">
+
+<img src="frontend/public/logo.png" alt="" width="72" height="72" />
+
 # Prune
 
-A local, offline uninstaller and cleanup utility for Windows.
+**A Windows uninstaller that finishes the job.**
 
-Prune runs a program's own registered uninstaller, then goes further than
-Windows' own "Apps & features": it scans for what that uninstaller leaves
-behind — stray files, registry keys, scheduled tasks — and gives you a
-safe, reversible way to remove them. Nothing is deleted outright by
-default; it's quarantined first, so a bad match is always recoverable.
+Runs a program's own uninstaller, then finds what it left behind — files,
+registry keys, scheduled tasks — and removes those too. Nothing is deleted
+outright: it is quarantined first, so a bad match is always recoverable.
 
-## Features
+<br/>
 
-- **Applications** — every installed program from the real Windows
-  registry (all three Uninstall hives), plus the Microsoft Store apps and
-  browser extensions no uninstall list mentions. Real icons, measured
-  sizes, versions and install dates where the registry recorded none, and
-  a warning before uninstalling something that is running. Runs each
-  program's own uninstall command, streaming live progress, one at a time
-  or as a batch.
-- **Leftover scan** — after an uninstall, finds files, registry keys, and
-  scheduled tasks the program left behind. Forced removal for entries
-  whose own uninstaller is already gone.
-- **Quarantine** — removed files and registry keys are backed up before
-  deletion, browsable and restorable from the Quarantine screen; nothing
-  is gone for good until you say so twice. Optional limits on how long and
-  how much to keep.
-- **Disk Map** — an interactive treemap of what's actually using your disk
-  space, from a full-drive scan that reads the NTFS MFT directly. Largest
-  files, a folder table, and a breakdown by file type beside the map.
-- **Deep Clean** — 74 rules across 29 categories, scanned a rule at a time
-  so the tree fills in as it goes. A rule that cannot be measured says
-  whether the software is missing or the read needs admin, rather than
-  reporting 0 B.
-- **Startup** — the Run keys and Startup folders Windows reads at
-  sign-in, with a switch that writes the same record Task Manager does,
-  plus scheduled tasks, automatic services and the startup tasks Store
-  apps register. Those last three are read-only and say where to change
-  them, since none of them is switched through the sign-in record.
-- **Duplicates** — duplicate files under a folder you choose, found by
-  size, then a 64 KB sample, then a full hash, so almost nothing is read
-  completely.
-- **Settings** — folders and file types to leave alone, guards on what a
-  clean may touch, quarantine limits, an optional schedule, and a real
-  Sandbox Test that proves the cleanup engine works against a throwaway
-  directory before you trust it on real files.
-- **Dashboard** — real drive health from the disk's own SMART data (not
-  free space dressed up as health), live CPU, memory and disk activity,
-  installed app count, and a log of what past uninstalls actually freed.
+![Platform](https://img.shields.io/badge/Windows-10%20%7C%2011-0ea5e9?style=for-the-badge&logo=windows&logoColor=white)
+![License](https://img.shields.io/badge/License-MIT-eab308?style=for-the-badge)
+![Tests](https://img.shields.io/badge/tests-1%2C587%20passing-22c55e?style=for-the-badge)
+![Telemetry](https://img.shields.io/badge/telemetry-none-64748b?style=for-the-badge)
 
-## Requirements
+<br/>
 
-- Windows 10 or 11.
-- Node.js 18+ (development only — the packaged app bundles its own
-  runtime via Electron).
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/screenshots/dashboard-dark.png" />
+  <source media="(prefers-color-scheme: light)" srcset="docs/screenshots/dashboard-light.png" />
+  <img src="docs/screenshots/dashboard-dark.png" alt="Prune's dashboard: real SMART drive health, live CPU and memory, installed application count and recent activity" width="880" />
+</picture>
+
+<sub>Real SMART data from the drive itself — not free space dressed up as health.<br/>
+This README's screenshot follows your theme, because the app does too.</sub>
+
+</div>
+
+<br/>
+
+## Why it exists
+
+Windows' own "Apps &amp; features" runs an uninstaller and stops there. What
+the uninstaller forgets — a folder in `AppData`, a `Run` key, a scheduled
+task — stays on the disk forever, and nothing in Windows will ever mention
+it again.
+
+Prune replaces four tools with one: an uninstaller, a disk visualiser, a
+cache cleaner and a drive-health monitor. Every number it shows is measured
+on the machine rather than estimated, and it says so when it cannot measure
+something instead of printing a confident zero.
+
+<br/>
+
+## What it does
+
+<table>
+<tr>
+<td width="50%" valign="top">
+
+### 🗑️ Applications
+
+Every installed program from all three registry Uninstall hives, plus the
+Store apps and browser extensions no uninstall list mentions. Real icons,
+measured sizes, and a warning before removing something that is running.
+
+</td>
+<td width="50%" valign="top">
+
+### 🧹 Deep Clean
+
+74 rules across 29 categories, scanned one at a time so the tree fills in as
+it goes. A rule that cannot be measured says whether the software is missing
+or the read needs admin — never `0 B`.
+
+</td>
+</tr>
+<tr>
+<td width="50%" valign="top">
+
+### 🗺️ Disk Map
+
+An interactive treemap of what is actually using the disk, from a full-drive
+scan that reads the NTFS MFT directly. Largest files, a folder table and a
+breakdown by type beside the map.
+
+</td>
+<td width="50%" valign="top">
+
+### ⚡ Startup
+
+Everything Windows launches at sign-in — Run keys, Startup folders,
+scheduled tasks, automatic services and Store startup tasks. The switch
+writes the same record Task Manager does.
+
+</td>
+</tr>
+<tr>
+<td width="50%" valign="top">
+
+### 🛟 Quarantine
+
+Nothing is deleted outright. Files are moved and registry keys exported
+before removal, browsable and restorable — nothing is gone for good until
+you say so twice.
+
+</td>
+<td width="50%" valign="top">
+
+### 🫧 Duplicates
+
+Duplicate files under a folder you choose, found by size, then a 64 KB
+sample, then a full hash — so almost nothing is read completely.
+
+</td>
+</tr>
+</table>
+
+<br/>
+
+## Screens
+
+<table>
+<tr>
+<td width="50%"><img src="docs/screenshots/applications-dark.png" alt="The Applications screen: 210 installed programs with real icons, measured sizes, versions and install dates, filterable by Unused, Store, Extensions and Broken" /></td>
+<td width="50%"><img src="docs/screenshots/deep-clean-dark.png" alt="Deep Clean: rules grouped by application, each with a plain-English description, and a Loses data badge on the ones that sign you out or clear history" /></td>
+</tr>
+<tr>
+<td align="center"><b>Applications</b><br/><sub>Every hive, plus Store apps and extensions</sub></td>
+<td align="center"><b>Deep Clean</b><br/><sub>Rules that lose something are marked, and never ticked by default</sub></td>
+</tr>
+<tr>
+<td width="50%"><img src="docs/screenshots/startup-dark.png" alt="The Startup screen: 56 sign-in entries grouped by registry hive and Startup folder, showing which are enabled and which are running now" /></td>
+<td width="50%"><img src="docs/screenshots/dashboard-light.png" alt="The dashboard in the light theme, showing the same drive health and storage cards on a light ground" /></td>
+</tr>
+<tr>
+<td align="center"><b>Startup</b><br/><sub>Grouped by where an entry lives, because that decides how to remove it</sub></td>
+<td align="center"><b>Light theme</b><br/><sub>Measured against every surface, not inverted</sub></td>
+</tr>
+</table>
+
+<br/>
 
 ## Installing
 
@@ -105,6 +187,28 @@ If you would rather not run an unsigned binary, the alternative is to
 build it yourself from source: see [Building an installer](#building-an-installer)
 below. The result is the same application.
 
+<br/>
+
+## Nothing leaves the machine
+
+No telemetry, no update check, no crash reporting, no analytics. The only
+HTTP in the app is the window talking to its own backend on `127.0.0.1`,
+behind a guard that checks the `Host` header before a request body is ever
+parsed — because loopback is not the protection it sounds like, and every
+web page you have open can reach it too.
+
+That is checkable rather than a promise: there is no `autoUpdater`, and no
+code path in the backend, the frontend or the Electron shell opens a
+connection to a host that is not loopback.
+
+<br/>
+
+## Requirements
+
+- Windows 10 or 11.
+- Node.js 18+ (development only — the packaged app bundles its own runtime
+  via Electron).
+
 ## Development
 
 ```bash
@@ -132,7 +236,8 @@ cd frontend && npm test
 ```
 
 1,587 tests, roughly half a minute per suite. There is no CI, so running
-both is on you.
+both is on you — and run them one at a time, for the reason
+[CONTRIBUTING.md](CONTRIBUTING.md) explains.
 
 ## Building an installer
 
@@ -141,38 +246,40 @@ cd electron
 npm run dist
 ```
 
-Produces an NSIS installer (`.exe`) and a portable `.zip` in
-`electron/dist/`. See [electron/README.md](electron/README.md) for how the
-build pipeline works and what it does differently from a plain
-`electron-builder` call.
+Produces an NSIS installer (`.exe`), a portable `.zip` and a generated
+`SHA256SUMS.txt` in `electron/dist/`. See
+[electron/README.md](electron/README.md) for how the build pipeline works
+and what it does differently from a plain `electron-builder` call, and
+[RELEASING.md](RELEASING.md) for the checklist around it.
 
 ## Architecture
 
-- `backend/` — Express (ESM), runs in-process inside Electron's main
+- `backend/` — Express (ESM), running in-process inside Electron's main
   process when packaged, or standalone via `node src/index.js` in
-  development. Zero native (compiled) dependencies: the registry reader
-  and the PowerShell COM interop used for Recycle Bin sizing both shell
-  out to `reg.exe`/`powershell.exe` — binaries every Windows machine
-  already has, nothing to bundle or rebuild per platform.
+  development. **Zero native dependencies**: the registry reader and the
+  PowerShell COM interop used for Recycle Bin sizing both shell out to
+  `reg.exe` and `powershell.exe` — binaries every Windows machine already
+  has, nothing to bundle or rebuild per platform.
 - `frontend/` — React + Vite + Tailwind, the Aurora Deck design system
   (obsidian ground, cyan accent, glass panels), in dark and light. Both
-  palettes are defined as CSS custom properties in `src/index.css` and
-  every text tier in each is measured against the surfaces it sits on.
+  palettes are CSS custom properties in `src/index.css`, and every text
+  tier in each is measured against the surfaces it sits on.
 - `electron/` — the desktop shell. Quarantine data and settings live under
   `app.getPath('userData')`, never inside the install directory, so an
-  app upgrade never touches or deletes them.
+  upgrade never touches or deletes them.
 
 ## Known limitations
 
 - Windows only.
-- Store/UWP apps are listed, but cannot be removed from inside Prune:
-  that is `Remove-AppxPackage`, not an uninstaller, so those rows open
-  Windows' own Installed Apps page instead of pretending to handle it.
-- Leftover scanning is heuristic (name/publisher matching), not a full
+- Store/UWP apps are listed, but cannot be removed from inside Prune: that
+  is `Remove-AppxPackage`, not an uninstaller, so those rows open Windows'
+  own Installed Apps page instead of pretending to handle it.
+- Leftover scanning is heuristic (name and publisher matching), not a full
   before/after filesystem snapshot.
-- The installer is unsigned, so Windows SmartScreen warns on first run and
-  keeps warning — see [Installing](#installing) for what the warning means
-  and how to verify the download instead.
+- The installer is unsigned, so SmartScreen warns on first run and keeps
+  warning — see [Installing](#installing).
+
+<br/>
 
 ## Contributing and security
 
@@ -180,11 +287,8 @@ build pipeline works and what it does differently from a plain
   here, and how to work on the parts that delete things without deleting
   your own.
 - [SECURITY.md](SECURITY.md) — where to report a vulnerability privately,
-  what is in scope, and a note on what Prune does not do (nothing leaves
-  the machine).
-- [RELEASING.md](RELEASING.md) — the checklist around a release, and the
-  handful of steps that only become possible once the repository is
-  public.
+  and what is in scope.
+- [RELEASING.md](RELEASING.md) — the release checklist.
 - [CHANGELOG.md](CHANGELOG.md) — release notes.
 
 ## License
