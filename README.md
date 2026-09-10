@@ -60,7 +60,8 @@ Store apps and browser extensions no uninstall list mentions. Real icons,
 measured sizes, and a warning before removing something that is running.
 Batches run without a wizard per program — the vendor's own silent command
 where one is published, and the right flag for MSI, NSIS and Squirrel
-otherwise. Store apps are removed in-app too.
+otherwise — and a game is removed before the launcher it uninstalls
+through. Store apps are removed in-app too.
 
 </td>
 <td width="50%" valign="top">

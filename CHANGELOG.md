@@ -3,6 +3,30 @@
 All notable changes to Prune (formerly named unrevo -- rebranded 2026-09-01,
 see v1.0.1 below) are documented here.
 
+## v2.3.1
+
+A fix to batch uninstall: it no longer removes a launcher before the games
+that uninstall through it.
+
+### Fixed
+
+- **A batch uninstalls a game before the launcher it depends on.** Some
+  programs are removed by asking another program to do it — a Steam game's
+  uninstaller is Steam itself, a Ubisoft game's is Ubisoft Connect, and
+  Overwolf apps and browser-installed web apps work the same way. A batch
+  used to run in whatever order you ticked things, so selecting Steam first
+  removed Steam, and the games queued after it were left with an uninstaller
+  that no longer existed. They failed, and stayed behind as broken entries.
+  Prune now runs the game first and the launcher after it.
+- **The confirm list says when it has moved something.** A list that comes
+  back in a different order from the one you ticked looks like a mistake
+  unless it explains itself, so the program that moved reads "runs before
+  Steam". Everything else keeps the order you gave it.
+
+Prune only reorders when a program's uninstall command clearly names it to
+another program. If it cannot tell, the batch runs in the order you chose,
+exactly as before.
+
 ## v2.3.0
 
 Batch uninstall that actually runs unattended, and Store apps you can
