@@ -20,6 +20,7 @@ Get-ItemProperty -Path $paths -ErrorAction SilentlyContinue |
     @{N='publisher';E={$_.Publisher}}, @{N='version';E={$_.DisplayVersion}},
     @{N='installDate';E={$_.InstallDate}}, @{N='estimatedSizeKb';E={$_.EstimatedSize}},
     @{N='uninstallString';E={$_.UninstallString}}, @{N='installLocation';E={$_.InstallLocation}},
+    @{N='quietUninstallString';E={$_.QuietUninstallString}},
     @{N='psPath';E={$_.PSPath}}, @{N='displayIcon';E={$_.DisplayIcon}},
     @{N='urlInfoAbout';E={$_.URLInfoAbout}}, @{N='helpLink';E={$_.HelpLink}} |
   ConvertTo-Json -Compress

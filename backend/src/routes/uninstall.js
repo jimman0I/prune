@@ -74,7 +74,7 @@ router.post('/', async (req, res) => {
     'Connection': 'keep-alive'
   });
   try {
-    const result = await runUninstaller(program.uninstallString, (type, data) => sendEvent(res, type, data));
+    const result = await runUninstaller(program, (type, data) => sendEvent(res, type, data));
     sendEvent(res, 'done', result);
   } catch (err) {
     sendEvent(res, 'error', { message: err.message });

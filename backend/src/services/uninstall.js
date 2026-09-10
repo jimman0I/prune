@@ -1,18 +1,24 @@
 import { spawn } from 'node:child_process';
+import { resolveSilentCommand } from './silentUninstall.js';
 
 /** Runs a program's registered uninstaller. `onEvent('running'|'exited', {...})`
  * fires 'running' once with the resolved command before running it (so the
  * UI can show it live), then 'exited' with the code. The exit code is
  * surfaced but never used to gate whether the leftover scan runs
  * afterward — see routes/uninstall.js — uninstallers routinely report
- * success when they weren't, and vice versa. */
-export function runUninstaller(uninstallString, onEvent) {
+ * success when they weren't, and vice versa.
+ *
+ * Takes the program rather than a bare string because making an uninstall
+ * silent needs two registry values, not one: UninstallString and the
+ * QuietUninstallString the vendor may have published beside it. See
+ * services/silentUninstall.js for which wins and why. */
+export function runUninstaller({ uninstallString, quietUninstallString } = {}, onEvent) {
   return new Promise((resolve, reject) => {
     if (!uninstallString) {
       reject(new Error('This program has no registered uninstall command.'));
       return;
     }
-    const command = withSilentFlag(uninstallString);
+    const command = resolveSilentCommand({ uninstallString, quietUninstallString });
     onEvent('running', { command });
 
     // cmd.exe /c: an UninstallString is a raw shell command line (e.g.
@@ -28,16 +34,4 @@ export function runUninstaller(uninstallString, onEvent) {
       resolve({ code });
     });
   });
-}
-
-/** MSI uninstall strings (MsiExec.exe /X{GUID}) run interactively by
- * default — appends /qn (quiet, no UI) if it's an MsiExec string that
- * doesn't already specify a UI mode. Non-MSI uninstallers run exactly as
- * registered: there's no universal silent flag, and guessing one wrong
- * risks passing a flag the installer doesn't understand. */
-export function withSilentFlag(uninstallString) {
-  const isMsiExec = /msiexec(\.exe)?/i.test(uninstallString);
-  const alreadyHasQuietFlag = /\/q[nb]?\b/i.test(uninstallString);
-  if (isMsiExec && !alreadyHasQuietFlag) return `${uninstallString} /qn`;
-  return uninstallString;
 }

@@ -59,8 +59,12 @@ describe('what POST /uninstall agrees to run', () => {
       programId: 'Thing',
       uninstallString: 'calc.exe & echo anything at all'
     });
+    /* The whole program now, not a bare string: making an uninstall silent
+     * needs QuietUninstallString as well, and it comes from this same
+     * fresh registry read. What this test is about is unchanged -- the
+     * command run is the registry's, never the request's. */
     expect(runUninstaller).toHaveBeenCalledWith(
-      '"C:\\Program Files\\Thing\\uninst.exe" /S',
+      expect.objectContaining({ uninstallString: '"C:\\Program Files\\Thing\\uninst.exe" /S' }),
       expect.any(Function)
     );
     expect(text).not.toContain('calc.exe');
