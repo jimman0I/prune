@@ -1,6 +1,8 @@
 import { Router } from 'express';
 import { runUninstaller } from '../services/uninstall.js';
 import { listInstalledPrograms } from '../services/programs.js';
+import { chromiumApplicationFolder } from '../services/silentUninstall.js';
+import { isRunningUnder } from '../services/runningPrograms.js';
 
 const router = Router();
 
@@ -68,13 +70,33 @@ router.post('/', async (req, res) => {
     return;
   }
 
+  /* Whether a Chromium browser is running, asked BEFORE the stream opens.
+   *
+   * --force-uninstall makes a browser's uninstall silent, and it also
+   * closes every running instance without asking -- the dialog it skips is
+   * the one that tells you to close it first. So the silent command is
+   * only built for a browser known not to be running, and this is where
+   * that is known.
+   *
+   * Only for Chromium: the check costs about a second and a half, and no
+   * other kind of uninstaller uses the answer. Edge and WebView2 are
+   * excluded before this point and never checked, because they are never
+   * made silent.
+   *
+   * The answer is passed through untouched, null included. Tidying a null
+   * into a false -- `!!running` -- is the one-character bug that would
+   * turn "could not tell" into "safe to kill". */
+  let running;
+  const applicationFolder = chromiumApplicationFolder(program.uninstallString);
+  if (applicationFolder) running = await isRunningUnder(applicationFolder);
+
   res.writeHead(200, {
     'Content-Type': 'text/event-stream',
     'Cache-Control': 'no-cache',
     'Connection': 'keep-alive'
   });
   try {
-    const result = await runUninstaller(program, (type, data) => sendEvent(res, type, data));
+    const result = await runUninstaller({ ...program, running }, (type, data) => sendEvent(res, type, data));
     sendEvent(res, 'done', result);
   } catch (err) {
     sendEvent(res, 'error', { message: err.message });

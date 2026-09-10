@@ -147,3 +147,39 @@ export async function getRunningPrograms(programs) {
 
   return matchRunningPrograms(processes, ownerFolders(list, storeApps, steamApps));
 }
+
+/** Whether anything at all is running from inside `folder` -- true, false,
+ * or null when that cannot be told.
+ *
+ * Exists because getRunningPrograms answers {} when its process query
+ * fails, which is indistinguishable from "nothing is running". That is a
+ * fine answer for a list that shows a badge. It is the wrong answer for
+ * the one caller that acts on it: a Chromium browser is force-uninstalled
+ * only when it is known not to be running, because --force-uninstall
+ * closes a running one without asking. A failed query that read as "idle"
+ * would kill a browser the check simply failed to see. So a failure here
+ * is null, and the caller treats null as running.
+ *
+ * Takes one folder rather than a program list on purpose. For a Chromium
+ * browser the folder that matters is its Application folder, two levels
+ * above setup.exe -- and the owner-folder rules getRunningPrograms uses
+ * would fall back to the uninstaller's own folder for an entry with no
+ * InstallLocation, which is the one place the browser never runs from. */
+export async function isRunningUnder(folder) {
+  const target = normalize(folder);
+  if (!target) return null;
+
+  let raw;
+  try {
+    raw = await runPowerShellJson(PROCESS_QUERY);
+  } catch {
+    return null;
+  }
+
+  const processes = Array.isArray(raw) ? raw : raw ? [raw] : [];
+  // A live machine always has processes -- the PowerShell answering this
+  // is one of them. None at all means the query did not work.
+  if (processes.length === 0) return null;
+
+  return processes.some((process) => isInside(normalize(process?.path), target));
+}
