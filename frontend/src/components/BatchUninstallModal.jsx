@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useSingleFlight } from '../hooks/useSingleFlight.js';
 import { streamUninstall, scanForLeftovers, removeQuarantined, appendHistoryEntry } from '../lib/api.js';
 import { deriveSearchTerm } from '../lib/searchTerm.js';
 import { mergeLeftovers } from '../lib/mergeLeftovers.js';
 import { batchSummary } from '../lib/batchSelection.js';
+import { orderBatch } from '../lib/batchOrder.js';
 import LeftoverReview from './LeftoverReview.jsx';
 import { selectionToRemoval } from './UninstallModal.jsx';
 
@@ -53,6 +54,16 @@ export default function BatchUninstallModal({ programs, onClose, onFinished }) {
   const [error, setError] = useState(null);
 
   const summary = batchSummary(programs);
+
+  /* Dependents before the program they uninstall through. A Steam game's
+   * uninstall command IS steam.exe, so removing Steam first would leave
+   * the game with an uninstaller that no longer exists -- see
+   * lib/batchOrder.js for how that relationship is recognised.
+   *
+   * Computed once and used for BOTH the list shown and the loop that runs.
+   * A confirm list in one order and a queue in another would be the worst
+   * of both: it would promise an order and then not keep it. */
+  const { ordered, runsBefore } = useMemo(() => orderBatch(programs), [programs]);
   const setStatus = (id, value) => setStatuses((prev) => ({ ...prev, [id]: value }));
 
   /* Single-flight, because the only thing stopping a second click was
@@ -65,7 +76,7 @@ export default function BatchUninstallModal({ programs, onClose, onFinished }) {
     setPhase('running');
     const scans = [];
 
-    for (const program of programs) {
+    for (const program of ordered) {
       setStatus(program.id, { state: 'running' });
       try {
         await streamUninstall(program.id, () => {});
@@ -166,9 +177,19 @@ export default function BatchUninstallModal({ programs, onClose, onFinished }) {
             </p>
 
             <div className="rounded-xl border border-[color:var(--border-subtle)] divide-y divide-[color:var(--border-subtle)] mb-5">
-              {programs.map((program) => (
+              {ordered.map((program) => (
                 <div key={program.id} className="flex items-center justify-between gap-4 px-3.5 py-2">
-                  <span className="text-[12.5px] truncate">{program.name}</span>
+                  <span className="flex items-baseline gap-2 min-w-0">
+                    <span className="text-[12.5px] truncate">{program.name}</span>
+                    {/* Said against the program that moved. A list that comes
+                        back in a different order from the one ticked looks
+                        like a bug unless it says why. */}
+                    {runsBefore[program.id] && (
+                      <span className="text-[11px] text-[color:var(--text-muted)] shrink-0">
+                        runs before {runsBefore[program.id]}
+                      </span>
+                    )}
+                  </span>
                   <span className="text-[11.5px] font-mono text-[color:var(--text-muted)] shrink-0">
                     {formatBytes(program.sizeBytes)}
                   </span>
@@ -190,7 +211,7 @@ export default function BatchUninstallModal({ programs, onClose, onFinished }) {
 
         {(phase === 'running' || phase === 'removing') && (
           <div className="space-y-1.5">
-            {programs.map((program) => {
+            {ordered.map((program) => {
               const status = statuses[program.id] || { state: 'pending' };
               return (
                 <div key={program.id} className="flex items-center justify-between gap-4 px-3.5 py-2 rounded-lg bg-[color:var(--surface-subtle)]">
