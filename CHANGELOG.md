@@ -3,6 +3,32 @@
 All notable changes to Prune (formerly named unrevo -- rebranded 2026-09-01,
 see v1.0.1 below) are documented here.
 
+## v2.3.2
+
+Chrome and Brave now uninstall silently in a batch — as long as they are
+closed.
+
+### Changed
+
+- **Chromium browsers uninstall without their dialog when they are
+  closed.** Chrome, Brave and other Chromium-based browsers used to stop a
+  batch on their own "are you sure" window. Prune now uses the browser's
+  own silent option, but only after checking that the browser's own
+  uninstaller actually supports it.
+- **An open browser is never closed for you.** The silent option also
+  closes every running window of the browser, without asking — so Prune
+  checks first, and if the browser is open, or Prune cannot tell whether it
+  is, the browser's own dialog appears instead, just as before. Losing a
+  window full of tabs to an uninstall you started from another app is not
+  a trade Prune makes on your behalf.
+- **Microsoft Edge and the WebView2 runtime always show Microsoft's own
+  dialog.** Edge is Windows' own browser, and WebView2 is a shared
+  component other programs draw their windows with — Windows Search among
+  them. Neither is ever removed silently.
+
+Your browsing data is kept either way. A browser deletes it only when you
+tick that option in its own dialog, and a silent uninstall never does.
+
 ## v2.3.1
 
 A fix to batch uninstall: it no longer removes a launcher before the games

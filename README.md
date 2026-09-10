@@ -59,8 +59,8 @@ Every installed program from all three registry Uninstall hives, plus the
 Store apps and browser extensions no uninstall list mentions. Real icons,
 measured sizes, and a warning before removing something that is running.
 Batches run without a wizard per program — the vendor's own silent command
-where one is published, and the right flag for MSI, NSIS and Squirrel
-otherwise — and a game is removed before the launcher it uninstalls
+where one is published, and the right flag for MSI, NSIS, Squirrel and
+closed Chromium browsers otherwise — and a game is removed before the launcher it uninstalls
 through. Store apps are removed in-app too.
 
 </td>
@@ -286,6 +286,11 @@ and what it does differently from a plain `electron-builder` call, and
 - About one program in ten still uninstalls with its own wizard: anything
   whose installer Prune cannot positively identify runs exactly as
   registered, because a wrong silent flag is worse than a visible dialog.
+- A Chromium browser that is open when its uninstall runs shows its own
+  dialog rather than being closed for you — the silent option closes every
+  window without asking. Microsoft Edge and the WebView2 runtime always
+  show Microsoft's dialog: other programs, Windows Search among them,
+  depend on WebView2.
 - Leftover scanning is heuristic (name and publisher matching), not a full
   before/after filesystem snapshot.
 - The installer is unsigned, so SmartScreen warns on first run and keeps
