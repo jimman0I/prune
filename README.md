@@ -15,7 +15,7 @@ outright: it is quarantined first, so a bad match is always recoverable.
 [![Latest release](https://img.shields.io/github/v/release/jimman0I/prune?style=for-the-badge&color=0ea5e9&label=release)](https://github.com/jimman0I/prune/releases/latest)
 ![Platform](https://img.shields.io/badge/Windows-10%20%7C%2011-1e293b?style=for-the-badge&logo=windows&logoColor=white)
 [![License](https://img.shields.io/github/license/jimman0I/prune?style=for-the-badge&color=eab308)](LICENSE)
-![Tests](https://img.shields.io/badge/tests-1%2C587%20passing-22c55e?style=for-the-badge)
+![Tests](https://img.shields.io/badge/tests-1%2C680%20passing-22c55e?style=for-the-badge)
 ![Telemetry](https://img.shields.io/badge/telemetry-none-64748b?style=for-the-badge)
 
 <br/>
@@ -61,7 +61,7 @@ measured sizes, and a warning before removing something that is running.
 Batches run without a wizard per program — the vendor's own silent command
 where one is published, and the right flag for MSI, NSIS, Squirrel and
 closed Chromium browsers otherwise — and a game is removed before the launcher it uninstalls
-through. Store apps are removed in-app too.
+through. Store apps are removed in-app too, one at a time or in a batch.
 
 </td>
 <td width="50%" valign="top">
@@ -240,7 +240,7 @@ cd backend && npm test
 cd frontend && npm test
 ```
 
-1,587 tests, roughly half a minute per suite. There is no CI, so running
+1,680 tests, roughly half a minute per suite. There is no CI, so running
 both is on you — and run them one at a time, for the reason
 [CONTRIBUTING.md](CONTRIBUTING.md) explains.
 

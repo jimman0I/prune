@@ -1,7 +1,7 @@
 {
   "name": "prune-desktop",
   "productName": "Prune",
-  "version": "2.3.2",
+  "version": "2.3.3",
   "license": "MIT",
   "private": true,
   "description": "Prune desktop app -- a local, offline uninstaller and cleanup utility for Windows.",

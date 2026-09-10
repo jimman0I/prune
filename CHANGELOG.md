@@ -3,6 +3,35 @@
 All notable changes to Prune (formerly named unrevo -- rebranded 2026-09-01,
 see v1.0.1 below) are documented here.
 
+## v2.3.3
+
+Store apps can now be removed in a batch, alongside everything else.
+
+### Changed
+
+- **Store apps can be ticked for batch uninstall.** They were left out
+  because they used to be removed through Windows. Since 2.3.0 Prune
+  removes them itself, and now a batch can too.
+- **Only the ones Windows says may be removed.** A Store app Windows marks
+  as part of the system cannot be ticked, and neither can one Windows has
+  not said either way about. A batch runs without anyone watching each
+  removal, so it takes only the apps it has been told are safe to take.
+  The checkbox says why an app is left out.
+- **The confirm step says a Store app cannot be brought back.** Everything
+  else a batch removes goes to Quarantine and can be restored. A Store app
+  does not: removing it takes the app's saved data too, and getting it
+  back means reinstalling it from the Store. When a batch includes one,
+  that is said before anything runs.
+- **No leftover scan after a Store app.** The scan matches on publisher,
+  and most Store apps are published by Microsoft — a search for that would
+  turn up a large part of Windows. The other programs in the same batch
+  are still scanned as before.
+
+### Fixed
+
+- **Removing a single Store app is now recorded in the dashboard's
+  history**, like every other removal. It had been missing since 2.3.0.
+
 ## v2.3.2
 
 Chrome and Brave now uninstall silently in a batch — as long as they are
