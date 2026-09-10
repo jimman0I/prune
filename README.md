@@ -58,6 +58,9 @@ something instead of printing a confident zero.
 Every installed program from all three registry Uninstall hives, plus the
 Store apps and browser extensions no uninstall list mentions. Real icons,
 measured sizes, and a warning before removing something that is running.
+Batches run without a wizard per program — the vendor's own silent command
+where one is published, and the right flag for MSI, NSIS and Squirrel
+otherwise. Store apps are removed in-app too.
 
 </td>
 <td width="50%" valign="top">
@@ -272,9 +275,16 @@ and what it does differently from a plain `electron-builder` call, and
 ## Known limitations
 
 - Windows only.
-- Store/UWP apps are listed, but cannot be removed from inside Prune: that
-  is `Remove-AppxPackage`, not an uninstaller, so those rows open Windows'
-  own Installed Apps page instead of pretending to handle it.
+- Removing a Store app cannot be undone from Quarantine, unlike everything
+  else Prune removes: `Remove-AppxPackage` takes the app and its data, and
+  the way back is reinstalling from the Store. The dialog says so before
+  you confirm.
+- Store apps Windows marks as part of the system — the Security interface,
+  the app installer — cannot be removed, and their rows open Windows' own
+  page instead. Store apps are also not part of batch uninstall yet.
+- About one program in ten still uninstalls with its own wizard: anything
+  whose installer Prune cannot positively identify runs exactly as
+  registered, because a wrong silent flag is worse than a visible dialog.
 - Leftover scanning is heuristic (name and publisher matching), not a full
   before/after filesystem snapshot.
 - The installer is unsigned, so SmartScreen warns on first run and keeps

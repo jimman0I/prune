@@ -59,10 +59,6 @@ body:
         - **Telemetry or an update check.** Nothing Prune does leaves the
           machine, and that is a design commitment rather than an
           unfinished feature. See [SECURITY.md](../SECURITY.md).
-        - **Removing Store apps from inside Prune.** That is
-          `Remove-AppxPackage`, not an uninstaller. Those rows open
-          Windows' own Installed Apps page instead of pretending to
-          handle it.
         - **macOS or Linux.** Prune reads the Windows registry, the NTFS
           MFT and Windows' own startup records. There is no version of
           this for another platform.

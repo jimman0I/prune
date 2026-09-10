@@ -63,9 +63,15 @@ than in the capability.
   that escapes those guards, or a quarantine restore that writes outside
   the directory it was captured from, is in scope.
 - **Command construction.** Uninstalling runs the program's own
-  registered uninstall command, and several features shell out to
-  `powershell.exe` and `reg.exe`. An injection that turns registry-derived
-  or user-supplied text into an extra command is in scope.
+  registered uninstall command — or the quiet variant the vendor published
+  beside it — and several features shell out to `powershell.exe` and
+  `reg.exe`. An injection that turns registry-derived or user-supplied text
+  into an extra command is in scope.
+- **Store app removal.** A package name is interpolated into a
+  `Remove-AppxPackage` script after being checked against a strict
+  character class, and packages Windows marks `NonRemovable` are refused
+  before the command is built. Anything that gets a crafted name past that
+  check, or removes a package Windows protects, is in scope.
 - **Elevation.** Some operations raise a UAC prompt. Anything that gets
   more done under that elevation than the prompt described, or that
   elevates without one, is in scope.

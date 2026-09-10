@@ -3,6 +3,42 @@
 All notable changes to Prune (formerly named unrevo -- rebranded 2026-09-01,
 see v1.0.1 below) are documented here.
 
+## v2.3.0
+
+Batch uninstall that actually runs unattended, and Store apps you can
+remove without leaving Prune.
+
+### Added
+
+- **Store apps can be removed from inside Prune.** They used to be listed
+  and nothing more — every row opened Windows' own Installed Apps page. They
+  now have an Uninstall button like every other row. Two apps on a typical
+  machine keep the old behaviour: Windows marks the Security interface and
+  the app installer as part of the system, and Prune will not offer to
+  remove either — the check happens before anything is run, not by letting
+  Windows refuse.
+- **The removal dialog tells you it cannot be undone.** Everything else
+  Prune removes goes to Quarantine and can be put back. A Store app cannot:
+  removing one takes the app and its saved data, and getting it back means
+  reinstalling from the Store. The dialog says that before you confirm
+  rather than asking a generic "are you sure".
+
+### Changed
+
+- **Batch uninstall no longer stops on a wizard for every program.** Nine
+  programs in ten now uninstall silently, up from seven in ten. Prune reads
+  the silent command the vendor publishes in the registry where there is
+  one — about one program in seven has it, and Prune was ignoring it — and
+  otherwise uses the right flag for MSI, NSIS and Squirrel installers.
+- **NSIS uninstallers are recognised by what is inside them, not by their
+  name.** Plenty of uninstallers called `uninstall.exe` are not NSIS, and
+  sending one of them the NSIS silent flag could make it do something else
+  entirely. Prune checks the file itself; anything it cannot positively
+  identify runs exactly as before, with its own wizard.
+- **MSI uninstalls no longer restart the machine unasked.** They now also
+  pass `/norestart`, so a package that decides it wants a reboot cannot
+  take one in the middle of a batch you have walked away from.
+
 ## v2.2.1
 
 A maintenance release. Nothing in the app looks or behaves differently;
