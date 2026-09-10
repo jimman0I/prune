@@ -12,6 +12,7 @@ import ProgramList from './components/ProgramList.jsx';
 import BatchUninstallModal from './components/BatchUninstallModal.jsx';
 import ModalOverlay from './components/ModalOverlay.jsx';
 import UninstallModal from './components/UninstallModal.jsx';
+import StoreRemoveDialog from './components/StoreRemoveDialog.jsx';
 import QuarantineManager from './components/QuarantineManager.jsx';
 import SettingsPage from './components/SettingsPage.jsx';
 import DeepClean from './components/DeepClean.jsx';
@@ -40,6 +41,10 @@ export default function App() {
   useEffect(() => { setVisited((prev) => rememberVisited(prev, screen)); }, [screen]);
   const [selectedProgram, setSelectedProgram] = useState(null);
   const [batchPrograms, setBatchPrograms] = useState(null);
+  // Its own state rather than reusing selectedProgram: that one opens
+  // UninstallModal, which runs a registered uninstaller a Store app
+  // does not have.
+  const [storeAppToRemove, setStoreAppToRemove] = useState(null);
 
   // Eight endpoints, merged at render. See hooks/usePrograms.js -- the
   // separation is load-bearing, not tidiness: these all cache on the
@@ -168,6 +173,7 @@ export default function App() {
               icons={icons}
               onUninstall={setSelectedProgram}
               onBatchUninstall={setBatchPrograms}
+              onRemoveStoreApp={setStoreAppToRemove}
             />
           </div>
         </Screen>
@@ -189,6 +195,18 @@ export default function App() {
             programs={batchPrograms}
             onClose={() => setBatchPrograms(null)}
             onFinished={refreshPrograms}
+          />
+        </ModalOverlay>
+      )}
+      {storeAppToRemove && (
+        <ModalOverlay
+          label={`Remove ${storeAppToRemove.name}`}
+          onClose={() => setStoreAppToRemove(null)}
+        >
+          <StoreRemoveDialog
+            app={storeAppToRemove}
+            onClose={() => setStoreAppToRemove(null)}
+            onRemoved={refreshPrograms}
           />
         </ModalOverlay>
       )}

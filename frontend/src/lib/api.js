@@ -241,7 +241,25 @@ export async function fetchPackageIcons() {
   return data.icons ?? {};
 }
 
-/** Opens Windows' own Installed apps page, where Store apps are removed. */
+/** Removes one Store app for the current user.
+ *
+ * Sends only the package name; the backend looks it up in a fresh
+ * Get-AppxPackage read and removes what the machine reports, never what
+ * this sends. Windows-marked non-removable packages are refused there
+ * too, not just hidden here. */
+export async function removeStoreApp(packageFullName) {
+  const res = await fetch(`${API_URL}/programs/store/remove`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ packageFullName })
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
+  return data;
+}
+
+/** Opens Windows' own Installed apps page, for the Store apps Windows
+ * will not let Prune remove. */
 export async function openInstalledAppsSettings() {
   const res = await fetch(`${API_URL}/programs/apps-settings`, { method: 'POST' });
   const data = await res.json();

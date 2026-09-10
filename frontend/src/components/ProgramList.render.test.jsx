@@ -49,7 +49,15 @@ const PROGRAMS = [
   program({ id: 'brave', name: 'Brave', publisher: 'Brave Software', sizeBytes: 5e9 }),
   program({ id: 'ghost', name: 'Ghost Downloader', publisher: 'XiaoYouChR', sizeBytes: 1e9, unused: true }),
   program({ id: 'broken', name: 'Broken Thing', publisher: 'Nobody', sizeBytes: 2e9, health: { orphaned: true } }),
-  program({ id: 'storeapp', name: 'Store App', publisher: 'Microsoft', sizeBytes: 3e9, source: 'store' })
+  program({ id: 'storeapp', name: 'Store App', publisher: 'Microsoft', sizeBytes: 3e9, source: 'store' }),
+  /* Windows' own NonRemovable flag. Two of the 81 Store packages on the
+   * dev machine carry it -- the Security interface and the app installer
+   * -- and those rows must keep pointing at Windows rather than offering
+   * a button that can only fail. */
+  program({
+    id: 'sechealth', name: 'Windows Security', publisher: 'Microsoft',
+    sizeBytes: 1e8, source: 'store', nonRemovable: true
+  })
 ];
 
 const EXTENSIONS = [
@@ -156,18 +164,41 @@ describe('handing a program to the uninstaller', () => {
     expect(within(row).getByRole('button', { name: /force remove/i })).toBeTruthy();
   });
 
-  it('does not offer to uninstall a Store app itself', async () => {
-    // Removing one is Remove-AppxPackage, which Prune does not do. The
-    // row opens Windows' own page instead of pretending to handle it.
-    render();
+  it('hands a removable Store app to the Store remover, not the uninstaller', async () => {
+    /* Store apps used to open Windows' own page and nothing else, because
+     * removal is Remove-AppxPackage rather than an uninstaller. It is now
+     * done in-app -- but through its OWN handler, because the uninstall
+     * modal runs a registered uninstall command that a Store app does not
+     * have. Handing it to onUninstall would open a dialog with nothing to
+     * run. */
+    const onUninstall = vi.fn();
+    const onRemoveStoreApp = vi.fn();
+    const user = userEvent.setup();
+    render({ onUninstall, onRemoveStoreApp });
     await screen.findByText('Store App');
+
     const row = screen.getByText('Store App').closest('div[class*="grid"]');
+    await user.click(within(row).getByRole('button', { name: /^uninstall$/i }));
+
+    expect(onRemoveStoreApp).toHaveBeenCalledTimes(1);
+    expect(onRemoveStoreApp.mock.calls[0][0].id).toBe('storeapp');
+    expect(onUninstall).not.toHaveBeenCalled();
+  });
+
+  it('still points at Windows for a package Windows will not release', async () => {
+    /* The guard. Prune could show a button here and let
+     * Remove-AppxPackage decline, but a control that can only fail is
+     * worse than one that is honestly absent -- and on a real machine
+     * this row is the Windows Security interface. */
+    const onRemoveStoreApp = vi.fn();
+    render({ onRemoveStoreApp });
+    await screen.findByText('Windows Security');
+    const row = screen.getByText('Windows Security').closest('div[class*="grid"]');
 
     expect(within(row).queryByRole('button', { name: /^uninstall$/i })).toBeNull();
-    // Matched on the accessible name, which is the aria-label rather than
-    // the visible "In Windows" -- the label spells out what the button
-    // does because two words on a row cannot.
-    expect(within(row).getByRole('button', { name: /open windows settings to remove/i })).toBeTruthy();
+    // Matched on the accessible name rather than the visible "In Windows",
+    // because two words on a row cannot say why the button is different.
+    expect(within(row).getByRole('button', { name: /does not allow .* to be removed/i })).toBeTruthy();
   });
 
   it('does not offer to uninstall a browser extension', async () => {

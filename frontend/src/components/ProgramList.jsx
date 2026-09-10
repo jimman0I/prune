@@ -183,7 +183,7 @@ function RevealButton({ program }) {
   );
 }
 
-function ProgramRow({ program, iconSrc, checked, running, isNew, onToggle, onUninstall }) {
+function ProgramRow({ program, iconSrc, checked, running, isNew, onToggle, onUninstall, onRemoveStoreApp }) {
   return (
     <div
     className="grid gap-2.5 px-4 py-1.5 items-center group hover:bg-[color:var(--surface-hover)] transition-colors"
@@ -303,17 +303,30 @@ function ProgramRow({ program, iconSrc, checked, running, isNew, onToggle, onUni
       {program.source === 'extension' ? (
         // Removing one is a browser operation, not an uninstaller.
         <span className="text-[11px] font-mono text-[color:var(--text-muted)]">via browser</span>
-      ) : program.source === 'store' ? (
-        // Not a dead Uninstall button, and not a bare label either.
-        // Removing a Store app is Remove-AppxPackage, which Prune does not
-        // do -- but saying "via Windows" and leaving someone to find the
-        // page is half an answer, so this opens it.
+      ) : program.source === 'store' && program.nonRemovable ? (
+        /* Windows marks this package as part of the system and will not
+         * let it go -- on the dev machine that is the Security interface
+         * and the app installer. Prune could offer a button and let
+         * Remove-AppxPackage decline, but a control that always fails is
+         * worse than one that is honestly absent, so this keeps the old
+         * behaviour and opens Windows' own page instead. */
         <button
           onClick={() => { openInstalledAppsSettings().catch(() => {}); }}
-          aria-label={`Open Windows settings to remove ${program.name}`}
+          aria-label={`Open Windows settings — Windows does not allow ${program.name} to be removed here`}
           className="btn-ghost px-2 py-1 rounded-md text-[11px] font-medium opacity-0 group-hover:opacity-100 focus-visible:opacity-100 transition-opacity"
         >
           In Windows
+        </button>
+      ) : program.source === 'store' ? (
+        // Removable, so it says Uninstall like every other row. What is
+        // different about it -- that this one cannot be undone from
+        // Quarantine -- is said in the dialog, where the decision is
+        // actually made, rather than crammed into a button.
+        <button
+          onClick={() => onRemoveStoreApp(program)}
+          className="btn-danger px-2.5 py-1 rounded-md text-[11px] font-medium opacity-0 group-hover:opacity-100 focus-visible:opacity-100 transition-opacity"
+        >
+          Uninstall
         </button>
       ) : (
         <button
@@ -328,7 +341,7 @@ function ProgramRow({ program, iconSrc, checked, running, isNew, onToggle, onUni
   );
 }
 
-export default function ProgramList({ programs: initialPrograms, extensions = [], icons = {}, running = {}, onUninstall, onBatchUninstall }) {
+export default function ProgramList({ programs: initialPrograms, extensions = [], icons = {}, running = {}, onUninstall, onBatchUninstall, onRemoveStoreApp = () => {} }) {
   const [programs, setPrograms] = useState(initialPrograms || []);
   const [loading, setLoading] = useState(!initialPrograms);
   const [error, setError] = useState(null);
@@ -552,6 +565,7 @@ export default function ProgramList({ programs: initialPrograms, extensions = []
               isNew={newIds.has(program.id)}
               onToggle={() => toggleRow(program)}
               onUninstall={onUninstall}
+              onRemoveStoreApp={onRemoveStoreApp}
             />
           ))}
         </div>
