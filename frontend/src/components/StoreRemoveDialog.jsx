@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { removeStoreApp } from '../lib/api.js';
+import { removeStoreApp, appendHistoryEntry } from '../lib/api.js';
 
 /** The question in front of removing a Store app.
  *
@@ -30,6 +30,12 @@ export default function StoreRemoveDialog({ app, onClose, onRemoved }) {
     setError(null);
     try {
       await removeStoreApp(app.packageFullName);
+      // Logged like every other removal, so the dashboard's record of what
+      // past removals freed does not depend on which dialog was used. And
+      // like every other removal, a logging failure never turns a removal
+      // that worked into an error -- the app is gone either way.
+      appendHistoryEntry({ programName: app.name, publisher: app.publisher, sizeBytes: app.sizeBytes })
+        .catch(() => {});
       setState('done');
       onRemoved?.(app);
     } catch (err) {

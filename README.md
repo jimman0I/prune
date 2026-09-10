@@ -282,7 +282,8 @@ and what it does differently from a plain `electron-builder` call, and
   you confirm.
 - Store apps Windows marks as part of the system — the Security interface,
   the app installer — cannot be removed, and their rows open Windows' own
-  page instead. Store apps are also not part of batch uninstall yet.
+  page instead. A batch takes only the Store apps Windows explicitly marks
+  as removable; one it has not said either way stays out.
 - About one program in ten still uninstalls with its own wizard: anything
   whose installer Prune cannot positively identify runs exactly as
   registered, because a wrong silent flag is worse than a visible dialog.

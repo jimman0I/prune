@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { useSingleFlight } from '../hooks/useSingleFlight.js';
-import { streamUninstall, scanForLeftovers, removeQuarantined, appendHistoryEntry } from '../lib/api.js';
+import { streamUninstall, removeStoreApp, scanForLeftovers, removeQuarantined, appendHistoryEntry } from '../lib/api.js';
 import { deriveSearchTerm } from '../lib/searchTerm.js';
 import { mergeLeftovers } from '../lib/mergeLeftovers.js';
 import { batchSummary } from '../lib/batchSelection.js';
@@ -64,6 +64,7 @@ export default function BatchUninstallModal({ programs, onClose, onFinished }) {
    * A confirm list in one order and a queue in another would be the worst
    * of both: it would promise an order and then not keep it. */
   const { ordered, runsBefore } = useMemo(() => orderBatch(programs), [programs]);
+  const storeCount = programs.filter((program) => program.source === 'store').length;
   const setStatus = (id, value) => setStatuses((prev) => ({ ...prev, [id]: value }));
 
   /* Single-flight, because the only thing stopping a second click was
@@ -79,7 +80,14 @@ export default function BatchUninstallModal({ programs, onClose, onFinished }) {
     for (const program of ordered) {
       setStatus(program.id, { state: 'running' });
       try {
-        await streamUninstall(program.id, () => {});
+        // A Store app has no registered uninstall command for the stream to
+        // run. It goes through Remove-AppxPackage instead, by package name,
+        // the same call the single-app dialog makes.
+        if (program.source === 'store') {
+          await removeStoreApp(program.packageFullName);
+        } else {
+          await streamUninstall(program.id, () => {});
+        }
         appendHistoryEntry({
           programName: program.name,
           publisher: program.publisher,
@@ -90,8 +98,15 @@ export default function BatchUninstallModal({ programs, onClose, onFinished }) {
         // Scan straight after each one rather than all at the end: the
         // program's own files are freshest now, and a later uninstaller
         // could remove a shared folder this one still had.
-        const scan = await scanForLeftovers(deriveSearchTerm(program.name), program.publisher);
-        scans.push({ program: program.name, scan });
+        //
+        // Not for a Store app. The scan matches on publisher, and 68 of the
+        // 81 Store apps on the dev machine are published by Microsoft
+        // Corporation -- a publisher search for that would offer to
+        // quarantine a large part of Windows.
+        if (program.source !== 'store') {
+          const scan = await scanForLeftovers(deriveSearchTerm(program.name), program.publisher);
+          scans.push({ program: program.name, scan });
+        }
       } catch (err) {
         // Recorded and skipped. The rest of the queue still runs.
         setStatus(program.id, { state: 'failed', message: err.message });
@@ -175,6 +190,18 @@ export default function BatchUninstallModal({ programs, onClose, onFinished }) {
               One at a time, because Windows only allows one install or uninstall at once. Some
               uninstallers will show their own windows and ask you questions.
             </p>
+
+            {/* Everything else here goes through Quarantine, and the line
+                above promises Prune shows everything before removing any
+                of it. A Store removal is the exception to both, so it is
+                said here, where the decision is made. */}
+            {storeCount > 0 && (
+              <p className="text-[12px] text-[color:var(--warning)] mb-5">
+                {storeCount === 1 ? 'The Store app' : `The ${storeCount} Store apps`} in this batch
+                cannot be restored from Quarantine: removing {storeCount === 1 ? 'it' : 'one'} takes the app and its saved data,
+                and getting it back means reinstalling it from the Store.
+              </p>
+            )}
 
             <div className="rounded-xl border border-[color:var(--border-subtle)] divide-y divide-[color:var(--border-subtle)] mb-5">
               {ordered.map((program) => (

@@ -53,16 +53,46 @@ describe('batchSummary', () => {
 });
 
 describe('Store apps in a batch', () => {
-  // A Store app is an Appx package: no uninstall string, and removing one
-  // is Remove-AppxPackage rather than running a vendor uninstaller.
-  it('cannot be batch uninstalled', () => {
-    expect(canBatchUninstall({ id: 'store:x', name: 'Paint', source: 'store' })).toBe(false);
+  /* Excluded outright until Prune could remove a Store app itself -- the
+   * old reason read "removed through Windows, not an uninstaller", which
+   * stopped being true in 2.3.0. They are eligible now, on one condition
+   * that matters more here than anywhere: a batch runs unattended, so only
+   * an app Windows has EXPLICITLY said may be removed is let in. */
+  const store = (over = {}) => ({
+    id: 'store:calc', name: 'Calculator', source: 'store', nonRemovable: false,
+    packageFullName: 'Microsoft.WindowsCalculator_11.2210.0.0_x64__8wekyb3d8bbwe',
+    ...over
   });
 
-  it('says why in terms that are actually true of it', () => {
-    // "No uninstall command is registered" is technically right and
-    // misleading -- there is a way to remove it, just not this one.
-    expect(batchIneligibleReason({ id: 'store:x', source: 'store' }))
-      .toBe('Store apps are removed through Windows, not an uninstaller.');
+  it('can be batch uninstalled when Windows allows its removal', () => {
+    expect(canBatchUninstall(store())).toBe(true);
+    expect(batchIneligibleReason(store())).toBeNull();
+  });
+
+  it('is not rejected for lacking an uninstall command, which it never has', () => {
+    // The registry rule below would otherwise catch every Store app.
+    expect(store().uninstallString).toBeUndefined();
+    expect(canBatchUninstall(store())).toBe(true);
+  });
+
+  it('cannot when Windows marks it as part of the system', () => {
+    // On the dev machine: the Security interface and the app installer.
+    expect(canBatchUninstall(store({ nonRemovable: true }))).toBe(false);
+    expect(batchIneligibleReason(store({ nonRemovable: true })))
+      .toMatch(/Windows marks this app as part of the system/);
+  });
+
+  it('cannot when nobody knows whether Windows allows it', () => {
+    /* The same lopsided default as the backend's NonRemovable reading, and
+     * for the same reason. Wrong one way leaves an app to be removed on
+     * its own; wrong the other removes a system component with nobody
+     * watching. */
+    expect(canBatchUninstall(store({ nonRemovable: undefined }))).toBe(false);
+    expect(canBatchUninstall(store({ nonRemovable: null }))).toBe(false);
+  });
+
+  it('cannot without a package name to remove', () => {
+    expect(canBatchUninstall(store({ packageFullName: '' }))).toBe(false);
+    expect(canBatchUninstall(store({ packageFullName: undefined }))).toBe(false);
   });
 });
