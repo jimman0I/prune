@@ -5,6 +5,7 @@ import { getProgramSizes } from '../services/programSizes.js';
 import { getProgramVersions } from '../services/programVersions.js';
 import { getProgramInstallDates } from '../services/installDates.js';
 import { getStoreApps } from '../services/storeApps.js';
+import { removeStoreApp } from '../services/removeStoreApp.js';
 import { getBrowserExtensions } from '../services/browserExtensions.js';
 import { getStartupItems, getStartupEntries } from '../services/startupItems.js';
 import { setStartupEnabled } from '../services/startupToggle.js';
@@ -245,6 +246,52 @@ router.post('/apps-settings', async (req, res) => {
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
+});
+
+/** Removes one Store app for the current user.
+ *
+ * The body names a package and nothing else, and the package is then
+ * looked up in a FRESH Get-AppxPackage read. That indirection is the same
+ * rule /uninstall follows and for the same reason: a route that took the
+ * package name from the request would run Remove-AppxPackage against
+ * whatever a caller sent.
+ *
+ * Fresh rather than cached also means the NonRemovable flag checked here
+ * is the one Windows reports now, not one captured when the screen loaded.
+ * Two of the 81 packages on the dev machine carry it -- the Security
+ * interface and the app installer -- and a stale "false" on either of
+ * those is the worst answer this route could give.
+ */
+router.post('/store/remove', async (req, res) => {
+  const { packageFullName } = req.body || {};
+  if (typeof packageFullName !== 'string' || !packageFullName) {
+    res.status(400).json({ error: 'packageFullName is required.' });
+    return;
+  }
+
+  let app;
+  try {
+    app = (await getStoreApps({ fresh: true }))
+      .find((entry) => entry.packageFullName === packageFullName);
+  } catch (err) {
+    res.status(500).json({ error: `Could not read the installed Store apps: ${err.message}` });
+    return;
+  }
+
+  if (!app) {
+    // Not a 500: the list on screen is a snapshot and an app can be gone
+    // by the time the button is pressed. Same wording as /uninstall.
+    res.status(404).json({ error: 'That app is no longer installed.' });
+    return;
+  }
+
+  // `app` is what the machine just reported, not what the request said.
+  const result = await removeStoreApp(app);
+  if (!result.ok) {
+    res.status(409).json({ error: result.error });
+    return;
+  }
+  res.json({ ok: true, name: app.name });
 });
 
 /** Which installed programs are running right now, as

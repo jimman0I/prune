@@ -82,6 +82,23 @@ describe('normalizeStoreApp', () => {
     expect(normalizeStoreApp({ ...raw, sizeBytes: 0 }).sizeBytes).toBeNull();
   });
 
+  it('treats an unknown NonRemovable as non-removable', () => {
+    /* The asymmetry is the point. Wrong in one direction hides an
+     * Uninstall button on an app that could have been removed; wrong in
+     * the other offers to delete something Windows depends on -- on this
+     * machine that flag covers the Security interface and the app
+     * installer. So anything that is not an explicit false means "do not
+     * offer to remove it".
+     *
+     * Reachable whenever the query cannot read the property: an older
+     * Windows build, the Appx cmdlets in an odd state, a package that is
+     * mid-staging. */
+    expect(normalizeStoreApp({ ...raw, nonRemovable: undefined }).nonRemovable).toBe(true);
+    expect(normalizeStoreApp({ ...raw, nonRemovable: null }).nonRemovable).toBe(true);
+    expect(normalizeStoreApp({ ...raw, nonRemovable: true }).nonRemovable).toBe(true);
+    expect(normalizeStoreApp({ ...raw, nonRemovable: false }).nonRemovable).toBe(false);
+  });
+
   it('maps the architecture the way the registry rows are already labelled', () => {
     expect(normalizeStoreApp({ ...raw, architecture: 'X64' }).architecture).toBe('64-bit');
     expect(normalizeStoreApp({ ...raw, architecture: 'Neutral' }).architecture).toBeNull();

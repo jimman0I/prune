@@ -66,6 +66,12 @@ $rows = foreach ($p in $apps) {
     architecture = [string]$p.Architecture
     sizeBytes = $size
     installDate = $installed
+    # Windows' own flag for a package the system will not let go of. Two
+    # of the 81 apps this query returns on the dev machine carry it: the
+    # Security interface and the app installer. Read here so the row can
+    # say so and the remover can refuse, rather than finding out by
+    # running Remove-AppxPackage and being told no.
+    nonRemovable = [bool]$p.NonRemovable
   }
 }
 ConvertTo-Json -InputObject @($rows) -Compress -Depth 3
@@ -150,6 +156,10 @@ export function normalizeStoreApp(raw) {
     installDateApproximate: /^\d{4}-\d{2}-\d{2}$/.test(raw.installDate || '') || undefined,
     packageFullName: raw.packageFullName,
     packageName: raw.name || null,
+    // Defaults to true when the query said nothing. An unknown answer
+    // here should mean "do not offer to remove it", not "go ahead" --
+    // the cost of the two mistakes is not remotely symmetrical.
+    nonRemovable: raw.nonRemovable !== false,
     source: 'store'
   };
 }
