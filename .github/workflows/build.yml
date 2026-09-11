@@ -91,6 +91,10 @@ jobs:
           # electron-builder downloads the Electron it packages itself; the
           # copy electron's own postinstall fetches would never be used.
           ELECTRON_SKIP_BINARY_DOWNLOAD: '1'
+      # The updater's consent rules and the installer's languages, before
+      # anything is built. Node's own test runner, so no new dependency.
+      - run: npm test
+        working-directory: electron
       # The same script a local release runs: frontend build, a clean
       # production-only backend install, electron-builder, SHA256SUMS.txt.
       - run: npm run dist
@@ -111,19 +115,28 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/v') || github.event_name == 'workflow_dispatch'
         uses: actions/attest@v4
         with:
+          # latest.yml too: it holds the SHA-512 the in-app updater checks
+          # every download against, so it is worth being able to verify.
           subject-path: |
             electron/dist/*.exe
             electron/dist/*.zip
+            electron/dist/latest.yml
 
       - uses: actions/upload-artifact@v7
         with:
           # By commit: a pull request's ref name ("12/merge") holds a slash,
           # which an artifact name may not.
           name: prune-${{ github.sha }}
+          # latest.yml and the blockmap are what the in-app updater reads
+          # from a release: without latest.yml the update button finds
+          # nothing, and the blockmap lets the NEXT release download only
+          # the parts of the installer that changed.
           path: |
             electron/dist/*.exe
             electron/dist/*.zip
             electron/dist/SHA256SUMS.txt
+            electron/dist/latest.yml
+            electron/dist/*.blockmap
           if-no-files-found: error
           retention-days: ${{ startsWith(github.ref, 'refs/tags/') && 90 || 14 }}
 
