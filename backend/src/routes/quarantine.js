@@ -2,7 +2,8 @@ import { Router } from 'express';
 import { readdir, readFile } from 'node:fs/promises';
 import { join, basename } from 'node:path';
 import { existsSync } from 'node:fs';
-import { quarantineAndDelete, restoreQuarantine, quarantineRoot, deletePermanently, emptyQuarantine, listQuarantineBatches } from '../services/quarantine.js';
+import { removeLeftovers, DESTINATIONS } from '../services/leftoverRemoval.js';
+import { restoreQuarantine, quarantineRoot, deletePermanently, emptyQuarantine, listQuarantineBatches } from '../services/quarantine.js';
 import { tryCreateRestorePoint } from '../services/restorePoint.js';
 import { getSettings } from '../services/settings.js';
 import { enforceQuarantineLimits } from '../services/quarantineLimits.js';
@@ -35,8 +36,15 @@ function resolveBatchDir(rawParam) {
 const router = Router();
 
 router.post('/remove', async (req, res) => {
-  const { programName, files, registryKeys } = req.body || {};
+  const { programName, files, registryKeys, destination = 'quarantine' } = req.body || {};
   if (!programName) { res.status(400).json({ error: 'programName is required' }); return; }
+  // From the request -- the dialog that told the user where the files
+  // would go -- and never from settings. Anything unrecognised is refused
+  // rather than mapped to a default: "PERMANENT" is not a typo to guess at.
+  if (!DESTINATIONS.includes(destination)) {
+    res.status(400).json({ error: `Unknown destination "${destination}".` });
+    return;
+  }
   try {
     // Revo's SRInCP, which it ships on. Prune already made one before
     // every forced removal -- it just made one unconditionally, which is a
@@ -46,7 +54,7 @@ router.post('/remove', async (req, res) => {
     const restorePoint = settings.createRestorePoint === false
       ? { created: false, reason: 'turned off in Settings' }
       : await tryCreateRestorePoint(`Prune: forced removal of ${programName}`);
-    const manifest = await quarantineAndDelete({ programName, files: files || [], registryKeys: registryKeys || [] });
+    const manifest = await removeLeftovers({ programName, files: files || [], registryKeys: registryKeys || [], destination });
     // The moment the quarantine grows is the moment it can exceed what
     // the user allowed it to hold, so the limits are applied here rather
     // than only on a timer. Awaited, and reported: something the user

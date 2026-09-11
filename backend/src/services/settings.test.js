@@ -36,6 +36,14 @@ describe('getSettings', () => {
     expect(settings.excludeFolders).toEqual([]);
     expect(settings.excludeExtensions).toEqual([]);
     expect(settings.updateCheck).toBe(false);          // nothing leaves the machine
+    expect(settings.leftoverDestination).toBe('quarantine'); // leftovers can be put back
+    expect(settings.preselectLeftovers).toBe(true);    // today's behaviour, unchanged
+    expect(settings.scanLeftoversAfterUninstall).toBe(true);
+    expect(settings.keepUninstallHistory).toBe(true);
+    expect(settings.restorePointBeforeUninstall).toBe(false);   // needs admin, slow
+    expect(settings.registryBackupBeforeUninstall).toBe(false); // ~140 MB each time
+    expect(settings.dismissedUpdateVersion).toBeNull();
+    expect(settings.showFreeSpaceOnMap).toBe(false);   // WizTree ships it off too
   });
 
   it('returns every key the app reads, so a missing one fails here', async () => {

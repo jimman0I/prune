@@ -85,6 +85,30 @@ const DEFAULT_SETTINGS = {
      explicit true turns it on -- see routes/updateCheck.js. Nothing is
      downloaded or installed either way; see services/updateCheck.js. */
   updateCheck: false,
+  /* Where an uninstall's leftover FILES go: 'quarantine' (restorable in
+     Prune), 'recycle' or 'permanent' -- Revo's three. Registry keys are
+     exported before deletion whichever it is. The dialog reads this and
+     says it; the backend acts on what the dialog sent, never on this
+     directly. See services/leftoverRemoval.js. */
+  leftoverDestination: 'quarantine',
+  /* Whether the leftover review starts with everything ticked, as it
+     always has. Revo ships this off; Prune keeps its behaviour and lets
+     the user choose, which matters more once 'permanent' exists. */
+  preselectLeftovers: true,
+  // Revo's "Only run the built-in uninstaller", the other way round.
+  scanLeftoversAfterUninstall: true,
+  // Revo's "Disable Uninstall History", the other way round.
+  keepUninstallHistory: true,
+  /* Before the program's own uninstaller runs, as Revo does. Off: a
+     restore point needs admin and Windows allows one a day, and a full
+     registry backup is about 140 MB (measured). See preUninstall.js. */
+  restorePointBeforeUninstall: false,
+  registryBackupBeforeUninstall: false,
+  // The newer release whose pop-up the user dismissed; that one only.
+  dismissedUpdateVersion: null,
+  /* WizTree's "Show Free Space on Treemap": a block for the drive's free
+     space beside what the scan found. Off by default, as WizTree ships it. */
+  showFreeSpaceOnMap: false,
   /* The scheduled run. IN-APP: it catches up when Prune is running rather
      than firing with the app closed, because there is no headless entry
      point for a Windows task to invoke. lastRunAt and lastResult live here

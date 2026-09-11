@@ -3,6 +3,8 @@ import { runUninstaller } from '../services/uninstall.js';
 import { listInstalledPrograms } from '../services/programs.js';
 import { chromiumApplicationFolder } from '../services/silentUninstall.js';
 import { isRunningUnder } from '../services/runningPrograms.js';
+import { getSettings } from '../services/settings.js';
+import { runPreUninstall } from '../services/preUninstall.js';
 
 const router = Router();
 
@@ -96,6 +98,20 @@ router.post('/', async (req, res) => {
     'Connection': 'keep-alive'
   });
   try {
+    // Inside the stream, not before it: a registry backup takes seconds
+    // and a restore point longer, and the dialog should show that rather
+    // than sit frozen. When a step says stop, the uninstaller never
+    // starts and the stream ends the way a failed uninstaller ends it.
+    const settings = await getSettings().catch(() => ({}));
+    const pre = await runPreUninstall({
+      programName: program.name,
+      settings,
+      onEvent: (type, data) => sendEvent(res, type, data)
+    });
+    if (!pre.proceed) {
+      sendEvent(res, 'error', { message: pre.reason });
+      return;
+    }
     const result = await runUninstaller({ ...program, running }, (type, data) => sendEvent(res, type, data));
     sendEvent(res, 'done', result);
   } catch (err) {

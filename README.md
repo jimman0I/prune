@@ -7,8 +7,8 @@
 **A Windows uninstaller that finishes the job.**
 
 Runs a program's own uninstaller, then finds what it left behind — files,
-registry keys, scheduled tasks — and removes those too. Nothing is deleted
-outright: it is quarantined first, so a bad match is always recoverable.
+registry keys, scheduled tasks — and removes those too. By default nothing is
+deleted outright: it is quarantined first, so a bad match is recoverable.
 
 <br/>
 
@@ -62,6 +62,8 @@ Batches run without a wizard per program — the vendor's own silent command
 where one is published, and the right flag for MSI, NSIS, Squirrel and
 closed Chromium browsers otherwise — and a game is removed before the launcher it uninstalls
 through. Store apps are removed in-app too, one at a time or in a batch.
+Optional, as in Revo: a restore point or a full registry backup before each
+uninstall, and a choice of where leftover files go.
 
 </td>
 <td width="50%" valign="top">
@@ -99,9 +101,10 @@ writes the same record Task Manager does.
 
 ### 🛟 Quarantine
 
-Nothing is deleted outright. Files are moved and registry keys exported
-before removal, browsable and restorable — nothing is gone for good until
-you say so twice.
+Files are moved and registry keys exported before removal, browsable and
+restorable — nothing is gone for good until you say so twice. Leftover files
+can go to the Recycle Bin or be deleted outright instead, if you choose that
+in Settings; registry keys are backed up either way.
 
 </td>
 <td width="50%" valign="top">
@@ -300,6 +303,13 @@ and what it does differently from a plain `electron-builder` call, and
   depend on WebView2.
 - Leftover scanning is heuristic (name and publisher matching), not a full
   before/after filesystem snapshot.
+- **Delete permanently**, if you choose it for leftover files in Settings,
+  means exactly that: they cannot be restored from Quarantine or the
+  Recycle Bin. It is off by default, the review says so before you confirm,
+  and a guard refuses Windows, a drive root, Program Files itself, your
+  profile's own folders and Prune's quarantine whatever the scan found.
+- A full registry backup before uninstalling covers `HKLM\SOFTWARE` and
+  `HKCU\Software` — about 140 MB here — and only the newest three are kept.
 - The installer is unsigned, so SmartScreen warns on first run and keeps
   warning — see [Installing](#installing).
 
