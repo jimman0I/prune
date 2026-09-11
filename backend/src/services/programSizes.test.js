@@ -1,8 +1,16 @@
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { mkdtemp, rm, mkdir, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { getProgramSizes, clearSizeCache } from './programSizes.js';
+
+// Left real, the GOG lookup spawns PowerShell on every call: about 0.6 s
+// a test here, and past vitest's 5 s limit on a cold GitHub Actions
+// runner, where it failed the build. This file is about measuring
+// folders -- which launchers the machine running it has installed is not
+// its business, so both answer "none".
+vi.mock('./gogApps.js', () => ({ getGogApps: async () => [] }));
+vi.mock('./epicApps.js', () => ({ getEpicApps: async () => [] }));
 
 let root;
 beforeEach(async () => {
