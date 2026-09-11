@@ -50,8 +50,14 @@ ship a stale one.
   7-Zip on Windows can only recreate with `SeCreateSymbolicLinkPrivilege`
   (Developer Mode or an elevated prompt); without it the build fails with
   `Cannot create symbolic link: A required privilege is not held by the
-  client.` This app ships unsigned by design (no cert) and has no custom
-  icon yet, so `signAndEditExecutable: false` skips that whole path.
+  client.` This app ships unsigned by design (no cert), so
+  `signAndEditExecutable: false` skips that whole path. That was
+  electron-builder 24. Since the upgrade to 26.15.3 the option is still
+  honoured (the build logs "executable resource editing and code signing
+  skipped", and the installer and `Prune.exe` both come out unsigned), but
+  26 edits resources with `resedit` and offers `signExecutable: false` to
+  skip only the signing -- see the comment in the config before changing
+  either.
 
 ## Where user data lives
 

@@ -118,6 +118,18 @@ module.exports = {
     // at runtime instead, which covers the window, taskbar, and tray --
     // the surfaces actually seen day to day; only the raw .exe file icon
     // in Explorer stays default).
+    //
+    // Re-checked on the upgrade to electron-builder 26.15.3 (2026-09-11):
+    // the option still exists and is still honoured -- the build logs
+    // "executable resource editing and code signing skipped" for Prune.exe
+    // and both the installer and Prune.exe come out NotSigned. What
+    // changed is the reason it is needed: 26 edits resources with resedit
+    // rather than rcedit, and has a separate `signExecutable: false` that
+    // skips only the signing. That could give Prune.exe its real icon and
+    // version resource back, but resource metadata is built from the same
+    // fields as the `author` crash described at the top of this file, so
+    // it is a change to make on its own, with an installer that is
+    // installed and launched, not folded into a version bump.
     signAndEditExecutable: false
   },
   nsis: {
