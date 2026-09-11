@@ -15,7 +15,7 @@ deleted outright: it is quarantined first, so a bad match is recoverable.
 [![Latest release](https://img.shields.io/github/v/release/jimman0I/prune?style=for-the-badge&color=0ea5e9&label=release)](https://github.com/jimman0I/prune/releases/latest)
 ![Platform](https://img.shields.io/badge/Windows-10%20%7C%2011-1e293b?style=for-the-badge&logo=windows&logoColor=white)
 [![License](https://img.shields.io/github/license/jimman0I/prune?style=for-the-badge&color=eab308)](LICENSE)
-![Tests](https://img.shields.io/badge/tests-1%2C844%20passing-22c55e?style=for-the-badge)
+[![Build](https://img.shields.io/github/actions/workflow/status/jimman0I/prune/build.yml?branch=master&style=for-the-badge&label=build)](https://github.com/jimman0I/prune/actions/workflows/build.yml)
 ![Telemetry](https://img.shields.io/badge/telemetry-none-64748b?style=for-the-badge)
 
 <br/>
@@ -249,9 +249,9 @@ cd backend && npm test
 cd frontend && npm test
 ```
 
-1,844 tests, roughly half a minute per suite. There is no CI, so running
-both is on you — and run them one at a time, for the reason
-[CONTRIBUTING.md](CONTRIBUTING.md) explains.
+1,844 tests, roughly half a minute per suite. GitHub Actions runs both on
+every push and pull request, but run them yourself before pushing — one at
+a time, for the reason [CONTRIBUTING.md](CONTRIBUTING.md) explains.
 
 ## Building an installer
 
@@ -264,7 +264,9 @@ Produces an NSIS installer (`.exe`), a portable `.zip` and a generated
 `SHA256SUMS.txt` in `electron/dist/`. See
 [electron/README.md](electron/README.md) for how the build pipeline works
 and what it does differently from a plain `electron-builder` call, and
-[RELEASING.md](RELEASING.md) for the checklist around it.
+[RELEASING.md](RELEASING.md) for the checklist around it. Published
+releases are built by GitHub Actions rather than on anyone's machine, so
+each file carries an attestation of where it came from.
 
 ## Architecture
 

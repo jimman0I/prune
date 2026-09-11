@@ -21,31 +21,58 @@ because they happen once per release rather than once per build.
 
 ## The build
 
+GitHub Actions builds the release, not this machine. Pushing a version
+tag runs [.github/workflows/build.yml](.github/workflows/build.yml): both
+suites on a Windows runner, the same `npm run dist` a local build uses, a
+re-check of `SHA256SUMS.txt` against the files it names, an attestation
+for the installer and the zip, and a **draft** release with all three
+files attached.
+
+```bash
+git tag -a v<version> -m "Prune <version>"
+git push origin v<version>
+```
+
+The point of building there is the attestation. Prune ships unsigned,
+and a checksum only proves a download arrived intact — not who built it
+or from what. An attestation is a signed record that this workflow, in
+this repository, produced that exact file from a named commit, and anyone
+can check it without trusting the person who uploaded it.
+
+A local build still works, and is still the way to try one before
+tagging:
+
 ```bash
 cd electron
 npm run dist
 ```
 
-Produces the installer, the portable zip, and `SHA256SUMS.txt` in
-`electron/dist/`, which is cleared first so it holds only what this build
-made.
-
-**Verify the checksums independently** rather than trusting the file that
-was just written beside them:
-
-```powershell
-Get-FileHash ".\electron\dist\Prune Setup <version>.exe" -Algorithm SHA256
-```
+It produces the same three files in `electron/dist/`, which is cleared
+first so it holds only what this build made. Nothing built locally has an
+attestation, so a local build should not be what ships.
 
 ## Publishing
 
-1. **Tag it**, annotated, matching the version: `git tag -a v<version>`.
-2. **Create the release** with all three files — installer, zip, and
-   `SHA256SUMS.txt`.
+1. **Wait for the run to go green.** The draft appears under Releases
+   only if the tests, the build and the checksum re-check all passed.
+2. **Replace the draft's notes** with the CHANGELOG entry, then publish.
+   The draft carries a placeholder so an unedited one is obvious.
 3. **Check the asset names.** GitHub replaces spaces with dots, so
    `Prune Setup 2.2.0.exe` becomes `Prune.Setup.2.2.0.exe` while the
    checksum file still names it with spaces. That is expected, and the
    README says so, but confirm the hashes still match what was uploaded.
+4. **Verify what was published**, from a fresh download rather than the
+   run's own copy:
+
+   ```bash
+   gh release download v<version> --repo jimman0I/prune --dir verify
+   gh attestation verify "verify/Prune.Setup.<version>.exe" --repo jimman0I/prune
+   gh attestation verify "verify/Prune-<version>-win.zip" --repo jimman0I/prune
+   ```
+
+   Both should report a verified attestation from `build.yml`. If either
+   does not, the file on the release is not the one the workflow built —
+   take the release down before anyone downloads it.
 
 ## Weeks before going public, not at the moment of it
 
@@ -89,12 +116,11 @@ miss at the moment they become possible.
   that is NOT already in the log: tokens, licence keys, private paths,
   someone else's name.
 - ~~**Swap the static badges for live ones.**~~ Done. The release and
-  licence badges now read from the repository, so neither needs updating
-  by hand again. The platform, test-count and telemetry badges stay
-  static: there is no CI to report a test count and the other two are
-  claims rather than metrics. **The test-count badge is therefore the one
-  thing in the README that can silently go stale — update it when the
-  number moves.**
+  licence badges read from the repository, and the hand-typed test-count
+  badge became a live build badge once GitHub Actions existed: it goes red
+  when either suite or the build fails on `master`, instead of quoting a
+  number someone had to remember to change. The platform and telemetry
+  badges stay static — they are claims rather than metrics.
 
 ## What is deliberately not part of this
 

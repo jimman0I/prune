@@ -30,8 +30,9 @@ cd backend  && npm test
 cd frontend && npm test
 ```
 
-That is 1,587 of them, roughly half a minute per suite. There is no CI,
-so running both is on you.
+That is 1,844 of them, roughly half a minute per suite. GitHub Actions
+runs both on every push and pull request, on a Windows runner, but a red
+build is a slower way to find out than running them first.
 
 **Run one suite at a time.** A handful of backend tests create and delete
 a real registry key, because the thing being tested is that Prune removes
