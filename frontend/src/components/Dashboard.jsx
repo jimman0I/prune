@@ -8,6 +8,7 @@ import { useQuery } from '@tanstack/react-query';
 import { fetchAutomation } from '../lib/api.js';
 import { keys } from '../lib/queryClient.js';
 import { useDiskSpace, useDiskHealth } from '../hooks/useSystemQueries.js';
+import { useLanguage } from '../i18n/LanguageContext.jsx';
 
 function formatBytes(bytes) {
   if (bytes === null || bytes === undefined) return '—';
@@ -29,6 +30,7 @@ function formatBytes(bytes) {
  * likely to look like the feature having failed.
  */
 function ScheduleBadge({ onNavigate }) {
+  const { t } = useLanguage();
   const { data } = useQuery({
     queryKey: keys.automation,
     queryFn: fetchAutomation,
@@ -47,9 +49,7 @@ function ScheduleBadge({ onNavigate }) {
       className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[color:var(--warning-soft)] border border-[color:var(--warning)]/25 text-[12px] text-[color:var(--warning)] hover:bg-[color:var(--warning)]/20 transition-colors shrink-0"
     >
       <span className="w-1.5 h-1.5 rounded-full bg-[color:var(--warning)] shrink-0" />
-      {missed > 0
-        ? `${missed} scheduled ${missed === 1 ? 'run was' : 'runs were'} missed while this PC was off`
-        : 'A scheduled run is due'}
+      {missed > 0 ? t('dashboard.scheduleBadge.missed', missed) : t('dashboard.scheduleBadge.due')}
     </button>
   );
 }
@@ -117,15 +117,18 @@ function HealthGauge({ percent, statusLabel, tone }) {
  * drive gives it up; Windows' own HealthStatus is the fallback, and
  * "unknown" is a legitimate third answer rather than something to paper
  * over with a number. */
-function driveVerdict(disk) {
+function driveVerdict(disk, unknownLabel) {
   if (!disk) return { percent: null, statusLabel: null, tone: 'muted' };
   if (disk.lifeRemainingPercent != null) {
     const pct = disk.lifeRemainingPercent;
     return { percent: pct, statusLabel: null, tone: pct <= 10 ? 'danger' : pct <= 25 ? 'warning' : 'success' };
   }
+  // disk.healthStatus is Windows' own word ("Healthy", "Warning") -- left
+  // untranslated, the same way any other OS-reported text in this app is.
+  // Only the fallback for NO status at all is Prune's own copy.
   const status = disk.healthStatus;
   const tone = status === 'Healthy' ? 'success' : status === 'Warning' ? 'warning' : status ? 'danger' : 'muted';
-  return { percent: null, statusLabel: status || 'Unknown', tone };
+  return { percent: null, statusLabel: status || unknownLabel, tone };
 }
 
 function formatCount(value) {
@@ -140,23 +143,24 @@ function formatCount(value) {
  * two an ordinary person should actually act on, and the rest is context
  * for them. */
 function SmartAttributes({ smart }) {
+  const { t } = useLanguage();
   const tb = (bytes) => (typeof bytes === 'number' ? `${(bytes / 1e12).toFixed(1)} TB` : '—');
 
   const rows = [
-    ['Power-on hours', formatCount(smart.powerOnHours)],
-    ['Power cycles', formatCount(smart.powerCycles)],
-    ['Data written', tb(smart.bytesWritten)],
-    ['Data read', tb(smart.bytesRead)],
-    ['Spare blocks', smart.availableSparePercent != null ? `${smart.availableSparePercent}%` : '—'],
-    ['Unsafe shutdowns', formatCount(smart.unsafeShutdowns), smart.unsafeShutdowns > 0 ? 'warn' : null],
-    ['Media errors', formatCount(smart.mediaErrors), smart.mediaErrors > 0 ? 'bad' : 'good'],
-    ['Error log entries', formatCount(smart.errorLogEntries)]
+    [t('dashboard.smart.powerOnHours'), formatCount(smart.powerOnHours)],
+    [t('dashboard.smart.powerCycles'), formatCount(smart.powerCycles)],
+    [t('dashboard.smart.dataWritten'), tb(smart.bytesWritten)],
+    [t('dashboard.smart.dataRead'), tb(smart.bytesRead)],
+    [t('dashboard.smart.spareBlocks'), smart.availableSparePercent != null ? `${smart.availableSparePercent}%` : '—'],
+    [t('dashboard.smart.unsafeShutdowns'), formatCount(smart.unsafeShutdowns), smart.unsafeShutdowns > 0 ? 'warn' : null],
+    [t('dashboard.smart.mediaErrors'), formatCount(smart.mediaErrors), smart.mediaErrors > 0 ? 'bad' : 'good'],
+    [t('dashboard.smart.errorLogEntries'), formatCount(smart.errorLogEntries)]
   ];
 
   return (
     <div className="mt-4 pt-4 border-t border-[color:var(--border-subtle)]">
       <div className="text-[10.5px] font-mono uppercase tracking-[0.14em] text-[color:var(--text-muted)] mb-2.5">
-        Reported by the drive
+        {t('dashboard.smart.header')}
       </div>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-2">
         {rows.map(([label, value, tone]) => (
@@ -181,6 +185,7 @@ function SmartAttributes({ smart }) {
 }
 
 export default function Dashboard({ programs, totalSize, onNavigate = () => {} }) {
+  const { t } = useLanguage();
   /* The count settles rather than snapping.
    *
    * It arrives a second or so after the card does, and appearing fully
@@ -229,14 +234,14 @@ export default function Dashboard({ programs, totalSize, onNavigate = () => {} }
     try {
       const result = await unlockDiskWear();
       if (result.cancelled) {
-        setUnlockNote('Not approved — still showing what Windows reports.');
+        setUnlockNote(t('dashboard.driveHealth.notApproved'));
       } else if (result.error) {
         setUnlockNote(result.error);
       } else if (!result.reliabilityAvailable) {
         // Real possibility, not a bug: plenty of consumer NVMe firmware
         // never implements the counters Windows asks for, so even an
         // administrator gets nothing back.
-        setUnlockNote("This drive doesn't report wear data, even as administrator.");
+        setUnlockNote(t('dashboard.driveHealth.noWearData'));
         setDiskHealth(result);
       } else {
         setUnlockNote(null);
@@ -250,12 +255,12 @@ export default function Dashboard({ programs, totalSize, onNavigate = () => {} }
   };
 
   const primaryDisk = diskHealth?.disks?.[0] || null;
-  const verdict = driveVerdict(primaryDisk);
+  const verdict = driveVerdict(primaryDisk, t('dashboard.driveHealth.unknownStatus'));
 
   return (
     <div className="px-12 py-10 max-w-[1400px]">
       <div className="flex items-baseline justify-between gap-4 mb-8">
-        <h1 className="display-heading text-[36px] leading-none">Dashboard</h1>
+        <h1 className="display-heading text-[36px] leading-none">{t('nav.dashboard')}</h1>
         <ScheduleBadge onNavigate={onNavigate} />
       </div>
 
@@ -269,18 +274,20 @@ export default function Dashboard({ programs, totalSize, onNavigate = () => {} }
         <div className="glass-panel flex items-center gap-6 p-8 flex-1 min-w-0">
         <HealthGauge percent={verdict.percent} statusLabel={verdict.statusLabel} tone={verdict.tone} />
         <div className="min-w-0">
-          <div className="text-[18px] font-medium text-[color:var(--text-primary)] mb-1">Drive Health</div>
+          <div className="text-[18px] font-medium text-[color:var(--text-primary)] mb-1">{t('dashboard.driveHealth.title')}</div>
 
           {diskHealthError && (
-            <div className="text-[13px] text-[color:var(--text-secondary)] select-text">Couldn't read drive health: {diskHealthError}</div>
+            <div className="text-[13px] text-[color:var(--text-secondary)] select-text">{t('dashboard.driveHealth.error', diskHealthError)}</div>
           )}
 
           {!diskHealthError && !primaryDisk && (
-            <div className="text-[13px] text-[color:var(--text-secondary)]">Reading drive health…</div>
+            <div className="text-[13px] text-[color:var(--text-secondary)]">{t('dashboard.driveHealth.loading')}</div>
           )}
 
           {primaryDisk && (
             <>
+              {/* model/mediaType/busType are Windows' own strings, same as
+                  healthStatus below -- left untranslated. */}
               <div className="text-[13px] text-[color:var(--text-primary)] truncate">
                 {primaryDisk.model}
                 {primaryDisk.mediaType && <span className="text-[color:var(--text-secondary)]"> · {primaryDisk.mediaType}</span>}
@@ -289,14 +296,17 @@ export default function Dashboard({ programs, totalSize, onNavigate = () => {} }
 
               {primaryDisk.lifeRemainingPercent != null ? (
                 <div className="text-[13px] text-[color:var(--text-secondary)] mt-1">
-                  {primaryDisk.lifeRemainingPercent}% life remaining
+                  {t('dashboard.driveHealth.lifeRemaining', primaryDisk.lifeRemainingPercent)}
                   {primaryDisk.temperatureC != null && ` · ${primaryDisk.temperatureC} °C`}
-                  {primaryDisk.powerOnHours != null && ` · ${primaryDisk.powerOnHours.toLocaleString()} h powered on`}
+                  {primaryDisk.powerOnHours != null && ` · ${t('dashboard.driveHealth.poweredOn', primaryDisk.powerOnHours.toLocaleString())}`}
                 </div>
               ) : (
                 <div className="text-[13px] text-[color:var(--text-secondary)] mt-1">
-                  Windows reports this drive <span className="text-[color:var(--text-primary)]">{primaryDisk.healthStatus || 'status unknown'}</span>.
-                  {' '}Wear, temperature and power-on hours need administrator access — Prune won't show a made-up figure instead.
+                  {/* The status word stays inside the translated sentence
+                      rather than in its own styled span: word order around
+                      it is not the same in every language. */}
+                  {t('dashboard.driveHealth.reportsStatus', primaryDisk.healthStatus || t('dashboard.driveHealth.statusUnknown'))}
+                  {' '}{t('dashboard.driveHealth.needsAdmin')}
                 </div>
               )}
 
@@ -307,7 +317,7 @@ export default function Dashboard({ programs, totalSize, onNavigate = () => {} }
                     onClick={handleUnlockWear}
                     disabled={unlocking}
                   >
-                    {unlocking ? 'Waiting for approval…' : 'Read drive wear (admin)'}
+                    {unlocking ? t('dashboard.driveHealth.waitingApproval') : t('dashboard.driveHealth.readWear')}
                   </button>
                   {unlockNote && <span className="text-[12px] text-[color:var(--text-muted)]">{unlockNote}</span>}
                 </div>
@@ -317,7 +327,7 @@ export default function Dashboard({ programs, totalSize, onNavigate = () => {} }
 
               {(primaryDisk.readErrorsUncorrected > 0 || primaryDisk.writeErrorsUncorrected > 0) && (
                 <div className="text-[12.5px] text-[color:var(--danger)] mt-1.5">
-                  {primaryDisk.readErrorsUncorrected || 0} uncorrected read · {primaryDisk.writeErrorsUncorrected || 0} uncorrected write errors
+                  {t('dashboard.driveHealth.uncorrectedErrors', primaryDisk.readErrorsUncorrected || 0, primaryDisk.writeErrorsUncorrected || 0)}
                 </div>
               )}
             </>
@@ -336,14 +346,14 @@ export default function Dashboard({ programs, totalSize, onNavigate = () => {} }
           when its element is displayed again. */}
       <div className="grid grid-cols-3 gap-4 mb-6 stagger">
         <StatCard
-          label="Total Storage"
+          label={t('dashboard.storage.label')}
           value={
             diskSpace ? (
               <div className="text-[18px] font-medium text-[color:var(--text-primary)] mb-2">
-                {formatBytes(diskSpace.totalBytes - diskSpace.freeBytes)} Used / {formatBytes(diskSpace.totalBytes)} Total
+                {t('dashboard.storage.usedTotal', formatBytes(diskSpace.totalBytes - diskSpace.freeBytes), formatBytes(diskSpace.totalBytes))}
               </div>
             ) : (
-              <div className="text-[13px] text-[color:var(--text-secondary)]">{diskSpaceError || 'Loading…'}</div>
+              <div className="text-[13px] text-[color:var(--text-secondary)]">{diskSpaceError || t('dashboard.storage.loading')}</div>
             )
           }
         >
@@ -353,7 +363,7 @@ export default function Dashboard({ programs, totalSize, onNavigate = () => {} }
                   of 952.9" is two numbers you then have to subtract. */}
               <span className="text-[color:var(--text-primary)] font-medium">
                 {formatBytes(diskSpace.freeBytes)}
-              </span>{' '}free
+              </span>{' '}{t('dashboard.storage.free')}
             </p>
           )}
           {diskSpace && (
@@ -366,18 +376,18 @@ export default function Dashboard({ programs, totalSize, onNavigate = () => {} }
           )}
         </StatCard>
         <StatCard
-          label="Installed Apps"
+          label={t('dashboard.apps.label')}
           value={<div className="display-heading text-[28px] text-[color:var(--text-primary)] tabular-nums">{Math.round(shownPrograms)}</div>}
           sublabel={
             // A bare count is not actionable; a broken entry is the one
             // thing on this card worth crossing the app for.
             brokenCount > 0 ? (
               <p className="text-[12px] text-[color:var(--danger)] mt-1.5">
-                {brokenCount} left behind by a failed uninstall
+                {t('dashboard.apps.broken', brokenCount)}
               </p>
             ) : (
               <p className="text-[12px] text-[color:var(--text-secondary)] mt-1.5">
-                No broken entries.
+                {t('dashboard.apps.noBroken')}
               </p>
             )
           }
@@ -386,7 +396,7 @@ export default function Dashboard({ programs, totalSize, onNavigate = () => {} }
             className="btn-ghost mt-3 px-3 py-1.5 rounded-lg text-[12px] font-medium"
             onClick={() => onNavigate('applications')}
           >
-            {brokenCount > 0 ? 'Review' : 'Manage'}
+            {brokenCount > 0 ? t('dashboard.apps.review') : t('dashboard.apps.manage')}
           </button>
         </StatCard>
         {/* This tile used to read "Run Deep Clean to find out." -- a card
@@ -399,13 +409,13 @@ export default function Dashboard({ programs, totalSize, onNavigate = () => {} }
             says what is true and carries the control, the same shape the
             Disk Map's drive root uses. */}
         <StatCard
-          label="Junk Files"
+          label={t('dashboard.junk.label')}
           value={
-            <div className="font-mono text-[15px] text-[color:var(--text-muted)]">not measured</div>
+            <div className="font-mono text-[15px] text-[color:var(--text-muted)]">{t('dashboard.junk.notMeasured')}</div>
           }
           sublabel={
             <p className="text-[12px] text-[color:var(--text-secondary)] mt-1.5">
-              Measuring walks every cleaner path on the disk — about half a minute.
+              {t('dashboard.junk.description')}
             </p>
           }
         >
@@ -413,24 +423,19 @@ export default function Dashboard({ programs, totalSize, onNavigate = () => {} }
             className="btn-ghost mt-3 px-3 py-1.5 rounded-lg text-[12px] font-medium"
             onClick={() => onNavigate('deepclean')}
           >
-            Measure
+            {t('dashboard.junk.measure')}
           </button>
         </StatCard>
       </div>
 
       <div className="flex items-center gap-3 mb-6">
-        {/* These are navigation, so they are named for where they go.
-            They previously invented a third set of names for screens that
-            already have two -- "Smart Scan" for a screen called Deep Clean,
-            "Disk Analyzer" for one called Disk Map -- which leaves the
-            reader matching synonyms instead of reading.
-
-            "Smart Scan" also pointed at 'cleanup', the Smart Cleanup screen
-            that no longer exists, so the primary action on the app's front
-            page navigated nowhere at all. */}
-        <button className="btn-primary" onClick={() => onNavigate('deepclean')}>Deep Clean</button>
-        <button className="btn-ghost" onClick={() => onNavigate('diskmap')}>Disk Map</button>
-        <button className="btn-ghost" onClick={() => onNavigate('applications')}>Applications</button>
+        {/* These are navigation, so they are named for where they go, and
+            reuse the same nav.* keys the side bar's own labels do -- the
+            words on this button and the destination it goes to should
+            never be able to drift apart into two different translations. */}
+        <button className="btn-primary" onClick={() => onNavigate('deepclean')}>{t('nav.deepClean')}</button>
+        <button className="btn-ghost" onClick={() => onNavigate('diskmap')}>{t('nav.diskMap')}</button>
+        <button className="btn-ghost" onClick={() => onNavigate('applications')}>{t('nav.applications')}</button>
       </div>
 
       <div className="glass-panel p-6">
@@ -438,13 +443,13 @@ export default function Dashboard({ programs, totalSize, onNavigate = () => {} }
           onClick={() => setHistoryOpen((o) => !o)}
           className="w-full flex items-center justify-between text-left"
         >
-          <span className="text-[13px] font-medium text-[color:var(--text-primary)]">Recent Activity</span>
-          <span className="text-[12px] text-[color:var(--text-muted)]">{historyOpen ? 'Hide' : 'Show'}</span>
+          <span className="text-[13px] font-medium text-[color:var(--text-primary)]">{t('dashboard.recentActivity.title')}</span>
+          <span className="text-[12px] text-[color:var(--text-muted)]">{historyOpen ? t('dashboard.recentActivity.hide') : t('dashboard.recentActivity.show')}</span>
         </button>
         {historyOpen && (
           <div className="mt-4">
             {history.length === 0 ? (
-              <p className="text-[13px] text-[color:var(--text-secondary)]">No uninstalls yet.</p>
+              <p className="text-[13px] text-[color:var(--text-secondary)]">{t('dashboard.recentActivity.empty')}</p>
             ) : (
               <div className="divide-y divide-[color:var(--border-subtle)]">
                 {history.map((entry) => (
@@ -453,7 +458,7 @@ export default function Dashboard({ programs, totalSize, onNavigate = () => {} }
                       <div className="text-[13px] text-[color:var(--text-primary)]">{entry.programName}</div>
                       <div className="text-[11px] text-[color:var(--text-muted)] font-mono">{formatRelativeTime(entry.timestamp)}</div>
                     </div>
-                    <div className="text-[12px] font-mono text-[color:var(--text-secondary)]">{formatBytes(entry.sizeBytes)} freed</div>
+                    <div className="text-[12px] font-mono text-[color:var(--text-secondary)]">{formatBytes(entry.sizeBytes)} {t('dashboard.recentActivity.freed')}</div>
                   </div>
                 ))}
               </div>
