@@ -15,7 +15,7 @@ outright: it is quarantined first, so a bad match is always recoverable.
 [![Latest release](https://img.shields.io/github/v/release/jimman0I/prune?style=for-the-badge&color=0ea5e9&label=release)](https://github.com/jimman0I/prune/releases/latest)
 ![Platform](https://img.shields.io/badge/Windows-10%20%7C%2011-1e293b?style=for-the-badge&logo=windows&logoColor=white)
 [![License](https://img.shields.io/github/license/jimman0I/prune?style=for-the-badge&color=eab308)](LICENSE)
-![Tests](https://img.shields.io/badge/tests-1%2C686%20passing-22c55e?style=for-the-badge)
+![Tests](https://img.shields.io/badge/tests-1%2C724%20passing-22c55e?style=for-the-badge)
 ![Telemetry](https://img.shields.io/badge/telemetry-none-64748b?style=for-the-badge)
 
 <br/>
@@ -196,15 +196,21 @@ below. The result is the same application.
 
 ## Nothing leaves the machine
 
-No telemetry, no update check, no crash reporting, no analytics. The only
-HTTP in the app is the window talking to its own backend on `127.0.0.1`,
-behind a guard that checks the `Host` header before a request body is ever
-parsed — because loopback is not the protection it sounds like, and every
-web page you have open can reach it too.
+No telemetry, no crash reporting, no analytics, and no update check unless
+you turn one on. The only HTTP in the app is the window talking to its own
+backend on `127.0.0.1`, behind a guard that checks the `Host` header before
+a request body is ever parsed — because loopback is not the protection it
+sounds like, and every web page you have open can reach it too.
 
-That is checkable rather than a promise: there is no `autoUpdater`, and no
-code path in the backend, the frontend or the Electron shell opens a
-connection to a host that is not loopback.
+The one exception is opt-in: **Settings → Check for updates**, off by
+default. Turned on, Prune asks `api.github.com` once a day whether a newer
+release exists, sending a User-Agent and nothing else, and shows a link if
+there is one. It never downloads or installs anything.
+
+That is checkable rather than a promise: there is no `autoUpdater`, and the
+only code that opens a connection to a host that is not loopback is
+`backend/src/services/updateCheck.js`, which is never called while that
+setting is off.
 
 <br/>
 
@@ -240,7 +246,7 @@ cd backend && npm test
 cd frontend && npm test
 ```
 
-1,686 tests, roughly half a minute per suite. There is no CI, so running
+1,724 tests, roughly half a minute per suite. There is no CI, so running
 both is on you — and run them one at a time, for the reason
 [CONTRIBUTING.md](CONTRIBUTING.md) explains.
 

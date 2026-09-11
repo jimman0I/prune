@@ -100,6 +100,9 @@ miss at the moment they become possible.
 
 - **Code signing.** Prune ships unsigned by choice. The README explains
   what that costs the user and how to verify a download instead.
-- **An update check.** Nothing Prune does leaves the machine; there is no
-  version ping and no auto-updater. New versions are found the way the
-  first one was.
+- **An auto-updater.** Prune never downloads or installs anything by
+  itself. There is an update check, but it is opt-in (Settings → Check for
+  updates, off by default), asks GitHub at most once a day, and only shows
+  a link. Two things follow for releases: the tag must be a plain
+  `vX.Y.Z` (anything else reads as "not a release Prune could read"), and
+  a draft or pre-release is never offered.

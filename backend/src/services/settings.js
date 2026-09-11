@@ -79,6 +79,12 @@ const DEFAULT_SETTINGS = {
      1024-based, so it agrees with the figure the Quarantine screen
      prints above it. */
   quarantineMaxSizeGb: null,
+  /* Whether Prune may ask GitHub, once a day, if a newer release exists.
+     Off by default, because "nothing leaves the machine" is a promise the
+     README makes and this is the one thing that would break it. Only an
+     explicit true turns it on -- see routes/updateCheck.js. Nothing is
+     downloaded or installed either way; see services/updateCheck.js. */
+  updateCheck: false,
   /* The scheduled run. IN-APP: it catches up when Prune is running rather
      than firing with the app closed, because there is no headless entry
      point for a Windows task to invoke. lastRunAt and lastResult live here

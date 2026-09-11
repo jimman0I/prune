@@ -35,6 +35,7 @@ describe('getSettings', () => {
     expect(settings.automation.task).toBe('scan');     // and if it did, it measures
     expect(settings.excludeFolders).toEqual([]);
     expect(settings.excludeExtensions).toEqual([]);
+    expect(settings.updateCheck).toBe(false);          // nothing leaves the machine
   });
 
   it('returns every key the app reads, so a missing one fails here', async () => {
@@ -46,7 +47,7 @@ describe('getSettings', () => {
       'excludeFolders', 'excludeExtensions', 'autoQuarantine', 'theme',
       'minimizeToTray', 'skipRecentHours', 'createRestorePoint', 'hideUnavailableRules',
       'acknowledgedCleanWarnings',
-      'quarantineRetentionDays', 'quarantineMaxSizeGb', 'automation'
+      'quarantineRetentionDays', 'quarantineMaxSizeGb', 'automation', 'updateCheck'
     ]) {
       expect(settings, key).toHaveProperty(key);
     }

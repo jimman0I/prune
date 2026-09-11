@@ -104,12 +104,21 @@ or not something a report can change:
 
 Stated because it removes a whole category of question, and because it is
 verifiable rather than a promise: **nothing Prune does leaves the
-machine.** There is no telemetry, no update check, no crash reporting and
-no analytics.
+machine unless you turn on the update check.** There is no telemetry, no
+crash reporting and no analytics.
 
 The only HTTP in the app is the window talking to its own backend on
-`127.0.0.1:3101`. There is no `autoUpdater`, and no code path anywhere —
-backend, frontend or Electron main — that opens a connection to a host
-that is not loopback. Grep for it: the sole non-loopback URL in the
-Electron shell is `http://localhost:5174`, the Vite dev server, used only
-when running from source.
+`127.0.0.1:3101`, with one opt-in exception: **Settings → Check for
+updates**, off by default. When it is on, the backend asks
+`https://api.github.com/repos/jimman0I/prune/releases/latest` at most once
+a day, sending a User-Agent and nothing else. It downloads nothing and
+installs nothing; the link it shows is built from the checked version
+number, never taken from GitHub's reply, and the endpoint that opens it
+takes no address from its caller.
+
+There is no `autoUpdater`, and no other code path — backend, frontend or
+Electron main — opens a connection to a host that is not loopback. Grep
+for it: `backend/src/services/updateCheck.js` is the only outbound
+request, and the sole non-loopback URL in the Electron shell is
+`http://localhost:5174`, the Vite dev server, used only when running from
+source.
