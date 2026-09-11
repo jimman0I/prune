@@ -145,10 +145,17 @@ sample, then a full hash — so almost nothing is read completely.
 
 ## Installing
 
-Download `Prune.Setup.<version>.exe` from the
+Download `Prune-Setup-<version>.exe` from the
 [latest release](https://github.com/jimman0I/prune/releases/latest) and run
-it. The `-win.zip` beside it is the same application without an installer:
-unzip it anywhere and run `Prune.exe`.
+it. The installer opens in Windows' own language — 40 are included — and on
+a fresh install asks whether Prune should check for updates, unticked
+unless you tick it. The `-win.zip` beside it is the same application
+without an installer: unzip it anywhere and run `Prune.exe`.
+
+From 2.5.0 on, that is the last installer you run by hand: with the update
+check on, a button appears at the bottom of the side bar when a new version
+is out, and one click installs it and reopens Prune. Releases before 2.5.0
+cannot update themselves, and named the installer `Prune.Setup.<version>.exe`.
 
 ### Windows will warn you, and here is why
 
@@ -173,18 +180,15 @@ both files, and you can check the one you downloaded matches before you
 run it:
 
 ```powershell
-Get-FileHash .\Prune.Setup.*.exe -Algorithm SHA256
+Get-FileHash .\Prune-Setup-*.exe -Algorithm SHA256
 ```
 
-Compare the result with `SHA256SUMS.txt` on the release page. Two things
-about that file look like mismatches and are not:
-
-- `Get-FileHash` prints the digest in **uppercase** and the file lists it
-  in lowercase. Same hash — compare them case-insensitively.
-- The file names the installer `Prune Setup <version>.exe`, with spaces,
-  because that is what the build produced. GitHub replaces spaces with
-  dots in release assets, so the file you downloaded is
-  `Prune.Setup.<version>.exe`. Same file — the hash is what identifies it.
+Compare the result with `SHA256SUMS.txt` on the release page.
+`Get-FileHash` prints the digest in **uppercase** and the file lists it in
+lowercase — same hash, compare them case-insensitively. For releases before
+2.5.0 the file also names the installer `Prune Setup <version>.exe`, with
+spaces, while the download is `Prune.Setup.<version>.exe`: same file,
+GitHub turns spaces into dots.
 
 Be clear about what that does and does not prove: it confirms the file
 reached you byte-for-byte as it was built, so a corrupted or altered
@@ -220,14 +224,19 @@ a request body is ever parsed — because loopback is not the protection it
 sounds like, and every web page you have open can reach it too.
 
 The one exception is opt-in: **Settings → Check for updates**, off by
-default. Turned on, Prune asks `api.github.com` once a day whether a newer
-release exists, sending a User-Agent and nothing else, and shows a link if
-there is one. It never downloads or installs anything.
+default (the installer asks on a fresh install, unticked). Turned on, Prune
+asks `api.github.com` once a day whether a newer release exists, sending a
+User-Agent and nothing else. If there is one, a button appears at the
+bottom of the side bar, and only clicking it downloads the new installer
+from the GitHub release and installs it. Turn on **Install updates
+automatically** as well and it downloads in the background instead, and
+installs the next time Prune closes.
 
-That is checkable rather than a promise: there is no `autoUpdater`, and the
-only code that opens a connection to a host that is not loopback is
-`backend/src/services/updateCheck.js`, which is never called while that
-setting is off.
+That is checkable rather than a promise: the only code that opens a
+connection to a host that is not loopback is
+`backend/src/services/updateCheck.js` and the updater in
+`electron/updater.cjs`, and neither does anything while the update check is
+off. [SECURITY.md](SECURITY.md) says exactly what the updater trusts.
 
 <br/>
 
@@ -261,11 +270,13 @@ Run tests:
 ```bash
 cd backend && npm test
 cd frontend && npm test
+cd electron && npm test
 ```
 
-1,877 tests, roughly half a minute per suite. GitHub Actions runs both on
-every push and pull request, but run them yourself before pushing — one at
-a time, for the reason [CONTRIBUTING.md](CONTRIBUTING.md) explains.
+1,918 tests: about half a minute each for the backend and frontend, a
+second for the electron suite. GitHub Actions runs all three on every push
+and pull request, but run them yourself before pushing — one at a time, for
+the reason [CONTRIBUTING.md](CONTRIBUTING.md) explains.
 
 ## Building an installer
 

@@ -28,11 +28,14 @@ Tests, which must pass before anything is sent:
 ```bash
 cd backend  && npm test
 cd frontend && npm test
+cd electron && npm test
 ```
 
-That is 1,877 of them, roughly half a minute per suite. GitHub Actions
-runs both on every push and pull request, on a Windows runner, but a red
-build is a slower way to find out than running them first.
+That is 1,918 of them. The backend and frontend take about half a minute
+each; the electron suite — the updater's rules and the installer's
+languages, on Node's own test runner — takes a second. GitHub Actions
+runs all three on every push and pull request, on a Windows runner, but a
+red build is a slower way to find out than running them first.
 
 **Run one suite at a time.** A handful of backend tests create and delete
 a real registry key, because the thing being tested is that Prune removes

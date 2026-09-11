@@ -109,16 +109,32 @@ crash reporting and no analytics.
 
 The only HTTP in the app is the window talking to its own backend on
 `127.0.0.1:3101`, with one opt-in exception: **Settings → Check for
-updates**, off by default. When it is on, the backend asks
+updates**, off by default — the installer asks too, on a fresh install,
+with the box unticked. When it is on, the backend asks
 `https://api.github.com/repos/jimman0I/prune/releases/latest` at most once
-a day, sending a User-Agent and nothing else. It downloads nothing and
-installs nothing; the link it shows is built from the checked version
-number, never taken from GitHub's reply, and the endpoint that opens it
-takes no address from its caller.
+a day, sending a User-Agent and nothing else. The link it shows is built
+from the checked version number, never taken from GitHub's reply, and the
+endpoint that opens it takes no address from its caller.
 
-There is no `autoUpdater`, and no other code path — backend, frontend or
-Electron main — opens a connection to a host that is not loopback. Grep
-for it: `backend/src/services/updateCheck.js` is the only outbound
-request, and the sole non-loopback URL in the Electron shell is
-`http://localhost:5174`, the Vite dev server, used only when running from
-source.
+Installing an update is a separate step, and it is the user's. When the
+check has found a newer release, a button appears at the bottom of the side
+bar; only clicking it — or turning on **Install updates automatically**,
+also off by default — makes the Electron shell's `electron-updater`
+download the installer from that GitHub release, check it against the
+SHA-512 in the release's `latest.yml`, and run it. The window can only name
+the version it showed: where the update comes from is fixed in the build,
+and any version other than the one shown is refused
+(`electron/updater.cjs`).
+
+What that trusts, plainly: the GitHub release. Prune is unsigned, so
+nothing checks who built the new installer — the SHA-512 proves the file
+matches `latest.yml`, and both come from the same release. That is the same
+trust as downloading it from the release page by hand. Every file on a
+release carries a build attestation you can check yourself; see the README.
+
+Grep for it: `backend/src/services/updateCheck.js` and
+`electron/updater.cjs` (through `electron-updater`) are the only code that
+opens a connection to a host that is not loopback, and neither does
+anything while the update check is off. The sole other non-loopback URL in
+the Electron shell is `http://localhost:5174`, the Vite dev server, used
+only when running from source.

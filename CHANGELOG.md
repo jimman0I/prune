@@ -3,6 +3,38 @@
 All notable changes to Prune (formerly named unrevo -- rebranded 2026-09-01,
 see v1.0.1 below) are documented here.
 
+## v2.5.0
+
+Updates that install themselves, and an installer in 40 languages that
+asks about updates before Prune ever runs.
+
+### Added
+
+- **One-click updates.** With the update check on, a button appears at the
+  bottom of the side bar when a newer release exists. One click downloads
+  it, installs it silently and reopens Prune on the new version — no
+  release page, no second installer to click through. Nothing is
+  downloaded before that click. This replaces the tile in the corner.
+- **Install updates automatically** (Settings → General, off by default,
+  and only with the update check on): a new release downloads in the
+  background and installs the next time Prune closes. The side-bar button
+  becomes a restart for anyone who would rather not wait.
+- **The installer in 40 languages**, opening in Windows' own display
+  language, with a picker for anyone who wants another.
+- **An "Updates" page in the installer** that asks whether to check for
+  updates, unticked unless you tick it. Shown on a fresh install only;
+  upgrades, and the updater's own silent installs, keep whatever you chose
+  before.
+
+### Changed
+
+- **The installer is now `Prune-Setup-<version>.exe`**, with hyphens. The
+  old name had spaces, which GitHub turned into dots on the release page,
+  and which the updater cannot follow.
+- **2.4.1 and earlier cannot update themselves.** The updater arrives in
+  this release, so this one version has to be downloaded and installed by
+  hand. Every release after it installs from the side-bar button.
+
 ## v2.4.1
 
 Text selection that behaves like a desktop app's, and the first release

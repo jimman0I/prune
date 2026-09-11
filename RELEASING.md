@@ -25,8 +25,10 @@ GitHub Actions builds the release, not this machine. Pushing a version
 tag runs [.github/workflows/build.yml](.github/workflows/build.yml): both
 suites on a Windows runner, the same `npm run dist` a local build uses, a
 re-check of `SHA256SUMS.txt` against the files it names, an attestation
-for the installer and the zip, and a **draft** release with all three
-files attached.
+for the installer, the zip and `latest.yml`, and a **draft** release with
+all five files attached: the installer and its `.blockmap`, the zip,
+`SHA256SUMS.txt`, and `latest.yml`, which is what the in-app updater
+reads.
 
 ```bash
 git tag -a v<version> -m "Prune <version>"
@@ -57,22 +59,27 @@ attestation, so a local build should not be what ships.
    only if the tests, the build and the checksum re-check all passed.
 2. **Replace the draft's notes** with the CHANGELOG entry, then publish.
    The draft carries a placeholder so an unedited one is obvious.
-3. **Check the asset names.** GitHub replaces spaces with dots, so
-   `Prune Setup 2.2.0.exe` becomes `Prune.Setup.2.2.0.exe` while the
-   checksum file still names it with spaces. That is expected, and the
-   README says so, but confirm the hashes still match what was uploaded.
+3. **Check the release has all five files**: `Prune-Setup-<version>.exe`,
+   its `.blockmap`, `Prune-<version>-win.zip`, `SHA256SUMS.txt` and
+   `latest.yml`. `latest.yml` is not decoration: it is what every installed
+   copy's update button reads, and without it no one on 2.5.0 or later is
+   offered this release. It names the installer by its exact file name, so
+   the name must reach the release unchanged — which is why it has no
+   spaces for GitHub to turn into dots.
 4. **Verify what was published**, from a fresh download rather than the
    run's own copy:
 
    ```bash
    gh release download v<version> --repo jimman0I/prune --dir verify
-   gh attestation verify "verify/Prune.Setup.<version>.exe" --repo jimman0I/prune
+   gh attestation verify "verify/Prune-Setup-<version>.exe" --repo jimman0I/prune
    gh attestation verify "verify/Prune-<version>-win.zip" --repo jimman0I/prune
+   gh attestation verify "verify/latest.yml" --repo jimman0I/prune
    ```
 
-   Both should report a verified attestation from `build.yml`. If either
+   All three should report a verified attestation from `build.yml`. If any
    does not, the file on the release is not the one the workflow built —
-   take the release down before anyone downloads it.
+   take the release down before anyone downloads it, and before any
+   installed copy offers it.
 
 ## Weeks before going public, not at the moment of it
 
@@ -126,9 +133,12 @@ miss at the moment they become possible.
 
 - **Code signing.** Prune ships unsigned by choice. The README explains
   what that costs the user and how to verify a download instead.
-- **An auto-updater.** Prune never downloads or installs anything by
-  itself. There is an update check, but it is opt-in (Settings → Check for
-  updates, off by default), asks GitHub at most once a day, and only shows
-  a link. Two things follow for releases: the tag must be a plain
-  `vX.Y.Z` (anything else reads as "not a release Prune could read"), and
-  a draft or pre-release is never offered.
+- **Updates without consent.** Since 2.5.0 Prune installs its own
+  updates, but only from the side-bar button or with **Install updates
+  automatically** turned on, and only with the update check on — all three
+  off by default. What follows for releases: the tag must be a plain
+  `vX.Y.Z` (anything else reads as "not a release Prune could read"); a
+  draft or pre-release is never offered; and a published release reaches
+  every installed copy with the check on within a day. There is no staged
+  rollout and no way to take one back from people who already installed
+  it, which is why step 4 of Publishing is verification, not a formality.
