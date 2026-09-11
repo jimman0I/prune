@@ -42,21 +42,18 @@ ship a stale one.
   `.cjs` config file and says nothing when it fails to find one — it just
   builds with defaults, producing an app with no backend inside it.
   `build-installer.mjs` always passes `-c electron-builder.config.cjs`.
-- **`signAndEditExecutable: false`** is set in the `win` config.
-  electron-builder normally downloads `winCodeSign` (a macOS code-signing
-  tool bundle) for any Windows build, purely to get `rcedit` for stamping
-  the `.exe`'s icon/version resources — even with no signing config
-  anywhere. `winCodeSign`'s archive contains real macOS symlinks that
-  7-Zip on Windows can only recreate with `SeCreateSymbolicLinkPrivilege`
-  (Developer Mode or an elevated prompt); without it the build fails with
-  `Cannot create symbolic link: A required privilege is not held by the
-  client.` This app ships unsigned by design (no cert), so
-  `signAndEditExecutable: false` skips that whole path. That was
-  electron-builder 24. Since the upgrade to 26.15.3 the option is still
-  honoured (the build logs "executable resource editing and code signing
-  skipped", and the installer and `Prune.exe` both come out unsigned), but
-  26 edits resources with `resedit` and offers `signExecutable: false` to
-  skip only the signing -- see the comment in the config before changing
+- **`signExecutable: false`** is set in the `win` config: nothing is
+  code-signed (this app ships unsigned by design, no cert), but
+  `Prune.exe` still gets its own icon and version block, so Explorer,
+  Task Manager and its Properties say Prune rather than Electron / GitHub,
+  Inc. Under electron-builder 24 that editing needed `rcedit`, fetched
+  inside `winCodeSign`, whose archive contains macOS symlinks that 7-Zip
+  can only recreate with `SeCreateSymbolicLinkPrivilege` — so the config
+  used `signAndEditExecutable: false` and gave up the icon and metadata.
+  electron-builder 26 edits resources with `resedit` (JavaScript, no
+  download), and `signExecutable: false` skips only the signing. The
+  version block is built from `productName`, `author` and the version —
+  see the warning about `author` at the top of the config before changing
   either.
 
 ## Where user data lives

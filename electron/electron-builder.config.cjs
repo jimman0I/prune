@@ -98,39 +98,40 @@ module.exports = {
   win: {
     target: [{ target: 'nsis', arch: ['x64'] }, { target: 'zip', arch: ['x64'] }],
     icon: 'build/icon.ico',
-    // Real bug, found running this live (2026-09-01): electron-builder
-    // downloads winCodeSign (a macOS code-signing tool bundle) for ANY
-    // win build by default, purely to get rcedit -- the tool it uses to
-    // stamp the .exe's icon/version resources -- even with
-    // CSC_IDENTITY_AUTO_DISCOVERY=false and no signing config anywhere.
-    // winCodeSign's archive contains real macOS symlinks that 7-Zip on
-    // Windows can only recreate with SeCreateSymbolicLinkPrivilege
-    // (Developer Mode or an elevated prompt); without it the build fails
-    // 4/4 retries with "Cannot create symbolic link: A required
-    // privilege is not held by the client." signAndEditExecutable:false
-    // skips resource-editing entirely (this app ships unsigned by design,
-    // no cert). A real app icon was added later (2026-09-01) -- NSIS's
-    // own installer/uninstaller/shortcut icons are set via nsis.*Icon
-    // below and electron-builder's own icon pipeline for those doesn't
-    // need rcedit; the running Prune.exe's OWN embedded resource icon
-    // still falls back to the default Electron icon with signing
-    // disabled (confirmed: main.cjs sets a real BrowserWindow/Tray icon
-    // at runtime instead, which covers the window, taskbar, and tray --
-    // the surfaces actually seen day to day; only the raw .exe file icon
-    // in Explorer stays default).
-    //
-    // Re-checked on the upgrade to electron-builder 26.15.3 (2026-09-11):
-    // the option still exists and is still honoured -- the build logs
-    // "executable resource editing and code signing skipped" for Prune.exe
-    // and both the installer and Prune.exe come out NotSigned. What
-    // changed is the reason it is needed: 26 edits resources with resedit
-    // rather than rcedit, and has a separate `signExecutable: false` that
-    // skips only the signing. That could give Prune.exe its real icon and
-    // version resource back, but resource metadata is built from the same
-    // fields as the `author` crash described at the top of this file, so
-    // it is a change to make on its own, with an installer that is
-    // installed and launched, not folded into a version bump.
-    signAndEditExecutable: false
+    /* Skip code signing, keep resource editing.
+     *
+     * Prune ships unsigned by design (no certificate), so nothing is
+     * signed. What IS done is stamping Prune.exe's own resources: its icon
+     * and its version block. Without that, Explorer showed the Electron
+     * icon for Prune.exe and its Properties said FileDescription
+     * "Electron", CompanyName "GitHub, Inc.", version 44.0.0 -- the
+     * Electron binary's own identity, which is what Task Manager and the
+     * "Open with" list showed too.
+     *
+     * History, because the option this replaces was load-bearing.
+     * electron-builder 24 stamped resources with rcedit, which it only got
+     * by downloading winCodeSign, a bundle whose archive contains macOS
+     * symlinks that 7-Zip on Windows can only recreate with
+     * SeCreateSymbolicLinkPrivilege. Without Developer Mode or an elevated
+     * prompt the build failed 4/4 retries with "Cannot create symbolic
+     * link: A required privilege is not held by the client" (2026-09-01),
+     * so this was `signAndEditExecutable: false`, which skipped signing
+     * AND resource editing and left the Electron identity in place.
+     *
+     * electron-builder 26 (upgraded 2026-09-11) edits resources with
+     * resedit, which is JavaScript, and `signExecutable: false` skips only
+     * the signing (winPackager.signIf). Verified on 2026-09-11 with a
+     * build, an install and a launch: the version block reads Prune, the
+     * exe carries build/icon.ico, it is still NotSigned, and the
+     * winCodeSign cache was not touched.
+     *
+     * The version block is built from productName (FileDescription,
+     * ProductName), author (CompanyName) and the version -- the `author`
+     * field is the one described at the top of this file, which is why
+     * this was changed on its own and verified by installing the result,
+     * not just building it. LegalCopyright is electron-builder's default,
+     * "Copyright (c) <year> <author>". */
+    signExecutable: false
   },
   nsis: {
     oneClick: false,
