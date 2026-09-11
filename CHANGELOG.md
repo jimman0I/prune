@@ -3,6 +3,29 @@
 All notable changes to Prune (formerly named unrevo -- rebranded 2026-09-01,
 see v1.0.1 below) are documented here.
 
+## v2.4.1
+
+Text selection that behaves like a desktop app's, and the first release
+built by GitHub Actions.
+
+### Changed
+
+- **Click-and-drag no longer highlights the whole window.** Labels,
+  headings, numbers and buttons can't be selected any more, the way they
+  can't in other Windows apps. What is worth copying still can be: file
+  and registry paths (leftovers, Quarantine, Duplicates, the Disk Map's
+  largest files), startup launch paths, the uninstall command, a Store
+  app's package name, and the text of errors, toasts included. Text boxes
+  are unaffected.
+
+### Release
+
+- **Built and attested by GitHub Actions.** The installer and the zip were
+  built by the repository's own workflow rather than on a developer's
+  machine, and each carries a signed attestation naming the commit and the
+  workflow that produced it. Check a download with
+  `gh attestation verify Prune.Setup.2.4.1.exe --repo jimman0I/prune`.
+
 ## v2.4.0
 
 Revo-style uninstall options, an opt-in update check, and a Prune.exe that

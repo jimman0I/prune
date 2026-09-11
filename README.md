@@ -188,8 +188,22 @@ about that file look like mismatches and are not:
 
 Be clear about what that does and does not prove: it confirms the file
 reached you byte-for-byte as it was built, so a corrupted or altered
-download is caught. It does **not** prove who built it — only a signature
-does that, and there isn't one.
+download is caught. It does **not** prove who built it.
+
+From 2.4.1 on, that second question has an answer too. Releases are built
+by GitHub Actions, and each file carries an attestation: a signed record
+of the repository, the commit and the workflow that produced it. With the
+[GitHub CLI](https://cli.github.com/) installed:
+
+```powershell
+gh attestation verify .\Prune.Setup.<version>.exe --repo jimman0I/prune
+```
+
+A file that passes was built by this repository's own workflow from its
+public source; anything else fails. It is still not a code signature —
+Windows does not read it, so SmartScreen warns all the same — but it
+answers who built the file, which a checksum cannot. Releases before 2.4.1
+were built locally and have no attestation.
 
 If you would rather not run an unsigned binary, the alternative is to
 build it yourself from source: see [Building an installer](#building-an-installer)
@@ -249,7 +263,7 @@ cd backend && npm test
 cd frontend && npm test
 ```
 
-1,844 tests, roughly half a minute per suite. GitHub Actions runs both on
+1,877 tests, roughly half a minute per suite. GitHub Actions runs both on
 every push and pull request, but run them yourself before pushing — one at
 a time, for the reason [CONTRIBUTING.md](CONTRIBUTING.md) explains.
 

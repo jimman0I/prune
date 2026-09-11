@@ -30,7 +30,7 @@ cd backend  && npm test
 cd frontend && npm test
 ```
 
-That is 1,844 of them, roughly half a minute per suite. GitHub Actions
+That is 1,877 of them, roughly half a minute per suite. GitHub Actions
 runs both on every push and pull request, on a Windows runner, but a red
 build is a slower way to find out than running them first.
 
