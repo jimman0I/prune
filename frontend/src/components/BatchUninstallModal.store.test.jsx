@@ -127,3 +127,83 @@ describe('the confirm step', () => {
     expect(screen.queryByText(/cannot be restored from Quarantine/i)).toBeNull();
   });
 });
+
+describe('what the confirm step says will happen', () => {
+  /* Its opening lines describe the registry path -- an uninstaller runs,
+   * then a leftover scan -- and they were written before Store apps could
+   * join a batch. For a Store app neither happens, so a batch of only
+   * Store apps was promised two things it would not do. */
+  it('does not promise an uninstaller or a leftover scan for a Store-only batch', () => {
+    renderScreen(<BatchUninstallModal programs={[calculator]} onClose={() => {}} onFinished={() => {}} />);
+
+    expect(screen.queryByText(/uninstaller runs/i)).toBeNull();
+    expect(screen.queryByText(/scans for what/i)).toBeNull();
+    expect(screen.queryByText(/own windows/i)).toBeNull();
+    expect(screen.getByText(/removed through Windows/i)).toBeTruthy();
+    expect(screen.getByText(/no leftover scan/i)).toBeTruthy();
+  });
+
+  it('says which programs are scanned in a mixed batch', () => {
+    renderScreen(<BatchUninstallModal programs={[calculator, thing]} onClose={() => {}} onFinished={() => {}} />);
+
+    expect(screen.getByText(/scans for what/i)).toBeTruthy();
+    expect(screen.getByText(/Store apps are removed through Windows/i)).toBeTruthy();
+    // The registry program can still open its own wizard.
+    expect(screen.getByText(/own windows/i)).toBeTruthy();
+  });
+
+  it('keeps the uninstaller wording, and nothing about Store apps, when there are none', () => {
+    renderScreen(<BatchUninstallModal programs={[thing]} onClose={() => {}} onFinished={() => {}} />);
+
+    expect(screen.getByText(/scans for what/i)).toBeTruthy();
+    expect(screen.getByText(/own windows/i)).toBeTruthy();
+    expect(screen.queryByText(/removed through Windows/i)).toBeNull();
+  });
+});
+
+describe('the review after a batch that scanned nothing', () => {
+  /* "No leftovers found -- clean uninstall" is LeftoverReview's answer to
+   * an empty scan result. When no scan ran at all, that result is empty
+   * for a different reason, and the sentence claims a check that never
+   * happened: after a Store-only batch, and after a batch where every
+   * uninstall failed and nothing was removed. */
+  const run = async (programs) => {
+    const onClose = vi.fn();
+    const onFinished = vi.fn();
+    const user = userEvent.setup();
+    renderScreen(<BatchUninstallModal programs={programs} onClose={onClose} onFinished={onFinished} />);
+    await user.click(screen.getByRole('button', { name: 'Start uninstalling' }));
+    return { user, onClose, onFinished };
+  };
+
+  it('does not call a Store-only batch a clean uninstall', async () => {
+    const { user, onClose, onFinished } = await run([calculator]);
+
+    await screen.findByText(/Uninstalled 1 of 1/);
+    expect(screen.queryByText(/No leftovers found/i)).toBeNull();
+    expect(screen.getByText(/no leftover scan/i)).toBeTruthy();
+
+    // Still a way out, and it finishes the batch the same way.
+    await user.click(screen.getByRole('button', { name: 'Done' }));
+    expect(onFinished).toHaveBeenCalledTimes(1);
+    expect(onClose).toHaveBeenCalledTimes(1);
+  });
+
+  it('does not call a batch where every uninstall failed a clean uninstall', async () => {
+    streamUninstall.mockRejectedValue(new Error('The uninstaller exited with code 1603.'));
+    await run([thing]);
+
+    await screen.findByText(/couldn't be uninstalled/i);
+    expect(screen.queryByText(/No leftovers found/i)).toBeNull();
+    // Nothing was removed, so there is nothing to say about a scan either.
+    expect(screen.queryByText(/leftover scan/i)).toBeNull();
+    expect(screen.getByRole('button', { name: 'Done' })).toBeTruthy();
+  });
+
+  it('still reports a clean uninstall when a scan ran and found nothing', async () => {
+    // The case the sentence is FOR. Guarding the two above must not lose it.
+    await run([thing]);
+
+    expect(await screen.findByText(/No leftovers found/i)).toBeTruthy();
+  });
+});

@@ -52,6 +52,9 @@ export default function BatchUninstallModal({ programs, onClose, onFinished }) {
   const [selected, setSelected] = useState(new Set());
   const [removal, setRemoval] = useState(null);
   const [error, setError] = useState(null);
+  // How many leftover scans the batch actually ran. Zero is not the same
+  // as "ran and found nothing" -- see the review phase below.
+  const [scanCount, setScanCount] = useState(0);
 
   const summary = batchSummary(programs);
 
@@ -65,6 +68,7 @@ export default function BatchUninstallModal({ programs, onClose, onFinished }) {
    * of both: it would promise an order and then not keep it. */
   const { ordered, runsBefore } = useMemo(() => orderBatch(programs), [programs]);
   const storeCount = programs.filter((program) => program.source === 'store').length;
+  const registryCount = programs.length - storeCount;
   const setStatus = (id, value) => setStatuses((prev) => ({ ...prev, [id]: value }));
 
   /* Single-flight, because the only thing stopping a second click was
@@ -113,6 +117,7 @@ export default function BatchUninstallModal({ programs, onClose, onFinished }) {
       }
     }
 
+    setScanCount(scans.length);
     const merged = mergeLeftovers(scans);
     setLeftovers(merged);
     const keys = [];
@@ -180,16 +185,30 @@ export default function BatchUninstallModal({ programs, onClose, onFinished }) {
       <div className="px-6 py-5 overflow-y-auto min-h-0">
         {phase === 'confirm' && (
           <>
-            <p className="text-[13px] text-[color:var(--text-secondary)] mb-1.5">
-              Each program's own uninstaller runs in turn, then Prune scans for what they leave
-              behind and shows you everything before removing any of it.
-            </p>
-            <p className="text-[12px] text-[color:var(--text-muted)] mb-5">
-              {/* Worth saying plainly: it is the reason this takes a while
-                  and the reason some of them will open their own windows. */}
-              One at a time, because Windows only allows one install or uninstall at once. Some
-              uninstallers will show their own windows and ask you questions.
-            </p>
+            {/* What will actually happen, which depends on what was ticked.
+                These lines were written for the registry path -- an
+                uninstaller, then a leftover scan -- and a Store app gets
+                neither, so a batch of only Store apps was promised both. */}
+            {registryCount === 0 ? (
+              <p className="text-[13px] text-[color:var(--text-secondary)] mb-5">
+                Each app is removed through Windows in turn, and there is no leftover scan
+                afterwards: Windows removes an app's own data along with it.
+              </p>
+            ) : (
+              <>
+                <p className="text-[13px] text-[color:var(--text-secondary)] mb-1.5">
+                  Each program's own uninstaller runs in turn, then Prune scans for what they leave
+                  behind and shows you everything before removing any of it.
+                  {storeCount > 0 && ' Store apps are removed through Windows instead, with no leftover scan afterwards.'}
+                </p>
+                <p className="text-[12px] text-[color:var(--text-muted)] mb-5">
+                  {/* Worth saying plainly: it is the reason this takes a while
+                      and the reason some of them will open their own windows. */}
+                  One at a time, because Windows only allows one install or uninstall at once. Some
+                  uninstallers will show their own windows and ask you questions.
+                </p>
+              </>
+            )}
 
             {/* Everything else here goes through Quarantine, and the line
                 above promises Prune shows everything before removing any
@@ -282,13 +301,30 @@ export default function BatchUninstallModal({ programs, onClose, onFinished }) {
               <p className="text-[12.5px] text-[color:var(--danger)] mb-4">Couldn't remove leftovers: {error}</p>
             )}
 
-            <LeftoverReview
-              scanResult={leftovers}
-              selected={selected}
-              onToggle={handleToggle}
-              onConfirm={handleRemoveLeftovers}
-              onSkip={() => { onFinished?.(); onClose(); }}
-            />
+            {/* LeftoverReview reads an empty result as "No leftovers found --
+                clean uninstall". With no scan run at all -- a batch of only
+                Store apps, or one where every uninstall failed -- the result
+                is empty for a different reason, and that sentence would
+                claim a check that never happened. */}
+            {scanCount === 0 ? (
+              <div className="text-center py-6">
+                {removed.some((p) => p.source === 'store') && (
+                  <p className="text-[13px] text-[color:var(--text-secondary)] mb-4">
+                    There is no leftover scan after a Store app: Windows removes an app's own data
+                    along with it.
+                  </p>
+                )}
+                <button className="btn-primary" onClick={() => { onFinished?.(); onClose(); }}>Done</button>
+              </div>
+            ) : (
+              <LeftoverReview
+                scanResult={leftovers}
+                selected={selected}
+                onToggle={handleToggle}
+                onConfirm={handleRemoveLeftovers}
+                onSkip={() => { onFinished?.(); onClose(); }}
+              />
+            )}
           </>
         )}
 
