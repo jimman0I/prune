@@ -167,6 +167,39 @@ describe('the update check', () => {
   });
 });
 
+describe('Install updates automatically', () => {
+  /* The one setting that lets Prune replace itself without a click. Off
+   * by default, and meaningless without the update check -- there is
+   * nothing to install until a check has found it -- so it cannot be
+   * turned on while the check is off. */
+  const theSwitch = () => screen.findByRole('switch', { name: 'Install updates automatically' });
+
+  it('is off by default', async () => {
+    fetchSettings.mockResolvedValue({ ...DEFAULTS, updateCheck: true });
+    renderScreen(<SettingsPage />);
+    expect((await theSwitch()).getAttribute('aria-checked')).toBe('false');
+  });
+
+  it('cannot be turned on while the update check is off', async () => {
+    renderScreen(<SettingsPage />);
+    expect((await theSwitch()).disabled).toBe(true);
+  });
+
+  it('saves the choice when it is turned on', async () => {
+    fetchSettings.mockResolvedValue({ ...DEFAULTS, updateCheck: true });
+    const user = userEvent.setup();
+    renderScreen(<SettingsPage />);
+    await user.click(await theSwitch());
+    expect(lastSaved()).toEqual({ autoInstallUpdates: true });
+  });
+
+  it('says what it does before it is turned on', async () => {
+    renderScreen(<SettingsPage />);
+    await theSwitch();
+    expect(screen.getByText(/installs it the next time Prune closes/i)).toBeTruthy();
+  });
+});
+
 describe('the About panel', () => {
   it('shows the version the backend is running, not a constant in this file', async () => {
     /* It said v2.2.0 through five releases: the version was a hand-copied

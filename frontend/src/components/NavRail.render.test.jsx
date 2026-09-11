@@ -91,3 +91,22 @@ describe('nav rail flyout labels', () => {
     expect(flyout.className).toContain('pointer-events-none');
   });
 });
+
+describe('the footer slot', () => {
+  // Where the update button goes. A slot rather than the button itself,
+  // so the rail stays a list of destinations that makes no requests of
+  // its own, and App decides what sits at the bottom.
+  it('puts what it is given after every destination, pushed to the bottom', () => {
+    renderScreen(<NavRail screen="dashboard" onNavigate={() => {}} footer={<button type="button">Update</button>} />);
+    const footer = screen.getByRole('button', { name: 'Update' });
+    const last = screen.getByRole('button', { name: 'Deep Clean' });
+
+    expect(last.compareDocumentPosition(footer) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    expect(footer.closest('.mt-auto')).toBeTruthy();
+  });
+
+  it('adds nothing when there is no footer', () => {
+    const { container } = renderScreen(<NavRail screen="dashboard" onNavigate={() => {}} />);
+    expect(container.querySelector('.mt-auto')).toBeNull();
+  });
+});

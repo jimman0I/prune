@@ -23,7 +23,7 @@ const TABS = [
 /** The same bespoke on/off switch DeepCleanTree.jsx uses, duplicated
  * rather than imported -- this codebase keeps small controls local to the
  * component that draws them rather than in a shared UI module. */
-function Toggle({ checked, onChange, label }) {
+function Toggle({ checked, onChange, label, disabled = false }) {
   return (
     <button
       type="button"
@@ -31,7 +31,8 @@ function Toggle({ checked, onChange, label }) {
       aria-checked={checked}
       aria-label={label}
       onClick={onChange}
-      className={`relative w-10 h-6 rounded-full transition-colors shrink-0 ${
+      disabled={disabled}
+      className={`relative w-10 h-6 rounded-full transition-colors shrink-0 disabled:opacity-40 disabled:cursor-not-allowed ${
         checked ? 'bg-[color:var(--accent-primary)]' : 'bg-[color:var(--surface-strong)]'
       }`}
     >
@@ -280,14 +281,38 @@ ode.js" is a folder or a file type.
                     <p className="text-[12.5px] text-[color:var(--text-secondary)] mt-1 leading-relaxed max-w-[62ch]">
                       Once a day, Prune asks api.github.com whether a newer release exists. It is
                       the only request Prune makes to anywhere but this machine, and GitHub sees
-                      your IP address as any website would. Nothing is downloaded or installed:
-                      if there is a new version, you get a link and decide.
+                      your IP address as any website would. When there is one, an update button
+                      appears at the bottom of the side bar, and nothing is downloaded or installed
+                      until you click it.
                     </p>
                   </div>
                   <Toggle
                     checked={settings.updateCheck === true}
                     onChange={() => save({ updateCheck: settings.updateCheck !== true })}
                     label="Check for updates"
+                  />
+                </div>
+
+                {/* The one switch that lets Prune replace itself without a
+                    click. Meaningless without the check above -- nothing is
+                    found to install -- so it cannot be turned on until that
+                    is, and it says what it does before anyone does. */}
+                <div className="flex items-center justify-between gap-4 mt-4 pt-4 border-t border-[color:var(--border-subtle)]">
+                  <div className="min-w-0">
+                    <div className={`text-[13.5px] font-medium ${settings.updateCheck === true ? 'text-[color:var(--text-primary)]' : 'text-[color:var(--text-muted)]'}`}>
+                      Install updates automatically
+                    </div>
+                    <p className="text-[12.5px] text-[color:var(--text-secondary)] mt-1 leading-relaxed max-w-[62ch]">
+                      Downloads a new version in the background and installs it the next time Prune
+                      closes, instead of waiting for you to click the update button. Needs the update
+                      check above.
+                    </p>
+                  </div>
+                  <Toggle
+                    checked={settings.autoInstallUpdates === true}
+                    onChange={() => save({ autoInstallUpdates: settings.autoInstallUpdates !== true })}
+                    label="Install updates automatically"
+                    disabled={settings.updateCheck !== true}
                   />
                 </div>
 

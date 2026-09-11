@@ -75,7 +75,7 @@ const ITEMS = [
   ) }
 ];
 
-export default function NavRail({ screen, onNavigate }) {
+export default function NavRail({ screen, onNavigate, footer = null }) {
   return (
     <nav className="relative flex flex-col items-center gap-2 py-6 w-[72px] shrink-0" aria-label="Main">
       {/* The glass is a background LAYER here, not the container itself.
@@ -164,6 +164,11 @@ export default function NavRail({ screen, onNavigate }) {
           </div>
         );
       })}
+      {/* Pushed to the bottom of the rail, below every destination: the
+          update button lives here (App passes it in). A slot rather than
+          the button itself, so the rail stays a list of places that makes
+          no requests of its own. */}
+      {footer && <div className="relative mt-auto">{footer}</div>}
     </nav>
   );
 }
