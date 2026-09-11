@@ -30,11 +30,33 @@ export function leftoverItemNote(item) {
   return null;
 }
 
+/** What the review says will happen to the ticked leftovers, by where the
+ * dialog is sending them -- beside the button, because "Remove selected"
+ * alone stopped saying whether a removal can be undone once the Recycle
+ * Bin and permanent deletion became possible. */
+const DESTINATION_COPY = {
+  quarantine: {
+    text: 'Selected items go to Quarantine, where you can restore them.',
+    button: 'Remove selected',
+    danger: false
+  },
+  recycle: {
+    text: 'Selected files go to the Recycle Bin. Registry keys are backed up before they are removed.',
+    button: 'Remove selected',
+    danger: false
+  },
+  permanent: {
+    text: "Selected files will be deleted permanently and can't be restored. Registry keys are backed up before they are removed.",
+    button: 'Delete permanently',
+    danger: true
+  }
+};
+
 /** `scanResult` is { files, registryKeys, scheduledTasks }, each
  * { ok, items }. `selected` is a Set of "group:index" keys — all checked
  * by default is the caller's job (UninstallModal seeds it), not this
  * component's. */
-export default function LeftoverReview({ scanResult, selected, onToggle, onConfirm, onSkip }) {
+export default function LeftoverReview({ scanResult, selected, onToggle, onConfirm, onSkip, destination = 'quarantine' }) {
   const [openGroups, setOpenGroups] = useState(() =>
     Object.fromEntries(GROUPS.map(g => [g.key, true]))
   );
@@ -46,6 +68,11 @@ export default function LeftoverReview({ scanResult, selected, onToggle, onConfi
 
   const totalItems = groupsWithItems.reduce((sum, g) => sum + g.group.items.length, 0);
   const selectedCount = selected.size;
+  const copy = DESTINATION_COPY[destination] || DESTINATION_COPY.quarantine;
+  // Folders the scan found and held back because they are in the user's
+  // exclusions (routes/leftovers.js). Said, so a leftover the user expected
+  // to see is not simply missing.
+  const excluded = Number(scanResult?.files?.excluded) || 0;
   const selectedSize = groupsWithItems.reduce((sum, g) =>
     sum + g.group.items.reduce((s, item, i) =>
       selected.has(`${g.key}:${i}`) ? s + (item.sizeBytes || 0) : s, 0), 0);
@@ -146,7 +173,16 @@ export default function LeftoverReview({ scanResult, selected, onToggle, onConfi
         })}
       </div>
 
-      <div className="flex items-center justify-between mt-5 pt-4 border-t border-[color:var(--border-subtle)]">
+      {excluded > 0 && (
+        <p className="text-[12px] text-[color:var(--text-muted)] mt-4">
+          {`${excluded} folder${excluded === 1 ? '' : 's'} left out because ${excluded === 1 ? "it's" : "they're"} in your exclusions.`}
+        </p>
+      )}
+      <p className={`text-[12px] mt-4 ${copy.danger ? 'text-[color:var(--danger)]' : 'text-[color:var(--text-secondary)]'}`}>
+        {copy.text}
+      </p>
+
+      <div className="flex items-center justify-between mt-4 pt-4 border-t border-[color:var(--border-subtle)]">
         <div className="text-[12px] text-[color:var(--text-secondary)]">
           <span className="text-[color:var(--text-primary)] font-medium">{selectedCount}</span> items selected
           {selectedSize > 0 && (
@@ -155,8 +191,8 @@ export default function LeftoverReview({ scanResult, selected, onToggle, onConfi
         </div>
         <div className="flex items-center gap-2.5">
           <button className="btn-ghost px-4 py-2 rounded-lg text-[12.5px] font-medium" onClick={onSkip}>Skip</button>
-          <button className="btn-primary px-4 py-2 rounded-lg text-[12.5px] font-medium" onClick={onConfirm}>
-            Remove selected
+          <button className={`${copy.danger ? 'btn-danger' : 'btn-primary'} px-4 py-2 rounded-lg text-[12.5px] font-medium`} onClick={onConfirm}>
+            {copy.button}
           </button>
         </div>
       </div>

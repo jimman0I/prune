@@ -3,6 +3,8 @@ import { useSingleFlight } from '../hooks/useSingleFlight.js';
 import { scanForLeftovers, scanForcedUninstall, streamUninstall, removeQuarantined, appendHistoryEntry } from '../lib/api.js';
 import { deriveSearchTerm } from '../lib/searchTerm.js';
 import LeftoverReview from './LeftoverReview.jsx';
+import { useSettings } from '../hooks/useSystemQueries.js';
+import { leftoverDestinationFrom } from '../lib/leftoverDestination.js';
 
 /** Shared spinner + live-command UI for both the "running the native
  * uninstaller" and "scanning for leftovers" phases -- same treatment,
@@ -29,6 +31,30 @@ function formatBytes(bytes) {
   const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
   const i = Math.floor(Math.log(bytes) / Math.log(k));
   return `${parseFloat((bytes / Math.pow(k, i)).toFixed(1))} ${sizes[i]}`;
+}
+
+const REMOVING = {
+  quarantine: { title: 'Moving to Quarantine', command: 'Nothing is deleted — every item can be restored' },
+  recycle: { title: 'Sending to the Recycle Bin', command: 'Restore them from the Recycle Bin if you need to' },
+  permanent: { title: 'Deleting permanently', command: 'These cannot be restored' }
+};
+
+const plural = (n, word) => `${n} ${word}${n === 1 ? '' : 's'}`;
+
+/** One sentence for what a removal did, in the words of where it went.
+ * Registry keys are backed up in Quarantine whichever destination the
+ * files had, and the sentence says so for the two that are not it. */
+export function removalSummary(removal) {
+  const files = removal?.files?.length ?? 0;
+  const keys = removal?.registryKeys?.length ?? 0;
+  const freed = formatBytes(removal?.totalSizeBytes);
+  if (removal?.destination === 'recycle') {
+    return `Sent ${plural(files, 'item')} to the Recycle Bin and removed ${plural(keys, 'registry key')}, backed up in Quarantine first. Freed ${freed}.`;
+  }
+  if (removal?.destination === 'permanent') {
+    return `Deleted ${plural(files, 'item')} permanently and removed ${plural(keys, 'registry key')}, backed up in Quarantine first. Freed ${freed}.`;
+  }
+  return `Moved ${plural(files, 'item')} and ${plural(keys, 'registry key')} to Quarantine, freeing ${freed}. Restore them any time from the Quarantine screen.`;
 }
 
 /** Turns the review's "group:index" selection keys back into the real
@@ -70,7 +96,18 @@ export default function UninstallModal({ program, running = false, onClose }) {
   // looking at it knows whether it found the right thing.
   const [searchTerm, setSearchTerm] = useState(() => deriveSearchTerm(program.name));
 
+  // Three settings shape this dialog, each read so that a settings request
+  // that failed leaves the dialog behaving exactly as it always did.
+  const { settings } = useSettings();
+  const destination = leftoverDestinationFrom(settings);
+  const preselect = settings?.preselectLeftovers !== false;
+  const scanAfter = settings?.scanLeftoversAfterUninstall !== false;
+  const [progressTitle, setProgressTitle] = useState(null);
+
   const selectEverythingIn = (result) => {
+    // Revo's "Check mark all leftovers by default", which it ships off.
+    // Prune keeps its behaviour unless the user turns it off.
+    if (!preselect) { setSelected(new Set()); return; }
     const keys = [];
     for (const groupKey of ['files', 'registryKeys']) {
       (result[groupKey]?.items || []).forEach((_, i) => keys.push(`${groupKey}:${i}`));
@@ -86,12 +123,22 @@ export default function UninstallModal({ program, running = false, onClose }) {
     setError(null);
     setStep('uninstalling');
     try {
-      await streamUninstall(program.id, () => {});
+      await streamUninstall(program.id, (type, data) => {
+        // The before-uninstall steps announce themselves, so the dialog
+        // says what it is waiting on instead of "running the uninstaller"
+        // through a registry backup.
+        if (type === 'preUninstall') {
+          setProgressTitle(data?.step === 'registryBackup' ? 'Backing up the registry' : 'Creating a restore point');
+        } else if (type !== 'restorePoint' && type !== 'registryBackup') {
+          setProgressTitle(null);
+        }
+      });
       appendHistoryEntry({ programName: program.name, publisher: program.publisher, sizeBytes: program.sizeBytes }).catch(() => {
         // Best-effort logging -- a failed history write must never block
         // or fail the uninstall flow itself, the uninstall already
         // genuinely succeeded by this point.
       });
+      if (!scanAfter) { setStep('noScan'); return; }
       setStep('scanning');
       // The derived term, not program.name -- the ordinary flow had the
       // same defect the forced path did: it searched for the full
@@ -151,7 +198,7 @@ export default function UninstallModal({ program, running = false, onClose }) {
     setError(null);
     setStep('removing');
     try {
-      const manifest = await removeQuarantined({ programName: program.name, files, registryKeys });
+      const manifest = await removeQuarantined({ programName: program.name, files, registryKeys, destination });
       setRemoval(manifest);
       setStep('done');
     } catch (err) {
@@ -249,7 +296,7 @@ export default function UninstallModal({ program, running = false, onClose }) {
           </div>
         )}
         {step === 'uninstalling' && (
-          <ProgressPhase title="Running native uninstaller" command={command} progress={45} />
+          <ProgressPhase title={progressTitle || 'Running native uninstaller'} command={command} progress={45} />
         )}
         {step === 'scanning' && (
           <ProgressPhase
@@ -260,10 +307,18 @@ export default function UninstallModal({ program, running = false, onClose }) {
         )}
         {step === 'removing' && (
           <ProgressPhase
-            title="Moving to Quarantine"
-            command="Nothing is deleted — every item can be restored"
+            title={REMOVING[destination].title}
+            command={REMOVING[destination].command}
             progress={95}
           />
+        )}
+        {step === 'noScan' && (
+          <div className="py-4">
+            <p className="text-[13px] text-[color:var(--text-secondary)] mb-5">
+              {`${program.name}'s uninstaller has finished. The leftover scan is turned off in Settings, so nothing else was looked for.`}
+            </p>
+            <button className="btn-primary" onClick={onClose}>Done</button>
+          </div>
         )}
         {step === 'review' && scanResult && (
           <>
@@ -274,6 +329,7 @@ export default function UninstallModal({ program, running = false, onClose }) {
               onToggle={handleToggle}
               onConfirm={handleConfirm}
               onSkip={onClose}
+              destination={destination}
             />
           </>
         )}
@@ -281,12 +337,20 @@ export default function UninstallModal({ program, running = false, onClose }) {
           <div className="py-4">
             <div className="flex items-start gap-2.5 mb-5 px-3.5 py-3 rounded-xl bg-[color:var(--success)]/10 border border-[color:var(--success)]/25">
               <div className="text-[12.5px] text-[color:var(--success)] leading-relaxed">
-                Moved {removal.files?.length ?? 0} item{removal.files?.length === 1 ? '' : 's'} and{' '}
-                {removal.registryKeys?.length ?? 0} registry key{removal.registryKeys?.length === 1 ? '' : 's'} to
-                Quarantine, freeing {formatBytes(removal.totalSizeBytes)}. Restore them any time from the
-                Quarantine screen.
+                {removalSummary(removal)}
               </div>
             </div>
+
+            {removal.failedFiles?.length > 0 && (
+              // Refused by the guard, locked, or already being deleted by
+              // something else. Named, never folded into the total.
+              <div className="mb-5 px-3.5 py-3 rounded-xl bg-[color:var(--warning-soft)] border border-[color:var(--warning)]/25 text-[12.5px] text-[color:var(--warning)]">
+                <p>{`${plural(removal.failedFiles.length, 'item')} couldn't be removed:`}</p>
+                {removal.failedFiles.map((f) => (
+                  <p key={f.path} className="mt-1 font-mono text-[11px] text-[color:var(--text-secondary)] break-all">{`${f.path} — ${f.reason}`}</p>
+                ))}
+              </div>
+            )}
 
             {removal.failedRegistryKeys?.length > 0 && (
               // The one outcome that must never be rounded up to success:
@@ -308,8 +372,8 @@ export default function UninstallModal({ program, running = false, onClose }) {
 
             {removal.restorePoint?.created === false && (
               <p className="text-[12px] text-[color:var(--text-muted)] mb-5">
-                No system restore point was created ({removal.restorePoint.reason}). The Quarantine
-                restore still works.
+                No system restore point was created ({removal.restorePoint.reason}).
+                {!removal.destination || removal.destination === 'quarantine' ? ' The Quarantine restore still works.' : ''}
               </p>
             )}
 

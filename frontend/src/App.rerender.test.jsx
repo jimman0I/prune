@@ -65,6 +65,10 @@ vi.mock('./lib/api.js', () => ({
   emptyQuarantine: vi.fn(async () => ({})),
   fetchSettings: vi.fn(async () => ({})),
   updateSettings: vi.fn(async () => ({})),
+  // The update tile asks on every render of App; with the check off it
+  // gets the running version back and draws nothing.
+  fetchUpdateCheck: vi.fn(async () => ({ enabled: false, current: '0.0.0' })),
+  openUpdatePage: vi.fn(async () => ({})),
   runSandboxTest: vi.fn(async () => ({})),
   streamDeepCleanScan: vi.fn(async () => ({})),
   fetchDeepCleanRules: vi.fn(async () => []),

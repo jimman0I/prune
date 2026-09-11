@@ -7,6 +7,25 @@ import { batchSummary } from '../lib/batchSelection.js';
 import { orderBatch } from '../lib/batchOrder.js';
 import LeftoverReview from './LeftoverReview.jsx';
 import { selectionToRemoval } from './UninstallModal.jsx';
+import { useSettings } from '../hooks/useSystemQueries.js';
+import { leftoverDestinationFrom } from '../lib/leftoverDestination.js';
+
+const REMOVING_LINE = {
+  quarantine: 'Moving leftovers to Quarantine…',
+  recycle: 'Sending leftovers to the Recycle Bin…',
+  permanent: 'Deleting leftovers permanently…'
+};
+
+/** What a batch did, in the words of where its leftovers went. */
+function batchRemovalSummary(programCount, removal) {
+  const n = removal?.files?.length ?? 0;
+  const programsText = `${programCount} program${programCount === 1 ? '' : 's'}`;
+  const items = `${n} leftover item${n === 1 ? '' : 's'}`;
+  const freed = formatBytes(removal?.totalSizeBytes);
+  if (removal?.destination === 'recycle') return `Uninstalled ${programsText} and sent ${items} to the Recycle Bin, freeing ${freed}.`;
+  if (removal?.destination === 'permanent') return `Uninstalled ${programsText} and deleted ${items} permanently, freeing ${freed}.`;
+  return `Uninstalled ${programsText} and moved ${items} to Quarantine, freeing ${freed}.`;
+}
 
 function formatBytes(bytes) {
   if (bytes === null || bytes === undefined) return '—';
@@ -55,6 +74,13 @@ export default function BatchUninstallModal({ programs, onClose, onFinished }) {
   // How many leftover scans the batch actually ran. Zero is not the same
   // as "ran and found nothing" -- see the review phase below.
   const [scanCount, setScanCount] = useState(0);
+
+  // The same three settings the single-program dialog follows, read the
+  // same way: a failed settings request leaves the batch as it always was.
+  const { settings } = useSettings();
+  const destination = leftoverDestinationFrom(settings);
+  const preselect = settings?.preselectLeftovers !== false;
+  const scanAfter = settings?.scanLeftoversAfterUninstall !== false;
 
   const summary = batchSummary(programs);
 
@@ -107,7 +133,7 @@ export default function BatchUninstallModal({ programs, onClose, onFinished }) {
         // 81 Store apps on the dev machine are published by Microsoft
         // Corporation -- a publisher search for that would offer to
         // quarantine a large part of Windows.
-        if (program.source !== 'store') {
+        if (program.source !== 'store' && scanAfter) {
           const scan = await scanForLeftovers(deriveSearchTerm(program.name), program.publisher);
           scans.push({ program: program.name, scan });
         }
@@ -124,7 +150,7 @@ export default function BatchUninstallModal({ programs, onClose, onFinished }) {
     for (const group of ['files', 'registryKeys']) {
       (merged[group]?.items || []).forEach((_, i) => keys.push(`${group}:${i}`));
     }
-    setSelected(new Set(keys));
+    setSelected(new Set(preselect ? keys : []));
     setPhase('review');
   });
 
@@ -146,7 +172,8 @@ export default function BatchUninstallModal({ programs, onClose, onFinished }) {
       const manifest = await removeQuarantined({
         programName: `Batch uninstall: ${programs.length} programs`,
         files,
-        registryKeys
+        registryKeys,
+        destination
       });
       setRemoval(manifest);
       setPhase('done');
@@ -270,7 +297,7 @@ export default function BatchUninstallModal({ programs, onClose, onFinished }) {
             })}
             {phase === 'removing' && (
               <p className="text-[12.5px] text-[color:var(--text-secondary)] pt-3">
-                Moving leftovers to Quarantine…
+                {REMOVING_LINE[destination]}
               </p>
             )}
           </div>
@@ -308,6 +335,11 @@ export default function BatchUninstallModal({ programs, onClose, onFinished }) {
                 claim a check that never happened. */}
             {scanCount === 0 ? (
               <div className="text-center py-6">
+                {!scanAfter && removed.some((p) => p.source !== 'store') && (
+                  <p className="text-[13px] text-[color:var(--text-secondary)] mb-4">
+                    The leftover scan is turned off in Settings, so nothing was looked for.
+                  </p>
+                )}
                 {removed.some((p) => p.source === 'store') && (
                   <p className="text-[13px] text-[color:var(--text-secondary)] mb-4">
                     There is no leftover scan after a Store app: Windows removes an app's own data
@@ -322,6 +354,7 @@ export default function BatchUninstallModal({ programs, onClose, onFinished }) {
                 selected={selected}
                 onToggle={handleToggle}
                 onConfirm={handleRemoveLeftovers}
+                destination={destination}
                 onSkip={() => { onFinished?.(); onClose(); }}
               />
             )}
@@ -332,9 +365,7 @@ export default function BatchUninstallModal({ programs, onClose, onFinished }) {
           <div>
             <div className="flex items-start gap-2.5 mb-5 px-3.5 py-3 rounded-xl bg-[color:var(--success)]/10 border border-[color:var(--success)]/25">
               <div className="text-[12.5px] text-[color:var(--success)] leading-relaxed">
-                Uninstalled {removed.length} program{removed.length === 1 ? '' : 's'} and moved{' '}
-                {removal.files?.length ?? 0} leftover item{removal.files?.length === 1 ? '' : 's'} to
-                Quarantine, freeing {formatBytes(removal.totalSizeBytes)}.
+                {batchRemovalSummary(removed.length, removal)}
               </div>
             </div>
 
@@ -347,7 +378,7 @@ export default function BatchUninstallModal({ programs, onClose, onFinished }) {
             {removal.restorePoint?.created === false && (
               <p className="text-[12px] text-[color:var(--text-muted)] mb-5">
                 No system restore point was created ({removal.restorePoint.reason?.trim() || 'not available'}).
-                Everything above is still in Quarantine and can be put back.
+                {!removal.destination || removal.destination === 'quarantine' ? 'Everything above is still in Quarantine and can be put back.' : ''}
               </p>
             )}
 

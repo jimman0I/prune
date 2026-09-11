@@ -180,6 +180,85 @@ describe('the About panel', () => {
   });
 });
 
+describe('the Uninstall tab', () => {
+  /* Revo's Uninstaller -> Backup and General pages, reduced to what Prune
+   * can honestly do. Everything here defaults to how Prune already
+   * behaved, except the two slow, admin-hungry steps, which are off. */
+  const openUninstallTab = async () => {
+    const user = userEvent.setup();
+    renderScreen(<SettingsPage />);
+    await user.click(await screen.findByRole('button', { name: 'Uninstall' }));
+    return user;
+  };
+
+  it.each([
+    ['Create a restore point before uninstalling', { restorePointBeforeUninstall: true }],
+    ['Back up the registry before uninstalling', { registryBackupBeforeUninstall: true }],
+    ['Scan for leftovers after uninstalling', { scanLeftoversAfterUninstall: false }],
+    ['Tick every leftover by default', { preselectLeftovers: false }],
+    ['Keep an uninstall history', { keepUninstallHistory: false }]
+  ])('saves "%s" when it is switched', async (label, expected) => {
+    const user = await openUninstallTab();
+    await user.click(await screen.findByRole('switch', { name: label }));
+    expect(lastSaved()).toEqual(expected);
+  });
+
+  it('says what the registry backup costs, and what happens if it fails', async () => {
+    await openUninstallTab();
+    expect(await screen.findByText(/140 MB/)).toBeTruthy();
+    expect(screen.getByText(/newest 3/)).toBeTruthy();
+    expect(screen.getByText(/doesn.t run/i)).toBeTruthy();
+  });
+
+  it('starts on Quarantine for leftover files', async () => {
+    await openUninstallTab();
+    expect((await screen.findByRole('radio', { name: /Quarantine/ })).checked).toBe(true);
+  });
+
+  it('saves the Recycle Bin', async () => {
+    const user = await openUninstallTab();
+    await user.click(await screen.findByRole('radio', { name: /Recycle Bin/ }));
+    expect(lastSaved()).toEqual({ leftoverDestination: 'recycle' });
+  });
+
+  it('saves permanent deletion, and says plainly it cannot be undone', async () => {
+    const user = await openUninstallTab();
+    expect(screen.queryByText(/can.t be restored/i)).toBeNull();
+    await user.click(await screen.findByRole('radio', { name: /Delete permanently/ }));
+    expect(lastSaved()).toEqual({ leftoverDestination: 'permanent' });
+    expect(await screen.findByText(/can.t be restored/i)).toBeTruthy();
+  });
+});
+
+describe('resetting warning confirmations', () => {
+  // BleachBit's "Reset warning confirmations". Prune remembered "don't ask
+  // again" per risky cleaner and gave no way to take it back.
+  it('clears every remembered choice', async () => {
+    fetchSettings.mockResolvedValue({ ...DEFAULTS, acknowledgedCleanWarnings: ['chrome-cookies', 'recycle-bin'] });
+    const user = await openCleanupTab();
+    expect(await screen.findByText(/2 cleaner warnings/i)).toBeTruthy();
+    await user.click(screen.getByRole('button', { name: 'Reset warning confirmations' }));
+    expect(lastSaved()).toEqual({ acknowledgedCleanWarnings: [] });
+  });
+
+  it('is disabled when there is nothing to reset', async () => {
+    fetchSettings.mockResolvedValue({ ...DEFAULTS, acknowledgedCleanWarnings: [] });
+    await openCleanupTab();
+    expect((await screen.findByRole('button', { name: 'Reset warning confirmations' })).disabled).toBe(true);
+  });
+});
+
+describe('free space on the Disk Map', () => {
+  it('is off by default and saves when switched on', async () => {
+    const user = userEvent.setup();
+    renderScreen(<SettingsPage />);
+    const toggle = await screen.findByRole('switch', { name: 'Show free space on the Disk Map' });
+    expect(toggle.getAttribute('aria-checked')).toBe('false');
+    await user.click(toggle);
+    expect(lastSaved()).toEqual({ showFreeSpaceOnMap: true });
+  });
+});
+
 describe('the quarantine limit fields', () => {
   it('are blank, and say what blank means, when no limit is set', async () => {
     // Off is the default, and a 0 sitting in the box would read as a

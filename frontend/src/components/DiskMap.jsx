@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState, memo } from 'react';
 import { useSingleFlight } from '../hooks/useSingleFlight.js';
 import { tooltipPosition } from '../lib/tooltipPosition.js';
-import { useDiskSpace } from '../hooks/useSystemQueries.js';
+import { useDiskSpace, useSettings } from '../hooks/useSystemQueries.js';
+import { mapTreeFor } from '../lib/freeSpaceBlock.js';
 import { createPortal } from 'react-dom';
 import { Treemap, ResponsiveContainer } from 'recharts';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
@@ -561,6 +562,7 @@ function DiskMap() {
    * unscanned-remainder calculation, and holding it in state would
    * re-render the whole treemap when it lands. */
   const { diskSpace } = useDiskSpace();
+  const { settings } = useSettings();
   useEffect(() => {
     // The API reports free and total; used is the subtraction. Read off
     // the response rather than assumed -- there is no `usedBytes` field,
@@ -636,7 +638,16 @@ function DiskMap() {
   // drawing every one produced 10,086 DOM nodes and made the whole view
   // crawl. Past this many the rects are a few pixels wide and say
   // nothing that the aggregate cell doesn't say better.
-  const cells = tree ? limitCells(topLevelCells(tree), MAX_CELLS) : [];
+  // WizTree's "Show Free Space on Treemap", at a drive root only, and on
+  // the map only: the folder table and the file-type breakdown describe
+  // what is on the disk, and free space is not on it. scanCoverage keeps
+  // reading `tree`, which never has the block.
+  const mapTree = mapTreeFor(tree, {
+    enabled: settings?.showFreeSpaceOnMap,
+    atDriveRoot: isDriveRoot(currentPath),
+    freeBytes: diskSpace?.freeBytes
+  });
+  const cells = mapTree ? limitCells(topLevelCells(mapTree), MAX_CELLS) : [];
 
   // Computed here rather than inside the panel so the icon fetch below can
   // ask for exactly the types the panel is about to show.

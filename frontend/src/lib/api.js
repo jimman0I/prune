@@ -307,11 +307,13 @@ export async function scanForcedUninstall({ name, publisher, registryKey }) {
   return data;
 }
 
-export async function removeQuarantined({ programName, files, registryKeys }) {
+export async function removeQuarantined({ programName, files, registryKeys, destination }) {
   const res = await fetch(`${API_URL}/quarantine/remove`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ programName, files, registryKeys })
+    // Only when the dialog chose one. The backend reads its absence as
+    // Quarantine, which is what every caller before this meant.
+    body: JSON.stringify({ programName, files, registryKeys, ...(destination ? { destination } : {}) })
   });
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
@@ -636,7 +638,19 @@ export async function streamUninstall(programId, onEvent) {
       const parsed = parseSSELine(line);
       if (!parsed) continue;
       if (parsed.field === 'event') currentEvent = parsed.value;
-      else if (parsed.field === 'data') onEvent(currentEvent, JSON.parse(parsed.value));
+      else if (parsed.field === 'data') {
+        const data = JSON.parse(parsed.value);
+        // The backend ends a stream with "error" when the uninstaller could
+        // not run, or when a before-uninstall step -- the registry backup
+        // the user asked for -- stopped it. Resolving would send the caller
+        // on to a leftover scan as if the uninstall had worked; both dialogs
+        // pass callbacks that ignore events, so this is where it has to stop.
+        if (currentEvent === 'error') {
+          await reader.cancel().catch(() => {});
+          throw new Error(data?.message || 'The uninstall did not complete.');
+        }
+        onEvent(currentEvent, data);
+      }
     }
   }
 }

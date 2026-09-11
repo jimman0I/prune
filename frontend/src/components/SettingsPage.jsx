@@ -5,6 +5,7 @@ import { positiveOrOff } from '../lib/limitInput.js';
 import AutomationSettings from './AutomationSettings.jsx';
 import ThemeToggle from './ThemeToggle.jsx';
 import { useSettings, useUpdateCheck } from '../hooks/useSystemQueries.js';
+import { leftoverDestinationFrom } from '../lib/leftoverDestination.js';
 
 // The version is NOT kept here. It used to be a hand-copied constant that
 // had to be bumped with the three package.json files, nothing failed when
@@ -14,6 +15,7 @@ const APP_NAME = 'Prune';
 
 const TABS = [
   { id: 'general', label: 'General' },
+  { id: 'uninstall', label: 'Uninstall' },
   { id: 'cleanup', label: 'Cleanup' },
   { id: 'about', label: 'About' }
 ];
@@ -41,6 +43,29 @@ function Toggle({ checked, onChange, label }) {
     </button>
   );
 }
+
+/** One switch with its explanation, for the panels that group several. */
+function SettingRow({ title, description, checked, onChange }) {
+  return (
+    <div className="flex items-center justify-between gap-4 py-3 first:pt-0 last:pb-0">
+      <div className="min-w-0">
+        <div className="text-[13.5px] font-medium text-[color:var(--text-primary)]">{title}</div>
+        {description && (
+          <p className="text-[12.5px] text-[color:var(--text-secondary)] mt-1 leading-relaxed max-w-[62ch]">{description}</p>
+        )}
+      </div>
+      <Toggle checked={checked} onChange={onChange} label={title} />
+    </div>
+  );
+}
+
+/* Revo's three, in Prune's words. The descriptions avoid each other's key
+ * words on purpose, so each option reads as exactly one choice. */
+const LEFTOVER_OPTIONS = [
+  { value: 'quarantine', label: 'Quarantine', description: "Moved into Prune's own backup, and restorable from the Quarantine screen. The default." },
+  { value: 'recycle', label: 'The Recycle Bin', description: "Restorable from Windows' own bin, and freed when you empty it." },
+  { value: 'permanent', label: 'Delete permanently', description: 'Deleted outright. Nothing to restore.' }
+];
 
 function StepRow({ step }) {
   return (
@@ -70,6 +95,11 @@ function SettingsPage() {
 
   const { settings, loading, save: saveMutation } = useSettings();
   const update = useUpdateCheck(settings?.updateCheck === true);
+  const destination = leftoverDestinationFrom(settings);
+  const acknowledgedCount = Array.isArray(settings?.acknowledgedCleanWarnings) ? settings.acknowledgedCleanWarnings.length : 0;
+  // Everything but an explicit false keeps the behaviour Prune always had.
+  const isOn = (key) => settings?.[key] !== false;
+  const isOnlyIfTrue = (key) => settings?.[key] === true;
   const [openError, setOpenError] = useState(null);
 
   const handleOpenUpdatePage = () => {
@@ -286,6 +316,17 @@ ode.js" is a folder or a file type.
                   </div>
                 )}
               </div>
+            </div>
+          )}
+
+          {tab === 'general' && (
+            <div className="glass-panel p-6 mt-4">
+              <SettingRow
+                title="Show free space on the Disk Map"
+                description="Draws the drive's free space as one more block when you scan a whole drive, so every folder reads as a share of the drive rather than of the space in use."
+                checked={isOnlyIfTrue('showFreeSpaceOnMap')}
+                onChange={() => save({ showFreeSpaceOnMap: !isOnlyIfTrue('showFreeSpaceOnMap') })}
+              />
             </div>
           )}
 
@@ -525,6 +566,106 @@ ode.js" is a folder or a file type.
                     )}
                   </div>
                 )}
+              </div>
+            </div>
+          )}
+
+          {tab === 'uninstall' && (
+            <div className="flex flex-col gap-4">
+              <div className="glass-panel p-6">
+                <h2 className="text-[14px] font-medium text-[color:var(--text-primary)] mb-3">Before uninstalling</h2>
+                <div className="divide-y divide-[color:var(--border-subtle)]">
+                  <SettingRow
+                    title="Create a restore point before uninstalling"
+                    description="Windows' own System Restore, made before the program's uninstaller runs. It needs Prune to be running as administrator and Windows allows one a day, so when it can't be made the uninstall goes ahead and the dialog says so."
+                    checked={isOnlyIfTrue('restorePointBeforeUninstall')}
+                    onChange={() => save({ restorePointBeforeUninstall: !isOnlyIfTrue('restorePointBeforeUninstall') })}
+                  />
+                  <SettingRow
+                    title="Back up the registry before uninstalling"
+                    description={'Exports HKLM\\SOFTWARE and HKCU\\Software (about 140 MB on the machine Prune is built on) and keeps the newest 3. If the backup can\'t be made, the uninstall doesn\'t run.'}
+                    checked={isOnlyIfTrue('registryBackupBeforeUninstall')}
+                    onChange={() => save({ registryBackupBeforeUninstall: !isOnlyIfTrue('registryBackupBeforeUninstall') })}
+                  />
+                </div>
+              </div>
+
+              <div className="glass-panel p-6">
+                <h2 className="text-[14px] font-medium text-[color:var(--text-primary)] mb-3">After uninstalling</h2>
+                <div className="divide-y divide-[color:var(--border-subtle)]">
+                  <SettingRow
+                    title="Scan for leftovers after uninstalling"
+                    description="Looks for the files, registry keys and scheduled tasks the uninstaller left behind. Off, Prune runs the program's own uninstaller and stops there."
+                    checked={isOn('scanLeftoversAfterUninstall')}
+                    onChange={() => save({ scanLeftoversAfterUninstall: !isOn('scanLeftoversAfterUninstall') })}
+                  />
+                  <SettingRow
+                    title="Tick every leftover by default"
+                    description="The review opens with everything it found ticked. Off, it opens with nothing ticked and you choose."
+                    checked={isOn('preselectLeftovers')}
+                    onChange={() => save({ preselectLeftovers: !isOn('preselectLeftovers') })}
+                  />
+                  <SettingRow
+                    title="Keep an uninstall history"
+                    description="The dashboard's list of recent removals and the space they freed. Off, nothing new is recorded."
+                    checked={isOn('keepUninstallHistory')}
+                    onChange={() => save({ keepUninstallHistory: !isOn('keepUninstallHistory') })}
+                  />
+                </div>
+              </div>
+
+              <div className="glass-panel p-6">
+                <h2 id="leftover-destination" className="text-[14px] font-medium text-[color:var(--text-primary)] mb-3">Leftover files go to</h2>
+                <div role="radiogroup" aria-labelledby="leftover-destination" className="flex flex-col gap-3">
+                  {LEFTOVER_OPTIONS.map((option) => (
+                    <label key={option.value} className="flex items-start gap-3 cursor-pointer">
+                      <input
+                        type="radio"
+                        name="leftover-destination"
+                        value={option.value}
+                        checked={destination === option.value}
+                        onChange={() => save({ leftoverDestination: option.value })}
+                        className="mt-1 accent-[color:var(--accent-primary)]"
+                      />
+                      <span>
+                        <span className="block text-[13.5px] font-medium text-[color:var(--text-primary)]">{option.label}</span>
+                        <span className="block text-[12.5px] text-[color:var(--text-secondary)]">{option.description}</span>
+                      </span>
+                    </label>
+                  ))}
+                </div>
+                {destination === 'permanent' && (
+                  <p className="mt-4 text-[12.5px] text-[color:var(--danger)] leading-relaxed max-w-[62ch]">
+                    Leftover files will be deleted outright and can't be restored, from Quarantine or anywhere
+                    else. Check the list before you confirm it.
+                  </p>
+                )}
+                <p className="mt-3 text-[12px] text-[color:var(--text-muted)]">
+                  Registry keys are exported to Quarantine before they are removed, whichever you choose.
+                </p>
+              </div>
+            </div>
+          )}
+
+          {tab === 'cleanup' && (
+            <div className="glass-panel p-6 mt-4">
+              <div className="flex items-center justify-between gap-4">
+                <div className="min-w-0">
+                  <div className="text-[14px] font-medium text-[color:var(--text-primary)]">Warning confirmations</div>
+                  <p className="text-[12.5px] text-[color:var(--text-secondary)] mt-1">
+                    {acknowledgedCount === 0
+                      ? 'Every cleaner that loses data asks before it runs.'
+                      : `${acknowledgedCount} cleaner warning${acknowledgedCount === 1 ? ' is' : 's are'} set not to ask again.`}
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  className="btn-ghost px-3 py-1.5 rounded-md text-[12.5px] shrink-0 disabled:opacity-40"
+                  disabled={acknowledgedCount === 0}
+                  onClick={() => save({ acknowledgedCleanWarnings: [] })}
+                >
+                  Reset warning confirmations
+                </button>
               </div>
             </div>
           )}

@@ -6,6 +6,7 @@ import DiskMap from './components/DiskMap.jsx';
 import Screen from './components/Screen.jsx';
 import { useProgramData } from './hooks/usePrograms.js';
 import ToastHost from './components/ToastHost.jsx';
+import UpdateTile from './components/UpdateTile.jsx';
 import ShortcutsModal from './components/ShortcutsModal.jsx';
 import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts.js';
 import ProgramList from './components/ProgramList.jsx';
@@ -141,6 +142,7 @@ export default function App() {
       <TitleBar />
       <div className="flex-1 flex min-h-0">
       <ToastHost />
+      <UpdateTile />
       <NavRail screen={screen} onNavigate={setScreen} />
       <div ref={stageRef} className="flex-1 overflow-y-auto min-h-0">
         <Screen active={screen === 'dashboard'} visited={visited.has('dashboard')}>

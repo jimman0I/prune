@@ -59,10 +59,14 @@ export function withUnscannedRemainder(tree, usedBytes) {
 export function scanCoverage(tree) {
   const remainder = tree?.children?.find((c) => c.scanned === false && c.name === UNSCANNED_LABEL);
   if (!remainder) return null;
-  const measured = tree.size - remainder.size;
+  // A free-space block (lib/freeSpaceBlock.js) is part of the drive but
+  // not of the space in use, and coverage is a share of the space in use.
+  const free = tree.children.find((c) => c.free === true)?.size ?? 0;
+  const used = tree.size - free;
+  const measured = used - remainder.size;
   return {
-    used: tree.size,
+    used,
     measured,
-    percent: measured > 0 ? Math.max(1, Math.round((measured / tree.size) * 100)) : 0
+    percent: measured > 0 ? Math.max(1, Math.round((measured / used) * 100)) : 0
   };
 }

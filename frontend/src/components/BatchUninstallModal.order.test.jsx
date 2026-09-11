@@ -24,7 +24,11 @@ vi.mock('../lib/api.js', () => ({
   scanForLeftovers: vi.fn(async () => ({ files: { items: [] }, registryKeys: { items: [] } })),
   appendHistoryEntry: vi.fn(async () => {}),
   removeQuarantined: vi.fn(async () => ({ files: [], registryKeys: [] })),
-  scanForcedUninstall: vi.fn()
+  scanForcedUninstall: vi.fn(),
+  // The dialog reads settings now (where leftovers go, whether they
+  // start ticked). Empty settings are the defaults it always had.
+  fetchSettings: vi.fn(async () => ({})),
+  updateSettings: vi.fn()
 }));
 
 const BatchUninstallModal = (await import('./BatchUninstallModal.jsx')).default;
