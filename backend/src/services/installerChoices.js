@@ -1,8 +1,10 @@
 import { readFile, unlink } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { settingsPath, updateSettings } from './settings.js';
+import { isSupportedLanguage } from './languages.js';
 
-/** The installer's answer to "Check for updates", handed over to the app.
+/** The installer's answers to "Check for updates" and "Language", handed
+ * over to the app.
  *
  * The installer asks the question on a page of its own (see
  * electron/build/installer.nsh), but it cannot write settings.json: NSIS
@@ -34,7 +36,16 @@ export async function applyInstallerChoices({ dir = dirname(settingsPath()), sav
   let choice = null;
   try {
     const parsed = JSON.parse(text.replace(/^﻿/, ''));
-    if (typeof parsed?.updateCheck === 'boolean') choice = { updateCheck: parsed.updateCheck };
+    if (typeof parsed?.updateCheck === 'boolean') {
+      choice = { ...choice, updateCheck: parsed.updateCheck };
+    }
+    // The language PICKED IN THE INSTALLER, not "Check for updates" -- a
+    // Prune code (installerLanguage.js's own mapping), so an installer
+    // build that offers a language this version of Prune does not
+    // recognise is ignored rather than applied as garbage.
+    if (isSupportedLanguage(parsed?.language)) {
+      choice = { ...choice, language: parsed.language };
+    }
   } catch {
     // Unreadable. Forgotten below, not retried on every start.
   }

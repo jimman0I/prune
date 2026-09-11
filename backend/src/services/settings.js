@@ -1,6 +1,7 @@
 import { readFile, writeFile, mkdir } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import { dirname, join } from 'node:path';
+import { matchLanguage } from './languages.js';
 
 /** Path to the settings file. A function, not a constant -- read at call
  * time, not import time -- so tests can point it at a scratch temp file
@@ -115,6 +116,13 @@ const DEFAULT_SETTINGS = {
   /* WizTree's "Show Free Space on Treemap": a block for the drive's free
      space beside what the scan found. Off by default, as WizTree ships it. */
   showFreeSpaceOnMap: false,
+  /* What Prune's own screens are shown in -- one of languages.js's 40, or
+     'en'. This default is only ever what a brand-new settings file gets;
+     see detectDefaultLanguage() below for where a first-ever run actually
+     gets its starting value, and services/installerChoices.js for the
+     installer's own answer to the same question. Change it from
+     Settings -> General, same as every other choice here. */
+  language: 'en',
   /* The scheduled run. IN-APP: it catches up when Prune is running rather
      than firing with the app closed, because there is no headless entry
      point for a Windows task to invoke. lastRunAt and lastResult live here
@@ -150,12 +158,46 @@ export function cleanGuardsFrom(settings) {
   };
 }
 
+/** The language Prune opens in before anyone -- the installer included --
+ * has chosen one: Windows' own display language, when Prune has that
+ * language, else English.
+ *
+ * Read only the moment settings.json does not exist yet, from
+ * getSettings() below. Once it exists, this is never asked again; a
+ * language typed into Settings, or a Windows display language that
+ * changes later, does not silently override a real choice.
+ *
+ * Same "not running inside Electron" guard as trayManager.js's own
+ * initTray() -- 'electron' is not even an installed package for
+ * standalone `node src/index.js` or this test suite, only for the
+ * separate electron/ project, so the dynamic import genuinely throws
+ * there rather than needing a mock. That also means this function's own
+ * two real-Electron branches (a locale Prune has, and app.getLocale()
+ * answering one it doesn't) are untestable here for the same structural
+ * reason trayManager.test.js's real branch is -- getSettings()'s own
+ * `detectLanguage` parameter below is what settings.test.js actually
+ * exercises, by injecting a stand-in for this whole function. */
+async function detectDefaultLanguage() {
+  try {
+    const { app } = await import('electron');
+    if (!app) return 'en';
+    return matchLanguage(app.getLocale()) ?? 'en';
+  } catch {
+    return 'en';
+  }
+}
+
 /** Persisted app settings, or the default shape if nothing has ever been
  * saved. Never throws on a missing file -- "never configured" is a normal,
- * expected state, not an error. */
-export async function getSettings() {
+ * expected state, not an error.
+ *
+ * `detectLanguage` is injectable so a test can prove the DETECTED value
+ * actually reaches the returned settings, rather than merely matching
+ * `detectDefaultLanguage()`'s own real-environment answer by coincidence
+ * -- the default parameter is what every real caller gets. */
+export async function getSettings({ detectLanguage = detectDefaultLanguage } = {}) {
   const path = settingsPath();
-  if (!existsSync(path)) return { ...DEFAULT_SETTINGS };
+  if (!existsSync(path)) return { ...DEFAULT_SETTINGS, language: await detectLanguage() };
   try {
     return { ...DEFAULT_SETTINGS, ...JSON.parse(await readFile(path, 'utf8')) };
   } catch {

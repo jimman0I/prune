@@ -44,15 +44,40 @@ describe('applyInstallerChoices', () => {
     expect(save).toHaveBeenCalledWith({ updateCheck: false });
   });
 
-  it('applies nothing but the update check, whatever else the file says', async () => {
+  it('applies nothing but the update check and the language, whatever else the file says', async () => {
     // The file sits in a folder the user can write to. It gets to answer
-    // the one question the installer asked, not to rewrite settings.
-    writeFileSync(file(), '{"updateCheck":true,"leftoverDestination":"permanent","autoInstallUpdates":true}');
+    // the two questions the installer asked, not to rewrite settings.
+    writeFileSync(file(), '{"updateCheck":true,"language":"el","leftoverDestination":"permanent","autoInstallUpdates":true}');
     const save = vi.fn(async () => {});
 
     await applyInstallerChoices({ dir, save });
     expect(save).toHaveBeenCalledTimes(1);
-    expect(save).toHaveBeenCalledWith({ updateCheck: true });
+    expect(save).toHaveBeenCalledWith({ updateCheck: true, language: 'el' });
+  });
+
+  it('applies the language the installer was run in', async () => {
+    writeFileSync(file(), '{"language":"el"}');
+    const save = vi.fn(async () => {});
+
+    expect(await applyInstallerChoices({ dir, save })).toEqual({ language: 'el' });
+    expect(save).toHaveBeenCalledWith({ language: 'el' });
+  });
+
+  it('ignores a language this version of Prune does not have', async () => {
+    // Installer offers 40; a future one might offer 41, and an older app
+    // opening a newer installer's file should not crash or store garbage.
+    writeFileSync(file(), '{"language":"xx"}');
+    const save = vi.fn();
+
+    expect(await applyInstallerChoices({ dir, save })).toBeNull();
+    expect(save).not.toHaveBeenCalled();
+  });
+
+  it('applies both answers together when both are real', async () => {
+    writeFileSync(file(), '{"updateCheck":false,"language":"ja"}');
+    const save = vi.fn(async () => {});
+
+    expect(await applyInstallerChoices({ dir, save })).toEqual({ updateCheck: false, language: 'ja' });
   });
 
   it('ignores anything but a real true or false', async () => {

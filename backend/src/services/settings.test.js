@@ -1,7 +1,8 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { mkdtempSync, rmSync } from 'node:fs';
+import { mkdir, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
-import { join } from 'node:path';
+import { join, dirname } from 'node:path';
 import { getSettings, updateSettings, cleanGuardsFrom } from './settings.js';
 
 let dir;
@@ -43,6 +44,7 @@ describe('getSettings', () => {
     expect(settings.restorePointBeforeUninstall).toBe(false);   // needs admin, slow
     expect(settings.registryBackupBeforeUninstall).toBe(false); // ~140 MB each time
     expect(settings.autoInstallUpdates).toBe(false);   // nothing installs unasked
+    expect(settings.language).toBe('en');              // no Electron in this test env to detect another
     expect(settings.showFreeSpaceOnMap).toBe(false);   // WizTree ships it off too
   });
 
@@ -91,6 +93,47 @@ describe('updateSettings', () => {
   it('supports the minimizeToTray preference the tray close-handler reads', async () => {
     const result = await updateSettings({ minimizeToTray: false });
     expect(result.minimizeToTray).toBe(false);
+  });
+
+  it('persists a language, same as any other setting', async () => {
+    const result = await updateSettings({ language: 'el' });
+    expect(result.language).toBe('el');
+    expect((await getSettings()).language).toBe('el');
+  });
+});
+
+describe('the default language', () => {
+  it('is English when there is no Electron to ask -- the case in this test suite', async () => {
+    // detectDefaultLanguage()'s own guard: 'electron' is not an installed
+    // package for the backend project, only for the separate electron/
+    // one, so this exercises the real failure path rather than a mock.
+    expect((await getSettings()).language).toBe('en');
+  });
+
+  it('uses whatever detectLanguage answers for a brand-new settings file', async () => {
+    // Injected rather than a real Electron locale (untestable here, see
+    // detectDefaultLanguage's own comment) -- this proves the VALUE
+    // actually reaches the returned settings, not merely that it defaults
+    // to 'en' the same way a broken wiring would too.
+    expect((await getSettings({ detectLanguage: async () => 'el' })).language).toBe('el');
+  });
+
+  it('falls back to the settings.js default when the settings.json on disk predates language entirely', async () => {
+    // A file from before this feature existed has no `language` key at
+    // all -- written directly, bypassing updateSettings(), which would
+    // otherwise bake today's detected language into the file itself and
+    // hide whether DEFAULT_SETTINGS.language is still doing its job.
+    await mkdir(dirname(process.env.UNREVO_SETTINGS_PATH), { recursive: true });
+    await writeFile(process.env.UNREVO_SETTINGS_PATH, JSON.stringify({ autoQuarantine: false }), 'utf8');
+    expect((await getSettings()).language).toBe('en');
+  });
+
+  it('is only consulted once -- an existing file is never re-detected', async () => {
+    // Writing any field creates the file; a second read must not call
+    // detectLanguage again -- proven by an injected detector that would
+    // change the answer if it ran a second time.
+    await updateSettings({ autoQuarantine: false });
+    expect((await getSettings({ detectLanguage: async () => 'el' })).language).not.toBe('el');
   });
 });
 
