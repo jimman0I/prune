@@ -1,0 +1,156 @@
+# Tests, build, and -- for a version tag -- a draft release whose files
+# were built here, from this repository, with a signed record saying so.
+#
+# Why this exists: Prune ships unsigned, and SHA256SUMS.txt only proves a
+# download arrived intact, not who built it. A GitHub artifact attestation
+# closes most of that gap for free: anyone can run
+#   gh attestation verify "Prune.Setup.X.Y.Z.exe" --repo jimman0I/prune
+# and see that the file was produced by this workflow, from a named commit
+# of this public repository. It is also what SignPath Foundation needs
+# before it will sign anything: a verifiable, automated build.
+#
+# Windows runners throughout. The backend shells out to reg.exe and
+# PowerShell, its tests include real-PowerShell and real-Recycle-Bin
+# checks, and the installer is built with NSIS -- none of which exist on
+# Linux.
+name: Build
+
+on:
+  push:
+    branches: [master]
+    tags: ['v*']
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  # A newer push to the same branch makes an older run pointless; a tag
+  # build is never cancelled halfway.
+  cancel-in-progress: ${{ !startsWith(github.ref, 'refs/tags/') }}
+
+jobs:
+  backend-tests:
+    name: Backend tests
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: backend/package-lock.json
+      - run: npm ci
+        working-directory: backend
+      # On its own runner, which is also the rule locally (CONTRIBUTING.md):
+      # the reg.exe and PowerShell tests time out when something else is
+      # competing for the machine.
+      - run: npm test
+        working-directory: backend
+
+  frontend-tests:
+    name: Frontend tests
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - run: npm ci
+        working-directory: frontend
+      - run: npm test
+        working-directory: frontend
+
+  build:
+    name: Build installer
+    needs: [backend-tests, frontend-tests]
+    runs-on: windows-latest
+    permissions:
+      contents: read
+      id-token: write          # Sigstore certificate for the attestation
+      attestations: write      # store the attestation
+      artifact-metadata: write # the artifact storage record
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          # No dependency cache in the job that signs attestations, as
+          # setup-node advises for jobs with elevated permissions: what is
+          # attested should come from a clean install, not a restored one.
+          package-manager-cache: false
+      - run: npm ci
+        working-directory: frontend
+      - run: npm ci
+        working-directory: electron
+        env:
+          # electron-builder downloads the Electron it packages itself; the
+          # copy electron's own postinstall fetches would never be used.
+          ELECTRON_SKIP_BINARY_DOWNLOAD: '1'
+      # The same script a local release runs: frontend build, a clean
+      # production-only backend install, electron-builder, SHA256SUMS.txt.
+      - run: npm run dist
+        working-directory: electron
+
+      - name: Check the checksums against the files
+        shell: pwsh
+        working-directory: electron/dist
+        run: |
+          foreach ($line in Get-Content SHA256SUMS.txt) {
+            $hash, $name = $line -split '  ', 2
+            $actual = (Get-FileHash -LiteralPath $name -Algorithm SHA256).Hash.ToLower()
+            if ($actual -ne $hash) { throw "SHA256SUMS.txt disagrees with $name" }
+            "ok  $name"
+          }
+
+      - name: Attest where the installer and zip came from
+        if: startsWith(github.ref, 'refs/tags/v') || github.event_name == 'workflow_dispatch'
+        uses: actions/attest@v4
+        with:
+          subject-path: |
+            electron/dist/*.exe
+            electron/dist/*.zip
+
+      - uses: actions/upload-artifact@v7
+        with:
+          # By commit: a pull request's ref name ("12/merge") holds a slash,
+          # which an artifact name may not.
+          name: prune-${{ github.sha }}
+          path: |
+            electron/dist/*.exe
+            electron/dist/*.zip
+            electron/dist/SHA256SUMS.txt
+          if-no-files-found: error
+          retention-days: ${{ startsWith(github.ref, 'refs/tags/') && 90 || 14 }}
+
+  draft-release:
+    name: Draft the release
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          pattern: prune-*
+          path: dist
+          merge-multiple: true
+      # A DRAFT: nothing is public until a person has replaced these notes
+      # with the changelog entry and published it. The files attached are
+      # the ones this workflow built and attested -- see RELEASING.md.
+      - name: Create the draft
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.ref_name }}
+        run: |
+          ls -la dist
+          gh release create "$TAG" dist/* \
+            --repo "$GITHUB_REPOSITORY" \
+            --draft --verify-tag \
+            --title "Prune ${TAG#v}" \
+            --notes "Built by GitHub Actions from ${GITHUB_SHA}. Replace these notes with the changelog entry before publishing."
