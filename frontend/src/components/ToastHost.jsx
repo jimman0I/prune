@@ -44,7 +44,7 @@ function ToastCard({ toast, onDismiss }) {
     >
       <span className="w-[3px] self-stretch rounded-full shrink-0" style={{ background: tone.accent }} />
 
-      <div className="flex-1 min-w-0">
+      <div className="flex-1 min-w-0 select-text">
         <div className="text-[12.5px] text-[color:var(--text-primary)] leading-snug">
           {toast.message}
           {/* The repeat count, when the same thing happened again. Shown

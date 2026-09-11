@@ -3,6 +3,7 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { renderScreen } from '../testSupport/renderScreen.jsx';
+import { isCopyable } from '../testSupport/copyable.js';
 
 /** The Deep Clean screen, rendered.
  *
@@ -138,6 +139,34 @@ describe('the gate in front of a clean', () => {
     const [ids] = executeDeepClean.mock.calls[0];
     expect(Array.isArray(ids)).toBe(true);
     expect(ids.length).toBeGreaterThan(0);
+  });
+});
+
+describe('what can be copied', () => {
+  it('the reason a scan failed', async () => {
+    streamDeepCleanScan.mockImplementationOnce(async (onEvent) => {
+      onEvent('error', { message: 'Access is denied: C:\\Windows\\Prefetch' });
+    });
+    const user = userEvent.setup();
+    renderScreen(<DeepClean />);
+    await screen.findByText('Temporary files');
+
+    await user.click(screen.getAllByRole('button', { name: 'Preview' })[0]);
+    expect(isCopyable(await screen.findByText(/Couldn't scan: Access is denied/))).toBe(true);
+  });
+
+  it('the reason a clean failed', async () => {
+    executeDeepClean.mockRejectedValueOnce(new Error('EBUSY: C:\\Windows\\Temp\\locked.tmp'));
+    const user = userEvent.setup();
+    renderScreen(<DeepClean />);
+    await screen.findByText('Temporary files');
+    const boxes = screen.getAllByRole('checkbox');
+    await user.click(boxes[boxes.length - 1]);
+    await waitFor(() => expect(cleanButton().disabled).toBe(false));
+    await user.click(cleanButton());
+    await user.click(screen.getByRole('button', { name: 'Confirm' }));
+
+    expect(isCopyable(await screen.findByText(/Couldn't clean: EBUSY/))).toBe(true);
   });
 });
 

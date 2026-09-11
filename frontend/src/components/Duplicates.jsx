@@ -151,7 +151,7 @@ function Duplicates() {
       </p>
 
       {scan.error && (
-        <div className="glass-panel p-6 text-[13px] text-[color:var(--danger)]">
+        <div className="glass-panel p-6 text-[13px] text-[color:var(--danger)] select-text">
           {scan.error.message}
         </div>
       )}
@@ -231,7 +231,7 @@ function Duplicates() {
                           checked={selected.has(file.path)}
                           onChange={() => toggle(file.path)}
                         />
-                        <span className="font-mono text-[11.5px] text-[color:var(--text-secondary)] truncate min-w-0 flex-1">
+                        <span className="font-mono text-[11.5px] text-[color:var(--text-secondary)] truncate min-w-0 flex-1 select-text">
                           {file.path}
                         </span>
                         <span className="text-[11px] font-mono text-[color:var(--text-muted)] shrink-0">

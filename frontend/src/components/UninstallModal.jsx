@@ -276,7 +276,7 @@ export default function UninstallModal({ program, running = false, onClose }) {
                   product, not the release. Edit it if the results look wrong.
                 </p>
 
-                {error && <p className="text-[12.5px] text-[color:var(--danger)] mb-4">Scan failed: {error}</p>}
+                {error && <p className="text-[12.5px] text-[color:var(--danger)] mb-4 select-text">Scan failed: {error}</p>}
                 <button className="btn-primary" onClick={startForcedScan} disabled={!searchTerm.trim()}>
                   Search for leftovers
                 </button>
@@ -286,8 +286,8 @@ export default function UninstallModal({ program, running = false, onClose }) {
                 <p className="text-[13px] text-[color:var(--text-secondary)] mb-1">
                   This runs {program.name}'s own uninstaller, then scans for anything it leaves behind.
                 </p>
-                <p className="text-[11.5px] text-[color:var(--text-muted)] font-mono mb-6 break-all">{command}</p>
-                {error && <p className="text-[12.5px] text-[color:var(--danger)] mb-4">Uninstall failed: {error}</p>}
+                <p className="text-[11.5px] text-[color:var(--text-muted)] font-mono mb-6 break-all select-text">{command}</p>
+                {error && <p className="text-[12.5px] text-[color:var(--danger)] mb-4 select-text">Uninstall failed: {error}</p>}
                 <button className="btn-primary" onClick={startUninstall} disabled={!program.uninstallString}>
                   Start uninstall
                 </button>
@@ -322,7 +322,7 @@ export default function UninstallModal({ program, running = false, onClose }) {
         )}
         {step === 'review' && scanResult && (
           <>
-            {error && <p className="text-[12.5px] text-[color:var(--danger)] mb-4">Removal failed: {error}</p>}
+            {error && <p className="text-[12.5px] text-[color:var(--danger)] mb-4 select-text">Removal failed: {error}</p>}
             <LeftoverReview
               scanResult={scanResult}
               selected={selected}
@@ -347,7 +347,7 @@ export default function UninstallModal({ program, running = false, onClose }) {
               <div className="mb-5 px-3.5 py-3 rounded-xl bg-[color:var(--warning-soft)] border border-[color:var(--warning)]/25 text-[12.5px] text-[color:var(--warning)]">
                 <p>{`${plural(removal.failedFiles.length, 'item')} couldn't be removed:`}</p>
                 {removal.failedFiles.map((f) => (
-                  <p key={f.path} className="mt-1 font-mono text-[11px] text-[color:var(--text-secondary)] break-all">{`${f.path} — ${f.reason}`}</p>
+                  <p key={f.path} className="mt-1 font-mono text-[11px] text-[color:var(--text-secondary)] break-all select-text">{`${f.path} — ${f.reason}`}</p>
                 ))}
               </div>
             )}

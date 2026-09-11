@@ -3,6 +3,7 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { renderScreen } from '../testSupport/renderScreen.jsx';
+import { isCopyable } from '../testSupport/copyable.js';
 
 /** The single-program uninstall, and the settings that now shape it:
  * where leftovers go, whether they start ticked, and whether a leftover
@@ -90,6 +91,54 @@ describe('where the leftovers go', () => {
     await user.click(await screen.findByRole('button', { name: 'Delete permanently' }));
     expect(await screen.findByText(/couldn.t be removed/i)).toBeTruthy();
     expect(screen.getByText(/The file is in use/)).toBeTruthy();
+  });
+});
+
+describe('what can be copied', () => {
+  it('the uninstall command it is about to run', () => {
+    renderScreen(<UninstallModal program={program} onClose={vi.fn()} />);
+    expect(isCopyable(screen.getByText(/uninst\.exe/))).toBe(true);
+    expect(isCopyable(screen.getByRole('button', { name: 'Start uninstall' }))).toBe(false);
+  });
+
+  it('the reason an uninstall failed', async () => {
+    streamUninstall.mockRejectedValue(new Error('The uninstaller exited with code 1603.'));
+    await uninstall();
+
+    expect(isCopyable(await screen.findByText(/exited with code 1603/))).toBe(true);
+  });
+
+  it('the reason a leftover search failed, for a program whose uninstaller is gone', async () => {
+    // The forced path searches with scanForcedUninstall only. A queued
+    // rejection on any other mock would outlive this test -- clearAllMocks
+    // does not empty a mockRejectedValueOnce queue -- and fail the next.
+    const { scanForcedUninstall } = await import('../lib/api.js');
+    scanForcedUninstall.mockRejectedValueOnce(new Error('The registry could not be read.'));
+    const user = userEvent.setup();
+    renderScreen(<UninstallModal program={{ ...program, health: { orphaned: true } }} onClose={vi.fn()} />);
+
+    await user.click(screen.getByRole('button', { name: 'Search for leftovers' }));
+    expect(isCopyable(await screen.findByText(/Scan failed: The registry could not be read/))).toBe(true);
+  });
+
+  it('the reason a removal failed', async () => {
+    removeQuarantined.mockRejectedValue(new Error('EACCES: permission denied'));
+    const { user } = await uninstall();
+
+    await user.click(await screen.findByRole('button', { name: 'Remove selected' }));
+    expect(isCopyable(await screen.findByText(/Removal failed: EACCES/))).toBe(true);
+  });
+
+  it('each item that could not be removed, and why', async () => {
+    fetchSettings.mockResolvedValue({ leftoverDestination: 'permanent' });
+    removeQuarantined.mockResolvedValue({
+      destination: 'permanent', files: [], registryKeys: [], totalSizeBytes: 0,
+      failedFiles: [{ path: 'C:\\Users\\jim\\AppData\\Roaming\\Thing', reason: 'The file is in use.' }]
+    });
+    const { user } = await uninstall();
+
+    await user.click(await screen.findByRole('button', { name: 'Delete permanently' }));
+    expect(isCopyable(await screen.findByText(/The file is in use/))).toBe(true);
   });
 });
 

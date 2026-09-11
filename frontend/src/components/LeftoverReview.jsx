@@ -146,7 +146,7 @@ export default function LeftoverReview({ scanResult, selected, onToggle, onConfi
                           onChange={() => onToggle(itemKey)}
                         />
                         <div className="flex-1 min-w-0">
-                          <div className="font-mono text-[11.5px] text-[color:var(--text-primary)] truncate">
+                          <div className="font-mono text-[11.5px] text-[color:var(--text-primary)] truncate select-text">
                             {item.path || item.name}
                           </div>
                           {leftoverItemNote(item) && (

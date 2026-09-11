@@ -79,7 +79,7 @@ function StepRow({ step }) {
       </div>
       <div className="min-w-0">
         <div className="text-[12.5px] text-[color:var(--text-primary)]">{step.name}</div>
-        {step.detail && <div className="font-mono text-[11px] text-[color:var(--text-muted)] mt-0.5 break-all">{step.detail}</div>}
+        {step.detail && <div className="font-mono text-[11px] text-[color:var(--text-muted)] mt-0.5 break-all select-text">{step.detail}</div>}
       </div>
     </div>
   );
@@ -247,7 +247,7 @@ ode.js" is a folder or a file type.
         <>
           {saveError && (
             <div className="mb-5 px-3.5 py-3 rounded-xl bg-[color:var(--danger-soft)] border border-[color:var(--danger)]/25">
-              <p className="text-[12.5px] text-[color:var(--danger)]">Couldn't save: {saveError}</p>
+              <p className="text-[12.5px] text-[color:var(--danger)] select-text">Couldn't save: {saveError}</p>
             </div>
           )}
 
@@ -297,7 +297,7 @@ ode.js" is a folder or a file type.
                       <p className="text-[color:var(--text-muted)]">Checking…</p>
                     )}
                     {update.data?.error && (
-                      <p className="text-[color:var(--warning)]">{`Couldn't check for updates: ${update.data.error}`}</p>
+                      <p className="text-[color:var(--warning)] select-text">{`Couldn't check for updates: ${update.data.error}`}</p>
                     )}
                     {update.data?.newer === true && (
                       <div className="flex items-center justify-between gap-4">
@@ -311,7 +311,7 @@ ode.js" is a folder or a file type.
                       <p className="text-[color:var(--text-muted)]">{`You're on the latest version (${update.data.current}).`}</p>
                     )}
                     {openError && (
-                      <p className="text-[color:var(--danger)] mt-2">{`Couldn't open the page: ${openError}`}</p>
+                      <p className="text-[color:var(--danger)] mt-2 select-text">{`Couldn't open the page: ${openError}`}</p>
                     )}
                   </div>
                 )}
@@ -562,7 +562,7 @@ ode.js" is a folder or a file type.
                       <StepRow key={i} step={step} />
                     ))}
                     {sandboxReport.error && (
-                      <p className="text-[12px] text-[color:var(--danger)] mt-2 font-mono break-all">{sandboxReport.error}</p>
+                      <p className="text-[12px] text-[color:var(--danger)] mt-2 font-mono break-all select-text">{sandboxReport.error}</p>
                     )}
                   </div>
                 )}

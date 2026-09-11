@@ -2,6 +2,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import { screen } from '@testing-library/react';
 import { renderScreen } from '../testSupport/renderScreen.jsx';
+import { isCopyable } from '../testSupport/copyable.js';
 import LeftoverReview from './LeftoverReview.jsx';
 
 /** The review says where the ticked leftovers will go, before the click
@@ -19,6 +20,17 @@ const selected = new Set(['files:0', 'registryKeys:0']);
 const show = (props = {}) => renderScreen(
   <LeftoverReview scanResult={scanResult} selected={selected} onToggle={vi.fn()} onConfirm={vi.fn()} onSkip={vi.fn()} {...props} />
 );
+
+describe('what can be copied', () => {
+  // Text selection is off across the app. A leftover's path stays on: it
+  // is what somebody pastes into Explorer to look before removing it.
+  it('each leftover path, file or registry key', () => {
+    show();
+    expect(isCopyable(screen.getByText('C:\\Users\\jim\\AppData\\Roaming\\Thing'))).toBe(true);
+    expect(isCopyable(screen.getByText('HKCU\\Software\\Thing'))).toBe(true);
+    expect(isCopyable(screen.getByRole('button', { name: 'Remove selected' }))).toBe(false);
+  });
+});
 
 describe('where the leftovers go', () => {
   it('says Quarantine, and can be restored, by default', () => {

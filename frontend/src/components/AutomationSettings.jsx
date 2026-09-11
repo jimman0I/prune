@@ -151,7 +151,7 @@ export default function AutomationSettings({ settings, save }) {
                 </span>
                 {' — '}
                 {lastResult.ok === false
-                  ? <span className="text-[color:var(--danger)]">{lastResult.error}</span>
+                  ? <span className="text-[color:var(--danger)] select-text">{lastResult.error}</span>
                   : lastResult.summary}
               </p>
             )}

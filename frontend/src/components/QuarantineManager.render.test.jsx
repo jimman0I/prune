@@ -3,6 +3,7 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { renderScreen } from '../testSupport/renderScreen.jsx';
+import { isCopyable } from '../testSupport/copyable.js';
 
 /** The Quarantine screen, actually rendered.
  *
@@ -79,6 +80,30 @@ const headerText = () => document.querySelector('h1 + p')?.textContent ?? '';
  * never matches. The batch directory is what this screen is responsible
  * for getting right; the context is the library's business. */
 const firstArg = (mock) => mock.mock.calls[0]?.[0];
+
+describe('what can be copied', () => {
+  it('the reason the quarantine could not be read', async () => {
+    fetchQuarantineBatches.mockRejectedValue(new Error('EACCES'));
+    renderScreen(<QuarantineManager />);
+    expect(isCopyable(await screen.findByText(/Couldn't load quarantine: EACCES/))).toBe(true);
+  });
+
+  it('the reason a delete failed', async () => {
+    const user = userEvent.setup();
+    deleteQuarantineBatch.mockRejectedValueOnce(new Error('EBUSY'));
+    renderScreen(<QuarantineManager />);
+    await user.click(await screen.findByRole('button', { name: 'Delete Permanently' }));
+    await user.click(screen.getByRole('button', { name: 'Confirm' }));
+
+    expect(isCopyable(await screen.findByText('EBUSY'))).toBe(true);
+  });
+
+  it('the original path of each file held, but not the program name', async () => {
+    renderScreen(<QuarantineManager />);
+    expect(isCopyable(await screen.findByText('C:\\Program Files\\Thing\\app.exe'))).toBe(true);
+    expect(isCopyable(screen.getByText('Thing'))).toBe(false);
+  });
+});
 
 describe('the Quarantine screen', () => {
   it('lists what is held', async () => {

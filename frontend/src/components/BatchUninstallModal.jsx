@@ -317,7 +317,7 @@ export default function BatchUninstallModal({ programs, onClose, onFinished }) {
                   {failed.length} couldn't be uninstalled and {failed.length === 1 ? 'was' : 'were'} left alone:
                 </p>
                 {failed.map((p) => (
-                  <p key={p.id} className="text-[11.5px] font-mono text-[color:var(--text-secondary)]">
+                  <p key={p.id} className="text-[11.5px] font-mono text-[color:var(--text-secondary)] select-text">
                     {p.name} — {statuses[p.id]?.message}
                   </p>
                 ))}
@@ -325,7 +325,7 @@ export default function BatchUninstallModal({ programs, onClose, onFinished }) {
             )}
 
             {error && (
-              <p className="text-[12.5px] text-[color:var(--danger)] mb-4">Couldn't remove leftovers: {error}</p>
+              <p className="text-[12.5px] text-[color:var(--danger)] mb-4 select-text">Couldn't remove leftovers: {error}</p>
             )}
 
             {/* LeftoverReview reads an empty result as "No leftovers found --

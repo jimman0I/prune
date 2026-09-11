@@ -435,7 +435,7 @@ export default function ProgramList({ programs: initialPrograms, extensions = []
       </div>
     );
   }
-  if (error) return <div style={{ color: 'var(--danger)' }}>Couldn't load programs: {error}</div>;
+  if (error) return <div className="select-text" style={{ color: 'var(--danger)' }}>Couldn't load programs: {error}</div>;
 
   return (
     <div className="flex flex-col min-h-0">

@@ -320,6 +320,16 @@ body {
   position: relative;
 }
 
+/* Text selection is off for the app as a whole. Prune is a desktop app,
+   and a click-and-drag across the program list should not paint every
+   label, heading and number it passes over blue. What is worth copying --
+   paths, commands, the text of an error -- opts back in with Tailwind's
+   `select-text`, element by element. Text boxes keep it unconditionally:
+   without it the cursor could not select a word in the field being typed
+   in. */
+body { user-select: none; }
+input, textarea { user-select: text; }
+
 /* Real bug behind "the glass looks flat" (found auditing, 2026-09-01):
    every .glass-panel already used this exact recipe (--glass-bg,
    --glass-border, blur(24px) saturate(180%)) -- backdrop-filter was

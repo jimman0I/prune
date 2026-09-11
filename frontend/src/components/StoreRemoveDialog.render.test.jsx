@@ -3,6 +3,7 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { renderScreen } from '../testSupport/renderScreen.jsx';
+import { isCopyable } from '../testSupport/copyable.js';
 
 /** The single-app Store removal dialog.
  *
@@ -38,6 +39,21 @@ const open = (props = {}) => {
   renderScreen(<StoreRemoveDialog app={app} onClose={onClose} onRemoved={onRemoved} />);
   return { onClose, onRemoved };
 };
+
+describe('what can be copied', () => {
+  it("Windows' reason for refusing, and the package name it refused", async () => {
+    // The package name is what Remove-AppxPackage takes, so it is the
+    // thing to paste into PowerShell when Prune cannot do it.
+    removeStoreApp.mockRejectedValue(new Error('The package is currently in use.'));
+    const user = userEvent.setup();
+    open();
+
+    await user.click(screen.getByRole('button', { name: 'Remove app' }));
+
+    expect(isCopyable(await screen.findByText('The package is currently in use.'))).toBe(true);
+    expect(isCopyable(screen.getByText(app.packageFullName))).toBe(true);
+  });
+});
 
 describe('removing one Store app', () => {
   it('says it cannot be undone before asking', () => {

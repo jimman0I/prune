@@ -342,13 +342,13 @@ function DeepClean() {
 
         {scanError && (
           <div className="mb-5 px-3.5 py-3 rounded-xl bg-[color:var(--danger-soft)] border border-[color:var(--danger)]/25">
-            <p className="text-[12.5px] text-[color:var(--danger)]">Couldn't scan: {scanError}</p>
+            <p className="text-[12.5px] text-[color:var(--danger)] select-text">Couldn't scan: {scanError}</p>
           </div>
         )}
 
         {cleanError && (
           <div className="mb-5 px-3.5 py-3 rounded-xl bg-[color:var(--danger-soft)] border border-[color:var(--danger)]/25">
-            <p className="text-[12.5px] text-[color:var(--danger)]">Couldn't clean: {cleanError}</p>
+            <p className="text-[12.5px] text-[color:var(--danger)] select-text">Couldn't clean: {cleanError}</p>
           </div>
         )}
 

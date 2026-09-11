@@ -325,7 +325,7 @@ function ExtensionPanel({ breakdown, shown, icons, typeColors }) {
  * Paths are shown in full and are the point of the view: this is the list
  * you act on, and "FactoryGame-Windows.ucas" without its folder is not
  * something anyone can find again. */
-function LargestFilesView({ files, icons }) {
+export function LargestFilesView({ files, icons }) {
 
   if (files.length === 0) {
     return (
@@ -361,7 +361,7 @@ function LargestFilesView({ files, icons }) {
             <div className="min-w-0 flex-1">
               <div className="text-[12.5px] text-[color:var(--text-primary)] truncate">{file.name}</div>
               {file.fullPath && (
-                <div className="text-[11px] font-mono text-[color:var(--text-muted)] truncate">{file.fullPath}</div>
+                <div className="text-[11px] font-mono text-[color:var(--text-muted)] truncate select-text">{file.fullPath}</div>
               )}
             </div>
           </div>
@@ -406,6 +406,25 @@ const FOLDER_COLUMNS = [
 const FOLDER_GRID = FOLDER_COLUMNS.map((c) => c.width).join(' ');
 
 /** A count that was never taken reads as a dash, never as zero. */
+/** Why a folder could not be scanned, naming the folder it was reading.
+ * Exported so it can be tested without scanning a real drive. */
+export function ScanFailure({ path, error }) {
+  return (
+    <div className="glass-panel p-6">
+      <p className="text-[13px] text-[color:var(--danger)] select-text">Couldn't scan "{path}": {error}</p>
+    </div>
+  );
+}
+
+/** Why the fast scan did not run: declined, or Windows' own reason. */
+export function FastScanNote({ note }) {
+  return (
+    <div className="mb-5 px-3.5 py-3 rounded-xl bg-[color:var(--warning-soft)] border border-[color:var(--warning)]/25">
+      <p className="text-[12.5px] text-[color:var(--warning)] select-text">{note}</p>
+    </div>
+  );
+}
+
 function Count({ value }) {
   if (value === null || value === undefined) {
     return <span className="text-[color:var(--text-muted)]">—</span>;
@@ -825,9 +844,7 @@ function DiskMap() {
       </div>
 
       {fastNote && (
-        <div className="mb-5 px-3.5 py-3 rounded-xl bg-[color:var(--warning-soft)] border border-[color:var(--warning)]/25">
-          <p className="text-[12.5px] text-[color:var(--warning)]">{fastNote}</p>
-        </div>
+        <FastScanNote note={fastNote} />
       )}
 
       <div className="flex items-center flex-wrap gap-1.5 text-[12.5px] font-mono mb-6">
@@ -886,9 +903,7 @@ function DiskMap() {
       )}
 
       {!loading && error && (
-        <div className="glass-panel p-6">
-          <p className="text-[13px] text-[color:var(--danger)]">Couldn't scan "{currentPath}": {error}</p>
-        </div>
+        <ScanFailure path={currentPath} error={error} />
       )}
 
       {!loading && !error && tree?.truncated && (

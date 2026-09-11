@@ -3,6 +3,7 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { renderScreen } from '../testSupport/renderScreen.jsx';
+import { isCopyable } from '../testSupport/copyable.js';
 
 /** The pop-up tile that says a newer release exists.
  *
@@ -33,6 +34,17 @@ beforeEach(() => {
 });
 
 const tile = () => screen.queryByRole('region', { name: 'Update available' });
+
+describe('what can be copied', () => {
+  it('the reason the download page could not be opened', async () => {
+    openUpdatePage.mockRejectedValueOnce(new Error('explorer.exe was not found'));
+    const user = userEvent.setup();
+    renderScreen(<UpdateTile />);
+
+    await user.click(await screen.findByRole('button', { name: 'Download' }));
+    expect(isCopyable(await screen.findByText(/Couldn't open the page: explorer\.exe/))).toBe(true);
+  });
+});
 
 describe('the update tile', () => {
   it('appears when the check has found a newer release', async () => {

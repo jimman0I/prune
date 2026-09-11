@@ -2,6 +2,7 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { screen, waitFor } from '@testing-library/react';
 import { renderScreen, makeTestClient } from '../testSupport/renderScreen.jsx';
+import { isCopyable } from '../testSupport/copyable.js';
 
 /** The Dashboard, which until this audit was the one screen still
  * fetching outside the query layer.
@@ -45,6 +46,16 @@ beforeEach(() => {
 });
 
 const render = () => renderScreen(<Dashboard programs={[]} totalSize={0} onNavigate={() => {}} />);
+
+describe('what can be copied', () => {
+  it('the reason drive health could not be read', async () => {
+    fetchDiskHealth.mockRejectedValue(new Error('WMI unavailable'));
+    render();
+    // Retried once before it reaches the screen; see the test below.
+    const message = await screen.findByText(/Couldn't read drive health: WMI unavailable/, {}, { timeout: 5000 });
+    expect(isCopyable(message)).toBe(true);
+  });
+});
 
 describe('the Dashboard reads', () => {
   it('shows disk space from the query layer', async () => {

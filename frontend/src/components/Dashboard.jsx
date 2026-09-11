@@ -272,7 +272,7 @@ export default function Dashboard({ programs, totalSize, onNavigate = () => {} }
           <div className="text-[18px] font-medium text-[color:var(--text-primary)] mb-1">Drive Health</div>
 
           {diskHealthError && (
-            <div className="text-[13px] text-[color:var(--text-secondary)]">Couldn't read drive health: {diskHealthError}</div>
+            <div className="text-[13px] text-[color:var(--text-secondary)] select-text">Couldn't read drive health: {diskHealthError}</div>
           )}
 
           {!diskHealthError && !primaryDisk && (

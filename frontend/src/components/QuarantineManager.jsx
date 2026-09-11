@@ -136,7 +136,7 @@ function QuarantineManager() {
 
       {!loading && error && (
         <div className="glass-panel p-6">
-          <p className="text-[13px] text-[color:var(--danger)]">Couldn't load quarantine: {error}</p>
+          <p className="text-[13px] text-[color:var(--danger)] select-text">Couldn't load quarantine: {error}</p>
         </div>
       )}
 
@@ -144,7 +144,7 @@ function QuarantineManager() {
         <>
           {actionError && (
             <div className="mb-5 px-3.5 py-3 rounded-xl bg-[color:var(--danger-soft)] border border-[color:var(--danger)]/25">
-              <p className="text-[12.5px] text-[color:var(--danger)]">{actionError}</p>
+              <p className="text-[12.5px] text-[color:var(--danger)] select-text">{actionError}</p>
             </div>
           )}
 
@@ -214,7 +214,7 @@ function QuarantineManager() {
                       <div className="border-t border-[color:var(--border-subtle)] pt-3 flex flex-col gap-1.5">
                         {batch.files.map((f) => (
                           <div key={f.originalPath} className="flex items-center justify-between gap-4">
-                            <div className="font-mono text-[11.5px] text-[color:var(--text-muted)] truncate min-w-0">{f.originalPath}</div>
+                            <div className="font-mono text-[11.5px] text-[color:var(--text-muted)] truncate min-w-0 select-text">{f.originalPath}</div>
                             <div className="font-mono text-[11px] text-[color:var(--text-secondary)] shrink-0">{formatBytes(f.sizeBytes)}</div>
                           </div>
                         ))}

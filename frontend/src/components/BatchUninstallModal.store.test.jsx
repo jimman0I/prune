@@ -3,6 +3,7 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { renderScreen } from '../testSupport/renderScreen.jsx';
+import { isCopyable } from '../testSupport/copyable.js';
 
 /** Store apps in a batch uninstall.
  *
@@ -162,6 +163,34 @@ describe('what the confirm step says will happen', () => {
     expect(screen.getByText(/scans for what/i)).toBeTruthy();
     expect(screen.getByText(/own windows/i)).toBeTruthy();
     expect(screen.queryByText(/removed through Windows/i)).toBeNull();
+  });
+});
+
+describe('what can be copied', () => {
+  it('the reason leftovers could not be removed', async () => {
+    const { removeQuarantined } = await import('../lib/api.js');
+    streamUninstall.mockResolvedValueOnce();
+    scanForLeftovers.mockResolvedValueOnce({
+      files: { ok: true, items: [{ path: 'C:\\Users\\jim\\AppData\\Roaming\\Thing', sizeBytes: 2048 }] },
+      registryKeys: { ok: true, items: [] },
+      scheduledTasks: { ok: true, items: [] }
+    });
+    removeQuarantined.mockRejectedValueOnce(new Error('EACCES: permission denied'));
+    const user = userEvent.setup();
+    renderScreen(<BatchUninstallModal programs={[thing]} onClose={vi.fn()} onFinished={vi.fn()} />);
+
+    await user.click(screen.getByRole('button', { name: 'Start uninstalling' }));
+    await user.click(await screen.findByRole('button', { name: 'Remove selected' }));
+    expect(isCopyable(await screen.findByText(/Couldn't remove leftovers: EACCES/))).toBe(true);
+  });
+
+  it('why each program could not be uninstalled', async () => {
+    streamUninstall.mockRejectedValue(new Error('The uninstaller exited with code 1603.'));
+    const user = userEvent.setup();
+    renderScreen(<BatchUninstallModal programs={[thing]} onClose={vi.fn()} onFinished={vi.fn()} />);
+    await user.click(screen.getByRole('button', { name: 'Start uninstalling' }));
+
+    expect(isCopyable(await screen.findByText(/Thing — .*1603/))).toBe(true);
   });
 });
 

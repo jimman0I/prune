@@ -55,12 +55,12 @@ export default function StoreRemoveDialog({ app, onClose, onRemoved }) {
         installing it again from the Microsoft Store.
       </p>
 
-      <p className="text-[11.5px] font-mono text-[color:var(--text-muted)] break-all mb-5">
+      <p className="text-[11.5px] font-mono text-[color:var(--text-muted)] break-all mb-5 select-text">
         {app.packageFullName}
       </p>
 
       {error && (
-        <div className="text-[12px] text-[color:var(--danger)] leading-snug mb-4">
+        <div className="text-[12px] text-[color:var(--danger)] leading-snug mb-4 select-text">
           {/* Windows' own words. It refuses for ordinary reasons — the app
               is running, the package was provisioned for every user — and
               which one it was is the only useful thing to show. */}

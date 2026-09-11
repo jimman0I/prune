@@ -35,7 +35,7 @@ export default function UpdateTile() {
         {`You have ${data.current}. Nothing is downloaded until you choose to.`}
       </p>
       {openError && (
-        <p className="text-[12px] text-[color:var(--danger)] mt-2">{`Couldn't open the page: ${openError}`}</p>
+        <p className="text-[12px] text-[color:var(--danger)] mt-2 select-text">{`Couldn't open the page: ${openError}`}</p>
       )}
       <div className="flex justify-end gap-2 mt-3">
         <button

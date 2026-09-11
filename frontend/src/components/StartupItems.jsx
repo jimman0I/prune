@@ -203,11 +203,11 @@ function StartupRow({ item, iconSrc, pending, error, onToggle }) {
           </div>
         )}
         {error && (
-          <div className="text-[10.5px] text-[color:var(--danger)] leading-snug mt-0.5">{error}</div>
+          <div className="text-[10.5px] text-[color:var(--danger)] leading-snug mt-0.5 select-text">{error}</div>
         )}
       </div>
 
-      <div className="text-[11px] font-mono text-[color:var(--text-muted)] truncate">
+      <div className="text-[11px] font-mono text-[color:var(--text-muted)] truncate select-text">
         {item.command}
       </div>
 
@@ -279,7 +279,7 @@ function StartupItems() {
       </p>
 
       {error && (
-        <div className="glass-panel p-6 text-[13px] text-[color:var(--danger)]">
+        <div className="glass-panel p-6 text-[13px] text-[color:var(--danger)] select-text">
           Couldn't read the startup entries: {error}
         </div>
       )}

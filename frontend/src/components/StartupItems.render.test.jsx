@@ -3,6 +3,7 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { screen, within, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { renderScreen } from '../testSupport/renderScreen.jsx';
+import { isCopyable } from '../testSupport/copyable.js';
 
 /** The Startup screen, rendered.
  *
@@ -70,6 +71,32 @@ beforeEach(() => {
   vi.clearAllMocks();
   fetchStartupItems.mockResolvedValue([entry()]);
   setStartupItemEnabled.mockResolvedValue({ ok: true, enabled: false });
+});
+
+describe('what can be copied', () => {
+  it('the reason the startup entries could not be read', async () => {
+    fetchStartupItems.mockRejectedValue(new Error('reg.exe exited with 1'));
+    renderScreen(<StartupItems />);
+    const message = await screen.findByText(/Couldn't read the startup entries: reg\.exe exited with 1/, {}, { timeout: 5000 });
+    expect(isCopyable(message)).toBe(true);
+  });
+
+  it('the launch path, but not the entry name', async () => {
+    renderScreen(<StartupItems />);
+    expect(isCopyable(await screen.findByText('C:\\Program Files\\Thing\\thing.exe'))).toBe(true);
+    expect(isCopyable(screen.getByText('Thing'))).toBe(false);
+  });
+
+  it('the reason Windows refused a switch', async () => {
+    setStartupItemEnabled.mockResolvedValue({ ok: false, error: 'Access is denied.' });
+    const user = userEvent.setup();
+    renderScreen(<StartupItems />);
+    await screen.findByText('Thing');
+
+    await user.click(screen.getByRole('switch'));
+
+    expect(isCopyable(await screen.findByText('Access is denied.'))).toBe(true);
+  });
 });
 
 describe('the startup list', () => {

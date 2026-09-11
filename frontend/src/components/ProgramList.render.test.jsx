@@ -3,6 +3,7 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { renderScreen } from '../testSupport/renderScreen.jsx';
+import { isCopyable } from '../testSupport/copyable.js';
 
 /** The Applications list, rendered.
  *
@@ -27,6 +28,16 @@ vi.mock('../lib/api.js', () => ({
 }));
 
 const ProgramList = (await import('./ProgramList.jsx')).default;
+
+describe('what can be copied', () => {
+  it('the reason the program list could not be read', async () => {
+    const { fetchPrograms } = await import('../lib/api.js');
+    fetchPrograms.mockRejectedValueOnce(new Error('reg.exe exited with 1'));
+    renderScreen(<ProgramList />);
+
+    expect(isCopyable(await screen.findByText(/Couldn't load programs: reg\.exe exited with 1/))).toBe(true);
+  });
+});
 
 /* `uninstallString` is on the base fixture because a program without one
  * is batch-INELIGIBLE (see lib/batchSelection.js), and leaving it off made

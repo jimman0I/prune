@@ -4,6 +4,7 @@ import { render, screen, cleanup, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ToastProvider, useToasts } from '../hooks/useToasts.jsx';
 import ToastHost from './ToastHost.jsx';
+import { isCopyable } from '../testSupport/copyable.js';
 
 /** Where toasts are drawn, and the provider that feeds it.
  *
@@ -69,6 +70,24 @@ describe('showing a toast', () => {
     expect(screen.getByText('They were in use.')).toBeTruthy();
     expect(screen.getByText('C:\\a.log')).toBeTruthy();
     expect(screen.getByText('C:\\b.log')).toBeTruthy();
+  });
+});
+
+describe('what can be copied', () => {
+  // Text selection is off across the app. A toast's text stays on: an
+  // error toast's message is often the error itself, and its paths are
+  // exactly what somebody goes looking for next.
+  it('everything the toast says, but not its dismiss button', async () => {
+    mount(<Push tone="danger" message="Skipped 2 locked files" extra={{
+      detail: 'They were in use.',
+      paths: ['C:\\a.log', 'C:\\b.log']
+    }} />);
+    await push();
+
+    expect(isCopyable(screen.getByText('Skipped 2 locked files'))).toBe(true);
+    expect(isCopyable(screen.getByText('They were in use.'))).toBe(true);
+    expect(isCopyable(screen.getByText('C:\\a.log'))).toBe(true);
+    expect(isCopyable(screen.getByRole('button', { name: 'Dismiss notification' }))).toBe(false);
   });
 });
 
