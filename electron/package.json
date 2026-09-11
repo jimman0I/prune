@@ -9,10 +9,14 @@
   "main": "main.cjs",
   "scripts": {
     "start": "electron .",
-    "dist": "node scripts/build-installer.mjs"
+    "dist": "node scripts/build-installer.mjs",
+    "test": "node --test \"*.test.cjs\""
   },
   "devDependencies": {
     "electron": "^44.0.0",
     "electron-builder": "^26.15.3"
+  },
+  "dependencies": {
+    "electron-updater": "^6.8.9"
   }
 }

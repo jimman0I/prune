@@ -36,7 +36,12 @@ module.exports = {
    * drops the one thing the preload does -- repainting the window's own
    * buttons for the light theme. It would have worked in dev, where the
    * file is loaded straight off disk, and failed only once packaged. */
-  files: ['main.cjs', 'preload.cjs'],
+  //
+  // updater.cjs is the same trap a third time: main.cjs requires it, so a
+  // build without it would run in dev and fail to start once packaged.
+  // electron-updater itself needs no entry -- electron-builder packs
+  // `dependencies` from package.json on its own.
+  files: ['main.cjs', 'preload.cjs', 'updater.cjs'],
   extraResources: [
     // NOTE the source: this copies from ../backend/src DIRECTLY, not from
     // the build/backend-prod/ staging directory build-installer.mjs
@@ -137,6 +142,80 @@ module.exports = {
     oneClick: false,
     allowToChangeInstallationDirectory: true,
     installerIcon: 'build/icon.ico',
-    uninstallerIcon: 'build/icon.ico'
-  }
+    uninstallerIcon: 'build/icon.ico',
+    /* No spaces in the installer's name.
+     *
+     * The default is "Prune Setup 2.5.0.exe", and GitHub renames a release
+     * asset's spaces to dots -- which the README has always had to explain,
+     * and which breaks the updater outright: latest.yml names the file the
+     * build produced, the release holds a file with a different name, and
+     * the download 404s. Hyphens survive the upload unchanged. */
+    artifactName: 'Prune-Setup-${version}.${ext}',
+    /* The installer in 40 languages, opened in Windows' own.
+     *
+     * Each language needs three things, and any one missing stops the
+     * build: installer strings in electron-builder, a language file in
+     * NSIS, and a Windows language id. Eight of electron-builder's
+     * translations fail one of them and are left out -- Persian, Slovene,
+     * Scottish Gaelic and Norwegian Nynorsk because electron-builder and
+     * NSIS name them differently ("Farsi", "Slovenian", "ScotsGaelic",
+     * "NorwegianNynorsk"); Azerbaijani, Bengali and Marathi because NSIS
+     * has no file; Esperanto because Windows has no language id. Hindi is
+     * a ninth: NSIS 3.0.4.1's own Hindi.nsh has an unterminated string on
+     * line 128, found by compiling a test installer once per language --
+     * the only one of 41 that failed.
+     *
+     * The codes are real Windows locales -- el_GR, he_IL -- and not the
+     * ones electron-builder's own toLangWithRegion guesses (el_EL, he_HE).
+     * The guesses have no language id: the first build with them handed
+     * NSIS "undefined" and stopped on warning 7025 while building the
+     * uninstaller. The price is that electron-builder matches its own nine
+     * messages ("close Prune first" and the like) by the guessed code, so
+     * for the twelve languages whose code had to change -- Norwegian's
+     * included, now nb_NO -- those nine stay in English, as they always
+     * were for Thai. Every page of the installer, the Updates page among
+     * them, is in all 40.
+     *
+     * The selector opens preselected to the Windows display language, so
+     * most people press OK; it is there for the ones who want another.
+     * The Updates page's words are in build/installer.nsh, and
+     * electron/installerLanguages.test.cjs fails if a language here has
+     * no words there, or no language id. */
+    multiLanguageInstaller: true,
+    displayLanguageSelector: true,
+    /* NSIS warnings are not build errors here, for one known reason.
+     *
+     * Eleven of these languages -- Afrikaans, Catalan, Welsh, Greek,
+     * Estonian, Icelandic, Lithuanian, Malay, Pashto, Romanian, Serbian --
+     * ship NSIS language files without the five MULTIUSER_TEXT_* strings
+     * (measured against English.nsh: those five and nothing else). They
+     * are the "Choose Users" page's, which asks whether to install for one
+     * user or everyone, and this installer never shows it: Prune installs
+     * per user without asking. NSIS uses the English text and warns, and
+     * electron-builder makes every warning fatal by default -- so without
+     * this the choice was Greek and ten others, or a build.
+     *
+     * The cost is that a new, real warning would no longer stop the build.
+     * The mistakes this installer can actually make -- a language without
+     * the Updates page's words, a code with no Windows language id -- are
+     * caught by electron/installerLanguages.test.cjs instead, before
+     * anything is built. */
+    warningsAsErrors: false,
+    installerLanguages: [
+      'en_US', 'af_ZA', 'ar_SA', 'ca_ES', 'cs_CZ', 'cy_GB', 'da_DK', 'de_DE',
+      'el_GR', 'es_ES', 'et_EE', 'fi_FI', 'fr_FR', 'he_IL', 'hu_HU', 'id_ID',
+      'is_IS', 'it_IT', 'ja_JP', 'ko_KR', 'lt_LT', 'ms_MY', 'nb_NO', 'nl_NL',
+      'pl_PL', 'ps_AF', 'pt_BR', 'pt_PT', 'ro_RO', 'ru_RU', 'sk_SK', 'sq_AL',
+      'sr_SP', 'sv_SE', 'th_TH', 'tr_TR', 'uk_UA', 'vi_VN', 'zh_CN', 'zh_TW'
+    ],
+    // The "Check for updates" page, and what it writes.
+    include: 'build/installer.nsh'
+  },
+  /* Where the updater looks: the GitHub release. This makes the build
+   * write latest.yml (the version, file name and SHA-512 electron-updater
+   * checks a download against) into dist/, and app-update.yml into the
+   * app, which is how the installed copy knows where to ask. Nothing is
+   * published by the build itself -- build-installer.mjs passes
+   * `--publish never`, and the release is drafted by CI. */
+  publish: [{ provider: 'github', owner: 'jimman0I', repo: 'prune', releaseType: 'release' }]
 };

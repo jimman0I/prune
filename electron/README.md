@@ -23,12 +23,16 @@ Four steps, in order:
    production-only install. The backend's shared dev `node_modules`
    (used for `npm test`) also carries `vitest` and its whole dependency
    tree; shipping that wholesale would bloat every installer with test
-   tooling nobody needs at runtime. `build/` is gitignored and rebuilt
-   from scratch every run — never edit anything inside it directly.
-4. **`electron-builder -c electron-builder.config.cjs`** — packages
-   `main.cjs`, the frontend build, and the production-only backend into
-   a Windows NSIS installer (`.exe`) and a portable build (`.zip`), both
-   written to `dist/` (also gitignored).
+   tooling nobody needs at runtime. `build/backend-prod/` is gitignored
+   and rebuilt from scratch every run — never edit anything inside it
+   directly. The rest of `build/` is committed source: the icons and
+   `installer.nsh`, electron-builder's default resources folder.
+4. **`electron-builder -c electron-builder.config.cjs --publish never`** —
+   packages `main.cjs`, `preload.cjs`, `updater.cjs`, the frontend build
+   and the production-only backend into a Windows NSIS installer (`.exe`,
+   with its `.blockmap`) and a portable build (`.zip`), plus `latest.yml`
+   for the updater, all written to `dist/` (also gitignored). Then
+   `SHA256SUMS.txt` for the installer and the zip.
 
 `electron-builder.config.cjs`'s `extraResources` points at
 `build/backend-prod/node_modules`, not `../backend/node_modules` — that's
@@ -55,6 +59,34 @@ ship a stale one.
   version block is built from `productName`, `author` and the version —
   see the warning about `author` at the top of the config before changing
   either.
+
+## Updates
+
+`updater.cjs` is the part of the in-app updater Prune owns. The
+downloading, the SHA-512 check against the release's `latest.yml` and the
+silent install are `electron-updater`'s; what this file adds is consent. It
+turns off electron-updater's two defaults — download as soon as a check
+finds something, install whatever was downloaded when the app quits — and
+refuses any version other than the one the side-bar button showed.
+`main.cjs` registers its three IPC handlers once, and `preload.cjs` exposes
+them to the window as `window.pruneWindow.updates`. Its tests are `npm
+test` here, on Node's own test runner, so no new dependency.
+
+`publish` in the config names the GitHub release, which is what makes the
+build write `latest.yml` into `dist/` and `app-update.yml` into the app.
+`build-installer.mjs` passes `--publish never`, so the build itself never
+uploads anything: CI drafts the release. The installer is named
+`Prune-Setup-<version>.exe` because `latest.yml` names the exact file, and
+GitHub would turn spaces into dots.
+
+## The installer
+
+40 languages, opening in Windows' display language (`installerLanguages`
+and `displayLanguageSelector` in the config), and an "Updates" page from
+`build/installer.nsh` that asks whether to check for updates, on a fresh
+install only. `installerLanguages.test.cjs` fails if a language the
+installer offers has no words for that page, which NSIS itself would only
+warn about.
 
 ## Where user data lives
 

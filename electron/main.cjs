@@ -2,6 +2,8 @@ const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('node:path');
 const http = require('node:http');
 const { pathToFileURL } = require('node:url');
+const { autoUpdater } = require('electron-updater');
+const { createUpdater } = require('./updater.cjs');
 
 const BACKEND_PORT = 3101;
 
@@ -175,9 +177,35 @@ async function createWindow() {
   }
 }
 
+/* The update button's three requests (see preload.cjs and updater.cjs).
+ *
+ * Registered once, not per window, because ipcMain.handle refuses a
+ * second handler for the same channel. Each one checks that the request
+ * came from one of Prune's own windows, and the updater itself checks the
+ * version it is handed, so nothing the renderer sends is taken on trust.
+ * Progress goes back to every window, of which there is normally one. */
+function registerUpdateHandlers() {
+  const updater = createUpdater({
+    autoUpdater,
+    isPackaged: app.isPackaged,
+    send: (channel, value) => {
+      for (const win of BrowserWindow.getAllWindows()) {
+        if (!win.isDestroyed()) win.webContents.send(`prune:update:${channel}`, value);
+      }
+    }
+  });
+  const fromPrune = (event) => {
+    if (!BrowserWindow.fromWebContents(event.sender)) throw new Error('Not a request from Prune.');
+  };
+  ipcMain.handle('prune:update:prepare', (event, version) => { fromPrune(event); return updater.prepare(version); });
+  ipcMain.handle('prune:update:install', (event) => { fromPrune(event); updater.install(); });
+  ipcMain.handle('prune:update:install-on-quit', (event, enabled) => { fromPrune(event); updater.installOnQuit(enabled); });
+}
+
 app.whenReady().then(async () => {
   await startBackend();
   await waitForBackend();
+  registerUpdateHandlers();
   await createWindow();
 
   app.on('activate', () => {

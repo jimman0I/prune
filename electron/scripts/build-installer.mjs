@@ -102,7 +102,13 @@ step('5/6 Running electron-builder', () => {
   // unsigned by design (no cert), so there is nothing to auto-discover --
   // CSC_IDENTITY_AUTO_DISCOVERY=false skips that entire step rather than
   // requiring Developer Mode or an elevated shell just to build.
-  execFileSync(process.platform === 'win32' ? 'npx.cmd' : 'npx', ['electron-builder', '-c', 'electron-builder.config.cjs'], {
+  //
+  // `--publish never` because the config now names a GitHub release for
+  // the updater, and electron-builder takes that as permission to upload
+  // on its own when it sees a CI tag. It would race the workflow's draft
+  // job for the same release. Publishing is CI's job, done from files
+  // this build only writes.
+  execFileSync(process.platform === 'win32' ? 'npx.cmd' : 'npx', ['electron-builder', '-c', 'electron-builder.config.cjs', '--publish', 'never'], {
     cwd: electronRoot,
     stdio: 'inherit',
     env: { ...process.env, CSC_IDENTITY_AUTO_DISCOVERY: 'false' },
