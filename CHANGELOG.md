@@ -3,6 +3,30 @@
 All notable changes to Prune (formerly named unrevo -- rebranded 2026-09-01,
 see v1.0.1 below) are documented here.
 
+## v2.3.4
+
+A fix to what the batch dialog says, and a newer build toolchain.
+
+### Fixed
+
+- **The batch dialog no longer promises things a Store app does not
+  get.** Its first lines said each program's own uninstaller would run
+  and a leftover scan would follow. A Store app is removed through
+  Windows and is not scanned, so a batch of only Store apps now says
+  exactly that, and a mixed batch says which programs are which.
+- **"No leftovers found — clean uninstall" only appears after a scan
+  that ran.** It used to appear after a batch of only Store apps, where
+  no scan runs, and after a batch where every uninstall failed — under
+  the list of failures. Those now end with a plain Done instead.
+
+### Changed
+
+- **Built with electron-builder 26.** The build tools had ten known
+  vulnerabilities in the archive extractor they use while building. None
+  of them were ever in the app you install, and nothing about how Prune
+  installs, runs or uninstalls has changed — the new installer was
+  installed, launched and removed again before release to make sure.
+
 ## v2.3.3
 
 Store apps can now be removed in a batch, alongside everything else.
