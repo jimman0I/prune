@@ -3,6 +3,53 @@
 All notable changes to Prune (formerly named unrevo -- rebranded 2026-09-01,
 see v1.0.1 below) are documented here.
 
+## v2.4.0
+
+Revo-style uninstall options, an opt-in update check, and a Prune.exe that
+looks like Prune.
+
+### Added
+
+- **An Uninstall tab in Settings**, modelled on Revo Uninstaller's options:
+  - **Where leftover files go:** Quarantine (the default, restorable in
+    Prune), the Recycle Bin, or Delete permanently. Registry keys are
+    backed up before they are removed whichever you pick. Permanent
+    deletion has its own guard — it refuses Windows, drive roots, Program
+    Files itself, your profile's own folders and Prune's quarantine,
+    whatever the scan found — and the review says where things will go
+    before you confirm.
+  - **Before uninstalling:** optionally create a System Restore point,
+    and optionally back up the registry (`HKLM\SOFTWARE` and
+    `HKCU\Software`, about 140 MB; the newest three are kept). If a
+    registry backup you asked for can't be made, the uninstall doesn't
+    run.
+  - **After uninstalling:** turn the leftover scan off, start the review
+    with nothing ticked, or stop keeping an uninstall history.
+- **An opt-in update check** (Settings → General, off by default). Turned
+  on, Prune asks GitHub once a day whether a newer release exists, and a
+  tile in the corner of the window offers the download page when one
+  does. Nothing is downloaded or installed, and it is the only request
+  Prune ever makes beyond this machine.
+- **Show free space on the Disk Map** (off by default): the drive's free
+  space as one more block, like WizTree's.
+- **Reset warning confirmations** in Settings → Cleanup, to bring back the
+  "this loses data" questions you had told not to ask again.
+
+### Changed
+
+- **Your excluded folders now apply to the leftover scan too**, so a
+  folder you told Prune never to touch is no longer offered after an
+  uninstall.
+- **Prune.exe shows its own icon and name** in Explorer, Task Manager and
+  its Properties, instead of Electron's.
+
+### Fixed
+
+- **The About panel said v2.2.0** for five releases. It now shows the
+  version you are running.
+- **A failed uninstall no longer carries on to a leftover scan** as if it
+  had worked.
+
 ## v2.3.4
 
 A fix to what the batch dialog says, and a newer build toolchain.

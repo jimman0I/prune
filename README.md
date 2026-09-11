@@ -15,7 +15,7 @@ deleted outright: it is quarantined first, so a bad match is recoverable.
 [![Latest release](https://img.shields.io/github/v/release/jimman0I/prune?style=for-the-badge&color=0ea5e9&label=release)](https://github.com/jimman0I/prune/releases/latest)
 ![Platform](https://img.shields.io/badge/Windows-10%20%7C%2011-1e293b?style=for-the-badge&logo=windows&logoColor=white)
 [![License](https://img.shields.io/github/license/jimman0I/prune?style=for-the-badge&color=eab308)](LICENSE)
-![Tests](https://img.shields.io/badge/tests-1%2C724%20passing-22c55e?style=for-the-badge)
+![Tests](https://img.shields.io/badge/tests-1%2C844%20passing-22c55e?style=for-the-badge)
 ![Telemetry](https://img.shields.io/badge/telemetry-none-64748b?style=for-the-badge)
 
 <br/>
@@ -249,7 +249,7 @@ cd backend && npm test
 cd frontend && npm test
 ```
 
-1,724 tests, roughly half a minute per suite. There is no CI, so running
+1,844 tests, roughly half a minute per suite. There is no CI, so running
 both is on you — and run them one at a time, for the reason
 [CONTRIBUTING.md](CONTRIBUTING.md) explains.
 
