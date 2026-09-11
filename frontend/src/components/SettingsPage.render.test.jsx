@@ -200,6 +200,40 @@ describe('Install updates automatically', () => {
   });
 });
 
+describe('the language picker', () => {
+  it('shows the current language selected, native names in the list', async () => {
+    fetchSettings.mockResolvedValue({ ...DEFAULTS, language: 'el' });
+    renderScreen(<SettingsPage />);
+
+    const picker = await screen.findByRole('combobox', { name: 'Γλώσσα' });
+    expect(picker.value).toBe('el');
+    expect(screen.getByRole('option', { name: 'Ελληνικά' })).toBeTruthy();
+    expect(screen.getByRole('option', { name: 'English' })).toBeTruthy();
+  });
+
+  it('defaults to English when settings say nothing', async () => {
+    renderScreen(<SettingsPage />);
+    expect((await screen.findByRole('combobox', { name: 'Language' })).value).toBe('en');
+  });
+
+  it('saves the language the moment a new one is picked', async () => {
+    const user = userEvent.setup();
+    renderScreen(<SettingsPage />);
+    const picker = await screen.findByRole('combobox', { name: 'Language' });
+
+    await user.selectOptions(picker, 'el');
+    expect(lastSaved()).toEqual({ language: 'el' });
+  });
+
+  it('lists all 40 languages, once each', async () => {
+    renderScreen(<SettingsPage />);
+    const picker = await screen.findByRole('combobox', { name: 'Language' });
+    const options = [...picker.querySelectorAll('option')];
+    expect(options).toHaveLength(40);
+    expect(new Set(options.map((o) => o.value)).size).toBe(40);
+  });
+});
+
 describe('the About panel', () => {
   it('shows the version the backend is running, not a constant in this file', async () => {
     /* It said v2.2.0 through five releases: the version was a hand-copied

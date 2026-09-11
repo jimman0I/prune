@@ -6,6 +6,7 @@ import AutomationSettings from './AutomationSettings.jsx';
 import ThemeToggle from './ThemeToggle.jsx';
 import { useSettings, useUpdateCheck } from '../hooks/useSystemQueries.js';
 import { leftoverDestinationFrom } from '../lib/leftoverDestination.js';
+import { useLanguage, LANGUAGES } from '../i18n/LanguageContext.jsx';
 
 // The version is NOT kept here. It used to be a hand-copied constant that
 // had to be bumped with the three package.json files, nothing failed when
@@ -95,6 +96,7 @@ function SettingsPage() {
   const [sandboxReport, setSandboxReport] = useState(null);
 
   const { settings, loading, save: saveMutation } = useSettings();
+  const { t } = useLanguage();
   const update = useUpdateCheck(settings?.updateCheck === true);
   const destination = leftoverDestinationFrom(settings);
   const acknowledgedCount = Array.isArray(settings?.acknowledgedCleanWarnings) ? settings.acknowledgedCleanWarnings.length : 0;
@@ -254,6 +256,32 @@ ode.js" is a folder or a file type.
 
           {tab === 'general' && (
             <div className="flex flex-col gap-4">
+
+              {/* What Prune's own screens are shown in -- the installer may
+                  already have picked one, or Windows' own display language
+                  did the first time Prune ever started; see
+                  backend/src/services/settings.js. Changing it here is
+                  instant: LanguageContext.jsx reads this same setting. */}
+              <div className="glass-panel p-6">
+                <div className="flex items-center justify-between gap-4">
+                  <div className="min-w-0">
+                    <div className="text-[14px] font-medium text-[color:var(--text-primary)]">{t('settings.language.title')}</div>
+                    <p className="text-[12.5px] text-[color:var(--text-secondary)] mt-1 leading-relaxed max-w-[62ch]">
+                      {t('settings.language.description')}
+                    </p>
+                  </div>
+                  <select
+                    value={settings.language ?? 'en'}
+                    onChange={(e) => save({ language: e.target.value })}
+                    aria-label={t('settings.language.title')}
+                    className="bg-[color:var(--bg-panel)] border border-[color:var(--border-subtle)] rounded-lg px-3 py-2 text-[12.5px] text-[color:var(--text-primary)] focus:outline-none focus:border-[color:var(--accent-primary)] shrink-0"
+                  >
+                    {LANGUAGES.map((lang) => (
+                      <option key={lang.code} value={lang.code}>{lang.native}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
 
               <div className="glass-panel p-6">
                 <div className="flex items-center justify-between gap-4">

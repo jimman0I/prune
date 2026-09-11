@@ -1,6 +1,22 @@
 import { motion } from 'framer-motion';
+import { useLanguage } from '../i18n/LanguageContext.jsx';
+
+/** Each item's catalog key, kept apart from ITEMS below because `t()`
+ * needs the current language from context and ITEMS is built once, at
+ * module load, before any component has rendered. */
+const NAV_KEYS = {
+  dashboard: 'nav.dashboard',
+  diskmap: 'nav.diskMap',
+  applications: 'nav.applications',
+  quarantine: 'nav.quarantine',
+  settings: 'nav.settings',
+  startup: 'nav.startup',
+  duplicates: 'nav.duplicates',
+  deepclean: 'nav.deepClean'
+};
+
 const ITEMS = [
-  { id: 'dashboard', label: 'Dashboard', icon: (
+  { id: 'dashboard', icon: (
     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
       <rect x="3" y="3" width="7" height="9" rx="1.5"></rect>
       <rect x="14" y="3" width="7" height="5" rx="1.5"></rect>
@@ -8,7 +24,7 @@ const ITEMS = [
       <rect x="3" y="16" width="7" height="5" rx="1.5"></rect>
     </svg>
   ) },
-  { id: 'diskmap', label: 'Disk Map', icon: (
+  { id: 'diskmap', icon: (
     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
       <rect x="3" y="3" width="10" height="10" rx="1.5"></rect>
       <rect x="15" y="3" width="6" height="6" rx="1.5"></rect>
@@ -16,27 +32,27 @@ const ITEMS = [
       <rect x="3" y="15" width="10" height="6" rx="1.5"></rect>
     </svg>
   ) },
-  { id: 'applications', label: 'Applications', icon: (
+  { id: 'applications', icon: (
     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
       <rect x="3" y="4" width="18" height="4" rx="1"></rect>
       <rect x="3" y="10" width="18" height="4" rx="1"></rect>
       <rect x="3" y="16" width="18" height="4" rx="1"></rect>
     </svg>
   ) },
-  { id: 'quarantine', label: 'Quarantine', icon: (
+  { id: 'quarantine', icon: (
     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
       <path d="M12 3l8 4v5c0 4.5-3.2 8.4-8 9.5-4.8-1.1-8-5-8-9.5V7l8-4z"></path>
       <path d="M12 8v5"></path>
       <path d="M12 16.5v.01"></path>
     </svg>
   ) },
-  { id: 'settings', label: 'Settings', icon: (
+  { id: 'settings', icon: (
     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
       <circle cx="12" cy="12" r="3"></circle>
       <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
     </svg>
   ) },
-  { id: 'startup', label: 'Startup', icon: (
+  { id: 'startup', icon: (
     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
       <path d="M12 2v10"></path>
       <path d="M18.4 6.6a9 9 0 1 1-12.8 0"></path>
@@ -44,7 +60,7 @@ const ITEMS = [
   ) },
   // Two overlapping sheets: the one glyph that reads as "copies" without
   // needing a label, which matters in a 72px rail.
-  { id: 'duplicates', label: 'Duplicates', icon: (
+  { id: 'duplicates', icon: (
     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
       <rect x="9" y="9" width="11" height="11" rx="2"></rect>
       <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
@@ -65,7 +81,7 @@ const ITEMS = [
   // expected to win; rasterised at the 20px this actually ships at, the
   // angle collapses into a stubby off-centre mark and the extra bristle
   // strokes merge into noise. Straight survives the size.
-  { id: 'deepclean', label: 'Deep Clean', icon: (
+  { id: 'deepclean', icon: (
     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
       <path d="M12 2.5v7.5"></path>
       <path d="M8.8 10h6.4l2.8 10.5H6z"></path>
@@ -76,6 +92,7 @@ const ITEMS = [
 ];
 
 export default function NavRail({ screen, onNavigate, footer = null }) {
+  const { t } = useLanguage();
   return (
     <nav className="relative flex flex-col items-center gap-2 py-6 w-[72px] shrink-0" aria-label="Main">
       {/* The glass is a background LAYER here, not the container itself.
@@ -97,6 +114,7 @@ export default function NavRail({ screen, onNavigate, footer = null }) {
           alternative and said nothing twice. */}
       {ITEMS.map((item) => {
         const active = screen === item.id;
+        const label = t(NAV_KEYS[item.id]);
         return (
           // The label is a real element, not a `title` attribute -- this
           // codebase does not use native hover text anywhere, and a
@@ -108,7 +126,7 @@ export default function NavRail({ screen, onNavigate, footer = null }) {
             <button
               onClick={() => onNavigate(item.id)}
               aria-current={active ? 'page' : undefined}
-              aria-label={item.label}
+              aria-label={label}
               className={`peer relative w-11 h-11 rounded-xl flex items-center justify-center transition-colors ${
                 active ? 'text-[color:var(--accent-primary)]' : 'text-[color:var(--text-secondary)] hover:text-[color:var(--text-primary)] hover:bg-[color:var(--surface-hover)]'
               }`}
@@ -159,7 +177,7 @@ export default function NavRail({ screen, onNavigate, footer = null }) {
               aria-hidden="true"
               className="pointer-events-none absolute left-full top-1/2 -translate-y-1/2 ml-2 px-2 py-1 rounded-md whitespace-nowrap text-[11.5px] font-medium bg-[color:var(--bg-panel)] text-[color:var(--text-primary)] border border-[color:var(--border-subtle)] shadow-lg opacity-0 group-hover:opacity-100 peer-focus-visible:opacity-100 transition-opacity duration-150 z-flyout"
             >
-              {item.label}
+              {label}
             </span>
           </div>
         );

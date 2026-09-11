@@ -10,6 +10,7 @@ import App from './App.jsx';
 import { queryClient } from './lib/queryClient.js';
 import { ToastProvider } from './hooks/useToasts.jsx';
 import { ThemeProvider, applyTheme, initialTheme } from './hooks/useTheme.jsx';
+import { LanguageProvider } from './i18n/LanguageContext.jsx';
 
 /** `reducedMotion="user"` makes every framer-motion component in the app
  * honour the operating system's reduce-motion setting.
@@ -41,9 +42,11 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <QueryClientProvider client={queryClient}>
       <MotionConfig reducedMotion="user">
         <ThemeProvider>
-          <ToastProvider>
-            <App />
-          </ToastProvider>
+          <LanguageProvider>
+            <ToastProvider>
+              <App />
+            </ToastProvider>
+          </LanguageProvider>
         </ThemeProvider>
       </MotionConfig>
     </QueryClientProvider>

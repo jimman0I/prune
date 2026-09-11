@@ -24,7 +24,10 @@ vi.mock('../lib/api.js', () => ({
   // front. Present because the module is imported at load time.
   fetchPrograms: vi.fn(async () => []),
   revealInExplorer: vi.fn(async () => {}),
-  openInstalledAppsSettings: vi.fn(async () => {})
+  openInstalledAppsSettings: vi.fn(async () => {}),
+  // Read by LanguageProvider, which renderScreen() now always mounts.
+  fetchSettings: vi.fn(async () => ({})),
+  updateSettings: vi.fn()
 }));
 
 const ProgramList = (await import('./ProgramList.jsx')).default;

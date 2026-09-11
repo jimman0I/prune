@@ -20,7 +20,10 @@ const removeStoreApp = vi.fn();
 const appendHistoryEntry = vi.fn(async () => {});
 vi.mock('../lib/api.js', () => ({
   removeStoreApp: (...a) => removeStoreApp(...a),
-  appendHistoryEntry: (...a) => appendHistoryEntry(...a)
+  appendHistoryEntry: (...a) => appendHistoryEntry(...a),
+  // Read by LanguageProvider, which renderScreen() now always mounts.
+  fetchSettings: vi.fn(async () => ({})),
+  updateSettings: vi.fn()
 }));
 
 const StoreRemoveDialog = (await import('./StoreRemoveDialog.jsx')).default;

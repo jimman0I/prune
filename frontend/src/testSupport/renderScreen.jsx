@@ -3,6 +3,7 @@ import { render, cleanup } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ToastProvider } from '../hooks/useToasts.jsx';
 import { ThemeProvider } from '../hooks/useTheme.jsx';
+import { LanguageProvider } from '../i18n/LanguageContext.jsx';
 
 /** Rendering a screen the way the app mounts it.
  *
@@ -44,12 +45,20 @@ export function makeTestClient() {
  * ThemeProvider is here for exactly the same reason, and arrived the same
  * way: useTheme throws outside it, so the moment Settings grew a theme
  * toggle, nine tests that had nothing to do with themes started failing
- * on a missing provider. */
+ * on a missing provider. LanguageProvider joins them for the same reason
+ * again: useLanguage throws outside it too, and it reads settings via
+ * useSettings() -- the same query client every other screen already
+ * shares here -- so it costs nothing extra to mount. Every existing
+ * test's English text assertions are untouched by this: with no
+ * `language` in a test's settings mock, LanguageContext.jsx defaults to
+ * English, the same text those tests already expect. */
 export function renderScreen(ui, { client = makeTestClient() } = {}) {
   const result = render(
     <QueryClientProvider client={client}>
       <ThemeProvider>
-        <ToastProvider>{ui}</ToastProvider>
+        <LanguageProvider>
+          <ToastProvider>{ui}</ToastProvider>
+        </LanguageProvider>
       </ThemeProvider>
     </QueryClientProvider>
   );
