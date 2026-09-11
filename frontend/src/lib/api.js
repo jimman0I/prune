@@ -378,6 +378,25 @@ export async function updateSettings(partial) {
   return data;
 }
 
+/** The running version, and -- only when the user has turned the update
+ * check on -- whether GitHub has a newer release. With the setting off the
+ * backend answers from this machine alone. */
+export async function fetchUpdateCheck() {
+  const res = await fetch(`${API_URL}/update-check`);
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
+  return data;
+}
+
+/** Opens the newer release's page in the browser. Sends no address: the
+ * backend opens the page its own last check found, and nothing else. */
+export async function openUpdatePage() {
+  const res = await fetch(`${API_URL}/update-check/open`, { method: 'POST' });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
+  return data;
+}
+
 export async function runSandboxTest() {
   const res = await fetch(`${API_URL}/sandbox-test`, { method: 'POST' });
   const data = await res.json();

@@ -1,24 +1,16 @@
 import { useState, memo } from 'react';
-import { runSandboxTest } from '../lib/api.js';
+import { runSandboxTest, openUpdatePage } from '../lib/api.js';
 import { classifyExclusion } from '../lib/exclusionInput.js';
 import { positiveOrOff } from '../lib/limitInput.js';
 import AutomationSettings from './AutomationSettings.jsx';
 import ThemeToggle from './ThemeToggle.jsx';
-import { useSettings } from '../hooks/useSystemQueries.js';
+import { useSettings, useUpdateCheck } from '../hooks/useSystemQueries.js';
 
-// electron/package.json is this app's real, single source of truth for
-// name/version (checked 2026-09-06 for the 2.1.3 release: productName
-// "Prune", version "2.1.3") -- hand-copied here rather than wired through
-// Vite's build pipeline, matching this codebase's existing convention of
-// small hand-curated constants over new plumbing for a value that changes
-// on release cadence, not per-request.
-//
-// The cost of that convention is that this has to be bumped by hand with
-// the three package.json files and their lockfiles, and nothing fails if
-// it is not -- the About panel simply reports the previous release. It
-// was already a release behind once.
+// The version is NOT kept here. It used to be a hand-copied constant that
+// had to be bumped with the three package.json files, nothing failed when
+// it was not, and the About panel said v2.2.0 through five releases. It is
+// now read from the backend, whose package.json every release bumps.
 const APP_NAME = 'Prune';
-const APP_VERSION = '2.2.0';
 
 const TABS = [
   { id: 'general', label: 'General' },
@@ -77,6 +69,13 @@ function SettingsPage() {
   const [sandboxReport, setSandboxReport] = useState(null);
 
   const { settings, loading, save: saveMutation } = useSettings();
+  const update = useUpdateCheck(settings?.updateCheck === true);
+  const [openError, setOpenError] = useState(null);
+
+  const handleOpenUpdatePage = () => {
+    setOpenError(null);
+    openUpdatePage().catch((err) => setOpenError(err.message));
+  };
   const error = null;
 
   /** Optimistic, and it rolls back on a real failure.
@@ -239,6 +238,53 @@ ode.js" is a folder or a file type.
                     label="Minimize to Tray"
                   />
                 </div>
+              </div>
+
+              {/* The one setting that lets anything leave the machine, so
+                  it says exactly what, to whom and how often before it is
+                  switched on -- and it is off until someone does. */}
+              <div className="glass-panel p-6">
+                <div className="flex items-center justify-between gap-4">
+                  <div className="min-w-0">
+                    <div className="text-[14px] font-medium text-[color:var(--text-primary)]">Check for updates</div>
+                    <p className="text-[12.5px] text-[color:var(--text-secondary)] mt-1 leading-relaxed max-w-[62ch]">
+                      Once a day, Prune asks api.github.com whether a newer release exists. It is
+                      the only request Prune makes to anywhere but this machine, and GitHub sees
+                      your IP address as any website would. Nothing is downloaded or installed:
+                      if there is a new version, you get a link and decide.
+                    </p>
+                  </div>
+                  <Toggle
+                    checked={settings.updateCheck === true}
+                    onChange={() => save({ updateCheck: settings.updateCheck !== true })}
+                    label="Check for updates"
+                  />
+                </div>
+
+                {settings.updateCheck === true && (
+                  <div className="mt-4 pt-4 border-t border-[color:var(--border-subtle)] text-[12.5px]">
+                    {update.loading && (
+                      <p className="text-[color:var(--text-muted)]">Checking…</p>
+                    )}
+                    {update.data?.error && (
+                      <p className="text-[color:var(--warning)]">{`Couldn't check for updates: ${update.data.error}`}</p>
+                    )}
+                    {update.data?.newer === true && (
+                      <div className="flex items-center justify-between gap-4">
+                        <p className="text-[color:var(--text-primary)]">{`Prune ${update.data.latest} is available.`}</p>
+                        <button type="button" className="btn-primary px-4 py-1.5 text-[12.5px] font-medium shrink-0" onClick={handleOpenUpdatePage}>
+                          Open the download page
+                        </button>
+                      </div>
+                    )}
+                    {update.data?.newer === false && (
+                      <p className="text-[color:var(--text-muted)]">{`You're on the latest version (${update.data.current}).`}</p>
+                    )}
+                    {openError && (
+                      <p className="text-[color:var(--danger)] mt-2">{`Couldn't open the page: ${openError}`}</p>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
           )}
@@ -486,7 +532,9 @@ ode.js" is a folder or a file type.
           {tab === 'about' && (
             <div className="glass-panel p-6">
               <h2 className="display-heading text-[20px] mb-1">{APP_NAME}</h2>
-              <p className="text-[12.5px] text-[color:var(--text-muted)] font-mono mb-4">v{APP_VERSION}</p>
+              {update.data?.current && (
+                <p className="text-[12.5px] text-[color:var(--text-muted)] font-mono mb-4">{`v${update.data.current}`}</p>
+              )}
               <p className="text-[13px] text-[color:var(--text-secondary)] leading-relaxed max-w-[52ch]">
                 A local, offline uninstaller and cleanup tool for Windows — forced removal with
                 leftover-file scanning, safe quarantine-before-delete, disk mapping, and

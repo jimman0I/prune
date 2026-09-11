@@ -3,7 +3,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   fetchStartupItems, fetchStartupIcons, setStartupItemEnabled,
   fetchQuarantineBatches, restoreQuarantineBatch, deleteQuarantineBatch, emptyQuarantine,
-  fetchSettings, updateSettings,
+  fetchSettings, updateSettings, fetchUpdateCheck,
   fetchDiskSpace, fetchDiskHealth
 } from '../lib/api.js';
 import { keys } from '../lib/queryClient.js';
@@ -198,6 +198,22 @@ export function useSettings() {
   });
 
   return { settings: settings.data ?? null, loading: settings.isPending, save };
+}
+
+/** The running version, and the update check's answer when it is on.
+ *
+ * Keyed on whether the check is enabled, so turning the switch on asks
+ * straight away instead of waiting out a cached "off". Never retried: a
+ * failed check is shown as one, and the backend already limits real
+ * requests to one a day. */
+export function useUpdateCheck(enabled) {
+  const query = useQuery({
+    queryKey: [...keys.updateCheck, enabled === true],
+    queryFn: fetchUpdateCheck,
+    retry: false,
+    staleTime: 60 * 60 * 1000
+  });
+  return { data: query.data ?? null, loading: query.isPending };
 }
 
 /* ----------------------------------------------------------------- disk */

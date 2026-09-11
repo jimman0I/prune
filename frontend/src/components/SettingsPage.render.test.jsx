@@ -18,10 +18,14 @@ import { renderScreen } from '../testSupport/renderScreen.jsx';
 
 const updateSettings = vi.fn(async (partial) => partial);
 const fetchSettings = vi.fn();
+const fetchUpdateCheck = vi.fn();
+const openUpdatePage = vi.fn(async () => ({ ok: true }));
 
 vi.mock('../lib/api.js', () => ({
   fetchSettings: (...a) => fetchSettings(...a),
   updateSettings: (...a) => updateSettings(...a),
+  fetchUpdateCheck: (...a) => fetchUpdateCheck(...a),
+  openUpdatePage: (...a) => openUpdatePage(...a),
   fetchAutomation: vi.fn(async () => ({ enabled: false, nextRun: null, missed: 0 })),
   runSandboxTest: vi.fn(),
   fetchStartupItems: vi.fn(), fetchStartupIcons: vi.fn(), setStartupItemEnabled: vi.fn(),
@@ -43,6 +47,7 @@ const DEFAULTS = {
   hideUnavailableRules: false,
   quarantineRetentionDays: null,
   quarantineMaxSizeGb: null,
+  updateCheck: false,
   automation: { enabled: false, frequency: 'weekly', weekday: 0, hour: 2, minute: 0, task: 'scan' }
 };
 
@@ -68,6 +73,111 @@ const lastSaved = () => updateSettings.mock.calls.at(-1)?.[0];
 beforeEach(() => {
   vi.clearAllMocks();
   fetchSettings.mockResolvedValue({ ...DEFAULTS });
+  fetchUpdateCheck.mockResolvedValue({ enabled: false, current: '2.3.4' });
+});
+
+describe('the update check', () => {
+  /* Prune's one outbound request, so the switch has to be off until the
+   * user turns it on, and has to say what turning it on does -- who is
+   * asked, how often, and that nothing is installed -- before they do. */
+  const newer = {
+    enabled: true, current: '2.3.4', latest: '2.3.5', newer: true,
+    url: 'https://github.com/jimman0I/prune/releases/tag/v2.3.5'
+  };
+  const theSwitch = () => screen.findByRole('switch', { name: 'Check for updates' });
+
+  it('is off by default, and says what turning it on would do', async () => {
+    renderScreen(<SettingsPage />);
+    expect((await theSwitch()).getAttribute('aria-checked')).toBe('false');
+    expect(screen.getByText(/api\.github\.com/)).toBeTruthy();
+    expect(screen.getByText(/nothing is downloaded or installed/i)).toBeTruthy();
+  });
+
+  it('saves the choice when it is turned on', async () => {
+    const user = userEvent.setup();
+    renderScreen(<SettingsPage />);
+    await user.click(await theSwitch());
+    expect(lastSaved()).toEqual({ updateCheck: true });
+  });
+
+  it('offers the download page when a newer release exists', async () => {
+    fetchSettings.mockResolvedValue({ ...DEFAULTS, updateCheck: true });
+    fetchUpdateCheck.mockResolvedValue(newer);
+    const user = userEvent.setup();
+    renderScreen(<SettingsPage />);
+
+    expect(await screen.findByText(/Prune 2\.3\.5 is available/)).toBeTruthy();
+    await user.click(screen.getByRole('button', { name: 'Open the download page' }));
+    expect(openUpdatePage).toHaveBeenCalledTimes(1);
+  });
+
+  it('says it is up to date when it is, with no download button', async () => {
+    fetchSettings.mockResolvedValue({ ...DEFAULTS, updateCheck: true });
+    fetchUpdateCheck.mockResolvedValue({ enabled: true, current: '2.3.4', latest: '2.3.4', newer: false, url: newer.url });
+    renderScreen(<SettingsPage />);
+
+    expect(await screen.findByText(/latest version/i)).toBeTruthy();
+    expect(screen.queryByRole('button', { name: 'Open the download page' })).toBeNull();
+  });
+
+  it('says so when the check fails, rather than going quiet', async () => {
+    fetchSettings.mockResolvedValue({ ...DEFAULTS, updateCheck: true });
+    fetchUpdateCheck.mockResolvedValue({ enabled: true, current: '2.3.4', error: 'GitHub answered 403.' });
+    renderScreen(<SettingsPage />);
+
+    expect(await screen.findByText(/Couldn.t check.*GitHub answered 403/)).toBeTruthy();
+  });
+
+  it('shows no update status at all while the switch is off', async () => {
+    renderScreen(<SettingsPage />);
+    await theSwitch();
+    expect(screen.queryByText(/is available|latest version|Couldn.t check/i)).toBeNull();
+  });
+
+  it('reads a settings file with no update-check entry as off', async () => {
+    // A settings file written before this feature existed has no such
+    // key, and a missing key is not consent to reach the network.
+    const { updateCheck, ...older } = DEFAULTS;
+    fetchSettings.mockResolvedValue(older);
+    renderScreen(<SettingsPage />);
+    expect((await theSwitch()).getAttribute('aria-checked')).toBe('false');
+  });
+
+  it('shows nothing from a check while the switch is off, whatever the answer', async () => {
+    /* The status belongs to the switch. An answer that arrives while it
+     * is off -- a check still in flight when it was turned off, say -- is
+     * not shown as if the user had asked for it. */
+    fetchUpdateCheck.mockResolvedValue(newer);
+    renderScreen(<SettingsPage />);
+    await theSwitch();
+    await waitFor(() => expect(fetchUpdateCheck).toHaveBeenCalled());
+    await new Promise((resolve) => setTimeout(resolve, 50));
+    expect(screen.queryByText(/is available/i)).toBeNull();
+  });
+
+  it('checks straight away when the switch is turned on', async () => {
+    // Not an hour later, when a cached "off" answer finally goes stale.
+    fetchUpdateCheck
+      .mockResolvedValueOnce({ enabled: false, current: '2.3.4' })
+      .mockResolvedValue(newer);
+    const user = userEvent.setup();
+    renderScreen(<SettingsPage />);
+    await user.click(await theSwitch());
+    expect(await screen.findByText(/Prune 2\.3\.5 is available/)).toBeTruthy();
+  });
+});
+
+describe('the About panel', () => {
+  it('shows the version the backend is running, not a constant in this file', async () => {
+    /* It said v2.2.0 through five releases: the version was a hand-copied
+     * constant and nothing failed when it went stale. */
+    fetchUpdateCheck.mockResolvedValue({ enabled: false, current: '9.8.7' });
+    const user = userEvent.setup();
+    renderScreen(<SettingsPage />);
+    await user.click(await screen.findByRole('button', { name: 'About' }));
+
+    expect(await screen.findByText('v9.8.7')).toBeTruthy();
+  });
 });
 
 describe('the quarantine limit fields', () => {
