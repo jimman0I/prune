@@ -41,6 +41,17 @@ foreach ($path in @(${literals})) {
         [Microsoft.VisualBasic.FileIO.RecycleOption]::SendToRecycleBin
       )
       $recycled += $path
+    } elseif (Test-Path -LiteralPath $path -PathType Container) {
+      # A whole folder, contents and all -- what an uninstall's leftovers
+      # usually are. Deep Clean only ever sends files, and this branch was
+      # missing until a live check of the uninstall leftovers found folders
+      # coming back neither recycled nor failed, still on the disk.
+      [Microsoft.VisualBasic.FileIO.FileSystem]::DeleteDirectory(
+        $path,
+        [Microsoft.VisualBasic.FileIO.UIOption]::OnlyErrorDialogs,
+        [Microsoft.VisualBasic.FileIO.RecycleOption]::SendToRecycleBin
+      )
+      $recycled += $path
     }
   } catch {
     # One locked file must not abort the batch, the same way it doesn't

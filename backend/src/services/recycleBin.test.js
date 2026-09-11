@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { mkdtempSync, writeFileSync, existsSync, rmSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, writeFileSync, existsSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
@@ -90,6 +90,27 @@ describe('sendToRecycleBin (real PowerShell, real Recycle Bin)', () => {
     expect(result.recycled).toEqual([file]);
     // Gone from where it was, which is what the caller reports as freed.
     expect(existsSync(file)).toBe(false);
+  }, 60000);
+
+  it('really moves a folder, with everything in it, to the Recycle Bin', async () => {
+    /* Found by a live check of the uninstall leftovers feature: this only
+     * ever handled files -- Deep Clean hands it files -- so a FOLDER, which
+     * is what most uninstall leftovers are, was skipped without being
+     * recycled or reported as failed. */
+    vi.doUnmock('./powershell.js');
+    vi.resetModules();
+    const { sendToRecycleBin: real } = await import('./recycleBin.js');
+
+    const folder = join(dir, 'prune-recycle-folder-fixture');
+    mkdirSync(join(folder, 'nested'), { recursive: true });
+    writeFileSync(join(folder, 'settings.ini'), 'recycle me');
+    writeFileSync(join(folder, 'nested', 'cache.bin'), 'and me');
+
+    const result = await real([folder]);
+
+    expect(result.failed).toEqual([]);
+    expect(result.recycled).toEqual([folder]);
+    expect(existsSync(folder)).toBe(false);
   }, 60000);
 
   it('reports a file that is not there rather than throwing', async () => {

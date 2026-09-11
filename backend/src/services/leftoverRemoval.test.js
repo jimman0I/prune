@@ -77,6 +77,21 @@ describe('to the Recycle Bin', () => {
     expect(result.failedFiles).toEqual([{ path: locked, reason: expect.any(String) }]);
   });
 
+  it('reports a path the Recycle Bin neither took nor refused, instead of dropping it', async () => {
+    /* Found in a live check against the real Recycle Bin: the recycler
+     * only handled files, so a leftover FOLDER came back in neither list
+     * and simply vanished from the report while staying on the disk. The
+     * recycler is fixed; this makes sure a path it says nothing about is
+     * never counted as gone. */
+    const folder = makeLeftoverFolder();
+    sendToRecycleBin.mockResolvedValue({ recycled: [], failed: [] });
+    const result = await removeLeftovers({ programName: 'Thing', files: [folder], registryKeys: [], destination: 'recycle' });
+
+    expect(result.files).toEqual([]);
+    expect(result.totalSizeBytes).toBe(0);
+    expect(result.failedFiles).toEqual([{ path: folder, reason: expect.stringMatching(/not moved to the Recycle Bin/) }]);
+  });
+
   it('skips files that are already gone rather than failing on them', async () => {
     sendToRecycleBin.mockResolvedValue({ recycled: [], failed: [] });
     const result = await removeLeftovers({ programName: 'Thing', files: [join(dir, 'nope')], registryKeys: [], destination: 'recycle' });

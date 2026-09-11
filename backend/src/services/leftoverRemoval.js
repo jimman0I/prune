@@ -132,6 +132,16 @@ export async function removeLeftovers({ programName, files = [], registryKeys = 
       for (const path of failed) {
         failedFiles.push({ path, reason: error ? `could not be recycled: ${error}` : 'could not be recycled' });
       }
+      // A path the recycler put in neither list was not removed, whatever
+      // else is true. Found live: folders came back in neither list and
+      // stayed on the disk, and a report built only from those two lists
+      // simply left them out. Never counted as gone without a yes.
+      const answered = new Set([...recycled, ...failed]);
+      for (const { path } of candidates) {
+        if (!answered.has(path)) {
+          failedFiles.push({ path, reason: 'It was not moved to the Recycle Bin, and Windows did not say why.' });
+        }
+      }
     }
   } else {
     for (const { path, sizeBytes } of candidates) {
