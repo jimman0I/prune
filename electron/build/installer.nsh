@@ -31,6 +31,55 @@
   Var updatesCheckbox
   Var updatesChoice
 
+  ; The language this install picked, as one of languages.js's 40 short
+  ; codes rather than NSIS's own LANG_* id -- written to
+  ; installer-choices.json in customInstall below, alongside updateCheck,
+  ; so the app opens in the same language the installer just ran in.
+  ; $(appLangCode) resolves against $LANGUAGE at the point it is used,
+  ; same as any other LangString reference, so no separate capture is
+  ; needed. backend/src/services/installerChoices.js ignores any code it
+  ; does not recognise, so a mismatch here fails safe rather than corrupt.
+  LangString appLangCode ${LANG_ENGLISH} "en"
+  LangString appLangCode ${LANG_AFRIKAANS} "af"
+  LangString appLangCode ${LANG_ARABIC} "ar"
+  LangString appLangCode ${LANG_CATALAN} "ca"
+  LangString appLangCode ${LANG_CZECH} "cs"
+  LangString appLangCode ${LANG_WELSH} "cy"
+  LangString appLangCode ${LANG_DANISH} "da"
+  LangString appLangCode ${LANG_GERMAN} "de"
+  LangString appLangCode ${LANG_GREEK} "el"
+  LangString appLangCode ${LANG_SPANISHINTERNATIONAL} "es"
+  LangString appLangCode ${LANG_ESTONIAN} "et"
+  LangString appLangCode ${LANG_FINNISH} "fi"
+  LangString appLangCode ${LANG_FRENCH} "fr"
+  LangString appLangCode ${LANG_HEBREW} "he"
+  LangString appLangCode ${LANG_HUNGARIAN} "hu"
+  LangString appLangCode ${LANG_INDONESIAN} "id"
+  LangString appLangCode ${LANG_ICELANDIC} "is"
+  LangString appLangCode ${LANG_ITALIAN} "it"
+  LangString appLangCode ${LANG_JAPANESE} "ja"
+  LangString appLangCode ${LANG_KOREAN} "ko"
+  LangString appLangCode ${LANG_LITHUANIAN} "lt"
+  LangString appLangCode ${LANG_MALAY} "ms"
+  LangString appLangCode ${LANG_NORWEGIAN} "nb"
+  LangString appLangCode ${LANG_DUTCH} "nl"
+  LangString appLangCode ${LANG_POLISH} "pl"
+  LangString appLangCode ${LANG_PASHTO} "ps"
+  LangString appLangCode ${LANG_PORTUGUESEBR} "pt-BR"
+  LangString appLangCode ${LANG_PORTUGUESE} "pt"
+  LangString appLangCode ${LANG_ROMANIAN} "ro"
+  LangString appLangCode ${LANG_RUSSIAN} "ru"
+  LangString appLangCode ${LANG_SLOVAK} "sk"
+  LangString appLangCode ${LANG_ALBANIAN} "sq"
+  LangString appLangCode ${LANG_SERBIAN} "sr"
+  LangString appLangCode ${LANG_SWEDISH} "sv"
+  LangString appLangCode ${LANG_THAI} "th"
+  LangString appLangCode ${LANG_TURKISH} "tr"
+  LangString appLangCode ${LANG_UKRAINIAN} "uk"
+  LangString appLangCode ${LANG_VIETNAMESE} "vi"
+  LangString appLangCode ${LANG_SIMPCHINESE} "zh-CN"
+  LangString appLangCode ${LANG_TRADCHINESE} "zh-TW"
+
   LangString updatesTitle ${LANG_ENGLISH} "Updates"
   LangString updatesSubtitle ${LANG_ENGLISH} "Prune can let you know when a new version is out."
   LangString updatesCheckbox ${LANG_ENGLISH} "Check for updates once a day (you can change this later in Prune's settings)"
@@ -227,12 +276,15 @@
 
 !macro customInstall
   ; $updatesChoice is empty when the page skipped itself, so a reinstall
-  ; writes nothing. ${Silent} is the updater's install.
+  ; writes nothing -- for the language too, on purpose: a reinstall in a
+  ; different NSIS display language must not silently override a language
+  ; already chosen in Prune's own settings. ${Silent} is the updater's
+  ; install, which shows no pages at all.
   ${IfNot} ${Silent}
     ${If} $updatesChoice != ""
       CreateDirectory "$APPDATA\Prune"
       FileOpen $0 "$APPDATA\Prune\installer-choices.json" w
-      FileWrite $0 '{"updateCheck":$updatesChoice}'
+      FileWrite $0 '{"updateCheck":$updatesChoice,"language":"$(appLangCode)"}'
       FileClose $0
     ${EndIf}
   ${EndIf}

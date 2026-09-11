@@ -2,6 +2,7 @@ const { test } = require('node:test');
 const assert = require('node:assert/strict');
 const { readFileSync } = require('node:fs');
 const path = require('node:path');
+const { pathToFileURL } = require('node:url');
 const config = require('./electron-builder.config.cjs');
 const { LangConfigurator, createAddLangsMacro } = require('app-builder-lib/out/targets/nsis/nsisLang');
 
@@ -17,7 +18,7 @@ const { LangConfigurator, createAddLangsMacro } = require('app-builder-lib/out/t
  * The language names come from electron-builder's own mapping, called the
  * way it calls it, rather than from a copy of it that could drift. */
 
-const PAGE_STRINGS = ['updatesTitle', 'updatesSubtitle', 'updatesCheckbox'];
+const PAGE_STRINGS = ['updatesTitle', 'updatesSubtitle', 'updatesCheckbox', 'appLangCode'];
 
 function nsisLanguageNames() {
   let lines = [];
@@ -94,6 +95,25 @@ test('writes nothing during a silent install, so an update keeps the choice', ()
   const customInstall = script.match(/!macro customInstall([\s\S]*?)!macroend/);
   assert.ok(customInstall, 'no customInstall macro');
   assert.match(customInstall[1], /\$\{IfNot\}\s+\$\{Silent\}[\s\S]*installer-choices\.json[\s\S]*\$\{EndIf\}/);
+});
+
+test('writes the language it was run in, alongside the update check', () => {
+  const customInstall = script.match(/!macro customInstall([\s\S]*?)!macroend/)[1];
+  assert.match(customInstall, /"language":"\$\(appLangCode\)"/);
+});
+
+test('every appLangCode is one of the app\'s own 40 languages', async () => {
+  // The value written to installer-choices.json, checked against the
+  // exact list backend/src/services/installerChoices.js validates it
+  // against -- not a copy of that list kept here to drift from it.
+  // On Windows a bare "C:\..." path is not a URL the ESM loader accepts.
+  const languagesPath = path.join(__dirname, '..', 'backend', 'src', 'services', 'languages.js');
+  const { LANGUAGES } = await import(pathToFileURL(languagesPath).href);
+  const codes = new Set(LANGUAGES.map((l) => l.code));
+  const codeStrings = langStrings.filter((s) => s.id === 'appLangCode');
+  assert.ok(codeStrings.length > 0, 'no appLangCode LangStrings found');
+  const unknown = codeStrings.filter((s) => !codes.has(s.text)).map((s) => `${s.lang}: "${s.text}"`);
+  assert.deepEqual(unknown, []);
 });
 
 test('names the installer without spaces, which the updater needs', () => {
