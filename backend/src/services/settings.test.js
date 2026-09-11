@@ -42,7 +42,7 @@ describe('getSettings', () => {
     expect(settings.keepUninstallHistory).toBe(true);
     expect(settings.restorePointBeforeUninstall).toBe(false);   // needs admin, slow
     expect(settings.registryBackupBeforeUninstall).toBe(false); // ~140 MB each time
-    expect(settings.dismissedUpdateVersion).toBeNull();
+    expect(settings.autoInstallUpdates).toBe(false);   // nothing installs unasked
     expect(settings.showFreeSpaceOnMap).toBe(false);   // WizTree ships it off too
   });
 

@@ -3,6 +3,7 @@ import { createApp } from './app.js';
 import { startScheduler, checkSchedule } from './services/scheduleRunner.js';
 import { enforceQuarantineLimits } from './services/quarantineLimits.js';
 import { getSettings } from './services/settings.js';
+import { applyInstallerChoices } from './services/installerChoices.js';
 import { initTray } from './lib/trayManager.js';
 import { getProgramIcons } from './services/programIcons.js';
 import { getProgramSizes } from './services/programSizes.js';
@@ -72,6 +73,14 @@ getSettings()
 // their machine is already using this port — rare, but "crashes the
 // whole app with zero explanation" is the wrong failure mode regardless
 // of how rare the trigger is.
+// The installer's answer to "Check for updates", if it left one. Before
+// the port opens, so the very first settings request after an install
+// already sees it. A failure only means it is applied on the next start
+// instead -- the file is kept when the save fails.
+await applyInstallerChoices().catch((err) => {
+  console.error("Could not apply the installer's choices:", err);
+});
+
 const server = createServer(app);
 server.on('error', (err) => {
   if (err.code === 'EADDRINUSE') {

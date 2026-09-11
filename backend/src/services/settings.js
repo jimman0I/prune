@@ -82,8 +82,10 @@ const DEFAULT_SETTINGS = {
   /* Whether Prune may ask GitHub, once a day, if a newer release exists.
      Off by default, because "nothing leaves the machine" is a promise the
      README makes and this is the one thing that would break it. Only an
-     explicit true turns it on -- see routes/updateCheck.js. Nothing is
-     downloaded or installed either way; see services/updateCheck.js. */
+     explicit true turns it on -- see routes/updateCheck.js. A check that
+     finds something downloads nothing: installing is the side-nav
+     button's job, or autoInstallUpdates' below. The installer asks this
+     question too; see services/installerChoices.js. */
   updateCheck: false,
   /* Where an uninstall's leftover FILES go: 'quarantine' (restorable in
      Prune), 'recycle' or 'permanent' -- Revo's three. Registry keys are
@@ -104,8 +106,12 @@ const DEFAULT_SETTINGS = {
      registry backup is about 140 MB (measured). See preUninstall.js. */
   restorePointBeforeUninstall: false,
   registryBackupBeforeUninstall: false,
-  // The newer release whose pop-up the user dismissed; that one only.
-  dismissedUpdateVersion: null,
+  /* Whether a newer release downloads by itself and installs the next
+     time Prune closes. Off by default: without it an update is one click
+     on the side-nav button, and nothing is downloaded before that click.
+     Only matters with updateCheck on -- nothing is found to install
+     otherwise. See electron/updater.cjs and components/UpdateButton.jsx. */
+  autoInstallUpdates: false,
   /* WizTree's "Show Free Space on Treemap": a block for the drive's free
      space beside what the scan found. Off by default, as WizTree ships it. */
   showFreeSpaceOnMap: false,
