@@ -235,6 +235,31 @@ export const CATALOG = {
         removeApp: 'Remove app',
         removing: 'Removing…'
       }
+    },
+    quarantine: {
+      title: 'Quarantine',
+      loading: 'Loading quarantine…',
+      loadError: (error) => `Couldn't load quarantine: ${error}`,
+      summary: {
+        phrase: (count, total, atLeast) => `${count} ${count === 1 ? 'batch' : 'batches'} · ${atLeast ? 'at least ' : ''}${total} held`,
+        withLimit: (count, total, atLeast, max) => `${count} ${count === 1 ? 'batch' : 'batches'} · ${atLeast ? 'at least ' : ''}${total} held of ${max}`,
+        unmeasuredSuffix: (count) => ` · ${count} unmeasured`
+      },
+      overCapWarning: (max) => `Over the ${max} limit. The most recent backup is never removed to make room, so this stays until you restore or delete it.`,
+      emptyButton: 'Empty Quarantine',
+      confirmEmptyPrompt: 'Permanently delete every batch?',
+      cancel: 'Cancel',
+      confirm: 'Confirm',
+      emptying: 'Emptying…',
+      empty: {
+        heading: 'Nothing in quarantine.',
+        body: 'Anything an uninstall or a Deep Clean removes lands here first. It stays until you empty it, so a file taken by mistake is always recoverable.'
+      },
+      deleteConfirmPrompt: 'Delete forever?',
+      restore: 'Restore',
+      restoring: 'Restoring…',
+      deletePermanently: 'Delete Permanently',
+      deleting: 'Deleting…'
     }
   },
 
@@ -441,6 +466,31 @@ export const CATALOG = {
         removeApp: 'Verwyder program',
         removing: 'Verwyder tans…'
       }
+    },
+    quarantine: {
+      title: 'Karantyn',
+      loading: 'Laai karantyn…',
+      loadError: (error) => `Kon nie karantyn laai nie: ${error}`,
+      summary: {
+        phrase: (count, total, atLeast) => `${count} ${count === 1 ? 'bondel' : 'bondels'} · ${atLeast ? 'ten minste ' : ''}${total} vasgehou`,
+        withLimit: (count, total, atLeast, max) => `${count} ${count === 1 ? 'bondel' : 'bondels'} · ${atLeast ? 'ten minste ' : ''}${total} vasgehou van ${max}`,
+        unmeasuredSuffix: (count) => ` · ${count} ongemeet`
+      },
+      overCapWarning: (max) => `Oor die ${max}-perk. Die jongste rugsteun word nooit verwyder om plek te maak nie, so dit bly totdat jy dit herstel of verwyder.`,
+      emptyButton: 'Maak Karantyn Leeg',
+      confirmEmptyPrompt: 'Verwyder elke bondel permanent?',
+      cancel: 'Kanselleer',
+      confirm: 'Bevestig',
+      emptying: 'Maak leeg…',
+      empty: {
+        heading: 'Niks in karantyn nie.',
+        body: "Enigiets wat 'n deïnstallering of 'n Diep Skoonmaak verwyder, land eers hier. Dit bly totdat jy dit leegmaak, sodat 'n lêer wat per ongeluk gevat is altyd herwinbaar is."
+      },
+      deleteConfirmPrompt: 'Vir altyd verwyder?',
+      restore: 'Herstel',
+      restoring: 'Herstel tans…',
+      deletePermanently: 'Verwyder Permanent',
+      deleting: 'Verwyder tans…'
     }
   },
 
@@ -647,6 +697,31 @@ export const CATALOG = {
         removeApp: 'إزالة التطبيق',
         removing: 'جارٍ الإزالة…'
       }
+    },
+    quarantine: {
+      title: 'الحجر الصحي',
+      loading: 'جارٍ تحميل الحجر الصحي…',
+      loadError: (error) => `تعذر تحميل الحجر الصحي: ${error}`,
+      summary: {
+        phrase: (count, total, atLeast) => `${count} ${count === 1 ? 'دفعة' : 'دفعات'} · ${atLeast ? 'ما لا يقل عن ' : ''}${total} محتجز`,
+        withLimit: (count, total, atLeast, max) => `${count} ${count === 1 ? 'دفعة' : 'دفعات'} · ${atLeast ? 'ما لا يقل عن ' : ''}${total} محتجز من ${max}`,
+        unmeasuredSuffix: (count) => ` · ${count} غير مقاس`
+      },
+      overCapWarning: (max) => `يتجاوز الحد البالغ ${max}. لا تتم إزالة أحدث نسخة احتياطية أبدًا لإفساح المجال، لذا تبقى هذه حتى تستعيدها أو تحذفها.`,
+      emptyButton: 'إفراغ الحجر الصحي',
+      confirmEmptyPrompt: 'هل تريد حذف كل دفعة نهائيًا؟',
+      cancel: 'إلغاء',
+      confirm: 'تأكيد',
+      emptying: 'جارٍ الإفراغ…',
+      empty: {
+        heading: 'لا شيء في الحجر الصحي.',
+        body: 'كل ما يزيله إلغاء تثبيت أو تنظيف عميق يصل إلى هنا أولاً. يبقى حتى تفرغه، لذا فإن أي ملف أُخذ بالخطأ يمكن استعادته دائمًا.'
+      },
+      deleteConfirmPrompt: 'حذف نهائيًا؟',
+      restore: 'استعادة',
+      restoring: 'جارٍ الاستعادة…',
+      deletePermanently: 'حذف نهائيًا',
+      deleting: 'جارٍ الحذف…'
     }
   },
 
@@ -853,6 +928,31 @@ export const CATALOG = {
         removeApp: "Elimina l'aplicació",
         removing: 'Eliminant…'
       }
+    },
+    quarantine: {
+      title: 'Quarantena',
+      loading: 'Carregant la quarantena…',
+      loadError: (error) => `No s'ha pogut carregar la quarantena: ${error}`,
+      summary: {
+        phrase: (count, total, atLeast) => `${count} ${count === 1 ? 'lot' : 'lots'} · ${atLeast ? 'com a mínim ' : ''}${total} retinguts`,
+        withLimit: (count, total, atLeast, max) => `${count} ${count === 1 ? 'lot' : 'lots'} · ${atLeast ? 'com a mínim ' : ''}${total} retinguts de ${max}`,
+        unmeasuredSuffix: (count) => ` · ${count} sense mesurar`
+      },
+      overCapWarning: (max) => `Supera el límit de ${max}. La còpia de seguretat més recent mai s'elimina per fer lloc, així que això es queda fins que el restauris o l'elimines.`,
+      emptyButton: 'Buida la Quarantena',
+      confirmEmptyPrompt: 'Vols eliminar permanentment cada lot?',
+      cancel: 'Cancel·la',
+      confirm: 'Confirma',
+      emptying: 'Buidant…',
+      empty: {
+        heading: 'No hi ha res a la quarantena.',
+        body: "Tot el que una desinstal·lació o una Neteja Profunda elimina, arriba aquí primer. Es queda fins que el buidis, així que un fitxer eliminat per error sempre es pot recuperar."
+      },
+      deleteConfirmPrompt: 'Eliminar per sempre?',
+      restore: 'Restaura',
+      restoring: 'Restaurant…',
+      deletePermanently: 'Elimina Permanentment',
+      deleting: 'Eliminant…'
     }
   },
 
@@ -1059,6 +1159,31 @@ export const CATALOG = {
         removeApp: 'Odebrat aplikaci',
         removing: 'Odebírání…'
       }
+    },
+    quarantine: {
+      title: 'Karanténa',
+      loading: 'Načítání karantény…',
+      loadError: (error) => `Karanténu se nepodařilo načíst: ${error}`,
+      summary: {
+        phrase: (count, total, atLeast) => `${count} ${count === 1 ? 'dávka' : count < 5 ? 'dávky' : 'dávek'} · ${atLeast ? 'nejméně ' : ''}${total} zadrženo`,
+        withLimit: (count, total, atLeast, max) => `${count} ${count === 1 ? 'dávka' : count < 5 ? 'dávky' : 'dávek'} · ${atLeast ? 'nejméně ' : ''}${total} zadrženo z ${max}`,
+        unmeasuredSuffix: (count) => ` · ${count} nezměřeno`
+      },
+      overCapWarning: (max) => `Nad limitem ${max}. Nejnovější záloha se nikdy neodstraňuje kvůli uvolnění místa, takže zůstává, dokud ji neobnovíte nebo neodstraníte.`,
+      emptyButton: 'Vyprázdnit karanténu',
+      confirmEmptyPrompt: 'Trvale odstranit každou dávku?',
+      cancel: 'Zrušit',
+      confirm: 'Potvrdit',
+      emptying: 'Vyprazdňování…',
+      empty: {
+        heading: 'V karanténě nic není.',
+        body: 'Vše, co odinstalace nebo Důkladné čištění odstraní, přistane nejdřív sem. Zůstává to tu, dokud to nevyprázdníte, takže omylem vzatý soubor lze vždy obnovit.'
+      },
+      deleteConfirmPrompt: 'Odstranit navždy?',
+      restore: 'Obnovit',
+      restoring: 'Obnovování…',
+      deletePermanently: 'Trvale odstranit',
+      deleting: 'Odstraňování…'
     }
   },
 
@@ -1265,6 +1390,31 @@ export const CATALOG = {
         removeApp: "Dileu'r ap",
         removing: "Wrthi'n dileu…"
       }
+    },
+    quarantine: {
+      title: 'Cwarantin',
+      loading: 'Wrthi\'n llwytho\'r cwarantin…',
+      loadError: (error) => `Methu llwytho'r cwarantin: ${error}`,
+      summary: {
+        phrase: (count, total, atLeast) => `${count} ${count === 1 ? 'swp' : 'swp'} · ${atLeast ? 'o leiaf ' : ''}${total} wedi'i ddal`,
+        withLimit: (count, total, atLeast, max) => `${count} ${count === 1 ? 'swp' : 'swp'} · ${atLeast ? 'o leiaf ' : ''}${total} wedi'i ddal o ${max}`,
+        unmeasuredSuffix: (count) => ` · ${count} heb eu mesur`
+      },
+      overCapWarning: (max) => `Dros y terfyn o ${max}. Ni chaiff y backup diweddaraf ei dynnu byth i wneud lle, felly mae hwn yn aros nes i chi ei adfer neu ei ddileu.`,
+      emptyButton: 'Gwacáu\'r Cwarantin',
+      confirmEmptyPrompt: 'Dileu pob swp yn barhaol?',
+      cancel: 'Diddymu',
+      confirm: 'Cadarnhau',
+      emptying: 'Gwacáu…',
+      empty: {
+        heading: 'Dim byd yn y cwarantin.',
+        body: "Mae unrhyw beth mae dadosod neu Lanhau Dwfn yn ei ddileu yn glanio yma gyntaf. Mae'n aros nes i chi ei wacáu, felly gellir adfer ffeil a gymerwyd trwy gamgymeriad bob amser."
+      },
+      deleteConfirmPrompt: 'Dileu am byth?',
+      restore: 'Adfer',
+      restoring: 'Wrthi\'n adfer…',
+      deletePermanently: 'Dileu\'n Barhaol',
+      deleting: 'Wrthi\'n dileu…'
     }
   },
 
@@ -1471,6 +1621,31 @@ export const CATALOG = {
         removeApp: 'Fjern app',
         removing: 'Fjerner…'
       }
+    },
+    quarantine: {
+      title: 'Karantæne',
+      loading: 'Indlæser karantæne…',
+      loadError: (error) => `Kunne ikke indlæse karantæne: ${error}`,
+      summary: {
+        phrase: (count, total, atLeast) => `${count} ${count === 1 ? 'batch' : 'batches'} · ${atLeast ? 'mindst ' : ''}${total} tilbageholdt`,
+        withLimit: (count, total, atLeast, max) => `${count} ${count === 1 ? 'batch' : 'batches'} · ${atLeast ? 'mindst ' : ''}${total} tilbageholdt af ${max}`,
+        unmeasuredSuffix: (count) => ` · ${count} umålt`
+      },
+      overCapWarning: (max) => `Over grænsen på ${max}. Den seneste sikkerhedskopi fjernes aldrig for at gøre plads, så denne bliver, indtil du gendanner eller sletter den.`,
+      emptyButton: 'Tøm Karantæne',
+      confirmEmptyPrompt: 'Slet hver batch permanent?',
+      cancel: 'Annuller',
+      confirm: 'Bekræft',
+      emptying: 'Tømmer…',
+      empty: {
+        heading: 'Intet i karantæne.',
+        body: 'Alt, hvad en afinstallation eller en Dybderensning fjerner, lander her først. Det bliver, indtil du tømmer det, så en fil taget ved en fejl altid kan gendannes.'
+      },
+      deleteConfirmPrompt: 'Slet for altid?',
+      restore: 'Gendan',
+      restoring: 'Gendanner…',
+      deletePermanently: 'Slet Permanent',
+      deleting: 'Sletter…'
     }
   },
 
@@ -1677,6 +1852,31 @@ export const CATALOG = {
         removeApp: 'App entfernen',
         removing: 'Wird entfernt…'
       }
+    },
+    quarantine: {
+      title: 'Quarantäne',
+      loading: 'Quarantäne wird geladen…',
+      loadError: (error) => `Quarantäne konnte nicht geladen werden: ${error}`,
+      summary: {
+        phrase: (count, total, atLeast) => `${count} ${count === 1 ? 'Stapel' : 'Stapel'} · ${atLeast ? 'mindestens ' : ''}${total} zurückgehalten`,
+        withLimit: (count, total, atLeast, max) => `${count} ${count === 1 ? 'Stapel' : 'Stapel'} · ${atLeast ? 'mindestens ' : ''}${total} zurückgehalten von ${max}`,
+        unmeasuredSuffix: (count) => ` · ${count} ungemessen`
+      },
+      overCapWarning: (max) => `Über dem Limit von ${max}. Die neueste Sicherung wird nie entfernt, um Platz zu schaffen, daher bleibt diese, bis du sie wiederherstellst oder löschst.`,
+      emptyButton: 'Quarantäne leeren',
+      confirmEmptyPrompt: 'Jeden Stapel dauerhaft löschen?',
+      cancel: 'Abbrechen',
+      confirm: 'Bestätigen',
+      emptying: 'Wird geleert…',
+      empty: {
+        heading: 'Nichts in der Quarantäne.',
+        body: 'Alles, was eine Deinstallation oder eine Tiefenreinigung entfernt, landet zuerst hier. Es bleibt, bis du es leerst, sodass eine versehentlich entfernte Datei immer wiederherstellbar ist.'
+      },
+      deleteConfirmPrompt: 'Für immer löschen?',
+      restore: 'Wiederherstellen',
+      restoring: 'Wird wiederhergestellt…',
+      deletePermanently: 'Dauerhaft löschen',
+      deleting: 'Wird gelöscht…'
     }
   },
 
@@ -1883,6 +2083,31 @@ export const CATALOG = {
         removeApp: 'Αφαίρεση εφαρμογής',
         removing: 'Αφαίρεση…'
       }
+    },
+    quarantine: {
+      title: 'Καραντίνα',
+      loading: 'Φόρτωση καραντίνας…',
+      loadError: (error) => `Αδυναμία φόρτωσης καραντίνας: ${error}`,
+      summary: {
+        phrase: (count, total, atLeast) => `${count} ${count === 1 ? 'παρτίδα' : 'παρτίδες'} · ${atLeast ? 'τουλάχιστον ' : ''}${total} σε κράτηση`,
+        withLimit: (count, total, atLeast, max) => `${count} ${count === 1 ? 'παρτίδα' : 'παρτίδες'} · ${atLeast ? 'τουλάχιστον ' : ''}${total} σε κράτηση από ${max}`,
+        unmeasuredSuffix: (count) => ` · ${count} χωρίς μέτρηση`
+      },
+      overCapWarning: (max) => `Υπερβαίνει το όριο των ${max}. Το πιο πρόσφατο αντίγραφο ασφαλείας δεν αφαιρείται ποτέ για να γίνει χώρος, οπότε αυτό παραμένει μέχρι να το επαναφέρετε ή να το διαγράψετε.`,
+      emptyButton: 'Άδειασμα Καραντίνας',
+      confirmEmptyPrompt: 'Οριστική διαγραφή κάθε παρτίδας;',
+      cancel: 'Ακύρωση',
+      confirm: 'Επιβεβαίωση',
+      emptying: 'Άδειασμα…',
+      empty: {
+        heading: 'Τίποτα στην καραντίνα.',
+        body: 'Οτιδήποτε αφαιρεί μια απεγκατάσταση ή ένας Βαθύς Καθαρισμός καταλήγει πρώτα εδώ. Παραμένει μέχρι να το αδειάσετε, οπότε ένα αρχείο που πάρθηκε κατά λάθος είναι πάντα ανακτήσιμο.'
+      },
+      deleteConfirmPrompt: 'Οριστική διαγραφή;',
+      restore: 'Επαναφορά',
+      restoring: 'Επαναφορά…',
+      deletePermanently: 'Οριστική Διαγραφή',
+      deleting: 'Διαγραφή…'
     }
   },
 
@@ -2089,6 +2314,31 @@ export const CATALOG = {
         removeApp: 'Quitar aplicación',
         removing: 'Quitando…'
       }
+    },
+    quarantine: {
+      title: 'Cuarentena',
+      loading: 'Cargando cuarentena…',
+      loadError: (error) => `No se pudo cargar la cuarentena: ${error}`,
+      summary: {
+        phrase: (count, total, atLeast) => `${count} ${count === 1 ? 'lote' : 'lotes'} · ${atLeast ? 'al menos ' : ''}${total} retenidos`,
+        withLimit: (count, total, atLeast, max) => `${count} ${count === 1 ? 'lote' : 'lotes'} · ${atLeast ? 'al menos ' : ''}${total} retenidos de ${max}`,
+        unmeasuredSuffix: (count) => ` · ${count} sin medir`
+      },
+      overCapWarning: (max) => `Supera el límite de ${max}. La copia de seguridad más reciente nunca se elimina para hacer espacio, así que esta permanece hasta que la restaures o la elimines.`,
+      emptyButton: 'Vaciar Cuarentena',
+      confirmEmptyPrompt: '¿Eliminar cada lote permanentemente?',
+      cancel: 'Cancelar',
+      confirm: 'Confirmar',
+      emptying: 'Vaciando…',
+      empty: {
+        heading: 'Nada en la cuarentena.',
+        body: 'Todo lo que elimina una desinstalación o una Limpieza Profunda llega aquí primero. Permanece hasta que la vacíes, así que un archivo eliminado por error siempre se puede recuperar.'
+      },
+      deleteConfirmPrompt: '¿Eliminar para siempre?',
+      restore: 'Restaurar',
+      restoring: 'Restaurando…',
+      deletePermanently: 'Eliminar Permanentemente',
+      deleting: 'Eliminando…'
     }
   },
 
@@ -2295,6 +2545,31 @@ export const CATALOG = {
         removeApp: 'Eemalda rakendus',
         removing: 'Eemaldamine…'
       }
+    },
+    quarantine: {
+      title: 'Karantiin',
+      loading: 'Karantiini laadimine…',
+      loadError: (error) => `Karantiini ei õnnestunud laadida: ${error}`,
+      summary: {
+        phrase: (count, total, atLeast) => `${count} ${count === 1 ? 'partii' : 'partiid'} · ${atLeast ? 'vähemalt ' : ''}${total} hoitud`,
+        withLimit: (count, total, atLeast, max) => `${count} ${count === 1 ? 'partii' : 'partiid'} · ${atLeast ? 'vähemalt ' : ''}${total} hoitud ${max}-st`,
+        unmeasuredSuffix: (count) => ` · ${count} mõõtmata`
+      },
+      overCapWarning: (max) => `Ületab ${max} piiri. Kõige uuemat varukoopiat ei eemaldata kunagi ruumi tegemiseks, seega jääb see alles, kuni taastate või kustutate selle.`,
+      emptyButton: 'Tühjenda karantiin',
+      confirmEmptyPrompt: 'Kas kustutada iga partii jäädavalt?',
+      cancel: 'Tühista',
+      confirm: 'Kinnita',
+      emptying: 'Tühjendamine…',
+      empty: {
+        heading: 'Karantiinis pole midagi.',
+        body: 'Kõik, mida desinstallimine või Sügavpuhastus eemaldab, jõuab kõigepealt siia. See jääb, kuni tühjendate selle, nii et kogemata võetud fail on alati taastatav.'
+      },
+      deleteConfirmPrompt: 'Kustutada jäädavalt?',
+      restore: 'Taasta',
+      restoring: 'Taastamine…',
+      deletePermanently: 'Kustuta jäädavalt',
+      deleting: 'Kustutamine…'
     }
   },
 
@@ -2501,6 +2776,31 @@ export const CATALOG = {
         removeApp: 'Poista sovellus',
         removing: 'Poistetaan…'
       }
+    },
+    quarantine: {
+      title: 'Karanteeni',
+      loading: 'Ladataan karanteenia…',
+      loadError: (error) => `Karanteenia ei voitu ladata: ${error}`,
+      summary: {
+        phrase: (count, total, atLeast) => `${count} ${count === 1 ? 'erä' : 'erää'} · ${atLeast ? 'vähintään ' : ''}${total} pidossa`,
+        withLimit: (count, total, atLeast, max) => `${count} ${count === 1 ? 'erä' : 'erää'} · ${atLeast ? 'vähintään ' : ''}${total} pidossa / ${max}`,
+        unmeasuredSuffix: (count) => ` · ${count} mittaamatta`
+      },
+      overCapWarning: (max) => `Ylittää rajan ${max}. Uusinta varmuuskopiota ei koskaan poisteta tilan tekemiseksi, joten tämä pysyy, kunnes palautat tai poistat sen.`,
+      emptyButton: 'Tyhjennä karanteeni',
+      confirmEmptyPrompt: 'Poistetaanko jokainen erä pysyvästi?',
+      cancel: 'Peruuta',
+      confirm: 'Vahvista',
+      emptying: 'Tyhjennetään…',
+      empty: {
+        heading: 'Karanteeni on tyhjä.',
+        body: 'Kaikki, mitä asennuksen poisto tai Syväpuhdistus poistaa, laskeutuu ensin tänne. Se pysyy täällä, kunnes tyhjennät sen, joten vahingossa otettu tiedosto on aina palautettavissa.'
+      },
+      deleteConfirmPrompt: 'Poistetaanko pysyvästi?',
+      restore: 'Palauta',
+      restoring: 'Palautetaan…',
+      deletePermanently: 'Poista pysyvästi',
+      deleting: 'Poistetaan…'
     }
   },
 
@@ -2707,6 +3007,31 @@ export const CATALOG = {
         removeApp: "Supprimer l'appli",
         removing: 'Suppression…'
       }
+    },
+    quarantine: {
+      title: 'Quarantaine',
+      loading: 'Chargement de la quarantaine…',
+      loadError: (error) => `Impossible de charger la quarantaine : ${error}`,
+      summary: {
+        phrase: (count, total, atLeast) => `${count} lot${count === 1 ? '' : 's'} · ${atLeast ? 'au moins ' : ''}${total} retenus`,
+        withLimit: (count, total, atLeast, max) => `${count} lot${count === 1 ? '' : 's'} · ${atLeast ? 'au moins ' : ''}${total} retenus sur ${max}`,
+        unmeasuredSuffix: (count) => ` · ${count} non mesurés`
+      },
+      overCapWarning: (max) => `Dépasse la limite de ${max}. La sauvegarde la plus récente n'est jamais supprimée pour faire de la place, elle reste donc jusqu'à ce que vous la restauriez ou la supprimiez.`,
+      emptyButton: 'Vider la quarantaine',
+      confirmEmptyPrompt: 'Supprimer définitivement chaque lot ?',
+      cancel: 'Annuler',
+      confirm: 'Confirmer',
+      emptying: 'Vidage…',
+      empty: {
+        heading: 'Rien en quarantaine.',
+        body: "Tout ce qu'une désinstallation ou un Nettoyage en profondeur supprime arrive ici en premier. Cela reste jusqu'à ce que vous le vidiez, donc un fichier pris par erreur est toujours récupérable."
+      },
+      deleteConfirmPrompt: 'Supprimer pour toujours ?',
+      restore: 'Restaurer',
+      restoring: 'Restauration…',
+      deletePermanently: 'Supprimer définitivement',
+      deleting: 'Suppression…'
     }
   },
 
@@ -2913,6 +3238,31 @@ export const CATALOG = {
         removeApp: 'הסר אפליקציה',
         removing: 'מסיר…'
       }
+    },
+    quarantine: {
+      title: 'הסגר',
+      loading: 'טוען הסגר…',
+      loadError: (error) => `לא ניתן היה לטעון את ההסגר: ${error}`,
+      summary: {
+        phrase: (count, total, atLeast) => `${count} ${count === 1 ? 'אצווה' : 'אצוות'} · ${atLeast ? 'לפחות ' : ''}${total} מוחזק`,
+        withLimit: (count, total, atLeast, max) => `${count} ${count === 1 ? 'אצווה' : 'אצוות'} · ${atLeast ? 'לפחות ' : ''}${total} מוחזק מתוך ${max}`,
+        unmeasuredSuffix: (count) => ` · ${count} לא נמדד`
+      },
+      overCapWarning: (max) => `חורג מהמגבלה של ${max}. הגיבוי העדכני ביותר לעולם לא מוסר כדי לפנות מקום, כך שהוא נשאר עד שתשחזר או תמחק אותו.`,
+      emptyButton: 'רוקן הסגר',
+      confirmEmptyPrompt: 'למחוק כל אצווה לצמיתות?',
+      cancel: 'ביטול',
+      confirm: 'אישור',
+      emptying: 'מרוקן…',
+      empty: {
+        heading: 'אין כלום בהסגר.',
+        body: 'כל מה שהסרת התקנה או ניקוי מעמיק מסירים מגיע לכאן קודם. זה נשאר עד שתרוקן אותו, כך שקובץ שנלקח בטעות תמיד ניתן לשחזור.'
+      },
+      deleteConfirmPrompt: 'למחוק לצמיתות?',
+      restore: 'שחזר',
+      restoring: 'משחזר…',
+      deletePermanently: 'מחק לצמיתות',
+      deleting: 'מוחק…'
     }
   },
 
@@ -3119,6 +3469,31 @@ export const CATALOG = {
         removeApp: 'Alkalmazás eltávolítása',
         removing: 'Eltávolítás…'
       }
+    },
+    quarantine: {
+      title: 'Karantén',
+      loading: 'Karantén betöltése…',
+      loadError: (error) => `Nem sikerült betölteni a karantént: ${error}`,
+      summary: {
+        phrase: (count, total, atLeast) => `${count} ${count === 1 ? 'köteg' : 'köteg'} · ${atLeast ? 'legalább ' : ''}${total} tárolva`,
+        withLimit: (count, total, atLeast, max) => `${count} ${count === 1 ? 'köteg' : 'köteg'} · ${atLeast ? 'legalább ' : ''}${total} tárolva / ${max}`,
+        unmeasuredSuffix: (count) => ` · ${count} nem mért`
+      },
+      overCapWarning: (max) => `Meghaladja a(z) ${max} korlátot. A legújabb biztonsági mentés soha nem kerül eltávolításra helykiürítés céljából, így ez marad, amíg vissza nem állítja vagy törli.`,
+      emptyButton: 'Karantén ürítése',
+      confirmEmptyPrompt: 'Véglegesen törli az összes köteget?',
+      cancel: 'Mégse',
+      confirm: 'Megerősítés',
+      emptying: 'Ürítés…',
+      empty: {
+        heading: 'A karantén üres.',
+        body: 'Minden, amit egy eltávolítás vagy egy Mélytisztítás eltávolít, először ide kerül. Ez itt marad, amíg ki nem üríti, így a tévedésből eltávolított fájl mindig visszaállítható.'
+      },
+      deleteConfirmPrompt: 'Végleg törli?',
+      restore: 'Visszaállítás',
+      restoring: 'Visszaállítás…',
+      deletePermanently: 'Végleges törlés',
+      deleting: 'Törlés…'
     }
   },
 
@@ -3325,6 +3700,31 @@ export const CATALOG = {
         removeApp: 'Hapus aplikasi',
         removing: 'Menghapus…'
       }
+    },
+    quarantine: {
+      title: 'Karantina',
+      loading: 'Memuat karantina…',
+      loadError: (error) => `Tidak dapat memuat karantina: ${error}`,
+      summary: {
+        phrase: (count, total, atLeast) => `${count} batch · ${atLeast ? 'setidaknya ' : ''}${total} ditahan`,
+        withLimit: (count, total, atLeast, max) => `${count} batch · ${atLeast ? 'setidaknya ' : ''}${total} ditahan dari ${max}`,
+        unmeasuredSuffix: (count) => ` · ${count} tidak terukur`
+      },
+      overCapWarning: (max) => `Melebihi batas ${max}. Cadangan terbaru tidak pernah dihapus untuk membuat ruang, jadi ini tetap ada sampai Anda memulihkan atau menghapusnya.`,
+      emptyButton: 'Kosongkan Karantina',
+      confirmEmptyPrompt: 'Hapus permanen setiap batch?',
+      cancel: 'Batal',
+      confirm: 'Konfirmasi',
+      emptying: 'Mengosongkan…',
+      empty: {
+        heading: 'Tidak ada apa pun di karantina.',
+        body: 'Semua yang dihapus oleh penghapusan instalasi atau Pembersihan Mendalam mendarat di sini terlebih dahulu. Ini tetap ada sampai Anda mengosongkannya, jadi berkas yang terambil secara tidak sengaja selalu dapat dipulihkan.'
+      },
+      deleteConfirmPrompt: 'Hapus selamanya?',
+      restore: 'Pulihkan',
+      restoring: 'Memulihkan…',
+      deletePermanently: 'Hapus Permanen',
+      deleting: 'Menghapus…'
     }
   },
 
@@ -3531,6 +3931,31 @@ export const CATALOG = {
         removeApp: 'Fjarlægja forrit',
         removing: 'Fjarlægi…'
       }
+    },
+    quarantine: {
+      title: 'Sóttkví',
+      loading: 'Hleð sóttkví…',
+      loadError: (error) => `Ekki tókst að hlaða sóttkví: ${error}`,
+      summary: {
+        phrase: (count, total, atLeast) => `${count} ${count === 1 ? 'lota' : 'lotur'} · ${atLeast ? 'að minnsta kosti ' : ''}${total} í haldi`,
+        withLimit: (count, total, atLeast, max) => `${count} ${count === 1 ? 'lota' : 'lotur'} · ${atLeast ? 'að minnsta kosti ' : ''}${total} í haldi af ${max}`,
+        unmeasuredSuffix: (count) => ` · ${count} ómælt`
+      },
+      overCapWarning: (max) => `Yfir mörkunum upp á ${max}. Nýjasta afritið er aldrei fjarlægt til að rýma pláss, svo þetta helst þar til þú endurheimtir eða eyðir því.`,
+      emptyButton: 'Tæma sóttkví',
+      confirmEmptyPrompt: 'Eyða hverri lotu varanlega?',
+      cancel: 'Hætta við',
+      confirm: 'Staðfesta',
+      emptying: 'Tæmi…',
+      empty: {
+        heading: 'Ekkert í sóttkví.',
+        body: 'Allt sem forritahreinsun eða Djúphreinsun fjarlægir lendir hér fyrst. Það helst þar til þú tæmir það, svo hægt er alltaf að endurheimta skrá sem var tekin fyrir mistök.'
+      },
+      deleteConfirmPrompt: 'Eyða að eilífu?',
+      restore: 'Endurheimta',
+      restoring: 'Endurheimti…',
+      deletePermanently: 'Eyða varanlega',
+      deleting: 'Eyði…'
     }
   },
 
@@ -3737,6 +4162,31 @@ export const CATALOG = {
         removeApp: 'Rimuovi app',
         removing: 'Rimozione…'
       }
+    },
+    quarantine: {
+      title: 'Quarantena',
+      loading: 'Caricamento della quarantena…',
+      loadError: (error) => `Impossibile caricare la quarantena: ${error}`,
+      summary: {
+        phrase: (count, total, atLeast) => `${count} ${count === 1 ? 'lotto' : 'lotti'} · ${atLeast ? 'almeno ' : ''}${total} trattenuti`,
+        withLimit: (count, total, atLeast, max) => `${count} ${count === 1 ? 'lotto' : 'lotti'} · ${atLeast ? 'almeno ' : ''}${total} trattenuti su ${max}`,
+        unmeasuredSuffix: (count) => ` · ${count} non misurati`
+      },
+      overCapWarning: (max) => `Oltre il limite di ${max}. Il backup più recente non viene mai rimosso per fare spazio, quindi resta qui finché non lo ripristini o lo elimini.`,
+      emptyButton: 'Svuota Quarantena',
+      confirmEmptyPrompt: 'Eliminare definitivamente ogni lotto?',
+      cancel: 'Annulla',
+      confirm: 'Conferma',
+      emptying: 'Svuotamento…',
+      empty: {
+        heading: 'Niente in quarantena.',
+        body: "Tutto ciò che una disinstallazione o una Pulizia Profonda rimuove atterra prima qui. Resta finché non lo svuoti, quindi un file preso per errore è sempre recuperabile."
+      },
+      deleteConfirmPrompt: 'Eliminare per sempre?',
+      restore: 'Ripristina',
+      restoring: 'Ripristino…',
+      deletePermanently: 'Elimina Definitivamente',
+      deleting: 'Eliminazione…'
     }
   },
 
@@ -3943,6 +4393,31 @@ export const CATALOG = {
         removeApp: 'アプリを削除',
         removing: '削除中…'
       }
+    },
+    quarantine: {
+      title: '隔離',
+      loading: '隔離を読み込み中…',
+      loadError: (error) => `隔離を読み込めませんでした: ${error}`,
+      summary: {
+        phrase: (count, total, atLeast) => `${count} 件のバッチ · ${atLeast ? '少なくとも' : ''}${total} 保持中`,
+        withLimit: (count, total, atLeast, max) => `${count} 件のバッチ · ${atLeast ? '少なくとも' : ''}${total} 保持中 / ${max}`,
+        unmeasuredSuffix: (count) => ` · 未計測 ${count} 件`
+      },
+      overCapWarning: (max) => `${max} の上限を超えています。最新のバックアップは容量確保のために削除されることはないため、復元するか削除するまでこのまま残ります。`,
+      emptyButton: '隔離を空にする',
+      confirmEmptyPrompt: 'すべてのバッチを完全に削除しますか?',
+      cancel: 'キャンセル',
+      confirm: '確認',
+      emptying: '空にしています…',
+      empty: {
+        heading: '隔離には何もありません。',
+        body: 'アンインストールやディープクリーンで削除されたものは、まずここに届きます。空にするまで残るため、誤って削除したファイルはいつでも復元できます。'
+      },
+      deleteConfirmPrompt: '完全に削除しますか?',
+      restore: '復元',
+      restoring: '復元中…',
+      deletePermanently: '完全に削除',
+      deleting: '削除中…'
     }
   },
 
@@ -4149,6 +4624,31 @@ export const CATALOG = {
         removeApp: '앱 제거',
         removing: '제거 중…'
       }
+    },
+    quarantine: {
+      title: '격리',
+      loading: '격리 항목 불러오는 중…',
+      loadError: (error) => `격리 항목을 불러오지 못했습니다: ${error}`,
+      summary: {
+        phrase: (count, total, atLeast) => `${count}개 배치 · ${atLeast ? '최소 ' : ''}${total} 보관 중`,
+        withLimit: (count, total, atLeast, max) => `${count}개 배치 · ${atLeast ? '최소 ' : ''}${total} 보관 중 / ${max}`,
+        unmeasuredSuffix: (count) => ` · 측정되지 않음 ${count}개`
+      },
+      overCapWarning: (max) => `${max} 한도를 초과했습니다. 가장 최근 백업은 공간 확보를 위해 제거되지 않으므로, 복원하거나 삭제할 때까지 유지됩니다.`,
+      emptyButton: '격리 비우기',
+      confirmEmptyPrompt: '모든 배치를 영구적으로 삭제하시겠습니까?',
+      cancel: '취소',
+      confirm: '확인',
+      emptying: '비우는 중…',
+      empty: {
+        heading: '격리 항목이 없습니다.',
+        body: '제거 또는 심층 정리가 삭제하는 모든 항목은 먼저 여기에 도착합니다. 비울 때까지 유지되므로 실수로 가져간 파일은 언제든지 복원할 수 있습니다.'
+      },
+      deleteConfirmPrompt: '영구적으로 삭제하시겠습니까?',
+      restore: '복원',
+      restoring: '복원 중…',
+      deletePermanently: '영구 삭제',
+      deleting: '삭제 중…'
     }
   },
 
@@ -4355,6 +4855,31 @@ export const CATALOG = {
         removeApp: 'Pašalinti programą',
         removing: 'Šalinama…'
       }
+    },
+    quarantine: {
+      title: 'Karantinas',
+      loading: 'Įkeliamas karantinas…',
+      loadError: (error) => `Nepavyko įkelti karantino: ${error}`,
+      summary: {
+        phrase: (count, total, atLeast) => `${count} ${count === 1 ? 'paketas' : 'paketai'} · ${atLeast ? 'bent ' : ''}${total} laikoma`,
+        withLimit: (count, total, atLeast, max) => `${count} ${count === 1 ? 'paketas' : 'paketai'} · ${atLeast ? 'bent ' : ''}${total} laikoma iš ${max}`,
+        unmeasuredSuffix: (count) => ` · ${count} nematuota`
+      },
+      overCapWarning: (max) => `Viršija ${max} limitą. Naujausia atsarginė kopija niekada nešalinama, kad atsirastų vietos, todėl ji lieka, kol jos neatkuriate ar neištrinate.`,
+      emptyButton: 'Ištuštinti karantiną',
+      confirmEmptyPrompt: 'Visam laikui ištrinti kiekvieną paketą?',
+      cancel: 'Atšaukti',
+      confirm: 'Patvirtinti',
+      emptying: 'Tuštinama…',
+      empty: {
+        heading: 'Karantine nieko nėra.',
+        body: 'Viskas, ką pašalina programos šalinimas ar Gilus valymas, pirmiausia atsiduria čia. Tai lieka, kol tai ištuštinsite, todėl atsitiktinai paimtą failą visada galima atkurti.'
+      },
+      deleteConfirmPrompt: 'Ištrinti visam laikui?',
+      restore: 'Atkurti',
+      restoring: 'Atkuriama…',
+      deletePermanently: 'Ištrinti visam laikui',
+      deleting: 'Trinama…'
     }
   },
 
@@ -4561,6 +5086,31 @@ export const CATALOG = {
         removeApp: 'Alih keluar apl',
         removing: 'Mengalih keluar…'
       }
+    },
+    quarantine: {
+      title: 'Kuarantin',
+      loading: 'Memuatkan kuarantin…',
+      loadError: (error) => `Tidak dapat memuatkan kuarantin: ${error}`,
+      summary: {
+        phrase: (count, total, atLeast) => `${count} kelompok · ${atLeast ? 'sekurang-kurangnya ' : ''}${total} ditahan`,
+        withLimit: (count, total, atLeast, max) => `${count} kelompok · ${atLeast ? 'sekurang-kurangnya ' : ''}${total} ditahan daripada ${max}`,
+        unmeasuredSuffix: (count) => ` · ${count} tidak diukur`
+      },
+      overCapWarning: (max) => `Melebihi had ${max}. Sandaran terbaharu tidak pernah dialih keluar untuk melapangkan ruang, jadi ini kekal sehingga anda memulihkan atau memadamkannya.`,
+      emptyButton: 'Kosongkan Kuarantin',
+      confirmEmptyPrompt: 'Padam setiap kelompok secara kekal?',
+      cancel: 'Batal',
+      confirm: 'Sahkan',
+      emptying: 'Mengosongkan…',
+      empty: {
+        heading: 'Tiada apa-apa dalam kuarantin.',
+        body: 'Segala yang dialih keluar oleh nyahpasang atau Pembersihan Mendalam mendarat di sini dahulu. Ia kekal sehingga anda mengosongkannya, jadi fail yang diambil secara tidak sengaja sentiasa boleh dipulihkan.'
+      },
+      deleteConfirmPrompt: 'Padam selama-lamanya?',
+      restore: 'Pulihkan',
+      restoring: 'Memulihkan…',
+      deletePermanently: 'Padam Kekal',
+      deleting: 'Memadam…'
     }
   },
 
@@ -4767,6 +5317,31 @@ export const CATALOG = {
         removeApp: 'Fjern app',
         removing: 'Fjerner…'
       }
+    },
+    quarantine: {
+      title: 'Karantene',
+      loading: 'Laster karantene…',
+      loadError: (error) => `Kunne ikke laste karantene: ${error}`,
+      summary: {
+        phrase: (count, total, atLeast) => `${count} ${count === 1 ? 'batch' : 'batcher'} · ${atLeast ? 'minst ' : ''}${total} holdt tilbake`,
+        withLimit: (count, total, atLeast, max) => `${count} ${count === 1 ? 'batch' : 'batcher'} · ${atLeast ? 'minst ' : ''}${total} holdt tilbake av ${max}`,
+        unmeasuredSuffix: (count) => ` · ${count} umålt`
+      },
+      overCapWarning: (max) => `Over grensen på ${max}. Den nyeste sikkerhetskopien fjernes aldri for å frigjøre plass, så denne blir liggende til du gjenoppretter eller sletter den.`,
+      emptyButton: 'Tøm karantene',
+      confirmEmptyPrompt: 'Slette hver batch permanent?',
+      cancel: 'Avbryt',
+      confirm: 'Bekreft',
+      emptying: 'Tømmer…',
+      empty: {
+        heading: 'Ingenting i karantene.',
+        body: 'Alt en avinstallering eller en Dyprens fjerner, havner her først. Det blir liggende til du tømmer det, så en fil tatt ved en feil kan alltid gjenopprettes.'
+      },
+      deleteConfirmPrompt: 'Slette for godt?',
+      restore: 'Gjenopprett',
+      restoring: 'Gjenoppretter…',
+      deletePermanently: 'Slett permanent',
+      deleting: 'Sletter…'
     }
   },
 
@@ -4973,6 +5548,31 @@ export const CATALOG = {
         removeApp: 'App verwijderen',
         removing: 'Verwijderen…'
       }
+    },
+    quarantine: {
+      title: 'Quarantaine',
+      loading: 'Quarantaine wordt geladen…',
+      loadError: (error) => `Kon quarantaine niet laden: ${error}`,
+      summary: {
+        phrase: (count, total, atLeast) => `${count} ${count === 1 ? 'batch' : 'batches'} · ${atLeast ? 'minstens ' : ''}${total} vastgehouden`,
+        withLimit: (count, total, atLeast, max) => `${count} ${count === 1 ? 'batch' : 'batches'} · ${atLeast ? 'minstens ' : ''}${total} vastgehouden van ${max}`,
+        unmeasuredSuffix: (count) => ` · ${count} ongemeten`
+      },
+      overCapWarning: (max) => `Boven de limiet van ${max}. De meest recente back-up wordt nooit verwijderd om ruimte te maken, dus deze blijft totdat je hem herstelt of verwijdert.`,
+      emptyButton: 'Quarantaine leegmaken',
+      confirmEmptyPrompt: 'Elke batch permanent verwijderen?',
+      cancel: 'Annuleren',
+      confirm: 'Bevestigen',
+      emptying: 'Leegmaken…',
+      empty: {
+        heading: 'Niets in quarantaine.',
+        body: 'Alles wat een verwijdering of een Diepe schoonmaak verwijdert, komt eerst hier terecht. Het blijft totdat je het leegmaakt, zodat een per ongeluk verwijderd bestand altijd herstelbaar is.'
+      },
+      deleteConfirmPrompt: 'Voor altijd verwijderen?',
+      restore: 'Herstellen',
+      restoring: 'Herstellen…',
+      deletePermanently: 'Permanent verwijderen',
+      deleting: 'Verwijderen…'
     }
   },
 
@@ -5179,6 +5779,31 @@ export const CATALOG = {
         removeApp: 'Usuń aplikację',
         removing: 'Usuwanie…'
       }
+    },
+    quarantine: {
+      title: 'Kwarantanna',
+      loading: 'Wczytywanie kwarantanny…',
+      loadError: (error) => `Nie udało się wczytać kwarantanny: ${error}`,
+      summary: {
+        phrase: (count, total, atLeast) => `${count} ${count === 1 ? 'partia' : count < 5 ? 'partie' : 'partii'} · ${atLeast ? 'co najmniej ' : ''}${total} przetrzymywane`,
+        withLimit: (count, total, atLeast, max) => `${count} ${count === 1 ? 'partia' : count < 5 ? 'partie' : 'partii'} · ${atLeast ? 'co najmniej ' : ''}${total} przetrzymywane z ${max}`,
+        unmeasuredSuffix: (count) => ` · ${count} niezmierzone`
+      },
+      overCapWarning: (max) => `Przekracza limit ${max}. Najnowsza kopia zapasowa nigdy nie jest usuwana w celu zwolnienia miejsca, więc pozostaje, dopóki jej nie przywrócisz lub nie usuniesz.`,
+      emptyButton: 'Opróżnij kwarantannę',
+      confirmEmptyPrompt: 'Trwale usunąć każdą partię?',
+      cancel: 'Anuluj',
+      confirm: 'Potwierdź',
+      emptying: 'Opróżnianie…',
+      empty: {
+        heading: 'W kwarantannie nic nie ma.',
+        body: 'Wszystko, co usuwa odinstalowanie lub Głębokie czyszczenie, trafia najpierw tutaj. Pozostaje tu, dopóki tego nie opróżnisz, więc plik zabrany przez pomyłkę zawsze można odzyskać.'
+      },
+      deleteConfirmPrompt: 'Usunąć na zawsze?',
+      restore: 'Przywróć',
+      restoring: 'Przywracanie…',
+      deletePermanently: 'Usuń trwale',
+      deleting: 'Usuwanie…'
     }
   },
 
@@ -5385,6 +6010,31 @@ export const CATALOG = {
         removeApp: 'د اپلیکیشن لرې کول',
         removing: 'لرې کیږي…'
       }
+    },
+    quarantine: {
+      title: 'قرنطین',
+      loading: 'د قرنطین بارول کیږي…',
+      loadError: (error) => `قرنطین بارول ونشول: ${error}`,
+      summary: {
+        phrase: (count, total, atLeast) => `${count} ${count === 1 ? 'ټولګه' : 'ټولګې'} · ${atLeast ? 'لږ تر لږه ' : ''}${total} نیول شوي`,
+        withLimit: (count, total, atLeast, max) => `${count} ${count === 1 ? 'ټولګه' : 'ټولګې'} · ${atLeast ? 'لږ تر لږه ' : ''}${total} نیول شوي د ${max} څخه`,
+        unmeasuredSuffix: (count) => ` · ${count} نامعلومه اندازه`
+      },
+      overCapWarning: (max) => `د ${max} حد څخه ډېر. تازه ترین بیک اپ هیڅکله د ځای جوړولو لپاره نه لرې کیږي، نو دا پاتې کیږي تر څو یې بیرته راولئ یا یې ړنګ کړئ.`,
+      emptyButton: 'قرنطین تشول',
+      confirmEmptyPrompt: 'هره ټولګه د تل لپاره ړنګه شي؟',
+      cancel: 'لغوه کول',
+      confirm: 'تایید',
+      emptying: 'تشول کیږي…',
+      empty: {
+        heading: 'په قرنطین کې هیڅ شی نشته.',
+        body: 'هر هغه څه چې لرې کول یا ژور پاکول یې لرې کوي، لومړی دلته راځي. دا پاتې کیږي تر څو یې تش نه کړئ، نو د تېروتنې له امله اخیستل شوی فایل تل بیرته ترلاسه کیدی شي.'
+      },
+      deleteConfirmPrompt: 'د تل لپاره ړنګ شي؟',
+      restore: 'بیرته راوړل',
+      restoring: 'بیرته راوړل کیږي…',
+      deletePermanently: 'د تل لپاره ړنګول',
+      deleting: 'ړنګول کیږي…'
     }
   },
 
@@ -5591,6 +6241,31 @@ export const CATALOG = {
         removeApp: 'Remover app',
         removing: 'Removendo…'
       }
+    },
+    quarantine: {
+      title: 'Quarentena',
+      loading: 'Carregando quarentena…',
+      loadError: (error) => `Não foi possível carregar a quarentena: ${error}`,
+      summary: {
+        phrase: (count, total, atLeast) => `${count} lote${count === 1 ? '' : 's'} · ${atLeast ? 'pelo menos ' : ''}${total} retidos`,
+        withLimit: (count, total, atLeast, max) => `${count} lote${count === 1 ? '' : 's'} · ${atLeast ? 'pelo menos ' : ''}${total} retidos de ${max}`,
+        unmeasuredSuffix: (count) => ` · ${count} não medidos`
+      },
+      overCapWarning: (max) => `Acima do limite de ${max}. O backup mais recente nunca é removido para abrir espaço, então este permanece até que você o restaure ou exclua.`,
+      emptyButton: 'Esvaziar Quarentena',
+      confirmEmptyPrompt: 'Excluir cada lote permanentemente?',
+      cancel: 'Cancelar',
+      confirm: 'Confirmar',
+      emptying: 'Esvaziando…',
+      empty: {
+        heading: 'Nada na quarentena.',
+        body: 'Tudo o que uma desinstalação ou uma Limpeza Profunda remove chega aqui primeiro. Permanece até que você o esvazie, então um arquivo pego por engano sempre pode ser recuperado.'
+      },
+      deleteConfirmPrompt: 'Excluir para sempre?',
+      restore: 'Restaurar',
+      restoring: 'Restaurando…',
+      deletePermanently: 'Excluir Permanentemente',
+      deleting: 'Excluindo…'
     }
   },
 
@@ -5797,6 +6472,31 @@ export const CATALOG = {
         removeApp: 'Remover aplicação',
         removing: 'A remover…'
       }
+    },
+    quarantine: {
+      title: 'Quarentena',
+      loading: 'A carregar a quarentena…',
+      loadError: (error) => `Não foi possível carregar a quarentena: ${error}`,
+      summary: {
+        phrase: (count, total, atLeast) => `${count} lote${count === 1 ? '' : 's'} · ${atLeast ? 'pelo menos ' : ''}${total} retidos`,
+        withLimit: (count, total, atLeast, max) => `${count} lote${count === 1 ? '' : 's'} · ${atLeast ? 'pelo menos ' : ''}${total} retidos de ${max}`,
+        unmeasuredSuffix: (count) => ` · ${count} não medidos`
+      },
+      overCapWarning: (max) => `Acima do limite de ${max}. A cópia de segurança mais recente nunca é removida para abrir espaço, pelo que esta permanece até a restaurar ou eliminar.`,
+      emptyButton: 'Esvaziar Quarentena',
+      confirmEmptyPrompt: 'Eliminar permanentemente cada lote?',
+      cancel: 'Cancelar',
+      confirm: 'Confirmar',
+      emptying: 'A esvaziar…',
+      empty: {
+        heading: 'Nada na quarentena.',
+        body: 'Tudo o que uma desinstalação ou uma Limpeza Profunda remove chega aqui primeiro. Permanece até a esvaziar, pelo que um ficheiro apanhado por engano é sempre recuperável.'
+      },
+      deleteConfirmPrompt: 'Eliminar para sempre?',
+      restore: 'Restaurar',
+      restoring: 'A restaurar…',
+      deletePermanently: 'Eliminar Permanentemente',
+      deleting: 'A eliminar…'
     }
   },
 
@@ -6003,6 +6703,31 @@ export const CATALOG = {
         removeApp: 'Elimină aplicația',
         removing: 'Se elimină…'
       }
+    },
+    quarantine: {
+      title: 'Carantină',
+      loading: 'Se încarcă carantina…',
+      loadError: (error) => `Carantina nu a putut fi încărcată: ${error}`,
+      summary: {
+        phrase: (count, total, atLeast) => `${count} ${count === 1 ? 'lot' : 'loturi'} · ${atLeast ? 'cel puțin ' : ''}${total} reținute`,
+        withLimit: (count, total, atLeast, max) => `${count} ${count === 1 ? 'lot' : 'loturi'} · ${atLeast ? 'cel puțin ' : ''}${total} reținute din ${max}`,
+        unmeasuredSuffix: (count) => ` · ${count} nemăsurate`
+      },
+      overCapWarning: (max) => `Depășește limita de ${max}. Cea mai recentă copie de rezervă nu este niciodată eliminată pentru a face loc, așa că aceasta rămâne până o restaurezi sau o ștergi.`,
+      emptyButton: 'Golește Carantina',
+      confirmEmptyPrompt: 'Ștergi definitiv fiecare lot?',
+      cancel: 'Anulează',
+      confirm: 'Confirmă',
+      emptying: 'Se golește…',
+      empty: {
+        heading: 'Nimic în carantină.',
+        body: 'Tot ce elimină o dezinstalare sau o Curățare profundă ajunge mai întâi aici. Rămâne aici până îl golești, deci un fișier luat din greșeală poate fi întotdeauna recuperat.'
+      },
+      deleteConfirmPrompt: 'Ștergi definitiv?',
+      restore: 'Restaurează',
+      restoring: 'Se restaurează…',
+      deletePermanently: 'Șterge definitiv',
+      deleting: 'Se șterge…'
     }
   },
 
@@ -6209,6 +6934,31 @@ export const CATALOG = {
         removeApp: 'Удалить приложение',
         removing: 'Удаление…'
       }
+    },
+    quarantine: {
+      title: 'Карантин',
+      loading: 'Загрузка карантина…',
+      loadError: (error) => `Не удалось загрузить карантин: ${error}`,
+      summary: {
+        phrase: (count, total, atLeast) => `Партий: ${count} · ${atLeast ? 'не менее ' : ''}${total} удержано`,
+        withLimit: (count, total, atLeast, max) => `Партий: ${count} · ${atLeast ? 'не менее ' : ''}${total} удержано из ${max}`,
+        unmeasuredSuffix: (count) => ` · не измерено: ${count}`
+      },
+      overCapWarning: (max) => `Превышен лимит ${max}. Самая новая резервная копия никогда не удаляется для освобождения места, поэтому она остаётся, пока вы её не восстановите или не удалите.`,
+      emptyButton: 'Очистить карантин',
+      confirmEmptyPrompt: 'Удалить каждую партию безвозвратно?',
+      cancel: 'Отмена',
+      confirm: 'Подтвердить',
+      emptying: 'Очистка…',
+      empty: {
+        heading: 'В карантине пусто.',
+        body: 'Всё, что удаляет удаление программы или Глубокая очистка, сначала попадает сюда. Это остаётся здесь, пока вы не очистите карантин, поэтому файл, взятый по ошибке, всегда можно восстановить.'
+      },
+      deleteConfirmPrompt: 'Удалить навсегда?',
+      restore: 'Восстановить',
+      restoring: 'Восстановление…',
+      deletePermanently: 'Удалить навсегда',
+      deleting: 'Удаление…'
     }
   },
 
@@ -6415,6 +7165,31 @@ export const CATALOG = {
         removeApp: 'Odstrániť aplikáciu',
         removing: 'Odstraňovanie…'
       }
+    },
+    quarantine: {
+      title: 'Karanténa',
+      loading: 'Načítava sa karanténa…',
+      loadError: (error) => `Karanténu sa nepodarilo načítať: ${error}`,
+      summary: {
+        phrase: (count, total, atLeast) => `${count} ${count === 1 ? 'dávka' : count < 5 ? 'dávky' : 'dávok'} · ${atLeast ? 'aspoň ' : ''}${total} zadržané`,
+        withLimit: (count, total, atLeast, max) => `${count} ${count === 1 ? 'dávka' : count < 5 ? 'dávky' : 'dávok'} · ${atLeast ? 'aspoň ' : ''}${total} zadržané z ${max}`,
+        unmeasuredSuffix: (count) => ` · ${count} nezmerané`
+      },
+      overCapWarning: (max) => `Nad limitom ${max}. Najnovšia záloha sa nikdy neodstraňuje kvôli uvoľneniu miesta, takže táto zostáva, kým ju neobnovíte alebo neodstránite.`,
+      emptyButton: 'Vyprázdniť karanténu',
+      confirmEmptyPrompt: 'Natrvalo odstrániť každú dávku?',
+      cancel: 'Zrušiť',
+      confirm: 'Potvrdiť',
+      emptying: 'Vyprázdňovanie…',
+      empty: {
+        heading: 'V karanténe nič nie je.',
+        body: 'Všetko, čo odinštalovanie alebo Hĺbkové čistenie odstráni, pristane najprv sem. Zostáva tu, kým to nevyprázdnite, takže omylom vzatý súbor je vždy možné obnoviť.'
+      },
+      deleteConfirmPrompt: 'Odstrániť navždy?',
+      restore: 'Obnoviť',
+      restoring: 'Obnovuje sa…',
+      deletePermanently: 'Natrvalo odstrániť',
+      deleting: 'Odstraňuje sa…'
     }
   },
 
@@ -6621,6 +7396,31 @@ export const CATALOG = {
         removeApp: 'Hiq aplikacionin',
         removing: 'Duke hequr…'
       }
+    },
+    quarantine: {
+      title: 'Karantinë',
+      loading: 'Duke ngarkuar karantinën…',
+      loadError: (error) => `Karantina nuk mundi të ngarkohej: ${error}`,
+      summary: {
+        phrase: (count, total, atLeast) => `${count} ${count === 1 ? 'grumbull' : 'grumbuj'} · ${atLeast ? 'të paktën ' : ''}${total} të mbajtura`,
+        withLimit: (count, total, atLeast, max) => `${count} ${count === 1 ? 'grumbull' : 'grumbuj'} · ${atLeast ? 'të paktën ' : ''}${total} të mbajtura nga ${max}`,
+        unmeasuredSuffix: (count) => ` · ${count} të pamatura`
+      },
+      overCapWarning: (max) => `Tejkalon kufirin prej ${max}. Kopja rezervë më e fundit nuk hiqet kurrë për të bërë vend, kështu që kjo mbetet derisa ta rikthesh ose ta fshish.`,
+      emptyButton: 'Zbraz Karantinën',
+      confirmEmptyPrompt: 'Të fshihet përgjithmonë çdo grumbull?',
+      cancel: 'Anulo',
+      confirm: 'Konfirmo',
+      emptying: 'Duke zbrazur…',
+      empty: {
+        heading: 'Asgjë në karantinë.',
+        body: 'Çdo gjë që heq një çinstalim ose një Pastrim i thellë, zbret këtu së pari. Mbetet derisa ta zbrazësh, kështu që një skedar i marrë gabimisht mund të rikthehet gjithmonë.'
+      },
+      deleteConfirmPrompt: 'Të fshihet përgjithmonë?',
+      restore: 'Rikthe',
+      restoring: 'Duke rikthyer…',
+      deletePermanently: 'Fshi Përgjithmonë',
+      deleting: 'Duke fshirë…'
     }
   },
 
@@ -6827,6 +7627,31 @@ export const CATALOG = {
         removeApp: 'Уклони апликацију',
         removing: 'Уклањање…'
       }
+    },
+    quarantine: {
+      title: 'Карантин',
+      loading: 'Учитавање карантина…',
+      loadError: (error) => `Карантин није могао да се учита: ${error}`,
+      summary: {
+        phrase: (count, total, atLeast) => `${count} ${count === 1 ? 'серија' : 'серије'} · ${atLeast ? 'најмање ' : ''}${total} задржано`,
+        withLimit: (count, total, atLeast, max) => `${count} ${count === 1 ? 'серија' : 'серије'} · ${atLeast ? 'најмање ' : ''}${total} задржано од ${max}`,
+        unmeasuredSuffix: (count) => ` · ${count} немерено`
+      },
+      overCapWarning: (max) => `Прекорачује ограничење од ${max}. Најновија резервна копија се никада не уклања ради ослобађања простора, тако да ово остаје док је не вратите или обришете.`,
+      emptyButton: 'Испразни карантин',
+      confirmEmptyPrompt: 'Трајно обрисати сваку серију?',
+      cancel: 'Откажи',
+      confirm: 'Потврди',
+      emptying: 'Празни се…',
+      empty: {
+        heading: 'Нема ничега у карантину.',
+        body: 'Све што деинсталација или Дубоко чишћење уклони, прво стиже овде. Остаје докле год га не испразните, тако да фајл узет грешком увек може да се врати.'
+      },
+      deleteConfirmPrompt: 'Обрисати заувек?',
+      restore: 'Врати',
+      restoring: 'Враћа се…',
+      deletePermanently: 'Обриши трајно',
+      deleting: 'Брише се…'
     }
   },
 
@@ -7033,6 +7858,31 @@ export const CATALOG = {
         removeApp: 'Ta bort app',
         removing: 'Tar bort…'
       }
+    },
+    quarantine: {
+      title: 'Karantän',
+      loading: 'Läser in karantän…',
+      loadError: (error) => `Kunde inte läsa in karantän: ${error}`,
+      summary: {
+        phrase: (count, total, atLeast) => `${count} ${count === 1 ? 'batch' : 'batchar'} · ${atLeast ? 'minst ' : ''}${total} kvarhållet`,
+        withLimit: (count, total, atLeast, max) => `${count} ${count === 1 ? 'batch' : 'batchar'} · ${atLeast ? 'minst ' : ''}${total} kvarhållet av ${max}`,
+        unmeasuredSuffix: (count) => ` · ${count} omätt`
+      },
+      overCapWarning: (max) => `Över gränsen på ${max}. Den senaste säkerhetskopian tas aldrig bort för att göra plats, så den ligger kvar tills du återställer eller tar bort den.`,
+      emptyButton: 'Töm karantän',
+      confirmEmptyPrompt: 'Ta bort varje batch permanent?',
+      cancel: 'Avbryt',
+      confirm: 'Bekräfta',
+      emptying: 'Tömmer…',
+      empty: {
+        heading: 'Inget i karantän.',
+        body: 'Allt som en avinstallation eller en Djuprensning tar bort hamnar här först. Det ligger kvar tills du tömmer det, så en fil som tagits av misstag kan alltid återställas.'
+      },
+      deleteConfirmPrompt: 'Ta bort för alltid?',
+      restore: 'Återställ',
+      restoring: 'Återställer…',
+      deletePermanently: 'Ta bort permanent',
+      deleting: 'Tar bort…'
     }
   },
 
@@ -7239,6 +8089,31 @@ export const CATALOG = {
         removeApp: 'ลบแอป',
         removing: 'กำลังลบ…'
       }
+    },
+    quarantine: {
+      title: 'กักกัน',
+      loading: 'กำลังโหลดข้อมูลกักกัน…',
+      loadError: (error) => `โหลดข้อมูลกักกันไม่สำเร็จ: ${error}`,
+      summary: {
+        phrase: (count, total, atLeast) => `${count} ชุด · ${atLeast ? 'อย่างน้อย ' : ''}${total} ถูกกักไว้`,
+        withLimit: (count, total, atLeast, max) => `${count} ชุด · ${atLeast ? 'อย่างน้อย ' : ''}${total} ถูกกักไว้ จาก ${max}`,
+        unmeasuredSuffix: (count) => ` · ไม่ได้วัดขนาด ${count} รายการ`
+      },
+      overCapWarning: (max) => `เกินขีดจำกัด ${max} ข้อมูลสำรองล่าสุดจะไม่ถูกลบเพื่อเพิ่มพื้นที่เลย ดังนั้นรายการนี้จะยังอยู่จนกว่าคุณจะกู้คืนหรือลบมัน`,
+      emptyButton: 'ล้างการกักกัน',
+      confirmEmptyPrompt: 'ลบทุกชุดอย่างถาวรใช่หรือไม่',
+      cancel: 'ยกเลิก',
+      confirm: 'ยืนยัน',
+      emptying: 'กำลังล้าง…',
+      empty: {
+        heading: 'ไม่มีอะไรในการกักกัน',
+        body: 'สิ่งที่การถอนการติดตั้งหรือการล้างเชิงลึกลบทิ้งจะมาที่นี่ก่อน มันจะอยู่ที่นี่จนกว่าคุณจะล้างมัน ดังนั้นไฟล์ที่ถูกนำออกโดยไม่ตั้งใจจึงสามารถกู้คืนได้เสมอ'
+      },
+      deleteConfirmPrompt: 'ลบทิ้งถาวรใช่หรือไม่',
+      restore: 'กู้คืน',
+      restoring: 'กำลังกู้คืน…',
+      deletePermanently: 'ลบถาวร',
+      deleting: 'กำลังลบ…'
     }
   },
 
@@ -7445,6 +8320,31 @@ export const CATALOG = {
         removeApp: 'Uygulamayı kaldır',
         removing: 'Kaldırılıyor…'
       }
+    },
+    quarantine: {
+      title: 'Karantina',
+      loading: 'Karantina yükleniyor…',
+      loadError: (error) => `Karantina yüklenemedi: ${error}`,
+      summary: {
+        phrase: (count, total, atLeast) => `${count} grup · ${atLeast ? 'en az ' : ''}${total} tutuluyor`,
+        withLimit: (count, total, atLeast, max) => `${count} grup · ${atLeast ? 'en az ' : ''}${total} tutuluyor / ${max}`,
+        unmeasuredSuffix: (count) => ` · ${count} ölçülmemiş`
+      },
+      overCapWarning: (max) => `${max} sınırını aşıyor. En son yedekleme yer açmak için asla kaldırılmaz, bu yüzden geri yükleyene veya silene kadar burada kalır.`,
+      emptyButton: 'Karantinayı Boşalt',
+      confirmEmptyPrompt: 'Her grup kalıcı olarak silinsin mi?',
+      cancel: 'İptal',
+      confirm: 'Onayla',
+      emptying: 'Boşaltılıyor…',
+      empty: {
+        heading: 'Karantinada hiçbir şey yok.',
+        body: 'Bir kaldırma veya bir Derin Temizlik ile silinen her şey önce buraya iner. Boşaltana kadar burada kalır, bu yüzden yanlışlıkla alınan bir dosya her zaman geri alınabilir.'
+      },
+      deleteConfirmPrompt: 'Kalıcı olarak silinsin mi?',
+      restore: 'Geri yükle',
+      restoring: 'Geri yükleniyor…',
+      deletePermanently: 'Kalıcı Olarak Sil',
+      deleting: 'Siliniyor…'
     }
   },
 
@@ -7651,6 +8551,31 @@ export const CATALOG = {
         removeApp: 'Видалити застосунок',
         removing: 'Видалення…'
       }
+    },
+    quarantine: {
+      title: 'Карантин',
+      loading: 'Завантаження карантину…',
+      loadError: (error) => `Не вдалося завантажити карантин: ${error}`,
+      summary: {
+        phrase: (count, total, atLeast) => `Партій: ${count} · ${atLeast ? 'принаймні ' : ''}${total} утримано`,
+        withLimit: (count, total, atLeast, max) => `Партій: ${count} · ${atLeast ? 'принаймні ' : ''}${total} утримано з ${max}`,
+        unmeasuredSuffix: (count) => ` · не виміряно: ${count}`
+      },
+      overCapWarning: (max) => `Перевищує ліміт ${max}. Найновіша резервна копія ніколи не видаляється для звільнення місця, тож вона залишається, доки ви її не відновите або не видалите.`,
+      emptyButton: 'Очистити карантин',
+      confirmEmptyPrompt: 'Видалити кожну партію назавжди?',
+      cancel: 'Скасувати',
+      confirm: 'Підтвердити',
+      emptying: 'Очищення…',
+      empty: {
+        heading: 'У карантині порожньо.',
+        body: 'Усе, що видаляє видалення програми чи Глибоке очищення, спершу потрапляє сюди. Це залишається тут, доки ви не очистите карантин, тож файл, узятий помилково, завжди можна відновити.'
+      },
+      deleteConfirmPrompt: 'Видалити назавжди?',
+      restore: 'Відновити',
+      restoring: 'Відновлення…',
+      deletePermanently: 'Видалити назавжди',
+      deleting: 'Видалення…'
     }
   },
 
@@ -7857,6 +8782,31 @@ export const CATALOG = {
         removeApp: 'Xóa ứng dụng',
         removing: 'Đang xóa…'
       }
+    },
+    quarantine: {
+      title: 'Khu cách ly',
+      loading: 'Đang tải khu cách ly…',
+      loadError: (error) => `Không thể tải khu cách ly: ${error}`,
+      summary: {
+        phrase: (count, total, atLeast) => `${count} lô · ${atLeast ? 'ít nhất ' : ''}${total} đang giữ`,
+        withLimit: (count, total, atLeast, max) => `${count} lô · ${atLeast ? 'ít nhất ' : ''}${total} đang giữ / ${max}`,
+        unmeasuredSuffix: (count) => ` · ${count} chưa đo`
+      },
+      overCapWarning: (max) => `Vượt quá giới hạn ${max}. Bản sao lưu mới nhất không bao giờ bị xóa để nhường chỗ, vì vậy mục này vẫn còn cho đến khi bạn khôi phục hoặc xóa nó.`,
+      emptyButton: 'Dọn sạch khu cách ly',
+      confirmEmptyPrompt: 'Xóa vĩnh viễn mọi lô?',
+      cancel: 'Hủy',
+      confirm: 'Xác nhận',
+      emptying: 'Đang dọn sạch…',
+      empty: {
+        heading: 'Không có gì trong khu cách ly.',
+        body: 'Bất cứ thứ gì mà việc gỡ cài đặt hoặc Dọn dẹp sâu xóa sẽ đến đây trước. Nó sẽ ở lại đây cho đến khi bạn dọn sạch, vì vậy một tệp bị lấy nhầm luôn có thể khôi phục được.'
+      },
+      deleteConfirmPrompt: 'Xóa vĩnh viễn?',
+      restore: 'Khôi phục',
+      restoring: 'Đang khôi phục…',
+      deletePermanently: 'Xóa vĩnh viễn',
+      deleting: 'Đang xóa…'
     }
   },
 
@@ -8063,6 +9013,31 @@ export const CATALOG = {
         removeApp: '删除应用',
         removing: '正在删除…'
       }
+    },
+    quarantine: {
+      title: '隔离区',
+      loading: '正在加载隔离区…',
+      loadError: (error) => `无法加载隔离区：${error}`,
+      summary: {
+        phrase: (count, total, atLeast) => `${count} 批 · ${atLeast ? '至少 ' : ''}保留 ${total}`,
+        withLimit: (count, total, atLeast, max) => `${count} 批 · ${atLeast ? '至少 ' : ''}保留 ${total} / ${max}`,
+        unmeasuredSuffix: (count) => ` · ${count} 项未测量`
+      },
+      overCapWarning: (max) => `超出了 ${max} 的上限。最新的备份永远不会被移除以腾出空间，因此它会一直保留，直到你恢复或删除它。`,
+      emptyButton: '清空隔离区',
+      confirmEmptyPrompt: '要永久删除每一批吗？',
+      cancel: '取消',
+      confirm: '确认',
+      emptying: '正在清空…',
+      empty: {
+        heading: '隔离区中没有内容。',
+        body: '卸载或深度清理移除的任何内容都会先到这里。它会一直保留，直到你清空隔离区，因此误删的文件始终可以恢复。'
+      },
+      deleteConfirmPrompt: '要永久删除吗？',
+      restore: '恢复',
+      restoring: '正在恢复…',
+      deletePermanently: '永久删除',
+      deleting: '正在删除…'
     }
   },
 
@@ -8269,6 +9244,31 @@ export const CATALOG = {
         removeApp: '移除應用程式',
         removing: '正在移除…'
       }
+    },
+    quarantine: {
+      title: '隔離區',
+      loading: '正在載入隔離區…',
+      loadError: (error) => `無法載入隔離區：${error}`,
+      summary: {
+        phrase: (count, total, atLeast) => `${count} 批 · ${atLeast ? '至少 ' : ''}保留 ${total}`,
+        withLimit: (count, total, atLeast, max) => `${count} 批 · ${atLeast ? '至少 ' : ''}保留 ${total} / ${max}`,
+        unmeasuredSuffix: (count) => ` · ${count} 項未測量`
+      },
+      overCapWarning: (max) => `超出了 ${max} 的上限。最新的備份永遠不會被移除以騰出空間，因此它會一直保留，直到你還原或刪除它。`,
+      emptyButton: '清空隔離區',
+      confirmEmptyPrompt: '要永久刪除每一批嗎？',
+      cancel: '取消',
+      confirm: '確認',
+      emptying: '正在清空…',
+      empty: {
+        heading: '隔離區中沒有內容。',
+        body: '解除安裝或深度清理移除的任何內容都會先到這裡。它會一直保留，直到你清空隔離區，因此誤刪的檔案永遠可以還原。'
+      },
+      deleteConfirmPrompt: '要永久刪除嗎？',
+      restore: '還原',
+      restoring: '正在還原…',
+      deletePermanently: '永久刪除',
+      deleting: '正在刪除…'
     }
   }
 };

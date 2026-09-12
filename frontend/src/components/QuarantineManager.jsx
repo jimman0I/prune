@@ -1,5 +1,6 @@
 import { useState, memo } from 'react';
 import { useQuarantine } from '../hooks/useSystemQueries.js';
+import { useLanguage } from '../i18n/LanguageContext.jsx';
 
 // Duplicated locally rather than imported from Dashboard.jsx/DeepClean.jsx
 // (both off-limits for this task) -- matches this codebase's own existing
@@ -27,6 +28,7 @@ function formatDate(ms) {
 }
 
 function QuarantineManager() {
+  const { t } = useLanguage();
   const [actionError, setActionError] = useState(null);
   const [confirmDeleteDir, setConfirmDeleteDir] = useState(null);
   const [confirmEmpty, setConfirmEmpty] = useState(false);
@@ -70,20 +72,26 @@ function QuarantineManager() {
     <div className="px-12 py-10 max-w-[1400px]">
       <div className="flex items-baseline justify-between mb-8">
         <div>
-          <h1 className="display-heading text-[30px] leading-none">Quarantine</h1>
+          <h1 className="display-heading text-[30px] leading-none">{t('quarantine.title')}</h1>
           {!loading && !error && (
             <>
             <p className="text-[13px] text-[color:var(--text-secondary)] mt-2.5">
-              <span className="text-[color:var(--text-primary)] font-medium">{batches.length}</span> batch{batches.length === 1 ? '' : 'es'} ·{' '}
-              {/* "at least" when a batch carries no recorded size. Rounding
-                  an unknown down to zero and printing the result as exact
-                  would understate the total while looking precise. */}
-              {!exact && 'at least '}
-              <span className="text-[color:var(--text-primary)] font-medium">{formatBytes(totalBytes)}</span> held
-              {maxBytes !== null && <> of {formatBytes(maxBytes)}</>}
+              {/* "at least" (the third argument below) when a batch carries
+                  no recorded size. Rounding an unknown down to zero and
+                  printing the result as exact would understate the total
+                  while looking precise. The whole phrase is bolded together
+                  rather than just the two numbers within it, the same
+                  tradeoff ProgramList.jsx's footer.selected already made --
+                  a translated catalog function can only return a plain
+                  string, not JSX with an inline bold span partway through. */}
+              <span className="text-[color:var(--text-primary)] font-medium">
+                {maxBytes !== null
+                  ? t('quarantine.summary.withLimit', batches.length, formatBytes(totalBytes), !exact, formatBytes(maxBytes))
+                  : t('quarantine.summary.phrase', batches.length, formatBytes(totalBytes), !exact)}
+              </span>
               {unknownSizeCount > 0 && (
                 <span className="text-[color:var(--text-muted)]">
-                  {' '}· {unknownSizeCount} unmeasured
+                  {t('quarantine.summary.unmeasuredSuffix', unknownSizeCount)}
                 </span>
               )}
             </p>
@@ -94,8 +102,7 @@ function QuarantineManager() {
                 does not apply. */}
             {overCap && (
               <p className="text-[12.5px] text-[color:var(--warning,var(--text-secondary))] mt-1.5">
-                Over the {formatBytes(maxBytes)} limit. The most recent backup is never removed to
-                make room, so this stays until you restore or delete it.
+                {t('quarantine.overCapWarning', formatBytes(maxBytes))}
               </p>
             )}
             </>
@@ -105,12 +112,12 @@ function QuarantineManager() {
         {!loading && !error && (
           confirmEmpty ? (
             <div className="flex items-center gap-2">
-              <span className="text-[12.5px] text-[color:var(--danger)]">Permanently delete every batch?</span>
+              <span className="text-[12.5px] text-[color:var(--danger)]">{t('quarantine.confirmEmptyPrompt')}</span>
               <button className="btn-ghost px-3.5 py-1.5 rounded-lg text-[12px] font-medium" onClick={() => setConfirmEmpty(false)} disabled={emptying}>
-                Cancel
+                {t('quarantine.cancel')}
               </button>
               <button className="btn-danger px-3.5 py-1.5 rounded-lg text-[12px] font-medium" onClick={handleEmptyQuarantine} disabled={emptying}>
-                {emptying ? 'Emptying…' : 'Confirm'}
+                {emptying ? t('quarantine.emptying') : t('quarantine.confirm')}
               </button>
             </div>
           ) : (
@@ -119,7 +126,7 @@ function QuarantineManager() {
               onClick={() => setConfirmEmpty(true)}
               disabled={batches.length === 0}
             >
-              Empty Quarantine
+              {t('quarantine.emptyButton')}
             </button>
           )
         )}
@@ -130,13 +137,13 @@ function QuarantineManager() {
           <div className="w-14 h-14 rounded-2xl bg-[color:var(--accent-primary)]/10 border border-[color:var(--accent-primary)]/25 flex items-center justify-center mb-5">
             <div className="w-6 h-6 border-2 border-[color:var(--accent-primary)] border-t-transparent rounded-full animate-spin"></div>
           </div>
-          <p className="text-[13px] text-[color:var(--text-secondary)]">Loading quarantine…</p>
+          <p className="text-[13px] text-[color:var(--text-secondary)]">{t('quarantine.loading')}</p>
         </div>
       )}
 
       {!loading && error && (
         <div className="glass-panel p-6">
-          <p className="text-[13px] text-[color:var(--danger)] select-text">Couldn't load quarantine: {error}</p>
+          <p className="text-[13px] text-[color:var(--danger)] select-text">{t('quarantine.loadError', error)}</p>
         </div>
       )}
 
@@ -150,10 +157,9 @@ function QuarantineManager() {
 
           {batches.length === 0 ? (
             <div className="glass-panel p-10 text-center">
-              <p className="text-[13.5px] text-[color:var(--text-secondary)]">Nothing in quarantine.</p>
+              <p className="text-[13.5px] text-[color:var(--text-secondary)]">{t('quarantine.empty.heading')}</p>
               <p className="text-[12.5px] text-[color:var(--text-muted)] mt-1.5">
-                Anything an uninstall or a Deep Clean removes lands here first. It stays until
-                you empty it, so a file taken by mistake is always recoverable.
+                {t('quarantine.empty.body')}
               </p>
             </div>
           ) : (
@@ -173,20 +179,20 @@ function QuarantineManager() {
                       <div className="flex items-center gap-2 shrink-0">
                         {confirming ? (
                           <>
-                            <span className="text-[12px] text-[color:var(--danger)] mr-1">Delete forever?</span>
+                            <span className="text-[12px] text-[color:var(--danger)] mr-1">{t('quarantine.deleteConfirmPrompt')}</span>
                             <button
                               className="btn-ghost px-3.5 py-1.5 rounded-lg text-[12px] font-medium"
                               onClick={() => setConfirmDeleteDir(null)}
                               disabled={busy}
                             >
-                              Cancel
+                              {t('quarantine.cancel')}
                             </button>
                             <button
                               className="btn-danger px-3.5 py-1.5 rounded-lg text-[12px] font-medium"
                               onClick={() => handleDeletePermanently(batch)}
                               disabled={busy}
                             >
-                              {busy ? 'Deleting…' : 'Confirm'}
+                              {busy ? t('quarantine.deleting') : t('quarantine.confirm')}
                             </button>
                           </>
                         ) : (
@@ -196,14 +202,14 @@ function QuarantineManager() {
                               onClick={() => handleRestore(batch)}
                               disabled={busy}
                             >
-                              {busy ? 'Restoring…' : 'Restore'}
+                              {busy ? t('quarantine.restoring') : t('quarantine.restore')}
                             </button>
                             <button
                               className="btn-danger px-3.5 py-1.5 rounded-lg text-[12px] font-medium disabled:opacity-50"
                               onClick={() => setConfirmDeleteDir(batch.batchDir)}
                               disabled={busy}
                             >
-                              Delete Permanently
+                              {t('quarantine.deletePermanently')}
                             </button>
                           </>
                         )}
