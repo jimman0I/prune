@@ -20,7 +20,21 @@ const LOCKED_REASON = /lock|access|denied|in use|EPERM|EBUSY|permission/i;
  * and five answers it better than forty. */
 const MAX_PATHS = 5;
 
-export function lockedFileSummary(cleanResult) {
+/** The English this carries when no translated set is passed in -- a
+ * plain default rather than the only option, the same pattern
+ * lib/batchSelection.js's `reasons` and lib/groupStartupItems.js's
+ * `labels` both use: this is a plain utility function with no access to
+ * the language hook, so the CALLER supplies a translated set
+ * (DeepClean.jsx passes `t('deepClean.locked')`) and this file stays
+ * free of any i18n import of its own. Exported so this file's own tests,
+ * which never pass a second argument, keep asserting the exact English
+ * wording. */
+export const DEFAULT_LOCKED_MESSAGES = {
+  message: (count) => `Skipped ${count} locked ${count === 1 ? 'file' : 'files'}.`,
+  detail: 'Close the apps using them and clean again.'
+};
+
+export function lockedFileSummary(cleanResult, messages = DEFAULT_LOCKED_MESSAGES) {
   const results = cleanResult?.results;
   if (!Array.isArray(results)) return null;
 
@@ -41,7 +55,7 @@ export function lockedFileSummary(cleanResult) {
   return {
     count: paths.length,
     paths: paths.slice(0, MAX_PATHS),
-    message: `Skipped ${paths.length} locked ${paths.length === 1 ? 'file' : 'files'}.`,
-    detail: 'Close the apps using them and clean again.'
+    message: messages.message(paths.length),
+    detail: messages.detail
   };
 }

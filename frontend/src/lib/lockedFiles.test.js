@@ -63,4 +63,14 @@ describe('lockedFileSummary', () => {
   it('survives a rule with no skipped array at all', () => {
     expect(lockedFileSummary({ results: [{ id: 'a' }, { id: 'b', skipped: null }] })).toBeNull();
   });
+
+  // DeepClean.jsx passes `t('deepClean.locked')` here so the message
+  // follows the app's chosen language, the same way ProgramList.jsx's
+  // call into batchIneligibleReason() supplies a translated reason set.
+  it('uses the given messages instead of the English defaults', () => {
+    const messages = { message: (count) => `Παραλείφθηκαν ${count} κλειδωμένα αρχεία.`, detail: 'Κλείστε τις εφαρμογές.' };
+    const summary = lockedFileSummary(result([{ path: 'C:\\a\\one.dat', reason: 'locked' }]), messages);
+    expect(summary.message).toBe('Παραλείφθηκαν 1 κλειδωμένα αρχεία.');
+    expect(summary.detail).toBe('Κλείστε τις εφαρμογές.');
+  });
 });

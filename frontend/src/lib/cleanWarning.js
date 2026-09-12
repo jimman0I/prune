@@ -37,22 +37,37 @@ export function needsWarning(item, { checking, acknowledged } = {}) {
   return !acknowledgedList(acknowledged).includes(item.id);
 }
 
+/** The English this carries when no translated set is passed in -- a
+ * plain default rather than the only option, the same pattern
+ * lib/lockedFiles.js's `messages` and lib/batchSelection.js's `reasons`
+ * both use: this is a plain utility function with no access to the
+ * language hook, so the CALLER supplies a translated set
+ * (DeepClean.jsx's CleanWarningDialog reads through `t('deepClean.warning')`)
+ * and this file stays free of any i18n import of its own. Exported so
+ * this file's own tests, which never pass a second argument, keep
+ * asserting the exact English wording. */
+export const DEFAULT_WARNING_MESSAGES = {
+  title: (label) => `Enable ${label}`,
+  remember: (label) => `Remember my choice for ${label}`,
+  fallbackBody: 'This option removes data you may want to keep.'
+};
+
 /** The dialog's text for one rule.
  *
  * Titled with the category as well as the name because that is how the
  * row reads -- "Cookies" under a "Brave" heading -- and three browsers
  * ship a rule called Cookies. */
-export function warningFor(item) {
+export function warningFor(item, messages = DEFAULT_WARNING_MESSAGES) {
   const label = item?.category ? `${item.category} — ${item.name}` : item?.name;
   return {
     id: item?.id,
-    title: `Enable ${label}`,
-    remember: `Remember my choice for ${label}`,
+    title: messages.title(label),
+    remember: messages.remember(label),
     // Every shipped rule has a description, and each one is already
     // written as the consequence rather than the mechanism. The fallback
     // exists so a rule added later without one still warns about
     // something rather than showing an empty dialog.
-    body: item?.description || 'This option removes data you may want to keep.'
+    body: item?.description || messages.fallbackBody
   };
 }
 

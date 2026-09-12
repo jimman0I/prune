@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { categorySelectionState, nextCategoryChecked } from '../lib/categorySelection.js';
 import { tileLetter } from '../lib/iconTileLetter.js';
 import { tileColor, TILE_INK } from '../lib/programTileColor.js';
+import { useLanguage } from '../i18n/LanguageContext.jsx';
 
 /** The Deep Clean list.
  *
@@ -69,14 +70,15 @@ function Checkbox({ state, onChange, label, size = 16 }) {
  * everyday example of the third: it routinely holds hundreds of MB and
  * reads as empty to an unelevated process. */
 function SizeLabel({ item }) {
+  const { t } = useLanguage();
   if (item.sizeBytes === null) {
     return <span className="font-mono text-[11px] shrink-0 text-[color:var(--text-muted)]">—</span>;
   }
   if (item.accessible === false) {
-    return <span className="font-mono text-[11px] shrink-0 text-[color:var(--warning)]">needs admin</span>;
+    return <span className="font-mono text-[11px] shrink-0 text-[color:var(--warning)]">{t('deepClean.tree.needsAdmin')}</span>;
   }
   if (item.present === false) {
-    return <span className="font-mono text-[11px] shrink-0 text-[color:var(--text-muted)]">not installed</span>;
+    return <span className="font-mono text-[11px] shrink-0 text-[color:var(--text-muted)]">{t('deepClean.tree.notInstalled')}</span>;
   }
   return (
     <span className={`font-mono text-[11px] shrink-0 ${item.sizeBytes ? 'text-[color:var(--text-secondary)]' : 'text-[color:var(--text-muted)]'}`}>
@@ -128,6 +130,7 @@ function CategoryIcon({ category, src }) {
 }
 
 function CategorySection({ category, items, iconSrc, selected, onToggle, onToggleCategory }) {
+  const { t } = useLanguage();
   const [expanded, setExpanded] = useState(true);
   const state = categorySelectionState(items, selected);
 
@@ -151,7 +154,7 @@ function CategorySection({ category, items, iconSrc, selected, onToggle, onToggl
         <Checkbox
           state={state}
           size={16}
-          label={`Select everything under ${category}`}
+          label={t('deepClean.tree.selectCategoryAriaLabel', category)}
           onChange={() => onToggleCategory(category, nextCategoryChecked(state))}
         />
         <button
@@ -203,7 +206,7 @@ function CategorySection({ category, items, iconSrc, selected, onToggle, onToggl
                   None of these is ticked by default; this says why. */}
               {item.risky && (
                 <span className="text-[8.5px] font-mono uppercase tracking-wider px-1 rounded bg-[color:var(--warning-soft)] text-[color:var(--warning)] border border-[color:var(--warning)]/25 shrink-0">
-                  Loses data
+                  {t('deepClean.tree.losesData')}
                 </span>
               )}
 

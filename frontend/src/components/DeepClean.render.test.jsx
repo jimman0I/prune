@@ -113,8 +113,11 @@ describe('the gate in front of a clean', () => {
     await selectSomething(user);
     await user.click(cleanButton());
 
-    expect(screen.getByText(/to Quarantine\?/)).toBeTruthy();
-    expect(screen.getByText('size not measured')).toBeTruthy();
+    // Now one translated sentence in a single text node (see
+    // deepClean.confirm.prompt in catalog.js) rather than JSX fragments
+    // around their own <span>, so this matches the whole phrase instead
+    // of a standalone "size not measured" node.
+    expect(screen.getByText(/\(size not measured\) to Quarantine\?/)).toBeTruthy();
   });
 
   it('backs out on Cancel, having cleaned nothing', async () => {
