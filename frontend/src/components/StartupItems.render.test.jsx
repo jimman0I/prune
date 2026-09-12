@@ -109,10 +109,11 @@ describe('the startup list', () => {
 
     expect(await screen.findByText('Steam')).toBeTruthy();
     expect(screen.getByText('Discord')).toBeTruthy();
-    // "2 entries / 1 enabled" -- the counts sit in their own spans, so
-    // each number is matched with its own label rather than as a phrase.
-    expect(screen.getByText('2').parentElement.textContent).toMatch(/entries/);
-    expect(screen.getByText('1').parentElement.textContent).toMatch(/enabled/);
+    // "2 entries", "1 enabled" -- each whole phrase is now one translated
+    // string in one span (see startup.counts.* in catalog.js), rather than
+    // a bare number in its own span next to a hardcoded English word.
+    expect(screen.getByText('2 entries')).toBeTruthy();
+    expect(screen.getByText('1 enabled')).toBeTruthy();
   });
 
   it('says plainly when there is nothing, and what was looked at', async () => {

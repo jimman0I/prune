@@ -260,6 +260,48 @@ export const CATALOG = {
       restoring: 'Restoring…',
       deletePermanently: 'Delete Permanently',
       deleting: 'Deleting…'
+    },
+    startup: {
+      title: 'Runs at sign-in',
+      subtitle: 'The Run keys and Startup folders Windows reads when you sign in, grouped by where they live — which is what decides who an entry affects and what it takes to remove it. An entry whose file is gone was left behind by a program that was removed carelessly, and Windows keeps trying to launch it every time.',
+      loading: 'Reading startup entries…',
+      loadError: (error) => `Couldn't read the startup entries: ${error}`,
+      empty: {
+        heading: 'Nothing runs at sign-in.',
+        body: 'Prune checked the Run and RunOnce keys in both registry hives and both Startup folders. A program that adds itself later will appear here.'
+      },
+      counts: {
+        total: (n) => `${n} ${n === 1 ? 'entry' : 'entries'}`,
+        enabled: (n) => `${n} enabled`,
+        runningNow: (n) => `${n} running now`,
+        broken: (n) => `${n} pointing at a file that is gone`
+      },
+      columns: {
+        name: 'Startup name',
+        command: 'Launch path',
+        description: 'Description',
+        publisher: 'Publisher',
+        status: 'Status'
+      },
+      switchAriaLabel: (enabled, name) => `${enabled ? 'Disable' : 'Enable'} ${name} at sign-in`,
+      status: {
+        invalid: 'Invalid',
+        running: 'Running',
+        notChecked: 'Not checked',
+        notRunning: 'Not running'
+      },
+      groups: {
+        'Startup folder|machine': 'All users Startup folder',
+        'Startup folder|user': 'Current user Startup folder',
+        'Run|user': 'Registry: HKCU Run',
+        'Run|machine': 'Registry: HKLM Run',
+        'Run (32-bit)|machine': 'Registry: HKLM Run (32-bit)',
+        'RunOnce|user': 'Registry: HKCU RunOnce',
+        'RunOnce|machine': 'Registry: HKLM RunOnce'
+      },
+      groupEnabledOf: (enabledCount, total) => `${enabledCount} of ${total} enabled`,
+      groupAdminNote: 'Changing these asks for administrator',
+      footerNote: "Switching an entry off records the decision in StartupApproved, the same place Windows' own Startup Apps settings and Task Manager read and write. Nothing is deleted: the Run value or the shortcut stays where it is, so the change is reversible from here or from either of those."
     }
   },
 
@@ -491,6 +533,48 @@ export const CATALOG = {
       restoring: 'Herstel tans…',
       deletePermanently: 'Verwyder Permanent',
       deleting: 'Verwyder tans…'
+    },
+    startup: {
+      title: 'Loop by aanmelding',
+      subtitle: 'Die Run-sleutels en Opstart-vouers wat Windows lees wanneer jy aanmeld, gegroepeer volgens waar hulle woon — wat bepaal wie \'n inskrywing raak en wat dit verg om te verwyder. \'n Inskrywing wie se lêer weg is, is agtergelaat deur \'n program wat onsorgvuldig verwyder is, en Windows probeer dit elke keer weer bestuur.',
+      loading: 'Lees opstart-inskrywings…',
+      loadError: (error) => `Kon nie die opstart-inskrywings lees nie: ${error}`,
+      empty: {
+        heading: 'Niks loop by aanmelding nie.',
+        body: "Prune het die Run- en RunOnce-sleutels in albei registerkorwe en albei Opstart-vouers nagegaan. \'n Program wat homself later byvoeg, sal hier verskyn."
+      },
+      counts: {
+        total: (n) => `${n} inskrywing${n === 1 ? '' : 's'}`,
+        enabled: (n) => `${n} geaktiveer`,
+        runningNow: (n) => `${n} loop nou`,
+        broken: (n) => `${n} wys na \'n lêer wat weg is`
+      },
+      columns: {
+        name: 'Opstartnaam',
+        command: 'Loopadres',
+        description: 'Beskrywing',
+        publisher: 'Uitgewer',
+        status: 'Status'
+      },
+      switchAriaLabel: (enabled, name) => `${enabled ? 'Deaktiveer' : 'Aktiveer'} ${name} by aanmelding`,
+      status: {
+        invalid: 'Ongeldig',
+        running: 'Loop',
+        notChecked: 'Nie nagegaan nie',
+        notRunning: 'Loop nie'
+      },
+      groups: {
+        'Startup folder|machine': 'Opstart-vouer vir alle gebruikers',
+        'Startup folder|user': 'Opstart-vouer vir huidige gebruiker',
+        'Run|user': 'Register: HKCU Run',
+        'Run|machine': 'Register: HKLM Run',
+        'Run (32-bit)|machine': 'Register: HKLM Run (32-bis)',
+        'RunOnce|user': 'Register: HKCU RunOnce',
+        'RunOnce|machine': 'Register: HKLM RunOnce'
+      },
+      groupEnabledOf: (enabledCount, total) => `${enabledCount} van ${total} geaktiveer`,
+      groupAdminNote: 'Om dit te verander vra administrateurregte',
+      footerNote: "Om \'n inskrywing af te skakel, teken die besluit in StartupApproved aan, dieselfde plek waar Windows se eie Opstartprogramme-instellings en Taakbestuurder lees en skryf. Niks word verwyder nie: die Run-waarde of kortpad bly presies waar dit is, sodat die verandering van hier of enige van daardie plekke omkeerbaar is."
     }
   },
 
@@ -722,6 +806,48 @@ export const CATALOG = {
       restoring: 'جارٍ الاستعادة…',
       deletePermanently: 'حذف نهائيًا',
       deleting: 'جارٍ الحذف…'
+    },
+    startup: {
+      title: 'يعمل عند تسجيل الدخول',
+      subtitle: 'مفاتيح التشغيل ومجلدات بدء التشغيل التي تقرأها Windows عند تسجيل الدخول، مجمعة حسب مكان وجودها — وهو ما يحدد من تؤثر عليه هذه الإدخالات وما يتطلبه إزالتها. أي إدخال ملفه غير موجود قد تركه برنامج تمت إزالته بلا عناية، وتستمر Windows في محاولة تشغيله في كل مرة.',
+      loading: 'جارٍ قراءة إدخالات بدء التشغيل…',
+      loadError: (error) => `تعذر قراءة إدخالات بدء التشغيل: ${error}`,
+      empty: {
+        heading: 'لا شيء يعمل عند تسجيل الدخول.',
+        body: 'تحقق Prune من مفاتيح Run وRunOnce في كلا خليتي السجل وفي مجلدي بدء التشغيل. أي برنامج يضيف نفسه لاحقًا سيظهر هنا.'
+      },
+      counts: {
+        total: (n) => `${n} إدخال${n === 1 ? '' : 'ات'}`,
+        enabled: (n) => `${n} مفعّل`,
+        runningNow: (n) => `${n} يعمل الآن`,
+        broken: (n) => `${n} يشير إلى ملف غير موجود`
+      },
+      columns: {
+        name: 'اسم بدء التشغيل',
+        command: 'مسار التشغيل',
+        description: 'الوصف',
+        publisher: 'الناشر',
+        status: 'الحالة'
+      },
+      switchAriaLabel: (enabled, name) => `${enabled ? 'تعطيل' : 'تفعيل'} ${name} عند تسجيل الدخول`,
+      status: {
+        invalid: 'غير صالح',
+        running: 'قيد التشغيل',
+        notChecked: 'لم يتم التحقق',
+        notRunning: 'غير قيد التشغيل'
+      },
+      groups: {
+        'Startup folder|machine': 'مجلد بدء التشغيل لجميع المستخدمين',
+        'Startup folder|user': 'مجلد بدء التشغيل للمستخدم الحالي',
+        'Run|user': 'السجل: HKCU Run',
+        'Run|machine': 'السجل: HKLM Run',
+        'Run (32-bit)|machine': 'السجل: HKLM Run (32-بت)',
+        'RunOnce|user': 'السجل: HKCU RunOnce',
+        'RunOnce|machine': 'السجل: HKLM RunOnce'
+      },
+      groupEnabledOf: (enabledCount, total) => `${enabledCount} من ${total} مفعّل`,
+      groupAdminNote: 'تغيير هذه يطلب صلاحيات المسؤول',
+      footerNote: 'إيقاف تشغيل إدخال ما يسجل القرار في StartupApproved، وهو نفس المكان الذي تقرأه وتكتب فيه إعدادات تطبيقات بدء التشغيل الخاصة بـ Windows ومدير المهام. لا يُحذف شيء: تبقى قيمة Run أو الاختصار كما هي، لذا فإن التغيير قابل للتراجع من هنا أو من أي منهما.'
     }
   },
 
@@ -953,6 +1079,48 @@ export const CATALOG = {
       restoring: 'Restaurant…',
       deletePermanently: 'Elimina Permanentment',
       deleting: 'Eliminant…'
+    },
+    startup: {
+      title: 'S\'executen en iniciar sessió',
+      subtitle: "Les claus Run i les carpetes d'Inici que el Windows llegeix quan inicies sessió, agrupades per on viuen — que és el que decideix a qui afecta una entrada i què cal per eliminar-la. Una entrada amb el fitxer desaparegut va ser deixada per un programa desinstal·lat sense cura, i el Windows continua provant d'executar-la cada vegada.",
+      loading: 'Llegint les entrades d\'inici…',
+      loadError: (error) => `No s'han pogut llegir les entrades d'inici: ${error}`,
+      empty: {
+        heading: 'Res s\'executa en iniciar sessió.',
+        body: "El Prune ha comprovat les claus Run i RunOnce en ambdós arxius del registre i ambdues carpetes d'Inici. Un programa que s'afegeixi més tard hi apareixerà."
+      },
+      counts: {
+        total: (n) => `${n} entrad${n === 1 ? 'a' : 'es'}`,
+        enabled: (n) => `${n} activades`,
+        runningNow: (n) => `${n} en execució ara`,
+        broken: (n) => `${n} apuntant a un fitxer desaparegut`
+      },
+      columns: {
+        name: 'Nom d\'inici',
+        command: 'Camí d\'execució',
+        description: 'Descripció',
+        publisher: 'Editor',
+        status: 'Estat'
+      },
+      switchAriaLabel: (enabled, name) => `${enabled ? 'Desactiva' : 'Activa'} ${name} en iniciar sessió`,
+      status: {
+        invalid: 'No vàlid',
+        running: 'En execució',
+        notChecked: 'No comprovat',
+        notRunning: 'No en execució'
+      },
+      groups: {
+        'Startup folder|machine': 'Carpeta d\'Inici de tots els usuaris',
+        'Startup folder|user': 'Carpeta d\'Inici de l\'usuari actual',
+        'Run|user': 'Registre: HKCU Run',
+        'Run|machine': 'Registre: HKLM Run',
+        'Run (32-bit)|machine': 'Registre: HKLM Run (32 bits)',
+        'RunOnce|user': 'Registre: HKCU RunOnce',
+        'RunOnce|machine': 'Registre: HKLM RunOnce'
+      },
+      groupEnabledOf: (enabledCount, total) => `${enabledCount} de ${total} activades`,
+      groupAdminNote: 'Canviar-les demana permisos d\'administrador',
+      footerNote: "Desactivar una entrada enregistra la decisió a StartupApproved, el mateix lloc on la configuració d'Aplicacions d'inici i el Gestor de tasques del Windows llegeixen i escriuen. No s'elimina res: el valor Run o la drecera es queda exactament on és, així que el canvi és reversible des d'aquí o des de qualsevol d'aquests."
     }
   },
 
@@ -1184,6 +1352,48 @@ export const CATALOG = {
       restoring: 'Obnovování…',
       deletePermanently: 'Trvale odstranit',
       deleting: 'Odstraňování…'
+    },
+    startup: {
+      title: 'Spouští se při přihlášení',
+      subtitle: 'Klíče Run a složky po spuštění, které Windows čte při přihlášení, seskupené podle toho, kde se nacházejí — což určuje, koho položka ovlivňuje a co je potřeba k jejímu odstranění. Položka, jejíž soubor chybí, byla ponechána programem odinstalovaným neopatrně, a Windows se ji stále pokouší spustit.',
+      loading: 'Čtení položek při spuštění…',
+      loadError: (error) => `Položky při spuštění se nepodařilo přečíst: ${error}`,
+      empty: {
+        heading: 'Při přihlášení se nic nespouští.',
+        body: 'Prune zkontroloval klíče Run a RunOnce v obou registrech a obou složkách po spuštění. Program, který se přidá později, se zde zobrazí.'
+      },
+      counts: {
+        total: (n) => `${n} ${n === 1 ? 'položka' : n < 5 ? 'položky' : 'položek'}`,
+        enabled: (n) => `${n} povoleno`,
+        runningNow: (n) => `${n} nyní spuštěno`,
+        broken: (n) => `${n} ukazuje na chybějící soubor`
+      },
+      columns: {
+        name: 'Název při spuštění',
+        command: 'Cesta ke spuštění',
+        description: 'Popis',
+        publisher: 'Vydavatel',
+        status: 'Stav'
+      },
+      switchAriaLabel: (enabled, name) => `${enabled ? 'Zakázat' : 'Povolit'} ${name} při přihlášení`,
+      status: {
+        invalid: 'Neplatné',
+        running: 'Spuštěno',
+        notChecked: 'Nezkontrolováno',
+        notRunning: 'Nespuštěno'
+      },
+      groups: {
+        'Startup folder|machine': 'Složka Po spuštění pro všechny uživatele',
+        'Startup folder|user': 'Složka Po spuštění pro aktuálního uživatele',
+        'Run|user': 'Registr: HKCU Run',
+        'Run|machine': 'Registr: HKLM Run',
+        'Run (32-bit)|machine': 'Registr: HKLM Run (32bitový)',
+        'RunOnce|user': 'Registr: HKCU RunOnce',
+        'RunOnce|machine': 'Registr: HKLM RunOnce'
+      },
+      groupEnabledOf: (enabledCount, total) => `${enabledCount} z ${total} povoleno`,
+      groupAdminNote: 'Změna vyžaduje oprávnění správce',
+      footerNote: 'Vypnutí položky zaznamená rozhodnutí do StartupApproved, stejného místa, které čte a zapisuje vlastní nastavení Po spuštění systému Windows a Správce úloh. Nic se neodstraní: hodnota Run nebo zástupce zůstává přesně tam, kde je, takže změnu lze vrátit odsud nebo z kteréhokoli z nich.'
     }
   },
 
@@ -1415,6 +1625,48 @@ export const CATALOG = {
       restoring: 'Wrthi\'n adfer…',
       deletePermanently: 'Dileu\'n Barhaol',
       deleting: 'Wrthi\'n dileu…'
+    },
+    startup: {
+      title: 'Yn rhedeg wrth fewngofnodi',
+      subtitle: "Yr allweddi Run a'r ffolderi Cychwyn mae Windows yn eu darllen pan fyddwch yn mewngofnodi, wedi'u grwpio yn ôl ble maen nhw'n byw — sy'n penderfynu pwy mae cofnod yn effeithio arno a beth mae ei angen i'w dynnu. Cofnod y mae ei ffeil ar goll wedi cael ei adael ar ôl gan raglen a ddadosodwyd yn ddiofal, ac mae Windows yn parhau i geisio ei lansio bob tro.",
+      loading: 'Wrthi\'n darllen cofnodion cychwyn…',
+      loadError: (error) => `Methu darllen y cofnodion cychwyn: ${error}`,
+      empty: {
+        heading: 'Nid oes dim yn rhedeg wrth fewngofnodi.',
+        body: "Gwiriodd Prune yr allweddi Run a RunOnce yn y ddwy gofrestrfa a'r ddwy ffolder Gychwyn. Bydd rhaglen sy'n ychwanegu ei hun yn ddiweddarach yn ymddangos yma."
+      },
+      counts: {
+        total: (n) => `${n} cofnod${n === 1 ? '' : 'ion'}`,
+        enabled: (n) => `${n} wedi'u galluogi`,
+        runningNow: (n) => `${n} yn rhedeg nawr`,
+        broken: (n) => `${n} yn pwyntio at ffeil sydd ar goll`
+      },
+      columns: {
+        name: 'Enw cychwyn',
+        command: 'Llwybr lansio',
+        description: 'Disgrifiad',
+        publisher: 'Cyhoeddwr',
+        status: 'Statws'
+      },
+      switchAriaLabel: (enabled, name) => `${enabled ? "Analluogi" : "Galluogi"} ${name} wrth fewngofnodi`,
+      status: {
+        invalid: 'Annilys',
+        running: 'Yn rhedeg',
+        notChecked: 'Heb ei wirio',
+        notRunning: 'Ddim yn rhedeg'
+      },
+      groups: {
+        'Startup folder|machine': 'Ffolder Gychwyn pob defnyddiwr',
+        'Startup folder|user': 'Ffolder Gychwyn y defnyddiwr presennol',
+        'Run|user': 'Cofrestrfa: HKCU Run',
+        'Run|machine': 'Cofrestrfa: HKLM Run',
+        'Run (32-bit)|machine': 'Cofrestrfa: HKLM Run (32-did)',
+        'RunOnce|user': 'Cofrestrfa: HKCU RunOnce',
+        'RunOnce|machine': 'Cofrestrfa: HKLM RunOnce'
+      },
+      groupEnabledOf: (enabledCount, total) => `${enabledCount} o ${total} wedi'u galluogi`,
+      groupAdminNote: 'Mae newid y rhain yn gofyn am hawliau gweinyddwr',
+      footerNote: "Mae diffodd cofnod yn cofnodi'r penderfyniad yn StartupApproved, yr un man y mae gosodiadau Apiau Cychwyn Windows a Rheolwr Tasgau eu hunain yn ei ddarllen ac yn ysgrifennu ato. Ni chaiff dim ei ddileu: mae'r gwerth Run neu'r llwybr byr yn aros yn union lle mae, felly gellir dadwneud y newid o'r fan hon neu o'r un o'r rheiny."
     }
   },
 
@@ -1646,6 +1898,48 @@ export const CATALOG = {
       restoring: 'Gendanner…',
       deletePermanently: 'Slet Permanent',
       deleting: 'Sletter…'
+    },
+    startup: {
+      title: 'Kører ved login',
+      subtitle: 'De Run-nøgler og Startup-mapper, Windows læser, når du logger ind, grupperet efter hvor de befinder sig — hvilket afgør, hvem en post påvirker, og hvad der skal til for at fjerne den. En post, hvis fil er væk, blev efterladt af et program, der blev afinstalleret skødesløst, og Windows bliver ved med at forsøge at starte den hver gang.',
+      loading: 'Læser opstartsposter…',
+      loadError: (error) => `Kunne ikke læse opstartsposterne: ${error}`,
+      empty: {
+        heading: 'Intet kører ved login.',
+        body: 'Prune tjekkede Run- og RunOnce-nøglerne i begge registreringsdatabase-hives og begge Startup-mapper. Et program, der tilføjer sig selv senere, vil dukke op her.'
+      },
+      counts: {
+        total: (n) => `${n} post${n === 1 ? '' : 'er'}`,
+        enabled: (n) => `${n} aktiveret`,
+        runningNow: (n) => `${n} kører nu`,
+        broken: (n) => `${n} peger på en fil, der er væk`
+      },
+      columns: {
+        name: 'Opstartsnavn',
+        command: 'Startsti',
+        description: 'Beskrivelse',
+        publisher: 'Udgiver',
+        status: 'Status'
+      },
+      switchAriaLabel: (enabled, name) => `${enabled ? 'Deaktiver' : 'Aktiver'} ${name} ved login`,
+      status: {
+        invalid: 'Ugyldig',
+        running: 'Kører',
+        notChecked: 'Ikke tjekket',
+        notRunning: 'Kører ikke'
+      },
+      groups: {
+        'Startup folder|machine': 'Startup-mappe for alle brugere',
+        'Startup folder|user': 'Startup-mappe for aktuel bruger',
+        'Run|user': 'Register: HKCU Run',
+        'Run|machine': 'Register: HKLM Run',
+        'Run (32-bit)|machine': 'Register: HKLM Run (32-bit)',
+        'RunOnce|user': 'Register: HKCU RunOnce',
+        'RunOnce|machine': 'Register: HKLM RunOnce'
+      },
+      groupEnabledOf: (enabledCount, total) => `${enabledCount} af ${total} aktiveret`,
+      groupAdminNote: 'Ændring af disse kræver administratorrettigheder',
+      footerNote: 'At slå en post fra registrerer beslutningen i StartupApproved, det samme sted Windows' + " egne Startprogrammer-indstillinger og Jobliste læser og skriver til. Intet slettes: Run-værdien eller genvejen forbliver, hvor den er, så ændringen kan fortrydes herfra eller fra en af de to andre steder."
     }
   },
 
@@ -1877,6 +2171,48 @@ export const CATALOG = {
       restoring: 'Wird wiederhergestellt…',
       deletePermanently: 'Dauerhaft löschen',
       deleting: 'Wird gelöscht…'
+    },
+    startup: {
+      title: 'Läuft bei der Anmeldung',
+      subtitle: 'Die Run-Schlüssel und Autostart-Ordner, die Windows bei der Anmeldung liest, gruppiert danach, wo sie sich befinden — das entscheidet, wen ein Eintrag betrifft und was zum Entfernen nötig ist. Ein Eintrag, dessen Datei fehlt, wurde von einem unsauber deinstallierten Programm zurückgelassen, und Windows versucht ihn weiterhin bei jeder Anmeldung zu starten.',
+      loading: 'Autostart-Einträge werden gelesen…',
+      loadError: (error) => `Die Autostart-Einträge konnten nicht gelesen werden: ${error}`,
+      empty: {
+        heading: 'Nichts läuft bei der Anmeldung.',
+        body: 'Prune hat die Run- und RunOnce-Schlüssel in beiden Registrierungs-Hives und beiden Autostart-Ordnern geprüft. Ein Programm, das sich später selbst hinzufügt, erscheint hier.'
+      },
+      counts: {
+        total: (n) => `${n} Eintr${n === 1 ? 'ag' : 'äge'}`,
+        enabled: (n) => `${n} aktiviert`,
+        runningNow: (n) => `${n} laufen gerade`,
+        broken: (n) => `${n} zeigt auf eine fehlende Datei`
+      },
+      columns: {
+        name: 'Autostart-Name',
+        command: 'Startpfad',
+        description: 'Beschreibung',
+        publisher: 'Herausgeber',
+        status: 'Status'
+      },
+      switchAriaLabel: (enabled, name) => `${name} bei der Anmeldung ${enabled ? 'deaktivieren' : 'aktivieren'}`,
+      status: {
+        invalid: 'Ungültig',
+        running: 'Läuft',
+        notChecked: 'Nicht geprüft',
+        notRunning: 'Läuft nicht'
+      },
+      groups: {
+        'Startup folder|machine': 'Autostart-Ordner für alle Benutzer',
+        'Startup folder|user': 'Autostart-Ordner des aktuellen Benutzers',
+        'Run|user': 'Registrierung: HKCU Run',
+        'Run|machine': 'Registrierung: HKLM Run',
+        'Run (32-bit)|machine': 'Registrierung: HKLM Run (32-Bit)',
+        'RunOnce|user': 'Registrierung: HKCU RunOnce',
+        'RunOnce|machine': 'Registrierung: HKLM RunOnce'
+      },
+      groupEnabledOf: (enabledCount, total) => `${enabledCount} von ${total} aktiviert`,
+      groupAdminNote: 'Das Ändern erfordert Administratorrechte',
+      footerNote: "Das Deaktivieren eines Eintrags speichert die Entscheidung in StartupApproved, demselben Ort, den Windows' eigene Autostart-Einstellungen und der Task-Manager lesen und schreiben. Nichts wird gelöscht: Der Run-Wert oder die Verknüpfung bleibt genau dort, wo er ist, sodass die Änderung von hier oder von beiden anderen Stellen rückgängig gemacht werden kann."
     }
   },
 
@@ -2108,6 +2444,48 @@ export const CATALOG = {
       restoring: 'Επαναφορά…',
       deletePermanently: 'Οριστική Διαγραφή',
       deleting: 'Διαγραφή…'
+    },
+    startup: {
+      title: 'Εκτελούνται κατά τη σύνδεση',
+      subtitle: 'Τα κλειδιά Run και οι φάκελοι Εκκίνησης που διαβάζουν τα Windows όταν συνδέεστε, ομαδοποιημένα ανάλογα με το πού βρίσκονται — αυτό είναι που καθορίζει ποιον επηρεάζει μια καταχώριση και τι χρειάζεται για να αφαιρεθεί. Μια καταχώριση της οποίας το αρχείο έχει χαθεί έχει μείνει πίσω από ένα πρόγραμμα που απεγκαταστάθηκε απρόσεκτα, και τα Windows συνεχίζουν να προσπαθούν να την εκκινήσουν κάθε φορά.',
+      loading: 'Ανάγνωση καταχωρίσεων εκκίνησης…',
+      loadError: (error) => `Αδυναμία ανάγνωσης των καταχωρίσεων εκκίνησης: ${error}`,
+      empty: {
+        heading: 'Τίποτα δεν εκτελείται κατά τη σύνδεση.',
+        body: 'Το Prune έλεγξε τα κλειδιά Run και RunOnce και στις δύο κυψέλες μητρώου και στους δύο φακέλους Εκκίνησης. Ένα πρόγραμμα που προστίθεται αργότερα θα εμφανιστεί εδώ.'
+      },
+      counts: {
+        total: (n) => `${n} ${n === 1 ? 'καταχώριση' : 'καταχωρίσεις'}`,
+        enabled: (n) => `${n} ενεργοποιημένες`,
+        runningNow: (n) => `${n} εκτελούνται τώρα`,
+        broken: (n) => `${n} δείχνουν σε αρχείο που δεν υπάρχει`
+      },
+      columns: {
+        name: 'Όνομα εκκίνησης',
+        command: 'Διαδρομή εκκίνησης',
+        description: 'Περιγραφή',
+        publisher: 'Εκδότης',
+        status: 'Κατάσταση'
+      },
+      switchAriaLabel: (enabled, name) => `${enabled ? 'Απενεργοποίηση' : 'Ενεργοποίηση'} του ${name} κατά τη σύνδεση`,
+      status: {
+        invalid: 'Μη έγκυρο',
+        running: 'Σε λειτουργία',
+        notChecked: 'Δεν ελέγχθηκε',
+        notRunning: 'Δεν εκτελείται'
+      },
+      groups: {
+        'Startup folder|machine': 'Φάκελος Εκκίνησης όλων των χρηστών',
+        'Startup folder|user': 'Φάκελος Εκκίνησης τρέχοντος χρήστη',
+        'Run|user': 'Μητρώο: HKCU Run',
+        'Run|machine': 'Μητρώο: HKLM Run',
+        'Run (32-bit)|machine': 'Μητρώο: HKLM Run (32-bit)',
+        'RunOnce|user': 'Μητρώο: HKCU RunOnce',
+        'RunOnce|machine': 'Μητρώο: HKLM RunOnce'
+      },
+      groupEnabledOf: (enabledCount, total) => `${enabledCount} από ${total} ενεργοποιημένες`,
+      groupAdminNote: 'Η αλλαγή τους ζητά δικαιώματα διαχειριστή',
+      footerNote: 'Η απενεργοποίηση μιας καταχώρισης καταγράφει την απόφαση στο StartupApproved, το ίδιο σημείο που διαβάζουν και γράφουν οι δικές τους ρυθμίσεις Εφαρμογών Εκκίνησης των Windows και η Διαχείριση εργασιών. Τίποτα δεν διαγράφεται: η τιμή Run ή η συντόμευση παραμένει ακριβώς εκεί που είναι, οπότε η αλλαγή είναι αναστρέψιμη από εδώ ή από οποιοδήποτε από τα δύο.'
     }
   },
 
@@ -2339,6 +2717,48 @@ export const CATALOG = {
       restoring: 'Restaurando…',
       deletePermanently: 'Eliminar Permanentemente',
       deleting: 'Eliminando…'
+    },
+    startup: {
+      title: 'Se ejecutan al iniciar sesión',
+      subtitle: 'Las claves Run y las carpetas de Inicio que Windows lee al iniciar sesión, agrupadas por dónde residen — eso es lo que decide a quién afecta una entrada y qué hace falta para eliminarla. Una entrada cuyo archivo ha desaparecido fue dejada por un programa desinstalado sin cuidado, y Windows sigue intentando iniciarla cada vez.',
+      loading: 'Leyendo entradas de inicio…',
+      loadError: (error) => `No se pudieron leer las entradas de inicio: ${error}`,
+      empty: {
+        heading: 'Nada se ejecuta al iniciar sesión.',
+        body: 'Prune comprobó las claves Run y RunOnce en ambos árboles del registro y ambas carpetas de Inicio. Un programa que se añada más tarde aparecerá aquí.'
+      },
+      counts: {
+        total: (n) => `${n} entrada${n === 1 ? '' : 's'}`,
+        enabled: (n) => `${n} habilitadas`,
+        runningNow: (n) => `${n} ejecutándose ahora`,
+        broken: (n) => `${n} apuntando a un archivo que no existe`
+      },
+      columns: {
+        name: 'Nombre de inicio',
+        command: 'Ruta de ejecución',
+        description: 'Descripción',
+        publisher: 'Editor',
+        status: 'Estado'
+      },
+      switchAriaLabel: (enabled, name) => `${enabled ? 'Deshabilitar' : 'Habilitar'} ${name} al iniciar sesión`,
+      status: {
+        invalid: 'No válido',
+        running: 'En ejecución',
+        notChecked: 'No comprobado',
+        notRunning: 'No se ejecuta'
+      },
+      groups: {
+        'Startup folder|machine': 'Carpeta de Inicio de todos los usuarios',
+        'Startup folder|user': 'Carpeta de Inicio del usuario actual',
+        'Run|user': 'Registro: HKCU Run',
+        'Run|machine': 'Registro: HKLM Run',
+        'Run (32-bit)|machine': 'Registro: HKLM Run (32 bits)',
+        'RunOnce|user': 'Registro: HKCU RunOnce',
+        'RunOnce|machine': 'Registro: HKLM RunOnce'
+      },
+      groupEnabledOf: (enabledCount, total) => `${enabledCount} de ${total} habilitadas`,
+      groupAdminNote: 'Cambiarlas solicita permisos de administrador',
+      footerNote: "Deshabilitar una entrada registra la decisión en StartupApproved, el mismo lugar que leen y escriben la configuración de Aplicaciones de inicio de Windows y el Administrador de tareas. No se elimina nada: el valor Run o el acceso directo permanece exactamente donde está, así que el cambio se puede revertir desde aquí o desde cualquiera de los dos."
     }
   },
 
@@ -2570,6 +2990,48 @@ export const CATALOG = {
       restoring: 'Taastamine…',
       deletePermanently: 'Kustuta jäädavalt',
       deleting: 'Kustutamine…'
+    },
+    startup: {
+      title: 'Käivituvad sisselogimisel',
+      subtitle: 'Run-võtmed ja käivituskaustad, mida Windows sisselogimisel loeb, rühmitatud selle järgi, kus need asuvad — see määrab, keda kirje mõjutab ja mida selle eemaldamiseks vaja on. Kirje, mille fail on kadunud, jäeti maha hooletult desinstallitud programmi poolt ja Windows üritab seda iga kord käivitada.',
+      loading: 'Käivituskirjete lugemine…',
+      loadError: (error) => `Käivituskirjeid ei õnnestunud lugeda: ${error}`,
+      empty: {
+        heading: 'Sisselogimisel ei käivitu midagi.',
+        body: 'Prune kontrollis Run- ja RunOnce-võtmeid mõlemas registri harus ja mõlemas käivituskaustas. Hiljem end lisav programm ilmub siia.'
+      },
+      counts: {
+        total: (n) => `${n} kirje${n === 1 ? '' : 'd'}`,
+        enabled: (n) => `${n} lubatud`,
+        runningNow: (n) => `${n} töötab praegu`,
+        broken: (n) => `${n} osutab puuduvale failile`
+      },
+      columns: {
+        name: 'Käivitusnimi',
+        command: 'Käivitustee',
+        description: 'Kirjeldus',
+        publisher: 'Väljaandja',
+        status: 'Olek'
+      },
+      switchAriaLabel: (enabled, name) => `${enabled ? 'Keela' : 'Luba'} ${name} sisselogimisel`,
+      status: {
+        invalid: 'Vigane',
+        running: 'Töötab',
+        notChecked: 'Kontrollimata',
+        notRunning: 'Ei tööta'
+      },
+      groups: {
+        'Startup folder|machine': 'Kõigi kasutajate käivituskaust',
+        'Startup folder|user': 'Praeguse kasutaja käivituskaust',
+        'Run|user': 'Register: HKCU Run',
+        'Run|machine': 'Register: HKLM Run',
+        'Run (32-bit)|machine': 'Register: HKLM Run (32-bitine)',
+        'RunOnce|user': 'Register: HKCU RunOnce',
+        'RunOnce|machine': 'Register: HKLM RunOnce'
+      },
+      groupEnabledOf: (enabledCount, total) => `${enabledCount}/${total} lubatud`,
+      groupAdminNote: 'Muutmine küsib administraatoriõigusi',
+      footerNote: "Kirje väljalülitamine salvestab otsuse StartupApproved kirjesse, samasse kohta, kust Windowsi enda Käivitusrakenduste seaded ja Task Manager loevad ja kirjutavad. Midagi ei kustutata: Run-väärtus või otsetee jääb täpselt sinna, kus see on, seega saab muudatuse siit või kummastki neist tagasi pöörata."
     }
   },
 
@@ -2801,6 +3263,48 @@ export const CATALOG = {
       restoring: 'Palautetaan…',
       deletePermanently: 'Poista pysyvästi',
       deleting: 'Poistetaan…'
+    },
+    startup: {
+      title: 'Käynnistyvät kirjautuessa',
+      subtitle: 'Run-avaimet ja käynnistyskansiot, jotka Windows lukee kirjautuessasi, ryhmiteltynä sen mukaan, missä ne sijaitsevat — se ratkaisee, keneen merkintä vaikuttaa ja mitä sen poistaminen vaatii. Merkintä, jonka tiedosto on kadonnut, on jäänyt huolimattomasti poistetusta ohjelmasta, ja Windows yrittää käynnistää sitä joka kerta.',
+      loading: 'Luetaan käynnistysmerkintöjä…',
+      loadError: (error) => `Käynnistysmerkintöjä ei voitu lukea: ${error}`,
+      empty: {
+        heading: 'Mikään ei käynnisty kirjautuessa.',
+        body: 'Prune tarkisti Run- ja RunOnce-avaimet molemmista rekisteripesistä ja molemmista käynnistyskansioista. Myöhemmin itsensä lisäävä ohjelma ilmestyy tänne.'
+      },
+      counts: {
+        total: (n) => `${n} ${n === 1 ? 'merkintä' : 'merkinnät'}`,
+        enabled: (n) => `${n} käytössä`,
+        runningNow: (n) => `${n} käynnissä nyt`,
+        broken: (n) => `${n} osoittaa puuttuvaan tiedostoon`
+      },
+      columns: {
+        name: 'Käynnistysnimi',
+        command: 'Käynnistyspolku',
+        description: 'Kuvaus',
+        publisher: 'Julkaisija',
+        status: 'Tila'
+      },
+      switchAriaLabel: (enabled, name) => `${enabled ? 'Poista käytöstä' : 'Ota käyttöön'} ${name} kirjautuessa`,
+      status: {
+        invalid: 'Virheellinen',
+        running: 'Käynnissä',
+        notChecked: 'Ei tarkistettu',
+        notRunning: 'Ei käynnissä'
+      },
+      groups: {
+        'Startup folder|machine': 'Kaikkien käyttäjien käynnistyskansio',
+        'Startup folder|user': 'Nykyisen käyttäjän käynnistyskansio',
+        'Run|user': 'Rekisteri: HKCU Run',
+        'Run|machine': 'Rekisteri: HKLM Run',
+        'Run (32-bit)|machine': 'Rekisteri: HKLM Run (32-bit)',
+        'RunOnce|user': 'Rekisteri: HKCU RunOnce',
+        'RunOnce|machine': 'Rekisteri: HKLM RunOnce'
+      },
+      groupEnabledOf: (enabledCount, total) => `${enabledCount}/${total} käytössä`,
+      groupAdminNote: 'Näiden muuttaminen pyytää ylläpitäjän oikeuksia',
+      footerNote: 'Merkinnän poistaminen käytöstä tallentaa päätöksen StartupApproved-tietoon, samaan paikkaan, jota Windowsin omat Käynnistyssovellukset-asetukset ja Tehtävienhallinta lukevat ja kirjoittavat. Mitään ei poisteta: Run-arvo tai pikakuvake pysyy juuri siellä, missä se on, joten muutoksen voi perua täältä tai kummasta tahansa niistä.'
     }
   },
 
@@ -3032,6 +3536,48 @@ export const CATALOG = {
       restoring: 'Restauration…',
       deletePermanently: 'Supprimer définitivement',
       deleting: 'Suppression…'
+    },
+    startup: {
+      title: 'S\'exécutent à la connexion',
+      subtitle: "Les clés Run et les dossiers de démarrage que Windows lit à la connexion, regroupés selon leur emplacement — ce qui détermine qui une entrée affecte et ce qu'il faut pour la supprimer. Une entrée dont le fichier a disparu a été laissée par un programme désinstallé sans précaution, et Windows continue d'essayer de la lancer à chaque fois.",
+      loading: 'Lecture des entrées de démarrage…',
+      loadError: (error) => `Impossible de lire les entrées de démarrage : ${error}`,
+      empty: {
+        heading: 'Rien ne s\'exécute à la connexion.',
+        body: "Prune a vérifié les clés Run et RunOnce dans les deux ruches du registre et les deux dossiers de démarrage. Un programme qui s'ajoute plus tard apparaîtra ici."
+      },
+      counts: {
+        total: (n) => `${n} entrée${n === 1 ? '' : 's'}`,
+        enabled: (n) => `${n} activées`,
+        runningNow: (n) => `${n} en cours d'exécution`,
+        broken: (n) => `${n} pointant vers un fichier disparu`
+      },
+      columns: {
+        name: 'Nom de démarrage',
+        command: 'Chemin de lancement',
+        description: 'Description',
+        publisher: 'Éditeur',
+        status: 'État'
+      },
+      switchAriaLabel: (enabled, name) => `${enabled ? 'Désactiver' : 'Activer'} ${name} à la connexion`,
+      status: {
+        invalid: 'Non valide',
+        running: 'En cours',
+        notChecked: 'Non vérifié',
+        notRunning: 'Non en cours'
+      },
+      groups: {
+        'Startup folder|machine': 'Dossier de démarrage de tous les utilisateurs',
+        'Startup folder|user': 'Dossier de démarrage de l\'utilisateur actuel',
+        'Run|user': 'Registre : HKCU Run',
+        'Run|machine': 'Registre : HKLM Run',
+        'Run (32-bit)|machine': 'Registre : HKLM Run (32 bits)',
+        'RunOnce|user': 'Registre : HKCU RunOnce',
+        'RunOnce|machine': 'Registre : HKLM RunOnce'
+      },
+      groupEnabledOf: (enabledCount, total) => `${enabledCount} sur ${total} activées`,
+      groupAdminNote: 'Les modifier demande des droits administrateur',
+      footerNote: "Désactiver une entrée enregistre la décision dans StartupApproved, le même endroit que lisent et écrivent les paramètres Applications au démarrage de Windows et le Gestionnaire des tâches. Rien n'est supprimé : la valeur Run ou le raccourci reste exactement là où il est, donc la modification est réversible depuis ici ou depuis l'un des deux autres."
     }
   },
 
@@ -3263,6 +3809,48 @@ export const CATALOG = {
       restoring: 'משחזר…',
       deletePermanently: 'מחק לצמיתות',
       deleting: 'מוחק…'
+    },
+    startup: {
+      title: 'פועלים בכניסה למערכת',
+      subtitle: 'מפתחות ה-Run ותיקיות ההפעלה ש-Windows קורא בעת הכניסה, מקובצים לפי מיקומם — וזה מה שקובע על מי רשומה משפיעה ומה נדרש כדי להסיר אותה. רשומה שהקובץ שלה חסר נותרה מאחור על ידי תוכנית שהוסרה ברשלנות, ו-Windows ממשיך לנסות להפעיל אותה בכל פעם.',
+      loading: 'קורא רשומות הפעלה…',
+      loadError: (error) => `לא ניתן היה לקרוא את רשומות ההפעלה: ${error}`,
+      empty: {
+        heading: 'שום דבר לא פועל בכניסה למערכת.',
+        body: 'Prune בדק את מפתחות Run ו-RunOnce בשני צירי הרישום ובשתי תיקיות ההפעלה. תוכנית שמוסיפה את עצמה מאוחר יותר תופיע כאן.'
+      },
+      counts: {
+        total: (n) => `${n} רשומ${n === 1 ? 'ה' : 'ות'}`,
+        enabled: (n) => `${n} מופעלות`,
+        runningNow: (n) => `${n} פועלות כעת`,
+        broken: (n) => `${n} מצביעות על קובץ חסר`
+      },
+      columns: {
+        name: 'שם ההפעלה',
+        command: 'נתיב ההפעלה',
+        description: 'תיאור',
+        publisher: 'מוציא לאור',
+        status: 'סטטוס'
+      },
+      switchAriaLabel: (enabled, name) => `${enabled ? 'השבת' : 'הפעל'} את ${name} בכניסה למערכת`,
+      status: {
+        invalid: 'לא תקין',
+        running: 'פועל',
+        notChecked: 'לא נבדק',
+        notRunning: 'לא פועל'
+      },
+      groups: {
+        'Startup folder|machine': 'תיקיית הפעלה לכל המשתמשים',
+        'Startup folder|user': 'תיקיית הפעלה למשתמש הנוכחי',
+        'Run|user': 'רישום: HKCU Run',
+        'Run|machine': 'רישום: HKLM Run',
+        'Run (32-bit)|machine': 'רישום: HKLM Run (32 סיביות)',
+        'RunOnce|user': 'רישום: HKCU RunOnce',
+        'RunOnce|machine': 'רישום: HKLM RunOnce'
+      },
+      groupEnabledOf: (enabledCount, total) => `${enabledCount} מתוך ${total} מופעלות`,
+      groupAdminNote: 'שינוי אלה דורש הרשאות מנהל',
+      footerNote: 'השבתת רשומה רושמת את ההחלטה ב-StartupApproved, אותו מקום שבו קוראות וכותבות הגדרות אפליקציות ההפעלה ומנהל המשימות של Windows עצמו. שום דבר לא נמחק: ערך ה-Run או הקיצור נשארים בדיוק במקומם, כך שהשינוי ניתן לביטול מכאן או מכל אחד מהם.'
     }
   },
 
@@ -3494,6 +4082,48 @@ export const CATALOG = {
       restoring: 'Visszaállítás…',
       deletePermanently: 'Végleges törlés',
       deleting: 'Törlés…'
+    },
+    startup: {
+      title: 'Bejelentkezéskor fut',
+      subtitle: 'A Run-kulcsok és az Indítópult-mappák, amelyeket a Windows bejelentkezéskor beolvas, aszerint csoportosítva, hogy hol találhatók — ez határozza meg, kire hat egy bejegyzés, és mi kell az eltávolításához. Egy olyan bejegyzés, amelynek fájlja eltűnt, egy hanyagul eltávolított programtól maradt, és a Windows minden alkalommal megpróbálja elindítani.',
+      loading: 'Indítási bejegyzések beolvasása…',
+      loadError: (error) => `Az indítási bejegyzéseket nem sikerült beolvasni: ${error}`,
+      empty: {
+        heading: 'Semmi sem fut bejelentkezéskor.',
+        body: 'A Prune ellenőrizte a Run és RunOnce kulcsokat mindkét registry-ágban és mindkét Indítópult-mappában. A később önmagát hozzáadó program itt fog megjelenni.'
+      },
+      counts: {
+        total: (n) => `${n} bejegyzés`,
+        enabled: (n) => `${n} engedélyezve`,
+        runningNow: (n) => `${n} most fut`,
+        broken: (n) => `${n} hiányzó fájlra mutat`
+      },
+      columns: {
+        name: 'Indítási név',
+        command: 'Indítási útvonal',
+        description: 'Leírás',
+        publisher: 'Kiadó',
+        status: 'Állapot'
+      },
+      switchAriaLabel: (enabled, name) => `${name} ${enabled ? 'letiltása' : 'engedélyezése'} bejelentkezéskor`,
+      status: {
+        invalid: 'Érvénytelen',
+        running: 'Fut',
+        notChecked: 'Nincs ellenőrizve',
+        notRunning: 'Nem fut'
+      },
+      groups: {
+        'Startup folder|machine': 'Minden felhasználó Indítópult mappája',
+        'Startup folder|user': 'Aktuális felhasználó Indítópult mappája',
+        'Run|user': 'Rendszerleíró adatbázis: HKCU Run',
+        'Run|machine': 'Rendszerleíró adatbázis: HKLM Run',
+        'Run (32-bit)|machine': 'Rendszerleíró adatbázis: HKLM Run (32 bites)',
+        'RunOnce|user': 'Rendszerleíró adatbázis: HKCU RunOnce',
+        'RunOnce|machine': 'Rendszerleíró adatbázis: HKLM RunOnce'
+      },
+      groupEnabledOf: (enabledCount, total) => `${enabledCount}/${total} engedélyezve`,
+      groupAdminNote: 'Ezek módosítása rendszergazdai jogosultságot kér',
+      footerNote: 'Egy bejegyzés kikapcsolása rögzíti a döntést a StartupApproved-ban, ugyanott, ahol a Windows saját Indítási alkalmazások beállításai és a Feladatkezelő olvas és ír. Semmi nem törlődik: a Run érték vagy a parancsikon pontosan ott marad, ahol van, így a módosítás innen vagy bármelyik másik helyről visszavonható.'
     }
   },
 
@@ -3725,6 +4355,48 @@ export const CATALOG = {
       restoring: 'Memulihkan…',
       deletePermanently: 'Hapus Permanen',
       deleting: 'Menghapus…'
+    },
+    startup: {
+      title: 'Berjalan saat masuk',
+      subtitle: 'Kunci Run dan folder Startup yang dibaca Windows saat Anda masuk, dikelompokkan menurut lokasinya — itulah yang menentukan siapa yang terpengaruh oleh sebuah entri dan apa yang diperlukan untuk menghapusnya. Entri yang berkasnya hilang ditinggalkan oleh program yang dihapus secara sembarangan, dan Windows terus mencoba menjalankannya setiap saat.',
+      loading: 'Membaca entri startup…',
+      loadError: (error) => `Entri startup tidak dapat dibaca: ${error}`,
+      empty: {
+        heading: 'Tidak ada yang berjalan saat masuk.',
+        body: 'Prune memeriksa kunci Run dan RunOnce di kedua hive registry dan kedua folder Startup. Program yang menambahkan dirinya sendiri nanti akan muncul di sini.'
+      },
+      counts: {
+        total: (n) => `${n} entri`,
+        enabled: (n) => `${n} diaktifkan`,
+        runningNow: (n) => `${n} sedang berjalan`,
+        broken: (n) => `${n} menunjuk ke berkas yang hilang`
+      },
+      columns: {
+        name: 'Nama startup',
+        command: 'Jalur peluncuran',
+        description: 'Deskripsi',
+        publisher: 'Penerbit',
+        status: 'Status'
+      },
+      switchAriaLabel: (enabled, name) => `${enabled ? 'Nonaktifkan' : 'Aktifkan'} ${name} saat masuk`,
+      status: {
+        invalid: 'Tidak valid',
+        running: 'Berjalan',
+        notChecked: 'Belum diperiksa',
+        notRunning: 'Tidak berjalan'
+      },
+      groups: {
+        'Startup folder|machine': 'Folder Startup semua pengguna',
+        'Startup folder|user': 'Folder Startup pengguna saat ini',
+        'Run|user': 'Registry: HKCU Run',
+        'Run|machine': 'Registry: HKLM Run',
+        'Run (32-bit)|machine': 'Registry: HKLM Run (32-bit)',
+        'RunOnce|user': 'Registry: HKCU RunOnce',
+        'RunOnce|machine': 'Registry: HKLM RunOnce'
+      },
+      groupEnabledOf: (enabledCount, total) => `${enabledCount} dari ${total} diaktifkan`,
+      groupAdminNote: 'Mengubah ini meminta hak administrator',
+      footerNote: 'Menonaktifkan sebuah entri mencatat keputusan itu di StartupApproved, tempat yang sama yang dibaca dan ditulis oleh pengaturan Aplikasi Startup Windows dan Task Manager sendiri. Tidak ada yang dihapus: nilai Run atau pintasan tetap persis di tempatnya, sehingga perubahan dapat dibatalkan dari sini atau dari salah satu dari keduanya.'
     }
   },
 
@@ -3956,6 +4628,48 @@ export const CATALOG = {
       restoring: 'Endurheimti…',
       deletePermanently: 'Eyða varanlega',
       deleting: 'Eyði…'
+    },
+    startup: {
+      title: 'Keyra við innskráningu',
+      subtitle: 'Run-lyklarnir og Ræsimöppurnar sem Windows les þegar þú skráir þig inn, flokkuð eftir því hvar þau eru staðsett — það ræður því hvern færsla hefur áhrif á og hvað þarf til að fjarlægja hana. Færsla þar sem skráin er horfin var skilin eftir af forriti sem var fjarlægt kærulaust, og Windows heldur áfram að reyna að ræsa hana í hvert sinn.',
+      loading: 'Les ræsifærslur…',
+      loadError: (error) => `Ekki tókst að lesa ræsifærslurnar: ${error}`,
+      empty: {
+        heading: 'Ekkert keyrir við innskráningu.',
+        body: 'Prune athugaði Run- og RunOnce-lyklana í báðum skráningarhlutum og báðum Ræsimöppum. Forrit sem bætir sér við síðar mun birtast hér.'
+      },
+      counts: {
+        total: (n) => `${n} færsl${n === 1 ? 'a' : 'ur'}`,
+        enabled: (n) => `${n} virkjaðar`,
+        runningNow: (n) => `${n} í gangi núna`,
+        broken: (n) => `${n} benda á skrá sem er horfin`
+      },
+      columns: {
+        name: 'Ræsiheiti',
+        command: 'Ræsislóð',
+        description: 'Lýsing',
+        publisher: 'Útgefandi',
+        status: 'Staða'
+      },
+      switchAriaLabel: (enabled, name) => `${enabled ? 'Slökkva á' : 'Kveikja á'} ${name} við innskráningu`,
+      status: {
+        invalid: 'Ógilt',
+        running: 'Í gangi',
+        notChecked: 'Ekki athugað',
+        notRunning: 'Ekki í gangi'
+      },
+      groups: {
+        'Startup folder|machine': 'Ræsimappa allra notenda',
+        'Startup folder|user': 'Ræsimappa núverandi notanda',
+        'Run|user': 'Skráningarhluti: HKCU Run',
+        'Run|machine': 'Skráningarhluti: HKLM Run',
+        'Run (32-bit)|machine': 'Skráningarhluti: HKLM Run (32-bita)',
+        'RunOnce|user': 'Skráningarhluti: HKCU RunOnce',
+        'RunOnce|machine': 'Skráningarhluti: HKLM RunOnce'
+      },
+      groupEnabledOf: (enabledCount, total) => `${enabledCount} af ${total} virkjaðar`,
+      groupAdminNote: 'Að breyta þessu biður um kerfisstjórnarréttindi',
+      footerNote: 'Að slökkva á færslu skráir ákvörðunina í StartupApproved, sama stað og Windows eigin Ræsiforritastillingar og Verkefnastjóri lesa og skrifa. Engu er eytt: Run-gildið eða flýtileiðin er nákvæmlega þar sem hún er, svo hægt er að afturkalla breytinguna héðan eða frá hvorum staðnum sem er.'
     }
   },
 
@@ -4187,6 +4901,48 @@ export const CATALOG = {
       restoring: 'Ripristino…',
       deletePermanently: 'Elimina Definitivamente',
       deleting: 'Eliminazione…'
+    },
+    startup: {
+      title: 'Si avviano all\'accesso',
+      subtitle: "Le chiavi Run e le cartelle Esecuzione automatica che Windows legge quando accedi, raggruppate in base a dove si trovano — ciò che decide chi una voce influenza e cosa serve per rimuoverla. Una voce il cui file è scomparso è stata lasciata da un programma disinstallato con noncuranza, e Windows continua a cercare di avviarla ogni volta.",
+      loading: 'Lettura delle voci di avvio…',
+      loadError: (error) => `Impossibile leggere le voci di avvio: ${error}`,
+      empty: {
+        heading: 'Niente si avvia all\'accesso.',
+        body: "Prune ha controllato le chiavi Run e RunOnce in entrambi gli hive del registro e in entrambe le cartelle Esecuzione automatica. Un programma che si aggiunge in seguito comparirà qui."
+      },
+      counts: {
+        total: (n) => `${n} vo${n === 1 ? 'ce' : 'ci'}`,
+        enabled: (n) => `${n} abilitate`,
+        runningNow: (n) => `${n} in esecuzione ora`,
+        broken: (n) => `${n} puntano a un file scomparso`
+      },
+      columns: {
+        name: 'Nome di avvio',
+        command: 'Percorso di avvio',
+        description: 'Descrizione',
+        publisher: 'Editore',
+        status: 'Stato'
+      },
+      switchAriaLabel: (enabled, name) => `${enabled ? 'Disabilita' : 'Abilita'} ${name} all\'accesso`,
+      status: {
+        invalid: 'Non valido',
+        running: 'In esecuzione',
+        notChecked: 'Non controllato',
+        notRunning: 'Non in esecuzione'
+      },
+      groups: {
+        'Startup folder|machine': 'Cartella Esecuzione automatica di tutti gli utenti',
+        'Startup folder|user': 'Cartella Esecuzione automatica dell\'utente corrente',
+        'Run|user': 'Registro: HKCU Run',
+        'Run|machine': 'Registro: HKLM Run',
+        'Run (32-bit)|machine': 'Registro: HKLM Run (32 bit)',
+        'RunOnce|user': 'Registro: HKCU RunOnce',
+        'RunOnce|machine': 'Registro: HKLM RunOnce'
+      },
+      groupEnabledOf: (enabledCount, total) => `${enabledCount} di ${total} abilitate`,
+      groupAdminNote: 'Modificarle richiede i permessi di amministratore',
+      footerNote: "Disabilitare una voce registra la decisione in StartupApproved, lo stesso posto letto e scritto dalle impostazioni di Windows per le App di avvio e dal Task Manager. Niente viene eliminato: il valore Run o il collegamento resta esattamente dov'è, quindi la modifica è reversibile da qui o da uno dei due."
     }
   },
 
@@ -4418,6 +5174,48 @@ export const CATALOG = {
       restoring: '復元中…',
       deletePermanently: '完全に削除',
       deleting: '削除中…'
+    },
+    startup: {
+      title: 'サインイン時に実行',
+      subtitle: 'サインイン時に Windows が読み込む Run キーとスタートアップ フォルダーを、存在する場所ごとにグループ化しています — これが、項目が誰に影響し、削除に何が必要かを決めます。ファイルが見つからない項目は、不注意にアンインストールされたプログラムが残したもので、Windows は毎回それを起動しようとし続けます。',
+      loading: 'スタートアップ項目を読み込み中…',
+      loadError: (error) => `スタートアップ項目を読み込めませんでした: ${error}`,
+      empty: {
+        heading: 'サインイン時に実行されるものはありません。',
+        body: 'Prune は両方のレジストリ ハイブと両方のスタートアップ フォルダーの Run キーと RunOnce キーを確認しました。後で自身を追加するプログラムはここに表示されます。'
+      },
+      counts: {
+        total: (n) => `${n} 件の項目`,
+        enabled: (n) => `${n} 件有効`,
+        runningNow: (n) => `${n} 件が現在実行中`,
+        broken: (n) => `${n} 件が存在しないファイルを指しています`
+      },
+      columns: {
+        name: 'スタートアップ名',
+        command: '起動パス',
+        description: '説明',
+        publisher: '発行元',
+        status: '状態'
+      },
+      switchAriaLabel: (enabled, name) => `サインイン時の ${name} を${enabled ? '無効' : '有効'}にする`,
+      status: {
+        invalid: '無効な項目',
+        running: '実行中',
+        notChecked: '未確認',
+        notRunning: '実行されていません'
+      },
+      groups: {
+        'Startup folder|machine': 'すべてのユーザーのスタートアップ フォルダー',
+        'Startup folder|user': '現在のユーザーのスタートアップ フォルダー',
+        'Run|user': 'レジストリ: HKCU Run',
+        'Run|machine': 'レジストリ: HKLM Run',
+        'Run (32-bit)|machine': 'レジストリ: HKLM Run (32 ビット)',
+        'RunOnce|user': 'レジストリ: HKCU RunOnce',
+        'RunOnce|machine': 'レジストリ: HKLM RunOnce'
+      },
+      groupEnabledOf: (enabledCount, total) => `${total} 件中 ${enabledCount} 件有効`,
+      groupAdminNote: '変更には管理者権限が必要です',
+      footerNote: 'ここで項目を無効にすると、その決定は StartupApproved に記録されます。これは Windows 自身のスタートアップ アプリの設定とタスク マネージャーが読み書きするのと同じ場所です。何も削除されません。Run の値やショートカットはそのまま残るため、変更はここからでもどちらの画面からでも元に戻せます。'
     }
   },
 
@@ -4649,6 +5447,48 @@ export const CATALOG = {
       restoring: '복원 중…',
       deletePermanently: '영구 삭제',
       deleting: '삭제 중…'
+    },
+    startup: {
+      title: '로그인 시 실행됨',
+      subtitle: '로그인할 때 Windows가 읽는 Run 키와 시작프로그램 폴더를 위치별로 그룹화했습니다 — 이것이 항목이 누구에게 영향을 미치고 제거하려면 무엇이 필요한지를 결정합니다. 파일이 사라진 항목은 부주의하게 제거된 프로그램이 남긴 것이며, Windows는 매번 이를 실행하려고 계속 시도합니다.',
+      loading: '시작프로그램 항목을 읽는 중…',
+      loadError: (error) => `시작프로그램 항목을 읽을 수 없습니다: ${error}`,
+      empty: {
+        heading: '로그인 시 실행되는 항목이 없습니다.',
+        body: 'Prune은 두 레지스트리 하이브와 두 시작프로그램 폴더의 Run 및 RunOnce 키를 확인했습니다. 나중에 스스로 추가되는 프로그램은 여기에 표시됩니다.'
+      },
+      counts: {
+        total: (n) => `${n}개 항목`,
+        enabled: (n) => `${n}개 사용`,
+        runningNow: (n) => `${n}개 현재 실행 중`,
+        broken: (n) => `${n}개가 없는 파일을 가리킴`
+      },
+      columns: {
+        name: '시작프로그램 이름',
+        command: '실행 경로',
+        description: '설명',
+        publisher: '게시자',
+        status: '상태'
+      },
+      switchAriaLabel: (enabled, name) => `로그인 시 ${name} ${enabled ? '사용 안 함' : '사용'}`,
+      status: {
+        invalid: '유효하지 않음',
+        running: '실행 중',
+        notChecked: '확인되지 않음',
+        notRunning: '실행되지 않음'
+      },
+      groups: {
+        'Startup folder|machine': '모든 사용자 시작프로그램 폴더',
+        'Startup folder|user': '현재 사용자 시작프로그램 폴더',
+        'Run|user': '레지스트리: HKCU Run',
+        'Run|machine': '레지스트리: HKLM Run',
+        'Run (32-bit)|machine': '레지스트리: HKLM Run (32비트)',
+        'RunOnce|user': '레지스트리: HKCU RunOnce',
+        'RunOnce|machine': '레지스트리: HKLM RunOnce'
+      },
+      groupEnabledOf: (enabledCount, total) => `${total}개 중 ${enabledCount}개 사용`,
+      groupAdminNote: '이 항목을 변경하려면 관리자 권한이 필요합니다',
+      footerNote: '항목을 사용 안 함으로 전환하면 해당 결정이 StartupApproved에 기록되며, 이는 Windows 자체의 시작 앱 설정과 작업 관리자가 읽고 쓰는 곳과 동일합니다. 아무것도 삭제되지 않습니다. Run 값이나 바로가기는 그대로 남아 있으므로, 변경 사항은 여기서든 두 곳 중 어디에서든 되돌릴 수 있습니다.'
     }
   },
 
@@ -4880,6 +5720,48 @@ export const CATALOG = {
       restoring: 'Atkuriama…',
       deletePermanently: 'Ištrinti visam laikui',
       deleting: 'Trinama…'
+    },
+    startup: {
+      title: 'Paleidžiama prisijungus',
+      subtitle: 'Run raktai ir Paleisties aplankai, kuriuos „Windows“ nuskaito prisijungus, sugrupuoti pagal tai, kur jie yra — tai lemia, kam įrašas daro poveikį ir ką reikia padaryti norint jį pašalinti. Įrašas, kurio failo nebėra, buvo paliktas programos, kuri buvo pašalinta neatsargiai, ir „Windows“ kaskart bando jį paleisti iš naujo.',
+      loading: 'Skaitomi paleisties įrašai…',
+      loadError: (error) => `Nepavyko nuskaityti paleisties įrašų: ${error}`,
+      empty: {
+        heading: 'Prisijungus niekas nepaleidžiama.',
+        body: '„Prune“ patikrino Run ir RunOnce raktus abiejuose registro skyriuose ir abiejuose Paleisties aplankuose. Vėliau save pridedanti programa pasirodys čia.'
+      },
+      counts: {
+        total: (n) => `${n} įraš${n === 1 ? 'as' : 'ai'}`,
+        enabled: (n) => `${n} įjungta`,
+        runningNow: (n) => `${n} veikia dabar`,
+        broken: (n) => `${n} rodo į failą, kurio nebėra`
+      },
+      columns: {
+        name: 'Paleisties pavadinimas',
+        command: 'Paleidimo kelias',
+        description: 'Aprašymas',
+        publisher: 'Leidėjas',
+        status: 'Būsena'
+      },
+      switchAriaLabel: (enabled, name) => `${enabled ? 'Išjungti' : 'Įjungti'} ${name} prisijungus`,
+      status: {
+        invalid: 'Netinkamas',
+        running: 'Veikia',
+        notChecked: 'Nepatikrinta',
+        notRunning: 'Neveikia'
+      },
+      groups: {
+        'Startup folder|machine': 'Visų naudotojų Paleisties aplankas',
+        'Startup folder|user': 'Dabartinio naudotojo Paleisties aplankas',
+        'Run|user': 'Registras: HKCU Run',
+        'Run|machine': 'Registras: HKLM Run',
+        'Run (32-bit)|machine': 'Registras: HKLM Run (32 bitų)',
+        'RunOnce|user': 'Registras: HKCU RunOnce',
+        'RunOnce|machine': 'Registras: HKLM RunOnce'
+      },
+      groupEnabledOf: (enabledCount, total) => `${enabledCount} iš ${total} įjungta`,
+      groupAdminNote: 'Keičiant reikės administratoriaus teisių',
+      footerNote: 'Įrašo išjungimas įrašo sprendimą į StartupApproved, tą pačią vietą, kurią skaito ir į kurią rašo pačios „Windows“ Paleisties programų nuostatos ir Užduočių tvarkytuvė. Niekas nepašalinama: Run reikšmė ar nuoroda lieka lygiai ten, kur buvo, todėl pakeitimą galima grąžinti iš čia arba iš bet kurios iš tų dviejų vietų.'
     }
   },
 
@@ -5111,6 +5993,48 @@ export const CATALOG = {
       restoring: 'Memulihkan…',
       deletePermanently: 'Padam Kekal',
       deleting: 'Memadam…'
+    },
+    startup: {
+      title: 'Berjalan semasa log masuk',
+      subtitle: 'Kekunci Run dan folder Startup yang dibaca oleh Windows semasa anda log masuk, dikumpulkan mengikut lokasinya — itulah yang menentukan siapa yang terkesan oleh entri dan apa yang diperlukan untuk mengalih keluarnya. Entri yang failnya hilang telah ditinggalkan oleh program yang dinyahpasang secara cuai, dan Windows terus cuba melancarkannya setiap kali.',
+      loading: 'Membaca entri permulaan…',
+      loadError: (error) => `Entri permulaan tidak dapat dibaca: ${error}`,
+      empty: {
+        heading: 'Tiada apa-apa berjalan semasa log masuk.',
+        body: 'Prune menyemak kekunci Run dan RunOnce dalam kedua-dua hive registri dan kedua-dua folder Startup. Program yang menambah dirinya kemudian akan muncul di sini.'
+      },
+      counts: {
+        total: (n) => `${n} entri`,
+        enabled: (n) => `${n} didayakan`,
+        runningNow: (n) => `${n} sedang berjalan`,
+        broken: (n) => `${n} menunjuk kepada fail yang hilang`
+      },
+      columns: {
+        name: 'Nama permulaan',
+        command: 'Laluan lancaran',
+        description: 'Penerangan',
+        publisher: 'Penerbit',
+        status: 'Status'
+      },
+      switchAriaLabel: (enabled, name) => `${enabled ? 'Lumpuhkan' : 'Dayakan'} ${name} semasa log masuk`,
+      status: {
+        invalid: 'Tidak sah',
+        running: 'Berjalan',
+        notChecked: 'Belum disemak',
+        notRunning: 'Tidak berjalan'
+      },
+      groups: {
+        'Startup folder|machine': 'Folder Startup semua pengguna',
+        'Startup folder|user': 'Folder Startup pengguna semasa',
+        'Run|user': 'Registri: HKCU Run',
+        'Run|machine': 'Registri: HKLM Run',
+        'Run (32-bit)|machine': 'Registri: HKLM Run (32-bit)',
+        'RunOnce|user': 'Registri: HKCU RunOnce',
+        'RunOnce|machine': 'Registri: HKLM RunOnce'
+      },
+      groupEnabledOf: (enabledCount, total) => `${enabledCount} daripada ${total} didayakan`,
+      groupAdminNote: 'Mengubah ini meminta hak pentadbir',
+      footerNote: 'Melumpuhkan entri merekodkan keputusan itu dalam StartupApproved, tempat yang sama yang dibaca dan ditulis oleh tetapan Aplikasi Permulaan Windows sendiri dan Pengurus Tugas. Tiada apa yang dipadamkan: nilai Run atau pintasan kekal betul-betul di tempatnya, jadi perubahan itu boleh dibalikkan dari sini atau dari mana-mana antara kedua-duanya.'
     }
   },
 
@@ -5342,6 +6266,48 @@ export const CATALOG = {
       restoring: 'Gjenoppretter…',
       deletePermanently: 'Slett permanent',
       deleting: 'Sletter…'
+    },
+    startup: {
+      title: 'Kjører ved pålogging',
+      subtitle: 'Run-nøklene og Oppstart-mappene som Windows leser når du logger på, gruppert etter hvor de befinner seg — det avgjør hvem en oppføring påvirker og hva som kreves for å fjerne den. En oppføring hvis fil er borte, ble etterlatt av et program som ble avinstallert uforsiktig, og Windows fortsetter å prøve å starte den hver gang.',
+      loading: 'Leser oppstartsoppføringer…',
+      loadError: (error) => `Kunne ikke lese oppstartsoppføringene: ${error}`,
+      empty: {
+        heading: 'Ingenting kjører ved pålogging.',
+        body: 'Prune sjekket Run- og RunOnce-nøklene i begge registerhivene og begge Oppstart-mappene. Et program som legger seg selv til senere, vil dukke opp her.'
+      },
+      counts: {
+        total: (n) => `${n} oppføring${n === 1 ? '' : 'er'}`,
+        enabled: (n) => `${n} aktivert`,
+        runningNow: (n) => `${n} kjører nå`,
+        broken: (n) => `${n} peker til en fil som er borte`
+      },
+      columns: {
+        name: 'Oppstartsnavn',
+        command: 'Oppstartssti',
+        description: 'Beskrivelse',
+        publisher: 'Utgiver',
+        status: 'Status'
+      },
+      switchAriaLabel: (enabled, name) => `${enabled ? 'Deaktiver' : 'Aktiver'} ${name} ved pålogging`,
+      status: {
+        invalid: 'Ugyldig',
+        running: 'Kjører',
+        notChecked: 'Ikke sjekket',
+        notRunning: 'Kjører ikke'
+      },
+      groups: {
+        'Startup folder|machine': 'Oppstart-mappe for alle brukere',
+        'Startup folder|user': 'Oppstart-mappe for gjeldende bruker',
+        'Run|user': 'Register: HKCU Run',
+        'Run|machine': 'Register: HKLM Run',
+        'Run (32-bit)|machine': 'Register: HKLM Run (32-bit)',
+        'RunOnce|user': 'Register: HKCU RunOnce',
+        'RunOnce|machine': 'Register: HKLM RunOnce'
+      },
+      groupEnabledOf: (enabledCount, total) => `${enabledCount} av ${total} aktivert`,
+      groupAdminNote: 'Å endre disse krever administratorrettigheter',
+      footerNote: 'Å slå av en oppføring registrerer beslutningen i StartupApproved, samme sted Windows' + " egne Oppstartsprogrammer-innstillinger og Oppgavebehandling leser og skriver til. Ingenting slettes: Run-verdien eller snarveien blir liggende akkurat der den er, så endringen kan reverseres herfra eller fra hvilken som helst av de to andre."
     }
   },
 
@@ -5573,6 +6539,48 @@ export const CATALOG = {
       restoring: 'Herstellen…',
       deletePermanently: 'Permanent verwijderen',
       deleting: 'Verwijderen…'
+    },
+    startup: {
+      title: 'Worden uitgevoerd bij aanmelden',
+      subtitle: 'De Run-sleutels en Opstartmappen die Windows leest wanneer je je aanmeldt, gegroepeerd naar waar ze zich bevinden — dat bepaalt wie een item beïnvloedt en wat nodig is om het te verwijderen. Een item waarvan het bestand ontbreekt, is achtergelaten door een programma dat onzorgvuldig is verwijderd, en Windows blijft het elke keer opnieuw proberen te starten.',
+      loading: 'Opstartitems worden gelezen…',
+      loadError: (error) => `De opstartitems konden niet worden gelezen: ${error}`,
+      empty: {
+        heading: 'Er wordt niets uitgevoerd bij aanmelden.',
+        body: 'Prune heeft de Run- en RunOnce-sleutels in beide registerhives en beide Opstartmappen gecontroleerd. Een programma dat zichzelf later toevoegt, verschijnt hier.'
+      },
+      counts: {
+        total: (n) => `${n} item${n === 1 ? '' : 's'}`,
+        enabled: (n) => `${n} ingeschakeld`,
+        runningNow: (n) => `${n} actief nu`,
+        broken: (n) => `${n} verwijst naar een ontbrekend bestand`
+      },
+      columns: {
+        name: 'Opstartnaam',
+        command: 'Opstartpad',
+        description: 'Beschrijving',
+        publisher: 'Uitgever',
+        status: 'Status'
+      },
+      switchAriaLabel: (enabled, name) => `${name} bij aanmelden ${enabled ? 'uitschakelen' : 'inschakelen'}`,
+      status: {
+        invalid: 'Ongeldig',
+        running: 'Actief',
+        notChecked: 'Niet gecontroleerd',
+        notRunning: 'Niet actief'
+      },
+      groups: {
+        'Startup folder|machine': 'Opstartmap voor alle gebruikers',
+        'Startup folder|user': 'Opstartmap van huidige gebruiker',
+        'Run|user': 'Register: HKCU Run',
+        'Run|machine': 'Register: HKLM Run',
+        'Run (32-bit)|machine': 'Register: HKLM Run (32-bits)',
+        'RunOnce|user': 'Register: HKCU RunOnce',
+        'RunOnce|machine': 'Register: HKLM RunOnce'
+      },
+      groupEnabledOf: (enabledCount, total) => `${enabledCount} van ${total} ingeschakeld`,
+      groupAdminNote: 'Wijzigen hiervan vraagt om beheerdersrechten',
+      footerNote: "Een item uitschakelen legt de beslissing vast in StartupApproved, dezelfde plek die Windows' eigen instellingen voor opstartapps en Taakbeheer lezen en beschrijven. Er wordt niets verwijderd: de Run-waarde of snelkoppeling blijft precies waar hij is, zodat de wijziging vanaf hier of vanaf een van beide ongedaan te maken is."
     }
   },
 
@@ -5804,6 +6812,48 @@ export const CATALOG = {
       restoring: 'Przywracanie…',
       deletePermanently: 'Usuń trwale',
       deleting: 'Usuwanie…'
+    },
+    startup: {
+      title: 'Uruchamiane przy logowaniu',
+      subtitle: 'Klucze Run i foldery Autostart, które Windows odczytuje przy logowaniu, pogrupowane według tego, gdzie się znajdują — to decyduje, na kogo wpływa dany wpis i co jest potrzebne, aby go usunąć. Wpis, którego plik zniknął, został pozostawiony przez program odinstalowany nieostrożnie, a Windows za każdym razem nadal próbuje go uruchomić.',
+      loading: 'Odczytywanie wpisów autostartu…',
+      loadError: (error) => `Nie udało się odczytać wpisów autostartu: ${error}`,
+      empty: {
+        heading: 'Nic nie uruchamia się przy logowaniu.',
+        body: 'Prune sprawdził klucze Run i RunOnce w obu gałęziach rejestru i obu folderach Autostart. Program, który doda się później, pojawi się tutaj.'
+      },
+      counts: {
+        total: (n) => `${n} ${n === 1 ? 'wpis' : n < 5 ? 'wpisy' : 'wpisów'}`,
+        enabled: (n) => `${n} włączonych`,
+        runningNow: (n) => `${n} uruchomionych teraz`,
+        broken: (n) => `${n} wskazujących brakujący plik`
+      },
+      columns: {
+        name: 'Nazwa autostartu',
+        command: 'Ścieżka uruchamiania',
+        description: 'Opis',
+        publisher: 'Wydawca',
+        status: 'Stan'
+      },
+      switchAriaLabel: (enabled, name) => `${enabled ? 'Wyłącz' : 'Włącz'} ${name} przy logowaniu`,
+      status: {
+        invalid: 'Nieprawidłowy',
+        running: 'Uruchomione',
+        notChecked: 'Niesprawdzone',
+        notRunning: 'Nieuruchomione'
+      },
+      groups: {
+        'Startup folder|machine': 'Folder Autostart wszystkich użytkowników',
+        'Startup folder|user': 'Folder Autostart bieżącego użytkownika',
+        'Run|user': 'Rejestr: HKCU Run',
+        'Run|machine': 'Rejestr: HKLM Run',
+        'Run (32-bit)|machine': 'Rejestr: HKLM Run (32-bitowy)',
+        'RunOnce|user': 'Rejestr: HKCU RunOnce',
+        'RunOnce|machine': 'Rejestr: HKLM RunOnce'
+      },
+      groupEnabledOf: (enabledCount, total) => `${enabledCount} z ${total} włączonych`,
+      groupAdminNote: 'Zmiana tych wpisów wymaga uprawnień administratora',
+      footerNote: 'Wyłączenie wpisu zapisuje decyzję w StartupApproved, tym samym miejscu, które odczytują i zapisują własne ustawienia aplikacji autostartu Windows oraz Menedżer zadań. Nic nie zostaje usunięte: wartość Run lub skrót pozostaje dokładnie tam, gdzie jest, więc zmianę można cofnąć stąd lub z dowolnego z tych dwóch miejsc.'
     }
   },
 
@@ -6035,6 +7085,48 @@ export const CATALOG = {
       restoring: 'بیرته راوړل کیږي…',
       deletePermanently: 'د تل لپاره ړنګول',
       deleting: 'ړنګول کیږي…'
+    },
+    startup: {
+      title: 'د ننوتلو پر مهال چلیږي',
+      subtitle: 'هغه Run کلیدونه او د پیل فولډرونه چې Windows یې ستاسو د ننوتلو پر مهال لولي، د دې پر بنسټ ډلبندي شوي چې چیرته اوسیږي — دا هغه څه دي چې پرېکړه کوي چا ته یوه ننوتنه اغیزه کوي او د لرې کولو لپاره څه ته اړتیا ده. هغه ننوتنه چې فایل یې ورک شوی، د بې پاملرنې سره لرې شوي پروګرام لخوا پریښودل شوې، او Windows هر ځل هڅه کوي چې دا پیل کړي.',
+      loading: 'د پیل ننوتنې لوستل کیږي…',
+      loadError: (error) => `د پیل ننوتنې ونشوای لوستل شي: ${error}`,
+      empty: {
+        heading: 'د ننوتلو پر مهال هیڅ شی نه چلیږي.',
+        body: 'Prune په دواړو د راجستري هایوونو او دواړو د پیل فولډرونو کې د Run او RunOnce کلیدونه وڅاره. هغه پروګرام چې وروسته ځان اضافه کړي دلته به ښکاره شي.'
+      },
+      counts: {
+        total: (n) => `${n} ننوتنې`,
+        enabled: (n) => `${n} فعالې`,
+        runningNow: (n) => `${n} اوس چلیږي`,
+        broken: (n) => `${n} یو ورک فایل ته اشاره کوي`
+      },
+      columns: {
+        name: 'د پیل نوم',
+        command: 'د پیل لاره',
+        description: 'تشریح',
+        publisher: 'خپروونکی',
+        status: 'حالت'
+      },
+      switchAriaLabel: (enabled, name) => `د ننوتلو پر مهال ${name} ${enabled ? 'غیرفعالول' : 'فعالول'}`,
+      status: {
+        invalid: 'ناسمه',
+        running: 'روان',
+        notChecked: 'ونه چیک شوه',
+        notRunning: 'نه چلیږي'
+      },
+      groups: {
+        'Startup folder|machine': 'د ټولو کاروونکو د پیل فولډر',
+        'Startup folder|user': 'د اوسني کاروونکي د پیل فولډر',
+        'Run|user': 'راجستري: HKCU Run',
+        'Run|machine': 'راجستري: HKLM Run',
+        'Run (32-bit)|machine': 'راجستري: HKLM Run (32-bit)',
+        'RunOnce|user': 'راجستري: HKCU RunOnce',
+        'RunOnce|machine': 'راجستري: HKLM RunOnce'
+      },
+      groupEnabledOf: (enabledCount, total) => `${enabledCount} د ${total} څخه فعالې`,
+      groupAdminNote: 'د دې بدلول د اډمین اجازې غواړي',
+      footerNote: 'د یوې ننوتنې غیرفعالول دا پرېکړه په StartupApproved کې ثبتوي، همدا هغه ځای دی چې د Windows خپل د پیل اپلیکیشنونو ترتیبات او د دندو مدیر یې لولي او لیکي. هیڅ شی نه ړنګیږي: د Run ارزښت یا شارټ کټ سمدلاسه هلته پاتې کیږي چې دی، نو بدلون د دې دواړو ځایونو څخه بېرته اړول کیدی شي.'
     }
   },
 
@@ -6266,6 +7358,48 @@ export const CATALOG = {
       restoring: 'Restaurando…',
       deletePermanently: 'Excluir Permanentemente',
       deleting: 'Excluindo…'
+    },
+    startup: {
+      title: 'Executam ao entrar',
+      subtitle: 'As chaves Run e as pastas de Inicialização que o Windows lê ao entrar, agrupadas pelo local onde ficam — isso é o que decide quem uma entrada afeta e o que é preciso para removê-la. Uma entrada cujo arquivo desapareceu foi deixada por um programa desinstalado sem cuidado, e o Windows continua tentando iniciá-la sempre.',
+      loading: 'Lendo entradas de inicialização…',
+      loadError: (error) => `Não foi possível ler as entradas de inicialização: ${error}`,
+      empty: {
+        heading: 'Nada é executado ao entrar.',
+        body: 'O Prune verificou as chaves Run e RunOnce em ambas as hives do registro e em ambas as pastas de Inicialização. Um programa que se adicionar depois vai aparecer aqui.'
+      },
+      counts: {
+        total: (n) => `${n} entrada${n === 1 ? '' : 's'}`,
+        enabled: (n) => `${n} habilitadas`,
+        runningNow: (n) => `${n} em execução agora`,
+        broken: (n) => `${n} apontando para um arquivo que sumiu`
+      },
+      columns: {
+        name: 'Nome de inicialização',
+        command: 'Caminho de execução',
+        description: 'Descrição',
+        publisher: 'Editor',
+        status: 'Status'
+      },
+      switchAriaLabel: (enabled, name) => `${enabled ? 'Desabilitar' : 'Habilitar'} ${name} ao entrar`,
+      status: {
+        invalid: 'Inválido',
+        running: 'Em execução',
+        notChecked: 'Não verificado',
+        notRunning: 'Não está em execução'
+      },
+      groups: {
+        'Startup folder|machine': 'Pasta de Inicialização de todos os usuários',
+        'Startup folder|user': 'Pasta de Inicialização do usuário atual',
+        'Run|user': 'Registro: HKCU Run',
+        'Run|machine': 'Registro: HKLM Run',
+        'Run (32-bit)|machine': 'Registro: HKLM Run (32 bits)',
+        'RunOnce|user': 'Registro: HKCU RunOnce',
+        'RunOnce|machine': 'Registro: HKLM RunOnce'
+      },
+      groupEnabledOf: (enabledCount, total) => `${enabledCount} de ${total} habilitadas`,
+      groupAdminNote: 'Alterá-las pede permissões de administrador',
+      footerNote: 'Desabilitar uma entrada registra a decisão no StartupApproved, o mesmo lugar que as configurações de Aplicativos de Inicialização do próprio Windows e o Gerenciador de Tarefas leem e escrevem. Nada é excluído: o valor Run ou o atalho permanece exatamente onde está, então a mudança pode ser desfeita a partir daqui ou de qualquer um dos dois.'
     }
   },
 
@@ -6497,6 +7631,48 @@ export const CATALOG = {
       restoring: 'A restaurar…',
       deletePermanently: 'Eliminar Permanentemente',
       deleting: 'A eliminar…'
+    },
+    startup: {
+      title: 'Executam ao iniciar sessão',
+      subtitle: 'As chaves Run e as pastas de Arranque que o Windows lê ao iniciar sessão, agrupadas pelo local onde residem — isso é o que decide quem uma entrada afeta e o que é preciso para a remover. Uma entrada cujo ficheiro desapareceu foi deixada por um programa desinstalado sem cuidado, e o Windows continua a tentar iniciá-la sempre.',
+      loading: 'A ler as entradas de arranque…',
+      loadError: (error) => `Não foi possível ler as entradas de arranque: ${error}`,
+      empty: {
+        heading: 'Nada é executado ao iniciar sessão.',
+        body: 'O Prune verificou as chaves Run e RunOnce em ambas as hives do registo e em ambas as pastas de Arranque. Um programa que se adicione mais tarde aparecerá aqui.'
+      },
+      counts: {
+        total: (n) => `${n} entrada${n === 1 ? '' : 's'}`,
+        enabled: (n) => `${n} ativadas`,
+        runningNow: (n) => `${n} em execução agora`,
+        broken: (n) => `${n} a apontar para um ficheiro que desapareceu`
+      },
+      columns: {
+        name: 'Nome de arranque',
+        command: 'Caminho de execução',
+        description: 'Descrição',
+        publisher: 'Editor',
+        status: 'Estado'
+      },
+      switchAriaLabel: (enabled, name) => `${enabled ? 'Desativar' : 'Ativar'} ${name} ao iniciar sessão`,
+      status: {
+        invalid: 'Inválido',
+        running: 'Em execução',
+        notChecked: 'Não verificado',
+        notRunning: 'Não está em execução'
+      },
+      groups: {
+        'Startup folder|machine': 'Pasta de Arranque de todos os utilizadores',
+        'Startup folder|user': 'Pasta de Arranque do utilizador atual',
+        'Run|user': 'Registo: HKCU Run',
+        'Run|machine': 'Registo: HKLM Run',
+        'Run (32-bit)|machine': 'Registo: HKLM Run (32 bits)',
+        'RunOnce|user': 'Registo: HKCU RunOnce',
+        'RunOnce|machine': 'Registo: HKLM RunOnce'
+      },
+      groupEnabledOf: (enabledCount, total) => `${enabledCount} de ${total} ativadas`,
+      groupAdminNote: 'Alterá-las pede permissões de administrador',
+      footerNote: 'Desativar uma entrada regista a decisão no StartupApproved, o mesmo local que as definições de Aplicações de Arranque do próprio Windows e o Gestor de Tarefas leem e escrevem. Nada é eliminado: o valor Run ou o atalho permanece exatamente onde está, pelo que a alteração pode ser revertida a partir daqui ou de qualquer um dos dois.'
     }
   },
 
@@ -6728,6 +7904,48 @@ export const CATALOG = {
       restoring: 'Se restaurează…',
       deletePermanently: 'Șterge definitiv',
       deleting: 'Se șterge…'
+    },
+    startup: {
+      title: 'Rulează la conectare',
+      subtitle: 'Cheile Run și folderele de Pornire pe care Windows le citește la conectare, grupate după locul unde se află — asta decide pe cine afectează o intrare și ce e nevoie pentru a o elimina. O intrare al cărei fișier a dispărut a fost lăsată de un program dezinstalat neglijent, iar Windows continuă să încerce să o pornească de fiecare dată.',
+      loading: 'Se citesc intrările de pornire…',
+      loadError: (error) => `Intrările de pornire nu au putut fi citite: ${error}`,
+      empty: {
+        heading: 'Nimic nu rulează la conectare.',
+        body: 'Prune a verificat cheile Run și RunOnce în ambii arbori de registru și ambele foldere de Pornire. Un program care se adaugă ulterior va apărea aici.'
+      },
+      counts: {
+        total: (n) => `${n} ${n === 1 ? 'intrare' : 'intrări'}`,
+        enabled: (n) => `${n} activate`,
+        runningNow: (n) => `${n} rulează acum`,
+        broken: (n) => `${n} indică un fișier care a dispărut`
+      },
+      columns: {
+        name: 'Nume la pornire',
+        command: 'Cale de lansare',
+        description: 'Descriere',
+        publisher: 'Editor',
+        status: 'Stare'
+      },
+      switchAriaLabel: (enabled, name) => `${enabled ? 'Dezactivează' : 'Activează'} ${name} la conectare`,
+      status: {
+        invalid: 'Nevalid',
+        running: 'În execuție',
+        notChecked: 'Neverificat',
+        notRunning: 'Nu rulează'
+      },
+      groups: {
+        'Startup folder|machine': 'Folderul de Pornire pentru toți utilizatorii',
+        'Startup folder|user': 'Folderul de Pornire al utilizatorului curent',
+        'Run|user': 'Registru: HKCU Run',
+        'Run|machine': 'Registru: HKLM Run',
+        'Run (32-bit)|machine': 'Registru: HKLM Run (32 de biți)',
+        'RunOnce|user': 'Registru: HKCU RunOnce',
+        'RunOnce|machine': 'Registru: HKLM RunOnce'
+      },
+      groupEnabledOf: (enabledCount, total) => `${enabledCount} din ${total} activate`,
+      groupAdminNote: 'Modificarea acestora solicită drepturi de administrator',
+      footerNote: 'Dezactivarea unei intrări înregistrează decizia în StartupApproved, același loc pe care setările proprii de Aplicații la pornire ale Windows și Managerul de activități le citesc și le scriu. Nimic nu este șters: valoarea Run sau comanda rapidă rămâne exact acolo unde este, deci modificarea poate fi anulată de aici sau din oricare dintre cele două.'
     }
   },
 
@@ -6959,6 +8177,48 @@ export const CATALOG = {
       restoring: 'Восстановление…',
       deletePermanently: 'Удалить навсегда',
       deleting: 'Удаление…'
+    },
+    startup: {
+      title: 'Запускаются при входе',
+      subtitle: 'Ключи Run и папки автозагрузки, которые Windows считывает при входе в систему, сгруппированы по месту расположения — именно это определяет, на кого влияет запись и что требуется для её удаления. Запись, файл которой отсутствует, была оставлена программой, удалённой без должной аккуратности, и Windows продолжает пытаться запускать её каждый раз.',
+      loading: 'Чтение записей автозагрузки…',
+      loadError: (error) => `Не удалось прочитать записи автозагрузки: ${error}`,
+      empty: {
+        heading: 'При входе ничего не запускается.',
+        body: 'Prune проверил ключи Run и RunOnce в обоих кустах реестра и в обеих папках автозагрузки. Программа, добавляющая себя позже, появится здесь.'
+      },
+      counts: {
+        total: (n) => `Записей: ${n}`,
+        enabled: (n) => `Включено: ${n}`,
+        runningNow: (n) => `Запущено сейчас: ${n}`,
+        broken: (n) => `Указывают на отсутствующий файл: ${n}`
+      },
+      columns: {
+        name: 'Имя автозагрузки',
+        command: 'Путь запуска',
+        description: 'Описание',
+        publisher: 'Издатель',
+        status: 'Состояние'
+      },
+      switchAriaLabel: (enabled, name) => `${enabled ? 'Отключить' : 'Включить'} ${name} при входе`,
+      status: {
+        invalid: 'Недействительно',
+        running: 'Работает',
+        notChecked: 'Не проверено',
+        notRunning: 'Не запущено'
+      },
+      groups: {
+        'Startup folder|machine': 'Папка автозагрузки всех пользователей',
+        'Startup folder|user': 'Папка автозагрузки текущего пользователя',
+        'Run|user': 'Реестр: HKCU Run',
+        'Run|machine': 'Реестр: HKLM Run',
+        'Run (32-bit)|machine': 'Реестр: HKLM Run (32-бит)',
+        'RunOnce|user': 'Реестр: HKCU RunOnce',
+        'RunOnce|machine': 'Реестр: HKLM RunOnce'
+      },
+      groupEnabledOf: (enabledCount, total) => `Включено ${enabledCount} из ${total}`,
+      groupAdminNote: 'Изменение требует прав администратора',
+      footerNote: 'Отключение записи фиксирует решение в StartupApproved — там же, где читают и пишут собственные параметры Windows «Приложения при автозапуске» и Диспетчер задач. Ничего не удаляется: значение Run или ярлык остаётся точно на своём месте, поэтому изменение можно отменить отсюда или из любого из этих двух мест.'
     }
   },
 
@@ -7190,6 +8450,48 @@ export const CATALOG = {
       restoring: 'Obnovuje sa…',
       deletePermanently: 'Natrvalo odstrániť',
       deleting: 'Odstraňuje sa…'
+    },
+    startup: {
+      title: 'Spúšťa sa pri prihlásení',
+      subtitle: 'Kľúče Run a priečinky Po spustení, ktoré Windows číta pri prihlásení, zoskupené podľa toho, kde sa nachádzajú — to určuje, koho položka ovplyvňuje a čo je potrebné na jej odstránenie. Položka, ktorej súbor chýba, bola ponechaná programom odinštalovaným neopatrne, a Windows sa ju stále pokúša spustiť pri každom prihlásení.',
+      loading: 'Čítanie položiek pri spustení…',
+      loadError: (error) => `Položky pri spustení sa nepodarilo prečítať: ${error}`,
+      empty: {
+        heading: 'Pri prihlásení sa nič nespúšťa.',
+        body: 'Prune skontroloval kľúče Run a RunOnce v oboch vetvách registra a oboch priečinkoch Po spustení. Program, ktorý sa pridá neskôr, sa zobrazí tu.'
+      },
+      counts: {
+        total: (n) => `${n} ${n === 1 ? 'položka' : n < 5 ? 'položky' : 'položiek'}`,
+        enabled: (n) => `${n} povolených`,
+        runningNow: (n) => `${n} spustených teraz`,
+        broken: (n) => `${n} ukazuje na chýbajúci súbor`
+      },
+      columns: {
+        name: 'Názov pri spustení',
+        command: 'Cesta k spusteniu',
+        description: 'Popis',
+        publisher: 'Vydavateľ',
+        status: 'Stav'
+      },
+      switchAriaLabel: (enabled, name) => `${enabled ? 'Zakázať' : 'Povoliť'} ${name} pri prihlásení`,
+      status: {
+        invalid: 'Neplatné',
+        running: 'Spustené',
+        notChecked: 'Neskontrolované',
+        notRunning: 'Nespustené'
+      },
+      groups: {
+        'Startup folder|machine': 'Priečinok Po spustení pre všetkých používateľov',
+        'Startup folder|user': 'Priečinok Po spustení aktuálneho používateľa',
+        'Run|user': 'Register: HKCU Run',
+        'Run|machine': 'Register: HKLM Run',
+        'Run (32-bit)|machine': 'Register: HKLM Run (32-bitové)',
+        'RunOnce|user': 'Register: HKCU RunOnce',
+        'RunOnce|machine': 'Register: HKLM RunOnce'
+      },
+      groupEnabledOf: (enabledCount, total) => `${enabledCount} z ${total} povolených`,
+      groupAdminNote: 'Zmena vyžaduje oprávnenia správcu',
+      footerNote: 'Vypnutie položky zaznamená rozhodnutie do StartupApproved, na to isté miesto, ktoré čítajú a zapisujú vlastné nastavenia Po spustení systému Windows a Správca úloh. Nič sa neodstráni: hodnota Run alebo skratka zostáva presne tam, kde je, takže zmenu možno vrátiť odtiaľto alebo z ktoréhokoľvek z nich.'
     }
   },
 
@@ -7421,6 +8723,48 @@ export const CATALOG = {
       restoring: 'Duke rikthyer…',
       deletePermanently: 'Fshi Përgjithmonë',
       deleting: 'Duke fshirë…'
+    },
+    startup: {
+      title: 'Ekzekutohen në hyrje',
+      subtitle: 'Çelësat Run dhe dosjet e Nisjes që Windows i lexon kur hyn, të grupuara sipas vendit ku ndodhen — kjo është ajo që përcakton kë prek një hyrje dhe çfarë duhet për ta hequr. Një hyrje, skedari i së cilës mungon, është lënë pas nga një program i çinstaluar pa kujdes, dhe Windows vazhdon të përpiqet ta nisë çdo herë.',
+      loading: 'Duke lexuar hyrjet e nisjes…',
+      loadError: (error) => `Hyrjet e nisjes nuk mund të lexoheshin: ${error}`,
+      empty: {
+        heading: 'Asgjë nuk ekzekutohet në hyrje.',
+        body: 'Prune kontrolloi çelësat Run dhe RunOnce në të dyja degët e regjistrit dhe të dyja dosjet e Nisjes. Një program që shtohet më vonë do të shfaqet këtu.'
+      },
+      counts: {
+        total: (n) => `${n} hyrje`,
+        enabled: (n) => `${n} të aktivizuara`,
+        runningNow: (n) => `${n} po ekzekutohen tani`,
+        broken: (n) => `${n} drejt një skedari që mungon`
+      },
+      columns: {
+        name: 'Emri i nisjes',
+        command: 'Rruga e nisjes',
+        description: 'Përshkrimi',
+        publisher: 'Botuesi',
+        status: 'Statusi'
+      },
+      switchAriaLabel: (enabled, name) => `${enabled ? 'Çaktivizo' : 'Aktivizo'} ${name} në hyrje`,
+      status: {
+        invalid: 'I pavlefshëm',
+        running: 'Në ekzekutim',
+        notChecked: 'I pakontrolluar',
+        notRunning: 'Nuk po ekzekutohet'
+      },
+      groups: {
+        'Startup folder|machine': 'Dosja e Nisjes për të gjithë përdoruesit',
+        'Startup folder|user': 'Dosja e Nisjes për përdoruesin aktual',
+        'Run|user': 'Regjistri: HKCU Run',
+        'Run|machine': 'Regjistri: HKLM Run',
+        'Run (32-bit)|machine': 'Regjistri: HKLM Run (32-bit)',
+        'RunOnce|user': 'Regjistri: HKCU RunOnce',
+        'RunOnce|machine': 'Regjistri: HKLM RunOnce'
+      },
+      groupEnabledOf: (enabledCount, total) => `${enabledCount} nga ${total} të aktivizuara`,
+      groupAdminNote: 'Ndryshimi i tyre kërkon të drejta administratori',
+      footerNote: 'Çaktivizimi i një hyrjeje regjistron vendimin në StartupApproved, po atë vend ku lexojnë dhe shkruajnë vetë cilësimet e Aplikacioneve të Nisjes të Windows dhe Menaxheri i Detyrave. Asgjë nuk fshihet: vlera Run ose shkurtorja mbetet saktësisht aty ku është, kështu që ndryshimi mund të kthehet mbrapsht që këtu ose nga cilido prej dy vendeve.'
     }
   },
 
@@ -7652,6 +8996,48 @@ export const CATALOG = {
       restoring: 'Враћа се…',
       deletePermanently: 'Обриши трајно',
       deleting: 'Брише се…'
+    },
+    startup: {
+      title: 'Покрећу се при пријави',
+      subtitle: 'Run кључеви и фасцикле за покретање које Windows чита при пријави, груписани према томе где се налазе — то одређује на кога ставка утиче и шта је потребно за њено уклањање. Ставка чија је датотека нестала остављена је од програма који је немарно деинсталиран, а Windows и даље сваки пут покушава да је покрене.',
+      loading: 'Читање ставки при покретању…',
+      loadError: (error) => `Ставке при покретању нису могле да се учитају: ${error}`,
+      empty: {
+        heading: 'Ништа се не покреће при пријави.',
+        body: 'Prune је проверио Run и RunOnce кључеве у оба регистарска чвора и обе фасцикле за покретање. Програм који се сам додаје касније ће се појавити овде.'
+      },
+      counts: {
+        total: (n) => `${n} ставк${n === 1 ? 'а' : 'и'}`,
+        enabled: (n) => `${n} омогућено`,
+        runningNow: (n) => `${n} тренутно покренуто`,
+        broken: (n) => `${n} упућује на датотеку која не постоји`
+      },
+      columns: {
+        name: 'Назив покретања',
+        command: 'Путања покретања',
+        description: 'Опис',
+        publisher: 'Издавач',
+        status: 'Статус'
+      },
+      switchAriaLabel: (enabled, name) => `${enabled ? 'Онемогући' : 'Омогући'} ${name} при пријави`,
+      status: {
+        invalid: 'Неважеће',
+        running: 'Покренуто',
+        notChecked: 'Није проверено',
+        notRunning: 'Није покренуто'
+      },
+      groups: {
+        'Startup folder|machine': 'Фасцикла за покретање свих корисника',
+        'Startup folder|user': 'Фасцикла за покретање тренутног корисника',
+        'Run|user': 'Регистар: HKCU Run',
+        'Run|machine': 'Регистар: HKLM Run',
+        'Run (32-bit)|machine': 'Регистар: HKLM Run (32-бита)',
+        'RunOnce|user': 'Регистар: HKCU RunOnce',
+        'RunOnce|machine': 'Регистар: HKLM RunOnce'
+      },
+      groupEnabledOf: (enabledCount, total) => `${enabledCount} од ${total} омогућено`,
+      groupAdminNote: 'Промена ових захтева администраторска права',
+      footerNote: 'Онемогућавање ставке бележи одлуку у StartupApproved, на истом месту које читају и пишу сопствена подешавања Windows апликација при покретању и Управљач задацима. Ништа се не брише: вредност Run или пречица остаје тачно тамо где јесте, тако да се промена може поништити одавде или из било ког од та два места.'
     }
   },
 
@@ -7883,6 +9269,48 @@ export const CATALOG = {
       restoring: 'Återställer…',
       deletePermanently: 'Ta bort permanent',
       deleting: 'Tar bort…'
+    },
+    startup: {
+      title: 'Körs vid inloggning',
+      subtitle: 'De Run-nycklar och Startmappar som Windows läser när du loggar in, grupperade efter var de finns — det är vad som avgör vem en post påverkar och vad som krävs för att ta bort den. En post vars fil är borta lämnades kvar av ett program som avinstallerades slarvigt, och Windows fortsätter försöka starta den varje gång.',
+      loading: 'Läser startposter…',
+      loadError: (error) => `Startposterna kunde inte läsas: ${error}`,
+      empty: {
+        heading: 'Inget körs vid inloggning.',
+        body: 'Prune kontrollerade Run- och RunOnce-nycklarna i båda registerdelarna och båda Startmapparna. Ett program som lägger till sig själv senare kommer att visas här.'
+      },
+      counts: {
+        total: (n) => `${n} post${n === 1 ? '' : 'er'}`,
+        enabled: (n) => `${n} aktiverade`,
+        runningNow: (n) => `${n} körs nu`,
+        broken: (n) => `${n} pekar på en fil som saknas`
+      },
+      columns: {
+        name: 'Startnamn',
+        command: 'Startsökväg',
+        description: 'Beskrivning',
+        publisher: 'Utgivare',
+        status: 'Status'
+      },
+      switchAriaLabel: (enabled, name) => `${enabled ? 'Inaktivera' : 'Aktivera'} ${name} vid inloggning`,
+      status: {
+        invalid: 'Ogiltig',
+        running: 'Körs',
+        notChecked: 'Ej kontrollerad',
+        notRunning: 'Körs inte'
+      },
+      groups: {
+        'Startup folder|machine': 'Startmapp för alla användare',
+        'Startup folder|user': 'Startmapp för aktuell användare',
+        'Run|user': 'Register: HKCU Run',
+        'Run|machine': 'Register: HKLM Run',
+        'Run (32-bit)|machine': 'Register: HKLM Run (32-bitars)',
+        'RunOnce|user': 'Register: HKCU RunOnce',
+        'RunOnce|machine': 'Register: HKLM RunOnce'
+      },
+      groupEnabledOf: (enabledCount, total) => `${enabledCount} av ${total} aktiverade`,
+      groupAdminNote: 'Att ändra dessa kräver administratörsrättigheter',
+      footerNote: 'Att inaktivera en post registrerar beslutet i StartupApproved, samma plats som Windows egna inställningar för Startappar och Aktivitetshanteraren läser och skriver till. Inget tas bort: Run-värdet eller genvägen ligger kvar exakt där det är, så ändringen kan ångras härifrån eller från någon av de två.'
     }
   },
 
@@ -8114,6 +9542,48 @@ export const CATALOG = {
       restoring: 'กำลังกู้คืน…',
       deletePermanently: 'ลบถาวร',
       deleting: 'กำลังลบ…'
+    },
+    startup: {
+      title: 'ทำงานเมื่อลงชื่อเข้าใช้',
+      subtitle: 'คีย์ Run และโฟลเดอร์เริ่มต้นระบบที่ Windows อ่านเมื่อคุณลงชื่อเข้าใช้ จัดกลุ่มตามตำแหน่งที่อยู่ — สิ่งนี้เป็นตัวกำหนดว่ารายการหนึ่งส่งผลต่อใครและต้องทำอย่างไรจึงจะลบมันได้ รายการที่ไฟล์หายไปถูกทิ้งไว้โดยโปรแกรมที่ถูกถอนการติดตั้งอย่างไม่ระมัดระวัง และ Windows ยังคงพยายามเรียกใช้มันทุกครั้ง',
+      loading: 'กำลังอ่านรายการเริ่มต้นระบบ…',
+      loadError: (error) => `ไม่สามารถอ่านรายการเริ่มต้นระบบได้: ${error}`,
+      empty: {
+        heading: 'ไม่มีอะไรทำงานเมื่อลงชื่อเข้าใช้',
+        body: 'Prune ตรวจสอบคีย์ Run และ RunOnce ในรีจิสทรีทั้งสองไฮฟ์และโฟลเดอร์เริ่มต้นระบบทั้งสองแห่ง โปรแกรมที่เพิ่มตัวเองในภายหลังจะปรากฏที่นี่'
+      },
+      counts: {
+        total: (n) => `${n} รายการ`,
+        enabled: (n) => `${n} เปิดใช้งาน`,
+        runningNow: (n) => `${n} กำลังทำงานอยู่`,
+        broken: (n) => `${n} ชี้ไปยังไฟล์ที่หายไป`
+      },
+      columns: {
+        name: 'ชื่อการเริ่มต้น',
+        command: 'พาธการเรียกใช้',
+        description: 'คำอธิบาย',
+        publisher: 'ผู้เผยแพร่',
+        status: 'สถานะ'
+      },
+      switchAriaLabel: (enabled, name) => `${enabled ? 'ปิดใช้งาน' : 'เปิดใช้งาน'} ${name} เมื่อลงชื่อเข้าใช้`,
+      status: {
+        invalid: 'ไม่ถูกต้อง',
+        running: 'กำลังทำงาน',
+        notChecked: 'ยังไม่ได้ตรวจสอบ',
+        notRunning: 'ไม่ได้ทำงาน'
+      },
+      groups: {
+        'Startup folder|machine': 'โฟลเดอร์เริ่มต้นระบบของผู้ใช้ทั้งหมด',
+        'Startup folder|user': 'โฟลเดอร์เริ่มต้นระบบของผู้ใช้ปัจจุบัน',
+        'Run|user': 'รีจิสทรี: HKCU Run',
+        'Run|machine': 'รีจิสทรี: HKLM Run',
+        'Run (32-bit)|machine': 'รีจิสทรี: HKLM Run (32 บิต)',
+        'RunOnce|user': 'รีจิสทรี: HKCU RunOnce',
+        'RunOnce|machine': 'รีจิสทรี: HKLM RunOnce'
+      },
+      groupEnabledOf: (enabledCount, total) => `เปิดใช้งาน ${enabledCount} จาก ${total}`,
+      groupAdminNote: 'การเปลี่ยนแปลงรายการเหล่านี้ต้องมีสิทธิ์ผู้ดูแลระบบ',
+      footerNote: 'การปิดใช้งานรายการจะบันทึกการตัดสินใจไว้ใน StartupApproved ซึ่งเป็นตำแหน่งเดียวกับที่การตั้งค่าแอปเริ่มต้นระบบของ Windows เองและตัวจัดการงานอ่านและเขียน ไม่มีอะไรถูกลบ ค่า Run หรือทางลัดยังคงอยู่ตรงตำแหน่งเดิม ดังนั้นการเปลี่ยนแปลงจึงย้อนกลับได้จากที่นี่หรือจากที่ใดที่หนึ่งในสองแห่งนั้น'
     }
   },
 
@@ -8345,6 +9815,48 @@ export const CATALOG = {
       restoring: 'Geri yükleniyor…',
       deletePermanently: 'Kalıcı Olarak Sil',
       deleting: 'Siliniyor…'
+    },
+    startup: {
+      title: 'Oturum açılışında çalışır',
+      subtitle: "Windows'un oturum açarken okuduğu Run anahtarları ve Başlangıç klasörleri, nerede bulunduklarına göre gruplandırılmıştır — bir girdinin kimi etkilediğini ve kaldırmak için ne gerektiğini belirleyen budur. Dosyası kaybolmuş bir girdi, dikkatsizce kaldırılan bir program tarafından geride bırakılmıştır ve Windows her seferinde onu başlatmayı denemeye devam eder.",
+      loading: 'Başlangıç girdileri okunuyor…',
+      loadError: (error) => `Başlangıç girdileri okunamadı: ${error}`,
+      empty: {
+        heading: 'Oturum açılışında hiçbir şey çalışmıyor.',
+        body: "Prune, her iki kayıt defteri kovanında ve her iki Başlangıç klasöründe Run ve RunOnce anahtarlarını kontrol etti. Kendini daha sonra ekleyen bir program burada görünecek."
+      },
+      counts: {
+        total: (n) => `${n} girdi`,
+        enabled: (n) => `${n} etkin`,
+        runningNow: (n) => `${n} şu anda çalışıyor`,
+        broken: (n) => `${n} kayıp bir dosyayı gösteriyor`
+      },
+      columns: {
+        name: 'Başlangıç adı',
+        command: 'Başlatma yolu',
+        description: 'Açıklama',
+        publisher: 'Yayımcı',
+        status: 'Durum'
+      },
+      switchAriaLabel: (enabled, name) => `${name} öğesini oturum açılışında ${enabled ? 'devre dışı bırak' : 'etkinleştir'}`,
+      status: {
+        invalid: 'Geçersiz',
+        running: 'Çalışıyor',
+        notChecked: 'Kontrol edilmedi',
+        notRunning: 'Çalışmıyor'
+      },
+      groups: {
+        'Startup folder|machine': 'Tüm kullanıcıların Başlangıç klasörü',
+        'Startup folder|user': 'Geçerli kullanıcının Başlangıç klasörü',
+        'Run|user': 'Kayıt defteri: HKCU Run',
+        'Run|machine': 'Kayıt defteri: HKLM Run',
+        'Run (32-bit)|machine': 'Kayıt defteri: HKLM Run (32 bit)',
+        'RunOnce|user': 'Kayıt defteri: HKCU RunOnce',
+        'RunOnce|machine': 'Kayıt defteri: HKLM RunOnce'
+      },
+      groupEnabledOf: (enabledCount, total) => `${total} öğeden ${enabledCount} tanesi etkin`,
+      groupAdminNote: 'Bunları değiştirmek yönetici izni ister',
+      footerNote: "Bir girdiyi devre dışı bırakmak, kararı StartupApproved'a kaydeder; bu, Windows'un kendi Başlangıç Uygulamaları ayarlarının ve Görev Yöneticisi'nin okuyup yazdığı aynı yerdir. Hiçbir şey silinmez: Run değeri veya kısayol tam olarak bulunduğu yerde kalır, bu yüzden değişiklik buradan veya ikisinden herhangi birinden geri alınabilir."
     }
   },
 
@@ -8576,6 +10088,48 @@ export const CATALOG = {
       restoring: 'Відновлення…',
       deletePermanently: 'Видалити назавжди',
       deleting: 'Видалення…'
+    },
+    startup: {
+      title: 'Запускаються під час входу',
+      subtitle: 'Ключі Run і папки автозавантаження, які Windows зчитує під час входу, згруповані за місцем розташування — саме це визначає, на кого впливає запис і що потрібно для його видалення. Запис, файл якого зник, залишила після себе програма, видалена необережно, і Windows щоразу продовжує намагатися його запустити.',
+      loading: 'Читання записів автозавантаження…',
+      loadError: (error) => `Не вдалося прочитати записи автозавантаження: ${error}`,
+      empty: {
+        heading: 'Під час входу нічого не запускається.',
+        body: 'Prune перевірив ключі Run і RunOnce в обох кущах реєстру та обох папках автозавантаження. Програма, яка додає себе пізніше, з\'явиться тут.'
+      },
+      counts: {
+        total: (n) => `Записів: ${n}`,
+        enabled: (n) => `Увімкнено: ${n}`,
+        runningNow: (n) => `Запущено зараз: ${n}`,
+        broken: (n) => `Вказують на відсутній файл: ${n}`
+      },
+      columns: {
+        name: 'Назва автозавантаження',
+        command: 'Шлях запуску',
+        description: 'Опис',
+        publisher: 'Видавець',
+        status: 'Стан'
+      },
+      switchAriaLabel: (enabled, name) => `${enabled ? 'Вимкнути' : 'Увімкнути'} ${name} під час входу`,
+      status: {
+        invalid: 'Недійсний',
+        running: 'Виконується',
+        notChecked: 'Не перевірено',
+        notRunning: 'Не запущено'
+      },
+      groups: {
+        'Startup folder|machine': 'Папка автозавантаження всіх користувачів',
+        'Startup folder|user': 'Папка автозавантаження поточного користувача',
+        'Run|user': 'Реєстр: HKCU Run',
+        'Run|machine': 'Реєстр: HKLM Run',
+        'Run (32-bit)|machine': 'Реєстр: HKLM Run (32-біт)',
+        'RunOnce|user': 'Реєстр: HKCU RunOnce',
+        'RunOnce|machine': 'Реєстр: HKLM RunOnce'
+      },
+      groupEnabledOf: (enabledCount, total) => `Увімкнено ${enabledCount} з ${total}`,
+      groupAdminNote: 'Зміна цього вимагає прав адміністратора',
+      footerNote: 'Вимкнення запису фіксує рішення в StartupApproved — тому самому місці, яке читають і записують власні параметри Windows «Застосунки автозавантаження» і Диспетчер завдань. Нічого не видаляється: значення Run або ярлик залишається точно там, де воно є, тож зміну можна скасувати звідси або з будь-якого з цих двох місць.'
     }
   },
 
@@ -8807,6 +10361,48 @@ export const CATALOG = {
       restoring: 'Đang khôi phục…',
       deletePermanently: 'Xóa vĩnh viễn',
       deleting: 'Đang xóa…'
+    },
+    startup: {
+      title: 'Chạy khi đăng nhập',
+      subtitle: 'Các khóa Run và thư mục Khởi động mà Windows đọc khi bạn đăng nhập, được nhóm theo nơi chúng nằm — điều này quyết định mục nào ảnh hưởng đến ai và cần gì để gỡ bỏ nó. Một mục có tệp bị mất đã bị bỏ lại bởi một chương trình bị gỡ cài đặt bất cẩn, và Windows tiếp tục cố khởi chạy nó mỗi lần.',
+      loading: 'Đang đọc các mục khởi động…',
+      loadError: (error) => `Không thể đọc các mục khởi động: ${error}`,
+      empty: {
+        heading: 'Không có gì chạy khi đăng nhập.',
+        body: 'Prune đã kiểm tra các khóa Run và RunOnce trong cả hai hive registry và cả hai thư mục Khởi động. Một chương trình tự thêm mình sau này sẽ xuất hiện ở đây.'
+      },
+      counts: {
+        total: (n) => `${n} mục`,
+        enabled: (n) => `${n} được bật`,
+        runningNow: (n) => `${n} đang chạy`,
+        broken: (n) => `${n} trỏ đến tệp đã mất`
+      },
+      columns: {
+        name: 'Tên khởi động',
+        command: 'Đường dẫn chạy',
+        description: 'Mô tả',
+        publisher: 'Nhà phát hành',
+        status: 'Trạng thái'
+      },
+      switchAriaLabel: (enabled, name) => `${enabled ? 'Tắt' : 'Bật'} ${name} khi đăng nhập`,
+      status: {
+        invalid: 'Không hợp lệ',
+        running: 'Đang chạy',
+        notChecked: 'Chưa kiểm tra',
+        notRunning: 'Không chạy'
+      },
+      groups: {
+        'Startup folder|machine': 'Thư mục Khởi động của mọi người dùng',
+        'Startup folder|user': 'Thư mục Khởi động của người dùng hiện tại',
+        'Run|user': 'Registry: HKCU Run',
+        'Run|machine': 'Registry: HKLM Run',
+        'Run (32-bit)|machine': 'Registry: HKLM Run (32-bit)',
+        'RunOnce|user': 'Registry: HKCU RunOnce',
+        'RunOnce|machine': 'Registry: HKLM RunOnce'
+      },
+      groupEnabledOf: (enabledCount, total) => `${enabledCount}/${total} được bật`,
+      groupAdminNote: 'Thay đổi các mục này cần quyền quản trị',
+      footerNote: 'Tắt một mục sẽ ghi lại quyết định đó trong StartupApproved, cùng nơi mà cài đặt Ứng dụng khởi động và Trình quản lý tác vụ của chính Windows đọc và ghi. Không có gì bị xóa: giá trị Run hoặc lối tắt vẫn còn nguyên ở đó, vì vậy thay đổi có thể được hoàn tác từ đây hoặc từ một trong hai nơi đó.'
     }
   },
 
@@ -9038,6 +10634,48 @@ export const CATALOG = {
       restoring: '正在恢复…',
       deletePermanently: '永久删除',
       deleting: '正在删除…'
+    },
+    startup: {
+      title: '登录时运行',
+      subtitle: '按位置分组的、Windows 在你登录时读取的 Run 键和启动文件夹——这决定了一个项目会影响谁，以及移除它需要什么。文件已丢失的项目是被草率卸载的程序遗留下来的，Windows 每次都会继续尝试启动它。',
+      loading: '正在读取启动项…',
+      loadError: (error) => `无法读取启动项：${error}`,
+      empty: {
+        heading: '登录时没有任何内容运行。',
+        body: 'Prune 检查了两个注册表配置单元和两个启动文件夹中的 Run 和 RunOnce 键。之后自行添加的程序会出现在这里。'
+      },
+      counts: {
+        total: (n) => `${n} 个项目`,
+        enabled: (n) => `${n} 个已启用`,
+        runningNow: (n) => `${n} 个正在运行`,
+        broken: (n) => `${n} 个指向丢失的文件`
+      },
+      columns: {
+        name: '启动名称',
+        command: '启动路径',
+        description: '说明',
+        publisher: '发布者',
+        status: '状态'
+      },
+      switchAriaLabel: (enabled, name) => `${enabled ? '禁用' : '启用'}登录时的 ${name}`,
+      status: {
+        invalid: '无效',
+        running: '运行中',
+        notChecked: '未检查',
+        notRunning: '未运行'
+      },
+      groups: {
+        'Startup folder|machine': '所有用户的启动文件夹',
+        'Startup folder|user': '当前用户的启动文件夹',
+        'Run|user': '注册表：HKCU Run',
+        'Run|machine': '注册表：HKLM Run',
+        'Run (32-bit)|machine': '注册表：HKLM Run（32 位）',
+        'RunOnce|user': '注册表：HKCU RunOnce',
+        'RunOnce|machine': '注册表：HKLM RunOnce'
+      },
+      groupEnabledOf: (enabledCount, total) => `${total} 个中已启用 ${enabledCount} 个`,
+      groupAdminNote: '更改这些需要管理员权限',
+      footerNote: '关闭某个项目会将该决定记录到 StartupApproved 中，这与 Windows 自身的"启动应用"设置和任务管理器读写的位置相同。不会删除任何内容：Run 值或快捷方式会原样保留，因此可以从这里或这两处中的任意一处撤销更改。'
     }
   },
 
@@ -9269,6 +10907,48 @@ export const CATALOG = {
       restoring: '正在還原…',
       deletePermanently: '永久刪除',
       deleting: '正在刪除…'
+    },
+    startup: {
+      title: '登入時執行',
+      subtitle: '依所在位置分組的、Windows 在你登入時讀取的 Run 機碼與啟動資料夾——這決定了某個項目會影響誰，以及移除它需要什麼。檔案已遺失的項目是被草率解除安裝的程式遺留下來的，Windows 每次都會持續嘗試啟動它。',
+      loading: '正在讀取啟動項目…',
+      loadError: (error) => `無法讀取啟動項目：${error}`,
+      empty: {
+        heading: '登入時沒有任何項目執行。',
+        body: 'Prune 檢查了兩個登錄檔配置單元和兩個啟動資料夾中的 Run 和 RunOnce 機碼。之後自行加入的程式會出現在這裡。'
+      },
+      counts: {
+        total: (n) => `${n} 個項目`,
+        enabled: (n) => `${n} 個已啟用`,
+        runningNow: (n) => `${n} 個正在執行`,
+        broken: (n) => `${n} 個指向遺失的檔案`
+      },
+      columns: {
+        name: '啟動名稱',
+        command: '啟動路徑',
+        description: '描述',
+        publisher: '發行者',
+        status: '狀態'
+      },
+      switchAriaLabel: (enabled, name) => `${enabled ? '停用' : '啟用'}登入時的 ${name}`,
+      status: {
+        invalid: '無效',
+        running: '執行中',
+        notChecked: '未檢查',
+        notRunning: '未執行'
+      },
+      groups: {
+        'Startup folder|machine': '所有使用者的啟動資料夾',
+        'Startup folder|user': '目前使用者的啟動資料夾',
+        'Run|user': '登錄檔：HKCU Run',
+        'Run|machine': '登錄檔：HKLM Run',
+        'Run (32-bit)|machine': '登錄檔：HKLM Run（32 位元）',
+        'RunOnce|user': '登錄檔：HKCU RunOnce',
+        'RunOnce|machine': '登錄檔：HKLM RunOnce'
+      },
+      groupEnabledOf: (enabledCount, total) => `${total} 個中已啟用 ${enabledCount} 個`,
+      groupAdminNote: '變更這些需要系統管理員權限',
+      footerNote: '關閉某個項目會將該決定記錄到 StartupApproved 中，這與 Windows 自身的「啟動應用程式」設定和工作管理員讀寫的位置相同。不會刪除任何內容：Run 值或捷徑會原樣保留，因此可以從這裡或這兩處中的任一處復原變更。'
     }
   }
 };
