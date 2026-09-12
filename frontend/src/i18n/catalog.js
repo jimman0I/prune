@@ -167,6 +167,74 @@ export const CATALOG = {
         file: 'File',
         cancel: 'Cancel'
       }
+    },
+    applications: {
+      loading: 'Reading installed programs…',
+      loadError: (error) => `Couldn't load programs: ${error}`,
+      search: { placeholder: 'Search applications…', label: 'Search applications' },
+      filters: {
+        all: 'All',
+        unused: 'Unused',
+        store: 'Store',
+        extensions: 'Extensions',
+        broken: 'Broken',
+        storeCount: (n) => `Store (${n})`,
+        extensionsCount: (n) => `Extensions (${n})`,
+        brokenCount: (n) => `Broken (${n})`
+      },
+      columns: {
+        application: 'Application',
+        size: 'Size',
+        version: 'Version',
+        type: 'Type',
+        installed: 'Installed',
+        new: 'New',
+        company: 'Company',
+        website: 'Website'
+      },
+      badges: { broken: 'Broken', running: 'Running', store: 'Store', disabled: 'Disabled', unused: 'Unused' },
+      selectRow: (name) => `Select ${name}`,
+      selectAll: 'Select all shown',
+      clearSelection: 'Clear selection',
+      reveal: { button: 'Folder', notFound: 'Not found', ariaLabel: (name) => `Open the folder for ${name}` },
+      viaBrowser: 'via browser',
+      inWindows: { button: 'In Windows', ariaLabel: (name) => `Open Windows settings — Windows does not allow ${name} to be removed here` },
+      uninstall: 'Uninstall',
+      forceRemove: 'Force remove',
+      empty: {
+        plain: 'Nothing matches.',
+        withQuery: (query) => `Nothing matches "${query}".`,
+        withFilter: (filterLabel) => `Nothing matches in ${filterLabel}.`,
+        withQueryAndFilter: (query, filterLabel) => `Nothing matches "${query}" in ${filterLabel}.`,
+        hiddenCount: (count) => `${count} entries are hidden by the current filter.`,
+        clear: 'Clear search and filters'
+      },
+      footer: {
+        selected: (count) => `${count} selected`,
+        unknownSizes: (count) => `+ ${count} of unknown size`,
+        clear: 'Clear',
+        uninstallCount: (count) => `Uninstall ${count} ${count === 1 ? 'program' : 'programs'}`,
+        installations: (count) => `Installations: ${count}`,
+        showingOf: (shown, total) => `Showing ${shown} of ${total}`,
+        newInDays: (count, days) => `${count} new in ${days} days`,
+        total: 'total'
+      },
+      batchReasons: {
+        orphaned: 'Its uninstaller is broken — use Force remove instead.',
+        extension: 'Browser extensions are removed from the browser itself.',
+        storeNoPackage: 'This Store app has no package name to remove.',
+        storeProtected: 'Windows marks this app as part of the system and does not allow it to be removed.',
+        storeUnknown: 'Windows has not said whether this app can be removed, so it is left out of the batch.',
+        noCommand: 'No uninstall command is registered for this program.'
+      },
+      storeRemoveDialog: {
+        heading: (name) => `Remove ${name}?`,
+        body: 'This removes the app for your account, along with its settings and saved data. Unlike everything else Prune removes, it does not go to Quarantine and cannot be restored from here — getting it back means installing it again from the Microsoft Store.',
+        cancel: 'Cancel',
+        close: 'Close',
+        removeApp: 'Remove app',
+        removing: 'Removing…'
+      }
     }
   },
 
@@ -304,6 +372,74 @@ export const CATALOG = {
         folder: 'Gids',
         file: 'Lêer',
         cancel: 'Kanselleer'
+      }
+    },
+    applications: {
+      loading: 'Lees geïnstalleerde programme…',
+      loadError: (error) => `Kon nie programme laai nie: ${error}`,
+      search: { placeholder: 'Soek toepassings…', label: 'Soek toepassings' },
+      filters: {
+        all: 'Almal',
+        unused: 'Ongebruik',
+        store: 'Winkel',
+        extensions: 'Uitbreidings',
+        broken: 'Stukkend',
+        storeCount: (n) => `Winkel (${n})`,
+        extensionsCount: (n) => `Uitbreidings (${n})`,
+        brokenCount: (n) => `Stukkend (${n})`
+      },
+      columns: {
+        application: 'Toepassing',
+        size: 'Grootte',
+        version: 'Weergawe',
+        type: 'Tipe',
+        installed: 'Geïnstalleer',
+        new: 'Nuut',
+        company: 'Maatskappy',
+        website: 'Webwerf'
+      },
+      badges: { broken: 'Stukkend', running: 'Loop', store: 'Winkel', disabled: 'Gedeaktiveer', unused: 'Ongebruik' },
+      selectRow: (name) => `Kies ${name}`,
+      selectAll: 'Kies alles wat gewys word',
+      clearSelection: 'Maak keuse skoon',
+      reveal: { button: 'Gids', notFound: 'Nie gevind nie', ariaLabel: (name) => `Maak die gids vir ${name} oop` },
+      viaBrowser: 'via blaaier',
+      inWindows: { button: 'In Windows', ariaLabel: (name) => `Maak Windows-instellings oop — Windows laat nie toe dat ${name} hier verwyder word nie` },
+      uninstall: 'Deïnstalleer',
+      forceRemove: 'Dwing verwydering af',
+      empty: {
+        plain: 'Niks pas nie.',
+        withQuery: (query) => `Niks pas by "${query}" nie.`,
+        withFilter: (filterLabel) => `Niks pas in ${filterLabel} nie.`,
+        withQueryAndFilter: (query, filterLabel) => `Niks pas by "${query}" in ${filterLabel} nie.`,
+        hiddenCount: (count) => `${count} inskrywings word deur die huidige filter weggesteek.`,
+        clear: 'Maak soektog en filters skoon'
+      },
+      footer: {
+        selected: (count) => `${count} gekies`,
+        unknownSizes: (count) => `+ ${count} van onbekende grootte`,
+        clear: 'Maak skoon',
+        uninstallCount: (count) => `Deïnstalleer ${count} program${count === 1 ? '' : 'me'}`,
+        installations: (count) => `Installasies: ${count}`,
+        showingOf: (shown, total) => `Wys ${shown} van ${total}`,
+        newInDays: (count, days) => `${count} nuut in ${days} dae`,
+        total: 'totaal'
+      },
+      batchReasons: {
+        orphaned: "Sy deïnstalleerder is stukkend — gebruik eerder Dwing verwydering af.",
+        extension: 'Blaaieruitbreidings word vanaf die blaaier self verwyder.',
+        storeNoPackage: 'Hierdie winkeltoepassing het geen pakketnaam om te verwyder nie.',
+        storeProtected: 'Windows merk hierdie toepassing as deel van die stelsel en laat nie toe dat dit verwyder word nie.',
+        storeUnknown: 'Windows het nie gesê of hierdie toepassing verwyder kan word nie, dus word dit uit die bondel gelaat.',
+        noCommand: 'Geen deïnstallasiebevel is vir hierdie program geregistreer nie.'
+      },
+      storeRemoveDialog: {
+        heading: (name) => `Verwyder ${name}?`,
+        body: 'Dit verwyder die program vir jou rekening, saam met sy instellings en gestoorde data. Anders as alles anders wat Prune verwyder, gaan dit nie na Karantyn nie en kan dit nie hiervandaan herstel word nie — om dit terug te kry beteken jy moet dit weer vanaf die Microsoft Store installeer.',
+        cancel: 'Kanselleer',
+        close: 'Maak toe',
+        removeApp: 'Verwyder program',
+        removing: 'Verwyder tans…'
       }
     }
   },
@@ -443,6 +579,74 @@ export const CATALOG = {
         file: 'ملف',
         cancel: 'إلغاء'
       }
+    },
+    applications: {
+      loading: 'جارٍ قراءة البرامج المثبتة…',
+      loadError: (error) => `تعذّر تحميل البرامج: ${error}`,
+      search: { placeholder: 'البحث في التطبيقات…', label: 'البحث في التطبيقات' },
+      filters: {
+        all: 'الكل',
+        unused: 'غير مستخدم',
+        store: 'المتجر',
+        extensions: 'الإضافات',
+        broken: 'معطوب',
+        storeCount: (n) => `المتجر (${n})`,
+        extensionsCount: (n) => `الإضافات (${n})`,
+        brokenCount: (n) => `معطوب (${n})`
+      },
+      columns: {
+        application: 'التطبيق',
+        size: 'الحجم',
+        version: 'الإصدار',
+        type: 'النوع',
+        installed: 'تاريخ التثبيت',
+        new: 'جديد',
+        company: 'الشركة',
+        website: 'الموقع الإلكتروني'
+      },
+      badges: { broken: 'معطوب', running: 'قيد التشغيل', store: 'متجر', disabled: 'معطّل', unused: 'غير مستخدم' },
+      selectRow: (name) => `تحديد ${name}`,
+      selectAll: 'تحديد كل ما هو معروض',
+      clearSelection: 'إلغاء التحديد',
+      reveal: { button: 'المجلد', notFound: 'غير موجود', ariaLabel: (name) => `فتح مجلد ${name}` },
+      viaBrowser: 'عبر المتصفح',
+      inWindows: { button: 'في Windows', ariaLabel: (name) => `فتح إعدادات Windows — لا يسمح Windows بإزالة ${name} من هنا` },
+      uninstall: 'إلغاء التثبيت',
+      forceRemove: 'إزالة إجبارية',
+      empty: {
+        plain: 'لا توجد نتائج مطابقة.',
+        withQuery: (query) => `لا توجد نتائج مطابقة لـ "${query}".`,
+        withFilter: (filterLabel) => `لا توجد نتائج مطابقة في ${filterLabel}.`,
+        withQueryAndFilter: (query, filterLabel) => `لا توجد نتائج مطابقة لـ "${query}" في ${filterLabel}.`,
+        hiddenCount: (count) => `${count} إدخالات مخفية بسبب الفلتر الحالي.`,
+        clear: 'مسح البحث والفلاتر'
+      },
+      footer: {
+        selected: (count) => `${count} محدد`,
+        unknownSizes: (count) => `+ ${count} بحجم غير معروف`,
+        clear: 'مسح',
+        uninstallCount: (count) => `إلغاء تثبيت ${count} ${count === 1 ? 'برنامج' : 'برامج'}`,
+        installations: (count) => `عمليات التثبيت: ${count}`,
+        showingOf: (shown, total) => `عرض ${shown} من ${total}`,
+        newInDays: (count, days) => `${count} جديد خلال ${days} يوم`,
+        total: 'الإجمالي'
+      },
+      batchReasons: {
+        orphaned: 'برنامج إلغاء التثبيت الخاص به معطوب — استخدم الإزالة الإجبارية بدلاً من ذلك.',
+        extension: 'تتم إزالة إضافات المتصفح من المتصفح نفسه.',
+        storeNoPackage: 'لا يحتوي تطبيق المتجر هذا على اسم حزمة لإزالته.',
+        storeProtected: 'يعتبر Windows هذا التطبيق جزءًا من النظام ولا يسمح بإزالته.',
+        storeUnknown: 'لم يحدد Windows ما إذا كان يمكن إزالة هذا التطبيق، لذا تم استبعاده من الدفعة.',
+        noCommand: 'لا يوجد أمر إلغاء تثبيت مسجل لهذا البرنامج.'
+      },
+      storeRemoveDialog: {
+        heading: (name) => `إزالة ${name}؟`,
+        body: 'يؤدي هذا إلى إزالة التطبيق من حسابك، مع إعداداته والبيانات المحفوظة. على عكس كل ما يزيله Prune، فإن هذا لا ينتقل إلى الحجر الصحي ولا يمكن استعادته من هنا — استعادته تعني تثبيته مرة أخرى من متجر Microsoft.',
+        cancel: 'إلغاء',
+        close: 'إغلاق',
+        removeApp: 'إزالة التطبيق',
+        removing: 'جارٍ الإزالة…'
+      }
     }
   },
 
@@ -580,6 +784,74 @@ export const CATALOG = {
         folder: 'Carpeta',
         file: 'Fitxer',
         cancel: "Cancel·la"
+      }
+    },
+    applications: {
+      loading: 'Llegint els programes instal·lats…',
+      loadError: (error) => `No s'han pogut carregar els programes: ${error}`,
+      search: { placeholder: 'Cerca aplicacions…', label: 'Cerca aplicacions' },
+      filters: {
+        all: 'Totes',
+        unused: 'Sense ús',
+        store: 'Botiga',
+        extensions: 'Extensions',
+        broken: 'Trencades',
+        storeCount: (n) => `Botiga (${n})`,
+        extensionsCount: (n) => `Extensions (${n})`,
+        brokenCount: (n) => `Trencades (${n})`
+      },
+      columns: {
+        application: 'Aplicació',
+        size: 'Mida',
+        version: 'Versió',
+        type: 'Tipus',
+        installed: 'Instal·lat',
+        new: 'Nou',
+        company: 'Empresa',
+        website: 'Lloc web'
+      },
+      badges: { broken: 'Trencada', running: 'En execució', store: 'Botiga', disabled: 'Desactivada', unused: 'Sense ús' },
+      selectRow: (name) => `Selecciona ${name}`,
+      selectAll: "Selecciona tot el que es mostra",
+      clearSelection: 'Neteja la selecció',
+      reveal: { button: 'Carpeta', notFound: 'No trobada', ariaLabel: (name) => `Obre la carpeta de ${name}` },
+      viaBrowser: 'des del navegador',
+      inWindows: { button: 'A Windows', ariaLabel: (name) => `Obre la configuració de Windows — Windows no permet suprimir ${name} des d'aquí` },
+      uninstall: 'Desinstal·la',
+      forceRemove: 'Força la supressió',
+      empty: {
+        plain: 'Res coincideix.',
+        withQuery: (query) => `Res coincideix amb "${query}".`,
+        withFilter: (filterLabel) => `Res coincideix a ${filterLabel}.`,
+        withQueryAndFilter: (query, filterLabel) => `Res coincideix amb "${query}" a ${filterLabel}.`,
+        hiddenCount: (count) => `${count} entrades estan amagades pel filtre actual.`,
+        clear: 'Neteja la cerca i els filtres'
+      },
+      footer: {
+        selected: (count) => `${count} seleccionades`,
+        unknownSizes: (count) => `+ ${count} de mida desconeguda`,
+        clear: 'Neteja',
+        uninstallCount: (count) => `Desinstal·la ${count} programa${count === 1 ? '' : 's'}`,
+        installations: (count) => `Instal·lacions: ${count}`,
+        showingOf: (shown, total) => `Mostrant ${shown} de ${total}`,
+        newInDays: (count, days) => `${count} noves en ${days} dies`,
+        total: 'total'
+      },
+      batchReasons: {
+        orphaned: "El seu desinstal·lador està trencat — utilitza Força la supressió.",
+        extension: 'Les extensions del navegador se suprimeixen des del mateix navegador.',
+        storeNoPackage: 'Aquesta aplicació de la botiga no té nom de paquet per suprimir.',
+        storeProtected: 'El Windows marca aquesta aplicació com a part del sistema i no permet suprimir-la.',
+        storeUnknown: 'El Windows no ha indicat si aquesta aplicació es pot suprimir, per la qual cosa queda fora del lot.',
+        noCommand: "No hi ha cap ordre de desinstal·lació registrada per a aquest programa."
+      },
+      storeRemoveDialog: {
+        heading: (name) => `Vols eliminar ${name}?`,
+        body: "Això elimina l'aplicació del teu compte, juntament amb la seva configuració i les dades desades. A diferència de tot el que Prune elimina, això no va a la Quarantena i no es pot restaurar des d'aquí — recuperar-la vol dir instal·lar-la de nou des de la Microsoft Store.",
+        cancel: 'Cancel·la',
+        close: 'Tanca',
+        removeApp: "Elimina l'aplicació",
+        removing: 'Eliminant…'
       }
     }
   },
@@ -719,6 +991,74 @@ export const CATALOG = {
         file: 'Soubor',
         cancel: 'Zrušit'
       }
+    },
+    applications: {
+      loading: 'Načítání nainstalovaných programů…',
+      loadError: (error) => `Programy se nepodařilo načíst: ${error}`,
+      search: { placeholder: 'Hledat aplikace…', label: 'Hledat aplikace' },
+      filters: {
+        all: 'Vše',
+        unused: 'Nepoužívané',
+        store: 'Obchod',
+        extensions: 'Rozšíření',
+        broken: 'Poškozené',
+        storeCount: (n) => `Obchod (${n})`,
+        extensionsCount: (n) => `Rozšíření (${n})`,
+        brokenCount: (n) => `Poškozené (${n})`
+      },
+      columns: {
+        application: 'Aplikace',
+        size: 'Velikost',
+        version: 'Verze',
+        type: 'Typ',
+        installed: 'Nainstalováno',
+        new: 'Nové',
+        company: 'Společnost',
+        website: 'Web'
+      },
+      badges: { broken: 'Poškozeno', running: 'Spuštěno', store: 'Obchod', disabled: 'Vypnuto', unused: 'Nepoužívané' },
+      selectRow: (name) => `Vybrat ${name}`,
+      selectAll: 'Vybrat vše zobrazené',
+      clearSelection: 'Zrušit výběr',
+      reveal: { button: 'Složka', notFound: 'Nenalezeno', ariaLabel: (name) => `Otevřít složku pro ${name}` },
+      viaBrowser: 'přes prohlížeč',
+      inWindows: { button: 'Ve Windows', ariaLabel: (name) => `Otevřít nastavení Windows — Windows neumožňuje odebrat ${name} odtud` },
+      uninstall: 'Odinstalovat',
+      forceRemove: 'Vynutit odstranění',
+      empty: {
+        plain: 'Nic neodpovídá.',
+        withQuery: (query) => `Ničemu neodpovídá „${query}“.`,
+        withFilter: (filterLabel) => `Nic neodpovídá ve filtru ${filterLabel}.`,
+        withQueryAndFilter: (query, filterLabel) => `Ničemu neodpovídá „${query}“ ve filtru ${filterLabel}.`,
+        hiddenCount: (count) => `${count} položek je skryto aktuálním filtrem.`,
+        clear: 'Vymazat hledání a filtry'
+      },
+      footer: {
+        selected: (count) => `${count} vybráno`,
+        unknownSizes: (count) => `+ ${count} neznámé velikosti`,
+        clear: 'Vymazat',
+        uninstallCount: (count) => `Odinstalovat ${count} ${count === 1 ? 'program' : count < 5 ? 'programy' : 'programů'}`,
+        installations: (count) => `Instalace: ${count}`,
+        showingOf: (shown, total) => `Zobrazeno ${shown} z ${total}`,
+        newInDays: (count, days) => `${count} nových za ${days} dní`,
+        total: 'celkem'
+      },
+      batchReasons: {
+        orphaned: 'Jeho odinstalační program je poškozen — použijte místo toho Vynutit odstranění.',
+        extension: 'Rozšíření prohlížeče se odebírají přímo z prohlížeče.',
+        storeNoPackage: 'Tato aplikace z obchodu nemá název balíčku k odebrání.',
+        storeProtected: 'Windows označuje tuto aplikaci jako součást systému a neumožňuje její odebrání.',
+        storeUnknown: 'Windows neuvedl, zda lze tuto aplikaci odebrat, proto je vynechána z dávky.',
+        noCommand: 'Pro tento program není zaregistrován žádný odinstalační příkaz.'
+      },
+      storeRemoveDialog: {
+        heading: (name) => `Odebrat ${name}?`,
+        body: 'Tímto se aplikace odebere z vašeho účtu, včetně jejího nastavení a uložených dat. Na rozdíl od všeho ostatního, co Prune odebírá, nejde do Karantény a nelze ji odtud obnovit — její obnovení znamená opětovnou instalaci z Microsoft Storu.',
+        cancel: 'Zrušit',
+        close: 'Zavřít',
+        removeApp: 'Odebrat aplikaci',
+        removing: 'Odebírání…'
+      }
     }
   },
 
@@ -856,6 +1196,74 @@ export const CATALOG = {
         folder: 'Ffolder',
         file: 'Ffeil',
         cancel: 'Diddymu'
+      }
+    },
+    applications: {
+      loading: "Darllen rhaglenni wedi'u gosod…",
+      loadError: (error) => `Methwyd llwytho rhaglenni: ${error}`,
+      search: { placeholder: 'Chwilio rhaglenni…', label: 'Chwilio rhaglenni' },
+      filters: {
+        all: 'Pob un',
+        unused: "Heb eu defnyddio",
+        store: 'Siop',
+        extensions: 'Estyniadau',
+        broken: 'Wedi torri',
+        storeCount: (n) => `Siop (${n})`,
+        extensionsCount: (n) => `Estyniadau (${n})`,
+        brokenCount: (n) => `Wedi torri (${n})`
+      },
+      columns: {
+        application: 'Rhaglen',
+        size: 'Maint',
+        version: 'Fersiwn',
+        type: 'Math',
+        installed: 'Gosodwyd',
+        new: 'Newydd',
+        company: 'Cwmni',
+        website: 'Gwefan'
+      },
+      badges: { broken: "Wedi torri", running: 'Yn rhedeg', store: 'Siop', disabled: "Wedi'i analluogi", unused: "Heb ei ddefnyddio" },
+      selectRow: (name) => `Dewis ${name}`,
+      selectAll: "Dewis pob un a ddangosir",
+      clearSelection: "Clirio'r dewis",
+      reveal: { button: 'Ffolder', notFound: "Heb ei ganfod", ariaLabel: (name) => `Agor y ffolder ar gyfer ${name}` },
+      viaBrowser: "trwy'r porwr",
+      inWindows: { button: 'Yn Windows', ariaLabel: (name) => `Agor gosodiadau Windows — nid yw Windows yn caniatáu tynnu ${name} oddi yma` },
+      uninstall: 'Dadosod',
+      forceRemove: 'Gorfodi tynnu',
+      empty: {
+        plain: 'Dim byd yn cyfateb.',
+        withQuery: (query) => `Dim byd yn cyfateb i "${query}".`,
+        withFilter: (filterLabel) => `Dim byd yn cyfateb yn ${filterLabel}.`,
+        withQueryAndFilter: (query, filterLabel) => `Dim byd yn cyfateb i "${query}" yn ${filterLabel}.`,
+        hiddenCount: (count) => `Mae ${count} cofnod wedi'u cuddio gan yr hidlydd cyfredol.`,
+        clear: "Clirio'r chwiliad a'r hidlyddion"
+      },
+      footer: {
+        selected: (count) => `${count} wedi'u dewis`,
+        unknownSizes: (count) => `+ ${count} o faint anhysbys`,
+        clear: 'Clirio',
+        uninstallCount: (count) => `Dadosod ${count} rhaglen`,
+        installations: (count) => `Gosodiadau: ${count}`,
+        showingOf: (shown, total) => `Yn dangos ${shown} o ${total}`,
+        newInDays: (count, days) => `${count} yn newydd yn ${days} diwrnod`,
+        total: 'cyfanswm'
+      },
+      batchReasons: {
+        orphaned: "Mae ei ddadosodwr wedi torri — defnyddiwch Gorfodi tynnu yn lle hynny.",
+        extension: "Tynnir estyniadau porwr o'r porwr ei hun.",
+        storeNoPackage: "Nid oes gan yr ap siop hwn enw pecyn i'w dynnu.",
+        storeProtected: "Mae Windows yn nodi bod yr ap hwn yn rhan o'r system ac nid yw'n caniatáu ei dynnu.",
+        storeUnknown: "Nid yw Windows wedi dweud a ellir tynnu'r ap hwn, felly caiff ei adael allan o'r swp.",
+        noCommand: "Nid oes gorchymyn dadosod wedi'i gofrestru ar gyfer y rhaglen hon."
+      },
+      storeRemoveDialog: {
+        heading: (name) => `Dileu ${name}?`,
+        body: "Mae hyn yn dileu'r ap ar gyfer eich cyfrif, ynghyd â'i osodiadau a'i ddata wedi'i gadw. Yn wahanol i bopeth arall mae Prune yn ei ddileu, nid yw'n mynd i Gwarantin ac ni ellir ei adfer o'r fan hon — mae ei gael yn ôl yn golygu ei osod eto o'r Microsoft Store.",
+        cancel: 'Diddymu',
+        close: 'Cau',
+        removeApp: "Dileu'r ap",
+        removing: "Wrthi'n dileu…"
       }
     }
   },
@@ -995,6 +1403,74 @@ export const CATALOG = {
         file: 'Fil',
         cancel: 'Annuller'
       }
+    },
+    applications: {
+      loading: 'Læser installerede programmer…',
+      loadError: (error) => `Kunne ikke indlæse programmer: ${error}`,
+      search: { placeholder: 'Søg i programmer…', label: 'Søg i programmer' },
+      filters: {
+        all: 'Alle',
+        unused: 'Ubrugt',
+        store: 'Store',
+        extensions: 'Udvidelser',
+        broken: 'Defekt',
+        storeCount: (n) => `Store (${n})`,
+        extensionsCount: (n) => `Udvidelser (${n})`,
+        brokenCount: (n) => `Defekt (${n})`
+      },
+      columns: {
+        application: 'Program',
+        size: 'Størrelse',
+        version: 'Version',
+        type: 'Type',
+        installed: 'Installeret',
+        new: 'Ny',
+        company: 'Firma',
+        website: 'Websted'
+      },
+      badges: { broken: 'Defekt', running: 'Kører', store: 'Store', disabled: 'Deaktiveret', unused: 'Ubrugt' },
+      selectRow: (name) => `Vælg ${name}`,
+      selectAll: 'Vælg alle viste',
+      clearSelection: 'Ryd markering',
+      reveal: { button: 'Mappe', notFound: 'Ikke fundet', ariaLabel: (name) => `Åbn mappen for ${name}` },
+      viaBrowser: 'via browseren',
+      inWindows: { button: 'I Windows', ariaLabel: (name) => `Åbn Windows-indstillinger — Windows tillader ikke, at ${name} fjernes herfra` },
+      uninstall: 'Afinstaller',
+      forceRemove: 'Gennemtving fjernelse',
+      empty: {
+        plain: 'Intet matcher.',
+        withQuery: (query) => `Intet matcher "${query}".`,
+        withFilter: (filterLabel) => `Intet matcher i ${filterLabel}.`,
+        withQueryAndFilter: (query, filterLabel) => `Intet matcher "${query}" i ${filterLabel}.`,
+        hiddenCount: (count) => `${count} poster er skjult af det aktuelle filter.`,
+        clear: 'Ryd søgning og filtre'
+      },
+      footer: {
+        selected: (count) => `${count} valgt`,
+        unknownSizes: (count) => `+ ${count} af ukendt størrelse`,
+        clear: 'Ryd',
+        uninstallCount: (count) => `Afinstaller ${count} program${count === 1 ? '' : 'mer'}`,
+        installations: (count) => `Installationer: ${count}`,
+        showingOf: (shown, total) => `Viser ${shown} af ${total}`,
+        newInDays: (count, days) => `${count} nye inden for ${days} dage`,
+        total: 'i alt'
+      },
+      batchReasons: {
+        orphaned: 'Dets afinstallationsprogram er defekt — brug Gennemtving fjernelse i stedet.',
+        extension: 'Browserudvidelser fjernes fra selve browseren.',
+        storeNoPackage: 'Denne Store-app har intet pakkenavn at fjerne.',
+        storeProtected: 'Windows markerer denne app som en del af systemet og tillader ikke, at den fjernes.',
+        storeUnknown: 'Windows har ikke oplyst, om denne app kan fjernes, så den er udeladt fra batchen.',
+        noCommand: 'Der er ikke registreret nogen afinstallationskommando for dette program.'
+      },
+      storeRemoveDialog: {
+        heading: (name) => `Fjern ${name}?`,
+        body: 'Dette fjerner appen for din konto sammen med dens indstillinger og gemte data. I modsætning til alt andet, Prune fjerner, går den ikke i Karantæne og kan ikke gendannes herfra — for at få den tilbage skal du installere den igen fra Microsoft Store.',
+        cancel: 'Annuller',
+        close: 'Luk',
+        removeApp: 'Fjern app',
+        removing: 'Fjerner…'
+      }
     }
   },
 
@@ -1132,6 +1608,74 @@ export const CATALOG = {
         folder: 'Ordner',
         file: 'Datei',
         cancel: 'Abbrechen'
+      }
+    },
+    applications: {
+      loading: 'Installierte Programme werden gelesen…',
+      loadError: (error) => `Programme konnten nicht geladen werden: ${error}`,
+      search: { placeholder: 'Anwendungen durchsuchen…', label: 'Anwendungen durchsuchen' },
+      filters: {
+        all: 'Alle',
+        unused: 'Ungenutzt',
+        store: 'Store',
+        extensions: 'Erweiterungen',
+        broken: 'Defekt',
+        storeCount: (n) => `Store (${n})`,
+        extensionsCount: (n) => `Erweiterungen (${n})`,
+        brokenCount: (n) => `Defekt (${n})`
+      },
+      columns: {
+        application: 'Anwendung',
+        size: 'Größe',
+        version: 'Version',
+        type: 'Typ',
+        installed: 'Installiert',
+        new: 'Neu',
+        company: 'Unternehmen',
+        website: 'Website'
+      },
+      badges: { broken: 'Defekt', running: 'Läuft', store: 'Store', disabled: 'Deaktiviert', unused: 'Ungenutzt' },
+      selectRow: (name) => `${name} auswählen`,
+      selectAll: 'Alle angezeigten auswählen',
+      clearSelection: 'Auswahl aufheben',
+      reveal: { button: 'Ordner', notFound: 'Nicht gefunden', ariaLabel: (name) => `Ordner für ${name} öffnen` },
+      viaBrowser: 'über den Browser',
+      inWindows: { button: 'In Windows', ariaLabel: (name) => `Windows-Einstellungen öffnen — Windows erlaubt es nicht, ${name} von hier zu entfernen` },
+      uninstall: 'Deinstallieren',
+      forceRemove: 'Entfernung erzwingen',
+      empty: {
+        plain: 'Nichts entspricht der Suche.',
+        withQuery: (query) => `Nichts entspricht „${query}“.`,
+        withFilter: (filterLabel) => `Nichts entspricht in ${filterLabel}.`,
+        withQueryAndFilter: (query, filterLabel) => `Nichts entspricht „${query}“ in ${filterLabel}.`,
+        hiddenCount: (count) => `${count} Einträge sind durch den aktuellen Filter ausgeblendet.`,
+        clear: 'Suche und Filter zurücksetzen'
+      },
+      footer: {
+        selected: (count) => `${count} ausgewählt`,
+        unknownSizes: (count) => `+ ${count} unbekannter Größe`,
+        clear: 'Zurücksetzen',
+        uninstallCount: (count) => `${count} Programm${count === 1 ? '' : 'e'} deinstallieren`,
+        installations: (count) => `Installationen: ${count}`,
+        showingOf: (shown, total) => `${shown} von ${total} angezeigt`,
+        newInDays: (count, days) => `${count} neu in ${days} Tagen`,
+        total: 'gesamt'
+      },
+      batchReasons: {
+        orphaned: 'Das Deinstallationsprogramm ist defekt — verwenden Sie stattdessen Entfernung erzwingen.',
+        extension: 'Browsererweiterungen werden aus dem Browser selbst entfernt.',
+        storeNoPackage: 'Diese Store-App hat keinen Paketnamen zum Entfernen.',
+        storeProtected: 'Windows kennzeichnet diese App als Teil des Systems und erlaubt keine Entfernung.',
+        storeUnknown: 'Windows hat nicht angegeben, ob diese App entfernt werden kann, daher wird sie aus dem Stapel ausgeschlossen.',
+        noCommand: 'Für dieses Programm ist kein Deinstallationsbefehl registriert.'
+      },
+      storeRemoveDialog: {
+        heading: (name) => `${name} entfernen?`,
+        body: 'Dadurch wird die App für dein Konto entfernt, zusammen mit ihren Einstellungen und gespeicherten Daten. Anders als alles andere, was Prune entfernt, wandert sie nicht in die Quarantäne und kann von hier aus nicht wiederhergestellt werden — um sie zurückzubekommen, muss sie erneut aus dem Microsoft Store installiert werden.',
+        cancel: 'Abbrechen',
+        close: 'Schließen',
+        removeApp: 'App entfernen',
+        removing: 'Wird entfernt…'
       }
     }
   },
@@ -1271,6 +1815,74 @@ export const CATALOG = {
         file: 'Αρχείο',
         cancel: 'Ακύρωση'
       }
+    },
+    applications: {
+      loading: 'Ανάγνωση εγκατεστημένων προγραμμάτων…',
+      loadError: (error) => `Αδυναμία φόρτωσης προγραμμάτων: ${error}`,
+      search: { placeholder: 'Αναζήτηση εφαρμογών…', label: 'Αναζήτηση εφαρμογών' },
+      filters: {
+        all: 'Όλα',
+        unused: 'Αχρησιμοποίητα',
+        store: 'Κατάστημα',
+        extensions: 'Επεκτάσεις',
+        broken: 'Κατεστραμμένα',
+        storeCount: (n) => `Κατάστημα (${n})`,
+        extensionsCount: (n) => `Επεκτάσεις (${n})`,
+        brokenCount: (n) => `Κατεστραμμένα (${n})`
+      },
+      columns: {
+        application: 'Εφαρμογή',
+        size: 'Μέγεθος',
+        version: 'Έκδοση',
+        type: 'Τύπος',
+        installed: 'Εγκαταστάθηκε',
+        new: 'Νέο',
+        company: 'Εταιρεία',
+        website: 'Ιστότοπος'
+      },
+      badges: { broken: 'Κατεστραμμένο', running: 'Σε λειτουργία', store: 'Κατάστημα', disabled: 'Απενεργοποιημένο', unused: 'Αχρησιμοποίητο' },
+      selectRow: (name) => `Επιλογή ${name}`,
+      selectAll: 'Επιλογή όλων των εμφανιζόμενων',
+      clearSelection: 'Απαλοιφή επιλογής',
+      reveal: { button: 'Φάκελος', notFound: 'Δεν βρέθηκε', ariaLabel: (name) => `Άνοιγμα του φακέλου για ${name}` },
+      viaBrowser: 'μέσω του προγράμματος περιήγησης',
+      inWindows: { button: 'Στα Windows', ariaLabel: (name) => `Άνοιγμα ρυθμίσεων Windows — τα Windows δεν επιτρέπουν την κατάργηση του ${name} από εδώ` },
+      uninstall: 'Απεγκατάσταση',
+      forceRemove: 'Εξαναγκασμένη κατάργηση',
+      empty: {
+        plain: 'Τίποτα δεν ταιριάζει.',
+        withQuery: (query) => `Τίποτα δεν ταιριάζει με «${query}».`,
+        withFilter: (filterLabel) => `Τίποτα δεν ταιριάζει στο ${filterLabel}.`,
+        withQueryAndFilter: (query, filterLabel) => `Τίποτα δεν ταιριάζει με «${query}» στο ${filterLabel}.`,
+        hiddenCount: (count) => `${count} καταχωρίσεις είναι κρυμμένες από το τρέχον φίλτρο.`,
+        clear: 'Απαλοιφή αναζήτησης και φίλτρων'
+      },
+      footer: {
+        selected: (count) => `${count} επιλέχθηκαν`,
+        unknownSizes: (count) => `+ ${count} με άγνωστο μέγεθος`,
+        clear: 'Απαλοιφή',
+        uninstallCount: (count) => `Απεγκατάσταση ${count} ${count === 1 ? 'προγράμματος' : 'προγραμμάτων'}`,
+        installations: (count) => `Εγκαταστάσεις: ${count}`,
+        showingOf: (shown, total) => `Εμφάνιση ${shown} από ${total}`,
+        newInDays: (count, days) => `${count} νέα σε ${days} ημέρες`,
+        total: 'σύνολο'
+      },
+      batchReasons: {
+        orphaned: "Το πρόγραμμα απεγκατάστασής του είναι κατεστραμμένο — χρησιμοποιήστε αντ' αυτού την εξαναγκασμένη κατάργηση.",
+        extension: 'Οι επεκτάσεις του προγράμματος περιήγησης καταργούνται από το ίδιο το πρόγραμμα περιήγησης.',
+        storeNoPackage: 'Αυτή η εφαρμογή καταστήματος δεν έχει όνομα πακέτου για κατάργηση.',
+        storeProtected: 'Τα Windows επισημαίνουν αυτήν την εφαρμογή ως μέρος του συστήματος και δεν επιτρέπουν την κατάργησή της.',
+        storeUnknown: 'Τα Windows δεν έχουν δηλώσει αν αυτή η εφαρμογή μπορεί να καταργηθεί, οπότε παραλείπεται από τη μαζική ενέργεια.',
+        noCommand: 'Δεν έχει καταχωριστεί εντολή απεγκατάστασης για αυτό το πρόγραμμα.'
+      },
+      storeRemoveDialog: {
+        heading: (name) => `Αφαίρεση ${name};`,
+        body: 'Αυτό αφαιρεί την εφαρμογή για τον λογαριασμό σας, μαζί με τις ρυθμίσεις και τα αποθηκευμένα δεδομένα της. Σε αντίθεση με οτιδήποτε άλλο αφαιρεί το Prune, αυτό δεν μεταφέρεται σε καραντίνα και δεν μπορεί να επαναφερθεί από εδώ — για να την επαναφέρετε θα πρέπει να την εγκαταστήσετε ξανά από το Microsoft Store.',
+        cancel: 'Ακύρωση',
+        close: 'Κλείσιμο',
+        removeApp: 'Αφαίρεση εφαρμογής',
+        removing: 'Αφαίρεση…'
+      }
     }
   },
 
@@ -1408,6 +2020,74 @@ export const CATALOG = {
         folder: 'Carpeta',
         file: 'Archivo',
         cancel: 'Cancelar'
+      }
+    },
+    applications: {
+      loading: 'Leyendo programas instalados…',
+      loadError: (error) => `No se pudieron cargar los programas: ${error}`,
+      search: { placeholder: 'Buscar aplicaciones…', label: 'Buscar aplicaciones' },
+      filters: {
+        all: 'Todas',
+        unused: 'Sin usar',
+        store: 'Tienda',
+        extensions: 'Extensiones',
+        broken: 'Rotas',
+        storeCount: (n) => `Tienda (${n})`,
+        extensionsCount: (n) => `Extensiones (${n})`,
+        brokenCount: (n) => `Rotas (${n})`
+      },
+      columns: {
+        application: 'Aplicación',
+        size: 'Tamaño',
+        version: 'Versión',
+        type: 'Tipo',
+        installed: 'Instalado',
+        new: 'Nuevo',
+        company: 'Empresa',
+        website: 'Sitio web'
+      },
+      badges: { broken: 'Rota', running: 'En ejecución', store: 'Tienda', disabled: 'Deshabilitada', unused: 'Sin usar' },
+      selectRow: (name) => `Seleccionar ${name}`,
+      selectAll: 'Seleccionar todo lo mostrado',
+      clearSelection: 'Borrar selección',
+      reveal: { button: 'Carpeta', notFound: 'No encontrada', ariaLabel: (name) => `Abrir la carpeta de ${name}` },
+      viaBrowser: 'a través del navegador',
+      inWindows: { button: 'En Windows', ariaLabel: (name) => `Abrir la configuración de Windows — Windows no permite quitar ${name} desde aquí` },
+      uninstall: 'Desinstalar',
+      forceRemove: 'Forzar eliminación',
+      empty: {
+        plain: 'Nada coincide.',
+        withQuery: (query) => `Nada coincide con "${query}".`,
+        withFilter: (filterLabel) => `Nada coincide en ${filterLabel}.`,
+        withQueryAndFilter: (query, filterLabel) => `Nada coincide con "${query}" en ${filterLabel}.`,
+        hiddenCount: (count) => `${count} entradas están ocultas por el filtro actual.`,
+        clear: 'Borrar búsqueda y filtros'
+      },
+      footer: {
+        selected: (count) => `${count} seleccionados`,
+        unknownSizes: (count) => `+ ${count} de tamaño desconocido`,
+        clear: 'Borrar',
+        uninstallCount: (count) => `Desinstalar ${count} programa${count === 1 ? '' : 's'}`,
+        installations: (count) => `Instalaciones: ${count}`,
+        showingOf: (shown, total) => `Mostrando ${shown} de ${total}`,
+        newInDays: (count, days) => `${count} nuevos en ${days} días`,
+        total: 'total'
+      },
+      batchReasons: {
+        orphaned: 'Su desinstalador está roto — use Forzar eliminación en su lugar.',
+        extension: 'Las extensiones del navegador se eliminan desde el propio navegador.',
+        storeNoPackage: 'Esta aplicación de la tienda no tiene nombre de paquete para eliminar.',
+        storeProtected: 'Windows marca esta aplicación como parte del sistema y no permite eliminarla.',
+        storeUnknown: 'Windows no ha indicado si esta aplicación se puede eliminar, por lo que se excluye del lote.',
+        noCommand: 'No hay ningún comando de desinstalación registrado para este programa.'
+      },
+      storeRemoveDialog: {
+        heading: (name) => `¿Quitar ${name}?`,
+        body: 'Esto quita la aplicación de tu cuenta, junto con su configuración y datos guardados. A diferencia de todo lo demás que Prune quita, esto no va a la Cuarentena y no se puede restaurar desde aquí — recuperarla implica instalarla de nuevo desde la Microsoft Store.',
+        cancel: 'Cancelar',
+        close: 'Cerrar',
+        removeApp: 'Quitar aplicación',
+        removing: 'Quitando…'
       }
     }
   },
@@ -1547,6 +2227,74 @@ export const CATALOG = {
         file: 'Fail',
         cancel: 'Tühista'
       }
+    },
+    applications: {
+      loading: 'Installitud programmide lugemine…',
+      loadError: (error) => `Programme ei õnnestunud laadida: ${error}`,
+      search: { placeholder: 'Otsi rakendusi…', label: 'Otsi rakendusi' },
+      filters: {
+        all: 'Kõik',
+        unused: 'Kasutamata',
+        store: 'Pood',
+        extensions: 'Laiendused',
+        broken: 'Katki',
+        storeCount: (n) => `Pood (${n})`,
+        extensionsCount: (n) => `Laiendused (${n})`,
+        brokenCount: (n) => `Katki (${n})`
+      },
+      columns: {
+        application: 'Rakendus',
+        size: 'Suurus',
+        version: 'Versioon',
+        type: 'Tüüp',
+        installed: 'Installitud',
+        new: 'Uus',
+        company: 'Ettevõte',
+        website: 'Veebisait'
+      },
+      badges: { broken: 'Katki', running: 'Töötab', store: 'Pood', disabled: 'Keelatud', unused: 'Kasutamata' },
+      selectRow: (name) => `Vali ${name}`,
+      selectAll: 'Vali kõik kuvatud',
+      clearSelection: 'Tühista valik',
+      reveal: { button: 'Kaust', notFound: 'Ei leitud', ariaLabel: (name) => `Ava kausta ${name} jaoks` },
+      viaBrowser: 'brauseri kaudu',
+      inWindows: { button: 'Windowsis', ariaLabel: (name) => `Ava Windowsi seaded — Windows ei luba rakendust ${name} siit eemaldada` },
+      uninstall: 'Desinstalli',
+      forceRemove: 'Sunni eemaldamist',
+      empty: {
+        plain: 'Miski ei vasta.',
+        withQuery: (query) => `Miski ei vasta päringule "${query}".`,
+        withFilter: (filterLabel) => `Miski ei vasta filtris ${filterLabel}.`,
+        withQueryAndFilter: (query, filterLabel) => `Miski ei vasta päringule "${query}" filtris ${filterLabel}.`,
+        hiddenCount: (count) => `${count} kirjet on praeguse filtriga peidetud.`,
+        clear: 'Tühjenda otsing ja filtrid'
+      },
+      footer: {
+        selected: (count) => `${count} valitud`,
+        unknownSizes: (count) => `+ ${count} teadmata suurusega`,
+        clear: 'Tühjenda',
+        uninstallCount: (count) => `Desinstalli ${count} programmi`,
+        installations: (count) => `Installatsioone: ${count}`,
+        showingOf: (shown, total) => `Kuvatakse ${shown} / ${total}`,
+        newInDays: (count, days) => `${count} uut ${days} päeva jooksul`,
+        total: 'kokku'
+      },
+      batchReasons: {
+        orphaned: 'Selle desinstallija on katki — kasutage selle asemel käsku Sunni eemaldamist.',
+        extension: 'Brauserilaiendused eemaldatakse brauserist endast.',
+        storeNoPackage: 'Sellel poerakendusel pole eemaldamiseks paketi nime.',
+        storeProtected: 'Windows märgib selle rakenduse süsteemi osaks ega luba seda eemaldada.',
+        storeUnknown: 'Windows ei ole öelnud, kas seda rakendust saab eemaldada, seega jäetakse see partiist välja.',
+        noCommand: 'Selle programmi jaoks pole registreeritud ühtegi desinstallimiskäsku.'
+      },
+      storeRemoveDialog: {
+        heading: (name) => `Eemaldada ${name}?`,
+        body: "See eemaldab rakenduse sinu konto jaoks koos selle seadete ja salvestatud andmetega. Erinevalt kõigest muust, mida Prune eemaldab, ei lähe see Karantiini ja seda ei saa siit taastada — selle tagasisaamiseks tuleb see uuesti Microsoft Store'ist installida.",
+        cancel: 'Tühista',
+        close: 'Sulge',
+        removeApp: 'Eemalda rakendus',
+        removing: 'Eemaldamine…'
+      }
     }
   },
 
@@ -1684,6 +2432,74 @@ export const CATALOG = {
         folder: 'Kansio',
         file: 'Tiedosto',
         cancel: 'Peruuta'
+      }
+    },
+    applications: {
+      loading: 'Luetaan asennettuja ohjelmia…',
+      loadError: (error) => `Ohjelmien lataaminen epäonnistui: ${error}`,
+      search: { placeholder: 'Hae sovelluksia…', label: 'Hae sovelluksia' },
+      filters: {
+        all: 'Kaikki',
+        unused: 'Käyttämättömät',
+        store: 'Kauppa',
+        extensions: 'Laajennukset',
+        broken: 'Rikkinäiset',
+        storeCount: (n) => `Kauppa (${n})`,
+        extensionsCount: (n) => `Laajennukset (${n})`,
+        brokenCount: (n) => `Rikkinäiset (${n})`
+      },
+      columns: {
+        application: 'Sovellus',
+        size: 'Koko',
+        version: 'Versio',
+        type: 'Tyyppi',
+        installed: 'Asennettu',
+        new: 'Uusi',
+        company: 'Yritys',
+        website: 'Verkkosivusto'
+      },
+      badges: { broken: 'Rikki', running: 'Käynnissä', store: 'Kauppa', disabled: 'Poistettu käytöstä', unused: 'Käyttämätön' },
+      selectRow: (name) => `Valitse ${name}`,
+      selectAll: 'Valitse kaikki näkyvät',
+      clearSelection: 'Tyhjennä valinta',
+      reveal: { button: 'Kansio', notFound: 'Ei löytynyt', ariaLabel: (name) => `Avaa kohteen ${name} kansio` },
+      viaBrowser: 'selaimen kautta',
+      inWindows: { button: 'Windowsissa', ariaLabel: (name) => `Avaa Windowsin asetukset — Windows ei salli kohteen ${name} poistamista täältä` },
+      uninstall: 'Poista',
+      forceRemove: 'Pakota poisto',
+      empty: {
+        plain: 'Ei osumia.',
+        withQuery: (query) => `Ei osumia haulle "${query}".`,
+        withFilter: (filterLabel) => `Ei osumia suodattimessa ${filterLabel}.`,
+        withQueryAndFilter: (query, filterLabel) => `Ei osumia haulle "${query}" suodattimessa ${filterLabel}.`,
+        hiddenCount: (count) => `${count} kohdetta on piilotettu nykyisellä suodattimella.`,
+        clear: 'Tyhjennä haku ja suodattimet'
+      },
+      footer: {
+        selected: (count) => `${count} valittu`,
+        unknownSizes: (count) => `+ ${count} tuntematonta kokoa`,
+        clear: 'Tyhjennä',
+        uninstallCount: (count) => `Poista ${count} ohjelma${count === 1 ? '' : 'a'}`,
+        installations: (count) => `Asennuksia: ${count}`,
+        showingOf: (shown, total) => `Näytetään ${shown}/${total}`,
+        newInDays: (count, days) => `${count} uutta ${days} päivän aikana`,
+        total: 'yhteensä'
+      },
+      batchReasons: {
+        orphaned: 'Sen poisto-ohjelma on rikki — käytä sen sijaan Pakota poisto -toimintoa.',
+        extension: 'Selainlaajennukset poistetaan itse selaimesta.',
+        storeNoPackage: 'Tällä kauppasovelluksella ei ole poistettavaa pakettinimeä.',
+        storeProtected: 'Windows merkitsee tämän sovelluksen osaksi järjestelmää eikä salli sen poistamista.',
+        storeUnknown: 'Windows ei ole ilmoittanut, voiko tämän sovelluksen poistaa, joten se jätetään erän ulkopuolelle.',
+        noCommand: 'Tälle ohjelmalle ei ole rekisteröity poistokomentoa.'
+      },
+      storeRemoveDialog: {
+        heading: (name) => `Poistetaanko ${name}?`,
+        body: 'Tämä poistaa sovelluksen tililtäsi sekä sen asetukset ja tallennetut tiedot. Toisin kuin kaikki muu, minkä Prune poistaa, tämä ei siirry Karanteeniin eikä sitä voi palauttaa täältä — sen saaminen takaisin tarkoittaa sen asentamista uudelleen Microsoft Storesta.',
+        cancel: 'Peruuta',
+        close: 'Sulje',
+        removeApp: 'Poista sovellus',
+        removing: 'Poistetaan…'
       }
     }
   },
@@ -1823,6 +2639,74 @@ export const CATALOG = {
         file: 'Fichier',
         cancel: 'Annuler'
       }
+    },
+    applications: {
+      loading: 'Lecture des programmes installés…',
+      loadError: (error) => `Impossible de charger les programmes : ${error}`,
+      search: { placeholder: 'Rechercher des applications…', label: 'Rechercher des applications' },
+      filters: {
+        all: 'Toutes',
+        unused: 'Inutilisées',
+        store: 'Store',
+        extensions: 'Extensions',
+        broken: 'Corrompues',
+        storeCount: (n) => `Store (${n})`,
+        extensionsCount: (n) => `Extensions (${n})`,
+        brokenCount: (n) => `Corrompues (${n})`
+      },
+      columns: {
+        application: 'Application',
+        size: 'Taille',
+        version: 'Version',
+        type: 'Type',
+        installed: 'Installé',
+        new: 'Nouveau',
+        company: 'Société',
+        website: 'Site web'
+      },
+      badges: { broken: 'Corrompu', running: 'En cours', store: 'Store', disabled: 'Désactivé', unused: 'Inutilisé' },
+      selectRow: (name) => `Sélectionner ${name}`,
+      selectAll: 'Sélectionner tout ce qui est affiché',
+      clearSelection: 'Effacer la sélection',
+      reveal: { button: 'Dossier', notFound: 'Introuvable', ariaLabel: (name) => `Ouvrir le dossier de ${name}` },
+      viaBrowser: 'via le navigateur',
+      inWindows: { button: 'Dans Windows', ariaLabel: (name) => `Ouvrir les paramètres Windows — Windows ne permet pas de supprimer ${name} depuis ici` },
+      uninstall: 'Désinstaller',
+      forceRemove: 'Forcer la suppression',
+      empty: {
+        plain: 'Aucune correspondance.',
+        withQuery: (query) => `Aucune correspondance pour « ${query} ».`,
+        withFilter: (filterLabel) => `Aucune correspondance dans ${filterLabel}.`,
+        withQueryAndFilter: (query, filterLabel) => `Aucune correspondance pour « ${query} » dans ${filterLabel}.`,
+        hiddenCount: (count) => `${count} entrées sont masquées par le filtre actuel.`,
+        clear: 'Effacer la recherche et les filtres'
+      },
+      footer: {
+        selected: (count) => `${count} sélectionné${count === 1 ? '' : 's'}`,
+        unknownSizes: (count) => `+ ${count} de taille inconnue`,
+        clear: 'Effacer',
+        uninstallCount: (count) => `Désinstaller ${count} programme${count === 1 ? '' : 's'}`,
+        installations: (count) => `Installations : ${count}`,
+        showingOf: (shown, total) => `Affichage de ${shown} sur ${total}`,
+        newInDays: (count, days) => `${count} nouveau${count === 1 ? '' : 'x'} en ${days} jours`,
+        total: 'total'
+      },
+      batchReasons: {
+        orphaned: 'Son désinstallateur est corrompu — utilisez plutôt Forcer la suppression.',
+        extension: 'Les extensions de navigateur sont supprimées depuis le navigateur lui-même.',
+        storeNoPackage: "Cette application du Store n'a pas de nom de paquet à supprimer.",
+        storeProtected: 'Windows marque cette application comme faisant partie du système et ne permet pas de la supprimer.',
+        storeUnknown: "Windows n'a pas indiqué si cette application peut être supprimée, elle est donc exclue du lot.",
+        noCommand: "Aucune commande de désinstallation n'est enregistrée pour ce programme."
+      },
+      storeRemoveDialog: {
+        heading: (name) => `Supprimer ${name} ?`,
+        body: "Cela supprime l'application de votre compte, ainsi que ses paramètres et ses données enregistrées. Contrairement à tout ce que Prune supprime, elle ne va pas dans la Quarantaine et ne peut pas être restaurée depuis ici — la récupérer signifie la réinstaller depuis le Microsoft Store.",
+        cancel: 'Annuler',
+        close: 'Fermer',
+        removeApp: "Supprimer l'appli",
+        removing: 'Suppression…'
+      }
     }
   },
 
@@ -1960,6 +2844,74 @@ export const CATALOG = {
         folder: 'תיקייה',
         file: 'קובץ',
         cancel: 'ביטול'
+      }
+    },
+    applications: {
+      loading: 'קורא תוכניות מותקנות…',
+      loadError: (error) => `טעינת התוכניות נכשלה: ${error}`,
+      search: { placeholder: 'חיפוש יישומים…', label: 'חיפוש יישומים' },
+      filters: {
+        all: 'הכול',
+        unused: 'לא בשימוש',
+        store: 'חנות',
+        extensions: 'תוספים',
+        broken: 'פגומים',
+        storeCount: (n) => `חנות (${n})`,
+        extensionsCount: (n) => `תוספים (${n})`,
+        brokenCount: (n) => `פגומים (${n})`
+      },
+      columns: {
+        application: 'יישום',
+        size: 'גודל',
+        version: 'גרסה',
+        type: 'סוג',
+        installed: 'הותקן',
+        new: 'חדש',
+        company: 'חברה',
+        website: 'אתר אינטרנט'
+      },
+      badges: { broken: 'פגום', running: 'פועל', store: 'חנות', disabled: 'מושבת', unused: 'לא בשימוש' },
+      selectRow: (name) => `בחר את ${name}`,
+      selectAll: 'בחר את כל המוצג',
+      clearSelection: 'נקה בחירה',
+      reveal: { button: 'תיקייה', notFound: 'לא נמצא', ariaLabel: (name) => `פתח את התיקייה של ${name}` },
+      viaBrowser: 'דרך הדפדפן',
+      inWindows: { button: 'ב-Windows', ariaLabel: (name) => `פתח את הגדרות Windows — Windows אינו מאפשר להסיר את ${name} מכאן` },
+      uninstall: 'הסר התקנה',
+      forceRemove: 'הסרה מאולצת',
+      empty: {
+        plain: 'אין התאמות.',
+        withQuery: (query) => `אין התאמות עבור "${query}".`,
+        withFilter: (filterLabel) => `אין התאמות ב-${filterLabel}.`,
+        withQueryAndFilter: (query, filterLabel) => `אין התאמות עבור "${query}" ב-${filterLabel}.`,
+        hiddenCount: (count) => `${count} רשומות מוסתרות על ידי המסנן הנוכחי.`,
+        clear: 'נקה חיפוש ומסננים'
+      },
+      footer: {
+        selected: (count) => `${count} נבחרו`,
+        unknownSizes: (count) => `+ ${count} בגודל לא ידוע`,
+        clear: 'נקה',
+        uninstallCount: (count) => `הסר התקנה של ${count} תוכניות`,
+        installations: (count) => `התקנות: ${count}`,
+        showingOf: (shown, total) => `מציג ${shown} מתוך ${total}`,
+        newInDays: (count, days) => `${count} חדשים ב-${days} הימים האחרונים`,
+        total: 'סך הכול'
+      },
+      batchReasons: {
+        orphaned: 'תוכנית ההסרה שלו פגומה — השתמש בהסרה מאולצת במקום זאת.',
+        extension: 'תוספי דפדפן מוסרים מהדפדפן עצמו.',
+        storeNoPackage: 'ליישום חנות זה אין שם חבילה להסרה.',
+        storeProtected: 'Windows מסמן יישום זה כחלק מהמערכת ואינו מאפשר את הסרתו.',
+        storeUnknown: 'Windows לא ציין אם ניתן להסיר יישום זה, ולכן הוא מושמט מהאצווה.',
+        noCommand: 'לא רשומה פקודת הסרת התקנה עבור תוכנית זו.'
+      },
+      storeRemoveDialog: {
+        heading: (name) => `להסיר את ${name}?`,
+        body: 'פעולה זו מסירה את האפליקציה עבור החשבון שלך, יחד עם ההגדרות והנתונים השמורים שלה. בשונה מכל דבר אחר ש-Prune מסיר, היא אינה עוברת להסגר ולא ניתן לשחזר אותה מכאן — כדי להחזיר אותה יש להתקין אותה מחדש מחנות Microsoft.',
+        cancel: 'ביטול',
+        close: 'סגור',
+        removeApp: 'הסר אפליקציה',
+        removing: 'מסיר…'
       }
     }
   },
@@ -2099,6 +3051,74 @@ export const CATALOG = {
         file: 'Fájl',
         cancel: 'Mégse'
       }
+    },
+    applications: {
+      loading: 'Telepített programok beolvasása…',
+      loadError: (error) => `A programok betöltése sikertelen: ${error}`,
+      search: { placeholder: 'Alkalmazások keresése…', label: 'Alkalmazások keresése' },
+      filters: {
+        all: 'Összes',
+        unused: 'Nem használt',
+        store: 'Áruház',
+        extensions: 'Bővítmények',
+        broken: 'Sérült',
+        storeCount: (n) => `Áruház (${n})`,
+        extensionsCount: (n) => `Bővítmények (${n})`,
+        brokenCount: (n) => `Sérült (${n})`
+      },
+      columns: {
+        application: 'Alkalmazás',
+        size: 'Méret',
+        version: 'Verzió',
+        type: 'Típus',
+        installed: 'Telepítve',
+        new: 'Új',
+        company: 'Vállalat',
+        website: 'Weboldal'
+      },
+      badges: { broken: 'Sérült', running: 'Fut', store: 'Áruház', disabled: 'Letiltva', unused: 'Nem használt' },
+      selectRow: (name) => `${name} kiválasztása`,
+      selectAll: 'Az összes megjelenített kiválasztása',
+      clearSelection: 'Kijelölés törlése',
+      reveal: { button: 'Mappa', notFound: 'Nem található', ariaLabel: (name) => `A(z) ${name} mappájának megnyitása` },
+      viaBrowser: 'a böngészőn keresztül',
+      inWindows: { button: 'A Windowsban', ariaLabel: (name) => `Windows-beállítások megnyitása — a Windows nem engedélyezi a(z) ${name} eltávolítását innen` },
+      uninstall: 'Eltávolítás',
+      forceRemove: 'Eltávolítás kényszerítése',
+      empty: {
+        plain: 'Semmi sem egyezik.',
+        withQuery: (query) => `Semmi sem egyezik ezzel: „${query}”.`,
+        withFilter: (filterLabel) => `Semmi sem egyezik itt: ${filterLabel}.`,
+        withQueryAndFilter: (query, filterLabel) => `Semmi sem egyezik ezzel: „${query}” itt: ${filterLabel}.`,
+        hiddenCount: (count) => `${count} bejegyzést elrejt az aktuális szűrő.`,
+        clear: 'Keresés és szűrők törlése'
+      },
+      footer: {
+        selected: (count) => `${count} kiválasztva`,
+        unknownSizes: (count) => `+ ${count} ismeretlen méretű`,
+        clear: 'Törlés',
+        uninstallCount: (count) => `${count} program eltávolítása`,
+        installations: (count) => `Telepítések: ${count}`,
+        showingOf: (shown, total) => `${shown} / ${total} megjelenítve`,
+        newInDays: (count, days) => `${count} új ${days} napon belül`,
+        total: 'összesen'
+      },
+      batchReasons: {
+        orphaned: 'Az eltávolítója sérült — használja helyette az Eltávolítás kényszerítése funkciót.',
+        extension: 'A böngészőbővítményeket magából a böngészőből lehet eltávolítani.',
+        storeNoPackage: 'Ennek az áruházi alkalmazásnak nincs csomagneve az eltávolításhoz.',
+        storeProtected: 'A Windows a rendszer részének jelöli ezt az alkalmazást, és nem engedélyezi az eltávolítását.',
+        storeUnknown: 'A Windows nem közölte, hogy ez az alkalmazás eltávolítható-e, ezért kimarad a kötegből.',
+        noCommand: 'Ehhez a programhoz nincs regisztrálva eltávolítási parancs.'
+      },
+      storeRemoveDialog: {
+        heading: (name) => `Eltávolítja: ${name}?`,
+        body: 'Ez eltávolítja az alkalmazást a fiókodból, a beállításaival és mentett adataival együtt. Ellentétben mindennel, amit a Prune eltávolít, ez nem kerül a Karanténba, és innen nem állítható vissza — a visszaszerzéséhez újra kell telepíteni a Microsoft Store-ból.',
+        cancel: 'Mégse',
+        close: 'Bezárás',
+        removeApp: 'Alkalmazás eltávolítása',
+        removing: 'Eltávolítás…'
+      }
     }
   },
 
@@ -2236,6 +3256,74 @@ export const CATALOG = {
         folder: 'Folder',
         file: 'File',
         cancel: 'Batal'
+      }
+    },
+    applications: {
+      loading: 'Membaca program yang terpasang…',
+      loadError: (error) => `Gagal memuat program: ${error}`,
+      search: { placeholder: 'Cari aplikasi…', label: 'Cari aplikasi' },
+      filters: {
+        all: 'Semua',
+        unused: 'Tidak digunakan',
+        store: 'Store',
+        extensions: 'Ekstensi',
+        broken: 'Rusak',
+        storeCount: (n) => `Store (${n})`,
+        extensionsCount: (n) => `Ekstensi (${n})`,
+        brokenCount: (n) => `Rusak (${n})`
+      },
+      columns: {
+        application: 'Aplikasi',
+        size: 'Ukuran',
+        version: 'Versi',
+        type: 'Jenis',
+        installed: 'Terpasang',
+        new: 'Baru',
+        company: 'Perusahaan',
+        website: 'Situs web'
+      },
+      badges: { broken: 'Rusak', running: 'Berjalan', store: 'Store', disabled: 'Dinonaktifkan', unused: 'Tidak digunakan' },
+      selectRow: (name) => `Pilih ${name}`,
+      selectAll: 'Pilih semua yang ditampilkan',
+      clearSelection: 'Hapus pilihan',
+      reveal: { button: 'Folder', notFound: 'Tidak ditemukan', ariaLabel: (name) => `Buka folder untuk ${name}` },
+      viaBrowser: 'melalui browser',
+      inWindows: { button: 'Di Windows', ariaLabel: (name) => `Buka pengaturan Windows — Windows tidak mengizinkan ${name} dihapus dari sini` },
+      uninstall: 'Copot pemasangan',
+      forceRemove: 'Paksa hapus',
+      empty: {
+        plain: 'Tidak ada yang cocok.',
+        withQuery: (query) => `Tidak ada yang cocok dengan "${query}".`,
+        withFilter: (filterLabel) => `Tidak ada yang cocok di ${filterLabel}.`,
+        withQueryAndFilter: (query, filterLabel) => `Tidak ada yang cocok dengan "${query}" di ${filterLabel}.`,
+        hiddenCount: (count) => `${count} entri disembunyikan oleh filter saat ini.`,
+        clear: 'Hapus pencarian dan filter'
+      },
+      footer: {
+        selected: (count) => `${count} dipilih`,
+        unknownSizes: (count) => `+ ${count} berukuran tidak diketahui`,
+        clear: 'Hapus',
+        uninstallCount: (count) => `Copot pemasangan ${count} program`,
+        installations: (count) => `Pemasangan: ${count}`,
+        showingOf: (shown, total) => `Menampilkan ${shown} dari ${total}`,
+        newInDays: (count, days) => `${count} baru dalam ${days} hari`,
+        total: 'total'
+      },
+      batchReasons: {
+        orphaned: 'Program pencopotannya rusak — gunakan Paksa hapus sebagai gantinya.',
+        extension: 'Ekstensi browser dihapus dari browser itu sendiri.',
+        storeNoPackage: 'Aplikasi Store ini tidak memiliki nama paket untuk dihapus.',
+        storeProtected: 'Windows menandai aplikasi ini sebagai bagian dari sistem dan tidak mengizinkan penghapusannya.',
+        storeUnknown: 'Windows belum menyatakan apakah aplikasi ini dapat dihapus, jadi aplikasi ini dikecualikan dari batch.',
+        noCommand: 'Tidak ada perintah pencopotan yang terdaftar untuk program ini.'
+      },
+      storeRemoveDialog: {
+        heading: (name) => `Hapus ${name}?`,
+        body: 'Ini menghapus aplikasi untuk akun Anda, beserta pengaturan dan data yang tersimpan. Berbeda dari semua hal lain yang dihapus Prune, ini tidak masuk ke Karantina dan tidak dapat dipulihkan dari sini — untuk mendapatkannya kembali berarti menginstalnya lagi dari Microsoft Store.',
+        cancel: 'Batal',
+        close: 'Tutup',
+        removeApp: 'Hapus aplikasi',
+        removing: 'Menghapus…'
       }
     }
   },
@@ -2375,6 +3463,74 @@ export const CATALOG = {
         file: 'Skrá',
         cancel: 'Hætta við'
       }
+    },
+    applications: {
+      loading: 'Les uppsett forrit…',
+      loadError: (error) => `Ekki tókst að hlaða forritum: ${error}`,
+      search: { placeholder: 'Leita í forritum…', label: 'Leita í forritum' },
+      filters: {
+        all: 'Allt',
+        unused: 'Ónotað',
+        store: 'Verslun',
+        extensions: 'Viðbætur',
+        broken: 'Skemmt',
+        storeCount: (n) => `Verslun (${n})`,
+        extensionsCount: (n) => `Viðbætur (${n})`,
+        brokenCount: (n) => `Skemmt (${n})`
+      },
+      columns: {
+        application: 'Forrit',
+        size: 'Stærð',
+        version: 'Útgáfa',
+        type: 'Tegund',
+        installed: 'Uppsett',
+        new: 'Nýtt',
+        company: 'Fyrirtæki',
+        website: 'Vefsíða'
+      },
+      badges: { broken: 'Skemmt', running: 'Í gangi', store: 'Verslun', disabled: 'Óvirkt', unused: 'Ónotað' },
+      selectRow: (name) => `Velja ${name}`,
+      selectAll: 'Velja allt sem sýnt er',
+      clearSelection: 'Hreinsa val',
+      reveal: { button: 'Mappa', notFound: 'Fannst ekki', ariaLabel: (name) => `Opna möppu fyrir ${name}` },
+      viaBrowser: 'í gegnum vafra',
+      inWindows: { button: 'Í Windows', ariaLabel: (name) => `Opna stillingar Windows — Windows leyfir ekki að fjarlægja ${name} héðan` },
+      uninstall: 'Fjarlægja',
+      forceRemove: 'Þvinga fjarlægingu',
+      empty: {
+        plain: 'Ekkert passar.',
+        withQuery: (query) => `Ekkert passar við „${query}“.`,
+        withFilter: (filterLabel) => `Ekkert passar í ${filterLabel}.`,
+        withQueryAndFilter: (query, filterLabel) => `Ekkert passar við „${query}“ í ${filterLabel}.`,
+        hiddenCount: (count) => `${count} færslur eru faldar af núverandi síu.`,
+        clear: 'Hreinsa leit og síur'
+      },
+      footer: {
+        selected: (count) => `${count} valin`,
+        unknownSizes: (count) => `+ ${count} af óþekktri stærð`,
+        clear: 'Hreinsa',
+        uninstallCount: (count) => `Fjarlægja ${count} forrit`,
+        installations: (count) => `Uppsetningar: ${count}`,
+        showingOf: (shown, total) => `Sýni ${shown} af ${total}`,
+        newInDays: (count, days) => `${count} ný á ${days} dögum`,
+        total: 'samtals'
+      },
+      batchReasons: {
+        orphaned: 'Fjarlægingarforritið er skemmt — notaðu Þvinga fjarlægingu í staðinn.',
+        extension: 'Vafraviðbætur eru fjarlægðar úr vafranum sjálfum.',
+        storeNoPackage: 'Þetta verslunarforrit hefur ekkert pakkaheiti til að fjarlægja.',
+        storeProtected: 'Windows merkir þetta forrit sem hluta af kerfinu og leyfir ekki að það sé fjarlægt.',
+        storeUnknown: 'Windows hefur ekki sagt til um hvort hægt sé að fjarlægja þetta forrit, svo það er skilið eftir úr hópaðgerðinni.',
+        noCommand: 'Engin fjarlægingarskipun er skráð fyrir þetta forrit.'
+      },
+      storeRemoveDialog: {
+        heading: (name) => `Fjarlægja ${name}?`,
+        body: 'Þetta fjarlægir forritið fyrir reikninginn þinn, ásamt stillingum þess og vistuðum gögnum. Ólíkt öllu öðru sem Prune fjarlægir fer þetta ekki í Sóttkví og er ekki hægt að endurheimta héðan — að fá það til baka þýðir að setja það upp aftur úr Microsoft Store.',
+        cancel: 'Hætta við',
+        close: 'Loka',
+        removeApp: 'Fjarlægja forrit',
+        removing: 'Fjarlægi…'
+      }
     }
   },
 
@@ -2512,6 +3668,74 @@ export const CATALOG = {
         folder: 'Cartella',
         file: 'File',
         cancel: 'Annulla'
+      }
+    },
+    applications: {
+      loading: 'Lettura dei programmi installati…',
+      loadError: (error) => `Impossibile caricare i programmi: ${error}`,
+      search: { placeholder: 'Cerca applicazioni…', label: 'Cerca applicazioni' },
+      filters: {
+        all: 'Tutte',
+        unused: 'Non usate',
+        store: 'Store',
+        extensions: 'Estensioni',
+        broken: 'Danneggiate',
+        storeCount: (n) => `Store (${n})`,
+        extensionsCount: (n) => `Estensioni (${n})`,
+        brokenCount: (n) => `Danneggiate (${n})`
+      },
+      columns: {
+        application: 'Applicazione',
+        size: 'Dimensione',
+        version: 'Versione',
+        type: 'Tipo',
+        installed: 'Installato',
+        new: 'Nuovo',
+        company: 'Azienda',
+        website: 'Sito web'
+      },
+      badges: { broken: 'Danneggiato', running: 'In esecuzione', store: 'Store', disabled: 'Disabilitato', unused: 'Non usato' },
+      selectRow: (name) => `Seleziona ${name}`,
+      selectAll: 'Seleziona tutti quelli mostrati',
+      clearSelection: 'Cancella selezione',
+      reveal: { button: 'Cartella', notFound: 'Non trovata', ariaLabel: (name) => `Apri la cartella di ${name}` },
+      viaBrowser: 'tramite il browser',
+      inWindows: { button: 'In Windows', ariaLabel: (name) => `Apri le impostazioni di Windows — Windows non consente di rimuovere ${name} da qui` },
+      uninstall: 'Disinstalla',
+      forceRemove: 'Forza rimozione',
+      empty: {
+        plain: 'Nessuna corrispondenza.',
+        withQuery: (query) => `Nessuna corrispondenza per "${query}".`,
+        withFilter: (filterLabel) => `Nessuna corrispondenza in ${filterLabel}.`,
+        withQueryAndFilter: (query, filterLabel) => `Nessuna corrispondenza per "${query}" in ${filterLabel}.`,
+        hiddenCount: (count) => `${count} voci sono nascoste dal filtro attuale.`,
+        clear: 'Cancella ricerca e filtri'
+      },
+      footer: {
+        selected: (count) => `${count} selezionati`,
+        unknownSizes: (count) => `+ ${count} di dimensione sconosciuta`,
+        clear: 'Cancella',
+        uninstallCount: (count) => `Disinstalla ${count} programma${count === 1 ? '' : 'i'}`,
+        installations: (count) => `Installazioni: ${count}`,
+        showingOf: (shown, total) => `Visualizzati ${shown} di ${total}`,
+        newInDays: (count, days) => `${count} nuovi negli ultimi ${days} giorni`,
+        total: 'totale'
+      },
+      batchReasons: {
+        orphaned: 'Il suo programma di disinstallazione è danneggiato — usa Forza rimozione.',
+        extension: 'Le estensioni del browser vengono rimosse dal browser stesso.',
+        storeNoPackage: 'Questa app dello Store non ha un nome pacchetto da rimuovere.',
+        storeProtected: 'Windows contrassegna questa app come parte del sistema e non consente di rimuoverla.',
+        storeUnknown: 'Windows non ha indicato se questa app può essere rimossa, quindi è esclusa dal gruppo.',
+        noCommand: 'Nessun comando di disinstallazione è registrato per questo programma.'
+      },
+      storeRemoveDialog: {
+        heading: (name) => `Rimuovere ${name}?`,
+        body: "Questo rimuove l'app per il tuo account, insieme alle sue impostazioni e ai dati salvati. A differenza di tutto il resto che Prune rimuove, questa non va in Quarantena e non può essere ripristinata da qui — per riaverla è necessario reinstallarla dal Microsoft Store.",
+        cancel: 'Annulla',
+        close: 'Chiudi',
+        removeApp: 'Rimuovi app',
+        removing: 'Rimozione…'
       }
     }
   },
@@ -2651,6 +3875,74 @@ export const CATALOG = {
         file: 'ファイル',
         cancel: 'キャンセル'
       }
+    },
+    applications: {
+      loading: 'インストール済みのプログラムを読み取っています…',
+      loadError: (error) => `プログラムを読み込めませんでした: ${error}`,
+      search: { placeholder: 'アプリを検索…', label: 'アプリを検索' },
+      filters: {
+        all: 'すべて',
+        unused: '未使用',
+        store: 'ストア',
+        extensions: '拡張機能',
+        broken: '破損',
+        storeCount: (n) => `ストア (${n})`,
+        extensionsCount: (n) => `拡張機能 (${n})`,
+        brokenCount: (n) => `破損 (${n})`
+      },
+      columns: {
+        application: 'アプリケーション',
+        size: 'サイズ',
+        version: 'バージョン',
+        type: '種類',
+        installed: 'インストール日',
+        new: '新規',
+        company: '発行元',
+        website: 'ウェブサイト'
+      },
+      badges: { broken: '破損', running: '実行中', store: 'ストア', disabled: '無効', unused: '未使用' },
+      selectRow: (name) => `${name} を選択`,
+      selectAll: '表示されているものをすべて選択',
+      clearSelection: '選択を解除',
+      reveal: { button: 'フォルダー', notFound: '見つかりません', ariaLabel: (name) => `${name} のフォルダーを開く` },
+      viaBrowser: 'ブラウザーから',
+      inWindows: { button: 'Windows で', ariaLabel: (name) => `Windows の設定を開く — Windows はここから ${name} の削除を許可していません` },
+      uninstall: 'アンインストール',
+      forceRemove: '強制削除',
+      empty: {
+        plain: '一致するものがありません。',
+        withQuery: (query) => `「${query}」に一致するものがありません。`,
+        withFilter: (filterLabel) => `${filterLabel}に一致するものがありません。`,
+        withQueryAndFilter: (query, filterLabel) => `${filterLabel}内で「${query}」に一致するものがありません。`,
+        hiddenCount: (count) => `現在のフィルターにより ${count} 件のエントリが非表示になっています。`,
+        clear: '検索とフィルターをクリア'
+      },
+      footer: {
+        selected: (count) => `${count} 件選択中`,
+        unknownSizes: (count) => `+ サイズ不明が ${count} 件`,
+        clear: 'クリア',
+        uninstallCount: (count) => `${count} 件のプログラムをアンインストール`,
+        installations: (count) => `インストール数: ${count}`,
+        showingOf: (shown, total) => `${total} 件中 ${shown} 件を表示`,
+        newInDays: (count, days) => `過去 ${days} 日以内に ${count} 件が新規`,
+        total: '合計'
+      },
+      batchReasons: {
+        orphaned: 'アンインストーラーが破損しています — 代わりに強制削除を使用してください。',
+        extension: 'ブラウザー拡張機能はブラウザー自体から削除されます。',
+        storeNoPackage: 'このストアアプリには削除するパッケージ名がありません。',
+        storeProtected: 'Windows はこのアプリをシステムの一部としてマークしており、削除を許可していません。',
+        storeUnknown: 'このアプリを削除できるかどうか Windows が示していないため、一括処理から除外されます。',
+        noCommand: 'このプログラムにはアンインストールコマンドが登録されていません。'
+      },
+      storeRemoveDialog: {
+        heading: (name) => `${name} を削除しますか?`,
+        body: 'これにより、アプリがアカウントから設定と保存データごと削除されます。Prune が削除する他のものと違い、これは隔離には移動されず、ここから復元することもできません — 元に戻すには Microsoft Store から再インストールする必要があります。',
+        cancel: 'キャンセル',
+        close: '閉じる',
+        removeApp: 'アプリを削除',
+        removing: '削除中…'
+      }
     }
   },
 
@@ -2788,6 +4080,74 @@ export const CATALOG = {
         folder: '폴더',
         file: '파일',
         cancel: '취소'
+      }
+    },
+    applications: {
+      loading: '설치된 프로그램을 읽는 중…',
+      loadError: (error) => `프로그램을 불러오지 못했습니다: ${error}`,
+      search: { placeholder: '앱 검색…', label: '앱 검색' },
+      filters: {
+        all: '전체',
+        unused: '사용 안 함',
+        store: '스토어',
+        extensions: '확장 프로그램',
+        broken: '손상됨',
+        storeCount: (n) => `스토어 (${n})`,
+        extensionsCount: (n) => `확장 프로그램 (${n})`,
+        brokenCount: (n) => `손상됨 (${n})`
+      },
+      columns: {
+        application: '애플리케이션',
+        size: '크기',
+        version: '버전',
+        type: '유형',
+        installed: '설치됨',
+        new: '신규',
+        company: '게시자',
+        website: '웹사이트'
+      },
+      badges: { broken: '손상됨', running: '실행 중', store: '스토어', disabled: '사용 안 함', unused: '사용 안 함' },
+      selectRow: (name) => `${name} 선택`,
+      selectAll: '표시된 항목 모두 선택',
+      clearSelection: '선택 해제',
+      reveal: { button: '폴더', notFound: '찾을 수 없음', ariaLabel: (name) => `${name}의 폴더 열기` },
+      viaBrowser: '브라우저를 통해',
+      inWindows: { button: 'Windows에서', ariaLabel: (name) => `Windows 설정 열기 — Windows에서 여기서 ${name}을(를) 제거할 수 없습니다` },
+      uninstall: '제거',
+      forceRemove: '강제 제거',
+      empty: {
+        plain: '일치하는 항목이 없습니다.',
+        withQuery: (query) => `"${query}"에 일치하는 항목이 없습니다.`,
+        withFilter: (filterLabel) => `${filterLabel}에 일치하는 항목이 없습니다.`,
+        withQueryAndFilter: (query, filterLabel) => `${filterLabel}에서 "${query}"에 일치하는 항목이 없습니다.`,
+        hiddenCount: (count) => `현재 필터로 인해 ${count}개 항목이 숨겨져 있습니다.`,
+        clear: '검색 및 필터 지우기'
+      },
+      footer: {
+        selected: (count) => `${count}개 선택됨`,
+        unknownSizes: (count) => `+ 크기 불명 ${count}개`,
+        clear: '지우기',
+        uninstallCount: (count) => `${count}개 프로그램 제거`,
+        installations: (count) => `설치됨: ${count}개`,
+        showingOf: (shown, total) => `${total}개 중 ${shown}개 표시`,
+        newInDays: (count, days) => `최근 ${days}일 이내 신규 ${count}개`,
+        total: '합계'
+      },
+      batchReasons: {
+        orphaned: '제거 프로그램이 손상되었습니다 — 대신 강제 제거를 사용하세요.',
+        extension: '브라우저 확장 프로그램은 브라우저 자체에서 제거됩니다.',
+        storeNoPackage: '이 스토어 앱에는 제거할 패키지 이름이 없습니다.',
+        storeProtected: 'Windows에서 이 앱을 시스템의 일부로 표시하여 제거를 허용하지 않습니다.',
+        storeUnknown: 'Windows에서 이 앱을 제거할 수 있는지 명시하지 않아 일괄 작업에서 제외됩니다.',
+        noCommand: '이 프로그램에 등록된 제거 명령이 없습니다.'
+      },
+      storeRemoveDialog: {
+        heading: (name) => `${name}을(를) 제거하시겠습니까?`,
+        body: '이렇게 하면 계정에서 앱이 설정 및 저장된 데이터와 함께 제거됩니다. Prune이 제거하는 다른 모든 항목과 달리 이것은 격리로 이동하지 않으며 여기서 복원할 수 없습니다 — 되돌리려면 Microsoft Store에서 다시 설치해야 합니다.',
+        cancel: '취소',
+        close: '닫기',
+        removeApp: '앱 제거',
+        removing: '제거 중…'
       }
     }
   },
@@ -2927,6 +4287,74 @@ export const CATALOG = {
         file: 'Failas',
         cancel: 'Atšaukti'
       }
+    },
+    applications: {
+      loading: 'Skaitomos įdiegtos programos…',
+      loadError: (error) => `Nepavyko įkelti programų: ${error}`,
+      search: { placeholder: 'Ieškoti programų…', label: 'Ieškoti programų' },
+      filters: {
+        all: 'Visos',
+        unused: 'Nenaudojamos',
+        store: 'Parduotuvė',
+        extensions: 'Plėtiniai',
+        broken: 'Sugadintos',
+        storeCount: (n) => `Parduotuvė (${n})`,
+        extensionsCount: (n) => `Plėtiniai (${n})`,
+        brokenCount: (n) => `Sugadintos (${n})`
+      },
+      columns: {
+        application: 'Programa',
+        size: 'Dydis',
+        version: 'Versija',
+        type: 'Tipas',
+        installed: 'Įdiegta',
+        new: 'Nauja',
+        company: 'Bendrovė',
+        website: 'Svetainė'
+      },
+      badges: { broken: 'Sugadinta', running: 'Veikia', store: 'Parduotuvė', disabled: 'Išjungta', unused: 'Nenaudojama' },
+      selectRow: (name) => `Pasirinkti ${name}`,
+      selectAll: 'Pasirinkti visas rodomas',
+      clearSelection: 'Išvalyti pasirinkimą',
+      reveal: { button: 'Aplankas', notFound: 'Nerasta', ariaLabel: (name) => `Atverti ${name} aplanką` },
+      viaBrowser: 'per naršyklę',
+      inWindows: { button: '„Windows“ nustatymuose', ariaLabel: (name) => `Atverti „Windows“ nustatymus — „Windows“ neleidžia pašalinti ${name} iš čia` },
+      uninstall: 'Pašalinti',
+      forceRemove: 'Priverstinai pašalinti',
+      empty: {
+        plain: 'Nieko neatitinka.',
+        withQuery: (query) => `Nieko neatitinka „${query}“.`,
+        withFilter: (filterLabel) => `Nieko neatitinka filtre ${filterLabel}.`,
+        withQueryAndFilter: (query, filterLabel) => `Nieko neatitinka „${query}“ filtre ${filterLabel}.`,
+        hiddenCount: (count) => `${count} įrašai paslėpti dėl dabartinio filtro.`,
+        clear: 'Išvalyti paiešką ir filtrus'
+      },
+      footer: {
+        selected: (count) => `${count} pasirinkta`,
+        unknownSizes: (count) => `+ ${count} nežinomo dydžio`,
+        clear: 'Išvalyti',
+        uninstallCount: (count) => `Pašalinti ${count} programas`,
+        installations: (count) => `Įdiegimai: ${count}`,
+        showingOf: (shown, total) => `Rodoma ${shown} iš ${total}`,
+        newInDays: (count, days) => `${count} naujos per ${days} d.`,
+        total: 'iš viso'
+      },
+      batchReasons: {
+        orphaned: 'Jos šalinimo programa sugadinta — vietoj to naudokite Priverstinai pašalinti.',
+        extension: 'Naršyklės plėtiniai šalinami iš pačios naršyklės.',
+        storeNoPackage: 'Ši parduotuvės programa neturi paketo pavadinimo pašalinimui.',
+        storeProtected: '„Windows“ pažymi šią programą kaip sistemos dalį ir neleidžia jos pašalinti.',
+        storeUnknown: '„Windows“ nenurodė, ar šią programą galima pašalinti, todėl ji neįtraukiama į paketą.',
+        noCommand: 'Šiai programai nėra užregistruotos jokios šalinimo komandos.'
+      },
+      storeRemoveDialog: {
+        heading: (name) => `Pašalinti „${name}“?`,
+        body: 'Tai pašalina programą iš jūsų paskyros kartu su jos nustatymais ir išsaugotais duomenimis. Skirtingai nei viskas kita, ką pašalina Prune, ji nepatenka į Karantiną ir negali būti čia atkurta — norint ją susigrąžinti, reikės iš naujo įdiegti iš Microsoft Store.',
+        cancel: 'Atšaukti',
+        close: 'Uždaryti',
+        removeApp: 'Pašalinti programą',
+        removing: 'Šalinama…'
+      }
     }
   },
 
@@ -3064,6 +4492,74 @@ export const CATALOG = {
         folder: 'Folder',
         file: 'Fail',
         cancel: 'Batal'
+      }
+    },
+    applications: {
+      loading: 'Membaca program yang dipasang…',
+      loadError: (error) => `Gagal memuatkan program: ${error}`,
+      search: { placeholder: 'Cari aplikasi…', label: 'Cari aplikasi' },
+      filters: {
+        all: 'Semua',
+        unused: 'Tidak digunakan',
+        store: 'Kedai',
+        extensions: 'Sambungan',
+        broken: 'Rosak',
+        storeCount: (n) => `Kedai (${n})`,
+        extensionsCount: (n) => `Sambungan (${n})`,
+        brokenCount: (n) => `Rosak (${n})`
+      },
+      columns: {
+        application: 'Aplikasi',
+        size: 'Saiz',
+        version: 'Versi',
+        type: 'Jenis',
+        installed: 'Dipasang',
+        new: 'Baharu',
+        company: 'Syarikat',
+        website: 'Laman web'
+      },
+      badges: { broken: 'Rosak', running: 'Berjalan', store: 'Kedai', disabled: 'Dilumpuhkan', unused: 'Tidak digunakan' },
+      selectRow: (name) => `Pilih ${name}`,
+      selectAll: 'Pilih semua yang dipaparkan',
+      clearSelection: 'Kosongkan pilihan',
+      reveal: { button: 'Folder', notFound: 'Tidak ditemui', ariaLabel: (name) => `Buka folder untuk ${name}` },
+      viaBrowser: 'melalui pelayar',
+      inWindows: { button: 'Dalam Windows', ariaLabel: (name) => `Buka tetapan Windows — Windows tidak membenarkan ${name} dialih keluar dari sini` },
+      uninstall: 'Nyahpasang',
+      forceRemove: 'Paksa alih keluar',
+      empty: {
+        plain: 'Tiada padanan.',
+        withQuery: (query) => `Tiada padanan untuk "${query}".`,
+        withFilter: (filterLabel) => `Tiada padanan dalam ${filterLabel}.`,
+        withQueryAndFilter: (query, filterLabel) => `Tiada padanan untuk "${query}" dalam ${filterLabel}.`,
+        hiddenCount: (count) => `${count} entri disembunyikan oleh penapis semasa.`,
+        clear: 'Kosongkan carian dan penapis'
+      },
+      footer: {
+        selected: (count) => `${count} dipilih`,
+        unknownSizes: (count) => `+ ${count} bersaiz tidak diketahui`,
+        clear: 'Kosongkan',
+        uninstallCount: (count) => `Nyahpasang ${count} program`,
+        installations: (count) => `Pemasangan: ${count}`,
+        showingOf: (shown, total) => `Memaparkan ${shown} daripada ${total}`,
+        newInDays: (count, days) => `${count} baharu dalam ${days} hari`,
+        total: 'jumlah'
+      },
+      batchReasons: {
+        orphaned: 'Program nyahpasangnya rosak — gunakan Paksa alih keluar sebagai gantinya.',
+        extension: 'Sambungan pelayar dialih keluar dari pelayar itu sendiri.',
+        storeNoPackage: 'Apl Kedai ini tiada nama pakej untuk dialih keluar.',
+        storeProtected: 'Windows menandakan apl ini sebagai sebahagian daripada sistem dan tidak membenarkan ia dialih keluar.',
+        storeUnknown: 'Windows tidak menyatakan sama ada apl ini boleh dialih keluar, jadi ia ditinggalkan daripada kelompok.',
+        noCommand: 'Tiada arahan nyahpasang didaftarkan untuk program ini.'
+      },
+      storeRemoveDialog: {
+        heading: (name) => `Alih keluar ${name}?`,
+        body: 'Ini mengalih keluar apl untuk akaun anda, berserta tetapan dan data yang disimpan. Tidak seperti perkara lain yang dialih keluar oleh Prune, ini tidak pergi ke Kuarantin dan tidak boleh dipulihkan dari sini — untuk mendapatkannya semula bermakna memasangnya semula dari Microsoft Store.',
+        cancel: 'Batal',
+        close: 'Tutup',
+        removeApp: 'Alih keluar apl',
+        removing: 'Mengalih keluar…'
       }
     }
   },
@@ -3203,6 +4699,74 @@ export const CATALOG = {
         file: 'Fil',
         cancel: 'Avbryt'
       }
+    },
+    applications: {
+      loading: 'Leser installerte programmer…',
+      loadError: (error) => `Kunne ikke laste inn programmer: ${error}`,
+      search: { placeholder: 'Søk i programmer…', label: 'Søk i programmer' },
+      filters: {
+        all: 'Alle',
+        unused: 'Ubrukt',
+        store: 'Store',
+        extensions: 'Utvidelser',
+        broken: 'Ødelagt',
+        storeCount: (n) => `Store (${n})`,
+        extensionsCount: (n) => `Utvidelser (${n})`,
+        brokenCount: (n) => `Ødelagt (${n})`
+      },
+      columns: {
+        application: 'Program',
+        size: 'Størrelse',
+        version: 'Versjon',
+        type: 'Type',
+        installed: 'Installert',
+        new: 'Ny',
+        company: 'Firma',
+        website: 'Nettsted'
+      },
+      badges: { broken: 'Ødelagt', running: 'Kjører', store: 'Store', disabled: 'Deaktivert', unused: 'Ubrukt' },
+      selectRow: (name) => `Velg ${name}`,
+      selectAll: 'Velg alle viste',
+      clearSelection: 'Fjern merking',
+      reveal: { button: 'Mappe', notFound: 'Ikke funnet', ariaLabel: (name) => `Åpne mappen for ${name}` },
+      viaBrowser: 'via nettleseren',
+      inWindows: { button: 'I Windows', ariaLabel: (name) => `Åpne Windows-innstillinger — Windows tillater ikke at ${name} fjernes herfra` },
+      uninstall: 'Avinstaller',
+      forceRemove: 'Tving fjerning',
+      empty: {
+        plain: 'Ingenting samsvarer.',
+        withQuery: (query) => `Ingenting samsvarer med "${query}".`,
+        withFilter: (filterLabel) => `Ingenting samsvarer i ${filterLabel}.`,
+        withQueryAndFilter: (query, filterLabel) => `Ingenting samsvarer med "${query}" i ${filterLabel}.`,
+        hiddenCount: (count) => `${count} oppføringer er skjult av det gjeldende filteret.`,
+        clear: 'Fjern søk og filtre'
+      },
+      footer: {
+        selected: (count) => `${count} valgt`,
+        unknownSizes: (count) => `+ ${count} av ukjent størrelse`,
+        clear: 'Fjern',
+        uninstallCount: (count) => `Avinstaller ${count} program${count === 1 ? '' : 'mer'}`,
+        installations: (count) => `Installasjoner: ${count}`,
+        showingOf: (shown, total) => `Viser ${shown} av ${total}`,
+        newInDays: (count, days) => `${count} nye i løpet av ${days} dager`,
+        total: 'totalt'
+      },
+      batchReasons: {
+        orphaned: 'Avinstalleringsprogrammet er ødelagt — bruk Tving fjerning i stedet.',
+        extension: 'Nettleserutvidelser fjernes fra selve nettleseren.',
+        storeNoPackage: 'Denne Store-appen har ikke noe pakkenavn å fjerne.',
+        storeProtected: 'Windows merker denne appen som en del av systemet og tillater ikke at den fjernes.',
+        storeUnknown: 'Windows har ikke oppgitt om denne appen kan fjernes, så den er utelatt fra puljen.',
+        noCommand: 'Ingen avinstalleringskommando er registrert for dette programmet.'
+      },
+      storeRemoveDialog: {
+        heading: (name) => `Fjerne ${name}?`,
+        body: 'Dette fjerner appen for kontoen din, sammen med innstillingene og lagrede data. I motsetning til alt annet Prune fjerner, går denne ikke til Karantene og kan ikke gjenopprettes herfra — å få den tilbake betyr å installere den på nytt fra Microsoft Store.',
+        cancel: 'Avbryt',
+        close: 'Lukk',
+        removeApp: 'Fjern app',
+        removing: 'Fjerner…'
+      }
     }
   },
 
@@ -3340,6 +4904,74 @@ export const CATALOG = {
         folder: 'Map',
         file: 'Bestand',
         cancel: 'Annuleren'
+      }
+    },
+    applications: {
+      loading: "Geïnstalleerde programma's worden gelezen…",
+      loadError: (error) => `Kan programma's niet laden: ${error}`,
+      search: { placeholder: 'Toepassingen zoeken…', label: 'Toepassingen zoeken' },
+      filters: {
+        all: 'Alle',
+        unused: 'Ongebruikt',
+        store: 'Store',
+        extensions: 'Extensies',
+        broken: 'Kapot',
+        storeCount: (n) => `Store (${n})`,
+        extensionsCount: (n) => `Extensies (${n})`,
+        brokenCount: (n) => `Kapot (${n})`
+      },
+      columns: {
+        application: 'Toepassing',
+        size: 'Grootte',
+        version: 'Versie',
+        type: 'Type',
+        installed: 'Geïnstalleerd',
+        new: 'Nieuw',
+        company: 'Bedrijf',
+        website: 'Website'
+      },
+      badges: { broken: 'Kapot', running: 'Actief', store: 'Store', disabled: 'Uitgeschakeld', unused: 'Ongebruikt' },
+      selectRow: (name) => `${name} selecteren`,
+      selectAll: 'Alle getoonde selecteren',
+      clearSelection: 'Selectie wissen',
+      reveal: { button: 'Map', notFound: 'Niet gevonden', ariaLabel: (name) => `Map voor ${name} openen` },
+      viaBrowser: 'via de browser',
+      inWindows: { button: 'In Windows', ariaLabel: (name) => `Windows-instellingen openen — Windows staat niet toe dat ${name} hiervandaan wordt verwijderd` },
+      uninstall: 'Verwijderen',
+      forceRemove: 'Verwijderen forceren',
+      empty: {
+        plain: 'Niets komt overeen.',
+        withQuery: (query) => `Niets komt overeen met "${query}".`,
+        withFilter: (filterLabel) => `Niets komt overeen in ${filterLabel}.`,
+        withQueryAndFilter: (query, filterLabel) => `Niets komt overeen met "${query}" in ${filterLabel}.`,
+        hiddenCount: (count) => `${count} items zijn verborgen door het huidige filter.`,
+        clear: 'Zoekopdracht en filters wissen'
+      },
+      footer: {
+        selected: (count) => `${count} geselecteerd`,
+        unknownSizes: (count) => `+ ${count} van onbekende grootte`,
+        clear: 'Wissen',
+        uninstallCount: (count) => `${count} programma's verwijderen`,
+        installations: (count) => `Installaties: ${count}`,
+        showingOf: (shown, total) => `${shown} van ${total} weergegeven`,
+        newInDays: (count, days) => `${count} nieuw in ${days} dagen`,
+        total: 'totaal'
+      },
+      batchReasons: {
+        orphaned: 'De verwijderingstoepassing is kapot — gebruik in plaats daarvan Verwijderen forceren.',
+        extension: 'Browserextensies worden vanuit de browser zelf verwijderd.',
+        storeNoPackage: 'Deze Store-app heeft geen pakketnaam om te verwijderen.',
+        storeProtected: 'Windows markeert deze app als onderdeel van het systeem en staat niet toe dat deze wordt verwijderd.',
+        storeUnknown: 'Windows heeft niet aangegeven of deze app kan worden verwijderd, dus deze wordt uitgesloten van de batch.',
+        noCommand: 'Er is geen verwijderopdracht geregistreerd voor dit programma.'
+      },
+      storeRemoveDialog: {
+        heading: (name) => `${name} verwijderen?`,
+        body: 'Dit verwijdert de app voor je account, samen met de instellingen en opgeslagen gegevens. In tegenstelling tot al het andere dat Prune verwijdert, gaat deze niet naar Quarantaine en kan hij van hieruit niet worden hersteld — hem terugkrijgen betekent hem opnieuw installeren vanuit de Microsoft Store.',
+        cancel: 'Annuleren',
+        close: 'Sluiten',
+        removeApp: 'App verwijderen',
+        removing: 'Verwijderen…'
       }
     }
   },
@@ -3479,6 +5111,74 @@ export const CATALOG = {
         file: 'Plik',
         cancel: 'Anuluj'
       }
+    },
+    applications: {
+      loading: 'Odczytywanie zainstalowanych programów…',
+      loadError: (error) => `Nie udało się wczytać programów: ${error}`,
+      search: { placeholder: 'Szukaj aplikacji…', label: 'Szukaj aplikacji' },
+      filters: {
+        all: 'Wszystkie',
+        unused: 'Nieużywane',
+        store: 'Sklep',
+        extensions: 'Rozszerzenia',
+        broken: 'Uszkodzone',
+        storeCount: (n) => `Sklep (${n})`,
+        extensionsCount: (n) => `Rozszerzenia (${n})`,
+        brokenCount: (n) => `Uszkodzone (${n})`
+      },
+      columns: {
+        application: 'Aplikacja',
+        size: 'Rozmiar',
+        version: 'Wersja',
+        type: 'Typ',
+        installed: 'Zainstalowano',
+        new: 'Nowe',
+        company: 'Firma',
+        website: 'Strona internetowa'
+      },
+      badges: { broken: 'Uszkodzone', running: 'Uruchomione', store: 'Sklep', disabled: 'Wyłączone', unused: 'Nieużywane' },
+      selectRow: (name) => `Zaznacz ${name}`,
+      selectAll: 'Zaznacz wszystkie wyświetlane',
+      clearSelection: 'Wyczyść zaznaczenie',
+      reveal: { button: 'Folder', notFound: 'Nie znaleziono', ariaLabel: (name) => `Otwórz folder aplikacji ${name}` },
+      viaBrowser: 'przez przeglądarkę',
+      inWindows: { button: 'W Windows', ariaLabel: (name) => `Otwórz ustawienia Windows — Windows nie pozwala usunąć ${name} stąd` },
+      uninstall: 'Odinstaluj',
+      forceRemove: 'Wymuś usunięcie',
+      empty: {
+        plain: 'Nic nie pasuje.',
+        withQuery: (query) => `Nic nie pasuje do „${query}”.`,
+        withFilter: (filterLabel) => `Nic nie pasuje w ${filterLabel}.`,
+        withQueryAndFilter: (query, filterLabel) => `Nic nie pasuje do „${query}” w ${filterLabel}.`,
+        hiddenCount: (count) => `${count} wpisów jest ukrytych przez bieżący filtr.`,
+        clear: 'Wyczyść wyszukiwanie i filtry'
+      },
+      footer: {
+        selected: (count) => `${count} zaznaczonych`,
+        unknownSizes: (count) => `+ ${count} o nieznanym rozmiarze`,
+        clear: 'Wyczyść',
+        uninstallCount: (count) => `Odinstaluj ${count} program${count === 1 ? '' : count < 5 ? 'y' : 'ów'}`,
+        installations: (count) => `Instalacje: ${count}`,
+        showingOf: (shown, total) => `Wyświetlono ${shown} z ${total}`,
+        newInDays: (count, days) => `${count} nowych w ciągu ${days} dni`,
+        total: 'razem'
+      },
+      batchReasons: {
+        orphaned: 'Jego deinstalator jest uszkodzony — użyj zamiast tego opcji Wymuś usunięcie.',
+        extension: 'Rozszerzenia przeglądarki są usuwane z samej przeglądarki.',
+        storeNoPackage: 'Ta aplikacja ze sklepu nie ma nazwy pakietu do usunięcia.',
+        storeProtected: 'Windows oznacza tę aplikację jako część systemu i nie pozwala jej usunąć.',
+        storeUnknown: 'Windows nie określił, czy tę aplikację można usunąć, więc jest ona pomijana w tej partii.',
+        noCommand: 'Dla tego programu nie zarejestrowano żadnego polecenia dezinstalacji.'
+      },
+      storeRemoveDialog: {
+        heading: (name) => `Usunąć ${name}?`,
+        body: 'To usuwa aplikację z Twojego konta wraz z jej ustawieniami i zapisanymi danymi. W przeciwieństwie do wszystkiego innego, co usuwa Prune, ta nie trafia do Kwarantanny i nie można jej stąd przywrócić — aby ją odzyskać, trzeba zainstalować ją ponownie ze sklepu Microsoft Store.',
+        cancel: 'Anuluj',
+        close: 'Zamknij',
+        removeApp: 'Usuń aplikację',
+        removing: 'Usuwanie…'
+      }
     }
   },
 
@@ -3616,6 +5316,74 @@ export const CATALOG = {
         folder: 'فولډر',
         file: 'فایل',
         cancel: 'لغوه کول'
+      }
+    },
+    applications: {
+      loading: 'د نصب شویو پروګرامونو لوستل…',
+      loadError: (error) => `د پروګرامونو بارول ناکام شول: ${error}`,
+      search: { placeholder: 'د غوښتنلیکونو لټون…', label: 'د غوښتنلیکونو لټون' },
+      filters: {
+        all: 'ټول',
+        unused: 'ناکارول شوي',
+        store: 'پلورنځی',
+        extensions: 'توسیعې',
+        broken: 'ماتې شوي',
+        storeCount: (n) => `پلورنځی (${n})`,
+        extensionsCount: (n) => `توسیعې (${n})`,
+        brokenCount: (n) => `ماتې شوي (${n})`
+      },
+      columns: {
+        application: 'غوښتنلیک',
+        size: 'اندازه',
+        version: 'نسخه',
+        type: 'ډول',
+        installed: 'نصب شوی',
+        new: 'نوی',
+        company: 'شرکت',
+        website: 'ویب پاڼه'
+      },
+      badges: { broken: 'ماتې شوی', running: 'روان', store: 'پلورنځی', disabled: 'غیرفعال شوی', unused: 'ناکارول شوی' },
+      selectRow: (name) => `${name} غوره کړئ`,
+      selectAll: 'ټول ښودل شوي غوره کړئ',
+      clearSelection: 'ټاکنه پاکه کړئ',
+      reveal: { button: 'فولډر', notFound: 'ونه موندل شو', ariaLabel: (name) => `د ${name} فولډر خلاص کړئ` },
+      viaBrowser: 'د براوزر له لارې',
+      inWindows: { button: 'په Windows کې', ariaLabel: (name) => `د Windows تنظیمات خلاص کړئ — Windows اجازه نه ورکوي چې ${name} له دې ځایه لرې شي` },
+      uninstall: 'لرې کول',
+      forceRemove: 'اجباري لرې کول',
+      empty: {
+        plain: 'هیڅ شی ونه موندل شو.',
+        withQuery: (query) => `د "${query}" سره هیڅ شی سمون نه خوري.`,
+        withFilter: (filterLabel) => `په ${filterLabel} کې هیڅ شی سمون نه خوري.`,
+        withQueryAndFilter: (query, filterLabel) => `په ${filterLabel} کې د "${query}" سره هیڅ شی سمون نه خوري.`,
+        hiddenCount: (count) => `${count} ننوتنې د اوسني فلټر لخوا پټې دي.`,
+        clear: 'لټون او فلټرونه پاک کړئ'
+      },
+      footer: {
+        selected: (count) => `${count} غوره شوي`,
+        unknownSizes: (count) => `+ ${count} د نامعلومې اندازې`,
+        clear: 'پاکول',
+        uninstallCount: (count) => `${count} پروګرامونه لرې کړئ`,
+        installations: (count) => `نصبونه: ${count}`,
+        showingOf: (shown, total) => `${total} څخه ${shown} ښودل کیږي`,
+        newInDays: (count, days) => `${count} نوي په ${days} ورځو کې`,
+        total: 'ټول'
+      },
+      batchReasons: {
+        orphaned: 'د دې د لرې کولو پروګرام ماتې شوی — پرځای یې اجباري لرې کول وکاروئ.',
+        extension: 'د براوزر توسیعې د خپل براوزر څخه لرې کیږي.',
+        storeNoPackage: 'دې پلورنځي غوښتنلیک لرې کولو لپاره د بستې نوم نلري.',
+        storeProtected: 'Windows دا غوښتنلیک د سیسټم د یوې برخې په توګه نښه کوي او اجازه نه ورکوي چې لرې شي.',
+        storeUnknown: 'Windows نه دي ویلي چې ایا دا غوښتنلیک لرې کیدی شي که نه، نو له ډلې څخه بهر پاتې کیږي.',
+        noCommand: 'د دې پروګرام لپاره هیڅ د لرې کولو امر ثبت شوی نه دی.'
+      },
+      storeRemoveDialog: {
+        heading: (name) => `${name} لرې کړئ؟`,
+        body: 'دا اپلیکیشن ستاسو د حساب لپاره، د هغې د ترتیباتو او ساتل شویو ډیټا سره یوځای لرې کوي. د هغه هر څه برخلاف چې Prune یې لرې کوي، دا قرنطین ته نه ځي او له دې ځایه بیرته نشي راوستل کیدی — د بیا ترلاسه کولو معنی دا ده چې بیا یې د مایکروسافټ سټور څخه نصب کړئ.',
+        cancel: 'لغوه کول',
+        close: 'بندول',
+        removeApp: 'د اپلیکیشن لرې کول',
+        removing: 'لرې کیږي…'
       }
     }
   },
@@ -3755,6 +5523,74 @@ export const CATALOG = {
         file: 'Arquivo',
         cancel: 'Cancelar'
       }
+    },
+    applications: {
+      loading: 'Lendo programas instalados…',
+      loadError: (error) => `Não foi possível carregar os programas: ${error}`,
+      search: { placeholder: 'Pesquisar aplicativos…', label: 'Pesquisar aplicativos' },
+      filters: {
+        all: 'Todos',
+        unused: 'Não usados',
+        store: 'Loja',
+        extensions: 'Extensões',
+        broken: 'Corrompidos',
+        storeCount: (n) => `Loja (${n})`,
+        extensionsCount: (n) => `Extensões (${n})`,
+        brokenCount: (n) => `Corrompidos (${n})`
+      },
+      columns: {
+        application: 'Aplicativo',
+        size: 'Tamanho',
+        version: 'Versão',
+        type: 'Tipo',
+        installed: 'Instalado',
+        new: 'Novo',
+        company: 'Empresa',
+        website: 'Site'
+      },
+      badges: { broken: 'Corrompido', running: 'Em execução', store: 'Loja', disabled: 'Desativado', unused: 'Não usado' },
+      selectRow: (name) => `Selecionar ${name}`,
+      selectAll: 'Selecionar tudo que está sendo exibido',
+      clearSelection: 'Limpar seleção',
+      reveal: { button: 'Pasta', notFound: 'Não encontrado', ariaLabel: (name) => `Abrir a pasta de ${name}` },
+      viaBrowser: 'pelo navegador',
+      inWindows: { button: 'No Windows', ariaLabel: (name) => `Abrir as configurações do Windows — o Windows não permite remover ${name} por aqui` },
+      uninstall: 'Desinstalar',
+      forceRemove: 'Forçar remoção',
+      empty: {
+        plain: 'Nada corresponde.',
+        withQuery: (query) => `Nada corresponde a "${query}".`,
+        withFilter: (filterLabel) => `Nada corresponde em ${filterLabel}.`,
+        withQueryAndFilter: (query, filterLabel) => `Nada corresponde a "${query}" em ${filterLabel}.`,
+        hiddenCount: (count) => `${count} entradas estão ocultas pelo filtro atual.`,
+        clear: 'Limpar busca e filtros'
+      },
+      footer: {
+        selected: (count) => `${count} selecionados`,
+        unknownSizes: (count) => `+ ${count} de tamanho desconhecido`,
+        clear: 'Limpar',
+        uninstallCount: (count) => `Desinstalar ${count} programa${count === 1 ? '' : 's'}`,
+        installations: (count) => `Instalações: ${count}`,
+        showingOf: (shown, total) => `Mostrando ${shown} de ${total}`,
+        newInDays: (count, days) => `${count} novos em ${days} dias`,
+        total: 'total'
+      },
+      batchReasons: {
+        orphaned: 'O desinstalador dele está corrompido — use Forçar remoção.',
+        extension: 'As extensões do navegador são removidas pelo próprio navegador.',
+        storeNoPackage: 'Este aplicativo da Loja não tem um nome de pacote para remover.',
+        storeProtected: 'O Windows marca este aplicativo como parte do sistema e não permite removê-lo.',
+        storeUnknown: 'O Windows não informou se este aplicativo pode ser removido, então ele é deixado de fora do lote.',
+        noCommand: 'Nenhum comando de desinstalação está registrado para este programa.'
+      },
+      storeRemoveDialog: {
+        heading: (name) => `Remover ${name}?`,
+        body: 'Isso remove o aplicativo da sua conta, junto com suas configurações e dados salvos. Ao contrário de tudo o mais que o Prune remove, este não vai para a Quarentena e não pode ser restaurado a partir daqui — recuperá-lo significa instalá-lo novamente pela Microsoft Store.',
+        cancel: 'Cancelar',
+        close: 'Fechar',
+        removeApp: 'Remover app',
+        removing: 'Removendo…'
+      }
     }
   },
 
@@ -3892,6 +5728,74 @@ export const CATALOG = {
         folder: 'Pasta',
         file: 'Ficheiro',
         cancel: 'Cancelar'
+      }
+    },
+    applications: {
+      loading: 'A ler os programas instalados…',
+      loadError: (error) => `Não foi possível carregar os programas: ${error}`,
+      search: { placeholder: 'Pesquisar aplicações…', label: 'Pesquisar aplicações' },
+      filters: {
+        all: 'Todas',
+        unused: 'Não usadas',
+        store: 'Loja',
+        extensions: 'Extensões',
+        broken: 'Danificadas',
+        storeCount: (n) => `Loja (${n})`,
+        extensionsCount: (n) => `Extensões (${n})`,
+        brokenCount: (n) => `Danificadas (${n})`
+      },
+      columns: {
+        application: 'Aplicação',
+        size: 'Tamanho',
+        version: 'Versão',
+        type: 'Tipo',
+        installed: 'Instalado',
+        new: 'Novo',
+        company: 'Empresa',
+        website: 'Site'
+      },
+      badges: { broken: 'Danificada', running: 'Em execução', store: 'Loja', disabled: 'Desativada', unused: 'Não usada' },
+      selectRow: (name) => `Selecionar ${name}`,
+      selectAll: 'Selecionar tudo o que está apresentado',
+      clearSelection: 'Limpar seleção',
+      reveal: { button: 'Pasta', notFound: 'Não encontrada', ariaLabel: (name) => `Abrir a pasta de ${name}` },
+      viaBrowser: 'através do navegador',
+      inWindows: { button: 'No Windows', ariaLabel: (name) => `Abrir as definições do Windows — o Windows não permite remover ${name} a partir daqui` },
+      uninstall: 'Desinstalar',
+      forceRemove: 'Forçar remoção',
+      empty: {
+        plain: 'Nada corresponde.',
+        withQuery: (query) => `Nada corresponde a "${query}".`,
+        withFilter: (filterLabel) => `Nada corresponde em ${filterLabel}.`,
+        withQueryAndFilter: (query, filterLabel) => `Nada corresponde a "${query}" em ${filterLabel}.`,
+        hiddenCount: (count) => `${count} entradas estão ocultas pelo filtro atual.`,
+        clear: 'Limpar pesquisa e filtros'
+      },
+      footer: {
+        selected: (count) => `${count} selecionadas`,
+        unknownSizes: (count) => `+ ${count} de tamanho desconhecido`,
+        clear: 'Limpar',
+        uninstallCount: (count) => `Desinstalar ${count} programa${count === 1 ? '' : 's'}`,
+        installations: (count) => `Instalações: ${count}`,
+        showingOf: (shown, total) => `A mostrar ${shown} de ${total}`,
+        newInDays: (count, days) => `${count} novas em ${days} dias`,
+        total: 'total'
+      },
+      batchReasons: {
+        orphaned: 'O desinstalador está danificado — utilize Forçar remoção.',
+        extension: 'As extensões do navegador são removidas a partir do próprio navegador.',
+        storeNoPackage: 'Esta aplicação da Loja não tem um nome de pacote para remover.',
+        storeProtected: 'O Windows assinala esta aplicação como parte do sistema e não permite removê-la.',
+        storeUnknown: 'O Windows não indicou se esta aplicação pode ser removida, pelo que fica excluída do lote.',
+        noCommand: 'Não existe nenhum comando de desinstalação registado para este programa.'
+      },
+      storeRemoveDialog: {
+        heading: (name) => `Remover ${name}?`,
+        body: 'Isto remove a aplicação da sua conta, juntamente com as suas definições e dados guardados. Ao contrário de tudo o resto que o Prune remove, esta não vai para a Quarentena e não pode ser restaurada a partir daqui — recuperá-la significa instalá-la novamente a partir da Microsoft Store.',
+        cancel: 'Cancelar',
+        close: 'Fechar',
+        removeApp: 'Remover aplicação',
+        removing: 'A remover…'
       }
     }
   },
@@ -4031,6 +5935,74 @@ export const CATALOG = {
         file: 'Fișier',
         cancel: 'Anulează'
       }
+    },
+    applications: {
+      loading: 'Se citesc programele instalate…',
+      loadError: (error) => `Programele nu au putut fi încărcate: ${error}`,
+      search: { placeholder: 'Caută aplicații…', label: 'Caută aplicații' },
+      filters: {
+        all: 'Toate',
+        unused: 'Neutilizate',
+        store: 'Magazin',
+        extensions: 'Extensii',
+        broken: 'Deteriorate',
+        storeCount: (n) => `Magazin (${n})`,
+        extensionsCount: (n) => `Extensii (${n})`,
+        brokenCount: (n) => `Deteriorate (${n})`
+      },
+      columns: {
+        application: 'Aplicație',
+        size: 'Dimensiune',
+        version: 'Versiune',
+        type: 'Tip',
+        installed: 'Instalat',
+        new: 'Nou',
+        company: 'Companie',
+        website: 'Site web'
+      },
+      badges: { broken: 'Deteriorată', running: 'În execuție', store: 'Magazin', disabled: 'Dezactivată', unused: 'Neutilizată' },
+      selectRow: (name) => `Selectează ${name}`,
+      selectAll: 'Selectează tot ce este afișat',
+      clearSelection: 'Golește selecția',
+      reveal: { button: 'Folder', notFound: 'Negăsit', ariaLabel: (name) => `Deschide folderul pentru ${name}` },
+      viaBrowser: 'prin browser',
+      inWindows: { button: 'În Windows', ariaLabel: (name) => `Deschide setările Windows — Windows nu permite eliminarea ${name} de aici` },
+      uninstall: 'Dezinstalează',
+      forceRemove: 'Forțează eliminarea',
+      empty: {
+        plain: 'Nimic nu se potrivește.',
+        withQuery: (query) => `Nimic nu se potrivește cu „${query}”.`,
+        withFilter: (filterLabel) => `Nimic nu se potrivește în ${filterLabel}.`,
+        withQueryAndFilter: (query, filterLabel) => `Nimic nu se potrivește cu „${query}” în ${filterLabel}.`,
+        hiddenCount: (count) => `${count} intrări sunt ascunse de filtrul curent.`,
+        clear: 'Golește căutarea și filtrele'
+      },
+      footer: {
+        selected: (count) => `${count} selectate`,
+        unknownSizes: (count) => `+ ${count} de dimensiune necunoscută`,
+        clear: 'Golește',
+        uninstallCount: (count) => `Dezinstalează ${count} program${count === 1 ? '' : 'e'}`,
+        installations: (count) => `Instalări: ${count}`,
+        showingOf: (shown, total) => `Se afișează ${shown} din ${total}`,
+        newInDays: (count, days) => `${count} noi în ${days} zile`,
+        total: 'total'
+      },
+      batchReasons: {
+        orphaned: 'Dezinstalatorul său este deteriorat — folosește Forțează eliminarea în schimb.',
+        extension: 'Extensiile browserului sunt eliminate chiar din browser.',
+        storeNoPackage: 'Această aplicație din Magazin nu are un nume de pachet de eliminat.',
+        storeProtected: 'Windows marchează această aplicație ca parte a sistemului și nu permite eliminarea ei.',
+        storeUnknown: 'Windows nu a precizat dacă această aplicație poate fi eliminată, așa că este exclusă din lot.',
+        noCommand: 'Nu este înregistrată nicio comandă de dezinstalare pentru acest program.'
+      },
+      storeRemoveDialog: {
+        heading: (name) => `Elimini ${name}?`,
+        body: 'Aceasta elimină aplicația pentru contul tău, împreună cu setările și datele salvate. Spre deosebire de tot ce elimină Prune, aceasta nu ajunge în Carantină și nu poate fi restaurată de aici — recuperarea ei înseamnă reinstalarea din Microsoft Store.',
+        cancel: 'Anulează',
+        close: 'Închide',
+        removeApp: 'Elimină aplicația',
+        removing: 'Se elimină…'
+      }
     }
   },
 
@@ -4168,6 +6140,74 @@ export const CATALOG = {
         folder: 'Папка',
         file: 'Файл',
         cancel: 'Отмена'
+      }
+    },
+    applications: {
+      loading: 'Чтение установленных программ…',
+      loadError: (error) => `Не удалось загрузить программы: ${error}`,
+      search: { placeholder: 'Поиск приложений…', label: 'Поиск приложений' },
+      filters: {
+        all: 'Все',
+        unused: 'Неиспользуемые',
+        store: 'Магазин',
+        extensions: 'Расширения',
+        broken: 'Повреждённые',
+        storeCount: (n) => `Магазин (${n})`,
+        extensionsCount: (n) => `Расширения (${n})`,
+        brokenCount: (n) => `Повреждённые (${n})`
+      },
+      columns: {
+        application: 'Приложение',
+        size: 'Размер',
+        version: 'Версия',
+        type: 'Тип',
+        installed: 'Установлено',
+        new: 'Новое',
+        company: 'Компания',
+        website: 'Веб-сайт'
+      },
+      badges: { broken: 'Повреждено', running: 'Работает', store: 'Магазин', disabled: 'Отключено', unused: 'Не используется' },
+      selectRow: (name) => `Выбрать ${name}`,
+      selectAll: 'Выбрать все показанные',
+      clearSelection: 'Снять выделение',
+      reveal: { button: 'Папка', notFound: 'Не найдено', ariaLabel: (name) => `Открыть папку для ${name}` },
+      viaBrowser: 'через браузер',
+      inWindows: { button: 'В Windows', ariaLabel: (name) => `Открыть параметры Windows — Windows не позволяет удалить ${name} отсюда` },
+      uninstall: 'Удалить',
+      forceRemove: 'Принудительное удаление',
+      empty: {
+        plain: 'Ничего не найдено.',
+        withQuery: (query) => `Ничего не найдено по запросу «${query}».`,
+        withFilter: (filterLabel) => `Ничего не найдено в фильтре «${filterLabel}».`,
+        withQueryAndFilter: (query, filterLabel) => `Ничего не найдено по запросу «${query}» в фильтре «${filterLabel}».`,
+        hiddenCount: (count) => `${count} записей скрыто текущим фильтром.`,
+        clear: 'Очистить поиск и фильтры'
+      },
+      footer: {
+        selected: (count) => `Выбрано: ${count}`,
+        unknownSizes: (count) => `+ ${count} неизвестного размера`,
+        clear: 'Очистить',
+        uninstallCount: (count) => `Удалить программ: ${count}`,
+        installations: (count) => `Установлено программ: ${count}`,
+        showingOf: (shown, total) => `Показано ${shown} из ${total}`,
+        newInDays: (count, days) => `${count} новых за ${days} дн.`,
+        total: 'всего'
+      },
+      batchReasons: {
+        orphaned: 'Его программа удаления повреждена — используйте вместо этого принудительное удаление.',
+        extension: 'Расширения браузера удаляются из самого браузера.',
+        storeNoPackage: 'У этого приложения из магазина нет имени пакета для удаления.',
+        storeProtected: 'Windows отмечает это приложение как часть системы и не позволяет его удалить.',
+        storeUnknown: 'Windows не указал, можно ли удалить это приложение, поэтому оно исключено из пакетного удаления.',
+        noCommand: 'Для этой программы не зарегистрирована команда удаления.'
+      },
+      storeRemoveDialog: {
+        heading: (name) => `Удалить ${name}?`,
+        body: 'Это удалит приложение для вашей учётной записи вместе с его настройками и сохранёнными данными. В отличие от всего остального, что удаляет Prune, оно не отправляется в Карантин и не может быть восстановлено отсюда — чтобы вернуть его, нужно установить заново из Microsoft Store.',
+        cancel: 'Отмена',
+        close: 'Закрыть',
+        removeApp: 'Удалить приложение',
+        removing: 'Удаление…'
       }
     }
   },
@@ -4307,6 +6347,74 @@ export const CATALOG = {
         file: 'Súbor',
         cancel: 'Zrušiť'
       }
+    },
+    applications: {
+      loading: 'Načítavanie nainštalovaných programov…',
+      loadError: (error) => `Programy sa nepodarilo načítať: ${error}`,
+      search: { placeholder: 'Hľadať aplikácie…', label: 'Hľadať aplikácie' },
+      filters: {
+        all: 'Všetky',
+        unused: 'Nepoužívané',
+        store: 'Obchod',
+        extensions: 'Rozšírenia',
+        broken: 'Poškodené',
+        storeCount: (n) => `Obchod (${n})`,
+        extensionsCount: (n) => `Rozšírenia (${n})`,
+        brokenCount: (n) => `Poškodené (${n})`
+      },
+      columns: {
+        application: 'Aplikácia',
+        size: 'Veľkosť',
+        version: 'Verzia',
+        type: 'Typ',
+        installed: 'Nainštalované',
+        new: 'Nové',
+        company: 'Spoločnosť',
+        website: 'Webová stránka'
+      },
+      badges: { broken: 'Poškodené', running: 'Spustené', store: 'Obchod', disabled: 'Vypnuté', unused: 'Nepoužívané' },
+      selectRow: (name) => `Vybrať ${name}`,
+      selectAll: 'Vybrať všetky zobrazené',
+      clearSelection: 'Zrušiť výber',
+      reveal: { button: 'Priečinok', notFound: 'Nenájdené', ariaLabel: (name) => `Otvoriť priečinok pre ${name}` },
+      viaBrowser: 'cez prehliadač',
+      inWindows: { button: 'Vo Windows', ariaLabel: (name) => `Otvoriť nastavenia Windows — Windows neumožňuje odstrániť ${name} odtiaľto` },
+      uninstall: 'Odinštalovať',
+      forceRemove: 'Vynútiť odstránenie',
+      empty: {
+        plain: 'Nič nezodpovedá.',
+        withQuery: (query) => `Ničomu nezodpovedá „${query}“.`,
+        withFilter: (filterLabel) => `Nič nezodpovedá vo filtri ${filterLabel}.`,
+        withQueryAndFilter: (query, filterLabel) => `Ničomu nezodpovedá „${query}“ vo filtri ${filterLabel}.`,
+        hiddenCount: (count) => `${count} položiek je skrytých aktuálnym filtrom.`,
+        clear: 'Vymazať hľadanie a filtre'
+      },
+      footer: {
+        selected: (count) => `${count} vybraných`,
+        unknownSizes: (count) => `+ ${count} neznámej veľkosti`,
+        clear: 'Vymazať',
+        uninstallCount: (count) => `Odinštalovať ${count} programov`,
+        installations: (count) => `Inštalácie: ${count}`,
+        showingOf: (shown, total) => `Zobrazené ${shown} z ${total}`,
+        newInDays: (count, days) => `${count} nových za ${days} dní`,
+        total: 'spolu'
+      },
+      batchReasons: {
+        orphaned: 'Jeho odinštalačný program je poškodený — namiesto toho použite Vynútiť odstránenie.',
+        extension: 'Rozšírenia prehliadača sa odstraňujú priamo z prehliadača.',
+        storeNoPackage: 'Táto aplikácia z obchodu nemá názov balíka na odstránenie.',
+        storeProtected: 'Windows označuje túto aplikáciu ako súčasť systému a neumožňuje jej odstránenie.',
+        storeUnknown: 'Windows neuviedol, či je možné túto aplikáciu odstrániť, preto je vynechaná z dávky.',
+        noCommand: 'Pre tento program nie je zaregistrovaný žiadny odinštalačný príkaz.'
+      },
+      storeRemoveDialog: {
+        heading: (name) => `Odstrániť ${name}?`,
+        body: 'Týmto sa aplikácia odstráni z vášho konta spolu s jej nastaveniami a uloženými údajmi. Na rozdiel od všetkého ostatného, čo Prune odstraňuje, táto nejde do Karantény a nedá sa odtiaľto obnoviť — jej opätovné získanie znamená nainštalovať ju znova z Microsoft Storu.',
+        cancel: 'Zrušiť',
+        close: 'Zavrieť',
+        removeApp: 'Odstrániť aplikáciu',
+        removing: 'Odstraňovanie…'
+      }
     }
   },
 
@@ -4444,6 +6552,74 @@ export const CATALOG = {
         folder: 'Dosja',
         file: 'Skedari',
         cancel: 'Anulo'
+      }
+    },
+    applications: {
+      loading: 'Duke lexuar programet e instaluara…',
+      loadError: (error) => `Programet nuk mund të ngarkoheshin: ${error}`,
+      search: { placeholder: 'Kërko aplikacione…', label: 'Kërko aplikacione' },
+      filters: {
+        all: 'Të gjitha',
+        unused: 'Të papërdorura',
+        store: 'Dyqan',
+        extensions: 'Shtesa',
+        broken: 'Të dëmtuara',
+        storeCount: (n) => `Dyqan (${n})`,
+        extensionsCount: (n) => `Shtesa (${n})`,
+        brokenCount: (n) => `Të dëmtuara (${n})`
+      },
+      columns: {
+        application: 'Aplikacioni',
+        size: 'Madhësia',
+        version: 'Versioni',
+        type: 'Lloji',
+        installed: 'Instaluar',
+        new: 'I ri',
+        company: 'Kompania',
+        website: 'Faqja e internetit'
+      },
+      badges: { broken: 'I dëmtuar', running: 'Në ekzekutim', store: 'Dyqan', disabled: 'I çaktivizuar', unused: 'I papërdorur' },
+      selectRow: (name) => `Zgjidh ${name}`,
+      selectAll: 'Zgjidh gjithçka të shfaqur',
+      clearSelection: 'Pastro përzgjedhjen',
+      reveal: { button: 'Dosja', notFound: 'Nuk u gjet', ariaLabel: (name) => `Hap dosjen për ${name}` },
+      viaBrowser: 'nëpërmjet shfletuesit',
+      inWindows: { button: 'Në Windows', ariaLabel: (name) => `Hap cilësimet e Windows — Windows nuk lejon që ${name} të hiqet nga këtu` },
+      uninstall: 'Çinstalo',
+      forceRemove: 'Detyro heqjen',
+      empty: {
+        plain: 'Asgjë nuk përputhet.',
+        withQuery: (query) => `Asgjë nuk përputhet me "${query}".`,
+        withFilter: (filterLabel) => `Asgjë nuk përputhet te ${filterLabel}.`,
+        withQueryAndFilter: (query, filterLabel) => `Asgjë nuk përputhet me "${query}" te ${filterLabel}.`,
+        hiddenCount: (count) => `${count} hyrje janë të fshehura nga filtri aktual.`,
+        clear: 'Pastro kërkimin dhe filtrat'
+      },
+      footer: {
+        selected: (count) => `${count} të përzgjedhura`,
+        unknownSizes: (count) => `+ ${count} me madhësi të panjohur`,
+        clear: 'Pastro',
+        uninstallCount: (count) => `Çinstalo ${count} programe`,
+        installations: (count) => `Instalime: ${count}`,
+        showingOf: (shown, total) => `Duke shfaqur ${shown} nga ${total}`,
+        newInDays: (count, days) => `${count} të reja brenda ${days} ditësh`,
+        total: 'gjithsej'
+      },
+      batchReasons: {
+        orphaned: 'Çinstaluesi i tij është i dëmtuar — përdorni Detyro heqjen në vend të kësaj.',
+        extension: 'Shtesat e shfletuesit hiqen nga vetë shfletuesi.',
+        storeNoPackage: "Ky aplikacion dyqani nuk ka emër paketimi për t'u hequr.",
+        storeProtected: 'Windows e shënon këtë aplikacion si pjesë të sistemit dhe nuk lejon heqjen e tij.',
+        storeUnknown: 'Windows nuk ka thënë nëse ky aplikacion mund të hiqet, prandaj lihet jashtë grupit.',
+        noCommand: 'Nuk ka komandë çinstalimi të regjistruar për këtë program.'
+      },
+      storeRemoveDialog: {
+        heading: (name) => `Të hiqet ${name}?`,
+        body: 'Kjo e heq aplikacionin për llogarinë tënde, së bashku me cilësimet dhe të dhënat e ruajtura. Ndryshe nga çdo gjë tjetër që heq Prune, ky nuk shkon në Karantinë dhe nuk mund të rikthehet nga këtu — rimarrja e tij do të thotë ta instalosh përsëri nga Microsoft Store.',
+        cancel: 'Anulo',
+        close: 'Mbyll',
+        removeApp: 'Hiq aplikacionin',
+        removing: 'Duke hequr…'
       }
     }
   },
@@ -4583,6 +6759,74 @@ export const CATALOG = {
         file: 'Датотека',
         cancel: 'Откажи'
       }
+    },
+    applications: {
+      loading: 'Читање инсталираних програма…',
+      loadError: (error) => `Учитавање програма није успело: ${error}`,
+      search: { placeholder: 'Претрага апликација…', label: 'Претрага апликација' },
+      filters: {
+        all: 'Све',
+        unused: 'Некоришћене',
+        store: 'Продавница',
+        extensions: 'Екстензије',
+        broken: 'Оштећене',
+        storeCount: (n) => `Продавница (${n})`,
+        extensionsCount: (n) => `Екстензије (${n})`,
+        brokenCount: (n) => `Оштећене (${n})`
+      },
+      columns: {
+        application: 'Апликација',
+        size: 'Величина',
+        version: 'Верзија',
+        type: 'Тип',
+        installed: 'Инсталирано',
+        new: 'Ново',
+        company: 'Компанија',
+        website: 'Веб-сајт'
+      },
+      badges: { broken: 'Оштећено', running: 'Покренуто', store: 'Продавница', disabled: 'Онемогућено', unused: 'Некоришћено' },
+      selectRow: (name) => `Изабери ${name}`,
+      selectAll: 'Изабери све приказано',
+      clearSelection: 'Обриши избор',
+      reveal: { button: 'Фасцикла', notFound: 'Није пронађено', ariaLabel: (name) => `Отвори фасциклу за ${name}` },
+      viaBrowser: 'преко прегледача',
+      inWindows: { button: 'У Windows-у', ariaLabel: (name) => `Отвори подешавања Windows-а — Windows не дозвољава да се ${name} уклони одавде` },
+      uninstall: 'Деинсталирај',
+      forceRemove: 'Присилно уклањање',
+      empty: {
+        plain: 'Ништа се не поклапа.',
+        withQuery: (query) => `Ништа се не поклапа са „${query}”.`,
+        withFilter: (filterLabel) => `Ништа се не поклапа у ${filterLabel}.`,
+        withQueryAndFilter: (query, filterLabel) => `Ништа се не поклапа са „${query}” у ${filterLabel}.`,
+        hiddenCount: (count) => `${count} ставки су скривене тренутним филтером.`,
+        clear: 'Обриши претрагу и филтере'
+      },
+      footer: {
+        selected: (count) => `${count} изабрано`,
+        unknownSizes: (count) => `+ ${count} непознате величине`,
+        clear: 'Обриши',
+        uninstallCount: (count) => `Деинсталирај ${count} програма`,
+        installations: (count) => `Инсталације: ${count}`,
+        showingOf: (shown, total) => `Приказано ${shown} од ${total}`,
+        newInDays: (count, days) => `${count} нових у последњих ${days} дана`,
+        total: 'укупно'
+      },
+      batchReasons: {
+        orphaned: 'Његов програм за деинсталацију је оштећен — уместо тога користите Присилно уклањање.',
+        extension: 'Екстензије прегледача се уклањају из самог прегледача.',
+        storeNoPackage: 'Ова апликација из продавнице нема назив пакета за уклањање.',
+        storeProtected: 'Windows означава ову апликацију као део система и не дозвољава њено уклањање.',
+        storeUnknown: 'Windows није навео да ли ова апликација може да се уклони, па је изостављена из групне радње.',
+        noCommand: 'За овај програм није регистрована команда за деинсталацију.'
+      },
+      storeRemoveDialog: {
+        heading: (name) => `Уклонити ${name}?`,
+        body: 'Ово уклања апликацију за ваш налог, заједно са њеним подешавањима и сачуваним подацима. За разлику од свега осталог што Prune уклања, ово не иде у Карантин и не може се одавде вратити — враћање значи поновну инсталацију из Microsoft продавнице.',
+        cancel: 'Откажи',
+        close: 'Затвори',
+        removeApp: 'Уклони апликацију',
+        removing: 'Уклањање…'
+      }
     }
   },
 
@@ -4720,6 +6964,74 @@ export const CATALOG = {
         folder: 'Mapp',
         file: 'Fil',
         cancel: 'Avbryt'
+      }
+    },
+    applications: {
+      loading: 'Läser installerade program…',
+      loadError: (error) => `Det gick inte att läsa in program: ${error}`,
+      search: { placeholder: 'Sök program…', label: 'Sök program' },
+      filters: {
+        all: 'Alla',
+        unused: 'Oanvända',
+        store: 'Store',
+        extensions: 'Tillägg',
+        broken: 'Trasiga',
+        storeCount: (n) => `Store (${n})`,
+        extensionsCount: (n) => `Tillägg (${n})`,
+        brokenCount: (n) => `Trasiga (${n})`
+      },
+      columns: {
+        application: 'Program',
+        size: 'Storlek',
+        version: 'Version',
+        type: 'Typ',
+        installed: 'Installerat',
+        new: 'Nytt',
+        company: 'Företag',
+        website: 'Webbplats'
+      },
+      badges: { broken: 'Trasig', running: 'Körs', store: 'Store', disabled: 'Inaktiverad', unused: 'Oanvänd' },
+      selectRow: (name) => `Välj ${name}`,
+      selectAll: 'Välj alla visade',
+      clearSelection: 'Rensa markering',
+      reveal: { button: 'Mapp', notFound: 'Hittades inte', ariaLabel: (name) => `Öppna mappen för ${name}` },
+      viaBrowser: 'via webbläsaren',
+      inWindows: { button: 'I Windows', ariaLabel: (name) => `Öppna Windows-inställningar — Windows tillåter inte att ${name} tas bort härifrån` },
+      uninstall: 'Avinstallera',
+      forceRemove: 'Tvinga borttagning',
+      empty: {
+        plain: 'Inget matchar.',
+        withQuery: (query) => `Inget matchar "${query}".`,
+        withFilter: (filterLabel) => `Inget matchar i ${filterLabel}.`,
+        withQueryAndFilter: (query, filterLabel) => `Inget matchar "${query}" i ${filterLabel}.`,
+        hiddenCount: (count) => `${count} poster är dolda av det aktuella filtret.`,
+        clear: 'Rensa sökning och filter'
+      },
+      footer: {
+        selected: (count) => `${count} markerade`,
+        unknownSizes: (count) => `+ ${count} av okänd storlek`,
+        clear: 'Rensa',
+        uninstallCount: (count) => `Avinstallera ${count} program`,
+        installations: (count) => `Installationer: ${count}`,
+        showingOf: (shown, total) => `Visar ${shown} av ${total}`,
+        newInDays: (count, days) => `${count} nya inom ${days} dagar`,
+        total: 'totalt'
+      },
+      batchReasons: {
+        orphaned: 'Dess avinstallationsprogram är trasigt — använd Tvinga borttagning istället.',
+        extension: 'Webbläsartillägg tas bort från själva webbläsaren.',
+        storeNoPackage: 'Denna Store-app har inget paketnamn att ta bort.',
+        storeProtected: 'Windows markerar denna app som en del av systemet och tillåter inte att den tas bort.',
+        storeUnknown: 'Windows har inte angett om denna app kan tas bort, så den utesluts från batchen.',
+        noCommand: 'Inget avinstallationskommando är registrerat för detta program.'
+      },
+      storeRemoveDialog: {
+        heading: (name) => `Ta bort ${name}?`,
+        body: 'Detta tar bort appen för ditt konto, tillsammans med dess inställningar och sparade data. Till skillnad från allt annat Prune tar bort går denna inte till Karantän och kan inte återställas härifrån — att få tillbaka den innebär att installera om den från Microsoft Store.',
+        cancel: 'Avbryt',
+        close: 'Stäng',
+        removeApp: 'Ta bort app',
+        removing: 'Tar bort…'
       }
     }
   },
@@ -4859,6 +7171,74 @@ export const CATALOG = {
         file: 'ไฟล์',
         cancel: 'ยกเลิก'
       }
+    },
+    applications: {
+      loading: 'กำลังอ่านโปรแกรมที่ติดตั้งไว้…',
+      loadError: (error) => `โหลดโปรแกรมไม่สำเร็จ: ${error}`,
+      search: { placeholder: 'ค้นหาแอปพลิเคชัน…', label: 'ค้นหาแอปพลิเคชัน' },
+      filters: {
+        all: 'ทั้งหมด',
+        unused: 'ไม่ได้ใช้งาน',
+        store: 'สโตร์',
+        extensions: 'ส่วนขยาย',
+        broken: 'เสียหาย',
+        storeCount: (n) => `สโตร์ (${n})`,
+        extensionsCount: (n) => `ส่วนขยาย (${n})`,
+        brokenCount: (n) => `เสียหาย (${n})`
+      },
+      columns: {
+        application: 'แอปพลิเคชัน',
+        size: 'ขนาด',
+        version: 'เวอร์ชัน',
+        type: 'ประเภท',
+        installed: 'ติดตั้งเมื่อ',
+        new: 'ใหม่',
+        company: 'บริษัท',
+        website: 'เว็บไซต์'
+      },
+      badges: { broken: 'เสียหาย', running: 'กำลังทำงาน', store: 'สโตร์', disabled: 'ปิดใช้งาน', unused: 'ไม่ได้ใช้งาน' },
+      selectRow: (name) => `เลือก ${name}`,
+      selectAll: 'เลือกทั้งหมดที่แสดง',
+      clearSelection: 'ล้างการเลือก',
+      reveal: { button: 'โฟลเดอร์', notFound: 'ไม่พบ', ariaLabel: (name) => `เปิดโฟลเดอร์ของ ${name}` },
+      viaBrowser: 'ผ่านเบราว์เซอร์',
+      inWindows: { button: 'ใน Windows', ariaLabel: (name) => `เปิดการตั้งค่า Windows — Windows ไม่อนุญาตให้ลบ ${name} จากที่นี่` },
+      uninstall: 'ถอนการติดตั้ง',
+      forceRemove: 'บังคับลบ',
+      empty: {
+        plain: 'ไม่พบรายการที่ตรงกัน',
+        withQuery: (query) => `ไม่พบรายการที่ตรงกับ "${query}"`,
+        withFilter: (filterLabel) => `ไม่พบรายการที่ตรงกันใน ${filterLabel}`,
+        withQueryAndFilter: (query, filterLabel) => `ไม่พบรายการที่ตรงกับ "${query}" ใน ${filterLabel}`,
+        hiddenCount: (count) => `${count} รายการถูกซ่อนโดยตัวกรองปัจจุบัน`,
+        clear: 'ล้างการค้นหาและตัวกรอง'
+      },
+      footer: {
+        selected: (count) => `เลือกแล้ว ${count} รายการ`,
+        unknownSizes: (count) => `+ ${count} รายการขนาดไม่ทราบ`,
+        clear: 'ล้าง',
+        uninstallCount: (count) => `ถอนการติดตั้ง ${count} โปรแกรม`,
+        installations: (count) => `การติดตั้ง: ${count}`,
+        showingOf: (shown, total) => `แสดง ${shown} จาก ${total}`,
+        newInDays: (count, days) => `ใหม่ ${count} รายการภายใน ${days} วัน`,
+        total: 'รวม'
+      },
+      batchReasons: {
+        orphaned: 'โปรแกรมถอนการติดตั้งเสียหาย — ใช้บังคับลบแทน',
+        extension: 'ส่วนขยายเบราว์เซอร์จะถูกลบจากเบราว์เซอร์เอง',
+        storeNoPackage: 'แอปสโตร์นี้ไม่มีชื่อแพ็กเกจให้ลบ',
+        storeProtected: 'Windows ระบุว่าแอปนี้เป็นส่วนหนึ่งของระบบและไม่อนุญาตให้ลบ',
+        storeUnknown: 'Windows ไม่ได้ระบุว่าแอปนี้สามารถลบได้หรือไม่ จึงถูกละไว้จากการดำเนินการเป็นชุด',
+        noCommand: 'ไม่มีคำสั่งถอนการติดตั้งที่ลงทะเบียนไว้สำหรับโปรแกรมนี้'
+      },
+      storeRemoveDialog: {
+        heading: (name) => `ลบ ${name} ใช่ไหม`,
+        body: 'การดำเนินการนี้จะลบแอปสำหรับบัญชีของคุณ พร้อมการตั้งค่าและข้อมูลที่บันทึกไว้ ต่างจากทุกอย่างที่ Prune ลบ แอปนี้จะไม่ถูกย้ายไปยังกักกัน และไม่สามารถกู้คืนจากที่นี่ได้ — การกู้คืนหมายถึงการติดตั้งใหม่จาก Microsoft Store',
+        cancel: 'ยกเลิก',
+        close: 'ปิด',
+        removeApp: 'ลบแอป',
+        removing: 'กำลังลบ…'
+      }
     }
   },
 
@@ -4996,6 +7376,74 @@ export const CATALOG = {
         folder: 'Klasör',
         file: 'Dosya',
         cancel: 'İptal'
+      }
+    },
+    applications: {
+      loading: 'Yüklü programlar okunuyor…',
+      loadError: (error) => `Programlar yüklenemedi: ${error}`,
+      search: { placeholder: 'Uygulama ara…', label: 'Uygulama ara' },
+      filters: {
+        all: 'Tümü',
+        unused: 'Kullanılmayan',
+        store: 'Mağaza',
+        extensions: 'Uzantılar',
+        broken: 'Bozuk',
+        storeCount: (n) => `Mağaza (${n})`,
+        extensionsCount: (n) => `Uzantılar (${n})`,
+        brokenCount: (n) => `Bozuk (${n})`
+      },
+      columns: {
+        application: 'Uygulama',
+        size: 'Boyut',
+        version: 'Sürüm',
+        type: 'Tür',
+        installed: 'Yüklendi',
+        new: 'Yeni',
+        company: 'Şirket',
+        website: 'Web sitesi'
+      },
+      badges: { broken: 'Bozuk', running: 'Çalışıyor', store: 'Mağaza', disabled: 'Devre dışı', unused: 'Kullanılmıyor' },
+      selectRow: (name) => `${name} öğesini seç`,
+      selectAll: 'Görüntülenen her şeyi seç',
+      clearSelection: 'Seçimi temizle',
+      reveal: { button: 'Klasör', notFound: 'Bulunamadı', ariaLabel: (name) => `${name} için klasörü aç` },
+      viaBrowser: 'tarayıcı üzerinden',
+      inWindows: { button: "Windows'ta", ariaLabel: (name) => `Windows ayarlarını aç — Windows, ${name} öğesinin buradan kaldırılmasına izin vermiyor` },
+      uninstall: 'Kaldır',
+      forceRemove: 'Kaldırmayı zorla',
+      empty: {
+        plain: 'Hiçbir şey eşleşmiyor.',
+        withQuery: (query) => `"${query}" ile eşleşen bir şey yok.`,
+        withFilter: (filterLabel) => `${filterLabel} içinde eşleşen bir şey yok.`,
+        withQueryAndFilter: (query, filterLabel) => `${filterLabel} içinde "${query}" ile eşleşen bir şey yok.`,
+        hiddenCount: (count) => `${count} girdi geçerli filtre tarafından gizlendi.`,
+        clear: 'Aramayı ve filtreleri temizle'
+      },
+      footer: {
+        selected: (count) => `${count} seçildi`,
+        unknownSizes: (count) => `+ ${count} bilinmeyen boyutta`,
+        clear: 'Temizle',
+        uninstallCount: (count) => `${count} programı kaldır`,
+        installations: (count) => `Kurulumlar: ${count}`,
+        showingOf: (shown, total) => `${total} öğeden ${shown} tanesi gösteriliyor`,
+        newInDays: (count, days) => `Son ${days} günde ${count} yeni`,
+        total: 'toplam'
+      },
+      batchReasons: {
+        orphaned: 'Kaldırma programı bozuk — bunun yerine Kaldırmayı zorla seçeneğini kullanın.',
+        extension: 'Tarayıcı uzantıları tarayıcının kendisinden kaldırılır.',
+        storeNoPackage: 'Bu Mağaza uygulamasının kaldırılacak bir paket adı yok.',
+        storeProtected: 'Windows bu uygulamayı sistemin bir parçası olarak işaretliyor ve kaldırılmasına izin vermiyor.',
+        storeUnknown: 'Windows bu uygulamanın kaldırılıp kaldırılamayacağını belirtmedi, bu yüzden toplu işlemden hariç tutuldu.',
+        noCommand: 'Bu program için kayıtlı bir kaldırma komutu yok.'
+      },
+      storeRemoveDialog: {
+        heading: (name) => `${name} kaldırılsın mı?`,
+        body: "Bu, uygulamayı hesabınız için ayarları ve kayıtlı verileriyle birlikte kaldırır. Prune'un kaldırdığı diğer her şeyin aksine, bu Karantina'ya gitmez ve buradan geri yüklenemez — geri almak, onu Microsoft Store'dan yeniden yüklemek anlamına gelir.",
+        cancel: 'İptal',
+        close: 'Kapat',
+        removeApp: 'Uygulamayı kaldır',
+        removing: 'Kaldırılıyor…'
       }
     }
   },
@@ -5135,6 +7583,74 @@ export const CATALOG = {
         file: 'Файл',
         cancel: 'Скасувати'
       }
+    },
+    applications: {
+      loading: 'Читання встановлених програм…',
+      loadError: (error) => `Не вдалося завантажити програми: ${error}`,
+      search: { placeholder: 'Пошук застосунків…', label: 'Пошук застосунків' },
+      filters: {
+        all: 'Усі',
+        unused: 'Невикористані',
+        store: 'Магазин',
+        extensions: 'Розширення',
+        broken: 'Пошкоджені',
+        storeCount: (n) => `Магазин (${n})`,
+        extensionsCount: (n) => `Розширення (${n})`,
+        brokenCount: (n) => `Пошкоджені (${n})`
+      },
+      columns: {
+        application: 'Застосунок',
+        size: 'Розмір',
+        version: 'Версія',
+        type: 'Тип',
+        installed: 'Встановлено',
+        new: 'Новий',
+        company: 'Компанія',
+        website: 'Веб-сайт'
+      },
+      badges: { broken: 'Пошкоджено', running: 'Виконується', store: 'Магазин', disabled: 'Вимкнено', unused: 'Не використовується' },
+      selectRow: (name) => `Вибрати ${name}`,
+      selectAll: 'Вибрати всі показані',
+      clearSelection: 'Зняти виділення',
+      reveal: { button: 'Папка', notFound: 'Не знайдено', ariaLabel: (name) => `Відкрити папку для ${name}` },
+      viaBrowser: 'через браузер',
+      inWindows: { button: 'У Windows', ariaLabel: (name) => `Відкрити параметри Windows — Windows не дозволяє видалити ${name} звідси` },
+      uninstall: 'Видалити',
+      forceRemove: 'Примусове видалення',
+      empty: {
+        plain: 'Нічого не знайдено.',
+        withQuery: (query) => `Нічого не знайдено за запитом «${query}».`,
+        withFilter: (filterLabel) => `Нічого не знайдено у фільтрі «${filterLabel}».`,
+        withQueryAndFilter: (query, filterLabel) => `Нічого не знайдено за запитом «${query}» у фільтрі «${filterLabel}».`,
+        hiddenCount: (count) => `${count} записів приховано поточним фільтром.`,
+        clear: 'Очистити пошук і фільтри'
+      },
+      footer: {
+        selected: (count) => `Вибрано: ${count}`,
+        unknownSizes: (count) => `+ ${count} невідомого розміру`,
+        clear: 'Очистити',
+        uninstallCount: (count) => `Видалити програм: ${count}`,
+        installations: (count) => `Встановлено програм: ${count}`,
+        showingOf: (shown, total) => `Показано ${shown} з ${total}`,
+        newInDays: (count, days) => `${count} нових за ${days} дн.`,
+        total: 'усього'
+      },
+      batchReasons: {
+        orphaned: 'Його програма видалення пошкоджена — використайте замість цього примусове видалення.',
+        extension: 'Розширення браузера видаляються з самого браузера.',
+        storeNoPackage: 'Цей застосунок магазину не має назви пакета для видалення.',
+        storeProtected: 'Windows позначає цей застосунок як частину системи і не дозволяє його видалити.',
+        storeUnknown: 'Windows не вказав, чи можна видалити цей застосунок, тому його виключено з пакетного видалення.',
+        noCommand: 'Для цієї програми не зареєстровано команду видалення.'
+      },
+      storeRemoveDialog: {
+        heading: (name) => `Видалити ${name}?`,
+        body: 'Це видалить застосунок для вашого облікового запису разом із його налаштуваннями та збереженими даними. На відміну від усього іншого, що видаляє Prune, цей не потрапляє в Карантин і не може бути відновлений звідси — щоб повернути його, потрібно встановити його знову з Microsoft Store.',
+        cancel: 'Скасувати',
+        close: 'Закрити',
+        removeApp: 'Видалити застосунок',
+        removing: 'Видалення…'
+      }
     }
   },
 
@@ -5272,6 +7788,74 @@ export const CATALOG = {
         folder: 'Thư mục',
         file: 'Tệp',
         cancel: 'Hủy'
+      }
+    },
+    applications: {
+      loading: 'Đang đọc các chương trình đã cài đặt…',
+      loadError: (error) => `Không thể tải chương trình: ${error}`,
+      search: { placeholder: 'Tìm kiếm ứng dụng…', label: 'Tìm kiếm ứng dụng' },
+      filters: {
+        all: 'Tất cả',
+        unused: 'Không sử dụng',
+        store: 'Cửa hàng',
+        extensions: 'Tiện ích mở rộng',
+        broken: 'Bị hỏng',
+        storeCount: (n) => `Cửa hàng (${n})`,
+        extensionsCount: (n) => `Tiện ích mở rộng (${n})`,
+        brokenCount: (n) => `Bị hỏng (${n})`
+      },
+      columns: {
+        application: 'Ứng dụng',
+        size: 'Kích thước',
+        version: 'Phiên bản',
+        type: 'Loại',
+        installed: 'Đã cài đặt',
+        new: 'Mới',
+        company: 'Công ty',
+        website: 'Trang web'
+      },
+      badges: { broken: 'Bị hỏng', running: 'Đang chạy', store: 'Cửa hàng', disabled: 'Đã tắt', unused: 'Không sử dụng' },
+      selectRow: (name) => `Chọn ${name}`,
+      selectAll: 'Chọn tất cả mục đang hiển thị',
+      clearSelection: 'Bỏ chọn',
+      reveal: { button: 'Thư mục', notFound: 'Không tìm thấy', ariaLabel: (name) => `Mở thư mục của ${name}` },
+      viaBrowser: 'qua trình duyệt',
+      inWindows: { button: 'Trong Windows', ariaLabel: (name) => `Mở cài đặt Windows — Windows không cho phép gỡ bỏ ${name} từ đây` },
+      uninstall: 'Gỡ cài đặt',
+      forceRemove: 'Buộc gỡ bỏ',
+      empty: {
+        plain: 'Không có gì khớp.',
+        withQuery: (query) => `Không có gì khớp với "${query}".`,
+        withFilter: (filterLabel) => `Không có gì khớp trong ${filterLabel}.`,
+        withQueryAndFilter: (query, filterLabel) => `Không có gì khớp với "${query}" trong ${filterLabel}.`,
+        hiddenCount: (count) => `${count} mục đang bị ẩn bởi bộ lọc hiện tại.`,
+        clear: 'Xóa tìm kiếm và bộ lọc'
+      },
+      footer: {
+        selected: (count) => `Đã chọn ${count}`,
+        unknownSizes: (count) => `+ ${count} không rõ dung lượng`,
+        clear: 'Xóa',
+        uninstallCount: (count) => `Gỡ cài đặt ${count} chương trình`,
+        installations: (count) => `Số lượt cài đặt: ${count}`,
+        showingOf: (shown, total) => `Hiển thị ${shown} trong tổng số ${total}`,
+        newInDays: (count, days) => `${count} mới trong ${days} ngày qua`,
+        total: 'tổng cộng'
+      },
+      batchReasons: {
+        orphaned: 'Trình gỡ cài đặt của nó bị hỏng — hãy dùng Buộc gỡ bỏ thay thế.',
+        extension: 'Tiện ích mở rộng trình duyệt được gỡ bỏ từ chính trình duyệt.',
+        storeNoPackage: 'Ứng dụng Cửa hàng này không có tên gói để gỡ bỏ.',
+        storeProtected: 'Windows đánh dấu ứng dụng này là một phần của hệ thống và không cho phép gỡ bỏ nó.',
+        storeUnknown: 'Windows chưa cho biết liệu ứng dụng này có thể gỡ bỏ hay không, vì vậy nó bị loại khỏi lô xử lý.',
+        noCommand: 'Không có lệnh gỡ cài đặt nào được đăng ký cho chương trình này.'
+      },
+      storeRemoveDialog: {
+        heading: (name) => `Xóa ${name}?`,
+        body: 'Thao tác này sẽ xóa ứng dụng khỏi tài khoản của bạn, cùng với các cài đặt và dữ liệu đã lưu. Không giống như mọi thứ khác mà Prune xóa, ứng dụng này không được chuyển vào Khu cách ly và không thể khôi phục từ đây — để lấy lại, bạn cần cài đặt lại từ Microsoft Store.',
+        cancel: 'Hủy',
+        close: 'Đóng',
+        removeApp: 'Xóa ứng dụng',
+        removing: 'Đang xóa…'
       }
     }
   },
@@ -5411,6 +7995,74 @@ export const CATALOG = {
         file: '文件',
         cancel: '取消'
       }
+    },
+    applications: {
+      loading: '正在读取已安装的程序…',
+      loadError: (error) => `无法加载程序：${error}`,
+      search: { placeholder: '搜索应用…', label: '搜索应用' },
+      filters: {
+        all: '全部',
+        unused: '未使用',
+        store: '商店',
+        extensions: '扩展程序',
+        broken: '已损坏',
+        storeCount: (n) => `商店 (${n})`,
+        extensionsCount: (n) => `扩展程序 (${n})`,
+        brokenCount: (n) => `已损坏 (${n})`
+      },
+      columns: {
+        application: '应用',
+        size: '大小',
+        version: '版本',
+        type: '类型',
+        installed: '安装日期',
+        new: '新',
+        company: '公司',
+        website: '网站'
+      },
+      badges: { broken: '已损坏', running: '运行中', store: '商店', disabled: '已禁用', unused: '未使用' },
+      selectRow: (name) => `选择 ${name}`,
+      selectAll: '选择所有显示项',
+      clearSelection: '清除选择',
+      reveal: { button: '文件夹', notFound: '未找到', ariaLabel: (name) => `打开 ${name} 的文件夹` },
+      viaBrowser: '通过浏览器',
+      inWindows: { button: '在 Windows 中', ariaLabel: (name) => `打开 Windows 设置 — Windows 不允许从此处删除 ${name}` },
+      uninstall: '卸载',
+      forceRemove: '强制移除',
+      empty: {
+        plain: '没有匹配项。',
+        withQuery: (query) => `没有匹配"${query}"的项。`,
+        withFilter: (filterLabel) => `在${filterLabel}中没有匹配项。`,
+        withQueryAndFilter: (query, filterLabel) => `在${filterLabel}中没有匹配"${query}"的项。`,
+        hiddenCount: (count) => `当前筛选器隐藏了 ${count} 个条目。`,
+        clear: '清除搜索和筛选器'
+      },
+      footer: {
+        selected: (count) => `已选择 ${count} 个`,
+        unknownSizes: (count) => `+ ${count} 个大小未知`,
+        clear: '清除',
+        uninstallCount: (count) => `卸载 ${count} 个程序`,
+        installations: (count) => `已安装：${count}`,
+        showingOf: (shown, total) => `显示 ${shown} / ${total}`,
+        newInDays: (count, days) => `${days} 天内新增 ${count} 个`,
+        total: '总计'
+      },
+      batchReasons: {
+        orphaned: '其卸载程序已损坏 — 请改用强制移除。',
+        extension: '浏览器扩展程序会从浏览器本身移除。',
+        storeNoPackage: '此商店应用没有可移除的包名称。',
+        storeProtected: 'Windows 将此应用标记为系统的一部分，不允许将其移除。',
+        storeUnknown: 'Windows 未说明此应用是否可以移除，因此在批量操作中将其排除。',
+        noCommand: '未为此程序注册卸载命令。'
+      },
+      storeRemoveDialog: {
+        heading: (name) => `删除${name}?`,
+        body: '这会删除你账户中的该应用及其设置和已保存的数据。与 Prune 删除的其他内容不同，此操作不会将其移入隔离区，也无法从此处恢复——要找回它，意味着需要从 Microsoft Store 重新安装。',
+        cancel: '取消',
+        close: '关闭',
+        removeApp: '删除应用',
+        removing: '正在删除…'
+      }
     }
   },
 
@@ -5548,6 +8200,74 @@ export const CATALOG = {
         folder: '資料夾',
         file: '檔案',
         cancel: '取消'
+      }
+    },
+    applications: {
+      loading: '正在讀取已安裝的程式…',
+      loadError: (error) => `無法載入程式：${error}`,
+      search: { placeholder: '搜尋應用程式…', label: '搜尋應用程式' },
+      filters: {
+        all: '全部',
+        unused: '未使用',
+        store: '市集',
+        extensions: '擴充功能',
+        broken: '已損壞',
+        storeCount: (n) => `市集 (${n})`,
+        extensionsCount: (n) => `擴充功能 (${n})`,
+        brokenCount: (n) => `已損壞 (${n})`
+      },
+      columns: {
+        application: '應用程式',
+        size: '大小',
+        version: '版本',
+        type: '類型',
+        installed: '安裝日期',
+        new: '新',
+        company: '公司',
+        website: '網站'
+      },
+      badges: { broken: '已損壞', running: '執行中', store: '市集', disabled: '已停用', unused: '未使用' },
+      selectRow: (name) => `選取 ${name}`,
+      selectAll: '選取所有顯示項目',
+      clearSelection: '清除選取',
+      reveal: { button: '資料夾', notFound: '找不到', ariaLabel: (name) => `開啟 ${name} 的資料夾` },
+      viaBrowser: '透過瀏覽器',
+      inWindows: { button: '在 Windows 中', ariaLabel: (name) => `開啟 Windows 設定 — Windows 不允許從這裡移除 ${name}` },
+      uninstall: '解除安裝',
+      forceRemove: '強制移除',
+      empty: {
+        plain: '沒有相符項目。',
+        withQuery: (query) => `沒有符合「${query}」的項目。`,
+        withFilter: (filterLabel) => `在${filterLabel}中沒有相符項目。`,
+        withQueryAndFilter: (query, filterLabel) => `在${filterLabel}中沒有符合「${query}」的項目。`,
+        hiddenCount: (count) => `目前的篩選條件隱藏了 ${count} 個項目。`,
+        clear: '清除搜尋與篩選條件'
+      },
+      footer: {
+        selected: (count) => `已選取 ${count} 個`,
+        unknownSizes: (count) => `+ ${count} 個大小未知`,
+        clear: '清除',
+        uninstallCount: (count) => `解除安裝 ${count} 個程式`,
+        installations: (count) => `已安裝：${count}`,
+        showingOf: (shown, total) => `顯示 ${shown} / ${total}`,
+        newInDays: (count, days) => `${days} 天內新增 ${count} 個`,
+        total: '總計'
+      },
+      batchReasons: {
+        orphaned: '其解除安裝程式已損壞 — 請改用強制移除。',
+        extension: '瀏覽器擴充功能會從瀏覽器本身移除。',
+        storeNoPackage: '此市集應用程式沒有可移除的套件名稱。',
+        storeProtected: 'Windows 將此應用程式標記為系統的一部分，不允許將其移除。',
+        storeUnknown: 'Windows 未說明此應用程式是否可以移除，因此在批次作業中將其排除。',
+        noCommand: '未為此程式註冊解除安裝命令。'
+      },
+      storeRemoveDialog: {
+        heading: (name) => `移除${name}?`,
+        body: '這會移除你帳戶中的此應用程式，連同其設定與已儲存的資料。與 Prune 移除的其他項目不同，這不會移到隔離區，也無法從這裡還原——要取回它，代表需要從 Microsoft Store 重新安裝。',
+        cancel: '取消',
+        close: '關閉',
+        removeApp: '移除應用程式',
+        removing: '正在移除…'
       }
     }
   }
