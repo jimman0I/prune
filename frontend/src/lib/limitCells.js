@@ -16,8 +16,14 @@ export const AGGREGATE_NAME_PREFIX = 'smaller items';
  * words, while keeping their bytes in the picture.
  *
  * The total is preserved exactly. A treemap that quietly dropped its tail
- * would understate the folder it is describing. */
-export function limitCells(cells, max) {
+ * would understate the folder it is describing.
+ *
+ * `aggregateName` builds the label from the count of hidden items --
+ * DiskMap.jsx passes `(count) => t('diskMap.aggregateCell', count)` so the
+ * label follows the chosen language like everything else on the screen.
+ * Defaulting to the English phrasing keeps this a pure, translation-free
+ * utility for callers (and this file's own tests) that don't pass one. */
+export function limitCells(cells, max, aggregateName = (count) => `${count.toLocaleString()} ${AGGREGATE_NAME_PREFIX}`) {
   if (!cells || cells.length === 0) return [];
   // Aggregating a single leftover is strictly worse than drawing it.
   if (cells.length <= max + 1) return cells;
@@ -29,7 +35,7 @@ export function limitCells(cells, max) {
   return [
     ...kept,
     {
-      name: `${rest.length.toLocaleString()} ${AGGREGATE_NAME_PREFIX}`,
+      name: aggregateName(rest.length),
       size: rest.reduce((sum, c) => sum + (c.size || 0), 0),
       type: 'directory',
       // No fullPath: it is not a place, so it must not look clickable.

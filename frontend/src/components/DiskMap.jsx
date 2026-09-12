@@ -22,6 +22,7 @@ import { withUnscannedRemainder, scanCoverage } from '../lib/unscannedRemainder.
 import { buildTypeColors, colorForExtension, colorForNode, NO_EXTENSION_COLOR } from '../lib/fileTypeColors.js';
 import { iconKeyForNode, extensionsInCells, extensionOf, GENERIC_FILE_KEY } from '../lib/fileTypeIcon.js';
 import { limitCells } from '../lib/limitCells.js';
+import { useLanguage } from '../i18n/LanguageContext.jsx';
 
 const DEFAULT_ROOT = 'C:\\';
 
@@ -61,16 +62,16 @@ export function isDriveRoot(path) {
  * long it can take, and what the faster option is. A minute of silence is
  * where people decide software has hung. */
 function LoadingState({ path, onFastScan, fastScanning }) {
+  const { t } = useLanguage();
   return (
     <div className="glass-panel flex flex-col items-center justify-center py-16 px-6 text-center">
       <div className="w-14 h-14 rounded-2xl bg-[color:var(--accent-primary)]/10 border border-[color:var(--accent-primary)]/25 flex items-center justify-center mb-5">
         <div className="w-6 h-6 border-2 border-[color:var(--accent-primary)] border-t-transparent rounded-full animate-spin"></div>
       </div>
-      <p className="text-[13px] text-[color:var(--text-primary)]">Reading every folder under</p>
+      <p className="text-[13px] text-[color:var(--text-primary)]">{t('diskMap.loading.heading')}</p>
       <p className="font-mono text-[12px] text-[color:var(--accent-primary)] mt-1 max-w-[46ch] truncate">{path}</p>
       <p className="text-[12.5px] text-[color:var(--text-secondary)] mt-3 max-w-[52ch]">
-        One directory at a time, which is the only way to do it without administrator access.
-        A whole drive can take a minute and may not finish.
+        {t('diskMap.loading.note')}
       </p>
       {onFastScan && (
         <button
@@ -78,7 +79,7 @@ function LoadingState({ path, onFastScan, fastScanning }) {
           onClick={onFastScan}
           disabled={fastScanning}
         >
-          {fastScanning ? 'Reading the drive…' : 'Read the drive index instead (admin)'}
+          {fastScanning ? t('diskMap.readingDrive') : t('diskMap.loading.indexButton')}
         </button>
       )}
     </div>
@@ -106,6 +107,7 @@ const PANEL_ROWS = 14;
 const FILE_ROWS = 60;
 
 function TreemapCell({ x, y, width, height, depth, name, size, type, scanned, aggregated, fullPath, icons, typeColors, onHover, onLeave, onDrillDown, onContextMenu }) {
+  const { t } = useLanguage();
   if (depth === 0 || !(width > 0) || !(height > 0)) return null;
   const fill = colorForNode({ name, type, scanned: scanned === false || aggregated ? false : scanned }, typeColors);
   // An unscanned block is a hole in the picture, not a folder. Clicking
@@ -164,7 +166,7 @@ function TreemapCell({ x, y, width, height, depth, name, size, type, scanned, ag
        * information only a mouse can get at. */
       tabIndex={canDrillDown ? 0 : undefined}
       role={canDrillDown ? 'button' : undefined}
-      aria-label={canDrillDown ? `Open ${name}` : undefined}
+      aria-label={canDrillDown ? t('diskMap.cellOpenLabel', name) : undefined}
       onFocus={(e) => {
         const box = e.currentTarget.getBoundingClientRect();
         onHover({ name, size, fullPath, type, scanned, aggregated }, {
@@ -233,6 +235,7 @@ function TreemapCell({ x, y, width, height, depth, name, size, type, scanned, ag
  * that printed only the first number would be quietly claiming the
  * second. */
 function ExtensionPanel({ breakdown, shown, icons, typeColors }) {
+  const { t } = useLanguage();
   const { rows, totalBytes, totalFiles, uncategorizedBytes } = breakdown;
   if (rows.length === 0) return null;
 
@@ -240,10 +243,10 @@ function ExtensionPanel({ breakdown, shown, icons, typeColors }) {
     <div className="glass-panel p-4 min-w-0">
       <div className="flex items-baseline justify-between gap-3 mb-3">
         <div className="text-[11px] font-mono uppercase tracking-[0.14em] text-[color:var(--text-secondary)]">
-          By file type
+          {t('diskMap.extensionPanel.header')}
         </div>
         <div className="text-[11px] font-mono text-[color:var(--text-muted)]">
-          {rows.length} types
+          {t('diskMap.extensionPanel.typeCount', rows.length)}
         </div>
       </div>
 
@@ -264,7 +267,7 @@ function ExtensionPanel({ breakdown, shown, icons, typeColors }) {
               <div className="w-4 h-4 shrink-0" />
             )}
             <div className="font-mono text-[11.5px] text-[color:var(--text-primary)] w-[62px] shrink-0 truncate">
-              {row.extension === NO_EXTENSION ? 'no type' : row.extension}
+              {row.extension === NO_EXTENSION ? t('diskMap.extensionPanel.noType') : row.extension}
             </div>
 
             {/* The bar carries the comparison; the number carries the
@@ -305,9 +308,9 @@ function ExtensionPanel({ breakdown, shown, icons, typeColors }) {
       </div>
 
       <div className="mt-3 pt-3 border-t border-[color:var(--border-subtle)] text-[11px] font-mono text-[color:var(--text-muted)]">
-        {formatBytes(totalBytes)} across {totalFiles.toLocaleString()} files
+        {t('diskMap.extensionPanel.footer', formatBytes(totalBytes), totalFiles.toLocaleString())}
         {uncategorizedBytes > 0 && (
-          <> · {formatBytes(uncategorizedBytes)} in folders the scan did not open</>
+          <>{t('diskMap.extensionPanel.unopenedFolders', formatBytes(uncategorizedBytes))}</>
         )}
       </div>
     </div>
@@ -326,11 +329,12 @@ function ExtensionPanel({ breakdown, shown, icons, typeColors }) {
  * you act on, and "FactoryGame-Windows.ucas" without its folder is not
  * something anyone can find again. */
 export function LargestFilesView({ files, icons }) {
+  const { t } = useLanguage();
 
   if (files.length === 0) {
     return (
       <div className="glass-panel p-6 text-[13px] text-[color:var(--text-muted)]">
-        The scan found no files to list.
+        {t('diskMap.largestFiles.empty')}
       </div>
     );
   }
@@ -394,14 +398,25 @@ export function LargestFilesView({ files, icons }) {
  * Every width here is measured against the content: "3.6%", "29.4 GB",
  * "59,502" and "8/17/2026" are the widest real values in their columns. */
 const FOLDER_COLUMNS = [
-  { key: 'name', label: 'Folder', align: 'left', width: 'minmax(150px,1fr)' },
-  { key: 'percentOfParent', label: '%', align: 'right', width: '54px' },
-  { key: 'size', label: 'Size', align: 'right', width: '84px' },
-  { key: 'items', label: 'Items', align: 'right', width: '68px' },
-  { key: 'files', label: 'Files', align: 'right', width: '64px' },
-  { key: 'folders', label: 'Folders', align: 'right', width: '68px' },
-  { key: 'modified', label: 'Modified', align: 'right', width: '84px' }
+  { key: 'name', align: 'left', width: 'minmax(150px,1fr)' },
+  { key: 'percentOfParent', align: 'right', width: '54px' },
+  { key: 'size', align: 'right', width: '84px' },
+  { key: 'items', align: 'right', width: '68px' },
+  { key: 'files', align: 'right', width: '64px' },
+  { key: 'folders', align: 'right', width: '68px' },
+  { key: 'modified', align: 'right', width: '84px' }
 ];
+
+// percentOfParent is the one column with no word to translate -- "%" is
+// the same symbol in every language this app ships.
+const FOLDER_COLUMN_KEYS = {
+  name: 'diskMap.folderTable.columns.folder',
+  size: 'diskMap.folderTable.columns.size',
+  items: 'diskMap.folderTable.columns.items',
+  files: 'diskMap.folderTable.columns.files',
+  folders: 'diskMap.folderTable.columns.folders',
+  modified: 'diskMap.folderTable.columns.modified'
+};
 
 const FOLDER_GRID = FOLDER_COLUMNS.map((c) => c.width).join(' ');
 
@@ -409,9 +424,10 @@ const FOLDER_GRID = FOLDER_COLUMNS.map((c) => c.width).join(' ');
 /** Why a folder could not be scanned, naming the folder it was reading.
  * Exported so it can be tested without scanning a real drive. */
 export function ScanFailure({ path, error }) {
+  const { t } = useLanguage();
   return (
     <div className="glass-panel p-6">
-      <p className="text-[13px] text-[color:var(--danger)] select-text">Couldn't scan "{path}": {error}</p>
+      <p className="text-[13px] text-[color:var(--danger)] select-text">{t('diskMap.scanFailure', path, error)}</p>
     </div>
   );
 }
@@ -433,6 +449,7 @@ function Count({ value }) {
 }
 
 function FolderTable({ tree, onDrillDown }) {
+  const { t } = useLanguage();
   const [sort, setSort] = useState({ column: 'size', direction: 'desc' });
   const rows = useMemo(
     () => sortFolderRows(folderTableRows(tree), sort.column, sort.direction),
@@ -442,7 +459,7 @@ function FolderTable({ tree, onDrillDown }) {
   if (rows.length === 0) {
     return (
       <div className="glass-panel p-6 text-[13px] text-[color:var(--text-muted)]">
-        Nothing to list inside this folder.
+        {t('diskMap.folderTable.empty')}
       </div>
     );
   }
@@ -461,7 +478,7 @@ function FolderTable({ tree, onDrillDown }) {
               col.align === 'right' ? 'justify-end' : ''
             }`}
           >
-            {col.label}
+            {col.key === 'percentOfParent' ? '%' : t(FOLDER_COLUMN_KEYS[col.key])}
             {sort.column === col.key && (
               <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.2" className="shrink-0">
                 {sort.direction === 'asc' ? <polyline points="18 15 12 9 6 15" /> : <polyline points="6 9 12 15 18 9" />}
@@ -492,7 +509,7 @@ function FolderTable({ tree, onDrillDown }) {
               {row.name}
               {!row.scanned && (
                 <span className="ml-2 text-[10px] font-mono uppercase tracking-wider text-[color:var(--text-muted)]">
-                  not scanned
+                  {t('diskMap.folderTable.notScanned')}
                 </span>
               )}
             </div>
@@ -522,6 +539,7 @@ function FolderTable({ tree, onDrillDown }) {
 }
 
 function DiskMap() {
+  const { t } = useLanguage();
   const [currentPath, setCurrentPath] = useState(DEFAULT_ROOT);
   const [hovered, setHovered] = useState(null);
   // The whole drive, read from the MFT in one pass. While this is set,
@@ -557,7 +575,7 @@ function DiskMap() {
     try {
       const result = await scanDriveFast(DEFAULT_ROOT.slice(0, 1));
       if (result.cancelled) {
-        setFastNote('Not approved — still using the folder-by-folder scan.');
+        setFastNote(t('diskMap.fastScanDeclined'));
         return;
       }
       setFastTree(attachFullPaths(result.tree, DEFAULT_ROOT));
@@ -666,7 +684,7 @@ function DiskMap() {
     atDriveRoot: isDriveRoot(currentPath),
     freeBytes: diskSpace?.freeBytes
   });
-  const cells = mapTree ? limitCells(topLevelCells(mapTree), MAX_CELLS) : [];
+  const cells = mapTree ? limitCells(topLevelCells(mapTree), MAX_CELLS, (count) => t('diskMap.aggregateCell', count)) : [];
 
   // Computed here rather than inside the panel so the icon fetch below can
   // ask for exactly the types the panel is about to show.
@@ -784,8 +802,8 @@ function DiskMap() {
     const result = await quarantineDiskPath(node.fullPath, node.size ?? null);
 
     if (result.ok) {
-      toasts.success(`Moved to quarantine: ${node.name}`, {
-        detail: 'Restore it from the Quarantine screen.'
+      toasts.success(t('diskMap.toasts.moved', node.name), {
+        detail: t('diskMap.toasts.restoreHint')
       });
       // The picture is now wrong -- that folder is gone. Re-read rather
       // than splicing the cell out: the parent's size changed too.
@@ -798,8 +816,8 @@ function DiskMap() {
     // point is to show it -- "that is Windows itself" is information, and
     // a generic error message in its place reads as the app being broken.
     if (result.protected) toasts.warn(result.error, { detail: node.fullPath, ttl: 0 });
-    else toasts.error(result.error || 'That could not be moved.', { detail: node.fullPath });
-  }, [pendingRemoval, toasts, queryClient, currentPath]));
+    else toasts.error(result.error || t('diskMap.toasts.moveFailed'), { detail: node.fullPath });
+  }, [pendingRemoval, toasts, queryClient, currentPath, t]));
 
   const handleDrillDown = useCallback((fullPath) => {
     setHovered(null);
@@ -810,20 +828,20 @@ function DiskMap() {
     <div className="px-12 py-10 max-w-[1400px]">
       <div className="flex items-start justify-between gap-6 mb-6">
         <div>
-          <h1 className="display-heading text-[30px] leading-none mb-2">Disk Usage</h1>
+          <h1 className="display-heading text-[30px] leading-none mb-2">{t('diskMap.title')}</h1>
           {fastStats ? (
             <p className="text-[12px] text-[color:var(--text-secondary)]">
-              {fastStats.recordsRead?.toLocaleString()} files and folders read from the drive's own index.
-              {' '}Browsing is instant from here.
+              {t('diskMap.fastIndexSummary', fastStats.recordsRead?.toLocaleString())}
+              {' '}{t('diskMap.browsingInstant')}
               {fastStats.mftComplete === false && (
                 <span className="text-[color:var(--warning)]">
-                  {' '}Part of the index couldn't be read, so totals are a lower bound.
+                  {' '}{t('diskMap.indexIncomplete')}
                 </span>
               )}
             </p>
           ) : (
             <p className="text-[12px] text-[color:var(--text-secondary)] max-w-[62ch]">
-              What is using the space on this drive, and where.
+              {t('diskMap.subtitle')}
             </p>
           )}
         </div>
@@ -838,7 +856,7 @@ function DiskMap() {
             onClick={handleFastScan}
             disabled={fastScanning}
           >
-            {fastScanning ? 'Scanning drive…' : fastStats ? 'Rescan drive (admin)' : 'Fast scan (admin)'}
+            {fastScanning ? t('diskMap.scanningDrive') : fastStats ? t('diskMap.rescanButton') : t('diskMap.fastScanButton')}
           </button>
         )}
       </div>
@@ -872,17 +890,13 @@ function DiskMap() {
       {!loading && !error && !tree && isDriveRoot(currentPath) && (
         <div className="glass-panel p-6">
           <h3 className="text-[15px] font-medium text-[color:var(--text-primary)] mb-2">
-            Read the whole drive
+            {t('diskMap.driveRootPrompt.heading')}
           </h3>
           <p className="text-[13px] text-[color:var(--text-secondary)] leading-relaxed max-w-[62ch] mb-1">
-            A fast scan reads the drive's own file index — every file on {currentPath.replace(/\\+$/, '')} in
-            a few seconds, which is how WizTree does it. Windows only lets a program read that index with
-            administrator access, so this raises a UAC prompt.
+            {t('diskMap.driveRootPrompt.fastExplain', currentPath.replace(/\\+$/, ''))}
           </p>
           <p className="text-[12.5px] text-[color:var(--text-muted)] leading-relaxed max-w-[62ch] mb-5">
-            The alternative walks folders one at a time. It needs no permission and is the right tool for a
-            single folder, but it cannot finish a volume: on this drive it reached 4% of what's in use before
-            running out of time, and the other 96% shows as unscanned rather than as anything useful.
+            {t('diskMap.driveRootPrompt.crawlExplain')}
           </p>
 
           <div className="flex items-center flex-wrap gap-2.5">
@@ -890,13 +904,13 @@ function DiskMap() {
               onClick={handleFastScan}
               disabled={fastScanning}
             >
-              {fastScanning ? 'Reading the drive…' : 'Fast scan (admin)'}
+              {fastScanning ? t('diskMap.readingDrive') : t('diskMap.fastScanButton')}
             </button>
             <button
               className="btn-ghost px-3.5 py-2 rounded-lg text-[12.5px] font-medium"
               onClick={() => setCrawlRoot(true)}
             >
-              Walk folders instead
+              {t('diskMap.driveRootPrompt.crawlButton')}
             </button>
           </div>
         </div>
@@ -914,22 +928,21 @@ function DiskMap() {
             <line x1="12" y1="16" x2="12.01" y2="16"></line>
           </svg>
           <div className="text-[12.5px] text-[color:var(--warning)]">
+            {/* The concrete number matters more than the warning does. "Possibly
+                incomplete" reads as a rounding caveat; "measured 34.5 GB of 850 GB"
+                tells you immediately that the picture is nearly all hole. The two
+                measured/used figures lose their bold styling here -- the same
+                trade the Dashboard's own drive-health sentence makes -- because
+                where they fall in the sentence is not the same in every language. */}
             {coverage
-              // The concrete number matters more than the warning does. "Possibly
-              // incomplete" reads as a rounding caveat; "measured 34.5 GB of 850 GB"
-              // tells you immediately that the picture is nearly all hole.
-              ? <>This scan ran out of time: it measured <span className="font-medium text-[color:var(--text-primary)]">{formatBytes(coverage.measured)}</span> of
-                the <span className="font-medium text-[color:var(--text-primary)]">{formatBytes(coverage.used)}</span> in use ({coverage.percent}%).
-                What it measured is real; the rest is shown as unscanned, not as empty.</>
-              : <>This scan ran out of time before it finished the drive. Everything it did measure
-                is real, but folders it never reached are shown as unscanned rather than as empty —
-                don't read this as a full picture of what's using your space.</>}
+              ? t('diskMap.truncated.withCoverage', formatBytes(coverage.measured), formatBytes(coverage.used), coverage.percent)
+              : t('diskMap.truncated.withoutCoverage')}
             {' '}<button
               className="underline underline-offset-2 hover:text-[color:var(--text-primary)] transition-colors disabled:opacity-50"
               onClick={handleFastScan}
               disabled={fastScanning}
             >
-              {fastScanning ? 'Scanning drive…' : 'Run a fast scan instead'}
+              {fastScanning ? t('diskMap.scanningDrive') : t('diskMap.truncated.rescanLink')}
             </button>
           </div>
         </div>
@@ -949,7 +962,7 @@ function DiskMap() {
           single file is biggest") asked of the whole subtree. */}
       {!loading && !error && tree && (
         <div className="flex items-center gap-1 mb-3">
-          {[['map', 'Tree'], ['files', 'Files']].map(([key, label]) => (
+          {[['map', t('diskMap.view.tree')], ['files', t('diskMap.view.files')]].map(([key, label]) => (
             <button
               key={key}
               onClick={() => setView(key)}
@@ -1033,13 +1046,13 @@ function DiskMap() {
         >
           <div className="text-[13px] font-medium text-[color:var(--text-primary)] mb-1">{hovered.node.name}</div>
           <div className="text-[12px] text-[color:var(--accent-primary)] mb-1">
-            {hovered.node.scanned === false ? `${formatBytes(hovered.node.size)} not measured` : formatBytes(hovered.node.size)}
+            {hovered.node.scanned === false ? t('diskMap.tooltip.notMeasured', formatBytes(hovered.node.size)) : formatBytes(hovered.node.size)}
           </div>
           <div className="text-[11px] font-mono text-[color:var(--text-muted)] break-all max-w-[320px]">
             {hovered.node.aggregated
-              ? 'The smallest entries in this folder, grouped together.'
+              ? t('diskMap.tooltip.aggregated')
               : hovered.node.scanned === false
-                ? 'The scan stopped before reaching this. Its real size is unknown.'
+                ? t('diskMap.tooltip.unscanned')
                 : hovered.node.fullPath}
           </div>
         </div>,
@@ -1053,18 +1066,18 @@ function DiskMap() {
         onClose={() => setMenu(null)}
         items={menu ? [
           {
-            label: 'Open in Explorer',
+            label: t('diskMap.contextMenu.openInExplorer'),
             onSelect: () => revealInExplorer(menu.node.fullPath)
               .catch((err) => toasts.error(err.message, { detail: menu.node.fullPath }))
           },
           {
-            label: 'Copy path',
+            label: t('diskMap.contextMenu.copyPath'),
             onSelect: () => navigator.clipboard?.writeText(menu.node.fullPath)
-              .then(() => toasts.info('Path copied.', { detail: menu.node.fullPath }))
-              .catch(() => toasts.error('Could not copy that path.'))
+              .then(() => toasts.info(t('diskMap.toasts.pathCopied'), { detail: menu.node.fullPath }))
+              .catch(() => toasts.error(t('diskMap.toasts.copyFailed')))
           },
           {
-            label: 'Move to quarantine…',
+            label: t('diskMap.contextMenu.moveToQuarantineMenu'),
             danger: true,
             // Never removed straight from the menu. A right-click is one
             // gesture and this is the only removal in the app aimed at
@@ -1075,11 +1088,11 @@ function DiskMap() {
       />
 
       {pendingRemoval && (
-        <ModalOverlay label="Move to quarantine" onClose={() => setPendingRemoval(null)}>
+        <ModalOverlay label={t('diskMap.removeModal.label')} onClose={() => setPendingRemoval(null)}>
           <div className="glass-panel w-full max-w-[520px] p-6">
-            <h2 className="display-heading text-[20px] mb-2">Move this to quarantine?</h2>
+            <h2 className="display-heading text-[20px] mb-2">{t('diskMap.removeModal.heading')}</h2>
             <p className="text-[12.5px] text-[color:var(--text-secondary)] mb-3">
-              It is moved, not deleted — restore it from the Quarantine screen at any time.
+              {t('diskMap.removeModal.note')}
             </p>
             {/* The exact path, in full and wrapped rather than truncated.
                 A confirmation for an arbitrary folder is worth nothing if
@@ -1088,7 +1101,7 @@ function DiskMap() {
               {pendingRemoval.fullPath}
             </p>
             <p className="text-[11.5px] text-[color:var(--text-muted)] mb-5">
-              {pendingRemoval.type === 'directory' ? 'Folder' : 'File'}
+              {pendingRemoval.type === 'directory' ? t('diskMap.removeModal.folder') : t('diskMap.removeModal.file')}
               {pendingRemoval.size ? ` · ${formatBytes(pendingRemoval.size)}` : ''}
             </p>
             <div className="flex items-center justify-end gap-2.5">
@@ -1096,13 +1109,13 @@ function DiskMap() {
                 className="btn-ghost px-4 py-2 rounded-lg text-[12.5px] font-medium"
                 onClick={() => setPendingRemoval(null)}
               >
-                Cancel
+                {t('diskMap.removeModal.cancel')}
               </button>
               <button
                 className="btn-danger px-4 py-2 rounded-lg text-[12.5px] font-medium"
                 onClick={confirmRemoval}
               >
-                Move to quarantine
+                {t('diskMap.removeModal.label')}
               </button>
             </div>
           </div>

@@ -1,7 +1,8 @@
 // @vitest-environment jsdom
-import { describe, it, expect, afterEach } from 'vitest';
-import { render, screen, cleanup } from '@testing-library/react';
+import { describe, it, expect, afterEach, vi } from 'vitest';
+import { screen, cleanup } from '@testing-library/react';
 import { isCopyable } from '../testSupport/copyable.js';
+import { renderScreen } from '../testSupport/renderScreen.jsx';
 import { LargestFilesView } from './DiskMap.jsx';
 
 /** The Disk Map's largest-files list.
@@ -11,18 +12,23 @@ import { LargestFilesView } from './DiskMap.jsx';
  * order to go and find them. The name above it is a label and stays off
  * like every other label. */
 
+vi.mock('../lib/api.js', () => ({
+  fetchSettings: vi.fn(async () => ({})),
+  updateSettings: vi.fn()
+}));
+
 afterEach(cleanup);
 
 describe('the largest-files list', () => {
-  it('leaves each full path copyable, but not the name above it', () => {
-    render(
+  it('leaves each full path copyable, but not the name above it', async () => {
+    renderScreen(
       <LargestFilesView
         files={[{ name: 'game.pak', size: 5 * 1024 ** 3, fullPath: 'D:\\Games\\Big\\game.pak' }]}
         icons={{}}
       />
     );
 
-    expect(isCopyable(screen.getByText('D:\\Games\\Big\\game.pak'))).toBe(true);
+    expect(isCopyable(await screen.findByText('D:\\Games\\Big\\game.pak'))).toBe(true);
     expect(isCopyable(screen.getByText('game.pak'))).toBe(false);
   });
 });

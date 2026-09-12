@@ -53,4 +53,14 @@ describe('limitCells', () => {
     expect(limitCells([], 10)).toEqual([]);
     expect(limitCells(null, 10)).toEqual([]);
   });
+
+  // DiskMap.jsx passes a translated builder here so the aggregate cell's
+  // label follows the app's chosen language like everything else on the
+  // screen -- this is what lets it do that without limitCells itself
+  // knowing anything about translation.
+  it('builds the aggregate label with the given function instead of the English default', () => {
+    const cells = Array.from({ length: 20 }, (_, i) => cell(`f${i}`, 1));
+    const result = limitCells(cells, 5, (count) => `${count} μικρότερα στοιχεία`);
+    expect(result.at(-1).name).toBe('15 μικρότερα στοιχεία');
+  });
 });
