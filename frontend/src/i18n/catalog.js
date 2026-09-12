@@ -32,6 +32,153 @@ export const CATALOG = {
       language: {
         title: 'Language',
         description: "What Prune's own screens are shown in."
+      },
+      tabs: { general: 'General', uninstall: 'Uninstall', cleanup: 'Cleanup', about: 'About' },
+      title: 'Settings',
+      loading: 'Loading settings…',
+      loadError: (error) => `Couldn't load settings: ${error}`,
+      saveError: (error) => `Couldn't save: ${error}`,
+      appearance: {
+        title: 'Appearance',
+        description: "Aurora Deck in dark or daylight. Both are real palettes rather than one inverted: the accent darkens for the light ground so a button can keep white text on it, and every tier was measured against the surfaces it actually sits on. Prune follows your system setting until you pick one here."
+      },
+      minimizeToTray: {
+        title: 'Minimize to Tray',
+        description: 'Closing the window sends Prune to the system tray instead of quitting.'
+      },
+      updateCheck: {
+        title: 'Check for updates',
+        description: 'Once a day, Prune asks api.github.com whether a newer release exists. It is the only request Prune makes to anywhere but this machine, and GitHub sees your IP address as any website would. When there is one, an update button appears at the bottom of the side bar, and nothing is downloaded or installed until you click it.'
+      },
+      autoInstallUpdates: {
+        title: 'Install updates automatically',
+        description: 'Downloads a new version in the background and installs it the next time Prune closes, instead of waiting for you to click the update button. Needs the update check above.'
+      },
+      updateStatus: {
+        checking: 'Checking…',
+        loadError: (error) => `Couldn't check for updates: ${error}`,
+        newerAvailable: (version) => `Prune ${version} is available.`,
+        openDownloadPage: 'Open the download page',
+        upToDate: (version) => `You're on the latest version (${version}).`,
+        openPageError: (error) => `Couldn't open the page: ${error}`
+      },
+      showFreeSpace: {
+        title: 'Show free space on the Disk Map',
+        description: "Draws the drive's free space as one more block when you scan a whole drive, so every folder reads as a share of the drive rather than of the space in use."
+      },
+      autoQuarantine: {
+        title: 'Auto-Quarantine',
+        description: "Deep Clean moves what it takes into Prune's Quarantine, where you can put it back. Turn this off and it goes to the Windows Recycle Bin instead — still recoverable, just somewhere you already know how to empty."
+      },
+      skipRecent: {
+        title: 'Leave recent files alone',
+        description: 'Skip anything modified in the last few hours. In a temp folder a file being written right now looks exactly like one abandoned two years ago — this is what stops a half-finished install being swept up. 0 turns it off.',
+        hoursUnit: 'hours',
+        ariaLabel: 'Hours to leave recent files alone'
+      },
+      restorePointCleanup: {
+        title: 'Create a restore point first',
+        description: 'Before a forced removal, so Windows itself can roll the machine back. Costs a few seconds, and does nothing at all if System Protection is turned off.'
+      },
+      hideUnavailable: {
+        title: "Hide cleaners that don't apply",
+        description: "Most of the list is for software this machine doesn't have. Hiding those leaves only what is actually here."
+      },
+      quarantineRetention: {
+        title: 'How long to keep undo',
+        description: 'Everything Prune removes goes to Quarantine first, and stays until you empty it. Set a number of days to drop backups older than that. Leave it blank to keep them forever.',
+        neverPlaceholder: 'Never',
+        daysUnit: 'days',
+        ariaLabel: 'Days to keep quarantine backups'
+      },
+      quarantineMaxSize: {
+        title: 'How much undo to keep',
+        description: 'A cap on the whole Quarantine folder. Over it, the oldest backups go first — the most recent one is never dropped, so something big you just removed stays recoverable even if it is larger than the cap on its own. Leave it blank for no limit.',
+        noLimitPlaceholder: 'No limit',
+        gbUnit: 'GB',
+        ariaLabel: 'Maximum quarantine size in gigabytes'
+      },
+      exclusions: {
+        title: 'Exclude Folders',
+        description: "Folders and file types Prune will leave alone — skipped by Deep Clean and left out of the Disk Map — on top of the ones it already protects: System Volume Information, antivirus quarantines, the component store and a dozen others.",
+        ariaLabel: 'Folder path or file type to exclude',
+        add: 'Add',
+        invalidFormat: 'Write a full folder path (D:\\Games) or a file type (*.iso).',
+        formatHint: 'A full folder path, or a file type written as *.iso',
+        none: 'Nothing excluded.',
+        typeBadge: 'Type',
+        folderBadge: 'Folder',
+        removeAriaLabel: (value) => `Stop excluding ${value}`
+      },
+      sandboxTest: {
+        title: 'Sandbox Test',
+        description: 'Runs the real cleanup engine against a throwaway temp directory only — never your actual Temp, Windows Temp, or thumbnail cache — to prove scanning and deletion genuinely work before you trust them on real files.',
+        run: 'Run Sandbox Test',
+        running: 'Running…',
+        allPassed: 'All checks passed',
+        failed: 'Sandbox test failed'
+      },
+      warningConfirmations: {
+        title: 'Warning confirmations',
+        allAsk: 'Every cleaner that loses data asks before it runs.',
+        someSet: (count) => `${count} cleaner warning${count === 1 ? ' is' : 's are'} set not to ask again.`,
+        reset: 'Reset warning confirmations'
+      },
+      uninstallTab: {
+        beforeHeading: 'Before uninstalling',
+        restorePointUninstall: {
+          title: 'Create a restore point before uninstalling',
+          description: "Windows' own System Restore, made before the program's uninstaller runs. It needs Prune to be running as administrator and Windows allows one a day, so when it can't be made the uninstall goes ahead and the dialog says so."
+        },
+        registryBackup: {
+          title: 'Back up the registry before uninstalling',
+          description: "Exports HKLM\\SOFTWARE and HKCU\\Software (about 140 MB on the machine Prune is built on) and keeps the newest 3. If the backup can't be made, the uninstall doesn't run."
+        },
+        afterHeading: 'After uninstalling',
+        scanLeftovers: {
+          title: 'Scan for leftovers after uninstalling',
+          description: "Looks for the files, registry keys and scheduled tasks the uninstaller left behind. Off, Prune runs the program's own uninstaller and stops there."
+        },
+        preselect: {
+          title: 'Tick every leftover by default',
+          description: 'The review opens with everything it found ticked. Off, it opens with nothing ticked and you choose.'
+        },
+        keepHistory: {
+          title: 'Keep an uninstall history',
+          description: "The dashboard's list of recent removals and the space they freed. Off, nothing new is recorded."
+        },
+        destinationHeading: 'Leftover files go to',
+        leftoverOptions: {
+          quarantine: { label: 'Quarantine', description: "Moved into Prune's own backup, and restorable from the Quarantine screen. The default." },
+          recycle: { label: 'The Recycle Bin', description: "Restorable from Windows' own bin, and freed when you empty it." },
+          permanent: { label: 'Delete permanently', description: 'Deleted outright. Nothing to restore.' }
+        },
+        permanentWarning: "Leftover files will be deleted outright and can't be restored, from Quarantine or anywhere else. Check the list before you confirm it.",
+        registryNote: 'Registry keys are exported to Quarantine before they are removed, whichever you choose.'
+      },
+      about: {
+        description: 'A local, offline uninstaller and cleanup tool for Windows — forced removal with leftover-file scanning, safe quarantine-before-delete, disk mapping, and one-click junk cleanup.'
+      },
+      automation: {
+        title: 'Automation',
+        description: 'Runs while Prune is open. It cannot wake a sleeping machine — a window that passes while the computer is off is reported as missed rather than silently skipped, and caught up the next time you open the app.',
+        scheduled: 'Scheduled',
+        off: 'Off',
+        howOften: 'How often',
+        day: 'Day',
+        at: 'At',
+        whatItDoes: 'What it does',
+        everyDay: 'Every day',
+        everyWeek: 'Every week',
+        measureOnly: 'Measure only',
+        clean: 'Clean',
+        cleanWarning: 'This removes files with nobody watching. It cleans the rules Deep Clean recommends and that actually have something in them, and everything still goes to quarantine — so check the retention setting above before leaving this on.',
+        nextRun: 'Next run:',
+        lastRun: 'Last run:',
+        weekdays: {
+          sunday: 'Sunday', monday: 'Monday', tuesday: 'Tuesday', wednesday: 'Wednesday',
+          thursday: 'Thursday', friday: 'Friday', saturday: 'Saturday'
+        }
       }
     },
     dashboard: {
@@ -411,7 +558,156 @@ export const CATALOG = {
       quarantine: 'Karantyn', settings: 'Instellings', startup: 'Opstart',
       duplicates: 'Duplikate', deepClean: 'Grondige Skoonmaak'
     },
-    settings: { language: { title: 'Taal', description: "Waarin Prune se eie skerms gewys word." } },
+    settings: {
+      language: { title: 'Taal', description: "Waarin Prune se eie skerms gewys word." },
+      tabs: { general: 'Algemeen', uninstall: 'Deïnstalleer', cleanup: 'Skoonmaak', about: 'Aangaande' },
+      title: 'Instellings',
+      loading: 'Laai instellings…',
+      loadError: (error) => `Kon nie instellings laai nie: ${error}`,
+      saveError: (error) => `Kon nie stoor nie: ${error}`,
+      appearance: {
+        title: 'Voorkoms',
+        description: "Aurora Deck in donker of daglig. Albei is regte palette eerder as een omgekeer: die aksent word donkerder vir die lig agtergrond sodat 'n knoppie wit teks daarop kan hou, en elke vlak is gemeet teen die oppervlaktes waarop dit werklik lê. Prune volg jou stelselinstelling totdat jy hier een kies."
+      },
+      minimizeToTray: {
+        title: 'Minimeer na Skinkbord',
+        description: 'Om die venster toe te maak stuur Prune na die stelselskinkbord in plaas daarvan om af te sluit.'
+      },
+      updateCheck: {
+        title: 'Soek vir opdaterings',
+        description: 'Een keer per dag vra Prune vir api.github.com of \'n nuwer weergawe bestaan. Dit is die enigste versoek wat Prune na enige plek behalwe hierdie masjien maak, en GitHub sien jou IP-adres soos enige webwerf sou. Wanneer daar een is, verskyn \'n opdateringsknoppie onderaan die kantbalk, en niks word afgelaai of geïnstalleer voordat jy daarop klik nie.'
+      },
+      autoInstallUpdates: {
+        title: 'Installeer opdaterings outomaties',
+        description: 'Laai \'n nuwe weergawe af in die agtergrond en installeer dit die volgende keer wanneer Prune toemaak, in plaas daarvan om te wag dat jy die opdateringsknoppie klik. Benodig die opdateringkontrole hierbo.'
+      },
+      updateStatus: {
+        checking: 'Besig om te kyk…',
+        loadError: (error) => `Kon nie vir opdaterings kyk nie: ${error}`,
+        newerAvailable: (version) => `Prune ${version} is beskikbaar.`,
+        openDownloadPage: 'Maak die aflaaibladsy oop',
+        upToDate: (version) => `Jy is op die nuutste weergawe (${version}).`,
+        openPageError: (error) => `Kon nie die bladsy oopmaak nie: ${error}`
+      },
+      showFreeSpace: {
+        title: 'Wys vrye spasie op die Skyfkaart',
+        description: "Trek die skyf se vrye spasie as nog 'n blok wanneer jy 'n hele skyf skandeer, sodat elke vouer lees as 'n deel van die skyf eerder as van die spasie wat gebruik word."
+      },
+      autoQuarantine: {
+        title: 'Outo-Karantyn',
+        description: "Diep Skoonmaak skuif wat dit vat na Prune se eie Karantyn, waar jy dit kan terugsit. Skakel dit af en dit gaan eerder na die Windows-asblik toe — steeds herwinbaar, net iewers wat jy reeds weet hoe om leeg te maak."
+      },
+      skipRecent: {
+        title: 'Los onlangse lêers uit',
+        description: "Slaan enigiets oor wat in die laaste paar uur verander is. In 'n tydelike vouer lyk 'n lêer wat nou geskryf word presies soos een wat twee jaar gelede laat vaar is — dit keer dat 'n halfklaar installasie opgevee word. 0 skakel dit af.",
+        hoursUnit: 'ure',
+        ariaLabel: 'Ure om onlangse lêers uit te los'
+      },
+      restorePointCleanup: {
+        title: 'Skep eers \'n herstelpunt',
+        description: "Voor 'n geforseerde verwydering, sodat Windows self die masjien kan terugrol. Kos 'n paar sekondes, en doen niks as Stelselbeskerming afgeskakel is nie."
+      },
+      hideUnavailable: {
+        title: "Versteek skoonmakers wat nie van toepassing is nie",
+        description: "Die meeste van die lys is vir sagteware wat hierdie masjien nie het nie. Om dit te versteek los slegs wat werklik hier is."
+      },
+      quarantineRetention: {
+        title: 'Hoe lank om ontdoen te hou',
+        description: "Alles wat Prune verwyder gaan eers na Karantyn, en bly totdat jy dit leegmaak. Stel 'n aantal dae om rugsteune ouer as dit te laat val. Los dit leeg om hulle vir altyd te hou.",
+        neverPlaceholder: 'Nooit',
+        daysUnit: 'dae',
+        ariaLabel: 'Dae om karantynrugsteune te hou'
+      },
+      quarantineMaxSize: {
+        title: 'Hoeveel ontdoen om te hou',
+        description: "'n Perk op die hele Karantyn-vouer. Daarbo gaan die oudste rugsteune eerste — die nuutste een word nooit laat val nie, sodat iets groot wat jy pas verwyder het herwinbaar bly selfs al is dit groter as die perk op sy eie. Los dit leeg vir geen perk nie.",
+        noLimitPlaceholder: 'Geen perk',
+        gbUnit: 'GB',
+        ariaLabel: 'Maksimum karantyngrootte in gigagrepe'
+      },
+      exclusions: {
+        title: 'Sluit Vouers Uit',
+        description: "Vouers en lêertipes wat Prune sal uitlos — oorgeslaan deur Diep Skoonmaak en uitgesluit van die Skyfkaart — bo en behalwe die wat dit reeds beskerm: Stelselvolume-inligting, antivirus-karantyne, die komponentwinkel en \'n dosyn ander.",
+        ariaLabel: "Vouerpad of lêertipe om uit te sluit",
+        add: 'Voeg by',
+        invalidFormat: "Skryf 'n volle vouerpad (D:\\Games) of 'n lêertipe (*.iso).",
+        formatHint: "'n Volle vouerpad, of 'n lêertipe geskryf as *.iso",
+        none: 'Niks uitgesluit nie.',
+        typeBadge: 'Tipe',
+        folderBadge: 'Vouer',
+        removeAriaLabel: (value) => `Hou op om ${value} uit te sluit`
+      },
+      sandboxTest: {
+        title: 'Sandput-toets',
+        description: "Laat die werklike skoonmaak-enjin loop teen slegs 'n weggooibare tydelike gids — nooit jou werklike Temp, Windows Temp, of duimnael-kas nie — om te bewys dat skandering en verwydering werklik werk voordat jy dit vertrou met regte lêers.",
+        run: 'Laat Sandput-toets loop',
+        running: 'Loop tans…',
+        allPassed: 'Alle toetse geslaag',
+        failed: 'Sandput-toets het misluk'
+      },
+      warningConfirmations: {
+        title: 'Waarskuwingbevestigings',
+        allAsk: 'Elke skoonmaker wat data verloor vra voordat dit loop.',
+        someSet: (count) => `${count} skoonmaak-waarskuwing${count === 1 ? '' : 's'} gestel om nie weer te vra nie.`,
+        reset: 'Stel waarskuwingbevestigings terug'
+      },
+      uninstallTab: {
+        beforeHeading: 'Voor deïnstallering',
+        restorePointUninstall: {
+          title: 'Skep \'n herstelpunt voor deïnstallering',
+          description: "Windows se eie Stelselherstel, gemaak voordat die program se deïnstalleerder loop. Dit benodig dat Prune as administrateur loop en Windows laat een per dag toe, so wanneer dit nie gemaak kan word nie, gaan die deïnstallering voort en die dialoog sê so."
+        },
+        registryBackup: {
+          title: 'Rugsteun die register voor deïnstallering',
+          description: "Voer HKLM\\SOFTWARE en HKCU\\Software uit (omtrent 140 MB op die masjien waarop Prune gebou is) en hou die nuutste 3. As die rugsteun nie gemaak kan word nie, loop die deïnstallering nie."
+        },
+        afterHeading: 'Na deïnstallering',
+        scanLeftovers: {
+          title: 'Skandeer vir oorblyfsels na deïnstallering',
+          description: "Soek na die lêers, registersleutels en geskeduleerde take wat die deïnstalleerder agtergelaat het. Af, loop Prune net die program se eie deïnstalleerder en stop daar."
+        },
+        preselect: {
+          title: 'Merk elke oorblyfsel by verstek',
+          description: 'Die oorsig open met alles wat gevind is gemerk. Af, open dit met niks gemerk nie en jy kies.'
+        },
+        keepHistory: {
+          title: 'Hou \'n deïnstallasiegeskiedenis',
+          description: "Die paneelbord se lys van onlangse verwyderings en die spasie wat hulle vrygemaak het. Af, word niks nuuts aangeteken nie."
+        },
+        destinationHeading: 'Oorblyfsellêers gaan na',
+        leftoverOptions: {
+          quarantine: { label: 'Karantyn', description: "Geskuif na Prune se eie rugsteun, en herwinbaar vanaf die Karantyn-skerm. Die verstek." },
+          recycle: { label: 'Die Asblik', description: "Herwinbaar vanaf Windows se eie asblik, en vrygemaak wanneer jy dit leegmaak." },
+          permanent: { label: 'Verwyder permanent', description: 'Reguit verwyder. Niks om te herstel nie.' }
+        },
+        permanentWarning: "Oorblyfsellêers sal reguit verwyder word en kan nie herstel word nie, van Karantyn of enige ander plek af. Kyk die lys na voordat jy dit bevestig.",
+        registryNote: 'Registersleutels word na Karantyn uitgevoer voordat hulle verwyder word, wat ook al jy kies.'
+      },
+      about: {
+        description: "'n Plaaslike, vanlyn deïnstalleerder en skoonmaakhulpmiddel vir Windows — geforseerde verwydering met oorblyfsellêerskandering, veilige karantyn-voor-verwydering, skyfkartering, en een-klik-vullis-skoonmaak."
+      },
+      automation: {
+        title: 'Outomatisering',
+        description: "Loop terwyl Prune oop is. Dit kan nie 'n slapende masjien wakker maak nie — 'n venster wat verbygaan terwyl die rekenaar af is word as gemis aangemeld eerder as stilweg oorgeslaan, en ingehaal die volgende keer wat jy die app oopmaak.",
+        scheduled: 'Geskeduleer',
+        off: 'Af',
+        howOften: 'Hoe gereeld',
+        day: 'Dag',
+        at: 'Om',
+        whatItDoes: 'Wat dit doen',
+        everyDay: 'Elke dag',
+        everyWeek: 'Elke week',
+        measureOnly: 'Meet net',
+        clean: 'Maak skoon',
+        cleanWarning: "Dit verwyder lêers met niemand wat kyk nie. Dit maak die reëls skoon wat Diep Skoonmaak aanbeveel en wat werklik iets daarin het, en alles gaan steeds na karantyn — kyk dus die behoue-instelling hierbo na voordat jy dit aanlaat.",
+        nextRun: 'Volgende loop:',
+        lastRun: 'Laaste loop:',
+        weekdays: {
+          sunday: 'Sondag', monday: 'Maandag', tuesday: 'Dinsdag', wednesday: 'Woensdag',
+          thursday: 'Donderdag', friday: 'Vrydag', saturday: 'Saterdag'
+        }
+      }
+    },
     dashboard: {
       scheduleBadge: {
         missed: (count) => `${count} geskeduleerde ${count === 1 ? 'loop' : 'lopies'} is gemis terwyl hierdie rekenaar af was`,
@@ -784,7 +1080,156 @@ export const CATALOG = {
       quarantine: 'الحجر', settings: 'الإعدادات', startup: 'بدء التشغيل',
       duplicates: 'الملفات المكررة', deepClean: 'تنظيف عميق'
     },
-    settings: { language: { title: 'اللغة', description: 'اللغة التي تُعرض بها شاشات Prune نفسها.' } },
+    settings: {
+      language: { title: 'اللغة', description: 'اللغة التي تُعرض بها شاشات Prune نفسها.' },
+      tabs: { general: 'عام', uninstall: 'إلغاء التثبيت', cleanup: 'التنظيف', about: 'حول' },
+      title: 'الإعدادات',
+      loading: 'جارٍ تحميل الإعدادات…',
+      loadError: (error) => `تعذر تحميل الإعدادات: ${error}`,
+      saveError: (error) => `تعذر الحفظ: ${error}`,
+      appearance: {
+        title: 'المظهر',
+        description: 'Aurora Deck في الوضع الداكن أو النهاري. كلاهما لوحتا ألوان حقيقيتان بدلاً من واحدة معكوسة: يصبح اللون المميز أغمق للأرضية الفاتحة حتى يتمكن الزر من الاحتفاظ بنص أبيض عليه، وتم قياس كل مستوى مقابل الأسطح التي يجلس عليها فعليًا. يتبع Prune إعداد نظامك حتى تختار واحدًا هنا.'
+      },
+      minimizeToTray: {
+        title: 'تصغير إلى علبة النظام',
+        description: 'إغلاق النافذة يرسل Prune إلى علبة النظام بدلاً من الإنهاء.'
+      },
+      updateCheck: {
+        title: 'التحقق من وجود تحديثات',
+        description: 'مرة واحدة يوميًا، يسأل Prune api.github.com عما إذا كان هناك إصدار أحدث. إنه الطلب الوحيد الذي يرسله Prune إلى أي مكان بخلاف هذا الجهاز، ويرى GitHub عنوان IP الخاص بك كما يفعل أي موقع ويب. عندما يكون هناك تحديث، يظهر زر تحديث أسفل الشريط الجانبي، ولا يتم تنزيل أو تثبيت أي شيء حتى تنقر عليه.'
+      },
+      autoInstallUpdates: {
+        title: 'تثبيت التحديثات تلقائيًا',
+        description: 'يقوم بتنزيل إصدار جديد في الخلفية وتثبيته في المرة التالية التي يُغلق فيها Prune، بدلاً من الانتظار حتى تنقر على زر التحديث. يتطلب التحقق من التحديثات أعلاه.'
+      },
+      updateStatus: {
+        checking: 'جارٍ التحقق…',
+        loadError: (error) => `تعذر التحقق من وجود تحديثات: ${error}`,
+        newerAvailable: (version) => `الإصدار ${version} من Prune متوفر.`,
+        openDownloadPage: 'افتح صفحة التنزيل',
+        upToDate: (version) => `أنت تستخدم أحدث إصدار (${version}).`,
+        openPageError: (error) => `تعذر فتح الصفحة: ${error}`
+      },
+      showFreeSpace: {
+        title: 'إظهار المساحة الحرة في خريطة القرص',
+        description: 'يرسم المساحة الحرة للقرص ككتلة إضافية عند فحص قرص كامل، بحيث يُقرأ كل مجلد كحصة من القرص بدلاً من المساحة المستخدمة.'
+      },
+      autoQuarantine: {
+        title: 'الحجر الصحي التلقائي',
+        description: 'ينقل التنظيف العميق ما يأخذه إلى الحجر الصحي الخاص بـ Prune، حيث يمكنك إعادته. أوقف هذا وسينتقل إلى سلة المحذوفات في Windows بدلاً من ذلك — لا يزال قابلاً للاسترداد، فقط في مكان تعرف بالفعل كيفية إفراغه.'
+      },
+      skipRecent: {
+        title: 'ترك الملفات الحديثة وشأنها',
+        description: 'تخطي أي شيء تم تعديله في الساعات القليلة الماضية. في مجلد مؤقت، يبدو الملف الذي تتم كتابته الآن تمامًا مثل ملف تم التخلي عنه منذ عامين — هذا ما يمنع كنس تثبيت غير مكتمل. 0 يوقف هذا.',
+        hoursUnit: 'ساعات',
+        ariaLabel: 'عدد الساعات لترك الملفات الحديثة وشأنها'
+      },
+      restorePointCleanup: {
+        title: 'إنشاء نقطة استعادة أولاً',
+        description: 'قبل الإزالة القسرية، حتى يتمكن Windows نفسه من التراجع عن الجهاز. يكلف بضع ثوانٍ، ولا يفعل شيئًا على الإطلاق إذا كانت حماية النظام متوقفة.'
+      },
+      hideUnavailable: {
+        title: 'إخفاء أدوات التنظيف التي لا تنطبق',
+        description: 'معظم القائمة مخصص لبرامج غير موجودة على هذا الجهاز. إخفاء تلك يترك فقط ما هو موجود بالفعل هنا.'
+      },
+      quarantineRetention: {
+        title: 'مدة الاحتفاظ بالتراجع',
+        description: 'كل ما يزيله Prune ينتقل إلى الحجر الصحي أولاً، ويبقى حتى تفرغه. حدد عدد الأيام لإسقاط النسخ الاحتياطية الأقدم من ذلك. اتركه فارغًا للاحتفاظ بها إلى الأبد.',
+        neverPlaceholder: 'أبدًا',
+        daysUnit: 'أيام',
+        ariaLabel: 'عدد الأيام للاحتفاظ بنسخ الحجر الصحي الاحتياطية'
+      },
+      quarantineMaxSize: {
+        title: 'مقدار التراجع للاحتفاظ به',
+        description: 'حد أقصى لمجلد الحجر الصحي بأكمله. عند تجاوزه، تذهب أقدم النسخ الاحتياطية أولاً — لا يتم إسقاط الأحدث أبدًا، لذا فإن أي شيء كبير أزلته للتو يبقى قابلاً للاسترداد حتى لو كان أكبر من الحد بمفرده. اتركه فارغًا لعدم وجود حد.',
+        noLimitPlaceholder: 'بلا حد',
+        gbUnit: 'جيجابايت',
+        ariaLabel: 'الحد الأقصى لحجم الحجر الصحي بالجيجابايت'
+      },
+      exclusions: {
+        title: 'استبعاد المجلدات',
+        description: 'المجلدات وأنواع الملفات التي سيتركها Prune وشأنها — يتخطاها التنظيف العميق ويستبعدها من خريطة القرص — بالإضافة إلى ما يحميه بالفعل: معلومات وحدة تخزين النظام، حجر مكافحات الفيروسات، مخزن المكونات وعشرات غيرها.',
+        ariaLabel: 'مسار المجلد أو نوع الملف المراد استبعاده',
+        add: 'إضافة',
+        invalidFormat: 'اكتب مسار مجلد كاملاً (D:\\Games) أو نوع ملف (*.iso).',
+        formatHint: 'مسار مجلد كامل، أو نوع ملف مكتوب كـ *.iso',
+        none: 'لا شيء مستبعد.',
+        typeBadge: 'نوع',
+        folderBadge: 'مجلد',
+        removeAriaLabel: (value) => `التوقف عن استبعاد ${value}`
+      },
+      sandboxTest: {
+        title: 'اختبار الصندوق الرملي',
+        description: 'يشغّل محرك التنظيف الحقيقي مقابل دليل مؤقت للاستخدام مرة واحدة فقط — أبدًا Temp الفعلي أو Windows Temp أو ذاكرة التخزين المؤقت للصور المصغرة — لإثبات أن الفحص والحذف يعملان فعليًا قبل أن تثق بهما مع ملفاتك الحقيقية.',
+        run: 'تشغيل اختبار الصندوق الرملي',
+        running: 'جارٍ التشغيل…',
+        allPassed: 'اجتازت جميع الفحوصات',
+        failed: 'فشل اختبار الصندوق الرملي'
+      },
+      warningConfirmations: {
+        title: 'تأكيدات التحذير',
+        allAsk: 'كل أداة تنظيف تفقد بيانات تسأل قبل تشغيلها.',
+        someSet: (count) => `${count} تحذير تنظيف تم ضبطه على عدم السؤال مرة أخرى.`,
+        reset: 'إعادة تعيين تأكيدات التحذير'
+      },
+      uninstallTab: {
+        beforeHeading: 'قبل إلغاء التثبيت',
+        restorePointUninstall: {
+          title: 'إنشاء نقطة استعادة قبل إلغاء التثبيت',
+          description: 'استعادة النظام الخاصة بـ Windows نفسه، تُنشأ قبل تشغيل برنامج إلغاء تثبيت البرنامج. يتطلب تشغيل Prune كمسؤول ويسمح Windows بواحدة يوميًا، لذا عندما لا يمكن إنشاؤها، يمضي إلغاء التثبيت قدمًا ويقول مربع الحوار ذلك.'
+        },
+        registryBackup: {
+          title: 'نسخ السجل احتياطيًا قبل إلغاء التثبيت',
+          description: 'يصدّر HKLM\\SOFTWARE و HKCU\\Software (حوالي 140 ميجابايت على الجهاز الذي تم بناء Prune عليه) ويحتفظ بأحدث 3 نسخ. إذا تعذر إنشاء النسخة الاحتياطية، فلن يتم تشغيل إلغاء التثبيت.'
+        },
+        afterHeading: 'بعد إلغاء التثبيت',
+        scanLeftovers: {
+          title: 'فحص المخلفات بعد إلغاء التثبيت',
+          description: 'يبحث عن الملفات ومفاتيح السجل والمهام المجدولة التي خلّفها برنامج إلغاء التثبيت. عند الإيقاف، يقوم Prune بتشغيل برنامج إلغاء تثبيت البرنامج نفسه ويتوقف عند ذلك.'
+        },
+        preselect: {
+          title: 'تحديد كل مخلف افتراضيًا',
+          description: 'تفتح المراجعة بكل ما تم العثور عليه محددًا. عند الإيقاف، تفتح بلا شيء محدد وأنت تختار.'
+        },
+        keepHistory: {
+          title: 'الاحتفاظ بسجل لإلغاء التثبيت',
+          description: 'قائمة لوحة التحكم بعمليات الإزالة الأخيرة والمساحة التي حررتها. عند الإيقاف، لا يتم تسجيل أي شيء جديد.'
+        },
+        destinationHeading: 'تذهب الملفات المتبقية إلى',
+        leftoverOptions: {
+          quarantine: { label: 'الحجر الصحي', description: 'تم نقلها إلى النسخة الاحتياطية الخاصة بـ Prune، وقابلة للاستعادة من شاشة الحجر الصحي. الافتراضي.' },
+          recycle: { label: 'سلة المحذوفات', description: 'قابلة للاستعادة من سلة Windows الخاصة، وتُحرر عند إفراغها.' },
+          permanent: { label: 'الحذف نهائيًا', description: 'يُحذف تمامًا. لا شيء لاستعادته.' }
+        },
+        permanentWarning: 'سيتم حذف الملفات المتبقية تمامًا ولا يمكن استعادتها، من الحجر الصحي أو أي مكان آخر. تحقق من القائمة قبل التأكيد.',
+        registryNote: 'يتم تصدير مفاتيح السجل إلى الحجر الصحي قبل إزالتها، أيًا كان اختيارك.'
+      },
+      about: {
+        description: 'أداة إلغاء تثبيت وتنظيف محلية وغير متصلة بالإنترنت لنظام Windows — إزالة قسرية مع فحص الملفات المتبقية، حجر صحي آمن قبل الحذف، رسم خرائط القرص، وتنظيف الفوضى بنقرة واحدة.'
+      },
+      automation: {
+        title: 'الأتمتة',
+        description: 'يعمل أثناء فتح Prune. لا يمكنه إيقاظ جهاز نائم — يتم الإبلاغ عن أي نافذة تمر أثناء إيقاف تشغيل الكمبيوتر على أنها فائتة بدلاً من تخطيها بصمت، ويتم تدارُكها في المرة التالية التي تفتح فيها التطبيق.',
+        scheduled: 'مجدول',
+        off: 'إيقاف',
+        howOften: 'عدد المرات',
+        day: 'اليوم',
+        at: 'الساعة',
+        whatItDoes: 'ما يفعله',
+        everyDay: 'كل يوم',
+        everyWeek: 'كل أسبوع',
+        measureOnly: 'القياس فقط',
+        clean: 'تنظيف',
+        cleanWarning: 'هذا يزيل الملفات دون أن يراقب أحد. ينظف القواعد التي يوصي بها التنظيف العميق والتي تحتوي فعليًا على شيء ما، ولا يزال كل شيء يذهب إلى الحجر الصحي — لذا تحقق من إعداد الاحتفاظ أعلاه قبل ترك هذا مفعلاً.',
+        nextRun: 'التشغيل التالي:',
+        lastRun: 'آخر تشغيل:',
+        weekdays: {
+          sunday: 'الأحد', monday: 'الاثنين', tuesday: 'الثلاثاء', wednesday: 'الأربعاء',
+          thursday: 'الخميس', friday: 'الجمعة', saturday: 'السبت'
+        }
+      }
+    },
     dashboard: {
       scheduleBadge: {
         missed: (count) => `تم تفويت ${count} ${count === 1 ? 'تشغيل مجدول' : 'عمليات تشغيل مجدولة'} أثناء إغلاق هذا الجهاز`,
@@ -1157,7 +1602,156 @@ export const CATALOG = {
       quarantine: 'Quarantena', settings: 'Configuració', startup: 'Inici',
       duplicates: 'Duplicats', deepClean: 'Neteja profunda'
     },
-    settings: { language: { title: 'Idioma', description: "L'idioma en què es mostren les pantalles del propi Prune." } },
+    settings: {
+      language: { title: 'Idioma', description: "L'idioma en què es mostren les pantalles del propi Prune." },
+      tabs: { general: 'General', uninstall: 'Desinstal·lació', cleanup: 'Neteja', about: 'Quant a' },
+      title: 'Configuració',
+      loading: 'Carregant la configuració…',
+      loadError: (error) => `No s'ha pogut carregar la configuració: ${error}`,
+      saveError: (error) => `No s'ha pogut desar: ${error}`,
+      appearance: {
+        title: 'Aparença',
+        description: "Aurora Deck en fosc o de dia. Tots dos són paletes reals en lloc d'una d'invertida: l'accent s'enfosqueix per al fons clar perquè un botó pugui mantenir text blanc, i cada nivell s'ha mesurat contra les superfícies on realment se situa. El Prune segueix la teva configuració del sistema fins que en triïs una aquí."
+      },
+      minimizeToTray: {
+        title: 'Minimitza a la Safata',
+        description: 'Tancar la finestra envia el Prune a la safata del sistema en lloc de sortir-ne.'
+      },
+      updateCheck: {
+        title: 'Comprova si hi ha actualitzacions',
+        description: "Una vegada al dia, el Prune pregunta a api.github.com si hi ha una versió més nova. És l'única sol·licitud que el Prune fa a qualsevol lloc que no sigui aquesta màquina, i GitHub veu la teva adreça IP com ho faria qualsevol lloc web. Quan n'hi ha una, apareix un botó d'actualització a la part inferior de la barra lateral, i no es descarrega ni instal·la res fins que hi facis clic."
+      },
+      autoInstallUpdates: {
+        title: 'Instal·la actualitzacions automàticament',
+        description: 'Descarrega una versió nova en segon pla i la instal·la la propera vegada que el Prune es tanqui, en lloc d\'esperar que facis clic al botó d\'actualització. Necessita la comprovació d\'actualitzacions anterior.'
+      },
+      updateStatus: {
+        checking: 'Comprovant…',
+        loadError: (error) => `No s'ha pogut comprovar si hi ha actualitzacions: ${error}`,
+        newerAvailable: (version) => `El Prune ${version} està disponible.`,
+        openDownloadPage: 'Obre la pàgina de descàrrega',
+        upToDate: (version) => `Tens l'última versió (${version}).`,
+        openPageError: (error) => `No s'ha pogut obrir la pàgina: ${error}`
+      },
+      showFreeSpace: {
+        title: 'Mostra l\'espai lliure al Mapa de Disc',
+        description: "Dibuixa l'espai lliure del disc com un bloc més quan escanejes un disc sencer, de manera que cada carpeta es llegeix com una part del disc en lloc de l'espai en ús."
+      },
+      autoQuarantine: {
+        title: 'Quarantena Automàtica',
+        description: "La Neteja Profunda mou el que treu a la Quarantena del Prune, on ho pots tornar a posar. Desactiva-ho i anirà a la Paperera de Windows en lloc d'això — encara recuperable, només en un lloc que ja saps com buidar."
+      },
+      skipRecent: {
+        title: 'Deixa els fitxers recents en pau',
+        description: "Omet qualsevol cosa modificada en les últimes hores. En una carpeta temporal, un fitxer que s'està escrivint ara mateix sembla exactament un d'abandonat fa dos anys — això és el que evita que una instal·lació a mig fer es netegi. 0 ho desactiva.",
+        hoursUnit: 'hores',
+        ariaLabel: 'Hores per deixar els fitxers recents en pau'
+      },
+      restorePointCleanup: {
+        title: 'Crea primer un punt de restauració',
+        description: "Abans d'una eliminació forçada, perquè el mateix Windows pugui revertir la màquina. Costa uns segons, i no fa res si la Protecció del Sistema està desactivada."
+      },
+      hideUnavailable: {
+        title: "Amaga els netejadors que no s'apliquen",
+        description: "La major part de la llista és per a programari que aquesta màquina no té. Amagar-los deixa només el que realment hi ha aquí."
+      },
+      quarantineRetention: {
+        title: 'Quant de temps mantenir la desfeta',
+        description: "Tot el que el Prune elimina va primer a la Quarantena, i hi queda fins que la buidis. Estableix un nombre de dies per descartar còpies de seguretat més antigues. Deixa-ho en blanc per mantenir-les per sempre.",
+        neverPlaceholder: 'Mai',
+        daysUnit: 'dies',
+        ariaLabel: 'Dies per mantenir les còpies de seguretat de quarantena'
+      },
+      quarantineMaxSize: {
+        title: 'Quanta desfeta mantenir',
+        description: "Un límit a tota la carpeta de Quarantena. Per sobre, les còpies més antigues cauen primer — la més recent mai es descarta, de manera que quelcom gran que acabes d'eliminar es manté recuperable fins i tot si és més gran que el límit per si sol. Deixa-ho en blanc per a cap límit.",
+        noLimitPlaceholder: 'Sense límit',
+        gbUnit: 'GB',
+        ariaLabel: 'Mida màxima de la quarantena en gigabytes'
+      },
+      exclusions: {
+        title: 'Exclou Carpetes',
+        description: "Carpetes i tipus de fitxer que el Prune deixarà en pau — omesos per la Neteja Profunda i exclosos del Mapa de Disc — a més dels que ja protegeix: Informació del volum del sistema, quarantenes d'antivirus, el magatzem de components i una dotzena més.",
+        ariaLabel: 'Camí de carpeta o tipus de fitxer a excloure',
+        add: 'Afegeix',
+        invalidFormat: "Escriu un camí de carpeta complet (D:\\Games) o un tipus de fitxer (*.iso).",
+        formatHint: "Un camí de carpeta complet, o un tipus de fitxer escrit com *.iso",
+        none: 'Res exclòs.',
+        typeBadge: 'Tipus',
+        folderBadge: 'Carpeta',
+        removeAriaLabel: (value) => `Deixa d'excloure ${value}`
+      },
+      sandboxTest: {
+        title: 'Prova de Sandbox',
+        description: "Executa el motor de neteja real contra un directori temporal d'un sol ús — mai el teu Temp real, el Temp de Windows, o la memòria cau de miniatures — per demostrar que l'escaneig i l'eliminació realment funcionen abans de confiar-hi amb fitxers reals.",
+        run: 'Executa la Prova de Sandbox',
+        running: 'Executant…',
+        allPassed: 'Totes les comprovacions superades',
+        failed: 'La prova de sandbox ha fallat'
+      },
+      warningConfirmations: {
+        title: 'Confirmacions d\'avís',
+        allAsk: 'Cada netejador que perd dades pregunta abans d\'executar-se.',
+        someSet: (count) => `${count} av${count === 1 ? 'ís de neteja està' : 'isos de neteja estan'} configurats per no tornar a preguntar.`,
+        reset: 'Restableix les confirmacions d\'avís'
+      },
+      uninstallTab: {
+        beforeHeading: 'Abans de desinstal·lar',
+        restorePointUninstall: {
+          title: 'Crea un punt de restauració abans de desinstal·lar',
+          description: "La pròpia Restauració del Sistema de Windows, feta abans que s'executi el desinstal·lador del programa. Necessita que el Prune s'executi com a administrador i Windows en permet una per dia, així que quan no es pot fer, la desinstal·lació continua i el diàleg ho diu."
+        },
+        registryBackup: {
+          title: 'Fes còpia de seguretat del registre abans de desinstal·lar',
+          description: "Exporta HKLM\\SOFTWARE i HKCU\\Software (uns 140 MB a la màquina on es construeix el Prune) i manté les 3 més recents. Si no es pot fer la còpia de seguretat, la desinstal·lació no s'executa."
+        },
+        afterHeading: 'Després de desinstal·lar',
+        scanLeftovers: {
+          title: 'Cerca romanents després de desinstal·lar',
+          description: "Cerca els fitxers, claus de registre i tasques programades que el desinstal·lador ha deixat enrere. Desactivat, el Prune només executa el propi desinstal·lador del programa i s'atura allà."
+        },
+        preselect: {
+          title: 'Marca cada romanent per defecte',
+          description: 'La revisió s\'obre amb tot el que ha trobat marcat. Desactivat, s\'obre sense res marcat i tu tries.'
+        },
+        keepHistory: {
+          title: 'Manté un historial de desinstal·lacions',
+          description: "La llista del tauler de les eliminacions recents i l'espai que han alliberat. Desactivat, no es registra res de nou."
+        },
+        destinationHeading: 'Els fitxers romanents van a',
+        leftoverOptions: {
+          quarantine: { label: 'Quarantena', description: "Moguts a la còpia de seguretat pròpia del Prune, i recuperables des de la pantalla de Quarantena. Per defecte." },
+          recycle: { label: 'La Paperera', description: "Recuperables des de la pròpia paperera de Windows, i alliberats quan la buides." },
+          permanent: { label: 'Elimina permanentment', description: 'Eliminats directament. Res a restaurar.' }
+        },
+        permanentWarning: "Els fitxers romanents s'eliminaran directament i no es podran restaurar, ni des de la Quarantena ni des de cap altre lloc. Revisa la llista abans de confirmar-ho.",
+        registryNote: 'Les claus de registre s\'exporten a la Quarantena abans de ser eliminades, sigui quina sigui la teva elecció.'
+      },
+      about: {
+        description: 'Una eina de desinstal·lació i neteja local i fora de línia per a Windows — eliminació forçada amb escaneig de fitxers romanents, quarantena segura abans d\'eliminar, mapatge de disc, i neteja de brossa amb un clic.'
+      },
+      automation: {
+        title: 'Automatització',
+        description: "S'executa mentre el Prune està obert. No pot despertar una màquina adormida — una finestra que passa mentre l'ordinador està apagat es reporta com a perduda en lloc d'ometre's silenciosament, i es recupera la propera vegada que obris l'aplicació.",
+        scheduled: 'Programat',
+        off: 'Desactivat',
+        howOften: 'Amb quina freqüència',
+        day: 'Dia',
+        at: 'A les',
+        whatItDoes: 'Què fa',
+        everyDay: 'Cada dia',
+        everyWeek: 'Cada setmana',
+        measureOnly: 'Només mesura',
+        clean: 'Neteja',
+        cleanWarning: "Això elimina fitxers sense que ningú ho vigili. Neteja les regles que la Neteja Profunda recomana i que realment tenen alguna cosa dins, i tot continua anant a la quarantena — així que revisa la configuració de retenció anterior abans de deixar això activat.",
+        nextRun: 'Propera execució:',
+        lastRun: 'Última execució:',
+        weekdays: {
+          sunday: 'Diumenge', monday: 'Dilluns', tuesday: 'Dimarts', wednesday: 'Dimecres',
+          thursday: 'Dijous', friday: 'Divendres', saturday: 'Dissabte'
+        }
+      }
+    },
     dashboard: {
       scheduleBadge: {
         missed: (count) => `${count} ${count === 1 ? 'execució programada' : 'execucions programades'} s'${count === 1 ? 'ha' : 'han'} perdut mentre aquest PC estava apagat`,
@@ -1530,7 +2124,156 @@ export const CATALOG = {
       quarantine: 'Karanténa', settings: 'Nastavení', startup: 'Po spuštění',
       duplicates: 'Duplicity', deepClean: 'Důkladné čištění'
     },
-    settings: { language: { title: 'Jazyk', description: 'Jazyk, ve kterém se zobrazují obrazovky Prune.' } },
+    settings: {
+      language: { title: 'Jazyk', description: 'Jazyk, ve kterém se zobrazují obrazovky Prune.' },
+      tabs: { general: 'Obecné', uninstall: 'Odinstalace', cleanup: 'Čištění', about: 'O aplikaci' },
+      title: 'Nastavení',
+      loading: 'Načítání nastavení…',
+      loadError: (error) => `Nastavení se nepodařilo načíst: ${error}`,
+      saveError: (error) => `Nepodařilo se uložit: ${error}`,
+      appearance: {
+        title: 'Vzhled',
+        description: 'Aurora Deck v tmavém nebo denním provedení. Obě jsou skutečné palety, nikoli jedna obrácená: akcent tmavne pro světlé pozadí, aby tlačítko mohlo mít bílý text, a každá úroveň byla měřena proti povrchům, na kterých skutečně leží. Prune sleduje nastavení systému, dokud si zde nevyberete jedno.'
+      },
+      minimizeToTray: {
+        title: 'Minimalizovat do systémové lišty',
+        description: 'Zavření okna pošle Prune do systémové lišty místo ukončení.'
+      },
+      updateCheck: {
+        title: 'Vyhledávat aktualizace',
+        description: 'Jednou denně se Prune zeptá api.github.com, zda existuje novější verze. Je to jediný požadavek, který Prune posílá kamkoli mimo tento počítač, a GitHub vidí vaši IP adresu stejně jako jakýkoli web. Když nějaká existuje, dole na postranním panelu se zobrazí tlačítko aktualizace a nic se nestáhne ani nenainstaluje, dokud na něj neklepnete.'
+      },
+      autoInstallUpdates: {
+        title: 'Instalovat aktualizace automaticky',
+        description: 'Stáhne novou verzi na pozadí a nainstaluje ji při příštím zavření aplikace Prune, místo aby čekal, až klepnete na tlačítko aktualizace. Vyžaduje výše uvedenou kontrolu aktualizací.'
+      },
+      updateStatus: {
+        checking: 'Kontrola…',
+        loadError: (error) => `Aktualizace se nepodařilo zkontrolovat: ${error}`,
+        newerAvailable: (version) => `Je k dispozici Prune ${version}.`,
+        openDownloadPage: 'Otevřít stránku ke stažení',
+        upToDate: (version) => `Máte nejnovější verzi (${version}).`,
+        openPageError: (error) => `Stránku se nepodařilo otevřít: ${error}`
+      },
+      showFreeSpace: {
+        title: 'Zobrazit volné místo v Mapě disku',
+        description: 'Vykreslí volné místo na disku jako další blok při skenování celého disku, takže se každá složka čte jako podíl na disku, nikoli na využitém místě.'
+      },
+      autoQuarantine: {
+        title: 'Automatická karanténa',
+        description: 'Důkladné čištění přesune, co odebere, do karantény aplikace Prune, odkud to můžete vrátit zpět. Vypněte to a místo toho to půjde do koše Windows — stále obnovitelné, jen na místě, které už umíte vyprázdnit.'
+      },
+      skipRecent: {
+        title: 'Nechat nedávné soubory na pokoji',
+        description: 'Přeskočí vše upravené v posledních několika hodinách. Ve složce temp vypadá soubor, který se právě zapisuje, přesně jako soubor opuštěný před dvěma lety — to brání tomu, aby byla smetena napůl dokončená instalace. 0 to vypne.',
+        hoursUnit: 'hodin',
+        ariaLabel: 'Počet hodin, po které nechat nedávné soubory na pokoji'
+      },
+      restorePointCleanup: {
+        title: 'Nejprve vytvořit bod obnovení',
+        description: 'Před vynuceným odebráním, aby mohl sám Windows vrátit počítač zpět. Stojí to pár sekund a nic to neudělá, pokud je Ochrana systému vypnutá.'
+      },
+      hideUnavailable: {
+        title: 'Skrýt čističe, které se nevztahují',
+        description: 'Většina seznamu je pro software, který tento počítač nemá. Jejich skrytím zůstane jen to, co je zde skutečně přítomno.'
+      },
+      quarantineRetention: {
+        title: 'Jak dlouho uchovávat vrácení zpět',
+        description: 'Vše, co Prune odebere, jde nejprve do karantény a zůstává tam, dokud ji nevyprázdníte. Nastavte počet dní, po kterých se starší zálohy zahodí. Ponechte prázdné, chcete-li je uchovat navždy.',
+        neverPlaceholder: 'Nikdy',
+        daysUnit: 'dní',
+        ariaLabel: 'Počet dní, po které uchovávat zálohy karantény'
+      },
+      quarantineMaxSize: {
+        title: 'Kolik vrácení zpět uchovávat',
+        description: 'Limit pro celou složku karantény. Nad ním jdou první nejstarší zálohy — nejnovější se nikdy nezahazuje, takže něco velkého, co jste právě odebrali, zůstává obnovitelné, i když je to větší než samotný limit. Ponechte prázdné pro žádný limit.',
+        noLimitPlaceholder: 'Bez limitu',
+        gbUnit: 'GB',
+        ariaLabel: 'Maximální velikost karantény v gigabajtech'
+      },
+      exclusions: {
+        title: 'Vyloučit složky',
+        description: 'Složky a typy souborů, které Prune nechá na pokoji — přeskočené Důkladným čištěním a vynechané z Mapy disku — navíc k těm, které již chrání: Informace o svazku systému, karantény antivirů, úložiště komponent a další.',
+        ariaLabel: 'Cesta ke složce nebo typ souboru k vyloučení',
+        add: 'Přidat',
+        invalidFormat: 'Napište úplnou cestu ke složce (D:\\Hry) nebo typ souboru (*.iso).',
+        formatHint: 'Úplná cesta ke složce nebo typ souboru zapsaný jako *.iso',
+        none: 'Nic není vyloučeno.',
+        typeBadge: 'Typ',
+        folderBadge: 'Složka',
+        removeAriaLabel: (value) => `Přestat vylučovat ${value}`
+      },
+      sandboxTest: {
+        title: 'Test v izolovaném prostředí',
+        description: 'Spustí skutečný čisticí engine pouze proti jednorázovému dočasnému adresáři — nikdy proti vašemu skutečnému Temp, Windows Temp nebo mezipaměti miniatur — aby se prokázalo, že skenování a mazání skutečně fungují, než jim začnete důvěřovat na skutečných souborech.',
+        run: 'Spustit test v izolovaném prostředí',
+        running: 'Probíhá…',
+        allPassed: 'Všechny kontroly prošly',
+        failed: 'Test v izolovaném prostředí selhal'
+      },
+      warningConfirmations: {
+        title: 'Potvrzení varování',
+        allAsk: 'Každý čistič, který ztrácí data, se zeptá, než se spustí.',
+        someSet: (count) => `${count} varování o čištění ${count === 1 ? 'je nastaveno' : 'je nastaveno'} tak, aby se znovu neptalo.`,
+        reset: 'Obnovit potvrzení varování'
+      },
+      uninstallTab: {
+        beforeHeading: 'Před odinstalací',
+        restorePointUninstall: {
+          title: 'Vytvořit bod obnovení před odinstalací',
+          description: 'Vlastní Obnovení systému Windows, vytvořené předtím, než se spustí odinstalační program. Vyžaduje, aby Prune běžel jako správce, a Windows umožňuje jeden denně, takže když ho nelze vytvořit, odinstalace pokračuje a dialog to uvádí.'
+        },
+        registryBackup: {
+          title: 'Zálohovat registr před odinstalací',
+          description: 'Exportuje HKLM\\SOFTWARE a HKCU\\Software (asi 140 MB na počítači, na kterém je Prune sestaven) a ponechá nejnovější 3. Pokud se zálohu nepodaří vytvořit, odinstalace se nespustí.'
+        },
+        afterHeading: 'Po odinstalaci',
+        scanLeftovers: {
+          title: 'Vyhledat pozůstatky po odinstalaci',
+          description: 'Hledá soubory, klíče registru a naplánované úlohy, které po sobě odinstalační program zanechal. Vypnuto, Prune jen spustí vlastní odinstalační program a tam skončí.'
+        },
+        preselect: {
+          title: 'Ve výchozím nastavení zaškrtnout každý pozůstatek',
+          description: 'Kontrola se otevře se vším nalezeným zaškrtnutým. Vypnuto, otevře se s ničím zaškrtnutým a vyberete si sami.'
+        },
+        keepHistory: {
+          title: 'Uchovávat historii odinstalací',
+          description: 'Seznam nedávných odebrání a uvolněného místa na řídicím panelu. Vypnuto, nic nového se nezaznamenává.'
+        },
+        destinationHeading: 'Zbylé soubory jdou do',
+        leftoverOptions: {
+          quarantine: { label: 'Karanténa', description: 'Přesunuto do vlastní zálohy aplikace Prune a obnovitelné z obrazovky Karanténa. Výchozí.' },
+          recycle: { label: 'Koš', description: 'Obnovitelné z vlastního koše Windows a uvolněné při jeho vyprázdnění.' },
+          permanent: { label: 'Trvale odstranit', description: 'Rovnou smazáno. Nic k obnovení.' }
+        },
+        permanentWarning: 'Zbylé soubory budou rovnou smazány a nelze je obnovit, ani z karantény, ani odjinud. Před potvrzením zkontrolujte seznam.',
+        registryNote: 'Klíče registru se exportují do karantény před odebráním, ať už zvolíte cokoli.'
+      },
+      about: {
+        description: 'Lokální, offline odinstalační a čisticí nástroj pro Windows — vynucené odebrání se skenováním pozůstatků, bezpečná karanténa před smazáním, mapování disku a jednoklikové čištění nepořádku.'
+      },
+      automation: {
+        title: 'Automatizace',
+        description: 'Běží, dokud je Prune otevřený. Nemůže probudit spící počítač — okno, které uplyne, když je počítač vypnutý, se hlásí jako zmeškané místo tichého přeskočení, a dohání se při příštím otevření aplikace.',
+        scheduled: 'Naplánováno',
+        off: 'Vypnuto',
+        howOften: 'Jak často',
+        day: 'Den',
+        at: 'V',
+        whatItDoes: 'Co to dělá',
+        everyDay: 'Každý den',
+        everyWeek: 'Každý týden',
+        measureOnly: 'Pouze měřit',
+        clean: 'Vyčistit',
+        cleanWarning: 'Toto odstraňuje soubory, aniž by na to někdo dohlížel. Čistí pravidla, která Důkladné čištění doporučuje a která skutečně něco obsahují, a vše stále jde do karantény — takže před ponecháním tohoto zapnutého zkontrolujte výše uvedené nastavení uchovávání.',
+        nextRun: 'Příští spuštění:',
+        lastRun: 'Poslední spuštění:',
+        weekdays: {
+          sunday: 'Neděle', monday: 'Pondělí', tuesday: 'Úterý', wednesday: 'Středa',
+          thursday: 'Čtvrtek', friday: 'Pátek', saturday: 'Sobota'
+        }
+      }
+    },
     dashboard: {
       scheduleBadge: {
         missed: (count) => `${count} ${count === 1 ? 'naplánované spuštění bylo' : 'naplánovaná spuštění byla'} zmeškáno, protože počítač byl vypnutý`,
@@ -1903,7 +2646,156 @@ export const CATALOG = {
       quarantine: 'Cwarantin', settings: 'Gosodiadau', startup: 'Cychwyn',
       duplicates: 'Dyblygiadau', deepClean: 'Glanhau Dwfn'
     },
-    settings: { language: { title: 'Iaith', description: "Yr iaith y dangosir sgriniau Prune ei hun ynddi." } },
+    settings: {
+      language: { title: 'Iaith', description: "Yr iaith y dangosir sgriniau Prune ei hun ynddi." },
+      tabs: { general: 'Cyffredinol', uninstall: 'Dadosod', cleanup: 'Glanhau', about: 'Ynghylch' },
+      title: 'Gosodiadau',
+      loading: 'Wrthi\'n llwytho gosodiadau…',
+      loadError: (error) => `Methu llwytho gosodiadau: ${error}`,
+      saveError: (error) => `Methu cadw: ${error}`,
+      appearance: {
+        title: 'Golwg',
+        description: "Aurora Deck mewn tywyllwch neu olau dydd. Mae'r ddwy yn baletau go iawn yn hytrach nag un wedi'i wrthdroi: mae'r acen yn tywyllu ar gyfer y cefndir golau fel y gall botwm gadw testun gwyn arno, a mesurwyd pob haen yn erbyn yr wynebau y mae'n eistedd arnynt mewn gwirionedd. Mae Prune yn dilyn gosodiad eich system nes i chi ddewis un yma."
+      },
+      minimizeToTray: {
+        title: 'Lleihau i\'r Hambwrdd',
+        description: 'Mae cau\'r ffenestr yn anfon Prune i hambwrdd y system yn lle gadael.'
+      },
+      updateCheck: {
+        title: 'Chwilio am ddiweddariadau',
+        description: "Unwaith y dydd, mae Prune yn gofyn i api.github.com a oes fersiwn newydd yn bodoli. Dyma'r unig gais y mae Prune yn ei wneud i unrhyw le heblaw'r peiriant hwn, ac mae GitHub yn gweld eich cyfeiriad IP fel y byddai unrhyw wefan. Pan fydd un, mae botwm diweddaru'n ymddangos ar waelod y bar ochr, ac ni chaiff dim ei lawrlwytho na'i osod nes i chi glicio arno."
+      },
+      autoInstallUpdates: {
+        title: 'Gosod diweddariadau\'n awtomatig',
+        description: "Yn lawrlwytho fersiwn newydd yn y cefndir ac yn ei osod y tro nesaf y bydd Prune yn cau, yn lle aros i chi glicio'r botwm diweddaru. Mae angen y gwiriad diweddaru uchod."
+      },
+      updateStatus: {
+        checking: 'Gwirio…',
+        loadError: (error) => `Methu gwirio am ddiweddariadau: ${error}`,
+        newerAvailable: (version) => `Mae Prune ${version} ar gael.`,
+        openDownloadPage: 'Agor y dudalen lawrlwytho',
+        upToDate: (version) => `Rydych ar y fersiwn ddiweddaraf (${version}).`,
+        openPageError: (error) => `Methu agor y dudalen: ${error}`
+      },
+      showFreeSpace: {
+        title: 'Dangos lle rhydd ar y Map Disg',
+        description: "Yn tynnu lle rhydd y ddisg fel bloc arall pan fyddwch yn sganio disg gyfan, fel bod pob ffolder yn darllen fel cyfran o'r ddisg yn hytrach na'r lle sy'n cael ei ddefnyddio."
+      },
+      autoQuarantine: {
+        title: 'Cwarantin Awtomatig',
+        description: "Mae Glanhau Dwfn yn symud yr hyn y mae'n ei gymryd i Gwarantin Prune, lle gallwch ei roi'n ôl. Diffoddwch hyn a bydd yn mynd i Fin Ailgylchu Windows yn lle hynny — yn dal i fod yn adferadwy, dim ond mewn man rydych eisoes yn gwybod sut i'w wacáu."
+      },
+      skipRecent: {
+        title: 'Gadewch ffeiliau diweddar yn llonydd',
+        description: "Hepgor unrhyw beth a addaswyd yn ystod yr oriau diwethaf. Mewn ffolder dros dro, mae ffeil sy'n cael ei hysgrifennu nawr yn edrych yn union fel un a adawyd ddwy flynedd yn ôl — dyma sy'n atal gosodiad hanner gorffenedig rhag cael ei sgubo i fyny. Mae 0 yn ei ddiffodd.",
+        hoursUnit: 'awr',
+        ariaLabel: 'Oriau i adael ffeiliau diweddar yn llonydd'
+      },
+      restorePointCleanup: {
+        title: 'Creu pwynt adfer yn gyntaf',
+        description: "Cyn tynnu gorfodol, fel y gall Windows ei hun droi'r peiriant yn ôl. Yn costio ychydig eiliadau, ac nid yw'n gwneud dim o gwbl os yw Diogelu System wedi'i ddiffodd."
+      },
+      hideUnavailable: {
+        title: "Cuddio glanhawyr nad ydynt yn berthnasol",
+        description: "Mae'r rhan fwyaf o'r rhestr ar gyfer meddalwedd nad oes gan y peiriant hwn. Mae cuddio'r rheiny'n gadael dim ond yr hyn sydd yma go iawn."
+      },
+      quarantineRetention: {
+        title: 'Am ba hyd i gadw dadwneud',
+        description: "Mae popeth mae Prune yn ei dynnu'n mynd i Gwarantin yn gyntaf, ac yn aros nes i chi ei wacáu. Gosodwch nifer o ddiwrnodau i ollwng copïau wrth gefn hŷn na hynny. Gadewch yn wag i'w cadw am byth.",
+        neverPlaceholder: 'Byth',
+        daysUnit: 'diwrnod',
+        ariaLabel: 'Diwrnodau i gadw copïau wrth gefn cwarantin'
+      },
+      quarantineMaxSize: {
+        title: 'Faint o ddadwneud i\'w gadw',
+        description: "Terfyn ar y ffolder Cwarantin cyfan. Uwch ei ben, mae'r copïau wrth gefn hynaf yn mynd yn gyntaf — ni chaiff yr un mwyaf diweddar ei ollwng byth, felly mae rhywbeth mawr rydych newydd ei dynnu'n aros yn adferadwy hyd yn oed os yw'n fwy na'r terfyn ar ei ben ei hun. Gadewch yn wag am ddim terfyn.",
+        noLimitPlaceholder: 'Dim terfyn',
+        gbUnit: 'GB',
+        ariaLabel: 'Maint mwyaf y cwarantin mewn gigabeitiau'
+      },
+      exclusions: {
+        title: 'Eithrio Ffolderi',
+        description: "Ffolderi a mathau o ffeiliau y bydd Prune yn eu gadael yn llonydd — wedi'u hepgor gan Lanhau Dwfn ac wedi'u heithrio o'r Map Disg — ar ben y rhai mae eisoes yn eu diogelu: Gwybodaeth Cyfrol System, cwarantinau gwrthfeirws, y storfa gydrannau a dwsin arall.",
+        ariaLabel: 'Llwybr ffolder neu fath o ffeil i\'w eithrio',
+        add: 'Ychwanegu',
+        invalidFormat: "Ysgrifennwch lwybr ffolder llawn (D:\\Games) neu fath o ffeil (*.iso).",
+        formatHint: "Llwybr ffolder llawn, neu fath o ffeil wedi'i ysgrifennu fel *.iso",
+        none: "Dim byd wedi'i eithrio.",
+        typeBadge: 'Math',
+        folderBadge: 'Ffolder',
+        removeAriaLabel: (value) => `Stopio eithrio ${value}`
+      },
+      sandboxTest: {
+        title: 'Prawf Blwch Tywod',
+        description: "Yn rhedeg yr injan lanhau go iawn yn erbyn cyfeiriadur dros dro tafladwy yn unig — byth eich Temp go iawn, Temp Windows, na chelc lluniau bach — i brofi bod sganio a dileu wir yn gweithio cyn i chi ymddiried ynddynt gyda ffeiliau go iawn.",
+        run: 'Rhedeg Prawf Blwch Tywod',
+        running: 'Yn rhedeg…',
+        allPassed: 'Pob gwiriad wedi pasio',
+        failed: 'Prawf blwch tywod wedi methu'
+      },
+      warningConfirmations: {
+        title: 'Cadarnhadau rhybudd',
+        allAsk: "Mae pob glanhawr sy'n colli data'n gofyn cyn iddo redeg.",
+        someSet: (count) => `Gosodwyd ${count} rhybudd glanhau i beidio â gofyn eto.`,
+        reset: 'Ailosod cadarnhadau rhybudd'
+      },
+      uninstallTab: {
+        beforeHeading: 'Cyn dadosod',
+        restorePointUninstall: {
+          title: 'Creu pwynt adfer cyn dadosod',
+          description: "Adferiad System Windows ei hun, wedi'i wneud cyn i ddadosodwr y rhaglen redeg. Mae angen i Prune redeg fel gweinyddwr ac mae Windows yn caniatáu un y dydd, felly pan na ellir ei wneud, mae'r dadosod yn mynd yn ei flaen ac mae'r ddeialog yn dweud hynny."
+        },
+        registryBackup: {
+          title: 'Cadw copi wrth gefn o\'r gofrestrfa cyn dadosod',
+          description: "Yn allforio HKLM\\SOFTWARE a HKCU\\Software (tua 140 MB ar y peiriant y mae Prune wedi'i adeiladu arno) ac yn cadw'r 3 diweddaraf. Os na ellir gwneud y copi wrth gefn, ni fydd y dadosod yn rhedeg."
+        },
+        afterHeading: 'Ar ôl dadosod',
+        scanLeftovers: {
+          title: 'Sganio am weddillion ar ôl dadosod',
+          description: "Yn chwilio am y ffeiliau, allweddi cofrestrfa a thasgau a drefnwyd y mae'r dadosodwr wedi'u gadael ar ôl. Wedi'i ddiffodd, mae Prune yn rhedeg dadosodwr ei hun y rhaglen ac yn stopio yno."
+        },
+        preselect: {
+          title: 'Ticio pob gweddill yn ddiofyn',
+          description: "Mae'r adolygiad yn agor gyda phopeth a ganfuwyd wedi'i dicio. Wedi'i ddiffodd, mae'n agor heb ddim wedi'i dicio ac rydych chi'n dewis."
+        },
+        keepHistory: {
+          title: 'Cadw hanes dadosod',
+          description: "Rhestr y dangosfwrdd o dynnu diweddar a'r lle y maent wedi'i ryddhau. Wedi'i ddiffodd, ni chaiff dim newydd ei gofnodi."
+        },
+        destinationHeading: "Mae ffeiliau gweddilliol yn mynd i",
+        leftoverOptions: {
+          quarantine: { label: 'Cwarantin', description: "Wedi'u symud i gopi wrth gefn ei hun Prune, ac yn adferadwy o'r sgrin Gwarantin. Y rhagosodiad." },
+          recycle: { label: "Y Bin Ailgylchu", description: "Yn adferadwy o fin Windows ei hun, ac yn cael ei ryddhau pan fyddwch yn ei wacáu." },
+          permanent: { label: "Dileu'n barhaol", description: "Wedi'u dileu'n llwyr. Dim byd i'w adfer." }
+        },
+        permanentWarning: "Caiff ffeiliau gweddilliol eu dileu'n llwyr ac ni ellir eu hadfer, o Gwarantin nac unrhyw le arall. Gwiriwch y rhestr cyn i chi ei chadarnhau.",
+        registryNote: "Caiff allweddi cofrestrfa eu hallforio i Gwarantin cyn iddynt gael eu tynnu, pa un bynnag a ddewiswch."
+      },
+      about: {
+        description: "Offeryn dadosod a glanhau lleol, all-lein ar gyfer Windows — tynnu gorfodol gyda sganio ffeiliau gweddilliol, cwarantin diogel cyn dileu, mapio disg, a glanhau sbwriel un clic."
+      },
+      automation: {
+        title: 'Awtomeiddio',
+        description: "Yn rhedeg tra bod Prune ar agor. Ni all ddeffro peiriant sy'n cysgu — mae ffenestr sy'n mynd heibio tra bod y cyfrifiadur i ffwrdd yn cael ei riportio fel un a gollwyd yn hytrach na'i hepgor yn dawel, ac yn cael ei dal i fyny'r tro nesaf y byddwch yn agor yr ap.",
+        scheduled: 'Wedi\'i drefnu',
+        off: 'I ffwrdd',
+        howOften: 'Pa mor aml',
+        day: 'Diwrnod',
+        at: 'Am',
+        whatItDoes: 'Beth mae\'n ei wneud',
+        everyDay: 'Bob dydd',
+        everyWeek: 'Bob wythnos',
+        measureOnly: "Mesur yn unig",
+        clean: 'Glanhau',
+        cleanWarning: "Mae hyn yn tynnu ffeiliau heb i neb wylio. Mae'n glanhau'r rheolau y mae Glanhau Dwfn yn eu hargymell ac sydd wir â rhywbeth ynddynt, ac mae popeth yn dal i fynd i gwarantin — felly gwiriwch y gosodiad cadw uchod cyn gadael hyn ymlaen.",
+        nextRun: 'Rhediad nesaf:',
+        lastRun: 'Rhediad diwethaf:',
+        weekdays: {
+          sunday: 'Dydd Sul', monday: 'Dydd Llun', tuesday: 'Dydd Mawrth', wednesday: 'Dydd Mercher',
+          thursday: 'Dydd Iau', friday: 'Dydd Gwener', saturday: 'Dydd Sadwrn'
+        }
+      }
+    },
     dashboard: {
       scheduleBadge: {
         missed: (count) => `Collwyd ${count} rhediad ${count === 1 ? 'a drefnwyd' : 'wedi\'u trefnu'} tra roedd y cyfrifiadur hwn i ffwrdd`,
@@ -2276,7 +3168,156 @@ export const CATALOG = {
       quarantine: 'Karantæne', settings: 'Indstillinger', startup: 'Opstart',
       duplicates: 'Dubletter', deepClean: 'Grundig oprydning'
     },
-    settings: { language: { title: 'Sprog', description: 'Det sprog, Prunes egne skærme vises på.' } },
+    settings: {
+      language: { title: 'Sprog', description: 'Det sprog, Prunes egne skærme vises på.' },
+      tabs: { general: 'Generelt', uninstall: 'Afinstaller', cleanup: 'Oprydning', about: 'Om' },
+      title: 'Indstillinger',
+      loading: 'Indlæser indstillinger…',
+      loadError: (error) => `Kunne ikke indlæse indstillinger: ${error}`,
+      saveError: (error) => `Kunne ikke gemme: ${error}`,
+      appearance: {
+        title: 'Udseende',
+        description: 'Aurora Deck i mørk eller dagslystilstand. Begge er rigtige paletter i stedet for én inverteret: accenten bliver mørkere for den lyse baggrund, så en knap kan beholde hvid tekst på den, og hvert niveau blev målt mod de flader, den faktisk sidder på. Prune følger din systemindstilling, indtil du vælger en her.'
+      },
+      minimizeToTray: {
+        title: 'Minimer til statusfeltet',
+        description: 'At lukke vinduet sender Prune til statusfeltet i stedet for at afslutte.'
+      },
+      updateCheck: {
+        title: 'Søg efter opdateringer',
+        description: 'En gang om dagen spørger Prune api.github.com, om der findes en nyere udgivelse. Det er den eneste anmodning, Prune sender andre steder end denne maskine, og GitHub ser din IP-adresse, som enhver hjemmeside ville. Når der er en, vises en opdateringsknap nederst i sidepanelet, og intet downloades eller installeres, før du klikker på den.'
+      },
+      autoInstallUpdates: {
+        title: 'Installer opdateringer automatisk',
+        description: 'Downloader en ny version i baggrunden og installerer den næste gang Prune lukkes, i stedet for at vente på, at du klikker på opdateringsknappen. Kræver ovenstående opdateringstjek.'
+      },
+      updateStatus: {
+        checking: 'Tjekker…',
+        loadError: (error) => `Kunne ikke tjekke for opdateringer: ${error}`,
+        newerAvailable: (version) => `Prune ${version} er tilgængelig.`,
+        openDownloadPage: 'Åbn downloadsiden',
+        upToDate: (version) => `Du har den nyeste version (${version}).`,
+        openPageError: (error) => `Kunne ikke åbne siden: ${error}`
+      },
+      showFreeSpace: {
+        title: 'Vis ledig plads på Diskkortet',
+        description: 'Tegner drevets ledige plads som endnu en blok, når du scanner et helt drev, så hver mappe læses som en andel af drevet i stedet for af den plads, der er i brug.'
+      },
+      autoQuarantine: {
+        title: 'Auto-karantæne',
+        description: 'Dybderensning flytter det, den fjerner, til Prunes egen karantæne, hvor du kan sætte det tilbage. Slå dette fra, og det går i stedet til Windows Papirkurv — stadig genoprettelig, bare et sted du allerede ved, hvordan du tømmer.'
+      },
+      skipRecent: {
+        title: 'Lad nylige filer være',
+        description: 'Springer alt over, der er ændret inden for de sidste par timer. I en midlertidig mappe ser en fil, der lige nu skrives til, nøjagtig ud som en, der blev opgivet for to år siden — det er det, der forhindrer en halvfærdig installation i at blive fejet op. 0 slår det fra.',
+        hoursUnit: 'timer',
+        ariaLabel: 'Timer at lade nylige filer være i fred'
+      },
+      restorePointCleanup: {
+        title: 'Opret et gendannelsespunkt først',
+        description: 'Før en tvungen fjernelse, så Windows selv kan rulle maskinen tilbage. Koster et par sekunder og gør ingenting, hvis Systembeskyttelse er slået fra.'
+      },
+      hideUnavailable: {
+        title: 'Skjul rensere, der ikke gælder',
+        description: 'Det meste af listen er til software, denne maskine ikke har. At skjule dem efterlader kun det, der faktisk er her.'
+      },
+      quarantineRetention: {
+        title: 'Hvor længe skal fortryd beholdes',
+        description: 'Alt, hvad Prune fjerner, går først til karantæne og bliver, indtil du tømmer den. Angiv et antal dage for at droppe sikkerhedskopier ældre end det. Lad det stå tomt for at beholde dem for altid.',
+        neverPlaceholder: 'Aldrig',
+        daysUnit: 'dage',
+        ariaLabel: 'Dage at beholde karantænesikkerhedskopier'
+      },
+      quarantineMaxSize: {
+        title: 'Hvor meget fortryd skal beholdes',
+        description: 'Et loft over hele karantænemappen. Over det går de ældste sikkerhedskopier først — den seneste droppes aldrig, så noget stort, du lige har fjernet, forbliver genoprettelig, selv hvis det er større end loftet alene. Lad det stå tomt for ingen grænse.',
+        noLimitPlaceholder: 'Ingen grænse',
+        gbUnit: 'GB',
+        ariaLabel: 'Maksimal karantænestørrelse i gigabyte'
+      },
+      exclusions: {
+        title: 'Ekskluder mapper',
+        description: 'Mapper og filtyper, Prune vil lade være — sprunget over af Dybderensning og udeladt af Diskkortet — udover dem, den allerede beskytter: Systemvolumeoplysninger, antivirus-karantæner, komponentlageret og et dusin andre.',
+        ariaLabel: 'Mappesti eller filtype at ekskludere',
+        add: 'Tilføj',
+        invalidFormat: 'Skriv en fuld mappesti (D:\\Games) eller en filtype (*.iso).',
+        formatHint: 'En fuld mappesti, eller en filtype skrevet som *.iso',
+        none: 'Intet ekskluderet.',
+        typeBadge: 'Type',
+        folderBadge: 'Mappe',
+        removeAriaLabel: (value) => `Stop med at ekskludere ${value}`
+      },
+      sandboxTest: {
+        title: 'Sandkassetest',
+        description: 'Kører den rigtige oprydningsmotor mod kun en engangs-midlertidig mappe — aldrig din faktiske Temp, Windows Temp eller miniaturecache — for at bevise, at scanning og sletning rent faktisk virker, før du stoler på dem med rigtige filer.',
+        run: 'Kør sandkassetest',
+        running: 'Kører…',
+        allPassed: 'Alle kontroller bestået',
+        failed: 'Sandkassetest mislykkedes'
+      },
+      warningConfirmations: {
+        title: 'Advarselsbekræftelser',
+        allAsk: 'Hver rensning, der mister data, spørger, før den kører.',
+        someSet: (count) => `${count} rensningsadvarsel${count === 1 ? '' : 'er'} sat til ikke at spørge igen.`,
+        reset: 'Nulstil advarselsbekræftelser'
+      },
+      uninstallTab: {
+        beforeHeading: 'Før afinstallation',
+        restorePointUninstall: {
+          title: 'Opret et gendannelsespunkt før afinstallation',
+          description: 'Windows egen systemgendannelse, oprettet før programmets afinstallationsprogram kører. Kræver at Prune kører som administrator, og Windows tillader én om dagen, så når den ikke kan oprettes, fortsætter afinstallationen, og dialogen siger det.'
+        },
+        registryBackup: {
+          title: 'Sikkerhedskopier registreringsdatabasen før afinstallation',
+          description: 'Eksporterer HKLM\\SOFTWARE og HKCU\\Software (ca. 140 MB på den maskine, Prune er bygget på) og beholder de nyeste 3. Hvis sikkerhedskopien ikke kan oprettes, kører afinstallationen ikke.'
+        },
+        afterHeading: 'Efter afinstallation',
+        scanLeftovers: {
+          title: 'Scan for rester efter afinstallation',
+          description: 'Leder efter filer, registreringsnøgler og planlagte opgaver, afinstallationsprogrammet har efterladt. Fra, kører Prune bare programmets eget afinstallationsprogram og stopper der.'
+        },
+        preselect: {
+          title: 'Afkryds hver rest som standard',
+          description: 'Gennemgangen åbner med alt, den fandt, afkrydset. Fra, åbner den med intet afkrydset, og du vælger.'
+        },
+        keepHistory: {
+          title: 'Behold en afinstallationshistorik',
+          description: 'Oversigtens liste over nylige fjernelser og den plads, de frigjorde. Fra, registreres intet nyt.'
+        },
+        destinationHeading: 'Restfiler går til',
+        leftoverOptions: {
+          quarantine: { label: 'Karantæne', description: 'Flyttet til Prunes egen sikkerhedskopi og genoprettelig fra Karantæne-skærmen. Standard.' },
+          recycle: { label: 'Papirkurven', description: 'Genoprettelig fra Windows egen papirkurv og frigjort, når du tømmer den.' },
+          permanent: { label: 'Slet permanent', description: 'Slettet direkte. Intet at gendanne.' }
+        },
+        permanentWarning: 'Restfiler slettes direkte og kan ikke gendannes, hverken fra karantæne eller andre steder. Tjek listen, før du bekræfter den.',
+        registryNote: 'Registreringsnøgler eksporteres til karantæne, før de fjernes, uanset hvad du vælger.'
+      },
+      about: {
+        description: 'Et lokalt, offline afinstallations- og oprydningsværktøj til Windows — tvungen fjernelse med scanning af restfiler, sikker karantæne før sletning, diskkortlægning og oprydning af skidt med ét klik.'
+      },
+      automation: {
+        title: 'Automatisering',
+        description: 'Kører, mens Prune er åben. Den kan ikke vække en sovende maskine — et vindue, der passerer, mens computeren er slukket, rapporteres som glippet i stedet for stille sprunget over, og indhentes næste gang du åbner appen.',
+        scheduled: 'Planlagt',
+        off: 'Fra',
+        howOften: 'Hvor ofte',
+        day: 'Dag',
+        at: 'Kl.',
+        whatItDoes: 'Hvad den gør',
+        everyDay: 'Hver dag',
+        everyWeek: 'Hver uge',
+        measureOnly: 'Kun mål',
+        clean: 'Rens',
+        cleanWarning: 'Dette fjerner filer uden at nogen holder øje. Den renser de regler, Dybderensning anbefaler, og som faktisk har noget i sig, og alt går stadig til karantæne — så tjek opbevaringsindstillingen ovenfor, før du lader dette være tændt.',
+        nextRun: 'Næste kørsel:',
+        lastRun: 'Sidste kørsel:',
+        weekdays: {
+          sunday: 'Søndag', monday: 'Mandag', tuesday: 'Tirsdag', wednesday: 'Onsdag',
+          thursday: 'Torsdag', friday: 'Fredag', saturday: 'Lørdag'
+        }
+      }
+    },
     dashboard: {
       scheduleBadge: {
         missed: (count) => `${count} planlagt${count === 1 ? '' : 'e'} kørsel${count === 1 ? '' : 'er'} blev sprunget over, mens pc'en var slukket`,
@@ -2649,7 +3690,156 @@ export const CATALOG = {
       quarantine: 'Quarantäne', settings: 'Einstellungen', startup: 'Autostart',
       duplicates: 'Duplikate', deepClean: 'Gründliche Bereinigung'
     },
-    settings: { language: { title: 'Sprache', description: 'Die Sprache, in der Prunes eigene Bildschirme angezeigt werden.' } },
+    settings: {
+      language: { title: 'Sprache', description: 'Die Sprache, in der Prunes eigene Bildschirme angezeigt werden.' },
+      tabs: { general: 'Allgemein', uninstall: 'Deinstallation', cleanup: 'Bereinigung', about: 'Über' },
+      title: 'Einstellungen',
+      loading: 'Einstellungen werden geladen…',
+      loadError: (error) => `Einstellungen konnten nicht geladen werden: ${error}`,
+      saveError: (error) => `Speichern fehlgeschlagen: ${error}`,
+      appearance: {
+        title: 'Erscheinungsbild',
+        description: 'Aurora Deck in Dunkel oder Tageslicht. Beide sind echte Paletten statt einer invertierten: Der Akzent wird für den hellen Hintergrund dunkler, damit ein Button weißen Text behalten kann, und jede Stufe wurde gegen die Flächen gemessen, auf denen sie tatsächlich sitzt. Prune folgt deiner Systemeinstellung, bis du hier eine wählst.'
+      },
+      minimizeToTray: {
+        title: 'In die Taskleiste minimieren',
+        description: 'Das Schließen des Fensters schickt Prune in die Taskleiste, statt es zu beenden.'
+      },
+      updateCheck: {
+        title: 'Nach Updates suchen',
+        description: 'Einmal am Tag fragt Prune api.github.com, ob eine neuere Version existiert. Es ist die einzige Anfrage, die Prune an einen anderen Ort als diesen Rechner sendet, und GitHub sieht deine IP-Adresse wie jede andere Website. Wenn es eine gibt, erscheint unten in der Seitenleiste ein Update-Button, und nichts wird heruntergeladen oder installiert, bis du darauf klickst.'
+      },
+      autoInstallUpdates: {
+        title: 'Updates automatisch installieren',
+        description: 'Lädt eine neue Version im Hintergrund herunter und installiert sie beim nächsten Schließen von Prune, statt darauf zu warten, dass du den Update-Button klickst. Erfordert die obige Update-Prüfung.'
+      },
+      updateStatus: {
+        checking: 'Wird geprüft…',
+        loadError: (error) => `Updates konnten nicht geprüft werden: ${error}`,
+        newerAvailable: (version) => `Prune ${version} ist verfügbar.`,
+        openDownloadPage: 'Download-Seite öffnen',
+        upToDate: (version) => `Du hast die neueste Version (${version}).`,
+        openPageError: (error) => `Seite konnte nicht geöffnet werden: ${error}`
+      },
+      showFreeSpace: {
+        title: 'Freien Speicherplatz auf der Speicherplatzkarte anzeigen',
+        description: 'Zeichnet den freien Speicherplatz des Laufwerks als weiteren Block, wenn du ein ganzes Laufwerk scannst, sodass jeder Ordner als Anteil des Laufwerks statt des belegten Speicherplatzes gelesen wird.'
+      },
+      autoQuarantine: {
+        title: 'Auto-Quarantäne',
+        description: 'Die Tiefenreinigung verschiebt, was sie entfernt, in Prunes eigene Quarantäne, wo du es zurückholen kannst. Schalte dies aus, und es wandert stattdessen in den Windows-Papierkorb — immer noch wiederherstellbar, nur an einem Ort, den du bereits kennst.'
+      },
+      skipRecent: {
+        title: 'Kürzlich geänderte Dateien in Ruhe lassen',
+        description: 'Überspringt alles, was in den letzten Stunden geändert wurde. In einem Temp-Ordner sieht eine Datei, die gerade geschrieben wird, genau wie eine vor zwei Jahren verlassene aus — das verhindert, dass eine halb fertige Installation weggefegt wird. 0 schaltet es aus.',
+        hoursUnit: 'Stunden',
+        ariaLabel: 'Stunden, in denen kürzliche Dateien in Ruhe gelassen werden'
+      },
+      restorePointCleanup: {
+        title: 'Zuerst einen Wiederherstellungspunkt erstellen',
+        description: 'Vor einer erzwungenen Entfernung, damit Windows selbst den Rechner zurücksetzen kann. Kostet ein paar Sekunden und bewirkt gar nichts, wenn der Systemschutz deaktiviert ist.'
+      },
+      hideUnavailable: {
+        title: 'Nicht zutreffende Reiniger ausblenden',
+        description: 'Der größte Teil der Liste ist für Software, die auf diesem Rechner nicht installiert ist. Das Ausblenden lässt nur das übrig, was tatsächlich hier ist.'
+      },
+      quarantineRetention: {
+        title: 'Wie lange rückgängig gemacht werden kann',
+        description: 'Alles, was Prune entfernt, wandert zuerst in die Quarantäne und bleibt dort, bis du sie leerst. Lege eine Anzahl von Tagen fest, um ältere Sicherungen zu verwerfen. Lasse es leer, um sie für immer zu behalten.',
+        neverPlaceholder: 'Nie',
+        daysUnit: 'Tage',
+        ariaLabel: 'Tage, für die Quarantäne-Sicherungen aufbewahrt werden'
+      },
+      quarantineMaxSize: {
+        title: 'Wie viel rückgängig gemacht werden kann',
+        description: 'Eine Obergrenze für den gesamten Quarantäne-Ordner. Darüber werden zuerst die ältesten Sicherungen gelöscht — die neueste wird nie verworfen, sodass etwas Großes, das du gerade entfernt hast, wiederherstellbar bleibt, selbst wenn es größer als die Grenze allein ist. Lasse es leer für keine Grenze.',
+        noLimitPlaceholder: 'Keine Grenze',
+        gbUnit: 'GB',
+        ariaLabel: 'Maximale Quarantänegröße in Gigabyte'
+      },
+      exclusions: {
+        title: 'Ordner ausschließen',
+        description: 'Ordner und Dateitypen, die Prune in Ruhe lässt — von der Tiefenreinigung übersprungen und von der Speicherplatzkarte ausgeschlossen — zusätzlich zu denen, die es bereits schützt: Systemvolumeninformationen, Antivirus-Quarantänen, der Komponentenspeicher und ein Dutzend andere.',
+        ariaLabel: 'Ordnerpfad oder Dateityp zum Ausschließen',
+        add: 'Hinzufügen',
+        invalidFormat: 'Gib einen vollständigen Ordnerpfad (D:\\Games) oder einen Dateityp (*.iso) ein.',
+        formatHint: 'Ein vollständiger Ordnerpfad oder ein Dateityp geschrieben als *.iso',
+        none: 'Nichts ausgeschlossen.',
+        typeBadge: 'Typ',
+        folderBadge: 'Ordner',
+        removeAriaLabel: (value) => `${value} nicht mehr ausschließen`
+      },
+      sandboxTest: {
+        title: 'Sandbox-Test',
+        description: 'Führt die echte Bereinigungs-Engine nur gegen ein Wegwerf-Temp-Verzeichnis aus — niemals gegen dein tatsächliches Temp, Windows Temp oder den Thumbnail-Cache — um zu beweisen, dass Scannen und Löschen tatsächlich funktionieren, bevor du ihnen mit echten Dateien vertraust.',
+        run: 'Sandbox-Test ausführen',
+        running: 'Wird ausgeführt…',
+        allPassed: 'Alle Prüfungen bestanden',
+        failed: 'Sandbox-Test fehlgeschlagen'
+      },
+      warningConfirmations: {
+        title: 'Warnbestätigungen',
+        allAsk: 'Jeder Reiniger, der Daten verliert, fragt vor der Ausführung nach.',
+        someSet: (count) => `${count} Reinigungswarnung${count === 1 ? '' : 'en'} so eingestellt, dass nicht erneut gefragt wird.`,
+        reset: 'Warnbestätigungen zurücksetzen'
+      },
+      uninstallTab: {
+        beforeHeading: 'Vor der Deinstallation',
+        restorePointUninstall: {
+          title: 'Vor der Deinstallation einen Wiederherstellungspunkt erstellen',
+          description: 'Windows eigene Systemwiederherstellung, erstellt bevor der Deinstaller des Programms läuft. Erfordert, dass Prune als Administrator läuft, und Windows erlaubt einen pro Tag, sodass die Deinstallation fortgesetzt wird, wenn er nicht erstellt werden kann, und der Dialog dies mitteilt.'
+        },
+        registryBackup: {
+          title: 'Registrierung vor der Deinstallation sichern',
+          description: 'Exportiert HKLM\\SOFTWARE und HKCU\\Software (etwa 140 MB auf dem Rechner, auf dem Prune gebaut ist) und behält die neuesten 3. Wenn die Sicherung nicht erstellt werden kann, läuft die Deinstallation nicht.'
+        },
+        afterHeading: 'Nach der Deinstallation',
+        scanLeftovers: {
+          title: 'Nach der Deinstallation nach Überresten suchen',
+          description: 'Sucht nach Dateien, Registrierungsschlüsseln und geplanten Aufgaben, die der Deinstaller zurückgelassen hat. Aus, führt Prune nur den eigenen Deinstaller des Programms aus und hört dort auf.'
+        },
+        preselect: {
+          title: 'Standardmäßig jeden Überrest ankreuzen',
+          description: 'Die Überprüfung öffnet sich mit allem Gefundenen angekreuzt. Aus, öffnet sie sich mit nichts angekreuzt und du wählst.'
+        },
+        keepHistory: {
+          title: 'Einen Deinstallationsverlauf führen',
+          description: 'Die Liste der letzten Entfernungen und des freigegebenen Speicherplatzes im Dashboard. Aus, wird nichts Neues aufgezeichnet.'
+        },
+        destinationHeading: 'Restdateien gehen an',
+        leftoverOptions: {
+          quarantine: { label: 'Quarantäne', description: 'In Prunes eigene Sicherung verschoben und über den Bildschirm Quarantäne wiederherstellbar. Der Standard.' },
+          recycle: { label: 'Papierkorb', description: 'Über Windows eigenen Papierkorb wiederherstellbar und freigegeben, wenn du ihn leerst.' },
+          permanent: { label: 'Dauerhaft löschen', description: 'Sofort gelöscht. Nichts wiederherzustellen.' }
+        },
+        permanentWarning: 'Restdateien werden sofort gelöscht und können nicht wiederhergestellt werden, weder aus der Quarantäne noch von anderswo. Überprüfe die Liste, bevor du sie bestätigst.',
+        registryNote: 'Registrierungsschlüssel werden vor der Entfernung in die Quarantäne exportiert, unabhängig davon, was du wählst.'
+      },
+      about: {
+        description: 'Ein lokales, offline Deinstallations- und Bereinigungstool für Windows — erzwungene Entfernung mit Scannen nach Restdateien, sichere Quarantäne vor dem Löschen, Speicherplatzkartierung und Ein-Klick-Müllbereinigung.'
+      },
+      automation: {
+        title: 'Automatisierung',
+        description: 'Läuft, während Prune geöffnet ist. Es kann einen schlafenden Rechner nicht aufwecken — ein Zeitfenster, das verstreicht, während der Rechner ausgeschaltet ist, wird als verpasst statt still übersprungen gemeldet und beim nächsten Öffnen der App nachgeholt.',
+        scheduled: 'Geplant',
+        off: 'Aus',
+        howOften: 'Wie oft',
+        day: 'Tag',
+        at: 'Um',
+        whatItDoes: 'Was es tut',
+        everyDay: 'Jeden Tag',
+        everyWeek: 'Jede Woche',
+        measureOnly: 'Nur messen',
+        clean: 'Bereinigen',
+        cleanWarning: 'Dies entfernt Dateien, ohne dass jemand zusieht. Es bereinigt die Regeln, die die Tiefenreinigung empfiehlt und die tatsächlich etwas enthalten, und alles landet weiterhin in der Quarantäne — überprüfe also die obige Aufbewahrungseinstellung, bevor du dies eingeschaltet lässt.',
+        nextRun: 'Nächster Lauf:',
+        lastRun: 'Letzter Lauf:',
+        weekdays: {
+          sunday: 'Sonntag', monday: 'Montag', tuesday: 'Dienstag', wednesday: 'Mittwoch',
+          thursday: 'Donnerstag', friday: 'Freitag', saturday: 'Samstag'
+        }
+      }
+    },
     dashboard: {
       scheduleBadge: {
         missed: (count) => `${count} geplante${count === 1 ? 'r Lauf wurde' : ' Läufe wurden'} verpasst, während dieser PC aus war`,
@@ -3022,7 +4212,156 @@ export const CATALOG = {
       quarantine: 'Καραντίνα', settings: 'Ρυθμίσεις', startup: 'Εκκίνηση',
       duplicates: 'Διπλότυπα', deepClean: 'Βαθύς καθαρισμός'
     },
-    settings: { language: { title: 'Γλώσσα', description: 'Η γλώσσα στην οποία εμφανίζονται οι δικές του οθόνες του Prune.' } },
+    settings: {
+      language: { title: 'Γλώσσα', description: 'Η γλώσσα στην οποία εμφανίζονται οι δικές του οθόνες του Prune.' },
+      tabs: { general: 'Γενικά', uninstall: 'Απεγκατάσταση', cleanup: 'Καθαρισμός', about: 'Σχετικά' },
+      title: 'Ρυθμίσεις',
+      loading: 'Φόρτωση ρυθμίσεων…',
+      loadError: (error) => `Αδυναμία φόρτωσης ρυθμίσεων: ${error}`,
+      saveError: (error) => `Αδυναμία αποθήκευσης: ${error}`,
+      appearance: {
+        title: 'Εμφάνιση',
+        description: 'Aurora Deck σε σκοτεινό ή ημερήσιο φωτισμό. Και οι δύο είναι πραγματικές παλέτες αντί για μία αντεστραμμένη: η έμφαση σκουραίνει για το ανοιχτόχρωμο φόντο ώστε ένα κουμπί να διατηρεί λευκό κείμενο πάνω του, και κάθε επίπεδο μετρήθηκε σε σχέση με τις επιφάνειες στις οποίες πράγματι βρίσκεται. Το Prune ακολουθεί τη ρύθμιση του συστήματός σας μέχρι να επιλέξετε ένα εδώ.'
+      },
+      minimizeToTray: {
+        title: 'Ελαχιστοποίηση στη γραμμή συστήματος',
+        description: 'Το κλείσιμο του παραθύρου στέλνει το Prune στη γραμμή συστήματος αντί να τερματίζεται.'
+      },
+      updateCheck: {
+        title: 'Έλεγχος για ενημερώσεις',
+        description: 'Μία φορά την ημέρα, το Prune ρωτά το api.github.com αν υπάρχει νεότερη έκδοση. Είναι το μόνο αίτημα που κάνει το Prune οπουδήποτε αλλού εκτός από αυτό το μηχάνημα, και το GitHub βλέπει τη διεύθυνση IP σας όπως θα την έβλεπε οποιαδήποτε ιστοσελίδα. Όταν υπάρχει μία, εμφανίζεται ένα κουμπί ενημέρωσης στο κάτω μέρος της πλαϊνής γραμμής, και τίποτα δεν πραγματοποιεί λήψη ή εγκατάσταση μέχρι να κάνετε κλικ σε αυτό.'
+      },
+      autoInstallUpdates: {
+        title: 'Αυτόματη εγκατάσταση ενημερώσεων',
+        description: 'Πραγματοποιεί λήψη μιας νέας έκδοσης στο παρασκήνιο και την εγκαθιστά την επόμενη φορά που κλείνει το Prune, αντί να περιμένει να κάνετε κλικ στο κουμπί ενημέρωσης. Απαιτεί τον παραπάνω έλεγχο ενημερώσεων.'
+      },
+      updateStatus: {
+        checking: 'Έλεγχος…',
+        loadError: (error) => `Αδυναμία ελέγχου για ενημερώσεις: ${error}`,
+        newerAvailable: (version) => `Το Prune ${version} είναι διαθέσιμο.`,
+        openDownloadPage: 'Άνοιγμα σελίδας λήψης',
+        upToDate: (version) => `Έχετε την πιο πρόσφατη έκδοση (${version}).`,
+        openPageError: (error) => `Αδυναμία ανοίγματος σελίδας: ${error}`
+      },
+      showFreeSpace: {
+        title: 'Εμφάνιση ελεύθερου χώρου στον Χάρτη Δίσκου',
+        description: 'Σχεδιάζει τον ελεύθερο χώρο του δίσκου ως ένα ακόμα μπλοκ όταν σαρώνετε έναν ολόκληρο δίσκο, ώστε κάθε φάκελος να διαβάζεται ως μερίδιο του δίσκου αντί του χώρου σε χρήση.'
+      },
+      autoQuarantine: {
+        title: 'Αυτόματη Καραντίνα',
+        description: 'Ο Βαθύς Καθαρισμός μετακινεί ό,τι αφαιρεί στην Καραντίνα του Prune, όπου μπορείτε να το επαναφέρετε. Απενεργοποιήστε το και θα πηγαίνει στον Κάδο Ανακύκλωσης των Windows αντ\' αυτού — ακόμα ανακτήσιμο, απλώς κάπου που ήδη ξέρετε πώς να αδειάσετε.'
+      },
+      skipRecent: {
+        title: 'Αφήστε ήσυχα τα πρόσφατα αρχεία',
+        description: 'Παραλείπει οτιδήποτε τροποποιήθηκε τις τελευταίες ώρες. Σε έναν προσωρινό φάκελο, ένα αρχείο που γράφεται αυτή τη στιγμή μοιάζει ακριβώς με ένα εγκαταλελειμμένο πριν από δύο χρόνια — αυτό εμποδίζει μια μισοτελειωμένη εγκατάσταση να σαρωθεί. Το 0 το απενεργοποιεί.',
+        hoursUnit: 'ώρες',
+        ariaLabel: 'Ώρες για να αφήσετε ήσυχα τα πρόσφατα αρχεία'
+      },
+      restorePointCleanup: {
+        title: 'Δημιουργία σημείου επαναφοράς πρώτα',
+        description: 'Πριν από μια εξαναγκασμένη αφαίρεση, ώστε τα ίδια τα Windows να μπορούν να επαναφέρουν το μηχάνημα. Κοστίζει μερικά δευτερόλεπτα, και δεν κάνει τίποτα αν η Προστασία Συστήματος είναι απενεργοποιημένη.'
+      },
+      hideUnavailable: {
+        title: 'Απόκρυψη καθαριστών που δεν ισχύουν',
+        description: 'Το μεγαλύτερο μέρος της λίστας είναι για λογισμικό που δεν έχει αυτό το μηχάνημα. Η απόκρυψή τους αφήνει μόνο ό,τι υπάρχει πράγματι εδώ.'
+      },
+      quarantineRetention: {
+        title: 'Πόσο καιρό να διατηρείται η αναίρεση',
+        description: 'Οτιδήποτε αφαιρεί το Prune πηγαίνει πρώτα στην Καραντίνα, και παραμένει μέχρι να την αδειάσετε. Ορίστε έναν αριθμό ημερών για να απορρίπτονται τα αντίγραφα ασφαλείας παλαιότερα από αυτό. Αφήστε το κενό για να τα κρατήσετε για πάντα.',
+        neverPlaceholder: 'Ποτέ',
+        daysUnit: 'ημέρες',
+        ariaLabel: 'Ημέρες διατήρησης αντιγράφων ασφαλείας καραντίνας'
+      },
+      quarantineMaxSize: {
+        title: 'Πόση αναίρεση να διατηρείται',
+        description: 'Ένα όριο για ολόκληρο τον φάκελο Καραντίνας. Πάνω από αυτό, τα παλαιότερα αντίγραφα ασφαλείας φεύγουν πρώτα — το πιο πρόσφατο δεν απορρίπτεται ποτέ, οπότε κάτι μεγάλο που μόλις αφαιρέσατε παραμένει ανακτήσιμο ακόμα κι αν είναι μεγαλύτερο από το όριο από μόνο του. Αφήστε το κενό για κανένα όριο.',
+        noLimitPlaceholder: 'Χωρίς όριο',
+        gbUnit: 'GB',
+        ariaLabel: 'Μέγιστο μέγεθος καραντίνας σε gigabyte'
+      },
+      exclusions: {
+        title: 'Εξαίρεση Φακέλων',
+        description: 'Φάκελοι και τύποι αρχείων που το Prune θα αφήσει ήσυχους — παραλείπονται από τον Βαθύ Καθαρισμό και εξαιρούνται από τον Χάρτη Δίσκου — επιπλέον αυτών που ήδη προστατεύει: Πληροφορίες τόμου συστήματος, καραντίνες προγραμμάτων προστασίας από ιούς, το κατάστημα στοιχείων και μια δωδεκάδα άλλα.',
+        ariaLabel: 'Διαδρομή φακέλου ή τύπος αρχείου προς εξαίρεση',
+        add: 'Προσθήκη',
+        invalidFormat: 'Γράψτε μια πλήρη διαδρομή φακέλου (D:\\Games) ή έναν τύπο αρχείου (*.iso).',
+        formatHint: 'Μια πλήρης διαδρομή φακέλου, ή ένας τύπος αρχείου γραμμένος ως *.iso',
+        none: 'Τίποτα δεν εξαιρείται.',
+        typeBadge: 'Τύπος',
+        folderBadge: 'Φάκελος',
+        removeAriaLabel: (value) => `Διακοπή εξαίρεσης του ${value}`
+      },
+      sandboxTest: {
+        title: 'Δοκιμή Sandbox',
+        description: 'Εκτελεί την πραγματική μηχανή καθαρισμού μόνο έναντι ενός αναλώσιμου προσωρινού καταλόγου — ποτέ του πραγματικού σας Temp, του Temp των Windows, ή της κρυφής μνήμης μικρογραφιών — για να αποδείξει ότι η σάρωση και η διαγραφή λειτουργούν πραγματικά πριν τα εμπιστευτείτε με πραγματικά αρχεία.',
+        run: 'Εκτέλεση Δοκιμής Sandbox',
+        running: 'Εκτελείται…',
+        allPassed: 'Όλοι οι έλεγχοι πέρασαν',
+        failed: 'Η δοκιμή sandbox απέτυχε'
+      },
+      warningConfirmations: {
+        title: 'Επιβεβαιώσεις προειδοποίησης',
+        allAsk: 'Κάθε καθαριστής που χάνει δεδομένα ρωτά πριν εκτελεστεί.',
+        someSet: (count) => `${count} προειδοποιήσ${count === 1 ? 'η καθαρισμού είναι ρυθμισμένη' : 'εις καθαρισμού είναι ρυθμισμένες'} να μη ρωτήσουν ξανά.`,
+        reset: 'Επαναφορά επιβεβαιώσεων προειδοποίησης'
+      },
+      uninstallTab: {
+        beforeHeading: 'Πριν την απεγκατάσταση',
+        restorePointUninstall: {
+          title: 'Δημιουργία σημείου επαναφοράς πριν την απεγκατάσταση',
+          description: 'Η δική τους Επαναφορά Συστήματος των Windows, δημιουργημένη πριν εκτελεστεί ο απεγκαταστάτης του προγράμματος. Χρειάζεται το Prune να εκτελείται ως διαχειριστής και τα Windows επιτρέπουν ένα την ημέρα, οπότε όταν δεν μπορεί να δημιουργηθεί, η απεγκατάσταση προχωρά και το παράθυρο διαλόγου το λέει.'
+        },
+        registryBackup: {
+          title: 'Δημιουργία αντιγράφου ασφαλείας μητρώου πριν την απεγκατάσταση',
+          description: 'Εξάγει τα HKLM\\SOFTWARE και HKCU\\Software (περίπου 140 MB στο μηχάνημα στο οποίο είναι χτισμένο το Prune) και κρατά τα 3 πιο πρόσφατα. Αν το αντίγραφο ασφαλείας δεν μπορεί να δημιουργηθεί, η απεγκατάσταση δεν εκτελείται.'
+        },
+        afterHeading: 'Μετά την απεγκατάσταση',
+        scanLeftovers: {
+          title: 'Σάρωση για κατάλοιπα μετά την απεγκατάσταση',
+          description: 'Αναζητά τα αρχεία, τα κλειδιά μητρώου και τις προγραμματισμένες εργασίες που άφησε πίσω ο απεγκαταστάτης. Απενεργοποιημένο, το Prune απλώς εκτελεί τον δικό του απεγκαταστάτη του προγράμματος και σταματά εκεί.'
+        },
+        preselect: {
+          title: 'Επιλογή κάθε καταλοίπου από προεπιλογή',
+          description: 'Η επισκόπηση ανοίγει με όλα όσα βρέθηκαν επιλεγμένα. Απενεργοποιημένο, ανοίγει με τίποτα επιλεγμένο και εσείς επιλέγετε.'
+        },
+        keepHistory: {
+          title: 'Διατήρηση ιστορικού απεγκαταστάσεων',
+          description: 'Η λίστα του πίνακα ελέγχου με τις πρόσφατες αφαιρέσεις και τον χώρο που ελευθέρωσαν. Απενεργοποιημένο, τίποτα νέο δεν καταγράφεται.'
+        },
+        destinationHeading: 'Τα κατάλοιπα αρχεία πηγαίνουν στο',
+        leftoverOptions: {
+          quarantine: { label: 'Καραντίνα', description: 'Μετακινήθηκε στο δικό του αντίγραφο ασφαλείας του Prune, και είναι ανακτήσιμο από την οθόνη Καραντίνας. Η προεπιλογή.' },
+          recycle: { label: 'Ο Κάδος Ανακύκλωσης', description: 'Ανακτήσιμο από τον δικό τους κάδο των Windows, και ελευθερώνεται όταν τον αδειάσετε.' },
+          permanent: { label: 'Οριστική διαγραφή', description: 'Διαγράφεται εντελώς. Τίποτα προς επαναφορά.' }
+        },
+        permanentWarning: 'Τα κατάλοιπα αρχεία θα διαγραφούν εντελώς και δεν μπορούν να επαναφερθούν, από την Καραντίνα ή οπουδήποτε αλλού. Ελέγξτε τη λίστα πριν την επιβεβαιώσετε.',
+        registryNote: 'Τα κλειδιά μητρώου εξάγονται στην Καραντίνα πριν αφαιρεθούν, όποιο κι αν επιλέξετε.'
+      },
+      about: {
+        description: 'Ένα τοπικό, εκτός σύνδεσης εργαλείο απεγκατάστασης και καθαρισμού για Windows — εξαναγκασμένη αφαίρεση με σάρωση καταλοίπων αρχείων, ασφαλή καραντίνα πριν τη διαγραφή, χαρτογράφηση δίσκου, και καθαρισμό σκουπιδιών με ένα κλικ.'
+      },
+      automation: {
+        title: 'Αυτοματισμός',
+        description: 'Εκτελείται όσο το Prune είναι ανοιχτό. Δεν μπορεί να ξυπνήσει ένα μηχάνημα σε αδράνεια — ένα παράθυρο που περνά ενώ ο υπολογιστής είναι απενεργοποιημένος αναφέρεται ως χαμένο αντί να παραλείπεται σιωπηλά, και ανακτάται την επόμενη φορά που ανοίγετε την εφαρμογή.',
+        scheduled: 'Προγραμματισμένο',
+        off: 'Ανενεργό',
+        howOften: 'Πόσο συχνά',
+        day: 'Ημέρα',
+        at: 'Στις',
+        whatItDoes: 'Τι κάνει',
+        everyDay: 'Κάθε μέρα',
+        everyWeek: 'Κάθε εβδομάδα',
+        measureOnly: 'Μόνο μέτρηση',
+        clean: 'Καθαρισμός',
+        cleanWarning: 'Αυτό αφαιρεί αρχεία χωρίς κανέναν να παρακολουθεί. Καθαρίζει τους κανόνες που συνιστά ο Βαθύς Καθαρισμός και που πράγματι έχουν κάτι μέσα τους, και όλα εξακολουθούν να πηγαίνουν σε καραντίνα — οπότε ελέγξτε τη ρύθμιση διατήρησης παραπάνω πριν το αφήσετε ενεργό.',
+        nextRun: 'Επόμενη εκτέλεση:',
+        lastRun: 'Τελευταία εκτέλεση:',
+        weekdays: {
+          sunday: 'Κυριακή', monday: 'Δευτέρα', tuesday: 'Τρίτη', wednesday: 'Τετάρτη',
+          thursday: 'Πέμπτη', friday: 'Παρασκευή', saturday: 'Σάββατο'
+        }
+      }
+    },
     dashboard: {
       scheduleBadge: {
         missed: (count) => `${count} προγραμματισμέν${count === 1 ? 'η εκτέλεση χάθηκε' : 'ες εκτελέσεις χάθηκαν'} όσο αυτός ο υπολογιστής ήταν κλειστός`,
@@ -3395,7 +4734,156 @@ export const CATALOG = {
       quarantine: 'Cuarentena', settings: 'Configuración', startup: 'Inicio',
       duplicates: 'Duplicados', deepClean: 'Limpieza profunda'
     },
-    settings: { language: { title: 'Idioma', description: 'El idioma en el que se muestran las propias pantallas de Prune.' } },
+    settings: {
+      language: { title: 'Idioma', description: 'El idioma en el que se muestran las propias pantallas de Prune.' },
+      tabs: { general: 'General', uninstall: 'Desinstalar', cleanup: 'Limpieza', about: 'Acerca de' },
+      title: 'Configuración',
+      loading: 'Cargando configuración…',
+      loadError: (error) => `No se pudo cargar la configuración: ${error}`,
+      saveError: (error) => `No se pudo guardar: ${error}`,
+      appearance: {
+        title: 'Apariencia',
+        description: 'Aurora Deck en modo oscuro o claro. Ambas son paletas reales en lugar de una invertida: el acento se oscurece para el fondo claro para que un botón pueda mantener texto blanco, y cada nivel se midió contra las superficies sobre las que realmente se apoya. Prune sigue la configuración de tu sistema hasta que elijas una aquí.'
+      },
+      minimizeToTray: {
+        title: 'Minimizar a la bandeja',
+        description: 'Cerrar la ventana envía Prune a la bandeja del sistema en lugar de cerrarlo.'
+      },
+      updateCheck: {
+        title: 'Buscar actualizaciones',
+        description: 'Una vez al día, Prune pregunta a api.github.com si existe una versión más reciente. Es la única solicitud que Prune hace a cualquier lugar que no sea este equipo, y GitHub ve tu dirección IP como lo haría cualquier sitio web. Cuando hay una, aparece un botón de actualización al final de la barra lateral, y no se descarga ni instala nada hasta que hagas clic en él.'
+      },
+      autoInstallUpdates: {
+        title: 'Instalar actualizaciones automáticamente',
+        description: 'Descarga una nueva versión en segundo plano y la instala la próxima vez que se cierre Prune, en lugar de esperar a que hagas clic en el botón de actualización. Necesita la búsqueda de actualizaciones de arriba.'
+      },
+      updateStatus: {
+        checking: 'Comprobando…',
+        loadError: (error) => `No se pudo buscar actualizaciones: ${error}`,
+        newerAvailable: (version) => `Prune ${version} está disponible.`,
+        openDownloadPage: 'Abrir página de descarga',
+        upToDate: (version) => `Tienes la última versión (${version}).`,
+        openPageError: (error) => `No se pudo abrir la página: ${error}`
+      },
+      showFreeSpace: {
+        title: 'Mostrar espacio libre en el Mapa de Disco',
+        description: 'Dibuja el espacio libre de la unidad como un bloque más al escanear una unidad completa, para que cada carpeta se lea como una parte de la unidad en lugar de del espacio en uso.'
+      },
+      autoQuarantine: {
+        title: 'Cuarentena automática',
+        description: 'La Limpieza Profunda mueve lo que quita a la Cuarentena de Prune, donde puedes devolverlo. Desactiva esto y en su lugar irá a la Papelera de Reciclaje de Windows — igual de recuperable, solo en un lugar que ya sabes vaciar.'
+      },
+      skipRecent: {
+        title: 'Dejar en paz los archivos recientes',
+        description: 'Omite todo lo modificado en las últimas horas. En una carpeta temporal, un archivo que se está escribiendo ahora mismo se ve exactamente como uno abandonado hace dos años — esto es lo que evita que una instalación a medias sea arrastrada. 0 lo desactiva.',
+        hoursUnit: 'horas',
+        ariaLabel: 'Horas para dejar en paz los archivos recientes'
+      },
+      restorePointCleanup: {
+        title: 'Crear un punto de restauración primero',
+        description: 'Antes de una eliminación forzada, para que Windows mismo pueda restaurar el equipo. Cuesta unos segundos, y no hace nada en absoluto si la Protección del Sistema está desactivada.'
+      },
+      hideUnavailable: {
+        title: 'Ocultar limpiadores que no aplican',
+        description: 'La mayor parte de la lista es para software que este equipo no tiene. Ocultarlos deja solo lo que realmente está aquí.'
+      },
+      quarantineRetention: {
+        title: 'Cuánto tiempo mantener el deshacer',
+        description: 'Todo lo que Prune elimina va primero a Cuarentena, y permanece hasta que la vacíes. Establece un número de días para descartar copias de seguridad más antiguas que eso. Déjalo en blanco para conservarlas para siempre.',
+        neverPlaceholder: 'Nunca',
+        daysUnit: 'días',
+        ariaLabel: 'Días para conservar las copias de seguridad de cuarentena'
+      },
+      quarantineMaxSize: {
+        title: 'Cuánto deshacer conservar',
+        description: 'Un límite para toda la carpeta de Cuarentena. Por encima de él, las copias de seguridad más antiguas se van primero — la más reciente nunca se descarta, así que algo grande que acabas de eliminar sigue siendo recuperable incluso si es más grande que el límite por sí solo. Déjalo en blanco para no tener límite.',
+        noLimitPlaceholder: 'Sin límite',
+        gbUnit: 'GB',
+        ariaLabel: 'Tamaño máximo de cuarentena en gigabytes'
+      },
+      exclusions: {
+        title: 'Excluir Carpetas',
+        description: 'Carpetas y tipos de archivo que Prune dejará en paz — omitidos por la Limpieza Profunda y excluidos del Mapa de Disco — además de los que ya protege: Información de volumen del sistema, cuarentenas de antivirus, el almacén de componentes y una docena más.',
+        ariaLabel: 'Ruta de carpeta o tipo de archivo a excluir',
+        add: 'Añadir',
+        invalidFormat: 'Escribe una ruta de carpeta completa (D:\\Games) o un tipo de archivo (*.iso).',
+        formatHint: 'Una ruta de carpeta completa, o un tipo de archivo escrito como *.iso',
+        none: 'Nada excluido.',
+        typeBadge: 'Tipo',
+        folderBadge: 'Carpeta',
+        removeAriaLabel: (value) => `Dejar de excluir ${value}`
+      },
+      sandboxTest: {
+        title: 'Prueba de Sandbox',
+        description: 'Ejecuta el motor de limpieza real solo contra un directorio temporal desechable — nunca tu Temp real, el Temp de Windows, o la caché de miniaturas — para probar que el escaneo y la eliminación realmente funcionan antes de confiárselos a archivos reales.',
+        run: 'Ejecutar Prueba de Sandbox',
+        running: 'Ejecutando…',
+        allPassed: 'Todas las comprobaciones pasaron',
+        failed: 'La prueba de sandbox falló'
+      },
+      warningConfirmations: {
+        title: 'Confirmaciones de advertencia',
+        allAsk: 'Todo limpiador que pierde datos pregunta antes de ejecutarse.',
+        someSet: (count) => `${count} advertencia${count === 1 ? '' : 's'} de limpieza configurada${count === 1 ? '' : 's'} para no volver a preguntar.`,
+        reset: 'Restablecer confirmaciones de advertencia'
+      },
+      uninstallTab: {
+        beforeHeading: 'Antes de desinstalar',
+        restorePointUninstall: {
+          title: 'Crear un punto de restauración antes de desinstalar',
+          description: 'La propia Restauración del Sistema de Windows, creada antes de que se ejecute el desinstalador del programa. Necesita que Prune se ejecute como administrador y Windows permite uno al día, así que cuando no se puede crear, la desinstalación continúa y el diálogo lo indica.'
+        },
+        registryBackup: {
+          title: 'Respaldar el registro antes de desinstalar',
+          description: 'Exporta HKLM\\SOFTWARE y HKCU\\Software (unos 140 MB en el equipo donde se compila Prune) y conserva los 3 más recientes. Si no se puede crear la copia de seguridad, la desinstalación no se ejecuta.'
+        },
+        afterHeading: 'Después de desinstalar',
+        scanLeftovers: {
+          title: 'Buscar restos después de desinstalar',
+          description: 'Busca los archivos, claves de registro y tareas programadas que dejó el desinstalador. Desactivado, Prune simplemente ejecuta el propio desinstalador del programa y se detiene ahí.'
+        },
+        preselect: {
+          title: 'Marcar cada resto por defecto',
+          description: 'La revisión se abre con todo lo encontrado marcado. Desactivado, se abre sin nada marcado y tú eliges.'
+        },
+        keepHistory: {
+          title: 'Mantener un historial de desinstalaciones',
+          description: 'La lista del panel de las eliminaciones recientes y el espacio que liberaron. Desactivado, no se registra nada nuevo.'
+        },
+        destinationHeading: 'Los archivos restantes van a',
+        leftoverOptions: {
+          quarantine: { label: 'Cuarentena', description: 'Movido a la propia copia de seguridad de Prune, y recuperable desde la pantalla de Cuarentena. La opción predeterminada.' },
+          recycle: { label: 'La Papelera de Reciclaje', description: 'Recuperable desde la propia papelera de Windows, y liberado cuando la vacías.' },
+          permanent: { label: 'Eliminar permanentemente', description: 'Eliminado por completo. Nada que restaurar.' }
+        },
+        permanentWarning: 'Los archivos restantes se eliminarán por completo y no se pueden restaurar, ni desde Cuarentena ni desde ningún otro lugar. Revisa la lista antes de confirmarla.',
+        registryNote: 'Las claves de registro se exportan a Cuarentena antes de eliminarse, sea cual sea tu elección.'
+      },
+      about: {
+        description: 'Una herramienta local y sin conexión de desinstalación y limpieza para Windows — eliminación forzada con escaneo de restos, cuarentena segura antes de borrar, mapeo de disco y limpieza de basura con un clic.'
+      },
+      automation: {
+        title: 'Automatización',
+        description: 'Se ejecuta mientras Prune está abierto. No puede despertar un equipo dormido — una ventana que pasa mientras el ordenador está apagado se reporta como perdida en lugar de omitida silenciosamente, y se recupera la próxima vez que abres la aplicación.',
+        scheduled: 'Programado',
+        off: 'Desactivado',
+        howOften: 'Con qué frecuencia',
+        day: 'Día',
+        at: 'A las',
+        whatItDoes: 'Qué hace',
+        everyDay: 'Todos los días',
+        everyWeek: 'Cada semana',
+        measureOnly: 'Solo medir',
+        clean: 'Limpiar',
+        cleanWarning: 'Esto elimina archivos sin que nadie lo vigile. Limpia las reglas que recomienda la Limpieza Profunda y que realmente tienen algo dentro, y todo sigue yendo a cuarentena — así que revisa la configuración de retención de arriba antes de dejar esto activado.',
+        nextRun: 'Próxima ejecución:',
+        lastRun: 'Última ejecución:',
+        weekdays: {
+          sunday: 'Domingo', monday: 'Lunes', tuesday: 'Martes', wednesday: 'Miércoles',
+          thursday: 'Jueves', friday: 'Viernes', saturday: 'Sábado'
+        }
+      }
+    },
     dashboard: {
       scheduleBadge: {
         missed: (count) => `Se ${count === 1 ? 'omitió' : 'omitieron'} ${count} ejecución${count === 1 ? '' : 'es'} programada${count === 1 ? '' : 's'} mientras este PC estaba apagado`,
@@ -3768,7 +5256,156 @@ export const CATALOG = {
       quarantine: 'Karantiin', settings: 'Seaded', startup: 'Käivitus',
       duplicates: 'Duplikaadid', deepClean: 'Põhjalik puhastus'
     },
-    settings: { language: { title: 'Keel', description: 'Keel, milles Prune oma ekraanid kuvatakse.' } },
+    settings: {
+      language: { title: 'Keel', description: 'Keel, milles Prune oma ekraanid kuvatakse.' },
+      tabs: { general: 'Üldine', uninstall: 'Desinstallimine', cleanup: 'Puhastamine', about: 'Teave' },
+      title: 'Seaded',
+      loading: 'Seadete laadimine…',
+      loadError: (error) => `Seadeid ei õnnestunud laadida: ${error}`,
+      saveError: (error) => `Salvestamine ebaõnnestus: ${error}`,
+      appearance: {
+        title: 'Välimus',
+        description: 'Aurora Deck tumedas või heledas toonis. Mõlemad on tõelised paletid, mitte üks ümberpööratud: aktsendivärv tumeneb heleda tausta jaoks, et nupp saaks hoida valget teksti, ja iga tase mõõdeti pindade järgi, millel see tegelikult asub. Prune järgib sinu süsteemi seadet, kuni valid siin ühe ise.'
+      },
+      minimizeToTray: {
+        title: 'Minimeeri salve',
+        description: 'Akna sulgemine saadab Prune süsteemisalve, mitte ei sulge seda.'
+      },
+      updateCheck: {
+        title: 'Kontrolli uuendusi',
+        description: 'Kord päevas küsib Prune api.github.com-ilt, kas uuem versioon on olemas. See on ainus päring, mille Prune teeb kuhugi mujale kui sellesse arvutisse, ja GitHub näeb sinu IP-aadressi nagu iga veebisait. Kui uuendus on olemas, ilmub külgriba alaossa uuendusnupp ja midagi ei laadita alla ega paigaldata, enne kui sellel klõpsad.'
+      },
+      autoInstallUpdates: {
+        title: 'Paigalda uuendused automaatselt',
+        description: 'Laadib uue versiooni taustal alla ja paigaldab selle järgmisel korral, kui Prune suletakse, selle asemel et oodata, kuni klõpsad uuendusnupul. Vajab ülaltoodud uuenduste kontrolli.'
+      },
+      updateStatus: {
+        checking: 'Kontrollimine…',
+        loadError: (error) => `Uuenduste kontrollimine ebaõnnestus: ${error}`,
+        newerAvailable: (version) => `Prune ${version} on saadaval.`,
+        openDownloadPage: 'Ava allalaadimislehekülg',
+        upToDate: (version) => `Sul on uusim versioon (${version}).`,
+        openPageError: (error) => `Lehekülje avamine ebaõnnestus: ${error}`
+      },
+      showFreeSpace: {
+        title: 'Näita vaba ruumi kettakaardil',
+        description: 'Joonistab terve ketta skannimisel vaba ruumi ühe lisaplokina, nii et iga kaust loetakse ketta, mitte kasutuses oleva ruumi osana.'
+      },
+      autoQuarantine: {
+        title: 'Automaatne karantiin',
+        description: 'Süvapuhastus liigutab eemaldatava Prune\'i karantiini, kust saad selle tagasi tuua. Lülita see välja ja see läheb selle asemel Windowsi prügikasti — ikka taastatav, lihtsalt kohas, mida juba tead tühjendada.'
+      },
+      skipRecent: {
+        title: 'Jäta hiljutised failid rahule',
+        description: 'Jätab vahele kõik, mida on viimaste tundide jooksul muudetud. Ajutises kaustas näeb praegu kirjutatav fail täpselt samasugune välja nagu kaks aastat tagasi hüljatu — see takistabki pooleli oleva installi minema pühkimist. 0 lülitab selle välja.',
+        hoursUnit: 'tundi',
+        ariaLabel: 'Tunnid, mille jooksul hiljutised failid rahule jätta'
+      },
+      restorePointCleanup: {
+        title: 'Loo esmalt taastepunkt',
+        description: 'Enne sundeemaldamist, et Windows ise saaks arvuti tagasi keerata. Kulutab paar sekundit ja ei tee midagi, kui süsteemikaitse on välja lülitatud.'
+      },
+      hideUnavailable: {
+        title: 'Peida sobimatud puhastajad',
+        description: 'Enamik loetelust on tarkvarale, mida selles arvutis pole. Nende peitmine jätab alles ainult selle, mis siin tegelikult on.'
+      },
+      quarantineRetention: {
+        title: 'Kui kaua tagasivõtmist hoida',
+        description: 'Kõik, mille Prune eemaldab, läheb esmalt karantiini ja jääb sinna, kuni selle tühjendad. Määra päevade arv, et visata ära sellest vanemad varukoopiad. Jäta tühjaks, et hoida neid igavesti.',
+        neverPlaceholder: 'Mitte kunagi',
+        daysUnit: 'päeva',
+        ariaLabel: 'Päevad karantiini varukoopiate hoidmiseks'
+      },
+      quarantineMaxSize: {
+        title: 'Kui palju tagasivõtmist hoida',
+        description: 'Piirmäär kogu karantiinikaustale. Selle ületamisel kaovad esimesena vanimad varukoopiad — kõige uuemat ei visata kunagi ära, nii et midagi suurt, mille just eemaldasid, jääb taastatavaks isegi kui see üksinda on piirmäärast suurem. Jäta tühjaks, kui piirmäära ei soovi.',
+        noLimitPlaceholder: 'Piiranguta',
+        gbUnit: 'GB',
+        ariaLabel: 'Karantiini maksimaalne suurus gigabaitides'
+      },
+      exclusions: {
+        title: 'Jäta kaustad välja',
+        description: 'Kaustad ja failitüübid, mille Prune rahule jätab — süvapuhastus jätab need vahele ja kettakaart jätab need välja — lisaks nendele, mida see juba kaitseb: süsteemiköite teave, viirusetõrje karantiinid, komponendipood ja tosin muud.',
+        ariaLabel: 'Väljajäetav kausta tee või failitüüp',
+        add: 'Lisa',
+        invalidFormat: 'Kirjuta täielik kausta tee (D:\\Games) või failitüüp (*.iso).',
+        formatHint: 'Täielik kausta tee või failitüüp kujul *.iso',
+        none: 'Miski pole välja jäetud.',
+        typeBadge: 'Tüüp',
+        folderBadge: 'Kaust',
+        removeAriaLabel: (value) => `Lõpeta ${value} väljajätmine`
+      },
+      sandboxTest: {
+        title: 'Liivakasti test',
+        description: 'Käivitab tegeliku puhastusmootori ainult ühekordse ajutise kataloogi vastu — mitte kunagi sinu tegeliku Temp-i, Windowsi Temp-i ega pisipiltide vahemälu vastu — et tõestada, et skannimine ja kustutamine tõesti töötavad, enne kui usaldad neid päris failidega.',
+        run: 'Käivita liivakasti test',
+        running: 'Käivitamine…',
+        allPassed: 'Kõik kontrollid läbiti',
+        failed: 'Liivakasti test ebaõnnestus'
+      },
+      warningConfirmations: {
+        title: 'Hoiatuste kinnitused',
+        allAsk: 'Iga andmeid kaotav puhastaja küsib enne käivitamist.',
+        someSet: (count) => `${count} puhastushoiatus${count === 1 ? '' : 't'} on seadistatud enam mitte küsima.`,
+        reset: 'Lähtesta hoiatuste kinnitused'
+      },
+      uninstallTab: {
+        beforeHeading: 'Enne desinstallimist',
+        restorePointUninstall: {
+          title: 'Loo enne desinstallimist taastepunkt',
+          description: 'Windowsi enda süsteemi taastamine, tehtud enne programmi desinstalliprogrammi käivitumist. Vajab, et Prune töötaks administraatorina, ja Windows lubab ühe päevas, seega kui seda ei saa luua, jätkub desinstallimine ja dialoog teatab sellest.'
+        },
+        registryBackup: {
+          title: 'Varunda register enne desinstallimist',
+          description: 'Ekspordib HKLM\\SOFTWARE ja HKCU\\Software (umbes 140 MB arvutis, kus Prune on ehitatud) ja hoiab uusimat 3. Kui varukoopiat ei saa luua, desinstallimist ei toimu.'
+        },
+        afterHeading: 'Pärast desinstallimist',
+        scanLeftovers: {
+          title: 'Otsi pärast desinstallimist jääke',
+          description: 'Otsib faile, registrivõtmeid ja ajastatud ülesandeid, mille desinstalliprogramm maha jättis. Väljas lülitatuna käivitab Prune lihtsalt programmi enda desinstalliprogrammi ja peatub seal.'
+        },
+        preselect: {
+          title: 'Märgi vaikimisi iga jääk',
+          description: 'Ülevaade avaneb koos kõige leituga märgituna. Väljas lülitatuna avaneb see ilma millegi märgituta ja sina valid.'
+        },
+        keepHistory: {
+          title: 'Pea desinstallimiste ajalugu',
+          description: 'Töölaua nimekiri hiljutistest eemaldamistest ja nende vabastatud ruumist. Väljas lülitatuna ei salvestata midagi uut.'
+        },
+        destinationHeading: 'Ülejäänud failid lähevad',
+        leftoverOptions: {
+          quarantine: { label: 'Karantiin', description: 'Liigutatud Prune\'i enda varukoopiasse ja taastatav karantiini vaatest. Vaikeväärtus.' },
+          recycle: { label: 'Prügikast', description: 'Taastatav Windowsi enda prügikastist ja vabastatud, kui selle tühjendad.' },
+          permanent: { label: 'Kustuta jäädavalt', description: 'Kustutatud täielikult. Midagi pole taastada.' }
+        },
+        permanentWarning: 'Ülejäänud failid kustutatakse täielikult ja neid ei saa taastada, ei karantiinist ega kusagilt mujalt. Vaata nimekiri üle enne kinnitamist.',
+        registryNote: 'Registrivõtmed eksporditakse karantiini enne eemaldamist, olenemata sinu valikust.'
+      },
+      about: {
+        description: 'Kohalik, võrguühenduseta desinstallimis- ja puhastustööriist Windowsile — sundeemaldamine koos jääkfailide skannimisega, turvaline karantiin enne kustutamist, kettakaardistus ja ühe klõpsuga prügipuhastus.'
+      },
+      automation: {
+        title: 'Automatiseerimine',
+        description: 'Töötab, kuni Prune on avatud. See ei saa magavat arvutit äratada — aken, mis möödub, kui arvuti on välja lülitatud, teatatakse vahelejäetuna, mitte vaikselt vahele jäetuna, ja tehakse järele järgmine kord, kui rakenduse avad.',
+        scheduled: 'Ajastatud',
+        off: 'Väljas',
+        howOften: 'Kui tihti',
+        day: 'Päev',
+        at: 'Kell',
+        whatItDoes: 'Mida see teeb',
+        everyDay: 'Iga päev',
+        everyWeek: 'Iga nädal',
+        measureOnly: 'Ainult mõõda',
+        clean: 'Puhasta',
+        cleanWarning: 'See eemaldab faile ilma, et keegi jälgiks. See puhastab reeglid, mida süvapuhastus soovitab ja millel tegelikult midagi sees on, ning kõik läheb ikka karantiini — seega kontrolli ülaltoodud säilitusseadet enne, kui jätad selle sisse.',
+        nextRun: 'Järgmine käivitus:',
+        lastRun: 'Viimane käivitus:',
+        weekdays: {
+          sunday: 'Pühapäev', monday: 'Esmaspäev', tuesday: 'Teisipäev', wednesday: 'Kolmapäev',
+          thursday: 'Neljapäev', friday: 'Reede', saturday: 'Laupäev'
+        }
+      }
+    },
     dashboard: {
       scheduleBadge: {
         missed: (count) => `${count} plaanitud käiku jäi vahele, kuna see arvuti oli välja lülitatud`,
@@ -4141,7 +5778,156 @@ export const CATALOG = {
       quarantine: 'Karanteeni', settings: 'Asetukset', startup: 'Käynnistys',
       duplicates: 'Kaksoiskappaleet', deepClean: 'Perusteellinen siivous'
     },
-    settings: { language: { title: 'Kieli', description: 'Kieli, jolla Prunen omat näytöt näytetään.' } },
+    settings: {
+      language: { title: 'Kieli', description: 'Kieli, jolla Prunen omat näytöt näytetään.' },
+      tabs: { general: 'Yleiset', uninstall: 'Poisto', cleanup: 'Siivous', about: 'Tietoja' },
+      title: 'Asetukset',
+      loading: 'Ladataan asetuksia…',
+      loadError: (error) => `Asetuksia ei voitu ladata: ${error}`,
+      saveError: (error) => `Tallennus epäonnistui: ${error}`,
+      appearance: {
+        title: 'Ulkoasu',
+        description: 'Aurora Deck tummana tai vaaleana. Molemmat ovat aitoja paletteja eivätkä yhtä käänteistä: korostusväri tummuu vaalealle pohjalle, jotta painike voi pitää valkoisen tekstin, ja jokainen taso mitattiin pinnoilta, joilla se todella lepää. Prune noudattaa järjestelmäsi asetusta, kunnes valitset tästä yhden.'
+      },
+      minimizeToTray: {
+        title: 'Pienennä ilmaisinalueelle',
+        description: 'Ikkunan sulkeminen lähettää Prunen ilmaisinalueelle sen sulkemisen sijaan.'
+      },
+      updateCheck: {
+        title: 'Tarkista päivitykset',
+        description: 'Kerran päivässä Prune kysyy api.github.com:lta, onko uudempaa versiota olemassa. Se on ainoa pyyntö, jonka Prune tekee minnekään muualle kuin tälle koneelle, ja GitHub näkee IP-osoitteesi kuten mikä tahansa verkkosivusto. Kun uusi versio on saatavilla, sivupalkin alaosaan ilmestyy päivityspainike, eikä mitään ladata tai asenneta ennen kuin klikkaat sitä.'
+      },
+      autoInstallUpdates: {
+        title: 'Asenna päivitykset automaattisesti',
+        description: 'Lataa uuden version taustalla ja asentaa sen seuraavan kerran, kun Prune suljetaan, sen sijaan että odottaisi päivityspainikkeen klikkausta. Vaatii yllä olevan päivitystarkistuksen.'
+      },
+      updateStatus: {
+        checking: 'Tarkistetaan…',
+        loadError: (error) => `Päivitysten tarkistus epäonnistui: ${error}`,
+        newerAvailable: (version) => `Prune ${version} on saatavilla.`,
+        openDownloadPage: 'Avaa latenaissivu',
+        upToDate: (version) => `Sinulla on uusin versio (${version}).`,
+        openPageError: (error) => `Sivun avaus epäonnistui: ${error}`
+      },
+      showFreeSpace: {
+        title: 'Näytä vapaa tila levykartalla',
+        description: 'Piirtää levyn vapaan tilan yhtenä lisälohkona koko levyä skannattaessa, jotta jokainen kansio näkyy osuutena levystä eikä käytössä olevasta tilasta.'
+      },
+      autoQuarantine: {
+        title: 'Automaattinen karanteeni',
+        description: 'Syväsiivous siirtää poistamansa Prunen karanteeniin, josta voit palauttaa sen. Poista tämä käytöstä, ja se menee sen sijaan Windowsin roskakoriin — silti palautettavissa, vain paikassa, jonka jo osaat tyhjentää.'
+      },
+      skipRecent: {
+        title: 'Jätä äskettäiset tiedostot rauhaan',
+        description: 'Ohittaa kaiken, mitä on muutettu viime tuntien aikana. Väliaikaiskansiossa juuri nyt kirjoitettava tiedosto näyttää täsmälleen samalta kuin kaksi vuotta sitten hylätty — tämä estää keskeneräisen asennuksen pyyhkiytymisen pois. 0 poistaa tämän käytöstä.',
+        hoursUnit: 'tuntia',
+        ariaLabel: 'Tunnit, joiden ajan äskettäiset tiedostot jätetään rauhaan'
+      },
+      restorePointCleanup: {
+        title: 'Luo palautuspiste ensin',
+        description: 'Ennen pakotettua poistoa, jotta Windows itse voi palauttaa koneen. Vie muutaman sekunnin, eikä tee mitään, jos järjestelmän suojaus on pois käytöstä.'
+      },
+      hideUnavailable: {
+        title: 'Piilota siivoojat, jotka eivät päde',
+        description: 'Suurin osa listasta on ohjelmistoille, joita tällä koneella ei ole. Niiden piilottaminen jättää jäljelle vain sen, mikä on todella täällä.'
+      },
+      quarantineRetention: {
+        title: 'Kuinka kauan säilyttää kumoaminen',
+        description: 'Kaikki, minkä Prune poistaa, menee ensin karanteeniin ja pysyy siellä, kunnes tyhjennät sen. Aseta päivien määrä pudottaaksesi sitä vanhemmat varmuuskopiot. Jätä tyhjäksi säilyttääksesi ne ikuisesti.',
+        neverPlaceholder: 'Ei koskaan',
+        daysUnit: 'päivää',
+        ariaLabel: 'Päivät, joiden ajan karanteenin varmuuskopiot säilytetään'
+      },
+      quarantineMaxSize: {
+        title: 'Kuinka paljon kumoamista säilyttää',
+        description: 'Yläraja koko karanteenikansiolle. Sen ylittyessä vanhimmat varmuuskopiot poistuvat ensin — uusinta ei koskaan pudoteta, joten jokin suuri, jonka juuri poistit, pysyy palautettavana, vaikka se olisi rajaa suurempi yksinään. Jätä tyhjäksi, jos rajaa ei haluta.',
+        noLimitPlaceholder: 'Ei rajaa',
+        gbUnit: 'Gt',
+        ariaLabel: 'Karanteenin enimmäiskoko gigatavuina'
+      },
+      exclusions: {
+        title: 'Sulje kansioita pois',
+        description: 'Kansiot ja tiedostotyypit, jotka Prune jättää rauhaan — syväsiivous ohittaa ne ja levykartta jättää ne pois — niiden lisäksi, joita se jo suojaa: Järjestelmän taltiotiedot, virustorjunnan karanteenit, komponenttivarasto ja tusina muuta.',
+        ariaLabel: 'Poissuljettava kansiopolku tai tiedostotyyppi',
+        add: 'Lisää',
+        invalidFormat: 'Kirjoita täydellinen kansiopolku (D:\\Games) tai tiedostotyyppi (*.iso).',
+        formatHint: 'Täydellinen kansiopolku tai tiedostotyyppi muodossa *.iso',
+        none: 'Ei mitään poissuljettuna.',
+        typeBadge: 'Tyyppi',
+        folderBadge: 'Kansio',
+        removeAriaLabel: (value) => `Lopeta kohteen ${value} poissulkeminen`
+      },
+      sandboxTest: {
+        title: 'Hiekkalaatikkotesti',
+        description: 'Suorittaa oikean siivousmoottorin vain kertakäyttöistä väliaikaishakemistoa vastaan — ei koskaan varsinaista Temp-kansiotasi, Windowsin Temp-kansiota tai pikkukuvien välimuistia vastaan — todistaakseen, että skannaus ja poisto todella toimivat ennen kuin luotat niihin oikeilla tiedostoilla.',
+        run: 'Suorita hiekkalaatikkotesti',
+        running: 'Suoritetaan…',
+        allPassed: 'Kaikki tarkistukset läpäisty',
+        failed: 'Hiekkalaatikkotesti epäonnistui'
+      },
+      warningConfirmations: {
+        title: 'Varoitusten vahvistukset',
+        allAsk: 'Jokainen tietoja hävittävä siivooja kysyy ennen suorittamista.',
+        someSet: (count) => `${count} siivousvaroitus${count === 1 ? '' : 'ta'} asetettu olemaan kysymättä uudelleen.`,
+        reset: 'Nollaa varoitusten vahvistukset'
+      },
+      uninstallTab: {
+        beforeHeading: 'Ennen poistoa',
+        restorePointUninstall: {
+          title: 'Luo palautuspiste ennen poistoa',
+          description: 'Windowsin oma järjestelmän palautus, tehty ennen ohjelman poisto-ohjelman suoritusta. Vaatii, että Prune toimii järjestelmänvalvojana, ja Windows sallii yhden päivässä, joten kun sitä ei voida luoda, poisto jatkuu ja valintaikkuna kertoo siitä.'
+        },
+        registryBackup: {
+          title: 'Varmuuskopioi rekisteri ennen poistoa',
+          description: 'Vie HKLM\\SOFTWARE- ja HKCU\\Software-avaimet (noin 140 Mt koneella, jolla Prune on koottu) ja säilyttää uusimmat 3. Jos varmuuskopiota ei voida luoda, poistoa ei suoriteta.'
+        },
+        afterHeading: 'Poiston jälkeen',
+        scanLeftovers: {
+          title: 'Etsi jäänteitä poiston jälkeen',
+          description: 'Etsii tiedostoja, rekisteriavaimia ja ajastettuja tehtäviä, jotka poisto-ohjelma jätti jälkeensä. Pois päältä, Prune vain suorittaa ohjelman oman poisto-ohjelman ja pysähtyy siihen.'
+        },
+        preselect: {
+          title: 'Merkitse jokainen jäänne oletuksena',
+          description: 'Tarkistus avautuu kaikki löydetyt merkittyinä. Pois päältä, se avautuu ilman merkintöjä ja sinä valitset.'
+        },
+        keepHistory: {
+          title: 'Pidä poistohistoriaa',
+          description: 'Kojelaudan lista viimeaikaisista poistoista ja niiden vapauttamasta tilasta. Pois päältä, mitään uutta ei tallenneta.'
+        },
+        destinationHeading: 'Jäljelle jääneet tiedostot menevät',
+        leftoverOptions: {
+          quarantine: { label: 'Karanteeni', description: 'Siirretty Prunen omaan varmuuskopioon, ja palautettavissa Karanteeni-näytöltä. Oletus.' },
+          recycle: { label: 'Roskakori', description: 'Palautettavissa Windowsin omasta korista, ja vapautuu, kun tyhjennät sen.' },
+          permanent: { label: 'Poista pysyvästi', description: 'Poistettu kokonaan. Ei mitään palautettavaa.' }
+        },
+        permanentWarning: 'Jäljelle jääneet tiedostot poistetaan kokonaan eikä niitä voida palauttaa, ei karanteenista eikä mistään muualta. Tarkista lista ennen vahvistamista.',
+        registryNote: 'Rekisteriavaimet viedään karanteeniin ennen niiden poistoa, valinnastasi riippumatta.'
+      },
+      about: {
+        description: 'Paikallinen, offline-poisto- ja siivoustyökalu Windowsille — pakotettu poisto jäännetiedostojen skannauksella, turvallinen karanteeni ennen poistoa, levykartoitus ja yhden klikkauksen roskasiivous.'
+      },
+      automation: {
+        title: 'Automaatio',
+        description: 'Toimii, kun Prune on auki. Se ei voi herättää nukkuvaa konetta — ikkuna, joka kuluu koneen ollessa sammuksissa, raportoidaan välistä jääneenä eikä hiljaa ohitettuna, ja se otetaan kiinni seuraavan kerran, kun avaat sovelluksen.',
+        scheduled: 'Ajastettu',
+        off: 'Pois',
+        howOften: 'Kuinka usein',
+        day: 'Päivä',
+        at: 'Kello',
+        whatItDoes: 'Mitä se tekee',
+        everyDay: 'Joka päivä',
+        everyWeek: 'Joka viikko',
+        measureOnly: 'Vain mittaa',
+        clean: 'Siivoa',
+        cleanWarning: 'Tämä poistaa tiedostoja ilman kenenkään valvontaa. Se siivoaa säännöt, joita syväsiivous suosittelee ja joissa on todella jotain sisällä, ja kaikki menee silti karanteeniin — joten tarkista yllä oleva säilytysasetus ennen kuin jätät tämän päälle.',
+        nextRun: 'Seuraava suoritus:',
+        lastRun: 'Viimeisin suoritus:',
+        weekdays: {
+          sunday: 'Sunnuntai', monday: 'Maanantai', tuesday: 'Tiistai', wednesday: 'Keskiviikko',
+          thursday: 'Torstai', friday: 'Perjantai', saturday: 'Lauantai'
+        }
+      }
+    },
     dashboard: {
       scheduleBadge: {
         missed: (count) => `${count} ajastettua ajoa jäi väliin, kun tämä tietokone oli pois päältä`,
@@ -4514,7 +6300,156 @@ export const CATALOG = {
       quarantine: 'Quarantaine', settings: 'Paramètres', startup: 'Démarrage',
       duplicates: 'Doublons', deepClean: 'Nettoyage approfondi'
     },
-    settings: { language: { title: 'Langue', description: 'La langue dans laquelle les écrans de Prune sont affichés.' } },
+    settings: {
+      language: { title: 'Langue', description: 'La langue dans laquelle les écrans de Prune sont affichés.' },
+      tabs: { general: 'Général', uninstall: 'Désinstallation', cleanup: 'Nettoyage', about: 'À propos' },
+      title: 'Paramètres',
+      loading: 'Chargement des paramètres…',
+      loadError: (error) => `Impossible de charger les paramètres : ${error}`,
+      saveError: (error) => `Impossible d'enregistrer : ${error}`,
+      appearance: {
+        title: 'Apparence',
+        description: "Aurora Deck en sombre ou en clair. Les deux sont de vraies palettes plutôt qu'une inversée : l'accent s'assombrit pour le fond clair afin qu'un bouton puisse garder un texte blanc, et chaque niveau a été mesuré par rapport aux surfaces sur lesquelles il repose réellement. Prune suit le réglage de votre système jusqu'à ce que vous en choisissiez un ici."
+      },
+      minimizeToTray: {
+        title: 'Réduire dans la barre système',
+        description: "Fermer la fenêtre envoie Prune dans la barre système au lieu de le quitter."
+      },
+      updateCheck: {
+        title: 'Vérifier les mises à jour',
+        description: "Une fois par jour, Prune demande à api.github.com si une version plus récente existe. C'est la seule requête que Prune fait ailleurs que sur cette machine, et GitHub voit votre adresse IP comme n'importe quel site le ferait. S'il y en a une, un bouton de mise à jour apparaît en bas de la barre latérale, et rien n'est téléchargé ni installé avant que vous cliquiez dessus."
+      },
+      autoInstallUpdates: {
+        title: 'Installer les mises à jour automatiquement',
+        description: "Télécharge une nouvelle version en arrière-plan et l'installe la prochaine fois que Prune se ferme, au lieu d'attendre que vous cliquiez sur le bouton de mise à jour. Nécessite la vérification des mises à jour ci-dessus."
+      },
+      updateStatus: {
+        checking: 'Vérification…',
+        loadError: (error) => `Impossible de vérifier les mises à jour : ${error}`,
+        newerAvailable: (version) => `Prune ${version} est disponible.`,
+        openDownloadPage: 'Ouvrir la page de téléchargement',
+        upToDate: (version) => `Vous avez la dernière version (${version}).`,
+        openPageError: (error) => `Impossible d'ouvrir la page : ${error}`
+      },
+      showFreeSpace: {
+        title: "Afficher l'espace libre sur la Carte du Disque",
+        description: "Dessine l'espace libre du lecteur comme un bloc de plus lors de l'analyse d'un lecteur entier, afin que chaque dossier se lise comme une part du lecteur plutôt que de l'espace utilisé."
+      },
+      autoQuarantine: {
+        title: 'Quarantaine automatique',
+        description: "Le Nettoyage en Profondeur déplace ce qu'il retire vers la Quarantaine de Prune, d'où vous pouvez le remettre en place. Désactivez ceci et cela ira à la Corbeille Windows à la place — toujours récupérable, juste à un endroit que vous savez déjà vider."
+      },
+      skipRecent: {
+        title: 'Laisser tranquilles les fichiers récents',
+        description: "Ignore tout ce qui a été modifié au cours des dernières heures. Dans un dossier temporaire, un fichier en cours d'écriture ressemble exactement à un fichier abandonné il y a deux ans — c'est ce qui empêche une installation à moitié terminée d'être balayée. 0 désactive ceci.",
+        hoursUnit: 'heures',
+        ariaLabel: 'Heures pendant lesquelles laisser tranquilles les fichiers récents'
+      },
+      restorePointCleanup: {
+        title: "Créer d'abord un point de restauration",
+        description: "Avant une suppression forcée, pour que Windows lui-même puisse restaurer la machine. Coûte quelques secondes, et ne fait rien du tout si la Protection du système est désactivée."
+      },
+      hideUnavailable: {
+        title: "Masquer les nettoyeurs qui ne s'appliquent pas",
+        description: "La majeure partie de la liste concerne des logiciels que cette machine n'a pas. Les masquer ne laisse que ce qui est réellement présent ici."
+      },
+      quarantineRetention: {
+        title: "Combien de temps conserver l'annulation",
+        description: "Tout ce que Prune retire va d'abord en Quarantaine, et y reste jusqu'à ce que vous la vidiez. Définissez un nombre de jours pour supprimer les sauvegardes plus anciennes que cela. Laissez vide pour les conserver pour toujours.",
+        neverPlaceholder: 'Jamais',
+        daysUnit: 'jours',
+        ariaLabel: 'Jours pendant lesquels conserver les sauvegardes de quarantaine'
+      },
+      quarantineMaxSize: {
+        title: "Combien d'annulation conserver",
+        description: "Une limite pour tout le dossier de Quarantaine. Au-delà, les sauvegardes les plus anciennes partent en premier — la plus récente n'est jamais supprimée, donc quelque chose de gros que vous venez de retirer reste récupérable même s'il est plus grand que la limite à lui seul. Laissez vide pour aucune limite.",
+        noLimitPlaceholder: 'Aucune limite',
+        gbUnit: 'Go',
+        ariaLabel: 'Taille maximale de la quarantaine en gigaoctets'
+      },
+      exclusions: {
+        title: 'Exclure des dossiers',
+        description: "Dossiers et types de fichiers que Prune laissera tranquilles — ignorés par le Nettoyage en Profondeur et exclus de la Carte du Disque — en plus de ceux qu'il protège déjà : Informations de volume système, quarantaines antivirus, le magasin de composants et une douzaine d'autres.",
+        ariaLabel: 'Chemin de dossier ou type de fichier à exclure',
+        add: 'Ajouter',
+        invalidFormat: 'Écrivez un chemin de dossier complet (D:\\Games) ou un type de fichier (*.iso).',
+        formatHint: 'Un chemin de dossier complet, ou un type de fichier écrit comme *.iso',
+        none: 'Rien n\'est exclu.',
+        typeBadge: 'Type',
+        folderBadge: 'Dossier',
+        removeAriaLabel: (value) => `Ne plus exclure ${value}`
+      },
+      sandboxTest: {
+        title: 'Test de bac à sable',
+        description: "Exécute le vrai moteur de nettoyage uniquement contre un répertoire temporaire jetable — jamais votre vrai Temp, le Temp de Windows, ou le cache des miniatures — pour prouver que l'analyse et la suppression fonctionnent réellement avant de leur confier de vrais fichiers.",
+        run: 'Exécuter le test de bac à sable',
+        running: 'Exécution…',
+        allPassed: 'Tous les contrôles ont réussi',
+        failed: 'Le test de bac à sable a échoué'
+      },
+      warningConfirmations: {
+        title: 'Confirmations d\'avertissement',
+        allAsk: 'Chaque nettoyeur qui perd des données demande avant de s\'exécuter.',
+        someSet: (count) => `${count} avertissement${count === 1 ? '' : 's'} de nettoyage configuré${count === 1 ? '' : 's'} pour ne plus demander.`,
+        reset: 'Réinitialiser les confirmations d\'avertissement'
+      },
+      uninstallTab: {
+        beforeHeading: 'Avant la désinstallation',
+        restorePointUninstall: {
+          title: 'Créer un point de restauration avant la désinstallation',
+          description: "La propre Restauration du système de Windows, créée avant que le désinstalleur du programme s'exécute. Nécessite que Prune s'exécute en tant qu'administrateur et Windows en autorise un par jour, donc quand il ne peut pas être créé, la désinstallation continue et la boîte de dialogue le signale."
+        },
+        registryBackup: {
+          title: 'Sauvegarder le registre avant la désinstallation',
+          description: "Exporte HKLM\\SOFTWARE et HKCU\\Software (environ 140 Mo sur la machine où Prune est compilé) et conserve les 3 plus récentes. Si la sauvegarde ne peut pas être créée, la désinstallation ne s'exécute pas."
+        },
+        afterHeading: 'Après la désinstallation',
+        scanLeftovers: {
+          title: 'Rechercher les restes après la désinstallation',
+          description: "Recherche les fichiers, clés de registre et tâches planifiées laissés par le désinstalleur. Désactivé, Prune exécute simplement le propre désinstalleur du programme et s'arrête là."
+        },
+        preselect: {
+          title: 'Cocher chaque reste par défaut',
+          description: "L'examen s'ouvre avec tout ce qui a été trouvé coché. Désactivé, il s'ouvre sans rien de coché et vous choisissez."
+        },
+        keepHistory: {
+          title: 'Conserver un historique de désinstallation',
+          description: "La liste du tableau de bord des suppressions récentes et de l'espace qu'elles ont libéré. Désactivé, rien de nouveau n'est enregistré."
+        },
+        destinationHeading: 'Les fichiers restants vont vers',
+        leftoverOptions: {
+          quarantine: { label: 'Quarantaine', description: "Déplacé vers la propre sauvegarde de Prune, et récupérable depuis l'écran Quarantaine. L'option par défaut." },
+          recycle: { label: 'La Corbeille', description: "Récupérable depuis la propre corbeille de Windows, et libéré lorsque vous la videz." },
+          permanent: { label: 'Supprimer définitivement', description: 'Supprimé complètement. Rien à restaurer.' }
+        },
+        permanentWarning: "Les fichiers restants seront supprimés complètement et ne peuvent pas être restaurés, ni depuis la Quarantaine ni depuis ailleurs. Vérifiez la liste avant de confirmer.",
+        registryNote: "Les clés de registre sont exportées vers la Quarantaine avant leur suppression, quel que soit votre choix."
+      },
+      about: {
+        description: "Un outil local et hors ligne de désinstallation et de nettoyage pour Windows — suppression forcée avec analyse des fichiers restants, quarantaine sécurisée avant suppression, cartographie du disque et nettoyage des déchets en un clic."
+      },
+      automation: {
+        title: 'Automatisation',
+        description: "S'exécute tant que Prune est ouvert. Elle ne peut pas réveiller une machine en veille — une fenêtre qui passe pendant que l'ordinateur est éteint est signalée comme manquée plutôt que silencieusement ignorée, et rattrapée la prochaine fois que vous ouvrez l'application.",
+        scheduled: 'Planifié',
+        off: 'Désactivé',
+        howOften: 'À quelle fréquence',
+        day: 'Jour',
+        at: 'À',
+        whatItDoes: 'Ce que ça fait',
+        everyDay: 'Chaque jour',
+        everyWeek: 'Chaque semaine',
+        measureOnly: 'Mesurer seulement',
+        clean: 'Nettoyer',
+        cleanWarning: "Cela supprime des fichiers sans surveillance. Cela nettoie les règles que le Nettoyage en Profondeur recommande et qui contiennent réellement quelque chose, et tout va toujours en quarantaine — vérifiez donc le paramètre de rétention ci-dessus avant de laisser ceci activé.",
+        nextRun: 'Prochaine exécution :',
+        lastRun: 'Dernière exécution :',
+        weekdays: {
+          sunday: 'Dimanche', monday: 'Lundi', tuesday: 'Mardi', wednesday: 'Mercredi',
+          thursday: 'Jeudi', friday: 'Vendredi', saturday: 'Samedi'
+        }
+      }
+    },
     dashboard: {
       scheduleBadge: {
         missed: (count) => `${count} exécution${count === 1 ? '' : 's'} programmée${count === 1 ? '' : 's'} manquée${count === 1 ? '' : 's'} pendant que ce PC était éteint`,
@@ -4887,7 +6822,156 @@ export const CATALOG = {
       quarantine: 'הסגר', settings: 'הגדרות', startup: 'הפעלה',
       duplicates: 'כפילויות', deepClean: 'ניקוי מעמיק'
     },
-    settings: { language: { title: 'שפה', description: 'השפה שבה מוצגים המסכים של Prune עצמו.' } },
+    settings: {
+      language: { title: 'שפה', description: 'השפה שבה מוצגים המסכים של Prune עצמו.' },
+      tabs: { general: 'כללי', uninstall: 'הסרה', cleanup: 'ניקוי', about: 'אודות' },
+      title: 'הגדרות',
+      loading: 'טוען הגדרות…',
+      loadError: (error) => `לא ניתן היה לטעון הגדרות: ${error}`,
+      saveError: (error) => `לא ניתן היה לשמור: ${error}`,
+      appearance: {
+        title: 'מראה',
+        description: 'Aurora Deck בכהה או באור יום. שתיהן פלטות אמיתיות ולא אחת הפוכה: הצבע המודגש מוכהה עבור הרקע הבהיר כדי שכפתור יוכל לשמור על טקסט לבן, וכל רמה נמדדה מול המשטחים שעליהם היא באמת יושבת. Prune עוקב אחר הגדרת המערכת שלך עד שתבחר אחת כאן.'
+      },
+      minimizeToTray: {
+        title: 'מזעור למגש המערכת',
+        description: 'סגירת החלון שולחת את Prune למגש המערכת במקום לסגור אותו.'
+      },
+      updateCheck: {
+        title: 'בדוק עדכונים',
+        description: 'פעם ביום, Prune שואל את api.github.com אם קיימת גרסה חדשה יותר. זו הבקשה היחידה ש-Prune שולח למקום כלשהו מלבד המחשב הזה, ו-GitHub רואה את כתובת ה-IP שלך כמו כל אתר אינטרנט. כשיש עדכון, כפתור עדכון מופיע בתחתית סרגל הצד, ושום דבר לא מורד או מותקן עד שתלחץ עליו.'
+      },
+      autoInstallUpdates: {
+        title: 'התקן עדכונים אוטומטית',
+        description: 'מוריד גרסה חדשה ברקע ומתקין אותה בפעם הבאה ש-Prune נסגר, במקום לחכות שתלחץ על כפתור העדכון. דורש את בדיקת העדכונים למעלה.'
+      },
+      updateStatus: {
+        checking: 'בודק…',
+        loadError: (error) => `לא ניתן היה לבדוק עדכונים: ${error}`,
+        newerAvailable: (version) => `Prune ${version} זמין.`,
+        openDownloadPage: 'פתח את דף ההורדה',
+        upToDate: (version) => `יש לך את הגרסה העדכנית ביותר (${version}).`,
+        openPageError: (error) => `לא ניתן היה לפתוח את הדף: ${error}`
+      },
+      showFreeSpace: {
+        title: 'הצג שטח פנוי במפת הדיסק',
+        description: 'מצייר את השטח הפנוי בכונן כבלוק נוסף כשסורקים כונן שלם, כך שכל תיקייה נקראת כחלק מהכונן ולא מהשטח בשימוש.'
+      },
+      autoQuarantine: {
+        title: 'הסגר אוטומטי',
+        description: 'ניקוי עמוק מעביר את מה שהוא מסיר להסגר של Prune, שממנו תוכל להחזיר אותו. כבה זאת והוא ילך במקום זאת לסל המיחזור של Windows — עדיין ניתן לשחזור, רק במקום שאתה כבר יודע איך לרוקן.'
+      },
+      skipRecent: {
+        title: 'השאר קבצים אחרונים לנפשם',
+        description: 'מדלג על כל דבר שהשתנה בשעות האחרונות. בתיקיית זמני, קובץ שנכתב כרגע נראה בדיוק כמו קובץ שננטש לפני שנתיים — זה מה שמונע ממתקן חצי-מוגמר להיסחף. 0 מכבה זאת.',
+        hoursUnit: 'שעות',
+        ariaLabel: 'שעות להשאיר קבצים אחרונים לנפשם'
+      },
+      restorePointCleanup: {
+        title: 'צור נקודת שחזור תחילה',
+        description: 'לפני הסרה כפויה, כדי ש-Windows עצמו יוכל להחזיר את המחשב לאחור. עולה כמה שניות, ולא עושה כלום אם הגנת המערכת כבויה.'
+      },
+      hideUnavailable: {
+        title: 'הסתר מנקים שלא רלוונטיים',
+        description: 'רוב הרשימה מיועדת לתוכנה שלא קיימת במחשב הזה. הסתרתם משאירה רק את מה שבאמת כאן.'
+      },
+      quarantineRetention: {
+        title: 'כמה זמן לשמור על אפשרות הביטול',
+        description: 'כל מה ש-Prune מסיר הולך תחילה להסגר, ונשאר שם עד שתרוקן אותו. קבע מספר ימים כדי להשליך גיבויים ישנים יותר מכך. השאר ריק כדי לשמור אותם לנצח.',
+        neverPlaceholder: 'לעולם לא',
+        daysUnit: 'ימים',
+        ariaLabel: 'ימים לשמירת גיבויי הסגר'
+      },
+      quarantineMaxSize: {
+        title: 'כמה אפשרות ביטול לשמור',
+        description: 'תקרה לכל תיקיית ההסגר. מעליה, הגיבויים הישנים ביותר הולכים ראשונים — האחרון ביותר לעולם לא יושלך, כך שמשהו גדול שהסרת זה עתה נשאר ניתן לשחזור גם אם הוא גדול מהתקרה בעצמו. השאר ריק ללא הגבלה.',
+        noLimitPlaceholder: 'ללא הגבלה',
+        gbUnit: 'GB',
+        ariaLabel: 'גודל מרבי של הסגר בגיגה-בייט'
+      },
+      exclusions: {
+        title: 'החרג תיקיות',
+        description: 'תיקיות וסוגי קבצים ש-Prune ישאיר לנפשם — ידולגו על ידי הניקוי העמוק ויוחרגו ממפת הדיסק — בנוסף לאלה שהוא כבר מגן עליהם: מידע על כרך המערכת, הסגרי אנטי-וירוס, מאגר הרכיבים ותריסר נוספים.',
+        ariaLabel: 'נתיב תיקייה או סוג קובץ להחרגה',
+        add: 'הוסף',
+        invalidFormat: 'כתוב נתיב תיקייה מלא (D:\\Games) או סוג קובץ (*.iso).',
+        formatHint: 'נתיב תיקייה מלא, או סוג קובץ שנכתב כמו *.iso',
+        none: 'שום דבר לא הוחרג.',
+        typeBadge: 'סוג',
+        folderBadge: 'תיקייה',
+        removeAriaLabel: (value) => `הפסק להחריג את ${value}`
+      },
+      sandboxTest: {
+        title: 'בדיקת ארגז חול',
+        description: 'מריץ את מנוע הניקוי האמיתי רק מול ספריית זמני חד-פעמית — לעולם לא את ה-Temp האמיתי שלך, את Temp של Windows, או את מטמון התמונות הממוזערות — כדי להוכיח שהסריקה והמחיקה באמת עובדות לפני שאתה סומך עליהן עם קבצים אמיתיים.',
+        run: 'הרץ בדיקת ארגז חול',
+        running: 'רץ…',
+        allPassed: 'כל הבדיקות עברו',
+        failed: 'בדיקת ארגז החול נכשלה'
+      },
+      warningConfirmations: {
+        title: 'אישורי אזהרה',
+        allAsk: 'כל מנקה שמאבד נתונים שואל לפני שהוא רץ.',
+        someSet: (count) => `${count} אזהרות ניקוי הוגדרו לא לשאול שוב.`,
+        reset: 'אפס אישורי אזהרה'
+      },
+      uninstallTab: {
+        beforeHeading: 'לפני ההסרה',
+        restorePointUninstall: {
+          title: 'צור נקודת שחזור לפני ההסרה',
+          description: 'שחזור המערכת של Windows עצמו, שנוצר לפני שתוכנית ההסרה של התוכנה רצה. דורש ש-Prune ירוץ כמנהל ו-Windows מאפשר אחת ביום, אז כשלא ניתן ליצור אותה, ההסרה ממשיכה ותיבת הדו-שיח מציינת זאת.'
+        },
+        registryBackup: {
+          title: 'גבה את הרישום לפני ההסרה',
+          description: 'מייצא את HKLM\\SOFTWARE ו-HKCU\\Software (כ-140 MB במחשב שבו Prune נבנה) ושומר את 3 העדכניים ביותר. אם לא ניתן ליצור את הגיבוי, ההסרה לא רצה.'
+        },
+        afterHeading: 'אחרי ההסרה',
+        scanLeftovers: {
+          title: 'סרוק שאריות אחרי ההסרה',
+          description: 'מחפש את הקבצים, מפתחות הרישום והמשימות המתוזמנות שתוכנית ההסרה השאירה מאחור. כבוי, Prune פשוט מריץ את תוכנית ההסרה של התוכנה עצמה ועוצר שם.'
+        },
+        preselect: {
+          title: 'סמן כל שארית כברירת מחדל',
+          description: 'הסקירה נפתחת עם כל מה שנמצא מסומן. כבוי, היא נפתחת בלי כלום מסומן ואתה בוחר.'
+        },
+        keepHistory: {
+          title: 'שמור היסטוריית הסרות',
+          description: 'רשימת לוח הבקרה של ההסרות האחרונות והשטח ששוחרר. כבוי, שום דבר חדש לא נרשם.'
+        },
+        destinationHeading: 'קבצים שנותרו הולכים אל',
+        leftoverOptions: {
+          quarantine: { label: 'הסגר', description: 'הועבר לגיבוי של Prune עצמו, וניתן לשחזור ממסך ההסגר. ברירת המחדל.' },
+          recycle: { label: 'סל המיחזור', description: 'ניתן לשחזור מסל המיחזור של Windows עצמו, ומשוחרר כשתרוקן אותו.' },
+          permanent: { label: 'מחק לצמיתות', description: 'נמחק לחלוטין. אין מה לשחזר.' }
+        },
+        permanentWarning: 'קבצים שנותרו יימחקו לחלוטין ולא ניתן לשחזרם, לא מהסגר ולא ממקום אחר. בדוק את הרשימה לפני האישור.',
+        registryNote: 'מפתחות הרישום מיוצאים להסגר לפני שהם מוסרים, לא משנה מה תבחר.'
+      },
+      about: {
+        description: 'כלי הסרה וניקוי מקומי, לא מקוון, עבור Windows — הסרה כפויה עם סריקת קבצים שנותרו, הסגר בטוח לפני מחיקה, מיפוי דיסק וניקוי זבל בלחיצה אחת.'
+      },
+      automation: {
+        title: 'אוטומציה',
+        description: 'רץ כל עוד Prune פתוח. הוא לא יכול להעיר מחשב ישן — חלון שעובר בזמן שהמחשב כבוי מדווח כמוחמץ ולא מדולג בשקט, ומושלם בפעם הבאה שתפתח את האפליקציה.',
+        scheduled: 'מתוזמן',
+        off: 'כבוי',
+        howOften: 'באיזו תדירות',
+        day: 'יום',
+        at: 'בשעה',
+        whatItDoes: 'מה זה עושה',
+        everyDay: 'כל יום',
+        everyWeek: 'כל שבוע',
+        measureOnly: 'מדוד בלבד',
+        clean: 'נקה',
+        cleanWarning: 'זה מסיר קבצים בלי שאף אחד יצפה. זה מנקה את הכללים שהניקוי העמוק ממליץ עליהם ושבאמת יש בהם משהו, והכול עדיין הולך להסגר — אז בדוק את הגדרת השמירה למעלה לפני שתשאיר את זה מופעל.',
+        nextRun: 'הרצה הבאה:',
+        lastRun: 'הרצה אחרונה:',
+        weekdays: {
+          sunday: 'יום ראשון', monday: 'יום שני', tuesday: 'יום שלישי', wednesday: 'יום רביעי',
+          thursday: 'יום חמישי', friday: 'יום שישי', saturday: 'שבת'
+        }
+      }
+    },
     dashboard: {
       scheduleBadge: {
         missed: (count) => `${count} ${count === 1 ? 'הרצה מתוזמנת פוספסה' : 'הרצות מתוזמנות פוספסו'} בזמן שהמחשב היה כבוי`,
@@ -5260,7 +7344,156 @@ export const CATALOG = {
       quarantine: 'Karantén', settings: 'Beállítások', startup: 'Indítás',
       duplicates: 'Duplikátumok', deepClean: 'Alapos tisztítás'
     },
-    settings: { language: { title: 'Nyelv', description: 'A nyelv, amelyen a Prune saját képernyői megjelennek.' } },
+    settings: {
+      language: { title: 'Nyelv', description: 'A nyelv, amelyen a Prune saját képernyői megjelennek.' },
+      tabs: { general: 'Általános', uninstall: 'Eltávolítás', cleanup: 'Tisztítás', about: 'Névjegy' },
+      title: 'Beállítások',
+      loading: 'Beállítások betöltése…',
+      loadError: (error) => `Nem sikerült betölteni a beállításokat: ${error}`,
+      saveError: (error) => `Nem sikerült menteni: ${error}`,
+      appearance: {
+        title: 'Megjelenés',
+        description: 'Aurora Deck sötét vagy nappali fényben. Mindkettő valódi paletta, nem pedig egy megfordított: a hangsúlyszín a világos háttérhez sötétebb, hogy egy gomb fehér szöveget tarthasson magán, és minden szint azokhoz a felületekhez lett mérve, amelyeken ténylegesen áll. A Prune követi a rendszerbeállításodat, amíg itt nem választasz egyet.'
+      },
+      minimizeToTray: {
+        title: 'Kicsinyítés a tálcára',
+        description: 'Az ablak bezárása a Prune-t a rendszertálcára küldi bezárás helyett.'
+      },
+      updateCheck: {
+        title: 'Frissítések keresése',
+        description: 'Naponta egyszer a Prune megkérdezi az api.github.com-ot, létezik-e újabb verzió. Ez az egyetlen kérés, amit a Prune bárhová máshova küld ezen a gépen kívül, és a GitHub látja az IP-címedet, ahogy bármely weboldal is látná. Ha van új verzió, egy frissítés gomb jelenik meg az oldalsáv alján, és semmi nem kerül letöltésre vagy telepítésre, amíg rá nem kattintasz.'
+      },
+      autoInstallUpdates: {
+        title: 'Frissítések automatikus telepítése',
+        description: 'Letölti az új verziót a háttérben, és telepíti legközelebb, amikor a Prune bezárul, ahelyett hogy megvárná, hogy a frissítés gombra kattints. A fenti frissítés-ellenőrzés szükséges hozzá.'
+      },
+      updateStatus: {
+        checking: 'Ellenőrzés…',
+        loadError: (error) => `Nem sikerült ellenőrizni a frissítéseket: ${error}`,
+        newerAvailable: (version) => `A Prune ${version} elérhető.`,
+        openDownloadPage: 'Letöltési oldal megnyitása',
+        upToDate: (version) => `A legújabb verziót használod (${version}).`,
+        openPageError: (error) => `Nem sikerült megnyitni az oldalt: ${error}`
+      },
+      showFreeSpace: {
+        title: 'Szabad hely megjelenítése a Lemeztérképen',
+        description: 'A meghajtó szabad helyét egy további blokként rajzolja ki egy teljes meghajtó vizsgálatakor, így minden mappa a meghajtó, nem pedig a használt hely arányaként olvasható.'
+      },
+      autoQuarantine: {
+        title: 'Automatikus karantén',
+        description: 'A Mélytisztítás a Prune karanténjába helyezi, amit eltávolít, ahonnan visszahelyezheted. Kapcsold ki ezt, és helyette a Windows Lomtárba kerül — továbbra is visszaállítható, csak olyan helyen, amit már tudsz üríteni.'
+      },
+      skipRecent: {
+        title: 'Hagyd békén a friss fájlokat',
+        description: 'Kihagy mindent, amit az elmúlt órákban módosítottak. Egy ideiglenes mappában egy éppen írt fájl pontosan úgy néz ki, mint egy két éve elhagyott — ez akadályozza meg, hogy egy félbehagyott telepítés eltűnjön. A 0 kikapcsolja ezt.',
+        hoursUnit: 'óra',
+        ariaLabel: 'Hány órán át hagyjuk békén a friss fájlokat'
+      },
+      restorePointCleanup: {
+        title: 'Visszaállítási pont létrehozása előbb',
+        description: 'Egy kényszerített eltávolítás előtt, hogy maga a Windows visszaállíthassa a gépet. Néhány másodpercbe kerül, és semmit sem csinál, ha a Rendszervédelem ki van kapcsolva.'
+      },
+      hideUnavailable: {
+        title: 'Nem alkalmazható tisztítók elrejtése',
+        description: 'A lista nagy része olyan szoftverekre vonatkozik, amelyek nincsenek ezen a gépen. Elrejtésük csak azt hagyja meg, ami valójában itt van.'
+      },
+      quarantineRetention: {
+        title: 'Meddig őrizzük meg a visszavonást',
+        description: 'Minden, amit a Prune eltávolít, először a Karanténba kerül, és ott marad, amíg ki nem üríted. Adj meg egy napszámot az annál régebbi biztonsági másolatok eldobásához. Hagyd üresen, hogy örökre megtartsd őket.',
+        neverPlaceholder: 'Soha',
+        daysUnit: 'nap',
+        ariaLabel: 'Hány napig őrizzük meg a karantén biztonsági másolatait'
+      },
+      quarantineMaxSize: {
+        title: 'Mennyi visszavonást tartsunk meg',
+        description: 'Felső korlát a teljes Karantén mappára. Ezen felül a legrégebbi biztonsági másolatok tűnnek el először — a legújabb sosem kerül eldobásra, így valami nagy, amit épp eltávolítottál, visszaállítható marad, még ha önmagában nagyobb is a korlátnál. Hagyd üresen, ha nincs szükség korlátra.',
+        noLimitPlaceholder: 'Nincs korlát',
+        gbUnit: 'GB',
+        ariaLabel: 'Maximális karantén-méret gigabájtban'
+      },
+      exclusions: {
+        title: 'Mappák kizárása',
+        description: 'Mappák és fájltípusok, amiket a Prune békén hagy — a Mélytisztítás kihagyja őket, és a Lemeztérkép kizárja őket — azok mellett, amiket már véd: Rendszerkötet-információ, vírusirtó-karanténok, a komponenttár és még egy tucat másik.',
+        ariaLabel: 'Kizárandó mappaútvonal vagy fájltípus',
+        add: 'Hozzáadás',
+        invalidFormat: 'Adj meg egy teljes mappaútvonalat (D:\\Games) vagy egy fájltípust (*.iso).',
+        formatHint: 'Egy teljes mappaútvonal, vagy egy *.iso formában írt fájltípus',
+        none: 'Semmi sincs kizárva.',
+        typeBadge: 'Típus',
+        folderBadge: 'Mappa',
+        removeAriaLabel: (value) => `${value} kizárásának megszüntetése`
+      },
+      sandboxTest: {
+        title: 'Homokozó teszt',
+        description: 'A valódi tisztítómotort csak egy eldobható ideiglenes könyvtár ellen futtatja — soha nem a tényleges Temp mappád, a Windows Temp vagy a bélyegkép-gyorsítótár ellen —, hogy bebizonyítsa, a vizsgálat és a törlés valóban működik, mielőtt rábíznád őket valódi fájlokra.',
+        run: 'Homokozó teszt futtatása',
+        running: 'Fut…',
+        allPassed: 'Minden ellenőrzés sikeres',
+        failed: 'A homokozó teszt sikertelen'
+      },
+      warningConfirmations: {
+        title: 'Figyelmeztetés-megerősítések',
+        allAsk: 'Minden adatvesztéssel járó tisztító megkérdez, mielőtt lefut.',
+        someSet: (count) => `${count} tisztítási figyelmeztetés van beállítva, hogy ne kérdezzen újra.`,
+        reset: 'Figyelmeztetés-megerősítések visszaállítása'
+      },
+      uninstallTab: {
+        beforeHeading: 'Eltávolítás előtt',
+        restorePointUninstall: {
+          title: 'Visszaállítási pont létrehozása eltávolítás előtt',
+          description: 'A Windows saját Rendszer-visszaállítása, ami a program eltávolítójának futása előtt jön létre. Ehhez a Prune-nak rendszergazdaként kell futnia, és a Windows naponta egyet enged, így ha nem hozható létre, az eltávolítás folytatódik, és a párbeszédablak jelzi ezt.'
+        },
+        registryBackup: {
+          title: 'Rendszerleíró adatbázis biztonsági mentése eltávolítás előtt',
+          description: 'Exportálja a HKLM\\SOFTWARE-t és a HKCU\\Software-t (kb. 140 MB azon a gépen, amelyen a Prune-t építik), és a legfrissebb 3-at megtartja. Ha a mentés nem hozható létre, az eltávolítás nem fut le.'
+        },
+        afterHeading: 'Eltávolítás után',
+        scanLeftovers: {
+          title: 'Maradványok keresése eltávolítás után',
+          description: 'Azokat a fájlokat, rendszerleíró kulcsokat és ütemezett feladatokat keresi, amiket az eltávolító hátrahagyott. Kikapcsolva a Prune egyszerűen lefuttatja a program saját eltávolítóját, és ott megáll.'
+        },
+        preselect: {
+          title: 'Minden maradvány bejelölése alapértelmezetten',
+          description: 'Az áttekintés minden megtalálttal bejelölve nyílik meg. Kikapcsolva semmi sincs bejelölve, és te választasz.'
+        },
+        keepHistory: {
+          title: 'Eltávolítási előzmények megőrzése',
+          description: 'A vezérlőpult listája a legutóbbi eltávolításokról és a felszabadított helyről. Kikapcsolva semmi új nem kerül rögzítésre.'
+        },
+        destinationHeading: 'A megmaradt fájlok célja',
+        leftoverOptions: {
+          quarantine: { label: 'Karantén', description: 'A Prune saját biztonsági mentésébe kerül, és a Karantén képernyőről visszaállítható. Ez az alapértelmezett.' },
+          recycle: { label: 'A Lomtár', description: 'A Windows saját Lomtárából visszaállítható, és felszabadul, amikor kiüríted.' },
+          permanent: { label: 'Végleges törlés', description: 'Teljesen törölve. Nincs mit visszaállítani.' }
+        },
+        permanentWarning: 'A megmaradt fájlok teljesen törlődnek, és nem állíthatók vissza sem a Karanténból, sem máshonnan. Ellenőrizd a listát, mielőtt megerősíted.',
+        registryNote: 'A rendszerleíró kulcsok a Karanténba kerülnek exportálásra eltávolításuk előtt, függetlenül a választásodtól.'
+      },
+      about: {
+        description: 'Helyi, offline eltávolító és tisztító eszköz Windowshoz — kényszerített eltávolítás maradványfájl-vizsgálattal, biztonságos karantén törlés előtt, lemeztérképezés és egykattintásos szemétisztítás.'
+      },
+      automation: {
+        title: 'Automatizálás',
+        description: 'Addig fut, amíg a Prune nyitva van. Nem tud felébreszteni egy alvó gépet — egy elmúló időablak, amíg a gép ki van kapcsolva, kihagyottként kerül jelentésre a csendes kihagyás helyett, és pótlásra kerül legközelebb, amikor megnyitod az alkalmazást.',
+        scheduled: 'Ütemezve',
+        off: 'Kikapcsolva',
+        howOften: 'Milyen gyakran',
+        day: 'Nap',
+        at: 'Ekkor',
+        whatItDoes: 'Mit csinál',
+        everyDay: 'Minden nap',
+        everyWeek: 'Minden héten',
+        measureOnly: 'Csak mérés',
+        clean: 'Tisztítás',
+        cleanWarning: 'Ez fájlokat távolít el anélkül, hogy bárki figyelné. Kitisztítja azokat a szabályokat, amiket a Mélytisztítás ajánl, és amikben valóban van valami, és minden továbbra is karanténba kerül — ezért ellenőrizd a fenti megőrzési beállítást, mielőtt bekapcsolva hagynád ezt.',
+        nextRun: 'Következő futás:',
+        lastRun: 'Utolsó futás:',
+        weekdays: {
+          sunday: 'Vasárnap', monday: 'Hétfő', tuesday: 'Kedd', wednesday: 'Szerda',
+          thursday: 'Csütörtök', friday: 'Péntek', saturday: 'Szombat'
+        }
+      }
+    },
     dashboard: {
       scheduleBadge: {
         missed: (count) => `${count} ütemezett futás maradt ki, amíg ez a gép ki volt kapcsolva`,
@@ -5633,7 +7866,156 @@ export const CATALOG = {
       quarantine: 'Karantina', settings: 'Pengaturan', startup: 'Mulai Otomatis',
       duplicates: 'Duplikat', deepClean: 'Pembersihan Menyeluruh'
     },
-    settings: { language: { title: 'Bahasa', description: 'Bahasa yang digunakan untuk menampilkan layar Prune sendiri.' } },
+    settings: {
+      language: { title: 'Bahasa', description: 'Bahasa yang digunakan untuk menampilkan layar Prune sendiri.' },
+      tabs: { general: 'Umum', uninstall: 'Uninstal', cleanup: 'Pembersihan', about: 'Tentang' },
+      title: 'Pengaturan',
+      loading: 'Memuat pengaturan…',
+      loadError: (error) => `Tidak dapat memuat pengaturan: ${error}`,
+      saveError: (error) => `Tidak dapat menyimpan: ${error}`,
+      appearance: {
+        title: 'Tampilan',
+        description: 'Aurora Deck dalam gelap atau terang. Keduanya adalah palet asli, bukan satu yang dibalik: warna aksen menjadi lebih gelap untuk latar terang agar tombol tetap bisa memakai teks putih, dan setiap tingkat diukur berdasarkan permukaan tempatnya benar-benar berada. Prune mengikuti pengaturan sistemmu sampai kamu memilih satu di sini.'
+      },
+      minimizeToTray: {
+        title: 'Perkecil ke baki sistem',
+        description: 'Menutup jendela mengirim Prune ke baki sistem alih-alih menutupnya sepenuhnya.'
+      },
+      updateCheck: {
+        title: 'Periksa pembaruan',
+        description: 'Sekali sehari, Prune bertanya ke api.github.com apakah ada versi yang lebih baru. Ini satu-satunya permintaan yang dibuat Prune ke tempat lain selain komputer ini, dan GitHub melihat alamat IP-mu seperti situs web mana pun. Jika ada, tombol pembaruan muncul di bagian bawah bilah samping, dan tidak ada yang diunduh atau dipasang sampai kamu mengkliknya.'
+      },
+      autoInstallUpdates: {
+        title: 'Pasang pembaruan secara otomatis',
+        description: 'Mengunduh versi baru di latar belakang dan memasangnya lain kali Prune ditutup, alih-alih menunggu kamu mengklik tombol pembaruan. Membutuhkan pemeriksaan pembaruan di atas.'
+      },
+      updateStatus: {
+        checking: 'Memeriksa…',
+        loadError: (error) => `Tidak dapat memeriksa pembaruan: ${error}`,
+        newerAvailable: (version) => `Prune ${version} tersedia.`,
+        openDownloadPage: 'Buka halaman unduhan',
+        upToDate: (version) => `Kamu memakai versi terbaru (${version}).`,
+        openPageError: (error) => `Tidak dapat membuka halaman: ${error}`
+      },
+      showFreeSpace: {
+        title: 'Tampilkan ruang kosong di Peta Disk',
+        description: 'Menggambar ruang kosong drive sebagai satu blok tambahan saat memindai seluruh drive, sehingga setiap folder terbaca sebagai bagian dari drive, bukan dari ruang yang terpakai.'
+      },
+      autoQuarantine: {
+        title: 'Karantina otomatis',
+        description: 'Pembersihan Mendalam memindahkan yang diambilnya ke Karantina Prune, tempat kamu bisa mengembalikannya. Matikan ini dan akan pergi ke Recycle Bin Windows sebagai gantinya — tetap dapat dipulihkan, hanya di tempat yang sudah kamu tahu cara mengosongkannya.'
+      },
+      skipRecent: {
+        title: 'Biarkan file terbaru',
+        description: 'Melewati apa pun yang dimodifikasi dalam beberapa jam terakhir. Di folder sementara, file yang sedang ditulis sekarang terlihat persis seperti yang ditinggalkan dua tahun lalu — inilah yang mencegah instalasi setengah jadi ikut tersapu. 0 mematikan ini.',
+        hoursUnit: 'jam',
+        ariaLabel: 'Jam untuk membiarkan file terbaru'
+      },
+      restorePointCleanup: {
+        title: 'Buat titik pemulihan terlebih dahulu',
+        description: 'Sebelum penghapusan paksa, agar Windows sendiri dapat mengembalikan komputer. Butuh beberapa detik, dan tidak melakukan apa pun jika Perlindungan Sistem dimatikan.'
+      },
+      hideUnavailable: {
+        title: 'Sembunyikan pembersih yang tidak berlaku',
+        description: 'Sebagian besar daftar untuk perangkat lunak yang tidak dimiliki komputer ini. Menyembunyikannya hanya menyisakan yang benar-benar ada di sini.'
+      },
+      quarantineRetention: {
+        title: 'Berapa lama menyimpan opsi batal',
+        description: 'Semua yang dihapus Prune pergi ke Karantina terlebih dahulu, dan tetap di sana sampai kamu mengosongkannya. Atur jumlah hari untuk membuang cadangan yang lebih lama dari itu. Biarkan kosong untuk menyimpannya selamanya.',
+        neverPlaceholder: 'Tidak pernah',
+        daysUnit: 'hari',
+        ariaLabel: 'Hari untuk menyimpan cadangan karantina'
+      },
+      quarantineMaxSize: {
+        title: 'Berapa banyak opsi batal yang disimpan',
+        description: 'Batas untuk seluruh folder Karantina. Di atasnya, cadangan tertua akan hilang lebih dulu — yang terbaru tidak pernah dibuang, jadi sesuatu yang besar yang baru saja kamu hapus tetap dapat dipulihkan meski lebih besar dari batas itu sendiri. Biarkan kosong untuk tanpa batas.',
+        noLimitPlaceholder: 'Tanpa batas',
+        gbUnit: 'GB',
+        ariaLabel: 'Ukuran karantina maksimum dalam gigabyte'
+      },
+      exclusions: {
+        title: 'Kecualikan Folder',
+        description: 'Folder dan tipe file yang akan dibiarkan Prune — dilewati oleh Pembersihan Mendalam dan dikecualikan dari Peta Disk — selain yang sudah dilindunginya: Informasi Volume Sistem, karantina antivirus, penyimpanan komponen, dan selusin lainnya.',
+        ariaLabel: 'Jalur folder atau tipe file untuk dikecualikan',
+        add: 'Tambah',
+        invalidFormat: 'Tulis jalur folder lengkap (D:\\Games) atau tipe file (*.iso).',
+        formatHint: 'Jalur folder lengkap, atau tipe file yang ditulis sebagai *.iso',
+        none: 'Tidak ada yang dikecualikan.',
+        typeBadge: 'Tipe',
+        folderBadge: 'Folder',
+        removeAriaLabel: (value) => `Berhenti mengecualikan ${value}`
+      },
+      sandboxTest: {
+        title: 'Uji Sandbox',
+        description: 'Menjalankan mesin pembersih sungguhan hanya terhadap direktori sementara sekali pakai — bukan Temp asli, Temp Windows, atau cache thumbnail — untuk membuktikan bahwa pemindaian dan penghapusan benar-benar berfungsi sebelum kamu mempercayakannya pada file sungguhan.',
+        run: 'Jalankan Uji Sandbox',
+        running: 'Berjalan…',
+        allPassed: 'Semua pemeriksaan lolos',
+        failed: 'Uji sandbox gagal'
+      },
+      warningConfirmations: {
+        title: 'Konfirmasi peringatan',
+        allAsk: 'Setiap pembersih yang menghilangkan data akan bertanya sebelum dijalankan.',
+        someSet: (count) => `${count} peringatan pembersihan diatur untuk tidak bertanya lagi.`,
+        reset: 'Atur ulang konfirmasi peringatan'
+      },
+      uninstallTab: {
+        beforeHeading: 'Sebelum uninstal',
+        restorePointUninstall: {
+          title: 'Buat titik pemulihan sebelum uninstal',
+          description: 'Pemulihan Sistem milik Windows sendiri, dibuat sebelum penghapus-instal program berjalan. Membutuhkan Prune berjalan sebagai administrator dan Windows mengizinkan satu per hari, jadi ketika tidak dapat dibuat, uninstal tetap berlanjut dan dialog memberitahukannya.'
+        },
+        registryBackup: {
+          title: 'Cadangkan registri sebelum uninstal',
+          description: 'Mengekspor HKLM\\SOFTWARE dan HKCU\\Software (sekitar 140 MB pada komputer tempat Prune dibangun) dan menyimpan 3 yang terbaru. Jika cadangan tidak dapat dibuat, uninstal tidak berjalan.'
+        },
+        afterHeading: 'Setelah uninstal',
+        scanLeftovers: {
+          title: 'Pindai sisa setelah uninstal',
+          description: 'Mencari file, kunci registri, dan tugas terjadwal yang ditinggalkan penghapus-instal. Nonaktif, Prune hanya menjalankan penghapus-instal program itu sendiri dan berhenti di situ.'
+        },
+        preselect: {
+          title: 'Centang setiap sisa secara default',
+          description: 'Peninjauan terbuka dengan semua yang ditemukan tercentang. Nonaktif, terbuka tanpa apa pun yang tercentang dan kamu yang memilih.'
+        },
+        keepHistory: {
+          title: 'Simpan riwayat uninstal',
+          description: 'Daftar dasbor tentang penghapusan terbaru dan ruang yang dibebaskannya. Nonaktif, tidak ada yang baru direkam.'
+        },
+        destinationHeading: 'File sisa pergi ke',
+        leftoverOptions: {
+          quarantine: { label: 'Karantina', description: 'Dipindahkan ke cadangan Prune sendiri, dan dapat dipulihkan dari layar Karantina. Bawaan.' },
+          recycle: { label: 'Recycle Bin', description: 'Dapat dipulihkan dari bin Windows sendiri, dan dibebaskan saat kamu mengosongkannya.' },
+          permanent: { label: 'Hapus permanen', description: 'Dihapus sepenuhnya. Tidak ada yang bisa dipulihkan.' }
+        },
+        permanentWarning: 'File sisa akan dihapus sepenuhnya dan tidak dapat dipulihkan, baik dari Karantina maupun tempat lain. Periksa daftar sebelum mengonfirmasinya.',
+        registryNote: 'Kunci registri diekspor ke Karantina sebelum dihapus, apa pun pilihanmu.'
+      },
+      about: {
+        description: 'Alat uninstal dan pembersihan lokal, offline untuk Windows — penghapusan paksa dengan pemindaian file sisa, karantina aman sebelum penghapusan, pemetaan disk, dan pembersihan sampah satu klik.'
+      },
+      automation: {
+        title: 'Otomatisasi',
+        description: 'Berjalan selama Prune terbuka. Ini tidak bisa membangunkan komputer yang tidur — jendela waktu yang berlalu saat komputer mati akan dilaporkan sebagai terlewat alih-alih dilewati diam-diam, dan dikejar lain kali kamu membuka aplikasi.',
+        scheduled: 'Terjadwal',
+        off: 'Mati',
+        howOften: 'Seberapa sering',
+        day: 'Hari',
+        at: 'Pada',
+        whatItDoes: 'Apa yang dilakukannya',
+        everyDay: 'Setiap hari',
+        everyWeek: 'Setiap minggu',
+        measureOnly: 'Ukur saja',
+        clean: 'Bersihkan',
+        cleanWarning: 'Ini menghapus file tanpa ada yang mengawasi. Ini membersihkan aturan yang direkomendasikan Pembersihan Mendalam dan yang sungguh berisi sesuatu, dan semuanya tetap masuk karantina — jadi periksa pengaturan retensi di atas sebelum membiarkan ini aktif.',
+        nextRun: 'Jalankan berikutnya:',
+        lastRun: 'Terakhir dijalankan:',
+        weekdays: {
+          sunday: 'Minggu', monday: 'Senin', tuesday: 'Selasa', wednesday: 'Rabu',
+          thursday: 'Kamis', friday: 'Jumat', saturday: 'Sabtu'
+        }
+      }
+    },
     dashboard: {
       scheduleBadge: {
         missed: (count) => `${count} proses terjadwal terlewat saat PC ini mati`,
@@ -6006,7 +8388,156 @@ export const CATALOG = {
       quarantine: 'Sóttkví', settings: 'Stillingar', startup: 'Ræsing',
       duplicates: 'Tvítök', deepClean: 'Ítarleg hreinsun'
     },
-    settings: { language: { title: 'Tungumál', description: 'Tungumálið sem skjáir Prune sjálfs birtast á.' } },
+    settings: {
+      language: { title: 'Tungumál', description: 'Tungumálið sem skjáir Prune sjálfs birtast á.' },
+      tabs: { general: 'Almennt', uninstall: 'Fjarlægja', cleanup: 'Hreinsun', about: 'Um' },
+      title: 'Stillingar',
+      loading: 'Hleð inn stillingum…',
+      loadError: (error) => `Ekki tókst að hlaða stillingum: ${error}`,
+      saveError: (error) => `Ekki tókst að vista: ${error}`,
+      appearance: {
+        title: 'Útlit',
+        description: 'Aurora Deck í dökku eða björtu. Bæði eru raunveruleg litaspjöld frekar en eitt umsnúið: áherslulitur dökknar fyrir ljósan bakgrunn svo hnappur geti haldið hvítum texta, og hvert stig var mælt gegn þeim flötum sem það hvílir raunverulega á. Prune fylgir kerfisstillingunni þinni þar til þú velur eina hér.'
+      },
+      minimizeToTray: {
+        title: 'Lágmarka í kerfisbakka',
+        description: 'Að loka glugganum sendir Prune í kerfisbakkann í stað þess að hætta.'
+      },
+      updateCheck: {
+        title: 'Athuga uppfærslur',
+        description: 'Einu sinni á dag spyr Prune api.github.com hvort nýrri útgáfa sé til. Þetta er eina beiðnin sem Prune sendir eitthvað annað en þessa vél, og GitHub sér IP-tölu þína eins og hvaða vefsíða sem er. Þegar ein er til birtist uppfærsluhnappur neðst í hliðarslánni, og ekkert er sótt eða sett upp fyrr en þú smellir á hann.'
+      },
+      autoInstallUpdates: {
+        title: 'Setja upp uppfærslur sjálfkrafa',
+        description: 'Sækir nýja útgáfu í bakgrunni og setur hana upp næst þegar Prune lokast, í stað þess að bíða eftir að þú smellir á uppfærsluhnappinn. Krefst uppfærsluathugunar hér að ofan.'
+      },
+      updateStatus: {
+        checking: 'Athuga…',
+        loadError: (error) => `Ekki tókst að athuga uppfærslur: ${error}`,
+        newerAvailable: (version) => `Prune ${version} er í boði.`,
+        openDownloadPage: 'Opna niðurhalssíðu',
+        upToDate: (version) => `Þú ert með nýjustu útgáfuna (${version}).`,
+        openPageError: (error) => `Ekki tókst að opna síðuna: ${error}`
+      },
+      showFreeSpace: {
+        title: 'Sýna laust pláss á Diskakortinu',
+        description: 'Teiknar laust pláss drifsins sem einn blokk til viðbótar þegar heilt drif er skannað, svo hver mappa lesist sem hlutfall af drifinu frekar en af notuðu plássi.'
+      },
+      autoQuarantine: {
+        title: 'Sjálfvirk sóttkví',
+        description: 'Djúphreinsun flytur það sem hún fjarlægir í sóttkví Prune, þaðan sem þú getur skilað því aftur. Slökktu á þessu og það fer í ruslafötu Windows í staðinn — enn endurheimtanlegt, bara á stað sem þú kannt nú þegar að tæma.'
+      },
+      skipRecent: {
+        title: 'Láta nýleg skjöl í friði',
+        description: 'Sleppir öllu sem breytt hefur verið á síðustu klukkustundum. Í tímabundinni möppu lítur skjal sem verið er að skrifa núna nákvæmlega eins út og eitt sem var yfirgefið fyrir tveimur árum — þetta er það sem kemur í veg fyrir að hálfkláruð uppsetning sé sópað burt. 0 slekkur á þessu.',
+        hoursUnit: 'klukkustundir',
+        ariaLabel: 'Klukkustundir til að láta nýleg skjöl í friði'
+      },
+      restorePointCleanup: {
+        title: 'Búa til endurheimtunarpunkt fyrst',
+        description: 'Fyrir þvingaða fjarlægingu, svo Windows sjálft geti fært vélina til baka. Kostar nokkrar sekúndur og gerir alls ekkert ef Kerfisvörn er slökkt.'
+      },
+      hideUnavailable: {
+        title: 'Fela hreinsara sem eiga ekki við',
+        description: 'Mestur hluti listans er fyrir hugbúnað sem þessi vél á ekki. Að fela þá skilur aðeins eftir það sem raunverulega er hér.'
+      },
+      quarantineRetention: {
+        title: 'Hversu lengi á að halda afturköllun',
+        description: 'Allt sem Prune fjarlægir fer fyrst í sóttkví, og verður þar þar til þú tæmir hana. Settu inn dagafjölda til að henda afritum eldri en það. Skildu eftir autt til að geyma þau að eilífu.',
+        neverPlaceholder: 'Aldrei',
+        daysUnit: 'dagar',
+        ariaLabel: 'Dagar til að geyma sóttkvíarafrit'
+      },
+      quarantineMaxSize: {
+        title: 'Hversu mikla afturköllun á að geyma',
+        description: 'Þak á alla sóttkvíarmöppuna. Yfir því fara elstu afritin fyrst — nýjasta er aldrei fjarlægt, svo eitthvað stórt sem þú fjarlægðir nýlega helst endurheimtanlegt jafnvel þótt það sé stærra en þakið eitt og sér. Skildu eftir autt fyrir engin takmörk.',
+        noLimitPlaceholder: 'Engin takmörk',
+        gbUnit: 'GB',
+        ariaLabel: 'Hámarksstærð sóttkvíar í gígabætum'
+      },
+      exclusions: {
+        title: 'Útiloka möppur',
+        description: 'Möppur og skráartegundir sem Prune lætur í friði — sleppt af Djúphreinsun og útilokað úr Diskakortinu — til viðbótar við það sem það verndar nú þegar: Kerfisbindisupplýsingar, veirueyðingarsóttkvíar, íhlutageymslan og tugur annarra.',
+        ariaLabel: 'Möppuslóð eða skráartegund til að útiloka',
+        add: 'Bæta við',
+        invalidFormat: 'Skrifaðu heila möppuslóð (D:\\Games) eða skráartegund (*.iso).',
+        formatHint: 'Heil möppuslóð, eða skráartegund skrifuð sem *.iso',
+        none: 'Ekkert útilokað.',
+        typeBadge: 'Tegund',
+        folderBadge: 'Mappa',
+        removeAriaLabel: (value) => `Hætta að útiloka ${value}`
+      },
+      sandboxTest: {
+        title: 'Sandkassapróf',
+        description: 'Keyrir raunverulegu hreinsivélina eingöngu á einnota tímabundna möppu — aldrei raunverulegu Temp-möppuna þína, Temp Windows, eða skyndiminni smámynda — til að sanna að skönnun og eyðing virki raunverulega áður en þú treystir þeim með raunverulegum skjölum.',
+        run: 'Keyra sandkassapróf',
+        running: 'Í keyrslu…',
+        allPassed: 'Allar athuganir stóðust',
+        failed: 'Sandkassaprófið mistókst'
+      },
+      warningConfirmations: {
+        title: 'Staðfestingar viðvarana',
+        allAsk: 'Sérhver hreinsari sem tapar gögnum spyr áður en hann keyrir.',
+        someSet: (count) => `${count} hreinsunarviðvaranir stilltar til að spyrja ekki aftur.`,
+        reset: 'Endurstilla staðfestingar viðvarana'
+      },
+      uninstallTab: {
+        beforeHeading: 'Áður en fjarlægt er',
+        restorePointUninstall: {
+          title: 'Búa til endurheimtunarpunkt áður en fjarlægt er',
+          description: 'Eigin Kerfisendurheimt Windows, búin til áður en fjarlægingarforrit forritsins keyrir. Krefst þess að Prune keyri sem stjórnandi og Windows leyfir eina á dag, svo þegar ekki er hægt að búa hana til heldur fjarlægingin áfram og glugginn segir frá því.'
+        },
+        registryBackup: {
+          title: 'Taka afrit af skráningargrunni áður en fjarlægt er',
+          description: 'Flytur út HKLM\\SOFTWARE og HKCU\\Software (um 140 MB á vélinni sem Prune er byggt á) og geymir nýjustu 3. Ef ekki er hægt að búa til afritið keyrir fjarlægingin ekki.'
+        },
+        afterHeading: 'Eftir fjarlægingu',
+        scanLeftovers: {
+          title: 'Skanna eftir leifum eftir fjarlægingu',
+          description: 'Leitar að skjölum, skráningarlyklum og áætluðum verkefnum sem fjarlægingarforritið skildi eftir. Slökkt, keyrir Prune einfaldlega eigið fjarlægingarforrit forritsins og stöðvast þar.'
+        },
+        preselect: {
+          title: 'Haka við hverja leif sjálfgefið',
+          description: 'Yfirferðin opnast með allt sem fannst hakað við. Slökkt, opnast hún með engu hakuðu og þú velur.'
+        },
+        keepHistory: {
+          title: 'Halda sögu fjarlæginga',
+          description: 'Listi mælaborðsins yfir nýlegar fjarlægingar og plássið sem þær losuðu. Slökkt, er ekkert nýtt skráð.'
+        },
+        destinationHeading: 'Afgangsskjöl fara í',
+        leftoverOptions: {
+          quarantine: { label: 'Sóttkví', description: 'Flutt í eigið afrit Prune, og endurheimtanlegt af Sóttkvíarskjánum. Sjálfgefið.' },
+          recycle: { label: 'Ruslafatan', description: 'Endurheimtanlegt úr eigin fötu Windows, og losnar þegar þú tæmir hana.' },
+          permanent: { label: 'Eyða varanlega', description: 'Eytt algjörlega. Ekkert að endurheimta.' }
+        },
+        permanentWarning: 'Afgangsskjölum verður eytt algjörlega og ekki er hægt að endurheimta þau, hvorki úr sóttkví né annars staðar frá. Skoðaðu listann áður en þú staðfestir hann.',
+        registryNote: 'Skráningarlyklar eru fluttir út í sóttkví áður en þeir eru fjarlægðir, sama hvað þú velur.'
+      },
+      about: {
+        description: 'Staðbundið, ótengt fjarlægingar- og hreinsunartæki fyrir Windows — þvinguð fjarlæging með skönnun leifarskjala, örugg sóttkví fyrir eyðingu, diskakortlagning og ruslahreinsun með einum smelli.'
+      },
+      automation: {
+        title: 'Sjálfvirkni',
+        description: 'Keyrir á meðan Prune er opið. Það getur ekki vakið sofandi vél — gluggi sem líður hjá á meðan tölvan er slökkt er tilkynntur sem misst af frekar en hljóðlega sleppt, og bætt upp næst þegar þú opnar forritið.',
+        scheduled: 'Áætlað',
+        off: 'Slökkt',
+        howOften: 'Hversu oft',
+        day: 'Dagur',
+        at: 'Klukkan',
+        whatItDoes: 'Hvað það gerir',
+        everyDay: 'Á hverjum degi',
+        everyWeek: 'Í hverri viku',
+        measureOnly: 'Aðeins mæla',
+        clean: 'Hreinsa',
+        cleanWarning: 'Þetta fjarlægir skjöl án þess að neinn fylgist með. Það hreinsar reglurnar sem Djúphreinsun mælir með og sem raunverulega innihalda eitthvað, og allt fer samt í sóttkví — svo athugaðu geymslustillinguna hér að ofan áður en þú lætur þetta vera á.',
+        nextRun: 'Næsta keyrsla:',
+        lastRun: 'Síðasta keyrsla:',
+        weekdays: {
+          sunday: 'Sunnudagur', monday: 'Mánudagur', tuesday: 'Þriðjudagur', wednesday: 'Miðvikudagur',
+          thursday: 'Fimmtudagur', friday: 'Föstudagur', saturday: 'Laugardagur'
+        }
+      }
+    },
     dashboard: {
       scheduleBadge: {
         missed: (count) => `${count} áætluð keyrsla var ${count === 1 ? '' : ''}misst af meðan þessi tölva var slökkt`,
@@ -6379,7 +8910,156 @@ export const CATALOG = {
       quarantine: 'Quarantena', settings: 'Impostazioni', startup: 'Avvio',
       duplicates: 'Duplicati', deepClean: 'Pulizia approfondita'
     },
-    settings: { language: { title: 'Lingua', description: 'La lingua in cui vengono mostrate le schermate di Prune.' } },
+    settings: {
+      language: { title: 'Lingua', description: 'La lingua in cui vengono mostrate le schermate di Prune.' },
+      tabs: { general: 'Generale', uninstall: 'Disinstallazione', cleanup: 'Pulizia', about: 'Informazioni' },
+      title: 'Impostazioni',
+      loading: 'Caricamento impostazioni…',
+      loadError: (error) => `Impossibile caricare le impostazioni: ${error}`,
+      saveError: (error) => `Impossibile salvare: ${error}`,
+      appearance: {
+        title: 'Aspetto',
+        description: "Aurora Deck in scuro o chiaro alla luce del giorno. Entrambe sono palette reali anziché una invertita: l'accento si scurisce per lo sfondo chiaro così un pulsante può mantenere il testo bianco, e ogni livello è stato misurato rispetto alle superfici su cui poggia realmente. Prune segue l'impostazione del tuo sistema finché non ne scegli una qui."
+      },
+      minimizeToTray: {
+        title: 'Riduci a icona nella barra di sistema',
+        description: 'Chiudere la finestra invia Prune nella barra di sistema invece di chiuderlo.'
+      },
+      updateCheck: {
+        title: 'Controlla aggiornamenti',
+        description: "Una volta al giorno, Prune chiede a api.github.com se esiste una versione più recente. È l'unica richiesta che Prune fa verso qualsiasi luogo diverso da questo computer, e GitHub vede il tuo indirizzo IP come farebbe qualsiasi sito web. Quando ce n'è una, un pulsante di aggiornamento appare in fondo alla barra laterale, e nulla viene scaricato o installato finché non ci clicchi sopra."
+      },
+      autoInstallUpdates: {
+        title: 'Installa gli aggiornamenti automaticamente',
+        description: "Scarica una nuova versione in background e la installa la prossima volta che Prune si chiude, invece di aspettare che tu clicchi sul pulsante di aggiornamento. Richiede il controllo aggiornamenti qui sopra."
+      },
+      updateStatus: {
+        checking: 'Controllo…',
+        loadError: (error) => `Impossibile controllare gli aggiornamenti: ${error}`,
+        newerAvailable: (version) => `Prune ${version} è disponibile.`,
+        openDownloadPage: 'Apri la pagina di download',
+        upToDate: (version) => `Hai l'ultima versione (${version}).`,
+        openPageError: (error) => `Impossibile aprire la pagina: ${error}`
+      },
+      showFreeSpace: {
+        title: 'Mostra lo spazio libero sulla Mappa del Disco',
+        description: "Disegna lo spazio libero dell'unità come un blocco in più quando scansioni un'intera unità, così ogni cartella si legge come una quota dell'unità anziché dello spazio in uso."
+      },
+      autoQuarantine: {
+        title: 'Quarantena automatica',
+        description: "La Pulizia Approfondita sposta ciò che rimuove nella Quarantena di Prune, da dove puoi rimetterlo a posto. Disattiva questo e andrà invece nel Cestino di Windows — ancora recuperabile, solo in un posto che già sai svuotare."
+      },
+      skipRecent: {
+        title: 'Lascia stare i file recenti',
+        description: "Salta tutto ciò che è stato modificato nelle ultime ore. In una cartella temporanea, un file in fase di scrittura in questo momento appare esattamente come uno abbandonato due anni fa — questo è ciò che impedisce che un'installazione a metà venga spazzata via. 0 lo disattiva.",
+        hoursUnit: 'ore',
+        ariaLabel: 'Ore per cui lasciare stare i file recenti'
+      },
+      restorePointCleanup: {
+        title: 'Crea prima un punto di ripristino',
+        description: "Prima di una rimozione forzata, così Windows stesso può riportare indietro il computer. Costa qualche secondo, e non fa nulla se la Protezione del sistema è disattivata."
+      },
+      hideUnavailable: {
+        title: 'Nascondi i pulitori non applicabili',
+        description: "La maggior parte dell'elenco è per software che questo computer non ha. Nasconderli lascia solo ciò che è realmente qui."
+      },
+      quarantineRetention: {
+        title: "Per quanto tempo conservare l'annullamento",
+        description: "Tutto ciò che Prune rimuove va prima in Quarantena, e vi rimane finché non la svuoti. Imposta un numero di giorni per scartare i backup più vecchi di quello. Lascialo vuoto per conservarli per sempre.",
+        neverPlaceholder: 'Mai',
+        daysUnit: 'giorni',
+        ariaLabel: 'Giorni per cui conservare i backup di quarantena'
+      },
+      quarantineMaxSize: {
+        title: "Quanto annullamento conservare",
+        description: "Un limite per l'intera cartella Quarantena. Oltre quello, i backup più vecchi vanno via per primi — il più recente non viene mai scartato, quindi qualcosa di grande che hai appena rimosso rimane recuperabile anche se è più grande del limite da solo. Lascialo vuoto per nessun limite.",
+        noLimitPlaceholder: 'Nessun limite',
+        gbUnit: 'GB',
+        ariaLabel: 'Dimensione massima della quarantena in gigabyte'
+      },
+      exclusions: {
+        title: 'Escludi cartelle',
+        description: "Cartelle e tipi di file che Prune lascerà stare — saltati dalla Pulizia Approfondita ed esclusi dalla Mappa del Disco — oltre a quelli che già protegge: Informazioni sul volume di sistema, quarantene antivirus, l'archivio componenti e una dozzina di altri.",
+        ariaLabel: 'Percorso cartella o tipo di file da escludere',
+        add: 'Aggiungi',
+        invalidFormat: 'Scrivi un percorso di cartella completo (D:\\Games) o un tipo di file (*.iso).',
+        formatHint: 'Un percorso di cartella completo, o un tipo di file scritto come *.iso',
+        none: 'Nulla è escluso.',
+        typeBadge: 'Tipo',
+        folderBadge: 'Cartella',
+        removeAriaLabel: (value) => `Smetti di escludere ${value}`
+      },
+      sandboxTest: {
+        title: 'Test Sandbox',
+        description: "Esegue il vero motore di pulizia solo contro una directory temporanea usa e getta — mai il tuo vero Temp, il Temp di Windows, o la cache delle miniature — per dimostrare che la scansione e l'eliminazione funzionano davvero prima di affidargli file reali.",
+        run: 'Esegui test sandbox',
+        running: 'In esecuzione…',
+        allPassed: 'Tutti i controlli superati',
+        failed: 'Il test sandbox non è riuscito'
+      },
+      warningConfirmations: {
+        title: 'Conferme di avviso',
+        allAsk: 'Ogni pulitore che perde dati chiede conferma prima di eseguire.',
+        someSet: (count) => `${count} avvis${count === 1 ? 'o di pulizia è impostato' : 'i di pulizia sono impostati'} per non chiedere più.`,
+        reset: 'Ripristina le conferme di avviso'
+      },
+      uninstallTab: {
+        beforeHeading: 'Prima di disinstallare',
+        restorePointUninstall: {
+          title: 'Crea un punto di ripristino prima di disinstallare',
+          description: "Il Ripristino configurazione di sistema di Windows, creato prima che venga eseguito il disinstallatore del programma. Richiede che Prune sia eseguito come amministratore e Windows ne permette uno al giorno, quindi quando non può essere creato la disinstallazione procede e la finestra di dialogo lo segnala."
+        },
+        registryBackup: {
+          title: 'Backup del registro prima di disinstallare',
+          description: "Esporta HKLM\\SOFTWARE e HKCU\\Software (circa 140 MB sul computer su cui è compilato Prune) e conserva i 3 più recenti. Se il backup non può essere creato, la disinstallazione non viene eseguita."
+        },
+        afterHeading: 'Dopo la disinstallazione',
+        scanLeftovers: {
+          title: 'Cerca residui dopo la disinstallazione',
+          description: "Cerca i file, le chiavi di registro e le attività pianificate lasciate dal disinstallatore. Disattivato, Prune esegue semplicemente il disinstallatore del programma stesso e si ferma lì."
+        },
+        preselect: {
+          title: 'Seleziona ogni residuo per impostazione predefinita',
+          description: "La revisione si apre con tutto ciò che è stato trovato selezionato. Disattivato, si apre senza nulla selezionato e scegli tu."
+        },
+        keepHistory: {
+          title: 'Mantieni una cronologia delle disinstallazioni',
+          description: "L'elenco della dashboard delle rimozioni recenti e dello spazio che hanno liberato. Disattivato, nulla di nuovo viene registrato."
+        },
+        destinationHeading: 'I file residui vanno a',
+        leftoverOptions: {
+          quarantine: { label: 'Quarantena', description: "Spostato nel backup di Prune stesso, e recuperabile dalla schermata Quarantena. L'impostazione predefinita." },
+          recycle: { label: 'Il Cestino', description: "Recuperabile dal cestino di Windows stesso, e liberato quando lo svuoti." },
+          permanent: { label: 'Elimina definitivamente', description: 'Eliminato completamente. Nulla da ripristinare.' }
+        },
+        permanentWarning: "I file residui verranno eliminati completamente e non possono essere ripristinati, né dalla Quarantena né da altrove. Controlla l'elenco prima di confermarlo.",
+        registryNote: 'Le chiavi di registro vengono esportate nella Quarantena prima di essere rimosse, qualunque sia la tua scelta.'
+      },
+      about: {
+        description: "Uno strumento locale e offline di disinstallazione e pulizia per Windows — rimozione forzata con scansione dei file residui, quarantena sicura prima dell'eliminazione, mappatura del disco e pulizia dei rifiuti con un clic."
+      },
+      automation: {
+        title: 'Automazione',
+        description: "Viene eseguito finché Prune è aperto. Non può risvegliare un computer addormentato — una finestra temporale che passa mentre il computer è spento viene segnalata come persa anziché saltata silenziosamente, e recuperata la prossima volta che apri l'app.",
+        scheduled: 'Programmato',
+        off: 'Disattivato',
+        howOften: 'Con quale frequenza',
+        day: 'Giorno',
+        at: 'Alle',
+        whatItDoes: 'Cosa fa',
+        everyDay: 'Ogni giorno',
+        everyWeek: 'Ogni settimana',
+        measureOnly: 'Solo misurazione',
+        clean: 'Pulisci',
+        cleanWarning: "Questo rimuove file senza che nessuno controlli. Pulisce le regole raccomandate dalla Pulizia Approfondita e che hanno davvero qualcosa dentro, e tutto va comunque in quarantena — quindi controlla l'impostazione di conservazione qui sopra prima di lasciarlo attivo.",
+        nextRun: 'Prossima esecuzione:',
+        lastRun: 'Ultima esecuzione:',
+        weekdays: {
+          sunday: 'Domenica', monday: 'Lunedì', tuesday: 'Martedì', wednesday: 'Mercoledì',
+          thursday: 'Giovedì', friday: 'Venerdì', saturday: 'Sabato'
+        }
+      }
+    },
     dashboard: {
       scheduleBadge: {
         missed: (count) => `${count} esecuzion${count === 1 ? 'e programmata è stata' : 'i programmate sono state'} saltate mentre questo PC era spento`,
@@ -6752,7 +9432,156 @@ export const CATALOG = {
       quarantine: '隔離', settings: '設定', startup: 'スタートアップ',
       duplicates: '重複ファイル', deepClean: 'ディープクリーン'
     },
-    settings: { language: { title: '言語', description: 'Prune 自身の画面が表示される言語です。' } },
+    settings: {
+      language: { title: '言語', description: 'Prune 自身の画面が表示される言語です。' },
+      tabs: { general: '一般', uninstall: 'アンインストール', cleanup: 'クリーンアップ', about: '概要' },
+      title: '設定',
+      loading: '設定を読み込み中…',
+      loadError: (error) => `設定を読み込めませんでした: ${error}`,
+      saveError: (error) => `保存できませんでした: ${error}`,
+      appearance: {
+        title: '外観',
+        description: 'Aurora Deck はダークまたはデイライトで表示されます。どちらも反転させたものではなく、それぞれ本物のパレットです。アクセントカラーは明るい背景用に暗くなっているため、ボタンは白いテキストを保てます。各段階は実際に配置される面に対して測定されています。Prune はここで選ぶまでシステムの設定に従います。'
+      },
+      minimizeToTray: {
+        title: 'システムトレイに最小化',
+        description: 'ウィンドウを閉じると、Prune は終了せずにシステムトレイに送られます。'
+      },
+      updateCheck: {
+        title: 'アップデートを確認',
+        description: '1日に一度、Prune は api.github.com に新しいバージョンがあるか尋ねます。これは Prune がこのマシン以外に送る唯一のリクエストで、GitHub はどのウェブサイトでもそうするように、あなたの IP アドレスを見ます。新しいバージョンがある場合、サイドバーの下部にアップデートボタンが表示され、クリックするまで何もダウンロードやインストールされません。'
+      },
+      autoInstallUpdates: {
+        title: 'アップデートを自動的にインストール',
+        description: 'アップデートボタンをクリックするのを待たずに、バックグラウンドで新しいバージョンをダウンロードし、次に Prune が閉じるときにインストールします。上のアップデート確認が必要です。'
+      },
+      updateStatus: {
+        checking: '確認中…',
+        loadError: (error) => `アップデートを確認できませんでした: ${error}`,
+        newerAvailable: (version) => `Prune ${version} が利用可能です。`,
+        openDownloadPage: 'ダウンロードページを開く',
+        upToDate: (version) => `最新バージョンです (${version})。`,
+        openPageError: (error) => `ページを開けませんでした: ${error}`
+      },
+      showFreeSpace: {
+        title: 'ディスクマップに空き容量を表示',
+        description: 'ドライブ全体をスキャンするとき、ドライブの空き容量をもう一つのブロックとして描画し、各フォルダが使用中の容量ではなくドライブ全体に対する割合として表示されるようにします。'
+      },
+      autoQuarantine: {
+        title: '自動隔離',
+        description: 'ディープクリーンは削除するものを Prune の隔離場所に移動し、そこから戻すことができます。これをオフにすると、代わりに Windows のごみ箱に移動します — 復元は可能ですが、すでに空にする方法を知っている場所になるだけです。'
+      },
+      skipRecent: {
+        title: '最近のファイルはそのままにする',
+        description: '過去数時間以内に変更されたものをすべてスキップします。一時フォルダでは、今書き込まれているファイルは2年前に放置されたファイルとまったく同じに見えます — これが、途中まで完了したインストールが一掃されるのを防ぐものです。0 にするとオフになります。',
+        hoursUnit: '時間',
+        ariaLabel: '最近のファイルをそのままにする時間'
+      },
+      restorePointCleanup: {
+        title: '先に復元ポイントを作成',
+        description: '強制削除の前に、Windows 自体がマシンを元に戻せるようにします。数秒かかり、システムの保護がオフの場合は何も起こりません。'
+      },
+      hideUnavailable: {
+        title: '該当しないクリーナーを非表示',
+        description: 'リストの大部分は、このマシンにないソフトウェア向けです。それらを非表示にすると、実際にここにあるものだけが残ります。'
+      },
+      quarantineRetention: {
+        title: '元に戻せる期間',
+        description: 'Prune が削除するものはすべて、まず隔離場所に行き、空にするまでそこに残ります。それより古いバックアップを破棄する日数を設定します。永久に保持するには空欄にします。',
+        neverPlaceholder: '無期限',
+        daysUnit: '日',
+        ariaLabel: '隔離バックアップを保持する日数'
+      },
+      quarantineMaxSize: {
+        title: '元に戻せる量',
+        description: '隔離フォルダ全体の上限です。これを超えると、最も古いバックアップから先に消えます — 最新のものは決して破棄されないため、削除したばかりの大きなものは、それ自体が上限より大きくても復元可能なままです。上限なしにするには空欄にします。',
+        noLimitPlaceholder: '上限なし',
+        gbUnit: 'GB',
+        ariaLabel: '隔離場所の最大サイズ（ギガバイト）'
+      },
+      exclusions: {
+        title: 'フォルダを除外',
+        description: 'Prune がそのままにしておくフォルダとファイルタイプ — ディープクリーンでスキップされ、ディスクマップから除外されます — すでに保護されているもの（システムボリューム情報、アンチウイルスの隔離場所、コンポーネントストアなど十数個）に加えて指定できます。',
+        ariaLabel: '除外するフォルダパスまたはファイルタイプ',
+        add: '追加',
+        invalidFormat: '完全なフォルダパス（D:\\Games）またはファイルタイプ（*.iso）を入力してください。',
+        formatHint: '完全なフォルダパス、または *.iso のように書かれたファイルタイプ',
+        none: '除外されているものはありません。',
+        typeBadge: 'タイプ',
+        folderBadge: 'フォルダ',
+        removeAriaLabel: (value) => `${value} の除外を解除`
+      },
+      sandboxTest: {
+        title: 'サンドボックステスト',
+        description: '実際のクリーンアップエンジンを、使い捨ての一時ディレクトリに対してのみ実行します — 実際の Temp、Windows の Temp、サムネイルキャッシュには決して実行しません — 本物のファイルで信頼する前に、スキャンと削除が本当に機能することを証明します。',
+        run: 'サンドボックステストを実行',
+        running: '実行中…',
+        allPassed: 'すべてのチェックに合格',
+        failed: 'サンドボックステストが失敗しました'
+      },
+      warningConfirmations: {
+        title: '警告の確認',
+        allAsk: 'データを失うすべてのクリーナーは、実行前に確認を求めます。',
+        someSet: (count) => `${count} 件のクリーンアップ警告が、再度確認しないように設定されています。`,
+        reset: '警告の確認をリセット'
+      },
+      uninstallTab: {
+        beforeHeading: 'アンインストール前',
+        restorePointUninstall: {
+          title: 'アンインストール前に復元ポイントを作成',
+          description: 'プログラムのアンインストーラーが実行される前に作成される、Windows 独自のシステムの復元です。Prune を管理者として実行する必要があり、Windows は1日に1回しか許可しないため、作成できない場合はアンインストールがそのまま進み、ダイアログでその旨が表示されます。'
+        },
+        registryBackup: {
+          title: 'アンインストール前にレジストリをバックアップ',
+          description: 'HKLM\\SOFTWARE と HKCU\\Software をエクスポートし（Prune がビルドされているマシンで約140 MB）、最新の3つを保持します。バックアップを作成できない場合、アンインストールは実行されません。'
+        },
+        afterHeading: 'アンインストール後',
+        scanLeftovers: {
+          title: 'アンインストール後に残留物をスキャン',
+          description: 'アンインストーラーが残したファイル、レジストリキー、スケジュールされたタスクを探します。オフの場合、Prune はプログラム自体のアンインストーラーを実行するだけで、そこで終わります。'
+        },
+        preselect: {
+          title: 'デフォルトですべての残留物にチェックを入れる',
+          description: '確認画面は、見つかったものすべてにチェックが入った状態で開きます。オフの場合、何もチェックされていない状態で開き、あなたが選択します。'
+        },
+        keepHistory: {
+          title: 'アンインストール履歴を保持',
+          description: '最近の削除とそれによって解放された容量のダッシュボードのリストです。オフの場合、新しく記録されるものはありません。'
+        },
+        destinationHeading: '残留ファイルの移動先',
+        leftoverOptions: {
+          quarantine: { label: '隔離場所', description: 'Prune 独自のバックアップに移動され、隔離画面から復元できます。デフォルトです。' },
+          recycle: { label: 'ごみ箱', description: 'Windows 独自のごみ箱から復元でき、空にすると解放されます。' },
+          permanent: { label: '完全に削除', description: '完全に削除されます。復元するものはありません。' }
+        },
+        permanentWarning: '残留ファイルは完全に削除され、隔離場所からもその他の場所からも復元できません。確認する前にリストを確認してください。',
+        registryNote: 'レジストリキーは、選択に関わらず、削除される前に隔離場所にエクスポートされます。'
+      },
+      about: {
+        description: 'Windows 向けのローカル・オフラインのアンインストールとクリーンアップツールです — 残留ファイルスキャン付きの強制削除、削除前の安全な隔離、ディスクマッピング、ワンクリックのジャンククリーンアップ。'
+      },
+      automation: {
+        title: '自動化',
+        description: 'Prune が開いている間だけ実行されます。休止中のマシンを起こすことはできません — コンピューターの電源が切れている間に過ぎた時間帯は、静かにスキップされるのではなく見逃されたと報告され、次にアプリを開いたときに実行されます。',
+        scheduled: 'スケジュール済み',
+        off: 'オフ',
+        howOften: '頻度',
+        day: '曜日',
+        at: '時刻',
+        whatItDoes: '実行内容',
+        everyDay: '毎日',
+        everyWeek: '毎週',
+        measureOnly: '測定のみ',
+        clean: 'クリーンアップ',
+        cleanWarning: 'これは誰も見ていない状態でファイルを削除します。ディープクリーンが推奨し、実際に中身があるルールをクリーンアップし、すべてはそれでも隔離場所に送られます — これをオンのままにする前に、上の保持設定を確認してください。',
+        nextRun: '次回の実行:',
+        lastRun: '前回の実行:',
+        weekdays: {
+          sunday: '日曜日', monday: '月曜日', tuesday: '火曜日', wednesday: '水曜日',
+          thursday: '木曜日', friday: '金曜日', saturday: '土曜日'
+        }
+      }
+    },
     dashboard: {
       scheduleBadge: {
         missed: (count) => `このPCの電源が切れている間に、予定されていた実行が${count}回スキップされました`,
@@ -7125,7 +9954,156 @@ export const CATALOG = {
       quarantine: '격리', settings: '설정', startup: '시작 프로그램',
       duplicates: '중복 파일', deepClean: '딥 클린'
     },
-    settings: { language: { title: '언어', description: 'Prune 자체 화면이 표시되는 언어입니다.' } },
+    settings: {
+      language: { title: '언어', description: 'Prune 자체 화면이 표시되는 언어입니다.' },
+      tabs: { general: '일반', uninstall: '제거', cleanup: '정리', about: '정보' },
+      title: '설정',
+      loading: '설정을 불러오는 중…',
+      loadError: (error) => `설정을 불러올 수 없습니다: ${error}`,
+      saveError: (error) => `저장할 수 없습니다: ${error}`,
+      appearance: {
+        title: '모양',
+        description: 'Aurora Deck는 어두운 모드 또는 밝은 모드로 표시됩니다. 둘 다 하나를 반전시킨 것이 아니라 실제 팔레트입니다. 강조 색상은 밝은 배경을 위해 더 어두워져서 버튼이 흰색 텍스트를 유지할 수 있으며, 각 단계는 실제로 놓이는 표면에 맞춰 측정되었습니다. Prune은 여기서 선택하기 전까지 시스템 설정을 따릅니다.'
+      },
+      minimizeToTray: {
+        title: '시스템 트레이로 최소화',
+        description: '창을 닫으면 Prune이 종료되지 않고 시스템 트레이로 이동합니다.'
+      },
+      updateCheck: {
+        title: '업데이트 확인',
+        description: '하루에 한 번 Prune은 api.github.com에 더 최신 버전이 있는지 묻습니다. 이것은 Prune이 이 컴퓨터가 아닌 다른 곳으로 보내는 유일한 요청이며, GitHub는 다른 웹사이트와 마찬가지로 당신의 IP 주소를 봅니다. 새 버전이 있으면 사이드바 하단에 업데이트 버튼이 나타나며, 클릭하기 전까지는 아무것도 다운로드되거나 설치되지 않습니다.'
+      },
+      autoInstallUpdates: {
+        title: '업데이트 자동 설치',
+        description: '업데이트 버튼을 클릭할 때까지 기다리지 않고 백그라운드에서 새 버전을 다운로드하고 다음에 Prune이 닫힐 때 설치합니다. 위의 업데이트 확인이 필요합니다.'
+      },
+      updateStatus: {
+        checking: '확인 중…',
+        loadError: (error) => `업데이트를 확인할 수 없습니다: ${error}`,
+        newerAvailable: (version) => `Prune ${version}을(를) 사용할 수 있습니다.`,
+        openDownloadPage: '다운로드 페이지 열기',
+        upToDate: (version) => `최신 버전을 사용 중입니다 (${version}).`,
+        openPageError: (error) => `페이지를 열 수 없습니다: ${error}`
+      },
+      showFreeSpace: {
+        title: '디스크 맵에 여유 공간 표시',
+        description: '전체 드라이브를 스캔할 때 드라이브의 여유 공간을 하나의 추가 블록으로 그려서, 각 폴더가 사용 중인 공간이 아닌 드라이브의 비율로 표시되도록 합니다.'
+      },
+      autoQuarantine: {
+        title: '자동 격리',
+        description: '심층 정리는 제거하는 항목을 Prune의 격리 공간으로 이동하며, 그곳에서 되돌릴 수 있습니다. 이 기능을 끄면 대신 Windows 휴지통으로 이동합니다 — 여전히 복구 가능하지만, 이미 비우는 방법을 알고 있는 곳일 뿐입니다.'
+      },
+      skipRecent: {
+        title: '최근 파일은 건드리지 않기',
+        description: '지난 몇 시간 동안 수정된 모든 항목을 건너뜁니다. 임시 폴더에서는 지금 작성 중인 파일이 2년 전에 방치된 파일과 정확히 똑같아 보입니다 — 이것이 반쯤 완료된 설치가 쓸려나가는 것을 막아줍니다. 0으로 설정하면 이 기능이 꺼집니다.',
+        hoursUnit: '시간',
+        ariaLabel: '최근 파일을 건드리지 않을 시간'
+      },
+      restorePointCleanup: {
+        title: '먼저 복원 지점 만들기',
+        description: '강제 제거 전에 Windows 자체가 컴퓨터를 되돌릴 수 있도록 합니다. 몇 초가 걸리며, 시스템 보호가 꺼져 있으면 아무 작업도 하지 않습니다.'
+      },
+      hideUnavailable: {
+        title: '해당하지 않는 클리너 숨기기',
+        description: '목록 대부분은 이 컴퓨터에 없는 소프트웨어용입니다. 이들을 숨기면 실제로 여기 있는 것만 남습니다.'
+      },
+      quarantineRetention: {
+        title: '실행 취소를 보관할 기간',
+        description: 'Prune이 제거하는 모든 것은 먼저 격리 공간으로 이동하며, 비울 때까지 그곳에 남아 있습니다. 그보다 오래된 백업을 삭제할 일수를 설정하세요. 영원히 보관하려면 비워 두세요.',
+        neverPlaceholder: '안 함',
+        daysUnit: '일',
+        ariaLabel: '격리 백업을 보관할 일수'
+      },
+      quarantineMaxSize: {
+        title: '보관할 실행 취소 양',
+        description: '전체 격리 폴더에 대한 상한선입니다. 이를 초과하면 가장 오래된 백업이 먼저 사라집니다 — 가장 최근 것은 절대 삭제되지 않으므로, 방금 제거한 큰 항목은 그 자체가 상한선보다 크더라도 복구 가능한 상태로 유지됩니다. 제한 없이 하려면 비워 두세요.',
+        noLimitPlaceholder: '제한 없음',
+        gbUnit: 'GB',
+        ariaLabel: '기가바이트 단위의 최대 격리 크기'
+      },
+      exclusions: {
+        title: '폴더 제외',
+        description: 'Prune이 건드리지 않을 폴더와 파일 유형입니다 — 심층 정리에서 건너뛰고 디스크 맵에서 제외됩니다 — 이미 보호하고 있는 것들(시스템 볼륨 정보, 백신 격리 공간, 구성 요소 저장소 등 12개 이상) 외에 추가로 지정할 수 있습니다.',
+        ariaLabel: '제외할 폴더 경로 또는 파일 유형',
+        add: '추가',
+        invalidFormat: '전체 폴더 경로(D:\\Games) 또는 파일 유형(*.iso)을 입력하세요.',
+        formatHint: '전체 폴더 경로 또는 *.iso와 같이 작성된 파일 유형',
+        none: '제외된 것이 없습니다.',
+        typeBadge: '유형',
+        folderBadge: '폴더',
+        removeAriaLabel: (value) => `${value} 제외 중지`
+      },
+      sandboxTest: {
+        title: '샌드박스 테스트',
+        description: '실제 정리 엔진을 일회용 임시 디렉터리에서만 실행합니다 — 실제 Temp, Windows Temp, 썸네일 캐시에서는 절대 실행하지 않습니다 — 실제 파일에 신뢰하기 전에 스캔과 삭제가 실제로 작동하는지 증명합니다.',
+        run: '샌드박스 테스트 실행',
+        running: '실행 중…',
+        allPassed: '모든 검사 통과',
+        failed: '샌드박스 테스트 실패'
+      },
+      warningConfirmations: {
+        title: '경고 확인',
+        allAsk: '데이터를 잃는 모든 클리너는 실행 전에 물어봅니다.',
+        someSet: (count) => `정리 경고 ${count}개가 다시 묻지 않도록 설정되었습니다.`,
+        reset: '경고 확인 재설정'
+      },
+      uninstallTab: {
+        beforeHeading: '제거 전',
+        restorePointUninstall: {
+          title: '제거 전 복원 지점 만들기',
+          description: '프로그램의 제거 프로그램이 실행되기 전에 만들어지는 Windows 자체의 시스템 복원입니다. Prune이 관리자로 실행되어야 하며 Windows는 하루에 하나만 허용하므로, 만들 수 없는 경우 제거가 계속 진행되고 대화 상자에 그 사실이 표시됩니다.'
+        },
+        registryBackup: {
+          title: '제거 전 레지스트리 백업',
+          description: 'HKLM\\SOFTWARE와 HKCU\\Software를 내보내고(Prune이 빌드되는 컴퓨터에서 약 140MB) 최신 3개를 보관합니다. 백업을 만들 수 없으면 제거가 실행되지 않습니다.'
+        },
+        afterHeading: '제거 후',
+        scanLeftovers: {
+          title: '제거 후 남은 항목 검사',
+          description: '제거 프로그램이 남긴 파일, 레지스트리 키, 예약된 작업을 찾습니다. 꺼져 있으면 Prune은 단순히 프로그램 자체의 제거 프로그램만 실행하고 거기서 멈춥니다.'
+        },
+        preselect: {
+          title: '기본적으로 모든 남은 항목 선택',
+          description: '검토 화면은 발견된 모든 항목이 선택된 상태로 열립니다. 꺼져 있으면 아무것도 선택되지 않은 상태로 열리고 직접 선택합니다.'
+        },
+        keepHistory: {
+          title: '제거 기록 유지',
+          description: '최근 제거 항목과 확보된 공간에 대한 대시보드 목록입니다. 꺼져 있으면 새로 기록되는 것이 없습니다.'
+        },
+        destinationHeading: '남은 파일이 이동하는 위치',
+        leftoverOptions: {
+          quarantine: { label: '격리 공간', description: 'Prune 자체 백업으로 이동되며, 격리 화면에서 복구할 수 있습니다. 기본값입니다.' },
+          recycle: { label: '휴지통', description: 'Windows 자체 휴지통에서 복구할 수 있으며, 비우면 공간이 확보됩니다.' },
+          permanent: { label: '영구 삭제', description: '완전히 삭제됩니다. 복원할 것이 없습니다.' }
+        },
+        permanentWarning: '남은 파일은 완전히 삭제되며 격리 공간이나 다른 어느 곳에서도 복원할 수 없습니다. 확인하기 전에 목록을 검토하세요.',
+        registryNote: '레지스트리 키는 선택과 관계없이 제거되기 전에 격리 공간으로 내보내집니다.'
+      },
+      about: {
+        description: 'Windows용 로컬 오프라인 제거 및 정리 도구입니다 — 남은 파일 검사가 포함된 강제 제거, 삭제 전 안전한 격리, 디스크 매핑, 원클릭 잡동사니 정리.'
+      },
+      automation: {
+        title: '자동화',
+        description: 'Prune이 열려 있는 동안에만 실행됩니다. 잠자는 컴퓨터를 깨울 수는 없습니다 — 컴퓨터가 꺼져 있는 동안 지나간 시간대는 조용히 건너뛰는 대신 놓친 것으로 보고되며, 다음에 앱을 열 때 따라잡습니다.',
+        scheduled: '예약됨',
+        off: '꺼짐',
+        howOften: '빈도',
+        day: '요일',
+        at: '시간',
+        whatItDoes: '수행 작업',
+        everyDay: '매일',
+        everyWeek: '매주',
+        measureOnly: '측정만',
+        clean: '정리',
+        cleanWarning: '아무도 지켜보지 않는 상태에서 파일을 제거합니다. 심층 정리가 권장하고 실제로 내용이 있는 규칙을 정리하며, 모든 것은 여전히 격리 공간으로 이동합니다 — 이 기능을 켜 두기 전에 위의 보관 설정을 확인하세요.',
+        nextRun: '다음 실행:',
+        lastRun: '마지막 실행:',
+        weekdays: {
+          sunday: '일요일', monday: '월요일', tuesday: '화요일', wednesday: '수요일',
+          thursday: '목요일', friday: '금요일', saturday: '토요일'
+        }
+      }
+    },
     dashboard: {
       scheduleBadge: {
         missed: (count) => `이 PC가 꺼져 있는 동안 예약된 실행 ${count}건을 놓쳤습니다`,
@@ -7498,7 +10476,156 @@ export const CATALOG = {
       quarantine: 'Karantinas', settings: 'Nustatymai', startup: 'Paleistis',
       duplicates: 'Dublikatai', deepClean: 'Kruopštus valymas'
     },
-    settings: { language: { title: 'Kalba', description: 'Kalba, kuria rodomi paties „Prune“ ekranai.' } },
+    settings: {
+      language: { title: 'Kalba', description: 'Kalba, kuria rodomi paties „Prune“ ekranai.' },
+      tabs: { general: 'Bendra', uninstall: 'Šalinimas', cleanup: 'Valymas', about: 'Apie' },
+      title: 'Nustatymai',
+      loading: 'Įkeliami nustatymai…',
+      loadError: (error) => `Nepavyko įkelti nustatymų: ${error}`,
+      saveError: (error) => `Nepavyko išsaugoti: ${error}`,
+      appearance: {
+        title: 'Išvaizda',
+        description: 'Aurora Deck tamsiu arba šviesiu režimu. Abu yra tikros paletės, o ne viena apversta: akcentinė spalva patamsėja šviesiam fonui, kad mygtukas galėtų išlaikyti baltą tekstą, ir kiekvienas lygis buvo matuojamas pagal paviršius, ant kurių jis iš tikrųjų remiasi. Prune seka jūsų sistemos nustatymu, kol čia pasirinksite vieną.'
+      },
+      minimizeToTray: {
+        title: 'Sumažinti į dėklą',
+        description: 'Lango uždarymas išsiunčia Prune į sistemos dėklą, o ne uždaro jį.'
+      },
+      updateCheck: {
+        title: 'Tikrinti atnaujinimus',
+        description: 'Kartą per dieną Prune paklausia api.github.com, ar yra naujesnė versija. Tai vienintelis prašymas, kurį Prune siunčia bet kur kitur, ne tik į šį kompiuterį, ir GitHub mato jūsų IP adresą taip pat, kaip bet kuri svetainė. Kai naujesnė versija yra, šoninės juostos apačioje atsiranda atnaujinimo mygtukas, ir niekas nesisiunčia ar nediegiama, kol jo nepaspausite.'
+      },
+      autoInstallUpdates: {
+        title: 'Diegti atnaujinimus automatiškai',
+        description: 'Atsisiunčia naują versiją fone ir įdiegia ją kitą kartą uždarius Prune, užuot laukus, kol paspausite atnaujinimo mygtuką. Reikalauja aukščiau esančio atnaujinimų tikrinimo.'
+      },
+      updateStatus: {
+        checking: 'Tikrinama…',
+        loadError: (error) => `Nepavyko patikrinti atnaujinimų: ${error}`,
+        newerAvailable: (version) => `Prieinama Prune ${version}.`,
+        openDownloadPage: 'Atidaryti atsisiuntimo puslapį',
+        upToDate: (version) => `Turite naujausią versiją (${version}).`,
+        openPageError: (error) => `Nepavyko atidaryti puslapio: ${error}`
+      },
+      showFreeSpace: {
+        title: 'Rodyti laisvą vietą disko žemėlapyje',
+        description: 'Nuskaitant visą diską, piešia disko laisvą vietą kaip dar vieną bloką, todėl kiekvienas aplankas skaitomas kaip disko, o ne naudojamos vietos dalis.'
+      },
+      autoQuarantine: {
+        title: 'Automatinis karantinas',
+        description: 'Gilus valymas perkelia tai, ką pašalina, į Prune karantiną, iš kur galite tai grąžinti. Išjunkite tai, ir vietoj to tai keliaus į Windows šiukšlinę — vis dar atkuriama, tik vietoje, kurią jau mokate ištuštinti.'
+      },
+      skipRecent: {
+        title: 'Palikite naujausius failus ramybėje',
+        description: 'Praleidžia viską, kas modifikuota per pastarąsias valandas. Laikinajame aplanke dabar rašomas failas atrodo lygiai taip pat kaip prieš dvejus metus paliktas — tai neleidžia nušluoti pusiau baigto diegimo. 0 tai išjungia.',
+        hoursUnit: 'valandos',
+        ariaLabel: 'Valandos, per kurias palikti naujausius failus ramybėje'
+      },
+      restorePointCleanup: {
+        title: 'Pirma sukurti atkūrimo tašką',
+        description: 'Prieš priverstinį šalinimą, kad pats „Windows“ galėtų grąžinti kompiuterį atgal. Kainuoja kelias sekundes ir visiškai nieko nedaro, jei sistemos apsauga išjungta.'
+      },
+      hideUnavailable: {
+        title: 'Slėpti netinkamus valytojus',
+        description: 'Didžioji sąrašo dalis skirta programinei įrangai, kurios šiame kompiuteryje nėra. Jų paslėpimas palieka tik tai, kas iš tikrųjų čia yra.'
+      },
+      quarantineRetention: {
+        title: 'Kiek laiko saugoti atšaukimą',
+        description: 'Viskas, ką Prune pašalina, pirmiausia patenka į karantiną ir ten lieka, kol jį ištuštinsite. Nustatykite dienų skaičių, kad atmestumėte senesnes nei tai atsargines kopijas. Palikite tuščią, kad išsaugotumėte jas amžinai.',
+        neverPlaceholder: 'Niekada',
+        daysUnit: 'dienos',
+        ariaLabel: 'Dienos, per kurias saugoti karantino atsargines kopijas'
+      },
+      quarantineMaxSize: {
+        title: 'Kiek atšaukimo saugoti',
+        description: 'Riba visam karantino aplankui. Ją viršijus, seniausios atsarginės kopijos dingsta pirmiausia — naujausia niekada nemetama, todėl kažkas didelio, ką ką tik pašalinote, lieka atkuriama, net jei tai vienas pats yra didesnis už ribą. Palikite tuščią, jei ribos nereikia.',
+        noLimitPlaceholder: 'Be ribos',
+        gbUnit: 'GB',
+        ariaLabel: 'Maksimalus karantino dydis gigabaitais'
+      },
+      exclusions: {
+        title: 'Neįtraukti aplankų',
+        description: 'Aplankai ir failų tipai, kuriuos Prune paliks ramybėje — praleidžiami Gilaus valymo ir neįtraukiami į disko žemėlapį — be tų, kuriuos jau saugo: sistemos tomo informacija, antivirusinių programų karantinai, komponentų saugykla ir dar tuzinas kitų.',
+        ariaLabel: 'Neįtrauktinas aplanko kelias arba failo tipas',
+        add: 'Pridėti',
+        invalidFormat: 'Įrašykite pilną aplanko kelią (D:\\Games) arba failo tipą (*.iso).',
+        formatHint: 'Pilnas aplanko kelias arba failo tipas, parašytas kaip *.iso',
+        none: 'Nieko neįtraukta.',
+        typeBadge: 'Tipas',
+        folderBadge: 'Aplankas',
+        removeAriaLabel: (value) => `Nebeneįtraukti ${value}`
+      },
+      sandboxTest: {
+        title: 'Smėlio dėžės testas',
+        description: 'Paleidžia tikrą valymo variklį tik prieš vienkartinį laikiną katalogą — niekada prieš jūsų tikrąjį Temp, Windows Temp ar miniatiūrų talpyklą — kad įrodytų, jog nuskaitymas ir trynimas tikrai veikia, prieš pasitikint jais su tikrais failais.',
+        run: 'Paleisti smėlio dėžės testą',
+        running: 'Vykdoma…',
+        allPassed: 'Visi patikrinimai sėkmingi',
+        failed: 'Smėlio dėžės testas nepavyko'
+      },
+      warningConfirmations: {
+        title: 'Įspėjimų patvirtinimai',
+        allAsk: 'Kiekvienas duomenis prarandantis valytojas klausia prieš paleidžiant.',
+        someSet: (count) => `${count} valymo įspėjimai nustatyti daugiau neklausti.`,
+        reset: 'Atkurti įspėjimų patvirtinimus'
+      },
+      uninstallTab: {
+        beforeHeading: 'Prieš šalinant',
+        restorePointUninstall: {
+          title: 'Sukurti atkūrimo tašką prieš šalinant',
+          description: 'Paties „Windows“ sistemos atkūrimas, sukurtas prieš paleidžiant programos šalinimo priemonę. Reikia, kad Prune veiktų administratoriaus teisėmis, o „Windows“ leidžia vieną per dieną, todėl kai jo negalima sukurti, šalinimas tęsiasi ir dialogo lange tai nurodoma.'
+        },
+        registryBackup: {
+          title: 'Sukurti registro atsarginę kopiją prieš šalinant',
+          description: 'Eksportuoja HKLM\\SOFTWARE ir HKCU\\Software (apie 140 MB kompiuteryje, kuriame kuriamas Prune) ir saugo 3 naujausias. Jei atsarginės kopijos sukurti nepavyksta, šalinimas nevykdomas.'
+        },
+        afterHeading: 'Po šalinimo',
+        scanLeftovers: {
+          title: 'Ieškoti liekanų po šalinimo',
+          description: 'Ieško failų, registro raktų ir suplanuotų užduočių, kurias paliko šalinimo priemonė. Išjungus, Prune tiesiog paleidžia pačios programos šalinimo priemonę ir ten sustoja.'
+        },
+        preselect: {
+          title: 'Pagal numatytuosius nustatymus pažymėti kiekvieną likutį',
+          description: 'Peržiūra atsidaro su viskuo, kas rasta, pažymėta. Išjungus, ji atsidaro be nieko pažymėta ir jūs renkatės.'
+        },
+        keepHistory: {
+          title: 'Saugoti šalinimo istoriją',
+          description: 'Skydelio naujausių pašalinimų ir jų atlaisvintos vietos sąrašas. Išjungus, nieko naujo neįrašoma.'
+        },
+        destinationHeading: 'Likę failai keliauja į',
+        leftoverOptions: {
+          quarantine: { label: 'Karantinas', description: 'Perkelta į paties Prune atsarginę kopiją ir atkuriama iš karantino ekrano. Numatytoji parinktis.' },
+          recycle: { label: 'Šiukšlinė', description: 'Atkuriama iš paties „Windows“ šiukšlinės ir atlaisvinama, kai ją ištuštinate.' },
+          permanent: { label: 'Ištrinti negrįžtamai', description: 'Visiškai ištrinta. Nėra ką atkurti.' }
+        },
+        permanentWarning: 'Likę failai bus visiškai ištrinti ir jų negalima atkurti nei iš karantino, nei iš kur kitur. Peržiūrėkite sąrašą prieš patvirtindami.',
+        registryNote: 'Registro raktai eksportuojami į karantiną prieš juos pašalinant, nepriklausomai nuo jūsų pasirinkimo.'
+      },
+      about: {
+        description: 'Vietinis, neprisijungęs prie interneto šalinimo ir valymo įrankis „Windows“ — priverstinis šalinimas su liekanų failų nuskaitymu, saugus karantinas prieš trynimą, disko žemėlapio sudarymas ir šiukšlių valymas vienu paspaudimu.'
+      },
+      automation: {
+        title: 'Automatizavimas',
+        description: 'Veikia, kol Prune yra atidarytas. Jis negali pažadinti miegančio kompiuterio — laiko langas, praeinantis kol kompiuteris išjungtas, pranešamas kaip praleistas, o ne tyliai apeinamas, ir pasivijamas kitą kartą atidarius programą.',
+        scheduled: 'Suplanuota',
+        off: 'Išjungta',
+        howOften: 'Kaip dažnai',
+        day: 'Diena',
+        at: 'Val.',
+        whatItDoes: 'Ką tai daro',
+        everyDay: 'Kasdien',
+        everyWeek: 'Kas savaitę',
+        measureOnly: 'Tik matuoti',
+        clean: 'Valyti',
+        cleanWarning: 'Tai pašalina failus niekam nestebint. Tai išvalo taisykles, kurias rekomenduoja Gilus valymas ir kuriose iš tikrųjų kažkas yra, ir viskas vis tiek patenka į karantiną — todėl prieš palikdami tai įjungtą, patikrinkite aukščiau esantį saugojimo nustatymą.',
+        nextRun: 'Kitas vykdymas:',
+        lastRun: 'Paskutinis vykdymas:',
+        weekdays: {
+          sunday: 'Sekmadienis', monday: 'Pirmadienis', tuesday: 'Antradienis', wednesday: 'Trečiadienis',
+          thursday: 'Ketvirtadienis', friday: 'Penktadienis', saturday: 'Šeštadienis'
+        }
+      }
+    },
     dashboard: {
       scheduleBadge: {
         missed: (count) => `Praleista ${count} suplanuota${count === 1 ? '' : 'i'} vykdymo${count === 1 ? '' : 'ų'}, kol šis kompiuteris buvo išjungtas`,
@@ -7871,7 +10998,156 @@ export const CATALOG = {
       quarantine: 'Kuarantin', settings: 'Tetapan', startup: 'Permulaan',
       duplicates: 'Pendua', deepClean: 'Pembersihan Menyeluruh'
     },
-    settings: { language: { title: 'Bahasa', description: 'Bahasa yang digunakan untuk memaparkan skrin Prune sendiri.' } },
+    settings: {
+      language: { title: 'Bahasa', description: 'Bahasa yang digunakan untuk memaparkan skrin Prune sendiri.' },
+      tabs: { general: 'Umum', uninstall: 'Nyahpasang', cleanup: 'Pembersihan', about: 'Perihal' },
+      title: 'Tetapan',
+      loading: 'Memuatkan tetapan…',
+      loadError: (error) => `Tidak dapat memuatkan tetapan: ${error}`,
+      saveError: (error) => `Tidak dapat menyimpan: ${error}`,
+      appearance: {
+        title: 'Rupa',
+        description: 'Aurora Deck dalam gelap atau siang hari. Kedua-duanya adalah palet sebenar bukannya satu yang diterbalikkan: warna aksen menjadi lebih gelap untuk latar cerah supaya butang boleh mengekalkan teks putih, dan setiap tahap diukur berdasarkan permukaan tempat ia sebenarnya berada. Prune mengikut tetapan sistem anda sehingga anda memilih satu di sini.'
+      },
+      minimizeToTray: {
+        title: 'Kecilkan ke dulang sistem',
+        description: 'Menutup tetingkap menghantar Prune ke dulang sistem dan bukannya keluar.'
+      },
+      updateCheck: {
+        title: 'Semak kemas kini',
+        description: 'Sekali sehari, Prune bertanya api.github.com sama ada versi lebih baharu wujud. Ini satu-satunya permintaan yang Prune buat ke mana-mana selain komputer ini, dan GitHub melihat alamat IP anda seperti mana-mana laman web. Apabila ada satu, butang kemas kini muncul di bahagian bawah bar sisi, dan tiada apa dimuat turun atau dipasang sehingga anda mengklik butang itu.'
+      },
+      autoInstallUpdates: {
+        title: 'Pasang kemas kini secara automatik',
+        description: 'Memuat turun versi baharu di latar belakang dan memasangnya pada kali seterusnya Prune ditutup, dan bukannya menunggu anda mengklik butang kemas kini. Memerlukan semakan kemas kini di atas.'
+      },
+      updateStatus: {
+        checking: 'Menyemak…',
+        loadError: (error) => `Tidak dapat menyemak kemas kini: ${error}`,
+        newerAvailable: (version) => `Prune ${version} tersedia.`,
+        openDownloadPage: 'Buka halaman muat turun',
+        upToDate: (version) => `Anda menggunakan versi terkini (${version}).`,
+        openPageError: (error) => `Tidak dapat membuka halaman: ${error}`
+      },
+      showFreeSpace: {
+        title: 'Tunjukkan ruang bebas pada Peta Cakera',
+        description: 'Melukis ruang bebas pemacu sebagai satu lagi blok apabila anda mengimbas keseluruhan pemacu, supaya setiap folder dibaca sebagai bahagian pemacu dan bukannya ruang yang digunakan.'
+      },
+      autoQuarantine: {
+        title: 'Kuarantin automatik',
+        description: 'Pembersihan Mendalam memindahkan apa yang dikeluarkan ke Kuarantin Prune, dari mana anda boleh mengembalikannya. Matikan ini dan ia akan pergi ke Tong Kitar Semula Windows sebagai gantinya — masih boleh dipulihkan, cuma di tempat yang anda sudah tahu cara mengosongkannya.'
+      },
+      skipRecent: {
+        title: 'Biarkan fail terkini',
+        description: 'Melangkau apa-apa yang diubah suai dalam beberapa jam yang lalu. Dalam folder sementara, fail yang sedang ditulis sekarang kelihatan sama persis seperti yang ditinggalkan dua tahun lalu — ini yang menghalang pemasangan separuh siap daripada disapu bersih. 0 mematikan ini.',
+        hoursUnit: 'jam',
+        ariaLabel: 'Jam untuk membiarkan fail terkini'
+      },
+      restorePointCleanup: {
+        title: 'Cipta titik pemulihan dahulu',
+        description: 'Sebelum penyingkiran paksa, supaya Windows sendiri boleh mengembalikan komputer. Mengambil masa beberapa saat, dan tidak melakukan apa-apa jika Perlindungan Sistem dimatikan.'
+      },
+      hideUnavailable: {
+        title: 'Sembunyikan pembersih yang tidak berkenaan',
+        description: 'Sebahagian besar senarai adalah untuk perisian yang tiada pada komputer ini. Menyembunyikannya hanya meninggalkan apa yang sebenarnya ada di sini.'
+      },
+      quarantineRetention: {
+        title: 'Berapa lama untuk simpan buat asal',
+        description: 'Semua yang dikeluarkan Prune pergi ke Kuarantin dahulu, dan kekal di sana sehingga anda mengosongkannya. Tetapkan bilangan hari untuk membuang sandaran yang lebih lama daripada itu. Biarkan kosong untuk menyimpannya selama-lamanya.',
+        neverPlaceholder: 'Tidak sekali-kali',
+        daysUnit: 'hari',
+        ariaLabel: 'Hari untuk menyimpan sandaran kuarantin'
+      },
+      quarantineMaxSize: {
+        title: 'Berapa banyak buat asal untuk disimpan',
+        description: 'Had untuk keseluruhan folder Kuarantin. Melebihi itu, sandaran paling lama akan hilang dahulu — yang paling baharu tidak akan sesekali dibuang, jadi sesuatu yang besar yang baru anda keluarkan kekal boleh dipulihkan walaupun ia lebih besar daripada had itu sendiri. Biarkan kosong untuk tiada had.',
+        noLimitPlaceholder: 'Tiada had',
+        gbUnit: 'GB',
+        ariaLabel: 'Saiz maksimum kuarantin dalam gigabait'
+      },
+      exclusions: {
+        title: 'Kecualikan Folder',
+        description: 'Folder dan jenis fail yang akan dibiarkan oleh Prune — dilangkau oleh Pembersihan Mendalam dan dikecualikan daripada Peta Cakera — sebagai tambahan kepada yang sudah dilindungi: Maklumat Volum Sistem, kuarantin antivirus, stor komponen dan selusin lagi.',
+        ariaLabel: 'Laluan folder atau jenis fail untuk dikecualikan',
+        add: 'Tambah',
+        invalidFormat: 'Tulis laluan folder penuh (D:\\Games) atau jenis fail (*.iso).',
+        formatHint: 'Laluan folder penuh, atau jenis fail ditulis sebagai *.iso',
+        none: 'Tiada yang dikecualikan.',
+        typeBadge: 'Jenis',
+        folderBadge: 'Folder',
+        removeAriaLabel: (value) => `Berhenti mengecualikan ${value}`
+      },
+      sandboxTest: {
+        title: 'Ujian Sandbox',
+        description: 'Menjalankan enjin pembersihan sebenar hanya terhadap direktori sementara sekali guna — bukan Temp sebenar, Temp Windows, atau cache lakaran kecil anda — untuk membuktikan bahawa imbasan dan pemadaman benar-benar berfungsi sebelum anda mempercayakannya dengan fail sebenar.',
+        run: 'Jalankan Ujian Sandbox',
+        running: 'Berjalan…',
+        allPassed: 'Semua semakan berjaya',
+        failed: 'Ujian sandbox gagal'
+      },
+      warningConfirmations: {
+        title: 'Pengesahan amaran',
+        allAsk: 'Setiap pembersih yang kehilangan data akan bertanya sebelum ia berjalan.',
+        someSet: (count) => `${count} amaran pembersihan ditetapkan supaya tidak bertanya lagi.`,
+        reset: 'Set semula pengesahan amaran'
+      },
+      uninstallTab: {
+        beforeHeading: 'Sebelum menyahpasang',
+        restorePointUninstall: {
+          title: 'Cipta titik pemulihan sebelum menyahpasang',
+          description: 'Pemulihan Sistem Windows sendiri, dicipta sebelum penyahpasang program berjalan. Memerlukan Prune berjalan sebagai pentadbir dan Windows membenarkan satu setiap hari, jadi apabila ia tidak boleh dicipta, penyahpasangan diteruskan dan dialog menyatakannya.'
+        },
+        registryBackup: {
+          title: 'Sandarkan registri sebelum menyahpasang',
+          description: 'Mengeksport HKLM\\SOFTWARE dan HKCU\\Software (kira-kira 140 MB pada komputer tempat Prune dibina) dan menyimpan 3 yang terbaharu. Jika sandaran tidak boleh dicipta, penyahpasangan tidak berjalan.'
+        },
+        afterHeading: 'Selepas menyahpasang',
+        scanLeftovers: {
+          title: 'Imbas baki selepas menyahpasang',
+          description: 'Mencari fail, kekunci registri dan tugas berjadual yang ditinggalkan oleh penyahpasang. Dimatikan, Prune hanya menjalankan penyahpasang program itu sendiri dan berhenti di situ.'
+        },
+        preselect: {
+          title: 'Tandakan setiap baki secara lalai',
+          description: 'Semakan dibuka dengan semua yang ditemui ditanda. Dimatikan, ia dibuka tanpa apa-apa yang ditanda dan anda memilih.'
+        },
+        keepHistory: {
+          title: 'Simpan sejarah nyahpasang',
+          description: 'Senarai papan pemuka bagi penyingkiran terkini dan ruang yang dibebaskannya. Dimatikan, tiada yang baharu direkodkan.'
+        },
+        destinationHeading: 'Fail baki pergi ke',
+        leftoverOptions: {
+          quarantine: { label: 'Kuarantin', description: 'Dipindahkan ke sandaran Prune sendiri, dan boleh dipulihkan dari skrin Kuarantin. Lalai.' },
+          recycle: { label: 'Tong Kitar Semula', description: 'Boleh dipulihkan dari tong Windows sendiri, dan dibebaskan apabila anda mengosongkannya.' },
+          permanent: { label: 'Padam secara kekal', description: 'Dipadam sepenuhnya. Tiada yang boleh dipulihkan.' }
+        },
+        permanentWarning: 'Fail baki akan dipadam sepenuhnya dan tidak boleh dipulihkan, sama ada dari Kuarantin atau di mana-mana sahaja. Semak senarai sebelum mengesahkannya.',
+        registryNote: 'Kekunci registri dieksport ke Kuarantin sebelum dikeluarkan, walau apa pun pilihan anda.'
+      },
+      about: {
+        description: 'Alat penyahpasangan dan pembersihan tempatan, luar talian untuk Windows — penyingkiran paksa dengan imbasan fail baki, kuarantin selamat sebelum pemadaman, pemetaan cakera, dan pembersihan sampah satu klik.'
+      },
+      automation: {
+        title: 'Automasi',
+        description: 'Berjalan selagi Prune dibuka. Ia tidak boleh mengejutkan komputer yang tidur — tetingkap masa yang berlalu semasa komputer dimatikan dilaporkan sebagai terlepas dan bukannya dilangkau senyap, dan dikejar semula pada kali seterusnya anda membuka aplikasi.',
+        scheduled: 'Dijadualkan',
+        off: 'Mati',
+        howOften: 'Kekerapan',
+        day: 'Hari',
+        at: 'Pada',
+        whatItDoes: 'Apa yang dilakukan',
+        everyDay: 'Setiap hari',
+        everyWeek: 'Setiap minggu',
+        measureOnly: 'Ukur sahaja',
+        clean: 'Bersihkan',
+        cleanWarning: 'Ini mengeluarkan fail tanpa sesiapa memerhati. Ia membersihkan peraturan yang disyorkan oleh Pembersihan Mendalam dan yang sememangnya mempunyai sesuatu di dalamnya, dan semuanya tetap pergi ke kuarantin — jadi semak tetapan pengekalan di atas sebelum membiarkan ini dihidupkan.',
+        nextRun: 'Larian seterusnya:',
+        lastRun: 'Larian terakhir:',
+        weekdays: {
+          sunday: 'Ahad', monday: 'Isnin', tuesday: 'Selasa', wednesday: 'Rabu',
+          thursday: 'Khamis', friday: 'Jumaat', saturday: 'Sabtu'
+        }
+      }
+    },
     dashboard: {
       scheduleBadge: {
         missed: (count) => `${count} larian berjadual terlepas semasa PC ini dimatikan`,
@@ -8244,7 +11520,156 @@ export const CATALOG = {
       quarantine: 'Karantene', settings: 'Innstillinger', startup: 'Oppstart',
       duplicates: 'Duplikater', deepClean: 'Grundig opprydding'
     },
-    settings: { language: { title: 'Språk', description: 'Språket Prunes egne skjermer vises på.' } },
+    settings: {
+      language: { title: 'Språk', description: 'Språket Prunes egne skjermer vises på.' },
+      tabs: { general: 'Generelt', uninstall: 'Avinstaller', cleanup: 'Opprydding', about: 'Om' },
+      title: 'Innstillinger',
+      loading: 'Laster innstillinger…',
+      loadError: (error) => `Kunne ikke laste innstillinger: ${error}`,
+      saveError: (error) => `Kunne ikke lagre: ${error}`,
+      appearance: {
+        title: 'Utseende',
+        description: 'Aurora Deck i mørk eller lys modus. Begge er ekte paletter i stedet for én invertert: aksentfargen mørkner for den lyse bakgrunnen slik at en knapp kan beholde hvit tekst, og hvert nivå ble målt mot flatene den faktisk ligger på. Prune følger systeminnstillingen din til du velger en her.'
+      },
+      minimizeToTray: {
+        title: 'Minimer til systemstatusfelt',
+        description: 'Å lukke vinduet sender Prune til systemstatusfeltet i stedet for å avslutte det.'
+      },
+      updateCheck: {
+        title: 'Se etter oppdateringer',
+        description: 'Én gang om dagen spør Prune api.github.com om en nyere versjon finnes. Det er den eneste forespørselen Prune gjør til noe annet enn denne maskinen, og GitHub ser IP-adressen din slik alle nettsteder ville gjort. Når det finnes en, vises en oppdateringsknapp nederst i sidefeltet, og ingenting lastes ned eller installeres før du klikker på den.'
+      },
+      autoInstallUpdates: {
+        title: 'Installer oppdateringer automatisk',
+        description: 'Laster ned en ny versjon i bakgrunnen og installerer den neste gang Prune lukkes, i stedet for å vente på at du klikker oppdateringsknappen. Krever oppdateringssjekken ovenfor.'
+      },
+      updateStatus: {
+        checking: 'Sjekker…',
+        loadError: (error) => `Kunne ikke sjekke etter oppdateringer: ${error}`,
+        newerAvailable: (version) => `Prune ${version} er tilgjengelig.`,
+        openDownloadPage: 'Åpne nedlastingssiden',
+        upToDate: (version) => `Du har den nyeste versjonen (${version}).`,
+        openPageError: (error) => `Kunne ikke åpne siden: ${error}`
+      },
+      showFreeSpace: {
+        title: 'Vis ledig plass på Diskkartet',
+        description: 'Tegner stasjonens ledige plass som enda en blokk når du skanner en hel stasjon, slik at hver mappe leses som en andel av stasjonen i stedet for av plassen som er i bruk.'
+      },
+      autoQuarantine: {
+        title: 'Automatisk karantene',
+        description: 'Dyprens flytter det den fjerner til Prunes karantene, hvor du kan legge det tilbake. Slå dette av, og det går i stedet til Windows Papirkurv — fortsatt gjenopprettbart, bare et sted du allerede vet hvordan du tømmer.'
+      },
+      skipRecent: {
+        title: 'La nylige filer være i fred',
+        description: 'Hopper over alt som er endret de siste timene. I en midlertidig mappe ser en fil som skrives akkurat nå nøyaktig ut som en som ble forlatt for to år siden — dette er det som hindrer en halvferdig installasjon fra å bli feid bort. 0 slår dette av.',
+        hoursUnit: 'timer',
+        ariaLabel: 'Timer å la nylige filer være i fred'
+      },
+      restorePointCleanup: {
+        title: 'Opprett et gjenopprettingspunkt først',
+        description: 'Før en tvungen fjerning, slik at Windows selv kan rulle tilbake maskinen. Koster noen sekunder, og gjør ingenting i det hele tatt hvis Systemgjenoppretting er slått av.'
+      },
+      hideUnavailable: {
+        title: 'Skjul renseprogrammer som ikke gjelder',
+        description: 'Mesteparten av listen er for programvare denne maskinen ikke har. Å skjule dem etterlater bare det som faktisk er her.'
+      },
+      quarantineRetention: {
+        title: 'Hvor lenge angring skal beholdes',
+        description: 'Alt Prune fjerner går først til Karantene, og blir der til du tømmer den. Angi et antall dager for å forkaste sikkerhetskopier eldre enn det. La stå tom for å beholde dem for alltid.',
+        neverPlaceholder: 'Aldri',
+        daysUnit: 'dager',
+        ariaLabel: 'Dager å beholde karantenesikkerhetskopier'
+      },
+      quarantineMaxSize: {
+        title: 'Hvor mye angring som skal beholdes',
+        description: 'Et tak for hele Karantene-mappen. Over det forsvinner de eldste sikkerhetskopiene først — den nyeste blir aldri forkastet, så noe stort du nettopp fjernet forblir gjenopprettbart selv om det er større enn taket alene. La stå tom for ingen grense.',
+        noLimitPlaceholder: 'Ingen grense',
+        gbUnit: 'GB',
+        ariaLabel: 'Maksimal karantenestørrelse i gigabyte'
+      },
+      exclusions: {
+        title: 'Ekskluder mapper',
+        description: 'Mapper og filtyper Prune vil la være i fred — hoppet over av Dyprens og utelatt fra Diskkartet — i tillegg til de den allerede beskytter: Systemvolumsinformasjon, antiviruskaranterne, komponentlageret og et dusin andre.',
+        ariaLabel: 'Mappesti eller filtype å ekskludere',
+        add: 'Legg til',
+        invalidFormat: 'Skriv en fullstendig mappesti (D:\\Games) eller en filtype (*.iso).',
+        formatHint: 'En fullstendig mappesti, eller en filtype skrevet som *.iso',
+        none: 'Ingenting ekskludert.',
+        typeBadge: 'Type',
+        folderBadge: 'Mappe',
+        removeAriaLabel: (value) => `Slutt å ekskludere ${value}`
+      },
+      sandboxTest: {
+        title: 'Sandkassetest',
+        description: 'Kjører den ekte opprydningsmotoren kun mot en engangs midlertidig mappe — aldri din faktiske Temp, Windows Temp, eller miniatyrbildebufferen — for å bevise at skanning og sletting faktisk fungerer før du stoler på dem med ekte filer.',
+        run: 'Kjør sandkassetest',
+        running: 'Kjører…',
+        allPassed: 'Alle kontroller bestått',
+        failed: 'Sandkassetesten mislyktes'
+      },
+      warningConfirmations: {
+        title: 'Advarselsbekreftelser',
+        allAsk: 'Hvert renseprogram som mister data spør før det kjører.',
+        someSet: (count) => `${count} opprydningsadvars${count === 1 ? 'el er satt' : 'ler er satt'} til å ikke spørre igjen.`,
+        reset: 'Tilbakestill advarselsbekreftelser'
+      },
+      uninstallTab: {
+        beforeHeading: 'Før avinstallering',
+        restorePointUninstall: {
+          title: 'Opprett et gjenopprettingspunkt før avinstallering',
+          description: 'Windows egen Systemgjenoppretting, laget før programmets avinstallasjonsprogram kjører. Krever at Prune kjører som administrator, og Windows tillater én per dag, så når det ikke kan lages, fortsetter avinstalleringen og dialogboksen sier det.'
+        },
+        registryBackup: {
+          title: 'Sikkerhetskopier registeret før avinstallering',
+          description: 'Eksporterer HKLM\\SOFTWARE og HKCU\\Software (ca. 140 MB på maskinen Prune er bygget på) og beholder de nyeste 3. Hvis sikkerhetskopien ikke kan lages, kjøres ikke avinstalleringen.'
+        },
+        afterHeading: 'Etter avinstallering',
+        scanLeftovers: {
+          title: 'Skann etter rester etter avinstallering',
+          description: 'Ser etter filene, registernøklene og planlagte oppgaver avinstallasjonsprogrammet etterlot seg. Av, kjører Prune bare programmets eget avinstallasjonsprogram og stopper der.'
+        },
+        preselect: {
+          title: 'Merk av for hver rest som standard',
+          description: 'Gjennomgangen åpnes med alt som ble funnet, merket av. Av, åpnes den uten noe merket av, og du velger.'
+        },
+        keepHistory: {
+          title: 'Behold en avinstalleringshistorikk',
+          description: 'Kontrollpanelets liste over nylige fjerninger og plassen de frigjorde. Av, registreres ingenting nytt.'
+        },
+        destinationHeading: 'Gjenværende filer går til',
+        leftoverOptions: {
+          quarantine: { label: 'Karantene', description: 'Flyttet til Prunes egen sikkerhetskopi, og gjenopprettbar fra Karantene-skjermen. Standardvalget.' },
+          recycle: { label: 'Papirkurven', description: 'Gjenopprettbar fra Windows egen papirkurv, og frigjort når du tømmer den.' },
+          permanent: { label: 'Slett permanent', description: 'Slettet helt. Ingenting å gjenopprette.' }
+        },
+        permanentWarning: 'Gjenværende filer vil bli slettet helt og kan ikke gjenopprettes, verken fra Karantene eller andre steder. Sjekk listen før du bekrefter den.',
+        registryNote: 'Registernøkler eksporteres til Karantene før de fjernes, uansett hva du velger.'
+      },
+      about: {
+        description: 'Et lokalt, frakoblet avinstallerings- og opprydningsverktøy for Windows — tvungen fjerning med skanning etter rester, trygg karantene før sletting, diskkartlegging og rusk-opprydding med ett klikk.'
+      },
+      automation: {
+        title: 'Automatisering',
+        description: 'Kjører mens Prune er åpen. Den kan ikke vekke en sovende maskin — et tidsvindu som passerer mens datamaskinen er avslått rapporteres som forbigått i stedet for stille hoppet over, og tas igjen neste gang du åpner appen.',
+        scheduled: 'Planlagt',
+        off: 'Av',
+        howOften: 'Hvor ofte',
+        day: 'Dag',
+        at: 'Klokken',
+        whatItDoes: 'Hva den gjør',
+        everyDay: 'Hver dag',
+        everyWeek: 'Hver uke',
+        measureOnly: 'Bare mål',
+        clean: 'Rens',
+        cleanWarning: 'Dette fjerner filer uten at noen overvåker det. Det renser reglene Dyprens anbefaler og som faktisk har noe i seg, og alt går fortsatt til karantene — så sjekk oppbevaringsinnstillingen ovenfor før du lar denne stå på.',
+        nextRun: 'Neste kjøring:',
+        lastRun: 'Siste kjøring:',
+        weekdays: {
+          sunday: 'Søndag', monday: 'Mandag', tuesday: 'Tirsdag', wednesday: 'Onsdag',
+          thursday: 'Torsdag', friday: 'Fredag', saturday: 'Lørdag'
+        }
+      }
+    },
     dashboard: {
       scheduleBadge: {
         missed: (count) => `${count} planlagt${count === 1 ? ' kjøring ble' : 'e kjøringer ble'} hoppet over mens denne PC-en var av`,
@@ -8617,7 +12042,156 @@ export const CATALOG = {
       quarantine: 'Quarantaine', settings: 'Instellingen', startup: 'Opstarten',
       duplicates: 'Duplicaten', deepClean: 'Grondige opschoning'
     },
-    settings: { language: { title: 'Taal', description: 'De taal waarin Prunes eigen schermen worden getoond.' } },
+    settings: {
+      language: { title: 'Taal', description: 'De taal waarin Prunes eigen schermen worden getoond.' },
+      tabs: { general: 'Algemeen', uninstall: 'Verwijderen', cleanup: 'Opschonen', about: 'Over' },
+      title: 'Instellingen',
+      loading: 'Instellingen laden…',
+      loadError: (error) => `Instellingen konden niet worden geladen: ${error}`,
+      saveError: (error) => `Kon niet opslaan: ${error}`,
+      appearance: {
+        title: 'Uiterlijk',
+        description: "Aurora Deck in donker of daglicht. Beide zijn echte paletten in plaats van één omgekeerde: de accentkleur wordt donkerder voor de lichte achtergrond zodat een knop witte tekst kan behouden, en elk niveau is gemeten aan de oppervlakken waarop het daadwerkelijk rust. Prune volgt je systeeminstelling totdat je hier een kiest."
+      },
+      minimizeToTray: {
+        title: 'Minimaliseren naar systeemvak',
+        description: 'Het venster sluiten stuurt Prune naar het systeemvak in plaats van het af te sluiten.'
+      },
+      updateCheck: {
+        title: 'Controleren op updates',
+        description: 'Eén keer per dag vraagt Prune aan api.github.com of er een nieuwere versie bestaat. Dit is het enige verzoek dat Prune ergens anders dan naar deze computer stuurt, en GitHub ziet je IP-adres zoals elke website dat zou doen. Als er een is, verschijnt er een update-knop onderaan de zijbalk, en er wordt niets gedownload of geïnstalleerd totdat je erop klikt.'
+      },
+      autoInstallUpdates: {
+        title: 'Updates automatisch installeren',
+        description: 'Downloadt een nieuwe versie op de achtergrond en installeert deze de volgende keer dat Prune wordt afgesloten, in plaats van te wachten tot je op de update-knop klikt. Vereist de update-controle hierboven.'
+      },
+      updateStatus: {
+        checking: 'Controleren…',
+        loadError: (error) => `Kon niet controleren op updates: ${error}`,
+        newerAvailable: (version) => `Prune ${version} is beschikbaar.`,
+        openDownloadPage: 'Downloadpagina openen',
+        upToDate: (version) => `Je hebt de nieuwste versie (${version}).`,
+        openPageError: (error) => `Kon de pagina niet openen: ${error}`
+      },
+      showFreeSpace: {
+        title: 'Vrije ruimte tonen op de Schijfkaart',
+        description: 'Tekent de vrije ruimte van de schijf als nog een blok wanneer je een hele schijf scant, zodat elke map leesbaar is als een aandeel van de schijf in plaats van de gebruikte ruimte.'
+      },
+      autoQuarantine: {
+        title: 'Automatische quarantaine',
+        description: 'Diepschoonmaak verplaatst wat het verwijdert naar Prune\'s Quarantaine, van waaruit je het kunt terugzetten. Zet dit uit en het gaat in plaats daarvan naar de Windows Prullenbak — nog steeds herstelbaar, alleen op een plek waarvan je al weet hoe je die leegmaakt.'
+      },
+      skipRecent: {
+        title: 'Recente bestanden met rust laten',
+        description: 'Slaat alles over dat in de afgelopen uren is gewijzigd. In een tijdelijke map ziet een bestand dat nu wordt geschreven er precies hetzelfde uit als een dat twee jaar geleden is achtergelaten — dit is wat voorkomt dat een half voltooide installatie wordt weggevaagd. 0 zet dit uit.',
+        hoursUnit: 'uur',
+        ariaLabel: 'Uren om recente bestanden met rust te laten'
+      },
+      restorePointCleanup: {
+        title: 'Eerst een herstelpunt maken',
+        description: 'Vóór een geforceerde verwijdering, zodat Windows zelf de computer kan terugdraaien. Kost een paar seconden en doet helemaal niets als Systeembeveiliging is uitgeschakeld.'
+      },
+      hideUnavailable: {
+        title: 'Niet-toepasselijke schoonmakers verbergen',
+        description: 'Het grootste deel van de lijst is voor software die deze computer niet heeft. Ze verbergen laat alleen over wat hier daadwerkelijk is.'
+      },
+      quarantineRetention: {
+        title: 'Hoe lang ongedaan maken bewaren',
+        description: 'Alles wat Prune verwijdert gaat eerst naar Quarantaine, en blijft daar totdat je het leegmaakt. Stel een aantal dagen in om back-ups ouder dan dat te laten vervallen. Laat leeg om ze voor altijd te bewaren.',
+        neverPlaceholder: 'Nooit',
+        daysUnit: 'dagen',
+        ariaLabel: 'Dagen om quarantaine-back-ups te bewaren'
+      },
+      quarantineMaxSize: {
+        title: 'Hoeveel ongedaan maken bewaren',
+        description: 'Een limiet voor de hele Quarantainemap. Daarboven verdwijnen de oudste back-ups eerst — de meest recente wordt nooit verwijderd, dus iets groots dat je net hebt verwijderd blijft herstelbaar, zelfs als het op zichzelf al groter is dan de limiet. Laat leeg voor geen limiet.',
+        noLimitPlaceholder: 'Geen limiet',
+        gbUnit: 'GB',
+        ariaLabel: 'Maximale quarantainegrootte in gigabytes'
+      },
+      exclusions: {
+        title: 'Mappen uitsluiten',
+        description: 'Mappen en bestandstypen die Prune met rust laat — overgeslagen door Diepschoonmaak en uitgesloten van de Schijfkaart — bovenop degene die het al beschermt: Systeemvolume-informatie, antivirusquarantaines, de onderdelenopslag en een tiental andere.',
+        ariaLabel: 'Uit te sluiten mappad of bestandstype',
+        add: 'Toevoegen',
+        invalidFormat: 'Schrijf een volledig mappad (D:\\Games) of een bestandstype (*.iso).',
+        formatHint: 'Een volledig mappad, of een bestandstype geschreven als *.iso',
+        none: 'Niets uitgesloten.',
+        typeBadge: 'Type',
+        folderBadge: 'Map',
+        removeAriaLabel: (value) => `${value} niet langer uitsluiten`
+      },
+      sandboxTest: {
+        title: 'Sandboxtest',
+        description: 'Voert de echte opschoonmotor alleen uit tegen een wegwerpbare tijdelijke map — nooit je eigenlijke Temp, Windows Temp, of de miniatuurcache — om te bewijzen dat scannen en verwijderen echt werken voordat je ze op echte bestanden vertrouwt.',
+        run: 'Sandboxtest uitvoeren',
+        running: 'Bezig…',
+        allPassed: 'Alle controles geslaagd',
+        failed: 'Sandboxtest mislukt'
+      },
+      warningConfirmations: {
+        title: 'Waarschuwingsbevestigingen',
+        allAsk: 'Elke schoonmaker die gegevens verliest vraagt om bevestiging voordat hij wordt uitgevoerd.',
+        someSet: (count) => `${count} opschoonwaarschuwing${count === 1 ? '' : 'en'} ingesteld om niet opnieuw te vragen.`,
+        reset: 'Waarschuwingsbevestigingen resetten'
+      },
+      uninstallTab: {
+        beforeHeading: 'Voor het verwijderen',
+        restorePointUninstall: {
+          title: 'Herstelpunt maken voor het verwijderen',
+          description: "Windows' eigen Systeemherstel, gemaakt voordat het verwijderprogramma van het programma wordt uitgevoerd. Vereist dat Prune als beheerder wordt uitgevoerd en Windows staat er één per dag toe, dus als het niet kan worden gemaakt, gaat de verwijdering door en meldt het dialoogvenster dit."
+        },
+        registryBackup: {
+          title: 'Register back-uppen voor het verwijderen',
+          description: "Exporteert HKLM\\SOFTWARE en HKCU\\Software (ongeveer 140 MB op de computer waarop Prune is gebouwd) en behoudt de nieuwste 3. Als de back-up niet kan worden gemaakt, wordt de verwijdering niet uitgevoerd."
+        },
+        afterHeading: 'Na het verwijderen',
+        scanLeftovers: {
+          title: 'Scannen op restanten na het verwijderen',
+          description: "Zoekt naar de bestanden, registersleutels en geplande taken die het verwijderprogramma heeft achtergelaten. Uit, voert Prune gewoon het eigen verwijderprogramma van het programma uit en stopt daar."
+        },
+        preselect: {
+          title: 'Elk restant standaard aanvinken',
+          description: 'De beoordeling opent met alles wat is gevonden aangevinkt. Uit, opent het zonder iets aangevinkt en kies je zelf.'
+        },
+        keepHistory: {
+          title: 'Een verwijderingsgeschiedenis bijhouden',
+          description: "De lijst van het dashboard met recente verwijderingen en de ruimte die ze hebben vrijgemaakt. Uit, wordt er niets nieuws vastgelegd."
+        },
+        destinationHeading: 'Overgebleven bestanden gaan naar',
+        leftoverOptions: {
+          quarantine: { label: 'Quarantaine', description: "Verplaatst naar Prune's eigen back-up, en herstelbaar vanaf het Quarantaine-scherm. De standaard." },
+          recycle: { label: 'De Prullenbak', description: "Herstelbaar vanuit Windows' eigen prullenbak, en vrijgemaakt wanneer je deze leegmaakt." },
+          permanent: { label: 'Permanent verwijderen', description: 'Volledig verwijderd. Niets te herstellen.' }
+        },
+        permanentWarning: 'Overgebleven bestanden worden volledig verwijderd en kunnen niet worden hersteld, noch vanuit Quarantaine, noch ergens anders vandaan. Controleer de lijst voordat je deze bevestigt.',
+        registryNote: 'Registersleutels worden geëxporteerd naar Quarantaine voordat ze worden verwijderd, wat je ook kiest.'
+      },
+      about: {
+        description: 'Een lokale, offline verwijder- en opschoontool voor Windows — geforceerde verwijdering met scannen op restbestanden, veilige quarantaine voor verwijdering, schijfmapping en opschonen van rommel met één klik.'
+      },
+      automation: {
+        title: 'Automatisering',
+        description: 'Draait zolang Prune open is. Het kan een slapende computer niet wekken — een tijdvenster dat verstrijkt terwijl de computer is uitgeschakeld wordt gemeld als gemist in plaats van stilletjes overgeslagen, en ingehaald de volgende keer dat je de app opent.',
+        scheduled: 'Gepland',
+        off: 'Uit',
+        howOften: 'Hoe vaak',
+        day: 'Dag',
+        at: 'Om',
+        whatItDoes: 'Wat het doet',
+        everyDay: 'Elke dag',
+        everyWeek: 'Elke week',
+        measureOnly: 'Alleen meten',
+        clean: 'Opschonen',
+        cleanWarning: 'Dit verwijdert bestanden zonder dat iemand toekijkt. Het schoont de regels op die Diepschoonmaak aanbeveelt en die daadwerkelijk iets bevatten, en alles gaat nog steeds naar quarantaine — controleer dus de bewaarinstelling hierboven voordat je dit aan laat staan.',
+        nextRun: 'Volgende uitvoering:',
+        lastRun: 'Laatste uitvoering:',
+        weekdays: {
+          sunday: 'Zondag', monday: 'Maandag', tuesday: 'Dinsdag', wednesday: 'Woensdag',
+          thursday: 'Donderdag', friday: 'Vrijdag', saturday: 'Zaterdag'
+        }
+      }
+    },
     dashboard: {
       scheduleBadge: {
         missed: (count) => `${count} geplande uitvoering${count === 1 ? '' : 'en'} gemist terwijl deze pc uit stond`,
@@ -8990,7 +12564,156 @@ export const CATALOG = {
       quarantine: 'Kwarantanna', settings: 'Ustawienia', startup: 'Autostart',
       duplicates: 'Duplikaty', deepClean: 'Dokładne czyszczenie'
     },
-    settings: { language: { title: 'Język', description: 'Język, w którym wyświetlane są własne ekrany Prune.' } },
+    settings: {
+      language: { title: 'Język', description: 'Język, w którym wyświetlane są własne ekrany Prune.' },
+      tabs: { general: 'Ogólne', uninstall: 'Odinstalowywanie', cleanup: 'Czyszczenie', about: 'O programie' },
+      title: 'Ustawienia',
+      loading: 'Wczytywanie ustawień…',
+      loadError: (error) => `Nie udało się wczytać ustawień: ${error}`,
+      saveError: (error) => `Nie udało się zapisać: ${error}`,
+      appearance: {
+        title: 'Wygląd',
+        description: 'Aurora Deck w trybie ciemnym lub jasnym. Oba są prawdziwymi paletami, a nie jedną odwróconą: kolor akcentu ciemnieje dla jasnego tła, aby przycisk mógł zachować biały tekst, a każdy poziom zmierzono względem powierzchni, na których faktycznie się znajduje. Prune podąża za ustawieniem systemowym, dopóki nie wybierzesz tutaj jednego.'
+      },
+      minimizeToTray: {
+        title: 'Minimalizuj do zasobnika systemowego',
+        description: 'Zamknięcie okna wysyła Prune do zasobnika systemowego zamiast go zamykać.'
+      },
+      updateCheck: {
+        title: 'Sprawdzaj aktualizacje',
+        description: 'Raz dziennie Prune pyta api.github.com, czy istnieje nowsza wersja. To jedyne żądanie, które Prune wysyła gdziekolwiek poza tym komputerem, a GitHub widzi twój adres IP tak, jak zrobiłaby to każda strona internetowa. Gdy jest nowa wersja, na dole paska bocznego pojawia się przycisk aktualizacji i nic nie jest pobierane ani instalowane, dopóki go nie klikniesz.'
+      },
+      autoInstallUpdates: {
+        title: 'Instaluj aktualizacje automatycznie',
+        description: 'Pobiera nową wersję w tle i instaluje ją przy następnym zamknięciu Prune, zamiast czekać, aż klikniesz przycisk aktualizacji. Wymaga powyższego sprawdzania aktualizacji.'
+      },
+      updateStatus: {
+        checking: 'Sprawdzanie…',
+        loadError: (error) => `Nie udało się sprawdzić aktualizacji: ${error}`,
+        newerAvailable: (version) => `Dostępna jest wersja Prune ${version}.`,
+        openDownloadPage: 'Otwórz stronę pobierania',
+        upToDate: (version) => `Masz najnowszą wersję (${version}).`,
+        openPageError: (error) => `Nie udało się otworzyć strony: ${error}`
+      },
+      showFreeSpace: {
+        title: 'Pokaż wolne miejsce na Mapie Dysku',
+        description: 'Rysuje wolne miejsce dysku jako jeszcze jeden blok podczas skanowania całego dysku, dzięki czemu każdy folder jest odczytywany jako udział dysku, a nie zajętego miejsca.'
+      },
+      autoQuarantine: {
+        title: 'Automatyczna kwarantanna',
+        description: 'Głębokie czyszczenie przenosi to, co usuwa, do kwarantanny Prune, skąd możesz to przywrócić. Wyłącz to, a zamiast tego trafi do Kosza Windows — nadal odzyskiwalne, tylko w miejscu, które już wiesz, jak opróżnić.'
+      },
+      skipRecent: {
+        title: 'Zostaw niedawne pliki w spokoju',
+        description: 'Pomija wszystko, co zostało zmodyfikowane w ciągu ostatnich kilku godzin. W folderze tymczasowym plik zapisywany właśnie teraz wygląda dokładnie tak samo jak porzucony dwa lata temu — to właśnie zapobiega zmiataniu niedokończonej instalacji. 0 wyłącza tę funkcję.',
+        hoursUnit: 'godziny',
+        ariaLabel: 'Godziny, przez które zostawiać niedawne pliki w spokoju'
+      },
+      restorePointCleanup: {
+        title: 'Najpierw utwórz punkt przywracania',
+        description: 'Przed wymuszonym usunięciem, aby sam system Windows mógł cofnąć zmiany na komputerze. Kosztuje kilka sekund i nic nie robi, jeśli Ochrona systemu jest wyłączona.'
+      },
+      hideUnavailable: {
+        title: 'Ukryj czyszczące, które nie mają zastosowania',
+        description: 'Większość listy dotyczy oprogramowania, którego nie ma na tym komputerze. Ukrycie ich pozostawia tylko to, co rzeczywiście tu jest.'
+      },
+      quarantineRetention: {
+        title: 'Jak długo przechowywać możliwość cofnięcia',
+        description: 'Wszystko, co usuwa Prune, trafia najpierw do kwarantanny i pozostaje tam, dopóki jej nie opróżnisz. Ustaw liczbę dni, aby odrzucać kopie zapasowe starsze niż to. Pozostaw puste, aby przechowywać je na zawsze.',
+        neverPlaceholder: 'Nigdy',
+        daysUnit: 'dni',
+        ariaLabel: 'Dni przechowywania kopii zapasowych kwarantanny'
+      },
+      quarantineMaxSize: {
+        title: 'Ile cofnięć przechowywać',
+        description: 'Limit dla całego folderu kwarantanny. Powyżej niego najstarsze kopie zapasowe znikają jako pierwsze — najnowsza nigdy nie jest odrzucana, więc coś dużego, co właśnie usunąłeś, pozostaje odzyskiwalne, nawet jeśli samo w sobie jest większe od limitu. Pozostaw puste, aby nie było limitu.',
+        noLimitPlaceholder: 'Bez limitu',
+        gbUnit: 'GB',
+        ariaLabel: 'Maksymalny rozmiar kwarantanny w gigabajtach'
+      },
+      exclusions: {
+        title: 'Wyklucz foldery',
+        description: 'Foldery i typy plików, które Prune zostawi w spokoju — pomijane przez Głębokie czyszczenie i wykluczone z Mapy Dysku — oprócz tych, które już chroni: informacje o woluminie systemowym, kwarantanny antywirusowe, magazyn składników i tuzin innych.',
+        ariaLabel: 'Ścieżka folderu lub typ pliku do wykluczenia',
+        add: 'Dodaj',
+        invalidFormat: 'Wpisz pełną ścieżkę folderu (D:\\Games) lub typ pliku (*.iso).',
+        formatHint: 'Pełna ścieżka folderu lub typ pliku zapisany jako *.iso',
+        none: 'Nic nie jest wykluczone.',
+        typeBadge: 'Typ',
+        folderBadge: 'Folder',
+        removeAriaLabel: (value) => `Przestań wykluczać ${value}`
+      },
+      sandboxTest: {
+        title: 'Test piaskownicy',
+        description: 'Uruchamia prawdziwy silnik czyszczący tylko wobec jednorazowego katalogu tymczasowego — nigdy wobec twojego prawdziwego Temp, Temp Windows, ani pamięci podręcznej miniatur — aby udowodnić, że skanowanie i usuwanie naprawdę działają, zanim zaufasz im na prawdziwych plikach.',
+        run: 'Uruchom test piaskownicy',
+        running: 'Trwa…',
+        allPassed: 'Wszystkie kontrole zaliczone',
+        failed: 'Test piaskownicy nie powiódł się'
+      },
+      warningConfirmations: {
+        title: 'Potwierdzenia ostrzeżeń',
+        allAsk: 'Każdy program czyszczący, który utraci dane, pyta przed uruchomieniem.',
+        someSet: (count) => `${count} ostrzeżeń o czyszczeniu ustawiono, aby nie pytać ponownie.`,
+        reset: 'Zresetuj potwierdzenia ostrzeżeń'
+      },
+      uninstallTab: {
+        beforeHeading: 'Przed odinstalowaniem',
+        restorePointUninstall: {
+          title: 'Utwórz punkt przywracania przed odinstalowaniem',
+          description: 'Własne Przywracanie systemu Windows, tworzone przed uruchomieniem dezinstalatora programu. Wymaga uruchomienia Prune jako administrator, a Windows pozwala na jeden dziennie, więc gdy nie można go utworzyć, odinstalowanie kontynuuje działanie, a okno dialogowe o tym informuje.'
+        },
+        registryBackup: {
+          title: 'Utwórz kopię zapasową rejestru przed odinstalowaniem',
+          description: 'Eksportuje HKLM\\SOFTWARE i HKCU\\Software (około 140 MB na komputerze, na którym zbudowano Prune) i przechowuje 3 najnowsze. Jeśli nie można utworzyć kopii zapasowej, odinstalowanie się nie uruchamia.'
+        },
+        afterHeading: 'Po odinstalowaniu',
+        scanLeftovers: {
+          title: 'Skanuj w poszukiwaniu pozostałości po odinstalowaniu',
+          description: 'Szuka plików, kluczy rejestru i zaplanowanych zadań pozostawionych przez dezinstalator. Wyłączone, Prune po prostu uruchamia własny dezinstalator programu i tam się zatrzymuje.'
+        },
+        preselect: {
+          title: 'Domyślnie zaznaczaj każdą pozostałość',
+          description: 'Przegląd otwiera się ze wszystkim, co znaleziono, zaznaczonym. Wyłączone, otwiera się bez niczego zaznaczonego i wybierasz sam.'
+        },
+        keepHistory: {
+          title: 'Prowadź historię odinstalowań',
+          description: 'Lista pulpitu nawigacyjnego niedawnych usunięć i miejsca, które uwolniły. Wyłączone, nic nowego nie jest rejestrowane.'
+        },
+        destinationHeading: 'Pozostałe pliki trafiają do',
+        leftoverOptions: {
+          quarantine: { label: 'Kwarantanna', description: 'Przeniesione do własnej kopii zapasowej Prune i możliwe do przywrócenia z ekranu Kwarantanny. Domyślne.' },
+          recycle: { label: 'Kosz', description: 'Możliwe do przywrócenia z własnego kosza Windows i zwalniane po jego opróżnieniu.' },
+          permanent: { label: 'Usuń trwale', description: 'Usunięte całkowicie. Nic do przywrócenia.' }
+        },
+        permanentWarning: 'Pozostałe pliki zostaną usunięte całkowicie i nie można ich przywrócić ani z kwarantanny, ani z żadnego innego miejsca. Sprawdź listę przed jej potwierdzeniem.',
+        registryNote: 'Klucze rejestru są eksportowane do kwarantanny przed ich usunięciem, niezależnie od wyboru.'
+      },
+      about: {
+        description: 'Lokalne, działające offline narzędzie do odinstalowywania i czyszczenia dla Windows — wymuszone usuwanie ze skanowaniem pozostałości plików, bezpieczna kwarantanna przed usunięciem, mapowanie dysku i czyszczenie śmieci jednym kliknięciem.'
+      },
+      automation: {
+        title: 'Automatyzacja',
+        description: 'Działa, dopóki Prune jest otwarte. Nie może obudzić uśpionego komputera — okno czasowe, które mija, gdy komputer jest wyłączony, jest zgłaszane jako pominięte, a nie po cichu przeoczone, i nadrabiane przy następnym otwarciu aplikacji.',
+        scheduled: 'Zaplanowane',
+        off: 'Wyłączone',
+        howOften: 'Jak często',
+        day: 'Dzień',
+        at: 'O',
+        whatItDoes: 'Co robi',
+        everyDay: 'Codziennie',
+        everyWeek: 'Co tydzień',
+        measureOnly: 'Tylko zmierz',
+        clean: 'Czyść',
+        cleanWarning: 'To usuwa pliki bez nadzoru nikogo. Czyści reguły, które zaleca Głębokie czyszczenie i które faktycznie coś zawierają, a wszystko nadal trafia do kwarantanny — więc sprawdź powyższe ustawienie przechowywania, zanim zostawisz to włączone.',
+        nextRun: 'Następne uruchomienie:',
+        lastRun: 'Ostatnie uruchomienie:',
+        weekdays: {
+          sunday: 'Niedziela', monday: 'Poniedziałek', tuesday: 'Wtorek', wednesday: 'Środa',
+          thursday: 'Czwartek', friday: 'Piątek', saturday: 'Sobota'
+        }
+      }
+    },
     dashboard: {
       scheduleBadge: {
         missed: (count) => `Pominięto ${count} zaplanowan${count === 1 ? 'e uruchomienie' : 'e uruchomienia'}, gdy ten komputer był wyłączony`,
@@ -9363,7 +13086,156 @@ export const CATALOG = {
       quarantine: 'قرنطین', settings: 'تنظیمات', startup: 'پیل',
       duplicates: 'تکراري فایلونه', deepClean: 'ژور پاکول'
     },
-    settings: { language: { title: 'ژبه', description: 'هغه ژبه چې د Prune خپلې پردې پرې ښودل کیږي.' } },
+    settings: {
+      language: { title: 'ژبه', description: 'هغه ژبه چې د Prune خپلې پردې پرې ښودل کیږي.' },
+      tabs: { general: 'عمومي', uninstall: 'لرې کول', cleanup: 'پاکول', about: 'په اړه' },
+      title: 'تنظیمات',
+      loading: 'تنظیمات لوډېږي…',
+      loadError: (error) => `تنظیمات نشول لوډېدلی: ${error}`,
+      saveError: (error) => `ساتل ونشول: ${error}`,
+      appearance: {
+        title: 'بڼه',
+        description: 'Aurora Deck په تیاره یا رڼا کې. دواړه واقعي رنګ پلیټونه دي نه یو چپه شوی: د تمرکز رنګ د رڼا شالید لپاره تیاریږي ترڅو یو تڼۍ سپین متن وساتي، او هره کچه د هغو سطحو په وړاندې اندازه شوې چې دا واقعیا پرې ولاړ دی. Prune ستاسو د سیسټم ترتیب تعقیبوي تر څو چې دلته یو غوره کړئ.'
+      },
+      minimizeToTray: {
+        title: 'د سیسټم ټرې ته کوچنی کول',
+        description: 'د کړکۍ بندول Prune د سیسټم ټرې ته لیږي پرځای دې چې بند شي.'
+      },
+      updateCheck: {
+        title: 'د تازه معلوماتو چیک کول',
+        description: 'یوځل په ورځ کې، Prune له api.github.com نه پوښتنه کوي چې ایا نوی نسخه شتون لري. دا یوازینۍ غوښتنه ده چې Prune یې دې ماشین پرته بل ځای ته کوي، او GitHub ستاسو د IP پته وینې لکه څنګه چې هره ویب پاڼه به کوله. کله چې یو شتون ولري، د اپډیټ تڼۍ د څنګ پټې په ښکته کې ښکاره کیږي، او هیڅ شی ډاونلوډ یا نصب نه کیږي تر څو چې تاسو پرې کلیک ونه کړئ.'
+      },
+      autoInstallUpdates: {
+        title: 'تازه معلومات په اتومات ډول نصبول',
+        description: 'نوی نسخه په شاليد کې ډاونلوډوي او دا ځل چې Prune بندیږي یې نصبوي، پرځای دې چې ستاسو د اپډیټ تڼۍ کلیک ته انتظار وباسي. پورته د اپډیټ چیک ته اړتیا لري.'
+      },
+      updateStatus: {
+        checking: 'چیک کول…',
+        loadError: (error) => `د تازه معلوماتو چیک نشو کولی: ${error}`,
+        newerAvailable: (version) => `Prune ${version} شتون لري.`,
+        openDownloadPage: 'د ډاونلوډ پاڼه پرانیستل',
+        upToDate: (version) => `تاسو تازه ترین نسخه لرئ (${version}).`,
+        openPageError: (error) => `پاڼه نشوه پرانیستل کیدی: ${error}`
+      },
+      showFreeSpace: {
+        title: 'د ډیسک نقشه کې خالي ځای ښودل',
+        description: 'د بشپړ ډرایو سکین کولو پر مهال د ډرایو خالي ځای د یو نور بلاک په توګه رسموي، ترڅو هر فولډر د کارول شوي ځای پرځای د ډرایو یوه برخه وګڼل شي.'
+      },
+      autoQuarantine: {
+        title: 'اتومات قرنطین',
+        description: 'ژور پاکونه هغه څه چې لرې کوي د Prune قرنطین ته لیږدوي، چیرې چې تاسو یې بیرته راوستلی شئ. دا بند کړئ او پرځای به Windows ردي بکس ته ولاړ شي — لاهم بیرته راوستل کیدونکی، یوازې یو ځای چې تاسو یې لا مخکې پیژنئ چې څنګه خالي کړئ.'
+      },
+      skipRecent: {
+        title: 'وروستي فایلونه پرېږدئ',
+        description: 'هر هغه څه چې په وروستیو ساعتونو کې بدل شوي پریږدي. په یو لنډمهاله فولډر کې، اوس مهال لیکل کیدونکی فایل بالکل داسې ښکاري لکه دوه کاله دمخه پریښودل شوی — دا هغه څه دي چې د نیمګړي نصب مخنیوی کوي. 0 دا بندوي.',
+        hoursUnit: 'ساعتونه',
+        ariaLabel: 'ساعتونه چې وروستي فایلونه پرې پریږدل شي'
+      },
+      restorePointCleanup: {
+        title: 'لومړی د بیارغونې نقطه جوړول',
+        description: 'د زوري لرې کولو دمخه، ترڅو Windows پخپله ماشین بیرته راولي. یو څو ثانیې لګوي، او که د سیسټم ساتنه بند وي هیڅ نه کوي.'
+      },
+      hideUnavailable: {
+        title: 'هغه پاکونکي پټ کړئ چې تړاو نه لري',
+        description: 'د لیست ډیره برخه د هغه سافټویر لپاره ده چې دا ماشین یې نه لري. د دوی پټول یوازې هغه څه پرېږدي چې واقعیا دلته دي.'
+      },
+      quarantineRetention: {
+        title: 'د بیرته اخیستنې د ساتلو موده',
+        description: 'هر هغه څه چې Prune یې لرې کوي لومړی قرنطین ته ځي، او هلته پاتې کیږي تر څو چې تاسو یې خالي کړئ. د ورځو شمیر وټاکئ ترڅو له دې نه زوړ بیک اپونه لرې کړئ. تش پریږدئ ترڅو دوی تل وساتئ.',
+        neverPlaceholder: 'هیڅکله',
+        daysUnit: 'ورځې',
+        ariaLabel: 'ورځې چې د قرنطین بیک اپونه پکې وساتل شي'
+      },
+      quarantineMaxSize: {
+        title: 'د بیرته اخیستنې کومه اندازه وساتل شي',
+        description: 'د ټول قرنطین فولډر لپاره یوه پوله. له دې نه پورته، زاړه بیک اپونه لومړی ورکیږي — تازه ترین یې هیڅکله نه لرې کیږي، نو یو څه لوی چې تاسو اوس مهال لرې کړی بیرته راوستل کیدونکی پاتې کیږي حتی که دا پخپله له پولې نه لوی وي. تش پریږدئ د بلا حده لپاره.',
+        noLimitPlaceholder: 'بې پولې',
+        gbUnit: 'GB',
+        ariaLabel: 'د قرنطین اعظمي اندازه په ګیګابایټونو کې'
+      },
+      exclusions: {
+        title: 'فولډرونه استثنا کول',
+        description: 'فولډرونه او د فایل ډولونه چې Prune به یې پرېږدي — د ژور پاکونې لخوا پریښودل شوي او د ډیسک نقشې څخه استثنا شوي — د هغو سربیره چې دمخه یې ساتي: د سیسټم حجم معلومات، انټي ویروس قرنطینونه، د اجزاوو زیرمه، او یوولس نور.',
+        ariaLabel: 'د استثنا کولو لپاره فولډر پته یا د فایل ډول',
+        add: 'اضافه کول',
+        invalidFormat: 'یو بشپړ فولډر پته (D:\\Games) یا د فایل ډول (*.iso) ولیکئ.',
+        formatHint: 'یو بشپړ فولډر پته، یا د فایل ډول لکه *.iso لیکل شوی',
+        none: 'هیڅ شی استثنا شوی نه دی.',
+        typeBadge: 'ډول',
+        folderBadge: 'فولډر',
+        removeAriaLabel: (value) => `د ${value} استثنا کول ودروئ`
+      },
+      sandboxTest: {
+        title: 'د سینڈباکس ازموینه',
+        description: 'واقعي پاکولو انجن یوازې د یو ځل کارونې لنډمهاله ډایرکټوري په وړاندې چلوي — هیڅکله ستاسو اصلي Temp، Windows Temp، یا د کوچني انځورونو کیش نه — ترڅو ثابته کړي چې سکین کول او ړنګول واقعیا کار کوي مخکې لدې چې تاسو دوی ته واقعي فایلونه وسپارئ.',
+        run: 'د سینڈباکس ازموینه چلول',
+        running: 'روان دی…',
+        allPassed: 'ټول چیکونه بریالي شول',
+        failed: 'د سینڈباکس ازموینه پاتې راغله'
+      },
+      warningConfirmations: {
+        title: 'د خبرداری تایید',
+        allAsk: 'هر پاکونکی چې معلومات له لاسه ورکوي مخکې له چلولو نه پوښتنه کوي.',
+        someSet: (count) => `${count} د پاکولو خبرداری تنظیم شوی چې بیا پوښتنه ونکړي.`,
+        reset: 'د خبرداری تایید بیا تنظیم کول'
+      },
+      uninstallTab: {
+        beforeHeading: 'د لرې کولو دمخه',
+        restorePointUninstall: {
+          title: 'د لرې کولو دمخه د بیارغونې نقطه جوړول',
+          description: 'د Windows خپل سیسټم بیارغونه، چې د پروګرام د لرې کوونکي له چلولو دمخه جوړیږي. اړتیا لري چې Prune د اډمین په توګه وچلیږي او Windows یوازې یو په ورځ کې اجازه ورکوي، نو کله چې دا جوړ نشي، لرې کول دوام کوي او ډیالوګ دا وایي.'
+        },
+        registryBackup: {
+          title: 'د لرې کولو دمخه رجسټری بیک اپ کول',
+          description: 'HKLM\\SOFTWARE او HKCU\\Software صادروي (شاوخوا 140 MB په هغه ماشین چې Prune پرې جوړ شوی) او تازه ترین 3 ساتي. که بیک اپ جوړ نشي، لرې کول ندي چلیدلی.'
+        },
+        afterHeading: 'د لرې کولو وروسته',
+        scanLeftovers: {
+          title: 'د لرې کولو وروسته د پاتې شونو لپاره سکین کول',
+          description: 'د هغو فایلونو، رجسټري کیلي، او ټاکل شویو دندو لپاره لټون کوي چې لرې کوونکي پریښي دي. بند شوی، Prune یوازې د پروګرام خپل لرې کوونکی چلوي او هلته درېږي.'
+        },
+        preselect: {
+          title: 'د بیفالټ په توګه هره پاتې شونې تیک کول',
+          description: 'بیاکتنه د هرڅه چې موندل شوي تیک شوي پرانیستل کیږي. بند شوی، دا پرته له تیک شوي هیڅ شي پرانیستل کیږي او تاسو غوره کوئ.'
+        },
+        keepHistory: {
+          title: 'د لرې کولو تاریخ ساتل',
+          description: 'د ډشبورډ لیست د وروستیو لرې کولو او هغه ځای چې خلاص شوی. بند شوی، هیڅ نوی ثبت نه کیږي.'
+        },
+        destinationHeading: 'پاتې فایلونه ورځي',
+        leftoverOptions: {
+          quarantine: { label: 'قرنطین', description: 'د Prune خپل بیک اپ ته لیږدول شوی، او د قرنطین سکرین څخه بیرته راوستل کیدونکی. ډیفالټ.' },
+          recycle: { label: 'ردي بکس', description: 'د Windows خپل بکس څخه بیرته راوستل کیدونکی، او خلاصیږي کله چې تاسو یې خالي کړئ.' },
+          permanent: { label: 'د تل لپاره ړنګول', description: 'په بشپړ ډول ړنګ شوی. د بیرته راوستلو لپاره هیڅ نشته.' }
+        },
+        permanentWarning: 'پاتې فایلونه به په بشپړ ډول ړنګ شي او نشي بیرته راوستل کیدی، نه له قرنطین نه او نه له بل ځای نه. لیست د تاییدولو دمخه وګورئ.',
+        registryNote: 'د رجسټري کیلي د لرې کیدو دمخه قرنطین ته صادریږي، پرته لدې چې تاسو کوم یو غوره کړئ.'
+      },
+      about: {
+        description: 'د Windows لپاره یو محلي، آفلاین لرې کولو او پاکولو وسیله — د پاتې فایل سکین سره زوري لرې کول، د ړنګولو دمخه خوندي قرنطین، د ډیسک نقشه کول، او د یوې کلیک خځلو پاکول.'
+      },
+      automation: {
+        title: 'اتومات کول',
+        description: 'تر هغه پورې چلیږي چې Prune خلاص وي. دا خوب ماشین نشي راویښولی — یو وخت پنجره چې د کمپیوټر بند وخت کې تیریږي د پریښودل شوي په توګه راپور ورکول کیږي پرځای د خاموشه پریښودل، او ستاسو د اپلیکیشن بل ځل خلاصولو پر مهال بیرته ترلاسه کیږي.',
+        scheduled: 'مهالویش شوی',
+        off: 'بند',
+        howOften: 'څومره ځله',
+        day: 'ورځ',
+        at: 'په',
+        whatItDoes: 'دا څه کوي',
+        everyDay: 'هره ورځ',
+        everyWeek: 'هره اونۍ',
+        measureOnly: 'یوازې اندازه کول',
+        clean: 'پاکول',
+        cleanWarning: 'دا فایلونه پرته له هرچا کتلو لرې کوي. دا هغه قواعد پاکوي چې ژور پاکونه یې وړاندیز کوي او واقعیا کې یو څه لري، او هرڅه لاهم قرنطین ته ځي — نو مخکې لدې چې دا فعال پریږدئ پورته د ساتنې تنظیم وګورئ.',
+        nextRun: 'راتلونکی چلونه:',
+        lastRun: 'وروستی چلونه:',
+        weekdays: {
+          sunday: 'یکشنبه', monday: 'دوشنبه', tuesday: 'سه‌شنبه', wednesday: 'چارشنبه',
+          thursday: 'پنجشنبه', friday: 'جمعه', saturday: 'شنبه'
+        }
+      }
+    },
     dashboard: {
       scheduleBadge: {
         missed: (count) => `${count} مهالويش شوي چلونه له لاسه ولاړل ځکه چې دا کمپیوټر بند و`,
@@ -9736,7 +13608,156 @@ export const CATALOG = {
       quarantine: 'Quarentena', settings: 'Configurações', startup: 'Inicialização',
       duplicates: 'Duplicados', deepClean: 'Limpeza profunda'
     },
-    settings: { language: { title: 'Idioma', description: 'O idioma em que as próprias telas do Prune são exibidas.' } },
+    settings: {
+      language: { title: 'Idioma', description: 'O idioma em que as próprias telas do Prune são exibidas.' },
+      tabs: { general: 'Geral', uninstall: 'Desinstalação', cleanup: 'Limpeza', about: 'Sobre' },
+      title: 'Configurações',
+      loading: 'Carregando configurações…',
+      loadError: (error) => `Não foi possível carregar as configurações: ${error}`,
+      saveError: (error) => `Não foi possível salvar: ${error}`,
+      appearance: {
+        title: 'Aparência',
+        description: 'Aurora Deck no modo escuro ou claro. Ambas são paletas reais em vez de uma invertida: o acento escurece para o fundo claro para que um botão possa manter o texto branco, e cada nível foi medido em relação às superfícies em que realmente está apoiado. O Prune segue a configuração do seu sistema até você escolher uma aqui.'
+      },
+      minimizeToTray: {
+        title: 'Minimizar para a bandeja',
+        description: 'Fechar a janela envia o Prune para a bandeja do sistema em vez de encerrá-lo.'
+      },
+      updateCheck: {
+        title: 'Verificar atualizações',
+        description: 'Uma vez por dia, o Prune pergunta ao api.github.com se existe uma versão mais recente. É a única solicitação que o Prune faz para qualquer lugar além desta máquina, e o GitHub vê seu endereço IP como qualquer site veria. Quando há uma, um botão de atualização aparece na parte inferior da barra lateral, e nada é baixado ou instalado até você clicar nele.'
+      },
+      autoInstallUpdates: {
+        title: 'Instalar atualizações automaticamente',
+        description: 'Baixa uma nova versão em segundo plano e a instala na próxima vez que o Prune for fechado, em vez de esperar você clicar no botão de atualização. Requer a verificação de atualizações acima.'
+      },
+      updateStatus: {
+        checking: 'Verificando…',
+        loadError: (error) => `Não foi possível verificar atualizações: ${error}`,
+        newerAvailable: (version) => `O Prune ${version} está disponível.`,
+        openDownloadPage: 'Abrir página de download',
+        upToDate: (version) => `Você tem a versão mais recente (${version}).`,
+        openPageError: (error) => `Não foi possível abrir a página: ${error}`
+      },
+      showFreeSpace: {
+        title: 'Mostrar espaço livre no Mapa de Disco',
+        description: 'Desenha o espaço livre da unidade como mais um bloco ao escanear uma unidade inteira, para que cada pasta seja lida como uma parcela da unidade em vez do espaço em uso.'
+      },
+      autoQuarantine: {
+        title: 'Quarentena automática',
+        description: 'A Limpeza Profunda move o que remove para a Quarentena do Prune, de onde você pode devolvê-lo. Desative isso e ele irá para a Lixeira do Windows em vez disso — ainda recuperável, apenas em um lugar que você já sabe esvaziar.'
+      },
+      skipRecent: {
+        title: 'Deixar os arquivos recentes em paz',
+        description: 'Pula tudo o que foi modificado nas últimas horas. Em uma pasta temporária, um arquivo sendo escrito agora parece exatamente igual a um abandonado há dois anos — é isso que impede que uma instalação pela metade seja varrida. 0 desativa isso.',
+        hoursUnit: 'horas',
+        ariaLabel: 'Horas para deixar os arquivos recentes em paz'
+      },
+      restorePointCleanup: {
+        title: 'Criar um ponto de restauração primeiro',
+        description: 'Antes de uma remoção forçada, para que o próprio Windows possa reverter a máquina. Custa alguns segundos e não faz nada se a Proteção do Sistema estiver desativada.'
+      },
+      hideUnavailable: {
+        title: 'Ocultar limpadores que não se aplicam',
+        description: 'A maior parte da lista é para software que esta máquina não tem. Ocultá-los deixa apenas o que realmente está aqui.'
+      },
+      quarantineRetention: {
+        title: 'Por quanto tempo manter o desfazer',
+        description: 'Tudo o que o Prune remove vai primeiro para a Quarentena, e permanece lá até você esvaziá-la. Defina um número de dias para descartar backups mais antigos que isso. Deixe em branco para mantê-los para sempre.',
+        neverPlaceholder: 'Nunca',
+        daysUnit: 'dias',
+        ariaLabel: 'Dias para manter os backups de quarentena'
+      },
+      quarantineMaxSize: {
+        title: 'Quanto desfazer manter',
+        description: 'Um limite para toda a pasta de Quarentena. Acima disso, os backups mais antigos vão embora primeiro — o mais recente nunca é descartado, então algo grande que você acabou de remover permanece recuperável mesmo que seja maior que o limite sozinho. Deixe em branco para nenhum limite.',
+        noLimitPlaceholder: 'Sem limite',
+        gbUnit: 'GB',
+        ariaLabel: 'Tamanho máximo de quarentena em gigabytes'
+      },
+      exclusions: {
+        title: 'Excluir Pastas',
+        description: 'Pastas e tipos de arquivo que o Prune deixará em paz — ignorados pela Limpeza Profunda e excluídos do Mapa de Disco — além dos que ele já protege: Informações do Volume do Sistema, quarentenas de antivírus, o repositório de componentes e uma dúzia de outros.',
+        ariaLabel: 'Caminho de pasta ou tipo de arquivo para excluir',
+        add: 'Adicionar',
+        invalidFormat: 'Escreva um caminho de pasta completo (D:\\Games) ou um tipo de arquivo (*.iso).',
+        formatHint: 'Um caminho de pasta completo, ou um tipo de arquivo escrito como *.iso',
+        none: 'Nada excluído.',
+        typeBadge: 'Tipo',
+        folderBadge: 'Pasta',
+        removeAriaLabel: (value) => `Parar de excluir ${value}`
+      },
+      sandboxTest: {
+        title: 'Teste de Sandbox',
+        description: 'Executa o mecanismo de limpeza real apenas contra um diretório temporário descartável — nunca seu Temp real, o Temp do Windows, ou o cache de miniaturas — para provar que a varredura e a exclusão realmente funcionam antes de confiar nelas com arquivos reais.',
+        run: 'Executar Teste de Sandbox',
+        running: 'Executando…',
+        allPassed: 'Todas as verificações aprovadas',
+        failed: 'O teste de sandbox falhou'
+      },
+      warningConfirmations: {
+        title: 'Confirmações de aviso',
+        allAsk: 'Todo limpador que perde dados pergunta antes de executar.',
+        someSet: (count) => `${count} aviso${count === 1 ? '' : 's'} de limpeza configurado${count === 1 ? '' : 's'} para não perguntar novamente.`,
+        reset: 'Redefinir confirmações de aviso'
+      },
+      uninstallTab: {
+        beforeHeading: 'Antes de desinstalar',
+        restorePointUninstall: {
+          title: 'Criar um ponto de restauração antes de desinstalar',
+          description: 'A própria Restauração do Sistema do Windows, criada antes que o desinstalador do programa seja executado. Requer que o Prune seja executado como administrador e o Windows permite um por dia, então quando não pode ser criado, a desinstalação continua e a caixa de diálogo informa isso.'
+        },
+        registryBackup: {
+          title: 'Fazer backup do registro antes de desinstalar',
+          description: 'Exporta HKLM\\SOFTWARE e HKCU\\Software (cerca de 140 MB na máquina onde o Prune é compilado) e mantém os 3 mais recentes. Se o backup não puder ser criado, a desinstalação não é executada.'
+        },
+        afterHeading: 'Depois de desinstalar',
+        scanLeftovers: {
+          title: 'Procurar resíduos depois de desinstalar',
+          description: 'Procura os arquivos, chaves de registro e tarefas agendadas que o desinstalador deixou para trás. Desativado, o Prune apenas executa o próprio desinstalador do programa e para por aí.'
+        },
+        preselect: {
+          title: 'Marcar cada resíduo por padrão',
+          description: 'A revisão abre com tudo o que foi encontrado marcado. Desativado, ela abre sem nada marcado e você escolhe.'
+        },
+        keepHistory: {
+          title: 'Manter um histórico de desinstalações',
+          description: 'A lista do painel de remoções recentes e o espaço que elas liberaram. Desativado, nada novo é registrado.'
+        },
+        destinationHeading: 'Os arquivos restantes vão para',
+        leftoverOptions: {
+          quarantine: { label: 'Quarentena', description: 'Movido para o próprio backup do Prune, e recuperável a partir da tela de Quarentena. O padrão.' },
+          recycle: { label: 'A Lixeira', description: 'Recuperável a partir da própria lixeira do Windows, e liberado quando você a esvazia.' },
+          permanent: { label: 'Excluir permanentemente', description: 'Excluído completamente. Nada a restaurar.' }
+        },
+        permanentWarning: 'Os arquivos restantes serão excluídos completamente e não podem ser restaurados, nem da Quarentena nem de qualquer outro lugar. Verifique a lista antes de confirmá-la.',
+        registryNote: 'As chaves de registro são exportadas para a Quarentena antes de serem removidas, seja qual for sua escolha.'
+      },
+      about: {
+        description: 'Uma ferramenta local e offline de desinstalação e limpeza para Windows — remoção forçada com varredura de arquivos residuais, quarentena segura antes da exclusão, mapeamento de disco e limpeza de lixo com um clique.'
+      },
+      automation: {
+        title: 'Automação',
+        description: 'É executada enquanto o Prune está aberto. Ela não pode acordar uma máquina adormecida — uma janela que passa enquanto o computador está desligado é relatada como perdida em vez de silenciosamente ignorada, e recuperada na próxima vez que você abrir o aplicativo.',
+        scheduled: 'Agendado',
+        off: 'Desativado',
+        howOften: 'Com que frequência',
+        day: 'Dia',
+        at: 'Às',
+        whatItDoes: 'O que faz',
+        everyDay: 'Todo dia',
+        everyWeek: 'Toda semana',
+        measureOnly: 'Apenas medir',
+        clean: 'Limpar',
+        cleanWarning: 'Isso remove arquivos sem ninguém observando. Limpa as regras que a Limpeza Profunda recomenda e que realmente têm algo dentro, e tudo ainda vai para a quarentena — então verifique a configuração de retenção acima antes de deixar isso ativado.',
+        nextRun: 'Próxima execução:',
+        lastRun: 'Última execução:',
+        weekdays: {
+          sunday: 'Domingo', monday: 'Segunda-feira', tuesday: 'Terça-feira', wednesday: 'Quarta-feira',
+          thursday: 'Quinta-feira', friday: 'Sexta-feira', saturday: 'Sábado'
+        }
+      }
+    },
     dashboard: {
       scheduleBadge: {
         missed: (count) => `${count} execuç${count === 1 ? 'ão agendada foi perdida' : 'ões agendadas foram perdidas'} enquanto este PC estava desligado`,
@@ -10109,7 +14130,156 @@ export const CATALOG = {
       quarantine: 'Quarentena', settings: 'Definições', startup: 'Arranque',
       duplicates: 'Duplicados', deepClean: 'Limpeza profunda'
     },
-    settings: { language: { title: 'Idioma', description: 'O idioma em que os próprios ecrãs do Prune são apresentados.' } },
+    settings: {
+      language: { title: 'Idioma', description: 'O idioma em que os próprios ecrãs do Prune são apresentados.' },
+      tabs: { general: 'Geral', uninstall: 'Desinstalação', cleanup: 'Limpeza', about: 'Acerca' },
+      title: 'Definições',
+      loading: 'A carregar definições…',
+      loadError: (error) => `Não foi possível carregar as definições: ${error}`,
+      saveError: (error) => `Não foi possível guardar: ${error}`,
+      appearance: {
+        title: 'Aparência',
+        description: 'Aurora Deck em modo escuro ou claro. Ambas são paletas reais em vez de uma invertida: o acento escurece para o fundo claro para que um botão possa manter o texto branco, e cada nível foi medido em relação às superfícies em que realmente assenta. O Prune segue a definição do seu sistema até escolher uma aqui.'
+      },
+      minimizeToTray: {
+        title: 'Minimizar para a bandeja',
+        description: 'Fechar a janela envia o Prune para a bandeja do sistema em vez de o fechar.'
+      },
+      updateCheck: {
+        title: 'Verificar atualizações',
+        description: 'Uma vez por dia, o Prune pergunta ao api.github.com se existe uma versão mais recente. É o único pedido que o Prune faz para qualquer lugar além desta máquina, e o GitHub vê o seu endereço IP como qualquer site veria. Quando há uma, aparece um botão de atualização na parte inferior da barra lateral, e nada é transferido ou instalado até clicar nele.'
+      },
+      autoInstallUpdates: {
+        title: 'Instalar atualizações automaticamente',
+        description: 'Transfere uma nova versão em segundo plano e instala-a da próxima vez que o Prune for fechado, em vez de esperar que clique no botão de atualização. Requer a verificação de atualizações acima.'
+      },
+      updateStatus: {
+        checking: 'A verificar…',
+        loadError: (error) => `Não foi possível verificar atualizações: ${error}`,
+        newerAvailable: (version) => `O Prune ${version} está disponível.`,
+        openDownloadPage: 'Abrir página de transferência',
+        upToDate: (version) => `Tem a versão mais recente (${version}).`,
+        openPageError: (error) => `Não foi possível abrir a página: ${error}`
+      },
+      showFreeSpace: {
+        title: 'Mostrar espaço livre no Mapa de Disco',
+        description: 'Desenha o espaço livre da unidade como mais um bloco ao analisar uma unidade inteira, para que cada pasta seja lida como uma parcela da unidade em vez do espaço em uso.'
+      },
+      autoQuarantine: {
+        title: 'Quarentena automática',
+        description: 'A Limpeza Profunda move o que remove para a Quarentena do Prune, de onde o pode devolver. Desative isto e irá para a Reciclagem do Windows em vez disso — ainda recuperável, apenas num lugar que já sabe esvaziar.'
+      },
+      skipRecent: {
+        title: 'Deixar os ficheiros recentes em paz',
+        description: 'Salta tudo o que foi modificado nas últimas horas. Numa pasta temporária, um ficheiro a ser escrito agora parece exatamente igual a um abandonado há dois anos — é isto que impede que uma instalação a meio seja varrida. 0 desativa isto.',
+        hoursUnit: 'horas',
+        ariaLabel: 'Horas para deixar os ficheiros recentes em paz'
+      },
+      restorePointCleanup: {
+        title: 'Criar um ponto de restauro primeiro',
+        description: 'Antes de uma remoção forçada, para que o próprio Windows possa reverter a máquina. Custa alguns segundos e não faz nada se a Proteção do Sistema estiver desativada.'
+      },
+      hideUnavailable: {
+        title: 'Ocultar limpadores que não se aplicam',
+        description: 'A maior parte da lista destina-se a software que esta máquina não tem. Ocultá-los deixa apenas o que realmente está aqui.'
+      },
+      quarantineRetention: {
+        title: 'Durante quanto tempo manter a desfazer',
+        description: 'Tudo o que o Prune remove vai primeiro para a Quarentena, e permanece lá até a esvaziar. Defina um número de dias para descartar cópias de segurança mais antigas do que isso. Deixe em branco para as manter para sempre.',
+        neverPlaceholder: 'Nunca',
+        daysUnit: 'dias',
+        ariaLabel: 'Dias para manter as cópias de segurança de quarentena'
+      },
+      quarantineMaxSize: {
+        title: 'Quanto desfazer manter',
+        description: 'Um limite para toda a pasta de Quarentena. Acima disso, as cópias de segurança mais antigas desaparecem primeiro — a mais recente nunca é descartada, portanto algo grande que acabou de remover permanece recuperável mesmo que seja maior do que o limite sozinho. Deixe em branco para nenhum limite.',
+        noLimitPlaceholder: 'Sem limite',
+        gbUnit: 'GB',
+        ariaLabel: 'Tamanho máximo de quarentena em gigabytes'
+      },
+      exclusions: {
+        title: 'Excluir Pastas',
+        description: 'Pastas e tipos de ficheiro que o Prune deixará em paz — ignorados pela Limpeza Profunda e excluídos do Mapa de Disco — além dos que já protege: Informações de Volume do Sistema, quarentenas de antivírus, o repositório de componentes e mais uma dezena.',
+        ariaLabel: 'Caminho de pasta ou tipo de ficheiro a excluir',
+        add: 'Adicionar',
+        invalidFormat: 'Escreva um caminho de pasta completo (D:\\Games) ou um tipo de ficheiro (*.iso).',
+        formatHint: 'Um caminho de pasta completo, ou um tipo de ficheiro escrito como *.iso',
+        none: 'Nada excluído.',
+        typeBadge: 'Tipo',
+        folderBadge: 'Pasta',
+        removeAriaLabel: (value) => `Deixar de excluir ${value}`
+      },
+      sandboxTest: {
+        title: 'Teste de Sandbox',
+        description: 'Executa o motor de limpeza real apenas contra um diretório temporário descartável — nunca o seu Temp real, o Temp do Windows, ou a cache de miniaturas — para provar que a análise e a eliminação funcionam mesmo antes de confiar nelas com ficheiros reais.',
+        run: 'Executar Teste de Sandbox',
+        running: 'A executar…',
+        allPassed: 'Todas as verificações aprovadas',
+        failed: 'O teste de sandbox falhou'
+      },
+      warningConfirmations: {
+        title: 'Confirmações de aviso',
+        allAsk: 'Todo o limpador que perde dados pergunta antes de executar.',
+        someSet: (count) => `${count} avis${count === 1 ? 'o de limpeza está definido' : 'os de limpeza estão definidos'} para não perguntar novamente.`,
+        reset: 'Repor confirmações de aviso'
+      },
+      uninstallTab: {
+        beforeHeading: 'Antes de desinstalar',
+        restorePointUninstall: {
+          title: 'Criar um ponto de restauro antes de desinstalar',
+          description: 'A própria Restauração do Sistema do Windows, criada antes de o desinstalador do programa ser executado. Requer que o Prune seja executado como administrador e o Windows permite um por dia, pelo que quando não pode ser criado, a desinstalação continua e a caixa de diálogo informa isso.'
+        },
+        registryBackup: {
+          title: 'Fazer cópia de segurança do registo antes de desinstalar',
+          description: 'Exporta HKLM\\SOFTWARE e HKCU\\Software (cerca de 140 MB na máquina onde o Prune é compilado) e mantém as 3 mais recentes. Se a cópia de segurança não puder ser criada, a desinstalação não é executada.'
+        },
+        afterHeading: 'Depois de desinstalar',
+        scanLeftovers: {
+          title: 'Procurar resíduos depois de desinstalar',
+          description: 'Procura os ficheiros, chaves de registo e tarefas agendadas que o desinstalador deixou para trás. Desativado, o Prune apenas executa o desinstalador do próprio programa e para aí.'
+        },
+        preselect: {
+          title: 'Marcar cada resíduo por predefinição',
+          description: 'A revisão abre com tudo o que foi encontrado marcado. Desativado, abre sem nada marcado e é você quem escolhe.'
+        },
+        keepHistory: {
+          title: 'Manter um histórico de desinstalações',
+          description: 'A lista do painel de remoções recentes e o espaço que libertaram. Desativado, nada de novo é registado.'
+        },
+        destinationHeading: 'Os ficheiros restantes vão para',
+        leftoverOptions: {
+          quarantine: { label: 'Quarentena', description: 'Movido para a própria cópia de segurança do Prune, e recuperável a partir do ecrã de Quarentena. A predefinição.' },
+          recycle: { label: 'A Reciclagem', description: 'Recuperável a partir da própria reciclagem do Windows, e libertado quando a esvazia.' },
+          permanent: { label: 'Eliminar permanentemente', description: 'Eliminado por completo. Nada a restaurar.' }
+        },
+        permanentWarning: 'Os ficheiros restantes serão eliminados por completo e não podem ser restaurados, nem da Quarentena nem de qualquer outro lugar. Verifique a lista antes de a confirmar.',
+        registryNote: 'As chaves de registo são exportadas para a Quarentena antes de serem removidas, seja qual for a sua escolha.'
+      },
+      about: {
+        description: 'Uma ferramenta local e offline de desinstalação e limpeza para Windows — remoção forçada com análise de ficheiros residuais, quarentena segura antes da eliminação, mapeamento de disco e limpeza de lixo com um clique.'
+      },
+      automation: {
+        title: 'Automatização',
+        description: 'É executada enquanto o Prune está aberto. Não consegue acordar uma máquina adormecida — uma janela que passa enquanto o computador está desligado é reportada como perdida em vez de silenciosamente ignorada, e recuperada da próxima vez que abrir a aplicação.',
+        scheduled: 'Agendado',
+        off: 'Desativado',
+        howOften: 'Com que frequência',
+        day: 'Dia',
+        at: 'Às',
+        whatItDoes: 'O que faz',
+        everyDay: 'Todos os dias',
+        everyWeek: 'Todas as semanas',
+        measureOnly: 'Apenas medir',
+        clean: 'Limpar',
+        cleanWarning: 'Isto remove ficheiros sem ninguém a observar. Limpa as regras que a Limpeza Profunda recomenda e que realmente têm algo dentro, e tudo continua a ir para a quarentena — por isso verifique a definição de retenção acima antes de deixar isto ativado.',
+        nextRun: 'Próxima execução:',
+        lastRun: 'Última execução:',
+        weekdays: {
+          sunday: 'Domingo', monday: 'Segunda-feira', tuesday: 'Terça-feira', wednesday: 'Quarta-feira',
+          thursday: 'Quinta-feira', friday: 'Sexta-feira', saturday: 'Sábado'
+        }
+      }
+    },
     dashboard: {
       scheduleBadge: {
         missed: (count) => `${count} execuç${count === 1 ? 'ão agendada foi perdida' : 'ões agendadas foram perdidas'} enquanto este PC esteve desligado`,
@@ -10482,7 +14652,156 @@ export const CATALOG = {
       quarantine: 'Carantină', settings: 'Setări', startup: 'Pornire',
       duplicates: 'Duplicate', deepClean: 'Curățare aprofundată'
     },
-    settings: { language: { title: 'Limbă', description: 'Limba în care sunt afișate propriile ecrane ale Prune.' } },
+    settings: {
+      language: { title: 'Limbă', description: 'Limba în care sunt afișate propriile ecrane ale Prune.' },
+      tabs: { general: 'General', uninstall: 'Dezinstalare', cleanup: 'Curățare', about: 'Despre' },
+      title: 'Setări',
+      loading: 'Se încarcă setările…',
+      loadError: (error) => `Nu s-au putut încărca setările: ${error}`,
+      saveError: (error) => `Nu s-a putut salva: ${error}`,
+      appearance: {
+        title: 'Aspect',
+        description: 'Aurora Deck în întuneric sau lumina zilei. Ambele sunt palete reale, nu una inversată: accentul se întunecă pentru fundalul deschis astfel încât un buton să poată păstra text alb, iar fiecare nivel a fost măsurat față de suprafețele pe care se așază de fapt. Prune urmează setarea sistemului tău până când alegi una aici.'
+      },
+      minimizeToTray: {
+        title: 'Minimizează în bara de sistem',
+        description: 'Închiderea ferestrei trimite Prune în bara de sistem în loc să-l închidă.'
+      },
+      updateCheck: {
+        title: 'Verifică actualizările',
+        description: 'O dată pe zi, Prune întreabă api.github.com dacă există o versiune mai nouă. Este singura cerere pe care Prune o face oriunde altundeva decât pe acest calculator, iar GitHub îți vede adresa IP așa cum ar face-o orice site web. Când există una, apare un buton de actualizare în partea de jos a barei laterale, și nimic nu este descărcat sau instalat până când nu dai clic pe el.'
+      },
+      autoInstallUpdates: {
+        title: 'Instalează actualizările automat',
+        description: 'Descarcă o versiune nouă în fundal și o instalează data viitoare când Prune se închide, în loc să aștepte să dai clic pe butonul de actualizare. Necesită verificarea actualizărilor de mai sus.'
+      },
+      updateStatus: {
+        checking: 'Se verifică…',
+        loadError: (error) => `Nu s-au putut verifica actualizările: ${error}`,
+        newerAvailable: (version) => `Prune ${version} este disponibil.`,
+        openDownloadPage: 'Deschide pagina de descărcare',
+        upToDate: (version) => `Ai cea mai recentă versiune (${version}).`,
+        openPageError: (error) => `Nu s-a putut deschide pagina: ${error}`
+      },
+      showFreeSpace: {
+        title: 'Afișează spațiul liber pe Harta Discului',
+        description: 'Desenează spațiul liber al unității ca încă un bloc atunci când scanezi o unitate întreagă, astfel încât fiecare folder să se citească drept o cotă a unității, nu a spațiului utilizat.'
+      },
+      autoQuarantine: {
+        title: 'Carantină automată',
+        description: 'Curățarea Profundă mută ceea ce elimină în Carantina Prune, de unde îl poți readuce. Dezactivează asta și va merge în schimb în Coșul de Reciclare Windows — încă recuperabil, doar într-un loc pe care știi deja cum să-l golești.'
+      },
+      skipRecent: {
+        title: 'Lasă fișierele recente în pace',
+        description: 'Sare peste tot ce a fost modificat în ultimele câteva ore. Într-un folder temporar, un fișier care se scrie chiar acum arată exact ca unul abandonat acum doi ani — asta este ceea ce împiedică o instalare pe jumătate terminată să fie măturată. 0 dezactivează asta.',
+        hoursUnit: 'ore',
+        ariaLabel: 'Ore pentru care să lași fișierele recente în pace'
+      },
+      restorePointCleanup: {
+        title: 'Creează mai întâi un punct de restaurare',
+        description: 'Înainte de o eliminare forțată, astfel încât Windows însuși să poată readuce calculatorul înapoi. Costă câteva secunde și nu face nimic dacă Protecția Sistemului este dezactivată.'
+      },
+      hideUnavailable: {
+        title: 'Ascunde curățătoarele care nu se aplică',
+        description: 'Cea mai mare parte a listei este pentru software pe care acest calculator nu îl are. Ascunderea lor lasă doar ceea ce este cu adevărat aici.'
+      },
+      quarantineRetention: {
+        title: 'Cât timp să păstrezi anularea',
+        description: 'Tot ce elimină Prune merge mai întâi în Carantină, și rămâne acolo până când o golești. Setează un număr de zile pentru a renunța la copiile de rezervă mai vechi de atât. Lasă gol pentru a le păstra pentru totdeauna.',
+        neverPlaceholder: 'Niciodată',
+        daysUnit: 'zile',
+        ariaLabel: 'Zile pentru a păstra copiile de rezervă din carantină'
+      },
+      quarantineMaxSize: {
+        title: 'Câtă anulare să păstrezi',
+        description: 'O limită pentru întregul folder Carantină. Peste aceasta, cele mai vechi copii de rezervă dispar primele — cea mai recentă nu este niciodată renunțată, așa că ceva mare pe care tocmai l-ai eliminat rămâne recuperabil chiar dacă este mai mare decât limita de unul singur. Lasă gol pentru nicio limită.',
+        noLimitPlaceholder: 'Fără limită',
+        gbUnit: 'GB',
+        ariaLabel: 'Dimensiunea maximă a carantinei în gigabytes'
+      },
+      exclusions: {
+        title: 'Exclude Foldere',
+        description: 'Foldere și tipuri de fișiere pe care Prune le va lăsa în pace — sărite de Curățarea Profundă și excluse din Harta Discului — pe lângă cele pe care le protejează deja: Informații despre Volumul de Sistem, carantine antivirus, depozitul de componente și încă o duzină.',
+        ariaLabel: 'Calea folderului sau tipul de fișier de exclus',
+        add: 'Adaugă',
+        invalidFormat: 'Scrie o cale de folder completă (D:\\Games) sau un tip de fișier (*.iso).',
+        formatHint: 'O cale de folder completă, sau un tip de fișier scris ca *.iso',
+        none: 'Nimic exclus.',
+        typeBadge: 'Tip',
+        folderBadge: 'Folder',
+        removeAriaLabel: (value) => `Nu mai exclude ${value}`
+      },
+      sandboxTest: {
+        title: 'Test Sandbox',
+        description: 'Rulează motorul real de curățare doar față de un director temporar de unică folosință — niciodată Temp-ul tău real, Temp-ul Windows, sau memoria cache a miniaturilor — pentru a dovedi că scanarea și ștergerea chiar funcționează înainte să le încredințezi fișiere reale.',
+        run: 'Rulează Testul Sandbox',
+        running: 'Se rulează…',
+        allPassed: 'Toate verificările au trecut',
+        failed: 'Testul sandbox a eșuat'
+      },
+      warningConfirmations: {
+        title: 'Confirmări de avertizare',
+        allAsk: 'Fiecare curățător care pierde date întreabă înainte de a rula.',
+        someSet: (count) => `${count} avertisment${count === 1 ? '' : 'e'} de curățare setat${count === 1 ? '' : 'e'} să nu mai întrebe.`,
+        reset: 'Resetează confirmările de avertizare'
+      },
+      uninstallTab: {
+        beforeHeading: 'Înainte de dezinstalare',
+        restorePointUninstall: {
+          title: 'Creează un punct de restaurare înainte de dezinstalare',
+          description: 'Propria Restaurare a Sistemului Windows, creată înainte ca dezinstalatorul programului să ruleze. Necesită ca Prune să ruleze ca administrator și Windows permite una pe zi, așa că atunci când nu poate fi creată, dezinstalarea continuă și dialogul spune asta.'
+        },
+        registryBackup: {
+          title: 'Copiază de rezervă registrul înainte de dezinstalare',
+          description: 'Exportă HKLM\\SOFTWARE și HKCU\\Software (aproximativ 140 MB pe calculatorul pe care este construit Prune) și păstrează cele mai recente 3. Dacă copia de rezervă nu poate fi creată, dezinstalarea nu rulează.'
+        },
+        afterHeading: 'După dezinstalare',
+        scanLeftovers: {
+          title: 'Scanează după resturi după dezinstalare',
+          description: 'Caută fișierele, cheile de registru și sarcinile programate pe care dezinstalatorul le-a lăsat în urmă. Dezactivat, Prune doar rulează propriul dezinstalator al programului și se oprește acolo.'
+        },
+        preselect: {
+          title: 'Bifează fiecare rest implicit',
+          description: 'Revizuirea se deschide cu tot ce a fost găsit bifat. Dezactivat, se deschide fără nimic bifat și alegi tu.'
+        },
+        keepHistory: {
+          title: 'Păstrează un istoric al dezinstalărilor',
+          description: 'Lista panoului de control cu eliminările recente și spațiul pe care l-au eliberat. Dezactivat, nimic nou nu este înregistrat.'
+        },
+        destinationHeading: 'Fișierele rămase merg la',
+        leftoverOptions: {
+          quarantine: { label: 'Carantină', description: 'Mutat în propria copie de rezervă a Prune, și recuperabil din ecranul Carantină. Cea implicită.' },
+          recycle: { label: 'Coșul de Reciclare', description: 'Recuperabil din propriul coș Windows, și eliberat când îl golești.' },
+          permanent: { label: 'Șterge definitiv', description: 'Șters complet. Nimic de restaurat.' }
+        },
+        permanentWarning: 'Fișierele rămase vor fi șterse complet și nu pot fi restaurate, nici din Carantină, nici de altundeva. Verifică lista înainte de a o confirma.',
+        registryNote: 'Cheile de registru sunt exportate în Carantină înainte de a fi eliminate, indiferent ce alegi.'
+      },
+      about: {
+        description: 'Un instrument local, offline de dezinstalare și curățare pentru Windows — eliminare forțată cu scanare de fișiere rămase, carantină sigură înainte de ștergere, cartografierea discului și curățare de gunoi cu un clic.'
+      },
+      automation: {
+        title: 'Automatizare',
+        description: 'Rulează atât timp cât Prune este deschis. Nu poate trezi un calculator adormit — o fereastră de timp care trece în timp ce calculatorul este oprit este raportată ca ratată în loc de sărită în tăcere, și recuperată data viitoare când deschizi aplicația.',
+        scheduled: 'Programat',
+        off: 'Dezactivat',
+        howOften: 'Cât de des',
+        day: 'Zi',
+        at: 'La',
+        whatItDoes: 'Ce face',
+        everyDay: 'În fiecare zi',
+        everyWeek: 'În fiecare săptămână',
+        measureOnly: 'Doar măsoară',
+        clean: 'Curăță',
+        cleanWarning: 'Aceasta elimină fișiere fără ca nimeni să supravegheze. Curăță regulile pe care Curățarea Profundă le recomandă și care chiar au ceva în ele, și totul merge totuși în carantină — așa că verifică setarea de reținere de mai sus înainte de a lăsa aceasta activată.',
+        nextRun: 'Următoarea rulare:',
+        lastRun: 'Ultima rulare:',
+        weekdays: {
+          sunday: 'Duminică', monday: 'Luni', tuesday: 'Marți', wednesday: 'Miercuri',
+          thursday: 'Joi', friday: 'Vineri', saturday: 'Sâmbătă'
+        }
+      }
+    },
     dashboard: {
       scheduleBadge: {
         missed: (count) => `${count} rulare${count === 1 ? ' programată a fost' : 'ri programate au fost'} ratate cât timp acest PC a fost oprit`,
@@ -10855,7 +15174,156 @@ export const CATALOG = {
       quarantine: 'Карантин', settings: 'Настройки', startup: 'Автозагрузка',
       duplicates: 'Дубликаты', deepClean: 'Глубокая очистка'
     },
-    settings: { language: { title: 'Язык', description: 'Язык, на котором отображаются собственные экраны Prune.' } },
+    settings: {
+      language: { title: 'Язык', description: 'Язык, на котором отображаются собственные экраны Prune.' },
+      tabs: { general: 'Общие', uninstall: 'Удаление', cleanup: 'Очистка', about: 'О программе' },
+      title: 'Настройки',
+      loading: 'Загрузка настроек…',
+      loadError: (error) => `Не удалось загрузить настройки: ${error}`,
+      saveError: (error) => `Не удалось сохранить: ${error}`,
+      appearance: {
+        title: 'Внешний вид',
+        description: 'Aurora Deck в тёмном или дневном режиме. Обе — настоящие палитры, а не одна инвертированная: акцентный цвет темнеет для светлого фона, чтобы кнопка могла сохранить белый текст, и каждый уровень был измерен относительно поверхностей, на которых он реально находится. Prune следует настройке вашей системы, пока вы не выберете здесь что-то своё.'
+      },
+      minimizeToTray: {
+        title: 'Свернуть в системный трей',
+        description: 'Закрытие окна отправляет Prune в системный трей вместо выхода.'
+      },
+      updateCheck: {
+        title: 'Проверять обновления',
+        description: 'Раз в день Prune спрашивает api.github.com, существует ли более новая версия. Это единственный запрос, который Prune делает куда-либо, кроме этого компьютера, и GitHub видит ваш IP-адрес так же, как это сделал бы любой сайт. Когда версия есть, внизу боковой панели появляется кнопка обновления, и ничего не скачивается и не устанавливается, пока вы на неё не нажмёте.'
+      },
+      autoInstallUpdates: {
+        title: 'Устанавливать обновления автоматически',
+        description: 'Скачивает новую версию в фоне и устанавливает её при следующем закрытии Prune, вместо ожидания вашего нажатия на кнопку обновления. Требует включённой проверки обновлений выше.'
+      },
+      updateStatus: {
+        checking: 'Проверка…',
+        loadError: (error) => `Не удалось проверить обновления: ${error}`,
+        newerAvailable: (version) => `Доступна версия Prune ${version}.`,
+        openDownloadPage: 'Открыть страницу загрузки',
+        upToDate: (version) => `У вас установлена последняя версия (${version}).`,
+        openPageError: (error) => `Не удалось открыть страницу: ${error}`
+      },
+      showFreeSpace: {
+        title: 'Показывать свободное место на Карте диска',
+        description: 'Рисует свободное место диска как ещё один блок при сканировании всего диска, чтобы каждая папка читалась как доля диска, а не занятого пространства.'
+      },
+      autoQuarantine: {
+        title: 'Автоматический карантин',
+        description: 'Глубокая очистка перемещает удаляемое в карантин Prune, откуда вы можете вернуть это обратно. Отключите это, и вместо этого файлы отправятся в Корзину Windows — всё ещё восстановимо, просто в месте, которое вы уже умеете очищать.'
+      },
+      skipRecent: {
+        title: 'Не трогать недавние файлы',
+        description: 'Пропускает всё, что было изменено за последние несколько часов. Во временной папке файл, который пишется прямо сейчас, выглядит точно так же, как оставленный два года назад — именно это не даёт смести наполовину завершённую установку. 0 отключает это.',
+        hoursUnit: 'часов',
+        ariaLabel: 'Часы, в течение которых не трогать недавние файлы'
+      },
+      restorePointCleanup: {
+        title: 'Сначала создать точку восстановления',
+        description: 'Перед принудительным удалением, чтобы сам Windows мог откатить систему. Занимает несколько секунд и ничего не делает, если Защита системы отключена.'
+      },
+      hideUnavailable: {
+        title: 'Скрывать неприменимые средства очистки',
+        description: 'Большая часть списка предназначена для программ, которых нет на этом компьютере. Их скрытие оставляет только то, что действительно здесь есть.'
+      },
+      quarantineRetention: {
+        title: 'Как долго хранить возможность отмены',
+        description: 'Всё, что удаляет Prune, сначала попадает в карантин и остаётся там, пока вы его не очистите. Установите количество дней, чтобы отбрасывать резервные копии старше этого срока. Оставьте пустым, чтобы хранить их вечно.',
+        neverPlaceholder: 'Никогда',
+        daysUnit: 'дней',
+        ariaLabel: 'Дни хранения резервных копий карантина'
+      },
+      quarantineMaxSize: {
+        title: 'Сколько отмены хранить',
+        description: 'Предел для всей папки карантина. Сверх него старейшие резервные копии удаляются первыми — самая новая никогда не отбрасывается, поэтому что-то большое, что вы только что удалили, остаётся восстановимым, даже если оно само по себе больше предела. Оставьте пустым, чтобы не было предела.',
+        noLimitPlaceholder: 'Без ограничений',
+        gbUnit: 'ГБ',
+        ariaLabel: 'Максимальный размер карантина в гигабайтах'
+      },
+      exclusions: {
+        title: 'Исключить папки',
+        description: 'Папки и типы файлов, которые Prune оставит без внимания — пропускаются Глубокой очисткой и исключаются из Карты диска — в дополнение к тем, что уже защищены: сведения о системном томе, карантины антивирусов, хранилище компонентов и ещё дюжина других.',
+        ariaLabel: 'Путь к папке или тип файла для исключения',
+        add: 'Добавить',
+        invalidFormat: 'Введите полный путь к папке (D:\\Games) или тип файла (*.iso).',
+        formatHint: 'Полный путь к папке или тип файла, записанный как *.iso',
+        none: 'Ничего не исключено.',
+        typeBadge: 'Тип',
+        folderBadge: 'Папка',
+        removeAriaLabel: (value) => `Прекратить исключать ${value}`
+      },
+      sandboxTest: {
+        title: 'Тест песочницы',
+        description: 'Запускает настоящий движок очистки только против одноразового временного каталога — никогда против вашего настоящего Temp, Temp Windows или кэша миниатюр — чтобы доказать, что сканирование и удаление действительно работают, прежде чем доверить им реальные файлы.',
+        run: 'Запустить тест песочницы',
+        running: 'Выполняется…',
+        allPassed: 'Все проверки пройдены',
+        failed: 'Тест песочницы не пройден'
+      },
+      warningConfirmations: {
+        title: 'Подтверждения предупреждений',
+        allAsk: 'Каждое средство очистки, теряющее данные, спрашивает перед запуском.',
+        someSet: (count) => `${count} предупреждений об очистке настроено не спрашивать снова.`,
+        reset: 'Сбросить подтверждения предупреждений'
+      },
+      uninstallTab: {
+        beforeHeading: 'Перед удалением',
+        restorePointUninstall: {
+          title: 'Создать точку восстановления перед удалением',
+          description: 'Собственное Восстановление системы Windows, создаваемое до запуска деинсталлятора программы. Требует запуска Prune от имени администратора, а Windows разрешает одну в день, поэтому когда её нельзя создать, удаление продолжается, и диалог сообщает об этом.'
+        },
+        registryBackup: {
+          title: 'Резервировать реестр перед удалением',
+          description: 'Экспортирует HKLM\\SOFTWARE и HKCU\\Software (около 140 МБ на компьютере, на котором собран Prune) и хранит 3 последних. Если резервную копию нельзя создать, удаление не выполняется.'
+        },
+        afterHeading: 'После удаления',
+        scanLeftovers: {
+          title: 'Сканировать остатки после удаления',
+          description: 'Ищет файлы, ключи реестра и запланированные задачи, оставленные деинсталлятором. Выключено — Prune просто запускает собственный деинсталлятор программы и останавливается на этом.'
+        },
+        preselect: {
+          title: 'Отмечать каждый остаток по умолчанию',
+          description: 'Проверка открывается со всем найденным отмеченным. Выключено — она открывается без отметок, и вы выбираете сами.'
+        },
+        keepHistory: {
+          title: 'Вести историю удалений',
+          description: 'Список панели управления недавними удалениями и освобождённым ими местом. Выключено — ничего нового не записывается.'
+        },
+        destinationHeading: 'Оставшиеся файлы отправляются в',
+        leftoverOptions: {
+          quarantine: { label: 'Карантин', description: 'Перемещено в собственную резервную копию Prune и восстановимо с экрана карантина. Вариант по умолчанию.' },
+          recycle: { label: 'Корзину', description: 'Восстановимо из собственной корзины Windows и освобождается при её очистке.' },
+          permanent: { label: 'Удалить навсегда', description: 'Удалено полностью. Восстанавливать нечего.' }
+        },
+        permanentWarning: 'Оставшиеся файлы будут удалены полностью и не могут быть восстановлены ни из карантина, ни откуда-либо ещё. Проверьте список перед подтверждением.',
+        registryNote: 'Ключи реестра экспортируются в карантин перед удалением, независимо от вашего выбора.'
+      },
+      about: {
+        description: 'Локальный, автономный инструмент удаления и очистки для Windows — принудительное удаление со сканированием остаточных файлов, безопасный карантин перед удалением, картирование диска и очистка мусора в один клик.'
+      },
+      automation: {
+        title: 'Автоматизация',
+        description: 'Работает, пока Prune открыт. Она не может разбудить спящий компьютер — временное окно, проходящее, пока компьютер выключен, сообщается как пропущенное, а не тихо игнорируется, и наверстывается при следующем открытии приложения.',
+        scheduled: 'Запланировано',
+        off: 'Выключено',
+        howOften: 'Как часто',
+        day: 'День',
+        at: 'В',
+        whatItDoes: 'Что это делает',
+        everyDay: 'Каждый день',
+        everyWeek: 'Каждую неделю',
+        measureOnly: 'Только измерение',
+        clean: 'Очистить',
+        cleanWarning: 'Это удаляет файлы без чьего-либо наблюдения. Это очищает правила, которые рекомендует Глубокая очистка и в которых действительно что-то есть, и всё равно всё отправляется в карантин — поэтому проверьте настройку хранения выше, прежде чем оставлять это включённым.',
+        nextRun: 'Следующий запуск:',
+        lastRun: 'Последний запуск:',
+        weekdays: {
+          sunday: 'Воскресенье', monday: 'Понедельник', tuesday: 'Вторник', wednesday: 'Среда',
+          thursday: 'Четверг', friday: 'Пятница', saturday: 'Суббота'
+        }
+      }
+    },
     dashboard: {
       scheduleBadge: {
         missed: (count) => `${count} запланированн${count === 1 ? 'ый запуск был' : 'ых запуска были'} пропущены, пока этот ПК был выключен`,
@@ -11228,7 +15696,156 @@ export const CATALOG = {
       quarantine: 'Karanténa', settings: 'Nastavenia', startup: 'Po spustení',
       duplicates: 'Duplicity', deepClean: 'Dôkladné čistenie'
     },
-    settings: { language: { title: 'Jazyk', description: 'Jazyk, v ktorom sa zobrazujú vlastné obrazovky Prune.' } },
+    settings: {
+      language: { title: 'Jazyk', description: 'Jazyk, v ktorom sa zobrazujú vlastné obrazovky Prune.' },
+      tabs: { general: 'Všeobecné', uninstall: 'Odinštalovanie', cleanup: 'Čistenie', about: 'Informácie' },
+      title: 'Nastavenia',
+      loading: 'Načítavanie nastavení…',
+      loadError: (error) => `Nastavenia sa nepodarilo načítať: ${error}`,
+      saveError: (error) => `Nepodarilo sa uložiť: ${error}`,
+      appearance: {
+        title: 'Vzhľad',
+        description: 'Aurora Deck v tmavom alebo dennom režime. Obe sú skutočné palety, nie jedna prevrátená: akcentová farba tmavne pre svetlé pozadie, aby tlačidlo mohlo zachovať biely text, a každá úroveň bola meraná voči povrchom, na ktorých skutočne spočíva. Prune sleduje nastavenie vášho systému, kým si tu jedno nevyberiete.'
+      },
+      minimizeToTray: {
+        title: 'Minimalizovať do systémovej lišty',
+        description: 'Zatvorenie okna pošle Prune do systémovej lišty namiesto ukončenia.'
+      },
+      updateCheck: {
+        title: 'Kontrolovať aktualizácie',
+        description: 'Raz denne sa Prune pýta api.github.com, či existuje novšia verzia. Je to jediná požiadavka, ktorú Prune posiela kamkoľvek okrem tohto počítača, a GitHub vidí vašu IP adresu tak, ako by to urobila akákoľvek webová stránka. Keď je k dispozícii, na spodku bočného panela sa zobrazí tlačidlo aktualizácie a nič sa nesťahuje ani neinštaluje, kým naň nekliknete.'
+      },
+      autoInstallUpdates: {
+        title: 'Inštalovať aktualizácie automaticky',
+        description: 'Stiahne novú verziu na pozadí a nainštaluje ju nabudúce, keď sa Prune zatvorí, namiesto čakania, kým kliknete na tlačidlo aktualizácie. Vyžaduje vyššie uvedenú kontrolu aktualizácií.'
+      },
+      updateStatus: {
+        checking: 'Kontroluje sa…',
+        loadError: (error) => `Aktualizácie sa nepodarilo skontrolovať: ${error}`,
+        newerAvailable: (version) => `Prune ${version} je k dispozícii.`,
+        openDownloadPage: 'Otvoriť stránku na stiahnutie',
+        upToDate: (version) => `Máte najnovšiu verziu (${version}).`,
+        openPageError: (error) => `Stránku sa nepodarilo otvoriť: ${error}`
+      },
+      showFreeSpace: {
+        title: 'Zobraziť voľné miesto na Mape disku',
+        description: 'Pri skenovaní celej jednotky vykreslí voľné miesto jednotky ako ďalší blok, takže každý priečinok sa číta ako podiel jednotky, nie ako podiel využitého miesta.'
+      },
+      autoQuarantine: {
+        title: 'Automatická karanténa',
+        description: 'Hĺbkové čistenie presúva to, čo odstráni, do karantény Prune, odkiaľ to môžete vrátiť späť. Vypnite to a namiesto toho to pôjde do Koša Windows — stále obnoviteľné, len na mieste, ktoré už viete vyprázdniť.'
+      },
+      skipRecent: {
+        title: 'Nechať nedávne súbory na pokoji',
+        description: 'Preskočí všetko, čo bolo upravené za posledných pár hodín. V dočasnom priečinku súbor, ktorý sa práve zapisuje, vyzerá presne ako ten, ktorý bol opustený pred dvoma rokmi — práve toto zabraňuje tomu, aby bola zmetená polodokončená inštalácia. 0 to vypne.',
+        hoursUnit: 'hodín',
+        ariaLabel: 'Hodiny, počas ktorých nechať nedávne súbory na pokoji'
+      },
+      restorePointCleanup: {
+        title: 'Najprv vytvoriť bod obnovenia',
+        description: 'Pred vynúteným odstránením, aby samotný Windows mohol vrátiť počítač späť. Stojí to pár sekúnd a nerobí to vôbec nič, ak je Ochrana systému vypnutá.'
+      },
+      hideUnavailable: {
+        title: 'Skryť nástroje na čistenie, ktoré sa neuplatňujú',
+        description: 'Väčšina zoznamu je pre softvér, ktorý tento počítač nemá. Ich skrytím zostane iba to, čo je tu skutočne prítomné.'
+      },
+      quarantineRetention: {
+        title: 'Ako dlho uchovávať možnosť vrátenia späť',
+        description: 'Všetko, čo Prune odstráni, ide najprv do karantény a zostáva tam, kým ju nevyprázdnite. Nastavte počet dní na zahodenie záloh starších ako toto. Ponechajte prázdne, aby ste ich uchovali navždy.',
+        neverPlaceholder: 'Nikdy',
+        daysUnit: 'dní',
+        ariaLabel: 'Dni na uchovanie záloh karantény'
+      },
+      quarantineMaxSize: {
+        title: 'Koľko vrátenia späť uchovávať',
+        description: 'Limit pre celý priečinok karantény. Nad ním najstaršie zálohy zmiznú prvé — najnovšia sa nikdy nezahodí, takže niečo veľké, čo ste práve odstránili, zostáva obnoviteľné, aj keď je samo osebe väčšie ako limit. Ponechajte prázdne pre žiadny limit.',
+        noLimitPlaceholder: 'Bez limitu',
+        gbUnit: 'GB',
+        ariaLabel: 'Maximálna veľkosť karantény v gigabajtoch'
+      },
+      exclusions: {
+        title: 'Vylúčiť priečinky',
+        description: 'Priečinky a typy súborov, ktoré Prune nechá na pokoji — Hĺbkové čistenie ich preskočí a Mapa disku ich vynechá — okrem tých, ktoré už chráni: informácie o systémovom zväzku, karantény antivírusov, úložisko komponentov a ďalší tucet.',
+        ariaLabel: 'Cesta k priečinku alebo typ súboru na vylúčenie',
+        add: 'Pridať',
+        invalidFormat: 'Zadajte úplnú cestu k priečinku (D:\\Games) alebo typ súboru (*.iso).',
+        formatHint: 'Úplná cesta k priečinku alebo typ súboru zapísaný ako *.iso',
+        none: 'Nič nie je vylúčené.',
+        typeBadge: 'Typ',
+        folderBadge: 'Priečinok',
+        removeAriaLabel: (value) => `Prestať vylučovať ${value}`
+      },
+      sandboxTest: {
+        title: 'Test sandboxu',
+        description: 'Spustí skutočný čistiaci nástroj iba proti jednorazovému dočasnému adresáru — nikdy proti vášmu skutočnému Temp, Temp Windows alebo vyrovnávacej pamäti miniatúr — aby dokázal, že skenovanie a mazanie skutočne fungujú, kým im zveríte skutočné súbory.',
+        run: 'Spustiť test sandboxu',
+        running: 'Prebieha…',
+        allPassed: 'Všetky kontroly prešli',
+        failed: 'Test sandboxu zlyhal'
+      },
+      warningConfirmations: {
+        title: 'Potvrdenia upozornení',
+        allAsk: 'Každý nástroj na čistenie, ktorý stráca dáta, sa pred spustením spýta.',
+        someSet: (count) => `${count} upozornen${count === 1 ? 'ie o čistení je nastavené' : 'í o čistení je nastavených'}, aby sa už nepýtali.`,
+        reset: 'Obnoviť potvrdenia upozornení'
+      },
+      uninstallTab: {
+        beforeHeading: 'Pred odinštalovaním',
+        restorePointUninstall: {
+          title: 'Vytvoriť bod obnovenia pred odinštalovaním',
+          description: 'Vlastná Obnova systému Windows, vytvorená pred spustením odinštalátora programu. Vyžaduje, aby Prune bežal ako správca, a Windows povoľuje jednu za deň, takže keď ju nemožno vytvoriť, odinštalovanie pokračuje a dialógové okno to oznámi.'
+        },
+        registryBackup: {
+          title: 'Zálohovať register pred odinštalovaním',
+          description: 'Exportuje HKLM\\SOFTWARE a HKCU\\Software (asi 140 MB na počítači, na ktorom je Prune zostavený) a uchováva 3 najnovšie. Ak zálohu nemožno vytvoriť, odinštalovanie sa nespustí.'
+        },
+        afterHeading: 'Po odinštalovaní',
+        scanLeftovers: {
+          title: 'Skenovať zvyšky po odinštalovaní',
+          description: 'Hľadá súbory, kľúče registra a naplánované úlohy, ktoré zanechal odinštalátor. Vypnuté, Prune jednoducho spustí vlastný odinštalátor programu a tam sa zastaví.'
+        },
+        preselect: {
+          title: 'Predvolene zaškrtnúť každý zvyšok',
+          description: 'Kontrola sa otvorí so všetkým nájdeným zaškrtnutým. Vypnuté, otvorí sa s ničím nezaškrtnutým a vyberáte si sami.'
+        },
+        keepHistory: {
+          title: 'Uchovávať históriu odinštalovaní',
+          description: 'Zoznam nedávnych odstránení a uvoľneného miesta na paneli. Vypnuté, nič nové sa nezaznamenáva.'
+        },
+        destinationHeading: 'Zostávajúce súbory idú do',
+        leftoverOptions: {
+          quarantine: { label: 'Karanténa', description: 'Presunuté do vlastnej zálohy Prune a obnoviteľné z obrazovky karantény. Predvolené.' },
+          recycle: { label: 'Kôš', description: 'Obnoviteľné z vlastného koša Windows a uvoľnené pri jeho vyprázdnení.' },
+          permanent: { label: 'Trvalo odstrániť', description: 'Úplne odstránené. Nič na obnovenie.' }
+        },
+        permanentWarning: 'Zostávajúce súbory budú úplne odstránené a nemožno ich obnoviť, ani z karantény, ani odinakiaľ. Skontrolujte zoznam pred potvrdením.',
+        registryNote: 'Kľúče registra sa exportujú do karantény pred ich odstránením, bez ohľadu na váš výber.'
+      },
+      about: {
+        description: 'Lokálny, offline nástroj na odinštalovanie a čistenie pre Windows — vynútené odstránenie so skenovaním zvyšných súborov, bezpečná karanténa pred vymazaním, mapovanie disku a jednoklikové čistenie odpadu.'
+      },
+      automation: {
+        title: 'Automatizácia',
+        description: 'Beží, kým je Prune otvorený. Nedokáže prebudiť spiaci počítač — časové okno, ktoré uplynie, kým je počítač vypnutý, sa nahlási ako zmeškané namiesto tichého preskočenia a dobehne sa nabudúce, keď otvoríte aplikáciu.',
+        scheduled: 'Naplánované',
+        off: 'Vypnuté',
+        howOften: 'Ako často',
+        day: 'Deň',
+        at: 'O',
+        whatItDoes: 'Čo robí',
+        everyDay: 'Každý deň',
+        everyWeek: 'Každý týždeň',
+        measureOnly: 'Len merať',
+        clean: 'Čistiť',
+        cleanWarning: 'Toto odstraňuje súbory bez toho, aby to niekto sledoval. Vyčistí pravidlá, ktoré Hĺbkové čistenie odporúča a ktoré v skutočnosti niečo obsahujú, a všetko naďalej ide do karantény — preto pred ponechaním tohto zapnutého skontrolujte vyššie uvedené nastavenie uchovávania.',
+        nextRun: 'Ďalšie spustenie:',
+        lastRun: 'Posledné spustenie:',
+        weekdays: {
+          sunday: 'Nedeľa', monday: 'Pondelok', tuesday: 'Utorok', wednesday: 'Streda',
+          thursday: 'Štvrtok', friday: 'Piatok', saturday: 'Sobota'
+        }
+      }
+    },
     dashboard: {
       scheduleBadge: {
         missed: (count) => `${count} naplánovan${count === 1 ? 'é spustenie bolo' : 'é spustenia boli'} vynechané, kým bol tento počítač vypnutý`,
@@ -11601,7 +16218,156 @@ export const CATALOG = {
       quarantine: 'Karantina', settings: 'Cilësimet', startup: 'Nisja',
       duplicates: 'Dublikatat', deepClean: 'Pastrim i thellë'
     },
-    settings: { language: { title: 'Gjuha', description: 'Gjuha në të cilën shfaqen ekranet e vetë Prune.' } },
+    settings: {
+      language: { title: 'Gjuha', description: 'Gjuha në të cilën shfaqen ekranet e vetë Prune.' },
+      tabs: { general: 'Të përgjithshme', uninstall: 'Çinstalim', cleanup: 'Pastrim', about: 'Rreth' },
+      title: 'Cilësimet',
+      loading: 'Duke ngarkuar cilësimet…',
+      loadError: (error) => `Cilësimet nuk u ngarkuan dot: ${error}`,
+      saveError: (error) => `Nuk u ruajt dot: ${error}`,
+      appearance: {
+        title: 'Pamja',
+        description: 'Aurora Deck në errësirë ose dritë dite. Të dyja janë paleta të vërteta në vend të njërës të përmbysur: ngjyra theksuese errësohet për sfondin e çelët që një buton të mbajë tekst të bardhë, dhe çdo shkallë është matur kundrejt sipërfaqeve mbi të cilat mbështetet realisht. Prune ndjek cilësimin e sistemit tuaj derisa të zgjidhni një këtu.'
+      },
+      minimizeToTray: {
+        title: 'Minimizo në tabaka të sistemit',
+        description: 'Mbyllja e dritares e dërgon Prune-in në tabakanë e sistemit në vend që ta mbyllë.'
+      },
+      updateCheck: {
+        title: 'Kontrollo për përditësime',
+        description: 'Një herë në ditë, Prune pyet api.github.com nëse ekziston një version më i ri. Kjo është kërkesa e vetme që Prune bën diku tjetër përveç kësaj makine, dhe GitHub e sheh adresën tuaj IP siç do ta shihte çdo faqe interneti. Kur ka një, një buton përditësimi shfaqet në fund të shiritit anësor, dhe asgjë nuk shkarkohet apo instalohet derisa të klikoni mbi të.'
+      },
+      autoInstallUpdates: {
+        title: 'Instalo përditësimet automatikisht',
+        description: 'Shkarkon një version të ri në sfond dhe e instalon herën tjetër kur Prune mbyllet, në vend që të presë klikimin tuaj mbi butonin e përditësimit. Kërkon kontrollin e përditësimeve më lart.'
+      },
+      updateStatus: {
+        checking: 'Duke kontrolluar…',
+        loadError: (error) => `Përditësimet nuk u kontrolluan dot: ${error}`,
+        newerAvailable: (version) => `Prune ${version} është i disponueshëm.`,
+        openDownloadPage: 'Hap faqen e shkarkimit',
+        upToDate: (version) => `Keni versionin më të fundit (${version}).`,
+        openPageError: (error) => `Faqja nuk u hap dot: ${error}`
+      },
+      showFreeSpace: {
+        title: 'Shfaq hapësirën e lirë në Hartën e Diskut',
+        description: 'Vizaton hapësirën e lirë të diskut si edhe një bllok tjetër kur skanoni një disk të tërë, kështu që çdo dosje lexohet si pjesë e diskut në vend të hapësirës në përdorim.'
+      },
+      autoQuarantine: {
+        title: 'Karantinë automatike',
+        description: 'Pastrimi i Thellë e zhvendos atë që heq në Karantinën e Prune-it, nga ku mund ta ktheni. Çaktivizojeni këtë dhe në vend të kësaj do të shkojë në Koshin e Riciklimit të Windows — ende i rikuperueshëm, thjesht në një vend që tashmë e dini si ta zbrazni.'
+      },
+      skipRecent: {
+        title: 'Lëri qetë skedarët e fundit',
+        description: 'Anashkalon çdo gjë të modifikuar në orët e fundit. Në një dosje të përkohshme, një skedar që po shkruhet tani duket saktësisht si një i braktisur dy vjet më parë — kjo është ajo që parandalon një instalim gjysmë të përfunduar nga fshirja. 0 e çaktivizon këtë.',
+        hoursUnit: 'orë',
+        ariaLabel: 'Orët për të lënë qetë skedarët e fundit'
+      },
+      restorePointCleanup: {
+        title: 'Krijo së pari një pikë rikthimi',
+        description: 'Përpara një heqjeje të detyruar, në mënyrë që vetë Windows të mund ta rikthejë makinën prapa. Kushton disa sekonda dhe nuk bën asgjë fare nëse Mbrojtja e Sistemit është e çaktivizuar.'
+      },
+      hideUnavailable: {
+        title: 'Fshih pastruesit që nuk zbatohen',
+        description: 'Pjesa më e madhe e listës është për softuer që kjo makinë nuk e ka. Fshehja e tyre lë vetëm atë që gjendet realisht këtu.'
+      },
+      quarantineRetention: {
+        title: 'Sa kohë të mbahet zhbërja',
+        description: 'Çdo gjë që Prune heq shkon fillimisht në Karantinë, dhe qëndron atje derisa ta zbrazni. Vendosni një numër ditësh për të hedhur kopjet rezervë më të vjetra se kaq. Lëreni bosh për t\'i mbajtur përgjithmonë.',
+        neverPlaceholder: 'Kurrë',
+        daysUnit: 'ditë',
+        ariaLabel: 'Ditët për të mbajtur kopjet rezervë të karantinës'
+      },
+      quarantineMaxSize: {
+        title: 'Sa zhbërje të mbahet',
+        description: 'Një kufi për të gjithë dosjen e Karantinës. Mbi të, kopjet rezervë më të vjetra ikin të parat — më e fundit nuk hidhet kurrë, kështu që diçka e madhe që sapo hoqët mbetet e rikuperueshme edhe nëse është vetë më e madhe se kufiri. Lëreni bosh për asnjë kufi.',
+        noLimitPlaceholder: 'Pa kufi',
+        gbUnit: 'GB',
+        ariaLabel: 'Madhësia maksimale e karantinës në gigabajt'
+      },
+      exclusions: {
+        title: 'Përjashto Dosje',
+        description: 'Dosje dhe lloje skedarësh që Prune do t\'i lërë qetë — anashkaluar nga Pastrimi i Thellë dhe të përjashtuara nga Harta e Diskut — përveç atyre që tashmë mbron: Informacioni i Vëllimit të Sistemit, karantinat antivirus, depoja e komponentëve dhe një duzinë të tjera.',
+        ariaLabel: 'Shtegu i dosjes ose lloji i skedarit për t\'u përjashtuar',
+        add: 'Shto',
+        invalidFormat: 'Shkruani një shteg të plotë dosjeje (D:\\Games) ose një lloj skedari (*.iso).',
+        formatHint: 'Një shteg i plotë dosjeje, ose një lloj skedari i shkruar si *.iso',
+        none: 'Asgjë e përjashtuar.',
+        typeBadge: 'Lloji',
+        folderBadge: 'Dosja',
+        removeAriaLabel: (value) => `Ndalo së përjashtuari ${value}`
+      },
+      sandboxTest: {
+        title: 'Testi i Sandbox-it',
+        description: 'Ekzekuton motorin e vërtetë të pastrimit vetëm kundrejt një drejtorie të përkohshme një përdorimeshe — kurrë kundrejt Temp-it tuaj real, Temp-it të Windows, apo memorjes cache të miniaturave — për të vërtetuar se skanimi dhe fshirja funksionojnë vërtet përpara se t\'u besoni skedarë realë.',
+        run: 'Ekzekuto Testin e Sandbox-it',
+        running: 'Po ekzekutohet…',
+        allPassed: 'Të gjitha kontrollet kaluan',
+        failed: 'Testi i sandbox-it dështoi'
+      },
+      warningConfirmations: {
+        title: 'Konfirmimet e paralajmërimeve',
+        allAsk: 'Çdo pastrues që humbet të dhëna pyet përpara se të ekzekutohet.',
+        someSet: (count) => `${count} paralajmërim${count === 1 ? '' : 'e'} pastrimi ${count === 1 ? 'është caktuar' : 'janë caktuar'} të mos pyesin më.`,
+        reset: 'Rivendos konfirmimet e paralajmërimeve'
+      },
+      uninstallTab: {
+        beforeHeading: 'Para çinstalimit',
+        restorePointUninstall: {
+          title: 'Krijo një pikë rikthimi para çinstalimit',
+          description: 'Rikuperimi i vetë Sistemit të Windows, krijuar përpara se çinstaluesi i programit të ekzekutohet. Kërkon që Prune të ekzekutohet si administrator dhe Windows lejon një në ditë, kështu që kur nuk mund të krijohet, çinstalimi vazhdon dhe dialogu e thotë këtë.'
+        },
+        registryBackup: {
+          title: 'Bëj kopje rezervë të regjistrit para çinstalimit',
+          description: 'Eksporton HKLM\\SOFTWARE dhe HKCU\\Software (rreth 140 MB në makinën ku është ndërtuar Prune) dhe mban 3 më të fundit. Nëse kopja rezervë nuk mund të krijohet, çinstalimi nuk ekzekutohet.'
+        },
+        afterHeading: 'Pas çinstalimit',
+        scanLeftovers: {
+          title: 'Skano për mbetje pas çinstalimit',
+          description: 'Kërkon skedarët, çelësat e regjistrit dhe detyrat e planifikuara që çinstaluesi ka lënë pas. I çaktivizuar, Prune thjesht ekzekuton çinstaluesin e vetë programit dhe ndalon aty.'
+        },
+        preselect: {
+          title: 'Shëno çdo mbetje si parazgjedhje',
+          description: 'Rishikimi hapet me gjithçka të gjetur të shënuar. I çaktivizuar, hapet pa asgjë të shënuar dhe ju zgjidhni.'
+        },
+        keepHistory: {
+          title: 'Mbaj një histori çinstalimesh',
+          description: 'Lista e panelit të heqjeve të fundit dhe hapësirës që kanë liruar. I çaktivizuar, asgjë e re nuk regjistrohet.'
+        },
+        destinationHeading: 'Skedarët e mbetur shkojnë te',
+        leftoverOptions: {
+          quarantine: { label: 'Karantina', description: 'Zhvendosur në kopjen rezervë të vetë Prune-it, dhe e rikuperueshme nga ekrani i Karantinës. E parazgjedhura.' },
+          recycle: { label: 'Koshi i Riciklimit', description: 'I rikuperueshëm nga koshi i vetë Windows, dhe liruar kur e zbrazni.' },
+          permanent: { label: 'Fshi përgjithmonë', description: 'Fshirë krejtësisht. Asgjë për t\'u rikthyer.' }
+        },
+        permanentWarning: 'Skedarët e mbetur do të fshihen krejtësisht dhe nuk mund të rikthehen, as nga Karantina, as nga diku tjetër. Kontrolloni listën përpara se ta konfirmoni.',
+        registryNote: 'Çelësat e regjistrit eksportohen në Karantinë përpara se të hiqen, cilëndo zgjedhje që të bëni.'
+      },
+      about: {
+        description: 'Një mjet lokal, jashtë linje çinstalimi dhe pastrimi për Windows — heqje e detyruar me skanim skedarësh të mbetur, karantinë e sigurt përpara fshirjes, hartëzim disku, dhe pastrim mbeturinash me një klikim.'
+      },
+      automation: {
+        title: 'Automatizimi',
+        description: 'Ekzekutohet ndërkohë që Prune është i hapur. Nuk mund të zgjojë një makinë në gjumë — një dritare kohore që kalon ndërsa kompjuteri është i fikur raportohet si e humbur në vend që të anashkalohet në heshtje, dhe rikuperohet herën tjetër që hapni aplikacionin.',
+        scheduled: 'I planifikuar',
+        off: 'Fikur',
+        howOften: 'Sa shpesh',
+        day: 'Dita',
+        at: 'Në',
+        whatItDoes: 'Çfarë bën',
+        everyDay: 'Çdo ditë',
+        everyWeek: 'Çdo javë',
+        measureOnly: 'Vetëm mat',
+        clean: 'Pastro',
+        cleanWarning: 'Kjo heq skedarë pa askënd që të vëzhgojë. Pastron rregullat që Pastrimi i Thellë rekomandon dhe që kanë vërtet diçka brenda, dhe gjithçka shkon prapëseprapë në karantinë — prandaj kontrolloni cilësimin e mbajtjes më lart përpara se ta lini këtë të aktivizuar.',
+        nextRun: 'Ekzekutimi tjetër:',
+        lastRun: 'Ekzekutimi i fundit:',
+        weekdays: {
+          sunday: 'E diel', monday: 'E hënë', tuesday: 'E martë', wednesday: 'E mërkurë',
+          thursday: 'E enjte', friday: 'E premte', saturday: 'E shtunë'
+        }
+      }
+    },
     dashboard: {
       scheduleBadge: {
         missed: (count) => `${count} ekzekutim${count === 1 ? ' i planifikuar u humb' : 'e të planifikuara u humbën'} ndërsa ky kompjuter ishte i fikur`,
@@ -11974,7 +16740,156 @@ export const CATALOG = {
       quarantine: 'Карантин', settings: 'Подешавања', startup: 'Покретање',
       duplicates: 'Дупликати', deepClean: 'Дубинско чишћење'
     },
-    settings: { language: { title: 'Језик', description: 'Језик на којем се приказују сопствени екрани Prune-а.' } },
+    settings: {
+      language: { title: 'Језик', description: 'Језик на којем се приказују сопствени екрани Prune-а.' },
+      tabs: { general: 'Опште', uninstall: 'Деинсталација', cleanup: 'Чишћење', about: 'О апликацији' },
+      title: 'Подешавања',
+      loading: 'Учитавање подешавања…',
+      loadError: (error) => `Подешавања нису могла да се учитају: ${error}`,
+      saveError: (error) => `Чување није успело: ${error}`,
+      appearance: {
+        title: 'Изглед',
+        description: 'Aurora Deck у тамном или дневном режиму. Обе су праве палете, а не једна обрнута: акцентна боја постаје тамнија за светлу позадину како би дугме могло да задржи бели текст, а сваки ниво је мерен у односу на површине на којима заиста стоји. Prune прати подешавање вашег система док овде не изаберете једно.'
+      },
+      minimizeToTray: {
+        title: 'Умањи у системску касету',
+        description: 'Затварање прозора шаље Prune у системску касету уместо да га затвори.'
+      },
+      updateCheck: {
+        title: 'Провери ажурирања',
+        description: 'Једном дневно, Prune пита api.github.com да ли постоји новија верзија. То је једини захтев који Prune шаље било где осим овог рачунара, а GitHub види вашу IP адресу као што би то учинио сваки веб-сајт. Када постоји нова верзија, на дну бочне траке се појављује дугме за ажурирање, и ништа се не преузима нити инсталира док на њега не кликнете.'
+      },
+      autoInstallUpdates: {
+        title: 'Аутоматски инсталирај ажурирања',
+        description: 'Преузима нову верзију у позадини и инсталира је следећи пут када се Prune затвори, уместо да чека да кликнете на дугме за ажурирање. Захтева проверу ажурирања изнад.'
+      },
+      updateStatus: {
+        checking: 'Проверавање…',
+        loadError: (error) => `Ажурирања нису могла да се провере: ${error}`,
+        newerAvailable: (version) => `Prune ${version} је доступан.`,
+        openDownloadPage: 'Отвори страницу за преузимање',
+        upToDate: (version) => `Имате најновију верзију (${version}).`,
+        openPageError: (error) => `Страница није могла да се отвори: ${error}`
+      },
+      showFreeSpace: {
+        title: 'Прикажи слободан простор на Мапи диска',
+        description: 'Исцртава слободан простор диска као још један блок када скенирате цео диск, тако да се сваки фолдер чита као удео диска, а не заузетог простора.'
+      },
+      autoQuarantine: {
+        title: 'Аутоматска карантина',
+        description: 'Дубоко чишћење премешта оно што уклони у Prune карантину, одакле можете то да вратите. Искључите ово и уместо тога ће отићи у Windows корпу за отпатке — и даље се може вратити, само на месту које већ знате да испразните.'
+      },
+      skipRecent: {
+        title: 'Остави недавне датотеке на миру',
+        description: 'Прескаче све што је измењено у последњих неколико сати. У привременом фолдеру, датотека која се управо пише изгледа потпуно исто као она напуштена пре две године — то је оно што спречава да напола завршена инсталација буде обрисана. 0 ово искључује.',
+        hoursUnit: 'сати',
+        ariaLabel: 'Сати за остављање недавних датотека на миру'
+      },
+      restorePointCleanup: {
+        title: 'Прво направи тачку опоравка',
+        description: 'Пре присилног уклањања, како би сам Windows могао да врати рачунар уназад. Кошта неколико секунди и не ради ништа ако је Заштита система искључена.'
+      },
+      hideUnavailable: {
+        title: 'Сакриј чистаче који се не примењују',
+        description: 'Већи део листе је за софтвер који овај рачунар нема. Скривање тих оставља само оно што је заиста овде.'
+      },
+      quarantineRetention: {
+        title: 'Колико дуго чувати могућност поништавања',
+        description: 'Све што Prune уклони прво иде у карантину, и остаје тамо док је не испразните. Поставите број дана да бисте одбацили резервне копије старије од тога. Оставите празно да их чувате заувек.',
+        neverPlaceholder: 'Никада',
+        daysUnit: 'дана',
+        ariaLabel: 'Дани за чување резервних копија карантине'
+      },
+      quarantineMaxSize: {
+        title: 'Колико поништавања чувати',
+        description: 'Ограничење за читав фолдер карантине. Изнад тога, најстарије резервне копије нестају прве — најновија се никада не одбацује, тако да нешто велико што сте управо уклонили остаје обновљиво чак и ако је само по себи веће од ограничења. Оставите празно за без ограничења.',
+        noLimitPlaceholder: 'Без ограничења',
+        gbUnit: 'GB',
+        ariaLabel: 'Максимална величина карантине у гигабајтима'
+      },
+      exclusions: {
+        title: 'Изузми фолдере',
+        description: 'Фолдери и типови датотека које ће Prune оставити на миру — прескочени од стране Дубоког чишћења и изузети из Мапе диска — поред оних које већ штити: информације о системском волумену, карантине антивируса, складиште компоненти и још десетак других.',
+        ariaLabel: 'Путања фолдера или тип датотеке за изузимање',
+        add: 'Додај',
+        invalidFormat: 'Унесите пуну путању фолдера (D:\\Games) или тип датотеке (*.iso).',
+        formatHint: 'Пуна путања фолдера, или тип датотеке написан као *.iso',
+        none: 'Ништа није изузето.',
+        typeBadge: 'Тип',
+        folderBadge: 'Фолдер',
+        removeAriaLabel: (value) => `Престани да изузимаш ${value}`
+      },
+      sandboxTest: {
+        title: 'Тест песка',
+        description: 'Покреће стварни механизам чишћења само против једнократног привременог директоријума — никада против вашег стварног Temp-а, Windows Temp-а или кеша сличица — да докаже да скенирање и брисање заиста раде пре него што им поверите стварне датотеке.',
+        run: 'Покрени тест песка',
+        running: 'У току…',
+        allPassed: 'Све провере прошле',
+        failed: 'Тест песка није успео'
+      },
+      warningConfirmations: {
+        title: 'Потврде упозорења',
+        allAsk: 'Сваки чистач који губи податке пита пре покретања.',
+        someSet: (count) => `${count} упозорења о чишћењу подешено да не пита поново.`,
+        reset: 'Ресетуј потврде упозорења'
+      },
+      uninstallTab: {
+        beforeHeading: 'Пре деинсталације',
+        restorePointUninstall: {
+          title: 'Направи тачку опоравка пре деинсталације',
+          description: 'Сопствени Windows опоравак система, направљен пре него што се покрене деинсталатер програма. Захтева да Prune буде покренут као администратор, а Windows дозвољава једну дневно, па када не може да се направи, деинсталација се наставља и дијалог то наводи.'
+        },
+        registryBackup: {
+          title: 'Направи резервну копију регистра пре деинсталације',
+          description: 'Извози HKLM\\SOFTWARE и HKCU\\Software (око 140 MB на рачунару на коме је Prune изграђен) и чува најновије 3. Ако резервна копија не може да се направи, деинсталација се не покреће.'
+        },
+        afterHeading: 'После деинсталације',
+        scanLeftovers: {
+          title: 'Скенирај остатке после деинсталације',
+          description: 'Тражи датотеке, кључеве регистра и заказане задатке које је деинсталатер оставио за собом. Искључено, Prune само покреће сопствени деинсталатер програма и ту се зауставља.'
+        },
+        preselect: {
+          title: 'Подразумевано означи сваки остатак',
+          description: 'Преглед се отвара са свим пронађеним означеним. Искључено, отвара се без ичега означеног и ви бирате.'
+        },
+        keepHistory: {
+          title: 'Чувај историју деинсталација',
+          description: 'Листа контролне табле недавних уклањања и простора који су ослободили. Искључено, ништа ново се не бележи.'
+        },
+        destinationHeading: 'Преостале датотеке иду у',
+        leftoverOptions: {
+          quarantine: { label: 'Карантина', description: 'Премештено у сопствену резервну копију Prune-а, и може се вратити са екрана карантине. Подразумевано.' },
+          recycle: { label: 'Корпа за отпатке', description: 'Може се вратити из сопствене Windows корпе, и ослобађа се када је испразните.' },
+          permanent: { label: 'Трајно обриши', description: 'Потпуно обрисано. Ништа за враћање.' }
+        },
+        permanentWarning: 'Преостале датотеке ће бити потпуно обрисане и не могу се вратити, ни из карантине ни одакле другде. Проверите листу пре потврђивања.',
+        registryNote: 'Кључеви регистра се извозе у карантину пре уклањања, без обзира на ваш избор.'
+      },
+      about: {
+        description: 'Локални, офлајн алат за деинсталацију и чишћење за Windows — присилно уклањање са скенирањем преосталих датотека, безбедна карантина пре брисања, мапирање диска и чишћење смећа једним кликом.'
+      },
+      automation: {
+        title: 'Аутоматизација',
+        description: 'Ради док је Prune отворен. Не може да пробуди успавани рачунар — временски прозор који прође док је рачунар искључен пријављује се као пропуштен уместо тихо прескочен, и надокнађује се следећи пут када отворите апликацију.',
+        scheduled: 'Заказано',
+        off: 'Искључено',
+        howOften: 'Колико често',
+        day: 'Дан',
+        at: 'У',
+        whatItDoes: 'Шта ради',
+        everyDay: 'Сваки дан',
+        everyWeek: 'Сваке недеље',
+        measureOnly: 'Само мери',
+        clean: 'Очисти',
+        cleanWarning: 'Ово уклања датотеке без надзора. Чисти правила која Дубоко чишћење препоручује и која заиста имају нешто у себи, а све и даље иде у карантину — зато проверите подешавање задржавања изнад пре него што ово оставите укљученим.',
+        nextRun: 'Следеће покретање:',
+        lastRun: 'Последње покретање:',
+        weekdays: {
+          sunday: 'Недеља', monday: 'Понедељак', tuesday: 'Уторак', wednesday: 'Среда',
+          thursday: 'Четвртак', friday: 'Петак', saturday: 'Субота'
+        }
+      }
+    },
     dashboard: {
       scheduleBadge: {
         missed: (count) => `${count} заказан${count === 1 ? 'о покретање је' : 'а покретања су'} пропуштена док је овај рачунар био искључен`,
@@ -12347,7 +17262,156 @@ export const CATALOG = {
       quarantine: 'Karantän', settings: 'Inställningar', startup: 'Startprogram',
       duplicates: 'Dubbletter', deepClean: 'Grundlig rensning'
     },
-    settings: { language: { title: 'Språk', description: 'Språket som Prunes egna skärmar visas på.' } },
+    settings: {
+      language: { title: 'Språk', description: 'Språket som Prunes egna skärmar visas på.' },
+      tabs: { general: 'Allmänt', uninstall: 'Avinstallation', cleanup: 'Rensning', about: 'Om' },
+      title: 'Inställningar',
+      loading: 'Laddar inställningar…',
+      loadError: (error) => `Kunde inte läsa in inställningar: ${error}`,
+      saveError: (error) => `Det gick inte att spara: ${error}`,
+      appearance: {
+        title: 'Utseende',
+        description: 'Aurora Deck i mörkt eller ljust läge. Båda är riktiga paletter i stället för en inverterad: accentfärgen blir mörkare för den ljusa bakgrunden så att en knapp kan behålla vit text, och varje nivå mättes mot ytorna den faktiskt vilar på. Prune följer din systeminställning tills du väljer en här.'
+      },
+      minimizeToTray: {
+        title: 'Minimera till aktivitetsfältet',
+        description: 'Att stänga fönstret skickar Prune till systemfältet i stället för att avsluta det.'
+      },
+      updateCheck: {
+        title: 'Sök efter uppdateringar',
+        description: 'En gång om dagen frågar Prune api.github.com om det finns en nyare version. Det är den enda begäran Prune gör någon annanstans än till den här datorn, och GitHub ser din IP-adress som vilken webbplats som helst skulle göra. När det finns en dyker en uppdateringsknapp upp längst ner i sidofältet, och inget laddas ner eller installeras förrän du klickar på den.'
+      },
+      autoInstallUpdates: {
+        title: 'Installera uppdateringar automatiskt',
+        description: 'Laddar ner en ny version i bakgrunden och installerar den nästa gång Prune stängs, i stället för att vänta på att du klickar på uppdateringsknappen. Kräver uppdateringskontrollen ovan.'
+      },
+      updateStatus: {
+        checking: 'Kontrollerar…',
+        loadError: (error) => `Det gick inte att söka efter uppdateringar: ${error}`,
+        newerAvailable: (version) => `Prune ${version} är tillgänglig.`,
+        openDownloadPage: 'Öppna nedladdningssidan',
+        upToDate: (version) => `Du har den senaste versionen (${version}).`,
+        openPageError: (error) => `Det gick inte att öppna sidan: ${error}`
+      },
+      showFreeSpace: {
+        title: 'Visa ledigt utrymme på Diskkartan',
+        description: 'Ritar enhetens lediga utrymme som ytterligare ett block när du skannar en hel enhet, så att varje mapp läses som en andel av enheten i stället för av det använda utrymmet.'
+      },
+      autoQuarantine: {
+        title: 'Automatisk karantän',
+        description: 'Djuprensning flyttar det den tar bort till Prunes karantän, varifrån du kan lägga tillbaka det. Stäng av detta och det går till Papperskorgen i Windows i stället — fortfarande återställbart, bara på en plats du redan vet hur du tömmer.'
+      },
+      skipRecent: {
+        title: 'Lämna nya filer i fred',
+        description: 'Hoppar över allt som ändrats de senaste timmarna. I en tillfällig mapp ser en fil som skrivs just nu exakt likadan ut som en som övergavs för två år sedan — det är det som förhindrar att en halvfärdig installation sopas bort. 0 stänger av detta.',
+        hoursUnit: 'timmar',
+        ariaLabel: 'Timmar att lämna nya filer i fred'
+      },
+      restorePointCleanup: {
+        title: 'Skapa en återställningspunkt först',
+        description: 'Före en tvingad borttagning, så att Windows själv kan återställa datorn. Kostar några sekunder och gör absolut ingenting om Systemskydd är avstängt.'
+      },
+      hideUnavailable: {
+        title: 'Dölj rensningsverktyg som inte gäller',
+        description: 'Merparten av listan är för programvara som den här datorn inte har. Att dölja dem lämnar bara kvar det som faktiskt finns här.'
+      },
+      quarantineRetention: {
+        title: 'Hur länge ångra ska sparas',
+        description: 'Allt Prune tar bort går först till Karantän, och stannar där tills du tömmer den. Ange ett antal dagar för att kasta säkerhetskopior äldre än så. Lämna tomt för att behålla dem för alltid.',
+        neverPlaceholder: 'Aldrig',
+        daysUnit: 'dagar',
+        ariaLabel: 'Dagar att spara karantänsäkerhetskopior'
+      },
+      quarantineMaxSize: {
+        title: 'Hur mycket ångra som ska sparas',
+        description: 'Ett tak för hela Karantän-mappen. Över det försvinner de äldsta säkerhetskopiorna först — den senaste kastas aldrig, så något stort du just tog bort förblir återställbart även om det är större än taket på egen hand. Lämna tomt för ingen gräns.',
+        noLimitPlaceholder: 'Ingen gräns',
+        gbUnit: 'GB',
+        ariaLabel: 'Maximal karantänstorlek i gigabyte'
+      },
+      exclusions: {
+        title: 'Uteslut mappar',
+        description: 'Mappar och filtyper som Prune lämnar i fred — hoppas över av Djuprensning och utesluts från Diskkartan — utöver de den redan skyddar: Systemvolyminformation, antiviruskaranterner, komponentlagret och ett dussin till.',
+        ariaLabel: 'Mappsökväg eller filtyp att utesluta',
+        add: 'Lägg till',
+        invalidFormat: 'Skriv en fullständig mappsökväg (D:\\Games) eller en filtyp (*.iso).',
+        formatHint: 'En fullständig mappsökväg, eller en filtyp skriven som *.iso',
+        none: 'Inget uteslutet.',
+        typeBadge: 'Typ',
+        folderBadge: 'Mapp',
+        removeAriaLabel: (value) => `Sluta utesluta ${value}`
+      },
+      sandboxTest: {
+        title: 'Sandlådetest',
+        description: 'Kör den riktiga rensningsmotorn endast mot en engångskatalog — aldrig din faktiska Temp, Windows Temp, eller miniatyrbildscachen — för att bevisa att skanning och radering verkligen fungerar innan du litar på dem med riktiga filer.',
+        run: 'Kör sandlådetest',
+        running: 'Körs…',
+        allPassed: 'Alla kontroller godkända',
+        failed: 'Sandlådetestet misslyckades'
+      },
+      warningConfirmations: {
+        title: 'Varningsbekräftelser',
+        allAsk: 'Varje rensningsverktyg som förlorar data frågar innan det körs.',
+        someSet: (count) => `${count} rensningsvarning${count === 1 ? '' : 'ar'} inställd${count === 1 ? '' : 'a'} på att inte fråga igen.`,
+        reset: 'Återställ varningsbekräftelser'
+      },
+      uninstallTab: {
+        beforeHeading: 'Före avinstallation',
+        restorePointUninstall: {
+          title: 'Skapa en återställningspunkt före avinstallation',
+          description: 'Windows egen Systemåterställning, skapad innan programmets avinstallationsprogram körs. Kräver att Prune körs som administratör och Windows tillåter en per dag, så när den inte kan skapas fortsätter avinstallationen och dialogrutan säger det.'
+        },
+        registryBackup: {
+          title: 'Säkerhetskopiera registret före avinstallation',
+          description: 'Exporterar HKLM\\SOFTWARE och HKCU\\Software (cirka 140 MB på datorn Prune är byggd på) och behåller de 3 senaste. Om säkerhetskopian inte kan skapas körs inte avinstallationen.'
+        },
+        afterHeading: 'Efter avinstallation',
+        scanLeftovers: {
+          title: 'Sök efter kvarlevor efter avinstallation',
+          description: 'Letar efter filerna, registernycklarna och schemalagda uppgifter som avinstallationsprogrammet lämnat kvar. Av, kör Prune bara programmets eget avinstallationsprogram och stannar där.'
+        },
+        preselect: {
+          title: 'Markera varje kvarleva som standard',
+          description: 'Granskningen öppnas med allt som hittats markerat. Av, öppnas den utan något markerat och du väljer.'
+        },
+        keepHistory: {
+          title: 'Håll en avinstallationshistorik',
+          description: 'Instrumentpanelens lista över nyligen genomförda borttagningar och det utrymme de frigjorde. Av, registreras inget nytt.'
+        },
+        destinationHeading: 'Kvarvarande filer går till',
+        leftoverOptions: {
+          quarantine: { label: 'Karantän', description: 'Flyttad till Prunes egen säkerhetskopia, och återställbar från Karantän-skärmen. Standardvalet.' },
+          recycle: { label: 'Papperskorgen', description: 'Återställbar från Windows egen papperskorg, och frigörs när du tömmer den.' },
+          permanent: { label: 'Radera permanent', description: 'Raderad helt. Inget att återställa.' }
+        },
+        permanentWarning: 'Kvarvarande filer kommer att raderas helt och kan inte återställas, varken från Karantän eller någon annanstans. Kontrollera listan innan du bekräftar den.',
+        registryNote: 'Registernycklar exporteras till Karantän innan de tas bort, oavsett vad du väljer.'
+      },
+      about: {
+        description: 'Ett lokalt, offline avinstallations- och rensningsverktyg för Windows — tvingad borttagning med skanning av kvarvarande filer, säker karantän före radering, diskkartläggning och skräprensning med ett klick.'
+      },
+      automation: {
+        title: 'Automatisering',
+        description: 'Körs medan Prune är öppen. Den kan inte väcka en sovande dator — ett tidsfönster som passerar medan datorn är avstängd rapporteras som missat i stället för tyst överhoppat, och tas igen nästa gång du öppnar appen.',
+        scheduled: 'Schemalagd',
+        off: 'Av',
+        howOften: 'Hur ofta',
+        day: 'Dag',
+        at: 'Klockan',
+        whatItDoes: 'Vad den gör',
+        everyDay: 'Varje dag',
+        everyWeek: 'Varje vecka',
+        measureOnly: 'Mät bara',
+        clean: 'Rensa',
+        cleanWarning: 'Detta tar bort filer utan att någon övervakar. Det rensar reglerna som Djuprensning rekommenderar och som verkligen har något i sig, och allt går fortfarande till karantän — så kontrollera bevarandeinställningen ovan innan du lämnar detta påslaget.',
+        nextRun: 'Nästa körning:',
+        lastRun: 'Senaste körning:',
+        weekdays: {
+          sunday: 'Söndag', monday: 'Måndag', tuesday: 'Tisdag', wednesday: 'Onsdag',
+          thursday: 'Torsdag', friday: 'Fredag', saturday: 'Lördag'
+        }
+      }
+    },
     dashboard: {
       scheduleBadge: {
         missed: (count) => `${count} schemalag${count === 1 ? 'd körning missades' : 'da körningar missades'} medan denna dator var avstängd`,
@@ -12720,7 +17784,156 @@ export const CATALOG = {
       quarantine: 'กักกัน', settings: 'การตั้งค่า', startup: 'โปรแกรมเริ่มต้น',
       duplicates: 'ไฟล์ซ้ำ', deepClean: 'ทำความสะอาดเชิงลึก'
     },
-    settings: { language: { title: 'ภาษา', description: 'ภาษาที่หน้าจอของ Prune เองแสดงผล' } },
+    settings: {
+      language: { title: 'ภาษา', description: 'ภาษาที่หน้าจอของ Prune เองแสดงผล' },
+      tabs: { general: 'ทั่วไป', uninstall: 'ถอนการติดตั้ง', cleanup: 'ล้างข้อมูล', about: 'เกี่ยวกับ' },
+      title: 'การตั้งค่า',
+      loading: 'กำลังโหลดการตั้งค่า…',
+      loadError: (error) => `ไม่สามารถโหลดการตั้งค่าได้: ${error}`,
+      saveError: (error) => `ไม่สามารถบันทึกได้: ${error}`,
+      appearance: {
+        title: 'รูปลักษณ์',
+        description: 'Aurora Deck ในโหมดมืดหรือโหมดกลางวัน ทั้งสองแบบเป็นชุดสีจริง ไม่ใช่การกลับสีจากอีกแบบหนึ่ง สีเน้นจะเข้มขึ้นสำหรับพื้นหลังสีอ่อนเพื่อให้ปุ่มยังคงข้อความสีขาวไว้ได้ และทุกระดับได้รับการวัดเทียบกับพื้นผิวที่มันวางอยู่จริง Prune จะทำตามการตั้งค่าระบบของคุณจนกว่าคุณจะเลือกที่นี่'
+      },
+      minimizeToTray: {
+        title: 'ย่อไปที่ถาดระบบ',
+        description: 'การปิดหน้าต่างจะส่ง Prune ไปที่ถาดระบบแทนที่จะปิดโปรแกรม'
+      },
+      updateCheck: {
+        title: 'ตรวจสอบการอัปเดต',
+        description: 'วันละครั้ง Prune จะถาม api.github.com ว่ามีเวอร์ชันใหม่กว่าหรือไม่ นี่เป็นคำขอเดียวที่ Prune ส่งไปที่อื่นนอกจากเครื่องนี้ และ GitHub จะเห็นที่อยู่ IP ของคุณเหมือนที่เว็บไซต์ใดๆ จะเห็น เมื่อมีเวอร์ชันใหม่ ปุ่มอัปเดตจะปรากฏที่ด้านล่างของแถบด้านข้าง และจะไม่มีการดาวน์โหลดหรือติดตั้งใดๆ จนกว่าคุณจะคลิกที่ปุ่มนั้น'
+      },
+      autoInstallUpdates: {
+        title: 'ติดตั้งการอัปเดตโดยอัตโนมัติ',
+        description: 'ดาวน์โหลดเวอร์ชันใหม่ในเบื้องหลังและติดตั้งในครั้งถัดไปที่ Prune ปิด แทนที่จะรอให้คุณคลิกปุ่มอัปเดต ต้องเปิดใช้การตรวจสอบการอัปเดตด้านบนก่อน'
+      },
+      updateStatus: {
+        checking: 'กำลังตรวจสอบ…',
+        loadError: (error) => `ไม่สามารถตรวจสอบการอัปเดตได้: ${error}`,
+        newerAvailable: (version) => `Prune ${version} พร้อมใช้งานแล้ว`,
+        openDownloadPage: 'เปิดหน้าดาวน์โหลด',
+        upToDate: (version) => `คุณใช้เวอร์ชันล่าสุดอยู่แล้ว (${version})`,
+        openPageError: (error) => `ไม่สามารถเปิดหน้าเว็บได้: ${error}`
+      },
+      showFreeSpace: {
+        title: 'แสดงพื้นที่ว่างบนแผนที่ดิสก์',
+        description: 'วาดพื้นที่ว่างของไดรฟ์เป็นอีกหนึ่งบล็อกเมื่อคุณสแกนไดรฟ์ทั้งหมด เพื่อให้แต่ละโฟลเดอร์อ่านเป็นสัดส่วนของไดรฟ์แทนที่จะเป็นพื้นที่ที่ใช้งานอยู่'
+      },
+      autoQuarantine: {
+        title: 'กักกันอัตโนมัติ',
+        description: 'การล้างข้อมูลเชิงลึกจะย้ายสิ่งที่ลบไปยังกักกันของ Prune ซึ่งคุณสามารถนำกลับมาได้ ปิดสิ่งนี้แล้วมันจะไปที่ถังรีไซเคิลของ Windows แทน — ยังคงกู้คืนได้ เพียงแค่อยู่ในที่ที่คุณรู้วิธีล้างอยู่แล้ว'
+      },
+      skipRecent: {
+        title: 'ปล่อยไฟล์ล่าสุดไว้',
+        description: 'ข้ามทุกอย่างที่ถูกแก้ไขในช่วงไม่กี่ชั่วโมงที่ผ่านมา ในโฟลเดอร์ชั่วคราว ไฟล์ที่กำลังถูกเขียนอยู่ตอนนี้จะดูเหมือนกับไฟล์ที่ถูกทิ้งไว้เมื่อสองปีก่อนทุกประการ — นี่คือสิ่งที่ป้องกันไม่ให้การติดตั้งที่ทำค้างไว้ถูกกวาดทิ้ง 0 คือการปิดใช้งาน',
+        hoursUnit: 'ชั่วโมง',
+        ariaLabel: 'จำนวนชั่วโมงที่จะปล่อยไฟล์ล่าสุดไว้'
+      },
+      restorePointCleanup: {
+        title: 'สร้างจุดคืนค่าก่อน',
+        description: 'ก่อนการลบแบบบังคับ เพื่อให้ Windows เองสามารถย้อนกลับเครื่องได้ ใช้เวลาไม่กี่วินาที และไม่ทำอะไรเลยหากการป้องกันระบบถูกปิดอยู่'
+      },
+      hideUnavailable: {
+        title: 'ซ่อนตัวล้างข้อมูลที่ไม่เกี่ยวข้อง',
+        description: 'รายการส่วนใหญ่เป็นซอฟต์แวร์ที่เครื่องนี้ไม่มี การซ่อนรายการเหล่านี้จะเหลือแค่สิ่งที่มีอยู่จริงในเครื่องนี้'
+      },
+      quarantineRetention: {
+        title: 'จะเก็บการเลิกทำไว้นานแค่ไหน',
+        description: 'ทุกอย่างที่ Prune ลบจะไปที่กักกันก่อน และอยู่ที่นั่นจนกว่าคุณจะล้างมัน ตั้งค่าจำนวนวันเพื่อทิ้งข้อมูลสำรองที่เก่ากว่านั้น เว้นว่างไว้เพื่อเก็บไว้ตลอดไป',
+        neverPlaceholder: 'ไม่มีวันหมดอายุ',
+        daysUnit: 'วัน',
+        ariaLabel: 'จำนวนวันที่จะเก็บข้อมูลสำรองการกักกัน'
+      },
+      quarantineMaxSize: {
+        title: 'จะเก็บการเลิกทำไว้มากแค่ไหน',
+        description: 'ขีดจำกัดสำหรับทั้งโฟลเดอร์กักกัน เกินกว่านั้น ข้อมูลสำรองที่เก่าที่สุดจะหายไปก่อน — ข้อมูลล่าสุดจะไม่ถูกทิ้งเลย ดังนั้นสิ่งที่ใหญ่ที่คุณเพิ่งลบไปจะยังคงกู้คืนได้แม้ว่าจะมีขนาดใหญ่กว่าขีดจำกัดด้วยตัวมันเอง เว้นว่างไว้เพื่อไม่มีขีดจำกัด',
+        noLimitPlaceholder: 'ไม่มีขีดจำกัด',
+        gbUnit: 'GB',
+        ariaLabel: 'ขนาดกักกันสูงสุดเป็นกิกะไบต์'
+      },
+      exclusions: {
+        title: 'ยกเว้นโฟลเดอร์',
+        description: 'โฟลเดอร์และประเภทไฟล์ที่ Prune จะปล่อยไว้ — ถูกข้ามโดยการล้างข้อมูลเชิงลึกและถูกยกเว้นจากแผนที่ดิสก์ — นอกเหนือจากสิ่งที่มันปกป้องอยู่แล้ว: ข้อมูลโวลุ่มระบบ, กักกันของแอนตี้ไวรัส, คลังส่วนประกอบ และอีกสิบกว่าอย่าง',
+        ariaLabel: 'เส้นทางโฟลเดอร์หรือประเภทไฟล์ที่จะยกเว้น',
+        add: 'เพิ่ม',
+        invalidFormat: 'เขียนเส้นทางโฟลเดอร์แบบเต็ม (D:\\Games) หรือประเภทไฟล์ (*.iso)',
+        formatHint: 'เส้นทางโฟลเดอร์แบบเต็ม หรือประเภทไฟล์ที่เขียนเป็น *.iso',
+        none: 'ไม่มีการยกเว้น',
+        typeBadge: 'ประเภท',
+        folderBadge: 'โฟลเดอร์',
+        removeAriaLabel: (value) => `หยุดยกเว้น ${value}`
+      },
+      sandboxTest: {
+        title: 'การทดสอบแซนด์บ็อกซ์',
+        description: 'รันเอนจินล้างข้อมูลจริงกับไดเรกทอรีชั่วคราวแบบใช้แล้วทิ้งเท่านั้น — ไม่เคยรันกับ Temp จริงของคุณ, Temp ของ Windows หรือแคชภาพขนาดย่อ — เพื่อพิสูจน์ว่าการสแกนและการลบใช้งานได้จริงก่อนที่คุณจะไว้วางใจให้ทำงานกับไฟล์จริง',
+        run: 'รันการทดสอบแซนด์บ็อกซ์',
+        running: 'กำลังทำงาน…',
+        allPassed: 'ผ่านการตรวจสอบทั้งหมด',
+        failed: 'การทดสอบแซนด์บ็อกซ์ล้มเหลว'
+      },
+      warningConfirmations: {
+        title: 'การยืนยันคำเตือน',
+        allAsk: 'ตัวล้างข้อมูลทุกตัวที่ทำให้สูญเสียข้อมูลจะถามก่อนที่จะทำงาน',
+        someSet: (count) => `คำเตือนการล้างข้อมูล ${count} รายการถูกตั้งค่าให้ไม่ต้องถามอีก`,
+        reset: 'รีเซ็ตการยืนยันคำเตือน'
+      },
+      uninstallTab: {
+        beforeHeading: 'ก่อนถอนการติดตั้ง',
+        restorePointUninstall: {
+          title: 'สร้างจุดคืนค่าก่อนถอนการติดตั้ง',
+          description: 'การคืนค่าระบบของ Windows เอง ที่สร้างขึ้นก่อนที่ตัวถอนการติดตั้งของโปรแกรมจะทำงาน ต้องให้ Prune ทำงานในฐานะผู้ดูแลระบบ และ Windows อนุญาตให้ทำได้วันละครั้ง ดังนั้นเมื่อไม่สามารถสร้างได้ การถอนการติดตั้งจะดำเนินต่อไปและกล่องโต้ตอบจะแจ้งเรื่องนี้'
+        },
+        registryBackup: {
+          title: 'สำรองข้อมูลรีจิสทรีก่อนถอนการติดตั้ง',
+          description: 'ส่งออก HKLM\\SOFTWARE และ HKCU\\Software (ประมาณ 140 MB บนเครื่องที่ Prune ถูกสร้างขึ้น) และเก็บ 3 รายการล่าสุด หากไม่สามารถสร้างข้อมูลสำรองได้ การถอนการติดตั้งจะไม่ทำงาน'
+        },
+        afterHeading: 'หลังถอนการติดตั้ง',
+        scanLeftovers: {
+          title: 'สแกนหาสิ่งตกค้างหลังถอนการติดตั้ง',
+          description: 'ค้นหาไฟล์ คีย์รีจิสทรี และงานที่กำหนดเวลาไว้ที่ตัวถอนการติดตั้งทิ้งไว้ ปิดไว้ Prune จะรันเพียงตัวถอนการติดตั้งของโปรแกรมเองและหยุดที่นั่น'
+        },
+        preselect: {
+          title: 'ทำเครื่องหมายสิ่งตกค้างทุกรายการโดยค่าเริ่มต้น',
+          description: 'การตรวจสอบจะเปิดขึ้นโดยที่ทุกสิ่งที่พบถูกทำเครื่องหมายไว้แล้ว ปิดไว้ จะเปิดขึ้นโดยไม่มีการทำเครื่องหมายใดๆ และคุณเป็นผู้เลือกเอง'
+        },
+        keepHistory: {
+          title: 'เก็บประวัติการถอนการติดตั้ง',
+          description: 'รายการในแดชบอร์ดของการลบล่าสุดและพื้นที่ที่มันปลดปล่อย ปิดไว้ จะไม่มีการบันทึกสิ่งใหม่'
+        },
+        destinationHeading: 'ไฟล์ที่เหลืออยู่จะไปที่',
+        leftoverOptions: {
+          quarantine: { label: 'กักกัน', description: 'ย้ายไปยังข้อมูลสำรองของ Prune เอง และสามารถกู้คืนได้จากหน้าจอกักกัน ค่าเริ่มต้น' },
+          recycle: { label: 'ถังรีไซเคิล', description: 'สามารถกู้คืนได้จากถังของ Windows เอง และปลดปล่อยเมื่อคุณล้างมัน' },
+          permanent: { label: 'ลบถาวร', description: 'ถูกลบไปทั้งหมด ไม่มีอะไรให้กู้คืน' }
+        },
+        permanentWarning: 'ไฟล์ที่เหลืออยู่จะถูกลบไปทั้งหมดและไม่สามารถกู้คืนได้ ไม่ว่าจะจากกักกันหรือที่อื่นใด ตรวจสอบรายการก่อนที่จะยืนยัน',
+        registryNote: 'คีย์รีจิสทรีจะถูกส่งออกไปยังกักกันก่อนที่จะถูกลบ ไม่ว่าคุณจะเลือกแบบใดก็ตาม'
+      },
+      about: {
+        description: 'เครื่องมือถอนการติดตั้งและล้างข้อมูลแบบออฟไลน์ในเครื่องสำหรับ Windows — การลบแบบบังคับพร้อมการสแกนไฟล์ตกค้าง, การกักกันอย่างปลอดภัยก่อนลบ, การทำแผนที่ดิสก์ และการล้างขยะด้วยคลิกเดียว'
+      },
+      automation: {
+        title: 'การทำงานอัตโนมัติ',
+        description: 'ทำงานตราบเท่าที่ Prune เปิดอยู่ มันไม่สามารถปลุกเครื่องที่หลับอยู่ได้ — ช่วงเวลาที่ผ่านไปในขณะที่คอมพิวเตอร์ปิดอยู่จะถูกรายงานว่าพลาดแทนที่จะถูกข้ามไปเงียบๆ และจะทำตามให้ทันในครั้งถัดไปที่คุณเปิดแอป',
+        scheduled: 'กำหนดเวลาแล้ว',
+        off: 'ปิด',
+        howOften: 'ความถี่',
+        day: 'วัน',
+        at: 'เวลา',
+        whatItDoes: 'สิ่งที่มันทำ',
+        everyDay: 'ทุกวัน',
+        everyWeek: 'ทุกสัปดาห์',
+        measureOnly: 'วัดเท่านั้น',
+        clean: 'ล้างข้อมูล',
+        cleanWarning: 'สิ่งนี้จะลบไฟล์โดยไม่มีใครเฝ้าดู มันจะล้างกฎที่การล้างข้อมูลเชิงลึกแนะนำและที่มีบางอย่างอยู่จริงข้างใน และทุกอย่างยังคงไปที่กักกัน — ดังนั้นตรวจสอบการตั้งค่าการเก็บรักษาด้านบนก่อนที่จะเปิดสิ่งนี้ไว้',
+        nextRun: 'การทำงานครั้งถัดไป:',
+        lastRun: 'การทำงานครั้งล่าสุด:',
+        weekdays: {
+          sunday: 'วันอาทิตย์', monday: 'วันจันทร์', tuesday: 'วันอังคาร', wednesday: 'วันพุธ',
+          thursday: 'วันพฤหัสบดี', friday: 'วันศุกร์', saturday: 'วันเสาร์'
+        }
+      }
+    },
     dashboard: {
       scheduleBadge: {
         missed: (count) => `พลาดการทำงานตามกำหนดเวลา ${count} ครั้งขณะที่พีซีเครื่องนี้ปิดอยู่`,
@@ -13093,7 +18306,156 @@ export const CATALOG = {
       quarantine: 'Karantina', settings: 'Ayarlar', startup: 'Başlangıç',
       duplicates: 'Yinelenenler', deepClean: 'Derinlemesine Temizlik'
     },
-    settings: { language: { title: 'Dil', description: "Prune'un kendi ekranlarının gösterildiği dil." } },
+    settings: {
+      language: { title: 'Dil', description: "Prune'un kendi ekranlarının gösterildiği dil." },
+      tabs: { general: 'Genel', uninstall: 'Kaldırma', cleanup: 'Temizlik', about: 'Hakkında' },
+      title: 'Ayarlar',
+      loading: 'Ayarlar yükleniyor…',
+      loadError: (error) => `Ayarlar yüklenemedi: ${error}`,
+      saveError: (error) => `Kaydedilemedi: ${error}`,
+      appearance: {
+        title: 'Görünüm',
+        description: 'Aurora Deck karanlıkta veya gün ışığında. İkisi de ters çevrilmiş bir palet değil, gerçek paletlerdir: vurgu rengi açık zemin için koyulaşır, böylece bir düğme üzerinde beyaz metni koruyabilir ve her seviye gerçekten üzerinde durduğu yüzeylere göre ölçülmüştür. Prune burada birini seçene kadar sistem ayarınızı takip eder.'
+      },
+      minimizeToTray: {
+        title: 'Sistem tepsisine küçült',
+        description: 'Pencereyi kapatmak, Prune\'u kapatmak yerine sistem tepsisine gönderir.'
+      },
+      updateCheck: {
+        title: 'Güncellemeleri denetle',
+        description: 'Günde bir kez, Prune api.github.com\'a daha yeni bir sürüm olup olmadığını sorar. Bu, Prune\'un bu makine dışında herhangi bir yere yaptığı tek istektir ve GitHub, herhangi bir web sitesinin göreceği gibi IP adresinizi görür. Yeni bir sürüm olduğunda, kenar çubuğunun altında bir güncelleme düğmesi belirir ve siz tıklayana kadar hiçbir şey indirilmez veya yüklenmez.'
+      },
+      autoInstallUpdates: {
+        title: 'Güncellemeleri otomatik yükle',
+        description: 'Güncelleme düğmesine tıklamanızı beklemek yerine yeni bir sürümü arka planda indirir ve Prune bir sonraki kapanışında yükler. Yukarıdaki güncelleme denetimini gerektirir.'
+      },
+      updateStatus: {
+        checking: 'Denetleniyor…',
+        loadError: (error) => `Güncellemeler denetlenemedi: ${error}`,
+        newerAvailable: (version) => `Prune ${version} kullanılabilir.`,
+        openDownloadPage: 'İndirme sayfasını aç',
+        upToDate: (version) => `En son sürüme sahipsiniz (${version}).`,
+        openPageError: (error) => `Sayfa açılamadı: ${error}`
+      },
+      showFreeSpace: {
+        title: 'Disk Haritasında boş alanı göster',
+        description: 'Tüm bir sürücüyü tararken sürücünün boş alanını bir blok daha olarak çizer, böylece her klasör kullanılan alanın değil, sürücünün bir payı olarak okunur.'
+      },
+      autoQuarantine: {
+        title: 'Otomatik karantina',
+        description: 'Derin Temizlik, kaldırdığı şeyi geri koyabileceğiniz Prune\'un Karantinasına taşır. Bunu kapatın, bunun yerine Windows Geri Dönüşüm Kutusuna gider — hâlâ kurtarılabilir, sadece nasıl boşaltacağınızı zaten bildiğiniz bir yerde.'
+      },
+      skipRecent: {
+        title: 'Yakın zamandaki dosyaları rahat bırak',
+        description: 'Son birkaç saat içinde değiştirilen her şeyi atlar. Geçici bir klasörde, şu anda yazılmakta olan bir dosya, iki yıl önce terk edilmiş biriyle tıpatıp aynı görünür — yarım kalmış bir kurulumun süpürülmesini engelleyen şey budur. 0 bunu kapatır.',
+        hoursUnit: 'saat',
+        ariaLabel: 'Yakın zamandaki dosyaları rahat bırakılacak saat sayısı'
+      },
+      restorePointCleanup: {
+        title: 'Önce bir geri yükleme noktası oluştur',
+        description: 'Zorla kaldırmadan önce, böylece Windows\'un kendisi makineyi geri alabilir. Birkaç saniye sürer ve Sistem Koruması kapalıysa hiçbir şey yapmaz.'
+      },
+      hideUnavailable: {
+        title: 'Uygulanamayan temizleyicileri gizle',
+        description: 'Listenin çoğu bu makinenin sahip olmadığı yazılımlar içindir. Onları gizlemek yalnızca gerçekten burada olanı bırakır.'
+      },
+      quarantineRetention: {
+        title: 'Geri almanın ne kadar süreyle tutulacağı',
+        description: 'Prune\'un kaldırdığı her şey önce Karantinaya gider ve siz onu boşaltana kadar orada kalır. Bundan daha eski yedeklemeleri atmak için bir gün sayısı ayarlayın. Onları sonsuza kadar saklamak için boş bırakın.',
+        neverPlaceholder: 'Asla',
+        daysUnit: 'gün',
+        ariaLabel: 'Karantina yedeklemelerinin tutulacağı gün sayısı'
+      },
+      quarantineMaxSize: {
+        title: 'Ne kadar geri alma tutulacağı',
+        description: 'Tüm Karantina klasörü için bir üst sınır. Bunun üzerinde en eski yedeklemeler önce gider — en yenisi asla atılmaz, bu yüzden yeni kaldırdığınız büyük bir şey, tek başına sınırdan büyük olsa bile kurtarılabilir kalır. Sınır olmaması için boş bırakın.',
+        noLimitPlaceholder: 'Sınır yok',
+        gbUnit: 'GB',
+        ariaLabel: 'Gigabayt cinsinden maksimum karantina boyutu'
+      },
+      exclusions: {
+        title: 'Klasörleri Hariç Tut',
+        description: 'Prune\'un rahat bırakacağı klasörler ve dosya türleri — Derin Temizlik tarafından atlanır ve Disk Haritasından hariç tutulur — zaten koruduklarına ek olarak: Sistem Birimi Bilgisi, antivirüs karantinaları, bileşen deposu ve bir düzine daha fazlası.',
+        ariaLabel: 'Hariç tutulacak klasör yolu veya dosya türü',
+        add: 'Ekle',
+        invalidFormat: 'Tam bir klasör yolu (D:\\Games) veya bir dosya türü (*.iso) yazın.',
+        formatHint: 'Tam bir klasör yolu, veya *.iso olarak yazılmış bir dosya türü',
+        none: 'Hiçbir şey hariç tutulmadı.',
+        typeBadge: 'Tür',
+        folderBadge: 'Klasör',
+        removeAriaLabel: (value) => `${value} hariç tutmayı durdur`
+      },
+      sandboxTest: {
+        title: 'Sanal Alan Testi',
+        description: 'Gerçek temizlik motorunu yalnızca tek kullanımlık geçici bir dizine karşı çalıştırır — asla gerçek Temp\'inize, Windows Temp\'ine veya küçük resim önbelleğine karşı değil — gerçek dosyalarla güvenmeden önce taramanın ve silmenin gerçekten çalıştığını kanıtlamak için.',
+        run: 'Sanal Alan Testini Çalıştır',
+        running: 'Çalışıyor…',
+        allPassed: 'Tüm kontroller geçti',
+        failed: 'Sanal alan testi başarısız oldu'
+      },
+      warningConfirmations: {
+        title: 'Uyarı onayları',
+        allAsk: 'Veri kaybeden her temizleyici çalışmadan önce sorar.',
+        someSet: (count) => `${count} temizlik uyarısı bir daha sormamak üzere ayarlandı.`,
+        reset: 'Uyarı onaylarını sıfırla'
+      },
+      uninstallTab: {
+        beforeHeading: 'Kaldırmadan önce',
+        restorePointUninstall: {
+          title: 'Kaldırmadan önce bir geri yükleme noktası oluştur',
+          description: 'Programın kaldırma uygulaması çalışmadan önce oluşturulan Windows\'un kendi Sistem Geri Yüklemesi. Prune\'un yönetici olarak çalışmasını gerektirir ve Windows günde bir tanesine izin verir, bu yüzden oluşturulamadığında kaldırma devam eder ve iletişim kutusu bunu belirtir.'
+        },
+        registryBackup: {
+          title: 'Kaldırmadan önce kayıt defterini yedekle',
+          description: 'HKLM\\SOFTWARE ve HKCU\\Software\'ı dışa aktarır (Prune\'un derlendiği makinede yaklaşık 140 MB) ve en yeni 3\'ünü tutar. Yedekleme oluşturulamazsa, kaldırma çalışmaz.'
+        },
+        afterHeading: 'Kaldırdıktan sonra',
+        scanLeftovers: {
+          title: 'Kaldırdıktan sonra artıkları tara',
+          description: 'Kaldırma uygulamasının geride bıraktığı dosyaları, kayıt defteri anahtarlarını ve zamanlanmış görevleri arar. Kapalıyken, Prune yalnızca programın kendi kaldırma uygulamasını çalıştırır ve orada durur.'
+        },
+        preselect: {
+          title: 'Her artığı varsayılan olarak işaretle',
+          description: 'İnceleme, bulunan her şey işaretlenmiş olarak açılır. Kapalıyken, hiçbir şey işaretlenmeden açılır ve siz seçersiniz.'
+        },
+        keepHistory: {
+          title: 'Bir kaldırma geçmişi tut',
+          description: 'Panonun son kaldırmalar ve serbest bıraktıkları alan listesi. Kapalıyken, yeni hiçbir şey kaydedilmez.'
+        },
+        destinationHeading: 'Kalan dosyalar şuraya gider',
+        leftoverOptions: {
+          quarantine: { label: 'Karantina', description: 'Prune\'un kendi yedeğine taşındı ve Karantina ekranından kurtarılabilir. Varsayılan.' },
+          recycle: { label: 'Geri Dönüşüm Kutusu', description: 'Windows\'un kendi kutusundan kurtarılabilir ve siz onu boşalttığınızda serbest kalır.' },
+          permanent: { label: 'Kalıcı olarak sil', description: 'Tamamen silindi. Geri yüklenecek bir şey yok.' }
+        },
+        permanentWarning: 'Kalan dosyalar tamamen silinecek ve ne Karantinadan ne de başka bir yerden geri yüklenemeyecek. Onaylamadan önce listeyi kontrol edin.',
+        registryNote: 'Kayıt defteri anahtarları, ne seçerseniz seçin, kaldırılmadan önce Karantinaya aktarılır.'
+      },
+      about: {
+        description: "Windows için yerel, çevrimdışı bir kaldırma ve temizlik aracı — artık dosya taramasıyla zorla kaldırma, silmeden önce güvenli karantina, disk haritalama ve tek tıkla çöp temizliği."
+      },
+      automation: {
+        title: 'Otomasyon',
+        description: 'Prune açıkken çalışır. Uyuyan bir makineyi uyandıramaz — bilgisayar kapalıyken geçen bir zaman penceresi sessizce atlanmak yerine kaçırılmış olarak bildirilir ve uygulamayı bir sonraki açışınızda yakalanır.',
+        scheduled: 'Zamanlandı',
+        off: 'Kapalı',
+        howOften: 'Ne sıklıkla',
+        day: 'Gün',
+        at: 'Saat',
+        whatItDoes: 'Ne yapar',
+        everyDay: 'Her gün',
+        everyWeek: 'Her hafta',
+        measureOnly: 'Sadece ölç',
+        clean: 'Temizle',
+        cleanWarning: 'Bu, kimse izlemeden dosyaları kaldırır. Derin Temizlik\'in önerdiği ve gerçekten içinde bir şey olan kuralları temizler ve her şey yine de karantinaya gider — bu yüzden bunu açık bırakmadan önce yukarıdaki saklama ayarını kontrol edin.',
+        nextRun: 'Sonraki çalıştırma:',
+        lastRun: 'Son çalıştırma:',
+        weekdays: {
+          sunday: 'Pazar', monday: 'Pazartesi', tuesday: 'Salı', wednesday: 'Çarşamba',
+          thursday: 'Perşembe', friday: 'Cuma', saturday: 'Cumartesi'
+        }
+      }
+    },
     dashboard: {
       scheduleBadge: {
         missed: (count) => `Bu PC kapalıyken ${count} zamanlanmış çalıştırma atlandı`,
@@ -13466,7 +18828,156 @@ export const CATALOG = {
       quarantine: 'Карантин', settings: 'Налаштування', startup: 'Автозавантаження',
       duplicates: 'Дублікати', deepClean: 'Глибоке очищення'
     },
-    settings: { language: { title: 'Мова', description: 'Мова, якою відображаються власні екрани Prune.' } },
+    settings: {
+      language: { title: 'Мова', description: 'Мова, якою відображаються власні екрани Prune.' },
+      tabs: { general: 'Загальні', uninstall: 'Видалення', cleanup: 'Очищення', about: 'Про програму' },
+      title: 'Налаштування',
+      loading: 'Завантаження налаштувань…',
+      loadError: (error) => `Не вдалося завантажити налаштування: ${error}`,
+      saveError: (error) => `Не вдалося зберегти: ${error}`,
+      appearance: {
+        title: 'Зовнішній вигляд',
+        description: 'Aurora Deck у темному або денному режимі. Обидва — справжні палітри, а не одна інвертована: акцентний колір темнішає для світлого фону, щоб кнопка могла зберегти білий текст, і кожен рівень виміряно відносно поверхонь, на яких він насправді знаходиться. Prune слідує налаштуванню вашої системи, поки ви не оберете тут своє.'
+      },
+      minimizeToTray: {
+        title: 'Згорнути в системний трей',
+        description: 'Закриття вікна надсилає Prune у системний трей замість завершення роботи.'
+      },
+      updateCheck: {
+        title: 'Перевіряти оновлення',
+        description: 'Раз на день Prune запитує api.github.com, чи існує новіша версія. Це єдиний запит, який Prune надсилає кудись, окрім цього комп\'ютера, і GitHub бачить вашу IP-адресу так само, як будь-який сайт. Коли з\'являється нова версія, внизу бічної панелі з\'являється кнопка оновлення, і нічого не завантажується та не встановлюється, поки ви на неї не натиснете.'
+      },
+      autoInstallUpdates: {
+        title: 'Встановлювати оновлення автоматично',
+        description: 'Завантажує нову версію у фоновому режимі та встановлює її наступного разу, коли Prune закриється, замість очікування вашого натискання кнопки оновлення. Потребує ввімкненої перевірки оновлень вище.'
+      },
+      updateStatus: {
+        checking: 'Перевірка…',
+        loadError: (error) => `Не вдалося перевірити оновлення: ${error}`,
+        newerAvailable: (version) => `Доступна версія Prune ${version}.`,
+        openDownloadPage: 'Відкрити сторінку завантаження',
+        upToDate: (version) => `У вас найновіша версія (${version}).`,
+        openPageError: (error) => `Не вдалося відкрити сторінку: ${error}`
+      },
+      showFreeSpace: {
+        title: 'Показувати вільне місце на Карті диска',
+        description: 'Малює вільне місце диска як ще один блок під час сканування всього диска, щоб кожна папка читалася як частка диска, а не зайнятого простору.'
+      },
+      autoQuarantine: {
+        title: 'Автоматичний карантин',
+        description: 'Глибоке очищення переміщує те, що видаляє, у карантин Prune, звідки ви можете повернути це назад. Вимкніть це, і замість цього файли підуть у Кошик Windows — все ще відновлювані, просто в місці, яке ви вже вмієте очищати.'
+      },
+      skipRecent: {
+        title: 'Не чіпати нещодавні файли',
+        description: 'Пропускає все, що було змінено за останні кілька годин. У тимчасовій папці файл, який записується прямо зараз, виглядає точнісінько так само, як залишений два роки тому — саме це не дає прибрати наполовину завершене встановлення. 0 вимикає це.',
+        hoursUnit: 'годин',
+        ariaLabel: 'Години, протягом яких не чіпати нещодавні файли'
+      },
+      restorePointCleanup: {
+        title: 'Спочатку створити точку відновлення',
+        description: 'Перед примусовим видаленням, щоб сам Windows міг відкотити систему. Займає кілька секунд і нічого не робить, якщо Захист системи вимкнено.'
+      },
+      hideUnavailable: {
+        title: 'Приховувати непридатні засоби очищення',
+        description: 'Більша частина списку призначена для програмного забезпечення, якого немає на цьому комп\'ютері. Приховування залишає лише те, що дійсно тут є.'
+      },
+      quarantineRetention: {
+        title: 'Як довго зберігати можливість скасування',
+        description: 'Усе, що видаляє Prune, спочатку потрапляє в карантин і залишається там, поки ви його не очистите. Встановіть кількість днів, щоб відкидати резервні копії, старіші за це. Залиште порожнім, щоб зберігати їх назавжди.',
+        neverPlaceholder: 'Ніколи',
+        daysUnit: 'днів',
+        ariaLabel: 'Дні зберігання резервних копій карантину'
+      },
+      quarantineMaxSize: {
+        title: 'Скільки скасувань зберігати',
+        description: 'Ліміт для всієї папки карантину. Понад це найстаріші резервні копії зникають першими — найновіша ніколи не відкидається, тому щось велике, що ви щойно видалили, залишається відновлюваним, навіть якщо воно саме по собі більше за ліміт. Залиште порожнім, якщо ліміт не потрібен.',
+        noLimitPlaceholder: 'Без обмежень',
+        gbUnit: 'ГБ',
+        ariaLabel: 'Максимальний розмір карантину в гігабайтах'
+      },
+      exclusions: {
+        title: 'Виключити папки',
+        description: 'Папки та типи файлів, які Prune залишить без уваги — пропускаються Глибоким очищенням і виключаються з Карти диска — на додаток до тих, які він вже захищає: відомості про системний том, карантини антивірусів, сховище компонентів і ще дюжина інших.',
+        ariaLabel: 'Шлях до папки або тип файлу для виключення',
+        add: 'Додати',
+        invalidFormat: 'Введіть повний шлях до папки (D:\\Games) або тип файлу (*.iso).',
+        formatHint: 'Повний шлях до папки, або тип файлу, записаний як *.iso',
+        none: 'Нічого не виключено.',
+        typeBadge: 'Тип',
+        folderBadge: 'Папка',
+        removeAriaLabel: (value) => `Припинити виключати ${value}`
+      },
+      sandboxTest: {
+        title: 'Тест пісочниці',
+        description: 'Запускає справжній механізм очищення лише проти одноразового тимчасового каталогу — ніколи проти вашого справжнього Temp, Temp Windows чи кешу мініатюр — щоб довести, що сканування та видалення дійсно працюють, перш ніж довірити їм реальні файли.',
+        run: 'Запустити тест пісочниці',
+        running: 'Виконується…',
+        allPassed: 'Усі перевірки пройдено',
+        failed: 'Тест пісочниці не пройдено'
+      },
+      warningConfirmations: {
+        title: 'Підтвердження попереджень',
+        allAsk: 'Кожен засіб очищення, що втрачає дані, запитує перед запуском.',
+        someSet: (count) => `${count} попереджень про очищення налаштовано не запитувати знову.`,
+        reset: 'Скинути підтвердження попереджень'
+      },
+      uninstallTab: {
+        beforeHeading: 'Перед видаленням',
+        restorePointUninstall: {
+          title: 'Створити точку відновлення перед видаленням',
+          description: 'Власне Відновлення системи Windows, створене до запуску деінсталятора програми. Потребує запуску Prune від імені адміністратора, а Windows дозволяє одну на день, тому коли її не можна створити, видалення продовжується, а діалогове вікно повідомляє про це.'
+        },
+        registryBackup: {
+          title: 'Резервувати реєстр перед видаленням',
+          description: 'Експортує HKLM\\SOFTWARE та HKCU\\Software (близько 140 МБ на комп\'ютері, на якому зібрано Prune) і зберігає 3 найновіші. Якщо резервну копію неможливо створити, видалення не виконується.'
+        },
+        afterHeading: 'Після видалення',
+        scanLeftovers: {
+          title: 'Сканувати залишки після видалення',
+          description: 'Шукає файли, ключі реєстру та заплановані завдання, залишені деінсталятором. Вимкнено — Prune просто запускає власний деінсталятор програми і зупиняється на цьому.'
+        },
+        preselect: {
+          title: 'Позначати кожен залишок за замовчуванням',
+          description: 'Перегляд відкривається з усім знайденим позначеним. Вимкнено — він відкривається без позначок, і ви обираєте самі.'
+        },
+        keepHistory: {
+          title: 'Вести історію видалень',
+          description: 'Список панелі керування нещодавніми видаленнями та звільненим ними місцем. Вимкнено — нічого нового не записується.'
+        },
+        destinationHeading: 'Файли, що залишилися, переходять до',
+        leftoverOptions: {
+          quarantine: { label: 'Карантин', description: 'Переміщено у власну резервну копію Prune і відновлюване з екрана карантину. Варіант за замовчуванням.' },
+          recycle: { label: 'Кошик', description: 'Відновлюване з власного кошика Windows і звільняється при його очищенні.' },
+          permanent: { label: 'Видалити назавжди', description: 'Видалено повністю. Нічого відновлювати.' }
+        },
+        permanentWarning: 'Файли, що залишилися, буде видалено повністю, і їх не можна відновити ні з карантину, ні звідки-небудь ще. Перевірте список перед підтвердженням.',
+        registryNote: 'Ключі реєстру експортуються до карантину перед видаленням, незалежно від вашого вибору.'
+      },
+      about: {
+        description: 'Локальний, автономний інструмент видалення та очищення для Windows — примусове видалення зі скануванням залишкових файлів, безпечний карантин перед видаленням, картографування диска та очищення сміття в один клік.'
+      },
+      automation: {
+        title: 'Автоматизація',
+        description: 'Працює, поки Prune відкрито. Вона не може розбудити комп\'ютер, що спить — часове вікно, яке минає, поки комп\'ютер вимкнено, повідомляється як пропущене, а не тихо ігнороване, і надолужується наступного разу, коли ви відкриєте застосунок.',
+        scheduled: 'Заплановано',
+        off: 'Вимкнено',
+        howOften: 'Як часто',
+        day: 'День',
+        at: 'О',
+        whatItDoes: 'Що це робить',
+        everyDay: 'Щодня',
+        everyWeek: 'Щотижня',
+        measureOnly: 'Тільки виміряти',
+        clean: 'Очистити',
+        cleanWarning: 'Це видаляє файли без будь-якого нагляду. Це очищає правила, які рекомендує Глибоке очищення і які дійсно щось містять, і все одно все йде в карантин — тому перевірте налаштування зберігання вище, перш ніж залишати це увімкненим.',
+        nextRun: 'Наступний запуск:',
+        lastRun: 'Останній запуск:',
+        weekdays: {
+          sunday: 'Неділя', monday: 'Понеділок', tuesday: 'Вівторок', wednesday: 'Середа',
+          thursday: 'Четвер', friday: "П'ятниця", saturday: 'Субота'
+        }
+      }
+    },
     dashboard: {
       scheduleBadge: {
         missed: (count) => `${count} запланован${count === 1 ? 'ий запуск було' : 'их запуски було'} пропущено, поки цей ПК був вимкнений`,
@@ -13839,7 +19350,156 @@ export const CATALOG = {
       quarantine: 'Cách ly', settings: 'Cài đặt', startup: 'Khởi động cùng',
       duplicates: 'Tệp trùng lặp', deepClean: 'Dọn dẹp sâu'
     },
-    settings: { language: { title: 'Ngôn ngữ', description: 'Ngôn ngữ hiển thị trên chính màn hình của Prune.' } },
+    settings: {
+      language: { title: 'Ngôn ngữ', description: 'Ngôn ngữ hiển thị trên chính màn hình của Prune.' },
+      tabs: { general: 'Chung', uninstall: 'Gỡ cài đặt', cleanup: 'Dọn dẹp', about: 'Giới thiệu' },
+      title: 'Cài đặt',
+      loading: 'Đang tải cài đặt…',
+      loadError: (error) => `Không thể tải cài đặt: ${error}`,
+      saveError: (error) => `Không thể lưu: ${error}`,
+      appearance: {
+        title: 'Giao diện',
+        description: 'Aurora Deck ở chế độ tối hoặc chế độ ban ngày. Cả hai đều là bảng màu thực sự thay vì một bảng bị đảo ngược: màu nhấn tối hơn cho nền sáng để nút có thể giữ chữ trắng, và mỗi cấp độ đã được đo dựa trên các bề mặt mà nó thực sự đặt lên. Prune sẽ theo cài đặt hệ thống của bạn cho đến khi bạn chọn một cài đặt ở đây.'
+      },
+      minimizeToTray: {
+        title: 'Thu nhỏ vào khay hệ thống',
+        description: 'Đóng cửa sổ sẽ gửi Prune vào khay hệ thống thay vì thoát ứng dụng.'
+      },
+      updateCheck: {
+        title: 'Kiểm tra cập nhật',
+        description: 'Mỗi ngày một lần, Prune hỏi api.github.com xem có phiên bản mới hơn không. Đây là yêu cầu duy nhất mà Prune gửi đi bất cứ đâu ngoài máy tính này, và GitHub thấy địa chỉ IP của bạn giống như bất kỳ trang web nào cũng sẽ thấy. Khi có phiên bản mới, một nút cập nhật sẽ xuất hiện ở cuối thanh bên, và không có gì được tải xuống hoặc cài đặt cho đến khi bạn nhấp vào nút đó.'
+      },
+      autoInstallUpdates: {
+        title: 'Cài đặt bản cập nhật tự động',
+        description: 'Tải xuống phiên bản mới trong nền và cài đặt vào lần đóng Prune tiếp theo, thay vì đợi bạn nhấp vào nút cập nhật. Yêu cầu bật kiểm tra cập nhật ở trên.'
+      },
+      updateStatus: {
+        checking: 'Đang kiểm tra…',
+        loadError: (error) => `Không thể kiểm tra bản cập nhật: ${error}`,
+        newerAvailable: (version) => `Đã có Prune ${version}.`,
+        openDownloadPage: 'Mở trang tải xuống',
+        upToDate: (version) => `Bạn đang dùng phiên bản mới nhất (${version}).`,
+        openPageError: (error) => `Không thể mở trang: ${error}`
+      },
+      showFreeSpace: {
+        title: 'Hiển thị dung lượng trống trên Bản đồ Ổ đĩa',
+        description: 'Vẽ dung lượng trống của ổ đĩa như một khối khác khi bạn quét toàn bộ ổ đĩa, để mỗi thư mục được đọc như một phần của ổ đĩa thay vì của dung lượng đang sử dụng.'
+      },
+      autoQuarantine: {
+        title: 'Cách ly tự động',
+        description: 'Dọn dẹp Sâu di chuyển những gì nó loại bỏ vào Cách ly của Prune, nơi bạn có thể đưa nó trở lại. Tắt tính năng này và nó sẽ đi vào Thùng rác của Windows thay vào đó — vẫn có thể khôi phục, chỉ là ở một nơi mà bạn đã biết cách làm trống.'
+      },
+      skipRecent: {
+        title: 'Để yên các tệp gần đây',
+        description: 'Bỏ qua bất cứ thứ gì đã được sửa đổi trong vài giờ qua. Trong một thư mục tạm thời, một tệp đang được ghi ngay bây giờ trông giống hệt một tệp bị bỏ quên hai năm trước — đây là điều ngăn cản một bản cài đặt dở dang bị quét sạch. 0 sẽ tắt tính năng này.',
+        hoursUnit: 'giờ',
+        ariaLabel: 'Số giờ để yên các tệp gần đây'
+      },
+      restorePointCleanup: {
+        title: 'Tạo điểm khôi phục trước',
+        description: 'Trước khi buộc gỡ bỏ, để chính Windows có thể khôi phục lại máy. Tốn vài giây và không làm gì cả nếu Bảo vệ Hệ thống bị tắt.'
+      },
+      hideUnavailable: {
+        title: 'Ẩn các công cụ dọn dẹp không áp dụng',
+        description: 'Phần lớn danh sách dành cho phần mềm mà máy này không có. Ẩn chúng chỉ để lại những gì thực sự có ở đây.'
+      },
+      quarantineRetention: {
+        title: 'Giữ khả năng hoàn tác trong bao lâu',
+        description: 'Mọi thứ Prune loại bỏ trước tiên sẽ vào Cách ly, và ở đó cho đến khi bạn làm trống nó. Đặt số ngày để loại bỏ các bản sao lưu cũ hơn thế. Để trống để giữ chúng mãi mãi.',
+        neverPlaceholder: 'Không bao giờ',
+        daysUnit: 'ngày',
+        ariaLabel: 'Số ngày giữ bản sao lưu cách ly'
+      },
+      quarantineMaxSize: {
+        title: 'Giữ bao nhiêu khả năng hoàn tác',
+        description: 'Giới hạn cho toàn bộ thư mục Cách ly. Vượt quá mức đó, các bản sao lưu cũ nhất sẽ biến mất trước — bản mới nhất không bao giờ bị loại bỏ, vì vậy một thứ lớn mà bạn vừa loại bỏ vẫn có thể khôi phục ngay cả khi bản thân nó lớn hơn giới hạn. Để trống để không có giới hạn.',
+        noLimitPlaceholder: 'Không giới hạn',
+        gbUnit: 'GB',
+        ariaLabel: 'Kích thước cách ly tối đa tính bằng gigabyte'
+      },
+      exclusions: {
+        title: 'Loại trừ Thư mục',
+        description: 'Các thư mục và loại tệp mà Prune sẽ để yên — được Dọn dẹp Sâu bỏ qua và bị loại khỏi Bản đồ Ổ đĩa — ngoài những gì nó đã bảo vệ: Thông tin ổ đĩa hệ thống, cách ly diệt vi-rút, kho lưu trữ thành phần và hàng chục thứ khác.',
+        ariaLabel: 'Đường dẫn thư mục hoặc loại tệp cần loại trừ',
+        add: 'Thêm',
+        invalidFormat: 'Nhập đường dẫn thư mục đầy đủ (D:\\Games) hoặc loại tệp (*.iso).',
+        formatHint: 'Một đường dẫn thư mục đầy đủ, hoặc loại tệp được viết như *.iso',
+        none: 'Không có gì bị loại trừ.',
+        typeBadge: 'Loại',
+        folderBadge: 'Thư mục',
+        removeAriaLabel: (value) => `Ngừng loại trừ ${value}`
+      },
+      sandboxTest: {
+        title: 'Kiểm tra Hộp cát',
+        description: 'Chạy công cụ dọn dẹp thực sự chỉ với một thư mục tạm thời dùng một lần — không bao giờ với Temp thực của bạn, Temp của Windows, hoặc bộ nhớ đệm hình thu nhỏ — để chứng minh rằng việc quét và xóa thực sự hoạt động trước khi bạn tin tưởng chúng với các tệp thực.',
+        run: 'Chạy Kiểm tra Hộp cát',
+        running: 'Đang chạy…',
+        allPassed: 'Tất cả kiểm tra đã vượt qua',
+        failed: 'Kiểm tra hộp cát thất bại'
+      },
+      warningConfirmations: {
+        title: 'Xác nhận cảnh báo',
+        allAsk: 'Mọi công cụ dọn dẹp làm mất dữ liệu đều hỏi trước khi chạy.',
+        someSet: (count) => `${count} cảnh báo dọn dẹp được đặt để không hỏi lại nữa.`,
+        reset: 'Đặt lại xác nhận cảnh báo'
+      },
+      uninstallTab: {
+        beforeHeading: 'Trước khi gỡ cài đặt',
+        restorePointUninstall: {
+          title: 'Tạo điểm khôi phục trước khi gỡ cài đặt',
+          description: 'Tính năng Khôi phục Hệ thống riêng của Windows, được tạo trước khi trình gỡ cài đặt của chương trình chạy. Yêu cầu Prune chạy với quyền quản trị viên và Windows chỉ cho phép một lần mỗi ngày, vì vậy khi không thể tạo, quá trình gỡ cài đặt vẫn tiếp tục và hộp thoại sẽ cho biết điều đó.'
+        },
+        registryBackup: {
+          title: 'Sao lưu registry trước khi gỡ cài đặt',
+          description: 'Xuất HKLM\\SOFTWARE và HKCU\\Software (khoảng 140 MB trên máy nơi Prune được xây dựng) và giữ 3 bản mới nhất. Nếu không thể tạo bản sao lưu, quá trình gỡ cài đặt sẽ không chạy.'
+        },
+        afterHeading: 'Sau khi gỡ cài đặt',
+        scanLeftovers: {
+          title: 'Quét tìm phần còn sót lại sau khi gỡ cài đặt',
+          description: 'Tìm kiếm các tệp, khóa registry và tác vụ đã lên lịch mà trình gỡ cài đặt để lại. Tắt, Prune chỉ chạy trình gỡ cài đặt riêng của chương trình và dừng lại ở đó.'
+        },
+        preselect: {
+          title: 'Đánh dấu mọi phần còn sót lại theo mặc định',
+          description: 'Quá trình xem xét mở ra với mọi thứ được tìm thấy đã được đánh dấu. Tắt, nó mở ra mà không có gì được đánh dấu và bạn tự chọn.'
+        },
+        keepHistory: {
+          title: 'Giữ lịch sử gỡ cài đặt',
+          description: 'Danh sách trên bảng điều khiển về các lần loại bỏ gần đây và dung lượng chúng đã giải phóng. Tắt, không có gì mới được ghi lại.'
+        },
+        destinationHeading: 'Các tệp còn sót lại sẽ đi đến',
+        leftoverOptions: {
+          quarantine: { label: 'Cách ly', description: 'Được chuyển vào bản sao lưu riêng của Prune, và có thể khôi phục từ màn hình Cách ly. Tùy chọn mặc định.' },
+          recycle: { label: 'Thùng rác', description: 'Có thể khôi phục từ thùng rác riêng của Windows, và được giải phóng khi bạn làm trống nó.' },
+          permanent: { label: 'Xóa vĩnh viễn', description: 'Bị xóa hoàn toàn. Không có gì để khôi phục.' }
+        },
+        permanentWarning: 'Các tệp còn sót lại sẽ bị xóa hoàn toàn và không thể khôi phục, dù từ Cách ly hay bất kỳ nơi nào khác. Kiểm tra danh sách trước khi xác nhận.',
+        registryNote: 'Các khóa registry được xuất vào Cách ly trước khi chúng bị loại bỏ, bất kể bạn chọn gì.'
+      },
+      about: {
+        description: 'Một công cụ gỡ cài đặt và dọn dẹp cục bộ, ngoại tuyến cho Windows — buộc loại bỏ với quét tệp còn sót lại, cách ly an toàn trước khi xóa, lập bản đồ ổ đĩa, và dọn dẹp rác chỉ với một cú nhấp chuột.'
+      },
+      automation: {
+        title: 'Tự động hóa',
+        description: 'Chạy trong khi Prune đang mở. Nó không thể đánh thức một máy đang ngủ — một khoảng thời gian trôi qua trong khi máy tính tắt được báo cáo là bị bỏ lỡ thay vì bị bỏ qua âm thầm, và được bắt kịp vào lần tiếp theo bạn mở ứng dụng.',
+        scheduled: 'Đã lên lịch',
+        off: 'Tắt',
+        howOften: 'Tần suất',
+        day: 'Ngày',
+        at: 'Lúc',
+        whatItDoes: 'Nó làm gì',
+        everyDay: 'Mỗi ngày',
+        everyWeek: 'Mỗi tuần',
+        measureOnly: 'Chỉ đo lường',
+        clean: 'Dọn dẹp',
+        cleanWarning: 'Điều này loại bỏ các tệp mà không ai theo dõi. Nó dọn dẹp các quy tắc mà Dọn dẹp Sâu đề xuất và thực sự có thứ gì đó trong đó, và mọi thứ vẫn đi vào cách ly — vì vậy hãy kiểm tra cài đặt lưu giữ ở trên trước khi để tính năng này bật.',
+        nextRun: 'Lần chạy tiếp theo:',
+        lastRun: 'Lần chạy cuối:',
+        weekdays: {
+          sunday: 'Chủ nhật', monday: 'Thứ Hai', tuesday: 'Thứ Ba', wednesday: 'Thứ Tư',
+          thursday: 'Thứ Năm', friday: 'Thứ Sáu', saturday: 'Thứ Bảy'
+        }
+      }
+    },
     dashboard: {
       scheduleBadge: {
         missed: (count) => `${count} lần chạy theo lịch đã bị bỏ lỡ khi máy tính này tắt`,
@@ -14212,7 +19872,156 @@ export const CATALOG = {
       quarantine: '隔离区', settings: '设置', startup: '启动项',
       duplicates: '重复文件', deepClean: '深度清理'
     },
-    settings: { language: { title: '语言', description: 'Prune 自身界面所使用的语言。' } },
+    settings: {
+      language: { title: '语言', description: 'Prune 自身界面所使用的语言。' },
+      tabs: { general: '常规', uninstall: '卸载', cleanup: '清理', about: '关于' },
+      title: '设置',
+      loading: '正在加载设置…',
+      loadError: (error) => `无法加载设置：${error}`,
+      saveError: (error) => `无法保存：${error}`,
+      appearance: {
+        title: '外观',
+        description: 'Aurora Deck 提供深色或日光两种模式。两者都是真正的独立配色方案，而不是一个反转另一个：强调色在浅色背景下会变深，以便按钮能保持白色文字，每一级都是根据它实际所处的表面测量得出的。在你在此处选择之前，Prune 会跟随系统设置。'
+      },
+      minimizeToTray: {
+        title: '最小化到系统托盘',
+        description: '关闭窗口会将 Prune 发送到系统托盘，而不是退出程序。'
+      },
+      updateCheck: {
+        title: '检查更新',
+        description: 'Prune 每天向 api.github.com 询问一次是否有更新版本。这是 Prune 向本机以外的任何地方发出的唯一请求，GitHub 会像任何网站一样看到你的 IP 地址。如果有新版本，侧边栏底部会出现一个更新按钮，在你点击它之前不会下载或安装任何内容。'
+      },
+      autoInstallUpdates: {
+        title: '自动安装更新',
+        description: '在后台下载新版本，并在 Prune 下次关闭时安装它，而不是等待你点击更新按钮。需要启用上面的更新检查。'
+      },
+      updateStatus: {
+        checking: '正在检查…',
+        loadError: (error) => `无法检查更新：${error}`,
+        newerAvailable: (version) => `Prune ${version} 可用。`,
+        openDownloadPage: '打开下载页面',
+        upToDate: (version) => `你使用的是最新版本（${version}）。`,
+        openPageError: (error) => `无法打开页面：${error}`
+      },
+      showFreeSpace: {
+        title: '在磁盘地图上显示可用空间',
+        description: '扫描整个驱动器时，将驱动器的可用空间绘制为另一个色块，这样每个文件夹显示的就是占驱动器的比例，而不是占已用空间的比例。'
+      },
+      autoQuarantine: {
+        title: '自动隔离',
+        description: '深度清理会将删除的内容移动到 Prune 的隔离区，你可以从那里将其放回。关闭此选项后，内容会改为进入 Windows 回收站——仍然可以恢复，只是在一个你已经知道如何清空的地方。'
+      },
+      skipRecent: {
+        title: '不动最近的文件',
+        description: '跳过过去几小时内修改过的所有内容。在临时文件夹中，正在写入的文件看起来和两年前被遗弃的文件一模一样——这正是防止半途而废的安装被清扫掉的原因。设为 0 可关闭此功能。',
+        hoursUnit: '小时',
+        ariaLabel: '不动最近文件的小时数'
+      },
+      restorePointCleanup: {
+        title: '先创建还原点',
+        description: '在强制删除之前创建，以便 Windows 本身能够回滚系统。会花费几秒钟，如果系统保护已关闭则不会执行任何操作。'
+      },
+      hideUnavailable: {
+        title: '隐藏不适用的清理项',
+        description: '列表中的大部分是针对本机没有的软件。隐藏它们只会留下真正存在于这里的内容。'
+      },
+      quarantineRetention: {
+        title: '保留撤销选项的时长',
+        description: 'Prune 删除的所有内容都会先进入隔离区，并保留在那里，直到你清空它。设置天数以丢弃早于该天数的备份。留空以永久保留它们。',
+        neverPlaceholder: '永不',
+        daysUnit: '天',
+        ariaLabel: '保留隔离区备份的天数'
+      },
+      quarantineMaxSize: {
+        title: '保留多少撤销内容',
+        description: '整个隔离文件夹的上限。超过此限制后，最旧的备份会先被删除——最新的备份永远不会被丢弃，因此你刚刚删除的大文件即使单独超过限制也仍然可以恢复。留空表示无限制。',
+        noLimitPlaceholder: '无限制',
+        gbUnit: 'GB',
+        ariaLabel: '最大隔离区大小（GB）'
+      },
+      exclusions: {
+        title: '排除文件夹',
+        description: 'Prune 将不予处理的文件夹和文件类型——深度清理会跳过它们，磁盘地图也会将其排除——这是在已经保护的内容（系统卷信息、防病毒隔离区、组件存储以及另外十几个）之外的额外选项。',
+        ariaLabel: '要排除的文件夹路径或文件类型',
+        add: '添加',
+        invalidFormat: '请输入完整的文件夹路径（D:\\Games）或文件类型（*.iso）。',
+        formatHint: '完整的文件夹路径，或写作 *.iso 形式的文件类型',
+        none: '未排除任何内容。',
+        typeBadge: '类型',
+        folderBadge: '文件夹',
+        removeAriaLabel: (value) => `停止排除 ${value}`
+      },
+      sandboxTest: {
+        title: '沙盒测试',
+        description: '仅针对一次性的临时目录运行真实的清理引擎——绝不会针对你实际的 Temp、Windows Temp 或缩略图缓存——以证明在你信任真实文件之前，扫描和删除确实有效。',
+        run: '运行沙盒测试',
+        running: '正在运行…',
+        allPassed: '所有检查均已通过',
+        failed: '沙盒测试失败'
+      },
+      warningConfirmations: {
+        title: '警告确认',
+        allAsk: '每个会丢失数据的清理项在运行前都会询问。',
+        someSet: (count) => `已设置 ${count} 个清理警告不再询问。`,
+        reset: '重置警告确认'
+      },
+      uninstallTab: {
+        beforeHeading: '卸载之前',
+        restorePointUninstall: {
+          title: '卸载前创建还原点',
+          description: 'Windows 自带的系统还原，在程序的卸载程序运行之前创建。需要 Prune 以管理员身份运行，而且 Windows 每天只允许创建一次，因此如果无法创建，卸载将继续进行，对话框会说明这一点。'
+        },
+        registryBackup: {
+          title: '卸载前备份注册表',
+          description: '导出 HKLM\\SOFTWARE 和 HKCU\\Software（在构建 Prune 的机器上约 140 MB），并保留最新的 3 个。如果无法创建备份，卸载将不会运行。'
+        },
+        afterHeading: '卸载之后',
+        scanLeftovers: {
+          title: '卸载后扫描残留',
+          description: '查找卸载程序遗留下来的文件、注册表项和计划任务。关闭后，Prune 只会运行程序自带的卸载程序并到此为止。'
+        },
+        preselect: {
+          title: '默认勾选每个残留项',
+          description: '审查界面打开时，所有找到的项目都已被勾选。关闭后，打开时不会勾选任何项目，由你自行选择。'
+        },
+        keepHistory: {
+          title: '保留卸载历史记录',
+          description: '仪表盘中最近删除项及其释放空间的列表。关闭后，不会记录任何新内容。'
+        },
+        destinationHeading: '残留文件的去向',
+        leftoverOptions: {
+          quarantine: { label: '隔离区', description: '移动到 Prune 自己的备份中，可以从隔离区界面恢复。默认选项。' },
+          recycle: { label: '回收站', description: '可以从 Windows 自带的回收站恢复，清空回收站时会释放空间。' },
+          permanent: { label: '永久删除', description: '彻底删除。无法恢复。' }
+        },
+        permanentWarning: '残留文件将被彻底删除，无法从隔离区或其他任何地方恢复。确认之前请检查列表。',
+        registryNote: '无论你如何选择，注册表项在删除前都会导出到隔离区。'
+      },
+      about: {
+        description: '一款本地、离线的 Windows 卸载与清理工具——具有残留文件扫描的强制删除、删除前的安全隔离、磁盘映射，以及一键垃圾清理。'
+      },
+      automation: {
+        title: '自动化',
+        description: '仅在 Prune 打开时运行。它无法唤醒休眠中的机器——如果计算机关机时错过了某个时间窗口，会被报告为错过，而不是悄悄跳过，并会在你下次打开应用时补上。',
+        scheduled: '已计划',
+        off: '关闭',
+        howOften: '频率',
+        day: '天',
+        at: '时间',
+        whatItDoes: '执行内容',
+        everyDay: '每天',
+        everyWeek: '每周',
+        measureOnly: '仅测量',
+        clean: '清理',
+        cleanWarning: '此操作会在无人监督的情况下删除文件。它会清理深度清理推荐且确实包含内容的规则，一切仍会进入隔离区——因此在保持此功能开启之前，请检查上面的保留设置。',
+        nextRun: '下次运行：',
+        lastRun: '上次运行：',
+        weekdays: {
+          sunday: '星期日', monday: '星期一', tuesday: '星期二', wednesday: '星期三',
+          thursday: '星期四', friday: '星期五', saturday: '星期六'
+        }
+      }
+    },
     dashboard: {
       scheduleBadge: {
         missed: (count) => `此电脑关机期间错过了 ${count} 次计划运行`,
@@ -14585,7 +20394,156 @@ export const CATALOG = {
       quarantine: '隔離區', settings: '設定', startup: '啟動項目',
       duplicates: '重複檔案', deepClean: '深度清理'
     },
-    settings: { language: { title: '語言', description: 'Prune 本身畫面所使用的語言。' } },
+    settings: {
+      language: { title: '語言', description: 'Prune 本身畫面所使用的語言。' },
+      tabs: { general: '一般', uninstall: '解除安裝', cleanup: '清理', about: '關於' },
+      title: '設定',
+      loading: '正在載入設定…',
+      loadError: (error) => `無法載入設定：${error}`,
+      saveError: (error) => `無法儲存：${error}`,
+      appearance: {
+        title: '外觀',
+        description: 'Aurora Deck 提供深色或日光兩種模式。兩者都是真正獨立的調色盤，而不是一個反轉另一個：強調色在淺色背景下會變深，讓按鈕能保持白色文字，每個層級都是根據它實際所處的表面測量而來。在你在此處選擇之前，Prune 會跟隨系統設定。'
+      },
+      minimizeToTray: {
+        title: '最小化到系統匣',
+        description: '關閉視窗會將 Prune 傳送到系統匣，而不是結束程式。'
+      },
+      updateCheck: {
+        title: '檢查更新',
+        description: 'Prune 每天向 api.github.com 詢問一次是否有更新版本。這是 Prune 向這台機器以外的任何地方發出的唯一請求，GitHub 會像任何網站一樣看到你的 IP 位址。如果有新版本，側邊欄底部會出現更新按鈕，在你按下之前不會下載或安裝任何內容。'
+      },
+      autoInstallUpdates: {
+        title: '自動安裝更新',
+        description: '在背景下載新版本，並在 Prune 下次關閉時安裝，而不是等待你按下更新按鈕。需要啟用上方的更新檢查。'
+      },
+      updateStatus: {
+        checking: '正在檢查…',
+        loadError: (error) => `無法檢查更新：${error}`,
+        newerAvailable: (version) => `Prune ${version} 現已推出。`,
+        openDownloadPage: '開啟下載頁面',
+        upToDate: (version) => `你使用的是最新版本（${version}）。`,
+        openPageError: (error) => `無法開啟頁面：${error}`
+      },
+      showFreeSpace: {
+        title: '在磁碟地圖上顯示可用空間',
+        description: '掃描整個磁碟機時，將磁碟機的可用空間繪製為另一個區塊，讓每個資料夾顯示的是佔磁碟機的比例，而不是佔已用空間的比例。'
+      },
+      autoQuarantine: {
+        title: '自動隔離',
+        description: '深度清理會將移除的內容移到 Prune 的隔離區，你可以從那裡將其放回。關閉此選項後，內容會改為進入 Windows 資源回收筒——仍然可以復原，只是在一個你已經知道如何清空的地方。'
+      },
+      skipRecent: {
+        title: '不動最近的檔案',
+        description: '略過過去幾小時內修改過的所有內容。在暫存資料夾中，正在寫入的檔案看起來和兩年前被遺棄的檔案一模一樣——這正是防止半途而廢的安裝被清掃掉的原因。設為 0 可關閉此功能。',
+        hoursUnit: '小時',
+        ariaLabel: '不動最近檔案的小時數'
+      },
+      restorePointCleanup: {
+        title: '先建立還原點',
+        description: '在強制移除之前建立，以便 Windows 本身能夠回復系統。會花費幾秒鐘，如果系統保護已關閉則不會執行任何動作。'
+      },
+      hideUnavailable: {
+        title: '隱藏不適用的清理項目',
+        description: '清單中的大部分是針對這台機器沒有的軟體。隱藏它們只會留下真正存在於這裡的內容。'
+      },
+      quarantineRetention: {
+        title: '保留復原選項的時長',
+        description: 'Prune 移除的所有內容都會先進入隔離區，並保留在那裡，直到你清空它。設定天數以捨棄早於該天數的備份。留空以永久保留它們。',
+        neverPlaceholder: '永不',
+        daysUnit: '天',
+        ariaLabel: '保留隔離區備份的天數'
+      },
+      quarantineMaxSize: {
+        title: '保留多少復原內容',
+        description: '整個隔離資料夾的上限。超過此限制後，最舊的備份會先被移除——最新的備份永遠不會被捨棄，因此你剛剛移除的大檔案即使單獨超過限制也仍然可以復原。留空表示無限制。',
+        noLimitPlaceholder: '無限制',
+        gbUnit: 'GB',
+        ariaLabel: '最大隔離區大小（GB）'
+      },
+      exclusions: {
+        title: '排除資料夾',
+        description: 'Prune 將不予處理的資料夾和檔案類型——深度清理會略過它們，磁碟地圖也會將其排除——這是在已經保護的內容（系統磁碟區資訊、防毒軟體隔離區、元件存放區以及另外十幾個）之外的額外選項。',
+        ariaLabel: '要排除的資料夾路徑或檔案類型',
+        add: '新增',
+        invalidFormat: '請輸入完整的資料夾路徑（D:\\Games）或檔案類型（*.iso）。',
+        formatHint: '完整的資料夾路徑，或寫成 *.iso 形式的檔案類型',
+        none: '未排除任何內容。',
+        typeBadge: '類型',
+        folderBadge: '資料夾',
+        removeAriaLabel: (value) => `停止排除 ${value}`
+      },
+      sandboxTest: {
+        title: '沙盒測試',
+        description: '僅針對一次性的暫存目錄執行真實的清理引擎——絕不會針對你實際的 Temp、Windows Temp 或縮圖快取——以證明在你信任真實檔案之前，掃描和刪除確實有效。',
+        run: '執行沙盒測試',
+        running: '正在執行…',
+        allPassed: '所有檢查均已通過',
+        failed: '沙盒測試失敗'
+      },
+      warningConfirmations: {
+        title: '警告確認',
+        allAsk: '每個會遺失資料的清理項目在執行前都會詢問。',
+        someSet: (count) => `已設定 ${count} 個清理警告不再詢問。`,
+        reset: '重設警告確認'
+      },
+      uninstallTab: {
+        beforeHeading: '解除安裝之前',
+        restorePointUninstall: {
+          title: '解除安裝前建立還原點',
+          description: 'Windows 內建的系統還原，在程式的解除安裝程式執行之前建立。需要 Prune 以系統管理員身分執行，而且 Windows 每天只允許建立一次，因此如果無法建立，解除安裝將繼續進行，對話方塊會說明這一點。'
+        },
+        registryBackup: {
+          title: '解除安裝前備份登錄檔',
+          description: '匯出 HKLM\\SOFTWARE 和 HKCU\\Software（在建置 Prune 的機器上約 140 MB），並保留最新的 3 個。如果無法建立備份，解除安裝將不會執行。'
+        },
+        afterHeading: '解除安裝之後',
+        scanLeftovers: {
+          title: '解除安裝後掃描殘留項目',
+          description: '尋找解除安裝程式遺留下來的檔案、登錄機碼和排程工作。關閉後，Prune 只會執行程式內建的解除安裝程式並到此為止。'
+        },
+        preselect: {
+          title: '預設勾選每個殘留項目',
+          description: '審核畫面開啟時，所有找到的項目都已被勾選。關閉後，開啟時不會勾選任何項目，由你自行選擇。'
+        },
+        keepHistory: {
+          title: '保留解除安裝記錄',
+          description: '儀表板中最近移除項目及其釋放空間的清單。關閉後，不會記錄任何新內容。'
+        },
+        destinationHeading: '殘留檔案的去向',
+        leftoverOptions: {
+          quarantine: { label: '隔離區', description: '移到 Prune 自己的備份中，可以從隔離區畫面復原。預設選項。' },
+          recycle: { label: '資源回收筒', description: '可以從 Windows 內建的資源回收筒復原，清空資源回收筒時會釋放空間。' },
+          permanent: { label: '永久刪除', description: '徹底刪除。無法復原。' }
+        },
+        permanentWarning: '殘留檔案將被徹底刪除，無法從隔離區或其他任何地方復原。確認之前請檢查清單。',
+        registryNote: '無論你如何選擇，登錄機碼在移除前都會匯出到隔離區。'
+      },
+      about: {
+        description: '一款本機、離線的 Windows 解除安裝與清理工具——具有殘留檔案掃描的強制移除、刪除前的安全隔離、磁碟對應，以及一鍵垃圾清理。'
+      },
+      automation: {
+        title: '自動化',
+        description: '僅在 Prune 開啟時執行。它無法喚醒休眠中的機器——如果電腦關機時錯過了某個時間視窗，會被回報為錯過，而不是悄悄略過，並會在你下次開啟應用程式時補上。',
+        scheduled: '已排程',
+        off: '關閉',
+        howOften: '頻率',
+        day: '天',
+        at: '時間',
+        whatItDoes: '執行內容',
+        everyDay: '每天',
+        everyWeek: '每週',
+        measureOnly: '僅測量',
+        clean: '清理',
+        cleanWarning: '此操作會在無人監督的情況下移除檔案。它會清理深度清理建議且確實包含內容的規則，一切仍會進入隔離區——因此在保持此功能開啟之前，請檢查上方的保留設定。',
+        nextRun: '下次執行：',
+        lastRun: '上次執行：',
+        weekdays: {
+          sunday: '星期日', monday: '星期一', tuesday: '星期二', wednesday: '星期三',
+          thursday: '星期四', friday: '星期五', saturday: '星期六'
+        }
+      }
+    },
     dashboard: {
       scheduleBadge: {
         missed: (count) => `此電腦關機期間錯過了 ${count} 次排程執行`,

@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { fetchAutomation } from '../lib/api.js';
 import { keys } from '../lib/queryClient.js';
+import { useLanguage } from '../i18n/LanguageContext.jsx';
 
 /** The scheduled run, and an honest account of what it can do.
  *
@@ -12,7 +13,7 @@ import { keys } from '../lib/queryClient.js';
  * how many windows went by while the machine was off, which is the
  * difference between "broken" and "your computer was asleep".
  */
-const WEEKDAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+const WEEKDAY_KEYS = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
 
 function Field({ label, children }) {
   return (
@@ -29,6 +30,7 @@ const selectClass =
   'font-mono text-[12.5px] px-3 py-2 rounded-lg bg-[color:var(--surface-hover)] border border-[color:var(--border-subtle)] text-[color:var(--text-primary)] focus:outline-none focus:border-[color:var(--accent-primary)]/50';
 
 export default function AutomationSettings({ settings, save }) {
+  const { t } = useLanguage();
   const automation = settings?.automation ?? {};
   const status = useQuery({
     queryKey: keys.automation,
@@ -46,11 +48,9 @@ export default function AutomationSettings({ settings, save }) {
 
   return (
     <div>
-      <h3 className="text-[13.5px] font-medium text-[color:var(--text-primary)] mb-1.5">Automation</h3>
+      <h3 className="text-[13.5px] font-medium text-[color:var(--text-primary)] mb-1.5">{t('settings.automation.title')}</h3>
       <p className="text-[12.5px] text-[color:var(--text-secondary)] mb-4 max-w-[62ch]">
-        Runs while Prune is open. It cannot wake a sleeping machine — a window that passes while
-        the computer is off is reported as missed rather than silently skipped, and caught up the
-        next time you open the app.
+        {t('settings.automation.description')}
       </p>
 
       <div className="flex items-center gap-3 mb-4">
@@ -69,37 +69,39 @@ export default function AutomationSettings({ settings, save }) {
           />
         </button>
         <span className="text-[12.5px] text-[color:var(--text-secondary)]">
-          {automation.enabled ? 'Scheduled' : 'Off'}
+          {automation.enabled ? t('settings.automation.scheduled') : t('settings.automation.off')}
         </span>
       </div>
 
       {automation.enabled && (
         <>
           <div className="flex flex-wrap gap-3 mb-4">
-            <Field label="How often">
+            <Field label={t('settings.automation.howOften')}>
               <select
                 className={selectClass}
                 value={automation.frequency ?? 'weekly'}
                 onChange={(e) => set({ frequency: e.target.value })}
               >
-                <option value="daily">Every day</option>
-                <option value="weekly">Every week</option>
+                <option value="daily">{t('settings.automation.everyDay')}</option>
+                <option value="weekly">{t('settings.automation.everyWeek')}</option>
               </select>
             </Field>
 
             {automation.frequency === 'weekly' && (
-              <Field label="Day">
+              <Field label={t('settings.automation.day')}>
                 <select
                   className={selectClass}
                   value={automation.weekday ?? 0}
                   onChange={(e) => set({ weekday: Number(e.target.value) })}
                 >
-                  {WEEKDAYS.map((day, i) => <option key={day} value={i}>{day}</option>)}
+                  {WEEKDAY_KEYS.map((key, i) => (
+                    <option key={key} value={i}>{t(`settings.automation.weekdays.${key}`)}</option>
+                  ))}
                 </select>
               </Field>
             )}
 
-            <Field label="At">
+            <Field label={t('settings.automation.at')}>
               <input
                 type="time"
                 className={selectClass}
@@ -111,14 +113,14 @@ export default function AutomationSettings({ settings, save }) {
               />
             </Field>
 
-            <Field label="What it does">
+            <Field label={t('settings.automation.whatItDoes')}>
               <select
                 className={selectClass}
                 value={automation.task ?? 'scan'}
                 onChange={(e) => set({ task: e.target.value })}
               >
-                <option value="scan">Measure only</option>
-                <option value="clean">Clean</option>
+                <option value="scan">{t('settings.automation.measureOnly')}</option>
+                <option value="clean">{t('settings.automation.clean')}</option>
               </select>
             </Field>
           </div>
@@ -129,23 +131,21 @@ export default function AutomationSettings({ settings, save }) {
           {automation.task === 'clean' && (
             <div className="mb-4 px-3.5 py-3 rounded-xl bg-[color:var(--warning-soft)] border border-[color:var(--warning)]/25">
               <p className="text-[12.5px] text-[color:var(--warning)]">
-                This removes files with nobody watching. It cleans the rules Deep Clean recommends
-                and that actually have something in them, and everything still goes to quarantine —
-                so check the retention setting above before leaving this on.
+                {t('settings.automation.cleanWarning')}
               </p>
             </div>
           )}
 
           <div className="text-[12px] text-[color:var(--text-secondary)] space-y-1">
             <p>
-              Next run:{' '}
+              {t('settings.automation.nextRun')}{' '}
               <span className="font-mono text-[color:var(--text-primary)]">
                 {nextRun ? nextRun.toLocaleString() : '—'}
               </span>
             </p>
             {lastResult && (
               <p>
-                Last run:{' '}
+                {t('settings.automation.lastRun')}{' '}
                 <span className="font-mono text-[color:var(--text-primary)]">
                   {new Date(lastResult.at).toLocaleString()}
                 </span>
