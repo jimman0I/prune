@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { removeStoreApp, appendHistoryEntry } from '../lib/api.js';
+import { useLanguage } from '../i18n/LanguageContext.jsx';
 
 /** The question in front of removing a Store app.
  *
@@ -19,6 +20,7 @@ import { removeStoreApp, appendHistoryEntry } from '../lib/api.js';
  * back to the row that opened it.
  */
 export default function StoreRemoveDialog({ app, onClose, onRemoved }) {
+  const { t } = useLanguage();
   const [state, setState] = useState('asking');
   const [error, setError] = useState(null);
 
@@ -46,13 +48,10 @@ export default function StoreRemoveDialog({ app, onClose, onRemoved }) {
 
   return (
     <div className="glass-panel w-full max-w-[520px] p-6 rounded-xl">
-      <h2 className="display-heading text-[19px] mb-1">Remove {app.name}?</h2>
+      <h2 className="display-heading text-[19px] mb-1">{t('applications.storeRemoveDialog.heading', app.name)}</h2>
 
       <p className="text-[13px] text-[color:var(--text-secondary)] leading-relaxed mb-3">
-        This removes the app for your account, along with its settings and
-        saved data. Unlike everything else Prune removes, it does not go to
-        Quarantine and cannot be restored from here — getting it back means
-        installing it again from the Microsoft Store.
+        {t('applications.storeRemoveDialog.body')}
       </p>
 
       <p className="text-[11.5px] font-mono text-[color:var(--text-muted)] break-all mb-5 select-text">
@@ -70,7 +69,7 @@ export default function StoreRemoveDialog({ app, onClose, onRemoved }) {
 
       <div className="flex justify-end gap-2">
         <button type="button" className="btn-ghost px-3 py-1.5 rounded-md text-[12.5px]" onClick={onClose}>
-          {state === 'done' ? 'Close' : 'Cancel'}
+          {state === 'done' ? t('applications.storeRemoveDialog.close') : t('applications.storeRemoveDialog.cancel')}
         </button>
         {state !== 'done' && (
           <button
@@ -79,7 +78,7 @@ export default function StoreRemoveDialog({ app, onClose, onRemoved }) {
             aria-busy={state === 'removing' || undefined}
             onClick={confirm}
           >
-            {state === 'removing' ? 'Removing…' : 'Remove app'}
+            {state === 'removing' ? t('applications.storeRemoveDialog.removing') : t('applications.storeRemoveDialog.removeApp')}
           </button>
         )}
       </div>

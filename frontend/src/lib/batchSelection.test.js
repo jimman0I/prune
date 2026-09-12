@@ -96,3 +96,14 @@ describe('Store apps in a batch', () => {
     expect(canBatchUninstall(store({ packageFullName: undefined }))).toBe(false);
   });
 });
+
+// ProgramList.jsx passes `t('applications.batchReasons')` here so the
+// reason follows the app's chosen language, the same way DiskMap.jsx's
+// call into limitCells() supplies a translated aggregate-cell label.
+describe('a translated reason set', () => {
+  it('uses the given reasons instead of the English default', () => {
+    const reasons = { orphaned: 'Το πρόγραμμα απεγκατάστασης είναι κατεστραμμένο.' };
+    expect(batchIneligibleReason({ health: { orphaned: true } }, reasons))
+      .toBe('Το πρόγραμμα απεγκατάστασης είναι κατεστραμμένο.');
+  });
+});

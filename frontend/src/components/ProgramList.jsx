@@ -7,6 +7,7 @@ import { isRecentlyInstalled, RECENT_DAYS } from '../lib/recentPrograms.js';
 import TableSkeleton from './TableSkeleton.jsx';
 import { tileLetter } from '../lib/iconTileLetter.js';
 import { tileColor, TILE_INK } from '../lib/programTileColor.js';
+import { useLanguage } from '../i18n/LanguageContext.jsx';
 
 function formatBytes(bytes) {
   if (bytes === null || bytes === undefined) return '—';
@@ -43,14 +44,14 @@ const SIZE_TONE_TEXT = {
  * fixed columns now sit just above their real content, and the three
  * flexible ones keep the slack. */
 const COLUMNS = [
-  { key: 'select', label: '', width: '30px' },
-  { key: 'name', label: 'Application', sort: 'name', width: 'minmax(190px,1fr)' },
-  { key: 'size', label: 'Size', sort: 'sizeBytes', width: '72px', align: 'right' },
+  { key: 'select', width: '30px' },
+  { key: 'name', sort: 'name', width: 'minmax(190px,1fr)' },
+  { key: 'size', sort: 'sizeBytes', width: '72px', align: 'right' },
   // Kept wide: "2026.08.19.11.06" is 138px and still truncates here. A
   // version is read left-to-right, so losing the tail costs least.
-  { key: 'version', label: 'Version', sort: 'version', width: '128px' },
-  { key: 'architecture', label: 'Type', sort: 'architecture', width: '52px' },
-  { key: 'installDate', label: 'Installed', sort: 'installDate', width: '74px' },
+  { key: 'version', sort: 'version', width: '128px' },
+  { key: 'architecture', sort: 'architecture', width: '52px' },
+  { key: 'installDate', sort: 'installDate', width: '74px' },
   // Recency used to be a grouping: recent installs sat under their own
   // collapsible heading above everything else. It is a column now because
   // a grouping owns the order of the whole table -- sort by size and the
@@ -59,11 +60,23 @@ const COLUMNS = [
   // only when you click it. Sorted by it, this is Revo's New Programs list.
   // 46px is the header, not the badge: NEW plus its sort arrow is wider
   // than the badge it sits over.
-  { key: 'recent', label: 'New', sort: 'recent', width: '46px' },
-  { key: 'publisher', label: 'Company', sort: 'publisher', width: 'minmax(112px,0.7fr)' },
-  { key: 'website', label: 'Website', width: 'minmax(92px,0.6fr)' },
-  { key: 'action', label: '', width: '164px', align: 'right' }
+  { key: 'recent', sort: 'recent', width: '46px' },
+  { key: 'publisher', sort: 'publisher', width: 'minmax(112px,0.7fr)' },
+  { key: 'website', width: 'minmax(92px,0.6fr)' },
+  { key: 'action', width: '164px', align: 'right' }
 ];
+
+// select/action carry no header word -- both are icon/button columns.
+const COLUMN_KEYS = {
+  name: 'applications.columns.application',
+  size: 'applications.columns.size',
+  version: 'applications.columns.version',
+  architecture: 'applications.columns.type',
+  installDate: 'applications.columns.installed',
+  recent: 'applications.columns.new',
+  publisher: 'applications.columns.company',
+  website: 'applications.columns.website'
+};
 
 const GRID_TEMPLATE = COLUMNS.map((c) => c.width).join(' ');
 
@@ -159,6 +172,7 @@ function SortArrow({ active, direction }) {
  * every extension have one, but plenty of registry entries record none,
  * and a button that cannot work is worse than no button. */
 function RevealButton({ program }) {
+  const { t } = useLanguage();
   const [failed, setFailed] = useState(null);
   const target = program.installLocation;
   if (!target) return null;
@@ -175,15 +189,16 @@ function RevealButton({ program }) {
           setFailed(error.message);
         }
       }}
-      aria-label={`Open the folder for ${program.name}`}
+      aria-label={t('applications.reveal.ariaLabel', program.name)}
       className="btn-ghost px-2 py-1 rounded-md text-[11px] font-medium opacity-0 group-hover:opacity-100 focus-visible:opacity-100 transition-opacity"
     >
-      {failed ? 'Not found' : 'Folder'}
+      {failed ? t('applications.reveal.notFound') : t('applications.reveal.button')}
     </button>
   );
 }
 
 function ProgramRow({ program, iconSrc, checked, running, isNew, onToggle, onUninstall, onRemoveStoreApp }) {
+  const { t } = useLanguage();
   return (
     <div
     className="grid gap-2.5 px-4 py-1.5 items-center group hover:bg-[color:var(--surface-hover)] transition-colors"
@@ -192,7 +207,7 @@ function ProgramRow({ program, iconSrc, checked, running, isNew, onToggle, onUni
     <RowCheckbox
       checked={checked}
       disabled={!canBatchUninstall(program)}
-      label={batchIneligibleReason(program) || `Select ${program.name}`}
+      label={batchIneligibleReason(program, t('applications.batchReasons')) || t('applications.selectRow', program.name)}
       onChange={onToggle}
     />
 
@@ -201,7 +216,7 @@ function ProgramRow({ program, iconSrc, checked, running, isNew, onToggle, onUni
       <span className="text-[12.5px] truncate">{program.name}</span>
       {program.health?.orphaned && (
         <span className="text-[9px] font-mono uppercase tracking-wider px-1 py-px rounded bg-[color:var(--danger-soft)] text-[color:var(--danger)] border border-[color:var(--danger)]/25 shrink-0">
-          Broken
+          {t('applications.badges.broken')}
         </span>
       )}
       {/* Revo warns before uninstalling something that is open, and the
@@ -210,14 +225,14 @@ function ProgramRow({ program, iconSrc, checked, running, isNew, onToggle, onUni
           next launch recreates. */}
       {running && (
         <span className="text-[9px] font-mono uppercase tracking-wider px-1 py-px rounded bg-[color:var(--success-soft)] text-[color:var(--success)] border border-[color:var(--success)]/25 shrink-0">
-          Running
+          {t('applications.badges.running')}
         </span>
       )}
       {/* Marked, because how you remove one is genuinely different --
           a Store app has no uninstaller to run. */}
       {program.source === 'store' && (
         <span className="text-[9px] font-mono uppercase tracking-wider px-1 py-px rounded bg-[color:var(--accent-blue)]/15 text-[color:var(--accent-blue)] border border-[color:var(--accent-blue)]/25 shrink-0">
-          Store
+          {t('applications.badges.store')}
         </span>
       )}
       {/* Which browser it belongs to is the identifying fact here -- the
@@ -234,12 +249,12 @@ function ProgramRow({ program, iconSrc, checked, running, isNew, onToggle, onUni
           add-on still occupies disk, which is what this list is about. */}
       {program.source === 'extension' && program.enabled === false && (
         <span className="text-[9px] font-mono uppercase tracking-wider px-1 py-px rounded bg-[color:var(--surface-hover)] text-[color:var(--text-muted)] border border-[color:var(--border-subtle)] shrink-0">
-          Disabled
+          {t('applications.badges.disabled')}
         </span>
       )}
       {program.unused && !program.health?.orphaned && (
         <span className="text-[9px] font-mono uppercase tracking-wider px-1 py-px rounded bg-[color:var(--warning-soft)] text-[color:var(--warning)] border border-[color:var(--warning)]/25 shrink-0">
-          Unused
+          {t('applications.badges.unused')}
         </span>
       )}
     </div>
@@ -285,7 +300,7 @@ function ProgramRow({ program, iconSrc, checked, running, isNew, onToggle, onUni
         <span
           className="text-[9px] font-mono uppercase tracking-wider px-1 py-px rounded bg-[color:var(--accent-primary)]/15 text-[color:var(--accent-primary)] border border-[color:var(--accent-primary)]/25"
         >
-          New
+          {t('applications.columns.new')}
         </span>
       )}
     </div>
@@ -302,7 +317,7 @@ function ProgramRow({ program, iconSrc, checked, running, isNew, onToggle, onUni
       <RevealButton program={program} />
       {program.source === 'extension' ? (
         // Removing one is a browser operation, not an uninstaller.
-        <span className="text-[11px] font-mono text-[color:var(--text-muted)]">via browser</span>
+        <span className="text-[11px] font-mono text-[color:var(--text-muted)]">{t('applications.viaBrowser')}</span>
       ) : program.source === 'store' && program.nonRemovable ? (
         /* Windows marks this package as part of the system and will not
          * let it go -- on the dev machine that is the Security interface
@@ -312,10 +327,10 @@ function ProgramRow({ program, iconSrc, checked, running, isNew, onToggle, onUni
          * behaviour and opens Windows' own page instead. */
         <button
           onClick={() => { openInstalledAppsSettings().catch(() => {}); }}
-          aria-label={`Open Windows settings — Windows does not allow ${program.name} to be removed here`}
+          aria-label={t('applications.inWindows.ariaLabel', program.name)}
           className="btn-ghost px-2 py-1 rounded-md text-[11px] font-medium opacity-0 group-hover:opacity-100 focus-visible:opacity-100 transition-opacity"
         >
-          In Windows
+          {t('applications.inWindows.button')}
         </button>
       ) : program.source === 'store' ? (
         // Removable, so it says Uninstall like every other row. What is
@@ -326,14 +341,14 @@ function ProgramRow({ program, iconSrc, checked, running, isNew, onToggle, onUni
           onClick={() => onRemoveStoreApp(program)}
           className="btn-danger px-2.5 py-1 rounded-md text-[11px] font-medium opacity-0 group-hover:opacity-100 focus-visible:opacity-100 transition-opacity"
         >
-          Uninstall
+          {t('applications.uninstall')}
         </button>
       ) : (
         <button
           onClick={() => onUninstall(program)}
           className="btn-danger px-2.5 py-1 rounded-md text-[11px] font-medium opacity-0 group-hover:opacity-100 focus-visible:opacity-100 transition-opacity"
         >
-          {program.health?.orphaned ? 'Force remove' : 'Uninstall'}
+          {program.health?.orphaned ? t('applications.forceRemove') : t('applications.uninstall')}
         </button>
       )}
     </div>
@@ -342,6 +357,7 @@ function ProgramRow({ program, iconSrc, checked, running, isNew, onToggle, onUni
 }
 
 export default function ProgramList({ programs: initialPrograms, extensions = [], icons = {}, running = {}, onUninstall, onBatchUninstall, onRemoveStoreApp = () => {} }) {
+  const { t } = useLanguage();
   const [programs, setPrograms] = useState(initialPrograms || []);
   const [loading, setLoading] = useState(!initialPrograms);
   const [error, setError] = useState(null);
@@ -429,13 +445,16 @@ export default function ProgramList({ programs: initialPrograms, extensions = []
   // filters and column set are all known before it does -- showing them
   // immediately means nothing moves when the rows land.
   if (loading) {
+    const skeletonColumns = COLUMNS
+      .filter((c) => COLUMN_KEYS[c.key])
+      .map((c) => ({ ...c, label: t(COLUMN_KEYS[c.key]) }));
     return (
       <div className="flex flex-col min-h-0">
-        <TableSkeleton columns={COLUMNS.filter((c) => c.label)} rows={10} label="Reading installed programs…" />
+        <TableSkeleton columns={skeletonColumns} rows={10} label={t('applications.loading')} />
       </div>
     );
   }
-  if (error) return <div className="select-text" style={{ color: 'var(--danger)' }}>Couldn't load programs: {error}</div>;
+  if (error) return <div className="select-text" style={{ color: 'var(--danger)' }}>{t('applications.loadError', error)}</div>;
 
   return (
     <div className="flex flex-col min-h-0">
@@ -448,12 +467,12 @@ export default function ProgramList({ programs: initialPrograms, extensions = []
           <input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search applications…"
+            placeholder={t('applications.search.placeholder')}
             // Not labelled by the placeholder alone -- that is not an
             // accessible name, and it disappears the moment anything is
             // typed, so the field goes anonymous exactly when it has
             // content worth describing.
-            aria-label="Search applications"
+            aria-label={t('applications.search.label')}
             // Named so the global Ctrl+K can find it without a ref
             // threaded through App, ProgramList and the header. The
             // shortcut is app-wide; the box belongs to one screen.
@@ -463,15 +482,15 @@ export default function ProgramList({ programs: initialPrograms, extensions = []
         </div>
         <div className="flex items-center gap-1 p-1 bg-[color:var(--bg-panel)] border border-[color:var(--border-subtle)] rounded-xl">
           {[
-            { id: 'all', label: 'All' },
-            { id: 'unused', label: 'Unused' },
+            { id: 'all', label: t('applications.filters.all') },
+            { id: 'unused', label: t('applications.filters.unused') },
             // Only offered when there's something to see. On a healthy
             // machine this filter would return an empty list every time,
             // and a permanently-empty view teaches people to ignore it --
             // when it does appear, it means something.
-            ...(storeCount > 0 ? [{ id: 'store', label: `Store (${storeCount})` }] : []),
-            ...(extensions.length > 0 ? [{ id: 'extensions', label: `Extensions (${extensions.length})` }] : []),
-            ...(brokenCount > 0 ? [{ id: 'broken', label: `Broken (${brokenCount})` }] : [])
+            ...(storeCount > 0 ? [{ id: 'store', label: t('applications.filters.storeCount', storeCount) }] : []),
+            ...(extensions.length > 0 ? [{ id: 'extensions', label: t('applications.filters.extensionsCount', extensions.length) }] : []),
+            ...(brokenCount > 0 ? [{ id: 'broken', label: t('applications.filters.brokenCount', brokenCount) }] : [])
           ].map(f => (
             <button
               key={f.id}
@@ -499,7 +518,7 @@ export default function ProgramList({ programs: initialPrograms, extensions = []
                   key={col.key}
                   checked={allSelected}
                   disabled={selectable.length === 0}
-                  label={allSelected ? 'Clear selection' : 'Select all shown'}
+                  label={allSelected ? t('applications.clearSelection') : t('applications.selectAll')}
                   onChange={toggleAll}
                 />
               );
@@ -507,7 +526,7 @@ export default function ProgramList({ programs: initialPrograms, extensions = []
             const active = sort.column === col.sort;
             const content = (
               <>
-                {col.label}
+                {COLUMN_KEYS[col.key] ? t(COLUMN_KEYS[col.key]) : ''}
                 <SortArrow active={active} direction={sort.direction} />
               </>
             );
@@ -537,21 +556,22 @@ export default function ProgramList({ programs: initialPrograms, extensions = []
             // to undo it, rather than reporting the absence and stopping.
             <div className="text-center py-16 px-6">
               <p className="text-[13px] text-[color:var(--text-secondary)]">
-                Nothing matches
-                {query.trim() && <> “<span className="text-[color:var(--text-primary)]">{query.trim()}</span>”</>}
-                {query.trim() && filter !== 'all' && ' in '}
-                {filter !== 'all' && <span className="text-[color:var(--text-primary)]">{filter}</span>}
-                .
+                {query.trim() && filter !== 'all'
+                  ? t('applications.empty.withQueryAndFilter', query.trim(), t(`applications.filters.${filter}`))
+                  : query.trim()
+                    ? t('applications.empty.withQuery', query.trim())
+                    : filter !== 'all'
+                      ? t('applications.empty.withFilter', t(`applications.filters.${filter}`))
+                      : t('applications.empty.plain')}
               </p>
               <p className="text-[12.5px] text-[color:var(--text-muted)] mt-1.5">
-                {(filter === 'extensions' ? extensions : programs).length} entries are hidden by the
-                current filter.
+                {t('applications.empty.hiddenCount', (filter === 'extensions' ? extensions : programs).length)}
               </p>
               <button
                 className="btn-ghost mt-4 px-3.5 py-2 rounded-lg text-[12.5px] font-medium"
                 onClick={() => { setQuery(''); setFilter('all'); }}
               >
-                Clear search and filters
+                {t('applications.empty.clear')}
               </button>
             </div>
           )}
@@ -579,10 +599,10 @@ export default function ProgramList({ programs: initialPrograms, extensions = []
           // it's the same row of information, about a smaller set.
           <div className="flex items-center justify-between gap-4 px-4 py-2 border-t border-[color:var(--accent-primary)]/25 bg-[color:var(--accent-primary)]/[0.07] shrink-0">
             <span className="text-[12px] text-[color:var(--text-secondary)]">
-              <span className="text-[color:var(--text-primary)] font-medium">{summary.count}</span> selected ·{' '}
+              <span className="text-[color:var(--text-primary)] font-medium">{t('applications.footer.selected', summary.count)}</span>{' · '}
               <span className="font-mono">{formatBytes(summary.totalBytes)}</span>
               {summary.unknownSizes > 0 && (
-                <span className="text-[color:var(--text-muted)]"> + {summary.unknownSizes} of unknown size</span>
+                <span className="text-[color:var(--text-muted)]"> {t('applications.footer.unknownSizes', summary.unknownSizes)}</span>
               )}
             </span>
             <div className="flex items-center gap-2.5">
@@ -590,13 +610,13 @@ export default function ProgramList({ programs: initialPrograms, extensions = []
                 className="text-[11.5px] text-[color:var(--text-secondary)] hover:text-[color:var(--accent-primary)] transition-colors"
                 onClick={() => setSelected(new Set())}
               >
-                Clear
+                {t('applications.footer.clear')}
               </button>
               <button
                 className="btn-danger px-3.5 py-1.5 rounded-lg text-[12px] font-medium"
                 onClick={() => onBatchUninstall?.(selectedPrograms)}
               >
-                Uninstall {summary.count} program{summary.count === 1 ? '' : 's'}
+                {t('applications.footer.uninstallCount', summary.count)}
               </button>
             </div>
           </div>
@@ -604,21 +624,21 @@ export default function ProgramList({ programs: initialPrograms, extensions = []
           <div className="flex items-center justify-between gap-4 px-4 py-2 border-t border-[color:var(--border-subtle)] bg-[color:var(--surface-subtle)] shrink-0 text-[11.5px] font-mono text-[color:var(--text-muted)]">
             <span>
               {filtered.length === programs.length
-                ? `Installations: ${programs.length}`
+                ? t('applications.footer.installations', programs.length)
                 // Against the list actually being filtered. Extensions are
                 // their own list, so "24 of 210" would be comparing them
                 // against a total they are not part of.
-                : `Showing ${filtered.length} of ${(filter === 'extensions' ? extensions : programs).length}`}
+                : t('applications.footer.showingOf', filtered.length, (filter === 'extensions' ? extensions : programs).length)}
               {/* The count the old New Programs heading used to carry, and
                   the only place the column's window is spelled out. A
                   badge saying New is not self-explanatory about how new. */}
               {newIds.size > 0 && (
                 <span className="text-[color:var(--accent-primary)]">
-                  {' · '}{newIds.size} new in {RECENT_DAYS} days
+                  {' · '}{t('applications.footer.newInDays', newIds.size, RECENT_DAYS)}
                 </span>
               )}
             </span>
-            <span>{formatBytes(totalBytes)} total</span>
+            <span>{formatBytes(totalBytes)} {t('applications.footer.total')}</span>
           </div>
         )}
       </div>
