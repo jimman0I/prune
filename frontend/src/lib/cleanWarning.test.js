@@ -86,6 +86,26 @@ describe('warningFor', () => {
   it('copes with a rule that has no category', () => {
     expect(warningFor(item({ category: undefined })).title).toBe('Enable Cookies');
   });
+
+  // CleanWarningDialog.jsx reads through DeepClean.jsx's
+  // `t('deepClean.warning')` so the dialog follows the app's chosen
+  // language, the same way ProgramList.jsx's call into
+  // batchIneligibleReason() supplies a translated reason set.
+  it('uses the given messages instead of the English defaults', () => {
+    const messages = {
+      title: (label) => `Ενεργοποίηση ${label}`,
+      remember: (label) => `Απομνημόνευση της επιλογής μου για ${label}`,
+      fallbackBody: 'Αυτή η επιλογή αφαιρεί δεδομένα.'
+    };
+    expect(warningFor(item(), messages)).toEqual({
+      id: 'brave_cookies',
+      title: 'Ενεργοποίηση Brave — Cookies',
+      remember: 'Απομνημόνευση της επιλογής μου για Brave — Cookies',
+      body: 'Signs you out of every site that remembered you.'
+    });
+    expect(warningFor(item({ description: undefined }), messages).body)
+      .toBe('Αυτή η επιλογή αφαιρεί δεδομένα.');
+  });
 });
 
 describe('rememberedWith', () => {

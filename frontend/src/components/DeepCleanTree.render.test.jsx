@@ -1,14 +1,18 @@
 // @vitest-environment jsdom
 import { describe, it, expect, afterEach, vi } from 'vitest';
-import { render, screen, within, cleanup } from '@testing-library/react';
+import { screen, within, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { renderScreen } from '../testSupport/renderScreen.jsx';
 import DeepCleanTree from './DeepCleanTree.jsx';
 
 /** The Deep Clean tree, rendered.
  *
- * Controlled and purely presentational, so this needs none of the app's
- * providers -- plain `render` rather than renderScreen, which would only
- * add a QueryClient nothing here reads.
+ * Controlled and purely presentational, but no longer provider-free: its
+ * rows now read useLanguage() for "needs admin" / "not installed" /
+ * "Loses data" / the heading checkbox's aria-label, and LanguageContext's
+ * useSettings() call needs a QueryClient underneath it -- so this uses
+ * renderScreen() like every other component test now, rather than the
+ * bare `render()` this file used before those strings were translated.
  *
  * The decisions it makes are all translations: a set of ticked ids into
  * three checkbox states, a click on a heading into a request the parent
@@ -18,6 +22,11 @@ import DeepCleanTree from './DeepCleanTree.jsx';
  * are unit-tested beside their own source; what is tested here is that
  * this component actually asks them and shows what they said.
  */
+
+vi.mock('../lib/api.js', () => ({
+  fetchSettings: vi.fn(async () => ({})),
+  updateSettings: vi.fn()
+}));
 
 /* Explicit, because this project runs vitest without globals -- every
  * test imports describe/it/expect by name -- and React Testing Library
@@ -52,7 +61,7 @@ const CATEGORIES = [
   }
 ];
 
-const draw = (props = {}) => render(
+const draw = (props = {}) => renderScreen(
   <DeepCleanTree
     categories={props.categories || CATEGORIES}
     selected={props.selected || new Set()}

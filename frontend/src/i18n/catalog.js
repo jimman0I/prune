@@ -346,6 +346,62 @@ export const CATALOG = {
         failed: (count) => `${count} could not be moved.`,
         failedDetail: 'They may be open or on another drive.'
       }
+    },
+    deepClean: {
+      title: 'Deep Clean',
+      subtitle: 'Every cache, log, dump and leftover Prune knows how to find, measured on this machine rather than estimated. Nothing is deleted outright — everything Clean takes goes to Quarantine first, where you can put it back.',
+      scanLog: {
+        header: 'Scan output',
+        scanningAnnounce: (total) => `Scanning ${total} locations.`,
+        finishedAnnounce: (scanned, total) => `Scan finished. ${scanned} of ${total} locations measured.`,
+        starting: 'Starting…'
+      },
+      emptyState: 'Nothing scanned yet.',
+      scanErrorPrefix: (error) => `Couldn't scan: ${error}`,
+      cleanErrorPrefix: (error) => `Couldn't clean: ${error}`,
+      cleanupComplete: 'Cleanup complete.',
+      resultFreed: (formatted) => `Freed ${formatted}`,
+      resultLockedSuffix: (count) => ` — skipped ${count} locked ${count === 1 ? 'file' : 'files'}`,
+      before: {
+        body: 'Prune measures every category on disk for real rather than estimating, which takes about half a minute.',
+        scanning: 'Scanning…',
+        preview: 'Preview'
+      },
+      hiddenNote: (count) => `${count} cleaner${count === 1 ? '' : 's'} hidden because the software isn't installed. Settings › Cleanup to show them.`,
+      footer: {
+        totalLabel: 'Total space to free:',
+        notMeasuredYet: 'not measured yet',
+        unmeasuredSuffix: (count) => ` · ${count} not measured`,
+        selectEverything: 'Select everything',
+        clear: 'Clear',
+        selectedCount: (count) => `${count} selected`
+      },
+      confirm: {
+        prompt: (count, sizeKnown, formatted) => `Move ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'}) to Quarantine?`,
+        cancel: 'Cancel',
+        confirmButton: 'Confirm',
+        cleaning: 'Cleaning…'
+      },
+      stop: 'Stop',
+      rescan: 'Rescan',
+      clean: 'Clean',
+      tree: {
+        selectCategoryAriaLabel: (category) => `Select everything under ${category}`,
+        losesData: 'Loses data',
+        needsAdmin: 'needs admin',
+        notInstalled: 'not installed'
+      },
+      warning: {
+        title: (label) => `Enable ${label}`,
+        remember: (label) => `Remember my choice for ${label}`,
+        fallbackBody: 'This option removes data you may want to keep.',
+        cancel: 'Cancel',
+        enableAnyway: 'Enable anyway'
+      },
+      locked: {
+        message: (count) => `Skipped ${count} locked ${count === 1 ? 'file' : 'files'}.`,
+        detail: 'Close the apps using them and clean again.'
+      }
     }
   },
 
@@ -662,6 +718,62 @@ export const CATALOG = {
         restoreHint: 'Herstel hulle vanaf die Karantyn-skerm.',
         failed: (count) => `${count} kon nie geskuif word nie.`,
         failedDetail: 'Hulle is dalk oop of op \'n ander skyf.'
+      }
+    },
+    deepClean: {
+      title: 'Diep Skoonmaak',
+      subtitle: 'Elke kas, log, dump en oorblyfsel wat Prune weet om te vind, gemeet op hierdie masjien in plaas van beraam. Niks word summier verwyder nie — alles wat Skoonmaak vat gaan eers na Karantyn, waar jy dit kan terugsit.',
+      scanLog: {
+        header: 'Skanderingsuitset',
+        scanningAnnounce: (total) => `Skandeer ${total} plekke.`,
+        finishedAnnounce: (scanned, total) => `Skandering voltooi. ${scanned} van ${total} plekke gemeet.`,
+        starting: 'Begin tans…'
+      },
+      emptyState: 'Nog niks geskandeer nie.',
+      scanErrorPrefix: (error) => `Kon nie skandeer nie: ${error}`,
+      cleanErrorPrefix: (error) => `Kon nie skoonmaak nie: ${error}`,
+      cleanupComplete: 'Skoonmaak voltooi.',
+      resultFreed: (formatted) => `${formatted} vrygemaak`,
+      resultLockedSuffix: (count) => ` — ${count} geslote lêer${count === 1 ? '' : 's'} oorgeslaan`,
+      before: {
+        body: 'Prune meet elke kategorie regtig op skyf eerder as om te beraam, wat omtrent \'n halwe minuut neem.',
+        scanning: 'Skandeer tans…',
+        preview: 'Voorskou'
+      },
+      hiddenNote: (count) => `${count} skoonmaker${count === 1 ? '' : 's'} weggesteek omdat die sagteware nie geïnstalleer is nie. Instellings › Skoonmaak om hulle te wys.`,
+      footer: {
+        totalLabel: 'Totale spasie om vry te maak:',
+        notMeasuredYet: 'nog nie gemeet nie',
+        unmeasuredSuffix: (count) => ` · ${count} nie gemeet nie`,
+        selectEverything: 'Kies alles',
+        clear: 'Maak skoon',
+        selectedCount: (count) => `${count} gekies`
+      },
+      confirm: {
+        prompt: (count, sizeKnown, formatted) => `Skuif ${count} item${count === 1 ? '' : 's'} (${sizeKnown ? formatted : 'grootte nie gemeet nie'}) na Karantyn?`,
+        cancel: 'Kanselleer',
+        confirmButton: 'Bevestig',
+        cleaning: 'Maak skoon…'
+      },
+      stop: 'Stop',
+      rescan: 'Skandeer weer',
+      clean: 'Maak skoon',
+      tree: {
+        selectCategoryAriaLabel: (category) => `Kies alles onder ${category}`,
+        losesData: 'Verloor data',
+        needsAdmin: 'benodig admin',
+        notInstalled: 'nie geïnstalleer nie'
+      },
+      warning: {
+        title: (label) => `Aktiveer ${label}`,
+        remember: (label) => `Onthou my keuse vir ${label}`,
+        fallbackBody: '\'n Hierdie opsie verwyder data wat jy dalk wil behou.',
+        cancel: 'Kanselleer',
+        enableAnyway: 'Aktiveer in elk geval'
+      },
+      locked: {
+        message: (count) => `${count} geslote lêer${count === 1 ? '' : 's'} oorgeslaan.`,
+        detail: '\'n Maak die programme wat hulle gebruik toe en maak weer skoon.'
       }
     }
   },
@@ -980,6 +1092,62 @@ export const CATALOG = {
         failed: (count) => `تعذر نقل ${count}.`,
         failedDetail: 'قد تكون مفتوحة أو على قرص آخر.'
       }
+    },
+    deepClean: {
+      title: 'التنظيف العميق',
+      subtitle: 'كل ذاكرة تخزين مؤقت وسجل وملف تفريغ وبقايا يعرف Prune كيف يجدها، مقاسة على هذا الجهاز بدلاً من تقديرها. لا يُحذف شيء نهائيًا — كل ما يأخذه التنظيف ينتقل أولاً إلى الحجر الصحي، حيث يمكنك إعادته.',
+      scanLog: {
+        header: 'مخرجات الفحص',
+        scanningAnnounce: (total) => `جارٍ فحص ${total} موقعًا.`,
+        finishedAnnounce: (scanned, total) => `انتهى الفحص. تم قياس ${scanned} من ${total} موقعًا.`,
+        starting: 'جارٍ البدء…'
+      },
+      emptyState: 'لم يتم فحص شيء بعد.',
+      scanErrorPrefix: (error) => `تعذر الفحص: ${error}`,
+      cleanErrorPrefix: (error) => `تعذر التنظيف: ${error}`,
+      cleanupComplete: 'اكتمل التنظيف.',
+      resultFreed: (formatted) => `تم تحرير ${formatted}`,
+      resultLockedSuffix: (count) => ` — تم تخطي ${count} ملف مقفل`,
+      before: {
+        body: 'يقيس Prune كل فئة على القرص فعليًا بدلاً من التقدير، وهو ما يستغرق حوالي نصف دقيقة.',
+        scanning: 'جارٍ الفحص…',
+        preview: 'معاينة'
+      },
+      hiddenNote: (count) => `تم إخفاء ${count} أداة تنظيف لأن البرنامج غير مثبت. الإعدادات › التنظيف لإظهارها.`,
+      footer: {
+        totalLabel: 'إجمالي المساحة المراد تحريرها:',
+        notMeasuredYet: 'لم يتم قياسها بعد',
+        unmeasuredSuffix: (count) => ` · ${count} غير مقاس`,
+        selectEverything: 'تحديد الكل',
+        clear: 'مسح',
+        selectedCount: (count) => `${count} محدد`
+      },
+      confirm: {
+        prompt: (count, sizeKnown, formatted) => `نقل ${count} عنصر (${sizeKnown ? formatted : 'الحجم غير مقاس'}) إلى الحجر الصحي؟`,
+        cancel: 'إلغاء',
+        confirmButton: 'تأكيد',
+        cleaning: 'جارٍ التنظيف…'
+      },
+      stop: 'إيقاف',
+      rescan: 'إعادة الفحص',
+      clean: 'تنظيف',
+      tree: {
+        selectCategoryAriaLabel: (category) => `تحديد كل ما تحت ${category}`,
+        losesData: 'يفقد بيانات',
+        needsAdmin: 'يتطلب صلاحيات المسؤول',
+        notInstalled: 'غير مثبت'
+      },
+      warning: {
+        title: (label) => `تفعيل ${label}`,
+        remember: (label) => `تذكر اختياري لـ ${label}`,
+        fallbackBody: 'يزيل هذا الخيار بيانات قد ترغب في الاحتفاظ بها.',
+        cancel: 'إلغاء',
+        enableAnyway: 'تفعيل على أي حال'
+      },
+      locked: {
+        message: (count) => `تم تخطي ${count} ملف مقفل.`,
+        detail: 'أغلق التطبيقات التي تستخدمها ونظّف مرة أخرى.'
+      }
     }
   },
 
@@ -1296,6 +1464,62 @@ export const CATALOG = {
         restoreHint: 'Restaura-les des de la pantalla de Quarantena.',
         failed: (count) => `${count} no s'han pogut moure.`,
         failedDetail: "Poden estar obertes o en un altre disc."
+      }
+    },
+    deepClean: {
+      title: 'Neteja Profunda',
+      subtitle: 'Cada memòria cau, registre, bolcat i romanent que Prune sap trobar, mesurat en aquesta màquina en lloc d\'estimat. Res s\'elimina directament — tot el que Neteja treu va primer a la Quarantena, on el pots tornar a posar.',
+      scanLog: {
+        header: 'Sortida de l\'escaneig',
+        scanningAnnounce: (total) => `Escanejant ${total} ubicacions.`,
+        finishedAnnounce: (scanned, total) => `Escaneig finalitzat. ${scanned} de ${total} ubicacions mesurades.`,
+        starting: 'Iniciant…'
+      },
+      emptyState: 'Encara no s\'ha escanejat res.',
+      scanErrorPrefix: (error) => `No s'ha pogut escanejar: ${error}`,
+      cleanErrorPrefix: (error) => `No s'ha pogut netejar: ${error}`,
+      cleanupComplete: 'Neteja completada.',
+      resultFreed: (formatted) => `${formatted} alliberats`,
+      resultLockedSuffix: (count) => ` — ${count} fitxer${count === 1 ? '' : 's'} bloquej${count === 1 ? 'at' : 'ats'} omès${count === 1 ? '' : 'os'}`,
+      before: {
+        body: 'El Prune mesura cada categoria al disc de veritat en lloc d\'estimar-la, cosa que triga uns trenta segons.',
+        scanning: 'Escanejant…',
+        preview: 'Previsualitza'
+      },
+      hiddenNote: (count) => `${count} netej${count === 1 ? 'ador amagat' : 'adors amagats'} perquè el programari no està instal·lat. Configuració › Neteja per mostrar-los.`,
+      footer: {
+        totalLabel: 'Espai total a alliberar:',
+        notMeasuredYet: 'encara no mesurat',
+        unmeasuredSuffix: (count) => ` · ${count} sense mesurar`,
+        selectEverything: 'Selecciona-ho tot',
+        clear: 'Neteja',
+        selectedCount: (count) => `${count} seleccionats`
+      },
+      confirm: {
+        prompt: (count, sizeKnown, formatted) => `Vols moure ${count} element${count === 1 ? '' : 's'} (${sizeKnown ? formatted : 'mida no mesurada'}) a la Quarantena?`,
+        cancel: 'Cancel·la',
+        confirmButton: 'Confirma',
+        cleaning: 'Netejant…'
+      },
+      stop: 'Atura',
+      rescan: 'Torna a escanejar',
+      clean: 'Neteja',
+      tree: {
+        selectCategoryAriaLabel: (category) => `Selecciona-ho tot sota ${category}`,
+        losesData: 'Perd dades',
+        needsAdmin: 'necessita administrador',
+        notInstalled: 'no instal·lat'
+      },
+      warning: {
+        title: (label) => `Activa ${label}`,
+        remember: (label) => `Recorda la meva elecció per a ${label}`,
+        fallbackBody: 'Aquesta opció elimina dades que potser voldràs conservar.',
+        cancel: 'Cancel·la',
+        enableAnyway: 'Activa igualment'
+      },
+      locked: {
+        message: (count) => `${count} fitxer${count === 1 ? '' : 's'} bloquej${count === 1 ? 'at' : 'ats'} omès${count === 1 ? '' : 'os'}.`,
+        detail: 'Tanca les aplicacions que els fan servir i neteja de nou.'
       }
     }
   },
@@ -1614,6 +1838,62 @@ export const CATALOG = {
         failed: (count) => `${count} se nepodařilo přesunout.`,
         failedDetail: 'Mohou být otevřené nebo na jiném disku.'
       }
+    },
+    deepClean: {
+      title: 'Důkladné čištění',
+      subtitle: 'Každá mezipaměť, protokol, výpis a pozůstatek, které Prune umí najít, změřené na tomto počítači místo odhadu. Nic se rovnou nesmaže — vše, co Čištění vezme, jde nejprve do Karantény, odkud to lze vrátit zpět.',
+      scanLog: {
+        header: 'Výstup skenování',
+        scanningAnnounce: (total) => `Skenování ${total} umístění.`,
+        finishedAnnounce: (scanned, total) => `Skenování dokončeno. Změřeno ${scanned} z ${total} umístění.`,
+        starting: 'Spouštění…'
+      },
+      emptyState: 'Zatím nic nenaskenováno.',
+      scanErrorPrefix: (error) => `Skenování se nezdařilo: ${error}`,
+      cleanErrorPrefix: (error) => `Čištění se nezdařilo: ${error}`,
+      cleanupComplete: 'Čištění dokončeno.',
+      resultFreed: (formatted) => `Uvolněno ${formatted}`,
+      resultLockedSuffix: (count) => ` — přeskočeno ${count} uzamčených souborů`,
+      before: {
+        body: 'Prune měří každou kategorii na disku skutečně, místo aby ji odhadoval, což trvá zhruba půl minuty.',
+        scanning: 'Skenování…',
+        preview: 'Náhled'
+      },
+      hiddenNote: (count) => `${count} čističů skryto, protože software není nainstalován. Nastavení › Čištění je zobrazí.`,
+      footer: {
+        totalLabel: 'Celkový prostor k uvolnění:',
+        notMeasuredYet: 'zatím nezměřeno',
+        unmeasuredSuffix: (count) => ` · ${count} nezměřeno`,
+        selectEverything: 'Vybrat vše',
+        clear: 'Vymazat',
+        selectedCount: (count) => `${count} vybráno`
+      },
+      confirm: {
+        prompt: (count, sizeKnown, formatted) => `Přesunout ${count} položek (${sizeKnown ? formatted : 'velikost nezměřena'}) do karantény?`,
+        cancel: 'Zrušit',
+        confirmButton: 'Potvrdit',
+        cleaning: 'Čištění…'
+      },
+      stop: 'Zastavit',
+      rescan: 'Znovu skenovat',
+      clean: 'Vyčistit',
+      tree: {
+        selectCategoryAriaLabel: (category) => `Vybrat vše pod ${category}`,
+        losesData: 'Ztráta dat',
+        needsAdmin: 'vyžaduje správce',
+        notInstalled: 'není nainstalováno'
+      },
+      warning: {
+        title: (label) => `Povolit ${label}`,
+        remember: (label) => `Zapamatovat mou volbu pro ${label}`,
+        fallbackBody: 'Tato možnost odstraní data, která si možná chcete ponechat.',
+        cancel: 'Zrušit',
+        enableAnyway: 'Přesto povolit'
+      },
+      locked: {
+        message: (count) => `Přeskočeno ${count} uzamčených souborů.`,
+        detail: 'Zavřete aplikace, které je používají, a vyčistěte znovu.'
+      }
     }
   },
 
@@ -1930,6 +2210,62 @@ export const CATALOG = {
         restoreHint: "Adferwch nhw o'r sgrin Gwarantin.",
         failed: (count) => `Methwyd symud ${count}.`,
         failedDetail: "Efallai eu bod ar agor neu ar ddisg arall."
+      }
+    },
+    deepClean: {
+      title: 'Glanhau Dwfn',
+      subtitle: "Pob storfa dros dro, log, dympiad ac olion mae Prune yn gwybod sut i'w canfod, wedi'u mesur ar y peiriant hwn yn hytrach nag amcangyfrif. Ni chaiff dim ei ddileu'n uniongyrchol — mae popeth mae Glanhau yn ei gymryd yn mynd i Gwarantin yn gyntaf, lle gallwch ei roi'n ôl.",
+      scanLog: {
+        header: 'Allbwn sgan',
+        scanningAnnounce: (total) => `Sganio ${total} lleoliad.`,
+        finishedAnnounce: (scanned, total) => `Sgan wedi gorffen. ${scanned} o ${total} lleoliad wedi'u mesur.`,
+        starting: 'Yn dechrau…'
+      },
+      emptyState: "Dim byd wedi'i sganio eto.",
+      scanErrorPrefix: (error) => `Methu sganio: ${error}`,
+      cleanErrorPrefix: (error) => `Methu glanhau: ${error}`,
+      cleanupComplete: 'Glanhau wedi\'i gwblhau.',
+      resultFreed: (formatted) => `Wedi rhyddhau ${formatted}`,
+      resultLockedSuffix: (count) => ` — ${count} ffeil ar glo wedi'u hepgor`,
+      before: {
+        body: "Mae Prune yn mesur pob categori ar y ddisg go iawn yn hytrach na dyfalu, sy'n cymryd tua hanner munud.",
+        scanning: 'Sganio…',
+        preview: 'Rhagolwg'
+      },
+      hiddenNote: (count) => `${count} glanhawr wedi'u cuddio am nad yw'r feddalwedd wedi'i gosod. Gosodiadau › Glanhau i'w dangos.`,
+      footer: {
+        totalLabel: "Cyfanswm lle i'w ryddhau:",
+        notMeasuredYet: 'heb ei fesur eto',
+        unmeasuredSuffix: (count) => ` · ${count} heb eu mesur`,
+        selectEverything: 'Dewis popeth',
+        clear: 'Clirio',
+        selectedCount: (count) => `${count} wedi'u dewis`
+      },
+      confirm: {
+        prompt: (count, sizeKnown, formatted) => `Symud ${count} eitem (${sizeKnown ? formatted : "maint heb ei fesur"}) i gwarantin?`,
+        cancel: 'Diddymu',
+        confirmButton: 'Cadarnhau',
+        cleaning: 'Glanhau…'
+      },
+      stop: 'Stopio',
+      rescan: 'Ailsganio',
+      clean: 'Glanhau',
+      tree: {
+        selectCategoryAriaLabel: (category) => `Dewis popeth o dan ${category}`,
+        losesData: 'Yn colli data',
+        needsAdmin: 'angen gweinyddwr',
+        notInstalled: "heb ei osod"
+      },
+      warning: {
+        title: (label) => `Galluogi ${label}`,
+        remember: (label) => `Cofio fy newis ar gyfer ${label}`,
+        fallbackBody: "Mae'r opsiwn hwn yn dileu data efallai y byddwch am ei gadw.",
+        cancel: 'Diddymu',
+        enableAnyway: 'Galluogi beth bynnag'
+      },
+      locked: {
+        message: (count) => `${count} ffeil ar glo wedi'u hepgor.`,
+        detail: "Caewch y rhaglenni sy'n eu defnyddio a glanhewch eto."
       }
     }
   },
@@ -2248,6 +2584,62 @@ export const CATALOG = {
         failed: (count) => `${count} kunne ikke flyttes.`,
         failedDetail: 'De er muligvis åbne eller på et andet drev.'
       }
+    },
+    deepClean: {
+      title: 'Dybderensning',
+      subtitle: 'Hver cache, log, dump og rest Prune ved, hvordan man finder, målt på denne maskine i stedet for anslået. Intet slettes direkte — alt, hvad Rens tager, går først til Karantæne, hvor du kan sætte det tilbage.',
+      scanLog: {
+        header: 'Scanningsoutput',
+        scanningAnnounce: (total) => `Scanner ${total} placeringer.`,
+        finishedAnnounce: (scanned, total) => `Scanning færdig. ${scanned} af ${total} placeringer målt.`,
+        starting: 'Starter…'
+      },
+      emptyState: 'Intet scannet endnu.',
+      scanErrorPrefix: (error) => `Kunne ikke scanne: ${error}`,
+      cleanErrorPrefix: (error) => `Kunne ikke rense: ${error}`,
+      cleanupComplete: 'Oprydning fuldført.',
+      resultFreed: (formatted) => `Frigjorde ${formatted}`,
+      resultLockedSuffix: (count) => ` — sprang ${count} låste filer over`,
+      before: {
+        body: 'Prune måler hver kategori på disken for alvor i stedet for at anslå, hvilket tager cirka et halvt minut.',
+        scanning: 'Scanner…',
+        preview: 'Forhåndsvisning'
+      },
+      hiddenNote: (count) => `${count} rensere skjult, fordi softwaren ikke er installeret. Indstillinger › Oprydning for at vise dem.`,
+      footer: {
+        totalLabel: 'Samlet plads at frigøre:',
+        notMeasuredYet: 'ikke målt endnu',
+        unmeasuredSuffix: (count) => ` · ${count} ikke målt`,
+        selectEverything: 'Vælg alt',
+        clear: 'Ryd',
+        selectedCount: (count) => `${count} valgt`
+      },
+      confirm: {
+        prompt: (count, sizeKnown, formatted) => `Flyt ${count} emner (${sizeKnown ? formatted : 'størrelse ikke målt'}) til karantæne?`,
+        cancel: 'Annuller',
+        confirmButton: 'Bekræft',
+        cleaning: 'Renser…'
+      },
+      stop: 'Stop',
+      rescan: 'Scan igen',
+      clean: 'Rens',
+      tree: {
+        selectCategoryAriaLabel: (category) => `Vælg alt under ${category}`,
+        losesData: 'Mister data',
+        needsAdmin: 'kræver administrator',
+        notInstalled: 'ikke installeret'
+      },
+      warning: {
+        title: (label) => `Aktivér ${label}`,
+        remember: (label) => `Husk mit valg for ${label}`,
+        fallbackBody: 'Denne indstilling fjerner data, du måske vil beholde.',
+        cancel: 'Annuller',
+        enableAnyway: 'Aktivér alligevel'
+      },
+      locked: {
+        message: (count) => `Sprang ${count} låste filer over.`,
+        detail: 'Luk de apps, der bruger dem, og rens igen.'
+      }
     }
   },
 
@@ -2564,6 +2956,62 @@ export const CATALOG = {
         restoreHint: 'Stelle sie über den Bildschirm Quarantäne wieder her.',
         failed: (count) => `${count} konnten nicht verschoben werden.`,
         failedDetail: 'Sie sind möglicherweise geöffnet oder auf einem anderen Laufwerk.'
+      }
+    },
+    deepClean: {
+      title: 'Tiefenreinigung',
+      subtitle: 'Jeder Cache, jedes Protokoll, jeder Dump und jeder Überrest, den Prune finden kann, auf diesem Rechner gemessen statt geschätzt. Nichts wird sofort gelöscht — alles, was die Reinigung mitnimmt, wandert zuerst in die Quarantäne, wo du es zurückholen kannst.',
+      scanLog: {
+        header: 'Scan-Ausgabe',
+        scanningAnnounce: (total) => `${total} Orte werden gescannt.`,
+        finishedAnnounce: (scanned, total) => `Scan abgeschlossen. ${scanned} von ${total} Orten gemessen.`,
+        starting: 'Wird gestartet…'
+      },
+      emptyState: 'Noch nichts gescannt.',
+      scanErrorPrefix: (error) => `Scan fehlgeschlagen: ${error}`,
+      cleanErrorPrefix: (error) => `Reinigung fehlgeschlagen: ${error}`,
+      cleanupComplete: 'Bereinigung abgeschlossen.',
+      resultFreed: (formatted) => `${formatted} freigegeben`,
+      resultLockedSuffix: (count) => ` — ${count} gesperrte Datei${count === 1 ? '' : 'en'} übersprungen`,
+      before: {
+        body: 'Prune misst jede Kategorie tatsächlich auf der Festplatte, statt zu schätzen, was etwa eine halbe Minute dauert.',
+        scanning: 'Wird gescannt…',
+        preview: 'Vorschau'
+      },
+      hiddenNote: (count) => `${count} Reiniger ausgeblendet, weil die Software nicht installiert ist. Einstellungen › Bereinigung, um sie anzuzeigen.`,
+      footer: {
+        totalLabel: 'Gesamt freizugebender Speicherplatz:',
+        notMeasuredYet: 'noch nicht gemessen',
+        unmeasuredSuffix: (count) => ` · ${count} nicht gemessen`,
+        selectEverything: 'Alles auswählen',
+        clear: 'Leeren',
+        selectedCount: (count) => `${count} ausgewählt`
+      },
+      confirm: {
+        prompt: (count, sizeKnown, formatted) => `${count} Element${count === 1 ? '' : 'e'} (${sizeKnown ? formatted : 'Größe nicht gemessen'}) in Quarantäne verschieben?`,
+        cancel: 'Abbrechen',
+        confirmButton: 'Bestätigen',
+        cleaning: 'Wird bereinigt…'
+      },
+      stop: 'Stopp',
+      rescan: 'Erneut scannen',
+      clean: 'Bereinigen',
+      tree: {
+        selectCategoryAriaLabel: (category) => `Alles unter ${category} auswählen`,
+        losesData: 'Datenverlust',
+        needsAdmin: 'benötigt Administrator',
+        notInstalled: 'nicht installiert'
+      },
+      warning: {
+        title: (label) => `${label} aktivieren`,
+        remember: (label) => `Meine Wahl für ${label} merken`,
+        fallbackBody: 'Diese Option entfernt Daten, die du vielleicht behalten möchtest.',
+        cancel: 'Abbrechen',
+        enableAnyway: 'Trotzdem aktivieren'
+      },
+      locked: {
+        message: (count) => `${count} gesperrte Datei${count === 1 ? '' : 'en'} übersprungen.`,
+        detail: 'Schließe die Apps, die sie verwenden, und bereinige erneut.'
       }
     }
   },
@@ -2882,6 +3330,62 @@ export const CATALOG = {
         failed: (count) => `${count} δεν μπόρεσαν να μετακινηθούν.`,
         failedDetail: 'Ενδέχεται να είναι ανοιχτά ή σε άλλο δίσκο.'
       }
+    },
+    deepClean: {
+      title: 'Βαθύς Καθαρισμός',
+      subtitle: 'Κάθε κρυφή μνήμη, αρχείο καταγραφής, dump και κατάλοιπο που το Prune ξέρει να βρίσκει, μετρημένο σε αυτό το μηχάνημα αντί να εκτιμάται. Τίποτα δεν διαγράφεται απευθείας — οτιδήποτε παίρνει ο Καθαρισμός πηγαίνει πρώτα σε καραντίνα, όπου μπορείτε να το επαναφέρετε.',
+      scanLog: {
+        header: 'Έξοδος σάρωσης',
+        scanningAnnounce: (total) => `Σάρωση ${total} τοποθεσιών.`,
+        finishedAnnounce: (scanned, total) => `Η σάρωση ολοκληρώθηκε. Μετρήθηκαν ${scanned} από ${total} τοποθεσίες.`,
+        starting: 'Έναρξη…'
+      },
+      emptyState: 'Δεν έχει σαρωθεί τίποτα ακόμα.',
+      scanErrorPrefix: (error) => `Αδυναμία σάρωσης: ${error}`,
+      cleanErrorPrefix: (error) => `Αδυναμία καθαρισμού: ${error}`,
+      cleanupComplete: 'Ο καθαρισμός ολοκληρώθηκε.',
+      resultFreed: (formatted) => `Ελευθερώθηκαν ${formatted}`,
+      resultLockedSuffix: (count) => ` — παραλείφθηκε${count === 1 ? '' : 'αν'} ${count} κλειδωμέν${count === 1 ? 'ο αρχείο' : 'α αρχεία'}`,
+      before: {
+        body: 'Το Prune μετρά κάθε κατηγορία πραγματικά στον δίσκο αντί να εκτιμά, κάτι που διαρκεί περίπου μισό λεπτό.',
+        scanning: 'Σάρωση…',
+        preview: 'Προεπισκόπηση'
+      },
+      hiddenNote: (count) => `${count} καθαριστές κρυμμένοι επειδή το λογισμικό δεν είναι εγκατεστημένο. Ρυθμίσεις › Καθαρισμός για να τους εμφανίσετε.`,
+      footer: {
+        totalLabel: 'Συνολικός χώρος προς απελευθέρωση:',
+        notMeasuredYet: 'δεν έχει μετρηθεί ακόμα',
+        unmeasuredSuffix: (count) => ` · ${count} χωρίς μέτρηση`,
+        selectEverything: 'Επιλογή όλων',
+        clear: 'Απαλοιφή',
+        selectedCount: (count) => `${count} επιλέχθηκαν`
+      },
+      confirm: {
+        prompt: (count, sizeKnown, formatted) => `Μετακίνηση ${count} στοιχείων (${sizeKnown ? formatted : 'το μέγεθος δεν μετρήθηκε'}) σε καραντίνα;`,
+        cancel: 'Ακύρωση',
+        confirmButton: 'Επιβεβαίωση',
+        cleaning: 'Καθαρισμός…'
+      },
+      stop: 'Διακοπή',
+      rescan: 'Επανασάρωση',
+      clean: 'Καθαρισμός',
+      tree: {
+        selectCategoryAriaLabel: (category) => `Επιλογή όλων στην κατηγορία ${category}`,
+        losesData: 'Χάνει δεδομένα',
+        needsAdmin: 'απαιτεί διαχειριστή',
+        notInstalled: 'δεν είναι εγκατεστημένο'
+      },
+      warning: {
+        title: (label) => `Ενεργοποίηση ${label}`,
+        remember: (label) => `Απομνημόνευση της επιλογής μου για ${label}`,
+        fallbackBody: 'Αυτή η επιλογή αφαιρεί δεδομένα που ίσως θέλετε να κρατήσετε.',
+        cancel: 'Ακύρωση',
+        enableAnyway: 'Ενεργοποίηση ούτως ή άλλως'
+      },
+      locked: {
+        message: (count) => `Παραλείφθηκε${count === 1 ? '' : 'αν'} ${count} κλειδωμέν${count === 1 ? 'ο αρχείο' : 'α αρχεία'}.`,
+        detail: 'Κλείστε τις εφαρμογές που τα χρησιμοποιούν και καθαρίστε ξανά.'
+      }
     }
   },
 
@@ -3198,6 +3702,62 @@ export const CATALOG = {
         restoreHint: 'Restáuralas desde la pantalla de Cuarentena.',
         failed: (count) => `${count} no se pudieron mover.`,
         failedDetail: 'Puede que estén abiertos o en otro disco.'
+      }
+    },
+    deepClean: {
+      title: 'Limpieza Profunda',
+      subtitle: 'Cada caché, registro, volcado y resto que Prune sabe encontrar, medido en esta máquina en lugar de estimado. Nada se elimina directamente — todo lo que Limpieza toma va primero a Cuarentena, donde puedes devolverlo.',
+      scanLog: {
+        header: 'Salida del escaneo',
+        scanningAnnounce: (total) => `Escaneando ${total} ubicaciones.`,
+        finishedAnnounce: (scanned, total) => `Escaneo terminado. ${scanned} de ${total} ubicaciones medidas.`,
+        starting: 'Iniciando…'
+      },
+      emptyState: 'Nada escaneado todavía.',
+      scanErrorPrefix: (error) => `No se pudo escanear: ${error}`,
+      cleanErrorPrefix: (error) => `No se pudo limpiar: ${error}`,
+      cleanupComplete: 'Limpieza completada.',
+      resultFreed: (formatted) => `${formatted} liberados`,
+      resultLockedSuffix: (count) => ` — ${count} archivo${count === 1 ? '' : 's'} bloqueado${count === 1 ? '' : 's'} omitido${count === 1 ? '' : 's'}`,
+      before: {
+        body: 'Prune mide cada categoría realmente en el disco en lugar de estimarla, lo que toma alrededor de medio minuto.',
+        scanning: 'Escaneando…',
+        preview: 'Vista previa'
+      },
+      hiddenNote: (count) => `${count} limpiador${count === 1 ? '' : 'es'} oculto${count === 1 ? '' : 's'} porque el software no está instalado. Configuración › Limpieza para mostrarlos.`,
+      footer: {
+        totalLabel: 'Espacio total a liberar:',
+        notMeasuredYet: 'aún no medido',
+        unmeasuredSuffix: (count) => ` · ${count} sin medir`,
+        selectEverything: 'Seleccionar todo',
+        clear: 'Limpiar',
+        selectedCount: (count) => `${count} seleccionados`
+      },
+      confirm: {
+        prompt: (count, sizeKnown, formatted) => `¿Mover ${count} elemento${count === 1 ? '' : 's'} (${sizeKnown ? formatted : 'tamaño no medido'}) a cuarentena?`,
+        cancel: 'Cancelar',
+        confirmButton: 'Confirmar',
+        cleaning: 'Limpiando…'
+      },
+      stop: 'Detener',
+      rescan: 'Volver a escanear',
+      clean: 'Limpiar',
+      tree: {
+        selectCategoryAriaLabel: (category) => `Seleccionar todo en ${category}`,
+        losesData: 'Pierde datos',
+        needsAdmin: 'necesita administrador',
+        notInstalled: 'no instalado'
+      },
+      warning: {
+        title: (label) => `Habilitar ${label}`,
+        remember: (label) => `Recordar mi elección para ${label}`,
+        fallbackBody: 'Esta opción elimina datos que quizá quieras conservar.',
+        cancel: 'Cancelar',
+        enableAnyway: 'Habilitar de todos modos'
+      },
+      locked: {
+        message: (count) => `${count} archivo${count === 1 ? '' : 's'} bloqueado${count === 1 ? '' : 's'} omitido${count === 1 ? '' : 's'}.`,
+        detail: 'Cierra las apps que los usan y limpia de nuevo.'
       }
     }
   },
@@ -3516,6 +4076,62 @@ export const CATALOG = {
         failed: (count) => `${count} ei õnnestunud teisaldada.`,
         failedDetail: 'Need võivad olla avatud või mõnel teisel draivil.'
       }
+    },
+    deepClean: {
+      title: 'Sügavpuhastus',
+      subtitle: 'Iga vahemälu, logi, tõmmis ja jääk, mida Prune oskab leida, mõõdetud sellel masinal, mitte hinnatud. Midagi ei kustutata otsekohe — kõik, mida Puhastus võtab, läheb esmalt Karantiini, kust saad selle tagasi panna.',
+      scanLog: {
+        header: 'Skannimise väljund',
+        scanningAnnounce: (total) => `Skannitakse ${total} asukohta.`,
+        finishedAnnounce: (scanned, total) => `Skannimine lõpetatud. Mõõdetud ${scanned} asukohta ${total}-st.`,
+        starting: 'Alustamine…'
+      },
+      emptyState: 'Veel pole midagi skannitud.',
+      scanErrorPrefix: (error) => `Skannimine ebaõnnestus: ${error}`,
+      cleanErrorPrefix: (error) => `Puhastamine ebaõnnestus: ${error}`,
+      cleanupComplete: 'Puhastamine lõpetatud.',
+      resultFreed: (formatted) => `Vabastati ${formatted}`,
+      resultLockedSuffix: (count) => ` — jäeti vahele ${count} lukustatud fail${count === 1 ? '' : 'i'}`,
+      before: {
+        body: 'Prune mõõdab iga kategooriat kettal tegelikult, mitte ei hinda seda, mis võtab aega umbes pool minutit.',
+        scanning: 'Skannimine…',
+        preview: 'Eelvaade'
+      },
+      hiddenNote: (count) => `${count} puhastajat peidetud, kuna tarkvara pole installitud. Sätted › Puhastamine, et neid näidata.`,
+      footer: {
+        totalLabel: 'Vabastatav ruum kokku:',
+        notMeasuredYet: 'veel mõõtmata',
+        unmeasuredSuffix: (count) => ` · ${count} mõõtmata`,
+        selectEverything: 'Vali kõik',
+        clear: 'Tühjenda',
+        selectedCount: (count) => `${count} valitud`
+      },
+      confirm: {
+        prompt: (count, sizeKnown, formatted) => `Teisaldada ${count} üksust (${sizeKnown ? formatted : 'suurus mõõtmata'}) karantiini?`,
+        cancel: 'Tühista',
+        confirmButton: 'Kinnita',
+        cleaning: 'Puhastamine…'
+      },
+      stop: 'Peata',
+      rescan: 'Skanni uuesti',
+      clean: 'Puhasta',
+      tree: {
+        selectCategoryAriaLabel: (category) => `Vali kõik kategoorias ${category}`,
+        losesData: 'Kaotab andmeid',
+        needsAdmin: 'vajab administraatorit',
+        notInstalled: 'pole installitud'
+      },
+      warning: {
+        title: (label) => `Luba ${label}`,
+        remember: (label) => `Jäta meelde minu valik ${label} jaoks`,
+        fallbackBody: 'See valik eemaldab andmeid, mida sa võib-olla soovid säilitada.',
+        cancel: 'Tühista',
+        enableAnyway: 'Luba ikkagi'
+      },
+      locked: {
+        message: (count) => `Jäeti vahele ${count} lukustatud fail${count === 1 ? '' : 'i'}.`,
+        detail: 'Sulge rakendused, mis neid kasutavad, ja puhasta uuesti.'
+      }
     }
   },
 
@@ -3832,6 +4448,62 @@ export const CATALOG = {
         restoreHint: 'Palauta ne Karanteeni-näytöltä.',
         failed: (count) => `${count} ei voitu siirtää.`,
         failedDetail: 'Ne voivat olla auki tai toisella asemalla.'
+      }
+    },
+    deepClean: {
+      title: 'Syväpuhdistus',
+      subtitle: 'Jokainen välimuisti, loki, vedos ja jäänne, jonka Prune osaa löytää, mitattu tällä koneella arvioinnin sijaan. Mitään ei poisteta suoraan — kaikki, mitä Puhdistus vie, menee ensin Karanteeniin, josta sen voi palauttaa.',
+      scanLog: {
+        header: 'Skannauksen tuloste',
+        scanningAnnounce: (total) => `Skannataan ${total} sijaintia.`,
+        finishedAnnounce: (scanned, total) => `Skannaus valmis. ${scanned}/${total} sijaintia mitattu.`,
+        starting: 'Aloitetaan…'
+      },
+      emptyState: 'Ei vielä skannattu mitään.',
+      scanErrorPrefix: (error) => `Skannaus epäonnistui: ${error}`,
+      cleanErrorPrefix: (error) => `Puhdistus epäonnistui: ${error}`,
+      cleanupComplete: 'Puhdistus valmis.',
+      resultFreed: (formatted) => `Vapautettiin ${formatted}`,
+      resultLockedSuffix: (count) => ` — ohitettiin ${count} lukittua tiedostoa`,
+      before: {
+        body: 'Prune mittaa jokaisen kategorian levyltä oikeasti sen sijaan, että arvioisi, mikä kestää noin puoli minuuttia.',
+        scanning: 'Skannataan…',
+        preview: 'Esikatselu'
+      },
+      hiddenNote: (count) => `${count} puhdistajaa piilotettu, koska ohjelmistoa ei ole asennettu. Asetukset › Puhdistus näyttääksesi ne.`,
+      footer: {
+        totalLabel: 'Vapautettava tila yhteensä:',
+        notMeasuredYet: 'ei vielä mitattu',
+        unmeasuredSuffix: (count) => ` · ${count} mittaamatta`,
+        selectEverything: 'Valitse kaikki',
+        clear: 'Tyhjennä',
+        selectedCount: (count) => `${count} valittu`
+      },
+      confirm: {
+        prompt: (count, sizeKnown, formatted) => `Siirretäänkö ${count} kohdetta (${sizeKnown ? formatted : 'kokoa ei mitattu'}) karanteeniin?`,
+        cancel: 'Peruuta',
+        confirmButton: 'Vahvista',
+        cleaning: 'Puhdistetaan…'
+      },
+      stop: 'Pysäytä',
+      rescan: 'Skannaa uudelleen',
+      clean: 'Puhdista',
+      tree: {
+        selectCategoryAriaLabel: (category) => `Valitse kaikki kategoriassa ${category}`,
+        losesData: 'Menettää tietoja',
+        needsAdmin: 'vaatii ylläpitäjän',
+        notInstalled: 'ei asennettu'
+      },
+      warning: {
+        title: (label) => `Ota käyttöön ${label}`,
+        remember: (label) => `Muista valintani kohteelle ${label}`,
+        fallbackBody: 'Tämä vaihtoehto poistaa tietoja, jotka saatat haluta säilyttää.',
+        cancel: 'Peruuta',
+        enableAnyway: 'Ota silti käyttöön'
+      },
+      locked: {
+        message: (count) => `Ohitettiin ${count} lukittua tiedostoa.`,
+        detail: 'Sulje niitä käyttävät sovellukset ja puhdista uudelleen.'
       }
     }
   },
@@ -4150,6 +4822,62 @@ export const CATALOG = {
         failed: (count) => `${count} n'ont pas pu être déplacés.`,
         failedDetail: 'Ils sont peut-être ouverts ou sur un autre disque.'
       }
+    },
+    deepClean: {
+      title: 'Nettoyage en profondeur',
+      subtitle: "Chaque cache, journal, vidage et reste que Prune sait trouver, mesuré sur cette machine plutôt qu'estimé. Rien n'est supprimé directement — tout ce que Nettoyer prend va d'abord en quarantaine, d'où vous pouvez le remettre en place.",
+      scanLog: {
+        header: 'Sortie de l\'analyse',
+        scanningAnnounce: (total) => `Analyse de ${total} emplacements.`,
+        finishedAnnounce: (scanned, total) => `Analyse terminée. ${scanned} emplacements mesurés sur ${total}.`,
+        starting: 'Démarrage…'
+      },
+      emptyState: 'Rien d\'analysé pour le moment.',
+      scanErrorPrefix: (error) => `Impossible d'analyser : ${error}`,
+      cleanErrorPrefix: (error) => `Impossible de nettoyer : ${error}`,
+      cleanupComplete: 'Nettoyage terminé.',
+      resultFreed: (formatted) => `${formatted} libérés`,
+      resultLockedSuffix: (count) => ` — ${count} fichier${count === 1 ? '' : 's'} verrouillé${count === 1 ? '' : 's'} ignoré${count === 1 ? '' : 's'}`,
+      before: {
+        body: "Prune mesure réellement chaque catégorie sur le disque plutôt que de l'estimer, ce qui prend environ une demi-minute.",
+        scanning: 'Analyse en cours…',
+        preview: 'Aperçu'
+      },
+      hiddenNote: (count) => `${count} nettoyeur${count === 1 ? '' : 's'} masqué${count === 1 ? '' : 's'} car le logiciel n'est pas installé. Paramètres › Nettoyage pour les afficher.`,
+      footer: {
+        totalLabel: 'Espace total à libérer :',
+        notMeasuredYet: 'pas encore mesuré',
+        unmeasuredSuffix: (count) => ` · ${count} non mesurés`,
+        selectEverything: 'Tout sélectionner',
+        clear: 'Effacer',
+        selectedCount: (count) => `${count} sélectionnés`
+      },
+      confirm: {
+        prompt: (count, sizeKnown, formatted) => `Déplacer ${count} élément${count === 1 ? '' : 's'} (${sizeKnown ? formatted : 'taille non mesurée'}) vers la quarantaine ?`,
+        cancel: 'Annuler',
+        confirmButton: 'Confirmer',
+        cleaning: 'Nettoyage…'
+      },
+      stop: 'Arrêter',
+      rescan: 'Réanalyser',
+      clean: 'Nettoyer',
+      tree: {
+        selectCategoryAriaLabel: (category) => `Tout sélectionner sous ${category}`,
+        losesData: 'Perte de données',
+        needsAdmin: 'nécessite administrateur',
+        notInstalled: 'non installé'
+      },
+      warning: {
+        title: (label) => `Activer ${label}`,
+        remember: (label) => `Se souvenir de mon choix pour ${label}`,
+        fallbackBody: 'Cette option supprime des données que vous voudrez peut-être conserver.',
+        cancel: 'Annuler',
+        enableAnyway: 'Activer quand même'
+      },
+      locked: {
+        message: (count) => `${count} fichier${count === 1 ? '' : 's'} verrouillé${count === 1 ? '' : 's'} ignoré${count === 1 ? '' : 's'}.`,
+        detail: 'Fermez les applications qui les utilisent et nettoyez à nouveau.'
+      }
     }
   },
 
@@ -4466,6 +5194,62 @@ export const CATALOG = {
         restoreHint: 'שחזרו אותם ממסך ההסגר.',
         failed: (count) => `לא ניתן היה להעביר ${count}.`,
         failedDetail: 'ייתכן שהם פתוחים או בכונן אחר.'
+      }
+    },
+    deepClean: {
+      title: 'ניקוי מעמיק',
+      subtitle: 'כל מטמון, יומן, קובץ dump ושארית ש-Prune יודע למצוא, נמדד במכשיר הזה במקום להיות מוערך. שום דבר לא נמחק ישירות — כל מה שהניקוי לוקח עובר קודם להסגר, שם ניתן להחזיר אותו.',
+      scanLog: {
+        header: 'פלט הסריקה',
+        scanningAnnounce: (total) => `סורק ${total} מיקומים.`,
+        finishedAnnounce: (scanned, total) => `הסריקה הסתיימה. נמדדו ${scanned} מתוך ${total} מיקומים.`,
+        starting: 'מתחיל…'
+      },
+      emptyState: 'עדיין לא נסרק דבר.',
+      scanErrorPrefix: (error) => `לא ניתן היה לסרוק: ${error}`,
+      cleanErrorPrefix: (error) => `לא ניתן היה לנקות: ${error}`,
+      cleanupComplete: 'הניקוי הושלם.',
+      resultFreed: (formatted) => `פונו ${formatted}`,
+      resultLockedSuffix: (count) => ` — דולגו ${count} קבצים נעולים`,
+      before: {
+        body: 'Prune מודד כל קטגוריה על הדיסק בפועל במקום להעריך, מה שלוקח כחצי דקה.',
+        scanning: 'סורק…',
+        preview: 'תצוגה מקדימה'
+      },
+      hiddenNote: (count) => `${count} כלי ניקוי הוסתרו כי התוכנה אינה מותקנת. הגדרות › ניקוי כדי להציגם.`,
+      footer: {
+        totalLabel: 'סה"כ שטח לפינוי:',
+        notMeasuredYet: 'טרם נמדד',
+        unmeasuredSuffix: (count) => ` · ${count} לא נמדד`,
+        selectEverything: 'בחר הכל',
+        clear: 'נקה',
+        selectedCount: (count) => `${count} נבחרו`
+      },
+      confirm: {
+        prompt: (count, sizeKnown, formatted) => `להעביר ${count} פריטים (${sizeKnown ? formatted : 'הגודל לא נמדד'}) להסגר?`,
+        cancel: 'ביטול',
+        confirmButton: 'אישור',
+        cleaning: 'מנקה…'
+      },
+      stop: 'עצור',
+      rescan: 'סרוק שוב',
+      clean: 'נקה',
+      tree: {
+        selectCategoryAriaLabel: (category) => `בחר הכל תחת ${category}`,
+        losesData: 'מאבד נתונים',
+        needsAdmin: 'דורש הרשאות מנהל',
+        notInstalled: 'לא מותקן'
+      },
+      warning: {
+        title: (label) => `הפעל ${label}`,
+        remember: (label) => `זכור את בחירתי עבור ${label}`,
+        fallbackBody: 'אפשרות זו מסירה נתונים שאולי תרצה לשמור.',
+        cancel: 'ביטול',
+        enableAnyway: 'הפעל בכל זאת'
+      },
+      locked: {
+        message: (count) => `דולגו ${count} קבצים נעולים.`,
+        detail: 'סגור את האפליקציות המשתמשות בהם ונקה שוב.'
       }
     }
   },
@@ -4784,6 +5568,62 @@ export const CATALOG = {
         failed: (count) => `${count} nem volt áthelyezhető.`,
         failedDetail: 'Lehet, hogy nyitva vannak, vagy másik meghajtón vannak.'
       }
+    },
+    deepClean: {
+      title: 'Mélytisztítás',
+      subtitle: 'Minden gyorsítótár, napló, memóriakép és maradvány, amit a Prune képes megtalálni, ezen a gépen mérve, nem becsülve. Semmi sem törlődik azonnal — mindent, amit a Tisztítás elvisz, először a Karanténba kerül, ahonnan visszahelyezheted.',
+      scanLog: {
+        header: 'Vizsgálati kimenet',
+        scanningAnnounce: (total) => `${total} hely vizsgálata.`,
+        finishedAnnounce: (scanned, total) => `A vizsgálat befejeződött. ${scanned}/${total} hely megmérve.`,
+        starting: 'Indítás…'
+      },
+      emptyState: 'Még semmi sincs megvizsgálva.',
+      scanErrorPrefix: (error) => `Nem sikerült a vizsgálat: ${error}`,
+      cleanErrorPrefix: (error) => `Nem sikerült a tisztítás: ${error}`,
+      cleanupComplete: 'A tisztítás befejeződött.',
+      resultFreed: (formatted) => `${formatted} felszabadítva`,
+      resultLockedSuffix: (count) => ` — ${count} zárolt fájl kihagyva`,
+      before: {
+        body: 'A Prune ténylegesen méri a lemezen minden kategóriát becslés helyett, ami körülbelül fél percet vesz igénybe.',
+        scanning: 'Vizsgálat…',
+        preview: 'Előnézet'
+      },
+      hiddenNote: (count) => `${count} tisztító elrejtve, mert a szoftver nincs telepítve. Beállítások › Tisztítás a megjelenítésükhöz.`,
+      footer: {
+        totalLabel: 'Felszabadítható hely összesen:',
+        notMeasuredYet: 'még nincs megmérve',
+        unmeasuredSuffix: (count) => ` · ${count} nem mért`,
+        selectEverything: 'Összes kijelölése',
+        clear: 'Törlés',
+        selectedCount: (count) => `${count} kijelölve`
+      },
+      confirm: {
+        prompt: (count, sizeKnown, formatted) => `Áthelyezed ${count} elemet (${sizeKnown ? formatted : 'a méret nincs megmérve'}) a karanténba?`,
+        cancel: 'Mégse',
+        confirmButton: 'Megerősítés',
+        cleaning: 'Tisztítás…'
+      },
+      stop: 'Leállítás',
+      rescan: 'Újbóli vizsgálat',
+      clean: 'Tisztítás',
+      tree: {
+        selectCategoryAriaLabel: (category) => `Összes kijelölése itt: ${category}`,
+        losesData: 'Adatvesztés',
+        needsAdmin: 'rendszergazda szükséges',
+        notInstalled: 'nincs telepítve'
+      },
+      warning: {
+        title: (label) => `${label} engedélyezése`,
+        remember: (label) => `Emlékezzen a választásomra ehhez: ${label}`,
+        fallbackBody: 'Ez a beállítás olyan adatokat távolít el, amelyeket esetleg meg szeretnél tartani.',
+        cancel: 'Mégse',
+        enableAnyway: 'Engedélyezés mindenképp'
+      },
+      locked: {
+        message: (count) => `${count} zárolt fájl kihagyva.`,
+        detail: 'Zárd be az azokat használó alkalmazásokat, és tisztíts újra.'
+      }
     }
   },
 
@@ -5100,6 +5940,62 @@ export const CATALOG = {
         restoreHint: 'Pulihkan dari layar Karantina.',
         failed: (count) => `${count} tidak dapat dipindahkan.`,
         failedDetail: 'Mungkin sedang terbuka atau berada di drive lain.'
+      }
+    },
+    deepClean: {
+      title: 'Pembersihan Mendalam',
+      subtitle: 'Setiap cache, log, dump, dan sisa yang diketahui Prune cara menemukannya, diukur di komputer ini alih-alih diperkirakan. Tidak ada yang langsung dihapus — semua yang diambil Bersihkan pergi ke Karantina terlebih dahulu, tempat Anda dapat mengembalikannya.',
+      scanLog: {
+        header: 'Output pemindaian',
+        scanningAnnounce: (total) => `Memindai ${total} lokasi.`,
+        finishedAnnounce: (scanned, total) => `Pemindaian selesai. ${scanned} dari ${total} lokasi diukur.`,
+        starting: 'Memulai…'
+      },
+      emptyState: 'Belum ada yang dipindai.',
+      scanErrorPrefix: (error) => `Tidak dapat memindai: ${error}`,
+      cleanErrorPrefix: (error) => `Tidak dapat membersihkan: ${error}`,
+      cleanupComplete: 'Pembersihan selesai.',
+      resultFreed: (formatted) => `Membebaskan ${formatted}`,
+      resultLockedSuffix: (count) => ` — melewati ${count} berkas terkunci`,
+      before: {
+        body: 'Prune benar-benar mengukur setiap kategori di disk alih-alih memperkirakan, yang memakan waktu sekitar setengah menit.',
+        scanning: 'Memindai…',
+        preview: 'Pratinjau'
+      },
+      hiddenNote: (count) => `${count} pembersih disembunyikan karena perangkat lunak tidak terpasang. Pengaturan › Pembersihan untuk menampilkannya.`,
+      footer: {
+        totalLabel: 'Total ruang yang akan dibebaskan:',
+        notMeasuredYet: 'belum diukur',
+        unmeasuredSuffix: (count) => ` · ${count} tidak terukur`,
+        selectEverything: 'Pilih semua',
+        clear: 'Bersihkan',
+        selectedCount: (count) => `${count} dipilih`
+      },
+      confirm: {
+        prompt: (count, sizeKnown, formatted) => `Pindahkan ${count} item (${sizeKnown ? formatted : 'ukuran tidak terukur'}) ke karantina?`,
+        cancel: 'Batal',
+        confirmButton: 'Konfirmasi',
+        cleaning: 'Membersihkan…'
+      },
+      stop: 'Hentikan',
+      rescan: 'Pindai ulang',
+      clean: 'Bersihkan',
+      tree: {
+        selectCategoryAriaLabel: (category) => `Pilih semua di bawah ${category}`,
+        losesData: 'Kehilangan data',
+        needsAdmin: 'memerlukan admin',
+        notInstalled: 'tidak terpasang'
+      },
+      warning: {
+        title: (label) => `Aktifkan ${label}`,
+        remember: (label) => `Ingat pilihan saya untuk ${label}`,
+        fallbackBody: 'Opsi ini menghapus data yang mungkin ingin Anda simpan.',
+        cancel: 'Batal',
+        enableAnyway: 'Aktifkan saja'
+      },
+      locked: {
+        message: (count) => `Melewati ${count} berkas terkunci.`,
+        detail: 'Tutup aplikasi yang menggunakannya dan bersihkan lagi.'
       }
     }
   },
@@ -5418,6 +6314,62 @@ export const CATALOG = {
         failed: (count) => `${count} var ekki hægt að flytja.`,
         failedDetail: 'Þau gætu verið opin eða á öðrum diski.'
       }
+    },
+    deepClean: {
+      title: 'Djúphreinsun',
+      subtitle: 'Öll skyndiminni, annálar, dumpar og leifar sem Prune kann að finna, mæld á þessari vél frekar en áætluð. Engu er eytt beint — allt sem Hreinsun tekur fer fyrst í sóttkví, þar sem þú getur sett það til baka.',
+      scanLog: {
+        header: 'Úttak skönnunar',
+        scanningAnnounce: (total) => `Skanna ${total} staðsetningar.`,
+        finishedAnnounce: (scanned, total) => `Skönnun lokið. ${scanned} af ${total} staðsetningum mældar.`,
+        starting: 'Er að byrja…'
+      },
+      emptyState: 'Ekkert skannað enn.',
+      scanErrorPrefix: (error) => `Ekki tókst að skanna: ${error}`,
+      cleanErrorPrefix: (error) => `Ekki tókst að hreinsa: ${error}`,
+      cleanupComplete: 'Hreinsun lokið.',
+      resultFreed: (formatted) => `Losaði ${formatted}`,
+      resultLockedSuffix: (count) => ` — sleppti ${count} læstum skrám`,
+      before: {
+        body: 'Prune mælir hvern flokk raunverulega á disknum frekar en að áætla, sem tekur um hálfa mínútu.',
+        scanning: 'Skanna…',
+        preview: 'Forskoðun'
+      },
+      hiddenNote: (count) => `${count} hreinsiforrit falin vegna þess að hugbúnaðurinn er ekki uppsettur. Stillingar › Hreinsun til að sýna þau.`,
+      footer: {
+        totalLabel: 'Heildarrými til að losa:',
+        notMeasuredYet: 'ekki mælt enn',
+        unmeasuredSuffix: (count) => ` · ${count} ómælt`,
+        selectEverything: 'Velja allt',
+        clear: 'Hreinsa',
+        selectedCount: (count) => `${count} valin`
+      },
+      confirm: {
+        prompt: (count, sizeKnown, formatted) => `Flytja ${count} atriði (${sizeKnown ? formatted : 'stærð ómæld'}) í sóttkví?`,
+        cancel: 'Hætta við',
+        confirmButton: 'Staðfesta',
+        cleaning: 'Hreinsar…'
+      },
+      stop: 'Stöðva',
+      rescan: 'Skanna aftur',
+      clean: 'Hreinsa',
+      tree: {
+        selectCategoryAriaLabel: (category) => `Velja allt undir ${category}`,
+        losesData: 'Tapar gögnum',
+        needsAdmin: 'þarf kerfisstjóra',
+        notInstalled: 'ekki uppsett'
+      },
+      warning: {
+        title: (label) => `Virkja ${label}`,
+        remember: (label) => `Muna val mitt fyrir ${label}`,
+        fallbackBody: 'Þessi valkostur fjarlægir gögn sem þú gætir viljað halda.',
+        cancel: 'Hætta við',
+        enableAnyway: 'Virkja samt'
+      },
+      locked: {
+        message: (count) => `Sleppti ${count} læstum skrám.`,
+        detail: 'Lokaðu forritunum sem nota þær og hreinsaðu aftur.'
+      }
     }
   },
 
@@ -5734,6 +6686,62 @@ export const CATALOG = {
         restoreHint: 'Ripristinale dalla schermata Quarantena.',
         failed: (count) => `${count} non è stato possibile spostarli.`,
         failedDetail: 'Potrebbero essere aperti o su un altro disco.'
+      }
+    },
+    deepClean: {
+      title: 'Pulizia Profonda',
+      subtitle: 'Ogni cache, log, dump e residuo che Prune sa trovare, misurato su questo computer anziché stimato. Nulla viene eliminato direttamente — tutto ciò che Pulisci prende va prima in quarantena, da dove puoi rimetterlo a posto.',
+      scanLog: {
+        header: 'Output della scansione',
+        scanningAnnounce: (total) => `Scansione di ${total} posizioni.`,
+        finishedAnnounce: (scanned, total) => `Scansione completata. ${scanned} di ${total} posizioni misurate.`,
+        starting: 'Avvio…'
+      },
+      emptyState: 'Ancora nulla scansionato.',
+      scanErrorPrefix: (error) => `Impossibile scansionare: ${error}`,
+      cleanErrorPrefix: (error) => `Impossibile pulire: ${error}`,
+      cleanupComplete: 'Pulizia completata.',
+      resultFreed: (formatted) => `Liberati ${formatted}`,
+      resultLockedSuffix: (count) => ` — saltati ${count} file bloccati`,
+      before: {
+        body: 'Prune misura davvero ogni categoria sul disco anziché stimarla, il che richiede circa mezzo minuto.',
+        scanning: 'Scansione…',
+        preview: 'Anteprima'
+      },
+      hiddenNote: (count) => `${count} strumenti di pulizia nascosti perché il software non è installato. Impostazioni › Pulizia per mostrarli.`,
+      footer: {
+        totalLabel: 'Spazio totale da liberare:',
+        notMeasuredYet: 'non ancora misurato',
+        unmeasuredSuffix: (count) => ` · ${count} non misurati`,
+        selectEverything: 'Seleziona tutto',
+        clear: 'Pulisci',
+        selectedCount: (count) => `${count} selezionati`
+      },
+      confirm: {
+        prompt: (count, sizeKnown, formatted) => `Spostare ${count} elementi (${sizeKnown ? formatted : 'dimensione non misurata'}) in quarantena?`,
+        cancel: 'Annulla',
+        confirmButton: 'Conferma',
+        cleaning: 'Pulizia…'
+      },
+      stop: 'Interrompi',
+      rescan: 'Nuova scansione',
+      clean: 'Pulisci',
+      tree: {
+        selectCategoryAriaLabel: (category) => `Seleziona tutto in ${category}`,
+        losesData: 'Perde dati',
+        needsAdmin: 'richiede amministratore',
+        notInstalled: 'non installato'
+      },
+      warning: {
+        title: (label) => `Abilita ${label}`,
+        remember: (label) => `Ricorda la mia scelta per ${label}`,
+        fallbackBody: 'Questa opzione rimuove dati che potresti voler conservare.',
+        cancel: 'Annulla',
+        enableAnyway: 'Abilita comunque'
+      },
+      locked: {
+        message: (count) => `Saltati ${count} file bloccati.`,
+        detail: 'Chiudi le app che li usano e pulisci di nuovo.'
       }
     }
   },
@@ -6052,6 +7060,62 @@ export const CATALOG = {
         failed: (count) => `${count} 件を移動できませんでした。`,
         failedDetail: '開いているか、別のドライブにある可能性があります。'
       }
+    },
+    deepClean: {
+      title: 'ディープクリーン',
+      subtitle: 'Prune が見つけ方を知っているすべてのキャッシュ、ログ、ダンプ、残留物を、推定ではなくこのマシンで実測します。何も即座には削除されません — クリーンが取り除くものはすべて、まず隔離に移動し、そこから元に戻せます。',
+      scanLog: {
+        header: 'スキャン出力',
+        scanningAnnounce: (total) => `${total} 件の場所をスキャン中。`,
+        finishedAnnounce: (scanned, total) => `スキャン完了。${total} 件中 ${scanned} 件の場所を測定しました。`,
+        starting: '開始中…'
+      },
+      emptyState: 'まだ何もスキャンされていません。',
+      scanErrorPrefix: (error) => `スキャンできませんでした: ${error}`,
+      cleanErrorPrefix: (error) => `クリーンできませんでした: ${error}`,
+      cleanupComplete: 'クリーンアップが完了しました。',
+      resultFreed: (formatted) => `${formatted} を解放しました`,
+      resultLockedSuffix: (count) => ` — ロックされたファイルを ${count} 件スキップしました`,
+      before: {
+        body: 'Prune は推定ではなく、ディスク上のすべてのカテゴリを実際に測定します。これには約30秒かかります。',
+        scanning: 'スキャン中…',
+        preview: 'プレビュー'
+      },
+      hiddenNote: (count) => `ソフトウェアがインストールされていないため、${count} 件のクリーナーが非表示になっています。設定 › クリーンアップで表示できます。`,
+      footer: {
+        totalLabel: '解放される容量の合計:',
+        notMeasuredYet: '未測定',
+        unmeasuredSuffix: (count) => ` · 未測定 ${count} 件`,
+        selectEverything: 'すべて選択',
+        clear: 'クリア',
+        selectedCount: (count) => `${count} 件選択中`
+      },
+      confirm: {
+        prompt: (count, sizeKnown, formatted) => `${count} 件の項目（${sizeKnown ? formatted : 'サイズ未測定'}）を隔離に移動しますか?`,
+        cancel: 'キャンセル',
+        confirmButton: '確認',
+        cleaning: 'クリーン中…'
+      },
+      stop: '停止',
+      rescan: '再スキャン',
+      clean: 'クリーン',
+      tree: {
+        selectCategoryAriaLabel: (category) => `${category} の下をすべて選択`,
+        losesData: 'データを失う',
+        needsAdmin: '管理者権限が必要',
+        notInstalled: '未インストール'
+      },
+      warning: {
+        title: (label) => `${label} を有効にする`,
+        remember: (label) => `${label} の選択を記憶する`,
+        fallbackBody: 'このオプションは、保持したいかもしれないデータを削除します。',
+        cancel: 'キャンセル',
+        enableAnyway: 'それでも有効にする'
+      },
+      locked: {
+        message: (count) => `ロックされたファイルを ${count} 件スキップしました。`,
+        detail: 'それらを使用しているアプリを閉じてから、もう一度クリーンしてください。'
+      }
     }
   },
 
@@ -6368,6 +7432,62 @@ export const CATALOG = {
         restoreHint: '격리 화면에서 복원하세요.',
         failed: (count) => `${count}개를 이동할 수 없습니다.`,
         failedDetail: '열려 있거나 다른 드라이브에 있을 수 있습니다.'
+      }
+    },
+    deepClean: {
+      title: '심층 정리',
+      subtitle: 'Prune이 찾는 방법을 아는 모든 캐시, 로그, 덤프 및 잔여물을 추정이 아니라 이 컴퓨터에서 직접 측정합니다. 아무것도 즉시 삭제되지 않습니다 — 정리가 가져가는 모든 항목은 먼저 격리로 이동하며, 그곳에서 다시 되돌릴 수 있습니다.',
+      scanLog: {
+        header: '스캔 출력',
+        scanningAnnounce: (total) => `${total}개 위치를 스캔 중입니다.`,
+        finishedAnnounce: (scanned, total) => `스캔 완료. ${total}개 중 ${scanned}개 위치가 측정되었습니다.`,
+        starting: '시작 중…'
+      },
+      emptyState: '아직 스캔된 항목이 없습니다.',
+      scanErrorPrefix: (error) => `스캔할 수 없습니다: ${error}`,
+      cleanErrorPrefix: (error) => `정리할 수 없습니다: ${error}`,
+      cleanupComplete: '정리가 완료되었습니다.',
+      resultFreed: (formatted) => `${formatted} 확보됨`,
+      resultLockedSuffix: (count) => ` — 잠긴 파일 ${count}개를 건너뜀`,
+      before: {
+        body: 'Prune은 추정하지 않고 디스크의 모든 카테고리를 실제로 측정하며, 약 30초 정도 걸립니다.',
+        scanning: '스캔 중…',
+        preview: '미리보기'
+      },
+      hiddenNote: (count) => `소프트웨어가 설치되어 있지 않아 ${count}개의 정리 도구가 숨겨져 있습니다. 설정 › 정리에서 표시할 수 있습니다.`,
+      footer: {
+        totalLabel: '확보할 총 공간:',
+        notMeasuredYet: '아직 측정되지 않음',
+        unmeasuredSuffix: (count) => ` · 측정되지 않음 ${count}개`,
+        selectEverything: '모두 선택',
+        clear: '지우기',
+        selectedCount: (count) => `${count}개 선택됨`
+      },
+      confirm: {
+        prompt: (count, sizeKnown, formatted) => `${count}개 항목(${sizeKnown ? formatted : '크기 측정되지 않음'})을 격리로 이동하시겠습니까?`,
+        cancel: '취소',
+        confirmButton: '확인',
+        cleaning: '정리 중…'
+      },
+      stop: '중지',
+      rescan: '다시 스캔',
+      clean: '정리',
+      tree: {
+        selectCategoryAriaLabel: (category) => `${category} 아래 모두 선택`,
+        losesData: '데이터 손실',
+        needsAdmin: '관리자 권한 필요',
+        notInstalled: '설치되지 않음'
+      },
+      warning: {
+        title: (label) => `${label} 사용`,
+        remember: (label) => `${label}에 대한 선택 기억하기`,
+        fallbackBody: '이 옵션은 보관하고 싶을 수 있는 데이터를 제거합니다.',
+        cancel: '취소',
+        enableAnyway: '그래도 사용'
+      },
+      locked: {
+        message: (count) => `잠긴 파일 ${count}개를 건너뛰었습니다.`,
+        detail: '해당 파일을 사용 중인 앱을 닫고 다시 정리하세요.'
       }
     }
   },
@@ -6686,6 +7806,62 @@ export const CATALOG = {
         failed: (count) => `${count} nepavyko perkelti.`,
         failedDetail: 'Jos gali būti atidarytos arba kitame diske.'
       }
+    },
+    deepClean: {
+      title: 'Gilus valymas',
+      subtitle: 'Kiekvienas talpykla, žurnalas, išklotinė ir liekana, kurią „Prune“ moka rasti, išmatuota šiame kompiuteryje, o ne apskaičiuota. Niekas nėra iškart ištrinama — viskas, ką paima Valymas, pirmiausia keliauja į Karantiną, iš kur galite tai grąžinti.',
+      scanLog: {
+        header: 'Nuskaitymo išvestis',
+        scanningAnnounce: (total) => `Nuskaitoma ${total} vietų.`,
+        finishedAnnounce: (scanned, total) => `Nuskaitymas baigtas. Išmatuota ${scanned} iš ${total} vietų.`,
+        starting: 'Pradedama…'
+      },
+      emptyState: 'Kol kas nieko nenuskaityta.',
+      scanErrorPrefix: (error) => `Nepavyko nuskaityti: ${error}`,
+      cleanErrorPrefix: (error) => `Nepavyko išvalyti: ${error}`,
+      cleanupComplete: 'Valymas baigtas.',
+      resultFreed: (formatted) => `Atlaisvinta ${formatted}`,
+      resultLockedSuffix: (count) => ` — praleista ${count} užrakintų failų`,
+      before: {
+        body: '„Prune“ realiai matuoja kiekvieną kategoriją diske, o ne apskaičiuoja, o tai užtrunka apie pusę minutės.',
+        scanning: 'Nuskaitoma…',
+        preview: 'Peržiūra'
+      },
+      hiddenNote: (count) => `${count} valymo priemonės paslėptos, nes programinė įranga neįdiegta. Nustatymai › Valymas, kad jas parodytumėte.`,
+      footer: {
+        totalLabel: 'Iš viso atlaisvinama vietos:',
+        notMeasuredYet: 'dar neišmatuota',
+        unmeasuredSuffix: (count) => ` · ${count} neišmatuota`,
+        selectEverything: 'Pasirinkti viską',
+        clear: 'Išvalyti',
+        selectedCount: (count) => `${count} pasirinkta`
+      },
+      confirm: {
+        prompt: (count, sizeKnown, formatted) => `Perkelti ${count} elementus (${sizeKnown ? formatted : 'dydis neišmatuotas'}) į karantiną?`,
+        cancel: 'Atšaukti',
+        confirmButton: 'Patvirtinti',
+        cleaning: 'Valoma…'
+      },
+      stop: 'Stabdyti',
+      rescan: 'Nuskaityti iš naujo',
+      clean: 'Valyti',
+      tree: {
+        selectCategoryAriaLabel: (category) => `Pasirinkti viską skiltyje ${category}`,
+        losesData: 'Prarandami duomenys',
+        needsAdmin: 'reikia administratoriaus',
+        notInstalled: 'neįdiegta'
+      },
+      warning: {
+        title: (label) => `Įjungti ${label}`,
+        remember: (label) => `Įsiminti mano pasirinkimą dėl ${label}`,
+        fallbackBody: 'Ši parinktis pašalina duomenis, kuriuos galbūt norėsite išsaugoti.',
+        cancel: 'Atšaukti',
+        enableAnyway: 'Vis tiek įjungti'
+      },
+      locked: {
+        message: (count) => `Praleista ${count} užrakintų failų.`,
+        detail: 'Uždarykite juos naudojančias programas ir valykite iš naujo.'
+      }
     }
   },
 
@@ -7002,6 +8178,62 @@ export const CATALOG = {
         restoreHint: 'Pulihkan daripada skrin Kuarantin.',
         failed: (count) => `${count} tidak dapat dialihkan.`,
         failedDetail: 'Ia mungkin terbuka atau berada pada pemacu lain.'
+      }
+    },
+    deepClean: {
+      title: 'Pembersihan Mendalam',
+      subtitle: 'Setiap cache, log, dump dan baki yang diketahui Prune cara mencarinya, diukur pada mesin ini bukannya dianggarkan. Tiada apa dipadamkan serta-merta — segala yang diambil oleh Bersih pergi ke Kuarantin dahulu, di mana anda boleh mengembalikannya.',
+      scanLog: {
+        header: 'Output imbasan',
+        scanningAnnounce: (total) => `Mengimbas ${total} lokasi.`,
+        finishedAnnounce: (scanned, total) => `Imbasan selesai. ${scanned} daripada ${total} lokasi diukur.`,
+        starting: 'Memulakan…'
+      },
+      emptyState: 'Belum ada yang diimbas.',
+      scanErrorPrefix: (error) => `Tidak dapat mengimbas: ${error}`,
+      cleanErrorPrefix: (error) => `Tidak dapat membersihkan: ${error}`,
+      cleanupComplete: 'Pembersihan selesai.',
+      resultFreed: (formatted) => `Membebaskan ${formatted}`,
+      resultLockedSuffix: (count) => ` — melangkau ${count} fail yang dikunci`,
+      before: {
+        body: 'Prune mengukur setiap kategori pada cakera secara sebenar bukannya menganggar, yang mengambil masa kira-kira setengah minit.',
+        scanning: 'Mengimbas…',
+        preview: 'Pratonton'
+      },
+      hiddenNote: (count) => `${count} pembersih disembunyikan kerana perisian tidak dipasang. Tetapan › Pembersihan untuk menunjukkannya.`,
+      footer: {
+        totalLabel: 'Jumlah ruang untuk dibebaskan:',
+        notMeasuredYet: 'belum diukur',
+        unmeasuredSuffix: (count) => ` · ${count} tidak diukur`,
+        selectEverything: 'Pilih semua',
+        clear: 'Kosongkan',
+        selectedCount: (count) => `${count} dipilih`
+      },
+      confirm: {
+        prompt: (count, sizeKnown, formatted) => `Alih ${count} item (${sizeKnown ? formatted : 'saiz tidak diukur'}) ke kuarantin?`,
+        cancel: 'Batal',
+        confirmButton: 'Sahkan',
+        cleaning: 'Membersihkan…'
+      },
+      stop: 'Henti',
+      rescan: 'Imbas semula',
+      clean: 'Bersihkan',
+      tree: {
+        selectCategoryAriaLabel: (category) => `Pilih semua di bawah ${category}`,
+        losesData: 'Kehilangan data',
+        needsAdmin: 'perlu pentadbir',
+        notInstalled: 'tidak dipasang'
+      },
+      warning: {
+        title: (label) => `Dayakan ${label}`,
+        remember: (label) => `Ingat pilihan saya untuk ${label}`,
+        fallbackBody: 'Pilihan ini mengalih keluar data yang mungkin anda mahu simpan.',
+        cancel: 'Batal',
+        enableAnyway: 'Dayakan juga'
+      },
+      locked: {
+        message: (count) => `Melangkau ${count} fail yang dikunci.`,
+        detail: 'Tutup aplikasi yang menggunakannya dan bersihkan semula.'
       }
     }
   },
@@ -7320,6 +8552,62 @@ export const CATALOG = {
         failed: (count) => `${count} kunne ikke flyttes.`,
         failedDetail: 'De kan være åpne eller på en annen stasjon.'
       }
+    },
+    deepClean: {
+      title: 'Dyprens',
+      subtitle: 'Hver hurtigbuffer, logg, dump og rest Prune vet hvordan man finner, målt på denne maskinen i stedet for anslått. Ingenting slettes umiddelbart — alt Rens tar går først til Karantene, hvor du kan legge det tilbake.',
+      scanLog: {
+        header: 'Skanningsutdata',
+        scanningAnnounce: (total) => `Skanner ${total} steder.`,
+        finishedAnnounce: (scanned, total) => `Skanning ferdig. ${scanned} av ${total} steder målt.`,
+        starting: 'Starter…'
+      },
+      emptyState: 'Ingenting skannet ennå.',
+      scanErrorPrefix: (error) => `Kunne ikke skanne: ${error}`,
+      cleanErrorPrefix: (error) => `Kunne ikke rense: ${error}`,
+      cleanupComplete: 'Opprydding fullført.',
+      resultFreed: (formatted) => `Frigjorde ${formatted}`,
+      resultLockedSuffix: (count) => ` — hoppet over ${count} låste filer`,
+      before: {
+        body: 'Prune måler hver kategori faktisk på disken i stedet for å anslå, noe som tar rundt et halvt minutt.',
+        scanning: 'Skanner…',
+        preview: 'Forhåndsvisning'
+      },
+      hiddenNote: (count) => `${count} rensere skjult fordi programvaren ikke er installert. Innstillinger › Opprydding for å vise dem.`,
+      footer: {
+        totalLabel: 'Total plass å frigjøre:',
+        notMeasuredYet: 'ikke målt ennå',
+        unmeasuredSuffix: (count) => ` · ${count} ikke målt`,
+        selectEverything: 'Velg alt',
+        clear: 'Tøm',
+        selectedCount: (count) => `${count} valgt`
+      },
+      confirm: {
+        prompt: (count, sizeKnown, formatted) => `Flytt ${count} elementer (${sizeKnown ? formatted : 'størrelse ikke målt'}) til karantene?`,
+        cancel: 'Avbryt',
+        confirmButton: 'Bekreft',
+        cleaning: 'Renser…'
+      },
+      stop: 'Stopp',
+      rescan: 'Skann på nytt',
+      clean: 'Rens',
+      tree: {
+        selectCategoryAriaLabel: (category) => `Velg alt under ${category}`,
+        losesData: 'Mister data',
+        needsAdmin: 'krever administrator',
+        notInstalled: 'ikke installert'
+      },
+      warning: {
+        title: (label) => `Aktiver ${label}`,
+        remember: (label) => `Husk valget mitt for ${label}`,
+        fallbackBody: 'Dette valget fjerner data du kanskje vil beholde.',
+        cancel: 'Avbryt',
+        enableAnyway: 'Aktiver likevel'
+      },
+      locked: {
+        message: (count) => `Hoppet over ${count} låste filer.`,
+        detail: 'Lukk appene som bruker dem, og rens på nytt.'
+      }
     }
   },
 
@@ -7636,6 +8924,62 @@ export const CATALOG = {
         restoreHint: 'Herstel ze vanaf het Quarantaine-scherm.',
         failed: (count) => `${count} kon(den) niet worden verplaatst.`,
         failedDetail: 'Ze zijn mogelijk geopend of staan op een andere schijf.'
+      }
+    },
+    deepClean: {
+      title: 'Diepe schoonmaak',
+      subtitle: 'Elke cache, log, dump en overblijfsel die Prune weet te vinden, gemeten op deze machine in plaats van geschat. Niets wordt direct verwijderd — alles wat Opschonen meeneemt gaat eerst naar Quarantaine, waar je het kunt terugzetten.',
+      scanLog: {
+        header: 'Scanuitvoer',
+        scanningAnnounce: (total) => `${total} locaties worden gescand.`,
+        finishedAnnounce: (scanned, total) => `Scan voltooid. ${scanned} van ${total} locaties gemeten.`,
+        starting: 'Wordt gestart…'
+      },
+      emptyState: 'Nog niets gescand.',
+      scanErrorPrefix: (error) => `Kon niet scannen: ${error}`,
+      cleanErrorPrefix: (error) => `Kon niet opschonen: ${error}`,
+      cleanupComplete: 'Opschonen voltooid.',
+      resultFreed: (formatted) => `${formatted} vrijgemaakt`,
+      resultLockedSuffix: (count) => ` — ${count} vergrendelde bestanden overgeslagen`,
+      before: {
+        body: 'Prune meet elke categorie daadwerkelijk op de schijf in plaats van te schatten, wat ongeveer een halve minuut duurt.',
+        scanning: 'Bezig met scannen…',
+        preview: 'Voorbeeld'
+      },
+      hiddenNote: (count) => `${count} opschoners verborgen omdat de software niet is geïnstalleerd. Instellingen › Opschonen om ze te tonen.`,
+      footer: {
+        totalLabel: 'Totale vrij te maken ruimte:',
+        notMeasuredYet: 'nog niet gemeten',
+        unmeasuredSuffix: (count) => ` · ${count} niet gemeten`,
+        selectEverything: 'Alles selecteren',
+        clear: 'Wissen',
+        selectedCount: (count) => `${count} geselecteerd`
+      },
+      confirm: {
+        prompt: (count, sizeKnown, formatted) => `${count} items (${sizeKnown ? formatted : 'grootte niet gemeten'}) naar quarantaine verplaatsen?`,
+        cancel: 'Annuleren',
+        confirmButton: 'Bevestigen',
+        cleaning: 'Bezig met opschonen…'
+      },
+      stop: 'Stoppen',
+      rescan: 'Opnieuw scannen',
+      clean: 'Opschonen',
+      tree: {
+        selectCategoryAriaLabel: (category) => `Alles selecteren onder ${category}`,
+        losesData: 'Verliest gegevens',
+        needsAdmin: 'heeft beheerder nodig',
+        notInstalled: 'niet geïnstalleerd'
+      },
+      warning: {
+        title: (label) => `${label} inschakelen`,
+        remember: (label) => `Mijn keuze onthouden voor ${label}`,
+        fallbackBody: 'Deze optie verwijdert gegevens die je misschien wilt behouden.',
+        cancel: 'Annuleren',
+        enableAnyway: 'Toch inschakelen'
+      },
+      locked: {
+        message: (count) => `${count} vergrendelde bestanden overgeslagen.`,
+        detail: 'Sluit de apps die ze gebruiken en schoon opnieuw op.'
       }
     }
   },
@@ -7954,6 +9298,62 @@ export const CATALOG = {
         failed: (count) => `Nie udało się przenieść: ${count}.`,
         failedDetail: 'Mogą być otwarte lub na innym dysku.'
       }
+    },
+    deepClean: {
+      title: 'Głębokie czyszczenie',
+      subtitle: 'Każda pamięć podręczna, dziennik, zrzut i pozostałość, które Prune potrafi znaleźć, zmierzone na tym komputerze zamiast szacowane. Nic nie jest usuwane od razu — wszystko, co zabiera Czyszczenie, trafia najpierw do kwarantanny, skąd można to przywrócić.',
+      scanLog: {
+        header: 'Wynik skanowania',
+        scanningAnnounce: (total) => `Skanowanie ${total} lokalizacji.`,
+        finishedAnnounce: (scanned, total) => `Skanowanie zakończone. Zmierzono ${scanned} z ${total} lokalizacji.`,
+        starting: 'Uruchamianie…'
+      },
+      emptyState: 'Nic jeszcze nie zeskanowano.',
+      scanErrorPrefix: (error) => `Nie udało się zeskanować: ${error}`,
+      cleanErrorPrefix: (error) => `Nie udało się wyczyścić: ${error}`,
+      cleanupComplete: 'Czyszczenie zakończone.',
+      resultFreed: (formatted) => `Zwolniono ${formatted}`,
+      resultLockedSuffix: (count) => ` — pominięto ${count} zablokowanych plików`,
+      before: {
+        body: 'Prune rzeczywiście mierzy każdą kategorię na dysku zamiast ją szacować, co zajmuje około pół minuty.',
+        scanning: 'Skanowanie…',
+        preview: 'Podgląd'
+      },
+      hiddenNote: (count) => `${count} czyścideł ukrytych, ponieważ oprogramowanie nie jest zainstalowane. Ustawienia › Czyszczenie, aby je pokazać.`,
+      footer: {
+        totalLabel: 'Łączna ilość miejsca do zwolnienia:',
+        notMeasuredYet: 'jeszcze nie zmierzono',
+        unmeasuredSuffix: (count) => ` · ${count} niezmierzone`,
+        selectEverything: 'Zaznacz wszystko',
+        clear: 'Wyczyść',
+        selectedCount: (count) => `${count} wybranych`
+      },
+      confirm: {
+        prompt: (count, sizeKnown, formatted) => `Przenieść ${count} elementów (${sizeKnown ? formatted : 'rozmiar niezmierzony'}) do kwarantanny?`,
+        cancel: 'Anuluj',
+        confirmButton: 'Potwierdź',
+        cleaning: 'Czyszczenie…'
+      },
+      stop: 'Zatrzymaj',
+      rescan: 'Skanuj ponownie',
+      clean: 'Wyczyść',
+      tree: {
+        selectCategoryAriaLabel: (category) => `Zaznacz wszystko w kategorii ${category}`,
+        losesData: 'Utrata danych',
+        needsAdmin: 'wymaga administratora',
+        notInstalled: 'niezainstalowane'
+      },
+      warning: {
+        title: (label) => `Włącz ${label}`,
+        remember: (label) => `Zapamiętaj mój wybór dla ${label}`,
+        fallbackBody: 'Ta opcja usuwa dane, które być może chcesz zachować.',
+        cancel: 'Anuluj',
+        enableAnyway: 'Włącz mimo to'
+      },
+      locked: {
+        message: (count) => `Pominięto ${count} zablokowanych plików.`,
+        detail: 'Zamknij aplikacje, które ich używają, i wyczyść ponownie.'
+      }
     }
   },
 
@@ -8270,6 +9670,62 @@ export const CATALOG = {
         restoreHint: 'دا د قرنطین سکرین څخه بیرته راوړئ.',
         failed: (count) => `${count} ونشوای لیږدول شي.`,
         failedDetail: 'دا ممکن پرانیستل شوي وي یا په بل ډرایو کې وي.'
+      }
+    },
+    deepClean: {
+      title: 'ژور پاکول',
+      subtitle: 'هره کیشه، لاگ، ډمپ او پاتې شونی چې Prune یې موندلو ته پوهیږي، پدې ماشین کې اندازه شوی نه چې اټکل شوی. هیڅ شی سمدلاسه نه ړنګیږي — هر هغه څه چې پاکول یې اخلي لومړی قرنطین ته ځي، چیرې چې تاسو یې بیرته ایښودلی شئ.',
+      scanLog: {
+        header: 'د سکینینګ محصول',
+        scanningAnnounce: (total) => `${total} ځایونه سکین کیږي.`,
+        finishedAnnounce: (scanned, total) => `سکینینګ بشپړ شو. د ${total} څخه ${scanned} ځایونه اندازه شوي.`,
+        starting: 'پیل کیږي…'
+      },
+      emptyState: 'تراوسه هیڅ شی سکین شوی نه دی.',
+      scanErrorPrefix: (error) => `سکینینګ ونشوای شي: ${error}`,
+      cleanErrorPrefix: (error) => `پاکول ونشوای شي: ${error}`,
+      cleanupComplete: 'پاکول بشپړ شول.',
+      resultFreed: (formatted) => `${formatted} خلاص شو`,
+      resultLockedSuffix: (count) => ` — ${count} تړل شوي فایلونه پریښودل شوي`,
+      before: {
+        body: 'Prune په دیسک کې هره کټګوري واقعیا اندازه کوي نه چې اټکل یې کوي، دا شاوخوا نیم دقیقه وخت نیسي.',
+        scanning: 'سکینینګ کیږي…',
+        preview: 'مخکتنه'
+      },
+      hiddenNote: (count) => `${count} پاکوونکي پټ شوي ځکه چې سافټویر نصب شوی نه دی. تنظیمات › پاکول یې ښودلو لپاره.`,
+      footer: {
+        totalLabel: 'د خلاصولو ټول ځای:',
+        notMeasuredYet: 'تراوسه اندازه شوی نه دی',
+        unmeasuredSuffix: (count) => ` · ${count} نامعلومه اندازه`,
+        selectEverything: 'هر څه ټاکل',
+        clear: 'پاک کول',
+        selectedCount: (count) => `${count} ټاکل شوي`
+      },
+      confirm: {
+        prompt: (count, sizeKnown, formatted) => `${count} توکي (${sizeKnown ? formatted : 'اندازه نامعلومه'}) قرنطین ته لیږدول شي؟`,
+        cancel: 'لغوه کول',
+        confirmButton: 'تایید',
+        cleaning: 'پاکول کیږي…'
+      },
+      stop: 'ودرول',
+      rescan: 'بیا سکین کول',
+      clean: 'پاکول',
+      tree: {
+        selectCategoryAriaLabel: (category) => `د ${category} لاندې هر څه ټاکل`,
+        losesData: 'ډیټا له لاسه ورکوي',
+        needsAdmin: 'اډمین ته اړتیا لري',
+        notInstalled: 'نصب شوی نه دی'
+      },
+      warning: {
+        title: (label) => `${label} فعالول`,
+        remember: (label) => `زما انتخاب د ${label} لپاره یاد ساتل`,
+        fallbackBody: 'دا اختیار هغه ډیټا لرې کوي چې تاسو یې ساتل غواړئ.',
+        cancel: 'لغوه کول',
+        enableAnyway: 'بیا هم فعالول'
+      },
+      locked: {
+        message: (count) => `${count} تړل شوي فایلونه پریښودل شوي.`,
+        detail: 'هغه اپلیکیشنونه بند کړئ چې دا کاروي او بیا یې پاک کړئ.'
       }
     }
   },
@@ -8588,6 +10044,62 @@ export const CATALOG = {
         failed: (count) => `${count} não puderam ser movidos.`,
         failedDetail: 'Podem estar abertos ou em outro disco.'
       }
+    },
+    deepClean: {
+      title: 'Limpeza Profunda',
+      subtitle: 'Cada cache, log, dump e resquício que o Prune sabe encontrar, medido nesta máquina em vez de estimado. Nada é excluído diretamente — tudo o que a Limpeza pega vai primeiro para a Quarentena, de onde você pode devolvê-lo.',
+      scanLog: {
+        header: 'Saída da varredura',
+        scanningAnnounce: (total) => `Varrendo ${total} locais.`,
+        finishedAnnounce: (scanned, total) => `Varredura concluída. ${scanned} de ${total} locais medidos.`,
+        starting: 'Iniciando…'
+      },
+      emptyState: 'Nada verificado ainda.',
+      scanErrorPrefix: (error) => `Não foi possível verificar: ${error}`,
+      cleanErrorPrefix: (error) => `Não foi possível limpar: ${error}`,
+      cleanupComplete: 'Limpeza concluída.',
+      resultFreed: (formatted) => `Liberados ${formatted}`,
+      resultLockedSuffix: (count) => ` — ${count} arquivo${count === 1 ? '' : 's'} bloqueado${count === 1 ? '' : 's'} ignorado${count === 1 ? '' : 's'}`,
+      before: {
+        body: 'O Prune mede de fato cada categoria no disco em vez de estimar, o que leva cerca de meio minuto.',
+        scanning: 'Verificando…',
+        preview: 'Prévia'
+      },
+      hiddenNote: (count) => `${count} limpador${count === 1 ? '' : 'es'} oculto${count === 1 ? '' : 's'} porque o software não está instalado. Configurações › Limpeza para mostrá-los.`,
+      footer: {
+        totalLabel: 'Espaço total a liberar:',
+        notMeasuredYet: 'ainda não medido',
+        unmeasuredSuffix: (count) => ` · ${count} não medidos`,
+        selectEverything: 'Selecionar tudo',
+        clear: 'Limpar',
+        selectedCount: (count) => `${count} selecionados`
+      },
+      confirm: {
+        prompt: (count, sizeKnown, formatted) => `Mover ${count} itens (${sizeKnown ? formatted : 'tamanho não medido'}) para quarentena?`,
+        cancel: 'Cancelar',
+        confirmButton: 'Confirmar',
+        cleaning: 'Limpando…'
+      },
+      stop: 'Parar',
+      rescan: 'Verificar novamente',
+      clean: 'Limpar',
+      tree: {
+        selectCategoryAriaLabel: (category) => `Selecionar tudo em ${category}`,
+        losesData: 'Perde dados',
+        needsAdmin: 'precisa de administrador',
+        notInstalled: 'não instalado'
+      },
+      warning: {
+        title: (label) => `Ativar ${label}`,
+        remember: (label) => `Lembrar minha escolha para ${label}`,
+        fallbackBody: 'Esta opção remove dados que você talvez queira manter.',
+        cancel: 'Cancelar',
+        enableAnyway: 'Ativar mesmo assim'
+      },
+      locked: {
+        message: (count) => `${count} arquivo${count === 1 ? '' : 's'} bloqueado${count === 1 ? '' : 's'} ignorado${count === 1 ? '' : 's'}.`,
+        detail: 'Feche os aplicativos que os usam e limpe novamente.'
+      }
     }
   },
 
@@ -8904,6 +10416,62 @@ export const CATALOG = {
         restoreHint: 'Restaure-as a partir do ecrã Quarentena.',
         failed: (count) => `${count} não puderam ser movidos.`,
         failedDetail: 'Podem estar abertos ou noutra unidade.'
+      }
+    },
+    deepClean: {
+      title: 'Limpeza Profunda',
+      subtitle: 'Cada cache, registo, dump e resíduo que o Prune sabe encontrar, medido nesta máquina em vez de estimado. Nada é eliminado diretamente — tudo o que a Limpeza retira vai primeiro para a Quarentena, de onde pode devolvê-lo.',
+      scanLog: {
+        header: 'Saída da verificação',
+        scanningAnnounce: (total) => `A verificar ${total} localizações.`,
+        finishedAnnounce: (scanned, total) => `Verificação concluída. ${scanned} de ${total} localizações medidas.`,
+        starting: 'A iniciar…'
+      },
+      emptyState: 'Nada verificado ainda.',
+      scanErrorPrefix: (error) => `Não foi possível verificar: ${error}`,
+      cleanErrorPrefix: (error) => `Não foi possível limpar: ${error}`,
+      cleanupComplete: 'Limpeza concluída.',
+      resultFreed: (formatted) => `Libertados ${formatted}`,
+      resultLockedSuffix: (count) => ` — ${count} ficheiro${count === 1 ? '' : 's'} bloqueado${count === 1 ? '' : 's'} ignorado${count === 1 ? '' : 's'}`,
+      before: {
+        body: 'O Prune mede de facto cada categoria no disco em vez de a estimar, o que demora cerca de meio minuto.',
+        scanning: 'A verificar…',
+        preview: 'Pré-visualização'
+      },
+      hiddenNote: (count) => `${count} limpador${count === 1 ? '' : 'es'} oculto${count === 1 ? '' : 's'} porque o software não está instalado. Definições › Limpeza para os mostrar.`,
+      footer: {
+        totalLabel: 'Espaço total a libertar:',
+        notMeasuredYet: 'ainda não medido',
+        unmeasuredSuffix: (count) => ` · ${count} não medidos`,
+        selectEverything: 'Selecionar tudo',
+        clear: 'Limpar',
+        selectedCount: (count) => `${count} selecionados`
+      },
+      confirm: {
+        prompt: (count, sizeKnown, formatted) => `Mover ${count} itens (${sizeKnown ? formatted : 'tamanho não medido'}) para a quarentena?`,
+        cancel: 'Cancelar',
+        confirmButton: 'Confirmar',
+        cleaning: 'A limpar…'
+      },
+      stop: 'Parar',
+      rescan: 'Verificar novamente',
+      clean: 'Limpar',
+      tree: {
+        selectCategoryAriaLabel: (category) => `Selecionar tudo em ${category}`,
+        losesData: 'Perde dados',
+        needsAdmin: 'precisa de administrador',
+        notInstalled: 'não instalado'
+      },
+      warning: {
+        title: (label) => `Ativar ${label}`,
+        remember: (label) => `Lembrar a minha escolha para ${label}`,
+        fallbackBody: 'Esta opção remove dados que talvez queira manter.',
+        cancel: 'Cancelar',
+        enableAnyway: 'Ativar na mesma'
+      },
+      locked: {
+        message: (count) => `${count} ficheiro${count === 1 ? '' : 's'} bloqueado${count === 1 ? '' : 's'} ignorado${count === 1 ? '' : 's'}.`,
+        detail: 'Feche as aplicações que os utilizam e limpe novamente.'
       }
     }
   },
@@ -9222,6 +10790,62 @@ export const CATALOG = {
         failed: (count) => `${count} nu au putut fi mutate.`,
         failedDetail: 'Pot fi deschise sau pe un alt disc.'
       }
+    },
+    deepClean: {
+      title: 'Curățare profundă',
+      subtitle: 'Fiecare cache, jurnal, dump și rest pe care Prune știe să-l găsească, măsurat pe acest calculator în loc să fie estimat. Nimic nu este șters direct — tot ce ia Curățarea merge mai întâi în Carantină, de unde îl poți pune înapoi.',
+      scanLog: {
+        header: 'Rezultatul scanării',
+        scanningAnnounce: (total) => `Se scanează ${total} locații.`,
+        finishedAnnounce: (scanned, total) => `Scanare finalizată. ${scanned} din ${total} locații măsurate.`,
+        starting: 'Se pornește…'
+      },
+      emptyState: 'Nimic scanat încă.',
+      scanErrorPrefix: (error) => `Scanarea a eșuat: ${error}`,
+      cleanErrorPrefix: (error) => `Curățarea a eșuat: ${error}`,
+      cleanupComplete: 'Curățare finalizată.',
+      resultFreed: (formatted) => `Eliberat ${formatted}`,
+      resultLockedSuffix: (count) => ` — s-au omis ${count} fișiere blocate`,
+      before: {
+        body: 'Prune măsoară efectiv fiecare categorie de pe disc în loc să o estimeze, ceea ce durează aproximativ jumătate de minut.',
+        scanning: 'Se scanează…',
+        preview: 'Previzualizare'
+      },
+      hiddenNote: (count) => `${count} instrumente de curățare ascunse deoarece software-ul nu este instalat. Setări › Curățare pentru a le afișa.`,
+      footer: {
+        totalLabel: 'Spațiu total de eliberat:',
+        notMeasuredYet: 'încă nemăsurat',
+        unmeasuredSuffix: (count) => ` · ${count} nemăsurate`,
+        selectEverything: 'Selectează tot',
+        clear: 'Golește',
+        selectedCount: (count) => `${count} selectate`
+      },
+      confirm: {
+        prompt: (count, sizeKnown, formatted) => `Muți ${count} elemente (${sizeKnown ? formatted : 'dimensiune nemăsurată'}) în carantină?`,
+        cancel: 'Anulează',
+        confirmButton: 'Confirmă',
+        cleaning: 'Se curăță…'
+      },
+      stop: 'Oprește',
+      rescan: 'Rescanează',
+      clean: 'Curăță',
+      tree: {
+        selectCategoryAriaLabel: (category) => `Selectează tot din ${category}`,
+        losesData: 'Pierde date',
+        needsAdmin: 'necesită administrator',
+        notInstalled: 'neinstalat'
+      },
+      warning: {
+        title: (label) => `Activează ${label}`,
+        remember: (label) => `Reține alegerea mea pentru ${label}`,
+        fallbackBody: 'Această opțiune elimină date pe care poate vrei să le păstrezi.',
+        cancel: 'Anulează',
+        enableAnyway: 'Activează oricum'
+      },
+      locked: {
+        message: (count) => `S-au omis ${count} fișiere blocate.`,
+        detail: 'Închide aplicațiile care le folosesc și curăță din nou.'
+      }
     }
   },
 
@@ -9538,6 +11162,62 @@ export const CATALOG = {
         restoreHint: 'Восстановите их с экрана Карантин.',
         failed: (count) => `Не удалось переместить: ${count}.`,
         failedDetail: 'Возможно, они открыты или находятся на другом диске.'
+      }
+    },
+    deepClean: {
+      title: 'Глубокая очистка',
+      subtitle: 'Каждый кэш, журнал, дамп и остаток, которые умеет находить Prune, измеряются на этом компьютере, а не оцениваются. Ничего не удаляется сразу — всё, что забирает Очистка, сначала попадает в карантин, откуда это можно вернуть.',
+      scanLog: {
+        header: 'Вывод сканирования',
+        scanningAnnounce: (total) => `Сканирование ${total} расположений.`,
+        finishedAnnounce: (scanned, total) => `Сканирование завершено. Измерено ${scanned} из ${total} расположений.`,
+        starting: 'Запуск…'
+      },
+      emptyState: 'Пока ничего не отсканировано.',
+      scanErrorPrefix: (error) => `Не удалось выполнить сканирование: ${error}`,
+      cleanErrorPrefix: (error) => `Не удалось выполнить очистку: ${error}`,
+      cleanupComplete: 'Очистка завершена.',
+      resultFreed: (formatted) => `Освобождено ${formatted}`,
+      resultLockedSuffix: (count) => ` — пропущено заблокированных файлов: ${count}`,
+      before: {
+        body: 'Prune действительно измеряет каждую категорию на диске, а не оценивает её, что занимает около получаса.',
+        scanning: 'Сканирование…',
+        preview: 'Предпросмотр'
+      },
+      hiddenNote: (count) => `Скрыто чистильщиков: ${count}, так как программа не установлена. Настройки › Очистка, чтобы их показать.`,
+      footer: {
+        totalLabel: 'Всего места будет освобождено:',
+        notMeasuredYet: 'ещё не измерено',
+        unmeasuredSuffix: (count) => ` · не измерено: ${count}`,
+        selectEverything: 'Выбрать всё',
+        clear: 'Очистить',
+        selectedCount: (count) => `Выбрано: ${count}`
+      },
+      confirm: {
+        prompt: (count, sizeKnown, formatted) => `Переместить элементов: ${count} (${sizeKnown ? formatted : 'размер не измерен'}) в карантин?`,
+        cancel: 'Отмена',
+        confirmButton: 'Подтвердить',
+        cleaning: 'Очистка…'
+      },
+      stop: 'Остановить',
+      rescan: 'Пересканировать',
+      clean: 'Очистить',
+      tree: {
+        selectCategoryAriaLabel: (category) => `Выбрать всё в категории ${category}`,
+        losesData: 'Потеря данных',
+        needsAdmin: 'требуется администратор',
+        notInstalled: 'не установлено'
+      },
+      warning: {
+        title: (label) => `Включить ${label}`,
+        remember: (label) => `Запомнить мой выбор для ${label}`,
+        fallbackBody: 'Этот параметр удаляет данные, которые вы, возможно, захотите сохранить.',
+        cancel: 'Отмена',
+        enableAnyway: 'Всё равно включить'
+      },
+      locked: {
+        message: (count) => `Пропущено заблокированных файлов: ${count}.`,
+        detail: 'Закройте приложения, которые их используют, и очистите снова.'
       }
     }
   },
@@ -9856,6 +11536,62 @@ export const CATALOG = {
         failed: (count) => `Nepodarilo sa presunúť: ${count}.`,
         failedDetail: 'Môžu byť otvorené alebo na inom disku.'
       }
+    },
+    deepClean: {
+      title: 'Hĺbkové čistenie',
+      subtitle: 'Každá vyrovnávacia pamäť, protokol, výpis a pozostatok, ktoré Prune vie nájsť, zmeraný na tomto počítači namiesto odhadu. Nič sa hneď nevymaže — všetko, čo si Čistenie vezme, ide najprv do karantény, odkiaľ to môžete vrátiť.',
+      scanLog: {
+        header: 'Výstup skenovania',
+        scanningAnnounce: (total) => `Skenovanie ${total} miest.`,
+        finishedAnnounce: (scanned, total) => `Skenovanie dokončené. Zmeraných ${scanned} z ${total} miest.`,
+        starting: 'Spúšťanie…'
+      },
+      emptyState: 'Zatiaľ nič nenaskenované.',
+      scanErrorPrefix: (error) => `Skenovanie zlyhalo: ${error}`,
+      cleanErrorPrefix: (error) => `Čistenie zlyhalo: ${error}`,
+      cleanupComplete: 'Čistenie dokončené.',
+      resultFreed: (formatted) => `Uvoľnené ${formatted}`,
+      resultLockedSuffix: (count) => ` — preskočených ${count} uzamknutých súborov`,
+      before: {
+        body: 'Prune skutočne meria každú kategóriu na disku namiesto odhadu, čo trvá približne pol minúty.',
+        scanning: 'Skenovanie…',
+        preview: 'Náhľad'
+      },
+      hiddenNote: (count) => `${count} čističov skrytých, pretože softvér nie je nainštalovaný. Nastavenia › Čistenie na ich zobrazenie.`,
+      footer: {
+        totalLabel: 'Celkové miesto na uvoľnenie:',
+        notMeasuredYet: 'zatiaľ nezmerané',
+        unmeasuredSuffix: (count) => ` · ${count} nezmeraných`,
+        selectEverything: 'Vybrať všetko',
+        clear: 'Vymazať',
+        selectedCount: (count) => `${count} vybraných`
+      },
+      confirm: {
+        prompt: (count, sizeKnown, formatted) => `Presunúť ${count} položiek (${sizeKnown ? formatted : 'veľkosť nezmeraná'}) do karantény?`,
+        cancel: 'Zrušiť',
+        confirmButton: 'Potvrdiť',
+        cleaning: 'Čistenie…'
+      },
+      stop: 'Zastaviť',
+      rescan: 'Skenovať znova',
+      clean: 'Vyčistiť',
+      tree: {
+        selectCategoryAriaLabel: (category) => `Vybrať všetko v kategórii ${category}`,
+        losesData: 'Strata dát',
+        needsAdmin: 'vyžaduje správcu',
+        notInstalled: 'nenainštalované'
+      },
+      warning: {
+        title: (label) => `Povoliť ${label}`,
+        remember: (label) => `Zapamätať si moju voľbu pre ${label}`,
+        fallbackBody: 'Táto možnosť odstráni údaje, ktoré si možno chcete ponechať.',
+        cancel: 'Zrušiť',
+        enableAnyway: 'Aj tak povoliť'
+      },
+      locked: {
+        message: (count) => `Preskočených ${count} uzamknutých súborov.`,
+        detail: 'Zatvorte aplikácie, ktoré ich používajú, a vyčistite znova.'
+      }
     }
   },
 
@@ -10172,6 +11908,62 @@ export const CATALOG = {
         restoreHint: 'Riktheji nga ekrani i Karantinës.',
         failed: (count) => `${count} nuk mundën të lëviznin.`,
         failedDetail: 'Mund të jenë të hapura ose në një disk tjetër.'
+      }
+    },
+    deepClean: {
+      title: 'Pastrim i thellë',
+      subtitle: 'Çdo memorie e fshehtë, regjistër, dump dhe mbetje që Prune di t\'i gjejë, e matur në këtë kompjuter në vend të vlerësuar. Asgjë nuk fshihet menjëherë — çdo gjë që merr Pastrimi shkon fillimisht në karantinë, ku mund ta rikthesh.',
+      scanLog: {
+        header: 'Rezultati i skanimit',
+        scanningAnnounce: (total) => `Duke skanuar ${total} vendndodhje.`,
+        finishedAnnounce: (scanned, total) => `Skanimi përfundoi. U matën ${scanned} nga ${total} vendndodhje.`,
+        starting: 'Duke filluar…'
+      },
+      emptyState: 'Ende nuk është skanuar asgjë.',
+      scanErrorPrefix: (error) => `Skanimi dështoi: ${error}`,
+      cleanErrorPrefix: (error) => `Pastrimi dështoi: ${error}`,
+      cleanupComplete: 'Pastrimi përfundoi.',
+      resultFreed: (formatted) => `U liruan ${formatted}`,
+      resultLockedSuffix: (count) => ` — u anashkaluan ${count} skedarë të kyçur`,
+      before: {
+        body: 'Prune mat vërtet çdo kategori në disk në vend që ta vlerësojë, gjë që zgjat rreth gjysmë minute.',
+        scanning: 'Duke skanuar…',
+        preview: 'Parashikim'
+      },
+      hiddenNote: (count) => `${count} pastrues të fshehur sepse softueri nuk është i instaluar. Cilësimet › Pastrimi për t\'i shfaqur.`,
+      footer: {
+        totalLabel: 'Hapësira totale për t\'u liruar:',
+        notMeasuredYet: 'ende e pamatur',
+        unmeasuredSuffix: (count) => ` · ${count} të pamatura`,
+        selectEverything: 'Zgjidh gjithçka',
+        clear: 'Pastro',
+        selectedCount: (count) => `${count} të zgjedhura`
+      },
+      confirm: {
+        prompt: (count, sizeKnown, formatted) => `Të lëvizen ${count} artikuj (${sizeKnown ? formatted : 'madhësia e pamatur'}) në karantinë?`,
+        cancel: 'Anulo',
+        confirmButton: 'Konfirmo',
+        cleaning: 'Duke pastruar…'
+      },
+      stop: 'Ndalo',
+      rescan: 'Riskano',
+      clean: 'Pastro',
+      tree: {
+        selectCategoryAriaLabel: (category) => `Zgjidh gjithçka nën ${category}`,
+        losesData: 'Humbet të dhëna',
+        needsAdmin: 'kërkon administrator',
+        notInstalled: 'i painstaluar'
+      },
+      warning: {
+        title: (label) => `Aktivizo ${label}`,
+        remember: (label) => `Kujto zgjedhjen time për ${label}`,
+        fallbackBody: 'Ky opsion heq të dhëna që mund të dëshirosh t\'i mbash.',
+        cancel: 'Anulo',
+        enableAnyway: 'Aktivizo gjithsesi'
+      },
+      locked: {
+        message: (count) => `U anashkaluan ${count} skedarë të kyçur.`,
+        detail: 'Mbylli aplikacionet që i përdorin dhe pastro përsëri.'
       }
     }
   },
@@ -10490,6 +12282,62 @@ export const CATALOG = {
         failed: (count) => `Није могуће преместити: ${count}.`,
         failedDetail: 'Можда су отворени или на другом диску.'
       }
+    },
+    deepClean: {
+      title: 'Дубоко чишћење',
+      subtitle: 'Свака кеш меморија, дневник, дамп и остатак које Prune зна да пронађе, измерено на овом рачунару уместо процењено. Ништа се не брише одмах — све што Чишћење узме иде прво у карантин, одакле то можете вратити.',
+      scanLog: {
+        header: 'Излаз скенирања',
+        scanningAnnounce: (total) => `Скенирање ${total} локација.`,
+        finishedAnnounce: (scanned, total) => `Скенирање завршено. Измерено ${scanned} од ${total} локација.`,
+        starting: 'Покретање…'
+      },
+      emptyState: 'Још ништа није скенирано.',
+      scanErrorPrefix: (error) => `Скенирање није успело: ${error}`,
+      cleanErrorPrefix: (error) => `Чишћење није успело: ${error}`,
+      cleanupComplete: 'Чишћење завршено.',
+      resultFreed: (formatted) => `Ослобођено ${formatted}`,
+      resultLockedSuffix: (count) => ` — прескочено закључаних фајлова: ${count}`,
+      before: {
+        body: 'Prune заиста мери сваку категорију на диску уместо да је процењује, што траје око пола минута.',
+        scanning: 'Скенирање…',
+        preview: 'Преглед'
+      },
+      hiddenNote: (count) => `Скривено средстава за чишћење: ${count}, јер софтвер није инсталиран. Подешавања › Чишћење да их прикажете.`,
+      footer: {
+        totalLabel: 'Укупно простора за ослобађање:',
+        notMeasuredYet: 'још није измерено',
+        unmeasuredSuffix: (count) => ` · ${count} немерено`,
+        selectEverything: 'Изабери све',
+        clear: 'Обриши',
+        selectedCount: (count) => `${count} изабрано`
+      },
+      confirm: {
+        prompt: (count, sizeKnown, formatted) => `Преместити ставки: ${count} (${sizeKnown ? formatted : 'величина није измерена'}) у карантин?`,
+        cancel: 'Откажи',
+        confirmButton: 'Потврди',
+        cleaning: 'Чишћење…'
+      },
+      stop: 'Заустави',
+      rescan: 'Поново скенирај',
+      clean: 'Очисти',
+      tree: {
+        selectCategoryAriaLabel: (category) => `Изабери све у категорији ${category}`,
+        losesData: 'Губи податке',
+        needsAdmin: 'захтева администратора',
+        notInstalled: 'није инсталирано'
+      },
+      warning: {
+        title: (label) => `Омогући ${label}`,
+        remember: (label) => `Запамти мој избор за ${label}`,
+        fallbackBody: 'Ова опција уклања податке које можда желите да задржите.',
+        cancel: 'Откажи',
+        enableAnyway: 'Омогући свакако'
+      },
+      locked: {
+        message: (count) => `Прескочено закључаних фајлова: ${count}.`,
+        detail: 'Затворите апликације које их користе и очистите поново.'
+      }
     }
   },
 
@@ -10806,6 +12654,62 @@ export const CATALOG = {
         restoreHint: 'Återställ dem från Karantän-skärmen.',
         failed: (count) => `${count} kunde inte flyttas.`,
         failedDetail: 'De kan vara öppna eller på en annan enhet.'
+      }
+    },
+    deepClean: {
+      title: 'Djuprensning',
+      subtitle: 'Varje cache, logg, dump och kvarleva som Prune vet hur man hittar, uppmätt på den här datorn i stället för uppskattat. Inget tas bort direkt — allt som Rensa tar går först till Karantän, där du kan lägga tillbaka det.',
+      scanLog: {
+        header: 'Skanningsutdata',
+        scanningAnnounce: (total) => `Skannar ${total} platser.`,
+        finishedAnnounce: (scanned, total) => `Skanning klar. ${scanned} av ${total} platser mätta.`,
+        starting: 'Startar…'
+      },
+      emptyState: 'Inget skannat än.',
+      scanErrorPrefix: (error) => `Kunde inte skanna: ${error}`,
+      cleanErrorPrefix: (error) => `Kunde inte rensa: ${error}`,
+      cleanupComplete: 'Rensning klar.',
+      resultFreed: (formatted) => `Frigjorde ${formatted}`,
+      resultLockedSuffix: (count) => ` — hoppade över ${count} låsta filer`,
+      before: {
+        body: 'Prune mäter faktiskt varje kategori på disken i stället för att uppskatta, vilket tar ungefär en halv minut.',
+        scanning: 'Skannar…',
+        preview: 'Förhandsgranska'
+      },
+      hiddenNote: (count) => `${count} rensare dolda eftersom programvaran inte är installerad. Inställningar › Rensning för att visa dem.`,
+      footer: {
+        totalLabel: 'Totalt utrymme att frigöra:',
+        notMeasuredYet: 'inte mätt än',
+        unmeasuredSuffix: (count) => ` · ${count} omätta`,
+        selectEverything: 'Markera allt',
+        clear: 'Rensa',
+        selectedCount: (count) => `${count} valda`
+      },
+      confirm: {
+        prompt: (count, sizeKnown, formatted) => `Flytta ${count} objekt (${sizeKnown ? formatted : 'storlek ej mätt'}) till karantän?`,
+        cancel: 'Avbryt',
+        confirmButton: 'Bekräfta',
+        cleaning: 'Rensar…'
+      },
+      stop: 'Stoppa',
+      rescan: 'Skanna igen',
+      clean: 'Rensa',
+      tree: {
+        selectCategoryAriaLabel: (category) => `Markera allt under ${category}`,
+        losesData: 'Förlorar data',
+        needsAdmin: 'kräver administratör',
+        notInstalled: 'inte installerad'
+      },
+      warning: {
+        title: (label) => `Aktivera ${label}`,
+        remember: (label) => `Kom ihåg mitt val för ${label}`,
+        fallbackBody: 'Det här alternativet tar bort data du kanske vill behålla.',
+        cancel: 'Avbryt',
+        enableAnyway: 'Aktivera ändå'
+      },
+      locked: {
+        message: (count) => `Hoppade över ${count} låsta filer.`,
+        detail: 'Stäng apparna som använder dem och rensa igen.'
       }
     }
   },
@@ -11124,6 +13028,62 @@ export const CATALOG = {
         failed: (count) => `ย้ายไม่สำเร็จ ${count} รายการ`,
         failedDetail: 'อาจเปิดอยู่หรืออยู่บนไดรฟ์อื่น'
       }
+    },
+    deepClean: {
+      title: 'การล้างเชิงลึก',
+      subtitle: 'แคช บันทึก ดัมพ์ และเศษเหลือทุกอย่างที่ Prune รู้วิธีค้นหา วัดผลจริงบนเครื่องนี้แทนการประมาณ ไม่มีอะไรถูกลบทันที — ทุกอย่างที่การล้างเก็บไปจะไปที่กักกันก่อน ซึ่งคุณสามารถนำกลับมาได้',
+      scanLog: {
+        header: 'ผลลัพธ์การสแกน',
+        scanningAnnounce: (total) => `กำลังสแกน ${total} ตำแหน่ง`,
+        finishedAnnounce: (scanned, total) => `สแกนเสร็จสิ้น วัดผลแล้ว ${scanned} จาก ${total} ตำแหน่ง`,
+        starting: 'กำลังเริ่ม…'
+      },
+      emptyState: 'ยังไม่ได้สแกนสิ่งใด',
+      scanErrorPrefix: (error) => `ไม่สามารถสแกนได้: ${error}`,
+      cleanErrorPrefix: (error) => `ไม่สามารถล้างได้: ${error}`,
+      cleanupComplete: 'การล้างข้อมูลเสร็จสมบูรณ์',
+      resultFreed: (formatted) => `เพิ่มพื้นที่ว่าง ${formatted}`,
+      resultLockedSuffix: (count) => ` — ข้าม ${count} ไฟล์ที่ถูกล็อก`,
+      before: {
+        body: 'Prune วัดผลแต่ละหมวดหมู่บนดิสก์จริง แทนการประมาณ ซึ่งใช้เวลาประมาณครึ่งนาที',
+        scanning: 'กำลังสแกน…',
+        preview: 'ดูตัวอย่าง'
+      },
+      hiddenNote: (count) => `เครื่องมือล้าง ${count} รายการถูกซ่อนเพราะไม่ได้ติดตั้งซอฟต์แวร์ ตั้งค่า › การล้างข้อมูล เพื่อแสดงรายการเหล่านี้`,
+      footer: {
+        totalLabel: 'พื้นที่ทั้งหมดที่จะเพิ่มว่าง:',
+        notMeasuredYet: 'ยังไม่ได้วัดผล',
+        unmeasuredSuffix: (count) => ` · ไม่ได้วัดผล ${count} รายการ`,
+        selectEverything: 'เลือกทั้งหมด',
+        clear: 'ล้าง',
+        selectedCount: (count) => `เลือก ${count} รายการ`
+      },
+      confirm: {
+        prompt: (count, sizeKnown, formatted) => `ย้าย ${count} รายการ (${sizeKnown ? formatted : 'ไม่ได้วัดขนาด'}) ไปยังกักกันหรือไม่`,
+        cancel: 'ยกเลิก',
+        confirmButton: 'ยืนยัน',
+        cleaning: 'กำลังล้าง…'
+      },
+      stop: 'หยุด',
+      rescan: 'สแกนใหม่',
+      clean: 'ล้าง',
+      tree: {
+        selectCategoryAriaLabel: (category) => `เลือกทั้งหมดภายใต้ ${category}`,
+        losesData: 'สูญเสียข้อมูล',
+        needsAdmin: 'ต้องการสิทธิ์ผู้ดูแลระบบ',
+        notInstalled: 'ไม่ได้ติดตั้ง'
+      },
+      warning: {
+        title: (label) => `เปิดใช้งาน ${label}`,
+        remember: (label) => `จำตัวเลือกของฉันสำหรับ ${label}`,
+        fallbackBody: 'ตัวเลือกนี้จะลบข้อมูลที่คุณอาจต้องการเก็บไว้',
+        cancel: 'ยกเลิก',
+        enableAnyway: 'เปิดใช้งานต่อไป'
+      },
+      locked: {
+        message: (count) => `ข้าม ${count} ไฟล์ที่ถูกล็อก`,
+        detail: 'ปิดแอปที่ใช้ไฟล์เหล่านั้นแล้วล้างอีกครั้ง'
+      }
     }
   },
 
@@ -11440,6 +13400,62 @@ export const CATALOG = {
         restoreHint: 'Bunları Karantina ekranından geri yükleyin.',
         failed: (count) => `${count} taşınamadı.`,
         failedDetail: 'Açık olabilirler veya başka bir sürücüde olabilirler.'
+      }
+    },
+    deepClean: {
+      title: 'Derin Temizlik',
+      subtitle: "Prune'un bulmayı bildiği her önbellek, günlük, döküm ve kalıntı, tahmin edilmek yerine bu makinede ölçülür. Hiçbir şey hemen silinmez — Temizle'nin aldığı her şey önce Karantina'ya gider, oradan geri koyabilirsiniz.",
+      scanLog: {
+        header: 'Tarama çıktısı',
+        scanningAnnounce: (total) => `${total} konum taranıyor.`,
+        finishedAnnounce: (scanned, total) => `Tarama tamamlandı. ${total} konumdan ${scanned} tanesi ölçüldü.`,
+        starting: 'Başlatılıyor…'
+      },
+      emptyState: 'Henüz hiçbir şey taranmadı.',
+      scanErrorPrefix: (error) => `Taranamadı: ${error}`,
+      cleanErrorPrefix: (error) => `Temizlenemedi: ${error}`,
+      cleanupComplete: 'Temizlik tamamlandı.',
+      resultFreed: (formatted) => `${formatted} boşaltıldı`,
+      resultLockedSuffix: (count) => ` — ${count} kilitli dosya atlandı`,
+      before: {
+        body: "Prune, tahmin etmek yerine diskteki her kategoriyi gerçekten ölçer, bu da yaklaşık yarım dakika sürer.",
+        scanning: 'Taranıyor…',
+        preview: 'Önizleme'
+      },
+      hiddenNote: (count) => `Yazılım yüklü olmadığı için ${count} temizleyici gizlendi. Göstermek için Ayarlar › Temizlik.`,
+      footer: {
+        totalLabel: 'Boşaltılacak toplam alan:',
+        notMeasuredYet: 'henüz ölçülmedi',
+        unmeasuredSuffix: (count) => ` · ${count} ölçülmedi`,
+        selectEverything: 'Tümünü seç',
+        clear: 'Temizle',
+        selectedCount: (count) => `${count} seçildi`
+      },
+      confirm: {
+        prompt: (count, sizeKnown, formatted) => `${count} öğe (${sizeKnown ? formatted : 'boyut ölçülmedi'}) karantinaya taşınsın mı?`,
+        cancel: 'İptal',
+        confirmButton: 'Onayla',
+        cleaning: 'Temizleniyor…'
+      },
+      stop: 'Durdur',
+      rescan: 'Yeniden tara',
+      clean: 'Temizle',
+      tree: {
+        selectCategoryAriaLabel: (category) => `${category} altındaki her şeyi seç`,
+        losesData: 'Veri kaybı',
+        needsAdmin: 'yönetici gerektirir',
+        notInstalled: 'yüklü değil'
+      },
+      warning: {
+        title: (label) => `${label} etkinleştir`,
+        remember: (label) => `${label} için seçimimi hatırla`,
+        fallbackBody: 'Bu seçenek, saklamak isteyebileceğiniz verileri kaldırır.',
+        cancel: 'İptal',
+        enableAnyway: 'Yine de etkinleştir'
+      },
+      locked: {
+        message: (count) => `${count} kilitli dosya atlandı.`,
+        detail: 'Onları kullanan uygulamaları kapatın ve yeniden temizleyin.'
       }
     }
   },
@@ -11758,6 +13774,62 @@ export const CATALOG = {
         failed: (count) => `Не вдалося перемістити: ${count}.`,
         failedDetail: 'Можливо, вони відкриті або перебувають на іншому диску.'
       }
+    },
+    deepClean: {
+      title: 'Глибоке очищення',
+      subtitle: 'Кожен кеш, журнал, дамп і залишок, які вміє знаходити Prune, вимірюється на цьому комп\'ютері, а не оцінюється. Нічого не видаляється одразу — усе, що забирає Очищення, спершу потрапляє в карантин, звідки це можна повернути.',
+      scanLog: {
+        header: 'Вивід сканування',
+        scanningAnnounce: (total) => `Сканування ${total} місць.`,
+        finishedAnnounce: (scanned, total) => `Сканування завершено. Виміряно ${scanned} з ${total} місць.`,
+        starting: 'Запуск…'
+      },
+      emptyState: 'Ще нічого не відскановано.',
+      scanErrorPrefix: (error) => `Не вдалося виконати сканування: ${error}`,
+      cleanErrorPrefix: (error) => `Не вдалося виконати очищення: ${error}`,
+      cleanupComplete: 'Очищення завершено.',
+      resultFreed: (formatted) => `Звільнено ${formatted}`,
+      resultLockedSuffix: (count) => ` — пропущено заблокованих файлів: ${count}`,
+      before: {
+        body: 'Prune справді вимірює кожну категорію на диску, а не оцінює її, що займає близько півхвилини.',
+        scanning: 'Сканування…',
+        preview: 'Попередній перегляд'
+      },
+      hiddenNote: (count) => `Приховано засобів очищення: ${count}, оскільки програму не встановлено. Налаштування › Очищення, щоб їх показати.`,
+      footer: {
+        totalLabel: 'Загальний обсяг місця для звільнення:',
+        notMeasuredYet: 'ще не виміряно',
+        unmeasuredSuffix: (count) => ` · не виміряно: ${count}`,
+        selectEverything: 'Вибрати все',
+        clear: 'Очистити',
+        selectedCount: (count) => `Вибрано: ${count}`
+      },
+      confirm: {
+        prompt: (count, sizeKnown, formatted) => `Перемістити елементів: ${count} (${sizeKnown ? formatted : 'розмір не виміряно'}) у карантин?`,
+        cancel: 'Скасувати',
+        confirmButton: 'Підтвердити',
+        cleaning: 'Очищення…'
+      },
+      stop: 'Зупинити',
+      rescan: 'Пересканувати',
+      clean: 'Очистити',
+      tree: {
+        selectCategoryAriaLabel: (category) => `Вибрати все в категорії ${category}`,
+        losesData: 'Втрата даних',
+        needsAdmin: 'потрібні права адміністратора',
+        notInstalled: 'не встановлено'
+      },
+      warning: {
+        title: (label) => `Увімкнути ${label}`,
+        remember: (label) => `Запам'ятати мій вибір для ${label}`,
+        fallbackBody: 'Цей параметр видаляє дані, які ви можете захотіти зберегти.',
+        cancel: 'Скасувати',
+        enableAnyway: 'Усе одно увімкнути'
+      },
+      locked: {
+        message: (count) => `Пропущено заблокованих файлів: ${count}.`,
+        detail: 'Закрийте застосунки, які їх використовують, і очистіть знову.'
+      }
     }
   },
 
@@ -12074,6 +14146,62 @@ export const CATALOG = {
         restoreHint: 'Khôi phục chúng từ màn hình Khu cách ly.',
         failed: (count) => `Không thể chuyển ${count} mục.`,
         failedDetail: 'Chúng có thể đang mở hoặc nằm trên ổ đĩa khác.'
+      }
+    },
+    deepClean: {
+      title: 'Dọn dẹp sâu',
+      subtitle: 'Mọi bộ nhớ đệm, nhật ký, tệp dump và tàn dư mà Prune biết cách tìm, được đo trên máy này thay vì ước tính. Không có gì bị xóa ngay lập tức — mọi thứ mà Dọn dẹp lấy đi đều vào Khu cách ly trước, nơi bạn có thể đưa nó trở lại.',
+      scanLog: {
+        header: 'Kết quả quét',
+        scanningAnnounce: (total) => `Đang quét ${total} vị trí.`,
+        finishedAnnounce: (scanned, total) => `Quét hoàn tất. Đã đo ${scanned} trong số ${total} vị trí.`,
+        starting: 'Đang bắt đầu…'
+      },
+      emptyState: 'Chưa quét gì cả.',
+      scanErrorPrefix: (error) => `Không thể quét: ${error}`,
+      cleanErrorPrefix: (error) => `Không thể dọn dẹp: ${error}`,
+      cleanupComplete: 'Dọn dẹp hoàn tất.',
+      resultFreed: (formatted) => `Đã giải phóng ${formatted}`,
+      resultLockedSuffix: (count) => ` — đã bỏ qua ${count} tệp bị khóa`,
+      before: {
+        body: 'Prune thực sự đo từng danh mục trên đĩa thay vì ước tính, việc này mất khoảng nửa phút.',
+        scanning: 'Đang quét…',
+        preview: 'Xem trước'
+      },
+      hiddenNote: (count) => `${count} công cụ dọn dẹp bị ẩn vì phần mềm chưa được cài đặt. Cài đặt › Dọn dẹp để hiển thị chúng.`,
+      footer: {
+        totalLabel: 'Tổng dung lượng sẽ giải phóng:',
+        notMeasuredYet: 'chưa đo',
+        unmeasuredSuffix: (count) => ` · ${count} chưa đo`,
+        selectEverything: 'Chọn tất cả',
+        clear: 'Xóa',
+        selectedCount: (count) => `${count} đã chọn`
+      },
+      confirm: {
+        prompt: (count, sizeKnown, formatted) => `Chuyển ${count} mục (${sizeKnown ? formatted : 'chưa đo kích thước'}) vào khu cách ly?`,
+        cancel: 'Hủy',
+        confirmButton: 'Xác nhận',
+        cleaning: 'Đang dọn dẹp…'
+      },
+      stop: 'Dừng',
+      rescan: 'Quét lại',
+      clean: 'Dọn dẹp',
+      tree: {
+        selectCategoryAriaLabel: (category) => `Chọn tất cả trong ${category}`,
+        losesData: 'Mất dữ liệu',
+        needsAdmin: 'cần quyền quản trị',
+        notInstalled: 'chưa cài đặt'
+      },
+      warning: {
+        title: (label) => `Bật ${label}`,
+        remember: (label) => `Nhớ lựa chọn của tôi cho ${label}`,
+        fallbackBody: 'Tùy chọn này xóa dữ liệu mà bạn có thể muốn giữ lại.',
+        cancel: 'Hủy',
+        enableAnyway: 'Vẫn bật'
+      },
+      locked: {
+        message: (count) => `Đã bỏ qua ${count} tệp bị khóa.`,
+        detail: 'Đóng các ứng dụng đang sử dụng chúng rồi dọn dẹp lại.'
       }
     }
   },
@@ -12392,6 +14520,62 @@ export const CATALOG = {
         failed: (count) => `${count} 个未能移动。`,
         failedDetail: '它们可能正被打开或位于另一个驱动器上。'
       }
+    },
+    deepClean: {
+      title: '深度清理',
+      subtitle: 'Prune 知道如何查找的每一个缓存、日志、转储和残留，都是在这台机器上实际测量的，而非估算。没有任何内容会被直接删除——清理所取走的一切都会先进入隔离区，你可以从那里放回原处。',
+      scanLog: {
+        header: '扫描输出',
+        scanningAnnounce: (total) => `正在扫描 ${total} 个位置。`,
+        finishedAnnounce: (scanned, total) => `扫描完成。已测量 ${total} 个位置中的 ${scanned} 个。`,
+        starting: '正在开始…'
+      },
+      emptyState: '尚未扫描任何内容。',
+      scanErrorPrefix: (error) => `无法扫描：${error}`,
+      cleanErrorPrefix: (error) => `无法清理：${error}`,
+      cleanupComplete: '清理完成。',
+      resultFreed: (formatted) => `已释放 ${formatted}`,
+      resultLockedSuffix: (count) => ` — 跳过了 ${count} 个被锁定的文件`,
+      before: {
+        body: 'Prune 会实际测量磁盘上的每个类别，而不是估算，这大约需要半分钟。',
+        scanning: '正在扫描…',
+        preview: '预览'
+      },
+      hiddenNote: (count) => `由于软件未安装，${count} 个清理项已隐藏。设置 › 清理 可显示它们。`,
+      footer: {
+        totalLabel: '可释放的总空间：',
+        notMeasuredYet: '尚未测量',
+        unmeasuredSuffix: (count) => ` · ${count} 项未测量`,
+        selectEverything: '全选',
+        clear: '清除',
+        selectedCount: (count) => `已选 ${count} 项`
+      },
+      confirm: {
+        prompt: (count, sizeKnown, formatted) => `要将 ${count} 个项目（${sizeKnown ? formatted : '大小未测量'}）移至隔离区吗？`,
+        cancel: '取消',
+        confirmButton: '确认',
+        cleaning: '正在清理…'
+      },
+      stop: '停止',
+      rescan: '重新扫描',
+      clean: '清理',
+      tree: {
+        selectCategoryAriaLabel: (category) => `全选 ${category} 下的所有项`,
+        losesData: '会丢失数据',
+        needsAdmin: '需要管理员权限',
+        notInstalled: '未安装'
+      },
+      warning: {
+        title: (label) => `启用 ${label}`,
+        remember: (label) => `记住我对 ${label} 的选择`,
+        fallbackBody: '此选项会删除你可能想保留的数据。',
+        cancel: '取消',
+        enableAnyway: '仍然启用'
+      },
+      locked: {
+        message: (count) => `跳过了 ${count} 个被锁定的文件。`,
+        detail: '关闭正在使用它们的应用后再次清理。'
+      }
     }
   },
 
@@ -12708,6 +14892,62 @@ export const CATALOG = {
         restoreHint: '從隔離區畫面還原它們。',
         failed: (count) => `${count} 個未能移動。`,
         failedDetail: '它們可能正被開啟或位於另一個磁碟上。'
+      }
+    },
+    deepClean: {
+      title: '深度清理',
+      subtitle: 'Prune 知道如何尋找的每一個快取、記錄、傾印檔與殘留，都是在這台機器上實際測量的，而非估算。沒有任何內容會被直接刪除——清理所取走的一切都會先進入隔離區，你可以從那裡放回原處。',
+      scanLog: {
+        header: '掃描輸出',
+        scanningAnnounce: (total) => `正在掃描 ${total} 個位置。`,
+        finishedAnnounce: (scanned, total) => `掃描完成。已測量 ${total} 個位置中的 ${scanned} 個。`,
+        starting: '正在開始…'
+      },
+      emptyState: '尚未掃描任何內容。',
+      scanErrorPrefix: (error) => `無法掃描：${error}`,
+      cleanErrorPrefix: (error) => `無法清理：${error}`,
+      cleanupComplete: '清理完成。',
+      resultFreed: (formatted) => `已釋放 ${formatted}`,
+      resultLockedSuffix: (count) => ` — 跳過了 ${count} 個被鎖定的檔案`,
+      before: {
+        body: 'Prune 會實際測量磁碟上的每個類別，而不是估算，這大約需要半分鐘。',
+        scanning: '正在掃描…',
+        preview: '預覽'
+      },
+      hiddenNote: (count) => `由於軟體未安裝，${count} 個清理項目已隱藏。設定 › 清理 可顯示它們。`,
+      footer: {
+        totalLabel: '可釋放的總空間：',
+        notMeasuredYet: '尚未測量',
+        unmeasuredSuffix: (count) => ` · ${count} 項未測量`,
+        selectEverything: '全選',
+        clear: '清除',
+        selectedCount: (count) => `已選 ${count} 項`
+      },
+      confirm: {
+        prompt: (count, sizeKnown, formatted) => `要將 ${count} 個項目（${sizeKnown ? formatted : '大小未測量'}）移至隔離區嗎？`,
+        cancel: '取消',
+        confirmButton: '確認',
+        cleaning: '正在清理…'
+      },
+      stop: '停止',
+      rescan: '重新掃描',
+      clean: '清理',
+      tree: {
+        selectCategoryAriaLabel: (category) => `全選 ${category} 下的所有項`,
+        losesData: '會遺失資料',
+        needsAdmin: '需要系統管理員權限',
+        notInstalled: '未安裝'
+      },
+      warning: {
+        title: (label) => `啟用 ${label}`,
+        remember: (label) => `記住我對 ${label} 的選擇`,
+        fallbackBody: '此選項會刪除你可能想保留的資料。',
+        cancel: '取消',
+        enableAnyway: '仍然啟用'
+      },
+      locked: {
+        message: (count) => `跳過了 ${count} 個被鎖定的檔案。`,
+        detail: '關閉正在使用它們的應用程式後再次清理。'
       }
     }
   }

@@ -13,6 +13,7 @@ import { needsWarning, rememberedWith } from '../lib/cleanWarning.js';
 import { categoryTickPlan } from '../lib/categoryTickPlan.js';
 import DeepCleanTree from './DeepCleanTree.jsx';
 import CleanWarningDialog from './CleanWarningDialog.jsx';
+import { useLanguage } from '../i18n/LanguageContext.jsx';
 
 const LOG_TONE = {
   size: 'text-[color:var(--accent-primary)]',
@@ -26,6 +27,7 @@ const LOG_TONE = {
  * the bottom -- yanking the view back down while someone is reading
  * further up is worse than not scrolling at all. */
 function ScanLog({ lines, scanning, scanned, total }) {
+  const { t } = useLanguage();
   const boxRef = useRef(null);
   const pinnedRef = useRef(true);
 
@@ -44,7 +46,7 @@ function ScanLog({ lines, scanning, scanned, total }) {
     <div className="glass-panel flex flex-col min-h-0 overflow-hidden">
       <div className="flex items-center justify-between gap-3 px-4 py-3 border-b border-[color:var(--border-subtle)] shrink-0">
         <span className="text-[11px] font-mono uppercase tracking-[0.14em] text-[color:var(--text-muted)]">
-          Scan output
+          {t('deepClean.scanLog.header')}
         </span>
         {total > 0 && (
           <span className="text-[11.5px] font-mono text-[color:var(--text-secondary)]">
@@ -64,8 +66,8 @@ function ScanLog({ lines, scanning, scanned, total }) {
           seventy-four interruptions is not progress, it is noise. */}
       <div className="sr-only" role="status" aria-live="polite">
         {scanning
-          ? `Scanning ${total} locations.`
-          : scanned > 0 ? `Scan finished. ${scanned} of ${total} locations measured.` : ''}
+          ? t('deepClean.scanLog.scanningAnnounce', total)
+          : scanned > 0 ? t('deepClean.scanLog.finishedAnnounce', scanned, total) : ''}
       </div>
 
       {total > 0 && (
@@ -80,7 +82,7 @@ function ScanLog({ lines, scanning, scanned, total }) {
       <div ref={boxRef} onScroll={onScroll} className="flex-1 overflow-y-auto min-h-0 px-4 py-3 space-y-1">
         {lines.length === 0 && (
           <p className="text-[12px] text-[color:var(--text-muted)] font-mono">
-            {scanning ? 'Starting…' : 'Nothing scanned yet.'}
+            {scanning ? t('deepClean.scanLog.starting') : t('deepClean.emptyState')}
           </p>
         )}
         {lines.map((line, i) => (
@@ -105,6 +107,7 @@ function formatBytes(bytes) {
 }
 
 function DeepClean() {
+  const { t } = useLanguage();
   // No auto-scan on mount, per spec -- the tree stays empty until the
   // user explicitly clicks Preview.
   const [selected, setSelected] = useState(new Set());
@@ -301,8 +304,8 @@ function DeepClean() {
       // to be the whole story and the failures were a passive clause
       // appended to it -- "some files were skipped (in use)" -- with no
       // count, no paths, and nothing to act on.
-      toasts.success(`Cleanup complete. Freed ${formatBytes(result.freedBytes)}.`);
-      const locked = lockedFileSummary(result);
+      toasts.success(`${t('deepClean.cleanupComplete')} ${t('deepClean.resultFreed', formatBytes(result.freedBytes))}.`);
+      const locked = lockedFileSummary(result, t('deepClean.locked'));
       if (locked) {
         // A warning, and one that does not expire: the whole point is
         // that these files are still there, and a notice that vanishes
@@ -333,31 +336,35 @@ function DeepClean() {
   return (
     <div className="h-full flex flex-col">
       <div className="flex-1 flex flex-col min-h-0 px-12 pt-10 pb-6 max-w-[1600px] w-full">
-        <h1 className="display-heading text-[30px] leading-none mb-2">Deep Clean</h1>
+        <h1 className="display-heading text-[30px] leading-none mb-2">{t('deepClean.title')}</h1>
         <p className="text-[13px] text-[color:var(--text-secondary)] mb-6 max-w-[62ch]">
-          Every cache, log, dump and leftover Prune knows how to find, measured on this
-          machine rather than estimated. Nothing is deleted outright — everything Clean
-          takes goes to Quarantine first, where you can put it back.
+          {t('deepClean.subtitle')}
         </p>
 
         {scanError && (
           <div className="mb-5 px-3.5 py-3 rounded-xl bg-[color:var(--danger-soft)] border border-[color:var(--danger)]/25">
-            <p className="text-[12.5px] text-[color:var(--danger)] select-text">Couldn't scan: {scanError}</p>
+            <p className="text-[12.5px] text-[color:var(--danger)] select-text">{t('deepClean.scanErrorPrefix', scanError)}</p>
           </div>
         )}
 
         {cleanError && (
           <div className="mb-5 px-3.5 py-3 rounded-xl bg-[color:var(--danger-soft)] border border-[color:var(--danger)]/25">
-            <p className="text-[12.5px] text-[color:var(--danger)] select-text">Couldn't clean: {cleanError}</p>
+            <p className="text-[12.5px] text-[color:var(--danger)] select-text">{t('deepClean.cleanErrorPrefix', cleanError)}</p>
           </div>
         )}
 
         {cleanResult && (
           <div className="flex items-center gap-2.5 mb-5 px-3.5 py-3 rounded-xl bg-[color:var(--success)]/10 border border-[color:var(--success)]/25">
             <div className="text-[12.5px] text-[color:var(--success)]">
-              Freed {formatBytes(cleanResult.freedBytes)}
-              {lockedFileSummary(cleanResult) &&
-                ` — ${lockedFileSummary(cleanResult).message.toLowerCase().replace(/\.$/, '')}`}
+              {t('deepClean.resultFreed', formatBytes(cleanResult.freedBytes))}
+              {/* A dedicated catalog phrase rather than reusing
+                  lockedFileSummary()'s own `message` lower-cased: that
+                  transform is an English-only trick (case has no meaning
+                  in Thai, Chinese or Arabic, and works differently in
+                  Greek/Cyrillic), so each language writes this clause
+                  naturally instead of having a sentence mangled at
+                  runtime. */}
+              {lockedFileSummary(cleanResult) && t('deepClean.resultLockedSuffix', lockedFileSummary(cleanResult).count)}
             </div>
           </div>
         )}
@@ -384,17 +391,16 @@ function DeepClean() {
                 wait that long is indistinguishable from a hang. */}
             {!categories && !scanError && (
               <div className="glass-panel p-10 text-center">
-                <p className="text-[13.5px] text-[color:var(--text-secondary)]">Nothing scanned yet.</p>
+                <p className="text-[13.5px] text-[color:var(--text-secondary)]">{t('deepClean.emptyState')}</p>
                 <p className="text-[12.5px] text-[color:var(--text-muted)] mt-1.5 max-w-[380px] mx-auto">
-                  Prune measures every category on disk for real rather than estimating,
-                  which takes about half a minute.
+                  {t('deepClean.before.body')}
                 </p>
                 <button
                   className="btn-primary px-5 py-2 text-[12.5px] font-medium mt-5 disabled:opacity-50"
                   onClick={() => runPreview()}
                   disabled={scanning}
                 >
-                  {scanning ? 'Scanning…' : 'Preview'}
+                  {scanning ? t('deepClean.before.scanning') : t('deepClean.before.preview')}
                 </button>
               </div>
             )}
@@ -404,8 +410,7 @@ function DeepClean() {
               // affects: someone who turned it on and forgot cannot tell
               // "Prune has no cleaner for this" from "Prune is hiding it".
               <p className="text-[12px] text-[color:var(--text-muted)] mb-2.5">
-                {hiddenCount} cleaner{hiddenCount === 1 ? '' : 's'} hidden because the software isn't
-                installed. Settings › Cleanup to show them.
+                {t('deepClean.hiddenNote', hiddenCount)}
               </p>
             )}
 
@@ -434,12 +439,12 @@ function DeepClean() {
                 listed but unmeasured, nothing has been asked of the disk
                 yet. Same rule as the version column -- say what is not
                 known rather than print a confident zero. */}
-            Total space to free:{' '}
+            {t('deepClean.footer.totalLabel')}{' '}
             <span className="text-[color:var(--text-primary)] font-medium font-mono">
-              {cleanTotal.anyMeasured ? formatBytes(cleanTotal.bytes) : 'not measured yet'}
+              {cleanTotal.anyMeasured ? formatBytes(cleanTotal.bytes) : t('deepClean.footer.notMeasuredYet')}
             </span>
             {cleanTotal.anyMeasured && cleanTotal.unmeasured > 0 && (
-              <span className="text-[color:var(--text-muted)]"> · {cleanTotal.unmeasured} not measured</span>
+              <span className="text-[color:var(--text-muted)]">{t('deepClean.footer.unmeasuredSuffix', cleanTotal.unmeasured)}</span>
             )}
           </div>
           {categories && (
@@ -455,7 +460,7 @@ function DeepClean() {
                 // said to stop asking about.
                 onClick={() => setSelected(selectableIds(categories, settings?.acknowledgedCleanWarnings))}
               >
-                Select everything
+                {t('deepClean.footer.selectEverything')}
               </button>
               <span className="text-[color:var(--border-subtle)]">·</span>
               <button
@@ -463,9 +468,9 @@ function DeepClean() {
                 onClick={() => setSelected(new Set())}
                 disabled={selected.size === 0}
               >
-                Clear
+                {t('deepClean.footer.clear')}
               </button>
-              <span className="text-[color:var(--text-muted)] font-mono">{selected.size} selected</span>
+              <span className="text-[color:var(--text-muted)] font-mono">{t('deepClean.footer.selectedCount', selected.size)}</span>
             </div>
           )}
         </div>
@@ -477,19 +482,19 @@ function DeepClean() {
                   make -- 47 items is a browser cache or most of a game
                   install. And when nothing has been measured it says so
                   rather than omitting the number and letting the reader
-                  assume it is small. */}
+                  assume it is small. The prompt is now one translated
+                  sentence rather than JSX fragments around an inline
+                  <span> -- the same tradeoff every other screen's own
+                  confirm bar already made, since a translated catalog
+                  function can only return a plain string. */}
               <span className="text-[12.5px] text-[color:var(--danger)] mr-1">
-                Move {selected.size} item{selected.size === 1 ? '' : 's'}
-                {cleanTotal.anyMeasured
-                  ? <> (<span className="font-mono">{formatBytes(cleanTotal.bytes)}</span>)</>
-                  : <> (<span className="font-mono">size not measured</span>)</>}
-                {' '}to Quarantine?
+                {t('deepClean.confirm.prompt', selected.size, cleanTotal.anyMeasured, formatBytes(cleanTotal.bytes))}
               </span>
               <button className="btn-ghost px-4 py-2 rounded-lg text-[12.5px] font-medium" onClick={() => setConfirmClean(false)} disabled={cleaning}>
-                Cancel
+                {t('deepClean.confirm.cancel')}
               </button>
               <button className="btn-primary px-5 py-2 text-[12.5px] font-medium disabled:opacity-50" onClick={handleClean} disabled={cleaning}>
-                {cleaning ? 'Cleaning…' : 'Confirm'}
+                {cleaning ? t('deepClean.confirm.cleaning') : t('deepClean.confirm.confirmButton')}
               </button>
             </>
           ) : (
@@ -503,14 +508,14 @@ function DeepClean() {
                   onClick={stopPreview}
                 >
                   <span className="w-2 h-2 rounded-[2px] bg-[color:var(--danger)]" />
-                  Stop
+                  {t('deepClean.stop')}
                 </button>
               ) : (
                 <button
                   className="btn-ghost px-4 py-2 rounded-lg text-[12.5px] font-medium"
                   onClick={() => runPreview()}
                 >
-                  {hasScanned ? 'Rescan' : 'Preview'}
+                  {hasScanned ? t('deepClean.rescan') : t('deepClean.before.preview')}
                 </button>
               )}
               <button
@@ -518,7 +523,7 @@ function DeepClean() {
                 onClick={() => setConfirmClean(true)}
                 disabled={!categories || selected.size === 0}
               >
-                Clean
+                {t('deepClean.clean')}
               </button>
             </>
           )}

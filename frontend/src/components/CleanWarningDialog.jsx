@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import ModalOverlay from './ModalOverlay.jsx';
 import { warningFor } from '../lib/cleanWarning.js';
+import { useLanguage } from '../i18n/LanguageContext.jsx';
 
 /** The question in front of a Deep Clean rule that loses something.
  *
@@ -22,11 +23,12 @@ import { warningFor } from '../lib/cleanWarning.js';
  * checkbox that opened it.
  */
 export default function CleanWarningDialog({ item, onCancel, onConfirm }) {
+  const { t } = useLanguage();
   // Unticked each time the dialog opens rather than remembered across
   // rules: it names one rule, and carrying a tick over from the last one
   // would silence a warning nobody read.
   const [remember, setRemember] = useState(false);
-  const { title, remember: rememberLabel, body } = warningFor(item);
+  const { title, remember: rememberLabel, body } = warningFor(item, t('deepClean.warning'));
 
   return (
     <ModalOverlay label={title} onClose={onCancel}>
@@ -50,13 +52,13 @@ export default function CleanWarningDialog({ item, onCancel, onConfirm }) {
             className="btn-ghost px-4 py-2 rounded-lg text-[12.5px] font-medium"
             onClick={onCancel}
           >
-            Cancel
+            {t('deepClean.warning.cancel')}
           </button>
           <button
             className="btn-danger px-4 py-2 rounded-lg text-[12.5px] font-medium"
             onClick={() => onConfirm(remember)}
           >
-            Enable anyway
+            {t('deepClean.warning.enableAnyway')}
           </button>
         </div>
       </div>
