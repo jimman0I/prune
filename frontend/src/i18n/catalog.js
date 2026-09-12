@@ -302,6 +302,50 @@ export const CATALOG = {
       groupEnabledOf: (enabledCount, total) => `${enabledCount} of ${total} enabled`,
       groupAdminNote: 'Changing these asks for administrator',
       footerNote: "Switching an entry off records the decision in StartupApproved, the same place Windows' own Startup Apps settings and Task Manager read and write. Nothing is deleted: the Run value or the shortcut stays where it is, so the change is reversible from here or from either of those."
+    },
+    duplicates: {
+      title: 'Duplicate files',
+      subtitle: "Files that are byte-identical, not merely the same size. Point it at a folder you actually keep things in — reading a whole drive to compare it against itself takes far longer than it is worth, and finds mostly the machine's own copies of its own files.",
+      folderInputAriaLabel: 'Folder to search for duplicates',
+      stop: 'Stop',
+      findButton: 'Find duplicates',
+      compareNote: 'Compares sizes first, then a sample, then the whole file — so most files are never read.',
+      reading: (folder) => `Reading ${folder}`,
+      readingNote: 'Sizes first, then a 64 KB sample of anything that shares one, then the full contents of whatever still matches.',
+      empty: {
+        heading: 'No duplicate files here.',
+        scanned: (count) => `${count} files compared.`,
+        truncatedSuffix: ' The scan was cut short, so this is not the whole folder.'
+      },
+      summarySets: (count) => `${count} ${count === 1 ? 'set' : 'sets'}`,
+      recoverable: (formatted) => `${formatted} recoverable`,
+      keepOldest: 'Keep oldest',
+      keepNewest: 'Keep newest',
+      clear: 'Clear',
+      truncatedWarning: 'The scan was cut short, so there may be more sets than these.',
+      group: {
+        identicalCopies: (count, size) => `${count} identical copies · ${size} each`,
+        allTickedWarning: 'Every copy in this set is ticked — untick one to keep it.'
+      },
+      footer: {
+        selected: (count, formatted) => `${count} selected · ${formatted}`,
+        moving: 'Moving…',
+        wouldLose: (count) => `${count} ${count === 1 ? 'set' : 'sets'} would lose every copy`,
+        moveButton: 'Move selected to quarantine'
+      },
+      modal: {
+        label: 'Move duplicates to quarantine',
+        heading: (count) => `Move ${count} copies to quarantine?`,
+        body: (formatted) => `${formatted} recovered. Every set keeps at least one copy, and nothing is deleted — restore any of it from the Quarantine screen.`,
+        cancel: 'Cancel',
+        confirmButton: 'Move to quarantine'
+      },
+      toasts: {
+        moved: (count) => `Moved ${count} ${count === 1 ? 'copy' : 'copies'} to quarantine.`,
+        restoreHint: 'Restore them from the Quarantine screen.',
+        failed: (count) => `${count} could not be moved.`,
+        failedDetail: 'They may be open or on another drive.'
+      }
     }
   },
 
@@ -575,6 +619,50 @@ export const CATALOG = {
       groupEnabledOf: (enabledCount, total) => `${enabledCount} van ${total} geaktiveer`,
       groupAdminNote: 'Om dit te verander vra administrateurregte',
       footerNote: "Om \'n inskrywing af te skakel, teken die besluit in StartupApproved aan, dieselfde plek waar Windows se eie Opstartprogramme-instellings en Taakbestuurder lees en skryf. Niks word verwyder nie: die Run-waarde of kortpad bly presies waar dit is, sodat die verandering van hier of enige van daardie plekke omkeerbaar is."
+    },
+    duplicates: {
+      title: 'Duplikaatlêers',
+      subtitle: 'Lêers wat greep-vir-greep identies is, nie net dieselfde grootte nie. Wys dit na \'n vouer waar jy werklik dinge in hou — om \'n hele skyf te lees om dit teen homself te vergelyk, neem baie langer as wat dit werd is, en vind meestal die masjien se eie kopieë van sy eie lêers.',
+      folderInputAriaLabel: 'Vouer om na duplikate te soek',
+      stop: 'Stop',
+      findButton: 'Vind duplikate',
+      compareNote: 'Vergelyk eers groottes, dan \'n monster, dan die hele lêer — sodat die meeste lêers nooit gelees word nie.',
+      reading: (folder) => `Lees ${folder}`,
+      readingNote: 'Eers groottes, dan \'n 64 KB-monster van enigiets wat een deel, dan die volle inhoud van enigiets wat steeds ooreenstem.',
+      empty: {
+        heading: 'Geen duplikaatlêers hier nie.',
+        scanned: (count) => `${count} lêers vergelyk.`,
+        truncatedSuffix: ' Die skandering is vroeg gestop, so dit is nie die hele vouer nie.'
+      },
+      summarySets: (count) => `${count} ${count === 1 ? 'stel' : 'stelle'}`,
+      recoverable: (formatted) => `${formatted} herwinbaar`,
+      keepOldest: 'Hou oudste',
+      keepNewest: 'Hou nuutste',
+      clear: 'Maak skoon',
+      truncatedWarning: 'Die skandering is vroeg gestop, so daar mag meer stelle wees as hierdie.',
+      group: {
+        identicalCopies: (count, size) => `${count} identiese kopieë · ${size} elk`,
+        allTickedWarning: 'Elke kopie in hierdie stel is gemerk — ontmerk een om dit te behou.'
+      },
+      footer: {
+        selected: (count, formatted) => `${count} gekies · ${formatted}`,
+        moving: 'Skuif tans…',
+        wouldLose: (count) => `${count} ${count === 1 ? 'stel' : 'stelle'} sal elke kopie verloor`,
+        moveButton: 'Skuif gekiesdes na karantyn'
+      },
+      modal: {
+        label: 'Skuif duplikate na karantyn',
+        heading: (count) => `Skuif ${count} kopieë na karantyn?`,
+        body: (formatted) => `${formatted} herwin. Elke stel behou ten minste een kopie, en niks word verwyder nie — herstel enigiets daarvan van die Karantyn-skerm af.`,
+        cancel: 'Kanselleer',
+        confirmButton: 'Skuif na karantyn'
+      },
+      toasts: {
+        moved: (count) => `${count} ${count === 1 ? 'kopie' : 'kopieë'} na karantyn geskuif.`,
+        restoreHint: 'Herstel hulle vanaf die Karantyn-skerm.',
+        failed: (count) => `${count} kon nie geskuif word nie.`,
+        failedDetail: 'Hulle is dalk oop of op \'n ander skyf.'
+      }
     }
   },
 
@@ -848,6 +936,50 @@ export const CATALOG = {
       groupEnabledOf: (enabledCount, total) => `${enabledCount} من ${total} مفعّل`,
       groupAdminNote: 'تغيير هذه يطلب صلاحيات المسؤول',
       footerNote: 'إيقاف تشغيل إدخال ما يسجل القرار في StartupApproved، وهو نفس المكان الذي تقرأه وتكتب فيه إعدادات تطبيقات بدء التشغيل الخاصة بـ Windows ومدير المهام. لا يُحذف شيء: تبقى قيمة Run أو الاختصار كما هي، لذا فإن التغيير قابل للتراجع من هنا أو من أي منهما.'
+    },
+    duplicates: {
+      title: 'الملفات المكررة',
+      subtitle: 'ملفات متطابقة بايتًا بايت، وليس مجرد نفس الحجم. وجّهها إلى مجلد تحتفظ فيه فعليًا بأشياء — فقراءة قرص كامل لمقارنته بنفسه تستغرق وقتًا أطول بكثير مما يستحق، وتجد في الغالب نسخ الجهاز الخاصة من ملفاته الخاصة.',
+      folderInputAriaLabel: 'المجلد للبحث عن التكرارات فيه',
+      stop: 'إيقاف',
+      findButton: 'البحث عن التكرارات',
+      compareNote: 'تتم مقارنة الأحجام أولاً، ثم عينة، ثم الملف بأكمله — لذا لا تُقرأ معظم الملفات إطلاقًا.',
+      reading: (folder) => `جارٍ قراءة ${folder}`,
+      readingNote: 'الأحجام أولاً، ثم عينة 64 كيلوبايت من أي شيء يشترك في حجم، ثم المحتوى الكامل لما لا يزال متطابقًا.',
+      empty: {
+        heading: 'لا توجد ملفات مكررة هنا.',
+        scanned: (count) => `تمت مقارنة ${count} ملف.`,
+        truncatedSuffix: ' تم اختصار الفحص، لذا هذا ليس المجلد بأكمله.'
+      },
+      summarySets: (count) => `${count} مجموعة${count === 1 ? '' : 'ات'}`,
+      recoverable: (formatted) => `${formatted} قابل للاسترداد`,
+      keepOldest: 'الاحتفاظ بالأقدم',
+      keepNewest: 'الاحتفاظ بالأحدث',
+      clear: 'مسح',
+      truncatedWarning: 'تم اختصار الفحص، لذا قد تكون هناك مجموعات أكثر من هذه.',
+      group: {
+        identicalCopies: (count, size) => `${count} نسخة متطابقة · ${size} لكل منها`,
+        allTickedWarning: 'كل نسخة في هذه المجموعة محددة — قم بإلغاء تحديد واحدة للاحتفاظ بها.'
+      },
+      footer: {
+        selected: (count, formatted) => `${count} محدد · ${formatted}`,
+        moving: 'جارٍ النقل…',
+        wouldLose: (count) => `${count} مجموعة${count === 1 ? '' : 'ات'} ستفقد كل نسخة`,
+        moveButton: 'نقل المحدد إلى الحجر الصحي'
+      },
+      modal: {
+        label: 'نقل التكرارات إلى الحجر الصحي',
+        heading: (count) => `نقل ${count} نسخة إلى الحجر الصحي؟`,
+        body: (formatted) => `تم استرداد ${formatted}. تحتفظ كل مجموعة بنسخة واحدة على الأقل، ولا يُحذف شيء — استعد أيًا منها من شاشة الحجر الصحي.`,
+        cancel: 'إلغاء',
+        confirmButton: 'نقل إلى الحجر الصحي'
+      },
+      toasts: {
+        moved: (count) => `تم نقل ${count} نسخة إلى الحجر الصحي.`,
+        restoreHint: 'استعدها من شاشة الحجر الصحي.',
+        failed: (count) => `تعذر نقل ${count}.`,
+        failedDetail: 'قد تكون مفتوحة أو على قرص آخر.'
+      }
     }
   },
 
@@ -1121,6 +1253,50 @@ export const CATALOG = {
       groupEnabledOf: (enabledCount, total) => `${enabledCount} de ${total} activades`,
       groupAdminNote: 'Canviar-les demana permisos d\'administrador',
       footerNote: "Desactivar una entrada enregistra la decisió a StartupApproved, el mateix lloc on la configuració d'Aplicacions d'inici i el Gestor de tasques del Windows llegeixen i escriuen. No s'elimina res: el valor Run o la drecera es queda exactament on és, així que el canvi és reversible des d'aquí o des de qualsevol d'aquests."
+    },
+    duplicates: {
+      title: 'Fitxers duplicats',
+      subtitle: "Fitxers idèntics byte a byte, no només de la mateixa mida. Apunta-ho a una carpeta on realment guardis coses — llegir tot un disc per comparar-lo amb ell mateix triga molt més del que val la pena, i troba sobretot còpies pròpies de la màquina dels seus propis fitxers.",
+      folderInputAriaLabel: 'Carpeta on cercar duplicats',
+      stop: 'Atura',
+      findButton: 'Cerca duplicats',
+      compareNote: 'Compara mides primer, després una mostra, després el fitxer sencer — així la majoria de fitxers mai es llegeixen.',
+      reading: (folder) => `Llegint ${folder}`,
+      readingNote: "Mides primer, després una mostra de 64 KB de qualsevol cosa que en comparteixi una, després el contingut complet del que encara coincideixi.",
+      empty: {
+        heading: 'No hi ha fitxers duplicats aquí.',
+        scanned: (count) => `${count} fitxers comparats.`,
+        truncatedSuffix: " L'escaneig es va tallar abans d'hora, així que això no és la carpeta sencera."
+      },
+      summarySets: (count) => `${count} conjunt${count === 1 ? '' : 's'}`,
+      recoverable: (formatted) => `${formatted} recuperables`,
+      keepOldest: 'Mantén el més antic',
+      keepNewest: 'Mantén el més recent',
+      clear: 'Neteja',
+      truncatedWarning: "L'escaneig es va tallar abans d'hora, així que hi pot haver més conjunts que aquests.",
+      group: {
+        identicalCopies: (count, size) => `${count} còpies idèntiques · ${size} cadascuna`,
+        allTickedWarning: 'Totes les còpies d\'aquest conjunt estan marcades — desmarca\'n una per conservar-la.'
+      },
+      footer: {
+        selected: (count, formatted) => `${count} seleccionats · ${formatted}`,
+        moving: 'Movent…',
+        wouldLose: (count) => `${count} conjunt${count === 1 ? '' : 's'} perdria${count === 1 ? '' : 'n'} totes les còpies`,
+        moveButton: 'Mou els seleccionats a la quarantena'
+      },
+      modal: {
+        label: 'Mou els duplicats a la quarantena',
+        heading: (count) => `Vols moure ${count} còpies a la quarantena?`,
+        body: (formatted) => `${formatted} recuperats. Cada conjunt conserva com a mínim una còpia, i no s'elimina res — restaura'n qualsevol des de la pantalla de Quarantena.`,
+        cancel: 'Cancel·la',
+        confirmButton: 'Mou a la quarantena'
+      },
+      toasts: {
+        moved: (count) => `${count} còpi${count === 1 ? 'a moguda' : 'es mogudes'} a la quarantena.`,
+        restoreHint: 'Restaura-les des de la pantalla de Quarantena.',
+        failed: (count) => `${count} no s'han pogut moure.`,
+        failedDetail: "Poden estar obertes o en un altre disc."
+      }
     }
   },
 
@@ -1394,6 +1570,50 @@ export const CATALOG = {
       groupEnabledOf: (enabledCount, total) => `${enabledCount} z ${total} povoleno`,
       groupAdminNote: 'Změna vyžaduje oprávnění správce',
       footerNote: 'Vypnutí položky zaznamená rozhodnutí do StartupApproved, stejného místa, které čte a zapisuje vlastní nastavení Po spuštění systému Windows a Správce úloh. Nic se neodstraní: hodnota Run nebo zástupce zůstává přesně tam, kde je, takže změnu lze vrátit odsud nebo z kteréhokoli z nich.'
+    },
+    duplicates: {
+      title: 'Duplicitní soubory',
+      subtitle: 'Soubory, které jsou bajt po bajtu identické, nejen stejně velké. Namiřte to na složku, kam skutečně ukládáte věci — čtení celého disku kvůli porovnání se sebou samým trvá mnohem déle, než stojí za to, a najde většinou vlastní kopie souborů počítače.',
+      folderInputAriaLabel: 'Složka pro hledání duplicit',
+      stop: 'Zastavit',
+      findButton: 'Najít duplicity',
+      compareNote: 'Porovnává nejprve velikosti, pak vzorek, pak celý soubor — takže většina souborů se nikdy nečte.',
+      reading: (folder) => `Čtení ${folder}`,
+      readingNote: 'Nejprve velikosti, pak 64KB vzorek všeho, co sdílí jednu, pak celý obsah toho, co stále odpovídá.',
+      empty: {
+        heading: 'Zde nejsou žádné duplicitní soubory.',
+        scanned: (count) => `${count} souborů porovnáno.`,
+        truncatedSuffix: ' Skenování bylo předčasně ukončeno, takže to není celá složka.'
+      },
+      summarySets: (count) => `${count} ${count === 1 ? 'sada' : count < 5 ? 'sady' : 'sad'}`,
+      recoverable: (formatted) => `${formatted} lze uvolnit`,
+      keepOldest: 'Ponechat nejstarší',
+      keepNewest: 'Ponechat nejnovější',
+      clear: 'Vymazat',
+      truncatedWarning: 'Skenování bylo předčasně ukončeno, takže sad může být více než těchto.',
+      group: {
+        identicalCopies: (count, size) => `${count} identických kopií · ${size} každá`,
+        allTickedWarning: 'Každá kopie v této sadě je zaškrtnutá — odškrtněte jednu, abyste ji ponechali.'
+      },
+      footer: {
+        selected: (count, formatted) => `${count} vybráno · ${formatted}`,
+        moving: 'Přesouvání…',
+        wouldLose: (count) => `${count} ${count === 1 ? 'sada' : 'sad'} by přišlo o všechny kopie`,
+        moveButton: 'Přesunout vybrané do karantény'
+      },
+      modal: {
+        label: 'Přesunout duplicity do karantény',
+        heading: (count) => `Přesunout ${count} kopií do karantény?`,
+        body: (formatted) => `${formatted} obnoveno. Každá sada si ponechá alespoň jednu kopii a nic se nesmaže — cokoli z toho můžete obnovit z obrazovky Karantény.`,
+        cancel: 'Zrušit',
+        confirmButton: 'Přesunout do karantény'
+      },
+      toasts: {
+        moved: (count) => `Přesunuto ${count} ${count === 1 ? 'kopie' : 'kopií'} do karantény.`,
+        restoreHint: 'Obnovte je z obrazovky Karanténa.',
+        failed: (count) => `${count} se nepodařilo přesunout.`,
+        failedDetail: 'Mohou být otevřené nebo na jiném disku.'
+      }
     }
   },
 
@@ -1667,6 +1887,50 @@ export const CATALOG = {
       groupEnabledOf: (enabledCount, total) => `${enabledCount} o ${total} wedi'u galluogi`,
       groupAdminNote: 'Mae newid y rhain yn gofyn am hawliau gweinyddwr',
       footerNote: "Mae diffodd cofnod yn cofnodi'r penderfyniad yn StartupApproved, yr un man y mae gosodiadau Apiau Cychwyn Windows a Rheolwr Tasgau eu hunain yn ei ddarllen ac yn ysgrifennu ato. Ni chaiff dim ei ddileu: mae'r gwerth Run neu'r llwybr byr yn aros yn union lle mae, felly gellir dadwneud y newid o'r fan hon neu o'r un o'r rheiny."
+    },
+    duplicates: {
+      title: 'Ffeiliau dyblyg',
+      subtitle: "Ffeiliau sy'n union yr un fath, beit am beit, nid yr un maint yn unig. Anelwch hyn at ffolder rydych chi wir yn cadw pethau ynddi — mae darllen disg gyfan i'w gymharu ag ef ei hun yn cymryd llawer mwy o amser nag y mae'n werth, ac mae'n dod o hyd i gopïau'r peiriant ei hun o'i ffeiliau ei hun gan mwyaf.",
+      folderInputAriaLabel: 'Ffolder i chwilio am ddyblygiadau',
+      stop: 'Stopio',
+      findButton: 'Dod o hyd i ddyblygiadau',
+      compareNote: "Yn cymharu meintiau'n gyntaf, yna sampl, yna'r ffeil gyfan — felly ni ddarllenir y rhan fwyaf o ffeiliau byth.",
+      reading: (folder) => `Darllen ${folder}`,
+      readingNote: "Meintiau'n gyntaf, yna sampl 64 KB o unrhyw beth sy'n rhannu un, yna cynnwys llawn beth bynnag sy'n dal i gyfateb.",
+      empty: {
+        heading: "Dim ffeiliau dyblyg yma.",
+        scanned: (count) => `${count} ffeil wedi'u cymharu.`,
+        truncatedSuffix: " Cafodd y sgan ei dorri'n fyr, felly nid dyma'r ffolder gyfan."
+      },
+      summarySets: (count) => `${count} set${count === 1 ? '' : 'iau'}`,
+      recoverable: (formatted) => `${formatted} adenilladwy`,
+      keepOldest: 'Cadw\'r hynaf',
+      keepNewest: 'Cadw\'r diweddaraf',
+      clear: 'Clirio',
+      truncatedWarning: "Cafodd y sgan ei dorri'n fyr, felly efallai bod mwy o setiau na'r rhain.",
+      group: {
+        identicalCopies: (count, size) => `${count} copi union yr un fath · ${size} yr un`,
+        allTickedWarning: "Mae pob copi yn y set hon wedi'i dicio — dad-diciwch un i'w gadw."
+      },
+      footer: {
+        selected: (count, formatted) => `${count} wedi'u dewis · ${formatted}`,
+        moving: 'Wrthi\'n symud…',
+        wouldLose: (count) => `Byddai ${count} set${count === 1 ? '' : 'iau'} yn colli pob copi`,
+        moveButton: 'Symud y dewisiedig i gwarantin'
+      },
+      modal: {
+        label: 'Symud dyblygiadau i gwarantin',
+        heading: (count) => `Symud ${count} copi i gwarantin?`,
+        body: (formatted) => `${formatted} wedi'u hadfer. Mae pob set yn cadw o leiaf un copi, ac ni chaiff dim ei ddileu — adferwch unrhyw un ohonynt o'r sgrin Gwarantin.`,
+        cancel: 'Diddymu',
+        confirmButton: 'Symud i gwarantin'
+      },
+      toasts: {
+        moved: (count) => `Wedi symud ${count} copi i gwarantin.`,
+        restoreHint: "Adferwch nhw o'r sgrin Gwarantin.",
+        failed: (count) => `Methwyd symud ${count}.`,
+        failedDetail: "Efallai eu bod ar agor neu ar ddisg arall."
+      }
     }
   },
 
@@ -1940,6 +2204,50 @@ export const CATALOG = {
       groupEnabledOf: (enabledCount, total) => `${enabledCount} af ${total} aktiveret`,
       groupAdminNote: 'Ændring af disse kræver administratorrettigheder',
       footerNote: 'At slå en post fra registrerer beslutningen i StartupApproved, det samme sted Windows' + " egne Startprogrammer-indstillinger og Jobliste læser og skriver til. Intet slettes: Run-værdien eller genvejen forbliver, hvor den er, så ændringen kan fortrydes herfra eller fra en af de to andre steder."
+    },
+    duplicates: {
+      title: 'Duplikerede filer',
+      subtitle: 'Filer der er byte-for-byte identiske, ikke bare samme størrelse. Peg det mod en mappe, du faktisk opbevarer ting i — at læse et helt drev for at sammenligne det med sig selv tager langt længere tid, end det er værd, og finder for det meste maskinens egne kopier af sine egne filer.',
+      folderInputAriaLabel: 'Mappe til søgning efter duplikater',
+      stop: 'Stop',
+      findButton: 'Find duplikater',
+      compareNote: 'Sammenligner størrelser først, derefter en stikprøve, derefter hele filen — så de fleste filer læses aldrig.',
+      reading: (folder) => `Læser ${folder}`,
+      readingNote: 'Størrelser først, derefter en 64 KB-stikprøve af alt, der deler en, derefter hele indholdet af det, der stadig matcher.',
+      empty: {
+        heading: 'Ingen duplikerede filer her.',
+        scanned: (count) => `${count} filer sammenlignet.`,
+        truncatedSuffix: ' Scanningen blev afbrudt, så dette er ikke hele mappen.'
+      },
+      summarySets: (count) => `${count} sæt`,
+      recoverable: (formatted) => `${formatted} genvindelig`,
+      keepOldest: 'Behold ældste',
+      keepNewest: 'Behold nyeste',
+      clear: 'Ryd',
+      truncatedWarning: 'Scanningen blev afbrudt, så der kan være flere sæt end disse.',
+      group: {
+        identicalCopies: (count, size) => `${count} identiske kopier · ${size} hver`,
+        allTickedWarning: 'Hver kopi i dette sæt er markeret — fjern markeringen af en for at beholde den.'
+      },
+      footer: {
+        selected: (count, formatted) => `${count} valgt · ${formatted}`,
+        moving: 'Flytter…',
+        wouldLose: (count) => `${count} sæt ville miste alle kopier`,
+        moveButton: 'Flyt valgte til karantæne'
+      },
+      modal: {
+        label: 'Flyt duplikater til karantæne',
+        heading: (count) => `Flyt ${count} kopier til karantæne?`,
+        body: (formatted) => `${formatted} gendannet. Hvert sæt beholder mindst én kopi, og intet slettes — gendan noget af det fra Karantæne-skærmen.`,
+        cancel: 'Annuller',
+        confirmButton: 'Flyt til karantæne'
+      },
+      toasts: {
+        moved: (count) => `Flyttede ${count} ${count === 1 ? 'kopi' : 'kopier'} til karantæne.`,
+        restoreHint: 'Gendan dem fra Karantæne-skærmen.',
+        failed: (count) => `${count} kunne ikke flyttes.`,
+        failedDetail: 'De er muligvis åbne eller på et andet drev.'
+      }
     }
   },
 
@@ -2213,6 +2521,50 @@ export const CATALOG = {
       groupEnabledOf: (enabledCount, total) => `${enabledCount} von ${total} aktiviert`,
       groupAdminNote: 'Das Ändern erfordert Administratorrechte',
       footerNote: "Das Deaktivieren eines Eintrags speichert die Entscheidung in StartupApproved, demselben Ort, den Windows' eigene Autostart-Einstellungen und der Task-Manager lesen und schreiben. Nichts wird gelöscht: Der Run-Wert oder die Verknüpfung bleibt genau dort, wo er ist, sodass die Änderung von hier oder von beiden anderen Stellen rückgängig gemacht werden kann."
+    },
+    duplicates: {
+      title: 'Doppelte Dateien',
+      subtitle: 'Dateien, die Byte für Byte identisch sind, nicht nur gleich groß. Richte es auf einen Ordner, in dem du tatsächlich Dinge aufbewahrst — ein ganzes Laufwerk zu lesen, um es mit sich selbst zu vergleichen, dauert weit länger, als es wert ist, und findet meist die eigenen Kopien des Rechners von seinen eigenen Dateien.',
+      folderInputAriaLabel: 'Ordner, in dem nach Duplikaten gesucht werden soll',
+      stop: 'Stopp',
+      findButton: 'Duplikate finden',
+      compareNote: 'Vergleicht zuerst Größen, dann eine Stichprobe, dann die ganze Datei — die meisten Dateien werden also nie gelesen.',
+      reading: (folder) => `${folder} wird gelesen`,
+      readingNote: 'Zuerst Größen, dann eine 64-KB-Stichprobe von allem, was eine teilt, dann der vollständige Inhalt von allem, was noch übereinstimmt.',
+      empty: {
+        heading: 'Keine doppelten Dateien hier.',
+        scanned: (count) => `${count} Dateien verglichen.`,
+        truncatedSuffix: ' Der Scan wurde vorzeitig abgebrochen, das ist also nicht der ganze Ordner.'
+      },
+      summarySets: (count) => `${count} ${count === 1 ? 'Gruppe' : 'Gruppen'}`,
+      recoverable: (formatted) => `${formatted} freigebbar`,
+      keepOldest: 'Älteste behalten',
+      keepNewest: 'Neueste behalten',
+      clear: 'Leeren',
+      truncatedWarning: 'Der Scan wurde vorzeitig abgebrochen, es könnte also mehr Gruppen geben als diese.',
+      group: {
+        identicalCopies: (count, size) => `${count} identische Kopien · je ${size}`,
+        allTickedWarning: 'Jede Kopie in dieser Gruppe ist markiert — eine abwählen, um sie zu behalten.'
+      },
+      footer: {
+        selected: (count, formatted) => `${count} ausgewählt · ${formatted}`,
+        moving: 'Wird verschoben…',
+        wouldLose: (count) => `${count} ${count === 1 ? 'Gruppe' : 'Gruppen'} würde${count === 1 ? '' : 'n'} jede Kopie verlieren`,
+        moveButton: 'Auswahl in Quarantäne verschieben'
+      },
+      modal: {
+        label: 'Duplikate in Quarantäne verschieben',
+        heading: (count) => `${count} Kopien in Quarantäne verschieben?`,
+        body: (formatted) => `${formatted} freigegeben. Jede Gruppe behält mindestens eine Kopie, und nichts wird gelöscht — stelle davon jederzeit über den Bildschirm Quarantäne wieder her.`,
+        cancel: 'Abbrechen',
+        confirmButton: 'In Quarantäne verschieben'
+      },
+      toasts: {
+        moved: (count) => `${count} ${count === 1 ? 'Kopie' : 'Kopien'} in Quarantäne verschoben.`,
+        restoreHint: 'Stelle sie über den Bildschirm Quarantäne wieder her.',
+        failed: (count) => `${count} konnten nicht verschoben werden.`,
+        failedDetail: 'Sie sind möglicherweise geöffnet oder auf einem anderen Laufwerk.'
+      }
     }
   },
 
@@ -2486,6 +2838,50 @@ export const CATALOG = {
       groupEnabledOf: (enabledCount, total) => `${enabledCount} από ${total} ενεργοποιημένες`,
       groupAdminNote: 'Η αλλαγή τους ζητά δικαιώματα διαχειριστή',
       footerNote: 'Η απενεργοποίηση μιας καταχώρισης καταγράφει την απόφαση στο StartupApproved, το ίδιο σημείο που διαβάζουν και γράφουν οι δικές τους ρυθμίσεις Εφαρμογών Εκκίνησης των Windows και η Διαχείριση εργασιών. Τίποτα δεν διαγράφεται: η τιμή Run ή η συντόμευση παραμένει ακριβώς εκεί που είναι, οπότε η αλλαγή είναι αναστρέψιμη από εδώ ή από οποιοδήποτε από τα δύο.'
+    },
+    duplicates: {
+      title: 'Διπλότυπα αρχεία',
+      subtitle: "Αρχεία που είναι πανομοιότυπα byte προς byte, όχι απλώς ίδιου μεγέθους. Στοχεύστε το σε έναν φάκελο όπου πραγματικά κρατάτε πράγματα — η ανάγνωση ενός ολόκληρου δίσκου για να τον συγκρίνετε με τον εαυτό του διαρκεί πολύ περισσότερο απ' όσο αξίζει, και βρίσκει κυρίως τα δικά του αντίγραφα του μηχανήματος από τα δικά του αρχεία.",
+      folderInputAriaLabel: 'Φάκελος για αναζήτηση διπλότυπων',
+      stop: 'Διακοπή',
+      findButton: 'Εύρεση διπλότυπων',
+      compareNote: 'Συγκρίνει πρώτα τα μεγέθη, μετά ένα δείγμα, μετά ολόκληρο το αρχείο — έτσι τα περισσότερα αρχεία δεν διαβάζονται ποτέ.',
+      reading: (folder) => `Ανάγνωση ${folder}`,
+      readingNote: 'Πρώτα τα μεγέθη, μετά ένα δείγμα 64 KB από οτιδήποτε μοιράζεται ένα, μετά το πλήρες περιεχόμενο ό,τι εξακολουθεί να ταιριάζει.',
+      empty: {
+        heading: 'Δεν υπάρχουν διπλότυπα αρχεία εδώ.',
+        scanned: (count) => `${count} αρχεία συγκρίθηκαν.`,
+        truncatedSuffix: ' Η σάρωση διακόπηκε νωρίς, οπότε αυτός δεν είναι ολόκληρος ο φάκελος.'
+      },
+      summarySets: (count) => `${count} ${count === 1 ? 'σετ' : 'σετ'}`,
+      recoverable: (formatted) => `${formatted} ανακτήσιμα`,
+      keepOldest: 'Διατήρηση παλαιότερου',
+      keepNewest: 'Διατήρηση νεότερου',
+      clear: 'Απαλοιφή',
+      truncatedWarning: 'Η σάρωση διακόπηκε νωρίς, οπότε μπορεί να υπάρχουν περισσότερα σετ από αυτά.',
+      group: {
+        identicalCopies: (count, size) => `${count} πανομοιότυπα αντίγραφα · ${size} το καθένα`,
+        allTickedWarning: 'Κάθε αντίγραφο σε αυτό το σετ είναι επιλεγμένο — αποεπιλέξτε ένα για να το κρατήσετε.'
+      },
+      footer: {
+        selected: (count, formatted) => `${count} επιλέχθηκαν · ${formatted}`,
+        moving: 'Μετακίνηση…',
+        wouldLose: (count) => `${count} ${count === 1 ? 'σετ' : 'σετ'} θα έχαναν κάθε αντίγραφο`,
+        moveButton: 'Μετακίνηση επιλεγμένων σε καραντίνα'
+      },
+      modal: {
+        label: 'Μετακίνηση διπλότυπων σε καραντίνα',
+        heading: (count) => `Μετακίνηση ${count} αντιγράφων σε καραντίνα;`,
+        body: (formatted) => `${formatted} ανακτήθηκαν. Κάθε σετ κρατά τουλάχιστον ένα αντίγραφο, και τίποτα δεν διαγράφεται — επαναφέρετε οτιδήποτε από αυτά από την οθόνη Καραντίνας.`,
+        cancel: 'Ακύρωση',
+        confirmButton: 'Μετακίνηση σε καραντίνα'
+      },
+      toasts: {
+        moved: (count) => `Μετακινήθηκ${count === 1 ? 'ε' : 'αν'} ${count} αντίγραφ${count === 1 ? 'ο' : 'α'} σε καραντίνα.`,
+        restoreHint: 'Επαναφέρετέ τα από την οθόνη Καραντίνας.',
+        failed: (count) => `${count} δεν μπόρεσαν να μετακινηθούν.`,
+        failedDetail: 'Ενδέχεται να είναι ανοιχτά ή σε άλλο δίσκο.'
+      }
     }
   },
 
@@ -2759,6 +3155,50 @@ export const CATALOG = {
       groupEnabledOf: (enabledCount, total) => `${enabledCount} de ${total} habilitadas`,
       groupAdminNote: 'Cambiarlas solicita permisos de administrador',
       footerNote: "Deshabilitar una entrada registra la decisión en StartupApproved, el mismo lugar que leen y escriben la configuración de Aplicaciones de inicio de Windows y el Administrador de tareas. No se elimina nada: el valor Run o el acceso directo permanece exactamente donde está, así que el cambio se puede revertir desde aquí o desde cualquiera de los dos."
+    },
+    duplicates: {
+      title: 'Archivos duplicados',
+      subtitle: 'Archivos que son idénticos byte a byte, no solo del mismo tamaño. Apúntalo a una carpeta donde realmente guardes cosas — leer todo un disco para compararlo consigo mismo lleva mucho más tiempo del que vale la pena, y encuentra sobre todo las propias copias de la máquina de sus propios archivos.',
+      folderInputAriaLabel: 'Carpeta donde buscar duplicados',
+      stop: 'Detener',
+      findButton: 'Buscar duplicados',
+      compareNote: 'Compara tamaños primero, luego una muestra, luego el archivo completo — así que la mayoría de los archivos nunca se leen.',
+      reading: (folder) => `Leyendo ${folder}`,
+      readingNote: 'Tamaños primero, luego una muestra de 64 KB de todo lo que comparta uno, luego el contenido completo de lo que aún coincida.',
+      empty: {
+        heading: 'No hay archivos duplicados aquí.',
+        scanned: (count) => `${count} archivos comparados.`,
+        truncatedSuffix: ' El escaneo se cortó antes de tiempo, así que esta no es toda la carpeta.'
+      },
+      summarySets: (count) => `${count} conjunto${count === 1 ? '' : 's'}`,
+      recoverable: (formatted) => `${formatted} recuperables`,
+      keepOldest: 'Mantener el más antiguo',
+      keepNewest: 'Mantener el más reciente',
+      clear: 'Limpiar',
+      truncatedWarning: 'El escaneo se cortó antes de tiempo, así que puede haber más conjuntos que estos.',
+      group: {
+        identicalCopies: (count, size) => `${count} copias idénticas · ${size} cada una`,
+        allTickedWarning: 'Todas las copias de este conjunto están marcadas — desmarca una para conservarla.'
+      },
+      footer: {
+        selected: (count, formatted) => `${count} seleccionados · ${formatted}`,
+        moving: 'Moviendo…',
+        wouldLose: (count) => `${count} conjunto${count === 1 ? '' : 's'} perdería${count === 1 ? '' : 'n'} todas las copias`,
+        moveButton: 'Mover seleccionados a cuarentena'
+      },
+      modal: {
+        label: 'Mover duplicados a cuarentena',
+        heading: (count) => `¿Mover ${count} copias a cuarentena?`,
+        body: (formatted) => `${formatted} recuperados. Cada conjunto conserva al menos una copia, y no se elimina nada — restaura cualquiera de ellos desde la pantalla de Cuarentena.`,
+        cancel: 'Cancelar',
+        confirmButton: 'Mover a cuarentena'
+      },
+      toasts: {
+        moved: (count) => `Se ${count === 1 ? 'movió' : 'movieron'} ${count} copi${count === 1 ? 'a' : 'as'} a cuarentena.`,
+        restoreHint: 'Restáuralas desde la pantalla de Cuarentena.',
+        failed: (count) => `${count} no se pudieron mover.`,
+        failedDetail: 'Puede que estén abiertos o en otro disco.'
+      }
     }
   },
 
@@ -3032,6 +3472,50 @@ export const CATALOG = {
       groupEnabledOf: (enabledCount, total) => `${enabledCount}/${total} lubatud`,
       groupAdminNote: 'Muutmine küsib administraatoriõigusi',
       footerNote: "Kirje väljalülitamine salvestab otsuse StartupApproved kirjesse, samasse kohta, kust Windowsi enda Käivitusrakenduste seaded ja Task Manager loevad ja kirjutavad. Midagi ei kustutata: Run-väärtus või otsetee jääb täpselt sinna, kus see on, seega saab muudatuse siit või kummastki neist tagasi pöörata."
+    },
+    duplicates: {
+      title: 'Dubleerivad failid',
+      subtitle: 'Failid, mis on baidi täpsusega identsed, mitte lihtsalt sama suurusega. Suunake see kausta, kuhu te tegelikult asju hoiate — terve draivi lugemine, et võrrelda seda iseendaga, võtab palju kauem aega, kui väärt on, ja leiab enamasti masina enda koopiaid omaenda failidest.',
+      folderInputAriaLabel: 'Kaust, kust duplikaate otsida',
+      stop: 'Peata',
+      findButton: 'Otsi duplikaate',
+      compareNote: 'Võrdleb kõigepealt suurusi, siis näidist, siis kogu faili — nii et enamikku faile ei loeta kunagi.',
+      reading: (folder) => `Loen ${folder}`,
+      readingNote: 'Kõigepealt suurused, siis 64 KB näidis kõigest, mis jagab üht, siis kõik selle sisu, mis endiselt sobib.',
+      empty: {
+        heading: 'Siin pole dubleerivaid faile.',
+        scanned: (count) => `${count} faili võrreldud.`,
+        truncatedSuffix: ' Skannimine katkestati enneaegselt, seega pole see terve kaust.'
+      },
+      summarySets: (count) => `${count} komplekt${count === 1 ? '' : 'i'}`,
+      recoverable: (formatted) => `${formatted} vabastatav`,
+      keepOldest: 'Säilita vanim',
+      keepNewest: 'Säilita uusim',
+      clear: 'Tühjenda',
+      truncatedWarning: 'Skannimine katkestati enneaegselt, seega võib komplekte olla rohkem kui need.',
+      group: {
+        identicalCopies: (count, size) => `${count} identset koopiat · igaüks ${size}`,
+        allTickedWarning: 'Kõik selle komplekti koopiad on märgitud — eemaldage ühelt märge, et see säilitada.'
+      },
+      footer: {
+        selected: (count, formatted) => `${count} valitud · ${formatted}`,
+        moving: 'Teisaldamine…',
+        wouldLose: (count) => `${count} komplekt${count === 1 ? '' : 'i'} kaotaks kõik koopiad`,
+        moveButton: 'Teisalda valitud karantiini'
+      },
+      modal: {
+        label: 'Teisalda duplikaadid karantiini',
+        heading: (count) => `Teisaldada ${count} koopiat karantiini?`,
+        body: (formatted) => `${formatted} vabastatud. Iga komplekt säilitab vähemalt ühe koopia ja midagi ei kustutata — taastage neist ükskõik milline Karantiini ekraanilt.`,
+        cancel: 'Tühista',
+        confirmButton: 'Teisalda karantiini'
+      },
+      toasts: {
+        moved: (count) => `Teisaldati ${count} koopia${count === 1 ? '' : 't'} karantiini.`,
+        restoreHint: 'Taastage need Karantiini ekraanilt.',
+        failed: (count) => `${count} ei õnnestunud teisaldada.`,
+        failedDetail: 'Need võivad olla avatud või mõnel teisel draivil.'
+      }
     }
   },
 
@@ -3305,6 +3789,50 @@ export const CATALOG = {
       groupEnabledOf: (enabledCount, total) => `${enabledCount}/${total} käytössä`,
       groupAdminNote: 'Näiden muuttaminen pyytää ylläpitäjän oikeuksia',
       footerNote: 'Merkinnän poistaminen käytöstä tallentaa päätöksen StartupApproved-tietoon, samaan paikkaan, jota Windowsin omat Käynnistyssovellukset-asetukset ja Tehtävienhallinta lukevat ja kirjoittavat. Mitään ei poisteta: Run-arvo tai pikakuvake pysyy juuri siellä, missä se on, joten muutoksen voi perua täältä tai kummasta tahansa niistä.'
+    },
+    duplicates: {
+      title: 'Kaksoiskappaleet',
+      subtitle: 'Tiedostot, jotka ovat tavu tavulta identtisiä, ei vain samankokoisia. Osoita se kansioon, johon oikeasti tallennat asioita — koko aseman lukeminen sen vertaamiseksi itseensä kestää paljon kauemmin kuin on sen arvoista, ja löytää lähinnä koneen omia kopioita sen omista tiedostoista.',
+      folderInputAriaLabel: 'Kansio, josta etsitään kaksoiskappaleita',
+      stop: 'Pysäytä',
+      findButton: 'Etsi kaksoiskappaleet',
+      compareNote: 'Vertaa ensin kokoja, sitten näytettä, sitten koko tiedostoa — joten useimpia tiedostoja ei koskaan lueta.',
+      reading: (folder) => `Luetaan ${folder}`,
+      readingNote: 'Ensin koot, sitten 64 kt:n näyte kaikesta, mikä jakaa yhden, sitten koko sisältö kaikesta, mikä yhä täsmää.',
+      empty: {
+        heading: 'Täällä ei ole kaksoiskappaleita.',
+        scanned: (count) => `${count} tiedostoa vertailtu.`,
+        truncatedSuffix: ' Skannaus keskeytettiin kesken, joten tämä ei ole koko kansio.'
+      },
+      summarySets: (count) => `${count} ${count === 1 ? 'joukko' : 'joukkoa'}`,
+      recoverable: (formatted) => `${formatted} vapautettavissa`,
+      keepOldest: 'Säilytä vanhin',
+      keepNewest: 'Säilytä uusin',
+      clear: 'Tyhjennä',
+      truncatedWarning: 'Skannaus keskeytettiin kesken, joten joukkoja voi olla enemmän kuin nämä.',
+      group: {
+        identicalCopies: (count, size) => `${count} identtistä kopiota · ${size} kukin`,
+        allTickedWarning: 'Kaikki tämän joukon kopiot on valittu — poista yhden valinta säilyttääksesi sen.'
+      },
+      footer: {
+        selected: (count, formatted) => `${count} valittu · ${formatted}`,
+        moving: 'Siirretään…',
+        wouldLose: (count) => `${count} ${count === 1 ? 'joukko' : 'joukkoa'} menettäisi kaikki kopiot`,
+        moveButton: 'Siirrä valitut karanteeniin'
+      },
+      modal: {
+        label: 'Siirrä kaksoiskappaleet karanteeniin',
+        heading: (count) => `Siirretäänkö ${count} kopiota karanteeniin?`,
+        body: (formatted) => `${formatted} vapautettu. Jokainen joukko säilyttää vähintään yhden kopion, eikä mitään poisteta — palauta mikä tahansa niistä Karanteeni-näytöltä.`,
+        cancel: 'Peruuta',
+        confirmButton: 'Siirrä karanteeniin'
+      },
+      toasts: {
+        moved: (count) => `Siirrettiin ${count} kopio${count === 1 ? '' : 'ta'} karanteeniin.`,
+        restoreHint: 'Palauta ne Karanteeni-näytöltä.',
+        failed: (count) => `${count} ei voitu siirtää.`,
+        failedDetail: 'Ne voivat olla auki tai toisella asemalla.'
+      }
     }
   },
 
@@ -3578,6 +4106,50 @@ export const CATALOG = {
       groupEnabledOf: (enabledCount, total) => `${enabledCount} sur ${total} activées`,
       groupAdminNote: 'Les modifier demande des droits administrateur',
       footerNote: "Désactiver une entrée enregistre la décision dans StartupApproved, le même endroit que lisent et écrivent les paramètres Applications au démarrage de Windows et le Gestionnaire des tâches. Rien n'est supprimé : la valeur Run ou le raccourci reste exactement là où il est, donc la modification est réversible depuis ici ou depuis l'un des deux autres."
+    },
+    duplicates: {
+      title: 'Fichiers en double',
+      subtitle: "Fichiers identiques bit à bit, pas seulement de même taille. Pointez-le vers un dossier où vous gardez réellement des choses — lire un disque entier pour le comparer à lui-même prend bien plus de temps que ça n'en vaut la peine, et trouve surtout les propres copies de la machine de ses propres fichiers.",
+      folderInputAriaLabel: 'Dossier où rechercher les doublons',
+      stop: 'Arrêter',
+      findButton: 'Rechercher les doublons',
+      compareNote: "Compare d'abord les tailles, puis un échantillon, puis le fichier entier — la plupart des fichiers ne sont donc jamais lus.",
+      reading: (folder) => `Lecture de ${folder}`,
+      readingNote: "D'abord les tailles, puis un échantillon de 64 Ko de tout ce qui en partage une, puis le contenu complet de ce qui correspond encore.",
+      empty: {
+        heading: 'Aucun fichier en double ici.',
+        scanned: (count) => `${count} fichiers comparés.`,
+        truncatedSuffix: " L'analyse a été interrompue, ce n'est donc pas tout le dossier."
+      },
+      summarySets: (count) => `${count} ensemble${count === 1 ? '' : 's'}`,
+      recoverable: (formatted) => `${formatted} récupérables`,
+      keepOldest: 'Garder le plus ancien',
+      keepNewest: 'Garder le plus récent',
+      clear: 'Effacer',
+      truncatedWarning: "L'analyse a été interrompue, il pourrait donc y avoir plus d'ensembles que ceux-ci.",
+      group: {
+        identicalCopies: (count, size) => `${count} copies identiques · ${size} chacune`,
+        allTickedWarning: 'Chaque copie de cet ensemble est cochée — décochez-en une pour la conserver.'
+      },
+      footer: {
+        selected: (count, formatted) => `${count} sélectionnés · ${formatted}`,
+        moving: 'Déplacement…',
+        wouldLose: (count) => `${count} ensemble${count === 1 ? '' : 's'} perdrai${count === 1 ? 't' : 'ent'} toutes ses copies`,
+        moveButton: 'Déplacer la sélection vers la quarantaine'
+      },
+      modal: {
+        label: 'Déplacer les doublons vers la quarantaine',
+        heading: (count) => `Déplacer ${count} copies vers la quarantaine ?`,
+        body: (formatted) => `${formatted} récupérés. Chaque ensemble conserve au moins une copie, et rien n'est supprimé — restaurez n'importe laquelle depuis l'écran Quarantaine.`,
+        cancel: 'Annuler',
+        confirmButton: 'Déplacer vers la quarantaine'
+      },
+      toasts: {
+        moved: (count) => `${count} copi${count === 1 ? 'e déplacée' : 'es déplacées'} vers la quarantaine.`,
+        restoreHint: "Restaurez-les depuis l'écran Quarantaine.",
+        failed: (count) => `${count} n'ont pas pu être déplacés.`,
+        failedDetail: 'Ils sont peut-être ouverts ou sur un autre disque.'
+      }
     }
   },
 
@@ -3851,6 +4423,50 @@ export const CATALOG = {
       groupEnabledOf: (enabledCount, total) => `${enabledCount} מתוך ${total} מופעלות`,
       groupAdminNote: 'שינוי אלה דורש הרשאות מנהל',
       footerNote: 'השבתת רשומה רושמת את ההחלטה ב-StartupApproved, אותו מקום שבו קוראות וכותבות הגדרות אפליקציות ההפעלה ומנהל המשימות של Windows עצמו. שום דבר לא נמחק: ערך ה-Run או הקיצור נשארים בדיוק במקומם, כך שהשינוי ניתן לביטול מכאן או מכל אחד מהם.'
+    },
+    duplicates: {
+      title: 'קבצים כפולים',
+      subtitle: 'קבצים זהים בית לבית, לא רק באותו גודל. כוונו זאת לתיקייה שבה אתם באמת שומרים דברים — קריאת כונן שלם כדי להשוות אותו לעצמו לוקחת הרבה יותר זמן מכפי שהיא שווה, ומוצאת בעיקר עותקים של המכשיר עצמו מהקבצים שלו עצמו.',
+      folderInputAriaLabel: 'תיקייה לחיפוש כפילויות',
+      stop: 'עצור',
+      findButton: 'חפש כפילויות',
+      compareNote: 'משווה גדלים תחילה, ואז דגימה, ואז הקובץ כולו — כך שרוב הקבצים לעולם לא נקראים.',
+      reading: (folder) => `קורא ${folder}`,
+      readingNote: 'גדלים תחילה, ואז דגימה של 64 קילובייט מכל דבר שמשתף גודל, ואז התוכן המלא של כל מה שעדיין תואם.',
+      empty: {
+        heading: 'אין כאן קבצים כפולים.',
+        scanned: (count) => `${count} קבצים הושוו.`,
+        truncatedSuffix: ' הסריקה קוצרה, כך שזו אינה כל התיקייה.'
+      },
+      summarySets: (count) => `${count} קבוצ${count === 1 ? 'ה' : 'ות'}`,
+      recoverable: (formatted) => `${formatted} ניתנים לפינוי`,
+      keepOldest: 'שמור את הישן ביותר',
+      keepNewest: 'שמור את החדש ביותר',
+      clear: 'נקה',
+      truncatedWarning: 'הסריקה קוצרה, כך שייתכן שיש יותר קבוצות מאלה.',
+      group: {
+        identicalCopies: (count, size) => `${count} עותקים זהים · ${size} כל אחד`,
+        allTickedWarning: 'כל עותק בקבוצה זו מסומן — בטל סימון של אחד כדי לשמור אותו.'
+      },
+      footer: {
+        selected: (count, formatted) => `${count} נבחרו · ${formatted}`,
+        moving: 'מעביר…',
+        wouldLose: (count) => `${count} קבוצ${count === 1 ? 'ה תאבד' : 'ות יאבדו'} כל עותק`,
+        moveButton: 'העבר את הנבחרים להסגר'
+      },
+      modal: {
+        label: 'העבר כפילויות להסגר',
+        heading: (count) => `להעביר ${count} עותקים להסגר?`,
+        body: (formatted) => `${formatted} שוחזרו. כל קבוצה שומרת לפחות עותק אחד, ושום דבר לא נמחק — שחזרו כל אחד מהם ממסך ההסגר.`,
+        cancel: 'ביטול',
+        confirmButton: 'העבר להסגר'
+      },
+      toasts: {
+        moved: (count) => `הועברו ${count} עותקים להסגר.`,
+        restoreHint: 'שחזרו אותם ממסך ההסגר.',
+        failed: (count) => `לא ניתן היה להעביר ${count}.`,
+        failedDetail: 'ייתכן שהם פתוחים או בכונן אחר.'
+      }
     }
   },
 
@@ -4124,6 +4740,50 @@ export const CATALOG = {
       groupEnabledOf: (enabledCount, total) => `${enabledCount}/${total} engedélyezve`,
       groupAdminNote: 'Ezek módosítása rendszergazdai jogosultságot kér',
       footerNote: 'Egy bejegyzés kikapcsolása rögzíti a döntést a StartupApproved-ban, ugyanott, ahol a Windows saját Indítási alkalmazások beállításai és a Feladatkezelő olvas és ír. Semmi nem törlődik: a Run érték vagy a parancsikon pontosan ott marad, ahol van, így a módosítás innen vagy bármelyik másik helyről visszavonható.'
+    },
+    duplicates: {
+      title: 'Duplikált fájlok',
+      subtitle: 'Bájtra pontosan azonos fájlok, nem csupán azonos méretűek. Irányítsd egy mappára, ahol valóban dolgokat tárolsz — egy teljes meghajtó beolvasása, hogy önmagával összehasonlítsd, sokkal tovább tart, mint amennyit megér, és leginkább a gép saját másolatait találja meg saját fájljairól.',
+      folderInputAriaLabel: 'Mappa, ahol duplikátumokat kell keresni',
+      stop: 'Leállítás',
+      findButton: 'Duplikátumok keresése',
+      compareNote: 'Először a méreteket hasonlítja össze, majd egy mintát, majd a teljes fájlt — így a fájlok többségét soha nem olvassa be.',
+      reading: (folder) => `${folder} olvasása`,
+      readingNote: 'Először a méretek, majd egy 64 KB-os minta mindenből, ami osztozik egyen, majd a teljes tartalma mindennek, ami továbbra is egyezik.',
+      empty: {
+        heading: 'Itt nincsenek duplikált fájlok.',
+        scanned: (count) => `${count} fájl összehasonlítva.`,
+        truncatedSuffix: ' A vizsgálat idő előtt befejeződött, tehát ez nem a teljes mappa.'
+      },
+      summarySets: (count) => `${count} készlet`,
+      recoverable: (formatted) => `${formatted} felszabadítható`,
+      keepOldest: 'Legrégebbi megtartása',
+      keepNewest: 'Legújabb megtartása',
+      clear: 'Törlés',
+      truncatedWarning: 'A vizsgálat idő előtt befejeződött, így ezeknél több készlet is lehet.',
+      group: {
+        identicalCopies: (count, size) => `${count} azonos másolat · egyenként ${size}`,
+        allTickedWarning: 'Ebben a készletben minden másolat ki van jelölve — vegyél ki egyet a jelölésből, hogy megtartsd.'
+      },
+      footer: {
+        selected: (count, formatted) => `${count} kiválasztva · ${formatted}`,
+        moving: 'Áthelyezés…',
+        wouldLose: (count) => `${count} készlet elveszítené az összes másolatát`,
+        moveButton: 'Kiválasztottak áthelyezése karanténba'
+      },
+      modal: {
+        label: 'Duplikátumok áthelyezése karanténba',
+        heading: (count) => `Áthelyezed ${count} másolatot a karanténba?`,
+        body: (formatted) => `${formatted} felszabadítva. Minden készlet legalább egy másolatot megtart, és semmi nem törlődik — bármelyiket visszaállíthatod a Karantén képernyőről.`,
+        cancel: 'Mégse',
+        confirmButton: 'Áthelyezés karanténba'
+      },
+      toasts: {
+        moved: (count) => `${count} másolat áthelyezve a karanténba.`,
+        restoreHint: 'Állítsd vissza őket a Karantén képernyőről.',
+        failed: (count) => `${count} nem volt áthelyezhető.`,
+        failedDetail: 'Lehet, hogy nyitva vannak, vagy másik meghajtón vannak.'
+      }
     }
   },
 
@@ -4397,6 +5057,50 @@ export const CATALOG = {
       groupEnabledOf: (enabledCount, total) => `${enabledCount} dari ${total} diaktifkan`,
       groupAdminNote: 'Mengubah ini meminta hak administrator',
       footerNote: 'Menonaktifkan sebuah entri mencatat keputusan itu di StartupApproved, tempat yang sama yang dibaca dan ditulis oleh pengaturan Aplikasi Startup Windows dan Task Manager sendiri. Tidak ada yang dihapus: nilai Run atau pintasan tetap persis di tempatnya, sehingga perubahan dapat dibatalkan dari sini atau dari salah satu dari keduanya.'
+    },
+    duplicates: {
+      title: 'Berkas duplikat',
+      subtitle: 'Berkas yang identik byte demi byte, bukan sekadar ukuran yang sama. Arahkan ke folder tempat Anda benar-benar menyimpan berkas — membaca seluruh drive untuk membandingkannya dengan dirinya sendiri memakan waktu jauh lebih lama daripada manfaatnya, dan kebanyakan menemukan salinan file mesin itu sendiri.',
+      folderInputAriaLabel: 'Folder untuk mencari duplikat',
+      stop: 'Hentikan',
+      findButton: 'Cari duplikat',
+      compareNote: 'Membandingkan ukuran terlebih dahulu, lalu sampel, lalu seluruh berkas — jadi sebagian besar berkas tidak pernah dibaca.',
+      reading: (folder) => `Membaca ${folder}`,
+      readingNote: 'Ukuran terlebih dahulu, lalu sampel 64 KB dari apa pun yang memiliki ukuran sama, lalu seluruh isi dari apa pun yang masih cocok.',
+      empty: {
+        heading: 'Tidak ada berkas duplikat di sini.',
+        scanned: (count) => `${count} berkas dibandingkan.`,
+        truncatedSuffix: ' Pemindaian dihentikan sebelum selesai, jadi ini bukan seluruh folder.'
+      },
+      summarySets: (count) => `${count} set`,
+      recoverable: (formatted) => `${formatted} dapat dipulihkan`,
+      keepOldest: 'Simpan yang terlama',
+      keepNewest: 'Simpan yang terbaru',
+      clear: 'Bersihkan',
+      truncatedWarning: 'Pemindaian dihentikan sebelum selesai, jadi mungkin ada lebih banyak set daripada ini.',
+      group: {
+        identicalCopies: (count, size) => `${count} salinan identik · masing-masing ${size}`,
+        allTickedWarning: 'Setiap salinan dalam set ini dicentang — hapus centang satu untuk menyimpannya.'
+      },
+      footer: {
+        selected: (count, formatted) => `${count} dipilih · ${formatted}`,
+        moving: 'Memindahkan…',
+        wouldLose: (count) => `${count} set akan kehilangan semua salinan`,
+        moveButton: 'Pindahkan yang dipilih ke karantina'
+      },
+      modal: {
+        label: 'Pindahkan duplikat ke karantina',
+        heading: (count) => `Pindahkan ${count} salinan ke karantina?`,
+        body: (formatted) => `${formatted} dipulihkan. Setiap set menyimpan setidaknya satu salinan, dan tidak ada yang dihapus — pulihkan salah satunya dari layar Karantina.`,
+        cancel: 'Batal',
+        confirmButton: 'Pindahkan ke karantina'
+      },
+      toasts: {
+        moved: (count) => `Memindahkan ${count} salinan ke karantina.`,
+        restoreHint: 'Pulihkan dari layar Karantina.',
+        failed: (count) => `${count} tidak dapat dipindahkan.`,
+        failedDetail: 'Mungkin sedang terbuka atau berada di drive lain.'
+      }
     }
   },
 
@@ -4670,6 +5374,50 @@ export const CATALOG = {
       groupEnabledOf: (enabledCount, total) => `${enabledCount} af ${total} virkjaðar`,
       groupAdminNote: 'Að breyta þessu biður um kerfisstjórnarréttindi',
       footerNote: 'Að slökkva á færslu skráir ákvörðunina í StartupApproved, sama stað og Windows eigin Ræsiforritastillingar og Verkefnastjóri lesa og skrifa. Engu er eytt: Run-gildið eða flýtileiðin er nákvæmlega þar sem hún er, svo hægt er að afturkalla breytinguna héðan eða frá hvorum staðnum sem er.'
+    },
+    duplicates: {
+      title: 'Tvítekin skrár',
+      subtitle: 'Skrár sem eru bæti fyrir bæti eins, ekki bara sömu stærðar. Beindu því á möppu þar sem þú geymir raunverulega hluti — að lesa allan disk til að bera hann saman við sjálfan sig tekur mun lengri tíma en það er þess virði, og finnur að mestu eintök vélarinnar sjálfrar af eigin skrám.',
+      folderInputAriaLabel: 'Mappa til að leita að tvíritum í',
+      stop: 'Stöðva',
+      findButton: 'Finna tvírit',
+      compareNote: 'Ber saman stærðir fyrst, svo sýnishorn, svo alla skrána — svo flestar skrár eru aldrei lesnar.',
+      reading: (folder) => `Les ${folder}`,
+      readingNote: 'Stærðir fyrst, svo 64 KB sýnishorn af öllu sem deilir einni, svo allt innihald þess sem enn passar.',
+      empty: {
+        heading: 'Engar tvíteknar skrár hér.',
+        scanned: (count) => `${count} skrár bornar saman.`,
+        truncatedSuffix: ' Skönnunin var stöðvuð fyrir tímann, svo þetta er ekki öll mappan.'
+      },
+      summarySets: (count) => `${count} ${count === 1 ? 'sett' : 'sett'}`,
+      recoverable: (formatted) => `${formatted} endurheimtanlegt`,
+      keepOldest: 'Halda elsta',
+      keepNewest: 'Halda nýjasta',
+      clear: 'Hreinsa',
+      truncatedWarning: 'Skönnunin var stöðvuð fyrir tímann, svo það geta verið fleiri sett en þessi.',
+      group: {
+        identicalCopies: (count, size) => `${count} eins eintök · ${size} hvert`,
+        allTickedWarning: 'Hvert eintak í þessu setti er hakað — afhakaðu eitt til að halda því.'
+      },
+      footer: {
+        selected: (count, formatted) => `${count} valin · ${formatted}`,
+        moving: 'Flyt…',
+        wouldLose: (count) => `${count} sett myndu tapa öllum eintökum`,
+        moveButton: 'Flytja valið í sóttkví'
+      },
+      modal: {
+        label: 'Flytja tvírit í sóttkví',
+        heading: (count) => `Flytja ${count} eintök í sóttkví?`,
+        body: (formatted) => `${formatted} endurheimt. Hvert sett heldur að minnsta kosti einu eintaki, og engu er eytt — endurheimtu hvað sem er af því af Sóttkví-skjánum.`,
+        cancel: 'Hætta við',
+        confirmButton: 'Flytja í sóttkví'
+      },
+      toasts: {
+        moved: (count) => `Flutti ${count} eintök í sóttkví.`,
+        restoreHint: 'Endurheimtu þau af Sóttkví-skjánum.',
+        failed: (count) => `${count} var ekki hægt að flytja.`,
+        failedDetail: 'Þau gætu verið opin eða á öðrum diski.'
+      }
     }
   },
 
@@ -4943,6 +5691,50 @@ export const CATALOG = {
       groupEnabledOf: (enabledCount, total) => `${enabledCount} di ${total} abilitate`,
       groupAdminNote: 'Modificarle richiede i permessi di amministratore',
       footerNote: "Disabilitare una voce registra la decisione in StartupApproved, lo stesso posto letto e scritto dalle impostazioni di Windows per le App di avvio e dal Task Manager. Niente viene eliminato: il valore Run o il collegamento resta esattamente dov'è, quindi la modifica è reversibile da qui o da uno dei due."
+    },
+    duplicates: {
+      title: 'File duplicati',
+      subtitle: 'File identici byte per byte, non semplicemente della stessa dimensione. Punta a una cartella dove conservi davvero le cose — leggere un intero disco per confrontarlo con se stesso richiede molto più tempo di quanto valga, e trova per lo più le copie del computer dei propri file.',
+      folderInputAriaLabel: 'Cartella in cui cercare i duplicati',
+      stop: 'Interrompi',
+      findButton: 'Trova duplicati',
+      compareNote: 'Confronta prima le dimensioni, poi un campione, poi il file intero — quindi la maggior parte dei file non viene mai letta.',
+      reading: (folder) => `Lettura di ${folder}`,
+      readingNote: 'Prima le dimensioni, poi un campione di 64 KB di tutto ciò che ne condivide una, poi il contenuto completo di ciò che corrisponde ancora.',
+      empty: {
+        heading: 'Nessun file duplicato qui.',
+        scanned: (count) => `${count} file confrontati.`,
+        truncatedSuffix: " La scansione è stata interrotta, quindi questa non è l'intera cartella."
+      },
+      summarySets: (count) => `${count} insiem${count === 1 ? 'e' : 'i'}`,
+      recoverable: (formatted) => `${formatted} recuperabili`,
+      keepOldest: 'Mantieni il più vecchio',
+      keepNewest: 'Mantieni il più recente',
+      clear: 'Pulisci',
+      truncatedWarning: 'La scansione è stata interrotta, quindi potrebbero esserci più insiemi di questi.',
+      group: {
+        identicalCopies: (count, size) => `${count} copie identiche · ${size} ciascuna`,
+        allTickedWarning: 'Ogni copia in questo insieme è selezionata — deseleziona una per conservarla.'
+      },
+      footer: {
+        selected: (count, formatted) => `${count} selezionati · ${formatted}`,
+        moving: 'Spostamento…',
+        wouldLose: (count) => `${count} insiem${count === 1 ? 'e perderebbe' : 'i perderebbero'} tutte le copie`,
+        moveButton: 'Sposta i selezionati in quarantena'
+      },
+      modal: {
+        label: 'Sposta duplicati in quarantena',
+        heading: (count) => `Spostare ${count} copie in quarantena?`,
+        body: (formatted) => `${formatted} recuperati. Ogni insieme conserva almeno una copia, e nulla viene eliminato — ripristina una qualsiasi di esse dalla schermata Quarantena.`,
+        cancel: 'Annulla',
+        confirmButton: 'Sposta in quarantena'
+      },
+      toasts: {
+        moved: (count) => `Spostat${count === 1 ? 'a' : 'e'} ${count} copi${count === 1 ? 'a' : 'e'} in quarantena.`,
+        restoreHint: 'Ripristinale dalla schermata Quarantena.',
+        failed: (count) => `${count} non è stato possibile spostarli.`,
+        failedDetail: 'Potrebbero essere aperti o su un altro disco.'
+      }
     }
   },
 
@@ -5216,6 +6008,50 @@ export const CATALOG = {
       groupEnabledOf: (enabledCount, total) => `${total} 件中 ${enabledCount} 件有効`,
       groupAdminNote: '変更には管理者権限が必要です',
       footerNote: 'ここで項目を無効にすると、その決定は StartupApproved に記録されます。これは Windows 自身のスタートアップ アプリの設定とタスク マネージャーが読み書きするのと同じ場所です。何も削除されません。Run の値やショートカットはそのまま残るため、変更はここからでもどちらの画面からでも元に戻せます。'
+    },
+    duplicates: {
+      title: '重複ファイル',
+      subtitle: 'サイズが同じだけでなく、バイト単位で完全に一致するファイルです。実際に何かを保存しているフォルダーに向けてください — ドライブ全体を読み込んでそれ自体と比較するのは、その価値をはるかに超える時間がかかり、たいていはマシン自身のファイルの自己コピーが見つかるだけです。',
+      folderInputAriaLabel: '重複を検索するフォルダー',
+      stop: '停止',
+      findButton: '重複を検索',
+      compareNote: 'まずサイズを比較し、次にサンプル、次にファイル全体を比較します — そのため、ほとんどのファイルは実際には読み込まれません。',
+      reading: (folder) => `${folder} を読み込み中`,
+      readingNote: 'まずサイズ、次にサイズが一致するものすべての 64 KB のサンプル、そして今も一致するものの内容全体という順に確認します。',
+      empty: {
+        heading: 'ここに重複ファイルはありません。',
+        scanned: (count) => `${count} 件のファイルを比較しました。`,
+        truncatedSuffix: ' スキャンは途中で打ち切られたため、フォルダー全体ではありません。'
+      },
+      summarySets: (count) => `${count} セット`,
+      recoverable: (formatted) => `${formatted} 回収可能`,
+      keepOldest: '最も古いものを残す',
+      keepNewest: '最も新しいものを残す',
+      clear: 'クリア',
+      truncatedWarning: 'スキャンは途中で打ち切られたため、これより多くのセットがある可能性があります。',
+      group: {
+        identicalCopies: (count, size) => `${count} 件の同一コピー · 各 ${size}`,
+        allTickedWarning: 'このセット内のすべてのコピーにチェックが入っています — 1 つのチェックを外して残してください。'
+      },
+      footer: {
+        selected: (count, formatted) => `${count} 件選択 · ${formatted}`,
+        moving: '移動中…',
+        wouldLose: (count) => `${count} セットがすべてのコピーを失います`,
+        moveButton: '選択項目を隔離に移動'
+      },
+      modal: {
+        label: '重複を隔離に移動',
+        heading: (count) => `${count} 件のコピーを隔離に移動しますか?`,
+        body: (formatted) => `${formatted} が回収されます。各セットは少なくとも 1 つのコピーを保持し、何も削除されません — 隔離画面からいつでも復元できます。`,
+        cancel: 'キャンセル',
+        confirmButton: '隔離に移動'
+      },
+      toasts: {
+        moved: (count) => `${count} 件のコピーを隔離に移動しました。`,
+        restoreHint: '隔離画面から復元してください。',
+        failed: (count) => `${count} 件を移動できませんでした。`,
+        failedDetail: '開いているか、別のドライブにある可能性があります。'
+      }
     }
   },
 
@@ -5489,6 +6325,50 @@ export const CATALOG = {
       groupEnabledOf: (enabledCount, total) => `${total}개 중 ${enabledCount}개 사용`,
       groupAdminNote: '이 항목을 변경하려면 관리자 권한이 필요합니다',
       footerNote: '항목을 사용 안 함으로 전환하면 해당 결정이 StartupApproved에 기록되며, 이는 Windows 자체의 시작 앱 설정과 작업 관리자가 읽고 쓰는 곳과 동일합니다. 아무것도 삭제되지 않습니다. Run 값이나 바로가기는 그대로 남아 있으므로, 변경 사항은 여기서든 두 곳 중 어디에서든 되돌릴 수 있습니다.'
+    },
+    duplicates: {
+      title: '중복 파일',
+      subtitle: '단순히 크기가 같은 것이 아니라 바이트 단위로 동일한 파일입니다. 실제로 파일을 보관하는 폴더를 지정하세요 — 드라이브 전체를 읽어 자신과 비교하는 것은 그만한 가치보다 훨씬 오래 걸리며, 대부분 컴퓨터 자체의 파일 사본만 찾아냅니다.',
+      folderInputAriaLabel: '중복 항목을 검색할 폴더',
+      stop: '중지',
+      findButton: '중복 항목 찾기',
+      compareNote: '먼저 크기를 비교한 다음 샘플을, 그다음 전체 파일을 비교합니다 — 그래서 대부분의 파일은 실제로 읽히지 않습니다.',
+      reading: (folder) => `${folder} 읽는 중`,
+      readingNote: '먼저 크기, 그다음 크기가 같은 모든 항목의 64KB 샘플, 그리고 여전히 일치하는 항목의 전체 내용 순으로 확인합니다.',
+      empty: {
+        heading: '여기에 중복 파일이 없습니다.',
+        scanned: (count) => `${count}개 파일 비교됨.`,
+        truncatedSuffix: ' 스캔이 중간에 중단되어 전체 폴더가 아닙니다.'
+      },
+      summarySets: (count) => `${count}개 세트`,
+      recoverable: (formatted) => `${formatted} 회수 가능`,
+      keepOldest: '가장 오래된 것 유지',
+      keepNewest: '가장 최신 것 유지',
+      clear: '지우기',
+      truncatedWarning: '스캔이 중간에 중단되어 이보다 더 많은 세트가 있을 수 있습니다.',
+      group: {
+        identicalCopies: (count, size) => `동일한 사본 ${count}개 · 각 ${size}`,
+        allTickedWarning: '이 세트의 모든 사본이 선택되어 있습니다 — 하나를 선택 해제하여 보관하세요.'
+      },
+      footer: {
+        selected: (count, formatted) => `${count}개 선택됨 · ${formatted}`,
+        moving: '이동 중…',
+        wouldLose: (count) => `${count}개 세트가 모든 사본을 잃게 됩니다`,
+        moveButton: '선택 항목을 격리로 이동'
+      },
+      modal: {
+        label: '중복 항목을 격리로 이동',
+        heading: (count) => `${count}개 사본을 격리로 이동하시겠습니까?`,
+        body: (formatted) => `${formatted}가 회수됩니다. 각 세트는 최소 하나의 사본을 유지하며, 아무것도 삭제되지 않습니다 — 격리 화면에서 언제든지 복원할 수 있습니다.`,
+        cancel: '취소',
+        confirmButton: '격리로 이동'
+      },
+      toasts: {
+        moved: (count) => `${count}개 사본을 격리로 이동했습니다.`,
+        restoreHint: '격리 화면에서 복원하세요.',
+        failed: (count) => `${count}개를 이동할 수 없습니다.`,
+        failedDetail: '열려 있거나 다른 드라이브에 있을 수 있습니다.'
+      }
     }
   },
 
@@ -5762,6 +6642,50 @@ export const CATALOG = {
       groupEnabledOf: (enabledCount, total) => `${enabledCount} iš ${total} įjungta`,
       groupAdminNote: 'Keičiant reikės administratoriaus teisių',
       footerNote: 'Įrašo išjungimas įrašo sprendimą į StartupApproved, tą pačią vietą, kurią skaito ir į kurią rašo pačios „Windows“ Paleisties programų nuostatos ir Užduočių tvarkytuvė. Niekas nepašalinama: Run reikšmė ar nuoroda lieka lygiai ten, kur buvo, todėl pakeitimą galima grąžinti iš čia arba iš bet kurios iš tų dviejų vietų.'
+    },
+    duplicates: {
+      title: 'Pasikartojantys failai',
+      subtitle: 'Failai, kurie yra identiški baitas po baito, o ne tik to paties dydžio. Nukreipkite tai į aplanką, kuriame iš tikrųjų laikote daiktus — viso disko skaitymas, norint palyginti jį su savimi, užtrunka daug ilgiau, nei to verta, ir dažniausiai randa mašinos pačios savo failų kopijas.',
+      folderInputAriaLabel: 'Aplankas, kuriame ieškoti dublikatų',
+      stop: 'Stabdyti',
+      findButton: 'Ieškoti dublikatų',
+      compareNote: 'Pirmiausia lygina dydžius, tada pavyzdį, tada visą failą — todėl dauguma failų niekada neskaitomi.',
+      reading: (folder) => `Skaitoma ${folder}`,
+      readingNote: 'Pirmiausia dydžiai, tada 64 KB pavyzdys visko, kas turi tokį patį dydį, tada visas turinys visko, kas vis dar sutampa.',
+      empty: {
+        heading: 'Čia nėra pasikartojančių failų.',
+        scanned: (count) => `Palyginta failų: ${count}.`,
+        truncatedSuffix: ' Skenavimas buvo nutrauktas anksčiau laiko, todėl tai nėra visas aplankas.'
+      },
+      summarySets: (count) => `${count} rinkin${count === 1 ? 'ys' : 'iai'}`,
+      recoverable: (formatted) => `${formatted} galima atlaisvinti`,
+      keepOldest: 'Palikti seniausią',
+      keepNewest: 'Palikti naujausią',
+      clear: 'Išvalyti',
+      truncatedWarning: 'Skenavimas buvo nutrauktas anksčiau laiko, todėl rinkinių gali būti daugiau nei šie.',
+      group: {
+        identicalCopies: (count, size) => `${count} identiškos kopijos · po ${size}`,
+        allTickedWarning: 'Kiekviena šio rinkinio kopija pažymėta — nuimkite žymėjimą nuo vienos, kad ją paliktumėte.'
+      },
+      footer: {
+        selected: (count, formatted) => `${count} pasirinkta · ${formatted}`,
+        moving: 'Perkeliama…',
+        wouldLose: (count) => `${count} rinkin${count === 1 ? 'ys prarastų' : 'iai prarastų'} visas kopijas`,
+        moveButton: 'Perkelti pasirinktus į karantiną'
+      },
+      modal: {
+        label: 'Perkelti dublikatus į karantiną',
+        heading: (count) => `Perkelti ${count} kopijas į karantiną?`,
+        body: (formatted) => `${formatted} atlaisvinta. Kiekvienas rinkinys išsaugo bent vieną kopiją, ir niekas nėra ištrinama — bet kurią iš jų galite atkurti iš Karantino ekrano.`,
+        cancel: 'Atšaukti',
+        confirmButton: 'Perkelti į karantiną'
+      },
+      toasts: {
+        moved: (count) => `Perkelta ${count} kopij${count === 1 ? 'a' : 'os'} į karantiną.`,
+        restoreHint: 'Atkurkite jas iš Karantino ekrano.',
+        failed: (count) => `${count} nepavyko perkelti.`,
+        failedDetail: 'Jos gali būti atidarytos arba kitame diske.'
+      }
     }
   },
 
@@ -6035,6 +6959,50 @@ export const CATALOG = {
       groupEnabledOf: (enabledCount, total) => `${enabledCount} daripada ${total} didayakan`,
       groupAdminNote: 'Mengubah ini meminta hak pentadbir',
       footerNote: 'Melumpuhkan entri merekodkan keputusan itu dalam StartupApproved, tempat yang sama yang dibaca dan ditulis oleh tetapan Aplikasi Permulaan Windows sendiri dan Pengurus Tugas. Tiada apa yang dipadamkan: nilai Run atau pintasan kekal betul-betul di tempatnya, jadi perubahan itu boleh dibalikkan dari sini atau dari mana-mana antara kedua-duanya.'
+    },
+    duplicates: {
+      title: 'Fail pendua',
+      subtitle: 'Fail yang sama sepenuhnya bait demi bait, bukan sekadar saiz yang sama. Tujukan ke folder tempat anda benar-benar menyimpan sesuatu — membaca keseluruhan pemacu untuk membandingkannya dengan dirinya sendiri mengambil masa jauh lebih lama daripada yang berbaloi, dan kebanyakannya menemui salinan mesin itu sendiri bagi failnya sendiri.',
+      folderInputAriaLabel: 'Folder untuk mencari pendua',
+      stop: 'Henti',
+      findButton: 'Cari pendua',
+      compareNote: 'Membandingkan saiz dahulu, kemudian sampel, kemudian keseluruhan fail — jadi kebanyakan fail tidak pernah dibaca.',
+      reading: (folder) => `Membaca ${folder}`,
+      readingNote: 'Saiz dahulu, kemudian sampel 64 KB bagi apa-apa yang berkongsi saiz sama, kemudian kandungan penuh bagi apa-apa yang masih sepadan.',
+      empty: {
+        heading: 'Tiada fail pendua di sini.',
+        scanned: (count) => `${count} fail dibandingkan.`,
+        truncatedSuffix: ' Imbasan telah dihentikan awal, jadi ini bukan keseluruhan folder.'
+      },
+      summarySets: (count) => `${count} set`,
+      recoverable: (formatted) => `${formatted} boleh dipulihkan`,
+      keepOldest: 'Simpan yang paling lama',
+      keepNewest: 'Simpan yang paling baharu',
+      clear: 'Kosongkan',
+      truncatedWarning: 'Imbasan telah dihentikan awal, jadi mungkin ada lebih banyak set daripada ini.',
+      group: {
+        identicalCopies: (count, size) => `${count} salinan serupa · ${size} setiap satu`,
+        allTickedWarning: 'Setiap salinan dalam set ini ditanda — nyahtanda satu untuk menyimpannya.'
+      },
+      footer: {
+        selected: (count, formatted) => `${count} dipilih · ${formatted}`,
+        moving: 'Mengalih…',
+        wouldLose: (count) => `${count} set akan kehilangan semua salinan`,
+        moveButton: 'Alih yang dipilih ke kuarantin'
+      },
+      modal: {
+        label: 'Alih pendua ke kuarantin',
+        heading: (count) => `Alih ${count} salinan ke kuarantin?`,
+        body: (formatted) => `${formatted} dipulihkan. Setiap set menyimpan sekurang-kurangnya satu salinan, dan tiada apa yang dipadamkan — pulihkan mana-mana daripadanya dari skrin Kuarantin.`,
+        cancel: 'Batal',
+        confirmButton: 'Alih ke kuarantin'
+      },
+      toasts: {
+        moved: (count) => `Mengalihkan ${count} salinan ke kuarantin.`,
+        restoreHint: 'Pulihkan daripada skrin Kuarantin.',
+        failed: (count) => `${count} tidak dapat dialihkan.`,
+        failedDetail: 'Ia mungkin terbuka atau berada pada pemacu lain.'
+      }
     }
   },
 
@@ -6308,6 +7276,50 @@ export const CATALOG = {
       groupEnabledOf: (enabledCount, total) => `${enabledCount} av ${total} aktivert`,
       groupAdminNote: 'Å endre disse krever administratorrettigheter',
       footerNote: 'Å slå av en oppføring registrerer beslutningen i StartupApproved, samme sted Windows' + " egne Oppstartsprogrammer-innstillinger og Oppgavebehandling leser og skriver til. Ingenting slettes: Run-verdien eller snarveien blir liggende akkurat der den er, så endringen kan reverseres herfra eller fra hvilken som helst av de to andre."
+    },
+    duplicates: {
+      title: 'Duplikatfiler',
+      subtitle: 'Filer som er byte-for-byte identiske, ikke bare samme størrelse. Pek det mot en mappe der du faktisk oppbevarer ting — å lese en hel stasjon for å sammenligne den med seg selv tar mye lengre tid enn det er verdt, og finner stort sett maskinens egne kopier av sine egne filer.',
+      folderInputAriaLabel: 'Mappe å søke etter duplikater i',
+      stop: 'Stopp',
+      findButton: 'Finn duplikater',
+      compareNote: 'Sammenligner størrelser først, deretter et utvalg, deretter hele filen — så de fleste filer blir aldri lest.',
+      reading: (folder) => `Leser ${folder}`,
+      readingNote: 'Størrelser først, deretter et 64 KB-utvalg av alt som deler én, deretter hele innholdet av det som fortsatt samsvarer.',
+      empty: {
+        heading: 'Ingen duplikatfiler her.',
+        scanned: (count) => `${count} filer sammenlignet.`,
+        truncatedSuffix: ' Skanningen ble avbrutt, så dette er ikke hele mappen.'
+      },
+      summarySets: (count) => `${count} sett`,
+      recoverable: (formatted) => `${formatted} frigjørbart`,
+      keepOldest: 'Behold eldste',
+      keepNewest: 'Behold nyeste',
+      clear: 'Tøm',
+      truncatedWarning: 'Skanningen ble avbrutt, så det kan være flere sett enn disse.',
+      group: {
+        identicalCopies: (count, size) => `${count} identiske kopier · ${size} hver`,
+        allTickedWarning: 'Hver kopi i dette settet er merket av — fjern merket fra én for å beholde den.'
+      },
+      footer: {
+        selected: (count, formatted) => `${count} valgt · ${formatted}`,
+        moving: 'Flytter…',
+        wouldLose: (count) => `${count} sett ville mistet alle kopier`,
+        moveButton: 'Flytt valgte til karantene'
+      },
+      modal: {
+        label: 'Flytt duplikater til karantene',
+        heading: (count) => `Flytte ${count} kopier til karantene?`,
+        body: (formatted) => `${formatted} frigjort. Hvert sett beholder minst én kopi, og ingenting slettes — gjenopprett hva som helst av det fra Karantene-skjermen.`,
+        cancel: 'Avbryt',
+        confirmButton: 'Flytt til karantene'
+      },
+      toasts: {
+        moved: (count) => `Flyttet ${count} ${count === 1 ? 'kopi' : 'kopier'} til karantene.`,
+        restoreHint: 'Gjenopprett dem fra Karantene-skjermen.',
+        failed: (count) => `${count} kunne ikke flyttes.`,
+        failedDetail: 'De kan være åpne eller på en annen stasjon.'
+      }
     }
   },
 
@@ -6581,6 +7593,50 @@ export const CATALOG = {
       groupEnabledOf: (enabledCount, total) => `${enabledCount} van ${total} ingeschakeld`,
       groupAdminNote: 'Wijzigen hiervan vraagt om beheerdersrechten',
       footerNote: "Een item uitschakelen legt de beslissing vast in StartupApproved, dezelfde plek die Windows' eigen instellingen voor opstartapps en Taakbeheer lezen en beschrijven. Er wordt niets verwijderd: de Run-waarde of snelkoppeling blijft precies waar hij is, zodat de wijziging vanaf hier of vanaf een van beide ongedaan te maken is."
+    },
+    duplicates: {
+      title: 'Dubbele bestanden',
+      subtitle: 'Bestanden die byte-voor-byte identiek zijn, niet alleen even groot. Richt het op een map waar je daadwerkelijk dingen bewaart — een heel station lezen om het met zichzelf te vergelijken duurt veel langer dan het waard is, en vindt vooral de eigen kopieën van de machine van zijn eigen bestanden.',
+      folderInputAriaLabel: 'Map om te zoeken naar duplicaten',
+      stop: 'Stoppen',
+      findButton: 'Duplicaten zoeken',
+      compareNote: 'Vergelijkt eerst groottes, dan een steekproef, dan het hele bestand — dus de meeste bestanden worden nooit gelezen.',
+      reading: (folder) => `${folder} wordt gelezen`,
+      readingNote: 'Eerst groottes, dan een steekproef van 64 KB van alles dat er een deelt, dan de volledige inhoud van wat nog steeds overeenkomt.',
+      empty: {
+        heading: 'Geen dubbele bestanden hier.',
+        scanned: (count) => `${count} bestanden vergeleken.`,
+        truncatedSuffix: ' De scan werd afgebroken, dus dit is niet de hele map.'
+      },
+      summarySets: (count) => `${count} set${count === 1 ? '' : 's'}`,
+      recoverable: (formatted) => `${formatted} vrij te maken`,
+      keepOldest: 'Oudste behouden',
+      keepNewest: 'Nieuwste behouden',
+      clear: 'Wissen',
+      truncatedWarning: 'De scan werd afgebroken, dus er kunnen meer sets zijn dan deze.',
+      group: {
+        identicalCopies: (count, size) => `${count} identieke kopieën · elk ${size}`,
+        allTickedWarning: 'Elke kopie in deze set is aangevinkt — vink er één uit om te behouden.'
+      },
+      footer: {
+        selected: (count, formatted) => `${count} geselecteerd · ${formatted}`,
+        moving: 'Verplaatsen…',
+        wouldLose: (count) => `${count} set${count === 1 ? '' : 's'} zou${count === 1 ? '' : 'den'} elke kopie verliezen`,
+        moveButton: 'Selectie naar quarantaine verplaatsen'
+      },
+      modal: {
+        label: 'Duplicaten naar quarantaine verplaatsen',
+        heading: (count) => `${count} kopieën naar quarantaine verplaatsen?`,
+        body: (formatted) => `${formatted} vrijgemaakt. Elke set behoudt minstens één kopie, en er wordt niets verwijderd — herstel er alsnog een vanaf het Quarantaine-scherm.`,
+        cancel: 'Annuleren',
+        confirmButton: 'Naar quarantaine verplaatsen'
+      },
+      toasts: {
+        moved: (count) => `${count} ${count === 1 ? 'kopie' : "kopieën"} naar quarantaine verplaatst.`,
+        restoreHint: 'Herstel ze vanaf het Quarantaine-scherm.',
+        failed: (count) => `${count} kon(den) niet worden verplaatst.`,
+        failedDetail: 'Ze zijn mogelijk geopend of staan op een andere schijf.'
+      }
     }
   },
 
@@ -6854,6 +7910,50 @@ export const CATALOG = {
       groupEnabledOf: (enabledCount, total) => `${enabledCount} z ${total} włączonych`,
       groupAdminNote: 'Zmiana tych wpisów wymaga uprawnień administratora',
       footerNote: 'Wyłączenie wpisu zapisuje decyzję w StartupApproved, tym samym miejscu, które odczytują i zapisują własne ustawienia aplikacji autostartu Windows oraz Menedżer zadań. Nic nie zostaje usunięte: wartość Run lub skrót pozostaje dokładnie tam, gdzie jest, więc zmianę można cofnąć stąd lub z dowolnego z tych dwóch miejsc.'
+    },
+    duplicates: {
+      title: 'Zduplikowane pliki',
+      subtitle: 'Pliki identyczne bit po bicie, a nie tylko tego samego rozmiaru. Wskaż folder, w którym rzeczywiście przechowujesz rzeczy — odczytanie całego dysku, aby porównać go z samym sobą, trwa znacznie dłużej, niż jest to warte, i znajduje głównie własne kopie plików samego komputera.',
+      folderInputAriaLabel: 'Folder do przeszukania pod kątem duplikatów',
+      stop: 'Zatrzymaj',
+      findButton: 'Znajdź duplikaty',
+      compareNote: 'Porównuje najpierw rozmiary, potem próbkę, potem cały plik — więc większość plików nigdy nie jest odczytywana.',
+      reading: (folder) => `Odczytywanie ${folder}`,
+      readingNote: 'Najpierw rozmiary, potem 64 KB próbka wszystkiego, co dzieli jeden rozmiar, a potem pełna zawartość tego, co nadal pasuje.',
+      empty: {
+        heading: 'Brak zduplikowanych plików tutaj.',
+        scanned: (count) => `Porównano plików: ${count}.`,
+        truncatedSuffix: ' Skanowanie zostało przerwane przedwcześnie, więc to nie jest cały folder.'
+      },
+      summarySets: (count) => `${count} ${count === 1 ? 'zestaw' : count < 5 ? 'zestawy' : 'zestawów'}`,
+      recoverable: (formatted) => `${formatted} do odzyskania`,
+      keepOldest: 'Zachowaj najstarszy',
+      keepNewest: 'Zachowaj najnowszy',
+      clear: 'Wyczyść',
+      truncatedWarning: 'Skanowanie zostało przerwane przedwcześnie, więc zestawów może być więcej niż te.',
+      group: {
+        identicalCopies: (count, size) => `${count} identycznych kopii · ${size} każda`,
+        allTickedWarning: 'Każda kopia w tym zestawie jest zaznaczona — odznacz jedną, aby ją zachować.'
+      },
+      footer: {
+        selected: (count, formatted) => `${count} wybranych · ${formatted}`,
+        moving: 'Przenoszenie…',
+        wouldLose: (count) => `${count} ${count === 1 ? 'zestaw' : 'zestawów'} straciłoby wszystkie kopie`,
+        moveButton: 'Przenieś zaznaczone do kwarantanny'
+      },
+      modal: {
+        label: 'Przenieś duplikaty do kwarantanny',
+        heading: (count) => `Przenieść ${count} kopii do kwarantanny?`,
+        body: (formatted) => `Odzyskano ${formatted}. Każdy zestaw zachowuje co najmniej jedną kopię i nic nie zostaje usunięte — przywróć dowolną z nich z ekranu Kwarantanna.`,
+        cancel: 'Anuluj',
+        confirmButton: 'Przenieś do kwarantanny'
+      },
+      toasts: {
+        moved: (count) => `Przeniesiono ${count} ${count === 1 ? 'kopię' : count < 5 ? 'kopie' : 'kopii'} do kwarantanny.`,
+        restoreHint: 'Przywróć je z ekranu Kwarantanna.',
+        failed: (count) => `Nie udało się przenieść: ${count}.`,
+        failedDetail: 'Mogą być otwarte lub na innym dysku.'
+      }
     }
   },
 
@@ -7127,6 +8227,50 @@ export const CATALOG = {
       groupEnabledOf: (enabledCount, total) => `${enabledCount} د ${total} څخه فعالې`,
       groupAdminNote: 'د دې بدلول د اډمین اجازې غواړي',
       footerNote: 'د یوې ننوتنې غیرفعالول دا پرېکړه په StartupApproved کې ثبتوي، همدا هغه ځای دی چې د Windows خپل د پیل اپلیکیشنونو ترتیبات او د دندو مدیر یې لولي او لیکي. هیڅ شی نه ړنګیږي: د Run ارزښت یا شارټ کټ سمدلاسه هلته پاتې کیږي چې دی، نو بدلون د دې دواړو ځایونو څخه بېرته اړول کیدی شي.'
+    },
+    duplicates: {
+      title: 'دوه ځله شوي فایلونه',
+      subtitle: 'هغه فایلونه چې بایټ په بایټ یو شان دي، نه یوازې د یو شان اندازې. دا هغه فولډر ته ورسوئ چیرې چې تاسو واقعیا شیان ساتئ — د یو ټول ډرایو لوستل چې دا د ځان سره پرتله کړي ډیر وخت نیسي پداسې حال کې چې دا ارزښت نلري، او ډیری وختونه د ماشین خپل فایلونه یې خپل کاپي کوي.',
+      folderInputAriaLabel: 'د دوه ځلي موندلو لپاره فولډر',
+      stop: 'ودرول',
+      findButton: 'دوه ځله شوي ومومئ',
+      compareNote: 'لومړی اندازې پرتله کوي، بیا یو نمونه، بیا ټول فایل — نو ډیری فایلونه هیڅکله نه لوستل کیږي.',
+      reading: (folder) => `${folder} لوستل کیږي`,
+      readingNote: 'لومړی اندازې، بیا د هر هغه شي 64 KB نمونه چې یو شریکوي، بیا د هر هغه شي بشپړ منځپانګه چې لاهم مطابقت لري.',
+      empty: {
+        heading: 'دلته دوه ځله شوي فایلونه نشته.',
+        scanned: (count) => `${count} فایلونه پرتله شوي.`,
+        truncatedSuffix: ' سکینینګ مخکې ودرول شو، نو دا ټول فولډر نه دی.'
+      },
+      summarySets: (count) => `${count} سیټونه`,
+      recoverable: (formatted) => `${formatted} بیرته ترلاسه کیدونکي`,
+      keepOldest: 'زوړ وساتئ',
+      keepNewest: 'نوی وساتئ',
+      clear: 'پاک کول',
+      truncatedWarning: 'سکینینګ مخکې ودرول شو، نو ممکن له دې څخه ډیر سیټونه وي.',
+      group: {
+        identicalCopies: (count, size) => `${count} ورته کاپي · هره یوه ${size}`,
+        allTickedWarning: 'په دې سیټ کې هره کاپي نښه شوې ده — یوه لغوه کړئ ترڅو یې وساتئ.'
+      },
+      footer: {
+        selected: (count, formatted) => `${count} ټاکل شوي · ${formatted}`,
+        moving: 'لیږدول کیږي…',
+        wouldLose: (count) => `${count} سیټونه به هره کاپي له لاسه ورکړي`,
+        moveButton: 'ټاکل شوي قرنطین ته لیږدول'
+      },
+      modal: {
+        label: 'دوه ځله شوي قرنطین ته لیږدول',
+        heading: (count) => `${count} کاپي قرنطین ته لیږدول شي؟`,
+        body: (formatted) => `${formatted} بیرته ترلاسه شول. هر سیټ لږترلږه یوه کاپي ساتي، او هیڅ شی نه ړنګیږي — د قرنطین سکرین څخه یې هره یوه بیرته راوړئ.`,
+        cancel: 'لغوه کول',
+        confirmButton: 'قرنطین ته لیږدول'
+      },
+      toasts: {
+        moved: (count) => `${count} کاپي قرنطین ته ولیږدول شوې.`,
+        restoreHint: 'دا د قرنطین سکرین څخه بیرته راوړئ.',
+        failed: (count) => `${count} ونشوای لیږدول شي.`,
+        failedDetail: 'دا ممکن پرانیستل شوي وي یا په بل ډرایو کې وي.'
+      }
     }
   },
 
@@ -7400,6 +8544,50 @@ export const CATALOG = {
       groupEnabledOf: (enabledCount, total) => `${enabledCount} de ${total} habilitadas`,
       groupAdminNote: 'Alterá-las pede permissões de administrador',
       footerNote: 'Desabilitar uma entrada registra a decisão no StartupApproved, o mesmo lugar que as configurações de Aplicativos de Inicialização do próprio Windows e o Gerenciador de Tarefas leem e escrevem. Nada é excluído: o valor Run ou o atalho permanece exatamente onde está, então a mudança pode ser desfeita a partir daqui ou de qualquer um dos dois.'
+    },
+    duplicates: {
+      title: 'Arquivos duplicados',
+      subtitle: 'Arquivos idênticos byte a byte, não apenas do mesmo tamanho. Aponte para uma pasta onde você realmente guarda coisas — ler um disco inteiro para compará-lo consigo mesmo leva muito mais tempo do que vale a pena, e encontra principalmente as próprias cópias da máquina de seus próprios arquivos.',
+      folderInputAriaLabel: 'Pasta onde procurar duplicados',
+      stop: 'Parar',
+      findButton: 'Localizar duplicados',
+      compareNote: 'Compara tamanhos primeiro, depois uma amostra, depois o arquivo inteiro — então a maioria dos arquivos nunca é lida.',
+      reading: (folder) => `Lendo ${folder}`,
+      readingNote: 'Tamanhos primeiro, depois uma amostra de 64 KB de tudo que compartilha um, depois o conteúdo completo do que ainda corresponde.',
+      empty: {
+        heading: 'Nenhum arquivo duplicado aqui.',
+        scanned: (count) => `${count} arquivos comparados.`,
+        truncatedSuffix: ' O escaneamento foi interrompido, então esta não é a pasta inteira.'
+      },
+      summarySets: (count) => `${count} conjunto${count === 1 ? '' : 's'}`,
+      recoverable: (formatted) => `${formatted} recuperáveis`,
+      keepOldest: 'Manter o mais antigo',
+      keepNewest: 'Manter o mais recente',
+      clear: 'Limpar',
+      truncatedWarning: 'O escaneamento foi interrompido, então pode haver mais conjuntos do que estes.',
+      group: {
+        identicalCopies: (count, size) => `${count} cópias idênticas · ${size} cada`,
+        allTickedWarning: 'Toda cópia neste conjunto está marcada — desmarque uma para mantê-la.'
+      },
+      footer: {
+        selected: (count, formatted) => `${count} selecionados · ${formatted}`,
+        moving: 'Movendo…',
+        wouldLose: (count) => `${count} conjunto${count === 1 ? '' : 's'} perderia${count === 1 ? '' : 'm'} todas as cópias`,
+        moveButton: 'Mover selecionados para quarentena'
+      },
+      modal: {
+        label: 'Mover duplicados para quarentena',
+        heading: (count) => `Mover ${count} cópias para a quarentena?`,
+        body: (formatted) => `${formatted} recuperados. Cada conjunto mantém pelo menos uma cópia, e nada é excluído — restaure qualquer uma delas a partir da tela Quarentena.`,
+        cancel: 'Cancelar',
+        confirmButton: 'Mover para quarentena'
+      },
+      toasts: {
+        moved: (count) => `${count} cópi${count === 1 ? 'a movida' : 'as movidas'} para quarentena.`,
+        restoreHint: 'Restaure-as a partir da tela Quarentena.',
+        failed: (count) => `${count} não puderam ser movidos.`,
+        failedDetail: 'Podem estar abertos ou em outro disco.'
+      }
     }
   },
 
@@ -7673,6 +8861,50 @@ export const CATALOG = {
       groupEnabledOf: (enabledCount, total) => `${enabledCount} de ${total} ativadas`,
       groupAdminNote: 'Alterá-las pede permissões de administrador',
       footerNote: 'Desativar uma entrada regista a decisão no StartupApproved, o mesmo local que as definições de Aplicações de Arranque do próprio Windows e o Gestor de Tarefas leem e escrevem. Nada é eliminado: o valor Run ou o atalho permanece exatamente onde está, pelo que a alteração pode ser revertida a partir daqui ou de qualquer um dos dois.'
+    },
+    duplicates: {
+      title: 'Ficheiros duplicados',
+      subtitle: 'Ficheiros idênticos byte a byte, não apenas do mesmo tamanho. Aponte-o para uma pasta onde realmente guarda coisas — ler um disco inteiro para o comparar consigo mesmo demora muito mais tempo do que vale a pena, e encontra sobretudo as próprias cópias da máquina dos seus próprios ficheiros.',
+      folderInputAriaLabel: 'Pasta onde procurar duplicados',
+      stop: 'Parar',
+      findButton: 'Localizar duplicados',
+      compareNote: 'Compara tamanhos primeiro, depois uma amostra, depois o ficheiro inteiro — pelo que a maioria dos ficheiros nunca é lida.',
+      reading: (folder) => `A ler ${folder}`,
+      readingNote: 'Tamanhos primeiro, depois uma amostra de 64 KB de tudo o que partilha um, depois o conteúdo completo do que ainda corresponde.',
+      empty: {
+        heading: 'Nenhum ficheiro duplicado aqui.',
+        scanned: (count) => `${count} ficheiros comparados.`,
+        truncatedSuffix: ' A verificação foi interrompida, pelo que esta não é a pasta inteira.'
+      },
+      summarySets: (count) => `${count} conjunto${count === 1 ? '' : 's'}`,
+      recoverable: (formatted) => `${formatted} recuperáveis`,
+      keepOldest: 'Manter o mais antigo',
+      keepNewest: 'Manter o mais recente',
+      clear: 'Limpar',
+      truncatedWarning: 'A verificação foi interrompida, pelo que pode haver mais conjuntos do que estes.',
+      group: {
+        identicalCopies: (count, size) => `${count} cópias idênticas · ${size} cada`,
+        allTickedWarning: 'Todas as cópias neste conjunto estão assinaladas — desassinale uma para a manter.'
+      },
+      footer: {
+        selected: (count, formatted) => `${count} selecionados · ${formatted}`,
+        moving: 'A mover…',
+        wouldLose: (count) => `${count} conjunto${count === 1 ? '' : 's'} perderia${count === 1 ? '' : 'm'} todas as cópias`,
+        moveButton: 'Mover selecionados para quarentena'
+      },
+      modal: {
+        label: 'Mover duplicados para quarentena',
+        heading: (count) => `Mover ${count} cópias para a quarentena?`,
+        body: (formatted) => `${formatted} recuperados. Cada conjunto mantém pelo menos uma cópia, e nada é eliminado — restaure qualquer uma delas a partir do ecrã Quarentena.`,
+        cancel: 'Cancelar',
+        confirmButton: 'Mover para quarentena'
+      },
+      toasts: {
+        moved: (count) => `${count} cópi${count === 1 ? 'a movida' : 'as movidas'} para quarentena.`,
+        restoreHint: 'Restaure-as a partir do ecrã Quarentena.',
+        failed: (count) => `${count} não puderam ser movidos.`,
+        failedDetail: 'Podem estar abertos ou noutra unidade.'
+      }
     }
   },
 
@@ -7946,6 +9178,50 @@ export const CATALOG = {
       groupEnabledOf: (enabledCount, total) => `${enabledCount} din ${total} activate`,
       groupAdminNote: 'Modificarea acestora solicită drepturi de administrator',
       footerNote: 'Dezactivarea unei intrări înregistrează decizia în StartupApproved, același loc pe care setările proprii de Aplicații la pornire ale Windows și Managerul de activități le citesc și le scriu. Nimic nu este șters: valoarea Run sau comanda rapidă rămâne exact acolo unde este, deci modificarea poate fi anulată de aici sau din oricare dintre cele două.'
+    },
+    duplicates: {
+      title: 'Fișiere duplicate',
+      subtitle: 'Fișiere identice octet cu octet, nu doar de aceeași dimensiune. Îndreaptă-l către un folder în care chiar păstrezi lucruri — citirea unui întreg disc pentru a-l compara cu el însuși durează mult mai mult decât merită și găsește în cea mai mare parte propriile copii ale calculatorului din propriile sale fișiere.',
+      folderInputAriaLabel: 'Folder în care se caută duplicate',
+      stop: 'Oprește',
+      findButton: 'Caută duplicate',
+      compareNote: 'Compară mai întâi dimensiunile, apoi un eșantion, apoi fișierul întreg — deci majoritatea fișierelor nu sunt niciodată citite.',
+      reading: (folder) => `Se citește ${folder}`,
+      readingNote: 'Mai întâi dimensiunile, apoi un eșantion de 64 KB din tot ce are aceeași dimensiune, apoi conținutul complet al a tot ce încă se potrivește.',
+      empty: {
+        heading: 'Niciun fișier duplicat aici.',
+        scanned: (count) => `${count} fișiere comparate.`,
+        truncatedSuffix: ' Scanarea a fost întreruptă, deci acesta nu este întregul folder.'
+      },
+      summarySets: (count) => `${count} ${count === 1 ? 'set' : 'seturi'}`,
+      recoverable: (formatted) => `${formatted} recuperabili`,
+      keepOldest: 'Păstrează cel mai vechi',
+      keepNewest: 'Păstrează cel mai nou',
+      clear: 'Golește',
+      truncatedWarning: 'Scanarea a fost întreruptă, deci pot exista mai multe seturi decât acestea.',
+      group: {
+        identicalCopies: (count, size) => `${count} copii identice · ${size} fiecare`,
+        allTickedWarning: 'Fiecare copie din acest set este bifată — debifează una pentru a o păstra.'
+      },
+      footer: {
+        selected: (count, formatted) => `${count} selectate · ${formatted}`,
+        moving: 'Se mută…',
+        wouldLose: (count) => `${count} ${count === 1 ? 'set' : 'seturi'} ar pierde fiecare copie`,
+        moveButton: 'Mută selecția în carantină'
+      },
+      modal: {
+        label: 'Mută duplicatele în carantină',
+        heading: (count) => `Muți ${count} copii în carantină?`,
+        body: (formatted) => `${formatted} recuperați. Fiecare set păstrează cel puțin o copie, și nimic nu este șters — restaurează oricare dintre ele din ecranul Carantină.`,
+        cancel: 'Anulează',
+        confirmButton: 'Mută în carantină'
+      },
+      toasts: {
+        moved: (count) => `${count} copi${count === 1 ? 'e mutată' : 'i mutate'} în carantină.`,
+        restoreHint: 'Restaurează-le din ecranul Carantină.',
+        failed: (count) => `${count} nu au putut fi mutate.`,
+        failedDetail: 'Pot fi deschise sau pe un alt disc.'
+      }
     }
   },
 
@@ -8219,6 +9495,50 @@ export const CATALOG = {
       groupEnabledOf: (enabledCount, total) => `Включено ${enabledCount} из ${total}`,
       groupAdminNote: 'Изменение требует прав администратора',
       footerNote: 'Отключение записи фиксирует решение в StartupApproved — там же, где читают и пишут собственные параметры Windows «Приложения при автозапуске» и Диспетчер задач. Ничего не удаляется: значение Run или ярлык остаётся точно на своём месте, поэтому изменение можно отменить отсюда или из любого из этих двух мест.'
+    },
+    duplicates: {
+      title: 'Повторяющиеся файлы',
+      subtitle: 'Файлы, идентичные побайтово, а не просто одинакового размера. Укажите папку, в которой вы действительно храните вещи — чтение всего диска для сравнения его с самим собой занимает намного больше времени, чем оно того стоит, и в основном находит собственные копии машиной своих же файлов.',
+      folderInputAriaLabel: 'Папка для поиска дубликатов',
+      stop: 'Остановить',
+      findButton: 'Найти дубликаты',
+      compareNote: 'Сначала сравниваются размеры, затем образец, затем весь файл — поэтому большинство файлов никогда не читается.',
+      reading: (folder) => `Чтение ${folder}`,
+      readingNote: 'Сначала размеры, затем образец в 64 КБ всего, что имеет одинаковый размер, затем полное содержимое того, что всё ещё совпадает.',
+      empty: {
+        heading: 'Здесь нет повторяющихся файлов.',
+        scanned: (count) => `Сравнено файлов: ${count}.`,
+        truncatedSuffix: ' Сканирование было прервано раньше времени, так что это не вся папка.'
+      },
+      summarySets: (count) => `Наборов: ${count}`,
+      recoverable: (formatted) => `${formatted} можно освободить`,
+      keepOldest: 'Оставить самый старый',
+      keepNewest: 'Оставить самый новый',
+      clear: 'Очистить',
+      truncatedWarning: 'Сканирование было прервано раньше времени, так что наборов может быть больше, чем показано.',
+      group: {
+        identicalCopies: (count, size) => `Идентичных копий: ${count} · по ${size}`,
+        allTickedWarning: 'Каждая копия в этом наборе отмечена — снимите отметку с одной, чтобы оставить её.'
+      },
+      footer: {
+        selected: (count, formatted) => `Выбрано: ${count} · ${formatted}`,
+        moving: 'Перемещение…',
+        wouldLose: (count) => `Наборов, которые потеряют все копии: ${count}`,
+        moveButton: 'Переместить выбранное в карантин'
+      },
+      modal: {
+        label: 'Переместить дубликаты в карантин',
+        heading: (count) => `Переместить ${count} копий в карантин?`,
+        body: (formatted) => `${formatted} будет освобождено. В каждом наборе сохраняется минимум одна копия, и ничего не удаляется — восстановите любую из них с экрана Карантин.`,
+        cancel: 'Отмена',
+        confirmButton: 'Переместить в карантин'
+      },
+      toasts: {
+        moved: (count) => `Перемещено копий в карантин: ${count}.`,
+        restoreHint: 'Восстановите их с экрана Карантин.',
+        failed: (count) => `Не удалось переместить: ${count}.`,
+        failedDetail: 'Возможно, они открыты или находятся на другом диске.'
+      }
     }
   },
 
@@ -8492,6 +9812,50 @@ export const CATALOG = {
       groupEnabledOf: (enabledCount, total) => `${enabledCount} z ${total} povolených`,
       groupAdminNote: 'Zmena vyžaduje oprávnenia správcu',
       footerNote: 'Vypnutie položky zaznamená rozhodnutie do StartupApproved, na to isté miesto, ktoré čítajú a zapisujú vlastné nastavenia Po spustení systému Windows a Správca úloh. Nič sa neodstráni: hodnota Run alebo skratka zostáva presne tam, kde je, takže zmenu možno vrátiť odtiaľto alebo z ktoréhokoľvek z nich.'
+    },
+    duplicates: {
+      title: 'Duplicitné súbory',
+      subtitle: 'Súbory, ktoré sú bajt po bajte identické, nielen rovnako veľké. Nasmerujte to na priečinok, kde skutočne uchovávate veci — čítanie celého disku na porovnanie so sebou samým trvá oveľa dlhšie, než sa oplatí, a väčšinou nájde vlastné kópie počítača z jeho vlastných súborov.',
+      folderInputAriaLabel: 'Priečinok, v ktorom sa majú hľadať duplicity',
+      stop: 'Zastaviť',
+      findButton: 'Nájsť duplicity',
+      compareNote: 'Porovnáva najprv veľkosti, potom vzorku, potom celý súbor — takže väčšina súborov sa nikdy nečíta.',
+      reading: (folder) => `Čítanie ${folder}`,
+      readingNote: 'Najprv veľkosti, potom 64 KB vzorka všetkého, čo zdieľa rovnakú veľkosť, potom celý obsah toho, čo stále zodpovedá.',
+      empty: {
+        heading: 'Tu nie sú žiadne duplicitné súbory.',
+        scanned: (count) => `Porovnaných súborov: ${count}.`,
+        truncatedSuffix: ' Skenovanie bolo predčasne ukončené, takže toto nie je celý priečinok.'
+      },
+      summarySets: (count) => `${count} ${count === 1 ? 'sada' : count < 5 ? 'sady' : 'sád'}`,
+      recoverable: (formatted) => `${formatted} možno uvoľniť`,
+      keepOldest: 'Ponechať najstaršiu',
+      keepNewest: 'Ponechať najnovšiu',
+      clear: 'Vymazať',
+      truncatedWarning: 'Skenovanie bolo predčasne ukončené, takže sád môže byť viac ako tieto.',
+      group: {
+        identicalCopies: (count, size) => `${count} identických kópií · po ${size}`,
+        allTickedWarning: 'Každá kópia v tejto sade je zaškrtnutá — odškrtnite jednu, aby ste ju ponechali.'
+      },
+      footer: {
+        selected: (count, formatted) => `${count} vybraných · ${formatted}`,
+        moving: 'Presúvanie…',
+        wouldLose: (count) => `${count} ${count === 1 ? 'sada' : 'sád'} by prišlo o všetky kópie`,
+        moveButton: 'Presunúť vybrané do karantény'
+      },
+      modal: {
+        label: 'Presunúť duplicity do karantény',
+        heading: (count) => `Presunúť ${count} kópií do karantény?`,
+        body: (formatted) => `Uvoľnených ${formatted}. Každá sada si ponechá aspoň jednu kópiu a nič sa nezmaže — ktorúkoľvek z nich môžete obnoviť z obrazovky Karanténa.`,
+        cancel: 'Zrušiť',
+        confirmButton: 'Presunúť do karantény'
+      },
+      toasts: {
+        moved: (count) => `Presunutých kópií do karantény: ${count}.`,
+        restoreHint: 'Obnovte ich z obrazovky Karanténa.',
+        failed: (count) => `Nepodarilo sa presunúť: ${count}.`,
+        failedDetail: 'Môžu byť otvorené alebo na inom disku.'
+      }
     }
   },
 
@@ -8765,6 +10129,50 @@ export const CATALOG = {
       groupEnabledOf: (enabledCount, total) => `${enabledCount} nga ${total} të aktivizuara`,
       groupAdminNote: 'Ndryshimi i tyre kërkon të drejta administratori',
       footerNote: 'Çaktivizimi i një hyrjeje regjistron vendimin në StartupApproved, po atë vend ku lexojnë dhe shkruajnë vetë cilësimet e Aplikacioneve të Nisjes të Windows dhe Menaxheri i Detyrave. Asgjë nuk fshihet: vlera Run ose shkurtorja mbetet saktësisht aty ku është, kështu që ndryshimi mund të kthehet mbrapsht që këtu ose nga cilido prej dy vendeve.'
+    },
+    duplicates: {
+      title: 'Skedarë të dyfishtë',
+      subtitle: 'Skedarë identikë bajt për bajt, jo thjesht të së njëjtës madhësi. Drejtoje te një dosje ku vërtet mban gjëra — leximi i një disku të tërë për ta krahasuar me veten e tij zgjat shumë më tepër se sa vlen, dhe gjen kryesisht kopjet e vetë makinës nga skedarët e saj.',
+      folderInputAriaLabel: 'Dosja ku të kërkohen dublikatat',
+      stop: 'Ndalo',
+      findButton: 'Gjej dublikatat',
+      compareNote: 'Krahason madhësitë fillimisht, pastaj një mostër, pastaj skedarin e tërë — kështu shumica e skedarëve nuk lexohen kurrë.',
+      reading: (folder) => `Duke lexuar ${folder}`,
+      readingNote: 'Madhësitë fillimisht, pastaj një mostër 64 KB e çdo gjëje me të njëjtën madhësi, pastaj përmbajtja e plotë e asaj që përputhet ende.',
+      empty: {
+        heading: 'Nuk ka skedarë të dyfishtë këtu.',
+        scanned: (count) => `${count} skedarë të krahasuar.`,
+        truncatedSuffix: ' Skanimi u ndërpre para kohe, kështu që ky nuk është i gjithë dosja.'
+      },
+      summarySets: (count) => `${count} bashkësi`,
+      recoverable: (formatted) => `${formatted} e rikuperueshme`,
+      keepOldest: 'Mbaj më të vjetrën',
+      keepNewest: 'Mbaj më të renë',
+      clear: 'Pastro',
+      truncatedWarning: 'Skanimi u ndërpre para kohe, kështu që mund të ketë më shumë bashkësi se këto.',
+      group: {
+        identicalCopies: (count, size) => `${count} kopje identike · ${size} secila`,
+        allTickedWarning: 'Çdo kopje në këtë bashkësi është shënuar — hiq shenjën nga një për ta mbajtur.'
+      },
+      footer: {
+        selected: (count, formatted) => `${count} të zgjedhura · ${formatted}`,
+        moving: 'Duke lëvizur…',
+        wouldLose: (count) => `${count} bashkësi do të humbisnin çdo kopje`,
+        moveButton: 'Lëviz të zgjedhurat në karantinë'
+      },
+      modal: {
+        label: 'Lëviz dublikatat në karantinë',
+        heading: (count) => `Të lëvizen ${count} kopje në karantinë?`,
+        body: (formatted) => `${formatted} u rikuperuan. Çdo bashkësi mban të paktën një kopje, dhe asgjë nuk fshihet — rikthe çdo gjë prej saj nga ekrani i Karantinës.`,
+        cancel: 'Anulo',
+        confirmButton: 'Lëviz në karantinë'
+      },
+      toasts: {
+        moved: (count) => `U lëvizën ${count} kopje në karantinë.`,
+        restoreHint: 'Riktheji nga ekrani i Karantinës.',
+        failed: (count) => `${count} nuk mundën të lëviznin.`,
+        failedDetail: 'Mund të jenë të hapura ose në një disk tjetër.'
+      }
     }
   },
 
@@ -9038,6 +10446,50 @@ export const CATALOG = {
       groupEnabledOf: (enabledCount, total) => `${enabledCount} од ${total} омогућено`,
       groupAdminNote: 'Промена ових захтева администраторска права',
       footerNote: 'Онемогућавање ставке бележи одлуку у StartupApproved, на истом месту које читају и пишу сопствена подешавања Windows апликација при покретању и Управљач задацима. Ништа се не брише: вредност Run или пречица остаје тачно тамо где јесте, тако да се промена може поништити одавде или из било ког од та два места.'
+    },
+    duplicates: {
+      title: 'Дуплирани фајлови',
+      subtitle: 'Фајлови који су идентични бајт по бајт, не само исте величине. Усмерите то на фасциклу у коју заиста чувате ствари — читање целог диска да би се упоредио са самим собом траје много дуже него што вреди, и углавном проналази сопствене копије машине сопствених фајлова.',
+      folderInputAriaLabel: 'Фасцикла за претрагу дупликата',
+      stop: 'Заустави',
+      findButton: 'Пронађи дупликате',
+      compareNote: 'Прво упоређује величине, затим узорак, затим цео фајл — тако да се већина фајлова никада не чита.',
+      reading: (folder) => `Читање ${folder}`,
+      readingNote: 'Прво величине, затим узорак од 64 KB свега што дели исту величину, затим потпун садржај свега што се и даље поклапа.',
+      empty: {
+        heading: 'Овде нема дуплираних фајлова.',
+        scanned: (count) => `Упоређено фајлова: ${count}.`,
+        truncatedSuffix: ' Скенирање је прекинуто пре времена, тако да ово није цела фасцикла.'
+      },
+      summarySets: (count) => `${count} ${count === 1 ? 'скуп' : 'скупова'}`,
+      recoverable: (formatted) => `${formatted} могуће ослободити`,
+      keepOldest: 'Задржи најстарији',
+      keepNewest: 'Задржи најновији',
+      clear: 'Обриши',
+      truncatedWarning: 'Скенирање је прекинуто пре времена, тако да можда има више скупова од ових.',
+      group: {
+        identicalCopies: (count, size) => `${count} идентичних копија · по ${size}`,
+        allTickedWarning: 'Свака копија у овом скупу је означена — уклоните ознаку са једне да бисте је задржали.'
+      },
+      footer: {
+        selected: (count, formatted) => `${count} изабрано · ${formatted}`,
+        moving: 'Премештање…',
+        wouldLose: (count) => `${count} ${count === 1 ? 'скуп' : 'скупова'} би изгубио све копије`,
+        moveButton: 'Премести изабрано у карантин'
+      },
+      modal: {
+        label: 'Премести дупликате у карантин',
+        heading: (count) => `Преместити ${count} копија у карантин?`,
+        body: (formatted) => `${formatted} ослобођено. Сваки скуп задржава најмање једну копију, и ништа се не брише — вратите било коју од њих са екрана Карантин.`,
+        cancel: 'Откажи',
+        confirmButton: 'Премести у карантин'
+      },
+      toasts: {
+        moved: (count) => `Премештено копија у карантин: ${count}.`,
+        restoreHint: 'Вратите их са екрана Карантин.',
+        failed: (count) => `Није могуће преместити: ${count}.`,
+        failedDetail: 'Можда су отворени или на другом диску.'
+      }
     }
   },
 
@@ -9311,6 +10763,50 @@ export const CATALOG = {
       groupEnabledOf: (enabledCount, total) => `${enabledCount} av ${total} aktiverade`,
       groupAdminNote: 'Att ändra dessa kräver administratörsrättigheter',
       footerNote: 'Att inaktivera en post registrerar beslutet i StartupApproved, samma plats som Windows egna inställningar för Startappar och Aktivitetshanteraren läser och skriver till. Inget tas bort: Run-värdet eller genvägen ligger kvar exakt där det är, så ändringen kan ångras härifrån eller från någon av de två.'
+    },
+    duplicates: {
+      title: 'Dubbletter',
+      subtitle: 'Filer som är byte-för-byte identiska, inte bara samma storlek. Rikta det mot en mapp där du faktiskt förvarar saker — att läsa en hel enhet för att jämföra den med sig själv tar mycket längre tid än det är värt, och hittar mest maskinens egna kopior av sina egna filer.',
+      folderInputAriaLabel: 'Mapp att söka efter dubbletter i',
+      stop: 'Stoppa',
+      findButton: 'Hitta dubbletter',
+      compareNote: 'Jämför storlekar först, sedan ett urval, sedan hela filen — så de flesta filer läses aldrig.',
+      reading: (folder) => `Läser ${folder}`,
+      readingNote: 'Storlekar först, sedan ett 64 KB-urval av allt som delar en storlek, sedan hela innehållet i det som fortfarande matchar.',
+      empty: {
+        heading: 'Inga dubblettfiler här.',
+        scanned: (count) => `${count} filer jämförda.`,
+        truncatedSuffix: ' Skanningen avbröts, så detta är inte hela mappen.'
+      },
+      summarySets: (count) => `${count} set`,
+      recoverable: (formatted) => `${formatted} kan frigöras`,
+      keepOldest: 'Behåll äldsta',
+      keepNewest: 'Behåll nyaste',
+      clear: 'Rensa',
+      truncatedWarning: 'Skanningen avbröts, så det kan finnas fler set än dessa.',
+      group: {
+        identicalCopies: (count, size) => `${count} identiska kopior · ${size} vardera`,
+        allTickedWarning: 'Varje kopia i detta set är markerad — avmarkera en för att behålla den.'
+      },
+      footer: {
+        selected: (count, formatted) => `${count} valda · ${formatted}`,
+        moving: 'Flyttar…',
+        wouldLose: (count) => `${count} set skulle förlora alla kopior`,
+        moveButton: 'Flytta valda till karantän'
+      },
+      modal: {
+        label: 'Flytta dubbletter till karantän',
+        heading: (count) => `Flytta ${count} kopior till karantän?`,
+        body: (formatted) => `${formatted} återvunnet. Varje set behåller minst en kopia, och inget raderas — återställ vilken som helst av dem från Karantän-skärmen.`,
+        cancel: 'Avbryt',
+        confirmButton: 'Flytta till karantän'
+      },
+      toasts: {
+        moved: (count) => `Flyttade ${count} ${count === 1 ? 'kopia' : 'kopior'} till karantän.`,
+        restoreHint: 'Återställ dem från Karantän-skärmen.',
+        failed: (count) => `${count} kunde inte flyttas.`,
+        failedDetail: 'De kan vara öppna eller på en annan enhet.'
+      }
     }
   },
 
@@ -9584,6 +11080,50 @@ export const CATALOG = {
       groupEnabledOf: (enabledCount, total) => `เปิดใช้งาน ${enabledCount} จาก ${total}`,
       groupAdminNote: 'การเปลี่ยนแปลงรายการเหล่านี้ต้องมีสิทธิ์ผู้ดูแลระบบ',
       footerNote: 'การปิดใช้งานรายการจะบันทึกการตัดสินใจไว้ใน StartupApproved ซึ่งเป็นตำแหน่งเดียวกับที่การตั้งค่าแอปเริ่มต้นระบบของ Windows เองและตัวจัดการงานอ่านและเขียน ไม่มีอะไรถูกลบ ค่า Run หรือทางลัดยังคงอยู่ตรงตำแหน่งเดิม ดังนั้นการเปลี่ยนแปลงจึงย้อนกลับได้จากที่นี่หรือจากที่ใดที่หนึ่งในสองแห่งนั้น'
+    },
+    duplicates: {
+      title: 'ไฟล์ที่ซ้ำกัน',
+      subtitle: 'ไฟล์ที่เหมือนกันทุกไบต์ ไม่ใช่แค่ขนาดเท่ากัน ชี้ไปยังโฟลเดอร์ที่คุณเก็บสิ่งต่าง ๆ จริง ๆ — การอ่านทั้งไดรฟ์เพื่อเปรียบเทียบกับตัวเองใช้เวลานานกว่าที่คุ้มค่า และส่วนใหญ่จะพบสำเนาไฟล์ของเครื่องเองเท่านั้น',
+      folderInputAriaLabel: 'โฟลเดอร์สำหรับค้นหาไฟล์ที่ซ้ำกัน',
+      stop: 'หยุด',
+      findButton: 'ค้นหาไฟล์ที่ซ้ำกัน',
+      compareNote: 'เปรียบเทียบขนาดก่อน จากนั้นตัวอย่าง จากนั้นทั้งไฟล์ — ดังนั้นไฟล์ส่วนใหญ่จึงไม่เคยถูกอ่านเลย',
+      reading: (folder) => `กำลังอ่าน ${folder}`,
+      readingNote: 'ขนาดก่อน จากนั้นตัวอย่างขนาด 64 KB ของสิ่งที่มีขนาดเดียวกัน จากนั้นเนื้อหาทั้งหมดของสิ่งที่ยังคงตรงกัน',
+      empty: {
+        heading: 'ไม่มีไฟล์ที่ซ้ำกันที่นี่',
+        scanned: (count) => `เปรียบเทียบแล้ว ${count} ไฟล์`,
+        truncatedSuffix: ' การสแกนถูกตัดให้สั้นลง ดังนั้นนี่ไม่ใช่ทั้งโฟลเดอร์'
+      },
+      summarySets: (count) => `${count} ชุด`,
+      recoverable: (formatted) => `${formatted} สามารถกู้คืนพื้นที่ได้`,
+      keepOldest: 'เก็บไฟล์เก่าสุด',
+      keepNewest: 'เก็บไฟล์ใหม่สุด',
+      clear: 'ล้าง',
+      truncatedWarning: 'การสแกนถูกตัดให้สั้นลง ดังนั้นอาจมีชุดมากกว่านี้',
+      group: {
+        identicalCopies: (count, size) => `${count} สำเนาที่เหมือนกัน · ชุดละ ${size}`,
+        allTickedWarning: 'ทุกสำเนาในชุดนี้ถูกเลือกไว้ — ยกเลิกการเลือกหนึ่งรายการเพื่อเก็บไว้'
+      },
+      footer: {
+        selected: (count, formatted) => `เลือก ${count} รายการ · ${formatted}`,
+        moving: 'กำลังย้าย…',
+        wouldLose: (count) => `${count} ชุดจะสูญเสียสำเนาทั้งหมด`,
+        moveButton: 'ย้ายรายการที่เลือกไปยังกักกัน'
+      },
+      modal: {
+        label: 'ย้ายไฟล์ที่ซ้ำกันไปยังกักกัน',
+        heading: (count) => `ย้าย ${count} สำเนาไปยังกักกันหรือไม่`,
+        body: (formatted) => `กู้คืนพื้นที่ได้ ${formatted} แต่ละชุดจะเก็บสำเนาไว้อย่างน้อยหนึ่งชุด และไม่มีอะไรถูกลบ — คุณสามารถกู้คืนรายการใดก็ได้จากหน้าจอกักกัน`,
+        cancel: 'ยกเลิก',
+        confirmButton: 'ย้ายไปยังกักกัน'
+      },
+      toasts: {
+        moved: (count) => `ย้าย ${count} สำเนาไปยังกักกันแล้ว`,
+        restoreHint: 'กู้คืนได้จากหน้าจอกักกัน',
+        failed: (count) => `ย้ายไม่สำเร็จ ${count} รายการ`,
+        failedDetail: 'อาจเปิดอยู่หรืออยู่บนไดรฟ์อื่น'
+      }
     }
   },
 
@@ -9857,6 +11397,50 @@ export const CATALOG = {
       groupEnabledOf: (enabledCount, total) => `${total} öğeden ${enabledCount} tanesi etkin`,
       groupAdminNote: 'Bunları değiştirmek yönetici izni ister',
       footerNote: "Bir girdiyi devre dışı bırakmak, kararı StartupApproved'a kaydeder; bu, Windows'un kendi Başlangıç Uygulamaları ayarlarının ve Görev Yöneticisi'nin okuyup yazdığı aynı yerdir. Hiçbir şey silinmez: Run değeri veya kısayol tam olarak bulunduğu yerde kalır, bu yüzden değişiklik buradan veya ikisinden herhangi birinden geri alınabilir."
+    },
+    duplicates: {
+      title: 'Yinelenen dosyalar',
+      subtitle: "Sadece aynı boyutta değil, bayt bayt aynı olan dosyalar. Bunu gerçekten bir şeyler sakladığınız bir klasöre yönlendirin — bütün bir sürücüyü kendisiyle karşılaştırmak için okumak, buna değeceğinden çok daha uzun sürer ve çoğunlukla makinenin kendi dosyalarının kendi kopyalarını bulur.",
+      folderInputAriaLabel: 'Yinelenenlerin aranacağı klasör',
+      stop: 'Durdur',
+      findButton: 'Yinelenenleri bul',
+      compareNote: 'Önce boyutları, sonra bir örneği, sonra tüm dosyayı karşılaştırır — bu yüzden dosyaların çoğu asla okunmaz.',
+      reading: (folder) => `${folder} okunuyor`,
+      readingNote: 'Önce boyutlar, sonra aynı boyutu paylaşan her şeyin 64 KB\'lık bir örneği, sonra hâlâ eşleşen her şeyin tam içeriği.',
+      empty: {
+        heading: 'Burada yinelenen dosya yok.',
+        scanned: (count) => `${count} dosya karşılaştırıldı.`,
+        truncatedSuffix: ' Tarama kısa kesildi, bu yüzden bu tüm klasör değil.'
+      },
+      summarySets: (count) => `${count} küme`,
+      recoverable: (formatted) => `${formatted} geri kazanılabilir`,
+      keepOldest: 'En eskisini tut',
+      keepNewest: 'En yenisini tut',
+      clear: 'Temizle',
+      truncatedWarning: 'Tarama kısa kesildi, bu yüzden bunlardan daha fazla küme olabilir.',
+      group: {
+        identicalCopies: (count, size) => `${count} özdeş kopya · her biri ${size}`,
+        allTickedWarning: 'Bu kümedeki her kopya işaretli — birini tutmak için işaretini kaldırın.'
+      },
+      footer: {
+        selected: (count, formatted) => `${count} seçildi · ${formatted}`,
+        moving: 'Taşınıyor…',
+        wouldLose: (count) => `${count} küme tüm kopyalarını kaybederdi`,
+        moveButton: 'Seçilenleri karantinaya taşı'
+      },
+      modal: {
+        label: 'Yinelenenleri karantinaya taşı',
+        heading: (count) => `${count} kopya karantinaya taşınsın mı?`,
+        body: (formatted) => `${formatted} geri kazanıldı. Her küme en az bir kopya tutar ve hiçbir şey silinmez — herhangi birini Karantina ekranından geri yükleyin.`,
+        cancel: 'İptal',
+        confirmButton: 'Karantinaya taşı'
+      },
+      toasts: {
+        moved: (count) => `${count} kopya karantinaya taşındı.`,
+        restoreHint: 'Bunları Karantina ekranından geri yükleyin.',
+        failed: (count) => `${count} taşınamadı.`,
+        failedDetail: 'Açık olabilirler veya başka bir sürücüde olabilirler.'
+      }
     }
   },
 
@@ -10130,6 +11714,50 @@ export const CATALOG = {
       groupEnabledOf: (enabledCount, total) => `Увімкнено ${enabledCount} з ${total}`,
       groupAdminNote: 'Зміна цього вимагає прав адміністратора',
       footerNote: 'Вимкнення запису фіксує рішення в StartupApproved — тому самому місці, яке читають і записують власні параметри Windows «Застосунки автозавантаження» і Диспетчер завдань. Нічого не видаляється: значення Run або ярлик залишається точно там, де воно є, тож зміну можна скасувати звідси або з будь-якого з цих двох місць.'
+    },
+    duplicates: {
+      title: 'Файли-дублікати',
+      subtitle: 'Файли, які ідентичні побайтово, а не просто одного розміру. Вкажіть папку, у якій ви справді зберігаєте файли — читання всього диска, щоб порівняти його із самим собою, займає набагато більше часу, ніж воно того варте, і здебільшого знаходить власні копії машини її ж власних файлів.',
+      folderInputAriaLabel: 'Папка для пошуку дублікатів',
+      stop: 'Зупинити',
+      findButton: 'Знайти дублікати',
+      compareNote: 'Спочатку порівнює розміри, потім зразок, потім весь файл — тому більшість файлів ніколи не читається.',
+      reading: (folder) => `Читання ${folder}`,
+      readingNote: 'Спочатку розміри, потім 64 КБ зразок усього, що має однаковий розмір, потім повний вміст того, що все ще збігається.',
+      empty: {
+        heading: 'Тут немає файлів-дублікатів.',
+        scanned: (count) => `Порівняно файлів: ${count}.`,
+        truncatedSuffix: ' Сканування було перервано завчасно, тож це не вся папка.'
+      },
+      summarySets: (count) => `Наборів: ${count}`,
+      recoverable: (formatted) => `${formatted} можна звільнити`,
+      keepOldest: 'Залишити найстаріший',
+      keepNewest: 'Залишити найновіший',
+      clear: 'Очистити',
+      truncatedWarning: 'Сканування було перервано завчасно, тож наборів може бути більше, ніж показано.',
+      group: {
+        identicalCopies: (count, size) => `Ідентичних копій: ${count} · по ${size}`,
+        allTickedWarning: 'Кожна копія в цьому наборі позначена — зніміть позначку з однієї, щоб залишити її.'
+      },
+      footer: {
+        selected: (count, formatted) => `Вибрано: ${count} · ${formatted}`,
+        moving: 'Переміщення…',
+        wouldLose: (count) => `Наборів, які втратять усі копії: ${count}`,
+        moveButton: 'Перемістити вибране в карантин'
+      },
+      modal: {
+        label: 'Перемістити дублікати в карантин',
+        heading: (count) => `Перемістити ${count} копій у карантин?`,
+        body: (formatted) => `Буде звільнено ${formatted}. Кожен набір зберігає щонайменше одну копію, і нічого не видаляється — відновіть будь-яку з них з екрана Карантин.`,
+        cancel: 'Скасувати',
+        confirmButton: 'Перемістити в карантин'
+      },
+      toasts: {
+        moved: (count) => `Переміщено копій у карантин: ${count}.`,
+        restoreHint: 'Відновіть їх з екрана Карантин.',
+        failed: (count) => `Не вдалося перемістити: ${count}.`,
+        failedDetail: 'Можливо, вони відкриті або перебувають на іншому диску.'
+      }
     }
   },
 
@@ -10403,6 +12031,50 @@ export const CATALOG = {
       groupEnabledOf: (enabledCount, total) => `${enabledCount}/${total} được bật`,
       groupAdminNote: 'Thay đổi các mục này cần quyền quản trị',
       footerNote: 'Tắt một mục sẽ ghi lại quyết định đó trong StartupApproved, cùng nơi mà cài đặt Ứng dụng khởi động và Trình quản lý tác vụ của chính Windows đọc và ghi. Không có gì bị xóa: giá trị Run hoặc lối tắt vẫn còn nguyên ở đó, vì vậy thay đổi có thể được hoàn tác từ đây hoặc từ một trong hai nơi đó.'
+    },
+    duplicates: {
+      title: 'Tệp trùng lặp',
+      subtitle: 'Các tệp giống hệt nhau từng byte, không chỉ đơn thuần là cùng kích thước. Trỏ vào một thư mục nơi bạn thực sự lưu trữ đồ đạc — đọc toàn bộ ổ đĩa để so sánh nó với chính nó mất nhiều thời gian hơn giá trị mang lại, và thường chỉ tìm thấy các bản sao của chính máy đối với các tệp của nó.',
+      folderInputAriaLabel: 'Thư mục để tìm các tệp trùng lặp',
+      stop: 'Dừng',
+      findButton: 'Tìm tệp trùng lặp',
+      compareNote: 'So sánh kích thước trước, sau đó một mẫu, sau đó toàn bộ tệp — vì vậy hầu hết các tệp không bao giờ được đọc.',
+      reading: (folder) => `Đang đọc ${folder}`,
+      readingNote: 'Kích thước trước, sau đó một mẫu 64 KB của bất kỳ thứ gì có cùng kích thước, sau đó toàn bộ nội dung của bất kỳ thứ gì vẫn khớp.',
+      empty: {
+        heading: 'Không có tệp trùng lặp ở đây.',
+        scanned: (count) => `Đã so sánh ${count} tệp.`,
+        truncatedSuffix: ' Quá trình quét đã bị cắt ngắn, vì vậy đây không phải là toàn bộ thư mục.'
+      },
+      summarySets: (count) => `${count} bộ`,
+      recoverable: (formatted) => `${formatted} có thể thu hồi`,
+      keepOldest: 'Giữ bản cũ nhất',
+      keepNewest: 'Giữ bản mới nhất',
+      clear: 'Xóa',
+      truncatedWarning: 'Quá trình quét đã bị cắt ngắn, vì vậy có thể có nhiều bộ hơn những bộ này.',
+      group: {
+        identicalCopies: (count, size) => `${count} bản sao giống hệt nhau · mỗi bản ${size}`,
+        allTickedWarning: 'Mọi bản sao trong bộ này đều được đánh dấu — bỏ đánh dấu một bản để giữ lại nó.'
+      },
+      footer: {
+        selected: (count, formatted) => `${count} đã chọn · ${formatted}`,
+        moving: 'Đang di chuyển…',
+        wouldLose: (count) => `${count} bộ sẽ mất toàn bộ bản sao`,
+        moveButton: 'Chuyển mục đã chọn vào khu cách ly'
+      },
+      modal: {
+        label: 'Chuyển tệp trùng lặp vào khu cách ly',
+        heading: (count) => `Chuyển ${count} bản sao vào khu cách ly?`,
+        body: (formatted) => `Đã thu hồi ${formatted}. Mỗi bộ giữ lại ít nhất một bản sao, và không có gì bị xóa — khôi phục bất kỳ bản nào trong số đó từ màn hình Khu cách ly.`,
+        cancel: 'Hủy',
+        confirmButton: 'Chuyển vào khu cách ly'
+      },
+      toasts: {
+        moved: (count) => `Đã chuyển ${count} bản sao vào khu cách ly.`,
+        restoreHint: 'Khôi phục chúng từ màn hình Khu cách ly.',
+        failed: (count) => `Không thể chuyển ${count} mục.`,
+        failedDetail: 'Chúng có thể đang mở hoặc nằm trên ổ đĩa khác.'
+      }
     }
   },
 
@@ -10676,6 +12348,50 @@ export const CATALOG = {
       groupEnabledOf: (enabledCount, total) => `${total} 个中已启用 ${enabledCount} 个`,
       groupAdminNote: '更改这些需要管理员权限',
       footerNote: '关闭某个项目会将该决定记录到 StartupApproved 中，这与 Windows 自身的"启动应用"设置和任务管理器读写的位置相同。不会删除任何内容：Run 值或快捷方式会原样保留，因此可以从这里或这两处中的任意一处撤销更改。'
+    },
+    duplicates: {
+      title: '重复文件',
+      subtitle: '逐字节完全相同的文件，而不仅仅是大小相同。将其指向一个你确实存放东西的文件夹——读取整个驱动器以与自身比较所花费的时间远超其价值，而且大多数情况下只会找到机器自身文件的自我副本。',
+      folderInputAriaLabel: '要搜索重复项的文件夹',
+      stop: '停止',
+      findButton: '查找重复项',
+      compareNote: '先比较大小，再比较样本，再比较整个文件——因此大多数文件根本不会被读取。',
+      reading: (folder) => `正在读取 ${folder}`,
+      readingNote: '先比较大小，然后比较大小相同的所有文件的 64 KB 样本，最后比较仍然匹配的文件的完整内容。',
+      empty: {
+        heading: '这里没有重复文件。',
+        scanned: (count) => `已比较 ${count} 个文件。`,
+        truncatedSuffix: ' 扫描被提前中止，因此这并非整个文件夹。'
+      },
+      summarySets: (count) => `${count} 组`,
+      recoverable: (formatted) => `${formatted} 可释放`,
+      keepOldest: '保留最旧的',
+      keepNewest: '保留最新的',
+      clear: '清除',
+      truncatedWarning: '扫描被提前中止，因此可能还有比这更多的组。',
+      group: {
+        identicalCopies: (count, size) => `${count} 个相同副本 · 每个 ${size}`,
+        allTickedWarning: '此组中的每个副本都已勾选——取消勾选一个以保留它。'
+      },
+      footer: {
+        selected: (count, formatted) => `已选 ${count} 个 · ${formatted}`,
+        moving: '正在移动…',
+        wouldLose: (count) => `${count} 组将失去所有副本`,
+        moveButton: '将所选内容移至隔离区'
+      },
+      modal: {
+        label: '将重复项移至隔离区',
+        heading: (count) => `要将 ${count} 个副本移至隔离区吗？`,
+        body: (formatted) => `将释放 ${formatted}。每组至少保留一个副本，且不会删除任何内容——你可以随时从隔离区屏幕恢复其中任何一个。`,
+        cancel: '取消',
+        confirmButton: '移至隔离区'
+      },
+      toasts: {
+        moved: (count) => `已将 ${count} 个副本移至隔离区。`,
+        restoreHint: '从隔离区屏幕恢复它们。',
+        failed: (count) => `${count} 个未能移动。`,
+        failedDetail: '它们可能正被打开或位于另一个驱动器上。'
+      }
     }
   },
 
@@ -10949,6 +12665,50 @@ export const CATALOG = {
       groupEnabledOf: (enabledCount, total) => `${total} 個中已啟用 ${enabledCount} 個`,
       groupAdminNote: '變更這些需要系統管理員權限',
       footerNote: '關閉某個項目會將該決定記錄到 StartupApproved 中，這與 Windows 自身的「啟動應用程式」設定和工作管理員讀寫的位置相同。不會刪除任何內容：Run 值或捷徑會原樣保留，因此可以從這裡或這兩處中的任一處復原變更。'
+    },
+    duplicates: {
+      title: '重複檔案',
+      subtitle: '逐位元組完全相同的檔案，而不僅僅是大小相同。將其指向一個你確實存放東西的資料夾——讀取整個磁碟以與自身比較所花費的時間遠超其價值，而且大多情況下只會找到機器自身檔案的自我副本。',
+      folderInputAriaLabel: '要搜尋重複項的資料夾',
+      stop: '停止',
+      findButton: '尋找重複項',
+      compareNote: '先比較大小，再比較樣本，再比較整個檔案——因此大多數檔案根本不會被讀取。',
+      reading: (folder) => `正在讀取 ${folder}`,
+      readingNote: '先比較大小，然後比較大小相同的所有檔案的 64 KB 樣本，最後比較仍然相符的檔案的完整內容。',
+      empty: {
+        heading: '這裡沒有重複檔案。',
+        scanned: (count) => `已比較 ${count} 個檔案。`,
+        truncatedSuffix: ' 掃描被提前中止，因此這並非整個資料夾。'
+      },
+      summarySets: (count) => `${count} 組`,
+      recoverable: (formatted) => `${formatted} 可釋放`,
+      keepOldest: '保留最舊的',
+      keepNewest: '保留最新的',
+      clear: '清除',
+      truncatedWarning: '掃描被提前中止，因此可能還有比這更多的組。',
+      group: {
+        identicalCopies: (count, size) => `${count} 個相同副本 · 每個 ${size}`,
+        allTickedWarning: '此組中的每個副本都已勾選——取消勾選一個以保留它。'
+      },
+      footer: {
+        selected: (count, formatted) => `已選 ${count} 個 · ${formatted}`,
+        moving: '正在移動…',
+        wouldLose: (count) => `${count} 組將失去所有副本`,
+        moveButton: '將所選內容移至隔離區'
+      },
+      modal: {
+        label: '將重複項移至隔離區',
+        heading: (count) => `要將 ${count} 個副本移至隔離區嗎？`,
+        body: (formatted) => `將釋放 ${formatted}。每組至少保留一個副本，且不會刪除任何內容——你可以隨時從隔離區畫面還原其中任何一個。`,
+        cancel: '取消',
+        confirmButton: '移至隔離區'
+      },
+      toasts: {
+        moved: (count) => `已將 ${count} 個副本移至隔離區。`,
+        restoreHint: '從隔離區畫面還原它們。',
+        failed: (count) => `${count} 個未能移動。`,
+        failedDetail: '它們可能正被開啟或位於另一個磁碟上。'
+      }
     }
   }
 };

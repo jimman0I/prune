@@ -4,6 +4,7 @@ import { fetchDuplicates, quarantineDiskPath } from '../lib/api.js';
 import { selectForRemoval, KEEP } from '../lib/duplicateSelection.js';
 import { useToasts } from '../hooks/useToasts.jsx';
 import ModalOverlay from './ModalOverlay.jsx';
+import { useLanguage } from '../i18n/LanguageContext.jsx';
 
 /** Files that are byte-identical, and which copy to keep.
  *
@@ -28,6 +29,7 @@ function formatBytes(bytes) {
 const DEFAULT_FOLDER = 'C:\\Users';
 
 function Duplicates() {
+  const { t } = useLanguage();
   const [folder, setFolder] = useState('');
   const [armed, setArmed] = useState(null);
   const [selected, setSelected] = useState(() => new Set());
@@ -100,22 +102,20 @@ function Duplicates() {
     queryClient.invalidateQueries({ queryKey: ['quarantine'] });
 
     if (moved > 0) {
-      toasts.success(`Moved ${moved} ${moved === 1 ? 'copy' : 'copies'} to quarantine.`, {
-        detail: 'Restore them from the Quarantine screen.'
+      toasts.success(t('duplicates.toasts.moved', moved), {
+        detail: t('duplicates.toasts.restoreHint')
       });
     }
     if (failed > 0) {
-      toasts.error(`${failed} could not be moved.`, { detail: 'They may be open or on another drive.', ttl: 0 });
+      toasts.error(t('duplicates.toasts.failed', failed), { detail: t('duplicates.toasts.failedDetail'), ttl: 0 });
     }
   };
 
   return (
     <div className="px-12 py-10 max-w-[1400px]">
-      <h1 className="display-heading text-[30px] leading-none mb-2">Duplicate files</h1>
+      <h1 className="display-heading text-[30px] leading-none mb-2">{t('duplicates.title')}</h1>
       <p className="text-[13px] text-[color:var(--text-secondary)] mb-6 max-w-[64ch]">
-        Files that are byte-identical, not merely the same size. Point it at a folder you
-        actually keep things in — reading a whole drive to compare it against itself takes far
-        longer than it is worth, and finds mostly the machine's own copies of its own files.
+        {t('duplicates.subtitle')}
       </p>
 
       <div className="flex items-center gap-2 mb-2 max-w-[640px]">
@@ -126,7 +126,7 @@ function Duplicates() {
           onKeyDown={(e) => { if (e.key === 'Enter' && folder.trim()) setArmed(folder.trim()); }}
           placeholder={DEFAULT_FOLDER}
           data-app-search="duplicates"
-          aria-label="Folder to search for duplicates"
+          aria-label={t('duplicates.folderInputAriaLabel')}
           className="flex-1 min-w-0 font-mono text-[12.5px] px-3 py-2 rounded-lg bg-[color:var(--surface-hover)] border border-[color:var(--border-subtle)] text-[color:var(--text-primary)] placeholder:text-[color:var(--text-muted)] focus:outline-none focus:border-[color:var(--accent-primary)]/50"
         />
         {scan.isFetching ? (
@@ -134,7 +134,7 @@ function Duplicates() {
             className="btn-ghost px-3.5 py-2 rounded-lg text-[12.5px] font-medium shrink-0"
             onClick={() => { setArmed(null); queryClient.cancelQueries({ queryKey: ['duplicates', armed] }); }}
           >
-            Stop
+            {t('duplicates.stop')}
           </button>
         ) : (
           <button
@@ -142,12 +142,12 @@ function Duplicates() {
             disabled={!folder.trim()}
             onClick={() => { setSelected(new Set()); setArmed(folder.trim()); }}
           >
-            Find duplicates
+            {t('duplicates.findButton')}
           </button>
         )}
       </div>
       <p className="text-[11.5px] text-[color:var(--text-muted)] mb-6">
-        Compares sizes first, then a sample, then the whole file — so most files are never read.
+        {t('duplicates.compareNote')}
       </p>
 
       {scan.error && (
@@ -159,20 +159,19 @@ function Duplicates() {
       {scan.isFetching && (
         <div className="glass-panel p-8 text-center">
           <div className="w-6 h-6 border-2 border-[color:var(--accent-primary)] border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-          <p className="text-[13px] text-[color:var(--text-primary)]">Reading {armed}</p>
+          <p className="text-[13px] text-[color:var(--text-primary)]">{t('duplicates.reading', armed)}</p>
           <p className="text-[12.5px] text-[color:var(--text-secondary)] mt-1.5 max-w-[52ch] mx-auto">
-            Sizes first, then a 64 KB sample of anything that shares one, then the full contents
-            of whatever still matches.
+            {t('duplicates.readingNote')}
           </p>
         </div>
       )}
 
       {!scan.isFetching && scan.data && groups.length === 0 && (
         <div className="glass-panel p-8 text-center">
-          <p className="text-[13.5px] text-[color:var(--text-secondary)]">No duplicate files here.</p>
+          <p className="text-[13.5px] text-[color:var(--text-secondary)]">{t('duplicates.empty.heading')}</p>
           <p className="text-[12.5px] text-[color:var(--text-muted)] mt-1.5">
-            {scan.data.scannedFiles.toLocaleString()} files compared.
-            {scan.data.truncated && ' The scan was cut short, so this is not the whole folder.'}
+            {t('duplicates.empty.scanned', scan.data.scannedFiles.toLocaleString())}
+            {scan.data.truncated && t('duplicates.empty.truncatedSuffix')}
           </p>
         </div>
       )}
@@ -181,24 +180,29 @@ function Duplicates() {
         <>
           <div className="flex items-center flex-wrap gap-3 mb-4">
             <span className="text-[12.5px] text-[color:var(--text-secondary)]">
-              <span className="text-[color:var(--text-primary)] font-medium">{groups.length}</span> sets ·{' '}
-              <span className="text-[color:var(--accent-primary)] font-medium">{formatBytes(scan.data.wastedBytes)}</span> recoverable
+              {/* Each phrase is bolded/accented as one unit rather than
+                  just the number within it -- the same tradeoff every
+                  other screen's own count line already made, since a
+                  translated catalog function can only return a plain
+                  string, not JSX with an inline span partway through. */}
+              <span className="text-[color:var(--text-primary)] font-medium">{t('duplicates.summarySets', groups.length)}</span>{' · '}
+              <span className="text-[color:var(--accent-primary)] font-medium">{t('duplicates.recoverable', formatBytes(scan.data.wastedBytes))}</span>
             </span>
             <span className="flex-1" />
             <button className="btn-ghost px-3 py-1.5 rounded-lg text-[12px]" onClick={() => autoSelect(KEEP.OLDEST)}>
-              Keep oldest
+              {t('duplicates.keepOldest')}
             </button>
             <button className="btn-ghost px-3 py-1.5 rounded-lg text-[12px]" onClick={() => autoSelect(KEEP.NEWEST)}>
-              Keep newest
+              {t('duplicates.keepNewest')}
             </button>
             <button className="btn-ghost px-3 py-1.5 rounded-lg text-[12px]" onClick={() => setSelected(new Set())}>
-              Clear
+              {t('duplicates.clear')}
             </button>
           </div>
 
           {scan.data.truncated && (
             <p className="text-[12px] text-[color:var(--warning)] mb-4">
-              The scan was cut short, so there may be more sets than these.
+              {t('duplicates.truncatedWarning')}
             </p>
           )}
 
@@ -209,16 +213,16 @@ function Duplicates() {
                 <div key={group.digest} className={`glass-panel p-4 ${allTicked ? 'border-[color:var(--danger)]/40' : ''}`}>
                   <div className="flex items-baseline justify-between mb-2.5">
                     <span className="text-[12.5px] text-[color:var(--text-primary)]">
-                      {group.count} identical copies · {formatBytes(group.size)} each
+                      {t('duplicates.group.identicalCopies', group.count, formatBytes(group.size))}
                     </span>
                     <span className="text-[12px] text-[color:var(--accent-primary)]">
-                      {formatBytes(group.wastedBytes)} recoverable
+                      {t('duplicates.recoverable', formatBytes(group.wastedBytes))}
                     </span>
                   </div>
 
                   {allTicked && (
                     <p className="text-[11.5px] text-[color:var(--danger)] mb-2">
-                      Every copy in this set is ticked — untick one to keep it.
+                      {t('duplicates.group.allTickedWarning')}
                     </p>
                   )}
 
@@ -247,36 +251,34 @@ function Duplicates() {
 
           <div className="sticky bottom-0 mt-4 glass-panel px-5 py-3 flex items-center justify-between gap-4">
             <span className="text-[12.5px] text-[color:var(--text-secondary)]">
-              <span className="text-[color:var(--text-primary)] font-medium">{selected.size}</span> selected ·{' '}
-              {formatBytes(selectedBytes)}
+              <span className="text-[color:var(--text-primary)] font-medium">{t('duplicates.footer.selected', selected.size, formatBytes(selectedBytes))}</span>
             </span>
             <button
               className="btn-danger px-4 py-2 rounded-lg text-[12.5px] font-medium disabled:opacity-50"
               disabled={selected.size === 0 || emptiedGroups.length > 0 || removing}
               onClick={() => setConfirming(true)}
             >
-              {removing ? 'Moving…' : emptiedGroups.length > 0
-                ? `${emptiedGroups.length} set${emptiedGroups.length === 1 ? '' : 's'} would lose every copy`
-                : 'Move selected to quarantine'}
+              {removing ? t('duplicates.footer.moving') : emptiedGroups.length > 0
+                ? t('duplicates.footer.wouldLose', emptiedGroups.length)
+                : t('duplicates.footer.moveButton')}
             </button>
           </div>
         </>
       )}
 
       {confirming && (
-        <ModalOverlay label="Move duplicates to quarantine" onClose={() => setConfirming(false)}>
+        <ModalOverlay label={t('duplicates.modal.label')} onClose={() => setConfirming(false)}>
           <div className="glass-panel w-full max-w-[480px] p-6">
-            <h2 className="display-heading text-[20px] mb-2">Move {selected.size} copies to quarantine?</h2>
+            <h2 className="display-heading text-[20px] mb-2">{t('duplicates.modal.heading', selected.size)}</h2>
             <p className="text-[12.5px] text-[color:var(--text-secondary)] mb-5">
-              {formatBytes(selectedBytes)} recovered. Every set keeps at least one copy, and
-              nothing is deleted — restore any of it from the Quarantine screen.
+              {t('duplicates.modal.body', formatBytes(selectedBytes))}
             </p>
             <div className="flex items-center justify-end gap-2.5">
               <button className="btn-ghost px-4 py-2 rounded-lg text-[12.5px]" onClick={() => setConfirming(false)}>
-                Cancel
+                {t('duplicates.modal.cancel')}
               </button>
               <button className="btn-danger px-4 py-2 rounded-lg text-[12.5px] font-medium" onClick={runRemoval}>
-                Move to quarantine
+                {t('duplicates.modal.confirmButton')}
               </button>
             </div>
           </div>
