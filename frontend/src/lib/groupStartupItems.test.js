@@ -54,6 +54,21 @@ describe('groupStartupItems', () => {
   it('copes with no list', () => {
     expect(groupStartupItems(null)).toEqual([]);
   });
+
+  // StartupItems.jsx passes `t('startup.groups')` here so the label
+  // follows the app's chosen language, the same way ProgramList.jsx's
+  // call into batchIneligibleReason() supplies a translated reason set.
+  it('uses the given labels instead of the English defaults', () => {
+    const labels = { 'Run|user': 'Μητρώο: HKCU Run' };
+    const groups = groupStartupItems([item({ location: 'Run', rawScope: 'user', name: 'a' })], labels);
+    expect(groups[0].label).toBe('Μητρώο: HKCU Run');
+  });
+
+  it('still falls back to the raw location name for an unknown key even with translated labels given', () => {
+    const labels = { 'Run|user': 'Μητρώο: HKCU Run' };
+    const groups = groupStartupItems([item({ location: 'Winlogon Shell', rawScope: 'machine', name: 'odd' })], labels);
+    expect(groups[0].label).toBe('Winlogon Shell');
+  });
 });
 
 describe('startupCounts', () => {

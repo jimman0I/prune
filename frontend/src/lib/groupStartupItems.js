@@ -20,7 +20,16 @@ const GROUP_ORDER = [
   'RunOnce|machine'
 ];
 
-const GROUP_LABELS = {
+/** The English these labels carry when no translated set is passed in --
+ * a plain default rather than the only option, the same pattern
+ * limitCells.js's `aggregateName` and batchSelection.js's `reasons` both
+ * use: this is a plain utility function with no access to the language
+ * hook, so the CALLER supplies a translated set
+ * (StartupItems.jsx passes `t('startup.groups')`) and this file stays
+ * free of any i18n import of its own. Exported so this file's own tests,
+ * which never pass a second argument, keep asserting the exact English
+ * wording. */
+export const DEFAULT_GROUP_LABELS = {
   'Startup folder|machine': 'All users Startup folder',
   'Startup folder|user': 'Current user Startup folder',
   'Run|user': 'Registry: HKCU Run',
@@ -41,7 +50,7 @@ function groupKeyFor(item) {
  * is not worth a row of screen. Anything in a location this does not know
  * about still appears, under its own raw name -- dropping an entry because
  * its location was unexpected would hide exactly the surprising ones. */
-export function groupStartupItems(items) {
+export function groupStartupItems(items, labels = DEFAULT_GROUP_LABELS) {
   const buckets = new Map();
 
   for (const item of items || []) {
@@ -55,7 +64,7 @@ export function groupStartupItems(items) {
 
   return [...known, ...unknown].map((key) => ({
     key,
-    label: GROUP_LABELS[key] ?? key.split('|')[0],
+    label: labels[key] ?? key.split('|')[0],
     items: buckets.get(key),
     // Per group, because "3 of 11" is the number that tells you whether
     // this location is where your sign-in time is going.

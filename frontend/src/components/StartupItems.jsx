@@ -4,6 +4,7 @@ import { useStartupItems, useStartupToggle } from '../hooks/useSystemQueries.js'
 import TableSkeleton from './TableSkeleton.jsx';
 import { tileLetter } from '../lib/iconTileLetter.js';
 import { tileColor, TILE_INK } from '../lib/programTileColor.js';
+import { useLanguage } from '../i18n/LanguageContext.jsx';
 
 /** What Windows launches when you sign in.
  *
@@ -26,14 +27,23 @@ import { tileColor, TILE_INK } from '../lib/programTileColor.js';
  * Revo's own: name, what it launches, what the file says it is, who signed
  * it, and whether it is running right now. */
 const COLUMNS = [
-  { key: 'state', label: '', width: '30px' },
-  { key: 'icon', label: '', width: '20px' },
-  { key: 'name', label: 'Startup name', width: 'minmax(150px,0.9fr)' },
-  { key: 'command', label: 'Launch path', width: 'minmax(180px,1.3fr)' },
-  { key: 'description', label: 'Description', width: 'minmax(130px,0.9fr)' },
-  { key: 'publisher', label: 'Publisher', width: 'minmax(120px,0.8fr)' },
-  { key: 'status', label: 'Status', width: '104px' }
+  { key: 'state', width: '30px' },
+  { key: 'icon', width: '20px' },
+  { key: 'name', width: 'minmax(150px,0.9fr)' },
+  { key: 'command', width: 'minmax(180px,1.3fr)' },
+  { key: 'description', width: 'minmax(130px,0.9fr)' },
+  { key: 'publisher', width: 'minmax(120px,0.8fr)' },
+  { key: 'status', width: '104px' }
 ];
+
+// state/icon carry no header word -- both are icon/switch columns.
+const COLUMN_KEYS = {
+  name: 'startup.columns.name',
+  command: 'startup.columns.command',
+  description: 'startup.columns.description',
+  publisher: 'startup.columns.publisher',
+  status: 'startup.columns.status'
+};
 
 const GRID = COLUMNS.map((c) => c.width).join(' ');
 
@@ -80,6 +90,7 @@ function Tick({ on }) {
  * on drops that focus to the page body. It stays focusable, says it is
  * busy, and ignores a second click. */
 function EnabledSwitch({ item, pending, onToggle }) {
+  const { t } = useLanguage();
   if (item.toggleNote) {
     // Not a switch at all. An inert checkbox is a broken control; the row
     // says why in words instead, next to the name.
@@ -92,7 +103,7 @@ function EnabledSwitch({ item, pending, onToggle }) {
       role="switch"
       aria-checked={item.enabled}
       aria-busy={pending || undefined}
-      aria-label={`${item.enabled ? 'Disable' : 'Enable'} ${item.name} at sign-in`}
+      aria-label={t('startup.switchAriaLabel', item.enabled, item.name)}
       onClick={() => !pending && onToggle(item)}
       // 24px, not the 13px the tick occupies: that is the floor WCAG 2.2
       // sets for a target, and the mark itself is half of it.
@@ -152,19 +163,20 @@ function StartupIcon({ item, src }) {
  * it is a leftover, which is the reason to be on this screen at all, so it
  * wins over the other two. */
 function StatusPill({ item }) {
+  const { t } = useLanguage();
   const base = 'text-[9px] font-mono uppercase tracking-wider px-1.5 py-px rounded border shrink-0';
 
   if (item.exists === false) {
     return (
       <span className={`${base} bg-[color:var(--danger-soft)] text-[color:var(--danger)] border-[color:var(--danger)]/25`}>
-        Invalid
+        {t('startup.status.invalid')}
       </span>
     );
   }
   if (item.running) {
     return (
       <span className={`${base} bg-[color:var(--success-soft)] text-[color:var(--success)] border-[color:var(--success)]/25`}>
-        Running
+        {t('startup.status.running')}
       </span>
     );
   }
@@ -173,11 +185,11 @@ function StatusPill({ item }) {
     // answer from here. Saying nothing is the honest option.
     return (
       <span className={`${base} bg-[color:var(--surface-hover)] text-[color:var(--text-muted)] border-[color:var(--border-subtle)]`}>
-        Not checked
+        {t('startup.status.notChecked')}
       </span>
     );
   }
-  return <span className="text-[10.5px] font-mono text-[color:var(--text-muted)]">Not running</span>;
+  return <span className="text-[10.5px] font-mono text-[color:var(--text-muted)]">{t('startup.status.notRunning')}</span>;
 }
 
 function StartupRow({ item, iconSrc, pending, error, onToggle }) {
@@ -225,6 +237,7 @@ function StartupRow({ item, iconSrc, pending, error, onToggle }) {
 }
 
 function StartupItems() {
+  const { t } = useLanguage();
   // An error belongs to the row that produced it rather than to the
   // screen: several rows can be mid-change at once.
   const [rowErrors, setRowErrors] = useState({});
@@ -265,27 +278,28 @@ function StartupItems() {
     return map;
   }, [pendingIds]);
 
-  const groups = useMemo(() => groupStartupItems(items), [items]);
+  const groups = useMemo(() => groupStartupItems(items, t('startup.groups')), [items, t]);
   const counts = useMemo(() => startupCounts(items), [items]);
 
   return (
     <div className="px-12 py-10 max-w-[1400px]">
-      <h1 className="display-heading text-[30px] leading-none mb-2">Runs at sign-in</h1>
+      <h1 className="display-heading text-[30px] leading-none mb-2">{t('startup.title')}</h1>
       <p className="text-[13px] text-[color:var(--text-secondary)] mb-6 max-w-[62ch]">
-        The Run keys and Startup folders Windows reads when you sign in, grouped by where they
-        live — which is what decides who an entry affects and what it takes to remove it. An
-        entry whose file is gone was left behind by a program that was removed carelessly, and
-        Windows keeps trying to launch it every time.
+        {t('startup.subtitle')}
       </p>
 
       {error && (
         <div className="glass-panel p-6 text-[13px] text-[color:var(--danger)] select-text">
-          Couldn't read the startup entries: {error}
+          {t('startup.loadError', error)}
         </div>
       )}
 
       {!error && items === null && (
-        <TableSkeleton columns={COLUMNS.filter((c) => c.label)} rows={7} label="Reading startup entries…" />
+        <TableSkeleton
+          columns={COLUMNS.filter((c) => COLUMN_KEYS[c.key]).map((c) => ({ ...c, label: t(COLUMN_KEYS[c.key]) }))}
+          rows={7}
+          label={t('startup.loading')}
+        />
       )}
 
       {!error && items && items.length === 0 && (
@@ -295,11 +309,10 @@ function StartupItems() {
         // more common reason a list comes back empty.
         <div className="glass-panel p-8 text-center">
           <p className="text-[13.5px] text-[color:var(--text-secondary)]">
-            Nothing runs at sign-in.
+            {t('startup.empty.heading')}
           </p>
           <p className="text-[12.5px] text-[color:var(--text-muted)] mt-1.5 max-w-[52ch] mx-auto">
-            Prune checked the Run and RunOnce keys in both registry hives and both Startup
-            folders. A program that adds itself later will appear here.
+            {t('startup.empty.body')}
           </p>
         </div>
       )}
@@ -307,18 +320,17 @@ function StartupItems() {
       {!error && items && items.length > 0 && (
         <>
           <div className="flex items-baseline flex-wrap gap-4 mb-4 text-[12.5px] text-[color:var(--text-secondary)]">
-            <span>
-              <span className="text-[color:var(--text-primary)] font-medium">{counts.total}</span> entries
-            </span>
-            <span>
-              <span className="text-[color:var(--text-primary)] font-medium">{counts.enabled}</span> enabled
-            </span>
-            <span>
-              <span className="text-[color:var(--text-primary)] font-medium">{counts.running}</span> running now
-            </span>
+            {/* Each phrase is bolded as one unit rather than just the
+                number within it -- the same tradeoff ProgramList.jsx's
+                footer.selected already made, since a translated catalog
+                function can only return a plain string, not JSX with an
+                inline bold span partway through. */}
+            <span className="text-[color:var(--text-primary)] font-medium">{t('startup.counts.total', counts.total)}</span>
+            <span className="text-[color:var(--text-primary)] font-medium">{t('startup.counts.enabled', counts.enabled)}</span>
+            <span className="text-[color:var(--text-primary)] font-medium">{t('startup.counts.runningNow', counts.running)}</span>
             {counts.broken > 0 && (
               <span className="text-[color:var(--danger)]">
-                {counts.broken} pointing at a file that is gone
+                {t('startup.counts.broken', counts.broken)}
               </span>
             )}
           </div>
@@ -333,7 +345,7 @@ function StartupItems() {
                   key={col.key}
                   className="text-[10.5px] font-mono uppercase tracking-[0.13em] text-[color:var(--text-muted)]"
                 >
-                  {col.label}
+                  {COLUMN_KEYS[col.key] ? t(COLUMN_KEYS[col.key]) : ''}
                 </span>
               ))}
             </div>
@@ -347,7 +359,7 @@ function StartupItems() {
                     {group.label}
                   </span>
                   <span className="text-[11px] font-mono text-[color:var(--text-muted)]">
-                    {group.enabledCount} of {group.items.length} enabled
+                    {t('startup.groupEnabledOf', group.enabledCount, group.items.length)}
                   </span>
                   {/* Said once per group rather than on every row. These
                       entries live in HKLM, which nobody can write to
@@ -355,7 +367,7 @@ function StartupItems() {
                       worth knowing before it appears, not after. */}
                   {group.key.endsWith('|machine') && (
                     <span className="text-[11px] text-[color:var(--text-muted)] ml-auto">
-                      Changing these asks for administrator
+                      {t('startup.groupAdminNote')}
                     </span>
                   )}
                 </div>
@@ -376,10 +388,7 @@ function StartupItems() {
           </div>
 
           <p className="text-[11.5px] text-[color:var(--text-muted)] mt-4 max-w-[68ch]">
-            Switching an entry off records the decision in StartupApproved, the same place
-            Windows' own Startup Apps settings and Task Manager read and write. Nothing is
-            deleted: the Run value or the shortcut stays where it is, so the change is
-            reversible from here or from either of those.
+            {t('startup.footerNote')}
           </p>
         </>
       )}
