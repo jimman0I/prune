@@ -14,12 +14,7 @@ import { useLanguage, LANGUAGES } from '../i18n/LanguageContext.jsx';
 // now read from the backend, whose package.json every release bumps.
 const APP_NAME = 'Prune';
 
-const TABS = [
-  { id: 'general', label: 'General' },
-  { id: 'uninstall', label: 'Uninstall' },
-  { id: 'cleanup', label: 'Cleanup' },
-  { id: 'about', label: 'About' }
-];
+const TAB_IDS = ['general', 'uninstall', 'cleanup', 'about'];
 
 /** The same bespoke on/off switch DeepCleanTree.jsx uses, duplicated
  * rather than imported -- this codebase keeps small controls local to the
@@ -61,14 +56,6 @@ function SettingRow({ title, description, checked, onChange }) {
   );
 }
 
-/* Revo's three, in Prune's words. The descriptions avoid each other's key
- * words on purpose, so each option reads as exactly one choice. */
-const LEFTOVER_OPTIONS = [
-  { value: 'quarantine', label: 'Quarantine', description: "Moved into Prune's own backup, and restorable from the Quarantine screen. The default." },
-  { value: 'recycle', label: 'The Recycle Bin', description: "Restorable from Windows' own bin, and freed when you empty it." },
-  { value: 'permanent', label: 'Delete permanently', description: 'Deleted outright. Nothing to restore.' }
-];
-
 function StepRow({ step }) {
   return (
     <div className="flex items-start gap-3 py-2">
@@ -99,6 +86,16 @@ function SettingsPage() {
   const { t } = useLanguage();
   const update = useUpdateCheck(settings?.updateCheck === true);
   const destination = leftoverDestinationFrom(settings);
+
+  const TABS = TAB_IDS.map((id) => ({ id, label: t(`settings.tabs.${id}`) }));
+
+  /* Revo's three, in Prune's words. The descriptions avoid each other's
+   * key words on purpose, so each option reads as exactly one choice. */
+  const LEFTOVER_OPTIONS = [
+    { value: 'quarantine', label: t('settings.uninstallTab.leftoverOptions.quarantine.label'), description: t('settings.uninstallTab.leftoverOptions.quarantine.description') },
+    { value: 'recycle', label: t('settings.uninstallTab.leftoverOptions.recycle.label'), description: t('settings.uninstallTab.leftoverOptions.recycle.description') },
+    { value: 'permanent', label: t('settings.uninstallTab.leftoverOptions.permanent.label'), description: t('settings.uninstallTab.leftoverOptions.permanent.description') }
+  ];
   const acknowledgedCount = Array.isArray(settings?.acknowledgedCleanWarnings) ? settings.acknowledgedCleanWarnings.length : 0;
   // Everything but an explicit false keeps the behaviour Prune always had.
   const isOn = (key) => settings?.[key] !== false;
@@ -146,7 +143,7 @@ ode.js" is a folder or a file type.
     if (!parsed) {
       setExclusionError(
         newExclusion.trim()
-          ? 'Write a full folder path (D:\Games) or a file type (*.iso).'
+          ? t('settings.exclusions.invalidFormat')
           : null
       );
       return;
@@ -188,20 +185,20 @@ ode.js" is a folder or a file type.
 
   return (
     <div className="px-12 py-10 max-w-[1400px]">
-      <h1 className="display-heading text-[30px] leading-none mb-6">Settings</h1>
+      <h1 className="display-heading text-[30px] leading-none mb-6">{t('settings.title')}</h1>
 
       <div className="flex items-center gap-1.5 mb-6">
-        {TABS.map((t) => (
+        {TABS.map((tabDef) => (
           <button
-            key={t.id}
-            onClick={() => setTab(t.id)}
+            key={tabDef.id}
+            onClick={() => setTab(tabDef.id)}
             className={`px-4 py-2 rounded-lg text-[13px] font-medium transition-colors ${
-              tab === t.id
+              tab === tabDef.id
                 ? 'bg-[color:var(--accent-primary-soft)] text-[color:var(--accent-primary)]'
                 : 'text-[color:var(--text-secondary)] hover:text-[color:var(--text-primary)] hover:bg-[color:var(--surface-hover)]'
             }`}
           >
-            {t.label}
+            {tabDef.label}
           </button>
         ))}
       </div>
@@ -217,12 +214,9 @@ ode.js" is a folder or a file type.
               <div className="glass-panel p-6">
                 <div className="flex items-center justify-between gap-4">
                   <div className="min-w-0">
-                    <h2 className="text-[14px] font-medium text-[color:var(--text-primary)] mb-1">Appearance</h2>
+                    <h2 className="text-[14px] font-medium text-[color:var(--text-primary)] mb-1">{t('settings.appearance.title')}</h2>
                     <p className="text-[12.5px] text-[color:var(--text-secondary)] leading-relaxed max-w-[62ch]">
-                      Aurora Deck in dark or daylight. Both are real palettes rather than one
-                      inverted: the accent darkens for the light ground so a button can keep white
-                      text on it, and every tier was measured against the surfaces it actually sits
-                      on. Prune follows your system setting until you pick one here.
+                      {t('settings.appearance.description')}
                     </p>
                   </div>
                   <ThemeToggle />
@@ -236,13 +230,13 @@ ode.js" is a folder or a file type.
           <div className="w-14 h-14 rounded-2xl bg-[color:var(--accent-primary)]/10 border border-[color:var(--accent-primary)]/25 flex items-center justify-center mb-5">
             <div className="w-6 h-6 border-2 border-[color:var(--accent-primary)] border-t-transparent rounded-full animate-spin"></div>
           </div>
-          <p className="text-[13px] text-[color:var(--text-secondary)]">Loading settings…</p>
+          <p className="text-[13px] text-[color:var(--text-secondary)]">{t('settings.loading')}</p>
         </div>
       )}
 
       {!loading && error && (
         <div className="glass-panel p-6">
-          <p className="text-[13px] text-[color:var(--danger)]">Couldn't load settings: {error}</p>
+          <p className="text-[13px] text-[color:var(--danger)]">{t('settings.loadError', error)}</p>
         </div>
       )}
 
@@ -250,7 +244,7 @@ ode.js" is a folder or a file type.
         <>
           {saveError && (
             <div className="mb-5 px-3.5 py-3 rounded-xl bg-[color:var(--danger-soft)] border border-[color:var(--danger)]/25">
-              <p className="text-[12.5px] text-[color:var(--danger)] select-text">Couldn't save: {saveError}</p>
+              <p className="text-[12.5px] text-[color:var(--danger)] select-text">{t('settings.saveError', saveError)}</p>
             </div>
           )}
 
@@ -286,15 +280,15 @@ ode.js" is a folder or a file type.
               <div className="glass-panel p-6">
                 <div className="flex items-center justify-between gap-4">
                   <div>
-                    <div className="text-[14px] font-medium text-[color:var(--text-primary)]">Minimize to Tray</div>
+                    <div className="text-[14px] font-medium text-[color:var(--text-primary)]">{t('settings.minimizeToTray.title')}</div>
                     <p className="text-[12.5px] text-[color:var(--text-secondary)] mt-1">
-                      Closing the window sends Prune to the system tray instead of quitting.
+                      {t('settings.minimizeToTray.description')}
                     </p>
                   </div>
                   <Toggle
                     checked={settings.minimizeToTray}
                     onChange={() => save({ minimizeToTray: !settings.minimizeToTray })}
-                    label="Minimize to Tray"
+                    label={t('settings.minimizeToTray.title')}
                   />
                 </div>
               </div>
@@ -305,19 +299,15 @@ ode.js" is a folder or a file type.
               <div className="glass-panel p-6">
                 <div className="flex items-center justify-between gap-4">
                   <div className="min-w-0">
-                    <div className="text-[14px] font-medium text-[color:var(--text-primary)]">Check for updates</div>
+                    <div className="text-[14px] font-medium text-[color:var(--text-primary)]">{t('settings.updateCheck.title')}</div>
                     <p className="text-[12.5px] text-[color:var(--text-secondary)] mt-1 leading-relaxed max-w-[62ch]">
-                      Once a day, Prune asks api.github.com whether a newer release exists. It is
-                      the only request Prune makes to anywhere but this machine, and GitHub sees
-                      your IP address as any website would. When there is one, an update button
-                      appears at the bottom of the side bar, and nothing is downloaded or installed
-                      until you click it.
+                      {t('settings.updateCheck.description')}
                     </p>
                   </div>
                   <Toggle
                     checked={settings.updateCheck === true}
                     onChange={() => save({ updateCheck: settings.updateCheck !== true })}
-                    label="Check for updates"
+                    label={t('settings.updateCheck.title')}
                   />
                 </div>
 
@@ -328,18 +318,16 @@ ode.js" is a folder or a file type.
                 <div className="flex items-center justify-between gap-4 mt-4 pt-4 border-t border-[color:var(--border-subtle)]">
                   <div className="min-w-0">
                     <div className={`text-[13.5px] font-medium ${settings.updateCheck === true ? 'text-[color:var(--text-primary)]' : 'text-[color:var(--text-muted)]'}`}>
-                      Install updates automatically
+                      {t('settings.autoInstallUpdates.title')}
                     </div>
                     <p className="text-[12.5px] text-[color:var(--text-secondary)] mt-1 leading-relaxed max-w-[62ch]">
-                      Downloads a new version in the background and installs it the next time Prune
-                      closes, instead of waiting for you to click the update button. Needs the update
-                      check above.
+                      {t('settings.autoInstallUpdates.description')}
                     </p>
                   </div>
                   <Toggle
                     checked={settings.autoInstallUpdates === true}
                     onChange={() => save({ autoInstallUpdates: settings.autoInstallUpdates !== true })}
-                    label="Install updates automatically"
+                    label={t('settings.autoInstallUpdates.title')}
                     disabled={settings.updateCheck !== true}
                   />
                 </div>
@@ -347,24 +335,24 @@ ode.js" is a folder or a file type.
                 {settings.updateCheck === true && (
                   <div className="mt-4 pt-4 border-t border-[color:var(--border-subtle)] text-[12.5px]">
                     {update.loading && (
-                      <p className="text-[color:var(--text-muted)]">Checking…</p>
+                      <p className="text-[color:var(--text-muted)]">{t('settings.updateStatus.checking')}</p>
                     )}
                     {update.data?.error && (
-                      <p className="text-[color:var(--warning)] select-text">{`Couldn't check for updates: ${update.data.error}`}</p>
+                      <p className="text-[color:var(--warning)] select-text">{t('settings.updateStatus.loadError', update.data.error)}</p>
                     )}
                     {update.data?.newer === true && (
                       <div className="flex items-center justify-between gap-4">
-                        <p className="text-[color:var(--text-primary)]">{`Prune ${update.data.latest} is available.`}</p>
+                        <p className="text-[color:var(--text-primary)]">{t('settings.updateStatus.newerAvailable', update.data.latest)}</p>
                         <button type="button" className="btn-primary px-4 py-1.5 text-[12.5px] font-medium shrink-0" onClick={handleOpenUpdatePage}>
-                          Open the download page
+                          {t('settings.updateStatus.openDownloadPage')}
                         </button>
                       </div>
                     )}
                     {update.data?.newer === false && (
-                      <p className="text-[color:var(--text-muted)]">{`You're on the latest version (${update.data.current}).`}</p>
+                      <p className="text-[color:var(--text-muted)]">{t('settings.updateStatus.upToDate', update.data.current)}</p>
                     )}
                     {openError && (
-                      <p className="text-[color:var(--danger)] mt-2 select-text">{`Couldn't open the page: ${openError}`}</p>
+                      <p className="text-[color:var(--danger)] mt-2 select-text">{t('settings.updateStatus.openPageError', openError)}</p>
                     )}
                   </div>
                 )}
@@ -375,8 +363,8 @@ ode.js" is a folder or a file type.
           {tab === 'general' && (
             <div className="glass-panel p-6 mt-4">
               <SettingRow
-                title="Show free space on the Disk Map"
-                description="Draws the drive's free space as one more block when you scan a whole drive, so every folder reads as a share of the drive rather than of the space in use."
+                title={t('settings.showFreeSpace.title')}
+                description={t('settings.showFreeSpace.description')}
                 checked={isOnlyIfTrue('showFreeSpaceOnMap')}
                 onChange={() => save({ showFreeSpaceOnMap: !isOnlyIfTrue('showFreeSpaceOnMap') })}
               />
@@ -392,17 +380,15 @@ ode.js" is a folder or a file type.
               <div className="glass-panel p-6">
                 <div className="flex items-center justify-between gap-4 mb-4">
                   <div>
-                    <div className="text-[14px] font-medium text-[color:var(--text-primary)]">Auto-Quarantine</div>
+                    <div className="text-[14px] font-medium text-[color:var(--text-primary)]">{t('settings.autoQuarantine.title')}</div>
                     <p className="text-[12.5px] text-[color:var(--text-secondary)] mt-1">
-                      Deep Clean moves what it takes into Prune's Quarantine, where you can put it
-                      back. Turn this off and it goes to the Windows Recycle Bin instead — still
-                      recoverable, just somewhere you already know how to empty.
+                      {t('settings.autoQuarantine.description')}
                     </p>
                   </div>
                   <Toggle
                     checked={settings.autoQuarantine}
                     onChange={() => save({ autoQuarantine: !settings.autoQuarantine })}
-                    label="Auto-Quarantine"
+                    label={t('settings.autoQuarantine.title')}
                   />
                 </div>
               </div>
@@ -410,11 +396,9 @@ ode.js" is a folder or a file type.
               <div className="glass-panel p-6">
                 <div className="flex items-center justify-between gap-4">
                   <div className="min-w-0">
-                    <div className="text-[14px] font-medium text-[color:var(--text-primary)]">Leave recent files alone</div>
+                    <div className="text-[14px] font-medium text-[color:var(--text-primary)]">{t('settings.skipRecent.title')}</div>
                     <p className="text-[12.5px] text-[color:var(--text-secondary)] mt-1">
-                      Skip anything modified in the last few hours. In a temp folder a file being
-                      written right now looks exactly like one abandoned two years ago — this is what
-                      stops a half-finished install being swept up. 0 turns it off.
+                      {t('settings.skipRecent.description')}
                     </p>
                   </div>
                   <div className="flex items-center gap-2 shrink-0">
@@ -424,11 +408,11 @@ ode.js" is a folder or a file type.
                       max="720"
                       value={settings.skipRecentHours}
                       onChange={(e) => save({ skipRecentHours: Math.max(0, Number(e.target.value) || 0) })}
-                      aria-label="Hours to leave recent files alone"
+                      aria-label={t('settings.skipRecent.ariaLabel')}
                       className="w-[72px] font-mono text-[12.5px] px-2.5 py-2 rounded-lg bg-[color:var(--surface-hover)] border border-[color:var(--border-subtle)] text-[color:var(--text-primary)] focus:outline-none focus:border-[color:var(--accent-primary)]/50"
                       style={{ fontVariantNumeric: 'tabular-nums' }}
                     />
-                    <span className="text-[12.5px] text-[color:var(--text-muted)]">hours</span>
+                    <span className="text-[12.5px] text-[color:var(--text-muted)]">{t('settings.skipRecent.hoursUnit')}</span>
                   </div>
                 </div>
               </div>
@@ -436,16 +420,15 @@ ode.js" is a folder or a file type.
               <div className="glass-panel p-6">
                 <div className="flex items-center justify-between gap-4">
                   <div className="min-w-0">
-                    <div className="text-[14px] font-medium text-[color:var(--text-primary)]">Create a restore point first</div>
+                    <div className="text-[14px] font-medium text-[color:var(--text-primary)]">{t('settings.restorePointCleanup.title')}</div>
                     <p className="text-[12.5px] text-[color:var(--text-secondary)] mt-1">
-                      Before a forced removal, so Windows itself can roll the machine back. Costs a
-                      few seconds, and does nothing at all if System Protection is turned off.
+                      {t('settings.restorePointCleanup.description')}
                     </p>
                   </div>
                   <Toggle
                     checked={settings.createRestorePoint}
                     onChange={() => save({ createRestorePoint: !settings.createRestorePoint })}
-                    label="Create a restore point first"
+                    label={t('settings.restorePointCleanup.title')}
                   />
                 </div>
               </div>
@@ -453,16 +436,15 @@ ode.js" is a folder or a file type.
               <div className="glass-panel p-6">
                 <div className="flex items-center justify-between gap-4">
                   <div className="min-w-0">
-                    <div className="text-[14px] font-medium text-[color:var(--text-primary)]">Hide cleaners that don't apply</div>
+                    <div className="text-[14px] font-medium text-[color:var(--text-primary)]">{t('settings.hideUnavailable.title')}</div>
                     <p className="text-[12.5px] text-[color:var(--text-secondary)] mt-1">
-                      Most of the list is for software this machine doesn't have. Hiding those leaves
-                      only what is actually here.
+                      {t('settings.hideUnavailable.description')}
                     </p>
                   </div>
                   <Toggle
                     checked={settings.hideUnavailableRules}
                     onChange={() => save({ hideUnavailableRules: !settings.hideUnavailableRules })}
-                    label="Hide cleaners that don't apply"
+                    label={t('settings.hideUnavailable.title')}
                   />
                 </div>
               </div>
@@ -476,11 +458,9 @@ ode.js" is a folder or a file type.
               <div className="glass-panel p-6">
                 <div className="flex items-center justify-between gap-4">
                   <div className="min-w-0">
-                    <div className="text-[14px] font-medium text-[color:var(--text-primary)]">How long to keep undo</div>
+                    <div className="text-[14px] font-medium text-[color:var(--text-primary)]">{t('settings.quarantineRetention.title')}</div>
                     <p className="text-[12.5px] text-[color:var(--text-secondary)] mt-1">
-                      Everything Prune removes goes to Quarantine first, and stays until you empty
-                      it. Set a number of days to drop backups older than that. Leave it blank to
-                      keep them forever.
+                      {t('settings.quarantineRetention.description')}
                     </p>
                   </div>
                   <div className="flex items-center gap-2 shrink-0">
@@ -489,13 +469,13 @@ ode.js" is a folder or a file type.
                       min="0"
                       max="3650"
                       value={settings.quarantineRetentionDays ?? ''}
-                      placeholder="Never"
+                      placeholder={t('settings.quarantineRetention.neverPlaceholder')}
                       onChange={(e) => save({ quarantineRetentionDays: positiveOrOff(e.target.value) })}
-                      aria-label="Days to keep quarantine backups"
+                      aria-label={t('settings.quarantineRetention.ariaLabel')}
                       className="w-[88px] font-mono text-[12.5px] px-2.5 py-2 rounded-lg bg-[color:var(--surface-hover)] border border-[color:var(--border-subtle)] text-[color:var(--text-primary)] focus:outline-none focus:border-[color:var(--accent-primary)]/50"
                       style={{ fontVariantNumeric: 'tabular-nums' }}
                     />
-                    <span className="text-[12.5px] text-[color:var(--text-muted)]">days</span>
+                    <span className="text-[12.5px] text-[color:var(--text-muted)]">{t('settings.quarantineRetention.daysUnit')}</span>
                   </div>
                 </div>
               </div>
@@ -503,12 +483,9 @@ ode.js" is a folder or a file type.
               <div className="glass-panel p-6">
                 <div className="flex items-center justify-between gap-4">
                   <div className="min-w-0">
-                    <div className="text-[14px] font-medium text-[color:var(--text-primary)]">How much undo to keep</div>
+                    <div className="text-[14px] font-medium text-[color:var(--text-primary)]">{t('settings.quarantineMaxSize.title')}</div>
                     <p className="text-[12.5px] text-[color:var(--text-secondary)] mt-1">
-                      A cap on the whole Quarantine folder. Over it, the oldest backups go first —
-                      the most recent one is never dropped, so something big you just removed stays
-                      recoverable even if it is larger than the cap on its own. Leave it blank for
-                      no limit.
+                      {t('settings.quarantineMaxSize.description')}
                     </p>
                   </div>
                   <div className="flex items-center gap-2 shrink-0">
@@ -517,23 +494,21 @@ ode.js" is a folder or a file type.
                       min="0"
                       step="0.5"
                       value={settings.quarantineMaxSizeGb ?? ''}
-                      placeholder="No limit"
+                      placeholder={t('settings.quarantineMaxSize.noLimitPlaceholder')}
                       onChange={(e) => save({ quarantineMaxSizeGb: positiveOrOff(e.target.value) })}
-                      aria-label="Maximum quarantine size in gigabytes"
+                      aria-label={t('settings.quarantineMaxSize.ariaLabel')}
                       className="w-[88px] font-mono text-[12.5px] px-2.5 py-2 rounded-lg bg-[color:var(--surface-hover)] border border-[color:var(--border-subtle)] text-[color:var(--text-primary)] focus:outline-none focus:border-[color:var(--accent-primary)]/50"
                       style={{ fontVariantNumeric: 'tabular-nums' }}
                     />
-                    <span className="text-[12.5px] text-[color:var(--text-muted)]">GB</span>
+                    <span className="text-[12.5px] text-[color:var(--text-muted)]">{t('settings.quarantineMaxSize.gbUnit')}</span>
                   </div>
                 </div>
               </div>
 
               <div className="glass-panel p-6">
-                <div className="text-[14px] font-medium text-[color:var(--text-primary)] mb-1">Exclude Folders</div>
+                <div className="text-[14px] font-medium text-[color:var(--text-primary)] mb-1">{t('settings.exclusions.title')}</div>
                 <p className="text-[12.5px] text-[color:var(--text-secondary)] mb-4">
-                  Folders and file types Prune will leave alone — skipped by Deep Clean and left
-                  out of the Disk Map — on top of the ones it already protects: System Volume
-                  Information, antivirus quarantines, the component store and a dozen others.
+                  {t('settings.exclusions.description')}
                 </p>
 
                 <div className="flex items-center gap-2 mb-1">
@@ -543,12 +518,12 @@ ode.js" is a folder or a file type.
                     onChange={(e) => { setNewExclusion(e.target.value); setExclusionError(null); }}
                     onKeyDown={(e) => { if (e.key === 'Enter') handleAddExclusion(); }}
                     placeholder="D:\Games   or   *.iso"
-                    aria-label="Folder path or file type to exclude"
+                    aria-label={t('settings.exclusions.ariaLabel')}
                     aria-invalid={Boolean(exclusionError)}
                     className="flex-1 min-w-0 font-mono text-[12.5px] px-3 py-2 rounded-lg bg-[color:var(--surface-hover)] border border-[color:var(--border-subtle)] text-[color:var(--text-primary)] placeholder:text-[color:var(--text-muted)] focus:outline-none focus:border-[color:var(--accent-primary)]/50"
                   />
                   <button className="btn-ghost px-3.5 py-2 rounded-lg text-[12px] font-medium shrink-0" onClick={handleAddExclusion}>
-                    Add
+                    {t('settings.exclusions.add')}
                   </button>
                 </div>
 
@@ -556,11 +531,11 @@ ode.js" is a folder or a file type.
                     is genuinely ambiguous and the user is the only one who
                     can resolve it. */}
                 <p className={`text-[11.5px] mb-4 ${exclusionError ? 'text-[color:var(--danger)]' : 'text-[color:var(--text-muted)]'}`}>
-                  {exclusionError || 'A full folder path, or a file type written as *.iso'}
+                  {exclusionError || t('settings.exclusions.formatHint')}
                 </p>
 
                 {exclusions.length === 0 ? (
-                  <p className="text-[12.5px] text-[color:var(--text-muted)]">Nothing excluded.</p>
+                  <p className="text-[12.5px] text-[color:var(--text-muted)]">{t('settings.exclusions.none')}</p>
                 ) : (
                   <div className="flex flex-col gap-1.5">
                     {exclusions.map(({ kind, value }) => (
@@ -570,12 +545,12 @@ ode.js" is a folder or a file type.
                               differently and the row should not need to be
                               parsed to tell them apart. */}
                           <span className="text-[9px] font-mono uppercase tracking-wider px-1.5 py-px rounded border shrink-0 border-[color:var(--border-subtle)] text-[color:var(--text-muted)]">
-                            {kind === 'extension' ? 'Type' : 'Folder'}
+                            {kind === 'extension' ? t('settings.exclusions.typeBadge') : t('settings.exclusions.folderBadge')}
                           </span>
                           <span className="font-mono text-[12px] text-[color:var(--text-secondary)] truncate min-w-0">{value}</span>
                         </div>
                         <button
-                          aria-label={`Stop excluding ${value}`}
+                          aria-label={t('settings.exclusions.removeAriaLabel', value)}
                           onClick={() => handleRemoveExclusion(kind, value)}
                           className="text-[color:var(--text-muted)] hover:text-[color:var(--danger)] transition-colors shrink-0 text-[13px] leading-none px-1"
                         >
@@ -588,18 +563,16 @@ ode.js" is a folder or a file type.
               </div>
 
               <div className="glass-panel p-6">
-                <div className="text-[14px] font-medium text-[color:var(--text-primary)] mb-1">Sandbox Test</div>
+                <div className="text-[14px] font-medium text-[color:var(--text-primary)] mb-1">{t('settings.sandboxTest.title')}</div>
                 <p className="text-[12.5px] text-[color:var(--text-secondary)] mb-4">
-                  Runs the real cleanup engine against a throwaway temp directory only — never
-                  your actual Temp, Windows Temp, or thumbnail cache — to prove scanning and
-                  deletion genuinely work before you trust them on real files.
+                  {t('settings.sandboxTest.description')}
                 </p>
                 <button
                   className="btn-primary px-5 py-2.5 text-[13px] font-medium disabled:opacity-50"
                   onClick={handleRunSandboxTest}
                   disabled={sandboxRunning}
                 >
-                  {sandboxRunning ? 'Running…' : 'Run Sandbox Test'}
+                  {sandboxRunning ? t('settings.sandboxTest.running') : t('settings.sandboxTest.run')}
                 </button>
 
                 {sandboxReport && (
@@ -609,7 +582,7 @@ ode.js" is a folder or a file type.
                         sandboxReport.passed ? 'text-[color:var(--success)]' : 'text-[color:var(--danger)]'
                       }`}
                     >
-                      {sandboxReport.passed ? 'All checks passed' : 'Sandbox test failed'}
+                      {sandboxReport.passed ? t('settings.sandboxTest.allPassed') : t('settings.sandboxTest.failed')}
                     </div>
                     {sandboxReport.steps.map((step, i) => (
                       <StepRow key={i} step={step} />
@@ -626,17 +599,17 @@ ode.js" is a folder or a file type.
           {tab === 'uninstall' && (
             <div className="flex flex-col gap-4">
               <div className="glass-panel p-6">
-                <h2 className="text-[14px] font-medium text-[color:var(--text-primary)] mb-3">Before uninstalling</h2>
+                <h2 className="text-[14px] font-medium text-[color:var(--text-primary)] mb-3">{t('settings.uninstallTab.beforeHeading')}</h2>
                 <div className="divide-y divide-[color:var(--border-subtle)]">
                   <SettingRow
-                    title="Create a restore point before uninstalling"
-                    description="Windows' own System Restore, made before the program's uninstaller runs. It needs Prune to be running as administrator and Windows allows one a day, so when it can't be made the uninstall goes ahead and the dialog says so."
+                    title={t('settings.uninstallTab.restorePointUninstall.title')}
+                    description={t('settings.uninstallTab.restorePointUninstall.description')}
                     checked={isOnlyIfTrue('restorePointBeforeUninstall')}
                     onChange={() => save({ restorePointBeforeUninstall: !isOnlyIfTrue('restorePointBeforeUninstall') })}
                   />
                   <SettingRow
-                    title="Back up the registry before uninstalling"
-                    description={'Exports HKLM\\SOFTWARE and HKCU\\Software (about 140 MB on the machine Prune is built on) and keeps the newest 3. If the backup can\'t be made, the uninstall doesn\'t run.'}
+                    title={t('settings.uninstallTab.registryBackup.title')}
+                    description={t('settings.uninstallTab.registryBackup.description')}
                     checked={isOnlyIfTrue('registryBackupBeforeUninstall')}
                     onChange={() => save({ registryBackupBeforeUninstall: !isOnlyIfTrue('registryBackupBeforeUninstall') })}
                   />
@@ -644,23 +617,23 @@ ode.js" is a folder or a file type.
               </div>
 
               <div className="glass-panel p-6">
-                <h2 className="text-[14px] font-medium text-[color:var(--text-primary)] mb-3">After uninstalling</h2>
+                <h2 className="text-[14px] font-medium text-[color:var(--text-primary)] mb-3">{t('settings.uninstallTab.afterHeading')}</h2>
                 <div className="divide-y divide-[color:var(--border-subtle)]">
                   <SettingRow
-                    title="Scan for leftovers after uninstalling"
-                    description="Looks for the files, registry keys and scheduled tasks the uninstaller left behind. Off, Prune runs the program's own uninstaller and stops there."
+                    title={t('settings.uninstallTab.scanLeftovers.title')}
+                    description={t('settings.uninstallTab.scanLeftovers.description')}
                     checked={isOn('scanLeftoversAfterUninstall')}
                     onChange={() => save({ scanLeftoversAfterUninstall: !isOn('scanLeftoversAfterUninstall') })}
                   />
                   <SettingRow
-                    title="Tick every leftover by default"
-                    description="The review opens with everything it found ticked. Off, it opens with nothing ticked and you choose."
+                    title={t('settings.uninstallTab.preselect.title')}
+                    description={t('settings.uninstallTab.preselect.description')}
                     checked={isOn('preselectLeftovers')}
                     onChange={() => save({ preselectLeftovers: !isOn('preselectLeftovers') })}
                   />
                   <SettingRow
-                    title="Keep an uninstall history"
-                    description="The dashboard's list of recent removals and the space they freed. Off, nothing new is recorded."
+                    title={t('settings.uninstallTab.keepHistory.title')}
+                    description={t('settings.uninstallTab.keepHistory.description')}
                     checked={isOn('keepUninstallHistory')}
                     onChange={() => save({ keepUninstallHistory: !isOn('keepUninstallHistory') })}
                   />
@@ -668,7 +641,7 @@ ode.js" is a folder or a file type.
               </div>
 
               <div className="glass-panel p-6">
-                <h2 id="leftover-destination" className="text-[14px] font-medium text-[color:var(--text-primary)] mb-3">Leftover files go to</h2>
+                <h2 id="leftover-destination" className="text-[14px] font-medium text-[color:var(--text-primary)] mb-3">{t('settings.uninstallTab.destinationHeading')}</h2>
                 <div role="radiogroup" aria-labelledby="leftover-destination" className="flex flex-col gap-3">
                   {LEFTOVER_OPTIONS.map((option) => (
                     <label key={option.value} className="flex items-start gap-3 cursor-pointer">
@@ -689,12 +662,11 @@ ode.js" is a folder or a file type.
                 </div>
                 {destination === 'permanent' && (
                   <p className="mt-4 text-[12.5px] text-[color:var(--danger)] leading-relaxed max-w-[62ch]">
-                    Leftover files will be deleted outright and can't be restored, from Quarantine or anywhere
-                    else. Check the list before you confirm it.
+                    {t('settings.uninstallTab.permanentWarning')}
                   </p>
                 )}
                 <p className="mt-3 text-[12px] text-[color:var(--text-muted)]">
-                  Registry keys are exported to Quarantine before they are removed, whichever you choose.
+                  {t('settings.uninstallTab.registryNote')}
                 </p>
               </div>
             </div>
@@ -704,11 +676,11 @@ ode.js" is a folder or a file type.
             <div className="glass-panel p-6 mt-4">
               <div className="flex items-center justify-between gap-4">
                 <div className="min-w-0">
-                  <div className="text-[14px] font-medium text-[color:var(--text-primary)]">Warning confirmations</div>
+                  <div className="text-[14px] font-medium text-[color:var(--text-primary)]">{t('settings.warningConfirmations.title')}</div>
                   <p className="text-[12.5px] text-[color:var(--text-secondary)] mt-1">
                     {acknowledgedCount === 0
-                      ? 'Every cleaner that loses data asks before it runs.'
-                      : `${acknowledgedCount} cleaner warning${acknowledgedCount === 1 ? ' is' : 's are'} set not to ask again.`}
+                      ? t('settings.warningConfirmations.allAsk')
+                      : t('settings.warningConfirmations.someSet', acknowledgedCount)}
                   </p>
                 </div>
                 <button
@@ -717,7 +689,7 @@ ode.js" is a folder or a file type.
                   disabled={acknowledgedCount === 0}
                   onClick={() => save({ acknowledgedCleanWarnings: [] })}
                 >
-                  Reset warning confirmations
+                  {t('settings.warningConfirmations.reset')}
                 </button>
               </div>
             </div>
@@ -730,9 +702,7 @@ ode.js" is a folder or a file type.
                 <p className="text-[12.5px] text-[color:var(--text-muted)] font-mono mb-4">{`v${update.data.current}`}</p>
               )}
               <p className="text-[13px] text-[color:var(--text-secondary)] leading-relaxed max-w-[52ch]">
-                A local, offline uninstaller and cleanup tool for Windows — forced removal with
-                leftover-file scanning, safe quarantine-before-delete, disk mapping, and
-                one-click junk cleanup.
+                {t('settings.about.description')}
               </p>
             </div>
           )}
