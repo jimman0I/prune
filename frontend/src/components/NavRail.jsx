@@ -94,7 +94,7 @@ const ITEMS = [
 export default function NavRail({ screen, onNavigate, footer = null }) {
   const { t } = useLanguage();
   return (
-    <nav className="relative flex flex-col items-center gap-2 py-6 w-[72px] shrink-0" aria-label="Main">
+    <nav className="relative flex flex-col items-center gap-2 py-6 w-[72px] shrink-0" aria-label={t('nav.landmark')}>
       {/* The glass is a background LAYER here, not the container itself.
           `backdrop-filter` establishes a containing block and clips
           absolutely positioned descendants to its own border box, so with

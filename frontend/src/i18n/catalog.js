@@ -26,7 +26,8 @@ export const CATALOG = {
       settings: 'Settings',
       startup: 'Startup',
       duplicates: 'Duplicates',
-      deepClean: 'Deep Clean'
+      deepClean: 'Deep Clean',
+      landmark: 'Main'
     },
     settings: {
       language: {
@@ -693,6 +694,11 @@ export const CATALOG = {
       couldNotUpdate: (version) => `Couldn't update to ${version}`,
       openDownloadPage: 'Open the download page',
       tryAgain: 'Try again'
+    },
+    app: {
+      installedApplications: 'Installed applications',
+      applicationsSummary: (count, size) => `${count} applications · ${size} installed`,
+      removeStoreApp: (name) => `Remove ${name}`
     }
   },
 
@@ -700,7 +706,8 @@ export const CATALOG = {
     nav: {
       dashboard: 'Kontroleskerm', diskMap: 'Skyfkaart', applications: 'Toepassings',
       quarantine: 'Karantyn', settings: 'Instellings', startup: 'Opstart',
-      duplicates: 'Duplikate', deepClean: 'Grondige Skoonmaak'
+      duplicates: 'Duplikate', deepClean: 'Grondige Skoonmaak',
+      landmark: 'Hoof'
     },
     settings: {
       language: { title: 'Taal', description: "Waarin Prune se eie skerms gewys word." },
@@ -1359,6 +1366,11 @@ export const CATALOG = {
       couldNotUpdate: (version) => `Kon nie na ${version} opdateer nie`,
       openDownloadPage: 'Maak die aflaaibladsy oop',
       tryAgain: 'Probeer weer'
+    },
+    app: {
+      installedApplications: 'Geïnstalleerde toepassings',
+      applicationsSummary: (count, size) => `${count} toepassings · ${size} geïnstalleer`,
+      removeStoreApp: (name) => `Verwyder ${name}`
     }
   },
 
@@ -1366,7 +1378,8 @@ export const CATALOG = {
     nav: {
       dashboard: 'لوحة التحكم', diskMap: 'خريطة القرص', applications: 'التطبيقات',
       quarantine: 'الحجر', settings: 'الإعدادات', startup: 'بدء التشغيل',
-      duplicates: 'الملفات المكررة', deepClean: 'تنظيف عميق'
+      duplicates: 'الملفات المكررة', deepClean: 'تنظيف عميق',
+      landmark: 'الرئيسية'
     },
     settings: {
       language: { title: 'اللغة', description: 'اللغة التي تُعرض بها شاشات Prune نفسها.' },
@@ -2025,6 +2038,11 @@ export const CATALOG = {
       couldNotUpdate: (version) => `تعذّر التحديث إلى ${version}`,
       openDownloadPage: 'فتح صفحة التنزيل',
       tryAgain: 'حاول مرة أخرى'
+    },
+    app: {
+      installedApplications: 'التطبيقات المثبَّتة',
+      applicationsSummary: (count, size) => `${count} تطبيقات · ${size} مثبَّتة`,
+      removeStoreApp: (name) => `إزالة ${name}`
     }
   },
 
@@ -2032,7 +2050,8 @@ export const CATALOG = {
     nav: {
       dashboard: 'Tauler', diskMap: 'Mapa del disc', applications: 'Aplicacions',
       quarantine: 'Quarantena', settings: 'Configuració', startup: 'Inici',
-      duplicates: 'Duplicats', deepClean: 'Neteja profunda'
+      duplicates: 'Duplicats', deepClean: 'Neteja profunda',
+      landmark: 'Principal'
     },
     settings: {
       language: { title: 'Idioma', description: "L'idioma en què es mostren les pantalles del propi Prune." },
@@ -2691,6 +2710,11 @@ export const CATALOG = {
       couldNotUpdate: (version) => `No s'ha pogut actualitzar a la ${version}`,
       openDownloadPage: 'Obre la pàgina de baixada',
       tryAgain: 'Torna-ho a provar'
+    },
+    app: {
+      installedApplications: 'Aplicacions instal·lades',
+      applicationsSummary: (count, size) => `${count} aplicacions · ${size} instal·lades`,
+      removeStoreApp: (name) => `Elimina ${name}`
     }
   },
 
@@ -2698,7 +2722,8 @@ export const CATALOG = {
     nav: {
       dashboard: 'Přehled', diskMap: 'Mapa disku', applications: 'Aplikace',
       quarantine: 'Karanténa', settings: 'Nastavení', startup: 'Po spuštění',
-      duplicates: 'Duplicity', deepClean: 'Důkladné čištění'
+      duplicates: 'Duplicity', deepClean: 'Důkladné čištění',
+      landmark: 'Hlavní'
     },
     settings: {
       language: { title: 'Jazyk', description: 'Jazyk, ve kterém se zobrazují obrazovky Prune.' },
@@ -3357,6 +3382,11 @@ export const CATALOG = {
       couldNotUpdate: (version) => `Nepodařilo se aktualizovat na ${version}`,
       openDownloadPage: 'Otevřít stránku ke stažení',
       tryAgain: 'Zkusit znovu'
+    },
+    app: {
+      installedApplications: 'Nainstalované aplikace',
+      applicationsSummary: (count, size) => `${count} aplikací · ${size} nainstalováno`,
+      removeStoreApp: (name) => `Odebrat ${name}`
     }
   },
 
@@ -3364,7 +3394,8 @@ export const CATALOG = {
     nav: {
       dashboard: 'Dangosfwrdd', diskMap: 'Map Disg', applications: 'Rhaglenni',
       quarantine: 'Cwarantin', settings: 'Gosodiadau', startup: 'Cychwyn',
-      duplicates: 'Dyblygiadau', deepClean: 'Glanhau Dwfn'
+      duplicates: 'Dyblygiadau', deepClean: 'Glanhau Dwfn',
+      landmark: 'Prif'
     },
     settings: {
       language: { title: 'Iaith', description: "Yr iaith y dangosir sgriniau Prune ei hun ynddi." },
@@ -4023,6 +4054,11 @@ export const CATALOG = {
       couldNotUpdate: (version) => `Methu diweddaru i ${version}`,
       openDownloadPage: 'Agor y dudalen lwytho i lawr',
       tryAgain: 'Ceisiwch eto'
+    },
+    app: {
+      installedApplications: 'Rhaglenni wedi\'u gosod',
+      applicationsSummary: (count, size) => `${count} rhaglen · ${size} wedi\'u gosod`,
+      removeStoreApp: (name) => `Tynnu ${name}`
     }
   },
 
@@ -4030,7 +4066,8 @@ export const CATALOG = {
     nav: {
       dashboard: 'Oversigt', diskMap: 'Diskkort', applications: 'Programmer',
       quarantine: 'Karantæne', settings: 'Indstillinger', startup: 'Opstart',
-      duplicates: 'Dubletter', deepClean: 'Grundig oprydning'
+      duplicates: 'Dubletter', deepClean: 'Grundig oprydning',
+      landmark: 'Hoved'
     },
     settings: {
       language: { title: 'Sprog', description: 'Det sprog, Prunes egne skærme vises på.' },
@@ -4689,6 +4726,11 @@ export const CATALOG = {
       couldNotUpdate: (version) => `Kunne ikke opdatere til ${version}`,
       openDownloadPage: 'Åbn downloadsiden',
       tryAgain: 'Prøv igen'
+    },
+    app: {
+      installedApplications: 'Installerede programmer',
+      applicationsSummary: (count, size) => `${count} programmer · ${size} installeret`,
+      removeStoreApp: (name) => `Fjern ${name}`
     }
   },
 
@@ -4696,7 +4738,8 @@ export const CATALOG = {
     nav: {
       dashboard: 'Übersicht', diskMap: 'Festplattenkarte', applications: 'Anwendungen',
       quarantine: 'Quarantäne', settings: 'Einstellungen', startup: 'Autostart',
-      duplicates: 'Duplikate', deepClean: 'Gründliche Bereinigung'
+      duplicates: 'Duplikate', deepClean: 'Gründliche Bereinigung',
+      landmark: 'Haupt'
     },
     settings: {
       language: { title: 'Sprache', description: 'Die Sprache, in der Prunes eigene Bildschirme angezeigt werden.' },
@@ -5355,6 +5398,11 @@ export const CATALOG = {
       couldNotUpdate: (version) => `Aktualisierung auf ${version} fehlgeschlagen`,
       openDownloadPage: 'Download-Seite öffnen',
       tryAgain: 'Erneut versuchen'
+    },
+    app: {
+      installedApplications: 'Installierte Anwendungen',
+      applicationsSummary: (count, size) => `${count} Anwendungen · ${size} installiert`,
+      removeStoreApp: (name) => `${name} entfernen`
     }
   },
 
@@ -5362,7 +5410,8 @@ export const CATALOG = {
     nav: {
       dashboard: 'Πίνακας ελέγχου', diskMap: 'Χάρτης δίσκου', applications: 'Εφαρμογές',
       quarantine: 'Καραντίνα', settings: 'Ρυθμίσεις', startup: 'Εκκίνηση',
-      duplicates: 'Διπλότυπα', deepClean: 'Βαθύς καθαρισμός'
+      duplicates: 'Διπλότυπα', deepClean: 'Βαθύς καθαρισμός',
+      landmark: 'Κύρια'
     },
     settings: {
       language: { title: 'Γλώσσα', description: 'Η γλώσσα στην οποία εμφανίζονται οι δικές του οθόνες του Prune.' },
@@ -6021,6 +6070,11 @@ export const CATALOG = {
       couldNotUpdate: (version) => `Αδυναμία ενημέρωσης στο ${version}`,
       openDownloadPage: 'Άνοιγμα σελίδας λήψης',
       tryAgain: 'Δοκιμάστε ξανά'
+    },
+    app: {
+      installedApplications: 'Εγκατεστημένες εφαρμογές',
+      applicationsSummary: (count, size) => `${count} εφαρμογές · ${size} εγκατεστημένα`,
+      removeStoreApp: (name) => `Κατάργηση ${name}`
     }
   },
 
@@ -6028,7 +6082,8 @@ export const CATALOG = {
     nav: {
       dashboard: 'Panel', diskMap: 'Mapa del disco', applications: 'Aplicaciones',
       quarantine: 'Cuarentena', settings: 'Configuración', startup: 'Inicio',
-      duplicates: 'Duplicados', deepClean: 'Limpieza profunda'
+      duplicates: 'Duplicados', deepClean: 'Limpieza profunda',
+      landmark: 'Principal'
     },
     settings: {
       language: { title: 'Idioma', description: 'El idioma en el que se muestran las propias pantallas de Prune.' },
@@ -6687,6 +6742,11 @@ export const CATALOG = {
       couldNotUpdate: (version) => `No se pudo actualizar a ${version}`,
       openDownloadPage: 'Abrir la página de descarga',
       tryAgain: 'Intentar de nuevo'
+    },
+    app: {
+      installedApplications: 'Aplicaciones instaladas',
+      applicationsSummary: (count, size) => `${count} aplicaciones · ${size} instalados`,
+      removeStoreApp: (name) => `Quitar ${name}`
     }
   },
 
@@ -6694,7 +6754,8 @@ export const CATALOG = {
     nav: {
       dashboard: 'Töölaud', diskMap: 'Kettakaart', applications: 'Rakendused',
       quarantine: 'Karantiin', settings: 'Seaded', startup: 'Käivitus',
-      duplicates: 'Duplikaadid', deepClean: 'Põhjalik puhastus'
+      duplicates: 'Duplikaadid', deepClean: 'Põhjalik puhastus',
+      landmark: 'Peamine'
     },
     settings: {
       language: { title: 'Keel', description: 'Keel, milles Prune oma ekraanid kuvatakse.' },
@@ -7353,6 +7414,11 @@ export const CATALOG = {
       couldNotUpdate: (version) => `Ei õnnestunud värskendada versioonile ${version}`,
       openDownloadPage: 'Ava allalaadimislehekülg',
       tryAgain: 'Proovi uuesti'
+    },
+    app: {
+      installedApplications: 'Installitud rakendused',
+      applicationsSummary: (count, size) => `${count} rakendust · ${size} installitud`,
+      removeStoreApp: (name) => `Eemalda ${name}`
     }
   },
 
@@ -7360,7 +7426,8 @@ export const CATALOG = {
     nav: {
       dashboard: 'Yhteenveto', diskMap: 'Levykartta', applications: 'Sovellukset',
       quarantine: 'Karanteeni', settings: 'Asetukset', startup: 'Käynnistys',
-      duplicates: 'Kaksoiskappaleet', deepClean: 'Perusteellinen siivous'
+      duplicates: 'Kaksoiskappaleet', deepClean: 'Perusteellinen siivous',
+      landmark: 'Pää'
     },
     settings: {
       language: { title: 'Kieli', description: 'Kieli, jolla Prunen omat näytöt näytetään.' },
@@ -8019,6 +8086,11 @@ export const CATALOG = {
       couldNotUpdate: (version) => `Päivitys versioon ${version} epäonnistui`,
       openDownloadPage: 'Avaa latenaissivu',
       tryAgain: 'Yritä uudelleen'
+    },
+    app: {
+      installedApplications: 'Asennetut sovellukset',
+      applicationsSummary: (count, size) => `${count} sovellusta · ${size} asennettu`,
+      removeStoreApp: (name) => `Poista ${name}`
     }
   },
 
@@ -8026,7 +8098,8 @@ export const CATALOG = {
     nav: {
       dashboard: 'Tableau de bord', diskMap: 'Carte du disque', applications: 'Applications',
       quarantine: 'Quarantaine', settings: 'Paramètres', startup: 'Démarrage',
-      duplicates: 'Doublons', deepClean: 'Nettoyage approfondi'
+      duplicates: 'Doublons', deepClean: 'Nettoyage approfondi',
+      landmark: 'Principal'
     },
     settings: {
       language: { title: 'Langue', description: 'La langue dans laquelle les écrans de Prune sont affichés.' },
@@ -8685,6 +8758,11 @@ export const CATALOG = {
       couldNotUpdate: (version) => `Impossible de mettre à jour vers ${version}`,
       openDownloadPage: 'Ouvrir la page de téléchargement',
       tryAgain: 'Réessayer'
+    },
+    app: {
+      installedApplications: 'Applications installées',
+      applicationsSummary: (count, size) => `${count} applications · ${size} installés`,
+      removeStoreApp: (name) => `Supprimer ${name}`
     }
   },
 
@@ -8692,7 +8770,8 @@ export const CATALOG = {
     nav: {
       dashboard: 'לוח בקרה', diskMap: 'מפת הדיסק', applications: 'יישומים',
       quarantine: 'הסגר', settings: 'הגדרות', startup: 'הפעלה',
-      duplicates: 'כפילויות', deepClean: 'ניקוי מעמיק'
+      duplicates: 'כפילויות', deepClean: 'ניקוי מעמיק',
+      landmark: 'ראשי'
     },
     settings: {
       language: { title: 'שפה', description: 'השפה שבה מוצגים המסכים של Prune עצמו.' },
@@ -9351,6 +9430,11 @@ export const CATALOG = {
       couldNotUpdate: (version) => `לא ניתן היה לעדכן ל-${version}`,
       openDownloadPage: 'פתח את דף ההורדה',
       tryAgain: 'נסה שוב'
+    },
+    app: {
+      installedApplications: 'יישומים מותקנים',
+      applicationsSummary: (count, size) => `${count} יישומים · ${size} מותקנים`,
+      removeStoreApp: (name) => `הסר את ${name}`
     }
   },
 
@@ -9358,7 +9442,8 @@ export const CATALOG = {
     nav: {
       dashboard: 'Áttekintés', diskMap: 'Lemeztérkép', applications: 'Alkalmazások',
       quarantine: 'Karantén', settings: 'Beállítások', startup: 'Indítás',
-      duplicates: 'Duplikátumok', deepClean: 'Alapos tisztítás'
+      duplicates: 'Duplikátumok', deepClean: 'Alapos tisztítás',
+      landmark: 'Fő'
     },
     settings: {
       language: { title: 'Nyelv', description: 'A nyelv, amelyen a Prune saját képernyői megjelennek.' },
@@ -10017,6 +10102,11 @@ export const CATALOG = {
       couldNotUpdate: (version) => `Nem sikerült frissíteni erre: ${version}`,
       openDownloadPage: 'Letöltési oldal megnyitása',
       tryAgain: 'Próbáld újra'
+    },
+    app: {
+      installedApplications: 'Telepített alkalmazások',
+      applicationsSummary: (count, size) => `${count} alkalmazás · ${size} telepítve`,
+      removeStoreApp: (name) => `${name} eltávolítása`
     }
   },
 
@@ -10024,7 +10114,8 @@ export const CATALOG = {
     nav: {
       dashboard: 'Dasbor', diskMap: 'Peta Disk', applications: 'Aplikasi',
       quarantine: 'Karantina', settings: 'Pengaturan', startup: 'Mulai Otomatis',
-      duplicates: 'Duplikat', deepClean: 'Pembersihan Menyeluruh'
+      duplicates: 'Duplikat', deepClean: 'Pembersihan Menyeluruh',
+      landmark: 'Utama'
     },
     settings: {
       language: { title: 'Bahasa', description: 'Bahasa yang digunakan untuk menampilkan layar Prune sendiri.' },
@@ -10683,6 +10774,11 @@ export const CATALOG = {
       couldNotUpdate: (version) => `Gagal memperbarui ke ${version}`,
       openDownloadPage: 'Buka halaman unduhan',
       tryAgain: 'Coba lagi'
+    },
+    app: {
+      installedApplications: 'Aplikasi terpasang',
+      applicationsSummary: (count, size) => `${count} aplikasi · ${size} terpasang`,
+      removeStoreApp: (name) => `Hapus ${name}`
     }
   },
 
@@ -10690,7 +10786,8 @@ export const CATALOG = {
     nav: {
       dashboard: 'Yfirlit', diskMap: 'Diskakort', applications: 'Forrit',
       quarantine: 'Sóttkví', settings: 'Stillingar', startup: 'Ræsing',
-      duplicates: 'Tvítök', deepClean: 'Ítarleg hreinsun'
+      duplicates: 'Tvítök', deepClean: 'Ítarleg hreinsun',
+      landmark: 'Aðal'
     },
     settings: {
       language: { title: 'Tungumál', description: 'Tungumálið sem skjáir Prune sjálfs birtast á.' },
@@ -11349,6 +11446,11 @@ export const CATALOG = {
       couldNotUpdate: (version) => `Ekki tókst að uppfæra í ${version}`,
       openDownloadPage: 'Opna niðurhalssíðuna',
       tryAgain: 'Reyna aftur'
+    },
+    app: {
+      installedApplications: 'Uppsett forrit',
+      applicationsSummary: (count, size) => `${count} forrit · ${size} uppsett`,
+      removeStoreApp: (name) => `Fjarlægja ${name}`
     }
   },
 
@@ -11356,7 +11458,8 @@ export const CATALOG = {
     nav: {
       dashboard: 'Pannello', diskMap: 'Mappa del disco', applications: 'Applicazioni',
       quarantine: 'Quarantena', settings: 'Impostazioni', startup: 'Avvio',
-      duplicates: 'Duplicati', deepClean: 'Pulizia approfondita'
+      duplicates: 'Duplicati', deepClean: 'Pulizia approfondita',
+      landmark: 'Principale'
     },
     settings: {
       language: { title: 'Lingua', description: 'La lingua in cui vengono mostrate le schermate di Prune.' },
@@ -12015,6 +12118,11 @@ export const CATALOG = {
       couldNotUpdate: (version) => `Impossibile aggiornare a ${version}`,
       openDownloadPage: 'Apri la pagina di download',
       tryAgain: 'Riprova'
+    },
+    app: {
+      installedApplications: 'Applicazioni installate',
+      applicationsSummary: (count, size) => `${count} applicazioni · ${size} installati`,
+      removeStoreApp: (name) => `Rimuovi ${name}`
     }
   },
 
@@ -12022,7 +12130,8 @@ export const CATALOG = {
     nav: {
       dashboard: 'ダッシュボード', diskMap: 'ディスクマップ', applications: 'アプリケーション',
       quarantine: '隔離', settings: '設定', startup: 'スタートアップ',
-      duplicates: '重複ファイル', deepClean: 'ディープクリーン'
+      duplicates: '重複ファイル', deepClean: 'ディープクリーン',
+      landmark: 'メイン'
     },
     settings: {
       language: { title: '言語', description: 'Prune 自身の画面が表示される言語です。' },
@@ -12681,6 +12790,11 @@ export const CATALOG = {
       couldNotUpdate: (version) => `${version} に更新できませんでした`,
       openDownloadPage: 'ダウンロードページを開く',
       tryAgain: 'もう一度試す'
+    },
+    app: {
+      installedApplications: 'インストール済みアプリケーション',
+      applicationsSummary: (count, size) => `${count} 件のアプリケーション · ${size} インストール済み`,
+      removeStoreApp: (name) => `${name} を削除`
     }
   },
 
@@ -12688,7 +12802,8 @@ export const CATALOG = {
     nav: {
       dashboard: '대시보드', diskMap: '디스크 맵', applications: '애플리케이션',
       quarantine: '격리', settings: '설정', startup: '시작 프로그램',
-      duplicates: '중복 파일', deepClean: '딥 클린'
+      duplicates: '중복 파일', deepClean: '딥 클린',
+      landmark: '메인'
     },
     settings: {
       language: { title: '언어', description: 'Prune 자체 화면이 표시되는 언어입니다.' },
@@ -13347,6 +13462,11 @@ export const CATALOG = {
       couldNotUpdate: (version) => `${version}(으)로 업데이트하지 못했습니다`,
       openDownloadPage: '다운로드 페이지 열기',
       tryAgain: '다시 시도'
+    },
+    app: {
+      installedApplications: '설치된 애플리케이션',
+      applicationsSummary: (count, size) => `${count}개 애플리케이션 · ${size} 설치됨`,
+      removeStoreApp: (name) => `${name} 제거`
     }
   },
 
@@ -13354,7 +13474,8 @@ export const CATALOG = {
     nav: {
       dashboard: 'Valdymo skydas', diskMap: 'Disko žemėlapis', applications: 'Programos',
       quarantine: 'Karantinas', settings: 'Nustatymai', startup: 'Paleistis',
-      duplicates: 'Dublikatai', deepClean: 'Kruopštus valymas'
+      duplicates: 'Dublikatai', deepClean: 'Kruopštus valymas',
+      landmark: 'Pagrindinis'
     },
     settings: {
       language: { title: 'Kalba', description: 'Kalba, kuria rodomi paties „Prune“ ekranai.' },
@@ -14013,6 +14134,11 @@ export const CATALOG = {
       couldNotUpdate: (version) => `Nepavyko atnaujinti į ${version}`,
       openDownloadPage: 'Atidaryti atsisiuntimo puslapį',
       tryAgain: 'Bandyti dar kartą'
+    },
+    app: {
+      installedApplications: 'Įdiegtos programos',
+      applicationsSummary: (count, size) => `${count} programos · ${size} įdiegta`,
+      removeStoreApp: (name) => `Pašalinti ${name}`
     }
   },
 
@@ -14020,7 +14146,8 @@ export const CATALOG = {
     nav: {
       dashboard: 'Papan Pemuka', diskMap: 'Peta Cakera', applications: 'Aplikasi',
       quarantine: 'Kuarantin', settings: 'Tetapan', startup: 'Permulaan',
-      duplicates: 'Pendua', deepClean: 'Pembersihan Menyeluruh'
+      duplicates: 'Pendua', deepClean: 'Pembersihan Menyeluruh',
+      landmark: 'Utama'
     },
     settings: {
       language: { title: 'Bahasa', description: 'Bahasa yang digunakan untuk memaparkan skrin Prune sendiri.' },
@@ -14679,6 +14806,11 @@ export const CATALOG = {
       couldNotUpdate: (version) => `Tidak dapat mengemas kini ke ${version}`,
       openDownloadPage: 'Buka halaman muat turun',
       tryAgain: 'Cuba lagi'
+    },
+    app: {
+      installedApplications: 'Aplikasi dipasang',
+      applicationsSummary: (count, size) => `${count} aplikasi · ${size} dipasang`,
+      removeStoreApp: (name) => `Alih keluar ${name}`
     }
   },
 
@@ -14686,7 +14818,8 @@ export const CATALOG = {
     nav: {
       dashboard: 'Oversikt', diskMap: 'Diskkart', applications: 'Programmer',
       quarantine: 'Karantene', settings: 'Innstillinger', startup: 'Oppstart',
-      duplicates: 'Duplikater', deepClean: 'Grundig opprydding'
+      duplicates: 'Duplikater', deepClean: 'Grundig opprydding',
+      landmark: 'Hoved'
     },
     settings: {
       language: { title: 'Språk', description: 'Språket Prunes egne skjermer vises på.' },
@@ -15345,6 +15478,11 @@ export const CATALOG = {
       couldNotUpdate: (version) => `Kunne ikke oppdatere til ${version}`,
       openDownloadPage: 'Åpne nedlastingssiden',
       tryAgain: 'Prøv igjen'
+    },
+    app: {
+      installedApplications: 'Installerte programmer',
+      applicationsSummary: (count, size) => `${count} programmer · ${size} installert`,
+      removeStoreApp: (name) => `Fjern ${name}`
     }
   },
 
@@ -15352,7 +15490,8 @@ export const CATALOG = {
     nav: {
       dashboard: 'Dashboard', diskMap: 'Schijfkaart', applications: 'Toepassingen',
       quarantine: 'Quarantaine', settings: 'Instellingen', startup: 'Opstarten',
-      duplicates: 'Duplicaten', deepClean: 'Grondige opschoning'
+      duplicates: 'Duplicaten', deepClean: 'Grondige opschoning',
+      landmark: 'Hoofd'
     },
     settings: {
       language: { title: 'Taal', description: 'De taal waarin Prunes eigen schermen worden getoond.' },
@@ -16011,6 +16150,11 @@ export const CATALOG = {
       couldNotUpdate: (version) => `Kon niet bijwerken naar ${version}`,
       openDownloadPage: 'Downloadpagina openen',
       tryAgain: 'Opnieuw proberen'
+    },
+    app: {
+      installedApplications: 'Geïnstalleerde toepassingen',
+      applicationsSummary: (count, size) => `${count} toepassingen · ${size} geïnstalleerd`,
+      removeStoreApp: (name) => `${name} verwijderen`
     }
   },
 
@@ -16018,7 +16162,8 @@ export const CATALOG = {
     nav: {
       dashboard: 'Panel', diskMap: 'Mapa dysku', applications: 'Aplikacje',
       quarantine: 'Kwarantanna', settings: 'Ustawienia', startup: 'Autostart',
-      duplicates: 'Duplikaty', deepClean: 'Dokładne czyszczenie'
+      duplicates: 'Duplikaty', deepClean: 'Dokładne czyszczenie',
+      landmark: 'Główna'
     },
     settings: {
       language: { title: 'Język', description: 'Język, w którym wyświetlane są własne ekrany Prune.' },
@@ -16677,6 +16822,11 @@ export const CATALOG = {
       couldNotUpdate: (version) => `Nie udało się zaktualizować do ${version}`,
       openDownloadPage: 'Otwórz stronę pobierania',
       tryAgain: 'Spróbuj ponownie'
+    },
+    app: {
+      installedApplications: 'Zainstalowane aplikacje',
+      applicationsSummary: (count, size) => `${count} aplikacji · ${size} zainstalowano`,
+      removeStoreApp: (name) => `Usuń ${name}`
     }
   },
 
@@ -16684,7 +16834,8 @@ export const CATALOG = {
     nav: {
       dashboard: 'ډشبورډ', diskMap: 'د ډیسک نقشه', applications: 'غوښتنلیکونه',
       quarantine: 'قرنطین', settings: 'تنظیمات', startup: 'پیل',
-      duplicates: 'تکراري فایلونه', deepClean: 'ژور پاکول'
+      duplicates: 'تکراري فایلونه', deepClean: 'ژور پاکول',
+      landmark: 'اصلي'
     },
     settings: {
       language: { title: 'ژبه', description: 'هغه ژبه چې د Prune خپلې پردې پرې ښودل کیږي.' },
@@ -17343,6 +17494,11 @@ export const CATALOG = {
       couldNotUpdate: (version) => `${version} ته اپډیټ نشو کړی`,
       openDownloadPage: 'د ډاونلوډ پاڼه پرانیستل',
       tryAgain: 'بیا هڅه وکړئ'
+    },
+    app: {
+      installedApplications: 'نصب شوي اپلیکیشنونه',
+      applicationsSummary: (count, size) => `${count} اپلیکیشنونه · ${size} نصب شوي`,
+      removeStoreApp: (name) => `${name} لرې کول`
     }
   },
 
@@ -17350,7 +17506,8 @@ export const CATALOG = {
     nav: {
       dashboard: 'Painel', diskMap: 'Mapa do disco', applications: 'Aplicativos',
       quarantine: 'Quarentena', settings: 'Configurações', startup: 'Inicialização',
-      duplicates: 'Duplicados', deepClean: 'Limpeza profunda'
+      duplicates: 'Duplicados', deepClean: 'Limpeza profunda',
+      landmark: 'Principal'
     },
     settings: {
       language: { title: 'Idioma', description: 'O idioma em que as próprias telas do Prune são exibidas.' },
@@ -18009,6 +18166,11 @@ export const CATALOG = {
       couldNotUpdate: (version) => `Não foi possível atualizar para ${version}`,
       openDownloadPage: 'Abrir a página de download',
       tryAgain: 'Tentar novamente'
+    },
+    app: {
+      installedApplications: 'Aplicativos instalados',
+      applicationsSummary: (count, size) => `${count} aplicativos · ${size} instalados`,
+      removeStoreApp: (name) => `Remover ${name}`
     }
   },
 
@@ -18016,7 +18178,8 @@ export const CATALOG = {
     nav: {
       dashboard: 'Painel', diskMap: 'Mapa do disco', applications: 'Aplicações',
       quarantine: 'Quarentena', settings: 'Definições', startup: 'Arranque',
-      duplicates: 'Duplicados', deepClean: 'Limpeza profunda'
+      duplicates: 'Duplicados', deepClean: 'Limpeza profunda',
+      landmark: 'Principal'
     },
     settings: {
       language: { title: 'Idioma', description: 'O idioma em que os próprios ecrãs do Prune são apresentados.' },
@@ -18675,6 +18838,11 @@ export const CATALOG = {
       couldNotUpdate: (version) => `Não foi possível atualizar para ${version}`,
       openDownloadPage: 'Abrir a página de transferência',
       tryAgain: 'Tentar novamente'
+    },
+    app: {
+      installedApplications: 'Aplicações instaladas',
+      applicationsSummary: (count, size) => `${count} aplicações · ${size} instalados`,
+      removeStoreApp: (name) => `Remover ${name}`
     }
   },
 
@@ -18682,7 +18850,8 @@ export const CATALOG = {
     nav: {
       dashboard: 'Panou', diskMap: 'Harta discului', applications: 'Aplicații',
       quarantine: 'Carantină', settings: 'Setări', startup: 'Pornire',
-      duplicates: 'Duplicate', deepClean: 'Curățare aprofundată'
+      duplicates: 'Duplicate', deepClean: 'Curățare aprofundată',
+      landmark: 'Principal'
     },
     settings: {
       language: { title: 'Limbă', description: 'Limba în care sunt afișate propriile ecrane ale Prune.' },
@@ -19341,6 +19510,11 @@ export const CATALOG = {
       couldNotUpdate: (version) => `Nu s-a putut actualiza la ${version}`,
       openDownloadPage: 'Deschide pagina de descărcare',
       tryAgain: 'Încearcă din nou'
+    },
+    app: {
+      installedApplications: 'Aplicații instalate',
+      applicationsSummary: (count, size) => `${count} aplicații · ${size} instalate`,
+      removeStoreApp: (name) => `Elimină ${name}`
     }
   },
 
@@ -19348,7 +19522,8 @@ export const CATALOG = {
     nav: {
       dashboard: 'Панель', diskMap: 'Карта диска', applications: 'Приложения',
       quarantine: 'Карантин', settings: 'Настройки', startup: 'Автозагрузка',
-      duplicates: 'Дубликаты', deepClean: 'Глубокая очистка'
+      duplicates: 'Дубликаты', deepClean: 'Глубокая очистка',
+      landmark: 'Основная'
     },
     settings: {
       language: { title: 'Язык', description: 'Язык, на котором отображаются собственные экраны Prune.' },
@@ -20007,6 +20182,11 @@ export const CATALOG = {
       couldNotUpdate: (version) => `Не удалось обновить до ${version}`,
       openDownloadPage: 'Открыть страницу загрузки',
       tryAgain: 'Повторить попытку'
+    },
+    app: {
+      installedApplications: 'Установленные приложения',
+      applicationsSummary: (count, size) => `${count} приложений · ${size} установлено`,
+      removeStoreApp: (name) => `Удалить ${name}`
     }
   },
 
@@ -20014,7 +20194,8 @@ export const CATALOG = {
     nav: {
       dashboard: 'Prehľad', diskMap: 'Mapa disku', applications: 'Aplikácie',
       quarantine: 'Karanténa', settings: 'Nastavenia', startup: 'Po spustení',
-      duplicates: 'Duplicity', deepClean: 'Dôkladné čistenie'
+      duplicates: 'Duplicity', deepClean: 'Dôkladné čistenie',
+      landmark: 'Hlavná'
     },
     settings: {
       language: { title: 'Jazyk', description: 'Jazyk, v ktorom sa zobrazujú vlastné obrazovky Prune.' },
@@ -20673,6 +20854,11 @@ export const CATALOG = {
       couldNotUpdate: (version) => `Nepodarilo sa aktualizovať na ${version}`,
       openDownloadPage: 'Otvoriť stránku na stiahnutie',
       tryAgain: 'Skúsiť znova'
+    },
+    app: {
+      installedApplications: 'Nainštalované aplikácie',
+      applicationsSummary: (count, size) => `${count} aplikácií · ${size} nainštalované`,
+      removeStoreApp: (name) => `Odstrániť ${name}`
     }
   },
 
@@ -20680,7 +20866,8 @@ export const CATALOG = {
     nav: {
       dashboard: 'Paneli', diskMap: 'Harta e Diskut', applications: 'Aplikacionet',
       quarantine: 'Karantina', settings: 'Cilësimet', startup: 'Nisja',
-      duplicates: 'Dublikatat', deepClean: 'Pastrim i thellë'
+      duplicates: 'Dublikatat', deepClean: 'Pastrim i thellë',
+      landmark: 'Kryesore'
     },
     settings: {
       language: { title: 'Gjuha', description: 'Gjuha në të cilën shfaqen ekranet e vetë Prune.' },
@@ -21339,6 +21526,11 @@ export const CATALOG = {
       couldNotUpdate: (version) => `Nuk u përditësua dot në ${version}`,
       openDownloadPage: 'Hap faqen e shkarkimit',
       tryAgain: 'Provo përsëri'
+    },
+    app: {
+      installedApplications: 'Aplikacione të instaluara',
+      applicationsSummary: (count, size) => `${count} aplikacione · ${size} të instaluara`,
+      removeStoreApp: (name) => `Hiq ${name}`
     }
   },
 
@@ -21346,7 +21538,8 @@ export const CATALOG = {
     nav: {
       dashboard: 'Контролна табла', diskMap: 'Мапа диска', applications: 'Апликације',
       quarantine: 'Карантин', settings: 'Подешавања', startup: 'Покретање',
-      duplicates: 'Дупликати', deepClean: 'Дубинско чишћење'
+      duplicates: 'Дупликати', deepClean: 'Дубинско чишћење',
+      landmark: 'Главна'
     },
     settings: {
       language: { title: 'Језик', description: 'Језик на којем се приказују сопствени екрани Prune-а.' },
@@ -22005,6 +22198,11 @@ export const CATALOG = {
       couldNotUpdate: (version) => `Ажурирање на ${version} није успело`,
       openDownloadPage: 'Отвори страницу за преузимање',
       tryAgain: 'Покушај поново'
+    },
+    app: {
+      installedApplications: 'Инсталиране апликације',
+      applicationsSummary: (count, size) => `${count} апликације · ${size} инсталирано`,
+      removeStoreApp: (name) => `Уклони ${name}`
     }
   },
 
@@ -22012,7 +22210,8 @@ export const CATALOG = {
     nav: {
       dashboard: 'Översikt', diskMap: 'Diskkarta', applications: 'Program',
       quarantine: 'Karantän', settings: 'Inställningar', startup: 'Startprogram',
-      duplicates: 'Dubbletter', deepClean: 'Grundlig rensning'
+      duplicates: 'Dubbletter', deepClean: 'Grundlig rensning',
+      landmark: 'Huvud'
     },
     settings: {
       language: { title: 'Språk', description: 'Språket som Prunes egna skärmar visas på.' },
@@ -22671,6 +22870,11 @@ export const CATALOG = {
       couldNotUpdate: (version) => `Kunde inte uppdatera till ${version}`,
       openDownloadPage: 'Öppna nedladdningssidan',
       tryAgain: 'Försök igen'
+    },
+    app: {
+      installedApplications: 'Installerade appar',
+      applicationsSummary: (count, size) => `${count} appar · ${size} installerat`,
+      removeStoreApp: (name) => `Ta bort ${name}`
     }
   },
 
@@ -22678,7 +22882,8 @@ export const CATALOG = {
     nav: {
       dashboard: 'แดชบอร์ด', diskMap: 'แผนที่ดิสก์', applications: 'แอปพลิเคชัน',
       quarantine: 'กักกัน', settings: 'การตั้งค่า', startup: 'โปรแกรมเริ่มต้น',
-      duplicates: 'ไฟล์ซ้ำ', deepClean: 'ทำความสะอาดเชิงลึก'
+      duplicates: 'ไฟล์ซ้ำ', deepClean: 'ทำความสะอาดเชิงลึก',
+      landmark: 'หลัก'
     },
     settings: {
       language: { title: 'ภาษา', description: 'ภาษาที่หน้าจอของ Prune เองแสดงผล' },
@@ -23337,6 +23542,11 @@ export const CATALOG = {
       couldNotUpdate: (version) => `ไม่สามารถอัปเดตเป็น ${version} ได้`,
       openDownloadPage: 'เปิดหน้าดาวน์โหลด',
       tryAgain: 'ลองอีกครั้ง'
+    },
+    app: {
+      installedApplications: 'แอปพลิเคชันที่ติดตั้ง',
+      applicationsSummary: (count, size) => `${count} แอปพลิเคชัน · ${size} ติดตั้งแล้ว`,
+      removeStoreApp: (name) => `นำ ${name} ออก`
     }
   },
 
@@ -23344,7 +23554,8 @@ export const CATALOG = {
     nav: {
       dashboard: 'Panel', diskMap: 'Disk Haritası', applications: 'Uygulamalar',
       quarantine: 'Karantina', settings: 'Ayarlar', startup: 'Başlangıç',
-      duplicates: 'Yinelenenler', deepClean: 'Derinlemesine Temizlik'
+      duplicates: 'Yinelenenler', deepClean: 'Derinlemesine Temizlik',
+      landmark: 'Ana'
     },
     settings: {
       language: { title: 'Dil', description: "Prune'un kendi ekranlarının gösterildiği dil." },
@@ -24003,6 +24214,11 @@ export const CATALOG = {
       couldNotUpdate: (version) => `${version} sürümüne güncellenemedi`,
       openDownloadPage: 'İndirme sayfasını aç',
       tryAgain: 'Tekrar dene'
+    },
+    app: {
+      installedApplications: 'Yüklü uygulamalar',
+      applicationsSummary: (count, size) => `${count} uygulama · ${size} yüklü`,
+      removeStoreApp: (name) => `${name} kaldır`
     }
   },
 
@@ -24010,7 +24226,8 @@ export const CATALOG = {
     nav: {
       dashboard: 'Панель', diskMap: 'Карта диска', applications: 'Застосунки',
       quarantine: 'Карантин', settings: 'Налаштування', startup: 'Автозавантаження',
-      duplicates: 'Дублікати', deepClean: 'Глибоке очищення'
+      duplicates: 'Дублікати', deepClean: 'Глибоке очищення',
+      landmark: 'Основна'
     },
     settings: {
       language: { title: 'Мова', description: 'Мова, якою відображаються власні екрани Prune.' },
@@ -24669,6 +24886,11 @@ export const CATALOG = {
       couldNotUpdate: (version) => `Не вдалося оновити до ${version}`,
       openDownloadPage: 'Відкрити сторінку завантаження',
       tryAgain: 'Спробувати ще раз'
+    },
+    app: {
+      installedApplications: 'Встановлені застосунки',
+      applicationsSummary: (count, size) => `${count} застосунків · ${size} встановлено`,
+      removeStoreApp: (name) => `Видалити ${name}`
     }
   },
 
@@ -24676,7 +24898,8 @@ export const CATALOG = {
     nav: {
       dashboard: 'Bảng điều khiển', diskMap: 'Bản đồ ổ đĩa', applications: 'Ứng dụng',
       quarantine: 'Cách ly', settings: 'Cài đặt', startup: 'Khởi động cùng',
-      duplicates: 'Tệp trùng lặp', deepClean: 'Dọn dẹp sâu'
+      duplicates: 'Tệp trùng lặp', deepClean: 'Dọn dẹp sâu',
+      landmark: 'Chính'
     },
     settings: {
       language: { title: 'Ngôn ngữ', description: 'Ngôn ngữ hiển thị trên chính màn hình của Prune.' },
@@ -25335,6 +25558,11 @@ export const CATALOG = {
       couldNotUpdate: (version) => `Không thể cập nhật lên ${version}`,
       openDownloadPage: 'Mở trang tải xuống',
       tryAgain: 'Thử lại'
+    },
+    app: {
+      installedApplications: 'Ứng dụng đã cài đặt',
+      applicationsSummary: (count, size) => `${count} ứng dụng · ${size} đã cài đặt`,
+      removeStoreApp: (name) => `Xóa ${name}`
     }
   },
 
@@ -25342,7 +25570,8 @@ export const CATALOG = {
     nav: {
       dashboard: '仪表盘', diskMap: '磁盘地图', applications: '应用程序',
       quarantine: '隔离区', settings: '设置', startup: '启动项',
-      duplicates: '重复文件', deepClean: '深度清理'
+      duplicates: '重复文件', deepClean: '深度清理',
+      landmark: '主要'
     },
     settings: {
       language: { title: '语言', description: 'Prune 自身界面所使用的语言。' },
@@ -26001,6 +26230,11 @@ export const CATALOG = {
       couldNotUpdate: (version) => `无法更新到 ${version}`,
       openDownloadPage: '打开下载页面',
       tryAgain: '重试'
+    },
+    app: {
+      installedApplications: '已安装的应用程序',
+      applicationsSummary: (count, size) => `${count} 个应用程序 · 已安装 ${size}`,
+      removeStoreApp: (name) => `移除 ${name}`
     }
   },
 
@@ -26008,7 +26242,8 @@ export const CATALOG = {
     nav: {
       dashboard: '儀表板', diskMap: '磁碟地圖', applications: '應用程式',
       quarantine: '隔離區', settings: '設定', startup: '啟動項目',
-      duplicates: '重複檔案', deepClean: '深度清理'
+      duplicates: '重複檔案', deepClean: '深度清理',
+      landmark: '主要'
     },
     settings: {
       language: { title: '語言', description: 'Prune 本身畫面所使用的語言。' },
@@ -26667,6 +26902,11 @@ export const CATALOG = {
       couldNotUpdate: (version) => `無法更新至 ${version}`,
       openDownloadPage: '開啟下載頁面',
       tryAgain: '重試'
+    },
+    app: {
+      installedApplications: '已安裝的應用程式',
+      applicationsSummary: (count, size) => `${count} 個應用程式 · 已安裝 ${size}`,
+      removeStoreApp: (name) => `移除 ${name}`
     }
   }
 };
