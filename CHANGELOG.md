@@ -5,11 +5,19 @@ see v1.0.1 below) are documented here.
 
 ## v2.5.0
 
-Updates that install themselves, and an installer in 40 languages that
-asks about updates before Prune ever runs.
+The whole app, not just the installer, in 40 languages — and updates
+that install themselves.
 
 ### Added
 
+- **Every screen translated into all 40 installer languages.** Not just
+  the installer: Dashboard, Disk Map, Applications, Quarantine, Startup,
+  Duplicates, Deep Clean, Settings, the uninstall and batch-uninstall
+  flows, and every small piece of chrome around them (keyboard shortcuts,
+  the theme toggle, toast notifications, the update button, the nav
+  rail). Follows Windows' own display language by default, with a picker
+  in Settings for anyone who wants another. Every string is real in
+  every language — nothing falls back to English by omission.
 - **One-click updates.** With the update check on, a button appears at the
   bottom of the side bar when a newer release exists. One click downloads
   it, installs it silently and reopens Prune on the new version — no
@@ -26,6 +34,33 @@ asks about updates before Prune ever runs.
   upgrades, and the updater's own silent installs, keep whatever you chose
   before.
 
+### Fixed
+
+- **Deep Clean's "Select everything" button worked in no browser at
+  all.** `selectableIds` was called but never imported, so the button
+  threw the instant it was clicked. No test had ever pressed it; one does
+  now.
+- **Deep Clean's "Freed X" success banner could never actually appear.**
+  The state that shows it was set, then cleared again in the same
+  synchronous tick by the rescan that follows every clean — React batched
+  both into one commit, so only the clear ever painted. The banner now
+  survives that rescan and clears on the next manual Preview instead.
+- **A handful of real cache folders Deep Clean never measured.**
+  `component_crx_cache` and `extensions_crx_cache`, which every
+  Chromium-based browser (Chrome, Brave, Edge, Opera, Vivaldi) keeps
+  directly under its `User Data` folder rather than inside a profile,
+  were outside every existing rule's reach — confirmed non-trivial on a
+  real machine (60+ MB on Brave alone) before fixing it.
+- **A dark flash on launch for anyone on a light theme.** Two separate
+  causes: the page's own CSS painted its dark defaults before the theme
+  attribute was set, and the native window's background and title-bar
+  buttons started dark unconditionally, correcting only after the app
+  had finished booting. Both now start from the right palette immediately
+  — the CSS one from a script that runs before the stylesheet does, the
+  native one from Windows' own light/dark preference.
+- **The logo and the nav icons below it didn't line up.** Ten pixels off,
+  from two numbers picked independently that were meant to agree.
+
 ### Changed
 
 - **The installer is now `Prune-Setup-<version>.exe`**, with hyphens. The
@@ -34,6 +69,14 @@ asks about updates before Prune ever runs.
 - **2.4.1 and earlier cannot update themselves.** The updater arrives in
   this release, so this one version has to be downloaded and installed by
   hand. Every release after it installs from the side-bar button.
+- **Prune opens faster.** Starting the backend and creating the window
+  used to happen strictly one after the other, with the window waiting
+  out the backend's own startup and first health check before it even
+  appeared. They now run at the same time.
+- **A small loading spinner during a Deep Clean scan**, next to the
+  existing counter and progress bar — both of which are silent between
+  updates, so a scan that paused for a moment looked identical to one
+  that had stopped.
 
 ## v2.4.1
 
