@@ -8,7 +8,9 @@
       "%LOCALAPPDATA%\\BraveSoftware\\Brave-Browser\\User Data\\*\\Cache",
       "%LOCALAPPDATA%\\BraveSoftware\\Brave-Browser\\User Data\\*\\Code Cache",
       "%LOCALAPPDATA%\\BraveSoftware\\Brave-Browser\\User Data\\*\\GPUCache",
-      "%LOCALAPPDATA%\\BraveSoftware\\Brave-Browser\\User Data\\*\\Service Worker\\CacheStorage"
+      "%LOCALAPPDATA%\\BraveSoftware\\Brave-Browser\\User Data\\*\\Service Worker\\CacheStorage",
+      "%LOCALAPPDATA%\\BraveSoftware\\Brave-Browser\\User Data\\component_crx_cache",
+      "%LOCALAPPDATA%\\BraveSoftware\\Brave-Browser\\User Data\\extensions_crx_cache"
     ],
     "is_safe": true,
     "recommended": true
@@ -104,7 +106,9 @@
       "%LOCALAPPDATA%\\Google\\Chrome\\User Data\\*\\Cache",
       "%LOCALAPPDATA%\\Google\\Chrome\\User Data\\*\\Code Cache",
       "%LOCALAPPDATA%\\Google\\Chrome\\User Data\\*\\GPUCache",
-      "%LOCALAPPDATA%\\Google\\Chrome\\User Data\\*\\Service Worker\\CacheStorage"
+      "%LOCALAPPDATA%\\Google\\Chrome\\User Data\\*\\Service Worker\\CacheStorage",
+      "%LOCALAPPDATA%\\Google\\Chrome\\User Data\\component_crx_cache",
+      "%LOCALAPPDATA%\\Google\\Chrome\\User Data\\extensions_crx_cache"
     ],
     "is_safe": true,
     "recommended": true
@@ -200,7 +204,9 @@
       "%LOCALAPPDATA%\\Microsoft\\Edge\\User Data\\*\\Cache",
       "%LOCALAPPDATA%\\Microsoft\\Edge\\User Data\\*\\Code Cache",
       "%LOCALAPPDATA%\\Microsoft\\Edge\\User Data\\*\\GPUCache",
-      "%LOCALAPPDATA%\\Microsoft\\Edge\\User Data\\*\\Service Worker\\CacheStorage"
+      "%LOCALAPPDATA%\\Microsoft\\Edge\\User Data\\*\\Service Worker\\CacheStorage",
+      "%LOCALAPPDATA%\\Microsoft\\Edge\\User Data\\component_crx_cache",
+      "%LOCALAPPDATA%\\Microsoft\\Edge\\User Data\\extensions_crx_cache"
     ],
     "is_safe": true,
     "recommended": true
@@ -610,7 +616,11 @@
     "description": "Opera's page and compiled-script cache.",
     "paths": [
       "%LOCALAPPDATA%\\Opera Software\\Opera Stable\\Cache",
-      "%LOCALAPPDATA%\\Opera Software\\Opera Stable\\Code Cache"
+      "%LOCALAPPDATA%\\Opera Software\\Opera Stable\\Code Cache",
+      "%LOCALAPPDATA%\\Opera Software\\Opera Stable\\GPUCache",
+      "%LOCALAPPDATA%\\Opera Software\\Opera Stable\\Service Worker\\CacheStorage",
+      "%LOCALAPPDATA%\\Opera Software\\Opera Stable\\component_crx_cache",
+      "%LOCALAPPDATA%\\Opera Software\\Opera Stable\\extensions_crx_cache"
     ],
     "is_safe": true,
     "recommended": true
@@ -622,7 +632,11 @@
     "description": "Vivaldi's page and compiled-script cache.",
     "paths": [
       "%LOCALAPPDATA%\\Vivaldi\\User Data\\*\\Cache",
-      "%LOCALAPPDATA%\\Vivaldi\\User Data\\*\\Code Cache"
+      "%LOCALAPPDATA%\\Vivaldi\\User Data\\*\\Code Cache",
+      "%LOCALAPPDATA%\\Vivaldi\\User Data\\*\\GPUCache",
+      "%LOCALAPPDATA%\\Vivaldi\\User Data\\*\\Service Worker\\CacheStorage",
+      "%LOCALAPPDATA%\\Vivaldi\\User Data\\component_crx_cache",
+      "%LOCALAPPDATA%\\Vivaldi\\User Data\\extensions_crx_cache"
     ],
     "is_safe": true,
     "recommended": true

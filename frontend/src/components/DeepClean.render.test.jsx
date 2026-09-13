@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { screen, waitFor, within } from '@testing-library/react';
+import { screen, waitFor, within, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { renderScreen } from '../testSupport/renderScreen.jsx';
 import { isCopyable } from '../testSupport/copyable.js';
@@ -99,6 +99,29 @@ describe('the Deep Clean screen', () => {
     for (const box of screen.getAllByRole('checkbox')) {
       expect(box.getAttribute('aria-checked')).toBe('true');
     }
+  });
+});
+
+describe('the scan-in-progress spinner', () => {
+  it('shows while scanning and is gone once the scan finishes', async () => {
+    // The counter and the progress bar are both silent between updates --
+    // a scan paused between two rules looked identical to one that had
+    // stopped. This is the one element in the panel that moves on its
+    // own for as long as the scan is actually running.
+    let finish;
+    streamDeepCleanScan.mockImplementation((onEvent) => {
+      onEvent('start', { total: 2 });
+      return new Promise((resolve) => { finish = resolve; });
+    });
+    const user = userEvent.setup();
+    renderScreen(<DeepClean />);
+    await screen.findByText('Temporary files');
+
+    await user.click(screen.getAllByRole('button', { name: 'Preview' })[0]);
+    await waitFor(() => expect(document.querySelector('.animate-spin')).toBeTruthy());
+
+    await act(async () => { finish(); });
+    await waitFor(() => expect(document.querySelector('.animate-spin')).toBeNull());
   });
 });
 

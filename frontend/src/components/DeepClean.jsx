@@ -45,9 +45,24 @@ function ScanLog({ lines, scanning, scanned, total }) {
   return (
     <div className="glass-panel flex flex-col min-h-0 overflow-hidden">
       <div className="flex items-center justify-between gap-3 px-4 py-3 border-b border-[color:var(--border-subtle)] shrink-0">
-        <span className="text-[11px] font-mono uppercase tracking-[0.14em] text-[color:var(--text-muted)]">
-          {t('deepClean.scanLog.header')}
-        </span>
+        <div className="flex items-center gap-2">
+          {/* The rest of this panel already carries the scan's progress --
+              a "12 / 74" counter and a determinate bar -- but neither one
+              moves on its own between updates, so a scan that pauses
+              between two rules looks identical to one that has stopped.
+              Disk Map's own loading state solves the same problem with a
+              spinner; this is the same glyph at header scale, next to the
+              label it is explaining rather than replacing the counter. */}
+          {scanning && (
+            <span
+              aria-hidden="true"
+              className="w-3 h-3 border-2 border-[color:var(--accent-primary)] border-t-transparent rounded-full animate-spin shrink-0"
+            />
+          )}
+          <span className="text-[11px] font-mono uppercase tracking-[0.14em] text-[color:var(--text-muted)]">
+            {t('deepClean.scanLog.header')}
+          </span>
+        </div>
         {total > 0 && (
           <span className="text-[11.5px] font-mono text-[color:var(--text-secondary)]">
             {scanned} / {total}
