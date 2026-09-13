@@ -1,9 +1,10 @@
 import { useEffect, useMemo, useRef, useState, memo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { visibleCategories, hiddenRuleCount } from '../lib/visibleRules.js';
-import { executeDeepClean, fetchCleanerCategoryIcons } from '../lib/api.js';
+import { fetchCleanerCategoryIcons } from '../lib/api.js';
 import { keys } from '../lib/queryClient.js';
 import { useDeepCleanScan } from '../hooks/useDeepCleanScan.js';
+import { useDeepCleanExecute } from '../hooks/useDeepCleanExecute.js';
 import { useSettings } from '../hooks/useSystemQueries.js';
 import { lockedFileSummary } from '../lib/lockedFiles.js';
 import { useToasts } from '../hooks/useToasts.jsx';
@@ -101,7 +102,7 @@ function ScanLog({ lines, scanning, scanned, total }) {
           </p>
         )}
         {lines.map((line, i) => (
-          <div key={i} className="flex items-baseline gap-2 text-[11.5px] font-mono leading-relaxed">
+          <div key={i} className="log-line-in flex items-baseline gap-2 text-[11.5px] font-mono leading-relaxed">
             <span className="text-[color:var(--text-secondary)] truncate">{line.label}</span>
             <span className="flex-1 border-b border-dashed border-[color:var(--border-subtle)] translate-y-[-3px]" />
             <span className={`${LOG_TONE[line.tone]} shrink-0`}>{line.detail}</span>
@@ -138,7 +139,6 @@ function DeepClean() {
     retry: 1
   });
   const [confirmClean, setConfirmClean] = useState(false);
-  const [cleaning, setCleaning] = useState(false);
   const [cleanResult, setCleanResult] = useState(null);
   const [cleanError, setCleanError] = useState(null);
   // The rule a warning dialog is currently open for, or null.
@@ -156,8 +156,18 @@ function DeepClean() {
   // still closes the connection and the backend still stops walking.
   const {
     tree: categories, scanning, hasScanned, log: logLines,
-    scanned, total, error: scanError, start, stop: stopPreview, cleanableIds: scannedIds
+    scanned, total, error: scanError, currentId: scanningId,
+    start, stop: stopPreview, cleanableIds: scannedIds
   } = useDeepCleanScan();
+
+  // The clean itself, streamed the same way -- see hooks/useDeepCleanExecute.js.
+  // `run` throws on a real failure (same contract the old one-shot
+  // executeDeepClean had, so handleClean's own try/catch below needs no
+  // change) and resolves quietly on Stop.
+  const {
+    run: runClean, stop: stopClean, cleaning,
+    log: cleanLog, executed: cleanExecuted, total: cleanTotalCount, currentId: cleaningId
+  } = useDeepCleanExecute();
 
   // BleachBit's "hide irrelevant cleaners". Most of a 74-rule list is for
   // software this machine does not have.
@@ -317,10 +327,12 @@ function DeepClean() {
   };
 
   const handleClean = async () => {
-    setCleaning(true);
     setCleanError(null);
     try {
-      const result = await executeDeepClean([...selected]);
+      // Streamed -- see hooks/useDeepCleanExecute.js. `result` keeps the
+      // same {freedBytes, results} shape the old one-shot POST returned,
+      // so everything below reads it exactly as it always has.
+      const result = await runClean([...selected]);
       setCleanResult(result);
 
       // Say what happened, and say it in numbers. The freed figure used
@@ -337,7 +349,6 @@ function DeepClean() {
       }
 
       setSelected(new Set());
-      setCleaning(false);
       setConfirmClean(false);
       // Re-scan so the numbers on screen reflect what's actually left on
       // disk, not a stale pre-clean snapshot -- same convention Smart
@@ -349,7 +360,6 @@ function DeepClean() {
     } catch (err) {
       setCleanError(err.message);
     } finally {
-      setCleaning(false);
       setConfirmClean(false);
     }
   };
@@ -444,11 +454,25 @@ function DeepClean() {
                 onToggle={handleToggle}
                 onToggleCategory={handleToggleCategory}
                 icons={categoryIcons.data ?? {}}
+                // Whichever is actually running highlights its own row --
+                // never both, since a scan and a clean cannot overlap.
+                activeId={cleaning ? cleaningId : scanningId}
               />
             )}
           </div>
 
-          <ScanLog lines={logLines} scanning={scanning} scanned={scanned} total={total} />
+          {/* Whichever is actually running takes the panel -- BleachBit's
+              own output never shows a scan and a clean at once either.
+              handleClean always starts the post-clean rescan the moment
+              cleaning finishes, so the panel hands itself back to the scan
+              log within a render or two of Clean completing -- the same
+              brief handoff Preview vs. Rescan already makes with the tree. */}
+          <ScanLog
+            lines={cleaning ? cleanLog : logLines}
+            scanning={cleaning || scanning}
+            scanned={cleaning ? cleanExecuted : scanned}
+            total={cleaning ? cleanTotalCount : total}
+          />
         </div>
       </div>
 
@@ -513,9 +537,25 @@ function DeepClean() {
               <span className="text-[12.5px] text-[color:var(--danger)] mr-1">
                 {t('deepClean.confirm.prompt', selected.size, cleanTotal.anyMeasured, formatBytes(cleanTotal.bytes))}
               </span>
-              <button className="btn-ghost px-4 py-2 rounded-lg text-[12.5px] font-medium" onClick={() => setConfirmClean(false)} disabled={cleaning}>
-                {t('deepClean.confirm.cancel')}
-              </button>
+              {/* Once the delete is actually in flight, Cancel no longer
+                  means anything -- rules already finished stay cleaned.
+                  Stop replaces it the same way it replaces Preview during
+                  a scan: the rule in progress still finishes (see
+                  executeRulesProgressively's own doc comment for why), but
+                  nothing after it starts. */}
+              {cleaning ? (
+                <button
+                  className="btn-ghost px-4 py-2 rounded-lg text-[12.5px] font-medium flex items-center gap-2"
+                  onClick={stopClean}
+                >
+                  <span className="w-2 h-2 rounded-[2px] bg-[color:var(--danger)]" />
+                  {t('deepClean.stop')}
+                </button>
+              ) : (
+                <button className="btn-ghost px-4 py-2 rounded-lg text-[12.5px] font-medium" onClick={() => setConfirmClean(false)}>
+                  {t('deepClean.confirm.cancel')}
+                </button>
+              )}
               <button className="btn-primary px-5 py-2 text-[12.5px] font-medium disabled:opacity-50" onClick={handleClean} disabled={cleaning}>
                 {cleaning ? t('deepClean.confirm.cleaning') : t('deepClean.confirm.confirmButton')}
               </button>

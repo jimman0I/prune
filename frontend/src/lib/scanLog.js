@@ -60,3 +60,36 @@ export function scanLogLine(item) {
   }
   return { label: item.name, detail: formatBytes(item.sizeBytes), tone: 'size' };
 }
+
+/** One line of the live CLEAN log -- BleachBit's own "Delete ..." /
+ * "Vacuum ..." output, for the step that actually removes something
+ * rather than the scan that only measures it.
+ *
+ * `item` is a streamed executeRulesProgressively result: { id, name,
+ * freedBytes, skipped, recycled, error }. The label leads with a verb the
+ * same way BleachBit's does (Delete / Recycle), because "Chrome Cache"
+ * on its own doesn't say what just happened to it -- only what was
+ * chosen a screen ago. */
+export function executeLogLine(item) {
+  if (item.error) {
+    return { label: item.name ?? item.id, detail: item.error, tone: 'warning' };
+  }
+
+  const verb = item.recycled ? 'Recycle' : 'Delete';
+  const label = `${verb} ${item.name ?? item.id}`;
+
+  if (item.freedBytes > 0) {
+    // A rule with locked files still freed something -- Chrome's cache
+    // is a thousand small files and a handful being open in another
+    // process should read as "mostly done", not silently vanish behind
+    // the size of everything else that came off.
+    const lockedSuffix = item.skipped?.length > 0 ? `, ${item.skipped.length} locked` : '';
+    return { label, detail: `${formatBytes(item.freedBytes)}${lockedSuffix}`, tone: 'size' };
+  }
+
+  if (item.skipped?.length > 0) {
+    return { label, detail: `${item.skipped.length} locked`, tone: 'warning' };
+  }
+
+  return { label, detail: 'already empty', tone: 'muted' };
+}

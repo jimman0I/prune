@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { streamDeepCleanScan } from './api.js';
+import { streamDeepCleanScan, streamDeepCleanExecute } from './api.js';
 
 global.fetch = vi.fn();
 
@@ -53,5 +53,39 @@ describe('streamDeepCleanScan', () => {
   it('throws when the stream cannot be opened', async () => {
     fetch.mockResolvedValueOnce({ ok: false, status: 500, body: null });
     await expect(streamDeepCleanScan(() => {})).rejects.toThrow(/500/);
+  });
+});
+
+describe('streamDeepCleanExecute', () => {
+  beforeEach(() => { vi.resetAllMocks(); });
+
+  it('reports each cleaned rule as it arrives, and carries the ids in the URL', async () => {
+    fetch.mockResolvedValueOnce({
+      ok: true,
+      body: sseBody([
+        'event: start\ndata: {"total":2}\n\n',
+        'event: rule\ndata: {"id":"a","name":"A cache","freedBytes":100}\n\n',
+        'event: rule\ndata: {"id":"b","name":"B cache","freedBytes":200}\n\n',
+        'event: done\ndata: {"aborted":false,"freedBytes":300}\n\n'
+      ])
+    });
+
+    const events = [];
+    await streamDeepCleanExecute(['a', 'b'], (type, data) => events.push([type, data]));
+
+    expect(events.map(([t]) => t)).toEqual(['start', 'rule', 'rule', 'done']);
+    expect(events[1][1].name).toBe('A cache');
+    expect(fetch).toHaveBeenCalledWith(expect.stringContaining('/deep-clean/execute/stream?ids=a,b'), expect.anything());
+  });
+
+  it('URL-encodes rule ids so a stray comma or space cannot split the list', async () => {
+    fetch.mockResolvedValueOnce({ ok: true, body: sseBody([]) });
+    await streamDeepCleanExecute(['weird id,with comma'], () => {});
+    expect(fetch).toHaveBeenCalledWith(expect.stringContaining('ids=weird%20id%2Cwith%20comma'), expect.anything());
+  });
+
+  it('throws when the stream cannot be opened', async () => {
+    fetch.mockResolvedValueOnce({ ok: false, status: 500, body: null });
+    await expect(streamDeepCleanExecute(['a'], () => {})).rejects.toThrow(/500/);
   });
 });

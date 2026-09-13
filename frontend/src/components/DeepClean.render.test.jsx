@@ -19,7 +19,17 @@ import { isCopyable } from '../testSupport/copyable.js';
  * game install, and those are not the same decision.
  */
 
-const executeDeepClean = vi.fn(async () => ({ removed: 2, freedBytes: 1024, locked: [] }));
+// The clean itself streams now (see hooks/useDeepCleanExecute.js), the
+// same shape the scan already does. Default delivers one 'rule' event
+// carrying the WHOLE freedBytes total regardless of how many ids were
+// passed -- these tests only ever assert on the final summary, and this
+// keeps every "Freed 1 KB" assertion below true no matter how many rules
+// a given test happens to select.
+const streamDeepCleanExecute = vi.fn(async (ruleIds, onEvent) => {
+  onEvent('start', { total: ruleIds.length });
+  onEvent('rule', { id: ruleIds[0], name: ruleIds[0], freedBytes: 1024, skipped: [] });
+  for (const id of ruleIds.slice(1)) onEvent('rule', { id, name: id, freedBytes: 0, skipped: [] });
+});
 const fetchDeepCleanRules = vi.fn();
 const streamDeepCleanScan = vi.fn();
 const fetchSettings = vi.fn();
@@ -28,7 +38,7 @@ const updateSettings = vi.fn(async (p) => p);
 vi.mock('../lib/api.js', () => ({
   fetchDeepCleanRules: (...a) => fetchDeepCleanRules(...a),
   streamDeepCleanScan: (...a) => streamDeepCleanScan(...a),
-  executeDeepClean: (...a) => executeDeepClean(...a),
+  streamDeepCleanExecute: (...a) => streamDeepCleanExecute(...a),
   fetchSettings: (...a) => fetchSettings(...a),
   updateSettings: (...a) => updateSettings(...a),
   fetchCleanerCategoryIcons: vi.fn(async () => ({})),
@@ -139,7 +149,7 @@ describe('the gate in front of a clean', () => {
     await selectSomething(user);
 
     await user.click(cleanButton());
-    expect(executeDeepClean).not.toHaveBeenCalled();
+    expect(streamDeepCleanExecute).not.toHaveBeenCalled();
     expect(screen.getByRole('button', { name: 'Confirm' })).toBeTruthy();
   });
 
@@ -166,7 +176,7 @@ describe('the gate in front of a clean', () => {
     await user.click(cleanButton());
     await user.click(screen.getByRole('button', { name: 'Cancel' }));
 
-    expect(executeDeepClean).not.toHaveBeenCalled();
+    expect(streamDeepCleanExecute).not.toHaveBeenCalled();
     expect(screen.getByRole('button', { name: 'Clean' })).toBeTruthy();
   });
 
@@ -177,8 +187,8 @@ describe('the gate in front of a clean', () => {
     await user.click(cleanButton());
     await user.click(screen.getByRole('button', { name: 'Confirm' }));
 
-    await waitFor(() => expect(executeDeepClean).toHaveBeenCalledTimes(1));
-    const [ids] = executeDeepClean.mock.calls[0];
+    await waitFor(() => expect(streamDeepCleanExecute).toHaveBeenCalledTimes(1));
+    const [ids] = streamDeepCleanExecute.mock.calls[0];
     expect(Array.isArray(ids)).toBe(true);
     expect(ids.length).toBeGreaterThan(0);
   });
@@ -195,13 +205,82 @@ describe('the gate in front of a clean', () => {
     await user.click(cleanButton());
     await user.click(screen.getByRole('button', { name: 'Confirm' }));
 
-    await waitFor(() => expect(executeDeepClean).toHaveBeenCalledTimes(1));
+    await waitFor(() => expect(streamDeepCleanExecute).toHaveBeenCalledTimes(1));
     expect(await screen.findByText('Freed 1 KB')).toBeTruthy();
 
     // The post-clean rescan (runPreview({ reselect: false })) must not
     // clear it either -- only an explicit Preview/Rescan click should.
     await waitFor(() => expect(streamDeepCleanScan).toHaveBeenCalled());
     expect(screen.getByText('Freed 1 KB')).toBeTruthy();
+  });
+});
+
+describe('the clean-in-progress output', () => {
+  const selectSomething = async (user) => {
+    await screen.findByText('Temporary files');
+    const boxes = screen.getAllByRole('checkbox');
+    await user.click(boxes[boxes.length - 1]); // 'thumbs'
+    await waitFor(() => expect(cleanButton().disabled).toBe(false));
+  };
+
+  it('shows the BleachBit-style log as each rule is cleaned', async () => {
+    // Deliberately never resolved -- same as the "Cleaning…" busy-state
+    // test in DeepClean.language.render.test.jsx. A resolved stream lets
+    // handleClean run all the way through to the post-clean rescan inside
+    // the same act() flush, which is exactly what this test should NOT
+    // yet observe: the log line while the clean is still in progress.
+    let onEventRef;
+    streamDeepCleanExecute.mockImplementation((ruleIds, onEvent) => {
+      onEventRef = onEvent;
+      return new Promise(() => {});
+    });
+    const user = userEvent.setup();
+    renderScreen(<DeepClean />);
+    await selectSomething(user);
+    await user.click(cleanButton());
+    await user.click(screen.getByRole('button', { name: 'Confirm' }));
+    act(() => { onEventRef('rule', { id: 'thumbs', name: 'Thumbnail cache', freedBytes: 2048, skipped: [] }); });
+
+    expect(await screen.findByText('Delete Thumbnail cache')).toBeTruthy();
+    expect(screen.getByText('2 KB')).toBeTruthy();
+  });
+
+  it('replaces Cancel with Stop once the delete is actually in flight, and Stop aborts it', async () => {
+    let signal;
+    streamDeepCleanExecute.mockImplementation((ruleIds, onEvent, s) => new Promise((resolve, reject) => {
+      signal = s;
+      s.addEventListener('abort', () => reject(Object.assign(new Error('aborted'), { name: 'AbortError' })));
+    }));
+    const user = userEvent.setup();
+    renderScreen(<DeepClean />);
+    await selectSomething(user);
+    await user.click(cleanButton());
+    await user.click(screen.getByRole('button', { name: 'Confirm' }));
+
+    const stopButton = await screen.findByRole('button', { name: 'Stop' });
+    expect(screen.queryByRole('button', { name: 'Cancel' })).toBeNull();
+
+    await user.click(stopButton);
+    await waitFor(() => expect(signal.aborted).toBe(true));
+  });
+
+  it('highlights the row of the rule currently being cleaned', async () => {
+    // Never resolved -- see the previous test's own comment for why. The
+    // highlight must still be up while cleaning is genuinely in progress.
+    let onEventRef;
+    streamDeepCleanExecute.mockImplementation((ruleIds, onEvent) => {
+      onEventRef = onEvent;
+      return new Promise(() => {});
+    });
+    const user = userEvent.setup();
+    renderScreen(<DeepClean />);
+    await selectSomething(user);
+    await user.click(cleanButton());
+    await user.click(screen.getByRole('button', { name: 'Confirm' }));
+    act(() => { onEventRef('rule', { id: 'thumbs', name: 'Thumbnail cache', freedBytes: 10, skipped: [] }); });
+
+    const row = (await screen.findByText('Thumbnail cache')).closest('div');
+    expect(row.className).toMatch(/animate-pulse/);
   });
 });
 
@@ -219,7 +298,7 @@ describe('what can be copied', () => {
   });
 
   it('the reason a clean failed', async () => {
-    executeDeepClean.mockRejectedValueOnce(new Error('EBUSY: C:\\Windows\\Temp\\locked.tmp'));
+    streamDeepCleanExecute.mockRejectedValueOnce(new Error('EBUSY: C:\\Windows\\Temp\\locked.tmp'));
     const user = userEvent.setup();
     renderScreen(<DeepClean />);
     await screen.findByText('Temporary files');

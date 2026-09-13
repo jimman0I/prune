@@ -514,6 +514,10 @@ body::before {
   from { opacity: 0; transform: scale(0.86); }
 }
 
+@keyframes log-line-in {
+  from { opacity: 0; transform: translateY(3px); }
+}
+
 /* The health ring drawing itself.
  *
  * `--ring-empty` is the full circumference, which is what an undrawn ring
@@ -573,6 +577,14 @@ body::before {
   animation: cell-in 320ms var(--ease-out-expo) both;
   transition: opacity 140ms ease-out;
 }
+/* Deep Clean's scan and clean logs: each line arrives while the panel is
+   already on screen, one every few hundred milliseconds for up to 74
+   rules -- an append, never a re-render of what is already there, so this
+   fires exactly once per line and never replays on the lines above it. */
+.log-line-in {
+  animation: log-line-in 200ms var(--ease-out-expo) both;
+}
+
 .treemap-cells:hover .treemap-cell { opacity: 0.4; }
 .treemap-cells .treemap-cell:hover { opacity: 1; }
 .treemap-cells .treemap-cell:hover > rect {

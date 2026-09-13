@@ -42,6 +42,11 @@ export function useDeepCleanScan() {
   const [hasScanned, setHasScanned] = useState(false);
   const [streamError, setStreamError] = useState(null);
   const [armed, setArmed] = useState(false);
+  // The rule currently being measured, or null between rules and once the
+  // scan is done -- what a tree row highlights against, the same "what is
+  // it doing right now" the log line already answers, asked of the tree
+  // that sits beside it.
+  const [currentId, setCurrentId] = useState(null);
 
   const tree = scannedTree ?? rulesQuery.data ?? null;
 
@@ -68,6 +73,7 @@ export function useDeepCleanScan() {
       setLog([]);
       setScanned(0);
       setTotal(0);
+      setCurrentId(null);
 
       // Mirrors the tree outside state: the stream delivers forty events
       // and the selection step afterwards needs the complete set, which a
@@ -87,12 +93,14 @@ export function useDeepCleanScan() {
           });
           setLog((prev) => [...prev, scanLogLine(data)]);
           setScanned((n) => n + 1);
+          setCurrentId(data.id);
         } else if (type === 'error') {
           setStreamError(data.message);
         }
       }, signal);
 
       setHasScanned(true);
+      setCurrentId(null);
       return built;
     }
   });
@@ -136,6 +144,7 @@ export function useDeepCleanScan() {
     scanned,
     total,
     error,
+    currentId,
     start,
     stop,
     /** The ids a scan proved are worth cleaning. Before a scan the tree

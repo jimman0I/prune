@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { mergeScannedRule, scanLogLine } from './scanLog.js';
+import { mergeScannedRule, scanLogLine, executeLogLine } from './scanLog.js';
 
 describe('mergeScannedRule', () => {
   it('creates the category on the first rule that belongs to it', () => {
@@ -57,6 +57,37 @@ describe('scanLogLine', () => {
 
   it('reports an installed but genuinely empty cache as empty, not as nothing', () => {
     expect(scanLogLine({ name: 'Zoom', sizeBytes: 0, present: true, accessible: true }).detail).toBe('empty');
+  });
+});
+
+describe('executeLogLine', () => {
+  it('reports a real deletion, BleachBit-style ("Delete <name>")', () => {
+    expect(executeLogLine({ id: 'discord_cache', name: 'Discord Cache', freedBytes: 396361728, skipped: [] }))
+      .toEqual({ label: 'Delete Discord Cache', detail: '378 MB', tone: 'size' });
+  });
+
+  it('says Recycle instead of Delete when autoQuarantine is off', () => {
+    expect(executeLogLine({ id: 'x', name: 'X Cache', freedBytes: 1024, recycled: true, skipped: [] }).label)
+      .toBe('Recycle X Cache');
+  });
+
+  it('reports a rule that was already empty as empty, not as a silent zero', () => {
+    expect(executeLogLine({ id: 'x', name: 'X Cache', freedBytes: 0, skipped: [] }).detail).toBe('already empty');
+  });
+
+  it('surfaces locked files rather than hiding them behind the freed total', () => {
+    const line = executeLogLine({ id: 'x', name: 'X Cache', freedBytes: 1024, skipped: [{ path: 'a' }, { path: 'b' }] });
+    expect(line.detail).toBe('1 KB, 2 locked');
+  });
+
+  it('warns when nothing could be freed at all because everything was locked', () => {
+    const line = executeLogLine({ id: 'x', name: 'X Cache', freedBytes: 0, skipped: [{ path: 'a' }] });
+    expect(line).toEqual({ label: 'Delete X Cache', detail: '1 locked', tone: 'warning' });
+  });
+
+  it('surfaces an unknown-rule-id error from the stream as its own line', () => {
+    expect(executeLogLine({ id: 'ghost', error: 'Unknown rule id "ghost"' }))
+      .toEqual({ label: 'ghost', detail: 'Unknown rule id "ghost"', tone: 'warning' });
   });
 });
 

@@ -28,7 +28,13 @@ import ToastHost from './ToastHost.jsx';
  * deepclean_blocks.py / catalog.js's `deepClean` namespace.
  */
 
-const executeDeepClean = vi.fn(async () => ({ removed: 2, freedBytes: 1024, results: [] }));
+// The clean itself streams now -- see hooks/useDeepCleanExecute.js.
+// Default delivers one 'rule' event for the first id carrying the whole
+// freedBytes total, matching what DeepClean.render.test.jsx's own default
+// does, for the same reason: nothing here cares about the per-rule split.
+const streamDeepCleanExecute = vi.fn(async (ruleIds, onEvent) => {
+  onEvent('rule', { id: ruleIds[0], name: ruleIds[0], freedBytes: 1024, skipped: [] });
+});
 const fetchDeepCleanRules = vi.fn();
 const streamDeepCleanScan = vi.fn();
 const fetchSettings = vi.fn();
@@ -37,7 +43,7 @@ const updateSettings = vi.fn(async (p) => p);
 vi.mock('../lib/api.js', () => ({
   fetchDeepCleanRules: (...a) => fetchDeepCleanRules(...a),
   streamDeepCleanScan: (...a) => streamDeepCleanScan(...a),
-  executeDeepClean: (...a) => executeDeepClean(...a),
+  streamDeepCleanExecute: (...a) => streamDeepCleanExecute(...a),
   fetchSettings: (...a) => fetchSettings(...a),
   updateSettings: (...a) => updateSettings(...a),
   fetchCleanerCategoryIcons: vi.fn(async () => ({}))
@@ -185,7 +191,7 @@ describe('the Deep Clean screen, in Greek', () => {
   });
 
   it('translates the clean-error message, with the raw error interpolated', async () => {
-    executeDeepClean.mockRejectedValueOnce(new Error('EBUSY: locked.tmp'));
+    streamDeepCleanExecute.mockRejectedValueOnce(new Error('EBUSY: locked.tmp'));
     const user = userEvent.setup();
     mount();
     await ready();
@@ -285,7 +291,11 @@ describe('the Deep Clean screen, in Greek', () => {
 
   it('translates the Cleaning… busy state', async () => {
     let resolveClean;
-    executeDeepClean.mockReturnValue(new Promise((resolve) => { resolveClean = resolve; }));
+    // The signature is (ruleIds, onEvent, signal) now, not a plain
+    // resolved value -- but the busy state only needs the promise to
+    // stay pending, so what it resolves WITH is unused (the hook builds
+    // freedBytes/results from onEvent calls, never called here).
+    streamDeepCleanExecute.mockReturnValue(new Promise((resolve) => { resolveClean = resolve; }));
     const user = userEvent.setup();
     mount();
     await ready();
@@ -297,7 +307,7 @@ describe('the Deep Clean screen, in Greek', () => {
     await user.click(screen.getByRole('button', { name: 'Επιβεβαίωση' }));
 
     expect(await screen.findByRole('button', { name: 'Καθαρισμός…' })).toBeTruthy();
-    resolveClean({ removed: 1, freedBytes: 1024, results: [] });
+    resolveClean();
   });
 
   it('translates Stop while scanning, and Rescan once a scan has finished', async () => {
@@ -312,9 +322,8 @@ describe('the Deep Clean screen, in Greek', () => {
   });
 
   it('translates the success toast and the locked-files clause', async () => {
-    executeDeepClean.mockResolvedValue({
-      removed: 1, freedBytes: 1024,
-      results: [{ id: 'temp', skipped: [{ path: 'C:\\a.tmp', reason: 'locked' }] }]
+    streamDeepCleanExecute.mockImplementation(async (ruleIds, onEvent) => {
+      onEvent('rule', { id: 'temp', name: 'temp', freedBytes: 1024, skipped: [{ path: 'C:\\a.tmp', reason: 'locked' }] });
     });
     const user = userEvent.setup();
     mount();

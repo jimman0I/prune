@@ -420,7 +420,36 @@ export async function runSandboxTest() {
  * Events: 'start' { total }, 'rule' (one scanned rule), 'done'
  * { aborted, total, scanned }, 'error' { message }. */
 export async function streamDeepCleanScan(onEvent, signal) {
-  const res = await fetch(`${API_URL}/deep-clean/scan/stream`, { signal });
+  await streamSSE(`${API_URL}/deep-clean/scan/stream`, onEvent, signal);
+}
+
+/** The clean itself, streamed a rule at a time -- BleachBit's own "Delete
+ * ... Vacuum ..." output, moved to the step that actually does either.
+ *
+ * executeDeepClean below is a single POST that returns nothing until
+ * every selected rule has been quarantined or deleted, which for a large
+ * batch is the scan's old silence problem again, just moved to the step
+ * that touches the disk. `ruleIds` travels as a query string because
+ * this is a GET, same reason streamDeepCleanScan is: the reader below is
+ * a plain fetch of an SSE body, not EventSource, but the backend route it
+ * calls only ever accepts GET, matching /scan/stream.
+ *
+ * Events: 'start' { total }, 'rule' (one cleaned rule, carrying its own
+ * name/category), 'done' { aborted, total, executed, freedBytes,
+ * results }, 'error' { message }. */
+export async function streamDeepCleanExecute(ruleIds, onEvent, signal) {
+  const ids = ruleIds.map(encodeURIComponent).join(',');
+  await streamSSE(`${API_URL}/deep-clean/execute/stream?ids=${ids}`, onEvent, signal);
+}
+
+/** Reads a Server-Sent-Events response body, calling `onEvent(type, data)`
+ * as each event arrives rather than waiting for the whole response.
+ *
+ * Shared by both Deep Clean streams above: same line-buffered parsing
+ * (a chunk boundary lands mid-event often enough that parsing whatever
+ * arrived would drop rules at random), same signal-driven cancellation. */
+async function streamSSE(url, onEvent, signal) {
+  const res = await fetch(url, { signal });
   if (!res.ok || !res.body) throw new Error(`Request failed: ${res.status}`);
 
   const reader = res.body.getReader();
@@ -433,8 +462,6 @@ export async function streamDeepCleanScan(onEvent, signal) {
     if (done) break;
     buf += decoder.decode(value, { stream: true });
 
-    // Line-buffered on purpose: a chunk boundary lands mid-event often
-    // enough that parsing whatever arrived would drop rules at random.
     let sep;
     while ((sep = buf.indexOf('\n')) >= 0) {
       const line = buf.slice(0, sep);
