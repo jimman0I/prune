@@ -2,6 +2,33 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <!-- Sets data-theme on <html> before anything else in <head> --
+         crucially, before the CSS this page loads (Vite injects a
+         render-blocking <link rel="stylesheet"> here at build time,
+         after this script tag but still in <head>). index.css's `:root`
+         defaults to the DARK palette, with `:root[data-theme='light']`
+         only overriding it, so a stylesheet that finishes loading
+         before this ran would briefly paint dark even for someone whose
+         stored or OS-preferred theme is light. main.jsx's own
+         applyTheme(initialTheme()) call still runs after this (it also
+         reaches window.pruneWindow?.setTheme?.() for the native title
+         bar buttons, which this inline script cannot touch) -- that
+         later call is a harmless no-op repaint once this has already
+         set the right theme, not a second source of truth. Mirrors
+         resolveInitialTheme()'s precedence in lib/theme.js (stored
+         choice, then OS preference, then dark) in plain JS because a
+         parser-blocking classic script can't import an ES module. -->
+    <script>
+      (function () {
+        var stored = null;
+        try { stored = window.localStorage.getItem('prune.theme'); } catch (e) {}
+        var theme = stored === 'dark' || stored === 'light'
+          ? stored
+          : (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+        document.documentElement.setAttribute('data-theme', theme);
+        document.documentElement.style.colorScheme = theme;
+      })();
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Prune</title>
     <link rel="icon" type="image/png" href="/logo.png" />

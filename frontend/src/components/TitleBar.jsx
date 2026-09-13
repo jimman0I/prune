@@ -50,7 +50,13 @@ export default function TitleBar() {
       // separate numbers describing one strip: if they disagree, either
       // the buttons overhang the app's content or the bar has a dead
       // band under them.
-      className="h-10 shrink-0 flex items-center gap-2.5 pl-4 select-none border-b border-[color:var(--border-subtle)] bg-[color:var(--bg-base)]"
+      //
+      // pl-[26px], not pl-4 (16px): the nav rail below is a fixed 72px
+      // column with its icon buttons centered in it, landing their
+      // center at x=36. The 20px logo's own center is its left edge
+      // plus 10 -- pl-4 landed that at 16+10=26, ten pixels left of the
+      // icons underneath it; pl-[26px] moves it to 26+10=36, matching.
+      className="h-10 shrink-0 flex items-center gap-2.5 pl-[26px] select-none border-b border-[color:var(--border-subtle)] bg-[color:var(--bg-base)]"
       style={{
         WebkitAppRegion: 'drag',
         paddingRight: `calc(${CONTENT_INSET} + 8px)`
