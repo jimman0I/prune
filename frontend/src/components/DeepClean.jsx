@@ -167,9 +167,17 @@ function DeepClean() {
 
   /** `reselect: false` is for the rescan that follows a clean -- the user
    * just acted on those rules, and re-ticking them would invite doing it
-   * twice. */
+   * twice. It also gates clearing `cleanResult`: handleClean calls
+   * `setCleanResult(result)` and then this, with no `await` between them,
+   * so an unconditional `setCleanResult(null)` here ran in the SAME
+   * synchronous stack frame and React 18's automatic batching collapsed
+   * both into one commit -- the "Freed X" banner was overwritten by its
+   * own clear before it ever painted. A manual Preview/Rescan click
+   * (`reselect: true`, the default) still clears the stale PREVIOUS
+   * result immediately, which is correct there; only the post-clean
+   * rescan needs to leave the banner up until the next explicit preview. */
   const runPreview = async ({ reselect = true } = {}) => {
-    setCleanResult(null);
+    if (reselect) setCleanResult(null);
     await start();
   };
 
