@@ -12,14 +12,19 @@ import { useLanguage } from '../i18n/LanguageContext.jsx';
  * per application rather than two text links, and one line per rule.
  * Before this, six rows of a single application filled the panel.
  *
- * What was NOT taken from BleachBit is the row content. BleachBit shows a
- * name and nothing else -- no size until you run Preview, and no
- * explanation ever, so "Cookies" tells a non-expert exactly nothing. This
- * keeps the measured size, the three-way not-installed / needs-admin /
- * real-bytes distinction, and the plain-English description, and pays for
- * them by putting the description on the same line as the name instead of
- * on a second one. Denser than what it replaces AND more informative than
- * the thing it was modelled on.
+ * The row content deliberately does not stay as bare as BleachBit's own,
+ * though. BleachBit shows a name and nothing else, ever -- no size, and no
+ * explanation, so "Cookies" tells a non-expert exactly nothing. This keeps
+ * the measured size, the three-way not-installed / needs-admin /
+ * real-bytes distinction, and the plain-English description, on the same
+ * line as the name rather than a second one -- denser than what it
+ * replaced AND more informative than the thing it was modelled on. What IS
+ * matched now is the timing: before a rule is measured the row is as bare
+ * as BleachBit's own (name and a checkbox), and the description -- along
+ * with the size -- reveals itself the moment that specific rule's real
+ * result streams in, rather than a wall of explanatory text appearing for
+ * 74 rules before anything is known about the machine. See `measured` in
+ * CategorySection below.
  */
 
 /** Custom checkbox -- primary-accent fill + DARK check when checked, glass
@@ -184,7 +189,9 @@ function CategorySection({ category, items, iconSrc, selected, onToggle, onToggl
           change. */}
       {expanded && (
         <div>
-          {items.map((item) => (
+          {items.map((item) => {
+          const measured = item.sizeBytes !== null && item.sizeBytes !== undefined;
+          return (
             <div
               key={item.id}
               className={`flex items-center gap-2.5 pl-[38px] pr-3 py-[3px] hover:bg-[color:var(--surface-subtle)] transition-colors duration-300 ${
@@ -223,17 +230,32 @@ function CategorySection({ category, items, iconSrc, selected, onToggle, onToggl
               {/* On the name's own line rather than under it. This is what
                   buys the density back: BleachBit's rows are one line
                   because they say nothing but the name, and these stay one
-                  line while still saying what the rule does. */}
-              {item.description && (
+                  line while still saying what the rule does.
+
+                  Held back until THIS rule is actually measured, though --
+                  BleachBit's own list is bare (name and a checkbox, nothing
+                  else) until Preview has run, and showing every rule's full
+                  explanation before anything is known about the machine is
+                  a wall of grey text nobody asked to read yet. `measured`
+                  is per-ROW, not gated on the scan as a whole finishing:
+                  each line reveals its own description the moment ITS OWN
+                  streamed result lands, the same rule-at-a-time reveal the
+                  size column and the scan log already do. Never gates the
+                  risky-rule badge above -- that is a safety warning, not
+                  descriptive text, and hiding it before a scan would let
+                  someone tick something that loses data before the app has
+                  said so. */}
+              {measured && item.description && (
                 <span className="text-[11px] text-[color:var(--text-muted)] truncate min-w-0 flex-1">
                   {item.description}
                 </span>
               )}
-              {!item.description && <span className="flex-1" />}
+              {!(measured && item.description) && <span className="flex-1" />}
 
               <SizeLabel item={item} />
             </div>
-          ))}
+          );
+          })}
         </div>
       )}
     </div>
