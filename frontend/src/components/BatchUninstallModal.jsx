@@ -9,22 +9,25 @@ import LeftoverReview from './LeftoverReview.jsx';
 import { selectionToRemoval } from './UninstallModal.jsx';
 import { useSettings } from '../hooks/useSystemQueries.js';
 import { leftoverDestinationFrom } from '../lib/leftoverDestination.js';
-
-const REMOVING_LINE = {
-  quarantine: 'Moving leftovers to Quarantine…',
-  recycle: 'Sending leftovers to the Recycle Bin…',
-  permanent: 'Deleting leftovers permanently…'
-};
+import { useLanguage } from '../i18n/LanguageContext.jsx';
 
 /** What a batch did, in the words of where its leftovers went. */
-function batchRemovalSummary(programCount, removal) {
+export const DEFAULT_BATCH_SUMMARY_MESSAGES = {
+  programs: (n) => `${n} program${n === 1 ? '' : 's'}`,
+  items: (n) => `${n} leftover item${n === 1 ? '' : 's'}`,
+  recycle: (programs, items, freed) => `Uninstalled ${programs} and sent ${items} to the Recycle Bin, freeing ${freed}.`,
+  permanent: (programs, items, freed) => `Uninstalled ${programs} and deleted ${items} permanently, freeing ${freed}.`,
+  quarantine: (programs, items, freed) => `Uninstalled ${programs} and moved ${items} to Quarantine, freeing ${freed}.`
+};
+
+function batchRemovalSummary(programCount, removal, messages = DEFAULT_BATCH_SUMMARY_MESSAGES) {
   const n = removal?.files?.length ?? 0;
-  const programsText = `${programCount} program${programCount === 1 ? '' : 's'}`;
-  const items = `${n} leftover item${n === 1 ? '' : 's'}`;
+  const programsText = messages.programs(programCount);
+  const items = messages.items(n);
   const freed = formatBytes(removal?.totalSizeBytes);
-  if (removal?.destination === 'recycle') return `Uninstalled ${programsText} and sent ${items} to the Recycle Bin, freeing ${freed}.`;
-  if (removal?.destination === 'permanent') return `Uninstalled ${programsText} and deleted ${items} permanently, freeing ${freed}.`;
-  return `Uninstalled ${programsText} and moved ${items} to Quarantine, freeing ${freed}.`;
+  if (removal?.destination === 'recycle') return messages.recycle(programsText, items, freed);
+  if (removal?.destination === 'permanent') return messages.permanent(programsText, items, freed);
+  return messages.quarantine(programsText, items, freed);
 }
 
 function formatBytes(bytes) {
@@ -43,13 +46,6 @@ const STATUS_STYLE = {
   failed: 'text-[color:var(--danger)]'
 };
 
-const STATUS_LABEL = {
-  pending: 'waiting',
-  running: 'uninstalling…',
-  done: 'removed',
-  failed: 'failed'
-};
-
 /** Runs several uninstallers in turn, then reviews everything they left
  * behind in one pass.
  *
@@ -63,6 +59,20 @@ const STATUS_LABEL = {
  * remaining nine because the first one errored would be worse than
  * uninstalling them one at a time. */
 export default function BatchUninstallModal({ programs, onClose, onFinished }) {
+  const { t } = useLanguage();
+
+  const REMOVING_LINE = {
+    quarantine: t('batchUninstallModal.removingLine.quarantine'),
+    recycle: t('batchUninstallModal.removingLine.recycle'),
+    permanent: t('batchUninstallModal.removingLine.permanent')
+  };
+  const STATUS_LABEL = {
+    pending: t('batchUninstallModal.status.waiting'),
+    running: t('batchUninstallModal.status.uninstalling'),
+    done: t('batchUninstallModal.status.removed'),
+    failed: t('batchUninstallModal.status.failed')
+  };
+
   const [phase, setPhase] = useState('confirm');
   const [statuses, setStatuses] = useState(() =>
     Object.fromEntries(programs.map((p) => [p.id, { state: 'pending' }]))
@@ -170,7 +180,7 @@ export default function BatchUninstallModal({ programs, onClose, onFinished }) {
     setError(null);
     try {
       const manifest = await removeQuarantined({
-        programName: `Batch uninstall: ${programs.length} programs`,
+        programName: t('batchUninstallModal.historyLabel', programs.length),
         files,
         registryKeys,
         destination
@@ -198,14 +208,14 @@ export default function BatchUninstallModal({ programs, onClose, onFinished }) {
     <div className="glass-panel rounded-2xl overflow-hidden max-w-[720px] w-full flex flex-col max-h-[85vh]">
       <div className="flex items-center justify-between px-6 py-5 border-b border-[color:var(--border-subtle)] shrink-0">
         <h2 className="text-[15px] font-semibold tracking-tight text-[color:var(--text-primary)]">
-          Uninstall {programs.length} program{programs.length === 1 ? '' : 's'}
+          {t('batchUninstallModal.title', programs.length)}
         </h2>
         <button
           onClick={onClose}
           disabled={phase === 'running' || phase === 'removing'}
           className="btn-ghost px-3 py-1.5 rounded-lg text-[12px] font-medium disabled:opacity-40"
         >
-          Close
+          {t('batchUninstallModal.close')}
         </button>
       </div>
 
@@ -218,21 +228,17 @@ export default function BatchUninstallModal({ programs, onClose, onFinished }) {
                 neither, so a batch of only Store apps was promised both. */}
             {registryCount === 0 ? (
               <p className="text-[13px] text-[color:var(--text-secondary)] mb-5">
-                Each app is removed through Windows in turn, and there is no leftover scan
-                afterwards: Windows removes an app's own data along with it.
+                {t('batchUninstallModal.registryOnlyIntro')}
               </p>
             ) : (
               <>
                 <p className="text-[13px] text-[color:var(--text-secondary)] mb-1.5">
-                  Each program's own uninstaller runs in turn, then Prune scans for what they leave
-                  behind and shows you everything before removing any of it.
-                  {storeCount > 0 && ' Store apps are removed through Windows instead, with no leftover scan afterwards.'}
+                  {t('batchUninstallModal.mixedIntro', storeCount > 0)}
                 </p>
                 <p className="text-[12px] text-[color:var(--text-muted)] mb-5">
                   {/* Worth saying plainly: it is the reason this takes a while
                       and the reason some of them will open their own windows. */}
-                  One at a time, because Windows only allows one install or uninstall at once. Some
-                  uninstallers will show their own windows and ask you questions.
+                  {t('batchUninstallModal.oneAtATime')}
                 </p>
               </>
             )}
@@ -243,9 +249,7 @@ export default function BatchUninstallModal({ programs, onClose, onFinished }) {
                 said here, where the decision is made. */}
             {storeCount > 0 && (
               <p className="text-[12px] text-[color:var(--warning)] mb-5">
-                {storeCount === 1 ? 'The Store app' : `The ${storeCount} Store apps`} in this batch
-                cannot be restored from Quarantine: removing {storeCount === 1 ? 'it' : 'one'} takes the app and its saved data,
-                and getting it back means reinstalling it from the Store.
+                {t('batchUninstallModal.storeWarning', storeCount)}
               </p>
             )}
 
@@ -259,7 +263,7 @@ export default function BatchUninstallModal({ programs, onClose, onFinished }) {
                         like a bug unless it says why. */}
                     {runsBefore[program.id] && (
                       <span className="text-[11px] text-[color:var(--text-muted)] shrink-0">
-                        runs before {runsBefore[program.id]}
+                        {t('batchUninstallModal.runsBefore', runsBefore[program.id])}
                       </span>
                     )}
                   </span>
@@ -272,11 +276,11 @@ export default function BatchUninstallModal({ programs, onClose, onFinished }) {
 
             <div className="flex items-center justify-between gap-4">
               <span className="text-[12.5px] text-[color:var(--text-secondary)]">
-                {formatBytes(summary.totalBytes)} reported
-                {summary.unknownSizes > 0 && `, ${summary.unknownSizes} of unknown size`}
+                {t('batchUninstallModal.reported', formatBytes(summary.totalBytes))}
+                {summary.unknownSizes > 0 && t('batchUninstallModal.unknownSizeSuffix', summary.unknownSizes)}
               </span>
               <button className="btn-primary px-5 py-2 text-[12.5px] font-medium" onClick={runBatch}>
-                Start uninstalling
+                {t('batchUninstallModal.startButton')}
               </button>
             </div>
           </>
@@ -307,14 +311,14 @@ export default function BatchUninstallModal({ programs, onClose, onFinished }) {
           <>
             <div className="flex items-center gap-2.5 mb-4 px-3.5 py-3 rounded-xl bg-[color:var(--success)]/10 border border-[color:var(--success)]/25">
               <p className="text-[12.5px] text-[color:var(--success)]">
-                Uninstalled {removed.length} of {programs.length}.
+                {t('batchUninstallModal.uninstalledOf', removed.length, programs.length)}
               </p>
             </div>
 
             {failed.length > 0 && (
               <div className="mb-4 px-3.5 py-3 rounded-xl bg-[color:var(--danger-soft)] border border-[color:var(--danger)]/25">
                 <p className="text-[12.5px] text-[color:var(--danger)] mb-1">
-                  {failed.length} couldn't be uninstalled and {failed.length === 1 ? 'was' : 'were'} left alone:
+                  {t('batchUninstallModal.failedHeading', failed.length)}
                 </p>
                 {failed.map((p) => (
                   <p key={p.id} className="text-[11.5px] font-mono text-[color:var(--text-secondary)] select-text">
@@ -325,7 +329,7 @@ export default function BatchUninstallModal({ programs, onClose, onFinished }) {
             )}
 
             {error && (
-              <p className="text-[12.5px] text-[color:var(--danger)] mb-4 select-text">Couldn't remove leftovers: {error}</p>
+              <p className="text-[12.5px] text-[color:var(--danger)] mb-4 select-text">{t('batchUninstallModal.removeLeftoversFailed', error)}</p>
             )}
 
             {/* LeftoverReview reads an empty result as "No leftovers found --
@@ -337,16 +341,15 @@ export default function BatchUninstallModal({ programs, onClose, onFinished }) {
               <div className="text-center py-6">
                 {!scanAfter && removed.some((p) => p.source !== 'store') && (
                   <p className="text-[13px] text-[color:var(--text-secondary)] mb-4">
-                    The leftover scan is turned off in Settings, so nothing was looked for.
+                    {t('batchUninstallModal.noScanSettingsOff')}
                   </p>
                 )}
                 {removed.some((p) => p.source === 'store') && (
                   <p className="text-[13px] text-[color:var(--text-secondary)] mb-4">
-                    There is no leftover scan after a Store app: Windows removes an app's own data
-                    along with it.
+                    {t('batchUninstallModal.noScanStore')}
                   </p>
                 )}
-                <button className="btn-primary" onClick={() => { onFinished?.(); onClose(); }}>Done</button>
+                <button className="btn-primary" onClick={() => { onFinished?.(); onClose(); }}>{t('batchUninstallModal.done')}</button>
               </div>
             ) : (
               <LeftoverReview
@@ -365,7 +368,7 @@ export default function BatchUninstallModal({ programs, onClose, onFinished }) {
           <div>
             <div className="flex items-start gap-2.5 mb-5 px-3.5 py-3 rounded-xl bg-[color:var(--success)]/10 border border-[color:var(--success)]/25">
               <div className="text-[12.5px] text-[color:var(--success)] leading-relaxed">
-                {batchRemovalSummary(removed.length, removal)}
+                {batchRemovalSummary(removed.length, removal, t('batchUninstallModal.summary'))}
               </div>
             </div>
 
@@ -377,22 +380,20 @@ export default function BatchUninstallModal({ programs, onClose, onFinished }) {
                 instead. */}
             {removal.restorePoint?.created === false && (
               <p className="text-[12px] text-[color:var(--text-muted)] mb-5">
-                No system restore point was created ({removal.restorePoint.reason?.trim() || 'not available'}).
-                {!removal.destination || removal.destination === 'quarantine' ? 'Everything above is still in Quarantine and can be put back.' : ''}
+                {t('batchUninstallModal.noRestorePoint', removal.restorePoint.reason?.trim() || t('batchUninstallModal.restorePointFallback'))}
+                {!removal.destination || removal.destination === 'quarantine' ? t('batchUninstallModal.quarantineNote') : ''}
               </p>
             )}
 
             {removal.failedRegistryKeys?.length > 0 && (
               <div className="mb-5 px-3.5 py-3 rounded-xl bg-[color:var(--warning-soft)] border border-[color:var(--warning)]/25">
                 <p className="text-[12.5px] text-[color:var(--warning)]">
-                  {removal.failedRegistryKeys.length} registry key
-                  {removal.failedRegistryKeys.length === 1 ? '' : 's'} couldn't be removed — these
-                  usually need Prune to be running as administrator.
+                  {t('batchUninstallModal.failedRegistryKeys', removal.failedRegistryKeys.length)}
                 </p>
               </div>
             )}
 
-            <button className="btn-primary" onClick={() => { onFinished?.(); onClose(); }}>Done</button>
+            <button className="btn-primary" onClick={() => { onFinished?.(); onClose(); }}>{t('batchUninstallModal.done')}</button>
           </div>
         )}
       </div>
