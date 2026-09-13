@@ -81,6 +81,38 @@ describe('the space kept clear for Windows\' own buttons', () => {
   });
 });
 
+describe('the logo, which has to line up with the nav rail underneath it', () => {
+  it('centers on the same x as the rail\'s icon column, not just visually close', () => {
+    /* jsdom does not lay anything out -- getBoundingClientRect returns
+     * zeros for everything, so this can't be caught by measuring the
+     * rendered DOM the way a real browser test could. Read out of the
+     * two source files instead, the same cross-file-agreement pattern
+     * the height test below uses.
+     *
+     * Regression: pl-4 (16px) put the 20px logo's own center at 26
+     * (16 + 20/2), ten pixels left of the nav rail's icon buttons, which
+     * sit centered in the rail's fixed 72px column -- center 36. */
+    render(<TitleBar />);
+    const paddingMatch = screen.getByRole('banner').className.match(/pl-\[(\d+)px\]/);
+    expect(paddingMatch, 'expected an arbitrary pl-[Npx] class on the title bar').toBeTruthy();
+    const logoLeft = Number(paddingMatch[1]);
+
+    const logo = document.querySelector('img');
+    const widthMatch = logo.className.match(/w-(\d+)/);
+    // Tailwind's w-5 is 1.25rem = 20px at the default root size.
+    const logoWidth = Number(widthMatch[1]) * 4;
+    const logoCenter = logoLeft + logoWidth / 2;
+
+    const navPath = resolve(process.cwd(), 'src/components/NavRail.jsx');
+    const navSource = readFileSync(navPath, 'utf8');
+    const railWidthMatch = navSource.match(/<nav[^>]*\bw-\[(\d+)px\]/);
+    expect(railWidthMatch, 'expected an arbitrary w-[Npx] rail width in NavRail.jsx').toBeTruthy();
+    const railCenter = Number(railWidthMatch[1]) / 2;
+
+    expect(logoCenter).toBe(railCenter);
+  });
+});
+
 describe('the height, which two files have to agree on', () => {
   it('matches titleBarOverlay.height in the Electron main process', () => {
     /* Two numbers describing one strip, in two files that are never read

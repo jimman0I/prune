@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain } = require('electron');
+const { app, BrowserWindow, ipcMain, nativeTheme } = require('electron');
 const path = require('node:path');
 const http = require('node:http');
 const { pathToFileURL } = require('node:url');
@@ -84,14 +84,37 @@ const OVERLAY_COLORS = {
   light: { color: '#f7f6f4', symbolColor: '#57534e' }
 };
 
+/** Which of the two palettes to paint BEFORE the renderer has said
+ * anything -- the window's backgroundColor and its titleBarOverlay are
+ * both native surfaces set at construction time, not CSS, so hardcoding
+ * 'dark' here painted every light-OS machine dark for the moment between
+ * the window appearing and the renderer's first `prune:theme` IPC
+ * message correcting it. `nativeTheme.shouldUseDarkColors` is Electron's
+ * own read of the OS preference, synchronous and available in the main
+ * process before any window exists -- the same signal the renderer's
+ * `systemPrefersDark()` reads from `prefers-color-scheme`, just reached
+ * from the other side of the process boundary.
+ *
+ * This still does not know about an in-app choice stored in the
+ * renderer's localStorage (main process has no route to that without
+ * extra plumbing this doesn't have yet) -- someone who picked light
+ * while their OS is dark still sees one native-chrome flash while the
+ * IPC catches up. What it does fix is the far more common case: an
+ * untouched install on a light-OS machine, which used to paint dark on
+ * every single launch. */
+function startingTheme() {
+  return nativeTheme.shouldUseDarkColors ? 'dark' : 'light';
+}
+
 async function createWindow() {
+  const startTheme = startingTheme();
   const win = new BrowserWindow({
     width: 1280,
     height: 860,
     minWidth: 900,
     minHeight: 560,
     title: 'Prune',
-    backgroundColor: '#09090b',
+    backgroundColor: OVERLAY_COLORS[startTheme].color,
     icon: iconPath(),
 
     /* The window's own title bar, drawn by the app.
@@ -113,13 +136,16 @@ async function createWindow() {
      * The cost is that the glyphs are Windows' rather than ours. They are
      * thin strokes in the same weight either way.
      *
-     * Dark is only the STARTING palette. These colours are not CSS and no
-     * stylesheet reaches them, so the renderer tells the main process when
-     * the theme changes and the handler below repaints them -- otherwise
-     * light mode leaves three dark glyphs on a light strip. */
+     * `startingTheme()` above only picks which of these two palettes to
+     * paint FIRST, from the OS preference. These colours are not CSS and
+     * no stylesheet reaches them, so the renderer still tells the main
+     * process whenever the theme actually changes (a toggle, or an
+     * in-app choice overriding the OS) and the handler below repaints
+     * them -- otherwise light mode leaves three dark glyphs on a light
+     * strip. */
     titleBarStyle: 'hidden',
     titleBarOverlay: {
-      ...OVERLAY_COLORS.dark,
+      ...OVERLAY_COLORS[startTheme],
       // 40, not the ~60 the reference design uses. Prune's screens are
       // dense -- tables, a treemap, a 55-row startup list -- and 20px of
       // permanent vertical chrome costs more here than on a page with one
@@ -203,10 +229,32 @@ function registerUpdateHandlers() {
 }
 
 app.whenReady().then(async () => {
-  await startBackend();
-  await waitForBackend();
+  /* Backend startup and window creation used to run strictly one after
+   * the other: start the backend, POLL it every 300ms until it answers,
+   * THEN create the window and start loading its page -- nothing visible
+   * happened until the backend was not just started but confirmed
+   * healthy. Nothing about creating a BrowserWindow or loading its page
+   * touches the backend at all; only the RENDERER's own fetch calls hit
+   * 127.0.0.1:3101, over a network stack that already retries once (see
+   * lib/queryClient.js) and whose screens already render a loading state
+   * before their first answer arrives (Dashboard's "Reading drive
+   * health…" placeholders, for one). Running the two in parallel instead
+   * puts a visible window on screen as soon as its own page loads,
+   * rather than waiting out whatever the backend's own startup and first
+   * health check happen to cost on top of that.
+   *
+   * `backendReady`'s own no-op `.catch` below exists only so a backend
+   * that fails to start doesn't log a spurious "unhandled rejection"
+   * during the gap before the real `await backendReady` further down --
+   * that later await still sees and surfaces the original rejection,
+   * since `.catch(() => {})` returns a new promise without altering
+   * `backendReady` itself. */
+  const backendReady = startBackend().then(() => waitForBackend());
+  backendReady.catch(() => {});
   registerUpdateHandlers();
+
   await createWindow();
+  await backendReady;
 
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();
