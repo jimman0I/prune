@@ -1,12 +1,10 @@
 import { readFileSync, existsSync } from 'node:fs';
-import { execFile } from 'node:child_process';
-import { promisify } from 'node:util';
 import { homedir } from 'node:os';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import * as deleteAction from './cleanerActions/delete.js';
+import * as shellAction from './cleanerActions/shell.js';
 
-const execFileAsync = promisify(execFile);
 const here = dirname(fileURLToPath(import.meta.url));
 const CLEANERS_JSON_PATH = join(here, '..', 'data', 'cleaners.json');
 
@@ -58,7 +56,7 @@ export function scanRule(rule, guards = {}) {
   // A command rule has nothing to look for on disk, so it's always
   // applicable -- `ipconfig /flushdns` works whether or not anything is
   // cached.
-  if (rule.command) return { id: rule.id, sizeBytes: null, fileCount: null, present: true, accessible: true };
+  if (rule.command) return { id: rule.id, ...shellAction.scan(), present: true };
   const expandedPaths = rule.paths.map(expandPath);
   const result = deleteAction.scan({ expandedPaths }, guards);
   return {
@@ -122,12 +120,8 @@ export function scanAllRules(guards = {}) {
  * flush) just runs the command; there is no file to quarantine. */
 export async function executeRule(rule, guards = {}) {
   if (rule.command) {
-    try {
-      await execFileAsync(rule.command.split(' ')[0], rule.command.split(' ').slice(1));
-      return { id: rule.id, ranCommand: true, freedBytes: 0, skipped: [] };
-    } catch (err) {
-      return { id: rule.id, ranCommand: true, freedBytes: 0, skipped: [], error: err.message };
-    }
+    const result = await shellAction.execute({ command: rule.command });
+    return { id: rule.id, ...result };
   }
 
   const expandedPaths = rule.paths.map(expandPath);
