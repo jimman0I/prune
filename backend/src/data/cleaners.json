@@ -904,7 +904,7 @@
     "name": "Game logs",
     "description": "Per-match client and game logs. Kept indefinitely, read almost never.",
     "paths": [
-      "C:\\Riot Games\\League of Legends\\Logs"
+      "%SYSTEMDRIVE%\\Riot Games\\League of Legends\\Logs"
     ],
     "is_safe": true,
     "recommended": true
