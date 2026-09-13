@@ -549,6 +549,110 @@ export const CATALOG = {
         message: (count) => `Skipped ${count} locked ${count === 1 ? 'file' : 'files'}.`,
         detail: 'Close the apps using them and clean again.'
       }
+    },
+    leftoverReview: {
+      groups: { files: 'Files & folders', registryKeys: 'Registry keys', scheduledTasks: 'Scheduled tasks' },
+      notRemoved: 'found, not removed',
+      checkFailed: (label) => `Couldn't check ${label}.`,
+      itemNote: {
+        valueOnly: (valueName) => `Only the value "${valueName}" — the key it sits in is shared and stays`,
+        uninstallEntry: 'Add/Remove Programs entry'
+      },
+      destinations: {
+        quarantine: { text: 'Selected items go to Quarantine, where you can restore them.', button: 'Remove selected' },
+        recycle: { text: 'Selected files go to the Recycle Bin. Registry keys are backed up before they are removed.', button: 'Remove selected' },
+        permanent: { text: "Selected files will be deleted permanently and can't be restored. Registry keys are backed up before they are removed.", button: 'Delete permanently' }
+      },
+      clean: 'No leftovers found — clean uninstall.',
+      done: 'Done',
+      foundWarning: (count) => `Found ${count} leftover item${count === 1 ? '' : 's'} the native uninstaller missed. Review before purging.`,
+      excludedNote: (count) => `${count} folder${count === 1 ? '' : 's'} left out because ${count === 1 ? "it's" : "they're"} in your exclusions.`,
+      itemsSelected: 'items selected',
+      reclaimable: 'reclaimable',
+      skip: 'Skip'
+    },
+    uninstallModal: {
+      titleForce: (name) => `Force remove ${name}`,
+      titleNormal: (name) => `Uninstall ${name}`,
+      close: 'Close',
+      runningWarning: (name) => `${name} is running right now. Close it first — an uninstaller usually fails on a program that is open, and can leave files behind that the next launch recreates.`,
+      orphanedWarning: (reason) => `${reason} Windows will keep listing it until the entry is removed.`,
+      brokenIntro: "Prune will search for files and registry keys matching this name, including its Add/Remove Programs entry, and show you everything before removing anything.",
+      searchForLabel: 'Search for',
+      searchHint: (name) => `Taken from "${name}" without its version — installers name folders after the product, not the release. Edit it if the results look wrong.`,
+      scanFailed: (error) => `Scan failed: ${error}`,
+      searchButton: 'Search for leftovers',
+      normalIntro: (name) => `This runs ${name}'s own uninstaller, then scans for anything it leaves behind.`,
+      uninstallFailed: (error) => `Uninstall failed: ${error}`,
+      startButton: 'Start uninstall',
+      noWorkingUninstaller: 'No working uninstaller — searching by name instead',
+      noUninstallCommand: 'No uninstall command registered',
+      progress: {
+        runningNative: 'Running native uninstaller',
+        backingUpRegistry: 'Backing up the registry',
+        creatingRestorePoint: 'Creating a restore point',
+        searchingLeftovers: 'Searching for leftovers',
+        scanningLeftovers: 'Scanning for leftovers',
+        checkingCommand: 'Checking filesystem, registry & scheduled tasks…'
+      },
+      removing: {
+        quarantine: { title: 'Moving to Quarantine', command: 'Nothing is deleted — every item can be restored' },
+        recycle: { title: 'Sending to the Recycle Bin', command: 'Restore them from the Recycle Bin if you need to' },
+        permanent: { title: 'Deleting permanently', command: 'These cannot be restored' }
+      },
+      noScan: (name) => `${name}'s uninstaller has finished. The leftover scan is turned off in Settings, so nothing else was looked for.`,
+      removalFailed: (error) => `Removal failed: ${error}`,
+      done: 'Done',
+      summary: {
+        item: (n) => `${n} item${n === 1 ? '' : 's'}`,
+        registryKey: (n) => `${n} registry key${n === 1 ? '' : 's'}`,
+        recycle: (files, keys, freed) => `Sent ${files} to the Recycle Bin and removed ${keys}, backed up in Quarantine first. Freed ${freed}.`,
+        permanent: (files, keys, freed) => `Deleted ${files} permanently and removed ${keys}, backed up in Quarantine first. Freed ${freed}.`,
+        quarantine: (files, keys, freed) => `Moved ${files} and ${keys} to Quarantine, freeing ${freed}. Restore them any time from the Quarantine screen.`
+      },
+      failedFilesHeading: (n) => `${n} item${n === 1 ? '' : 's'} couldn't be removed:`,
+      failedRegistryKeysHeading: (n) => `${n} registry key${n === 1 ? '' : 's'} couldn't be removed`,
+      failedRegistryKeysNote: 'these usually need Prune to be running as administrator:',
+      noRestorePoint: (reason) => `No system restore point was created (${reason}).`,
+      quarantineStillWorks: 'The Quarantine restore still works.'
+    },
+    batchUninstallModal: {
+      title: (n) => `Uninstall ${n} program${n === 1 ? '' : 's'}`,
+      historyLabel: (n) => `Batch uninstall: ${n} programs`,
+      close: 'Close',
+      registryOnlyIntro: "Each app is removed through Windows in turn, and there is no leftover scan afterwards: Windows removes an app's own data along with it.",
+      mixedIntro: (hasStore) => `Each program's own uninstaller runs in turn, then Prune scans for what they leave behind and shows you everything before removing any of it.${hasStore ? ' Store apps are removed through Windows instead, with no leftover scan afterwards.' : ''}`,
+      oneAtATime: 'One at a time, because Windows only allows one install or uninstall at once. Some uninstallers will show their own windows and ask you questions.',
+      storeWarning: (count) => count === 1
+        ? 'The Store app in this batch cannot be restored from Quarantine: removing it takes the app and its saved data, and getting it back means reinstalling it from the Store.'
+        : `The ${count} Store apps in this batch cannot be restored from Quarantine: removing one takes the app and its saved data, and getting it back means reinstalling it from the Store.`,
+      runsBefore: (name) => `runs before ${name}`,
+      reported: (bytes) => `${bytes} reported`,
+      unknownSizeSuffix: (n) => `, ${n} of unknown size`,
+      startButton: 'Start uninstalling',
+      status: { waiting: 'waiting', uninstalling: 'uninstalling…', removed: 'removed', failed: 'failed' },
+      removingLine: {
+        quarantine: 'Moving leftovers to Quarantine…',
+        recycle: 'Sending leftovers to the Recycle Bin…',
+        permanent: 'Deleting leftovers permanently…'
+      },
+      uninstalledOf: (removed, total) => `Uninstalled ${removed} of ${total}.`,
+      failedHeading: (n) => `${n} couldn't be uninstalled and ${n === 1 ? 'was' : 'were'} left alone:`,
+      removeLeftoversFailed: (error) => `Couldn't remove leftovers: ${error}`,
+      noScanSettingsOff: 'The leftover scan is turned off in Settings, so nothing was looked for.',
+      noScanStore: "There is no leftover scan after a Store app: Windows removes an app's own data along with it.",
+      done: 'Done',
+      summary: {
+        recycle: (programs, items, freed) => `Uninstalled ${programs} and sent ${items} to the Recycle Bin, freeing ${freed}.`,
+        permanent: (programs, items, freed) => `Uninstalled ${programs} and deleted ${items} permanently, freeing ${freed}.`,
+        quarantine: (programs, items, freed) => `Uninstalled ${programs} and moved ${items} to Quarantine, freeing ${freed}.`,
+        programs: (n) => `${n} program${n === 1 ? '' : 's'}`,
+        items: (n) => `${n} leftover item${n === 1 ? '' : 's'}`
+      },
+      noRestorePoint: (reason) => `No system restore point was created (${reason}).`,
+      restorePointFallback: 'not available',
+      quarantineNote: 'Everything above is still in Quarantine and can be put back.',
+      failedRegistryKeys: (n) => `${n} registry key${n === 1 ? '' : 's'} couldn't be removed — these usually need Prune to be running as administrator.`
     }
   },
 
@@ -1071,6 +1175,110 @@ export const CATALOG = {
         message: (count) => `${count} geslote lêer${count === 1 ? '' : 's'} oorgeslaan.`,
         detail: '\'n Maak die programme wat hulle gebruik toe en maak weer skoon.'
       }
+    },
+    leftoverReview: {
+      groups: { files: 'Lêers en vouers', registryKeys: 'Register sleutels', scheduledTasks: 'Geskeduleerde take' },
+      notRemoved: 'gevind, nie verwyder nie',
+      checkFailed: (label) => `Kon nie ${label} nagaan nie.`,
+      itemNote: {
+        valueOnly: (valueName) => `Slegs die waarde "${valueName}" — die sleutel waarin dit sit word gedeel en bly`,
+        uninstallEntry: 'Voeg by/Verwyder Programme-inskrywing'
+      },
+      destinations: {
+        quarantine: { text: 'Geselekteerde items gaan na Kwarantyn, waar jy hulle kan herstel.', button: 'Verwyder geselekteerdes' },
+        recycle: { text: 'Geselekteerde lêers gaan na die Asblik. Registersleutels word geback-up voordat hulle verwyder word.', button: 'Verwyder geselekteerdes' },
+        permanent: { text: "Geselekteerde lêers sal permanent verwyder word en kan nie herstel word nie. Registersleutels word geback-up voordat hulle verwyder word.", button: 'Verwyder permanent' }
+      },
+      clean: 'Geen oorblyfsels gevind — skoon deïnstallering.',
+      done: 'Klaar',
+      foundWarning: (count) => `${count} oorblywende item${count === 1 ? '' : 's'} gevind wat die inheemse deïnstalleerder gemis het. Gaan na voor jy skoonmaak.`,
+      excludedNote: (count) => `${count} vouer${count === 1 ? '' : 's'} uitgelaat omdat dit in jou uitsluitings ${count === 1 ? 'is' : 'is'}.`,
+      itemsSelected: 'items geselekteer',
+      reclaimable: 'herwinbaar',
+      skip: 'Slaan oor'
+    },
+    uninstallModal: {
+      titleForce: (name) => `Forseer verwydering van ${name}`,
+      titleNormal: (name) => `Deïnstalleer ${name}`,
+      close: 'Sluit',
+      runningWarning: (name) => `${name} loop tans. Sluit dit eers — 'n deïnstalleerder misluk gewoonlik op 'n program wat oop is, en kan lêers agterlaat wat die volgende lansering herskep.`,
+      orphanedWarning: (reason) => `${reason} Windows sal dit steeds lys totdat die inskrywing verwyder is.`,
+      brokenIntro: "Prune sal soek na lêers en registersleutels wat hierdie naam pas, insluitend sy Voeg by/Verwyder Programme-inskrywing, en jou alles wys voordat enigiets verwyder word.",
+      searchForLabel: 'Soek vir',
+      searchHint: (name) => `Geneem uit "${name}" sonder sy weergawe — installeerders noem vouers na die produk, nie die vrystelling nie. Wysig dit as die resultate verkeerd lyk.`,
+      scanFailed: (error) => `Skandering het misluk: ${error}`,
+      searchButton: 'Soek vir oorblyfsels',
+      normalIntro: (name) => `Dit laat ${name} se eie deïnstalleerder loop, dan skandeer dit vir enigiets wat dit agterlaat.`,
+      uninstallFailed: (error) => `Deïnstallering het misluk: ${error}`,
+      startButton: 'Begin deïnstallering',
+      noWorkingUninstaller: 'Geen werkende deïnstalleerder — soek eerder volgens naam',
+      noUninstallCommand: 'Geen deïnstalleer-opdrag geregistreer nie',
+      progress: {
+        runningNative: 'Inheemse deïnstalleerder loop',
+        backingUpRegistry: 'Register word geback-up',
+        creatingRestorePoint: "'n Herstelpunt word geskep",
+        searchingLeftovers: 'Soek na oorblyfsels',
+        scanningLeftovers: 'Skandeer vir oorblyfsels',
+        checkingCommand: 'Kontroleer lêerstelsel, register & geskeduleerde take…'
+      },
+      removing: {
+        quarantine: { title: 'Word na Kwarantyn geskuif', command: 'Niks word verwyder nie — elke item kan herstel word' },
+        recycle: { title: 'Word na die Asblik gestuur', command: 'Herstel hulle van die Asblik af as jy moet' },
+        permanent: { title: 'Word permanent verwyder', command: 'Hierdie kan nie herstel word nie' }
+      },
+      noScan: (name) => `${name} se deïnstalleerder is klaar. Die oorblyfsel-skandering is af in Instellings, so niks anders is gesoek nie.`,
+      removalFailed: (error) => `Verwydering het misluk: ${error}`,
+      done: 'Klaar',
+      summary: {
+        item: (n) => `${n} item${n === 1 ? '' : 's'}`,
+        registryKey: (n) => `${n} registersleutel${n === 1 ? '' : 's'}`,
+        recycle: (files, keys, freed) => `${files} na die Asblik gestuur en ${keys} verwyder, eers geback-up in Kwarantyn. ${freed} vrygemaak.`,
+        permanent: (files, keys, freed) => `${files} permanent verwyder en ${keys} verwyder, eers geback-up in Kwarantyn. ${freed} vrygemaak.`,
+        quarantine: (files, keys, freed) => `${files} en ${keys} na Kwarantyn geskuif, ${freed} vrygemaak. Herstel hulle enige tyd vanaf die Kwarantyn-skerm.`
+      },
+      failedFilesHeading: (n) => `${n} item${n === 1 ? '' : 's'} kon nie verwyder word nie:`,
+      failedRegistryKeysHeading: (n) => `${n} registersleutel${n === 1 ? '' : 's'} kon nie verwyder word nie`,
+      failedRegistryKeysNote: 'hierdie het gewoonlik nodig dat Prune as administrateur loop:',
+      noRestorePoint: (reason) => `Geen herstelpunt is geskep nie (${reason}).`,
+      quarantineStillWorks: 'Die Kwarantyn-herstel werk steeds.'
+    },
+    batchUninstallModal: {
+      title: (n) => `Deïnstalleer ${n} program${n === 1 ? '' : 'me'}`,
+      historyLabel: (n) => `Groepsverwydering: ${n} programme`,
+      close: 'Sluit',
+      registryOnlyIntro: "Elke app word een vir een deur Windows verwyder, en daar is geen oorblyfsel-skandering daarna nie: Windows verwyder 'n app se eie data saam daarmee.",
+      mixedIntro: (hasStore) => `Elke program se eie deïnstalleerder loop een vir een, dan skandeer Prune vir wat hulle agterlaat en wys jou alles voordat enigiets verwyder word.${hasStore ? ' Store-programme word eerder deur Windows verwyder, sonder oorblyfsel-skandering daarna.' : ''}`,
+      oneAtATime: "Een op 'n slag, want Windows laat net een installering of deïnstallering op 'n slag toe. Sommige deïnstalleerders sal hul eie vensters wys en jou vrae vra.",
+      storeWarning: (count) => count === 1
+        ? "Die Store-program in hierdie bondel kan nie van Kwarantyn af herstel word nie: om dit te verwyder neem die app en sy gestoorde data, en om dit terug te kry beteken dit moet weer vanaf die Store geïnstalleer word."
+        : `Die ${count} Store-programme in hierdie bondel kan nie van Kwarantyn af herstel word nie: om een te verwyder neem die app en sy gestoorde data, en om dit terug te kry beteken dit moet weer vanaf die Store geïnstalleer word.`,
+      runsBefore: (name) => `loop voor ${name}`,
+      reported: (bytes) => `${bytes} aangemeld`,
+      unknownSizeSuffix: (n) => `, ${n} van onbekende grootte`,
+      startButton: 'Begin deïnstallering',
+      status: { waiting: 'wag', uninstalling: 'deïnstalleer…', removed: 'verwyder', failed: 'misluk' },
+      removingLine: {
+        quarantine: 'Oorblyfsels word na Kwarantyn geskuif…',
+        recycle: 'Oorblyfsels word na die Asblik gestuur…',
+        permanent: 'Oorblyfsels word permanent verwyder…'
+      },
+      uninstalledOf: (removed, total) => `${removed} van ${total} gedeïnstalleer.`,
+      failedHeading: (n) => `${n} kon nie gedeïnstalleer word nie en ${n === 1 ? 'is' : 'is'} alleen gelaat:`,
+      removeLeftoversFailed: (error) => `Kon nie oorblyfsels verwyder nie: ${error}`,
+      noScanSettingsOff: 'Die oorblyfsel-skandering is af in Instellings, so niks is gesoek nie.',
+      noScanStore: "Daar is geen oorblyfsel-skandering na 'n Store-program nie: Windows verwyder 'n app se eie data saam daarmee.",
+      done: 'Klaar',
+      summary: {
+        recycle: (programs, items, freed) => `${programs} gedeïnstalleer en ${items} na die Asblik gestuur, ${freed} vrygemaak.`,
+        permanent: (programs, items, freed) => `${programs} gedeïnstalleer en ${items} permanent verwyder, ${freed} vrygemaak.`,
+        quarantine: (programs, items, freed) => `${programs} gedeïnstalleer en ${items} na Kwarantyn geskuif, ${freed} vrygemaak.`,
+        programs: (n) => `${n} program${n === 1 ? '' : 'me'}`,
+        items: (n) => `${n} oorblywende item${n === 1 ? '' : 's'}`
+      },
+      noRestorePoint: (reason) => `Geen herstelpunt is geskep nie (${reason}).`,
+      restorePointFallback: 'nie beskikbaar nie',
+      quarantineNote: 'Alles hierbo is steeds in Kwarantyn en kan teruggesit word.',
+      failedRegistryKeys: (n) => `${n} registersleutel${n === 1 ? '' : 's'} kon nie verwyder word nie — hierdie het gewoonlik nodig dat Prune as administrateur loop.`
     }
   },
 
@@ -1593,6 +1801,110 @@ export const CATALOG = {
         message: (count) => `تم تخطي ${count} ملف مقفل.`,
         detail: 'أغلق التطبيقات التي تستخدمها ونظّف مرة أخرى.'
       }
+    },
+    leftoverReview: {
+      groups: { files: 'الملفات والمجلدات', registryKeys: 'مفاتيح السجل', scheduledTasks: 'المهام المجدولة' },
+      notRemoved: 'تم العثور عليها، لم تُزال',
+      checkFailed: (label) => `تعذّر التحقق من ${label}.`,
+      itemNote: {
+        valueOnly: (valueName) => `فقط القيمة "${valueName}" — المفتاح الذي توجد فيه مشترك ويبقى`,
+        uninstallEntry: 'إدخال إضافة/إزالة البرامج'
+      },
+      destinations: {
+        quarantine: { text: 'تنتقل العناصر المحددة إلى الحجر الصحي، حيث يمكنك استعادتها.', button: 'إزالة المحدد' },
+        recycle: { text: 'تنتقل الملفات المحددة إلى سلة المحذوفات. يتم نسخ مفاتيح السجل احتياطيًا قبل إزالتها.', button: 'إزالة المحدد' },
+        permanent: { text: 'سيتم حذف الملفات المحددة نهائيًا ولا يمكن استعادتها. يتم نسخ مفاتيح السجل احتياطيًا قبل إزالتها.', button: 'حذف نهائيًا' }
+      },
+      clean: 'لم يتم العثور على مخلفات — إزالة نظيفة.',
+      done: 'تم',
+      foundWarning: (count) => `تم العثور على ${count} عنصر متبقٍ فاتته أداة إلغاء التثبيت الأصلية. راجعها قبل التطهير.`,
+      excludedNote: (count) => `تم استبعاد ${count} مجلد لأنه ضمن استثناءاتك.`,
+      itemsSelected: 'عناصر محددة',
+      reclaimable: 'قابل للاسترداد',
+      skip: 'تخطّي'
+    },
+    uninstallModal: {
+      titleForce: (name) => `إزالة قسرية لـ ${name}`,
+      titleNormal: (name) => `إلغاء تثبيت ${name}`,
+      close: 'إغلاق',
+      runningWarning: (name) => `${name} قيد التشغيل الآن. أغلقه أولًا — عادةً ما تفشل أداة إلغاء التثبيت مع برنامج مفتوح، وقد تترك ملفات يعيد التشغيل التالي إنشاءها.`,
+      orphanedWarning: (reason) => `${reason} سيستمر Windows في إدراجه حتى تتم إزالة الإدخال.`,
+      brokenIntro: 'سيبحث Prune عن الملفات ومفاتيح السجل المطابقة لهذا الاسم، بما في ذلك إدخال إضافة/إزالة البرامج الخاص به، ويعرض لك كل شيء قبل إزالة أي شيء.',
+      searchForLabel: 'البحث عن',
+      searchHint: (name) => `مأخوذ من "${name}" بدون رقم إصداره — تسمي برامج التثبيت المجلدات باسم المنتج، وليس الإصدار. عدّله إذا بدت النتائج غير صحيحة.`,
+      scanFailed: (error) => `فشل الفحص: ${error}`,
+      searchButton: 'البحث عن المخلفات',
+      normalIntro: (name) => `يشغّل هذا أداة إلغاء التثبيت الخاصة بـ ${name}، ثم يفحص أي شيء يتركه وراءه.`,
+      uninstallFailed: (error) => `فشل إلغاء التثبيت: ${error}`,
+      startButton: 'بدء إلغاء التثبيت',
+      noWorkingUninstaller: 'لا توجد أداة إلغاء تثبيت عاملة — البحث بالاسم بدلًا من ذلك',
+      noUninstallCommand: 'لا يوجد أمر إلغاء تثبيت مسجَّل',
+      progress: {
+        runningNative: 'تشغيل أداة إلغاء التثبيت الأصلية',
+        backingUpRegistry: 'يجري نسخ السجل احتياطيًا',
+        creatingRestorePoint: 'يجري إنشاء نقطة استعادة',
+        searchingLeftovers: 'البحث عن المخلفات',
+        scanningLeftovers: 'فحص المخلفات',
+        checkingCommand: 'التحقق من نظام الملفات والسجل والمهام المجدولة…'
+      },
+      removing: {
+        quarantine: { title: 'النقل إلى الحجر الصحي', command: 'لا يُحذف شيء — يمكن استعادة كل عنصر' },
+        recycle: { title: 'الإرسال إلى سلة المحذوفات', command: 'استعدها من سلة المحذوفات إذا لزم الأمر' },
+        permanent: { title: 'الحذف نهائيًا', command: 'لا يمكن استعادة هذه' }
+      },
+      noScan: (name) => `انتهت أداة إلغاء تثبيت ${name}. فحص المخلفات معطّل في الإعدادات، لذا لم يتم البحث عن أي شيء آخر.`,
+      removalFailed: (error) => `فشلت الإزالة: ${error}`,
+      done: 'تم',
+      summary: {
+        item: (n) => `${n} عنصر`,
+        registryKey: (n) => `${n} مفتاح سجل`,
+        recycle: (files, keys, freed) => `تم إرسال ${files} إلى سلة المحذوفات وإزالة ${keys}، مع نسخ احتياطي في الحجر الصحي أولًا. تم تحرير ${freed}.`,
+        permanent: (files, keys, freed) => `تم حذف ${files} نهائيًا وإزالة ${keys}، مع نسخ احتياطي في الحجر الصحي أولًا. تم تحرير ${freed}.`,
+        quarantine: (files, keys, freed) => `تم نقل ${files} و${keys} إلى الحجر الصحي، مما حرر ${freed}. استعدها في أي وقت من شاشة الحجر الصحي.`
+      },
+      failedFilesHeading: (n) => `تعذّرت إزالة ${n} عنصر:`,
+      failedRegistryKeysHeading: (n) => `تعذّرت إزالة ${n} مفتاح سجل`,
+      failedRegistryKeysNote: 'عادةً ما يتطلب هذا تشغيل Prune كمسؤول:',
+      noRestorePoint: (reason) => `لم يتم إنشاء نقطة استعادة للنظام (${reason}).`,
+      quarantineStillWorks: 'لا تزال استعادة الحجر الصحي تعمل.'
+    },
+    batchUninstallModal: {
+      title: (n) => `إلغاء تثبيت ${n} برنامج`,
+      historyLabel: (n) => `إزالة دفعية: ${n} برنامج`,
+      close: 'إغلاق',
+      registryOnlyIntro: 'تتم إزالة كل تطبيق عبر Windows بالتتابع، ولا يوجد فحص للمخلفات بعد ذلك: يزيل Windows بيانات التطبيق الخاصة به معه.',
+      mixedIntro: (hasStore) => `تعمل أداة إلغاء التثبيت الخاصة بكل برنامج بالتتابع، ثم يفحص Prune ما تتركه ويعرض لك كل شيء قبل إزالة أي منه.${hasStore ? ' تتم إزالة تطبيقات المتجر عبر Windows بدلًا من ذلك، دون فحص مخلفات بعد ذلك.' : ''}`,
+      oneAtATime: 'واحدًا تلو الآخر، لأن Windows يسمح بتثبيت أو إلغاء تثبيت واحد فقط في كل مرة. ستعرض بعض أدوات إلغاء التثبيت نوافذها الخاصة وتطرح عليك أسئلة.',
+      storeWarning: (count) => count === 1
+        ? 'لا يمكن استعادة تطبيق المتجر في هذه الدفعة من الحجر الصحي: إزالته تأخذ التطبيق وبياناته المحفوظة، واستعادته تعني إعادة تثبيته من المتجر.'
+        : `لا يمكن استعادة تطبيقات المتجر الـ${count} في هذه الدفعة من الحجر الصحي: إزالة أحدها تأخذ التطبيق وبياناته المحفوظة، واستعادته تعني إعادة تثبيته من المتجر.`,
+      runsBefore: (name) => `يعمل قبل ${name}`,
+      reported: (bytes) => `${bytes} تم الإبلاغ عنها`,
+      unknownSizeSuffix: (n) => `، ${n} بحجم غير معروف`,
+      startButton: 'بدء إلغاء التثبيت',
+      status: { waiting: 'في الانتظار', uninstalling: 'جارٍ إلغاء التثبيت…', removed: 'تمت الإزالة', failed: 'فشل' },
+      removingLine: {
+        quarantine: 'نقل المخلفات إلى الحجر الصحي…',
+        recycle: 'إرسال المخلفات إلى سلة المحذوفات…',
+        permanent: 'حذف المخلفات نهائيًا…'
+      },
+      uninstalledOf: (removed, total) => `تم إلغاء تثبيت ${removed} من ${total}.`,
+      failedHeading: (n) => `تعذّر إلغاء تثبيت ${n} وتُركت وحدها:`,
+      removeLeftoversFailed: (error) => `تعذّرت إزالة المخلفات: ${error}`,
+      noScanSettingsOff: 'فحص المخلفات معطّل في الإعدادات، لذا لم يتم البحث عن أي شيء.',
+      noScanStore: 'لا يوجد فحص للمخلفات بعد تطبيق من المتجر: يزيل Windows بيانات التطبيق الخاصة به معه.',
+      done: 'تم',
+      summary: {
+        recycle: (programs, items, freed) => `تم إلغاء تثبيت ${programs} وإرسال ${items} إلى سلة المحذوفات، مما حرر ${freed}.`,
+        permanent: (programs, items, freed) => `تم إلغاء تثبيت ${programs} وحذف ${items} نهائيًا، مما حرر ${freed}.`,
+        quarantine: (programs, items, freed) => `تم إلغاء تثبيت ${programs} ونقل ${items} إلى الحجر الصحي، مما حرر ${freed}.`,
+        programs: (n) => `${n} برنامج`,
+        items: (n) => `${n} عنصر متبقٍ`
+      },
+      noRestorePoint: (reason) => `لم يتم إنشاء نقطة استعادة للنظام (${reason}).`,
+      restorePointFallback: 'غير متاح',
+      quarantineNote: 'كل ما سبق لا يزال في الحجر الصحي ويمكن إعادته.',
+      failedRegistryKeys: (n) => `تعذّرت إزالة ${n} مفتاح سجل — عادةً ما يتطلب هذا تشغيل Prune كمسؤول.`
     }
   },
 
@@ -2115,6 +2427,110 @@ export const CATALOG = {
         message: (count) => `${count} fitxer${count === 1 ? '' : 's'} bloquej${count === 1 ? 'at' : 'ats'} omès${count === 1 ? '' : 'os'}.`,
         detail: 'Tanca les aplicacions que els fan servir i neteja de nou.'
       }
+    },
+    leftoverReview: {
+      groups: { files: 'Fitxers i carpetes', registryKeys: 'Claus del registre', scheduledTasks: 'Tasques programades' },
+      notRemoved: 'trobat, no eliminat',
+      checkFailed: (label) => `No s'ha pogut comprovar ${label}.`,
+      itemNote: {
+        valueOnly: (valueName) => `Només el valor "${valueName}" — la clau on es troba és compartida i es manté`,
+        uninstallEntry: 'Entrada d\'Afegeix o suprimeix programes'
+      },
+      destinations: {
+        quarantine: { text: 'Els elements seleccionats van a la Quarantena, on els pots restaurar.', button: 'Elimina els seleccionats' },
+        recycle: { text: 'Els fitxers seleccionats van a la Paperera de reciclatge. Les claus del registre es guarden abans de suprimir-les.', button: 'Elimina els seleccionats' },
+        permanent: { text: "Els fitxers seleccionats se suprimiran definitivament i no es podran restaurar. Les claus del registre es guarden abans de suprimir-les.", button: 'Suprimeix definitivament' }
+      },
+      clean: "No s'han trobat restes — desinstal·lació neta.",
+      done: 'Fet',
+      foundWarning: (count) => `S'${count === 1 ? 'ha' : 'han'} trobat ${count} element${count === 1 ? '' : 's'} residual${count === 1 ? '' : 's'} que el desinstal·lador natiu ha passat per alt. Revisa-ho abans de purgar.`,
+      excludedNote: (count) => `${count} carpet${count === 1 ? 'a deixada' : 'es deixades'} fora perquè ${count === 1 ? 'és' : 'són'} a les teves exclusions.`,
+      itemsSelected: 'elements seleccionats',
+      reclaimable: 'recuperable',
+      skip: 'Omet'
+    },
+    uninstallModal: {
+      titleForce: (name) => `Elimina forçadament ${name}`,
+      titleNormal: (name) => `Desinstal·la ${name}`,
+      close: 'Tanca',
+      runningWarning: (name) => `${name} s'està executant ara mateix. Tanca'l primer — un desinstal·lador sol fallar amb un programa obert, i pot deixar fitxers que el proper inici torna a crear.`,
+      orphanedWarning: (reason) => `${reason} El Windows el continuarà llistant fins que s'elimini l'entrada.`,
+      brokenIntro: "El Prune buscarà fitxers i claus del registre que coincideixin amb aquest nom, incloent-hi la seva entrada d'Afegeix o suprimeix programes, i et mostrarà tot abans d'eliminar res.",
+      searchForLabel: 'Cerca',
+      searchHint: (name) => `Extret de "${name}" sense la versió — els instal·ladors anomenen les carpetes segons el producte, no la versió. Edita-ho si els resultats semblen incorrectes.`,
+      scanFailed: (error) => `L'escaneig ha fallat: ${error}`,
+      searchButton: 'Cerca restes',
+      normalIntro: (name) => `Això executa el propi desinstal·lador de ${name} i després escaneja qualsevol cosa que deixi enrere.`,
+      uninstallFailed: (error) => `La desinstal·lació ha fallat: ${error}`,
+      startButton: 'Inicia la desinstal·lació',
+      noWorkingUninstaller: 'Cap desinstal·lador funcional — es cercarà pel nom en el seu lloc',
+      noUninstallCommand: 'No hi ha cap ordre de desinstal·lació registrada',
+      progress: {
+        runningNative: 'Executant el desinstal·lador natiu',
+        backingUpRegistry: 'Fent còpia de seguretat del registre',
+        creatingRestorePoint: 'Creant un punt de restauració',
+        searchingLeftovers: 'Cercant restes',
+        scanningLeftovers: 'Escanejant restes',
+        checkingCommand: 'Comprovant el sistema de fitxers, el registre i les tasques programades…'
+      },
+      removing: {
+        quarantine: { title: 'Movent a la Quarantena', command: 'No se suprimeix res — cada element es pot restaurar' },
+        recycle: { title: 'Enviant a la Paperera de reciclatge', command: 'Restaura-ho des de la Paperera de reciclatge si cal' },
+        permanent: { title: 'Suprimint definitivament', command: 'Això no es pot restaurar' }
+      },
+      noScan: (name) => `El desinstal·lador de ${name} ha acabat. L'escaneig de restes està desactivat a Configuració, així que no s'ha buscat res més.`,
+      removalFailed: (error) => `L'eliminació ha fallat: ${error}`,
+      done: 'Fet',
+      summary: {
+        item: (n) => `${n} element${n === 1 ? '' : 's'}`,
+        registryKey: (n) => `${n} clau${n === 1 ? '' : 's'} del registre`,
+        recycle: (files, keys, freed) => `S'${files === '1 element' ? 'ha' : 'han'} enviat ${files} a la Paperera de reciclatge i s'${keys === '1 clau del registre' ? 'ha' : 'han'} eliminat ${keys}, guardats abans a la Quarantena. S'${'ha'} alliberat ${freed}.`,
+        permanent: (files, keys, freed) => `S'${'ha'} suprimit definitivament ${files} i s'${'ha'} eliminat ${keys}, guardats abans a la Quarantena. S'${'ha'} alliberat ${freed}.`,
+        quarantine: (files, keys, freed) => `S'${'ha'} mogut ${files} i ${keys} a la Quarantena, alliberant ${freed}. Restaura'ls en qualsevol moment des de la pantalla de Quarantena.`
+      },
+      failedFilesHeading: (n) => `No s'${n === 1 ? 'ha' : 'han'} pogut eliminar ${n} element${n === 1 ? '' : 's'}:`,
+      failedRegistryKeysHeading: (n) => `No s'${n === 1 ? 'ha' : 'han'} pogut eliminar ${n} clau${n === 1 ? '' : 's'} del registre`,
+      failedRegistryKeysNote: 'aquestes solen necessitar que el Prune s\'executi com a administrador:',
+      noRestorePoint: (reason) => `No s'ha creat cap punt de restauració del sistema (${reason}).`,
+      quarantineStillWorks: 'La restauració des de la Quarantena encara funciona.'
+    },
+    batchUninstallModal: {
+      title: (n) => `Desinstal·la ${n} programa${n === 1 ? '' : 's'}`,
+      historyLabel: (n) => `Desinstal·lació per lots: ${n} programes`,
+      close: 'Tanca',
+      registryOnlyIntro: "Cada aplicació s'elimina a través del Windows per torns, i no hi ha cap escaneig de restes després: el Windows elimina les dades pròpies de l'aplicació juntament amb ella.",
+      mixedIntro: (hasStore) => `El propi desinstal·lador de cada programa s'executa per torns, i després el Prune escaneja el que deixen enrere i et mostra tot abans d'eliminar-ne res.${hasStore ? ' Les aplicacions de la Botiga s\'eliminen a través del Windows en el seu lloc, sense escaneig de restes després.' : ''}`,
+      oneAtATime: "D'una en una, perquè el Windows només permet una instal·lació o desinstal·lació alhora. Alguns desinstal·ladors mostraran les seves pròpies finestres i et faran preguntes.",
+      storeWarning: (count) => count === 1
+        ? "L'aplicació de la Botiga d'aquest lot no es pot restaurar des de la Quarantena: eliminar-la s'emporta l'aplicació i les seves dades desades, i recuperar-la significa reinstal·lar-la des de la Botiga."
+        : `Les ${count} aplicacions de la Botiga d'aquest lot no es poden restaurar des de la Quarantena: eliminar-ne una s'emporta l'aplicació i les seves dades desades, i recuperar-la significa reinstal·lar-la des de la Botiga.`,
+      runsBefore: (name) => `s'executa abans de ${name}`,
+      reported: (bytes) => `${bytes} informats`,
+      unknownSizeSuffix: (n) => `, ${n} de mida desconeguda`,
+      startButton: 'Inicia la desinstal·lació',
+      status: { waiting: 'esperant', uninstalling: 'desinstal·lant…', removed: 'eliminat', failed: 'ha fallat' },
+      removingLine: {
+        quarantine: 'Movent restes a la Quarantena…',
+        recycle: 'Enviant restes a la Paperera de reciclatge…',
+        permanent: 'Suprimint restes definitivament…'
+      },
+      uninstalledOf: (removed, total) => `S'${'han'} desinstal·lat ${removed} de ${total}.`,
+      failedHeading: (n) => `No s'${n === 1 ? 'ha' : 'han'} pogut desinstal·lar ${n} i s'${n === 1 ? 'ha' : 'han'} deixat sol${n === 1 ? '' : 's'}:`,
+      removeLeftoversFailed: (error) => `No s'han pogut eliminar les restes: ${error}`,
+      noScanSettingsOff: "L'escaneig de restes està desactivat a Configuració, així que no s'ha buscat res.",
+      noScanStore: "No hi ha cap escaneig de restes després d'una aplicació de la Botiga: el Windows elimina les dades pròpies de l'aplicació juntament amb ella.",
+      done: 'Fet',
+      summary: {
+        recycle: (programs, items, freed) => `S'${'han'} desinstal·lat ${programs} i s'${'han'} enviat ${items} a la Paperera de reciclatge, alliberant ${freed}.`,
+        permanent: (programs, items, freed) => `S'${'han'} desinstal·lat ${programs} i s'${'han'} suprimit ${items} definitivament, alliberant ${freed}.`,
+        quarantine: (programs, items, freed) => `S'${'han'} desinstal·lat ${programs} i s'${'han'} mogut ${items} a la Quarantena, alliberant ${freed}.`,
+        programs: (n) => `${n} programa${n === 1 ? '' : 's'}`,
+        items: (n) => `${n} element${n === 1 ? '' : 's'} residual${n === 1 ? '' : 's'}`
+      },
+      noRestorePoint: (reason) => `No s'ha creat cap punt de restauració del sistema (${reason}).`,
+      restorePointFallback: 'no disponible',
+      quarantineNote: 'Tot l\'anterior encara és a la Quarantena i es pot recuperar.',
+      failedRegistryKeys: (n) => `No s'${n === 1 ? 'ha' : 'han'} pogut eliminar ${n} clau${n === 1 ? '' : 's'} del registre — normalment cal que el Prune s'executi com a administrador.`
     }
   },
 
@@ -2637,6 +3053,110 @@ export const CATALOG = {
         message: (count) => `Přeskočeno ${count} uzamčených souborů.`,
         detail: 'Zavřete aplikace, které je používají, a vyčistěte znovu.'
       }
+    },
+    leftoverReview: {
+      groups: { files: 'Soubory a složky', registryKeys: 'Klíče registru', scheduledTasks: 'Naplánované úlohy' },
+      notRemoved: 'nalezeno, neodstraněno',
+      checkFailed: (label) => `Nepodařilo se zkontrolovat ${label}.`,
+      itemNote: {
+        valueOnly: (valueName) => `Pouze hodnota „${valueName}“ — klíč, ve kterém se nachází, je sdílený a zůstává`,
+        uninstallEntry: 'Položka Přidat nebo odebrat programy'
+      },
+      destinations: {
+        quarantine: { text: 'Vybrané položky přejdou do karantény, kde je můžete obnovit.', button: 'Odstranit vybrané' },
+        recycle: { text: 'Vybrané soubory přejdou do koše. Klíče registru se před odstraněním zálohují.', button: 'Odstranit vybrané' },
+        permanent: { text: 'Vybrané soubory budou trvale smazány a nelze je obnovit. Klíče registru se před odstraněním zálohují.', button: 'Smazat trvale' }
+      },
+      clean: 'Nebyly nalezeny žádné zbytky — čistá odinstalace.',
+      done: 'Hotovo',
+      foundWarning: (count) => `Nalezen${count === 1 ? 'a' : 'y'} ${count} zbytkov${count === 1 ? 'á položka' : (count < 5 ? 'é položky' : 'ých položek')}, které nativní odinstalátor přehlédl. Před vyčištěním zkontrolujte.`,
+      excludedNote: (count) => `${count} složk${count === 1 ? 'a vynechána' : (count < 5 ? 'y vynechány' : 'a vynecháno')}, protože ${count === 1 ? 'je' : 'jsou'} ve vašich výjimkách.`,
+      itemsSelected: 'vybraných položek',
+      reclaimable: 'lze uvolnit',
+      skip: 'Přeskočit'
+    },
+    uninstallModal: {
+      titleForce: (name) => `Vynutit odstranění ${name}`,
+      titleNormal: (name) => `Odinstalovat ${name}`,
+      close: 'Zavřít',
+      runningWarning: (name) => `${name} je právě spuštěný. Nejprve ho zavřete — odinstalátor obvykle selže u spuštěného programu a může zanechat soubory, které příští spuštění znovu vytvoří.`,
+      orphanedWarning: (reason) => `${reason} Windows ho bude nadále zobrazovat, dokud nebude položka odstraněna.`,
+      brokenIntro: 'Prune vyhledá soubory a klíče registru odpovídající tomuto názvu, včetně jeho položky Přidat nebo odebrat programy, a před odstraněním čehokoli vám vše ukáže.',
+      searchForLabel: 'Hledat',
+      searchHint: (name) => `Převzato z „${name}“ bez verze — instalátory pojmenovávají složky podle produktu, ne podle vydání. Upravte to, pokud výsledky vypadají špatně.`,
+      scanFailed: (error) => `Skenování selhalo: ${error}`,
+      searchButton: 'Hledat zbytky',
+      normalIntro: (name) => `Toto spustí vlastní odinstalátor ${name} a poté zkontroluje, co po sobě zanechal.`,
+      uninstallFailed: (error) => `Odinstalace selhala: ${error}`,
+      startButton: 'Spustit odinstalaci',
+      noWorkingUninstaller: 'Žádný funkční odinstalátor — místo toho se hledá podle názvu',
+      noUninstallCommand: 'Není registrován žádný odinstalační příkaz',
+      progress: {
+        runningNative: 'Spouští se nativní odinstalátor',
+        backingUpRegistry: 'Zálohuje se registr',
+        creatingRestorePoint: 'Vytváří se bod obnovení',
+        searchingLeftovers: 'Hledají se zbytky',
+        scanningLeftovers: 'Kontrolují se zbytky',
+        checkingCommand: 'Kontrola souborového systému, registru a naplánovaných úloh…'
+      },
+      removing: {
+        quarantine: { title: 'Přesouvá se do karantény', command: 'Nic se nemaže — každou položku lze obnovit' },
+        recycle: { title: 'Odesílá se do koše', command: 'V případě potřeby je obnovte z koše' },
+        permanent: { title: 'Trvale se maže', command: 'Toto nelze obnovit' }
+      },
+      noScan: (name) => `Odinstalátor ${name} dokončil svou práci. Kontrola zbytků je v Nastavení vypnutá, takže se nic dalšího nehledalo.`,
+      removalFailed: (error) => `Odstranění selhalo: ${error}`,
+      done: 'Hotovo',
+      summary: {
+        item: (n) => `${n} položk${n === 1 ? 'a' : (n < 5 ? 'y' : '')}`,
+        registryKey: (n) => `${n} klíč${n === 1 ? '' : (n < 5 ? 'e' : 'ů')} registru`,
+        recycle: (files, keys, freed) => `Odesláno ${files} do koše a odstraněno ${keys}, nejprve zálohováno v karanténě. Uvolněno ${freed}.`,
+        permanent: (files, keys, freed) => `Trvale smazáno ${files} a odstraněno ${keys}, nejprve zálohováno v karanténě. Uvolněno ${freed}.`,
+        quarantine: (files, keys, freed) => `Přesunuto ${files} a ${keys} do karantény, uvolněno ${freed}. Kdykoliv je obnovte z obrazovky karantény.`
+      },
+      failedFilesHeading: (n) => `Nepodařilo se odstranit ${n} položk${n === 1 ? 'u' : (n < 5 ? 'y' : '')}:`,
+      failedRegistryKeysHeading: (n) => `Nepodařilo se odstranit ${n} klíč${n === 1 ? '' : (n < 5 ? 'e' : 'ů')} registru`,
+      failedRegistryKeysNote: 'ty obvykle vyžadují, aby Prune běžel jako správce:',
+      noRestorePoint: (reason) => `Nebyl vytvořen žádný bod obnovení systému (${reason}).`,
+      quarantineStillWorks: 'Obnovení z karantény stále funguje.'
+    },
+    batchUninstallModal: {
+      title: (n) => `Odinstalovat ${n} program${n === 1 ? '' : (n < 5 ? 'y' : 'ů')}`,
+      historyLabel: (n) => `Dávkové odinstalování: ${n} programů`,
+      close: 'Zavřít',
+      registryOnlyIntro: 'Každá aplikace se postupně odstraní přes Windows a poté neprobíhá žádná kontrola zbytků: Windows odstraní vlastní data aplikace spolu s ní.',
+      mixedIntro: (hasStore) => `Vlastní odinstalátor každého programu se spustí postupně, poté Prune zkontroluje, co po sobě zanechaly, a před odstraněním čehokoli vám vše ukáže.${hasStore ? ' Aplikace ze Store se místo toho odstraňují přes Windows, bez následné kontroly zbytků.' : ''}`,
+      oneAtATime: 'Postupně po jedné, protože Windows umožňuje jen jednu instalaci nebo odinstalaci najednou. Některé odinstalátory zobrazí vlastní okna a budou vám klást otázky.',
+      storeWarning: (count) => count === 1
+        ? 'Aplikaci ze Store v této dávce nelze obnovit z karantény: jejím odstraněním zmizí aplikace i její uložená data a získat ji zpět znamená přeinstalovat ji ze Store.'
+        : `${count} aplikace ze Store v této dávce nelze obnovit z karantény: odstraněním jedné zmizí aplikace i její uložená data a získat ji zpět znamená přeinstalovat ji ze Store.`,
+      runsBefore: (name) => `spustí se před ${name}`,
+      reported: (bytes) => `nahlášeno ${bytes}`,
+      unknownSizeSuffix: (n) => `, ${n} neznámé velikosti`,
+      startButton: 'Spustit odinstalaci',
+      status: { waiting: 'čeká', uninstalling: 'odinstalovává se…', removed: 'odstraněno', failed: 'selhalo' },
+      removingLine: {
+        quarantine: 'Zbytky se přesouvají do karantény…',
+        recycle: 'Zbytky se odesílají do koše…',
+        permanent: 'Zbytky se trvale mažou…'
+      },
+      uninstalledOf: (removed, total) => `Odinstalováno ${removed} z ${total}.`,
+      failedHeading: (n) => `${n} se nepodařilo odinstalovat a ${n === 1 ? 'zůstal' : 'zůstaly'} nedotčeny:`,
+      removeLeftoversFailed: (error) => `Nepodařilo se odstranit zbytky: ${error}`,
+      noScanSettingsOff: 'Kontrola zbytků je v Nastavení vypnutá, takže se nic nehledalo.',
+      noScanStore: 'Po aplikaci ze Store neprobíhá žádná kontrola zbytků: Windows odstraní vlastní data aplikace spolu s ní.',
+      done: 'Hotovo',
+      summary: {
+        recycle: (programs, items, freed) => `Odinstalováno ${programs} a odesláno ${items} do koše, uvolněno ${freed}.`,
+        permanent: (programs, items, freed) => `Odinstalováno ${programs} a trvale smazáno ${items}, uvolněno ${freed}.`,
+        quarantine: (programs, items, freed) => `Odinstalováno ${programs} a přesunuto ${items} do karantény, uvolněno ${freed}.`,
+        programs: (n) => `${n} program${n === 1 ? '' : (n < 5 ? 'y' : 'ů')}`,
+        items: (n) => `${n} zbytkov${n === 1 ? 'á položka' : (n < 5 ? 'é položky' : 'ých položek')}`
+      },
+      noRestorePoint: (reason) => `Nebyl vytvořen žádný bod obnovení systému (${reason}).`,
+      restorePointFallback: 'není k dispozici',
+      quarantineNote: 'Vše výše je stále v karanténě a lze to vrátit zpět.',
+      failedRegistryKeys: (n) => `Nepodařilo se odstranit ${n} klíč${n === 1 ? '' : (n < 5 ? 'e' : 'ů')} registru — ty obvykle vyžadují, aby Prune běžel jako správce.`
     }
   },
 
@@ -3159,6 +3679,110 @@ export const CATALOG = {
         message: (count) => `${count} ffeil ar glo wedi'u hepgor.`,
         detail: "Caewch y rhaglenni sy'n eu defnyddio a glanhewch eto."
       }
+    },
+    leftoverReview: {
+      groups: { files: 'Ffeiliau a ffolderi', registryKeys: "Allweddi'r gofrestrfa", scheduledTasks: 'Tasgau wedi\'u hamserlennu' },
+      notRemoved: 'wedi\'u canfod, heb eu tynnu',
+      checkFailed: (label) => `Methu gwirio ${label}.`,
+      itemNote: {
+        valueOnly: (valueName) => `Dim ond y gwerth "${valueName}" — mae'r allwedd y mae'n eistedd ynddi'n cael ei rhannu ac yn aros`,
+        uninstallEntry: 'Cofnod Ychwanegu/Tynnu Rhaglenni'
+      },
+      destinations: {
+        quarantine: { text: "Mae eitemau a ddewiswyd yn mynd i'r Cwarantin, lle gallwch eu hadfer.", button: 'Tynnu\'r rhai a ddewiswyd' },
+        recycle: { text: "Mae ffeiliau a ddewiswyd yn mynd i'r Bin Ailgylchu. Mae allweddi'r gofrestrfa'n cael eu bacio i fyny cyn eu tynnu.", button: 'Tynnu\'r rhai a ddewiswyd' },
+        permanent: { text: "Bydd ffeiliau a ddewiswyd yn cael eu dileu'n llwyr ac ni ellir eu hadfer. Mae allweddi'r gofrestrfa'n cael eu bacio i fyny cyn eu tynnu.", button: "Dileu'n barhaol" }
+      },
+      clean: "Ni chanfuwyd unrhyw olion — dadosodiad glân.",
+      done: 'Wedi gorffen',
+      foundWarning: (count) => `Canfuwyd ${count} eitem${count === 1 ? '' : ''} weddilliol a gollodd y dadosodwr brodorol. Adolygwch cyn puro.`,
+      excludedNote: (count) => `Gadawyd ${count} ffolder allan am eu bod yn eich eithriadau.`,
+      itemsSelected: 'eitem wedi\'u dewis',
+      reclaimable: 'adenilladwy',
+      skip: 'Hepgor'
+    },
+    uninstallModal: {
+      titleForce: (name) => `Gorfodi tynnu ${name}`,
+      titleNormal: (name) => `Dadosod ${name}`,
+      close: 'Cau',
+      runningWarning: (name) => `Mae ${name} yn rhedeg ar hyn o bryd. Caewch ef yn gyntaf — mae dadosodwr fel arfer yn methu ar raglen sy'n agored, a gall adael ffeiliau ar ôl y bydd y lansiad nesaf yn eu hail-greu.`,
+      orphanedWarning: (reason) => `${reason} Bydd Windows yn parhau i'w restru nes bod y cofnod yn cael ei dynnu.`,
+      brokenIntro: "Bydd Prune yn chwilio am ffeiliau ac allweddi cofrestrfa sy'n cyfateb i'r enw hwn, gan gynnwys ei gofnod Ychwanegu/Tynnu Rhaglenni, ac yn dangos popeth i chi cyn tynnu unrhyw beth.",
+      searchForLabel: 'Chwilio am',
+      searchHint: (name) => `Wedi'i gymryd o "${name}" heb ei fersiwn — mae gosodwyr yn enwi ffolderi ar ôl y cynnyrch, nid y rhyddhad. Golygwch ef os yw'r canlyniadau'n edrych yn anghywir.`,
+      scanFailed: (error) => `Methodd y sganio: ${error}`,
+      searchButton: 'Chwilio am olion',
+      normalIntro: (name) => `Mae hyn yn rhedeg dadosodwr ei hun ${name}, yna'n sganio am unrhyw beth y mae'n ei adael ar ôl.`,
+      uninstallFailed: (error) => `Methodd y dadosod: ${error}`,
+      startButton: 'Dechrau dadosod',
+      noWorkingUninstaller: 'Dim dadosodwr gweithredol — yn chwilio yn ôl enw yn lle hynny',
+      noUninstallCommand: 'Dim gorchymyn dadosod wedi\'i gofrestru',
+      progress: {
+        runningNative: 'Yn rhedeg dadosodwr brodorol',
+        backingUpRegistry: 'Yn bacio i fyny\'r gofrestrfa',
+        creatingRestorePoint: 'Yn creu pwynt adfer',
+        searchingLeftovers: 'Yn chwilio am olion',
+        scanningLeftovers: 'Yn sganio am olion',
+        checkingCommand: 'Yn gwirio\'r system ffeiliau, y gofrestrfa a\'r tasgau wedi\'u hamserlennu…'
+      },
+      removing: {
+        quarantine: { title: "Yn symud i'r Cwarantin", command: 'Ni chaiff dim ei ddileu — gellir adfer pob eitem' },
+        recycle: { title: "Yn anfon i'r Bin Ailgylchu", command: "Adferwch nhw o'r Bin Ailgylchu os oes angen" },
+        permanent: { title: "Yn dileu'n barhaol", command: 'Ni ellir adfer y rhain' }
+      },
+      noScan: (name) => `Mae dadosodwr ${name} wedi gorffen. Mae'r sgan olion wedi'i ddiffodd yn y Gosodiadau, felly ni chwiliwyd am ddim byd arall.`,
+      removalFailed: (error) => `Methodd y tynnu: ${error}`,
+      done: 'Wedi gorffen',
+      summary: {
+        item: (n) => `${n} eitem`,
+        registryKey: (n) => `${n} allwedd gofrestrfa`,
+        recycle: (files, keys, freed) => `Anfonwyd ${files} i'r Bin Ailgylchu a thynnwyd ${keys}, wedi'u bacio i fyny yn y Cwarantin yn gyntaf. Rhyddhawyd ${freed}.`,
+        permanent: (files, keys, freed) => `Dilewyd ${files} yn barhaol a thynnwyd ${keys}, wedi'u bacio i fyny yn y Cwarantin yn gyntaf. Rhyddhawyd ${freed}.`,
+        quarantine: (files, keys, freed) => `Symudwyd ${files} a ${keys} i'r Cwarantin, gan ryddhau ${freed}. Adferwch nhw unrhyw bryd o'r sgrin Cwarantin.`
+      },
+      failedFilesHeading: (n) => `Methwyd tynnu ${n} eitem:`,
+      failedRegistryKeysHeading: (n) => `Methwyd tynnu ${n} allwedd gofrestrfa`,
+      failedRegistryKeysNote: 'mae'+"'"+'r rhain fel arfer angen i Prune redeg fel gweinyddwr:',
+      noRestorePoint: (reason) => `Ni chrëwyd pwynt adfer system (${reason}).`,
+      quarantineStillWorks: "Mae adfer y Cwarantin yn dal i weithio."
+    },
+    batchUninstallModal: {
+      title: (n) => `Dadosod ${n} rhaglen`,
+      historyLabel: (n) => `Dadosod bataau: ${n} rhaglen`,
+      close: 'Cau',
+      registryOnlyIntro: "Mae pob ap yn cael ei dynnu drwy Windows yn ei dro, ac nid oes sgan olion wedyn: mae Windows yn tynnu data ei hun yr ap gydag ef.",
+      mixedIntro: (hasStore) => `Mae dadosodwr ei hun pob rhaglen yn rhedeg yn ei dro, yna mae Prune yn sganio am yr hyn y maen nhw'n ei adael ar ôl ac yn dangos popeth i chi cyn tynnu dim ohono.${hasStore ? " Mae apiau'r Store yn cael eu tynnu drwy Windows yn lle hynny, heb sgan olion wedyn." : ''}`,
+      oneAtATime: "Un ar y tro, oherwydd bod Windows ond yn caniatáu un gosodiad neu ddadosodiad ar y tro. Bydd rhai dadosodwyr yn dangos eu ffenestri eu hunain ac yn gofyn cwestiynau i chi.",
+      storeWarning: (count) => count === 1
+        ? "Ni ellir adfer ap y Store yn y swp hwn o'r Cwarantin: mae ei dynnu'n cymryd yr ap a'i ddata wedi'i gadw, ac mae ei gael yn ôl yn golygu ei ailosod o'r Store."
+        : `Ni ellir adfer y ${count} ap Store yn y swp hwn o'r Cwarantin: mae tynnu un yn cymryd yr ap a'i ddata wedi'i gadw, ac mae ei gael yn ôl yn golygu ei ailosod o'r Store.`,
+      runsBefore: (name) => `yn rhedeg cyn ${name}`,
+      reported: (bytes) => `${bytes} wedi'u hadrodd`,
+      unknownSizeSuffix: (n) => `, ${n} o faint anhysbys`,
+      startButton: 'Dechrau dadosod',
+      status: { waiting: 'yn aros', uninstalling: 'yn dadosod…', removed: 'wedi\'i dynnu', failed: 'wedi methu' },
+      removingLine: {
+        quarantine: "Yn symud olion i'r Cwarantin…",
+        recycle: "Yn anfon olion i'r Bin Ailgylchu…",
+        permanent: "Yn dileu olion yn barhaol…"
+      },
+      uninstalledOf: (removed, total) => `Dadosodwyd ${removed} o ${total}.`,
+      failedHeading: (n) => `Methwyd dadosod ${n} a chawsant eu gadael ar eu pen eu hunain:`,
+      removeLeftoversFailed: (error) => `Methwyd tynnu olion: ${error}`,
+      noScanSettingsOff: "Mae'r sgan olion wedi'i ddiffodd yn y Gosodiadau, felly ni chwiliwyd am ddim byd.",
+      noScanStore: "Nid oes sgan olion ar ôl ap Store: mae Windows yn tynnu data ei hun yr ap gydag ef.",
+      done: 'Wedi gorffen',
+      summary: {
+        recycle: (programs, items, freed) => `Dadosodwyd ${programs} ac anfonwyd ${items} i'r Bin Ailgylchu, gan ryddhau ${freed}.`,
+        permanent: (programs, items, freed) => `Dadosodwyd ${programs} a dilewyd ${items} yn barhaol, gan ryddhau ${freed}.`,
+        quarantine: (programs, items, freed) => `Dadosodwyd ${programs} a symudwyd ${items} i'r Cwarantin, gan ryddhau ${freed}.`,
+        programs: (n) => `${n} rhaglen`,
+        items: (n) => `${n} eitem weddilliol`
+      },
+      noRestorePoint: (reason) => `Ni chrëwyd pwynt adfer system (${reason}).`,
+      restorePointFallback: 'ddim ar gael',
+      quarantineNote: "Mae popeth uchod yn dal yn y Cwarantin ac yn gallu cael ei roi'n ôl.",
+      failedRegistryKeys: (n) => `Methwyd tynnu ${n} allwedd gofrestrfa — mae'r rhain fel arfer angen i Prune redeg fel gweinyddwr.`
     }
   },
 
@@ -3681,6 +4305,110 @@ export const CATALOG = {
         message: (count) => `Sprang ${count} låste filer over.`,
         detail: 'Luk de apps, der bruger dem, og rens igen.'
       }
+    },
+    leftoverReview: {
+      groups: { files: 'Filer og mapper', registryKeys: 'Registreringsnøgler', scheduledTasks: 'Planlagte opgaver' },
+      notRemoved: 'fundet, ikke fjernet',
+      checkFailed: (label) => `Kunne ikke kontrollere ${label}.`,
+      itemNote: {
+        valueOnly: (valueName) => `Kun værdien "${valueName}" — nøglen, den sidder i, er delt og forbliver`,
+        uninstallEntry: 'Post i Fjern eller rediger programmer'
+      },
+      destinations: {
+        quarantine: { text: 'Valgte elementer går til karantæne, hvor du kan gendanne dem.', button: 'Fjern valgte' },
+        recycle: { text: 'Valgte filer går til papirkurven. Registreringsnøgler sikkerhedskopieres, før de fjernes.', button: 'Fjern valgte' },
+        permanent: { text: 'Valgte filer slettes permanent og kan ikke gendannes. Registreringsnøgler sikkerhedskopieres, før de fjernes.', button: 'Slet permanent' }
+      },
+      clean: 'Ingen rester fundet — ren afinstallation.',
+      done: 'Færdig',
+      foundWarning: (count) => `Fandt ${count} resterende element${count === 1 ? '' : 'er'}, som det oprindelige afinstallationsprogram gik glip af. Gennemgå før oprydning.`,
+      excludedNote: (count) => `${count} mappe${count === 1 ? '' : 'r'} udeladt, fordi ${count === 1 ? 'den er' : 'de er'} i dine undtagelser.`,
+      itemsSelected: 'elementer valgt',
+      reclaimable: 'kan frigøres',
+      skip: 'Spring over'
+    },
+    uninstallModal: {
+      titleForce: (name) => `Tving fjernelse af ${name}`,
+      titleNormal: (name) => `Afinstaller ${name}`,
+      close: 'Luk',
+      runningWarning: (name) => `${name} kører lige nu. Luk det først — et afinstallationsprogram fejler som regel på et åbent program og kan efterlade filer, som næste opstart genskaber.`,
+      orphanedWarning: (reason) => `${reason} Windows bliver ved med at vise det, indtil posten er fjernet.`,
+      brokenIntro: 'Prune søger efter filer og registreringsnøgler, der matcher dette navn, inklusive dets post i Fjern eller rediger programmer, og viser dig alt, før noget fjernes.',
+      searchForLabel: 'Søg efter',
+      searchHint: (name) => `Taget fra "${name}" uden dets version — installationsprogrammer navngiver mapper efter produktet, ikke udgivelsen. Rediger det, hvis resultaterne ser forkerte ud.`,
+      scanFailed: (error) => `Scanning mislykkedes: ${error}`,
+      searchButton: 'Søg efter rester',
+      normalIntro: (name) => `Dette kører ${name}s eget afinstallationsprogram og scanner derefter for alt, det efterlader.`,
+      uninstallFailed: (error) => `Afinstallation mislykkedes: ${error}`,
+      startButton: 'Start afinstallation',
+      noWorkingUninstaller: 'Intet fungerende afinstallationsprogram — søger efter navn i stedet',
+      noUninstallCommand: 'Ingen afinstallationskommando registreret',
+      progress: {
+        runningNative: 'Kører oprindeligt afinstallationsprogram',
+        backingUpRegistry: 'Sikkerhedskopierer registreringsdatabasen',
+        creatingRestorePoint: 'Opretter et gendannelsespunkt',
+        searchingLeftovers: 'Søger efter rester',
+        scanningLeftovers: 'Scanner for rester',
+        checkingCommand: 'Kontrollerer filsystem, registreringsdatabase & planlagte opgaver…'
+      },
+      removing: {
+        quarantine: { title: 'Flytter til karantæne', command: 'Intet slettes — hvert element kan gendannes' },
+        recycle: { title: 'Sender til papirkurven', command: 'Gendan dem fra papirkurven, hvis det er nødvendigt' },
+        permanent: { title: 'Sletter permanent', command: 'Disse kan ikke gendannes' }
+      },
+      noScan: (name) => `${name}s afinstallationsprogram er færdigt. Rest-scanningen er slået fra i Indstillinger, så der blev ikke søgt efter andet.`,
+      removalFailed: (error) => `Fjernelse mislykkedes: ${error}`,
+      done: 'Færdig',
+      summary: {
+        item: (n) => `${n} element${n === 1 ? '' : 'er'}`,
+        registryKey: (n) => `${n} registreringsnøgle${n === 1 ? '' : 'r'}`,
+        recycle: (files, keys, freed) => `Sendte ${files} til papirkurven og fjernede ${keys}, sikkerhedskopieret i karantæne først. Frigjorde ${freed}.`,
+        permanent: (files, keys, freed) => `Slettede ${files} permanent og fjernede ${keys}, sikkerhedskopieret i karantæne først. Frigjorde ${freed}.`,
+        quarantine: (files, keys, freed) => `Flyttede ${files} og ${keys} til karantæne, og frigjorde ${freed}. Gendan dem når som helst fra karantæneskærmen.`
+      },
+      failedFilesHeading: (n) => `${n} element${n === 1 ? '' : 'er'} kunne ikke fjernes:`,
+      failedRegistryKeysHeading: (n) => `${n} registreringsnøgle${n === 1 ? '' : 'r'} kunne ikke fjernes`,
+      failedRegistryKeysNote: 'disse kræver som regel, at Prune kører som administrator:',
+      noRestorePoint: (reason) => `Der blev ikke oprettet noget systemgendannelsespunkt (${reason}).`,
+      quarantineStillWorks: 'Gendannelse fra karantæne virker stadig.'
+    },
+    batchUninstallModal: {
+      title: (n) => `Afinstaller ${n} program${n === 1 ? '' : 'mer'}`,
+      historyLabel: (n) => `Batch-afinstallation: ${n} programmer`,
+      close: 'Luk',
+      registryOnlyIntro: 'Hver app fjernes gennem Windows efter tur, og der er ingen rest-scanning bagefter: Windows fjerner appens egne data sammen med den.',
+      mixedIntro: (hasStore) => `Hvert programs eget afinstallationsprogram kører efter tur, hvorefter Prune scanner for, hvad de efterlader, og viser dig alt, før noget af det fjernes.${hasStore ? ' Store-apps fjernes i stedet gennem Windows, uden rest-scanning bagefter.' : ''}`,
+      oneAtATime: 'Én ad gangen, fordi Windows kun tillader én installation eller afinstallation ad gangen. Nogle afinstallationsprogrammer viser deres egne vinduer og stiller dig spørgsmål.',
+      storeWarning: (count) => count === 1
+        ? 'Store-appen i denne batch kan ikke gendannes fra karantæne: at fjerne den tager appen og dens gemte data, og at få den tilbage betyder at geninstallere den fra Store.'
+        : `De ${count} Store-apps i denne batch kan ikke gendannes fra karantæne: at fjerne en tager appen og dens gemte data, og at få den tilbage betyder at geninstallere den fra Store.`,
+      runsBefore: (name) => `kører før ${name}`,
+      reported: (bytes) => `${bytes} rapporteret`,
+      unknownSizeSuffix: (n) => `, ${n} af ukendt størrelse`,
+      startButton: 'Start afinstallation',
+      status: { waiting: 'venter', uninstalling: 'afinstallerer…', removed: 'fjernet', failed: 'mislykkedes' },
+      removingLine: {
+        quarantine: 'Flytter rester til karantæne…',
+        recycle: 'Sender rester til papirkurven…',
+        permanent: 'Sletter rester permanent…'
+      },
+      uninstalledOf: (removed, total) => `Afinstallerede ${removed} af ${total}.`,
+      failedHeading: (n) => `${n} kunne ikke afinstalleres og blev ladet være:`,
+      removeLeftoversFailed: (error) => `Kunne ikke fjerne rester: ${error}`,
+      noScanSettingsOff: 'Rest-scanningen er slået fra i Indstillinger, så der blev ikke søgt efter noget.',
+      noScanStore: 'Der er ingen rest-scanning efter en Store-app: Windows fjerner appens egne data sammen med den.',
+      done: 'Færdig',
+      summary: {
+        recycle: (programs, items, freed) => `Afinstallerede ${programs} og sendte ${items} til papirkurven, hvilket frigjorde ${freed}.`,
+        permanent: (programs, items, freed) => `Afinstallerede ${programs} og slettede ${items} permanent, hvilket frigjorde ${freed}.`,
+        quarantine: (programs, items, freed) => `Afinstallerede ${programs} og flyttede ${items} til karantæne, hvilket frigjorde ${freed}.`,
+        programs: (n) => `${n} program${n === 1 ? '' : 'mer'}`,
+        items: (n) => `${n} resterende element${n === 1 ? '' : 'er'}`
+      },
+      noRestorePoint: (reason) => `Der blev ikke oprettet noget systemgendannelsespunkt (${reason}).`,
+      restorePointFallback: 'ikke tilgængelig',
+      quarantineNote: 'Alt ovenfor er stadig i karantæne og kan sættes tilbage.',
+      failedRegistryKeys: (n) => `${n} registreringsnøgle${n === 1 ? '' : 'r'} kunne ikke fjernes — disse kræver som regel, at Prune kører som administrator.`
     }
   },
 
@@ -4203,6 +4931,110 @@ export const CATALOG = {
         message: (count) => `${count} gesperrte Datei${count === 1 ? '' : 'en'} übersprungen.`,
         detail: 'Schließe die Apps, die sie verwenden, und bereinige erneut.'
       }
+    },
+    leftoverReview: {
+      groups: { files: 'Dateien und Ordner', registryKeys: 'Registrierungsschlüssel', scheduledTasks: 'Geplante Aufgaben' },
+      notRemoved: 'gefunden, nicht entfernt',
+      checkFailed: (label) => `${label} konnte nicht überprüft werden.`,
+      itemNote: {
+        valueOnly: (valueName) => `Nur der Wert „${valueName}“ — der Schlüssel, in dem er sich befindet, wird geteilt und bleibt bestehen`,
+        uninstallEntry: 'Eintrag unter „Programme und Features“'
+      },
+      destinations: {
+        quarantine: { text: 'Ausgewählte Elemente werden in die Quarantäne verschoben, von wo aus du sie wiederherstellen kannst.', button: 'Auswahl entfernen' },
+        recycle: { text: 'Ausgewählte Dateien werden in den Papierkorb verschoben. Registrierungsschlüssel werden vor dem Entfernen gesichert.', button: 'Auswahl entfernen' },
+        permanent: { text: 'Ausgewählte Dateien werden endgültig gelöscht und können nicht wiederhergestellt werden. Registrierungsschlüssel werden vor dem Entfernen gesichert.', button: 'Endgültig löschen' }
+      },
+      clean: 'Keine Rückstände gefunden — saubere Deinstallation.',
+      done: 'Fertig',
+      foundWarning: (count) => `${count} verbliebene${count === 1 ? 's' : ''} Element${count === 1 ? '' : 'e'} gefunden, die der native Deinstaller übersehen hat. Vor dem Bereinigen überprüfen.`,
+      excludedNote: (count) => `${count} Ordner ausgelassen, da ${count === 1 ? 'er sich in deinen Ausnahmen befindet' : 'sie sich in deinen Ausnahmen befinden'}.`,
+      itemsSelected: 'Elemente ausgewählt',
+      reclaimable: 'wiederherstellbar',
+      skip: 'Überspringen'
+    },
+    uninstallModal: {
+      titleForce: (name) => `${name} zwangsweise entfernen`,
+      titleNormal: (name) => `${name} deinstallieren`,
+      close: 'Schließen',
+      runningWarning: (name) => `${name} läuft gerade. Schließe es zuerst — ein Deinstaller schlägt bei einem geöffneten Programm meist fehl und kann Dateien hinterlassen, die der nächste Start neu erstellt.`,
+      orphanedWarning: (reason) => `${reason} Windows wird es weiterhin auflisten, bis der Eintrag entfernt wird.`,
+      brokenIntro: 'Prune sucht nach Dateien und Registrierungsschlüsseln, die diesem Namen entsprechen, einschließlich seines Eintrags unter „Programme und Features“, und zeigt dir alles, bevor etwas entfernt wird.',
+      searchForLabel: 'Suchen nach',
+      searchHint: (name) => `Übernommen aus „${name}“ ohne Versionsnummer — Installationsprogramme benennen Ordner nach dem Produkt, nicht nach der Version. Bearbeite es, wenn die Ergebnisse falsch aussehen.`,
+      scanFailed: (error) => `Scan fehlgeschlagen: ${error}`,
+      searchButton: 'Nach Rückständen suchen',
+      normalIntro: (name) => `Dies führt den eigenen Deinstaller von ${name} aus und sucht anschließend nach allem, was zurückbleibt.`,
+      uninstallFailed: (error) => `Deinstallation fehlgeschlagen: ${error}`,
+      startButton: 'Deinstallation starten',
+      noWorkingUninstaller: 'Kein funktionierender Deinstaller — es wird stattdessen nach Namen gesucht',
+      noUninstallCommand: 'Kein Deinstallationsbefehl registriert',
+      progress: {
+        runningNative: 'Nativer Deinstaller wird ausgeführt',
+        backingUpRegistry: 'Registrierung wird gesichert',
+        creatingRestorePoint: 'Wiederherstellungspunkt wird erstellt',
+        searchingLeftovers: 'Suche nach Rückständen',
+        scanningLeftovers: 'Rückstände werden gescannt',
+        checkingCommand: 'Dateisystem, Registrierung & geplante Aufgaben werden überprüft…'
+      },
+      removing: {
+        quarantine: { title: 'Wird in die Quarantäne verschoben', command: 'Nichts wird gelöscht — jedes Element kann wiederhergestellt werden' },
+        recycle: { title: 'Wird in den Papierkorb verschoben', command: 'Bei Bedarf aus dem Papierkorb wiederherstellen' },
+        permanent: { title: 'Wird endgültig gelöscht', command: 'Diese können nicht wiederhergestellt werden' }
+      },
+      noScan: (name) => `Der Deinstaller von ${name} ist fertig. Der Rückstands-Scan ist in den Einstellungen deaktiviert, daher wurde nach nichts weiterem gesucht.`,
+      removalFailed: (error) => `Entfernen fehlgeschlagen: ${error}`,
+      done: 'Fertig',
+      summary: {
+        item: (n) => `${n} Element${n === 1 ? '' : 'e'}`,
+        registryKey: (n) => `${n} Registrierungsschlüssel`,
+        recycle: (files, keys, freed) => `${files} in den Papierkorb verschoben und ${keys} entfernt, zuvor in der Quarantäne gesichert. ${freed} freigegeben.`,
+        permanent: (files, keys, freed) => `${files} endgültig gelöscht und ${keys} entfernt, zuvor in der Quarantäne gesichert. ${freed} freigegeben.`,
+        quarantine: (files, keys, freed) => `${files} und ${keys} in die Quarantäne verschoben und dabei ${freed} freigegeben. Jederzeit über den Quarantäne-Bildschirm wiederherstellbar.`
+      },
+      failedFilesHeading: (n) => `${n} Element${n === 1 ? '' : 'e'} konnte${n === 1 ? '' : 'n'} nicht entfernt werden:`,
+      failedRegistryKeysHeading: (n) => `${n} Registrierungsschlüssel konnte${n === 1 ? '' : 'n'} nicht entfernt werden`,
+      failedRegistryKeysNote: 'diese benötigen normalerweise, dass Prune als Administrator ausgeführt wird:',
+      noRestorePoint: (reason) => `Es wurde kein Systemwiederherstellungspunkt erstellt (${reason}).`,
+      quarantineStillWorks: 'Die Wiederherstellung aus der Quarantäne funktioniert weiterhin.'
+    },
+    batchUninstallModal: {
+      title: (n) => `${n} Programm${n === 1 ? '' : 'e'} deinstallieren`,
+      historyLabel: (n) => `Batch-Deinstallation: ${n} Programme`,
+      close: 'Schließen',
+      registryOnlyIntro: 'Jede App wird nacheinander über Windows entfernt, und danach findet kein Rückstands-Scan statt: Windows entfernt die eigenen Daten der App zusammen mit ihr.',
+      mixedIntro: (hasStore) => `Der eigene Deinstaller jedes Programms läuft nacheinander, dann scannt Prune nach dem, was sie hinterlassen, und zeigt dir alles, bevor etwas davon entfernt wird.${hasStore ? ' Store-Apps werden stattdessen über Windows entfernt, danach ohne Rückstands-Scan.' : ''}`,
+      oneAtATime: 'Eins nach dem anderen, weil Windows immer nur eine Installation oder Deinstallation gleichzeitig zulässt. Manche Deinstaller zeigen eigene Fenster an und stellen dir Fragen.',
+      storeWarning: (count) => count === 1
+        ? 'Die Store-App in diesem Stapel kann nicht aus der Quarantäne wiederhergestellt werden: Ihr Entfernen nimmt die App und ihre gespeicherten Daten mit, und sie zurückzubekommen bedeutet, sie erneut aus dem Store zu installieren.'
+        : `Die ${count} Store-Apps in diesem Stapel können nicht aus der Quarantäne wiederhergestellt werden: Das Entfernen einer davon nimmt die App und ihre gespeicherten Daten mit, und sie zurückzubekommen bedeutet, sie erneut aus dem Store zu installieren.`,
+      runsBefore: (name) => `läuft vor ${name}`,
+      reported: (bytes) => `${bytes} gemeldet`,
+      unknownSizeSuffix: (n) => `, ${n} mit unbekannter Größe`,
+      startButton: 'Deinstallation starten',
+      status: { waiting: 'wartet', uninstalling: 'wird deinstalliert…', removed: 'entfernt', failed: 'fehlgeschlagen' },
+      removingLine: {
+        quarantine: 'Rückstände werden in die Quarantäne verschoben…',
+        recycle: 'Rückstände werden in den Papierkorb verschoben…',
+        permanent: 'Rückstände werden endgültig gelöscht…'
+      },
+      uninstalledOf: (removed, total) => `${removed} von ${total} deinstalliert.`,
+      failedHeading: (n) => `${n} konnte${n === 1 ? '' : 'n'} nicht deinstalliert werden und ${n === 1 ? 'wurde' : 'wurden'} unangetastet gelassen:`,
+      removeLeftoversFailed: (error) => `Rückstände konnten nicht entfernt werden: ${error}`,
+      noScanSettingsOff: 'Der Rückstands-Scan ist in den Einstellungen deaktiviert, daher wurde nach nichts gesucht.',
+      noScanStore: 'Nach einer Store-App findet kein Rückstands-Scan statt: Windows entfernt die eigenen Daten der App zusammen mit ihr.',
+      done: 'Fertig',
+      summary: {
+        recycle: (programs, items, freed) => `${programs} deinstalliert und ${items} in den Papierkorb verschoben, dabei ${freed} freigegeben.`,
+        permanent: (programs, items, freed) => `${programs} deinstalliert und ${items} endgültig gelöscht, dabei ${freed} freigegeben.`,
+        quarantine: (programs, items, freed) => `${programs} deinstalliert und ${items} in die Quarantäne verschoben, dabei ${freed} freigegeben.`,
+        programs: (n) => `${n} Programm${n === 1 ? '' : 'e'}`,
+        items: (n) => `${n} verbliebene${n === 1 ? 's' : 'n'} Element${n === 1 ? '' : 'e'}`
+      },
+      noRestorePoint: (reason) => `Es wurde kein Systemwiederherstellungspunkt erstellt (${reason}).`,
+      restorePointFallback: 'nicht verfügbar',
+      quarantineNote: 'Alles oben ist weiterhin in der Quarantäne und kann zurückgesetzt werden.',
+      failedRegistryKeys: (n) => `${n} Registrierungsschlüssel konnte${n === 1 ? '' : 'n'} nicht entfernt werden — diese benötigen normalerweise, dass Prune als Administrator ausgeführt wird.`
     }
   },
 
@@ -4725,6 +5557,110 @@ export const CATALOG = {
         message: (count) => `Παραλείφθηκε${count === 1 ? '' : 'αν'} ${count} κλειδωμέν${count === 1 ? 'ο αρχείο' : 'α αρχεία'}.`,
         detail: 'Κλείστε τις εφαρμογές που τα χρησιμοποιούν και καθαρίστε ξανά.'
       }
+    },
+    leftoverReview: {
+      groups: { files: 'Αρχεία & φάκελοι', registryKeys: 'Κλειδιά μητρώου', scheduledTasks: 'Προγραμματισμένες εργασίες' },
+      notRemoved: 'βρέθηκε, δεν αφαιρέθηκε',
+      checkFailed: (label) => `Αδυναμία ελέγχου ${label}.`,
+      itemNote: {
+        valueOnly: (valueName) => `Μόνο η τιμή "${valueName}" — το κλειδί στο οποίο βρίσκεται είναι κοινόχρηστο και παραμένει`,
+        uninstallEntry: 'Καταχώριση Προσθαφαίρεσης Προγραμμάτων'
+      },
+      destinations: {
+        quarantine: { text: 'Τα επιλεγμένα στοιχεία μεταφέρονται στην Καραντίνα, όπου μπορείτε να τα επαναφέρετε.', button: 'Αφαίρεση επιλεγμένων' },
+        recycle: { text: 'Τα επιλεγμένα αρχεία μεταφέρονται στον Κάδο Ανακύκλωσης. Τα κλειδιά μητρώου αντιγράφονται πριν αφαιρεθούν.', button: 'Αφαίρεση επιλεγμένων' },
+        permanent: { text: 'Τα επιλεγμένα αρχεία θα διαγραφούν οριστικά και δεν μπορούν να επαναφερθούν. Τα κλειδιά μητρώου αντιγράφονται πριν αφαιρεθούν.', button: 'Οριστική διαγραφή' }
+      },
+      clean: 'Δεν βρέθηκαν κατάλοιπα — καθαρή απεγκατάσταση.',
+      done: 'Τέλος',
+      foundWarning: (count) => `Βρέθηκ${count === 1 ? 'ε' : 'αν'} ${count} στοιχεί${count === 1 ? 'ο' : 'α'} που παρέλειψε ο εγγενής απεγκαταστάτης. Ελέγξτε πριν την εκκαθάριση.`,
+      excludedNote: (count) => `${count} φάκελ${count === 1 ? 'ος παραλείφθηκε' : 'οι παραλείφθηκαν'} επειδή ${count === 1 ? 'βρίσκεται' : 'βρίσκονται'} στις εξαιρέσεις σας.`,
+      itemsSelected: 'επιλεγμένα στοιχεία',
+      reclaimable: 'ανακτήσιμο',
+      skip: 'Παράλειψη'
+    },
+    uninstallModal: {
+      titleForce: (name) => `Εξαναγκασμένη αφαίρεση ${name}`,
+      titleNormal: (name) => `Απεγκατάσταση ${name}`,
+      close: 'Κλείσιμο',
+      runningWarning: (name) => `Το ${name} εκτελείται αυτή τη στιγμή. Κλείστε το πρώτα — ένας απεγκαταστάτης συνήθως αποτυγχάνει σε ένα ανοιχτό πρόγραμμα και μπορεί να αφήσει πίσω αρχεία που η επόμενη εκκίνηση θα ξαναδημιουργήσει.`,
+      orphanedWarning: (reason) => `${reason} Τα Windows θα συνεχίσουν να το καταχωρούν μέχρι να αφαιρεθεί η εγγραφή.`,
+      brokenIntro: 'Το Prune θα αναζητήσει αρχεία και κλειδιά μητρώου που ταιριάζουν με αυτό το όνομα, συμπεριλαμβανομένης της καταχώρισης Προσθαφαίρεσης Προγραμμάτων, και θα σας δείξει τα πάντα πριν αφαιρέσει οτιδήποτε.',
+      searchForLabel: 'Αναζήτηση για',
+      searchHint: (name) => `Λήφθηκε από "${name}" χωρίς την έκδοσή του — τα προγράμματα εγκατάστασης ονομάζουν τους φακέλους σύμφωνα με το προϊόν, όχι την έκδοση κυκλοφορίας. Επεξεργαστείτε το αν τα αποτελέσματα φαίνονται λανθασμένα.`,
+      scanFailed: (error) => `Η σάρωση απέτυχε: ${error}`,
+      searchButton: 'Αναζήτηση καταλοίπων',
+      normalIntro: (name) => `Αυτό εκτελεί τον δικό του απεγκαταστάτη του ${name} και έπειτα σαρώνει για οτιδήποτε αφήνει πίσω.`,
+      uninstallFailed: (error) => `Η απεγκατάσταση απέτυχε: ${error}`,
+      startButton: 'Έναρξη απεγκατάστασης',
+      noWorkingUninstaller: 'Δεν υπάρχει λειτουργικός απεγκαταστάτης — αναζήτηση με βάση το όνομα αντ\' αυτού',
+      noUninstallCommand: 'Δεν έχει καταχωρηθεί εντολή απεγκατάστασης',
+      progress: {
+        runningNative: 'Εκτέλεση εγγενούς απεγκαταστάτη',
+        backingUpRegistry: 'Δημιουργία αντιγράφου ασφαλείας μητρώου',
+        creatingRestorePoint: 'Δημιουργία σημείου επαναφοράς',
+        searchingLeftovers: 'Αναζήτηση καταλοίπων',
+        scanningLeftovers: 'Σάρωση καταλοίπων',
+        checkingCommand: 'Έλεγχος συστήματος αρχείων, μητρώου & προγραμματισμένων εργασιών…'
+      },
+      removing: {
+        quarantine: { title: 'Μεταφορά στην Καραντίνα', command: 'Τίποτα δεν διαγράφεται — κάθε στοιχείο μπορεί να επαναφερθεί' },
+        recycle: { title: 'Αποστολή στον Κάδο Ανακύκλωσης', command: 'Επαναφέρετέ τα από τον Κάδο Ανακύκλωσης αν χρειαστεί' },
+        permanent: { title: 'Οριστική διαγραφή', command: 'Αυτά δεν μπορούν να επαναφερθούν' }
+      },
+      noScan: (name) => `Ο απεγκαταστάτης του ${name} ολοκληρώθηκε. Η σάρωση καταλοίπων είναι απενεργοποιημένη στις Ρυθμίσεις, οπότε δεν αναζητήθηκε τίποτα άλλο.`,
+      removalFailed: (error) => `Η αφαίρεση απέτυχε: ${error}`,
+      done: 'Τέλος',
+      summary: {
+        item: (n) => `${n} στοιχεί${n === 1 ? 'ο' : 'α'}`,
+        registryKey: (n) => `${n} κλειδ${n === 1 ? 'ί' : 'ιά'} μητρώου`,
+        recycle: (files, keys, freed) => `Στάλθηκ${files === '1 στοιχείο' ? 'ε' : 'αν'} ${files} στον Κάδο Ανακύκλωσης και αφαιρέθηκ${'αν'} ${keys}, αφού πρώτα αντιγράφηκαν στην Καραντίνα. Ελευθερώθηκαν ${freed}.`,
+        permanent: (files, keys, freed) => `Διαγράφηκ${'αν'} ${files} οριστικά και αφαιρέθηκ${'αν'} ${keys}, αφού πρώτα αντιγράφηκαν στην Καραντίνα. Ελευθερώθηκαν ${freed}.`,
+        quarantine: (files, keys, freed) => `Μεταφέρθηκ${'αν'} ${files} και ${keys} στην Καραντίνα, ελευθερώνοντας ${freed}. Επαναφέρετέ τα οποτεδήποτε από την οθόνη Καραντίνας.`
+      },
+      failedFilesHeading: (n) => `Αποτυχία αφαίρεσης ${n} στοιχεί${n === 1 ? 'ου' : 'ων'}:`,
+      failedRegistryKeysHeading: (n) => `Αποτυχία αφαίρεσης ${n} κλειδι${n === 1 ? 'ού' : 'ών'} μητρώου`,
+      failedRegistryKeysNote: 'αυτά συνήθως απαιτούν το Prune να εκτελείται ως διαχειριστής:',
+      noRestorePoint: (reason) => `Δεν δημιουργήθηκε σημείο επαναφοράς συστήματος (${reason}).`,
+      quarantineStillWorks: 'Η επαναφορά από την Καραντίνα εξακολουθεί να λειτουργεί.'
+    },
+    batchUninstallModal: {
+      title: (n) => `Απεγκατάσταση ${n} προγραμμάτων`,
+      historyLabel: (n) => `Ομαδική απεγκατάσταση: ${n} προγράμματα`,
+      close: 'Κλείσιμο',
+      registryOnlyIntro: 'Κάθε εφαρμογή αφαιρείται μέσω των Windows με τη σειρά, και δεν υπάρχει σάρωση καταλοίπων μετά: τα Windows αφαιρούν τα δικά της δεδομένα της εφαρμογής μαζί της.',
+      mixedIntro: (hasStore) => `Ο δικός του απεγκαταστάτης κάθε προγράμματος εκτελείται με τη σειρά, έπειτα το Prune σαρώνει για ό,τι αφήνουν πίσω και σας δείχνει τα πάντα πριν αφαιρέσει οτιδήποτε από αυτά.${hasStore ? ' Οι εφαρμογές Store αφαιρούνται μέσω των Windows αντ\' αυτού, χωρίς σάρωση καταλοίπων μετά.' : ''}`,
+      oneAtATime: 'Ένα τη φορά, επειδή τα Windows επιτρέπουν μόνο μία εγκατάσταση ή απεγκατάσταση τη φορά. Ορισμένοι απεγκαταστάτες θα εμφανίσουν τα δικά τους παράθυρα και θα σας κάνουν ερωτήσεις.',
+      storeWarning: (count) => count === 1
+        ? 'Η εφαρμογή Store σε αυτήν την παρτίδα δεν μπορεί να επαναφερθεί από την Καραντίνα: η αφαίρεσή της παίρνει μαζί την εφαρμογή και τα αποθηκευμένα δεδομένα της, και η επαναφορά της σημαίνει επανεγκατάστασή της από το Store.'
+        : `Οι ${count} εφαρμογές Store σε αυτήν την παρτίδα δεν μπορούν να επαναφερθούν από την Καραντίνα: η αφαίρεση μιας παίρνει μαζί την εφαρμογή και τα αποθηκευμένα δεδομένα της, και η επαναφορά της σημαίνει επανεγκατάστασή της από το Store.`,
+      runsBefore: (name) => `εκτελείται πριν από το ${name}`,
+      reported: (bytes) => `${bytes} αναφέρθηκαν`,
+      unknownSizeSuffix: (n) => `, ${n} με άγνωστο μέγεθος`,
+      startButton: 'Έναρξη απεγκατάστασης',
+      status: { waiting: 'σε αναμονή', uninstalling: 'απεγκατάσταση…', removed: 'αφαιρέθηκε', failed: 'απέτυχε' },
+      removingLine: {
+        quarantine: 'Μεταφορά καταλοίπων στην Καραντίνα…',
+        recycle: 'Αποστολή καταλοίπων στον Κάδο Ανακύκλωσης…',
+        permanent: 'Οριστική διαγραφή καταλοίπων…'
+      },
+      uninstalledOf: (removed, total) => `Απεγκαταστάθηκαν ${removed} από ${total}.`,
+      failedHeading: (n) => `Αποτυχία απεγκατάστασης ${n} και παρέμειν${n === 1 ? 'ε' : 'αν'} ανέγγιχτ${n === 1 ? 'ο' : 'α'}:`,
+      removeLeftoversFailed: (error) => `Αδυναμία αφαίρεσης καταλοίπων: ${error}`,
+      noScanSettingsOff: 'Η σάρωση καταλοίπων είναι απενεργοποιημένη στις Ρυθμίσεις, οπότε δεν αναζητήθηκε τίποτα.',
+      noScanStore: 'Δεν υπάρχει σάρωση καταλοίπων μετά από μια εφαρμογή Store: τα Windows αφαιρούν τα δικά της δεδομένα της εφαρμογής μαζί της.',
+      done: 'Τέλος',
+      summary: {
+        recycle: (programs, items, freed) => `Απεγκαταστάθηκαν ${programs} και στάλθηκαν ${items} στον Κάδο Ανακύκλωσης, ελευθερώνοντας ${freed}.`,
+        permanent: (programs, items, freed) => `Απεγκαταστάθηκαν ${programs} και διαγράφηκαν οριστικά ${items}, ελευθερώνοντας ${freed}.`,
+        quarantine: (programs, items, freed) => `Απεγκαταστάθηκαν ${programs} και μεταφέρθηκαν ${items} στην Καραντίνα, ελευθερώνοντας ${freed}.`,
+        programs: (n) => `${n} πρόγραμμ${n === 1 ? 'α' : 'ατα'}`,
+        items: (n) => `${n} στοιχεί${n === 1 ? 'ο' : 'α'} καταλοίπων`
+      },
+      noRestorePoint: (reason) => `Δεν δημιουργήθηκε σημείο επαναφοράς συστήματος (${reason}).`,
+      restorePointFallback: 'μη διαθέσιμο',
+      quarantineNote: 'Όλα τα παραπάνω παραμένουν στην Καραντίνα και μπορούν να επανέλθουν.',
+      failedRegistryKeys: (n) => `Αποτυχία αφαίρεσης ${n} κλειδι${n === 1 ? 'ού' : 'ών'} μητρώου — αυτά συνήθως απαιτούν το Prune να εκτελείται ως διαχειριστής.`
     }
   },
 
@@ -5247,6 +6183,110 @@ export const CATALOG = {
         message: (count) => `${count} archivo${count === 1 ? '' : 's'} bloqueado${count === 1 ? '' : 's'} omitido${count === 1 ? '' : 's'}.`,
         detail: 'Cierra las apps que los usan y limpia de nuevo.'
       }
+    },
+    leftoverReview: {
+      groups: { files: 'Archivos y carpetas', registryKeys: 'Claves del registro', scheduledTasks: 'Tareas programadas' },
+      notRemoved: 'encontrado, no eliminado',
+      checkFailed: (label) => `No se pudo comprobar ${label}.`,
+      itemNote: {
+        valueOnly: (valueName) => `Solo el valor "${valueName}" — la clave en la que se encuentra es compartida y permanece`,
+        uninstallEntry: 'Entrada de Agregar o quitar programas'
+      },
+      destinations: {
+        quarantine: { text: 'Los elementos seleccionados van a Cuarentena, donde puedes restaurarlos.', button: 'Eliminar seleccionados' },
+        recycle: { text: 'Los archivos seleccionados van a la Papelera de reciclaje. Las claves del registro se respaldan antes de eliminarse.', button: 'Eliminar seleccionados' },
+        permanent: { text: 'Los archivos seleccionados se eliminarán por completo y no se podrán restaurar. Las claves del registro se respaldan antes de eliminarse.', button: 'Eliminar permanentemente' }
+      },
+      clean: 'No se encontraron restos — desinstalación limpia.',
+      done: 'Listo',
+      foundWarning: (count) => `Se encontr${count === 1 ? 'ó' : 'aron'} ${count} elemento${count === 1 ? '' : 's'} residual${count === 1 ? '' : 'es'} que el desinstalador nativo pasó por alto. Revisa antes de purgar.`,
+      excludedNote: (count) => `${count} carpeta${count === 1 ? '' : 's'} omitida${count === 1 ? '' : 's'} porque ${count === 1 ? 'está' : 'están'} en tus exclusiones.`,
+      itemsSelected: 'elementos seleccionados',
+      reclaimable: 'recuperable',
+      skip: 'Omitir'
+    },
+    uninstallModal: {
+      titleForce: (name) => `Forzar eliminación de ${name}`,
+      titleNormal: (name) => `Desinstalar ${name}`,
+      close: 'Cerrar',
+      runningWarning: (name) => `${name} se está ejecutando ahora mismo. Ciérralo primero — un desinstalador suele fallar con un programa abierto, y puede dejar archivos que el próximo inicio recreará.`,
+      orphanedWarning: (reason) => `${reason} Windows lo seguirá mostrando hasta que se elimine la entrada.`,
+      brokenIntro: 'Prune buscará archivos y claves del registro que coincidan con este nombre, incluida su entrada de Agregar o quitar programas, y te mostrará todo antes de eliminar nada.',
+      searchForLabel: 'Buscar',
+      searchHint: (name) => `Tomado de "${name}" sin su versión — los instaladores nombran las carpetas según el producto, no la versión. Edítalo si los resultados parecen incorrectos.`,
+      scanFailed: (error) => `El escaneo falló: ${error}`,
+      searchButton: 'Buscar restos',
+      normalIntro: (name) => `Esto ejecuta el propio desinstalador de ${name} y luego busca cualquier cosa que deje atrás.`,
+      uninstallFailed: (error) => `La desinstalación falló: ${error}`,
+      startButton: 'Iniciar desinstalación',
+      noWorkingUninstaller: 'No hay un desinstalador funcional — se buscará por nombre en su lugar',
+      noUninstallCommand: 'No hay ningún comando de desinstalación registrado',
+      progress: {
+        runningNative: 'Ejecutando el desinstalador nativo',
+        backingUpRegistry: 'Respaldando el registro',
+        creatingRestorePoint: 'Creando un punto de restauración',
+        searchingLeftovers: 'Buscando restos',
+        scanningLeftovers: 'Escaneando restos',
+        checkingCommand: 'Comprobando el sistema de archivos, el registro y las tareas programadas…'
+      },
+      removing: {
+        quarantine: { title: 'Moviendo a Cuarentena', command: 'No se elimina nada — cada elemento se puede restaurar' },
+        recycle: { title: 'Enviando a la Papelera de reciclaje', command: 'Restáuralos desde la Papelera de reciclaje si es necesario' },
+        permanent: { title: 'Eliminando permanentemente', command: 'Estos no se pueden restaurar' }
+      },
+      noScan: (name) => `El desinstalador de ${name} ha terminado. El escaneo de restos está desactivado en Configuración, así que no se buscó nada más.`,
+      removalFailed: (error) => `La eliminación falló: ${error}`,
+      done: 'Listo',
+      summary: {
+        item: (n) => `${n} elemento${n === 1 ? '' : 's'}`,
+        registryKey: (n) => `${n} clave${n === 1 ? '' : 's'} del registro`,
+        recycle: (files, keys, freed) => `Se envi${'ó'} ${files} a la Papelera de reciclaje y se eliminó ${keys}, respaldados antes en Cuarentena. Se liberaron ${freed}.`,
+        permanent: (files, keys, freed) => `Se eliminó permanentemente ${files} y se eliminó ${keys}, respaldados antes en Cuarentena. Se liberaron ${freed}.`,
+        quarantine: (files, keys, freed) => `Se movieron ${files} y ${keys} a Cuarentena, liberando ${freed}. Restáuralos en cualquier momento desde la pantalla de Cuarentena.`
+      },
+      failedFilesHeading: (n) => `No se ${n === 1 ? 'pudo' : 'pudieron'} eliminar ${n} elemento${n === 1 ? '' : 's'}:`,
+      failedRegistryKeysHeading: (n) => `No se ${n === 1 ? 'pudo' : 'pudieron'} eliminar ${n} clave${n === 1 ? '' : 's'} del registro`,
+      failedRegistryKeysNote: 'estas suelen necesitar que Prune se ejecute como administrador:',
+      noRestorePoint: (reason) => `No se creó ningún punto de restauración del sistema (${reason}).`,
+      quarantineStillWorks: 'La restauración desde Cuarentena sigue funcionando.'
+    },
+    batchUninstallModal: {
+      title: (n) => `Desinstalar ${n} programa${n === 1 ? '' : 's'}`,
+      historyLabel: (n) => `Desinstalación por lotes: ${n} programas`,
+      close: 'Cerrar',
+      registryOnlyIntro: 'Cada aplicación se elimina a través de Windows por turnos, y no hay escaneo de restos después: Windows elimina los datos propios de la aplicación junto con ella.',
+      mixedIntro: (hasStore) => `El propio desinstalador de cada programa se ejecuta por turnos, luego Prune busca lo que dejan atrás y te muestra todo antes de eliminar nada de ello.${hasStore ? ' Las aplicaciones de la Store se eliminan a través de Windows en su lugar, sin escaneo de restos después.' : ''}`,
+      oneAtATime: 'De una en una, porque Windows solo permite una instalación o desinstalación a la vez. Algunos desinstaladores mostrarán sus propias ventanas y te harán preguntas.',
+      storeWarning: (count) => count === 1
+        ? 'La aplicación de la Store en este lote no se puede restaurar desde Cuarentena: eliminarla se lleva la aplicación y sus datos guardados, y recuperarla significa reinstalarla desde la Store.'
+        : `Las ${count} aplicaciones de la Store en este lote no se pueden restaurar desde Cuarentena: eliminar una se lleva la aplicación y sus datos guardados, y recuperarla significa reinstalarla desde la Store.`,
+      runsBefore: (name) => `se ejecuta antes de ${name}`,
+      reported: (bytes) => `${bytes} reportados`,
+      unknownSizeSuffix: (n) => `, ${n} de tamaño desconocido`,
+      startButton: 'Iniciar desinstalación',
+      status: { waiting: 'esperando', uninstalling: 'desinstalando…', removed: 'eliminado', failed: 'falló' },
+      removingLine: {
+        quarantine: 'Moviendo restos a Cuarentena…',
+        recycle: 'Enviando restos a la Papelera de reciclaje…',
+        permanent: 'Eliminando restos permanentemente…'
+      },
+      uninstalledOf: (removed, total) => `Se desinstalaron ${removed} de ${total}.`,
+      failedHeading: (n) => `No se ${n === 1 ? 'pudo' : 'pudieron'} desinstalar ${n} y se dej${n === 1 ? 'ó' : 'aron'} tal cual:`,
+      removeLeftoversFailed: (error) => `No se pudieron eliminar los restos: ${error}`,
+      noScanSettingsOff: 'El escaneo de restos está desactivado en Configuración, así que no se buscó nada.',
+      noScanStore: 'No hay escaneo de restos después de una aplicación de la Store: Windows elimina los datos propios de la aplicación junto con ella.',
+      done: 'Listo',
+      summary: {
+        recycle: (programs, items, freed) => `Se desinstalaron ${programs} y se enviaron ${items} a la Papelera de reciclaje, liberando ${freed}.`,
+        permanent: (programs, items, freed) => `Se desinstalaron ${programs} y se eliminaron ${items} permanentemente, liberando ${freed}.`,
+        quarantine: (programs, items, freed) => `Se desinstalaron ${programs} y se movieron ${items} a Cuarentena, liberando ${freed}.`,
+        programs: (n) => `${n} programa${n === 1 ? '' : 's'}`,
+        items: (n) => `${n} elemento${n === 1 ? '' : 's'} residual${n === 1 ? '' : 'es'}`
+      },
+      noRestorePoint: (reason) => `No se creó ningún punto de restauración del sistema (${reason}).`,
+      restorePointFallback: 'no disponible',
+      quarantineNote: 'Todo lo anterior sigue en Cuarentena y se puede devolver.',
+      failedRegistryKeys: (n) => `No se ${n === 1 ? 'pudo' : 'pudieron'} eliminar ${n} clave${n === 1 ? '' : 's'} del registro — estas suelen necesitar que Prune se ejecute como administrador.`
     }
   },
 
@@ -5769,6 +6809,110 @@ export const CATALOG = {
         message: (count) => `Jäeti vahele ${count} lukustatud fail${count === 1 ? '' : 'i'}.`,
         detail: 'Sulge rakendused, mis neid kasutavad, ja puhasta uuesti.'
       }
+    },
+    leftoverReview: {
+      groups: { files: 'Failid ja kaustad', registryKeys: 'Registrivõtmed', scheduledTasks: 'Ajastatud toimingud' },
+      notRemoved: 'leitud, ei eemaldatud',
+      checkFailed: (label) => `${label} kontrollimine ebaõnnestus.`,
+      itemNote: {
+        valueOnly: (valueName) => `Ainult väärtus "${valueName}" — võti, milles see asub, on jagatud ja jääb alles`,
+        uninstallEntry: 'Programmide lisamise/eemaldamise kirje'
+      },
+      destinations: {
+        quarantine: { text: 'Valitud üksused lähevad karantiini, kust saad need taastada.', button: 'Eemalda valitud' },
+        recycle: { text: 'Valitud failid lähevad prügikasti. Registrivõtmed varundatakse enne eemaldamist.', button: 'Eemalda valitud' },
+        permanent: { text: 'Valitud failid kustutatakse jäädavalt ja neid ei saa taastada. Registrivõtmed varundatakse enne eemaldamist.', button: 'Kustuta jäädavalt' }
+      },
+      clean: 'Jääke ei leitud — puhas desinstallimine.',
+      done: 'Valmis',
+      foundWarning: (count) => `Leiti ${count} allesjäänud ${count === 1 ? 'üksus' : 'üksust'}, mille algupärane desinstallija vahele jättis. Vaata üle enne puhastamist.`,
+      excludedNote: (count) => `${count} kaust jäeti välja, kuna ${count === 1 ? 'see on' : 'need on'} sinu välistuste hulgas.`,
+      itemsSelected: 'üksust valitud',
+      reclaimable: 'vabastatav',
+      skip: 'Jäta vahele'
+    },
+    uninstallModal: {
+      titleForce: (name) => `Sundeemalda ${name}`,
+      titleNormal: (name) => `Desinstalli ${name}`,
+      close: 'Sulge',
+      runningWarning: (name) => `${name} töötab praegu. Sulge see esmalt — desinstallija ebaõnnestub tavaliselt avatud programmiga ja võib jätta maha faile, mille järgmine käivitamine uuesti loob.`,
+      orphanedWarning: (reason) => `${reason} Windows jätkab selle kuvamist, kuni kirje eemaldatakse.`,
+      brokenIntro: 'Prune otsib faile ja registrivõtmeid, mis vastavad sellele nimele, sealhulgas selle programmide lisamise/eemaldamise kirjet, ja näitab sulle kõike enne midagi eemaldamist.',
+      searchForLabel: 'Otsi',
+      searchHint: (name) => `Võetud "${name}" versioonita — installijad nimetavad kaustu toote, mitte väljalaske järgi. Muuda seda, kui tulemused tunduvad valed.`,
+      scanFailed: (error) => `Skannimine ebaõnnestus: ${error}`,
+      searchButton: 'Otsi jääke',
+      normalIntro: (name) => `See käivitab ${name} enda desinstallija ja skannib seejärel kõike, mis maha jääb.`,
+      uninstallFailed: (error) => `Desinstallimine ebaõnnestus: ${error}`,
+      startButton: 'Alusta desinstallimist',
+      noWorkingUninstaller: 'Töötav desinstallija puudub — otsitakse selle asemel nime järgi',
+      noUninstallCommand: 'Ühtegi desinstallimiskäsku pole registreeritud',
+      progress: {
+        runningNative: 'Algupärase desinstallija käitamine',
+        backingUpRegistry: 'Registri varundamine',
+        creatingRestorePoint: 'Taastepunkti loomine',
+        searchingLeftovers: 'Jääkide otsimine',
+        scanningLeftovers: 'Jääkide skannimine',
+        checkingCommand: 'Failisüsteemi, registri ja ajastatud toimingute kontrollimine…'
+      },
+      removing: {
+        quarantine: { title: 'Liigutamine karantiini', command: 'Midagi ei kustutata — iga üksus on taastatav' },
+        recycle: { title: 'Saatmine prügikasti', command: 'Taasta need vajadusel prügikastist' },
+        permanent: { title: 'Jäädav kustutamine', command: 'Neid ei saa taastada' }
+      },
+      noScan: (name) => `${name} desinstallija on lõpetanud. Jääkide skannimine on seadetes välja lülitatud, seega ei otsitud midagi muud.`,
+      removalFailed: (error) => `Eemaldamine ebaõnnestus: ${error}`,
+      done: 'Valmis',
+      summary: {
+        item: (n) => `${n} üksus${n === 1 ? '' : 't'}`,
+        registryKey: (n) => `${n} registrivõti${n === 1 ? '' : 't'}`,
+        recycle: (files, keys, freed) => `Saadeti ${files} prügikasti ja eemaldati ${keys}, eelnevalt karantiini varundatud. Vabanes ${freed}.`,
+        permanent: (files, keys, freed) => `Kustutati jäädavalt ${files} ja eemaldati ${keys}, eelnevalt karantiini varundatud. Vabanes ${freed}.`,
+        quarantine: (files, keys, freed) => `Liigutati ${files} ja ${keys} karantiini, vabastades ${freed}. Taasta need igal ajal karantiini ekraanilt.`
+      },
+      failedFilesHeading: (n) => `${n} üksus${n === 1 ? '' : 't'} ei õnnestunud eemaldada:`,
+      failedRegistryKeysHeading: (n) => `${n} registrivõti${n === 1 ? '' : 't'} ei õnnestunud eemaldada`,
+      failedRegistryKeysNote: 'need vajavad tavaliselt, et Prune töötaks administraatorina:',
+      noRestorePoint: (reason) => `Süsteemi taastepunkti ei loodud (${reason}).`,
+      quarantineStillWorks: 'Karantiinist taastamine töötab endiselt.'
+    },
+    batchUninstallModal: {
+      title: (n) => `Desinstalli ${n} programm${n === 1 ? '' : 'i'}`,
+      historyLabel: (n) => `Rühmadesinstallimine: ${n} programmi`,
+      close: 'Sulge',
+      registryOnlyIntro: 'Iga rakendus eemaldatakse Windowsi kaudu järjekorras ning pärast seda jääkide skannimist ei toimu: Windows eemaldab rakenduse enda andmed koos sellega.',
+      mixedIntro: (hasStore) => `Iga programmi enda desinstallija käivitub järjekorras, seejärel skannib Prune, mis nad maha jätavad, ja näitab sulle kõike enne mille tahes eemaldamist.${hasStore ? ' Store\'i rakendused eemaldatakse selle asemel Windowsi kaudu, ilma järgneva jääkide skannimiseta.' : ''}`,
+      oneAtATime: 'Üks korraga, sest Windows lubab korraga ainult ühte installimist või desinstallimist. Mõned desinstallijad näitavad oma aknaid ja esitavad küsimusi.',
+      storeWarning: (count) => count === 1
+        ? "Selle partii Store'i rakendust ei saa karantiinist taastada: selle eemaldamine võtab kaasa rakenduse ja selle salvestatud andmed ning selle tagasisaamine tähendab selle uuesti installimist Store'ist."
+        : `Selle partii ${count} Store'i rakendust ei saa karantiinist taastada: ühe eemaldamine võtab kaasa rakenduse ja selle salvestatud andmed ning selle tagasisaamine tähendab selle uuesti installimist Store'ist.`,
+      runsBefore: (name) => `käivitub enne ${name}`,
+      reported: (bytes) => `${bytes} teatatud`,
+      unknownSizeSuffix: (n) => `, ${n} teadmata suurusega`,
+      startButton: 'Alusta desinstallimist',
+      status: { waiting: 'ootel', uninstalling: 'desinstallimine…', removed: 'eemaldatud', failed: 'ebaõnnestus' },
+      removingLine: {
+        quarantine: 'Jääkide liigutamine karantiini…',
+        recycle: 'Jääkide saatmine prügikasti…',
+        permanent: 'Jääkide jäädav kustutamine…'
+      },
+      uninstalledOf: (removed, total) => `Desinstalliti ${removed} ${total}-st.`,
+      failedHeading: (n) => `${n} ei õnnestunud desinstallida ja need jäeti rahule:`,
+      removeLeftoversFailed: (error) => `Jääkide eemaldamine ebaõnnestus: ${error}`,
+      noScanSettingsOff: 'Jääkide skannimine on seadetes välja lülitatud, seega ei otsitud midagi.',
+      noScanStore: "Store'i rakenduse järel jääkide skannimist ei toimu: Windows eemaldab rakenduse enda andmed koos sellega.",
+      done: 'Valmis',
+      summary: {
+        recycle: (programs, items, freed) => `Desinstalliti ${programs} ja saadeti ${items} prügikasti, vabastades ${freed}.`,
+        permanent: (programs, items, freed) => `Desinstalliti ${programs} ja kustutati jäädavalt ${items}, vabastades ${freed}.`,
+        quarantine: (programs, items, freed) => `Desinstalliti ${programs} ja liigutati ${items} karantiini, vabastades ${freed}.`,
+        programs: (n) => `${n} programm${n === 1 ? '' : 'i'}`,
+        items: (n) => `${n} allesjäänud üksus${n === 1 ? '' : 't'}`
+      },
+      noRestorePoint: (reason) => `Süsteemi taastepunkti ei loodud (${reason}).`,
+      restorePointFallback: 'pole saadaval',
+      quarantineNote: 'Kõik ülaltoodu on endiselt karantiinis ja saab tagasi panna.',
+      failedRegistryKeys: (n) => `${n} registrivõti${n === 1 ? '' : 't'} ei õnnestunud eemaldada — need vajavad tavaliselt, et Prune töötaks administraatorina.`
     }
   },
 
@@ -6291,6 +7435,110 @@ export const CATALOG = {
         message: (count) => `Ohitettiin ${count} lukittua tiedostoa.`,
         detail: 'Sulje niitä käyttävät sovellukset ja puhdista uudelleen.'
       }
+    },
+    leftoverReview: {
+      groups: { files: 'Tiedostot ja kansiot', registryKeys: 'Rekisteriavaimet', scheduledTasks: 'Ajastetut tehtävät' },
+      notRemoved: 'löytyi, ei poistettu',
+      checkFailed: (label) => `Kohteen ${label} tarkistus epäonnistui.`,
+      itemNote: {
+        valueOnly: (valueName) => `Vain arvo "${valueName}" — avain, jossa se sijaitsee, on jaettu ja säilyy`,
+        uninstallEntry: 'Ohjelmat ja toiminnot -merkintä'
+      },
+      destinations: {
+        quarantine: { text: 'Valitut kohteet siirtyvät karanteeniin, josta voit palauttaa ne.', button: 'Poista valitut' },
+        recycle: { text: 'Valitut tiedostot siirtyvät roskakoriin. Rekisteriavaimet varmuuskopioidaan ennen poistamista.', button: 'Poista valitut' },
+        permanent: { text: 'Valitut tiedostot poistetaan pysyvästi eikä niitä voi palauttaa. Rekisteriavaimet varmuuskopioidaan ennen poistamista.', button: 'Poista pysyvästi' }
+      },
+      clean: 'Jäänteitä ei löytynyt — puhdas poisto.',
+      done: 'Valmis',
+      foundWarning: (count) => `Löytyi ${count} jäljelle jäänyt${count === 1 ? '' : 'ttä'} kohde${count === 1 ? '' : 'tta'}, jotka alkuperäinen poisto-ohjelma jätti huomiotta. Tarkista ennen puhdistusta.`,
+      excludedNote: (count) => `${count} kansio${count === 1 ? '' : 'ta'} jätettiin pois, koska ${count === 1 ? 'se on' : 'ne ovat'} poissulkemissasi.`,
+      itemsSelected: 'kohdetta valittu',
+      reclaimable: 'vapautettavissa',
+      skip: 'Ohita'
+    },
+    uninstallModal: {
+      titleForce: (name) => `Pakota kohteen ${name} poisto`,
+      titleNormal: (name) => `Poista ${name}`,
+      close: 'Sulje',
+      runningWarning: (name) => `${name} on käynnissä juuri nyt. Sulje se ensin — poisto-ohjelma epäonnistuu yleensä avoinna olevan ohjelman kanssa ja voi jättää tiedostoja, jotka seuraava käynnistys luo uudelleen.`,
+      orphanedWarning: (reason) => `${reason} Windows näyttää sen edelleen, kunnes merkintä poistetaan.`,
+      brokenIntro: 'Prune etsii tätä nimeä vastaavia tiedostoja ja rekisteriavaimia, mukaan lukien sen Ohjelmat ja toiminnot -merkinnän, ja näyttää sinulle kaiken ennen minkään poistamista.',
+      searchForLabel: 'Hae',
+      searchHint: (name) => `Otettu nimestä "${name}" ilman versiota — asennusohjelmat nimeävät kansiot tuotteen, ei julkaisun mukaan. Muokkaa sitä, jos tulokset näyttävät väärältä.`,
+      scanFailed: (error) => `Skannaus epäonnistui: ${error}`,
+      searchButton: 'Hae jäänteitä',
+      normalIntro: (name) => `Tämä suorittaa ${name}n oman poisto-ohjelman ja skannaa sitten kaiken, mitä se jättää jälkeensä.`,
+      uninstallFailed: (error) => `Poisto epäonnistui: ${error}`,
+      startButton: 'Aloita poisto',
+      noWorkingUninstaller: 'Ei toimivaa poisto-ohjelmaa — haetaan sen sijaan nimen perusteella',
+      noUninstallCommand: 'Poistokomentoa ei ole rekisteröity',
+      progress: {
+        runningNative: 'Suoritetaan alkuperäistä poisto-ohjelmaa',
+        backingUpRegistry: 'Varmuuskopioidaan rekisteriä',
+        creatingRestorePoint: 'Luodaan palautuspistettä',
+        searchingLeftovers: 'Haetaan jäänteitä',
+        scanningLeftovers: 'Skannataan jäänteitä',
+        checkingCommand: 'Tarkistetaan tiedostojärjestelmää, rekisteriä ja ajastettuja tehtäviä…'
+      },
+      removing: {
+        quarantine: { title: 'Siirretään karanteeniin', command: 'Mitään ei poisteta — jokainen kohde on palautettavissa' },
+        recycle: { title: 'Lähetetään roskakoriin', command: 'Palauta ne roskakorista tarvittaessa' },
+        permanent: { title: 'Poistetaan pysyvästi', command: 'Näitä ei voi palauttaa' }
+      },
+      noScan: (name) => `${name}n poisto-ohjelma on valmis. Jäänteiden skannaus on pois päältä asetuksissa, joten muuta ei etsitty.`,
+      removalFailed: (error) => `Poistaminen epäonnistui: ${error}`,
+      done: 'Valmis',
+      summary: {
+        item: (n) => `${n} kohde${n === 1 ? '' : 'tta'}`,
+        registryKey: (n) => `${n} rekisteriavain${n === 1 ? '' : 'ta'}`,
+        recycle: (files, keys, freed) => `Lähetettiin ${files} roskakoriin ja poistettiin ${keys}, varmuuskopioitu ensin karanteeniin. Vapautettiin ${freed}.`,
+        permanent: (files, keys, freed) => `Poistettiin pysyvästi ${files} ja poistettiin ${keys}, varmuuskopioitu ensin karanteeniin. Vapautettiin ${freed}.`,
+        quarantine: (files, keys, freed) => `Siirrettiin ${files} ja ${keys} karanteeniin, vapauttaen ${freed}. Palauta ne milloin tahansa karanteeninäytöltä.`
+      },
+      failedFilesHeading: (n) => `${n} kohdetta ei voitu poistaa:`,
+      failedRegistryKeysHeading: (n) => `${n} rekisteriavainta ei voitu poistaa`,
+      failedRegistryKeysNote: 'nämä vaativat yleensä, että Prune toimii järjestelmänvalvojana:',
+      noRestorePoint: (reason) => `Järjestelmän palautuspistettä ei luotu (${reason}).`,
+      quarantineStillWorks: 'Karanteenista palauttaminen toimii edelleen.'
+    },
+    batchUninstallModal: {
+      title: (n) => `Poista ${n} ohjelma${n === 1 ? '' : 'a'}`,
+      historyLabel: (n) => `Erän poisto: ${n} ohjelmaa`,
+      close: 'Sulje',
+      registryOnlyIntro: 'Jokainen sovellus poistetaan Windowsin kautta vuorotellen, eikä sen jälkeen tehdä jäänteiden skannausta: Windows poistaa sovelluksen omat tiedot sen mukana.',
+      mixedIntro: (hasStore) => `Jokaisen ohjelman oma poisto-ohjelma suoritetaan vuorotellen, minkä jälkeen Prune skannaa, mitä ne jättävät jälkeensä, ja näyttää sinulle kaiken ennen minkään poistamista.${hasStore ? ' Store-sovellukset poistetaan sen sijaan Windowsin kautta, ilman jäänteiden skannausta jälkeenpäin.' : ''}`,
+      oneAtATime: 'Yksi kerrallaan, koska Windows sallii vain yhden asennuksen tai poiston kerrallaan. Jotkin poisto-ohjelmat näyttävät omat ikkunansa ja esittävät sinulle kysymyksiä.',
+      storeWarning: (count) => count === 1
+        ? 'Tämän erän Store-sovellusta ei voi palauttaa karanteenista: sen poistaminen vie mukanaan sovelluksen ja sen tallennetut tiedot, ja sen saaminen takaisin tarkoittaa sen asentamista uudelleen Storesta.'
+        : `Tämän erän ${count} Store-sovellusta ei voi palauttaa karanteenista: yhden poistaminen vie mukanaan sovelluksen ja sen tallennetut tiedot, ja sen saaminen takaisin tarkoittaa sen asentamista uudelleen Storesta.`,
+      runsBefore: (name) => `suoritetaan ennen kohdetta ${name}`,
+      reported: (bytes) => `${bytes} ilmoitettu`,
+      unknownSizeSuffix: (n) => `, ${n} kokoa ei tiedossa`,
+      startButton: 'Aloita poisto',
+      status: { waiting: 'odottaa', uninstalling: 'poistetaan…', removed: 'poistettu', failed: 'epäonnistui' },
+      removingLine: {
+        quarantine: 'Siirretään jäänteitä karanteeniin…',
+        recycle: 'Lähetetään jäänteitä roskakoriin…',
+        permanent: 'Poistetaan jäänteitä pysyvästi…'
+      },
+      uninstalledOf: (removed, total) => `Poistettiin ${removed}/${total}.`,
+      failedHeading: (n) => `${n} ei voitu poistaa ja ${n === 1 ? 'se jätettiin' : 'ne jätettiin'} rauhaan:`,
+      removeLeftoversFailed: (error) => `Jäänteiden poistaminen epäonnistui: ${error}`,
+      noScanSettingsOff: 'Jäänteiden skannaus on pois päältä asetuksissa, joten mitään ei etsitty.',
+      noScanStore: 'Store-sovelluksen jälkeen ei tehdä jäänteiden skannausta: Windows poistaa sovelluksen omat tiedot sen mukana.',
+      done: 'Valmis',
+      summary: {
+        recycle: (programs, items, freed) => `Poistettiin ${programs} ja lähetettiin ${items} roskakoriin, vapauttaen ${freed}.`,
+        permanent: (programs, items, freed) => `Poistettiin ${programs} ja poistettiin pysyvästi ${items}, vapauttaen ${freed}.`,
+        quarantine: (programs, items, freed) => `Poistettiin ${programs} ja siirrettiin ${items} karanteeniin, vapauttaen ${freed}.`,
+        programs: (n) => `${n} ohjelma${n === 1 ? '' : 'a'}`,
+        items: (n) => `${n} jäljelle jäänyt${n === 1 ? '' : 'ttä'} kohde${n === 1 ? '' : 'tta'}`
+      },
+      noRestorePoint: (reason) => `Järjestelmän palautuspistettä ei luotu (${reason}).`,
+      restorePointFallback: 'ei saatavilla',
+      quarantineNote: 'Kaikki yllä oleva on edelleen karanteenissa ja voidaan palauttaa.',
+      failedRegistryKeys: (n) => `${n} rekisteriavainta ei voitu poistaa — nämä vaativat yleensä, että Prune toimii järjestelmänvalvojana.`
     }
   },
 
@@ -6813,6 +8061,110 @@ export const CATALOG = {
         message: (count) => `${count} fichier${count === 1 ? '' : 's'} verrouillé${count === 1 ? '' : 's'} ignoré${count === 1 ? '' : 's'}.`,
         detail: 'Fermez les applications qui les utilisent et nettoyez à nouveau.'
       }
+    },
+    leftoverReview: {
+      groups: { files: 'Fichiers et dossiers', registryKeys: 'Clés de registre', scheduledTasks: 'Tâches planifiées' },
+      notRemoved: 'trouvé, non supprimé',
+      checkFailed: (label) => `Impossible de vérifier ${label}.`,
+      itemNote: {
+        valueOnly: (valueName) => `Uniquement la valeur « ${valueName} » — la clé dans laquelle elle se trouve est partagée et reste`,
+        uninstallEntry: 'Entrée Ajout/Suppression de programmes'
+      },
+      destinations: {
+        quarantine: { text: 'Les éléments sélectionnés vont en Quarantaine, où vous pouvez les restaurer.', button: 'Supprimer la sélection' },
+        recycle: { text: 'Les fichiers sélectionnés vont dans la Corbeille. Les clés de registre sont sauvegardées avant leur suppression.', button: 'Supprimer la sélection' },
+        permanent: { text: 'Les fichiers sélectionnés seront définitivement supprimés et ne pourront pas être restaurés. Les clés de registre sont sauvegardées avant leur suppression.', button: 'Supprimer définitivement' }
+      },
+      clean: 'Aucun résidu trouvé — désinstallation propre.',
+      done: 'Terminé',
+      foundWarning: (count) => `${count} élément${count === 1 ? '' : 's'} résiduel${count === 1 ? '' : 's'} trouvé${count === 1 ? '' : 's'}, oublié${count === 1 ? '' : 's'} par le désinstalleur natif. Vérifiez avant de purger.`,
+      excludedNote: (count) => `${count} dossier${count === 1 ? '' : 's'} laissé${count === 1 ? '' : 's'} de côté car ${count === 1 ? 'il figure' : 'ils figurent'} dans vos exclusions.`,
+      itemsSelected: 'éléments sélectionnés',
+      reclaimable: 'récupérable',
+      skip: 'Ignorer'
+    },
+    uninstallModal: {
+      titleForce: (name) => `Forcer la suppression de ${name}`,
+      titleNormal: (name) => `Désinstaller ${name}`,
+      close: 'Fermer',
+      runningWarning: (name) => `${name} est en cours d'exécution en ce moment. Fermez-le d'abord — un désinstalleur échoue généralement sur un programme ouvert, et peut laisser des fichiers que le prochain lancement recréera.`,
+      orphanedWarning: (reason) => `${reason} Windows continuera à le lister tant que l'entrée n'est pas supprimée.`,
+      brokenIntro: "Prune recherchera les fichiers et clés de registre correspondant à ce nom, y compris son entrée Ajout/Suppression de programmes, et vous montrera tout avant de rien supprimer.",
+      searchForLabel: 'Rechercher',
+      searchHint: (name) => `Extrait de « ${name} » sans sa version — les installateurs nomment les dossiers d'après le produit, pas la version. Modifiez-le si les résultats semblent incorrects.`,
+      scanFailed: (error) => `L'analyse a échoué : ${error}`,
+      searchButton: 'Rechercher les résidus',
+      normalIntro: (name) => `Ceci exécute le propre désinstalleur de ${name}, puis recherche tout ce qu'il laisse derrière lui.`,
+      uninstallFailed: (error) => `La désinstallation a échoué : ${error}`,
+      startButton: 'Démarrer la désinstallation',
+      noWorkingUninstaller: 'Aucun désinstalleur fonctionnel — recherche par nom à la place',
+      noUninstallCommand: 'Aucune commande de désinstallation enregistrée',
+      progress: {
+        runningNative: 'Exécution du désinstalleur natif',
+        backingUpRegistry: 'Sauvegarde du registre',
+        creatingRestorePoint: "Création d'un point de restauration",
+        searchingLeftovers: 'Recherche des résidus',
+        scanningLeftovers: 'Analyse des résidus',
+        checkingCommand: 'Vérification du système de fichiers, du registre et des tâches planifiées…'
+      },
+      removing: {
+        quarantine: { title: 'Déplacement vers la Quarantaine', command: "Rien n'est supprimé — chaque élément peut être restauré" },
+        recycle: { title: 'Envoi vers la Corbeille', command: 'Restaurez-les depuis la Corbeille si nécessaire' },
+        permanent: { title: 'Suppression définitive', command: 'Ceux-ci ne peuvent pas être restaurés' }
+      },
+      noScan: (name) => `Le désinstalleur de ${name} a terminé. L'analyse des résidus est désactivée dans les Paramètres, donc rien d'autre n'a été recherché.`,
+      removalFailed: (error) => `La suppression a échoué : ${error}`,
+      done: 'Terminé',
+      summary: {
+        item: (n) => `${n} élément${n === 1 ? '' : 's'}`,
+        registryKey: (n) => `${n} clé${n === 1 ? '' : 's'} de registre`,
+        recycle: (files, keys, freed) => `${files} envoyé${files === '1 élément' ? '' : 's'} vers la Corbeille et ${keys} supprimé${'s'}, sauvegardés d'abord en Quarantaine. ${freed} libéré${'s'}.`,
+        permanent: (files, keys, freed) => `${files} supprimé${'s'} définitivement et ${keys} supprimé${'s'}, sauvegardés d'abord en Quarantaine. ${freed} libéré${'s'}.`,
+        quarantine: (files, keys, freed) => `${files} et ${keys} déplacés vers la Quarantaine, libérant ${freed}. Restaurez-les à tout moment depuis l'écran Quarantaine.`
+      },
+      failedFilesHeading: (n) => `${n} élément${n === 1 ? '' : 's'} n'${n === 1 ? 'a' : 'ont'} pas pu être supprimé${n === 1 ? '' : 's'} :`,
+      failedRegistryKeysHeading: (n) => `${n} clé${n === 1 ? '' : 's'} de registre n'${n === 1 ? 'a' : 'ont'} pas pu être supprimée${n === 1 ? '' : 's'}`,
+      failedRegistryKeysNote: "celles-ci nécessitent généralement que Prune s'exécute en tant qu'administrateur :",
+      noRestorePoint: (reason) => `Aucun point de restauration système n'a été créé (${reason}).`,
+      quarantineStillWorks: 'La restauration depuis la Quarantaine fonctionne toujours.'
+    },
+    batchUninstallModal: {
+      title: (n) => `Désinstaller ${n} programme${n === 1 ? '' : 's'}`,
+      historyLabel: (n) => `Désinstallation groupée : ${n} programmes`,
+      close: 'Fermer',
+      registryOnlyIntro: "Chaque application est supprimée via Windows à tour de rôle, et il n'y a pas d'analyse des résidus ensuite : Windows supprime les données propres de l'application en même temps qu'elle.",
+      mixedIntro: (hasStore) => `Le propre désinstalleur de chaque programme s'exécute à tour de rôle, puis Prune recherche ce qu'ils laissent derrière eux et vous montre tout avant d'en supprimer quoi que ce soit.${hasStore ? " Les applications du Store sont supprimées via Windows à la place, sans analyse des résidus ensuite." : ''}`,
+      oneAtATime: "Une à la fois, car Windows ne permet qu'une seule installation ou désinstallation à la fois. Certains désinstalleurs afficheront leurs propres fenêtres et vous poseront des questions.",
+      storeWarning: (count) => count === 1
+        ? "L'application du Store dans ce lot ne peut pas être restaurée depuis la Quarantaine : la supprimer emporte l'application et ses données enregistrées, et la récupérer signifie la réinstaller depuis le Store."
+        : `Les ${count} applications du Store dans ce lot ne peuvent pas être restaurées depuis la Quarantaine : en supprimer une emporte l'application et ses données enregistrées, et la récupérer signifie la réinstaller depuis le Store.`,
+      runsBefore: (name) => `s'exécute avant ${name}`,
+      reported: (bytes) => `${bytes} signalés`,
+      unknownSizeSuffix: (n) => `, ${n} de taille inconnue`,
+      startButton: 'Démarrer la désinstallation',
+      status: { waiting: 'en attente', uninstalling: 'désinstallation…', removed: 'supprimé', failed: 'échec' },
+      removingLine: {
+        quarantine: 'Déplacement des résidus vers la Quarantaine…',
+        recycle: 'Envoi des résidus vers la Corbeille…',
+        permanent: 'Suppression définitive des résidus…'
+      },
+      uninstalledOf: (removed, total) => `${removed} désinstallé${removed === 1 ? '' : 's'} sur ${total}.`,
+      failedHeading: (n) => `${n} n'${n === 1 ? 'a' : 'ont'} pas pu être désinstallé${n === 1 ? '' : 's'} et ${n === 1 ? 'a été laissé' : 'ont été laissés'} tel${n === 1 ? '' : 's'} quel${n === 1 ? '' : 's'} :`,
+      removeLeftoversFailed: (error) => `Impossible de supprimer les résidus : ${error}`,
+      noScanSettingsOff: "L'analyse des résidus est désactivée dans les Paramètres, donc rien n'a été recherché.",
+      noScanStore: "Il n'y a pas d'analyse des résidus après une application du Store : Windows supprime les données propres de l'application en même temps qu'elle.",
+      done: 'Terminé',
+      summary: {
+        recycle: (programs, items, freed) => `${programs} désinstallé${'s'} et ${items} envoyé${'s'} vers la Corbeille, libérant ${freed}.`,
+        permanent: (programs, items, freed) => `${programs} désinstallé${'s'} et ${items} supprimé${'s'} définitivement, libérant ${freed}.`,
+        quarantine: (programs, items, freed) => `${programs} désinstallé${'s'} et ${items} déplacé${'s'} vers la Quarantaine, libérant ${freed}.`,
+        programs: (n) => `${n} programme${n === 1 ? '' : 's'}`,
+        items: (n) => `${n} élément${n === 1 ? '' : 's'} résiduel${n === 1 ? '' : 's'}`
+      },
+      noRestorePoint: (reason) => `Aucun point de restauration système n'a été créé (${reason}).`,
+      restorePointFallback: 'non disponible',
+      quarantineNote: "Tout ce qui précède est toujours en Quarantaine et peut être remis en place.",
+      failedRegistryKeys: (n) => `${n} clé${n === 1 ? '' : 's'} de registre n'${n === 1 ? 'a' : 'ont'} pas pu être supprimée${n === 1 ? '' : 's'} — celles-ci nécessitent généralement que Prune s'exécute en tant qu'administrateur.`
     }
   },
 
@@ -7335,6 +8687,110 @@ export const CATALOG = {
         message: (count) => `דולגו ${count} קבצים נעולים.`,
         detail: 'סגור את האפליקציות המשתמשות בהם ונקה שוב.'
       }
+    },
+    leftoverReview: {
+      groups: { files: 'קבצים ותיקיות', registryKeys: 'מפתחות רישום', scheduledTasks: 'משימות מתוזמנות' },
+      notRemoved: 'נמצא, לא הוסר',
+      checkFailed: (label) => `לא ניתן היה לבדוק את ${label}.`,
+      itemNote: {
+        valueOnly: (valueName) => `רק הערך "${valueName}" — המפתח שבו הוא נמצא משותף ונשאר`,
+        uninstallEntry: 'רשומת הוספה/הסרה של תוכניות'
+      },
+      destinations: {
+        quarantine: { text: 'פריטים שנבחרו עוברים להסגר, שם תוכל לשחזר אותם.', button: 'הסר את הנבחרים' },
+        recycle: { text: 'קבצים שנבחרו עוברים לסל המיחזור. מפתחות רישום מגובים לפני הסרתם.', button: 'הסר את הנבחרים' },
+        permanent: { text: 'קבצים שנבחרו יימחקו לצמיתות ולא ניתן יהיה לשחזרם. מפתחות רישום מגובים לפני הסרתם.', button: 'מחק לצמיתות' }
+      },
+      clean: 'לא נמצאו שאריות — הסרה נקייה.',
+      done: 'סיום',
+      foundWarning: (count) => `נמצאו ${count} פריטים שנותרו שתוכנית ההסרה המקורית פספסה. סקור לפני הטיהור.`,
+      excludedNote: (count) => `${count} תיקיות הושמטו כי הן ברשימת ההחרגות שלך.`,
+      itemsSelected: 'פריטים נבחרו',
+      reclaimable: 'ניתן לשחרור',
+      skip: 'דלג'
+    },
+    uninstallModal: {
+      titleForce: (name) => `הסרה כפויה של ${name}`,
+      titleNormal: (name) => `הסר את ${name}`,
+      close: 'סגור',
+      runningWarning: (name) => `${name} פועל כרגע. סגור אותו תחילה — תוכנית הסרה בדרך כלל נכשלת בתוכנית פתוחה, ועלולה להשאיר קבצים שההפעלה הבאה תיצור מחדש.`,
+      orphanedWarning: (reason) => `${reason} Windows ימשיך לרשום אותו עד שהרשומה תוסר.`,
+      brokenIntro: 'Prune יחפש קבצים ומפתחות רישום התואמים לשם זה, כולל רשומת ההוספה/הסרה של תוכניות שלו, ויציג לך הכול לפני שיוסר משהו.',
+      searchForLabel: 'חפש עבור',
+      searchHint: (name) => `נלקח מ-"${name}" ללא הגרסה — תוכניות התקנה קוראות לתיקיות על שם המוצר, לא הגרסה. ערוך זאת אם התוצאות נראות שגויות.`,
+      scanFailed: (error) => `הסריקה נכשלה: ${error}`,
+      searchButton: 'חפש שאריות',
+      normalIntro: (name) => `זה מריץ את תוכנית ההסרה של ${name} עצמו, ואז סורק אחר כל דבר שהוא משאיר מאחור.`,
+      uninstallFailed: (error) => `ההסרה נכשלה: ${error}`,
+      startButton: 'התחל הסרה',
+      noWorkingUninstaller: 'אין תוכנית הסרה פעילה — יחפש לפי שם במקום זאת',
+      noUninstallCommand: 'לא נרשמה פקודת הסרה',
+      progress: {
+        runningNative: 'מריץ את תוכנית ההסרה המקורית',
+        backingUpRegistry: 'מגבה את הרישום',
+        creatingRestorePoint: 'יוצר נקודת שחזור',
+        searchingLeftovers: 'מחפש שאריות',
+        scanningLeftovers: 'סורק שאריות',
+        checkingCommand: 'בודק מערכת קבצים, רישום ומשימות מתוזמנות…'
+      },
+      removing: {
+        quarantine: { title: 'מעביר להסגר', command: 'שום דבר לא נמחק — כל פריט ניתן לשחזור' },
+        recycle: { title: 'שולח לסל המיחזור', command: 'שחזר אותם מסל המיחזור במידת הצורך' },
+        permanent: { title: 'מוחק לצמיתות', command: 'לא ניתן לשחזר אלה' }
+      },
+      noScan: (name) => `תוכנית ההסרה של ${name} סיימה. סריקת השאריות כבויה בהגדרות, כך שלא חופש דבר נוסף.`,
+      removalFailed: (error) => `ההסרה נכשלה: ${error}`,
+      done: 'סיום',
+      summary: {
+        item: (n) => `${n} פריטים`,
+        registryKey: (n) => `${n} מפתחות רישום`,
+        recycle: (files, keys, freed) => `נשלחו ${files} לסל המיחזור והוסרו ${keys}, גובו תחילה בהסגר. שוחררו ${freed}.`,
+        permanent: (files, keys, freed) => `נמחקו ${files} לצמיתות והוסרו ${keys}, גובו תחילה בהסגר. שוחררו ${freed}.`,
+        quarantine: (files, keys, freed) => `הועברו ${files} ו-${keys} להסגר, ושוחררו ${freed}. שחזר אותם בכל עת ממסך ההסגר.`
+      },
+      failedFilesHeading: (n) => `לא ניתן היה להסיר ${n} פריטים:`,
+      failedRegistryKeysHeading: (n) => `לא ניתן היה להסיר ${n} מפתחות רישום`,
+      failedRegistryKeysNote: 'אלה בדרך כלל דורשים ש-Prune ירוץ כמנהל:',
+      noRestorePoint: (reason) => `לא נוצרה נקודת שחזור מערכת (${reason}).`,
+      quarantineStillWorks: 'שחזור ההסגר עדיין עובד.'
+    },
+    batchUninstallModal: {
+      title: (n) => `הסר ${n} תוכניות`,
+      historyLabel: (n) => `הסרה קבוצתית: ${n} תוכניות`,
+      close: 'סגור',
+      registryOnlyIntro: 'כל אפליקציה מוסרת דרך Windows בתורה, ואין סריקת שאריות לאחר מכן: Windows מסיר את הנתונים של האפליקציה עצמה יחד איתה.',
+      mixedIntro: (hasStore) => `תוכנית ההסרה של כל תוכנית פועלת בתורה, ואז Prune סורק את מה שהן משאירות מאחור ומציג לך הכול לפני הסרת משהו ממנו.${hasStore ? ' אפליקציות מהחנות מוסרות דרך Windows במקום זאת, ללא סריקת שאריות לאחר מכן.' : ''}`,
+      oneAtATime: 'אחת בכל פעם, כי Windows מאפשר רק התקנה או הסרה אחת בכל פעם. חלק מתוכניות ההסרה יציגו את חלונותיהן שלהן וישאלו אותך שאלות.',
+      storeWarning: (count) => count === 1
+        ? 'לא ניתן לשחזר את אפליקציית החנות באצווה זו מההסגר: הסרתה לוקחת את האפליקציה והנתונים השמורים שלה, והחזרתה משמעה התקנה מחדש מהחנות.'
+        : `לא ניתן לשחזר את ${count} אפליקציות החנות באצווה זו מההסגר: הסרת אחת לוקחת את האפליקציה והנתונים השמורים שלה, והחזרתה משמעה התקנה מחדש מהחנות.`,
+      runsBefore: (name) => `רץ לפני ${name}`,
+      reported: (bytes) => `${bytes} דווחו`,
+      unknownSizeSuffix: (n) => `, ${n} בגודל לא ידוע`,
+      startButton: 'התחל הסרה',
+      status: { waiting: 'ממתין', uninstalling: 'מסיר…', removed: 'הוסר', failed: 'נכשל' },
+      removingLine: {
+        quarantine: 'מעביר שאריות להסגר…',
+        recycle: 'שולח שאריות לסל המיחזור…',
+        permanent: 'מוחק שאריות לצמיתות…'
+      },
+      uninstalledOf: (removed, total) => `הוסרו ${removed} מתוך ${total}.`,
+      failedHeading: (n) => `לא ניתן היה להסיר ${n} והן נותרו כפי שהן:`,
+      removeLeftoversFailed: (error) => `לא ניתן היה להסיר שאריות: ${error}`,
+      noScanSettingsOff: 'סריקת השאריות כבויה בהגדרות, כך שלא חופש דבר.',
+      noScanStore: 'אין סריקת שאריות אחרי אפליקציית חנות: Windows מסיר את הנתונים של האפליקציה עצמה יחד איתה.',
+      done: 'סיום',
+      summary: {
+        recycle: (programs, items, freed) => `הוסרו ${programs} ונשלחו ${items} לסל המיחזור, ששחרר ${freed}.`,
+        permanent: (programs, items, freed) => `הוסרו ${programs} ונמחקו ${items} לצמיתות, ששחרר ${freed}.`,
+        quarantine: (programs, items, freed) => `הוסרו ${programs} והועברו ${items} להסגר, ששחרר ${freed}.`,
+        programs: (n) => `${n} תוכניות`,
+        items: (n) => `${n} פריטים שנותרו`
+      },
+      noRestorePoint: (reason) => `לא נוצרה נקודת שחזור מערכת (${reason}).`,
+      restorePointFallback: 'לא זמין',
+      quarantineNote: 'כל האמור לעיל עדיין נמצא בהסגר וניתן להחזירו.',
+      failedRegistryKeys: (n) => `לא ניתן היה להסיר ${n} מפתחות רישום — אלה בדרך כלל דורשים ש-Prune ירוץ כמנהל.`
     }
   },
 
@@ -7857,6 +9313,110 @@ export const CATALOG = {
         message: (count) => `${count} zárolt fájl kihagyva.`,
         detail: 'Zárd be az azokat használó alkalmazásokat, és tisztíts újra.'
       }
+    },
+    leftoverReview: {
+      groups: { files: 'Fájlok és mappák', registryKeys: 'Rendszerleíró kulcsok', scheduledTasks: 'Ütemezett feladatok' },
+      notRemoved: 'megtalálva, nem eltávolítva',
+      checkFailed: (label) => `Nem sikerült ellenőrizni: ${label}.`,
+      itemNote: {
+        valueOnly: (valueName) => `Csak a(z) „${valueName}” érték — a kulcs, amelyben található, megosztott és megmarad`,
+        uninstallEntry: 'Programok és szolgáltatások bejegyzés'
+      },
+      destinations: {
+        quarantine: { text: 'A kijelölt elemek karanténba kerülnek, ahonnan visszaállíthatod őket.', button: 'Kijelöltek eltávolítása' },
+        recycle: { text: 'A kijelölt fájlok a Lomtárba kerülnek. A rendszerleíró kulcsok mentésre kerülnek eltávolítás előtt.', button: 'Kijelöltek eltávolítása' },
+        permanent: { text: 'A kijelölt fájlok véglegesen törlődnek, és nem állíthatók vissza. A rendszerleíró kulcsok mentésre kerülnek eltávolítás előtt.', button: 'Végleges törlés' }
+      },
+      clean: 'Nem található maradvány — tiszta eltávolítás.',
+      done: 'Kész',
+      foundWarning: (count) => `${count} megmaradt elem található, amelyet a natív eltávolító kihagyott. Ellenőrizd a tisztítás előtt.`,
+      excludedNote: (count) => `${count} mappa kimaradt, mert szerepel a kizárásaid között.`,
+      itemsSelected: 'elem kijelölve',
+      reclaimable: 'felszabadítható',
+      skip: 'Kihagyás'
+    },
+    uninstallModal: {
+      titleForce: (name) => `${name} kényszerített eltávolítása`,
+      titleNormal: (name) => `${name} eltávolítása`,
+      close: 'Bezárás',
+      runningWarning: (name) => `A(z) ${name} éppen fut. Zárd be előbb — egy eltávolító általában sikertelen egy nyitott programnál, és fájlokat hagyhat hátra, amiket a következő indítás újra létrehoz.`,
+      orphanedWarning: (reason) => `${reason} A Windows tovább fogja listázni, amíg a bejegyzést el nem távolítják.`,
+      brokenIntro: 'A Prune ehhez a névhez illő fájlokat és rendszerleíró kulcsokat fog keresni, beleértve a Programok és szolgáltatások bejegyzést is, és megmutat mindent, mielőtt bármit eltávolítana.',
+      searchForLabel: 'Keresés erre',
+      searchHint: (name) => `A(z) „${name}” névből véve, verziószám nélkül — a telepítők a terméknek megfelelően nevezik el a mappákat, nem a kiadásnak. Szerkeszd, ha az eredmények hibásnak tűnnek.`,
+      scanFailed: (error) => `A vizsgálat sikertelen: ${error}`,
+      searchButton: 'Maradványok keresése',
+      normalIntro: (name) => `Ez lefuttatja a(z) ${name} saját eltávolítóját, majd megkeresi, amit hátrahagy.`,
+      uninstallFailed: (error) => `Az eltávolítás sikertelen: ${error}`,
+      startButton: 'Eltávolítás indítása',
+      noWorkingUninstaller: 'Nincs működő eltávolító — helyette név szerint keres',
+      noUninstallCommand: 'Nincs regisztrált eltávolítási parancs',
+      progress: {
+        runningNative: 'Natív eltávolító futtatása',
+        backingUpRegistry: 'Rendszerleíró adatbázis mentése',
+        creatingRestorePoint: 'Visszaállítási pont létrehozása',
+        searchingLeftovers: 'Maradványok keresése',
+        scanningLeftovers: 'Maradványok vizsgálata',
+        checkingCommand: 'Fájlrendszer, rendszerleíró adatbázis és ütemezett feladatok ellenőrzése…'
+      },
+      removing: {
+        quarantine: { title: 'Áthelyezés karanténba', command: 'Semmi sem törlődik — minden elem visszaállítható' },
+        recycle: { title: 'Küldés a Lomtárba', command: 'Állítsd vissza őket a Lomtárból, ha szükséges' },
+        permanent: { title: 'Végleges törlés', command: 'Ezek nem állíthatók vissza' }
+      },
+      noScan: (name) => `A(z) ${name} eltávolítója befejezte a munkát. A maradványvizsgálat ki van kapcsolva a Beállításokban, így semmi mást nem kerestünk.`,
+      removalFailed: (error) => `Az eltávolítás sikertelen: ${error}`,
+      done: 'Kész',
+      summary: {
+        item: (n) => `${n} elem`,
+        registryKey: (n) => `${n} rendszerleíró kulcs`,
+        recycle: (files, keys, freed) => `${files} elküldve a Lomtárba, és ${keys} eltávolítva, előbb a karanténba mentve. ${freed} felszabadítva.`,
+        permanent: (files, keys, freed) => `${files} véglegesen törölve, és ${keys} eltávolítva, előbb a karanténba mentve. ${freed} felszabadítva.`,
+        quarantine: (files, keys, freed) => `${files} és ${keys} karanténba helyezve, ${freed} felszabadítva. Bármikor visszaállítható a Karantén képernyőről.`
+      },
+      failedFilesHeading: (n) => `${n} elemet nem sikerült eltávolítani:`,
+      failedRegistryKeysHeading: (n) => `${n} rendszerleíró kulcsot nem sikerült eltávolítani`,
+      failedRegistryKeysNote: 'ezekhez általában rendszergazdaként futó Prune szükséges:',
+      noRestorePoint: (reason) => `Nem jött létre rendszer-visszaállítási pont (${reason}).`,
+      quarantineStillWorks: 'A karantén-visszaállítás továbbra is működik.'
+    },
+    batchUninstallModal: {
+      title: (n) => `${n} program eltávolítása`,
+      historyLabel: (n) => `Kötegelt eltávolítás: ${n} program`,
+      close: 'Bezárás',
+      registryOnlyIntro: 'Minden alkalmazást sorban távolít el a Windows, és utána nincs maradványvizsgálat: a Windows az alkalmazás saját adatait is eltávolítja vele együtt.',
+      mixedIntro: (hasStore) => `Minden program saját eltávolítója sorban lefut, majd a Prune megvizsgálja, mit hagynak hátra, és megmutat mindent, mielőtt bármit is eltávolítana belőle.${hasStore ? ' A Store-alkalmazásokat helyette a Windows távolítja el, utólagos maradványvizsgálat nélkül.' : ''}`,
+      oneAtATime: 'Egyenként, mert a Windows egyszerre csak egy telepítést vagy eltávolítást engedélyez. Egyes eltávolítók saját ablakokat jelenítenek meg, és kérdéseket tesznek fel.',
+      storeWarning: (count) => count === 1
+        ? 'Az ebben a kötegben lévő Store-alkalmazás nem állítható vissza a karanténból: eltávolítása magával viszi az alkalmazást és mentett adatait, visszaszerzése pedig újratelepítést jelent a Store-ból.'
+        : `Az ebben a kötegben lévő ${count} Store-alkalmazás nem állítható vissza a karanténból: egy eltávolítása magával viszi az alkalmazást és mentett adatait, visszaszerzése pedig újratelepítést jelent a Store-ból.`,
+      runsBefore: (name) => `előbb fut, mint ${name}`,
+      reported: (bytes) => `${bytes} jelentve`,
+      unknownSizeSuffix: (n) => `, ${n} ismeretlen méretű`,
+      startButton: 'Eltávolítás indítása',
+      status: { waiting: 'várakozik', uninstalling: 'eltávolítás…', removed: 'eltávolítva', failed: 'sikertelen' },
+      removingLine: {
+        quarantine: 'Maradványok áthelyezése karanténba…',
+        recycle: 'Maradványok küldése a Lomtárba…',
+        permanent: 'Maradványok végleges törlése…'
+      },
+      uninstalledOf: (removed, total) => `${removed}/${total} eltávolítva.`,
+      failedHeading: (n) => `${n} eltávolítása sikertelen volt, és érintetlenül maradt${n === 1 ? '' : 'ak'}:`,
+      removeLeftoversFailed: (error) => `Nem sikerült eltávolítani a maradványokat: ${error}`,
+      noScanSettingsOff: 'A maradványvizsgálat ki van kapcsolva a Beállításokban, így semmit nem kerestünk.',
+      noScanStore: 'Egy Store-alkalmazás után nincs maradványvizsgálat: a Windows az alkalmazás saját adatait is eltávolítja vele együtt.',
+      done: 'Kész',
+      summary: {
+        recycle: (programs, items, freed) => `${programs} eltávolítva, ${items} elküldve a Lomtárba, ${freed} felszabadítva.`,
+        permanent: (programs, items, freed) => `${programs} eltávolítva, ${items} véglegesen törölve, ${freed} felszabadítva.`,
+        quarantine: (programs, items, freed) => `${programs} eltávolítva, ${items} karanténba helyezve, ${freed} felszabadítva.`,
+        programs: (n) => `${n} program`,
+        items: (n) => `${n} megmaradt elem`
+      },
+      noRestorePoint: (reason) => `Nem jött létre rendszer-visszaállítási pont (${reason}).`,
+      restorePointFallback: 'nem érhető el',
+      quarantineNote: 'A fentiek mind a karanténban maradnak, és visszatehetők.',
+      failedRegistryKeys: (n) => `${n} rendszerleíró kulcsot nem sikerült eltávolítani — ezekhez általában rendszergazdaként futó Prune szükséges.`
     }
   },
 
@@ -8379,6 +9939,110 @@ export const CATALOG = {
         message: (count) => `Melewati ${count} berkas terkunci.`,
         detail: 'Tutup aplikasi yang menggunakannya dan bersihkan lagi.'
       }
+    },
+    leftoverReview: {
+      groups: { files: 'File & folder', registryKeys: 'Kunci registri', scheduledTasks: 'Tugas terjadwal' },
+      notRemoved: 'ditemukan, tidak dihapus',
+      checkFailed: (label) => `Tidak dapat memeriksa ${label}.`,
+      itemNote: {
+        valueOnly: (valueName) => `Hanya nilai "${valueName}" — kunci tempatnya berada digunakan bersama dan tetap ada`,
+        uninstallEntry: 'Entri Tambah/Hapus Program'
+      },
+      destinations: {
+        quarantine: { text: 'Item yang dipilih akan masuk ke Karantina, tempat kamu dapat memulihkannya.', button: 'Hapus yang dipilih' },
+        recycle: { text: 'File yang dipilih akan masuk ke Recycle Bin. Kunci registri dicadangkan sebelum dihapus.', button: 'Hapus yang dipilih' },
+        permanent: { text: 'File yang dipilih akan dihapus permanen dan tidak dapat dipulihkan. Kunci registri dicadangkan sebelum dihapus.', button: 'Hapus permanen' }
+      },
+      clean: 'Tidak ditemukan sisa — uninstal bersih.',
+      done: 'Selesai',
+      foundWarning: (count) => `Ditemukan ${count} item sisa yang terlewat oleh uninstaller asli. Tinjau sebelum membersihkan.`,
+      excludedNote: (count) => `${count} folder dikecualikan karena ada dalam pengecualianmu.`,
+      itemsSelected: 'item dipilih',
+      reclaimable: 'dapat dibebaskan',
+      skip: 'Lewati'
+    },
+    uninstallModal: {
+      titleForce: (name) => `Paksa hapus ${name}`,
+      titleNormal: (name) => `Uninstal ${name}`,
+      close: 'Tutup',
+      runningWarning: (name) => `${name} sedang berjalan sekarang. Tutup dulu — uninstaller biasanya gagal pada program yang terbuka, dan dapat meninggalkan file yang akan dibuat ulang oleh peluncuran berikutnya.`,
+      orphanedWarning: (reason) => `${reason} Windows akan terus mencantumkannya sampai entri dihapus.`,
+      brokenIntro: 'Prune akan mencari file dan kunci registri yang cocok dengan nama ini, termasuk entri Tambah/Hapus Program-nya, dan menampilkan semuanya sebelum menghapus apa pun.',
+      searchForLabel: 'Cari',
+      searchHint: (name) => `Diambil dari "${name}" tanpa versinya — installer menamai folder berdasarkan produk, bukan rilis. Edit jika hasilnya terlihat salah.`,
+      scanFailed: (error) => `Pemindaian gagal: ${error}`,
+      searchButton: 'Cari sisa',
+      normalIntro: (name) => `Ini menjalankan uninstaller ${name} sendiri, lalu memindai apa pun yang ditinggalkannya.`,
+      uninstallFailed: (error) => `Uninstal gagal: ${error}`,
+      startButton: 'Mulai uninstal',
+      noWorkingUninstaller: 'Tidak ada uninstaller yang berfungsi — mencari berdasarkan nama sebagai gantinya',
+      noUninstallCommand: 'Tidak ada perintah uninstal yang terdaftar',
+      progress: {
+        runningNative: 'Menjalankan uninstaller asli',
+        backingUpRegistry: 'Mencadangkan registri',
+        creatingRestorePoint: 'Membuat titik pemulihan',
+        searchingLeftovers: 'Mencari sisa',
+        scanningLeftovers: 'Memindai sisa',
+        checkingCommand: 'Memeriksa sistem file, registri & tugas terjadwal…'
+      },
+      removing: {
+        quarantine: { title: 'Memindahkan ke Karantina', command: 'Tidak ada yang dihapus — setiap item dapat dipulihkan' },
+        recycle: { title: 'Mengirim ke Recycle Bin', command: 'Pulihkan dari Recycle Bin jika perlu' },
+        permanent: { title: 'Menghapus permanen', command: 'Ini tidak dapat dipulihkan' }
+      },
+      noScan: (name) => `Uninstaller ${name} telah selesai. Pemindaian sisa dimatikan di Pengaturan, jadi tidak ada lagi yang dicari.`,
+      removalFailed: (error) => `Penghapusan gagal: ${error}`,
+      done: 'Selesai',
+      summary: {
+        item: (n) => `${n} item`,
+        registryKey: (n) => `${n} kunci registri`,
+        recycle: (files, keys, freed) => `Mengirim ${files} ke Recycle Bin dan menghapus ${keys}, dicadangkan dulu di Karantina. Membebaskan ${freed}.`,
+        permanent: (files, keys, freed) => `Menghapus permanen ${files} dan menghapus ${keys}, dicadangkan dulu di Karantina. Membebaskan ${freed}.`,
+        quarantine: (files, keys, freed) => `Memindahkan ${files} dan ${keys} ke Karantina, membebaskan ${freed}. Pulihkan kapan saja dari layar Karantina.`
+      },
+      failedFilesHeading: (n) => `${n} item tidak dapat dihapus:`,
+      failedRegistryKeysHeading: (n) => `${n} kunci registri tidak dapat dihapus`,
+      failedRegistryKeysNote: 'ini biasanya memerlukan Prune berjalan sebagai administrator:',
+      noRestorePoint: (reason) => `Tidak ada titik pemulihan sistem yang dibuat (${reason}).`,
+      quarantineStillWorks: 'Pemulihan Karantina masih berfungsi.'
+    },
+    batchUninstallModal: {
+      title: (n) => `Uninstal ${n} program`,
+      historyLabel: (n) => `Uninstal massal: ${n} program`,
+      close: 'Tutup',
+      registryOnlyIntro: 'Setiap aplikasi dihapus melalui Windows secara bergiliran, dan tidak ada pemindaian sisa sesudahnya: Windows menghapus data milik aplikasi bersamanya.',
+      mixedIntro: (hasStore) => `Uninstaller masing-masing program berjalan bergiliran, lalu Prune memindai apa yang mereka tinggalkan dan menampilkan semuanya sebelum menghapus apa pun.${hasStore ? ' Aplikasi Store dihapus melalui Windows sebagai gantinya, tanpa pemindaian sisa sesudahnya.' : ''}`,
+      oneAtATime: 'Satu per satu, karena Windows hanya mengizinkan satu instalasi atau uninstal pada satu waktu. Beberapa uninstaller akan menampilkan jendela mereka sendiri dan mengajukan pertanyaan kepadamu.',
+      storeWarning: (count) => count === 1
+        ? 'Aplikasi Store dalam batch ini tidak dapat dipulihkan dari Karantina: menghapusnya membawa serta aplikasi dan data tersimpannya, dan mendapatkannya kembali berarti menginstal ulang dari Store.'
+        : `${count} aplikasi Store dalam batch ini tidak dapat dipulihkan dari Karantina: menghapus salah satu membawa serta aplikasi dan data tersimpannya, dan mendapatkannya kembali berarti menginstal ulang dari Store.`,
+      runsBefore: (name) => `berjalan sebelum ${name}`,
+      reported: (bytes) => `${bytes} dilaporkan`,
+      unknownSizeSuffix: (n) => `, ${n} berukuran tidak diketahui`,
+      startButton: 'Mulai uninstal',
+      status: { waiting: 'menunggu', uninstalling: 'menguninstal…', removed: 'dihapus', failed: 'gagal' },
+      removingLine: {
+        quarantine: 'Memindahkan sisa ke Karantina…',
+        recycle: 'Mengirim sisa ke Recycle Bin…',
+        permanent: 'Menghapus sisa secara permanen…'
+      },
+      uninstalledOf: (removed, total) => `Menguninstal ${removed} dari ${total}.`,
+      failedHeading: (n) => `${n} tidak dapat diuninstal dan dibiarkan saja:`,
+      removeLeftoversFailed: (error) => `Tidak dapat menghapus sisa: ${error}`,
+      noScanSettingsOff: 'Pemindaian sisa dimatikan di Pengaturan, jadi tidak ada yang dicari.',
+      noScanStore: 'Tidak ada pemindaian sisa setelah aplikasi Store: Windows menghapus data milik aplikasi bersamanya.',
+      done: 'Selesai',
+      summary: {
+        recycle: (programs, items, freed) => `Menguninstal ${programs} dan mengirim ${items} ke Recycle Bin, membebaskan ${freed}.`,
+        permanent: (programs, items, freed) => `Menguninstal ${programs} dan menghapus ${items} permanen, membebaskan ${freed}.`,
+        quarantine: (programs, items, freed) => `Menguninstal ${programs} dan memindahkan ${items} ke Karantina, membebaskan ${freed}.`,
+        programs: (n) => `${n} program`,
+        items: (n) => `${n} item sisa`
+      },
+      noRestorePoint: (reason) => `Tidak ada titik pemulihan sistem yang dibuat (${reason}).`,
+      restorePointFallback: 'tidak tersedia',
+      quarantineNote: 'Semua di atas masih ada di Karantina dan dapat dikembalikan.',
+      failedRegistryKeys: (n) => `${n} kunci registri tidak dapat dihapus — ini biasanya memerlukan Prune berjalan sebagai administrator.`
     }
   },
 
@@ -8901,6 +10565,110 @@ export const CATALOG = {
         message: (count) => `Sleppti ${count} læstum skrám.`,
         detail: 'Lokaðu forritunum sem nota þær og hreinsaðu aftur.'
       }
+    },
+    leftoverReview: {
+      groups: { files: 'Skrár og möppur', registryKeys: 'Skráningarlyklar', scheduledTasks: 'Áætluð verkefni' },
+      notRemoved: 'fannst, ekki fjarlægt',
+      checkFailed: (label) => `Ekki tókst að athuga ${label}.`,
+      itemNote: {
+        valueOnly: (valueName) => `Aðeins gildið "${valueName}" — lykillinn sem það situr í er sameiginlegur og helst`,
+        uninstallEntry: 'Bæta við/fjarlægja forrit-færsla'
+      },
+      destinations: {
+        quarantine: { text: 'Valdir hlutir fara í sóttkví, þaðan sem þú getur endurheimt þá.', button: 'Fjarlægja valið' },
+        recycle: { text: 'Valdar skrár fara í ruslafötuna. Skráningarlyklar eru afritaðir áður en þeir eru fjarlægðir.', button: 'Fjarlægja valið' },
+        permanent: { text: 'Valdar skrár verða eytt varanlega og ekki er hægt að endurheimta þær. Skráningarlyklar eru afritaðir áður en þeir eru fjarlægðir.', button: 'Eyða varanlega' }
+      },
+      clean: 'Engar leifar fundust — hrein fjarlæging.',
+      done: 'Lokið',
+      foundWarning: (count) => `Fann ${count} eftirstandandi hlut sem upprunalega fjarlægingarforritið missti af. Farðu yfir áður en þú hreinsar.`,
+      excludedNote: (count) => `${count} mappa skilin eftir því hún er í undanþágum þínum.`,
+      itemsSelected: 'hlutir valdir',
+      reclaimable: 'endurheimtanlegt',
+      skip: 'Sleppa'
+    },
+    uninstallModal: {
+      titleForce: (name) => `Þvinga fjarlægingu á ${name}`,
+      titleNormal: (name) => `Fjarlægja ${name}`,
+      close: 'Loka',
+      runningWarning: (name) => `${name} er í gangi núna. Lokaðu því fyrst — fjarlægingarforrit mistekst yfirleitt með opið forrit og getur skilið eftir skrár sem næsta ræsing endurskapar.`,
+      orphanedWarning: (reason) => `${reason} Windows mun halda áfram að skrá það þar til færslan er fjarlægð.`,
+      brokenIntro: 'Prune mun leita að skrám og skráningarlyklum sem passa við þetta nafn, þar á meðal Bæta við/fjarlægja forrit-færslu þess, og sýna þér allt áður en nokkru er eytt.',
+      searchForLabel: 'Leita að',
+      searchHint: (name) => `Tekið úr "${name}" án útgáfu þess — uppsetningarforrit nefna möppur eftir vörunni, ekki útgáfunni. Breyttu því ef niðurstöðurnar líta rangt út.`,
+      scanFailed: (error) => `Skönnun mistókst: ${error}`,
+      searchButton: 'Leita að leifum',
+      normalIntro: (name) => `Þetta keyrir eigið fjarlægingarforrit ${name} og skannar síðan eftir öllu sem það skilur eftir.`,
+      uninstallFailed: (error) => `Fjarlæging mistókst: ${error}`,
+      startButton: 'Hefja fjarlægingu',
+      noWorkingUninstaller: 'Ekkert virkt fjarlægingarforrit — leitað er eftir nafni í staðinn',
+      noUninstallCommand: 'Engin fjarlægingarskipun skráð',
+      progress: {
+        runningNative: 'Keyri upprunalegt fjarlægingarforrit',
+        backingUpRegistry: 'Afrita skráningargrunn',
+        creatingRestorePoint: 'Bý til endurheimtunarpunkt',
+        searchingLeftovers: 'Leita að leifum',
+        scanningLeftovers: 'Skanna leifar',
+        checkingCommand: 'Athuga skráarkerfi, skráningargrunn og áætluð verkefni…'
+      },
+      removing: {
+        quarantine: { title: 'Færi í sóttkví', command: 'Engu er eytt — hægt er að endurheimta hvern hlut' },
+        recycle: { title: 'Sendi í ruslafötuna', command: 'Endurheimtu þau úr ruslafötunni ef þörf krefur' },
+        permanent: { title: 'Eyði varanlega', command: 'Ekki er hægt að endurheimta þetta' }
+      },
+      noScan: (name) => `Fjarlægingarforrit ${name} er lokið. Leifaskönnun er slökkt í Stillingum, svo ekkert annað var leitað að.`,
+      removalFailed: (error) => `Fjarlæging mistókst: ${error}`,
+      done: 'Lokið',
+      summary: {
+        item: (n) => `${n} hlut${n === 1 ? 'ur' : 'ir'}`,
+        registryKey: (n) => `${n} skráningarlykil${n === 1 ? 'l' : 'ar'}`,
+        recycle: (files, keys, freed) => `Sendi ${files} í ruslafötuna og fjarlægði ${keys}, áður afritað í sóttkví. Losaði ${freed}.`,
+        permanent: (files, keys, freed) => `Eyddi ${files} varanlega og fjarlægði ${keys}, áður afritað í sóttkví. Losaði ${freed}.`,
+        quarantine: (files, keys, freed) => `Færði ${files} og ${keys} í sóttkví, sem losaði ${freed}. Endurheimtu þau hvenær sem er af sóttkvíarskjánum.`
+      },
+      failedFilesHeading: (n) => `Ekki tókst að fjarlægja ${n} hlut${n === 1 ? '' : 'i'}:`,
+      failedRegistryKeysHeading: (n) => `Ekki tókst að fjarlægja ${n} skráningarlykil${n === 1 ? '' : 'a'}`,
+      failedRegistryKeysNote: 'þessir þurfa yfirleitt að Prune keyri sem stjórnandi:',
+      noRestorePoint: (reason) => `Enginn endurheimtunarpunktur kerfis var búinn til (${reason}).`,
+      quarantineStillWorks: 'Endurheimt úr sóttkví virkar enn.'
+    },
+    batchUninstallModal: {
+      title: (n) => `Fjarlægja ${n} forrit`,
+      historyLabel: (n) => `Fjarlæging í hópum: ${n} forrit`,
+      close: 'Loka',
+      registryOnlyIntro: 'Hvert forrit er fjarlægt í gegnum Windows í röð, og engin leifaskönnun fer fram á eftir: Windows fjarlægir eigin gögn forritsins með því.',
+      mixedIntro: (hasStore) => `Eigið fjarlægingarforrit hvers forrits keyrir í röð, síðan skannar Prune eftir því sem þau skilja eftir og sýnir þér allt áður en nokkru af því er eytt.${hasStore ? ' Store-forrit eru fjarlægð í gegnum Windows í staðinn, án leifaskönnunar á eftir.' : ''}`,
+      oneAtATime: 'Eitt í einu, því Windows leyfir aðeins eina uppsetningu eða fjarlægingu í einu. Sum fjarlægingarforrit munu sýna eigin glugga og spyrja þig spurninga.',
+      storeWarning: (count) => count === 1
+        ? 'Ekki er hægt að endurheimta Store-forritið í þessari lotu úr sóttkví: að fjarlægja það tekur forritið og vistuðu gögnin þess, og að fá það aftur þýðir að setja það upp aftur úr Store.'
+        : `Ekki er hægt að endurheimta ${count} Store-forritin í þessari lotu úr sóttkví: að fjarlægja eitt tekur forritið og vistuðu gögnin þess, og að fá það aftur þýðir að setja það upp aftur úr Store.`,
+      runsBefore: (name) => `keyrir á undan ${name}`,
+      reported: (bytes) => `${bytes} tilkynnt`,
+      unknownSizeSuffix: (n) => `, ${n} af óþekktri stærð`,
+      startButton: 'Hefja fjarlægingu',
+      status: { waiting: 'bíður', uninstalling: 'fjarlægi…', removed: 'fjarlægt', failed: 'mistókst' },
+      removingLine: {
+        quarantine: 'Færi leifar í sóttkví…',
+        recycle: 'Sendi leifar í ruslafötuna…',
+        permanent: 'Eyði leifum varanlega…'
+      },
+      uninstalledOf: (removed, total) => `Fjarlægði ${removed} af ${total}.`,
+      failedHeading: (n) => `Ekki tókst að fjarlægja ${n} og var${n === 1 ? '' : 'u'} látin eiga sig:`,
+      removeLeftoversFailed: (error) => `Ekki tókst að fjarlægja leifar: ${error}`,
+      noScanSettingsOff: 'Leifaskönnun er slökkt í Stillingum, svo ekkert var leitað að.',
+      noScanStore: 'Engin leifaskönnun fer fram eftir Store-forrit: Windows fjarlægir eigin gögn forritsins með því.',
+      done: 'Lokið',
+      summary: {
+        recycle: (programs, items, freed) => `Fjarlægði ${programs} og sendi ${items} í ruslafötuna, sem losaði ${freed}.`,
+        permanent: (programs, items, freed) => `Fjarlægði ${programs} og eyddi ${items} varanlega, sem losaði ${freed}.`,
+        quarantine: (programs, items, freed) => `Fjarlægði ${programs} og færði ${items} í sóttkví, sem losaði ${freed}.`,
+        programs: (n) => `${n} forrit`,
+        items: (n) => `${n} eftirstandandi hlut${n === 1 ? 'ur' : 'ir'}`
+      },
+      noRestorePoint: (reason) => `Enginn endurheimtunarpunktur kerfis var búinn til (${reason}).`,
+      restorePointFallback: 'ekki tiltækt',
+      quarantineNote: 'Allt hér að ofan er enn í sóttkví og hægt er að setja það aftur.',
+      failedRegistryKeys: (n) => `Ekki tókst að fjarlægja ${n} skráningarlykil${n === 1 ? '' : 'a'} — þessir þurfa yfirleitt að Prune keyri sem stjórnandi.`
     }
   },
 
@@ -9423,6 +11191,110 @@ export const CATALOG = {
         message: (count) => `Saltati ${count} file bloccati.`,
         detail: 'Chiudi le app che li usano e pulisci di nuovo.'
       }
+    },
+    leftoverReview: {
+      groups: { files: 'File e cartelle', registryKeys: 'Chiavi di registro', scheduledTasks: 'Attività pianificate' },
+      notRemoved: 'trovato, non rimosso',
+      checkFailed: (label) => `Impossibile controllare ${label}.`,
+      itemNote: {
+        valueOnly: (valueName) => `Solo il valore "${valueName}" — la chiave in cui si trova è condivisa e rimane`,
+        uninstallEntry: 'Voce di Installazione applicazioni'
+      },
+      destinations: {
+        quarantine: { text: 'Gli elementi selezionati vanno in Quarantena, da dove puoi ripristinarli.', button: 'Rimuovi selezionati' },
+        recycle: { text: 'I file selezionati vanno nel Cestino. Le chiavi di registro vengono salvate prima di essere rimosse.', button: 'Rimuovi selezionati' },
+        permanent: { text: 'I file selezionati verranno eliminati definitivamente e non potranno essere ripristinati. Le chiavi di registro vengono salvate prima di essere rimosse.', button: 'Elimina definitivamente' }
+      },
+      clean: 'Nessun residuo trovato — disinstallazione pulita.',
+      done: 'Fatto',
+      foundWarning: (count) => `Trovat${count === 1 ? 'o' : 'i'} ${count} element${count === 1 ? 'o residuo' : 'i residui'} che il disinstallatore nativo ha perso. Rivedi prima di eliminare.`,
+      excludedNote: (count) => `${count} cartell${count === 1 ? 'a esclusa' : 'e escluse'} perché ${count === 1 ? 'è' : 'sono'} nelle tue esclusioni.`,
+      itemsSelected: 'elementi selezionati',
+      reclaimable: 'recuperabile',
+      skip: 'Salta'
+    },
+    uninstallModal: {
+      titleForce: (name) => `Rimuovi forzatamente ${name}`,
+      titleNormal: (name) => `Disinstalla ${name}`,
+      close: 'Chiudi',
+      runningWarning: (name) => `${name} è in esecuzione in questo momento. Chiudilo prima — un disinstallatore di solito fallisce con un programma aperto e può lasciare file che il prossimo avvio ricreerà.`,
+      orphanedWarning: (reason) => `${reason} Windows continuerà a elencarlo finché la voce non verrà rimossa.`,
+      brokenIntro: "Prune cercherà file e chiavi di registro corrispondenti a questo nome, inclusa la sua voce di Installazione applicazioni, e ti mostrerà tutto prima di rimuovere qualsiasi cosa.",
+      searchForLabel: 'Cerca',
+      searchHint: (name) => `Preso da "${name}" senza la versione — i programmi di installazione nominano le cartelle in base al prodotto, non alla release. Modificalo se i risultati sembrano sbagliati.`,
+      scanFailed: (error) => `Scansione fallita: ${error}`,
+      searchButton: 'Cerca residui',
+      normalIntro: (name) => `Questo esegue il disinstallatore proprio di ${name}, poi analizza tutto ciò che lascia dietro di sé.`,
+      uninstallFailed: (error) => `Disinstallazione fallita: ${error}`,
+      startButton: 'Avvia disinstallazione',
+      noWorkingUninstaller: 'Nessun disinstallatore funzionante — verrà cercato per nome invece',
+      noUninstallCommand: 'Nessun comando di disinstallazione registrato',
+      progress: {
+        runningNative: 'Esecuzione del disinstallatore nativo',
+        backingUpRegistry: 'Backup del registro in corso',
+        creatingRestorePoint: 'Creazione di un punto di ripristino',
+        searchingLeftovers: 'Ricerca dei residui',
+        scanningLeftovers: 'Analisi dei residui',
+        checkingCommand: 'Controllo del file system, registro e attività pianificate…'
+      },
+      removing: {
+        quarantine: { title: 'Spostamento in Quarantena', command: 'Nulla viene eliminato — ogni elemento può essere ripristinato' },
+        recycle: { title: 'Invio al Cestino', command: 'Ripristinali dal Cestino se necessario' },
+        permanent: { title: 'Eliminazione definitiva', command: 'Questi non possono essere ripristinati' }
+      },
+      noScan: (name) => `Il disinstallatore di ${name} ha terminato. La scansione dei residui è disattivata nelle Impostazioni, quindi non è stato cercato altro.`,
+      removalFailed: (error) => `Rimozione fallita: ${error}`,
+      done: 'Fatto',
+      summary: {
+        item: (n) => `${n} element${n === 1 ? 'o' : 'i'}`,
+        registryKey: (n) => `${n} chiav${n === 1 ? 'e' : 'i'} di registro`,
+        recycle: (files, keys, freed) => `Inviat${'i'} ${files} al Cestino e rimoss${'e'} ${keys}, salvat${'e'} prima in Quarantena. Liberat${'i'} ${freed}.`,
+        permanent: (files, keys, freed) => `Eliminat${'i'} definitivamente ${files} e rimoss${'e'} ${keys}, salvat${'e'} prima in Quarantena. Liberat${'i'} ${freed}.`,
+        quarantine: (files, keys, freed) => `Spostat${'i'} ${files} e ${keys} in Quarantena, liberando ${freed}. Ripristinali in qualsiasi momento dalla schermata Quarantena.`
+      },
+      failedFilesHeading: (n) => `Impossibile rimuovere ${n} element${n === 1 ? 'o' : 'i'}:`,
+      failedRegistryKeysHeading: (n) => `Impossibile rimuovere ${n} chiav${n === 1 ? 'e' : 'i'} di registro`,
+      failedRegistryKeysNote: 'queste di solito richiedono che Prune sia eseguito come amministratore:',
+      noRestorePoint: (reason) => `Non è stato creato alcun punto di ripristino del sistema (${reason}).`,
+      quarantineStillWorks: 'Il ripristino dalla Quarantena funziona ancora.'
+    },
+    batchUninstallModal: {
+      title: (n) => `Disinstalla ${n} programm${n === 1 ? 'a' : 'i'}`,
+      historyLabel: (n) => `Disinstallazione in blocco: ${n} programmi`,
+      close: 'Chiudi',
+      registryOnlyIntro: "Ogni app viene rimossa tramite Windows a turno, e non c'è alcuna scansione dei residui dopo: Windows rimuove i dati propri dell'app insieme ad essa.",
+      mixedIntro: (hasStore) => `Il disinstallatore proprio di ogni programma viene eseguito a turno, poi Prune analizza cosa lasciano dietro di sé e ti mostra tutto prima di rimuoverne qualcosa.${hasStore ? " Le app dello Store vengono rimosse tramite Windows invece, senza scansione dei residui dopo." : ''}`,
+      oneAtATime: "Una alla volta, perché Windows consente solo un'installazione o disinstallazione alla volta. Alcuni disinstallatori mostreranno le proprie finestre e ti faranno domande.",
+      storeWarning: (count) => count === 1
+        ? "L'app dello Store in questo gruppo non può essere ripristinata dalla Quarantena: rimuoverla porta via l'app e i suoi dati salvati, e recuperarla significa reinstallarla dallo Store."
+        : `Le ${count} app dello Store in questo gruppo non possono essere ripristinate dalla Quarantena: rimuoverne una porta via l'app e i suoi dati salvati, e recuperarla significa reinstallarla dallo Store.`,
+      runsBefore: (name) => `viene eseguito prima di ${name}`,
+      reported: (bytes) => `${bytes} segnalati`,
+      unknownSizeSuffix: (n) => `, ${n} di dimensione sconosciuta`,
+      startButton: 'Avvia disinstallazione',
+      status: { waiting: 'in attesa', uninstalling: 'disinstallazione…', removed: 'rimosso', failed: 'fallito' },
+      removingLine: {
+        quarantine: 'Spostamento dei residui in Quarantena…',
+        recycle: 'Invio dei residui al Cestino…',
+        permanent: 'Eliminazione definitiva dei residui…'
+      },
+      uninstalledOf: (removed, total) => `Disinstallat${'i'} ${removed} di ${total}.`,
+      failedHeading: (n) => `Impossibile disinstallare ${n}, lasciat${n === 1 ? 'o' : 'i'} così:`,
+      removeLeftoversFailed: (error) => `Impossibile rimuovere i residui: ${error}`,
+      noScanSettingsOff: 'La scansione dei residui è disattivata nelle Impostazioni, quindi non è stato cercato nulla.',
+      noScanStore: "Non c'è alcuna scansione dei residui dopo un'app dello Store: Windows rimuove i dati propri dell'app insieme ad essa.",
+      done: 'Fatto',
+      summary: {
+        recycle: (programs, items, freed) => `Disinstallat${'i'} ${programs} e inviat${'i'} ${items} al Cestino, liberando ${freed}.`,
+        permanent: (programs, items, freed) => `Disinstallat${'i'} ${programs} ed eliminat${'i'} ${items} definitivamente, liberando ${freed}.`,
+        quarantine: (programs, items, freed) => `Disinstallat${'i'} ${programs} e spostat${'i'} ${items} in Quarantena, liberando ${freed}.`,
+        programs: (n) => `${n} programm${n === 1 ? 'a' : 'i'}`,
+        items: (n) => `${n} element${n === 1 ? 'o residuo' : 'i residui'}`
+      },
+      noRestorePoint: (reason) => `Non è stato creato alcun punto di ripristino del sistema (${reason}).`,
+      restorePointFallback: 'non disponibile',
+      quarantineNote: 'Tutto quanto sopra è ancora in Quarantena e può essere rimesso a posto.',
+      failedRegistryKeys: (n) => `Impossibile rimuovere ${n} chiav${n === 1 ? 'e' : 'i'} di registro — queste di solito richiedono che Prune sia eseguito come amministratore.`
     }
   },
 
@@ -9945,6 +11817,110 @@ export const CATALOG = {
         message: (count) => `ロックされたファイルを ${count} 件スキップしました。`,
         detail: 'それらを使用しているアプリを閉じてから、もう一度クリーンしてください。'
       }
+    },
+    leftoverReview: {
+      groups: { files: 'ファイルとフォルダー', registryKeys: 'レジストリキー', scheduledTasks: 'タスクスケジューラのタスク' },
+      notRemoved: '検出済み、未削除',
+      checkFailed: (label) => `${label}を確認できませんでした。`,
+      itemNote: {
+        valueOnly: (valueName) => `値「${valueName}」のみ — それが含まれるキーは共有されており残ります`,
+        uninstallEntry: 'プログラムと機能のエントリ'
+      },
+      destinations: {
+        quarantine: { text: '選択した項目は隔離場所に移動し、そこから復元できます。', button: '選択項目を削除' },
+        recycle: { text: '選択したファイルはごみ箱に移動します。レジストリキーは削除前にバックアップされます。', button: '選択項目を削除' },
+        permanent: { text: '選択したファイルは完全に削除され、復元できません。レジストリキーは削除前にバックアップされます。', button: '完全に削除' }
+      },
+      clean: '残留物は見つかりませんでした — クリーンなアンインストールです。',
+      done: '完了',
+      foundWarning: (count) => `ネイティブのアンインストーラーが見逃した残留項目が${count}件見つかりました。削除する前に確認してください。`,
+      excludedNote: (count) => `${count}個のフォルダーが除外設定に含まれているため除外されました。`,
+      itemsSelected: '項目を選択中',
+      reclaimable: '回収可能',
+      skip: 'スキップ'
+    },
+    uninstallModal: {
+      titleForce: (name) => `${name} を強制削除`,
+      titleNormal: (name) => `${name} をアンインストール`,
+      close: '閉じる',
+      runningWarning: (name) => `${name} は現在実行中です。まず終了してください — アンインストーラーは開いているプログラムに対して失敗することが多く、次回の起動時に再作成されるファイルを残す可能性があります。`,
+      orphanedWarning: (reason) => `${reason} エントリが削除されるまで、Windows はこれを表示し続けます。`,
+      brokenIntro: 'Prune はこの名前に一致するファイルとレジストリキーを検索します（プログラムと機能のエントリを含む）。何も削除する前にすべてを表示します。',
+      searchForLabel: '検索対象',
+      searchHint: (name) => `「${name}」からバージョンを除いたものです — インストーラーはリリースではなく製品名でフォルダーに名前を付けます。結果が間違っているように見える場合は編集してください。`,
+      scanFailed: (error) => `スキャンに失敗しました: ${error}`,
+      searchButton: '残留物を検索',
+      normalIntro: (name) => `これは ${name} 自身のアンインストーラーを実行し、その後に残されたものをスキャンします。`,
+      uninstallFailed: (error) => `アンインストールに失敗しました: ${error}`,
+      startButton: 'アンインストールを開始',
+      noWorkingUninstaller: '動作するアンインストーラーがありません — 代わりに名前で検索します',
+      noUninstallCommand: '登録されているアンインストールコマンドがありません',
+      progress: {
+        runningNative: 'ネイティブのアンインストーラーを実行中',
+        backingUpRegistry: 'レジストリをバックアップ中',
+        creatingRestorePoint: '復元ポイントを作成中',
+        searchingLeftovers: '残留物を検索中',
+        scanningLeftovers: '残留物をスキャン中',
+        checkingCommand: 'ファイルシステム、レジストリ、タスクスケジューラのタスクを確認中…'
+      },
+      removing: {
+        quarantine: { title: '隔離場所へ移動中', command: '何も削除されません — すべての項目を復元できます' },
+        recycle: { title: 'ごみ箱へ送信中', command: '必要な場合はごみ箱から復元してください' },
+        permanent: { title: '完全に削除中', command: 'これらは復元できません' }
+      },
+      noScan: (name) => `${name} のアンインストーラーが完了しました。残留物スキャンは設定でオフになっているため、他には何も検索されませんでした。`,
+      removalFailed: (error) => `削除に失敗しました: ${error}`,
+      done: '完了',
+      summary: {
+        item: (n) => `${n} 件の項目`,
+        registryKey: (n) => `${n} 件のレジストリキー`,
+        recycle: (files, keys, freed) => `${files}をごみ箱に送信し、${keys}を削除しました（先に隔離場所にバックアップ済み）。${freed}を解放しました。`,
+        permanent: (files, keys, freed) => `${files}を完全に削除し、${keys}を削除しました（先に隔離場所にバックアップ済み）。${freed}を解放しました。`,
+        quarantine: (files, keys, freed) => `${files}と${keys}を隔離場所に移動し、${freed}を解放しました。隔離画面からいつでも復元できます。`
+      },
+      failedFilesHeading: (n) => `${n} 件の項目を削除できませんでした:`,
+      failedRegistryKeysHeading: (n) => `${n} 件のレジストリキーを削除できませんでした`,
+      failedRegistryKeysNote: 'これらは通常、Prune を管理者として実行する必要があります:',
+      noRestorePoint: (reason) => `システムの復元ポイントは作成されませんでした（${reason}）。`,
+      quarantineStillWorks: '隔離場所からの復元は引き続き機能します。'
+    },
+    batchUninstallModal: {
+      title: (n) => `${n} 件のプログラムをアンインストール`,
+      historyLabel: (n) => `一括アンインストール: ${n} 件のプログラム`,
+      close: '閉じる',
+      registryOnlyIntro: '各アプリは順番に Windows を通じて削除され、その後の残留物スキャンはありません。Windows はアプリ自身のデータもあわせて削除します。',
+      mixedIntro: (hasStore) => `各プログラム自身のアンインストーラーが順番に実行され、その後 Prune が残されたものをスキャンし、何も削除する前にすべてを表示します。${hasStore ? ' ストアアプリは代わりに Windows を通じて削除され、その後の残留物スキャンはありません。' : ''}`,
+      oneAtATime: 'Windows は一度に1つのインストールまたはアンインストールしか許可しないため、1つずつ実行されます。一部のアンインストーラーは独自のウィンドウを表示し、質問をしてきます。',
+      storeWarning: (count) => count === 1
+        ? 'このバッチ内のストアアプリは隔離場所から復元できません。削除するとアプリとその保存データが失われ、取り戻すにはストアから再インストールする必要があります。'
+        : `このバッチ内の${count}個のストアアプリは隔離場所から復元できません。1つを削除するとアプリとその保存データが失われ、取り戻すにはストアから再インストールする必要があります。`,
+      runsBefore: (name) => `${name}の前に実行`,
+      reported: (bytes) => `${bytes}を報告`,
+      unknownSizeSuffix: (n) => `、サイズ不明が${n}件`,
+      startButton: 'アンインストールを開始',
+      status: { waiting: '待機中', uninstalling: 'アンインストール中…', removed: '削除済み', failed: '失敗' },
+      removingLine: {
+        quarantine: '残留物を隔離場所へ移動中…',
+        recycle: '残留物をごみ箱へ送信中…',
+        permanent: '残留物を完全に削除中…'
+      },
+      uninstalledOf: (removed, total) => `${total}件中${removed}件をアンインストールしました。`,
+      failedHeading: (n) => `${n}件をアンインストールできず、そのまま残されました:`,
+      removeLeftoversFailed: (error) => `残留物を削除できませんでした: ${error}`,
+      noScanSettingsOff: '残留物スキャンは設定でオフになっているため、何も検索されませんでした。',
+      noScanStore: 'ストアアプリの後には残留物スキャンはありません。Windows はアプリ自身のデータもあわせて削除します。',
+      done: '完了',
+      summary: {
+        recycle: (programs, items, freed) => `${programs}をアンインストールし、${items}をごみ箱に送信して${freed}を解放しました。`,
+        permanent: (programs, items, freed) => `${programs}をアンインストールし、${items}を完全に削除して${freed}を解放しました。`,
+        quarantine: (programs, items, freed) => `${programs}をアンインストールし、${items}を隔離場所に移動して${freed}を解放しました。`,
+        programs: (n) => `${n} 件のプログラム`,
+        items: (n) => `${n} 件の残留項目`
+      },
+      noRestorePoint: (reason) => `システムの復元ポイントは作成されませんでした（${reason}）。`,
+      restorePointFallback: '利用できません',
+      quarantineNote: '上記のものはすべて隔離場所に残っており、元に戻すことができます。',
+      failedRegistryKeys: (n) => `${n}件のレジストリキーを削除できませんでした — これらは通常、Prune を管理者として実行する必要があります。`
     }
   },
 
@@ -10467,6 +12443,110 @@ export const CATALOG = {
         message: (count) => `잠긴 파일 ${count}개를 건너뛰었습니다.`,
         detail: '해당 파일을 사용 중인 앱을 닫고 다시 정리하세요.'
       }
+    },
+    leftoverReview: {
+      groups: { files: '파일 및 폴더', registryKeys: '레지스트리 키', scheduledTasks: '예약된 작업' },
+      notRemoved: '발견됨, 제거되지 않음',
+      checkFailed: (label) => `${label}을(를) 확인할 수 없습니다.`,
+      itemNote: {
+        valueOnly: (valueName) => `값 "${valueName}"만 — 이 값이 있는 키는 공유되어 남아 있습니다`,
+        uninstallEntry: '프로그램 추가/제거 항목'
+      },
+      destinations: {
+        quarantine: { text: '선택한 항목은 격리 공간으로 이동하며, 그곳에서 복원할 수 있습니다.', button: '선택 항목 제거' },
+        recycle: { text: '선택한 파일은 휴지통으로 이동합니다. 레지스트리 키는 제거되기 전에 백업됩니다.', button: '선택 항목 제거' },
+        permanent: { text: '선택한 파일은 완전히 삭제되며 복원할 수 없습니다. 레지스트리 키는 제거되기 전에 백업됩니다.', button: '완전히 삭제' }
+      },
+      clean: '남은 항목이 없습니다 — 깔끔한 제거입니다.',
+      done: '완료',
+      foundWarning: (count) => `기본 제거 프로그램이 놓친 남은 항목 ${count}개를 찾았습니다. 삭제하기 전에 검토하세요.`,
+      excludedNote: (count) => `제외 목록에 있어 ${count}개의 폴더가 제외되었습니다.`,
+      itemsSelected: '개 항목 선택됨',
+      reclaimable: '확보 가능',
+      skip: '건너뛰기'
+    },
+    uninstallModal: {
+      titleForce: (name) => `${name} 강제 제거`,
+      titleNormal: (name) => `${name} 제거`,
+      close: '닫기',
+      runningWarning: (name) => `${name}이(가) 현재 실행 중입니다. 먼저 종료하세요 — 제거 프로그램은 실행 중인 프로그램에서 대개 실패하며, 다음 실행 시 다시 생성되는 파일을 남길 수 있습니다.`,
+      orphanedWarning: (reason) => `${reason} 항목이 제거될 때까지 Windows는 계속 이를 표시합니다.`,
+      brokenIntro: 'Prune는 이 이름과 일치하는 파일과 레지스트리 키를 검색합니다(프로그램 추가/제거 항목 포함). 아무것도 제거하기 전에 모든 것을 보여줍니다.',
+      searchForLabel: '검색어',
+      searchHint: (name) => `"${name}"에서 버전을 뺀 것입니다 — 설치 프로그램은 릴리스가 아니라 제품 이름으로 폴더 이름을 짓습니다. 결과가 잘못되어 보이면 편집하세요.`,
+      scanFailed: (error) => `검사 실패: ${error}`,
+      searchButton: '남은 항목 검색',
+      normalIntro: (name) => `이 작업은 ${name}의 자체 제거 프로그램을 실행한 다음, 남기는 모든 항목을 검사합니다.`,
+      uninstallFailed: (error) => `제거 실패: ${error}`,
+      startButton: '제거 시작',
+      noWorkingUninstaller: '작동하는 제거 프로그램이 없습니다 — 대신 이름으로 검색합니다',
+      noUninstallCommand: '등록된 제거 명령이 없습니다',
+      progress: {
+        runningNative: '기본 제거 프로그램 실행 중',
+        backingUpRegistry: '레지스트리 백업 중',
+        creatingRestorePoint: '복원 지점 생성 중',
+        searchingLeftovers: '남은 항목 검색 중',
+        scanningLeftovers: '남은 항목 검사 중',
+        checkingCommand: '파일 시스템, 레지스트리 및 예약된 작업 확인 중…'
+      },
+      removing: {
+        quarantine: { title: '격리 공간으로 이동 중', command: '아무것도 삭제되지 않습니다 — 모든 항목을 복원할 수 있습니다' },
+        recycle: { title: '휴지통으로 보내는 중', command: '필요한 경우 휴지통에서 복원하세요' },
+        permanent: { title: '완전히 삭제 중', command: '이것들은 복원할 수 없습니다' }
+      },
+      noScan: (name) => `${name}의 제거 프로그램이 완료되었습니다. 남은 항목 검사가 설정에서 꺼져 있어 다른 것은 검색되지 않았습니다.`,
+      removalFailed: (error) => `제거 실패: ${error}`,
+      done: '완료',
+      summary: {
+        item: (n) => `${n}개 항목`,
+        registryKey: (n) => `${n}개 레지스트리 키`,
+        recycle: (files, keys, freed) => `${files}을(를) 휴지통으로 보내고 ${keys}을(를) 제거했으며, 먼저 격리 공간에 백업되었습니다. ${freed} 확보되었습니다.`,
+        permanent: (files, keys, freed) => `${files}을(를) 완전히 삭제하고 ${keys}을(를) 제거했으며, 먼저 격리 공간에 백업되었습니다. ${freed} 확보되었습니다.`,
+        quarantine: (files, keys, freed) => `${files}와(과) ${keys}을(를) 격리 공간으로 이동하여 ${freed}을(를) 확보했습니다. 격리 화면에서 언제든지 복원할 수 있습니다.`
+      },
+      failedFilesHeading: (n) => `${n}개 항목을 제거할 수 없습니다:`,
+      failedRegistryKeysHeading: (n) => `${n}개 레지스트리 키를 제거할 수 없습니다`,
+      failedRegistryKeysNote: '이 항목들은 보통 Prune이 관리자로 실행되어야 합니다:',
+      noRestorePoint: (reason) => `시스템 복원 지점이 생성되지 않았습니다(${reason}).`,
+      quarantineStillWorks: '격리 공간 복원은 여전히 작동합니다.'
+    },
+    batchUninstallModal: {
+      title: (n) => `프로그램 ${n}개 제거`,
+      historyLabel: (n) => `일괄 제거: 프로그램 ${n}개`,
+      close: '닫기',
+      registryOnlyIntro: '각 앱은 순서대로 Windows를 통해 제거되며, 그 후 남은 항목 검사는 없습니다. Windows는 앱 자체 데이터도 함께 제거합니다.',
+      mixedIntro: (hasStore) => `각 프로그램 자체의 제거 프로그램이 순서대로 실행된 다음, Prune이 남기는 것을 검사하여 무엇이든 제거하기 전에 모두 보여줍니다.${hasStore ? ' 스토어 앱은 대신 Windows를 통해 제거되며, 이후 남은 항목 검사는 없습니다.' : ''}`,
+      oneAtATime: 'Windows는 한 번에 하나의 설치 또는 제거만 허용하므로 한 번에 하나씩 진행됩니다. 일부 제거 프로그램은 자체 창을 표시하고 질문을 할 수 있습니다.',
+      storeWarning: (count) => count === 1
+        ? '이 배치의 스토어 앱은 격리 공간에서 복원할 수 없습니다. 제거하면 앱과 저장된 데이터가 함께 사라지며, 되찾으려면 스토어에서 다시 설치해야 합니다.'
+        : `이 배치의 스토어 앱 ${count}개는 격리 공간에서 복원할 수 없습니다. 하나를 제거하면 앱과 저장된 데이터가 함께 사라지며, 되찾으려면 스토어에서 다시 설치해야 합니다.`,
+      runsBefore: (name) => `${name} 전에 실행됨`,
+      reported: (bytes) => `${bytes} 보고됨`,
+      unknownSizeSuffix: (n) => `, ${n}개는 크기 알 수 없음`,
+      startButton: '제거 시작',
+      status: { waiting: '대기 중', uninstalling: '제거 중…', removed: '제거됨', failed: '실패' },
+      removingLine: {
+        quarantine: '남은 항목을 격리 공간으로 이동 중…',
+        recycle: '남은 항목을 휴지통으로 보내는 중…',
+        permanent: '남은 항목을 완전히 삭제 중…'
+      },
+      uninstalledOf: (removed, total) => `${total}개 중 ${removed}개를 제거했습니다.`,
+      failedHeading: (n) => `${n}개를 제거할 수 없어 그대로 두었습니다:`,
+      removeLeftoversFailed: (error) => `남은 항목을 제거할 수 없습니다: ${error}`,
+      noScanSettingsOff: '남은 항목 검사가 설정에서 꺼져 있어 아무것도 검색되지 않았습니다.',
+      noScanStore: '스토어 앱 이후에는 남은 항목 검사가 없습니다. Windows는 앱 자체 데이터도 함께 제거합니다.',
+      done: '완료',
+      summary: {
+        recycle: (programs, items, freed) => `${programs}을(를) 제거하고 ${items}을(를) 휴지통으로 보내 ${freed}을(를) 확보했습니다.`,
+        permanent: (programs, items, freed) => `${programs}을(를) 제거하고 ${items}을(를) 완전히 삭제하여 ${freed}을(를) 확보했습니다.`,
+        quarantine: (programs, items, freed) => `${programs}을(를) 제거하고 ${items}을(를) 격리 공간으로 이동하여 ${freed}을(를) 확보했습니다.`,
+        programs: (n) => `프로그램 ${n}개`,
+        items: (n) => `남은 항목 ${n}개`
+      },
+      noRestorePoint: (reason) => `시스템 복원 지점이 생성되지 않았습니다(${reason}).`,
+      restorePointFallback: '사용할 수 없음',
+      quarantineNote: '위의 모든 항목은 여전히 격리 공간에 있으며 되돌릴 수 있습니다.',
+      failedRegistryKeys: (n) => `${n}개 레지스트리 키를 제거할 수 없습니다 — 이 항목들은 보통 Prune이 관리자로 실행되어야 합니다.`
     }
   },
 
@@ -10989,6 +13069,110 @@ export const CATALOG = {
         message: (count) => `Praleista ${count} užrakintų failų.`,
         detail: 'Uždarykite juos naudojančias programas ir valykite iš naujo.'
       }
+    },
+    leftoverReview: {
+      groups: { files: 'Failai ir aplankai', registryKeys: 'Registro raktai', scheduledTasks: 'Suplanuotos užduotys' },
+      notRemoved: 'rasta, nepašalinta',
+      checkFailed: (label) => `Nepavyko patikrinti ${label}.`,
+      itemNote: {
+        valueOnly: (valueName) => `Tik reikšmė „${valueName}“ — raktas, kuriame ji yra, yra bendras ir lieka`,
+        uninstallEntry: 'Programų pridėjimo/šalinimo įrašas'
+      },
+      destinations: {
+        quarantine: { text: 'Pasirinkti elementai keliauja į karantiną, iš kur galite juos atkurti.', button: 'Pašalinti pasirinktus' },
+        recycle: { text: 'Pasirinkti failai keliauja į šiukšlinę. Registro raktai atsargiai kopijuojami prieš juos pašalinant.', button: 'Pašalinti pasirinktus' },
+        permanent: { text: 'Pasirinkti failai bus visiškai ištrinti ir jų negalima bus atkurti. Registro raktai atsargiai kopijuojami prieš juos pašalinant.', button: 'Ištrinti negrįžtamai' }
+      },
+      clean: 'Liekanų nerasta — švarus pašalinimas.',
+      done: 'Atlikta',
+      foundWarning: (count) => `Rast${count === 1 ? 'as' : 'a'} ${count} likę${count === 1 ? 's elementas' : ' elementai'}, kurių originali šalinimo priemonė nepastebėjo. Peržiūrėkite prieš valydami.`,
+      excludedNote: (count) => `${count} aplankas praleistas, nes yra jūsų išimtyse.`,
+      itemsSelected: 'pasirinkti elementai',
+      reclaimable: 'atlaisvinama',
+      skip: 'Praleisti'
+    },
+    uninstallModal: {
+      titleForce: (name) => `Priverstinai pašalinti ${name}`,
+      titleNormal: (name) => `Pašalinti ${name}`,
+      close: 'Uždaryti',
+      runningWarning: (name) => `${name} šiuo metu veikia. Pirmiausia uždarykite jį — šalinimo priemonė paprastai nepavyksta su atidaryta programa ir gali palikti failus, kuriuos kitas paleidimas sukurs iš naujo.`,
+      orphanedWarning: (reason) => `${reason} „Windows“ ir toliau ją rodys, kol įrašas bus pašalintas.`,
+      brokenIntro: '„Prune“ ieškos failų ir registro raktų, atitinkančių šį pavadinimą, įskaitant jos programų pridėjimo/šalinimo įrašą, ir parodys jums viską prieš ką nors pašalindama.',
+      searchForLabel: 'Ieškoti',
+      searchHint: (name) => `Paimta iš „${name}“ be versijos — diegimo programos aplankus pavadina pagal produktą, o ne leidimą. Redaguokite, jei rezultatai atrodo neteisingi.`,
+      scanFailed: (error) => `Nepavyko nuskaityti: ${error}`,
+      searchButton: 'Ieškoti liekanų',
+      normalIntro: (name) => `Tai paleidžia paties ${name} šalinimo priemonę, tada nuskaito viską, ką ji palieka.`,
+      uninstallFailed: (error) => `Pašalinimas nepavyko: ${error}`,
+      startButton: 'Pradėti šalinimą',
+      noWorkingUninstaller: 'Nėra veikiančios šalinimo priemonės — vietoj to ieškoma pagal pavadinimą',
+      noUninstallCommand: 'Neregistruota jokia šalinimo komanda',
+      progress: {
+        runningNative: 'Vykdoma originali šalinimo priemonė',
+        backingUpRegistry: 'Kuriama registro atsarginė kopija',
+        creatingRestorePoint: 'Kuriamas atkūrimo taškas',
+        searchingLeftovers: 'Ieškoma liekanų',
+        scanningLeftovers: 'Nuskaitomos liekanos',
+        checkingCommand: 'Tikrinama failų sistema, registras ir suplanuotos užduotys…'
+      },
+      removing: {
+        quarantine: { title: 'Perkeliama į karantiną', command: 'Niekas neištrinama — kiekvieną elementą galima atkurti' },
+        recycle: { title: 'Siunčiama į šiukšlinę', command: 'Prireikus atkurkite iš šiukšlinės' },
+        permanent: { title: 'Ištrinama negrįžtamai', command: 'Šių negalima atkurti' }
+      },
+      noScan: (name) => `${name} šalinimo priemonė baigė darbą. Liekanų nuskaitymas nustatymuose išjungtas, todėl daugiau nieko nebuvo ieškoma.`,
+      removalFailed: (error) => `Pašalinimas nepavyko: ${error}`,
+      done: 'Atlikta',
+      summary: {
+        item: (n) => `${n} element${n === 1 ? 'as' : 'ai'}`,
+        registryKey: (n) => `${n} registro rakt${n === 1 ? 'as' : 'ai'}`,
+        recycle: (files, keys, freed) => `Išsiųsta ${files} į šiukšlinę ir pašalinta ${keys}, prieš tai atsargiai nukopijuoti į karantiną. Atlaisvinta ${freed}.`,
+        permanent: (files, keys, freed) => `Visiškai ištrinta ${files} ir pašalinta ${keys}, prieš tai atsargiai nukopijuoti į karantiną. Atlaisvinta ${freed}.`,
+        quarantine: (files, keys, freed) => `Perkelta ${files} ir ${keys} į karantiną, atlaisvinant ${freed}. Atkurkite juos bet kada iš karantino ekrano.`
+      },
+      failedFilesHeading: (n) => `Nepavyko pašalinti ${n} element${n === 1 ? 'o' : 'ų'}:`,
+      failedRegistryKeysHeading: (n) => `Nepavyko pašalinti ${n} registro rakt${n === 1 ? 'o' : 'ų'}`,
+      failedRegistryKeysNote: 'jiems paprastai reikia, kad „Prune“ veiktų administratoriaus teisėmis:',
+      noRestorePoint: (reason) => `Sistemos atkūrimo taškas nesukurtas (${reason}).`,
+      quarantineStillWorks: 'Atkūrimas iš karantino vis dar veikia.'
+    },
+    batchUninstallModal: {
+      title: (n) => `Pašalinti ${n} program${n === 1 ? 'ą' : 'as'}`,
+      historyLabel: (n) => `Paketinis šalinimas: ${n} programos`,
+      close: 'Uždaryti',
+      registryOnlyIntro: 'Kiekviena programėlė paeiliui pašalinama per „Windows“, ir po to jokio liekanų nuskaitymo nėra: „Windows“ pašalina nuosavus programėlės duomenis kartu su ja.',
+      mixedIntro: (hasStore) => `Kiekvienos programos pati šalinimo priemonė paleidžiama paeiliui, tada „Prune“ nuskaito, ką jos palieka, ir parodo jums viską prieš ką nors iš to pašalindama.${hasStore ? ' Store programėlės vietoj to pašalinamos per „Windows“, be vėlesnio liekanų nuskaitymo.' : ''}`,
+      oneAtATime: 'Po vieną, nes „Windows“ vienu metu leidžia tik vieną diegimą ar šalinimą. Kai kurios šalinimo priemonės rodys savo langus ir užduos jums klausimų.',
+      storeWarning: (count) => count === 1
+        ? 'Šios partijos Store programėlės negalima atkurti iš karantino: jos pašalinimas pasiima programėlę ir jos išsaugotus duomenis, o susigrąžinti reiškia įdiegti ją iš naujo iš Store.'
+        : `Šios partijos ${count} Store programėlių negalima atkurti iš karantino: vienos pašalinimas pasiima programėlę ir jos išsaugotus duomenis, o susigrąžinti reiškia įdiegti ją iš naujo iš Store.`,
+      runsBefore: (name) => `vykdoma prieš ${name}`,
+      reported: (bytes) => `${bytes} praneštas`,
+      unknownSizeSuffix: (n) => `, ${n} nežinomo dydžio`,
+      startButton: 'Pradėti šalinimą',
+      status: { waiting: 'laukiama', uninstalling: 'šalinama…', removed: 'pašalinta', failed: 'nepavyko' },
+      removingLine: {
+        quarantine: 'Liekanos perkeliamos į karantiną…',
+        recycle: 'Liekanos siunčiamos į šiukšlinę…',
+        permanent: 'Liekanos visiškai ištrinamos…'
+      },
+      uninstalledOf: (removed, total) => `Pašalinta ${removed} iš ${total}.`,
+      failedHeading: (n) => `${n} nepavyko pašalinti ir jos buvo paliktos ramybėje:`,
+      removeLeftoversFailed: (error) => `Nepavyko pašalinti liekanų: ${error}`,
+      noScanSettingsOff: 'Liekanų nuskaitymas nustatymuose išjungtas, todėl nieko nebuvo ieškoma.',
+      noScanStore: 'Po Store programėlės liekanų nuskaitymo nėra: „Windows“ pašalina nuosavus programėlės duomenis kartu su ja.',
+      done: 'Atlikta',
+      summary: {
+        recycle: (programs, items, freed) => `Pašalinta ${programs} ir išsiųsta ${items} į šiukšlinę, atlaisvinant ${freed}.`,
+        permanent: (programs, items, freed) => `Pašalinta ${programs} ir visiškai ištrinta ${items}, atlaisvinant ${freed}.`,
+        quarantine: (programs, items, freed) => `Pašalinta ${programs} ir perkelta ${items} į karantiną, atlaisvinant ${freed}.`,
+        programs: (n) => `${n} program${n === 1 ? 'a' : 'os'}`,
+        items: (n) => `${n} likę${n === 1 ? 's elementas' : ' elementai'}`
+      },
+      noRestorePoint: (reason) => `Sistemos atkūrimo taškas nesukurtas (${reason}).`,
+      restorePointFallback: 'nepasiekiama',
+      quarantineNote: 'Visa tai, kas aukščiau, vis dar yra karantine ir gali būti grąžinta.',
+      failedRegistryKeys: (n) => `Nepavyko pašalinti ${n} registro rakt${n === 1 ? 'o' : 'ų'} — jiems paprastai reikia, kad „Prune“ veiktų administratoriaus teisėmis.`
     }
   },
 
@@ -11511,6 +13695,110 @@ export const CATALOG = {
         message: (count) => `Melangkau ${count} fail yang dikunci.`,
         detail: 'Tutup aplikasi yang menggunakannya dan bersihkan semula.'
       }
+    },
+    leftoverReview: {
+      groups: { files: 'Fail & folder', registryKeys: 'Kekunci registri', scheduledTasks: 'Tugas berjadual' },
+      notRemoved: 'ditemui, tidak dikeluarkan',
+      checkFailed: (label) => `Tidak dapat menyemak ${label}.`,
+      itemNote: {
+        valueOnly: (valueName) => `Hanya nilai "${valueName}" — kekunci tempat ia berada dikongsi dan kekal`,
+        uninstallEntry: 'Entri Tambah/Alih Keluar Program'
+      },
+      destinations: {
+        quarantine: { text: 'Item yang dipilih pergi ke Kuarantin, dari mana anda boleh memulihkannya.', button: 'Keluarkan yang dipilih' },
+        recycle: { text: 'Fail yang dipilih pergi ke Tong Kitar Semula. Kekunci registri disandarkan sebelum dikeluarkan.', button: 'Keluarkan yang dipilih' },
+        permanent: { text: 'Fail yang dipilih akan dipadam secara kekal dan tidak boleh dipulihkan. Kekunci registri disandarkan sebelum dikeluarkan.', button: 'Padam secara kekal' }
+      },
+      clean: 'Tiada baki ditemui — nyahpasang bersih.',
+      done: 'Selesai',
+      foundWarning: (count) => `Ditemui ${count} item baki yang terlepas pandang oleh penyahpasang asli. Semak sebelum membersihkan.`,
+      excludedNote: (count) => `${count} folder ditinggalkan kerana berada dalam pengecualian anda.`,
+      itemsSelected: 'item dipilih',
+      reclaimable: 'boleh dituntut semula',
+      skip: 'Langkau'
+    },
+    uninstallModal: {
+      titleForce: (name) => `Paksa keluarkan ${name}`,
+      titleNormal: (name) => `Nyahpasang ${name}`,
+      close: 'Tutup',
+      runningWarning: (name) => `${name} sedang berjalan sekarang. Tutup dahulu — penyahpasang biasanya gagal pada program yang terbuka, dan boleh meninggalkan fail yang akan dicipta semula oleh pelancaran seterusnya.`,
+      orphanedWarning: (reason) => `${reason} Windows akan terus menyenaraikannya sehingga entri dikeluarkan.`,
+      brokenIntro: 'Prune akan mencari fail dan kekunci registri yang sepadan dengan nama ini, termasuk entri Tambah/Alih Keluar Program, dan menunjukkan semuanya kepada anda sebelum mengeluarkan apa-apa.',
+      searchForLabel: 'Cari',
+      searchHint: (name) => `Diambil daripada "${name}" tanpa versinya — pemasang menamakan folder mengikut produk, bukan keluaran. Sunting jika hasilnya kelihatan salah.`,
+      scanFailed: (error) => `Imbasan gagal: ${error}`,
+      searchButton: 'Cari baki',
+      normalIntro: (name) => `Ini menjalankan penyahpasang ${name} sendiri, kemudian mengimbas apa-apa yang ditinggalkannya.`,
+      uninstallFailed: (error) => `Nyahpasang gagal: ${error}`,
+      startButton: 'Mula nyahpasang',
+      noWorkingUninstaller: 'Tiada penyahpasang yang berfungsi — mencari mengikut nama sebagai gantinya',
+      noUninstallCommand: 'Tiada arahan nyahpasang didaftarkan',
+      progress: {
+        runningNative: 'Menjalankan penyahpasang asli',
+        backingUpRegistry: 'Menyandarkan registri',
+        creatingRestorePoint: 'Mencipta titik pemulihan',
+        searchingLeftovers: 'Mencari baki',
+        scanningLeftovers: 'Mengimbas baki',
+        checkingCommand: 'Menyemak sistem fail, registri & tugas berjadual…'
+      },
+      removing: {
+        quarantine: { title: 'Memindahkan ke Kuarantin', command: 'Tiada apa dipadam — setiap item boleh dipulihkan' },
+        recycle: { title: 'Menghantar ke Tong Kitar Semula', command: 'Pulihkan daripada Tong Kitar Semula jika perlu' },
+        permanent: { title: 'Memadam secara kekal', command: 'Ini tidak boleh dipulihkan' }
+      },
+      noScan: (name) => `Penyahpasang ${name} telah selesai. Imbasan baki dimatikan dalam Tetapan, jadi tiada yang lain dicari.`,
+      removalFailed: (error) => `Pengeluaran gagal: ${error}`,
+      done: 'Selesai',
+      summary: {
+        item: (n) => `${n} item`,
+        registryKey: (n) => `${n} kekunci registri`,
+        recycle: (files, keys, freed) => `Menghantar ${files} ke Tong Kitar Semula dan mengeluarkan ${keys}, disandarkan dahulu dalam Kuarantin. Membebaskan ${freed}.`,
+        permanent: (files, keys, freed) => `Memadam secara kekal ${files} dan mengeluarkan ${keys}, disandarkan dahulu dalam Kuarantin. Membebaskan ${freed}.`,
+        quarantine: (files, keys, freed) => `Memindahkan ${files} dan ${keys} ke Kuarantin, membebaskan ${freed}. Pulihkan pada bila-bila masa daripada skrin Kuarantin.`
+      },
+      failedFilesHeading: (n) => `${n} item tidak dapat dikeluarkan:`,
+      failedRegistryKeysHeading: (n) => `${n} kekunci registri tidak dapat dikeluarkan`,
+      failedRegistryKeysNote: 'ini biasanya memerlukan Prune berjalan sebagai pentadbir:',
+      noRestorePoint: (reason) => `Tiada titik pemulihan sistem dicipta (${reason}).`,
+      quarantineStillWorks: 'Pemulihan Kuarantin masih berfungsi.'
+    },
+    batchUninstallModal: {
+      title: (n) => `Nyahpasang ${n} program`,
+      historyLabel: (n) => `Nyahpasang kelompok: ${n} program`,
+      close: 'Tutup',
+      registryOnlyIntro: 'Setiap apl dikeluarkan melalui Windows secara bergilir, dan tiada imbasan baki selepas itu: Windows mengeluarkan data sendiri apl bersamanya.',
+      mixedIntro: (hasStore) => `Penyahpasang sendiri setiap program berjalan secara bergilir, kemudian Prune mengimbas apa yang mereka tinggalkan dan menunjukkan semuanya kepada anda sebelum mengeluarkan apa-apa daripadanya.${hasStore ? ' Apl Store dikeluarkan melalui Windows sebagai gantinya, tanpa imbasan baki selepas itu.' : ''}`,
+      oneAtATime: 'Satu demi satu, kerana Windows hanya membenarkan satu pemasangan atau penyahpasangan pada satu masa. Sesetengah penyahpasang akan menunjukkan tetingkap mereka sendiri dan menanya anda soalan.',
+      storeWarning: (count) => count === 1
+        ? 'Apl Store dalam kelompok ini tidak boleh dipulihkan daripada Kuarantin: mengeluarkannya mengambil apl dan data tersimpannya, dan mendapatkannya semula bermakna memasangnya semula daripada Store.'
+        : `${count} apl Store dalam kelompok ini tidak boleh dipulihkan daripada Kuarantin: mengeluarkan satu mengambil apl dan data tersimpannya, dan mendapatkannya semula bermakna memasangnya semula daripada Store.`,
+      runsBefore: (name) => `berjalan sebelum ${name}`,
+      reported: (bytes) => `${bytes} dilaporkan`,
+      unknownSizeSuffix: (n) => `, ${n} bersaiz tidak diketahui`,
+      startButton: 'Mula nyahpasang',
+      status: { waiting: 'menunggu', uninstalling: 'menyahpasang…', removed: 'dikeluarkan', failed: 'gagal' },
+      removingLine: {
+        quarantine: 'Memindahkan baki ke Kuarantin…',
+        recycle: 'Menghantar baki ke Tong Kitar Semula…',
+        permanent: 'Memadam baki secara kekal…'
+      },
+      uninstalledOf: (removed, total) => `Menyahpasang ${removed} daripada ${total}.`,
+      failedHeading: (n) => `${n} tidak dapat dinyahpasang dan dibiarkan sahaja:`,
+      removeLeftoversFailed: (error) => `Tidak dapat mengeluarkan baki: ${error}`,
+      noScanSettingsOff: 'Imbasan baki dimatikan dalam Tetapan, jadi tiada apa dicari.',
+      noScanStore: 'Tiada imbasan baki selepas apl Store: Windows mengeluarkan data sendiri apl bersamanya.',
+      done: 'Selesai',
+      summary: {
+        recycle: (programs, items, freed) => `Menyahpasang ${programs} dan menghantar ${items} ke Tong Kitar Semula, membebaskan ${freed}.`,
+        permanent: (programs, items, freed) => `Menyahpasang ${programs} dan memadam ${items} secara kekal, membebaskan ${freed}.`,
+        quarantine: (programs, items, freed) => `Menyahpasang ${programs} dan memindahkan ${items} ke Kuarantin, membebaskan ${freed}.`,
+        programs: (n) => `${n} program`,
+        items: (n) => `${n} item baki`
+      },
+      noRestorePoint: (reason) => `Tiada titik pemulihan sistem dicipta (${reason}).`,
+      restorePointFallback: 'tidak tersedia',
+      quarantineNote: 'Semua di atas masih dalam Kuarantin dan boleh dikembalikan.',
+      failedRegistryKeys: (n) => `${n} kekunci registri tidak dapat dikeluarkan — ini biasanya memerlukan Prune berjalan sebagai pentadbir.`
     }
   },
 
@@ -12033,6 +14321,110 @@ export const CATALOG = {
         message: (count) => `Hoppet over ${count} låste filer.`,
         detail: 'Lukk appene som bruker dem, og rens på nytt.'
       }
+    },
+    leftoverReview: {
+      groups: { files: 'Filer og mapper', registryKeys: 'Registernøkler', scheduledTasks: 'Planlagte oppgaver' },
+      notRemoved: 'funnet, ikke fjernet',
+      checkFailed: (label) => `Kunne ikke sjekke ${label}.`,
+      itemNote: {
+        valueOnly: (valueName) => `Bare verdien "${valueName}" — nøkkelen den ligger i er delt og forblir`,
+        uninstallEntry: 'Oppføring i Legg til/fjern programmer'
+      },
+      destinations: {
+        quarantine: { text: 'Valgte elementer går til karantene, hvor du kan gjenopprette dem.', button: 'Fjern valgte' },
+        recycle: { text: 'Valgte filer går til papirkurven. Registernøkler sikkerhetskopieres før de fjernes.', button: 'Fjern valgte' },
+        permanent: { text: 'Valgte filer slettes permanent og kan ikke gjenopprettes. Registernøkler sikkerhetskopieres før de fjernes.', button: 'Slett permanent' }
+      },
+      clean: 'Ingen rester funnet — ren avinstallering.',
+      done: 'Ferdig',
+      foundWarning: (count) => `Fant ${count} gjenværende element${count === 1 ? '' : 'er'} som det opprinnelige avinstallasjonsprogrammet gikk glipp av. Se gjennom før du renser.`,
+      excludedNote: (count) => `${count} mappe${count === 1 ? '' : 'r'} utelatt fordi ${count === 1 ? 'den er' : 'de er'} i unntakene dine.`,
+      itemsSelected: 'elementer valgt',
+      reclaimable: 'kan frigjøres',
+      skip: 'Hopp over'
+    },
+    uninstallModal: {
+      titleForce: (name) => `Tving fjerning av ${name}`,
+      titleNormal: (name) => `Avinstaller ${name}`,
+      close: 'Lukk',
+      runningWarning: (name) => `${name} kjører akkurat nå. Lukk det først — et avinstallasjonsprogram mislykkes vanligvis på et åpent program, og kan etterlate filer som neste oppstart gjenskaper.`,
+      orphanedWarning: (reason) => `${reason} Windows vil fortsette å vise det til oppføringen fjernes.`,
+      brokenIntro: 'Prune vil søke etter filer og registernøkler som matcher dette navnet, inkludert dets oppføring i Legg til/fjern programmer, og vise deg alt før noe fjernes.',
+      searchForLabel: 'Søk etter',
+      searchHint: (name) => `Hentet fra "${name}" uten versjonen — installasjonsprogrammer navngir mapper etter produktet, ikke utgivelsen. Rediger det hvis resultatene ser feil ut.`,
+      scanFailed: (error) => `Skanning mislyktes: ${error}`,
+      searchButton: 'Søk etter rester',
+      normalIntro: (name) => `Dette kjører ${name}s eget avinstallasjonsprogram, og skanner deretter etter alt det etterlater.`,
+      uninstallFailed: (error) => `Avinstallering mislyktes: ${error}`,
+      startButton: 'Start avinstallering',
+      noWorkingUninstaller: 'Ingen fungerende avinstallasjonsprogram — søker etter navn i stedet',
+      noUninstallCommand: 'Ingen avinstallasjonskommando registrert',
+      progress: {
+        runningNative: 'Kjører opprinnelig avinstallasjonsprogram',
+        backingUpRegistry: 'Sikkerhetskopierer registeret',
+        creatingRestorePoint: 'Oppretter et gjenopprettingspunkt',
+        searchingLeftovers: 'Søker etter rester',
+        scanningLeftovers: 'Skanner etter rester',
+        checkingCommand: 'Sjekker filsystem, register og planlagte oppgaver…'
+      },
+      removing: {
+        quarantine: { title: 'Flytter til karantene', command: 'Ingenting slettes — hvert element kan gjenopprettes' },
+        recycle: { title: 'Sender til papirkurven', command: 'Gjenopprett dem fra papirkurven om nødvendig' },
+        permanent: { title: 'Sletter permanent', command: 'Disse kan ikke gjenopprettes' }
+      },
+      noScan: (name) => `${name}s avinstallasjonsprogram er ferdig. Restskanningen er slått av i Innstillinger, så ingenting annet ble søkt etter.`,
+      removalFailed: (error) => `Fjerning mislyktes: ${error}`,
+      done: 'Ferdig',
+      summary: {
+        item: (n) => `${n} element${n === 1 ? '' : 'er'}`,
+        registryKey: (n) => `${n} registernøk${n === 1 ? 'kel' : 'ler'}`,
+        recycle: (files, keys, freed) => `Sendte ${files} til papirkurven og fjernet ${keys}, sikkerhetskopiert i karantene først. Frigjorde ${freed}.`,
+        permanent: (files, keys, freed) => `Slettet ${files} permanent og fjernet ${keys}, sikkerhetskopiert i karantene først. Frigjorde ${freed}.`,
+        quarantine: (files, keys, freed) => `Flyttet ${files} og ${keys} til karantene, og frigjorde ${freed}. Gjenopprett dem når som helst fra karanteneskjermen.`
+      },
+      failedFilesHeading: (n) => `${n} element${n === 1 ? '' : 'er'} kunne ikke fjernes:`,
+      failedRegistryKeysHeading: (n) => `${n} registernøk${n === 1 ? 'kel' : 'ler'} kunne ikke fjernes`,
+      failedRegistryKeysNote: 'disse krever vanligvis at Prune kjører som administrator:',
+      noRestorePoint: (reason) => `Ingen systemgjenopprettingspunkt ble opprettet (${reason}).`,
+      quarantineStillWorks: 'Gjenoppretting fra karantene fungerer fortsatt.'
+    },
+    batchUninstallModal: {
+      title: (n) => `Avinstaller ${n} program${n === 1 ? '' : 'mer'}`,
+      historyLabel: (n) => `Gruppeavinstallering: ${n} programmer`,
+      close: 'Lukk',
+      registryOnlyIntro: 'Hver app fjernes gjennom Windows etter tur, og det er ingen restskanning etterpå: Windows fjerner appens egne data sammen med den.',
+      mixedIntro: (hasStore) => `Hvert programs eget avinstallasjonsprogram kjører etter tur, deretter skanner Prune etter hva de etterlater og viser deg alt før noe av det fjernes.${hasStore ? ' Store-apper fjernes i stedet gjennom Windows, uten restskanning etterpå.' : ''}`,
+      oneAtATime: 'Én om gangen, fordi Windows kun tillater én installasjon eller avinstallasjon om gangen. Noen avinstallasjonsprogrammer vil vise egne vinduer og stille deg spørsmål.',
+      storeWarning: (count) => count === 1
+        ? 'Store-appen i denne batchen kan ikke gjenopprettes fra karantene: å fjerne den tar med seg appen og dens lagrede data, og å få den tilbake betyr å installere den på nytt fra Store.'
+        : `De ${count} Store-appene i denne batchen kan ikke gjenopprettes fra karantene: å fjerne én tar med seg appen og dens lagrede data, og å få den tilbake betyr å installere den på nytt fra Store.`,
+      runsBefore: (name) => `kjører før ${name}`,
+      reported: (bytes) => `${bytes} rapportert`,
+      unknownSizeSuffix: (n) => `, ${n} av ukjent størrelse`,
+      startButton: 'Start avinstallering',
+      status: { waiting: 'venter', uninstalling: 'avinstallerer…', removed: 'fjernet', failed: 'mislyktes' },
+      removingLine: {
+        quarantine: 'Flytter rester til karantene…',
+        recycle: 'Sender rester til papirkurven…',
+        permanent: 'Sletter rester permanent…'
+      },
+      uninstalledOf: (removed, total) => `Avinstallerte ${removed} av ${total}.`,
+      failedHeading: (n) => `${n} kunne ikke avinstalleres og ble latt være:`,
+      removeLeftoversFailed: (error) => `Kunne ikke fjerne rester: ${error}`,
+      noScanSettingsOff: 'Restskanningen er slått av i Innstillinger, så ingenting ble søkt etter.',
+      noScanStore: 'Det er ingen restskanning etter en Store-app: Windows fjerner appens egne data sammen med den.',
+      done: 'Ferdig',
+      summary: {
+        recycle: (programs, items, freed) => `Avinstallerte ${programs} og sendte ${items} til papirkurven, og frigjorde ${freed}.`,
+        permanent: (programs, items, freed) => `Avinstallerte ${programs} og slettet ${items} permanent, og frigjorde ${freed}.`,
+        quarantine: (programs, items, freed) => `Avinstallerte ${programs} og flyttet ${items} til karantene, og frigjorde ${freed}.`,
+        programs: (n) => `${n} program${n === 1 ? '' : 'mer'}`,
+        items: (n) => `${n} gjenværende element${n === 1 ? '' : 'er'}`
+      },
+      noRestorePoint: (reason) => `Ingen systemgjenopprettingspunkt ble opprettet (${reason}).`,
+      restorePointFallback: 'ikke tilgjengelig',
+      quarantineNote: 'Alt over er fortsatt i karantene og kan settes tilbake.',
+      failedRegistryKeys: (n) => `${n} registernøk${n === 1 ? 'kel' : 'ler'} kunne ikke fjernes — disse krever vanligvis at Prune kjører som administrator.`
     }
   },
 
@@ -12555,6 +14947,110 @@ export const CATALOG = {
         message: (count) => `${count} vergrendelde bestanden overgeslagen.`,
         detail: 'Sluit de apps die ze gebruiken en schoon opnieuw op.'
       }
+    },
+    leftoverReview: {
+      groups: { files: 'Bestanden en mappen', registryKeys: 'Registersleutels', scheduledTasks: 'Geplande taken' },
+      notRemoved: 'gevonden, niet verwijderd',
+      checkFailed: (label) => `Kon ${label} niet controleren.`,
+      itemNote: {
+        valueOnly: (valueName) => `Alleen de waarde "${valueName}" — de sleutel waarin deze zich bevindt wordt gedeeld en blijft bestaan`,
+        uninstallEntry: 'Item in Programma\'s en onderdelen'
+      },
+      destinations: {
+        quarantine: { text: 'Geselecteerde items gaan naar Quarantaine, waar je ze kunt herstellen.', button: 'Selectie verwijderen' },
+        recycle: { text: 'Geselecteerde bestanden gaan naar de Prullenbak. Registersleutels worden geback-upt voordat ze worden verwijderd.', button: 'Selectie verwijderen' },
+        permanent: { text: 'Geselecteerde bestanden worden definitief verwijderd en kunnen niet worden hersteld. Registersleutels worden geback-upt voordat ze worden verwijderd.', button: 'Definitief verwijderen' }
+      },
+      clean: 'Geen restanten gevonden — schone verwijdering.',
+      done: 'Klaar',
+      foundWarning: (count) => `${count} overgebleven item${count === 1 ? '' : 's'} gevonden die het oorspronkelijke verwijderprogramma heeft gemist. Controleer voor het opschonen.`,
+      excludedNote: (count) => `${count} map${count === 1 ? '' : 'pen'} weggelaten omdat ${count === 1 ? 'deze zich' : 'ze zich'} in je uitsluitingen bevind${count === 1 ? 't' : 'en'}.`,
+      itemsSelected: 'items geselecteerd',
+      reclaimable: 'terug te winnen',
+      skip: 'Overslaan'
+    },
+    uninstallModal: {
+      titleForce: (name) => `${name} geforceerd verwijderen`,
+      titleNormal: (name) => `${name} verwijderen`,
+      close: 'Sluiten',
+      runningWarning: (name) => `${name} draait op dit moment. Sluit het eerst af — een verwijderprogramma mislukt meestal bij een geopend programma en kan bestanden achterlaten die bij de volgende start opnieuw worden aangemaakt.`,
+      orphanedWarning: (reason) => `${reason} Windows blijft het vermelden totdat het item is verwijderd.`,
+      brokenIntro: 'Prune zoekt naar bestanden en registersleutels die overeenkomen met deze naam, inclusief het item in Programma\'s en onderdelen, en laat je alles zien voordat er iets wordt verwijderd.',
+      searchForLabel: 'Zoeken naar',
+      searchHint: (name) => `Overgenomen uit "${name}" zonder de versie — installatieprogramma\'s noemen mappen naar het product, niet naar de release. Bewerk dit als de resultaten er verkeerd uitzien.`,
+      scanFailed: (error) => `Scan mislukt: ${error}`,
+      searchButton: 'Zoeken naar restanten',
+      normalIntro: (name) => `Dit voert het eigen verwijderprogramma van ${name} uit en scant vervolgens op alles wat het achterlaat.`,
+      uninstallFailed: (error) => `Verwijderen mislukt: ${error}`,
+      startButton: 'Verwijdering starten',
+      noWorkingUninstaller: 'Geen werkend verwijderprogramma — zoekt in plaats daarvan op naam',
+      noUninstallCommand: 'Geen verwijderopdracht geregistreerd',
+      progress: {
+        runningNative: 'Native verwijderprogramma wordt uitgevoerd',
+        backingUpRegistry: 'Register wordt geback-upt',
+        creatingRestorePoint: 'Herstelpunt wordt aangemaakt',
+        searchingLeftovers: 'Zoeken naar restanten',
+        scanningLeftovers: 'Restanten worden gescand',
+        checkingCommand: 'Bestandssysteem, register en geplande taken worden gecontroleerd…'
+      },
+      removing: {
+        quarantine: { title: 'Wordt verplaatst naar Quarantaine', command: 'Er wordt niets verwijderd — elk item is herstelbaar' },
+        recycle: { title: 'Wordt naar de Prullenbak gestuurd', command: 'Herstel ze indien nodig vanuit de Prullenbak' },
+        permanent: { title: 'Wordt definitief verwijderd', command: 'Deze kunnen niet worden hersteld' }
+      },
+      noScan: (name) => `Het verwijderprogramma van ${name} is klaar. De restantenscan staat uit in Instellingen, dus er is niet meer naar iets gezocht.`,
+      removalFailed: (error) => `Verwijderen mislukt: ${error}`,
+      done: 'Klaar',
+      summary: {
+        item: (n) => `${n} item${n === 1 ? '' : 's'}`,
+        registryKey: (n) => `${n} registersleutel${n === 1 ? '' : 's'}`,
+        recycle: (files, keys, freed) => `${files} naar de Prullenbak gestuurd en ${keys} verwijderd, eerst geback-upt in Quarantaine. ${freed} vrijgemaakt.`,
+        permanent: (files, keys, freed) => `${files} definitief verwijderd en ${keys} verwijderd, eerst geback-upt in Quarantaine. ${freed} vrijgemaakt.`,
+        quarantine: (files, keys, freed) => `${files} en ${keys} verplaatst naar Quarantaine, waarbij ${freed} is vrijgemaakt. Herstel ze op elk moment vanaf het Quarantainescherm.`
+      },
+      failedFilesHeading: (n) => `${n} item${n === 1 ? '' : 's'} kon${n === 1 ? '' : 'den'} niet worden verwijderd:`,
+      failedRegistryKeysHeading: (n) => `${n} registersleutel${n === 1 ? '' : 's'} kon${n === 1 ? '' : 'den'} niet worden verwijderd`,
+      failedRegistryKeysNote: 'deze vereisen meestal dat Prune als beheerder wordt uitgevoerd:',
+      noRestorePoint: (reason) => `Er is geen systeemherstelpunt gemaakt (${reason}).`,
+      quarantineStillWorks: 'Herstellen vanuit Quarantaine werkt nog steeds.'
+    },
+    batchUninstallModal: {
+      title: (n) => `${n} programma${n === 1 ? '' : '\'s'} verwijderen`,
+      historyLabel: (n) => `Batchverwijdering: ${n} programma's`,
+      close: 'Sluiten',
+      registryOnlyIntro: 'Elke app wordt om de beurt via Windows verwijderd, en daarna is er geen restantenscan: Windows verwijdert de eigen gegevens van de app samen met de app.',
+      mixedIntro: (hasStore) => `Het eigen verwijderprogramma van elk programma wordt om de beurt uitgevoerd, waarna Prune scant op wat ze achterlaten en je alles laat zien voordat er iets van wordt verwijderd.${hasStore ? ' Store-apps worden in plaats daarvan via Windows verwijderd, zonder restantenscan achteraf.' : ''}`,
+      oneAtATime: 'Eén voor één, omdat Windows slechts één installatie of verwijdering tegelijk toestaat. Sommige verwijderprogramma\'s tonen hun eigen vensters en stellen je vragen.',
+      storeWarning: (count) => count === 1
+        ? 'De Store-app in deze batch kan niet worden hersteld vanuit Quarantaine: het verwijderen ervan neemt de app en de opgeslagen gegevens mee, en het terugkrijgen ervan betekent opnieuw installeren vanuit de Store.'
+        : `De ${count} Store-apps in deze batch kunnen niet worden hersteld vanuit Quarantaine: het verwijderen van één neemt de app en de opgeslagen gegevens mee, en het terugkrijgen ervan betekent opnieuw installeren vanuit de Store.`,
+      runsBefore: (name) => `wordt uitgevoerd voor ${name}`,
+      reported: (bytes) => `${bytes} gemeld`,
+      unknownSizeSuffix: (n) => `, ${n} van onbekende grootte`,
+      startButton: 'Verwijdering starten',
+      status: { waiting: 'wacht', uninstalling: 'wordt verwijderd…', removed: 'verwijderd', failed: 'mislukt' },
+      removingLine: {
+        quarantine: 'Restanten worden verplaatst naar Quarantaine…',
+        recycle: 'Restanten worden naar de Prullenbak gestuurd…',
+        permanent: 'Restanten worden definitief verwijderd…'
+      },
+      uninstalledOf: (removed, total) => `${removed} van ${total} verwijderd.`,
+      failedHeading: (n) => `${n} kon${n === 1 ? '' : 'den'} niet worden verwijderd en ${n === 1 ? 'is' : 'zijn'} met rust gelaten:`,
+      removeLeftoversFailed: (error) => `Kon restanten niet verwijderen: ${error}`,
+      noScanSettingsOff: 'De restantenscan staat uit in Instellingen, dus er is niets gezocht.',
+      noScanStore: 'Er is geen restantenscan na een Store-app: Windows verwijdert de eigen gegevens van de app samen met de app.',
+      done: 'Klaar',
+      summary: {
+        recycle: (programs, items, freed) => `${programs} verwijderd en ${items} naar de Prullenbak gestuurd, waarbij ${freed} is vrijgemaakt.`,
+        permanent: (programs, items, freed) => `${programs} verwijderd en ${items} definitief verwijderd, waarbij ${freed} is vrijgemaakt.`,
+        quarantine: (programs, items, freed) => `${programs} verwijderd en ${items} verplaatst naar Quarantaine, waarbij ${freed} is vrijgemaakt.`,
+        programs: (n) => `${n} programma${n === 1 ? '' : '\'s'}`,
+        items: (n) => `${n} overgebleven item${n === 1 ? '' : 's'}`
+      },
+      noRestorePoint: (reason) => `Er is geen systeemherstelpunt gemaakt (${reason}).`,
+      restorePointFallback: 'niet beschikbaar',
+      quarantineNote: 'Alles hierboven staat nog in Quarantaine en kan worden teruggezet.',
+      failedRegistryKeys: (n) => `${n} registersleutel${n === 1 ? '' : 's'} kon${n === 1 ? '' : 'den'} niet worden verwijderd — deze vereisen meestal dat Prune als beheerder wordt uitgevoerd.`
     }
   },
 
@@ -13077,6 +15573,110 @@ export const CATALOG = {
         message: (count) => `Pominięto ${count} zablokowanych plików.`,
         detail: 'Zamknij aplikacje, które ich używają, i wyczyść ponownie.'
       }
+    },
+    leftoverReview: {
+      groups: { files: 'Pliki i foldery', registryKeys: 'Klucze rejestru', scheduledTasks: 'Zaplanowane zadania' },
+      notRemoved: 'znaleziono, nie usunięto',
+      checkFailed: (label) => `Nie udało się sprawdzić: ${label}.`,
+      itemNote: {
+        valueOnly: (valueName) => `Tylko wartość „${valueName}” — klucz, w którym się znajduje, jest współdzielony i pozostaje`,
+        uninstallEntry: 'Wpis Dodaj lub usuń programy'
+      },
+      destinations: {
+        quarantine: { text: 'Wybrane elementy trafiają do kwarantanny, skąd możesz je przywrócić.', button: 'Usuń zaznaczone' },
+        recycle: { text: 'Wybrane pliki trafiają do kosza. Klucze rejestru są archiwizowane przed usunięciem.', button: 'Usuń zaznaczone' },
+        permanent: { text: 'Wybrane pliki zostaną trwale usunięte i nie będzie można ich przywrócić. Klucze rejestru są archiwizowane przed usunięciem.', button: 'Usuń trwale' }
+      },
+      clean: 'Nie znaleziono pozostałości — czyste odinstalowanie.',
+      done: 'Gotowe',
+      foundWarning: (count) => `Znaleziono ${count} pozostał${count === 1 ? 'y element' : 'e elementy'}, które ominął natywny dezinstalator. Sprawdź przed wyczyszczeniem.`,
+      excludedNote: (count) => `Pominięto ${count} folder${count === 1 ? '' : 'y'}, ponieważ ${count === 1 ? 'znajduje się' : 'znajdują się'} w Twoich wykluczeniach.`,
+      itemsSelected: 'zaznaczonych elementów',
+      reclaimable: 'do odzyskania',
+      skip: 'Pomiń'
+    },
+    uninstallModal: {
+      titleForce: (name) => `Wymuś usunięcie ${name}`,
+      titleNormal: (name) => `Odinstaluj ${name}`,
+      close: 'Zamknij',
+      runningWarning: (name) => `${name} jest obecnie uruchomiony. Zamknij go najpierw — dezinstalator zwykle kończy się niepowodzeniem przy otwartym programie i może pozostawić pliki, które następne uruchomienie odtworzy.`,
+      orphanedWarning: (reason) => `${reason} Windows będzie nadal go wyświetlać, dopóki wpis nie zostanie usunięty.`,
+      brokenIntro: 'Prune wyszuka pliki i klucze rejestru pasujące do tej nazwy, w tym wpis Dodaj lub usuń programy, i pokaże Ci wszystko przed usunięciem czegokolwiek.',
+      searchForLabel: 'Szukaj',
+      searchHint: (name) => `Wzięte z „${name}” bez wersji — instalatory nazywają foldery według produktu, a nie wydania. Edytuj, jeśli wyniki wyglądają błędnie.`,
+      scanFailed: (error) => `Skanowanie nie powiodło się: ${error}`,
+      searchButton: 'Szukaj pozostałości',
+      normalIntro: (name) => `To uruchamia własny dezinstalator ${name}, a następnie skanuje w poszukiwaniu wszystkiego, co po sobie pozostawia.`,
+      uninstallFailed: (error) => `Odinstalowanie nie powiodło się: ${error}`,
+      startButton: 'Rozpocznij odinstalowywanie',
+      noWorkingUninstaller: 'Brak działającego dezinstalatora — zamiast tego wyszukiwanie po nazwie',
+      noUninstallCommand: 'Nie zarejestrowano polecenia odinstalowania',
+      progress: {
+        runningNative: 'Uruchamianie natywnego dezinstalatora',
+        backingUpRegistry: 'Tworzenie kopii zapasowej rejestru',
+        creatingRestorePoint: 'Tworzenie punktu przywracania',
+        searchingLeftovers: 'Wyszukiwanie pozostałości',
+        scanningLeftovers: 'Skanowanie pozostałości',
+        checkingCommand: 'Sprawdzanie systemu plików, rejestru i zaplanowanych zadań…'
+      },
+      removing: {
+        quarantine: { title: 'Przenoszenie do kwarantanny', command: 'Nic nie jest usuwane — każdy element można przywrócić' },
+        recycle: { title: 'Wysyłanie do kosza', command: 'W razie potrzeby przywróć je z kosza' },
+        permanent: { title: 'Trwałe usuwanie', command: 'Tych nie można przywrócić' }
+      },
+      noScan: (name) => `Dezinstalator ${name} zakończył pracę. Skanowanie pozostałości jest wyłączone w Ustawieniach, więc nic więcej nie wyszukano.`,
+      removalFailed: (error) => `Usunięcie nie powiodło się: ${error}`,
+      done: 'Gotowe',
+      summary: {
+        item: (n) => `${n} element${n === 1 ? '' : (n < 5 ? 'y' : 'ów')}`,
+        registryKey: (n) => `${n} klucz${n === 1 ? '' : (n < 5 ? 'e' : 'y')} rejestru`,
+        recycle: (files, keys, freed) => `Wysłano ${files} do kosza i usunięto ${keys}, wcześniej zarchiwizowane w kwarantannie. Zwolniono ${freed}.`,
+        permanent: (files, keys, freed) => `Trwale usunięto ${files} i usunięto ${keys}, wcześniej zarchiwizowane w kwarantannie. Zwolniono ${freed}.`,
+        quarantine: (files, keys, freed) => `Przeniesiono ${files} i ${keys} do kwarantanny, zwalniając ${freed}. Przywróć je w dowolnym momencie z ekranu kwarantanny.`
+      },
+      failedFilesHeading: (n) => `Nie udało się usunąć ${n} element${n === 1 ? 'u' : (n < 5 ? 'ów' : 'ów')}:`,
+      failedRegistryKeysHeading: (n) => `Nie udało się usunąć ${n} klucz${n === 1 ? 'a' : 'y'} rejestru`,
+      failedRegistryKeysNote: 'do tego zwykle wymagane jest uruchomienie Prune jako administrator:',
+      noRestorePoint: (reason) => `Nie utworzono punktu przywracania systemu (${reason}).`,
+      quarantineStillWorks: 'Przywracanie z kwarantanny nadal działa.'
+    },
+    batchUninstallModal: {
+      title: (n) => `Odinstaluj ${n} program${n === 1 ? '' : (n < 5 ? 'y' : 'ów')}`,
+      historyLabel: (n) => `Odinstalowanie grupowe: ${n} programów`,
+      close: 'Zamknij',
+      registryOnlyIntro: 'Każda aplikacja jest usuwana przez Windows po kolei, a potem nie ma skanowania pozostałości: Windows usuwa własne dane aplikacji razem z nią.',
+      mixedIntro: (hasStore) => `Własny dezinstalator każdego programu uruchamia się po kolei, a następnie Prune skanuje w poszukiwaniu tego, co po sobie zostawiają, i pokazuje Ci wszystko przed usunięciem czegokolwiek z tego.${hasStore ? ' Aplikacje ze Sklepu są zamiast tego usuwane przez Windows, bez skanowania pozostałości potem.' : ''}`,
+      oneAtATime: 'Po jednym na raz, ponieważ Windows zezwala tylko na jedną instalację lub odinstalowanie naraz. Niektóre dezinstalatory wyświetlą własne okna i zadadzą Ci pytania.',
+      storeWarning: (count) => count === 1
+        ? 'Aplikacji ze Sklepu w tej partii nie można przywrócić z kwarantanny: jej usunięcie zabiera aplikację i jej zapisane dane, a odzyskanie jej oznacza ponowną instalację ze Sklepu.'
+        : `${count} aplikacji ze Sklepu w tej partii nie można przywrócić z kwarantanny: usunięcie jednej zabiera aplikację i jej zapisane dane, a odzyskanie jej oznacza ponowną instalację ze Sklepu.`,
+      runsBefore: (name) => `uruchamia się przed ${name}`,
+      reported: (bytes) => `zgłoszono ${bytes}`,
+      unknownSizeSuffix: (n) => `, ${n} o nieznanym rozmiarze`,
+      startButton: 'Rozpocznij odinstalowywanie',
+      status: { waiting: 'oczekuje', uninstalling: 'odinstalowywanie…', removed: 'usunięto', failed: 'niepowodzenie' },
+      removingLine: {
+        quarantine: 'Przenoszenie pozostałości do kwarantanny…',
+        recycle: 'Wysyłanie pozostałości do kosza…',
+        permanent: 'Trwałe usuwanie pozostałości…'
+      },
+      uninstalledOf: (removed, total) => `Odinstalowano ${removed} z ${total}.`,
+      failedHeading: (n) => `Nie udało się odinstalować ${n} i pozostawiono je bez zmian:`,
+      removeLeftoversFailed: (error) => `Nie udało się usunąć pozostałości: ${error}`,
+      noScanSettingsOff: 'Skanowanie pozostałości jest wyłączone w Ustawieniach, więc niczego nie wyszukano.',
+      noScanStore: 'Po aplikacji ze Sklepu nie ma skanowania pozostałości: Windows usuwa własne dane aplikacji razem z nią.',
+      done: 'Gotowe',
+      summary: {
+        recycle: (programs, items, freed) => `Odinstalowano ${programs} i wysłano ${items} do kosza, zwalniając ${freed}.`,
+        permanent: (programs, items, freed) => `Odinstalowano ${programs} i trwale usunięto ${items}, zwalniając ${freed}.`,
+        quarantine: (programs, items, freed) => `Odinstalowano ${programs} i przeniesiono ${items} do kwarantanny, zwalniając ${freed}.`,
+        programs: (n) => `${n} program${n === 1 ? '' : (n < 5 ? 'y' : 'ów')}`,
+        items: (n) => `${n} pozostał${n === 1 ? 'y element' : 'e elementy'}`
+      },
+      noRestorePoint: (reason) => `Nie utworzono punktu przywracania systemu (${reason}).`,
+      restorePointFallback: 'niedostępne',
+      quarantineNote: 'Wszystko powyższe wciąż znajduje się w kwarantannie i można to przywrócić.',
+      failedRegistryKeys: (n) => `Nie udało się usunąć ${n} klucz${n === 1 ? 'a' : 'y'} rejestru — do tego zwykle wymagane jest uruchomienie Prune jako administrator.`
     }
   },
 
@@ -13599,6 +16199,110 @@ export const CATALOG = {
         message: (count) => `${count} تړل شوي فایلونه پریښودل شوي.`,
         detail: 'هغه اپلیکیشنونه بند کړئ چې دا کاروي او بیا یې پاک کړئ.'
       }
+    },
+    leftoverReview: {
+      groups: { files: 'دوتنې او فولډرونه', registryKeys: 'د راجستر کیلي', scheduledTasks: 'مهالویش شوي دندې' },
+      notRemoved: 'وموندل شو، لرې نشو',
+      checkFailed: (label) => `د ${label} چیک کول ونشول.`,
+      itemNote: {
+        valueOnly: (valueName) => `یوازې ارزښت "${valueName}" — هغه کیلي چې دا پکې ده شریکه ده او پاتې کیږي`,
+        uninstallEntry: 'د پروګرامونو اضافه کول/لرې کول ننوتنه'
+      },
+      destinations: {
+        quarantine: { text: 'ټاکل شوي توکي قرنطین ته ځي، چیرې چې تاسو یې بیرته راوستلی شئ.', button: 'ټاکل شوي لرې کړئ' },
+        recycle: { text: 'ټاکل شوي فایلونه ردي بکس ته ځي. د راجستر کیلي د لرې کیدو دمخه بیک اپ کیږي.', button: 'ټاکل شوي لرې کړئ' },
+        permanent: { text: 'ټاکل شوي فایلونه به په بشپړ ډول ړنګ شي او نشي بیرته راوستل کیدی. د راجستر کیلي د لرې کیدو دمخه بیک اپ کیږي.', button: 'د تل لپاره ړنګول' }
+      },
+      clean: 'هیڅ پاتې شونې ونه موندل شوې — پاک لرې کول.',
+      done: 'شوی',
+      foundWarning: (count) => `${count} پاتې شوي توکي وموندل شول چې اصلي لرې کوونکي یې پریښودل. مخکې له پاکولو یې وګورئ.`,
+      excludedNote: (count) => `${count} فولډرونه پریښودل شول ځکه چې دوی ستاسو په استثناوو کې دي.`,
+      itemsSelected: 'توکي ټاکل شوي',
+      reclaimable: 'بیا ترلاسه کیدونکی',
+      skip: 'پریښودل'
+    },
+    uninstallModal: {
+      titleForce: (name) => `${name} په زور لرې کول`,
+      titleNormal: (name) => `${name} لرې کول`,
+      close: 'بندول',
+      runningWarning: (name) => `${name} اوس مهال چلیږي. لومړی یې بند کړئ — یو لرې کوونکی معمولاً د خلاص پروګرام سره پاتې راځي، او کولی شي فایلونه پریږدي چې راتلونکی چلونه به یې بیا جوړ کړي.`,
+      orphanedWarning: (reason) => `${reason} Windows به یې لا هم لیست کوي تر څو چې ننوتنه لرې نشي.`,
+      brokenIntro: 'Prune به د دې نوم سره سمون لرونکي فایلونه او د راجستر کیلي ولټوي، په شمول د هغې د پروګرامونو اضافه کول/لرې کول ننوتنه، او تاسو ته به هرڅه وښیي مخکې لدې چې هرڅه لرې شي.',
+      searchForLabel: 'د لټون لپاره',
+      searchHint: (name) => `له "${name}" څخه اخیستل شوی پرته له نسخې نه — نصبونکي فولډرونه د محصول له مخې نومول کوي، نه د خپرونې. که پایلې غلطې ښکاري یې سمون ورکړئ.`,
+      scanFailed: (error) => `سکین ناکام شو: ${error}`,
+      searchButton: 'د پاتې شونو لپاره لټون',
+      normalIntro: (name) => `دا د ${name} خپل لرې کوونکی چلوي، بیا هغه هرڅه سکین کوي چې دا یې پریږدي.`,
+      uninstallFailed: (error) => `لرې کول ناکام شول: ${error}`,
+      startButton: 'لرې کول پیل کړئ',
+      noWorkingUninstaller: 'کار کوونکی لرې کوونکی نشته — پرځای یې د نوم له مخې لټون کیږي',
+      noUninstallCommand: 'هیڅ ثبت شوی لرې کولو امر نشته',
+      progress: {
+        runningNative: 'اصلي لرې کوونکی چلیږي',
+        backingUpRegistry: 'راجستر بیک اپ کیږي',
+        creatingRestorePoint: 'د بیارغونې نقطه جوړیږي',
+        searchingLeftovers: 'د پاتې شونو لټون',
+        scanningLeftovers: 'د پاتې شونو سکین کول',
+        checkingCommand: 'د فایل سیسټم، راجستر او مهالویش شویو دندو چیک کول…'
+      },
+      removing: {
+        quarantine: { title: 'قرنطین ته لیږدول کیږي', command: 'هیڅ شی نه ړنګیږي — هر توکی بیرته راوستل کیدی شي' },
+        recycle: { title: 'ردي بکس ته لیږل کیږي', command: 'که اړتیا وي دوی له ردي بکس نه بیرته راوړئ' },
+        permanent: { title: 'د تل لپاره ړنګیږي', command: 'دا نشي بیرته راوستل کیدی' }
+      },
+      noScan: (name) => `د ${name} لرې کوونکی بشپړ شو. د پاتې شونو سکین په تنظیماتو کې بند دی، نو بل هیڅ ونه لټول شو.`,
+      removalFailed: (error) => `لرې کول ناکام شول: ${error}`,
+      done: 'شوی',
+      summary: {
+        item: (n) => `${n} توکي`,
+        registryKey: (n) => `${n} د راجستر کیلي`,
+        recycle: (files, keys, freed) => `${files} ردي بکس ته ولیږل شول او ${keys} لرې شول، لومړی په قرنطین کې بیک اپ شوي. ${freed} خلاص شول.`,
+        permanent: (files, keys, freed) => `${files} د تل لپاره ړنګ شول او ${keys} لرې شول، لومړی په قرنطین کې بیک اپ شوي. ${freed} خلاص شول.`,
+        quarantine: (files, keys, freed) => `${files} او ${keys} قرنطین ته ولیږدول شول، ${freed} خلاص شول. دوی په هر وخت کې د قرنطین سکرین څخه بیرته راوړئ.`
+      },
+      failedFilesHeading: (n) => `${n} توکي لرې نشول کیدی:`,
+      failedRegistryKeysHeading: (n) => `${n} د راجستر کیلي لرې نشوای کیدی`,
+      failedRegistryKeysNote: 'دا معمولاً اړتیا لري چې Prune د اډمین په توګه وچلیږي:',
+      noRestorePoint: (reason) => `د سیسټم بیارغونې نقطه جوړه نشوه (${reason}).`,
+      quarantineStillWorks: 'د قرنطین بیارغونه لاهم کار کوي.'
+    },
+    batchUninstallModal: {
+      title: (n) => `${n} پروګرامونه لرې کول`,
+      historyLabel: (n) => `ډله ییز لرې کول: ${n} پروګرامونه`,
+      close: 'بندول',
+      registryOnlyIntro: 'هر اپلیکیشن په وار سره د Windows له لارې لرې کیږي، او له هغې وروسته د پاتې شونو سکین نشته: Windows د اپلیکیشن خپل ډاټا لرې کوي.',
+      mixedIntro: (hasStore) => `د هر پروګرام خپل لرې کوونکی په وار سره چلیږي، بیا Prune هغه څه سکین کوي چې دوی یې پریږدي او تاسو ته هرڅه ښیي مخکې لدې چې هرڅه لرې شي.${hasStore ? ' د پلورنځي اپلیکیشنونه پرځای یې د Windows له لارې لرې کیږي، پرته له وروستي پاتې شونو سکین نه.' : ''}`,
+      oneAtATime: 'یو په وار، ځکه چې Windows یوازې یو نصبول یا لرې کول په یو وخت کې اجازه ورکوي. ځینې لرې کوونکي به خپل کړکۍ ښیي او له تاسو نه به پوښتنې وکړي.',
+      storeWarning: (count) => count === 1
+        ? 'د دې بستې د پلورنځي اپلیکیشن د قرنطین څخه بیرته راوستل کیدی نشي: د دې لرې کول اپلیکیشن او د هغې خوندي شوي ډاټا اخلي، او د دې بیرته ترلاسه کول د پلورنځي څخه بیا نصبول معنی لري.'
+        : `د دې بستې ${count} د پلورنځي اپلیکیشنونه د قرنطین څخه بیرته راوستل کیدی نشي: د یوه لرې کول اپلیکیشن او د هغې خوندي شوي ډاټا اخلي، او د دې بیرته ترلاسه کول د پلورنځي څخه بیا نصبول معنی لري.`,
+      runsBefore: (name) => `د ${name} دمخه چلیږي`,
+      reported: (bytes) => `${bytes} راپور شوي`,
+      unknownSizeSuffix: (n) => `، ${n} ناڅرګنده اندازه`,
+      startButton: 'لرې کول پیل کړئ',
+      status: { waiting: 'انتظار', uninstalling: 'لرې کیږي…', removed: 'لرې شو', failed: 'ناکام شو' },
+      removingLine: {
+        quarantine: 'پاتې شونې قرنطین ته لیږدول کیږي…',
+        recycle: 'پاتې شونې ردي بکس ته لیږل کیږي…',
+        permanent: 'پاتې شونې د تل لپاره ړنګیږي…'
+      },
+      uninstalledOf: (removed, total) => `${removed} د ${total} څخه لرې شول.`,
+      failedHeading: (n) => `${n} لرې نشوای کیدی او یوازې پریښودل شول:`,
+      removeLeftoversFailed: (error) => `پاتې شونې لرې نشوای: ${error}`,
+      noScanSettingsOff: 'د پاتې شونو سکین په تنظیماتو کې بند دی، نو هیڅ ونه لټول شو.',
+      noScanStore: 'د پلورنځي اپلیکیشن وروسته هیڅ پاتې شونو سکین نشته: Windows د اپلیکیشن خپل ډاټا لرې کوي.',
+      done: 'شوی',
+      summary: {
+        recycle: (programs, items, freed) => `${programs} لرې شول او ${items} ردي بکس ته ولیږل شول، ${freed} خلاص شول.`,
+        permanent: (programs, items, freed) => `${programs} لرې شول او ${items} د تل لپاره ړنګ شول، ${freed} خلاص شول.`,
+        quarantine: (programs, items, freed) => `${programs} لرې شول او ${items} قرنطین ته ولیږدول شول، ${freed} خلاص شول.`,
+        programs: (n) => `${n} پروګرامونه`,
+        items: (n) => `${n} پاتې شوي توکي`
+      },
+      noRestorePoint: (reason) => `د سیسټم بیارغونې نقطه جوړه نشوه (${reason}).`,
+      restorePointFallback: 'شتون نلري',
+      quarantineNote: 'پورته ټول لا هم په قرنطین کې دي او بیرته ایښودل کیدی شي.',
+      failedRegistryKeys: (n) => `${n} د راجستر کیلي لرې نشوای کیدی — دا معمولاً اړتیا لري چې Prune د اډمین په توګه وچلیږي.`
     }
   },
 
@@ -14121,6 +16825,110 @@ export const CATALOG = {
         message: (count) => `${count} arquivo${count === 1 ? '' : 's'} bloqueado${count === 1 ? '' : 's'} ignorado${count === 1 ? '' : 's'}.`,
         detail: 'Feche os aplicativos que os usam e limpe novamente.'
       }
+    },
+    leftoverReview: {
+      groups: { files: 'Arquivos e pastas', registryKeys: 'Chaves de registro', scheduledTasks: 'Tarefas agendadas' },
+      notRemoved: 'encontrado, não removido',
+      checkFailed: (label) => `Não foi possível verificar ${label}.`,
+      itemNote: {
+        valueOnly: (valueName) => `Somente o valor "${valueName}" — a chave em que ele está é compartilhada e permanece`,
+        uninstallEntry: 'Entrada de Adicionar/Remover Programas'
+      },
+      destinations: {
+        quarantine: { text: 'Os itens selecionados vão para a Quarentena, de onde você pode restaurá-los.', button: 'Remover selecionados' },
+        recycle: { text: 'Os arquivos selecionados vão para a Lixeira. As chaves de registro são backupeadas antes de serem removidas.', button: 'Remover selecionados' },
+        permanent: { text: 'Os arquivos selecionados serão excluídos definitivamente e não poderão ser restaurados. As chaves de registro são backupeadas antes de serem removidas.', button: 'Excluir permanentemente' }
+      },
+      clean: 'Nenhum resíduo encontrado — desinstalação limpa.',
+      done: 'Concluído',
+      foundWarning: (count) => `Encontrado${count === 1 ? '' : 's'} ${count} item${count === 1 ? '' : 's'} residual${count === 1 ? '' : 'is'} que o desinstalador nativo não pegou. Revise antes de limpar.`,
+      excludedNote: (count) => `${count} past${count === 1 ? 'a deixada' : 'as deixadas'} de fora porque ${count === 1 ? 'está' : 'estão'} nas suas exclusões.`,
+      itemsSelected: 'itens selecionados',
+      reclaimable: 'recuperável',
+      skip: 'Pular'
+    },
+    uninstallModal: {
+      titleForce: (name) => `Forçar remoção de ${name}`,
+      titleNormal: (name) => `Desinstalar ${name}`,
+      close: 'Fechar',
+      runningWarning: (name) => `${name} está em execução agora. Feche-o primeiro — um desinstalador geralmente falha com um programa aberto, e pode deixar arquivos que a próxima inicialização recriará.`,
+      orphanedWarning: (reason) => `${reason} O Windows continuará a listá-lo até que a entrada seja removida.`,
+      brokenIntro: 'O Prune procurará arquivos e chaves de registro que correspondam a este nome, incluindo sua entrada de Adicionar/Remover Programas, e mostrará tudo antes de remover qualquer coisa.',
+      searchForLabel: 'Buscar por',
+      searchHint: (name) => `Extraído de "${name}" sem a versão — instaladores nomeiam pastas de acordo com o produto, não com o lançamento. Edite se os resultados parecerem errados.`,
+      scanFailed: (error) => `A verificação falhou: ${error}`,
+      searchButton: 'Buscar resíduos',
+      normalIntro: (name) => `Isso executa o próprio desinstalador do ${name} e depois verifica qualquer coisa que ele deixe para trás.`,
+      uninstallFailed: (error) => `A desinstalação falhou: ${error}`,
+      startButton: 'Iniciar desinstalação',
+      noWorkingUninstaller: 'Nenhum desinstalador funcional — buscando pelo nome em vez disso',
+      noUninstallCommand: 'Nenhum comando de desinstalação registrado',
+      progress: {
+        runningNative: 'Executando o desinstalador nativo',
+        backingUpRegistry: 'Fazendo backup do registro',
+        creatingRestorePoint: 'Criando um ponto de restauração',
+        searchingLeftovers: 'Buscando resíduos',
+        scanningLeftovers: 'Verificando resíduos',
+        checkingCommand: 'Verificando sistema de arquivos, registro e tarefas agendadas…'
+      },
+      removing: {
+        quarantine: { title: 'Movendo para a Quarentena', command: 'Nada é excluído — cada item pode ser restaurado' },
+        recycle: { title: 'Enviando para a Lixeira', command: 'Restaure-os da Lixeira se necessário' },
+        permanent: { title: 'Excluindo permanentemente', command: 'Estes não podem ser restaurados' }
+      },
+      noScan: (name) => `O desinstalador do ${name} terminou. A verificação de resíduos está desativada nas Configurações, então nada mais foi procurado.`,
+      removalFailed: (error) => `A remoção falhou: ${error}`,
+      done: 'Concluído',
+      summary: {
+        item: (n) => `${n} item${n === 1 ? '' : 's'}`,
+        registryKey: (n) => `${n} chave${n === 1 ? '' : 's'} de registro`,
+        recycle: (files, keys, freed) => `Enviado${'s'} ${files} para a Lixeira e removido${'s'} ${keys}, backupeados antes na Quarentena. Liberado${'s'} ${freed}.`,
+        permanent: (files, keys, freed) => `Excluído${'s'} definitivamente ${files} e removido${'s'} ${keys}, backupeados antes na Quarentena. Liberado${'s'} ${freed}.`,
+        quarantine: (files, keys, freed) => `Movido${'s'} ${files} e ${keys} para a Quarentena, liberando ${freed}. Restaure-os a qualquer momento a partir da tela de Quarentena.`
+      },
+      failedFilesHeading: (n) => `${n} item${n === 1 ? '' : 's'} não p${n === 1 ? 'ôde' : 'uderam'} ser removido${n === 1 ? '' : 's'}:`,
+      failedRegistryKeysHeading: (n) => `${n} chave${n === 1 ? '' : 's'} de registro não p${n === 1 ? 'ôde' : 'uderam'} ser removida${n === 1 ? '' : 's'}`,
+      failedRegistryKeysNote: 'estas geralmente exigem que o Prune seja executado como administrador:',
+      noRestorePoint: (reason) => `Nenhum ponto de restauração do sistema foi criado (${reason}).`,
+      quarantineStillWorks: 'A restauração da Quarentena ainda funciona.'
+    },
+    batchUninstallModal: {
+      title: (n) => `Desinstalar ${n} programa${n === 1 ? '' : 's'}`,
+      historyLabel: (n) => `Desinstalação em lote: ${n} programas`,
+      close: 'Fechar',
+      registryOnlyIntro: 'Cada app é removido pelo Windows por vez, e não há verificação de resíduos depois: o Windows remove os próprios dados do app junto com ele.',
+      mixedIntro: (hasStore) => `O próprio desinstalador de cada programa é executado por vez, depois o Prune verifica o que eles deixam para trás e mostra tudo antes de remover qualquer coisa.${hasStore ? ' Apps da Store são removidos pelo Windows em vez disso, sem verificação de resíduos depois.' : ''}`,
+      oneAtATime: 'Um de cada vez, porque o Windows só permite uma instalação ou desinstalação por vez. Alguns desinstaladores mostrarão suas próprias janelas e farão perguntas a você.',
+      storeWarning: (count) => count === 1
+        ? 'O app da Store neste lote não pode ser restaurado da Quarentena: removê-lo leva o app e seus dados salvos, e recuperá-lo significa reinstalá-lo pela Store.'
+        : `Os ${count} apps da Store neste lote não podem ser restaurados da Quarentena: remover um leva o app e seus dados salvos, e recuperá-lo significa reinstalá-lo pela Store.`,
+      runsBefore: (name) => `executa antes de ${name}`,
+      reported: (bytes) => `${bytes} reportados`,
+      unknownSizeSuffix: (n) => `, ${n} de tamanho desconhecido`,
+      startButton: 'Iniciar desinstalação',
+      status: { waiting: 'aguardando', uninstalling: 'desinstalando…', removed: 'removido', failed: 'falhou' },
+      removingLine: {
+        quarantine: 'Movendo resíduos para a Quarentena…',
+        recycle: 'Enviando resíduos para a Lixeira…',
+        permanent: 'Excluindo resíduos permanentemente…'
+      },
+      uninstalledOf: (removed, total) => `Desinstalado${'s'} ${removed} de ${total}.`,
+      failedHeading: (n) => `${n} não p${n === 1 ? 'ôde' : 'uderam'} ser desinstalado${n === 1 ? '' : 's'} e f${n === 1 ? 'oi deixado' : 'oram deixados'} de lado:`,
+      removeLeftoversFailed: (error) => `Não foi possível remover os resíduos: ${error}`,
+      noScanSettingsOff: 'A verificação de resíduos está desativada nas Configurações, então nada foi procurado.',
+      noScanStore: 'Não há verificação de resíduos após um app da Store: o Windows remove os próprios dados do app junto com ele.',
+      done: 'Concluído',
+      summary: {
+        recycle: (programs, items, freed) => `Desinstalado${'s'} ${programs} e envi${'ados'} ${items} para a Lixeira, liberando ${freed}.`,
+        permanent: (programs, items, freed) => `Desinstalado${'s'} ${programs} e excluído${'s'} ${items} permanentemente, liberando ${freed}.`,
+        quarantine: (programs, items, freed) => `Desinstalado${'s'} ${programs} e movido${'s'} ${items} para a Quarentena, liberando ${freed}.`,
+        programs: (n) => `${n} programa${n === 1 ? '' : 's'}`,
+        items: (n) => `${n} item${n === 1 ? '' : 's'} residual${n === 1 ? '' : 'is'}`
+      },
+      noRestorePoint: (reason) => `Nenhum ponto de restauração do sistema foi criado (${reason}).`,
+      restorePointFallback: 'não disponível',
+      quarantineNote: 'Tudo acima ainda está na Quarentena e pode ser devolvido.',
+      failedRegistryKeys: (n) => `${n} chave${n === 1 ? '' : 's'} de registro não p${n === 1 ? 'ôde' : 'uderam'} ser removida${n === 1 ? '' : 's'} — estas geralmente exigem que o Prune seja executado como administrador.`
     }
   },
 
@@ -14643,6 +17451,110 @@ export const CATALOG = {
         message: (count) => `${count} ficheiro${count === 1 ? '' : 's'} bloqueado${count === 1 ? '' : 's'} ignorado${count === 1 ? '' : 's'}.`,
         detail: 'Feche as aplicações que os utilizam e limpe novamente.'
       }
+    },
+    leftoverReview: {
+      groups: { files: 'Ficheiros e pastas', registryKeys: 'Chaves de registo', scheduledTasks: 'Tarefas agendadas' },
+      notRemoved: 'encontrado, não removido',
+      checkFailed: (label) => `Não foi possível verificar ${label}.`,
+      itemNote: {
+        valueOnly: (valueName) => `Apenas o valor "${valueName}" — a chave onde este se encontra é partilhada e permanece`,
+        uninstallEntry: 'Entrada de Adicionar/Remover Programas'
+      },
+      destinations: {
+        quarantine: { text: 'Os itens selecionados vão para a Quarentena, de onde os pode restaurar.', button: 'Remover selecionados' },
+        recycle: { text: 'Os ficheiros selecionados vão para a Reciclagem. As chaves de registo são copiadas de segurança antes de serem removidas.', button: 'Remover selecionados' },
+        permanent: { text: 'Os ficheiros selecionados serão eliminados definitivamente e não poderão ser restaurados. As chaves de registo são copiadas de segurança antes de serem removidas.', button: 'Eliminar permanentemente' }
+      },
+      clean: 'Não foram encontrados resíduos — desinstalação limpa.',
+      done: 'Concluído',
+      foundWarning: (count) => `Encontrado${count === 1 ? '' : 's'} ${count} elemento${count === 1 ? '' : 's'} residual${count === 1 ? '' : 'ais'} que o desinstalador nativo não apanhou. Reveja antes de limpar.`,
+      excludedNote: (count) => `${count} past${count === 1 ? 'a deixada' : 'as deixadas'} de fora porque ${count === 1 ? 'está' : 'estão'} nas suas exclusões.`,
+      itemsSelected: 'itens selecionados',
+      reclaimable: 'recuperável',
+      skip: 'Ignorar'
+    },
+    uninstallModal: {
+      titleForce: (name) => `Forçar remoção de ${name}`,
+      titleNormal: (name) => `Desinstalar ${name}`,
+      close: 'Fechar',
+      runningWarning: (name) => `${name} está em execução neste momento. Feche-o primeiro — um desinstalador normalmente falha com um programa aberto, e pode deixar ficheiros que o próximo arranque recriará.`,
+      orphanedWarning: (reason) => `${reason} O Windows continuará a listá-lo até que a entrada seja removida.`,
+      brokenIntro: 'O Prune procurará ficheiros e chaves de registo que correspondam a este nome, incluindo a sua entrada de Adicionar/Remover Programas, e mostrar-lhe-á tudo antes de remover algo.',
+      searchForLabel: 'Procurar por',
+      searchHint: (name) => `Retirado de "${name}" sem a versão — os instaladores nomeiam pastas de acordo com o produto, não com o lançamento. Edite se os resultados parecerem errados.`,
+      scanFailed: (error) => `A verificação falhou: ${error}`,
+      searchButton: 'Procurar resíduos',
+      normalIntro: (name) => `Isto executa o próprio desinstalador do ${name}, e depois verifica tudo o que deixa para trás.`,
+      uninstallFailed: (error) => `A desinstalação falhou: ${error}`,
+      startButton: 'Iniciar desinstalação',
+      noWorkingUninstaller: 'Nenhum desinstalador funcional — a procurar pelo nome em alternativa',
+      noUninstallCommand: 'Nenhum comando de desinstalação registado',
+      progress: {
+        runningNative: 'A executar o desinstalador nativo',
+        backingUpRegistry: 'A copiar de segurança o registo',
+        creatingRestorePoint: 'A criar um ponto de restauro',
+        searchingLeftovers: 'A procurar resíduos',
+        scanningLeftovers: 'A verificar resíduos',
+        checkingCommand: 'A verificar o sistema de ficheiros, o registo e as tarefas agendadas…'
+      },
+      removing: {
+        quarantine: { title: 'A mover para a Quarentena', command: 'Nada é eliminado — cada item pode ser restaurado' },
+        recycle: { title: 'A enviar para a Reciclagem', command: 'Restaure-os a partir da Reciclagem se necessário' },
+        permanent: { title: 'A eliminar permanentemente', command: 'Estes não podem ser restaurados' }
+      },
+      noScan: (name) => `O desinstalador do ${name} terminou. A verificação de resíduos está desativada nas Definições, pelo que não se procurou mais nada.`,
+      removalFailed: (error) => `A remoção falhou: ${error}`,
+      done: 'Concluído',
+      summary: {
+        item: (n) => `${n} elemento${n === 1 ? '' : 's'}`,
+        registryKey: (n) => `${n} chave${n === 1 ? '' : 's'} de registo`,
+        recycle: (files, keys, freed) => `Envi${'ados'} ${files} para a Reciclagem e removid${'os'} ${keys}, copiados de segurança na Quarentena primeiro. Libertad${'os'} ${freed}.`,
+        permanent: (files, keys, freed) => `Eliminad${'os'} definitivamente ${files} e removid${'os'} ${keys}, copiados de segurança na Quarentena primeiro. Libertad${'os'} ${freed}.`,
+        quarantine: (files, keys, freed) => `Movid${'os'} ${files} e ${keys} para a Quarentena, libertando ${freed}. Restaure-os a qualquer momento a partir do ecrã de Quarentena.`
+      },
+      failedFilesHeading: (n) => `${n} elemento${n === 1 ? '' : 's'} não p${n === 1 ? 'ôde' : 'uderam'} ser removido${n === 1 ? '' : 's'}:`,
+      failedRegistryKeysHeading: (n) => `${n} chave${n === 1 ? '' : 's'} de registo não p${n === 1 ? 'ôde' : 'uderam'} ser removida${n === 1 ? '' : 's'}`,
+      failedRegistryKeysNote: 'estas normalmente exigem que o Prune seja executado como administrador:',
+      noRestorePoint: (reason) => `Não foi criado nenhum ponto de restauro do sistema (${reason}).`,
+      quarantineStillWorks: 'A restauração a partir da Quarentena continua a funcionar.'
+    },
+    batchUninstallModal: {
+      title: (n) => `Desinstalar ${n} programa${n === 1 ? '' : 's'}`,
+      historyLabel: (n) => `Desinstalação em lote: ${n} programas`,
+      close: 'Fechar',
+      registryOnlyIntro: 'Cada aplicação é removida através do Windows por sua vez, e não há verificação de resíduos depois: o Windows remove os próprios dados da aplicação juntamente com ela.',
+      mixedIntro: (hasStore) => `O próprio desinstalador de cada programa é executado por sua vez, depois o Prune verifica o que deixam para trás e mostra-lhe tudo antes de remover algo disso.${hasStore ? ' As aplicações da Store são removidas através do Windows em alternativa, sem verificação de resíduos depois.' : ''}`,
+      oneAtATime: 'Uma de cada vez, porque o Windows só permite uma instalação ou desinstalação de cada vez. Alguns desinstaladores mostrarão as suas próprias janelas e far-lhe-ão perguntas.',
+      storeWarning: (count) => count === 1
+        ? 'A aplicação da Store neste lote não pode ser restaurada a partir da Quarentena: removê-la leva a aplicação e os seus dados guardados, e recuperá-la significa reinstalá-la a partir da Store.'
+        : `As ${count} aplicações da Store neste lote não podem ser restauradas a partir da Quarentena: remover uma leva a aplicação e os seus dados guardados, e recuperá-la significa reinstalá-la a partir da Store.`,
+      runsBefore: (name) => `executa antes de ${name}`,
+      reported: (bytes) => `${bytes} reportados`,
+      unknownSizeSuffix: (n) => `, ${n} de tamanho desconhecido`,
+      startButton: 'Iniciar desinstalação',
+      status: { waiting: 'a aguardar', uninstalling: 'a desinstalar…', removed: 'removido', failed: 'falhou' },
+      removingLine: {
+        quarantine: 'A mover resíduos para a Quarentena…',
+        recycle: 'A enviar resíduos para a Reciclagem…',
+        permanent: 'A eliminar resíduos permanentemente…'
+      },
+      uninstalledOf: (removed, total) => `Desinstalad${'os'} ${removed} de ${total}.`,
+      failedHeading: (n) => `${n} não p${n === 1 ? 'ôde' : 'uderam'} ser desinstalado${n === 1 ? '' : 's'} e f${n === 1 ? 'oi deixado' : 'oram deixados'} intocado${n === 1 ? '' : 's'}:`,
+      removeLeftoversFailed: (error) => `Não foi possível remover os resíduos: ${error}`,
+      noScanSettingsOff: 'A verificação de resíduos está desativada nas Definições, pelo que nada foi procurado.',
+      noScanStore: 'Não há verificação de resíduos após uma aplicação da Store: o Windows remove os próprios dados da aplicação juntamente com ela.',
+      done: 'Concluído',
+      summary: {
+        recycle: (programs, items, freed) => `Desinstalad${'os'} ${programs} e envi${'ados'} ${items} para a Reciclagem, libertando ${freed}.`,
+        permanent: (programs, items, freed) => `Desinstalad${'os'} ${programs} e eliminad${'os'} ${items} permanentemente, libertando ${freed}.`,
+        quarantine: (programs, items, freed) => `Desinstalad${'os'} ${programs} e movid${'os'} ${items} para a Quarentena, libertando ${freed}.`,
+        programs: (n) => `${n} programa${n === 1 ? '' : 's'}`,
+        items: (n) => `${n} elemento${n === 1 ? '' : 's'} residual${n === 1 ? '' : 'ais'}`
+      },
+      noRestorePoint: (reason) => `Não foi criado nenhum ponto de restauro do sistema (${reason}).`,
+      restorePointFallback: 'não disponível',
+      quarantineNote: 'Tudo acima ainda está na Quarentena e pode ser reposto.',
+      failedRegistryKeys: (n) => `${n} chave${n === 1 ? '' : 's'} de registo não p${n === 1 ? 'ôde' : 'uderam'} ser removida${n === 1 ? '' : 's'} — estas normalmente exigem que o Prune seja executado como administrador.`
     }
   },
 
@@ -15165,6 +18077,110 @@ export const CATALOG = {
         message: (count) => `S-au omis ${count} fișiere blocate.`,
         detail: 'Închide aplicațiile care le folosesc și curăță din nou.'
       }
+    },
+    leftoverReview: {
+      groups: { files: 'Fișiere și foldere', registryKeys: 'Chei de registru', scheduledTasks: 'Sarcini programate' },
+      notRemoved: 'găsit, neeliminat',
+      checkFailed: (label) => `Nu s-a putut verifica ${label}.`,
+      itemNote: {
+        valueOnly: (valueName) => `Doar valoarea „${valueName}” — cheia în care se află este partajată și rămâne`,
+        uninstallEntry: 'Intrare Adăugare/Eliminare programe'
+      },
+      destinations: {
+        quarantine: { text: 'Elementele selectate merg în Carantină, de unde le poți restaura.', button: 'Elimină selecția' },
+        recycle: { text: 'Fișierele selectate merg în Coșul de reciclare. Cheile de registru sunt copiate de rezervă înainte de a fi eliminate.', button: 'Elimină selecția' },
+        permanent: { text: 'Fișierele selectate vor fi șterse definitiv și nu pot fi restaurate. Cheile de registru sunt copiate de rezervă înainte de a fi eliminate.', button: 'Șterge definitiv' }
+      },
+      clean: 'Nu s-au găsit resturi — dezinstalare curată.',
+      done: 'Terminat',
+      foundWarning: (count) => `S-au găsit ${count} element${count === 1 ? '' : 'e'} rămas${count === 1 ? '' : 'e'} pe care dezinstalatorul nativ le-a ratat. Revizuiește înainte de curățare.`,
+      excludedNote: (count) => `${count} folder${count === 1 ? '' : 'e'} las${count === 1 ? 'at' : 'ate'} deoparte pentru că ${count === 1 ? 'se află' : 'se află'} în excluderile tale.`,
+      itemsSelected: 'elemente selectate',
+      reclaimable: 'recuperabil',
+      skip: 'Omite'
+    },
+    uninstallModal: {
+      titleForce: (name) => `Forțează eliminarea ${name}`,
+      titleNormal: (name) => `Dezinstalează ${name}`,
+      close: 'Închide',
+      runningWarning: (name) => `${name} rulează chiar acum. Închide-l mai întâi — un dezinstalator eșuează de obicei cu un program deschis și poate lăsa fișiere pe care următoarea lansare le va recrea.`,
+      orphanedWarning: (reason) => `${reason} Windows va continua să îl listeze până când intrarea este eliminată.`,
+      brokenIntro: 'Prune va căuta fișiere și chei de registru care corespund acestui nume, inclusiv intrarea sa Adăugare/Eliminare programe, și îți va arăta totul înainte de a elimina orice.',
+      searchForLabel: 'Caută',
+      searchHint: (name) => `Preluat din „${name}” fără versiunea sa — programele de instalare denumesc folderele după produs, nu după versiune. Editează-l dacă rezultatele par greșite.`,
+      scanFailed: (error) => `Scanarea a eșuat: ${error}`,
+      searchButton: 'Caută resturi',
+      normalIntro: (name) => `Aceasta rulează propriul dezinstalator al ${name}, apoi scanează orice lasă în urmă.`,
+      uninstallFailed: (error) => `Dezinstalarea a eșuat: ${error}`,
+      startButton: 'Începe dezinstalarea',
+      noWorkingUninstaller: 'Niciun dezinstalator funcțional — se caută după nume în schimb',
+      noUninstallCommand: 'Nicio comandă de dezinstalare înregistrată',
+      progress: {
+        runningNative: 'Se rulează dezinstalatorul nativ',
+        backingUpRegistry: 'Se copiază de rezervă registrul',
+        creatingRestorePoint: 'Se creează un punct de restaurare',
+        searchingLeftovers: 'Se caută resturi',
+        scanningLeftovers: 'Se scanează resturi',
+        checkingCommand: 'Se verifică sistemul de fișiere, registrul și sarcinile programate…'
+      },
+      removing: {
+        quarantine: { title: 'Se mută în Carantină', command: 'Nimic nu este șters — fiecare element poate fi restaurat' },
+        recycle: { title: 'Se trimite în Coșul de reciclare', command: 'Restaurează-le din Coșul de reciclare dacă este necesar' },
+        permanent: { title: 'Se șterge definitiv', command: 'Acestea nu pot fi restaurate' }
+      },
+      noScan: (name) => `Dezinstalatorul ${name} a terminat. Scanarea resturilor este dezactivată în Setări, deci nu s-a mai căutat nimic altceva.`,
+      removalFailed: (error) => `Eliminarea a eșuat: ${error}`,
+      done: 'Terminat',
+      summary: {
+        item: (n) => `${n} element${n === 1 ? '' : 'e'}`,
+        registryKey: (n) => `${n} che${n === 1 ? 'ie' : 'i'} de registru`,
+        recycle: (files, keys, freed) => `S-au trimis ${files} în Coșul de reciclare și s-au eliminat ${keys}, copiate de rezervă în Carantină mai întâi. S-au eliberat ${freed}.`,
+        permanent: (files, keys, freed) => `S-au șters definitiv ${files} și s-au eliminat ${keys}, copiate de rezervă în Carantină mai întâi. S-au eliberat ${freed}.`,
+        quarantine: (files, keys, freed) => `S-au mutat ${files} și ${keys} în Carantină, eliberând ${freed}. Restaurează-le oricând din ecranul Carantină.`
+      },
+      failedFilesHeading: (n) => `${n} element${n === 1 ? '' : 'e'} nu ${n === 1 ? 'a putut fi eliminat' : 'au putut fi eliminate'}:`,
+      failedRegistryKeysHeading: (n) => `${n} che${n === 1 ? 'ie' : 'i'} de registru nu ${n === 1 ? 'a putut fi eliminată' : 'au putut fi eliminate'}`,
+      failedRegistryKeysNote: 'acestea necesită de obicei ca Prune să ruleze ca administrator:',
+      noRestorePoint: (reason) => `Nu s-a creat niciun punct de restaurare a sistemului (${reason}).`,
+      quarantineStillWorks: 'Restaurarea din Carantină funcționează în continuare.'
+    },
+    batchUninstallModal: {
+      title: (n) => `Dezinstalează ${n} program${n === 1 ? '' : 'e'}`,
+      historyLabel: (n) => `Dezinstalare în lot: ${n} programe`,
+      close: 'Închide',
+      registryOnlyIntro: 'Fiecare aplicație este eliminată prin Windows pe rând, și nu există scanare de resturi după: Windows elimină datele proprii ale aplicației odată cu ea.',
+      mixedIntro: (hasStore) => `Propriul dezinstalator al fiecărui program rulează pe rând, apoi Prune scanează ce lasă în urmă și îți arată totul înainte de a elimina orice din asta.${hasStore ? ' Aplicațiile din Store sunt eliminate prin Windows în schimb, fără scanare de resturi după.' : ''}`,
+      oneAtATime: 'Câte una, pentru că Windows permite doar o instalare sau dezinstalare la un moment dat. Unele dezinstalatoare vor afișa propriile ferestre și îți vor pune întrebări.',
+      storeWarning: (count) => count === 1
+        ? 'Aplicația din Store din acest lot nu poate fi restaurată din Carantină: eliminarea ei ia aplicația și datele salvate, iar recuperarea ei înseamnă reinstalarea din Store.'
+        : `Cele ${count} aplicații din Store din acest lot nu pot fi restaurate din Carantină: eliminarea uneia ia aplicația și datele salvate, iar recuperarea ei înseamnă reinstalarea din Store.`,
+      runsBefore: (name) => `rulează înainte de ${name}`,
+      reported: (bytes) => `${bytes} raportate`,
+      unknownSizeSuffix: (n) => `, ${n} de dimensiune necunoscută`,
+      startButton: 'Începe dezinstalarea',
+      status: { waiting: 'în așteptare', uninstalling: 'se dezinstalează…', removed: 'eliminat', failed: 'eșuat' },
+      removingLine: {
+        quarantine: 'Se mută resturile în Carantină…',
+        recycle: 'Se trimit resturile în Coșul de reciclare…',
+        permanent: 'Se șterg resturile definitiv…'
+      },
+      uninstalledOf: (removed, total) => `S-au dezinstalat ${removed} din ${total}.`,
+      failedHeading: (n) => `${n} nu ${n === 1 ? 'a putut fi dezinstalat' : 'au putut fi dezinstalate'} și ${n === 1 ? 'a fost lăsat' : 'au fost lăsate'} deoparte:`,
+      removeLeftoversFailed: (error) => `Nu s-au putut elimina resturile: ${error}`,
+      noScanSettingsOff: 'Scanarea resturilor este dezactivată în Setări, deci nu s-a căutat nimic.',
+      noScanStore: 'Nu există scanare de resturi după o aplicație din Store: Windows elimină datele proprii ale aplicației odată cu ea.',
+      done: 'Terminat',
+      summary: {
+        recycle: (programs, items, freed) => `S-au dezinstalat ${programs} și s-au trimis ${items} în Coșul de reciclare, eliberând ${freed}.`,
+        permanent: (programs, items, freed) => `S-au dezinstalat ${programs} și s-au șters definitiv ${items}, eliberând ${freed}.`,
+        quarantine: (programs, items, freed) => `S-au dezinstalat ${programs} și s-au mutat ${items} în Carantină, eliberând ${freed}.`,
+        programs: (n) => `${n} program${n === 1 ? '' : 'e'}`,
+        items: (n) => `${n} element${n === 1 ? '' : 'e'} rămas${n === 1 ? '' : 'e'}`
+      },
+      noRestorePoint: (reason) => `Nu s-a creat niciun punct de restaurare a sistemului (${reason}).`,
+      restorePointFallback: 'indisponibil',
+      quarantineNote: 'Tot ce este mai sus este încă în Carantină și poate fi pus înapoi.',
+      failedRegistryKeys: (n) => `${n} che${n === 1 ? 'ie' : 'i'} de registru nu ${n === 1 ? 'a putut fi eliminată' : 'au putut fi eliminate'} — acestea necesită de obicei ca Prune să ruleze ca administrator.`
     }
   },
 
@@ -15687,6 +18703,110 @@ export const CATALOG = {
         message: (count) => `Пропущено заблокированных файлов: ${count}.`,
         detail: 'Закройте приложения, которые их используют, и очистите снова.'
       }
+    },
+    leftoverReview: {
+      groups: { files: 'Файлы и папки', registryKeys: 'Ключи реестра', scheduledTasks: 'Запланированные задачи' },
+      notRemoved: 'найдено, не удалено',
+      checkFailed: (label) => `Не удалось проверить ${label}.`,
+      itemNote: {
+        valueOnly: (valueName) => `Только значение «${valueName}» — ключ, в котором оно находится, является общим и остаётся`,
+        uninstallEntry: 'Запись в списке программ и компонентов'
+      },
+      destinations: {
+        quarantine: { text: 'Выбранные элементы перемещаются в карантин, откуда вы можете их восстановить.', button: 'Удалить выбранное' },
+        recycle: { text: 'Выбранные файлы перемещаются в корзину. Ключи реестра резервируются перед удалением.', button: 'Удалить выбранное' },
+        permanent: { text: 'Выбранные файлы будут удалены безвозвратно и не могут быть восстановлены. Ключи реестра резервируются перед удалением.', button: 'Удалить безвозвратно' }
+      },
+      clean: 'Остатков не найдено — чистое удаление.',
+      done: 'Готово',
+      foundWarning: (count) => `Найдено ${count} оставшихся элементов, которые пропустил встроенный деинсталлятор. Проверьте перед очисткой.`,
+      excludedNote: (count) => `${count} папок исключено, так как они находятся в ваших исключениях.`,
+      itemsSelected: 'элементов выбрано',
+      reclaimable: 'можно освободить',
+      skip: 'Пропустить'
+    },
+    uninstallModal: {
+      titleForce: (name) => `Принудительно удалить ${name}`,
+      titleNormal: (name) => `Удалить ${name}`,
+      close: 'Закрыть',
+      runningWarning: (name) => `${name} сейчас запущена. Сначала закройте её — деинсталлятор обычно завершается с ошибкой при открытой программе и может оставить файлы, которые следующий запуск создаст заново.`,
+      orphanedWarning: (reason) => `${reason} Windows продолжит отображать её, пока запись не будет удалена.`,
+      brokenIntro: 'Prune найдёт файлы и ключи реестра, соответствующие этому имени, включая запись в списке программ и компонентов, и покажет вам всё перед удалением чего-либо.',
+      searchForLabel: 'Искать',
+      searchHint: (name) => `Взято из «${name}» без версии — установщики называют папки по продукту, а не по релизу. Отредактируйте, если результаты выглядят неверно.`,
+      scanFailed: (error) => `Сканирование не удалось: ${error}`,
+      searchButton: 'Искать остатки',
+      normalIntro: (name) => `Это запускает собственный деинсталлятор ${name}, затем сканирует всё, что он оставляет после себя.`,
+      uninstallFailed: (error) => `Удаление не удалось: ${error}`,
+      startButton: 'Начать удаление',
+      noWorkingUninstaller: 'Нет работающего деинсталлятора — вместо этого выполняется поиск по имени',
+      noUninstallCommand: 'Команда удаления не зарегистрирована',
+      progress: {
+        runningNative: 'Выполняется встроенный деинсталлятор',
+        backingUpRegistry: 'Резервное копирование реестра',
+        creatingRestorePoint: 'Создание точки восстановления',
+        searchingLeftovers: 'Поиск остатков',
+        scanningLeftovers: 'Сканирование остатков',
+        checkingCommand: 'Проверка файловой системы, реестра и запланированных задач…'
+      },
+      removing: {
+        quarantine: { title: 'Перемещение в карантин', command: 'Ничего не удаляется — каждый элемент можно восстановить' },
+        recycle: { title: 'Отправка в корзину', command: 'При необходимости восстановите их из корзины' },
+        permanent: { title: 'Безвозвратное удаление', command: 'Их нельзя восстановить' }
+      },
+      noScan: (name) => `Деинсталлятор ${name} завершил работу. Сканирование остатков отключено в настройках, поэтому ничего другого не искалось.`,
+      removalFailed: (error) => `Удаление не удалось: ${error}`,
+      done: 'Готово',
+      summary: {
+        item: (n) => `${n} элемент${n === 1 ? '' : (n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) ? 'а' : 'ов')}`,
+        registryKey: (n) => `${n} ключ${n === 1 ? '' : (n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) ? 'а' : 'ей')} реестра`,
+        recycle: (files, keys, freed) => `Отправлено ${files} в корзину и удалено ${keys}, предварительно сохранено в карантине. Освобождено ${freed}.`,
+        permanent: (files, keys, freed) => `Безвозвратно удалено ${files} и удалено ${keys}, предварительно сохранено в карантине. Освобождено ${freed}.`,
+        quarantine: (files, keys, freed) => `Перемещено ${files} и ${keys} в карантин, освободив ${freed}. Восстановите их в любое время с экрана карантина.`
+      },
+      failedFilesHeading: (n) => `Не удалось удалить ${n} элементов:`,
+      failedRegistryKeysHeading: (n) => `Не удалось удалить ${n} ключей реестра`,
+      failedRegistryKeysNote: 'обычно для этого требуется, чтобы Prune был запущен от имени администратора:',
+      noRestorePoint: (reason) => `Точка восстановления системы не была создана (${reason}).`,
+      quarantineStillWorks: 'Восстановление из карантина всё ещё работает.'
+    },
+    batchUninstallModal: {
+      title: (n) => `Удалить ${n} программ`,
+      historyLabel: (n) => `Пакетное удаление: ${n} программ`,
+      close: 'Закрыть',
+      registryOnlyIntro: 'Каждое приложение удаляется через Windows по очереди, и после этого сканирование остатков не выполняется: Windows удаляет собственные данные приложения вместе с ним.',
+      mixedIntro: (hasStore) => `Собственный деинсталлятор каждой программы запускается по очереди, затем Prune сканирует, что они оставляют после себя, и показывает вам всё перед удалением чего-либо из этого.${hasStore ? ' Приложения из Store вместо этого удаляются через Windows, без последующего сканирования остатков.' : ''}`,
+      oneAtATime: 'По одному, потому что Windows разрешает только одну установку или удаление за раз. Некоторые деинсталляторы покажут собственные окна и зададут вам вопросы.',
+      storeWarning: (count) => count === 1
+        ? 'Приложение Store в этом пакете нельзя восстановить из карантина: его удаление забирает приложение и его сохранённые данные, а вернуть его означает переустановить из Store.'
+        : `${count} приложений Store в этом пакете нельзя восстановить из карантина: удаление одного забирает приложение и его сохранённые данные, а вернуть его означает переустановить из Store.`,
+      runsBefore: (name) => `выполняется перед ${name}`,
+      reported: (bytes) => `${bytes} заявлено`,
+      unknownSizeSuffix: (n) => `, ${n} неизвестного размера`,
+      startButton: 'Начать удаление',
+      status: { waiting: 'ожидание', uninstalling: 'удаление…', removed: 'удалено', failed: 'ошибка' },
+      removingLine: {
+        quarantine: 'Перемещение остатков в карантин…',
+        recycle: 'Отправка остатков в корзину…',
+        permanent: 'Безвозвратное удаление остатков…'
+      },
+      uninstalledOf: (removed, total) => `Удалено ${removed} из ${total}.`,
+      failedHeading: (n) => `${n} не удалось удалить, и они остались нетронутыми:`,
+      removeLeftoversFailed: (error) => `Не удалось удалить остатки: ${error}`,
+      noScanSettingsOff: 'Сканирование остатков отключено в настройках, поэтому ничего не искалось.',
+      noScanStore: 'После приложения Store сканирование остатков не выполняется: Windows удаляет собственные данные приложения вместе с ним.',
+      done: 'Готово',
+      summary: {
+        recycle: (programs, items, freed) => `Удалено ${programs} и отправлено ${items} в корзину, освободив ${freed}.`,
+        permanent: (programs, items, freed) => `Удалено ${programs} и безвозвратно удалено ${items}, освободив ${freed}.`,
+        quarantine: (programs, items, freed) => `Удалено ${programs} и перемещено ${items} в карантин, освободив ${freed}.`,
+        programs: (n) => `${n} программ`,
+        items: (n) => `${n} оставшихся элементов`
+      },
+      noRestorePoint: (reason) => `Точка восстановления системы не была создана (${reason}).`,
+      restorePointFallback: 'недоступно',
+      quarantineNote: 'Всё вышеперечисленное всё ещё находится в карантине и может быть возвращено обратно.',
+      failedRegistryKeys: (n) => `Не удалось удалить ${n} ключей реестра — обычно для этого требуется, чтобы Prune был запущен от имени администратора.`
     }
   },
 
@@ -16209,6 +19329,110 @@ export const CATALOG = {
         message: (count) => `Preskočených ${count} uzamknutých súborov.`,
         detail: 'Zatvorte aplikácie, ktoré ich používajú, a vyčistite znova.'
       }
+    },
+    leftoverReview: {
+      groups: { files: 'Súbory a priečinky', registryKeys: 'Kľúče registra', scheduledTasks: 'Naplánované úlohy' },
+      notRemoved: 'nájdené, neodstránené',
+      checkFailed: (label) => `Nepodarilo sa skontrolovať ${label}.`,
+      itemNote: {
+        valueOnly: (valueName) => `Iba hodnota „${valueName}“ — kľúč, v ktorom sa nachádza, je zdieľaný a zostáva`,
+        uninstallEntry: 'Položka Pridať alebo odobrať programy'
+      },
+      destinations: {
+        quarantine: { text: 'Vybrané položky prejdú do karantény, odkiaľ ich môžete obnoviť.', button: 'Odstrániť vybrané' },
+        recycle: { text: 'Vybrané súbory prejdú do koša. Kľúče registra sa zálohujú pred odstránením.', button: 'Odstrániť vybrané' },
+        permanent: { text: 'Vybrané súbory budú natrvalo odstránené a nemožno ich obnoviť. Kľúče registra sa zálohujú pred odstránením.', button: 'Odstrániť natrvalo' }
+      },
+      clean: 'Nenašli sa žiadne zvyšky — čisté odinštalovanie.',
+      done: 'Hotovo',
+      foundWarning: (count) => `Našlo sa ${count} zvyšných položiek, ktoré natívny odinštalátor prehliadol. Skontrolujte pred vyčistením.`,
+      excludedNote: (count) => `${count} priečinkov bolo vynechaných, pretože sú vo vašich výnimkách.`,
+      itemsSelected: 'vybraných položiek',
+      reclaimable: 'možno uvoľniť',
+      skip: 'Preskočiť'
+    },
+    uninstallModal: {
+      titleForce: (name) => `Vynútiť odstránenie ${name}`,
+      titleNormal: (name) => `Odinštalovať ${name}`,
+      close: 'Zavrieť',
+      runningWarning: (name) => `${name} je práve spustený. Najprv ho zatvorte — odinštalátor zvyčajne zlyhá s otvoreným programom a môže zanechať súbory, ktoré ďalšie spustenie znova vytvorí.`,
+      orphanedWarning: (reason) => `${reason} Windows ho bude naďalej zobrazovať, kým sa položka neodstráni.`,
+      brokenIntro: 'Prune vyhľadá súbory a kľúče registra zodpovedajúce tomuto názvu, vrátane jeho položky Pridať alebo odobrať programy, a ukáže vám všetko pred odstránením čohokoľvek.',
+      searchForLabel: 'Hľadať',
+      searchHint: (name) => `Prevzaté z „${name}“ bez verzie — inštalátory pomenúvajú priečinky podľa produktu, nie podľa vydania. Upravte to, ak výsledky vyzerajú nesprávne.`,
+      scanFailed: (error) => `Skenovanie zlyhalo: ${error}`,
+      searchButton: 'Hľadať zvyšky',
+      normalIntro: (name) => `Toto spustí vlastný odinštalátor ${name} a potom skenuje čokoľvek, čo po sebe zanechá.`,
+      uninstallFailed: (error) => `Odinštalovanie zlyhalo: ${error}`,
+      startButton: 'Spustiť odinštalovanie',
+      noWorkingUninstaller: 'Žiadny funkčný odinštalátor — namiesto toho sa hľadá podľa názvu',
+      noUninstallCommand: 'Nie je zaregistrovaný žiadny príkaz na odinštalovanie',
+      progress: {
+        runningNative: 'Spúšťa sa natívny odinštalátor',
+        backingUpRegistry: 'Zálohuje sa register',
+        creatingRestorePoint: 'Vytvára sa bod obnovenia',
+        searchingLeftovers: 'Hľadajú sa zvyšky',
+        scanningLeftovers: 'Skenujú sa zvyšky',
+        checkingCommand: 'Kontroluje sa súborový systém, register a naplánované úlohy…'
+      },
+      removing: {
+        quarantine: { title: 'Presúva sa do karantény', command: 'Nič sa nemaže — každú položku možno obnoviť' },
+        recycle: { title: 'Odosiela sa do koša', command: 'V prípade potreby ich obnovte z koša' },
+        permanent: { title: 'Natrvalo sa maže', command: 'Toto nemožno obnoviť' }
+      },
+      noScan: (name) => `Odinštalátor ${name} dokončil prácu. Skenovanie zvyškov je vypnuté v Nastaveniach, takže sa nič iné nehľadalo.`,
+      removalFailed: (error) => `Odstránenie zlyhalo: ${error}`,
+      done: 'Hotovo',
+      summary: {
+        item: (n) => `${n} polož${n === 1 ? 'ka' : (n < 5 ? 'ky' : 'iek')}`,
+        registryKey: (n) => `${n} kľúč${n === 1 ? '' : (n < 5 ? 'e' : 'ov')} registra`,
+        recycle: (files, keys, freed) => `Odoslané ${files} do koša a odstránené ${keys}, najprv zálohované v karanténe. Uvoľnené ${freed}.`,
+        permanent: (files, keys, freed) => `Natrvalo odstránené ${files} a odstránené ${keys}, najprv zálohované v karanténe. Uvoľnené ${freed}.`,
+        quarantine: (files, keys, freed) => `Presunuté ${files} a ${keys} do karantény, uvoľnené ${freed}. Obnovte ich kedykoľvek z obrazovky karantény.`
+      },
+      failedFilesHeading: (n) => `Nepodarilo sa odstrániť ${n} polož${n === 1 ? 'ku' : (n < 5 ? 'ky' : 'iek')}:`,
+      failedRegistryKeysHeading: (n) => `Nepodarilo sa odstrániť ${n} kľúč${n === 1 ? '' : (n < 5 ? 'e' : 'ov')} registra`,
+      failedRegistryKeysNote: 'tieto zvyčajne vyžadujú, aby Prune bežal ako správca:',
+      noRestorePoint: (reason) => `Nebol vytvorený žiadny bod obnovenia systému (${reason}).`,
+      quarantineStillWorks: 'Obnovenie z karantény stále funguje.'
+    },
+    batchUninstallModal: {
+      title: (n) => `Odinštalovať ${n} program${n === 1 ? '' : (n < 5 ? 'y' : 'ov')}`,
+      historyLabel: (n) => `Dávkové odinštalovanie: ${n} programov`,
+      close: 'Zavrieť',
+      registryOnlyIntro: 'Každá aplikácia sa postupne odstráni prostredníctvom Windows a potom nenasleduje skenovanie zvyškov: Windows odstráni vlastné údaje aplikácie spolu s ňou.',
+      mixedIntro: (hasStore) => `Vlastný odinštalátor každého programu sa spustí postupne, potom Prune skenuje, čo po sebe zanechajú, a ukáže vám všetko pred odstránením čohokoľvek z toho.${hasStore ? ' Aplikácie zo Store sa namiesto toho odstránia prostredníctvom Windows, bez následného skenovania zvyškov.' : ''}`,
+      oneAtATime: 'Postupne po jednej, pretože Windows povoľuje iba jednu inštaláciu alebo odinštalovanie naraz. Niektoré odinštalátory zobrazia vlastné okná a položia vám otázky.',
+      storeWarning: (count) => count === 1
+        ? 'Aplikáciu zo Store v tejto dávke nemožno obnoviť z karantény: jej odstránenie zoberie aplikáciu a jej uložené údaje, a jej získanie späť znamená preinštalovanie zo Store.'
+        : `${count} aplikácií zo Store v tejto dávke nemožno obnoviť z karantény: odstránenie jednej zoberie aplikáciu a jej uložené údaje, a jej získanie späť znamená preinštalovanie zo Store.`,
+      runsBefore: (name) => `spustí sa pred ${name}`,
+      reported: (bytes) => `nahlásených ${bytes}`,
+      unknownSizeSuffix: (n) => `, ${n} neznámej veľkosti`,
+      startButton: 'Spustiť odinštalovanie',
+      status: { waiting: 'čaká', uninstalling: 'odinštalováva sa…', removed: 'odstránené', failed: 'zlyhalo' },
+      removingLine: {
+        quarantine: 'Zvyšky sa presúvajú do karantény…',
+        recycle: 'Zvyšky sa odosielajú do koša…',
+        permanent: 'Zvyšky sa natrvalo mažú…'
+      },
+      uninstalledOf: (removed, total) => `Odinštalovaných ${removed} z ${total}.`,
+      failedHeading: (n) => `${n} sa nepodarilo odinštalovať a boli ponechané tak, ako sú:`,
+      removeLeftoversFailed: (error) => `Nepodarilo sa odstrániť zvyšky: ${error}`,
+      noScanSettingsOff: 'Skenovanie zvyškov je vypnuté v Nastaveniach, takže sa nič nehľadalo.',
+      noScanStore: 'Po aplikácii zo Store nenasleduje skenovanie zvyškov: Windows odstráni vlastné údaje aplikácie spolu s ňou.',
+      done: 'Hotovo',
+      summary: {
+        recycle: (programs, items, freed) => `Odinštalovaných ${programs} a odoslaných ${items} do koša, uvoľnené ${freed}.`,
+        permanent: (programs, items, freed) => `Odinštalovaných ${programs} a natrvalo odstránených ${items}, uvoľnené ${freed}.`,
+        quarantine: (programs, items, freed) => `Odinštalovaných ${programs} a presunutých ${items} do karantény, uvoľnené ${freed}.`,
+        programs: (n) => `${n} program${n === 1 ? '' : (n < 5 ? 'y' : 'ov')}`,
+        items: (n) => `${n} zvyšn${n === 1 ? 'á položka' : (n < 5 ? 'é položky' : 'ých položiek')}`
+      },
+      noRestorePoint: (reason) => `Nebol vytvorený žiadny bod obnovenia systému (${reason}).`,
+      restorePointFallback: 'nie je k dispozícii',
+      quarantineNote: 'Všetko vyššie je stále v karanténe a možno to vrátiť späť.',
+      failedRegistryKeys: (n) => `Nepodarilo sa odstrániť ${n} kľúč${n === 1 ? '' : (n < 5 ? 'e' : 'ov')} registra — tieto zvyčajne vyžadujú, aby Prune bežal ako správca.`
     }
   },
 
@@ -16731,6 +19955,110 @@ export const CATALOG = {
         message: (count) => `U anashkaluan ${count} skedarë të kyçur.`,
         detail: 'Mbylli aplikacionet që i përdorin dhe pastro përsëri.'
       }
+    },
+    leftoverReview: {
+      groups: { files: 'Skedarë dhe dosje', registryKeys: 'Çelësa regjistri', scheduledTasks: 'Detyra të planifikuara' },
+      notRemoved: 'gjetur, jo hequr',
+      checkFailed: (label) => `Nuk u kontrollua dot ${label}.`,
+      itemNote: {
+        valueOnly: (valueName) => `Vetëm vlera "${valueName}" — çelësi ku ndodhet është i përbashkët dhe mbetet`,
+        uninstallEntry: 'Hyrje e Shto/Hiq Programet'
+      },
+      destinations: {
+        quarantine: { text: 'Artikujt e zgjedhur shkojnë në Karantinë, ku mund t\'i rikuperoni.', button: 'Hiq të zgjedhurat' },
+        recycle: { text: 'Skedarët e zgjedhur shkojnë në Koshin e Riciklimit. Çelësat e regjistrit ruhen si kopje rezervë përpara se të hiqen.', button: 'Hiq të zgjedhurat' },
+        permanent: { text: 'Skedarët e zgjedhur do të fshihen përgjithmonë dhe nuk mund të rikuperohen. Çelësat e regjistrit ruhen si kopje rezervë përpara se të hiqen.', button: 'Fshi përgjithmonë' }
+      },
+      clean: 'Nuk u gjetën mbetje — çinstalim i pastër.',
+      done: 'Përfundoi',
+      foundWarning: (count) => `U gjetën ${count} artikuj të mbetur që çinstaluesi vendas i humbi. Rishikoni përpara pastrimit.`,
+      excludedNote: (count) => `${count} dosje u lanë jashtë sepse janë në përjashtimet tuaja.`,
+      itemsSelected: 'artikuj të zgjedhur',
+      reclaimable: 'i rikuperueshëm',
+      skip: 'Anashkalo'
+    },
+    uninstallModal: {
+      titleForce: (name) => `Detyro heqjen e ${name}`,
+      titleNormal: (name) => `Çinstalo ${name}`,
+      close: 'Mbyll',
+      runningWarning: (name) => `${name} po ekzekutohet tani. Mbylleni së pari — një çinstalues zakonisht dështon me një program të hapur, dhe mund të lërë skedarë që lëshimi tjetër do t\'i rikrijojë.`,
+      orphanedWarning: (reason) => `${reason} Windows do të vazhdojë ta listojë derisa hyrja të hiqet.`,
+      brokenIntro: 'Prune do të kërkojë skedarë dhe çelësa regjistri që përputhen me këtë emër, duke përfshirë hyrjen e Shto/Hiq Programet, dhe do t\'ju tregojë gjithçka përpara se të hiqet gjë.',
+      searchForLabel: 'Kërko për',
+      searchHint: (name) => `Marrë nga "${name}" pa versionin e tij — instaluesit i emërtojnë dosjet sipas produktit, jo lëshimit. Redaktojeni nëse rezultatet duken të gabuara.`,
+      scanFailed: (error) => `Skanimi dështoi: ${error}`,
+      searchButton: 'Kërko mbetje',
+      normalIntro: (name) => `Kjo ekzekuton çinstaluesin e vetë ${name}, pastaj skanon çdo gjë që lë pas.`,
+      uninstallFailed: (error) => `Çinstalimi dështoi: ${error}`,
+      startButton: 'Fillo çinstalimin',
+      noWorkingUninstaller: 'Nuk ka çinstalues funksional — po kërkohet sipas emrit në vend të kësaj',
+      noUninstallCommand: 'Nuk ka komandë çinstalimi të regjistruar',
+      progress: {
+        runningNative: 'Duke ekzekutuar çinstaluesin vendas',
+        backingUpRegistry: 'Duke ruajtur kopje rezervë të regjistrit',
+        creatingRestorePoint: 'Duke krijuar një pikë rikthimi',
+        searchingLeftovers: 'Duke kërkuar mbetje',
+        scanningLeftovers: 'Duke skanuar mbetje',
+        checkingCommand: 'Duke kontrolluar sistemin e skedarëve, regjistrin dhe detyrat e planifikuara…'
+      },
+      removing: {
+        quarantine: { title: 'Duke lëvizur në Karantinë', command: 'Asgjë nuk fshihet — çdo artikull mund të rikuperohet' },
+        recycle: { title: 'Duke dërguar në Koshin e Riciklimit', command: 'Rikuperojini nga Koshi i Riciklimit nëse është e nevojshme' },
+        permanent: { title: 'Duke fshirë përgjithmonë', command: 'Këto nuk mund të rikuperohen' }
+      },
+      noScan: (name) => `Çinstaluesi i ${name} ka përfunduar. Skanimi i mbetjeve është çaktivizuar në Cilësimet, kështu që nuk u kërkua asgjë tjetër.`,
+      removalFailed: (error) => `Heqja dështoi: ${error}`,
+      done: 'Përfundoi',
+      summary: {
+        item: (n) => `${n} artikuj`,
+        registryKey: (n) => `${n} çelësa regjistri`,
+        recycle: (files, keys, freed) => `U dërguan ${files} në Koshin e Riciklimit dhe u hoqën ${keys}, të ruajtur si kopje rezervë në Karantinë së pari. U liruan ${freed}.`,
+        permanent: (files, keys, freed) => `U fshinë përgjithmonë ${files} dhe u hoqën ${keys}, të ruajtur si kopje rezervë në Karantinë së pari. U liruan ${freed}.`,
+        quarantine: (files, keys, freed) => `U lëvizën ${files} dhe ${keys} në Karantinë, duke liruar ${freed}. Rikuperojini kurdo nga ekrani i Karantinës.`
+      },
+      failedFilesHeading: (n) => `Nuk u hoqën dot ${n} artikuj:`,
+      failedRegistryKeysHeading: (n) => `Nuk u hoqën dot ${n} çelësa regjistri`,
+      failedRegistryKeysNote: 'këto zakonisht kërkojnë që Prune të ekzekutohet si administrator:',
+      noRestorePoint: (reason) => `Nuk u krijua asnjë pikë rikthimi sistemi (${reason}).`,
+      quarantineStillWorks: 'Rikthimi nga Karantina ende funksionon.'
+    },
+    batchUninstallModal: {
+      title: (n) => `Çinstalo ${n} programe`,
+      historyLabel: (n) => `Çinstalim në grup: ${n} programe`,
+      close: 'Mbyll',
+      registryOnlyIntro: 'Çdo aplikacion hiqet përmes Windows me radhë, dhe nuk ka skanim mbetjesh më pas: Windows heq të dhënat e veta të aplikacionit bashkë me të.',
+      mixedIntro: (hasStore) => `Çinstaluesi i vetë çdo programi ekzekutohet me radhë, pastaj Prune skanon çfarë lënë pas dhe ju tregon gjithçka përpara se të hiqet gjë prej saj.${hasStore ? ' Aplikacionet e Store hiqen përmes Windows në vend të kësaj, pa skanim mbetjesh më pas.' : ''}`,
+      oneAtATime: 'Një nga një, sepse Windows lejon vetëm një instalim ose çinstalim në një kohë. Disa çinstalues do të shfaqin dritaret e tyre dhe do t\'ju bëjnë pyetje.',
+      storeWarning: (count) => count === 1
+        ? 'Aplikacioni i Store në këtë grup nuk mund të rikuperohet nga Karantina: heqja e tij merr aplikacionin dhe të dhënat e tij të ruajtura, dhe rimarrja e tij do të thotë ta instaloni përsëri nga Store.'
+        : `${count} aplikacionet e Store në këtë grup nuk mund të rikuperohen nga Karantina: heqja e njërit merr aplikacionin dhe të dhënat e tij të ruajtura, dhe rimarrja e tij do të thotë ta instaloni përsëri nga Store.`,
+      runsBefore: (name) => `ekzekutohet përpara ${name}`,
+      reported: (bytes) => `${bytes} raportuar`,
+      unknownSizeSuffix: (n) => `, ${n} me madhësi të panjohur`,
+      startButton: 'Fillo çinstalimin',
+      status: { waiting: 'në pritje', uninstalling: 'duke çinstaluar…', removed: 'hequr', failed: 'dështoi' },
+      removingLine: {
+        quarantine: 'Duke lëvizur mbetjet në Karantinë…',
+        recycle: 'Duke dërguar mbetjet në Koshin e Riciklimit…',
+        permanent: 'Duke fshirë mbetjet përgjithmonë…'
+      },
+      uninstalledOf: (removed, total) => `U çinstaluan ${removed} nga ${total}.`,
+      failedHeading: (n) => `${n} nuk u çinstaluan dot dhe u lanë ashtu siç ishin:`,
+      removeLeftoversFailed: (error) => `Nuk u hoqën dot mbetjet: ${error}`,
+      noScanSettingsOff: 'Skanimi i mbetjeve është çaktivizuar në Cilësimet, kështu që nuk u kërkua asgjë.',
+      noScanStore: 'Nuk ka skanim mbetjesh pas një aplikacioni Store: Windows heq të dhënat e veta të aplikacionit bashkë me të.',
+      done: 'Përfundoi',
+      summary: {
+        recycle: (programs, items, freed) => `U çinstaluan ${programs} dhe u dërguan ${items} në Koshin e Riciklimit, duke liruar ${freed}.`,
+        permanent: (programs, items, freed) => `U çinstaluan ${programs} dhe u fshinë ${items} përgjithmonë, duke liruar ${freed}.`,
+        quarantine: (programs, items, freed) => `U çinstaluan ${programs} dhe u lëvizën ${items} në Karantinë, duke liruar ${freed}.`,
+        programs: (n) => `${n} programe`,
+        items: (n) => `${n} artikuj të mbetur`
+      },
+      noRestorePoint: (reason) => `Nuk u krijua asnjë pikë rikthimi sistemi (${reason}).`,
+      restorePointFallback: 'jo i disponueshëm',
+      quarantineNote: 'Gjithçka më sipër është ende në Karantinë dhe mund të vendoset përsëri.',
+      failedRegistryKeys: (n) => `Nuk u hoqën dot ${n} çelësa regjistri — këto zakonisht kërkojnë që Prune të ekzekutohet si administrator.`
     }
   },
 
@@ -17253,6 +20581,110 @@ export const CATALOG = {
         message: (count) => `Прескочено закључаних фајлова: ${count}.`,
         detail: 'Затворите апликације које их користе и очистите поново.'
       }
+    },
+    leftoverReview: {
+      groups: { files: 'Датотеке и фасцикле', registryKeys: 'Кључеви регистра', scheduledTasks: 'Заказани задаци' },
+      notRemoved: 'пронађено, није уклоњено',
+      checkFailed: (label) => `Није могуће проверити ${label}.`,
+      itemNote: {
+        valueOnly: (valueName) => `Само вредност „${valueName}“ — кључ у коме се налази је дељен и остаје`,
+        uninstallEntry: 'Ставка Додај/уклони програме'
+      },
+      destinations: {
+        quarantine: { text: 'Означене ставке иду у карантину, одакле их можете вратити.', button: 'Уклони означено' },
+        recycle: { text: 'Означене датотеке иду у корпу за отпатке. Кључеви регистра се архивирају пре уклањања.', button: 'Уклони означено' },
+        permanent: { text: 'Означене датотеке ће бити трајно обрисане и не могу се вратити. Кључеви регистра се архивирају пре уклањања.', button: 'Обриши трајно' }
+      },
+      clean: 'Није пронађен ниједан остатак — чисто деинсталирање.',
+      done: 'Готово',
+      foundWarning: (count) => `Пронађено је ${count} преосталих ставки које је изворни деинсталатер пропустио. Прегледајте пре чишћења.`,
+      excludedNote: (count) => `${count} фасцикли је изостављено јер су у вашим изузецима.`,
+      itemsSelected: 'ставки означено',
+      reclaimable: 'може се ослободити',
+      skip: 'Прескочи'
+    },
+    uninstallModal: {
+      titleForce: (name) => `Присилно уклони ${name}`,
+      titleNormal: (name) => `Деинсталирај ${name}`,
+      close: 'Затвори',
+      runningWarning: (name) => `${name} се тренутно извршава. Прво га затворите — деинсталатер обично не успева са отвореним програмом и може оставити датотеке које ће следеће покретање поново направити.`,
+      orphanedWarning: (reason) => `${reason} Windows ће га наставити да приказује док се ставка не уклони.`,
+      brokenIntro: 'Prune ће потражити датотеке и кључеве регистра који одговарају овом имену, укључујући његову ставку Додај/уклони програме, и приказаће вам све пре него што било шта уклони.',
+      searchForLabel: 'Тражи',
+      searchHint: (name) => `Преузето из „${name}“ без верзије — инсталатери именују фасцикле према производу, не према издању. Уредите ако резултати изгледају погрешно.`,
+      scanFailed: (error) => `Скенирање није успело: ${error}`,
+      searchButton: 'Тражи остатке',
+      normalIntro: (name) => `Ово покреће сопствени деинсталатер програма ${name}, а затим скенира све што остане иза њега.`,
+      uninstallFailed: (error) => `Деинсталирање није успело: ${error}`,
+      startButton: 'Покрени деинсталирање',
+      noWorkingUninstaller: 'Нема функционалног деинсталатера — уместо тога се тражи по имену',
+      noUninstallCommand: 'Нема регистроване команде за деинсталирање',
+      progress: {
+        runningNative: 'Извршава се изворни деинсталатер',
+        backingUpRegistry: 'Прави се резервна копија регистра',
+        creatingRestorePoint: 'Прави се тачка опоравка',
+        searchingLeftovers: 'Тражи се остатке',
+        scanningLeftovers: 'Скенирају се остаци',
+        checkingCommand: 'Проверава се систем датотека, регистар и заказани задаци…'
+      },
+      removing: {
+        quarantine: { title: 'Премешта се у карантину', command: 'Ништа се не брише — свака ставка се може вратити' },
+        recycle: { title: 'Шаље се у корпу за отпатке', command: 'Вратите их из корпе за отпатке ако је потребно' },
+        permanent: { title: 'Трајно се брише', command: 'Ово се не може вратити' }
+      },
+      noScan: (name) => `Деинсталатер за ${name} је завршио. Скенирање остатака је искључено у Подешавањима, па се ништа друго није тражило.`,
+      removalFailed: (error) => `Уклањање није успело: ${error}`,
+      done: 'Готово',
+      summary: {
+        item: (n) => `${n} ставк${n === 1 ? 'а' : 'и'}`,
+        registryKey: (n) => `${n} кључ${n === 1 ? '' : 'а'} регистра`,
+        recycle: (files, keys, freed) => `Послато ${files} у корпу за отпатке и уклоњено ${keys}, претходно архивирано у карантини. Ослобођено ${freed}.`,
+        permanent: (files, keys, freed) => `Трајно обрисано ${files} и уклоњено ${keys}, претходно архивирано у карантини. Ослобођено ${freed}.`,
+        quarantine: (files, keys, freed) => `Премештено ${files} и ${keys} у карантину, ослобађајући ${freed}. Вратите их било када са екрана карантине.`
+      },
+      failedFilesHeading: (n) => `Није могуће уклонити ${n} ставк${n === 1 ? 'у' : 'и'}:`,
+      failedRegistryKeysHeading: (n) => `Није могуће уклонити ${n} кључ${n === 1 ? '' : 'а'} регистра`,
+      failedRegistryKeysNote: 'ово обично захтева да Prune буде покренут као администратор:',
+      noRestorePoint: (reason) => `Није направљена тачка опоравка система (${reason}).`,
+      quarantineStillWorks: 'Опоравак из карантине и даље ради.'
+    },
+    batchUninstallModal: {
+      title: (n) => `Деинсталирај ${n} програма`,
+      historyLabel: (n) => `Групно деинсталирање: ${n} програма`,
+      close: 'Затвори',
+      registryOnlyIntro: 'Свака апликација се уклања преко Windows-а редом, а после тога нема скенирања остатака: Windows уклања сопствене податке апликације заједно са њом.',
+      mixedIntro: (hasStore) => `Сопствени деинсталатер сваког програма се извршава редом, а затим Prune скенира шта остављају иза себе и приказује вам све пре него што било шта од тога уклони.${hasStore ? ' Апликације из продавнице се уместо тога уклањају преко Windows-а, без скенирања остатака после тога.' : ''}`,
+      oneAtATime: 'Једно по једно, јер Windows дозвољава само једну инсталацију или деинсталацију у једном тренутку. Неки деинсталатери ће приказати сопствене прозоре и поставити вам питања.',
+      storeWarning: (count) => count === 1
+        ? 'Апликација из продавнице у овој серији не може се вратити из карантине: њеним уклањањем нестају апликација и њени сачувани подаци, а њено враћање значи поновну инсталацију из продавнице.'
+        : `${count} апликације из продавнице у овој серији не могу се вратити из карантине: уклањањем једне нестају апликација и њени сачувани подаци, а њено враћање значи поновну инсталацију из продавнице.`,
+      runsBefore: (name) => `извршава се пре ${name}`,
+      reported: (bytes) => `${bytes} пријављено`,
+      unknownSizeSuffix: (n) => `, ${n} непознате величине`,
+      startButton: 'Покрени деинсталирање',
+      status: { waiting: 'чека', uninstalling: 'деинсталира се…', removed: 'уклоњено', failed: 'неуспешно' },
+      removingLine: {
+        quarantine: 'Премештају се остаци у карантину…',
+        recycle: 'Шаљу се остаци у корпу за отпатке…',
+        permanent: 'Трајно се бришу остаци…'
+      },
+      uninstalledOf: (removed, total) => `Деинсталирано ${removed} од ${total}.`,
+      failedHeading: (n) => `${n} није могло да се деинсталира и остало је нетакнуто:`,
+      removeLeftoversFailed: (error) => `Није могуће уклонити остатке: ${error}`,
+      noScanSettingsOff: 'Скенирање остатака је искључено у Подешавањима, па се ништа није тражило.',
+      noScanStore: 'Не постоји скенирање остатака после апликације из продавнице: Windows уклања сопствене податке апликације заједно са њом.',
+      done: 'Готово',
+      summary: {
+        recycle: (programs, items, freed) => `Деинсталирано ${programs} и послато ${items} у корпу за отпатке, ослобађајући ${freed}.`,
+        permanent: (programs, items, freed) => `Деинсталирано ${programs} и трајно обрисано ${items}, ослобађајући ${freed}.`,
+        quarantine: (programs, items, freed) => `Деинсталирано ${programs} и премештено ${items} у карантину, ослобађајући ${freed}.`,
+        programs: (n) => `${n} програма`,
+        items: (n) => `${n} преосталих ставки`
+      },
+      noRestorePoint: (reason) => `Није направљена тачка опоравка система (${reason}).`,
+      restorePointFallback: 'није доступно',
+      quarantineNote: 'Све горе наведено је и даље у карантини и може се вратити.',
+      failedRegistryKeys: (n) => `Није могуће уклонити ${n} кључ${n === 1 ? '' : 'а'} регистра — ово обично захтева да Prune буде покренут као администратор.`
     }
   },
 
@@ -17775,6 +21207,110 @@ export const CATALOG = {
         message: (count) => `Hoppade över ${count} låsta filer.`,
         detail: 'Stäng apparna som använder dem och rensa igen.'
       }
+    },
+    leftoverReview: {
+      groups: { files: 'Filer och mappar', registryKeys: 'Registernycklar', scheduledTasks: 'Schemalagda aktiviteter' },
+      notRemoved: 'hittad, inte borttagen',
+      checkFailed: (label) => `Det gick inte att kontrollera ${label}.`,
+      itemNote: {
+        valueOnly: (valueName) => `Endast värdet "${valueName}" — nyckeln den ligger i delas och finns kvar`,
+        uninstallEntry: 'Post i Lägg till/ta bort program'
+      },
+      destinations: {
+        quarantine: { text: 'Valda objekt går till karantän, där du kan återställa dem.', button: 'Ta bort valda' },
+        recycle: { text: 'Valda filer går till papperskorgen. Registernycklar säkerhetskopieras innan de tas bort.', button: 'Ta bort valda' },
+        permanent: { text: 'Valda filer kommer att raderas permanent och kan inte återställas. Registernycklar säkerhetskopieras innan de tas bort.', button: 'Radera permanent' }
+      },
+      clean: 'Inga rester hittades — ren avinstallation.',
+      done: 'Klar',
+      foundWarning: (count) => `Hittade ${count} kvarvarande objekt som det ursprungliga avinstallationsprogrammet missade. Granska innan du rensar.`,
+      excludedNote: (count) => `${count} mappar utelämnades eftersom de finns i dina undantag.`,
+      itemsSelected: 'objekt valda',
+      reclaimable: 'kan frigöras',
+      skip: 'Hoppa över'
+    },
+    uninstallModal: {
+      titleForce: (name) => `Tvinga bort ${name}`,
+      titleNormal: (name) => `Avinstallera ${name}`,
+      close: 'Stäng',
+      runningWarning: (name) => `${name} körs just nu. Stäng det först — ett avinstallationsprogram misslyckas vanligtvis med ett öppet program, och kan lämna kvar filer som nästa uppstart återskapar.`,
+      orphanedWarning: (reason) => `${reason} Windows kommer att fortsätta lista det tills posten tas bort.`,
+      brokenIntro: 'Prune kommer att söka efter filer och registernycklar som matchar detta namn, inklusive dess post i Lägg till/ta bort program, och visa dig allt innan något tas bort.',
+      searchForLabel: 'Sök efter',
+      searchHint: (name) => `Hämtat från "${name}" utan dess version — installationsprogram namnger mappar efter produkten, inte utgåvan. Redigera det om resultaten ser felaktiga ut.`,
+      scanFailed: (error) => `Skanningen misslyckades: ${error}`,
+      searchButton: 'Sök efter rester',
+      normalIntro: (name) => `Detta kör ${name}s eget avinstallationsprogram och söker sedan efter allt det lämnar kvar.`,
+      uninstallFailed: (error) => `Avinstallationen misslyckades: ${error}`,
+      startButton: 'Starta avinstallation',
+      noWorkingUninstaller: 'Inget fungerande avinstallationsprogram — söker efter namn istället',
+      noUninstallCommand: 'Inget avinstallationskommando registrerat',
+      progress: {
+        runningNative: 'Kör det ursprungliga avinstallationsprogrammet',
+        backingUpRegistry: 'Säkerhetskopierar registret',
+        creatingRestorePoint: 'Skapar en återställningspunkt',
+        searchingLeftovers: 'Söker efter rester',
+        scanningLeftovers: 'Skannar rester',
+        checkingCommand: 'Kontrollerar filsystem, register och schemalagda aktiviteter…'
+      },
+      removing: {
+        quarantine: { title: 'Flyttar till karantän', command: 'Inget raderas — varje objekt kan återställas' },
+        recycle: { title: 'Skickar till papperskorgen', command: 'Återställ dem från papperskorgen om det behövs' },
+        permanent: { title: 'Raderar permanent', command: 'Dessa kan inte återställas' }
+      },
+      noScan: (name) => `${name}s avinstallationsprogram är klart. Restskanningen är avstängd i Inställningar, så inget annat söktes efter.`,
+      removalFailed: (error) => `Borttagningen misslyckades: ${error}`,
+      done: 'Klar',
+      summary: {
+        item: (n) => `${n} objekt`,
+        registryKey: (n) => `${n} registernyck${n === 1 ? 'el' : 'lar'}`,
+        recycle: (files, keys, freed) => `Skickade ${files} till papperskorgen och tog bort ${keys}, säkerhetskopierade i karantän först. Frigjorde ${freed}.`,
+        permanent: (files, keys, freed) => `Raderade ${files} permanent och tog bort ${keys}, säkerhetskopierade i karantän först. Frigjorde ${freed}.`,
+        quarantine: (files, keys, freed) => `Flyttade ${files} och ${keys} till karantän, och frigjorde ${freed}. Återställ dem när som helst från karantänskärmen.`
+      },
+      failedFilesHeading: (n) => `${n} objekt kunde inte tas bort:`,
+      failedRegistryKeysHeading: (n) => `${n} registernyck${n === 1 ? 'el' : 'lar'} kunde inte tas bort`,
+      failedRegistryKeysNote: 'dessa kräver vanligtvis att Prune körs som administratör:',
+      noRestorePoint: (reason) => `Ingen systemåterställningspunkt skapades (${reason}).`,
+      quarantineStillWorks: 'Återställning från karantän fungerar fortfarande.'
+    },
+    batchUninstallModal: {
+      title: (n) => `Avinstallera ${n} program`,
+      historyLabel: (n) => `Batchavinstallation: ${n} program`,
+      close: 'Stäng',
+      registryOnlyIntro: 'Varje app tas bort via Windows i tur och ordning, och det finns ingen restskanning efteråt: Windows tar bort appens egna data tillsammans med den.',
+      mixedIntro: (hasStore) => `Varje programs eget avinstallationsprogram körs i tur och ordning, sedan skannar Prune efter vad de lämnar kvar och visar dig allt innan något av det tas bort.${hasStore ? ' Store-appar tas istället bort via Windows, utan restskanning efteråt.' : ''}`,
+      oneAtATime: 'En i taget, eftersom Windows bara tillåter en installation eller avinstallation åt gången. Vissa avinstallationsprogram visar sina egna fönster och ställer frågor till dig.',
+      storeWarning: (count) => count === 1
+        ? 'Store-appen i den här omgången kan inte återställas från karantän: att ta bort den tar med sig appen och dess sparade data, och att få tillbaka den innebär att installera om den från Store.'
+        : `De ${count} Store-apparna i den här omgången kan inte återställas från karantän: att ta bort en tar med sig appen och dess sparade data, och att få tillbaka den innebär att installera om den från Store.`,
+      runsBefore: (name) => `körs före ${name}`,
+      reported: (bytes) => `${bytes} rapporterat`,
+      unknownSizeSuffix: (n) => `, ${n} av okänd storlek`,
+      startButton: 'Starta avinstallation',
+      status: { waiting: 'väntar', uninstalling: 'avinstallerar…', removed: 'borttagen', failed: 'misslyckades' },
+      removingLine: {
+        quarantine: 'Flyttar rester till karantän…',
+        recycle: 'Skickar rester till papperskorgen…',
+        permanent: 'Raderar rester permanent…'
+      },
+      uninstalledOf: (removed, total) => `Avinstallerade ${removed} av ${total}.`,
+      failedHeading: (n) => `${n} kunde inte avinstalleras och lämnades ifred:`,
+      removeLeftoversFailed: (error) => `Det gick inte att ta bort rester: ${error}`,
+      noScanSettingsOff: 'Restskanningen är avstängd i Inställningar, så inget söktes.',
+      noScanStore: 'Det finns ingen restskanning efter en Store-app: Windows tar bort appens egna data tillsammans med den.',
+      done: 'Klar',
+      summary: {
+        recycle: (programs, items, freed) => `Avinstallerade ${programs} och skickade ${items} till papperskorgen, vilket frigjorde ${freed}.`,
+        permanent: (programs, items, freed) => `Avinstallerade ${programs} och raderade ${items} permanent, vilket frigjorde ${freed}.`,
+        quarantine: (programs, items, freed) => `Avinstallerade ${programs} och flyttade ${items} till karantän, vilket frigjorde ${freed}.`,
+        programs: (n) => `${n} program`,
+        items: (n) => `${n} kvarvarande objekt`
+      },
+      noRestorePoint: (reason) => `Ingen systemåterställningspunkt skapades (${reason}).`,
+      restorePointFallback: 'inte tillgänglig',
+      quarantineNote: 'Allt ovan finns fortfarande i karantän och kan sättas tillbaka.',
+      failedRegistryKeys: (n) => `${n} registernyck${n === 1 ? 'el' : 'lar'} kunde inte tas bort — dessa kräver vanligtvis att Prune körs som administratör.`
     }
   },
 
@@ -18297,6 +21833,110 @@ export const CATALOG = {
         message: (count) => `ข้าม ${count} ไฟล์ที่ถูกล็อก`,
         detail: 'ปิดแอปที่ใช้ไฟล์เหล่านั้นแล้วล้างอีกครั้ง'
       }
+    },
+    leftoverReview: {
+      groups: { files: 'ไฟล์และโฟลเดอร์', registryKeys: 'คีย์รีจิสทรี', scheduledTasks: 'งานที่ตั้งเวลาไว้' },
+      notRemoved: 'พบแล้ว ยังไม่ได้ลบ',
+      checkFailed: (label) => `ไม่สามารถตรวจสอบ ${label} ได้`,
+      itemNote: {
+        valueOnly: (valueName) => `เฉพาะค่า "${valueName}" เท่านั้น — คีย์ที่ค่านี้อยู่ถูกใช้ร่วมกันและจะยังคงอยู่`,
+        uninstallEntry: 'รายการเพิ่ม/ลบโปรแกรม'
+      },
+      destinations: {
+        quarantine: { text: 'รายการที่เลือกจะไปที่กักกัน ซึ่งคุณสามารถกู้คืนได้จากที่นั่น', button: 'ลบรายการที่เลือก' },
+        recycle: { text: 'ไฟล์ที่เลือกจะไปที่ถังรีไซเคิล คีย์รีจิสทรีจะถูกสำรองข้อมูลก่อนที่จะถูกลบ', button: 'ลบรายการที่เลือก' },
+        permanent: { text: 'ไฟล์ที่เลือกจะถูกลบอย่างถาวรและไม่สามารถกู้คืนได้ คีย์รีจิสทรีจะถูกสำรองข้อมูลก่อนที่จะถูกลบ', button: 'ลบถาวร' }
+      },
+      clean: 'ไม่พบสิ่งตกค้าง — ถอนการติดตั้งสะอาด',
+      done: 'เสร็จสิ้น',
+      foundWarning: (count) => `พบ ${count} รายการที่ตกค้างซึ่งตัวถอนการติดตั้งดั้งเดิมพลาดไป ตรวจสอบก่อนล้างข้อมูล`,
+      excludedNote: (count) => `${count} โฟลเดอร์ถูกละไว้เพราะอยู่ในรายการยกเว้นของคุณ`,
+      itemsSelected: 'รายการที่เลือก',
+      reclaimable: 'สามารถเรียกคืนได้',
+      skip: 'ข้าม'
+    },
+    uninstallModal: {
+      titleForce: (name) => `บังคับลบ ${name}`,
+      titleNormal: (name) => `ถอนการติดตั้ง ${name}`,
+      close: 'ปิด',
+      runningWarning: (name) => `${name} กำลังทำงานอยู่ในขณะนี้ กรุณาปิดก่อน — ตัวถอนการติดตั้งมักจะล้มเหลวเมื่อโปรแกรมเปิดอยู่ และอาจทิ้งไฟล์ที่การเปิดครั้งถัดไปจะสร้างขึ้นใหม่`,
+      orphanedWarning: (reason) => `${reason} Windows จะยังคงแสดงรายการนี้จนกว่าจะลบรายการนี้ออก`,
+      brokenIntro: 'Prune จะค้นหาไฟล์และคีย์รีจิสทรีที่ตรงกับชื่อนี้ รวมถึงรายการเพิ่ม/ลบโปรแกรม และแสดงทุกอย่างให้คุณเห็นก่อนที่จะลบสิ่งใด',
+      searchForLabel: 'ค้นหาสำหรับ',
+      searchHint: (name) => `นำมาจาก "${name}" โดยไม่มีเวอร์ชัน — โปรแกรมติดตั้งตั้งชื่อโฟลเดอร์ตามผลิตภัณฑ์ ไม่ใช่รุ่นที่วางจำหน่าย แก้ไขหากผลลัพธ์ดูไม่ถูกต้อง`,
+      scanFailed: (error) => `การสแกนล้มเหลว: ${error}`,
+      searchButton: 'ค้นหาสิ่งตกค้าง',
+      normalIntro: (name) => `การดำเนินการนี้จะเรียกใช้ตัวถอนการติดตั้งของ ${name} เอง จากนั้นจะสแกนหาสิ่งที่มันทิ้งไว้`,
+      uninstallFailed: (error) => `การถอนการติดตั้งล้มเหลว: ${error}`,
+      startButton: 'เริ่มการถอนการติดตั้ง',
+      noWorkingUninstaller: 'ไม่มีตัวถอนการติดตั้งที่ใช้งานได้ — จะค้นหาตามชื่อแทน',
+      noUninstallCommand: 'ไม่มีคำสั่งถอนการติดตั้งที่ลงทะเบียนไว้',
+      progress: {
+        runningNative: 'กำลังเรียกใช้ตัวถอนการติดตั้งดั้งเดิม',
+        backingUpRegistry: 'กำลังสำรองข้อมูลรีจิสทรี',
+        creatingRestorePoint: 'กำลังสร้างจุดคืนค่า',
+        searchingLeftovers: 'กำลังค้นหาสิ่งตกค้าง',
+        scanningLeftovers: 'กำลังสแกนสิ่งตกค้าง',
+        checkingCommand: 'กำลังตรวจสอบระบบไฟล์ รีจิสทรี และงานที่ตั้งเวลาไว้…'
+      },
+      removing: {
+        quarantine: { title: 'กำลังย้ายไปยังกักกัน', command: 'ไม่มีการลบสิ่งใด — สามารถกู้คืนได้ทุกรายการ' },
+        recycle: { title: 'กำลังส่งไปยังถังรีไซเคิล', command: 'กู้คืนจากถังรีไซเคิลหากจำเป็น' },
+        permanent: { title: 'กำลังลบถาวร', command: 'ไม่สามารถกู้คืนสิ่งเหล่านี้ได้' }
+      },
+      noScan: (name) => `ตัวถอนการติดตั้งของ ${name} เสร็จสิ้นแล้ว การสแกนสิ่งตกค้างถูกปิดในการตั้งค่า จึงไม่มีการค้นหาสิ่งอื่นเพิ่มเติม`,
+      removalFailed: (error) => `การลบล้มเหลว: ${error}`,
+      done: 'เสร็จสิ้น',
+      summary: {
+        item: (n) => `${n} รายการ`,
+        registryKey: (n) => `${n} คีย์รีจิสทรี`,
+        recycle: (files, keys, freed) => `ส่ง ${files} ไปยังถังรีไซเคิลและลบ ${keys} โดยสำรองข้อมูลไว้ในกักกันก่อน เพิ่มพื้นที่ว่าง ${freed}`,
+        permanent: (files, keys, freed) => `ลบ ${files} ถาวรและลบ ${keys} โดยสำรองข้อมูลไว้ในกักกันก่อน เพิ่มพื้นที่ว่าง ${freed}`,
+        quarantine: (files, keys, freed) => `ย้าย ${files} และ ${keys} ไปยังกักกัน เพิ่มพื้นที่ว่าง ${freed} กู้คืนได้ทุกเมื่อจากหน้าจอกักกัน`
+      },
+      failedFilesHeading: (n) => `ไม่สามารถลบ ${n} รายการได้:`,
+      failedRegistryKeysHeading: (n) => `ไม่สามารถลบ ${n} คีย์รีจิสทรีได้`,
+      failedRegistryKeysNote: 'โดยปกติสิ่งเหล่านี้ต้องการให้ Prune ทำงานในฐานะผู้ดูแลระบบ:',
+      noRestorePoint: (reason) => `ไม่ได้สร้างจุดคืนค่าระบบ (${reason})`,
+      quarantineStillWorks: 'การกู้คืนจากกักกันยังคงใช้งานได้'
+    },
+    batchUninstallModal: {
+      title: (n) => `ถอนการติดตั้ง ${n} โปรแกรม`,
+      historyLabel: (n) => `ถอนการติดตั้งแบบชุด: ${n} โปรแกรม`,
+      close: 'ปิด',
+      registryOnlyIntro: 'แต่ละแอปจะถูกลบผ่าน Windows ตามลำดับ และไม่มีการสแกนสิ่งตกค้างหลังจากนั้น: Windows จะลบข้อมูลของแอปเองไปพร้อมกัน',
+      mixedIntro: (hasStore) => `ตัวถอนการติดตั้งของแต่ละโปรแกรมจะทำงานตามลำดับ จากนั้น Prune จะสแกนหาสิ่งที่ทิ้งไว้และแสดงทุกอย่างให้คุณเห็นก่อนที่จะลบสิ่งใด${hasStore ? ' แอปจาก Store จะถูกลบผ่าน Windows แทน โดยไม่มีการสแกนสิ่งตกค้างหลังจากนั้น' : ''}`,
+      oneAtATime: 'ทีละรายการ เนื่องจาก Windows อนุญาตให้ติดตั้งหรือถอนการติดตั้งได้ครั้งละหนึ่งรายการเท่านั้น ตัวถอนการติดตั้งบางตัวจะแสดงหน้าต่างของตัวเองและถามคำถามคุณ',
+      storeWarning: (count) => count === 1
+        ? 'แอป Store ในชุดนี้ไม่สามารถกู้คืนจากกักกันได้ การลบจะนำแอปและข้อมูลที่บันทึกไว้ไปด้วย และการได้กลับคืนหมายถึงการติดตั้งใหม่จาก Store'
+        : `แอป Store ${count} รายการในชุดนี้ไม่สามารถกู้คืนจากกักกันได้ การลบรายการใดรายการหนึ่งจะนำแอปและข้อมูลที่บันทึกไว้ไปด้วย และการได้กลับคืนหมายถึงการติดตั้งใหม่จาก Store`,
+      runsBefore: (name) => `ทำงานก่อน ${name}`,
+      reported: (bytes) => `รายงาน ${bytes}`,
+      unknownSizeSuffix: (n) => `, ${n} รายการที่ไม่ทราบขนาด`,
+      startButton: 'เริ่มการถอนการติดตั้ง',
+      status: { waiting: 'กำลังรอ', uninstalling: 'กำลังถอนการติดตั้ง…', removed: 'ลบแล้ว', failed: 'ล้มเหลว' },
+      removingLine: {
+        quarantine: 'กำลังย้ายสิ่งตกค้างไปยังกักกัน…',
+        recycle: 'กำลังส่งสิ่งตกค้างไปยังถังรีไซเคิล…',
+        permanent: 'กำลังลบสิ่งตกค้างถาวร…'
+      },
+      uninstalledOf: (removed, total) => `ถอนการติดตั้งแล้ว ${removed} จาก ${total}`,
+      failedHeading: (n) => `${n} รายการไม่สามารถถอนการติดตั้งได้และถูกปล่อยไว้:`,
+      removeLeftoversFailed: (error) => `ไม่สามารถลบสิ่งตกค้างได้: ${error}`,
+      noScanSettingsOff: 'การสแกนสิ่งตกค้างถูกปิดในการตั้งค่า จึงไม่มีการค้นหาสิ่งใด',
+      noScanStore: 'ไม่มีการสแกนสิ่งตกค้างหลังจากแอป Store: Windows จะลบข้อมูลของแอปเองไปพร้อมกัน',
+      done: 'เสร็จสิ้น',
+      summary: {
+        recycle: (programs, items, freed) => `ถอนการติดตั้ง ${programs} และส่ง ${items} ไปยังถังรีไซเคิล เพิ่มพื้นที่ว่าง ${freed}`,
+        permanent: (programs, items, freed) => `ถอนการติดตั้ง ${programs} และลบ ${items} ถาวร เพิ่มพื้นที่ว่าง ${freed}`,
+        quarantine: (programs, items, freed) => `ถอนการติดตั้ง ${programs} และย้าย ${items} ไปยังกักกัน เพิ่มพื้นที่ว่าง ${freed}`,
+        programs: (n) => `${n} โปรแกรม`,
+        items: (n) => `${n} รายการที่ตกค้าง`
+      },
+      noRestorePoint: (reason) => `ไม่ได้สร้างจุดคืนค่าระบบ (${reason})`,
+      restorePointFallback: 'ไม่พร้อมใช้งาน',
+      quarantineNote: 'ทุกอย่างข้างต้นยังคงอยู่ในกักกันและสามารถนำกลับมาได้',
+      failedRegistryKeys: (n) => `ไม่สามารถลบ ${n} คีย์รีจิสทรีได้ — โดยปกติสิ่งเหล่านี้ต้องการให้ Prune ทำงานในฐานะผู้ดูแลระบบ`
     }
   },
 
@@ -18819,6 +22459,110 @@ export const CATALOG = {
         message: (count) => `${count} kilitli dosya atlandı.`,
         detail: 'Onları kullanan uygulamaları kapatın ve yeniden temizleyin.'
       }
+    },
+    leftoverReview: {
+      groups: { files: 'Dosyalar ve klasörler', registryKeys: 'Kayıt defteri anahtarları', scheduledTasks: 'Zamanlanmış görevler' },
+      notRemoved: 'bulundu, kaldırılmadı',
+      checkFailed: (label) => `${label} kontrol edilemedi.`,
+      itemNote: {
+        valueOnly: (valueName) => `Yalnızca "${valueName}" değeri — bulunduğu anahtar paylaşımlı ve kalıcıdır`,
+        uninstallEntry: 'Program Ekle/Kaldır girdisi'
+      },
+      destinations: {
+        quarantine: { text: 'Seçili öğeler, geri yükleyebileceğiniz Karantinaya gider.', button: 'Seçilenleri kaldır' },
+        recycle: { text: 'Seçili dosyalar Geri Dönüşüm Kutusuna gider. Kayıt defteri anahtarları kaldırılmadan önce yedeklenir.', button: 'Seçilenleri kaldır' },
+        permanent: { text: 'Seçili dosyalar kalıcı olarak silinecek ve geri yüklenemeyecek. Kayıt defteri anahtarları kaldırılmadan önce yedeklenir.', button: 'Kalıcı olarak sil' }
+      },
+      clean: 'Artık bulunamadı — temiz kaldırma.',
+      done: 'Tamamlandı',
+      foundWarning: (count) => `Yerel kaldırma programının gözden kaçırdığı ${count} artık öğe bulundu. Temizlemeden önce inceleyin.`,
+      excludedNote: (count) => `${count} klasör hariç tutulduğu için atlandı.`,
+      itemsSelected: 'öğe seçildi',
+      reclaimable: 'geri kazanılabilir',
+      skip: 'Atla'
+    },
+    uninstallModal: {
+      titleForce: (name) => `${name} zorla kaldır`,
+      titleNormal: (name) => `${name} kaldır`,
+      close: 'Kapat',
+      runningWarning: (name) => `${name} şu anda çalışıyor. Önce kapatın — bir kaldırma programı genellikle açık bir programda başarısız olur ve bir sonraki başlatmanın yeniden oluşturacağı dosyalar bırakabilir.`,
+      orphanedWarning: (reason) => `${reason} Girdi kaldırılana kadar Windows onu listelemeye devam edecek.`,
+      brokenIntro: "Prune, Program Ekle/Kaldır girdisi de dahil olmak üzere bu ada uyan dosyaları ve kayıt defteri anahtarlarını arayacak ve hiçbir şeyi kaldırmadan önce size her şeyi gösterecek.",
+      searchForLabel: 'Şunu ara',
+      searchHint: (name) => `"${name}" adından sürüm bilgisi çıkarılarak alındı — yükleyiciler klasörleri sürüme göre değil ürüne göre adlandırır. Sonuçlar yanlış görünüyorsa düzenleyin.`,
+      scanFailed: (error) => `Tarama başarısız oldu: ${error}`,
+      searchButton: 'Artıkları ara',
+      normalIntro: (name) => `Bu, ${name}'nin kendi kaldırma programını çalıştırır, ardından geride bıraktığı her şeyi tarar.`,
+      uninstallFailed: (error) => `Kaldırma başarısız oldu: ${error}`,
+      startButton: 'Kaldırmayı başlat',
+      noWorkingUninstaller: 'Çalışan bir kaldırma programı yok — bunun yerine ada göre aranıyor',
+      noUninstallCommand: 'Kayıtlı bir kaldırma komutu yok',
+      progress: {
+        runningNative: 'Yerel kaldırma programı çalıştırılıyor',
+        backingUpRegistry: 'Kayıt defteri yedekleniyor',
+        creatingRestorePoint: 'Bir geri yükleme noktası oluşturuluyor',
+        searchingLeftovers: 'Artıklar aranıyor',
+        scanningLeftovers: 'Artıklar taranıyor',
+        checkingCommand: 'Dosya sistemi, kayıt defteri ve zamanlanmış görevler kontrol ediliyor…'
+      },
+      removing: {
+        quarantine: { title: 'Karantinaya taşınıyor', command: 'Hiçbir şey silinmiyor — her öğe geri yüklenebilir' },
+        recycle: { title: 'Geri Dönüşüm Kutusuna gönderiliyor', command: 'Gerekirse Geri Dönüşüm Kutusundan geri yükleyin' },
+        permanent: { title: 'Kalıcı olarak siliniyor', command: 'Bunlar geri yüklenemez' }
+      },
+      noScan: (name) => `${name} kaldırma programı tamamlandı. Artık taraması Ayarlar'da kapalı, bu yüzden başka bir şey aranmadı.`,
+      removalFailed: (error) => `Kaldırma başarısız oldu: ${error}`,
+      done: 'Tamamlandı',
+      summary: {
+        item: (n) => `${n} öğe`,
+        registryKey: (n) => `${n} kayıt defteri anahtarı`,
+        recycle: (files, keys, freed) => `${files} Geri Dönüşüm Kutusuna gönderildi ve ${keys} kaldırıldı, önce Karantinaya yedeklendi. ${freed} boşaltıldı.`,
+        permanent: (files, keys, freed) => `${files} kalıcı olarak silindi ve ${keys} kaldırıldı, önce Karantinaya yedeklendi. ${freed} boşaltıldı.`,
+        quarantine: (files, keys, freed) => `${files} ve ${keys} Karantinaya taşındı, ${freed} boşaltıldı. Bunları istediğiniz zaman Karantina ekranından geri yükleyin.`
+      },
+      failedFilesHeading: (n) => `${n} öğe kaldırılamadı:`,
+      failedRegistryKeysHeading: (n) => `${n} kayıt defteri anahtarı kaldırılamadı`,
+      failedRegistryKeysNote: 'bunlar genellikle Prune\'un yönetici olarak çalışmasını gerektirir:',
+      noRestorePoint: (reason) => `Sistem geri yükleme noktası oluşturulmadı (${reason}).`,
+      quarantineStillWorks: 'Karantina geri yüklemesi hâlâ çalışıyor.'
+    },
+    batchUninstallModal: {
+      title: (n) => `${n} program kaldır`,
+      historyLabel: (n) => `Toplu kaldırma: ${n} program`,
+      close: 'Kapat',
+      registryOnlyIntro: "Her uygulama sırayla Windows aracılığıyla kaldırılır ve sonrasında artık taraması yapılmaz: Windows, uygulamanın kendi verilerini de onunla birlikte kaldırır.",
+      mixedIntro: (hasStore) => `Her programın kendi kaldırma programı sırayla çalışır, ardından Prune geride bıraktıklarını tarar ve herhangi birini kaldırmadan önce size her şeyi gösterir.${hasStore ? ' Store uygulamaları bunun yerine Windows aracılığıyla kaldırılır, sonrasında artık taraması yapılmaz.' : ''}`,
+      oneAtATime: "Birer birer, çünkü Windows aynı anda yalnızca bir kurulum veya kaldırma işlemine izin verir. Bazı kaldırma programları kendi pencerelerini gösterecek ve size sorular soracaktır.",
+      storeWarning: (count) => count === 1
+        ? 'Bu gruptaki Store uygulaması Karantinadan geri yüklenemez: kaldırılması uygulamayı ve kayıtlı verilerini götürür, geri almak ise onu Store\'dan yeniden yüklemek anlamına gelir.'
+        : `Bu gruptaki ${count} Store uygulaması Karantinadan geri yüklenemez: birinin kaldırılması uygulamayı ve kayıtlı verilerini götürür, geri almak ise onu Store'dan yeniden yüklemek anlamına gelir.`,
+      runsBefore: (name) => `${name}'den önce çalışır`,
+      reported: (bytes) => `${bytes} bildirildi`,
+      unknownSizeSuffix: (n) => `, ${n} bilinmeyen boyutta`,
+      startButton: 'Kaldırmayı başlat',
+      status: { waiting: 'bekliyor', uninstalling: 'kaldırılıyor…', removed: 'kaldırıldı', failed: 'başarısız' },
+      removingLine: {
+        quarantine: 'Artıklar Karantinaya taşınıyor…',
+        recycle: 'Artıklar Geri Dönüşüm Kutusuna gönderiliyor…',
+        permanent: 'Artıklar kalıcı olarak siliniyor…'
+      },
+      uninstalledOf: (removed, total) => `${total} programdan ${removed} tanesi kaldırıldı.`,
+      failedHeading: (n) => `${n} tanesi kaldırılamadı ve olduğu gibi bırakıldı:`,
+      removeLeftoversFailed: (error) => `Artıklar kaldırılamadı: ${error}`,
+      noScanSettingsOff: 'Artık taraması Ayarlar\'da kapalı, bu yüzden hiçbir şey aranmadı.',
+      noScanStore: "Bir Store uygulamasından sonra artık taraması yapılmaz: Windows, uygulamanın kendi verilerini de onunla birlikte kaldırır.",
+      done: 'Tamamlandı',
+      summary: {
+        recycle: (programs, items, freed) => `${programs} kaldırıldı ve ${items} Geri Dönüşüm Kutusuna gönderildi, ${freed} boşaltıldı.`,
+        permanent: (programs, items, freed) => `${programs} kaldırıldı ve ${items} kalıcı olarak silindi, ${freed} boşaltıldı.`,
+        quarantine: (programs, items, freed) => `${programs} kaldırıldı ve ${items} Karantinaya taşındı, ${freed} boşaltıldı.`,
+        programs: (n) => `${n} program`,
+        items: (n) => `${n} artık öğe`
+      },
+      noRestorePoint: (reason) => `Sistem geri yükleme noktası oluşturulmadı (${reason}).`,
+      restorePointFallback: 'kullanılamıyor',
+      quarantineNote: 'Yukarıdakilerin hepsi hâlâ Karantinada ve geri konulabilir.',
+      failedRegistryKeys: (n) => `${n} kayıt defteri anahtarı kaldırılamadı — bunlar genellikle Prune'un yönetici olarak çalışmasını gerektirir.`
     }
   },
 
@@ -19341,6 +23085,110 @@ export const CATALOG = {
         message: (count) => `Пропущено заблокованих файлів: ${count}.`,
         detail: 'Закрийте застосунки, які їх використовують, і очистіть знову.'
       }
+    },
+    leftoverReview: {
+      groups: { files: 'Файли та папки', registryKeys: 'Ключі реєстру', scheduledTasks: 'Заплановані завдання' },
+      notRemoved: 'знайдено, не видалено',
+      checkFailed: (label) => `Не вдалося перевірити ${label}.`,
+      itemNote: {
+        valueOnly: (valueName) => `Лише значення «${valueName}» — ключ, у якому воно знаходиться, є спільним і залишається`,
+        uninstallEntry: 'Запис у списку програм і компонентів'
+      },
+      destinations: {
+        quarantine: { text: 'Вибрані елементи переміщуються в карантин, звідки ви можете їх відновити.', button: 'Видалити вибране' },
+        recycle: { text: 'Вибрані файли переміщуються в кошик. Ключі реєстру резервуються перед видаленням.', button: 'Видалити вибране' },
+        permanent: { text: 'Вибрані файли будуть видалені остаточно і не можуть бути відновлені. Ключі реєстру резервуються перед видаленням.', button: 'Видалити остаточно' }
+      },
+      clean: 'Залишків не знайдено — чисте видалення.',
+      done: 'Готово',
+      foundWarning: (count) => `Знайдено ${count} елементів, що залишилися, які пропустив вбудований деінсталятор. Перевірте перед очищенням.`,
+      excludedNote: (count) => `${count} папок пропущено, оскільки вони входять до ваших винятків.`,
+      itemsSelected: 'елементів вибрано',
+      reclaimable: 'можна звільнити',
+      skip: 'Пропустити'
+    },
+    uninstallModal: {
+      titleForce: (name) => `Примусово видалити ${name}`,
+      titleNormal: (name) => `Видалити ${name}`,
+      close: 'Закрити',
+      runningWarning: (name) => `${name} зараз запущено. Спочатку закрийте його — деінсталятор зазвичай завершується невдало з відкритою програмою і може залишити файли, які наступний запуск створить знову.`,
+      orphanedWarning: (reason) => `${reason} Windows продовжуватиме відображати його, доки запис не буде видалено.`,
+      brokenIntro: 'Prune шукатиме файли та ключі реєстру, що відповідають цій назві, включно з записом у списку програм і компонентів, і покаже вам усе перед видаленням будь-чого.',
+      searchForLabel: 'Шукати',
+      searchHint: (name) => `Взято з «${name}» без версії — інсталятори називають папки за продуктом, а не за випуском. Відредагуйте, якщо результати виглядають неправильно.`,
+      scanFailed: (error) => `Сканування не вдалося: ${error}`,
+      searchButton: 'Шукати залишки',
+      normalIntro: (name) => `Це запускає власний деінсталятор ${name}, потім сканує все, що він залишає після себе.`,
+      uninstallFailed: (error) => `Видалення не вдалося: ${error}`,
+      startButton: 'Почати видалення',
+      noWorkingUninstaller: 'Немає працюючого деінсталятора — натомість буде виконано пошук за назвою',
+      noUninstallCommand: 'Команду видалення не зареєстровано',
+      progress: {
+        runningNative: 'Виконується вбудований деінсталятор',
+        backingUpRegistry: 'Резервне копіювання реєстру',
+        creatingRestorePoint: 'Створення точки відновлення',
+        searchingLeftovers: 'Пошук залишків',
+        scanningLeftovers: 'Сканування залишків',
+        checkingCommand: 'Перевірка файлової системи, реєстру та запланованих завдань…'
+      },
+      removing: {
+        quarantine: { title: 'Переміщення в карантин', command: 'Нічого не видаляється — кожен елемент можна відновити' },
+        recycle: { title: 'Надсилання в кошик', command: 'За потреби відновіть їх із кошика' },
+        permanent: { title: 'Остаточне видалення', command: 'Їх не можна відновити' }
+      },
+      noScan: (name) => `Деінсталятор ${name} завершив роботу. Сканування залишків вимкнено в налаштуваннях, тому нічого іншого не шукали.`,
+      removalFailed: (error) => `Видалення не вдалося: ${error}`,
+      done: 'Готово',
+      summary: {
+        item: (n) => `${n} елемент${n === 1 ? '' : (n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) ? 'и' : 'ів')}`,
+        registryKey: (n) => `${n} ключ${n === 1 ? '' : (n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) ? 'і' : 'ів')} реєстру`,
+        recycle: (files, keys, freed) => `Надіслано ${files} у кошик і видалено ${keys}, попередньо збережено в карантині. Звільнено ${freed}.`,
+        permanent: (files, keys, freed) => `Остаточно видалено ${files} і видалено ${keys}, попередньо збережено в карантині. Звільнено ${freed}.`,
+        quarantine: (files, keys, freed) => `Переміщено ${files} і ${keys} у карантин, звільнивши ${freed}. Відновіть їх будь-коли з екрана карантину.`
+      },
+      failedFilesHeading: (n) => `Не вдалося видалити ${n} елементів:`,
+      failedRegistryKeysHeading: (n) => `Не вдалося видалити ${n} ключів реєстру`,
+      failedRegistryKeysNote: 'зазвичай для цього потрібно, щоб Prune було запущено від імені адміністратора:',
+      noRestorePoint: (reason) => `Точку відновлення системи не було створено (${reason}).`,
+      quarantineStillWorks: 'Відновлення з карантину все ще працює.'
+    },
+    batchUninstallModal: {
+      title: (n) => `Видалити ${n} програм`,
+      historyLabel: (n) => `Пакетне видалення: ${n} програм`,
+      close: 'Закрити',
+      registryOnlyIntro: 'Кожен застосунок видаляється через Windows по черзі, і після цього сканування залишків не виконується: Windows видаляє власні дані застосунку разом з ним.',
+      mixedIntro: (hasStore) => `Власний деінсталятор кожної програми запускається по черзі, потім Prune сканує, що вони залишають після себе, і показує вам усе перед видаленням будь-чого з цього.${hasStore ? ' Застосунки зі Store натомість видаляються через Windows, без подальшого сканування залишків.' : ''}`,
+      oneAtATime: 'По одному, оскільки Windows дозволяє лише одне встановлення чи видалення одночасно. Деякі деінсталятори покажуть власні вікна та поставлять вам запитання.',
+      storeWarning: (count) => count === 1
+        ? 'Застосунок Store у цьому пакеті не можна відновити з карантину: його видалення забирає застосунок і його збережені дані, а повернути його означає перевстановити зі Store.'
+        : `${count} застосунків Store у цьому пакеті не можна відновити з карантину: видалення одного забирає застосунок і його збережені дані, а повернути його означає перевстановити зі Store.`,
+      runsBefore: (name) => `виконується перед ${name}`,
+      reported: (bytes) => `${bytes} заявлено`,
+      unknownSizeSuffix: (n) => `, ${n} невідомого розміру`,
+      startButton: 'Почати видалення',
+      status: { waiting: 'очікування', uninstalling: 'видалення…', removed: 'видалено', failed: 'помилка' },
+      removingLine: {
+        quarantine: 'Переміщення залишків у карантин…',
+        recycle: 'Надсилання залишків у кошик…',
+        permanent: 'Остаточне видалення залишків…'
+      },
+      uninstalledOf: (removed, total) => `Видалено ${removed} з ${total}.`,
+      failedHeading: (n) => `${n} не вдалося видалити, і вони залишилися неторканими:`,
+      removeLeftoversFailed: (error) => `Не вдалося видалити залишки: ${error}`,
+      noScanSettingsOff: 'Сканування залишків вимкнено в налаштуваннях, тому нічого не шукали.',
+      noScanStore: 'Після застосунку Store сканування залишків не виконується: Windows видаляє власні дані застосунку разом з ним.',
+      done: 'Готово',
+      summary: {
+        recycle: (programs, items, freed) => `Видалено ${programs} і надіслано ${items} у кошик, звільнивши ${freed}.`,
+        permanent: (programs, items, freed) => `Видалено ${programs} і остаточно видалено ${items}, звільнивши ${freed}.`,
+        quarantine: (programs, items, freed) => `Видалено ${programs} і переміщено ${items} у карантин, звільнивши ${freed}.`,
+        programs: (n) => `${n} програм`,
+        items: (n) => `${n} елементів, що залишилися`
+      },
+      noRestorePoint: (reason) => `Точку відновлення системи не було створено (${reason}).`,
+      restorePointFallback: 'недоступно',
+      quarantineNote: 'Усе вищезазначене все ще перебуває в карантині і може бути повернуто.',
+      failedRegistryKeys: (n) => `Не вдалося видалити ${n} ключів реєстру — зазвичай для цього потрібно, щоб Prune було запущено від імені адміністратора.`
     }
   },
 
@@ -19863,6 +23711,110 @@ export const CATALOG = {
         message: (count) => `Đã bỏ qua ${count} tệp bị khóa.`,
         detail: 'Đóng các ứng dụng đang sử dụng chúng rồi dọn dẹp lại.'
       }
+    },
+    leftoverReview: {
+      groups: { files: 'Tệp & thư mục', registryKeys: 'Khóa registry', scheduledTasks: 'Tác vụ đã lên lịch' },
+      notRemoved: 'đã tìm thấy, chưa xóa',
+      checkFailed: (label) => `Không thể kiểm tra ${label}.`,
+      itemNote: {
+        valueOnly: (valueName) => `Chỉ giá trị "${valueName}" — khóa mà nó nằm trong được chia sẻ và vẫn còn`,
+        uninstallEntry: 'Mục Thêm/Gỡ bỏ Chương trình'
+      },
+      destinations: {
+        quarantine: { text: 'Các mục đã chọn sẽ vào Cách ly, nơi bạn có thể khôi phục chúng.', button: 'Xóa mục đã chọn' },
+        recycle: { text: 'Các tệp đã chọn sẽ vào Thùng rác. Các khóa registry được sao lưu trước khi bị xóa.', button: 'Xóa mục đã chọn' },
+        permanent: { text: 'Các tệp đã chọn sẽ bị xóa vĩnh viễn và không thể khôi phục. Các khóa registry được sao lưu trước khi bị xóa.', button: 'Xóa vĩnh viễn' }
+      },
+      clean: 'Không tìm thấy tệp sót lại — gỡ cài đặt sạch sẽ.',
+      done: 'Xong',
+      foundWarning: (count) => `Đã tìm thấy ${count} mục còn sót lại mà trình gỡ cài đặt gốc đã bỏ sót. Xem lại trước khi dọn dẹp.`,
+      excludedNote: (count) => `${count} thư mục đã bị loại trừ vì chúng nằm trong danh sách loại trừ của bạn.`,
+      itemsSelected: 'mục đã chọn',
+      reclaimable: 'có thể thu hồi',
+      skip: 'Bỏ qua'
+    },
+    uninstallModal: {
+      titleForce: (name) => `Buộc gỡ bỏ ${name}`,
+      titleNormal: (name) => `Gỡ cài đặt ${name}`,
+      close: 'Đóng',
+      runningWarning: (name) => `${name} hiện đang chạy. Hãy đóng nó trước — trình gỡ cài đặt thường thất bại với một chương trình đang mở, và có thể để lại các tệp mà lần khởi chạy tiếp theo sẽ tạo lại.`,
+      orphanedWarning: (reason) => `${reason} Windows sẽ tiếp tục liệt kê nó cho đến khi mục này bị xóa.`,
+      brokenIntro: 'Prune sẽ tìm kiếm các tệp và khóa registry khớp với tên này, bao gồm cả mục Thêm/Gỡ bỏ Chương trình của nó, và hiển thị cho bạn mọi thứ trước khi xóa bất cứ điều gì.',
+      searchForLabel: 'Tìm kiếm',
+      searchHint: (name) => `Được lấy từ "${name}" không có phiên bản của nó — trình cài đặt đặt tên thư mục theo sản phẩm, không phải theo bản phát hành. Chỉnh sửa nếu kết quả trông không đúng.`,
+      scanFailed: (error) => `Quét thất bại: ${error}`,
+      searchButton: 'Tìm kiếm tệp sót lại',
+      normalIntro: (name) => `Thao tác này chạy trình gỡ cài đặt riêng của ${name}, sau đó quét bất cứ thứ gì nó để lại.`,
+      uninstallFailed: (error) => `Gỡ cài đặt thất bại: ${error}`,
+      startButton: 'Bắt đầu gỡ cài đặt',
+      noWorkingUninstaller: 'Không có trình gỡ cài đặt hoạt động — sẽ tìm kiếm theo tên thay thế',
+      noUninstallCommand: 'Không có lệnh gỡ cài đặt nào được đăng ký',
+      progress: {
+        runningNative: 'Đang chạy trình gỡ cài đặt gốc',
+        backingUpRegistry: 'Đang sao lưu registry',
+        creatingRestorePoint: 'Đang tạo điểm khôi phục',
+        searchingLeftovers: 'Đang tìm kiếm tệp sót lại',
+        scanningLeftovers: 'Đang quét tệp sót lại',
+        checkingCommand: 'Đang kiểm tra hệ thống tệp, registry & tác vụ đã lên lịch…'
+      },
+      removing: {
+        quarantine: { title: 'Đang di chuyển vào Cách ly', command: 'Không có gì bị xóa — mỗi mục đều có thể khôi phục' },
+        recycle: { title: 'Đang gửi đến Thùng rác', command: 'Khôi phục chúng từ Thùng rác nếu cần' },
+        permanent: { title: 'Đang xóa vĩnh viễn', command: 'Những mục này không thể khôi phục' }
+      },
+      noScan: (name) => `Trình gỡ cài đặt của ${name} đã hoàn tất. Quét tệp sót lại đã bị tắt trong Cài đặt, vì vậy không có gì khác được tìm kiếm.`,
+      removalFailed: (error) => `Xóa thất bại: ${error}`,
+      done: 'Xong',
+      summary: {
+        item: (n) => `${n} mục`,
+        registryKey: (n) => `${n} khóa registry`,
+        recycle: (files, keys, freed) => `Đã gửi ${files} đến Thùng rác và xóa ${keys}, được sao lưu trước vào Cách ly. Đã giải phóng ${freed}.`,
+        permanent: (files, keys, freed) => `Đã xóa vĩnh viễn ${files} và xóa ${keys}, được sao lưu trước vào Cách ly. Đã giải phóng ${freed}.`,
+        quarantine: (files, keys, freed) => `Đã di chuyển ${files} và ${keys} vào Cách ly, giải phóng ${freed}. Khôi phục chúng bất cứ lúc nào từ màn hình Cách ly.`
+      },
+      failedFilesHeading: (n) => `Không thể xóa ${n} mục:`,
+      failedRegistryKeysHeading: (n) => `Không thể xóa ${n} khóa registry`,
+      failedRegistryKeysNote: 'những mục này thường yêu cầu Prune chạy với quyền quản trị viên:',
+      noRestorePoint: (reason) => `Không có điểm khôi phục hệ thống nào được tạo (${reason}).`,
+      quarantineStillWorks: 'Khôi phục từ Cách ly vẫn hoạt động.'
+    },
+    batchUninstallModal: {
+      title: (n) => `Gỡ cài đặt ${n} chương trình`,
+      historyLabel: (n) => `Gỡ cài đặt hàng loạt: ${n} chương trình`,
+      close: 'Đóng',
+      registryOnlyIntro: 'Mỗi ứng dụng được gỡ bỏ lần lượt thông qua Windows, và không có quét tệp sót lại sau đó: Windows xóa dữ liệu riêng của ứng dụng cùng với nó.',
+      mixedIntro: (hasStore) => `Trình gỡ cài đặt riêng của mỗi chương trình chạy lần lượt, sau đó Prune quét những gì chúng để lại và hiển thị cho bạn mọi thứ trước khi xóa bất cứ thứ gì trong đó.${hasStore ? ' Các ứng dụng Store thay vào đó được gỡ bỏ thông qua Windows, không có quét tệp sót lại sau đó.' : ''}`,
+      oneAtATime: 'Từng cái một, vì Windows chỉ cho phép một lần cài đặt hoặc gỡ cài đặt tại một thời điểm. Một số trình gỡ cài đặt sẽ hiển thị cửa sổ riêng của chúng và đặt câu hỏi cho bạn.',
+      storeWarning: (count) => count === 1
+        ? 'Ứng dụng Store trong đợt này không thể khôi phục từ Cách ly: việc xóa nó sẽ lấy đi ứng dụng và dữ liệu đã lưu của nó, và lấy lại nó có nghĩa là cài đặt lại từ Store.'
+        : `${count} ứng dụng Store trong đợt này không thể khôi phục từ Cách ly: việc xóa một ứng dụng sẽ lấy đi ứng dụng và dữ liệu đã lưu của nó, và lấy lại nó có nghĩa là cài đặt lại từ Store.`,
+      runsBefore: (name) => `chạy trước ${name}`,
+      reported: (bytes) => `${bytes} đã báo cáo`,
+      unknownSizeSuffix: (n) => `, ${n} kích thước không xác định`,
+      startButton: 'Bắt đầu gỡ cài đặt',
+      status: { waiting: 'đang chờ', uninstalling: 'đang gỡ cài đặt…', removed: 'đã xóa', failed: 'thất bại' },
+      removingLine: {
+        quarantine: 'Đang di chuyển tệp sót lại vào Cách ly…',
+        recycle: 'Đang gửi tệp sót lại đến Thùng rác…',
+        permanent: 'Đang xóa tệp sót lại vĩnh viễn…'
+      },
+      uninstalledOf: (removed, total) => `Đã gỡ cài đặt ${removed} trong số ${total}.`,
+      failedHeading: (n) => `${n} không thể gỡ cài đặt và đã bị bỏ qua:`,
+      removeLeftoversFailed: (error) => `Không thể xóa tệp sót lại: ${error}`,
+      noScanSettingsOff: 'Quét tệp sót lại đã bị tắt trong Cài đặt, vì vậy không có gì được tìm kiếm.',
+      noScanStore: 'Không có quét tệp sót lại sau một ứng dụng Store: Windows xóa dữ liệu riêng của ứng dụng cùng với nó.',
+      done: 'Xong',
+      summary: {
+        recycle: (programs, items, freed) => `Đã gỡ cài đặt ${programs} và gửi ${items} đến Thùng rác, giải phóng ${freed}.`,
+        permanent: (programs, items, freed) => `Đã gỡ cài đặt ${programs} và xóa vĩnh viễn ${items}, giải phóng ${freed}.`,
+        quarantine: (programs, items, freed) => `Đã gỡ cài đặt ${programs} và di chuyển ${items} vào Cách ly, giải phóng ${freed}.`,
+        programs: (n) => `${n} chương trình`,
+        items: (n) => `${n} mục còn sót lại`
+      },
+      noRestorePoint: (reason) => `Không có điểm khôi phục hệ thống nào được tạo (${reason}).`,
+      restorePointFallback: 'không có sẵn',
+      quarantineNote: 'Tất cả những gì ở trên vẫn còn trong Cách ly và có thể được đưa trở lại.',
+      failedRegistryKeys: (n) => `Không thể xóa ${n} khóa registry — những mục này thường yêu cầu Prune chạy với quyền quản trị viên.`
     }
   },
 
@@ -20385,6 +24337,110 @@ export const CATALOG = {
         message: (count) => `跳过了 ${count} 个被锁定的文件。`,
         detail: '关闭正在使用它们的应用后再次清理。'
       }
+    },
+    leftoverReview: {
+      groups: { files: '文件和文件夹', registryKeys: '注册表项', scheduledTasks: '计划任务' },
+      notRemoved: '已找到，未删除',
+      checkFailed: (label) => `无法检查${label}。`,
+      itemNote: {
+        valueOnly: (valueName) => `仅限值"${valueName}"——它所在的键是共享的并会保留`,
+        uninstallEntry: '"添加/删除程序"条目'
+      },
+      destinations: {
+        quarantine: { text: '选定的项目将进入隔离区，你可以从那里恢复它们。', button: '删除所选项' },
+        recycle: { text: '选定的文件将进入回收站。注册表项在删除前会先备份。', button: '删除所选项' },
+        permanent: { text: '选定的文件将被彻底删除且无法恢复。注册表项在删除前会先备份。', button: '永久删除' }
+      },
+      clean: '未找到残留项——干净卸载。',
+      done: '完成',
+      foundWarning: (count) => `找到了原生卸载程序遗漏的 ${count} 个残留项。清理前请先查看。`,
+      excludedNote: (count) => `因为在你的排除列表中，已排除 ${count} 个文件夹。`,
+      itemsSelected: '个项目已选择',
+      reclaimable: '可释放',
+      skip: '跳过'
+    },
+    uninstallModal: {
+      titleForce: (name) => `强制移除 ${name}`,
+      titleNormal: (name) => `卸载 ${name}`,
+      close: '关闭',
+      runningWarning: (name) => `${name} 目前正在运行。请先关闭它——卸载程序通常在程序处于打开状态时会失败，并可能留下下次启动时会重新创建的文件。`,
+      orphanedWarning: (reason) => `${reason}在该条目被移除之前，Windows 会继续列出它。`,
+      brokenIntro: 'Prune 将搜索与此名称匹配的文件和注册表项，包括其"添加/删除程序"条目，并在删除任何内容之前向你展示所有内容。',
+      searchForLabel: '搜索',
+      searchHint: (name) => `取自"${name}"并去除了版本号——安装程序按产品而非发行版本命名文件夹。如果结果看起来不正确，请编辑它。`,
+      scanFailed: (error) => `扫描失败：${error}`,
+      searchButton: '搜索残留项',
+      normalIntro: (name) => `此操作会运行 ${name} 自己的卸载程序，然后扫描它遗留下的任何内容。`,
+      uninstallFailed: (error) => `卸载失败：${error}`,
+      startButton: '开始卸载',
+      noWorkingUninstaller: '没有可用的卸载程序——将改为按名称搜索',
+      noUninstallCommand: '未注册卸载命令',
+      progress: {
+        runningNative: '正在运行原生卸载程序',
+        backingUpRegistry: '正在备份注册表',
+        creatingRestorePoint: '正在创建还原点',
+        searchingLeftovers: '正在搜索残留项',
+        scanningLeftovers: '正在扫描残留项',
+        checkingCommand: '正在检查文件系统、注册表和计划任务…'
+      },
+      removing: {
+        quarantine: { title: '正在移动到隔离区', command: '不会删除任何内容——每个项目都可以恢复' },
+        recycle: { title: '正在发送到回收站', command: '如有需要，可从回收站恢复它们' },
+        permanent: { title: '正在永久删除', command: '这些内容无法恢复' }
+      },
+      noScan: (name) => `${name} 的卸载程序已完成。残留项扫描在设置中已关闭，因此未搜索其他内容。`,
+      removalFailed: (error) => `删除失败：${error}`,
+      done: '完成',
+      summary: {
+        item: (n) => `${n} 个项目`,
+        registryKey: (n) => `${n} 个注册表项`,
+        recycle: (files, keys, freed) => `已将 ${files} 发送到回收站并删除了 ${keys}，之前已在隔离区备份。释放了 ${freed}。`,
+        permanent: (files, keys, freed) => `已永久删除 ${files} 并删除了 ${keys}，之前已在隔离区备份。释放了 ${freed}。`,
+        quarantine: (files, keys, freed) => `已将 ${files} 和 ${keys} 移动到隔离区，释放了 ${freed}。可随时从隔离区界面恢复它们。`
+      },
+      failedFilesHeading: (n) => `${n} 个项目无法删除：`,
+      failedRegistryKeysHeading: (n) => `${n} 个注册表项无法删除`,
+      failedRegistryKeysNote: '这些通常需要 Prune 以管理员身份运行：',
+      noRestorePoint: (reason) => `未创建系统还原点（${reason}）。`,
+      quarantineStillWorks: '隔离区恢复功能仍然有效。'
+    },
+    batchUninstallModal: {
+      title: (n) => `卸载 ${n} 个程序`,
+      historyLabel: (n) => `批量卸载：${n} 个程序`,
+      close: '关闭',
+      registryOnlyIntro: '每个应用都会依次通过 Windows 移除，之后不会进行残留项扫描：Windows 会连同应用自身的数据一起删除。',
+      mixedIntro: (hasStore) => `每个程序自己的卸载程序会依次运行，然后 Prune 会扫描它们遗留下的内容，并在删除任何内容之前向你展示所有内容。${hasStore ? ' 应用商店的应用会改为通过 Windows 移除，之后不进行残留项扫描。' : ''}`,
+      oneAtATime: '逐一进行，因为 Windows 一次只允许一个安装或卸载操作。一些卸载程序会显示自己的窗口并向你提问。',
+      storeWarning: (count) => count === 1
+        ? '此批次中的应用商店应用无法从隔离区恢复：删除它会连同应用及其保存的数据一起消失，找回它意味着需要从应用商店重新安装。'
+        : `此批次中的 ${count} 个应用商店应用无法从隔离区恢复：删除其中一个会连同应用及其保存的数据一起消失，找回它意味着需要从应用商店重新安装。`,
+      runsBefore: (name) => `在 ${name} 之前运行`,
+      reported: (bytes) => `已报告 ${bytes}`,
+      unknownSizeSuffix: (n) => `，${n} 个大小未知`,
+      startButton: '开始卸载',
+      status: { waiting: '等待中', uninstalling: '正在卸载…', removed: '已移除', failed: '失败' },
+      removingLine: {
+        quarantine: '正在将残留项移动到隔离区…',
+        recycle: '正在将残留项发送到回收站…',
+        permanent: '正在永久删除残留项…'
+      },
+      uninstalledOf: (removed, total) => `已卸载 ${total} 个中的 ${removed} 个。`,
+      failedHeading: (n) => `${n} 个无法卸载，已保持原样：`,
+      removeLeftoversFailed: (error) => `无法删除残留项：${error}`,
+      noScanSettingsOff: '残留项扫描在设置中已关闭，因此未搜索任何内容。',
+      noScanStore: '应用商店应用之后不会进行残留项扫描：Windows 会连同应用自身的数据一起删除。',
+      done: '完成',
+      summary: {
+        recycle: (programs, items, freed) => `已卸载 ${programs} 并将 ${items} 发送到回收站，释放了 ${freed}。`,
+        permanent: (programs, items, freed) => `已卸载 ${programs} 并永久删除了 ${items}，释放了 ${freed}。`,
+        quarantine: (programs, items, freed) => `已卸载 ${programs} 并将 ${items} 移动到隔离区，释放了 ${freed}。`,
+        programs: (n) => `${n} 个程序`,
+        items: (n) => `${n} 个残留项`
+      },
+      noRestorePoint: (reason) => `未创建系统还原点（${reason}）。`,
+      restorePointFallback: '不可用',
+      quarantineNote: '以上所有内容仍在隔离区中，可以恢复。',
+      failedRegistryKeys: (n) => `${n} 个注册表项无法删除——这些通常需要 Prune 以管理员身份运行。`
     }
   },
 
@@ -20907,6 +24963,110 @@ export const CATALOG = {
         message: (count) => `跳過了 ${count} 個被鎖定的檔案。`,
         detail: '關閉正在使用它們的應用程式後再次清理。'
       }
+    },
+    leftoverReview: {
+      groups: { files: '檔案與資料夾', registryKeys: '登錄機碼', scheduledTasks: '排程工作' },
+      notRemoved: '已找到，未移除',
+      checkFailed: (label) => `無法檢查${label}。`,
+      itemNote: {
+        valueOnly: (valueName) => `僅限值「${valueName}」——它所在的機碼是共用的，會保留下來`,
+        uninstallEntry: '「新增/移除程式」項目'
+      },
+      destinations: {
+        quarantine: { text: '選取的項目會進入隔離區，你可以從那裡復原它們。', button: '移除所選項目' },
+        recycle: { text: '選取的檔案會進入資源回收筒。登錄機碼會在移除前先備份。', button: '移除所選項目' },
+        permanent: { text: '選取的檔案將被徹底刪除且無法復原。登錄機碼會在移除前先備份。', button: '永久刪除' }
+      },
+      clean: '未找到殘留項目——乾淨解除安裝。',
+      done: '完成',
+      foundWarning: (count) => `找到了原生解除安裝程式遺漏的 ${count} 個殘留項目。清理前請先檢查。`,
+      excludedNote: (count) => `因為在你的排除清單中，已排除 ${count} 個資料夾。`,
+      itemsSelected: '個項目已選取',
+      reclaimable: '可釋放',
+      skip: '略過'
+    },
+    uninstallModal: {
+      titleForce: (name) => `強制移除 ${name}`,
+      titleNormal: (name) => `解除安裝 ${name}`,
+      close: '關閉',
+      runningWarning: (name) => `${name} 目前正在執行。請先關閉它——解除安裝程式通常在程式開啟時會失敗，並可能留下下次啟動時會重新建立的檔案。`,
+      orphanedWarning: (reason) => `${reason}在該項目被移除之前，Windows 會持續列出它。`,
+      brokenIntro: 'Prune 將搜尋與此名稱相符的檔案和登錄機碼，包括其「新增/移除程式」項目，並在刪除任何內容之前向你顯示所有內容。',
+      searchForLabel: '搜尋',
+      searchHint: (name) => `取自「${name}」並移除了版本號——安裝程式依產品而非發行版本命名資料夾。如果結果看起來不正確，請編輯它。`,
+      scanFailed: (error) => `掃描失敗：${error}`,
+      searchButton: '搜尋殘留項目',
+      normalIntro: (name) => `此操作會執行 ${name} 自己的解除安裝程式，然後掃描它遺留下的任何內容。`,
+      uninstallFailed: (error) => `解除安裝失敗：${error}`,
+      startButton: '開始解除安裝',
+      noWorkingUninstaller: '沒有可用的解除安裝程式——將改為依名稱搜尋',
+      noUninstallCommand: '未註冊解除安裝命令',
+      progress: {
+        runningNative: '正在執行原生解除安裝程式',
+        backingUpRegistry: '正在備份登錄檔',
+        creatingRestorePoint: '正在建立還原點',
+        searchingLeftovers: '正在搜尋殘留項目',
+        scanningLeftovers: '正在掃描殘留項目',
+        checkingCommand: '正在檢查檔案系統、登錄檔和排程工作…'
+      },
+      removing: {
+        quarantine: { title: '正在移動到隔離區', command: '不會刪除任何內容——每個項目都可以復原' },
+        recycle: { title: '正在傳送到資源回收筒', command: '如有需要，可從資源回收筒復原它們' },
+        permanent: { title: '正在永久刪除', command: '這些內容無法復原' }
+      },
+      noScan: (name) => `${name} 的解除安裝程式已完成。殘留項目掃描在設定中已關閉，因此未搜尋其他內容。`,
+      removalFailed: (error) => `刪除失敗：${error}`,
+      done: '完成',
+      summary: {
+        item: (n) => `${n} 個項目`,
+        registryKey: (n) => `${n} 個登錄機碼`,
+        recycle: (files, keys, freed) => `已將 ${files} 傳送到資源回收筒並刪除了 ${keys}，先前已在隔離區備份。釋放了 ${freed}。`,
+        permanent: (files, keys, freed) => `已永久刪除 ${files} 並刪除了 ${keys}，先前已在隔離區備份。釋放了 ${freed}。`,
+        quarantine: (files, keys, freed) => `已將 ${files} 和 ${keys} 移動到隔離區，釋放了 ${freed}。可隨時從隔離區畫面復原它們。`
+      },
+      failedFilesHeading: (n) => `${n} 個項目無法刪除：`,
+      failedRegistryKeysHeading: (n) => `${n} 個登錄機碼無法刪除`,
+      failedRegistryKeysNote: '這些通常需要 Prune 以系統管理員身分執行：',
+      noRestorePoint: (reason) => `未建立系統還原點（${reason}）。`,
+      quarantineStillWorks: '隔離區復原功能仍然有效。'
+    },
+    batchUninstallModal: {
+      title: (n) => `解除安裝 ${n} 個程式`,
+      historyLabel: (n) => `批次解除安裝：${n} 個程式`,
+      close: '關閉',
+      registryOnlyIntro: '每個應用程式都會依序透過 Windows 移除，之後不會進行殘留項目掃描：Windows 會連同應用程式自身的資料一起刪除。',
+      mixedIntro: (hasStore) => `每個程式自己的解除安裝程式會依序執行，然後 Prune 會掃描它們遺留下的內容，並在刪除任何內容之前向你顯示所有內容。${hasStore ? ' 市集應用程式會改為透過 Windows 移除，之後不進行殘留項目掃描。' : ''}`,
+      oneAtATime: '逐一進行，因為 Windows 一次只允許一個安裝或解除安裝作業。有些解除安裝程式會顯示自己的視窗並向你提問。',
+      storeWarning: (count) => count === 1
+        ? '此批次中的市集應用程式無法從隔離區復原：刪除它會連同應用程式及其儲存的資料一起消失，找回它代表需要從市集重新安裝。'
+        : `此批次中的 ${count} 個市集應用程式無法從隔離區復原：刪除其中一個會連同應用程式及其儲存的資料一起消失，找回它代表需要從市集重新安裝。`,
+      runsBefore: (name) => `在 ${name} 之前執行`,
+      reported: (bytes) => `已回報 ${bytes}`,
+      unknownSizeSuffix: (n) => `，${n} 個大小未知`,
+      startButton: '開始解除安裝',
+      status: { waiting: '等待中', uninstalling: '正在解除安裝…', removed: '已移除', failed: '失敗' },
+      removingLine: {
+        quarantine: '正在將殘留項目移動到隔離區…',
+        recycle: '正在將殘留項目傳送到資源回收筒…',
+        permanent: '正在永久刪除殘留項目…'
+      },
+      uninstalledOf: (removed, total) => `已解除安裝 ${total} 個中的 ${removed} 個。`,
+      failedHeading: (n) => `${n} 個無法解除安裝，已保持原樣：`,
+      removeLeftoversFailed: (error) => `無法刪除殘留項目：${error}`,
+      noScanSettingsOff: '殘留項目掃描在設定中已關閉，因此未搜尋任何內容。',
+      noScanStore: '市集應用程式之後不會進行殘留項目掃描：Windows 會連同應用程式自身的資料一起刪除。',
+      done: '完成',
+      summary: {
+        recycle: (programs, items, freed) => `已解除安裝 ${programs} 並將 ${items} 傳送到資源回收筒，釋放了 ${freed}。`,
+        permanent: (programs, items, freed) => `已解除安裝 ${programs} 並永久刪除了 ${items}，釋放了 ${freed}。`,
+        quarantine: (programs, items, freed) => `已解除安裝 ${programs} 並將 ${items} 移動到隔離區，釋放了 ${freed}。`,
+        programs: (n) => `${n} 個程式`,
+        items: (n) => `${n} 個殘留項目`
+      },
+      noRestorePoint: (reason) => `未建立系統還原點（${reason}）。`,
+      restorePointFallback: '無法使用',
+      quarantineNote: '以上所有內容仍在隔離區中，可以復原。',
+      failedRegistryKeys: (n) => `${n} 個登錄機碼無法刪除——這些通常需要 Prune 以系統管理員身分執行。`
     }
   }
 };

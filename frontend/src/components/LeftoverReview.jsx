@@ -1,14 +1,5 @@
 import { useState } from 'react';
-
-const GROUPS = [
-  { key: 'files', label: 'Files & folders' },
-  { key: 'registryKeys', label: 'Registry keys' },
-  // Reported, never removed. Quarantine works by moving files and
-  // exporting registry keys, both of which a restore can put back; a
-  // scheduled task has no equivalent reversible operation, so offering a
-  // checkbox here would promise something the removal can't deliver.
-  { key: 'scheduledTasks', label: 'Scheduled tasks', removable: false }
-];
+import { useLanguage } from '../i18n/LanguageContext.jsx';
 
 function formatBytes(bytes) {
   if (!bytes) return null;
@@ -22,41 +13,44 @@ function formatBytes(bytes) {
  *
  * Both cases are about a row whose path does not say what removing it
  * actually does. Everything else is exactly what it looks like. */
-export function leftoverItemNote(item) {
-  if (item?.valueName) {
-    return `Only the value "${item.valueName}" — the key it sits in is shared and stays`;
-  }
-  if (item?.isUninstallEntry) return 'Add/Remove Programs entry';
+export const DEFAULT_LEFTOVER_NOTE_MESSAGES = {
+  valueOnly: (valueName) => `Only the value "${valueName}" — the key it sits in is shared and stays`,
+  uninstallEntry: 'Add/Remove Programs entry'
+};
+
+export function leftoverItemNote(item, messages = DEFAULT_LEFTOVER_NOTE_MESSAGES) {
+  if (item?.valueName) return messages.valueOnly(item.valueName);
+  if (item?.isUninstallEntry) return messages.uninstallEntry;
   return null;
 }
-
-/** What the review says will happen to the ticked leftovers, by where the
- * dialog is sending them -- beside the button, because "Remove selected"
- * alone stopped saying whether a removal can be undone once the Recycle
- * Bin and permanent deletion became possible. */
-const DESTINATION_COPY = {
-  quarantine: {
-    text: 'Selected items go to Quarantine, where you can restore them.',
-    button: 'Remove selected',
-    danger: false
-  },
-  recycle: {
-    text: 'Selected files go to the Recycle Bin. Registry keys are backed up before they are removed.',
-    button: 'Remove selected',
-    danger: false
-  },
-  permanent: {
-    text: "Selected files will be deleted permanently and can't be restored. Registry keys are backed up before they are removed.",
-    button: 'Delete permanently',
-    danger: true
-  }
-};
 
 /** `scanResult` is { files, registryKeys, scheduledTasks }, each
  * { ok, items }. `selected` is a Set of "group:index" keys — all checked
  * by default is the caller's job (UninstallModal seeds it), not this
  * component's. */
 export default function LeftoverReview({ scanResult, selected, onToggle, onConfirm, onSkip, destination = 'quarantine' }) {
+  const { t } = useLanguage();
+
+  const GROUPS = [
+    { key: 'files', label: t('leftoverReview.groups.files') },
+    { key: 'registryKeys', label: t('leftoverReview.groups.registryKeys') },
+    // Reported, never removed. Quarantine works by moving files and
+    // exporting registry keys, both of which a restore can put back; a
+    // scheduled task has no equivalent reversible operation, so offering a
+    // checkbox here would promise something the removal can't deliver.
+    { key: 'scheduledTasks', label: t('leftoverReview.groups.scheduledTasks'), removable: false }
+  ];
+
+  /** What the review says will happen to the ticked leftovers, by where the
+   * dialog is sending them -- beside the button, because "Remove selected"
+   * alone stopped saying whether a removal can be undone once the Recycle
+   * Bin and permanent deletion became possible. */
+  const DESTINATION_COPY = {
+    quarantine: { text: t('leftoverReview.destinations.quarantine.text'), button: t('leftoverReview.destinations.quarantine.button'), danger: false },
+    recycle: { text: t('leftoverReview.destinations.recycle.text'), button: t('leftoverReview.destinations.recycle.button'), danger: false },
+    permanent: { text: t('leftoverReview.destinations.permanent.text'), button: t('leftoverReview.destinations.permanent.button'), danger: true }
+  };
+
   const [openGroups, setOpenGroups] = useState(() =>
     Object.fromEntries(GROUPS.map(g => [g.key, true]))
   );
@@ -80,8 +74,8 @@ export default function LeftoverReview({ scanResult, selected, onToggle, onConfi
   if (totalItems === 0) {
     return (
       <div className="text-center py-6">
-        <p className="text-[13px] text-[color:var(--text-secondary)] mb-4">No leftovers found — clean uninstall.</p>
-        <button className="btn-primary" onClick={onSkip}>Done</button>
+        <p className="text-[13px] text-[color:var(--text-secondary)] mb-4">{t('leftoverReview.clean')}</p>
+        <button className="btn-primary" onClick={onSkip}>{t('leftoverReview.done')}</button>
       </div>
     );
   }
@@ -94,14 +88,13 @@ export default function LeftoverReview({ scanResult, selected, onToggle, onConfi
           <line x1="12" y1="8" x2="12" y2="12"></line>
           <line x1="12" y1="16" x2="12.01" y2="16"></line>
         </svg>
-        <div className="text-[12.5px] text-[color:var(--warning)] leading-relaxed">
-          Found <span className="font-semibold text-[color:var(--text-primary)]">{totalItems} leftover items</span> the
-          native uninstaller missed. Review before purging.
+        <div className="text-[12.5px] font-semibold text-[color:var(--warning)] leading-relaxed">
+          {t('leftoverReview.foundWarning', totalItems)}
         </div>
       </div>
 
       {failedGroups.map(({ key, label }) => (
-        <p key={key} className="text-[12px] text-[color:var(--text-muted)] mb-2">Couldn't check {label.toLowerCase()}.</p>
+        <p key={key} className="text-[12px] text-[color:var(--text-muted)] mb-2">{t('leftoverReview.checkFailed', label.toLowerCase())}</p>
       ))}
 
       <div className="space-y-3">
@@ -119,7 +112,7 @@ export default function LeftoverReview({ scanResult, selected, onToggle, onConfi
                 <span className="text-[13px] font-medium">{label}</span>
                 <span className="text-[11px] text-[color:var(--text-muted)] font-mono">({group.items.length})</span>
                 {!removable && (
-                  <span className="text-[10.5px] text-[color:var(--text-muted)] ml-auto">found, not removed</span>
+                  <span className="text-[10.5px] text-[color:var(--text-muted)] ml-auto">{t('leftoverReview.notRemoved')}</span>
                 )}
               </button>
               {open && (
@@ -149,14 +142,14 @@ export default function LeftoverReview({ scanResult, selected, onToggle, onConfi
                           <div className="font-mono text-[11.5px] text-[color:var(--text-primary)] truncate select-text">
                             {item.path || item.name}
                           </div>
-                          {leftoverItemNote(item) && (
+                          {leftoverItemNote(item, t('leftoverReview.itemNote')) && (
                             // A path alone doesn't say what removing this
                             // does: an uninstall entry is the key that
                             // makes Windows list the program at all, and a
                             // value's path is a key shared with every
                             // other program that starts with Windows.
                             <div className="text-[10.5px] text-[color:var(--accent-primary)] mt-0.5">
-                              {leftoverItemNote(item)}
+                              {leftoverItemNote(item, t('leftoverReview.itemNote'))}
                             </div>
                           )}
                         </div>
@@ -175,7 +168,7 @@ export default function LeftoverReview({ scanResult, selected, onToggle, onConfi
 
       {excluded > 0 && (
         <p className="text-[12px] text-[color:var(--text-muted)] mt-4">
-          {`${excluded} folder${excluded === 1 ? '' : 's'} left out because ${excluded === 1 ? "it's" : "they're"} in your exclusions.`}
+          {t('leftoverReview.excludedNote', excluded)}
         </p>
       )}
       <p className={`text-[12px] mt-4 ${copy.danger ? 'text-[color:var(--danger)]' : 'text-[color:var(--text-secondary)]'}`}>
@@ -184,13 +177,13 @@ export default function LeftoverReview({ scanResult, selected, onToggle, onConfi
 
       <div className="flex items-center justify-between mt-4 pt-4 border-t border-[color:var(--border-subtle)]">
         <div className="text-[12px] text-[color:var(--text-secondary)]">
-          <span className="text-[color:var(--text-primary)] font-medium">{selectedCount}</span> items selected
+          <span className="text-[color:var(--text-primary)] font-medium">{selectedCount}</span> {t('leftoverReview.itemsSelected')}
           {selectedSize > 0 && (
-            <> · <span className="text-[color:var(--accent-primary)] font-medium">{formatBytes(selectedSize)}</span> reclaimable</>
+            <> · <span className="text-[color:var(--accent-primary)] font-medium">{formatBytes(selectedSize)}</span> {t('leftoverReview.reclaimable')}</>
           )}
         </div>
         <div className="flex items-center gap-2.5">
-          <button className="btn-ghost px-4 py-2 rounded-lg text-[12.5px] font-medium" onClick={onSkip}>Skip</button>
+          <button className="btn-ghost px-4 py-2 rounded-lg text-[12.5px] font-medium" onClick={onSkip}>{t('leftoverReview.skip')}</button>
           <button className={`${copy.danger ? 'btn-danger' : 'btn-primary'} px-4 py-2 rounded-lg text-[12.5px] font-medium`} onClick={onConfirm}>
             {copy.button}
           </button>

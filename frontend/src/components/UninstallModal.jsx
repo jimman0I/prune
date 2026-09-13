@@ -5,6 +5,7 @@ import { deriveSearchTerm } from '../lib/searchTerm.js';
 import LeftoverReview from './LeftoverReview.jsx';
 import { useSettings } from '../hooks/useSystemQueries.js';
 import { leftoverDestinationFrom } from '../lib/leftoverDestination.js';
+import { useLanguage } from '../i18n/LanguageContext.jsx';
 
 /** Shared spinner + live-command UI for both the "running the native
  * uninstaller" and "scanning for leftovers" phases -- same treatment,
@@ -33,28 +34,24 @@ function formatBytes(bytes) {
   return `${parseFloat((bytes / Math.pow(k, i)).toFixed(1))} ${sizes[i]}`;
 }
 
-const REMOVING = {
-  quarantine: { title: 'Moving to Quarantine', command: 'Nothing is deleted — every item can be restored' },
-  recycle: { title: 'Sending to the Recycle Bin', command: 'Restore them from the Recycle Bin if you need to' },
-  permanent: { title: 'Deleting permanently', command: 'These cannot be restored' }
-};
-
-const plural = (n, word) => `${n} ${word}${n === 1 ? '' : 's'}`;
-
 /** One sentence for what a removal did, in the words of where it went.
  * Registry keys are backed up in Quarantine whichever destination the
  * files had, and the sentence says so for the two that are not it. */
-export function removalSummary(removal) {
-  const files = removal?.files?.length ?? 0;
-  const keys = removal?.registryKeys?.length ?? 0;
+export const DEFAULT_REMOVAL_SUMMARY_MESSAGES = {
+  item: (n) => `${n} item${n === 1 ? '' : 's'}`,
+  registryKey: (n) => `${n} registry key${n === 1 ? '' : 's'}`,
+  recycle: (files, keys, freed) => `Sent ${files} to the Recycle Bin and removed ${keys}, backed up in Quarantine first. Freed ${freed}.`,
+  permanent: (files, keys, freed) => `Deleted ${files} permanently and removed ${keys}, backed up in Quarantine first. Freed ${freed}.`,
+  quarantine: (files, keys, freed) => `Moved ${files} and ${keys} to Quarantine, freeing ${freed}. Restore them any time from the Quarantine screen.`
+};
+
+export function removalSummary(removal, messages = DEFAULT_REMOVAL_SUMMARY_MESSAGES) {
+  const files = messages.item(removal?.files?.length ?? 0);
+  const keys = messages.registryKey(removal?.registryKeys?.length ?? 0);
   const freed = formatBytes(removal?.totalSizeBytes);
-  if (removal?.destination === 'recycle') {
-    return `Sent ${plural(files, 'item')} to the Recycle Bin and removed ${plural(keys, 'registry key')}, backed up in Quarantine first. Freed ${freed}.`;
-  }
-  if (removal?.destination === 'permanent') {
-    return `Deleted ${plural(files, 'item')} permanently and removed ${plural(keys, 'registry key')}, backed up in Quarantine first. Freed ${freed}.`;
-  }
-  return `Moved ${plural(files, 'item')} and ${plural(keys, 'registry key')} to Quarantine, freeing ${freed}. Restore them any time from the Quarantine screen.`;
+  if (removal?.destination === 'recycle') return messages.recycle(files, keys, freed);
+  if (removal?.destination === 'permanent') return messages.permanent(files, keys, freed);
+  return messages.quarantine(files, keys, freed);
 }
 
 /** Turns the review's "group:index" selection keys back into the real
@@ -84,6 +81,14 @@ export function selectionToRemoval(scanResult, selected) {
 }
 
 export default function UninstallModal({ program, running = false, onClose }) {
+  const { t } = useLanguage();
+
+  const REMOVING = {
+    quarantine: { title: t('uninstallModal.removing.quarantine.title'), command: t('uninstallModal.removing.quarantine.command') },
+    recycle: { title: t('uninstallModal.removing.recycle.title'), command: t('uninstallModal.removing.recycle.command') },
+    permanent: { title: t('uninstallModal.removing.permanent.title'), command: t('uninstallModal.removing.permanent.command') }
+  };
+
   // A program whose own uninstaller can't run doesn't get the normal
   // flow's confirm step at all -- there is nothing to confirm running.
   const broken = program.health?.orphaned === true;
@@ -128,7 +133,7 @@ export default function UninstallModal({ program, running = false, onClose }) {
         // says what it is waiting on instead of "running the uninstaller"
         // through a registry backup.
         if (type === 'preUninstall') {
-          setProgressTitle(data?.step === 'registryBackup' ? 'Backing up the registry' : 'Creating a restore point');
+          setProgressTitle(data?.step === 'registryBackup' ? t('uninstallModal.progress.backingUpRegistry') : t('uninstallModal.progress.creatingRestorePoint'));
         } else if (type !== 'restorePoint' && type !== 'registryBackup') {
           setProgressTitle(null);
         }
@@ -208,17 +213,17 @@ export default function UninstallModal({ program, running = false, onClose }) {
   });
 
   const command = broken
-    ? 'No working uninstaller — searching by name instead'
-    : program.uninstallString || 'No uninstall command registered';
+    ? t('uninstallModal.noWorkingUninstaller')
+    : program.uninstallString || t('uninstallModal.noUninstallCommand');
 
   return (
     <div className="glass-panel rounded-2xl overflow-hidden max-w-[680px] w-full flex flex-col">
       <div className="flex items-center justify-between px-6 py-5 border-b border-[color:var(--border-subtle)]">
         <h2 className="text-[15px] font-semibold tracking-tight text-[color:var(--text-primary)] truncate">
-          {broken ? 'Force remove' : 'Uninstall'} {program.name}
+          {broken ? t('uninstallModal.titleForce', program.name) : t('uninstallModal.titleNormal', program.name)}
         </h2>
         <button onClick={onClose} className="btn-ghost px-3 py-1.5 rounded-lg text-[12px] font-medium">
-          Close
+          {t('uninstallModal.close')}
         </button>
       </div>
       <div className="px-6 py-6">
@@ -238,9 +243,7 @@ export default function UninstallModal({ program, running = false, onClose }) {
                   <line x1="12" y1="16" x2="12.01" y2="16"></line>
                 </svg>
                 <div className="text-[12.5px] text-[color:var(--warning)] leading-relaxed">
-                  {program.name} is running right now. Close it first — an uninstaller
-                  usually fails on a program that is open, and can leave files behind
-                  that the next launch recreates.
+                  {t('uninstallModal.runningWarning', program.name)}
                 </div>
               </div>
             )}
@@ -253,16 +256,15 @@ export default function UninstallModal({ program, running = false, onClose }) {
                     <line x1="12" y1="16" x2="12.01" y2="16"></line>
                   </svg>
                   <div className="text-[12.5px] text-[color:var(--warning)] leading-relaxed">
-                    {program.health.reason} Windows will keep listing it until the entry is removed.
+                    {t('uninstallModal.orphanedWarning', program.health.reason)}
                   </div>
                 </div>
                 <p className="text-[13px] text-[color:var(--text-secondary)] mb-4">
-                  Prune will search for files and registry keys matching this name, including its
-                  Add/Remove Programs entry, and show you everything before removing anything.
+                  {t('uninstallModal.brokenIntro')}
                 </p>
 
                 <label className="block text-[11px] text-[color:var(--text-muted)] font-mono uppercase tracking-[0.14em] mb-1.5">
-                  Search for
+                  {t('uninstallModal.searchForLabel')}
                 </label>
                 <input
                   value={searchTerm}
@@ -270,38 +272,35 @@ export default function UninstallModal({ program, running = false, onClose }) {
                   className="w-full bg-[color:var(--bg-panel)] border border-[color:var(--border-subtle)] rounded-xl px-3.5 py-2.5 text-[13px] font-mono focus:outline-none focus:border-[color:var(--accent-primary)] focus:ring-4 focus:ring-[color:var(--accent-primary)]/10 transition"
                 />
                 <p className="text-[12px] text-[color:var(--text-muted)] mt-1.5 mb-6">
-                  {/* Explaining why this differs from the name above matters:
-                      otherwise an edited-looking field reads like a bug. */}
-                  Taken from "{program.name}" without its version — installers name folders after the
-                  product, not the release. Edit it if the results look wrong.
+                  {t('uninstallModal.searchHint', program.name)}
                 </p>
 
-                {error && <p className="text-[12.5px] text-[color:var(--danger)] mb-4 select-text">Scan failed: {error}</p>}
+                {error && <p className="text-[12.5px] text-[color:var(--danger)] mb-4 select-text">{t('uninstallModal.scanFailed', error)}</p>}
                 <button className="btn-primary" onClick={startForcedScan} disabled={!searchTerm.trim()}>
-                  Search for leftovers
+                  {t('uninstallModal.searchButton')}
                 </button>
               </>
             ) : (
               <>
                 <p className="text-[13px] text-[color:var(--text-secondary)] mb-1">
-                  This runs {program.name}'s own uninstaller, then scans for anything it leaves behind.
+                  {t('uninstallModal.normalIntro', program.name)}
                 </p>
                 <p className="text-[11.5px] text-[color:var(--text-muted)] font-mono mb-6 break-all select-text">{command}</p>
-                {error && <p className="text-[12.5px] text-[color:var(--danger)] mb-4 select-text">Uninstall failed: {error}</p>}
+                {error && <p className="text-[12.5px] text-[color:var(--danger)] mb-4 select-text">{t('uninstallModal.uninstallFailed', error)}</p>}
                 <button className="btn-primary" onClick={startUninstall} disabled={!program.uninstallString}>
-                  Start uninstall
+                  {t('uninstallModal.startButton')}
                 </button>
               </>
             )}
           </div>
         )}
         {step === 'uninstalling' && (
-          <ProgressPhase title={progressTitle || 'Running native uninstaller'} command={command} progress={45} />
+          <ProgressPhase title={progressTitle || t('uninstallModal.progress.runningNative')} command={command} progress={45} />
         )}
         {step === 'scanning' && (
           <ProgressPhase
-            title={broken ? 'Searching for leftovers' : 'Scanning for leftovers'}
-            command="Checking filesystem, registry & scheduled tasks…"
+            title={broken ? t('uninstallModal.progress.searchingLeftovers') : t('uninstallModal.progress.scanningLeftovers')}
+            command={t('uninstallModal.progress.checkingCommand')}
             progress={85}
           />
         )}
@@ -315,14 +314,14 @@ export default function UninstallModal({ program, running = false, onClose }) {
         {step === 'noScan' && (
           <div className="py-4">
             <p className="text-[13px] text-[color:var(--text-secondary)] mb-5">
-              {`${program.name}'s uninstaller has finished. The leftover scan is turned off in Settings, so nothing else was looked for.`}
+              {t('uninstallModal.noScan', program.name)}
             </p>
-            <button className="btn-primary" onClick={onClose}>Done</button>
+            <button className="btn-primary" onClick={onClose}>{t('uninstallModal.done')}</button>
           </div>
         )}
         {step === 'review' && scanResult && (
           <>
-            {error && <p className="text-[12.5px] text-[color:var(--danger)] mb-4 select-text">Removal failed: {error}</p>}
+            {error && <p className="text-[12.5px] text-[color:var(--danger)] mb-4 select-text">{t('uninstallModal.removalFailed', error)}</p>}
             <LeftoverReview
               scanResult={scanResult}
               selected={selected}
@@ -337,7 +336,7 @@ export default function UninstallModal({ program, running = false, onClose }) {
           <div className="py-4">
             <div className="flex items-start gap-2.5 mb-5 px-3.5 py-3 rounded-xl bg-[color:var(--success)]/10 border border-[color:var(--success)]/25">
               <div className="text-[12.5px] text-[color:var(--success)] leading-relaxed">
-                {removalSummary(removal)}
+                {removalSummary(removal, t('uninstallModal.summary'))}
               </div>
             </div>
 
@@ -345,7 +344,7 @@ export default function UninstallModal({ program, running = false, onClose }) {
               // Refused by the guard, locked, or already being deleted by
               // something else. Named, never folded into the total.
               <div className="mb-5 px-3.5 py-3 rounded-xl bg-[color:var(--warning-soft)] border border-[color:var(--warning)]/25 text-[12.5px] text-[color:var(--warning)]">
-                <p>{`${plural(removal.failedFiles.length, 'item')} couldn't be removed:`}</p>
+                <p>{t('uninstallModal.failedFilesHeading', removal.failedFiles.length)}</p>
                 {removal.failedFiles.map((f) => (
                   <p key={f.path} className="mt-1 font-mono text-[11px] text-[color:var(--text-secondary)] break-all select-text">{`${f.path} — ${f.reason}`}</p>
                 ))}
@@ -359,10 +358,9 @@ export default function UninstallModal({ program, running = false, onClose }) {
               <div className="flex items-start gap-2.5 mb-5 px-3.5 py-3 rounded-xl bg-[color:var(--warning-soft)] border border-[color:var(--warning)]/25">
                 <div className="text-[12.5px] text-[color:var(--warning)] leading-relaxed">
                   <span className="font-semibold">
-                    {removal.failedRegistryKeys.length} registry key
-                    {removal.failedRegistryKeys.length === 1 ? '' : 's'} couldn't be removed
+                    {t('uninstallModal.failedRegistryKeysHeading', removal.failedRegistryKeys.length)}
                   </span>{' '}
-                  — these usually need Prune to be running as administrator:
+                  {t('uninstallModal.failedRegistryKeysNote')}
                   <div className="mt-1.5 font-mono text-[11px] text-[color:var(--text-secondary)] break-all">
                     {removal.failedRegistryKeys.join(', ')}
                   </div>
@@ -372,12 +370,12 @@ export default function UninstallModal({ program, running = false, onClose }) {
 
             {removal.restorePoint?.created === false && (
               <p className="text-[12px] text-[color:var(--text-muted)] mb-5">
-                No system restore point was created ({removal.restorePoint.reason}).
-                {!removal.destination || removal.destination === 'quarantine' ? ' The Quarantine restore still works.' : ''}
+                {t('uninstallModal.noRestorePoint', removal.restorePoint.reason)}
+                {!removal.destination || removal.destination === 'quarantine' ? ` ${t('uninstallModal.quarantineStillWorks')}` : ''}
               </p>
             )}
 
-            <button className="btn-primary" onClick={onClose}>Done</button>
+            <button className="btn-primary" onClick={onClose}>{t('uninstallModal.done')}</button>
           </div>
         )}
       </div>
