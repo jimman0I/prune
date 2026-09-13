@@ -3,7 +3,7 @@ import { describe, it, expect, afterEach, vi } from 'vitest';
 import { render, screen, cleanup } from '@testing-library/react';
 import { isCopyable } from '../testSupport/copyable.js';
 import { renderScreen } from '../testSupport/renderScreen.jsx';
-import { ScanFailure, FastScanNote } from './DiskMap.jsx';
+import { ScanFailure, FastScanNote, LoadingState } from './DiskMap.jsx';
 
 /** What the Disk Map says when a scan could not be done.
  *
@@ -34,5 +34,20 @@ describe('a fast scan that could not run', () => {
     render(<FastScanNote note="The MFT could not be read: Access is denied." />);
 
     expect(isCopyable(screen.getByText('The MFT could not be read: Access is denied.'))).toBe(true);
+  });
+});
+
+describe('the full-drive-scan loading state', () => {
+  // No percentage anywhere in here, on purpose -- a directory walk does
+  // not know its own total until it has finished, so a real progress bar
+  // would have to lie. The breathing rings are motion, not a number: they
+  // say "this is still working" without claiming a total the scan does
+  // not have. See the pulse-ring keyframe's own comment in index.css.
+  it('breathes two rings behind the spinner while a scan this long has nothing more specific to report', async () => {
+    renderScreen(<LoadingState path={'C:\\'} />);
+    await screen.findByText('C:\\');
+
+    const rings = document.querySelectorAll('[style*="pulse-ring"]');
+    expect(rings.length).toBe(2);
   });
 });
