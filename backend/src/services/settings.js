@@ -52,7 +52,7 @@ const DEFAULT_SETTINGS = {
   excludeExtensions: [],
   autoQuarantine: true,
   theme: 'dark',
-  minimizeToTray: true,
+  minimizeToTray: false,
   skipRecentHours: 24,
   createRestorePoint: true,
   hideUnavailableRules: false,
