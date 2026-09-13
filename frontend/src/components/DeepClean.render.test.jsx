@@ -84,6 +84,22 @@ describe('the Deep Clean screen', () => {
     await screen.findByText('Temporary files');
     expect(cleanButton().disabled).toBe(true);
   });
+
+  it('selects every eligible rule on "Select everything"', async () => {
+    // Regression: selectableIds was called but never imported, so this
+    // button threw a ReferenceError on click. No test ever pressed it.
+    const user = userEvent.setup();
+    renderScreen(<DeepClean />);
+    await screen.findByText('Temporary files');
+
+    await user.click(screen.getByRole('button', { name: 'Select everything' }));
+
+    expect(screen.getByText('2 selected')).toBeTruthy();
+    expect(cleanButton().disabled).toBe(false);
+    for (const box of screen.getAllByRole('checkbox')) {
+      expect(box.getAttribute('aria-checked')).toBe('true');
+    }
+  });
 });
 
 describe('the gate in front of a clean', () => {
