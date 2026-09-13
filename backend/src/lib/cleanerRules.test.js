@@ -11,6 +11,7 @@ import {
   scanAllRules,
   executeRule,
   executeRules,
+  executeRulesProgressively,
   scanRulesProgressively
 } from './cleanerRules.js';
 
@@ -282,6 +283,62 @@ describe('executeRules', () => {
     const summary = await executeRules(['not_a_real_rule']);
     expect(summary.results[0].error).toBeTruthy();
     expect(summary.freedBytes).toBe(0);
+  });
+});
+
+describe('executeRulesProgressively', () => {
+  it('reports each cleaned rule one at a time, carrying its name and category', async () => {
+    const dir1 = join(appDataDir, 'discord', 'Cache');
+    const dir2 = join(appDataDir, 'Code', 'Cache');
+    await mkdir(dir1, { recursive: true });
+    await mkdir(dir2, { recursive: true });
+    await writeFile(join(dir1, 'a.bin'), '12345'); // 5 bytes
+    await writeFile(join(dir2, 'b.bin'), '1234567890'); // 10 bytes
+
+    const seen = [];
+    const summary = await executeRulesProgressively(['discord_cache', 'vscode_cache'], (item) => seen.push(item));
+
+    expect(seen.map((i) => i.id)).toEqual(['discord_cache', 'vscode_cache']);
+    expect(seen[0].name).toBeTruthy();
+    expect(seen[0].category).toBeTruthy();
+    expect(seen[0].freedBytes).toBe(5);
+    expect(seen[1].freedBytes).toBe(10);
+    expect(summary.freedBytes).toBe(15);
+    expect(summary.executed).toBe(2);
+    expect(summary.aborted).toBe(false);
+  });
+
+  it('reports an unknown rule id through onItem too, without throwing', async () => {
+    const seen = [];
+    const summary = await executeRulesProgressively(['not_a_real_rule'], (item) => seen.push(item));
+    expect(seen[0].error).toBeTruthy();
+    expect(summary.freedBytes).toBe(0);
+  });
+
+  it('stops early when the caller aborts, without cleaning the remaining ids', async () => {
+    const dir1 = join(appDataDir, 'discord', 'Cache');
+    await mkdir(dir1, { recursive: true });
+    await writeFile(join(dir1, 'a.bin'), '12345');
+
+    const controller = new AbortController();
+    const seen = [];
+    const summary = await executeRulesProgressively(
+      ['discord_cache', 'vscode_cache'],
+      (item) => { seen.push(item); controller.abort(); },
+      { signal: controller.signal }
+    );
+
+    expect(summary.aborted).toBe(true);
+    expect(seen).toHaveLength(1);
+  });
+
+  it('still sums to the same total executeRules reports, wrapping this', async () => {
+    const dir1 = join(appDataDir, 'discord', 'Cache');
+    await mkdir(dir1, { recursive: true });
+    await writeFile(join(dir1, 'a.bin'), '12345');
+
+    const summary = await executeRules(['discord_cache']);
+    expect(summary.freedBytes).toBe(5);
   });
 });
 

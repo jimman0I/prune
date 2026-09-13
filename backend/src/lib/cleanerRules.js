@@ -335,25 +335,64 @@ export async function executeRule(rule, guards = {}) {
   }
 }
 
+/** Executes every requested rule id in turn, handing each result to
+ * `onItem` -- carrying the rule's own name and category, not just its id
+ * -- as soon as it's known, rather than only at the end.
+ *
+ * This is what a clean actually does under the "Clean" button: quarantine
+ * or delete real files, one rule at a time, sometimes a large one (a game's
+ * shader cache can take several seconds on its own). The one-shot
+ * `executeRules` below returns nothing until every rule is done, which is
+ * BleachBit's own "please wait, doing nothing visible" problem, just moved
+ * from the scan to the clean -- and the clean is the step that actually
+ * touches the disk, so silence here is worse, not better.
+ *
+ * Same interruptible-between-rules shape as scanRulesProgressively: an
+ * `await` after each result hands control back so a response can flush,
+ * and `signal` lets a caller stop before the next rule starts. A rule
+ * already in progress still runs to completion -- quarantining a batch
+ * half-deleted is a worse state than finishing the one rule already
+ * underway. */
+export async function executeRulesProgressively(ruleIds, onItem, { signal, ...guards } = {}) {
+  const rules = loadCleanerRules();
+  const results = [];
+  let freedBytes = 0;
+  let executed = 0;
+
+  for (const id of ruleIds) {
+    if (signal?.aborted) return { aborted: true, total: ruleIds.length, executed, freedBytes, results };
+
+    const rule = rules.find((r) => r.id === id);
+    if (!rule) {
+      const result = { id, error: `Unknown rule id "${id}"` };
+      results.push(result);
+      onItem(result);
+      executed++;
+      continue;
+    }
+
+    const result = await executeRule(rule, guards);
+    freedBytes += result.freedBytes || 0;
+    results.push(result);
+    onItem({ ...result, name: rule.name, category: rule.category });
+    executed++;
+    await new Promise((resolve) => setImmediate(resolve));
+  }
+
+  return { aborted: false, total: ruleIds.length, executed, freedBytes, results };
+}
+
 /** Executes every requested rule id in turn, summing freed bytes into one
  * summary. An id that doesn't match any loaded rule is reported as an
  * error entry rather than thrown -- same "don't trust a caller-supplied
  * id blindly, but don't blow up on it either" posture cleanup.js's own
- * executeCleanup already uses for its category ids. */
+ * executeCleanup already uses for its category ids.
+ *
+ * A thin wrapper over executeRulesProgressively now, kept for callers (and
+ * tests) that just want the final summary and have no stream to write
+ * progress to. */
 export async function executeRules(ruleIds, guards = {}) {
-  const rules = loadCleanerRules();
-  const results = [];
-  let freedBytes = 0;
-  for (const id of ruleIds) {
-    const rule = rules.find(r => r.id === id);
-    if (!rule) {
-      results.push({ id, error: `Unknown rule id "${id}"` });
-      continue;
-    }
-    const result = await executeRule(rule, guards);
-    freedBytes += result.freedBytes || 0;
-    results.push(result);
-  }
+  const { freedBytes, results } = await executeRulesProgressively(ruleIds, () => {}, guards);
   return { freedBytes, results };
 }
 
