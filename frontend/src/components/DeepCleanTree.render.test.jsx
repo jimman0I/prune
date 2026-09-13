@@ -234,6 +234,34 @@ describe('the rules that lose something', () => {
   });
 });
 
+describe('the description line', () => {
+  // BleachBit's own list is bare -- a name and a checkbox, nothing else --
+  // until Preview has actually run. Prune keeps the description (it says
+  // what a bare "Cookies" cannot), but holds it back until THIS rule is
+  // measured, per-row, rather than showing a wall of explanatory text for
+  // 74 rules the machine may not even have.
+  it('is hidden before the rule has been measured', () => {
+    draw({ categories: [{ category: 'C', items: [rule({ id: 's', name: 'Rule', sizeBytes: null })] }] });
+    expect(screen.queryByText('Cached page data')).toBeNull();
+  });
+
+  it('appears once that specific rule is measured', () => {
+    draw({ categories: [{ category: 'C', items: [rule({ id: 's', name: 'Rule', sizeBytes: 2048 })] }] });
+    expect(screen.getByText('Cached page data')).toBeTruthy();
+  });
+
+  it('never hides the "Loses data" badge, which is a safety warning, not description text', () => {
+    draw({
+      categories: [{
+        category: 'C',
+        items: [rule({ id: 's', name: 'Rule', sizeBytes: null, risky: true, description: 'Signs you out' })]
+      }]
+    });
+    expect(screen.getByText('Loses data')).toBeTruthy();
+    expect(screen.queryByText('Signs you out')).toBeNull();
+  });
+});
+
 describe('the size column', () => {
   /* Four different answers that a naive implementation renders as one.
    * Only ONE of them means "nothing to clean", and the other three are
