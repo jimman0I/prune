@@ -31,7 +31,6 @@ Deferred to later phases, each its own spec when picked up: `json` (Phase B), `c
 
 - `json`, `cookie`, and per-app bespoke SQL action types.
 - Any change to Disk Map, Settings, or any screen other than Deep Clean's own data/engine layer.
-- Undo/backup for a deleted registry key (see "Known gap" below).
 - New cleaner rules written using the new action types (a natural follow-up once the engine exists, but not required to consider this phase done).
 
 ## Architecture
@@ -106,13 +105,13 @@ Each exports `scan(action, guards)` and `execute(action, guards)`, with the same
 
 **What it does:** deletes one registry key (and everything under it) from `HKEY_CURRENT_USER`. Every `winreg` action in BleachBit's real corpus targets HKCU — nothing in the phase-A scope needs HKLM, which would additionally require elevation Deep Clean doesn't otherwise ask for.
 
-**Implementation:** reuses `quarantine.js`'s existing `reg.exe delete <key> /f` call and its `isProtectedKey`-style guard **verbatim** — this is not new registry code, it's the same primitive already shipping and tested for uninstall-leftover removal, called from a second place.
+**Implementation — corrected from the first draft of this spec.** `quarantine.js`'s `quarantineAndDelete({ programName, files, registryKeys })` already does exactly this end to end: exports the key to a `.reg` file inside the batch directory (`reg export`), THEN deletes it (`reg delete ... /f`), records both in `manifest.json`, and `restoreQuarantineBatch` already re-imports that `.reg` file to undo it — this is the same machinery an uninstall's leftover registry removal already uses, not a separate raw `reg.exe` call. `isProtectedKey` (depth-under-3, or an explicit list of OS-critical keys) is already checked inside `quarantineAndDelete` before anything touches `reg.exe`. So a `winreg` action calls `quarantineAndDelete({ programName: \`Deep Clean: ${rule.name}\`, files: [], registryKeys: [expandedKeyPath] })` — zero new registry code, and it is undoable through the exact same Quarantine screen a deleted file already restores through.
 
-**Scan:** does the key exist (`reg query`)? Reported as `present`/`absent`, same vocabulary as a path rule. No byte size — a registry key doesn't have one worth reporting, and reporting `0 B` would read as "measured and empty" rather than "not the kind of thing this is measured in."
+**Scan:** does the key exist? A plain `reg query <key>` (no export, no delete) — reported as `present`/`absent`, same vocabulary as a path rule. No byte size — a registry key doesn't have one worth reporting, and reporting `0 B` would read as "measured and empty" rather than "not the kind of thing this is measured in."
 
-**Execute:** `reg.exe delete`, then report via the new `registryKeysRemoved` count (1 per successful deletion, 0 if the key was already absent — not an error, same "nothing to clean" posture an absent cache folder already gets).
+**Execute:** call `quarantineAndDelete` as above; report via the new `registryKeysRemoved` count, read off `manifest.registryKeys.length` (1 per successful deletion) — `0` if the key was already absent (skip calling `quarantineAndDelete` entirely in that case; nothing to quarantine) or if `quarantineAndDelete` reports it under `failedRegistryKeys` (protected key, or `reg.exe` failed) — either way not an error, same "nothing to clean" posture an absent cache folder already gets.
 
-**Known gap, not fixed in this phase:** deleting a registry key here is NOT quarantined or backed up — Prune's existing registry backup (`preUninstall.js`'s `createRegistryBackup`) only runs before an uninstall, a different flow with a different trigger. A `winreg` Deep Clean action is therefore the one action type in this phase without an undo path. This is flagged explicitly rather than silently shipped: worth a follow-up (export the key to the quarantine directory before deleting, mirroring how a deleted FILE already goes to quarantine first) but out of scope here, since it would mean extending the quarantine format to hold non-file entries.
+**No known gap remains for undo** — a `winreg` action is quarantined and restorable exactly like a deleted file, discovered by reading `quarantine.js` fully while writing the implementation plan (the first draft of this spec assumed no backup path existed here, which was wrong).
 
 ## Frontend
 
@@ -130,4 +129,4 @@ No structural change. `DeepCleanTree`/`ScanLog`/`executeLogLine` already treat a
 
 - **Why not a native SQLite module?** Backend runs inside Electron's own process (`await import()` in `main.cjs`), so any native module needs Electron-ABI builds specifically — a real, ongoing packaging cost. Shelling out to a bundled CLI matches this codebase's own established convention (reg.exe, PowerShell, makensis are already handled this way) and avoids it entirely.
 - **Why HKCU only?** Every real `winreg` action in BleachBit's corpus targets HKCU. HKLM would need elevation Deep Clean doesn't otherwise require; out of scope unless a concrete rule needs it later.
-- **Why no registry-key backup in this phase?** It would mean extending Prune's quarantine format (currently file-shaped) to also hold registry entries — a real feature on its own, not a one-line addition. Flagged as a known gap rather than silently building an unquarantined delete and calling it done.
+- **Why no registry-key backup in this phase?** Turned out not to be a gap at all — `quarantine.js`'s `quarantineAndDelete` already accepts `registryKeys` and exports-then-deletes-then-makes-restorable, the same path an uninstall's leftover registry removal already uses. The `winreg` action type calls that function directly rather than `reg.exe` on its own.
