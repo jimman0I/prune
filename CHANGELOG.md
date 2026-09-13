@@ -3,6 +3,28 @@
 All notable changes to Prune (formerly named unrevo -- rebranded 2026-09-01,
 see v1.0.1 below) are documented here.
 
+## v2.5.1
+
+The installer's language dialog now actually reaches the app on an
+upgrade, not just a fresh install.
+
+### Fixed
+
+- **Picking a language in the installer did nothing on an upgrade.**
+  Reported directly: choosing Greek while upgrading from 2.4.1 left the
+  app in English. The installer writes its language choice to the same
+  one-line file as the separate "check for updates" answer, and that
+  file's write was gated entirely on the Updates page having been shown
+  -- which it deliberately is not on an upgrade (anyone with an existing
+  settings.json keeps whatever update-check preference they already
+  set). The language choice got caught by the same gate by accident:
+  it is a real, deliberate choice made in the installer's own language
+  dialog on every non-silent run, fresh or upgrade, and has nothing to
+  do with the separate reasoning that protects the update-check
+  preference. The two are now written independently -- language on
+  every interactive install, the update-check answer only when its own
+  page was actually shown.
+
 ## v2.5.0
 
 The whole app, not just the installer, in 40 languages — and updates

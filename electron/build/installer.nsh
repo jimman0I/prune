@@ -1,19 +1,30 @@
-; The installer's "Updates" page, and what it hands to the app.
+; The installer's "Updates" page and language dialog, and what they hand
+; to the app.
 ;
-; One question, asked once: should Prune check for updates? The answer
-; cannot go into settings.json -- NSIS has no JSON, and would have to merge
+; Two questions, two different lifetimes. Neither can go into
+; settings.json directly -- NSIS has no JSON, and would have to merge
 ; into a file it cannot read -- so the installer leaves a one-line file,
 ; installer-choices.json, beside it, and the app applies it on its next
 ; start and deletes it (backend/src/services/installerChoices.js).
 ;
-; Only on a fresh install. Anyone who has used Prune on this Windows
-; account already has a settings.json, and their choice lives there; an
-; unticked box on a reinstall would otherwise quietly turn off an update
-; check they had turned on. So the page skips itself and nothing is
-; written -- change it in Settings instead.
+; "Should Prune check for updates?" is asked on a fresh install only.
+; Anyone who has used Prune on this Windows account already has a
+; settings.json, and their choice lives there; an unticked box on a
+; reinstall would otherwise quietly turn off an update check they had
+; turned on. So the page skips itself, and updateCheck is left out of
+; the file entirely -- change it in Settings instead.
 ;
-; Never during a silent install, which is what the updater runs: no page is
-; shown, and no file is written, so an update never touches the choice.
+; The installer's own display language, by contrast, is written on
+; EVERY interactive install, fresh or upgrade: it is a real, deliberate
+; choice the person just made in the wizard's own language dialog, not
+; a leftover default, and the app opening in whatever language the
+; installer just ran in is the whole point of shipping one. See
+; customInstall below for why this is no longer tied to the same
+; fresh-install-only gate updateCheck uses.
+;
+; Never during a silent install, which is what the updater runs: no page
+; is shown, no dialog appears, and no file is written at all, so an
+; update never touches either choice.
 ;
 ; Off unless ticked, as it is in the app: the check is the one request
 ; Prune makes beyond the machine, and it is opt-in everywhere.
@@ -275,18 +286,36 @@
 !macroend
 
 !macro customInstall
-  ; $updatesChoice is empty when the page skipped itself, so a reinstall
-  ; writes nothing -- for the language too, on purpose: a reinstall in a
-  ; different NSIS display language must not silently override a language
-  ; already chosen in Prune's own settings. ${Silent} is the updater's
-  ; install, which shows no pages at all.
+  ; The language is written on every interactive install, fresh or
+  ; upgrade -- ${Silent} is the updater's own install, which shows no
+  ; pages (including the language dialog) at all, so it is excluded the
+  ; same way updateCheck already was.
+  ;
+  ; This used to be gated on $updatesChoice too (empty on an upgrade,
+  ; since the Updates page skips itself there -- see updatesPageCreate).
+  ; The reasoning was that a reinstall in whatever language Windows
+  ; happens to default to should not silently override a language
+  ; someone had deliberately picked inside Prune's own Settings. In
+  ; practice that protected a rare case at the cost of the common one:
+  ; someone upgrading Prune who ACTIVELY picks a language in the
+  ; installer's own language dialog -- a real, deliberate choice, shown
+  ; on every non-silent run regardless of fresh-install-or-not -- had it
+  ; silently discarded, and the app opened in whatever language it was
+  ; already in. Reported directly: an upgrade picked Greek in the
+  ; installer and the app came up in English. $updatesChoice's own
+  ; fresh-install-only gate is unrelated and unchanged -- that one
+  ; protects against an unticked checkbox on a page nobody was shown
+  ; turning off a setting silently, which is a real risk this decoupling
+  ; does not touch.
   ${IfNot} ${Silent}
+    CreateDirectory "$APPDATA\Prune"
+    FileOpen $0 "$APPDATA\Prune\installer-choices.json" w
     ${If} $updatesChoice != ""
-      CreateDirectory "$APPDATA\Prune"
-      FileOpen $0 "$APPDATA\Prune\installer-choices.json" w
       FileWrite $0 '{"updateCheck":$updatesChoice,"language":"$(appLangCode)"}'
-      FileClose $0
+    ${Else}
+      FileWrite $0 '{"language":"$(appLangCode)"}'
     ${EndIf}
+    FileClose $0
   ${EndIf}
 !macroend
 
