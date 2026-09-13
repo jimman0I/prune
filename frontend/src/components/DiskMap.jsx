@@ -60,12 +60,29 @@ export function isDriveRoot(path) {
  * them -- so instead of faking a bar this says what is being read, how
  * long it can take, and what the faster option is. A minute of silence is
  * where people decide software has hung. */
-function LoadingState({ path, onFastScan, fastScanning }) {
+export function LoadingState({ path, onFastScan, fastScanning }) {
   const { t } = useLanguage();
   return (
     <div className="glass-panel flex flex-col items-center justify-center py-16 px-6 text-center">
-      <div className="w-14 h-14 rounded-2xl bg-[color:var(--accent-primary)]/10 border border-[color:var(--accent-primary)]/25 flex items-center justify-center mb-5">
-        <div className="w-6 h-6 border-2 border-[color:var(--accent-primary)] border-t-transparent rounded-full animate-spin"></div>
+      {/* Two rings breathing outward behind the spinner, offset by half a
+          cycle -- motion that reads as "still working" without claiming a
+          percentage the scan does not have. The spinner itself already
+          says "in progress"; this says "this could take a while, and
+          that's normal" the way a single static spinner does not. */}
+      <div className="relative w-14 h-14 flex items-center justify-center mb-5">
+        <span
+          aria-hidden="true"
+          className="absolute inset-0 rounded-2xl border border-[color:var(--accent-primary)]/40"
+          style={{ animation: 'pulse-ring 2.4s ease-out infinite' }}
+        />
+        <span
+          aria-hidden="true"
+          className="absolute inset-0 rounded-2xl border border-[color:var(--accent-primary)]/40"
+          style={{ animation: 'pulse-ring 2.4s ease-out infinite', animationDelay: '1.2s' }}
+        />
+        <div className="relative w-14 h-14 rounded-2xl bg-[color:var(--accent-primary)]/10 border border-[color:var(--accent-primary)]/25 flex items-center justify-center">
+          <div className="w-6 h-6 border-2 border-[color:var(--accent-primary)] border-t-transparent rounded-full animate-spin"></div>
+        </div>
       </div>
       <p className="text-[13px] text-[color:var(--text-primary)]">{t('diskMap.loading.heading')}</p>
       <p className="font-mono text-[12px] text-[color:var(--accent-primary)] mt-1 max-w-[46ch] truncate">{path}</p>
