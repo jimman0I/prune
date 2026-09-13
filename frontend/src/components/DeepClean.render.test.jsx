@@ -159,6 +159,27 @@ describe('the gate in front of a clean', () => {
     expect(Array.isArray(ids)).toBe(true);
     expect(ids.length).toBeGreaterThan(0);
   });
+
+  it('shows the Freed banner after a clean, and it survives the automatic rescan', async () => {
+    // Regression: handleClean called setCleanResult(result), then --
+    // with no await between them -- runPreview's setCleanResult(null),
+    // both in the same synchronous stack. React 18 batched them into one
+    // commit, so the banner was overwritten by its own clear before it
+    // ever painted. No test asserted on the banner's actual presence.
+    const user = userEvent.setup();
+    renderScreen(<DeepClean />);
+    await selectSomething(user);
+    await user.click(cleanButton());
+    await user.click(screen.getByRole('button', { name: 'Confirm' }));
+
+    await waitFor(() => expect(executeDeepClean).toHaveBeenCalledTimes(1));
+    expect(await screen.findByText('Freed 1 KB')).toBeTruthy();
+
+    // The post-clean rescan (runPreview({ reselect: false })) must not
+    // clear it either -- only an explicit Preview/Rescan click should.
+    await waitFor(() => expect(streamDeepCleanScan).toHaveBeenCalled());
+    expect(screen.getByText('Freed 1 KB')).toBeTruthy();
+  });
 });
 
 describe('what can be copied', () => {
