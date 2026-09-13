@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, nativeTheme } = require('electron');
+const { app, BrowserWindow, ipcMain, nativeTheme, screen } = require('electron');
 const path = require('node:path');
 const http = require('node:http');
 const { pathToFileURL } = require('node:url');
@@ -106,6 +106,51 @@ function startingTheme() {
   return nativeTheme.shouldUseDarkColors ? 'dark' : 'light';
 }
 
+/** A second display at a different scale than the one a window was
+ * created on -- an external monitor, or a TV used as one, plugged into a
+ * laptop with its own HiDPI panel -- is exactly the case Windows' own
+ * Per-Monitor-V2 DPI awareness is supposed to handle by itself. What it
+ * does not reliably do on Windows, a real and long-standing
+ * Chromium/Electron gap, is relayout an ALREADY-OPEN window's CONTENT the
+ * moment its current display's scale factor changes: the native frame
+ * rescales correctly, but the page inside can be left laid out for the
+ * OLD scale factor, which reads as the content occupying only part of
+ * the window -- "it only uses half of the screen" is exactly that shape
+ * of bug, moving a window onto a second display is exactly how it's
+ * triggered, and "some devices, never this one" fits a single-display
+ * machine that can never even reach the code path that breaks.
+ *
+ * The fix that Electron's own issue tracker and other apps converge on is
+ * not a CSS one: nudge the window's bounds by a pixel and back the moment
+ * its current display's metrics change, which forces Chromium to
+ * recompute layout against the display it is actually on now.
+ * `display-metrics-changed` fires for exactly that -- a scale factor,
+ * resolution or rotation change, which covers a window being dragged (or
+ * the OS reassigning it) onto a differently-scaled display, not only a
+ * monitor being reconnected.
+ *
+ * Unconfirmed against the actual reported hardware: there is no second,
+ * differently-scaled display on this machine to reproduce the bug
+ * against, only to confirm this nudge is inert here (`current.id` never
+ * matches `changedDisplay.id` on a one-display machine, so it never
+ * fires). It is the standard, narrowly-scoped, idempotent mitigation for
+ * the specific bug class the symptom matches -- not a confirmed fix,
+ * same honesty this project already applies to a fix it could not fully
+ * verify against the reporter's own hardware (see the League of Legends
+ * hardcoded-path fix). */
+function nudgeOnDisplayChange(win) {
+  const onMetricsChanged = (_event, changedDisplay) => {
+    if (win.isDestroyed()) return;
+    const current = screen.getDisplayMatching(win.getBounds());
+    if (changedDisplay.id !== current.id) return;
+    const bounds = win.getBounds();
+    win.setBounds({ ...bounds, width: bounds.width + 1 });
+    win.setBounds(bounds);
+  };
+  screen.on('display-metrics-changed', onMetricsChanged);
+  win.once('closed', () => screen.removeListener('display-metrics-changed', onMetricsChanged));
+}
+
 async function createWindow() {
   const startTheme = startingTheme();
   const win = new BrowserWindow({
@@ -167,6 +212,7 @@ async function createWindow() {
   // offers, and it doesn't belong on a native desktop utility that isn't a
   // browser. Same call Re:Route's own main.cjs already makes.
   win.removeMenu();
+  nudgeOnDisplayChange(win);
 
   /* Repaint the native buttons when the app changes theme.
    *
