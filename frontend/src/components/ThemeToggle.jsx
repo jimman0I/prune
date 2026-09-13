@@ -1,5 +1,6 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '../hooks/useTheme.jsx';
+import { useLanguage } from '../i18n/LanguageContext.jsx';
 
 /** The sun/moon switch.
  *
@@ -25,13 +26,14 @@ const MOON = <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z" />;
 
 export default function ThemeToggle() {
   const { theme, toggle } = useTheme();
-  const goingTo = theme === 'dark' ? 'light' : 'dark';
+  const { t } = useLanguage();
+  const goingTo = theme === 'dark' ? t('themeToggle.light') : t('themeToggle.dark');
 
   return (
     <button
       type="button"
       onClick={toggle}
-      aria-label={`Switch to ${goingTo} theme`}
+      aria-label={t('themeToggle.switchTo', goingTo)}
       className="relative w-10 h-10 rounded-xl flex items-center justify-center shrink-0 overflow-hidden text-[color:var(--text-secondary)] hover:text-[color:var(--text-primary)] bg-[color:var(--surface-hover)] hover:bg-[color:var(--surface-strong)] border border-[color:var(--border-subtle)] transition-colors"
     >
       {/* The ripple. A single expanding disc of the accent at low alpha,

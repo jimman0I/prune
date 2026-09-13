@@ -1,6 +1,7 @@
 import { createPortal } from 'react-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useToasts } from '../hooks/useToasts.jsx';
+import { useLanguage } from '../i18n/LanguageContext.jsx';
 
 /** Where toasts are drawn.
  *
@@ -26,6 +27,7 @@ const TONE = {
 const EASE = [0.2, 0.9, 0.3, 1];
 
 function ToastCard({ toast, onDismiss }) {
+  const { t } = useLanguage();
   const tone = TONE[toast.tone] ?? TONE.info;
 
   return (
@@ -78,7 +80,7 @@ function ToastCard({ toast, onDismiss }) {
       <button
         type="button"
         onClick={() => onDismiss(toast.id)}
-        aria-label="Dismiss notification"
+        aria-label={t('toastHost.dismiss')}
         className="btn-ghost shrink-0 w-6 h-6 rounded-md flex items-center justify-center text-[color:var(--text-muted)]"
       >
         <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round">
