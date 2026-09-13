@@ -53,11 +53,13 @@ export function useKeyboardShortcuts({ onSearch, onSettings, onHelp }) {
 }
 
 /** What the help modal lists. Data rather than markup so the list cannot
- * drift from what matchShortcut actually accepts. */
+ * drift from what matchShortcut actually accepts. `id` keys into
+ * shortcutsModal.actions.* in the catalog -- ShortcutsModal supplies the
+ * translated label at render time, so this array carries no English text. */
 export const SHORTCUTS = [
-  { keys: ['Ctrl', 'K'], alternative: ['Ctrl', 'F'], action: 'Focus the search box' },
-  { keys: ['Ctrl', ','], action: 'Open Settings' },
-  { keys: ['Ctrl', '/'], action: 'Show this list' },
-  { keys: ['Esc'], action: 'Close a dialog' },
-  { keys: ['Tab'], action: 'Move between controls; inside a dialog, focus stays in it' }
+  { keys: ['Ctrl', 'K'], alternative: ['Ctrl', 'F'], id: 'focusSearch' },
+  { keys: ['Ctrl', ','], id: 'openSettings' },
+  { keys: ['Ctrl', '/'], id: 'showThisList' },
+  { keys: ['Esc'], id: 'closeDialog' },
+  { keys: ['Tab'], id: 'moveBetweenControls' }
 ];

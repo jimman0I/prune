@@ -653,6 +653,46 @@ export const CATALOG = {
       restorePointFallback: 'not available',
       quarantineNote: 'Everything above is still in Quarantine and can be put back.',
       failedRegistryKeys: (n) => `${n} registry key${n === 1 ? '' : 's'} couldn't be removed — these usually need Prune to be running as administrator.`
+    },
+    resourceMonitor: {
+      rightNow: 'Right now',
+      cores: (n) => `${n} cores`,
+      cpu: 'CPU',
+      memory: 'Memory',
+      disk: 'Disk',
+      footer: 'A scan reads the whole disk, so these move while Prune is working — which is the point of having them here.'
+    },
+    shortcutsModal: {
+      title: 'Keyboard shortcuts',
+      close: 'Close',
+      or: 'or',
+      footer: 'Cmd works in place of Ctrl. A chord is ignored while you are typing in a field, so Ctrl+F still reaches the search box you are already in.',
+      actions: {
+        focusSearch: 'Focus the search box',
+        openSettings: 'Open Settings',
+        showThisList: 'Show this list',
+        closeDialog: 'Close a dialog',
+        moveBetweenControls: 'Move between controls; inside a dialog, focus stays in it'
+      }
+    },
+    themeToggle: {
+      switchTo: (theme) => `Switch to ${theme} theme`,
+      light: 'light',
+      dark: 'dark'
+    },
+    toastHost: {
+      dismiss: 'Dismiss notification'
+    },
+    updateButton: {
+      restartToUpdate: (version) => `Restart to update to Prune ${version}`,
+      updateTo: (version) => `Update to Prune ${version}`,
+      downloadProgress: 'Download progress',
+      restarting: 'Restarting…',
+      restartToUpdateShort: (version) => `Restart to update to ${version}`,
+      updateToShort: (version) => `Update to ${version}`,
+      couldNotUpdate: (version) => `Couldn't update to ${version}`,
+      openDownloadPage: 'Open the download page',
+      tryAgain: 'Try again'
     }
   },
 
@@ -1279,6 +1319,46 @@ export const CATALOG = {
       restorePointFallback: 'nie beskikbaar nie',
       quarantineNote: 'Alles hierbo is steeds in Kwarantyn en kan teruggesit word.',
       failedRegistryKeys: (n) => `${n} registersleutel${n === 1 ? '' : 's'} kon nie verwyder word nie — hierdie het gewoonlik nodig dat Prune as administrateur loop.`
+    },
+    resourceMonitor: {
+      rightNow: 'Nou net',
+      cores: (n) => `${n} kerne`,
+      cpu: 'SVE',
+      memory: 'Geheue',
+      disk: 'Skyf',
+      footer: "'n Skandering lees die hele skyf, so hierdie beweeg terwyl Prune werk — wat die punt is om hulle hier te hê."
+    },
+    shortcutsModal: {
+      title: 'Sleutelbordkortpaaie',
+      close: 'Sluit',
+      or: 'of',
+      footer: "Cmd werk in plek van Ctrl. 'n Kombinasie word geïgnoreer terwyl jy in 'n veld tik, so Ctrl+F bereik steeds die soekkassie waarin jy reeds is.",
+      actions: {
+        focusSearch: 'Fokus die soekkassie',
+        openSettings: 'Maak Instellings oop',
+        showThisList: 'Wys hierdie lys',
+        closeDialog: 'Sluit \'n dialoog',
+        moveBetweenControls: "Beweeg tussen kontroles; binne 'n dialoog bly fokus daarin"
+      }
+    },
+    themeToggle: {
+      switchTo: (theme) => `Wissel na ${theme} tema`,
+      light: 'lig',
+      dark: 'donker'
+    },
+    toastHost: {
+      dismiss: 'Maak kennisgewing toe'
+    },
+    updateButton: {
+      restartToUpdate: (version) => `Herbegin om na Prune ${version} op te dateer`,
+      updateTo: (version) => `Dateer op na Prune ${version}`,
+      downloadProgress: 'Aflaaivordering',
+      restarting: 'Herbegin…',
+      restartToUpdateShort: (version) => `Herbegin om na ${version} op te dateer`,
+      updateToShort: (version) => `Dateer op na ${version}`,
+      couldNotUpdate: (version) => `Kon nie na ${version} opdateer nie`,
+      openDownloadPage: 'Maak die aflaaibladsy oop',
+      tryAgain: 'Probeer weer'
     }
   },
 
@@ -1905,6 +1985,46 @@ export const CATALOG = {
       restorePointFallback: 'غير متاح',
       quarantineNote: 'كل ما سبق لا يزال في الحجر الصحي ويمكن إعادته.',
       failedRegistryKeys: (n) => `تعذّرت إزالة ${n} مفتاح سجل — عادةً ما يتطلب هذا تشغيل Prune كمسؤول.`
+    },
+    resourceMonitor: {
+      rightNow: 'الآن',
+      cores: (n) => `${n} أنوية`,
+      cpu: 'المعالج',
+      memory: 'الذاكرة',
+      disk: 'القرص',
+      footer: 'يقرأ الفحص القرص بأكمله، لذا تتحرك هذه القيم أثناء عمل Prune — وهذا هو سبب وجودها هنا.'
+    },
+    shortcutsModal: {
+      title: 'اختصارات لوحة المفاتيح',
+      close: 'إغلاق',
+      or: 'أو',
+      footer: 'يعمل Cmd بدلاً من Ctrl. يتم تجاهل الاختصار أثناء الكتابة في حقل، لذا يظل Ctrl+F يصل إلى مربع البحث الذي أنت فيه بالفعل.',
+      actions: {
+        focusSearch: 'التركيز على مربع البحث',
+        openSettings: 'فتح الإعدادات',
+        showThisList: 'إظهار هذه القائمة',
+        closeDialog: 'إغلاق مربع حوار',
+        moveBetweenControls: 'التنقل بين عناصر التحكم؛ داخل مربع حوار، يبقى التركيز فيه'
+      }
+    },
+    themeToggle: {
+      switchTo: (theme) => `التبديل إلى المظهر ${theme}`,
+      light: 'الفاتح',
+      dark: 'الداكن'
+    },
+    toastHost: {
+      dismiss: 'إغلاق الإشعار'
+    },
+    updateButton: {
+      restartToUpdate: (version) => `إعادة التشغيل للتحديث إلى Prune ${version}`,
+      updateTo: (version) => `التحديث إلى Prune ${version}`,
+      downloadProgress: 'تقدم التنزيل',
+      restarting: 'إعادة التشغيل…',
+      restartToUpdateShort: (version) => `إعادة التشغيل للتحديث إلى ${version}`,
+      updateToShort: (version) => `التحديث إلى ${version}`,
+      couldNotUpdate: (version) => `تعذّر التحديث إلى ${version}`,
+      openDownloadPage: 'فتح صفحة التنزيل',
+      tryAgain: 'حاول مرة أخرى'
     }
   },
 
@@ -2531,6 +2651,46 @@ export const CATALOG = {
       restorePointFallback: 'no disponible',
       quarantineNote: 'Tot l\'anterior encara és a la Quarantena i es pot recuperar.',
       failedRegistryKeys: (n) => `No s'${n === 1 ? 'ha' : 'han'} pogut eliminar ${n} clau${n === 1 ? '' : 's'} del registre — normalment cal que el Prune s'executi com a administrador.`
+    },
+    resourceMonitor: {
+      rightNow: 'Ara mateix',
+      cores: (n) => `${n} nuclis`,
+      cpu: 'CPU',
+      memory: 'Memòria',
+      disk: 'Disc',
+      footer: 'Un escaneig llegeix tot el disc, així que aquests es mouen mentre el Prune treballa — que és el sentit de tenir-los aquí.'
+    },
+    shortcutsModal: {
+      title: 'Dreceres de teclat',
+      close: 'Tanca',
+      or: 'o',
+      footer: "La tecla Cmd funciona en lloc de Ctrl. Un acord s'ignora mentre escrius en un camp, així que Ctrl+F encara arriba al quadre de cerca on ja ets.",
+      actions: {
+        focusSearch: 'Enfoca el quadre de cerca',
+        openSettings: 'Obre la Configuració',
+        showThisList: 'Mostra aquesta llista',
+        closeDialog: 'Tanca un diàleg',
+        moveBetweenControls: "Mou-te entre controls; dins d'un diàleg, el focus hi roman"
+      }
+    },
+    themeToggle: {
+      switchTo: (theme) => `Canvia al tema ${theme}`,
+      light: 'clar',
+      dark: 'fosc'
+    },
+    toastHost: {
+      dismiss: 'Descarta la notificació'
+    },
+    updateButton: {
+      restartToUpdate: (version) => `Reinicia per actualitzar al Prune ${version}`,
+      updateTo: (version) => `Actualitza al Prune ${version}`,
+      downloadProgress: 'Progrés de la baixada',
+      restarting: 'Reiniciant…',
+      restartToUpdateShort: (version) => `Reinicia per actualitzar a la ${version}`,
+      updateToShort: (version) => `Actualitza a la ${version}`,
+      couldNotUpdate: (version) => `No s'ha pogut actualitzar a la ${version}`,
+      openDownloadPage: 'Obre la pàgina de baixada',
+      tryAgain: 'Torna-ho a provar'
     }
   },
 
@@ -3157,6 +3317,46 @@ export const CATALOG = {
       restorePointFallback: 'není k dispozici',
       quarantineNote: 'Vše výše je stále v karanténě a lze to vrátit zpět.',
       failedRegistryKeys: (n) => `Nepodařilo se odstranit ${n} klíč${n === 1 ? '' : (n < 5 ? 'e' : 'ů')} registru — ty obvykle vyžadují, aby Prune běžel jako správce.`
+    },
+    resourceMonitor: {
+      rightNow: 'Právě teď',
+      cores: (n) => `${n} jader`,
+      cpu: 'CPU',
+      memory: 'Paměť',
+      disk: 'Disk',
+      footer: 'Skenování čte celý disk, takže se tyto hodnoty mění, zatímco Prune pracuje — proto jsou zde.'
+    },
+    shortcutsModal: {
+      title: 'Klávesové zkratky',
+      close: 'Zavřít',
+      or: 'nebo',
+      footer: 'Cmd funguje místo Ctrl. Zkratka je ignorována, když píšete do pole, takže Ctrl+F stále doputuje do vyhledávacího pole, ve kterém již jste.',
+      actions: {
+        focusSearch: 'Zaměřit vyhledávací pole',
+        openSettings: 'Otevřít Nastavení',
+        showThisList: 'Zobrazit tento seznam',
+        closeDialog: 'Zavřít dialogové okno',
+        moveBetweenControls: 'Pohybovat se mezi ovládacími prvky; uvnitř dialogového okna zůstává zaměření v něm'
+      }
+    },
+    themeToggle: {
+      switchTo: (theme) => `Přepnout na ${theme} motiv`,
+      light: 'světlý',
+      dark: 'tmavý'
+    },
+    toastHost: {
+      dismiss: 'Zavřít oznámení'
+    },
+    updateButton: {
+      restartToUpdate: (version) => `Restartovat a aktualizovat na Prune ${version}`,
+      updateTo: (version) => `Aktualizovat na Prune ${version}`,
+      downloadProgress: 'Průběh stahování',
+      restarting: 'Restartuje se…',
+      restartToUpdateShort: (version) => `Restartovat a aktualizovat na ${version}`,
+      updateToShort: (version) => `Aktualizovat na ${version}`,
+      couldNotUpdate: (version) => `Nepodařilo se aktualizovat na ${version}`,
+      openDownloadPage: 'Otevřít stránku ke stažení',
+      tryAgain: 'Zkusit znovu'
     }
   },
 
@@ -3783,6 +3983,46 @@ export const CATALOG = {
       restorePointFallback: 'ddim ar gael',
       quarantineNote: "Mae popeth uchod yn dal yn y Cwarantin ac yn gallu cael ei roi'n ôl.",
       failedRegistryKeys: (n) => `Methwyd tynnu ${n} allwedd gofrestrfa — mae'r rhain fel arfer angen i Prune redeg fel gweinyddwr.`
+    },
+    resourceMonitor: {
+      rightNow: 'Ar hyn o bryd',
+      cores: (n) => `${n} craidd`,
+      cpu: 'CPU',
+      memory: 'Cof',
+      disk: 'Disg',
+      footer: "Mae sgan yn darllen y ddisg gyfan, felly mae'r rhain yn symud tra bo Prune yn gweithio — dyna pam maen nhw yma."
+    },
+    shortcutsModal: {
+      title: 'Byrlwybrau bysellfwrdd',
+      close: 'Cau',
+      or: 'neu',
+      footer: "Mae Cmd yn gweithio yn lle Ctrl. Anwybyddir cord tra byddwch yn teipio mewn maes, felly mae Ctrl+F yn dal i gyrraedd y blwch chwilio rydych ynddo eisoes.",
+      actions: {
+        focusSearch: 'Ffocysu\'r blwch chwilio',
+        openSettings: 'Agor Gosodiadau',
+        showThisList: "Dangos y rhestr hon",
+        closeDialog: 'Cau deialog',
+        moveBetweenControls: "Symud rhwng rheolyddion; y tu mewn i ddeialog, mae'r ffocws yn aros ynddo"
+      }
+    },
+    themeToggle: {
+      switchTo: (theme) => `Newid i thema ${theme}`,
+      light: 'golau',
+      dark: 'tywyll'
+    },
+    toastHost: {
+      dismiss: 'Diystyru\'r hysbysiad'
+    },
+    updateButton: {
+      restartToUpdate: (version) => `Ailgychwyn i ddiweddaru i Prune ${version}`,
+      updateTo: (version) => `Diweddaru i Prune ${version}`,
+      downloadProgress: 'Cynnydd llwytho i lawr',
+      restarting: 'Yn ailgychwyn…',
+      restartToUpdateShort: (version) => `Ailgychwyn i ddiweddaru i ${version}`,
+      updateToShort: (version) => `Diweddaru i ${version}`,
+      couldNotUpdate: (version) => `Methu diweddaru i ${version}`,
+      openDownloadPage: 'Agor y dudalen lwytho i lawr',
+      tryAgain: 'Ceisiwch eto'
     }
   },
 
@@ -4409,6 +4649,46 @@ export const CATALOG = {
       restorePointFallback: 'ikke tilgængelig',
       quarantineNote: 'Alt ovenfor er stadig i karantæne og kan sættes tilbage.',
       failedRegistryKeys: (n) => `${n} registreringsnøgle${n === 1 ? '' : 'r'} kunne ikke fjernes — disse kræver som regel, at Prune kører som administrator.`
+    },
+    resourceMonitor: {
+      rightNow: 'Lige nu',
+      cores: (n) => `${n} kerner`,
+      cpu: 'CPU',
+      memory: 'Hukommelse',
+      disk: 'Disk',
+      footer: 'En scanning læser hele disken, så disse bevæger sig, mens Prune arbejder — det er derfor de er her.'
+    },
+    shortcutsModal: {
+      title: 'Tastaturgenveje',
+      close: 'Luk',
+      or: 'eller',
+      footer: 'Cmd fungerer i stedet for Ctrl. En genvej ignoreres, mens du skriver i et felt, så Ctrl+F stadig når søgefeltet, du allerede er i.',
+      actions: {
+        focusSearch: 'Fokusér søgefeltet',
+        openSettings: 'Åbn Indstillinger',
+        showThisList: 'Vis denne liste',
+        closeDialog: 'Luk en dialog',
+        moveBetweenControls: 'Flyt mellem kontroller; inde i en dialog forbliver fokus i den'
+      }
+    },
+    themeToggle: {
+      switchTo: (theme) => `Skift til ${theme} tema`,
+      light: 'lyst',
+      dark: 'mørkt'
+    },
+    toastHost: {
+      dismiss: 'Afvis notifikation'
+    },
+    updateButton: {
+      restartToUpdate: (version) => `Genstart for at opdatere til Prune ${version}`,
+      updateTo: (version) => `Opdater til Prune ${version}`,
+      downloadProgress: 'Downloadfremgang',
+      restarting: 'Genstarter…',
+      restartToUpdateShort: (version) => `Genstart for at opdatere til ${version}`,
+      updateToShort: (version) => `Opdater til ${version}`,
+      couldNotUpdate: (version) => `Kunne ikke opdatere til ${version}`,
+      openDownloadPage: 'Åbn downloadsiden',
+      tryAgain: 'Prøv igen'
     }
   },
 
@@ -5035,6 +5315,46 @@ export const CATALOG = {
       restorePointFallback: 'nicht verfügbar',
       quarantineNote: 'Alles oben ist weiterhin in der Quarantäne und kann zurückgesetzt werden.',
       failedRegistryKeys: (n) => `${n} Registrierungsschlüssel konnte${n === 1 ? '' : 'n'} nicht entfernt werden — diese benötigen normalerweise, dass Prune als Administrator ausgeführt wird.`
+    },
+    resourceMonitor: {
+      rightNow: 'Gerade jetzt',
+      cores: (n) => `${n} Kerne`,
+      cpu: 'CPU',
+      memory: 'Arbeitsspeicher',
+      disk: 'Festplatte',
+      footer: 'Ein Scan liest die gesamte Festplatte, daher bewegen sich diese Werte, während Prune arbeitet — genau deshalb sind sie hier.'
+    },
+    shortcutsModal: {
+      title: 'Tastenkombinationen',
+      close: 'Schließen',
+      or: 'oder',
+      footer: 'Cmd funktioniert anstelle von Strg. Eine Kombination wird ignoriert, während du in ein Feld tippst, sodass Strg+F weiterhin das Suchfeld erreicht, in dem du dich bereits befindest.',
+      actions: {
+        focusSearch: 'Suchfeld fokussieren',
+        openSettings: 'Einstellungen öffnen',
+        showThisList: 'Diese Liste anzeigen',
+        closeDialog: 'Dialog schließen',
+        moveBetweenControls: 'Zwischen Bedienelementen wechseln; innerhalb eines Dialogs bleibt der Fokus darin'
+      }
+    },
+    themeToggle: {
+      switchTo: (theme) => `Zum ${theme} Erscheinungsbild wechseln`,
+      light: 'hellen',
+      dark: 'dunklen'
+    },
+    toastHost: {
+      dismiss: 'Benachrichtigung schließen'
+    },
+    updateButton: {
+      restartToUpdate: (version) => `Neu starten, um auf Prune ${version} zu aktualisieren`,
+      updateTo: (version) => `Auf Prune ${version} aktualisieren`,
+      downloadProgress: 'Download-Fortschritt',
+      restarting: 'Wird neu gestartet…',
+      restartToUpdateShort: (version) => `Neu starten, um auf ${version} zu aktualisieren`,
+      updateToShort: (version) => `Auf ${version} aktualisieren`,
+      couldNotUpdate: (version) => `Aktualisierung auf ${version} fehlgeschlagen`,
+      openDownloadPage: 'Download-Seite öffnen',
+      tryAgain: 'Erneut versuchen'
     }
   },
 
@@ -5661,6 +5981,46 @@ export const CATALOG = {
       restorePointFallback: 'μη διαθέσιμο',
       quarantineNote: 'Όλα τα παραπάνω παραμένουν στην Καραντίνα και μπορούν να επανέλθουν.',
       failedRegistryKeys: (n) => `Αποτυχία αφαίρεσης ${n} κλειδι${n === 1 ? 'ού' : 'ών'} μητρώου — αυτά συνήθως απαιτούν το Prune να εκτελείται ως διαχειριστής.`
+    },
+    resourceMonitor: {
+      rightNow: 'Αυτή τη στιγμή',
+      cores: (n) => `${n} πυρήνες`,
+      cpu: 'CPU',
+      memory: 'Μνήμη',
+      disk: 'Δίσκος',
+      footer: 'Μια σάρωση διαβάζει ολόκληρο τον δίσκο, οπότε αυτά κινούνται όσο το Prune εργάζεται — αυτό είναι το νόημα να είναι εδώ.'
+    },
+    shortcutsModal: {
+      title: 'Συντομεύσεις πληκτρολογίου',
+      close: 'Κλείσιμο',
+      or: 'ή',
+      footer: 'Το Cmd λειτουργεί αντί για το Ctrl. Μια συντόμευση αγνοείται ενώ πληκτρολογείτε σε ένα πεδίο, οπότε το Ctrl+F εξακολουθεί να φτάνει στο πλαίσιο αναζήτησης στο οποίο βρίσκεστε ήδη.',
+      actions: {
+        focusSearch: 'Εστίαση στο πλαίσιο αναζήτησης',
+        openSettings: 'Άνοιγμα Ρυθμίσεων',
+        showThisList: 'Εμφάνιση αυτής της λίστας',
+        closeDialog: 'Κλείσιμο ενός παραθύρου διαλόγου',
+        moveBetweenControls: 'Μετακίνηση μεταξύ στοιχείων ελέγχου· μέσα σε παράθυρο διαλόγου, η εστίαση παραμένει σε αυτό'
+      }
+    },
+    themeToggle: {
+      switchTo: (theme) => `Εναλλαγή σε ${theme} θέμα`,
+      light: 'ανοιχτόχρωμο',
+      dark: 'σκοτεινό'
+    },
+    toastHost: {
+      dismiss: 'Απόρριψη ειδοποίησης'
+    },
+    updateButton: {
+      restartToUpdate: (version) => `Επανεκκίνηση για ενημέρωση στο Prune ${version}`,
+      updateTo: (version) => `Ενημέρωση στο Prune ${version}`,
+      downloadProgress: 'Πρόοδος λήψης',
+      restarting: 'Επανεκκίνηση…',
+      restartToUpdateShort: (version) => `Επανεκκίνηση για ενημέρωση στο ${version}`,
+      updateToShort: (version) => `Ενημέρωση στο ${version}`,
+      couldNotUpdate: (version) => `Αδυναμία ενημέρωσης στο ${version}`,
+      openDownloadPage: 'Άνοιγμα σελίδας λήψης',
+      tryAgain: 'Δοκιμάστε ξανά'
     }
   },
 
@@ -6287,6 +6647,46 @@ export const CATALOG = {
       restorePointFallback: 'no disponible',
       quarantineNote: 'Todo lo anterior sigue en Cuarentena y se puede devolver.',
       failedRegistryKeys: (n) => `No se ${n === 1 ? 'pudo' : 'pudieron'} eliminar ${n} clave${n === 1 ? '' : 's'} del registro — estas suelen necesitar que Prune se ejecute como administrador.`
+    },
+    resourceMonitor: {
+      rightNow: 'Ahora mismo',
+      cores: (n) => `${n} núcleos`,
+      cpu: 'CPU',
+      memory: 'Memoria',
+      disk: 'Disco',
+      footer: 'Un escaneo lee todo el disco, así que estos se mueven mientras Prune trabaja — que es el sentido de tenerlos aquí.'
+    },
+    shortcutsModal: {
+      title: 'Atajos de teclado',
+      close: 'Cerrar',
+      or: 'o',
+      footer: 'Cmd funciona en lugar de Ctrl. Un atajo se ignora mientras escribes en un campo, así que Ctrl+F sigue llegando al cuadro de búsqueda en el que ya estás.',
+      actions: {
+        focusSearch: 'Enfocar el cuadro de búsqueda',
+        openSettings: 'Abrir Configuración',
+        showThisList: 'Mostrar esta lista',
+        closeDialog: 'Cerrar un cuadro de diálogo',
+        moveBetweenControls: 'Moverse entre controles; dentro de un cuadro de diálogo, el enfoque permanece en él'
+      }
+    },
+    themeToggle: {
+      switchTo: (theme) => `Cambiar al tema ${theme}`,
+      light: 'claro',
+      dark: 'oscuro'
+    },
+    toastHost: {
+      dismiss: 'Descartar notificación'
+    },
+    updateButton: {
+      restartToUpdate: (version) => `Reiniciar para actualizar a Prune ${version}`,
+      updateTo: (version) => `Actualizar a Prune ${version}`,
+      downloadProgress: 'Progreso de la descarga',
+      restarting: 'Reiniciando…',
+      restartToUpdateShort: (version) => `Reiniciar para actualizar a ${version}`,
+      updateToShort: (version) => `Actualizar a ${version}`,
+      couldNotUpdate: (version) => `No se pudo actualizar a ${version}`,
+      openDownloadPage: 'Abrir la página de descarga',
+      tryAgain: 'Intentar de nuevo'
     }
   },
 
@@ -6913,6 +7313,46 @@ export const CATALOG = {
       restorePointFallback: 'pole saadaval',
       quarantineNote: 'Kõik ülaltoodu on endiselt karantiinis ja saab tagasi panna.',
       failedRegistryKeys: (n) => `${n} registrivõti${n === 1 ? '' : 't'} ei õnnestunud eemaldada — need vajavad tavaliselt, et Prune töötaks administraatorina.`
+    },
+    resourceMonitor: {
+      rightNow: 'Praegu',
+      cores: (n) => `${n} tuuma`,
+      cpu: 'Protsessor',
+      memory: 'Mälu',
+      disk: 'Ketas',
+      footer: 'Skannimine loeb kogu ketast, seega need liiguvad, kui Prune töötab — see ongi mõte, miks need siin on.'
+    },
+    shortcutsModal: {
+      title: 'Klaviatuuri otseteed',
+      close: 'Sulge',
+      or: 'või',
+      footer: 'Cmd töötab Ctrl asemel. Kiirklahvi eiratakse, kui kirjutad väljale, seega Ctrl+F jõuab siiski otsingukasti, kus juba oled.',
+      actions: {
+        focusSearch: 'Fokuseeri otsingukast',
+        openSettings: 'Ava seaded',
+        showThisList: 'Näita seda loendit',
+        closeDialog: 'Sulge dialoog',
+        moveBetweenControls: 'Liigu juhtelementide vahel; dialoogi sees jääb fookus sinna'
+      }
+    },
+    themeToggle: {
+      switchTo: (theme) => `Lülitu ${theme} teemale`,
+      light: 'heledale',
+      dark: 'tumedale'
+    },
+    toastHost: {
+      dismiss: 'Sulge teavitus'
+    },
+    updateButton: {
+      restartToUpdate: (version) => `Taaskäivita, et värskendada versioonile Prune ${version}`,
+      updateTo: (version) => `Värskenda versioonile Prune ${version}`,
+      downloadProgress: 'Allalaadimise edenemine',
+      restarting: 'Taaskäivitamine…',
+      restartToUpdateShort: (version) => `Taaskäivita, et värskendada versioonile ${version}`,
+      updateToShort: (version) => `Värskenda versioonile ${version}`,
+      couldNotUpdate: (version) => `Ei õnnestunud värskendada versioonile ${version}`,
+      openDownloadPage: 'Ava allalaadimislehekülg',
+      tryAgain: 'Proovi uuesti'
     }
   },
 
@@ -7539,6 +7979,46 @@ export const CATALOG = {
       restorePointFallback: 'ei saatavilla',
       quarantineNote: 'Kaikki yllä oleva on edelleen karanteenissa ja voidaan palauttaa.',
       failedRegistryKeys: (n) => `${n} rekisteriavainta ei voitu poistaa — nämä vaativat yleensä, että Prune toimii järjestelmänvalvojana.`
+    },
+    resourceMonitor: {
+      rightNow: 'Juuri nyt',
+      cores: (n) => `${n} ydintä`,
+      cpu: 'Suoritin',
+      memory: 'Muisti',
+      disk: 'Levy',
+      footer: 'Skannaus lukee koko levyn, joten nämä liikkuvat Prunen työskennellessä — siksi ne ovat täällä.'
+    },
+    shortcutsModal: {
+      title: 'Pikanäppäimet',
+      close: 'Sulje',
+      or: 'tai',
+      footer: 'Cmd toimii Ctrl:n sijaan. Pikanäppäin ohitetaan, kun kirjoitat kenttään, joten Ctrl+F saavuttaa silti hakukentän, jossa jo olet.',
+      actions: {
+        focusSearch: 'Kohdista hakukenttään',
+        openSettings: 'Avaa asetukset',
+        showThisList: 'Näytä tämä luettelo',
+        closeDialog: 'Sulje valintaikkuna',
+        moveBetweenControls: 'Siirry säätimien välillä; valintaikkunan sisällä kohdistus pysyy siinä'
+      }
+    },
+    themeToggle: {
+      switchTo: (theme) => `Vaihda ${theme} teemaan`,
+      light: 'vaaleaan',
+      dark: 'tummaan'
+    },
+    toastHost: {
+      dismiss: 'Hylkää ilmoitus'
+    },
+    updateButton: {
+      restartToUpdate: (version) => `Käynnistä uudelleen päivittääksesi versioon Prune ${version}`,
+      updateTo: (version) => `Päivitä versioon Prune ${version}`,
+      downloadProgress: 'Latauksen eteneminen',
+      restarting: 'Käynnistetään uudelleen…',
+      restartToUpdateShort: (version) => `Käynnistä uudelleen päivittääksesi versioon ${version}`,
+      updateToShort: (version) => `Päivitä versioon ${version}`,
+      couldNotUpdate: (version) => `Päivitys versioon ${version} epäonnistui`,
+      openDownloadPage: 'Avaa latenaissivu',
+      tryAgain: 'Yritä uudelleen'
     }
   },
 
@@ -8165,6 +8645,46 @@ export const CATALOG = {
       restorePointFallback: 'non disponible',
       quarantineNote: "Tout ce qui précède est toujours en Quarantaine et peut être remis en place.",
       failedRegistryKeys: (n) => `${n} clé${n === 1 ? '' : 's'} de registre n'${n === 1 ? 'a' : 'ont'} pas pu être supprimée${n === 1 ? '' : 's'} — celles-ci nécessitent généralement que Prune s'exécute en tant qu'administrateur.`
+    },
+    resourceMonitor: {
+      rightNow: 'En ce moment',
+      cores: (n) => `${n} cœurs`,
+      cpu: 'CPU',
+      memory: 'Mémoire',
+      disk: 'Disque',
+      footer: "Une analyse lit tout le disque, donc ces valeurs bougent pendant que Prune travaille — c'est tout l'intérêt de les avoir ici."
+    },
+    shortcutsModal: {
+      title: 'Raccourcis clavier',
+      close: 'Fermer',
+      or: 'ou',
+      footer: "Cmd fonctionne à la place de Ctrl. Un raccourci est ignoré pendant que vous tapez dans un champ, donc Ctrl+F atteint quand même le champ de recherche dans lequel vous êtes déjà.",
+      actions: {
+        focusSearch: 'Placer le focus sur le champ de recherche',
+        openSettings: 'Ouvrir les Paramètres',
+        showThisList: 'Afficher cette liste',
+        closeDialog: 'Fermer une boîte de dialogue',
+        moveBetweenControls: "Se déplacer entre les contrôles ; à l'intérieur d'une boîte de dialogue, le focus y reste"
+      }
+    },
+    themeToggle: {
+      switchTo: (theme) => `Passer au thème ${theme}`,
+      light: 'clair',
+      dark: 'sombre'
+    },
+    toastHost: {
+      dismiss: 'Ignorer la notification'
+    },
+    updateButton: {
+      restartToUpdate: (version) => `Redémarrer pour mettre à jour vers Prune ${version}`,
+      updateTo: (version) => `Mettre à jour vers Prune ${version}`,
+      downloadProgress: 'Progression du téléchargement',
+      restarting: 'Redémarrage…',
+      restartToUpdateShort: (version) => `Redémarrer pour mettre à jour vers ${version}`,
+      updateToShort: (version) => `Mettre à jour vers ${version}`,
+      couldNotUpdate: (version) => `Impossible de mettre à jour vers ${version}`,
+      openDownloadPage: 'Ouvrir la page de téléchargement',
+      tryAgain: 'Réessayer'
     }
   },
 
@@ -8791,6 +9311,46 @@ export const CATALOG = {
       restorePointFallback: 'לא זמין',
       quarantineNote: 'כל האמור לעיל עדיין נמצא בהסגר וניתן להחזירו.',
       failedRegistryKeys: (n) => `לא ניתן היה להסיר ${n} מפתחות רישום — אלה בדרך כלל דורשים ש-Prune ירוץ כמנהל.`
+    },
+    resourceMonitor: {
+      rightNow: 'כרגע',
+      cores: (n) => `${n} ליבות`,
+      cpu: 'מעבד',
+      memory: 'זיכרון',
+      disk: 'דיסק',
+      footer: 'סריקה קוראת את כל הדיסק, כך שאלה משתנים בזמן ש-Prune עובד — וזו הסיבה שהם כאן.'
+    },
+    shortcutsModal: {
+      title: 'קיצורי מקלדת',
+      close: 'סגור',
+      or: 'או',
+      footer: 'Cmd עובד במקום Ctrl. צירוף מקשים מתעלם בזמן שאתה מקליד בשדה, כך ש-Ctrl+F עדיין מגיע לתיבת החיפוש שבה אתה כבר נמצא.',
+      actions: {
+        focusSearch: 'התמקד בתיבת החיפוש',
+        openSettings: 'פתח הגדרות',
+        showThisList: 'הצג רשימה זו',
+        closeDialog: 'סגור תיבת דו-שיח',
+        moveBetweenControls: 'עבור בין פקדים; בתוך תיבת דו-שיח, המיקוד נשאר בה'
+      }
+    },
+    themeToggle: {
+      switchTo: (theme) => `עבור לערכת נושא ${theme}`,
+      light: 'בהירה',
+      dark: 'כהה'
+    },
+    toastHost: {
+      dismiss: 'בטל התראה'
+    },
+    updateButton: {
+      restartToUpdate: (version) => `הפעל מחדש כדי לעדכן ל-Prune ${version}`,
+      updateTo: (version) => `עדכן ל-Prune ${version}`,
+      downloadProgress: 'התקדמות ההורדה',
+      restarting: 'מפעיל מחדש…',
+      restartToUpdateShort: (version) => `הפעל מחדש כדי לעדכן ל-${version}`,
+      updateToShort: (version) => `עדכן ל-${version}`,
+      couldNotUpdate: (version) => `לא ניתן היה לעדכן ל-${version}`,
+      openDownloadPage: 'פתח את דף ההורדה',
+      tryAgain: 'נסה שוב'
     }
   },
 
@@ -9417,6 +9977,46 @@ export const CATALOG = {
       restorePointFallback: 'nem érhető el',
       quarantineNote: 'A fentiek mind a karanténban maradnak, és visszatehetők.',
       failedRegistryKeys: (n) => `${n} rendszerleíró kulcsot nem sikerült eltávolítani — ezekhez általában rendszergazdaként futó Prune szükséges.`
+    },
+    resourceMonitor: {
+      rightNow: 'Éppen most',
+      cores: (n) => `${n} mag`,
+      cpu: 'CPU',
+      memory: 'Memória',
+      disk: 'Lemez',
+      footer: 'Egy vizsgálat a teljes lemezt olvassa, ezért ezek mozognak, amíg a Prune dolgozik — ez a lényege annak, hogy itt vannak.'
+    },
+    shortcutsModal: {
+      title: 'Billentyűparancsok',
+      close: 'Bezárás',
+      or: 'vagy',
+      footer: 'A Cmd a Ctrl helyett működik. Egy billentyűkombinációt figyelmen kívül hagy a rendszer, amíg egy mezőbe gépelsz, így a Ctrl+F továbbra is eléri azt a keresőmezőt, amelyben már vagy.',
+      actions: {
+        focusSearch: 'Fókusz a keresőmezőre',
+        openSettings: 'Beállítások megnyitása',
+        showThisList: 'Ennek a listának a megjelenítése',
+        closeDialog: 'Párbeszédablak bezárása',
+        moveBetweenControls: 'Mozgás a vezérlők között; egy párbeszédablakon belül a fókusz ott marad'
+      }
+    },
+    themeToggle: {
+      switchTo: (theme) => `Váltás ${theme} témára`,
+      light: 'világos',
+      dark: 'sötét'
+    },
+    toastHost: {
+      dismiss: 'Értesítés elvetése'
+    },
+    updateButton: {
+      restartToUpdate: (version) => `Indítsd újra a frissítéshez: Prune ${version}`,
+      updateTo: (version) => `Frissítés erre: Prune ${version}`,
+      downloadProgress: 'Letöltés folyamata',
+      restarting: 'Újraindítás…',
+      restartToUpdateShort: (version) => `Indítsd újra a frissítéshez: ${version}`,
+      updateToShort: (version) => `Frissítés erre: ${version}`,
+      couldNotUpdate: (version) => `Nem sikerült frissíteni erre: ${version}`,
+      openDownloadPage: 'Letöltési oldal megnyitása',
+      tryAgain: 'Próbáld újra'
     }
   },
 
@@ -10043,6 +10643,46 @@ export const CATALOG = {
       restorePointFallback: 'tidak tersedia',
       quarantineNote: 'Semua di atas masih ada di Karantina dan dapat dikembalikan.',
       failedRegistryKeys: (n) => `${n} kunci registri tidak dapat dihapus — ini biasanya memerlukan Prune berjalan sebagai administrator.`
+    },
+    resourceMonitor: {
+      rightNow: 'Saat ini',
+      cores: (n) => `${n} inti`,
+      cpu: 'CPU',
+      memory: 'Memori',
+      disk: 'Disk',
+      footer: 'Pemindaian membaca seluruh disk, jadi angka ini bergerak saat Prune bekerja — itulah gunanya ditampilkan di sini.'
+    },
+    shortcutsModal: {
+      title: 'Pintasan keyboard',
+      close: 'Tutup',
+      or: 'atau',
+      footer: 'Cmd berfungsi menggantikan Ctrl. Pintasan diabaikan saat Anda mengetik di sebuah kolom, jadi Ctrl+F tetap mencapai kotak pencarian yang sedang Anda gunakan.',
+      actions: {
+        focusSearch: 'Fokus ke kotak pencarian',
+        openSettings: 'Buka Pengaturan',
+        showThisList: 'Tampilkan daftar ini',
+        closeDialog: 'Tutup dialog',
+        moveBetweenControls: 'Berpindah antar kontrol; di dalam dialog, fokus tetap di dalamnya'
+      }
+    },
+    themeToggle: {
+      switchTo: (theme) => `Beralih ke tema ${theme}`,
+      light: 'terang',
+      dark: 'gelap'
+    },
+    toastHost: {
+      dismiss: 'Tutup notifikasi'
+    },
+    updateButton: {
+      restartToUpdate: (version) => `Mulai ulang untuk memperbarui ke Prune ${version}`,
+      updateTo: (version) => `Perbarui ke Prune ${version}`,
+      downloadProgress: 'Progres unduhan',
+      restarting: 'Memulai ulang…',
+      restartToUpdateShort: (version) => `Mulai ulang untuk memperbarui ke ${version}`,
+      updateToShort: (version) => `Perbarui ke ${version}`,
+      couldNotUpdate: (version) => `Gagal memperbarui ke ${version}`,
+      openDownloadPage: 'Buka halaman unduhan',
+      tryAgain: 'Coba lagi'
     }
   },
 
@@ -10669,6 +11309,46 @@ export const CATALOG = {
       restorePointFallback: 'ekki tiltækt',
       quarantineNote: 'Allt hér að ofan er enn í sóttkví og hægt er að setja það aftur.',
       failedRegistryKeys: (n) => `Ekki tókst að fjarlægja ${n} skráningarlykil${n === 1 ? '' : 'a'} — þessir þurfa yfirleitt að Prune keyri sem stjórnandi.`
+    },
+    resourceMonitor: {
+      rightNow: 'Núna',
+      cores: (n) => `${n} kjarnar`,
+      cpu: 'Örgjörvi',
+      memory: 'Minni',
+      disk: 'Diskur',
+      footer: 'Skönnun les allan diskinn, svo þessar tölur breytast á meðan Prune vinnur — það er tilgangurinn með því að hafa þær hér.'
+    },
+    shortcutsModal: {
+      title: 'Flýtileiðir á lyklaborði',
+      close: 'Loka',
+      or: 'eða',
+      footer: 'Cmd virkar í stað Ctrl. Flýtileið er hunsuð á meðan þú skrifar í reit, svo Ctrl+F nær samt í leitarreitinn sem þú ert þegar í.',
+      actions: {
+        focusSearch: 'Setja fókus á leitarreit',
+        openSettings: 'Opna stillingar',
+        showThisList: 'Sýna þennan lista',
+        closeDialog: 'Loka glugga',
+        moveBetweenControls: 'Fara á milli stýringa; innan glugga helst fókusinn þar'
+      }
+    },
+    themeToggle: {
+      switchTo: (theme) => `Skipta yfir í ${theme} þema`,
+      light: 'ljóst',
+      dark: 'dökkt'
+    },
+    toastHost: {
+      dismiss: 'Loka tilkynningu'
+    },
+    updateButton: {
+      restartToUpdate: (version) => `Endurræsa til að uppfæra í Prune ${version}`,
+      updateTo: (version) => `Uppfæra í Prune ${version}`,
+      downloadProgress: 'Framvinda niðurhals',
+      restarting: 'Endurræsir…',
+      restartToUpdateShort: (version) => `Endurræsa til að uppfæra í ${version}`,
+      updateToShort: (version) => `Uppfæra í ${version}`,
+      couldNotUpdate: (version) => `Ekki tókst að uppfæra í ${version}`,
+      openDownloadPage: 'Opna niðurhalssíðuna',
+      tryAgain: 'Reyna aftur'
     }
   },
 
@@ -11295,6 +11975,46 @@ export const CATALOG = {
       restorePointFallback: 'non disponibile',
       quarantineNote: 'Tutto quanto sopra è ancora in Quarantena e può essere rimesso a posto.',
       failedRegistryKeys: (n) => `Impossibile rimuovere ${n} chiav${n === 1 ? 'e' : 'i'} di registro — queste di solito richiedono che Prune sia eseguito come amministratore.`
+    },
+    resourceMonitor: {
+      rightNow: 'In questo momento',
+      cores: (n) => `${n} core`,
+      cpu: 'CPU',
+      memory: 'Memoria',
+      disk: 'Disco',
+      footer: "Una scansione legge l'intero disco, quindi questi valori cambiano mentre Prune lavora — è proprio per questo che sono qui."
+    },
+    shortcutsModal: {
+      title: 'Scorciatoie da tastiera',
+      close: 'Chiudi',
+      or: 'o',
+      footer: 'Cmd funziona al posto di Ctrl. Una combinazione viene ignorata mentre digiti in un campo, quindi Ctrl+F raggiunge comunque la casella di ricerca in cui ti trovi già.',
+      actions: {
+        focusSearch: 'Metti a fuoco la casella di ricerca',
+        openSettings: 'Apri Impostazioni',
+        showThisList: 'Mostra questo elenco',
+        closeDialog: 'Chiudi una finestra di dialogo',
+        moveBetweenControls: "Spostati tra i controlli; all'interno di una finestra di dialogo, il focus vi resta"
+      }
+    },
+    themeToggle: {
+      switchTo: (theme) => `Passa al tema ${theme}`,
+      light: 'chiaro',
+      dark: 'scuro'
+    },
+    toastHost: {
+      dismiss: 'Ignora notifica'
+    },
+    updateButton: {
+      restartToUpdate: (version) => `Riavvia per aggiornare a Prune ${version}`,
+      updateTo: (version) => `Aggiorna a Prune ${version}`,
+      downloadProgress: 'Avanzamento del download',
+      restarting: 'Riavvio…',
+      restartToUpdateShort: (version) => `Riavvia per aggiornare a ${version}`,
+      updateToShort: (version) => `Aggiorna a ${version}`,
+      couldNotUpdate: (version) => `Impossibile aggiornare a ${version}`,
+      openDownloadPage: 'Apri la pagina di download',
+      tryAgain: 'Riprova'
     }
   },
 
@@ -11921,6 +12641,46 @@ export const CATALOG = {
       restorePointFallback: '利用できません',
       quarantineNote: '上記のものはすべて隔離場所に残っており、元に戻すことができます。',
       failedRegistryKeys: (n) => `${n}件のレジストリキーを削除できませんでした — これらは通常、Prune を管理者として実行する必要があります。`
+    },
+    resourceMonitor: {
+      rightNow: '現在',
+      cores: (n) => `${n} コア`,
+      cpu: 'CPU',
+      memory: 'メモリ',
+      disk: 'ディスク',
+      footer: 'スキャンはディスク全体を読み取るため、Prune が作業している間はこれらの値が変動します — だからこそここに表示する意味があります。'
+    },
+    shortcutsModal: {
+      title: 'キーボードショートカット',
+      close: '閉じる',
+      or: 'または',
+      footer: 'Cmd は Ctrl の代わりに使えます。フィールドに入力している間はショートカットが無視されるため、Ctrl+F はすでに入力中の検索ボックスに届きます。',
+      actions: {
+        focusSearch: '検索ボックスにフォーカス',
+        openSettings: '設定を開く',
+        showThisList: 'このリストを表示',
+        closeDialog: 'ダイアログを閉じる',
+        moveBetweenControls: 'コントロール間を移動；ダイアログ内ではフォーカスがその中にとどまる'
+      }
+    },
+    themeToggle: {
+      switchTo: (theme) => `${theme}テーマに切り替え`,
+      light: 'ライト',
+      dark: 'ダーク'
+    },
+    toastHost: {
+      dismiss: '通知を閉じる'
+    },
+    updateButton: {
+      restartToUpdate: (version) => `再起動して Prune ${version} に更新`,
+      updateTo: (version) => `Prune ${version} に更新`,
+      downloadProgress: 'ダウンロードの進捗',
+      restarting: '再起動しています…',
+      restartToUpdateShort: (version) => `再起動して ${version} に更新`,
+      updateToShort: (version) => `${version} に更新`,
+      couldNotUpdate: (version) => `${version} に更新できませんでした`,
+      openDownloadPage: 'ダウンロードページを開く',
+      tryAgain: 'もう一度試す'
     }
   },
 
@@ -12547,6 +13307,46 @@ export const CATALOG = {
       restorePointFallback: '사용할 수 없음',
       quarantineNote: '위의 모든 항목은 여전히 격리 공간에 있으며 되돌릴 수 있습니다.',
       failedRegistryKeys: (n) => `${n}개 레지스트리 키를 제거할 수 없습니다 — 이 항목들은 보통 Prune이 관리자로 실행되어야 합니다.`
+    },
+    resourceMonitor: {
+      rightNow: '지금',
+      cores: (n) => `코어 ${n}개`,
+      cpu: 'CPU',
+      memory: '메모리',
+      disk: '디스크',
+      footer: '스캔은 디스크 전체를 읽기 때문에 Prune이 작업하는 동안 이 값들이 변합니다 — 그래서 여기에 표시하는 것입니다.'
+    },
+    shortcutsModal: {
+      title: '키보드 단축키',
+      close: '닫기',
+      or: '또는',
+      footer: 'Cmd는 Ctrl 대신 작동합니다. 필드에 입력하는 동안에는 단축키가 무시되므로, Ctrl+F는 이미 사용 중인 검색창에 도달합니다.',
+      actions: {
+        focusSearch: '검색창에 포커스',
+        openSettings: '설정 열기',
+        showThisList: '이 목록 표시',
+        closeDialog: '대화 상자 닫기',
+        moveBetweenControls: '컨트롤 간 이동; 대화 상자 안에서는 포커스가 그 안에 유지됨'
+      }
+    },
+    themeToggle: {
+      switchTo: (theme) => `${theme} 테마로 전환`,
+      light: '라이트',
+      dark: '다크'
+    },
+    toastHost: {
+      dismiss: '알림 닫기'
+    },
+    updateButton: {
+      restartToUpdate: (version) => `재시작하여 Prune ${version}(으)로 업데이트`,
+      updateTo: (version) => `Prune ${version}(으)로 업데이트`,
+      downloadProgress: '다운로드 진행 상황',
+      restarting: '재시작 중…',
+      restartToUpdateShort: (version) => `재시작하여 ${version}(으)로 업데이트`,
+      updateToShort: (version) => `${version}(으)로 업데이트`,
+      couldNotUpdate: (version) => `${version}(으)로 업데이트하지 못했습니다`,
+      openDownloadPage: '다운로드 페이지 열기',
+      tryAgain: '다시 시도'
     }
   },
 
@@ -13173,6 +13973,46 @@ export const CATALOG = {
       restorePointFallback: 'nepasiekiama',
       quarantineNote: 'Visa tai, kas aukščiau, vis dar yra karantine ir gali būti grąžinta.',
       failedRegistryKeys: (n) => `Nepavyko pašalinti ${n} registro rakt${n === 1 ? 'o' : 'ų'} — jiems paprastai reikia, kad „Prune“ veiktų administratoriaus teisėmis.`
+    },
+    resourceMonitor: {
+      rightNow: 'Dabar',
+      cores: (n) => `${n} branduoliai`,
+      cpu: 'Procesorius',
+      memory: 'Atmintis',
+      disk: 'Diskas',
+      footer: 'Nuskaitymas skaito visą diską, todėl šios reikšmės keičiasi, kol Prune dirba — būtent todėl jos rodomos čia.'
+    },
+    shortcutsModal: {
+      title: 'Klaviatūros trumpiniai',
+      close: 'Uždaryti',
+      or: 'arba',
+      footer: 'Cmd veikia vietoj Ctrl. Trumpinys ignoruojamas, kai rašote lauke, todėl Ctrl+F vis tiek pasiekia paieškos lauką, kuriame jau esate.',
+      actions: {
+        focusSearch: 'Sufokusuoti paieškos lauką',
+        openSettings: 'Atidaryti nustatymus',
+        showThisList: 'Rodyti šį sąrašą',
+        closeDialog: 'Uždaryti dialogo langą',
+        moveBetweenControls: 'Judėti tarp valdiklių; dialogo lange fokusas išlieka jame'
+      }
+    },
+    themeToggle: {
+      switchTo: (theme) => `Perjungti į ${theme} temą`,
+      light: 'šviesią',
+      dark: 'tamsią'
+    },
+    toastHost: {
+      dismiss: 'Atmesti pranešimą'
+    },
+    updateButton: {
+      restartToUpdate: (version) => `Paleisti iš naujo, kad atnaujintumėte į Prune ${version}`,
+      updateTo: (version) => `Atnaujinti į Prune ${version}`,
+      downloadProgress: 'Atsisiuntimo eiga',
+      restarting: 'Paleidžiama iš naujo…',
+      restartToUpdateShort: (version) => `Paleisti iš naujo, kad atnaujintumėte į ${version}`,
+      updateToShort: (version) => `Atnaujinti į ${version}`,
+      couldNotUpdate: (version) => `Nepavyko atnaujinti į ${version}`,
+      openDownloadPage: 'Atidaryti atsisiuntimo puslapį',
+      tryAgain: 'Bandyti dar kartą'
     }
   },
 
@@ -13799,6 +14639,46 @@ export const CATALOG = {
       restorePointFallback: 'tidak tersedia',
       quarantineNote: 'Semua di atas masih dalam Kuarantin dan boleh dikembalikan.',
       failedRegistryKeys: (n) => `${n} kekunci registri tidak dapat dikeluarkan — ini biasanya memerlukan Prune berjalan sebagai pentadbir.`
+    },
+    resourceMonitor: {
+      rightNow: 'Sekarang',
+      cores: (n) => `${n} teras`,
+      cpu: 'CPU',
+      memory: 'Memori',
+      disk: 'Cakera',
+      footer: 'Imbasan membaca seluruh cakera, jadi nilai ini berubah semasa Prune berfungsi — itulah sebabnya ia dipaparkan di sini.'
+    },
+    shortcutsModal: {
+      title: 'Pintasan papan kekunci',
+      close: 'Tutup',
+      or: 'atau',
+      footer: 'Cmd berfungsi menggantikan Ctrl. Pintasan diabaikan semasa anda menaip dalam medan, jadi Ctrl+F tetap sampai ke kotak carian yang sedang anda gunakan.',
+      actions: {
+        focusSearch: 'Fokus pada kotak carian',
+        openSettings: 'Buka Tetapan',
+        showThisList: 'Papar senarai ini',
+        closeDialog: 'Tutup dialog',
+        moveBetweenControls: 'Bergerak antara kawalan; dalam dialog, fokus kekal di dalamnya'
+      }
+    },
+    themeToggle: {
+      switchTo: (theme) => `Tukar kepada tema ${theme}`,
+      light: 'terang',
+      dark: 'gelap'
+    },
+    toastHost: {
+      dismiss: 'Ketepikan pemberitahuan'
+    },
+    updateButton: {
+      restartToUpdate: (version) => `Mulakan semula untuk mengemas kini ke Prune ${version}`,
+      updateTo: (version) => `Kemas kini ke Prune ${version}`,
+      downloadProgress: 'Kemajuan muat turun',
+      restarting: 'Memulakan semula…',
+      restartToUpdateShort: (version) => `Mulakan semula untuk mengemas kini ke ${version}`,
+      updateToShort: (version) => `Kemas kini ke ${version}`,
+      couldNotUpdate: (version) => `Tidak dapat mengemas kini ke ${version}`,
+      openDownloadPage: 'Buka halaman muat turun',
+      tryAgain: 'Cuba lagi'
     }
   },
 
@@ -14425,6 +15305,46 @@ export const CATALOG = {
       restorePointFallback: 'ikke tilgjengelig',
       quarantineNote: 'Alt over er fortsatt i karantene og kan settes tilbake.',
       failedRegistryKeys: (n) => `${n} registernøk${n === 1 ? 'kel' : 'ler'} kunne ikke fjernes — disse krever vanligvis at Prune kjører som administrator.`
+    },
+    resourceMonitor: {
+      rightNow: 'Akkurat nå',
+      cores: (n) => `${n} kjerner`,
+      cpu: 'CPU',
+      memory: 'Minne',
+      disk: 'Disk',
+      footer: 'Et søk leser hele disken, så disse verdiene beveger seg mens Prune jobber — det er poenget med å ha dem her.'
+    },
+    shortcutsModal: {
+      title: 'Tastatursnarveier',
+      close: 'Lukk',
+      or: 'eller',
+      footer: 'Cmd fungerer i stedet for Ctrl. En snarvei ignoreres mens du skriver i et felt, så Ctrl+F når likevel søkeboksen du allerede er i.',
+      actions: {
+        focusSearch: 'Sett fokus på søkeboksen',
+        openSettings: 'Åpne innstillinger',
+        showThisList: 'Vis denne listen',
+        closeDialog: 'Lukk en dialogboks',
+        moveBetweenControls: 'Flytt mellom kontroller; inne i en dialogboks blir fokuset værende der'
+      }
+    },
+    themeToggle: {
+      switchTo: (theme) => `Bytt til ${theme} tema`,
+      light: 'lyst',
+      dark: 'mørkt'
+    },
+    toastHost: {
+      dismiss: 'Lukk varsel'
+    },
+    updateButton: {
+      restartToUpdate: (version) => `Start på nytt for å oppdatere til Prune ${version}`,
+      updateTo: (version) => `Oppdater til Prune ${version}`,
+      downloadProgress: 'Nedlastingsfremdrift',
+      restarting: 'Starter på nytt…',
+      restartToUpdateShort: (version) => `Start på nytt for å oppdatere til ${version}`,
+      updateToShort: (version) => `Oppdater til ${version}`,
+      couldNotUpdate: (version) => `Kunne ikke oppdatere til ${version}`,
+      openDownloadPage: 'Åpne nedlastingssiden',
+      tryAgain: 'Prøv igjen'
     }
   },
 
@@ -15051,6 +15971,46 @@ export const CATALOG = {
       restorePointFallback: 'niet beschikbaar',
       quarantineNote: 'Alles hierboven staat nog in Quarantaine en kan worden teruggezet.',
       failedRegistryKeys: (n) => `${n} registersleutel${n === 1 ? '' : 's'} kon${n === 1 ? '' : 'den'} niet worden verwijderd — deze vereisen meestal dat Prune als beheerder wordt uitgevoerd.`
+    },
+    resourceMonitor: {
+      rightNow: 'Op dit moment',
+      cores: (n) => `${n} cores`,
+      cpu: 'CPU',
+      memory: 'Geheugen',
+      disk: 'Schijf',
+      footer: 'Een scan leest de hele schijf, dus deze waarden bewegen terwijl Prune werkt — dat is precies waarom ze hier staan.'
+    },
+    shortcutsModal: {
+      title: 'Sneltoetsen',
+      close: 'Sluiten',
+      or: 'of',
+      footer: 'Cmd werkt in plaats van Ctrl. Een sneltoets wordt genegeerd terwijl je in een veld typt, dus Ctrl+F bereikt nog steeds het zoekvak waarin je al zit.',
+      actions: {
+        focusSearch: 'Focus op het zoekvak',
+        openSettings: 'Instellingen openen',
+        showThisList: 'Deze lijst tonen',
+        closeDialog: 'Een dialoogvenster sluiten',
+        moveBetweenControls: 'Verplaatsen tussen besturingselementen; binnen een dialoogvenster blijft de focus daarin'
+      }
+    },
+    themeToggle: {
+      switchTo: (theme) => `Overschakelen naar ${theme} thema`,
+      light: 'licht',
+      dark: 'donker'
+    },
+    toastHost: {
+      dismiss: 'Melding sluiten'
+    },
+    updateButton: {
+      restartToUpdate: (version) => `Herstart om bij te werken naar Prune ${version}`,
+      updateTo: (version) => `Bijwerken naar Prune ${version}`,
+      downloadProgress: 'Downloadvoortgang',
+      restarting: 'Opnieuw opstarten…',
+      restartToUpdateShort: (version) => `Herstart om bij te werken naar ${version}`,
+      updateToShort: (version) => `Bijwerken naar ${version}`,
+      couldNotUpdate: (version) => `Kon niet bijwerken naar ${version}`,
+      openDownloadPage: 'Downloadpagina openen',
+      tryAgain: 'Opnieuw proberen'
     }
   },
 
@@ -15677,6 +16637,46 @@ export const CATALOG = {
       restorePointFallback: 'niedostępne',
       quarantineNote: 'Wszystko powyższe wciąż znajduje się w kwarantannie i można to przywrócić.',
       failedRegistryKeys: (n) => `Nie udało się usunąć ${n} klucz${n === 1 ? 'a' : 'y'} rejestru — do tego zwykle wymagane jest uruchomienie Prune jako administrator.`
+    },
+    resourceMonitor: {
+      rightNow: 'W tej chwili',
+      cores: (n) => `${n} rdzeni`,
+      cpu: 'CPU',
+      memory: 'Pamięć',
+      disk: 'Dysk',
+      footer: 'Skanowanie odczytuje cały dysk, więc te wartości zmieniają się, gdy Prune pracuje — właśnie dlatego są tutaj.'
+    },
+    shortcutsModal: {
+      title: 'Skróty klawiszowe',
+      close: 'Zamknij',
+      or: 'lub',
+      footer: 'Cmd działa zamiast Ctrl. Skrót jest ignorowany, gdy piszesz w polu, więc Ctrl+F nadal trafia do pola wyszukiwania, w którym już jesteś.',
+      actions: {
+        focusSearch: 'Ustaw fokus na polu wyszukiwania',
+        openSettings: 'Otwórz ustawienia',
+        showThisList: 'Pokaż tę listę',
+        closeDialog: 'Zamknij okno dialogowe',
+        moveBetweenControls: 'Przechodzenie między elementami sterującymi; wewnątrz okna dialogowego fokus pozostaje w nim'
+      }
+    },
+    themeToggle: {
+      switchTo: (theme) => `Przełącz na motyw ${theme}`,
+      light: 'jasny',
+      dark: 'ciemny'
+    },
+    toastHost: {
+      dismiss: 'Odrzuć powiadomienie'
+    },
+    updateButton: {
+      restartToUpdate: (version) => `Uruchom ponownie, aby zaktualizować do Prune ${version}`,
+      updateTo: (version) => `Zaktualizuj do Prune ${version}`,
+      downloadProgress: 'Postęp pobierania',
+      restarting: 'Ponowne uruchamianie…',
+      restartToUpdateShort: (version) => `Uruchom ponownie, aby zaktualizować do ${version}`,
+      updateToShort: (version) => `Zaktualizuj do ${version}`,
+      couldNotUpdate: (version) => `Nie udało się zaktualizować do ${version}`,
+      openDownloadPage: 'Otwórz stronę pobierania',
+      tryAgain: 'Spróbuj ponownie'
     }
   },
 
@@ -16303,6 +17303,46 @@ export const CATALOG = {
       restorePointFallback: 'شتون نلري',
       quarantineNote: 'پورته ټول لا هم په قرنطین کې دي او بیرته ایښودل کیدی شي.',
       failedRegistryKeys: (n) => `${n} د راجستر کیلي لرې نشوای کیدی — دا معمولاً اړتیا لري چې Prune د اډمین په توګه وچلیږي.`
+    },
+    resourceMonitor: {
+      rightNow: 'همدا اوس',
+      cores: (n) => `${n} کورونه`,
+      cpu: 'پروسیسر',
+      memory: 'حافظه',
+      disk: 'ډیسک',
+      footer: 'یوه سکن ټوله ډیسک لولي، نو دا ارزښتونه هغه وخت بدلیږي چې Prune کار کوي — دا خو د دلته ښودلو موخه ده.'
+    },
+    shortcutsModal: {
+      title: 'د کیبورډ شارټ کټونه',
+      close: 'بندول',
+      or: 'یا',
+      footer: 'Cmd د Ctrl پر ځای کار کوي. کله چې تاسو په یوه ساحه کې لیکئ، شارټ کټ له پامه غورځول کیږي، نو Ctrl+F بیا هم هغه لټون بکس ته رسیږي چې تاسو یې دمخه کې یاست.',
+      actions: {
+        focusSearch: 'د لټون بکس ته تمرکز ورکول',
+        openSettings: 'تنظیمات پرانیستل',
+        showThisList: 'دا لیست ښودل',
+        closeDialog: 'یو ډیالوګ بندول',
+        moveBetweenControls: 'د کنټرولونو ترمنځ حرکت؛ د ډیالوګ دننه، تمرکز په هغه کې پاتې کیږي'
+      }
+    },
+    themeToggle: {
+      switchTo: (theme) => `${theme} موضوع ته لاړ شئ`,
+      light: 'رڼا',
+      dark: 'تیاره'
+    },
+    toastHost: {
+      dismiss: 'خبرتیا رد کول'
+    },
+    updateButton: {
+      restartToUpdate: (version) => `بیا پیل کړئ ترڅو Prune ${version} ته اپډیټ شي`,
+      updateTo: (version) => `Prune ${version} ته اپډیټ کول`,
+      downloadProgress: 'د ډاونلوډ پرمختګ',
+      restarting: 'بیا پیل کیږي…',
+      restartToUpdateShort: (version) => `بیا پیل کړئ ترڅو ${version} ته اپډیټ شي`,
+      updateToShort: (version) => `${version} ته اپډیټ کول`,
+      couldNotUpdate: (version) => `${version} ته اپډیټ نشو کړی`,
+      openDownloadPage: 'د ډاونلوډ پاڼه پرانیستل',
+      tryAgain: 'بیا هڅه وکړئ'
     }
   },
 
@@ -16929,6 +17969,46 @@ export const CATALOG = {
       restorePointFallback: 'não disponível',
       quarantineNote: 'Tudo acima ainda está na Quarentena e pode ser devolvido.',
       failedRegistryKeys: (n) => `${n} chave${n === 1 ? '' : 's'} de registro não p${n === 1 ? 'ôde' : 'uderam'} ser removida${n === 1 ? '' : 's'} — estas geralmente exigem que o Prune seja executado como administrador.`
+    },
+    resourceMonitor: {
+      rightNow: 'Agora mesmo',
+      cores: (n) => `${n} núcleos`,
+      cpu: 'CPU',
+      memory: 'Memória',
+      disk: 'Disco',
+      footer: 'Uma varredura lê o disco inteiro, então esses valores mudam enquanto o Prune trabalha — e é exatamente por isso que estão aqui.'
+    },
+    shortcutsModal: {
+      title: 'Atalhos de teclado',
+      close: 'Fechar',
+      or: 'ou',
+      footer: 'O Cmd funciona no lugar do Ctrl. Um atalho é ignorado enquanto você digita em um campo, então Ctrl+F ainda chega à caixa de pesquisa em que você já está.',
+      actions: {
+        focusSearch: 'Focar na caixa de pesquisa',
+        openSettings: 'Abrir Configurações',
+        showThisList: 'Mostrar esta lista',
+        closeDialog: 'Fechar uma caixa de diálogo',
+        moveBetweenControls: 'Mover entre controles; dentro de uma caixa de diálogo, o foco permanece nela'
+      }
+    },
+    themeToggle: {
+      switchTo: (theme) => `Mudar para o tema ${theme}`,
+      light: 'claro',
+      dark: 'escuro'
+    },
+    toastHost: {
+      dismiss: 'Dispensar notificação'
+    },
+    updateButton: {
+      restartToUpdate: (version) => `Reiniciar para atualizar para o Prune ${version}`,
+      updateTo: (version) => `Atualizar para o Prune ${version}`,
+      downloadProgress: 'Progresso do download',
+      restarting: 'Reiniciando…',
+      restartToUpdateShort: (version) => `Reiniciar para atualizar para ${version}`,
+      updateToShort: (version) => `Atualizar para ${version}`,
+      couldNotUpdate: (version) => `Não foi possível atualizar para ${version}`,
+      openDownloadPage: 'Abrir a página de download',
+      tryAgain: 'Tentar novamente'
     }
   },
 
@@ -17555,6 +18635,46 @@ export const CATALOG = {
       restorePointFallback: 'não disponível',
       quarantineNote: 'Tudo acima ainda está na Quarentena e pode ser reposto.',
       failedRegistryKeys: (n) => `${n} chave${n === 1 ? '' : 's'} de registo não p${n === 1 ? 'ôde' : 'uderam'} ser removida${n === 1 ? '' : 's'} — estas normalmente exigem que o Prune seja executado como administrador.`
+    },
+    resourceMonitor: {
+      rightNow: 'Neste momento',
+      cores: (n) => `${n} núcleos`,
+      cpu: 'CPU',
+      memory: 'Memória',
+      disk: 'Disco',
+      footer: 'Uma análise lê todo o disco, por isso estes valores mudam enquanto o Prune trabalha — é exatamente por isso que estão aqui.'
+    },
+    shortcutsModal: {
+      title: 'Atalhos de teclado',
+      close: 'Fechar',
+      or: 'ou',
+      footer: 'O Cmd funciona em vez do Ctrl. Um atalho é ignorado enquanto está a escrever num campo, pelo que Ctrl+F continua a chegar à caixa de pesquisa em que já se encontra.',
+      actions: {
+        focusSearch: 'Focar a caixa de pesquisa',
+        openSettings: 'Abrir Definições',
+        showThisList: 'Mostrar esta lista',
+        closeDialog: 'Fechar uma caixa de diálogo',
+        moveBetweenControls: 'Mover entre controlos; dentro de uma caixa de diálogo, o foco permanece nela'
+      }
+    },
+    themeToggle: {
+      switchTo: (theme) => `Mudar para o tema ${theme}`,
+      light: 'claro',
+      dark: 'escuro'
+    },
+    toastHost: {
+      dismiss: 'Dispensar notificação'
+    },
+    updateButton: {
+      restartToUpdate: (version) => `Reiniciar para atualizar para o Prune ${version}`,
+      updateTo: (version) => `Atualizar para o Prune ${version}`,
+      downloadProgress: 'Progresso da transferência',
+      restarting: 'A reiniciar…',
+      restartToUpdateShort: (version) => `Reiniciar para atualizar para ${version}`,
+      updateToShort: (version) => `Atualizar para ${version}`,
+      couldNotUpdate: (version) => `Não foi possível atualizar para ${version}`,
+      openDownloadPage: 'Abrir a página de transferência',
+      tryAgain: 'Tentar novamente'
     }
   },
 
@@ -18181,6 +19301,46 @@ export const CATALOG = {
       restorePointFallback: 'indisponibil',
       quarantineNote: 'Tot ce este mai sus este încă în Carantină și poate fi pus înapoi.',
       failedRegistryKeys: (n) => `${n} che${n === 1 ? 'ie' : 'i'} de registru nu ${n === 1 ? 'a putut fi eliminată' : 'au putut fi eliminate'} — acestea necesită de obicei ca Prune să ruleze ca administrator.`
+    },
+    resourceMonitor: {
+      rightNow: 'Chiar acum',
+      cores: (n) => `${n} nuclee`,
+      cpu: 'CPU',
+      memory: 'Memorie',
+      disk: 'Disc',
+      footer: 'O scanare citește întregul disc, așa că aceste valori se mișcă în timp ce Prune lucrează — exact de aceea sunt afișate aici.'
+    },
+    shortcutsModal: {
+      title: 'Comenzi rapide de la tastatură',
+      close: 'Închide',
+      or: 'sau',
+      footer: 'Cmd funcționează în locul Ctrl. O comandă rapidă este ignorată în timp ce scrii într-un câmp, așa că Ctrl+F ajunge totuși la caseta de căutare în care te afli deja.',
+      actions: {
+        focusSearch: 'Focalizează caseta de căutare',
+        openSettings: 'Deschide Setările',
+        showThisList: 'Afișează această listă',
+        closeDialog: 'Închide o casetă de dialog',
+        moveBetweenControls: 'Deplasare între comenzi; în interiorul unei casete de dialog, focalizarea rămâne acolo'
+      }
+    },
+    themeToggle: {
+      switchTo: (theme) => `Comută la tema ${theme}`,
+      light: 'deschisă',
+      dark: 'întunecată'
+    },
+    toastHost: {
+      dismiss: 'Închide notificarea'
+    },
+    updateButton: {
+      restartToUpdate: (version) => `Repornește pentru a actualiza la Prune ${version}`,
+      updateTo: (version) => `Actualizează la Prune ${version}`,
+      downloadProgress: 'Progresul descărcării',
+      restarting: 'Se repornește…',
+      restartToUpdateShort: (version) => `Repornește pentru a actualiza la ${version}`,
+      updateToShort: (version) => `Actualizează la ${version}`,
+      couldNotUpdate: (version) => `Nu s-a putut actualiza la ${version}`,
+      openDownloadPage: 'Deschide pagina de descărcare',
+      tryAgain: 'Încearcă din nou'
     }
   },
 
@@ -18807,6 +19967,46 @@ export const CATALOG = {
       restorePointFallback: 'недоступно',
       quarantineNote: 'Всё вышеперечисленное всё ещё находится в карантине и может быть возвращено обратно.',
       failedRegistryKeys: (n) => `Не удалось удалить ${n} ключей реестра — обычно для этого требуется, чтобы Prune был запущен от имени администратора.`
+    },
+    resourceMonitor: {
+      rightNow: 'Прямо сейчас',
+      cores: (n) => `${n} ядер`,
+      cpu: 'Процессор',
+      memory: 'Память',
+      disk: 'Диск',
+      footer: 'Сканирование читает весь диск, поэтому эти значения меняются, пока Prune работает — именно поэтому они здесь.'
+    },
+    shortcutsModal: {
+      title: 'Комбинации клавиш',
+      close: 'Закрыть',
+      or: 'или',
+      footer: 'Cmd работает вместо Ctrl. Комбинация игнорируется, пока вы печатаете в поле, поэтому Ctrl+F по-прежнему попадает в поле поиска, в котором вы уже находитесь.',
+      actions: {
+        focusSearch: 'Установить фокус на поле поиска',
+        openSettings: 'Открыть настройки',
+        showThisList: 'Показать этот список',
+        closeDialog: 'Закрыть диалоговое окно',
+        moveBetweenControls: 'Перемещение между элементами управления; внутри диалогового окна фокус остаётся в нём'
+      }
+    },
+    themeToggle: {
+      switchTo: (theme) => `Переключиться на ${theme} тему`,
+      light: 'светлую',
+      dark: 'тёмную'
+    },
+    toastHost: {
+      dismiss: 'Закрыть уведомление'
+    },
+    updateButton: {
+      restartToUpdate: (version) => `Перезапустить для обновления до Prune ${version}`,
+      updateTo: (version) => `Обновить до Prune ${version}`,
+      downloadProgress: 'Прогресс загрузки',
+      restarting: 'Перезапуск…',
+      restartToUpdateShort: (version) => `Перезапустить для обновления до ${version}`,
+      updateToShort: (version) => `Обновить до ${version}`,
+      couldNotUpdate: (version) => `Не удалось обновить до ${version}`,
+      openDownloadPage: 'Открыть страницу загрузки',
+      tryAgain: 'Повторить попытку'
     }
   },
 
@@ -19433,6 +20633,46 @@ export const CATALOG = {
       restorePointFallback: 'nie je k dispozícii',
       quarantineNote: 'Všetko vyššie je stále v karanténe a možno to vrátiť späť.',
       failedRegistryKeys: (n) => `Nepodarilo sa odstrániť ${n} kľúč${n === 1 ? '' : (n < 5 ? 'e' : 'ov')} registra — tieto zvyčajne vyžadujú, aby Prune bežal ako správca.`
+    },
+    resourceMonitor: {
+      rightNow: 'Práve teraz',
+      cores: (n) => `${n} jadier`,
+      cpu: 'CPU',
+      memory: 'Pamäť',
+      disk: 'Disk',
+      footer: 'Kontrola číta celý disk, takže tieto hodnoty sa menia, kým Prune pracuje — presne preto sú tu.'
+    },
+    shortcutsModal: {
+      title: 'Klávesové skratky',
+      close: 'Zavrieť',
+      or: 'alebo',
+      footer: 'Cmd funguje namiesto Ctrl. Skratka sa ignoruje, kým píšete do poľa, takže Ctrl+F sa aj tak dostane do vyhľadávacieho poľa, v ktorom už ste.',
+      actions: {
+        focusSearch: 'Zamerať vyhľadávacie pole',
+        openSettings: 'Otvoriť nastavenia',
+        showThisList: 'Zobraziť tento zoznam',
+        closeDialog: 'Zavrieť dialógové okno',
+        moveBetweenControls: 'Presúvanie medzi ovládacími prvkami; vnútri dialógového okna zostáva fokus v ňom'
+      }
+    },
+    themeToggle: {
+      switchTo: (theme) => `Prepnúť na ${theme} motív`,
+      light: 'svetlý',
+      dark: 'tmavý'
+    },
+    toastHost: {
+      dismiss: 'Zavrieť upozornenie'
+    },
+    updateButton: {
+      restartToUpdate: (version) => `Reštartovať a aktualizovať na Prune ${version}`,
+      updateTo: (version) => `Aktualizovať na Prune ${version}`,
+      downloadProgress: 'Priebeh sťahovania',
+      restarting: 'Reštartuje sa…',
+      restartToUpdateShort: (version) => `Reštartovať a aktualizovať na ${version}`,
+      updateToShort: (version) => `Aktualizovať na ${version}`,
+      couldNotUpdate: (version) => `Nepodarilo sa aktualizovať na ${version}`,
+      openDownloadPage: 'Otvoriť stránku na stiahnutie',
+      tryAgain: 'Skúsiť znova'
     }
   },
 
@@ -20059,6 +21299,46 @@ export const CATALOG = {
       restorePointFallback: 'jo i disponueshëm',
       quarantineNote: 'Gjithçka më sipër është ende në Karantinë dhe mund të vendoset përsëri.',
       failedRegistryKeys: (n) => `Nuk u hoqën dot ${n} çelësa regjistri — këto zakonisht kërkojnë që Prune të ekzekutohet si administrator.`
+    },
+    resourceMonitor: {
+      rightNow: 'Tani',
+      cores: (n) => `${n} bërthama`,
+      cpu: 'CPU',
+      memory: 'Memoria',
+      disk: 'Disku',
+      footer: 'Një skanim lexon të gjithë diskun, kështu që këto vlera lëvizin ndërsa Prune po punon — kjo është pikërisht arsyeja pse janë këtu.'
+    },
+    shortcutsModal: {
+      title: 'Shkurtoret e tastierës',
+      close: 'Mbyll',
+      or: 'ose',
+      footer: 'Cmd funksionon në vend të Ctrl. Një shkurtore injorohet ndërsa po shkruani në një fushë, kështu që Ctrl+F arrin gjithsesi te kutia e kërkimit ku jeni tashmë.',
+      actions: {
+        focusSearch: 'Fokuso kutinë e kërkimit',
+        openSettings: 'Hap Cilësimet',
+        showThisList: 'Shfaq këtë listë',
+        closeDialog: 'Mbyll një dialog',
+        moveBetweenControls: 'Lëviz mes kontrolleve; brenda një dialogu, fokusi mbetet aty'
+      }
+    },
+    themeToggle: {
+      switchTo: (theme) => `Kalo te tema ${theme}`,
+      light: 'e çelët',
+      dark: 'e errët'
+    },
+    toastHost: {
+      dismiss: 'Hiq njoftimin'
+    },
+    updateButton: {
+      restartToUpdate: (version) => `Rinis për të përditësuar në Prune ${version}`,
+      updateTo: (version) => `Përditëso në Prune ${version}`,
+      downloadProgress: 'Ecuria e shkarkimit',
+      restarting: 'Duke rinisur…',
+      restartToUpdateShort: (version) => `Rinis për të përditësuar në ${version}`,
+      updateToShort: (version) => `Përditëso në ${version}`,
+      couldNotUpdate: (version) => `Nuk u përditësua dot në ${version}`,
+      openDownloadPage: 'Hap faqen e shkarkimit',
+      tryAgain: 'Provo përsëri'
     }
   },
 
@@ -20685,6 +21965,46 @@ export const CATALOG = {
       restorePointFallback: 'није доступно',
       quarantineNote: 'Све горе наведено је и даље у карантини и може се вратити.',
       failedRegistryKeys: (n) => `Није могуће уклонити ${n} кључ${n === 1 ? '' : 'а'} регистра — ово обично захтева да Prune буде покренут као администратор.`
+    },
+    resourceMonitor: {
+      rightNow: 'Управо сада',
+      cores: (n) => `${n} језгара`,
+      cpu: 'Процесор',
+      memory: 'Меморија',
+      disk: 'Диск',
+      footer: 'Скенирање чита цео диск, тако да се ове вредности мењају док Prune ради — управо зато су приказане овде.'
+    },
+    shortcutsModal: {
+      title: 'Пречице на тастатури',
+      close: 'Затвори',
+      or: 'или',
+      footer: 'Cmd ради уместо Ctrl. Пречица се игнорише док куцате у пољу, тако да Ctrl+F ипак стиже до поља за претрагу у ком се већ налазите.',
+      actions: {
+        focusSearch: 'Фокусирај поље за претрагу',
+        openSettings: 'Отвори подешавања',
+        showThisList: 'Прикажи ову листу',
+        closeDialog: 'Затвори дијалог',
+        moveBetweenControls: 'Кретање између контрола; унутар дијалога, фокус остаје у њему'
+      }
+    },
+    themeToggle: {
+      switchTo: (theme) => `Пређи на ${theme} тему`,
+      light: 'светлу',
+      dark: 'тамну'
+    },
+    toastHost: {
+      dismiss: 'Одбаци обавештење'
+    },
+    updateButton: {
+      restartToUpdate: (version) => `Рестартуј да ажурираш на Prune ${version}`,
+      updateTo: (version) => `Ажурирај на Prune ${version}`,
+      downloadProgress: 'Напредак преузимања',
+      restarting: 'Рестартовање…',
+      restartToUpdateShort: (version) => `Рестартуј да ажурираш на ${version}`,
+      updateToShort: (version) => `Ажурирај на ${version}`,
+      couldNotUpdate: (version) => `Ажурирање на ${version} није успело`,
+      openDownloadPage: 'Отвори страницу за преузимање',
+      tryAgain: 'Покушај поново'
     }
   },
 
@@ -21311,6 +22631,46 @@ export const CATALOG = {
       restorePointFallback: 'inte tillgänglig',
       quarantineNote: 'Allt ovan finns fortfarande i karantän och kan sättas tillbaka.',
       failedRegistryKeys: (n) => `${n} registernyck${n === 1 ? 'el' : 'lar'} kunde inte tas bort — dessa kräver vanligtvis att Prune körs som administratör.`
+    },
+    resourceMonitor: {
+      rightNow: 'Just nu',
+      cores: (n) => `${n} kärnor`,
+      cpu: 'CPU',
+      memory: 'Minne',
+      disk: 'Disk',
+      footer: 'En sökning läser hela disken, så dessa värden rör sig medan Prune arbetar — det är just poängen med att ha dem här.'
+    },
+    shortcutsModal: {
+      title: 'Tangentbordsgenvägar',
+      close: 'Stäng',
+      or: 'eller',
+      footer: 'Cmd fungerar i stället för Ctrl. En genväg ignoreras medan du skriver i ett fält, så Ctrl+F når ändå sökrutan du redan är i.',
+      actions: {
+        focusSearch: 'Fokusera sökrutan',
+        openSettings: 'Öppna inställningar',
+        showThisList: 'Visa denna lista',
+        closeDialog: 'Stäng en dialogruta',
+        moveBetweenControls: 'Flytta mellan kontroller; inuti en dialogruta stannar fokus kvar där'
+      }
+    },
+    themeToggle: {
+      switchTo: (theme) => `Byt till ${theme} tema`,
+      light: 'ljust',
+      dark: 'mörkt'
+    },
+    toastHost: {
+      dismiss: 'Avvisa avisering'
+    },
+    updateButton: {
+      restartToUpdate: (version) => `Starta om för att uppdatera till Prune ${version}`,
+      updateTo: (version) => `Uppdatera till Prune ${version}`,
+      downloadProgress: 'Nedladdningsförlopp',
+      restarting: 'Startar om…',
+      restartToUpdateShort: (version) => `Starta om för att uppdatera till ${version}`,
+      updateToShort: (version) => `Uppdatera till ${version}`,
+      couldNotUpdate: (version) => `Kunde inte uppdatera till ${version}`,
+      openDownloadPage: 'Öppna nedladdningssidan',
+      tryAgain: 'Försök igen'
     }
   },
 
@@ -21937,6 +23297,46 @@ export const CATALOG = {
       restorePointFallback: 'ไม่พร้อมใช้งาน',
       quarantineNote: 'ทุกอย่างข้างต้นยังคงอยู่ในกักกันและสามารถนำกลับมาได้',
       failedRegistryKeys: (n) => `ไม่สามารถลบ ${n} คีย์รีจิสทรีได้ — โดยปกติสิ่งเหล่านี้ต้องการให้ Prune ทำงานในฐานะผู้ดูแลระบบ`
+    },
+    resourceMonitor: {
+      rightNow: 'ตอนนี้',
+      cores: (n) => `${n} คอร์`,
+      cpu: 'ซีพียู',
+      memory: 'หน่วยความจำ',
+      disk: 'ดิสก์',
+      footer: 'การสแกนอ่านทั้งดิสก์ ค่าเหล่านี้จึงเปลี่ยนแปลงขณะที่ Prune กำลังทำงาน — นั่นคือเหตุผลที่แสดงไว้ตรงนี้'
+    },
+    shortcutsModal: {
+      title: 'แป้นพิมพ์ลัด',
+      close: 'ปิด',
+      or: 'หรือ',
+      footer: 'Cmd ใช้แทน Ctrl ได้ แป้นลัดจะถูกละเว้นขณะที่คุณกำลังพิมพ์ในช่อง ดังนั้น Ctrl+F ยังคงไปถึงช่องค้นหาที่คุณอยู่แล้ว',
+      actions: {
+        focusSearch: 'โฟกัสไปที่ช่องค้นหา',
+        openSettings: 'เปิดการตั้งค่า',
+        showThisList: 'แสดงรายการนี้',
+        closeDialog: 'ปิดกล่องโต้ตอบ',
+        moveBetweenControls: 'ย้ายระหว่างตัวควบคุม; ภายในกล่องโต้ตอบ โฟกัสจะยังคงอยู่ในนั้น'
+      }
+    },
+    themeToggle: {
+      switchTo: (theme) => `เปลี่ยนเป็นธีม${theme}`,
+      light: 'สว่าง',
+      dark: 'มืด'
+    },
+    toastHost: {
+      dismiss: 'ปิดการแจ้งเตือน'
+    },
+    updateButton: {
+      restartToUpdate: (version) => `รีสตาร์ทเพื่ออัปเดตเป็น Prune ${version}`,
+      updateTo: (version) => `อัปเดตเป็น Prune ${version}`,
+      downloadProgress: 'ความคืบหน้าการดาวน์โหลด',
+      restarting: 'กำลังรีสตาร์ท…',
+      restartToUpdateShort: (version) => `รีสตาร์ทเพื่ออัปเดตเป็น ${version}`,
+      updateToShort: (version) => `อัปเดตเป็น ${version}`,
+      couldNotUpdate: (version) => `ไม่สามารถอัปเดตเป็น ${version} ได้`,
+      openDownloadPage: 'เปิดหน้าดาวน์โหลด',
+      tryAgain: 'ลองอีกครั้ง'
     }
   },
 
@@ -22563,6 +23963,46 @@ export const CATALOG = {
       restorePointFallback: 'kullanılamıyor',
       quarantineNote: 'Yukarıdakilerin hepsi hâlâ Karantinada ve geri konulabilir.',
       failedRegistryKeys: (n) => `${n} kayıt defteri anahtarı kaldırılamadı — bunlar genellikle Prune'un yönetici olarak çalışmasını gerektirir.`
+    },
+    resourceMonitor: {
+      rightNow: 'Şu anda',
+      cores: (n) => `${n} çekirdek`,
+      cpu: 'İşlemci',
+      memory: 'Bellek',
+      disk: 'Disk',
+      footer: 'Bir tarama tüm diski okur, bu yüzden Prune çalışırken bu değerler hareket eder — burada olmalarının amacı da bu.'
+    },
+    shortcutsModal: {
+      title: 'Klavye kısayolları',
+      close: 'Kapat',
+      or: 'veya',
+      footer: 'Cmd, Ctrl yerine çalışır. Bir alana yazarken kısayol yok sayılır, bu yüzden Ctrl+F yine de zaten içinde bulunduğunuz arama kutusuna ulaşır.',
+      actions: {
+        focusSearch: 'Arama kutusuna odaklan',
+        openSettings: 'Ayarları aç',
+        showThisList: 'Bu listeyi göster',
+        closeDialog: 'Bir iletişim kutusunu kapat',
+        moveBetweenControls: 'Denetimler arasında gezinme; bir iletişim kutusu içinde odak orada kalır'
+      }
+    },
+    themeToggle: {
+      switchTo: (theme) => `${theme} temaya geç`,
+      light: 'açık',
+      dark: 'koyu'
+    },
+    toastHost: {
+      dismiss: 'Bildirimi kapat'
+    },
+    updateButton: {
+      restartToUpdate: (version) => `Prune ${version} sürümüne güncellemek için yeniden başlat`,
+      updateTo: (version) => `Prune ${version} sürümüne güncelle`,
+      downloadProgress: 'İndirme ilerlemesi',
+      restarting: 'Yeniden başlatılıyor…',
+      restartToUpdateShort: (version) => `${version} sürümüne güncellemek için yeniden başlat`,
+      updateToShort: (version) => `${version} sürümüne güncelle`,
+      couldNotUpdate: (version) => `${version} sürümüne güncellenemedi`,
+      openDownloadPage: 'İndirme sayfasını aç',
+      tryAgain: 'Tekrar dene'
     }
   },
 
@@ -23189,6 +24629,46 @@ export const CATALOG = {
       restorePointFallback: 'недоступно',
       quarantineNote: 'Усе вищезазначене все ще перебуває в карантині і може бути повернуто.',
       failedRegistryKeys: (n) => `Не вдалося видалити ${n} ключів реєстру — зазвичай для цього потрібно, щоб Prune було запущено від імені адміністратора.`
+    },
+    resourceMonitor: {
+      rightNow: 'Просто зараз',
+      cores: (n) => `${n} ядер`,
+      cpu: 'Процесор',
+      memory: "Пам'ять",
+      disk: 'Диск',
+      footer: 'Сканування читає весь диск, тому ці значення змінюються, поки Prune працює — саме тому вони показані тут.'
+    },
+    shortcutsModal: {
+      title: 'Комбінації клавіш',
+      close: 'Закрити',
+      or: 'або',
+      footer: 'Cmd працює замість Ctrl. Комбінація ігнорується, поки ви друкуєте в полі, тому Ctrl+F все одно потрапляє в поле пошуку, в якому ви вже перебуваєте.',
+      actions: {
+        focusSearch: 'Встановити фокус на поле пошуку',
+        openSettings: 'Відкрити налаштування',
+        showThisList: 'Показати цей список',
+        closeDialog: 'Закрити діалогове вікно',
+        moveBetweenControls: 'Переміщення між елементами керування; всередині діалогового вікна фокус залишається в ньому'
+      }
+    },
+    themeToggle: {
+      switchTo: (theme) => `Перемкнутися на ${theme} тему`,
+      light: 'світлу',
+      dark: 'темну'
+    },
+    toastHost: {
+      dismiss: 'Закрити сповіщення'
+    },
+    updateButton: {
+      restartToUpdate: (version) => `Перезапустити, щоб оновити до Prune ${version}`,
+      updateTo: (version) => `Оновити до Prune ${version}`,
+      downloadProgress: 'Прогрес завантаження',
+      restarting: 'Перезапуск…',
+      restartToUpdateShort: (version) => `Перезапустити, щоб оновити до ${version}`,
+      updateToShort: (version) => `Оновити до ${version}`,
+      couldNotUpdate: (version) => `Не вдалося оновити до ${version}`,
+      openDownloadPage: 'Відкрити сторінку завантаження',
+      tryAgain: 'Спробувати ще раз'
     }
   },
 
@@ -23815,6 +25295,46 @@ export const CATALOG = {
       restorePointFallback: 'không có sẵn',
       quarantineNote: 'Tất cả những gì ở trên vẫn còn trong Cách ly và có thể được đưa trở lại.',
       failedRegistryKeys: (n) => `Không thể xóa ${n} khóa registry — những mục này thường yêu cầu Prune chạy với quyền quản trị viên.`
+    },
+    resourceMonitor: {
+      rightNow: 'Ngay bây giờ',
+      cores: (n) => `${n} lõi`,
+      cpu: 'CPU',
+      memory: 'Bộ nhớ',
+      disk: 'Ổ đĩa',
+      footer: 'Một lượt quét đọc toàn bộ ổ đĩa, vì vậy các giá trị này thay đổi trong khi Prune đang hoạt động — đó chính là lý do chúng được hiển thị ở đây.'
+    },
+    shortcutsModal: {
+      title: 'Phím tắt',
+      close: 'Đóng',
+      or: 'hoặc',
+      footer: 'Cmd hoạt động thay cho Ctrl. Một phím tắt sẽ bị bỏ qua khi bạn đang gõ trong một trường, vì vậy Ctrl+F vẫn đến được ô tìm kiếm mà bạn đang ở trong đó.',
+      actions: {
+        focusSearch: 'Đặt tiêu điểm vào ô tìm kiếm',
+        openSettings: 'Mở Cài đặt',
+        showThisList: 'Hiển thị danh sách này',
+        closeDialog: 'Đóng một hộp thoại',
+        moveBetweenControls: 'Di chuyển giữa các điều khiển; bên trong hộp thoại, tiêu điểm vẫn ở lại đó'
+      }
+    },
+    themeToggle: {
+      switchTo: (theme) => `Chuyển sang giao diện ${theme}`,
+      light: 'sáng',
+      dark: 'tối'
+    },
+    toastHost: {
+      dismiss: 'Bỏ qua thông báo'
+    },
+    updateButton: {
+      restartToUpdate: (version) => `Khởi động lại để cập nhật lên Prune ${version}`,
+      updateTo: (version) => `Cập nhật lên Prune ${version}`,
+      downloadProgress: 'Tiến trình tải xuống',
+      restarting: 'Đang khởi động lại…',
+      restartToUpdateShort: (version) => `Khởi động lại để cập nhật lên ${version}`,
+      updateToShort: (version) => `Cập nhật lên ${version}`,
+      couldNotUpdate: (version) => `Không thể cập nhật lên ${version}`,
+      openDownloadPage: 'Mở trang tải xuống',
+      tryAgain: 'Thử lại'
     }
   },
 
@@ -24441,6 +25961,46 @@ export const CATALOG = {
       restorePointFallback: '不可用',
       quarantineNote: '以上所有内容仍在隔离区中，可以恢复。',
       failedRegistryKeys: (n) => `${n} 个注册表项无法删除——这些通常需要 Prune 以管理员身份运行。`
+    },
+    resourceMonitor: {
+      rightNow: '当前',
+      cores: (n) => `${n} 核`,
+      cpu: 'CPU',
+      memory: '内存',
+      disk: '磁盘',
+      footer: '扫描会读取整个磁盘，因此在 Prune 工作时这些数值会变化——这正是把它们放在这里的意义所在。'
+    },
+    shortcutsModal: {
+      title: '键盘快捷键',
+      close: '关闭',
+      or: '或',
+      footer: 'Cmd 可代替 Ctrl 使用。当你在输入框中打字时，快捷键会被忽略，因此 Ctrl+F 仍会作用于你已经在使用的搜索框。',
+      actions: {
+        focusSearch: '聚焦到搜索框',
+        openSettings: '打开设置',
+        showThisList: '显示此列表',
+        closeDialog: '关闭对话框',
+        moveBetweenControls: '在控件之间移动；在对话框内，焦点会保持在其中'
+      }
+    },
+    themeToggle: {
+      switchTo: (theme) => `切换到${theme}主题`,
+      light: '浅色',
+      dark: '深色'
+    },
+    toastHost: {
+      dismiss: '关闭通知'
+    },
+    updateButton: {
+      restartToUpdate: (version) => `重启以更新到 Prune ${version}`,
+      updateTo: (version) => `更新到 Prune ${version}`,
+      downloadProgress: '下载进度',
+      restarting: '正在重启…',
+      restartToUpdateShort: (version) => `重启以更新到 ${version}`,
+      updateToShort: (version) => `更新到 ${version}`,
+      couldNotUpdate: (version) => `无法更新到 ${version}`,
+      openDownloadPage: '打开下载页面',
+      tryAgain: '重试'
     }
   },
 
@@ -25067,6 +26627,46 @@ export const CATALOG = {
       restorePointFallback: '無法使用',
       quarantineNote: '以上所有內容仍在隔離區中，可以復原。',
       failedRegistryKeys: (n) => `${n} 個登錄機碼無法刪除——這些通常需要 Prune 以系統管理員身分執行。`
+    },
+    resourceMonitor: {
+      rightNow: '目前',
+      cores: (n) => `${n} 核心`,
+      cpu: 'CPU',
+      memory: '記憶體',
+      disk: '磁碟',
+      footer: '掃描會讀取整個磁碟，因此在 Prune 運作時這些數值會變動——這正是把它們放在這裡的用意。'
+    },
+    shortcutsModal: {
+      title: '鍵盤快速鍵',
+      close: '關閉',
+      or: '或',
+      footer: 'Cmd 可代替 Ctrl 使用。當您在欄位中輸入時，快速鍵會被忽略，因此 Ctrl+F 仍會作用於您已經在使用的搜尋框。',
+      actions: {
+        focusSearch: '將焦點移至搜尋框',
+        openSettings: '開啟設定',
+        showThisList: '顯示此清單',
+        closeDialog: '關閉對話方塊',
+        moveBetweenControls: '在控制項之間移動；在對話方塊內，焦點會保持在其中'
+      }
+    },
+    themeToggle: {
+      switchTo: (theme) => `切換為${theme}主題`,
+      light: '淺色',
+      dark: '深色'
+    },
+    toastHost: {
+      dismiss: '關閉通知'
+    },
+    updateButton: {
+      restartToUpdate: (version) => `重新啟動以更新至 Prune ${version}`,
+      updateTo: (version) => `更新至 Prune ${version}`,
+      downloadProgress: '下載進度',
+      restarting: '正在重新啟動…',
+      restartToUpdateShort: (version) => `重新啟動以更新至 ${version}`,
+      updateToShort: (version) => `更新至 ${version}`,
+      couldNotUpdate: (version) => `無法更新至 ${version}`,
+      openDownloadPage: '開啟下載頁面',
+      tryAgain: '重試'
     }
   }
 };

@@ -3,6 +3,7 @@ import { describe, it, expect, afterEach, vi } from 'vitest';
 import { render, screen, cleanup, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ToastProvider, useToasts } from '../hooks/useToasts.jsx';
+import { renderScreen } from '../testSupport/renderScreen.jsx';
 import ToastHost from './ToastHost.jsx';
 import { isCopyable } from '../testSupport/copyable.js';
 
@@ -28,7 +29,7 @@ function Push({ tone = 'info', message = 'Done', extra }) {
   return <button type="button" onClick={() => send(message, extra)}>push</button>;
 }
 
-const mount = (ui) => render(
+const mount = (ui) => renderScreen(
   <ToastProvider>
     {ui}
     <ToastHost />
@@ -146,7 +147,7 @@ describe('dismissing', () => {
     }
 
     const user = userEvent.setup();
-    render(
+    renderScreen(
       <ToastProvider>
         <Push message="Freed 2.4 GB" />
         <Count />
@@ -203,7 +204,7 @@ describe('expiry', () => {
 
   const afterThirtySeconds = async (tone) => {
     const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
-    render(
+    renderScreen(
       <ToastProvider>
         <Push tone={tone} message="Something happened" />
         <Count />

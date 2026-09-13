@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
 import { fetchResources } from '../lib/api.js';
 import { keys } from '../lib/queryClient.js';
+import { useLanguage } from '../i18n/LanguageContext.jsx';
 
 /** CPU, memory and disk throughput, live.
  *
@@ -77,6 +78,7 @@ function formatGB(bytes) {
 }
 
 export default function ResourceMonitor() {
+  const { t } = useLanguage();
   const { data } = useQuery({
     queryKey: keys.resources,
     queryFn: fetchResources,
@@ -113,22 +115,22 @@ export default function ResourceMonitor() {
     <div className="glass-panel p-5 w-[268px] shrink-0 flex flex-col">
       <div className="flex items-baseline justify-between mb-4">
         <h2 className="text-[11px] font-mono uppercase tracking-[0.14em] text-[color:var(--text-muted)]">
-          Right now
+          {t('resourceMonitor.rightNow')}
         </h2>
         <span className="text-[11px] text-[color:var(--text-muted)]">
-          {data?.cores ? `${data.cores} cores` : ''}
+          {data?.cores ? t('resourceMonitor.cores', data.cores) : ''}
         </span>
       </div>
 
       <div className="flex items-start justify-around gap-2">
         <Gauge
-          label="CPU"
+          label={t('resourceMonitor.cpu')}
           percent={data?.cpuPercent}
           tone="var(--accent-blue)"
           caption={null}
         />
         <Gauge
-          label="Memory"
+          label={t('resourceMonitor.memory')}
           percent={data?.ram?.percent}
           tone="var(--accent-purple)"
           // Short enough not to wrap in a 268px panel. "15.9 GB of 31.9
@@ -136,7 +138,7 @@ export default function ResourceMonitor() {
           caption={data?.ram ? `${formatGB(data.ram.usedBytes)} / ${formatGB(data.ram.totalBytes)} GB` : null}
         />
         <Gauge
-          label="Disk"
+          label={t('resourceMonitor.disk')}
           percent={diskPercent}
           tone="var(--accent-primary)"
           caption={formatRate(data?.diskBytesPerSec)}
@@ -144,8 +146,7 @@ export default function ResourceMonitor() {
       </div>
 
       <p className="text-[11px] text-[color:var(--text-muted)] mt-4 leading-snug">
-        A scan reads the whole disk, so these move while Prune is working — which is the point of
-        having them here.
+        {t('resourceMonitor.footer')}
       </p>
     </div>
   );

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { openUpdatePage } from '../lib/api.js';
 import { useSettings, useUpdateCheck } from '../hooks/useSystemQueries.js';
+import { useLanguage } from '../i18n/LanguageContext.jsx';
 
 /** The update button at the bottom of the side nav.
  *
@@ -23,6 +24,7 @@ const bridge = () => window.pruneWindow?.updates ?? null;
 const RING = 2 * Math.PI * 20;
 
 export default function UpdateButton() {
+  const { t } = useLanguage();
   const { settings } = useSettings();
   const enabled = settings?.updateCheck === true;
   const automatic = settings?.autoInstallUpdates === true;
@@ -97,8 +99,8 @@ export default function UpdateButton() {
   };
 
   const label = phase === 'ready'
-    ? `Restart to update to Prune ${version}`
-    : `Update to Prune ${version}`;
+    ? t('updateButton.restartToUpdate', version)
+    : t('updateButton.updateTo', version);
   const busy = phase === 'downloading' || phase === 'installing';
 
   return (
@@ -112,7 +114,7 @@ export default function UpdateButton() {
         {phase === 'downloading' && (
           <span
             role="progressbar"
-            aria-label="Download progress"
+            aria-label={t('updateButton.downloadProgress')}
             aria-valuemin={0}
             aria-valuemax={100}
             aria-valuenow={percent}
@@ -142,7 +144,7 @@ export default function UpdateButton() {
         <span className="mt-1 text-[10px] font-mono text-[color:var(--text-secondary)]">{`${percent}%`}</span>
       )}
       {phase === 'installing' && (
-        <span className="mt-1 text-[10px] text-[color:var(--text-secondary)]">Restarting…</span>
+        <span className="mt-1 text-[10px] text-[color:var(--text-secondary)]">{t('updateButton.restarting')}</span>
       )}
 
       {/* The name, on hover and on keyboard focus, the same way every
@@ -152,7 +154,7 @@ export default function UpdateButton() {
           aria-hidden="true"
           className="pointer-events-none absolute left-full top-1/2 -translate-y-1/2 ml-2 px-2 py-1 rounded-md whitespace-nowrap text-[11.5px] font-medium bg-[color:var(--bg-panel)] text-[color:var(--text-primary)] border border-[color:var(--border-subtle)] shadow-lg opacity-0 group-hover:opacity-100 peer-focus-visible:opacity-100 transition-opacity duration-150 z-flyout"
         >
-          {phase === 'ready' ? `Restart to update to ${version}` : `Update to ${version}`}
+          {phase === 'ready' ? t('updateButton.restartToUpdateShort', version) : t('updateButton.updateToShort', version)}
         </span>
       )}
 
@@ -161,14 +163,14 @@ export default function UpdateButton() {
           role="alert"
           className="absolute left-full bottom-0 ml-2 w-[280px] p-3.5 rounded-xl bg-[color:var(--bg-panel)] border border-[color:var(--border-subtle)] shadow-2xl z-flyout"
         >
-          <p className="text-[12.5px] font-medium text-[color:var(--text-primary)]">{`Couldn't update to ${version}`}</p>
+          <p className="text-[12.5px] font-medium text-[color:var(--text-primary)]">{t('updateButton.couldNotUpdate', version)}</p>
           <p className="text-[12px] text-[color:var(--danger)] mt-1 leading-snug break-words select-text">{error}</p>
           <div className="flex justify-end gap-2 mt-3">
             <button type="button" className="btn-ghost px-3 py-1.5 rounded-md text-[12px]" onClick={openPage}>
-              Open the download page
+              {t('updateButton.openDownloadPage')}
             </button>
             <button type="button" className="btn-primary px-3 py-1.5 rounded-md text-[12px] font-medium" onClick={click}>
-              Try again
+              {t('updateButton.tryAgain')}
             </button>
           </div>
         </div>
