@@ -36,10 +36,9 @@ that install themselves.
 
 ### Fixed
 
-- **Deep Clean's "Select everything" button worked in no browser at
-  all.** `selectableIds` was called but never imported, so the button
-  threw the instant it was clicked. No test had ever pressed it; one does
-  now.
+- **Deep Clean's "Select everything" button never worked at all.**
+  `selectableIds` was called but never imported, so the button threw the
+  instant it was clicked. No test had ever pressed it; one does now.
 - **Deep Clean's "Freed X" success banner could never actually appear.**
   The state that shows it was set, then cleared again in the same
   synchronous tick by the rescan that follows every clean — React batched
