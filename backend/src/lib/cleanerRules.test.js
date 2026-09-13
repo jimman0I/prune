@@ -506,4 +506,25 @@ describe('expandPath tokens', () => {
       }
     }
   });
+
+  it('never hardcodes a bare drive letter -- %SYSTEMDRIVE% instead', () => {
+    // Reported directly: Deep Clean showed "League of Legends" as
+    // present on a device that never had it installed. That rule's own
+    // path was the ONLY one in the whole file written as a literal
+    // "C:\..." instead of "%SYSTEMDRIVE%\...", which every OTHER rule in
+    // this file already gets right -- Windows can be installed on any
+    // drive letter, and a rule that assumes C: either misses the real
+    // installation on a machine where it isn't, or -- the reported
+    // failure mode -- returns present:true against a leftover or
+    // unrelated folder that happens to sit at that literal path on a
+    // machine whose C: is not the system drive at all. A bare "X:\"
+    // anywhere in the raw (pre-expandPath) string is the bug shape --
+    // every legitimate path is rooted at a %TOKEN% instead, which never
+    // itself contains a literal drive letter.
+    for (const rule of loadCleanerRules()) {
+      for (const path of rule.paths || []) {
+        expect(path, `${rule.id}: ${path}`).not.toMatch(/[A-Za-z]:\\/);
+      }
+    }
+  });
 });
