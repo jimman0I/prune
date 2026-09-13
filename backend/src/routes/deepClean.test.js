@@ -21,6 +21,10 @@ const scanRulesProgressively = vi.fn(async (emit) => {
   emit({ id: 'thumbs', sizeBytes: 20 });
   return { totalBytes: 30 };
 });
+const executeRulesProgressively = vi.fn(async (ruleIds, emit) => {
+  for (const id of ruleIds) emit({ id, name: id, freedBytes: 5 });
+  return { aborted: false, total: ruleIds.length, executed: ruleIds.length, freedBytes: 5 * ruleIds.length };
+});
 // Presence is a real filesystem question, asked per rule by the /rules
 // route. These fixtures name no real paths, so the honest default is
 // false; individual tests override it.
@@ -28,6 +32,7 @@ const rulePathsExist = vi.fn(() => false);
 
 vi.mock('../lib/cleanerRules.js', () => ({
   executeRules: (...a) => executeRules(...a),
+  executeRulesProgressively: (...a) => executeRulesProgressively(...a),
   scanAllRules: (...a) => scanAllRules(...a),
   loadCleanerRules: (...a) => loadCleanerRules(...a),
   scanRulesProgressively: (...a) => scanRulesProgressively(...a),
@@ -76,6 +81,61 @@ describe('POST /deep-clean/execute', () => {
     const res = await server.call('/deep-clean/execute');
     expect(res.status).toBe(404);
     expect(executeRules).not.toHaveBeenCalled();
+  });
+});
+
+describe('GET /deep-clean/execute/stream', () => {
+  it('streams a start, a line per cleaned rule, and a done -- the BleachBit-style clean output', async () => {
+    const res = await fetch(`${server.base}/deep-clean/execute/stream?ids=temp,thumbs`);
+    expect(res.headers.get('content-type')).toMatch(/text\/event-stream/);
+    expect(res.headers.get('x-accel-buffering')).toBe('no');
+
+    const body = await res.text();
+    expect(body).toContain('event: start');
+    expect(body).toContain('"total":2');
+    expect(body).toContain('event: rule');
+    expect(body).toContain('"id":"temp"');
+    expect(body).toContain('event: done');
+    expect(body).toContain('"freedBytes":10');
+    expect(executeRulesProgressively).toHaveBeenCalledWith(['temp', 'thumbs'], expect.any(Function), expect.objectContaining(guards));
+  });
+
+  it('refuses an empty or missing id list rather than cleaning nothing silently', async () => {
+    for (const url of ['/deep-clean/execute/stream', '/deep-clean/execute/stream?ids=']) {
+      const res = await server.call(url);
+      expect(res.status).toBe(400);
+    }
+    expect(executeRulesProgressively).not.toHaveBeenCalled();
+  });
+
+  it('reports a failure as an error event on the open stream', async () => {
+    executeRulesProgressively.mockRejectedValueOnce(new Error('locked'));
+    const body = await (await fetch(`${server.base}/deep-clean/execute/stream?ids=temp`)).text();
+    expect(body).toContain('event: error');
+    expect(body).toContain('locked');
+    expect(body).not.toContain('event: done');
+  });
+
+  it('stops cleaning when the client goes away', async () => {
+    let signal;
+    const started = new Promise((resolve) => {
+      executeRulesProgressively.mockImplementationOnce(async (ids, emit, options) => {
+        signal = options.signal;
+        resolve();
+        await new Promise((r) => options.signal.addEventListener('abort', r));
+        return { aborted: true, freedBytes: 0 };
+      });
+    });
+
+    const client = new AbortController();
+    const request = fetch(`${server.base}/deep-clean/execute/stream?ids=temp`, { signal: client.signal })
+      .then((r) => r.text())
+      .catch(() => 'gone');
+    await started;
+    expect(signal.aborted).toBe(false);
+    client.abort();
+    await request;
+    await vi.waitFor(() => expect(signal.aborted).toBe(true));
   });
 });
 

@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { scanAllRules, executeRules, scanRulesProgressively, loadCleanerRules, rulePathsExist } from '../lib/cleanerRules.js';
+import { scanAllRules, executeRules, executeRulesProgressively, scanRulesProgressively, loadCleanerRules, rulePathsExist } from '../lib/cleanerRules.js';
 import { getSettings, cleanGuardsFrom } from '../services/settings.js';
 import { getCleanerCategoryIcons } from '../services/cleanerCategoryIcons.js';
 
@@ -110,6 +110,48 @@ router.get('/scan', async (req, res) => {
     res.json({ categories: scanAllRules(cleanGuardsFrom(await getSettings())) });
   } catch (err) {
     res.status(500).json({ error: err.message });
+  }
+});
+
+/** The same clean as POST /execute, streamed a rule at a time -- the
+ * output BleachBit shows while it's actually working, moved to the step
+ * that's actually working. `ids` is a comma-separated list rather than a
+ * body: EventSource (and this route's own fetch-based reader on the
+ * frontend, matching /scan/stream) only ever sends GET.
+ *
+ * Same abort-on-disconnect wiring as /scan/stream, with the same caveat
+ * `executeRulesProgressively` documents: the rule in flight when Stop is
+ * pressed still finishes, so a batch already being quarantined is never
+ * left half-done. */
+router.get('/execute/stream', async (req, res) => {
+  const ids = String(req.query.ids || '').split(',').map((id) => id.trim()).filter(Boolean);
+  if (ids.length === 0) {
+    res.status(400).json({ error: 'ids (a non-empty comma-separated list) is required' });
+    return;
+  }
+
+  res.writeHead(200, {
+    'Content-Type': 'text/event-stream',
+    'Cache-Control': 'no-cache',
+    'Connection': 'keep-alive',
+    'X-Accel-Buffering': 'no'
+  });
+
+  const controller = new AbortController();
+  req.on('close', () => controller.abort());
+
+  try {
+    sendEvent(res, 'start', { total: ids.length });
+    const summary = await executeRulesProgressively(
+      ids,
+      (item) => sendEvent(res, 'rule', item),
+      { signal: controller.signal, ...cleanGuardsFrom(await getSettings()) }
+    );
+    if (!controller.signal.aborted) sendEvent(res, 'done', summary);
+  } catch (err) {
+    if (!controller.signal.aborted) sendEvent(res, 'error', { message: err.message });
+  } finally {
+    res.end();
   }
 });
 
