@@ -47,6 +47,10 @@ async function startBackend() {
   if (quarantineDir) process.env.UNREVO_QUARANTINE_ROOT = quarantineDir;
   const settingsFile = settingsPath();
   if (settingsFile) process.env.UNREVO_SETTINGS_PATH = settingsFile;
+  // Packaged only -- see sqliteVacuum.js's own dev-mode fallback, which
+  // reaches electron/build/sqlite3.exe directly by relative path when
+  // this isn't set, the same packaged-vs-dev split iconPath() above uses.
+  if (app.isPackaged) process.env.UNREVO_SQLITE3_PATH = path.join(process.resourcesPath, 'sqlite3.exe');
   const entry = pathToFileURL(backendEntryPath()).href;
   await import(entry); // side effect: calls server.listen()
 }

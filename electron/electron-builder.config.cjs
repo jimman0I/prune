@@ -82,6 +82,12 @@ module.exports = {
     // can set it as the tray icon -- `files: ['main.cjs']` above means
     // nothing under build/ reaches the packaged app otherwise.
     { from: 'build/icon.png', to: 'icon.png' },
+    // The CLI sqlite.vacuum actions shell out to -- see
+    // backend/src/lib/cleanerActions/sqliteVacuum.js. A real binary asset
+    // shipped the same way icon.png already is, not a build-time-only
+    // file: main.cjs points UNREVO_SQLITE3_PATH at this exact spot in a
+    // packaged app.
+    { from: 'build/sqlite3.exe', to: 'sqlite3.exe' },
     /* The licence itself, shipped with the app rather than left in the
      * repository.
      *
