@@ -21,6 +21,7 @@ import Duplicates from './components/Duplicates.jsx';
 import StartupItems from './components/StartupItems.jsx';
 import { rememberVisited } from './lib/visitedScreens.js';
 import { useIdlePrefetch } from './hooks/useIdlePrefetch.js';
+import { useLanguage } from './i18n/LanguageContext.jsx';
 
 function formatBytes(bytes) {
   if (bytes === null || bytes === undefined) return '—';
@@ -32,6 +33,7 @@ function formatBytes(bytes) {
 }
 
 export default function App() {
+  const { t } = useLanguage();
   const [screen, setScreen] = useState('dashboard');
 
   // Which tabs have been opened. A screen is built the first time it is
@@ -158,14 +160,13 @@ export default function App() {
             <div className="flex items-baseline justify-between mb-6 shrink-0">
               <div>
                 <h1 className="display-heading text-[30px] leading-none">
-                  Installed applications
+                  {t('app.installedApplications')}
                 </h1>
                 <p className="text-[13px] text-[color:var(--text-secondary)] mt-2.5">
-                  <span className="text-[color:var(--text-primary)] font-medium">{programs.length}</span> applications ·
-                  <span className="text-[color:var(--text-primary)] font-medium">{formatBytes(totalSize)}</span> installed
+                  {t('app.applicationsSummary', programs.length, formatBytes(totalSize))}
                 </p>
               </div>
-              <button className="btn-ghost" onClick={() => setScreen('quarantine')}>Quarantine</button>
+              <button className="btn-ghost" onClick={() => setScreen('quarantine')}>{t('nav.quarantine')}</button>
             </div>
             <ProgramList
               programs={programs}
@@ -189,7 +190,7 @@ export default function App() {
 
       {batchPrograms && (
         <ModalOverlay
-          label={`Uninstall ${batchPrograms.length} programs`}
+          label={t('batchUninstallModal.title', batchPrograms.length)}
           onClose={() => setBatchPrograms(null)}
         >
           <BatchUninstallModal
@@ -201,7 +202,7 @@ export default function App() {
       )}
       {storeAppToRemove && (
         <ModalOverlay
-          label={`Remove ${storeAppToRemove.name}`}
+          label={t('app.removeStoreApp', storeAppToRemove.name)}
           onClose={() => setStoreAppToRemove(null)}
         >
           <StoreRemoveDialog
@@ -213,7 +214,7 @@ export default function App() {
       )}
       {selectedProgram && (
         <ModalOverlay
-          label={`Uninstall ${selectedProgram.name}`}
+          label={t('uninstallModal.titleNormal', selectedProgram.name)}
           onClose={() => setSelectedProgram(null)}
         >
           <UninstallModal
