@@ -14,9 +14,8 @@ import ContextMenu from './ContextMenu.jsx';
 import ModalOverlay from './ModalOverlay.jsx';
 import { attachFullPaths, topLevelCells } from '../lib/diskMapTree.js';
 import { subtreeForPath } from '../lib/mftSubtree.js';
-import { extensionBreakdown, NO_EXTENSION } from '../lib/extensionBreakdown.js';
-import { largestFiles } from '../lib/largestFiles.js';
-import { folderTableRows } from '../lib/folderTable.js';
+import { NO_EXTENSION } from '../lib/extensionBreakdown.js';
+import { useDiskMapAggregates } from '../hooks/useDiskMapAggregates.js';
 import { sortFolderRows, nextFolderSort } from '../lib/sortFolderRows.js';
 import { withUnscannedRemainder, scanCoverage } from '../lib/unscannedRemainder.js';
 import { buildTypeColors, colorForExtension, colorForNode, NO_EXTENSION_COLOR } from '../lib/fileTypeColors.js';
@@ -105,6 +104,17 @@ const PANEL_ROWS = 14;
  * this is the honest depth for a plain list -- past it the sizes flatten
  * out and nothing on screen is worth acting on. */
 const FILE_ROWS = 60;
+
+/** What the breakdown/largest-files panels read before
+ * useDiskMapAggregates' worker has answered for the current tree.
+ * Module-level and reused rather than built fresh per render, so a
+ * consumer's own `useMemo` (shownExtensions, typeColors) doesn't see a
+ * new object identity on every render while nothing has actually
+ * changed. Shaped exactly like extensionBreakdown()'s and largestFiles()'
+ * own real return values -- an empty result, not a different one. */
+const EMPTY_BREAKDOWN = { rows: [], totalBytes: 0, totalFiles: 0, treeBytes: 0, uncategorizedBytes: 0 };
+const EMPTY_FILES = [];
+const EMPTY_FOLDER_ROWS = [];
 
 function TreemapCell({ x, y, width, height, depth, name, size, type, scanned, aggregated, fullPath, icons, typeColors, onHover, onLeave, onDrillDown, onContextMenu }) {
   const { t } = useLanguage();
@@ -448,12 +458,17 @@ function Count({ value }) {
   return <>{value.toLocaleString()}</>;
 }
 
-function FolderTable({ tree, onDrillDown }) {
+function FolderTable({ folderRows, onDrillDown }) {
   const { t } = useLanguage();
   const [sort, setSort] = useState({ column: 'size', direction: 'desc' });
+  // The counts themselves are computed off the main thread (see
+  // useDiskMapAggregates.js) since a folder like a drive root's own
+  // countSubtree walk covers every node in the tree; only the SORT of the
+  // already-computed rows happens here, which is cheap regardless of how
+  // large the tree behind them was.
   const rows = useMemo(
-    () => sortFolderRows(folderTableRows(tree), sort.column, sort.direction),
-    [tree, sort]
+    () => sortFolderRows(folderRows, sort.column, sort.direction),
+    [folderRows, sort]
   );
 
   if (rows.length === 0) {
@@ -686,9 +701,18 @@ function DiskMap() {
   });
   const cells = mapTree ? limitCells(topLevelCells(mapTree), MAX_CELLS, (count) => t('diskMap.aggregateCell', count)) : [];
 
-  // Computed here rather than inside the panel so the icon fetch below can
-  // ask for exactly the types the panel is about to show.
-  const breakdown = useMemo(() => extensionBreakdown(tree), [tree]);
+  // The file-type breakdown, the largest-files list and the folder
+  // table's counts, computed off the main thread: each is an honest
+  // single pass over the WHOLE scanned tree, and at a drive root after a
+  // full MFT fast scan that tree can be millions of nodes on a machine
+  // this wasn't measured against. Three such passes back to back,
+  // synchronously, in the render that just received the scan, is what
+  // froze the whole app -- not just this tab -- on some machines.
+  // useDiskMapAggregates falls back to computing these synchronously
+  // wherever there is no Worker to post to (every test environment,
+  // notably), so this still returns the exact same shapes there.
+  const aggregates = useDiskMapAggregates(tree, { fileLimit: FILE_ROWS });
+  const breakdown = aggregates.result?.extensionBreakdown ?? EMPTY_BREAKDOWN;
   const shownExtensions = useMemo(() => breakdown.rows.slice(0, PANEL_ROWS), [breakdown]);
 
   // The colours the map is painted with AND the legend's swatch column --
@@ -704,7 +728,7 @@ function DiskMap() {
     () => buildTypeColors(breakdown.rows.map((r) => r.extension).filter((e) => e !== NO_EXTENSION)),
     [breakdown]
   );
-  const topFiles = useMemo(() => largestFiles(tree, { limit: FILE_ROWS }), [tree]);
+  const topFiles = aggregates.result?.largestFiles ?? EMPTY_FILES;
 
   useEffect(() => {
     const wanted = [
@@ -990,7 +1014,7 @@ function DiskMap() {
               two tables are read row by row and want height, the map is
               read as a picture and wants area. */}
           <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_360px] items-start">
-            <FolderTable tree={tree} onDrillDown={handleDrillDown} />
+            <FolderTable folderRows={aggregates.result?.folderRows ?? EMPTY_FOLDER_ROWS} onDrillDown={handleDrillDown} />
             <ExtensionPanel breakdown={breakdown} shown={shownExtensions} icons={typeIcons} typeColors={typeColors} />
           </div>
 
