@@ -97,9 +97,50 @@ test('writes nothing during a silent install, so an update keeps the choice', ()
   assert.match(customInstall[1], /\$\{IfNot\}\s+\$\{Silent\}[\s\S]*installer-choices\.json[\s\S]*\$\{EndIf\}/);
 });
 
-test('writes the language it was run in, alongside the update check', () => {
+test('writes the language it was run in', () => {
   const customInstall = script.match(/!macro customInstall([\s\S]*?)!macroend/)[1];
   assert.match(customInstall, /"language":"\$\(appLangCode\)"/);
+});
+
+test('writes the language even on an upgrade, where the Updates page skips itself', () => {
+  // Regression: this used to be written only inside the SAME
+  // `${If} $updatesChoice != ""}` branch as updateCheck, so it inherited
+  // updateCheck's fresh-install-only gate too -- $updatesChoice is only
+  // ever set by updatesPageLeave, which only runs if updatesPageCreate
+  // didn't Abort, which it does whenever settings.json already exists
+  // (i.e. every upgrade). Reported directly: picking Greek in the
+  // installer on an upgrade left the app in English. The language must
+  // reach installer-choices.json on every non-silent install regardless
+  // of whether $updatesChoice ever got set -- i.e. there must be a
+  // FileWrite of language alone, outside any $updatesChoice check.
+  const customInstall = script.match(/!macro customInstall([\s\S]*?)!macroend/)[1];
+  assert.match(
+    customInstall,
+    /FileWrite \$0 '\{"language":"\$\(appLangCode\)"\}'/,
+    'no unconditional (no-updateCheck) language-only FileWrite found'
+  );
+});
+
+test('never writes updateCheck when the Updates page was skipped', () => {
+  // The other half of the same fix: decoupling language from
+  // $updatesChoice must not accidentally start writing updateCheck
+  // unconditionally too -- an unticked box on a page nobody saw must
+  // still never turn off a setting silently.
+  const customInstall = script.match(/!macro customInstall([\s\S]*?)!macroend/)[1];
+  const updateCheckWrites = [...customInstall.matchAll(/FileWrite \$0 '([^']*)'/g)]
+    .map((m) => m[1])
+    .filter((line) => line.includes('updateCheck'));
+  assert.ok(updateCheckWrites.length > 0, 'no FileWrite mentions updateCheck at all');
+  for (const line of updateCheckWrites) {
+    // Every line that writes updateCheck must be inside the
+    // $updatesChoice != "" branch -- checked structurally: find that
+    // line's own FileWrite statement and confirm an
+    // `${If} $updatesChoice != ""}` appears before it, before the
+    // matching ${EndIf}, within customInstall.
+    const idx = customInstall.indexOf(`FileWrite $0 '${line}'`);
+    const before = customInstall.slice(0, idx);
+    assert.match(before, /\$\{If\}\s+\$updatesChoice\s+!=\s+""[\s\S]*$/, `updateCheck write not gated: ${line}`);
+  }
 });
 
 test('every appLangCode is one of the app\'s own 40 languages', async () => {
