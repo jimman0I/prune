@@ -129,7 +129,7 @@ function CategoryIcon({ category, src }) {
   );
 }
 
-function CategorySection({ category, items, iconSrc, selected, onToggle, onToggleCategory }) {
+function CategorySection({ category, items, iconSrc, selected, onToggle, onToggleCategory, activeId }) {
   const { t } = useLanguage();
   const [expanded, setExpanded] = useState(true);
   const state = categorySelectionState(items, selected);
@@ -187,8 +187,18 @@ function CategorySection({ category, items, iconSrc, selected, onToggle, onToggl
           {items.map((item) => (
             <div
               key={item.id}
-              className={`flex items-center gap-2.5 pl-[38px] pr-3 py-[3px] hover:bg-[color:var(--surface-subtle)] ${
+              className={`flex items-center gap-2.5 pl-[38px] pr-3 py-[3px] hover:bg-[color:var(--surface-subtle)] transition-colors duration-300 ${
                 item.present === false ? 'opacity-45' : ''
+              } ${
+                // The row a scan or a clean is working on right now -- the
+                // same "what is it doing" question the log line beside the
+                // tree already answers, put on the tree itself. A tint
+                // rather than a border: side-stripe accents read as a
+                // decoration bolted onto a card, not as the row itself
+                // being highlighted.
+                item.id === activeId
+                  ? 'bg-[color:var(--accent-primary)]/[0.08] animate-pulse'
+                  : ''
               }`}
             >
               <Checkbox
@@ -236,7 +246,7 @@ function CategorySection({ category, items, iconSrc, selected, onToggle, onToggl
  * sizeBytes, ...}] }]. `icons` is { category: dataUri } from
  * GET /api/deep-clean/category-icons, and is allowed to be empty or to
  * arrive late -- every heading renders either way. */
-export default function DeepCleanTree({ categories, selected, onToggle, onToggleCategory, icons = {} }) {
+export default function DeepCleanTree({ categories, selected, onToggle, onToggleCategory, icons = {}, activeId = null }) {
   return (
     <div className="glass-panel rounded-xl overflow-y-auto min-h-0">
       {categories.map((group) => (
@@ -248,6 +258,7 @@ export default function DeepCleanTree({ categories, selected, onToggle, onToggle
           selected={selected}
           onToggle={onToggle}
           onToggleCategory={onToggleCategory}
+          activeId={activeId}
         />
       ))}
     </div>

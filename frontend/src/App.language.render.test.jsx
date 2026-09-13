@@ -49,6 +49,7 @@ vi.mock('./lib/api.js', () => ({
   fetchDeepCleanRules: vi.fn(async () => []),
   fetchDeepCleanScan: vi.fn(async () => ({})),
   executeDeepClean: vi.fn(async () => ({})),
+  streamDeepCleanExecute: vi.fn(async () => ({})),
   fetchDiskHealth: vi.fn(async () => ({})),
   unlockDiskWear: vi.fn(async () => ({})),
   fetchFileTypeIcons: vi.fn(async () => ({})),
