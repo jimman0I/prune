@@ -49,17 +49,24 @@ export function loadCleanerRules() {
 }
 
 /** Gives every rule an `actions` array, synthesizing one from the legacy
- * `paths`/`command` shape when a rule doesn't already have one -- so all
- * 75 rules in cleaners.json keep working with ZERO data migration, and a
- * new rule can be written directly in the richer shape. Every OTHER
- * function in this file reads `rule.actions`, never `rule.paths`/
- * `rule.command` directly, once this normalizes it -- that's what makes
- * adding a new action type (sqlite.vacuum, winreg) a matter of adding a
- * new case to the dispatcher, not touching every rule already written. */
+ * `paths`/`command` shape when a rule doesn't already have one -- so every
+ * rule in cleaners.json keeps working with ZERO data migration, and a new
+ * rule can be written directly in the richer shape. This is additive only:
+ * nothing reads `rule.actions` yet. Once a later task (Task 7) wires this
+ * into `scanRule`/`executeRule` so THEY read `rule.actions` instead of
+ * `rule.paths`/`rule.command` directly, adding a new action type
+ * (sqlite.vacuum, winreg) becomes a matter of adding a new case to a
+ * dispatcher, not touching every rule already written.
+ *
+ * A rule with none of `actions`/`command`/`paths` is malformed -- throwing
+ * here, naming the rule, is deliberate: better a clear failure at the one
+ * rule that's broken than a confusing TypeError several files away, inside
+ * whatever action module eventually tries to act on an undefined target. */
 export function normalizeRule(rule) {
   if (rule.actions) return rule;
   if (rule.command) return { ...rule, actions: [{ type: 'shell', command: rule.command }] };
-  return { ...rule, actions: [{ type: 'delete', paths: rule.paths }] };
+  if (rule.paths) return { ...rule, actions: [{ type: 'delete', paths: rule.paths }] };
+  throw new Error(`normalizeRule: rule "${rule?.id}" has none of actions/command/paths`);
 }
 
 /** Computes one rule's current size without touching anything -- Preview
