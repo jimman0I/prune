@@ -89,6 +89,26 @@ describe('executeLogLine', () => {
     expect(executeLogLine({ id: 'ghost', error: 'Unknown rule id "ghost"' }))
       .toEqual({ label: 'ghost', detail: 'Unknown rule id "ghost"', tone: 'warning' });
   });
+
+  it('says "Compact", not "Delete", for a rule with no files removed but a real byte reduction', () => {
+    const line = executeLogLine({ id: 'x', name: 'X Database', freedBytes: 2048, skipped: [], fileCount: 0 });
+    expect(line.label).toBe('Compact X Database');
+  });
+
+  it('says "Reset", not "Delete", for a registry-only rule', () => {
+    const line = executeLogLine({ id: 'x', name: 'X Recent Files', freedBytes: 0, registryKeysRemoved: 1, skipped: [] });
+    expect(line).toEqual({ label: 'Reset X Recent Files', detail: '1 registry key', tone: 'size' });
+  });
+
+  it('still says "Delete" for an ordinary file-removal rule, unchanged', () => {
+    const line = executeLogLine({ id: 'x', name: 'X Cache', freedBytes: 1024, skipped: [] });
+    expect(line.label).toBe('Delete X Cache');
+  });
+
+  it('reports a registry-only rule whose key was already gone as absent, not a silent zero', () => {
+    const line = executeLogLine({ id: 'x', name: 'X Recent Files', freedBytes: 0, registryKeysRemoved: 0, skipped: [] });
+    expect(line).toEqual({ label: 'Reset X Recent Files', detail: 'already absent', tone: 'muted' });
+  });
 });
 
 describe('mergeScannedRule over a pre-listed tree', () => {
