@@ -48,6 +48,20 @@ export function loadCleanerRules() {
   return JSON.parse(readFileSync(CLEANERS_JSON_PATH, 'utf8'));
 }
 
+/** Gives every rule an `actions` array, synthesizing one from the legacy
+ * `paths`/`command` shape when a rule doesn't already have one -- so all
+ * 75 rules in cleaners.json keep working with ZERO data migration, and a
+ * new rule can be written directly in the richer shape. Every OTHER
+ * function in this file reads `rule.actions`, never `rule.paths`/
+ * `rule.command` directly, once this normalizes it -- that's what makes
+ * adding a new action type (sqlite.vacuum, winreg) a matter of adding a
+ * new case to the dispatcher, not touching every rule already written. */
+export function normalizeRule(rule) {
+  if (rule.actions) return rule;
+  if (rule.command) return { ...rule, actions: [{ type: 'shell', command: rule.command }] };
+  return { ...rule, actions: [{ type: 'delete', paths: rule.paths }] };
+}
+
 /** Computes one rule's current size without touching anything -- Preview
  * Mode. A command-based rule (nothing to size) returns null, not 0 --
  * 0 would falsely claim "there is nothing to free", null honestly says
