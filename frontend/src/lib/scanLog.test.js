@@ -91,13 +91,13 @@ describe('executeLogLine', () => {
   });
 
   it('says "Compact", not "Delete", for a rule with no files removed but a real byte reduction', () => {
-    const line = executeLogLine({ id: 'x', name: 'X Database', freedBytes: 2048, skipped: [], fileCount: 0 });
+    const line = executeLogLine({ id: 'x', name: 'X Database', freedBytes: 2048, skipped: [], vacuumed: true });
     expect(line.label).toBe('Compact X Database');
   });
 
-  it('says "Reset", not "Delete", for a registry-only rule', () => {
+  it('says "Clear", not "Delete", for a registry-only rule', () => {
     const line = executeLogLine({ id: 'x', name: 'X Recent Files', freedBytes: 0, registryKeysRemoved: 1, skipped: [] });
-    expect(line).toEqual({ label: 'Reset X Recent Files', detail: '1 registry key', tone: 'size' });
+    expect(line).toEqual({ label: 'Clear X Recent Files', detail: '1 registry key', tone: 'size' });
   });
 
   it('still says "Delete" for an ordinary file-removal rule, unchanged', () => {
@@ -107,7 +107,7 @@ describe('executeLogLine', () => {
 
   it('reports a registry-only rule whose key was already gone as absent, not a silent zero', () => {
     const line = executeLogLine({ id: 'x', name: 'X Recent Files', freedBytes: 0, registryKeysRemoved: 0, skipped: [] });
-    expect(line).toEqual({ label: 'Reset X Recent Files', detail: 'already absent', tone: 'muted' });
+    expect(line).toEqual({ label: 'Clear X Recent Files', detail: 'already absent', tone: 'muted' });
   });
 });
 
