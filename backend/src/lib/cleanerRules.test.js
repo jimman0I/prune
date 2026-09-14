@@ -491,7 +491,7 @@ describe('recommended defaults', () => {
 });
 
 describe('normalizeRule', () => {
-  it('synthesizes a delete action from a legacy paths rule, unchanged', () => {
+  it('synthesizes a delete action from a legacy paths rule, other fields carried through as-is', () => {
     const rule = { id: 'x', paths: ['%APPDATA%\\X\\Cache'] };
     expect(normalizeRule(rule)).toEqual({
       ...rule,
@@ -510,6 +510,23 @@ describe('normalizeRule', () => {
   it('passes an already-actions-shaped rule through untouched', () => {
     const rule = { id: 'y', actions: [{ type: 'sqlite.vacuum', path: '%APPDATA%\\Y\\db' }] };
     expect(normalizeRule(rule)).toBe(rule);
+  });
+
+  it('treats an empty actions array as already-normalized, not as "missing"', () => {
+    // `[]` is truthy, so this takes the same early-return path as any other
+    // already-actions-shaped rule, rather than falling through and trying
+    // to synthesize a delete/shell action on top of it.
+    const rule = { id: 'z', actions: [] };
+    expect(normalizeRule(rule)).toBe(rule);
+  });
+
+  it('throws naming the rule id when a rule has none of actions/command/paths', () => {
+    // Not currently reachable by any of the 74 rules in cleaners.json, but
+    // this function is a foundation later action-type work builds on --
+    // a malformed rule should fail loudly right here, not several files
+    // away as a confusing TypeError inside whatever action module tries
+    // to act on an undefined target.
+    expect(() => normalizeRule({ id: 'malformed' })).toThrow(/malformed/);
   });
 });
 
