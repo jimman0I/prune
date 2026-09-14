@@ -93,9 +93,23 @@ export function executeLogLine(item) {
 
   // `vacuumed` is set iff executeRule ran a sqlite.vacuum action for this
   // rule -- freedBytes here came from compacting a database file, not
-  // from removing any.
+  // from removing any. `vacuumed: true` only means the action RAN, not
+  // that it succeeded: sqliteVacuumAction.execute can still come back
+  // with freedBytes: 0 and real entries in skipped[] (missing file,
+  // excluded/too-recent guard, or the VACUUM subprocess itself failing
+  // against a locked/corrupt database) -- collapsing that into a flat
+  // "Compact X: 0 B" would hide a real failure behind a genuine no-op,
+  // so this follows the same freedBytes -> skipped -> empty shape the
+  // Delete/Recycle fallthrough below already uses.
   if (item.vacuumed) {
-    return { label: `Compact ${item.name ?? item.id}`, detail: formatBytes(item.freedBytes), tone: 'size' };
+    const label = `Compact ${item.name ?? item.id}`;
+    if (item.freedBytes > 0) {
+      return { label, detail: formatBytes(item.freedBytes), tone: 'size' };
+    }
+    if (item.skipped?.length > 0) {
+      return { label, detail: `${item.skipped.length} skipped`, tone: 'warning' };
+    }
+    return { label, detail: 'already empty', tone: 'muted' };
   }
 
   const verb = item.recycled ? 'Recycle' : 'Delete';
