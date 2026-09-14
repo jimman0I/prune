@@ -92,7 +92,27 @@ describe('executeLogLine', () => {
 
   it('says "Compact", not "Delete", for a rule with no files removed but a real byte reduction', () => {
     const line = executeLogLine({ id: 'x', name: 'X Database', freedBytes: 2048, skipped: [], vacuumed: true });
-    expect(line.label).toBe('Compact X Database');
+    expect(line).toEqual({ label: 'Compact X Database', detail: '2 KB', tone: 'size' });
+  });
+
+  it('does not report a held-back or failed vacuum as a silent success', () => {
+    // vacuumed: true only means the action RAN, not that it succeeded --
+    // sqliteVacuumAction.execute can still return freedBytes: 0 with a
+    // real skipped[] entry (missing file, excluded/too-recent guard, or
+    // the VACUUM subprocess itself failing on a locked/corrupt database).
+    const line = executeLogLine({
+      id: 'x',
+      name: 'X Database',
+      freedBytes: 0,
+      vacuumed: true,
+      skipped: [{ path: 'x.db', reason: 'modified too recently' }]
+    });
+    expect(line).toEqual({ label: 'Compact X Database', detail: '1 skipped', tone: 'warning' });
+  });
+
+  it('reports a vacuum that genuinely had nothing to reclaim as empty', () => {
+    const line = executeLogLine({ id: 'x', name: 'X Database', freedBytes: 0, vacuumed: true, skipped: [] });
+    expect(line).toEqual({ label: 'Compact X Database', detail: 'already empty', tone: 'muted' });
   });
 
   it('says "Clear", not "Delete", for a registry-only rule', () => {
