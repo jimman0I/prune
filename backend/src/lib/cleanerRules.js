@@ -72,17 +72,31 @@ export function normalizeRule(rule) {
 }
 
 /** Computes one rule's current size without touching anything -- Preview
- * Mode. A command-based rule (nothing to size) returns null, not 0 --
- * 0 would falsely claim "there is nothing to free", null honestly says
- * "there is nothing to preview". */
+ * Mode. Normalizes the rule to its `actions` array (normalizeRule) and
+ * dispatches each action to its own module's `scan()` by `type` --
+ * `shell`, `delete`, `sqlite.vacuum`, `winreg` -- merging their results
+ * into one summary: `sizeBytes`/`fileCount` summed, `heldCount` summed,
+ * `accessible` ANDed together, `present` true if ANY action reports
+ * something there. A rule with only a `shell` action (nothing to size)
+ * keeps `sizeBytes`/`fileCount` at null, not 0 -- 0 would falsely claim
+ * "there is nothing to free", null honestly says "there is nothing to
+ * preview". A rule mixing action types (e.g. a `delete` action and a
+ * `sqlite.vacuum` action under one id) is summed across all of them, not
+ * just the first. */
 export function scanRule(rule, guards = {}) {
   const normalized = normalizeRule(rule);
+  // `accessible` here specifically means "no `delete` action reported a
+  // permission problem listing its files" -- it says nothing about a
+  // `sqlite.vacuum` or `winreg` action in the same rule, neither of which
+  // has an equivalent "can't even look" failure mode this flag tracks.
+  // A mixed delete+winreg rule reporting accessible:true is only a
+  // promise about the delete half; don't read it as "everything in this
+  // rule, registry key included, is reachable."
   let sizeBytes = null, fileCount = null, heldCount = 0, accessible = true, present = false;
 
   for (const action of normalized.actions) {
     if (action.type === 'shell') {
       present = true;
-      accessible = accessible && true;
       // sizeBytes/fileCount stay null -- a shell action has nothing to measure.
     } else if (action.type === 'delete') {
       const expandedPaths = action.paths.map(expandPath);
@@ -104,6 +118,12 @@ export function scanRule(rule, guards = {}) {
       // is what actually determines whether anything happens). Revisit
       // if a future rule needs an accurate pre-scan presence check for a
       // registry-only rule.
+      //
+      // User-visible consequence: a winreg-only rule always shows as
+      // "present"/applicable in a pre-clean scan, even on a machine where
+      // the registry key doesn't exist at all -- the opposite of the
+      // "grey out cleaners that don't apply" behavior rulePathsExist's own
+      // doc comment calls out as a feature for path-based rules.
       present = true;
     }
   }
@@ -141,11 +161,7 @@ export function rulePathsExist(rule) {
   if (rule?.command) return true;
 
   for (const rawPath of rule?.paths || []) {
-    const [driveSegment, ...rest] = deleteAction.pathToSegments(expandPath(rawPath));
-    if (!driveSegment) continue;
-    for (const match of deleteAction.resolveGlob(driveSegment, rest)) {
-      if (existsSync(match)) return true;
-    }
+    if (rulePathsExistFor(expandPath(rawPath))) return true;
   }
   return false;
 }
@@ -164,12 +180,29 @@ export function scanAllRules(guards = {}) {
   return [...byCategory.entries()].map(([category, items]) => ({ category, items }));
 }
 
-/** Executes one rule for real. A `paths` rule pre-filters out any locked/
- * inaccessible file (reported in `skipped`, never thrown), then quarantines
- * everything left through the EXISTING quarantine system -- moved, not
- * deleted outright, so a bad match is always recoverable the same way an
- * uninstall's own leftover removal already is. A `command` rule (DNS
- * flush) just runs the command; there is no file to quarantine. */
+/** Executes one rule for real. Normalizes the rule to its `actions` array
+ * (normalizeRule) and dispatches each action to its own module's
+ * `execute()` by `type`, merging their results into one summary:
+ * `freedBytes` summed across every action, `skipped` concatenated, and
+ * `registryKeysRemoved`/`recycled`/`quarantineBatch`/`ranCommand`/`error`
+ * each included only when an action of the matching type actually
+ * produced one (never present-but-undefined).
+ *
+ * - `delete` pre-filters out any locked/inaccessible file (reported in
+ *   `skipped`, never thrown), then quarantines everything left through
+ *   the EXISTING quarantine system -- moved, not deleted outright, so a
+ *   bad match is always recoverable the same way an uninstall's own
+ *   leftover removal already is.
+ * - `shell` (e.g. DNS flush) just runs the command; there is no file to
+ *   quarantine.
+ * - `sqlite.vacuum` rewrites the target database in place via VACUUM;
+ *   again nothing to quarantine.
+ * - `winreg` removes one registry key through the same quarantine-then-
+ *   delete path `delete` uses, just for a key instead of a file.
+ *
+ * A rule mixing action types (e.g. a `delete` action and a
+ * `sqlite.vacuum` action under one id) runs every action and sums
+ * `freedBytes` across all of them, not just the first. */
 export async function executeRule(rule, guards = {}) {
   const normalized = normalizeRule(rule);
   let freedBytes = 0;
