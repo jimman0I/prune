@@ -75,6 +75,24 @@ export function executeLogLine(item) {
     return { label: item.name ?? item.id, detail: item.error, tone: 'warning' };
   }
 
+  // The verb says what actually happened, not just what was chosen --
+  // a rule that only vacuums a database or only removes a registry key
+  // never "Deletes" anything, and saying so would be inaccurate, not
+  // just imprecise.
+  if (item.registryKeysRemoved !== undefined) {
+    const label = `Reset ${item.name ?? item.id}`;
+    return item.registryKeysRemoved > 0
+      ? { label, detail: `${item.registryKeysRemoved} registry key${item.registryKeysRemoved === 1 ? '' : 's'}`, tone: 'size' }
+      : { label, detail: 'already absent', tone: 'muted' };
+  }
+
+  // A rule whose freedBytes came entirely from compacting a database
+  // (fileCount explicitly 0, not merely absent/undefined) rather than
+  // removing files.
+  if (item.fileCount === 0 && item.freedBytes > 0) {
+    return { label: `Compact ${item.name ?? item.id}`, detail: formatBytes(item.freedBytes), tone: 'size' };
+  }
+
   const verb = item.recycled ? 'Recycle' : 'Delete';
   const label = `${verb} ${item.name ?? item.id}`;
 
