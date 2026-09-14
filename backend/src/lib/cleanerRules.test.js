@@ -12,7 +12,8 @@ import {
   executeRule,
   executeRules,
   executeRulesProgressively,
-  scanRulesProgressively
+  scanRulesProgressively,
+  normalizeRule
 } from './cleanerRules.js';
 
 // node:fs's ESM namespace is frozen -- vi.spyOn can't redefine its exports
@@ -487,6 +488,29 @@ describe('recommended defaults', () => {
     const item = scanAllRules().flatMap(g => g.items).find(i => i.id === 'discord_cache');
     expect(item.recommended).toBe(true);
   }, 30000);
+});
+
+describe('normalizeRule', () => {
+  it('synthesizes a delete action from a legacy paths rule, unchanged', () => {
+    const rule = { id: 'x', paths: ['%APPDATA%\\X\\Cache'] };
+    expect(normalizeRule(rule)).toEqual({
+      ...rule,
+      actions: [{ type: 'delete', paths: ['%APPDATA%\\X\\Cache'] }]
+    });
+  });
+
+  it('synthesizes a shell action from a legacy command rule', () => {
+    const rule = { id: 'dns', command: 'ipconfig /flushdns' };
+    expect(normalizeRule(rule)).toEqual({
+      ...rule,
+      actions: [{ type: 'shell', command: 'ipconfig /flushdns' }]
+    });
+  });
+
+  it('passes an already-actions-shaped rule through untouched', () => {
+    const rule = { id: 'y', actions: [{ type: 'sqlite.vacuum', path: '%APPDATA%\\Y\\db' }] };
+    expect(normalizeRule(rule)).toBe(rule);
+  });
 });
 
 describe('scanRulesProgressively', () => {
