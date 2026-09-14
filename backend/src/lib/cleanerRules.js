@@ -4,6 +4,8 @@ import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import * as deleteAction from './cleanerActions/delete.js';
 import * as shellAction from './cleanerActions/shell.js';
+import * as sqliteVacuumAction from './cleanerActions/sqliteVacuum.js';
+import * as winregAction from './cleanerActions/winreg.js';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const CLEANERS_JSON_PATH = join(here, '..', 'data', 'cleaners.json');
@@ -74,20 +76,49 @@ export function normalizeRule(rule) {
  * 0 would falsely claim "there is nothing to free", null honestly says
  * "there is nothing to preview". */
 export function scanRule(rule, guards = {}) {
-  // A command rule has nothing to look for on disk, so it's always
-  // applicable -- `ipconfig /flushdns` works whether or not anything is
-  // cached.
-  if (rule.command) return { id: rule.id, ...shellAction.scan(), present: true };
-  const expandedPaths = rule.paths.map(expandPath);
-  const result = deleteAction.scan({ expandedPaths }, guards);
-  return {
-    id: rule.id,
-    sizeBytes: result.sizeBytes,
-    fileCount: result.fileCount,
-    heldCount: result.heldCount,
-    present: rulePathsExist(rule),
-    accessible: result.accessible
-  };
+  const normalized = normalizeRule(rule);
+  let sizeBytes = null, fileCount = null, heldCount = 0, accessible = true, present = false;
+
+  for (const action of normalized.actions) {
+    if (action.type === 'shell') {
+      present = true;
+      accessible = accessible && true;
+      // sizeBytes/fileCount stay null -- a shell action has nothing to measure.
+    } else if (action.type === 'delete') {
+      const expandedPaths = action.paths.map(expandPath);
+      const result = deleteAction.scan({ expandedPaths }, guards);
+      sizeBytes = (sizeBytes ?? 0) + result.sizeBytes;
+      fileCount = (fileCount ?? 0) + result.fileCount;
+      heldCount += result.heldCount;
+      accessible = accessible && result.accessible;
+      if (expandedPaths.some((p) => rulePathsExistFor(p))) present = true;
+    } else if (action.type === 'sqlite.vacuum') {
+      const result = sqliteVacuumAction.scan({ expandedPath: expandPath(action.path) });
+      sizeBytes = (sizeBytes ?? 0) + result.sizeBytes;
+      if (result.present) present = true;
+    } else if (action.type === 'winreg') {
+      // Presence is checked asynchronously by winreg's own scan(), which
+      // this synchronous function can't await -- reported via `present`
+      // best-effort as true (registry actions don't gate `present` the
+      // way a missing cache folder does; executeRule's own winreg branch
+      // is what actually determines whether anything happens). Revisit
+      // if a future rule needs an accurate pre-scan presence check for a
+      // registry-only rule.
+      present = true;
+    }
+  }
+
+  return { id: rule.id, sizeBytes, fileCount, heldCount, present, accessible };
+}
+
+/** Whether ONE already-expanded path (from a delete action) exists --
+ * used by scanRule's per-action loop above so a rule mixing action types
+ * can still answer "present" correctly without calling the whole-rule
+ * rulePathsExist(), which expects raw (unexpanded) rule.paths. */
+function rulePathsExistFor(expandedPath) {
+  const [driveSegment, ...rest] = deleteAction.pathToSegments(expandedPath);
+  if (!driveSegment) return false;
+  return deleteAction.resolveGlob(driveSegment, rest).some((match) => existsSync(match));
 }
 
 /** Whether any of a rule's target paths exists at all -- which is a
@@ -140,14 +171,47 @@ export function scanAllRules(guards = {}) {
  * uninstall's own leftover removal already is. A `command` rule (DNS
  * flush) just runs the command; there is no file to quarantine. */
 export async function executeRule(rule, guards = {}) {
-  if (rule.command) {
-    const result = await shellAction.execute({ command: rule.command });
-    return { id: rule.id, ...result };
+  const normalized = normalizeRule(rule);
+  let freedBytes = 0;
+  let registryKeysRemoved;
+  const skipped = [];
+  let recycled, quarantineBatch, ranCommand, error;
+
+  for (const action of normalized.actions) {
+    if (action.type === 'shell') {
+      const result = await shellAction.execute(action);
+      ranCommand = true;
+      if (result.error) error = result.error;
+    } else if (action.type === 'delete') {
+      const expandedPaths = action.paths.map(expandPath);
+      const result = await deleteAction.execute({ expandedPaths }, rule.name, guards);
+      freedBytes += result.freedBytes;
+      skipped.push(...result.skipped);
+      if (result.recycled) recycled = true;
+      if (result.quarantineBatch) quarantineBatch = result.quarantineBatch;
+    } else if (action.type === 'sqlite.vacuum') {
+      const result = await sqliteVacuumAction.execute({ expandedPath: expandPath(action.path) }, guards);
+      freedBytes += result.freedBytes;
+      skipped.push(...result.skipped);
+    } else if (action.type === 'winreg') {
+      const result = await winregAction.execute({ expandedKey: expandPath(action.key) }, rule.name);
+      freedBytes += result.freedBytes;
+      registryKeysRemoved = (registryKeysRemoved || 0) + result.registryKeysRemoved;
+      skipped.push(...result.skipped);
+      if (result.quarantineBatch) quarantineBatch = result.quarantineBatch;
+    }
   }
 
-  const expandedPaths = rule.paths.map(expandPath);
-  const result = await deleteAction.execute({ expandedPaths }, rule.name, guards);
-  return { id: rule.id, ...result };
+  return {
+    id: rule.id,
+    freedBytes,
+    skipped,
+    ...(registryKeysRemoved !== undefined ? { registryKeysRemoved } : {}),
+    ...(recycled ? { recycled } : {}),
+    ...(quarantineBatch ? { quarantineBatch } : {}),
+    ...(ranCommand ? { ranCommand } : {}),
+    ...(error ? { error } : {})
+  };
 }
 
 /** Executes every requested rule id in turn, handing each result to

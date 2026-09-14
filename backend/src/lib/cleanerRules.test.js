@@ -15,6 +15,7 @@ import {
   scanRulesProgressively,
   normalizeRule
 } from './cleanerRules.js';
+import * as sqliteVacuum from './cleanerActions/sqliteVacuum.js';
 
 // node:fs's ESM namespace is frozen -- vi.spyOn can't redefine its exports
 // directly. Same vi.mock partial-passthrough workaround cleanup.test.js/
@@ -581,6 +582,83 @@ describe('scanRulesProgressively', () => {
     expect(result.aborted).toBe(false);
     expect(result.total).toBe(loadCleanerRules().length);
   }, 60000);
+});
+
+describe('actions-array rules', () => {
+  it('sums freedBytes across a delete action AND a sqlite.vacuum action under one rule', async () => {
+    const dir1 = join(appDataDir, 'mixed', 'cache');
+    await mkdir(dir1, { recursive: true });
+    await writeFile(join(dir1, 'a.bin'), '12345'); // 5 bytes
+
+    const dbPath = join(appDataDir, 'mixed', 'test.db');
+    const { execFile } = await import('node:child_process');
+    const { promisify } = await import('node:util');
+    const execFileAsync = promisify(execFile);
+    // Written to a temp file and run via sqlite3's `.read` meta-command,
+    // not passed as a raw argv string -- at 300 inserts x 500 chars this
+    // SQL is ~150KB, which blows past Windows's ~32K CreateProcess
+    // command-line limit (spawn ENAMETOOLONG). Same fix already
+    // established in sqliteVacuum.test.js's makeBloatedDb helper.
+    const sql = [
+      'CREATE TABLE t (id INTEGER PRIMARY KEY, data TEXT);',
+      ...Array.from({ length: 300 }, (_, i) => `INSERT INTO t (data) VALUES ('${'x'.repeat(500)}-${i}');`),
+      'DELETE FROM t WHERE id % 2 = 0;'
+    ].join('\n');
+    const scriptPath = join(appDataDir, 'mixed', 'setup.sql');
+    await writeFile(scriptPath, sql, 'utf8');
+    await execFileAsync(sqliteVacuum.sqlite3ExePath(), [dbPath, `.read ${scriptPath}`]);
+    const { statSync } = await import('node:fs');
+    const dbSizeBefore = statSync(dbPath).size;
+
+    const rule = {
+      id: 'mixed', category: 'Test', name: 'Mixed rule',
+      actions: [
+        { type: 'delete', paths: ['%APPDATA%\\mixed\\cache'] },
+        { type: 'sqlite.vacuum', path: '%APPDATA%\\mixed\\test.db' }
+      ]
+    };
+
+    const result = await executeRule(rule);
+
+    expect(result.freedBytes).toBeGreaterThan(5); // the 5-byte file, plus real vacuum reclaim
+    expect(statSync(dbPath).size).toBeLessThan(dbSizeBefore);
+  });
+
+  it('reports registryKeysRemoved, not a fabricated freedBytes, for a winreg-only rule', async () => {
+    const { execFile } = await import('node:child_process');
+    const { promisify } = await import('node:util');
+    const execFileAsync = promisify(execFile);
+    const testKey = `HKCU\\Software\\prune-dispatch-test-${process.pid}`;
+    await execFileAsync('reg', ['add', testKey, '/v', 'Marker', '/d', 'x', '/f']);
+
+    const rule = {
+      id: 'reg-only', category: 'Test', name: 'Registry-only rule',
+      actions: [{ type: 'winreg', key: testKey }]
+    };
+
+    const result = await executeRule(rule);
+
+    expect(result.freedBytes).toBe(0);
+    expect(result.registryKeysRemoved).toBe(1);
+
+    try { await execFileAsync('reg', ['delete', testKey, '/f']); } catch { /* already gone, expected */ }
+  });
+
+  it('scans a sqlite.vacuum-only rule, reporting the file size as sizeBytes', async () => {
+    const dbPath = join(appDataDir, 'solo.db');
+    const { execFile } = await import('node:child_process');
+    const { promisify } = await import('node:util');
+    const execFileAsync = promisify(execFile);
+    await execFileAsync(sqliteVacuum.sqlite3ExePath(), [dbPath, 'CREATE TABLE t (id INTEGER);']);
+    const { statSync } = await import('node:fs');
+    const realSize = statSync(dbPath).size;
+
+    const rule = { id: 'solo', category: 'Test', name: 'Solo vacuum', actions: [{ type: 'sqlite.vacuum', path: '%APPDATA%\\solo.db' }] };
+
+    const result = scanRule(rule);
+
+    expect(result.sizeBytes).toBe(realSize);
+  });
 });
 
 describe('expandPath tokens', () => {
