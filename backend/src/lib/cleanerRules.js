@@ -184,9 +184,9 @@ export function scanAllRules(guards = {}) {
  * (normalizeRule) and dispatches each action to its own module's
  * `execute()` by `type`, merging their results into one summary:
  * `freedBytes` summed across every action, `skipped` concatenated, and
- * `registryKeysRemoved`/`recycled`/`quarantineBatch`/`ranCommand`/`error`
- * each included only when an action of the matching type actually
- * produced one (never present-but-undefined).
+ * `registryKeysRemoved`/`vacuumed`/`recycled`/`quarantineBatch`/
+ * `ranCommand`/`error` each included only when an action of the matching
+ * type actually produced one (never present-but-undefined).
  *
  * - `delete` pre-filters out any locked/inaccessible file (reported in
  *   `skipped`, never thrown), then quarantines everything left through
@@ -208,7 +208,7 @@ export async function executeRule(rule, guards = {}) {
   let freedBytes = 0;
   let registryKeysRemoved;
   const skipped = [];
-  let recycled, quarantineBatch, ranCommand, error;
+  let recycled, quarantineBatch, ranCommand, error, vacuumed;
 
   for (const action of normalized.actions) {
     if (action.type === 'shell') {
@@ -226,6 +226,14 @@ export async function executeRule(rule, guards = {}) {
       const result = await sqliteVacuumAction.execute({ expandedPath: expandPath(action.path) }, guards);
       freedBytes += result.freedBytes;
       skipped.push(...result.skipped);
+      // The one discriminator a frontend has for "this result came from a
+      // sqlite.vacuum action" -- freedBytes alone is indistinguishable
+      // from a delete action's freedBytes (both are just a byte count),
+      // and executeRule's result carries no fileCount (that's a
+      // scan-time/preview concept scanRule tracks, never something
+      // execute's dispatcher returns). Same conditional-only-when-true
+      // shape as `recycled`/`registryKeysRemoved` below.
+      vacuumed = true;
     } else if (action.type === 'winreg') {
       const result = await winregAction.execute({ expandedKey: expandPath(action.key) }, rule.name);
       freedBytes += result.freedBytes;
@@ -240,6 +248,7 @@ export async function executeRule(rule, guards = {}) {
     freedBytes,
     skipped,
     ...(registryKeysRemoved !== undefined ? { registryKeysRemoved } : {}),
+    ...(vacuumed ? { vacuumed } : {}),
     ...(recycled ? { recycled } : {}),
     ...(quarantineBatch ? { quarantineBatch } : {}),
     ...(ranCommand ? { ranCommand } : {}),

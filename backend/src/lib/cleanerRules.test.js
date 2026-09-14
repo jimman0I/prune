@@ -659,6 +659,32 @@ describe('actions-array rules', () => {
 
     expect(result.sizeBytes).toBe(realSize);
   });
+
+  it('marks a real sqlite.vacuum-only execute result with vacuumed: true -- the frontend\'s only discriminator, since executeRule never returns fileCount', async () => {
+    const dbPath = join(appDataDir, 'vacuum-marker.db');
+    const { execFile } = await import('node:child_process');
+    const { promisify } = await import('node:util');
+    const execFileAsync = promisify(execFile);
+    await execFileAsync(sqliteVacuum.sqlite3ExePath(), [dbPath, 'CREATE TABLE t (id INTEGER);']);
+
+    const rule = { id: 'vacuum-marker', category: 'Test', name: 'Vacuum marker', actions: [{ type: 'sqlite.vacuum', path: '%APPDATA%\\vacuum-marker.db' }] };
+
+    const result = await executeRule(rule);
+
+    expect(result.vacuumed).toBe(true);
+  });
+
+  it('never includes a vacuumed key on a delete-only rule\'s execute result', async () => {
+    const dir = join(appDataDir, 'delete-only', 'cache');
+    await mkdir(dir, { recursive: true });
+    await writeFile(join(dir, 'a.bin'), '12345'); // 5 bytes
+
+    const rule = { id: 'delete-only', category: 'Test', name: 'Delete only', actions: [{ type: 'delete', paths: ['%APPDATA%\\delete-only\\cache'] }] };
+
+    const result = await executeRule(rule);
+
+    expect('vacuumed' in result).toBe(false);
+  });
 });
 
 describe('expandPath tokens', () => {
