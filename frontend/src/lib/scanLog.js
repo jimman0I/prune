@@ -79,17 +79,22 @@ export function executeLogLine(item) {
   // a rule that only vacuums a database or only removes a registry key
   // never "Deletes" anything, and saying so would be inaccurate, not
   // just imprecise.
+  //
+  // `registryKeysRemoved` is set iff executeRule's merge logic ran a
+  // winreg action for this rule, so its presence (not its value) is the
+  // discriminator -- 0 means the action ran and found nothing to remove,
+  // not that the field is absent.
   if (item.registryKeysRemoved !== undefined) {
-    const label = `Reset ${item.name ?? item.id}`;
+    const label = `Clear ${item.name ?? item.id}`;
     return item.registryKeysRemoved > 0
       ? { label, detail: `${item.registryKeysRemoved} registry key${item.registryKeysRemoved === 1 ? '' : 's'}`, tone: 'size' }
       : { label, detail: 'already absent', tone: 'muted' };
   }
 
-  // A rule whose freedBytes came entirely from compacting a database
-  // (fileCount explicitly 0, not merely absent/undefined) rather than
-  // removing files.
-  if (item.fileCount === 0 && item.freedBytes > 0) {
+  // `vacuumed` is set iff executeRule ran a sqlite.vacuum action for this
+  // rule -- freedBytes here came from compacting a database file, not
+  // from removing any.
+  if (item.vacuumed) {
     return { label: `Compact ${item.name ?? item.id}`, detail: formatBytes(item.freedBytes), tone: 'size' };
   }
 
