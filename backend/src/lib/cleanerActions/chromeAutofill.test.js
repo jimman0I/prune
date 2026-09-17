@@ -48,7 +48,21 @@ describe('chromeAutofill scan', () => {
 describe('chromeAutofill execute', () => {
   it('clears the autofill table, quarantines the original, reports a real byte delta', async () => {
     const filePath = join(scratchDir, 'Web Data');
-    await makeWebDataDb(filePath, Array.from({ length: 50 }, (_, i) => ({ name: 'field' + i, value: 'value-'.repeat(20) + i })));
+    // 50 rows x ~200 bytes of real payload each in BOTH the value and
+    // value_lower columns makeWebDataDb populates (~20KB of row data
+    // total, similar overall sizing to cookie.test.js's own ~18KB padded
+    // fixture -- kept smaller per-column than that fixture's 600 bytes
+    // because this schema duplicates the payload into a second column,
+    // and doubling straight to 600/column would blow past the Windows
+    // command-line length limit for the sqlite3.exe CLI invocation).
+    // Several SQLite pages at the default 4096-byte page size, so that
+    // clearing the table and running VACUUM has real freed pages to
+    // reclaim -- a handful of tiny rows can fit on a single page and
+    // would shrink by 0 bytes even if VACUUM silently did nothing, the
+    // same vacuous-test gap cookie.test.js's own padded fixture guards
+    // against for its surgical row delete.
+    const padding = 'x'.repeat(200);
+    await makeWebDataDb(filePath, Array.from({ length: 50 }, (_, i) => ({ name: 'field' + i, value: padding + i })));
     const before = (await readFile(filePath)).length;
 
     const result = await execute({ expandedPath: filePath }, 'Test Rule', {});
@@ -56,7 +70,10 @@ describe('chromeAutofill execute', () => {
     const remaining = await execFileAsync(sqlite3ExePath(), [filePath, 'SELECT COUNT(*) FROM autofill;']);
     expect(remaining.stdout.trim()).toBe('0');
     expect(result.quarantineBatch).toBeTruthy();
-    expect(result.freedBytes).toBeGreaterThanOrEqual(0);
+    const after = (await readFile(filePath)).length;
+    expect(after).toBeLessThan(before);
+    expect(result.freedBytes).toBeGreaterThan(0);
+    expect(result.freedBytes).toBe(before - after);
 
     const batchFiles = await (await import('node:fs/promises')).readdir(result.quarantineBatch);
     const quarantinedFile = batchFiles.find((f) => f.startsWith('file-0-'));
