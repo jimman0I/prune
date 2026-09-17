@@ -810,6 +810,69 @@ describe('cookie action, wired', () => {
   });
 });
 
+describe('glob-resolved bespoke actions', () => {
+  // Same fixture-building approach the 'cookie action, wired' block above
+  // uses: a real Chromium-schema cookie SQLite database via the bundled
+  // sqlite3.exe CLI, not a fake/hand-crafted file -- the dispatcher's
+  // cookie branch calls into sqlite3.exe (via cookie.js's
+  // detectCookieTable/execute) and a non-database stub would only prove
+  // the plumbing, not the real path.
+  async function makeChromiumCookieDb(filePath, rows) {
+    const { execFile } = await import('node:child_process');
+    const { promisify } = await import('node:util');
+    const execFileAsync = promisify(execFile);
+    const values = rows.map(({ host }) => `('${host}', 'name', 'value')`).join(',');
+    const sql = `CREATE TABLE cookies (host_key TEXT, name TEXT, value TEXT); INSERT INTO cookies (host_key, name, value) VALUES ${values};`;
+    await execFileAsync(sqliteVacuum.sqlite3ExePath(), [filePath, sql]);
+  }
+
+  it('a wildcarded cookie action cleans every real profile folder, not just one', async () => {
+    const profile1Dir = join(appDataDir, 'multi-profile-test', 'Default');
+    const profile2Dir = join(appDataDir, 'multi-profile-test', 'Profile 1');
+    await mkdir(profile1Dir, { recursive: true });
+    await mkdir(profile2Dir, { recursive: true });
+
+    await makeChromiumCookieDb(join(profile1Dir, 'Cookies'), [{ host: 'a.com' }]);
+    await makeChromiumCookieDb(join(profile2Dir, 'Cookies'), [{ host: 'b.com' }]);
+
+    const rule = {
+      id: 'multi-profile-cookie-test', category: 'Test', name: 'Multi-profile cookie test',
+      actions: [{ type: 'cookie', path: '%APPDATA%\\multi-profile-test\\*\\Cookies' }]
+    };
+
+    // Scan should also see both real profiles, not just one.
+    const scanned = scanRule(rule);
+    expect(scanned.present).toBe(true);
+    expect(scanned.sizeBytes).toBeGreaterThan(0);
+
+    const result = await executeRule(rule, { cookieKeepList: [] });
+
+    // BOTH profiles' Cookies files should be gone -- proves the glob
+    // resolved to two concrete paths, not just one (or a literal '*').
+    expect(existsSync(join(profile1Dir, 'Cookies'))).toBe(false);
+    expect(existsSync(join(profile2Dir, 'Cookies'))).toBe(false);
+    expect(result.freedBytes).toBeGreaterThan(0);
+  });
+
+  it('a non-wildcarded bespoke action path is completely unaffected by this change', async () => {
+    // Reuses the exact scenario from the 'cookie action, wired' describe
+    // block above (a single, non-wildcarded path) to prove the glob-
+    // resolution change is a pure addition: resolveGlob's own documented
+    // behavior for a path with no `*` is to resolve to exactly itself, so
+    // this single-profile case must behave identically to before.
+    const filePath = join(appDataDir, 'Cookies');
+    await makeChromiumCookieDb(filePath, [{ host: 'example.com' }, { host: 'other.com' }]);
+
+    const rule = { id: 'cookie-exec-whole-single', category: 'Test', name: 'Cookie exec whole-file single test', actions: [{ type: 'cookie', path: '%APPDATA%\\Cookies' }] };
+
+    const result = await executeRule(rule, { cookieKeepList: [] });
+
+    expect(existsSync(filePath)).toBe(false);
+    expect(result.freedBytes).toBeGreaterThan(0);
+    expect(result.quarantineBatch).toBeTruthy();
+  });
+});
+
 describe('phase D actions, wired', () => {
   // Same "reproduce the real fixture-building helper inline, not exported
   // from the action module's own test file" approach the cookie block

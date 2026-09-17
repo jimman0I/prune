@@ -3,6 +3,7 @@ import { homedir } from 'node:os';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import * as deleteAction from './cleanerActions/delete.js';
+import { resolveGlob, pathToSegments } from './cleanerActions/delete.js';
 import * as shellAction from './cleanerActions/shell.js';
 import * as sqliteVacuumAction from './cleanerActions/sqliteVacuum.js';
 import * as winregAction from './cleanerActions/winreg.js';
@@ -48,6 +49,22 @@ export function expandPath(rawPath) {
     expanded = join(homedir(), expanded.slice(1).replace(/^[\\/]/, ''));
   }
   return expanded;
+}
+
+/** Resolves one bespoke action's `path` (already environment-expanded)
+ * into every REAL concrete path it currently matches -- a `*` wildcard
+ * (e.g. matching every Chrome profile folder) expands the same way
+ * `delete.js`'s own action already does, via the exact same resolver.
+ * A path with no `*` resolves to exactly itself (resolveGlob's own
+ * documented behavior for the non-wildcard case), so every existing
+ * single-profile rule is unaffected. Returns an array -- callers loop
+ * over it and merge results, since a wildcard can now genuinely match
+ * zero, one, or several real files where the bespoke action types
+ * previously only ever saw one. */
+function resolveBespokeActionPaths(expandedPath) {
+  const [driveSegment, ...rest] = pathToSegments(expandedPath);
+  if (!driveSegment) return [];
+  return resolveGlob(driveSegment, rest);
 }
 
 /** Reads and parses cleaners.json fresh every call -- the rule set is
@@ -140,33 +157,47 @@ export function scanRule(rule, guards = {}) {
       // doc comment calls out as a feature for path-based rules.
       present = true;
     } else if (action.type === 'json') {
-      const result = jsonAction.scan({ expandedPath: expandPath(action.path), address: action.address });
-      sizeBytes = (sizeBytes ?? 0) + result.sizeBytes;
-      if (result.present) present = true;
+      for (const concretePath of resolveBespokeActionPaths(expandPath(action.path))) {
+        const result = jsonAction.scan({ expandedPath: concretePath, address: action.address });
+        sizeBytes = (sizeBytes ?? 0) + result.sizeBytes;
+        if (result.present) present = true;
+      }
     } else if (action.type === 'cookie') {
-      const result = cookieAction.scan({ expandedPath: expandPath(action.path) });
-      sizeBytes = (sizeBytes ?? 0) + result.sizeBytes;
-      if (result.present) present = true;
+      for (const concretePath of resolveBespokeActionPaths(expandPath(action.path))) {
+        const result = cookieAction.scan({ expandedPath: concretePath });
+        sizeBytes = (sizeBytes ?? 0) + result.sizeBytes;
+        if (result.present) present = true;
+      }
     } else if (action.type === 'chrome.autofill') {
-      const result = chromeAutofillAction.scan({ expandedPath: expandPath(action.path) });
-      sizeBytes = (sizeBytes ?? 0) + result.sizeBytes;
-      if (result.present) present = true;
+      for (const concretePath of resolveBespokeActionPaths(expandPath(action.path))) {
+        const result = chromeAutofillAction.scan({ expandedPath: concretePath });
+        sizeBytes = (sizeBytes ?? 0) + result.sizeBytes;
+        if (result.present) present = true;
+      }
     } else if (action.type === 'chrome.keywords') {
-      const result = chromeKeywordsAction.scan({ expandedPath: expandPath(action.path) });
-      sizeBytes = (sizeBytes ?? 0) + result.sizeBytes;
-      if (result.present) present = true;
+      for (const concretePath of resolveBespokeActionPaths(expandPath(action.path))) {
+        const result = chromeKeywordsAction.scan({ expandedPath: concretePath });
+        sizeBytes = (sizeBytes ?? 0) + result.sizeBytes;
+        if (result.present) present = true;
+      }
     } else if (action.type === 'chrome.history') {
-      const result = chromeHistoryAction.scan({ expandedPath: expandPath(action.path) });
-      sizeBytes = (sizeBytes ?? 0) + result.sizeBytes;
-      if (result.present) present = true;
+      for (const concretePath of resolveBespokeActionPaths(expandPath(action.path))) {
+        const result = chromeHistoryAction.scan({ expandedPath: concretePath });
+        sizeBytes = (sizeBytes ?? 0) + result.sizeBytes;
+        if (result.present) present = true;
+      }
     } else if (action.type === 'mozilla.url.history') {
-      const result = mozillaUrlHistoryAction.scan({ expandedPath: expandPath(action.path) });
-      sizeBytes = (sizeBytes ?? 0) + result.sizeBytes;
-      if (result.present) present = true;
+      for (const concretePath of resolveBespokeActionPaths(expandPath(action.path))) {
+        const result = mozillaUrlHistoryAction.scan({ expandedPath: concretePath });
+        sizeBytes = (sizeBytes ?? 0) + result.sizeBytes;
+        if (result.present) present = true;
+      }
     } else if (action.type === 'mozilla.favicons') {
-      const result = mozillaFaviconsAction.scan({ expandedPath: expandPath(action.path) });
-      sizeBytes = (sizeBytes ?? 0) + result.sizeBytes;
-      if (result.present) present = true;
+      for (const concretePath of resolveBespokeActionPaths(expandPath(action.path))) {
+        const result = mozillaFaviconsAction.scan({ expandedPath: concretePath });
+        sizeBytes = (sizeBytes ?? 0) + result.sizeBytes;
+        if (result.present) present = true;
+      }
     }
   }
 
@@ -308,47 +339,61 @@ export async function executeRule(rule, guards = {}) {
       skipped.push(...result.skipped);
       if (result.quarantineBatch) quarantineBatch = result.quarantineBatch;
     } else if (action.type === 'json') {
-      const result = await jsonAction.execute({ expandedPath: expandPath(action.path), address: action.address }, rule.name, guards);
-      freedBytes += result.freedBytes;
-      skipped.push(...result.skipped);
-      if (result.recycled) recycled = true;
-      if (result.quarantineBatch) quarantineBatch = result.quarantineBatch;
-      // The one discriminator a frontend has for "this result came from a
-      // json action" -- same conditional-only-when-true shape as `vacuumed`
-      // above, mirrored exactly: freedBytes alone can't tell a json key
-      // removal apart from a delete action's freedBytes.
-      edited = true;
+      for (const concretePath of resolveBespokeActionPaths(expandPath(action.path))) {
+        const result = await jsonAction.execute({ expandedPath: concretePath, address: action.address }, rule.name, guards);
+        freedBytes += result.freedBytes;
+        skipped.push(...result.skipped);
+        if (result.recycled) recycled = true;
+        if (result.quarantineBatch) quarantineBatch = result.quarantineBatch;
+        // The one discriminator a frontend has for "this result came from a
+        // json action" -- same conditional-only-when-true shape as `vacuumed`
+        // above, mirrored exactly: freedBytes alone can't tell a json key
+        // removal apart from a delete action's freedBytes.
+        edited = true;
+      }
     } else if (action.type === 'cookie') {
-      const result = await cookieAction.execute({ expandedPath: expandPath(action.path) }, rule.name, guards);
-      freedBytes += result.freedBytes;
-      skipped.push(...result.skipped);
-      if (result.recycled) recycled = true;
-      if (result.quarantineBatch) quarantineBatch = result.quarantineBatch;
+      for (const concretePath of resolveBespokeActionPaths(expandPath(action.path))) {
+        const result = await cookieAction.execute({ expandedPath: concretePath }, rule.name, guards);
+        freedBytes += result.freedBytes;
+        skipped.push(...result.skipped);
+        if (result.recycled) recycled = true;
+        if (result.quarantineBatch) quarantineBatch = result.quarantineBatch;
+      }
     } else if (action.type === 'chrome.autofill') {
-      const result = await chromeAutofillAction.execute({ expandedPath: expandPath(action.path) }, rule.name, guards);
-      freedBytes += result.freedBytes;
-      skipped.push(...result.skipped);
-      if (result.quarantineBatch) quarantineBatch = result.quarantineBatch;
+      for (const concretePath of resolveBespokeActionPaths(expandPath(action.path))) {
+        const result = await chromeAutofillAction.execute({ expandedPath: concretePath }, rule.name, guards);
+        freedBytes += result.freedBytes;
+        skipped.push(...result.skipped);
+        if (result.quarantineBatch) quarantineBatch = result.quarantineBatch;
+      }
     } else if (action.type === 'chrome.keywords') {
-      const result = await chromeKeywordsAction.execute({ expandedPath: expandPath(action.path) }, rule.name, guards);
-      freedBytes += result.freedBytes;
-      skipped.push(...result.skipped);
-      if (result.quarantineBatch) quarantineBatch = result.quarantineBatch;
+      for (const concretePath of resolveBespokeActionPaths(expandPath(action.path))) {
+        const result = await chromeKeywordsAction.execute({ expandedPath: concretePath }, rule.name, guards);
+        freedBytes += result.freedBytes;
+        skipped.push(...result.skipped);
+        if (result.quarantineBatch) quarantineBatch = result.quarantineBatch;
+      }
     } else if (action.type === 'chrome.history') {
-      const result = await chromeHistoryAction.execute({ expandedPath: expandPath(action.path) }, rule.name, guards);
-      freedBytes += result.freedBytes;
-      skipped.push(...result.skipped);
-      if (result.quarantineBatch) quarantineBatch = result.quarantineBatch;
+      for (const concretePath of resolveBespokeActionPaths(expandPath(action.path))) {
+        const result = await chromeHistoryAction.execute({ expandedPath: concretePath }, rule.name, guards);
+        freedBytes += result.freedBytes;
+        skipped.push(...result.skipped);
+        if (result.quarantineBatch) quarantineBatch = result.quarantineBatch;
+      }
     } else if (action.type === 'mozilla.url.history') {
-      const result = await mozillaUrlHistoryAction.execute({ expandedPath: expandPath(action.path) }, rule.name, guards);
-      freedBytes += result.freedBytes;
-      skipped.push(...result.skipped);
-      if (result.quarantineBatch) quarantineBatch = result.quarantineBatch;
+      for (const concretePath of resolveBespokeActionPaths(expandPath(action.path))) {
+        const result = await mozillaUrlHistoryAction.execute({ expandedPath: concretePath }, rule.name, guards);
+        freedBytes += result.freedBytes;
+        skipped.push(...result.skipped);
+        if (result.quarantineBatch) quarantineBatch = result.quarantineBatch;
+      }
     } else if (action.type === 'mozilla.favicons') {
-      const result = await mozillaFaviconsAction.execute({ expandedPath: expandPath(action.path) }, rule.name, guards);
-      freedBytes += result.freedBytes;
-      skipped.push(...result.skipped);
-      if (result.quarantineBatch) quarantineBatch = result.quarantineBatch;
+      for (const concretePath of resolveBespokeActionPaths(expandPath(action.path))) {
+        const result = await mozillaFaviconsAction.execute({ expandedPath: concretePath }, rule.name, guards);
+        freedBytes += result.freedBytes;
+        skipped.push(...result.skipped);
+        if (result.quarantineBatch) quarantineBatch = result.quarantineBatch;
+      }
     }
   }
 
