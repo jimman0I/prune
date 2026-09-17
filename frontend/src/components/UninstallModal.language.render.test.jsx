@@ -56,6 +56,16 @@ const openAndUninstall = async () => {
   return { user, onClose };
 };
 
+/** Same as openAndUninstall, but also clicks past the new manual
+ * readyToScan step (translated Scan button) -- for the tests below that
+ * exercise what happens once a leftover scan actually runs, not the
+ * readyToScan gate itself. */
+const openAndScan = async () => {
+  const { user, onClose } = await openAndUninstall();
+  await user.click(await screen.findByRole('button', { name: 'Σάρωση' }));
+  return { user, onClose };
+};
+
 describe('the uninstall dialog, in Greek', () => {
   it('translates the title and the Close button', async () => {
     renderScreen(<UninstallModal program={program} onClose={vi.fn()} />);
@@ -137,7 +147,7 @@ describe('the uninstall dialog, in Greek', () => {
   it('translates the removing phase for each destination', async () => {
     let resolveRemoval;
     removeQuarantined.mockReturnValue(new Promise((resolve) => { resolveRemoval = resolve; }));
-    const { user } = await openAndUninstall();
+    const { user } = await openAndScan();
     await user.click(await screen.findByRole('button', { name: 'Αφαίρεση επιλεγμένων' }));
     expect(await screen.findByText('Μεταφορά στην Καραντίνα')).toBeTruthy();
     expect(screen.getByText('Τίποτα δεν διαγράφεται — κάθε στοιχείο μπορεί να επαναφερθεί')).toBeTruthy();
@@ -148,7 +158,7 @@ describe('the uninstall dialog, in Greek', () => {
     fetchSettings.mockResolvedValue({ language: 'el', leftoverDestination: 'recycle' });
     let resolveRemoval;
     removeQuarantined.mockReturnValue(new Promise((resolve) => { resolveRemoval = resolve; }));
-    const { user } = await openAndUninstall();
+    const { user } = await openAndScan();
     await user.click(await screen.findByRole('button', { name: 'Αφαίρεση επιλεγμένων' }));
     expect(await screen.findByText('Αποστολή στον Κάδο Ανακύκλωσης')).toBeTruthy();
     expect(screen.getByText('Επαναφέρετέ τα από τον Κάδο Ανακύκλωσης αν χρειαστεί')).toBeTruthy();
@@ -159,17 +169,26 @@ describe('the uninstall dialog, in Greek', () => {
     fetchSettings.mockResolvedValue({ language: 'el', leftoverDestination: 'permanent' });
     let resolveRemoval;
     removeQuarantined.mockReturnValue(new Promise((resolve) => { resolveRemoval = resolve; }));
-    const { user } = await openAndUninstall();
+    const { user } = await openAndScan();
     await user.click(await screen.findByRole('button', { name: 'Οριστική διαγραφή' }));
     expect(await screen.findByText('Οριστική διαγραφή')).toBeTruthy();
     expect(screen.getByText('Αυτά δεν μπορούν να επαναφερθούν')).toBeTruthy();
     resolveRemoval({ destination: 'permanent', files: [{ originalPath: 'x', sizeBytes: 2048 }], registryKeys: [], totalSizeBytes: 2048 });
   });
 
+  it('translates the readyToScan step: body copy and Scan button', async () => {
+    const { user } = await openAndUninstall();
+    expect(await screen.findByText(/Αν ο δικός του απεγκαταστάτης του Thing εξακολουθεί να ολοκληρώνεται/)).toBeTruthy();
+    expect(screen.getByRole('button', { name: 'Σάρωση' })).toBeTruthy();
+    expect(scanForLeftovers).not.toHaveBeenCalled();
+    await user.click(screen.getByRole('button', { name: 'Σάρωση' }));
+    await waitFor(() => expect(scanForLeftovers).toHaveBeenCalledTimes(1));
+  });
+
   it('translates the scanning progress phase', async () => {
     let resolveScan;
     scanForLeftovers.mockReturnValue(new Promise((resolve) => { resolveScan = resolve; }));
-    const { } = await openAndUninstall();
+    const { } = await openAndScan();
     expect(await screen.findByText('Σάρωση καταλοίπων')).toBeTruthy();
     expect(screen.getByText('Έλεγχος συστήματος αρχείων, μητρώου & προγραμματισμένων εργασιών…')).toBeTruthy();
     resolveScan(found);
@@ -183,7 +202,7 @@ describe('the uninstall dialog, in Greek', () => {
   });
 
   it('translates the review step, including the embedded LeftoverReview screen', async () => {
-    await openAndUninstall();
+    await openAndScan();
     expect(await screen.findByText(/Βρέθηκ.*στοιχεί.*απεγκαταστάτης/)).toBeTruthy();
     expect(screen.getByText('Αρχεία & φάκελοι')).toBeTruthy();
     expect(screen.getByText('Κλειδιά μητρώου')).toBeTruthy();
@@ -201,7 +220,7 @@ describe('the uninstall dialog, in Greek', () => {
       },
       scheduledTasks: { ok: false, items: [] }
     });
-    await openAndUninstall();
+    await openAndScan();
     await screen.findByText('Αρχεία & φάκελοι');
     // scheduledTasks reported ok: false -> the "couldn't check" line, in the
     // group's own translated, lower-cased label.
@@ -220,7 +239,7 @@ describe('the uninstall dialog, in Greek', () => {
       registryKeys: { ok: true, items: [] },
       scheduledTasks: { ok: true, items: [{ name: 'ThingUpdaterTask', path: '\\' }] }
     });
-    await openAndUninstall();
+    await openAndScan();
     expect(await screen.findByText('βρέθηκε, δεν αφαιρέθηκε')).toBeTruthy();
     expect(screen.getByText('Προγραμματισμένες εργασίες')).toBeTruthy();
   });
@@ -231,14 +250,14 @@ describe('the uninstall dialog, in Greek', () => {
       registryKeys: { ok: true, items: [] },
       scheduledTasks: { ok: true, items: [] }
     });
-    await openAndUninstall();
+    await openAndScan();
     expect(await screen.findByText('Δεν βρέθηκαν κατάλοιπα — καθαρή απεγκατάσταση.')).toBeTruthy();
     expect(screen.getByRole('button', { name: 'Τέλος' })).toBeTruthy();
   });
 
   it('translates a removal failure inside the review step', async () => {
     removeQuarantined.mockRejectedValue(new Error('boom'));
-    const { user } = await openAndUninstall();
+    const { user } = await openAndScan();
     await user.click(await screen.findByRole('button', { name: 'Αφαίρεση επιλεγμένων' }));
     expect(await screen.findByText('Η αφαίρεση απέτυχε: boom')).toBeTruthy();
   });
@@ -248,7 +267,7 @@ describe('the uninstall dialog, in Greek', () => {
       destination: 'quarantine', files: [{ originalPath: 'x', sizeBytes: 2048 }], registryKeys: ['k'], totalSizeBytes: 2048,
       restorePoint: { created: false, reason: 'System Protection is off' }
     });
-    const { user } = await openAndUninstall();
+    const { user } = await openAndScan();
     await user.click(await screen.findByRole('button', { name: 'Αφαίρεση επιλεγμένων' }));
     expect(await screen.findByText(/Μεταφέρθηκ.*στην Καραντίνα, ελευθερώνοντας/)).toBeTruthy();
     expect(screen.getByText(/Δεν δημιουργήθηκε σημείο επαναφοράς συστήματος \(System Protection is off\)/)).toBeTruthy();
@@ -259,7 +278,7 @@ describe('the uninstall dialog, in Greek', () => {
   it('translates the recycle-bin done summary', async () => {
     fetchSettings.mockResolvedValue({ language: 'el', leftoverDestination: 'recycle' });
     removeQuarantined.mockResolvedValue({ destination: 'recycle', files: [{ originalPath: 'x', sizeBytes: 2048 }], registryKeys: ['k'], totalSizeBytes: 2048 });
-    const { user } = await openAndUninstall();
+    const { user } = await openAndScan();
     await user.click(await screen.findByRole('button', { name: 'Αφαίρεση επιλεγμένων' }));
     expect(await screen.findByText(/Στάλθηκ.*στον Κάδο Ανακύκλωσης/)).toBeTruthy();
   });
@@ -267,7 +286,7 @@ describe('the uninstall dialog, in Greek', () => {
   it('translates the permanent-deletion done summary', async () => {
     fetchSettings.mockResolvedValue({ language: 'el', leftoverDestination: 'permanent' });
     removeQuarantined.mockResolvedValue({ destination: 'permanent', files: [{ originalPath: 'x', sizeBytes: 2048 }], registryKeys: ['k'], totalSizeBytes: 2048 });
-    const { user } = await openAndUninstall();
+    const { user } = await openAndScan();
     await user.click(await screen.findByRole('button', { name: 'Οριστική διαγραφή' }));
     expect(await screen.findByText(/Διαγράφηκ.*οριστικά/)).toBeTruthy();
   });
@@ -278,7 +297,7 @@ describe('the uninstall dialog, in Greek', () => {
       destination: 'permanent', files: [], registryKeys: [], totalSizeBytes: 0,
       failedFiles: [{ path: 'C:\\Users\\jim\\AppData\\Roaming\\Thing', reason: 'The file is in use.' }]
     });
-    const { user } = await openAndUninstall();
+    const { user } = await openAndScan();
     await user.click(await screen.findByRole('button', { name: 'Οριστική διαγραφή' }));
     expect(await screen.findByText('Αποτυχία αφαίρεσης 1 στοιχείου:')).toBeTruthy();
   });
@@ -288,7 +307,7 @@ describe('the uninstall dialog, in Greek', () => {
       destination: 'quarantine', files: [], registryKeys: [], totalSizeBytes: 0,
       failedRegistryKeys: ['HKLM\\Software\\Thing']
     });
-    const { user } = await openAndUninstall();
+    const { user } = await openAndScan();
     await user.click(await screen.findByRole('button', { name: 'Αφαίρεση επιλεγμένων' }));
     expect(await screen.findByText('Αποτυχία αφαίρεσης 1 κλειδιού μητρώου')).toBeTruthy();
     expect(screen.getByText(/αυτά συνήθως απαιτούν το Prune να εκτελείται ως διαχειριστής/)).toBeTruthy();

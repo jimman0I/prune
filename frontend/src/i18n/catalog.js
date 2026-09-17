@@ -606,6 +606,10 @@ export const CATALOG = {
         permanent: { title: 'Deleting permanently', command: 'These cannot be restored' }
       },
       noScan: (name) => `${name}'s uninstaller has finished. The leftover scan is turned off in Settings, so nothing else was looked for.`,
+      readyToScan: {
+        body: (name) => `If ${name}'s own uninstaller is still finishing up, let it close first. Once it's done, click Scan to look for anything it left behind.`,
+        scanButton: 'Scan'
+      },
       removalFailed: (error) => `Removal failed: ${error}`,
       done: 'Done',
       summary: {
@@ -1282,6 +1286,10 @@ export const CATALOG = {
         permanent: { title: 'Word permanent verwyder', command: 'Hierdie kan nie herstel word nie' }
       },
       noScan: (name) => `${name} se deïnstalleerder is klaar. Die oorblyfsel-skandering is af in Instellings, so niks anders is gesoek nie.`,
+      readyToScan: {
+        body: (name) => `As ${name} se eie deïnstalleerder nog besig is om klaar te maak, laat dit eers toemaak. Sodra dit klaar is, klik Skandeer om te soek vir enigiets wat dit agtergelaat het.`,
+        scanButton: 'Skandeer'
+      },
       removalFailed: (error) => `Verwydering het misluk: ${error}`,
       done: 'Klaar',
       summary: {
@@ -1958,6 +1966,10 @@ export const CATALOG = {
         permanent: { title: 'الحذف نهائيًا', command: 'لا يمكن استعادة هذه' }
       },
       noScan: (name) => `انتهت أداة إلغاء تثبيت ${name}. فحص المخلفات معطّل في الإعدادات، لذا لم يتم البحث عن أي شيء آخر.`,
+      readyToScan: {
+        body: (name) => `إذا كانت أداة إلغاء تثبيت ${name} الخاصة لا تزال تُنهي عملها، فاتركها تُغلق أولاً. بمجرد انتهائها، انقر على مسح للبحث عن أي شيء تركته خلفها.`,
+        scanButton: 'مسح'
+      },
       removalFailed: (error) => `فشلت الإزالة: ${error}`,
       done: 'تم',
       summary: {
@@ -2634,6 +2646,10 @@ export const CATALOG = {
         permanent: { title: 'Suprimint definitivament', command: 'Això no es pot restaurar' }
       },
       noScan: (name) => `El desinstal·lador de ${name} ha acabat. L'escaneig de restes està desactivat a Configuració, així que no s'ha buscat res més.`,
+      readyToScan: {
+        body: (name) => `Si el propi desinstal·lador de ${name} encara està acabant, deixa'l tancar primer. Un cop hagi acabat, fes clic a Escaneja per buscar qualsevol cosa que hagi deixat enrere.`,
+        scanButton: 'Escaneja'
+      },
       removalFailed: (error) => `L'eliminació ha fallat: ${error}`,
       done: 'Fet',
       summary: {
@@ -3310,6 +3326,10 @@ export const CATALOG = {
         permanent: { title: 'Trvale se maže', command: 'Toto nelze obnovit' }
       },
       noScan: (name) => `Odinstalátor ${name} dokončil svou práci. Kontrola zbytků je v Nastavení vypnutá, takže se nic dalšího nehledalo.`,
+      readyToScan: {
+        body: (name) => `Pokud vlastní odinstalátor programu ${name} ještě dokončuje svou práci, nechte ho nejprve zavřít. Jakmile skončí, klikněte na Skenovat a vyhledejte vše, co po sobě zanechal.`,
+        scanButton: 'Skenovat'
+      },
       removalFailed: (error) => `Odstranění selhalo: ${error}`,
       done: 'Hotovo',
       summary: {
@@ -3986,6 +4006,10 @@ export const CATALOG = {
         permanent: { title: "Yn dileu'n barhaol", command: 'Ni ellir adfer y rhain' }
       },
       noScan: (name) => `Mae dadosodwr ${name} wedi gorffen. Mae'r sgan olion wedi'i ddiffodd yn y Gosodiadau, felly ni chwiliwyd am ddim byd arall.`,
+      readyToScan: {
+        body: (name) => `Os yw dadosodwr ${name} ei hun yn dal i orffen, gadewch iddo gau yn gyntaf. Unwaith y bydd wedi gorffen, cliciwch Sganio i chwilio am unrhyw beth y mae wedi'i adael ar ôl.`,
+        scanButton: 'Sganio'
+      },
       removalFailed: (error) => `Methodd y tynnu: ${error}`,
       done: 'Wedi gorffen',
       summary: {
@@ -4662,6 +4686,10 @@ export const CATALOG = {
         permanent: { title: 'Sletter permanent', command: 'Disse kan ikke gendannes' }
       },
       noScan: (name) => `${name}s afinstallationsprogram er færdigt. Rest-scanningen er slået fra i Indstillinger, så der blev ikke søgt efter andet.`,
+      readyToScan: {
+        body: (name) => `Hvis ${name}s eget afinstallationsprogram stadig er ved at afslutte, så lad det lukke først. Når det er færdigt, skal du klikke på Scan for at søge efter alt, det har efterladt.`,
+        scanButton: 'Scan'
+      },
       removalFailed: (error) => `Fjernelse mislykkedes: ${error}`,
       done: 'Færdig',
       summary: {
@@ -5338,6 +5366,10 @@ export const CATALOG = {
         permanent: { title: 'Wird endgültig gelöscht', command: 'Diese können nicht wiederhergestellt werden' }
       },
       noScan: (name) => `Der Deinstaller von ${name} ist fertig. Der Rückstands-Scan ist in den Einstellungen deaktiviert, daher wurde nach nichts weiterem gesucht.`,
+      readyToScan: {
+        body: (name) => `Falls der eigene Deinstaller von ${name} noch nicht fertig ist, lassen Sie ihn zuerst schließen. Sobald er fertig ist, klicken Sie auf Scannen, um nach Rückständen zu suchen.`,
+        scanButton: 'Scannen'
+      },
       removalFailed: (error) => `Entfernen fehlgeschlagen: ${error}`,
       done: 'Fertig',
       summary: {
@@ -6014,6 +6046,10 @@ export const CATALOG = {
         permanent: { title: 'Οριστική διαγραφή', command: 'Αυτά δεν μπορούν να επαναφερθούν' }
       },
       noScan: (name) => `Ο απεγκαταστάτης του ${name} ολοκληρώθηκε. Η σάρωση καταλοίπων είναι απενεργοποιημένη στις Ρυθμίσεις, οπότε δεν αναζητήθηκε τίποτα άλλο.`,
+      readyToScan: {
+        body: (name) => `Αν ο δικός του απεγκαταστάτης του ${name} εξακολουθεί να ολοκληρώνεται, αφήστε τον να κλείσει πρώτα. Μόλις τελειώσει, κάντε κλικ στο Σάρωση για να αναζητήσετε οτιδήποτε άφησε πίσω του.`,
+        scanButton: 'Σάρωση'
+      },
       removalFailed: (error) => `Η αφαίρεση απέτυχε: ${error}`,
       done: 'Τέλος',
       summary: {
@@ -6690,6 +6726,10 @@ export const CATALOG = {
         permanent: { title: 'Eliminando permanentemente', command: 'Estos no se pueden restaurar' }
       },
       noScan: (name) => `El desinstalador de ${name} ha terminado. El escaneo de restos está desactivado en Configuración, así que no se buscó nada más.`,
+      readyToScan: {
+        body: (name) => `Si el propio desinstalador de ${name} todavía está terminando, deja que se cierre primero. Una vez que termine, haz clic en Escanear para buscar cualquier cosa que haya dejado atrás.`,
+        scanButton: 'Escanear'
+      },
       removalFailed: (error) => `La eliminación falló: ${error}`,
       done: 'Listo',
       summary: {
@@ -7366,6 +7406,10 @@ export const CATALOG = {
         permanent: { title: 'Jäädav kustutamine', command: 'Neid ei saa taastada' }
       },
       noScan: (name) => `${name} desinstallija on lõpetanud. Jääkide skannimine on seadetes välja lülitatud, seega ei otsitud midagi muud.`,
+      readyToScan: {
+        body: (name) => `Kui ${name} enda desinstallija on ikka veel lõpetamas, laske sel esmalt sulguda. Kui see on valmis, klõpsake nuppu Skanni, et otsida kõike, mis maha jäi.`,
+        scanButton: 'Skanni'
+      },
       removalFailed: (error) => `Eemaldamine ebaõnnestus: ${error}`,
       done: 'Valmis',
       summary: {
@@ -8042,6 +8086,10 @@ export const CATALOG = {
         permanent: { title: 'Poistetaan pysyvästi', command: 'Näitä ei voi palauttaa' }
       },
       noScan: (name) => `${name}n poisto-ohjelma on valmis. Jäänteiden skannaus on pois päältä asetuksissa, joten muuta ei etsitty.`,
+      readyToScan: {
+        body: (name) => `Jos ${name}n oma poisto-ohjelma on vielä viimeistelemässä toimintaansa, anna sen sulkeutua ensin. Kun se on valmis, napsauta Skannaa etsiäksesi kaiken, mitä se jätti jälkeensä.`,
+        scanButton: 'Skannaa'
+      },
       removalFailed: (error) => `Poistaminen epäonnistui: ${error}`,
       done: 'Valmis',
       summary: {
@@ -8718,6 +8766,10 @@ export const CATALOG = {
         permanent: { title: 'Suppression définitive', command: 'Ceux-ci ne peuvent pas être restaurés' }
       },
       noScan: (name) => `Le désinstalleur de ${name} a terminé. L'analyse des résidus est désactivée dans les Paramètres, donc rien d'autre n'a été recherché.`,
+      readyToScan: {
+        body: (name) => `Si le désinstalleur de ${name} est encore en train de terminer, laissez-le se fermer d'abord. Une fois terminé, cliquez sur Analyser pour rechercher tout ce qu'il a laissé derrière lui.`,
+        scanButton: 'Analyser'
+      },
       removalFailed: (error) => `La suppression a échoué : ${error}`,
       done: 'Terminé',
       summary: {
@@ -9394,6 +9446,10 @@ export const CATALOG = {
         permanent: { title: 'מוחק לצמיתות', command: 'לא ניתן לשחזר אלה' }
       },
       noScan: (name) => `תוכנית ההסרה של ${name} סיימה. סריקת השאריות כבויה בהגדרות, כך שלא חופש דבר נוסף.`,
+      readyToScan: {
+        body: (name) => `אם תוכנית ההסרה של ${name} עצמה עדיין מסיימת את פעולתה, תנו לה להיסגר קודם. לאחר שתסתיים, לחצו על סרוק כדי לחפש כל מה שהיא השאירה מאחור.`,
+        scanButton: 'סרוק'
+      },
       removalFailed: (error) => `ההסרה נכשלה: ${error}`,
       done: 'סיום',
       summary: {
@@ -10070,6 +10126,10 @@ export const CATALOG = {
         permanent: { title: 'Végleges törlés', command: 'Ezek nem állíthatók vissza' }
       },
       noScan: (name) => `A(z) ${name} eltávolítója befejezte a munkát. A maradványvizsgálat ki van kapcsolva a Beállításokban, így semmi mást nem kerestünk.`,
+      readyToScan: {
+        body: (name) => `Ha a(z) ${name} saját eltávolítója még mindig befejezés alatt van, hagyja, hogy előbb bezáruljon. Amint végzett, kattintson a Vizsgálat gombra, hogy megkeresse, mit hagyott maga után.`,
+        scanButton: 'Vizsgálat'
+      },
       removalFailed: (error) => `Az eltávolítás sikertelen: ${error}`,
       done: 'Kész',
       summary: {
@@ -10746,6 +10806,10 @@ export const CATALOG = {
         permanent: { title: 'Menghapus permanen', command: 'Ini tidak dapat dipulihkan' }
       },
       noScan: (name) => `Uninstaller ${name} telah selesai. Pemindaian sisa dimatikan di Pengaturan, jadi tidak ada lagi yang dicari.`,
+      readyToScan: {
+        body: (name) => `Jika uninstaller ${name} sendiri masih dalam proses penyelesaian, biarkan ditutup terlebih dahulu. Setelah selesai, klik Pindai untuk mencari apa pun yang ditinggalkannya.`,
+        scanButton: 'Pindai'
+      },
       removalFailed: (error) => `Penghapusan gagal: ${error}`,
       done: 'Selesai',
       summary: {
@@ -11422,6 +11486,10 @@ export const CATALOG = {
         permanent: { title: 'Eyði varanlega', command: 'Ekki er hægt að endurheimta þetta' }
       },
       noScan: (name) => `Fjarlægingarforrit ${name} er lokið. Leifaskönnun er slökkt í Stillingum, svo ekkert annað var leitað að.`,
+      readyToScan: {
+        body: (name) => `Ef eigið fjarlægingarforrit ${name} er enn að ljúka sér af, láttu það loka fyrst. Þegar því er lokið, smelltu á Skanna til að leita að öllu sem það skildi eftir.`,
+        scanButton: 'Skanna'
+      },
       removalFailed: (error) => `Fjarlæging mistókst: ${error}`,
       done: 'Lokið',
       summary: {
@@ -12098,6 +12166,10 @@ export const CATALOG = {
         permanent: { title: 'Eliminazione definitiva', command: 'Questi non possono essere ripristinati' }
       },
       noScan: (name) => `Il disinstallatore di ${name} ha terminato. La scansione dei residui è disattivata nelle Impostazioni, quindi non è stato cercato altro.`,
+      readyToScan: {
+        body: (name) => `Se il disinstallatore di ${name} sta ancora terminando, lascialo chiudere prima. Una volta terminato, fai clic su Scansiona per cercare tutto ciò che ha lasciato.`,
+        scanButton: 'Scansiona'
+      },
       removalFailed: (error) => `Rimozione fallita: ${error}`,
       done: 'Fatto',
       summary: {
@@ -12774,6 +12846,10 @@ export const CATALOG = {
         permanent: { title: '完全に削除中', command: 'これらは復元できません' }
       },
       noScan: (name) => `${name} のアンインストーラーが完了しました。残留物スキャンは設定でオフになっているため、他には何も検索されませんでした。`,
+      readyToScan: {
+        body: (name) => `${name} 自体のアンインストーラーがまだ終了処理中の場合は、先に閉じるまで待ってください。完了したら、「スキャン」をクリックして残っているものを検索してください。`,
+        scanButton: 'スキャン'
+      },
       removalFailed: (error) => `削除に失敗しました: ${error}`,
       done: '完了',
       summary: {
@@ -13450,6 +13526,10 @@ export const CATALOG = {
         permanent: { title: '완전히 삭제 중', command: '이것들은 복원할 수 없습니다' }
       },
       noScan: (name) => `${name}의 제거 프로그램이 완료되었습니다. 남은 항목 검사가 설정에서 꺼져 있어 다른 것은 검색되지 않았습니다.`,
+      readyToScan: {
+        body: (name) => `${name}의 자체 제거 프로그램이 아직 마무리 중이라면 먼저 닫히도록 기다리세요. 완료되면 스캔을 클릭하여 남은 항목을 검색하세요.`,
+        scanButton: '스캔'
+      },
       removalFailed: (error) => `제거 실패: ${error}`,
       done: '완료',
       summary: {
@@ -14126,6 +14206,10 @@ export const CATALOG = {
         permanent: { title: 'Ištrinama negrįžtamai', command: 'Šių negalima atkurti' }
       },
       noScan: (name) => `${name} šalinimo priemonė baigė darbą. Liekanų nuskaitymas nustatymuose išjungtas, todėl daugiau nieko nebuvo ieškoma.`,
+      readyToScan: {
+        body: (name) => `Jei paties ${name} šalinimo priemonė vis dar baigia darbą, leiskite jai pirmiausia užsidaryti. Kai ji baigs, spustelėkite Nuskaityti, kad surastumėte viską, ką ji paliko.`,
+        scanButton: 'Nuskaityti'
+      },
       removalFailed: (error) => `Pašalinimas nepavyko: ${error}`,
       done: 'Atlikta',
       summary: {
@@ -14802,6 +14886,10 @@ export const CATALOG = {
         permanent: { title: 'Memadam secara kekal', command: 'Ini tidak boleh dipulihkan' }
       },
       noScan: (name) => `Penyahpasang ${name} telah selesai. Imbasan baki dimatikan dalam Tetapan, jadi tiada yang lain dicari.`,
+      readyToScan: {
+        body: (name) => `Jika penyahpasang ${name} sendiri masih selesai menjalankan tugasnya, biarkan ia ditutup dahulu. Setelah selesai, klik Imbas untuk mencari apa-apa yang ditinggalkannya.`,
+        scanButton: 'Imbas'
+      },
       removalFailed: (error) => `Pengeluaran gagal: ${error}`,
       done: 'Selesai',
       summary: {
@@ -15478,6 +15566,10 @@ export const CATALOG = {
         permanent: { title: 'Sletter permanent', command: 'Disse kan ikke gjenopprettes' }
       },
       noScan: (name) => `${name}s avinstallasjonsprogram er ferdig. Restskanningen er slått av i Innstillinger, så ingenting annet ble søkt etter.`,
+      readyToScan: {
+        body: (name) => `Hvis ${name}s eget avinstallasjonsprogram fortsatt holder på å avslutte, la det lukke seg først. Når det er ferdig, klikk Skann for å se etter alt det har etterlatt.`,
+        scanButton: 'Skann'
+      },
       removalFailed: (error) => `Fjerning mislyktes: ${error}`,
       done: 'Ferdig',
       summary: {
@@ -16154,6 +16246,10 @@ export const CATALOG = {
         permanent: { title: 'Wordt definitief verwijderd', command: 'Deze kunnen niet worden hersteld' }
       },
       noScan: (name) => `Het verwijderprogramma van ${name} is klaar. De restantenscan staat uit in Instellingen, dus er is niet meer naar iets gezocht.`,
+      readyToScan: {
+        body: (name) => `Als het eigen verwijderprogramma van ${name} nog aan het afronden is, laat het dan eerst sluiten. Zodra het klaar is, klik op Scannen om te zoeken naar alles wat het heeft achtergelaten.`,
+        scanButton: 'Scannen'
+      },
       removalFailed: (error) => `Verwijderen mislukt: ${error}`,
       done: 'Klaar',
       summary: {
@@ -16830,6 +16926,10 @@ export const CATALOG = {
         permanent: { title: 'Trwałe usuwanie', command: 'Tych nie można przywrócić' }
       },
       noScan: (name) => `Dezinstalator ${name} zakończył pracę. Skanowanie pozostałości jest wyłączone w Ustawieniach, więc nic więcej nie wyszukano.`,
+      readyToScan: {
+        body: (name) => `Jeśli własny dezinstalator ${name} nadal kończy pracę, pozwól mu się najpierw zamknąć. Gdy skończy, kliknij Skanuj, aby wyszukać wszystko, co po sobie zostawił.`,
+        scanButton: 'Skanuj'
+      },
       removalFailed: (error) => `Usunięcie nie powiodło się: ${error}`,
       done: 'Gotowe',
       summary: {
@@ -17506,6 +17606,10 @@ export const CATALOG = {
         permanent: { title: 'د تل لپاره ړنګیږي', command: 'دا نشي بیرته راوستل کیدی' }
       },
       noScan: (name) => `د ${name} لرې کوونکی بشپړ شو. د پاتې شونو سکین په تنظیماتو کې بند دی، نو بل هیڅ ونه لټول شو.`,
+      readyToScan: {
+        body: (name) => `که د ${name} خپل لرې کوونکی لا هم پای ته رسیدو کې وي، لومړی پرېږدئ چې وتړل شي. کله چې پای ته ورسېد، د پاتې شونو لټون لپاره پر سکین کلیک وکړئ.`,
+        scanButton: 'سکین'
+      },
       removalFailed: (error) => `لرې کول ناکام شول: ${error}`,
       done: 'شوی',
       summary: {
@@ -18182,6 +18286,10 @@ export const CATALOG = {
         permanent: { title: 'Excluindo permanentemente', command: 'Estes não podem ser restaurados' }
       },
       noScan: (name) => `O desinstalador do ${name} terminou. A verificação de resíduos está desativada nas Configurações, então nada mais foi procurado.`,
+      readyToScan: {
+        body: (name) => `Se o próprio desinstalador do ${name} ainda estiver terminando, deixe-o fechar primeiro. Assim que terminar, clique em Escanear para procurar qualquer coisa que ele tenha deixado para trás.`,
+        scanButton: 'Escanear'
+      },
       removalFailed: (error) => `A remoção falhou: ${error}`,
       done: 'Concluído',
       summary: {
@@ -18858,6 +18966,10 @@ export const CATALOG = {
         permanent: { title: 'A eliminar permanentemente', command: 'Estes não podem ser restaurados' }
       },
       noScan: (name) => `O desinstalador do ${name} terminou. A verificação de resíduos está desativada nas Definições, pelo que não se procurou mais nada.`,
+      readyToScan: {
+        body: (name) => `Se o próprio desinstalador do ${name} ainda estiver a terminar, deixe-o fechar primeiro. Assim que terminar, clique em Analisar para procurar tudo o que tenha deixado para trás.`,
+        scanButton: 'Analisar'
+      },
       removalFailed: (error) => `A remoção falhou: ${error}`,
       done: 'Concluído',
       summary: {
@@ -19534,6 +19646,10 @@ export const CATALOG = {
         permanent: { title: 'Se șterge definitiv', command: 'Acestea nu pot fi restaurate' }
       },
       noScan: (name) => `Dezinstalatorul ${name} a terminat. Scanarea resturilor este dezactivată în Setări, deci nu s-a mai căutat nimic altceva.`,
+      readyToScan: {
+        body: (name) => `Dacă propriul dezinstalator al ${name} încă termină, lăsați-l să se închidă mai întâi. Odată terminat, faceți clic pe Scanează pentru a căuta tot ce a lăsat în urmă.`,
+        scanButton: 'Scanează'
+      },
       removalFailed: (error) => `Eliminarea a eșuat: ${error}`,
       done: 'Terminat',
       summary: {
@@ -20210,6 +20326,10 @@ export const CATALOG = {
         permanent: { title: 'Безвозвратное удаление', command: 'Их нельзя восстановить' }
       },
       noScan: (name) => `Деинсталлятор ${name} завершил работу. Сканирование остатков отключено в настройках, поэтому ничего другого не искалось.`,
+      readyToScan: {
+        body: (name) => `Если собственный деинсталлятор ${name} всё ещё завершает работу, дайте ему сначала закрыться. Как только он закончит, нажмите «Сканировать», чтобы найти всё, что осталось после него.`,
+        scanButton: 'Сканировать'
+      },
       removalFailed: (error) => `Удаление не удалось: ${error}`,
       done: 'Готово',
       summary: {
@@ -20886,6 +21006,10 @@ export const CATALOG = {
         permanent: { title: 'Natrvalo sa maže', command: 'Toto nemožno obnoviť' }
       },
       noScan: (name) => `Odinštalátor ${name} dokončil prácu. Skenovanie zvyškov je vypnuté v Nastaveniach, takže sa nič iné nehľadalo.`,
+      readyToScan: {
+        body: (name) => `Ak vlastný odinštalátor ${name} ešte stále dokončuje prácu, nechajte ho najprv zavrieť. Keď skončí, kliknite na Skenovať a vyhľadajte všetko, čo po sebe zanechal.`,
+        scanButton: 'Skenovať'
+      },
       removalFailed: (error) => `Odstránenie zlyhalo: ${error}`,
       done: 'Hotovo',
       summary: {
@@ -21562,6 +21686,10 @@ export const CATALOG = {
         permanent: { title: 'Duke fshirë përgjithmonë', command: 'Këto nuk mund të rikuperohen' }
       },
       noScan: (name) => `Çinstaluesi i ${name} ka përfunduar. Skanimi i mbetjeve është çaktivizuar në Cilësimet, kështu që nuk u kërkua asgjë tjetër.`,
+      readyToScan: {
+        body: (name) => `Nëse çinstaluesi vetë i ${name} ende po përfundon, lëreni të mbyllet fillimisht. Sapo të përfundojë, klikoni Skano për të kërkuar çdo gjë që ka lënë pas.`,
+        scanButton: 'Skano'
+      },
       removalFailed: (error) => `Heqja dështoi: ${error}`,
       done: 'Përfundoi',
       summary: {
@@ -22238,6 +22366,10 @@ export const CATALOG = {
         permanent: { title: 'Трајно се брише', command: 'Ово се не може вратити' }
       },
       noScan: (name) => `Деинсталатер за ${name} је завршио. Скенирање остатака је искључено у Подешавањима, па се ништа друго није тражило.`,
+      readyToScan: {
+        body: (name) => `Ако сопствени деинсталатер за ${name} још увек завршава, пустите га да се прво затвори. Када заврши, кликните на Скенирај да потражите све што је оставио за собом.`,
+        scanButton: 'Скенирај'
+      },
       removalFailed: (error) => `Уклањање није успело: ${error}`,
       done: 'Готово',
       summary: {
@@ -22914,6 +23046,10 @@ export const CATALOG = {
         permanent: { title: 'Raderar permanent', command: 'Dessa kan inte återställas' }
       },
       noScan: (name) => `${name}s avinstallationsprogram är klart. Restskanningen är avstängd i Inställningar, så inget annat söktes efter.`,
+      readyToScan: {
+        body: (name) => `Om ${name}s eget avinstallationsprogram fortfarande håller på att avslutas, låt det stängas först. När det är klart, klicka på Skanna för att leta efter allt det har lämnat kvar.`,
+        scanButton: 'Skanna'
+      },
       removalFailed: (error) => `Borttagningen misslyckades: ${error}`,
       done: 'Klar',
       summary: {
@@ -23590,6 +23726,10 @@ export const CATALOG = {
         permanent: { title: 'กำลังลบถาวร', command: 'ไม่สามารถกู้คืนสิ่งเหล่านี้ได้' }
       },
       noScan: (name) => `ตัวถอนการติดตั้งของ ${name} เสร็จสิ้นแล้ว การสแกนสิ่งตกค้างถูกปิดในการตั้งค่า จึงไม่มีการค้นหาสิ่งอื่นเพิ่มเติม`,
+      readyToScan: {
+        body: (name) => `หากตัวถอนการติดตั้งของ ${name} เองยังทำงานไม่เสร็จ ให้รอจนกว่าจะปิดตัวลงก่อน เมื่อเสร็จแล้ว คลิกสแกนเพื่อค้นหาสิ่งที่หลงเหลืออยู่`,
+        scanButton: 'สแกน'
+      },
       removalFailed: (error) => `การลบล้มเหลว: ${error}`,
       done: 'เสร็จสิ้น',
       summary: {
@@ -24266,6 +24406,10 @@ export const CATALOG = {
         permanent: { title: 'Kalıcı olarak siliniyor', command: 'Bunlar geri yüklenemez' }
       },
       noScan: (name) => `${name} kaldırma programı tamamlandı. Artık taraması Ayarlar'da kapalı, bu yüzden başka bir şey aranmadı.`,
+      readyToScan: {
+        body: (name) => `${name}'in kendi kaldırma programı hâlâ tamamlanıyorsa, önce kapanmasını bekleyin. Tamamlandığında, geride bıraktığı her şeyi aramak için Tara'ya tıklayın.`,
+        scanButton: 'Tara'
+      },
       removalFailed: (error) => `Kaldırma başarısız oldu: ${error}`,
       done: 'Tamamlandı',
       summary: {
@@ -24942,6 +25086,10 @@ export const CATALOG = {
         permanent: { title: 'Остаточне видалення', command: 'Їх не можна відновити' }
       },
       noScan: (name) => `Деінсталятор ${name} завершив роботу. Сканування залишків вимкнено в налаштуваннях, тому нічого іншого не шукали.`,
+      readyToScan: {
+        body: (name) => `Якщо власний деінсталятор ${name} ще завершує роботу, дайте йому спочатку закритися. Щойно він завершить, натисніть «Сканувати», щоб знайти все, що залишилося після нього.`,
+        scanButton: 'Сканувати'
+      },
       removalFailed: (error) => `Видалення не вдалося: ${error}`,
       done: 'Готово',
       summary: {
@@ -25618,6 +25766,10 @@ export const CATALOG = {
         permanent: { title: 'Đang xóa vĩnh viễn', command: 'Những mục này không thể khôi phục' }
       },
       noScan: (name) => `Trình gỡ cài đặt của ${name} đã hoàn tất. Quét tệp sót lại đã bị tắt trong Cài đặt, vì vậy không có gì khác được tìm kiếm.`,
+      readyToScan: {
+        body: (name) => `Nếu trình gỡ cài đặt riêng của ${name} vẫn đang hoàn tất, hãy để nó đóng lại trước. Khi xong, hãy nhấp vào Quét để tìm bất cứ thứ gì nó để lại.`,
+        scanButton: 'Quét'
+      },
       removalFailed: (error) => `Xóa thất bại: ${error}`,
       done: 'Xong',
       summary: {
@@ -26294,6 +26446,10 @@ export const CATALOG = {
         permanent: { title: '正在永久删除', command: '这些内容无法恢复' }
       },
       noScan: (name) => `${name} 的卸载程序已完成。残留项扫描在设置中已关闭，因此未搜索其他内容。`,
+      readyToScan: {
+        body: (name) => `如果 ${name} 自己的卸载程序仍在收尾，请先让它关闭。完成后，点击扫描以查找它遗留的任何内容。`,
+        scanButton: '扫描'
+      },
       removalFailed: (error) => `删除失败：${error}`,
       done: '完成',
       summary: {
@@ -26970,6 +27126,10 @@ export const CATALOG = {
         permanent: { title: '正在永久刪除', command: '這些內容無法復原' }
       },
       noScan: (name) => `${name} 的解除安裝程式已完成。殘留項目掃描在設定中已關閉，因此未搜尋其他內容。`,
+      readyToScan: {
+        body: (name) => `如果 ${name} 自己的解除安裝程式仍在收尾，請先讓它關閉。完成後，點擊掃描以尋找它遺留的任何內容。`,
+        scanButton: '掃描'
+      },
       removalFailed: (error) => `刪除失敗：${error}`,
       done: '完成',
       summary: {
