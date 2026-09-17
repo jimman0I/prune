@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { scanAllRules, executeRules, executeRulesProgressively, scanRulesProgressively, loadCleanerRules, rulePathsExist } from '../lib/cleanerRules.js';
 import { getSettings, cleanGuardsFrom } from '../services/settings.js';
 import { getCleanerCategoryIcons } from '../services/cleanerCategoryIcons.js';
+import { listCookieDomains } from '../lib/cleanerActions/cookieDomains.js';
 
 const router = Router();
 
@@ -100,6 +101,14 @@ router.get('/rules', (req, res) => {
 router.get('/category-icons', async (req, res) => {
   try {
     res.json({ icons: await getCleanerCategoryIcons() });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+router.get('/cookie-domains', async (req, res) => {
+  try {
+    res.json(await listCookieDomains());
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
