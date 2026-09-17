@@ -511,6 +511,34 @@ describe('quarantineFileEdit with editFn', () => {
     expect(await readFile(filePath, 'utf8')).toBe('{"a":1}');
     expect(await readFile(manifest.files[0].quarantinedPath, 'utf8')).toBe('{"a":1,"b":2}');
   });
+
+  it('still writes a recoverable manifest when editFn throws mid-mutation, and rejects the caller', async () => {
+    const filePath = join(scratchDir, 'data.bin');
+    await writeFile(filePath, Buffer.from([0xde, 0xad, 0xbe, 0xef]));
+
+    await expect(quarantineFileEdit({
+      programName: 'Test',
+      filePath,
+      editFn: async (realPath) => {
+        // Simulates sqlite3.exe DELETE+VACUUM failing partway through --
+        // the real file gets left mutated (not necessarily gone) before
+        // the external tool errors out.
+        await writeFile(realPath, Buffer.from([0x00]));
+        throw new Error('sqlite3.exe exited with code 1');
+      }
+    })).rejects.toThrow(/sqlite3\.exe exited with code 1/);
+
+    // The caller was correctly informed something went wrong, but the
+    // batch must not be invisible/orphaned because of that: the original
+    // copy already sitting in the batch dir needs a manifest.json to be
+    // findable and restorable.
+    const batches = await listQuarantineBatches();
+    expect(batches).toHaveLength(1);
+
+    await restoreQuarantine(batches[0].batchDir);
+
+    expect(await readFile(filePath)).toEqual(Buffer.from([0xde, 0xad, 0xbe, 0xef]));
+  });
 });
 
 describe('emptyQuarantine', () => {
