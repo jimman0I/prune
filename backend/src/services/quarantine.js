@@ -72,15 +72,26 @@ export async function quarantineAndDelete({ programName, files, registryKeys }) 
   await mkdir(batchDir, { recursive: true });
 
   const movedFiles = [];
+  const failedFiles = [];
   for (const filePath of files) {
     if (!existsSync(filePath)) continue;
-    // Stat BEFORE the rename -- same file either side of a same-volume move
-    // (rename never changes size), but stat-ing after would be one more
-    // opportunity to race a file that vanishes between the two calls.
-    const sizeBytes = (await stat(filePath)).size;
-    const dest = join(batchDir, `file-${movedFiles.length}-${basename(filePath)}`);
-    await rename(filePath, dest);
-    movedFiles.push({ originalPath: filePath, quarantinedPath: dest, sizeBytes });
+    try {
+      // Stat BEFORE the rename -- same file either side of a same-volume move
+      // (rename never changes size), but stat-ing after would be one more
+      // opportunity to race a file that vanishes between the two calls.
+      const sizeBytes = (await stat(filePath)).size;
+      const dest = join(batchDir, `file-${movedFiles.length}-${basename(filePath)}`);
+      await rename(filePath, dest);
+      movedFiles.push({ originalPath: filePath, quarantinedPath: dest, sizeBytes });
+    } catch (err) {
+      // A locked file (EBUSY, occasionally EPERM) must not abort every file
+      // after it, or every registry key in the loop below -- same
+      // partial-results-over-total-failure philosophy the registry loop a
+      // few lines down already follows. Recorded, not swallowed: a caller
+      // that only reads `files` would report a clean batch while a file is
+      // still sitting exactly where it was.
+      failedFiles.push({ path: filePath, reason: err.message });
+    }
   }
 
   const exportedKeys = [];
@@ -125,7 +136,7 @@ export async function quarantineAndDelete({ programName, files, registryKeys }) 
 
   const manifest = {
     programName, createdAt: Date.now(), batchDir,
-    files: movedFiles, registryKeys: exportedKeys, failedRegistryKeys: failedKeys, regFiles,
+    files: movedFiles, failedFiles, registryKeys: exportedKeys, failedRegistryKeys: failedKeys, regFiles,
     totalSizeBytes: movedFiles.reduce((sum, f) => sum + f.sizeBytes, 0)
   };
   await writeFile(join(batchDir, 'manifest.json'), JSON.stringify(manifest, null, 2), 'utf8');
