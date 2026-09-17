@@ -332,13 +332,18 @@ describe('quarantineAndDelete', () => {
     });
     const schedulePendingDeleteSpy = vi.spyOn(pendingReboot, 'schedulePendingDelete');
 
-    const manifest = await quarantineAndDelete({ programName: 'Test', files: [lockedPath], registryKeys: [] });
+    try {
+      const manifest = await quarantineAndDelete({ programName: 'Test', files: [lockedPath], registryKeys: [] });
 
-    expect(schedulePendingDeleteSpy).not.toHaveBeenCalled();
-    expect(manifest.failedFiles).toHaveLength(1);
-    expect(manifest.scheduledForReboot).toEqual([]);
-
-    schedulePendingDeleteSpy.mockRestore();
+      expect(schedulePendingDeleteSpy).not.toHaveBeenCalled();
+      expect(manifest.failedFiles).toHaveLength(1);
+      expect(manifest.scheduledForReboot).toEqual([]);
+    } finally {
+      // try/finally, not a bare call after the assertions: a failed
+      // expect() above must not leave this spy attached to
+      // pendingReboot.schedulePendingDelete for whichever test runs next.
+      schedulePendingDeleteSpy.mockRestore();
+    }
   });
 });
 
