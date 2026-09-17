@@ -613,6 +613,12 @@ ode.js" is a folder or a file type.
                     checked={isOnlyIfTrue('registryBackupBeforeUninstall')}
                     onChange={() => save({ registryBackupBeforeUninstall: !isOnlyIfTrue('registryBackupBeforeUninstall') })}
                   />
+                  <SettingRow
+                    title={t('settings.uninstallTab.deleteLockedFiles.title')}
+                    description={t('settings.uninstallTab.deleteLockedFiles.description')}
+                    checked={isOnlyIfTrue('deleteLockedFilesOnRestart')}
+                    onChange={() => save({ deleteLockedFilesOnRestart: !isOnlyIfTrue('deleteLockedFilesOnRestart') })}
+                  />
                 </div>
               </div>
 
