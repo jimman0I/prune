@@ -119,8 +119,16 @@ export async function execute(action, ruleName, guards = {}) {
         });
         const after = statSync(action.expandedPath).size;
         return { freedBytes: Math.max(0, before.size - after), quarantineBatch: manifest.batchDir, skipped: [] };
-      } catch (err) {
-        return { freedBytes: 0, skipped: [{ path: action.expandedPath, reason: err.message }] };
+      } catch {
+        // Deliberately NOT err.message here -- execFileAsync's own failure
+        // text for this call is `Command failed: <sqlite3.exe path> <db
+        // path> <raw SQL>`, which would leak real filesystem paths and SQL
+        // text into a message a Deep Clean UI user could see. The two
+        // catches above (table detection, COUNT) already prefix theirs
+        // with 'not a valid cookie database: ', but that message is a much
+        // shorter, cleaner failure than a full DELETE+VACUUM command dump,
+        // so this gets its own short, user-facing reason instead.
+        return { freedBytes: 0, skipped: [{ path: action.expandedPath, reason: 'could not clean cookies: the database may be in use or corrupted' }] };
       }
     }
     // keptCount === 0: nothing in this file matches the keep list -- fall
