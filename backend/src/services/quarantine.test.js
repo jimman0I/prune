@@ -8,6 +8,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { quarantineAndDelete, restoreQuarantine, deletePermanently, emptyQuarantine } from './quarantine.js';
 import { readPendingOperations, PENDING_KEY, PENDING_VALUE } from './pendingReboot.js';
+import * as pendingReboot from './pendingReboot.js';
 
 const execFileAsync = promisify(execFile);
 
@@ -312,6 +313,16 @@ describe('quarantineAndDelete', () => {
     }
   });
 
+  // Deliberately independent of elevation: with the flag off, this must
+  // prove schedulePendingDelete is never even ATTEMPTED, not just that the
+  // manifest ends up looking a certain way. Without this, in a typical
+  // non-elevated dev/CI shell, flipping the default to `true` would produce
+  // the exact same observable manifest shape (schedulePendingDelete throws
+  // access-denied, which the flag-on catch branch also routes into
+  // failedFiles) -- so asserting on failedFiles/scheduledForReboot alone
+  // gives zero regression protection for the default outside an elevated
+  // runner. Mocking schedulePendingDelete directly closes that gap and
+  // needs no registry cleanup, since nothing real is ever touched.
   it('does NOT schedule a locked file for reboot when the setting is off (default)', async () => {
     const lockedPath = join(scratchDir, 'locked.txt');
     await writeFile(lockedPath, 'locked content');
@@ -319,11 +330,15 @@ describe('quarantineAndDelete', () => {
     fsPromises.rename.mockImplementation(async () => {
       throw Object.assign(new Error('EBUSY: resource busy or locked'), { code: 'EBUSY' });
     });
+    const schedulePendingDeleteSpy = vi.spyOn(pendingReboot, 'schedulePendingDelete');
 
     const manifest = await quarantineAndDelete({ programName: 'Test', files: [lockedPath], registryKeys: [] });
 
+    expect(schedulePendingDeleteSpy).not.toHaveBeenCalled();
     expect(manifest.failedFiles).toHaveLength(1);
-    expect(manifest.scheduledForReboot ?? []).toEqual([]);
+    expect(manifest.scheduledForReboot).toEqual([]);
+
+    schedulePendingDeleteSpy.mockRestore();
   });
 });
 
