@@ -6,9 +6,19 @@ because they happen once per release rather than once per build.
 
 ## Before the build
 
-1. **Bump the version** in `electron/package.json`. That is the one the
-   installer filename, the release tag and the app's own Settings screen
-   all come from.
+1. **Bump the version** in `electron/package.json` -- the installer
+   filename and the release tag both come from it, and it's what
+   electron-updater bakes into the installed .exe's own resource. **Also
+   bump `backend/package.json` to the same version** -- that is the
+   SEPARATE file the app's own Settings screen and its update-checker
+   actually read (`backend/src/services/updateCheck.js`'s `appVersion()`).
+   The two silently drifted on v2.6.0: only `electron/package.json` was
+   bumped, so the installed .exe was genuinely 2.6.0 but Settings kept
+   showing 2.5.1 and the update-checker kept nagging forever, unable to
+   ever resolve (electron-updater correctly refused to "update" to a
+   version already installed). `backend/src/services/updateCheck.test.js`
+   now asserts the two files match, but bump both by hand regardless --
+   don't rely on the test alone to catch a mistake before it ships.
 2. **Write the CHANGELOG entry.** The release notes are assembled from
    it, so anything not in the changelog is not in the notes.
 3. **Run both suites.** One at a time — see
