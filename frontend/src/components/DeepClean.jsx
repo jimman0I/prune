@@ -44,7 +44,7 @@ function ScanLog({ lines, scanning, scanned, total }) {
   };
 
   return (
-    <div className="glass-panel flex flex-col min-h-0 overflow-hidden">
+    <div className="glass-panel flex flex-col min-h-0 overflow-hidden flex-1 min-w-0">
       <div className="flex items-center justify-between gap-3 px-4 py-3 border-b border-[color:var(--border-subtle)] shrink-0">
         <div className="flex items-center gap-2">
           {/* The rest of this panel already carries the scan's progress --
@@ -405,7 +405,7 @@ function DeepClean() {
         {/* Tree on the left, live scan output on the right -- so what the
             scan is doing is visible while it does it, instead of a
             spinner that says nothing for nineteen seconds. */}
-        <div className="flex-1 grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_360px] gap-5 min-h-0">
+        <div className="flex-1 flex flex-col lg:flex-row gap-5 min-h-0">
           {/* Column, not a scroller. The tree does its own scrolling now,
               which is what lets its category headings stick: a sticky
               element positions against its nearest SCROLLING ancestor, and
@@ -413,8 +413,24 @@ function DeepClean() {
               ancestor without ever scrolling -- so the heading had nowhere
               to move and simply scrolled away. Verified by walking the
               ancestor chain in the running app rather than by reading it
-              off the markup. */}
-          <div className="flex flex-col min-h-0 pr-1">
+              off the markup.
+
+              A flex row rather than the previous CSS Grid, specifically so
+              this column's own `width` can transition smoothly between a
+              browsing-wide and a cleaning-narrow state: `grid-template-
+              columns` does not reliably animate between mismatched track
+              types (`minmax(...)` vs a plain length), but a plain `width`
+              on a flex child does. `lg:shrink-0` matters -- without it,
+              flexbox lets this explicitly-widthed column shrink to make
+              room for ScanLog, undoing the very width just set. Only
+              applied at `lg` and above, mirroring the grid's own prior
+              `lg:` gate -- on a stacked narrow layout there is no "the
+              other column" to steal width from. */}
+          <div
+            data-testid="deep-clean-tree-column"
+            className="flex flex-col min-h-0 pr-1 lg:shrink-0 transition-[width] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]"
+            style={{ width: cleaning ? '260px' : 'calc(100% - 380px)' }}
+          >
             {/* The action lives IN the empty state, not only in the
                 footer. Reported as "Deep Clean doesn't work" from exactly
                 this screen: the panel says click a button that is a
@@ -457,6 +473,10 @@ function DeepClean() {
                 // Whichever is actually running highlights its own row --
                 // never both, since a scan and a clean cannot overlap.
                 activeId={cleaning ? cleaningId : scanningId}
+                // While a clean actually runs the tree column narrows to a
+                // receipt -- only `cleaning`, never `scanning`, which stays
+                // the full browsable list while deciding what to clean.
+                receiptMode={cleaning}
               />
             )}
           </div>
