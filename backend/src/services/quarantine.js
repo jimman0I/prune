@@ -1,4 +1,4 @@
-import { mkdir, rename, readFile, writeFile, stat, rm, readdir } from 'node:fs/promises';
+import { mkdir, rename, readFile, writeFile, stat, rm, readdir, copyFile } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import { join, basename } from 'node:path';
 import { execFile } from 'node:child_process';
@@ -154,6 +154,49 @@ export async function quarantineAndDelete({ programName, files, registryKeys, de
     files: movedFiles, failedFiles, scheduledForReboot,
     registryKeys: exportedKeys, failedRegistryKeys: failedKeys, regFiles,
     totalSizeBytes: movedFiles.reduce((sum, f) => sum + f.sizeBytes, 0)
+  };
+  await writeFile(join(batchDir, 'manifest.json'), JSON.stringify(manifest, null, 2), 'utf8');
+  return manifest;
+}
+
+/** Backs up a file's ORIGINAL content into a quarantine batch, then
+ * overwrites the file at its own path with `newContent` -- for an action
+ * that edits a file in place rather than removing it (the `json` action
+ * type: deleting one key from a browser's Preferences file still leaves
+ * a Preferences file there, just a smaller one).
+ *
+ * Deliberately NOT built on quarantineAndDelete(), whose whole contract
+ * is "move this file out of its original location" -- a `rename()` to a
+ * batch dir, full stop. This needs the opposite at the original path: the
+ * file must still exist there afterward, just with different content.
+ * So this copies (not moves) the original into the batch, then writes
+ * the new content over the original.
+ *
+ * Writes the EXACT same manifest shape quarantineAndDelete() does
+ * (`files: [{originalPath, quarantinedPath, sizeBytes}]`, `totalSizeBytes`,
+ * the same empty arrays for the fields that don't apply here) on purpose:
+ * restoreQuarantine()'s own `rename(quarantinedPath, originalPath)`
+ * already overwrites an existing destination file on this OS (confirmed
+ * empirically, not assumed), so restoring a batch made by THIS function
+ * puts the original content back over the edited file with zero new
+ * restore code, and listQuarantineBatches()/deletePermanently() need
+ * nothing new either -- the whole Quarantine screen already works on
+ * this. */
+export async function quarantineFileEdit({ programName, filePath, newContent }) {
+  const batchDir = join(quarantineRoot(), `${Date.now()}-${safeSegment(programName)}`);
+  await mkdir(batchDir, { recursive: true });
+
+  const sizeBytes = (await stat(filePath)).size;
+  const dest = join(batchDir, `file-0-${basename(filePath)}`);
+  await copyFile(filePath, dest);
+  await writeFile(filePath, newContent, 'utf8');
+
+  const manifest = {
+    programName, createdAt: Date.now(), batchDir,
+    files: [{ originalPath: filePath, quarantinedPath: dest, sizeBytes }],
+    failedFiles: [], scheduledForReboot: [],
+    registryKeys: [], failedRegistryKeys: [], regFiles: [],
+    totalSizeBytes: sizeBytes
   };
   await writeFile(join(batchDir, 'manifest.json'), JSON.stringify(manifest, null, 2), 'utf8');
   return manifest;
