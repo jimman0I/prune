@@ -300,6 +300,37 @@ describe('the size column', () => {
   });
 });
 
+describe('the checkbox position in each row', () => {
+  // Grounded against the real, installed BleachBit app: every row -- both
+  // an application heading and each rule under it -- puts its checkbox in
+  // a column at the row's far right edge, with the disclosure triangle and
+  // the label at the left. Prune's rows used to do the opposite (checkbox
+  // first). Both row types render their checkbox as a direct child of the
+  // same flex container that holds everything else in the row, so "last
+  // child of the checkbox's own parent" is "last thing in the row".
+  it('puts the category heading checkbox last in its row, not first', () => {
+    draw();
+
+    const checkbox = headingBox('Brave');
+    const row = checkbox.parentElement;
+    const children = Array.from(row.children);
+
+    expect(children[children.length - 1]).toBe(checkbox);
+    expect(children[0]).not.toBe(checkbox);
+  });
+
+  it('puts an item row\'s checkbox last in its row, not first', () => {
+    draw();
+
+    const checkbox = screen.getByRole('checkbox', { name: 'Cookies' });
+    const row = checkbox.parentElement;
+    const children = Array.from(row.children);
+
+    expect(children[children.length - 1]).toBe(checkbox);
+    expect(children[0]).not.toBe(checkbox);
+  });
+});
+
 describe('collapsing a category', () => {
   it('hides its rules but keeps its checkbox reachable', async () => {
     // The heading is the one row that stays: a collapsed category still
