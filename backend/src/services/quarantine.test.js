@@ -1,13 +1,29 @@
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import { mkdtemp, rm, readFile, writeFile } from 'node:fs/promises';
+import * as fsPromises from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { quarantineAndDelete, restoreQuarantine, deletePermanently, emptyQuarantine } from './quarantine.js';
 
 const execFileAsync = promisify(execFile);
+
+// Same vi.mock partial-passthrough technique cleanerRules.test.js already
+// establishes for fs.promises.open (there, mocking 'node:fs' since that
+// file imports the fs default export) -- applied here to node:fs/promises'
+// named `rename` export instead, since that's how quarantine.js imports it.
+// vi.spyOn cannot do this directly: ESM module namespaces are not
+// configurable, so "Cannot redefine property: rename" the moment a real
+// rename() would otherwise fire (confirmed live). vi.mock's factory swaps
+// in a vi.fn() wrapper at module-load time instead, which IS allowed, and
+// __actualRename keeps the real implementation reachable so the mock can
+// pass every other call straight through unmodified.
+vi.mock('node:fs/promises', async (importOriginal) => {
+  const actual = await importOriginal();
+  return { ...actual, rename: vi.fn(actual.rename), __actualRename: actual.rename };
+});
 
 /* A key name unique to this process, not a fixed one.
  *
@@ -49,6 +65,7 @@ beforeEach(async () => {
 });
 
 afterEach(async () => {
+  fsPromises.rename.mockImplementation(fsPromises.__actualRename);
   delete process.env.UNREVO_QUARANTINE_ROOT;
   await rm(scratchDir, { recursive: true, force: true });
   try { await execFileAsync('reg', ['delete', TEST_KEY, '/f']); } catch { /* already gone */ }
@@ -182,6 +199,30 @@ describe('quarantineAndDelete', () => {
     expect(sizeFor(a)).toBe(5);
     expect(sizeFor(b)).toBe(10);
     expect(manifest.totalSizeBytes).toBe(15);
+  });
+
+  it('does not abort the whole batch when one file is locked -- reports it and keeps going', async () => {
+    const lockedPath = join(scratchDir, 'locked.txt');
+    const laterPath = join(scratchDir, 'later.txt');
+    await writeFile(lockedPath, 'locked content');
+    await writeFile(laterPath, 'later content');
+
+    // Simulate a real Windows sharing violation without holding a genuine
+    // OS-level lock -- via the module-level vi.mock('node:fs/promises')
+    // above (vi.spyOn can't redefine an ESM named export directly: "Cannot
+    // redefine property: rename", confirmed live).
+    const realRename = fsPromises.__actualRename;
+    fsPromises.rename.mockImplementation((src, dest) => {
+      if (src === lockedPath) return Promise.reject(Object.assign(new Error('EBUSY: resource busy or locked'), { code: 'EBUSY' }));
+      return realRename(src, dest);
+    });
+
+    const manifest = await quarantineAndDelete({ programName: 'Test', files: [lockedPath, laterPath], registryKeys: [] });
+
+    expect(manifest.files.some((f) => f.originalPath === laterPath)).toBe(true);
+    expect(manifest.failedFiles).toHaveLength(1);
+    expect(manifest.failedFiles[0].path).toBe(lockedPath);
+    expect(manifest.failedFiles[0].reason).toMatch(/EBUSY|locked/i);
   });
 });
 
