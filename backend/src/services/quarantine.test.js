@@ -7,8 +7,64 @@ import { existsSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { quarantineAndDelete, restoreQuarantine, deletePermanently, emptyQuarantine } from './quarantine.js';
+import { readPendingOperations, PENDING_KEY, PENDING_VALUE } from './pendingReboot.js';
 
 const execFileAsync = promisify(execFile);
+
+/** Rewrites PENDING_VALUE to exactly `strings`, via the same `hex(7)` /
+ * `.reg`-file round trip pendingReboot.js itself uses internally, and the
+ * same technique pendingReboot.test.js's own writeAllPendingOperations
+ * uses for its cleanup -- duplicated here rather than imported (neither
+ * pendingReboot.js nor its test file exports it) for the same reason
+ * pendingReboot.test.js gives: this is this test's OWN verification/
+ * cleanup path, kept independent of the module under test.
+ *
+ * `reg add ... /t REG_MULTI_SZ /d "..."` cannot be used for this -- it
+ * silently drops a trailing empty-string element, which is exactly what a
+ * delete pair's second half is (see pendingReboot.js's writeMultiSzValue
+ * comment). This dev machine's PENDING_VALUE genuinely holds real pending
+ * deletes from Windows Update / Brave, so every call site here rebuilds
+ * `strings` from a `readPendingOperations()` taken moments earlier and
+ * only removes the one pair this test itself added -- never a blanket
+ * overwrite. */
+async function writeAllPendingOperations(strings) {
+  const encodeMultiSz = (list) => {
+    const parts = list.map((s) => Buffer.concat([Buffer.from(s, 'utf16le'), Buffer.from([0, 0])]));
+    return Buffer.concat([...parts, Buffer.from([0, 0])]);
+  };
+  const bytes = encodeMultiSz(strings);
+  const hexList = Array.from(bytes).map((b) => b.toString(16).padStart(2, '0')).join(',');
+  const fullKeyPath = PENDING_KEY.replace(/^HKLM\\?/i, 'HKEY_LOCAL_MACHINE\\');
+  const regFileText = `Windows Registry Editor Version 5.00\r\n\r\n[${fullKeyPath}]\r\n"${PENDING_VALUE}"=hex(7):${hexList}\r\n\r\n`;
+  const regFileBytes = Buffer.concat([Buffer.from([0xff, 0xfe]), Buffer.from(regFileText, 'utf16le')]);
+  const importFile = join(tmpdir(), `prune-quarantine-test-pfro-cleanup-${process.pid}-${Date.now()}-${Math.random().toString(36).slice(2)}.reg`);
+  await writeFile(importFile, regFileBytes);
+  try {
+    await execFileAsync('reg', ['import', importFile]);
+  } finally {
+    await rm(importFile, { force: true }).catch(() => {});
+  }
+}
+
+/** Removes exactly the one pending-reboot pair this test added (matched by
+ * its `\??\<path>` marker), never a blanket overwrite -- same
+ * read-modify-only-your-own-entry-write-back contract pendingReboot.test.js's
+ * own afterEach uses. */
+async function removePendingDeleteFor(filePath) {
+  const marker = `\\??\\${filePath}`;
+  const current = await readPendingOperations();
+  const cleaned = [];
+  for (let i = 0; i < current.length; i += 2) {
+    if (current[i] === marker) continue;
+    cleaned.push(current[i], current[i + 1]);
+  }
+  if (cleaned.length === current.length) return; // nothing of ours was there
+  if (cleaned.length === 0) {
+    await execFileAsync('reg', ['delete', PENDING_KEY, '/v', PENDING_VALUE, '/f']).catch(() => {});
+  } else {
+    await writeAllPendingOperations(cleaned);
+  }
+}
 
 // Same vi.mock partial-passthrough technique cleanerRules.test.js already
 // establishes for fs.promises.open (there, mocking 'node:fs' since that
@@ -223,6 +279,51 @@ describe('quarantineAndDelete', () => {
     expect(manifest.failedFiles).toHaveLength(1);
     expect(manifest.failedFiles[0].path).toBe(lockedPath);
     expect(manifest.failedFiles[0].reason).toMatch(/EBUSY|locked/i);
+  });
+
+  // Known environmental limitation, same as pendingReboot.test.js's own
+  // schedulePendingDelete tests: writing HKLM\SYSTEM requires an elevated
+  // shell. If this test process is not elevated, schedulePendingDelete's
+  // own `reg import` fails with an access-denied error, which surfaces
+  // here as a rejected quarantineAndDelete call (or, depending on how the
+  // implementation handles that failure, as a failedFiles entry rather
+  // than scheduledForReboot) -- NOT as evidence quarantine.js's wiring is
+  // wrong. Run from an elevated shell to actually exercise the write path.
+  it('schedules a locked file for delete-on-restart when the setting is on', async () => {
+    const lockedPath = join(scratchDir, 'locked.txt');
+    await writeFile(lockedPath, 'locked content');
+
+    fsPromises.rename.mockImplementation(async () => {
+      throw Object.assign(new Error('EBUSY: resource busy or locked'), { code: 'EBUSY' });
+    });
+
+    try {
+      const manifest = await quarantineAndDelete({
+        programName: 'Test', files: [lockedPath], registryKeys: [], deleteLockedFilesOnRestart: true
+      });
+
+      expect(manifest.failedFiles).toEqual([]); // scheduled, not failed
+      expect(manifest.scheduledForReboot).toEqual([lockedPath]);
+    } finally {
+      // Clean up the real registry write this test caused, whether it
+      // succeeded or not -- safe no-op if nothing was actually written
+      // (e.g. the elevation-gated failure case).
+      await removePendingDeleteFor(lockedPath);
+    }
+  });
+
+  it('does NOT schedule a locked file for reboot when the setting is off (default)', async () => {
+    const lockedPath = join(scratchDir, 'locked.txt');
+    await writeFile(lockedPath, 'locked content');
+
+    fsPromises.rename.mockImplementation(async () => {
+      throw Object.assign(new Error('EBUSY: resource busy or locked'), { code: 'EBUSY' });
+    });
+
+    const manifest = await quarantineAndDelete({ programName: 'Test', files: [lockedPath], registryKeys: [] });
+
+    expect(manifest.failedFiles).toHaveLength(1);
+    expect(manifest.scheduledForReboot ?? []).toEqual([]);
   });
 });
 
