@@ -511,6 +511,19 @@ export async function fetchDeepCleanScan() {
   return data.categories ?? [];
 }
 
+/** Every real cookie domain found on this machine, with how many cookies
+ * each has. Throws on failure (unlike fetchCleanerCategoryIcons, which
+ * swallows errors because icons are decoration) -- this is the result of
+ * an explicit user click, and a scan that silently returned nothing would
+ * look identical to "this machine truly has no cookies anywhere", which
+ * is never true. */
+export async function fetchCookieDomains() {
+  const res = await fetch(`${API_URL}/deep-clean/cookie-domains`);
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
+  return { domains: data.domains ?? [], errors: data.errors ?? [] };
+}
+
 export async function executeDeepClean(ruleIds) {
   const res = await fetch(`${API_URL}/deep-clean/execute`, {
     method: 'POST',
