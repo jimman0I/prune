@@ -31,13 +31,15 @@
     "id": "brave_history",
     "category": "Brave",
     "name": "Browsing history",
-    "description": "The list of pages visited, plus the most-visited shortcuts on the new tab page.",
-    "paths": [
-      "%LOCALAPPDATA%\\BraveSoftware\\Brave-Browser\\User Data\\*\\History",
-      "%LOCALAPPDATA%\\BraveSoftware\\Brave-Browser\\User Data\\*\\History-journal",
-      "%LOCALAPPDATA%\\BraveSoftware\\Brave-Browser\\User Data\\*\\Top Sites",
-      "%LOCALAPPDATA%\\BraveSoftware\\Brave-Browser\\User Data\\*\\Top Sites-journal",
-      "%LOCALAPPDATA%\\BraveSoftware\\Brave-Browser\\User Data\\*\\Visited Links"
+    "description": "The list of pages visited, plus the most-visited shortcuts on the new tab page. Bookmarked sites keep their entry so they're not treated as brand new next time.",
+    "actions": [
+      { "type": "chrome.history", "path": "%LOCALAPPDATA%\\BraveSoftware\\Brave-Browser\\User Data\\*\\History" },
+      { "type": "delete", "paths": [
+        "%LOCALAPPDATA%\\BraveSoftware\\Brave-Browser\\User Data\\*\\History-journal",
+        "%LOCALAPPDATA%\\BraveSoftware\\Brave-Browser\\User Data\\*\\Top Sites",
+        "%LOCALAPPDATA%\\BraveSoftware\\Brave-Browser\\User Data\\*\\Top Sites-journal",
+        "%LOCALAPPDATA%\\BraveSoftware\\Brave-Browser\\User Data\\*\\Visited Links"
+      ] }
     ],
     "is_safe": false,
     "risky": true,
@@ -48,11 +50,13 @@
     "category": "Brave",
     "name": "Cookies",
     "description": "Signs you out of every site that remembered you.",
-    "paths": [
-      "%LOCALAPPDATA%\\BraveSoftware\\Brave-Browser\\User Data\\*\\Network\\Cookies",
-      "%LOCALAPPDATA%\\BraveSoftware\\Brave-Browser\\User Data\\*\\Network\\Cookies-journal",
-      "%LOCALAPPDATA%\\BraveSoftware\\Brave-Browser\\User Data\\*\\Cookies",
-      "%LOCALAPPDATA%\\BraveSoftware\\Brave-Browser\\User Data\\*\\Cookies-journal"
+    "actions": [
+      { "type": "cookie", "path": "%LOCALAPPDATA%\\BraveSoftware\\Brave-Browser\\User Data\\*\\Network\\Cookies" },
+      { "type": "cookie", "path": "%LOCALAPPDATA%\\BraveSoftware\\Brave-Browser\\User Data\\*\\Cookies" },
+      { "type": "delete", "paths": [
+        "%LOCALAPPDATA%\\BraveSoftware\\Brave-Browser\\User Data\\*\\Network\\Cookies-journal",
+        "%LOCALAPPDATA%\\BraveSoftware\\Brave-Browser\\User Data\\*\\Cookies-journal"
+      ] }
     ],
     "is_safe": false,
     "risky": true,
@@ -129,13 +133,15 @@
     "id": "chrome_history",
     "category": "Chrome",
     "name": "Browsing history",
-    "description": "The list of pages visited, plus the most-visited shortcuts on the new tab page.",
-    "paths": [
-      "%LOCALAPPDATA%\\Google\\Chrome\\User Data\\*\\History",
-      "%LOCALAPPDATA%\\Google\\Chrome\\User Data\\*\\History-journal",
-      "%LOCALAPPDATA%\\Google\\Chrome\\User Data\\*\\Top Sites",
-      "%LOCALAPPDATA%\\Google\\Chrome\\User Data\\*\\Top Sites-journal",
-      "%LOCALAPPDATA%\\Google\\Chrome\\User Data\\*\\Visited Links"
+    "description": "The list of pages visited, plus the most-visited shortcuts on the new tab page. Bookmarked sites keep their entry so they're not treated as brand new next time.",
+    "actions": [
+      { "type": "chrome.history", "path": "%LOCALAPPDATA%\\Google\\Chrome\\User Data\\*\\History" },
+      { "type": "delete", "paths": [
+        "%LOCALAPPDATA%\\Google\\Chrome\\User Data\\*\\History-journal",
+        "%LOCALAPPDATA%\\Google\\Chrome\\User Data\\*\\Top Sites",
+        "%LOCALAPPDATA%\\Google\\Chrome\\User Data\\*\\Top Sites-journal",
+        "%LOCALAPPDATA%\\Google\\Chrome\\User Data\\*\\Visited Links"
+      ] }
     ],
     "is_safe": false,
     "risky": true,
@@ -146,11 +152,13 @@
     "category": "Chrome",
     "name": "Cookies",
     "description": "Signs you out of every site that remembered you.",
-    "paths": [
-      "%LOCALAPPDATA%\\Google\\Chrome\\User Data\\*\\Network\\Cookies",
-      "%LOCALAPPDATA%\\Google\\Chrome\\User Data\\*\\Network\\Cookies-journal",
-      "%LOCALAPPDATA%\\Google\\Chrome\\User Data\\*\\Cookies",
-      "%LOCALAPPDATA%\\Google\\Chrome\\User Data\\*\\Cookies-journal"
+    "actions": [
+      { "type": "cookie", "path": "%LOCALAPPDATA%\\Google\\Chrome\\User Data\\*\\Network\\Cookies" },
+      { "type": "cookie", "path": "%LOCALAPPDATA%\\Google\\Chrome\\User Data\\*\\Cookies" },
+      { "type": "delete", "paths": [
+        "%LOCALAPPDATA%\\Google\\Chrome\\User Data\\*\\Network\\Cookies-journal",
+        "%LOCALAPPDATA%\\Google\\Chrome\\User Data\\*\\Cookies-journal"
+      ] }
     ],
     "is_safe": false,
     "risky": true,
@@ -227,13 +235,15 @@
     "id": "edge_history",
     "category": "Edge",
     "name": "Browsing history",
-    "description": "The list of pages visited, plus the most-visited shortcuts on the new tab page.",
-    "paths": [
-      "%LOCALAPPDATA%\\Microsoft\\Edge\\User Data\\*\\History",
-      "%LOCALAPPDATA%\\Microsoft\\Edge\\User Data\\*\\History-journal",
-      "%LOCALAPPDATA%\\Microsoft\\Edge\\User Data\\*\\Top Sites",
-      "%LOCALAPPDATA%\\Microsoft\\Edge\\User Data\\*\\Top Sites-journal",
-      "%LOCALAPPDATA%\\Microsoft\\Edge\\User Data\\*\\Visited Links"
+    "description": "The list of pages visited, plus the most-visited shortcuts on the new tab page. Bookmarked sites keep their entry so they're not treated as brand new next time.",
+    "actions": [
+      { "type": "chrome.history", "path": "%LOCALAPPDATA%\\Microsoft\\Edge\\User Data\\*\\History" },
+      { "type": "delete", "paths": [
+        "%LOCALAPPDATA%\\Microsoft\\Edge\\User Data\\*\\History-journal",
+        "%LOCALAPPDATA%\\Microsoft\\Edge\\User Data\\*\\Top Sites",
+        "%LOCALAPPDATA%\\Microsoft\\Edge\\User Data\\*\\Top Sites-journal",
+        "%LOCALAPPDATA%\\Microsoft\\Edge\\User Data\\*\\Visited Links"
+      ] }
     ],
     "is_safe": false,
     "risky": true,
@@ -244,11 +254,13 @@
     "category": "Edge",
     "name": "Cookies",
     "description": "Signs you out of every site that remembered you.",
-    "paths": [
-      "%LOCALAPPDATA%\\Microsoft\\Edge\\User Data\\*\\Network\\Cookies",
-      "%LOCALAPPDATA%\\Microsoft\\Edge\\User Data\\*\\Network\\Cookies-journal",
-      "%LOCALAPPDATA%\\Microsoft\\Edge\\User Data\\*\\Cookies",
-      "%LOCALAPPDATA%\\Microsoft\\Edge\\User Data\\*\\Cookies-journal"
+    "actions": [
+      { "type": "cookie", "path": "%LOCALAPPDATA%\\Microsoft\\Edge\\User Data\\*\\Network\\Cookies" },
+      { "type": "cookie", "path": "%LOCALAPPDATA%\\Microsoft\\Edge\\User Data\\*\\Cookies" },
+      { "type": "delete", "paths": [
+        "%LOCALAPPDATA%\\Microsoft\\Edge\\User Data\\*\\Network\\Cookies-journal",
+        "%LOCALAPPDATA%\\Microsoft\\Edge\\User Data\\*\\Cookies-journal"
+      ] }
     ],
     "is_safe": false,
     "risky": true,
