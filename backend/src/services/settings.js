@@ -171,6 +171,7 @@ export function cleanGuardsFrom(settings) {
   return {
     excludeFolders: Array.isArray(settings?.excludeFolders) ? settings.excludeFolders : [],
     excludeExtensions: Array.isArray(settings?.excludeExtensions) ? settings.excludeExtensions : [],
+    cookieKeepList: Array.isArray(settings?.cookieKeepList) ? settings.cookieKeepList : [],
     skipRecentHours: Number.isFinite(hours) && hours > 0 ? hours : 0,
     // Only an explicit false turns quarantining off. A settings file
     // written before this key existed must keep the safer behaviour.

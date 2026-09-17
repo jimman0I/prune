@@ -149,6 +149,16 @@ describe('cleanGuardsFrom', () => {
     expect(cleanGuardsFrom(null).excludeFolders).toEqual([]);
   });
 
+  it('passes the user\'s cookie keep list through', () => {
+    expect(cleanGuardsFrom({ cookieKeepList: ['example.com'] }).cookieKeepList).toEqual(['example.com']);
+  });
+
+  it('treats a missing or malformed cookie keep list as empty', () => {
+    expect(cleanGuardsFrom({}).cookieKeepList).toEqual([]);
+    expect(cleanGuardsFrom({ cookieKeepList: 'example.com' }).cookieKeepList).toEqual([]);
+    expect(cleanGuardsFrom(null).cookieKeepList).toEqual([]);
+  });
+
   it('passes a real recency window through', () => {
     expect(cleanGuardsFrom({ skipRecentHours: 48 }).skipRecentHours).toBe(48);
   });
