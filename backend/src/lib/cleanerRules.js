@@ -6,6 +6,7 @@ import * as deleteAction from './cleanerActions/delete.js';
 import * as shellAction from './cleanerActions/shell.js';
 import * as sqliteVacuumAction from './cleanerActions/sqliteVacuum.js';
 import * as winregAction from './cleanerActions/winreg.js';
+import * as jsonAction from './cleanerActions/json.js';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const CLEANERS_JSON_PATH = join(here, '..', 'data', 'cleaners.json');
@@ -73,8 +74,10 @@ export function normalizeRule(rule) {
 /** Computes one rule's current size without touching anything -- Preview
  * Mode. Normalizes the rule to its `actions` array (normalizeRule) and
  * dispatches each action to its own module's `scan()` by `type` --
- * `shell`, `delete`, `sqlite.vacuum`, `winreg` -- merging their results
- * into one summary: `sizeBytes`/`fileCount` summed, `heldCount` summed,
+ * `shell`, `delete`, `sqlite.vacuum`, `winreg`, `json` (does the rule's
+ * BleachBit-style `address` currently resolve inside the target JSON
+ * file?) -- merging their results into one summary: `sizeBytes`/
+ * `fileCount` summed, `heldCount` summed,
  * `accessible` ANDed together, `present` true if ANY action reports
  * something there. A rule with only a `shell` action (nothing to size)
  * keeps `sizeBytes`/`fileCount` at null, not 0 -- 0 would falsely claim
@@ -124,6 +127,10 @@ export function scanRule(rule, guards = {}) {
       // "grey out cleaners that don't apply" behavior rulePathsExist's own
       // doc comment calls out as a feature for path-based rules.
       present = true;
+    } else if (action.type === 'json') {
+      const result = jsonAction.scan({ expandedPath: expandPath(action.path), address: action.address });
+      sizeBytes = (sizeBytes ?? 0) + result.sizeBytes;
+      if (result.present) present = true;
     }
   }
 
@@ -198,6 +205,10 @@ export function scanAllRules(guards = {}) {
  *   again nothing to quarantine.
  * - `winreg` removes one registry key through the same quarantine-then-
  *   delete path `delete` uses, just for a key instead of a file.
+ * - `json` deletes one key (BleachBit-style `address`) out of a parsed
+ *   JSON file and rewrites it in place, quarantining the original --
+ *   never a whole-file delete, since the rest of the file's data must
+ *   survive.
  *
  * A rule mixing action types (e.g. a `delete` action and a
  * `sqlite.vacuum` action under one id) runs every action and sums
@@ -238,6 +249,12 @@ export async function executeRule(rule, guards = {}) {
       freedBytes += result.freedBytes;
       registryKeysRemoved = (registryKeysRemoved || 0) + result.registryKeysRemoved;
       skipped.push(...result.skipped);
+      if (result.quarantineBatch) quarantineBatch = result.quarantineBatch;
+    } else if (action.type === 'json') {
+      const result = await jsonAction.execute({ expandedPath: expandPath(action.path), address: action.address }, rule.name, guards);
+      freedBytes += result.freedBytes;
+      skipped.push(...result.skipped);
+      if (result.recycled) recycled = true;
       if (result.quarantineBatch) quarantineBatch = result.quarantineBatch;
     }
   }
