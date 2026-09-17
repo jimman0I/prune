@@ -504,6 +504,43 @@ describe('the tree/log split while a clean runs', () => {
     expect(column.className).toMatch(/(?:^|\s)w-full(?:\s|$)/);
     expect(column.className).toMatch(/lg:w-\[var\(--dc-tree-w\)\]/);
   });
+
+  it('keeps a full receipt even if the live selection shrinks under it mid-clean', async () => {
+    // Regression: receiptMode used to filter against the LIVE `selected`
+    // set. Nothing disables checkbox toggling or Clear while `cleaning` is
+    // true, so unticking a row (or hitting Clear) mid-clean shrank
+    // `selected` and made the item currently being processed vanish from
+    // its own receipt -- while the backend kept working through the
+    // original batch it was actually handed. handleClean now freezes a
+    // snapshot the instant Clean starts, and the tree filters against
+    // THAT while cleaning, not the live set.
+    streamDeepCleanExecute.mockImplementation(() => new Promise(() => {}));
+    const user = userEvent.setup();
+    renderScreen(<DeepClean />);
+    await screen.findByText('Temporary files');
+
+    // Select BOTH rules, by their own label rather than array position --
+    // there is also a category-heading checkbox on screen.
+    await user.click(screen.getByRole('checkbox', { name: 'Temporary files' }));
+    await user.click(screen.getByRole('checkbox', { name: 'Thumbnail cache' }));
+    await waitFor(() => expect(cleanButton().disabled).toBe(false));
+
+    await user.click(cleanButton());
+    await user.click(screen.getByRole('button', { name: 'Confirm' }));
+
+    // Both still on screen: the receipt for the batch Clean actually
+    // started with.
+    expect(await screen.findByText('Temporary files')).toBeTruthy();
+    expect(screen.getByText('Thumbnail cache')).toBeTruthy();
+
+    // The live `selected` set shrinks -- unticking a row is still wired to
+    // the real handler even mid-clean, which this fix does not change.
+    await user.click(screen.getByRole('checkbox', { name: 'Temporary files' }));
+
+    // The receipt is unaffected: it was never reading live `selected`.
+    expect(screen.getByText('Temporary files')).toBeTruthy();
+    expect(screen.getByText('Thumbnail cache')).toBeTruthy();
+  });
 });
 
 describe('what a finished scan does to the selection', () => {
