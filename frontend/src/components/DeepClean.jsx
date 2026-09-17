@@ -425,11 +425,21 @@ function DeepClean() {
               room for ScanLog, undoing the very width just set. Only
               applied at `lg` and above, mirroring the grid's own prior
               `lg:` gate -- on a stacked narrow layout there is no "the
-              other column" to steal width from. */}
+              other column" to steal width from.
+
+              The explicit width itself is also gated to `lg` -- it is set
+              as a CSS custom property via inline style (which can hold the
+              `calc()`/`px` values that drive the transition) but only
+              CONSUMED by the `lg:w-[var(--dc-tree-w)]` class. Below `lg`
+              the column stays the plain `w-full` it always was: `calc(100%
+              - 380px)` goes negative (clamped to 0) on a narrow window,
+              and `260px` would pin a stacked, full-width column to a
+              sliver -- both values only make sense once the row is
+              actually side-by-side. */}
           <div
             data-testid="deep-clean-tree-column"
-            className="flex flex-col min-h-0 pr-1 lg:shrink-0 transition-[width] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]"
-            style={{ width: cleaning ? '260px' : 'calc(100% - 380px)' }}
+            className="flex flex-col min-h-0 pr-1 lg:shrink-0 w-full lg:w-[var(--dc-tree-w)] transition-[width] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]"
+            style={{ '--dc-tree-w': cleaning ? '260px' : 'calc(100% - 380px)' }}
           >
             {/* The action lives IN the empty state, not only in the
                 footer. Reported as "Deep Clean doesn't work" from exactly
