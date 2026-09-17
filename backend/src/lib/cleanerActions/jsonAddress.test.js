@@ -50,4 +50,17 @@ describe('resolveAddress', () => {
     delete result.parent[result.key];
     expect(obj).toEqual({});
   });
+
+  it('returns null when a middle segment of a 3-level path is null', () => {
+    const obj = { profile: { content_settings: null } };
+    expect(resolveAddress(obj, 'profile/content_settings/exceptions')).toBeNull();
+  });
+
+  it('resolves a genuine 3-level nested key', () => {
+    const obj = { profile: { content_settings: { exceptions: { notifications: {} } } } };
+    const result = resolveAddress(obj, 'profile/content_settings/exceptions');
+    expect(result).not.toBeNull();
+    expect(result.parent).toBe(obj.profile.content_settings);
+    expect(result.key).toBe('exceptions');
+  });
 });
