@@ -224,3 +224,53 @@ describe('the leftover scan', () => {
     expect(screen.queryByRole('button', { name: 'Start uninstall' })).toBeNull();
   });
 });
+
+describe('the "automatically delete all found leftovers" checkbox', () => {
+  it('is unticked by default, and the flow still lands on review after Scan -- unchanged regression coverage', async () => {
+    const { user } = await uninstall();
+
+    await user.click(await screen.findByRole('button', { name: 'Scan' }));
+    await waitFor(() => expect(scanForLeftovers).toHaveBeenCalledTimes(1));
+    // The review screen renders (its own "Remove selected" action), and
+    // removeQuarantined has NOT run yet -- it waits for that click, exactly
+    // as before this checkbox existed.
+    expect(await screen.findByRole('button', { name: 'Remove selected' })).toBeTruthy();
+    expect(removeQuarantined).not.toHaveBeenCalled();
+  });
+
+  it('skips review entirely when ticked before Scan, removing everything the scan found through the same quarantine call', async () => {
+    const onClose = vi.fn();
+    const user = userEvent.setup();
+    renderScreen(<UninstallModal program={program} onClose={onClose} />);
+    // The checkbox lives on the confirm step, above "Start uninstall" --
+    // it has to be ticked before that click, not after.
+    await user.click(screen.getByRole('checkbox', { name: /Automatically remove everything the scan finds/i }));
+    await user.click(screen.getByRole('button', { name: 'Start uninstall' }));
+    await user.click(await screen.findByRole('button', { name: 'Scan' }));
+
+    // Lands on 'done' without ever rendering the review step's own controls.
+    expect(await screen.findByRole('button', { name: 'Done' })).toBeTruthy();
+    expect(screen.queryByRole('button', { name: 'Remove selected' })).toBeNull();
+
+    await waitFor(() => expect(removeQuarantined).toHaveBeenCalledTimes(1));
+    const call = removeQuarantined.mock.calls[0][0];
+    // `found` has one file and one registry key -- both must be present,
+    // proving the full set was sent, not a partial/empty one.
+    expect(call.files).toEqual(['C:\\Users\\jim\\AppData\\Roaming\\Thing']);
+    expect(call.registryKeys).toEqual(['HKCU\\Software\\Thing']);
+    expect(call.programName).toBe('Thing');
+  });
+
+  it('falls back to review, with the error shown, when removeQuarantined itself throws during auto-remove', async () => {
+    removeQuarantined.mockRejectedValue(new Error('EACCES: permission denied'));
+    const user = userEvent.setup();
+    renderScreen(<UninstallModal program={program} onClose={vi.fn()} />);
+    await user.click(screen.getByRole('checkbox', { name: /Automatically remove everything the scan finds/i }));
+    await user.click(screen.getByRole('button', { name: 'Start uninstall' }));
+    await user.click(await screen.findByRole('button', { name: 'Scan' }));
+
+    expect(await screen.findByText(/Removal failed: EACCES/)).toBeTruthy();
+    // Landed on the manual review screen, not stuck or silently dropped.
+    expect(await screen.findByRole('button', { name: 'Remove selected' })).toBeTruthy();
+  });
+});

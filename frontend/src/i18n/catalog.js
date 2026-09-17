@@ -623,7 +623,8 @@ export const CATALOG = {
       failedRegistryKeysHeading: (n) => `${n} registry key${n === 1 ? '' : 's'} couldn't be removed`,
       failedRegistryKeysNote: 'these usually need Prune to be running as administrator:',
       noRestorePoint: (reason) => `No system restore point was created (${reason}).`,
-      quarantineStillWorks: 'The Quarantine restore still works.'
+      quarantineStillWorks: 'The Quarantine restore still works.',
+      autoRemoveLeftovers: 'Automatically remove everything the scan finds, without reviewing it first'
     },
     batchUninstallModal: {
       title: (n) => `Uninstall ${n} program${n === 1 ? '' : 's'}`,
@@ -1303,7 +1304,8 @@ export const CATALOG = {
       failedRegistryKeysHeading: (n) => `${n} registersleutel${n === 1 ? '' : 's'} kon nie verwyder word nie`,
       failedRegistryKeysNote: 'hierdie het gewoonlik nodig dat Prune as administrateur loop:',
       noRestorePoint: (reason) => `Geen herstelpunt is geskep nie (${reason}).`,
-      quarantineStillWorks: 'Die Kwarantyn-herstel werk steeds.'
+      quarantineStillWorks: 'Die Kwarantyn-herstel werk steeds.',
+      autoRemoveLeftovers: 'Verwyder outomaties alles wat die skandering vind, sonder om dit eers te hersien'
     },
     batchUninstallModal: {
       title: (n) => `Deïnstalleer ${n} program${n === 1 ? '' : 'me'}`,
@@ -1983,7 +1985,8 @@ export const CATALOG = {
       failedRegistryKeysHeading: (n) => `تعذّرت إزالة ${n} مفتاح سجل`,
       failedRegistryKeysNote: 'عادةً ما يتطلب هذا تشغيل Prune كمسؤول:',
       noRestorePoint: (reason) => `لم يتم إنشاء نقطة استعادة للنظام (${reason}).`,
-      quarantineStillWorks: 'لا تزال استعادة الحجر الصحي تعمل.'
+      quarantineStillWorks: 'لا تزال استعادة الحجر الصحي تعمل.',
+      autoRemoveLeftovers: 'إزالة كل ما يجده الفحص تلقائيًا، دون مراجعته أولاً'
     },
     batchUninstallModal: {
       title: (n) => `إلغاء تثبيت ${n} برنامج`,
@@ -2663,7 +2666,8 @@ export const CATALOG = {
       failedRegistryKeysHeading: (n) => `No s'${n === 1 ? 'ha' : 'han'} pogut eliminar ${n} clau${n === 1 ? '' : 's'} del registre`,
       failedRegistryKeysNote: 'aquestes solen necessitar que el Prune s\'executi com a administrador:',
       noRestorePoint: (reason) => `No s'ha creat cap punt de restauració del sistema (${reason}).`,
-      quarantineStillWorks: 'La restauració des de la Quarantena encara funciona.'
+      quarantineStillWorks: 'La restauració des de la Quarantena encara funciona.',
+      autoRemoveLeftovers: "Elimina automàticament tot el que trobi l'escaneig, sense revisar-ho abans"
     },
     batchUninstallModal: {
       title: (n) => `Desinstal·la ${n} programa${n === 1 ? '' : 's'}`,
@@ -3343,7 +3347,8 @@ export const CATALOG = {
       failedRegistryKeysHeading: (n) => `Nepodařilo se odstranit ${n} klíč${n === 1 ? '' : (n < 5 ? 'e' : 'ů')} registru`,
       failedRegistryKeysNote: 'ty obvykle vyžadují, aby Prune běžel jako správce:',
       noRestorePoint: (reason) => `Nebyl vytvořen žádný bod obnovení systému (${reason}).`,
-      quarantineStillWorks: 'Obnovení z karantény stále funguje.'
+      quarantineStillWorks: 'Obnovení z karantény stále funguje.',
+      autoRemoveLeftovers: 'Automaticky odstranit vše, co skenování najde, bez předchozí kontroly'
     },
     batchUninstallModal: {
       title: (n) => `Odinstalovat ${n} program${n === 1 ? '' : (n < 5 ? 'y' : 'ů')}`,
@@ -4023,7 +4028,8 @@ export const CATALOG = {
       failedRegistryKeysHeading: (n) => `Methwyd tynnu ${n} allwedd gofrestrfa`,
       failedRegistryKeysNote: 'mae'+"'"+'r rhain fel arfer angen i Prune redeg fel gweinyddwr:',
       noRestorePoint: (reason) => `Ni chrëwyd pwynt adfer system (${reason}).`,
-      quarantineStillWorks: "Mae adfer y Cwarantin yn dal i weithio."
+      quarantineStillWorks: "Mae adfer y Cwarantin yn dal i weithio.",
+      autoRemoveLeftovers: "Tynnu popeth y mae'r sgan yn ei ddarganfod yn awtomatig, heb ei adolygu'n gyntaf"
     },
     batchUninstallModal: {
       title: (n) => `Dadosod ${n} rhaglen`,
@@ -4703,7 +4709,8 @@ export const CATALOG = {
       failedRegistryKeysHeading: (n) => `${n} registreringsnøgle${n === 1 ? '' : 'r'} kunne ikke fjernes`,
       failedRegistryKeysNote: 'disse kræver som regel, at Prune kører som administrator:',
       noRestorePoint: (reason) => `Der blev ikke oprettet noget systemgendannelsespunkt (${reason}).`,
-      quarantineStillWorks: 'Gendannelse fra karantæne virker stadig.'
+      quarantineStillWorks: 'Gendannelse fra karantæne virker stadig.',
+      autoRemoveLeftovers: 'Fjern automatisk alt, hvad scanningen finder, uden at gennemgå det først'
     },
     batchUninstallModal: {
       title: (n) => `Afinstaller ${n} program${n === 1 ? '' : 'mer'}`,
@@ -5383,7 +5390,8 @@ export const CATALOG = {
       failedRegistryKeysHeading: (n) => `${n} Registrierungsschlüssel konnte${n === 1 ? '' : 'n'} nicht entfernt werden`,
       failedRegistryKeysNote: 'diese benötigen normalerweise, dass Prune als Administrator ausgeführt wird:',
       noRestorePoint: (reason) => `Es wurde kein Systemwiederherstellungspunkt erstellt (${reason}).`,
-      quarantineStillWorks: 'Die Wiederherstellung aus der Quarantäne funktioniert weiterhin.'
+      quarantineStillWorks: 'Die Wiederherstellung aus der Quarantäne funktioniert weiterhin.',
+      autoRemoveLeftovers: 'Alles automatisch entfernen, was der Scan findet, ohne es vorher zu überprüfen'
     },
     batchUninstallModal: {
       title: (n) => `${n} Programm${n === 1 ? '' : 'e'} deinstallieren`,
@@ -6063,7 +6071,8 @@ export const CATALOG = {
       failedRegistryKeysHeading: (n) => `Αποτυχία αφαίρεσης ${n} κλειδι${n === 1 ? 'ού' : 'ών'} μητρώου`,
       failedRegistryKeysNote: 'αυτά συνήθως απαιτούν το Prune να εκτελείται ως διαχειριστής:',
       noRestorePoint: (reason) => `Δεν δημιουργήθηκε σημείο επαναφοράς συστήματος (${reason}).`,
-      quarantineStillWorks: 'Η επαναφορά από την Καραντίνα εξακολουθεί να λειτουργεί.'
+      quarantineStillWorks: 'Η επαναφορά από την Καραντίνα εξακολουθεί να λειτουργεί.',
+      autoRemoveLeftovers: 'Αφαίρεση αυτόματα όλων των καταλοίπων που βρίσκει η σάρωση, χωρίς να τα ελέγξετε πρώτα'
     },
     batchUninstallModal: {
       title: (n) => `Απεγκατάσταση ${n} προγραμμάτων`,
@@ -6743,7 +6752,8 @@ export const CATALOG = {
       failedRegistryKeysHeading: (n) => `No se ${n === 1 ? 'pudo' : 'pudieron'} eliminar ${n} clave${n === 1 ? '' : 's'} del registro`,
       failedRegistryKeysNote: 'estas suelen necesitar que Prune se ejecute como administrador:',
       noRestorePoint: (reason) => `No se creó ningún punto de restauración del sistema (${reason}).`,
-      quarantineStillWorks: 'La restauración desde Cuarentena sigue funcionando.'
+      quarantineStillWorks: 'La restauración desde Cuarentena sigue funcionando.',
+      autoRemoveLeftovers: 'Eliminar automáticamente todo lo que encuentre el escaneo, sin revisarlo antes'
     },
     batchUninstallModal: {
       title: (n) => `Desinstalar ${n} programa${n === 1 ? '' : 's'}`,
@@ -7423,7 +7433,8 @@ export const CATALOG = {
       failedRegistryKeysHeading: (n) => `${n} registrivõti${n === 1 ? '' : 't'} ei õnnestunud eemaldada`,
       failedRegistryKeysNote: 'need vajavad tavaliselt, et Prune töötaks administraatorina:',
       noRestorePoint: (reason) => `Süsteemi taastepunkti ei loodud (${reason}).`,
-      quarantineStillWorks: 'Karantiinist taastamine töötab endiselt.'
+      quarantineStillWorks: 'Karantiinist taastamine töötab endiselt.',
+      autoRemoveLeftovers: 'Eemalda automaatselt kõik, mida skannimine leiab, ilma seda enne üle vaatamata'
     },
     batchUninstallModal: {
       title: (n) => `Desinstalli ${n} programm${n === 1 ? '' : 'i'}`,
@@ -8103,7 +8114,8 @@ export const CATALOG = {
       failedRegistryKeysHeading: (n) => `${n} rekisteriavainta ei voitu poistaa`,
       failedRegistryKeysNote: 'nämä vaativat yleensä, että Prune toimii järjestelmänvalvojana:',
       noRestorePoint: (reason) => `Järjestelmän palautuspistettä ei luotu (${reason}).`,
-      quarantineStillWorks: 'Karanteenista palauttaminen toimii edelleen.'
+      quarantineStillWorks: 'Karanteenista palauttaminen toimii edelleen.',
+      autoRemoveLeftovers: 'Poista automaattisesti kaikki, mitä skannaus löytää, tarkistamatta sitä ensin'
     },
     batchUninstallModal: {
       title: (n) => `Poista ${n} ohjelma${n === 1 ? '' : 'a'}`,
@@ -8783,7 +8795,8 @@ export const CATALOG = {
       failedRegistryKeysHeading: (n) => `${n} clé${n === 1 ? '' : 's'} de registre n'${n === 1 ? 'a' : 'ont'} pas pu être supprimée${n === 1 ? '' : 's'}`,
       failedRegistryKeysNote: "celles-ci nécessitent généralement que Prune s'exécute en tant qu'administrateur :",
       noRestorePoint: (reason) => `Aucun point de restauration système n'a été créé (${reason}).`,
-      quarantineStillWorks: 'La restauration depuis la Quarantaine fonctionne toujours.'
+      quarantineStillWorks: 'La restauration depuis la Quarantaine fonctionne toujours.',
+      autoRemoveLeftovers: "Supprimer automatiquement tout ce que l'analyse trouve, sans le vérifier au préalable"
     },
     batchUninstallModal: {
       title: (n) => `Désinstaller ${n} programme${n === 1 ? '' : 's'}`,
@@ -9463,7 +9476,8 @@ export const CATALOG = {
       failedRegistryKeysHeading: (n) => `לא ניתן היה להסיר ${n} מפתחות רישום`,
       failedRegistryKeysNote: 'אלה בדרך כלל דורשים ש-Prune ירוץ כמנהל:',
       noRestorePoint: (reason) => `לא נוצרה נקודת שחזור מערכת (${reason}).`,
-      quarantineStillWorks: 'שחזור ההסגר עדיין עובד.'
+      quarantineStillWorks: 'שחזור ההסגר עדיין עובד.',
+      autoRemoveLeftovers: 'הסר אוטומטית את כל מה שהסריקה מוצאת, מבלי לבדוק זאת קודם'
     },
     batchUninstallModal: {
       title: (n) => `הסר ${n} תוכניות`,
@@ -10143,7 +10157,8 @@ export const CATALOG = {
       failedRegistryKeysHeading: (n) => `${n} rendszerleíró kulcsot nem sikerült eltávolítani`,
       failedRegistryKeysNote: 'ezekhez általában rendszergazdaként futó Prune szükséges:',
       noRestorePoint: (reason) => `Nem jött létre rendszer-visszaállítási pont (${reason}).`,
-      quarantineStillWorks: 'A karantén-visszaállítás továbbra is működik.'
+      quarantineStillWorks: 'A karantén-visszaállítás továbbra is működik.',
+      autoRemoveLeftovers: 'A vizsgálat által talált összes elem automatikus eltávolítása, előzetes ellenőrzés nélkül'
     },
     batchUninstallModal: {
       title: (n) => `${n} program eltávolítása`,
@@ -10823,7 +10838,8 @@ export const CATALOG = {
       failedRegistryKeysHeading: (n) => `${n} kunci registri tidak dapat dihapus`,
       failedRegistryKeysNote: 'ini biasanya memerlukan Prune berjalan sebagai administrator:',
       noRestorePoint: (reason) => `Tidak ada titik pemulihan sistem yang dibuat (${reason}).`,
-      quarantineStillWorks: 'Pemulihan Karantina masih berfungsi.'
+      quarantineStillWorks: 'Pemulihan Karantina masih berfungsi.',
+      autoRemoveLeftovers: 'Hapus otomatis semua yang ditemukan pemindaian, tanpa meninjaunya terlebih dahulu'
     },
     batchUninstallModal: {
       title: (n) => `Uninstal ${n} program`,
@@ -11503,7 +11519,8 @@ export const CATALOG = {
       failedRegistryKeysHeading: (n) => `Ekki tókst að fjarlægja ${n} skráningarlykil${n === 1 ? '' : 'a'}`,
       failedRegistryKeysNote: 'þessir þurfa yfirleitt að Prune keyri sem stjórnandi:',
       noRestorePoint: (reason) => `Enginn endurheimtunarpunktur kerfis var búinn til (${reason}).`,
-      quarantineStillWorks: 'Endurheimt úr sóttkví virkar enn.'
+      quarantineStillWorks: 'Endurheimt úr sóttkví virkar enn.',
+      autoRemoveLeftovers: 'Fjarlægja sjálfkrafa allt sem skönnunin finnur, án þess að yfirfara það fyrst'
     },
     batchUninstallModal: {
       title: (n) => `Fjarlægja ${n} forrit`,
@@ -12183,7 +12200,8 @@ export const CATALOG = {
       failedRegistryKeysHeading: (n) => `Impossibile rimuovere ${n} chiav${n === 1 ? 'e' : 'i'} di registro`,
       failedRegistryKeysNote: 'queste di solito richiedono che Prune sia eseguito come amministratore:',
       noRestorePoint: (reason) => `Non è stato creato alcun punto di ripristino del sistema (${reason}).`,
-      quarantineStillWorks: 'Il ripristino dalla Quarantena funziona ancora.'
+      quarantineStillWorks: 'Il ripristino dalla Quarantena funziona ancora.',
+      autoRemoveLeftovers: 'Rimuovi automaticamente tutto ciò che trova la scansione, senza controllarlo prima'
     },
     batchUninstallModal: {
       title: (n) => `Disinstalla ${n} programm${n === 1 ? 'a' : 'i'}`,
@@ -12863,7 +12881,8 @@ export const CATALOG = {
       failedRegistryKeysHeading: (n) => `${n} 件のレジストリキーを削除できませんでした`,
       failedRegistryKeysNote: 'これらは通常、Prune を管理者として実行する必要があります:',
       noRestorePoint: (reason) => `システムの復元ポイントは作成されませんでした（${reason}）。`,
-      quarantineStillWorks: '隔離場所からの復元は引き続き機能します。'
+      quarantineStillWorks: '隔離場所からの復元は引き続き機能します。',
+      autoRemoveLeftovers: '確認せずに、スキャンで見つかったものをすべて自動的に削除します'
     },
     batchUninstallModal: {
       title: (n) => `${n} 件のプログラムをアンインストール`,
@@ -13543,7 +13562,8 @@ export const CATALOG = {
       failedRegistryKeysHeading: (n) => `${n}개 레지스트리 키를 제거할 수 없습니다`,
       failedRegistryKeysNote: '이 항목들은 보통 Prune이 관리자로 실행되어야 합니다:',
       noRestorePoint: (reason) => `시스템 복원 지점이 생성되지 않았습니다(${reason}).`,
-      quarantineStillWorks: '격리 공간 복원은 여전히 작동합니다.'
+      quarantineStillWorks: '격리 공간 복원은 여전히 작동합니다.',
+      autoRemoveLeftovers: '검토 없이 검사에서 찾은 모든 항목을 자동으로 제거합니다'
     },
     batchUninstallModal: {
       title: (n) => `프로그램 ${n}개 제거`,
@@ -14223,7 +14243,8 @@ export const CATALOG = {
       failedRegistryKeysHeading: (n) => `Nepavyko pašalinti ${n} registro rakt${n === 1 ? 'o' : 'ų'}`,
       failedRegistryKeysNote: 'jiems paprastai reikia, kad „Prune“ veiktų administratoriaus teisėmis:',
       noRestorePoint: (reason) => `Sistemos atkūrimo taškas nesukurtas (${reason}).`,
-      quarantineStillWorks: 'Atkūrimas iš karantino vis dar veikia.'
+      quarantineStillWorks: 'Atkūrimas iš karantino vis dar veikia.',
+      autoRemoveLeftovers: 'Automatiškai pašalinti viską, ką randa nuskaitymas, be išankstinės peržiūros'
     },
     batchUninstallModal: {
       title: (n) => `Pašalinti ${n} program${n === 1 ? 'ą' : 'as'}`,
@@ -14903,7 +14924,8 @@ export const CATALOG = {
       failedRegistryKeysHeading: (n) => `${n} kekunci registri tidak dapat dikeluarkan`,
       failedRegistryKeysNote: 'ini biasanya memerlukan Prune berjalan sebagai pentadbir:',
       noRestorePoint: (reason) => `Tiada titik pemulihan sistem dicipta (${reason}).`,
-      quarantineStillWorks: 'Pemulihan Kuarantin masih berfungsi.'
+      quarantineStillWorks: 'Pemulihan Kuarantin masih berfungsi.',
+      autoRemoveLeftovers: 'Buang secara automatik semua yang ditemui oleh imbasan, tanpa menyemaknya dahulu'
     },
     batchUninstallModal: {
       title: (n) => `Nyahpasang ${n} program`,
@@ -15583,7 +15605,8 @@ export const CATALOG = {
       failedRegistryKeysHeading: (n) => `${n} registernøk${n === 1 ? 'kel' : 'ler'} kunne ikke fjernes`,
       failedRegistryKeysNote: 'disse krever vanligvis at Prune kjører som administrator:',
       noRestorePoint: (reason) => `Ingen systemgjenopprettingspunkt ble opprettet (${reason}).`,
-      quarantineStillWorks: 'Gjenoppretting fra karantene fungerer fortsatt.'
+      quarantineStillWorks: 'Gjenoppretting fra karantene fungerer fortsatt.',
+      autoRemoveLeftovers: 'Fjern automatisk alt skanningen finner, uten å gjennomgå det først'
     },
     batchUninstallModal: {
       title: (n) => `Avinstaller ${n} program${n === 1 ? '' : 'mer'}`,
@@ -16263,7 +16286,8 @@ export const CATALOG = {
       failedRegistryKeysHeading: (n) => `${n} registersleutel${n === 1 ? '' : 's'} kon${n === 1 ? '' : 'den'} niet worden verwijderd`,
       failedRegistryKeysNote: 'deze vereisen meestal dat Prune als beheerder wordt uitgevoerd:',
       noRestorePoint: (reason) => `Er is geen systeemherstelpunt gemaakt (${reason}).`,
-      quarantineStillWorks: 'Herstellen vanuit Quarantaine werkt nog steeds.'
+      quarantineStillWorks: 'Herstellen vanuit Quarantaine werkt nog steeds.',
+      autoRemoveLeftovers: 'Verwijder automatisch alles wat de scan vindt, zonder het eerst te controleren'
     },
     batchUninstallModal: {
       title: (n) => `${n} programma${n === 1 ? '' : '\'s'} verwijderen`,
@@ -16943,7 +16967,8 @@ export const CATALOG = {
       failedRegistryKeysHeading: (n) => `Nie udało się usunąć ${n} klucz${n === 1 ? 'a' : 'y'} rejestru`,
       failedRegistryKeysNote: 'do tego zwykle wymagane jest uruchomienie Prune jako administrator:',
       noRestorePoint: (reason) => `Nie utworzono punktu przywracania systemu (${reason}).`,
-      quarantineStillWorks: 'Przywracanie z kwarantanny nadal działa.'
+      quarantineStillWorks: 'Przywracanie z kwarantanny nadal działa.',
+      autoRemoveLeftovers: 'Automatycznie usuń wszystko, co znajdzie skanowanie, bez wcześniejszego przeglądania'
     },
     batchUninstallModal: {
       title: (n) => `Odinstaluj ${n} program${n === 1 ? '' : (n < 5 ? 'y' : 'ów')}`,
@@ -17623,7 +17648,8 @@ export const CATALOG = {
       failedRegistryKeysHeading: (n) => `${n} د راجستر کیلي لرې نشوای کیدی`,
       failedRegistryKeysNote: 'دا معمولاً اړتیا لري چې Prune د اډمین په توګه وچلیږي:',
       noRestorePoint: (reason) => `د سیسټم بیارغونې نقطه جوړه نشوه (${reason}).`,
-      quarantineStillWorks: 'د قرنطین بیارغونه لاهم کار کوي.'
+      quarantineStillWorks: 'د قرنطین بیارغونه لاهم کار کوي.',
+      autoRemoveLeftovers: 'هرڅه چې سکین یې مومي، پرته له مخکینۍ کتنې، په اتوماتيک ډول لرې کړئ'
     },
     batchUninstallModal: {
       title: (n) => `${n} پروګرامونه لرې کول`,
@@ -18303,7 +18329,8 @@ export const CATALOG = {
       failedRegistryKeysHeading: (n) => `${n} chave${n === 1 ? '' : 's'} de registro não p${n === 1 ? 'ôde' : 'uderam'} ser removida${n === 1 ? '' : 's'}`,
       failedRegistryKeysNote: 'estas geralmente exigem que o Prune seja executado como administrador:',
       noRestorePoint: (reason) => `Nenhum ponto de restauração do sistema foi criado (${reason}).`,
-      quarantineStillWorks: 'A restauração da Quarentena ainda funciona.'
+      quarantineStillWorks: 'A restauração da Quarentena ainda funciona.',
+      autoRemoveLeftovers: 'Remover automaticamente tudo o que a verificação encontrar, sem revisar antes'
     },
     batchUninstallModal: {
       title: (n) => `Desinstalar ${n} programa${n === 1 ? '' : 's'}`,
@@ -18983,7 +19010,8 @@ export const CATALOG = {
       failedRegistryKeysHeading: (n) => `${n} chave${n === 1 ? '' : 's'} de registo não p${n === 1 ? 'ôde' : 'uderam'} ser removida${n === 1 ? '' : 's'}`,
       failedRegistryKeysNote: 'estas normalmente exigem que o Prune seja executado como administrador:',
       noRestorePoint: (reason) => `Não foi criado nenhum ponto de restauro do sistema (${reason}).`,
-      quarantineStillWorks: 'A restauração a partir da Quarentena continua a funcionar.'
+      quarantineStillWorks: 'A restauração a partir da Quarentena continua a funcionar.',
+      autoRemoveLeftovers: 'Remover automaticamente tudo o que a verificação encontrar, sem o rever primeiro'
     },
     batchUninstallModal: {
       title: (n) => `Desinstalar ${n} programa${n === 1 ? '' : 's'}`,
@@ -19663,7 +19691,8 @@ export const CATALOG = {
       failedRegistryKeysHeading: (n) => `${n} che${n === 1 ? 'ie' : 'i'} de registru nu ${n === 1 ? 'a putut fi eliminată' : 'au putut fi eliminate'}`,
       failedRegistryKeysNote: 'acestea necesită de obicei ca Prune să ruleze ca administrator:',
       noRestorePoint: (reason) => `Nu s-a creat niciun punct de restaurare a sistemului (${reason}).`,
-      quarantineStillWorks: 'Restaurarea din Carantină funcționează în continuare.'
+      quarantineStillWorks: 'Restaurarea din Carantină funcționează în continuare.',
+      autoRemoveLeftovers: 'Elimină automat tot ce găsește scanarea, fără a-l revizui mai întâi'
     },
     batchUninstallModal: {
       title: (n) => `Dezinstalează ${n} program${n === 1 ? '' : 'e'}`,
@@ -20343,7 +20372,8 @@ export const CATALOG = {
       failedRegistryKeysHeading: (n) => `Не удалось удалить ${n} ключей реестра`,
       failedRegistryKeysNote: 'обычно для этого требуется, чтобы Prune был запущен от имени администратора:',
       noRestorePoint: (reason) => `Точка восстановления системы не была создана (${reason}).`,
-      quarantineStillWorks: 'Восстановление из карантина всё ещё работает.'
+      quarantineStillWorks: 'Восстановление из карантина всё ещё работает.',
+      autoRemoveLeftovers: 'Автоматически удалять всё, что найдёт сканирование, без предварительного просмотра'
     },
     batchUninstallModal: {
       title: (n) => `Удалить ${n} программ`,
@@ -21023,7 +21053,8 @@ export const CATALOG = {
       failedRegistryKeysHeading: (n) => `Nepodarilo sa odstrániť ${n} kľúč${n === 1 ? '' : (n < 5 ? 'e' : 'ov')} registra`,
       failedRegistryKeysNote: 'tieto zvyčajne vyžadujú, aby Prune bežal ako správca:',
       noRestorePoint: (reason) => `Nebol vytvorený žiadny bod obnovenia systému (${reason}).`,
-      quarantineStillWorks: 'Obnovenie z karantény stále funguje.'
+      quarantineStillWorks: 'Obnovenie z karantény stále funguje.',
+      autoRemoveLeftovers: 'Automaticky odstrániť všetko, čo nájde skenovanie, bez predchádzajúcej kontroly'
     },
     batchUninstallModal: {
       title: (n) => `Odinštalovať ${n} program${n === 1 ? '' : (n < 5 ? 'y' : 'ov')}`,
@@ -21703,7 +21734,8 @@ export const CATALOG = {
       failedRegistryKeysHeading: (n) => `Nuk u hoqën dot ${n} çelësa regjistri`,
       failedRegistryKeysNote: 'këto zakonisht kërkojnë që Prune të ekzekutohet si administrator:',
       noRestorePoint: (reason) => `Nuk u krijua asnjë pikë rikthimi sistemi (${reason}).`,
-      quarantineStillWorks: 'Rikthimi nga Karantina ende funksionon.'
+      quarantineStillWorks: 'Rikthimi nga Karantina ende funksionon.',
+      autoRemoveLeftovers: 'Hiq automatikisht gjithçka që gjen skanimi, pa e rishikuar më parë'
     },
     batchUninstallModal: {
       title: (n) => `Çinstalo ${n} programe`,
@@ -22383,7 +22415,8 @@ export const CATALOG = {
       failedRegistryKeysHeading: (n) => `Није могуће уклонити ${n} кључ${n === 1 ? '' : 'а'} регистра`,
       failedRegistryKeysNote: 'ово обично захтева да Prune буде покренут као администратор:',
       noRestorePoint: (reason) => `Није направљена тачка опоравка система (${reason}).`,
-      quarantineStillWorks: 'Опоравак из карантине и даље ради.'
+      quarantineStillWorks: 'Опоравак из карантине и даље ради.',
+      autoRemoveLeftovers: 'Аутоматски уклони све што пронађе скенирање, без претходног прегледа'
     },
     batchUninstallModal: {
       title: (n) => `Деинсталирај ${n} програма`,
@@ -23063,7 +23096,8 @@ export const CATALOG = {
       failedRegistryKeysHeading: (n) => `${n} registernyck${n === 1 ? 'el' : 'lar'} kunde inte tas bort`,
       failedRegistryKeysNote: 'dessa kräver vanligtvis att Prune körs som administratör:',
       noRestorePoint: (reason) => `Ingen systemåterställningspunkt skapades (${reason}).`,
-      quarantineStillWorks: 'Återställning från karantän fungerar fortfarande.'
+      quarantineStillWorks: 'Återställning från karantän fungerar fortfarande.',
+      autoRemoveLeftovers: 'Ta bort automatiskt allt som skanningen hittar, utan att granska det först'
     },
     batchUninstallModal: {
       title: (n) => `Avinstallera ${n} program`,
@@ -23743,7 +23777,8 @@ export const CATALOG = {
       failedRegistryKeysHeading: (n) => `ไม่สามารถลบ ${n} คีย์รีจิสทรีได้`,
       failedRegistryKeysNote: 'โดยปกติสิ่งเหล่านี้ต้องการให้ Prune ทำงานในฐานะผู้ดูแลระบบ:',
       noRestorePoint: (reason) => `ไม่ได้สร้างจุดคืนค่าระบบ (${reason})`,
-      quarantineStillWorks: 'การกู้คืนจากกักกันยังคงใช้งานได้'
+      quarantineStillWorks: 'การกู้คืนจากกักกันยังคงใช้งานได้',
+      autoRemoveLeftovers: 'ลบทุกอย่างที่การสแกนพบโดยอัตโนมัติ โดยไม่ต้องตรวจสอบก่อน'
     },
     batchUninstallModal: {
       title: (n) => `ถอนการติดตั้ง ${n} โปรแกรม`,
@@ -24423,7 +24458,8 @@ export const CATALOG = {
       failedRegistryKeysHeading: (n) => `${n} kayıt defteri anahtarı kaldırılamadı`,
       failedRegistryKeysNote: 'bunlar genellikle Prune\'un yönetici olarak çalışmasını gerektirir:',
       noRestorePoint: (reason) => `Sistem geri yükleme noktası oluşturulmadı (${reason}).`,
-      quarantineStillWorks: 'Karantina geri yüklemesi hâlâ çalışıyor.'
+      quarantineStillWorks: 'Karantina geri yüklemesi hâlâ çalışıyor.',
+      autoRemoveLeftovers: 'Taramanın bulduğu her şeyi, önce incelemeden otomatik olarak kaldır'
     },
     batchUninstallModal: {
       title: (n) => `${n} program kaldır`,
@@ -25103,7 +25139,8 @@ export const CATALOG = {
       failedRegistryKeysHeading: (n) => `Не вдалося видалити ${n} ключів реєстру`,
       failedRegistryKeysNote: 'зазвичай для цього потрібно, щоб Prune було запущено від імені адміністратора:',
       noRestorePoint: (reason) => `Точку відновлення системи не було створено (${reason}).`,
-      quarantineStillWorks: 'Відновлення з карантину все ще працює.'
+      quarantineStillWorks: 'Відновлення з карантину все ще працює.',
+      autoRemoveLeftovers: 'Автоматично видаляти все, що знайде сканування, без попереднього перегляду'
     },
     batchUninstallModal: {
       title: (n) => `Видалити ${n} програм`,
@@ -25783,7 +25820,8 @@ export const CATALOG = {
       failedRegistryKeysHeading: (n) => `Không thể xóa ${n} khóa registry`,
       failedRegistryKeysNote: 'những mục này thường yêu cầu Prune chạy với quyền quản trị viên:',
       noRestorePoint: (reason) => `Không có điểm khôi phục hệ thống nào được tạo (${reason}).`,
-      quarantineStillWorks: 'Khôi phục từ Cách ly vẫn hoạt động.'
+      quarantineStillWorks: 'Khôi phục từ Cách ly vẫn hoạt động.',
+      autoRemoveLeftovers: 'Tự động xóa mọi thứ mà quá trình quét tìm thấy, mà không cần xem lại trước'
     },
     batchUninstallModal: {
       title: (n) => `Gỡ cài đặt ${n} chương trình`,
@@ -26463,7 +26501,8 @@ export const CATALOG = {
       failedRegistryKeysHeading: (n) => `${n} 个注册表项无法删除`,
       failedRegistryKeysNote: '这些通常需要 Prune 以管理员身份运行：',
       noRestorePoint: (reason) => `未创建系统还原点（${reason}）。`,
-      quarantineStillWorks: '隔离区恢复功能仍然有效。'
+      quarantineStillWorks: '隔离区恢复功能仍然有效。',
+      autoRemoveLeftovers: '自动清除扫描找到的所有残留项，无需事先查看'
     },
     batchUninstallModal: {
       title: (n) => `卸载 ${n} 个程序`,
@@ -27143,7 +27182,8 @@ export const CATALOG = {
       failedRegistryKeysHeading: (n) => `${n} 個登錄機碼無法刪除`,
       failedRegistryKeysNote: '這些通常需要 Prune 以系統管理員身分執行：',
       noRestorePoint: (reason) => `未建立系統還原點（${reason}）。`,
-      quarantineStillWorks: '隔離區復原功能仍然有效。'
+      quarantineStillWorks: '隔離區復原功能仍然有效。',
+      autoRemoveLeftovers: '自動移除掃描找到的所有殘留項目，無需事先查看'
     },
     batchUninstallModal: {
       title: (n) => `解除安裝 ${n} 個程式`,
