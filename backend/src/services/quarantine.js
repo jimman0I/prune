@@ -228,7 +228,22 @@ export async function quarantineAndDelete({ programName, files, registryKeys, de
  *    guarantee to offer -- it hands the real path to code outside this
  *    function's control -- but the original is already safely copied
  *    into the batch before `editFn` ever runs, so restoreQuarantine()
- *    can still recover from a partial or failed mutation. */
+ *    can still recover from a partial or failed mutation.
+ *
+ * 4. Either mode's edit step can itself throw -- `editFn` can reject (a
+ *    future `cookie` action's `sqlite3.exe` DELETE failing partway), and
+ *    `newContent` mode's own `writeFile`/`rename` pair can fail too (disk
+ *    full, a permissions error). The original is already copied into
+ *    `dest` by the time either edit step runs, so that copy is
+ *    recoverable in principle -- but only if a manifest.json exists to
+ *    make the batch visible to listQuarantineBatches() and reachable by
+ *    restoreQuarantine(). Building `manifest` before the edit step and
+ *    writing it in a `finally` -- on the success path AND the failure
+ *    path alike -- turns that orphaned copy into a real, listable,
+ *    restorable batch either way, while still letting the original error
+ *    propagate to the caller once the `finally` has run (nothing in the
+ *    `finally` itself throws, so `await` here surfaces the edit's own
+ *    rejection, not a swallowed one). */
 export async function quarantineFileEdit({ programName, filePath, newContent, editFn }) {
   if (newContent === undefined && typeof editFn !== 'function') {
     throw new Error('quarantineFileEdit requires either newContent or editFn');
@@ -244,14 +259,6 @@ export async function quarantineFileEdit({ programName, filePath, newContent, ed
   const dest = join(batchDir, `file-0-${basename(filePath)}`);
   await copyFile(filePath, dest);
 
-  if (typeof editFn === 'function') {
-    await editFn(filePath);
-  } else {
-    const tempPath = `${filePath}.prune-tmp`;
-    await writeFile(tempPath, newContent, 'utf8');
-    await rename(tempPath, filePath);
-  }
-
   const manifest = {
     programName, createdAt: Date.now(), batchDir,
     files: [{ originalPath: filePath, quarantinedPath: dest, sizeBytes }],
@@ -259,7 +266,24 @@ export async function quarantineFileEdit({ programName, filePath, newContent, ed
     registryKeys: [], failedRegistryKeys: [], regFiles: [],
     totalSizeBytes: sizeBytes
   };
-  await writeFile(join(batchDir, 'manifest.json'), JSON.stringify(manifest, null, 2), 'utf8');
+
+  try {
+    if (typeof editFn === 'function') {
+      await editFn(filePath);
+    } else {
+      const tempPath = `${filePath}.prune-tmp`;
+      await writeFile(tempPath, newContent, 'utf8');
+      await rename(tempPath, filePath);
+    }
+  } finally {
+    // Written whether the edit above succeeded or threw -- see point 4
+    // above. A throw here (disk full while writing manifest.json itself)
+    // would replace the original error; that's an even worse-off disk
+    // than the one this function is already built to tolerate, and not
+    // one either mode's happy path guards against either.
+    await writeFile(join(batchDir, 'manifest.json'), JSON.stringify(manifest, null, 2), 'utf8');
+  }
+
   return manifest;
 }
 
