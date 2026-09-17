@@ -31,6 +31,12 @@ describe('buildKeepPredicate', () => {
     const sql = buildKeepPredicate(['.Example.COM'], 'host');
     expect(sql).toBe("(host = 'example.com' OR host LIKE '%.example.com')");
   });
+
+  it('throws a clear error for an empty domain list instead of producing invalid SQL', () => {
+    expect(() => buildKeepPredicate([], 'host_key')).toThrow(
+      'buildKeepPredicate requires at least one domain'
+    );
+  });
 });
 
 describe('TABLE_DETECT_SQL', () => {
