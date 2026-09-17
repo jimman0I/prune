@@ -7,6 +7,7 @@ import * as shellAction from './cleanerActions/shell.js';
 import * as sqliteVacuumAction from './cleanerActions/sqliteVacuum.js';
 import * as winregAction from './cleanerActions/winreg.js';
 import * as jsonAction from './cleanerActions/json.js';
+import * as cookieAction from './cleanerActions/cookie.js';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const CLEANERS_JSON_PATH = join(here, '..', 'data', 'cleaners.json');
@@ -76,7 +77,8 @@ export function normalizeRule(rule) {
  * dispatches each action to its own module's `scan()` by `type` --
  * `shell`, `delete`, `sqlite.vacuum`, `winreg`, `json` (does the rule's
  * BleachBit-style `address` currently resolve inside the target JSON
- * file?) -- merging their results into one summary: `sizeBytes`/
+ * file?), `cookie` (does the target cookie database exist, and how big is
+ * it?) -- merging their results into one summary: `sizeBytes`/
  * `fileCount` summed, `heldCount` summed,
  * `accessible` ANDed together, `present` true if ANY action reports
  * something there. A rule with only a `shell` action (nothing to size)
@@ -129,6 +131,10 @@ export function scanRule(rule, guards = {}) {
       present = true;
     } else if (action.type === 'json') {
       const result = jsonAction.scan({ expandedPath: expandPath(action.path), address: action.address });
+      sizeBytes = (sizeBytes ?? 0) + result.sizeBytes;
+      if (result.present) present = true;
+    } else if (action.type === 'cookie') {
+      const result = cookieAction.scan({ expandedPath: expandPath(action.path) });
       sizeBytes = (sizeBytes ?? 0) + result.sizeBytes;
       if (result.present) present = true;
     }
@@ -209,6 +215,11 @@ export function scanAllRules(guards = {}) {
  *   JSON file and rewrites it in place, quarantining the original --
  *   never a whole-file delete, since the rest of the file's data must
  *   survive.
+ * - `cookie` either removes the whole cookie database (no keep list, or
+ *   one that matches nothing in this specific file) through the same
+ *   quarantine-then-delete path `delete` uses, or -- when a keep list
+ *   matches at least one row in this file -- a surgical DELETE + VACUUM
+ *   through the bundled sqlite3.exe CLI, quarantining the original first.
  *
  * A rule mixing action types (e.g. a `delete` action and a
  * `sqlite.vacuum` action under one id) runs every action and sums
@@ -261,6 +272,12 @@ export async function executeRule(rule, guards = {}) {
       // above, mirrored exactly: freedBytes alone can't tell a json key
       // removal apart from a delete action's freedBytes.
       edited = true;
+    } else if (action.type === 'cookie') {
+      const result = await cookieAction.execute({ expandedPath: expandPath(action.path) }, rule.name, guards);
+      freedBytes += result.freedBytes;
+      skipped.push(...result.skipped);
+      if (result.recycled) recycled = true;
+      if (result.quarantineBatch) quarantineBatch = result.quarantineBatch;
     }
   }
 
