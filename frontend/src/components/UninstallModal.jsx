@@ -97,6 +97,11 @@ export default function UninstallModal({ program, running = false, onClose }) {
   const [selected, setSelected] = useState(new Set());
   const [removal, setRemoval] = useState(null);
   const [error, setError] = useState(null);
+  // Revo's third checkbox: unticked by default (matching Revo's own
+  // default), and read only once, at the moment the scan resolves --
+  // ticking it after the scan has already started changes nothing, same
+  // as the other two settings this dialog already reads once per run.
+  const [autoRemoveLeftovers, setAutoRemoveLeftovers] = useState(false);
   // Editable, because name matching is a heuristic and only the person
   // looking at it knows whether it found the right thing.
   const [searchTerm, setSearchTerm] = useState(() => deriveSearchTerm(program.name));
@@ -109,15 +114,24 @@ export default function UninstallModal({ program, running = false, onClose }) {
   const scanAfter = settings?.scanLeftoversAfterUninstall !== false;
   const [progressTitle, setProgressTitle] = useState(null);
 
-  const selectEverythingIn = (result) => {
-    // Revo's "Check mark all leftovers by default", which it ships off.
-    // Prune keeps its behaviour unless the user turns it off.
-    if (!preselect) { setSelected(new Set()); return; }
+  // Every "group:index" key a scan result contains, regardless of any
+  // setting -- the one shape both selectEverythingIn (gated by the
+  // preselectLeftovers setting) and the auto-remove path (which ignores
+  // that setting on purpose: "remove ALL found leftovers" means literally
+  // everything) need to build.
+  const allFoundIn = (result) => {
     const keys = [];
     for (const groupKey of ['files', 'registryKeys']) {
       (result[groupKey]?.items || []).forEach((_, i) => keys.push(`${groupKey}:${i}`));
     }
-    setSelected(new Set(keys));
+    return new Set(keys);
+  };
+
+  const selectEverythingIn = (result) => {
+    // Revo's "Check mark all leftovers by default", which it ships off.
+    // Prune keeps its behaviour unless the user turns it off.
+    if (!preselect) { setSelected(new Set()); return; }
+    setSelected(allFoundIn(result));
   };
 
   /* Single-flight: this runs the program's real uninstaller, and its only
@@ -171,6 +185,26 @@ export default function UninstallModal({ program, running = false, onClose }) {
       // so its leftover sweep found registry keys and never files.
       const result = await scanForLeftovers(deriveSearchTerm(program.name), program.publisher);
       setScanResult(result);
+      // Revo's "Automatically delete all found leftovers": skip the manual
+      // review screen and remove everything the scan just found, straight
+      // away. It still goes through the exact same quarantine call the
+      // manual review's own confirm button does -- this only skips the
+      // SELECTION step, not the safety of the removal itself.
+      if (autoRemoveLeftovers) {
+        const full = allFoundIn(result);
+        setSelected(full);
+        setStep('removing');
+        try {
+          const { files, registryKeys } = selectionToRemoval(result, full);
+          const manifest = await removeQuarantined({ programName: program.name, files, registryKeys, destination });
+          setRemoval(manifest);
+          setStep('done');
+        } catch (err) {
+          setError(err.message);
+          setStep('review');
+        }
+        return;
+      }
       selectEverythingIn(result);
       setStep('review');
     } catch (err) {
@@ -307,6 +341,15 @@ export default function UninstallModal({ program, running = false, onClose }) {
                 </p>
                 <p className="text-[11.5px] text-[color:var(--text-muted)] font-mono mb-6 break-all select-text">{command}</p>
                 {error && <p className="text-[12.5px] text-[color:var(--danger)] mb-4 select-text">{t('uninstallModal.uninstallFailed', error)}</p>}
+                <label className="flex items-center gap-2.5 mb-5 cursor-pointer select-none">
+                  <input
+                    type="checkbox"
+                    checked={autoRemoveLeftovers}
+                    onChange={(e) => setAutoRemoveLeftovers(e.target.checked)}
+                    className="w-[15px] h-[15px] accent-[color:var(--accent-primary)] cursor-pointer"
+                  />
+                  <span className="text-[12.5px] text-[color:var(--text-secondary)]">{t('uninstallModal.autoRemoveLeftovers')}</span>
+                </label>
                 <button className="btn-primary" onClick={startUninstall} disabled={!program.uninstallString}>
                   {t('uninstallModal.startButton')}
                 </button>

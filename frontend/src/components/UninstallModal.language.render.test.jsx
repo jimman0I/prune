@@ -312,4 +312,12 @@ describe('the uninstall dialog, in Greek', () => {
     expect(await screen.findByText('Αποτυχία αφαίρεσης 1 κλειδιού μητρώου')).toBeTruthy();
     expect(screen.getByText(/αυτά συνήθως απαιτούν το Prune να εκτελείται ως διαχειριστής/)).toBeTruthy();
   });
+
+  it('translates the "automatically delete all found leftovers" checkbox label on the confirm step', async () => {
+    renderScreen(<UninstallModal program={program} onClose={vi.fn()} />);
+    await ready();
+    expect(screen.getByRole('checkbox', {
+      name: 'Αφαίρεση αυτόματα όλων των καταλοίπων που βρίσκει η σάρωση, χωρίς να τα ελέγξετε πρώτα'
+    })).toBeTruthy();
+  });
 });
