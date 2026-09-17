@@ -45,7 +45,8 @@ describe('POST /quarantine/remove destination', () => {
     const res = await remove({});
     expect(res.status).toBe(200);
     expect(removeLeftovers).toHaveBeenCalledWith({
-      programName: 'Thing', files: ['C:\\x'], registryKeys: [], destination: 'quarantine'
+      programName: 'Thing', files: ['C:\\x'], registryKeys: [], destination: 'quarantine',
+      deleteLockedFilesOnRestart: false
     });
   });
 
@@ -74,5 +75,17 @@ describe('POST /quarantine/remove destination', () => {
   it('still makes the restore point first, whatever the destination', async () => {
     const res = await remove({ destination: 'permanent' });
     expect(res.body.restorePoint).toEqual({ created: true });
+  });
+
+  it('passes deleteLockedFilesOnRestart from settings through to removeLeftovers', async () => {
+    settings = { createRestorePoint: true, deleteLockedFilesOnRestart: true };
+    await remove({});
+    expect(removeLeftovers.mock.calls[0][0].deleteLockedFilesOnRestart).toBe(true);
+  });
+
+  it('defaults deleteLockedFilesOnRestart to false when settings does not have it', async () => {
+    settings = { createRestorePoint: true };
+    await remove({});
+    expect(removeLeftovers.mock.calls[0][0].deleteLockedFilesOnRestart).toBe(false);
   });
 });
