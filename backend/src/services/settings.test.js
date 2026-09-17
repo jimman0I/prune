@@ -43,6 +43,7 @@ describe('getSettings', () => {
     expect(settings.keepUninstallHistory).toBe(true);
     expect(settings.restorePointBeforeUninstall).toBe(false);   // needs admin, slow
     expect(settings.registryBackupBeforeUninstall).toBe(false); // ~140 MB each time
+    expect(settings.deleteLockedFilesOnRestart).toBe(false); // writes to HKLM, needs admin
     expect(settings.autoInstallUpdates).toBe(false);   // nothing installs unasked
     expect(settings.language).toBe('en');              // no Electron in this test env to detect another
     expect(settings.showFreeSpaceOnMap).toBe(false);   // WizTree ships it off too

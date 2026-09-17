@@ -107,6 +107,14 @@ const DEFAULT_SETTINGS = {
      registry backup is about 140 MB (measured). See preUninstall.js. */
   restorePointBeforeUninstall: false,
   registryBackupBeforeUninstall: false,
+  /* Revo's own "force deletion" cousin -- a file quarantine/removal
+     couldn't move because something has it open gets scheduled for
+     deletion at the next restart (MOVEFILE_DELAY_UNTIL_REBOOT's own
+     mechanism -- see services/pendingReboot.js) instead of just being
+     reported as skipped. Off by default, same posture as the two
+     settings above: this writes to HKLM\SYSTEM, a machine-wide key,
+     and needs admin -- never something to turn on silently. */
+  deleteLockedFilesOnRestart: false,
   /* Whether a newer release downloads by itself and installs the next
      time Prune closes. Off by default: without it an update is one click
      on the side-nav button, and nothing is downloaded before that click.
