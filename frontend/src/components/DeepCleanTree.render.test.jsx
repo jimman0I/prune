@@ -1,8 +1,12 @@
 // @vitest-environment jsdom
 import { describe, it, expect, afterEach, vi } from 'vitest';
-import { screen, within, cleanup } from '@testing-library/react';
+import { screen, within, cleanup, render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { renderScreen } from '../testSupport/renderScreen.jsx';
+import { QueryClientProvider } from '@tanstack/react-query';
+import { ThemeProvider } from '../hooks/useTheme.jsx';
+import { ToastProvider } from '../hooks/useToasts.jsx';
+import { LanguageProvider } from '../i18n/LanguageContext.jsx';
+import { renderScreen, makeTestClient } from '../testSupport/renderScreen.jsx';
 import DeepCleanTree from './DeepCleanTree.jsx';
 
 /** The Deep Clean tree, rendered.
@@ -68,6 +72,7 @@ const draw = (props = {}) => renderScreen(
     onToggle={props.onToggle || (() => {})}
     onToggleCategory={props.onToggleCategory || (() => {})}
     icons={props.icons}
+    receiptMode={props.receiptMode}
   />
 );
 
@@ -328,6 +333,79 @@ describe('the checkbox position in each row', () => {
 
     expect(children[children.length - 1]).toBe(checkbox);
     expect(children[0]).not.toBe(checkbox);
+  });
+});
+
+describe('receiptMode', () => {
+  // The narrow sidebar Clean shows while running: a live receipt of only
+  // what was actually ticked, not the full 74-row browsing list. Nothing
+  // here touches selection state itself -- only which rows this component
+  // chooses to render.
+  it('shows only selected items within a category, forced expanded', () => {
+    const selected = new Set(['brave-cache']);
+    draw({ receiptMode: true, selected });
+
+    expect(screen.getByText('Cache')).toBeTruthy();
+    expect(screen.queryByText('Cookies')).toBeNull();
+  });
+
+  it('omits a category entirely when nothing in it is selected', () => {
+    draw({ receiptMode: true, selected: new Set() });
+
+    expect(screen.queryByText('Brave')).toBeNull();
+    expect(screen.queryByText('Windows')).toBeNull();
+  });
+
+  it('shows a category forced-expanded in receiptMode even if the user had collapsed it', async () => {
+    // Same rendering the rest of this file gets from renderScreen(), built
+    // by hand here because the point of this test is a mid-test PROP
+    // change (collapse, then flip receiptMode on) via the same render's
+    // own rerender -- renderScreen() itself only exposes a one-shot render.
+    const client = makeTestClient();
+    const wrap = ({ selected, receiptMode }) => (
+      <QueryClientProvider client={client}>
+        <ThemeProvider>
+          <LanguageProvider>
+            <ToastProvider>
+              <DeepCleanTree
+                categories={CATEGORIES}
+                selected={selected}
+                onToggle={() => {}}
+                onToggleCategory={() => {}}
+                receiptMode={receiptMode}
+              />
+            </ToastProvider>
+          </LanguageProvider>
+        </ThemeProvider>
+      </QueryClientProvider>
+    );
+
+    const user = userEvent.setup();
+    const selected = new Set(['brave-cache']);
+    const { rerender } = render(wrap({ selected, receiptMode: false }));
+
+    await user.click(screen.getByRole('button', { expanded: true, name: /Brave/ }));
+    expect(screen.queryByText('Cache')).toBeNull();
+
+    rerender(wrap({ selected, receiptMode: true }));
+
+    expect(screen.getByText('Cache')).toBeTruthy();
+  });
+
+  it('is a no-op when receiptMode is omitted -- unchanged current behavior', () => {
+    draw({ selected: new Set(['brave-cache']) });
+
+    expect(screen.getByText('Cache')).toBeTruthy();
+    expect(screen.getByText('Cookies')).toBeTruthy();
+    expect(screen.getByText('Windows')).toBeTruthy();
+  });
+
+  it('is a no-op when receiptMode is false -- unchanged current behavior', () => {
+    draw({ receiptMode: false, selected: new Set(['brave-cache']) });
+
+    expect(screen.getByText('Cache')).toBeTruthy();
+    expect(screen.getByText('Cookies')).toBeTruthy();
+    expect(screen.getByText('Windows')).toBeTruthy();
   });
 });
 
