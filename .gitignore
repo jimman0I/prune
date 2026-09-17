@@ -11,3 +11,6 @@ electron/build/backend-prod/
 *.log
 
 .reroute/
+
+# Isolated worktrees for agentic feature work (superpowers using-git-worktrees)
+.worktrees/
