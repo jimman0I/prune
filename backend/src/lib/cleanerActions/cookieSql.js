@@ -38,6 +38,9 @@ function normalizeDomain(domain) {
  * list -- an empty list means "delete the whole file", a different code
  * path entirely that never needs a predicate at all. */
 export function buildKeepPredicate(domains, hostColumn) {
+  if (domains.length === 0) {
+    throw new Error('buildKeepPredicate requires at least one domain');
+  }
   const clauses = domains.map((rawDomain) => {
     const domain = escapeSqlString(normalizeDomain(rawDomain));
     return `${hostColumn} = '${domain}' OR ${hostColumn} LIKE '%.${domain}'`;
