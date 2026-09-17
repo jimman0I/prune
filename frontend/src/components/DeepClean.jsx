@@ -141,6 +141,14 @@ function DeepClean() {
   const [confirmClean, setConfirmClean] = useState(false);
   const [cleanResult, setCleanResult] = useState(null);
   const [cleanError, setCleanError] = useState(null);
+  // A frozen copy of `selected`, taken the instant Clean actually starts.
+  // receiptMode filters the tree against THIS, not the live `selected` --
+  // nothing currently stops a checkbox click or "Clear" from mutating
+  // `selected` while a clean is in flight, and the backend keeps working
+  // through the batch it was actually handed regardless. Filtering the
+  // receipt against a live set that can shrink mid-clean would make the
+  // row `activeId` is highlighting vanish from its own receipt.
+  const [cleaningSelection, setCleaningSelection] = useState(null);
   // The rule a warning dialog is currently open for, or null.
   /* A QUEUE, not one rule. Ticking a whole application can owe the user
    * several questions -- Brave alone has five rules that lose data -- and
@@ -329,6 +337,11 @@ function DeepClean() {
   const handleClean = async () => {
     setCleanError(null);
     try {
+      // Freeze what's actually being handed to the backend before it can
+      // change out from under the receipt -- see cleaningSelection's own
+      // comment above.
+      setCleaningSelection(new Set(selected));
+
       // Streamed -- see hooks/useDeepCleanExecute.js. `result` keeps the
       // same {freedBytes, results} shape the old one-shot POST returned,
       // so everything below reads it exactly as it always has.
@@ -361,6 +374,7 @@ function DeepClean() {
       setCleanError(err.message);
     } finally {
       setConfirmClean(false);
+      setCleaningSelection(null);
     }
   };
 
@@ -476,7 +490,11 @@ function DeepClean() {
             {shownCategories && (
               <DeepCleanTree
                 categories={shownCategories}
-                selected={selected}
+                // The frozen snapshot ONLY while receiptMode is actually
+                // filtering the tree to it -- checkbox ticks/clicks below
+                // still read and write the live `selected` via onToggle/
+                // onToggleCategory regardless, unaffected by this.
+                selected={cleaning && cleaningSelection ? cleaningSelection : selected}
                 onToggle={handleToggle}
                 onToggleCategory={handleToggleCategory}
                 icons={categoryIcons.data ?? {}}
