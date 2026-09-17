@@ -53,6 +53,18 @@ describe('json scan', () => {
   });
 });
 
+describe('json scan/execute agreement on a malformed rule', () => {
+  it('both throw the same clear error for a rule missing address, rather than scan silently reporting present:false', async () => {
+    const filePath = join(scratchDir, 'Preferences');
+    await writeFile(filePath, JSON.stringify({ sync: {} }));
+
+    expect(() => scan({ expandedPath: filePath })).toThrow(`json action for ${filePath} is missing 'address'`);
+    await expect(execute({ expandedPath: filePath }, 'Test Rule')).rejects.toThrow(
+      `json action for ${filePath} is missing 'address'`
+    );
+  });
+});
+
 describe('json execute', () => {
   it('removes the real key, quarantines the original, and reports a real byte delta', async () => {
     const filePath = join(scratchDir, 'Preferences');
