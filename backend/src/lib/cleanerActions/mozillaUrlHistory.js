@@ -1,16 +1,8 @@
 import { existsSync, statSync } from 'node:fs';
-import { writeFile, rm } from 'node:fs/promises';
-import { execFile } from 'node:child_process';
-import { promisify } from 'node:util';
-import { randomUUID } from 'node:crypto';
-import { tmpdir } from 'node:os';
-import { join } from 'node:path';
 import { isExcluded, isTooRecent } from '../cleanGuards.js';
-import { sqlite3ExePath } from './sqliteVacuum.js';
 import { sqliteTableExists } from './sqliteInspect.js';
+import { runSqlViaTempScript } from './sqliteExec.js';
 import { quarantineFileEdit } from '../../services/quarantine.js';
-
-const execFileAsync = promisify(execFile);
 
 /** Firefox/Firefox-family `places.sqlite` cleaner, ported from BleachBit's
  * real `delete_mozilla_url_history()`. NOTE: this schema was NOT
@@ -29,25 +21,6 @@ function heldReason(expandedPath, mtimeMs, guards) {
     return 'modified too recently';
   }
   return null;
-}
-
-/** Runs `sql` against the database at `dbPath` via sqlite3.exe's `.read`
- * meta-command rather than passing the SQL as a raw argv string. This
- * module has no large-list risk of its own (no bookmark-URL-list embedded
- * in the SQL, unlike chromeHistory.js), but a places.sqlite database with
- * many tables/rows could still produce a moderately long combined SQL
- * string across all the existence-checked DELETEs -- writing the script
- * to a temp file keeps argv tiny regardless, matching the same safer
- * convention chromeHistory.js's own `runSqlViaTempScript()` established.
- * The temp file is always removed afterward. */
-async function runSqlViaTempScript(dbPath, sql) {
-  const scriptPath = join(tmpdir(), `prune-mozilla-history-${process.pid}-${randomUUID()}.sql`);
-  try {
-    await writeFile(scriptPath, sql, 'utf8');
-    await execFileAsync(sqlite3ExePath(), [dbPath, `.read ${scriptPath}`]);
-  } finally {
-    await rm(scriptPath, { force: true });
-  }
 }
 
 /** Scans a mozilla.url.history action: the places.sqlite file's current
