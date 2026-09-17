@@ -50,6 +50,18 @@ const DEFAULT_SETTINGS = {
      and a single list would have to guess which at match time, on every
      file of every scan. See lib/exclusionInput.js. */
   excludeExtensions: [],
+  /** Cookie domains a `cookie` action must NEVER delete rows for -- an
+   * exact-domain-or-any-subdomain match against each entry (so keeping
+   * "example.com" also keeps "sub.example.com", matching BleachBit's own
+   * predicate). Empty by default, and an empty list is a fully working,
+   * intentional state: it means every `cookie` action deletes the whole
+   * cookie database file outright, exactly like BleachBit's own behavior
+   * when nothing is configured to survive. See cleanerActions/cookie.js.
+   * No Settings-screen entry point yet -- managing this list (browsing
+   * what's actually in a cookie database, picking domains to keep) is a
+   * real, separate future feature; this default state is not a stand-in
+   * for it, it's the documented behavior of an empty keep list. */
+  cookieKeepList: [],
   autoQuarantine: true,
   theme: 'dark',
   minimizeToTray: false,
