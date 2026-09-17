@@ -144,7 +144,27 @@ export default function UninstallModal({ program, running = false, onClose }) {
         // genuinely succeeded by this point.
       });
       if (!scanAfter) { setStep('noScan'); return; }
-      setStep('scanning');
+      // Revo's own screen after the real uninstaller runs: it does not
+      // race into a scan the instant the spawned process exits, because
+      // that process returning is not proof the program's own uninstall
+      // work (background services, async cleanup) is actually done yet.
+      // The person confirms readiness themselves with an explicit click.
+      setStep('readyToScan');
+    } catch (err) {
+      setError(err.message);
+      setStep('confirm');
+    }
+  });
+
+  /* Single-flight for the same reason startUninstall is: the click that
+   * fires the leftover scan should not be able to fire it twice. Its
+   * failure path returns to 'readyToScan', not 'confirm' -- the real
+   * uninstall already ran and succeeded; only the scan itself failed and
+   * can be retried without touching the program again. */
+  const startScan = useSingleFlight(async () => {
+    setError(null);
+    setStep('scanning');
+    try {
       // The derived term, not program.name -- the ordinary flow had the
       // same defect the forced path did: it searched for the full
       // DisplayName ("TriClaude 0.1.0"), which no folder is ever called,
@@ -155,7 +175,7 @@ export default function UninstallModal({ program, running = false, onClose }) {
       setStep('review');
     } catch (err) {
       setError(err.message);
-      setStep('confirm');
+      setStep('readyToScan');
     }
   });
 
@@ -296,6 +316,18 @@ export default function UninstallModal({ program, running = false, onClose }) {
         )}
         {step === 'uninstalling' && (
           <ProgressPhase title={progressTitle || t('uninstallModal.progress.runningNative')} command={command} progress={45} />
+        )}
+        {step === 'readyToScan' && (
+          <div className="py-4">
+            <p className="text-[13px] text-[color:var(--text-secondary)] mb-5">
+              {t('uninstallModal.readyToScan.body', program.name)}
+            </p>
+            {error && <p className="text-[12.5px] text-[color:var(--danger)] mb-4 select-text">{t('uninstallModal.scanFailed', error)}</p>}
+            <div className="flex items-center gap-2.5">
+              <button className="btn-primary" onClick={startScan}>{t('uninstallModal.readyToScan.scanButton')}</button>
+              <button className="btn-ghost px-3 py-1.5 rounded-lg text-[12px] font-medium" onClick={onClose}>{t('uninstallModal.close')}</button>
+            </div>
+          </div>
         )}
         {step === 'scanning' && (
           <ProgressPhase
