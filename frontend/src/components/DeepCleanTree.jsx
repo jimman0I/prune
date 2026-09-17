@@ -134,9 +134,14 @@ function CategoryIcon({ category, src }) {
   );
 }
 
-function CategorySection({ category, items, iconSrc, selected, onToggle, onToggleCategory, activeId }) {
+function CategorySection({ category, items, iconSrc, selected, onToggle, onToggleCategory, activeId, receiptMode = false }) {
   const { t } = useLanguage();
   const [expanded, setExpanded] = useState(true);
+  // receiptMode forces every remaining category open without touching the
+  // underlying `expanded` state itself -- a collapse the user made while
+  // browsing has to still be there, exactly as they left it, once Clean
+  // finishes and receiptMode goes back to false.
+  const isExpanded = receiptMode || expanded;
   const state = categorySelectionState(items, selected);
 
   return (
@@ -159,13 +164,13 @@ function CategorySection({ category, items, iconSrc, selected, onToggle, onToggl
         <button
           type="button"
           onClick={() => setExpanded((e) => !e)}
-          aria-expanded={expanded}
+          aria-expanded={isExpanded}
           className="flex items-center gap-2 min-w-0 flex-1 text-left"
         >
           <svg
             width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
             className="text-[color:var(--text-muted)] shrink-0"
-            style={{ transform: expanded ? 'rotate(90deg)' : 'rotate(0deg)' }}
+            style={{ transform: isExpanded ? 'rotate(90deg)' : 'rotate(0deg)' }}
           >
             <polyline points="9 18 15 12 9 6"></polyline>
           </svg>
@@ -187,7 +192,7 @@ function CategorySection({ category, items, iconSrc, selected, onToggle, onToggl
           it -- the cost is paid by rows the user was not looking at. The
           chevron still turns, which is the part that reads as a state
           change. */}
-      {expanded && (
+      {isExpanded && (
         <div>
           {items.map((item) => {
           const measured = item.sizeBytes !== null && item.sizeBytes !== undefined;
@@ -269,10 +274,20 @@ function CategorySection({ category, items, iconSrc, selected, onToggle, onToggl
  * sizeBytes, ...}] }]. `icons` is { category: dataUri } from
  * GET /api/deep-clean/category-icons, and is allowed to be empty or to
  * arrive late -- every heading renders either way. */
-export default function DeepCleanTree({ categories, selected, onToggle, onToggleCategory, icons = {}, activeId = null }) {
+export default function DeepCleanTree({ categories, selected, onToggle, onToggleCategory, icons = {}, activeId = null, receiptMode = false }) {
+  // The narrow sidebar Clean shows while running: a live receipt of only
+  // what's actually being processed, not the full browsable list. A
+  // category left with nothing selected in it is dropped entirely rather
+  // than shown empty.
+  const visibleGroups = receiptMode
+    ? categories
+        .map((group) => ({ ...group, items: group.items.filter((item) => selected.has(item.id)) }))
+        .filter((group) => group.items.length > 0)
+    : categories;
+
   return (
     <div className="glass-panel rounded-xl overflow-y-auto min-h-0">
-      {categories.map((group) => (
+      {visibleGroups.map((group) => (
         <CategorySection
           key={group.category}
           category={group.category}
@@ -282,6 +297,7 @@ export default function DeepCleanTree({ categories, selected, onToggle, onToggle
           onToggle={onToggle}
           onToggleCategory={onToggleCategory}
           activeId={activeId}
+          receiptMode={receiptMode}
         />
       ))}
     </div>
