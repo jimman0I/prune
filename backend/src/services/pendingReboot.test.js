@@ -1,10 +1,37 @@
-import { describe, it, expect, afterEach } from 'vitest';
+import { describe, it, expect, afterEach, vi } from 'vitest';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import { writeFile, rm } from 'node:fs/promises';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import { schedulePendingDelete, readPendingOperations, PENDING_KEY, PENDING_VALUE } from './pendingReboot.js';
+
+// Same vi.mock partial-passthrough technique quarantine.test.js already
+// establishes for 'node:fs/promises' -- applied here to 'node:child_process'
+// instead, so a single test below can force ONE specific `reg export` call
+// to fail with something other than "not found", while every other call in
+// this file (this file's own real cleanup, pendingReboot.js's own real
+// reg.exe calls) passes straight through to the real execFile unchanged.
+//
+// Deliberately NOT trying to preserve execFile's `[util.promisify.custom]`
+// symbol on the mock (vi.fn(impl) doesn't carry it over, so `promisify`
+// would fall back to its generic behavior and only resolve with `stdout`,
+// not Node's special-cased `{ stdout, stderr }`). Tried it two ways --
+// referencing the top-level `promisify` import inside the factory throws
+// "Cannot access '...' before initialization" (vi.mock's factory is
+// hoisted above every other import, so a module-level import binding
+// really is in its temporal dead zone there, confirmed live); a dynamic
+// `await import('node:util')` inside the factory avoids that error but
+// then the mock silently never applies at all -- calls fall through to
+// the real, unmocked execFile with zero explanation. Neither is worth the
+// fragility: nothing in this file destructures a successful call's
+// `{ stdout, stderr }` shape, so there's nothing to lose by not preserving
+// it, and the plain, no-symbol version below is the one actually confirmed
+// to intercept pendingReboot.js's own internal execFile calls.
+vi.mock('node:child_process', async (importOriginal) => {
+  const actual = await importOriginal();
+  return { ...actual, execFile: vi.fn(actual.execFile) };
+});
 
 const execFileAsync = promisify(execFile);
 
@@ -47,7 +74,11 @@ async function writeAllPendingOperations(strings) {
   const fullKeyPath = PENDING_KEY.replace(/^HKLM\\?/i, 'HKEY_LOCAL_MACHINE\\');
   const regFileText = `Windows Registry Editor Version 5.00\r\n\r\n[${fullKeyPath}]\r\n"${PENDING_VALUE}"=hex(7):${hexList}\r\n\r\n`;
   const regFileBytes = Buffer.concat([Buffer.from([0xff, 0xfe]), Buffer.from(regFileText, 'utf16le')]);
-  const importFile = join(tmpdir(), `pfro-test-cleanup-${process.pid}-${Date.now()}.reg`);
+  // Same naming shape pendingReboot.js's own writeMultiSzValue uses
+  // (pid + timestamp + random suffix) -- two afterEach cleanups firing in
+  // the same millisecond, from this file and a concurrent run, must not
+  // collide on one temp path.
+  const importFile = join(tmpdir(), `pfro-test-cleanup-${process.pid}-${Date.now()}-${Math.random().toString(36).slice(2)}.reg`);
   await writeFile(importFile, regFileBytes);
   try {
     await execFileAsync('reg', ['import', importFile]);
@@ -96,6 +127,39 @@ describe('readPendingOperations', () => {
       expect(typeof result[i]).toBe('string');
       expect(typeof result[i + 1]).toBe('string');
     }
+  });
+
+  // The critical fix this test exists to lock in: a `reg export` failure
+  // that is NOT "key/value genuinely doesn't exist" must propagate as a
+  // thrown error, never silently become `[]`. schedulePendingDelete reads
+  // via this function and writes the result back as the ENTIRE new
+  // registry value -- if a transient export failure (locked temp dir, AV
+  // interference, a spawn hiccup) were swallowed into `[]` here, the next
+  // write would overwrite and destroy whatever real pairs Windows Update
+  // or another installer already had queued, which is exactly what
+  // happened on this dev machine's own key throughout this module's
+  // development (4 real pending deletes, the whole time). Forces the
+  // failure via the mocked `execFile` above rather than against the real
+  // registry, since there's no safe real-world way to make `reg export`
+  // fail with a non-"not found" error on demand.
+  it('throws rather than returning [] when reg export fails for a reason other than "not found"', async () => {
+    // execFile's callback is always its LAST argument -- (file, args,
+    // callback) when no options object is passed, (file, args, options,
+    // callback) when one is -- so pulling it out by position rather than
+    // assuming a fixed arity survives either call shape.
+    execFile.mockImplementationOnce((...args) => {
+      const callback = args[args.length - 1];
+      // Shaped like a real execFile failure -- Node's own error message
+      // already folds stderr text in (confirmed live: a real access-denied
+      // `reg import` failure elsewhere in this suite reads "Command failed:
+      // reg import ...\nERROR: Error accessing the registry."), so this
+      // mirrors that instead of inventing an unrealistic shape.
+      const err = new Error('Command failed: reg export ... /y\nERROR: Access is denied.\r\n');
+      err.stderr = 'ERROR: Access is denied.\r\n';
+      callback(err);
+    });
+
+    await expect(readPendingOperations()).rejects.toThrow(/Access is denied/);
   });
 });
 
