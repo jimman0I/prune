@@ -111,6 +111,19 @@ export const CATALOG = {
         folderBadge: 'Folder',
         removeAriaLabel: (value) => `Stop excluding ${value}`
       },
+      cookiesToPreserve: {
+        title: 'Cookies to preserve',
+        description: "Everything else in a browser's cookie file is gone the moment you clean it. Scan to see what's actually there, and tick anything worth keeping.",
+        scanButton: 'Scan for cookies',
+        scanning: 'Scanning…',
+        filterPlaceholder: 'Filter domains…',
+        countSuffix: (count) => `${count} cookie${count === 1 ? '' : 's'}`,
+        none: 'No cookies found.',
+        staleBadge: 'not seen this scan',
+        scanErrorPrefix: (message) => `Couldn't scan for cookies: ${message}`,
+        fileErrorsNote: (count) => `${count} file${count === 1 ? '' : 's'} couldn't be read and ${count === 1 ? 'was' : 'were'} skipped.`,
+        checkboxAriaLabel: (domain) => `Keep cookies from ${domain}`
+      },
       sandboxTest: {
         title: 'Sandbox Test',
         description: 'Runs the real cleanup engine against a throwaway temp directory only — never your actual Temp, Windows Temp, or thumbnail cache — to prove scanning and deletion genuinely work before you trust them on real files.',
@@ -797,6 +810,19 @@ export const CATALOG = {
         folderBadge: 'Vouer',
         removeAriaLabel: (value) => `Hou op om ${value} uit te sluit`
       },
+      cookiesToPreserve: {
+        title: 'Koekies om te behou',
+        description: "Alles anders in 'n blaaier se koekielêer is weg sodra jy dit skoonmaak. Skandeer om te sien wat regtig daar is, en merk enigiets wat die moeite werd is om te behou.",
+        scanButton: 'Skandeer vir koekies',
+        scanning: 'Skandeer tans…',
+        filterPlaceholder: 'Filtreer domeine…',
+        countSuffix: (count) => `${count} koekie${count === 1 ? '' : 's'}`,
+        none: 'Geen koekies gevind nie.',
+        staleBadge: 'nie gesien in hierdie skandering nie',
+        scanErrorPrefix: (message) => `Kon nie vir koekies skandeer nie: ${message}`,
+        fileErrorsNote: (count) => `${count} lêer${count === 1 ? '' : 's'} kon nie gelees word nie en is oorgeslaan.`,
+        checkboxAriaLabel: (domain) => `Behou koekies van ${domain}`
+      },
       sandboxTest: {
         title: 'Sandput-toets',
         description: "Laat die werklike skoonmaak-enjin loop teen slegs 'n weggooibare tydelike gids — nooit jou werklike Temp, Windows Temp, of duimnael-kas nie — om te bewys dat skandering en verwydering werklik werk voordat jy dit vertrou met regte lêers.",
@@ -1477,6 +1503,19 @@ export const CATALOG = {
         typeBadge: 'نوع',
         folderBadge: 'مجلد',
         removeAriaLabel: (value) => `التوقف عن استبعاد ${value}`
+      },
+      cookiesToPreserve: {
+        title: 'ملفات تعريف الارتباط المراد الاحتفاظ بها',
+        description: 'كل شيء آخر في ملف تعريف الارتباط الخاص بالمتصفح يختفي بمجرد التنظيف. امسح لترى ما هو موجود فعليًا، وحدد أي شيء يستحق الاحتفاظ به.',
+        scanButton: 'البحث عن ملفات تعريف الارتباط',
+        scanning: 'جارٍ الفحص…',
+        filterPlaceholder: 'تصفية النطاقات…',
+        countSuffix: (count) => `${count} ملف تعريف ارتباط`,
+        none: 'لم يتم العثور على ملفات تعريف ارتباط.',
+        staleBadge: 'لم يُشاهد في هذا الفحص',
+        scanErrorPrefix: (message) => `تعذر البحث عن ملفات تعريف الارتباط: ${message}`,
+        fileErrorsNote: (count) => `تعذرت قراءة ${count} ملف وتم تخطيه.`,
+        checkboxAriaLabel: (domain) => `الاحتفاظ بملفات تعريف الارتباط من ${domain}`
       },
       sandboxTest: {
         title: 'اختبار الصندوق الرملي',
@@ -2159,6 +2198,19 @@ export const CATALOG = {
         folderBadge: 'Carpeta',
         removeAriaLabel: (value) => `Deixa d'excloure ${value}`
       },
+      cookiesToPreserve: {
+        title: 'Galetes a conservar',
+        description: "Tota la resta del fitxer de galetes d'un navegador desapareix en el moment de netejar-lo. Escaneja per veure què hi ha realment, i marca tot allò que valgui la pena conservar.",
+        scanButton: 'Escaneja galetes',
+        scanning: 'Escanejant…',
+        filterPlaceholder: 'Filtra dominis…',
+        countSuffix: (count) => `${count} galet${count === 1 ? 'a' : 'es'}`,
+        none: "No s'ha trobat cap galeta.",
+        staleBadge: 'no vista en aquest escaneig',
+        scanErrorPrefix: (message) => `No s'han pogut cercar galetes: ${message}`,
+        fileErrorsNote: (count) => `${count} fitxer${count === 1 ? " no s'ha pogut llegir i s'ha omès" : " no s'han pogut llegir i s'han omesos"}.`,
+        checkboxAriaLabel: (domain) => `Conserva les galetes de ${domain}`
+      },
       sandboxTest: {
         title: 'Prova de Sandbox',
         description: "Executa el motor de neteja real contra un directori temporal d'un sol ús — mai el teu Temp real, el Temp de Windows, o la memòria cau de miniatures — per demostrar que l'escaneig i l'eliminació realment funcionen abans de confiar-hi amb fitxers reals.",
@@ -2839,6 +2891,19 @@ export const CATALOG = {
         typeBadge: 'Typ',
         folderBadge: 'Složka',
         removeAriaLabel: (value) => `Přestat vylučovat ${value}`
+      },
+      cookiesToPreserve: {
+        title: 'Soubory cookie k zachování',
+        description: 'Všechno ostatní v souboru cookie prohlížeče zmizí ve chvíli, kdy ho vyčistíte. Naskenujte a zjistěte, co tam skutečně je, a zaškrtněte vše, co stojí za to zachovat.',
+        scanButton: 'Vyhledat cookies',
+        scanning: 'Skenování…',
+        filterPlaceholder: 'Filtrovat domény…',
+        countSuffix: (count) => `${count} cookie`,
+        none: 'Nebyly nalezeny žádné cookies.',
+        staleBadge: 'nebylo vidět při tomto skenování',
+        scanErrorPrefix: (message) => `Nepodařilo se vyhledat cookies: ${message}`,
+        fileErrorsNote: (count) => `${count} soubor${count === 1 ? ' se nepodařilo přečíst a byl přeskočen' : 'ů se nepodařilo přečíst a bylo přeskočeno'}.`,
+        checkboxAriaLabel: (domain) => `Zachovat cookies z ${domain}`
       },
       sandboxTest: {
         title: 'Test v izolovaném prostředí',
@@ -3521,6 +3586,19 @@ export const CATALOG = {
         folderBadge: 'Ffolder',
         removeAriaLabel: (value) => `Stopio eithrio ${value}`
       },
+      cookiesToPreserve: {
+        title: "Cwcis i'w cadw",
+        description: "Mae popeth arall yn ffeil cwcis porwr yn diflannu unwaith y byddwch yn ei lanhau. Sganiwch i weld beth sydd yno mewn gwirionedd, a thiciwch unrhyw beth sy'n werth ei gadw.",
+        scanButton: 'Sganio am gwcis',
+        scanning: 'Yn sganio…',
+        filterPlaceholder: 'Hidlo parthau…',
+        countSuffix: (count) => `${count} cwci`,
+        none: 'Ni ddarganfuwyd unrhyw gwcis.',
+        staleBadge: 'heb ei weld yn y sgan hwn',
+        scanErrorPrefix: (message) => `Methu sganio am gwcis: ${message}`,
+        fileErrorsNote: (count) => `Methwyd darllen ${count} ffeil a chawsant eu hepgor.`,
+        checkboxAriaLabel: (domain) => `Cadw cwcis o ${domain}`
+      },
       sandboxTest: {
         title: 'Prawf Blwch Tywod',
         description: "Yn rhedeg yr injan lanhau go iawn yn erbyn cyfeiriadur dros dro tafladwy yn unig — byth eich Temp go iawn, Temp Windows, na chelc lluniau bach — i brofi bod sganio a dileu wir yn gweithio cyn i chi ymddiried ynddynt gyda ffeiliau go iawn.",
@@ -4201,6 +4279,19 @@ export const CATALOG = {
         typeBadge: 'Type',
         folderBadge: 'Mappe',
         removeAriaLabel: (value) => `Stop med at ekskludere ${value}`
+      },
+      cookiesToPreserve: {
+        title: 'Cookies der skal bevares',
+        description: 'Alt andet i en browsers cookiefil forsvinder, i det øjeblik du rengør den. Scan for at se, hvad der faktisk er der, og markér alt, der er værd at beholde.',
+        scanButton: 'Scan efter cookies',
+        scanning: 'Scanner…',
+        filterPlaceholder: 'Filtrer domæner…',
+        countSuffix: (count) => `${count} cookie${count === 1 ? '' : 's'}`,
+        none: 'Ingen cookies fundet.',
+        staleBadge: 'ikke set i denne scanning',
+        scanErrorPrefix: (message) => `Kunne ikke scanne efter cookies: ${message}`,
+        fileErrorsNote: (count) => `${count} fil${count === 1 ? ' kunne' : 'er kunne'} ikke læses og blev sprunget over.`,
+        checkboxAriaLabel: (domain) => `Behold cookies fra ${domain}`
       },
       sandboxTest: {
         title: 'Sandkassetest',
@@ -4883,6 +4974,19 @@ export const CATALOG = {
         folderBadge: 'Ordner',
         removeAriaLabel: (value) => `${value} nicht mehr ausschließen`
       },
+      cookiesToPreserve: {
+        title: 'Zu erhaltende Cookies',
+        description: 'Alles andere in der Cookie-Datei eines Browsers ist weg, sobald du sie bereinigst. Scanne, um zu sehen, was tatsächlich vorhanden ist, und hake alles ab, was es wert ist, behalten zu werden.',
+        scanButton: 'Nach Cookies suchen',
+        scanning: 'Wird gescannt…',
+        filterPlaceholder: 'Domains filtern…',
+        countSuffix: (count) => `${count} Cookie${count === 1 ? '' : 's'}`,
+        none: 'Keine Cookies gefunden.',
+        staleBadge: 'bei diesem Scan nicht gesehen',
+        scanErrorPrefix: (message) => `Suche nach Cookies fehlgeschlagen: ${message}`,
+        fileErrorsNote: (count) => `${count} Datei${count === 1 ? ' konnte' : 'en konnten'} nicht gelesen werden und wurde${count === 1 ? '' : 'n'} übersprungen.`,
+        checkboxAriaLabel: (domain) => `Cookies von ${domain} behalten`
+      },
       sandboxTest: {
         title: 'Sandbox-Test',
         description: 'Führt die echte Bereinigungs-Engine nur gegen ein Wegwerf-Temp-Verzeichnis aus — niemals gegen dein tatsächliches Temp, Windows Temp oder den Thumbnail-Cache — um zu beweisen, dass Scannen und Löschen tatsächlich funktionieren, bevor du ihnen mit echten Dateien vertraust.',
@@ -5563,6 +5667,19 @@ export const CATALOG = {
         typeBadge: 'Τύπος',
         folderBadge: 'Φάκελος',
         removeAriaLabel: (value) => `Διακοπή εξαίρεσης του ${value}`
+      },
+      cookiesToPreserve: {
+        title: 'Cookies προς διατήρηση',
+        description: 'Οτιδήποτε άλλο στο αρχείο cookie ενός προγράμματος περιήγησης χάνεται τη στιγμή που το καθαρίζετε. Σαρώστε για να δείτε τι υπάρχει πραγματικά και επιλέξτε ό,τι αξίζει να κρατήσετε.',
+        scanButton: 'Σάρωση για cookies',
+        scanning: 'Σάρωση…',
+        filterPlaceholder: 'Φιλτράρισμα τομέων…',
+        countSuffix: (count) => `${count} cookie${count === 1 ? '' : 's'}`,
+        none: 'Δεν βρέθηκαν cookies.',
+        staleBadge: 'δεν εμφανίστηκε σε αυτή τη σάρωση',
+        scanErrorPrefix: (message) => `Αδυναμία σάρωσης για cookies: ${message}`,
+        fileErrorsNote: (count) => `${count} αρχεί${count === 1 ? 'ο δεν ήταν δυνατό να διαβαστεί και παραλείφθηκε' : 'α δεν ήταν δυνατό να διαβαστούν και παραλείφθηκαν'}.`,
+        checkboxAriaLabel: (domain) => `Διατήρηση cookies από ${domain}`
       },
       sandboxTest: {
         title: 'Δοκιμή Sandbox',
@@ -6245,6 +6362,19 @@ export const CATALOG = {
         folderBadge: 'Carpeta',
         removeAriaLabel: (value) => `Dejar de excluir ${value}`
       },
+      cookiesToPreserve: {
+        title: 'Cookies a conservar',
+        description: 'Todo lo demás en el archivo de cookies de un navegador desaparece en el momento en que lo limpias. Escanea para ver qué hay realmente, y marca todo lo que valga la pena conservar.',
+        scanButton: 'Buscar cookies',
+        scanning: 'Escaneando…',
+        filterPlaceholder: 'Filtrar dominios…',
+        countSuffix: (count) => `${count} cookie${count === 1 ? '' : 's'}`,
+        none: 'No se encontraron cookies.',
+        staleBadge: 'no vista en este escaneo',
+        scanErrorPrefix: (message) => `No se pudieron buscar cookies: ${message}`,
+        fileErrorsNote: (count) => `${count} archivo${count === 1 ? ' no se pudo leer y fue' : 's no se pudieron leer y fueron'} omitido${count === 1 ? '' : 's'}.`,
+        checkboxAriaLabel: (domain) => `Conservar cookies de ${domain}`
+      },
       sandboxTest: {
         title: 'Prueba de Sandbox',
         description: 'Ejecuta el motor de limpieza real solo contra un directorio temporal desechable — nunca tu Temp real, el Temp de Windows, o la caché de miniaturas — para probar que el escaneo y la eliminación realmente funcionan antes de confiárselos a archivos reales.',
@@ -6925,6 +7055,19 @@ export const CATALOG = {
         typeBadge: 'Tüüp',
         folderBadge: 'Kaust',
         removeAriaLabel: (value) => `Lõpeta ${value} väljajätmine`
+      },
+      cookiesToPreserve: {
+        title: 'Säilitatavad küpsised',
+        description: 'Kõik muu brauseri küpsisefailis kaob niipea, kui sa selle puhastad. Skaneeri, et näha, mis seal tegelikult on, ja märgi kõik, mida tasub alles hoida.',
+        scanButton: 'Otsi küpsiseid',
+        scanning: 'Skannimine…',
+        filterPlaceholder: 'Filtreeri domeene…',
+        countSuffix: (count) => `${count} küpsis${count === 1 ? '' : 't'}`,
+        none: 'Küpsiseid ei leitud.',
+        staleBadge: 'ei nähtud selles skannimises',
+        scanErrorPrefix: (message) => `Küpsiste otsimine ebaõnnestus: ${message}`,
+        fileErrorsNote: (count) => `${count} fail${count === 1 ? '' : 'i'} ei õnnestunud lugeda ja jäeti vahele.`,
+        checkboxAriaLabel: (domain) => `Säilita küpsised domeenilt ${domain}`
       },
       sandboxTest: {
         title: 'Liivakasti test',
@@ -7607,6 +7750,19 @@ export const CATALOG = {
         folderBadge: 'Kansio',
         removeAriaLabel: (value) => `Lopeta kohteen ${value} poissulkeminen`
       },
+      cookiesToPreserve: {
+        title: 'Säilytettävät evästeet',
+        description: 'Kaikki muu selaimen evästetiedostossa katoaa heti, kun puhdistat sen. Skannaa nähdäksesi, mitä siellä oikeasti on, ja rastita kaikki säilyttämisen arvoinen.',
+        scanButton: 'Etsi evästeitä',
+        scanning: 'Skannataan…',
+        filterPlaceholder: 'Suodata verkkotunnuksia…',
+        countSuffix: (count) => `${count} eväste${count === 1 ? '' : 'ttä'}`,
+        none: 'Evästeitä ei löytynyt.',
+        staleBadge: 'ei näkynyt tässä skannauksessa',
+        scanErrorPrefix: (message) => `Evästeiden etsiminen epäonnistui: ${message}`,
+        fileErrorsNote: (count) => `${count} tiedosto${count === 1 ? ' ei voitu lukea ja se ohitettiin' : 'a ei voitu lukea ja ne ohitettiin'}.`,
+        checkboxAriaLabel: (domain) => `Säilytä evästeet verkkotunnuksesta ${domain}`
+      },
       sandboxTest: {
         title: 'Hiekkalaatikkotesti',
         description: 'Suorittaa oikean siivousmoottorin vain kertakäyttöistä väliaikaishakemistoa vastaan — ei koskaan varsinaista Temp-kansiotasi, Windowsin Temp-kansiota tai pikkukuvien välimuistia vastaan — todistaakseen, että skannaus ja poisto todella toimivat ennen kuin luotat niihin oikeilla tiedostoilla.',
@@ -8287,6 +8443,19 @@ export const CATALOG = {
         typeBadge: 'Type',
         folderBadge: 'Dossier',
         removeAriaLabel: (value) => `Ne plus exclure ${value}`
+      },
+      cookiesToPreserve: {
+        title: 'Cookies à conserver',
+        description: "Tout le reste du fichier de cookies d'un navigateur disparaît dès que vous le nettoyez. Analysez pour voir ce qui s'y trouve réellement, et cochez tout ce qui mérite d'être conservé.",
+        scanButton: 'Rechercher des cookies',
+        scanning: 'Analyse en cours…',
+        filterPlaceholder: 'Filtrer les domaines…',
+        countSuffix: (count) => `${count} cookie${count === 1 ? '' : 's'}`,
+        none: 'Aucun cookie trouvé.',
+        staleBadge: 'non vu lors de cette analyse',
+        scanErrorPrefix: (message) => `Impossible de rechercher des cookies : ${message}`,
+        fileErrorsNote: (count) => `${count} fichier${count === 1 ? '' : 's'} n'${count === 1 ? 'a' : 'ont'} pas pu être lu${count === 1 ? '' : 's'} et ${count === 1 ? 'a' : 'ont'} été ignoré${count === 1 ? '' : 's'}.`,
+        checkboxAriaLabel: (domain) => `Conserver les cookies de ${domain}`
       },
       sandboxTest: {
         title: 'Test de bac à sable',
@@ -8969,6 +9138,19 @@ export const CATALOG = {
         folderBadge: 'תיקייה',
         removeAriaLabel: (value) => `הפסק להחריג את ${value}`
       },
+      cookiesToPreserve: {
+        title: 'עוגיות לשימור',
+        description: 'כל השאר בקובץ העוגיות של הדפדפן נעלם ברגע שאתה מנקה אותו. סרוק כדי לראות מה יש שם באמת, וסמן כל דבר ששווה לשמור.',
+        scanButton: 'סרוק לאיתור עוגיות',
+        scanning: 'סורק…',
+        filterPlaceholder: 'סנן דומיינים…',
+        countSuffix: (count) => `${count} עוגיות`,
+        none: 'לא נמצאו עוגיות.',
+        staleBadge: 'לא נראה בסריקה זו',
+        scanErrorPrefix: (message) => `לא ניתן היה לסרוק לאיתור עוגיות: ${message}`,
+        fileErrorsNote: (count) => `${count} קבצים לא ניתן היה לקרוא והם דולגו.`,
+        checkboxAriaLabel: (domain) => `שמור עוגיות מ-${domain}`
+      },
       sandboxTest: {
         title: 'בדיקת ארגז חול',
         description: 'מריץ את מנוע הניקוי האמיתי רק מול ספריית זמני חד-פעמית — לעולם לא את ה-Temp האמיתי שלך, את Temp של Windows, או את מטמון התמונות הממוזערות — כדי להוכיח שהסריקה והמחיקה באמת עובדות לפני שאתה סומך עליהן עם קבצים אמיתיים.',
@@ -9649,6 +9831,19 @@ export const CATALOG = {
         typeBadge: 'Típus',
         folderBadge: 'Mappa',
         removeAriaLabel: (value) => `${value} kizárásának megszüntetése`
+      },
+      cookiesToPreserve: {
+        title: 'Megőrzendő sütik',
+        description: 'A böngésző sütifájljában lévő minden más eltűnik, amint megtisztítod. Vizsgáld meg, hogy valójában mi van ott, és pipáld ki, amit érdemes megtartani.',
+        scanButton: 'Sütik keresése',
+        scanning: 'Vizsgálat…',
+        filterPlaceholder: 'Domainek szűrése…',
+        countSuffix: (count) => `${count} süti`,
+        none: 'Nem található süti.',
+        staleBadge: 'ebben a vizsgálatban nem látszott',
+        scanErrorPrefix: (message) => `Nem sikerült sütiket keresni: ${message}`,
+        fileErrorsNote: (count) => `${count} fájlt nem sikerült beolvasni, ezért kimaradt.`,
+        checkboxAriaLabel: (domain) => `Sütik megőrzése innen: ${domain}`
       },
       sandboxTest: {
         title: 'Homokozó teszt',
@@ -10331,6 +10526,19 @@ export const CATALOG = {
         folderBadge: 'Folder',
         removeAriaLabel: (value) => `Berhenti mengecualikan ${value}`
       },
+      cookiesToPreserve: {
+        title: 'Cookie yang akan dipertahankan',
+        description: 'Semua yang lain di file cookie browser akan hilang begitu Anda membersihkannya. Pindai untuk melihat apa yang sebenarnya ada, dan centang apa pun yang layak disimpan.',
+        scanButton: 'Pindai cookie',
+        scanning: 'Memindai…',
+        filterPlaceholder: 'Filter domain…',
+        countSuffix: (count) => `${count} cookie`,
+        none: 'Tidak ada cookie yang ditemukan.',
+        staleBadge: 'tidak terlihat pada pemindaian ini',
+        scanErrorPrefix: (message) => `Tidak dapat memindai cookie: ${message}`,
+        fileErrorsNote: (count) => `${count} file tidak dapat dibaca dan dilewati.`,
+        checkboxAriaLabel: (domain) => `Pertahankan cookie dari ${domain}`
+      },
       sandboxTest: {
         title: 'Uji Sandbox',
         description: 'Menjalankan mesin pembersih sungguhan hanya terhadap direktori sementara sekali pakai — bukan Temp asli, Temp Windows, atau cache thumbnail — untuk membuktikan bahwa pemindaian dan penghapusan benar-benar berfungsi sebelum kamu mempercayakannya pada file sungguhan.',
@@ -11011,6 +11219,19 @@ export const CATALOG = {
         typeBadge: 'Tegund',
         folderBadge: 'Mappa',
         removeAriaLabel: (value) => `Hætta að útiloka ${value}`
+      },
+      cookiesToPreserve: {
+        title: 'Vefkökur til að varðveita',
+        description: 'Allt annað í vefkökuskrá vafra hverfur um leið og þú hreinsar hann. Skannaðu til að sjá hvað er raunverulega þar, og hakaðu við allt sem er þess virði að halda.',
+        scanButton: 'Leita að vefkökum',
+        scanning: 'Skanna…',
+        filterPlaceholder: 'Sía lén…',
+        countSuffix: (count) => `${count} ${count === 1 ? 'vefkaka' : 'vefkökur'}`,
+        none: 'Engar vefkökur fundust.',
+        staleBadge: 'sást ekki í þessari skönnun',
+        scanErrorPrefix: (message) => `Ekki tókst að leita að vefkökum: ${message}`,
+        fileErrorsNote: (count) => `Ekki var hægt að lesa ${count} ${count === 1 ? 'skrá' : 'skrár'} og var þeim sleppt.`,
+        checkboxAriaLabel: (domain) => `Halda vefkökum frá ${domain}`
       },
       sandboxTest: {
         title: 'Sandkassapróf',
@@ -11693,6 +11914,19 @@ export const CATALOG = {
         folderBadge: 'Cartella',
         removeAriaLabel: (value) => `Smetti di escludere ${value}`
       },
+      cookiesToPreserve: {
+        title: 'Cookie da conservare',
+        description: "Tutto il resto nel file dei cookie di un browser scompare non appena lo pulisci. Esegui una scansione per vedere cosa c'è realmente, e seleziona tutto ciò che vale la pena conservare.",
+        scanButton: 'Cerca cookie',
+        scanning: 'Scansione…',
+        filterPlaceholder: 'Filtra domini…',
+        countSuffix: (count) => `${count} cookie`,
+        none: 'Nessun cookie trovato.',
+        staleBadge: 'non visto in questa scansione',
+        scanErrorPrefix: (message) => `Impossibile cercare i cookie: ${message}`,
+        fileErrorsNote: (count) => `${count} file${count === 1 ? ' non è stato possibile leggerlo ed è stato ignorato' : ' non è stato possibile leggerli e sono stati ignorati'}.`,
+        checkboxAriaLabel: (domain) => `Conserva i cookie da ${domain}`
+      },
       sandboxTest: {
         title: 'Test Sandbox',
         description: "Esegue il vero motore di pulizia solo contro una directory temporanea usa e getta — mai il tuo vero Temp, il Temp di Windows, o la cache delle miniature — per dimostrare che la scansione e l'eliminazione funzionano davvero prima di affidargli file reali.",
@@ -12373,6 +12607,19 @@ export const CATALOG = {
         typeBadge: 'タイプ',
         folderBadge: 'フォルダ',
         removeAriaLabel: (value) => `${value} の除外を解除`
+      },
+      cookiesToPreserve: {
+        title: '保持するCookie',
+        description: 'ブラウザのCookieファイル内のそれ以外のものは、クリーンアップした瞬間に消えます。スキャンして実際に何があるかを確認し、保持する価値があるものにチェックを入れてください。',
+        scanButton: 'Cookieをスキャン',
+        scanning: 'スキャン中…',
+        filterPlaceholder: 'ドメインを絞り込む…',
+        countSuffix: (count) => `${count} 件の Cookie`,
+        none: 'Cookieが見つかりませんでした。',
+        staleBadge: '今回のスキャンでは見つかりませんでした',
+        scanErrorPrefix: (message) => `Cookieのスキャンに失敗しました: ${message}`,
+        fileErrorsNote: (count) => `${count} 件のファイルを読み込めなかったためスキップされました。`,
+        checkboxAriaLabel: (domain) => `${domain} のCookieを保持する`
       },
       sandboxTest: {
         title: 'サンドボックステスト',
@@ -13055,6 +13302,19 @@ export const CATALOG = {
         folderBadge: '폴더',
         removeAriaLabel: (value) => `${value} 제외 중지`
       },
+      cookiesToPreserve: {
+        title: '유지할 쿠키',
+        description: '브라우저의 쿠키 파일에 있는 나머지 항목은 정리하는 순간 사라집니다. 스캔하여 실제로 무엇이 있는지 확인하고 유지할 가치가 있는 항목에 체크하세요.',
+        scanButton: '쿠키 검사',
+        scanning: '스캔 중…',
+        filterPlaceholder: '도메인 필터링…',
+        countSuffix: (count) => `쿠키 ${count}개`,
+        none: '쿠키를 찾을 수 없습니다.',
+        staleBadge: '이번 스캔에서 보이지 않음',
+        scanErrorPrefix: (message) => `쿠키를 검사할 수 없습니다: ${message}`,
+        fileErrorsNote: (count) => `파일 ${count}개를 읽을 수 없어 건너뛰었습니다.`,
+        checkboxAriaLabel: (domain) => `${domain}의 쿠키 유지`
+      },
       sandboxTest: {
         title: '샌드박스 테스트',
         description: '실제 정리 엔진을 일회용 임시 디렉터리에서만 실행합니다 — 실제 Temp, Windows Temp, 썸네일 캐시에서는 절대 실행하지 않습니다 — 실제 파일에 신뢰하기 전에 스캔과 삭제가 실제로 작동하는지 증명합니다.',
@@ -13735,6 +13995,19 @@ export const CATALOG = {
         typeBadge: 'Tipas',
         folderBadge: 'Aplankas',
         removeAriaLabel: (value) => `Nebeneįtraukti ${value}`
+      },
+      cookiesToPreserve: {
+        title: 'Slapukai, kuriuos reikia išsaugoti',
+        description: 'Viskas kita naršyklės slapukų faile dingsta, kai tik ją išvalote. Nuskaitykite, kad pamatytumėte, kas ten tikrai yra, ir pažymėkite viską, ką verta palikti.',
+        scanButton: 'Ieškoti slapukų',
+        scanning: 'Vykdoma…',
+        filterPlaceholder: 'Filtruoti domenus…',
+        countSuffix: (count) => `${count} slapukai`,
+        none: 'Slapukų nerasta.',
+        staleBadge: 'nematytas šiame nuskaitymo cikle',
+        scanErrorPrefix: (message) => `Nepavyko ieškoti slapukų: ${message}`,
+        fileErrorsNote: (count) => `Nepavyko perskaityti ${count} failų, todėl jie buvo praleisti.`,
+        checkboxAriaLabel: (domain) => `Išsaugoti slapukus iš ${domain}`
       },
       sandboxTest: {
         title: 'Smėlio dėžės testas',
@@ -14417,6 +14690,19 @@ export const CATALOG = {
         folderBadge: 'Folder',
         removeAriaLabel: (value) => `Berhenti mengecualikan ${value}`
       },
+      cookiesToPreserve: {
+        title: 'Kuki untuk dikekalkan',
+        description: 'Semua yang lain dalam fail kuki pelayar akan hilang sebaik sahaja anda membersihkannya. Imbas untuk melihat apa yang sebenarnya ada, dan tandakan apa-apa yang berbaloi disimpan.',
+        scanButton: 'Imbas kuki',
+        scanning: 'Mengimbas…',
+        filterPlaceholder: 'Tapis domain…',
+        countSuffix: (count) => `${count} kuki`,
+        none: 'Tiada kuki ditemui.',
+        staleBadge: 'tidak dilihat dalam imbasan ini',
+        scanErrorPrefix: (message) => `Tidak dapat mengimbas kuki: ${message}`,
+        fileErrorsNote: (count) => `${count} fail tidak dapat dibaca dan telah dilangkau.`,
+        checkboxAriaLabel: (domain) => `Kekalkan kuki daripada ${domain}`
+      },
       sandboxTest: {
         title: 'Ujian Sandbox',
         description: 'Menjalankan enjin pembersihan sebenar hanya terhadap direktori sementara sekali guna — bukan Temp sebenar, Temp Windows, atau cache lakaran kecil anda — untuk membuktikan bahawa imbasan dan pemadaman benar-benar berfungsi sebelum anda mempercayakannya dengan fail sebenar.',
@@ -15097,6 +15383,19 @@ export const CATALOG = {
         typeBadge: 'Type',
         folderBadge: 'Mappe',
         removeAriaLabel: (value) => `Slutt å ekskludere ${value}`
+      },
+      cookiesToPreserve: {
+        title: 'Informasjonskapsler som skal bevares',
+        description: 'Alt annet i en nettlesers informasjonskapsel-fil er borte i det øyeblikket du renser den. Skann for å se hva som faktisk er der, og huk av alt som er verdt å beholde.',
+        scanButton: 'Skann etter informasjonskapsler',
+        scanning: 'Skanner…',
+        filterPlaceholder: 'Filtrer domener…',
+        countSuffix: (count) => `${count} informasjonskapsel${count === 1 ? '' : 'er'}`,
+        none: 'Ingen informasjonskapsler funnet.',
+        staleBadge: 'ikke sett i denne skanningen',
+        scanErrorPrefix: (message) => `Kunne ikke skanne etter informasjonskapsler: ${message}`,
+        fileErrorsNote: (count) => `${count} fil${count === 1 ? ' kunne' : 'er kunne'} ikke leses og ble hoppet over.`,
+        checkboxAriaLabel: (domain) => `Behold informasjonskapsler fra ${domain}`
       },
       sandboxTest: {
         title: 'Sandkassetest',
@@ -15779,6 +16078,19 @@ export const CATALOG = {
         folderBadge: 'Map',
         removeAriaLabel: (value) => `${value} niet langer uitsluiten`
       },
+      cookiesToPreserve: {
+        title: 'Cookies om te bewaren',
+        description: 'Al het andere in het cookiebestand van een browser is verdwenen zodra je opschoont. Scan om te zien wat er echt is, en vink aan wat de moeite waard is om te bewaren.',
+        scanButton: 'Scannen naar cookies',
+        scanning: 'Bezig…',
+        filterPlaceholder: 'Domeinen filteren…',
+        countSuffix: (count) => `${count} cookie${count === 1 ? '' : 's'}`,
+        none: 'Geen cookies gevonden.',
+        staleBadge: 'niet gezien in deze scan',
+        scanErrorPrefix: (message) => `Kon niet scannen naar cookies: ${message}`,
+        fileErrorsNote: (count) => `${count} bestand${count === 1 ? ' kon' : 'en konden'} niet worden gelezen en ${count === 1 ? 'is' : 'zijn'} overgeslagen.`,
+        checkboxAriaLabel: (domain) => `Cookies van ${domain} bewaren`
+      },
       sandboxTest: {
         title: 'Sandboxtest',
         description: 'Voert de echte opschoonmotor alleen uit tegen een wegwerpbare tijdelijke map — nooit je eigenlijke Temp, Windows Temp, of de miniatuurcache — om te bewijzen dat scannen en verwijderen echt werken voordat je ze op echte bestanden vertrouwt.',
@@ -16459,6 +16771,19 @@ export const CATALOG = {
         typeBadge: 'Typ',
         folderBadge: 'Folder',
         removeAriaLabel: (value) => `Przestań wykluczać ${value}`
+      },
+      cookiesToPreserve: {
+        title: 'Ciasteczka do zachowania',
+        description: 'Wszystko inne w pliku ciasteczek przeglądarki znika w chwili czyszczenia. Przeskanuj, aby zobaczyć, co naprawdę tam jest, i zaznacz to, co warto zachować.',
+        scanButton: 'Skanuj w poszukiwaniu ciasteczek',
+        scanning: 'Trwa…',
+        filterPlaceholder: 'Filtruj domeny…',
+        countSuffix: (count) => `${count} ciasteczek`,
+        none: 'Nie znaleziono ciasteczek.',
+        staleBadge: 'niewidoczne podczas tego skanowania',
+        scanErrorPrefix: (message) => `Nie udało się wyszukać ciasteczek: ${message}`,
+        fileErrorsNote: (count) => `Nie udało się odczytać ${count} plików, więc zostały pominięte.`,
+        checkboxAriaLabel: (domain) => `Zachowaj ciasteczka z ${domain}`
       },
       sandboxTest: {
         title: 'Test piaskownicy',
@@ -17141,6 +17466,19 @@ export const CATALOG = {
         folderBadge: 'فولډر',
         removeAriaLabel: (value) => `د ${value} استثنا کول ودروئ`
       },
+      cookiesToPreserve: {
+        title: 'د ساتلو لپاره کوکیز',
+        description: 'د براوزر په کوکي فایل کې نور هر څه، سملاسي چې تاسو یې پاکوئ، له منځه ځي. سکین وکړئ چې وګورئ څه شی په رښتیا شتون لري، او هر هغه څه چې د ساتلو ارزښت لري نښه کړئ.',
+        scanButton: 'د کوکیزو لپاره سکین کول',
+        scanning: 'روان دی…',
+        filterPlaceholder: 'ډومینونه فلټر کول…',
+        countSuffix: (count) => `${count} کوکیز`,
+        none: 'هیڅ کوکي ونه موندل شول.',
+        staleBadge: 'په دې سکین کې نه دی لیدل شوی',
+        scanErrorPrefix: (message) => `د کوکیزو لټون ونشول: ${message}`,
+        fileErrorsNote: (count) => `${count} فایلونه ونه لوستل شول او پریښودل شول.`,
+        checkboxAriaLabel: (domain) => `د ${domain} کوکیز وساتئ`
+      },
       sandboxTest: {
         title: 'د سینڈباکس ازموینه',
         description: 'واقعي پاکولو انجن یوازې د یو ځل کارونې لنډمهاله ډایرکټوري په وړاندې چلوي — هیڅکله ستاسو اصلي Temp، Windows Temp، یا د کوچني انځورونو کیش نه — ترڅو ثابته کړي چې سکین کول او ړنګول واقعیا کار کوي مخکې لدې چې تاسو دوی ته واقعي فایلونه وسپارئ.',
@@ -17821,6 +18159,19 @@ export const CATALOG = {
         typeBadge: 'Tipo',
         folderBadge: 'Pasta',
         removeAriaLabel: (value) => `Parar de excluir ${value}`
+      },
+      cookiesToPreserve: {
+        title: 'Cookies para preservar',
+        description: 'Tudo o mais no arquivo de cookies de um navegador desaparece no momento em que você o limpa. Faça a varredura para ver o que realmente está lá, e marque tudo o que valha a pena manter.',
+        scanButton: 'Procurar cookies',
+        scanning: 'Executando…',
+        filterPlaceholder: 'Filtrar domínios…',
+        countSuffix: (count) => `${count} cookie${count === 1 ? '' : 's'}`,
+        none: 'Nenhum cookie encontrado.',
+        staleBadge: 'não visto nesta varredura',
+        scanErrorPrefix: (message) => `Não foi possível procurar cookies: ${message}`,
+        fileErrorsNote: (count) => `${count} arquivo${count === 1 ? ' não pôde ser lido e foi' : 's não puderam ser lidos e foram'} ignorado${count === 1 ? '' : 's'}.`,
+        checkboxAriaLabel: (domain) => `Manter cookies de ${domain}`
       },
       sandboxTest: {
         title: 'Teste de Sandbox',
@@ -18503,6 +18854,19 @@ export const CATALOG = {
         folderBadge: 'Pasta',
         removeAriaLabel: (value) => `Deixar de excluir ${value}`
       },
+      cookiesToPreserve: {
+        title: 'Cookies a preservar',
+        description: 'Tudo o resto no ficheiro de cookies de um navegador desaparece assim que o limpa. Digitalize para ver o que está lá realmente, e assinale tudo o que valha a pena manter.',
+        scanButton: 'Procurar cookies',
+        scanning: 'A executar…',
+        filterPlaceholder: 'Filtrar domínios…',
+        countSuffix: (count) => `${count} cookie${count === 1 ? '' : 's'}`,
+        none: 'Nenhum cookie encontrado.',
+        staleBadge: 'não visto nesta análise',
+        scanErrorPrefix: (message) => `Não foi possível procurar cookies: ${message}`,
+        fileErrorsNote: (count) => `${count} ficheiro${count === 1 ? ' não pôde ser lido e foi' : 's não puderam ser lidos e foram'} ignorado${count === 1 ? '' : 's'}.`,
+        checkboxAriaLabel: (domain) => `Manter cookies de ${domain}`
+      },
       sandboxTest: {
         title: 'Teste de Sandbox',
         description: 'Executa o motor de limpeza real apenas contra um diretório temporário descartável — nunca o seu Temp real, o Temp do Windows, ou a cache de miniaturas — para provar que a análise e a eliminação funcionam mesmo antes de confiar nelas com ficheiros reais.',
@@ -19183,6 +19547,19 @@ export const CATALOG = {
         typeBadge: 'Tip',
         folderBadge: 'Folder',
         removeAriaLabel: (value) => `Nu mai exclude ${value}`
+      },
+      cookiesToPreserve: {
+        title: 'Cookie-uri de păstrat',
+        description: 'Tot restul din fișierul de cookie-uri al unui browser dispare în momentul în care îl cureți. Scanează pentru a vedea ce este de fapt acolo, și bifează tot ce merită păstrat.',
+        scanButton: 'Scanează după cookie-uri',
+        scanning: 'Se rulează…',
+        filterPlaceholder: 'Filtrează domeniile…',
+        countSuffix: (count) => `${count} cookie${count === 1 ? '' : '-uri'}`,
+        none: 'Niciun cookie găsit.',
+        staleBadge: 'nevăzut la această scanare',
+        scanErrorPrefix: (message) => `Nu s-a putut scana după cookie-uri: ${message}`,
+        fileErrorsNote: (count) => `${count} fișier${count === 1 ? ' nu a putut fi citit și a fost' : 'e nu au putut fi citite și au fost'} omis${count === 1 ? '' : 'e'}.`,
+        checkboxAriaLabel: (domain) => `Păstrează cookie-urile de la ${domain}`
       },
       sandboxTest: {
         title: 'Test Sandbox',
@@ -19865,6 +20242,19 @@ export const CATALOG = {
         folderBadge: 'Папка',
         removeAriaLabel: (value) => `Прекратить исключать ${value}`
       },
+      cookiesToPreserve: {
+        title: 'Файлы cookie для сохранения',
+        description: 'Всё остальное в файле cookie браузера исчезает в момент очистки. Просканируйте, чтобы увидеть, что там есть на самом деле, и отметьте всё, что стоит сохранить.',
+        scanButton: 'Поиск файлов cookie',
+        scanning: 'Выполняется…',
+        filterPlaceholder: 'Фильтр доменов…',
+        countSuffix: (count) => `${count} cookie-файлов`,
+        none: 'Файлы cookie не найдены.',
+        staleBadge: 'не обнаружено при этом сканировании',
+        scanErrorPrefix: (message) => `Не удалось найти файлы cookie: ${message}`,
+        fileErrorsNote: (count) => `Не удалось прочитать ${count} файлов, поэтому они были пропущены.`,
+        checkboxAriaLabel: (domain) => `Сохранить файлы cookie с ${domain}`
+      },
       sandboxTest: {
         title: 'Тест песочницы',
         description: 'Запускает настоящий движок очистки только против одноразового временного каталога — никогда против вашего настоящего Temp, Temp Windows или кэша миниатюр — чтобы доказать, что сканирование и удаление действительно работают, прежде чем доверить им реальные файлы.',
@@ -20545,6 +20935,19 @@ export const CATALOG = {
         typeBadge: 'Typ',
         folderBadge: 'Priečinok',
         removeAriaLabel: (value) => `Prestať vylučovať ${value}`
+      },
+      cookiesToPreserve: {
+        title: 'Súbory cookie na zachovanie',
+        description: 'Všetko ostatné v súbore cookie prehliadača zmizne vo chvíli, keď ho vyčistíte. Naskenujte a zistite, čo tam skutočne je, a začiarknite všetko, čo stojí za zachovanie.',
+        scanButton: 'Vyhľadať súbory cookie',
+        scanning: 'Prebieha…',
+        filterPlaceholder: 'Filtrovať domény…',
+        countSuffix: (count) => `${count} cookie`,
+        none: 'Nenašli sa žiadne súbory cookie.',
+        staleBadge: 'nezistené pri tomto skenovaní',
+        scanErrorPrefix: (message) => `Nepodarilo sa vyhľadať súbory cookie: ${message}`,
+        fileErrorsNote: (count) => `${count} súbor${count === 1 ? ' sa nepodarilo prečítať a bol' : 'ov sa nepodarilo prečítať a boli'} preskočen${count === 1 ? 'ý' : 'é'}.`,
+        checkboxAriaLabel: (domain) => `Zachovať súbory cookie z ${domain}`
       },
       sandboxTest: {
         title: 'Test sandboxu',
@@ -21227,6 +21630,19 @@ export const CATALOG = {
         folderBadge: 'Dosja',
         removeAriaLabel: (value) => `Ndalo së përjashtuari ${value}`
       },
+      cookiesToPreserve: {
+        title: "Cookie për t'u ruajtur",
+        description: 'Gjithçka tjetër në skedarin e cookie-ve të shfletuesit zhduket në momentin që e pastroni. Skanoni për të parë çfarë ka në të vërtetë, dhe shënoni gjithçka që ia vlen të ruhet.',
+        scanButton: 'Skano për cookie',
+        scanning: 'Po ekzekutohet…',
+        filterPlaceholder: 'Filtro domenet…',
+        countSuffix: (count) => `${count} cookie`,
+        none: 'Nuk u gjet asnjë cookie.',
+        staleBadge: 'nuk u pa në këtë skanim',
+        scanErrorPrefix: (message) => `Nuk u skanua dot për cookie: ${message}`,
+        fileErrorsNote: (count) => `${count} skedar${count === 1 ? ' nuk u lexua dot dhe u anashkalua' : 'ë nuk u lexuan dot dhe u anashkaluan'}.`,
+        checkboxAriaLabel: (domain) => `Ruaj cookie nga ${domain}`
+      },
       sandboxTest: {
         title: 'Testi i Sandbox-it',
         description: 'Ekzekuton motorin e vërtetë të pastrimit vetëm kundrejt një drejtorie të përkohshme një përdorimeshe — kurrë kundrejt Temp-it tuaj real, Temp-it të Windows, apo memorjes cache të miniaturave — për të vërtetuar se skanimi dhe fshirja funksionojnë vërtet përpara se t\'u besoni skedarë realë.',
@@ -21907,6 +22323,19 @@ export const CATALOG = {
         typeBadge: 'Тип',
         folderBadge: 'Фолдер',
         removeAriaLabel: (value) => `Престани да изузимаш ${value}`
+      },
+      cookiesToPreserve: {
+        title: 'Колачићи за чување',
+        description: 'Све остало у датотеци колачића прегледача нестаје у тренутку када га очистите. Скенирајте да бисте видели шта се заиста тамо налази, и означите све што вреди сачувати.',
+        scanButton: 'Скенирај колачиће',
+        scanning: 'У току…',
+        filterPlaceholder: 'Филтрирај домене…',
+        countSuffix: (count) => `${count} колачића`,
+        none: 'Нису пронађени колачићи.',
+        staleBadge: 'није виђено током овог скенирања',
+        scanErrorPrefix: (message) => `Скенирање колачића није успело: ${message}`,
+        fileErrorsNote: (count) => `Није било могуће прочитати ${count} датотека, па су прескочене.`,
+        checkboxAriaLabel: (domain) => `Сачувај колачиће са ${domain}`
       },
       sandboxTest: {
         title: 'Тест песка',
@@ -22589,6 +23018,19 @@ export const CATALOG = {
         folderBadge: 'Mapp',
         removeAriaLabel: (value) => `Sluta utesluta ${value}`
       },
+      cookiesToPreserve: {
+        title: 'Kakor att bevara',
+        description: 'Allt annat i webbläsarens kakfil försvinner så snart du rensar den. Skanna för att se vad som faktiskt finns där, och kryssa i allt som är värt att behålla.',
+        scanButton: 'Sök efter kakor',
+        scanning: 'Körs…',
+        filterPlaceholder: 'Filtrera domäner…',
+        countSuffix: (count) => `${count} kak${count === 1 ? 'a' : 'or'}`,
+        none: 'Inga kakor hittades.',
+        staleBadge: 'syntes inte vid denna skanning',
+        scanErrorPrefix: (message) => `Det gick inte att söka efter kakor: ${message}`,
+        fileErrorsNote: (count) => `${count} fil${count === 1 ? ' kunde' : 'er kunde'} inte läsas och hoppades över.`,
+        checkboxAriaLabel: (domain) => `Behåll kakor från ${domain}`
+      },
       sandboxTest: {
         title: 'Sandlådetest',
         description: 'Kör den riktiga rensningsmotorn endast mot en engångskatalog — aldrig din faktiska Temp, Windows Temp, eller miniatyrbildscachen — för att bevisa att skanning och radering verkligen fungerar innan du litar på dem med riktiga filer.',
@@ -23269,6 +23711,19 @@ export const CATALOG = {
         typeBadge: 'ประเภท',
         folderBadge: 'โฟลเดอร์',
         removeAriaLabel: (value) => `หยุดยกเว้น ${value}`
+      },
+      cookiesToPreserve: {
+        title: 'คุกกี้ที่จะเก็บไว้',
+        description: 'สิ่งอื่นทั้งหมดในไฟล์คุกกี้ของเบราว์เซอร์จะหายไปทันทีที่คุณล้างข้อมูล สแกนเพื่อดูว่ามีอะไรอยู่จริง แล้วทำเครื่องหมายสิ่งที่คุ้มค่าจะเก็บไว้',
+        scanButton: 'สแกนหาคุกกี้',
+        scanning: 'กำลังทำงาน…',
+        filterPlaceholder: 'กรองโดเมน…',
+        countSuffix: (count) => `คุกกี้ ${count} รายการ`,
+        none: 'ไม่พบคุกกี้',
+        staleBadge: 'ไม่พบในการสแกนนี้',
+        scanErrorPrefix: (message) => `ไม่สามารถสแกนหาคุกกี้ได้: ${message}`,
+        fileErrorsNote: (count) => `ไม่สามารถอ่านไฟล์ ${count} ไฟล์ได้ และถูกข้ามไป`,
+        checkboxAriaLabel: (domain) => `เก็บคุกกี้จาก ${domain}`
       },
       sandboxTest: {
         title: 'การทดสอบแซนด์บ็อกซ์',
@@ -23951,6 +24406,19 @@ export const CATALOG = {
         folderBadge: 'Klasör',
         removeAriaLabel: (value) => `${value} hariç tutmayı durdur`
       },
+      cookiesToPreserve: {
+        title: 'Korunacak çerezler',
+        description: "Bir tarayıcının çerez dosyasındaki geri kalan her şey, temizlediğiniz anda kaybolur. Gerçekte ne olduğunu görmek için tarayın ve saklamaya değer her şeyi işaretleyin.",
+        scanButton: 'Çerezleri tara',
+        scanning: 'Çalışıyor…',
+        filterPlaceholder: 'Alan adlarını filtrele…',
+        countSuffix: (count) => `${count} çerez`,
+        none: 'Çerez bulunamadı.',
+        staleBadge: 'bu taramada görülmedi',
+        scanErrorPrefix: (message) => `Çerezler taranamadı: ${message}`,
+        fileErrorsNote: (count) => `${count} dosya okunamadı ve atlandı.`,
+        checkboxAriaLabel: (domain) => `${domain} kaynaklı çerezleri koru`
+      },
       sandboxTest: {
         title: 'Sanal Alan Testi',
         description: 'Gerçek temizlik motorunu yalnızca tek kullanımlık geçici bir dizine karşı çalıştırır — asla gerçek Temp\'inize, Windows Temp\'ine veya küçük resim önbelleğine karşı değil — gerçek dosyalarla güvenmeden önce taramanın ve silmenin gerçekten çalıştığını kanıtlamak için.',
@@ -24631,6 +25099,19 @@ export const CATALOG = {
         typeBadge: 'Тип',
         folderBadge: 'Папка',
         removeAriaLabel: (value) => `Припинити виключати ${value}`
+      },
+      cookiesToPreserve: {
+        title: 'Файли cookie для збереження',
+        description: 'Усе інше у файлі cookie браузера зникає в момент очищення. Скануйте, щоб побачити, що там є насправді, і позначте все, що варто зберегти.',
+        scanButton: 'Пошук файлів cookie',
+        scanning: 'Виконується…',
+        filterPlaceholder: 'Фільтрувати домени…',
+        countSuffix: (count) => `${count} файлів cookie`,
+        none: 'Файли cookie не знайдено.',
+        staleBadge: 'не виявлено під час цього сканування',
+        scanErrorPrefix: (message) => `Не вдалося знайти файли cookie: ${message}`,
+        fileErrorsNote: (count) => `Не вдалося прочитати ${count} файлів, тому їх пропущено.`,
+        checkboxAriaLabel: (domain) => `Зберегти файли cookie з ${domain}`
       },
       sandboxTest: {
         title: 'Тест пісочниці',
@@ -25313,6 +25794,19 @@ export const CATALOG = {
         folderBadge: 'Thư mục',
         removeAriaLabel: (value) => `Ngừng loại trừ ${value}`
       },
+      cookiesToPreserve: {
+        title: 'Cookie cần giữ lại',
+        description: 'Mọi thứ khác trong tệp cookie của trình duyệt sẽ biến mất ngay khi bạn dọn dẹp nó. Quét để xem thực sự có gì ở đó, và đánh dấu bất cứ thứ gì đáng giữ lại.',
+        scanButton: 'Quét tìm cookie',
+        scanning: 'Đang chạy…',
+        filterPlaceholder: 'Lọc miền…',
+        countSuffix: (count) => `${count} cookie`,
+        none: 'Không tìm thấy cookie nào.',
+        staleBadge: 'không thấy trong lần quét này',
+        scanErrorPrefix: (message) => `Không thể quét tìm cookie: ${message}`,
+        fileErrorsNote: (count) => `${count} tệp không thể đọc được và đã bị bỏ qua.`,
+        checkboxAriaLabel: (domain) => `Giữ cookie từ ${domain}`
+      },
       sandboxTest: {
         title: 'Kiểm tra Hộp cát',
         description: 'Chạy công cụ dọn dẹp thực sự chỉ với một thư mục tạm thời dùng một lần — không bao giờ với Temp thực của bạn, Temp của Windows, hoặc bộ nhớ đệm hình thu nhỏ — để chứng minh rằng việc quét và xóa thực sự hoạt động trước khi bạn tin tưởng chúng với các tệp thực.',
@@ -25994,6 +26488,19 @@ export const CATALOG = {
         folderBadge: '文件夹',
         removeAriaLabel: (value) => `停止排除 ${value}`
       },
+      cookiesToPreserve: {
+        title: '要保留的 Cookie',
+        description: '浏览器 Cookie 文件中的其他所有内容在清理的那一刻就会消失。扫描以查看实际存在的内容，并勾选值得保留的项目。',
+        scanButton: '扫描 Cookie',
+        scanning: '正在运行…',
+        filterPlaceholder: '筛选域名…',
+        countSuffix: (count) => `${count} 个 Cookie`,
+        none: '未找到任何 Cookie。',
+        staleBadge: '本次扫描未发现',
+        scanErrorPrefix: (message) => `无法扫描 Cookie：${message}`,
+        fileErrorsNote: (count) => `有 ${count} 个文件无法读取，已跳过。`,
+        checkboxAriaLabel: (domain) => `保留来自 ${domain} 的 Cookie`
+      },
       sandboxTest: {
         title: '沙盒测试',
         description: '仅针对一次性的临时目录运行真实的清理引擎——绝不会针对你实际的 Temp、Windows Temp 或缩略图缓存——以证明在你信任真实文件之前，扫描和删除确实有效。',
@@ -26674,6 +27181,19 @@ export const CATALOG = {
         typeBadge: '類型',
         folderBadge: '資料夾',
         removeAriaLabel: (value) => `停止排除 ${value}`
+      },
+      cookiesToPreserve: {
+        title: '要保留的 Cookie',
+        description: '瀏覽器 Cookie 檔案中的其他所有內容，在清理的那一刻就會消失。掃描以查看實際存在的內容，並勾選值得保留的項目。',
+        scanButton: '掃描 Cookie',
+        scanning: '正在執行…',
+        filterPlaceholder: '篩選網域…',
+        countSuffix: (count) => `${count} 個 Cookie`,
+        none: '未找到任何 Cookie。',
+        staleBadge: '本次掃描未發現',
+        scanErrorPrefix: (message) => `無法掃描 Cookie：${message}`,
+        fileErrorsNote: (count) => `有 ${count} 個檔案無法讀取，已略過。`,
+        checkboxAriaLabel: (domain) => `保留來自 ${domain} 的 Cookie`
       },
       sandboxTest: {
         title: '沙盒測試',
