@@ -218,7 +218,7 @@ export async function executeRule(rule, guards = {}) {
   let freedBytes = 0;
   let registryKeysRemoved;
   const skipped = [];
-  let recycled, quarantineBatch, ranCommand, error, vacuumed;
+  let recycled, quarantineBatch, ranCommand, error, vacuumed, edited;
 
   for (const action of normalized.actions) {
     if (action.type === 'shell') {
@@ -256,6 +256,11 @@ export async function executeRule(rule, guards = {}) {
       skipped.push(...result.skipped);
       if (result.recycled) recycled = true;
       if (result.quarantineBatch) quarantineBatch = result.quarantineBatch;
+      // The one discriminator a frontend has for "this result came from a
+      // json action" -- same conditional-only-when-true shape as `vacuumed`
+      // above, mirrored exactly: freedBytes alone can't tell a json key
+      // removal apart from a delete action's freedBytes.
+      edited = true;
     }
   }
 
@@ -265,6 +270,7 @@ export async function executeRule(rule, guards = {}) {
     skipped,
     ...(registryKeysRemoved !== undefined ? { registryKeysRemoved } : {}),
     ...(vacuumed ? { vacuumed } : {}),
+    ...(edited ? { edited } : {}),
     ...(recycled ? { recycled } : {}),
     ...(quarantineBatch ? { quarantineBatch } : {}),
     ...(ranCommand ? { ranCommand } : {}),
