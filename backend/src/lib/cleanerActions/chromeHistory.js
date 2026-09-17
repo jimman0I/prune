@@ -1,7 +1,9 @@
 import { existsSync, statSync } from 'node:fs';
-import { readFile } from 'node:fs/promises';
+import { readFile, writeFile, rm } from 'node:fs/promises';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
+import { randomUUID } from 'node:crypto';
+import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { isExcluded, isTooRecent } from '../cleanGuards.js';
 import { sqlite3ExePath } from './sqliteVacuum.js';
@@ -23,11 +25,17 @@ function heldReason(expandedPath, mtimeMs, guards) {
 
 /** Collects every URL string bookmarked in a Chrome/Chromium `Bookmarks`
  * JSON file, walking `roots` recursively (folders have `children`, a
- * bookmark node has `type: "url"` and its own `url`). Returns an empty
- * array if the file doesn't exist or isn't valid JSON. */
+ * bookmark node has `type: "url"` and its own `url`).
+ *
+ * Returns `{ urls: [], corrupt: false }` when the file genuinely doesn't
+ * exist -- nothing to preserve, a normal case. Returns `{ urls: [],
+ * corrupt: true }` when the file EXISTS but fails to parse -- a
+ * materially different case the caller must not treat the same way:
+ * "can't verify what's bookmarked" is a reason to hold back, not a
+ * license to delete everything. */
 async function collectBookmarkUrls(historyPath) {
   const bookmarksPath = join(dirname(historyPath), 'Bookmarks');
-  if (!existsSync(bookmarksPath)) return [];
+  if (!existsSync(bookmarksPath)) return { urls: [], corrupt: false };
   try {
     const data = JSON.parse(await readFile(bookmarksPath, 'utf8'));
     const urls = [];
@@ -40,9 +48,29 @@ async function collectBookmarkUrls(historyPath) {
       }
     };
     for (const root of Object.values(data.roots ?? {})) walk(root);
-    return urls;
+    return { urls, corrupt: false };
   } catch {
-    return [];
+    return { urls: [], corrupt: true };
+  }
+}
+
+/** Runs `sql` against the database at `dbPath` via sqlite3.exe's `.read`
+ * meta-command rather than passing the SQL as a raw argv string. A real
+ * user's bookmark list can run into the hundreds or low thousands of
+ * entries; at real-world escaped-URL lengths the `WHERE url NOT IN
+ * (...)` list alone can cross Windows's ~32,767-char CreateProcess
+ * command-line limit (spawn ENAMETOOLONG) well within that range.
+ * Writing the script to a temp file keeps argv tiny regardless of how
+ * large the bookmark list gets -- the same fix `sqliteVacuum.test.js`
+ * already uses for its own oversized setup script, applied here in
+ * production code. The temp file is always removed afterward. */
+async function runSqlViaTempScript(dbPath, sql) {
+  const scriptPath = join(tmpdir(), `prune-chrome-history-${process.pid}-${randomUUID()}.sql`);
+  try {
+    await writeFile(scriptPath, sql, 'utf8');
+    await execFileAsync(sqlite3ExePath(), [dbPath, `.read ${scriptPath}`]);
+  } finally {
+    await rm(scriptPath, { force: true });
   }
 }
 
@@ -58,7 +86,14 @@ export function scan(action) {
 /** Executes a chrome.history action: clears browsing history while
  * preserving bookmarked URLs' own rows in `urls` -- everything else
  * clears unconditionally. Every table beyond `urls` is existence-checked
- * before being touched. */
+ * before being touched.
+ *
+ * Bookmarks are read BEFORE the file is touched (and before
+ * `quarantineFileEdit` is even called): if the `Bookmarks` file exists
+ * but fails to parse, the bookmark-preservation guarantee can't be
+ * honored, so the whole action is skipped with a clear reason rather
+ * than silently wiping bookmarked URLs' rows along with everything
+ * else. */
 export async function execute(action, ruleName, guards = {}) {
   if (!existsSync(action.expandedPath)) {
     return { freedBytes: 0, skipped: [] };
@@ -74,15 +109,22 @@ export async function execute(action, ruleName, guards = {}) {
     return { freedBytes: 0, skipped: [{ path: action.expandedPath, reason: 'not a recognized Chrome History file' }] };
   }
 
+  const bookmarks = await collectBookmarkUrls(action.expandedPath);
+  if (bookmarks.corrupt) {
+    return {
+      freedBytes: 0,
+      skipped: [{ path: action.expandedPath, reason: 'could not verify bookmarked URLs -- Bookmarks file is unreadable or corrupt' }]
+    };
+  }
+
   try {
     const manifest = await quarantineFileEdit({
       programName: `Deep Clean: ${ruleName}`,
       filePath: action.expandedPath,
       editFn: async (realPath) => {
-        const bookmarkUrls = await collectBookmarkUrls(realPath);
         let urlsWhere = '';
-        if (bookmarkUrls.length > 0) {
-          const list = bookmarkUrls.map((u) => `'${escapeSqlString(u)}'`).join(',');
+        if (bookmarks.urls.length > 0) {
+          const list = bookmarks.urls.map((u) => `'${escapeSqlString(u)}'`).join(',');
           urlsWhere = ` WHERE url NOT IN (${list})`;
         }
         let sql = `DELETE FROM urls${urlsWhere};`;
@@ -90,7 +132,7 @@ export async function execute(action, ruleName, guards = {}) {
           if (await sqliteTableExists(realPath, table)) sql += `DELETE FROM ${table};`;
         }
         sql += 'VACUUM;';
-        await execFileAsync(sqlite3ExePath(), [realPath, sql]);
+        await runSqlViaTempScript(realPath, sql);
       }
     });
     const after = statSync(action.expandedPath).size;

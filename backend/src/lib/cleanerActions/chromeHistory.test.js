@@ -114,4 +114,40 @@ describe('chromeHistory execute', () => {
     expect(result.freedBytes).toBeGreaterThan(0);
     expect(result.freedBytes).toBe(before - after);
   });
+
+  it('handles a huge bookmark list that would blow an argv-based approach', async () => {
+    const filePath = join(scratchDir, 'History');
+    await makeHistoryDb(filePath, [
+      { id: 1, url: 'https://bookmarked.com', title: 'Kept' },
+      { id: 2, url: 'https://not-bookmarked.com', title: 'Gone' }
+    ]);
+    // 1000+ synthetic bookmarked URLs, long enough per-entry that the old
+    // "embed the WHERE-list directly in argv" approach would have blown
+    // past Windows's ~32,767-char command-line limit.
+    const manyBookmarks = Array.from({ length: 1200 }, (_, i) => `https://bookmark-site-${i}.example.com/some/long/path/segment/${'a'.repeat(40)}`);
+    manyBookmarks.push('https://bookmarked.com');
+    await writeFile(join(scratchDir, 'Bookmarks'), makeBookmarksJson(manyBookmarks));
+
+    const result = await execute({ expandedPath: filePath }, 'Test Rule', {});
+
+    expect(result.skipped).toHaveLength(0);
+    const urls = await execFileAsync(sqlite3ExePath(), [filePath, 'SELECT url FROM urls;']);
+    expect(urls.stdout.trim()).toBe('https://bookmarked.com');
+  });
+
+  it('skips the whole action when the Bookmarks file exists but is corrupt', async () => {
+    const filePath = join(scratchDir, 'History');
+    await makeHistoryDb(filePath, [
+      { id: 1, url: 'https://bookmarked.com', title: 'Kept' },
+      { id: 2, url: 'https://not-bookmarked.com', title: 'Gone' }
+    ]);
+    await writeFile(join(scratchDir, 'Bookmarks'), '{ this is not valid JSON ][');
+
+    const result = await execute({ expandedPath: filePath }, 'Test Rule', {});
+
+    expect(result.skipped).toHaveLength(1);
+    expect(result.skipped[0].reason).toMatch(/corrupt|unreadable/);
+    const urls = await execFileAsync(sqlite3ExePath(), [filePath, 'SELECT COUNT(*) FROM urls;']);
+    expect(urls.stdout.trim()).toBe('2');
+  });
 });
