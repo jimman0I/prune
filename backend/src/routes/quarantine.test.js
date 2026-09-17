@@ -93,7 +93,7 @@ describe('POST /quarantine/remove', () => {
   it('defaults the file and registry lists rather than passing undefined through', async () => {
     await postJson('/quarantine/remove', { programName: 'Thing' });
     expect(quarantineAndDelete).toHaveBeenCalledWith({
-      programName: 'Thing', files: [], registryKeys: []
+      programName: 'Thing', files: [], registryKeys: [], deleteLockedFilesOnRestart: false
     });
   });
 });

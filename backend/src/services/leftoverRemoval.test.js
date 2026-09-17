@@ -52,11 +52,19 @@ describe('to Quarantine', () => {
       programName: 'Thing', files: ['C:\\a'], registryKeys: ['HKCU\\Software\\Thing'], destination: 'quarantine'
     });
     expect(quarantineAndDelete).toHaveBeenCalledWith({
-      programName: 'Thing', files: ['C:\\a'], registryKeys: ['HKCU\\Software\\Thing']
+      programName: 'Thing', files: ['C:\\a'], registryKeys: ['HKCU\\Software\\Thing'], deleteLockedFilesOnRestart: false
     });
     expect(result.destination).toBe('quarantine');
     expect(result.batchDir).toBe('Q:\\batch');
     expect(sendToRecycleBin).not.toHaveBeenCalled();
+  });
+
+  it('passes deleteLockedFilesOnRestart through to quarantineAndDelete', async () => {
+    await removeLeftovers({
+      programName: 'Thing', files: ['C:\\a'], registryKeys: [], destination: 'quarantine',
+      deleteLockedFilesOnRestart: true
+    });
+    expect(quarantineAndDelete).toHaveBeenCalledWith(expect.objectContaining({ deleteLockedFilesOnRestart: true }));
   });
 });
 
