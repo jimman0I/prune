@@ -448,6 +448,18 @@ describe('quarantineFileEdit', () => {
     const batches = await listQuarantineBatches();
     expect(batches.some((b) => b.batchDir === manifest.batchDir)).toBe(true);
   });
+
+  it('throws a clear error for a nonexistent file instead of leaving an orphaned batch dir', async () => {
+    const filePath = join(scratchDir, 'does-not-exist.json');
+
+    await expect(quarantineFileEdit({ programName: 'Test', filePath, newContent: '{}' }))
+      .rejects.toThrow(/does not exist/);
+
+    // No orphaned batch directory should have been created for the
+    // rejected call -- the guard runs before mkdir(batchDir).
+    const batches = await listQuarantineBatches();
+    expect(batches).toEqual([]);
+  });
 });
 
 describe('emptyQuarantine', () => {
