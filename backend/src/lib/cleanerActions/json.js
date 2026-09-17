@@ -1,5 +1,5 @@
 import { existsSync, statSync, readFileSync } from 'node:fs';
-import { writeFile } from 'node:fs/promises';
+import { writeFile, rename } from 'node:fs/promises';
 import { isExcluded, isTooRecent } from '../cleanGuards.js';
 import { resolveAddress } from './jsonAddress.js';
 import { quarantineFileEdit } from '../../services/quarantine.js';
@@ -91,7 +91,16 @@ export async function execute(action, ruleName, guards = {}) {
         }]
       };
     }
-    await writeFile(action.expandedPath, newContent, 'utf8');
+    // Same atomic swap quarantineFileEdit() does internally for the
+    // default branch below: write to a temp file in the SAME directory,
+    // then rename() it onto the real path. The recycle bin already took
+    // the original away, but this file still needs to land as valid JSON
+    // even if the write itself is interrupted (crash, disk full) --
+    // otherwise a consuming app reading its own Preferences file back
+    // could find it truncated instead of merely "gone".
+    const tempPath = `${action.expandedPath}.prune-tmp`;
+    await writeFile(tempPath, newContent, 'utf8');
+    await rename(tempPath, action.expandedPath);
     const after = statSync(action.expandedPath).size;
     return { freedBytes: Math.max(0, before.size - after), recycled: true, skipped: [] };
   }
