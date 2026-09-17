@@ -88,4 +88,15 @@ describe('POST /quarantine/remove destination', () => {
     await remove({});
     expect(removeLeftovers.mock.calls[0][0].deleteLockedFilesOnRestart).toBe(false);
   });
+
+  it('treats a non-boolean truthy value as off, not on -- a corrupted settings.json must not silently enable an HKLM write', async () => {
+    // getSettings() merges a hand-edited or corrupted settings.json with
+    // no schema validation (see settings.js's own {...DEFAULT_SETTINGS,
+    // ...JSON.parse(raw)} spread), so a real settings.json COULD hand
+    // this route a string instead of a boolean. `=== true` is what keeps
+    // that fail-closed; a bare truthy check (or Boolean(...)) would not.
+    settings = { createRestorePoint: true, deleteLockedFilesOnRestart: 'true' };
+    await remove({});
+    expect(removeLeftovers.mock.calls[0][0].deleteLockedFilesOnRestart).toBe(false);
+  });
 });
