@@ -76,6 +76,16 @@ function decodeMultiSz(buffer) {
 // created> ... /y`), NOT assumed from documentation. Matched narrowly on
 // purpose: see readMultiSzValue's catch below for why treating any OTHER
 // failure the same way would be dangerous here.
+//
+// English only. reg.exe's error text is localized, so this regex will not
+// match on a non-English Windows install -- but the failure direction is
+// the SAFE one: a genuinely-absent value on such a machine would fail
+// this match and get rethrown as an unexpected error (over-cautious,
+// annoying) rather than the dangerous direction (a real failure silently
+// read as "absent" and then overwritten). Worth a real fix -- checking
+// reg.exe's exit code/behavior in a locale-independent way -- if this
+// ever actually bites someone; not done here since it can't cause data
+// loss as it stands.
 const KEY_OR_VALUE_NOT_FOUND = /unable to find the specified registry key or value/i;
 
 /** Reads one `REG_MULTI_SZ` value as a flat array of strings, via `reg
