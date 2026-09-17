@@ -159,18 +159,35 @@ export async function quarantineAndDelete({ programName, files, registryKeys, de
   return manifest;
 }
 
-/** Backs up a file's ORIGINAL content into a quarantine batch, then
- * overwrites the file at its own path with `newContent` -- for an action
- * that edits a file in place rather than removing it (the `json` action
- * type: deleting one key from a browser's Preferences file still leaves
- * a Preferences file there, just a smaller one).
+/** Backs up a file's ORIGINAL content into a quarantine batch, then edits
+ * the file at its own path -- for an action that edits a file in place
+ * rather than removing it (the `json` action type: deleting one key from
+ * a browser's Preferences file still leaves a Preferences file there,
+ * just a smaller one).
+ *
+ * Two mutually exclusive modes, exactly one of which must be given:
+ *
+ * - `newContent` (a string): the final bytes are already known up front.
+ *   Written to a temp file and swapped atomically over the original (see
+ *   point 2 below).
+ *
+ * - `editFn` (an async function): the final bytes are NOT known up front
+ *   -- the file is binary and gets mutated in place by an external
+ *   process. A future `cookie` action shells out to `sqlite3.exe` to
+ *   DELETE+VACUUM the real cookie database directly; there is no
+ *   pre-computed "new content" string to hand in for that. `editFn` is
+ *   called with `filePath` AFTER the original is already safely copied
+ *   into the quarantine batch, and is responsible for mutating the real
+ *   file itself however it needs to (no atomic-swap guarantee is
+ *   possible here on this function's side -- whatever `editFn` does to
+ *   the real file, it does directly).
  *
  * Deliberately NOT built on quarantineAndDelete(), whose whole contract
  * is "move this file out of its original location" -- a `rename()` to a
  * batch dir, full stop. This needs the opposite at the original path: the
  * file must still exist there afterward, just with different content.
- * So this copies (not moves) the original into the batch, then writes
- * the new content over the original.
+ * So this copies (not moves) the original into the batch, then edits
+ * the original in place (either mode).
  *
  * Writes the EXACT same manifest shape quarantineAndDelete() does
  * (`files: [{originalPath, quarantinedPath, sizeBytes}]`, `totalSizeBytes`,
@@ -183,27 +200,39 @@ export async function quarantineAndDelete({ programName, files, registryKeys, de
  * nothing new either -- the whole Quarantine screen already works on
  * this.
  *
- * Two failure modes this guards against on purpose:
+ * Failure modes this guards against on purpose:
  *
- * 1. A missing `filePath` is a precondition violation, not a normal
- *    outcome -- checked with existsSync() BEFORE mkdir(batchDir) runs, so
- *    a bad call throws a clear error instead of leaving an orphaned,
+ * 1. Calling with neither mode (or both left out) is a precondition
+ *    violation, not a normal outcome -- checked up front, before either
+ *    existsSync() or mkdir(batchDir) runs, so a bad call throws a clear
+ *    error immediately.
+ *
+ * 2. A missing `filePath` is likewise a precondition violation --
+ *    checked with existsSync() BEFORE mkdir(batchDir) runs, so a bad
+ *    call throws a clear error instead of leaving an orphaned,
  *    manifest-less batch directory behind (invisible to
  *    listQuarantineBatches(), silent clutter for emptyQuarantine() to
  *    sweep up later).
  *
- * 2. The overwrite itself must be atomic. quarantineAndDelete() gets this
- *    for free -- its whole operation on a file IS a rename(). Writing
- *    `newContent` straight over `filePath` has no such guarantee: a
- *    write() that fails partway (disk full, a permissions error mid-
- *    stream) can leave the original truncated or corrupted with nothing
- *    to roll back to, even though a pristine copy already sits in the
- *    batch dir. So the new content is written to a temp file in the SAME
- *    directory as `filePath` first, then swapped in with rename() --
- *    same-directory so the swap is a same-volume rename, not a
- *    cross-volume copy, matching quarantineAndDelete()'s own atomic-
- *    rename guarantee. */
-export async function quarantineFileEdit({ programName, filePath, newContent }) {
+ * 3. In `newContent` mode, the overwrite itself must be atomic.
+ *    quarantineAndDelete() gets this for free -- its whole operation on a
+ *    file IS a rename(). Writing `newContent` straight over `filePath`
+ *    has no such guarantee: a write() that fails partway (disk full, a
+ *    permissions error mid-stream) can leave the original truncated or
+ *    corrupted with nothing to roll back to, even though a pristine copy
+ *    already sits in the batch dir. So the new content is written to a
+ *    temp file in the SAME directory as `filePath` first, then swapped in
+ *    with rename() -- same-directory so the swap is a same-volume
+ *    rename, not a cross-volume copy, matching quarantineAndDelete()'s
+ *    own atomic-rename guarantee. `editFn` mode has no equivalent
+ *    guarantee to offer -- it hands the real path to code outside this
+ *    function's control -- but the original is already safely copied
+ *    into the batch before `editFn` ever runs, so restoreQuarantine()
+ *    can still recover from a partial or failed mutation. */
+export async function quarantineFileEdit({ programName, filePath, newContent, editFn }) {
+  if (newContent === undefined && typeof editFn !== 'function') {
+    throw new Error('quarantineFileEdit requires either newContent or editFn');
+  }
   if (!existsSync(filePath)) {
     throw new Error(`Cannot quarantine-edit ${filePath}: file does not exist`);
   }
@@ -215,9 +244,13 @@ export async function quarantineFileEdit({ programName, filePath, newContent }) 
   const dest = join(batchDir, `file-0-${basename(filePath)}`);
   await copyFile(filePath, dest);
 
-  const tempPath = `${filePath}.prune-tmp`;
-  await writeFile(tempPath, newContent, 'utf8');
-  await rename(tempPath, filePath);
+  if (typeof editFn === 'function') {
+    await editFn(filePath);
+  } else {
+    const tempPath = `${filePath}.prune-tmp`;
+    await writeFile(tempPath, newContent, 'utf8');
+    await rename(tempPath, filePath);
+  }
 
   const manifest = {
     programName, createdAt: Date.now(), batchDir,
