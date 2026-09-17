@@ -156,12 +156,6 @@ function CategorySection({ category, items, iconSrc, selected, onToggle, onToggl
             what is actually ticked. Every row it left alone is wearing a
             "Loses data" badge saying why, and each still takes a
             deliberate individual click that raises the warning dialog. */}
-        <Checkbox
-          state={state}
-          size={16}
-          label={t('deepClean.tree.selectCategoryAriaLabel', category)}
-          onChange={() => onToggleCategory(category, nextCategoryChecked(state))}
-        />
         <button
           type="button"
           onClick={() => setExpanded((e) => !e)}
@@ -179,6 +173,12 @@ function CategorySection({ category, items, iconSrc, selected, onToggle, onToggl
           <span className="text-[12.5px] font-medium text-[color:var(--text-primary)] truncate">{category}</span>
           <span className="text-[10.5px] text-[color:var(--text-muted)] font-mono shrink-0">{items.length}</span>
         </button>
+        <Checkbox
+          state={state}
+          size={16}
+          label={t('deepClean.tree.selectCategoryAriaLabel', category)}
+          onChange={() => onToggleCategory(category, nextCategoryChecked(state))}
+        />
       </div>
 
       {/* Plain conditional, not the 0fr/1fr height transition this used to
@@ -208,12 +208,6 @@ function CategorySection({ category, items, iconSrc, selected, onToggle, onToggl
                   : ''
               }`}
             >
-              <Checkbox
-                state={selected.has(item.id) ? 'all' : 'none'}
-                size={14}
-                label={item.name}
-                onChange={() => onToggle(item.id)}
-              />
               <span className="text-[12px] text-[color:var(--text-primary)] shrink-0">{item.name}</span>
 
               {/* Marked because "recoverable" is not "wanted". Clean moves
@@ -253,6 +247,13 @@ function CategorySection({ category, items, iconSrc, selected, onToggle, onToggl
               {!(measured && item.description) && <span className="flex-1" />}
 
               <SizeLabel item={item} />
+
+              <Checkbox
+                state={selected.has(item.id) ? 'all' : 'none'}
+                size={14}
+                label={item.name}
+                onChange={() => onToggle(item.id)}
+              />
             </div>
           );
           })}
