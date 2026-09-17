@@ -57,10 +57,10 @@ const DEFAULT_SETTINGS = {
    * intentional state: it means every `cookie` action deletes the whole
    * cookie database file outright, exactly like BleachBit's own behavior
    * when nothing is configured to survive. See cleanerActions/cookie.js.
-   * No Settings-screen entry point yet -- managing this list (browsing
-   * what's actually in a cookie database, picking domains to keep) is a
-   * real, separate future feature; this default state is not a stand-in
-   * for it, it's the documented behavior of an empty keep list. */
+   * Populated via Settings -> Cleanup's "Cookies to preserve" panel
+   * (CookieKeepListSettings.jsx), which scans real cookie databases and
+   * ticks domains into this array. Empty is still the documented default
+   * behavior of the list itself, not a sign the UI is missing. */
   cookieKeepList: [],
   autoQuarantine: true,
   theme: 'dark',
