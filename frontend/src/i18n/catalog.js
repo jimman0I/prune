@@ -137,7 +137,7 @@ export const CATALOG = {
         },
         deleteLockedFiles: {
           title: 'Delete locked files on next restart',
-          description: 'Files another program still has open are removed the next time you restart your computer, instead of only being reported as skipped. Needs administrator.'
+          description: "Files another program still has open are removed the next time you restart your computer, instead of only being reported as skipped. Needs administrator, or they're still just reported as skipped."
         },
         afterHeading: 'After uninstalling',
         scanLeftovers: {
@@ -818,7 +818,7 @@ export const CATALOG = {
         },
         deleteLockedFiles: {
           title: 'Verwyder gesluite lêers by die volgende herbegin',
-          description: "Lêers wat 'n ander program nog oophet, word verwyder wanneer jy jou rekenaar die volgende keer herbegin, in plaas daarvan om net as oorgeslaan aangemeld te word. Vereis administrateur."
+          description: "Lêers wat 'n ander program nog oophet, word verwyder wanneer jy jou rekenaar die volgende keer herbegin, in plaas daarvan om net as oorgeslaan aangemeld te word. Vereis administrateur, of hulle word steeds net as oorgeslaan aangemeld."
         },
         afterHeading: 'Na deïnstallering',
         scanLeftovers: {
@@ -1494,7 +1494,7 @@ export const CATALOG = {
         },
         deleteLockedFiles: {
           title: 'حذف الملفات المقفلة عند إعادة التشغيل التالية',
-          description: 'يتم حذف الملفات التي لا يزال برنامج آخر يستخدمها في المرة التالية التي تعيد فيها تشغيل الكمبيوتر، بدلاً من مجرد الإبلاغ عن تخطيها. يتطلب صلاحيات المسؤول.'
+          description: 'يتم حذف الملفات التي لا يزال برنامج آخر يستخدمها في المرة التالية التي تعيد فيها تشغيل الكمبيوتر، بدلاً من مجرد الإبلاغ عن تخطيها. يتطلب صلاحيات المسؤول، وإلا فسيستمر الإبلاغ عنها على أنها متخطاة فقط.'
         },
         afterHeading: 'بعد إلغاء التثبيت',
         scanLeftovers: {
@@ -2170,7 +2170,7 @@ export const CATALOG = {
         },
         deleteLockedFiles: {
           title: 'Suprimeix els fitxers bloquejats en el següent reinici',
-          description: "Els fitxers que un altre programa encara té oberts se suprimeixen la propera vegada que reinicies l'ordinador, en lloc de només informar que s'han omès. Necessita administrador."
+          description: "Els fitxers que un altre programa encara té oberts se suprimeixen la propera vegada que reinicies l'ordinador, en lloc de només informar que s'han omès. Necessita administrador; si no, encara només s'informa que s'han omès."
         },
         afterHeading: 'Després de desinstal·lar',
         scanLeftovers: {
@@ -2846,7 +2846,7 @@ export const CATALOG = {
         },
         deleteLockedFiles: {
           title: 'Odstranit uzamčené soubory při příštím restartu',
-          description: 'Soubory, které stále má otevřené jiný program, budou odstraněny při příštím restartu počítače, místo aby byly jen nahlášeny jako přeskočené. Vyžaduje administrátora.'
+          description: 'Soubory, které stále má otevřené jiný program, budou odstraněny při příštím restartu počítače, místo aby byly jen nahlášeny jako přeskočené. Vyžaduje administrátora, jinak budou i nadále jen nahlášeny jako přeskočené.'
         },
         afterHeading: 'Po odinstalaci',
         scanLeftovers: {
@@ -3522,7 +3522,7 @@ export const CATALOG = {
         },
         deleteLockedFiles: {
           title: "Dileu ffeiliau wedi'u cloi adeg yr ailgychwyn nesaf",
-          description: "Caiff ffeiliau y mae rhaglen arall yn dal i'w cadw ar agor eu dileu y tro nesaf y byddwch yn ailgychwyn eich cyfrifiadur, yn hytrach na chael eu hadrodd fel rhai a hepgorwyd yn unig. Angen gweinyddwr."
+          description: "Caiff ffeiliau y mae rhaglen arall yn dal i'w cadw ar agor eu dileu y tro nesaf y byddwch yn ailgychwyn eich cyfrifiadur, yn hytrach na chael eu hadrodd fel rhai a hepgorwyd yn unig. Angen gweinyddwr, neu byddant yn dal i gael eu hadrodd fel rhai a hepgorwyd yn unig."
         },
         afterHeading: 'Ar ôl dadosod',
         scanLeftovers: {
@@ -4198,7 +4198,7 @@ export const CATALOG = {
         },
         deleteLockedFiles: {
           title: 'Slet låste filer ved næste genstart',
-          description: 'Filer, som et andet program stadig har åbne, fjernes næste gang du genstarter computeren, i stedet for kun at blive rapporteret som sprunget over. Kræver administrator.'
+          description: 'Filer, som et andet program stadig har åbne, fjernes næste gang du genstarter computeren, i stedet for kun at blive rapporteret som sprunget over. Kræver administrator, ellers bliver de fortsat kun rapporteret som sprunget over.'
         },
         afterHeading: 'Efter afinstallation',
         scanLeftovers: {
@@ -4874,7 +4874,7 @@ export const CATALOG = {
         },
         deleteLockedFiles: {
           title: 'Gesperrte Dateien beim nächsten Neustart löschen',
-          description: 'Dateien, die noch von einem anderen Programm geöffnet sind, werden beim nächsten Neustart des Computers entfernt, statt nur als übersprungen gemeldet zu werden. Erfordert Administratorrechte.'
+          description: 'Dateien, die noch von einem anderen Programm geöffnet sind, werden beim nächsten Neustart des Computers entfernt, statt nur als übersprungen gemeldet zu werden. Erfordert Administratorrechte, sonst werden sie weiterhin nur als übersprungen gemeldet.'
         },
         afterHeading: 'Nach der Deinstallation',
         scanLeftovers: {
@@ -5550,7 +5550,7 @@ export const CATALOG = {
         },
         deleteLockedFiles: {
           title: 'Διαγραφή κλειδωμένων αρχείων στην επόμενη επανεκκίνηση',
-          description: 'Τα αρχεία που εξακολουθεί να έχει ανοιχτά ένα άλλο πρόγραμμα διαγράφονται την επόμενη φορά που θα κάνετε επανεκκίνηση του υπολογιστή σας, αντί να αναφέρονται απλώς ως παραλειφθέντα. Απαιτεί δικαιώματα διαχειριστή.'
+          description: 'Τα αρχεία που εξακολουθεί να έχει ανοιχτά ένα άλλο πρόγραμμα διαγράφονται την επόμενη φορά που θα κάνετε επανεκκίνηση του υπολογιστή σας, αντί να αναφέρονται απλώς ως παραλειφθέντα. Απαιτεί δικαιώματα διαχειριστή, διαφορετικά συνεχίζουν να αναφέρονται απλώς ως παραλειφθέντα.'
         },
         afterHeading: 'Μετά την απεγκατάσταση',
         scanLeftovers: {
@@ -6226,7 +6226,7 @@ export const CATALOG = {
         },
         deleteLockedFiles: {
           title: 'Eliminar archivos bloqueados en el próximo reinicio',
-          description: 'Los archivos que otro programa todavía tiene abiertos se eliminan la próxima vez que reinicias el equipo, en lugar de solo notificarse como omitidos. Necesita administrador.'
+          description: 'Los archivos que otro programa todavía tiene abiertos se eliminan la próxima vez que reinicias el equipo, en lugar de solo notificarse como omitidos. Necesita administrador; si no, se siguen notificando solo como omitidos.'
         },
         afterHeading: 'Después de desinstalar',
         scanLeftovers: {
@@ -6902,7 +6902,7 @@ export const CATALOG = {
         },
         deleteLockedFiles: {
           title: 'Kustuta lukustatud failid järgmisel taaskäivitusel',
-          description: 'Failid, mida mõni teine programm endiselt avatuna hoiab, kustutatakse järgmisel arvuti taaskäivitusel, selle asemel et neist lihtsalt vahelejäetuna teatada. Vajab administraatorit.'
+          description: 'Failid, mida mõni teine programm endiselt avatuna hoiab, kustutatakse järgmisel arvuti taaskäivitusel, selle asemel et neist lihtsalt vahelejäetuna teatada. Vajab administraatorit, muidu teatatakse neist endiselt lihtsalt kui vahelejäetutest.'
         },
         afterHeading: 'Pärast desinstallimist',
         scanLeftovers: {
@@ -7578,7 +7578,7 @@ export const CATALOG = {
         },
         deleteLockedFiles: {
           title: 'Poista lukitut tiedostot seuraavassa uudelleenkäynnistyksessä',
-          description: 'Tiedostot, jotka toinen ohjelma pitää yhä avoinna, poistetaan seuraavan kerran, kun käynnistät tietokoneen uudelleen, sen sijaan että ne vain ilmoitettaisiin ohitetuiksi. Vaatii järjestelmänvalvojan.'
+          description: 'Tiedostot, jotka toinen ohjelma pitää yhä avoinna, poistetaan seuraavan kerran, kun käynnistät tietokoneen uudelleen, sen sijaan että ne vain ilmoitettaisiin ohitetuiksi. Vaatii järjestelmänvalvojan oikeudet, muuten ne vain ilmoitetaan edelleen ohitetuiksi.'
         },
         afterHeading: 'Poiston jälkeen',
         scanLeftovers: {
@@ -8254,7 +8254,7 @@ export const CATALOG = {
         },
         deleteLockedFiles: {
           title: 'Supprimer les fichiers verrouillés au prochain redémarrage',
-          description: "Les fichiers qu'un autre programme a encore ouverts sont supprimés au prochain redémarrage de l'ordinateur, au lieu d'être seulement signalés comme ignorés. Nécessite les droits administrateur."
+          description: "Les fichiers qu'un autre programme a encore ouverts sont supprimés au prochain redémarrage de l'ordinateur, au lieu d'être seulement signalés comme ignorés. Nécessite les droits administrateur, sinon ils continuent d'être simplement signalés comme ignorés."
         },
         afterHeading: 'Après la désinstallation',
         scanLeftovers: {
@@ -8930,7 +8930,7 @@ export const CATALOG = {
         },
         deleteLockedFiles: {
           title: 'מחיקת קבצים נעולים באתחול הבא',
-          description: 'קבצים שתוכנית אחרת עדיין מחזיקה פתוחים יימחקו בפעם הבאה שתפעיל מחדש את המחשב, במקום רק לדווח שהם דולגו. דורש הרשאת מנהל.'
+          description: 'קבצים שתוכנית אחרת עדיין מחזיקה פתוחים יימחקו בפעם הבאה שתפעיל מחדש את המחשב, במקום רק לדווח שהם דולגו. דורש הרשאת מנהל, אחרת הם עדיין רק ידווחו כדולגו.'
         },
         afterHeading: 'אחרי ההסרה',
         scanLeftovers: {
@@ -9606,7 +9606,7 @@ export const CATALOG = {
         },
         deleteLockedFiles: {
           title: 'Zárolt fájlok törlése a következő újraindításkor',
-          description: 'A fájlokat, amelyeket még egy másik program tart nyitva, a számítógép következő újraindításakor törli a rendszer, ahelyett hogy csak kihagyottként jelentené őket. Rendszergazdai jogosultság szükséges.'
+          description: 'A fájlokat, amelyeket még egy másik program tart nyitva, a számítógép következő újraindításakor törli a rendszer, ahelyett hogy csak kihagyottként jelentené őket. Rendszergazdai jogosultság szükséges, különben továbbra is csak kihagyottként jelennek meg.'
         },
         afterHeading: 'Eltávolítás után',
         scanLeftovers: {
@@ -10282,7 +10282,7 @@ export const CATALOG = {
         },
         deleteLockedFiles: {
           title: 'Hapus file terkunci saat mulai ulang berikutnya',
-          description: 'File yang masih dibuka oleh program lain akan dihapus saat berikutnya Anda memulai ulang komputer, bukan hanya dilaporkan sebagai dilewati. Memerlukan administrator.'
+          description: 'File yang masih dibuka oleh program lain akan dihapus saat berikutnya Anda memulai ulang komputer, bukan hanya dilaporkan sebagai dilewati. Memerlukan administrator, jika tidak file tersebut tetap hanya dilaporkan sebagai dilewati.'
         },
         afterHeading: 'Setelah uninstal',
         scanLeftovers: {
@@ -10958,7 +10958,7 @@ export const CATALOG = {
         },
         deleteLockedFiles: {
           title: 'Eyða læstum skrám við næstu endurræsingu',
-          description: 'Skrár sem annað forrit hefur enn opnar eru fjarlægðar næst þegar þú endurræsir tölvuna, í stað þess að vera aðeins tilkynntar sem yfirsleppt. Krefst kerfisstjóra.'
+          description: 'Skrár sem annað forrit hefur enn opnar eru fjarlægðar næst þegar þú endurræsir tölvuna, í stað þess að vera aðeins tilkynntar sem yfirsleppt. Krefst kerfisstjóra, annars eru þær áfram aðeins tilkynntar sem yfirsleppt.'
         },
         afterHeading: 'Eftir fjarlægingu',
         scanLeftovers: {
@@ -11634,7 +11634,7 @@ export const CATALOG = {
         },
         deleteLockedFiles: {
           title: 'Elimina i file bloccati al prossimo riavvio',
-          description: "I file che un altro programma ha ancora aperti vengono rimossi al prossimo riavvio del computer, invece di essere solo segnalati come saltati. Richiede l'amministratore."
+          description: "I file che un altro programma ha ancora aperti vengono rimossi al prossimo riavvio del computer, invece di essere solo segnalati come saltati. Richiede l'amministratore, altrimenti vengono comunque solo segnalati come saltati."
         },
         afterHeading: 'Dopo la disinstallazione',
         scanLeftovers: {
@@ -12310,7 +12310,7 @@ export const CATALOG = {
         },
         deleteLockedFiles: {
           title: '次回の再起動時にロックされたファイルを削除',
-          description: '他のプログラムがまだ開いているファイルは、単にスキップしたと報告されるのではなく、次回コンピューターを再起動したときに削除されます。管理者権限が必要です。'
+          description: '他のプログラムがまだ開いているファイルは、単にスキップしたと報告されるのではなく、次回コンピューターを再起動したときに削除されます。管理者権限が必要です。権限がない場合は、これまでどおりスキップとして報告されるだけです。'
         },
         afterHeading: 'アンインストール後',
         scanLeftovers: {
@@ -12986,7 +12986,7 @@ export const CATALOG = {
         },
         deleteLockedFiles: {
           title: '다음 재부팅 시 잠긴 파일 삭제',
-          description: '다른 프로그램이 아직 열어 둔 파일은 건너뛴 것으로만 보고되는 대신, 다음에 컴퓨터를 다시 시작할 때 삭제됩니다. 관리자 권한이 필요합니다.'
+          description: '다른 프로그램이 아직 열어 둔 파일은 건너뛴 것으로만 보고되는 대신, 다음에 컴퓨터를 다시 시작할 때 삭제됩니다. 관리자 권한이 필요하며, 권한이 없으면 여전히 건너뛴 것으로만 보고됩니다.'
         },
         afterHeading: '제거 후',
         scanLeftovers: {
@@ -13662,7 +13662,7 @@ export const CATALOG = {
         },
         deleteLockedFiles: {
           title: 'Ištrinti užrakintus failus per kitą paleidimą iš naujo',
-          description: 'Failai, kuriuos vis dar laiko atvertus kita programa, bus pašalinti kitą kartą paleidus kompiuterį iš naujo, o ne tik pažymėti kaip praleisti. Reikalingos administratoriaus teisės.'
+          description: 'Failai, kuriuos vis dar laiko atvertus kita programa, bus pašalinti kitą kartą paleidus kompiuterį iš naujo, o ne tik pažymėti kaip praleisti. Reikalingos administratoriaus teisės, kitaip jie ir toliau bus tik pažymėti kaip praleisti.'
         },
         afterHeading: 'Po šalinimo',
         scanLeftovers: {
@@ -14338,7 +14338,7 @@ export const CATALOG = {
         },
         deleteLockedFiles: {
           title: 'Padam fail terkunci pada mula semula seterusnya',
-          description: 'Fail yang masih dibuka oleh program lain akan dipadamkan pada kali seterusnya anda memulakan semula komputer, bukan hanya dilaporkan sebagai dilangkau. Memerlukan pentadbir.'
+          description: 'Fail yang masih dibuka oleh program lain akan dipadamkan pada kali seterusnya anda memulakan semula komputer, bukan hanya dilaporkan sebagai dilangkau. Memerlukan pentadbir, jika tidak fail itu masih dilaporkan sebagai dilangkau sahaja.'
         },
         afterHeading: 'Selepas menyahpasang',
         scanLeftovers: {
@@ -15014,7 +15014,7 @@ export const CATALOG = {
         },
         deleteLockedFiles: {
           title: 'Slett låste filer ved neste omstart',
-          description: 'Filer som et annet program fortsatt har åpne, fjernes neste gang du starter datamaskinen på nytt, i stedet for bare å bli rapportert som hoppet over. Krever administrator.'
+          description: 'Filer som et annet program fortsatt har åpne, fjernes neste gang du starter datamaskinen på nytt, i stedet for bare å bli rapportert som hoppet over. Krever administrator, ellers blir de fortsatt bare rapportert som hoppet over.'
         },
         afterHeading: 'Etter avinstallering',
         scanLeftovers: {
@@ -15690,7 +15690,7 @@ export const CATALOG = {
         },
         deleteLockedFiles: {
           title: 'Vergrendelde bestanden verwijderen bij de volgende herstart',
-          description: "Bestanden die een ander programma nog open heeft, worden verwijderd de volgende keer dat je de computer herstart, in plaats van alleen als overgeslagen te worden gemeld. Vereist beheerder."
+          description: "Bestanden die een ander programma nog open heeft, worden verwijderd de volgende keer dat je de computer herstart, in plaats van alleen als overgeslagen te worden gemeld. Vereist beheerder, anders worden ze nog steeds alleen als overgeslagen gemeld."
         },
         afterHeading: 'Na het verwijderen',
         scanLeftovers: {
@@ -16366,7 +16366,7 @@ export const CATALOG = {
         },
         deleteLockedFiles: {
           title: 'Usuń zablokowane pliki przy następnym ponownym uruchomieniu',
-          description: 'Pliki, które nadal ma otwarte inny program, zostaną usunięte przy następnym ponownym uruchomieniu komputera, zamiast być jedynie zgłaszane jako pominięte. Wymaga uprawnień administratora.'
+          description: 'Pliki, które nadal ma otwarte inny program, zostaną usunięte przy następnym ponownym uruchomieniu komputera, zamiast być jedynie zgłaszane jako pominięte. Wymaga uprawnień administratora, w przeciwnym razie nadal będą tylko zgłaszane jako pominięte.'
         },
         afterHeading: 'Po odinstalowaniu',
         scanLeftovers: {
@@ -17042,7 +17042,7 @@ export const CATALOG = {
         },
         deleteLockedFiles: {
           title: 'په راتلونکي بیا پیل کې د بند شوو فایلونو حذف کول',
-          description: 'هغه فایلونه چې بله برنامه یې لاهم پرانیستي لري، ستاسو د کمپیوټر په راتلونکي بیا پیل کې به حذف شي، نه یوازې د پریښودل شوي په توګه راپور شي. اډمین ته اړتیا لري.'
+          description: 'هغه فایلونه چې بله برنامه یې لاهم پرانیستي لري، ستاسو د کمپیوټر په راتلونکي بیا پیل کې به حذف شي، نه یوازې د پریښودل شوي په توګه راپور شي. اډمین ته اړتیا لري؛ که نه وي، دا فایلونه به لاهم یوازې د پریښودل شوي په توګه راپور شي.'
         },
         afterHeading: 'د لرې کولو وروسته',
         scanLeftovers: {
@@ -17718,7 +17718,7 @@ export const CATALOG = {
         },
         deleteLockedFiles: {
           title: 'Excluir arquivos bloqueados na próxima reinicialização',
-          description: 'Arquivos que outro programa ainda mantém abertos são removidos na próxima vez que você reiniciar o computador, em vez de apenas serem relatados como ignorados. Requer administrador.'
+          description: 'Arquivos que outro programa ainda mantém abertos são removidos na próxima vez que você reiniciar o computador, em vez de apenas serem relatados como ignorados. Requer administrador; caso contrário, continuam sendo apenas relatados como ignorados.'
         },
         afterHeading: 'Depois de desinstalar',
         scanLeftovers: {
@@ -18394,7 +18394,7 @@ export const CATALOG = {
         },
         deleteLockedFiles: {
           title: 'Eliminar ficheiros bloqueados no próximo reinício',
-          description: 'Os ficheiros que outro programa ainda mantém abertos são removidos da próxima vez que reiniciar o computador, em vez de serem apenas comunicados como ignorados. Requer administrador.'
+          description: 'Os ficheiros que outro programa ainda mantém abertos são removidos da próxima vez que reiniciar o computador, em vez de serem apenas comunicados como ignorados. Requer administrador; caso contrário, continuam a ser apenas comunicados como ignorados.'
         },
         afterHeading: 'Depois de desinstalar',
         scanLeftovers: {
@@ -19070,7 +19070,7 @@ export const CATALOG = {
         },
         deleteLockedFiles: {
           title: 'Șterge fișierele blocate la următoarea repornire',
-          description: 'Fișierele pe care un alt program le mai are încă deschise sunt eliminate data viitoare când repornești calculatorul, în loc să fie doar raportate ca omise. Necesită administrator.'
+          description: 'Fișierele pe care un alt program le mai are încă deschise sunt eliminate data viitoare când repornești calculatorul, în loc să fie doar raportate ca omise. Necesită administrator, altfel sunt în continuare doar raportate ca omise.'
         },
         afterHeading: 'După dezinstalare',
         scanLeftovers: {
@@ -19746,7 +19746,7 @@ export const CATALOG = {
         },
         deleteLockedFiles: {
           title: 'Удалить заблокированные файлы при следующей перезагрузке',
-          description: 'Файлы, которые всё ещё открыты в другой программе, будут удалены при следующей перезагрузке компьютера, вместо того чтобы просто сообщаться как пропущенные. Требуются права администратора.'
+          description: 'Файлы, которые всё ещё открыты в другой программе, будут удалены при следующей перезагрузке компьютера, вместо того чтобы просто сообщаться как пропущенные. Требуются права администратора, иначе они по-прежнему будут просто отмечены как пропущенные.'
         },
         afterHeading: 'После удаления',
         scanLeftovers: {
@@ -20422,7 +20422,7 @@ export const CATALOG = {
         },
         deleteLockedFiles: {
           title: 'Odstrániť uzamknuté súbory pri ďalšom reštarte',
-          description: 'Súbory, ktoré má stále otvorené iný program, sa odstránia pri ďalšom reštarte počítača namiesto toho, aby boli iba nahlásené ako preskočené. Vyžaduje administrátora.'
+          description: 'Súbory, ktoré má stále otvorené iný program, sa odstránia pri ďalšom reštarte počítača namiesto toho, aby boli iba nahlásené ako preskočené. Vyžaduje administrátora, inak budú naďalej iba nahlásené ako preskočené.'
         },
         afterHeading: 'Po odinštalovaní',
         scanLeftovers: {
@@ -21098,7 +21098,7 @@ export const CATALOG = {
         },
         deleteLockedFiles: {
           title: 'Fshi skedarët e kyçur në rinisjen tjetër',
-          description: 'Skedarët që një program tjetër i mban ende të hapur hiqen herën tjetër që rinis kompjuterin, në vend që të raportohen thjesht si të anashkaluar. Kërkon administrator.'
+          description: 'Skedarët që një program tjetër i mban ende të hapur hiqen herën tjetër që rinis kompjuterin, në vend që të raportohen thjesht si të anashkaluar. Kërkon administrator, përndryshe vazhdojnë të raportohen thjesht si të anashkaluar.'
         },
         afterHeading: 'Pas çinstalimit',
         scanLeftovers: {
@@ -21774,7 +21774,7 @@ export const CATALOG = {
         },
         deleteLockedFiles: {
           title: 'Обриши закључане датотеке при следећем поновном покретању',
-          description: 'Датотеке које други програм и даље држи отворене биће уклоњене следећи пут када поново покренете рачунар, уместо да буду само пријављене као прескочене. Захтева администратора.'
+          description: 'Датотеке које други програм и даље држи отворене биће уклоњене следећи пут када поново покренете рачунар, уместо да буду само пријављене као прескочене. Захтева администратора, у супротном ће и даље бити само пријављене као прескочене.'
         },
         afterHeading: 'После деинсталације',
         scanLeftovers: {
@@ -22450,7 +22450,7 @@ export const CATALOG = {
         },
         deleteLockedFiles: {
           title: 'Ta bort låsta filer vid nästa omstart',
-          description: 'Filer som ett annat program fortfarande har öppna tas bort nästa gång du startar om datorn, i stället för att bara rapporteras som överhoppade. Kräver administratör.'
+          description: 'Filer som ett annat program fortfarande har öppna tas bort nästa gång du startar om datorn, i stället för att bara rapporteras som överhoppade. Kräver administratör, annars rapporteras de fortfarande bara som överhoppade.'
         },
         afterHeading: 'Efter avinstallation',
         scanLeftovers: {
@@ -23126,7 +23126,7 @@ export const CATALOG = {
         },
         deleteLockedFiles: {
           title: 'ลบไฟล์ที่ถูกล็อกเมื่อรีสตาร์ทครั้งถัดไป',
-          description: 'ไฟล์ที่โปรแกรมอื่นยังคงเปิดค้างไว้จะถูกลบในครั้งถัดไปที่คุณรีสตาร์ทคอมพิวเตอร์ แทนที่จะแค่รายงานว่าถูกข้ามไปเท่านั้น ต้องใช้สิทธิ์ผู้ดูแลระบบ'
+          description: 'ไฟล์ที่โปรแกรมอื่นยังคงเปิดค้างไว้จะถูกลบในครั้งถัดไปที่คุณรีสตาร์ทคอมพิวเตอร์ แทนที่จะแค่รายงานว่าถูกข้ามไปเท่านั้น ต้องใช้สิทธิ์ผู้ดูแลระบบ มิเช่นนั้นไฟล์เหล่านั้นจะยังคงถูกรายงานว่าถูกข้ามไปเท่านั้น'
         },
         afterHeading: 'หลังถอนการติดตั้ง',
         scanLeftovers: {
@@ -23802,7 +23802,7 @@ export const CATALOG = {
         },
         deleteLockedFiles: {
           title: 'Sonraki yeniden başlatmada kilitli dosyaları sil',
-          description: 'Başka bir programın hâlâ açık tuttuğu dosyalar, yalnızca atlandı olarak bildirilmek yerine, bilgisayarınızı bir sonraki yeniden başlatışınızda kaldırılır. Yönetici gerektirir.'
+          description: 'Başka bir programın hâlâ açık tuttuğu dosyalar, yalnızca atlandı olarak bildirilmek yerine, bilgisayarınızı bir sonraki yeniden başlatışınızda kaldırılır. Yönetici gerektirir; aksi hâlde dosyalar yine yalnızca atlandı olarak bildirilir.'
         },
         afterHeading: 'Kaldırdıktan sonra',
         scanLeftovers: {
@@ -24478,7 +24478,7 @@ export const CATALOG = {
         },
         deleteLockedFiles: {
           title: 'Видалити заблоковані файли під час наступного перезавантаження',
-          description: 'Файли, які досі відкриті в іншій програмі, буде видалено під час наступного перезавантаження комп\'ютера, замість того щоб їх просто повідомляли як пропущені. Потрібні права адміністратора.'
+          description: 'Файли, які досі відкриті в іншій програмі, буде видалено під час наступного перезавантаження комп\'ютера, замість того щоб їх просто повідомляли як пропущені. Потрібні права адміністратора, інакше вони, як і раніше, лише повідомлятимуться як пропущені.'
         },
         afterHeading: 'Після видалення',
         scanLeftovers: {
@@ -25154,7 +25154,7 @@ export const CATALOG = {
         },
         deleteLockedFiles: {
           title: 'Xóa các tệp bị khóa vào lần khởi động lại tiếp theo',
-          description: 'Các tệp mà một chương trình khác vẫn đang mở sẽ được xóa vào lần tiếp theo bạn khởi động lại máy tính, thay vì chỉ được báo cáo là đã bỏ qua. Cần quyền quản trị viên.'
+          description: 'Các tệp mà một chương trình khác vẫn đang mở sẽ được xóa vào lần tiếp theo bạn khởi động lại máy tính, thay vì chỉ được báo cáo là đã bỏ qua. Cần quyền quản trị viên; nếu không, các tệp đó vẫn chỉ được báo cáo là đã bỏ qua.'
         },
         afterHeading: 'Sau khi gỡ cài đặt',
         scanLeftovers: {
@@ -25830,7 +25830,7 @@ export const CATALOG = {
         },
         deleteLockedFiles: {
           title: '在下次重启时删除被锁定的文件',
-          description: '仍被其他程序占用的文件将在您下次重启计算机时被删除，而不仅仅是报告为已跳过。需要管理员权限。'
+          description: '仍被其他程序占用的文件将在您下次重启计算机时被删除，而不仅仅是报告为已跳过。需要管理员权限，否则仍只会被报告为已跳过。'
         },
         afterHeading: '卸载之后',
         scanLeftovers: {
@@ -26506,7 +26506,7 @@ export const CATALOG = {
         },
         deleteLockedFiles: {
           title: '在下次重新啟動時刪除被鎖定的檔案',
-          description: '仍被其他程式佔用的檔案將在您下次重新啟動電腦時刪除，而不僅僅是回報為已略過。需要系統管理員權限。'
+          description: '仍被其他程式佔用的檔案將在您下次重新啟動電腦時刪除，而不僅僅是回報為已略過。需要系統管理員權限，否則仍只會被回報為已略過。'
         },
         afterHeading: '解除安裝之後',
         scanLeftovers: {
