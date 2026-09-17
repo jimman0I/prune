@@ -182,6 +182,26 @@ describe('appVersion', () => {
     const pkg = JSON.parse(readFileSync(new URL('../../package.json', import.meta.url), 'utf8'));
     expect(appVersion()).toBe(pkg.version);
   });
+
+  // Real bug, found live on the v2.6.0 release: RELEASING.md's checklist
+  // only says to bump electron/package.json, and that's genuinely the
+  // version electron-updater bakes into the installed .exe's own resource
+  // (confirmed via the file's real Windows version info after installing
+  // v2.6.0) -- but appVersion() above reads a SEPARATE copy in backend's
+  // OWN package.json, which nothing bumps automatically. The two silently
+  // drifted: the installed exe was genuinely 2.6.0, but Settings and this
+  // app's own update-checker kept reporting 2.5.1, so the checker kept
+  // saying "update available" forever -- and clicking it always failed,
+  // because electron-updater (correctly comparing the REAL current
+  // version) knew there was nothing newer to install. Nothing short of
+  // hand-editing the installed copy's package.json cleared it. This test
+  // is what RELEASING.md's own "run both suites" step should have caught
+  // before v2.6.0 shipped, if it had existed then.
+  it('matches electron/package.json -- the actual version electron-updater bakes into the installed .exe', () => {
+    const backendPkg = JSON.parse(readFileSync(new URL('../../package.json', import.meta.url), 'utf8'));
+    const electronPkg = JSON.parse(readFileSync(new URL('../../../electron/package.json', import.meta.url), 'utf8'));
+    expect(backendPkg.version).toBe(electronPkg.version);
+  });
 });
 
 describe('openReleasePage', () => {
