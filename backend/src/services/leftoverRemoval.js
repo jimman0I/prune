@@ -105,7 +105,15 @@ async function pathSize(path) {
 
 /** Removes an uninstall's leftovers to the chosen destination. Reports
  * rather than throws, like quarantineAndDelete: one locked file is a
- * partial success with a name attached, not a failure of the whole run. */
+ * partial success with a name attached, not a failure of the whole run.
+ *
+ * `deleteLockedFilesOnRestart` only ever reaches the `quarantine`
+ * destination's own `quarantineAndDelete` call below -- the `recycle`/
+ * `permanent` branches' own registry-only `quarantineAndDelete` call
+ * further down never passes `files` at all (it removes files through
+ * `sendToRecycleBin`/`rm` instead), so there is no locked FILE for that
+ * call to ever need to schedule. A no-op for those two destinations,
+ * not a bug. */
 export async function removeLeftovers({ programName, files = [], registryKeys = [], destination = 'quarantine', deleteLockedFilesOnRestart = false }) {
   if (destination === 'quarantine') {
     return { ...(await quarantineAndDelete({ programName, files, registryKeys, deleteLockedFilesOnRestart })), destination };

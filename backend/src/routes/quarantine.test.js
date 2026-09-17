@@ -93,7 +93,11 @@ describe('POST /quarantine/remove', () => {
   it('defaults the file and registry lists rather than passing undefined through', async () => {
     await postJson('/quarantine/remove', { programName: 'Thing' });
     expect(quarantineAndDelete).toHaveBeenCalledWith({
-      programName: 'Thing', files: [], registryKeys: [], deleteLockedFilesOnRestart: false
+      programName: 'Thing', files: [], registryKeys: [],
+      // Not this route's own concern -- removeLeftovers() itself now
+      // always forwards this (see leftoverRemoval.js), off by default
+      // until a later change reads it from settings and passes it in.
+      deleteLockedFilesOnRestart: false
     });
   });
 });
