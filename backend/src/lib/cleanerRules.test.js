@@ -17,6 +17,22 @@ import {
 } from './cleanerRules.js';
 import * as sqliteVacuum from './cleanerActions/sqliteVacuum.js';
 
+// Every raw path string a rule names, however it names it -- the legacy
+// flat `paths` array, or an `actions` array whose entries carry either a
+// single `path` (the bespoke single-file action types: sqlite.vacuum,
+// json, cookie, chrome.*, mozilla.*) or their own `paths` array (a
+// `delete` action nested inside an actions-array rule). Shared by every
+// structural test below that walks the real rule set path-by-path -- a
+// rule converted to `actions` is not exempt from any of them.
+function allRulePaths(rule) {
+  const paths = [...(rule.paths || [])];
+  for (const action of rule.actions || []) {
+    if (action.path) paths.push(action.path);
+    if (action.paths) paths.push(...action.paths);
+  }
+  return paths;
+}
+
 // node:fs's ESM namespace is frozen -- vi.spyOn can't redefine its exports
 // directly. Same vi.mock partial-passthrough workaround cleanup.test.js/
 // diskScan.test.js already establish: fs.promises.open becomes a real
@@ -90,7 +106,7 @@ describe('expandPath', () => {
     // the real rule set and fails if any token slipped in unsupported.
     const tokens = new Set();
     for (const rule of loadCleanerRules()) {
-      for (const rawPath of rule.paths || []) {
+      for (const rawPath of allRulePaths(rule)) {
         for (const match of rawPath.match(/%[A-Z_()0-9]+%/gi) || []) tokens.add(match.toUpperCase());
       }
     }
@@ -111,7 +127,10 @@ describe('loadCleanerRules', () => {
       expect(rule).toHaveProperty('category');
       expect(rule).toHaveProperty('name');
       expect(rule).toHaveProperty('is_safe');
-      expect(rule.paths || rule.command).toBeTruthy(); // one or the other, not neither
+      // One of the three real shapes a rule can be written in: the legacy
+      // flat `paths`/`command`, or the richer `actions` array (added for
+      // sqlite.vacuum/winreg/json/cookie/chrome.*/mozilla.* rules).
+      expect(rule.paths || rule.command || rule.actions).toBeTruthy();
     }
   });
 
@@ -1080,7 +1099,7 @@ describe('expandPath tokens', () => {
     // The general form of the same bug: any rule whose path still
     // contains a %TOKEN% after expansion can never match anything.
     for (const rule of loadCleanerRules()) {
-      for (const path of rule.paths || []) {
+      for (const path of allRulePaths(rule)) {
         expect(expandPath(path), `${rule.id}: ${path}`).not.toMatch(/%[A-Za-z_()0-9]+%/);
       }
     }
@@ -1101,7 +1120,7 @@ describe('expandPath tokens', () => {
     // every legitimate path is rooted at a %TOKEN% instead, which never
     // itself contains a literal drive letter.
     for (const rule of loadCleanerRules()) {
-      for (const path of rule.paths || []) {
+      for (const path of allRulePaths(rule)) {
         expect(path, `${rule.id}: ${path}`).not.toMatch(/[A-Za-z]:\\/);
       }
     }
