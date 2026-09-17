@@ -61,7 +61,7 @@ export function expandPath(rawPath) {
  * over it and merge results, since a wildcard can now genuinely match
  * zero, one, or several real files where the bespoke action types
  * previously only ever saw one. */
-function resolveBespokeActionPaths(expandedPath) {
+export function resolveBespokeActionPaths(expandedPath) {
   const [driveSegment, ...rest] = pathToSegments(expandedPath);
   if (!driveSegment) return [];
   return resolveGlob(driveSegment, rest);

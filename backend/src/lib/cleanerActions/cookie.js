@@ -30,7 +30,7 @@ function heldReason(expandedPath, mtimeMs, guards) {
  * all, or a schema this doesn't recognize) resolves to null rather than
  * throwing -- the caller decides what "not a recognized cookie database"
  * means for the action as a whole. */
-async function detectCookieTable(dbPath) {
+export async function detectCookieTable(dbPath) {
   const { stdout } = await execFileAsync(sqlite3ExePath(), [dbPath, TABLE_DETECT_SQL]);
   const foundName = stdout.trim().split('\n')[0]?.trim();
   return SQLITE_TABLES[foundName] ?? null;

@@ -28,7 +28,7 @@ export function escapeSqlString(value) {
 /** Normalizes one keep-list entry the same way BleachBit's own
  * delete_cookies() does before matching: lowercased, with any single
  * leading dot stripped. */
-function normalizeDomain(domain) {
+export function normalizeDomain(domain) {
   return domain.replace(/^\./, '').toLowerCase();
 }
 
