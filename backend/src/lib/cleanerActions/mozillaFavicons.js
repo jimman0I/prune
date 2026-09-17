@@ -1,17 +1,10 @@
 import { existsSync, statSync } from 'node:fs';
-import { writeFile, rm } from 'node:fs/promises';
-import { execFile } from 'node:child_process';
-import { promisify } from 'node:util';
-import { randomUUID } from 'node:crypto';
-import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { isExcluded, isTooRecent } from '../cleanGuards.js';
-import { sqlite3ExePath } from './sqliteVacuum.js';
 import { sqliteTableExists } from './sqliteInspect.js';
 import { escapeSqlString } from './cookieSql.js';
+import { runSqlViaTempScript } from './sqliteExec.js';
 import { quarantineFileEdit } from '../../services/quarantine.js';
-
-const execFileAsync = promisify(execFile);
 
 /** Firefox/Firefox-family `favicons.sqlite` cleaner, ported from
  * BleachBit's real `delete_mozilla_favicons()`. This is the most involved
@@ -40,23 +33,6 @@ function heldReason(expandedPath, mtimeMs, guards) {
     return 'modified too recently';
   }
   return null;
-}
-
-/** Runs `sql` against the database at `dbPath` via sqlite3.exe's `.read`
- * meta-command rather than passing the SQL as a raw argv string -- this
- * module's cross-file ATTACH DATABASE query text could be moderately
- * long, and writing the script to a temp file keeps argv tiny regardless,
- * matching the same convention mozillaUrlHistory.js's own
- * `runSqlViaTempScript()` already established. The temp file is always
- * removed afterward. */
-async function runSqlViaTempScript(dbPath, sql) {
-  const scriptPath = join(tmpdir(), `prune-mozilla-favicons-${process.pid}-${randomUUID()}.sql`);
-  try {
-    await writeFile(scriptPath, sql, 'utf8');
-    await execFileAsync(sqlite3ExePath(), [dbPath, `.read ${scriptPath}`]);
-  } finally {
-    await rm(scriptPath, { force: true });
-  }
 }
 
 /** Scans a mozilla.favicons action: the favicons.sqlite file's current
