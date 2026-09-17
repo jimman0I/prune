@@ -8,6 +8,11 @@ import * as sqliteVacuumAction from './cleanerActions/sqliteVacuum.js';
 import * as winregAction from './cleanerActions/winreg.js';
 import * as jsonAction from './cleanerActions/json.js';
 import * as cookieAction from './cleanerActions/cookie.js';
+import * as chromeAutofillAction from './cleanerActions/chromeAutofill.js';
+import * as chromeKeywordsAction from './cleanerActions/chromeKeywords.js';
+import * as chromeHistoryAction from './cleanerActions/chromeHistory.js';
+import * as mozillaUrlHistoryAction from './cleanerActions/mozillaUrlHistory.js';
+import * as mozillaFaviconsAction from './cleanerActions/mozillaFavicons.js';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const CLEANERS_JSON_PATH = join(here, '..', 'data', 'cleaners.json');
@@ -78,7 +83,12 @@ export function normalizeRule(rule) {
  * `shell`, `delete`, `sqlite.vacuum`, `winreg`, `json` (does the rule's
  * BleachBit-style `address` currently resolve inside the target JSON
  * file?), `cookie` (does the target cookie database exist, and how big is
- * it?) -- merging their results into one summary: `sizeBytes`/
+ * it?), `chrome.autofill` (Chrome/Chromium Web Data file's saved
+ * form-field values), `chrome.keywords` (the same Web Data file's
+ * user-added search engines), `chrome.history` (Chrome/Chromium History
+ * file), `mozilla.url.history` (Firefox-family places.sqlite),
+ * `mozilla.favicons` (Firefox-family favicons.sqlite) -- merging their
+ * results into one summary: `sizeBytes`/
  * `fileCount` summed, `heldCount` summed,
  * `accessible` ANDed together, `present` true if ANY action reports
  * something there. A rule with only a `shell` action (nothing to size)
@@ -135,6 +145,26 @@ export function scanRule(rule, guards = {}) {
       if (result.present) present = true;
     } else if (action.type === 'cookie') {
       const result = cookieAction.scan({ expandedPath: expandPath(action.path) });
+      sizeBytes = (sizeBytes ?? 0) + result.sizeBytes;
+      if (result.present) present = true;
+    } else if (action.type === 'chrome.autofill') {
+      const result = chromeAutofillAction.scan({ expandedPath: expandPath(action.path) });
+      sizeBytes = (sizeBytes ?? 0) + result.sizeBytes;
+      if (result.present) present = true;
+    } else if (action.type === 'chrome.keywords') {
+      const result = chromeKeywordsAction.scan({ expandedPath: expandPath(action.path) });
+      sizeBytes = (sizeBytes ?? 0) + result.sizeBytes;
+      if (result.present) present = true;
+    } else if (action.type === 'chrome.history') {
+      const result = chromeHistoryAction.scan({ expandedPath: expandPath(action.path) });
+      sizeBytes = (sizeBytes ?? 0) + result.sizeBytes;
+      if (result.present) present = true;
+    } else if (action.type === 'mozilla.url.history') {
+      const result = mozillaUrlHistoryAction.scan({ expandedPath: expandPath(action.path) });
+      sizeBytes = (sizeBytes ?? 0) + result.sizeBytes;
+      if (result.present) present = true;
+    } else if (action.type === 'mozilla.favicons') {
+      const result = mozillaFaviconsAction.scan({ expandedPath: expandPath(action.path) });
       sizeBytes = (sizeBytes ?? 0) + result.sizeBytes;
       if (result.present) present = true;
     }
@@ -220,6 +250,22 @@ export function scanAllRules(guards = {}) {
  *   quarantine-then-delete path `delete` uses, or -- when a keep list
  *   matches at least one row in this file -- a surgical DELETE + VACUUM
  *   through the bundled sqlite3.exe CLI, quarantining the original first.
+ * - `chrome.autofill` clears the Chrome/Chromium Web Data file's
+ *   `autofill` table (saved form-field values) and VACUUMs, quarantining
+ *   the original first.
+ * - `chrome.keywords` deletes only user-added search engines from the
+ *   same Web Data file's `keywords` (and, when present, `keywords_backup`)
+ *   table and VACUUMs, quarantining the original first.
+ * - `chrome.history` clears the Chrome/Chromium History file while
+ *   preserving bookmarked URLs' own rows (read from the sibling
+ *   Bookmarks JSON file) and VACUUMs, quarantining the original first.
+ * - `mozilla.url.history` clears a Firefox-family places.sqlite's
+ *   browsing history while preserving bookmarked places and VACUUMs,
+ *   quarantining the original first.
+ * - `mozilla.favicons` clears a Firefox-family favicons.sqlite's
+ *   unbookmarked-page icons, cross-referencing a sibling places.sqlite
+ *   (read-only, never quarantined) and VACUUMs, quarantining the
+ *   favicons file first.
  *
  * A rule mixing action types (e.g. a `delete` action and a
  * `sqlite.vacuum` action under one id) runs every action and sums
@@ -277,6 +323,31 @@ export async function executeRule(rule, guards = {}) {
       freedBytes += result.freedBytes;
       skipped.push(...result.skipped);
       if (result.recycled) recycled = true;
+      if (result.quarantineBatch) quarantineBatch = result.quarantineBatch;
+    } else if (action.type === 'chrome.autofill') {
+      const result = await chromeAutofillAction.execute({ expandedPath: expandPath(action.path) }, rule.name, guards);
+      freedBytes += result.freedBytes;
+      skipped.push(...result.skipped);
+      if (result.quarantineBatch) quarantineBatch = result.quarantineBatch;
+    } else if (action.type === 'chrome.keywords') {
+      const result = await chromeKeywordsAction.execute({ expandedPath: expandPath(action.path) }, rule.name, guards);
+      freedBytes += result.freedBytes;
+      skipped.push(...result.skipped);
+      if (result.quarantineBatch) quarantineBatch = result.quarantineBatch;
+    } else if (action.type === 'chrome.history') {
+      const result = await chromeHistoryAction.execute({ expandedPath: expandPath(action.path) }, rule.name, guards);
+      freedBytes += result.freedBytes;
+      skipped.push(...result.skipped);
+      if (result.quarantineBatch) quarantineBatch = result.quarantineBatch;
+    } else if (action.type === 'mozilla.url.history') {
+      const result = await mozillaUrlHistoryAction.execute({ expandedPath: expandPath(action.path) }, rule.name, guards);
+      freedBytes += result.freedBytes;
+      skipped.push(...result.skipped);
+      if (result.quarantineBatch) quarantineBatch = result.quarantineBatch;
+    } else if (action.type === 'mozilla.favicons') {
+      const result = await mozillaFaviconsAction.execute({ expandedPath: expandPath(action.path) }, rule.name, guards);
+      freedBytes += result.freedBytes;
+      skipped.push(...result.skipped);
       if (result.quarantineBatch) quarantineBatch = result.quarantineBatch;
     }
   }

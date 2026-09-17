@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { mkdtemp, rm, writeFile, mkdir } from 'node:fs/promises';
+import { mkdtemp, rm, writeFile, mkdir, readFile } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import * as fs from 'node:fs';
 import { tmpdir } from 'node:os';
@@ -807,6 +807,197 @@ describe('cookie action, wired', () => {
     const remainingHosts = remaining.stdout.trim().split(/\r?\n/).filter(Boolean);
     expect(remainingHosts).toEqual(['example.com']);
     expect(remainingHosts).not.toContain('other.com');
+  });
+});
+
+describe('phase D actions, wired', () => {
+  // Same "reproduce the real fixture-building helper inline, not exported
+  // from the action module's own test file" approach the cookie block
+  // above already uses -- a real Chromium/Firefox-schema SQLite database
+  // via the bundled sqlite3.exe CLI, not a fake/hand-crafted file, since
+  // the dispatcher branch calls straight into the real action module.
+  async function run(sql, filePath) {
+    const { execFile } = await import('node:child_process');
+    const { promisify } = await import('node:util');
+    const execFileAsync = promisify(execFile);
+    await execFileAsync(sqliteVacuum.sqlite3ExePath(), [filePath, sql]);
+  }
+  async function query(sql, filePath) {
+    const { execFile } = await import('node:child_process');
+    const { promisify } = await import('node:util');
+    const execFileAsync = promisify(execFile);
+    const { stdout } = await execFileAsync(sqliteVacuum.sqlite3ExePath(), [filePath, sql]);
+    return stdout.trim();
+  }
+
+  async function makeWebDataAutofillDb(filePath) {
+    const padding = 'x'.repeat(200);
+    const rows = Array.from({ length: 50 }, (_, i) => `('field${i}', '${padding}${i}', '${padding}${i}')`).join(',');
+    await run(`CREATE TABLE autofill (name VARCHAR, value VARCHAR, value_lower VARCHAR); INSERT INTO autofill (name, value, value_lower) VALUES ${rows};`, filePath);
+  }
+
+  async function makeWebDataKeywordsDb(filePath) {
+    const cols = 'id INTEGER PRIMARY KEY, short_name VARCHAR, keyword VARCHAR, favicon_url VARCHAR, originating_url VARCHAR, suggest_url VARCHAR, date_created INTEGER, usage_count INTEGER';
+    const sql = `CREATE TABLE keywords (${cols});
+      INSERT INTO keywords (id, short_name, keyword, favicon_url, originating_url, suggest_url, date_created, usage_count) VALUES
+        (1, 'name', 'default-engine.com', '', '', '', 0, 5),
+        (2, 'name', 'my-custom-search.com', '', '', '', 1700000000, 3);`;
+    await run(sql, filePath);
+  }
+
+  async function makeHistoryDb(filePath) {
+    const sql = `
+      CREATE TABLE urls (id INTEGER PRIMARY KEY, url LONGVARCHAR, title LONGVARCHAR, visit_count INTEGER, typed_count INTEGER, last_visit_time INTEGER, hidden INTEGER);
+      INSERT INTO urls VALUES (1, 'https://bookmarked.com', 'Kept', 1, 0, 1700000000, 0), (2, 'https://not-bookmarked.com', 'Gone', 1, 0, 1700000000, 0);
+      CREATE TABLE visits (id INTEGER PRIMARY KEY, url INTEGER, visit_time INTEGER);
+      INSERT INTO visits (id, url, visit_time) VALUES (1, 1, 1700000000), (2, 2, 1700000000);
+    `;
+    await run(sql, filePath);
+  }
+
+  function makeBookmarksJson(bookmarkedUrls) {
+    return JSON.stringify({ roots: { bookmark_bar: { type: 'folder', children: bookmarkedUrls.map((url) => ({ type: 'url', url })) } } });
+  }
+
+  async function makePlacesUrlHistoryDb(filePath) {
+    const sql = `
+      CREATE TABLE moz_bookmarks (id INTEGER PRIMARY KEY, fk INTEGER);
+      CREATE TABLE moz_places (id INTEGER PRIMARY KEY, url LONGVARCHAR, rev_host LONGVARCHAR, title LONGVARCHAR, visit_count INTEGER, frecency INTEGER, last_visit_date INTEGER, favicon_id INTEGER);
+      INSERT INTO moz_places (id, url, rev_host, title, visit_count, frecency) VALUES
+        (1, 'https://bookmarked.com', 'moc.dekramkoob.', 'Kept', 5, 100),
+        (2, 'https://not-bookmarked.com', 'moc.dekramkoobton.', 'Gone', 3, 50);
+      INSERT INTO moz_bookmarks (id, fk) VALUES (1, 1);
+      CREATE TABLE moz_historyvisits (id INTEGER PRIMARY KEY, place_id INTEGER);
+      INSERT INTO moz_historyvisits (id, place_id) VALUES (1, 1), (2, 2);
+    `;
+    await run(sql, filePath);
+  }
+
+  async function makePlacesForFaviconsDb(filePath) {
+    const sql = `
+      CREATE TABLE moz_bookmarks (id INTEGER PRIMARY KEY, fk INTEGER);
+      CREATE TABLE moz_places (id INTEGER PRIMARY KEY, url LONGVARCHAR);
+      INSERT INTO moz_places (id, url) VALUES (1, 'https://bookmarked.com/some/deep/page');
+      INSERT INTO moz_bookmarks (id, fk) VALUES (1, 1);
+    `;
+    await run(sql, filePath);
+  }
+
+  async function makeFaviconsDb(filePath) {
+    const sql = `
+      CREATE TABLE moz_icons (id INTEGER PRIMARY KEY, icon_url LONGVARCHAR, data BLOB);
+      INSERT INTO moz_icons (id, icon_url, data) VALUES (1, 'https://bookmarked.com/favicon.ico', x'01'), (2, 'https://not-bookmarked.com/favicon.ico', x'02');
+      CREATE TABLE moz_pages_w_icons (id INTEGER PRIMARY KEY, page_url LONGVARCHAR);
+      INSERT INTO moz_pages_w_icons (id, page_url) VALUES (1, 'https://bookmarked.com/some/deep/page'), (2, 'https://not-bookmarked.com/');
+      CREATE TABLE moz_icons_to_pages (page_id INTEGER, icon_id INTEGER);
+      INSERT INTO moz_icons_to_pages (page_id, icon_id) VALUES (1, 1), (2, 2);
+    `;
+    await run(sql, filePath);
+  }
+
+  it('scans and executes a chrome.autofill-only rule -- clears the real autofill table', async () => {
+    const filePath = join(appDataDir, 'Web Data');
+    await makeWebDataAutofillDb(filePath);
+
+    const rule = { id: 'autofill-wired', category: 'Test', name: 'Autofill wired test', actions: [{ type: 'chrome.autofill', path: '%APPDATA%\\Web Data' }] };
+
+    const scanned = scanRule(rule);
+    expect(scanned.sizeBytes).toBeGreaterThan(0);
+    expect(scanned.present).toBe(true);
+
+    const result = await executeRule(rule);
+    expect(result.freedBytes).toBeGreaterThan(0);
+    expect(result.quarantineBatch).toBeTruthy();
+    // Load-bearing: only the real chromeAutofill.execute() empties this
+    // specific table -- a no-op dispatcher would leave all 50 rows intact.
+    expect(await query('SELECT COUNT(*) FROM autofill;', filePath)).toBe('0');
+  });
+
+  it('scans and executes a chrome.keywords-only rule -- deletes only the user-added search engine', async () => {
+    const filePath = join(appDataDir, 'Web Data');
+    await makeWebDataKeywordsDb(filePath);
+
+    const rule = { id: 'keywords-wired', category: 'Test', name: 'Keywords wired test', actions: [{ type: 'chrome.keywords', path: '%APPDATA%\\Web Data' }] };
+
+    const scanned = scanRule(rule);
+    expect(scanned.sizeBytes).toBeGreaterThan(0);
+    expect(scanned.present).toBe(true);
+
+    const result = await executeRule(rule);
+    expect(result.quarantineBatch).toBeTruthy();
+    // Load-bearing: proves the real chromeKeywords logic ran (date_created
+    // predicate applied), not just that the dispatcher touched some file --
+    // a no-op dispatcher would leave BOTH rows, and a naive "delete
+    // everything" dispatcher would leave NEITHER.
+    expect(await query('SELECT keyword, usage_count FROM keywords ORDER BY id;', filePath)).toBe('default-engine.com|0');
+  });
+
+  it('scans and executes a chrome.history-only rule -- preserves the bookmarked URL row', async () => {
+    const filePath = join(appDataDir, 'History');
+    await makeHistoryDb(filePath);
+    await writeFile(join(appDataDir, 'Bookmarks'), makeBookmarksJson(['https://bookmarked.com']));
+
+    const rule = { id: 'history-wired', category: 'Test', name: 'History wired test', actions: [{ type: 'chrome.history', path: '%APPDATA%\\History' }] };
+
+    const scanned = scanRule(rule);
+    expect(scanned.sizeBytes).toBeGreaterThan(0);
+    expect(scanned.present).toBe(true);
+
+    const result = await executeRule(rule);
+    expect(result.quarantineBatch).toBeTruthy();
+    // Load-bearing: this exact row surviving while the other is gone can
+    // only happen if the real bookmark-preservation logic (reading
+    // sibling Bookmarks JSON, WHERE url NOT IN (...)) actually ran --
+    // a no-op dispatcher would leave both rows, a naive wipe would leave
+    // neither.
+    expect(await query('SELECT url FROM urls;', filePath)).toBe('https://bookmarked.com');
+  });
+
+  it('scans and executes a mozilla.url.history-only rule -- preserves the bookmarked place', async () => {
+    const filePath = join(appDataDir, 'places.sqlite');
+    await makePlacesUrlHistoryDb(filePath);
+
+    const rule = { id: 'mozhistory-wired', category: 'Test', name: 'Mozilla history wired test', actions: [{ type: 'mozilla.url.history', path: '%APPDATA%\\places.sqlite' }] };
+
+    const scanned = scanRule(rule);
+    expect(scanned.sizeBytes).toBeGreaterThan(0);
+    expect(scanned.present).toBe(true);
+
+    const result = await executeRule(rule);
+    expect(result.quarantineBatch).toBeTruthy();
+    // Load-bearing: the bookmarked place's row surviving with visit_count
+    // reset to 0 and frecency to -1 (the real UPDATE the action runs) can
+    // only happen via the real LEFT JOIN moz_bookmarks logic -- a no-op
+    // dispatcher would leave both places with their original counts.
+    expect(await query('SELECT url, visit_count, frecency FROM moz_places ORDER BY url;', filePath)).toBe('https://bookmarked.com|0|-1');
+  });
+
+  it('scans and executes a mozilla.favicons-only rule -- keeps the bookmarked page, leaves the sibling places.sqlite untouched', async () => {
+    const placesPath = join(appDataDir, 'places.sqlite');
+    await makePlacesForFaviconsDb(placesPath);
+    const filePath = join(appDataDir, 'favicons.sqlite');
+    await makeFaviconsDb(filePath);
+    const placesBefore = await readFile(placesPath);
+
+    const rule = { id: 'favicons-wired', category: 'Test', name: 'Favicons wired test', actions: [{ type: 'mozilla.favicons', path: '%APPDATA%\\favicons.sqlite' }] };
+
+    const scanned = scanRule(rule);
+    expect(scanned.sizeBytes).toBeGreaterThan(0);
+    expect(scanned.present).toBe(true);
+
+    const result = await executeRule(rule);
+    expect(result.quarantineBatch).toBeTruthy();
+    // Load-bearing: this specific page_url surviving can only happen via
+    // the real cross-file ATTACH DATABASE query against the sibling
+    // places.sqlite -- a no-op dispatcher would leave both pages, and a
+    // dispatcher that mixed up which file to check bookmarks against would
+    // keep the wrong one.
+    expect(await query('SELECT page_url FROM moz_pages_w_icons;', filePath)).toBe('https://bookmarked.com/some/deep/page');
+    // The other half of the load-bearing check: places.sqlite itself must
+    // be byte-for-byte untouched -- proves the dispatcher passed the
+    // favicons path (not the places path) as the action's own target.
+    const placesAfter = await readFile(placesPath);
+    expect(placesAfter).toEqual(placesBefore);
   });
 });
 
