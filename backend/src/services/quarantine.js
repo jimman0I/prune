@@ -181,15 +181,43 @@ export async function quarantineAndDelete({ programName, files, registryKeys, de
  * puts the original content back over the edited file with zero new
  * restore code, and listQuarantineBatches()/deletePermanently() need
  * nothing new either -- the whole Quarantine screen already works on
- * this. */
+ * this.
+ *
+ * Two failure modes this guards against on purpose:
+ *
+ * 1. A missing `filePath` is a precondition violation, not a normal
+ *    outcome -- checked with existsSync() BEFORE mkdir(batchDir) runs, so
+ *    a bad call throws a clear error instead of leaving an orphaned,
+ *    manifest-less batch directory behind (invisible to
+ *    listQuarantineBatches(), silent clutter for emptyQuarantine() to
+ *    sweep up later).
+ *
+ * 2. The overwrite itself must be atomic. quarantineAndDelete() gets this
+ *    for free -- its whole operation on a file IS a rename(). Writing
+ *    `newContent` straight over `filePath` has no such guarantee: a
+ *    write() that fails partway (disk full, a permissions error mid-
+ *    stream) can leave the original truncated or corrupted with nothing
+ *    to roll back to, even though a pristine copy already sits in the
+ *    batch dir. So the new content is written to a temp file in the SAME
+ *    directory as `filePath` first, then swapped in with rename() --
+ *    same-directory so the swap is a same-volume rename, not a
+ *    cross-volume copy, matching quarantineAndDelete()'s own atomic-
+ *    rename guarantee. */
 export async function quarantineFileEdit({ programName, filePath, newContent }) {
+  if (!existsSync(filePath)) {
+    throw new Error(`Cannot quarantine-edit ${filePath}: file does not exist`);
+  }
+
   const batchDir = join(quarantineRoot(), `${Date.now()}-${safeSegment(programName)}`);
   await mkdir(batchDir, { recursive: true });
 
   const sizeBytes = (await stat(filePath)).size;
   const dest = join(batchDir, `file-0-${basename(filePath)}`);
   await copyFile(filePath, dest);
-  await writeFile(filePath, newContent, 'utf8');
+
+  const tempPath = `${filePath}.prune-tmp`;
+  await writeFile(tempPath, newContent, 'utf8');
+  await rename(tempPath, filePath);
 
   const manifest = {
     programName, createdAt: Date.now(), batchDir,
