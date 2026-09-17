@@ -456,9 +456,10 @@ describe('the warning in front of a rule that loses data', () => {
 describe('the tree/log split while a clean runs', () => {
   // BleachBit inverts the split once you're watching a result instead of
   // deciding what to clean: a narrow input sidebar, a wide output pane.
-  // `cleaning` drives an inline width on the tree column so the change can
-  // animate as a `transition-[width]`, rather than swapping Tailwind
-  // classes (which would snap, not transition).
+  // `cleaning` drives a `--dc-tree-w` custom property on the tree column,
+  // consumed ONLY by the `lg:w-[var(--dc-tree-w)]` class -- below `lg` the
+  // column stays plain `w-full` regardless of `cleaning`, since neither
+  // `260px` nor `calc(100% - 380px)` means anything on a stacked layout.
   const selectSomething = async (user) => {
     await screen.findByText('Temporary files');
     const boxes = screen.getAllByRole('checkbox');
@@ -471,7 +472,7 @@ describe('the tree/log split while a clean runs', () => {
     await screen.findByText('Temporary files');
 
     const column = screen.getByTestId('deep-clean-tree-column');
-    expect(column.style.width).not.toBe('260px');
+    expect(column.style.getPropertyValue('--dc-tree-w')).not.toBe('260px');
   });
 
   it('narrows to 260px once a clean is actually running', async () => {
@@ -485,7 +486,23 @@ describe('the tree/log split while a clean runs', () => {
     await user.click(cleanButton());
     await user.click(screen.getByRole('button', { name: 'Confirm' }));
 
-    await waitFor(() => expect(screen.getByTestId('deep-clean-tree-column').style.width).toBe('260px'));
+    await waitFor(() =>
+      expect(screen.getByTestId('deep-clean-tree-column').style.getPropertyValue('--dc-tree-w')).toBe('260px'));
+  });
+
+  it('never applies the explicit width class below the lg breakpoint, at either cleaning state', () => {
+    // Regression: an unconditional inline `width` (or an unconditional
+    // width class) would collapse the tree to nothing on a narrow window
+    // while browsing (`calc(100% - 380px)` clamps negative to 0) and pin a
+    // stacked full-width column to a sliver while cleaning (`260px`).
+    // The fix scopes the explicit width to `lg:` only -- this asserts the
+    // class list itself carries that gate, which is what actually protects
+    // a real narrow viewport regardless of which `cleaning` state renders.
+    renderScreen(<DeepClean />);
+    const column = screen.getByTestId('deep-clean-tree-column');
+
+    expect(column.className).toMatch(/(?:^|\s)w-full(?:\s|$)/);
+    expect(column.className).toMatch(/lg:w-\[var\(--dc-tree-w\)\]/);
   });
 });
 
