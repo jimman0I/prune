@@ -453,6 +453,42 @@ describe('the warning in front of a rule that loses data', () => {
   });
 });
 
+describe('the tree/log split while a clean runs', () => {
+  // BleachBit inverts the split once you're watching a result instead of
+  // deciding what to clean: a narrow input sidebar, a wide output pane.
+  // `cleaning` drives an inline width on the tree column so the change can
+  // animate as a `transition-[width]`, rather than swapping Tailwind
+  // classes (which would snap, not transition).
+  const selectSomething = async (user) => {
+    await screen.findByText('Temporary files');
+    const boxes = screen.getAllByRole('checkbox');
+    await user.click(boxes[boxes.length - 1]);
+    await waitFor(() => expect(cleanButton().disabled).toBe(false));
+  };
+
+  it('is wide while browsing (cleaning false)', async () => {
+    renderScreen(<DeepClean />);
+    await screen.findByText('Temporary files');
+
+    const column = screen.getByTestId('deep-clean-tree-column');
+    expect(column.style.width).not.toBe('260px');
+  });
+
+  it('narrows to 260px once a clean is actually running', async () => {
+    // Deliberately never resolved, same convention the other
+    // clean-in-progress tests in this file already use, so the assertion
+    // lands while `cleaning` is genuinely still true.
+    streamDeepCleanExecute.mockImplementation(() => new Promise(() => {}));
+    const user = userEvent.setup();
+    renderScreen(<DeepClean />);
+    await selectSomething(user);
+    await user.click(cleanButton());
+    await user.click(screen.getByRole('button', { name: 'Confirm' }));
+
+    await waitFor(() => expect(screen.getByTestId('deep-clean-tree-column').style.width).toBe('260px'));
+  });
+});
+
 describe('what a finished scan does to the selection', () => {
   const riskyRules = [{
     category: 'Brave',
