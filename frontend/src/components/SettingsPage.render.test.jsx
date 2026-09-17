@@ -31,7 +31,8 @@ vi.mock('../lib/api.js', () => ({
   fetchStartupItems: vi.fn(), fetchStartupIcons: vi.fn(), setStartupItemEnabled: vi.fn(),
   fetchQuarantineBatches: vi.fn(), restoreQuarantineBatch: vi.fn(),
   deleteQuarantineBatch: vi.fn(), emptyQuarantine: vi.fn(),
-  fetchDiskSpace: vi.fn(), fetchDiskHealth: vi.fn()
+  fetchDiskSpace: vi.fn(), fetchDiskHealth: vi.fn(),
+  fetchCookieDomains: vi.fn(async () => ({ domains: [], errors: [] }))
 }));
 
 const SettingsPage = (await import('./SettingsPage.jsx')).default;
@@ -47,6 +48,7 @@ const DEFAULTS = {
   hideUnavailableRules: false,
   quarantineRetentionDays: null,
   quarantineMaxSizeGb: null,
+  cookieKeepList: [],
   updateCheck: false,
   automation: { enabled: false, frequency: 'weekly', weekday: 0, hour: 2, minute: 0, task: 'scan' }
 };
@@ -408,5 +410,12 @@ describe('the guards beside them', () => {
     const user = await openCleanupTab();
     await user.clear(screen.getByLabelText('Hours to leave recent files alone'));
     await waitFor(() => expect(lastSaved()).toEqual({ skipRecentHours: 0 }));
+  });
+});
+
+describe('cookies to preserve', () => {
+  it('shows the panel on the Cleanup tab', async () => {
+    await openCleanupTab();
+    expect(await screen.findByText('Cookies to preserve')).toBeTruthy();
   });
 });
