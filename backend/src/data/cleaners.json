@@ -89,6 +89,29 @@
     "recommended": false
   },
   {
+    "id": "brave_autofill_suggestions",
+    "category": "Brave",
+    "name": "Form-fill suggestions",
+    "description": "Text you've typed into web forms before, offered back as a suggestion. Does not touch saved addresses, cards or passwords -- see \"Autofill and form history\" for those.",
+    "actions": [
+      { "type": "chrome.autofill", "path": "%LOCALAPPDATA%\\BraveSoftware\\Brave-Browser\\User Data\\*\\Web Data" }
+    ],
+    "is_safe": false,
+    "risky": true,
+    "recommended": false
+  },
+  {
+    "id": "brave_keywords",
+    "category": "Brave",
+    "name": "Search engines you've added",
+    "description": "Custom search shortcuts you've typed or added yourself. Brave's own built-in engines are left alone.",
+    "actions": [
+      { "type": "chrome.keywords", "path": "%LOCALAPPDATA%\\BraveSoftware\\Brave-Browser\\User Data\\*\\Web Data" }
+    ],
+    "is_safe": true,
+    "recommended": false
+  },
+  {
     "id": "brave_site_data",
     "category": "Brave",
     "name": "Site data",
@@ -191,6 +214,29 @@
     "recommended": false
   },
   {
+    "id": "chrome_autofill_suggestions",
+    "category": "Chrome",
+    "name": "Form-fill suggestions",
+    "description": "Text you've typed into web forms before, offered back as a suggestion. Does not touch saved addresses, cards or passwords -- see \"Autofill and form history\" for those.",
+    "actions": [
+      { "type": "chrome.autofill", "path": "%LOCALAPPDATA%\\Google\\Chrome\\User Data\\*\\Web Data" }
+    ],
+    "is_safe": false,
+    "risky": true,
+    "recommended": false
+  },
+  {
+    "id": "chrome_keywords",
+    "category": "Chrome",
+    "name": "Search engines you've added",
+    "description": "Custom search shortcuts you've typed or added yourself. Chrome's own built-in engines are left alone.",
+    "actions": [
+      { "type": "chrome.keywords", "path": "%LOCALAPPDATA%\\Google\\Chrome\\User Data\\*\\Web Data" }
+    ],
+    "is_safe": true,
+    "recommended": false
+  },
+  {
     "id": "chrome_site_data",
     "category": "Chrome",
     "name": "Site data",
@@ -290,6 +336,29 @@
     ],
     "is_safe": false,
     "risky": true,
+    "recommended": false
+  },
+  {
+    "id": "edge_autofill_suggestions",
+    "category": "Edge",
+    "name": "Form-fill suggestions",
+    "description": "Text you've typed into web forms before, offered back as a suggestion. Does not touch saved addresses, cards or passwords -- see \"Autofill and form history\" for those.",
+    "actions": [
+      { "type": "chrome.autofill", "path": "%LOCALAPPDATA%\\Microsoft\\Edge\\User Data\\*\\Web Data" }
+    ],
+    "is_safe": false,
+    "risky": true,
+    "recommended": false
+  },
+  {
+    "id": "edge_keywords",
+    "category": "Edge",
+    "name": "Search engines you've added",
+    "description": "Custom search shortcuts you've typed or added yourself. Edge's own built-in engines are left alone.",
+    "actions": [
+      { "type": "chrome.keywords", "path": "%LOCALAPPDATA%\\Microsoft\\Edge\\User Data\\*\\Web Data" }
+    ],
+    "is_safe": true,
     "recommended": false
   },
   {
