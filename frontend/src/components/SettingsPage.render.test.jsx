@@ -261,6 +261,7 @@ describe('the Uninstall tab', () => {
   it.each([
     ['Create a restore point before uninstalling', { restorePointBeforeUninstall: true }],
     ['Back up the registry before uninstalling', { registryBackupBeforeUninstall: true }],
+    ['Delete locked files on next restart', { deleteLockedFilesOnRestart: true }],
     ['Scan for leftovers after uninstalling', { scanLeftoversAfterUninstall: false }],
     ['Tick every leftover by default', { preselectLeftovers: false }],
     ['Keep an uninstall history', { keepUninstallHistory: false }]

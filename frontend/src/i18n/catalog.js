@@ -135,6 +135,10 @@ export const CATALOG = {
           title: 'Back up the registry before uninstalling',
           description: "Exports HKLM\\SOFTWARE and HKCU\\Software (about 140 MB on the machine Prune is built on) and keeps the newest 3. If the backup can't be made, the uninstall doesn't run."
         },
+        deleteLockedFiles: {
+          title: 'Delete locked files on next restart',
+          description: 'Files another program still has open are removed the next time you restart your computer, instead of only being reported as skipped. Needs administrator.'
+        },
         afterHeading: 'After uninstalling',
         scanLeftovers: {
           title: 'Scan for leftovers after uninstalling',
@@ -812,6 +816,10 @@ export const CATALOG = {
           title: 'Rugsteun die register voor deïnstallering',
           description: "Voer HKLM\\SOFTWARE en HKCU\\Software uit (omtrent 140 MB op die masjien waarop Prune gebou is) en hou die nuutste 3. As die rugsteun nie gemaak kan word nie, loop die deïnstallering nie."
         },
+        deleteLockedFiles: {
+          title: 'Verwyder gesluite lêers by die volgende herbegin',
+          description: "Lêers wat 'n ander program nog oophet, word verwyder wanneer jy jou rekenaar die volgende keer herbegin, in plaas daarvan om net as oorgeslaan aangemeld te word. Vereis administrateur."
+        },
         afterHeading: 'Na deïnstallering',
         scanLeftovers: {
           title: 'Skandeer vir oorblyfsels na deïnstallering',
@@ -1483,6 +1491,10 @@ export const CATALOG = {
         registryBackup: {
           title: 'نسخ السجل احتياطيًا قبل إلغاء التثبيت',
           description: 'يصدّر HKLM\\SOFTWARE و HKCU\\Software (حوالي 140 ميجابايت على الجهاز الذي تم بناء Prune عليه) ويحتفظ بأحدث 3 نسخ. إذا تعذر إنشاء النسخة الاحتياطية، فلن يتم تشغيل إلغاء التثبيت.'
+        },
+        deleteLockedFiles: {
+          title: 'حذف الملفات المقفلة عند إعادة التشغيل التالية',
+          description: 'يتم حذف الملفات التي لا يزال برنامج آخر يستخدمها في المرة التالية التي تعيد فيها تشغيل الكمبيوتر، بدلاً من مجرد الإبلاغ عن تخطيها. يتطلب صلاحيات المسؤول.'
         },
         afterHeading: 'بعد إلغاء التثبيت',
         scanLeftovers: {
@@ -2156,6 +2168,10 @@ export const CATALOG = {
           title: 'Fes còpia de seguretat del registre abans de desinstal·lar',
           description: "Exporta HKLM\\SOFTWARE i HKCU\\Software (uns 140 MB a la màquina on es construeix el Prune) i manté les 3 més recents. Si no es pot fer la còpia de seguretat, la desinstal·lació no s'executa."
         },
+        deleteLockedFiles: {
+          title: 'Suprimeix els fitxers bloquejats en el següent reinici',
+          description: "Els fitxers que un altre programa encara té oberts se suprimeixen la propera vegada que reinicies l'ordinador, en lloc de només informar que s'han omès. Necessita administrador."
+        },
         afterHeading: 'Després de desinstal·lar',
         scanLeftovers: {
           title: 'Cerca romanents després de desinstal·lar',
@@ -2827,6 +2843,10 @@ export const CATALOG = {
         registryBackup: {
           title: 'Zálohovat registr před odinstalací',
           description: 'Exportuje HKLM\\SOFTWARE a HKCU\\Software (asi 140 MB na počítači, na kterém je Prune sestaven) a ponechá nejnovější 3. Pokud se zálohu nepodaří vytvořit, odinstalace se nespustí.'
+        },
+        deleteLockedFiles: {
+          title: 'Odstranit uzamčené soubory při příštím restartu',
+          description: 'Soubory, které stále má otevřené jiný program, budou odstraněny při příštím restartu počítače, místo aby byly jen nahlášeny jako přeskočené. Vyžaduje administrátora.'
         },
         afterHeading: 'Po odinstalaci',
         scanLeftovers: {
@@ -3500,6 +3520,10 @@ export const CATALOG = {
           title: 'Cadw copi wrth gefn o\'r gofrestrfa cyn dadosod',
           description: "Yn allforio HKLM\\SOFTWARE a HKCU\\Software (tua 140 MB ar y peiriant y mae Prune wedi'i adeiladu arno) ac yn cadw'r 3 diweddaraf. Os na ellir gwneud y copi wrth gefn, ni fydd y dadosod yn rhedeg."
         },
+        deleteLockedFiles: {
+          title: "Dileu ffeiliau wedi'u cloi adeg yr ailgychwyn nesaf",
+          description: "Caiff ffeiliau y mae rhaglen arall yn dal i'w cadw ar agor eu dileu y tro nesaf y byddwch yn ailgychwyn eich cyfrifiadur, yn hytrach na chael eu hadrodd fel rhai a hepgorwyd yn unig. Angen gweinyddwr."
+        },
         afterHeading: 'Ar ôl dadosod',
         scanLeftovers: {
           title: 'Sganio am weddillion ar ôl dadosod',
@@ -4171,6 +4195,10 @@ export const CATALOG = {
         registryBackup: {
           title: 'Sikkerhedskopier registreringsdatabasen før afinstallation',
           description: 'Eksporterer HKLM\\SOFTWARE og HKCU\\Software (ca. 140 MB på den maskine, Prune er bygget på) og beholder de nyeste 3. Hvis sikkerhedskopien ikke kan oprettes, kører afinstallationen ikke.'
+        },
+        deleteLockedFiles: {
+          title: 'Slet låste filer ved næste genstart',
+          description: 'Filer, som et andet program stadig har åbne, fjernes næste gang du genstarter computeren, i stedet for kun at blive rapporteret som sprunget over. Kræver administrator.'
         },
         afterHeading: 'Efter afinstallation',
         scanLeftovers: {
@@ -4844,6 +4872,10 @@ export const CATALOG = {
           title: 'Registrierung vor der Deinstallation sichern',
           description: 'Exportiert HKLM\\SOFTWARE und HKCU\\Software (etwa 140 MB auf dem Rechner, auf dem Prune gebaut ist) und behält die neuesten 3. Wenn die Sicherung nicht erstellt werden kann, läuft die Deinstallation nicht.'
         },
+        deleteLockedFiles: {
+          title: 'Gesperrte Dateien beim nächsten Neustart löschen',
+          description: 'Dateien, die noch von einem anderen Programm geöffnet sind, werden beim nächsten Neustart des Computers entfernt, statt nur als übersprungen gemeldet zu werden. Erfordert Administratorrechte.'
+        },
         afterHeading: 'Nach der Deinstallation',
         scanLeftovers: {
           title: 'Nach der Deinstallation nach Überresten suchen',
@@ -5515,6 +5547,10 @@ export const CATALOG = {
         registryBackup: {
           title: 'Δημιουργία αντιγράφου ασφαλείας μητρώου πριν την απεγκατάσταση',
           description: 'Εξάγει τα HKLM\\SOFTWARE και HKCU\\Software (περίπου 140 MB στο μηχάνημα στο οποίο είναι χτισμένο το Prune) και κρατά τα 3 πιο πρόσφατα. Αν το αντίγραφο ασφαλείας δεν μπορεί να δημιουργηθεί, η απεγκατάσταση δεν εκτελείται.'
+        },
+        deleteLockedFiles: {
+          title: 'Διαγραφή κλειδωμένων αρχείων στην επόμενη επανεκκίνηση',
+          description: 'Τα αρχεία που εξακολουθεί να έχει ανοιχτά ένα άλλο πρόγραμμα διαγράφονται την επόμενη φορά που θα κάνετε επανεκκίνηση του υπολογιστή σας, αντί να αναφέρονται απλώς ως παραλειφθέντα. Απαιτεί δικαιώματα διαχειριστή.'
         },
         afterHeading: 'Μετά την απεγκατάσταση',
         scanLeftovers: {
@@ -6188,6 +6224,10 @@ export const CATALOG = {
           title: 'Respaldar el registro antes de desinstalar',
           description: 'Exporta HKLM\\SOFTWARE y HKCU\\Software (unos 140 MB en el equipo donde se compila Prune) y conserva los 3 más recientes. Si no se puede crear la copia de seguridad, la desinstalación no se ejecuta.'
         },
+        deleteLockedFiles: {
+          title: 'Eliminar archivos bloqueados en el próximo reinicio',
+          description: 'Los archivos que otro programa todavía tiene abiertos se eliminan la próxima vez que reinicias el equipo, en lugar de solo notificarse como omitidos. Necesita administrador.'
+        },
         afterHeading: 'Después de desinstalar',
         scanLeftovers: {
           title: 'Buscar restos después de desinstalar',
@@ -6859,6 +6899,10 @@ export const CATALOG = {
         registryBackup: {
           title: 'Varunda register enne desinstallimist',
           description: 'Ekspordib HKLM\\SOFTWARE ja HKCU\\Software (umbes 140 MB arvutis, kus Prune on ehitatud) ja hoiab uusimat 3. Kui varukoopiat ei saa luua, desinstallimist ei toimu.'
+        },
+        deleteLockedFiles: {
+          title: 'Kustuta lukustatud failid järgmisel taaskäivitusel',
+          description: 'Failid, mida mõni teine programm endiselt avatuna hoiab, kustutatakse järgmisel arvuti taaskäivitusel, selle asemel et neist lihtsalt vahelejäetuna teatada. Vajab administraatorit.'
         },
         afterHeading: 'Pärast desinstallimist',
         scanLeftovers: {
@@ -7532,6 +7576,10 @@ export const CATALOG = {
           title: 'Varmuuskopioi rekisteri ennen poistoa',
           description: 'Vie HKLM\\SOFTWARE- ja HKCU\\Software-avaimet (noin 140 Mt koneella, jolla Prune on koottu) ja säilyttää uusimmat 3. Jos varmuuskopiota ei voida luoda, poistoa ei suoriteta.'
         },
+        deleteLockedFiles: {
+          title: 'Poista lukitut tiedostot seuraavassa uudelleenkäynnistyksessä',
+          description: 'Tiedostot, jotka toinen ohjelma pitää yhä avoinna, poistetaan seuraavan kerran, kun käynnistät tietokoneen uudelleen, sen sijaan että ne vain ilmoitettaisiin ohitetuiksi. Vaatii järjestelmänvalvojan.'
+        },
         afterHeading: 'Poiston jälkeen',
         scanLeftovers: {
           title: 'Etsi jäänteitä poiston jälkeen',
@@ -8203,6 +8251,10 @@ export const CATALOG = {
         registryBackup: {
           title: 'Sauvegarder le registre avant la désinstallation',
           description: "Exporte HKLM\\SOFTWARE et HKCU\\Software (environ 140 Mo sur la machine où Prune est compilé) et conserve les 3 plus récentes. Si la sauvegarde ne peut pas être créée, la désinstallation ne s'exécute pas."
+        },
+        deleteLockedFiles: {
+          title: 'Supprimer les fichiers verrouillés au prochain redémarrage',
+          description: "Les fichiers qu'un autre programme a encore ouverts sont supprimés au prochain redémarrage de l'ordinateur, au lieu d'être seulement signalés comme ignorés. Nécessite les droits administrateur."
         },
         afterHeading: 'Après la désinstallation',
         scanLeftovers: {
@@ -8876,6 +8928,10 @@ export const CATALOG = {
           title: 'גבה את הרישום לפני ההסרה',
           description: 'מייצא את HKLM\\SOFTWARE ו-HKCU\\Software (כ-140 MB במחשב שבו Prune נבנה) ושומר את 3 העדכניים ביותר. אם לא ניתן ליצור את הגיבוי, ההסרה לא רצה.'
         },
+        deleteLockedFiles: {
+          title: 'מחיקת קבצים נעולים באתחול הבא',
+          description: 'קבצים שתוכנית אחרת עדיין מחזיקה פתוחים יימחקו בפעם הבאה שתפעיל מחדש את המחשב, במקום רק לדווח שהם דולגו. דורש הרשאת מנהל.'
+        },
         afterHeading: 'אחרי ההסרה',
         scanLeftovers: {
           title: 'סרוק שאריות אחרי ההסרה',
@@ -9547,6 +9603,10 @@ export const CATALOG = {
         registryBackup: {
           title: 'Rendszerleíró adatbázis biztonsági mentése eltávolítás előtt',
           description: 'Exportálja a HKLM\\SOFTWARE-t és a HKCU\\Software-t (kb. 140 MB azon a gépen, amelyen a Prune-t építik), és a legfrissebb 3-at megtartja. Ha a mentés nem hozható létre, az eltávolítás nem fut le.'
+        },
+        deleteLockedFiles: {
+          title: 'Zárolt fájlok törlése a következő újraindításkor',
+          description: 'A fájlokat, amelyeket még egy másik program tart nyitva, a számítógép következő újraindításakor törli a rendszer, ahelyett hogy csak kihagyottként jelentené őket. Rendszergazdai jogosultság szükséges.'
         },
         afterHeading: 'Eltávolítás után',
         scanLeftovers: {
@@ -10220,6 +10280,10 @@ export const CATALOG = {
           title: 'Cadangkan registri sebelum uninstal',
           description: 'Mengekspor HKLM\\SOFTWARE dan HKCU\\Software (sekitar 140 MB pada komputer tempat Prune dibangun) dan menyimpan 3 yang terbaru. Jika cadangan tidak dapat dibuat, uninstal tidak berjalan.'
         },
+        deleteLockedFiles: {
+          title: 'Hapus file terkunci saat mulai ulang berikutnya',
+          description: 'File yang masih dibuka oleh program lain akan dihapus saat berikutnya Anda memulai ulang komputer, bukan hanya dilaporkan sebagai dilewati. Memerlukan administrator.'
+        },
         afterHeading: 'Setelah uninstal',
         scanLeftovers: {
           title: 'Pindai sisa setelah uninstal',
@@ -10891,6 +10955,10 @@ export const CATALOG = {
         registryBackup: {
           title: 'Taka afrit af skráningargrunni áður en fjarlægt er',
           description: 'Flytur út HKLM\\SOFTWARE og HKCU\\Software (um 140 MB á vélinni sem Prune er byggt á) og geymir nýjustu 3. Ef ekki er hægt að búa til afritið keyrir fjarlægingin ekki.'
+        },
+        deleteLockedFiles: {
+          title: 'Eyða læstum skrám við næstu endurræsingu',
+          description: 'Skrár sem annað forrit hefur enn opnar eru fjarlægðar næst þegar þú endurræsir tölvuna, í stað þess að vera aðeins tilkynntar sem yfirsleppt. Krefst kerfisstjóra.'
         },
         afterHeading: 'Eftir fjarlægingu',
         scanLeftovers: {
@@ -11564,6 +11632,10 @@ export const CATALOG = {
           title: 'Backup del registro prima di disinstallare',
           description: "Esporta HKLM\\SOFTWARE e HKCU\\Software (circa 140 MB sul computer su cui è compilato Prune) e conserva i 3 più recenti. Se il backup non può essere creato, la disinstallazione non viene eseguita."
         },
+        deleteLockedFiles: {
+          title: 'Elimina i file bloccati al prossimo riavvio',
+          description: "I file che un altro programma ha ancora aperti vengono rimossi al prossimo riavvio del computer, invece di essere solo segnalati come saltati. Richiede l'amministratore."
+        },
         afterHeading: 'Dopo la disinstallazione',
         scanLeftovers: {
           title: 'Cerca residui dopo la disinstallazione',
@@ -12235,6 +12307,10 @@ export const CATALOG = {
         registryBackup: {
           title: 'アンインストール前にレジストリをバックアップ',
           description: 'HKLM\\SOFTWARE と HKCU\\Software をエクスポートし（Prune がビルドされているマシンで約140 MB）、最新の3つを保持します。バックアップを作成できない場合、アンインストールは実行されません。'
+        },
+        deleteLockedFiles: {
+          title: '次回の再起動時にロックされたファイルを削除',
+          description: '他のプログラムがまだ開いているファイルは、単にスキップしたと報告されるのではなく、次回コンピューターを再起動したときに削除されます。管理者権限が必要です。'
         },
         afterHeading: 'アンインストール後',
         scanLeftovers: {
@@ -12908,6 +12984,10 @@ export const CATALOG = {
           title: '제거 전 레지스트리 백업',
           description: 'HKLM\\SOFTWARE와 HKCU\\Software를 내보내고(Prune이 빌드되는 컴퓨터에서 약 140MB) 최신 3개를 보관합니다. 백업을 만들 수 없으면 제거가 실행되지 않습니다.'
         },
+        deleteLockedFiles: {
+          title: '다음 재부팅 시 잠긴 파일 삭제',
+          description: '다른 프로그램이 아직 열어 둔 파일은 건너뛴 것으로만 보고되는 대신, 다음에 컴퓨터를 다시 시작할 때 삭제됩니다. 관리자 권한이 필요합니다.'
+        },
         afterHeading: '제거 후',
         scanLeftovers: {
           title: '제거 후 남은 항목 검사',
@@ -13579,6 +13659,10 @@ export const CATALOG = {
         registryBackup: {
           title: 'Sukurti registro atsarginę kopiją prieš šalinant',
           description: 'Eksportuoja HKLM\\SOFTWARE ir HKCU\\Software (apie 140 MB kompiuteryje, kuriame kuriamas Prune) ir saugo 3 naujausias. Jei atsarginės kopijos sukurti nepavyksta, šalinimas nevykdomas.'
+        },
+        deleteLockedFiles: {
+          title: 'Ištrinti užrakintus failus per kitą paleidimą iš naujo',
+          description: 'Failai, kuriuos vis dar laiko atvertus kita programa, bus pašalinti kitą kartą paleidus kompiuterį iš naujo, o ne tik pažymėti kaip praleisti. Reikalingos administratoriaus teisės.'
         },
         afterHeading: 'Po šalinimo',
         scanLeftovers: {
@@ -14252,6 +14336,10 @@ export const CATALOG = {
           title: 'Sandarkan registri sebelum menyahpasang',
           description: 'Mengeksport HKLM\\SOFTWARE dan HKCU\\Software (kira-kira 140 MB pada komputer tempat Prune dibina) dan menyimpan 3 yang terbaharu. Jika sandaran tidak boleh dicipta, penyahpasangan tidak berjalan.'
         },
+        deleteLockedFiles: {
+          title: 'Padam fail terkunci pada mula semula seterusnya',
+          description: 'Fail yang masih dibuka oleh program lain akan dipadamkan pada kali seterusnya anda memulakan semula komputer, bukan hanya dilaporkan sebagai dilangkau. Memerlukan pentadbir.'
+        },
         afterHeading: 'Selepas menyahpasang',
         scanLeftovers: {
           title: 'Imbas baki selepas menyahpasang',
@@ -14923,6 +15011,10 @@ export const CATALOG = {
         registryBackup: {
           title: 'Sikkerhetskopier registeret før avinstallering',
           description: 'Eksporterer HKLM\\SOFTWARE og HKCU\\Software (ca. 140 MB på maskinen Prune er bygget på) og beholder de nyeste 3. Hvis sikkerhetskopien ikke kan lages, kjøres ikke avinstalleringen.'
+        },
+        deleteLockedFiles: {
+          title: 'Slett låste filer ved neste omstart',
+          description: 'Filer som et annet program fortsatt har åpne, fjernes neste gang du starter datamaskinen på nytt, i stedet for bare å bli rapportert som hoppet over. Krever administrator.'
         },
         afterHeading: 'Etter avinstallering',
         scanLeftovers: {
@@ -15596,6 +15688,10 @@ export const CATALOG = {
           title: 'Register back-uppen voor het verwijderen',
           description: "Exporteert HKLM\\SOFTWARE en HKCU\\Software (ongeveer 140 MB op de computer waarop Prune is gebouwd) en behoudt de nieuwste 3. Als de back-up niet kan worden gemaakt, wordt de verwijdering niet uitgevoerd."
         },
+        deleteLockedFiles: {
+          title: 'Vergrendelde bestanden verwijderen bij de volgende herstart',
+          description: "Bestanden die een ander programma nog open heeft, worden verwijderd de volgende keer dat je de computer herstart, in plaats van alleen als overgeslagen te worden gemeld. Vereist beheerder."
+        },
         afterHeading: 'Na het verwijderen',
         scanLeftovers: {
           title: 'Scannen op restanten na het verwijderen',
@@ -16267,6 +16363,10 @@ export const CATALOG = {
         registryBackup: {
           title: 'Utwórz kopię zapasową rejestru przed odinstalowaniem',
           description: 'Eksportuje HKLM\\SOFTWARE i HKCU\\Software (około 140 MB na komputerze, na którym zbudowano Prune) i przechowuje 3 najnowsze. Jeśli nie można utworzyć kopii zapasowej, odinstalowanie się nie uruchamia.'
+        },
+        deleteLockedFiles: {
+          title: 'Usuń zablokowane pliki przy następnym ponownym uruchomieniu',
+          description: 'Pliki, które nadal ma otwarte inny program, zostaną usunięte przy następnym ponownym uruchomieniu komputera, zamiast być jedynie zgłaszane jako pominięte. Wymaga uprawnień administratora.'
         },
         afterHeading: 'Po odinstalowaniu',
         scanLeftovers: {
@@ -16940,6 +17040,10 @@ export const CATALOG = {
           title: 'د لرې کولو دمخه رجسټری بیک اپ کول',
           description: 'HKLM\\SOFTWARE او HKCU\\Software صادروي (شاوخوا 140 MB په هغه ماشین چې Prune پرې جوړ شوی) او تازه ترین 3 ساتي. که بیک اپ جوړ نشي، لرې کول ندي چلیدلی.'
         },
+        deleteLockedFiles: {
+          title: 'په راتلونکي بیا پیل کې د بند شوو فایلونو حذف کول',
+          description: 'هغه فایلونه چې بله برنامه یې لاهم پرانیستي لري، ستاسو د کمپیوټر په راتلونکي بیا پیل کې به حذف شي، نه یوازې د پریښودل شوي په توګه راپور شي. اډمین ته اړتیا لري.'
+        },
         afterHeading: 'د لرې کولو وروسته',
         scanLeftovers: {
           title: 'د لرې کولو وروسته د پاتې شونو لپاره سکین کول',
@@ -17611,6 +17715,10 @@ export const CATALOG = {
         registryBackup: {
           title: 'Fazer backup do registro antes de desinstalar',
           description: 'Exporta HKLM\\SOFTWARE e HKCU\\Software (cerca de 140 MB na máquina onde o Prune é compilado) e mantém os 3 mais recentes. Se o backup não puder ser criado, a desinstalação não é executada.'
+        },
+        deleteLockedFiles: {
+          title: 'Excluir arquivos bloqueados na próxima reinicialização',
+          description: 'Arquivos que outro programa ainda mantém abertos são removidos na próxima vez que você reiniciar o computador, em vez de apenas serem relatados como ignorados. Requer administrador.'
         },
         afterHeading: 'Depois de desinstalar',
         scanLeftovers: {
@@ -18284,6 +18392,10 @@ export const CATALOG = {
           title: 'Fazer cópia de segurança do registo antes de desinstalar',
           description: 'Exporta HKLM\\SOFTWARE e HKCU\\Software (cerca de 140 MB na máquina onde o Prune é compilado) e mantém as 3 mais recentes. Se a cópia de segurança não puder ser criada, a desinstalação não é executada.'
         },
+        deleteLockedFiles: {
+          title: 'Eliminar ficheiros bloqueados no próximo reinício',
+          description: 'Os ficheiros que outro programa ainda mantém abertos são removidos da próxima vez que reiniciar o computador, em vez de serem apenas comunicados como ignorados. Requer administrador.'
+        },
         afterHeading: 'Depois de desinstalar',
         scanLeftovers: {
           title: 'Procurar resíduos depois de desinstalar',
@@ -18955,6 +19067,10 @@ export const CATALOG = {
         registryBackup: {
           title: 'Copiază de rezervă registrul înainte de dezinstalare',
           description: 'Exportă HKLM\\SOFTWARE și HKCU\\Software (aproximativ 140 MB pe calculatorul pe care este construit Prune) și păstrează cele mai recente 3. Dacă copia de rezervă nu poate fi creată, dezinstalarea nu rulează.'
+        },
+        deleteLockedFiles: {
+          title: 'Șterge fișierele blocate la următoarea repornire',
+          description: 'Fișierele pe care un alt program le mai are încă deschise sunt eliminate data viitoare când repornești calculatorul, în loc să fie doar raportate ca omise. Necesită administrator.'
         },
         afterHeading: 'După dezinstalare',
         scanLeftovers: {
@@ -19628,6 +19744,10 @@ export const CATALOG = {
           title: 'Резервировать реестр перед удалением',
           description: 'Экспортирует HKLM\\SOFTWARE и HKCU\\Software (около 140 МБ на компьютере, на котором собран Prune) и хранит 3 последних. Если резервную копию нельзя создать, удаление не выполняется.'
         },
+        deleteLockedFiles: {
+          title: 'Удалить заблокированные файлы при следующей перезагрузке',
+          description: 'Файлы, которые всё ещё открыты в другой программе, будут удалены при следующей перезагрузке компьютера, вместо того чтобы просто сообщаться как пропущенные. Требуются права администратора.'
+        },
         afterHeading: 'После удаления',
         scanLeftovers: {
           title: 'Сканировать остатки после удаления',
@@ -20299,6 +20419,10 @@ export const CATALOG = {
         registryBackup: {
           title: 'Zálohovať register pred odinštalovaním',
           description: 'Exportuje HKLM\\SOFTWARE a HKCU\\Software (asi 140 MB na počítači, na ktorom je Prune zostavený) a uchováva 3 najnovšie. Ak zálohu nemožno vytvoriť, odinštalovanie sa nespustí.'
+        },
+        deleteLockedFiles: {
+          title: 'Odstrániť uzamknuté súbory pri ďalšom reštarte',
+          description: 'Súbory, ktoré má stále otvorené iný program, sa odstránia pri ďalšom reštarte počítača namiesto toho, aby boli iba nahlásené ako preskočené. Vyžaduje administrátora.'
         },
         afterHeading: 'Po odinštalovaní',
         scanLeftovers: {
@@ -20972,6 +21096,10 @@ export const CATALOG = {
           title: 'Bëj kopje rezervë të regjistrit para çinstalimit',
           description: 'Eksporton HKLM\\SOFTWARE dhe HKCU\\Software (rreth 140 MB në makinën ku është ndërtuar Prune) dhe mban 3 më të fundit. Nëse kopja rezervë nuk mund të krijohet, çinstalimi nuk ekzekutohet.'
         },
+        deleteLockedFiles: {
+          title: 'Fshi skedarët e kyçur në rinisjen tjetër',
+          description: 'Skedarët që një program tjetër i mban ende të hapur hiqen herën tjetër që rinis kompjuterin, në vend që të raportohen thjesht si të anashkaluar. Kërkon administrator.'
+        },
         afterHeading: 'Pas çinstalimit',
         scanLeftovers: {
           title: 'Skano për mbetje pas çinstalimit',
@@ -21643,6 +21771,10 @@ export const CATALOG = {
         registryBackup: {
           title: 'Направи резервну копију регистра пре деинсталације',
           description: 'Извози HKLM\\SOFTWARE и HKCU\\Software (око 140 MB на рачунару на коме је Prune изграђен) и чува најновије 3. Ако резервна копија не може да се направи, деинсталација се не покреће.'
+        },
+        deleteLockedFiles: {
+          title: 'Обриши закључане датотеке при следећем поновном покретању',
+          description: 'Датотеке које други програм и даље држи отворене биће уклоњене следећи пут када поново покренете рачунар, уместо да буду само пријављене као прескочене. Захтева администратора.'
         },
         afterHeading: 'После деинсталације',
         scanLeftovers: {
@@ -22316,6 +22448,10 @@ export const CATALOG = {
           title: 'Säkerhetskopiera registret före avinstallation',
           description: 'Exporterar HKLM\\SOFTWARE och HKCU\\Software (cirka 140 MB på datorn Prune är byggd på) och behåller de 3 senaste. Om säkerhetskopian inte kan skapas körs inte avinstallationen.'
         },
+        deleteLockedFiles: {
+          title: 'Ta bort låsta filer vid nästa omstart',
+          description: 'Filer som ett annat program fortfarande har öppna tas bort nästa gång du startar om datorn, i stället för att bara rapporteras som överhoppade. Kräver administratör.'
+        },
         afterHeading: 'Efter avinstallation',
         scanLeftovers: {
           title: 'Sök efter kvarlevor efter avinstallation',
@@ -22987,6 +23123,10 @@ export const CATALOG = {
         registryBackup: {
           title: 'สำรองข้อมูลรีจิสทรีก่อนถอนการติดตั้ง',
           description: 'ส่งออก HKLM\\SOFTWARE และ HKCU\\Software (ประมาณ 140 MB บนเครื่องที่ Prune ถูกสร้างขึ้น) และเก็บ 3 รายการล่าสุด หากไม่สามารถสร้างข้อมูลสำรองได้ การถอนการติดตั้งจะไม่ทำงาน'
+        },
+        deleteLockedFiles: {
+          title: 'ลบไฟล์ที่ถูกล็อกเมื่อรีสตาร์ทครั้งถัดไป',
+          description: 'ไฟล์ที่โปรแกรมอื่นยังคงเปิดค้างไว้จะถูกลบในครั้งถัดไปที่คุณรีสตาร์ทคอมพิวเตอร์ แทนที่จะแค่รายงานว่าถูกข้ามไปเท่านั้น ต้องใช้สิทธิ์ผู้ดูแลระบบ'
         },
         afterHeading: 'หลังถอนการติดตั้ง',
         scanLeftovers: {
@@ -23660,6 +23800,10 @@ export const CATALOG = {
           title: 'Kaldırmadan önce kayıt defterini yedekle',
           description: 'HKLM\\SOFTWARE ve HKCU\\Software\'ı dışa aktarır (Prune\'un derlendiği makinede yaklaşık 140 MB) ve en yeni 3\'ünü tutar. Yedekleme oluşturulamazsa, kaldırma çalışmaz.'
         },
+        deleteLockedFiles: {
+          title: 'Sonraki yeniden başlatmada kilitli dosyaları sil',
+          description: 'Başka bir programın hâlâ açık tuttuğu dosyalar, yalnızca atlandı olarak bildirilmek yerine, bilgisayarınızı bir sonraki yeniden başlatışınızda kaldırılır. Yönetici gerektirir.'
+        },
         afterHeading: 'Kaldırdıktan sonra',
         scanLeftovers: {
           title: 'Kaldırdıktan sonra artıkları tara',
@@ -24331,6 +24475,10 @@ export const CATALOG = {
         registryBackup: {
           title: 'Резервувати реєстр перед видаленням',
           description: 'Експортує HKLM\\SOFTWARE та HKCU\\Software (близько 140 МБ на комп\'ютері, на якому зібрано Prune) і зберігає 3 найновіші. Якщо резервну копію неможливо створити, видалення не виконується.'
+        },
+        deleteLockedFiles: {
+          title: 'Видалити заблоковані файли під час наступного перезавантаження',
+          description: 'Файли, які досі відкриті в іншій програмі, буде видалено під час наступного перезавантаження комп\'ютера, замість того щоб їх просто повідомляли як пропущені. Потрібні права адміністратора.'
         },
         afterHeading: 'Після видалення',
         scanLeftovers: {
@@ -25004,6 +25152,10 @@ export const CATALOG = {
           title: 'Sao lưu registry trước khi gỡ cài đặt',
           description: 'Xuất HKLM\\SOFTWARE và HKCU\\Software (khoảng 140 MB trên máy nơi Prune được xây dựng) và giữ 3 bản mới nhất. Nếu không thể tạo bản sao lưu, quá trình gỡ cài đặt sẽ không chạy.'
         },
+        deleteLockedFiles: {
+          title: 'Xóa các tệp bị khóa vào lần khởi động lại tiếp theo',
+          description: 'Các tệp mà một chương trình khác vẫn đang mở sẽ được xóa vào lần tiếp theo bạn khởi động lại máy tính, thay vì chỉ được báo cáo là đã bỏ qua. Cần quyền quản trị viên.'
+        },
         afterHeading: 'Sau khi gỡ cài đặt',
         scanLeftovers: {
           title: 'Quét tìm phần còn sót lại sau khi gỡ cài đặt',
@@ -25676,6 +25828,10 @@ export const CATALOG = {
           title: '卸载前备份注册表',
           description: '导出 HKLM\\SOFTWARE 和 HKCU\\Software（在构建 Prune 的机器上约 140 MB），并保留最新的 3 个。如果无法创建备份，卸载将不会运行。'
         },
+        deleteLockedFiles: {
+          title: '在下次重启时删除被锁定的文件',
+          description: '仍被其他程序占用的文件将在您下次重启计算机时被删除，而不仅仅是报告为已跳过。需要管理员权限。'
+        },
         afterHeading: '卸载之后',
         scanLeftovers: {
           title: '卸载后扫描残留',
@@ -26347,6 +26503,10 @@ export const CATALOG = {
         registryBackup: {
           title: '解除安裝前備份登錄檔',
           description: '匯出 HKLM\\SOFTWARE 和 HKCU\\Software（在建置 Prune 的機器上約 140 MB），並保留最新的 3 個。如果無法建立備份，解除安裝將不會執行。'
+        },
+        deleteLockedFiles: {
+          title: '在下次重新啟動時刪除被鎖定的檔案',
+          description: '仍被其他程式佔用的檔案將在您下次重新啟動電腦時刪除，而不僅僅是回報為已略過。需要系統管理員權限。'
         },
         afterHeading: '解除安裝之後',
         scanLeftovers: {
