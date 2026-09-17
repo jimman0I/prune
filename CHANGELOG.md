@@ -3,6 +3,23 @@
 All notable changes to Prune (formerly named unrevo -- rebranded 2026-09-01,
 see v1.0.1 below) are documented here.
 
+## v2.6.1
+
+Fixes an update-checker bug from 2.6.0 that could get stuck nagging
+forever with no way to clear it.
+
+### Fixed
+
+- **The update-checker could get stuck offering an update that was
+  already installed.** Two separate files track Prune's own version --
+  one that electron-updater bakes into the installed app, and a second
+  one Settings and the update-checker actually read -- and 2.6.0 only
+  bumped the first. Anyone who installed 2.6.0 kept seeing an "update
+  available" banner for a version they already had, and clicking it
+  always failed with "GitHub is offering nothing newer than this
+  version." The two are now kept in sync, and a check catches it before
+  a future release can make the same mistake.
+
 ## v2.6.0
 
 Deep Clean's cleaning engine rebuilt to match BleachBit's own real
