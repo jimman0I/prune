@@ -587,8 +587,11 @@ body::before {
   transform-box: fill-box;
   transform-origin: center;
   animation: cell-in 320ms var(--ease-out-expo) both;
-  transition: opacity 140ms ease-out;
+  transition: opacity 140ms ease-out, transform 100ms cubic-bezier(0.2, 0.9, 0.3, 1);
 }
+/* Click press, drillable cells only -- an unscanned or aggregate block
+   does nothing on click and should not claim otherwise. */
+.treemap-cells .treemap-cell--clickable:active { transform: scale(0.96); }
 /* Deep Clean's scan and clean logs: each line arrives while the panel is
    already on screen, one every few hundred milliseconds for up to 74
    rules -- an append, never a re-render of what is already there, so this
@@ -803,6 +806,56 @@ body::after {
 .lift:hover {
   transform: translateY(-3px);
   box-shadow: var(--shadow-raised);
+}
+
+/* Press feedback, app-wide, for every button that is not already one of
+   the three named button classes -- table sort headers, breadcrumbs, tab
+   toggles, the footer's text-styled actions, context menu rows. Those
+   three already declare their own hover AND active states; this gives
+   the rest of the app the same acknowledgment on click rather than
+   nothing at all. Checkboxes are excluded (role="checkbox") because they
+   get their own scale-based press just below -- a shrink reads as a tick
+   being pressed, where this translateY reads as depressing a raised
+   surface, and the two would fight on the same control. */
+button:not(.btn-primary):not(.btn-ghost):not(.btn-danger):not([role="checkbox"]) {
+  transition: color 160ms ease, background-color 160ms ease, border-color 160ms ease,
+              transform 120ms cubic-bezier(0.2, 0.9, 0.3, 1);
+}
+button:not(.btn-primary):not(.btn-ghost):not(.btn-danger):not([role="checkbox"]):active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+/* The same acknowledgment for a control drawn as a checkbox rather than a
+   button -- Deep Clean's own tri-state boxes (role="checkbox", excluded
+   above) and the native input this app draws everywhere else. */
+input[type="checkbox"].prune-check,
+[role="checkbox"] {
+  transition: background-color 140ms ease, border-color 140ms ease,
+              transform 100ms cubic-bezier(0.2, 0.9, 0.3, 1);
+}
+input[type="checkbox"].prune-check:active:not(:disabled),
+[role="checkbox"]:active:not(:disabled) {
+  transform: scale(0.86);
+}
+
+/* The row a scan or a clean is reading right now (see activeId in
+   DeepCleanTree.jsx). This replaces a generic Tailwind `animate-pulse`
+   (an opacity breathe used everywhere for "loading", meaning nothing in
+   particular) with a sweep that reads specifically as "being read" --
+   the same job Disk Map's own pulse-ring already does for its wait,
+   authored for this row rather than borrowed from a skeleton. Layered as
+   a background-image over the row's own background-color tint, which is
+   a different CSS property and composites with it rather than replacing
+   it. */
+@keyframes row-scan {
+  0% { background-position: -60% 0; }
+  100% { background-position: 160% 0; }
+}
+.row-processing {
+  background-image: linear-gradient(90deg, transparent, var(--accent-primary-soft), transparent);
+  background-size: 55% 100%;
+  background-repeat: no-repeat;
+  animation: row-scan 1.5s ease-in-out infinite;
 }
 
 /* Reduced motion, for everything above.
