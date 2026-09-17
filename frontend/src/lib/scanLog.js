@@ -112,6 +112,23 @@ export function executeLogLine(item) {
     return { label, detail: 'already empty', tone: 'muted' };
   }
 
+  // `edited` is set iff executeRule ran a json action for this rule --
+  // freedBytes here came from removing one key from a JSON file, not
+  // from deleting the file itself. Same "ran, but might not have
+  // succeeded" caveat vacuumed carries: a held/failed edit still sets
+  // edited, so this follows the identical freedBytes -> skipped -> empty
+  // fallthrough rather than an unconditional "success" label.
+  if (item.edited) {
+    const label = `Trim ${item.name ?? item.id}`;
+    if (item.freedBytes > 0) {
+      return { label, detail: formatBytes(item.freedBytes), tone: 'size' };
+    }
+    if (item.skipped?.length > 0) {
+      return { label, detail: `${item.skipped.length} skipped`, tone: 'warning' };
+    }
+    return { label, detail: 'already empty', tone: 'muted' };
+  }
+
   const verb = item.recycled ? 'Recycle' : 'Delete';
   const label = `${verb} ${item.name ?? item.id}`;
 

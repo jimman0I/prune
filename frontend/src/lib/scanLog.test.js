@@ -129,6 +129,24 @@ describe('executeLogLine', () => {
     const line = executeLogLine({ id: 'x', name: 'X Recent Files', freedBytes: 0, registryKeysRemoved: 0, skipped: [] });
     expect(line).toEqual({ label: 'Clear X Recent Files', detail: 'already absent', tone: 'muted' });
   });
+
+  it('says "Trim", not "Delete" or "Compact", for a json-edit result', () => {
+    const line = executeLogLine({ id: 'x', name: 'X Preferences', freedBytes: 512, skipped: [], edited: true });
+    expect(line).toEqual({ label: 'Trim X Preferences', detail: '512 B', tone: 'size' });
+  });
+
+  it('reports a json-edit that removed a key but freed nothing measurable as empty, not silently 0 B', () => {
+    const line = executeLogLine({ id: 'x', name: 'X Preferences', freedBytes: 0, skipped: [], edited: true });
+    expect(line).toEqual({ label: 'Trim X Preferences', detail: 'already empty', tone: 'muted' });
+  });
+
+  it('does not collapse a skipped/failed json edit into a fake success', () => {
+    const line = executeLogLine({
+      id: 'x', name: 'X Preferences', freedBytes: 0, edited: true,
+      skipped: [{ path: 'prefs.json', reason: 'not valid JSON' }]
+    });
+    expect(line).toEqual({ label: 'Trim X Preferences', detail: '1 skipped', tone: 'warning' });
+  });
 });
 
 describe('mergeScannedRule over a pre-listed tree', () => {
