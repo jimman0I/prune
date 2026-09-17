@@ -462,6 +462,57 @@ describe('quarantineFileEdit', () => {
   });
 });
 
+describe('quarantineFileEdit with editFn', () => {
+  it('backs up the original, then hands the real path to editFn to mutate however it wants', async () => {
+    const filePath = join(scratchDir, 'data.bin');
+    await writeFile(filePath, Buffer.from([0x01, 0x02, 0x03, 0x04]));
+
+    const manifest = await quarantineFileEdit({
+      programName: 'Test',
+      filePath,
+      editFn: async (realPath) => {
+        // Simulates an external tool mutating the real file directly --
+        // a plain binary overwrite here, standing in for sqlite3.exe.
+        await writeFile(realPath, Buffer.from([0xff]));
+      }
+    });
+
+    expect(await readFile(filePath)).toEqual(Buffer.from([0xff]));
+    expect(manifest.files).toHaveLength(1);
+    expect(await readFile(manifest.files[0].quarantinedPath)).toEqual(Buffer.from([0x01, 0x02, 0x03, 0x04]));
+  });
+
+  it('restoreQuarantine recovers the pre-edit original after an editFn mutation', async () => {
+    const filePath = join(scratchDir, 'data.bin');
+    await writeFile(filePath, Buffer.from([0xaa, 0xbb]));
+
+    const manifest = await quarantineFileEdit({
+      programName: 'Test', filePath,
+      editFn: async (realPath) => { await writeFile(realPath, Buffer.from([0x00])); }
+    });
+    expect(await readFile(filePath)).toEqual(Buffer.from([0x00]));
+
+    await restoreQuarantine(manifest.batchDir);
+
+    expect(await readFile(filePath)).toEqual(Buffer.from([0xaa, 0xbb]));
+  });
+
+  it('throws a clear error if called with neither newContent nor editFn', async () => {
+    const filePath = join(scratchDir, 'data.bin');
+    await writeFile(filePath, 'x');
+
+    await expect(quarantineFileEdit({ programName: 'Test', filePath })).rejects.toThrow(/newContent.*editFn|editFn.*newContent/i);
+  });
+
+  it('existing newContent mode is completely unaffected', async () => {
+    const filePath = join(scratchDir, 'prefs.json');
+    await writeFile(filePath, '{"a":1,"b":2}', 'utf8');
+    const manifest = await quarantineFileEdit({ programName: 'Test', filePath, newContent: '{"a":1}' });
+    expect(await readFile(filePath, 'utf8')).toBe('{"a":1}');
+    expect(await readFile(manifest.files[0].quarantinedPath, 'utf8')).toBe('{"a":1,"b":2}');
+  });
+});
+
 describe('emptyQuarantine', () => {
   it('permanently removes every batch under quarantineRoot() and sums their sizes', async () => {
     const a = join(scratchDir, 'a.txt');
