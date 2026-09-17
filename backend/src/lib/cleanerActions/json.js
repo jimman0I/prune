@@ -20,22 +20,37 @@ function heldReason(expandedPath, mtimeMs, guards) {
 }
 
 /** Scans a `json` action: does the BleachBit-style `address` genuinely
- * resolve inside the file right now? Never throws -- a missing file, an
- * unreadable file, or invalid JSON all just mean `present: false`, the
- * same "absence is not an error" contract sqlite.vacuum's scan follows
- * for a missing database file. Uses `readFileSync`, not `require()` --
- * this module is ESM like every other file in cleanerActions/. */
+ * resolve inside the file right now? A missing file, an unreadable file,
+ * or invalid JSON all just mean `present: false`, the same "absence is
+ * not an error" contract sqlite.vacuum's scan follows for a missing
+ * database file. Uses `readFileSync`, not `require()` -- this module is
+ * ESM like every other file in cleanerActions/.
+ *
+ * A missing `action.address`, though, IS thrown -- that's not a state a
+ * real file can be in, it's a malformed rule, and `execute()` throws the
+ * same error for the same input (see its own comment for why this must
+ * match rather than the two silently disagreeing). */
 export function scan(action) {
+  if (!action.address) {
+    throw new Error(`json action for ${action.expandedPath} is missing 'address'`);
+  }
   if (!existsSync(action.expandedPath)) {
     return { sizeBytes: 0, present: false };
   }
   const sizeBytes = statSync(action.expandedPath).size;
+  let parsed;
   try {
-    const parsed = JSON.parse(readFileSync(action.expandedPath, 'utf8'));
-    return { sizeBytes, present: resolveAddress(parsed, action.address) !== null };
+    parsed = JSON.parse(readFileSync(action.expandedPath, 'utf8'));
   } catch {
+    // Narrowly scoped to the read/parse: "the file isn't valid JSON" is
+    // the only thing this catch is for. A missing `address` is a rule-
+    // authoring mistake, not a malformed-file condition, and must not be
+    // swallowed here the way it used to be when resolveAddress() ran
+    // inside this same try -- that let `address: undefined` throw a
+    // TypeError that got silently reported as `present: false` forever.
     return { sizeBytes, present: false };
   }
+  return { sizeBytes, present: resolveAddress(parsed, action.address) !== null };
 }
 
 /** Executes a `json` action: deletes the one key `address` names from the
@@ -53,8 +68,20 @@ export function scan(action) {
  * sqlite.vacuum -- this action can genuinely quarantine the original
  * (unlike an in-place VACUUM, there's a clean "before" to save), so
  * `autoQuarantine: false` sends that original to the Recycle Bin instead
- * of Prune's own quarantine store. */
+ * of Prune's own quarantine store.
+ *
+ * A missing `action.address` is the one thing this throws for instead of
+ * reporting: `resolveAddress()` does `address.split('/')`, which throws
+ * its own confusing TypeError on `undefined` -- this raises a clear one
+ * up front instead, and matches what `scan()` now throws for the exact
+ * same malformed rule (previously scan() silently swallowed that same
+ * TypeError inside its JSON.parse try/catch and reported `present:
+ * false` forever, while execute() let the raw TypeError escape -- two
+ * different, both-wrong behaviors for one rule-authoring mistake). */
 export async function execute(action, ruleName, guards = {}) {
+  if (!action.address) {
+    throw new Error(`json action for ${action.expandedPath} is missing 'address'`);
+  }
   if (!existsSync(action.expandedPath)) {
     return { freedBytes: 0, skipped: [] };
   }
