@@ -613,12 +613,6 @@ ode.js" is a folder or a file type.
                     checked={isOnlyIfTrue('registryBackupBeforeUninstall')}
                     onChange={() => save({ registryBackupBeforeUninstall: !isOnlyIfTrue('registryBackupBeforeUninstall') })}
                   />
-                  <SettingRow
-                    title={t('settings.uninstallTab.deleteLockedFiles.title')}
-                    description={t('settings.uninstallTab.deleteLockedFiles.description')}
-                    checked={isOnlyIfTrue('deleteLockedFilesOnRestart')}
-                    onChange={() => save({ deleteLockedFilesOnRestart: !isOnlyIfTrue('deleteLockedFilesOnRestart') })}
-                  />
                 </div>
               </div>
 
@@ -636,6 +630,12 @@ ode.js" is a folder or a file type.
                     description={t('settings.uninstallTab.preselect.description')}
                     checked={isOn('preselectLeftovers')}
                     onChange={() => save({ preselectLeftovers: !isOn('preselectLeftovers') })}
+                  />
+                  <SettingRow
+                    title={t('settings.uninstallTab.deleteLockedFiles.title')}
+                    description={t('settings.uninstallTab.deleteLockedFiles.description')}
+                    checked={isOnlyIfTrue('deleteLockedFilesOnRestart')}
+                    onChange={() => save({ deleteLockedFilesOnRestart: !isOnlyIfTrue('deleteLockedFilesOnRestart') })}
                   />
                   <SettingRow
                     title={t('settings.uninstallTab.keepHistory.title')}
