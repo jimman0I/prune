@@ -53,12 +53,11 @@ export function loadCleanerRules() {
 /** Gives every rule an `actions` array, synthesizing one from the legacy
  * `paths`/`command` shape when a rule doesn't already have one -- so every
  * rule in cleaners.json keeps working with ZERO data migration, and a new
- * rule can be written directly in the richer shape. This is additive only:
- * nothing reads `rule.actions` yet. Once a later task (Task 7) wires this
- * into `scanRule`/`executeRule` so THEY read `rule.actions` instead of
- * `rule.paths`/`rule.command` directly, adding a new action type
- * (sqlite.vacuum, winreg) becomes a matter of adding a new case to a
- * dispatcher, not touching every rule already written.
+ * rule can be written directly in the richer shape. `scanRule`/`executeRule`
+ * below both call this and iterate `normalized.actions`, never `rule.paths`/
+ * `rule.command` directly -- that's what makes adding a new action type
+ * (sqlite.vacuum, winreg, and eventually json/cookie) a matter of adding a
+ * new case to their dispatch, not touching every rule already written.
  *
  * A rule with none of `actions`/`command`/`paths` is malformed -- throwing
  * here, naming the rule, is deliberate: better a clear failure at the one
