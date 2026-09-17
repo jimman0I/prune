@@ -54,7 +54,10 @@ router.post('/remove', async (req, res) => {
     const restorePoint = settings.createRestorePoint === false
       ? { created: false, reason: 'turned off in Settings' }
       : await tryCreateRestorePoint(`Prune: forced removal of ${programName}`);
-    const manifest = await removeLeftovers({ programName, files: files || [], registryKeys: registryKeys || [], destination });
+    const manifest = await removeLeftovers({
+      programName, files: files || [], registryKeys: registryKeys || [], destination,
+      deleteLockedFilesOnRestart: settings.deleteLockedFilesOnRestart === true
+    });
     // The moment the quarantine grows is the moment it can exceed what
     // the user allowed it to hold, so the limits are applied here rather
     // than only on a timer. Awaited, and reported: something the user
