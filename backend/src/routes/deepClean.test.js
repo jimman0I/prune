@@ -46,6 +46,11 @@ vi.mock('../services/settings.js', () => ({
   updateSettings: async (p) => p
 }));
 
+const listCookieDomains = vi.fn(async () => ({ domains: [{ domain: 'example.com', count: 3 }], errors: [] }));
+vi.mock('../lib/cleanerActions/cookieDomains.js', () => ({
+  listCookieDomains: (...a) => listCookieDomains(...a)
+}));
+
 let server;
 beforeAll(async () => { server = await startTestServer(); });
 afterAll(async () => { await server.close(); });
@@ -171,6 +176,21 @@ describe('GET /deep-clean/rules', () => {
     const items = res.body.categories.flatMap((c) => c.items);
     expect(items.find((i) => i.id === 'temp').present).toBe(true);
     expect(items.filter((i) => i.present === false).length).toBe(items.length - 1);
+  });
+});
+
+describe('GET /deep-clean/cookie-domains', () => {
+  it('returns whatever listCookieDomains resolves, verbatim', async () => {
+    const res = await server.call('/deep-clean/cookie-domains');
+    expect(res.status).toBe(200);
+    expect(res.body).toEqual({ domains: [{ domain: 'example.com', count: 3 }], errors: [] });
+  });
+
+  it('responds 500 with the error message if the scan throws', async () => {
+    listCookieDomains.mockRejectedValueOnce(new Error('sqlite3.exe not found'));
+    const res = await server.call('/deep-clean/cookie-domains');
+    expect(res.status).toBe(500);
+    expect(res.body.error).toBe('sqlite3.exe not found');
   });
 });
 
