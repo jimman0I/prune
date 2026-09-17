@@ -3,6 +3,61 @@
 All notable changes to Prune (formerly named unrevo -- rebranded 2026-09-01,
 see v1.0.1 below) are documented here.
 
+## v2.6.0
+
+Deep Clean's cleaning engine rebuilt to match BleachBit's own real
+behavior instead of always deleting the whole file, plus a Disk Map
+freeze fixed, a locked-file uninstall gap closed, and Deep Clean's
+input/output redesigned around BleachBit's own layout.
+
+### Added
+
+- **A real cleaning engine, not just whole-file deletes.** Deep Clean's
+  rules can now target exactly what BleachBit itself targets instead of
+  removing an entire file: a database gets `VACUUM`ed to reclaim space
+  with zero data loss (`sqlite.vacuum`), a single registry key is removed
+  cleanly (`winreg`), one key comes out of a JSON preferences file while
+  the rest survives (`json`), and cookies/history/autofill/search-engine
+  entries are edited in place rather than deleted wholesale. Every edit
+  is quarantined first, same as everything else Deep Clean touches --
+  nothing here breaks the "put it back" promise.
+- **Chrome, Brave and Edge's history and cookie rules now use the new
+  engine.** Clearing history keeps a bookmarked site's own entry instead
+  of forgetting it the moment you visit it again; a future "sites to stay
+  signed into" list (not yet in Settings) will use the same mechanism
+  cookies already have, with today's default behavior unchanged.
+- **Two new rules per browser**: "Search engines you've added" (clears
+  custom search shortcuts, leaves Chrome/Brave/Edge's own built-in ones
+  alone) and "Form-fill suggestions" (clears typed-before form
+  suggestions specifically, without touching saved addresses, cards or
+  passwords the way the existing "Autofill and form history" rule does).
+- **Delete locked files on next restart** (Settings → Uninstall, off by
+  default, needs administrator): a leftover file another program still
+  has open is scheduled for deletion the next time you restart, instead
+  of only being reported as skipped.
+- Deep Clean's tree now matches BleachBit's own row layout (checkbox at
+  the right edge of each row, not the left), and starting a Clean
+  narrows the list to a live receipt of exactly what's being processed
+  while the output panel takes the rest of the screen -- what you were
+  browsing shrinks to what you're actually doing.
+
+### Fixed
+
+- **Disk Map could freeze the whole app** on a drive with a very large
+  number of files -- confirmed on this machine's own C: drive at over
+  three million files. The size/extension/largest-files calculations
+  now run on a background thread instead of blocking the window.
+- Minimize-to-tray now defaults to off: closing the window quits Prune,
+  matching what most people expect from an X button.
+- A hardcoded rule could report League of Legends present on a machine
+  that never had it installed, if Windows wasn't on the C: drive.
+
+### Changed
+
+- Deep Clean's scan output now streams live during an actual clean, not
+  just during Preview -- the row being worked on highlights, and Stop
+  replaces Cancel once a clean is running.
+
 ## v2.5.1
 
 The installer's language dialog now actually reaches the app on an
