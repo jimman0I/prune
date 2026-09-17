@@ -10,7 +10,11 @@ import { sqlite3ExePath } from './sqliteVacuum.js';
 const execFileAsync = promisify(execFile);
 
 async function makeChromiumCookieDb(filePath, rows) {
-  const values = rows.map(({ host }) => `('${host}', 'name', 'value')`).join(',');
+  // `value` defaults to a short placeholder for every existing caller, but
+  // can be overridden per-row -- the real-VACUUM-shrink test below needs
+  // enough real bytes in the table that DELETE + VACUUM produces a
+  // measurable size reduction, not just a row-count change.
+  const values = rows.map(({ host, value = 'value' }) => `('${host}', 'name', '${value}')`).join(',');
   const sql = `CREATE TABLE cookies (host_key TEXT, name TEXT, value TEXT); INSERT INTO cookies (host_key, name, value) VALUES ${values};`;
   await execFileAsync(sqlite3ExePath(), [filePath, sql]);
 }
@@ -98,6 +102,31 @@ describe('cookie execute -- surgical row delete (Chromium schema)', () => {
     const quarantinedFile = batchFiles.find((f) => f.startsWith('file-0-'));
     expect(await readFile(join(result.quarantineBatch, quarantinedFile))).toEqual(originalBytes);
     expect(result.freedBytes).toBeGreaterThanOrEqual(0);
+  });
+});
+
+describe('cookie execute -- surgical row delete really shrinks the file', () => {
+  it('produces a measurable size reduction once DELETE + VACUUM reclaim the freed pages, not just a no-op Math.max(0, ...) floor', async () => {
+    const filePath = join(scratchDir, 'Cookies');
+    // 30 rows x ~600 bytes of real payload each (~18KB of row data,
+    // several SQLite pages at the default 4096-byte page size) so that
+    // dropping all but one row and running VACUUM has real freed pages to
+    // reclaim -- a handful of tiny rows can fit on a single page and would
+    // shrink by 0 bytes even if VACUUM silently did nothing.
+    const padding = 'x'.repeat(600);
+    const bulkRows = Array.from({ length: 30 }, (_, i) => ({
+      host: i === 0 ? 'example.com' : `dropped-${i}.com`,
+      value: padding
+    }));
+    await makeChromiumCookieDb(filePath, bulkRows);
+    const before = (await stat(filePath)).size;
+
+    const result = await execute({ expandedPath: filePath }, 'Test Rule', { cookieKeepList: ['example.com'] });
+
+    const after = (await stat(filePath)).size;
+    expect(after).toBeLessThan(before);
+    expect(result.freedBytes).toBeGreaterThan(0);
+    expect(result.freedBytes).toBe(before - after);
   });
 });
 
