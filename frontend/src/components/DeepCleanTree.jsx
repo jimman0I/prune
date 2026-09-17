@@ -74,19 +74,26 @@ function Checkbox({ state, onChange, label, size = 16 }) {
  * Only the middle one actually means "nothing to clean". Prefetch is the
  * everyday example of the third: it routinely holds hundreds of MB and
  * reads as empty to an unelevated process. */
+/* The three answer branches below carry `log-line-in` -- the same fade
+ * this file's scan log already uses for an arriving line -- so the
+ * moment THIS row's real result streams in reads as an arrival, not a
+ * silent swap. Paired with the `key` at the call site (item.sizeBytes ===
+ * null vs not), which remounts this span exactly once, when the answer
+ * first lands, and never again while the value it already has just sits
+ * there. The bare dash gets no animation: nothing has arrived yet. */
 function SizeLabel({ item }) {
   const { t } = useLanguage();
   if (item.sizeBytes === null) {
     return <span className="font-mono text-[11px] shrink-0 text-[color:var(--text-muted)]">—</span>;
   }
   if (item.accessible === false) {
-    return <span className="font-mono text-[11px] shrink-0 text-[color:var(--warning)]">{t('deepClean.tree.needsAdmin')}</span>;
+    return <span className="log-line-in font-mono text-[11px] shrink-0 text-[color:var(--warning)]">{t('deepClean.tree.needsAdmin')}</span>;
   }
   if (item.present === false) {
-    return <span className="font-mono text-[11px] shrink-0 text-[color:var(--text-muted)]">{t('deepClean.tree.notInstalled')}</span>;
+    return <span className="log-line-in font-mono text-[11px] shrink-0 text-[color:var(--text-muted)]">{t('deepClean.tree.notInstalled')}</span>;
   }
   return (
-    <span className={`font-mono text-[11px] shrink-0 ${item.sizeBytes ? 'text-[color:var(--text-secondary)]' : 'text-[color:var(--text-muted)]'}`}>
+    <span className={`log-line-in font-mono text-[11px] shrink-0 ${item.sizeBytes ? 'text-[color:var(--text-secondary)]' : 'text-[color:var(--text-muted)]'}`}>
       {formatBytes(item.sizeBytes)}
     </span>
   );
@@ -209,7 +216,7 @@ function CategorySection({ category, items, iconSrc, selected, onToggle, onToggl
                 // decoration bolted onto a card, not as the row itself
                 // being highlighted.
                 item.id === activeId
-                  ? 'bg-[color:var(--accent-primary)]/[0.08] animate-pulse'
+                  ? 'bg-[color:var(--accent-primary)]/[0.08] row-processing'
                   : ''
               }`}
             >
@@ -245,13 +252,13 @@ function CategorySection({ category, items, iconSrc, selected, onToggle, onToggl
                   someone tick something that loses data before the app has
                   said so. */}
               {measured && item.description && (
-                <span className="text-[11px] text-[color:var(--text-muted)] truncate min-w-0 flex-1">
+                <span className="log-line-in text-[11px] text-[color:var(--text-muted)] truncate min-w-0 flex-1">
                   {item.description}
                 </span>
               )}
               {!(measured && item.description) && <span className="flex-1" />}
 
-              <SizeLabel item={item} />
+              <SizeLabel key={item.sizeBytes === null ? 'pending' : 'measured'} item={item} />
 
               <Checkbox
                 state={selected.has(item.id) ? 'all' : 'none'}

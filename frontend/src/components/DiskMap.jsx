@@ -158,7 +158,7 @@ function TreemapCell({ x, y, width, height, depth, name, size, type, scanned, ag
 
   return (
     <g
-      className="treemap-cell"
+      className={`treemap-cell${canDrillDown ? ' treemap-cell--clickable' : ''}`}
       // ONE style prop. There were briefly two -- an animationDelay added
       // beside the existing cursor -- and JSX silently keeps the last, so
       // the stagger was dropped and every cell revealed at once. It looked
@@ -300,8 +300,13 @@ function ExtensionPanel({ breakdown, shown, icons, typeColors }) {
             {/* The bar carries the comparison; the number carries the
                 fact. Sharing one row keeps both readable at a glance. */}
             <div className="flex-1 h-[6px] rounded-full bg-[color:var(--surface-hover)] overflow-hidden min-w-0">
+              {/* Grows in rather than snapping to width: the breakdown is
+                  computed off the main thread (useDiskMapAggregates) and
+                  can land a moment after the row itself first paints at
+                  0.6% -- the growth is the process resolving, not
+                  decoration on a value that was already final. */}
               <div
-                className="h-full rounded-full"
+                className="h-full rounded-full transition-[width] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
                 style={{
                   width: `${Math.max(row.percent, 0.6)}%`,
                   background: row.extension === NO_EXTENSION ? NO_EXTENSION_COLOR : colorForExtension(row.extension, typeColors)

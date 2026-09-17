@@ -280,7 +280,7 @@ describe('the clean-in-progress output', () => {
     act(() => { onEventRef('rule', { id: 'thumbs', name: 'Thumbnail cache', freedBytes: 10, skipped: [] }); });
 
     const row = (await screen.findByText('Thumbnail cache')).closest('div');
-    expect(row.className).toMatch(/animate-pulse/);
+    expect(row.className).toMatch(/row-processing/);
   });
 });
 
