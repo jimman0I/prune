@@ -6,7 +6,10 @@ import * as fsPromises from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { quarantineAndDelete, restoreQuarantine, deletePermanently, emptyQuarantine } from './quarantine.js';
+import {
+  quarantineAndDelete, restoreQuarantine, deletePermanently, emptyQuarantine,
+  listQuarantineBatches, quarantineFileEdit
+} from './quarantine.js';
 import { readPendingOperations, PENDING_KEY, PENDING_VALUE } from './pendingReboot.js';
 import * as pendingReboot from './pendingReboot.js';
 
@@ -397,6 +400,53 @@ describe('deletePermanently', () => {
   it('handles an already-missing batch directory without throwing', async () => {
     const result = await deletePermanently(join(scratchDir, 'never-existed'));
     expect(result.deleted).toBe(false);
+  });
+});
+
+describe('quarantineFileEdit', () => {
+  it('preserves the original file bytes in the quarantine batch and writes the new content to the original path', async () => {
+    const filePath = join(scratchDir, 'prefs.json');
+    await writeFile(filePath, '{"a":1,"b":2}', 'utf8');
+
+    const manifest = await quarantineFileEdit({
+      programName: 'Test', filePath, newContent: '{"a":1}'
+    });
+
+    // The original path now holds the NEW content.
+    expect(await readFile(filePath, 'utf8')).toBe('{"a":1}');
+
+    // The manifest's one file entry points at a real copy of the
+    // ORIGINAL bytes, matching quarantineAndDelete's own manifest shape
+    // exactly -- same field names, so the existing Quarantine UI and
+    // restore/list/delete functions work on this with no changes.
+    expect(manifest.files).toHaveLength(1);
+    expect(manifest.files[0].originalPath).toBe(filePath);
+    expect(await readFile(manifest.files[0].quarantinedPath, 'utf8')).toBe('{"a":1,"b":2}');
+    expect(manifest.totalSizeBytes).toBe(Buffer.byteLength('{"a":1,"b":2}'));
+  });
+
+  it('restoreQuarantine puts the ORIGINAL content back, overwriting the edited file', async () => {
+    const filePath = join(scratchDir, 'prefs.json');
+    await writeFile(filePath, '{"a":1,"b":2}', 'utf8');
+
+    const manifest = await quarantineFileEdit({
+      programName: 'Test', filePath, newContent: '{"a":1}'
+    });
+    expect(await readFile(filePath, 'utf8')).toBe('{"a":1}'); // sanity: edit landed
+
+    await restoreQuarantine(manifest.batchDir);
+
+    expect(await readFile(filePath, 'utf8')).toBe('{"a":1,"b":2}');
+  });
+
+  it('a batch made this way appears in listQuarantineBatches, unchanged code path', async () => {
+    const filePath = join(scratchDir, 'prefs.json');
+    await writeFile(filePath, '{"a":1}', 'utf8');
+
+    const manifest = await quarantineFileEdit({ programName: 'Test', filePath, newContent: '{}' });
+
+    const batches = await listQuarantineBatches();
+    expect(batches.some((b) => b.batchDir === manifest.batchDir)).toBe(true);
   });
 });
 
