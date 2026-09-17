@@ -687,6 +687,57 @@ describe('actions-array rules', () => {
   });
 });
 
+describe('json action, wired', () => {
+  it('scans a json-only rule, reporting the file size as sizeBytes and present correctly', async () => {
+    const filePath = join(appDataDir, 'Preferences');
+    await writeFile(filePath, JSON.stringify({ sync: { enabled: true } }));
+
+    const rule = { id: 'json-scan', category: 'Test', name: 'JSON scan test', actions: [{ type: 'json', path: '%APPDATA%\\Preferences', address: 'sync' }] };
+
+    const result = scanRule(rule);
+
+    expect(result.sizeBytes).toBeGreaterThan(0);
+    expect(result.present).toBe(true);
+  });
+
+  it('executes a json-only rule, removing the key and quarantining the original', async () => {
+    const filePath = join(appDataDir, 'Preferences');
+    await writeFile(filePath, JSON.stringify({ sync: { enabled: true }, keep: 1 }));
+
+    const rule = { id: 'json-exec', category: 'Test', name: 'JSON exec test', actions: [{ type: 'json', path: '%APPDATA%\\Preferences', address: 'sync' }] };
+
+    const result = await executeRule(rule);
+
+    expect(result.freedBytes).toBeGreaterThan(0);
+    const after = JSON.parse(await (await import('node:fs/promises')).readFile(filePath, 'utf8'));
+    expect(after.sync).toBeUndefined();
+    expect(after.keep).toBe(1);
+  });
+
+  it('sums freedBytes across a delete action AND a json action under one rule', async () => {
+    const dir1 = join(appDataDir, 'mixed-json', 'cache');
+    await mkdir(dir1, { recursive: true });
+    await writeFile(join(dir1, 'a.bin'), '12345'); // 5 bytes
+
+    const filePath = join(appDataDir, 'mixed-json', 'Preferences');
+    await writeFile(filePath, JSON.stringify({
+      dns_prefetching: { host_referral_list: Array.from({ length: 100 }, (_, i) => `h${i}.example.com`) }
+    }));
+
+    const rule = {
+      id: 'mixed-json', category: 'Test', name: 'Mixed rule',
+      actions: [
+        { type: 'delete', paths: ['%APPDATA%\\mixed-json\\cache'] },
+        { type: 'json', path: '%APPDATA%\\mixed-json\\Preferences', address: 'dns_prefetching/host_referral_list' }
+      ]
+    };
+
+    const result = await executeRule(rule);
+
+    expect(result.freedBytes).toBeGreaterThan(5); // the 5-byte file, plus a real JSON size reduction
+  });
+});
+
 describe('expandPath tokens', () => {
   // A token expandPath does not know stays in the string verbatim, so the
   // path never matches and the rule reports "not installed" rather than
