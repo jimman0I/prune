@@ -790,6 +790,23 @@ describe('cookie action, wired', () => {
     expect(existsSync(filePath)).toBe(true);
     expect(typeof result.freedBytes).toBe('number');
     expect(Number.isFinite(result.freedBytes)).toBe(true);
+    // quarantineBatch alone doesn't distinguish the surgical-edit branch
+    // from the whole-file-delete branch (both set it) -- combined with the
+    // file-still-existing check above, it does: only the surgical path
+    // quarantines an edit while leaving the real file in place.
+    expect(result.quarantineBatch).toBeTruthy();
+    // The real, load-bearing proof: re-query the actual database via the
+    // bundled sqlite3.exe CLI, same pattern cookie.test.js's own surgical-
+    // edit tests already use -- the kept domain's row must have survived
+    // and the non-kept domain's row must be gone, not just "some file
+    // still exists with some byte count".
+    const { execFile } = await import('node:child_process');
+    const { promisify } = await import('node:util');
+    const execFileAsync = promisify(execFile);
+    const remaining = await execFileAsync(sqliteVacuum.sqlite3ExePath(), [filePath, 'SELECT host_key FROM cookies ORDER BY host_key;']);
+    const remainingHosts = remaining.stdout.trim().split(/\r?\n/).filter(Boolean);
+    expect(remainingHosts).toEqual(['example.com']);
+    expect(remainingHosts).not.toContain('other.com');
   });
 });
 
