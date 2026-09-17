@@ -4,6 +4,7 @@ import { classifyExclusion } from '../lib/exclusionInput.js';
 import { positiveOrOff } from '../lib/limitInput.js';
 import AutomationSettings from './AutomationSettings.jsx';
 import ThemeToggle from './ThemeToggle.jsx';
+import CookieKeepListSettings from './CookieKeepListSettings.jsx';
 import { useSettings, useUpdateCheck } from '../hooks/useSystemQueries.js';
 import { leftoverDestinationFrom } from '../lib/leftoverDestination.js';
 import { useLanguage, LANGUAGES } from '../i18n/LanguageContext.jsx';
@@ -561,6 +562,8 @@ ode.js" is a folder or a file type.
                   </div>
                 )}
               </div>
+
+              <CookieKeepListSettings settings={settings} save={save} />
 
               <div className="glass-panel p-6">
                 <div className="text-[14px] font-medium text-[color:var(--text-primary)] mb-1">{t('settings.sandboxTest.title')}</div>
