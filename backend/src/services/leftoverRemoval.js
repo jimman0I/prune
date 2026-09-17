@@ -106,9 +106,9 @@ async function pathSize(path) {
 /** Removes an uninstall's leftovers to the chosen destination. Reports
  * rather than throws, like quarantineAndDelete: one locked file is a
  * partial success with a name attached, not a failure of the whole run. */
-export async function removeLeftovers({ programName, files = [], registryKeys = [], destination = 'quarantine' }) {
+export async function removeLeftovers({ programName, files = [], registryKeys = [], destination = 'quarantine', deleteLockedFilesOnRestart = false }) {
   if (destination === 'quarantine') {
-    return { ...(await quarantineAndDelete({ programName, files, registryKeys })), destination };
+    return { ...(await quarantineAndDelete({ programName, files, registryKeys, deleteLockedFilesOnRestart })), destination };
   }
 
   const removed = [];
