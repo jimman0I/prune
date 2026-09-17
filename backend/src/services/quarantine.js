@@ -4,6 +4,7 @@ import { join, basename } from 'node:path';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import { isProtectedKey } from './registryLeftovers.js';
+import { schedulePendingDelete } from './pendingReboot.js';
 
 const execFileAsync = promisify(execFile);
 
@@ -67,12 +68,13 @@ function toRegistryTarget(entry) {
  * A key that fails to export/delete (already gone, access denied) is
  * skipped rather than aborting the whole batch — same
  * partial-results-over-total-failure philosophy as the leftover scanner. */
-export async function quarantineAndDelete({ programName, files, registryKeys }) {
+export async function quarantineAndDelete({ programName, files, registryKeys, deleteLockedFilesOnRestart = false }) {
   const batchDir = join(quarantineRoot(), `${Date.now()}-${safeSegment(programName)}`);
   await mkdir(batchDir, { recursive: true });
 
   const movedFiles = [];
   const failedFiles = [];
+  const scheduledForReboot = [];
   for (const filePath of files) {
     if (!existsSync(filePath)) continue;
     try {
@@ -90,6 +92,19 @@ export async function quarantineAndDelete({ programName, files, registryKeys }) 
       // few lines down already follows. Recorded, not swallowed: a caller
       // that only reads `files` would report a clean batch while a file is
       // still sitting exactly where it was.
+      if (deleteLockedFilesOnRestart) {
+        try {
+          await schedulePendingDelete(filePath);
+          scheduledForReboot.push(filePath);
+          continue;
+        } catch (scheduleErr) {
+          // Scheduling itself failed (not elevated, key genuinely
+          // unwritable) -- falls through to the ordinary failed-file
+          // report below rather than losing the failure silently.
+          failedFiles.push({ path: filePath, reason: scheduleErr.message });
+          continue;
+        }
+      }
       failedFiles.push({ path: filePath, reason: err.message });
     }
   }
@@ -136,7 +151,8 @@ export async function quarantineAndDelete({ programName, files, registryKeys }) 
 
   const manifest = {
     programName, createdAt: Date.now(), batchDir,
-    files: movedFiles, failedFiles, registryKeys: exportedKeys, failedRegistryKeys: failedKeys, regFiles,
+    files: movedFiles, failedFiles, scheduledForReboot,
+    registryKeys: exportedKeys, failedRegistryKeys: failedKeys, regFiles,
     totalSizeBytes: movedFiles.reduce((sum, f) => sum + f.sizeBytes, 0)
   };
   await writeFile(join(batchDir, 'manifest.json'), JSON.stringify(manifest, null, 2), 'utf8');
