@@ -51,6 +51,14 @@ vi.mock('../lib/cleanerActions/cookieDomains.js', () => ({
   listCookieDomains: (...a) => listCookieDomains(...a)
 }));
 
+const listInstalledPrograms = vi.fn(async () => [
+  { id: 'league', name: 'League of Legends' },
+  { id: 'steam', name: 'Steam' }
+]);
+vi.mock('../services/programs.js', () => ({
+  listInstalledPrograms: (...a) => listInstalledPrograms(...a)
+}));
+
 let server;
 beforeAll(async () => { server = await startTestServer(); });
 afterAll(async () => { await server.close(); });
@@ -191,6 +199,32 @@ describe('GET /deep-clean/cookie-domains', () => {
     const res = await server.call('/deep-clean/cookie-domains');
     expect(res.status).toBe(500);
     expect(res.body.error).toBe('sqlite3.exe not found');
+  });
+});
+
+describe('the real installed-programs list feeds every scan route', () => {
+  it('GET /rules calls rulePathsExist with installedProgramNames built from the real list', async () => {
+    await server.call('/deep-clean/rules');
+    expect(listInstalledPrograms).toHaveBeenCalled();
+    const guardsArg = rulePathsExist.mock.calls[0][1];
+    expect(guardsArg.installedProgramNames.has('league of legends')).toBe(true);
+    expect(guardsArg.installedProgramNames.has('steam')).toBe(true);
+    expect(guardsArg.installedProgramNames.has('epic games launcher')).toBe(false);
+  });
+
+  it('GET /scan calls scanAllRules with installedProgramNames merged into the existing guards', async () => {
+    await server.call('/deep-clean/scan');
+    const guardsArg = scanAllRules.mock.calls[0][0];
+    expect(guardsArg.excludeFolders).toEqual(['C:\\Keep']); // the existing settings-derived guard, untouched
+    expect(guardsArg.installedProgramNames.has('steam')).toBe(true);
+  });
+
+  it('GET /scan/stream calls scanRulesProgressively with installedProgramNames merged into the existing guards', async () => {
+    const res = await server.call('/deep-clean/scan/stream');
+    void res; // the route streams; reaching here without throwing is enough to prove the guards were built
+    const guardsArg = scanRulesProgressively.mock.calls[0][1];
+    expect(guardsArg.excludeFolders).toEqual(['C:\\Keep']);
+    expect(guardsArg.installedProgramNames.has('league of legends')).toBe(true);
   });
 });
 

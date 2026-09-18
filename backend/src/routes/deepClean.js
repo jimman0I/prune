@@ -3,6 +3,7 @@ import { scanAllRules, executeRules, executeRulesProgressively, scanRulesProgres
 import { getSettings, cleanGuardsFrom } from '../services/settings.js';
 import { getCleanerCategoryIcons } from '../services/cleanerCategoryIcons.js';
 import { listCookieDomains } from '../lib/cleanerActions/cookieDomains.js';
+import { listInstalledPrograms } from '../services/programs.js';
 
 const router = Router();
 
@@ -11,6 +12,18 @@ function sendEvent(res, event, data) {
 data: ${JSON.stringify(data)}
 
 `);
+}
+
+/** The real installed-programs list, reduced to a lowercased name Set --
+ * fetched once per scan request (not once per rule) and threaded into
+ * `guards` the same way `cleanGuardsFrom`'s own fields already are, so
+ * `scanRule`/`rulePathsExist` can gate a game/launcher rule's
+ * `requiresProgram` field against real registry data instead of trusting
+ * a bare folder-exists check. See cleanerRules.js's own requiresProgram
+ * gate for why this exists. */
+async function installedProgramNames() {
+  const programs = await listInstalledPrograms();
+  return new Set(programs.map((p) => p.name.toLowerCase()));
 }
 
 /** The same scan as GET /scan, streamed a rule at a time.
@@ -42,7 +55,7 @@ router.get('/scan/stream', async (req, res) => {
     sendEvent(res, 'start', { total: rules.length });
     const summary = await scanRulesProgressively(
       (item) => sendEvent(res, 'rule', item),
-      { signal: controller.signal, ...cleanGuardsFrom(await getSettings()) }
+      { signal: controller.signal, ...cleanGuardsFrom(await getSettings()), installedProgramNames: await installedProgramNames() }
     );
     if (!controller.signal.aborted) sendEvent(res, 'done', summary);
   } catch (err) {
@@ -64,8 +77,9 @@ router.get('/scan/stream', async (req, res) => {
  * Every rule reports sizeBytes: null, which the tree already renders as a
  * dash. That is the honest state: not measured, as opposed to measured
  * and empty. */
-router.get('/rules', (req, res) => {
+router.get('/rules', async (req, res) => {
   try {
+    const guards = { installedProgramNames: await installedProgramNames() };
     const grouped = [];
     for (const rule of loadCleanerRules()) {
       // `present` is computed here, cheaply, even though sizeBytes is
@@ -80,7 +94,7 @@ router.get('/rules', (req, res) => {
       // Firefox, Opera and Vivaldi to someone who has none of them, and
       // the setting looked broken. Six of the 29 categories on this
       // machine are for software that is not installed.
-      const item = { ...rule, sizeBytes: null, fileCount: null, present: rulePathsExist(rule) };
+      const item = { ...rule, sizeBytes: null, fileCount: null, present: rulePathsExist(rule, guards) };
       const group = grouped.find((g) => g.category === rule.category);
       if (group) group.items.push(item);
       else grouped.push({ category: rule.category, items: [item] });
@@ -116,7 +130,9 @@ router.get('/cookie-domains', async (req, res) => {
 
 router.get('/scan', async (req, res) => {
   try {
-    res.json({ categories: scanAllRules(cleanGuardsFrom(await getSettings())) });
+    res.json({
+      categories: scanAllRules({ ...cleanGuardsFrom(await getSettings()), installedProgramNames: await installedProgramNames() })
+    });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
