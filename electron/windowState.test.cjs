@@ -3,7 +3,7 @@ const assert = require('node:assert/strict');
 const { mkdtemp, rm, writeFile } = require('node:fs/promises');
 const { tmpdir } = require('node:os');
 const path = require('node:path');
-const { resolveWindowState, loadWindowState, saveWindowState } = require('./windowState.cjs');
+const { resolveWindowState, loadWindowState, saveWindowState, saveWindowStateSync } = require('./windowState.cjs');
 
 const DEFAULT_BOUNDS = { width: 1280, height: 860 };
 
@@ -62,6 +62,18 @@ test('loadWindowState / saveWindowState -- round-trips through a real file', asy
 
     const state = { width: 1400, height: 900, x: 50, y: 50, isMaximized: false };
     await saveWindowState(filePath, state);
+    assert.deepEqual(await loadWindowState(filePath), state);
+  } finally {
+    await rm(dir, { recursive: true, force: true });
+  }
+});
+
+test('saveWindowStateSync -- round-trips through a real file, synchronously', async () => {
+  const dir = await mkdtemp(path.join(tmpdir(), 'prune-window-state-test-'));
+  const filePath = path.join(dir, 'window-state.json');
+  try {
+    const state = { width: 1200, height: 800, x: 20, y: 20, isMaximized: true };
+    saveWindowStateSync(filePath, state);
     assert.deepEqual(await loadWindowState(filePath), state);
   } finally {
     await rm(dir, { recursive: true, force: true });
