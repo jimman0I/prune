@@ -8,6 +8,7 @@ import {
   expandPath,
   loadCleanerRules,
   scanRule,
+  rulePathsExist,
   scanAllRules,
   executeRule,
   executeRules,
@@ -197,6 +198,87 @@ describe('scanRule', () => {
     const result = scanRule(rule);
     expect(result.sizeBytes).toBeNull();
     expect(result.fileCount).toBeNull();
+  });
+});
+
+describe('scanRule -- requiresProgram gate', () => {
+  it('reports present:false and 0 bytes when the required program is not in guards.installedProgramNames, even though the folder genuinely exists', async () => {
+    const dir = join(appDataDir, 'some-game', 'Logs');
+    await mkdir(dir, { recursive: true });
+    await writeFile(join(dir, 'game.log'), '12345'); // 5 real bytes, would normally count
+
+    const rule = { id: 'some_game_logs', paths: ['%APPDATA%\\some-game\\Logs'], requiresProgram: 'Some Game' };
+    const result = scanRule(rule, { installedProgramNames: new Set(['other program']) });
+
+    expect(result.present).toBe(false);
+    expect(result.sizeBytes).toBe(0);
+    expect(result.fileCount).toBe(0);
+  });
+
+  it('scans normally when the required program IS in guards.installedProgramNames', async () => {
+    const dir = join(appDataDir, 'some-game', 'Logs');
+    await mkdir(dir, { recursive: true });
+    await writeFile(join(dir, 'game.log'), '12345'); // 5 real bytes
+
+    const rule = { id: 'some_game_logs', paths: ['%APPDATA%\\some-game\\Logs'], requiresProgram: 'Some Game' };
+    const result = scanRule(rule, { installedProgramNames: new Set(['some game']) });
+
+    expect(result.present).toBe(true);
+    expect(result.sizeBytes).toBe(5);
+  });
+
+  it('matches case-insensitively', async () => {
+    const dir = join(appDataDir, 'some-game', 'Logs');
+    await mkdir(dir, { recursive: true });
+    await writeFile(join(dir, 'game.log'), '12345');
+
+    const rule = { id: 'some_game_logs', paths: ['%APPDATA%\\some-game\\Logs'], requiresProgram: 'Some Game' };
+    const result = scanRule(rule, { installedProgramNames: new Set(['SOME GAME']) });
+
+    expect(result.present).toBe(true);
+  });
+
+  it('is unaffected by requiresProgram when guards.installedProgramNames is not provided at all', async () => {
+    // scanAllRules() with no guards, and every other existing caller that
+    // never heard of this feature, must keep working exactly as before.
+    const dir = join(appDataDir, 'some-game', 'Logs');
+    await mkdir(dir, { recursive: true });
+    await writeFile(join(dir, 'game.log'), '12345');
+
+    const rule = { id: 'some_game_logs', paths: ['%APPDATA%\\some-game\\Logs'] }; // no requiresProgram at all
+    const result = scanRule(rule);
+
+    expect(result.present).toBe(true);
+    expect(result.sizeBytes).toBe(5);
+  });
+});
+
+describe('rulePathsExist -- requiresProgram gate', () => {
+  it('returns false when the required program is not installed, even though the folder exists', async () => {
+    const dir = join(appDataDir, 'some-game', 'Logs');
+    await mkdir(dir, { recursive: true });
+    await writeFile(join(dir, 'game.log'), '12345');
+
+    const rule = { id: 'some_game_logs', paths: ['%APPDATA%\\some-game\\Logs'], requiresProgram: 'Some Game' };
+    expect(rulePathsExist(rule, { installedProgramNames: new Set(['other program']) })).toBe(false);
+  });
+
+  it('returns true when the required program is installed', async () => {
+    const dir = join(appDataDir, 'some-game', 'Logs');
+    await mkdir(dir, { recursive: true });
+    await writeFile(join(dir, 'game.log'), '12345');
+
+    const rule = { id: 'some_game_logs', paths: ['%APPDATA%\\some-game\\Logs'], requiresProgram: 'Some Game' };
+    expect(rulePathsExist(rule, { installedProgramNames: new Set(['some game']) })).toBe(true);
+  });
+
+  it('still works for a rule with no requiresProgram and no guards at all, exactly as before', async () => {
+    const dir = join(appDataDir, 'plain-app', 'Cache');
+    await mkdir(dir, { recursive: true });
+    await writeFile(join(dir, 'x'), '1');
+
+    const rule = { id: 'plain_app_cache', paths: ['%APPDATA%\\plain-app\\Cache'] };
+    expect(rulePathsExist(rule)).toBe(true);
   });
 });
 
