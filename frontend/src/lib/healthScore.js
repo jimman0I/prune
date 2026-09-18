@@ -41,10 +41,10 @@ function storageComponent(diskSpace) {
     return null;
   }
   const freePercent = (diskSpace.freeBytes / diskSpace.totalBytes) * 100;
-  return clamp01(
+  return Math.round(clamp01(
     (freePercent - STORAGE_ZERO_CREDIT_FREE_PERCENT) /
       (STORAGE_FULL_CREDIT_FREE_PERCENT - STORAGE_ZERO_CREDIT_FREE_PERCENT)
-  ) * 100;
+  ) * 100);
 }
 
 /** brokenCount is always a real number (Dashboard.jsx computes it
