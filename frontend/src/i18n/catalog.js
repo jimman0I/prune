@@ -209,6 +209,11 @@ export const CATALOG = {
         missed: (count) => `${count} scheduled ${count === 1 ? 'run was' : 'runs were'} missed while this PC was off`,
         due: 'A scheduled run is due'
       },
+      systemHealth: {
+        title: 'System Health',
+        breakdownLine: (drive, storage, apps, errors) => `Drive ${drive} · Storage ${storage} · Apps ${apps} · Errors ${errors}`,
+        driveDetailHeading: 'Drive detail'
+      },
       driveHealth: {
         title: 'Drive Health',
         error: (message) => `Couldn't read drive health: ${message}`,
@@ -902,6 +907,11 @@ export const CATALOG = {
       scheduleBadge: {
         missed: (count) => `${count} geskeduleerde ${count === 1 ? 'loop' : 'lopies'} is gemis terwyl hierdie rekenaar af was`,
         due: "'n Geskeduleerde loop is nou nodig"
+      },
+      systemHealth: {
+        title: 'Stelselgesondheid',
+        breakdownLine: (drive, storage, apps, errors) => `Skyf ${drive} · Berging ${storage} · Toepassings ${apps} · Foute ${errors}`,
+        driveDetailHeading: 'Skyfbesonderhede'
       },
       driveHealth: {
         title: 'Skyfgesondheid',
@@ -1597,6 +1607,11 @@ export const CATALOG = {
         missed: (count) => `تم تفويت ${count} ${count === 1 ? 'تشغيل مجدول' : 'عمليات تشغيل مجدولة'} أثناء إغلاق هذا الجهاز`,
         due: 'حان موعد تشغيل مجدول'
       },
+      systemHealth: {
+        title: 'صحة النظام',
+        breakdownLine: (drive, storage, apps, errors) => `القرص ${drive} · التخزين ${storage} · التطبيقات ${apps} · الأخطاء ${errors}`,
+        driveDetailHeading: 'تفاصيل القرص'
+      },
       driveHealth: {
         title: 'صحة القرص',
         error: (message) => `تعذرت قراءة صحة القرص: ${message}`,
@@ -2290,6 +2305,11 @@ export const CATALOG = {
       scheduleBadge: {
         missed: (count) => `${count} ${count === 1 ? 'execució programada' : 'execucions programades'} s'${count === 1 ? 'ha' : 'han'} perdut mentre aquest PC estava apagat`,
         due: 'Toca una execució programada'
+      },
+      systemHealth: {
+        title: 'Salut del sistema',
+        breakdownLine: (drive, storage, apps, errors) => `Disc ${drive} · Emmagatzematge ${storage} · Aplicacions ${apps} · Errors ${errors}`,
+        driveDetailHeading: 'Detall del disc'
       },
       driveHealth: {
         title: 'Salut del disc',
@@ -2985,6 +3005,11 @@ export const CATALOG = {
         missed: (count) => `${count} ${count === 1 ? 'naplánované spuštění bylo' : 'naplánovaná spuštění byla'} zmeškáno, protože počítač byl vypnutý`,
         due: 'Naplánované spuštění je splatné'
       },
+      systemHealth: {
+        title: 'Stav systému',
+        breakdownLine: (drive, storage, apps, errors) => `Disk ${drive} · Úložiště ${storage} · Aplikace ${apps} · Chyby ${errors}`,
+        driveDetailHeading: 'Podrobnosti o disku'
+      },
       driveHealth: {
         title: 'Stav disku',
         error: (message) => `Stav disku se nepodařilo načíst: ${message}`,
@@ -3678,6 +3703,11 @@ export const CATALOG = {
       scheduleBadge: {
         missed: (count) => `Collwyd ${count} rhediad ${count === 1 ? 'a drefnwyd' : 'wedi\'u trefnu'} tra roedd y cyfrifiadur hwn i ffwrdd`,
         due: 'Mae rhediad a drefnwyd yn ddyledus'
+      },
+      systemHealth: {
+        title: 'Iechyd y System',
+        breakdownLine: (drive, storage, apps, errors) => `Disg ${drive} · Storfa ${storage} · Rhaglenni ${apps} · Gwallau ${errors}`,
+        driveDetailHeading: 'Manylion y Ddisg'
       },
       driveHealth: {
         title: 'Iechyd y Ddisg',
@@ -4373,6 +4403,11 @@ export const CATALOG = {
         missed: (count) => `${count} planlagt${count === 1 ? '' : 'e'} kørsel${count === 1 ? '' : 'er'} blev sprunget over, mens pc'en var slukket`,
         due: 'En planlagt kørsel er forfalden'
       },
+      systemHealth: {
+        title: 'Systemets tilstand',
+        breakdownLine: (drive, storage, apps, errors) => `Disk ${drive} · Lagerplads ${storage} · Programmer ${apps} · Fejl ${errors}`,
+        driveDetailHeading: 'Diskdetaljer'
+      },
       driveHealth: {
         title: 'Diskens tilstand',
         error: (message) => `Kunne ikke læse diskens tilstand: ${message}`,
@@ -5066,6 +5101,11 @@ export const CATALOG = {
       scheduleBadge: {
         missed: (count) => `${count} geplante${count === 1 ? 'r Lauf wurde' : ' Läufe wurden'} verpasst, während dieser PC aus war`,
         due: 'Ein geplanter Lauf steht an'
+      },
+      systemHealth: {
+        title: 'Systemstatus',
+        breakdownLine: (drive, storage, apps, errors) => `Laufwerk ${drive} · Speicher ${storage} · Programme ${apps} · Fehler ${errors}`,
+        driveDetailHeading: 'Laufwerksdetails'
       },
       driveHealth: {
         title: 'Laufwerksstatus',
@@ -5761,6 +5801,11 @@ export const CATALOG = {
         missed: (count) => `${count} προγραμματισμέν${count === 1 ? 'η εκτέλεση χάθηκε' : 'ες εκτελέσεις χάθηκαν'} όσο αυτός ο υπολογιστής ήταν κλειστός`,
         due: 'Μια προγραμματισμένη εκτέλεση εκκρεμεί'
       },
+      systemHealth: {
+        title: 'Υγεία Συστήματος',
+        breakdownLine: (drive, storage, apps, errors) => `Δίσκος ${drive} · Αποθήκευση ${storage} · Εφαρμογές ${apps} · Σφάλματα ${errors}`,
+        driveDetailHeading: 'Λεπτομέρειες δίσκου'
+      },
       driveHealth: {
         title: 'Υγεία Δίσκου',
         error: (message) => `Αδυναμία ανάγνωσης της υγείας του δίσκου: ${message}`,
@@ -6454,6 +6499,11 @@ export const CATALOG = {
       scheduleBadge: {
         missed: (count) => `Se ${count === 1 ? 'omitió' : 'omitieron'} ${count} ejecución${count === 1 ? '' : 'es'} programada${count === 1 ? '' : 's'} mientras este PC estaba apagado`,
         due: 'Hay una ejecución programada pendiente'
+      },
+      systemHealth: {
+        title: 'Salud del sistema',
+        breakdownLine: (drive, storage, apps, errors) => `Disco ${drive} · Almacenamiento ${storage} · Aplicaciones ${apps} · Errores ${errors}`,
+        driveDetailHeading: 'Detalle del disco'
       },
       driveHealth: {
         title: 'Salud del disco',
@@ -7149,6 +7199,11 @@ export const CATALOG = {
         missed: (count) => `${count} plaanitud käiku jäi vahele, kuna see arvuti oli välja lülitatud`,
         due: 'Plaanitud käik on tähtaja ületanud'
       },
+      systemHealth: {
+        title: 'Süsteemi seisund',
+        breakdownLine: (drive, storage, apps, errors) => `Ketas ${drive} · Maht ${storage} · Rakendused ${apps} · Vead ${errors}`,
+        driveDetailHeading: 'Ketta üksikasjad'
+      },
       driveHealth: {
         title: 'Ketta seisund',
         error: (message) => `Ketta seisundit ei õnnestunud lugeda: ${message}`,
@@ -7842,6 +7897,11 @@ export const CATALOG = {
       scheduleBadge: {
         missed: (count) => `${count} ajastettua ajoa jäi väliin, kun tämä tietokone oli pois päältä`,
         due: 'Ajastettu ajo on myöhässä'
+      },
+      systemHealth: {
+        title: 'Järjestelmän kunto',
+        breakdownLine: (drive, storage, apps, errors) => `Levy ${drive} · Tallennustila ${storage} · Sovellukset ${apps} · Virheet ${errors}`,
+        driveDetailHeading: 'Levyn tiedot'
       },
       driveHealth: {
         title: 'Levyn kunto',
@@ -8537,6 +8597,11 @@ export const CATALOG = {
         missed: (count) => `${count} exécution${count === 1 ? '' : 's'} programmée${count === 1 ? '' : 's'} manquée${count === 1 ? '' : 's'} pendant que ce PC était éteint`,
         due: 'Une exécution programmée est due'
       },
+      systemHealth: {
+        title: 'État du système',
+        breakdownLine: (drive, storage, apps, errors) => `Disque ${drive} · Stockage ${storage} · Applications ${apps} · Erreurs ${errors}`,
+        driveDetailHeading: 'Détails du disque'
+      },
       driveHealth: {
         title: 'État du disque',
         error: (message) => `Impossible de lire l'état du disque : ${message}`,
@@ -9230,6 +9295,11 @@ export const CATALOG = {
       scheduleBadge: {
         missed: (count) => `${count} ${count === 1 ? 'הרצה מתוזמנת פוספסה' : 'הרצות מתוזמנות פוספסו'} בזמן שהמחשב היה כבוי`,
         due: 'הרצה מתוזמנת ממתינה'
+      },
+      systemHealth: {
+        title: 'תקינות המערכת',
+        breakdownLine: (drive, storage, apps, errors) => `דיסק ${drive} · אחסון ${storage} · אפליקציות ${apps} · שגיאות ${errors}`,
+        driveDetailHeading: 'פרטי הדיסק'
       },
       driveHealth: {
         title: 'תקינות הדיסק',
@@ -9925,6 +9995,11 @@ export const CATALOG = {
         missed: (count) => `${count} ütemezett futás maradt ki, amíg ez a gép ki volt kapcsolva`,
         due: 'Egy ütemezett futás esedékes'
       },
+      systemHealth: {
+        title: 'Rendszer Állapota',
+        breakdownLine: (drive, storage, apps, errors) => `Meghajtó ${drive} · Tárhely ${storage} · Alkalmazások ${apps} · Hibák ${errors}`,
+        driveDetailHeading: 'Meghajtó Részletei'
+      },
       driveHealth: {
         title: 'Meghajtó Állapota',
         error: (message) => `A meghajtó állapota nem olvasható: ${message}`,
@@ -10618,6 +10693,11 @@ export const CATALOG = {
       scheduleBadge: {
         missed: (count) => `${count} proses terjadwal terlewat saat PC ini mati`,
         due: 'Ada proses terjadwal yang jatuh tempo'
+      },
+      systemHealth: {
+        title: 'Kesehatan Sistem',
+        breakdownLine: (drive, storage, apps, errors) => `Disk ${drive} · Penyimpanan ${storage} · Aplikasi ${apps} · Kesalahan ${errors}`,
+        driveDetailHeading: 'Detail disk'
       },
       driveHealth: {
         title: 'Kesehatan Disk',
@@ -11313,6 +11393,11 @@ export const CATALOG = {
         missed: (count) => `${count} áætluð keyrsla var ${count === 1 ? '' : ''}misst af meðan þessi tölva var slökkt`,
         due: 'Áætluð keyrsla er á gjalddaga'
       },
+      systemHealth: {
+        title: 'Heilsa Kerfisins',
+        breakdownLine: (drive, storage, apps, errors) => `Diskur ${drive} · Geymsla ${storage} · Forrit ${apps} · Villur ${errors}`,
+        driveDetailHeading: 'Nánar um diskinn'
+      },
       driveHealth: {
         title: 'Heilsa Disks',
         error: (message) => `Ekki tókst að lesa heilsu disksins: ${message}`,
@@ -12006,6 +12091,11 @@ export const CATALOG = {
       scheduleBadge: {
         missed: (count) => `${count} esecuzion${count === 1 ? 'e programmata è stata' : 'i programmate sono state'} saltate mentre questo PC era spento`,
         due: 'Un\'esecuzione programmata è in scadenza'
+      },
+      systemHealth: {
+        title: 'Salute del Sistema',
+        breakdownLine: (drive, storage, apps, errors) => `Disco ${drive} · Archiviazione ${storage} · Applicazioni ${apps} · Errori ${errors}`,
+        driveDetailHeading: 'Dettagli del disco'
       },
       driveHealth: {
         title: 'Salute del Disco',
@@ -12701,6 +12791,11 @@ export const CATALOG = {
         missed: (count) => `このPCの電源が切れている間に、予定されていた実行が${count}回スキップされました`,
         due: '予定された実行が期限を過ぎています'
       },
+      systemHealth: {
+        title: 'システムの状態',
+        breakdownLine: (drive, storage, apps, errors) => `ドライブ ${drive} · ストレージ ${storage} · アプリ ${apps} · エラー ${errors}`,
+        driveDetailHeading: 'ドライブの詳細'
+      },
       driveHealth: {
         title: 'ドライブの状態',
         error: (message) => `ドライブの状態を読み取れませんでした: ${message}`,
@@ -13394,6 +13489,11 @@ export const CATALOG = {
       scheduleBadge: {
         missed: (count) => `이 PC가 꺼져 있는 동안 예약된 실행 ${count}건을 놓쳤습니다`,
         due: '예약된 실행이 지연되고 있습니다'
+      },
+      systemHealth: {
+        title: '시스템 상태',
+        breakdownLine: (drive, storage, apps, errors) => `드라이브 ${drive} · 저장 공간 ${storage} · 앱 ${apps} · 오류 ${errors}`,
+        driveDetailHeading: '드라이브 세부정보'
       },
       driveHealth: {
         title: '드라이브 상태',
@@ -14089,6 +14189,11 @@ export const CATALOG = {
         missed: (count) => `Praleista ${count} suplanuota${count === 1 ? '' : 'i'} vykdymo${count === 1 ? '' : 'ų'}, kol šis kompiuteris buvo išjungtas`,
         due: 'Suplanuotas vykdymas jau vėluoja'
       },
+      systemHealth: {
+        title: 'Sistemos Būklė',
+        breakdownLine: (drive, storage, apps, errors) => `Diskas ${drive} · Saugykla ${storage} · Programos ${apps} · Klaidos ${errors}`,
+        driveDetailHeading: 'Disko duomenys'
+      },
       driveHealth: {
         title: 'Disko Būklė',
         error: (message) => `Nepavyko nuskaityti disko būklės: ${message}`,
@@ -14782,6 +14887,11 @@ export const CATALOG = {
       scheduleBadge: {
         missed: (count) => `${count} larian berjadual terlepas semasa PC ini dimatikan`,
         due: 'Larian berjadual sudah tiba masanya'
+      },
+      systemHealth: {
+        title: 'Kesihatan Sistem',
+        breakdownLine: (drive, storage, apps, errors) => `Cakera ${drive} · Storan ${storage} · Aplikasi ${apps} · Ralat ${errors}`,
+        driveDetailHeading: 'Butiran cakera'
       },
       driveHealth: {
         title: 'Kesihatan Cakera',
@@ -15477,6 +15587,11 @@ export const CATALOG = {
         missed: (count) => `${count} planlagt${count === 1 ? ' kjøring ble' : 'e kjøringer ble'} hoppet over mens denne PC-en var av`,
         due: 'En planlagt kjøring forfaller'
       },
+      systemHealth: {
+        title: 'Systemhelse',
+        breakdownLine: (drive, storage, apps, errors) => `Disk ${drive} · Lagringsplass ${storage} · Programmer ${apps} · Feil ${errors}`,
+        driveDetailHeading: 'Diskdetaljer'
+      },
       driveHealth: {
         title: 'Diskhelse',
         error: (message) => `Kunne ikke lese diskhelse: ${message}`,
@@ -16170,6 +16285,11 @@ export const CATALOG = {
       scheduleBadge: {
         missed: (count) => `${count} geplande uitvoering${count === 1 ? '' : 'en'} gemist terwijl deze pc uit stond`,
         due: 'Een geplande uitvoering is verschuldigd'
+      },
+      systemHealth: {
+        title: 'Systeemstatus',
+        breakdownLine: (drive, storage, apps, errors) => `Schijf ${drive} · Opslag ${storage} · Toepassingen ${apps} · Fouten ${errors}`,
+        driveDetailHeading: 'Schijfdetails'
       },
       driveHealth: {
         title: 'Schijfstatus',
@@ -16865,6 +16985,11 @@ export const CATALOG = {
         missed: (count) => `Pominięto ${count} zaplanowan${count === 1 ? 'e uruchomienie' : 'e uruchomienia'}, gdy ten komputer był wyłączony`,
         due: 'Zaplanowane uruchomienie jest zaległe'
       },
+      systemHealth: {
+        title: 'Stan Systemu',
+        breakdownLine: (drive, storage, apps, errors) => `Dysk ${drive} · Pamięć ${storage} · Aplikacje ${apps} · Błędy ${errors}`,
+        driveDetailHeading: 'Szczegóły dysku'
+      },
       driveHealth: {
         title: 'Stan Dysku',
         error: (message) => `Nie udało się odczytać stanu dysku: ${message}`,
@@ -17558,6 +17683,11 @@ export const CATALOG = {
       scheduleBadge: {
         missed: (count) => `${count} مهالويش شوي چلونه له لاسه ولاړل ځکه چې دا کمپیوټر بند و`,
         due: 'مهالويش شوی چلون اوس اړین دی'
+      },
+      systemHealth: {
+        title: 'د سیسټم روغتیا',
+        breakdownLine: (drive, storage, apps, errors) => `ډرایو ${drive} · ذخیره ${storage} · اپلیکیشنونه ${apps} · تېروتنې ${errors}`,
+        driveDetailHeading: 'د ډرایو توضیحات'
       },
       driveHealth: {
         title: 'د ډرایو روغتیا',
@@ -18253,6 +18383,11 @@ export const CATALOG = {
         missed: (count) => `${count} execuç${count === 1 ? 'ão agendada foi perdida' : 'ões agendadas foram perdidas'} enquanto este PC estava desligado`,
         due: 'Uma execução agendada está pendente'
       },
+      systemHealth: {
+        title: 'Saúde do Sistema',
+        breakdownLine: (drive, storage, apps, errors) => `Disco ${drive} · Armazenamento ${storage} · Aplicativos ${apps} · Erros ${errors}`,
+        driveDetailHeading: 'Detalhes do disco'
+      },
       driveHealth: {
         title: 'Saúde do Disco',
         error: (message) => `Não foi possível ler a saúde do disco: ${message}`,
@@ -18946,6 +19081,11 @@ export const CATALOG = {
       scheduleBadge: {
         missed: (count) => `${count} execuç${count === 1 ? 'ão agendada foi perdida' : 'ões agendadas foram perdidas'} enquanto este PC esteve desligado`,
         due: 'Uma execução agendada está pendente'
+      },
+      systemHealth: {
+        title: 'Saúde do Sistema',
+        breakdownLine: (drive, storage, apps, errors) => `Disco ${drive} · Armazenamento ${storage} · Aplicações ${apps} · Erros ${errors}`,
+        driveDetailHeading: 'Detalhes do disco'
       },
       driveHealth: {
         title: 'Saúde do Disco',
@@ -19641,6 +19781,11 @@ export const CATALOG = {
         missed: (count) => `${count} rulare${count === 1 ? ' programată a fost' : 'ri programate au fost'} ratate cât timp acest PC a fost oprit`,
         due: 'O rulare programată este scadentă'
       },
+      systemHealth: {
+        title: 'Starea Sistemului',
+        breakdownLine: (drive, storage, apps, errors) => `Disc ${drive} · Stocare ${storage} · Aplicații ${apps} · Erori ${errors}`,
+        driveDetailHeading: 'Detalii disc'
+      },
       driveHealth: {
         title: 'Starea Discului',
         error: (message) => `Starea discului nu a putut fi citită: ${message}`,
@@ -20334,6 +20479,11 @@ export const CATALOG = {
       scheduleBadge: {
         missed: (count) => `${count} запланированн${count === 1 ? 'ый запуск был' : 'ых запуска были'} пропущены, пока этот ПК был выключен`,
         due: 'Наступил срок запланированного запуска'
+      },
+      systemHealth: {
+        title: 'Состояние Системы',
+        breakdownLine: (drive, storage, apps, errors) => `Диск ${drive} · Хранилище ${storage} · Приложения ${apps} · Ошибки ${errors}`,
+        driveDetailHeading: 'Сведения о диске'
       },
       driveHealth: {
         title: 'Состояние Диска',
@@ -21029,6 +21179,11 @@ export const CATALOG = {
         missed: (count) => `${count} naplánovan${count === 1 ? 'é spustenie bolo' : 'é spustenia boli'} vynechané, kým bol tento počítač vypnutý`,
         due: 'Naplánované spustenie je splatné'
       },
+      systemHealth: {
+        title: 'Stav Systému',
+        breakdownLine: (drive, storage, apps, errors) => `Disk ${drive} · Úložisko ${storage} · Aplikácie ${apps} · Chyby ${errors}`,
+        driveDetailHeading: 'Podrobnosti o disku'
+      },
       driveHealth: {
         title: 'Stav Disku',
         error: (message) => `Stav disku sa nepodarilo načítať: ${message}`,
@@ -21722,6 +21877,11 @@ export const CATALOG = {
       scheduleBadge: {
         missed: (count) => `${count} ekzekutim${count === 1 ? ' i planifikuar u humb' : 'e të planifikuara u humbën'} ndërsa ky kompjuter ishte i fikur`,
         due: 'Një ekzekutim i planifikuar është i vonuar'
+      },
+      systemHealth: {
+        title: 'Shëndeti i Sistemit',
+        breakdownLine: (drive, storage, apps, errors) => `Disku ${drive} · Hapësira ${storage} · Aplikacionet ${apps} · Gabimet ${errors}`,
+        driveDetailHeading: 'Detajet e diskut'
       },
       driveHealth: {
         title: 'Shëndeti i Diskut',
@@ -22417,6 +22577,11 @@ export const CATALOG = {
         missed: (count) => `${count} заказан${count === 1 ? 'о покретање је' : 'а покретања су'} пропуштена док је овај рачунар био искључен`,
         due: 'Заказано покретање је доспело'
       },
+      systemHealth: {
+        title: 'Стање Система',
+        breakdownLine: (drive, storage, apps, errors) => `Диск ${drive} · Складиште ${storage} · Апликације ${apps} · Грешке ${errors}`,
+        driveDetailHeading: 'Детаљи диска'
+      },
       driveHealth: {
         title: 'Стање Диска',
         error: (message) => `Стање диска није могло да се прочита: ${message}`,
@@ -23110,6 +23275,11 @@ export const CATALOG = {
       scheduleBadge: {
         missed: (count) => `${count} schemalag${count === 1 ? 'd körning missades' : 'da körningar missades'} medan denna dator var avstängd`,
         due: 'En schemalagd körning är försenad'
+      },
+      systemHealth: {
+        title: 'Systemhälsa',
+        breakdownLine: (drive, storage, apps, errors) => `Disk ${drive} · Lagring ${storage} · Program ${apps} · Fel ${errors}`,
+        driveDetailHeading: 'Diskdetaljer'
       },
       driveHealth: {
         title: 'Diskhälsa',
@@ -23805,6 +23975,11 @@ export const CATALOG = {
         missed: (count) => `พลาดการทำงานตามกำหนดเวลา ${count} ครั้งขณะที่พีซีเครื่องนี้ปิดอยู่`,
         due: 'ถึงกำหนดการทำงานตามตารางเวลาแล้ว'
       },
+      systemHealth: {
+        title: 'สุขภาพระบบ',
+        breakdownLine: (drive, storage, apps, errors) => `ไดรฟ์ ${drive} · พื้นที่จัดเก็บ ${storage} · แอป ${apps} · ข้อผิดพลาด ${errors}`,
+        driveDetailHeading: 'รายละเอียดไดรฟ์'
+      },
       driveHealth: {
         title: 'สุขภาพไดรฟ์',
         error: (message) => `ไม่สามารถอ่านสุขภาพไดรฟ์ได้: ${message}`,
@@ -24498,6 +24673,11 @@ export const CATALOG = {
       scheduleBadge: {
         missed: (count) => `Bu PC kapalıyken ${count} zamanlanmış çalıştırma atlandı`,
         due: 'Zamanlanmış bir çalıştırmanın vakti geldi'
+      },
+      systemHealth: {
+        title: 'Sistem Sağlığı',
+        breakdownLine: (drive, storage, apps, errors) => `Disk ${drive} · Depolama ${storage} · Uygulamalar ${apps} · Hatalar ${errors}`,
+        driveDetailHeading: 'Disk ayrıntıları'
       },
       driveHealth: {
         title: 'Disk Sağlığı',
@@ -25193,6 +25373,11 @@ export const CATALOG = {
         missed: (count) => `${count} запланован${count === 1 ? 'ий запуск було' : 'их запуски було'} пропущено, поки цей ПК був вимкнений`,
         due: 'Настав час запланованого запуску'
       },
+      systemHealth: {
+        title: 'Стан Системи',
+        breakdownLine: (drive, storage, apps, errors) => `Диск ${drive} · Сховище ${storage} · Застосунки ${apps} · Помилки ${errors}`,
+        driveDetailHeading: 'Відомості про диск'
+      },
       driveHealth: {
         title: 'Стан Диска',
         error: (message) => `Не вдалося прочитати стан диска: ${message}`,
@@ -25886,6 +26071,11 @@ export const CATALOG = {
       scheduleBadge: {
         missed: (count) => `${count} lần chạy theo lịch đã bị bỏ lỡ khi máy tính này tắt`,
         due: 'Đã đến hạn một lần chạy theo lịch'
+      },
+      systemHealth: {
+        title: 'Tình Trạng Hệ Thống',
+        breakdownLine: (drive, storage, apps, errors) => `Ổ đĩa ${drive} · Dung lượng ${storage} · Ứng dụng ${apps} · Lỗi ${errors}`,
+        driveDetailHeading: 'Chi tiết ổ đĩa'
       },
       driveHealth: {
         title: 'Tình Trạng Ổ Đĩa',
@@ -26581,6 +26771,11 @@ export const CATALOG = {
         missed: (count) => `此电脑关机期间错过了 ${count} 次计划运行`,
         due: '一次计划运行已到期'
       },
+      systemHealth: {
+        title: '系统健康状况',
+        breakdownLine: (drive, storage, apps, errors) => `驱动器 ${drive} · 存储 ${storage} · 应用 ${apps} · 错误 ${errors}`,
+        driveDetailHeading: '驱动器详情'
+      },
       driveHealth: {
         title: '驱动器健康状况',
         error: (message) => `无法读取驱动器健康状况：${message}`,
@@ -27274,6 +27469,11 @@ export const CATALOG = {
       scheduleBadge: {
         missed: (count) => `此電腦關機期間錯過了 ${count} 次排程執行`,
         due: '一次排程執行已到期'
+      },
+      systemHealth: {
+        title: '系統健康狀態',
+        breakdownLine: (drive, storage, apps, errors) => `硬碟 ${drive} · 儲存空間 ${storage} · 應用程式 ${apps} · 錯誤 ${errors}`,
+        driveDetailHeading: '硬碟詳情'
       },
       driveHealth: {
         title: '硬碟健康狀態',
