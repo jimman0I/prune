@@ -192,6 +192,17 @@ describe('schedulePendingDelete', () => {
     expect(after[after.length - 1]).toBe('');
   });
 
+  /** Confirmed live, elevated, on this real machine: a strict length/prefix
+   * comparison between the two reads is not safe on a shared, systemwide
+   * key. Windows itself (Gaming Services, in the run that caught this) can
+   * append its own pair to PendingFileRenameOperations at any moment,
+   * landing between `afterFirst` and `afterSecond` and making both a
+   * `.length` delta check and a positional-prefix check fail even though
+   * schedulePendingDelete behaved correctly. So this compares PAIRS
+   * (as sets), not positions or counts: every pair from `afterFirst` must
+   * still be present afterward (nothing got clobbered), and the new pair
+   * must be one of them -- both true regardless of what a concurrent
+   * Windows write does to the rest of the value. */
   it('appends rather than replacing whatever was already pending', async () => {
     await schedulePendingDelete('C:\\prune-pendingreboot-test-marker-' + process.pid + '.tmp');
     const afterFirst = await readPendingOperations();
@@ -199,12 +210,20 @@ describe('schedulePendingDelete', () => {
     await schedulePendingDelete('C:\\prune-pendingreboot-test-marker-' + process.pid + '-second.tmp');
     const afterSecond = await readPendingOperations();
 
-    expect(afterSecond.length).toBe(afterFirst.length + 2);
-    expect(afterSecond.slice(0, afterFirst.length)).toEqual(afterFirst);
+    const pairsOf = (list) => {
+      const pairs = [];
+      for (let i = 0; i < list.length; i += 2) pairs.push(`${list[i]}\u0000${list[i + 1]}`);
+      return pairs;
+    };
+    const firstPairs = pairsOf(afterFirst);
+    const secondPairs = pairsOf(afterSecond);
+    const secondMarker = `\\??\\C:\\prune-pendingreboot-test-marker-${process.pid}-second.tmp`;
+
+    for (const pair of firstPairs) expect(secondPairs).toContain(pair);
+    expect(secondPairs).toContain(`${secondMarker}\u0000`);
 
     // Cleanup this test itself is responsible for -- remove the "-second"
     // pair explicitly (afterEach only strips the module-level MARKER).
-    const secondMarker = `\\??\\C:\\prune-pendingreboot-test-marker-${process.pid}-second.tmp`;
     const withoutSecond = [];
     for (let i = 0; i < afterSecond.length; i += 2) {
       if (afterSecond[i] === secondMarker) continue;
