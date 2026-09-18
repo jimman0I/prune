@@ -32,8 +32,25 @@ const streamDeepCleanExecute = vi.fn(async (ruleIds, onEvent) => {
 });
 const fetchDeepCleanRules = vi.fn();
 const streamDeepCleanScan = vi.fn();
-const fetchSettings = vi.fn();
-const updateSettings = vi.fn(async (p) => p);
+// `fetchSettings`/`updateSettings` share one in-memory record instead of
+// `updateSettings` echoing back only the partial it was handed.
+// useSystemQueries.js's own `save` mutation treats its `onSuccess` payload
+// as the FULL settings object and replaces the cache with it wholesale
+// (see its comment: "the server returns the FULL settings object, not the
+// partial that was sent"). An `updateSettings` that returned just the
+// partial broke that contract silently as soon as two different partial
+// saves landed in the same test -- e.g. Deep Clean's own selection-
+// persistence effect saving `{ deepCleanSelection }` after the tree loads,
+// then the rule-warning flow saving `{ acknowledgedCleanWarnings }` --
+// because the second one's onSuccess replaced the cache with an object
+// that no longer had the first one's field. Merging here is what the real
+// backend already does.
+let settingsRecord = null;
+const fetchSettings = vi.fn(async () => settingsRecord);
+const updateSettings = vi.fn(async (partial) => {
+  settingsRecord = { ...settingsRecord, ...partial };
+  return settingsRecord;
+});
 
 vi.mock('../lib/api.js', () => ({
   fetchDeepCleanRules: (...a) => fetchDeepCleanRules(...a),
@@ -60,10 +77,10 @@ const rules = [{
 
 beforeEach(() => {
   vi.clearAllMocks();
-  fetchSettings.mockResolvedValue({
+  settingsRecord = {
     excludeFolders: [], excludeExtensions: [], hideUnavailableRules: false,
     skipRecentHours: 24, acknowledgedCleanWarnings: []
-  });
+  };
   // The array itself, not { categories }. fetchDeepCleanRules unwraps the
   // response before the hook ever sees it.
   fetchDeepCleanRules.mockResolvedValue(rules);
@@ -405,14 +422,19 @@ describe('the warning in front of a rule that loses data', () => {
   });
 
   it('saves the acknowledgement only when the box was ticked', async () => {
-    // A settings write per checkbox click that changed nothing would be a
-    // disk write per checkbox click.
+    // A settings write for the acknowledgement itself, specifically, when
+    // nothing was asked to be remembered would be a disk write nobody
+    // opted into. (Deep Clean's own selection is now persisted on every
+    // tick regardless -- see DeepClean.render.test.jsx's "remembered Deep
+    // Clean selection" describe block -- so `updateSettings` legitimately
+    // gets called here too; what must NOT happen is one of those calls
+    // carrying `acknowledgedCleanWarnings`.)
     fetchDeepCleanRules.mockResolvedValue(riskyRules);
     const user = userEvent.setup();
     renderScreen(<DeepClean />);
     await tick(user, 'Cookies');
     await user.click(screen.getByRole('button', { name: 'Enable anyway' }));
-    expect(updateSettings).not.toHaveBeenCalled();
+    expect(updateSettings.mock.calls.some((call) => 'acknowledgedCleanWarnings' in (call[0] ?? {}))).toBe(false);
   });
 
   it('remembers one rule by id when asked, not the whole category', async () => {
@@ -424,15 +446,20 @@ describe('the warning in front of a rule that loses data', () => {
     await user.click(screen.getByLabelText('Remember my choice for Brave — Cookies'));
     await user.click(screen.getByRole('button', { name: 'Enable anyway' }));
 
-    await waitFor(() => expect(updateSettings).toHaveBeenCalledTimes(1));
-    expect(updateSettings.mock.calls[0][0]).toEqual({ acknowledgedCleanWarnings: ['brave_cookies'] });
+    // Selection persistence also calls `updateSettings` around the same
+    // interaction now, so this looks for ITS OWN call rather than assuming
+    // it's the only one.
+    await waitFor(() => {
+      const call = updateSettings.mock.calls.find((c) => 'acknowledgedCleanWarnings' in (c[0] ?? {}));
+      expect(call?.[0]).toEqual({ acknowledgedCleanWarnings: ['brave_cookies'] });
+    });
   });
 
   it('stops asking about a rule already acknowledged', async () => {
-    fetchSettings.mockResolvedValue({
+    settingsRecord = {
       excludeFolders: [], excludeExtensions: [], hideUnavailableRules: false,
       skipRecentHours: 24, acknowledgedCleanWarnings: ['brave_cookies']
-    });
+    };
     fetchDeepCleanRules.mockResolvedValue(riskyRules);
     const user = userEvent.setup();
     renderScreen(<DeepClean />);
@@ -540,6 +567,40 @@ describe('the tree/log split while a clean runs', () => {
     // The receipt is unaffected: it was never reading live `selected`.
     expect(screen.getByText('Temporary files')).toBeTruthy();
     expect(screen.getByText('Thumbnail cache')).toBeTruthy();
+  });
+});
+
+describe('the remembered Deep Clean selection', () => {
+  it('seeds the initial ticks from settings.deepCleanSelection when defaultSelection would otherwise pick nothing', async () => {
+    settingsRecord = {
+      excludeFolders: [], excludeExtensions: [], hideUnavailableRules: false,
+      skipRecentHours: 24, acknowledgedCleanWarnings: [], deepCleanSelection: ['thumbs']
+    };
+    renderScreen(<DeepClean />);
+    await screen.findByText('Temporary files');
+
+    const thumbsRow = screen.getByText('Thumbnail cache').closest('div');
+    expect(within(thumbsRow).getByRole('checkbox').getAttribute('aria-checked')).toBe('true');
+    const tempRow = screen.getByText('Temporary files').closest('div');
+    expect(within(tempRow).getByRole('checkbox').getAttribute('aria-checked')).toBe('false');
+  });
+
+  it('saves the selection whenever it changes, so the next relaunch sees it', async () => {
+    const user = userEvent.setup();
+    renderScreen(<DeepClean />);
+    await screen.findByText('Temporary files');
+
+    await user.click(screen.getByRole('button', { name: 'Select everything' }));
+
+    // updateSettings is TanStack Query's mutationFn, called as
+    // (variables, context) -- the same reason every other assertion on it
+    // in this file reads `.mock.calls[n][0]` rather than
+    // toHaveBeenCalledWith, which would also match against the context arg.
+    await waitFor(() => {
+      const call = updateSettings.mock.calls.find((c) =>
+        c[0]?.deepCleanSelection?.includes('temp') && c[0]?.deepCleanSelection?.includes('thumbs'));
+      expect(call).toBeTruthy();
+    });
   });
 });
 
