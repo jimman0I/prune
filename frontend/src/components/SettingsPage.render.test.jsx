@@ -3,6 +3,7 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { renderScreen } from '../testSupport/renderScreen.jsx';
+import { SETTINGS_TAB_STORAGE_KEY } from '../lib/settingsTab.js';
 
 /** The Settings screen, rendered, with the two quarantine limits under
  * the most scrutiny.
@@ -423,7 +424,7 @@ describe('cookies to preserve', () => {
 
 describe('the remembered Settings tab', () => {
   it('reopens on the tab last chosen, not General', async () => {
-    window.localStorage.setItem('prune.settingsTab', 'cleanup');
+    window.localStorage.setItem(SETTINGS_TAB_STORAGE_KEY, 'cleanup');
     renderScreen(<SettingsPage />);
     // The Cleanup tab's own content (its exclusions panel) should be
     // visible without ever clicking the Cleanup button.
@@ -434,6 +435,6 @@ describe('the remembered Settings tab', () => {
     const user = userEvent.setup();
     renderScreen(<SettingsPage />);
     await user.click(await screen.findByRole('button', { name: 'Cleanup' }));
-    expect(window.localStorage.getItem('prune.settingsTab')).toBe('cleanup');
+    expect(window.localStorage.getItem(SETTINGS_TAB_STORAGE_KEY)).toBe('cleanup');
   });
 });
