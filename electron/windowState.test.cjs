@@ -1,6 +1,6 @@
 const { test } = require('node:test');
 const assert = require('node:assert/strict');
-const { mkdtemp, rm } = require('node:fs/promises');
+const { mkdtemp, rm, writeFile } = require('node:fs/promises');
 const { tmpdir } = require('node:os');
 const path = require('node:path');
 const { resolveWindowState, loadWindowState, saveWindowState } = require('./windowState.cjs');
@@ -26,6 +26,19 @@ test('resolveWindowState -- falls back to the default when the saved position is
   const saved = { width: 1000, height: 700, x: 2200, y: 100, isMaximized: false };
   const result = resolveWindowState({ saved, displays: ONE_DISPLAY, defaultBounds: DEFAULT_BOUNDS });
   assert.deepEqual(result, { ...DEFAULT_BOUNDS, x: undefined, y: undefined, isMaximized: false });
+});
+
+test('resolveWindowState -- the display boundary is inclusive on the low edge, exclusive on the high edge', () => {
+  // ONE_DISPLAY's workArea is {x:0, y:0, width:1920, height:1080} -- valid
+  // x range is [0, 1920), valid y range is [0, 1080).
+  const justInside = { width: 1000, height: 700, x: 1919, y: 1079, isMaximized: false };
+  const justOutside = { width: 1000, height: 700, x: 1920, y: 100, isMaximized: false };
+
+  const insideResult = resolveWindowState({ saved: justInside, displays: ONE_DISPLAY, defaultBounds: DEFAULT_BOUNDS });
+  assert.deepEqual(insideResult, justInside);
+
+  const outsideResult = resolveWindowState({ saved: justOutside, displays: ONE_DISPLAY, defaultBounds: DEFAULT_BOUNDS });
+  assert.deepEqual(outsideResult, { ...DEFAULT_BOUNDS, x: undefined, y: undefined, isMaximized: false });
 });
 
 test('resolveWindowState -- preserves a real isMaximized:true', () => {
@@ -58,7 +71,6 @@ test('loadWindowState / saveWindowState -- round-trips through a real file', asy
 test('loadWindowState -- tolerates a corrupt file, returns null rather than throwing', async () => {
   const dir = await mkdtemp(path.join(tmpdir(), 'prune-window-state-test-'));
   const filePath = path.join(dir, 'window-state.json');
-  const { writeFile } = require('node:fs/promises');
   try {
     await writeFile(filePath, 'not valid json{{{');
     assert.equal(await loadWindowState(filePath), null);
