@@ -114,7 +114,32 @@ export function normalizeRule(rule) {
  * preview". A rule mixing action types (e.g. a `delete` action and a
  * `sqlite.vacuum` action under one id) is summed across all of them, not
  * just the first. */
+/** Whether a rule's `requiresProgram` names a program that isn't in
+ * `guards.installedProgramNames` -- case-insensitively on BOTH sides,
+ * since neither a rule author's spelling in cleaners.json nor whatever
+ * case Windows' own registry happens to report a display name in is
+ * guaranteed to match the other. A rule with no `requiresProgram` is
+ * never gated (returns false unconditionally). */
+function isRequiredProgramMissing(rule, guards) {
+  if (!rule?.requiresProgram) return false;
+  const required = rule.requiresProgram.toLowerCase();
+  for (const installed of guards.installedProgramNames || []) {
+    if (String(installed).toLowerCase() === required) return false;
+  }
+  return true;
+}
+
 export function scanRule(rule, guards = {}) {
+  // A game/launcher rule's requiresProgram gate wins over everything
+  // below -- checked before normalizeRule/the action loop even runs, so
+  // a launcher's own scaffolded placeholder folder (confirmed real,
+  // e.g. "Install League of Legends eune" under Riot Games' own
+  // %LOCALAPPDATA% tree) can never be mistaken for a completed install
+  // just because something exists on disk at the expected path.
+  if (isRequiredProgramMissing(rule, guards)) {
+    return { id: rule.id, sizeBytes: 0, fileCount: 0, heldCount: 0, present: false, accessible: true };
+  }
+
   const normalized = normalizeRule(rule);
   // `accessible` here specifically means "no `delete` action reported a
   // permission problem listing its files" -- it says nothing about a
@@ -223,7 +248,7 @@ function rulePathsExistFor(expandedPath) {
  * cleaners that don't apply to the machine), and with a rule set this
  * size most rules won't apply to any given user -- so the difference
  * carries most of the list's signal. */
-export function rulePathsExist(rule) {
+export function rulePathsExist(rule, guards = {}) {
   // A command rule has no paths to look for, and is always applicable:
   // `ipconfig /flushdns` works whether or not anything is cached. scanRule
   // returns present:true for these BEFORE it gets here, which is why this
@@ -232,6 +257,7 @@ export function rulePathsExist(rule) {
   // command rule in the set. The guard belongs with the function rather
   // than with each caller.
   if (rule?.command) return true;
+  if (isRequiredProgramMissing(rule, guards)) return false;
 
   for (const rawPath of rule?.paths || []) {
     if (rulePathsExistFor(expandPath(rawPath))) return true;
