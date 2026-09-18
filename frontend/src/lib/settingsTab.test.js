@@ -38,7 +38,7 @@ describe('readStoredSettingsTab', () => {
 describe('writeStoredSettingsTab', () => {
   it('writes the value under the real key', () => {
     const storage = fakeStorage();
-    writeStoredSettingsTab(storage, 'about');
+    expect(writeStoredSettingsTab(storage, 'about')).toBe(true);
     expect(storage.getItem(SETTINGS_TAB_STORAGE_KEY)).toBe('about');
   });
 

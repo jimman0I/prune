@@ -17,12 +17,13 @@ export const SETTINGS_TAB_STORAGE_KEY = 'prune.settingsTab';
  * not just return null (a packaged Electron renderer with site data
  * blocked raises on the getter). */
 export function readStoredSettingsTab(storage, validTabs) {
+  let value;
   try {
-    const value = storage?.getItem(SETTINGS_TAB_STORAGE_KEY) ?? null;
-    return validTabs.includes(value) ? value : null;
+    value = storage?.getItem(SETTINGS_TAB_STORAGE_KEY) ?? null;
   } catch {
     return null;
   }
+  return validTabs.includes(value) ? value : null;
 }
 
 export function writeStoredSettingsTab(storage, tab) {
