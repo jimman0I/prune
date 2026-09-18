@@ -3,6 +3,23 @@
 All notable changes to Prune (formerly named unrevo -- rebranded 2026-09-01,
 see v1.0.1 below) are documented here.
 
+## v2.7.1
+
+Fixes a real Deep Clean false positive: a game could show up as
+cleanable on a machine that never had it installed.
+
+### Fixed
+
+- **A game/launcher rule (Steam, Epic Games Launcher, Riot Client,
+  League of Legends) could report itself as cleanable even when that
+  program was never installed.** These 8 rules only ever checked whether
+  a folder existed, not whether the program itself was actually
+  installed -- and a launcher can create its own placeholder folders for
+  titles it merely lists, not titles you've installed. They're now
+  cross-checked against the same real, registry-based installed-programs
+  list that already powers the Applications screen, so a rule can no
+  longer claim a game is here when it isn't.
+
 ## v2.7.0
 
 Fixes a real uninstaller bug (some uninstallers' own windows never came
