@@ -73,6 +73,7 @@ async function openCleanupTab() {
 const lastSaved = () => updateSettings.mock.calls.at(-1)?.[0];
 
 beforeEach(() => {
+  window.localStorage.clear();
   vi.clearAllMocks();
   fetchSettings.mockResolvedValue({ ...DEFAULTS });
   fetchUpdateCheck.mockResolvedValue({ enabled: false, current: '2.3.4' });
@@ -417,5 +418,22 @@ describe('cookies to preserve', () => {
   it('shows the panel on the Cleanup tab', async () => {
     await openCleanupTab();
     expect(await screen.findByText('Cookies to preserve')).toBeTruthy();
+  });
+});
+
+describe('the remembered Settings tab', () => {
+  it('reopens on the tab last chosen, not General', async () => {
+    window.localStorage.setItem('prune.settingsTab', 'cleanup');
+    renderScreen(<SettingsPage />);
+    // The Cleanup tab's own content (its exclusions panel) should be
+    // visible without ever clicking the Cleanup button.
+    expect(await screen.findByText('Exclude Folders')).toBeTruthy();
+  });
+
+  it('writes the choice when a tab is clicked, so it survives the next relaunch', async () => {
+    const user = userEvent.setup();
+    renderScreen(<SettingsPage />);
+    await user.click(await screen.findByRole('button', { name: 'Cleanup' }));
+    expect(window.localStorage.getItem('prune.settingsTab')).toBe('cleanup');
   });
 });

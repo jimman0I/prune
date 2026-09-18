@@ -8,6 +8,7 @@ import CookieKeepListSettings from './CookieKeepListSettings.jsx';
 import { useSettings, useUpdateCheck } from '../hooks/useSystemQueries.js';
 import { leftoverDestinationFrom } from '../lib/leftoverDestination.js';
 import { useLanguage, LANGUAGES } from '../i18n/LanguageContext.jsx';
+import { readStoredSettingsTab, writeStoredSettingsTab } from '../lib/settingsTab.js';
 
 // The version is NOT kept here. It used to be a hand-copied constant that
 // had to be bumped with the three package.json files, nothing failed when
@@ -76,7 +77,7 @@ function StepRow({ step }) {
 }
 
 function SettingsPage() {
-  const [tab, setTab] = useState('general');
+  const [tab, setTab] = useState(() => readStoredSettingsTab(window.localStorage, TAB_IDS) ?? 'general');
   const [saveError, setSaveError] = useState(null);
   const [newExclusion, setNewExclusion] = useState('');
   const [exclusionError, setExclusionError] = useState(null);
@@ -108,6 +109,11 @@ function SettingsPage() {
     openUpdatePage().catch((err) => setOpenError(err.message));
   };
   const error = null;
+
+  const handleTabChange = (id) => {
+    setTab(id);
+    writeStoredSettingsTab(window.localStorage, id);
+  };
 
   /** Optimistic, and it rolls back on a real failure.
    *
@@ -192,7 +198,7 @@ ode.js" is a folder or a file type.
         {TABS.map((tabDef) => (
           <button
             key={tabDef.id}
-            onClick={() => setTab(tabDef.id)}
+            onClick={() => handleTabChange(tabDef.id)}
             className={`px-4 py-2 rounded-lg text-[13px] font-medium transition-colors ${
               tab === tabDef.id
                 ? 'bg-[color:var(--accent-primary-soft)] text-[color:var(--accent-primary)]'
