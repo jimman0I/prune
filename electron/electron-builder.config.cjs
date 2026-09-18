@@ -41,7 +41,12 @@ module.exports = {
   // build without it would run in dev and fail to start once packaged.
   // electron-updater itself needs no entry -- electron-builder packs
   // `dependencies` from package.json on its own.
-  files: ['main.cjs', 'preload.cjs', 'updater.cjs'],
+  //
+  // windowState.cjs is the same trap again: main.cjs requires it to
+  // restore and persist window bounds, so a build without it would run
+  // fine in dev (loaded straight off disk) and throw the moment
+  // createWindow() runs in a packaged app.
+  files: ['main.cjs', 'preload.cjs', 'updater.cjs', 'windowState.cjs'],
   extraResources: [
     // NOTE the source: this copies from ../backend/src DIRECTLY, not from
     // the build/backend-prod/ staging directory build-installer.mjs

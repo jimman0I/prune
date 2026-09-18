@@ -4,6 +4,7 @@ const http = require('node:http');
 const { pathToFileURL } = require('node:url');
 const { autoUpdater } = require('electron-updater');
 const { createUpdater } = require('./updater.cjs');
+const { resolveWindowState, loadWindowState, saveWindowState } = require('./windowState.cjs');
 
 const BACKEND_PORT = 3101;
 
@@ -38,6 +39,13 @@ function quarantineRoot() {
  * root (Roaming, not Local). Both belong under the same app-data root. */
 function settingsPath() {
   return app.isPackaged ? path.join(app.getPath('userData'), 'settings.json') : null;
+}
+
+/** Same reasoning as settingsPath() -- outside the install directory so
+ * an upgrade never wipes it, in the same userData root as everything
+ * else Prune persists. */
+function windowStatePath() {
+  return app.isPackaged ? path.join(app.getPath('userData'), 'window-state.json') : null;
 }
 
 /** Starts the Express backend in-process (it's ESM, loaded via dynamic
@@ -157,9 +165,18 @@ function nudgeOnDisplayChange(win) {
 
 async function createWindow() {
   const startTheme = startingTheme();
+  const stateFile = windowStatePath();
+  const saved = stateFile ? await loadWindowState(stateFile) : null;
+  const resolvedBounds = resolveWindowState({
+    saved,
+    displays: screen.getAllDisplays(),
+    defaultBounds: { width: 1280, height: 860 }
+  });
   const win = new BrowserWindow({
-    width: 1280,
-    height: 860,
+    width: resolvedBounds.width,
+    height: resolvedBounds.height,
+    x: resolvedBounds.x,
+    y: resolvedBounds.y,
     minWidth: 900,
     minHeight: 560,
     title: 'Prune',
@@ -217,6 +234,27 @@ async function createWindow() {
   // browser. Same call Re:Route's own main.cjs already makes.
   win.removeMenu();
   nudgeOnDisplayChange(win);
+
+  if (resolvedBounds.isMaximized) win.maximize();
+
+  if (stateFile) {
+    let saveTimer = null;
+    const scheduleSave = () => {
+      clearTimeout(saveTimer);
+      saveTimer = setTimeout(() => {
+        if (win.isDestroyed()) return;
+        saveWindowState(stateFile, { ...win.getBounds(), isMaximized: win.isMaximized() });
+      }, 500);
+    };
+    win.on('resize', scheduleSave);
+    win.on('move', scheduleSave);
+    win.on('close', () => {
+      // Unconditional, not debounced -- the window is closing right now,
+      // so a pending debounce that hasn't fired yet must not be lost.
+      clearTimeout(saveTimer);
+      saveWindowState(stateFile, { ...win.getBounds(), isMaximized: win.isMaximized() });
+    });
+  }
 
   /* Repaint the native buttons when the app changes theme.
    *
