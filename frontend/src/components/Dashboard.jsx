@@ -136,6 +136,10 @@ function formatCount(value) {
   return typeof value === 'number' ? value.toLocaleString() : '—';
 }
 
+function formatComponent(value) {
+  return value === null || value === undefined ? '—' : String(value);
+}
+
 /** The drive's own SMART attributes, the set CrystalDiskInfo shows.
  *
  * Read straight from the NVMe SMART log page, which needs no elevation --
@@ -270,7 +274,12 @@ export default function Dashboard({ programs, totalSize, onNavigate = () => {} }
     diskSpace,
     brokenCount
   });
-  const formatComponent = (value) => (value == null ? '—' : String(value));
+  const formattedBreakdown = {
+    drive: formatComponent(breakdown.drive),
+    storage: formatComponent(breakdown.storage),
+    apps: formatComponent(breakdown.apps),
+    errors: formatComponent(breakdown.errors)
+  };
 
   return (
     <div className="px-12 py-10 max-w-[1400px]">
@@ -292,7 +301,7 @@ export default function Dashboard({ programs, totalSize, onNavigate = () => {} }
           <div className="text-[18px] font-medium text-[color:var(--text-primary)] mb-1">{t('dashboard.systemHealth.title')}</div>
           {healthScore != null && (
             <div className="text-[12px] font-mono text-[color:var(--text-secondary)] mb-2">
-              {t('dashboard.systemHealth.breakdownLine', formatComponent(breakdown.drive), formatComponent(breakdown.storage), formatComponent(breakdown.apps), formatComponent(breakdown.errors))}
+              {t('dashboard.systemHealth.breakdownLine', formattedBreakdown.drive, formattedBreakdown.storage, formattedBreakdown.apps, formattedBreakdown.errors)}
             </div>
           )}
 
@@ -306,7 +315,7 @@ export default function Dashboard({ programs, totalSize, onNavigate = () => {} }
 
           {primaryDisk && (
             <>
-              <div className="text-[10.5px] font-mono uppercase tracking-[0.14em] text-[color:var(--text-muted)] mb-2">
+              <div className="text-[10.5px] font-mono uppercase tracking-[0.14em] text-[color:var(--text-muted)] mb-2.5">
                 {t('dashboard.systemHealth.driveDetailHeading')}
               </div>
               {/* model/mediaType/busType are Windows' own strings, same as
