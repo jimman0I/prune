@@ -76,6 +76,13 @@ const DEFAULT_SETTINGS = {
      ask. Per rule, never per category: agreeing to lose cookies is not
      agreeing to lose browsing history. See lib/cleanWarning.js. */
   acknowledgedCleanWarnings: [],
+  /* Deep Clean's own checkbox selection, by rule id -- so reopening the
+     tab (or relaunching the app) shows the same rules ticked, instead of
+     always resetting to defaultSelection(). Not read by cleanGuardsFrom:
+     this is pure frontend selection state, never consulted by the
+     cleaning engine itself during a real scan or clean, exactly like
+     acknowledgedCleanWarnings above it. */
+  deepCleanSelection: [],
   /* Days before a quarantine batch is deleted for good, or null for
      never. Off by default and off for every ambiguous value -- see
      quarantineRetention.js. Quarantine is this app's undo, and a

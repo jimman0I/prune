@@ -57,7 +57,7 @@ describe('getSettings', () => {
     for (const key of [
       'excludeFolders', 'excludeExtensions', 'autoQuarantine', 'theme',
       'minimizeToTray', 'skipRecentHours', 'createRestorePoint', 'hideUnavailableRules',
-      'acknowledgedCleanWarnings',
+      'acknowledgedCleanWarnings', 'deepCleanSelection',
       'quarantineRetentionDays', 'quarantineMaxSizeGb', 'automation', 'updateCheck'
     ]) {
       expect(settings, key).toHaveProperty(key);
@@ -70,6 +70,15 @@ describe('updateSettings', () => {
     await updateSettings({ autoQuarantine: false });
     const settings = await getSettings();
     expect(settings.autoQuarantine).toBe(false);
+  });
+
+  it('deepCleanSelection defaults to an empty array and round-trips a real one', async () => {
+    const before = await getSettings();
+    expect(before.deepCleanSelection).toEqual([]);
+
+    await updateSettings({ deepCleanSelection: ['chrome_cache', 'brave_cookies'] });
+    const after = await getSettings();
+    expect(after.deepCleanSelection).toEqual(['chrome_cache', 'brave_cookies']);
   });
 
   it('merges rather than replaces -- changing one field leaves the others untouched', async () => {
