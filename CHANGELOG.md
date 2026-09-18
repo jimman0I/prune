@@ -3,6 +3,52 @@
 All notable changes to Prune (formerly named unrevo -- rebranded 2026-09-01,
 see v1.0.1 below) are documented here.
 
+## v2.7.0
+
+Fixes a real uninstaller bug (some uninstallers' own windows never came
+to the front), plus two new screens: a real "Cookies to Preserve" picker
+and a composite Dashboard health score.
+
+### Fixed
+
+- **Some uninstallers' own confirmation window never came to the front.**
+  A program's uninstaller (Riot's VALORANT uninstall dialog, confirmed
+  live) could genuinely open and sit there, hidden behind Prune's own
+  window, with no sign anything had happened -- Windows' own
+  focus-stealing prevention was refusing to let a background-spawned
+  process's window become the foreground window. Prune now grants that
+  right before spawning any uninstaller.
+- Deep Clean and Disk Map's own "still working" indicators no longer
+  borrow a generic loading pulse -- the row a scan or clean is currently
+  reading now sweeps, and Disk Map's file-type bars grow into their
+  measured width as the numbers actually arrive, instead of snapping to
+  a value that was already final.
+
+### Added
+
+- **Cookies to Preserve** (Settings → Cleanup): scan for the real cookie
+  domains on this machine and choose which ones survive a Deep Clean,
+  instead of always losing every cookie on a browser's cookie rules. The
+  keep-list engine has existed since Deep Clean's rebuilt cleaning engine
+  landed in 2.6.0 -- this is the screen to actually use it.
+- **A composite System Health score on the Dashboard**, replacing the
+  ring that only ever showed drive wear. It now combines drive health,
+  free disk space, broken/orphaned installs and hardware errors into one
+  number, with a breakdown line underneath so it's never a mystery figure
+  -- and it stays blank rather than guess until the real reads it depends
+  on have actually come back.
+- Uninstalling now matches Revo Uninstaller's own two-step flow: a
+  manual "Scan" step once the uninstaller has actually finished (instead
+  of racing into a leftover scan the moment its process exits, which can
+  race real background cleanup some uninstallers keep doing), and an
+  optional "automatically remove everything found" checkbox that skips
+  the review screen -- still fully undoable through Quarantine either
+  way.
+- More hover and click feedback across the app: every button that wasn't
+  already using one of the app's three named button styles now
+  acknowledges a click, and checkboxes press with a distinct feel of
+  their own.
+
 ## v2.6.1
 
 Fixes an update-checker bug from 2.6.0 that could get stuck nagging
