@@ -1083,6 +1083,20 @@ describe('phase D actions, wired', () => {
   });
 });
 
+describe('game/launcher rules require their program to be installed', () => {
+  it('carries requiresProgram matching the real registry display name for each of the 8 rules', () => {
+    const byId = Object.fromEntries(loadCleanerRules().map((r) => [r.id, r.requiresProgram]));
+    expect(byId.steam_cache).toBe('Steam');
+    expect(byId.steam_shader_cache).toBe('Steam');
+    expect(byId.steam_depot_cache).toBe('Steam');
+    expect(byId.steam_logs).toBe('Steam');
+    expect(byId.epic_games_cache).toBe('Epic Games Launcher');
+    expect(byId.epic_crash_reports).toBe('Epic Games Launcher');
+    expect(byId.riot_client_logs).toBe('Riot Client');
+    expect(byId.league_of_legends_logs).toBe('League of Legends');
+  });
+});
+
 describe('expandPath tokens', () => {
   // A token expandPath does not know stays in the string verbatim, so the
   // path never matches and the rule reports "not installed" rather than
