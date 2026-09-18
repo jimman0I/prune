@@ -5,6 +5,15 @@
  * score-design.md for the full reasoning behind these weights. */
 const WEIGHTS = { drive: 40, storage: 25, apps: 20, errors: 15 };
 
+/** Free-space percent at or below which storage scores 0 credit. */
+const STORAGE_ZERO_CREDIT_FREE_PERCENT = 2;
+
+/** Free-space percent at or above which storage scores full credit. */
+const STORAGE_FULL_CREDIT_FREE_PERCENT = 20;
+
+/** Points deducted from the apps component per broken/orphaned app. */
+const PER_BROKEN_APP_PENALTY = 25;
+
 function clamp01(x) {
   return Math.max(0, Math.min(1, x));
 }
@@ -32,7 +41,10 @@ function storageComponent(diskSpace) {
     return null;
   }
   const freePercent = (diskSpace.freeBytes / diskSpace.totalBytes) * 100;
-  return clamp01((freePercent - 2) / 18) * 100;
+  return clamp01(
+    (freePercent - STORAGE_ZERO_CREDIT_FREE_PERCENT) /
+      (STORAGE_FULL_CREDIT_FREE_PERCENT - STORAGE_ZERO_CREDIT_FREE_PERCENT)
+  ) * 100;
 }
 
 /** brokenCount is always a real number (Dashboard.jsx computes it
@@ -41,7 +53,7 @@ function storageComponent(diskSpace) {
  * floored at 0. */
 function appsComponent(brokenCount) {
   const count = typeof brokenCount === 'number' ? brokenCount : 0;
-  return Math.max(0, 100 - 25 * count);
+  return Math.max(0, 100 - PER_BROKEN_APP_PENALTY * count);
 }
 
 /** Binary, not scaled: a single uncorrected error or bad media block is
