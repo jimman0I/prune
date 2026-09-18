@@ -423,7 +423,8 @@
       "%LOCALAPPDATA%\\Steam\\htmlcache"
     ],
     "is_safe": true,
-    "recommended": true
+    "recommended": true,
+    "requiresProgram": "Steam"
   },
   {
     "id": "steam_shader_cache",
@@ -434,7 +435,8 @@
       "%PROGRAMFILES(X86)%\\Steam\\steamapps\\shadercache"
     ],
     "is_safe": true,
-    "recommended": true
+    "recommended": true,
+    "requiresProgram": "Steam"
   },
   {
     "id": "steam_depot_cache",
@@ -445,7 +447,8 @@
       "%PROGRAMFILES(X86)%\\Steam\\depotcache"
     ],
     "is_safe": true,
-    "recommended": true
+    "recommended": true,
+    "requiresProgram": "Steam"
   },
   {
     "id": "steam_logs",
@@ -457,7 +460,8 @@
       "%PROGRAMFILES(X86)%\\Steam\\dumps"
     ],
     "is_safe": true,
-    "recommended": true
+    "recommended": true,
+    "requiresProgram": "Steam"
   },
   {
     "id": "vscode_cache",
@@ -537,7 +541,8 @@
       "%LOCALAPPDATA%\\EpicGamesLauncher\\Saved\\Logs"
     ],
     "is_safe": true,
-    "recommended": true
+    "recommended": true,
+    "requiresProgram": "Epic Games Launcher"
   },
   {
     "id": "epic_crash_reports",
@@ -548,7 +553,8 @@
       "%LOCALAPPDATA%\\EpicGamesLauncher\\Saved\\Crashes"
     ],
     "is_safe": true,
-    "recommended": true
+    "recommended": true,
+    "requiresProgram": "Epic Games Launcher"
   },
   {
     "id": "riot_client_logs",
@@ -559,7 +565,8 @@
       "%LOCALAPPDATA%\\Riot Games\\Riot Client\\Logs"
     ],
     "is_safe": true,
-    "recommended": true
+    "recommended": true,
+    "requiresProgram": "Riot Client"
   },
   {
     "id": "overwolf_cache",
@@ -988,7 +995,8 @@
       "%SYSTEMDRIVE%\\Riot Games\\League of Legends\\Logs"
     ],
     "is_safe": true,
-    "recommended": true
+    "recommended": true,
+    "requiresProgram": "League of Legends"
   },
   {
     "id": "recycle_bin",
