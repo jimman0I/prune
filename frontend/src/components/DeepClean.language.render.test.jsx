@@ -37,8 +37,21 @@ const streamDeepCleanExecute = vi.fn(async (ruleIds, onEvent) => {
 });
 const fetchDeepCleanRules = vi.fn();
 const streamDeepCleanScan = vi.fn();
-const fetchSettings = vi.fn();
-const updateSettings = vi.fn(async (p) => p);
+// `fetchSettings`/`updateSettings` share one in-memory record rather than
+// `updateSettings` echoing back only the partial it was handed -- see
+// DeepClean.render.test.jsx's identical comment. Deep Clean now persists
+// its checkbox selection on every change via a `{ deepCleanSelection }`
+// save, and useSystemQueries.js's `save` mutation replaces the ENTIRE
+// settings cache with whatever `updateSettings` resolves to (the real
+// backend returns the full settings object). A mock that echoed only the
+// partial would wipe `language: 'el'` off the cache the moment that save
+// fired, silently reverting every screen back to English mid-test.
+let settingsRecord = null;
+const fetchSettings = vi.fn(async () => settingsRecord);
+const updateSettings = vi.fn(async (partial) => {
+  settingsRecord = { ...settingsRecord, ...partial };
+  return settingsRecord;
+});
 
 vi.mock('../lib/api.js', () => ({
   fetchDeepCleanRules: (...a) => fetchDeepCleanRules(...a),
@@ -90,11 +103,11 @@ const riskyRules = [{
 
 beforeEach(() => {
   vi.clearAllMocks();
-  fetchSettings.mockResolvedValue({
+  settingsRecord = {
     language: 'el',
     excludeFolders: [], excludeExtensions: [], hideUnavailableRules: false,
     skipRecentHours: 24, acknowledgedCleanWarnings: []
-  });
+  };
   fetchDeepCleanRules.mockResolvedValue(rules);
   streamDeepCleanScan.mockImplementation(() => () => {});
 });
@@ -206,11 +219,11 @@ describe('the Deep Clean screen, in Greek', () => {
   });
 
   it('translates the hidden-cleaners note', async () => {
-    fetchSettings.mockResolvedValue({
+    settingsRecord = {
       language: 'el',
       excludeFolders: [], excludeExtensions: [], hideUnavailableRules: true,
       skipRecentHours: 24, acknowledgedCleanWarnings: []
-    });
+    };
     fetchDeepCleanRules.mockResolvedValue([{
       category: 'Windows',
       items: [{ id: 'temp', name: 'Temporary files', sizeBytes: null, fileCount: null, present: false }]

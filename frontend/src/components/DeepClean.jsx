@@ -192,11 +192,46 @@ function DeepClean() {
   );
 
   // The listed tree arrives before anything is measured, so the default
-  // ticks land as soon as there is something to tick.
+  // ticks land as soon as there is something to tick -- unless a real
+  // selection was already saved from a previous session, in which case
+  // that's what reopens instead of the defaults.
+  //
+  // Runs exactly once (`seededSelectionRef`), and only once BOTH the tree
+  // AND settings have actually loaded. Depending on `settings.
+  // deepCleanSelection` directly (rather than gating on `settings` itself)
+  // would re-fire this on every settings update -- including the persist
+  // effect's own writes just below, which hand back a brand new (if
+  // logically identical) array/object each time -- recomputing another
+  // reference-distinct empty Set on every pass and feeding the persist
+  // effect a stream of redundant writes that raced the initial settings
+  // fetch's own cancelQueries() in practice, which was cancelling that
+  // fetch before it ever resolved.
+  const seededSelectionRef = useRef(false);
+  useEffect(() => {
+    if (!categories || !settings || seededSelectionRef.current) return;
+    seededSelectionRef.current = true;
+    setSelected((prev) => {
+      if (prev.size > 0) return prev;
+      const saved = settings.deepCleanSelection;
+      if (Array.isArray(saved) && saved.length > 0) return new Set(saved);
+      return defaultSelection(categories);
+    });
+  }, [categories, settings]);
+
+  // Persists every change to `selected` -- every tick, untick, category
+  // toggle, Select Everything/Clear, and the post-scan reconciliation
+  // effect's own pruning all funnel through setSelected, so one effect
+  // watching the result covers all of them at once rather than a save()
+  // call threaded into each individual call site. Gated on `categories`
+  // purely so a stray render before anything has loaded can't fire it;
+  // the real protection against writing back a premature empty Set is the
+  // seeding effect above never changing `selected` at all until it has
+  // settled on a real value (saved, or computed defaults).
   useEffect(() => {
     if (!categories) return;
-    setSelected((prev) => (prev.size > 0 ? prev : defaultSelection(categories)));
-  }, [categories]);
+    saveSettings.mutate({ deepCleanSelection: [...selected] });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selected]);
 
   /** `reselect: false` is for the rescan that follows a clean -- the user
    * just acted on those rules, and re-ticking them would invite doing it
