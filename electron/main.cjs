@@ -4,7 +4,7 @@ const http = require('node:http');
 const { pathToFileURL } = require('node:url');
 const { autoUpdater } = require('electron-updater');
 const { createUpdater } = require('./updater.cjs');
-const { resolveWindowState, loadWindowState, saveWindowState } = require('./windowState.cjs');
+const { resolveWindowState, loadWindowState, saveWindowState, saveWindowStateSync } = require('./windowState.cjs');
 
 const BACKEND_PORT = 3101;
 
@@ -251,8 +251,11 @@ async function createWindow() {
     win.on('close', () => {
       // Unconditional, not debounced -- the window is closing right now,
       // so a pending debounce that hasn't fired yet must not be lost.
+      // Synchronous, not the async saveWindowState the debounced saves
+      // above use -- window-all-closed's app.quit() can fire before an
+      // in-flight async write settles, silently losing the final save.
       clearTimeout(saveTimer);
-      saveWindowState(stateFile, { ...win.getBounds(), isMaximized: win.isMaximized() });
+      saveWindowStateSync(stateFile, { ...win.getBounds(), isMaximized: win.isMaximized() });
     });
   }
 

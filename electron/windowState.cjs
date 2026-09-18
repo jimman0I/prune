@@ -1,4 +1,5 @@
 const { readFile, writeFile } = require('node:fs/promises');
+const { writeFileSync } = require('node:fs');
 
 /** Whether a saved window position falls within any currently-connected
  * display's work area. A laptop undocked from a second monitor since the
@@ -56,4 +57,18 @@ async function saveWindowState(filePath, state) {
   }
 }
 
-module.exports = { resolveWindowState, loadWindowState, saveWindowState };
+/** Same best-effort contract as saveWindowState, but synchronous --
+ * used only when the process might exit before an async write settles
+ * (the window's own 'close' handler in main.cjs, right before
+ * window-all-closed triggers app.quit()). The debounced resize/move
+ * saves have no such race and stay on the async path. */
+function saveWindowStateSync(filePath, state) {
+  try {
+    writeFileSync(filePath, JSON.stringify(state));
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+module.exports = { resolveWindowState, loadWindowState, saveWindowState, saveWindowStateSync };
