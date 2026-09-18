@@ -49,7 +49,7 @@ describe('the Dashboard in another language', () => {
     render();
 
     expect(await screen.findByRole('heading', { name: 'Πίνακας ελέγχου' })).toBeTruthy();
-    expect(screen.getByText('Υγεία Δίσκου')).toBeTruthy();
+    expect(screen.getByText('Υγεία Συστήματος')).toBeTruthy();
     expect(screen.getByText('Συνολικός Αποθηκευτικός Χώρος')).toBeTruthy();
     expect(screen.getByText('Εγκατεστημένες Εφαρμογές')).toBeTruthy();
     expect(screen.getByText('Άχρηστα Αρχεία')).toBeTruthy();

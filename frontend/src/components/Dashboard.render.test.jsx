@@ -96,3 +96,46 @@ describe('the Dashboard reads', () => {
     expect(fetchDiskSpace).toHaveBeenCalledTimes(1);
   });
 });
+
+describe('the System Health score', () => {
+  it('shows the composite score, not the raw drive-wear percent, and a breakdown line', async () => {
+    fetchDiskHealth.mockResolvedValue({
+      disks: [{
+        deviceId: '0', model: 'Test NVMe', mediaType: 'SSD', healthStatus: 'Healthy',
+        lifeRemainingPercent: 100, readErrorsUncorrected: 0, writeErrorsUncorrected: 0,
+        smart: { mediaErrors: 0 }
+      }]
+    });
+    fetchDiskSpace.mockResolvedValue({ freeBytes: 500 * GB, totalBytes: 1000 * GB }); // 50% free, full storage credit
+    render();
+
+    // drive 100*40 + storage 100*25 + apps 100*20 + errors 100*15 = 100
+    expect(await screen.findByText('System Health')).toBeTruthy();
+    expect(await screen.findByText('100%')).toBeTruthy();
+    expect(await screen.findByText(/Drive 100.*Storage 100.*Apps 100.*Errors 100/)).toBeTruthy();
+  });
+
+  it('reflects a broken app in both the score and the breakdown line', async () => {
+    fetchDiskHealth.mockResolvedValue({
+      disks: [{
+        deviceId: '0', model: 'Test NVMe', mediaType: 'SSD', healthStatus: 'Healthy',
+        lifeRemainingPercent: 100, readErrorsUncorrected: 0, writeErrorsUncorrected: 0,
+        smart: { mediaErrors: 0 }
+      }]
+    });
+    fetchDiskSpace.mockResolvedValue({ freeBytes: 500 * GB, totalBytes: 1000 * GB });
+    const programs = [{ health: { orphaned: true } }];
+    renderScreen(<Dashboard programs={programs} totalSize={0} onNavigate={() => {}} />);
+
+    // drive 100*40 + storage 100*25 + apps 75*20 + errors 100*15 = 9500/100 = 95
+    expect(await screen.findByText('95%')).toBeTruthy();
+    expect(await screen.findByText(/Apps 75/)).toBeTruthy();
+  });
+
+  it('shows the drive detail sub-heading above the existing drive-specific content', async () => {
+    render();
+    expect(await screen.findByText('Drive detail')).toBeTruthy();
+    // The existing drive-specific content is still there, unchanged.
+    expect(await screen.findByText(/Test NVMe/)).toBeTruthy();
+  });
+});

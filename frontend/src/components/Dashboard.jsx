@@ -9,6 +9,7 @@ import { fetchAutomation } from '../lib/api.js';
 import { keys } from '../lib/queryClient.js';
 import { useDiskSpace, useDiskHealth } from '../hooks/useSystemQueries.js';
 import { useLanguage } from '../i18n/LanguageContext.jsx';
+import { computeHealthScore } from '../lib/healthScore.js';
 
 function formatBytes(bytes) {
   if (bytes === null || bytes === undefined) return '—';
@@ -257,6 +258,20 @@ export default function Dashboard({ programs, totalSize, onNavigate = () => {} }
   const primaryDisk = diskHealth?.disks?.[0] || null;
   const verdict = driveVerdict(primaryDisk, t('dashboard.driveHealth.unknownStatus'));
 
+  // driveVerdict is only meaningful once primaryDisk has actually
+  // answered -- passing it through while primaryDisk is still null would
+  // score the drive component as a real "unknown" (75) rather than
+  // correctly excluding it as "not loaded yet", which is what lets the
+  // very first render show a fabricated high score. See healthScore.js's
+  // own doc comment for the full reasoning.
+  const { score: healthScore, breakdown } = computeHealthScore({
+    driveVerdict: primaryDisk ? verdict : null,
+    primaryDisk,
+    diskSpace,
+    brokenCount
+  });
+  const formatComponent = (value) => (value == null ? '—' : String(value));
+
   return (
     <div className="px-12 py-10 max-w-[1400px]">
       <div className="flex items-baseline justify-between gap-4 mb-8">
@@ -272,9 +287,14 @@ export default function Dashboard({ programs, totalSize, onNavigate = () => {} }
           been through, the other is what it is doing now. */}
       <div className="flex items-stretch gap-4 mb-6">
         <div className="glass-panel flex items-center gap-6 p-8 flex-1 min-w-0">
-        <HealthGauge percent={verdict.percent} statusLabel={verdict.statusLabel} tone={verdict.tone} />
+        <HealthGauge percent={healthScore} statusLabel={verdict.statusLabel} tone={verdict.tone} />
         <div className="min-w-0">
-          <div className="text-[18px] font-medium text-[color:var(--text-primary)] mb-1">{t('dashboard.driveHealth.title')}</div>
+          <div className="text-[18px] font-medium text-[color:var(--text-primary)] mb-1">{t('dashboard.systemHealth.title')}</div>
+          {healthScore != null && (
+            <div className="text-[12px] font-mono text-[color:var(--text-secondary)] mb-2">
+              {t('dashboard.systemHealth.breakdownLine', formatComponent(breakdown.drive), formatComponent(breakdown.storage), formatComponent(breakdown.apps), formatComponent(breakdown.errors))}
+            </div>
+          )}
 
           {diskHealthError && (
             <div className="text-[13px] text-[color:var(--text-secondary)] select-text">{t('dashboard.driveHealth.error', diskHealthError)}</div>
@@ -286,6 +306,9 @@ export default function Dashboard({ programs, totalSize, onNavigate = () => {} }
 
           {primaryDisk && (
             <>
+              <div className="text-[10.5px] font-mono uppercase tracking-[0.14em] text-[color:var(--text-muted)] mb-2">
+                {t('dashboard.systemHealth.driveDetailHeading')}
+              </div>
               {/* model/mediaType/busType are Windows' own strings, same as
                   healthStatus below -- left untranslated. */}
               <div className="text-[13px] text-[color:var(--text-primary)] truncate">
