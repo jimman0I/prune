@@ -89,6 +89,17 @@ describe('computeHealthScore -- storage component', () => {
     expect(breakdown.storage).toBeNull();
     expect(score).toBeNull();
   });
+
+  it('rounds to a clean integer rather than a long float, for real-world free-space percentages', () => {
+    const { breakdown } = computeHealthScore({
+      driveVerdict: HEALTHY_DRIVE_VERDICT, primaryDisk: CLEAN_DISK,
+      // A real, messy free-space ratio (not a round-number fixture) --
+      // this is what caught the original bug: every existing fixture
+      // happened to land on an exact percentage.
+      diskSpace: { freeBytes: 907, totalBytes: 9529 }, brokenCount: 0
+    });
+    expect(Number.isInteger(breakdown.storage)).toBe(true);
+  });
 });
 
 describe('computeHealthScore -- apps component', () => {
