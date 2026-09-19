@@ -120,4 +120,30 @@ describe('the readyToScan gate', () => {
     expect(onFinished).toHaveBeenCalledTimes(1);
     expect(onClose).toHaveBeenCalledTimes(1);
   });
+
+  it('returns to readyToScan, not confirm, when the scan itself fails, and retries the same programs in the same order', async () => {
+    // Every uninstall already ran; only the scan failed. The retry must not
+    // lose, reorder, or duplicate the pending scan list built when the gate
+    // first opened.
+    scanForLeftovers.mockRejectedValueOnce(new Error('The registry could not be read.'));
+    const user = userEvent.setup();
+    renderScreen(<BatchUninstallModal programs={programs} onClose={() => {}} onFinished={() => {}} />);
+    await user.click(screen.getByRole('button', { name: 'Start uninstalling' }));
+
+    const scanButton = await screen.findByRole('button', { name: 'Scan for leftovers' });
+    await user.click(scanButton);
+
+    expect(await screen.findByText(/Scan failed: The registry could not be read/)).toBeTruthy();
+    // Back on the gate -- not stuck on 'scanning', and not the confirm view.
+    expect(await screen.findByRole('button', { name: 'Scan for leftovers' })).toBeTruthy();
+    expect(screen.queryByRole('button', { name: 'Start uninstalling' })).toBeNull();
+
+    // Isolate the retry's own calls: the failed first attempt's call(s) are
+    // discarded here, so what remains is unambiguously the second attempt.
+    scanForLeftovers.mockClear();
+    await user.click(screen.getByRole('button', { name: 'Scan for leftovers' }));
+
+    await waitFor(() => expect(scanForLeftovers).toHaveBeenCalledTimes(2));
+    expect(scanForLeftovers.mock.calls.map((c) => c[0])).toEqual(['Thing One', 'Thing Two']);
+  });
 });

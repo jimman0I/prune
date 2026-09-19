@@ -247,4 +247,19 @@ describe('the review after a batch that scanned nothing', () => {
 
     expect(await screen.findByText(/No leftovers found/i)).toBeTruthy();
   });
+
+  it('skips the gate entirely for a mixed batch where the Store app succeeds but the registry program fails -- zero eligible for a scan', async () => {
+    // calculator succeeds (Store, never scanned) and thing fails (registry,
+    // so it never joins `succeeded` either) -- once succeeded is filtered
+    // down to non-Store programs, nothing is left to scan, so the gate
+    // must never appear and the batch lands straight on review.
+    streamUninstall.mockRejectedValue(new Error('The uninstaller exited with code 1603.'));
+    await run([calculator, thing]);
+
+    await screen.findByText(/Uninstalled 1 of 2/);
+    expect(screen.queryByRole('button', { name: 'Scan for leftovers' })).toBeNull();
+    expect(scanForLeftovers).not.toHaveBeenCalled();
+    expect(screen.queryByText(/No leftovers found/i)).toBeNull();
+    expect(screen.getByText(/no leftover scan/i)).toBeTruthy();
+  });
 });
