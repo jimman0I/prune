@@ -56,6 +56,14 @@ const run = async () => {
   await ready();
   await user.click(screen.getByRole('button', { name: 'Έναρξη απεγκατάστασης' }));
   await waitFor(() => expect(streamUninstall).toHaveBeenCalledTimes(2));
+  // `programs` are both real, non-Store, and always succeed here, so the
+  // readyToScan gate appears for this helper's callers -- except when a
+  // caller has turned scanLeftoversAfterUninstall off first, which skips
+  // the gate by design (nothing to scan means nothing to confirm), so this
+  // tolerates either outcome the same way BatchUninstallModal.settings.test.jsx's
+  // own run() helper does.
+  const scanButton = await screen.findByRole('button', { name: 'Σάρωση για κατάλοιπα' }).catch(() => null);
+  if (scanButton) await user.click(scanButton);
   return { user, onClose, onFinished };
 };
 
@@ -110,6 +118,27 @@ describe('the batch uninstall dialog, in Greek', () => {
     renderScreen(<BatchUninstallModal programs={[steam, marvel]} onClose={vi.fn()} onFinished={vi.fn()} />);
     await screen.findByRole('heading', { name: /Απεγκατάσταση 2 προγραμμάτων/ });
     expect(screen.getByText(/εκτελείται πριν από το Steam/)).toBeTruthy();
+  });
+
+  it('translates the readyToScan gate: body and Scan button, and the scanning-phase line', async () => {
+    const user = userEvent.setup();
+    renderScreen(<BatchUninstallModal programs={programs} onClose={vi.fn()} onFinished={vi.fn()} />);
+    await ready();
+    await user.click(screen.getByRole('button', { name: 'Έναρξη απεγκατάστασης' }));
+    await waitFor(() => expect(streamUninstall).toHaveBeenCalledTimes(2));
+
+    expect(screen.getByText(/εκκινητές παιχνιδιών/)).toBeTruthy();
+    // A resolved mock would let the scan finish inside the same act() the
+    // click already awaits, and the scanning-phase line would never be
+    // observable -- held open deliberately, the same way this file's own
+    // sibling in UninstallModal.language.render.test.jsx holds its
+    // scanning-phase assertion open.
+    let resolveScan;
+    scanForLeftovers.mockReturnValue(new Promise((resolve) => { resolveScan = resolve; }));
+    const scanButton = screen.getByRole('button', { name: 'Σάρωση για κατάλοιπα' });
+    await user.click(scanButton);
+    expect(await screen.findByText('Σάρωση καταλοίπων…')).toBeTruthy();
+    resolveScan(found);
   });
 
   it('translates the running-phase status labels and the removing-phase line', async () => {

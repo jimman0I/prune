@@ -86,3 +86,38 @@ describe('starting a batch uninstall', () => {
     expect(maxConcurrent).toBe(1);
   });
 });
+
+describe('the readyToScan gate', () => {
+  it('does not scan until Scan for leftovers is clicked, once every uninstaller has exited', async () => {
+    const user = userEvent.setup();
+    renderScreen(<BatchUninstallModal programs={programs} onClose={() => {}} onFinished={() => {}} />);
+    await user.click(screen.getByRole('button', { name: 'Start uninstalling' }));
+
+    const scanButton = await screen.findByRole('button', { name: 'Scan for leftovers' });
+    expect(scanForLeftovers).not.toHaveBeenCalled();
+
+    await user.click(scanButton);
+    await waitFor(() => expect(scanForLeftovers).toHaveBeenCalledTimes(2));
+    expect(scanForLeftovers.mock.calls.map((c) => c[0])).toEqual(['Thing One', 'Thing Two']);
+  });
+
+  it('closes from the gate without ever scanning, and still finishes the batch', async () => {
+    const onClose = vi.fn();
+    const onFinished = vi.fn();
+    const user = userEvent.setup();
+    renderScreen(<BatchUninstallModal programs={programs} onClose={onClose} onFinished={onFinished} />);
+    await user.click(screen.getByRole('button', { name: 'Start uninstalling' }));
+    await screen.findByRole('button', { name: 'Scan for leftovers' });
+
+    // Two "Close" buttons exist once the gate is up: the header's own, and
+    // the gate's dedicated one -- this targets the one rendered last, the
+    // same convention UninstallModal.render.test.jsx already uses for its
+    // own readyToScan step.
+    const closeButtons = screen.getAllByRole('button', { name: 'Close' });
+    await user.click(closeButtons[closeButtons.length - 1]);
+
+    expect(scanForLeftovers).not.toHaveBeenCalled();
+    expect(onFinished).toHaveBeenCalledTimes(1);
+    expect(onClose).toHaveBeenCalledTimes(1);
+  });
+});
