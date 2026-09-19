@@ -86,7 +86,10 @@ describe('a Store app in a batch', () => {
     /* The registry program still is -- that is what the scan is for. The
      * Store app is not, because the scan matches on publisher, and on the
      * dev machine most Store apps are Microsoft's. */
-    await startBatch([calculator, thing]);
+    const user = userEvent.setup();
+    renderScreen(<BatchUninstallModal programs={[calculator, thing]} onClose={() => {}} onFinished={() => {}} />);
+    await user.click(screen.getByRole('button', { name: 'Start uninstalling' }));
+    await user.click(await screen.findByRole('button', { name: 'Scan for leftovers' }));
 
     await waitFor(() => expect(scanForLeftovers).toHaveBeenCalledTimes(1));
     const scannedPublishers = scanForLeftovers.mock.calls.map((c) => c[1]);
@@ -180,6 +183,10 @@ describe('what can be copied', () => {
     renderScreen(<BatchUninstallModal programs={[thing]} onClose={vi.fn()} onFinished={vi.fn()} />);
 
     await user.click(screen.getByRole('button', { name: 'Start uninstalling' }));
+    // `thing` is real, non-Store, and succeeds here, so the readyToScan
+    // gate appears before the scan (and this test's queued leftover
+    // result) ever runs.
+    await user.click(await screen.findByRole('button', { name: 'Scan for leftovers' }));
     await user.click(await screen.findByRole('button', { name: 'Remove selected' }));
     expect(isCopyable(await screen.findByText(/Couldn't remove leftovers: EACCES/))).toBe(true);
   });
@@ -235,7 +242,8 @@ describe('the review after a batch that scanned nothing', () => {
 
   it('still reports a clean uninstall when a scan ran and found nothing', async () => {
     // The case the sentence is FOR. Guarding the two above must not lose it.
-    await run([thing]);
+    const { user } = await run([thing]);
+    await user.click(await screen.findByRole('button', { name: 'Scan for leftovers' }));
 
     expect(await screen.findByText(/No leftovers found/i)).toBeTruthy();
   });

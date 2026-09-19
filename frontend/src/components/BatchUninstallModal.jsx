@@ -84,6 +84,11 @@ export default function BatchUninstallModal({ programs, onClose, onFinished }) {
   // How many leftover scans the batch actually ran. Zero is not the same
   // as "ran and found nothing" -- see the review phase below.
   const [scanCount, setScanCount] = useState(0);
+  // Which succeeded, non-Store programs are waiting on a leftover scan --
+  // populated once, when the uninstall loop finishes and the readyToScan
+  // gate opens; read once the gate's own Scan button is clicked. See
+  // docs/superpowers/specs/2026-09-19-batch-uninstall-scan-gate-design.md.
+  const [scannable, setScannable] = useState([]);
 
   // The same three settings the single-program dialog follows, read the
   // same way: a failed settings request leaves the batch as it always was.
@@ -115,7 +120,7 @@ export default function BatchUninstallModal({ programs, onClose, onFinished }) {
    * second pass would run every one of them again. */
   const runBatch = useSingleFlight(async () => {
     setPhase('running');
-    const scans = [];
+    const succeeded = [];
 
     for (const program of ordered) {
       setStatus(program.id, { state: 'running' });
@@ -134,34 +139,77 @@ export default function BatchUninstallModal({ programs, onClose, onFinished }) {
           sizeBytes: program.sizeBytes
         }).catch(() => { /* logging must never fail an uninstall that worked */ });
         setStatus(program.id, { state: 'done' });
-
-        // Scan straight after each one rather than all at the end: the
-        // program's own files are freshest now, and a later uninstaller
-        // could remove a shared folder this one still had.
-        //
-        // Not for a Store app. The scan matches on publisher, and 68 of the
-        // 81 Store apps on the dev machine are published by Microsoft
-        // Corporation -- a publisher search for that would offer to
-        // quarantine a large part of Windows.
-        if (program.source !== 'store' && scanAfter) {
-          const scan = await scanForLeftovers(deriveSearchTerm(program.name), program.publisher);
-          scans.push({ program: program.name, scan });
-        }
+        succeeded.push(program);
       } catch (err) {
         // Recorded and skipped. The rest of the queue still runs.
         setStatus(program.id, { state: 'failed', message: err.message });
       }
     }
 
-    setScanCount(scans.length);
-    const merged = mergeLeftovers(scans);
-    setLeftovers(merged);
-    const keys = [];
-    for (const group of ['files', 'registryKeys']) {
-      (merged[group]?.items || []).forEach((_, i) => keys.push(`${group}:${i}`));
+    // Not for a Store app. The scan matches on publisher, and 68 of the
+    // 81 Store apps on the dev machine are published by Microsoft
+    // Corporation -- a publisher search for that would offer to
+    // quarantine a large part of Windows.
+    const eligible = succeeded.filter((program) => program.source !== 'store');
+
+    if (scanAfter && eligible.length > 0) {
+      // Every uninstaller has exited, but an exited process is not proof
+      // its real work is done -- confirmed live with Riot Client, whose
+      // real removal keeps running well after RiotClientServices.exe
+      // returns. The batch pauses here, once for the whole batch rather
+      // than once per program, for an explicit human confirmation before
+      // ANY leftover scan runs. See
+      // docs/superpowers/specs/2026-09-19-batch-uninstall-scan-gate-design.md
+      // for why this is one gate, not N, and the freshness trade-off that
+      // choice accepts.
+      setScannable(eligible);
+      setPhase('readyToScan');
+      return;
     }
-    setSelected(new Set(preselect ? keys : []));
+
+    // Nothing to gate: the leftover scan is off, or nothing eligible
+    // succeeded (all failures, or an all-Store batch) -- either way zero
+    // scans would run whether or not anyone confirmed anything.
+    finishWithNoScans();
+  });
+
+  const finishWithNoScans = () => {
+    setScanCount(0);
+    setLeftovers(mergeLeftovers([]));
+    setSelected(new Set());
     setPhase('review');
+  };
+
+  /* Single-flight for the same reason runBatch is: the click that starts
+   * the batch's leftover scans should not be able to fire twice. Its
+   * failure path returns to 'readyToScan', not 'confirm' or 'running' --
+   * every uninstall already ran; only the scan itself failed and can be
+   * retried without touching any program again. */
+  const startScans = useSingleFlight(async () => {
+    setError(null);
+    setPhase('scanning');
+    try {
+      const scans = [];
+      // Still scanned in the original per-program order -- mergeLeftovers'
+      // own de-duplication and per-item program attribution are unchanged
+      // by when the scan runs, only by what order it runs in.
+      for (const program of scannable) {
+        const scan = await scanForLeftovers(deriveSearchTerm(program.name), program.publisher);
+        scans.push({ program: program.name, scan });
+      }
+      setScanCount(scans.length);
+      const merged = mergeLeftovers(scans);
+      setLeftovers(merged);
+      const keys = [];
+      for (const group of ['files', 'registryKeys']) {
+        (merged[group]?.items || []).forEach((_, i) => keys.push(`${group}:${i}`));
+      }
+      setSelected(new Set(preselect ? keys : []));
+      setPhase('review');
+    } catch (err) {
+      setError(err.message);
+      setPhase('readyToScan');
+    }
   });
 
   /* Single-flight for the same reason the batch run is: the only thing
@@ -212,7 +260,7 @@ export default function BatchUninstallModal({ programs, onClose, onFinished }) {
         </h2>
         <button
           onClick={onClose}
-          disabled={phase === 'running' || phase === 'removing'}
+          disabled={phase === 'running' || phase === 'scanning' || phase === 'removing'}
           className="btn-ghost px-3 py-1.5 rounded-lg text-[12px] font-medium disabled:opacity-40"
         >
           {t('batchUninstallModal.close')}
@@ -286,7 +334,7 @@ export default function BatchUninstallModal({ programs, onClose, onFinished }) {
           </>
         )}
 
-        {(phase === 'running' || phase === 'removing') && (
+        {(phase === 'running' || phase === 'scanning' || phase === 'removing') && (
           <div className="space-y-1.5">
             {ordered.map((program) => {
               const status = statuses[program.id] || { state: 'pending' };
@@ -304,6 +352,24 @@ export default function BatchUninstallModal({ programs, onClose, onFinished }) {
                 {REMOVING_LINE[destination]}
               </p>
             )}
+            {phase === 'scanning' && (
+              <p className="text-[12.5px] text-[color:var(--text-secondary)] pt-3">
+                {t('batchUninstallModal.scanningLine')}
+              </p>
+            )}
+          </div>
+        )}
+
+        {phase === 'readyToScan' && (
+          <div className="py-4">
+            <p className="text-[13px] text-[color:var(--text-secondary)] mb-5">
+              {t('batchUninstallModal.readyToScan.body', scannable.length)}
+            </p>
+            {error && <p className="text-[12.5px] text-[color:var(--danger)] mb-4 select-text">{t('uninstallModal.scanFailed', error)}</p>}
+            <div className="flex items-center gap-2.5">
+              <button className="btn-primary" onClick={startScans}>{t('batchUninstallModal.readyToScan.scanButton')}</button>
+              <button className="btn-ghost px-3 py-1.5 rounded-lg text-[12px] font-medium" onClick={() => { onFinished?.(); onClose(); }}>{t('batchUninstallModal.close')}</button>
+            </div>
           </div>
         )}
 

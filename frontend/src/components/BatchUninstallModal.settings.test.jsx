@@ -46,6 +46,13 @@ const run = async () => {
   // opened from a screen that has long since loaded them.
   await waitFor(() => expect(fetchSettings).toHaveBeenCalled());
   await user.click(screen.getByRole('button', { name: 'Start uninstalling' }));
+  // thing always succeeds and is never a Store app, so the readyToScan
+  // gate always appears here -- except when scanLeftoversAfterUninstall
+  // is off, which that one test below checks for itself before calling
+  // this helper, and which skips the gate by design (nothing to scan
+  // means nothing to confirm).
+  const scanButton = await screen.findByRole('button', { name: 'Scan for leftovers' }).catch(() => null);
+  if (scanButton) await user.click(scanButton);
   return user;
 };
 
