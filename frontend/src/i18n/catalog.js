@@ -664,6 +664,11 @@ export const CATALOG = {
         recycle: 'Sending leftovers to the Recycle Bin…',
         permanent: 'Deleting leftovers permanently…'
       },
+      scanningLine: 'Scanning for leftovers…',
+      readyToScan: {
+        body: (n) => `${n} uninstaller${n === 1 ? '' : 's'} finished running. Some — game launchers especially — keep removing files in the background after their own window closes. Give it a moment if you're not sure, then click Scan to check for anything left behind.`,
+        scanButton: 'Scan for leftovers'
+      },
       uninstalledOf: (removed, total) => `Uninstalled ${removed} of ${total}.`,
       failedHeading: (n) => `${n} couldn't be uninstalled and ${n === 1 ? 'was' : 'were'} left alone:`,
       removeLeftoversFailed: (error) => `Couldn't remove leftovers: ${error}`,
@@ -1362,6 +1367,11 @@ export const CATALOG = {
         quarantine: 'Oorblyfsels word na Kwarantyn geskuif…',
         recycle: 'Oorblyfsels word na die Asblik gestuur…',
         permanent: 'Oorblyfsels word permanent verwyder…'
+      },
+      scanningLine: 'Skandeer vir oorblyfsels…',
+      readyToScan: {
+        body: (n) => `${n} deïnstalleerder${n === 1 ? '' : 's'} het klaar gehardloop. Sommige — veral speletjielanseerders — hou aan om lêers in die agtergrond te verwyder nadat hul eie venster toegemaak het. Gee dit 'n oomblik as jy nie seker is nie, en klik dan Skandeer vir oorblyfsels om te kyk of iets agtergelaat is.`,
+        scanButton: 'Skandeer vir oorblyfsels'
       },
       uninstalledOf: (removed, total) => `${removed} van ${total} gedeïnstalleer.`,
       failedHeading: (n) => `${n} kon nie gedeïnstalleer word nie en ${n === 1 ? 'is' : 'is'} alleen gelaat:`,
@@ -2062,6 +2072,11 @@ export const CATALOG = {
         recycle: 'إرسال المخلفات إلى سلة المحذوفات…',
         permanent: 'حذف المخلفات نهائيًا…'
       },
+      scanningLine: 'فحص المخلفات…',
+      readyToScan: {
+        body: (n) => `انتهى تشغيل ${n} ${n === 1 ? 'أداة إلغاء تثبيت' : 'أدوات إلغاء تثبيت'}. بعضها — خاصة مشغلات الألعاب — يستمر في حذف الملفات في الخلفية بعد إغلاق نافذته الخاصة. أمهلها لحظة إذا لم تكن متأكدًا، ثم انقر على مسح المخلفات للتحقق من أي شيء تم تركه.`,
+        scanButton: 'مسح المخلفات'
+      },
       uninstalledOf: (removed, total) => `تم إلغاء تثبيت ${removed} من ${total}.`,
       failedHeading: (n) => `تعذّر إلغاء تثبيت ${n} وتُركت وحدها:`,
       removeLeftoversFailed: (error) => `تعذّرت إزالة المخلفات: ${error}`,
@@ -2760,6 +2775,11 @@ export const CATALOG = {
         quarantine: 'Movent restes a la Quarantena…',
         recycle: 'Enviant restes a la Paperera de reciclatge…',
         permanent: 'Suprimint restes definitivament…'
+      },
+      scanningLine: 'Escanejant restes…',
+      readyToScan: {
+        body: (n) => `${n} desinstal·lador${n === 1 ? '' : 's'} ha${n === 1 ? '' : 'n'} acabat d'executar-se. Alguns — especialment els llançadors de jocs — continuen suprimint fitxers en segon pla després de tancar la seva pròpia finestra. Dona-li un moment si no n'estàs segur i després fes clic a Escaneja restes per comprovar si queda alguna cosa.`,
+        scanButton: 'Escaneja restes'
       },
       uninstalledOf: (removed, total) => `S'${'han'} desinstal·lat ${removed} de ${total}.`,
       failedHeading: (n) => `No s'${n === 1 ? 'ha' : 'han'} pogut desinstal·lar ${n} i s'${n === 1 ? 'ha' : 'han'} deixat sol${n === 1 ? '' : 's'}:`,
@@ -3460,6 +3480,11 @@ export const CATALOG = {
         recycle: 'Zbytky se odesílají do koše…',
         permanent: 'Zbytky se trvale mažou…'
       },
+      scanningLine: 'Kontrolují se zbytky…',
+      readyToScan: {
+        body: (n) => `Dokončeno ${n} odinstalačních programů (${n}). Některé — zejména herní launchery — pokračují v mazání souborů na pozadí i po zavření vlastního okna. Pokud si nejste jisti, dejte tomu chvíli, poté klikněte na Skenovat zbytky a zkontrolujte, zda něco nezůstalo.`,
+        scanButton: 'Skenovat zbytky'
+      },
       uninstalledOf: (removed, total) => `Odinstalováno ${removed} z ${total}.`,
       failedHeading: (n) => `${n} se nepodařilo odinstalovat a ${n === 1 ? 'zůstal' : 'zůstaly'} nedotčeny:`,
       removeLeftoversFailed: (error) => `Nepodařilo se odstranit zbytky: ${error}`,
@@ -4158,6 +4183,11 @@ export const CATALOG = {
         quarantine: "Yn symud olion i'r Cwarantin…",
         recycle: "Yn anfon olion i'r Bin Ailgylchu…",
         permanent: "Yn dileu olion yn barhaol…"
+      },
+      scanningLine: 'Yn sganio am olion…',
+      readyToScan: {
+        body: (n) => `Mae ${n} dadosodwr wedi gorffen rhedeg. Mae rhai — lansiwyr gemau yn arbennig — yn parhau i ddileu ffeiliau yn y cefndir ar ôl i'w ffenestr eu hunain gau. Rhowch eiliad iddo os nad ydych yn siŵr, yna cliciwch Sganio am olion i wirio am unrhyw beth sydd ar ôl.`,
+        scanButton: 'Sganio am olion'
       },
       uninstalledOf: (removed, total) => `Dadosodwyd ${removed} o ${total}.`,
       failedHeading: (n) => `Methwyd dadosod ${n} a chawsant eu gadael ar eu pen eu hunain:`,
@@ -4858,6 +4888,11 @@ export const CATALOG = {
         recycle: 'Sender rester til papirkurven…',
         permanent: 'Sletter rester permanent…'
       },
+      scanningLine: 'Scanner for rester…',
+      readyToScan: {
+        body: (n) => `${n} afinstallationsprogram${n === 1 ? '' : 'mer'} er færdige med at køre. Nogle — især spillauncher — bliver ved med at fjerne filer i baggrunden, efter deres eget vindue er lukket. Giv det et øjeblik, hvis du er i tvivl, og klik derefter på Scan efter rester for at tjekke, om der er noget tilbage.`,
+        scanButton: 'Scan efter rester'
+      },
       uninstalledOf: (removed, total) => `Afinstallerede ${removed} af ${total}.`,
       failedHeading: (n) => `${n} kunne ikke afinstalleres og blev ladet være:`,
       removeLeftoversFailed: (error) => `Kunne ikke fjerne rester: ${error}`,
@@ -5556,6 +5591,11 @@ export const CATALOG = {
         quarantine: 'Rückstände werden in die Quarantäne verschoben…',
         recycle: 'Rückstände werden in den Papierkorb verschoben…',
         permanent: 'Rückstände werden endgültig gelöscht…'
+      },
+      scanningLine: 'Rückstände werden gescannt…',
+      readyToScan: {
+        body: (n) => `${n} Deinstallationsprogramm${n === 1 ? '' : 'e'} ${n === 1 ? 'wurde' : 'wurden'} beendet. Manche — insbesondere Spiele-Launcher — entfernen im Hintergrund weiter Dateien, nachdem ihr eigenes Fenster geschlossen wurde. Geben Sie ihm etwas Zeit, falls Sie unsicher sind, und klicken Sie dann auf Nach Rückständen scannen, um zu prüfen, ob etwas übrig geblieben ist.`,
+        scanButton: 'Nach Rückständen scannen'
       },
       uninstalledOf: (removed, total) => `${removed} von ${total} deinstalliert.`,
       failedHeading: (n) => `${n} konnte${n === 1 ? '' : 'n'} nicht deinstalliert werden und ${n === 1 ? 'wurde' : 'wurden'} unangetastet gelassen:`,
@@ -6256,6 +6296,11 @@ export const CATALOG = {
         recycle: 'Αποστολή καταλοίπων στον Κάδο Ανακύκλωσης…',
         permanent: 'Οριστική διαγραφή καταλοίπων…'
       },
+      scanningLine: 'Σάρωση καταλοίπων…',
+      readyToScan: {
+        body: (n) => `Ολοκληρώθηκαν ${n} απεγκαταστάτ${n === 1 ? 'ης' : 'ες'}. Ορισμένοι — ειδικά οι εκκινητές παιχνιδιών — συνεχίζουν να αφαιρούν αρχεία στο παρασκήνιο αφού κλείσει το δικό τους παράθυρο. Δώστε του λίγο χρόνο αν δεν είστε σίγουροι και μετά κάντε κλικ στο Σάρωση για κατάλοιπα για να ελέγξετε αν έχει μείνει κάτι.`,
+        scanButton: 'Σάρωση για κατάλοιπα'
+      },
       uninstalledOf: (removed, total) => `Απεγκαταστάθηκαν ${removed} από ${total}.`,
       failedHeading: (n) => `Αποτυχία απεγκατάστασης ${n} και παρέμειν${n === 1 ? 'ε' : 'αν'} ανέγγιχτ${n === 1 ? 'ο' : 'α'}:`,
       removeLeftoversFailed: (error) => `Αδυναμία αφαίρεσης καταλοίπων: ${error}`,
@@ -6954,6 +6999,11 @@ export const CATALOG = {
         quarantine: 'Moviendo restos a Cuarentena…',
         recycle: 'Enviando restos a la Papelera de reciclaje…',
         permanent: 'Eliminando restos permanentemente…'
+      },
+      scanningLine: 'Escaneando restos…',
+      readyToScan: {
+        body: (n) => `${n} desinstalador${n === 1 ? '' : 'es'} terminaron de ejecutarse. Algunos — especialmente los lanzadores de juegos — siguen eliminando archivos en segundo plano después de cerrar su propia ventana. Dale un momento si no estás seguro y luego haz clic en Escanear restos para comprobar si queda algo.`,
+        scanButton: 'Escanear restos'
       },
       uninstalledOf: (removed, total) => `Se desinstalaron ${removed} de ${total}.`,
       failedHeading: (n) => `No se ${n === 1 ? 'pudo' : 'pudieron'} desinstalar ${n} y se dej${n === 1 ? 'ó' : 'aron'} tal cual:`,
@@ -7654,6 +7704,11 @@ export const CATALOG = {
         recycle: 'Jääkide saatmine prügikasti…',
         permanent: 'Jääkide jäädav kustutamine…'
       },
+      scanningLine: 'Jääkide skannimine…',
+      readyToScan: {
+        body: (n) => `${n} desinstallija${n === 1 ? '' : 't'} lõpetas${n === 1 ? '' : 'id'} töö. Mõned — eriti mänguturud — jätkavad failide eemaldamist taustal ka pärast oma akna sulgemist. Kui te pole kindel, andke sellele hetk aega ja klõpsake seejärel Skanni jääke, et kontrollida, kas midagi jäi maha.`,
+        scanButton: 'Skanni jääke'
+      },
       uninstalledOf: (removed, total) => `Desinstalliti ${removed} ${total}-st.`,
       failedHeading: (n) => `${n} ei õnnestunud desinstallida ja need jäeti rahule:`,
       removeLeftoversFailed: (error) => `Jääkide eemaldamine ebaõnnestus: ${error}`,
@@ -8352,6 +8407,11 @@ export const CATALOG = {
         quarantine: 'Siirretään jäänteitä karanteeniin…',
         recycle: 'Lähetetään jäänteitä roskakoriin…',
         permanent: 'Poistetaan jäänteitä pysyvästi…'
+      },
+      scanningLine: 'Skannataan jäänteitä…',
+      readyToScan: {
+        body: (n) => `${n} poisto-ohjelma${n === 1 ? '' : 'a'} lopetti toimintansa. Jotkin — erityisesti pelien käynnistysohjelmat — jatkavat tiedostojen poistamista taustalla oman ikkunansa sulkeuduttua. Anna sille hetki aikaa, jos olet epävarma, ja napsauta sitten Skannaa jäänteet tarkistaaksesi, jäikö mitään jäljelle.`,
+        scanButton: 'Skannaa jäänteet'
       },
       uninstalledOf: (removed, total) => `Poistettiin ${removed}/${total}.`,
       failedHeading: (n) => `${n} ei voitu poistaa ja ${n === 1 ? 'se jätettiin' : 'ne jätettiin'} rauhaan:`,
@@ -9052,6 +9112,11 @@ export const CATALOG = {
         recycle: 'Envoi des résidus vers la Corbeille…',
         permanent: 'Suppression définitive des résidus…'
       },
+      scanningLine: 'Analyse des résidus…',
+      readyToScan: {
+        body: (n) => `${n} désinstalleur${n === 1 ? '' : 's'} ${n === 1 ? 'a terminé' : 'ont terminé'} son exécution. Certains — notamment les lanceurs de jeux — continuent à supprimer des fichiers en arrière-plan après la fermeture de leur propre fenêtre. Laissez-lui un instant en cas de doute, puis cliquez sur Analyser les résidus pour vérifier ce qu'il a pu laisser derrière lui.`,
+        scanButton: 'Analyser les résidus'
+      },
       uninstalledOf: (removed, total) => `${removed} désinstallé${removed === 1 ? '' : 's'} sur ${total}.`,
       failedHeading: (n) => `${n} n'${n === 1 ? 'a' : 'ont'} pas pu être désinstallé${n === 1 ? '' : 's'} et ${n === 1 ? 'a été laissé' : 'ont été laissés'} tel${n === 1 ? '' : 's'} quel${n === 1 ? '' : 's'} :`,
       removeLeftoversFailed: (error) => `Impossible de supprimer les résidus : ${error}`,
@@ -9750,6 +9815,11 @@ export const CATALOG = {
         quarantine: 'מעביר שאריות להסגר…',
         recycle: 'שולח שאריות לסל המיחזור…',
         permanent: 'מוחק שאריות לצמיתות…'
+      },
+      scanningLine: 'סורק שאריות…',
+      readyToScan: {
+        body: (n) => `${n} תוכנ${n === 1 ? 'ת' : 'ות'} הסרה סיימ${n === 1 ? 'ה' : 'ו'} לפעול. חלקן — במיוחד משגרי משחקים — ממשיכות למחוק קבצים ברקע גם אחרי שהחלון שלהן נסגר. תנו לזה רגע אם אינכם בטוחים, ואז לחצו על סרוק שאריות כדי לבדוק אם נשאר משהו.`,
+        scanButton: 'סרוק שאריות'
       },
       uninstalledOf: (removed, total) => `הוסרו ${removed} מתוך ${total}.`,
       failedHeading: (n) => `לא ניתן היה להסיר ${n} והן נותרו כפי שהן:`,
@@ -10450,6 +10520,11 @@ export const CATALOG = {
         recycle: 'Maradványok küldése a Lomtárba…',
         permanent: 'Maradványok végleges törlése…'
       },
+      scanningLine: 'Maradványok vizsgálata…',
+      readyToScan: {
+        body: (n) => `${n} eltávolító fejezte be a futást. Néhány — különösen a játékindítók — a saját ablakuk bezárása után is folytatják a fájlok háttérben történő törlését. Ha nem biztos benne, adjon neki egy pillanatot, majd kattintson a Maradványok keresése gombra, hogy ellenőrizze, maradt-e valami.`,
+        scanButton: 'Maradványok keresése'
+      },
       uninstalledOf: (removed, total) => `${removed}/${total} eltávolítva.`,
       failedHeading: (n) => `${n} eltávolítása sikertelen volt, és érintetlenül maradt${n === 1 ? '' : 'ak'}:`,
       removeLeftoversFailed: (error) => `Nem sikerült eltávolítani a maradványokat: ${error}`,
@@ -11148,6 +11223,11 @@ export const CATALOG = {
         quarantine: 'Memindahkan sisa ke Karantina…',
         recycle: 'Mengirim sisa ke Recycle Bin…',
         permanent: 'Menghapus sisa secara permanen…'
+      },
+      scanningLine: 'Memindai sisa…',
+      readyToScan: {
+        body: (n) => `${n} uninstaller selesai berjalan. Beberapa — terutama peluncur game — terus menghapus file di latar belakang setelah jendelanya sendiri tertutup. Beri waktu sebentar jika Anda tidak yakin, lalu klik Pindai sisa untuk memeriksa apakah ada yang tertinggal.`,
+        scanButton: 'Pindai sisa'
       },
       uninstalledOf: (removed, total) => `Menguninstal ${removed} dari ${total}.`,
       failedHeading: (n) => `${n} tidak dapat diuninstal dan dibiarkan saja:`,
@@ -11848,6 +11928,11 @@ export const CATALOG = {
         recycle: 'Sendi leifar í ruslafötuna…',
         permanent: 'Eyði leifum varanlega…'
       },
+      scanningLine: 'Skanna leifar…',
+      readyToScan: {
+        body: (n) => `${n} fjarlægingarforrit${n === 1 ? '' : ''} lauk keyrslu. Sum — sérstaklega leikjaræsar — halda áfram að fjarlægja skrár í bakgrunni eftir að þeirra eigin gluggi lokast. Gefðu því smá stund ef þú ert ekki viss, smelltu svo á Skanna eftir leifum til að athuga hvort eitthvað varð eftir.`,
+        scanButton: 'Skanna eftir leifum'
+      },
       uninstalledOf: (removed, total) => `Fjarlægði ${removed} af ${total}.`,
       failedHeading: (n) => `Ekki tókst að fjarlægja ${n} og var${n === 1 ? '' : 'u'} látin eiga sig:`,
       removeLeftoversFailed: (error) => `Ekki tókst að fjarlægja leifar: ${error}`,
@@ -12546,6 +12631,11 @@ export const CATALOG = {
         quarantine: 'Spostamento dei residui in Quarantena…',
         recycle: 'Invio dei residui al Cestino…',
         permanent: 'Eliminazione definitiva dei residui…'
+      },
+      scanningLine: 'Analisi dei residui…',
+      readyToScan: {
+        body: (n) => `${n} disinstallator${n === 1 ? 'e ha' : 'i hanno'} terminato l'esecuzione. Alcuni — soprattutto i launcher di giochi — continuano a rimuovere file in background dopo la chiusura della propria finestra. Concedigli un momento se non sei sicuro, poi fai clic su Scansiona residui per verificare se è rimasto qualcosa.`,
+        scanButton: 'Scansiona residui'
       },
       uninstalledOf: (removed, total) => `Disinstallat${'i'} ${removed} di ${total}.`,
       failedHeading: (n) => `Impossibile disinstallare ${n}, lasciat${n === 1 ? 'o' : 'i'} così:`,
@@ -13246,6 +13336,11 @@ export const CATALOG = {
         recycle: '残留物をごみ箱へ送信中…',
         permanent: '残留物を完全に削除中…'
       },
+      scanningLine: '残留物をスキャン中…',
+      readyToScan: {
+        body: (n) => `${n} 件のアンインストーラーの実行が終了しました。特にゲームランチャーなど、一部はウィンドウを閉じた後もバックグラウンドでファイルの削除を続けることがあります。不安な場合は少し待ってから、「残留物をスキャン」をクリックして残っているものがないか確認してください。`,
+        scanButton: '残留物をスキャン'
+      },
       uninstalledOf: (removed, total) => `${total}件中${removed}件をアンインストールしました。`,
       failedHeading: (n) => `${n}件をアンインストールできず、そのまま残されました:`,
       removeLeftoversFailed: (error) => `残留物を削除できませんでした: ${error}`,
@@ -13944,6 +14039,11 @@ export const CATALOG = {
         quarantine: '남은 항목을 격리 공간으로 이동 중…',
         recycle: '남은 항목을 휴지통으로 보내는 중…',
         permanent: '남은 항목을 완전히 삭제 중…'
+      },
+      scanningLine: '남은 항목 검사 중…',
+      readyToScan: {
+        body: (n) => `${n}개의 제거 프로그램 실행이 끝났습니다. 일부 — 특히 게임 런처 — 는 자체 창이 닫힌 후에도 백그라운드에서 파일 삭제를 계속합니다. 확실하지 않다면 잠시 기다린 후 남은 항목 검사를 클릭하여 남은 것이 있는지 확인하세요.`,
+        scanButton: '남은 항목 검사'
       },
       uninstalledOf: (removed, total) => `${total}개 중 ${removed}개를 제거했습니다.`,
       failedHeading: (n) => `${n}개를 제거할 수 없어 그대로 두었습니다:`,
@@ -14644,6 +14744,11 @@ export const CATALOG = {
         recycle: 'Liekanos siunčiamos į šiukšlinę…',
         permanent: 'Liekanos visiškai ištrinamos…'
       },
+      scanningLine: 'Nuskaitomos liekanos…',
+      readyToScan: {
+        body: (n) => `${n} šalinimo priemon${n === 1 ? 'ė baigė' : 'ės baigė'} veikti. Kai kurios — ypač žaidimų leidiklės — toliau šalina failus fone, net kai jų pačių langas jau uždarytas. Jei nesate tikri, palaukite akimirką, tada spustelėkite Ieškoti liekanų, kad patikrintumėte, ar kas nors liko.`,
+        scanButton: 'Ieškoti liekanų'
+      },
       uninstalledOf: (removed, total) => `Pašalinta ${removed} iš ${total}.`,
       failedHeading: (n) => `${n} nepavyko pašalinti ir jos buvo paliktos ramybėje:`,
       removeLeftoversFailed: (error) => `Nepavyko pašalinti liekanų: ${error}`,
@@ -15342,6 +15447,11 @@ export const CATALOG = {
         quarantine: 'Memindahkan baki ke Kuarantin…',
         recycle: 'Menghantar baki ke Tong Kitar Semula…',
         permanent: 'Memadam baki secara kekal…'
+      },
+      scanningLine: 'Mengimbas baki…',
+      readyToScan: {
+        body: (n) => `${n} penyahpasang selesai dijalankan. Sesetengah — terutamanya pelancar permainan — terus mengalih keluar fail di latar belakang selepas tetingkapnya sendiri ditutup. Beri sedikit masa jika anda tidak pasti, kemudian klik Imbas baki untuk menyemak sama ada ada yang tertinggal.`,
+        scanButton: 'Imbas baki'
       },
       uninstalledOf: (removed, total) => `Menyahpasang ${removed} daripada ${total}.`,
       failedHeading: (n) => `${n} tidak dapat dinyahpasang dan dibiarkan sahaja:`,
@@ -16042,6 +16152,11 @@ export const CATALOG = {
         recycle: 'Sender rester til papirkurven…',
         permanent: 'Sletter rester permanent…'
       },
+      scanningLine: 'Skanner etter rester…',
+      readyToScan: {
+        body: (n) => `${n} avinstallasjonsprogram${n === 1 ? '' : 'mer'} er ferdig med å kjøre. Noen — spesielt spill-launchere — fortsetter å fjerne filer i bakgrunnen etter at sitt eget vindu er lukket. Gi det et øyeblikk hvis du er usikker, klikk deretter Skann etter rester for å sjekke om noe ble liggende igjen.`,
+        scanButton: 'Skann etter rester'
+      },
       uninstalledOf: (removed, total) => `Avinstallerte ${removed} av ${total}.`,
       failedHeading: (n) => `${n} kunne ikke avinstalleres og ble latt være:`,
       removeLeftoversFailed: (error) => `Kunne ikke fjerne rester: ${error}`,
@@ -16740,6 +16855,11 @@ export const CATALOG = {
         quarantine: 'Restanten worden verplaatst naar Quarantaine…',
         recycle: 'Restanten worden naar de Prullenbak gestuurd…',
         permanent: 'Restanten worden definitief verwijderd…'
+      },
+      scanningLine: 'Restanten worden gescand…',
+      readyToScan: {
+        body: (n) => `${n} verwijderprogramma${n === 1 ? '' : "'s"} ${n === 1 ? 'is' : 'zijn'} klaar met uitvoeren. Sommige — vooral gamelaunchers — blijven op de achtergrond bestanden verwijderen nadat hun eigen venster is gesloten. Geef het een moment als je het niet zeker weet, klik dan op Scannen op restanten om te controleren of er iets is achtergebleven.`,
+        scanButton: 'Scannen op restanten'
       },
       uninstalledOf: (removed, total) => `${removed} van ${total} verwijderd.`,
       failedHeading: (n) => `${n} kon${n === 1 ? '' : 'den'} niet worden verwijderd en ${n === 1 ? 'is' : 'zijn'} met rust gelaten:`,
@@ -17440,6 +17560,11 @@ export const CATALOG = {
         recycle: 'Wysyłanie pozostałości do kosza…',
         permanent: 'Trwałe usuwanie pozostałości…'
       },
+      scanningLine: 'Skanowanie pozostałości…',
+      readyToScan: {
+        body: (n) => `${n} dezinstalator${n === 1 ? '' : 'y'} zakończył${n === 1 ? '' : 'y'} działanie. Niektóre — zwłaszcza launchery gier — nadal usuwają pliki w tle po zamknięciu własnego okna. Jeśli nie masz pewności, daj temu chwilę, a następnie kliknij Skanuj pozostałości, aby sprawdzić, czy coś zostało.`,
+        scanButton: 'Skanuj pozostałości'
+      },
       uninstalledOf: (removed, total) => `Odinstalowano ${removed} z ${total}.`,
       failedHeading: (n) => `Nie udało się odinstalować ${n} i pozostawiono je bez zmian:`,
       removeLeftoversFailed: (error) => `Nie udało się usunąć pozostałości: ${error}`,
@@ -18138,6 +18263,11 @@ export const CATALOG = {
         quarantine: 'پاتې شونې قرنطین ته لیږدول کیږي…',
         recycle: 'پاتې شونې ردي بکس ته لیږل کیږي…',
         permanent: 'پاتې شونې د تل لپاره ړنګیږي…'
+      },
+      scanningLine: 'د پاتې شونو سکین کول…',
+      readyToScan: {
+        body: (n) => `د ${n} لرې کوونکو چلول پای ته ورسیدل. ځینې — په ځانګړي توګه د لوبو پیلوونکي — د خپلې کړکۍ تړلو وروسته هم په شاليد کې فایلونه لرې کول دوام ورکوي. که ډاډه نه یاست یو څه صبر وکړئ، بیا د پاتې شونو سکین باندې کلیک وکړئ ترڅو وګورئ چې کوم شی پاتې دی که نه.`,
+        scanButton: 'د پاتې شونو سکین'
       },
       uninstalledOf: (removed, total) => `${removed} د ${total} څخه لرې شول.`,
       failedHeading: (n) => `${n} لرې نشوای کیدی او یوازې پریښودل شول:`,
@@ -18838,6 +18968,11 @@ export const CATALOG = {
         recycle: 'Enviando resíduos para a Lixeira…',
         permanent: 'Excluindo resíduos permanentemente…'
       },
+      scanningLine: 'Verificando resíduos…',
+      readyToScan: {
+        body: (n) => `${n} desinstalador${n === 1 ? '' : 'es'} terminou${n === 1 ? '' : 'ram'} de rodar. Alguns — especialmente os launchers de jogos — continuam removendo arquivos em segundo plano depois que a própria janela é fechada. Dê um tempo se não tiver certeza e depois clique em Verificar resíduos para checar se sobrou algo.`,
+        scanButton: 'Verificar resíduos'
+      },
       uninstalledOf: (removed, total) => `Desinstalado${'s'} ${removed} de ${total}.`,
       failedHeading: (n) => `${n} não p${n === 1 ? 'ôde' : 'uderam'} ser desinstalado${n === 1 ? '' : 's'} e f${n === 1 ? 'oi deixado' : 'oram deixados'} de lado:`,
       removeLeftoversFailed: (error) => `Não foi possível remover os resíduos: ${error}`,
@@ -19536,6 +19671,11 @@ export const CATALOG = {
         quarantine: 'A mover resíduos para a Quarentena…',
         recycle: 'A enviar resíduos para a Reciclagem…',
         permanent: 'A eliminar resíduos permanentemente…'
+      },
+      scanningLine: 'A verificar resíduos…',
+      readyToScan: {
+        body: (n) => `${n} desinstalador${n === 1 ? '' : 'es'} termin${n === 1 ? 'ou' : 'aram'} de correr. Alguns — sobretudo os launchers de jogos — continuam a remover ficheiros em segundo plano depois de a própria janela se fechar. Dê-lhe um momento se não tiver a certeza e depois clique em Analisar resíduos para verificar se ficou algo por remover.`,
+        scanButton: 'Analisar resíduos'
       },
       uninstalledOf: (removed, total) => `Desinstalad${'os'} ${removed} de ${total}.`,
       failedHeading: (n) => `${n} não p${n === 1 ? 'ôde' : 'uderam'} ser desinstalado${n === 1 ? '' : 's'} e f${n === 1 ? 'oi deixado' : 'oram deixados'} intocado${n === 1 ? '' : 's'}:`,
@@ -20236,6 +20376,11 @@ export const CATALOG = {
         recycle: 'Se trimit resturile în Coșul de reciclare…',
         permanent: 'Se șterg resturile definitiv…'
       },
+      scanningLine: 'Se scanează resturi…',
+      readyToScan: {
+        body: (n) => `${n} dezinstalator${n === 1 ? ' și-a terminat' : 'e și-au terminat'} rularea. Unele — mai ales launcherele de jocuri — continuă să șteargă fișiere în fundal după ce propria fereastră s-a închis. Acordați-i un moment dacă nu sunteți sigur, apoi faceți clic pe Scanează resturi pentru a verifica dacă a mai rămas ceva.`,
+        scanButton: 'Scanează resturi'
+      },
       uninstalledOf: (removed, total) => `S-au dezinstalat ${removed} din ${total}.`,
       failedHeading: (n) => `${n} nu ${n === 1 ? 'a putut fi dezinstalat' : 'au putut fi dezinstalate'} și ${n === 1 ? 'a fost lăsat' : 'au fost lăsate'} deoparte:`,
       removeLeftoversFailed: (error) => `Nu s-au putut elimina resturile: ${error}`,
@@ -20934,6 +21079,11 @@ export const CATALOG = {
         quarantine: 'Перемещение остатков в карантин…',
         recycle: 'Отправка остатков в корзину…',
         permanent: 'Безвозвратное удаление остатков…'
+      },
+      scanningLine: 'Сканирование остатков…',
+      readyToScan: {
+        body: (n) => `${n} деинсталлятор${n === 1 ? '' : 'ов'} завершил${n === 1 ? '' : 'и'} работу. Некоторые — особенно лаунчеры игр — продолжают удалять файлы в фоновом режиме после закрытия собственного окна. Если не уверены, дайте этому немного времени, затем нажмите «Сканировать остатки», чтобы проверить, не осталось ли чего-нибудь.`,
+        scanButton: 'Сканировать остатки'
       },
       uninstalledOf: (removed, total) => `Удалено ${removed} из ${total}.`,
       failedHeading: (n) => `${n} не удалось удалить, и они остались нетронутыми:`,
@@ -21634,6 +21784,11 @@ export const CATALOG = {
         recycle: 'Zvyšky sa odosielajú do koša…',
         permanent: 'Zvyšky sa natrvalo mažú…'
       },
+      scanningLine: 'Skenujú sa zvyšky…',
+      readyToScan: {
+        body: (n) => `${n} odinštalátor${n === 1 ? '' : 'y'} dokončil${n === 1 ? '' : 'i'} beh. Niektoré — najmä herné launchery — pokračujú v odstraňovaní súborov na pozadí aj po zatvorení vlastného okna. Ak si nie ste istí, dajte tomu chvíľu a potom kliknite na Vyhľadať zvyšky, aby ste skontrolovali, či niečo nezostalo.`,
+        scanButton: 'Vyhľadať zvyšky'
+      },
       uninstalledOf: (removed, total) => `Odinštalovaných ${removed} z ${total}.`,
       failedHeading: (n) => `${n} sa nepodarilo odinštalovať a boli ponechané tak, ako sú:`,
       removeLeftoversFailed: (error) => `Nepodarilo sa odstrániť zvyšky: ${error}`,
@@ -22332,6 +22487,11 @@ export const CATALOG = {
         quarantine: 'Duke lëvizur mbetjet në Karantinë…',
         recycle: 'Duke dërguar mbetjet në Koshin e Riciklimit…',
         permanent: 'Duke fshirë mbetjet përgjithmonë…'
+      },
+      scanningLine: 'Duke skanuar mbetje…',
+      readyToScan: {
+        body: (n) => `${n} çinstalues ka${n === 1 ? '' : 'në'} përfunduar ekzekutimin. Disa — sidomos nisësit e lojërave — vazhdojnë të heqin skedarë në sfond edhe pasi dritarja e tyre është mbyllur. Jepini një moment nëse nuk je i sigurt, pastaj kliko Skano mbetjet për të kontrolluar nëse ka mbetur diçka.`,
+        scanButton: 'Skano mbetjet'
       },
       uninstalledOf: (removed, total) => `U çinstaluan ${removed} nga ${total}.`,
       failedHeading: (n) => `${n} nuk u çinstaluan dot dhe u lanë ashtu siç ishin:`,
@@ -23032,6 +23192,11 @@ export const CATALOG = {
         recycle: 'Шаљу се остаци у корпу за отпатке…',
         permanent: 'Трајно се бришу остаци…'
       },
+      scanningLine: 'Скенирају се остаци…',
+      readyToScan: {
+        body: (n) => `Извршавање ${n} деинсталатера је завршено. Неки — посебно покретачи игара — настављају да уклањају датотеке у позадини и након затварања сопственог прозора. Ако нисте сигурни, сачекајте тренутак, а затим кликните на Скенирај остатке да проверите да ли је нешто остало.`,
+        scanButton: 'Скенирај остатке'
+      },
       uninstalledOf: (removed, total) => `Деинсталирано ${removed} од ${total}.`,
       failedHeading: (n) => `${n} није могло да се деинсталира и остало је нетакнуто:`,
       removeLeftoversFailed: (error) => `Није могуће уклонити остатке: ${error}`,
@@ -23730,6 +23895,11 @@ export const CATALOG = {
         quarantine: 'Flyttar rester till karantän…',
         recycle: 'Skickar rester till papperskorgen…',
         permanent: 'Raderar rester permanent…'
+      },
+      scanningLine: 'Skannar rester…',
+      readyToScan: {
+        body: (n) => `${n} avinstallationsprogram slutförde körningen. Vissa — särskilt spellanserare — fortsätter att ta bort filer i bakgrunden efter att det egna fönstret stängts. Ge det en stund om du är osäker, klicka sedan på Skanna efter rester för att kontrollera om något finns kvar.`,
+        scanButton: 'Skanna efter rester'
       },
       uninstalledOf: (removed, total) => `Avinstallerade ${removed} av ${total}.`,
       failedHeading: (n) => `${n} kunde inte avinstalleras och lämnades ifred:`,
@@ -24430,6 +24600,11 @@ export const CATALOG = {
         recycle: 'กำลังส่งสิ่งตกค้างไปยังถังรีไซเคิล…',
         permanent: 'กำลังลบสิ่งตกค้างถาวร…'
       },
+      scanningLine: 'กำลังสแกนสิ่งตกค้าง…',
+      readyToScan: {
+        body: (n) => `${n} ตัวถอนการติดตั้งทำงานเสร็จแล้ว บางตัว — โดยเฉพาะตัวเปิดเกม — ยังคงลบไฟล์ในเบื้องหลังต่อไปหลังจากหน้าต่างของตัวเองปิดลง หากไม่แน่ใจ ให้รอสักครู่ แล้วคลิกสแกนหาสิ่งตกค้างเพื่อตรวจสอบว่ามีอะไรหลงเหลืออยู่หรือไม่`,
+        scanButton: 'สแกนหาสิ่งตกค้าง'
+      },
       uninstalledOf: (removed, total) => `ถอนการติดตั้งแล้ว ${removed} จาก ${total}`,
       failedHeading: (n) => `${n} รายการไม่สามารถถอนการติดตั้งได้และถูกปล่อยไว้:`,
       removeLeftoversFailed: (error) => `ไม่สามารถลบสิ่งตกค้างได้: ${error}`,
@@ -25128,6 +25303,11 @@ export const CATALOG = {
         quarantine: 'Artıklar Karantinaya taşınıyor…',
         recycle: 'Artıklar Geri Dönüşüm Kutusuna gönderiliyor…',
         permanent: 'Artıklar kalıcı olarak siliniyor…'
+      },
+      scanningLine: 'Artıklar taranıyor…',
+      readyToScan: {
+        body: (n) => `${n} kaldırma programının çalışması sona erdi. Bazıları — özellikle oyun başlatıcıları — kendi penceresi kapandıktan sonra bile arka planda dosya kaldırmaya devam eder. Emin değilseniz biraz bekleyin, ardından geride bir şey kalıp kalmadığını kontrol etmek için Artıkları tara'ya tıklayın.`,
+        scanButton: 'Artıkları tara'
       },
       uninstalledOf: (removed, total) => `${total} programdan ${removed} tanesi kaldırıldı.`,
       failedHeading: (n) => `${n} tanesi kaldırılamadı ve olduğu gibi bırakıldı:`,
@@ -25828,6 +26008,11 @@ export const CATALOG = {
         recycle: 'Надсилання залишків у кошик…',
         permanent: 'Остаточне видалення залишків…'
       },
+      scanningLine: 'Сканування залишків…',
+      readyToScan: {
+        body: (n) => `${n} деінсталятор${n === 1 ? '' : 'ів'} завершив${n === 1 ? '' : 'и'} роботу. Деякі — особливо лаунчери ігор — продовжують видаляти файли у фоновому режимі після закриття власного вікна. Якщо не впевнені, дайте цьому трохи часу, а потім натисніть «Сканувати залишки», щоб перевірити, чи щось залишилось.`,
+        scanButton: 'Сканувати залишки'
+      },
       uninstalledOf: (removed, total) => `Видалено ${removed} з ${total}.`,
       failedHeading: (n) => `${n} не вдалося видалити, і вони залишилися неторканими:`,
       removeLeftoversFailed: (error) => `Не вдалося видалити залишки: ${error}`,
@@ -26526,6 +26711,11 @@ export const CATALOG = {
         quarantine: 'Đang di chuyển tệp sót lại vào Cách ly…',
         recycle: 'Đang gửi tệp sót lại đến Thùng rác…',
         permanent: 'Đang xóa tệp sót lại vĩnh viễn…'
+      },
+      scanningLine: 'Đang quét tệp sót lại…',
+      readyToScan: {
+        body: (n) => `${n} trình gỡ cài đặt đã chạy xong. Một số — đặc biệt là trình khởi chạy game — vẫn tiếp tục xóa tệp trong nền sau khi cửa sổ riêng của chúng đã đóng. Hãy chờ một chút nếu bạn không chắc, sau đó nhấp vào Quét tệp sót lại để kiểm tra xem còn sót lại gì không.`,
+        scanButton: 'Quét tệp sót lại'
       },
       uninstalledOf: (removed, total) => `Đã gỡ cài đặt ${removed} trong số ${total}.`,
       failedHeading: (n) => `${n} không thể gỡ cài đặt và đã bị bỏ qua:`,
@@ -27226,6 +27416,11 @@ export const CATALOG = {
         recycle: '正在将残留项发送到回收站…',
         permanent: '正在永久删除残留项…'
       },
+      scanningLine: '正在扫描残留项…',
+      readyToScan: {
+        body: (n) => `${n} 个卸载程序已运行完毕。有些——尤其是游戏启动器——会在自己的窗口关闭后继续在后台删除文件。如果不确定，请稍等片刻，然后点击扫描残留项以检查是否还有遗留内容。`,
+        scanButton: '扫描残留项'
+      },
       uninstalledOf: (removed, total) => `已卸载 ${total} 个中的 ${removed} 个。`,
       failedHeading: (n) => `${n} 个无法卸载，已保持原样：`,
       removeLeftoversFailed: (error) => `无法删除残留项：${error}`,
@@ -27924,6 +28119,11 @@ export const CATALOG = {
         quarantine: '正在將殘留項目移動到隔離區…',
         recycle: '正在將殘留項目傳送到資源回收筒…',
         permanent: '正在永久刪除殘留項目…'
+      },
+      scanningLine: '正在掃描殘留項目…',
+      readyToScan: {
+        body: (n) => `${n} 個解除安裝程式已執行完畢。有些——尤其是遊戲啟動器——會在自己的視窗關閉後繼續在背景刪除檔案。如果不確定，請稍候片刻，然後點擊掃描殘留項目以檢查是否還有遺留內容。`,
+        scanButton: '掃描殘留項目'
       },
       uninstalledOf: (removed, total) => `已解除安裝 ${total} 個中的 ${removed} 個。`,
       failedHeading: (n) => `${n} 個無法解除安裝，已保持原樣：`,
