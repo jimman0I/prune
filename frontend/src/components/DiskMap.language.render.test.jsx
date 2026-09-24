@@ -134,7 +134,9 @@ describe('the Disk Map in another language, before any scan has run', () => {
 
     await user.click(await crawlButton());
 
-    expect(await screen.findByText('Ανάγνωση κάθε φακέλου μέσα στο')).toBeTruthy();
+    // The scan card labels itself "Σάρωση του <path>" in one element now
+    // (it used to be a heading plus a separate path line).
+    expect(await screen.findByText('Σάρωση του C:\\')).toBeTruthy();
     expect(screen.getByText(/Έναν κατάλογο τη φορά/)).toBeTruthy();
     expect(screen.getByRole('button', { name: "Ανάγνωση του ευρετηρίου δίσκου αντ' αυτού (διαχειριστής)" })).toBeTruthy();
   });

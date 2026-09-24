@@ -22,6 +22,7 @@ import { buildTypeColors, colorForExtension, colorForNode, NO_EXTENSION_COLOR } 
 import { iconKeyForNode, extensionsInCells, extensionOf, GENERIC_FILE_KEY } from '../lib/fileTypeIcon.js';
 import { limitCells } from '../lib/limitCells.js';
 import { useLanguage } from '../i18n/LanguageContext.jsx';
+import DiskScanProgress from './DiskScanProgress.jsx';
 
 const DEFAULT_ROOT = 'C:\\';
 
@@ -55,40 +56,17 @@ export function isDriveRoot(path) {
 }
 
 /** A spinner and the word "Scanning" is the wrong answer to a wait this
- * long. Walking a folder tree has no progress to report -- the scanner
- * does not know how many directories are below it until it has been in
- * them -- so instead of faking a bar this says what is being read, how
+ * long. So this says what is being read, how much has been read so far, how
  * long it can take, and what the faster option is. A minute of silence is
- * where people decide software has hung. */
-export function LoadingState({ path, onFastScan, fastScanning }) {
+ * where people decide software has hung.
+ *
+ * A thin wrapper over DiskScanProgress. `percent`, `files` and `bytes` come
+ * from the scan's real progress events; when the scan has no known total,
+ * `percent` is null and no percentage is drawn -- never a made-up one. */
+export function LoadingState({ path, onFastScan, fastScanning, percent, files, bytes }) {
   const { t } = useLanguage();
   return (
-    <div className="glass-panel flex flex-col items-center justify-center py-16 px-6 text-center">
-      {/* Two rings breathing outward behind the spinner, offset by half a
-          cycle -- motion that reads as "still working" without claiming a
-          percentage the scan does not have. The spinner itself already
-          says "in progress"; this says "this could take a while, and
-          that's normal" the way a single static spinner does not. */}
-      <div className="relative w-14 h-14 flex items-center justify-center mb-5">
-        <span
-          aria-hidden="true"
-          className="absolute inset-0 rounded-2xl border border-[color:var(--accent-primary)]/40"
-          style={{ animation: 'pulse-ring 2.4s ease-out infinite' }}
-        />
-        <span
-          aria-hidden="true"
-          className="absolute inset-0 rounded-2xl border border-[color:var(--accent-primary)]/40"
-          style={{ animation: 'pulse-ring 2.4s ease-out infinite', animationDelay: '1.2s' }}
-        />
-        <div className="relative w-14 h-14 rounded-2xl bg-[color:var(--accent-primary)]/10 border border-[color:var(--accent-primary)]/25 flex items-center justify-center">
-          <div className="w-6 h-6 border-2 border-[color:var(--accent-primary)] border-t-transparent rounded-full animate-spin"></div>
-        </div>
-      </div>
-      <p className="text-[13px] text-[color:var(--text-primary)]">{t('diskMap.loading.heading')}</p>
-      <p className="font-mono text-[12px] text-[color:var(--accent-primary)] mt-1 max-w-[46ch] truncate">{path}</p>
-      <p className="text-[12.5px] text-[color:var(--text-secondary)] mt-3 max-w-[52ch]">
-        {t('diskMap.loading.note')}
-      </p>
+    <DiskScanProgress status="scanning" path={path} percent={percent} files={files} bytes={bytes}>
       {onFastScan && (
         <button
           className="btn-ghost mt-4 px-3.5 py-2 rounded-lg text-[12.5px] font-medium disabled:opacity-50"
@@ -98,6 +76,44 @@ export function LoadingState({ path, onFastScan, fastScanning }) {
           {fastScanning ? t('diskMap.readingDrive') : t('diskMap.loading.indexButton')}
         </button>
       )}
+    </DiskScanProgress>
+  );
+}
+
+/** The drive-root chooser, shown before any scan has been picked. Exported
+ * so a render test can assert on it without scanning anything.
+ *
+ * Contained: the card caps its own width (720px, which fits the 900px
+ * minimum window's content column), wraps an unbreakable token instead of
+ * overflowing, and lets the button row wrap rather than push past the edge. */
+export function DriveRootPrompt({ path, onFastScan, fastScanning, onCrawl }) {
+  const { t } = useLanguage();
+  return (
+    <div className="glass-panel mx-auto w-full max-w-[720px] p-8 leading-[1.6] [overflow-wrap:anywhere]">
+      <h3 className="text-[18px] font-semibold text-[color:var(--text-primary)] mb-4">
+        {t('diskMap.driveRootPrompt.heading')}
+      </h3>
+      <p className="text-[14px] text-[color:var(--text-secondary)] mb-3">
+        {t('diskMap.driveRootPrompt.fastExplain', path.replace(/\\+$/, ''))}
+      </p>
+      <p className="text-[14px] text-[color:var(--text-secondary)] mb-0">
+        {t('diskMap.driveRootPrompt.crawlExplain')}
+      </p>
+
+      <div className="flex flex-wrap gap-3 mt-6">
+        <button className="btn-primary px-4 py-2 rounded-lg text-[13px] font-medium disabled:opacity-50"
+          onClick={onFastScan}
+          disabled={fastScanning}
+        >
+          {fastScanning ? t('diskMap.readingDrive') : t('diskMap.fastScanButton')}
+        </button>
+        <button
+          className="btn-ghost px-3.5 py-2 rounded-lg text-[12.5px] font-medium"
+          onClick={onCrawl}
+        >
+          {t('diskMap.driveRootPrompt.crawlButton')}
+        </button>
+      </div>
     </div>
   );
 }
@@ -455,12 +471,10 @@ const FOLDER_GRID = FOLDER_COLUMNS.map((c) => c.width).join(' ');
 /** A count that was never taken reads as a dash, never as zero. */
 /** Why a folder could not be scanned, naming the folder it was reading.
  * Exported so it can be tested without scanning a real drive. */
-export function ScanFailure({ path, error }) {
+export function ScanFailure({ path, error, onRetry }) {
   const { t } = useLanguage();
   return (
-    <div className="glass-panel p-6">
-      <p className="text-[13px] text-[color:var(--danger)] select-text">{t('diskMap.scanFailure', path, error)}</p>
-    </div>
+    <DiskScanProgress status="error" message={t('diskMap.scanFailure', path, error)} onRetry={onRetry} />
   );
 }
 
@@ -586,6 +600,11 @@ function DiskMap() {
   const [fastStats, setFastStats] = useState(null);
   const [fastScanning, setFastScanning] = useState(false);
   const [fastNote, setFastNote] = useState(null);
+  // The latest real progress event of the folder-by-folder scan
+  // ({type:'progress'|'complete', files/bytes/percent or totalFiles/
+  // totalBytes}, plus the path it belongs to). Only ever set from the
+  // backend's own events; a scan that reports nothing leaves it null.
+  const [scanProgress, setScanProgress] = useState(null);
   // Real used space, so a truncated scan can show how much of the drive
   // it never got to instead of presenting a fragment as the whole thing.
   //
@@ -687,7 +706,22 @@ function DiskMap() {
     retry: false,
     staleTime: Infinity,
     queryFn: async ({ signal }) => {
-      const result = await fetchDiskScan(currentPath, signal);
+      setScanProgress(null);
+      const result = await fetchDiskScan(currentPath, signal, {
+        // An event that lands after the scan was abandoned (path changed,
+        // screen left) belongs to nobody.
+        onProgress: (event) => {
+          if (signal.aborted) return;
+          // The completion event carries no percent or counters of its own,
+          // so it is merged over the last real progress reading: the card
+          // keeps showing what was actually read while the tree downloads.
+          setScanProgress((prev) => ({
+            ...(prev?.path === currentPath ? prev : null),
+            ...event,
+            path: currentPath
+          }));
+        }
+      });
       return attachFullPaths(
         // Only at a drive root: a truncated scan of a subfolder has no
         // used-space figure to reconcile against.
@@ -699,6 +733,9 @@ function DiskMap() {
 
   const tree = fastSubtree ?? scanQuery.data ?? null;
   const loading = shouldScan && scanQuery.isFetching;
+  // Progress belongs to one path; a reading left over from another folder's
+  // scan is never shown against this one.
+  const progressHere = scanProgress?.path === currentPath ? scanProgress : null;
   // A failed crawl is not worth reporting once the fast scan has answered
   // the same question -- the old code cleared this by hand after the MFT
   // read succeeded, and a derived error has to account for that itself.
@@ -928,42 +965,48 @@ function DiskMap() {
       </div>
 
       {loading && (
-        <LoadingState path={currentPath} onFastScan={handleFastScan} fastScanning={fastScanning} />
+        <LoadingState
+          path={currentPath}
+          onFastScan={handleFastScan}
+          fastScanning={fastScanning}
+          percent={progressHere?.percent}
+          files={progressHere?.files}
+          bytes={progressHere?.bytes}
+        />
       )}
 
       {/* The drive root, before a choice has been made. Nothing is scanning
           and nothing is going to until one of these is pressed. */}
-      {!loading && !error && !tree && isDriveRoot(currentPath) && (
-        <div className="glass-panel p-6">
-          <h3 className="text-[15px] font-medium text-[color:var(--text-primary)] mb-2">
-            {t('diskMap.driveRootPrompt.heading')}
-          </h3>
-          <p className="text-[13px] text-[color:var(--text-secondary)] leading-relaxed max-w-[62ch] mb-1">
-            {t('diskMap.driveRootPrompt.fastExplain', currentPath.replace(/\\+$/, ''))}
-          </p>
-          <p className="text-[12.5px] text-[color:var(--text-muted)] leading-relaxed max-w-[62ch] mb-5">
-            {t('diskMap.driveRootPrompt.crawlExplain')}
-          </p>
+      {!loading && !error && !tree && isDriveRoot(currentPath) && !fastScanning && (
+        <DriveRootPrompt
+          path={currentPath}
+          onFastScan={handleFastScan}
+          fastScanning={fastScanning}
+          onCrawl={() => setCrawlRoot(true)}
+        />
+      )}
 
-          <div className="flex items-center flex-wrap gap-2.5">
-            <button className="btn-primary px-4 py-2 rounded-lg text-[13px] font-medium disabled:opacity-50"
-              onClick={handleFastScan}
-              disabled={fastScanning}
-            >
-              {fastScanning ? t('diskMap.readingDrive') : t('diskMap.fastScanButton')}
-            </button>
-            <button
-              className="btn-ghost px-3.5 py-2 rounded-lg text-[12.5px] font-medium"
-              onClick={() => setCrawlRoot(true)}
-            >
-              {t('diskMap.driveRootPrompt.crawlButton')}
-            </button>
-          </div>
-        </div>
+      {/* The fast scan reads the MFT in an elevated process that has no
+          progress channel, so this is time only: no percent, no counters. */}
+      {!loading && fastScanning && (
+        <DiskScanProgress status="scanning" mode="index" path={currentPath} />
       )}
 
       {!loading && error && (
-        <ScanFailure path={currentPath} error={error} />
+        <ScanFailure path={currentPath} error={error} onRetry={() => scanQuery.refetch()} />
+      )}
+
+      {/* A crawl that has finished, when the backend said so. Absent for
+          any scan that reported no completion, so a scan without progress
+          events looks exactly as it always did. */}
+      {!loading && !error && tree && !fastSubtree
+        && progressHere?.type === 'complete' && (
+        <DiskScanProgress
+          status="complete"
+          totalFiles={progressHere.totalFiles}
+          totalBytes={progressHere.totalBytes}
+          onScanAgain={() => scanQuery.refetch()}
+        />
       )}
 
       {!loading && !error && tree?.truncated && (

@@ -45,7 +45,8 @@ describe('the full-drive-scan loading state', () => {
   // not have. See the pulse-ring keyframe's own comment in index.css.
   it('breathes two rings behind the spinner while a scan this long has nothing more specific to report', async () => {
     renderScreen(<LoadingState path={'C:\\'} />);
-    await screen.findByText('C:\\');
+    // The path now sits inside one "Scanning <path>" label element.
+    await screen.findByText(/Scanning C:\\/);
 
     const rings = document.querySelectorAll('[style*="pulse-ring"]');
     expect(rings.length).toBe(2);

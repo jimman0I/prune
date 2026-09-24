@@ -878,3 +878,33 @@ input[type="checkbox"].prune-check:active:not(:disabled),
   .btn-danger:hover:not(:disabled),
   .btn-danger:active:not(:disabled) { transform: none; }
 }
+
+/* The Disk Map scan card's bar (DiskScanProgress.jsx).
+ *
+ * scan-shimmer is a soft highlight sweeping across the filled part, so the
+ * bar reads as live even between counter updates. scan-indeterminate slides
+ * a fixed-width segment end to end when the scan has no real percentage --
+ * it says "working", and claims no number. */
+@keyframes scan-shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+@keyframes scan-indeterminate {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(290%); }
+}
+.scan-shimmer {
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+  animation: scan-shimmer 1.6s ease-in-out infinite;
+}
+.scan-indeterminate {
+  animation: scan-indeterminate 1.5s ease-in-out infinite;
+}
+
+/* Reduced motion for the scan bar. After the rules it overrides, so it wins
+   on order at equal specificity. A still bar (the indeterminate segment
+   parked at the left, no shimmer) still reads as "in progress". */
+@media (prefers-reduced-motion: reduce) {
+  .scan-shimmer { animation: none; background: none; }
+  .scan-indeterminate { animation: none; }
+}
