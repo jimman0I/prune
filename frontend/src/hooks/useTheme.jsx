@@ -1,6 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import {
-  THEMES, resolveInitialTheme, nextTheme, readStoredTheme, writeStoredTheme
+  THEME_CHOICES, resolveInitialTheme, resolveChoice, readStoredTheme, writeStoredTheme
 } from '../lib/theme.js';
 
 const ThemeContext = createContext(null);
@@ -42,36 +42,45 @@ export function applyTheme(theme) {
   window.pruneWindow?.setTheme?.(theme);
 }
 
+function storage() {
+  return typeof window === 'undefined' ? null : window.localStorage;
+}
+
 export function initialTheme() {
   return resolveInitialTheme({
-    stored: readStoredTheme(typeof window === 'undefined' ? null : window.localStorage),
+    stored: resolveChoice(readStoredTheme(storage())),
     prefersDark: systemPrefersDark()
   });
 }
 
 export function ThemeProvider({ children }) {
-  const [theme, setTheme] = useState(initialTheme);
+  /* Two separate pieces of state, because they change for different
+   * reasons. `choice` is what the person picked (System, Light or Dark)
+   * and only they change it. `systemDark` is what Windows is doing right
+   * now and only Windows changes it. The palette on screen is derived from
+   * both, which is what lets System follow Windows again after a Light or
+   * Dark choice: nothing has to remember what the OS said in the meantime. */
+  const [choice, setChoice] = useState(() => resolveChoice(readStoredTheme(storage())));
+  const [systemDark, setSystemDark] = useState(systemPrefersDark);
+
+  const theme = resolveInitialTheme({ stored: choice, prefersDark: systemDark });
 
   useEffect(() => { applyTheme(theme); }, [theme]);
 
-  /** Follows the OS while the user has expressed no preference of their
-   * own, and stops the moment they do. Someone who has never touched the
-   * toggle should see the app change when their machine switches at
-   * sunset; someone who picked light explicitly should not have it
+  /** Tracks the OS unconditionally and lets the derivation above decide
+   * whether it matters: someone on System sees the app change when their
+   * machine switches at sunset, someone who picked Light does not have it
    * taken away. */
   useEffect(() => {
     if (typeof window === 'undefined' || !window.matchMedia) return undefined;
     const query = window.matchMedia('(prefers-color-scheme: dark)');
-    const onChange = (event) => {
-      if (readStoredTheme(window.localStorage)) return;
-      setTheme(event.matches ? 'dark' : 'light');
-    };
+    const onChange = (event) => setSystemDark(event.matches);
     query.addEventListener('change', onChange);
     return () => query.removeEventListener('change', onChange);
   }, []);
 
   const choose = useCallback((value) => {
-    if (!THEMES.includes(value)) return;
+    if (!THEME_CHOICES.includes(value)) return;
 
     /* The cross-fade, armed for exactly as long as it runs.
      *
@@ -85,19 +94,11 @@ export function ThemeProvider({ children }) {
       window.setTimeout(() => root.classList.remove('theme-switching'), SWITCH_MS);
     }
 
-    setTheme(value);
-    writeStoredTheme(typeof window === 'undefined' ? null : window.localStorage, value);
+    setChoice(value);
+    writeStoredTheme(storage(), value);
   }, []);
 
-  const toggle = useCallback(() => {
-    setTheme((current) => {
-      const value = nextTheme(current);
-      choose(value);
-      return value;
-    });
-  }, [choose]);
-
-  const value = useMemo(() => ({ theme, setTheme: choose, toggle }), [theme, choose, toggle]);
+  const value = useMemo(() => ({ theme, choice, setChoice: choose }), [theme, choice, choose]);
 
   return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;
 }

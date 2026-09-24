@@ -1,19 +1,20 @@
 // @vitest-environment jsdom
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { act, screen } from '@testing-library/react';
+import { act, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { renderScreen } from '../testSupport/renderScreen.jsx';
 import { THEME_STORAGE_KEY } from '../lib/theme.js';
 import ThemeToggle from './ThemeToggle.jsx';
 
-/** The theme switch, and the provider behind it.
+/** The theme control, and the provider behind it.
  *
  * Two things are tested together here on purpose. lib/theme.js is
  * unit-tested (which theme follows which, what a stored value means), and
- * what was not tested anywhere is the wiring in between: that the button
- * is labelled with the theme it will switch TO, that a click actually
- * reaches the document and localStorage, and that it tells Electron to
- * repaint the window buttons CSS cannot reach.
+ * what was not tested anywhere is the wiring in between: that the three
+ * choices (System, Light, Dark) say which one is on, that picking one
+ * reaches the document and localStorage, that System really does follow
+ * Windows again, and that Electron is told to repaint the window buttons
+ * CSS cannot reach.
  *
  * That last one has a specific reason to be pinned down. `pruneWindow` is
  * exposed by electron/preload.cjs, and preload.cjs has to be named in the
@@ -55,87 +56,93 @@ afterEach(() => {
   delete window.pruneWindow;
 });
 
-const click = async () => {
+const pick = async (name) => {
   const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
-  await user.click(screen.getByRole('button'));
+  await user.click(screen.getByRole('button', { name }));
 };
 
-describe('what the button says', () => {
-  it('names the theme it will switch TO, not the one that is on', async () => {
-    /* A control labelled with its current state reads as a status light.
-     * Someone in dark mode looking at a button that says "dark" has no
-     * reason to press it, and someone who does press it is surprised.
-     *
-     * It is also the accessible name, so this is the entire label for
-     * anyone not looking at the glyph. */
+const pressed = (name) => screen.getByRole('button', { name }).getAttribute('aria-pressed');
+
+describe('what the control says', () => {
+  it('offers System, Light and Dark, in a named group', () => {
     renderScreen(<ThemeToggle />);
 
-    expect(screen.getByRole('button').getAttribute('aria-label')).toBe('Switch to light theme');
-
-    await click();
-    expect(screen.getByRole('button').getAttribute('aria-label')).toBe('Switch to dark theme');
+    const group = screen.getByRole('group', { name: 'Appearance' });
+    const names = within(group).getAllByRole('button').map((b) => b.textContent);
+    expect(names).toEqual(['System', 'Light', 'Dark']);
   });
 
-  it('draws a moon in the dark and a sun in the light', () => {
-    /* The sun is a disc with rays and the moon is a crescent, so the
-     * circle is what separates them -- asserted on the shape rather than
-     * on a class, since the glyphs swap by content.
-     *
-     * Two renders rather than a click, deliberately. The glyphs swap
-     * through an AnimatePresence with `mode="wait"`, so the incoming one
-     * does not mount until the outgoing one has finished leaving, and
-     * framer-motion does not run that exit to completion in jsdom. What
-     * is being asserted is the mapping from theme to glyph, and starting
-     * in each theme tests exactly that without waiting on an animation
-     * that will never finish here. */
-    const { unmount } = renderScreen(<ThemeToggle />);
-    expect(document.querySelector('svg circle')).toBeNull();
-    unmount();
-
-    window.localStorage.setItem(THEME_STORAGE_KEY, 'light');
+  it('marks System as on for an install that has never chosen', () => {
+    // The whole point of the third option: the default is not "dark", it
+    // is "whatever Windows is doing", and the control has to say so.
     renderScreen(<ThemeToggle />);
-    expect(document.querySelector('svg circle')).toBeTruthy();
+
+    expect(pressed('System')).toBe('true');
+    expect(pressed('Light')).toBe('false');
+    expect(pressed('Dark')).toBe('false');
+  });
+
+  it('marks the stored choice, not the resolved palette, as the one that is on', () => {
+    // System resolving to dark must not light up Dark: they behave
+    // differently the next time Windows switches.
+    window.localStorage.setItem(THEME_STORAGE_KEY, 'dark');
+    renderScreen(<ThemeToggle />);
+
+    expect(pressed('Dark')).toBe('true');
+    expect(pressed('System')).toBe('false');
+  });
+
+  it('treats a junk stored value as System', () => {
+    window.localStorage.setItem(THEME_STORAGE_KEY, 'solarized');
+    renderScreen(<ThemeToggle />);
+
+    expect(pressed('System')).toBe('true');
   });
 });
 
-describe('what a click actually changes', () => {
+describe('what picking one changes', () => {
   it('puts the new theme on the root element', async () => {
     // Where every custom property in index.css is switched from. Nothing
     // else in the app reads the React state directly.
     renderScreen(<ThemeToggle />);
     expect(document.documentElement.getAttribute('data-theme')).toBe('dark');
 
-    await click();
+    await pick('Light');
     expect(document.documentElement.getAttribute('data-theme')).toBe('light');
+    expect(pressed('Light')).toBe('true');
   });
 
   it('sets colorScheme too, for the controls the app does not draw', async () => {
     // Native scrollbars, form controls and focus rings read this and not
     // the attribute above. Left behind, a light app keeps dark scrollbars.
     renderScreen(<ThemeToggle />);
-    await click();
+    await pick('Light');
 
     expect(document.documentElement.style.colorScheme).toBe('light');
   });
 
   it('remembers the choice', async () => {
     renderScreen(<ThemeToggle />);
-    await click();
+    await pick('Light');
 
     expect(window.localStorage.getItem(THEME_STORAGE_KEY)).toBe('light');
   });
 
-  it('tells Electron to repaint the window buttons', async () => {
+  it('tells Electron to repaint the window buttons with the RESOLVED palette', async () => {
     // Minimize/maximize/close are painted by Windows over the app's own
     // title bar, so they are the one part of the UI a stylesheet cannot
-    // reach. Without this they stay dark on a light app.
+    // reach. main.cjs only knows 'dark' and 'light', so 'system' must never
+    // be what crosses the bridge.
     const setTheme = vi.fn();
     window.pruneWindow = { setTheme };
     renderScreen(<ThemeToggle />);
 
-    await click();
+    await pick('Light');
+    expect(setTheme).toHaveBeenLastCalledWith('light');
 
-    expect(setTheme).toHaveBeenCalledWith('light');
+    await pick('System');
+    expect(setTheme).toHaveBeenLastCalledWith('dark');
+    expect(setTheme).not.toHaveBeenCalledWith('system');
   });
 
   it('works in a browser tab, where there is no Electron to tell', async () => {
@@ -144,7 +151,7 @@ describe('what a click actually changes', () => {
     expect(window.pruneWindow).toBeUndefined();
     renderScreen(<ThemeToggle />);
 
-    await click();
+    await pick('Light');
 
     expect(document.documentElement.getAttribute('data-theme')).toBe('light');
   });
@@ -160,7 +167,7 @@ describe('the cross-fade', () => {
      * The class also has to be added BEFORE the attribute changes, or the
      * new palette lands instantly and there is nothing to fade. */
     renderScreen(<ThemeToggle />);
-    await click();
+    await pick('Light');
 
     expect(document.documentElement.classList.contains('theme-switching')).toBe(true);
 
@@ -169,9 +176,9 @@ describe('the cross-fade', () => {
   });
 });
 
-describe('following the machine', () => {
-  it('changes with the OS while the user has never chosen', () => {
-    // Someone who has never touched the toggle should see the app change
+describe('System follows Windows', () => {
+  it('changes with the OS while System is chosen', () => {
+    // Someone who has never touched the control should see the app change
     // when their machine switches at sunset.
     renderScreen(<ThemeToggle />);
     expect(document.documentElement.getAttribute('data-theme')).toBe('dark');
@@ -183,16 +190,42 @@ describe('following the machine', () => {
     expect(document.documentElement.getAttribute('data-theme')).toBe('light');
   });
 
-  it('stops the moment they do', async () => {
-    // And the other half: a choice that the OS can overrule is not a
-    // choice. Someone who picked light should not have it taken away at
-    // sunset.
+  it('stops following the moment Light or Dark is chosen', async () => {
+    // A choice that the OS can overrule is not a choice. Someone who
+    // picked light should not have it taken away at sunset.
     renderScreen(<ThemeToggle />);
-    await click();
+    await pick('Light');
     expect(document.documentElement.getAttribute('data-theme')).toBe('light');
 
     act(() => { for (const fn of listeners) fn({ matches: true }); });
 
     expect(document.documentElement.getAttribute('data-theme')).toBe('light');
+  });
+
+  it('follows Windows AGAIN after going back to System', async () => {
+    // The regression this control exists for: the old flip wrote an
+    // explicit value on the first click and there was no way back to
+    // "whatever Windows says".
+    renderScreen(<ThemeToggle />);
+    await pick('Light');
+    await pick('System');
+
+    // Windows is dark (beforeEach), so choosing System goes straight back
+    // to dark rather than staying on the light the user had picked.
+    expect(document.documentElement.getAttribute('data-theme')).toBe('dark');
+
+    act(() => { for (const fn of listeners) fn({ matches: false }); });
+    expect(document.documentElement.getAttribute('data-theme')).toBe('light');
+
+    act(() => { for (const fn of listeners) fn({ matches: true }); });
+    expect(document.documentElement.getAttribute('data-theme')).toBe('dark');
+  });
+
+  it('is remembered as System', async () => {
+    renderScreen(<ThemeToggle />);
+    await pick('Light');
+    await pick('System');
+
+    expect(window.localStorage.getItem(THEME_STORAGE_KEY)).toBe('system');
   });
 });

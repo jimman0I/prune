@@ -1,12 +1,14 @@
-/** Which theme the app opens in, and what the toggle does next.
+/** Which theme the app opens in, and which choices exist.
  *
  * Pure, because the interesting part is the precedence rather than the
  * plumbing: a stored choice beats the operating system, the operating
  * system beats the default, and the default is dark -- the theme every
  * screen in this app was designed against first.
  *
- * A stored value that is not one of the two is treated as absent rather
- * than trusted. localStorage survives upgrades and is editable by hand, so
+ * A stored value that is not one of the two palettes is treated as absent
+ * rather than trusted (which includes 'system', the choice that means
+ * "follow the operating system": it falls through to the OS preference,
+ * which is exactly what it should do). localStorage survives upgrades and is editable by hand, so
  * "solarized" is a state that can genuinely reach this function, and
  * setting data-theme to it would leave the app with no palette at all.
  */
@@ -21,8 +23,17 @@ export function resolveInitialTheme({ stored, prefersDark } = {}) {
   return DEFAULT_THEME;
 }
 
-export function nextTheme(current) {
-  return current === 'light' ? 'dark' : 'light';
+/** What the Settings control offers. `system` is not a palette, it is the
+ * instruction "follow Windows", so it is kept out of THEMES (which is the
+ * list of palettes index.css can actually draw). */
+export const THEME_CHOICES = ['system', 'light', 'dark'];
+
+/** The stored value as a choice. Absent, or anything that is not one of the
+ * three, is System: that is what an install that never touched the control
+ * has always done, and it is the safe reading of a value hand-edited into
+ * something else. */
+export function resolveChoice(stored) {
+  return THEME_CHOICES.includes(stored) ? stored : 'system';
 }
 
 /** Where the choice is kept.
