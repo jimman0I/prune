@@ -109,3 +109,18 @@ export function computeHealthScore({ driveVerdict, primaryDisk, diskSpace, broke
   const score = totalWeight > 0 ? Math.round(weightedSum / totalWeight) : null;
   return { score, breakdown };
 }
+
+/** Which colour band a score falls in: 75 and up is good, 50 and up is
+ * caution, anything below is a problem. Null in, null out -- there is no
+ * band for a score that has not arrived, and the caller must not invent one
+ * (the same rule that keeps the score itself null until real data lands).
+ *
+ * The bands are the score's OWN, deliberately not the drive verdict's: a
+ * healthy drive on a nearly full disk scores in the 50s, and painting that
+ * green because the SSD is fine told people the opposite of the number. */
+export function healthBand(score) {
+  if (typeof score !== 'number' || !Number.isFinite(score)) return null;
+  if (score >= 75) return 'good';
+  if (score >= 50) return 'caution';
+  return 'problem';
+}
