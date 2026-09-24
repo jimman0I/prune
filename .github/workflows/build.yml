@@ -56,7 +56,14 @@ jobs:
       # for a real bug -- the scan itself is the extra cost, not the code.
       - name: Exclude TEMP from Windows Defender's real-time scan
         shell: pwsh
-        run: Add-MpPreference -ExclusionPath $env:TEMP
+        run: |
+          Add-MpPreference -ExclusionPath $env:TEMP
+          # Evidence, not a gate: shows whether the exclusion took, next to
+          # the directory the tests' mkdtemp() will actually use. If these
+          # ever disagree (an 8.3 RUNNER~1 spelling vs the long name) the
+          # exclusion is not covering the tests' files.
+          Write-Host "Defender exclusions: $((Get-MpPreference).ExclusionPath -join '; ')"
+          Write-Host "Node tmpdir:         $(node -p "require('os').tmpdir()")"
       # On its own runner, which is also the rule locally (CONTRIBUTING.md):
       # the reg.exe and PowerShell tests time out when something else is
       # competing for the machine.
