@@ -126,8 +126,10 @@ router.get('/stream', async (req, res) => {
     }
 
     const truncated = controller.signal.aborted;
+    // Only true when the user pressed Stop: the client words that as "you
+    // stopped it", never as "ran out of time".
     const resultId = putScanResult({ ...result, truncated });
-    sendEvent(res, 'complete', { type: 'complete', totalFiles: files, totalBytes: bytes, truncated, resultId });
+    sendEvent(res, 'complete', { type: 'complete', totalFiles: files, totalBytes: bytes, truncated, stoppedByUser, resultId });
   } catch (err) {
     if (!clientGone) sendEvent(res, 'error', { type: 'error', message: err.message });
   } finally {
