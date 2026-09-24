@@ -1020,5 +1020,147 @@
     ],
     "is_safe": true,
     "recommended": true
+  },
+  {
+    "id": "defender_history",
+    "category": "Windows Defender",
+    "name": "Scan history",
+    "description": "Stored results of past Defender scans and the log that lists them. Protection is unaffected; Defender starts a new record with its next scan.",
+    "paths": [
+      "%PROGRAMDATA%\\Microsoft\\Windows Defender\\Scans\\History\\Results\\Quick",
+      "%PROGRAMDATA%\\Microsoft\\Windows Defender\\Scans\\History\\Results\\Resource",
+      "%PROGRAMDATA%\\Microsoft\\Windows Defender\\Scans\\History\\Service\\History.Log"
+    ],
+    "is_safe": true,
+    "recommended": false
+  },
+  {
+    "id": "defender_temp",
+    "category": "Windows Defender",
+    "name": "Temporary files",
+    "description": "Update installers and logs Defender leaves behind in Windows' temp and update folders once it has used them.",
+    "paths": [
+      "%WINDIR%\\Temp\\MpCmdRun.log",
+      "%WINDIR%\\Temp\\MpSigStub.log",
+      "%WINDIR%\\SoftwareDistribution\\Download\\Install\\mpas-d.exe",
+      "%WINDIR%\\SoftwareDistribution\\Download\\Install\\mpas-fe.exe",
+      "%WINDIR%\\SoftwareDistribution\\Download\\Install\\mpas-fe_bd.exe",
+      "%WINDIR%\\SoftwareDistribution\\Download\\Install\\AS_Engine.exe",
+      "%WINDIR%\\SoftwareDistribution\\Download\\Install\\AS_Engine_Patch_*.exe",
+      "%WINDIR%\\SoftwareDistribution\\Download\\Install\\AS_Base.exe",
+      "%WINDIR%\\SoftwareDistribution\\Download\\Install\\AS_Base_Patch*.exe",
+      "%WINDIR%\\SoftwareDistribution\\Download\\Install\\AS_Delta.exe",
+      "%WINDIR%\\SoftwareDistribution\\Download\\Install\\AS_Delta_Patch_*.exe",
+      "%PROGRAMDATA%\\Microsoft\\Windows Defender\\Definition Updates\\Updates"
+    ],
+    "is_safe": true,
+    "recommended": true
+  },
+  {
+    "id": "defender_quarantine",
+    "category": "Windows Defender",
+    "name": "Quarantined files",
+    "description": "Files Defender caught and locked away. Quarantine is how Defender gives back a file it flagged by mistake -- once this is cleared, a false positive can never be restored.",
+    "paths": [
+      "%PROGRAMDATA%\\Microsoft\\Windows Defender\\Quarantine"
+    ],
+    "is_safe": false,
+    "risky": true,
+    "recommended": false
+  },
+  {
+    "id": "defender_backup",
+    "category": "Windows Defender",
+    "name": "Definition backup",
+    "description": "The previous set of virus definitions, kept so Defender can roll back a bad update. A new backup arrives with the next update, but until then there is nothing to roll back to.",
+    "paths": [
+      "%PROGRAMDATA%\\Microsoft\\Windows Defender\\Definition Updates\\Backup"
+    ],
+    "is_safe": false,
+    "risky": true,
+    "recommended": false
+  },
+  {
+    "id": "defender_logs",
+    "category": "Windows Defender",
+    "name": "Logs",
+    "description": "Defender's own service and diagnostic logs. Only useful when troubleshooting Defender itself; it writes new ones as it runs.",
+    "paths": [
+      "%PROGRAMDATA%\\Microsoft\\Windows Defender\\Scans\\History\\Service\\Detections.log",
+      "%PROGRAMDATA%\\Microsoft\\Windows Defender\\Scans\\History\\Service\\History.Log",
+      "%PROGRAMDATA%\\Microsoft\\Windows Defender\\Scans\\History\\Service\\Unknown.Log",
+      "%PROGRAMDATA%\\Microsoft\\Windows Defender\\Support\\MPLog-*.log"
+    ],
+    "is_safe": true,
+    "recommended": true
+  },
+  {
+    "id": "winrar_history",
+    "category": "WinRAR",
+    "name": "History",
+    "description": "WinRAR's remembered archive names, extract-to folders and search terms. The archives themselves are not touched.",
+    "actions": [
+      {
+        "type": "winreg",
+        "key": "HKCU\\Software\\WinRAR\\ArcHistory"
+      },
+      {
+        "type": "winreg",
+        "key": "HKCU\\Software\\WinRAR\\DialogEditHistory\\ArcName"
+      },
+      {
+        "type": "winreg",
+        "key": "HKCU\\Software\\WinRAR\\DialogEditHistory\\ArcCmtName"
+      },
+      {
+        "type": "winreg",
+        "key": "HKCU\\Software\\WinRAR\\DialogEditHistory\\ExtrPath"
+      },
+      {
+        "type": "winreg",
+        "key": "HKCU\\Software\\WinRAR\\DialogEditHistory\\FindArcNames"
+      },
+      {
+        "type": "winreg",
+        "key": "HKCU\\Software\\WinRAR\\DialogEditHistory\\FindNames"
+      },
+      {
+        "type": "winreg",
+        "key": "HKCU\\Software\\WinRAR\\DialogEditHistory\\FindText"
+      },
+      {
+        "type": "winreg",
+        "key": "HKCU\\Software\\WinRAR\\DialogEditHistory\\WizArcName"
+      },
+      {
+        "type": "winreg",
+        "key": "HKCU\\Software\\WinRAR SFX"
+      },
+      {
+        "type": "winreg",
+        "key": "HKCU\\Software\\WinRAR\\General",
+        "value": "LastFolder"
+      },
+      {
+        "type": "winreg",
+        "key": "HKCU\\Software\\WinRAR\\General\\Info",
+        "value": "CommentFile"
+      }
+    ],
+    "is_safe": true,
+    "recommended": false
+  },
+  {
+    "id": "winrar_temp",
+    "category": "WinRAR",
+    "name": "Temporary files",
+    "description": "Temp files WinRAR left behind in its own program folder. Archives and settings are untouched.",
+    "paths": [
+      "%LOCALAPPDATA%\\VirtualStore\\Program Files*\\WinRAR\\**\\*.tmp",
+      "%PROGRAMFILES%\\WinRAR\\**\\*.tmp",
+      "%PROGRAMFILES(X86)%\\WinRAR\\**\\*.tmp"
+    ],
+    "is_safe": true,
+    "recommended": true
   }
 ]
