@@ -6,7 +6,12 @@ import {
   extensionOf,
   NO_EXTENSION_COLOR,
   UNSCANNED_COLOR,
-  DIRECTORY_COLOR
+  DIRECTORY_COLOR,
+  PALETTE,
+  INK_DARK,
+  INK_LIGHT,
+  inkForFill,
+  wcagContrast
 } from './fileTypeColors.js';
 
 const HEX = /^#[0-9a-f]{6}$/i;
@@ -133,5 +138,36 @@ describe('colorForNode', () => {
     // container and the other is content nobody can categorise.
     expect(colorForNode({ name: 'LICENSE', type: 'file' }, colors)).toBe(NO_EXTENSION_COLOR);
     expect(colorForNode({ name: 'LICENSE', type: 'file' }, colors)).not.toBe(DIRECTORY_COLOR);
+  });
+});
+
+describe('inkForFill: the treemap label is readable on every fill it can sit on', () => {
+  // The rule is measured, not asserted by eye: every fill the map can paint,
+  // with the ink the function picks for it, must clear WCAG AA for normal
+  // text. The previous white-at-85%-opacity label failed on ten of them.
+  const fills = [...PALETTE, NO_EXTENSION_COLOR, DIRECTORY_COLOR, UNSCANNED_COLOR];
+
+  it('covers all 16 type colours and the 3 neutrals', () => {
+    expect(PALETTE).toHaveLength(16);
+    expect(fills).toHaveLength(19);
+  });
+
+  it.each(fills)('reaches at least 4.5:1 on %s with the ink it picks', (fill) => {
+    expect(wcagContrast(inkForFill(fill), fill)).toBeGreaterThanOrEqual(4.5);
+  });
+
+  it('uses the dark ink on every one of the 16 type colours', () => {
+    for (const fill of PALETTE) expect(inkForFill(fill)).toBe(INK_DARK);
+  });
+
+  it('uses full white only on the three neutrals', () => {
+    for (const fill of [NO_EXTENSION_COLOR, DIRECTORY_COLOR, UNSCANNED_COLOR]) {
+      expect(inkForFill(fill)).toBe(INK_LIGHT);
+    }
+  });
+
+  it('computes real WCAG ratios: black on white is 21:1, white on white is 1:1', () => {
+    expect(wcagContrast('#000000', '#ffffff')).toBeCloseTo(21, 5);
+    expect(wcagContrast('#ffffff', '#ffffff')).toBeCloseTo(1, 5);
   });
 });
