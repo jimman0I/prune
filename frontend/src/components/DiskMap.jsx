@@ -8,7 +8,7 @@ import { Treemap, ResponsiveContainer } from 'recharts';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { keys } from '../lib/queryClient.js';
 import { breadcrumbTrail } from '../lib/breadcrumbTrail.js';
-import { fetchDiskScan, scanDriveFast, fetchFileTypeIcons, quarantineDiskPath, revealInExplorer } from '../lib/api.js';
+import { fetchDiskScan, stopDiskScan, scanDriveFast, fetchFileTypeIcons, quarantineDiskPath, revealInExplorer } from '../lib/api.js';
 import { useToasts } from '../hooks/useToasts.jsx';
 import ContextMenu from './ContextMenu.jsx';
 import ModalOverlay from './ModalOverlay.jsx';
@@ -69,11 +69,11 @@ export function isDriveRoot(path) {
  * A thin wrapper over DiskScanProgress. `percent`, `files` and `bytes` come
  * from the scan's real progress events; when the scan has no known total,
  * `percent` is null and no percentage is drawn -- never a made-up one. */
-export function LoadingState({ path, onFastScan, fastScanning, percent, files, bytes, remainingMs, remainingAt }) {
+export function LoadingState({ path, onFastScan, fastScanning, percent, files, bytes, remainingMs, remainingAt, onStop }) {
   const { t } = useLanguage();
   return (
     <DiskScanProgress status="scanning" path={path} percent={percent} files={files} bytes={bytes}
-      remainingMs={remainingMs} remainingAt={remainingAt}>
+      remainingMs={remainingMs} remainingAt={remainingAt} onStop={onStop}>
       {onFastScan && (
         <button
           className="btn-ghost mt-4 px-3.5 py-2 rounded-lg text-[12.5px] font-medium disabled:opacity-50"
@@ -992,6 +992,9 @@ function DiskMap() {
           bytes={progressHere?.bytes}
           remainingMs={progressHere?.remainingMs}
           remainingAt={progressHere?.receivedAt}
+          // Only once the backend has announced the scan's id; before that
+          // there is nothing to stop yet.
+          onStop={progressHere?.scanId ? () => { stopDiskScan(progressHere.scanId); } : undefined}
         />
       )}
 

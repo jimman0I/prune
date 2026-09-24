@@ -175,7 +175,24 @@ function Bar({ percent }) {
   );
 }
 
-function Scanning({ path, percent, files, bytes, mode, elapsedMs, remainingMs, remainingAt, expectedMs, children }) {
+/** Halts a running folder walk. Disabled once pressed: the walk then ends
+ * on its own with the partial result, and a second press would ask twice. */
+function StopButton({ onStop }) {
+  const { t } = useLanguage();
+  const [asked, setAsked] = useState(false);
+  return (
+    <button
+      className="btn-ghost mt-4 px-4 py-2 rounded-lg text-[12.5px] font-medium flex items-center gap-2 disabled:opacity-50"
+      disabled={asked}
+      onClick={() => { setAsked(true); onStop(); }}
+    >
+      <span aria-hidden="true" className="w-2 h-2 rounded-[2px] bg-[color:var(--danger)]" />
+      {t('deepClean.stop')}
+    </button>
+  );
+}
+
+function Scanning({ path, percent, files, bytes, mode, elapsedMs, remainingMs, remainingAt, expectedMs, onStop, children }) {
   const { t } = useLanguage();
   const format = useFormatDuration();
   const seconds = useElapsedSeconds(mode === 'index', elapsedMs);
@@ -185,7 +202,11 @@ function Scanning({ path, percent, files, bytes, mode, elapsedMs, remainingMs, r
   const showCounters = mode !== 'index' && typeof files === 'number';
   return (
     <div className="glass-panel flex flex-col items-center justify-center py-12 px-6 text-center">
-      <Rings />
+      {/* One indicator, not several. A real percent gets the bar and the
+          counters and nothing spinning beside them; the rings and spinner
+          are for a wait whose length is unknown, where they are the only
+          sign of life. */}
+      {!Number.isFinite(percent) && <Rings />}
       <p className="font-mono text-[13px] text-[color:var(--text-primary)] max-w-[52ch] truncate">
         {t('diskMap.scanProgress.scanning', path)}
       </p>
@@ -216,6 +237,9 @@ function Scanning({ path, percent, files, bytes, mode, elapsedMs, remainingMs, r
           )}
         </>
       )}
+      {/* Walk only. The fast scan runs in an elevated process that cannot be
+          interrupted mid-read, so it never offers Stop. */}
+      {mode !== 'index' && onStop && <StopButton onStop={onStop} />}
       {children}
     </div>
   );
@@ -327,6 +351,7 @@ export default function DiskScanProgress({
   remainingMs,
   remainingAt,
   expectedMs,
+  onStop,
   message,
   totalFiles,
   truncated = false,
@@ -338,7 +363,7 @@ export default function DiskScanProgress({
   if (status === 'scanning') {
     return (
       <Scanning path={path} percent={percent} files={files} bytes={bytes} mode={mode} elapsedMs={elapsedMs}
-        remainingMs={remainingMs} remainingAt={remainingAt} expectedMs={expectedMs}>
+        remainingMs={remainingMs} remainingAt={remainingAt} expectedMs={expectedMs} onStop={onStop}>
         {children}
       </Scanning>
     );

@@ -25,6 +25,7 @@ vi.mock('recharts', async () => {
 const fetchDiskSpace = vi.fn();
 const fetchDiskScan = vi.fn();
 const scanDriveFast = vi.fn();
+const stopDiskScan = vi.fn(async () => true);
 
 vi.mock('../lib/api.js', () => ({
   fetchSettings: vi.fn(async () => ({})),
@@ -32,6 +33,7 @@ vi.mock('../lib/api.js', () => ({
   fetchDiskSpace: (...a) => fetchDiskSpace(...a),
   fetchDiskScan: (...a) => fetchDiskScan(...a),
   scanDriveFast: (...a) => scanDriveFast(...a),
+  stopDiskScan: (...a) => stopDiskScan(...a),
   fetchFileTypeIcons: vi.fn(async () => ({})),
   quarantineDiskPath: vi.fn(),
   revealInExplorer: vi.fn(async () => {})
@@ -290,5 +292,50 @@ describe('the Disk Map passes the server time limit to the walk card', () => {
     await crawl(user);
 
     expect(await screen.findByText(/^Up to (26|27) s left$/)).toBeTruthy();
+  });
+});
+
+describe('the Disk Map Stop button', () => {
+  it('appears once the backend announced the scan id, and stops that scan', async () => {
+    scanReporting({ type: 'start', scanId: 'scan-77', remainingMs: 30_000 });
+    const user = userEvent.setup();
+    mount();
+    await crawl(user);
+
+    await user.click(await screen.findByRole('button', { name: 'Stop' }));
+    expect(stopDiskScan).toHaveBeenCalledWith('scan-77');
+  });
+
+  it('is not offered before the scan has an id', async () => {
+    scanReporting();
+    const user = userEvent.setup();
+    mount();
+    await crawl(user);
+
+    await screen.findByText(/Scanning C:/);
+    expect(screen.queryByRole('button', { name: 'Stop' })).toBeNull();
+  });
+
+  it('is not offered during the fast (admin) scan', async () => {
+    scanDriveFast.mockImplementation(() => new Promise(() => {}));
+    const user = userEvent.setup();
+    mount();
+    await user.click(await screen.findByRole('button', { name: 'Fast scan (admin)' }));
+
+    await screen.findByText(/Elapsed/);
+    expect(screen.queryByRole('button', { name: 'Stop' })).toBeNull();
+  });
+
+  it('a stopped scan ends in the partial result, worded as stopped early', async () => {
+    fetchDiskScan.mockImplementation(async (_path, _signal, opts) => {
+      opts?.onProgress?.({ type: 'start', scanId: 's', remainingMs: 30_000 });
+      opts?.onProgress?.({ type: 'complete', totalFiles: 40, totalBytes: 2048, truncated: true, resultId: 'x' });
+      return { ...TREE, truncated: true };
+    });
+    const user = userEvent.setup();
+    mount();
+    await crawl(user);
+
+    expect(await screen.findByText(/^Scan stopped early — 40 files/)).toBeTruthy();
   });
 });

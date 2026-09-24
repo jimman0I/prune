@@ -104,3 +104,13 @@ describe('the time-left lines in Greek', () => {
     expect(await screen.findByText('Διαρκεί περισσότερο από την τελευταία σας σάρωση')).toBeTruthy();
   });
 });
+
+describe('Stop in Greek', () => {
+  it('reuses the catalog Stop wording', async () => {
+    const onStop = vi.fn();
+    mount({ status: 'scanning', path: 'C:\Users', percent: null, onStop });
+
+    fireEvent.click(await screen.findByRole('button', { name: 'Διακοπή' }));
+    expect(onStop).toHaveBeenCalledTimes(1);
+  });
+});
