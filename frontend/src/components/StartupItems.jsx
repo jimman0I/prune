@@ -55,7 +55,7 @@ function Tick({ on }) {
       className={`w-[13px] h-[13px] rounded-[3px] border flex items-center justify-center shrink-0 transition-colors ${
         on
           ? 'bg-[color:var(--success)] border-[color:var(--success)]'
-          : 'bg-transparent border-[color:var(--border-subtle)]'
+          : 'bg-transparent border-[color:var(--control-border)]'
       }`}
     >
       {/* The tick, not just a fill. A tinted square on a dark ground reads

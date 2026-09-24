@@ -495,7 +495,7 @@ export default function ProgramList({ programs: initialPrograms, extensions = []
             <button
               key={f.id}
               onClick={() => setFilter(f.id)}
-              className={`px-3 py-1.5 rounded-lg text-[12.5px] font-medium transition ${filter === f.id ? 'bg-[color:var(--surface-hover)] text-[color:var(--text-primary)]' : 'text-[color:var(--text-muted)] hover:text-[color:var(--text-primary)]'}`}
+              className={`px-3 py-1.5 rounded-lg text-[12.5px] font-medium transition ${filter === f.id ? 'pill-selected bg-[color:var(--surface-hover)] text-[color:var(--text-primary)]' : 'text-[color:var(--text-muted)] hover:text-[color:var(--text-primary)]'}`}
             >
               {f.label}
             </button>

@@ -23,7 +23,9 @@ export default function Toggle({ checked, onChange, label, disabled = false, siz
       onClick={onChange}
       disabled={disabled}
       className={`relative ${s.track} rounded-full transition-colors shrink-0 disabled:opacity-40 disabled:cursor-not-allowed ${
-        checked ? 'bg-[color:var(--accent-primary)]' : 'bg-[color:var(--surface-strong)]'
+        // The off track gets a 3:1 ring (an inset box-shadow, so it moves
+        // nothing) because --surface-strong alone is a smudge, not a control.
+        checked ? 'bg-[color:var(--accent-primary)]' : 'bg-[color:var(--surface-strong)] ring-1 ring-inset ring-[color:var(--control-border)]'
       }`}
     >
       <motion.span

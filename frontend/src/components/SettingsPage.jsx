@@ -177,7 +177,7 @@ ode.js" is a folder or a file type.
             onClick={() => handleTabChange(tabDef.id)}
             className={`px-4 py-2 rounded-lg text-[13px] font-medium transition-colors ${
               tab === tabDef.id
-                ? 'bg-[color:var(--accent-primary-soft)] text-[color:var(--accent-primary)]'
+                ? 'pill-selected bg-[color:var(--accent-primary-soft)] text-[color:var(--accent-primary)]'
                 : 'text-[color:var(--text-secondary)] hover:text-[color:var(--text-primary)] hover:bg-[color:var(--surface-hover)]'
             }`}
           >
