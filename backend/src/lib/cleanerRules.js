@@ -167,20 +167,10 @@ export function scanRule(rule, guards = {}) {
       sizeBytes = (sizeBytes ?? 0) + result.sizeBytes;
       if (result.present) present = true;
     } else if (action.type === 'winreg') {
-      // Presence is checked asynchronously by winreg's own scan(), which
-      // this synchronous function can't await -- reported via `present`
-      // best-effort as true (registry actions don't gate `present` the
-      // way a missing cache folder does; executeRule's own winreg branch
-      // is what actually determines whether anything happens). Revisit
-      // if a future rule needs an accurate pre-scan presence check for a
-      // registry-only rule.
-      //
-      // User-visible consequence: a winreg-only rule always shows as
-      // "present"/applicable in a pre-clean scan, even on a machine where
-      // the registry key doesn't exist at all -- the opposite of the
-      // "grey out cleaners that don't apply" behavior rulePathsExist's own
-      // doc comment calls out as a feature for path-based rules.
-      present = true;
+      // A real check now: a winreg-only rule (WinRAR's history) must be
+      // able to say "not on this machine". Synchronous reg.exe, ~45 ms a
+      // call, skipped once anything in the rule is already present.
+      if (!present && winregAction.scanSync({ expandedKey: expandPath(action.key), value: action.value }).present) present = true;
     } else if (action.type === 'json') {
       for (const concretePath of resolveBespokeActionPaths(expandPath(action.path))) {
         const result = jsonAction.scan({ expandedPath: concretePath, address: action.address });
@@ -336,8 +326,9 @@ export function scanAllRules(guards = {}) {
  *   quarantine.
  * - `sqlite.vacuum` rewrites the target database in place via VACUUM;
  *   again nothing to quarantine.
- * - `winreg` removes one registry key through the same quarantine-then-
- *   delete path `delete` uses, just for a key instead of a file.
+ * - `winreg` removes the rule's registry keys and single values (an
+ *   action with a `value`) through ONE quarantine batch, via the same
+ *   quarantine-then-delete path `delete` uses.
  * - `json` deletes one key (BleachBit-style `address`) out of a parsed
  *   JSON file and rewrites it in place, quarantining the original --
  *   never a whole-file delete, since the rest of the file's data must
@@ -398,12 +389,6 @@ export async function executeRule(rule, guards = {}) {
       // execute's dispatcher returns). Same conditional-only-when-true
       // shape as `recycled`/`registryKeysRemoved` below.
       vacuumed = true;
-    } else if (action.type === 'winreg') {
-      const result = await winregAction.execute({ expandedKey: expandPath(action.key) }, rule.name);
-      freedBytes += result.freedBytes;
-      registryKeysRemoved = (registryKeysRemoved || 0) + result.registryKeysRemoved;
-      skipped.push(...result.skipped);
-      if (result.quarantineBatch) quarantineBatch = result.quarantineBatch;
     } else if (action.type === 'json') {
       for (const concretePath of resolveBespokeActionPaths(expandPath(action.path))) {
         const result = await jsonAction.execute({ expandedPath: concretePath, address: action.address }, rule.name, guards);
@@ -461,6 +446,21 @@ export async function executeRule(rule, guards = {}) {
         if (result.quarantineBatch) quarantineBatch = result.quarantineBatch;
       }
     }
+  }
+
+  // All of a rule's registry targets go through ONE quarantine batch --
+  // one Quarantine entry per rule, like a delete action's files, and no
+  // two same-millisecond batches sharing a directory name.
+  const winregActions = normalized.actions.filter((action) => action.type === 'winreg');
+  if (winregActions.length > 0) {
+    const result = await winregAction.executeAll(
+      winregActions.map((action) => ({ expandedKey: expandPath(action.key), value: action.value })),
+      rule.name
+    );
+    freedBytes += result.freedBytes;
+    registryKeysRemoved = (registryKeysRemoved || 0) + result.registryKeysRemoved;
+    skipped.push(...result.skipped);
+    if (result.quarantineBatch) quarantineBatch = result.quarantineBatch;
   }
 
   return {
