@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { fetchAutomation } from '../lib/api.js';
 import { keys } from '../lib/queryClient.js';
 import { useLanguage } from '../i18n/LanguageContext.jsx';
+import Toggle from './Toggle.jsx';
 
 /** The scheduled run, and an honest account of what it can do.
  *
@@ -54,20 +55,7 @@ export default function AutomationSettings({ settings, save }) {
       </p>
 
       <div className="flex items-center gap-3 mb-4">
-        <button
-          type="button"
-          role="switch"
-          aria-checked={automation.enabled === true}
-          onClick={() => set({ enabled: !automation.enabled })}
-          className={`w-[38px] h-[21px] rounded-full relative transition-colors shrink-0 ${
-            automation.enabled ? 'bg-[color:var(--accent-primary)]' : 'bg-[color:var(--surface-strong)]'
-          }`}
-        >
-          <span
-            className="absolute top-[3px] w-[15px] h-[15px] rounded-full bg-white transition-all"
-            style={{ left: automation.enabled ? '20px' : '3px' }}
-          />
-        </button>
+        <Toggle size="sm" checked={automation.enabled === true} onChange={() => set({ enabled: !automation.enabled })} />
         <span className="text-[12.5px] text-[color:var(--text-secondary)]">
           {automation.enabled ? t('settings.automation.scheduled') : t('settings.automation.off')}
         </span>

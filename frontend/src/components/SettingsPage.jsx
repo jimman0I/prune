@@ -4,6 +4,7 @@ import { classifyExclusion } from '../lib/exclusionInput.js';
 import { positiveOrOff } from '../lib/limitInput.js';
 import AutomationSettings from './AutomationSettings.jsx';
 import ThemeToggle from './ThemeToggle.jsx';
+import Toggle from './Toggle.jsx';
 import CookieKeepListSettings from './CookieKeepListSettings.jsx';
 import { useSettings, useUpdateCheck } from '../hooks/useSystemQueries.js';
 import { leftoverDestinationFrom } from '../lib/leftoverDestination.js';
@@ -17,31 +18,6 @@ import { readStoredSettingsTab, writeStoredSettingsTab } from '../lib/settingsTa
 const APP_NAME = 'Prune';
 
 const TAB_IDS = ['general', 'uninstall', 'cleanup', 'about'];
-
-/** The same bespoke on/off switch DeepCleanTree.jsx uses, duplicated
- * rather than imported -- this codebase keeps small controls local to the
- * component that draws them rather than in a shared UI module. */
-function Toggle({ checked, onChange, label, disabled = false }) {
-  return (
-    <button
-      type="button"
-      role="switch"
-      aria-checked={checked}
-      aria-label={label}
-      onClick={onChange}
-      disabled={disabled}
-      className={`relative w-10 h-6 rounded-full transition-colors shrink-0 disabled:opacity-40 disabled:cursor-not-allowed ${
-        checked ? 'bg-[color:var(--accent-primary)]' : 'bg-[color:var(--surface-strong)]'
-      }`}
-    >
-      <span
-        className={`absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white transition-transform ${
-          checked ? 'translate-x-4' : 'translate-x-0'
-        }`}
-      />
-    </button>
-  );
-}
 
 /** One switch with its explanation, for the panels that group several. */
 function SettingRow({ title, description, checked, onChange }) {
