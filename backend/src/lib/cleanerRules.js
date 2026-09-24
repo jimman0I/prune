@@ -264,6 +264,11 @@ function pathExistsOrDenied(path) {
  * checked on disk; `shell` and `winreg` can't be answered from the
  * filesystem and count as present.
  *
+ * Caveat: a winreg-only rule therefore counts as present pre-scan, but
+ * scanRule really checks the registry now and may report present:false
+ * after the scan -- the same flip as below, and expected for a rule
+ * (WinRAR's history) that doesn't apply to this machine.
+ *
  * Caveat: a bespoke action module's own scan uses existsSync, so for an
  * access-denied bespoke path the pre-scan `present` may be true and flip
  * to false after the scan (unlikely: browser profile files are not

@@ -19,7 +19,7 @@ function queryArgs({ expandedKey, value }) {
  * in." */
 export async function scan(action) {
   try {
-    await execFileAsync('reg', queryArgs(action));
+    await execFileAsync('reg', queryArgs(action), { maxBuffer: 64 * 1024 * 1024 });
     return { present: true };
   } catch {
     return { present: false };
@@ -27,10 +27,11 @@ export async function scan(action) {
 }
 
 /** scan(), synchronously -- for scanRule, which is synchronous by design
- * (it runs inside the rule-at-a-time streaming loop). ~45 ms per call. */
+ * (it runs inside the rule-at-a-time streaming loop). ~45 ms per call; a
+ * 5 s timeout bounds a wedged reg.exe (a timeout reads as "absent"). */
 export function scanSync(action) {
   try {
-    execFileSync('reg', queryArgs(action), { stdio: 'ignore', windowsHide: true });
+    execFileSync('reg', queryArgs(action), { stdio: 'ignore', windowsHide: true, timeout: 5000 });
     return { present: true };
   } catch {
     return { present: false };
@@ -42,6 +43,31 @@ export function scanSync(action) {
 function toRegistryTarget({ expandedKey, value }) {
   return value ? { path: expandedKey, valueName: value } : expandedKey;
 }
+/** Drops targets that would be redundant or would break each other:
+ * exact duplicates (case-insensitive key + value, as the registry is), and
+ * anything at or below a whole-key target in the same list, whatever the
+ * order. A whole-key parent's .reg export already contains its
+ * descendants, and once the parent is deleted the child's own export fails
+ * -- which would be misreported as "protected or could not be removed" and
+ * undercount registryKeysRemoved. A value target under a key that is NOT
+ * itself a whole-key target is unaffected. A dropped target is not counted
+ * as removed: registryKeysRemoved is only what quarantineAndDelete
+ * recorded. */
+function dropOverlapping(actions) {
+  const wholeKeys = actions.filter((a) => !a.value).map((a) => a.expandedKey.toLowerCase());
+  const seen = new Set();
+  const kept = [];
+  for (const action of actions) {
+    const key = action.expandedKey.toLowerCase();
+    const id = `${key}|${action.value ? action.value.toLowerCase() : ''}|${action.value ? 'v' : 'k'}`;
+    if (seen.has(id)) continue;
+    seen.add(id);
+    if (wholeKeys.some((parent) => key.startsWith(parent + '\\'))) continue;
+    kept.push(action);
+  }
+  return kept;
+}
+
 function describeTarget(entry) {
   return typeof entry === 'string' ? entry : `${entry.path} [${entry.valueName}]`;
 }
@@ -77,10 +103,11 @@ function describeTarget(entry) {
  * quarantined because VACUUM rewrites the file in place. Not an
  * oversight -- there is nothing here for a guards object to guard. */
 export async function executeAll(actions, ruleName) {
-  const present = [];
+  const found = [];
   for (const action of actions) {
-    if ((await scan(action)).present) present.push(action);
+    if ((await scan(action)).present) found.push(action);
   }
+  const present = dropOverlapping(found);
   if (present.length === 0) return { freedBytes: 0, registryKeysRemoved: 0, skipped: [] };
 
   const manifest = await quarantineAndDelete({
