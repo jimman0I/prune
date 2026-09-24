@@ -60,6 +60,12 @@ export const SHORTCUTS = [
   { keys: ['Ctrl', 'K'], alternative: ['Ctrl', 'F'], id: 'focusSearch' },
   { keys: ['Ctrl', ','], id: 'openSettings' },
   { keys: ['Ctrl', '/'], id: 'showThisList' },
+  // Text zoom is not handled by this hook: the Electron shell restores it
+  // (electron/zoom.cjs, wired in main.cjs) after removing the default menu
+  // took the accelerators with it. Listed here because this array is what
+  // the help modal shows, and they are keys people can press.
+  { keys: ['Ctrl', '+'], alternative: ['Ctrl', '-'], id: 'zoomInOut' },
+  { keys: ['Ctrl', '0'], id: 'zoomReset' },
   { keys: ['Esc'], id: 'closeDialog' },
   { keys: ['Tab'], id: 'moveBetweenControls' }
 ];
