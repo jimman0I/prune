@@ -1222,3 +1222,72 @@ describe('expandPath tokens', () => {
     }
   });
 });
+
+describe('recursive ** glob segment', () => {
+  async function put(root, rel, content) {
+    const full = join(root, ...rel.split('/'));
+    await mkdir(join(full, '..'), { recursive: true });
+    await writeFile(full, content);
+    return Buffer.byteLength(content);
+  }
+
+  it('matches zero, one and many directory levels, case-insensitively', async () => {
+    const tree = join(appDataDir, 'rartest');
+    const sizes = [
+      await put(tree, 'a.tmp', 'aaaa'),
+      await put(tree, 'sub/b.TMP', 'bbbbbb'),
+      await put(tree, 'sub/deep/c.tmp', 'cc'),
+      await put(tree, 'keep.txt', 'zzzzzzzz'),
+      await put(tree, 'sub/keep.dat', 'yyyyyyyy')
+    ];
+    const result = scanRule({ id: 'rar', paths: ['%APPDATA%\\rartest\\**\\*.tmp'] });
+    expect(result.fileCount).toBe(3);
+    expect(result.sizeBytes).toBe(sizes[0] + sizes[1] + sizes[2]);
+    expect(result.present).toBe(true);
+  });
+
+  it('reports nothing when only non-matching files exist', async () => {
+    const tree = join(appDataDir, 'rartest');
+    await put(tree, 'keep.txt', 'zzzz');
+    await put(tree, 'sub/keep.dat', 'yyyy');
+    const result = scanRule({ id: 'rar', paths: ['%APPDATA%\\rartest\\**\\*.tmp'] });
+    expect(result.fileCount).toBe(0);
+    expect(result.present).toBe(false);
+  });
+
+  it('a trailing ** counts every file under the folder exactly once', async () => {
+    const tree = join(appDataDir, 'rartest');
+    const sizes = [
+      await put(tree, 'a.txt', 'aaaa'),
+      await put(tree, 'sub/b.dat', 'bbbbbb'),
+      await put(tree, 'sub/deep/c.tmp', 'cc')
+    ];
+    const result = scanRule({ id: 'rar', paths: ['%APPDATA%\\rartest\\**'] });
+    expect(result.fileCount).toBe(3);
+    expect(result.sizeBytes).toBe(sizes.reduce((a, b) => a + b, 0));
+  });
+
+  it('does not follow a directory junction', async () => {
+    const tree = join(appDataDir, 'rartest');
+    const outside = await mkdtemp(join(tmpdir(), 'unrevo-cleaner-outside-'));
+    try {
+      await put(outside, 'x.tmp', 'xxxx');
+      await put(tree, 'a.tmp', 'aa');
+      fs.symlinkSync(outside, join(tree, 'link'), 'junction');
+      const result = scanRule({ id: 'rar', paths: ['%APPDATA%\\rartest\\**\\*.tmp'] });
+      expect(result.fileCount).toBe(1);
+    } finally {
+      await rm(outside, { recursive: true, force: true });
+    }
+  });
+
+  it('combines with a * segment', async () => {
+    const vs = join(appDataDir, 'VirtualStore');
+    const s1 = await put(vs, 'Program Files/WinRAR/a.tmp', 'aaaa');
+    const s2 = await put(vs, 'Program Files (x86)/WinRAR/sub/b.tmp', 'bb');
+    await put(vs, 'Program Files/WinRAR/keep.txt', 'zzzz');
+    const result = scanRule({ id: 'rar', paths: ['%APPDATA%\\VirtualStore\\Program Files*\\WinRAR\\**\\*.tmp'] });
+    expect(result.fileCount).toBe(2);
+    expect(result.sizeBytes).toBe(s1 + s2);
+  });
+});
