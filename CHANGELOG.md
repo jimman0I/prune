@@ -5,11 +5,20 @@ see v1.0.1 below) are documented here.
 
 ## v2.8.0
 
-Prune now remembers where you left it, and batch uninstall no longer
-declares success before an uninstaller has actually finished.
+Prune now remembers where you left it, and uninstallers that never opened
+now do.
 
 ### Fixed
 
+- **Uninstallers whose path contains a space never started at all.**
+  Clicking Uninstall on VALORANT (and any program whose registered
+  uninstall command is a quoted path with a space in it, which includes
+  everything under Program Files) launched nothing: Windows' command
+  processor rejected the command as "not recognized" before any
+  uninstaller ran, and Prune reported the uninstall as done anyway. This
+  is the real cause of "the uninstaller doesn't open"; 2.7.0's fix for it
+  addressed a window that was never being created. The command is now
+  handed over exactly as the program registered it.
 - **Batch uninstall could report "Uninstalled" while the program was
   still fully installed.** Selecting programs and choosing "Uninstall N
   programs" scanned for leftovers the instant each uninstaller's process
