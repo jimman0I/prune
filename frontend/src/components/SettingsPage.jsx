@@ -228,7 +228,7 @@ function SettingsPage() {
         ))}
       </div>
 
-      <div role="tabpanel" id="settings-panel" aria-labelledby={`settings-tab-${tab}`}>
+      <div role="tabpanel" id="settings-panel" tabIndex={0} aria-labelledby={`settings-tab-${tab}`}>
       {/* Outside the settings gate, deliberately. Everything below waits
           on the backend, and this panel does not: the theme lives in
           localStorage and is applied before React renders. Gating it too

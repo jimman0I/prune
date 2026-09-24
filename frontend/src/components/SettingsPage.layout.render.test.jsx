@@ -80,6 +80,11 @@ describe('the sub-tabs are a tablist', () => {
     expect(tabs[0].getAttribute('aria-controls')).toBe(panel.id);
   });
 
+  it('makes the panel itself focusable, so a keyboard user can reach a panel with no focusable content', async () => {
+    await open('About');
+    expect(screen.getByRole('tabpanel').getAttribute('tabindex')).toBe('0');
+  });
+
   it('puts only the selected tab in the tab order (roving tabindex)', async () => {
     await open();
     const tabs = screen.getAllByRole('tab');

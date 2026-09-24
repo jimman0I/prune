@@ -38,7 +38,7 @@ import { useLanguage } from '../i18n/LanguageContext.jsx';
  * `state` is 'none' | 'all' | 'some'. The partial state draws a dash
  * rather than a tick, which is the one shape that cannot be mistaken for
  * either of the other two. */
-function Checkbox({ state, onChange, label, size = 16, hit = size, className = '' }) {
+function Checkbox({ state, onChange, label, size = 16, hit = size, className = '', disabled = false }) {
   const filled = state === 'all' || state === 'some';
 
   return (
@@ -51,6 +51,7 @@ function Checkbox({ state, onChange, label, size = 16, hit = size, className = '
       role="checkbox"
       aria-checked={state === 'some' ? 'mixed' : state === 'all'}
       aria-label={label}
+      disabled={disabled}
       // The row a rule's box lives in is clickable too, so this must not
       // bubble or one click would toggle twice and land where it began.
       onClick={(event) => { event.stopPropagation(); onChange(); }}
@@ -172,11 +173,11 @@ function CategorySection({ category, items, allItems = items, iconSrc, selected,
   // user made while browsing has to still be there, exactly as they left
   // it, once Clean finishes or the filter is cleared.
   const isExpanded = receiptMode || filtering || !collapsed;
-  // The heading reflects, and acts on, the WHOLE category even while a
-  // filter shows only some of its rules. Its label says "everything under
-  // X", and a box that read "all" because the few visible rows were ticked
-  // would be claiming something about rules it is not showing.
-  const state = categorySelectionState(allItems, selected);
+  // The heading reflects, and acts on, what is VISIBLE: while a filter
+  // shows only some of a category's rules, ticking the heading must never
+  // tick (or raise a risky-rule dialog for) rules the user cannot see.
+  // Unfiltered, `items` is the whole category.
+  const state = categorySelectionState(items, selected);
 
   return (
     <div>
@@ -187,14 +188,11 @@ function CategorySection({ category, items, allItems = items, iconSrc, selected,
           panel is already a backdrop-filter surface, so the heading was
           blurring a backdrop that had itself been blurred. */}
       <div className="flex items-center gap-2.5 px-3 py-1.5 bg-[color:var(--bg-panel)] border-y border-[color:var(--border-subtle)] sticky top-0 z-10">
-        {/* Ticking this often lands on 'some' rather than 'all', and that
-            is correct rather than a stuck control: onToggleCategory
-            deliberately skips the risky rules and the ones for software
-            that is not installed, so a category like Brave -- five of
-            whose seven rules lose data -- fills to two. The box reports
-            what is actually ticked. Every row it left alone is wearing a
-            "Loses data" badge saying why, and each still takes a
-            deliberate individual click that raises the warning dialog. */}
+        {/* Ticking this can land on 'some' rather than 'all', and that is
+            correct rather than a stuck control: a risky rule is not ticked
+            by the heading, it is QUEUED for its own warning dialog
+            (lib/categoryTickPlan.js), and stays unticked until the user
+            says yes. The box reports what is actually ticked. */}
         <button
           type="button"
           onClick={() => onToggleCollapsed(category)}
@@ -219,8 +217,13 @@ function CategorySection({ category, items, allItems = items, iconSrc, selected,
           size={16}
           hit={28}
           className="-my-1.5 -mr-1.5"
+          disabled={receiptMode}
           label={t('deepClean.tree.selectCategoryAriaLabel', category)}
-          onChange={() => onToggleCategory(category, nextCategoryChecked(state))}
+          onChange={() => {
+            const checked = nextCategoryChecked(state);
+            if (filtering) onToggleCategory(category, checked, items.map((item) => item.id));
+            else onToggleCategory(category, checked);
+          }}
         />
       </div>
 
@@ -242,11 +245,21 @@ function CategorySection({ category, items, allItems = items, iconSrc, selected,
               // on a plain div focuses nothing, and a risky rule opens a
               // dialog that hands focus back to whatever was focused when
               // it opened: without this it would return to <body>.
-              onClick={(event) => {
-                event.currentTarget.querySelector('[role="checkbox"]')?.focus();
+              //
+              // Not in receiptMode: that list is drawn from the frozen
+              // snapshot taken when Clean started, while onToggle reads the
+              // live selection, so a click could toggle the wrong thing or
+              // open a risky-rule dialog in the middle of a clean.
+              onClick={receiptMode ? undefined : (event) => {
+                // preventScroll: focusing must not scroll the row under the
+                // sticky category heading; the scroller's scroll-padding
+                // covers keyboard focus.
+                event.currentTarget.querySelector('[role="checkbox"]')?.focus({ preventScroll: true });
                 onToggle(item.id);
               }}
-              className={`flex items-center gap-2.5 pl-[38px] pr-3 py-[3px] cursor-pointer hover:bg-[color:var(--surface-subtle)] transition-colors duration-300 ${
+              className={`flex items-center gap-2.5 pl-[38px] pr-3 py-[3px] transition-colors duration-300 ${
+                receiptMode ? '' : 'cursor-pointer hover:bg-[color:var(--surface-subtle)]'
+              } ${
                 // The row a scan or a clean is working on right now -- the
                 // same "what is it doing" question the log line beside the
                 // tree already answers, put on the tree itself. A tint
@@ -304,6 +317,7 @@ function CategorySection({ category, items, allItems = items, iconSrc, selected,
               <Checkbox
                 state={selected.has(item.id) ? 'all' : 'none'}
                 size={14}
+                disabled={receiptMode}
                 label={item.name}
                 onChange={() => onToggle(item.id)}
               />
@@ -327,15 +341,19 @@ export default function DeepCleanTree({ categories, selected, onToggle, onToggle
   const [query, setQuery] = useState('');
   const [collapsed, setCollapsed] = useState(() => readCollapsedCategories(window.localStorage));
 
+  const needle = receiptMode ? '' : query.trim().toLowerCase();
+  const filtering = needle !== '';
+
   const toggleCollapsed = (category) => {
+    // The list is forced open in these two modes, so a toggle would change
+    // nothing on screen while silently rewriting what is remembered.
+    if (receiptMode || filtering) return;
     const next = new Set(collapsed);
     if (next.has(category)) next.delete(category); else next.add(category);
     setCollapsed(next);
     writeCollapsedCategories(window.localStorage, next);
   };
 
-  const needle = receiptMode ? '' : query.trim().toLowerCase();
-  const filtering = needle !== '';
 
   /* The filter is a VIEW. It narrows which rows are drawn and does nothing
    * else: it never reads or writes the selection, so a ticked rule that is
@@ -364,7 +382,8 @@ export default function DeepCleanTree({ categories, selected, onToggle, onToggle
       : categories;
 
   const total = categories.reduce((sum, group) => sum + group.items.length, 0);
-  const ticked = categories.reduce((sum, group) => sum + group.items.filter((item) => selected.has(item.id)).length, 0);
+  // selected.size, the same number the footer shows and Clean acts on.
+  const ticked = selected.size;
   const measured = selectionTotal(categories, selected);
   const summary = `${t('deepClean.tree.selectedOfTotal', ticked, total)}${measured.anyMeasured ? ` · ${formatBytes(measured.bytes)}` : ''}`;
   const placeholder = t('deepClean.tree.filterPlaceholder');
@@ -386,7 +405,7 @@ export default function DeepCleanTree({ categories, selected, onToggle, onToggle
         </div>
       )}
 
-      <div className="overflow-y-auto min-h-0 flex-1">
+      <div className="overflow-y-auto min-h-0 flex-1 scroll-pt-[30px]">
         {filtering && visibleGroups.length === 0 && (
           <p className="px-4 py-6 text-center text-[12.5px] text-[color:var(--text-muted)]">{t('deepClean.tree.filterNone')}</p>
         )}
