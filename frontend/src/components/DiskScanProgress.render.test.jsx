@@ -1,0 +1,227 @@
+// @vitest-environment jsdom
+import { describe, it, expect, afterEach, vi } from 'vitest';
+import { screen, cleanup, fireEvent, act } from '@testing-library/react';
+import { MotionConfig } from 'framer-motion';
+import { isCopyable } from '../testSupport/copyable.js';
+import { renderScreen } from '../testSupport/renderScreen.jsx';
+import DiskScanProgress from './DiskScanProgress.jsx';
+
+/** The Disk Map's scan progress card.
+ *
+ * The rule under every test here (the user's decision): a percentage is
+ * drawn only when it is a real, finite number. Nothing is derived,
+ * smoothed or invented, so an unknown percent must leave no number and no
+ * aria-valuenow behind. */
+
+vi.mock('../lib/api.js', () => ({
+  fetchSettings: vi.fn(async () => ({})),
+  updateSettings: vi.fn()
+}));
+
+afterEach(() => {
+  cleanup();
+  vi.useRealTimers();
+  vi.restoreAllMocks();
+});
+
+const GB = 1024 ** 3;
+
+function show(props) {
+  return renderScreen(
+    <MotionConfig reducedMotion="always">
+      <DiskScanProgress {...props} />
+    </MotionConfig>
+  );
+}
+
+describe('idle', () => {
+  it('renders nothing', () => {
+    const { container } = show({ status: 'idle', path: 'C:\\' });
+    expect(container.querySelector('.glass-panel')).toBeNull();
+    expect(screen.queryByRole('progressbar')).toBeNull();
+    expect(container.textContent).toBe('');
+  });
+});
+
+describe('scanning', () => {
+  it('names the path in ONE monospace, truncating element and keeps the two breathing rings', async () => {
+    show({ status: 'scanning', path: 'C:\\Users\\Someone', percent: null });
+
+    const label = await screen.findByText('Scanning C:\\Users\\Someone');
+    expect(label.className).toContain('font-mono');
+    expect(label.className).toContain('truncate');
+    expect(document.querySelectorAll('[style*="pulse-ring"]').length).toBe(2);
+  });
+
+  it.each([
+    ['null', null],
+    ['undefined', undefined],
+    ['NaN', NaN],
+    ['a string', '42']
+  ])('draws NO percent number when percent is %s', async (_name, percent) => {
+    show({ status: 'scanning', path: 'C:\\', percent, files: 10, bytes: 100 });
+    await screen.findByText('Scanning C:\\');
+
+    expect(document.body.textContent).not.toContain('%');
+    expect(screen.getByRole('progressbar').hasAttribute('aria-valuenow')).toBe(false);
+  });
+
+  it('draws the percent, and aria-valuenow/min/max, when it is a real number', async () => {
+    show({ status: 'scanning', path: 'C:\\', percent: 42 });
+
+    expect(await screen.findByText('42%')).toBeTruthy();
+    const bar = screen.getByRole('progressbar', { name: 'Scan progress' });
+    expect(bar.getAttribute('aria-valuenow')).toBe('42');
+    expect(bar.getAttribute('aria-valuemin')).toBe('0');
+    expect(bar.getAttribute('aria-valuemax')).toBe('100');
+    expect(bar.hasAttribute('data-indeterminate')).toBe(false);
+  });
+
+  it('treats a real 0 as a real percent', async () => {
+    show({ status: 'scanning', path: 'C:\\', percent: 0 });
+
+    expect(await screen.findByText('0%')).toBeTruthy();
+    expect(screen.getByRole('progressbar').getAttribute('aria-valuenow')).toBe('0');
+  });
+
+  it('is an indeterminate bar with no aria-valuenow, min or max when there is no percent', async () => {
+    show({ status: 'scanning', path: 'C:\\Games', percent: null });
+    await screen.findByText('Scanning C:\\Games');
+
+    const bar = screen.getByRole('progressbar', { name: 'Scan progress' });
+    expect(bar.hasAttribute('aria-valuenow')).toBe(false);
+    expect(bar.hasAttribute('aria-valuemin')).toBe(false);
+    expect(bar.hasAttribute('aria-valuemax')).toBe(false);
+    expect(bar.getAttribute('data-indeterminate')).toBe('true');
+    expect(bar.querySelector('.scan-indeterminate')).toBeTruthy();
+  });
+
+  it('shows the live counters, with no percent, when files are known but the total is not', async () => {
+    show({ status: 'scanning', path: 'C:\\Games', percent: null, files: 1200, bytes: 5 * GB });
+
+    expect(await screen.findByText(/1[,.]200/)).toBeTruthy();
+    expect(document.body.textContent).toMatch(/1[,.]200 files scanned · 5 GB processed/);
+    expect(document.body.textContent).not.toMatch(/\d\s*%/);
+    expect(screen.getByText(/no percentage/)).toBeTruthy();
+  });
+
+  it('shows no counters at all when files is not a number', async () => {
+    show({ status: 'scanning', path: 'C:\\Games', percent: null });
+    await screen.findByText('Scanning C:\\Games');
+
+    expect(document.body.textContent).not.toContain('files scanned');
+  });
+
+  it('does not say there is no percentage when there is one', async () => {
+    show({ status: 'scanning', path: 'C:\\', percent: 37, files: 5, bytes: 10 });
+    await screen.findByText('37%');
+
+    expect(screen.queryByText(/no percentage/)).toBeNull();
+  });
+
+  it('renders the footer action passed as children', async () => {
+    show({ status: 'scanning', path: 'C:\\', children: <button>Read the index</button> });
+
+    expect(await screen.findByRole('button', { name: 'Read the index' })).toBeTruthy();
+  });
+});
+
+describe('scanning in index mode (the fast scan)', () => {
+  it('shows elapsed time and the no-progress note, never a percent or counters', async () => {
+    show({ status: 'scanning', mode: 'index', path: 'C:\\', percent: 55, files: 9, bytes: 9 });
+
+    expect(await screen.findByText('Elapsed 00:00')).toBeTruthy();
+    expect(screen.getByText(/Windows reports no progress/)).toBeTruthy();
+    expect(document.body.textContent).not.toMatch(/\d\s*%/);
+    expect(document.body.textContent).not.toContain('files scanned');
+    expect(screen.getByRole('progressbar').hasAttribute('aria-valuenow')).toBe(false);
+  });
+
+  it('ticks the elapsed time once a second, and clears its timer on unmount', async () => {
+    vi.useFakeTimers();
+    const setSpy = vi.spyOn(globalThis, 'setInterval');
+    const clearSpy = vi.spyOn(globalThis, 'clearInterval');
+    const { unmount } = show({ status: 'scanning', mode: 'index', path: 'C:\\' });
+
+    expect(screen.getByText('Elapsed 00:00')).toBeTruthy();
+    act(() => { vi.advanceTimersByTime(3000); });
+    expect(screen.getByText('Elapsed 00:03')).toBeTruthy();
+    act(() => { vi.advanceTimersByTime(62_000); });
+    expect(screen.getByText('Elapsed 01:05')).toBeTruthy();
+
+    const ours = setSpy.mock.calls
+      .map((call, i) => (call[1] === 1000 ? setSpy.mock.results[i].value : undefined))
+      .filter((id) => id !== undefined);
+    unmount();
+    // Every interval the component started was cleared.
+    for (const id of ours) expect(clearSpy).toHaveBeenCalledWith(id);
+    expect(ours.length).toBeGreaterThan(0);
+  });
+
+  it('starts a 1-second interval only in index mode', () => {
+    vi.useFakeTimers();
+    const setSpy = vi.spyOn(globalThis, 'setInterval');
+    show({ status: 'scanning', path: 'C:\\', percent: null });
+    expect(setSpy.mock.calls.filter(([, ms]) => ms === 1000)).toHaveLength(0);
+  });
+});
+
+describe('complete', () => {
+  it('draws a checkmark whose path animates pathLength from 0', () => {
+    const { container } = show({ status: 'complete', totalFiles: 1500, totalBytes: 2 * GB });
+
+    const path = container.querySelector('svg path');
+    expect(path).toBeTruthy();
+    // framer-motion normalises the path to length 1 and drives a dash pair
+    // "<drawn> <gap>" from pathLength. On the first render (initial
+    // pathLength 0) nothing is drawn yet: the drawn part is 0.
+    expect(path.getAttribute('pathLength')).toBe('1');
+    expect(path.getAttribute('stroke-dasharray')).toBe('0 1');
+  });
+
+  it('says the counts when the totals are known', async () => {
+    show({ status: 'complete', totalFiles: 1500, totalBytes: 2 * GB });
+
+    expect(await screen.findByText(/^Scan complete — 1[,.]500 files, 2 GB$/)).toBeTruthy();
+  });
+
+  it('says plain "Scan complete" when the totals are not known', async () => {
+    show({ status: 'complete' });
+
+    expect(await screen.findByText('Scan complete')).toBeTruthy();
+  });
+
+  it('calls onScanAgain from the Scan again button', async () => {
+    const onScanAgain = vi.fn();
+    show({ status: 'complete', totalFiles: 1, totalBytes: 1, onScanAgain });
+
+    fireEvent.click(await screen.findByRole('button', { name: 'Scan again' }));
+    expect(onScanAgain).toHaveBeenCalledTimes(1);
+  });
+
+  it('offers no Scan again button without a handler', async () => {
+    show({ status: 'complete' });
+    await screen.findByText('Scan complete');
+
+    expect(screen.queryByRole('button', { name: 'Scan again' })).toBeNull();
+  });
+});
+
+describe('error', () => {
+  it('shows the message in a selectable element and calls onRetry from Retry', async () => {
+    const onRetry = vi.fn();
+    show({ status: 'error', message: 'Couldn\'t scan "D:\\": EACCES', onRetry });
+
+    const message = await screen.findByText('Couldn\'t scan "D:\\": EACCES');
+    expect(isCopyable(message)).toBe(true);
+    fireEvent.click(screen.getByRole('button', { name: 'Retry' }));
+    expect(onRetry).toHaveBeenCalledTimes(1);
+  });
+
+  it('offers no Retry button without a handler', async () => {
+    show({ status: 'error', message: 'nope' });
+    await screen.findByText('nope');
+
+    expect(screen.queryByRole('button', { name: 'Retry' })).toBeNull();
+  });
+});
