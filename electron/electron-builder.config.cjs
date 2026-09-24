@@ -46,7 +46,10 @@ module.exports = {
   // restore and persist window bounds, so a build without it would run
   // fine in dev (loaded straight off disk) and throw the moment
   // createWindow() runs in a packaged app.
-  files: ['main.cjs', 'preload.cjs', 'updater.cjs', 'windowState.cjs'],
+  //
+  // zoom.cjs is the same trap a fifth time: main.cjs requires it for the
+  // text-zoom keys, and installerLanguages.test.cjs fails if it is missing.
+  files: ['main.cjs', 'preload.cjs', 'updater.cjs', 'windowState.cjs', 'zoom.cjs'],
   extraResources: [
     // NOTE the source: this copies from ../backend/src DIRECTLY, not from
     // the build/backend-prod/ staging directory build-installer.mjs

@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { describe, it, expect, afterEach, vi } from 'vitest';
+import { describe, it, expect, afterEach, beforeEach, vi } from 'vitest';
 import { render, screen, cleanup, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ToastProvider, useToasts } from '../hooks/useToasts.jsx';
@@ -271,7 +271,20 @@ describe('hovering or focusing a toast holds it on screen', () => {
     await user.click(screen.getByText('push'));
     return user;
   };
-  afterEach(() => vi.useRealTimers());
+  /* jsdom's :focus-visible depends on how the previous interaction went
+   * (pointer or keyboard), which makes these order-dependent. Say it
+   * explicitly: focus is keyboard focus unless a test says otherwise. */
+  const realMatches = Element.prototype.matches;
+  const stubFocusVisible = (visible) => {
+    Element.prototype.matches = function (selector) {
+      return selector === ':focus-visible' ? visible : realMatches.call(this, selector);
+    };
+  };
+  beforeEach(() => stubFocusVisible(true));
+  afterEach(() => {
+    Element.prototype.matches = realMatches;
+    vi.useRealTimers();
+  });
 
   it('does not expire while the pointer is over it, then lets it go afterwards', async () => {
     const user = await setup();
@@ -299,11 +312,24 @@ describe('hovering or focusing a toast holds it on screen', () => {
   it('stays held if the pointer leaves but focus is still inside', async () => {
     const user = await setup();
     const status = screen.getByRole('status');
-    await user.hover(status);
+    // Keyboard focus first, then the pointer passes over and leaves. (Focus
+    // after a mouse move is not :focus-visible in jsdom or in a browser.)
     screen.getByRole('button', { name: 'Dismiss notification' }).focus();
+    await user.hover(status);
     await user.unhover(status);
     await wait(30_000);
     expect(count()).toBe('1');
+  });
+
+  it('is not held by focus that arrived from a mouse click', async () => {
+    // Clicking a control inside a toast focuses it, but that is not
+    // keyboard focus: :focus-visible is false. Holding on it would keep the
+    // toast forever once the pointer had left.
+    stubFocusVisible(false);
+    await setup();
+    screen.getByRole('button', { name: 'Dismiss notification' }).focus();
+    await wait(30_000);
+    expect(count()).toBe('0');
   });
 
   it('keeps a warning past any timeout without needing a hover', async () => {

@@ -261,9 +261,11 @@ async function createWindow() {
   // Ctrl+wheel: Electron reports the request, it does not act on it.
   wc.on('zoom-changed', (_event, direction) => setZoom(applyZoomAction(zoomLevel, direction)));
   // Restore the saved level once the page is up (a load can reset it).
-  wc.on('did-finish-load', () => {
-    if (wc.getZoomLevel() !== zoomLevel) wc.setZoomLevel(zoomLevel);
-  });
+  // dom-ready first so the window does not paint at 100% and then jump;
+  // did-finish-load stays as the backstop in case the level was reset.
+  const restoreZoom = () => { if (wc.getZoomLevel() !== zoomLevel) wc.setZoomLevel(zoomLevel); };
+  wc.on('dom-ready', restoreZoom);
+  wc.on('did-finish-load', restoreZoom);
 
   if (resolvedBounds.isMaximized) win.maximize();
 

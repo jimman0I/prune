@@ -50,7 +50,7 @@ function Checkbox({ state, onChange, label, size = 16 }) {
       className={`rounded-[4px] flex items-center justify-center shrink-0 transition-colors border ${
         filled
           ? 'bg-[color:var(--accent-primary)] border-[color:var(--accent-primary)]'
-          : 'bg-[color:var(--surface-subtle)] border-[color:var(--control-border)] hover:border-[color:var(--border-hover)]'
+          : 'bg-[color:var(--surface-subtle)] border-[color:var(--control-border)] hover:border-[color:var(--control-border-hover)]'
       }`}
     >
       {state === 'all' && (

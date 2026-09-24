@@ -61,6 +61,15 @@ describe('--control-border', () => {
     expect(src('src/components/Toggle.jsx')).toMatch(/ring-\[color:var\(--control-border\)\]/);
   });
 
+  it('strengthens the edge on hover instead of weakening it', () => {
+    // --border-hover (0.25 white) is below the resting 0.36, so using it
+    // for hover made the box fainter under the pointer.
+    expect(css).toMatch(/--control-border-hover:\s*rgba\(255,\s*255,\s*255,\s*0\.6\)/);
+    expect(css).toMatch(/--control-border-hover:\s*rgba\(28,\s*25,\s*23,\s*0\.72\)/);
+    expect(ruleIn(css, 'input[type="checkbox"].prune-check:hover:not(:disabled)')).toMatch(/var\(--control-border-hover\)/);
+    expect(src('src/components/DeepCleanTree.jsx')).toMatch(/hover:border-\[color:var\(--control-border-hover\)\]/);
+  });
+
   it('also draws the shared native checkbox with it', () => {
     expect(ruleIn(css, 'input[type="checkbox"].prune-check')).toMatch(/border:\s*1px solid var\(--control-border\)/);
   });
@@ -84,6 +93,22 @@ describe('forced colors', () => {
     expect(ruleIn(scope, '.pill-selected')).toMatch(/outline:\s*2px solid Highlight/);
     expect(ruleIn(scope, '[role="tab"][aria-selected="true"]')).toMatch(/outline:\s*2px solid Highlight/);
     expect(ruleIn(scope, 'button[aria-pressed="true"]')).toMatch(/outline:\s*2px solid Highlight/);
+  });
+
+  it('keeps the focus ring outside a selected item so the two marks differ', () => {
+    const scope = fc();
+    for (const sel of ['.pill-selected:focus-visible', '[role="tab"][aria-selected="true"]:focus-visible', 'button[aria-pressed="true"]:focus-visible']) {
+      expect(ruleIn(scope, sel), sel).toMatch(/outline-offset:\s*2px/);
+    }
+  });
+
+  it('puts the switch thumb back where the border pushed it', () => {
+    expect(ruleIn(fc(), '[role="switch"] > span')).toBeTruthy();
+    expect(fc()).toMatch(/\[role="switch"\] > span \{ margin: -1px 0 0 -1px; \}/);
+  });
+
+  it('beats the storage fill's inline colour, which a plain rule cannot', () => {
+    expect(ruleIn(fc(), '.storage-bar-fill')).toMatch(/background:\s*Highlight !important/);
   });
 
   it('opts the storage bar out of forced colours so the fill survives', () => {
