@@ -306,3 +306,77 @@ describe('scanDirectory exclusions', () => {
     }
   }, 30000);
 });
+
+describe('scanDirectory onFile progress callback', () => {
+  it('is called once per file with its byte size, and never for a directory', async () => {
+    const root = mkdtempSync(join(tmpdir(), 'prune-onfile-'));
+    try {
+      mkdirSync(join(root, 'sub', 'deeper'), { recursive: true });
+      writeFileSync(join(root, 'a.txt'), '12345');
+      writeFileSync(join(root, 'sub', 'b.txt'), '1234567890');
+      writeFileSync(join(root, 'sub', 'deeper', 'c.txt'), '123');
+      const sizes = [];
+      // maxDepth 0: depth only bounds the returned tree, the walk (and so the
+      // counters) still covers every file.
+      await scanDirectory(root, 0, undefined, null, (size) => sizes.push(size));
+      expect(sizes.sort((x, y) => x - y)).toEqual([3, 5, 10]);
+    } finally {
+      rmSync(root, { recursive: true, force: true });
+    }
+  }, 30000);
+
+  it('counts a single file path', async () => {
+    const root = mkdtempSync(join(tmpdir(), 'prune-onfile-single-'));
+    try {
+      const file = join(root, 'only.bin');
+      writeFileSync(file, 'abcd');
+      const sizes = [];
+      await scanDirectory(file, 5, undefined, null, (size) => sizes.push(size));
+      expect(sizes).toEqual([4]);
+    } finally {
+      rmSync(root, { recursive: true, force: true });
+    }
+  }, 30000);
+
+  it('does not count excluded entries', async () => {
+    const root = mkdtempSync(join(tmpdir(), 'prune-onfile-excl-'));
+    try {
+      mkdirSync(join(root, 'Games'), { recursive: true });
+      writeFileSync(join(root, 'Games', 'big.bin'), 'x'.repeat(500));
+      writeFileSync(join(root, 'disc.iso'), 'y'.repeat(300));
+      writeFileSync(join(root, 'notes.txt'), 'z'.repeat(20));
+      const sizes = [];
+      await scanDirectory(
+        root, 5, undefined,
+        { excludeFolders: [join(root, 'Games')], excludeExtensions: ['.iso'] },
+        (size) => sizes.push(size)
+      );
+      expect(sizes).toEqual([20]);
+    } finally {
+      rmSync(root, { recursive: true, force: true });
+    }
+  }, 30000);
+
+  it('does not count files inside a directory that cannot be listed', async () => {
+    const root = mkdtempSync(join(tmpdir(), 'prune-onfile-unread-'));
+    try {
+      mkdirSync(join(root, 'locked'), { recursive: true });
+      writeFileSync(join(root, 'locked', 'hidden.bin'), 'h'.repeat(50));
+      writeFileSync(join(root, 'seen.bin'), 's'.repeat(7));
+      const realReaddir = fs.__actualPromises.readdir;
+      fs.promises.readdir.mockImplementation(async (p, o) => {
+        if (String(p).endsWith('locked')) throw new Error('EPERM');
+        return realReaddir(p, o);
+      });
+      const sizes = [];
+      try {
+        await scanDirectory(root, 5, undefined, null, (size) => sizes.push(size));
+      } finally {
+        fs.promises.readdir.mockImplementation(realReaddir);
+      }
+      expect(sizes).toEqual([7]);
+    } finally {
+      rmSync(root, { recursive: true, force: true });
+    }
+  }, 30000);
+});

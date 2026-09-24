@@ -16,7 +16,7 @@ import { matchesExtension } from '../lib/exclusionInput.js';
 
 export const DEFAULT_MAX_DEPTH = 12;
 
-async function scanNode(entryPath, name, depthRemaining, signal, exclusions) {
+async function scanNode(entryPath, name, depthRemaining, signal, exclusions, onFile) {
   // Checked BEFORE starting new work, not just relied on to reject an
   // in-flight fs call -- an already-aborted signal should stop growing the
   // tree immediately rather than spend one more stat/readdir round-trip
@@ -51,6 +51,7 @@ async function scanNode(entryPath, name, depthRemaining, signal, exclusions) {
   }
 
   if (!stat.isDirectory()) {
+    onFile?.(stat.size);
     return { name, size: stat.size, type: 'file' };
   }
 
@@ -103,7 +104,7 @@ async function scanNode(entryPath, name, depthRemaining, signal, exclusions) {
       break;
     }
     const entryName = entryNames[i];
-    const child = await scanNode(join(entryPath, entryName), entryName, depthRemaining - 1, signal, exclusions);
+    const child = await scanNode(join(entryPath, entryName), entryName, depthRemaining - 1, signal, exclusions, onFile);
     if (child) children.push(child);
   }
   const size = children.reduce((sum, c) => sum + c.size, 0);
@@ -140,9 +141,15 @@ async function scanNode(entryPath, name, depthRemaining, signal, exclusions) {
  * (see the route) to cap how long a single scan can run. An abort mid-walk
  * doesn't throw or discard progress: the tree returned reflects whatever
  * was genuinely visited before the signal fired, an honest partial result
- * rather than an error or a silently-inaccurate "complete" one. */
-export async function scanDirectory(dirPath, maxDepth = DEFAULT_MAX_DEPTH, signal, exclusions = null) {
-  return scanNode(dirPath, basename(dirPath) || dirPath, maxDepth, signal, exclusions);
+ * rather than an error or a silently-inaccurate "complete" one.
+ *
+ * `onFile` (optional) is called once per non-directory entry actually
+ * stat'ed, with its byte size, so a caller can report live progress. Excluded
+ * entries and unreadable directories are not "scanned" and are not counted.
+ * The walk visits files below the depth cap too, so the count reflects work
+ * done, not what the returned tree shows. */
+export async function scanDirectory(dirPath, maxDepth = DEFAULT_MAX_DEPTH, signal, exclusions = null, onFile) {
+  return scanNode(dirPath, basename(dirPath) || dirPath, maxDepth, signal, exclusions, onFile);
 }
 
 /** Whether the scanner should skip this entry outright.

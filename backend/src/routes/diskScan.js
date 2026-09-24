@@ -1,6 +1,9 @@
 import { Router } from 'express';
 import { scanDirectory, DEFAULT_MAX_DEPTH } from '../services/diskScan.js';
 import { getSettings } from '../services/settings.js';
+import { getSystemDriveSpace } from '../services/diskSpace.js';
+import { scanPercent } from '../lib/scanPercent.js';
+import { putScanResult, getScanResult } from '../lib/scanResults.js';
 
 const router = Router();
 
@@ -16,7 +19,106 @@ const router = Router();
 // bound on that second half: a scan that's taking too long is stopped
 // cleanly rather than left to run indefinitely, per the same reasoning
 // as WAR_ROOM_PHASE_TIMEOUT_MS in triclaude-web's own warRoom.js.
+// Shared by GET / and GET /stream so both routes have one deadline.
 const SCAN_TIMEOUT_MS = 30_000;
+
+// How often /stream reports progress. An interval, not per file: a
+// 3-million-file walk would otherwise emit millions of events.
+const PROGRESS_INTERVAL_MS = 200;
+
+function sendEvent(res, event, data) {
+  res.write(`event: ${event}\ndata: ${JSON.stringify(data)}\n\n`);
+}
+
+/** True for a bare drive root on the system drive ("C:", "C:\", "c:/").
+ * Only there does a real "bytes in use" figure exist (getSystemDriveSpace
+ * reports C: only), so only there can a percent be honest. */
+function isSystemDriveRoot(path) {
+  return /^[cC]:[\\/]*$/.test(String(path).trim());
+}
+
+/** Bytes in use on C:, or null on any failure. Never a guess. */
+async function systemDriveInUseBytes() {
+  try {
+    const space = await getSystemDriveSpace();
+    if (!space) return null;
+    const inUse = space.totalBytes - space.freeBytes;
+    return Number.isFinite(inUse) && inUse > 0 ? inUse : null;
+  } catch {
+    return null;
+  }
+}
+
+/** The same scan as GET /, streamed as SSE: `progress` events on an interval
+ * while walking, then `complete` (counts and a resultId, NOT the tree) or
+ * `error`. The tree itself is fetched from GET /result/:id: on a big drive
+ * it is tens of MB, which would make one enormous SSE line. */
+router.get('/stream', async (req, res) => {
+  const path = req.query.path;
+  if (!path) return res.status(400).json({ error: 'Missing required "path" query parameter.' });
+
+  res.writeHead(200, {
+    'Content-Type': 'text/event-stream',
+    'Cache-Control': 'no-cache',
+    'Connection': 'keep-alive',
+    'X-Accel-Buffering': 'no'
+  });
+
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), SCAN_TIMEOUT_MS);
+  let clientGone = false;
+  req.on('close', () => { clientGone = true; controller.abort(); });
+
+  let files = 0;
+  let bytes = 0;
+  // Resolved alongside the walk so the scan does not wait on PowerShell.
+  // Stays null (=> percent null) for any path but the C: root, or on failure.
+  let inUseBytes = null;
+  if (isSystemDriveRoot(path)) {
+    systemDriveInUseBytes().then((v) => { inUseBytes = v; });
+  }
+
+  const ticker = setInterval(() => {
+    sendEvent(res, 'progress', { type: 'progress', files, bytes, percent: scanPercent(bytes, inUseBytes) });
+  }, PROGRESS_INTERVAL_MS);
+
+  try {
+    const settings = await getSettings();
+    const result = await scanDirectory(path, DEFAULT_MAX_DEPTH, controller.signal, {
+      excludeFolders: settings.excludeFolders,
+      excludeExtensions: settings.excludeExtensions
+    }, (size) => { files += 1; bytes += size; });
+
+    clearInterval(ticker);
+    if (clientGone) return;
+
+    if (!result) {
+      const message = controller.signal.aborted
+        ? `Scanning "${path}" took too long (over ${SCAN_TIMEOUT_MS / 1000}s) and was stopped before any result was ready.`
+        : `Could not read "${path}" -- it may not exist or may not be accessible.`;
+      sendEvent(res, 'error', { type: 'error', message });
+      return;
+    }
+
+    const truncated = controller.signal.aborted;
+    const resultId = putScanResult({ ...result, truncated });
+    sendEvent(res, 'complete', { type: 'complete', totalFiles: files, totalBytes: bytes, truncated, resultId });
+  } catch (err) {
+    if (!clientGone) sendEvent(res, 'error', { type: 'error', message: err.message });
+  } finally {
+    clearInterval(ticker);
+    clearTimeout(timeout);
+    res.end();
+  }
+});
+
+/** The finished tree from a completed /stream scan, as ordinary JSON in the
+ * same shape as GET /'s body. */
+router.get('/result/:id', (req, res) => {
+  const tree = getScanResult(req.params.id);
+  if (!tree) return res.status(404).json({ error: 'That scan result is not available (it may have expired). Scan again.' });
+  res.json(tree);
+});
 
 router.get('/', async (req, res) => {
   const path = req.query.path;
