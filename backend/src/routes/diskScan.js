@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import { randomUUID } from 'node:crypto';
 import { scanDirectory, DEFAULT_MAX_DEPTH } from '../services/diskScan.js';
 import { getSettings } from '../services/settings.js';
 import { getSystemDriveSpace } from '../services/diskSpace.js';
@@ -6,6 +7,11 @@ import { scanPercent } from '../lib/scanPercent.js';
 import { putScanResult, getScanResult } from '../lib/scanResults.js';
 
 const router = Router();
+
+/** Scans that are running right now, by the id announced in their `start`
+ * event, so POST /stop/:id can reach the right AbortController. Removed in
+ * the stream's `finally`, so a finished scan can no longer be stopped. */
+const runningScans = new Map();
 
 // Real bug, found dogfooding (2026-09-01): scanning a genuinely large root
 // (a full "C:\") pegged the backend at ~100% CPU and made the ENTIRE
@@ -70,7 +76,13 @@ router.get('/stream', async (req, res) => {
   // the true stopping point instead of duplicating the constant.
   const deadline = Date.now() + SCAN_TIMEOUT_MS;
   let clientGone = false;
+  let stoppedByUser = false;
   req.on('close', () => { clientGone = true; controller.abort(); });
+
+  const scanId = randomUUID();
+  runningScans.set(scanId, () => { stoppedByUser = true; controller.abort(); });
+  // First thing on the wire, so the client can offer Stop straight away.
+  sendEvent(res, 'start', { type: 'start', scanId, remainingMs: SCAN_TIMEOUT_MS });
 
   let files = 0;
   let bytes = 0;
@@ -104,7 +116,9 @@ router.get('/stream', async (req, res) => {
     if (clientGone) return;
 
     if (!result) {
-      const message = controller.signal.aborted
+      const message = stoppedByUser
+        ? `The scan of "${path}" was stopped before any result was ready.`
+        : controller.signal.aborted
         ? `Scanning "${path}" took too long (over ${SCAN_TIMEOUT_MS / 1000}s) and was stopped before any result was ready.`
         : `Could not read "${path}" -- it may not exist or may not be accessible.`;
       sendEvent(res, 'error', { type: 'error', message });
@@ -117,10 +131,23 @@ router.get('/stream', async (req, res) => {
   } catch (err) {
     if (!clientGone) sendEvent(res, 'error', { type: 'error', message: err.message });
   } finally {
+    runningScans.delete(scanId);
     clearInterval(ticker);
     clearTimeout(timeout);
     res.end();
   }
+});
+
+/** Asks a running /stream scan to stop. The walk already answers an abort
+ * with the partial tree it has so far (flagged `truncated`), so the stream
+ * simply carries on to its normal `complete` event and the client shows what
+ * was measured, worded as "stopped early". Stopping by dropping the
+ * connection instead would discard exactly that partial result. */
+router.post('/stop/:id', (req, res) => {
+  const stopScan = runningScans.get(req.params.id);
+  if (!stopScan) return res.status(404).json({ error: 'No running scan with that id (it may have already finished).' });
+  stopScan();
+  res.json({ stopped: true });
 });
 
 /** The finished tree from a completed /stream scan, as ordinary JSON in the
