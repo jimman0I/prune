@@ -262,8 +262,6 @@ export const CATALOG = {
       },
       recentActivity: {
         title: 'Recent activity',
-        hide: 'Hide',
-        show: 'Show',
         empty: 'No uninstalls yet.',
         freed: 'freed'
       }
@@ -1003,8 +1001,6 @@ export const CATALOG = {
       },
       recentActivity: {
         title: 'Onlangse Aktiwiteit',
-        hide: 'Versteek',
-        show: 'Wys',
         empty: 'Nog geen deïnstallasies nie.',
         freed: 'vrygemaak'
       }
@@ -1744,8 +1740,6 @@ export const CATALOG = {
       },
       recentActivity: {
         title: 'النشاط الأخير',
-        hide: 'إخفاء',
-        show: 'إظهار',
         empty: 'لا عمليات إلغاء تثبيت بعد.',
         freed: 'تم تحريره'
       }
@@ -2485,8 +2479,6 @@ export const CATALOG = {
       },
       recentActivity: {
         title: 'Activitat recent',
-        hide: 'Amaga',
-        show: 'Mostra',
         empty: 'Encara cap desinstal·lació.',
         freed: 'alliberat'
       }
@@ -3226,8 +3218,6 @@ export const CATALOG = {
       },
       recentActivity: {
         title: 'Nedávná aktivita',
-        hide: 'Skrýt',
-        show: 'Zobrazit',
         empty: 'Zatím žádné odinstalace.',
         freed: 'uvolněno'
       }
@@ -3967,8 +3957,6 @@ export const CATALOG = {
       },
       recentActivity: {
         title: 'Gweithgaredd Diweddar',
-        hide: 'Cuddio',
-        show: 'Dangos',
         empty: 'Dim dadosodiadau eto.',
         freed: 'wedi\'i ryddhau'
       }
@@ -4708,8 +4696,6 @@ export const CATALOG = {
       },
       recentActivity: {
         title: 'Seneste Aktivitet',
-        hide: 'Skjul',
-        show: 'Vis',
         empty: 'Ingen afinstallationer endnu.',
         freed: 'frigjort'
       }
@@ -5449,8 +5435,6 @@ export const CATALOG = {
       },
       recentActivity: {
         title: 'Letzte Aktivität',
-        hide: 'Ausblenden',
-        show: 'Anzeigen',
         empty: 'Noch keine Deinstallationen.',
         freed: 'freigegeben'
       }
@@ -6190,8 +6174,6 @@ export const CATALOG = {
       },
       recentActivity: {
         title: 'Πρόσφατη Δραστηριότητα',
-        hide: 'Απόκρυψη',
-        show: 'Εμφάνιση',
         empty: 'Καμία απεγκατάσταση ακόμη.',
         freed: 'ελευθερώθηκαν'
       }
@@ -6931,8 +6913,6 @@ export const CATALOG = {
       },
       recentActivity: {
         title: 'Actividad Reciente',
-        hide: 'Ocultar',
-        show: 'Mostrar',
         empty: 'Aún no hay desinstalaciones.',
         freed: 'liberado'
       }
@@ -7672,8 +7652,6 @@ export const CATALOG = {
       },
       recentActivity: {
         title: 'Hiljutine Tegevus',
-        hide: 'Peida',
-        show: 'Näita',
         empty: 'Desinstallimisi pole veel olnud.',
         freed: 'vabastatud'
       }
@@ -8413,8 +8391,6 @@ export const CATALOG = {
       },
       recentActivity: {
         title: 'Viimeaikainen Toiminta',
-        hide: 'Piilota',
-        show: 'Näytä',
         empty: 'Ei vielä poistoja.',
         freed: 'vapautettu'
       }
@@ -9154,8 +9130,6 @@ export const CATALOG = {
       },
       recentActivity: {
         title: 'Activité Récente',
-        hide: 'Masquer',
-        show: 'Afficher',
         empty: 'Aucune désinstallation pour le moment.',
         freed: 'libéré'
       }
@@ -9895,8 +9869,6 @@ export const CATALOG = {
       },
       recentActivity: {
         title: 'פעילות אחרונה',
-        hide: 'הסתר',
-        show: 'הצג',
         empty: 'אין עדיין הסרות התקנה.',
         freed: 'שוחרר'
       }
@@ -10636,8 +10608,6 @@ export const CATALOG = {
       },
       recentActivity: {
         title: 'Legutóbbi Tevékenység',
-        hide: 'Elrejtés',
-        show: 'Megjelenítés',
         empty: 'Még nincs eltávolítás.',
         freed: 'felszabadítva'
       }
@@ -11377,8 +11347,6 @@ export const CATALOG = {
       },
       recentActivity: {
         title: 'Aktivitas Terbaru',
-        hide: 'Sembunyikan',
-        show: 'Tampilkan',
         empty: 'Belum ada pencopotan.',
         freed: 'dibebaskan'
       }
@@ -12118,8 +12086,6 @@ export const CATALOG = {
       },
       recentActivity: {
         title: 'Nýleg Virkni',
-        hide: 'Fela',
-        show: 'Sýna',
         empty: 'Engar affermingar ennþá.',
         freed: 'losað'
       }
@@ -12859,8 +12825,6 @@ export const CATALOG = {
       },
       recentActivity: {
         title: 'Attività Recente',
-        hide: 'Nascondi',
-        show: 'Mostra',
         empty: 'Ancora nessuna disinstallazione.',
         freed: 'liberato'
       }
@@ -13600,8 +13564,6 @@ export const CATALOG = {
       },
       recentActivity: {
         title: '最近のアクティビティ',
-        hide: '隠す',
-        show: '表示',
         empty: 'まだアンインストールはありません。',
         freed: '解放'
       }
@@ -14341,8 +14303,6 @@ export const CATALOG = {
       },
       recentActivity: {
         title: '최근 활동',
-        hide: '숨기기',
-        show: '표시',
         empty: '아직 제거된 항목이 없습니다.',
         freed: '확보됨'
       }
@@ -15082,8 +15042,6 @@ export const CATALOG = {
       },
       recentActivity: {
         title: 'Naujausia Veikla',
-        hide: 'Slėpti',
-        show: 'Rodyti',
         empty: 'Kol kas pašalinimų nebuvo.',
         freed: 'atlaisvinta'
       }
@@ -15823,8 +15781,6 @@ export const CATALOG = {
       },
       recentActivity: {
         title: 'Aktiviti Terkini',
-        hide: 'Sembunyi',
-        show: 'Tunjuk',
         empty: 'Belum ada nyahpasangan.',
         freed: 'dibebaskan'
       }
@@ -16564,8 +16520,6 @@ export const CATALOG = {
       },
       recentActivity: {
         title: 'Nylig Aktivitet',
-        hide: 'Skjul',
-        show: 'Vis',
         empty: 'Ingen avinstalleringer ennå.',
         freed: 'frigjort'
       }
@@ -17305,8 +17259,6 @@ export const CATALOG = {
       },
       recentActivity: {
         title: 'Recente Activiteit',
-        hide: 'Verbergen',
-        show: 'Tonen',
         empty: 'Nog geen verwijderingen.',
         freed: 'vrijgemaakt'
       }
@@ -18046,8 +17998,6 @@ export const CATALOG = {
       },
       recentActivity: {
         title: 'Ostatnia Aktywność',
-        hide: 'Ukryj',
-        show: 'Pokaż',
         empty: 'Jeszcze żadnych dezinstalacji.',
         freed: 'zwolniono'
       }
@@ -18787,8 +18737,6 @@ export const CATALOG = {
       },
       recentActivity: {
         title: 'وروستۍ فعالیت',
-        hide: 'پټول',
-        show: 'ښودل',
         empty: 'تراوسه هیڅ لرې کول نشته.',
         freed: 'خلاص شوی'
       }
@@ -19528,8 +19476,6 @@ export const CATALOG = {
       },
       recentActivity: {
         title: 'Atividade Recente',
-        hide: 'Ocultar',
-        show: 'Mostrar',
         empty: 'Ainda nenhuma desinstalação.',
         freed: 'liberado'
       }
@@ -20269,8 +20215,6 @@ export const CATALOG = {
       },
       recentActivity: {
         title: 'Atividade Recente',
-        hide: 'Ocultar',
-        show: 'Mostrar',
         empty: 'Ainda nenhuma desinstalação.',
         freed: 'libertado'
       }
@@ -21010,8 +20954,6 @@ export const CATALOG = {
       },
       recentActivity: {
         title: 'Activitate Recentă',
-        hide: 'Ascunde',
-        show: 'Arată',
         empty: 'Încă nicio dezinstalare.',
         freed: 'eliberat'
       }
@@ -21751,8 +21693,6 @@ export const CATALOG = {
       },
       recentActivity: {
         title: 'Недавняя Активность',
-        hide: 'Скрыть',
-        show: 'Показать',
         empty: 'Пока нет удалений.',
         freed: 'освобождено'
       }
@@ -22492,8 +22432,6 @@ export const CATALOG = {
       },
       recentActivity: {
         title: 'Nedávna Aktivita',
-        hide: 'Skryť',
-        show: 'Zobraziť',
         empty: 'Zatiaľ žiadne odinštalácie.',
         freed: 'uvoľnené'
       }
@@ -23233,8 +23171,6 @@ export const CATALOG = {
       },
       recentActivity: {
         title: 'Aktiviteti i Fundit',
-        hide: 'Fshih',
-        show: 'Shfaq',
         empty: 'Ende asnjë çinstalim.',
         freed: 'u lirua'
       }
@@ -23974,8 +23910,6 @@ export const CATALOG = {
       },
       recentActivity: {
         title: 'Недавна Активност',
-        hide: 'Сакриј',
-        show: 'Прикажи',
         empty: 'Још увек нема деинсталација.',
         freed: 'ослобођено'
       }
@@ -24715,8 +24649,6 @@ export const CATALOG = {
       },
       recentActivity: {
         title: 'Senaste Aktivitet',
-        hide: 'Dölj',
-        show: 'Visa',
         empty: 'Inga avinstallationer än.',
         freed: 'frigjort'
       }
@@ -25456,8 +25388,6 @@ export const CATALOG = {
       },
       recentActivity: {
         title: 'กิจกรรมล่าสุด',
-        hide: 'ซ่อน',
-        show: 'แสดง',
         empty: 'ยังไม่มีการถอนการติดตั้ง',
         freed: 'ที่เพิ่มพื้นที่ว่าง'
       }
@@ -26197,8 +26127,6 @@ export const CATALOG = {
       },
       recentActivity: {
         title: 'Son Etkinlik',
-        hide: 'Gizle',
-        show: 'Göster',
         empty: 'Henüz kaldırma yok.',
         freed: 'boşaltıldı'
       }
@@ -26938,8 +26866,6 @@ export const CATALOG = {
       },
       recentActivity: {
         title: 'Остання Активність',
-        hide: 'Приховати',
-        show: 'Показати',
         empty: 'Ще немає видалень.',
         freed: 'звільнено'
       }
@@ -27679,8 +27605,6 @@ export const CATALOG = {
       },
       recentActivity: {
         title: 'Hoạt Động Gần Đây',
-        hide: 'Ẩn',
-        show: 'Hiện',
         empty: 'Chưa có lần gỡ cài đặt nào.',
         freed: 'đã giải phóng'
       }
@@ -28420,8 +28344,6 @@ export const CATALOG = {
       },
       recentActivity: {
         title: '最近活动',
-        hide: '隐藏',
-        show: '显示',
         empty: '尚无卸载记录。',
         freed: '已释放'
       }
@@ -29161,8 +29083,6 @@ export const CATALOG = {
       },
       recentActivity: {
         title: '最近活動',
-        hide: '隱藏',
-        show: '顯示',
         empty: '尚無解除安裝記錄。',
         freed: '已釋放'
       }
