@@ -38,7 +38,12 @@ vi.mock('../lib/api.js', () => ({
  * test's DOM is still mounted for the next, and getByText finds two of
  * everything. renderScreen carries the same hook for the screens that use
  * it; this file renders bare, so it carries its own. */
-afterEach(cleanup);
+afterEach(() => {
+  cleanup();
+  // Which categories are collapsed is remembered in localStorage now, and
+  // jsdom keeps that across the tests of a file.
+  window.localStorage.clear();
+});
 
 const rule = (over = {}) => ({
   id: 'r1',

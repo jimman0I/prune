@@ -167,7 +167,7 @@ describe('the gate in front of a clean', () => {
 
     await user.click(cleanButton());
     expect(streamDeepCleanExecute).not.toHaveBeenCalled();
-    expect(screen.getByRole('button', { name: 'Confirm' })).toBeTruthy();
+    expect(screen.getByRole('button', { name: 'Move to Quarantine' })).toBeTruthy();
   });
 
   it('says how much, not just how many, before it will run', async () => {
@@ -202,7 +202,7 @@ describe('the gate in front of a clean', () => {
     renderScreen(<DeepClean />);
     await selectSomething(user);
     await user.click(cleanButton());
-    await user.click(screen.getByRole('button', { name: 'Confirm' }));
+    await user.click(screen.getByRole('button', { name: 'Move to Quarantine' }));
 
     await waitFor(() => expect(streamDeepCleanExecute).toHaveBeenCalledTimes(1));
     const [ids] = streamDeepCleanExecute.mock.calls[0];
@@ -220,7 +220,7 @@ describe('the gate in front of a clean', () => {
     renderScreen(<DeepClean />);
     await selectSomething(user);
     await user.click(cleanButton());
-    await user.click(screen.getByRole('button', { name: 'Confirm' }));
+    await user.click(screen.getByRole('button', { name: 'Move to Quarantine' }));
 
     await waitFor(() => expect(streamDeepCleanExecute).toHaveBeenCalledTimes(1));
     expect(await screen.findByText('Freed 1 KB')).toBeTruthy();
@@ -255,7 +255,7 @@ describe('the clean-in-progress output', () => {
     renderScreen(<DeepClean />);
     await selectSomething(user);
     await user.click(cleanButton());
-    await user.click(screen.getByRole('button', { name: 'Confirm' }));
+    await user.click(screen.getByRole('button', { name: 'Move to Quarantine' }));
     act(() => { onEventRef('rule', { id: 'thumbs', name: 'Thumbnail cache', freedBytes: 2048, skipped: [] }); });
 
     expect(await screen.findByText('Delete Thumbnail cache')).toBeTruthy();
@@ -272,7 +272,7 @@ describe('the clean-in-progress output', () => {
     renderScreen(<DeepClean />);
     await selectSomething(user);
     await user.click(cleanButton());
-    await user.click(screen.getByRole('button', { name: 'Confirm' }));
+    await user.click(screen.getByRole('button', { name: 'Move to Quarantine' }));
 
     const stopButton = await screen.findByRole('button', { name: 'Stop' });
     expect(screen.queryByRole('button', { name: 'Cancel' })).toBeNull();
@@ -293,7 +293,7 @@ describe('the clean-in-progress output', () => {
     renderScreen(<DeepClean />);
     await selectSomething(user);
     await user.click(cleanButton());
-    await user.click(screen.getByRole('button', { name: 'Confirm' }));
+    await user.click(screen.getByRole('button', { name: 'Move to Quarantine' }));
     act(() => { onEventRef('rule', { id: 'thumbs', name: 'Thumbnail cache', freedBytes: 10, skipped: [] }); });
 
     const row = (await screen.findByText('Thumbnail cache')).closest('div');
@@ -323,7 +323,7 @@ describe('what can be copied', () => {
     await user.click(boxes[boxes.length - 1]);
     await waitFor(() => expect(cleanButton().disabled).toBe(false));
     await user.click(cleanButton());
-    await user.click(screen.getByRole('button', { name: 'Confirm' }));
+    await user.click(screen.getByRole('button', { name: 'Move to Quarantine' }));
 
     expect(isCopyable(await screen.findByText(/Couldn't clean: EBUSY/))).toBe(true);
   });
@@ -511,7 +511,7 @@ describe('the tree/log split while a clean runs', () => {
     renderScreen(<DeepClean />);
     await selectSomething(user);
     await user.click(cleanButton());
-    await user.click(screen.getByRole('button', { name: 'Confirm' }));
+    await user.click(screen.getByRole('button', { name: 'Move to Quarantine' }));
 
     await waitFor(() =>
       expect(screen.getByTestId('deep-clean-tree-column').style.getPropertyValue('--dc-tree-w')).toBe('260px'));
@@ -553,7 +553,7 @@ describe('the tree/log split while a clean runs', () => {
     await waitFor(() => expect(cleanButton().disabled).toBe(false));
 
     await user.click(cleanButton());
-    await user.click(screen.getByRole('button', { name: 'Confirm' }));
+    await user.click(screen.getByRole('button', { name: 'Move to Quarantine' }));
 
     // Both still on screen: the receipt for the batch Clean actually
     // started with.
