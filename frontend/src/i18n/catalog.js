@@ -270,6 +270,7 @@ export const CATALOG = {
     },
     diskMap: {
       title: 'Disk Map',
+      unscannedLabel: "Not scanned",
       aggregateCell: (count) => `${count} smaller items`,
       subtitle: 'Disk usage: what is using the space on this drive, and where.',
       fastIndexSummary: (count) => `${count} files and folders read from the drive's own index.`,
@@ -306,6 +307,7 @@ export const CATALOG = {
         indexNoteEstimate: "Windows reports no progress while the drive index is read, so there is no percentage — this estimate is how long your last scan took.",
         durationSeconds: (n) => `${n} s`,
         durationMinutes: (m, s) => `${m} min ${s} s`,
+        stopping: "Stopping…",
         scanAgain: "Scan again",
         retry: "Retry",
         barLabel: "Scan progress"
@@ -315,11 +317,14 @@ export const CATALOG = {
       truncated: {
         withCoverage: (measured, used, percent) => `This scan ran out of time: it measured ${measured} of the ${used} in use (${percent}%). What it measured is real; the rest is shown as unscanned, not as empty.`,
         withoutCoverage: "This scan ran out of time before it finished the drive. Everything it did measure is real, but folders it never reached are shown as unscanned rather than as empty — don't read this as a full picture of what's using your space.",
+        stoppedWithCoverage: (a, b, c) => `You stopped this scan: it measured ${a} of the ${b} in use (${c}%). What it measured is real; the rest is shown as unscanned, not as empty.`,
+        stoppedWithoutCoverage: "You stopped this scan early. What it measured is real; folders it never reached are shown as unscanned, not as empty — this is not a full picture of what's using your space.",
         rescanLink: 'Run a fast scan instead'
       },
       view: { tree: 'Tree', files: 'Files' },
       folderTable: {
         empty: 'Nothing to list inside this folder.',
+        rowLabel: (a, b) => `Open ${a}, ${b}`,
         notScanned: 'not scanned',
         columns: { folder: 'Folder', size: 'Size', items: 'Items', files: 'Files', folders: 'Folders', modified: 'Modified' }
       },
@@ -336,6 +341,7 @@ export const CATALOG = {
         aggregated: 'The smallest entries in this folder, grouped together.',
         unscanned: 'The scan stopped before reaching this. Its real size is unknown.'
       },
+      rowActionsLabel: (a) => `Actions for ${a}`,
       cellOpenLabel: (name) => `Open ${name}`,
       contextMenu: {
         openInExplorer: 'Open in Explorer',
@@ -473,11 +479,12 @@ export const CATALOG = {
         publisher: 'Publisher',
         status: 'Status'
       },
-      switchAriaLabel: (enabled, name) => `${enabled ? 'Disable' : 'Enable'} ${name} at sign-in`,
+      switchAriaLabel: (name) => `Run ${name} at sign-in`,
       status: {
         invalid: 'Invalid',
         running: 'Running',
         notChecked: 'Not checked',
+        off: "Off",
         notRunning: 'Not running'
       },
       groups: {
@@ -496,6 +503,8 @@ export const CATALOG = {
     duplicates: {
       title: 'Duplicate files',
       subtitle: "Files that are byte-identical, not merely the same size. Point it at a folder you actually keep things in — reading a whole drive to compare it against itself takes far longer than it is worth, and finds mostly the machine's own copies of its own files.",
+      folderPlaceholder: (a) => `Folder path, for example ${a}`,
+      stoppedNote: "Stopped — nothing was compared.",
       folderInputAriaLabel: 'Folder to search for duplicates',
       stop: 'Stop',
       findButton: 'Find duplicates',
@@ -513,6 +522,7 @@ export const CATALOG = {
       keepNewest: 'Keep newest',
       clear: 'Clear',
       truncatedWarning: 'The scan was cut short, so there may be more sets than these.',
+      tags: { keep: "Keep", toQuarantine: "To quarantine" },
       group: {
         identicalCopies: (count, size) => `${count} identical copies · ${size} each`,
         allTickedWarning: 'Every copy in this set is ticked — untick one to keep it.'
@@ -525,8 +535,8 @@ export const CATALOG = {
       },
       modal: {
         label: 'Move duplicates to quarantine',
-        heading: (count) => `Move ${count} copies to quarantine?`,
-        body: (formatted) => `${formatted} recovered. Every set keeps at least one copy, and nothing is deleted — restore any of it from the Quarantine screen.`,
+        heading: (count) => `Move ${count} ${count === 1 ? 'copy' : 'copies'} to quarantine?`,
+        body: (a) => `Moving them frees ${a} once you empty Quarantine. Every set keeps at least one copy, and nothing is deleted — restore any of it from the Quarantine screen.`,
         cancel: 'Cancel',
         confirmButton: 'Move to quarantine'
       },
@@ -1001,6 +1011,7 @@ export const CATALOG = {
     },
     diskMap: {
       title: 'Skyfgebruik',
+      unscannedLabel: "Nie geskandeer nie",
       aggregateCell: (count) => `${count} kleiner items`,
       subtitle: "Wat gebruik die spasie op hierdie skyf, en waar.",
       fastIndexSummary: (count) => `${count} lêers en gidse gelees vanaf die skyf se eie indeks.`,
@@ -1037,6 +1048,7 @@ export const CATALOG = {
         indexNoteEstimate: "Windows rapporteer geen vordering terwyl die skyfindeks gelees word nie, so daar is geen persentasie nie — hierdie skatting is hoe lank jou vorige skandering geneem het.",
         durationSeconds: (n) => `${n} s`,
         durationMinutes: (m, s) => `${m} min ${s} s`,
+        stopping: "Stop tans…",
         scanAgain: "Skandeer weer",
         retry: "Probeer weer",
         barLabel: "Skanderingsvordering"
@@ -1046,11 +1058,14 @@ export const CATALOG = {
       truncated: {
         withCoverage: (measured, used, percent) => `Hierdie skandering het uitgeloop: dit het ${measured} van die ${used} in gebruik gemeet (${percent}%). Wat dit gemeet het, is werklik; die res word as ongeskandeer gewys, nie as leeg nie.`,
         withoutCoverage: "Hierdie skandering het uitgeloop voordat dit die skyf voltooi het. Alles wat dit wel gemeet het, is werklik, maar gidse wat dit nooit bereik het nie, word as ongeskandeer gewys eerder as leeg — moenie dit as 'n volledige prentjie van wat jou spasie gebruik, lees nie.",
+        stoppedWithCoverage: (a, b, c) => `Jy het hierdie skandering gestop: dit het ${a} van die ${b} in gebruik gemeet (${c}%). Wat dit gemeet het, is werklik; die res word as ongeskandeer gewys, nie as leeg nie.`,
+        stoppedWithoutCoverage: "Jy het hierdie skandering vroeg gestop. Wat dit gemeet het, is werklik; vouers wat dit nooit bereik het nie, word as ongeskandeer gewys, nie as leeg nie — dit is nie 'n volledige prentjie van wat jou spasie gebruik nie.",
         rescanLink: "Doen eerder 'n vinnige skandering"
       },
       view: { tree: 'Boom', files: 'Lêers' },
       folderTable: {
         empty: 'Niks om binne hierdie gids te lys nie.',
+        rowLabel: (a, b) => `Maak ${a} oop, ${b}`,
         notScanned: 'nie geskandeer nie',
         columns: { folder: 'Gids', size: 'Grootte', items: 'Items', files: 'Lêers', folders: 'Gidse', modified: 'Gewysig' }
       },
@@ -1067,6 +1082,7 @@ export const CATALOG = {
         aggregated: 'Die kleinste inskrywings in hierdie gids, saam gegroepeer.',
         unscanned: 'Die skandering het gestop voor dit hier uitgekom het. Die werklike grootte is onbekend.'
       },
+      rowActionsLabel: (a) => `Aksies vir ${a}`,
       cellOpenLabel: (name) => `Maak ${name} oop`,
       contextMenu: {
         openInExplorer: 'Maak oop in Verkenner',
@@ -1204,11 +1220,12 @@ export const CATALOG = {
         publisher: 'Uitgewer',
         status: 'Status'
       },
-      switchAriaLabel: (enabled, name) => `${enabled ? 'Deaktiveer' : 'Aktiveer'} ${name} by aanmelding`,
+      switchAriaLabel: (name) => `Laat ${name} loop by aanmelding`,
       status: {
         invalid: 'Ongeldig',
         running: 'Loop',
         notChecked: 'Nie nagegaan nie',
+        off: "Af",
         notRunning: 'Loop nie'
       },
       groups: {
@@ -1227,6 +1244,8 @@ export const CATALOG = {
     duplicates: {
       title: 'Duplikaatlêers',
       subtitle: 'Lêers wat greep-vir-greep identies is, nie net dieselfde grootte nie. Wys dit na \'n vouer waar jy werklik dinge in hou — om \'n hele skyf te lees om dit teen homself te vergelyk, neem baie langer as wat dit werd is, en vind meestal die masjien se eie kopieë van sy eie lêers.',
+      folderPlaceholder: (a) => `Vouerpad, byvoorbeeld ${a}`,
+      stoppedNote: "Gestop — niks is vergelyk nie.",
       folderInputAriaLabel: 'Vouer om na duplikate te soek',
       stop: 'Stop',
       findButton: 'Vind duplikate',
@@ -1244,6 +1263,7 @@ export const CATALOG = {
       keepNewest: 'Hou nuutste',
       clear: 'Maak skoon',
       truncatedWarning: 'Die skandering is vroeg gestop, so daar mag meer stelle wees as hierdie.',
+      tags: { keep: "Hou", toQuarantine: "Na karantyn" },
       group: {
         identicalCopies: (count, size) => `${count} identiese kopieë · ${size} elk`,
         allTickedWarning: 'Elke kopie in hierdie stel is gemerk — ontmerk een om dit te behou.'
@@ -1257,7 +1277,7 @@ export const CATALOG = {
       modal: {
         label: 'Skuif duplikate na karantyn',
         heading: (count) => `Skuif ${count} kopieë na karantyn?`,
-        body: (formatted) => `${formatted} herwin. Elke stel behou ten minste een kopie, en niks word verwyder nie — herstel enigiets daarvan van die Karantyn-skerm af.`,
+        body: (a) => `As jy hulle skuif, word ${a} vrygemaak sodra jy Karantyn leegmaak. Elke stel behou ten minste een kopie, en niks word verwyder nie — herstel enigiets daarvan van die Karantyn-skerm af.`,
         cancel: 'Kanselleer',
         confirmButton: 'Skuif na karantyn'
       },
@@ -1732,6 +1752,7 @@ export const CATALOG = {
     },
     diskMap: {
       title: 'استخدام القرص',
+      unscannedLabel: "لم يُفحص",
       aggregateCell: (count) => `${count} عناصر أصغر`,
       subtitle: 'ما الذي يستخدم المساحة على هذا القرص، وأين.',
       fastIndexSummary: (count) => `تمت قراءة ${count} من الملفات والمجلدات من فهرس القرص نفسه.`,
@@ -1768,6 +1789,7 @@ export const CATALOG = {
         indexNoteEstimate: "لا يُبلغ Windows عن أي تقدم أثناء قراءة فهرس القرص، لذا لا توجد نسبة مئوية — هذا التقدير هو المدة التي استغرقها فحصك السابق.",
         durationSeconds: (n) => `${n} ث`,
         durationMinutes: (m, s) => `${m} د ${s} ث`,
+        stopping: "جارٍ الإيقاف…",
         scanAgain: "افحص مرة أخرى",
         retry: "إعادة المحاولة",
         barLabel: "تقدم الفحص"
@@ -1777,11 +1799,14 @@ export const CATALOG = {
       truncated: {
         withCoverage: (measured, used, percent) => `نفد وقت هذا الفحص: قاس ${measured} من أصل ${used} المستخدمة (${percent}٪). ما تم قياسه حقيقي؛ ويظهر الباقي كغير مفحوص، لا كفارغ.`,
         withoutCoverage: 'نفد وقت هذا الفحص قبل أن ينهي القرص. كل ما تم قياسه فعليًا حقيقي، لكن المجلدات التي لم يصلها تظهر كغير مفحوصة وليست فارغة — لا تعتبر هذا صورة كاملة لما يستخدم مساحتك.',
+        stoppedWithCoverage: (a, b, c) => `أوقفتَ هذا الفحص: قاس ${a} من أصل ${b} المستخدمة (${c}٪). ما تم قياسه حقيقي؛ ويظهر الباقي كغير مفحوص، لا كفارغ.`,
+        stoppedWithoutCoverage: "أوقفتَ هذا الفحص مبكرًا. ما تم قياسه حقيقي؛ أما المجلدات التي لم يصل إليها فتظهر كغير مفحوصة لا كفارغة — فلا تعتبر هذا صورة كاملة لما يستهلك مساحتك.",
         rescanLink: 'تشغيل فحص سريع بدلاً من ذلك'
       },
       view: { tree: 'الشجرة', files: 'الملفات' },
       folderTable: {
         empty: 'لا يوجد شيء لعرضه داخل هذا المجلد.',
+        rowLabel: (a, b) => `فتح ${a}، ${b}`,
         notScanned: 'لم يُفحص',
         columns: { folder: 'المجلد', size: 'الحجم', items: 'العناصر', files: 'الملفات', folders: 'المجلدات', modified: 'التعديل' }
       },
@@ -1798,6 +1823,7 @@ export const CATALOG = {
         aggregated: 'أصغر العناصر في هذا المجلد، مجمّعة معًا.',
         unscanned: 'توقف الفحص قبل الوصول إلى هذا. حجمه الحقيقي غير معروف.'
       },
+      rowActionsLabel: (a) => `إجراءات ${a}`,
       cellOpenLabel: (name) => `فتح ${name}`,
       contextMenu: {
         openInExplorer: 'فتح في مستكشف الملفات',
@@ -1935,11 +1961,12 @@ export const CATALOG = {
         publisher: 'الناشر',
         status: 'الحالة'
       },
-      switchAriaLabel: (enabled, name) => `${enabled ? 'تعطيل' : 'تفعيل'} ${name} عند تسجيل الدخول`,
+      switchAriaLabel: (name) => `تشغيل ${name} عند تسجيل الدخول`,
       status: {
         invalid: 'غير صالح',
         running: 'قيد التشغيل',
         notChecked: 'لم يتم التحقق',
+        off: "متوقف",
         notRunning: 'غير قيد التشغيل'
       },
       groups: {
@@ -1958,6 +1985,8 @@ export const CATALOG = {
     duplicates: {
       title: 'الملفات المكررة',
       subtitle: 'ملفات متطابقة بايتًا بايت، وليس مجرد نفس الحجم. وجّهها إلى مجلد تحتفظ فيه فعليًا بأشياء — فقراءة قرص كامل لمقارنته بنفسه تستغرق وقتًا أطول بكثير مما يستحق، وتجد في الغالب نسخ الجهاز الخاصة من ملفاته الخاصة.',
+      folderPlaceholder: (a) => `مسار المجلد، مثل ${a}`,
+      stoppedNote: "تم الإيقاف — لم تتم مقارنة أي شيء.",
       folderInputAriaLabel: 'المجلد للبحث عن التكرارات فيه',
       stop: 'إيقاف',
       findButton: 'البحث عن التكرارات',
@@ -1975,6 +2004,7 @@ export const CATALOG = {
       keepNewest: 'الاحتفاظ بالأحدث',
       clear: 'مسح',
       truncatedWarning: 'تم اختصار الفحص، لذا قد تكون هناك مجموعات أكثر من هذه.',
+      tags: { keep: "إبقاء", toQuarantine: "إلى الحجر الصحي" },
       group: {
         identicalCopies: (count, size) => `${count} نسخة متطابقة · ${size} لكل منها`,
         allTickedWarning: 'كل نسخة في هذه المجموعة محددة — قم بإلغاء تحديد واحدة للاحتفاظ بها.'
@@ -1988,7 +2018,7 @@ export const CATALOG = {
       modal: {
         label: 'نقل التكرارات إلى الحجر الصحي',
         heading: (count) => `نقل ${count} نسخة إلى الحجر الصحي؟`,
-        body: (formatted) => `تم استرداد ${formatted}. تحتفظ كل مجموعة بنسخة واحدة على الأقل، ولا يُحذف شيء — استعد أيًا منها من شاشة الحجر الصحي.`,
+        body: (a) => `نقلها يحرّر ${a} بعد أن تفرغ الحجر الصحي. تحتفظ كل مجموعة بنسخة واحدة على الأقل، ولا يُحذف شيء — استعد أيًا منها من شاشة الحجر الصحي.`,
         cancel: 'إلغاء',
         confirmButton: 'نقل إلى الحجر الصحي'
       },
@@ -2463,6 +2493,7 @@ export const CATALOG = {
     },
     diskMap: {
       title: 'Ús del disc',
+      unscannedLabel: "No escanejat",
       aggregateCell: (count) => `${count} elements més petits`,
       subtitle: "Què utilitza l'espai en aquest disc, i on.",
       fastIndexSummary: (count) => `${count} fitxers i carpetes llegits des de l'índex propi del disc.`,
@@ -2499,6 +2530,7 @@ export const CATALOG = {
         indexNoteEstimate: "Windows no informa del progrés mentre es llegeix l'índex del disc, així que no hi ha percentatge: aquesta estimació és el que va durar la teva darrera anàlisi.",
         durationSeconds: (n) => `${n} s`,
         durationMinutes: (m, s) => `${m} min ${s} s`,
+        stopping: "Aturant…",
         scanAgain: "Torna a analitzar",
         retry: "Torna-ho a provar",
         barLabel: "Progrés de l'anàlisi"
@@ -2508,11 +2540,14 @@ export const CATALOG = {
       truncated: {
         withCoverage: (measured, used, percent) => `Aquest escaneig s'ha esgotat: ha mesurat ${measured} dels ${used} en ús (${percent}%). El que ha mesurat és real; la resta es mostra com a no escanejat, no com a buit.`,
         withoutCoverage: "Aquest escaneig s'ha esgotat abans d'acabar el disc. Tot el que ha mesurat és real, però les carpetes a les quals no ha arribat es mostren com a no escanejades en lloc de buides — no ho llegeixis com una imatge completa del que utilitza el teu espai.",
+        stoppedWithCoverage: (a, b, c) => `Has aturat aquest escaneig: ha mesurat ${a} dels ${b} en ús (${c}%). El que ha mesurat és real; la resta es mostra com a no escanejat, no com a buit.`,
+        stoppedWithoutCoverage: "Has aturat aquest escaneig abans d'hora. El que ha mesurat és real; les carpetes que no ha arribat a llegir es mostren com a no escanejades, no com a buides — no ho interpretis com una imatge completa del que ocupa espai.",
         rescanLink: "Fes un escaneig ràpid en lloc d'això"
       },
       view: { tree: 'Arbre', files: 'Fitxers' },
       folderTable: {
         empty: "Res per llistar dins d'aquesta carpeta.",
+        rowLabel: (a, b) => `Obre ${a}, ${b}`,
         notScanned: 'no escanejat',
         columns: { folder: 'Carpeta', size: 'Mida', items: 'Elements', files: 'Fitxers', folders: 'Carpetes', modified: 'Modificat' }
       },
@@ -2529,6 +2564,7 @@ export const CATALOG = {
         aggregated: "Les entrades més petites d'aquesta carpeta, agrupades.",
         unscanned: "L'escaneig s'ha aturat abans d'arribar aquí. La mida real és desconeguda."
       },
+      rowActionsLabel: (a) => `Accions per a ${a}`,
       cellOpenLabel: (name) => `Obre ${name}`,
       contextMenu: {
         openInExplorer: "Obre a l'Explorador",
@@ -2666,11 +2702,12 @@ export const CATALOG = {
         publisher: 'Editor',
         status: 'Estat'
       },
-      switchAriaLabel: (enabled, name) => `${enabled ? 'Desactiva' : 'Activa'} ${name} en iniciar sessió`,
+      switchAriaLabel: (name) => `Executa ${name} en iniciar sessió`,
       status: {
         invalid: 'No vàlid',
         running: 'En execució',
         notChecked: 'No comprovat',
+        off: "Desactivat",
         notRunning: 'No en execució'
       },
       groups: {
@@ -2689,6 +2726,8 @@ export const CATALOG = {
     duplicates: {
       title: 'Fitxers duplicats',
       subtitle: "Fitxers idèntics byte a byte, no només de la mateixa mida. Apunta-ho a una carpeta on realment guardis coses — llegir tot un disc per comparar-lo amb ell mateix triga molt més del que val la pena, i troba sobretot còpies pròpies de la màquina dels seus propis fitxers.",
+      folderPlaceholder: (a) => `Camí de la carpeta, per exemple ${a}`,
+      stoppedNote: "Aturat — no s'ha comparat res.",
       folderInputAriaLabel: 'Carpeta on cercar duplicats',
       stop: 'Atura',
       findButton: 'Cerca duplicats',
@@ -2706,6 +2745,7 @@ export const CATALOG = {
       keepNewest: 'Mantén el més recent',
       clear: 'Neteja',
       truncatedWarning: "L'escaneig es va tallar abans d'hora, així que hi pot haver més conjunts que aquests.",
+      tags: { keep: "Conserva", toQuarantine: "A la quarantena" },
       group: {
         identicalCopies: (count, size) => `${count} còpies idèntiques · ${size} cadascuna`,
         allTickedWarning: 'Totes les còpies d\'aquest conjunt estan marcades — desmarca\'n una per conservar-la.'
@@ -2719,7 +2759,7 @@ export const CATALOG = {
       modal: {
         label: 'Mou els duplicats a la quarantena',
         heading: (count) => `Vols moure ${count} còpies a la quarantena?`,
-        body: (formatted) => `${formatted} recuperats. Cada conjunt conserva com a mínim una còpia, i no s'elimina res — restaura'n qualsevol des de la pantalla de Quarantena.`,
+        body: (a) => `En moure-les s'alliberen ${a} quan buidis la Quarantena. Cada conjunt conserva com a mínim una còpia, i no s'elimina res — restaura'n qualsevol des de la pantalla de Quarantena.`,
         cancel: 'Cancel·la',
         confirmButton: 'Mou a la quarantena'
       },
@@ -3194,6 +3234,7 @@ export const CATALOG = {
     },
     diskMap: {
       title: 'Využití disku',
+      unscannedLabel: "Neprohledáno",
       aggregateCell: (count) => `${count} menších položek`,
       subtitle: 'Co využívá místo na tomto disku a kde.',
       fastIndexSummary: (count) => `${count} souborů a složek načteno z vlastního indexu disku.`,
@@ -3230,6 +3271,7 @@ export const CATALOG = {
         indexNoteEstimate: "Windows během čtení indexu disku nehlásí průběh, proto se nezobrazuje procento — tento odhad vychází z délky vašeho posledního skenování.",
         durationSeconds: (n) => `${n} s`,
         durationMinutes: (m, s) => `${m} min ${s} s`,
+        stopping: "Zastavuje se…",
         scanAgain: "Skenovat znovu",
         retry: "Zkusit znovu",
         barLabel: "Průběh skenování"
@@ -3239,11 +3281,14 @@ export const CATALOG = {
       truncated: {
         withCoverage: (measured, used, percent) => `Toto prohledání vypršelo: změřilo ${measured} z ${used} využitého místa (${percent} %). Co změřilo, je skutečné; zbytek se zobrazuje jako neprohledaný, nikoli jako prázdný.`,
         withoutCoverage: 'Toto prohledání vypršelo, než dokončilo disk. Vše, co skutečně změřilo, je skutečné, ale složky, ke kterým se nedostalo, se zobrazují jako neprohledané, nikoli jako prázdné — neberte to jako úplný obraz toho, co využívá vaše místo.',
+        stoppedWithCoverage: (a, b, c) => `Toto prohledání jste zastavili: změřilo ${a} z ${b} využitého místa (${c} %). Co změřilo, je skutečné; zbytek se zobrazuje jako neprohledaný, nikoli jako prázdný.`,
+        stoppedWithoutCoverage: "Toto prohledání jste předčasně zastavili. Co změřilo, je skutečné; složky, ke kterým se nedostalo, se zobrazují jako neprohledané, nikoli jako prázdné — nepovažujte to za úplný obraz toho, co zabírá místo.",
         rescanLink: 'Místo toho spustit rychlé prohledání'
       },
       view: { tree: 'Strom', files: 'Soubory' },
       folderTable: {
         empty: 'V této složce není nic k zobrazení.',
+        rowLabel: (a, b) => `Otevřít ${a}, ${b}`,
         notScanned: 'neprohledáno',
         columns: { folder: 'Složka', size: 'Velikost', items: 'Položky', files: 'Soubory', folders: 'Složky', modified: 'Změněno' }
       },
@@ -3260,6 +3305,7 @@ export const CATALOG = {
         aggregated: 'Nejmenší položky v této složce, seskupené dohromady.',
         unscanned: 'Prohledání se zastavilo, než se sem dostalo. Skutečná velikost není známa.'
       },
+      rowActionsLabel: (a) => `Akce pro ${a}`,
       cellOpenLabel: (name) => `Otevřít ${name}`,
       contextMenu: {
         openInExplorer: 'Otevřít v Průzkumníkovi',
@@ -3397,11 +3443,12 @@ export const CATALOG = {
         publisher: 'Vydavatel',
         status: 'Stav'
       },
-      switchAriaLabel: (enabled, name) => `${enabled ? 'Zakázat' : 'Povolit'} ${name} při přihlášení`,
+      switchAriaLabel: (name) => `Spouštět ${name} při přihlášení`,
       status: {
         invalid: 'Neplatné',
         running: 'Spuštěno',
         notChecked: 'Nezkontrolováno',
+        off: "Vypnuto",
         notRunning: 'Nespuštěno'
       },
       groups: {
@@ -3420,6 +3467,8 @@ export const CATALOG = {
     duplicates: {
       title: 'Duplicitní soubory',
       subtitle: 'Soubory, které jsou bajt po bajtu identické, nejen stejně velké. Namiřte to na složku, kam skutečně ukládáte věci — čtení celého disku kvůli porovnání se sebou samým trvá mnohem déle, než stojí za to, a najde většinou vlastní kopie souborů počítače.',
+      folderPlaceholder: (a) => `Cesta ke složce, například ${a}`,
+      stoppedNote: "Zastaveno — nic nebylo porovnáno.",
       folderInputAriaLabel: 'Složka pro hledání duplicit',
       stop: 'Zastavit',
       findButton: 'Najít duplicity',
@@ -3437,6 +3486,7 @@ export const CATALOG = {
       keepNewest: 'Ponechat nejnovější',
       clear: 'Vymazat',
       truncatedWarning: 'Skenování bylo předčasně ukončeno, takže sad může být více než těchto.',
+      tags: { keep: "Ponechat", toQuarantine: "Do karantény" },
       group: {
         identicalCopies: (count, size) => `${count} identických kopií · ${size} každá`,
         allTickedWarning: 'Každá kopie v této sadě je zaškrtnutá — odškrtněte jednu, abyste ji ponechali.'
@@ -3450,7 +3500,7 @@ export const CATALOG = {
       modal: {
         label: 'Přesunout duplicity do karantény',
         heading: (count) => `Přesunout ${count} kopií do karantény?`,
-        body: (formatted) => `${formatted} obnoveno. Každá sada si ponechá alespoň jednu kopii a nic se nesmaže — cokoli z toho můžete obnovit z obrazovky Karantény.`,
+        body: (a) => `Přesunem uvolníte ${a}, jakmile vysypete Karanténu. Každá sada si ponechá alespoň jednu kopii a nic se nesmaže — cokoli z toho můžete obnovit z obrazovky Karantény.`,
         cancel: 'Zrušit',
         confirmButton: 'Přesunout do karantény'
       },
@@ -3925,6 +3975,7 @@ export const CATALOG = {
     },
     diskMap: {
       title: 'Defnydd Disg',
+      unscannedLabel: "Heb ei sganio",
       aggregateCell: (count) => `${count} eitem llai`,
       subtitle: "Beth sy'n defnyddio'r lle ar y ddisg hon, a ble.",
       fastIndexSummary: (count) => `${count} ffeil a ffolder wedi'u darllen o fynegai ei hun y ddisg.`,
@@ -3961,6 +4012,7 @@ export const CATALOG = {
         indexNoteEstimate: "Nid yw Windows yn adrodd ar gynnydd wrth ddarllen mynegai'r gyriant, felly nid oes canran — mae'r amcangyfrif hwn yn seiliedig ar ba mor hir y cymerodd eich sgan diwethaf.",
         durationSeconds: (n) => `${n} s`,
         durationMinutes: (m, s) => `${m} mun ${s} s`,
+        stopping: "Yn stopio…",
         scanAgain: "Sganio eto",
         retry: "Rhowch gynnig arall arni",
         barLabel: "Cynnydd y sgan"
@@ -3970,11 +4022,14 @@ export const CATALOG = {
       truncated: {
         withCoverage: (measured, used, percent) => `Rhedodd y sgan hwn allan o amser: mesurodd ${measured} o'r ${used} sydd mewn defnydd (${percent}%). Mae'r hyn a fesurwyd yn real; dangosir y gweddill fel heb ei sganio, nid fel gwag.`,
         withoutCoverage: "Rhedodd y sgan hwn allan o amser cyn gorffen y ddisg. Mae popeth a fesurwyd yn real, ond dangosir ffolderi na chyrhaeddwyd fel heb eu sganio yn hytrach na gwag — peidiwch â darllen hyn fel darlun cyflawn o'r hyn sy'n defnyddio'ch lle.",
+        stoppedWithCoverage: (a, b, c) => `Fe wnaethoch stopio'r sgan hwn: mesurodd ${a} o'r ${b} sydd mewn defnydd (${c}%). Mae'r hyn a fesurwyd yn real; dangosir y gweddill fel heb ei sganio, nid fel gwag.`,
+        stoppedWithoutCoverage: "Fe wnaethoch stopio'r sgan hwn yn gynnar. Mae'r hyn a fesurwyd yn real; dangosir ffolderi na chyrhaeddodd fel rhai heb eu sganio, nid fel rhai gwag — peidiwch â'i ddarllen fel darlun llawn o'r hyn sy'n defnyddio'ch lle.",
         rescanLink: "Rhedeg sgan cyflym yn lle hynny"
       },
       view: { tree: 'Coeden', files: 'Ffeiliau' },
       folderTable: {
         empty: "Dim byd i'w restru y tu mewn i'r ffolder hon.",
+        rowLabel: (a, b) => `Agor ${a}, ${b}`,
         notScanned: "heb ei sganio",
         columns: { folder: 'Ffolder', size: 'Maint', items: 'Eitemau', files: 'Ffeiliau', folders: 'Ffolderi', modified: 'Diwygiwyd' }
       },
@@ -3991,6 +4046,7 @@ export const CATALOG = {
         aggregated: "Y cofnodion lleiaf yn y ffolder hon, wedi'u grwpio gyda'i gilydd.",
         unscanned: "Stopiodd y sgan cyn cyrraedd hyn. Mae ei faint gwirioneddol yn anhysbys."
       },
+      rowActionsLabel: (a) => `Camau gweithredu ar gyfer ${a}`,
       cellOpenLabel: (name) => `Agor ${name}`,
       contextMenu: {
         openInExplorer: 'Agor yn yr Explorer',
@@ -4128,11 +4184,12 @@ export const CATALOG = {
         publisher: 'Cyhoeddwr',
         status: 'Statws'
       },
-      switchAriaLabel: (enabled, name) => `${enabled ? "Analluogi" : "Galluogi"} ${name} wrth fewngofnodi`,
+      switchAriaLabel: (name) => `Rhedeg ${name} wrth fewngofnodi`,
       status: {
         invalid: 'Annilys',
         running: 'Yn rhedeg',
         notChecked: 'Heb ei wirio',
+        off: "I ffwrdd",
         notRunning: 'Ddim yn rhedeg'
       },
       groups: {
@@ -4151,6 +4208,8 @@ export const CATALOG = {
     duplicates: {
       title: 'Ffeiliau dyblyg',
       subtitle: "Ffeiliau sy'n union yr un fath, beit am beit, nid yr un maint yn unig. Anelwch hyn at ffolder rydych chi wir yn cadw pethau ynddi — mae darllen disg gyfan i'w gymharu ag ef ei hun yn cymryd llawer mwy o amser nag y mae'n werth, ac mae'n dod o hyd i gopïau'r peiriant ei hun o'i ffeiliau ei hun gan mwyaf.",
+      folderPlaceholder: (a) => `Llwybr ffolder, er enghraifft ${a}`,
+      stoppedNote: "Wedi stopio — ni chymharwyd dim.",
       folderInputAriaLabel: 'Ffolder i chwilio am ddyblygiadau',
       stop: 'Stopio',
       findButton: 'Dod o hyd i ddyblygiadau',
@@ -4168,6 +4227,7 @@ export const CATALOG = {
       keepNewest: 'Cadw\'r diweddaraf',
       clear: 'Clirio',
       truncatedWarning: "Cafodd y sgan ei dorri'n fyr, felly efallai bod mwy o setiau na'r rhain.",
+      tags: { keep: "Cadw", toQuarantine: "I'r gwarantin" },
       group: {
         identicalCopies: (count, size) => `${count} copi union yr un fath · ${size} yr un`,
         allTickedWarning: "Mae pob copi yn y set hon wedi'i dicio — dad-diciwch un i'w gadw."
@@ -4181,7 +4241,7 @@ export const CATALOG = {
       modal: {
         label: 'Symud dyblygiadau i gwarantin',
         heading: (count) => `Symud ${count} copi i gwarantin?`,
-        body: (formatted) => `${formatted} wedi'u hadfer. Mae pob set yn cadw o leiaf un copi, ac ni chaiff dim ei ddileu — adferwch unrhyw un ohonynt o'r sgrin Gwarantin.`,
+        body: (a) => `Bydd eu symud yn rhyddhau ${a} unwaith y byddwch yn gwagio'r Gwarantin. Mae pob set yn cadw o leiaf un copi, ac ni chaiff dim ei ddileu — adferwch unrhyw un ohonynt o'r sgrin Gwarantin.`,
         cancel: 'Diddymu',
         confirmButton: 'Symud i gwarantin'
       },
@@ -4656,6 +4716,7 @@ export const CATALOG = {
     },
     diskMap: {
       title: 'Diskforbrug',
+      unscannedLabel: "Ikke scannet",
       aggregateCell: (count) => `${count} mindre elementer`,
       subtitle: 'Hvad der bruger pladsen på denne disk, og hvor.',
       fastIndexSummary: (count) => `${count} filer og mapper læst fra diskens eget indeks.`,
@@ -4692,6 +4753,7 @@ export const CATALOG = {
         indexNoteEstimate: "Windows rapporterer ikke fremdrift, mens drevets indeks læses, så der vises ingen procent — dette skøn er, hvor lang tid din sidste scanning tog.",
         durationSeconds: (n) => `${n} s`,
         durationMinutes: (m, s) => `${m} min. ${s} s`,
+        stopping: "Stopper…",
         scanAgain: "Scan igen",
         retry: "Prøv igen",
         barLabel: "Scanningsforløb"
@@ -4701,11 +4763,14 @@ export const CATALOG = {
       truncated: {
         withCoverage: (measured, used, percent) => `Denne scanning løb tør for tid: den målte ${measured} af de ${used} i brug (${percent}%). Det, den målte, er reelt; resten vises som uscannet, ikke som tomt.`,
         withoutCoverage: 'Denne scanning løb tør for tid, før den blev færdig med disken. Alt, den faktisk målte, er reelt, men mapper, den aldrig nåede, vises som uscannet frem for tomt — læs ikke dette som et fuldstændigt billede af, hvad der bruger din plads.',
+        stoppedWithCoverage: (a, b, c) => `Du stoppede denne scanning: den målte ${a} af de ${b} i brug (${c}%). Det, den målte, er reelt; resten vises som uscannet, ikke som tomt.`,
+        stoppedWithoutCoverage: "Du stoppede denne scanning tidligt. Det, den målte, er reelt; mapper, den aldrig nåede, vises som uscannede, ikke som tomme — læs det ikke som et fuldt billede af, hvad der bruger din plads.",
         rescanLink: 'Kør i stedet en hurtig scanning'
       },
       view: { tree: 'Træ', files: 'Filer' },
       folderTable: {
         empty: 'Intet at vise i denne mappe.',
+        rowLabel: (a, b) => `Åbn ${a}, ${b}`,
         notScanned: 'ikke scannet',
         columns: { folder: 'Mappe', size: 'Størrelse', items: 'Elementer', files: 'Filer', folders: 'Mapper', modified: 'Ændret' }
       },
@@ -4722,6 +4787,7 @@ export const CATALOG = {
         aggregated: 'De mindste elementer i denne mappe, grupperet sammen.',
         unscanned: 'Scanningen stoppede, før den nåede hertil. Den reelle størrelse er ukendt.'
       },
+      rowActionsLabel: (a) => `Handlinger for ${a}`,
       cellOpenLabel: (name) => `Åbn ${name}`,
       contextMenu: {
         openInExplorer: 'Åbn i Stifinder',
@@ -4859,11 +4925,12 @@ export const CATALOG = {
         publisher: 'Udgiver',
         status: 'Status'
       },
-      switchAriaLabel: (enabled, name) => `${enabled ? 'Deaktiver' : 'Aktiver'} ${name} ved login`,
+      switchAriaLabel: (name) => `Kør ${name} ved login`,
       status: {
         invalid: 'Ugyldig',
         running: 'Kører',
         notChecked: 'Ikke tjekket',
+        off: "Fra",
         notRunning: 'Kører ikke'
       },
       groups: {
@@ -4882,6 +4949,8 @@ export const CATALOG = {
     duplicates: {
       title: 'Duplikerede filer',
       subtitle: 'Filer der er byte-for-byte identiske, ikke bare samme størrelse. Peg det mod en mappe, du faktisk opbevarer ting i — at læse et helt drev for at sammenligne det med sig selv tager langt længere tid, end det er værd, og finder for det meste maskinens egne kopier af sine egne filer.',
+      folderPlaceholder: (a) => `Mappesti, for eksempel ${a}`,
+      stoppedNote: "Stoppet — intet blev sammenlignet.",
       folderInputAriaLabel: 'Mappe til søgning efter duplikater',
       stop: 'Stop',
       findButton: 'Find duplikater',
@@ -4899,6 +4968,7 @@ export const CATALOG = {
       keepNewest: 'Behold nyeste',
       clear: 'Ryd',
       truncatedWarning: 'Scanningen blev afbrudt, så der kan være flere sæt end disse.',
+      tags: { keep: "Behold", toQuarantine: "Til karantæne" },
       group: {
         identicalCopies: (count, size) => `${count} identiske kopier · ${size} hver`,
         allTickedWarning: 'Hver kopi i dette sæt er markeret — fjern markeringen af en for at beholde den.'
@@ -4912,7 +4982,7 @@ export const CATALOG = {
       modal: {
         label: 'Flyt duplikater til karantæne',
         heading: (count) => `Flyt ${count} kopier til karantæne?`,
-        body: (formatted) => `${formatted} gendannet. Hvert sæt beholder mindst én kopi, og intet slettes — gendan noget af det fra Karantæne-skærmen.`,
+        body: (a) => `Når du flytter dem, frigøres ${a}, så snart du tømmer Karantæne. Hvert sæt beholder mindst én kopi, og intet slettes — gendan noget af det fra Karantæne-skærmen.`,
         cancel: 'Annuller',
         confirmButton: 'Flyt til karantæne'
       },
@@ -5387,6 +5457,7 @@ export const CATALOG = {
     },
     diskMap: {
       title: 'Speicherplatznutzung',
+      unscannedLabel: "Nicht gescannt",
       aggregateCell: (count) => `${count} kleinere Elemente`,
       subtitle: 'Was den Speicherplatz auf diesem Laufwerk belegt, und wo.',
       fastIndexSummary: (count) => `${count} Dateien und Ordner aus dem eigenen Index des Laufwerks gelesen.`,
@@ -5423,6 +5494,7 @@ export const CATALOG = {
         indexNoteEstimate: "Windows meldet keinen Fortschritt, während der Laufwerksindex gelesen wird, daher gibt es keine Prozentangabe – diese Schätzung ist die Dauer Ihres letzten Scans.",
         durationSeconds: (n) => `${n} s`,
         durationMinutes: (m, s) => `${m} Min. ${s} s`,
+        stopping: "Wird beendet …",
         scanAgain: "Erneut scannen",
         retry: "Wiederholen",
         barLabel: "Scanfortschritt"
@@ -5432,11 +5504,14 @@ export const CATALOG = {
       truncated: {
         withCoverage: (measured, used, percent) => `Diesem Scan ist die Zeit ausgegangen: Er hat ${measured} der ${used} genutzten gemessen (${percent} %). Was er gemessen hat, ist real; der Rest wird als nicht gescannt angezeigt, nicht als leer.`,
         withoutCoverage: 'Diesem Scan ist die Zeit ausgegangen, bevor er das Laufwerk fertig durchsucht hat. Alles, was er tatsächlich gemessen hat, ist real, aber Ordner, die er nie erreicht hat, werden als nicht gescannt angezeigt statt als leer — lesen Sie dies nicht als vollständiges Bild dessen, was Ihren Speicherplatz belegt.',
+        stoppedWithCoverage: (a, b, c) => `Du hast diesen Scan gestoppt: Er hat ${a} der ${b} genutzten gemessen (${c} %). Was er gemessen hat, ist real; der Rest wird als nicht gescannt angezeigt, nicht als leer.`,
+        stoppedWithoutCoverage: "Du hast diesen Scan vorzeitig gestoppt. Was er gemessen hat, ist real; Ordner, die er nicht erreicht hat, werden als nicht gescannt angezeigt, nicht als leer — sieh das nicht als vollständiges Bild dessen, was Speicherplatz belegt.",
         rescanLink: 'Stattdessen einen Schnellscan ausführen'
       },
       view: { tree: 'Baum', files: 'Dateien' },
       folderTable: {
         empty: 'In diesem Ordner gibt es nichts aufzulisten.',
+        rowLabel: (a, b) => `${a} öffnen, ${b}`,
         notScanned: 'nicht gescannt',
         columns: { folder: 'Ordner', size: 'Größe', items: 'Elemente', files: 'Dateien', folders: 'Ordner', modified: 'Geändert' }
       },
@@ -5453,6 +5528,7 @@ export const CATALOG = {
         aggregated: 'Die kleinsten Einträge in diesem Ordner, zusammengefasst.',
         unscanned: 'Der Scan wurde gestoppt, bevor er dies erreicht hat. Die tatsächliche Größe ist unbekannt.'
       },
+      rowActionsLabel: (a) => `Aktionen für ${a}`,
       cellOpenLabel: (name) => `${name} öffnen`,
       contextMenu: {
         openInExplorer: 'Im Explorer öffnen',
@@ -5590,11 +5666,12 @@ export const CATALOG = {
         publisher: 'Herausgeber',
         status: 'Status'
       },
-      switchAriaLabel: (enabled, name) => `${name} bei der Anmeldung ${enabled ? 'deaktivieren' : 'aktivieren'}`,
+      switchAriaLabel: (name) => `${name} bei der Anmeldung ausführen`,
       status: {
         invalid: 'Ungültig',
         running: 'Läuft',
         notChecked: 'Nicht geprüft',
+        off: "Aus",
         notRunning: 'Läuft nicht'
       },
       groups: {
@@ -5613,6 +5690,8 @@ export const CATALOG = {
     duplicates: {
       title: 'Doppelte Dateien',
       subtitle: 'Dateien, die Byte für Byte identisch sind, nicht nur gleich groß. Richte es auf einen Ordner, in dem du tatsächlich Dinge aufbewahrst — ein ganzes Laufwerk zu lesen, um es mit sich selbst zu vergleichen, dauert weit länger, als es wert ist, und findet meist die eigenen Kopien des Rechners von seinen eigenen Dateien.',
+      folderPlaceholder: (a) => `Ordnerpfad, zum Beispiel ${a}`,
+      stoppedNote: "Gestoppt – es wurde nichts verglichen.",
       folderInputAriaLabel: 'Ordner, in dem nach Duplikaten gesucht werden soll',
       stop: 'Stopp',
       findButton: 'Duplikate finden',
@@ -5630,6 +5709,7 @@ export const CATALOG = {
       keepNewest: 'Neueste behalten',
       clear: 'Leeren',
       truncatedWarning: 'Der Scan wurde vorzeitig abgebrochen, es könnte also mehr Gruppen geben als diese.',
+      tags: { keep: "Behalten", toQuarantine: "In Quarantäne" },
       group: {
         identicalCopies: (count, size) => `${count} identische Kopien · je ${size}`,
         allTickedWarning: 'Jede Kopie in dieser Gruppe ist markiert — eine abwählen, um sie zu behalten.'
@@ -5643,7 +5723,7 @@ export const CATALOG = {
       modal: {
         label: 'Duplikate in Quarantäne verschieben',
         heading: (count) => `${count} Kopien in Quarantäne verschieben?`,
-        body: (formatted) => `${formatted} freigegeben. Jede Gruppe behält mindestens eine Kopie, und nichts wird gelöscht — stelle davon jederzeit über den Bildschirm Quarantäne wieder her.`,
+        body: (a) => `Beim Verschieben werden ${a} frei, sobald du die Quarantäne leerst. Jede Gruppe behält mindestens eine Kopie, und nichts wird gelöscht — stelle davon jederzeit über den Bildschirm Quarantäne wieder her.`,
         cancel: 'Abbrechen',
         confirmButton: 'In Quarantäne verschieben'
       },
@@ -6118,6 +6198,7 @@ export const CATALOG = {
     },
     diskMap: {
       title: 'Χρήση Δίσκου',
+      unscannedLabel: "Δεν σαρώθηκε",
       aggregateCell: (count) => `${count} μικρότερα στοιχεία`,
       subtitle: 'Τι χρησιμοποιεί τον χώρο σε αυτόν τον δίσκο, και πού.',
       fastIndexSummary: (count) => `${count} αρχεία και φάκελοι διαβάστηκαν από το ευρετήριο του ίδιου του δίσκου.`,
@@ -6154,6 +6235,7 @@ export const CATALOG = {
         indexNoteEstimate: "Τα Windows δεν αναφέρουν πρόοδο κατά την ανάγνωση του ευρετηρίου του δίσκου, επομένως δεν εμφανίζεται ποσοστό — αυτή η εκτίμηση είναι η διάρκεια της τελευταίας σας σάρωσης.",
         durationSeconds: (n) => `${n} δευτ.`,
         durationMinutes: (m, s) => `${m} λεπ. ${s} δευτ.`,
+        stopping: "Διακοπή…",
         scanAgain: "Σάρωση ξανά",
         retry: "Δοκιμή ξανά",
         barLabel: "Πρόοδος σάρωσης"
@@ -6163,11 +6245,14 @@ export const CATALOG = {
       truncated: {
         withCoverage: (measured, used, percent) => `Αυτή η σάρωση εξάντλησε τον χρόνο της: μέτρησε ${measured} από τα ${used} που χρησιμοποιούνται (${percent}%). Ό,τι μέτρησε είναι πραγματικό· το υπόλοιπο εμφανίζεται ως μη σαρωμένο, όχι ως κενό.`,
         withoutCoverage: 'Αυτή η σάρωση εξάντλησε τον χρόνο της πριν ολοκληρώσει τον δίσκο. Ό,τι πράγματι μέτρησε είναι πραγματικό, αλλά οι φάκελοι που δεν προλάβαμε να φτάσουμε εμφανίζονται ως μη σαρωμένοι αντί για κενοί — μην το διαβάσετε ως πλήρη εικόνα του τι χρησιμοποιεί τον χώρο σας.',
+        stoppedWithCoverage: (a, b, c) => `Διακόψατε αυτή τη σάρωση: μέτρησε ${a} από τα ${b} που χρησιμοποιούνται (${c}%). Ό,τι μέτρησε είναι πραγματικό· το υπόλοιπο εμφανίζεται ως μη σαρωμένο, όχι ως κενό.`,
+        stoppedWithoutCoverage: "Διακόψατε αυτή τη σάρωση πρόωρα. Ό,τι μέτρησε είναι πραγματικό· οι φάκελοι που δεν πρόλαβε να φτάσει εμφανίζονται ως μη σαρωμένοι, όχι ως κενοί — μην το διαβάζετε ως πλήρη εικόνα του τι καταλαμβάνει χώρο.",
         rescanLink: "Εκτέλεσε αντ' αυτού μια γρήγορη σάρωση"
       },
       view: { tree: 'Δέντρο', files: 'Αρχεία' },
       folderTable: {
         empty: 'Τίποτα για εμφάνιση μέσα σε αυτόν τον φάκελο.',
+        rowLabel: (a, b) => `Άνοιγμα ${a}, ${b}`,
         notScanned: 'μη σαρωμένο',
         columns: { folder: 'Φάκελος', size: 'Μέγεθος', items: 'Στοιχεία', files: 'Αρχεία', folders: 'Φάκελοι', modified: 'Τροποποιήθηκε' }
       },
@@ -6184,6 +6269,7 @@ export const CATALOG = {
         aggregated: 'Οι μικρότερες καταχωρίσεις σε αυτόν τον φάκελο, ομαδοποιημένες.',
         unscanned: 'Η σάρωση σταμάτησε πριν φτάσει εδώ. Το πραγματικό μέγεθος είναι άγνωστο.'
       },
+      rowActionsLabel: (a) => `Ενέργειες για το ${a}`,
       cellOpenLabel: (name) => `Άνοιγμα ${name}`,
       contextMenu: {
         openInExplorer: 'Άνοιγμα στην Εξερεύνηση αρχείων',
@@ -6321,11 +6407,12 @@ export const CATALOG = {
         publisher: 'Εκδότης',
         status: 'Κατάσταση'
       },
-      switchAriaLabel: (enabled, name) => `${enabled ? 'Απενεργοποίηση' : 'Ενεργοποίηση'} του ${name} κατά τη σύνδεση`,
+      switchAriaLabel: (name) => `Εκτέλεση του ${name} κατά τη σύνδεση`,
       status: {
         invalid: 'Μη έγκυρο',
         running: 'Σε λειτουργία',
         notChecked: 'Δεν ελέγχθηκε',
+        off: "Ανενεργό",
         notRunning: 'Δεν εκτελείται'
       },
       groups: {
@@ -6344,6 +6431,8 @@ export const CATALOG = {
     duplicates: {
       title: 'Διπλότυπα αρχεία',
       subtitle: "Αρχεία που είναι πανομοιότυπα byte προς byte, όχι απλώς ίδιου μεγέθους. Στοχεύστε το σε έναν φάκελο όπου πραγματικά κρατάτε πράγματα — η ανάγνωση ενός ολόκληρου δίσκου για να τον συγκρίνετε με τον εαυτό του διαρκεί πολύ περισσότερο απ' όσο αξίζει, και βρίσκει κυρίως τα δικά του αντίγραφα του μηχανήματος από τα δικά του αρχεία.",
+      folderPlaceholder: (a) => `Διαδρομή φακέλου, για παράδειγμα ${a}`,
+      stoppedNote: "Διακόπηκε — δεν συγκρίθηκε τίποτα.",
       folderInputAriaLabel: 'Φάκελος για αναζήτηση διπλότυπων',
       stop: 'Διακοπή',
       findButton: 'Εύρεση διπλότυπων',
@@ -6361,6 +6450,7 @@ export const CATALOG = {
       keepNewest: 'Διατήρηση νεότερου',
       clear: 'Απαλοιφή',
       truncatedWarning: 'Η σάρωση διακόπηκε νωρίς, οπότε μπορεί να υπάρχουν περισσότερα σετ από αυτά.',
+      tags: { keep: "Διατήρηση", toQuarantine: "Στην καραντίνα" },
       group: {
         identicalCopies: (count, size) => `${count} πανομοιότυπα αντίγραφα · ${size} το καθένα`,
         allTickedWarning: 'Κάθε αντίγραφο σε αυτό το σετ είναι επιλεγμένο — αποεπιλέξτε ένα για να το κρατήσετε.'
@@ -6374,7 +6464,7 @@ export const CATALOG = {
       modal: {
         label: 'Μετακίνηση διπλότυπων σε καραντίνα',
         heading: (count) => `Μετακίνηση ${count} αντιγράφων σε καραντίνα;`,
-        body: (formatted) => `${formatted} ανακτήθηκαν. Κάθε σετ κρατά τουλάχιστον ένα αντίγραφο, και τίποτα δεν διαγράφεται — επαναφέρετε οτιδήποτε από αυτά από την οθόνη Καραντίνας.`,
+        body: (a) => `Η μετακίνησή τους ελευθερώνει ${a} μόλις αδειάσετε την Καραντίνα. Κάθε σετ κρατά τουλάχιστον ένα αντίγραφο, και τίποτα δεν διαγράφεται — επαναφέρετε οτιδήποτε από αυτά από την οθόνη Καραντίνας.`,
         cancel: 'Ακύρωση',
         confirmButton: 'Μετακίνηση σε καραντίνα'
       },
@@ -6849,6 +6939,7 @@ export const CATALOG = {
     },
     diskMap: {
       title: 'Uso del Disco',
+      unscannedLabel: "Sin escanear",
       aggregateCell: (count) => `${count} elementos más pequeños`,
       subtitle: 'Qué está usando el espacio en este disco, y dónde.',
       fastIndexSummary: (count) => `${count} archivos y carpetas leídos desde el propio índice del disco.`,
@@ -6885,6 +6976,7 @@ export const CATALOG = {
         indexNoteEstimate: "Windows no informa del progreso mientras se lee el índice de la unidad, así que no hay porcentaje: esta estimación es lo que tardó tu último análisis.",
         durationSeconds: (n) => `${n} s`,
         durationMinutes: (m, s) => `${m} min ${s} s`,
+        stopping: "Deteniendo…",
         scanAgain: "Analizar de nuevo",
         retry: "Reintentar",
         barLabel: "Progreso del análisis"
@@ -6894,11 +6986,14 @@ export const CATALOG = {
       truncated: {
         withCoverage: (measured, used, percent) => `A este escaneo se le agotó el tiempo: midió ${measured} de los ${used} en uso (${percent}%). Lo que midió es real; el resto se muestra como no escaneado, no como vacío.`,
         withoutCoverage: 'A este escaneo se le agotó el tiempo antes de terminar el disco. Todo lo que realmente midió es real, pero las carpetas a las que nunca llegó se muestran como no escaneadas en lugar de vacías — no lo interprete como una imagen completa de lo que usa su espacio.',
+        stoppedWithCoverage: (a, b, c) => `Detuviste este escaneo: midió ${a} de los ${b} en uso (${c}%). Lo que midió es real; el resto se muestra como no escaneado, no como vacío.`,
+        stoppedWithoutCoverage: "Detuviste este escaneo antes de que terminara. Lo que midió es real; las carpetas a las que no llegó se muestran como no escaneadas, no como vacías — no lo tomes como una imagen completa de lo que ocupa espacio.",
         rescanLink: 'Ejecutar un escaneo rápido en su lugar'
       },
       view: { tree: 'Árbol', files: 'Archivos' },
       folderTable: {
         empty: 'Nada que listar dentro de esta carpeta.',
+        rowLabel: (a, b) => `Abrir ${a}, ${b}`,
         notScanned: 'no escaneado',
         columns: { folder: 'Carpeta', size: 'Tamaño', items: 'Elementos', files: 'Archivos', folders: 'Carpetas', modified: 'Modificado' }
       },
@@ -6915,6 +7010,7 @@ export const CATALOG = {
         aggregated: 'Las entradas más pequeñas de esta carpeta, agrupadas.',
         unscanned: 'El escaneo se detuvo antes de llegar aquí. Su tamaño real es desconocido.'
       },
+      rowActionsLabel: (a) => `Acciones para ${a}`,
       cellOpenLabel: (name) => `Abrir ${name}`,
       contextMenu: {
         openInExplorer: 'Abrir en el Explorador',
@@ -7052,11 +7148,12 @@ export const CATALOG = {
         publisher: 'Editor',
         status: 'Estado'
       },
-      switchAriaLabel: (enabled, name) => `${enabled ? 'Deshabilitar' : 'Habilitar'} ${name} al iniciar sesión`,
+      switchAriaLabel: (name) => `Ejecutar ${name} al iniciar sesión`,
       status: {
         invalid: 'No válido',
         running: 'En ejecución',
         notChecked: 'No comprobado',
+        off: "Desactivado",
         notRunning: 'No se ejecuta'
       },
       groups: {
@@ -7075,6 +7172,8 @@ export const CATALOG = {
     duplicates: {
       title: 'Archivos duplicados',
       subtitle: 'Archivos que son idénticos byte a byte, no solo del mismo tamaño. Apúntalo a una carpeta donde realmente guardes cosas — leer todo un disco para compararlo consigo mismo lleva mucho más tiempo del que vale la pena, y encuentra sobre todo las propias copias de la máquina de sus propios archivos.',
+      folderPlaceholder: (a) => `Ruta de la carpeta, por ejemplo ${a}`,
+      stoppedNote: "Detenido — no se comparó nada.",
       folderInputAriaLabel: 'Carpeta donde buscar duplicados',
       stop: 'Detener',
       findButton: 'Buscar duplicados',
@@ -7092,6 +7191,7 @@ export const CATALOG = {
       keepNewest: 'Mantener el más reciente',
       clear: 'Limpiar',
       truncatedWarning: 'El escaneo se cortó antes de tiempo, así que puede haber más conjuntos que estos.',
+      tags: { keep: "Conservar", toQuarantine: "A cuarentena" },
       group: {
         identicalCopies: (count, size) => `${count} copias idénticas · ${size} cada una`,
         allTickedWarning: 'Todas las copias de este conjunto están marcadas — desmarca una para conservarla.'
@@ -7105,7 +7205,7 @@ export const CATALOG = {
       modal: {
         label: 'Mover duplicados a cuarentena',
         heading: (count) => `¿Mover ${count} copias a cuarentena?`,
-        body: (formatted) => `${formatted} recuperados. Cada conjunto conserva al menos una copia, y no se elimina nada — restaura cualquiera de ellos desde la pantalla de Cuarentena.`,
+        body: (a) => `Al moverlos se liberan ${a} cuando vacíes la Cuarentena. Cada conjunto conserva al menos una copia, y no se elimina nada — restaura cualquiera de ellos desde la pantalla de Cuarentena.`,
         cancel: 'Cancelar',
         confirmButton: 'Mover a cuarentena'
       },
@@ -7580,6 +7680,7 @@ export const CATALOG = {
     },
     diskMap: {
       title: 'Kettakasutus',
+      unscannedLabel: "Skannimata",
       aggregateCell: (count) => `${count} väiksemat üksust`,
       subtitle: 'Mis kasutab ruumi sellel kettal ja kus.',
       fastIndexSummary: (count) => `${count} faili ja kausta loetud ketta enda registrist.`,
@@ -7616,6 +7717,7 @@ export const CATALOG = {
         indexNoteEstimate: "Windows ei teata edenemist ketta indeksi lugemise ajal, seega protsenti ei kuvata — see hinnang põhineb teie viimase skannimise kestusel.",
         durationSeconds: (n) => `${n} s`,
         durationMinutes: (m, s) => `${m} min ${s} s`,
+        stopping: "Peatamine…",
         scanAgain: "Skanni uuesti",
         retry: "Proovi uuesti",
         barLabel: "Skannimise edenemine"
@@ -7625,11 +7727,14 @@ export const CATALOG = {
       truncated: {
         withCoverage: (measured, used, percent) => `Sellel skannimisel sai aeg otsa: see mõõtis ${measured} kasutusel olevast ${used} (${percent}%). Mõõdetu on tõeline; ülejäänu kuvatakse skannimata, mitte tühjana.`,
         withoutCoverage: 'Sellel skannimisel sai aeg otsa enne ketta lõpetamist. Kõik, mida see tegelikult mõõtis, on tõeline, kuid kaustad, milleni ei jõutud, kuvatakse skannimata, mitte tühjana — ärge lugege seda täielikuks pildiks sellest, mis teie ruumi kasutab.',
+        stoppedWithCoverage: (a, b, c) => `Peatasid selle skannimise: see mõõtis ${a} kasutusel olevast ${b} (${c}%). Mõõdetu on tõeline; ülejäänu kuvatakse skannimata, mitte tühjana.`,
+        stoppedWithoutCoverage: "Peatasid selle skannimise enneaegselt. Mõõdetu on tõeline; kaustad, milleni see ei jõudnud, kuvatakse skannimata, mitte tühjana — ära pea seda täielikuks pildiks sellest, mis ruumi kasutab.",
         rescanLink: 'Käivita selle asemel kiirskann'
       },
       view: { tree: 'Puu', files: 'Failid' },
       folderTable: {
         empty: 'Selles kaustas pole midagi loetleda.',
+        rowLabel: (a, b) => `Ava ${a}, ${b}`,
         notScanned: 'skannimata',
         columns: { folder: 'Kaust', size: 'Suurus', items: 'Üksused', files: 'Failid', folders: 'Kaustad', modified: 'Muudetud' }
       },
@@ -7646,6 +7751,7 @@ export const CATALOG = {
         aggregated: 'Selle kausta väikseimad kirjed, kokku rühmitatud.',
         unscanned: 'Skannimine peatus enne siia jõudmist. Tegelik suurus on teadmata.'
       },
+      rowActionsLabel: (a) => `Toimingud: ${a}`,
       cellOpenLabel: (name) => `Ava ${name}`,
       contextMenu: {
         openInExplorer: 'Ava failihalduris',
@@ -7783,11 +7889,12 @@ export const CATALOG = {
         publisher: 'Väljaandja',
         status: 'Olek'
       },
-      switchAriaLabel: (enabled, name) => `${enabled ? 'Keela' : 'Luba'} ${name} sisselogimisel`,
+      switchAriaLabel: (name) => `Käivita ${name} sisselogimisel`,
       status: {
         invalid: 'Vigane',
         running: 'Töötab',
         notChecked: 'Kontrollimata',
+        off: "Väljas",
         notRunning: 'Ei tööta'
       },
       groups: {
@@ -7806,6 +7913,8 @@ export const CATALOG = {
     duplicates: {
       title: 'Dubleerivad failid',
       subtitle: 'Failid, mis on baidi täpsusega identsed, mitte lihtsalt sama suurusega. Suunake see kausta, kuhu te tegelikult asju hoiate — terve draivi lugemine, et võrrelda seda iseendaga, võtab palju kauem aega, kui väärt on, ja leiab enamasti masina enda koopiaid omaenda failidest.',
+      folderPlaceholder: (a) => `Kausta tee, näiteks ${a}`,
+      stoppedNote: "Peatatud — midagi ei võrreldud.",
       folderInputAriaLabel: 'Kaust, kust duplikaate otsida',
       stop: 'Peata',
       findButton: 'Otsi duplikaate',
@@ -7823,6 +7932,7 @@ export const CATALOG = {
       keepNewest: 'Säilita uusim',
       clear: 'Tühjenda',
       truncatedWarning: 'Skannimine katkestati enneaegselt, seega võib komplekte olla rohkem kui need.',
+      tags: { keep: "Säilita", toQuarantine: "Karantiini" },
       group: {
         identicalCopies: (count, size) => `${count} identset koopiat · igaüks ${size}`,
         allTickedWarning: 'Kõik selle komplekti koopiad on märgitud — eemaldage ühelt märge, et see säilitada.'
@@ -7836,7 +7946,7 @@ export const CATALOG = {
       modal: {
         label: 'Teisalda duplikaadid karantiini',
         heading: (count) => `Teisaldada ${count} koopiat karantiini?`,
-        body: (formatted) => `${formatted} vabastatud. Iga komplekt säilitab vähemalt ühe koopia ja midagi ei kustutata — taastage neist ükskõik milline Karantiini ekraanilt.`,
+        body: (a) => `Teisaldamisel vabaneb ${a}, kui tühjendad Karantiini. Iga komplekt säilitab vähemalt ühe koopia ja midagi ei kustutata — taastage neist ükskõik milline Karantiini ekraanilt.`,
         cancel: 'Tühista',
         confirmButton: 'Teisalda karantiini'
       },
@@ -8311,6 +8421,7 @@ export const CATALOG = {
     },
     diskMap: {
       title: 'Levyn käyttö',
+      unscannedLabel: "Ei skannattu",
       aggregateCell: (count) => `${count} pienempää kohdetta`,
       subtitle: 'Mikä käyttää tilaa tällä levyllä, ja missä.',
       fastIndexSummary: (count) => `${count} tiedostoa ja kansiota luettu levyn omasta hakemistosta.`,
@@ -8347,6 +8458,7 @@ export const CATALOG = {
         indexNoteEstimate: "Windows ei ilmoita edistymistä levyn indeksiä luettaessa, joten prosenttia ei näytetä — arvio perustuu viimeisimmän skannauksesi kestoon.",
         durationSeconds: (n) => `${n} s`,
         durationMinutes: (m, s) => `${m} min ${s} s`,
+        stopping: "Pysäytetään…",
         scanAgain: "Skannaa uudelleen",
         retry: "Yritä uudelleen",
         barLabel: "Skannauksen eteneminen"
@@ -8356,11 +8468,14 @@ export const CATALOG = {
       truncated: {
         withCoverage: (measured, used, percent) => `Tältä skannaukselta loppui aika: se mittasi ${measured} käytössä olevasta ${used} (${percent} %). Se, minkä se mittasi, on todellista; loput näkyy skannaamattomana, ei tyhjänä.`,
         withoutCoverage: 'Tältä skannaukselta loppui aika ennen levyn valmistumista. Kaikki, minkä se todella mittasi, on todellista, mutta kansiot, joihin se ei koskaan päässyt, näkyvät skannaamattomina eikä tyhjinä — älä lue tätä täydelliseksi kuvaksi siitä, mikä käyttää tilaasi.',
+        stoppedWithCoverage: (a, b, c) => `Pysäytit tämän skannauksen: se mittasi ${a} käytössä olevasta ${b} (${c} %). Se, minkä se mittasi, on todellista; loput näkyy skannaamattomana, ei tyhjänä.`,
+        stoppedWithoutCoverage: "Pysäytit tämän skannauksen ennenaikaisesti. Se, minkä se mittasi, on todellista; kansiot, joihin se ei ehtinyt, näkyvät skannaamattomina, eivät tyhjinä — älä pidä tätä täydellisenä kuvana siitä, mikä vie tilaa.",
         rescanLink: 'Suorita sen sijaan pikaskannaus'
       },
       view: { tree: 'Puu', files: 'Tiedostot' },
       folderTable: {
         empty: 'Tässä kansiossa ei ole mitään lueteltavaa.',
+        rowLabel: (a, b) => `Avaa ${a}, ${b}`,
         notScanned: 'ei skannattu',
         columns: { folder: 'Kansio', size: 'Koko', items: 'Kohteet', files: 'Tiedostot', folders: 'Kansiot', modified: 'Muokattu' }
       },
@@ -8377,6 +8492,7 @@ export const CATALOG = {
         aggregated: 'Tämän kansion pienimmät kohteet, ryhmiteltynä yhteen.',
         unscanned: 'Skannaus pysähtyi ennen tähän pääsyä. Todellinen koko on tuntematon.'
       },
+      rowActionsLabel: (a) => `Toiminnot: ${a}`,
       cellOpenLabel: (name) => `Avaa ${name}`,
       contextMenu: {
         openInExplorer: 'Avaa Resurssienhallinnassa',
@@ -8514,11 +8630,12 @@ export const CATALOG = {
         publisher: 'Julkaisija',
         status: 'Tila'
       },
-      switchAriaLabel: (enabled, name) => `${enabled ? 'Poista käytöstä' : 'Ota käyttöön'} ${name} kirjautuessa`,
+      switchAriaLabel: (name) => `Suorita ${name} kirjautuessa`,
       status: {
         invalid: 'Virheellinen',
         running: 'Käynnissä',
         notChecked: 'Ei tarkistettu',
+        off: "Pois",
         notRunning: 'Ei käynnissä'
       },
       groups: {
@@ -8537,6 +8654,8 @@ export const CATALOG = {
     duplicates: {
       title: 'Kaksoiskappaleet',
       subtitle: 'Tiedostot, jotka ovat tavu tavulta identtisiä, ei vain samankokoisia. Osoita se kansioon, johon oikeasti tallennat asioita — koko aseman lukeminen sen vertaamiseksi itseensä kestää paljon kauemmin kuin on sen arvoista, ja löytää lähinnä koneen omia kopioita sen omista tiedostoista.',
+      folderPlaceholder: (a) => `Kansion polku, esimerkiksi ${a}`,
+      stoppedNote: "Pysäytetty — mitään ei verrattu.",
       folderInputAriaLabel: 'Kansio, josta etsitään kaksoiskappaleita',
       stop: 'Pysäytä',
       findButton: 'Etsi kaksoiskappaleet',
@@ -8554,6 +8673,7 @@ export const CATALOG = {
       keepNewest: 'Säilytä uusin',
       clear: 'Tyhjennä',
       truncatedWarning: 'Skannaus keskeytettiin kesken, joten joukkoja voi olla enemmän kuin nämä.',
+      tags: { keep: "Säilytä", toQuarantine: "Karanteeniin" },
       group: {
         identicalCopies: (count, size) => `${count} identtistä kopiota · ${size} kukin`,
         allTickedWarning: 'Kaikki tämän joukon kopiot on valittu — poista yhden valinta säilyttääksesi sen.'
@@ -8567,7 +8687,7 @@ export const CATALOG = {
       modal: {
         label: 'Siirrä kaksoiskappaleet karanteeniin',
         heading: (count) => `Siirretäänkö ${count} kopiota karanteeniin?`,
-        body: (formatted) => `${formatted} vapautettu. Jokainen joukko säilyttää vähintään yhden kopion, eikä mitään poisteta — palauta mikä tahansa niistä Karanteeni-näytöltä.`,
+        body: (a) => `Siirto vapauttaa ${a}, kun tyhjennät Karanteenin. Jokainen joukko säilyttää vähintään yhden kopion, eikä mitään poisteta — palauta mikä tahansa niistä Karanteeni-näytöltä.`,
         cancel: 'Peruuta',
         confirmButton: 'Siirrä karanteeniin'
       },
@@ -9042,6 +9162,7 @@ export const CATALOG = {
     },
     diskMap: {
       title: 'Utilisation du disque',
+      unscannedLabel: "Non analysé",
       aggregateCell: (count) => `${count} éléments plus petits`,
       subtitle: "Ce qui utilise l'espace sur ce disque, et où.",
       fastIndexSummary: (count) => `${count} fichiers et dossiers lus depuis l'index propre du disque.`,
@@ -9078,6 +9199,7 @@ export const CATALOG = {
         indexNoteEstimate: "Windows ne signale aucune progression pendant la lecture de l'index du lecteur, donc aucun pourcentage n'est affiché : cette estimation correspond à la durée de votre dernière analyse.",
         durationSeconds: (n) => `${n} s`,
         durationMinutes: (m, s) => `${m} min ${s} s`,
+        stopping: "Arrêt en cours…",
         scanAgain: "Analyser à nouveau",
         retry: "Réessayer",
         barLabel: "Progression de l'analyse"
@@ -9087,11 +9209,14 @@ export const CATALOG = {
       truncated: {
         withCoverage: (measured, used, percent) => `Cette analyse a manqué de temps : elle a mesuré ${measured} sur les ${used} utilisés (${percent} %). Ce qu'elle a mesuré est réel ; le reste s'affiche comme non analysé, pas comme vide.`,
         withoutCoverage: "Cette analyse a manqué de temps avant de terminer le disque. Tout ce qu'elle a réellement mesuré est réel, mais les dossiers qu'elle n'a jamais atteints s'affichent comme non analysés plutôt que vides — ne lisez pas ceci comme une image complète de ce qui utilise votre espace.",
+        stoppedWithCoverage: (a, b, c) => `Vous avez arrêté cette analyse : elle a mesuré ${a} sur les ${b} utilisés (${c} %). Ce qu'elle a mesuré est réel ; le reste s'affiche comme non analysé, pas comme vide.`,
+        stoppedWithoutCoverage: "Vous avez arrêté cette analyse avant la fin. Ce qu'elle a mesuré est réel ; les dossiers qu'elle n'a pas atteints s'affichent comme non analysés, pas comme vides — n'y voyez pas un tableau complet de ce qui occupe l'espace.",
         rescanLink: 'Lancer plutôt une analyse rapide'
       },
       view: { tree: 'Arborescence', files: 'Fichiers' },
       folderTable: {
         empty: 'Rien à lister dans ce dossier.',
+        rowLabel: (a, b) => `Ouvrir ${a}, ${b}`,
         notScanned: 'non analysé',
         columns: { folder: 'Dossier', size: 'Taille', items: 'Éléments', files: 'Fichiers', folders: 'Dossiers', modified: 'Modifié' }
       },
@@ -9108,6 +9233,7 @@ export const CATALOG = {
         aggregated: 'Les plus petites entrées de ce dossier, regroupées.',
         unscanned: "L'analyse s'est arrêtée avant d'atteindre ceci. Sa taille réelle est inconnue."
       },
+      rowActionsLabel: (a) => `Actions pour ${a}`,
       cellOpenLabel: (name) => `Ouvrir ${name}`,
       contextMenu: {
         openInExplorer: "Ouvrir dans l'Explorateur",
@@ -9245,11 +9371,12 @@ export const CATALOG = {
         publisher: 'Éditeur',
         status: 'État'
       },
-      switchAriaLabel: (enabled, name) => `${enabled ? 'Désactiver' : 'Activer'} ${name} à la connexion`,
+      switchAriaLabel: (name) => `Lancer ${name} à la connexion`,
       status: {
         invalid: 'Non valide',
         running: 'En cours',
         notChecked: 'Non vérifié',
+        off: "Désactivé",
         notRunning: 'Non en cours'
       },
       groups: {
@@ -9268,6 +9395,8 @@ export const CATALOG = {
     duplicates: {
       title: 'Fichiers en double',
       subtitle: "Fichiers identiques bit à bit, pas seulement de même taille. Pointez-le vers un dossier où vous gardez réellement des choses — lire un disque entier pour le comparer à lui-même prend bien plus de temps que ça n'en vaut la peine, et trouve surtout les propres copies de la machine de ses propres fichiers.",
+      folderPlaceholder: (a) => `Chemin du dossier, par exemple ${a}`,
+      stoppedNote: "Arrêté — rien n'a été comparé.",
       folderInputAriaLabel: 'Dossier où rechercher les doublons',
       stop: 'Arrêter',
       findButton: 'Rechercher les doublons',
@@ -9285,6 +9414,7 @@ export const CATALOG = {
       keepNewest: 'Garder le plus récent',
       clear: 'Effacer',
       truncatedWarning: "L'analyse a été interrompue, il pourrait donc y avoir plus d'ensembles que ceux-ci.",
+      tags: { keep: "Conserver", toQuarantine: "Vers la quarantaine" },
       group: {
         identicalCopies: (count, size) => `${count} copies identiques · ${size} chacune`,
         allTickedWarning: 'Chaque copie de cet ensemble est cochée — décochez-en une pour la conserver.'
@@ -9298,7 +9428,7 @@ export const CATALOG = {
       modal: {
         label: 'Déplacer les doublons vers la quarantaine',
         heading: (count) => `Déplacer ${count} copies vers la quarantaine ?`,
-        body: (formatted) => `${formatted} récupérés. Chaque ensemble conserve au moins une copie, et rien n'est supprimé — restaurez n'importe laquelle depuis l'écran Quarantaine.`,
+        body: (a) => `Leur déplacement libère ${a} une fois la Quarantaine vidée. Chaque ensemble conserve au moins une copie, et rien n'est supprimé — restaurez n'importe laquelle depuis l'écran Quarantaine.`,
         cancel: 'Annuler',
         confirmButton: 'Déplacer vers la quarantaine'
       },
@@ -9773,6 +9903,7 @@ export const CATALOG = {
     },
     diskMap: {
       title: 'שימוש בדיסק',
+      unscannedLabel: "לא נסרק",
       aggregateCell: (count) => `${count} פריטים קטנים יותר`,
       subtitle: 'מה משתמש במקום בדיסק הזה, והיכן.',
       fastIndexSummary: (count) => `${count} קבצים ותיקיות נקראו מהאינדקס של הדיסק עצמו.`,
@@ -9809,6 +9940,7 @@ export const CATALOG = {
         indexNoteEstimate: "Windows אינה מדווחת על התקדמות בזמן קריאת אינדקס הכונן, ולכן אין אחוז — ההערכה הזו היא משך הסריקה האחרונה שלך.",
         durationSeconds: (n) => `${n} שנ׳`,
         durationMinutes: (m, s) => `${m} דק׳ ${s} שנ׳`,
+        stopping: "עוצר…",
         scanAgain: "סרוק שוב",
         retry: "נסה שוב",
         barLabel: "התקדמות הסריקה"
@@ -9818,11 +9950,14 @@ export const CATALOG = {
       truncated: {
         withCoverage: (measured, used, percent) => `לסריקה זו נגמר הזמן: היא מדדה ${measured} מתוך ${used} בשימוש (${percent}%). מה שנמדד הוא אמיתי; השאר מוצג כלא נסרק, לא כריק.`,
         withoutCoverage: 'לסריקה זו נגמר הזמן לפני שסיימה את הדיסק. כל מה שנמדד בפועל הוא אמיתי, אך תיקיות שלא הגיעה אליהן מוצגות כלא נסרקות ולא כריקות — אל תקרא זאת כתמונה מלאה של מה שמשתמש במקום שלך.',
+        stoppedWithCoverage: (a, b, c) => `עצרת את הסריקה הזו: היא מדדה ${a} מתוך ${b} בשימוש (${c}%). מה שנמדד הוא אמיתי; השאר מוצג כלא נסרק, לא כריק.`,
+        stoppedWithoutCoverage: "עצרת את הסריקה הזו מוקדם. מה שנמדד הוא אמיתי; תיקיות שלא הגיעה אליהן מוצגות כלא נסרקו, לא כריקות — אל תקרא זאת כתמונה מלאה של מה שתופס מקום.",
         rescanLink: 'הרץ במקום זאת סריקה מהירה'
       },
       view: { tree: 'עץ', files: 'קבצים' },
       folderTable: {
         empty: 'אין מה לרשום בתוך תיקייה זו.',
+        rowLabel: (a, b) => `פתח את ${a}, ${b}`,
         notScanned: 'לא נסרק',
         columns: { folder: 'תיקייה', size: 'גודל', items: 'פריטים', files: 'קבצים', folders: 'תיקיות', modified: 'שונה' }
       },
@@ -9839,6 +9974,7 @@ export const CATALOG = {
         aggregated: 'הרשומות הקטנות ביותר בתיקייה זו, מקובצות יחד.',
         unscanned: 'הסריקה נעצרה לפני שהגיעה לכאן. הגודל האמיתי אינו ידוע.'
       },
+      rowActionsLabel: (a) => `פעולות עבור ${a}`,
       cellOpenLabel: (name) => `פתח ${name}`,
       contextMenu: {
         openInExplorer: 'פתח בסייר הקבצים',
@@ -9976,11 +10112,12 @@ export const CATALOG = {
         publisher: 'מוציא לאור',
         status: 'סטטוס'
       },
-      switchAriaLabel: (enabled, name) => `${enabled ? 'השבת' : 'הפעל'} את ${name} בכניסה למערכת`,
+      switchAriaLabel: (name) => `הפעל את ${name} בכניסה למערכת`,
       status: {
         invalid: 'לא תקין',
         running: 'פועל',
         notChecked: 'לא נבדק',
+        off: "כבוי",
         notRunning: 'לא פועל'
       },
       groups: {
@@ -9999,6 +10136,8 @@ export const CATALOG = {
     duplicates: {
       title: 'קבצים כפולים',
       subtitle: 'קבצים זהים בית לבית, לא רק באותו גודל. כוונו זאת לתיקייה שבה אתם באמת שומרים דברים — קריאת כונן שלם כדי להשוות אותו לעצמו לוקחת הרבה יותר זמן מכפי שהיא שווה, ומוצאת בעיקר עותקים של המכשיר עצמו מהקבצים שלו עצמו.',
+      folderPlaceholder: (a) => `נתיב תיקייה, למשל ${a}`,
+      stoppedNote: "נעצר — דבר לא הושווה.",
       folderInputAriaLabel: 'תיקייה לחיפוש כפילויות',
       stop: 'עצור',
       findButton: 'חפש כפילויות',
@@ -10016,6 +10155,7 @@ export const CATALOG = {
       keepNewest: 'שמור את החדש ביותר',
       clear: 'נקה',
       truncatedWarning: 'הסריקה קוצרה, כך שייתכן שיש יותר קבוצות מאלה.',
+      tags: { keep: "השאר", toQuarantine: "להסגר" },
       group: {
         identicalCopies: (count, size) => `${count} עותקים זהים · ${size} כל אחד`,
         allTickedWarning: 'כל עותק בקבוצה זו מסומן — בטל סימון של אחד כדי לשמור אותו.'
@@ -10029,7 +10169,7 @@ export const CATALOG = {
       modal: {
         label: 'העבר כפילויות להסגר',
         heading: (count) => `להעביר ${count} עותקים להסגר?`,
-        body: (formatted) => `${formatted} שוחזרו. כל קבוצה שומרת לפחות עותק אחד, ושום דבר לא נמחק — שחזרו כל אחד מהם ממסך ההסגר.`,
+        body: (a) => `העברתם משחררת ${a} לאחר שתרוקנו את ההסגר. כל קבוצה שומרת לפחות עותק אחד, ושום דבר לא נמחק — שחזרו כל אחד מהם ממסך ההסגר.`,
         cancel: 'ביטול',
         confirmButton: 'העבר להסגר'
       },
@@ -10504,6 +10644,7 @@ export const CATALOG = {
     },
     diskMap: {
       title: 'Lemezhasználat',
+      unscannedLabel: "Nem vizsgált",
       aggregateCell: (count) => `${count} kisebb elem`,
       subtitle: 'Mi használja a helyet ezen a lemezen, és hol.',
       fastIndexSummary: (count) => `${count} fájl és mappa beolvasva a lemez saját indexéből.`,
@@ -10540,6 +10681,7 @@ export const CATALOG = {
         indexNoteEstimate: "A Windows nem jelez előrehaladást a meghajtóindex olvasása közben, ezért nincs százalék — ez a becslés az utolsó vizsgálat időtartamán alapul.",
         durationSeconds: (n) => `${n} mp`,
         durationMinutes: (m, s) => `${m} perc ${s} mp`,
+        stopping: "Leállítás…",
         scanAgain: "Vizsgálat újra",
         retry: "Újra",
         barLabel: "A vizsgálat állapota"
@@ -10549,11 +10691,14 @@ export const CATALOG = {
       truncated: {
         withCoverage: (measured, used, percent) => `Ennek a vizsgálatnak lejárt az ideje: ${measured} adatot mért a használt ${used} adatból (${percent}%). Amit mért, az valós; a többi nem vizsgáltként jelenik meg, nem üresként.`,
         withoutCoverage: 'Ennek a vizsgálatnak lejárt az ideje, mielőtt befejezte volna a lemezt. Minden, amit ténylegesen mért, valós, de azok a mappák, amelyeket sosem ért el, nem vizsgáltként jelennek meg, nem üresként — ezt ne tekintse a helyét használó dolgok teljes képének.',
+        stoppedWithCoverage: (a, b, c) => `Leállítottad ezt a vizsgálatot: a használt ${b} adatból ${a} adatot mért (${c}%). Amit mért, az valós; a többi nem vizsgáltként jelenik meg, nem üresként.`,
+        stoppedWithoutCoverage: "Idő előtt leállítottad ezt a vizsgálatot. Amit mért, az valós; a mappák, amelyeket nem ért el, nem vizsgáltként jelennek meg, nem üresként — ne tekintsd teljes képnek arról, mi foglalja a helyet.",
         rescanLink: 'Inkább gyors vizsgálat futtatása'
       },
       view: { tree: 'Fa', files: 'Fájlok' },
       folderTable: {
         empty: 'Nincs mit listázni ebben a mappában.',
+        rowLabel: (a, b) => `${a} megnyitása, ${b}`,
         notScanned: 'nincs megvizsgálva',
         columns: { folder: 'Mappa', size: 'Méret', items: 'Elemek', files: 'Fájlok', folders: 'Mappák', modified: 'Módosítva' }
       },
@@ -10570,6 +10715,7 @@ export const CATALOG = {
         aggregated: 'Ennek a mappának a legkisebb bejegyzései, csoportosítva.',
         unscanned: 'A vizsgálat leállt, mielőtt ideért volna. A valós mérete ismeretlen.'
       },
+      rowActionsLabel: (a) => `Műveletek: ${a}`,
       cellOpenLabel: (name) => `${name} megnyitása`,
       contextMenu: {
         openInExplorer: 'Megnyitás a Intézőben',
@@ -10707,11 +10853,12 @@ export const CATALOG = {
         publisher: 'Kiadó',
         status: 'Állapot'
       },
-      switchAriaLabel: (enabled, name) => `${name} ${enabled ? 'letiltása' : 'engedélyezése'} bejelentkezéskor`,
+      switchAriaLabel: (name) => `${name} futtatása bejelentkezéskor`,
       status: {
         invalid: 'Érvénytelen',
         running: 'Fut',
         notChecked: 'Nincs ellenőrizve',
+        off: "Ki",
         notRunning: 'Nem fut'
       },
       groups: {
@@ -10730,6 +10877,8 @@ export const CATALOG = {
     duplicates: {
       title: 'Duplikált fájlok',
       subtitle: 'Bájtra pontosan azonos fájlok, nem csupán azonos méretűek. Irányítsd egy mappára, ahol valóban dolgokat tárolsz — egy teljes meghajtó beolvasása, hogy önmagával összehasonlítsd, sokkal tovább tart, mint amennyit megér, és leginkább a gép saját másolatait találja meg saját fájljairól.',
+      folderPlaceholder: (a) => `Mappa elérési útja, például ${a}`,
+      stoppedNote: "Leállítva — semmi sem lett összehasonlítva.",
       folderInputAriaLabel: 'Mappa, ahol duplikátumokat kell keresni',
       stop: 'Leállítás',
       findButton: 'Duplikátumok keresése',
@@ -10747,6 +10896,7 @@ export const CATALOG = {
       keepNewest: 'Legújabb megtartása',
       clear: 'Törlés',
       truncatedWarning: 'A vizsgálat idő előtt befejeződött, így ezeknél több készlet is lehet.',
+      tags: { keep: "Megtartás", toQuarantine: "Karanténba" },
       group: {
         identicalCopies: (count, size) => `${count} azonos másolat · egyenként ${size}`,
         allTickedWarning: 'Ebben a készletben minden másolat ki van jelölve — vegyél ki egyet a jelölésből, hogy megtartsd.'
@@ -10760,7 +10910,7 @@ export const CATALOG = {
       modal: {
         label: 'Duplikátumok áthelyezése karanténba',
         heading: (count) => `Áthelyezed ${count} másolatot a karanténba?`,
-        body: (formatted) => `${formatted} felszabadítva. Minden készlet legalább egy másolatot megtart, és semmi nem törlődik — bármelyiket visszaállíthatod a Karantén képernyőről.`,
+        body: (a) => `Az áthelyezéssel ${a} szabadul fel, amint kiüríted a Karantént. Minden készlet legalább egy másolatot megtart, és semmi nem törlődik — bármelyiket visszaállíthatod a Karantén képernyőről.`,
         cancel: 'Mégse',
         confirmButton: 'Áthelyezés karanténba'
       },
@@ -11235,6 +11385,7 @@ export const CATALOG = {
     },
     diskMap: {
       title: 'Penggunaan Disk',
+      unscannedLabel: "Belum dipindai",
       aggregateCell: (count) => `${count} item yang lebih kecil`,
       subtitle: 'Apa yang menggunakan ruang di disk ini, dan di mana.',
       fastIndexSummary: (count) => `${count} file dan folder dibaca dari indeks disk itu sendiri.`,
@@ -11271,6 +11422,7 @@ export const CATALOG = {
         indexNoteEstimate: "Windows tidak melaporkan kemajuan saat indeks drive dibaca, jadi tidak ada persentase — perkiraan ini berdasarkan lama pemindaian terakhir Anda.",
         durationSeconds: (n) => `${n} dtk`,
         durationMinutes: (m, s) => `${m} mnt ${s} dtk`,
+        stopping: "Menghentikan…",
         scanAgain: "Pindai lagi",
         retry: "Coba lagi",
         barLabel: "Kemajuan pemindaian"
@@ -11280,11 +11432,14 @@ export const CATALOG = {
       truncated: {
         withCoverage: (measured, used, percent) => `Pemindaian ini kehabisan waktu: mengukur ${measured} dari ${used} yang digunakan (${percent}%). Apa yang diukur adalah nyata; sisanya ditampilkan sebagai belum dipindai, bukan sebagai kosong.`,
         withoutCoverage: 'Pemindaian ini kehabisan waktu sebelum menyelesaikan disk. Semua yang benar-benar diukur adalah nyata, tetapi folder yang tidak pernah dijangkau ditampilkan sebagai belum dipindai, bukan kosong — jangan anggap ini sebagai gambaran lengkap tentang apa yang menggunakan ruang Anda.',
+        stoppedWithCoverage: (a, b, c) => `Anda menghentikan pemindaian ini: pemindaian mengukur ${a} dari ${b} yang digunakan (${c}%). Apa yang diukur adalah nyata; sisanya ditampilkan sebagai belum dipindai, bukan sebagai kosong.`,
+        stoppedWithoutCoverage: "Anda menghentikan pemindaian ini lebih awal. Apa yang diukur adalah nyata; folder yang belum dijangkau ditampilkan sebagai belum dipindai, bukan sebagai kosong — jangan anggap ini gambaran lengkap dari apa yang memakai ruang Anda.",
         rescanLink: 'Jalankan pemindaian cepat sebagai gantinya'
       },
       view: { tree: 'Pohon', files: 'File' },
       folderTable: {
         empty: 'Tidak ada yang bisa ditampilkan di dalam folder ini.',
+        rowLabel: (a, b) => `Buka ${a}, ${b}`,
         notScanned: 'belum dipindai',
         columns: { folder: 'Folder', size: 'Ukuran', items: 'Item', files: 'File', folders: 'Folder', modified: 'Diubah' }
       },
@@ -11301,6 +11456,7 @@ export const CATALOG = {
         aggregated: 'Entri terkecil di folder ini, dikelompokkan bersama.',
         unscanned: 'Pemindaian berhenti sebelum mencapai ini. Ukuran sebenarnya tidak diketahui.'
       },
+      rowActionsLabel: (a) => `Tindakan untuk ${a}`,
       cellOpenLabel: (name) => `Buka ${name}`,
       contextMenu: {
         openInExplorer: 'Buka di Explorer',
@@ -11438,11 +11594,12 @@ export const CATALOG = {
         publisher: 'Penerbit',
         status: 'Status'
       },
-      switchAriaLabel: (enabled, name) => `${enabled ? 'Nonaktifkan' : 'Aktifkan'} ${name} saat masuk`,
+      switchAriaLabel: (name) => `Jalankan ${name} saat masuk`,
       status: {
         invalid: 'Tidak valid',
         running: 'Berjalan',
         notChecked: 'Belum diperiksa',
+        off: "Mati",
         notRunning: 'Tidak berjalan'
       },
       groups: {
@@ -11461,6 +11618,8 @@ export const CATALOG = {
     duplicates: {
       title: 'Berkas duplikat',
       subtitle: 'Berkas yang identik byte demi byte, bukan sekadar ukuran yang sama. Arahkan ke folder tempat Anda benar-benar menyimpan berkas — membaca seluruh drive untuk membandingkannya dengan dirinya sendiri memakan waktu jauh lebih lama daripada manfaatnya, dan kebanyakan menemukan salinan file mesin itu sendiri.',
+      folderPlaceholder: (a) => `Jalur folder, misalnya ${a}`,
+      stoppedNote: "Dihentikan — tidak ada yang dibandingkan.",
       folderInputAriaLabel: 'Folder untuk mencari duplikat',
       stop: 'Hentikan',
       findButton: 'Cari duplikat',
@@ -11478,6 +11637,7 @@ export const CATALOG = {
       keepNewest: 'Simpan yang terbaru',
       clear: 'Bersihkan',
       truncatedWarning: 'Pemindaian dihentikan sebelum selesai, jadi mungkin ada lebih banyak set daripada ini.',
+      tags: { keep: "Simpan", toQuarantine: "Ke karantina" },
       group: {
         identicalCopies: (count, size) => `${count} salinan identik · masing-masing ${size}`,
         allTickedWarning: 'Setiap salinan dalam set ini dicentang — hapus centang satu untuk menyimpannya.'
@@ -11491,7 +11651,7 @@ export const CATALOG = {
       modal: {
         label: 'Pindahkan duplikat ke karantina',
         heading: (count) => `Pindahkan ${count} salinan ke karantina?`,
-        body: (formatted) => `${formatted} dipulihkan. Setiap set menyimpan setidaknya satu salinan, dan tidak ada yang dihapus — pulihkan salah satunya dari layar Karantina.`,
+        body: (a) => `Memindahkannya membebaskan ${a} setelah Anda mengosongkan Karantina. Setiap set menyimpan setidaknya satu salinan, dan tidak ada yang dihapus — pulihkan salah satunya dari layar Karantina.`,
         cancel: 'Batal',
         confirmButton: 'Pindahkan ke karantina'
       },
@@ -11966,6 +12126,7 @@ export const CATALOG = {
     },
     diskMap: {
       title: 'Diskanotkun',
+      unscannedLabel: "Ekki skannað",
       aggregateCell: (count) => `${count} minni atriði`,
       subtitle: 'Hvað notar plássið á þessum diski, og hvar.',
       fastIndexSummary: (count) => `${count} skrár og möppur lesnar úr eigin skrá disksins.`,
@@ -12002,6 +12163,7 @@ export const CATALOG = {
         indexNoteEstimate: "Windows tilkynnir ekki framvindu meðan skráaskrá drifsins er lesin, því er engin prósenta sýnd — þetta mat byggir á því hve lengi síðasta skönnun þín tók.",
         durationSeconds: (n) => `${n} sek.`,
         durationMinutes: (m, s) => `${m} mín. ${s} sek.`,
+        stopping: "Stöðva…",
         scanAgain: "Skanna aftur",
         retry: "Reyna aftur",
         barLabel: "Framvinda skönnunar"
@@ -12011,11 +12173,14 @@ export const CATALOG = {
       truncated: {
         withCoverage: (measured, used, percent) => `Þessi skönnun kláraði tímann: hún mældi ${measured} af ${used} í notkun (${percent}%). Það sem hún mældi er raunverulegt; afgangurinn birtist sem óskannaður, ekki tómur.`,
         withoutCoverage: 'Þessi skönnun kláraði tímann áður en hún lauk við diskinn. Allt sem hún raunverulega mældi er raunverulegt, en möppur sem hún náði aldrei til birtast sem óskannaðar frekar en tómar — ekki lesa þetta sem heildarmynd af því sem notar plássið þitt.',
+        stoppedWithCoverage: (a, b, c) => `Þú stöðvaðir þessa skönnun: hún mældi ${a} af ${b} í notkun (${c}%). Það sem hún mældi er raunverulegt; afgangurinn birtist sem óskannaður, ekki tómur.`,
+        stoppedWithoutCoverage: "Þú stöðvaðir þessa skönnun snemma. Það sem hún mældi er raunverulegt; möppur sem hún náði ekki til birtast sem óskannaðar, ekki tómar — ekki líta á þetta sem heildarmynd af því sem notar plássið.",
         rescanLink: 'Keyra frekar hraðskönnun'
       },
       view: { tree: 'Tré', files: 'Skrár' },
       folderTable: {
         empty: 'Ekkert til að telja upp í þessari möppu.',
+        rowLabel: (a, b) => `Opna ${a}, ${b}`,
         notScanned: 'óskannað',
         columns: { folder: 'Mappa', size: 'Stærð', items: 'Hlutir', files: 'Skrár', folders: 'Möppur', modified: 'Breytt' }
       },
@@ -12032,6 +12197,7 @@ export const CATALOG = {
         aggregated: 'Minnstu færslurnar í þessari möppu, flokkaðar saman.',
         unscanned: 'Skönnunin stöðvaðist áður en hún náði hingað. Raunveruleg stærð er óþekkt.'
       },
+      rowActionsLabel: (a) => `Aðgerðir fyrir ${a}`,
       cellOpenLabel: (name) => `Opna ${name}`,
       contextMenu: {
         openInExplorer: 'Opna í Skráasafni',
@@ -12169,11 +12335,12 @@ export const CATALOG = {
         publisher: 'Útgefandi',
         status: 'Staða'
       },
-      switchAriaLabel: (enabled, name) => `${enabled ? 'Slökkva á' : 'Kveikja á'} ${name} við innskráningu`,
+      switchAriaLabel: (name) => `Keyra ${name} við innskráningu`,
       status: {
         invalid: 'Ógilt',
         running: 'Í gangi',
         notChecked: 'Ekki athugað',
+        off: "Slökkt",
         notRunning: 'Ekki í gangi'
       },
       groups: {
@@ -12192,6 +12359,8 @@ export const CATALOG = {
     duplicates: {
       title: 'Tvítekin skrár',
       subtitle: 'Skrár sem eru bæti fyrir bæti eins, ekki bara sömu stærðar. Beindu því á möppu þar sem þú geymir raunverulega hluti — að lesa allan disk til að bera hann saman við sjálfan sig tekur mun lengri tíma en það er þess virði, og finnur að mestu eintök vélarinnar sjálfrar af eigin skrám.',
+      folderPlaceholder: (a) => `Slóð möppu, til dæmis ${a}`,
+      stoppedNote: "Stöðvað — engu var borið saman.",
       folderInputAriaLabel: 'Mappa til að leita að tvíritum í',
       stop: 'Stöðva',
       findButton: 'Finna tvírit',
@@ -12209,6 +12378,7 @@ export const CATALOG = {
       keepNewest: 'Halda nýjasta',
       clear: 'Hreinsa',
       truncatedWarning: 'Skönnunin var stöðvuð fyrir tímann, svo það geta verið fleiri sett en þessi.',
+      tags: { keep: "Halda", toQuarantine: "Í sóttkví" },
       group: {
         identicalCopies: (count, size) => `${count} eins eintök · ${size} hvert`,
         allTickedWarning: 'Hvert eintak í þessu setti er hakað — afhakaðu eitt til að halda því.'
@@ -12222,7 +12392,7 @@ export const CATALOG = {
       modal: {
         label: 'Flytja tvírit í sóttkví',
         heading: (count) => `Flytja ${count} eintök í sóttkví?`,
-        body: (formatted) => `${formatted} endurheimt. Hvert sett heldur að minnsta kosti einu eintaki, og engu er eytt — endurheimtu hvað sem er af því af Sóttkví-skjánum.`,
+        body: (a) => `Þegar þau eru flutt losnar ${a} þegar þú tæmir Sóttkví. Hvert sett heldur að minnsta kosti einu eintaki, og engu er eytt — endurheimtu hvað sem er af því af Sóttkví-skjánum.`,
         cancel: 'Hætta við',
         confirmButton: 'Flytja í sóttkví'
       },
@@ -12697,6 +12867,7 @@ export const CATALOG = {
     },
     diskMap: {
       title: 'Utilizzo del Disco',
+      unscannedLabel: "Non scansionato",
       aggregateCell: (count) => `${count} elementi più piccoli`,
       subtitle: 'Cosa sta usando lo spazio su questo disco, e dove.',
       fastIndexSummary: (count) => `${count} file e cartelle letti dall'indice del disco stesso.`,
@@ -12733,6 +12904,7 @@ export const CATALOG = {
         indexNoteEstimate: "Windows non segnala l'avanzamento durante la lettura dell'indice dell'unità, quindi non viene mostrata alcuna percentuale: questa stima è la durata della tua ultima analisi.",
         durationSeconds: (n) => `${n} s`,
         durationMinutes: (m, s) => `${m} min ${s} s`,
+        stopping: "Interruzione…",
         scanAgain: "Analizza di nuovo",
         retry: "Riprova",
         barLabel: "Avanzamento dell'analisi"
@@ -12742,11 +12914,14 @@ export const CATALOG = {
       truncated: {
         withCoverage: (measured, used, percent) => `Questa scansione ha esaurito il tempo: ha misurato ${measured} dei ${used} in uso (${percent}%). Ciò che ha misurato è reale; il resto è mostrato come non scansionato, non come vuoto.`,
         withoutCoverage: "Questa scansione ha esaurito il tempo prima di completare il disco. Tutto ciò che ha effettivamente misurato è reale, ma le cartelle mai raggiunte sono mostrate come non scansionate piuttosto che vuote — non leggerlo come un quadro completo di ciò che occupa il tuo spazio.",
+        stoppedWithCoverage: (a, b, c) => `Hai interrotto questa scansione: ha misurato ${a} dei ${b} in uso (${c}%). Ciò che ha misurato è reale; il resto è mostrato come non scansionato, non come vuoto.`,
+        stoppedWithoutCoverage: "Hai interrotto questa scansione in anticipo. Ciò che ha misurato è reale; le cartelle che non ha raggiunto sono mostrate come non scansionate, non come vuote — non leggerlo come un quadro completo di ciò che occupa spazio.",
         rescanLink: 'Esegui invece una scansione rapida'
       },
       view: { tree: 'Albero', files: 'File' },
       folderTable: {
         empty: 'Niente da elencare in questa cartella.',
+        rowLabel: (a, b) => `Apri ${a}, ${b}`,
         notScanned: 'non scansionato',
         columns: { folder: 'Cartella', size: 'Dimensione', items: 'Elementi', files: 'File', folders: 'Cartelle', modified: 'Modificato' }
       },
@@ -12763,6 +12938,7 @@ export const CATALOG = {
         aggregated: 'Le voci più piccole di questa cartella, raggruppate.',
         unscanned: 'La scansione si è fermata prima di raggiungere questo. La sua dimensione reale è sconosciuta.'
       },
+      rowActionsLabel: (a) => `Azioni per ${a}`,
       cellOpenLabel: (name) => `Apri ${name}`,
       contextMenu: {
         openInExplorer: 'Apri in Esplora File',
@@ -12900,11 +13076,12 @@ export const CATALOG = {
         publisher: 'Editore',
         status: 'Stato'
       },
-      switchAriaLabel: (enabled, name) => `${enabled ? 'Disabilita' : 'Abilita'} ${name} all\'accesso`,
+      switchAriaLabel: (name) => `Esegui ${name} all'accesso`,
       status: {
         invalid: 'Non valido',
         running: 'In esecuzione',
         notChecked: 'Non controllato',
+        off: "Disattivato",
         notRunning: 'Non in esecuzione'
       },
       groups: {
@@ -12923,6 +13100,8 @@ export const CATALOG = {
     duplicates: {
       title: 'File duplicati',
       subtitle: 'File identici byte per byte, non semplicemente della stessa dimensione. Punta a una cartella dove conservi davvero le cose — leggere un intero disco per confrontarlo con se stesso richiede molto più tempo di quanto valga, e trova per lo più le copie del computer dei propri file.',
+      folderPlaceholder: (a) => `Percorso della cartella, ad esempio ${a}`,
+      stoppedNote: "Interrotto — nulla è stato confrontato.",
       folderInputAriaLabel: 'Cartella in cui cercare i duplicati',
       stop: 'Interrompi',
       findButton: 'Trova duplicati',
@@ -12940,6 +13119,7 @@ export const CATALOG = {
       keepNewest: 'Mantieni il più recente',
       clear: 'Pulisci',
       truncatedWarning: 'La scansione è stata interrotta, quindi potrebbero esserci più insiemi di questi.',
+      tags: { keep: "Mantieni", toQuarantine: "In quarantena" },
       group: {
         identicalCopies: (count, size) => `${count} copie identiche · ${size} ciascuna`,
         allTickedWarning: 'Ogni copia in questo insieme è selezionata — deseleziona una per conservarla.'
@@ -12953,7 +13133,7 @@ export const CATALOG = {
       modal: {
         label: 'Sposta duplicati in quarantena',
         heading: (count) => `Spostare ${count} copie in quarantena?`,
-        body: (formatted) => `${formatted} recuperati. Ogni insieme conserva almeno una copia, e nulla viene eliminato — ripristina una qualsiasi di esse dalla schermata Quarantena.`,
+        body: (a) => `Spostarli libera ${a} una volta svuotata la Quarantena. Ogni insieme conserva almeno una copia, e nulla viene eliminato — ripristina una qualsiasi di esse dalla schermata Quarantena.`,
         cancel: 'Annulla',
         confirmButton: 'Sposta in quarantena'
       },
@@ -13428,6 +13608,7 @@ export const CATALOG = {
     },
     diskMap: {
       title: 'ディスク使用状況',
+      unscannedLabel: "未スキャン",
       aggregateCell: (count) => `${count} 件の小さな項目`,
       subtitle: '何がこのディスクの容量を使っているか、どこで。',
       fastIndexSummary: (count) => `ドライブ自身のインデックスから ${count} 件のファイルとフォルダーを読み取りました。`,
@@ -13464,6 +13645,7 @@ export const CATALOG = {
         indexNoteEstimate: "ドライブのインデックスを読み取っている間、Windows は進行状況を報告しないため、パーセントは表示されません。この目安は前回のスキャンにかかった時間です。",
         durationSeconds: (n) => `${n} 秒`,
         durationMinutes: (m, s) => `${m} 分 ${s} 秒`,
+        stopping: "停止しています…",
         scanAgain: "もう一度スキャン",
         retry: "再試行",
         barLabel: "スキャンの進行状況"
@@ -13473,11 +13655,14 @@ export const CATALOG = {
       truncated: {
         withCoverage: (measured, used, percent) => `このスキャンは時間切れになりました。使用中の ${used} のうち ${measured} を測定しました（${percent}%）。測定できた部分は正確です。残りは空ではなく未スキャンとして表示されます。`,
         withoutCoverage: 'このスキャンはドライブを完了する前に時間切れになりました。実際に測定できた部分はすべて正確ですが、到達できなかったフォルダーは空ではなく未スキャンとして表示されます — これを容量を使用しているものの完全な情報として読まないでください。',
+        stoppedWithCoverage: (a, b, c) => `このスキャンは停止されました。使用中の ${b} のうち ${a} を測定しました（${c}%）。測定できた部分は正確です。残りは空ではなく未スキャンとして表示されます。`,
+        stoppedWithoutCoverage: "このスキャンは途中で停止されました。測定できた部分は正確です。到達しなかったフォルダーは空ではなく未スキャンとして表示されます。使用中の容量の全体像としては読まないでください。",
         rescanLink: '代わりに高速スキャンを実行'
       },
       view: { tree: 'ツリー', files: 'ファイル' },
       folderTable: {
         empty: 'このフォルダー内に表示するものがありません。',
+        rowLabel: (a, b) => `${a} を開く、${b}`,
         notScanned: '未スキャン',
         columns: { folder: 'フォルダー', size: 'サイズ', items: '項目', files: 'ファイル', folders: 'フォルダー', modified: '更新日時' }
       },
@@ -13494,6 +13679,7 @@ export const CATALOG = {
         aggregated: 'このフォルダー内の最小の項目をまとめたものです。',
         unscanned: 'ここに到達する前にスキャンが停止しました。実際のサイズは不明です。'
       },
+      rowActionsLabel: (a) => `${a} の操作`,
       cellOpenLabel: (name) => `${name} を開く`,
       contextMenu: {
         openInExplorer: 'エクスプローラーで開く',
@@ -13631,11 +13817,12 @@ export const CATALOG = {
         publisher: '発行元',
         status: '状態'
       },
-      switchAriaLabel: (enabled, name) => `サインイン時の ${name} を${enabled ? '無効' : '有効'}にする`,
+      switchAriaLabel: (name) => `サインイン時に ${name} を実行`,
       status: {
         invalid: '無効な項目',
         running: '実行中',
         notChecked: '未確認',
+        off: "オフ",
         notRunning: '実行されていません'
       },
       groups: {
@@ -13654,6 +13841,8 @@ export const CATALOG = {
     duplicates: {
       title: '重複ファイル',
       subtitle: 'サイズが同じだけでなく、バイト単位で完全に一致するファイルです。実際に何かを保存しているフォルダーに向けてください — ドライブ全体を読み込んでそれ自体と比較するのは、その価値をはるかに超える時間がかかり、たいていはマシン自身のファイルの自己コピーが見つかるだけです。',
+      folderPlaceholder: (a) => `フォルダーのパス（例: ${a}）`,
+      stoppedNote: "停止しました — 何も比較されていません。",
       folderInputAriaLabel: '重複を検索するフォルダー',
       stop: '停止',
       findButton: '重複を検索',
@@ -13671,6 +13860,7 @@ export const CATALOG = {
       keepNewest: '最も新しいものを残す',
       clear: 'クリア',
       truncatedWarning: 'スキャンは途中で打ち切られたため、これより多くのセットがある可能性があります。',
+      tags: { keep: "残す", toQuarantine: "隔離へ" },
       group: {
         identicalCopies: (count, size) => `${count} 件の同一コピー · 各 ${size}`,
         allTickedWarning: 'このセット内のすべてのコピーにチェックが入っています — 1 つのチェックを外して残してください。'
@@ -13684,7 +13874,7 @@ export const CATALOG = {
       modal: {
         label: '重複を隔離に移動',
         heading: (count) => `${count} 件のコピーを隔離に移動しますか?`,
-        body: (formatted) => `${formatted} が回収されます。各セットは少なくとも 1 つのコピーを保持し、何も削除されません — 隔離画面からいつでも復元できます。`,
+        body: (a) => `移動すると、隔離を空にした時点で ${a} が解放されます。各セットは少なくとも 1 つのコピーを保持し、何も削除されません — 隔離画面からいつでも復元できます。`,
         cancel: 'キャンセル',
         confirmButton: '隔離に移動'
       },
@@ -14159,6 +14349,7 @@ export const CATALOG = {
     },
     diskMap: {
       title: '디스크 사용량',
+      unscannedLabel: "검사 안 됨",
       aggregateCell: (count) => `${count}개의 더 작은 항목`,
       subtitle: '이 디스크에서 공간을 사용하는 항목과 위치.',
       fastIndexSummary: (count) => `드라이브 자체 색인에서 파일 및 폴더 ${count}개를 읽었습니다.`,
@@ -14195,6 +14386,7 @@ export const CATALOG = {
         indexNoteEstimate: "드라이브 인덱스를 읽는 동안 Windows가 진행률을 알려 주지 않으므로 백분율은 표시되지 않으며, 이 예상 시간은 지난 검사에 걸린 시간입니다.",
         durationSeconds: (n) => `${n}초`,
         durationMinutes: (m, s) => `${m}분 ${s}초`,
+        stopping: "중지하는 중…",
         scanAgain: "다시 검사",
         retry: "다시 시도",
         barLabel: "검사 진행률"
@@ -14204,11 +14396,14 @@ export const CATALOG = {
       truncated: {
         withCoverage: (measured, used, percent) => `이 검사는 시간이 초과되었습니다: 사용 중인 ${used} 중 ${measured}을(를) 측정했습니다(${percent}%). 측정된 부분은 실제 값이며, 나머지는 비어 있는 것이 아니라 검사되지 않음으로 표시됩니다.`,
         withoutCoverage: '이 검사는 드라이브를 완료하기 전에 시간이 초과되었습니다. 실제로 측정된 모든 것은 정확하지만, 도달하지 못한 폴더는 비어 있는 것이 아니라 검사되지 않음으로 표시됩니다 — 이를 공간을 사용하는 항목의 완전한 그림으로 받아들이지 마세요.',
+        stoppedWithCoverage: (a, b, c) => `이 검사를 중지했습니다: 사용 중인 ${b} 중 ${a}을(를) 측정했습니다(${c}%). 측정된 부분은 실제 값이며, 나머지는 비어 있는 것이 아니라 검사되지 않음으로 표시됩니다.`,
+        stoppedWithoutCoverage: "이 검사를 도중에 중지했습니다. 측정된 부분은 실제 값이며, 도달하지 못한 폴더는 비어 있는 것이 아니라 검사되지 않음으로 표시됩니다 — 공간을 차지하는 항목의 전체 모습으로 읽지 마세요.",
         rescanLink: '대신 빠른 검사 실행'
       },
       view: { tree: '트리', files: '파일' },
       folderTable: {
         empty: '이 폴더 안에 나열할 항목이 없습니다.',
+        rowLabel: (a, b) => `${a} 열기, ${b}`,
         notScanned: '검사되지 않음',
         columns: { folder: '폴더', size: '크기', items: '항목', files: '파일', folders: '폴더', modified: '수정됨' }
       },
@@ -14225,6 +14420,7 @@ export const CATALOG = {
         aggregated: '이 폴더의 가장 작은 항목들을 묶은 것입니다.',
         unscanned: '이곳에 도달하기 전에 검사가 중단되었습니다. 실제 크기는 알 수 없습니다.'
       },
+      rowActionsLabel: (a) => `${a}에 대한 작업`,
       cellOpenLabel: (name) => `${name} 열기`,
       contextMenu: {
         openInExplorer: '탐색기에서 열기',
@@ -14362,11 +14558,12 @@ export const CATALOG = {
         publisher: '게시자',
         status: '상태'
       },
-      switchAriaLabel: (enabled, name) => `로그인 시 ${name} ${enabled ? '사용 안 함' : '사용'}`,
+      switchAriaLabel: (name) => `로그인 시 ${name} 실행`,
       status: {
         invalid: '유효하지 않음',
         running: '실행 중',
         notChecked: '확인되지 않음',
+        off: "끔",
         notRunning: '실행되지 않음'
       },
       groups: {
@@ -14385,6 +14582,8 @@ export const CATALOG = {
     duplicates: {
       title: '중복 파일',
       subtitle: '단순히 크기가 같은 것이 아니라 바이트 단위로 동일한 파일입니다. 실제로 파일을 보관하는 폴더를 지정하세요 — 드라이브 전체를 읽어 자신과 비교하는 것은 그만한 가치보다 훨씬 오래 걸리며, 대부분 컴퓨터 자체의 파일 사본만 찾아냅니다.',
+      folderPlaceholder: (a) => `폴더 경로, 예: ${a}`,
+      stoppedNote: "중지됨 — 아무것도 비교하지 않았습니다.",
       folderInputAriaLabel: '중복 항목을 검색할 폴더',
       stop: '중지',
       findButton: '중복 항목 찾기',
@@ -14402,6 +14601,7 @@ export const CATALOG = {
       keepNewest: '가장 최신 것 유지',
       clear: '지우기',
       truncatedWarning: '스캔이 중간에 중단되어 이보다 더 많은 세트가 있을 수 있습니다.',
+      tags: { keep: "유지", toQuarantine: "격리로 이동" },
       group: {
         identicalCopies: (count, size) => `동일한 사본 ${count}개 · 각 ${size}`,
         allTickedWarning: '이 세트의 모든 사본이 선택되어 있습니다 — 하나를 선택 해제하여 보관하세요.'
@@ -14415,7 +14615,7 @@ export const CATALOG = {
       modal: {
         label: '중복 항목을 격리로 이동',
         heading: (count) => `${count}개 사본을 격리로 이동하시겠습니까?`,
-        body: (formatted) => `${formatted}가 회수됩니다. 각 세트는 최소 하나의 사본을 유지하며, 아무것도 삭제되지 않습니다 — 격리 화면에서 언제든지 복원할 수 있습니다.`,
+        body: (a) => `이동하면 격리를 비울 때 ${a}이(가) 확보됩니다. 각 세트는 최소 하나의 사본을 유지하며, 아무것도 삭제되지 않습니다 — 격리 화면에서 언제든지 복원할 수 있습니다.`,
         cancel: '취소',
         confirmButton: '격리로 이동'
       },
@@ -14890,6 +15090,7 @@ export const CATALOG = {
     },
     diskMap: {
       title: 'Disko naudojimas',
+      unscannedLabel: "Neskenuota",
       aggregateCell: (count) => `${count} mažesni elementai`,
       subtitle: 'Kas naudoja vietą šiame diske ir kur.',
       fastIndexSummary: (count) => `${count} failų ir aplankų nuskaityta iš paties disko indekso.`,
@@ -14926,6 +15127,7 @@ export const CATALOG = {
         indexNoteEstimate: "Skaitant disko indeksą „Windows“ nepraneša apie eigą, todėl procentai nerodomi — šis įvertis yra paskutinio nuskaitymo trukmė.",
         durationSeconds: (n) => `${n} s`,
         durationMinutes: (m, s) => `${m} min. ${s} s`,
+        stopping: "Stabdoma…",
         scanAgain: "Nuskaityti dar kartą",
         retry: "Bandyti dar kartą",
         barLabel: "Nuskaitymo eiga"
@@ -14935,11 +15137,14 @@ export const CATALOG = {
       truncated: {
         withCoverage: (measured, used, percent) => `Šiam skenavimui baigėsi laikas: jis išmatavo ${measured} iš ${used} naudojamų (${percent}%). Tai, kas išmatuota, yra tikra; likusi dalis rodoma kaip neskenuota, o ne tuščia.`,
         withoutCoverage: 'Šiam skenavimui baigėsi laikas prieš baigiant diską. Viskas, kas iš tikrųjų buvo išmatuota, yra tikra, tačiau aplankai, kurių jis niekada nepasiekė, rodomi kaip neskenuoti, o ne tušti — nelaikykite to pilnu vaizdu apie tai, kas naudoja jūsų vietą.',
+        stoppedWithCoverage: (a, b, c) => `Sustabdėte šį skenavimą: jis išmatavo ${a} iš ${b} naudojamų (${c}%). Tai, kas išmatuota, yra tikra; likusi dalis rodoma kaip neskenuota, o ne tuščia.`,
+        stoppedWithoutCoverage: "Sustabdėte šį skenavimą anksčiau laiko. Tai, kas išmatuota, yra tikra; aplankai, kurių jis nepasiekė, rodomi kaip neskenuoti, o ne tušti — nelaikykite to pilnu vaizdu, kas užima vietą.",
         rescanLink: 'Vietoj to paleisti greitąjį skenavimą'
       },
       view: { tree: 'Medis', files: 'Failai' },
       folderTable: {
         empty: 'Šiame aplanke nėra ko išvardyti.',
+        rowLabel: (a, b) => `Atverti ${a}, ${b}`,
         notScanned: 'neskenuota',
         columns: { folder: 'Aplankas', size: 'Dydis', items: 'Elementai', files: 'Failai', folders: 'Aplankai', modified: 'Pakeista' }
       },
@@ -14956,6 +15161,7 @@ export const CATALOG = {
         aggregated: 'Mažiausi šio aplanko įrašai, sugrupuoti kartu.',
         unscanned: 'Skenavimas sustojo prieš pasiekiant šį. Tikras dydis nežinomas.'
       },
+      rowActionsLabel: (a) => `Veiksmai: ${a}`,
       cellOpenLabel: (name) => `Atverti ${name}`,
       contextMenu: {
         openInExplorer: 'Atverti naršyklėje',
@@ -15093,11 +15299,12 @@ export const CATALOG = {
         publisher: 'Leidėjas',
         status: 'Būsena'
       },
-      switchAriaLabel: (enabled, name) => `${enabled ? 'Išjungti' : 'Įjungti'} ${name} prisijungus`,
+      switchAriaLabel: (name) => `Paleisti ${name} prisijungus`,
       status: {
         invalid: 'Netinkamas',
         running: 'Veikia',
         notChecked: 'Nepatikrinta',
+        off: "Išjungta",
         notRunning: 'Neveikia'
       },
       groups: {
@@ -15116,6 +15323,8 @@ export const CATALOG = {
     duplicates: {
       title: 'Pasikartojantys failai',
       subtitle: 'Failai, kurie yra identiški baitas po baito, o ne tik to paties dydžio. Nukreipkite tai į aplanką, kuriame iš tikrųjų laikote daiktus — viso disko skaitymas, norint palyginti jį su savimi, užtrunka daug ilgiau, nei to verta, ir dažniausiai randa mašinos pačios savo failų kopijas.',
+      folderPlaceholder: (a) => `Aplanko kelias, pavyzdžiui, ${a}`,
+      stoppedNote: "Sustabdyta — niekas nebuvo palyginta.",
       folderInputAriaLabel: 'Aplankas, kuriame ieškoti dublikatų',
       stop: 'Stabdyti',
       findButton: 'Ieškoti dublikatų',
@@ -15133,6 +15342,7 @@ export const CATALOG = {
       keepNewest: 'Palikti naujausią',
       clear: 'Išvalyti',
       truncatedWarning: 'Skenavimas buvo nutrauktas anksčiau laiko, todėl rinkinių gali būti daugiau nei šie.',
+      tags: { keep: "Palikti", toQuarantine: "Į karantiną" },
       group: {
         identicalCopies: (count, size) => `${count} identiškos kopijos · po ${size}`,
         allTickedWarning: 'Kiekviena šio rinkinio kopija pažymėta — nuimkite žymėjimą nuo vienos, kad ją paliktumėte.'
@@ -15146,7 +15356,7 @@ export const CATALOG = {
       modal: {
         label: 'Perkelti dublikatus į karantiną',
         heading: (count) => `Perkelti ${count} kopijas į karantiną?`,
-        body: (formatted) => `${formatted} atlaisvinta. Kiekvienas rinkinys išsaugo bent vieną kopiją, ir niekas nėra ištrinama — bet kurią iš jų galite atkurti iš Karantino ekrano.`,
+        body: (a) => `Perkėlus atlaisvinama ${a}, kai ištuštinsite Karantiną. Kiekvienas rinkinys išsaugo bent vieną kopiją, ir niekas nėra ištrinama — bet kurią iš jų galite atkurti iš Karantino ekrano.`,
         cancel: 'Atšaukti',
         confirmButton: 'Perkelti į karantiną'
       },
@@ -15621,6 +15831,7 @@ export const CATALOG = {
     },
     diskMap: {
       title: 'Penggunaan Cakera',
+      unscannedLabel: "Tidak diimbas",
       aggregateCell: (count) => `${count} item yang lebih kecil`,
       subtitle: 'Apa yang menggunakan ruang pada cakera ini, dan di mana.',
       fastIndexSummary: (count) => `${count} fail dan folder dibaca daripada indeks cakera itu sendiri.`,
@@ -15657,6 +15868,7 @@ export const CATALOG = {
         indexNoteEstimate: "Windows tidak melaporkan kemajuan semasa indeks pemacu dibaca, jadi tiada peratusan — anggaran ini ialah tempoh imbasan terakhir anda.",
         durationSeconds: (n) => `${n} s`,
         durationMinutes: (m, s) => `${m} min ${s} s`,
+        stopping: "Menghentikan…",
         scanAgain: "Imbas semula",
         retry: "Cuba lagi",
         barLabel: "Kemajuan imbasan"
@@ -15666,11 +15878,14 @@ export const CATALOG = {
       truncated: {
         withCoverage: (measured, used, percent) => `Imbasan ini kehabisan masa: ia mengukur ${measured} daripada ${used} yang digunakan (${percent}%). Apa yang diukur adalah benar; bakinya dipaparkan sebagai tidak diimbas, bukan sebagai kosong.`,
         withoutCoverage: 'Imbasan ini kehabisan masa sebelum menyelesaikan cakera. Segala yang benar-benar diukur adalah benar, tetapi folder yang tidak pernah sampai dipaparkan sebagai tidak diimbas dan bukannya kosong — jangan anggap ini sebagai gambaran lengkap tentang apa yang menggunakan ruang anda.',
+        stoppedWithCoverage: (a, b, c) => `Anda menghentikan imbasan ini: ia mengukur ${a} daripada ${b} yang digunakan (${c}%). Apa yang diukur adalah benar; bakinya dipaparkan sebagai tidak diimbas, bukan sebagai kosong.`,
+        stoppedWithoutCoverage: "Anda menghentikan imbasan ini lebih awal. Apa yang diukur adalah benar; folder yang tidak sempat dicapai dipaparkan sebagai tidak diimbas, bukan sebagai kosong — jangan anggap ini gambaran lengkap tentang apa yang menggunakan ruang anda.",
         rescanLink: 'Jalankan imbasan pantas sebagai gantinya'
       },
       view: { tree: 'Pokok', files: 'Fail' },
       folderTable: {
         empty: 'Tiada apa untuk disenaraikan di dalam folder ini.',
+        rowLabel: (a, b) => `Buka ${a}, ${b}`,
         notScanned: 'tidak diimbas',
         columns: { folder: 'Folder', size: 'Saiz', items: 'Item', files: 'Fail', folders: 'Folder', modified: 'Diubah suai' }
       },
@@ -15687,6 +15902,7 @@ export const CATALOG = {
         aggregated: 'Entri terkecil dalam folder ini, dikumpulkan bersama.',
         unscanned: 'Imbasan berhenti sebelum sampai ke sini. Saiz sebenarnya tidak diketahui.'
       },
+      rowActionsLabel: (a) => `Tindakan untuk ${a}`,
       cellOpenLabel: (name) => `Buka ${name}`,
       contextMenu: {
         openInExplorer: 'Buka dalam Explorer',
@@ -15824,11 +16040,12 @@ export const CATALOG = {
         publisher: 'Penerbit',
         status: 'Status'
       },
-      switchAriaLabel: (enabled, name) => `${enabled ? 'Lumpuhkan' : 'Dayakan'} ${name} semasa log masuk`,
+      switchAriaLabel: (name) => `Jalankan ${name} semasa log masuk`,
       status: {
         invalid: 'Tidak sah',
         running: 'Berjalan',
         notChecked: 'Belum disemak',
+        off: "Mati",
         notRunning: 'Tidak berjalan'
       },
       groups: {
@@ -15847,6 +16064,8 @@ export const CATALOG = {
     duplicates: {
       title: 'Fail pendua',
       subtitle: 'Fail yang sama sepenuhnya bait demi bait, bukan sekadar saiz yang sama. Tujukan ke folder tempat anda benar-benar menyimpan sesuatu — membaca keseluruhan pemacu untuk membandingkannya dengan dirinya sendiri mengambil masa jauh lebih lama daripada yang berbaloi, dan kebanyakannya menemui salinan mesin itu sendiri bagi failnya sendiri.',
+      folderPlaceholder: (a) => `Laluan folder, contohnya ${a}`,
+      stoppedNote: "Dihentikan — tiada apa yang dibandingkan.",
       folderInputAriaLabel: 'Folder untuk mencari pendua',
       stop: 'Henti',
       findButton: 'Cari pendua',
@@ -15864,6 +16083,7 @@ export const CATALOG = {
       keepNewest: 'Simpan yang paling baharu',
       clear: 'Kosongkan',
       truncatedWarning: 'Imbasan telah dihentikan awal, jadi mungkin ada lebih banyak set daripada ini.',
+      tags: { keep: "Simpan", toQuarantine: "Ke kuarantin" },
       group: {
         identicalCopies: (count, size) => `${count} salinan serupa · ${size} setiap satu`,
         allTickedWarning: 'Setiap salinan dalam set ini ditanda — nyahtanda satu untuk menyimpannya.'
@@ -15877,7 +16097,7 @@ export const CATALOG = {
       modal: {
         label: 'Alih pendua ke kuarantin',
         heading: (count) => `Alih ${count} salinan ke kuarantin?`,
-        body: (formatted) => `${formatted} dipulihkan. Setiap set menyimpan sekurang-kurangnya satu salinan, dan tiada apa yang dipadamkan — pulihkan mana-mana daripadanya dari skrin Kuarantin.`,
+        body: (a) => `Mengalihkannya membebaskan ${a} setelah anda mengosongkan Kuarantin. Setiap set menyimpan sekurang-kurangnya satu salinan, dan tiada apa yang dipadamkan — pulihkan mana-mana daripadanya dari skrin Kuarantin.`,
         cancel: 'Batal',
         confirmButton: 'Alih ke kuarantin'
       },
@@ -16352,6 +16572,7 @@ export const CATALOG = {
     },
     diskMap: {
       title: 'Diskbruk',
+      unscannedLabel: "Ikke skannet",
       aggregateCell: (count) => `${count} mindre elementer`,
       subtitle: 'Hva som bruker plassen på denne disken, og hvor.',
       fastIndexSummary: (count) => `${count} filer og mapper lest fra diskens eget register.`,
@@ -16388,6 +16609,7 @@ export const CATALOG = {
         indexNoteEstimate: "Windows rapporterer ikke fremdrift mens stasjonens indeks leses, så det vises ingen prosent — dette anslaget er hvor lang tid forrige skanning tok.",
         durationSeconds: (n) => `${n} s`,
         durationMinutes: (m, s) => `${m} min ${s} s`,
+        stopping: "Stopper…",
         scanAgain: "Skann på nytt",
         retry: "Prøv igjen",
         barLabel: "Skanningsfremdrift"
@@ -16397,11 +16619,14 @@ export const CATALOG = {
       truncated: {
         withCoverage: (measured, used, percent) => `Dette skannet gikk tom for tid: det målte ${measured} av de ${used} i bruk (${percent} %). Det som ble målt, er reelt; resten vises som uskannet, ikke som tomt.`,
         withoutCoverage: 'Dette skannet gikk tom for tid før det fullførte disken. Alt det faktisk målte, er reelt, men mapper det aldri nådde, vises som uskannet i stedet for tomt — ikke les dette som et fullstendig bilde av hva som bruker plassen din.',
+        stoppedWithCoverage: (a, b, c) => `Du stoppet dette skannet: det målte ${a} av de ${b} i bruk (${c} %). Det som ble målt, er reelt; resten vises som uskannet, ikke som tomt.`,
+        stoppedWithoutCoverage: "Du stoppet dette skannet tidlig. Det som ble målt, er reelt; mapper det aldri nådde, vises som uskannet, ikke som tomt — ikke les dette som et fullstendig bilde av hva som bruker plassen din.",
         rescanLink: 'Kjør et hurtigskann i stedet'
       },
       view: { tree: 'Tre', files: 'Filer' },
       folderTable: {
         empty: 'Ingenting å vise i denne mappen.',
+        rowLabel: (a, b) => `Åpne ${a}, ${b}`,
         notScanned: 'ikke skannet',
         columns: { folder: 'Mappe', size: 'Størrelse', items: 'Elementer', files: 'Filer', folders: 'Mapper', modified: 'Endret' }
       },
@@ -16418,6 +16643,7 @@ export const CATALOG = {
         aggregated: 'De minste oppføringene i denne mappen, gruppert sammen.',
         unscanned: 'Skanningen stoppet før den nådde hit. Den reelle størrelsen er ukjent.'
       },
+      rowActionsLabel: (a) => `Handlinger for ${a}`,
       cellOpenLabel: (name) => `Åpne ${name}`,
       contextMenu: {
         openInExplorer: 'Åpne i Utforsker',
@@ -16555,11 +16781,12 @@ export const CATALOG = {
         publisher: 'Utgiver',
         status: 'Status'
       },
-      switchAriaLabel: (enabled, name) => `${enabled ? 'Deaktiver' : 'Aktiver'} ${name} ved pålogging`,
+      switchAriaLabel: (name) => `Kjør ${name} ved pålogging`,
       status: {
         invalid: 'Ugyldig',
         running: 'Kjører',
         notChecked: 'Ikke sjekket',
+        off: "Av",
         notRunning: 'Kjører ikke'
       },
       groups: {
@@ -16578,6 +16805,8 @@ export const CATALOG = {
     duplicates: {
       title: 'Duplikatfiler',
       subtitle: 'Filer som er byte-for-byte identiske, ikke bare samme størrelse. Pek det mot en mappe der du faktisk oppbevarer ting — å lese en hel stasjon for å sammenligne den med seg selv tar mye lengre tid enn det er verdt, og finner stort sett maskinens egne kopier av sine egne filer.',
+      folderPlaceholder: (a) => `Mappesti, for eksempel ${a}`,
+      stoppedNote: "Stoppet — ingenting ble sammenlignet.",
       folderInputAriaLabel: 'Mappe å søke etter duplikater i',
       stop: 'Stopp',
       findButton: 'Finn duplikater',
@@ -16595,6 +16824,7 @@ export const CATALOG = {
       keepNewest: 'Behold nyeste',
       clear: 'Tøm',
       truncatedWarning: 'Skanningen ble avbrutt, så det kan være flere sett enn disse.',
+      tags: { keep: "Behold", toQuarantine: "Til karantene" },
       group: {
         identicalCopies: (count, size) => `${count} identiske kopier · ${size} hver`,
         allTickedWarning: 'Hver kopi i dette settet er merket av — fjern merket fra én for å beholde den.'
@@ -16608,7 +16838,7 @@ export const CATALOG = {
       modal: {
         label: 'Flytt duplikater til karantene',
         heading: (count) => `Flytte ${count} kopier til karantene?`,
-        body: (formatted) => `${formatted} frigjort. Hvert sett beholder minst én kopi, og ingenting slettes — gjenopprett hva som helst av det fra Karantene-skjermen.`,
+        body: (a) => `Når du flytter dem, frigjøres ${a} så snart du tømmer Karantene. Hvert sett beholder minst én kopi, og ingenting slettes — gjenopprett hva som helst av det fra Karantene-skjermen.`,
         cancel: 'Avbryt',
         confirmButton: 'Flytt til karantene'
       },
@@ -17083,6 +17313,7 @@ export const CATALOG = {
     },
     diskMap: {
       title: 'Schijfgebruik',
+      unscannedLabel: "Niet gescand",
       aggregateCell: (count) => `${count} kleinere items`,
       subtitle: 'Wat gebruikt de ruimte op deze schijf, en waar.',
       fastIndexSummary: (count) => `${count} bestanden en mappen gelezen uit de eigen index van de schijf.`,
@@ -17119,6 +17350,7 @@ export const CATALOG = {
         indexNoteEstimate: "Windows meldt geen voortgang terwijl de index van de schijf wordt gelezen, dus er is geen percentage — deze schatting is hoe lang je laatste scan duurde.",
         durationSeconds: (n) => `${n} s`,
         durationMinutes: (m, s) => `${m} min ${s} s`,
+        stopping: "Stoppen…",
         scanAgain: "Opnieuw scannen",
         retry: "Opnieuw proberen",
         barLabel: "Scanvoortgang"
@@ -17128,11 +17360,14 @@ export const CATALOG = {
       truncated: {
         withCoverage: (measured, used, percent) => `Deze scan heeft geen tijd meer: er is ${measured} gemeten van de ${used} in gebruik (${percent}%). Wat is gemeten, is echt; de rest wordt getoond als niet-gescand, niet als leeg.`,
         withoutCoverage: 'Deze scan heeft geen tijd meer voordat de schijf werd voltooid. Alles wat daadwerkelijk is gemeten, is echt, maar mappen die nooit zijn bereikt, worden getoond als niet-gescand in plaats van leeg — lees dit niet als een volledig beeld van wat uw ruimte gebruikt.',
+        stoppedWithCoverage: (a, b, c) => `Je hebt deze scan gestopt: er is ${a} gemeten van de ${b} in gebruik (${c}%). Wat is gemeten, is echt; de rest wordt getoond als niet-gescand, niet als leeg.`,
+        stoppedWithoutCoverage: "Je hebt deze scan voortijdig gestopt. Wat is gemeten, is echt; mappen die niet zijn bereikt, worden getoond als niet-gescand, niet als leeg — zie dit niet als een volledig beeld van wat je ruimte gebruikt.",
         rescanLink: 'Voer in plaats daarvan een snelle scan uit'
       },
       view: { tree: 'Boom', files: 'Bestanden' },
       folderTable: {
         empty: 'Niets om weer te geven in deze map.',
+        rowLabel: (a, b) => `${a} openen, ${b}`,
         notScanned: 'niet gescand',
         columns: { folder: 'Map', size: 'Grootte', items: 'Items', files: 'Bestanden', folders: 'Mappen', modified: 'Gewijzigd' }
       },
@@ -17149,6 +17384,7 @@ export const CATALOG = {
         aggregated: 'De kleinste items in deze map, gegroepeerd.',
         unscanned: 'De scan is gestopt voordat dit werd bereikt. De werkelijke grootte is onbekend.'
       },
+      rowActionsLabel: (a) => `Acties voor ${a}`,
       cellOpenLabel: (name) => `${name} openen`,
       contextMenu: {
         openInExplorer: 'Openen in Verkenner',
@@ -17286,11 +17522,12 @@ export const CATALOG = {
         publisher: 'Uitgever',
         status: 'Status'
       },
-      switchAriaLabel: (enabled, name) => `${name} bij aanmelden ${enabled ? 'uitschakelen' : 'inschakelen'}`,
+      switchAriaLabel: (name) => `${name} uitvoeren bij aanmelden`,
       status: {
         invalid: 'Ongeldig',
         running: 'Actief',
         notChecked: 'Niet gecontroleerd',
+        off: "Uit",
         notRunning: 'Niet actief'
       },
       groups: {
@@ -17309,6 +17546,8 @@ export const CATALOG = {
     duplicates: {
       title: 'Dubbele bestanden',
       subtitle: 'Bestanden die byte-voor-byte identiek zijn, niet alleen even groot. Richt het op een map waar je daadwerkelijk dingen bewaart — een heel station lezen om het met zichzelf te vergelijken duurt veel langer dan het waard is, en vindt vooral de eigen kopieën van de machine van zijn eigen bestanden.',
+      folderPlaceholder: (a) => `Mappad, bijvoorbeeld ${a}`,
+      stoppedNote: "Gestopt — er is niets vergeleken.",
       folderInputAriaLabel: 'Map om te zoeken naar duplicaten',
       stop: 'Stoppen',
       findButton: 'Duplicaten zoeken',
@@ -17326,6 +17565,7 @@ export const CATALOG = {
       keepNewest: 'Nieuwste behouden',
       clear: 'Wissen',
       truncatedWarning: 'De scan werd afgebroken, dus er kunnen meer sets zijn dan deze.',
+      tags: { keep: "Behouden", toQuarantine: "Naar quarantaine" },
       group: {
         identicalCopies: (count, size) => `${count} identieke kopieën · elk ${size}`,
         allTickedWarning: 'Elke kopie in deze set is aangevinkt — vink er één uit om te behouden.'
@@ -17339,7 +17579,7 @@ export const CATALOG = {
       modal: {
         label: 'Duplicaten naar quarantaine verplaatsen',
         heading: (count) => `${count} kopieën naar quarantaine verplaatsen?`,
-        body: (formatted) => `${formatted} vrijgemaakt. Elke set behoudt minstens één kopie, en er wordt niets verwijderd — herstel er alsnog een vanaf het Quarantaine-scherm.`,
+        body: (a) => `Door ze te verplaatsen komt ${a} vrij zodra je de Quarantaine leegt. Elke set behoudt minstens één kopie, en er wordt niets verwijderd — herstel er alsnog een vanaf het Quarantaine-scherm.`,
         cancel: 'Annuleren',
         confirmButton: 'Naar quarantaine verplaatsen'
       },
@@ -17814,6 +18054,7 @@ export const CATALOG = {
     },
     diskMap: {
       title: 'Wykorzystanie Dysku',
+      unscannedLabel: "Nieskanowane",
       aggregateCell: (count) => `${count} mniejszych elementów`,
       subtitle: 'Co zajmuje miejsce na tym dysku i gdzie.',
       fastIndexSummary: (count) => `${count} plików i folderów odczytanych z własnego indeksu dysku.`,
@@ -17850,6 +18091,7 @@ export const CATALOG = {
         indexNoteEstimate: "System Windows nie zgłasza postępu podczas odczytu indeksu dysku, więc nie ma wartości procentowej — to oszacowanie to czas trwania ostatniego skanowania.",
         durationSeconds: (n) => `${n} s`,
         durationMinutes: (m, s) => `${m} min ${s} s`,
+        stopping: "Zatrzymywanie…",
         scanAgain: "Skanuj ponownie",
         retry: "Spróbuj ponownie",
         barLabel: "Postęp skanowania"
@@ -17859,11 +18101,14 @@ export const CATALOG = {
       truncated: {
         withCoverage: (measured, used, percent) => `Temu skanowaniu zabrakło czasu: zmierzyło ${measured} z ${used} wykorzystanych (${percent}%). To, co zmierzyło, jest prawdziwe; reszta jest pokazywana jako niezeskanowana, a nie jako pusta.`,
         withoutCoverage: 'Temu skanowaniu zabrakło czasu, zanim ukończyło dysk. Wszystko, co faktycznie zmierzyło, jest prawdziwe, ale foldery, do których nigdy nie dotarło, są pokazywane jako niezeskanowane, a nie puste — nie odczytuj tego jako pełnego obrazu tego, co zajmuje twoje miejsce.',
+        stoppedWithCoverage: (a, b, c) => `Zatrzymano to skanowanie: zmierzyło ${a} z ${b} wykorzystanych (${c}%). To, co zmierzyło, jest prawdziwe; reszta jest pokazywana jako niezeskanowana, a nie jako pusta.`,
+        stoppedWithoutCoverage: "To skanowanie zostało zatrzymane przed ukończeniem. To, co zmierzyło, jest prawdziwe; foldery, do których nie dotarło, są pokazywane jako niezeskanowane, a nie jako puste — nie traktuj tego jako pełnego obrazu tego, co zajmuje miejsce.",
         rescanLink: 'Zamiast tego uruchom szybkie skanowanie'
       },
       view: { tree: 'Drzewo', files: 'Pliki' },
       folderTable: {
         empty: 'Nic do wyświetlenia w tym folderze.',
+        rowLabel: (a, b) => `Otwórz ${a}, ${b}`,
         notScanned: 'niezeskanowane',
         columns: { folder: 'Folder', size: 'Rozmiar', items: 'Elementy', files: 'Pliki', folders: 'Foldery', modified: 'Zmodyfikowano' }
       },
@@ -17880,6 +18125,7 @@ export const CATALOG = {
         aggregated: 'Najmniejsze wpisy w tym folderze, pogrupowane razem.',
         unscanned: 'Skanowanie zatrzymało się, zanim dotarło tutaj. Rzeczywisty rozmiar jest nieznany.'
       },
+      rowActionsLabel: (a) => `Akcje dla: ${a}`,
       cellOpenLabel: (name) => `Otwórz ${name}`,
       contextMenu: {
         openInExplorer: 'Otwórz w Eksploratorze',
@@ -18017,11 +18263,12 @@ export const CATALOG = {
         publisher: 'Wydawca',
         status: 'Stan'
       },
-      switchAriaLabel: (enabled, name) => `${enabled ? 'Wyłącz' : 'Włącz'} ${name} przy logowaniu`,
+      switchAriaLabel: (name) => `Uruchamiaj ${name} przy logowaniu`,
       status: {
         invalid: 'Nieprawidłowy',
         running: 'Uruchomione',
         notChecked: 'Niesprawdzone',
+        off: "Wyłączone",
         notRunning: 'Nieuruchomione'
       },
       groups: {
@@ -18040,6 +18287,8 @@ export const CATALOG = {
     duplicates: {
       title: 'Zduplikowane pliki',
       subtitle: 'Pliki identyczne bit po bicie, a nie tylko tego samego rozmiaru. Wskaż folder, w którym rzeczywiście przechowujesz rzeczy — odczytanie całego dysku, aby porównać go z samym sobą, trwa znacznie dłużej, niż jest to warte, i znajduje głównie własne kopie plików samego komputera.',
+      folderPlaceholder: (a) => `Ścieżka folderu, na przykład ${a}`,
+      stoppedNote: "Zatrzymano — nic nie porównano.",
       folderInputAriaLabel: 'Folder do przeszukania pod kątem duplikatów',
       stop: 'Zatrzymaj',
       findButton: 'Znajdź duplikaty',
@@ -18057,6 +18306,7 @@ export const CATALOG = {
       keepNewest: 'Zachowaj najnowszy',
       clear: 'Wyczyść',
       truncatedWarning: 'Skanowanie zostało przerwane przedwcześnie, więc zestawów może być więcej niż te.',
+      tags: { keep: "Zachowaj", toQuarantine: "Do kwarantanny" },
       group: {
         identicalCopies: (count, size) => `${count} identycznych kopii · ${size} każda`,
         allTickedWarning: 'Każda kopia w tym zestawie jest zaznaczona — odznacz jedną, aby ją zachować.'
@@ -18070,7 +18320,7 @@ export const CATALOG = {
       modal: {
         label: 'Przenieś duplikaty do kwarantanny',
         heading: (count) => `Przenieść ${count} kopii do kwarantanny?`,
-        body: (formatted) => `Odzyskano ${formatted}. Każdy zestaw zachowuje co najmniej jedną kopię i nic nie zostaje usunięte — przywróć dowolną z nich z ekranu Kwarantanna.`,
+        body: (a) => `Przeniesienie zwolni ${a} po opróżnieniu Kwarantanny. Każdy zestaw zachowuje co najmniej jedną kopię i nic nie zostaje usunięte — przywróć dowolną z nich z ekranu Kwarantanna.`,
         cancel: 'Anuluj',
         confirmButton: 'Przenieś do kwarantanny'
       },
@@ -18545,6 +18795,7 @@ export const CATALOG = {
     },
     diskMap: {
       title: 'د ډیسک کارول',
+      unscannedLabel: "نه دی سکن شوی",
       aggregateCell: (count) => `${count} کوچني توکي`,
       subtitle: 'دا ډیسک کې ځای څه شی کاروي، او چیرته.',
       fastIndexSummary: (count) => `${count} فایلونه او فولډرونه د ډرایو له خپل شاخص څخه ولوستل شول.`,
@@ -18581,6 +18832,7 @@ export const CATALOG = {
         indexNoteEstimate: "کله چې د ډرایو انډیکس لوستل کېږي، Windows پرمختګ نه راپور کوي، نو سلنه نشته — دا اټکل هغه وخت دی چې ستاسو وروستي سکین ونیو.",
         durationSeconds: (n) => `${n} ثانیې`,
         durationMinutes: (m, s) => `${m} دقیقې ${s} ثانیې`,
+        stopping: "ودرول کیږي…",
         scanAgain: "بیا سکین کړئ",
         retry: "بیا هڅه وکړئ",
         barLabel: "د سکین پرمختګ"
@@ -18590,11 +18842,14 @@ export const CATALOG = {
       truncated: {
         withCoverage: (measured, used, percent) => `دا سکن یې وخت پای ته ورسید: دا یې کارول شوي ${used} څخه ${measured} اندازه کړل (${percent}٪). هغه څه چې اندازه شوي واقعي دي؛ پاتې برخه د تشو پر ځای د نه سکن شوي په توګه ښودل کیږي.`,
         withoutCoverage: 'دا سکن یې وخت پای ته ورسید مخکې لدې چې ډرایو بشپړ کړي. هر هغه څه چې واقعیا اندازه شوي واقعي دي، خو هغه فولډرونه چې دا هیڅکله ورته نه دی رسیدلی د تشو پر ځای د نه سکن شوي په توګه ښودل کیږي — دا د خپل ځای کارونکي شیانو د بشپړ انځور په توګه مه لولئ.',
+        stoppedWithCoverage: (a, b, c) => `تاسو دا سکن ودراوه: دا یې کارول شوي ${b} څخه ${a} اندازه کړل (${c}٪). هغه څه چې اندازه شوي واقعي دي؛ پاتې برخه د تشو پر ځای د نه سکن شوي په توګه ښودل کیږي.`,
+        stoppedWithoutCoverage: "تاسو دا سکن وختي ودراوه. هغه څه چې اندازه شوي واقعي دي؛ هغه پوښۍ چې ورته نه دی رسېدلی د تشو پر ځای د نه سکن شویو په توګه ښودل کیږي — دا د هغه څه بشپړ انځور مه ګڼئ چې ستاسو ځای کاروي.",
         rescanLink: 'پرځای یې یو چټک سکن پیل کړئ'
       },
       view: { tree: 'ونه', files: 'فایلونه' },
       folderTable: {
         empty: 'د دې فولډر دننه لیست کولو لپاره هیڅ شی نشته.',
+        rowLabel: (a, b) => `${a} خلاص کړئ، ${b}`,
         notScanned: 'نه دی سکن شوی',
         columns: { folder: 'فولډر', size: 'اندازه', items: 'توکي', files: 'فایلونه', folders: 'فولډرونه', modified: 'بدل شوی' }
       },
@@ -18611,6 +18866,7 @@ export const CATALOG = {
         aggregated: 'د دې فولډر ترټولو کوچني ننوتنې، سره یوځای شوي.',
         unscanned: 'سکن دې ته رسیدو مخکې ودریدل. اصلي اندازه نامعلومه ده.'
       },
+      rowActionsLabel: (a) => `د ${a} کړنې`,
       cellOpenLabel: (name) => `${name} خلاص کړئ`,
       contextMenu: {
         openInExplorer: 'په اکسپلورر کې خلاص کړئ',
@@ -18748,11 +19004,12 @@ export const CATALOG = {
         publisher: 'خپروونکی',
         status: 'حالت'
       },
-      switchAriaLabel: (enabled, name) => `د ننوتلو پر مهال ${name} ${enabled ? 'غیرفعالول' : 'فعالول'}`,
+      switchAriaLabel: (name) => `د ننوتلو پر مهال ${name} چلول`,
       status: {
         invalid: 'ناسمه',
         running: 'روان',
         notChecked: 'ونه چیک شوه',
+        off: "بند",
         notRunning: 'نه چلیږي'
       },
       groups: {
@@ -18771,6 +19028,8 @@ export const CATALOG = {
     duplicates: {
       title: 'دوه ځله شوي فایلونه',
       subtitle: 'هغه فایلونه چې بایټ په بایټ یو شان دي، نه یوازې د یو شان اندازې. دا هغه فولډر ته ورسوئ چیرې چې تاسو واقعیا شیان ساتئ — د یو ټول ډرایو لوستل چې دا د ځان سره پرتله کړي ډیر وخت نیسي پداسې حال کې چې دا ارزښت نلري، او ډیری وختونه د ماشین خپل فایلونه یې خپل کاپي کوي.',
+      folderPlaceholder: (a) => `د پوښۍ لارښود، د بېلګې په توګه ${a}`,
+      stoppedNote: "ودرول شو — هیڅ شی پرتله نه شو.",
       folderInputAriaLabel: 'د دوه ځلي موندلو لپاره فولډر',
       stop: 'ودرول',
       findButton: 'دوه ځله شوي ومومئ',
@@ -18788,6 +19047,7 @@ export const CATALOG = {
       keepNewest: 'نوی وساتئ',
       clear: 'پاک کول',
       truncatedWarning: 'سکینینګ مخکې ودرول شو، نو ممکن له دې څخه ډیر سیټونه وي.',
+      tags: { keep: "وساتئ", toQuarantine: "قرنطین ته" },
       group: {
         identicalCopies: (count, size) => `${count} ورته کاپي · هره یوه ${size}`,
         allTickedWarning: 'په دې سیټ کې هره کاپي نښه شوې ده — یوه لغوه کړئ ترڅو یې وساتئ.'
@@ -18801,7 +19061,7 @@ export const CATALOG = {
       modal: {
         label: 'دوه ځله شوي قرنطین ته لیږدول',
         heading: (count) => `${count} کاپي قرنطین ته لیږدول شي؟`,
-        body: (formatted) => `${formatted} بیرته ترلاسه شول. هر سیټ لږترلږه یوه کاپي ساتي، او هیڅ شی نه ړنګیږي — د قرنطین سکرین څخه یې هره یوه بیرته راوړئ.`,
+        body: (a) => `لیږدول یې ${a} خلاصوي کله چې قرنطین خالي کړئ. هر سیټ لږترلږه یوه کاپي ساتي، او هیڅ شی نه ړنګیږي — د قرنطین سکرین څخه یې هره یوه بیرته راوړئ.`,
         cancel: 'لغوه کول',
         confirmButton: 'قرنطین ته لیږدول'
       },
@@ -19276,6 +19536,7 @@ export const CATALOG = {
     },
     diskMap: {
       title: 'Uso do Disco',
+      unscannedLabel: "Não escaneado",
       aggregateCell: (count) => `${count} itens menores`,
       subtitle: 'O que está usando o espaço neste disco, e onde.',
       fastIndexSummary: (count) => `${count} arquivos e pastas lidos do próprio índice do disco.`,
@@ -19312,6 +19573,7 @@ export const CATALOG = {
         indexNoteEstimate: "O Windows não informa o progresso enquanto o índice da unidade é lido, então não há porcentagem — esta estimativa é o tempo que a sua última verificação levou.",
         durationSeconds: (n) => `${n} s`,
         durationMinutes: (m, s) => `${m} min ${s} s`,
+        stopping: "Parando…",
         scanAgain: "Verificar novamente",
         retry: "Tentar novamente",
         barLabel: "Progresso da verificação"
@@ -19321,11 +19583,14 @@ export const CATALOG = {
       truncated: {
         withCoverage: (measured, used, percent) => `Este escaneamento ficou sem tempo: mediu ${measured} dos ${used} em uso (${percent}%). O que foi medido é real; o resto aparece como não escaneado, não como vazio.`,
         withoutCoverage: 'Este escaneamento ficou sem tempo antes de terminar o disco. Tudo o que realmente mediu é real, mas as pastas que nunca alcançou aparecem como não escaneadas em vez de vazias — não interprete isso como uma imagem completa do que está usando seu espaço.',
+        stoppedWithCoverage: (a, b, c) => `Você parou este escaneamento: ele mediu ${a} dos ${b} em uso (${c}%). O que foi medido é real; o resto aparece como não escaneado, não como vazio.`,
+        stoppedWithoutCoverage: "Você parou este escaneamento antes do fim. O que foi medido é real; as pastas que não foram alcançadas aparecem como não escaneadas, não como vazias — não leia isto como um retrato completo do que ocupa espaço.",
         rescanLink: 'Executar um escaneamento rápido em vez disso'
       },
       view: { tree: 'Árvore', files: 'Arquivos' },
       folderTable: {
         empty: 'Nada para listar dentro desta pasta.',
+        rowLabel: (a, b) => `Abrir ${a}, ${b}`,
         notScanned: 'não escaneado',
         columns: { folder: 'Pasta', size: 'Tamanho', items: 'Itens', files: 'Arquivos', folders: 'Pastas', modified: 'Modificado' }
       },
@@ -19342,6 +19607,7 @@ export const CATALOG = {
         aggregated: 'As menores entradas desta pasta, agrupadas.',
         unscanned: 'O escaneamento parou antes de chegar aqui. O tamanho real é desconhecido.'
       },
+      rowActionsLabel: (a) => `Ações para ${a}`,
       cellOpenLabel: (name) => `Abrir ${name}`,
       contextMenu: {
         openInExplorer: 'Abrir no Explorador de Arquivos',
@@ -19479,11 +19745,12 @@ export const CATALOG = {
         publisher: 'Editor',
         status: 'Status'
       },
-      switchAriaLabel: (enabled, name) => `${enabled ? 'Desabilitar' : 'Habilitar'} ${name} ao entrar`,
+      switchAriaLabel: (name) => `Executar ${name} ao entrar`,
       status: {
         invalid: 'Inválido',
         running: 'Em execução',
         notChecked: 'Não verificado',
+        off: "Desligado",
         notRunning: 'Não está em execução'
       },
       groups: {
@@ -19502,6 +19769,8 @@ export const CATALOG = {
     duplicates: {
       title: 'Arquivos duplicados',
       subtitle: 'Arquivos idênticos byte a byte, não apenas do mesmo tamanho. Aponte para uma pasta onde você realmente guarda coisas — ler um disco inteiro para compará-lo consigo mesmo leva muito mais tempo do que vale a pena, e encontra principalmente as próprias cópias da máquina de seus próprios arquivos.',
+      folderPlaceholder: (a) => `Caminho da pasta, por exemplo ${a}`,
+      stoppedNote: "Interrompido — nada foi comparado.",
       folderInputAriaLabel: 'Pasta onde procurar duplicados',
       stop: 'Parar',
       findButton: 'Localizar duplicados',
@@ -19519,6 +19788,7 @@ export const CATALOG = {
       keepNewest: 'Manter o mais recente',
       clear: 'Limpar',
       truncatedWarning: 'O escaneamento foi interrompido, então pode haver mais conjuntos do que estes.',
+      tags: { keep: "Manter", toQuarantine: "Para a quarentena" },
       group: {
         identicalCopies: (count, size) => `${count} cópias idênticas · ${size} cada`,
         allTickedWarning: 'Toda cópia neste conjunto está marcada — desmarque uma para mantê-la.'
@@ -19532,7 +19802,7 @@ export const CATALOG = {
       modal: {
         label: 'Mover duplicados para quarentena',
         heading: (count) => `Mover ${count} cópias para a quarentena?`,
-        body: (formatted) => `${formatted} recuperados. Cada conjunto mantém pelo menos uma cópia, e nada é excluído — restaure qualquer uma delas a partir da tela Quarentena.`,
+        body: (a) => `Movê-los libera ${a} quando você esvaziar a Quarentena. Cada conjunto mantém pelo menos uma cópia, e nada é excluído — restaure qualquer uma delas a partir da tela Quarentena.`,
         cancel: 'Cancelar',
         confirmButton: 'Mover para quarentena'
       },
@@ -20007,6 +20277,7 @@ export const CATALOG = {
     },
     diskMap: {
       title: 'Utilização do Disco',
+      unscannedLabel: "Não analisado",
       aggregateCell: (count) => `${count} itens mais pequenos`,
       subtitle: 'O que está a usar o espaço neste disco, e onde.',
       fastIndexSummary: (count) => `${count} ficheiros e pastas lidos a partir do próprio índice do disco.`,
@@ -20043,6 +20314,7 @@ export const CATALOG = {
         indexNoteEstimate: "O Windows não indica o progresso enquanto o índice da unidade é lido, por isso não há percentagem — esta estimativa é o tempo que a sua última análise demorou.",
         durationSeconds: (n) => `${n} s`,
         durationMinutes: (m, s) => `${m} min ${s} s`,
+        stopping: "A parar…",
         scanAgain: "Analisar novamente",
         retry: "Tentar novamente",
         barLabel: "Progresso da análise"
@@ -20052,11 +20324,14 @@ export const CATALOG = {
       truncated: {
         withCoverage: (measured, used, percent) => `Esta análise ficou sem tempo: mediu ${measured} dos ${used} em uso (${percent}%). O que mediu é real; o resto aparece como não analisado, não como vazio.`,
         withoutCoverage: 'Esta análise ficou sem tempo antes de concluir o disco. Tudo o que realmente mediu é real, mas as pastas que nunca alcançou aparecem como não analisadas em vez de vazias — não leia isto como uma imagem completa do que está a usar o seu espaço.',
+        stoppedWithCoverage: (a, b, c) => `Parou esta análise: mediu ${a} dos ${b} em uso (${c}%). O que mediu é real; o resto aparece como não analisado, não como vazio.`,
+        stoppedWithoutCoverage: "Parou esta análise antes do fim. O que mediu é real; as pastas que não alcançou aparecem como não analisadas, não como vazias — não veja isto como um retrato completo do que ocupa espaço.",
         rescanLink: 'Executar antes uma análise rápida'
       },
       view: { tree: 'Árvore', files: 'Ficheiros' },
       folderTable: {
         empty: 'Nada para listar dentro desta pasta.',
+        rowLabel: (a, b) => `Abrir ${a}, ${b}`,
         notScanned: 'não analisado',
         columns: { folder: 'Pasta', size: 'Tamanho', items: 'Itens', files: 'Ficheiros', folders: 'Pastas', modified: 'Modificado' }
       },
@@ -20073,6 +20348,7 @@ export const CATALOG = {
         aggregated: 'As entradas mais pequenas desta pasta, agrupadas.',
         unscanned: 'A análise parou antes de chegar aqui. O tamanho real é desconhecido.'
       },
+      rowActionsLabel: (a) => `Ações para ${a}`,
       cellOpenLabel: (name) => `Abrir ${name}`,
       contextMenu: {
         openInExplorer: 'Abrir no Explorador',
@@ -20210,11 +20486,12 @@ export const CATALOG = {
         publisher: 'Editor',
         status: 'Estado'
       },
-      switchAriaLabel: (enabled, name) => `${enabled ? 'Desativar' : 'Ativar'} ${name} ao iniciar sessão`,
+      switchAriaLabel: (name) => `Executar ${name} ao iniciar sessão`,
       status: {
         invalid: 'Inválido',
         running: 'Em execução',
         notChecked: 'Não verificado',
+        off: "Desligado",
         notRunning: 'Não está em execução'
       },
       groups: {
@@ -20233,6 +20510,8 @@ export const CATALOG = {
     duplicates: {
       title: 'Ficheiros duplicados',
       subtitle: 'Ficheiros idênticos byte a byte, não apenas do mesmo tamanho. Aponte-o para uma pasta onde realmente guarda coisas — ler um disco inteiro para o comparar consigo mesmo demora muito mais tempo do que vale a pena, e encontra sobretudo as próprias cópias da máquina dos seus próprios ficheiros.',
+      folderPlaceholder: (a) => `Caminho da pasta, por exemplo ${a}`,
+      stoppedNote: "Parado — nada foi comparado.",
       folderInputAriaLabel: 'Pasta onde procurar duplicados',
       stop: 'Parar',
       findButton: 'Localizar duplicados',
@@ -20250,6 +20529,7 @@ export const CATALOG = {
       keepNewest: 'Manter o mais recente',
       clear: 'Limpar',
       truncatedWarning: 'A verificação foi interrompida, pelo que pode haver mais conjuntos do que estes.',
+      tags: { keep: "Manter", toQuarantine: "Para a quarentena" },
       group: {
         identicalCopies: (count, size) => `${count} cópias idênticas · ${size} cada`,
         allTickedWarning: 'Todas as cópias neste conjunto estão assinaladas — desassinale uma para a manter.'
@@ -20263,7 +20543,7 @@ export const CATALOG = {
       modal: {
         label: 'Mover duplicados para quarentena',
         heading: (count) => `Mover ${count} cópias para a quarentena?`,
-        body: (formatted) => `${formatted} recuperados. Cada conjunto mantém pelo menos uma cópia, e nada é eliminado — restaure qualquer uma delas a partir do ecrã Quarentena.`,
+        body: (a) => `Movê-los liberta ${a} quando esvaziar a Quarentena. Cada conjunto mantém pelo menos uma cópia, e nada é eliminado — restaure qualquer uma delas a partir do ecrã Quarentena.`,
         cancel: 'Cancelar',
         confirmButton: 'Mover para quarentena'
       },
@@ -20738,6 +21018,7 @@ export const CATALOG = {
     },
     diskMap: {
       title: 'Utilizarea Discului',
+      unscannedLabel: "Nescanat",
       aggregateCell: (count) => `${count} elemente mai mici`,
       subtitle: 'Ce utilizează spațiul pe acest disc, și unde.',
       fastIndexSummary: (count) => `${count} fișiere și foldere citite din propriul index al discului.`,
@@ -20774,6 +21055,7 @@ export const CATALOG = {
         indexNoteEstimate: "Windows nu raportează progresul în timp ce indexul unității este citit, deci nu există procent — această estimare este durata ultimei tale scanări.",
         durationSeconds: (n) => `${n} s`,
         durationMinutes: (m, s) => `${m} min ${s} s`,
+        stopping: "Se oprește…",
         scanAgain: "Scanează din nou",
         retry: "Încearcă din nou",
         barLabel: "Progresul scanării"
@@ -20783,11 +21065,14 @@ export const CATALOG = {
       truncated: {
         withCoverage: (measured, used, percent) => `Această scanare a rămas fără timp: a măsurat ${measured} din cei ${used} utilizați (${percent}%). Ceea ce a măsurat este real; restul apare ca nescanat, nu ca gol.`,
         withoutCoverage: 'Această scanare a rămas fără timp înainte de a finaliza discul. Tot ce a măsurat efectiv este real, dar folderele la care nu a ajuns niciodată apar ca nescanate, nu ca goale — nu citiți asta ca o imagine completă a ceea ce vă utilizează spațiul.',
+        stoppedWithCoverage: (a, b, c) => `Ai oprit această scanare: a măsurat ${a} din cei ${b} utilizați (${c}%). Ceea ce a măsurat este real; restul apare ca nescanat, nu ca gol.`,
+        stoppedWithoutCoverage: "Ai oprit această scanare înainte de final. Ceea ce a măsurat este real; folderele la care nu a ajuns apar ca nescanate, nu ca goale — nu o citi ca pe o imagine completă a ceea ce ocupă spațiu.",
         rescanLink: 'Rulează în schimb o scanare rapidă'
       },
       view: { tree: 'Arbore', files: 'Fișiere' },
       folderTable: {
         empty: 'Nimic de listat în acest folder.',
+        rowLabel: (a, b) => `Deschide ${a}, ${b}`,
         notScanned: 'nescanat',
         columns: { folder: 'Folder', size: 'Dimensiune', items: 'Elemente', files: 'Fișiere', folders: 'Foldere', modified: 'Modificat' }
       },
@@ -20804,6 +21089,7 @@ export const CATALOG = {
         aggregated: 'Cele mai mici intrări din acest folder, grupate împreună.',
         unscanned: 'Scanarea s-a oprit înainte de a ajunge aici. Dimensiunea reală este necunoscută.'
       },
+      rowActionsLabel: (a) => `Acțiuni pentru ${a}`,
       cellOpenLabel: (name) => `Deschide ${name}`,
       contextMenu: {
         openInExplorer: 'Deschide în Explorer',
@@ -20941,11 +21227,12 @@ export const CATALOG = {
         publisher: 'Editor',
         status: 'Stare'
       },
-      switchAriaLabel: (enabled, name) => `${enabled ? 'Dezactivează' : 'Activează'} ${name} la conectare`,
+      switchAriaLabel: (name) => `Rulează ${name} la conectare`,
       status: {
         invalid: 'Nevalid',
         running: 'În execuție',
         notChecked: 'Neverificat',
+        off: "Oprit",
         notRunning: 'Nu rulează'
       },
       groups: {
@@ -20964,6 +21251,8 @@ export const CATALOG = {
     duplicates: {
       title: 'Fișiere duplicate',
       subtitle: 'Fișiere identice octet cu octet, nu doar de aceeași dimensiune. Îndreaptă-l către un folder în care chiar păstrezi lucruri — citirea unui întreg disc pentru a-l compara cu el însuși durează mult mai mult decât merită și găsește în cea mai mare parte propriile copii ale calculatorului din propriile sale fișiere.',
+      folderPlaceholder: (a) => `Calea folderului, de exemplu ${a}`,
+      stoppedNote: "Oprit — nimic nu a fost comparat.",
       folderInputAriaLabel: 'Folder în care se caută duplicate',
       stop: 'Oprește',
       findButton: 'Caută duplicate',
@@ -20981,6 +21270,7 @@ export const CATALOG = {
       keepNewest: 'Păstrează cel mai nou',
       clear: 'Golește',
       truncatedWarning: 'Scanarea a fost întreruptă, deci pot exista mai multe seturi decât acestea.',
+      tags: { keep: "Păstrează", toQuarantine: "În carantină" },
       group: {
         identicalCopies: (count, size) => `${count} copii identice · ${size} fiecare`,
         allTickedWarning: 'Fiecare copie din acest set este bifată — debifează una pentru a o păstra.'
@@ -20994,7 +21284,7 @@ export const CATALOG = {
       modal: {
         label: 'Mută duplicatele în carantină',
         heading: (count) => `Muți ${count} copii în carantină?`,
-        body: (formatted) => `${formatted} recuperați. Fiecare set păstrează cel puțin o copie, și nimic nu este șters — restaurează oricare dintre ele din ecranul Carantină.`,
+        body: (a) => `Mutarea lor eliberează ${a} după ce golești Carantina. Fiecare set păstrează cel puțin o copie, și nimic nu este șters — restaurează oricare dintre ele din ecranul Carantină.`,
         cancel: 'Anulează',
         confirmButton: 'Mută în carantină'
       },
@@ -21469,6 +21759,7 @@ export const CATALOG = {
     },
     diskMap: {
       title: 'Использование Диска',
+      unscannedLabel: "Не сканировано",
       aggregateCell: (count) => `${count} меньших элементов`,
       subtitle: 'Что использует место на этом диске, и где.',
       fastIndexSummary: (count) => `${count} файлов и папок прочитано из собственного индекса диска.`,
@@ -21505,6 +21796,7 @@ export const CATALOG = {
         indexNoteEstimate: "Пока читается индекс диска, Windows не сообщает о ходе выполнения, поэтому процент не показывается — эта оценка равна длительности вашего последнего сканирования.",
         durationSeconds: (n) => `${n} с`,
         durationMinutes: (m, s) => `${m} мин ${s} с`,
+        stopping: "Остановка…",
         scanAgain: "Сканировать снова",
         retry: "Повторить",
         barLabel: "Ход сканирования"
@@ -21514,11 +21806,14 @@ export const CATALOG = {
       truncated: {
         withCoverage: (measured, used, percent) => `У этого сканирования закончилось время: измерено ${measured} из ${used} используемых (${percent}%). То, что измерено, реально; остальное отображается как несканированное, а не как пустое.`,
         withoutCoverage: 'У этого сканирования закончилось время до завершения диска. Всё, что было фактически измерено, реально, но папки, которых оно так и не достигло, отображаются как несканированные, а не пустые — не воспринимайте это как полную картину того, что занимает ваше место.',
+        stoppedWithCoverage: (a, b, c) => `Вы остановили это сканирование: измерено ${a} из ${b} используемых (${c}%). То, что измерено, реально; остальное отображается как несканированное, а не как пустое.`,
+        stoppedWithoutCoverage: "Вы остановили это сканирование досрочно. То, что измерено, реально; папки, до которых оно не дошло, отображаются как несканированные, а не как пустые — не воспринимайте это как полную картину того, что занимает место.",
         rescanLink: 'Вместо этого запустить быстрое сканирование'
       },
       view: { tree: 'Дерево', files: 'Файлы' },
       folderTable: {
         empty: 'В этой папке нечего перечислять.',
+        rowLabel: (a, b) => `Открыть ${a}, ${b}`,
         notScanned: 'не сканировано',
         columns: { folder: 'Папка', size: 'Размер', items: 'Элементы', files: 'Файлы', folders: 'Папки', modified: 'Изменено' }
       },
@@ -21535,6 +21830,7 @@ export const CATALOG = {
         aggregated: 'Самые маленькие записи в этой папке, сгруппированные вместе.',
         unscanned: 'Сканирование остановилось до достижения этого места. Реальный размер неизвестен.'
       },
+      rowActionsLabel: (a) => `Действия для ${a}`,
       cellOpenLabel: (name) => `Открыть ${name}`,
       contextMenu: {
         openInExplorer: 'Открыть в проводнике',
@@ -21672,11 +21968,12 @@ export const CATALOG = {
         publisher: 'Издатель',
         status: 'Состояние'
       },
-      switchAriaLabel: (enabled, name) => `${enabled ? 'Отключить' : 'Включить'} ${name} при входе`,
+      switchAriaLabel: (name) => `Запускать ${name} при входе`,
       status: {
         invalid: 'Недействительно',
         running: 'Работает',
         notChecked: 'Не проверено',
+        off: "Выкл.",
         notRunning: 'Не запущено'
       },
       groups: {
@@ -21695,6 +21992,8 @@ export const CATALOG = {
     duplicates: {
       title: 'Повторяющиеся файлы',
       subtitle: 'Файлы, идентичные побайтово, а не просто одинакового размера. Укажите папку, в которой вы действительно храните вещи — чтение всего диска для сравнения его с самим собой занимает намного больше времени, чем оно того стоит, и в основном находит собственные копии машиной своих же файлов.',
+      folderPlaceholder: (a) => `Путь к папке, например ${a}`,
+      stoppedNote: "Остановлено — ничего не сравнивалось.",
       folderInputAriaLabel: 'Папка для поиска дубликатов',
       stop: 'Остановить',
       findButton: 'Найти дубликаты',
@@ -21712,6 +22011,7 @@ export const CATALOG = {
       keepNewest: 'Оставить самый новый',
       clear: 'Очистить',
       truncatedWarning: 'Сканирование было прервано раньше времени, так что наборов может быть больше, чем показано.',
+      tags: { keep: "Оставить", toQuarantine: "В карантин" },
       group: {
         identicalCopies: (count, size) => `Идентичных копий: ${count} · по ${size}`,
         allTickedWarning: 'Каждая копия в этом наборе отмечена — снимите отметку с одной, чтобы оставить её.'
@@ -21725,7 +22025,7 @@ export const CATALOG = {
       modal: {
         label: 'Переместить дубликаты в карантин',
         heading: (count) => `Переместить ${count} копий в карантин?`,
-        body: (formatted) => `${formatted} будет освобождено. В каждом наборе сохраняется минимум одна копия, и ничего не удаляется — восстановите любую из них с экрана Карантин.`,
+        body: (a) => `После переноса будет освобождено ${a}, когда вы очистите Карантин. В каждом наборе сохраняется минимум одна копия, и ничего не удаляется — восстановите любую из них с экрана Карантин.`,
         cancel: 'Отмена',
         confirmButton: 'Переместить в карантин'
       },
@@ -22200,6 +22500,7 @@ export const CATALOG = {
     },
     diskMap: {
       title: 'Využitie Disku',
+      unscannedLabel: "Neprehľadané",
       aggregateCell: (count) => `${count} menších položiek`,
       subtitle: 'Čo využíva miesto na tomto disku a kde.',
       fastIndexSummary: (count) => `${count} súborov a priečinkov načítaných z vlastného indexu disku.`,
@@ -22236,6 +22537,7 @@ export const CATALOG = {
         indexNoteEstimate: "Windows počas čítania indexu disku nehlási priebeh, preto sa nezobrazuje percento — tento odhad vychádza z dĺžky vášho posledného skenovania.",
         durationSeconds: (n) => `${n} s`,
         durationMinutes: (m, s) => `${m} min ${s} s`,
+        stopping: "Zastavuje sa…",
         scanAgain: "Skenovať znova",
         retry: "Skúsiť znova",
         barLabel: "Priebeh skenovania"
@@ -22245,11 +22547,14 @@ export const CATALOG = {
       truncated: {
         withCoverage: (measured, used, percent) => `Tomuto prehľadaniu vypršal čas: zmeralo ${measured} z ${used} využitého miesta (${percent} %). To, čo zmeralo, je skutočné; zvyšok sa zobrazuje ako neprehľadaný, nie ako prázdny.`,
         withoutCoverage: 'Tomuto prehľadaniu vypršal čas skôr, ako dokončilo disk. Všetko, čo skutočne zmeralo, je skutočné, ale priečinky, ku ktorým sa nikdy nedostalo, sa zobrazujú ako neprehľadané, nie ako prázdne — neberte to ako úplný obraz toho, čo využíva vaše miesto.',
+        stoppedWithCoverage: (a, b, c) => `Toto prehľadávanie ste zastavili: zmeralo ${a} z ${b} využitého miesta (${c} %). To, čo zmeralo, je skutočné; zvyšok sa zobrazuje ako neprehľadaný, nie ako prázdny.`,
+        stoppedWithoutCoverage: "Toto prehľadávanie ste zastavili predčasne. To, čo zmeralo, je skutočné; priečinky, ktoré nestihlo, sa zobrazujú ako neprehľadané, nie ako prázdne — nepovažujte to za úplný obraz toho, čo zaberá miesto.",
         rescanLink: 'Namiesto toho spustiť rýchle prehľadanie'
       },
       view: { tree: 'Strom', files: 'Súbory' },
       folderTable: {
         empty: 'V tomto priečinku nie je nič na zobrazenie.',
+        rowLabel: (a, b) => `Otvoriť ${a}, ${b}`,
         notScanned: 'neprehľadané',
         columns: { folder: 'Priečinok', size: 'Veľkosť', items: 'Položky', files: 'Súbory', folders: 'Priečinky', modified: 'Zmenené' }
       },
@@ -22266,6 +22571,7 @@ export const CATALOG = {
         aggregated: 'Najmenšie položky v tomto priečinku, zoskupené spolu.',
         unscanned: 'Prehľadanie sa zastavilo, kým sa sem dostalo. Skutočná veľkosť nie je známa.'
       },
+      rowActionsLabel: (a) => `Akcie pre ${a}`,
       cellOpenLabel: (name) => `Otvoriť ${name}`,
       contextMenu: {
         openInExplorer: 'Otvoriť v Prieskumníkovi',
@@ -22403,11 +22709,12 @@ export const CATALOG = {
         publisher: 'Vydavateľ',
         status: 'Stav'
       },
-      switchAriaLabel: (enabled, name) => `${enabled ? 'Zakázať' : 'Povoliť'} ${name} pri prihlásení`,
+      switchAriaLabel: (name) => `Spúšťať ${name} pri prihlásení`,
       status: {
         invalid: 'Neplatné',
         running: 'Spustené',
         notChecked: 'Neskontrolované',
+        off: "Vypnuté",
         notRunning: 'Nespustené'
       },
       groups: {
@@ -22426,6 +22733,8 @@ export const CATALOG = {
     duplicates: {
       title: 'Duplicitné súbory',
       subtitle: 'Súbory, ktoré sú bajt po bajte identické, nielen rovnako veľké. Nasmerujte to na priečinok, kde skutočne uchovávate veci — čítanie celého disku na porovnanie so sebou samým trvá oveľa dlhšie, než sa oplatí, a väčšinou nájde vlastné kópie počítača z jeho vlastných súborov.',
+      folderPlaceholder: (a) => `Cesta k priečinku, napríklad ${a}`,
+      stoppedNote: "Zastavené — nič sa neporovnalo.",
       folderInputAriaLabel: 'Priečinok, v ktorom sa majú hľadať duplicity',
       stop: 'Zastaviť',
       findButton: 'Nájsť duplicity',
@@ -22443,6 +22752,7 @@ export const CATALOG = {
       keepNewest: 'Ponechať najnovšiu',
       clear: 'Vymazať',
       truncatedWarning: 'Skenovanie bolo predčasne ukončené, takže sád môže byť viac ako tieto.',
+      tags: { keep: "Ponechať", toQuarantine: "Do karantény" },
       group: {
         identicalCopies: (count, size) => `${count} identických kópií · po ${size}`,
         allTickedWarning: 'Každá kópia v tejto sade je zaškrtnutá — odškrtnite jednu, aby ste ju ponechali.'
@@ -22456,7 +22766,7 @@ export const CATALOG = {
       modal: {
         label: 'Presunúť duplicity do karantény',
         heading: (count) => `Presunúť ${count} kópií do karantény?`,
-        body: (formatted) => `Uvoľnených ${formatted}. Každá sada si ponechá aspoň jednu kópiu a nič sa nezmaže — ktorúkoľvek z nich môžete obnoviť z obrazovky Karanténa.`,
+        body: (a) => `Presunom sa uvoľní ${a}, keď vyprázdnite Karanténu. Každá sada si ponechá aspoň jednu kópiu a nič sa nezmaže — ktorúkoľvek z nich môžete obnoviť z obrazovky Karanténa.`,
         cancel: 'Zrušiť',
         confirmButton: 'Presunúť do karantény'
       },
@@ -22931,6 +23241,7 @@ export const CATALOG = {
     },
     diskMap: {
       title: 'Përdorimi i Diskut',
+      unscannedLabel: "Pa skanuar",
       aggregateCell: (count) => `${count} elemente më të vogla`,
       subtitle: 'Çfarë po përdor hapësirën në këtë disk, dhe ku.',
       fastIndexSummary: (count) => `${count} skedarë dhe dosje u lexuan nga vetë indeksi i diskut.`,
@@ -22967,6 +23278,7 @@ export const CATALOG = {
         indexNoteEstimate: "Windows nuk raporton përparim ndërsa lexohet indeksi i diskut, prandaj nuk ka përqindje — ky vlerësim është sa zgjati skanimi juaj i fundit.",
         durationSeconds: (n) => `${n} s`,
         durationMinutes: (m, s) => `${m} min ${s} s`,
+        stopping: "Po ndalet…",
         scanAgain: "Skano përsëri",
         retry: "Provo përsëri",
         barLabel: "Përparimi i skanimit"
@@ -22976,11 +23288,14 @@ export const CATALOG = {
       truncated: {
         withCoverage: (measured, used, percent) => `Këtij skanimi i mbaroi koha: matëi ${measured} nga ${used} në përdorim (${percent}%). Ajo që u mat është reale; pjesa tjetër shfaqet si e paskanuar, jo si bosh.`,
         withoutCoverage: 'Këtij skanimi i mbaroi koha para se të përfundonte diskun. Gjithçka që u mat në fakt është reale, por dosjet ku nuk arriti kurrë shfaqen si të paskanuara në vend të bosh — mos e lexoni këtë si një pamje të plotë të asaj që po përdor hapësirën tuaj.',
+        stoppedWithCoverage: (a, b, c) => `E ndalove këtë skanim: matëi ${a} nga ${b} në përdorim (${c}%). Ajo që u mat është reale; pjesa tjetër shfaqet si e paskanuar, jo si bosh.`,
+        stoppedWithoutCoverage: "E ndalove këtë skanim para kohe. Ajo që u mat është reale; dosjet që nuk u arritën shfaqen si të paskanuara, jo si bosh — mos e lexo si pamje të plotë të asaj që zë hapësirë.",
         rescanLink: 'Ekzekuto në vend të kësaj një skanim të shpejtë'
       },
       view: { tree: 'Pema', files: 'Skedarët' },
       folderTable: {
         empty: 'Asgjë për të listuar brenda kësaj dosjeje.',
+        rowLabel: (a, b) => `Hap ${a}, ${b}`,
         notScanned: 'e paskanuar',
         columns: { folder: 'Dosja', size: 'Madhësia', items: 'Elementet', files: 'Skedarët', folders: 'Dosjet', modified: 'Modifikuar' }
       },
@@ -22997,6 +23312,7 @@ export const CATALOG = {
         aggregated: 'Hyrjet më të vogla në këtë dosje, të grupuara së bashku.',
         unscanned: 'Skanimi u ndal para se të arrinte këtu. Madhësia reale është e panjohur.'
       },
+      rowActionsLabel: (a) => `Veprime për ${a}`,
       cellOpenLabel: (name) => `Hap ${name}`,
       contextMenu: {
         openInExplorer: 'Hap në Explorer',
@@ -23134,11 +23450,12 @@ export const CATALOG = {
         publisher: 'Botuesi',
         status: 'Statusi'
       },
-      switchAriaLabel: (enabled, name) => `${enabled ? 'Çaktivizo' : 'Aktivizo'} ${name} në hyrje`,
+      switchAriaLabel: (name) => `Ekzekuto ${name} në hyrje`,
       status: {
         invalid: 'I pavlefshëm',
         running: 'Në ekzekutim',
         notChecked: 'I pakontrolluar',
+        off: "Joaktiv",
         notRunning: 'Nuk po ekzekutohet'
       },
       groups: {
@@ -23157,6 +23474,8 @@ export const CATALOG = {
     duplicates: {
       title: 'Skedarë të dyfishtë',
       subtitle: 'Skedarë identikë bajt për bajt, jo thjesht të së njëjtës madhësi. Drejtoje te një dosje ku vërtet mban gjëra — leximi i një disku të tërë për ta krahasuar me veten e tij zgjat shumë më tepër se sa vlen, dhe gjen kryesisht kopjet e vetë makinës nga skedarët e saj.',
+      folderPlaceholder: (a) => `Rruga e dosjes, për shembull ${a}`,
+      stoppedNote: "U ndal — nuk u krahasua asgjë.",
       folderInputAriaLabel: 'Dosja ku të kërkohen dublikatat',
       stop: 'Ndalo',
       findButton: 'Gjej dublikatat',
@@ -23174,6 +23493,7 @@ export const CATALOG = {
       keepNewest: 'Mbaj më të renë',
       clear: 'Pastro',
       truncatedWarning: 'Skanimi u ndërpre para kohe, kështu që mund të ketë më shumë bashkësi se këto.',
+      tags: { keep: "Mbaj", toQuarantine: "Në karantinë" },
       group: {
         identicalCopies: (count, size) => `${count} kopje identike · ${size} secila`,
         allTickedWarning: 'Çdo kopje në këtë bashkësi është shënuar — hiq shenjën nga një për ta mbajtur.'
@@ -23187,7 +23507,7 @@ export const CATALOG = {
       modal: {
         label: 'Lëviz dublikatat në karantinë',
         heading: (count) => `Të lëvizen ${count} kopje në karantinë?`,
-        body: (formatted) => `${formatted} u rikuperuan. Çdo bashkësi mban të paktën një kopje, dhe asgjë nuk fshihet — rikthe çdo gjë prej saj nga ekrani i Karantinës.`,
+        body: (a) => `Zhvendosja i çliron ${a} sapo ta zbosh Karantinën. Çdo bashkësi mban të paktën një kopje, dhe asgjë nuk fshihet — rikthe çdo gjë prej saj nga ekrani i Karantinës.`,
         cancel: 'Anulo',
         confirmButton: 'Lëviz në karantinë'
       },
@@ -23662,6 +23982,7 @@ export const CATALOG = {
     },
     diskMap: {
       title: 'Искоришћеност Диска',
+      unscannedLabel: "Није скенирано",
       aggregateCell: (count) => `${count} мањих ставки`,
       subtitle: 'Шта користи простор на овом диску, и где.',
       fastIndexSummary: (count) => `${count} датотека и фасцикли прочитано из сопственог индекса диска.`,
@@ -23698,6 +24019,7 @@ export const CATALOG = {
         indexNoteEstimate: "Док се чита индекс диска, Windows не пријављује напредак, па се проценат не приказује — ова процена је трајање вашег последњег скенирања.",
         durationSeconds: (n) => `${n} с`,
         durationMinutes: (m, s) => `${m} мин ${s} с`,
+        stopping: "Заустављање…",
         scanAgain: "Скенирај поново",
         retry: "Покушај поново",
         barLabel: "Напредак скенирања"
@@ -23707,11 +24029,14 @@ export const CATALOG = {
       truncated: {
         withCoverage: (measured, used, percent) => `Овом скенирању је истекло време: измерило је ${measured} од ${used} који се користе (${percent}%). Оно што је измерено је стварно; остатак се приказује као нескениран, не као празан.`,
         withoutCoverage: 'Овом скенирању је истекло време пре него што је завршило диск. Све што је заиста измерено је стварно, али фасцикле до којих никада није стигло приказују се као нескениране, а не као празне — не читајте ово као потпуну слику онога што користи ваш простор.',
+        stoppedWithCoverage: (a, b, c) => `Зауставили сте ово скенирање: измерило је ${a} од ${b} који се користе (${c}%). Оно што је измерено је стварно; остатак се приказује као нескениран, не као празан.`,
+        stoppedWithoutCoverage: "Зауставили сте ово скенирање пре краја. Оно што је измерено је стварно; фасцикле до којих није стигло приказују се као нескениране, не као празне — немојте то читати као потпуну слику онога што заузима простор.",
         rescanLink: 'Уместо тога покрени брзо скенирање'
       },
       view: { tree: 'Стабло', files: 'Датотеке' },
       folderTable: {
         empty: 'Нема ништа за приказ у овој фасцикли.',
+        rowLabel: (a, b) => `Отвори ${a}, ${b}`,
         notScanned: 'није скенирано',
         columns: { folder: 'Фасцикла', size: 'Величина', items: 'Ставке', files: 'Датотеке', folders: 'Фасцикле', modified: 'Измењено' }
       },
@@ -23728,6 +24053,7 @@ export const CATALOG = {
         aggregated: 'Најмање ставке у овој фасцикли, груписане заједно.',
         unscanned: 'Скенирање се зауставило пре него што је стигло овде. Стварна величина је непозната.'
       },
+      rowActionsLabel: (a) => `Радње за ${a}`,
       cellOpenLabel: (name) => `Отвори ${name}`,
       contextMenu: {
         openInExplorer: 'Отвори у Истраживачу',
@@ -23865,11 +24191,12 @@ export const CATALOG = {
         publisher: 'Издавач',
         status: 'Статус'
       },
-      switchAriaLabel: (enabled, name) => `${enabled ? 'Онемогући' : 'Омогући'} ${name} при пријави`,
+      switchAriaLabel: (name) => `Покрени ${name} при пријави`,
       status: {
         invalid: 'Неважеће',
         running: 'Покренуто',
         notChecked: 'Није проверено',
+        off: "Искључено",
         notRunning: 'Није покренуто'
       },
       groups: {
@@ -23888,6 +24215,8 @@ export const CATALOG = {
     duplicates: {
       title: 'Дуплирани фајлови',
       subtitle: 'Фајлови који су идентични бајт по бајт, не само исте величине. Усмерите то на фасциклу у коју заиста чувате ствари — читање целог диска да би се упоредио са самим собом траје много дуже него што вреди, и углавном проналази сопствене копије машине сопствених фајлова.',
+      folderPlaceholder: (a) => `Путања фасцикле, на пример ${a}`,
+      stoppedNote: "Заустављено — ништа није упоређено.",
       folderInputAriaLabel: 'Фасцикла за претрагу дупликата',
       stop: 'Заустави',
       findButton: 'Пронађи дупликате',
@@ -23905,6 +24234,7 @@ export const CATALOG = {
       keepNewest: 'Задржи најновији',
       clear: 'Обриши',
       truncatedWarning: 'Скенирање је прекинуто пре времена, тако да можда има више скупова од ових.',
+      tags: { keep: "Задржи", toQuarantine: "У карантин" },
       group: {
         identicalCopies: (count, size) => `${count} идентичних копија · по ${size}`,
         allTickedWarning: 'Свака копија у овом скупу је означена — уклоните ознаку са једне да бисте је задржали.'
@@ -23918,7 +24248,7 @@ export const CATALOG = {
       modal: {
         label: 'Премести дупликате у карантин',
         heading: (count) => `Преместити ${count} копија у карантин?`,
-        body: (formatted) => `${formatted} ослобођено. Сваки скуп задржава најмање једну копију, и ништа се не брише — вратите било коју од њих са екрана Карантин.`,
+        body: (a) => `Премештањем се ослобађа ${a} када испразните Карантин. Сваки скуп задржава најмање једну копију, и ништа се не брише — вратите било коју од њих са екрана Карантин.`,
         cancel: 'Откажи',
         confirmButton: 'Премести у карантин'
       },
@@ -24393,6 +24723,7 @@ export const CATALOG = {
     },
     diskMap: {
       title: 'Diskanvändning',
+      unscannedLabel: "Ej skannad",
       aggregateCell: (count) => `${count} mindre objekt`,
       subtitle: 'Vad som använder utrymmet på den här disken, och var.',
       fastIndexSummary: (count) => `${count} filer och mappar lästa från diskens eget register.`,
@@ -24429,6 +24760,7 @@ export const CATALOG = {
         indexNoteEstimate: "Windows rapporterar ingen förloppsinformation medan enhetens index läses, så ingen procentsats visas – uppskattningen är hur lång tid din senaste skanning tog.",
         durationSeconds: (n) => `${n} s`,
         durationMinutes: (m, s) => `${m} min ${s} s`,
+        stopping: "Stoppar…",
         scanAgain: "Skanna igen",
         retry: "Försök igen",
         barLabel: "Skanningsförlopp"
@@ -24438,11 +24770,14 @@ export const CATALOG = {
       truncated: {
         withCoverage: (measured, used, percent) => `Denna skanning fick slut på tid: den mätte ${measured} av de ${used} som används (${percent} %). Det som mättes är verkligt; resten visas som oskannat, inte som tomt.`,
         withoutCoverage: 'Denna skanning fick slut på tid innan den slutförde disken. Allt den faktiskt mätte är verkligt, men mappar den aldrig nådde visas som oskannade i stället för tomma — läs inte detta som en fullständig bild av vad som använder ditt utrymme.',
+        stoppedWithCoverage: (a, b, c) => `Du stoppade den här skanningen: den mätte ${a} av de ${b} som används (${c} %). Det som mättes är verkligt; resten visas som oskannat, inte som tomt.`,
+        stoppedWithoutCoverage: "Du stoppade den här skanningen i förtid. Det som mättes är verkligt; mappar den aldrig nådde visas som oskannade, inte som tomma — läs inte detta som en fullständig bild av vad som använder ditt utrymme.",
         rescanLink: 'Kör en snabbskanning istället'
       },
       view: { tree: 'Träd', files: 'Filer' },
       folderTable: {
         empty: 'Inget att visa i den här mappen.',
+        rowLabel: (a, b) => `Öppna ${a}, ${b}`,
         notScanned: 'ej skannad',
         columns: { folder: 'Mapp', size: 'Storlek', items: 'Objekt', files: 'Filer', folders: 'Mappar', modified: 'Ändrad' }
       },
@@ -24459,6 +24794,7 @@ export const CATALOG = {
         aggregated: 'De minsta posterna i den här mappen, grupperade.',
         unscanned: 'Skanningen stoppade innan den nådde hit. Den verkliga storleken är okänd.'
       },
+      rowActionsLabel: (a) => `Åtgärder för ${a}`,
       cellOpenLabel: (name) => `Öppna ${name}`,
       contextMenu: {
         openInExplorer: 'Öppna i Utforskaren',
@@ -24596,11 +24932,12 @@ export const CATALOG = {
         publisher: 'Utgivare',
         status: 'Status'
       },
-      switchAriaLabel: (enabled, name) => `${enabled ? 'Inaktivera' : 'Aktivera'} ${name} vid inloggning`,
+      switchAriaLabel: (name) => `Kör ${name} vid inloggning`,
       status: {
         invalid: 'Ogiltig',
         running: 'Körs',
         notChecked: 'Ej kontrollerad',
+        off: "Av",
         notRunning: 'Körs inte'
       },
       groups: {
@@ -24619,6 +24956,8 @@ export const CATALOG = {
     duplicates: {
       title: 'Dubbletter',
       subtitle: 'Filer som är byte-för-byte identiska, inte bara samma storlek. Rikta det mot en mapp där du faktiskt förvarar saker — att läsa en hel enhet för att jämföra den med sig själv tar mycket längre tid än det är värt, och hittar mest maskinens egna kopior av sina egna filer.',
+      folderPlaceholder: (a) => `Sökväg till mapp, till exempel ${a}`,
+      stoppedNote: "Stoppad – inget jämfördes.",
       folderInputAriaLabel: 'Mapp att söka efter dubbletter i',
       stop: 'Stoppa',
       findButton: 'Hitta dubbletter',
@@ -24636,6 +24975,7 @@ export const CATALOG = {
       keepNewest: 'Behåll nyaste',
       clear: 'Rensa',
       truncatedWarning: 'Skanningen avbröts, så det kan finnas fler set än dessa.',
+      tags: { keep: "Behåll", toQuarantine: "Till karantän" },
       group: {
         identicalCopies: (count, size) => `${count} identiska kopior · ${size} vardera`,
         allTickedWarning: 'Varje kopia i detta set är markerad — avmarkera en för att behålla den.'
@@ -24649,7 +24989,7 @@ export const CATALOG = {
       modal: {
         label: 'Flytta dubbletter till karantän',
         heading: (count) => `Flytta ${count} kopior till karantän?`,
-        body: (formatted) => `${formatted} återvunnet. Varje set behåller minst en kopia, och inget raderas — återställ vilken som helst av dem från Karantän-skärmen.`,
+        body: (a) => `När du flyttar dem frigörs ${a} så fort du tömmer Karantän. Varje set behåller minst en kopia, och inget raderas — återställ vilken som helst av dem från Karantän-skärmen.`,
         cancel: 'Avbryt',
         confirmButton: 'Flytta till karantän'
       },
@@ -25124,6 +25464,7 @@ export const CATALOG = {
     },
     diskMap: {
       title: 'การใช้งานดิสก์',
+      unscannedLabel: "ยังไม่ได้สแกน",
       aggregateCell: (count) => `${count} รายการที่เล็กกว่า`,
       subtitle: 'อะไรกำลังใช้พื้นที่ในดิสก์นี้ และที่ไหน',
       fastIndexSummary: (count) => `อ่านไฟล์และโฟลเดอร์ ${count} รายการจากดัชนีของไดรฟ์เอง`,
@@ -25160,6 +25501,7 @@ export const CATALOG = {
         indexNoteEstimate: "Windows ไม่รายงานความคืบหน้าขณะอ่านดัชนีของไดรฟ์ จึงไม่แสดงเปอร์เซ็นต์ — ค่าประมาณนี้คือเวลาที่การสแกนครั้งล่าสุดของคุณใช้",
         durationSeconds: (n) => `${n} วิ`,
         durationMinutes: (m, s) => `${m} นาที ${s} วิ`,
+        stopping: "กำลังหยุด…",
         scanAgain: "สแกนอีกครั้ง",
         retry: "ลองอีกครั้ง",
         barLabel: "ความคืบหน้าการสแกน"
@@ -25169,11 +25511,14 @@ export const CATALOG = {
       truncated: {
         withCoverage: (measured, used, percent) => `การสแกนนี้หมดเวลา: วัดได้ ${measured} จากทั้งหมด ${used} ที่ใช้งาน (${percent}%) สิ่งที่วัดได้นั้นเป็นจริง ส่วนที่เหลือแสดงเป็นยังไม่ได้สแกน ไม่ใช่ว่างเปล่า`,
         withoutCoverage: 'การสแกนนี้หมดเวลาก่อนที่จะสแกนดิสก์เสร็จสมบูรณ์ สิ่งที่วัดได้จริงทั้งหมดเป็นข้อมูลจริง แต่โฟลเดอร์ที่ไม่เคยเข้าถึงจะแสดงเป็นยังไม่ได้สแกนแทนที่จะเป็นว่างเปล่า — อย่าตีความสิ่งนี้ว่าเป็นภาพรวมที่สมบูรณ์ของสิ่งที่ใช้พื้นที่ของคุณ',
+        stoppedWithCoverage: (a, b, c) => `คุณหยุดการสแกนนี้: วัดได้ ${a} จากทั้งหมด ${b} ที่ใช้งาน (${c}%) สิ่งที่วัดได้นั้นเป็นจริง ส่วนที่เหลือแสดงเป็นยังไม่ได้สแกน ไม่ใช่ว่างเปล่า`,
+        stoppedWithoutCoverage: "คุณหยุดการสแกนนี้ก่อนกำหนด สิ่งที่วัดได้นั้นเป็นจริง โฟลเดอร์ที่ยังไปไม่ถึงแสดงเป็นยังไม่ได้สแกน ไม่ใช่ว่างเปล่า — อย่าถือว่านี่เป็นภาพรวมทั้งหมดของสิ่งที่ใช้พื้นที่ของคุณ",
         rescanLink: 'เรียกใช้การสแกนแบบเร็วแทน'
       },
       view: { tree: 'ผังต้นไม้', files: 'ไฟล์' },
       folderTable: {
         empty: 'ไม่มีอะไรให้แสดงในโฟลเดอร์นี้',
+        rowLabel: (a, b) => `เปิด ${a}, ${b}`,
         notScanned: 'ยังไม่ได้สแกน',
         columns: { folder: 'โฟลเดอร์', size: 'ขนาด', items: 'รายการ', files: 'ไฟล์', folders: 'โฟลเดอร์', modified: 'แก้ไขล่าสุด' }
       },
@@ -25190,6 +25535,7 @@ export const CATALOG = {
         aggregated: 'รายการที่เล็กที่สุดในโฟลเดอร์นี้ ถูกจัดกลุ่มเข้าด้วยกัน',
         unscanned: 'การสแกนหยุดก่อนที่จะไปถึงจุดนี้ ขนาดจริงไม่ทราบแน่ชัด'
       },
+      rowActionsLabel: (a) => `การดำเนินการสำหรับ ${a}`,
       cellOpenLabel: (name) => `เปิด ${name}`,
       contextMenu: {
         openInExplorer: 'เปิดใน File Explorer',
@@ -25327,11 +25673,12 @@ export const CATALOG = {
         publisher: 'ผู้เผยแพร่',
         status: 'สถานะ'
       },
-      switchAriaLabel: (enabled, name) => `${enabled ? 'ปิดใช้งาน' : 'เปิดใช้งาน'} ${name} เมื่อลงชื่อเข้าใช้`,
+      switchAriaLabel: (name) => `เรียกใช้ ${name} เมื่อลงชื่อเข้าใช้`,
       status: {
         invalid: 'ไม่ถูกต้อง',
         running: 'กำลังทำงาน',
         notChecked: 'ยังไม่ได้ตรวจสอบ',
+        off: "ปิด",
         notRunning: 'ไม่ได้ทำงาน'
       },
       groups: {
@@ -25350,6 +25697,8 @@ export const CATALOG = {
     duplicates: {
       title: 'ไฟล์ที่ซ้ำกัน',
       subtitle: 'ไฟล์ที่เหมือนกันทุกไบต์ ไม่ใช่แค่ขนาดเท่ากัน ชี้ไปยังโฟลเดอร์ที่คุณเก็บสิ่งต่าง ๆ จริง ๆ — การอ่านทั้งไดรฟ์เพื่อเปรียบเทียบกับตัวเองใช้เวลานานกว่าที่คุ้มค่า และส่วนใหญ่จะพบสำเนาไฟล์ของเครื่องเองเท่านั้น',
+      folderPlaceholder: (a) => `เส้นทางโฟลเดอร์ เช่น ${a}`,
+      stoppedNote: "หยุดแล้ว — ยังไม่ได้เปรียบเทียบอะไร",
       folderInputAriaLabel: 'โฟลเดอร์สำหรับค้นหาไฟล์ที่ซ้ำกัน',
       stop: 'หยุด',
       findButton: 'ค้นหาไฟล์ที่ซ้ำกัน',
@@ -25367,6 +25716,7 @@ export const CATALOG = {
       keepNewest: 'เก็บไฟล์ใหม่สุด',
       clear: 'ล้าง',
       truncatedWarning: 'การสแกนถูกตัดให้สั้นลง ดังนั้นอาจมีชุดมากกว่านี้',
+      tags: { keep: "เก็บไว้", toQuarantine: "ไปยังกักกัน" },
       group: {
         identicalCopies: (count, size) => `${count} สำเนาที่เหมือนกัน · ชุดละ ${size}`,
         allTickedWarning: 'ทุกสำเนาในชุดนี้ถูกเลือกไว้ — ยกเลิกการเลือกหนึ่งรายการเพื่อเก็บไว้'
@@ -25380,7 +25730,7 @@ export const CATALOG = {
       modal: {
         label: 'ย้ายไฟล์ที่ซ้ำกันไปยังกักกัน',
         heading: (count) => `ย้าย ${count} สำเนาไปยังกักกันหรือไม่`,
-        body: (formatted) => `กู้คืนพื้นที่ได้ ${formatted} แต่ละชุดจะเก็บสำเนาไว้อย่างน้อยหนึ่งชุด และไม่มีอะไรถูกลบ — คุณสามารถกู้คืนรายการใดก็ได้จากหน้าจอกักกัน`,
+        body: (a) => `การย้ายจะคืนพื้นที่ ${a} เมื่อคุณล้างกักกัน แต่ละชุดจะเก็บสำเนาไว้อย่างน้อยหนึ่งชุด และไม่มีอะไรถูกลบ — คุณสามารถกู้คืนรายการใดก็ได้จากหน้าจอกักกัน`,
         cancel: 'ยกเลิก',
         confirmButton: 'ย้ายไปยังกักกัน'
       },
@@ -25855,6 +26205,7 @@ export const CATALOG = {
     },
     diskMap: {
       title: 'Disk Kullanımı',
+      unscannedLabel: "Taranmadı",
       aggregateCell: (count) => `${count} daha küçük öğe`,
       subtitle: 'Bu diskte alanı neyin kullandığı ve nerede.',
       fastIndexSummary: (count) => `Diskin kendi dizininden ${count} dosya ve klasör okundu.`,
@@ -25891,6 +26242,7 @@ export const CATALOG = {
         indexNoteEstimate: "Sürücü dizini okunurken Windows ilerleme bildirmez, bu yüzden yüzde gösterilmiyor — bu tahmin son taramanızın ne kadar sürdüğüdür.",
         durationSeconds: (n) => `${n} sn`,
         durationMinutes: (m, s) => `${m} dk ${s} sn`,
+        stopping: "Durduruluyor…",
         scanAgain: "Yeniden tara",
         retry: "Yeniden dene",
         barLabel: "Tarama ilerlemesi"
@@ -25900,11 +26252,14 @@ export const CATALOG = {
       truncated: {
         withCoverage: (measured, used, percent) => `Bu taramanın süresi doldu: kullanılan ${used} miktarının ${measured} kadarını ölçtü (%${percent}). Ölçülen kısım gerçek; geri kalanı boş yerine taranmamış olarak gösterilir.`,
         withoutCoverage: 'Bu taramanın süresi diski tamamlamadan doldu. Gerçekten ölçtüğü her şey gerçek, ancak hiç ulaşamadığı klasörler boş yerine taranmamış olarak gösterilir — bunu alanınızı neyin kullandığının eksiksiz bir görüntüsü olarak okumayın.',
+        stoppedWithCoverage: (a, b, c) => `Bu taramayı durdurdun: kullanılan ${b} miktarının ${a} kadarını ölçtü (%${c}). Ölçülen kısım gerçek; geri kalanı boş yerine taranmamış olarak gösterilir.`,
+        stoppedWithoutCoverage: "Bu taramayı erken durdurdun. Ölçülen kısım gerçek; ulaşamadığı klasörler boş yerine taranmamış olarak gösterilir — bunu alanını neyin kapladığının tam resmi olarak okuma.",
         rescanLink: 'Bunun yerine hızlı bir tarama çalıştır'
       },
       view: { tree: 'Ağaç', files: 'Dosyalar' },
       folderTable: {
         empty: 'Bu klasörün içinde listelenecek bir şey yok.',
+        rowLabel: (a, b) => `${a} öğesini aç, ${b}`,
         notScanned: 'taranmadı',
         columns: { folder: 'Klasör', size: 'Boyut', items: 'Öğeler', files: 'Dosyalar', folders: 'Klasörler', modified: 'Değiştirildi' }
       },
@@ -25921,6 +26276,7 @@ export const CATALOG = {
         aggregated: 'Bu klasördeki en küçük girdiler, bir araya toplanmış.',
         unscanned: 'Tarama buraya ulaşmadan önce durdu. Gerçek boyutu bilinmiyor.'
       },
+      rowActionsLabel: (a) => `${a} için eylemler`,
       cellOpenLabel: (name) => `${name} öğesini aç`,
       contextMenu: {
         openInExplorer: "Explorer'da Aç",
@@ -26058,11 +26414,12 @@ export const CATALOG = {
         publisher: 'Yayımcı',
         status: 'Durum'
       },
-      switchAriaLabel: (enabled, name) => `${name} öğesini oturum açılışında ${enabled ? 'devre dışı bırak' : 'etkinleştir'}`,
+      switchAriaLabel: (name) => `${name} öğesini oturum açılışında çalıştır`,
       status: {
         invalid: 'Geçersiz',
         running: 'Çalışıyor',
         notChecked: 'Kontrol edilmedi',
+        off: "Kapalı",
         notRunning: 'Çalışmıyor'
       },
       groups: {
@@ -26081,6 +26438,8 @@ export const CATALOG = {
     duplicates: {
       title: 'Yinelenen dosyalar',
       subtitle: "Sadece aynı boyutta değil, bayt bayt aynı olan dosyalar. Bunu gerçekten bir şeyler sakladığınız bir klasöre yönlendirin — bütün bir sürücüyü kendisiyle karşılaştırmak için okumak, buna değeceğinden çok daha uzun sürer ve çoğunlukla makinenin kendi dosyalarının kendi kopyalarını bulur.",
+      folderPlaceholder: (a) => `Klasör yolu, örneğin ${a}`,
+      stoppedNote: "Durduruldu — hiçbir şey karşılaştırılmadı.",
       folderInputAriaLabel: 'Yinelenenlerin aranacağı klasör',
       stop: 'Durdur',
       findButton: 'Yinelenenleri bul',
@@ -26098,6 +26457,7 @@ export const CATALOG = {
       keepNewest: 'En yenisini tut',
       clear: 'Temizle',
       truncatedWarning: 'Tarama kısa kesildi, bu yüzden bunlardan daha fazla küme olabilir.',
+      tags: { keep: "Tut", toQuarantine: "Karantinaya" },
       group: {
         identicalCopies: (count, size) => `${count} özdeş kopya · her biri ${size}`,
         allTickedWarning: 'Bu kümedeki her kopya işaretli — birini tutmak için işaretini kaldırın.'
@@ -26111,7 +26471,7 @@ export const CATALOG = {
       modal: {
         label: 'Yinelenenleri karantinaya taşı',
         heading: (count) => `${count} kopya karantinaya taşınsın mı?`,
-        body: (formatted) => `${formatted} geri kazanıldı. Her küme en az bir kopya tutar ve hiçbir şey silinmez — herhangi birini Karantina ekranından geri yükleyin.`,
+        body: (a) => `Taşımak, Karantina'yı boşalttığında ${a} yer açar. Her küme en az bir kopya tutar ve hiçbir şey silinmez — herhangi birini Karantina ekranından geri yükleyin.`,
         cancel: 'İptal',
         confirmButton: 'Karantinaya taşı'
       },
@@ -26586,6 +26946,7 @@ export const CATALOG = {
     },
     diskMap: {
       title: 'Використання Диска',
+      unscannedLabel: "Не скановано",
       aggregateCell: (count) => `${count} менших елементів`,
       subtitle: 'Що використовує місце на цьому диску, і де.',
       fastIndexSummary: (count) => `${count} файлів і папок прочитано з власного індексу диска.`,
@@ -26622,6 +26983,7 @@ export const CATALOG = {
         indexNoteEstimate: "Поки читається індекс диска, Windows не повідомляє про перебіг, тому відсоток не показується — ця оцінка дорівнює тривалості вашого останнього сканування.",
         durationSeconds: (n) => `${n} с`,
         durationMinutes: (m, s) => `${m} хв ${s} с`,
+        stopping: "Зупинка…",
         scanAgain: "Сканувати знову",
         retry: "Повторити",
         barLabel: "Перебіг сканування"
@@ -26631,11 +26993,14 @@ export const CATALOG = {
       truncated: {
         withCoverage: (measured, used, percent) => `У цього сканування закінчився час: воно виміряло ${measured} з ${used} використаних (${percent}%). Те, що виміряно, реальне; решта відображається як несканована, а не як порожня.`,
         withoutCoverage: 'У цього сканування закінчився час до завершення диска. Усе, що фактично виміряно, реальне, але папки, яких воно так і не досягло, відображаються як несканований, а не порожні — не сприймайте це як повну картину того, що займає ваш простір.',
+        stoppedWithCoverage: (a, b, c) => `Ви зупинили це сканування: воно виміряло ${a} з ${b} використаних (${c}%). Те, що виміряно, реальне; решта відображається як несканована, а не як порожня.`,
+        stoppedWithoutCoverage: "Ви зупинили це сканування достроково. Те, що виміряно, реальне; папки, до яких воно не дійшло, відображаються як не скановані, а не як порожні — не сприймайте це як повну картину того, що займає місце.",
         rescanLink: 'Замість цього запустити швидке сканування'
       },
       view: { tree: 'Дерево', files: 'Файли' },
       folderTable: {
         empty: 'У цій папці немає чого перелічувати.',
+        rowLabel: (a, b) => `Відкрити ${a}, ${b}`,
         notScanned: 'не скановано',
         columns: { folder: 'Папка', size: 'Розмір', items: 'Елементи', files: 'Файли', folders: 'Папки', modified: 'Змінено' }
       },
@@ -26652,6 +27017,7 @@ export const CATALOG = {
         aggregated: 'Найменші записи цієї папки, згруповані разом.',
         unscanned: 'Сканування зупинилося до досягнення цього місця. Реальний розмір невідомий.'
       },
+      rowActionsLabel: (a) => `Дії для ${a}`,
       cellOpenLabel: (name) => `Відкрити ${name}`,
       contextMenu: {
         openInExplorer: 'Відкрити в Провіднику',
@@ -26789,11 +27155,12 @@ export const CATALOG = {
         publisher: 'Видавець',
         status: 'Стан'
       },
-      switchAriaLabel: (enabled, name) => `${enabled ? 'Вимкнути' : 'Увімкнути'} ${name} під час входу`,
+      switchAriaLabel: (name) => `Запускати ${name} під час входу`,
       status: {
         invalid: 'Недійсний',
         running: 'Виконується',
         notChecked: 'Не перевірено',
+        off: "Вимк.",
         notRunning: 'Не запущено'
       },
       groups: {
@@ -26812,6 +27179,8 @@ export const CATALOG = {
     duplicates: {
       title: 'Файли-дублікати',
       subtitle: 'Файли, які ідентичні побайтово, а не просто одного розміру. Вкажіть папку, у якій ви справді зберігаєте файли — читання всього диска, щоб порівняти його із самим собою, займає набагато більше часу, ніж воно того варте, і здебільшого знаходить власні копії машини її ж власних файлів.',
+      folderPlaceholder: (a) => `Шлях до папки, наприклад ${a}`,
+      stoppedNote: "Зупинено — нічого не порівнювалося.",
       folderInputAriaLabel: 'Папка для пошуку дублікатів',
       stop: 'Зупинити',
       findButton: 'Знайти дублікати',
@@ -26829,6 +27198,7 @@ export const CATALOG = {
       keepNewest: 'Залишити найновіший',
       clear: 'Очистити',
       truncatedWarning: 'Сканування було перервано завчасно, тож наборів може бути більше, ніж показано.',
+      tags: { keep: "Залишити", toQuarantine: "У карантин" },
       group: {
         identicalCopies: (count, size) => `Ідентичних копій: ${count} · по ${size}`,
         allTickedWarning: 'Кожна копія в цьому наборі позначена — зніміть позначку з однієї, щоб залишити її.'
@@ -26842,7 +27212,7 @@ export const CATALOG = {
       modal: {
         label: 'Перемістити дублікати в карантин',
         heading: (count) => `Перемістити ${count} копій у карантин?`,
-        body: (formatted) => `Буде звільнено ${formatted}. Кожен набір зберігає щонайменше одну копію, і нічого не видаляється — відновіть будь-яку з них з екрана Карантин.`,
+        body: (a) => `Після переміщення буде звільнено ${a}, коли ви очистите Карантин. Кожен набір зберігає щонайменше одну копію, і нічого не видаляється — відновіть будь-яку з них з екрана Карантин.`,
         cancel: 'Скасувати',
         confirmButton: 'Перемістити в карантин'
       },
@@ -27317,6 +27687,7 @@ export const CATALOG = {
     },
     diskMap: {
       title: 'Mức Sử Dụng Ổ Đĩa',
+      unscannedLabel: "Chưa quét",
       aggregateCell: (count) => `${count} mục nhỏ hơn`,
       subtitle: 'Cái gì đang chiếm dụng không gian trên ổ đĩa này, và ở đâu.',
       fastIndexSummary: (count) => `${count} tệp và thư mục đã được đọc từ chỉ mục riêng của ổ đĩa.`,
@@ -27353,6 +27724,7 @@ export const CATALOG = {
         indexNoteEstimate: "Windows không báo cáo tiến độ khi đọc chỉ mục của ổ đĩa nên không có phần trăm — ước tính này là thời gian lần quét gần nhất của bạn đã mất.",
         durationSeconds: (n) => `${n} giây`,
         durationMinutes: (m, s) => `${m} phút ${s} giây`,
+        stopping: "Đang dừng…",
         scanAgain: "Quét lại",
         retry: "Thử lại",
         barLabel: "Tiến độ quét"
@@ -27362,11 +27734,14 @@ export const CATALOG = {
       truncated: {
         withCoverage: (measured, used, percent) => `Lần quét này đã hết thời gian: đã đo được ${measured} trong tổng số ${used} đang sử dụng (${percent}%). Những gì đã đo được là thật; phần còn lại được hiển thị là chưa quét, chứ không phải trống.`,
         withoutCoverage: 'Lần quét này đã hết thời gian trước khi hoàn tất ổ đĩa. Mọi thứ nó thực sự đo được đều là thật, nhưng các thư mục nó chưa từng chạm tới được hiển thị là chưa quét thay vì trống — đừng coi đây là bức tranh đầy đủ về những gì đang chiếm dụng không gian của bạn.',
+        stoppedWithCoverage: (a, b, c) => `Bạn đã dừng lần quét này: đã đo được ${a} trong tổng số ${b} đang sử dụng (${c}%). Những gì đã đo được là thật; phần còn lại được hiển thị là chưa quét, chứ không phải trống.`,
+        stoppedWithoutCoverage: "Bạn đã dừng lần quét này sớm. Những gì đã đo được là thật; các thư mục chưa quét tới được hiển thị là chưa quét, chứ không phải trống — đừng coi đây là bức tranh đầy đủ về thứ đang chiếm dung lượng.",
         rescanLink: 'Thay vào đó, chạy một lần quét nhanh'
       },
       view: { tree: 'Cây', files: 'Tệp' },
       folderTable: {
         empty: 'Không có gì để liệt kê trong thư mục này.',
+        rowLabel: (a, b) => `Mở ${a}, ${b}`,
         notScanned: 'chưa quét',
         columns: { folder: 'Thư mục', size: 'Kích thước', items: 'Mục', files: 'Tệp', folders: 'Thư mục', modified: 'Đã sửa đổi' }
       },
@@ -27383,6 +27758,7 @@ export const CATALOG = {
         aggregated: 'Các mục nhỏ nhất trong thư mục này, được nhóm lại với nhau.',
         unscanned: 'Quá trình quét đã dừng trước khi đến đây. Kích thước thực tế không xác định.'
       },
+      rowActionsLabel: (a) => `Hành động cho ${a}`,
       cellOpenLabel: (name) => `Mở ${name}`,
       contextMenu: {
         openInExplorer: 'Mở trong Explorer',
@@ -27520,11 +27896,12 @@ export const CATALOG = {
         publisher: 'Nhà phát hành',
         status: 'Trạng thái'
       },
-      switchAriaLabel: (enabled, name) => `${enabled ? 'Tắt' : 'Bật'} ${name} khi đăng nhập`,
+      switchAriaLabel: (name) => `Chạy ${name} khi đăng nhập`,
       status: {
         invalid: 'Không hợp lệ',
         running: 'Đang chạy',
         notChecked: 'Chưa kiểm tra',
+        off: "Tắt",
         notRunning: 'Không chạy'
       },
       groups: {
@@ -27543,6 +27920,8 @@ export const CATALOG = {
     duplicates: {
       title: 'Tệp trùng lặp',
       subtitle: 'Các tệp giống hệt nhau từng byte, không chỉ đơn thuần là cùng kích thước. Trỏ vào một thư mục nơi bạn thực sự lưu trữ đồ đạc — đọc toàn bộ ổ đĩa để so sánh nó với chính nó mất nhiều thời gian hơn giá trị mang lại, và thường chỉ tìm thấy các bản sao của chính máy đối với các tệp của nó.',
+      folderPlaceholder: (a) => `Đường dẫn thư mục, ví dụ ${a}`,
+      stoppedNote: "Đã dừng — chưa so sánh gì cả.",
       folderInputAriaLabel: 'Thư mục để tìm các tệp trùng lặp',
       stop: 'Dừng',
       findButton: 'Tìm tệp trùng lặp',
@@ -27560,6 +27939,7 @@ export const CATALOG = {
       keepNewest: 'Giữ bản mới nhất',
       clear: 'Xóa',
       truncatedWarning: 'Quá trình quét đã bị cắt ngắn, vì vậy có thể có nhiều bộ hơn những bộ này.',
+      tags: { keep: "Giữ lại", toQuarantine: "Vào khu cách ly" },
       group: {
         identicalCopies: (count, size) => `${count} bản sao giống hệt nhau · mỗi bản ${size}`,
         allTickedWarning: 'Mọi bản sao trong bộ này đều được đánh dấu — bỏ đánh dấu một bản để giữ lại nó.'
@@ -27573,7 +27953,7 @@ export const CATALOG = {
       modal: {
         label: 'Chuyển tệp trùng lặp vào khu cách ly',
         heading: (count) => `Chuyển ${count} bản sao vào khu cách ly?`,
-        body: (formatted) => `Đã thu hồi ${formatted}. Mỗi bộ giữ lại ít nhất một bản sao, và không có gì bị xóa — khôi phục bất kỳ bản nào trong số đó từ màn hình Khu cách ly.`,
+        body: (a) => `Di chuyển sẽ giải phóng ${a} sau khi bạn dọn trống Khu cách ly. Mỗi bộ giữ lại ít nhất một bản sao, và không có gì bị xóa — khôi phục bất kỳ bản nào trong số đó từ màn hình Khu cách ly.`,
         cancel: 'Hủy',
         confirmButton: 'Chuyển vào khu cách ly'
       },
@@ -28048,6 +28428,7 @@ export const CATALOG = {
     },
     diskMap: {
       title: '磁盘使用情况',
+      unscannedLabel: "未扫描",
       aggregateCell: (count) => `${count} 个较小的项目`,
       subtitle: '什么在占用此磁盘上的空间，以及在哪里。',
       fastIndexSummary: (count) => `已从驱动器自身的索引中读取 ${count} 个文件和文件夹。`,
@@ -28084,6 +28465,7 @@ export const CATALOG = {
         indexNoteEstimate: "读取驱动器索引时 Windows 不会报告进度，因此不显示百分比；此估计为您上次扫描所用的时间。",
         durationSeconds: (n) => `${n} 秒`,
         durationMinutes: (m, s) => `${m} 分 ${s} 秒`,
+        stopping: "正在停止…",
         scanAgain: "重新扫描",
         retry: "重试",
         barLabel: "扫描进度"
@@ -28093,11 +28475,14 @@ export const CATALOG = {
       truncated: {
         withCoverage: (measured, used, percent) => `此次扫描已超时：已测量已用 ${used} 中的 ${measured}（${percent}%）。已测量的部分是真实的；其余部分显示为未扫描，而不是空的。`,
         withoutCoverage: '此次扫描在完成整个驱动器之前已超时。实际测量到的所有内容都是真实的，但从未到达的文件夹显示为未扫描，而不是空的 — 请勿将此视为占用空间情况的完整画面。',
+        stoppedWithCoverage: (a, b, c) => `你已停止此次扫描：已测量已用 ${b} 中的 ${a}（${c}%）。已测量的部分是真实的；其余部分显示为未扫描，而不是空的。`,
+        stoppedWithoutCoverage: "你提前停止了此次扫描。已测量的部分是真实的；尚未到达的文件夹显示为未扫描，而不是空的——请不要把它当作占用空间情况的完整画面。",
         rescanLink: '改为运行快速扫描'
       },
       view: { tree: '树状图', files: '文件' },
       folderTable: {
         empty: '此文件夹内没有可列出的内容。',
+        rowLabel: (a, b) => `打开 ${a}，${b}`,
         notScanned: '未扫描',
         columns: { folder: '文件夹', size: '大小', items: '项目', files: '文件', folders: '文件夹', modified: '修改日期' }
       },
@@ -28114,6 +28499,7 @@ export const CATALOG = {
         aggregated: '此文件夹中最小的条目，已归为一组。',
         unscanned: '扫描在到达此处之前已停止。实际大小未知。'
       },
+      rowActionsLabel: (a) => `${a} 的操作`,
       cellOpenLabel: (name) => `打开 ${name}`,
       contextMenu: {
         openInExplorer: '在资源管理器中打开',
@@ -28251,11 +28637,12 @@ export const CATALOG = {
         publisher: '发布者',
         status: '状态'
       },
-      switchAriaLabel: (enabled, name) => `${enabled ? '禁用' : '启用'}登录时的 ${name}`,
+      switchAriaLabel: (name) => `登录时运行 ${name}`,
       status: {
         invalid: '无效',
         running: '运行中',
         notChecked: '未检查',
+        off: "关",
         notRunning: '未运行'
       },
       groups: {
@@ -28274,6 +28661,8 @@ export const CATALOG = {
     duplicates: {
       title: '重复文件',
       subtitle: '逐字节完全相同的文件，而不仅仅是大小相同。将其指向一个你确实存放东西的文件夹——读取整个驱动器以与自身比较所花费的时间远超其价值，而且大多数情况下只会找到机器自身文件的自我副本。',
+      folderPlaceholder: (a) => `文件夹路径，例如 ${a}`,
+      stoppedNote: "已停止——未比较任何内容。",
       folderInputAriaLabel: '要搜索重复项的文件夹',
       stop: '停止',
       findButton: '查找重复项',
@@ -28291,6 +28680,7 @@ export const CATALOG = {
       keepNewest: '保留最新的',
       clear: '清除',
       truncatedWarning: '扫描被提前中止，因此可能还有比这更多的组。',
+      tags: { keep: "保留", toQuarantine: "移至隔离区" },
       group: {
         identicalCopies: (count, size) => `${count} 个相同副本 · 每个 ${size}`,
         allTickedWarning: '此组中的每个副本都已勾选——取消勾选一个以保留它。'
@@ -28304,7 +28694,7 @@ export const CATALOG = {
       modal: {
         label: '将重复项移至隔离区',
         heading: (count) => `要将 ${count} 个副本移至隔离区吗？`,
-        body: (formatted) => `将释放 ${formatted}。每组至少保留一个副本，且不会删除任何内容——你可以随时从隔离区屏幕恢复其中任何一个。`,
+        body: (a) => `移动后，清空隔离区时将释放 ${a}。每组至少保留一个副本，且不会删除任何内容——你可以随时从隔离区屏幕恢复其中任何一个。`,
         cancel: '取消',
         confirmButton: '移至隔离区'
       },
@@ -28779,6 +29169,7 @@ export const CATALOG = {
     },
     diskMap: {
       title: '磁碟使用狀況',
+      unscannedLabel: "未掃描",
       aggregateCell: (count) => `${count} 個較小的項目`,
       subtitle: '什麼正在佔用這個磁碟上的空間，以及在哪裡。',
       fastIndexSummary: (count) => `已從硬碟自身的索引中讀取 ${count} 個檔案與資料夾。`,
@@ -28815,6 +29206,7 @@ export const CATALOG = {
         indexNoteEstimate: "讀取磁碟機索引時 Windows 不會回報進度，因此不顯示百分比；此估計為您上次掃描所花的時間。",
         durationSeconds: (n) => `${n} 秒`,
         durationMinutes: (m, s) => `${m} 分 ${s} 秒`,
+        stopping: "正在停止…",
         scanAgain: "重新掃描",
         retry: "重試",
         barLabel: "掃描進度"
@@ -28824,11 +29216,14 @@ export const CATALOG = {
       truncated: {
         withCoverage: (measured, used, percent) => `這次掃描已逾時：已測量已用 ${used} 中的 ${measured}（${percent}%）。已測量的部分是真實的；其餘部分顯示為未掃描，而非空白。`,
         withoutCoverage: '這次掃描在完成整個硬碟之前已逾時。實際測量到的所有內容都是真實的，但從未到達的資料夾顯示為未掃描，而非空白 — 請勿將此視為佔用空間狀況的完整畫面。',
+        stoppedWithCoverage: (a, b, c) => `你已停止這次掃描：已測量已用 ${b} 中的 ${a}（${c}%）。已測量的部分是真實的；其餘部分顯示為未掃描，而非空白。`,
+        stoppedWithoutCoverage: "你提前停止了這次掃描。已測量的部分是真實的；尚未到達的資料夾顯示為未掃描，而非空白——請不要把它當作佔用空間情況的完整畫面。",
         rescanLink: '改為執行快速掃描'
       },
       view: { tree: '樹狀圖', files: '檔案' },
       folderTable: {
         empty: '此資料夾內沒有可列出的內容。',
+        rowLabel: (a, b) => `開啟 ${a}，${b}`,
         notScanned: '未掃描',
         columns: { folder: '資料夾', size: '大小', items: '項目', files: '檔案', folders: '資料夾', modified: '修改日期' }
       },
@@ -28845,6 +29240,7 @@ export const CATALOG = {
         aggregated: '此資料夾中最小的項目，已歸為一組。',
         unscanned: '掃描在到達此處之前已停止。實際大小未知。'
       },
+      rowActionsLabel: (a) => `${a} 的動作`,
       cellOpenLabel: (name) => `開啟 ${name}`,
       contextMenu: {
         openInExplorer: '在檔案總管中開啟',
@@ -28982,11 +29378,12 @@ export const CATALOG = {
         publisher: '發行者',
         status: '狀態'
       },
-      switchAriaLabel: (enabled, name) => `${enabled ? '停用' : '啟用'}登入時的 ${name}`,
+      switchAriaLabel: (name) => `登入時執行 ${name}`,
       status: {
         invalid: '無效',
         running: '執行中',
         notChecked: '未檢查',
+        off: "關",
         notRunning: '未執行'
       },
       groups: {
@@ -29005,6 +29402,8 @@ export const CATALOG = {
     duplicates: {
       title: '重複檔案',
       subtitle: '逐位元組完全相同的檔案，而不僅僅是大小相同。將其指向一個你確實存放東西的資料夾——讀取整個磁碟以與自身比較所花費的時間遠超其價值，而且大多情況下只會找到機器自身檔案的自我副本。',
+      folderPlaceholder: (a) => `資料夾路徑，例如 ${a}`,
+      stoppedNote: "已停止——未比較任何內容。",
       folderInputAriaLabel: '要搜尋重複項的資料夾',
       stop: '停止',
       findButton: '尋找重複項',
@@ -29022,6 +29421,7 @@ export const CATALOG = {
       keepNewest: '保留最新的',
       clear: '清除',
       truncatedWarning: '掃描被提前中止，因此可能還有比這更多的組。',
+      tags: { keep: "保留", toQuarantine: "移至隔離區" },
       group: {
         identicalCopies: (count, size) => `${count} 個相同副本 · 每個 ${size}`,
         allTickedWarning: '此組中的每個副本都已勾選——取消勾選一個以保留它。'
@@ -29035,7 +29435,7 @@ export const CATALOG = {
       modal: {
         label: '將重複項移至隔離區',
         heading: (count) => `要將 ${count} 個副本移至隔離區嗎？`,
-        body: (formatted) => `將釋放 ${formatted}。每組至少保留一個副本，且不會刪除任何內容——你可以隨時從隔離區畫面還原其中任何一個。`,
+        body: (a) => `移動後，清空隔離區時將釋放 ${a}。每組至少保留一個副本，且不會刪除任何內容——你可以隨時從隔離區畫面還原其中任何一個。`,
         cancel: '取消',
         confirmButton: '移至隔離區'
       },
