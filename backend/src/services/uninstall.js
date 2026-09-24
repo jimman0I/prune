@@ -64,7 +64,19 @@ export async function runUninstaller({ uninstallString, quietUninstallString } =
     // `MsiExec.exe /X{GUID} /qn` or `"C:\...\uninst.exe" /S`), not a
     // single executable + argv array — cmd.exe is what correctly splits
     // quoted paths and flags the way the registry entry expects.
-    const child = spawn('cmd.exe', ['/c', command], { windowsHide: true });
+    //
+    // Verbatim arguments, wrapped in one extra pair of quotes, with /s:
+    // handed the command as an ordinary argv element, Node escapes every
+    // embedded quote as \" -- which cmd.exe does not understand -- so any
+    // command that is a quoted path containing a space (every Program
+    // Files uninstaller, and Riot's `"C:\Riot Games\Riot Client\...exe"`)
+    // died with "not recognized" and exit 1 before starting anything. /s
+    // makes cmd strip exactly the outer pair we add and leave the rest
+    // untouched; /d skips AutoRun so a user's registry hook cannot run.
+    const child = spawn('cmd.exe', ['/d', '/s', '/c', `"${command}"`], {
+      windowsHide: true,
+      windowsVerbatimArguments: true
+    });
     let stderr = '';
     child.stderr?.on('data', (chunk) => { stderr += chunk.toString(); });
     child.on('error', (err) => reject(new Error(`Failed to launch uninstaller: ${err.message}`)));
