@@ -4,6 +4,7 @@ import TitleBar from './components/TitleBar.jsx';
 import Dashboard from './components/Dashboard.jsx';
 import DiskMap from './components/DiskMap.jsx';
 import Screen from './components/Screen.jsx';
+import Page from './components/Page.jsx';
 import { useProgramData } from './hooks/usePrograms.js';
 import ToastHost from './components/ToastHost.jsx';
 import UpdateButton from './components/UpdateButton.jsx';
@@ -94,7 +95,17 @@ export default function App() {
       box?.select?.();
     },
     onSettings: () => setScreen('settings'),
-    onHelp: () => setShowShortcuts(true)
+    onHelp: () => setShowShortcuts(true),
+    /* Ctrl+1 to Ctrl+8, in rail order. Not while a dialog is open: the
+       dialog traps focus precisely so the screen behind it stays put, and a
+       chord that changed that screen from inside it would leave someone
+       confirming a removal on a page they can no longer see. Asked of the
+       DOM rather than of this component's own modal state, so a dialog a
+       screen opens for itself (Deep Clean's risk warning) counts too. */
+    onGoToScreen: (id) => {
+      if (document.querySelector('[role="dialog"][aria-modal="true"]')) return;
+      setScreen(id);
+    }
   });
 
 
@@ -119,7 +130,7 @@ export default function App() {
         <Screen active={screen === 'deepclean'} visited={visited.has('deepclean')}><DeepClean /></Screen>
         <Screen active={screen === 'duplicates'} visited={visited.has('duplicates')}><Duplicates /></Screen>
         <Screen active={screen === 'applications'} visited={visited.has('applications')}>
-          <div className="px-12 py-10 h-full flex flex-col min-h-0">
+          <Page className="h-full flex flex-col min-h-0">
             <div className="flex items-baseline justify-between mb-6 shrink-0">
               <div>
                 <h1 className="display-heading text-[30px] leading-none">
@@ -140,7 +151,7 @@ export default function App() {
               onBatchUninstall={setBatchPrograms}
               onRemoveStoreApp={setStoreAppToRemove}
             />
-          </div>
+          </Page>
         </Screen>
       </div>
       </div>

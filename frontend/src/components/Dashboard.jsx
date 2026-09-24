@@ -9,7 +9,9 @@ import { fetchAutomation } from '../lib/api.js';
 import { keys } from '../lib/queryClient.js';
 import { useDiskSpace, useDiskHealth } from '../hooks/useSystemQueries.js';
 import { useLanguage } from '../i18n/LanguageContext.jsx';
-import { computeHealthScore } from '../lib/healthScore.js';
+import { computeHealthScore, healthBand } from '../lib/healthScore.js';
+import { storageBarColor } from '../lib/usageTone.js';
+import Page from './Page.jsx';
 
 function formatBytes(bytes) {
   if (bytes === null || bytes === undefined) return '—';
@@ -66,19 +68,32 @@ function toneColor(tone) {
   return 'var(--text-muted)';
 }
 
-/** Shows a real percentage when one exists, and a short status word when
- * it doesn't -- never a stand-in number. An SSD life gauge that invents a
- * figure is worse than one that admits it can't read the drive. */
-function HealthGauge({ percent, statusLabel, tone }) {
+/** The score's own colour: 75 and up is good, 50 and up is caution, below
+ * that a problem. See healthBand -- the ring reads the number it prints, not
+ * the drive's verdict, which used to paint a 58 green because the SSD is
+ * fine. */
+const BAND_COLOR = { good: 'var(--success)', caution: 'var(--warning)', problem: 'var(--danger)' };
+
+/** Shows the composite score out of 100 when one exists, and a short status
+ * word when it doesn't -- never a stand-in number. `score` stays null until
+ * both the drive and the storage have genuinely loaded (healthScore.js), so
+ * neither the number, the "/100" nor a colour band appears before then: a
+ * ring that invents a healthy-looking figure is worse than one that admits
+ * it hasn't read the machine yet. Until then the ring shows the drive's own
+ * status word in the drive's own tone, exactly as before. */
+function HealthGauge({ score, statusLabel, tone }) {
   const radius = 54;
   const circumference = 2 * Math.PI * radius;
-  const offset = percent != null ? circumference * (1 - percent / 100) : 0;
-  const color = toneColor(tone);
+  const offset = score != null ? circumference * (1 - score / 100) : 0;
+  const color = score != null ? BAND_COLOR[healthBand(score)] : toneColor(tone);
   return (
     <div className="relative w-[140px] h-[140px] shrink-0">
       <svg width="140" height="140" viewBox="0 0 140 140" className="-rotate-90">
-        <circle cx="70" cy="70" r={radius} fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="10" />
-        {(percent != null || statusLabel) && (
+        {/* The theme's own strong surface, not a white alpha: white at 8%
+            is invisible on the light ground, which left the ring an arc
+            floating with no track. */}
+        <circle cx="70" cy="70" r={radius} fill="none" stroke="var(--surface-strong)" strokeWidth="10" />
+        {(score != null || statusLabel) && (
           <circle
             cx="70" cy="70" r={radius} fill="none"
             stroke={color} strokeWidth="10" strokeLinecap="round"
@@ -96,14 +111,17 @@ function HealthGauge({ percent, statusLabel, tone }) {
             style={{
               '--ring-empty': circumference,
               animation: 'ring-fill 900ms var(--ease-out-expo) both',
-              opacity: percent != null ? 1 : 0.55
+              opacity: score != null ? 1 : 0.55
             }}
           />
         )}
       </svg>
       <div className="absolute inset-0 flex items-center justify-center px-3 text-center">
-        {percent != null ? (
-          <span className="display-heading text-[32px]" style={{ color }}>{percent}%</span>
+        {score != null ? (
+          <span className="flex items-baseline gap-0.5" style={{ color }}>
+            <span className="display-heading text-[32px]">{score}</span>
+            <span className="text-[12px] font-mono text-[color:var(--text-secondary)]">/100</span>
+          </span>
         ) : (
           <span className="text-[15px] font-medium leading-tight" style={{ color }}>
             {statusLabel || '—'}
@@ -136,8 +154,10 @@ function formatCount(value) {
   return typeof value === 'number' ? value.toLocaleString() : '—';
 }
 
+/** Each breakdown part is a score out of 100, and says so: a bare "Errors
+ * 100" read as a hundred errors, which is the opposite of what it means. */
 function formatComponent(value) {
-  return value === null || value === undefined ? '—' : String(value);
+  return value === null || value === undefined ? '—' : `${value}/100`;
 }
 
 /** The drive's own SMART attributes, the set CrystalDiskInfo shows.
@@ -167,10 +187,10 @@ function SmartAttributes({ smart }) {
       <div className="text-[10.5px] font-mono uppercase tracking-[0.14em] text-[color:var(--text-muted)] mb-2.5">
         {t('dashboard.smart.header')}
       </div>
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-2">
+      <div className="grid grid-cols-[repeat(auto-fit,minmax(120px,1fr))] gap-x-6 gap-y-2">
         {rows.map(([label, value, tone]) => (
           <div key={label} className="min-w-0">
-            <div className="text-[10.5px] text-[color:var(--text-muted)] truncate">{label}</div>
+            <div className="text-[10.5px] leading-snug text-[color:var(--text-muted)] break-words">{label}</div>
             <div
               className={`text-[13px] font-mono ${
                 tone === 'bad' ? 'text-[color:var(--danger)]'
@@ -282,9 +302,9 @@ export default function Dashboard({ programs, totalSize, onNavigate = () => {} }
   };
 
   return (
-    <div className="px-12 py-10 max-w-[1400px]">
+    <Page>
       <div className="flex items-baseline justify-between gap-4 mb-8">
-        <h1 className="display-heading text-[36px] leading-none">{t('nav.dashboard')}</h1>
+        <h1 className="display-heading text-[30px] leading-none">{t('nav.dashboard')}</h1>
         <ScheduleBadge onNavigate={onNavigate} />
       </div>
 
@@ -294,9 +314,14 @@ export default function Dashboard({ programs, totalSize, onNavigate = () => {} }
           and this panel had a conspicuously empty right half already --
           the two readouts also belong together: one is what the drive has
           been through, the other is what it is doing now. */}
-      <div className="flex items-stretch gap-4 mb-6">
-        <div className="glass-panel flex items-center gap-6 p-8 flex-1 min-w-0">
-        <HealthGauge percent={healthScore} statusLabel={verdict.statusLabel} tone={verdict.tone} />
+      {/* A grid rather than a flex row with a fixed 268px monitor: at a 900px
+          window the two panels had a 732px row to share and the health panel's
+          text column collapsed to nothing. Stacked below 1100px (the same
+          window-width breakpoint the nav rail widens at), side by side from
+          there with the monitor taking what it needs. */}
+      <div className="grid grid-cols-1 min-[1100px]:grid-cols-[minmax(0,1fr)_minmax(268px,320px)] items-stretch gap-4 mb-6">
+        <div className="glass-panel flex items-center gap-6 p-8 min-w-0">
+        <HealthGauge score={healthScore} statusLabel={verdict.statusLabel} tone={verdict.tone} />
         <div className="min-w-0">
           <div className="text-[18px] font-medium text-[color:var(--text-primary)] mb-1">{t('dashboard.systemHealth.title')}</div>
           {healthScore != null && (
@@ -381,8 +406,12 @@ export default function Dashboard({ programs, totalSize, onNavigate = () => {} }
           label={t('dashboard.storage.label')}
           value={
             diskSpace ? (
-              <div className="text-[18px] font-medium text-[color:var(--text-primary)] mb-2">
-                {t('dashboard.storage.usedTotal', formatBytes(diskSpace.totalBytes - diskSpace.freeBytes), formatBytes(diskSpace.totalBytes))}
+              // Free space is the headline: it is what someone opens this
+              // card to find out. "835 GB used / 952 GB total" is two
+              // numbers to subtract, so used and total drop to a secondary
+              // line beneath it.
+              <div className="text-[18px] font-medium text-[color:var(--text-primary)] mb-1">
+                <span>{formatBytes(diskSpace.freeBytes)}</span>{' '}{t('dashboard.storage.free')}
               </div>
             ) : (
               <div className="text-[13px] text-[color:var(--text-secondary)]">{diskSpaceError || t('dashboard.storage.loading')}</div>
@@ -390,19 +419,21 @@ export default function Dashboard({ programs, totalSize, onNavigate = () => {} }
           }
         >
           {diskSpace && (
-            <p className="text-[12px] text-[color:var(--text-secondary)] mt-1.5 mb-3">
-              {/* The figure someone actually came to this card for. "815.8
-                  of 952.9" is two numbers you then have to subtract. */}
-              <span className="text-[color:var(--text-primary)] font-medium">
-                {formatBytes(diskSpace.freeBytes)}
-              </span>{' '}{t('dashboard.storage.free')}
+            <p className="text-[12px] text-[color:var(--text-secondary)] mb-3">
+              {t('dashboard.storage.usedTotal', formatBytes(diskSpace.totalBytes - diskSpace.freeBytes), formatBytes(diskSpace.totalBytes))}
             </p>
           )}
           {diskSpace && (
             <div className="storage-bar h-1.5 rounded-full bg-[color:var(--surface-strong)] overflow-hidden">
+              {/* Neutral, amber under 10% free -- never the primary accent,
+                  which is for actions. The class stays: the forced-colors
+                  rules in index.css key on it. */}
               <div
                 className="storage-bar-fill h-full rounded-full"
-                style={{ width: `${Math.round((1 - diskSpace.freeBytes / diskSpace.totalBytes) * 100)}%`, background: 'var(--accent-primary)' }}
+                style={{
+                  width: `${Math.round((1 - diskSpace.freeBytes / diskSpace.totalBytes) * 100)}%`,
+                  background: storageBarColor(diskSpace.freeBytes, diskSpace.totalBytes)
+                }}
               />
             </div>
           )}
@@ -461,22 +492,32 @@ export default function Dashboard({ programs, totalSize, onNavigate = () => {} }
       </div>
 
       <div className="flex items-center gap-3 mb-6">
-        {/* These are navigation, so they are named for where they go, and
-            reuse the same nav.* keys the side bar's own labels do -- the
-            words on this button and the destination it goes to should
-            never be able to drift apart into two different translations. */}
+        {/* One action. Disk Map and Applications used to sit beside it, but
+            they are already one click away in the rail on every screen, and
+            three buttons of equal weight made "what should I do" a choice.
+            Named with nav.deepClean so the button and its destination can
+            never be translated two ways. */}
         <button className="btn-primary" onClick={() => onNavigate('deepclean')}>{t('nav.deepClean')}</button>
-        <button className="btn-ghost" onClick={() => onNavigate('diskmap')}>{t('nav.diskMap')}</button>
-        <button className="btn-ghost" onClick={() => onNavigate('applications')}>{t('nav.applications')}</button>
       </div>
 
       <div className="glass-panel p-6">
+        {/* A disclosure: the state is aria-expanded and the chevron, not the
+            words Hide/Show, which put a second label in every language on
+            a control the title already names. 28px tall so it is a target
+            and not a line of text. */}
         <button
           onClick={() => setHistoryOpen((o) => !o)}
-          className="w-full flex items-center justify-between text-left"
+          aria-expanded={historyOpen}
+          className="w-full min-h-[28px] flex items-center justify-between text-left"
         >
           <span className="text-[13px] font-medium text-[color:var(--text-primary)]">{t('dashboard.recentActivity.title')}</span>
-          <span className="text-[12px] text-[color:var(--text-muted)]">{historyOpen ? t('dashboard.recentActivity.hide') : t('dashboard.recentActivity.show')}</span>
+          <svg
+            xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"
+            className={`text-[color:var(--text-muted)] transition-transform duration-150 motion-reduce:transition-none ${historyOpen ? '' : '-rotate-90'}`}
+          >
+            <path d="M6 9l6 6 6-6"></path>
+          </svg>
         </button>
         {historyOpen && (
           <div className="mt-4">
@@ -498,6 +539,6 @@ export default function Dashboard({ programs, totalSize, onNavigate = () => {} }
           </div>
         )}
       </div>
-    </div>
+    </Page>
   );
 }
