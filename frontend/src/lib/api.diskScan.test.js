@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { fetchDiskScan } from './api.js';
+import { fetchDiskScan, stopDiskScan } from './api.js';
 
 global.fetch = vi.fn();
 
@@ -99,5 +99,42 @@ describe('fetchDiskScan with onProgress', () => {
       .mockResolvedValueOnce({ ok: true, body: sseBody([sse('complete', complete)]) })
       .mockResolvedValueOnce({ ok: false, status: 404, json: async () => ({ error: 'Scan result expired' }) });
     await expect(fetchDiskScan('C:\\', undefined, { onProgress: () => {} })).rejects.toThrow('Scan result expired');
+  });
+});
+
+describe('scan stop', () => {
+  beforeEach(() => { vi.resetAllMocks(); });
+
+  it('forwards the start event, which carries the id Stop needs', async () => {
+    const onProgress = vi.fn();
+    fetch
+      .mockResolvedValueOnce({
+        ok: true,
+        body: sseBody([
+          sse('start', { type: 'start', scanId: 'abc-123', remainingMs: 30000 }),
+          sse('complete', { type: 'complete', totalFiles: 1, totalBytes: 1, truncated: true, resultId: 'r1' })
+        ])
+      })
+      .mockResolvedValueOnce({ ok: true, json: async () => ({ name: 'x', size: 1 }) });
+
+    await fetchDiskScan('C:\\', undefined, { onProgress });
+
+    expect(onProgress).toHaveBeenCalledWith({ type: 'start', scanId: 'abc-123', remainingMs: 30000 });
+  });
+
+  it('stopDiskScan POSTs to the stop endpoint with the id encoded', async () => {
+    fetch.mockResolvedValueOnce({ ok: true });
+    expect(await stopDiskScan('a/b c')).toBe(true);
+
+    const [url, options] = fetch.mock.calls[0];
+    expect(url).toContain('/disk-scan/stop/a%2Fb%20c');
+    expect(options.method).toBe('POST');
+  });
+
+  it('stopDiskScan resolves false, never throws, for a scan that already ended or a dead backend', async () => {
+    fetch.mockResolvedValueOnce({ ok: false, status: 404 });
+    expect(await stopDiskScan('gone')).toBe(false);
+    fetch.mockRejectedValueOnce(new Error('network'));
+    expect(await stopDiskScan('gone')).toBe(false);
   });
 });

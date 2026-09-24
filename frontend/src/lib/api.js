@@ -613,11 +613,26 @@ export async function fetchDiskScan(path, signal, { onProgress } = {}) {
   return data;
 }
 
+/** Asks the backend to stop a running streamed scan. The stream itself then
+ * ends normally with the partial tree (flagged truncated), so the caller
+ * does nothing else: it just keeps waiting for fetchDiskScan to resolve.
+ * `scanId` comes from the stream's `start` event. Resolves false, never
+ * throws, when the scan was already over -- stopping something that has
+ * finished is not an error worth showing. */
+export async function stopDiskScan(scanId) {
+  try {
+    const res = await fetch(`${API_URL}/disk-scan/stop/${encodeURIComponent(scanId)}`, { method: 'POST' });
+    return res.ok;
+  } catch {
+    return false;
+  }
+}
+
 async function fetchDiskScanStreamed(path, signal, onProgress) {
   let done = null;
   let failure = null;
   await streamSSE(`${API_URL}/disk-scan/stream?path=${encodeURIComponent(path)}`, (type, data) => {
-    if (type === 'progress') onProgress(data);
+    if (type === 'progress' || type === 'start') onProgress(data);
     else if (type === 'complete') { done = data; onProgress(data); }
     else if (type === 'error') failure = data?.message || 'Scan failed';
   }, signal);

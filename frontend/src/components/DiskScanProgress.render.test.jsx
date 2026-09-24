@@ -360,3 +360,61 @@ describe('time left in the fast scan', () => {
     expect(document.body.textContent).not.toMatch(/\d\s*%/);
   });
 });
+
+describe('one indicator at a time', () => {
+  const rings = () => document.querySelectorAll('[style*="pulse-ring"]').length;
+  const spinner = () => document.querySelectorAll('.animate-spin').length;
+
+  it('a real percent gets the bar and the counters only: no rings, no spinner', () => {
+    show({ status: 'scanning', path: 'C:', percent: 42, files: 100, bytes: 100 });
+
+    expect(rings()).toBe(0);
+    expect(spinner()).toBe(0);
+    expect(screen.getByText('42%')).toBeTruthy();
+    expect(screen.getByRole('progressbar').getAttribute('aria-valuenow')).toBe('42');
+    expect(screen.getByTestId('scan-counters')).toBeTruthy();
+  });
+
+  it('an indeterminate walk keeps the rings and the spinner, the only sign of life it has', () => {
+    show({ status: 'scanning', path: 'Folder', percent: null, files: 100, bytes: 100 });
+
+    expect(rings()).toBe(2);
+    expect(spinner()).toBe(1);
+  });
+
+  it('the fast scan is indeterminate too, so it keeps them', () => {
+    show({ status: 'scanning', mode: 'index', path: 'C:' });
+
+    expect(rings()).toBe(2);
+    expect(spinner()).toBe(1);
+  });
+});
+
+describe('Stop', () => {
+  it('halts a folder walk: calls onStop once and disables itself', () => {
+    const onStop = vi.fn();
+    show({ status: 'scanning', path: 'Folder', percent: null, onStop });
+
+    const button = screen.getByRole('button', { name: 'Stop' });
+    fireEvent.click(button);
+    fireEvent.click(button);
+
+    expect(onStop).toHaveBeenCalledTimes(1);
+    expect(button.disabled).toBe(true);
+  });
+
+  it('is offered on a whole-drive walk with a real percent as well', () => {
+    show({ status: 'scanning', path: 'C:', percent: 12, onStop: vi.fn() });
+    expect(screen.getByRole('button', { name: 'Stop' })).toBeTruthy();
+  });
+
+  it('is absent when there is nothing to stop yet', () => {
+    show({ status: 'scanning', path: 'Folder', percent: null });
+    expect(screen.queryByRole('button', { name: 'Stop' })).toBeNull();
+  });
+
+  it('is NEVER offered for the fast scan, which cannot be interrupted mid-read', () => {
+    show({ status: 'scanning', mode: 'index', path: 'C:', onStop: vi.fn() });
+    expect(screen.queryByRole('button', { name: 'Stop' })).toBeNull();
+  });
+});
