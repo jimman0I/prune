@@ -44,7 +44,11 @@ function ScanLog({ lines, scanning, scanned, total }) {
   };
 
   return (
-    <div className="glass-panel flex flex-col min-h-0 overflow-hidden flex-1 min-w-0">
+    // A fixed short height while stacked (below lg), where it used to have
+    // none of its own: the tree above took every pixel and the log
+    // collapsed to nothing at 900 px wide. Side by side it fills the column
+    // as before.
+    <div className="glass-panel flex flex-col min-h-0 overflow-hidden flex-none h-44 lg:h-auto lg:flex-1 min-w-0">
       <div className="flex items-center justify-between gap-3 px-4 py-3 border-b border-[color:var(--border-subtle)] shrink-0">
         <div className="flex items-center gap-2">
           {/* The rest of this panel already carries the scan's progress --
@@ -98,7 +102,7 @@ function ScanLog({ lines, scanning, scanned, total }) {
       <div ref={boxRef} onScroll={onScroll} className="flex-1 overflow-y-auto min-h-0 px-4 py-3 space-y-1">
         {lines.length === 0 && (
           <p className="text-[12px] text-[color:var(--text-muted)] font-mono">
-            {scanning ? t('deepClean.scanLog.starting') : t('deepClean.emptyState')}
+            {scanning ? t('deepClean.scanLog.starting') : t('deepClean.scanLog.idle')}
           </p>
         )}
         {lines.map((line, i) => (
@@ -584,7 +588,7 @@ function DeepClean() {
             <div className="flex items-center gap-2 text-[11.5px] shrink-0">
               <span className="text-[color:var(--text-muted)]">·</span>
               <button
-                className="text-[color:var(--text-secondary)] hover:text-[color:var(--accent-primary)] transition-colors"
+                className="inline-flex items-center min-h-[24px] px-1 text-[color:var(--text-secondary)] hover:text-[color:var(--accent-primary)] transition-colors"
                 // Same rule as a category's own Select All: never sweeps
                 // in a rule that loses something the user has not already
                 // said to stop asking about.
@@ -594,7 +598,7 @@ function DeepClean() {
               </button>
               <span className="text-[color:var(--border-subtle)]">·</span>
               <button
-                className="text-[color:var(--text-secondary)] hover:text-[color:var(--accent-primary)] transition-colors disabled:opacity-40"
+                className="inline-flex items-center min-h-[24px] px-1 text-[color:var(--text-secondary)] hover:text-[color:var(--accent-primary)] transition-colors disabled:opacity-40"
                 onClick={() => setSelected(new Set())}
                 disabled={selected.size === 0}
               >
@@ -617,7 +621,7 @@ function DeepClean() {
                   <span> -- the same tradeoff every other screen's own
                   confirm bar already made, since a translated catalog
                   function can only return a plain string. */}
-              <span className="text-[12.5px] text-[color:var(--danger)] mr-1">
+              <span className="text-[12.5px] text-[color:var(--text-primary)] mr-1">
                 {t('deepClean.confirm.prompt', selected.size, cleanTotal.anyMeasured, formatBytes(cleanTotal.bytes))}
               </span>
               {/* Once the delete is actually in flight, Cancel no longer

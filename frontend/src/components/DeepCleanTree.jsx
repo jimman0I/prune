@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { categorySelectionState, nextCategoryChecked } from '../lib/categorySelection.js';
+import { selectionTotal } from '../lib/selectionTotal.js';
+import { readCollapsedCategories, writeCollapsedCategories } from '../lib/deepCleanExpansion.js';
 import { tileLetter } from '../lib/iconTileLetter.js';
 import { tileColor, TILE_INK } from '../lib/programTileColor.js';
 import { useLanguage } from '../i18n/LanguageContext.jsx';
@@ -36,33 +38,45 @@ import { useLanguage } from '../i18n/LanguageContext.jsx';
  * `state` is 'none' | 'all' | 'some'. The partial state draws a dash
  * rather than a tick, which is the one shape that cannot be mistaken for
  * either of the other two. */
-function Checkbox({ state, onChange, label, size = 16 }) {
+function Checkbox({ state, onChange, label, size = 16, hit = size, className = '' }) {
   const filled = state === 'all' || state === 'some';
 
   return (
+    // `hit` is the button (what a pointer can land on), `size` is the box
+    // that is drawn inside it. Equal for a rule's own box, which sits in a
+    // row that is itself the click target; the category heading's is 28
+    // around 16, so the 16 px box is no longer the whole target.
     <button
       type="button"
       role="checkbox"
       aria-checked={state === 'some' ? 'mixed' : state === 'all'}
       aria-label={label}
-      onClick={onChange}
-      style={{ width: size, height: size }}
-      className={`rounded-[4px] flex items-center justify-center shrink-0 transition-colors border ${
-        filled
-          ? 'bg-[color:var(--accent-primary)] border-[color:var(--accent-primary)]'
-          : 'bg-[color:var(--surface-subtle)] border-[color:var(--control-border)] hover:border-[color:var(--control-border-hover)]'
-      }`}
+      // The row a rule's box lives in is clickable too, so this must not
+      // bubble or one click would toggle twice and land where it began.
+      onClick={(event) => { event.stopPropagation(); onChange(); }}
+      style={{ width: hit, height: hit }}
+      className={`group flex items-center justify-center shrink-0 ${className}`}
     >
-      {state === 'all' && (
-        <svg width={size - 6} height={size - 6} viewBox="0 0 24 24" fill="none" stroke="var(--accent-ink)" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
-          <polyline points="20 6 9 17 4 12"></polyline>
-        </svg>
-      )}
-      {state === 'some' && (
-        <svg width={size - 6} height={size - 6} viewBox="0 0 24 24" fill="none" stroke="var(--accent-ink)" strokeWidth="3.5" strokeLinecap="round">
-          <line x1="5" y1="12" x2="19" y2="12"></line>
-        </svg>
-      )}
+      <span
+        data-checkbox-visual
+        style={{ width: size, height: size }}
+        className={`rounded-[4px] flex items-center justify-center transition-colors border ${
+          filled
+            ? 'bg-[color:var(--accent-primary)] border-[color:var(--accent-primary)]'
+            : 'bg-[color:var(--surface-subtle)] border-[color:var(--control-border)] group-hover:border-[color:var(--control-border-hover)]'
+        }`}
+      >
+        {state === 'all' && (
+          <svg width={size - 6} height={size - 6} viewBox="0 0 24 24" fill="none" stroke="var(--accent-ink)" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+        )}
+        {state === 'some' && (
+          <svg width={size - 6} height={size - 6} viewBox="0 0 24 24" fill="none" stroke="var(--accent-ink)" strokeWidth="3.5" strokeLinecap="round">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </svg>
+        )}
+      </span>
     </button>
   );
 }
@@ -87,7 +101,17 @@ function SizeLabel({ item }) {
     return <span className="font-mono text-[11px] shrink-0 text-[color:var(--text-muted)]">—</span>;
   }
   if (item.accessible === false) {
-    return <span className="log-line-in font-mono text-[11px] shrink-0 text-[color:var(--warning)]">{t('deepClean.tree.needsAdmin')}</span>;
+    // Secondary text and a lock, not the amber that means "loses data" on
+    // the badge beside the name: two different meanings do not get one colour.
+    return (
+      <span className="log-line-in inline-flex items-center gap-1 font-mono text-[11px] shrink-0 text-[color:var(--text-secondary)]">
+        <svg data-lock aria-hidden="true" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <rect x="4" y="11" width="16" height="10" rx="2" />
+          <path d="M8 11V7a4 4 0 0 1 8 0v4" />
+        </svg>
+        {t('deepClean.tree.needsAdmin')}
+      </span>
+    );
   }
   if (item.present === false) {
     return <span className="log-line-in font-mono text-[11px] shrink-0 text-[color:var(--text-muted)]">{t('deepClean.tree.notInstalled')}</span>;
@@ -141,15 +165,18 @@ function CategoryIcon({ category, src }) {
   );
 }
 
-function CategorySection({ category, items, iconSrc, selected, onToggle, onToggleCategory, activeId, receiptMode = false }) {
+function CategorySection({ category, items, allItems = items, iconSrc, selected, onToggle, onToggleCategory, activeId, receiptMode = false, collapsed, onToggleCollapsed, filtering = false }) {
   const { t } = useLanguage();
-  const [expanded, setExpanded] = useState(true);
-  // receiptMode forces every remaining category open without touching the
-  // underlying `expanded` state itself -- a collapse the user made while
-  // browsing has to still be there, exactly as they left it, once Clean
-  // finishes and receiptMode goes back to false.
-  const isExpanded = receiptMode || expanded;
-  const state = categorySelectionState(items, selected);
+  // receiptMode -- and a filter that has matches in this category -- force
+  // it open without touching the remembered collapse itself: a collapse the
+  // user made while browsing has to still be there, exactly as they left
+  // it, once Clean finishes or the filter is cleared.
+  const isExpanded = receiptMode || filtering || !collapsed;
+  // The heading reflects, and acts on, the WHOLE category even while a
+  // filter shows only some of its rules. Its label says "everything under
+  // X", and a box that read "all" because the few visible rows were ticked
+  // would be claiming something about rules it is not showing.
+  const state = categorySelectionState(allItems, selected);
 
   return (
     <div>
@@ -170,7 +197,7 @@ function CategorySection({ category, items, iconSrc, selected, onToggle, onToggl
             deliberate individual click that raises the warning dialog. */}
         <button
           type="button"
-          onClick={() => setExpanded((e) => !e)}
+          onClick={() => onToggleCollapsed(category)}
           aria-expanded={isExpanded}
           className="flex items-center gap-2 min-w-0 flex-1 text-left"
         >
@@ -183,11 +210,15 @@ function CategorySection({ category, items, iconSrc, selected, onToggle, onToggl
           </svg>
           <CategoryIcon category={category} src={iconSrc} />
           <span className="text-[12.5px] font-medium text-[color:var(--text-primary)] truncate">{category}</span>
-          <span className="text-[10.5px] text-[color:var(--text-muted)] font-mono shrink-0">{items.length}</span>
+          <span className="text-[10.5px] text-[color:var(--text-muted)] font-mono shrink-0">{allItems.length}</span>
         </button>
+        {/* Negative margins so the 28 px target costs the row nothing: it
+            is the same 28 px tall row and the drawn box sits where it did. */}
         <Checkbox
           state={state}
           size={16}
+          hit={28}
+          className="-my-1.5 -mr-1.5"
           label={t('deepClean.tree.selectCategoryAriaLabel', category)}
           onChange={() => onToggleCategory(category, nextCategoryChecked(state))}
         />
@@ -206,9 +237,16 @@ function CategorySection({ category, items, iconSrc, selected, onToggle, onToggl
           return (
             <div
               key={item.id}
-              className={`flex items-center gap-2.5 pl-[38px] pr-3 py-[3px] hover:bg-[color:var(--surface-subtle)] transition-colors duration-300 ${
-                item.present === false ? 'opacity-45' : ''
-              } ${
+              // The whole row toggles the rule -- the box alone is 14 px.
+              // Focus goes to the row's own checkbox first because a click
+              // on a plain div focuses nothing, and a risky rule opens a
+              // dialog that hands focus back to whatever was focused when
+              // it opened: without this it would return to <body>.
+              onClick={(event) => {
+                event.currentTarget.querySelector('[role="checkbox"]')?.focus();
+                onToggle(item.id);
+              }}
+              className={`flex items-center gap-2.5 pl-[38px] pr-3 py-[3px] cursor-pointer hover:bg-[color:var(--surface-subtle)] transition-colors duration-300 ${
                 // The row a scan or a clean is working on right now -- the
                 // same "what is it doing" question the log line beside the
                 // tree already answers, put on the tree itself. A tint
@@ -220,7 +258,10 @@ function CategorySection({ category, items, iconSrc, selected, onToggle, onToggl
                   : ''
               }`}
             >
-              <span className="text-[12px] text-[color:var(--text-primary)] shrink-0">{item.name}</span>
+              {/* A rule for software that is not here reads muted rather than
+                  faded: opacity dropped the whole row, its live checkbox
+                  included, below legible contrast. */}
+              <span className={`text-[12px] shrink-0 ${item.present === false ? 'text-[color:var(--text-muted)]' : 'text-[color:var(--text-primary)]'}`}>{item.name}</span>
 
               {/* Marked because "recoverable" is not "wanted". Clean moves
                   everything to Quarantine first, so nothing here is
@@ -228,7 +269,7 @@ function CategorySection({ category, items, iconSrc, selected, onToggle, onToggl
                   not a surprise a cleaning tool should spring on anyone.
                   None of these is ticked by default; this says why. */}
               {item.risky && (
-                <span className="text-[8.5px] font-mono uppercase tracking-wider px-1 rounded bg-[color:var(--warning-soft)] text-[color:var(--warning)] border border-[color:var(--warning)]/25 shrink-0">
+                <span className="text-[10px] font-mono uppercase tracking-wider px-1 rounded bg-[color:var(--warning-soft)] text-[color:var(--warning)] border border-[color:var(--warning)]/25 shrink-0">
                   {t('deepClean.tree.losesData')}
                 </span>
               )}
@@ -282,31 +323,91 @@ function CategorySection({ category, items, iconSrc, selected, onToggle, onToggl
  * GET /api/deep-clean/category-icons, and is allowed to be empty or to
  * arrive late -- every heading renders either way. */
 export default function DeepCleanTree({ categories, selected, onToggle, onToggleCategory, icons = {}, activeId = null, receiptMode = false }) {
-  // The narrow sidebar Clean shows while running: a live receipt of only
-  // what's actually being processed, not the full browsable list. A
-  // category left with nothing selected in it is dropped entirely rather
-  // than shown empty.
+  const { t } = useLanguage();
+  const [query, setQuery] = useState('');
+  const [collapsed, setCollapsed] = useState(() => readCollapsedCategories(window.localStorage));
+
+  const toggleCollapsed = (category) => {
+    const next = new Set(collapsed);
+    if (next.has(category)) next.delete(category); else next.add(category);
+    setCollapsed(next);
+    writeCollapsedCategories(window.localStorage, next);
+  };
+
+  const needle = receiptMode ? '' : query.trim().toLowerCase();
+  const filtering = needle !== '';
+
+  /* The filter is a VIEW. It narrows which rows are drawn and does nothing
+   * else: it never reads or writes the selection, so a ticked rule that is
+   * filtered out is still ticked, still counted in the header and the
+   * footer, and still cleaned. The heading of a category that stays on
+   * screen keeps describing the whole category for the same reason.
+   *
+   * receiptMode is the narrow sidebar Clean shows while running: a live
+   * receipt of only what's actually being processed, not the full browsable
+   * list. A category left with nothing selected in it is dropped entirely
+   * rather than shown empty. */
   const visibleGroups = receiptMode
     ? categories
         .map((group) => ({ ...group, items: group.items.filter((item) => selected.has(item.id)) }))
         .filter((group) => group.items.length > 0)
-    : categories;
+    : filtering
+      ? categories
+          .map((group) => {
+            // A match on the category's own name keeps all of its rules.
+            if (group.category.toLowerCase().includes(needle)) return { ...group, allItems: group.items };
+            const items = group.items.filter((item) =>
+              item.name.toLowerCase().includes(needle) || (item.description ?? '').toLowerCase().includes(needle));
+            return { ...group, allItems: group.items, items };
+          })
+          .filter((group) => group.items.length > 0)
+      : categories;
+
+  const total = categories.reduce((sum, group) => sum + group.items.length, 0);
+  const ticked = categories.reduce((sum, group) => sum + group.items.filter((item) => selected.has(item.id)).length, 0);
+  const measured = selectionTotal(categories, selected);
+  const summary = `${t('deepClean.tree.selectedOfTotal', ticked, total)}${measured.anyMeasured ? ` · ${formatBytes(measured.bytes)}` : ''}`;
+  const placeholder = t('deepClean.tree.filterPlaceholder');
 
   return (
-    <div className="glass-panel rounded-xl overflow-y-auto min-h-0">
-      {visibleGroups.map((group) => (
-        <CategorySection
-          key={group.category}
-          category={group.category}
-          items={group.items}
-          iconSrc={icons[group.category]}
-          selected={selected}
-          onToggle={onToggle}
-          onToggleCategory={onToggleCategory}
-          activeId={activeId}
-          receiptMode={receiptMode}
-        />
-      ))}
+    <div className="glass-panel rounded-xl min-h-0 flex flex-col overflow-hidden">
+      {!receiptMode && (
+        <div className="flex items-center gap-3 px-3 py-2 border-b border-[color:var(--border-subtle)] shrink-0">
+          <input
+            type="text"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            onKeyDown={(e) => { if (e.key === 'Escape' && query) { e.stopPropagation(); setQuery(''); } }}
+            placeholder={placeholder}
+            aria-label={placeholder}
+            className="flex-1 min-w-0 text-[12.5px] px-3 py-1.5 rounded-lg bg-[color:var(--surface-hover)] border border-[color:var(--border-subtle)] text-[color:var(--text-primary)] placeholder:text-[color:var(--text-muted)] focus:border-[color:var(--accent-primary)]/50"
+          />
+          <span className="text-[11.5px] font-mono text-[color:var(--text-secondary)] shrink-0">{summary}</span>
+        </div>
+      )}
+
+      <div className="overflow-y-auto min-h-0 flex-1">
+        {filtering && visibleGroups.length === 0 && (
+          <p className="px-4 py-6 text-center text-[12.5px] text-[color:var(--text-muted)]">{t('deepClean.tree.filterNone')}</p>
+        )}
+        {visibleGroups.map((group) => (
+          <CategorySection
+            key={group.category}
+            category={group.category}
+            items={group.items}
+            allItems={group.allItems ?? group.items}
+            iconSrc={icons[group.category]}
+            selected={selected}
+            onToggle={onToggle}
+            onToggleCategory={onToggleCategory}
+            activeId={activeId}
+            receiptMode={receiptMode}
+            collapsed={collapsed.has(group.category)}
+            onToggleCollapsed={toggleCollapsed}
+            filtering={filtering}
+          />
+        ))}
+      </div>
     </div>
   );
 }

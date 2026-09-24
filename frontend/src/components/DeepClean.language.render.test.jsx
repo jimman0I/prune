@@ -133,11 +133,10 @@ describe('the Deep Clean screen, in Greek', () => {
     fetchDeepCleanRules.mockImplementation(() => new Promise(() => {}));
     mount();
     await ready();
-    // The same translated string legitimately appears twice: the "before
-    // any scan" panel's own heading, and ScanLog's empty-log message
-    // (deepClean.emptyState is shared, mirroring the original English
-    // code's identical literal used in both places).
-    expect(await screen.findAllByText('Δεν έχει σαρωθεί τίποτα ακόμα.')).toHaveLength(2);
+    // Once now: the empty scan log says what to do next instead of
+    // repeating the panel's own "nothing scanned yet".
+    expect(await screen.findAllByText('Δεν έχει σαρωθεί τίποτα ακόμα.')).toHaveLength(1);
+    expect(screen.getByText('Πατήστε Προεπισκόπηση για να μετρήσετε τι μπορεί να καθαριστεί.')).toBeTruthy();
     expect(screen.getByText(/διαρκεί περίπου μισό λεπτό/)).toBeTruthy();
     expect(screen.getAllByRole('button', { name: 'Προεπισκόπηση' }).length).toBeGreaterThan(0);
   });
@@ -213,7 +212,7 @@ describe('the Deep Clean screen, in Greek', () => {
     await user.click(boxes[boxes.length - 1]);
     await waitFor(() => expect(cleanButton().disabled).toBe(false));
     await user.click(cleanButton());
-    await user.click(screen.getByRole('button', { name: 'Επιβεβαίωση' }));
+    await user.click(screen.getByRole('button', { name: 'Μετακίνηση σε καραντίνα' }));
 
     expect(await screen.findByText(/Αδυναμία καθαρισμού: EBUSY/)).toBeTruthy();
   });
@@ -287,6 +286,18 @@ describe('the Deep Clean screen, in Greek', () => {
     expect(screen.getByText('0 επιλέχθηκαν')).toBeTruthy();
   });
 
+  it('translates the tree filter, its header and its empty result', async () => {
+    const user = userEvent.setup();
+    mount();
+    await ready();
+    await screen.findByText('Temporary files');
+
+    expect(screen.getByText('0 από 2 επιλεγμένα')).toBeTruthy();
+    const filter = screen.getByRole('textbox', { name: 'Φιλτράρισμα καθαριστών…' });
+    await user.type(filter, 'zzzz');
+    expect(screen.getByText('Κανένας καθαριστής δεν ταιριάζει με αυτό το φίλτρο.')).toBeTruthy();
+  });
+
   it('translates the confirm prompt, Cancel and Confirm', async () => {
     const user = userEvent.setup();
     mount();
@@ -299,7 +310,7 @@ describe('the Deep Clean screen, in Greek', () => {
 
     expect(screen.getByText(/Μετακίνηση 1 στοιχείων \(το μέγεθος δεν μετρήθηκε\) σε καραντίνα;/)).toBeTruthy();
     expect(screen.getByRole('button', { name: 'Ακύρωση' })).toBeTruthy();
-    expect(screen.getByRole('button', { name: 'Επιβεβαίωση' })).toBeTruthy();
+    expect(screen.getByRole('button', { name: 'Μετακίνηση σε καραντίνα' })).toBeTruthy();
   });
 
   it('translates the Cleaning… busy state', async () => {
@@ -317,7 +328,7 @@ describe('the Deep Clean screen, in Greek', () => {
     await user.click(boxes[boxes.length - 1]);
     await waitFor(() => expect(cleanButton().disabled).toBe(false));
     await user.click(cleanButton());
-    await user.click(screen.getByRole('button', { name: 'Επιβεβαίωση' }));
+    await user.click(screen.getByRole('button', { name: 'Μετακίνηση σε καραντίνα' }));
 
     expect(await screen.findByRole('button', { name: 'Καθαρισμός…' })).toBeTruthy();
     resolveClean();
@@ -346,7 +357,7 @@ describe('the Deep Clean screen, in Greek', () => {
     await user.click(boxes[boxes.length - 1]);
     await waitFor(() => expect(cleanButton().disabled).toBe(false));
     await user.click(cleanButton());
-    await user.click(screen.getByRole('button', { name: 'Επιβεβαίωση' }));
+    await user.click(screen.getByRole('button', { name: 'Μετακίνηση σε καραντίνα' }));
 
     expect(await screen.findByText(/Ο καθαρισμός ολοκληρώθηκε\. Ελευθερώθηκαν/)).toBeTruthy();
     expect(await screen.findByText('Παραλείφθηκε 1 κλειδωμένο αρχείο.')).toBeTruthy();
