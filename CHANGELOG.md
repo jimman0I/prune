@@ -3,6 +3,34 @@
 All notable changes to Prune (formerly named unrevo -- rebranded 2026-09-01,
 see v1.0.1 below) are documented here.
 
+## v2.8.0
+
+Prune now remembers where you left it, and batch uninstall no longer
+declares success before an uninstaller has actually finished.
+
+### Fixed
+
+- **Batch uninstall could report "Uninstalled" while the program was
+  still fully installed.** Selecting programs and choosing "Uninstall N
+  programs" scanned for leftovers the instant each uninstaller's process
+  exited. Some uninstallers hand the real work off and exit almost
+  immediately -- Riot's VALORANT uninstaller, confirmed live, returned
+  within seconds while its 32 GB install was never touched -- so Prune
+  reported success and cleaned a few small leftovers while the program
+  itself stayed exactly where it was. Batch uninstall now waits for you
+  to confirm the uninstallers are done before it scans, the same step
+  the single-program uninstall already had.
+
+### Added
+
+- **The window reopens where you left it** -- same size, same position,
+  maximized if it was. If the monitor it was on is no longer connected,
+  it opens centred on one that is, rather than somewhere off-screen.
+- **Settings reopens on the tab you last used**, instead of always
+  General.
+- **Deep Clean remembers what you ticked.** The selection is kept across
+  relaunches instead of resetting to the defaults every time.
+
 ## v2.7.1
 
 Fixes a real Deep Clean false positive: a game could show up as
