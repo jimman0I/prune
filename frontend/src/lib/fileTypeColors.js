@@ -123,3 +123,33 @@ export function colorForNode(node, colors) {
   if (!node || node.type !== 'file') return COLOR_DIRECTORY;
   return colorForExtension(extensionOf(node.name), colors);
 }
+
+/** Label inks for the treemap. Dark on the sixteen type colours (4.9 to 9.7:1
+ * on them) and full white only on the three dark neutrals: the old label was
+ * white at 85% opacity on every fill, which is 2 to 3.4:1 on the light hues. */
+export const INK_DARK = '#09090b';
+export const INK_LIGHT = '#ffffff';
+
+/** Relative luminance of a #rrggbb colour, per WCAG 2.x. */
+function relativeLuminance(hex) {
+  const n = parseInt(String(hex).replace('#', ''), 16);
+  const channel = (v) => {
+    const c = v / 255;
+    return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
+  };
+  return 0.2126 * channel((n >> 16) & 255) + 0.7152 * channel((n >> 8) & 255) + 0.0722 * channel(n & 255);
+}
+
+/** WCAG contrast ratio between two #rrggbb colours (1 to 21). */
+export function wcagContrast(a, b) {
+  const la = relativeLuminance(a);
+  const lb = relativeLuminance(b);
+  return (Math.max(la, lb) + 0.05) / (Math.min(la, lb) + 0.05);
+}
+
+/** The label ink for a fill: whichever of the two has the higher contrast.
+ * Chosen by measurement, so a future palette entry gets the right ink
+ * without anyone remembering which end of the wheel is "light". */
+export function inkForFill(fill) {
+  return wcagContrast(INK_DARK, fill) >= wcagContrast(INK_LIGHT, fill) ? INK_DARK : INK_LIGHT;
+}
