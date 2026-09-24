@@ -298,6 +298,8 @@ export const CATALOG = {
         elapsed: (time) => `Elapsed ${time}`,
         complete: "Scan complete",
         completeCounts: (files, size) => `Scan complete — ${files} files, ${size}`,
+        stoppedEarly: "Scan stopped early",
+        stoppedEarlyCounts: (files, size) => `Scan stopped early — ${files} files, ${size} so far`,
         scanAgain: "Scan again",
         retry: "Retry",
         barLabel: "Scan progress"
@@ -1014,6 +1016,8 @@ export const CATALOG = {
         elapsed: (time) => `Verstreke ${time}`,
         complete: "Skandering voltooi",
         completeCounts: (files, size) => `Skandering voltooi — ${files} lêers, ${size}`,
+        stoppedEarly: "Skandering vroeg gestop",
+        stoppedEarlyCounts: (files, size) => `Skandering vroeg gestop — tot dusver ${files} lêers, ${size}`,
         scanAgain: "Skandeer weer",
         retry: "Probeer weer",
         barLabel: "Skanderingsvordering"
@@ -1730,6 +1734,8 @@ export const CATALOG = {
         elapsed: (time) => `المدة المنقضية ${time}`,
         complete: "اكتمل الفحص",
         completeCounts: (files, size) => `اكتمل الفحص — ${files} ملف، ${size}`,
+        stoppedEarly: "توقف الفحص مبكرًا",
+        stoppedEarlyCounts: (files, size) => `توقف الفحص مبكرًا — ${files} ملف، ${size} حتى الآن`,
         scanAgain: "افحص مرة أخرى",
         retry: "إعادة المحاولة",
         barLabel: "تقدم الفحص"
@@ -2446,6 +2452,8 @@ export const CATALOG = {
         elapsed: (time) => `Transcorregut ${time}`,
         complete: "Anàlisi completada",
         completeCounts: (files, size) => `Anàlisi completada — ${files} fitxers, ${size}`,
+        stoppedEarly: "L'anàlisi s'ha aturat abans d'hora",
+        stoppedEarlyCounts: (files, size) => `L'anàlisi s'ha aturat abans d'hora — fins ara ${files} fitxers, ${size}`,
         scanAgain: "Torna a analitzar",
         retry: "Torna-ho a provar",
         barLabel: "Progrés de l'anàlisi"
@@ -3162,6 +3170,8 @@ export const CATALOG = {
         elapsed: (time) => `Uplynulo ${time}`,
         complete: "Skenování dokončeno",
         completeCounts: (files, size) => `Skenování dokončeno — souborů: ${files}, ${size}`,
+        stoppedEarly: "Skenování bylo předčasně zastaveno",
+        stoppedEarlyCounts: (files, size) => `Skenování bylo předčasně zastaveno — zatím souborů: ${files}, ${size}`,
         scanAgain: "Skenovat znovu",
         retry: "Zkusit znovu",
         barLabel: "Průběh skenování"
@@ -3878,6 +3888,8 @@ export const CATALOG = {
         elapsed: (time) => `Wedi mynd heibio ${time}`,
         complete: "Sgan wedi'i gwblhau",
         completeCounts: (files, size) => `Sgan wedi'i gwblhau — ${files} ffeil, ${size}`,
+        stoppedEarly: "Stopiwyd y sgan yn gynnar",
+        stoppedEarlyCounts: (files, size) => `Stopiwyd y sgan yn gynnar — ${files} ffeil, ${size} hyd yma`,
         scanAgain: "Sganio eto",
         retry: "Rhowch gynnig arall arni",
         barLabel: "Cynnydd y sgan"
@@ -4594,6 +4606,8 @@ export const CATALOG = {
         elapsed: (time) => `Forløbet tid ${time}`,
         complete: "Scanning fuldført",
         completeCounts: (files, size) => `Scanning fuldført — ${files} filer, ${size}`,
+        stoppedEarly: "Scanningen stoppede før tid",
+        stoppedEarlyCounts: (files, size) => `Scanningen stoppede før tid — indtil nu ${files} filer, ${size}`,
         scanAgain: "Scan igen",
         retry: "Prøv igen",
         barLabel: "Scanningsforløb"
@@ -5310,6 +5324,8 @@ export const CATALOG = {
         elapsed: (time) => `Verstrichen: ${time}`,
         complete: "Scan abgeschlossen",
         completeCounts: (files, size) => `Scan abgeschlossen – ${files} Dateien, ${size}`,
+        stoppedEarly: "Scan vorzeitig beendet",
+        stoppedEarlyCounts: (files, size) => `Scan vorzeitig beendet – bisher ${files} Dateien, ${size}`,
         scanAgain: "Erneut scannen",
         retry: "Wiederholen",
         barLabel: "Scanfortschritt"
@@ -6026,6 +6042,8 @@ export const CATALOG = {
         elapsed: (time) => `Χρόνος ${time}`,
         complete: "Η σάρωση ολοκληρώθηκε",
         completeCounts: (files, size) => `Η σάρωση ολοκληρώθηκε — ${files} αρχεία, ${size}`,
+        stoppedEarly: "Η σάρωση σταμάτησε πρόωρα",
+        stoppedEarlyCounts: (files, size) => `Η σάρωση σταμάτησε πρόωρα — μέχρι τώρα ${files} αρχεία, ${size}`,
         scanAgain: "Σάρωση ξανά",
         retry: "Δοκιμή ξανά",
         barLabel: "Πρόοδος σάρωσης"
@@ -6742,6 +6760,8 @@ export const CATALOG = {
         elapsed: (time) => `Transcurrido ${time}`,
         complete: "Análisis completado",
         completeCounts: (files, size) => `Análisis completado — ${files} archivos, ${size}`,
+        stoppedEarly: "El análisis se detuvo antes de terminar",
+        stoppedEarlyCounts: (files, size) => `El análisis se detuvo antes de terminar — hasta ahora ${files} archivos, ${size}`,
         scanAgain: "Analizar de nuevo",
         retry: "Reintentar",
         barLabel: "Progreso del análisis"
@@ -7458,6 +7478,8 @@ export const CATALOG = {
         elapsed: (time) => `Kulunud aeg ${time}`,
         complete: "Skannimine lõpetatud",
         completeCounts: (files, size) => `Skannimine lõpetatud — ${files} faili, ${size}`,
+        stoppedEarly: "Skannimine peatati enneaegselt",
+        stoppedEarlyCounts: (files, size) => `Skannimine peatati enneaegselt — seni ${files} faili, ${size}`,
         scanAgain: "Skanni uuesti",
         retry: "Proovi uuesti",
         barLabel: "Skannimise edenemine"
@@ -8174,6 +8196,8 @@ export const CATALOG = {
         elapsed: (time) => `Kulunut aika ${time}`,
         complete: "Skannaus valmis",
         completeCounts: (files, size) => `Skannaus valmis — ${files} tiedostoa, ${size}`,
+        stoppedEarly: "Skannaus keskeytyi ennenaikaisesti",
+        stoppedEarlyCounts: (files, size) => `Skannaus keskeytyi ennenaikaisesti — toistaiseksi ${files} tiedostoa, ${size}`,
         scanAgain: "Skannaa uudelleen",
         retry: "Yritä uudelleen",
         barLabel: "Skannauksen eteneminen"
@@ -8890,6 +8914,8 @@ export const CATALOG = {
         elapsed: (time) => `Temps écoulé : ${time}`,
         complete: "Analyse terminée",
         completeCounts: (files, size) => `Analyse terminée — ${files} fichiers, ${size}`,
+        stoppedEarly: "L'analyse s'est arrêtée avant la fin",
+        stoppedEarlyCounts: (files, size) => `L'analyse s'est arrêtée avant la fin — jusqu'ici ${files} fichiers, ${size}`,
         scanAgain: "Analyser à nouveau",
         retry: "Réessayer",
         barLabel: "Progression de l'analyse"
@@ -9606,6 +9632,8 @@ export const CATALOG = {
         elapsed: (time) => `זמן שחלף ${time}`,
         complete: "הסריקה הושלמה",
         completeCounts: (files, size) => `הסריקה הושלמה — ${files} קבצים, ${size}`,
+        stoppedEarly: "הסריקה נעצרה מוקדם",
+        stoppedEarlyCounts: (files, size) => `הסריקה נעצרה מוקדם — עד כה ${files} קבצים, ${size}`,
         scanAgain: "סרוק שוב",
         retry: "נסה שוב",
         barLabel: "התקדמות הסריקה"
@@ -10322,6 +10350,8 @@ export const CATALOG = {
         elapsed: (time) => `Eltelt idő: ${time}`,
         complete: "A vizsgálat kész",
         completeCounts: (files, size) => `A vizsgálat kész — ${files} fájl, ${size}`,
+        stoppedEarly: "A vizsgálat idő előtt leállt",
+        stoppedEarlyCounts: (files, size) => `A vizsgálat idő előtt leállt — eddig ${files} fájl, ${size}`,
         scanAgain: "Vizsgálat újra",
         retry: "Újra",
         barLabel: "A vizsgálat állapota"
@@ -11038,6 +11068,8 @@ export const CATALOG = {
         elapsed: (time) => `Berlalu ${time}`,
         complete: "Pemindaian selesai",
         completeCounts: (files, size) => `Pemindaian selesai — ${files} berkas, ${size}`,
+        stoppedEarly: "Pemindaian berhenti lebih awal",
+        stoppedEarlyCounts: (files, size) => `Pemindaian berhenti lebih awal — sejauh ini ${files} berkas, ${size}`,
         scanAgain: "Pindai lagi",
         retry: "Coba lagi",
         barLabel: "Kemajuan pemindaian"
@@ -11754,6 +11786,8 @@ export const CATALOG = {
         elapsed: (time) => `Liðinn tími ${time}`,
         complete: "Skönnun lokið",
         completeCounts: (files, size) => `Skönnun lokið — ${files} skrár, ${size}`,
+        stoppedEarly: "Skönnun stöðvaðist snemma",
+        stoppedEarlyCounts: (files, size) => `Skönnun stöðvaðist snemma — til þessa ${files} skrár, ${size}`,
         scanAgain: "Skanna aftur",
         retry: "Reyna aftur",
         barLabel: "Framvinda skönnunar"
@@ -12470,6 +12504,8 @@ export const CATALOG = {
         elapsed: (time) => `Tempo trascorso ${time}`,
         complete: "Analisi completata",
         completeCounts: (files, size) => `Analisi completata — ${files} file, ${size}`,
+        stoppedEarly: "Analisi interrotta in anticipo",
+        stoppedEarlyCounts: (files, size) => `Analisi interrotta in anticipo — finora ${files} file, ${size}`,
         scanAgain: "Analizza di nuovo",
         retry: "Riprova",
         barLabel: "Avanzamento dell'analisi"
@@ -13186,6 +13222,8 @@ export const CATALOG = {
         elapsed: (time) => `経過時間 ${time}`,
         complete: "スキャン完了",
         completeCounts: (files, size) => `スキャン完了 — ${files} 個のファイル、${size}`,
+        stoppedEarly: "スキャンは途中で停止しました",
+        stoppedEarlyCounts: (files, size) => `スキャンは途中で停止しました — ここまでで ${files} 個のファイル、${size}`,
         scanAgain: "もう一度スキャン",
         retry: "再試行",
         barLabel: "スキャンの進行状況"
@@ -13902,6 +13940,8 @@ export const CATALOG = {
         elapsed: (time) => `경과 시간 ${time}`,
         complete: "검사 완료",
         completeCounts: (files, size) => `검사 완료 — 파일 ${files}개, ${size}`,
+        stoppedEarly: "검사가 중간에 중단되었습니다",
+        stoppedEarlyCounts: (files, size) => `검사가 중간에 중단되었습니다 — 지금까지 파일 ${files}개, ${size}`,
         scanAgain: "다시 검사",
         retry: "다시 시도",
         barLabel: "검사 진행률"
@@ -14618,6 +14658,8 @@ export const CATALOG = {
         elapsed: (time) => `Praėjo ${time}`,
         complete: "Nuskaitymas baigtas",
         completeCounts: (files, size) => `Nuskaitymas baigtas — failų: ${files}, ${size}`,
+        stoppedEarly: "Nuskaitymas sustabdytas anksčiau laiko",
+        stoppedEarlyCounts: (files, size) => `Nuskaitymas sustabdytas anksčiau laiko — iki šiol failų: ${files}, ${size}`,
         scanAgain: "Nuskaityti dar kartą",
         retry: "Bandyti dar kartą",
         barLabel: "Nuskaitymo eiga"
@@ -15334,6 +15376,8 @@ export const CATALOG = {
         elapsed: (time) => `Masa berlalu ${time}`,
         complete: "Imbasan selesai",
         completeCounts: (files, size) => `Imbasan selesai — ${files} fail, ${size}`,
+        stoppedEarly: "Imbasan berhenti lebih awal",
+        stoppedEarlyCounts: (files, size) => `Imbasan berhenti lebih awal — setakat ini ${files} fail, ${size}`,
         scanAgain: "Imbas semula",
         retry: "Cuba lagi",
         barLabel: "Kemajuan imbasan"
@@ -16050,6 +16094,8 @@ export const CATALOG = {
         elapsed: (time) => `Forløpt tid ${time}`,
         complete: "Skanningen er fullført",
         completeCounts: (files, size) => `Skanningen er fullført — ${files} filer, ${size}`,
+        stoppedEarly: "Skanningen stoppet tidlig",
+        stoppedEarlyCounts: (files, size) => `Skanningen stoppet tidlig — så langt ${files} filer, ${size}`,
         scanAgain: "Skann på nytt",
         retry: "Prøv igjen",
         barLabel: "Skanningsfremdrift"
@@ -16766,6 +16812,8 @@ export const CATALOG = {
         elapsed: (time) => `Verstreken ${time}`,
         complete: "Scan voltooid",
         completeCounts: (files, size) => `Scan voltooid — ${files} bestanden, ${size}`,
+        stoppedEarly: "Scan voortijdig gestopt",
+        stoppedEarlyCounts: (files, size) => `Scan voortijdig gestopt — tot nu toe ${files} bestanden, ${size}`,
         scanAgain: "Opnieuw scannen",
         retry: "Opnieuw proberen",
         barLabel: "Scanvoortgang"
@@ -17482,6 +17530,8 @@ export const CATALOG = {
         elapsed: (time) => `Upłynęło ${time}`,
         complete: "Skanowanie zakończone",
         completeCounts: (files, size) => `Skanowanie zakończone — plików: ${files}, ${size}`,
+        stoppedEarly: "Skanowanie zatrzymane przed ukończeniem",
+        stoppedEarlyCounts: (files, size) => `Skanowanie zatrzymane przed ukończeniem — dotąd plików: ${files}, ${size}`,
         scanAgain: "Skanuj ponownie",
         retry: "Spróbuj ponownie",
         barLabel: "Postęp skanowania"
@@ -18198,6 +18248,8 @@ export const CATALOG = {
         elapsed: (time) => `تېر وخت ${time}`,
         complete: "سکین بشپړ شو",
         completeCounts: (files, size) => `سکین بشپړ شو — ${files} فایلونه، ${size}`,
+        stoppedEarly: "سکین وختي ودرېد",
+        stoppedEarlyCounts: (files, size) => `سکین وختي ودرېد — تر اوسه ${files} فایلونه، ${size}`,
         scanAgain: "بیا سکین کړئ",
         retry: "بیا هڅه وکړئ",
         barLabel: "د سکین پرمختګ"
@@ -18914,6 +18966,8 @@ export const CATALOG = {
         elapsed: (time) => `Decorrido ${time}`,
         complete: "Verificação concluída",
         completeCounts: (files, size) => `Verificação concluída — ${files} arquivos, ${size}`,
+        stoppedEarly: "Verificação interrompida antes do fim",
+        stoppedEarlyCounts: (files, size) => `Verificação interrompida antes do fim — até agora ${files} arquivos, ${size}`,
         scanAgain: "Verificar novamente",
         retry: "Tentar novamente",
         barLabel: "Progresso da verificação"
@@ -19630,6 +19684,8 @@ export const CATALOG = {
         elapsed: (time) => `Decorrido ${time}`,
         complete: "Análise concluída",
         completeCounts: (files, size) => `Análise concluída — ${files} ficheiros, ${size}`,
+        stoppedEarly: "Análise interrompida antes do fim",
+        stoppedEarlyCounts: (files, size) => `Análise interrompida antes do fim — até agora ${files} ficheiros, ${size}`,
         scanAgain: "Analisar novamente",
         retry: "Tentar novamente",
         barLabel: "Progresso da análise"
@@ -20346,6 +20402,8 @@ export const CATALOG = {
         elapsed: (time) => `Timp scurs ${time}`,
         complete: "Scanare încheiată",
         completeCounts: (files, size) => `Scanare încheiată — ${files} fișiere, ${size}`,
+        stoppedEarly: "Scanarea s-a oprit înainte de final",
+        stoppedEarlyCounts: (files, size) => `Scanarea s-a oprit înainte de final — până acum ${files} fișiere, ${size}`,
         scanAgain: "Scanează din nou",
         retry: "Încearcă din nou",
         barLabel: "Progresul scanării"
@@ -21062,6 +21120,8 @@ export const CATALOG = {
         elapsed: (time) => `Прошло ${time}`,
         complete: "Сканирование завершено",
         completeCounts: (files, size) => `Сканирование завершено — файлов: ${files}, ${size}`,
+        stoppedEarly: "Сканирование остановлено досрочно",
+        stoppedEarlyCounts: (files, size) => `Сканирование остановлено досрочно — на данный момент файлов: ${files}, ${size}`,
         scanAgain: "Сканировать снова",
         retry: "Повторить",
         barLabel: "Ход сканирования"
@@ -21778,6 +21838,8 @@ export const CATALOG = {
         elapsed: (time) => `Uplynulo ${time}`,
         complete: "Skenovanie je dokončené",
         completeCounts: (files, size) => `Skenovanie je dokončené — súborov: ${files}, ${size}`,
+        stoppedEarly: "Skenovanie sa predčasne zastavilo",
+        stoppedEarlyCounts: (files, size) => `Skenovanie sa predčasne zastavilo — zatiaľ súborov: ${files}, ${size}`,
         scanAgain: "Skenovať znova",
         retry: "Skúsiť znova",
         barLabel: "Priebeh skenovania"
@@ -22494,6 +22556,8 @@ export const CATALOG = {
         elapsed: (time) => `Koha e kaluar ${time}`,
         complete: "Skanimi përfundoi",
         completeCounts: (files, size) => `Skanimi përfundoi — ${files} skedarë, ${size}`,
+        stoppedEarly: "Skanimi u ndal para kohe",
+        stoppedEarlyCounts: (files, size) => `Skanimi u ndal para kohe — deri tani ${files} skedarë, ${size}`,
         scanAgain: "Skano përsëri",
         retry: "Provo përsëri",
         barLabel: "Përparimi i skanimit"
@@ -23210,6 +23274,8 @@ export const CATALOG = {
         elapsed: (time) => `Протекло ${time}`,
         complete: "Скенирање је завршено",
         completeCounts: (files, size) => `Скенирање је завршено — датотека: ${files}, ${size}`,
+        stoppedEarly: "Скенирање је прекинуто пре краја",
+        stoppedEarlyCounts: (files, size) => `Скенирање је прекинуто пре краја — до сада датотека: ${files}, ${size}`,
         scanAgain: "Скенирај поново",
         retry: "Покушај поново",
         barLabel: "Напредак скенирања"
@@ -23926,6 +23992,8 @@ export const CATALOG = {
         elapsed: (time) => `Förfluten tid ${time}`,
         complete: "Skanningen är klar",
         completeCounts: (files, size) => `Skanningen är klar – ${files} filer, ${size}`,
+        stoppedEarly: "Skanningen avbröts i förtid",
+        stoppedEarlyCounts: (files, size) => `Skanningen avbröts i förtid – hittills ${files} filer, ${size}`,
         scanAgain: "Skanna igen",
         retry: "Försök igen",
         barLabel: "Skanningsförlopp"
@@ -24642,6 +24710,8 @@ export const CATALOG = {
         elapsed: (time) => `ใช้เวลาไปแล้ว ${time}`,
         complete: "สแกนเสร็จแล้ว",
         completeCounts: (files, size) => `สแกนเสร็จแล้ว — ${files} ไฟล์, ${size}`,
+        stoppedEarly: "การสแกนหยุดก่อนกำหนด",
+        stoppedEarlyCounts: (files, size) => `การสแกนหยุดก่อนกำหนด — จนถึงตอนนี้ ${files} ไฟล์, ${size}`,
         scanAgain: "สแกนอีกครั้ง",
         retry: "ลองอีกครั้ง",
         barLabel: "ความคืบหน้าการสแกน"
@@ -25358,6 +25428,8 @@ export const CATALOG = {
         elapsed: (time) => `Geçen süre ${time}`,
         complete: "Tarama tamamlandı",
         completeCounts: (files, size) => `Tarama tamamlandı — ${files} dosya, ${size}`,
+        stoppedEarly: "Tarama erken durduruldu",
+        stoppedEarlyCounts: (files, size) => `Tarama erken durduruldu — şimdiye kadar ${files} dosya, ${size}`,
         scanAgain: "Yeniden tara",
         retry: "Yeniden dene",
         barLabel: "Tarama ilerlemesi"
@@ -26074,6 +26146,8 @@ export const CATALOG = {
         elapsed: (time) => `Минуло ${time}`,
         complete: "Сканування завершено",
         completeCounts: (files, size) => `Сканування завершено — файлів: ${files}, ${size}`,
+        stoppedEarly: "Сканування зупинено достроково",
+        stoppedEarlyCounts: (files, size) => `Сканування зупинено достроково — на цей момент файлів: ${files}, ${size}`,
         scanAgain: "Сканувати знову",
         retry: "Повторити",
         barLabel: "Перебіг сканування"
@@ -26790,6 +26864,8 @@ export const CATALOG = {
         elapsed: (time) => `Đã trôi qua ${time}`,
         complete: "Quét xong",
         completeCounts: (files, size) => `Quét xong — ${files} tệp, ${size}`,
+        stoppedEarly: "Quét dừng sớm",
+        stoppedEarlyCounts: (files, size) => `Quét dừng sớm — cho đến nay ${files} tệp, ${size}`,
         scanAgain: "Quét lại",
         retry: "Thử lại",
         barLabel: "Tiến độ quét"
@@ -27506,6 +27582,8 @@ export const CATALOG = {
         elapsed: (time) => `已用时间 ${time}`,
         complete: "扫描完成",
         completeCounts: (files, size) => `扫描完成——${files} 个文件，${size}`,
+        stoppedEarly: "扫描提前停止",
+        stoppedEarlyCounts: (files, size) => `扫描提前停止——目前 ${files} 个文件，${size}`,
         scanAgain: "重新扫描",
         retry: "重试",
         barLabel: "扫描进度"
@@ -28222,6 +28300,8 @@ export const CATALOG = {
         elapsed: (time) => `已經過時間 ${time}`,
         complete: "掃描完成",
         completeCounts: (files, size) => `掃描完成——${files} 個檔案，${size}`,
+        stoppedEarly: "掃描提前停止",
+        stoppedEarlyCounts: (files, size) => `掃描提前停止——目前 ${files} 個檔案，${size}`,
         scanAgain: "重新掃描",
         retry: "重試",
         barLabel: "掃描進度"
