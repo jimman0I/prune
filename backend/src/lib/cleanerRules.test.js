@@ -3,7 +3,7 @@ import { mkdtemp, rm, writeFile, mkdir, readFile } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import * as fs from 'node:fs';
 import { tmpdir } from 'node:os';
-import { join } from 'node:path';
+import { join, dirname } from 'node:path';
 import {
   expandPath,
   loadCleanerRules,
@@ -1226,7 +1226,7 @@ describe('expandPath tokens', () => {
 describe('recursive ** glob segment', () => {
   async function put(root, rel, content) {
     const full = join(root, ...rel.split('/'));
-    await mkdir(join(full, '..'), { recursive: true });
+    await mkdir(dirname(full), { recursive: true });
     await writeFile(full, content);
     return Buffer.byteLength(content);
   }
@@ -1282,12 +1282,37 @@ describe('recursive ** glob segment', () => {
   });
 
   it('combines with a * segment', async () => {
-    const vs = join(appDataDir, 'VirtualStore');
+    const vs = join(localAppDataDir, 'VirtualStore');
     const s1 = await put(vs, 'Program Files/WinRAR/a.tmp', 'aaaa');
     const s2 = await put(vs, 'Program Files (x86)/WinRAR/sub/b.tmp', 'bb');
     await put(vs, 'Program Files/WinRAR/keep.txt', 'zzzz');
-    const result = scanRule({ id: 'rar', paths: ['%APPDATA%\\VirtualStore\\Program Files*\\WinRAR\\**\\*.tmp'] });
+    const result = scanRule({ id: 'rar', paths: ['%LOCALAPPDATA%\\VirtualStore\\Program Files*\\WinRAR\\**\\*.tmp'] });
     expect(result.fileCount).toBe(2);
     expect(result.sizeBytes).toBe(s1 + s2);
+  });
+
+  it('never counts a file twice when a matched directory is also descended into', async () => {
+    const tree = join(appDataDir, 'dup');
+    const size = await put(tree, 'odd.tmp/inner/x.tmp', 'xxxxx');
+    const result = scanRule({ id: 'rar', paths: ['%APPDATA%\\dup\\**\\*.tmp'] });
+    expect(result.fileCount).toBe(1);
+    expect(result.sizeBytes).toBe(size);
+  });
+
+  it('treats consecutive ** segments as one', async () => {
+    const tree = join(appDataDir, 'dup');
+    await put(tree, 'a.tmp', 'a');
+    await put(tree, 'sub/b.tmp', 'bb');
+    await put(tree, 'sub/deep/c.tmp', 'ccc');
+    await put(tree, 'sub/keep.txt', 'k');
+    const result = scanRule({ id: 'rar', paths: ['%APPDATA%\\dup\\**\\**\\*.tmp'] });
+    expect(result.fileCount).toBe(3);
+    expect(result.sizeBytes).toBe(6);
+  });
+
+  it('a ** under a missing folder matches nothing and does not throw', () => {
+    const result = scanRule({ id: 'rar', paths: ['%APPDATA%\\nonexistent\\**\\*.tmp'] });
+    expect(result.fileCount).toBe(0);
+    expect(result.present).toBe(false);
   });
 });

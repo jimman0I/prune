@@ -49,9 +49,15 @@ export function resolveGlob(basePath, segments) {
  * directories are descended into: a Dirent for a symlink or junction
  * reports isDirectory() false, so a junction loop can't recurse forever.
  * A trailing `**` is just its base path -- collectFiles already walks a
- * directory recursively, and expanding it here would list every file twice. */
+ * directory recursively, and expanding it here would list every file twice.
+ * A subfolder that refuses listing is skipped silently (same as the `*`
+ * branch -- not recorded as denied), and a folder whose name matches the
+ * final pattern is taken whole by collectFiles. */
 function resolveRecursive(basePath, rest) {
   if (rest.length === 0) return [basePath];
+  // `**\**` is the same set as `**`; without collapsing it every directory
+  // would be visited once per `**` combination.
+  if (rest[0] === '**') return resolveRecursive(basePath, rest.slice(1));
   const matches = resolveGlob(basePath, rest);
   let entries;
   try {
@@ -154,8 +160,22 @@ export function resolveActionFiles(expandedPaths, guards = {}) {
   // built on, rather than in each of them separately. The preview
   // promising a number the removal then doesn't free is exactly the
   // drift this shared resolver exists to prevent.
-  const { cleanable, held } = partitionCleanableFiles(files, guards);
-  return { files: cleanable, denied, held };
+  //
+  // Deduplicated first (lower-cased: Windows paths are case-insensitive):
+  // `**` can reach the same file through a matched directory (which
+  // collectFiles walks whole) and again through its own descent into that
+  // directory, and a file counted twice would inflate the scan and fail its
+  // second rename on execute.
+  const seen = new Set();
+  const uniqueFiles = files.filter((f) => {
+    const key = f.path.toLowerCase();
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+  const uniqueDenied = [...new Map(denied.map((p) => [p.toLowerCase(), p])).values()];
+  const { cleanable, held } = partitionCleanableFiles(uniqueFiles, guards);
+  return { files: cleanable, denied: uniqueDenied, held };
 }
 
 /** True if `filePath` can be opened for read+write right now -- Windows
