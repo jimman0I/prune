@@ -508,6 +508,7 @@ export default function Dashboard({ programs, totalSize, onNavigate = () => {} }
         <button
           onClick={() => setHistoryOpen((o) => !o)}
           aria-expanded={historyOpen}
+          aria-controls="recent-activity-panel"
           className="w-full min-h-[28px] flex items-center justify-between text-left"
         >
           <span className="text-[13px] font-medium text-[color:var(--text-primary)]">{t('dashboard.recentActivity.title')}</span>
@@ -520,7 +521,7 @@ export default function Dashboard({ programs, totalSize, onNavigate = () => {} }
           </svg>
         </button>
         {historyOpen && (
-          <div className="mt-4">
+          <div id="recent-activity-panel" className="mt-4">
             {history.length === 0 ? (
               <p className="text-[13px] text-[color:var(--text-secondary)]">{t('dashboard.recentActivity.empty')}</p>
             ) : (

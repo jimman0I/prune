@@ -158,18 +158,28 @@ describe('the two rail widths', () => {
     expect(rowLabel.getAttribute('aria-hidden')).toBe('true');
   });
 
-  it('hides the flyout when wide, since the label is already in the row', () => {
+  it('keeps only the key in the flyout when wide, since the name is already in the row', () => {
     renderScreen(<NavRail screen="dashboard" onNavigate={() => {}} />);
-    for (const label of LABELS) expect(classesOf(flyoutFor(label).flyout)).toContain('min-[1100px]:hidden');
+    LABELS.forEach((label, index) => {
+      const { flyout } = flyoutFor(label);
+      const [name, key] = flyout.children;
+      expect(name.textContent).toBe(label);
+      expect(classesOf(name)).toContain('min-[1100px]:hidden');
+      expect(key.textContent).toBe(`Ctrl+${index + 1}`);
+      expect(classesOf(key)).not.toContain('min-[1100px]:hidden');
+      // Still the hover / keyboard-focus tooltip, not a permanent chip.
+      expect(classesOf(flyout)).toContain('opacity-0');
+      expect(classesOf(flyout)).not.toContain('min-[1100px]:hidden');
+    });
   });
 
-  it('shows the key at the row end on hover or keyboard focus when wide', () => {
+  it('gives the in-row label the room it needs: nothing else sits in the row after it', () => {
+    // Regression: a reserved (opacity-0) key hint in the row took ~38px and
+    // truncated "Applications" at the 200px rail width.
     renderScreen(<NavRail screen="dashboard" onNavigate={() => {}} />);
-    const hint = [...screen.getByRole('button', { name: 'Quarantine' }).querySelectorAll('span')].find((el) => el.textContent === 'Ctrl+4');
-    expect(hint).toBeTruthy();
-    expect(classesOf(hint)).toEqual(expect.arrayContaining([
-      'opacity-0', 'group-hover:opacity-100', 'group-has-[:focus-visible]:opacity-100', 'min-[1100px]:block'
-    ]));
+    const button = screen.getByRole('button', { name: 'Applications' });
+    const rowSpans = [...button.children].filter((el) => el.tagName === 'SPAN' && !el.querySelector('svg'));
+    expect(rowSpans.map((el) => el.textContent)).toEqual(['Applications']);
   });
 });
 

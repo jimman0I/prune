@@ -78,6 +78,23 @@ describe('matchShortcut', () => {
     expect(matchShortcut(press('2', { ctrlKey: true, altKey: true }))).toBeNull();
   });
 
+  it('finds Ctrl+1 by its physical key on a layout where the digit needs Shift (AZERTY)', () => {
+    // AZERTY types "&" on the unshifted top-row 1 key: key is "&", code is Digit1.
+    expect(matchShortcut(press('&', { ctrlKey: true, code: 'Digit1' }))).toBe('screen:1');
+    expect(matchShortcut(press('é', { ctrlKey: true, code: 'Digit2' }))).toBe('screen:2');
+    expect(matchShortcut(press('4', { ctrlKey: true, code: 'Numpad4' }))).toBe('screen:4');
+  });
+
+  it('does not take Ctrl+Shift+digit by position, nor Digit0 or Digit9', () => {
+    expect(matchShortcut(press('!', { ctrlKey: true, shiftKey: true, code: 'Digit1' }))).toBeNull();
+    expect(matchShortcut(press('à', { ctrlKey: true, code: 'Digit0' }))).toBeNull();
+    expect(matchShortcut(press('ç', { ctrlKey: true, code: 'Digit9' }))).toBeNull();
+  });
+
+  it('still defers a positional digit to a focused field', () => {
+    expect(matchShortcut(press('&', { ctrlKey: true, code: 'Digit1', target: { tagName: 'INPUT' } }))).toBeNull();
+  });
+
   it('has no opinion about anything else', () => {
     expect(matchShortcut(press('s', { ctrlKey: true }))).toBeNull();
     expect(matchShortcut(null)).toBeNull();

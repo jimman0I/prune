@@ -114,10 +114,9 @@ const SETTINGS_ITEM = { id: 'settings', icon: (
  * TitleBar.render.test.jsx reads these numbers out of this file and fails
  * if the two states ever disagree.
  *
- * The flyout label is for the icon-only state (a glyph alone is a memory
- * test) and carries the Ctrl+N key; from 1100px the label is printed in
- * the row, so the flyout is hidden and the key shows on hover/focus at the
- * row's right edge instead. */
+ * The flyout is for the icon-only state (a glyph alone is a memory test)
+ * and carries the name and the Ctrl+N key; from 1100px the name is printed
+ * in the row, so the flyout keeps only the key. */
 function NavItem({ item, screen, onNavigate, label }) {
   const active = screen === item.id;
   const number = SCREEN_ORDER.indexOf(item.id) + 1;
@@ -176,12 +175,6 @@ function NavItem({ item, screen, onNavigate, label }) {
         <span aria-hidden="true" className="relative hidden min-[1100px]:block text-[13px] font-medium truncate">
           {label}
         </span>
-        <span
-          aria-hidden="true"
-          className="relative hidden min-[1100px]:block ml-auto font-mono text-[10.5px] text-[color:var(--text-muted)] opacity-0 group-hover:opacity-100 group-has-[:focus-visible]:opacity-100 transition-opacity duration-150"
-        >
-          {shortcut}
-        </span>
       </motion.button>
 
       {/* Shown on hover AND on keyboard focus: someone tabbing the rail
@@ -205,14 +198,17 @@ function NavItem({ item, screen, onNavigate, label }) {
           element that matches the pseudo-class can drive a variant. Hover
           stays on the group, which is the whole target area.
 
-          `min-[1100px]:hidden`: in the wide rail the label is already
-          printed in the row. */}
+          In the wide rail the label is already printed in the row, so the
+          flyout drops the name (`min-[1100px]:hidden` on it) and keeps only
+          the key: a small chip beside the rail on hover or focus. Putting
+          the key IN the row instead reserved ~38px the label needed -- at
+          200px it truncated "Applications". */}
       <span
         aria-hidden="true"
-        className="pointer-events-none absolute left-full top-1/2 -translate-y-1/2 ml-2 px-2 py-1 rounded-md whitespace-nowrap text-[11.5px] font-medium bg-[color:var(--bg-panel)] text-[color:var(--text-primary)] border border-[color:var(--border-subtle)] shadow-lg opacity-0 group-hover:opacity-100 peer-focus-visible:opacity-100 transition-opacity duration-150 z-flyout min-[1100px]:hidden"
+        className="pointer-events-none absolute left-full top-1/2 -translate-y-1/2 ml-2 px-2 py-1 rounded-md whitespace-nowrap text-[11.5px] font-medium bg-[color:var(--bg-panel)] text-[color:var(--text-primary)] border border-[color:var(--border-subtle)] shadow-lg opacity-0 group-hover:opacity-100 peer-focus-visible:opacity-100 transition-opacity duration-150 z-flyout"
       >
-        {label}
-        <span className="ml-2 font-mono text-[10.5px] text-[color:var(--text-muted)]">{shortcut}</span>
+        <span className="min-[1100px]:hidden">{label}</span>
+        <span className="ml-2 min-[1100px]:ml-0 font-mono text-[10.5px] text-[color:var(--text-muted)]">{shortcut}</span>
       </span>
     </div>
   );
