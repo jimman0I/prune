@@ -738,10 +738,7 @@ export const CATALOG = {
     themeToggle: {
       optionSystem: "System",
       optionLight: "Light",
-      optionDark: "Dark",
-      switchTo: (theme) => `Switch to ${theme} theme`,
-      light: 'light',
-      dark: 'dark'
+      optionDark: "Dark"
     },
     toastHost: {
       dismiss: 'Dismiss notification'
@@ -1472,10 +1469,7 @@ export const CATALOG = {
     themeToggle: {
       optionSystem: "Stelsel",
       optionLight: "Lig",
-      optionDark: "Donker",
-      switchTo: (theme) => `Wissel na ${theme} tema`,
-      light: 'lig',
-      dark: 'donker'
+      optionDark: "Donker"
     },
     toastHost: {
       dismiss: 'Maak kennisgewing toe'
@@ -2206,10 +2200,7 @@ export const CATALOG = {
     themeToggle: {
       optionSystem: "النظام",
       optionLight: "فاتح",
-      optionDark: "داكن",
-      switchTo: (theme) => `التبديل إلى المظهر ${theme}`,
-      light: 'الفاتح',
-      dark: 'الداكن'
+      optionDark: "داكن"
     },
     toastHost: {
       dismiss: 'إغلاق الإشعار'
@@ -2940,10 +2931,7 @@ export const CATALOG = {
     themeToggle: {
       optionSystem: "Sistema",
       optionLight: "Clar",
-      optionDark: "Fosc",
-      switchTo: (theme) => `Canvia al tema ${theme}`,
-      light: 'clar',
-      dark: 'fosc'
+      optionDark: "Fosc"
     },
     toastHost: {
       dismiss: 'Descarta la notificació'
@@ -3674,10 +3662,7 @@ export const CATALOG = {
     themeToggle: {
       optionSystem: "Systém",
       optionLight: "Světlý",
-      optionDark: "Tmavý",
-      switchTo: (theme) => `Přepnout na ${theme} motiv`,
-      light: 'světlý',
-      dark: 'tmavý'
+      optionDark: "Tmavý"
     },
     toastHost: {
       dismiss: 'Zavřít oznámení'
@@ -4408,10 +4393,7 @@ export const CATALOG = {
     themeToggle: {
       optionSystem: "System",
       optionLight: "Golau",
-      optionDark: "Tywyll",
-      switchTo: (theme) => `Newid i thema ${theme}`,
-      light: 'golau',
-      dark: 'tywyll'
+      optionDark: "Tywyll"
     },
     toastHost: {
       dismiss: 'Diystyru\'r hysbysiad'
@@ -5142,10 +5124,7 @@ export const CATALOG = {
     themeToggle: {
       optionSystem: "System",
       optionLight: "Lyst",
-      optionDark: "Mørkt",
-      switchTo: (theme) => `Skift til ${theme} tema`,
-      light: 'lyst',
-      dark: 'mørkt'
+      optionDark: "Mørkt"
     },
     toastHost: {
       dismiss: 'Afvis notifikation'
@@ -5876,10 +5855,7 @@ export const CATALOG = {
     themeToggle: {
       optionSystem: "System",
       optionLight: "Hell",
-      optionDark: "Dunkel",
-      switchTo: (theme) => `Zum ${theme} Erscheinungsbild wechseln`,
-      light: 'hellen',
-      dark: 'dunklen'
+      optionDark: "Dunkel"
     },
     toastHost: {
       dismiss: 'Benachrichtigung schließen'
@@ -6610,10 +6586,7 @@ export const CATALOG = {
     themeToggle: {
       optionSystem: "Σύστημα",
       optionLight: "Ανοιχτό",
-      optionDark: "Σκούρο",
-      switchTo: (theme) => `Εναλλαγή σε ${theme} θέμα`,
-      light: 'ανοιχτόχρωμο',
-      dark: 'σκοτεινό'
+      optionDark: "Σκούρο"
     },
     toastHost: {
       dismiss: 'Απόρριψη ειδοποίησης'
@@ -7344,10 +7317,7 @@ export const CATALOG = {
     themeToggle: {
       optionSystem: "Sistema",
       optionLight: "Claro",
-      optionDark: "Oscuro",
-      switchTo: (theme) => `Cambiar al tema ${theme}`,
-      light: 'claro',
-      dark: 'oscuro'
+      optionDark: "Oscuro"
     },
     toastHost: {
       dismiss: 'Descartar notificación'
@@ -8078,10 +8048,7 @@ export const CATALOG = {
     themeToggle: {
       optionSystem: "Süsteem",
       optionLight: "Hele",
-      optionDark: "Tume",
-      switchTo: (theme) => `Lülitu ${theme} teemale`,
-      light: 'heledale',
-      dark: 'tumedale'
+      optionDark: "Tume"
     },
     toastHost: {
       dismiss: 'Sulge teavitus'
@@ -8812,10 +8779,7 @@ export const CATALOG = {
     themeToggle: {
       optionSystem: "Järjestelmä",
       optionLight: "Vaalea",
-      optionDark: "Tumma",
-      switchTo: (theme) => `Vaihda ${theme} teemaan`,
-      light: 'vaaleaan',
-      dark: 'tummaan'
+      optionDark: "Tumma"
     },
     toastHost: {
       dismiss: 'Hylkää ilmoitus'
@@ -9546,10 +9510,7 @@ export const CATALOG = {
     themeToggle: {
       optionSystem: "Système",
       optionLight: "Clair",
-      optionDark: "Sombre",
-      switchTo: (theme) => `Passer au thème ${theme}`,
-      light: 'clair',
-      dark: 'sombre'
+      optionDark: "Sombre"
     },
     toastHost: {
       dismiss: 'Ignorer la notification'
@@ -10280,10 +10241,7 @@ export const CATALOG = {
     themeToggle: {
       optionSystem: "מערכת",
       optionLight: "בהיר",
-      optionDark: "כהה",
-      switchTo: (theme) => `עבור לערכת נושא ${theme}`,
-      light: 'בהירה',
-      dark: 'כהה'
+      optionDark: "כהה"
     },
     toastHost: {
       dismiss: 'בטל התראה'
@@ -11014,10 +10972,7 @@ export const CATALOG = {
     themeToggle: {
       optionSystem: "Rendszer",
       optionLight: "Világos",
-      optionDark: "Sötét",
-      switchTo: (theme) => `Váltás ${theme} témára`,
-      light: 'világos',
-      dark: 'sötét'
+      optionDark: "Sötét"
     },
     toastHost: {
       dismiss: 'Értesítés elvetése'
@@ -11748,10 +11703,7 @@ export const CATALOG = {
     themeToggle: {
       optionSystem: "Sistem",
       optionLight: "Terang",
-      optionDark: "Gelap",
-      switchTo: (theme) => `Beralih ke tema ${theme}`,
-      light: 'terang',
-      dark: 'gelap'
+      optionDark: "Gelap"
     },
     toastHost: {
       dismiss: 'Tutup notifikasi'
@@ -12482,10 +12434,7 @@ export const CATALOG = {
     themeToggle: {
       optionSystem: "Kerfi",
       optionLight: "Ljóst",
-      optionDark: "Dökkt",
-      switchTo: (theme) => `Skipta yfir í ${theme} þema`,
-      light: 'ljóst',
-      dark: 'dökkt'
+      optionDark: "Dökkt"
     },
     toastHost: {
       dismiss: 'Loka tilkynningu'
@@ -13216,10 +13165,7 @@ export const CATALOG = {
     themeToggle: {
       optionSystem: "Sistema",
       optionLight: "Chiaro",
-      optionDark: "Scuro",
-      switchTo: (theme) => `Passa al tema ${theme}`,
-      light: 'chiaro',
-      dark: 'scuro'
+      optionDark: "Scuro"
     },
     toastHost: {
       dismiss: 'Ignora notifica'
@@ -13950,10 +13896,7 @@ export const CATALOG = {
     themeToggle: {
       optionSystem: "システム",
       optionLight: "ライト",
-      optionDark: "ダーク",
-      switchTo: (theme) => `${theme}テーマに切り替え`,
-      light: 'ライト',
-      dark: 'ダーク'
+      optionDark: "ダーク"
     },
     toastHost: {
       dismiss: '通知を閉じる'
@@ -14684,10 +14627,7 @@ export const CATALOG = {
     themeToggle: {
       optionSystem: "시스템",
       optionLight: "라이트",
-      optionDark: "다크",
-      switchTo: (theme) => `${theme} 테마로 전환`,
-      light: '라이트',
-      dark: '다크'
+      optionDark: "다크"
     },
     toastHost: {
       dismiss: '알림 닫기'
@@ -15418,10 +15358,7 @@ export const CATALOG = {
     themeToggle: {
       optionSystem: "Sistema",
       optionLight: "Šviesi",
-      optionDark: "Tamsi",
-      switchTo: (theme) => `Perjungti į ${theme} temą`,
-      light: 'šviesią',
-      dark: 'tamsią'
+      optionDark: "Tamsi"
     },
     toastHost: {
       dismiss: 'Atmesti pranešimą'
@@ -16152,10 +16089,7 @@ export const CATALOG = {
     themeToggle: {
       optionSystem: "Sistem",
       optionLight: "Terang",
-      optionDark: "Gelap",
-      switchTo: (theme) => `Tukar kepada tema ${theme}`,
-      light: 'terang',
-      dark: 'gelap'
+      optionDark: "Gelap"
     },
     toastHost: {
       dismiss: 'Ketepikan pemberitahuan'
@@ -16886,10 +16820,7 @@ export const CATALOG = {
     themeToggle: {
       optionSystem: "System",
       optionLight: "Lyst",
-      optionDark: "Mørkt",
-      switchTo: (theme) => `Bytt til ${theme} tema`,
-      light: 'lyst',
-      dark: 'mørkt'
+      optionDark: "Mørkt"
     },
     toastHost: {
       dismiss: 'Lukk varsel'
@@ -17620,10 +17551,7 @@ export const CATALOG = {
     themeToggle: {
       optionSystem: "Systeem",
       optionLight: "Licht",
-      optionDark: "Donker",
-      switchTo: (theme) => `Overschakelen naar ${theme} thema`,
-      light: 'licht',
-      dark: 'donker'
+      optionDark: "Donker"
     },
     toastHost: {
       dismiss: 'Melding sluiten'
@@ -18354,10 +18282,7 @@ export const CATALOG = {
     themeToggle: {
       optionSystem: "System",
       optionLight: "Jasny",
-      optionDark: "Ciemny",
-      switchTo: (theme) => `Przełącz na motyw ${theme}`,
-      light: 'jasny',
-      dark: 'ciemny'
+      optionDark: "Ciemny"
     },
     toastHost: {
       dismiss: 'Odrzuć powiadomienie'
@@ -19088,10 +19013,7 @@ export const CATALOG = {
     themeToggle: {
       optionSystem: "سیسټم",
       optionLight: "رڼا",
-      optionDark: "تیاره",
-      switchTo: (theme) => `${theme} موضوع ته لاړ شئ`,
-      light: 'رڼا',
-      dark: 'تیاره'
+      optionDark: "تیاره"
     },
     toastHost: {
       dismiss: 'خبرتیا رد کول'
@@ -19822,10 +19744,7 @@ export const CATALOG = {
     themeToggle: {
       optionSystem: "Sistema",
       optionLight: "Claro",
-      optionDark: "Escuro",
-      switchTo: (theme) => `Mudar para o tema ${theme}`,
-      light: 'claro',
-      dark: 'escuro'
+      optionDark: "Escuro"
     },
     toastHost: {
       dismiss: 'Dispensar notificação'
@@ -20556,10 +20475,7 @@ export const CATALOG = {
     themeToggle: {
       optionSystem: "Sistema",
       optionLight: "Claro",
-      optionDark: "Escuro",
-      switchTo: (theme) => `Mudar para o tema ${theme}`,
-      light: 'claro',
-      dark: 'escuro'
+      optionDark: "Escuro"
     },
     toastHost: {
       dismiss: 'Dispensar notificação'
@@ -21290,10 +21206,7 @@ export const CATALOG = {
     themeToggle: {
       optionSystem: "Sistem",
       optionLight: "Luminos",
-      optionDark: "Întunecat",
-      switchTo: (theme) => `Comută la tema ${theme}`,
-      light: 'deschisă',
-      dark: 'întunecată'
+      optionDark: "Întunecat"
     },
     toastHost: {
       dismiss: 'Închide notificarea'
@@ -22024,10 +21937,7 @@ export const CATALOG = {
     themeToggle: {
       optionSystem: "Система",
       optionLight: "Светлая",
-      optionDark: "Тёмная",
-      switchTo: (theme) => `Переключиться на ${theme} тему`,
-      light: 'светлую',
-      dark: 'тёмную'
+      optionDark: "Тёмная"
     },
     toastHost: {
       dismiss: 'Закрыть уведомление'
@@ -22758,10 +22668,7 @@ export const CATALOG = {
     themeToggle: {
       optionSystem: "Systém",
       optionLight: "Svetlý",
-      optionDark: "Tmavý",
-      switchTo: (theme) => `Prepnúť na ${theme} motív`,
-      light: 'svetlý',
-      dark: 'tmavý'
+      optionDark: "Tmavý"
     },
     toastHost: {
       dismiss: 'Zavrieť upozornenie'
@@ -23492,10 +23399,7 @@ export const CATALOG = {
     themeToggle: {
       optionSystem: "Sistemi",
       optionLight: "E çelët",
-      optionDark: "E errët",
-      switchTo: (theme) => `Kalo te tema ${theme}`,
-      light: 'e çelët',
-      dark: 'e errët'
+      optionDark: "E errët"
     },
     toastHost: {
       dismiss: 'Hiq njoftimin'
@@ -24226,10 +24130,7 @@ export const CATALOG = {
     themeToggle: {
       optionSystem: "Систем",
       optionLight: "Светла",
-      optionDark: "Тамна",
-      switchTo: (theme) => `Пређи на ${theme} тему`,
-      light: 'светлу',
-      dark: 'тамну'
+      optionDark: "Тамна"
     },
     toastHost: {
       dismiss: 'Одбаци обавештење'
@@ -24960,10 +24861,7 @@ export const CATALOG = {
     themeToggle: {
       optionSystem: "System",
       optionLight: "Ljust",
-      optionDark: "Mörkt",
-      switchTo: (theme) => `Byt till ${theme} tema`,
-      light: 'ljust',
-      dark: 'mörkt'
+      optionDark: "Mörkt"
     },
     toastHost: {
       dismiss: 'Avvisa avisering'
@@ -25694,10 +25592,7 @@ export const CATALOG = {
     themeToggle: {
       optionSystem: "ระบบ",
       optionLight: "สว่าง",
-      optionDark: "มืด",
-      switchTo: (theme) => `เปลี่ยนเป็นธีม${theme}`,
-      light: 'สว่าง',
-      dark: 'มืด'
+      optionDark: "มืด"
     },
     toastHost: {
       dismiss: 'ปิดการแจ้งเตือน'
@@ -26428,10 +26323,7 @@ export const CATALOG = {
     themeToggle: {
       optionSystem: "Sistem",
       optionLight: "Açık",
-      optionDark: "Koyu",
-      switchTo: (theme) => `${theme} temaya geç`,
-      light: 'açık',
-      dark: 'koyu'
+      optionDark: "Koyu"
     },
     toastHost: {
       dismiss: 'Bildirimi kapat'
@@ -27162,10 +27054,7 @@ export const CATALOG = {
     themeToggle: {
       optionSystem: "Система",
       optionLight: "Світла",
-      optionDark: "Темна",
-      switchTo: (theme) => `Перемкнутися на ${theme} тему`,
-      light: 'світлу',
-      dark: 'темну'
+      optionDark: "Темна"
     },
     toastHost: {
       dismiss: 'Закрити сповіщення'
@@ -27896,10 +27785,7 @@ export const CATALOG = {
     themeToggle: {
       optionSystem: "Hệ thống",
       optionLight: "Sáng",
-      optionDark: "Tối",
-      switchTo: (theme) => `Chuyển sang giao diện ${theme}`,
-      light: 'sáng',
-      dark: 'tối'
+      optionDark: "Tối"
     },
     toastHost: {
       dismiss: 'Bỏ qua thông báo'
@@ -28630,10 +28516,7 @@ export const CATALOG = {
     themeToggle: {
       optionSystem: "系统",
       optionLight: "浅色",
-      optionDark: "深色",
-      switchTo: (theme) => `切换到${theme}主题`,
-      light: '浅色',
-      dark: '深色'
+      optionDark: "深色"
     },
     toastHost: {
       dismiss: '关闭通知'
@@ -29364,10 +29247,7 @@ export const CATALOG = {
     themeToggle: {
       optionSystem: "系統",
       optionLight: "淺色",
-      optionDark: "深色",
-      switchTo: (theme) => `切換為${theme}主題`,
-      light: '淺色',
-      dark: '深色'
+      optionDark: "深色"
     },
     toastHost: {
       dismiss: '關閉通知'
