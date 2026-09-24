@@ -89,7 +89,7 @@ export default function CookieKeepListSettings({ settings, save }) {
           value={filter}
           onChange={(e) => setFilter(e.target.value)}
           placeholder={t('settings.cookiesToPreserve.filterPlaceholder')}
-          className="w-full font-mono text-[12.5px] px-3 py-2 mb-3 rounded-lg bg-[color:var(--surface-hover)] border border-[color:var(--border-subtle)] text-[color:var(--text-primary)] placeholder:text-[color:var(--text-muted)] focus:outline-none focus:border-[color:var(--accent-primary)]/50"
+          className="w-full font-mono text-[12.5px] px-3 py-2 mb-3 rounded-lg bg-[color:var(--surface-hover)] border border-[color:var(--border-subtle)] text-[color:var(--text-primary)] placeholder:text-[color:var(--text-muted)] focus:border-[color:var(--accent-primary)]/50"
         />
       )}
 
