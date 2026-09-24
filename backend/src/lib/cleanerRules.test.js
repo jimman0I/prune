@@ -53,7 +53,7 @@ let localAppDataDir;
 let quarantineDir;
 let savedEnv;
 
-const ENV_KEYS = ['APPDATA', 'LOCALAPPDATA', 'UNREVO_QUARANTINE_ROOT'];
+const ENV_KEYS = ['APPDATA', 'LOCALAPPDATA', 'UNREVO_QUARANTINE_ROOT', 'ProgramFiles', 'ProgramFiles(x86)'];
 
 beforeEach(async () => {
   appDataDir = await mkdtemp(join(tmpdir(), 'unrevo-cleaner-appdata-'));
@@ -727,7 +727,7 @@ describe('normalizeRule', () => {
   });
 
   it('throws naming the rule id when a rule has none of actions/command/paths', () => {
-    // Not currently reachable by any of the 74 rules in cleaners.json, but
+    // Not currently reachable by any of the rules in cleaners.json, but
     // this function is a foundation later action-type work builds on --
     // a malformed rule should fail loudly right here, not several files
     // away as a confusing TypeError inside whatever action module tries
@@ -1474,8 +1474,8 @@ describe('Windows Defender and WinRAR rules', () => {
     const rule = byId(id);
     expect(rule, id).toBeDefined();
     expect(rule.category).toBe(category);
-    if (risky) expect(rule.risky).toBe(true);
-    else expect(rule.risky).toBeUndefined();
+    expect(rule.risky ?? false).toBe(risky);
+    if (!risky) expect(rule.risky).toBeUndefined();
     expect(rule.recommended).toBe(recommended);
     expect(rule.is_safe).toBe(isSafe);
     expect(rule.requiresProgram).toBeUndefined();
@@ -1513,10 +1513,37 @@ describe('Windows Defender and WinRAR rules', () => {
 
   it('winrar_temp only matches .tmp files in the three WinRAR locations', () => {
     const paths = byId('winrar_temp').paths;
-    for (const p of paths) expect(p).toContain('**\\*.tmp');
-    expect(paths.some(p => p.includes('%LOCALAPPDATA%\\VirtualStore\\Program Files*\\WinRAR'))).toBe(true);
-    expect(paths.some(p => p.includes('%PROGRAMFILES%\\WinRAR'))).toBe(true);
-    expect(paths.some(p => p.includes('%PROGRAMFILES(X86)%\\WinRAR'))).toBe(true);
+    expect(paths).toHaveLength(3);
+    const bases = ['%LOCALAPPDATA%\\VirtualStore\\Program Files*', '%PROGRAMFILES%', '%PROGRAMFILES(X86)%'];
+    for (const base of bases) {
+      const hit = paths.filter(p => p.startsWith(base) && p.endsWith('\\WinRAR\\**\\*.tmp'));
+      expect(hit, base).toHaveLength(1);
+    }
+  });
+
+  it('winrar_temp matches nested and upper-case .tmp files only', async () => {
+    const pf = await mkdtemp(join(tmpdir(), 'unrevo-winrar-pf-'));
+    try {
+      process.env.ProgramFiles = pf;
+      process.env['ProgramFiles(x86)'] = join(pf, 'x86-none');
+      const rule = byId('winrar_temp');
+      expect(scanRule(rule).present).toBe(false);
+      await mkdir(join(pf, 'WinRAR', 'a', 'b'), { recursive: true });
+      await writeFile(join(pf, 'WinRAR', 'a', 'b', 'x.tmp'), 'x');
+      await writeFile(join(pf, 'WinRAR', 'top.TMP'), 'x');
+      await writeFile(join(pf, 'WinRAR', 'keep.txt'), 'x');
+      const result = scanRule(rule);
+      expect(result.fileCount).toBe(2);
+      expect(result.present).toBe(true);
+    } finally {
+      await rm(pf, { recursive: true, force: true });
+    }
+  });
+
+  it('defender_history and defender_logs share only the intentional History.Log', () => {
+    const a = new Set(byId('defender_history').paths);
+    const shared = byId('defender_logs').paths.filter(p => a.has(p));
+    expect(shared).toEqual(['%PROGRAMDATA%\\Microsoft\\Windows Defender\\Scans\\History\\Service\\History.Log']);
   });
 
   it('defender_temp covers the Defender logs and the update folder', () => {

@@ -125,6 +125,12 @@
   "Developer tools": [
     "%SYSTEMROOT%\\System32\\WindowsPowerShell\\v1.0\\powershell.exe"
   ],
-  "Windows Defender": ["%SYSTEMROOT%\\System32\\SecurityHealthSystray.exe", "%PROGRAMFILES%\\Windows Defender\\MpCmdRun.exe"],
-  "WinRAR": ["%PROGRAMFILES%\\WinRAR\\WinRAR.exe", "%PROGRAMFILES(X86)%\\WinRAR\\WinRAR.exe"]
+  "Windows Defender": [
+    "%SYSTEMROOT%\\System32\\SecurityHealthSystray.exe",
+    "%PROGRAMFILES%\\Windows Defender\\MpCmdRun.exe"
+  ],
+  "WinRAR": [
+    "%PROGRAMFILES%\\WinRAR\\WinRAR.exe",
+    "%PROGRAMFILES(X86)%\\WinRAR\\WinRAR.exe"
+  ]
 }

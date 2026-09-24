@@ -18,7 +18,7 @@ import { rulePathsExist, loadCleanerRules } from './cleanerRules.js';
 
 describe('rulePathsExist', () => {
   it('does not throw on any rule in the shipped set', () => {
-    // The whole bug, as one assertion. 74 rules, one of which has no
+    // The whole bug, as one assertion. Every rule, one of which has no
     // paths key at all.
     for (const rule of loadCleanerRules()) {
       expect(() => rulePathsExist(rule), rule.id).not.toThrow();

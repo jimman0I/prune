@@ -92,7 +92,7 @@ router.get('/rules', async (req, res) => {
       // apply" could not do anything until a scan had run -- the flag it
       // filters on did not exist yet -- so the list opened showing
       // Firefox, Opera and Vivaldi to someone who has none of them, and
-      // the setting looked broken. Six of the 29 categories on this
+      // the setting looked broken. Several categories on this
       // machine are for software that is not installed.
       const item = { ...rule, sizeBytes: null, fileCount: null, present: rulePathsExist(rule, guards) };
       const group = grouped.find((g) => g.category === rule.category);
