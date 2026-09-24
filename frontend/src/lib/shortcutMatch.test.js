@@ -60,6 +60,24 @@ describe('matchShortcut', () => {
     expect(matchShortcut(press('k', { ctrlKey: true, altKey: true }))).toBeNull();
   });
 
+  it('jumps to the Nth screen on Ctrl+1 to Ctrl+8', () => {
+    for (let n = 1; n <= 8; n++) {
+      expect(matchShortcut(press(String(n), { ctrlKey: true }))).toBe(`screen:${n}`);
+    }
+  });
+
+  it('claims neither Ctrl+9 nor Ctrl+0 (0 is the text-zoom reset) nor a bare digit', () => {
+    expect(matchShortcut(press('9', { ctrlKey: true }))).toBeNull();
+    expect(matchShortcut(press('0', { ctrlKey: true }))).toBeNull();
+    expect(matchShortcut(press('3'))).toBeNull();
+  });
+
+  it('does not jump screens while typing in a field, or on a chord with Alt', () => {
+    expect(matchShortcut(press('2', { ctrlKey: true, target: { tagName: 'INPUT' } }))).toBeNull();
+    expect(matchShortcut(press('2', { ctrlKey: true, target: { tagName: 'SELECT' } }))).toBeNull();
+    expect(matchShortcut(press('2', { ctrlKey: true, altKey: true }))).toBeNull();
+  });
+
   it('has no opinion about anything else', () => {
     expect(matchShortcut(press('s', { ctrlKey: true }))).toBeNull();
     expect(matchShortcut(null)).toBeNull();

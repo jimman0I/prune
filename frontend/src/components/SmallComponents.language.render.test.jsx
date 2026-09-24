@@ -68,7 +68,9 @@ describe('ShortcutsModal in Greek', () => {
     expect(screen.getByText('Μεγέθυνση ή σμίκρυνση κειμένου')).toBeTruthy();
     expect(screen.getByText('Επαναφορά μεγέθους κειμένου')).toBeTruthy();
     expect(screen.getAllByText('ή').length).toBeGreaterThan(0);
-    expect(screen.getByText(/Το Cmd λειτουργεί αντί για το Ctrl/)).toBeTruthy();
+    expect(screen.getByText('Μετάβαση σε οθόνη, με τη σειρά της πλαϊνής γραμμής')).toBeTruthy();
+    expect(screen.getByText(/Μια συντόμευση αγνοείται ενώ πληκτρολογείτε/)).toBeTruthy();
+    expect(screen.queryByText(/Cmd/)).toBeNull();
   });
 });
 
