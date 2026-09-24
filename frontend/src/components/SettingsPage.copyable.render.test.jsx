@@ -68,7 +68,7 @@ describe('what can be copied on the Settings screen', () => {
     });
     const user = userEvent.setup();
     renderScreen(<SettingsPage />);
-    await user.click(await screen.findByRole('button', { name: 'Cleanup' }));
+    await user.click(await screen.findByRole('tab', { name: 'Cleanup' }));
     await user.click(screen.getByRole('button', { name: 'Run sandbox test' }));
 
     expect(isCopyable(await screen.findByText(/^EPERM: C:/))).toBe(true);

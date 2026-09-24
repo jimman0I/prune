@@ -59,7 +59,7 @@ export default function CookieKeepListSettings({ settings, save }) {
       <div className="text-[14px] font-medium text-[color:var(--text-primary)] mb-1">
         {t('settings.cookiesToPreserve.title')}
       </div>
-      <p className="text-[12.5px] text-[color:var(--text-secondary)] mb-4">
+      <p className="text-[12.5px] text-[color:var(--text-secondary)] mb-4 max-w-[62ch]">
         {t('settings.cookiesToPreserve.description')}
       </p>
 
@@ -116,7 +116,7 @@ export default function CookieKeepListSettings({ settings, save }) {
                   {row.domain}
                 </span>
                 {row.stale && (
-                  <span className="text-[9px] font-mono uppercase tracking-wider px-1.5 py-px rounded border shrink-0 border-[color:var(--border-subtle)] text-[color:var(--text-muted)]">
+                  <span className="text-[10px] font-mono uppercase tracking-wider px-1.5 py-px rounded border shrink-0 border-[color:var(--border-subtle)] text-[color:var(--text-muted)]">
                     {t('settings.cookiesToPreserve.staleBadge')}
                   </span>
                 )}

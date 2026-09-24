@@ -83,7 +83,7 @@ const openTab = async (label) => {
   const user = userEvent.setup();
   renderScreen(<SettingsPage />);
   await ready();
-  await user.click(screen.getByRole('button', { name: label }));
+  await user.click(screen.getByRole('tab', { name: label }));
   return user;
 };
 
@@ -91,10 +91,10 @@ describe('the settings screen, in Greek', () => {
   it('translates the title and all four tab labels', async () => {
     renderScreen(<SettingsPage />);
     await ready();
-    expect(screen.getByRole('button', { name: 'Γενικά' })).toBeTruthy();
-    expect(screen.getByRole('button', { name: 'Απεγκατάσταση' })).toBeTruthy();
-    expect(screen.getByRole('button', { name: 'Καθαρισμός' })).toBeTruthy();
-    expect(screen.getByRole('button', { name: 'Σχετικά' })).toBeTruthy();
+    expect(screen.getByRole('tab', { name: 'Γενικά' })).toBeTruthy();
+    expect(screen.getByRole('tab', { name: 'Απεγκατάσταση' })).toBeTruthy();
+    expect(screen.getByRole('tab', { name: 'Καθαρισμός' })).toBeTruthy();
+    expect(screen.getByRole('tab', { name: 'Σχετικά' })).toBeTruthy();
   });
 
   // `settings.loading` has no test here, and cannot: SettingsPage's own
@@ -115,7 +115,11 @@ describe('the settings screen, in Greek', () => {
     renderScreen(<SettingsPage />);
     await ready();
     expect(screen.getByText('Εμφάνιση')).toBeTruthy();
-    expect(screen.getByText(/Aurora Deck σε σκοτεινό ή ημερήσιο φωτισμό/)).toBeTruthy();
+    expect(screen.getByText('Επιλέξτε Ανοιχτό ή Σκούρο, ή αφήστε το Σύστημα να ακολουθεί τα Windows.')).toBeTruthy();
+    // The System / Light / Dark control, translated.
+    expect(screen.getByRole('button', { name: 'Σύστημα' }).getAttribute('aria-pressed')).toBe('true');
+    expect(screen.getByRole('button', { name: 'Ανοιχτό' })).toBeTruthy();
+    expect(screen.getByRole('button', { name: 'Σκούρο' })).toBeTruthy();
   });
 
   it('translates Minimize to Tray, both the heading and the switch name', async () => {
@@ -220,13 +224,23 @@ describe('the settings screen, in Greek', () => {
       expect(screen.getByText('ώρες')).toBeTruthy();
     });
 
-    it('translates the restore-point guard, heading and description', async () => {
+    it('groups the Cleanup tab under Greek Deep Clean and Quarantine headings', async () => {
       await openTab('Καθαρισμός');
+      expect(screen.getByRole('heading', { name: 'Βαθύς καθαρισμός' })).toBeTruthy();
+      expect(screen.getByRole('heading', { name: 'Καραντίνα' })).toBeTruthy();
+    });
+  });
+
+  describe('the restore-point guard, which moved to the Uninstall tab', () => {
+    it('translates the restore-point guard, heading and description', async () => {
+      await openTab('Απεγκατάσταση');
       expect(screen.getByText('Δημιουργία σημείου επαναφοράς πρώτα')).toBeTruthy();
       expect(screen.getByRole('switch', { name: 'Δημιουργία σημείου επαναφοράς πρώτα' })).toBeTruthy();
       expect(screen.getByText(/Πριν από μια εξαναγκασμένη αφαίρεση/)).toBeTruthy();
     });
+  });
 
+  describe('more of the Cleanup tab', () => {
     it('translates the hide-unavailable guard, heading and description', async () => {
       await openTab('Καθαρισμός');
       expect(screen.getByText('Απόκρυψη καθαριστών που δεν ισχύουν')).toBeTruthy();
