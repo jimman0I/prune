@@ -1,7 +1,27 @@
-/** Name of the block standing in for the part of the drive the scan
- * never reached. Exported so the renderer can style it without matching
- * on a string literal in two places. */
-export const UNSCANNED_LABEL = 'Not scanned (ran out of time)';
+/** The block's stored name: a stable key, NOT what the screen shows. It is
+ * English on purpose (it lives in cached scan data), and the wording that
+ * reaches the eye comes from the `diskMap.unscannedLabel` catalog entry via
+ * localizeUnscanned. It also no longer says "ran out of time": the user can
+ * stop a scan too, and the block only says what is true of both. */
+export const UNSCANNED_LABEL = 'Not scanned';
+
+/** Whether a node is the remainder block. The flag is the truth; the name
+ * match keeps a tree built by older code recognisable. */
+function isRemainder(node) {
+  return node?.scanned === false && (node.unscannedRemainder === true || node.name === UNSCANNED_LABEL);
+}
+
+/** The tree with the remainder block renamed to `label` (the translated
+ * string), and untouched -- same object -- when it has none, so a memo keyed
+ * on the tree does not churn. Only the block's name changes; sizes and paths
+ * are exactly what was measured. */
+export function localizeUnscanned(tree, label) {
+  if (!tree?.children?.some(isRemainder)) return tree;
+  return {
+    ...tree,
+    children: tree.children.map((c) => (isRemainder(c) ? { ...c, name: label } : c))
+  };
+}
 
 /** How much of the drive has to be missing before it's worth drawing.
  * Below this the remainder is measurement noise -- logical vs allocated
@@ -42,7 +62,7 @@ export function withUnscannedRemainder(tree, usedBytes) {
     size: usedBytes,
     children: [
       ...(tree.children || []),
-      { name: UNSCANNED_LABEL, size: remainder, type: 'directory', scanned: false }
+      { name: UNSCANNED_LABEL, size: remainder, type: 'directory', scanned: false, unscannedRemainder: true }
     ]
   };
 }
@@ -57,7 +77,7 @@ export function withUnscannedRemainder(tree, usedBytes) {
  * than down to 0, because a real measurement reported as 0% claims
  * nothing was scanned, which is a different and wrong statement. */
 export function scanCoverage(tree) {
-  const remainder = tree?.children?.find((c) => c.scanned === false && c.name === UNSCANNED_LABEL);
+  const remainder = tree?.children?.find(isRemainder);
   if (!remainder) return null;
   // A free-space block (lib/freeSpaceBlock.js) is part of the drive but
   // not of the space in use, and coverage is a share of the space in use.

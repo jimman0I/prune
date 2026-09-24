@@ -70,7 +70,7 @@ describe('withUnscannedRemainder', () => {
   });
 });
 
-import { scanCoverage } from './unscannedRemainder.js';
+import { scanCoverage, localizeUnscanned, UNSCANNED_LABEL } from './unscannedRemainder.js';
 
 describe('scanCoverage', () => {
   const withRemainder = withUnscannedRemainder(partial, 845 * GB);
@@ -97,5 +97,39 @@ describe('scanCoverage', () => {
       845 * GB
     );
     expect(scanCoverage(tiny).percent).toBe(1);
+  });
+});
+
+describe('localizeUnscanned', () => {
+  const reconciled = withUnscannedRemainder(partial, 845 * GB);
+
+  it('renames only the remainder block, to the translated label', () => {
+    const result = localizeUnscanned(reconciled, 'Δεν σαρώθηκε');
+    const names = result.children.map((c) => c.name);
+    expect(names).toEqual(['Games', 'Android', 'Δεν σαρώθηκε']);
+    // Everything measured is exactly as it was.
+    expect(result.children[2].size).toBe(reconciled.children[2].size);
+    expect(result.children[2].scanned).toBe(false);
+  });
+
+  it('still lets scanCoverage find the block after it has been renamed', () => {
+    const result = localizeUnscanned(reconciled, 'Δεν σαρώθηκε');
+    expect(scanCoverage(result)).toEqual(scanCoverage(reconciled));
+  });
+
+  it('never matches a real folder that happens to be called the same thing', () => {
+    // scanned:false is what marks the hole; a scanned folder with that name is a folder.
+    const lookalike = { ...partial, children: [{ name: UNSCANNED_LABEL, size: 5, type: 'directory' }] };
+    expect(localizeUnscanned(lookalike, 'X')).toBe(lookalike);
+  });
+
+  it('returns the very same object when there is no remainder, and copes with null', () => {
+    expect(localizeUnscanned(partial, 'X')).toBe(partial);
+    expect(localizeUnscanned(null, 'X')).toBeNull();
+  });
+
+  it('keeps English out of what is shown: the stored name is a key, not the label', () => {
+    expect(reconciled.children.at(-1).unscannedRemainder).toBe(true);
+    expect(UNSCANNED_LABEL).not.toMatch(/ran out of time/);
   });
 });
