@@ -1005,6 +1005,7 @@ function DiskMap() {
           status="complete"
           totalFiles={progressHere.totalFiles}
           totalBytes={progressHere.totalBytes}
+          truncated={Boolean(tree.truncated || progressHere.truncated)}
           onScanAgain={() => scanQuery.refetch()}
         />
       )}

@@ -191,6 +191,32 @@ describe('complete', () => {
     expect(await screen.findByText('Scan complete')).toBeTruthy();
   });
 
+  it('a scan that ran out of time says it stopped early, not complete, with a warning mark instead of the checkmark', async () => {
+    const { container } = show({ status: 'complete', truncated: true, totalFiles: 82747, totalBytes: 34.8 * GB, onScanAgain: vi.fn() });
+
+    expect(await screen.findByText(/^Scan stopped early — 82[,.]747 files, 34\.8 GB so far$/)).toBeTruthy();
+    expect(screen.queryByText(/Scan complete/)).toBeNull();
+    expect(screen.getByTestId('scan-stopped-mark')).toBeTruthy();
+    // No self-drawing success checkmark.
+    expect(container.querySelector('svg path[pathLength]')).toBeNull();
+    expect(screen.getByRole('button', { name: 'Scan again' })).toBeTruthy();
+  });
+
+  it('stopped early without known totals still does not say complete', async () => {
+    show({ status: 'complete', truncated: true });
+
+    expect(await screen.findByText('Scan stopped early')).toBeTruthy();
+    expect(screen.queryByText(/Scan complete/)).toBeNull();
+  });
+
+  it('a scan that finished keeps the checkmark and the complete wording', async () => {
+    const { container } = show({ status: 'complete', truncated: false, totalFiles: 5, totalBytes: 5 });
+
+    expect(await screen.findByText(/^Scan complete — 5 files/)).toBeTruthy();
+    expect(screen.queryByTestId('scan-stopped-mark')).toBeNull();
+    expect(container.querySelector('svg path[pathLength]')).toBeTruthy();
+  });
+
   it('calls onScanAgain from the Scan again button', async () => {
     const onScanAgain = vi.fn();
     show({ status: 'complete', totalFiles: 1, totalBytes: 1, onScanAgain });

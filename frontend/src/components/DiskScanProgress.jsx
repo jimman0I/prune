@@ -172,14 +172,40 @@ function Scanning({ path, percent, files, bytes, mode, elapsedMs, children }) {
   );
 }
 
-function Complete({ totalFiles, totalBytes, onScanAgain }) {
+/** A finished scan. A scan that ran out of time (`truncated`) is NOT
+ * complete and must not say so: it gets "stopped early" wording and a
+ * warning mark in place of the success checkmark. */
+function Complete({ totalFiles, totalBytes, truncated, onScanAgain }) {
   const { t } = useLanguage();
   const known = Number.isFinite(totalFiles);
-  const message = known
-    ? t('diskMap.scanProgress.completeCounts', totalFiles.toLocaleString(), formatBytes(totalBytes))
-    : t('diskMap.scanProgress.complete');
+  const size = known ? [totalFiles.toLocaleString(), formatBytes(totalBytes)] : null;
+  let message;
+  if (truncated) {
+    message = known ? t('diskMap.scanProgress.stoppedEarlyCounts', ...size) : t('diskMap.scanProgress.stoppedEarly');
+  } else {
+    message = known ? t('diskMap.scanProgress.completeCounts', ...size) : t('diskMap.scanProgress.complete');
+  }
   return (
     <div className="glass-panel flex items-center gap-3 px-4 py-3 mb-5">
+      {truncated ? (
+        <svg
+          aria-hidden="true"
+          data-testid="scan-stopped-mark"
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="var(--warning)"
+          strokeWidth="2.2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="shrink-0"
+        >
+          <circle cx="12" cy="12" r="10" />
+          <line x1="12" y1="8" x2="12" y2="12.5" />
+          <line x1="12" y1="16" x2="12.01" y2="16" />
+        </svg>
+      ) : (
       <motion.svg
         aria-hidden="true"
         width="20"
@@ -199,6 +225,7 @@ function Complete({ totalFiles, totalBytes, onScanAgain }) {
           transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
         />
       </motion.svg>
+      )}
       <p className="text-[13px] text-[color:var(--text-primary)] flex-1 min-w-0">{message}</p>
       {onScanAgain && (
         <button
@@ -250,6 +277,7 @@ export default function DiskScanProgress({
   elapsedMs,
   message,
   totalFiles,
+  truncated = false,
   totalBytes,
   onRetry,
   onScanAgain,
@@ -263,7 +291,7 @@ export default function DiskScanProgress({
     );
   }
   if (status === 'complete') {
-    return <Complete totalFiles={totalFiles} totalBytes={totalBytes} onScanAgain={onScanAgain} />;
+    return <Complete totalFiles={totalFiles} totalBytes={totalBytes} truncated={truncated} onScanAgain={onScanAgain} />;
   }
   if (status === 'error') return <Failed message={message} onRetry={onRetry} />;
   return null;

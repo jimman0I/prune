@@ -47,7 +47,9 @@ do, and the Disk Map shows real progress while it scans.
   cannot report progress (it runs in a separate elevated process that
   only hands back its result at the end), so it shows elapsed time and
   says why there is no percentage. Finished scans draw a checkmark and
-  offer "Scan again"; a failed one offers "Retry".
+  offer "Scan again"; one that ran out of time says it stopped early
+  (with a warning mark, not a checkmark) and offers the same; a failed
+  one offers "Retry".
 - **Motion polish, all of it off under Windows' reduce-motion setting.**
   Buttons swell slightly on hover and press in on click, nav items react
   to hover and press, toggle switches slide on a spring, and the scan
