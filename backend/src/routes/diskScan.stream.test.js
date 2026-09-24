@@ -68,6 +68,22 @@ function slowScan({ files = [10, 20], lingerMs = 500, result = TREE } = {}) {
 }
 
 describe('GET /disk-scan/stream', () => {
+  it("sends the scan's own time limit, counting down, so the client never hard-codes it", async () => {
+    slowScan({ lingerMs: 700 });
+    const { events } = await readStream('?path=C%3A%5CUsers');
+
+    const progress = events.filter((e) => e.event === 'progress');
+    expect(progress.length).toBeGreaterThanOrEqual(2);
+    for (const p of progress) {
+      expect(Number.isFinite(p.data.remainingMs)).toBe(true);
+      // The real limit is 30 s from the start of the request.
+      expect(p.data.remainingMs).toBeLessThanOrEqual(30_000);
+      expect(p.data.remainingMs).toBeGreaterThan(29_000);
+    }
+    // It is a countdown against a deadline, not a constant.
+    expect(progress[progress.length - 1].data.remainingMs).toBeLessThan(progress[0].data.remainingMs);
+  });
+
   it('needs a path, as a plain 400 and not a stream', async () => {
     const res = await fetch(`${server.base}/disk-scan/stream`);
     expect(res.status).toBe(400);

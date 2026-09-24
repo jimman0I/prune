@@ -214,3 +214,81 @@ describe('the Disk Map during a fast (admin) scan', () => {
     await screen.findByText('Read the whole drive');
   });
 });
+
+describe('the Disk Map remembers how long a fast scan took', () => {
+  const KEY = 'prune.fastScanMs';
+  beforeEach(() => { window.localStorage.clear(); });
+  afterEach(() => { window.localStorage.clear(); });
+
+  const fastButton = () => screen.findByRole('button', { name: 'Fast scan (admin)' });
+
+  it('stores the duration of a scan that finished, and nothing before it', async () => {
+    let finish;
+    scanDriveFast.mockImplementation(() => new Promise((r) => { finish = r; }));
+    const user = userEvent.setup();
+    mount();
+    await user.click(await fastButton());
+    expect(window.localStorage.getItem(KEY)).toBeNull();
+
+    await act(async () => { await new Promise((r) => setTimeout(r, 1100)); finish({ tree: TREE, stats: {} }); });
+
+    await waitFor(() => expect(Number(window.localStorage.getItem(KEY))).toBeGreaterThanOrEqual(1000));
+  });
+
+  it('does not store a declined (cancelled) scan', async () => {
+    scanDriveFast.mockResolvedValue({ cancelled: true });
+    const user = userEvent.setup();
+    mount();
+    await user.click(await fastButton());
+
+    await screen.findByText(/Not approved/);
+    expect(window.localStorage.getItem(KEY)).toBeNull();
+  });
+
+  it('does not store a failed scan', async () => {
+    scanDriveFast.mockRejectedValue(new Error('the reader crashed'));
+    const user = userEvent.setup();
+    mount();
+    await user.click(await fastButton());
+
+    await screen.findByText('the reader crashed');
+    expect(window.localStorage.getItem(KEY)).toBeNull();
+  });
+
+  it('first ever scan shows no estimate; the next one estimates from the stored duration', async () => {
+    scanDriveFast.mockImplementation(() => new Promise(() => {}));
+    const user = userEvent.setup();
+    const first = mount();
+    await user.click(await fastButton());
+    await screen.findByText(/Elapsed/);
+    expect(document.body.textContent).not.toMatch(/based on your last scan/);
+    first.unmount();
+
+    window.localStorage.setItem(KEY, '20000');
+    mount();
+    await user.click(await fastButton());
+    expect(await screen.findByText(/^About \d+ s left, based on your last scan$/)).toBeTruthy();
+  });
+
+  it('ignores a garbage stored value rather than showing nonsense', async () => {
+    window.localStorage.setItem(KEY, 'banana');
+    scanDriveFast.mockImplementation(() => new Promise(() => {}));
+    const user = userEvent.setup();
+    mount();
+    await user.click(await fastButton());
+
+    await screen.findByText(/Elapsed/);
+    expect(document.body.textContent).not.toMatch(/left/);
+  });
+});
+
+describe('the Disk Map passes the server time limit to the walk card', () => {
+  it('shows "up to N s left" from the progress event', async () => {
+    scanReporting({ type: 'progress', files: 10, bytes: 100, percent: null, remainingMs: 27_000 });
+    const user = userEvent.setup();
+    mount();
+    await crawl(user);
+
+    expect(await screen.findByText(/^Up to (26|27) s left$/)).toBeTruthy();
+  });
+});

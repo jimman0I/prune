@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { useLanguage } from '../i18n/LanguageContext.jsx';
 import AnimatedNumber from './AnimatedNumber.jsx';
+import { remainingSeconds } from '../lib/scanCountdown.js';
+import { fastScanEstimate } from '../lib/fastScanDuration.js';
 
 // Duplicated locally, the same convention DiskMap.jsx documents for its own
 // copy: a small per-component formatter rather than one shared util.
@@ -57,6 +59,46 @@ function useElapsedSeconds(active, startMs) {
     return () => clearInterval(id);
   }, [active]);
   return seconds;
+}
+
+/** Wall-clock time, refreshed once a second while `active`. The countdown is
+ * plain text that changes on this tick: nothing animates, so there is nothing
+ * for reduced motion to turn off. */
+function useNow(active) {
+  const [now, setNow] = useState(() => Date.now());
+  useEffect(() => {
+    if (!active) return undefined;
+    setNow(Date.now());
+    const id = setInterval(() => setNow(Date.now()), 1000);
+    return () => clearInterval(id);
+  }, [active]);
+  return now;
+}
+
+/** "29 s" or "1 min 5 s", in the language's own units. */
+function useFormatDuration() {
+  const { t } = useLanguage();
+  return (totalSeconds) => (totalSeconds < 60
+    ? t('diskMap.scanProgress.durationSeconds', totalSeconds)
+    : t('diskMap.scanProgress.durationMinutes', Math.floor(totalSeconds / 60), totalSeconds % 60));
+}
+
+/** How long the folder walk can still run. The backend sends the time to its
+ * hard stop, so this is an UPPER BOUND ("up to N s left"): a small folder
+ * finishes long before it. When the limit is reached the walk is stopping,
+ * so it says that rather than sitting on "0 s left". Nothing without a real
+ * figure. */
+function WalkTimeLeft({ remainingMs, remainingAt }) {
+  const { t } = useLanguage();
+  const format = useFormatDuration();
+  const now = useNow(Number.isFinite(remainingMs));
+  const seconds = remainingSeconds({ remainingMs, receivedAt: remainingAt, now });
+  if (seconds === null) return null;
+  return (
+    <p className="text-[12.5px] text-[color:var(--text-primary)] mt-3 tabular-nums" data-testid="scan-time-left">
+      {seconds === 0 ? t('diskMap.scanProgress.stoppedEarly') : t('diskMap.scanProgress.upToLeft', format(seconds))}
+    </p>
+  );
 }
 
 function Rings() {
@@ -133,9 +175,13 @@ function Bar({ percent }) {
   );
 }
 
-function Scanning({ path, percent, files, bytes, mode, elapsedMs, children }) {
+function Scanning({ path, percent, files, bytes, mode, elapsedMs, remainingMs, remainingAt, expectedMs, children }) {
   const { t } = useLanguage();
+  const format = useFormatDuration();
   const seconds = useElapsedSeconds(mode === 'index', elapsedMs);
+  // The fast scan reports no progress, so the only estimate is how long the
+  // user's last one took. None remembered: no number, just the plain copy.
+  const estimate = mode === 'index' ? fastScanEstimate({ expectedMs, elapsedMs: seconds * 1000 }) : { state: 'none' };
   const showCounters = mode !== 'index' && typeof files === 'number';
   return (
     <div className="glass-panel flex flex-col items-center justify-center py-12 px-6 text-center">
@@ -146,16 +192,19 @@ function Scanning({ path, percent, files, bytes, mode, elapsedMs, children }) {
       {mode === 'index' ? (
         <>
           <Bar percent={null} />
-          <p className="text-[12.5px] text-[color:var(--text-primary)] mt-3 tabular-nums">
-            {t('diskMap.scanProgress.elapsed', formatElapsed(seconds))}
+          <p className="text-[12.5px] text-[color:var(--text-primary)] mt-3 tabular-nums" data-testid={estimate.state === 'none' ? 'scan-elapsed' : 'scan-time-left'}>
+            {estimate.state === 'left' && t('diskMap.scanProgress.aboutLeft', format(estimate.seconds))}
+            {estimate.state === 'overrun' && t('diskMap.scanProgress.takingLonger')}
+            {estimate.state === 'none' && t('diskMap.scanProgress.elapsed', formatElapsed(seconds))}
           </p>
           <p className="text-[12px] text-[color:var(--text-secondary)] mt-2 max-w-[52ch]">
-            {t('diskMap.scanProgress.indexNote')}
+            {estimate.state === 'none' ? t('diskMap.scanProgress.indexNote') : t('diskMap.scanProgress.indexNoteEstimate')}
           </p>
         </>
       ) : (
         <>
           <Bar percent={percent} />
+          <WalkTimeLeft remainingMs={remainingMs} remainingAt={remainingAt} />
           {showCounters && <Counters files={files} bytes={bytes} />}
           <p className="text-[12px] text-[color:var(--text-secondary)] mt-3 max-w-[52ch]">
             {t('diskMap.loading.note')}
@@ -275,6 +324,9 @@ export default function DiskScanProgress({
   bytes,
   mode = 'walk',
   elapsedMs,
+  remainingMs,
+  remainingAt,
+  expectedMs,
   message,
   totalFiles,
   truncated = false,
@@ -285,7 +337,8 @@ export default function DiskScanProgress({
 }) {
   if (status === 'scanning') {
     return (
-      <Scanning path={path} percent={percent} files={files} bytes={bytes} mode={mode} elapsedMs={elapsedMs}>
+      <Scanning path={path} percent={percent} files={files} bytes={bytes} mode={mode} elapsedMs={elapsedMs}
+        remainingMs={remainingMs} remainingAt={remainingAt} expectedMs={expectedMs}>
         {children}
       </Scanning>
     );
