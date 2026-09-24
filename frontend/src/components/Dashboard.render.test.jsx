@@ -111,8 +111,8 @@ describe('the System Health score', () => {
 
     // drive 100*40 + storage 100*25 + apps 100*20 + errors 100*15 = 100
     expect(await screen.findByText('System health')).toBeTruthy();
-    expect(await screen.findByText('100%')).toBeTruthy();
-    expect(await screen.findByText(/Drive 100.*Storage 100.*Apps 100.*Errors 100/)).toBeTruthy();
+    expect(await screen.findByText('100')).toBeTruthy();
+    expect(await screen.findByText(/Drive 100.*Storage 100.*Apps 100.*Error check 100/)).toBeTruthy();
   });
 
   it('reflects a broken app in both the score and the breakdown line', async () => {
@@ -128,7 +128,7 @@ describe('the System Health score', () => {
     renderScreen(<Dashboard programs={programs} totalSize={0} onNavigate={() => {}} />);
 
     // drive 100*40 + storage 100*25 + apps 75*20 + errors 100*15 = 9500/100 = 95
-    expect(await screen.findByText('95%')).toBeTruthy();
+    expect(await screen.findByText('95')).toBeTruthy();
     expect(await screen.findByText(/Apps 75/)).toBeTruthy();
   });
 

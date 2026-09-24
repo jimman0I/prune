@@ -56,21 +56,24 @@ describe('the Dashboard in another language', () => {
     expect(screen.getByText('δεν έχει μετρηθεί')).toBeTruthy();
     expect(screen.getByText('Η μέτρηση διατρέχει κάθε διαδρομή καθαρισμού στον δίσκο — περίπου μισό λεπτό.')).toBeTruthy();
     expect(screen.getByRole('button', { name: 'Μέτρηση' })).toBeTruthy();
-    expect(screen.getByText('Πρόσφατη Δραστηριότητα')).toBeTruthy();
-    expect(screen.getByText('Απόκρυψη')).toBeTruthy();
+    expect(screen.getByRole('button', { name: 'Πρόσφατη Δραστηριότητα' })).toBeTruthy();
+    // A chevron and aria-expanded now say hide/show; the words are gone.
+    expect(screen.queryByText('Απόκρυψη')).toBeNull();
     expect(screen.getByText('Καμία απεγκατάσταση ακόμη.')).toBeTruthy();
     // Navigation, so it reuses nav.* rather than keeping a second,
     // independently-translatable copy of the same word.
     expect(screen.getByRole('button', { name: 'Βαθύς καθαρισμός' })).toBeTruthy();
   });
 
-  it('toggles Recent Activity\'s own hide/show label', async () => {
+  it('collapses Recent Activity, reporting the state through aria-expanded', async () => {
     const user = userEvent.setup();
     render();
-    await screen.findByText('Απόκρυψη');
+    const toggle = await screen.findByRole('button', { name: /Πρόσφατη Δραστηριότητα/ });
+    expect(toggle.getAttribute('aria-expanded')).toBe('true');
 
-    await user.click(screen.getByRole('button', { name: /Πρόσφατη Δραστηριότητα/ }));
-    expect(screen.getByText('Εμφάνιση')).toBeTruthy();
+    await user.click(toggle);
+    expect(toggle.getAttribute('aria-expanded')).toBe('false');
+    expect(screen.queryByText('Καμία απεγκατάσταση ακόμη.')).toBeNull();
   });
 
   it('shows the translated loading word, then the used/total and free lines', async () => {
