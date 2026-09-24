@@ -21,6 +21,8 @@ import Duplicates from './components/Duplicates.jsx';
 import StartupItems from './components/StartupItems.jsx';
 import { rememberVisited } from './lib/visitedScreens.js';
 import { useIdlePrefetch } from './hooks/useIdlePrefetch.js';
+import { useScreenFade } from './hooks/useScreenFade.js';
+import { useWindowActivity } from './hooks/useWindowActivity.js';
 import { useLanguage } from './i18n/LanguageContext.jsx';
 
 function formatBytes(bytes) {
@@ -66,52 +68,13 @@ export default function App() {
    * and prefetchQuery is a no-op once the data is fresh. */
   useIdlePrefetch();
 
-  /* The screen-change transition.
-   *
-   * Not AnimatePresence, and the reason is this app's architecture rather
-   * than preference. Screens STAY MOUNTED once visited (see Screen.jsx) so
-   * the Disk Map's scan and Deep Clean's results survive a tab switch.
-   * AnimatePresence animates things in and out of the tree, and keying a
-   * wrapper on `screen` would remount every screen on every switch --
-   * throwing away exactly the state that design protects. So the CONTAINER
-   * plays a short enter while its children are left alone.
-   *
-   * Web Animations rather than framer-motion, for one concrete reason:
-   * framer-motion writes its keyframe values as INLINE STYLES, so a
-   * cancelled or stalled run leaves `opacity: 0` sitting on the element
-   * permanently. WAAPI at the default `fill: none` writes nothing -- once
-   * the animation ends or is cancelled, the element is back to its
-   * stylesheet value with no residue.
-   *
-   * That is NOT the same as "safe if it never runs". An animation that is
-   * running but not progressing holds its first keyframe, whichever API
-   * drives it, so a screen mid-transition in a context that never
-   * composites shows opacity 0 either way. The cleanup below is what
-   * bounds that: leaving the screen cancels the animation and the element
-   * returns to visible immediately.
-   *
-   * The cancel is also a real fix rather than tidiness. Without it every
-   * tab switch stacks another animation on the same element -- measured
-   * three live at once after three switches -- and they fight over the
-   * same properties.
-   *
-   * Reduced motion is checked directly. MotionConfig covers framer-motion
-   * and index.css covers CSS transitions; neither reaches a WAAPI call. */
+  /* The screen-change fade (see hooks/useScreenFade.js for why it is a
+     container fade and not AnimatePresence: screens stay mounted). */
   const stageRef = useRef(null);
-  useEffect(() => {
-    const stage = stageRef.current;
-    if (!stage?.animate) return undefined;
-    if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return undefined;
+  useScreenFade(stageRef, screen);
 
-    const animation = stage.animate(
-      [
-        { opacity: 0, transform: 'translateY(12px)' },
-        { opacity: 1, transform: 'translateY(0)' }
-      ],
-      { duration: 300, easing: 'cubic-bezier(0.22, 1, 0.36, 1)' }
-    );
-    return () => animation.cancel();
-  }, [screen]);
+  // Pauses the aurora while the window is unfocused or hidden.
+  useWindowActivity();
 
   const [showShortcuts, setShowShortcuts] = useState(false);
 
