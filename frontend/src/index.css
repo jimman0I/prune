@@ -629,6 +629,15 @@ body::before {
   stroke-width: 2.5;
   filter: drop-shadow(0 0 6px var(--accent-primary-glow));
 }
+/* Keyboard focus on a cell draws the same kind of mark hover does, on the
+   rectangle itself. The global outline would be drawn around the <g>'s
+   bounding box, which on an SVG group is not the rounded block the eye is
+   following. */
+.treemap-cells .treemap-cell:focus-visible { outline: none; opacity: 1; }
+.treemap-cells .treemap-cell:focus-visible > rect {
+  stroke: var(--text-primary);
+  stroke-width: 3;
+}
 
 @keyframes skeleton-settle {
   0%, 100% { opacity: 0.55; }
