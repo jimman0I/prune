@@ -99,7 +99,10 @@ describe('what interrupts and what does not', () => {
     mount(<Push tone="danger" message="Could not remove 3 files" />);
     await push();
 
-    expect(screen.getByRole('status').getAttribute('aria-live')).toBe('assertive');
+    // role="alert" rather than status: it is what a screen reader treats
+    // as an interruption without relying on aria-live being honoured.
+    expect(screen.getByRole('alert').getAttribute('aria-live')).toBe('assertive');
+    expect(screen.queryByRole('status')).toBeNull();
   });
 
   it('mentions a success politely, without cutting in', async () => {
@@ -110,6 +113,16 @@ describe('what interrupts and what does not', () => {
     await push();
 
     expect(screen.getByRole('status').getAttribute('aria-live')).toBe('polite');
+  });
+});
+
+describe('what interrupts and what does not: warnings', () => {
+  it('announces a warning politely, as a status', async () => {
+    mount(<Push tone="warning" message="Protected by Windows" />);
+    await push();
+
+    expect(screen.getByRole('status').getAttribute('aria-live')).toBe('polite');
+    expect(screen.queryByRole('alert')).toBeNull();
   });
 });
 
@@ -234,5 +247,68 @@ describe('expiry', () => {
     } finally {
       vi.useRealTimers();
     }
+  });
+});
+
+describe('hovering or focusing a toast holds it on screen', () => {
+  function Count() {
+    const { toasts } = useToasts();
+    return <span data-testid="count">{toasts.length}</span>;
+  }
+  const count = () => screen.getByTestId('count').textContent;
+  const wait = (ms) => act(async () => { await vi.advanceTimersByTimeAsync(ms); });
+
+  const setup = async (tone = 'success') => {
+    vi.useFakeTimers({ shouldAdvanceTime: true });
+    const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+    renderScreen(
+      <ToastProvider>
+        <Push tone={tone} message="Freed 2.4 GB" />
+        <Count />
+        <ToastHost />
+      </ToastProvider>
+    );
+    await user.click(screen.getByText('push'));
+    return user;
+  };
+  afterEach(() => vi.useRealTimers());
+
+  it('does not expire while the pointer is over it, then lets it go afterwards', async () => {
+    const user = await setup();
+    await user.hover(screen.getByRole('status'));
+    await wait(30_000);
+    expect(count()).toBe('1');
+
+    await user.unhover(screen.getByRole('status'));
+    await wait(30_000);
+    expect(count()).toBe('0');
+  });
+
+  it('does not expire while a control inside it has keyboard focus', async () => {
+    const user = await setup();
+    screen.getByRole('button', { name: 'Dismiss notification' }).focus();
+    await wait(30_000);
+    expect(count()).toBe('1');
+
+    act(() => { screen.getByRole('button', { name: 'Dismiss notification' }).blur(); });
+    await wait(30_000);
+    expect(count()).toBe('0');
+    void user;
+  });
+
+  it('stays held if the pointer leaves but focus is still inside', async () => {
+    const user = await setup();
+    const status = screen.getByRole('status');
+    await user.hover(status);
+    screen.getByRole('button', { name: 'Dismiss notification' }).focus();
+    await user.unhover(status);
+    await wait(30_000);
+    expect(count()).toBe('1');
+  });
+
+  it('keeps a warning past any timeout without needing a hover', async () => {
+    await setup('warning');
+    await wait(30_000);
+    expect(count()).toBe('1');
   });
 });

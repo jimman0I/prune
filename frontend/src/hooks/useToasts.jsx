@@ -1,5 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
-import { addToast, dismissToast, expireToasts } from '../lib/toastQueue.js';
+import { addToast, dismissToast, expireToasts, pauseToast, resumeToast } from '../lib/toastQueue.js';
 
 /** Raising a toast from anywhere, without threading a prop through six
  * components that do not care.
@@ -28,6 +28,15 @@ export function ToastProvider({ children }) {
     setToasts((current) => dismissToast(current, id));
   }, []);
 
+  // Held while hovered or focused (see ToastHost); restart on release.
+  const pause = useCallback((id) => {
+    setToasts((current) => pauseToast(current, id));
+  }, []);
+
+  const resume = useCallback((id) => {
+    setToasts((current) => resumeToast(current, id));
+  }, []);
+
   useEffect(() => {
     const timer = setInterval(() => {
       // expireToasts returns the SAME array when nothing expired, so this
@@ -42,14 +51,17 @@ export function ToastProvider({ children }) {
   const value = useMemo(() => ({
     toasts,
     dismiss,
+    pause,
+    resume,
     push,
     success: (message, extra) => push({ tone: 'success', message, ...extra }),
     info: (message, extra) => push({ tone: 'info', message, ...extra }),
+    // Warnings and failures never expire on their own (the queue's default
+    // for those tones). Someone who looked away must still find out that
+    // three files were not cleaned.
     warn: (message, extra) => push({ tone: 'warning', message, ...extra }),
-    // Failures never expire on their own. Someone who looked away must
-    // still find out that three files were not cleaned.
-    error: (message, extra) => push({ tone: 'danger', message, ttl: 0, ...extra })
-  }), [toasts, dismiss, push]);
+    error: (message, extra) => push({ tone: 'danger', message, ...extra })
+  }), [toasts, dismiss, pause, resume, push]);
 
   return <ToastContext.Provider value={value}>{children}</ToastContext.Provider>;
 }
@@ -62,7 +74,7 @@ export function ToastProvider({ children }) {
  * know about toasts. */
 const NOOP = {
   toasts: [],
-  push: () => {}, dismiss: () => {},
+  push: () => {}, dismiss: () => {}, pause: () => {}, resume: () => {},
   success: () => {}, info: () => {}, warn: () => {}, error: () => {}
 };
 
