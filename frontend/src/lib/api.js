@@ -601,8 +601,31 @@ export async function scanDriveFast(driveLetter = 'C') {
   return data;
 }
 
-export async function fetchDiskScan(path, signal) {
+/** Scans a folder for the disk map. With `onProgress`, the scan streams over
+ * SSE and every `progress` / `complete` payload is forwarded as it arrives;
+ * the finished tree is then fetched by the id the `complete` event carries.
+ * Without it this is the original single request, unchanged. */
+export async function fetchDiskScan(path, signal, { onProgress } = {}) {
+  if (typeof onProgress === 'function') return fetchDiskScanStreamed(path, signal, onProgress);
   const res = await fetch(`${API_URL}/disk-scan?path=${encodeURIComponent(path)}`, { signal });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
+  return data;
+}
+
+async function fetchDiskScanStreamed(path, signal, onProgress) {
+  let done = null;
+  let failure = null;
+  await streamSSE(`${API_URL}/disk-scan/stream?path=${encodeURIComponent(path)}`, (type, data) => {
+    if (type === 'progress') onProgress(data);
+    else if (type === 'complete') { done = data; onProgress(data); }
+    else if (type === 'error') failure = data?.message || 'Scan failed';
+  }, signal);
+
+  if (failure) throw new Error(failure);
+  if (!done) throw new Error('The scan ended before it finished');
+
+  const res = await fetch(`${API_URL}/disk-scan/result/${encodeURIComponent(done.resultId)}`, { signal });
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
   return data;
