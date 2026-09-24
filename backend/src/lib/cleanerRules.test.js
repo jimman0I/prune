@@ -692,22 +692,8 @@ describe('actions-array rules', () => {
     await writeFile(join(dir1, 'a.bin'), '12345'); // 5 bytes
 
     const dbPath = join(appDataDir, 'mixed', 'test.db');
-    const { execFile } = await import('node:child_process');
-    const { promisify } = await import('node:util');
-    const execFileAsync = promisify(execFile);
-    // Written to a temp file and run via sqlite3's `.read` meta-command,
-    // not passed as a raw argv string -- at 300 inserts x 500 chars this
-    // SQL is ~150KB, which blows past Windows's ~32K CreateProcess
-    // command-line limit (spawn ENAMETOOLONG). Same fix already
-    // established in sqliteVacuum.test.js's makeBloatedDb helper.
-    const sql = [
-      'CREATE TABLE t (id INTEGER PRIMARY KEY, data TEXT);',
-      ...Array.from({ length: 300 }, (_, i) => `INSERT INTO t (data) VALUES ('${'x'.repeat(500)}-${i}');`),
-      'DELETE FROM t WHERE id % 2 = 0;'
-    ].join('\n');
-    const scriptPath = join(appDataDir, 'mixed', 'setup.sql');
-    await writeFile(scriptPath, sql, 'utf8');
-    await execFileAsync(sqliteVacuum.sqlite3ExePath(), [dbPath, `.read ${scriptPath}`]);
+    const { makeBloatedDb } = await import('../testSupport/bloatedDb.js');
+    await makeBloatedDb({ dbPath, scriptPath: join(appDataDir, 'mixed', 'setup.sql'), rows: 300 });
     const { statSync } = await import('node:fs');
     const dbSizeBefore = statSync(dbPath).size;
 

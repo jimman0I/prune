@@ -5,6 +5,7 @@ import { join } from 'node:path';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import { scan, execute, sqlite3ExePath } from './sqliteVacuum.js';
+import { makeBloatedDb as buildBloatedDb } from '../../testSupport/bloatedDb.js';
 
 const execFileAsync = promisify(execFile);
 
@@ -16,28 +17,8 @@ afterEach(async () => {
   await rm(scratchDir, { recursive: true, force: true });
 });
 
-/** A real SQLite database with real reclaimable free space: insert a lot
- * of rows, then delete most of them. SQLite marks their pages free but
- * does not shrink the file until VACUUM runs -- this is the exact
- * condition the action exists to fix, so the test proves it against a
- * real file rather than asserting on a mock.
- *
- * The SQL script is written to a temp file and run via sqlite3's `.read`
- * meta-command rather than passed as a raw argv string: at this row
- * count the script is ~250KB, which blows past Windows's ~32K
- * CreateProcess command-line limit (spawn ENAMETOOLONG) when passed
- * directly as an argument. `.read <file>` keeps the argv tiny while
- * running the exact same SQL. */
-async function makeBloatedDb(path) {
-  const sql = [
-    'CREATE TABLE t (id INTEGER PRIMARY KEY, data TEXT);',
-    ...Array.from({ length: 500 }, (_, i) => `INSERT INTO t (data) VALUES ('${'x'.repeat(500)}-${i}');`),
-    'DELETE FROM t WHERE id % 2 = 0;'
-  ].join('\n');
-  const scriptPath = join(scratchDir, 'setup.sql');
-  await writeFile(scriptPath, sql, 'utf8');
-  await execFileAsync(sqlite3ExePath(), [path, `.read ${scriptPath}`]);
-}
+// A real database with real reclaimable free space -- see testSupport/bloatedDb.js.
+const makeBloatedDb = (path) => buildBloatedDb({ dbPath: path, scriptPath: join(scratchDir, 'setup.sql') });
 
 describe('sqlite.vacuum scan', () => {
   it('reports the file\'s current size as the (upper-bound) reclaimable amount', async () => {
