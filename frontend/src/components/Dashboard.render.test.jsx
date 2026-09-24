@@ -61,7 +61,7 @@ describe('the Dashboard reads', () => {
   it('shows disk space from the query layer', async () => {
     render();
     await waitFor(() => expect(fetchDiskSpace).toHaveBeenCalled());
-    expect(await screen.findByText(/400 GB Used/)).toBeTruthy();
+    expect(await screen.findByText(/400 GB used/)).toBeTruthy();
   });
 
   it('shows the drive model once health resolves', async () => {
@@ -110,7 +110,7 @@ describe('the System Health score', () => {
     render();
 
     // drive 100*40 + storage 100*25 + apps 100*20 + errors 100*15 = 100
-    expect(await screen.findByText('System Health')).toBeTruthy();
+    expect(await screen.findByText('System health')).toBeTruthy();
     expect(await screen.findByText('100%')).toBeTruthy();
     expect(await screen.findByText(/Drive 100.*Storage 100.*Apps 100.*Errors 100/)).toBeTruthy();
   });

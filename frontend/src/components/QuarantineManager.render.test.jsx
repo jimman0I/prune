@@ -9,7 +9,7 @@ import { isCopyable } from '../testSupport/copyable.js';
  *
  * This is the app's undo, and this screen is the only place a backup can
  * be destroyed on purpose. The property worth a test is not that the
- * buttons exist -- it is that a single click on "Delete Permanently"
+ * buttons exist -- it is that a single click on "Delete permanently"
  * cannot delete anything. Every destructive action here is a two-step
  * inline gate, and nothing in the suite was holding that still.
  *
@@ -92,7 +92,7 @@ describe('what can be copied', () => {
     const user = userEvent.setup();
     deleteQuarantineBatch.mockRejectedValueOnce(new Error('EBUSY'));
     renderScreen(<QuarantineManager />);
-    await user.click(await screen.findByRole('button', { name: 'Delete Permanently' }));
+    await user.click(await screen.findByRole('button', { name: 'Delete permanently' }));
     await user.click(screen.getByRole('button', { name: 'Confirm' }));
 
     expect(isCopyable(await screen.findByText('EBUSY'))).toBe(true);
@@ -139,7 +139,7 @@ describe('the gate in front of a permanent delete', () => {
     // confirmation; it must not reach the API.
     const user = userEvent.setup();
     renderScreen(<QuarantineManager />);
-    await user.click(await screen.findByRole('button', { name: 'Delete Permanently' }));
+    await user.click(await screen.findByRole('button', { name: 'Delete permanently' }));
 
     expect(deleteQuarantineBatch).not.toHaveBeenCalled();
     expect(screen.getByText('Delete forever?')).toBeTruthy();
@@ -148,7 +148,7 @@ describe('the gate in front of a permanent delete', () => {
   it('backs out on Cancel, having deleted nothing', async () => {
     const user = userEvent.setup();
     renderScreen(<QuarantineManager />);
-    await user.click(await screen.findByRole('button', { name: 'Delete Permanently' }));
+    await user.click(await screen.findByRole('button', { name: 'Delete permanently' }));
     await user.click(screen.getByRole('button', { name: 'Cancel' }));
 
     expect(deleteQuarantineBatch).not.toHaveBeenCalled();
@@ -160,7 +160,7 @@ describe('the gate in front of a permanent delete', () => {
   it('deletes the batch that was confirmed, and only on the second click', async () => {
     const user = userEvent.setup();
     renderScreen(<QuarantineManager />);
-    await user.click(await screen.findByRole('button', { name: 'Delete Permanently' }));
+    await user.click(await screen.findByRole('button', { name: 'Delete permanently' }));
     await user.click(screen.getByRole('button', { name: 'Confirm' }));
 
     await waitFor(() => expect(deleteQuarantineBatch).toHaveBeenCalledTimes(1));
@@ -185,7 +185,7 @@ describe('the gate in front of a permanent delete', () => {
     const user = userEvent.setup();
     deleteQuarantineBatch.mockRejectedValueOnce(new Error('EBUSY'));
     renderScreen(<QuarantineManager />);
-    await user.click(await screen.findByRole('button', { name: 'Delete Permanently' }));
+    await user.click(await screen.findByRole('button', { name: 'Delete permanently' }));
     await user.click(screen.getByRole('button', { name: 'Confirm' }));
 
     expect(await screen.findByText('EBUSY')).toBeTruthy();

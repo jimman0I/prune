@@ -62,4 +62,52 @@ describe('CATALOG', () => {
     }
     expect(problems).toEqual([]);
   });
+
+  it('writes English labels in sentence case, keeping only the proper names capitalised', () => {
+    /* Decision 2 of the Apple design pass: "Minimize to tray", not "Minimize
+     * to Tray". Short strings (labels, titles, buttons) are checked; long
+     * prose is sentence case by construction and full of names. Functions are
+     * called with placeholder arguments so template labels are checked too. */
+    const PROPER = [
+      'Deep Clean', 'Disk Map', 'Recycle Bin', 'Prune', 'Quarantine', 'Windows', 'Defender', 'WinRAR',
+      'Settings', 'Startup', 'Applications', 'Dashboard', 'Duplicates', 'Store', 'Explorer',
+      'Add/Remove Programs', 'Run', 'RunOnce', 'Registry', 'Microsoft', 'Edge', 'Chrome', 'Firefox',
+      'System Restore', 'Task Manager', 'StartupApproved', 'GitHub', 'WizTree', 'Downloads'
+    ];
+    const leaves = (node, path = '') => {
+      if (typeof node === 'function') {
+        let out;
+        try { out = node('a', 'b', 'c', 'd', 'e'); } catch { return []; }
+        return typeof out === 'string' ? [[path, out]] : [];
+      }
+      if (typeof node === 'string') return [[path, node]];
+      return Object.entries(node).flatMap(([k, v]) => leaves(v, path ? `${path}.${k}` : k));
+    };
+    const offenders = [];
+    for (const [path, text] of leaves(CATALOG.en)) {
+      // A label has no sentence punctuation and is a handful of words.
+      if (/[.:;!?]/.test(text.replace(/\.\.\./g, '').replace(/…/g, '')) || text.split(/\s+/).length > 6) continue;
+      let rest = text;
+      for (const name of PROPER) rest = rest.split(name).join(' ');
+      const words = rest.split(/[^A-Za-z'’]+/).filter(Boolean);
+      // The first word may be capitalised; a later one may not (Title Case).
+      const bad = words.slice(rest.trimStart() === rest ? 1 : 0).filter((w) => /^[A-Z][a-z]/.test(w));
+      if (bad.length) offenders.push(`${path}: "${text}"`);
+    }
+    expect(offenders).toEqual([]);
+  });
+
+  it('titles each English page exactly as its rail label, with the old wording moved into the subtitle', () => {
+    // Decision 3 of the Apple design pass.
+    const en = CATALOG.en;
+    expect(en.diskMap.title).toBe(en.nav.diskMap);
+    expect(en.startup.title).toBe(en.nav.startup);
+    expect(en.app.installedApplications).toBe(en.nav.applications);
+    expect(en.diskMap.title).toBe('Disk Map');
+    expect(en.startup.title).toBe('Startup');
+    expect(en.diskMap.subtitle).toMatch(/usage/i);
+    expect(en.startup.subtitle).toMatch(/when you sign in/i);
+    expect(en.app.applicationsSummary(212, '83 GB')).toBe('212 installed applications · 83 GB');
+    expect(en.app.applicationsSummary(1, '5 GB')).toBe('1 installed application · 5 GB');
+  });
 });
