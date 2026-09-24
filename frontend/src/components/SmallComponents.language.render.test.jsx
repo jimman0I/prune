@@ -95,14 +95,19 @@ describe('ThemeToggle in Greek', () => {
     document.documentElement.removeAttribute('data-theme');
   });
 
-  it('names the theme it will switch TO, in Greek, and updates after a click', async () => {
+  it('offers System, Light and Dark in Greek, and picking one updates which is on', async () => {
     renderScreen(<ThemeToggle />);
 
-    const button = await screen.findByRole('button', { name: 'Εναλλαγή σε ανοιχτόχρωμο θέμα' });
+    // Group name is the Appearance heading, translated.
+    expect(await screen.findByRole('group', { name: 'Εμφάνιση' })).toBeTruthy();
+    const system = await screen.findByRole('button', { name: 'Σύστημα' });
+    expect(system.getAttribute('aria-pressed')).toBe('true');
 
     const user = userEvent.setup();
-    await user.click(button);
-    expect(await screen.findByRole('button', { name: 'Εναλλαγή σε σκοτεινό θέμα' })).toBeTruthy();
+    await user.click(screen.getByRole('button', { name: 'Σκούρο' }));
+    expect(screen.getByRole('button', { name: 'Σκούρο' }).getAttribute('aria-pressed')).toBe('true');
+    expect(system.getAttribute('aria-pressed')).toBe('false');
+    expect(screen.getByRole('button', { name: 'Ανοιχτό' })).toBeTruthy();
   });
 });
 

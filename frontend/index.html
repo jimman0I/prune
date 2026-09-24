@@ -17,7 +17,11 @@
          set the right theme, not a second source of truth. Mirrors
          resolveInitialTheme()'s precedence in lib/theme.js (stored
          choice, then OS preference, then dark) in plain JS because a
-         parser-blocking classic script can't import an ES module. -->
+         parser-blocking classic script can't import an ES module. A stored
+         'system' (the Settings > General "System" choice) is not one of the
+         two palettes, so it falls through to the OS preference exactly as
+         an absent value does; themeBootScript.test.js runs this very
+         script to pin that. -->
     <script>
       (function () {
         var stored = null;

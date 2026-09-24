@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { resolveInitialTheme, nextTheme, THEMES } from './theme.js';
+import { resolveInitialTheme, resolveChoice, THEMES, THEME_CHOICES } from './theme.js';
 
 /** Which theme the app opens in.
  *
@@ -37,19 +37,34 @@ describe('resolveInitialTheme', () => {
   });
 });
 
-describe('nextTheme', () => {
-  it('alternates', () => {
-    expect(nextTheme('dark')).toBe('light');
-    expect(nextTheme('light')).toBe('dark');
+describe('resolveChoice', () => {
+  it('keeps the three real choices', () => {
+    for (const choice of ['system', 'light', 'dark']) expect(resolveChoice(choice)).toBe(choice);
   });
 
-  it('treats anything unrecognised as dark, so the toggle still works', () => {
-    expect(nextTheme('nonsense')).toBe('light');
+  it('treats nothing stored as System, which is what an untouched install does', () => {
+    expect(resolveChoice(null)).toBe('system');
+    expect(resolveChoice(undefined)).toBe('system');
+  });
+
+  it('treats a stored value that is not a choice as System rather than trusting it', () => {
+    for (const junk of ['solarized', '', 'DARK', '{}', 42]) expect(resolveChoice(junk)).toBe('system');
   });
 });
 
-describe('THEMES', () => {
-  it('is the whole set, so nothing else has to hardcode the list', () => {
+describe('System mode', () => {
+  it('follows the operating system, in both directions', () => {
+    expect(resolveInitialTheme({ stored: 'system', prefersDark: false })).toBe('light');
+    expect(resolveInitialTheme({ stored: 'system', prefersDark: true })).toBe('dark');
+  });
+});
+
+describe('THEMES / THEME_CHOICES', () => {
+  it('THEMES is the palettes, so nothing else has to hardcode the list', () => {
     expect(THEMES).toEqual(['dark', 'light']);
+  });
+
+  it('THEME_CHOICES is what the control offers, System first', () => {
+    expect(THEME_CHOICES).toEqual(['system', 'light', 'dark']);
   });
 });
