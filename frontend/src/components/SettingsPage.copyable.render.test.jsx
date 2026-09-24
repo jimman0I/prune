@@ -39,6 +39,9 @@ const DEFAULTS = {
 };
 
 beforeEach(() => {
+  // Settings remembers its last tab in localStorage; without this, the
+  // sandbox test's click on Cleanup reopens every later test there.
+  window.localStorage.clear();
   vi.clearAllMocks();
   fetchSettings.mockResolvedValue({ ...DEFAULTS });
   fetchUpdateCheck.mockResolvedValue({ enabled: false, current: '2.4.0' });
