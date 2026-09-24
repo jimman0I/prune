@@ -290,6 +290,18 @@ export const CATALOG = {
         crawlExplain: "The alternative walks folders one at a time. It needs no permission and is the right tool for a single folder, but it cannot finish a volume: on this drive it reached 4% of what's in use before running out of time, and the other 96% shows as unscanned rather than as anything useful.",
         crawlButton: 'Walk folders instead'
       },
+      scanProgress: {
+        scanning: (path) => `Scanning ${path}`,
+        filesProcessed: (files, size) => `${files} files scanned · ${size} processed`,
+        noTotalNote: "No total is known for this scan, so there is no percentage — the counters show what has been read so far.",
+        indexNote: "Windows reports no progress while the drive index is read, so there is no percentage — only the time so far.",
+        elapsed: (time) => `Elapsed ${time}`,
+        complete: "Scan complete",
+        completeCounts: (files, size) => `Scan complete — ${files} files, ${size}`,
+        scanAgain: "Scan again",
+        retry: "Retry",
+        barLabel: "Scan progress"
+      },
       scanFailure: (path, error) => `Couldn't scan "${path}": ${error}`,
       fastScanDeclined: 'Not approved — still using the folder-by-folder scan.',
       truncated: {
@@ -993,6 +1005,18 @@ export const CATALOG = {
         fastExplain: (path) => `'n Vinnige skandering lees die skyf se eie lêerindeks — elke lêer op ${path} in 'n paar sekondes, soos WizTree dit doen. Windows laat 'n program slegs met administrateurtoegang daardie indeks lees, dus veroorsaak dit 'n UAC-versoek.`,
         crawlExplain: "Die alternatief loop deur gidse een op 'n slag. Dit benodig geen toestemming nie en is die regte manier vir 'n enkele gids, maar dit kan nie 'n hele volume voltooi nie: op hierdie skyf het dit 4% van wat in gebruik is, bereik voor tyd opgeraak het, en die ander 96% word as ongeskandeer gewys eerder as iets bruikbaars.",
         crawlButton: 'Loop eerder deur gidse'
+      },
+      scanProgress: {
+        scanning: (path) => `Skandeer ${path}`,
+        filesProcessed: (files, size) => `${files} lêers geskandeer · ${size} verwerk`,
+        noTotalNote: "Geen totaal is vir hierdie skandering bekend nie, so daar is geen persentasie nie — die tellers wys wat tot dusver gelees is.",
+        indexNote: "Windows rapporteer geen vordering terwyl die skyfindeks gelees word nie, so daar is geen persentasie nie — net die tyd tot dusver.",
+        elapsed: (time) => `Verstreke ${time}`,
+        complete: "Skandering voltooi",
+        completeCounts: (files, size) => `Skandering voltooi — ${files} lêers, ${size}`,
+        scanAgain: "Skandeer weer",
+        retry: "Probeer weer",
+        barLabel: "Skanderingsvordering"
       },
       scanFailure: (path, error) => `Kon nie "${path}" skandeer nie: ${error}`,
       fastScanDeclined: 'Nie goedgekeur nie — gebruik steeds die gids-vir-gids-skandering.',
@@ -1698,6 +1722,18 @@ export const CATALOG = {
         crawlExplain: 'البديل يمر عبر المجلدات واحدًا تلو الآخر. لا يحتاج إلى أي إذن وهو الأداة المناسبة لمجلد واحد، لكنه لا يستطيع إنهاء مجلد كامل: على هذا القرص وصل إلى 4% مما هو مستخدم قبل نفاد الوقت، وتظهر النسبة الأخرى 96% كغير مفحوصة بدلاً من أي شيء مفيد.',
         crawlButton: 'المرور عبر المجلدات بدلاً من ذلك'
       },
+      scanProgress: {
+        scanning: (path) => `جارٍ فحص ${path}`,
+        filesProcessed: (files, size) => `تم فحص ${files} ملف · تمت معالجة ${size}`,
+        noTotalNote: "لا يوجد إجمالي معروف لهذا الفحص، لذا لا توجد نسبة مئوية — تعرض العدّادات ما تمت قراءته حتى الآن.",
+        indexNote: "لا يُبلغ Windows عن أي تقدم أثناء قراءة فهرس القرص، لذا لا توجد نسبة مئوية — الوقت المنقضي فقط.",
+        elapsed: (time) => `المدة المنقضية ${time}`,
+        complete: "اكتمل الفحص",
+        completeCounts: (files, size) => `اكتمل الفحص — ${files} ملف، ${size}`,
+        scanAgain: "افحص مرة أخرى",
+        retry: "إعادة المحاولة",
+        barLabel: "تقدم الفحص"
+      },
       scanFailure: (path, error) => `تعذّر فحص "${path}": ${error}`,
       fastScanDeclined: 'لم تتم الموافقة — لا يزال يُستخدم الفحص مجلدًا تلو الآخر.',
       truncated: {
@@ -2401,6 +2437,18 @@ export const CATALOG = {
         fastExplain: (path) => `Un escaneig ràpid llegeix l'índex de fitxers propi del disc — cada fitxer de ${path} en pocs segons, tal com fa WizTree. El Windows només deixa a un programa llegir aquest índex amb accés d'administrador, per això apareix un avís UAC.`,
         crawlExplain: "L'alternativa recorre les carpetes d'una en una. No necessita cap permís i és l'eina adequada per a una sola carpeta, però no pot acabar un volum sencer: en aquest disc va arribar al 4% del que s'utilitza abans d'esgotar el temps, i l'altre 96% es mostra com a no escanejat en lloc de com a res útil.",
         crawlButton: "Recorre les carpetes en lloc d'això"
+      },
+      scanProgress: {
+        scanning: (path) => `S'està analitzant ${path}`,
+        filesProcessed: (files, size) => `${files} fitxers analitzats · ${size} processats`,
+        noTotalNote: "No es coneix cap total per a aquesta anàlisi, així que no hi ha percentatge: els comptadors mostren el que s'ha llegit fins ara.",
+        indexNote: "Windows no informa del progrés mentre es llegeix l'índex del disc, així que no hi ha percentatge, només el temps transcorregut.",
+        elapsed: (time) => `Transcorregut ${time}`,
+        complete: "Anàlisi completada",
+        completeCounts: (files, size) => `Anàlisi completada — ${files} fitxers, ${size}`,
+        scanAgain: "Torna a analitzar",
+        retry: "Torna-ho a provar",
+        barLabel: "Progrés de l'anàlisi"
       },
       scanFailure: (path, error) => `No s'ha pogut escanejar "${path}": ${error}`,
       fastScanDeclined: "No aprovat — es continua utilitzant l'escaneig carpeta per carpeta.",
@@ -3106,6 +3154,18 @@ export const CATALOG = {
         crawlExplain: 'Alternativa prochází složky jednu po druhé. Nevyžaduje žádné oprávnění a je vhodná pro jednu složku, ale nedokáže dokončit celý svazek: na tomto disku dosáhla 4 % využitého místa, než jí došel čas, a zbylých 96 % se zobrazuje jako neprohledáno místo jako cokoli užitečného.',
         crawlButton: 'Místo toho procházet složky'
       },
+      scanProgress: {
+        scanning: (path) => `Prohledávání ${path}`,
+        filesProcessed: (files, size) => `Prohledáno souborů: ${files} · zpracováno ${size}`,
+        noTotalNote: "Celková velikost tohoto skenování není známa, proto se nezobrazuje procento — čítače ukazují, co bylo dosud přečteno.",
+        indexNote: "Windows během čtení indexu disku nehlásí průběh, proto se nezobrazuje procento — jen uplynulý čas.",
+        elapsed: (time) => `Uplynulo ${time}`,
+        complete: "Skenování dokončeno",
+        completeCounts: (files, size) => `Skenování dokončeno — souborů: ${files}, ${size}`,
+        scanAgain: "Skenovat znovu",
+        retry: "Zkusit znovu",
+        barLabel: "Průběh skenování"
+      },
       scanFailure: (path, error) => `Nepodařilo se prohledat „${path}“: ${error}`,
       fastScanDeclined: 'Neschváleno — stále se používá prohledávání složka po složce.',
       truncated: {
@@ -3809,6 +3869,18 @@ export const CATALOG = {
         fastExplain: (path) => `Mae sgan cyflym yn darllen mynegai ffeiliau ei hun y ddisg — pob ffeil ar ${path} mewn ychydig eiliadau, yr un ffordd ag y mae WizTree yn ei wneud. Dim ond gyda mynediad gweinyddwr y mae Windows yn gadael i raglen ddarllen y mynegai hwnnw, felly mae hyn yn codi cais UAC.`,
         crawlExplain: "Mae'r dewis arall yn cerdded drwy ffolderi fesul un. Nid oes angen unrhyw ganiatâd arno ac mae'n arf priodol ar gyfer un ffolder, ond ni all orffen cyfrol gyfan: ar y ddisg hon fe gyrhaeddodd 4% o'r hyn sydd mewn defnydd cyn i amser redeg allan, ac mae'r 96% arall yn dangos fel heb ei sganio yn hytrach nag unrhyw beth defnyddiol.",
         crawlButton: "Cerdded drwy ffolderi yn lle hynny"
+      },
+      scanProgress: {
+        scanning: (path) => `Sganio ${path}`,
+        filesProcessed: (files, size) => `${files} ffeil wedi'u sganio · ${size} wedi'u prosesu`,
+        noTotalNote: "Nid oes cyfanswm hysbys ar gyfer y sgan hwn, felly nid oes canran — mae'r cownteri'n dangos yr hyn a ddarllenwyd hyd yma.",
+        indexNote: "Nid yw Windows yn adrodd ar gynnydd wrth ddarllen mynegai'r gyriant, felly nid oes canran — dim ond yr amser hyd yma.",
+        elapsed: (time) => `Wedi mynd heibio ${time}`,
+        complete: "Sgan wedi'i gwblhau",
+        completeCounts: (files, size) => `Sgan wedi'i gwblhau — ${files} ffeil, ${size}`,
+        scanAgain: "Sganio eto",
+        retry: "Rhowch gynnig arall arni",
+        barLabel: "Cynnydd y sgan"
       },
       scanFailure: (path, error) => `Methwyd sganio "${path}": ${error}`,
       fastScanDeclined: "Heb ei gymeradwyo — yn dal i ddefnyddio'r sgan fesul ffolder.",
@@ -4514,6 +4586,18 @@ export const CATALOG = {
         crawlExplain: 'Alternativet gennemgår mapper én ad gangen. Det kræver ingen tilladelse og er det rette redskab til en enkelt mappe, men kan ikke gennemføre en hel diskenhed: på denne disk nåede den 4% af det brugte, før tiden løb ud, og de resterende 96% vises som uscannet i stedet for noget nyttigt.',
         crawlButton: 'Gennemgå mapper i stedet'
       },
+      scanProgress: {
+        scanning: (path) => `Scanner ${path}`,
+        filesProcessed: (files, size) => `${files} filer scannet · ${size} behandlet`,
+        noTotalNote: "Der kendes ingen samlet størrelse for denne scanning, så der vises ingen procent — tællerne viser, hvad der er læst indtil nu.",
+        indexNote: "Windows rapporterer ikke fremdrift, mens drevets indeks læses, så der vises ingen procent — kun tiden indtil nu.",
+        elapsed: (time) => `Forløbet tid ${time}`,
+        complete: "Scanning fuldført",
+        completeCounts: (files, size) => `Scanning fuldført — ${files} filer, ${size}`,
+        scanAgain: "Scan igen",
+        retry: "Prøv igen",
+        barLabel: "Scanningsforløb"
+      },
       scanFailure: (path, error) => `Kunne ikke scanne "${path}": ${error}`,
       fastScanDeclined: 'Ikke godkendt — bruger stadig mappe-for-mappe-scanningen.',
       truncated: {
@@ -5217,6 +5301,18 @@ export const CATALOG = {
         fastExplain: (path) => `Ein Schnellscan liest den eigenen Dateiindex des Laufwerks — jede Datei auf ${path} in wenigen Sekunden, genau wie WizTree es macht. Windows erlaubt einem Programm nur mit Administratorrechten, diesen Index zu lesen, daher erscheint eine UAC-Aufforderung.`,
         crawlExplain: 'Die Alternative durchläuft Ordner einzeln nacheinander. Sie benötigt keine Berechtigung und ist das richtige Werkzeug für einen einzelnen Ordner, kann aber kein ganzes Volume abschließen: Auf diesem Laufwerk erreichte sie 4 % des belegten Speicherplatzes, bevor die Zeit ablief, und die restlichen 96 % werden als nicht gescannt angezeigt statt als etwas Brauchbares.',
         crawlButton: 'Stattdessen Ordner durchlaufen'
+      },
+      scanProgress: {
+        scanning: (path) => `${path} wird gescannt`,
+        filesProcessed: (files, size) => `${files} Dateien gescannt · ${size} verarbeitet`,
+        noTotalNote: "Für diesen Scan ist keine Gesamtgröße bekannt, daher gibt es keine Prozentangabe – die Zähler zeigen, was bisher gelesen wurde.",
+        indexNote: "Windows meldet keinen Fortschritt, während der Laufwerksindex gelesen wird, daher gibt es keine Prozentangabe – nur die bisher vergangene Zeit.",
+        elapsed: (time) => `Verstrichen: ${time}`,
+        complete: "Scan abgeschlossen",
+        completeCounts: (files, size) => `Scan abgeschlossen – ${files} Dateien, ${size}`,
+        scanAgain: "Erneut scannen",
+        retry: "Wiederholen",
+        barLabel: "Scanfortschritt"
       },
       scanFailure: (path, error) => `„${path}“ konnte nicht gescannt werden: ${error}`,
       fastScanDeclined: 'Nicht genehmigt — verwendet weiterhin den Ordner-für-Ordner-Scan.',
@@ -5922,6 +6018,18 @@ export const CATALOG = {
         crawlExplain: 'Η εναλλακτική διατρέχει τους φακέλους έναν προς έναν. Δεν χρειάζεται καμία άδεια και είναι το σωστό εργαλείο για έναν μόνο φάκελο, αλλά δεν μπορεί να ολοκληρώσει έναν ολόκληρο τόμο: σε αυτόν τον δίσκο έφτασε στο 4% του χώρου που χρησιμοποιείται πριν εξαντληθεί ο χρόνος, και το υπόλοιπο 96% εμφανίζεται ως μη σαρωμένο αντί για κάτι χρήσιμο.',
         crawlButton: "Διάτρεξε τους φακέλους αντ' αυτού"
       },
+      scanProgress: {
+        scanning: (path) => `Σάρωση του ${path}`,
+        filesProcessed: (files, size) => `${files} αρχεία σαρώθηκαν · ${size} επεξεργάστηκαν`,
+        noTotalNote: "Για αυτή τη σάρωση δεν είναι γνωστό το συνολικό μέγεθος, επομένως δεν εμφανίζεται ποσοστό — οι μετρητές δείχνουν όσα έχουν διαβαστεί μέχρι τώρα.",
+        indexNote: "Τα Windows δεν αναφέρουν πρόοδο κατά την ανάγνωση του ευρετηρίου του δίσκου, επομένως δεν εμφανίζεται ποσοστό — μόνο ο χρόνος που πέρασε.",
+        elapsed: (time) => `Χρόνος ${time}`,
+        complete: "Η σάρωση ολοκληρώθηκε",
+        completeCounts: (files, size) => `Η σάρωση ολοκληρώθηκε — ${files} αρχεία, ${size}`,
+        scanAgain: "Σάρωση ξανά",
+        retry: "Δοκιμή ξανά",
+        barLabel: "Πρόοδος σάρωσης"
+      },
       scanFailure: (path, error) => `Αδυναμία σάρωσης του «${path}»: ${error}`,
       fastScanDeclined: 'Δεν εγκρίθηκε — εξακολουθεί να χρησιμοποιείται η σάρωση φάκελο προς φάκελο.',
       truncated: {
@@ -6625,6 +6733,18 @@ export const CATALOG = {
         fastExplain: (path) => `Un escaneo rápido lee el propio índice de archivos del disco — cada archivo en ${path} en unos segundos, tal como lo hace WizTree. Windows solo permite a un programa leer ese índice con acceso de administrador, por lo que esto genera una solicitud de UAC.`,
         crawlExplain: 'La alternativa recorre las carpetas una a una. No necesita ningún permiso y es la herramienta adecuada para una sola carpeta, pero no puede terminar un volumen entero: en este disco alcanzó el 4% de lo que está en uso antes de agotarse el tiempo, y el otro 96% se muestra como no escaneado en lugar de algo útil.',
         crawlButton: 'Recorrer carpetas en su lugar'
+      },
+      scanProgress: {
+        scanning: (path) => `Analizando ${path}`,
+        filesProcessed: (files, size) => `${files} archivos analizados · ${size} procesados`,
+        noTotalNote: "No se conoce un total para este análisis, así que no hay porcentaje: los contadores muestran lo leído hasta ahora.",
+        indexNote: "Windows no informa del progreso mientras se lee el índice de la unidad, así que no hay porcentaje, solo el tiempo transcurrido.",
+        elapsed: (time) => `Transcurrido ${time}`,
+        complete: "Análisis completado",
+        completeCounts: (files, size) => `Análisis completado — ${files} archivos, ${size}`,
+        scanAgain: "Analizar de nuevo",
+        retry: "Reintentar",
+        barLabel: "Progreso del análisis"
       },
       scanFailure: (path, error) => `No se pudo escanear "${path}": ${error}`,
       fastScanDeclined: 'No aprobado — se sigue usando el escaneo carpeta por carpeta.',
@@ -7330,6 +7450,18 @@ export const CATALOG = {
         crawlExplain: 'Alternatiiv käib kaustadest läbi ühekaupa. See ei vaja luba ja sobib ühe kausta jaoks, kuid ei suuda lõpetada tervet köidet: sellel kettal jõudis see 4%-ni kasutusel olevast enne aja lõppemist ja ülejäänud 96% kuvatakse skannimata, mitte millegi kasulikuna.',
         crawlButton: 'Käi selle asemel kaustadest läbi'
       },
+      scanProgress: {
+        scanning: (path) => `Skannitakse ${path}`,
+        filesProcessed: (files, size) => `${files} faili skannitud · ${size} töödeldud`,
+        noTotalNote: "Selle skannimise kogumahtu ei teata, seega protsenti ei kuvata — loendurid näitavad seni loetut.",
+        indexNote: "Windows ei teata edenemist ketta indeksi lugemise ajal, seega protsenti ei kuvata — ainult seni kulunud aega.",
+        elapsed: (time) => `Kulunud aeg ${time}`,
+        complete: "Skannimine lõpetatud",
+        completeCounts: (files, size) => `Skannimine lõpetatud — ${files} faili, ${size}`,
+        scanAgain: "Skanni uuesti",
+        retry: "Proovi uuesti",
+        barLabel: "Skannimise edenemine"
+      },
       scanFailure: (path, error) => `„${path}" skannimine ebaõnnestus: ${error}`,
       fastScanDeclined: 'Ei kinnitatud — kasutatakse jätkuvalt kausta-kaustalt skannimist.',
       truncated: {
@@ -8033,6 +8165,18 @@ export const CATALOG = {
         fastExplain: (path) => `Pikaskannaus lukee levyn oman tiedostohakemiston — jokaisen tiedoston kohteessa ${path} muutamassa sekunnissa, aivan kuten WizTree tekee. Windows sallii ohjelman lukea tämän hakemiston vain järjestelmänvalvojan oikeuksilla, joten tämä käynnistää UAC-kehotteen.`,
         crawlExplain: 'Vaihtoehto käy kansiot läpi yksitellen. Se ei vaadi mitään oikeuksia ja on oikea työkalu yhdelle kansiolle, mutta se ei pysty saattamaan koko taltiota loppuun: tällä levyllä se saavutti 4 % käytössä olevasta ennen ajan loppumista, ja loput 96 % näkyy skannaamattomana eikä minään hyödyllisenä.',
         crawlButton: 'Käy sen sijaan kansiot läpi'
+      },
+      scanProgress: {
+        scanning: (path) => `Skannataan ${path}`,
+        filesProcessed: (files, size) => `${files} tiedostoa skannattu · ${size} käsitelty`,
+        noTotalNote: "Tämän skannauksen kokonaismäärää ei tiedetä, joten prosenttia ei näytetä — laskurit näyttävät tähän mennessä luetun.",
+        indexNote: "Windows ei ilmoita edistymistä levyn indeksiä luettaessa, joten prosenttia ei näytetä — vain tähän mennessä kulunut aika.",
+        elapsed: (time) => `Kulunut aika ${time}`,
+        complete: "Skannaus valmis",
+        completeCounts: (files, size) => `Skannaus valmis — ${files} tiedostoa, ${size}`,
+        scanAgain: "Skannaa uudelleen",
+        retry: "Yritä uudelleen",
+        barLabel: "Skannauksen eteneminen"
       },
       scanFailure: (path, error) => `Kohteen "${path}" skannaus epäonnistui: ${error}`,
       fastScanDeclined: 'Ei hyväksytty — käytetään edelleen kansio kerrallaan -skannausta.',
@@ -8738,6 +8882,18 @@ export const CATALOG = {
         crawlExplain: "L'alternative parcourt les dossiers un par un. Elle ne nécessite aucune permission et est l'outil adapté à un seul dossier, mais elle ne peut pas terminer un volume entier : sur ce disque, elle a atteint 4 % de ce qui est utilisé avant que le temps ne s'épuise, et les 96 % restants s'affichent comme non analysés plutôt que comme quelque chose d'utile.",
         crawlButton: 'Parcourir les dossiers à la place'
       },
+      scanProgress: {
+        scanning: (path) => `Analyse de ${path}`,
+        filesProcessed: (files, size) => `${files} fichiers analysés · ${size} traités`,
+        noTotalNote: "Aucun total n'est connu pour cette analyse, donc aucun pourcentage n'est affiché : les compteurs montrent ce qui a été lu jusqu'ici.",
+        indexNote: "Windows ne signale aucune progression pendant la lecture de l'index du lecteur, donc aucun pourcentage n'est affiché : seulement le temps écoulé.",
+        elapsed: (time) => `Temps écoulé : ${time}`,
+        complete: "Analyse terminée",
+        completeCounts: (files, size) => `Analyse terminée — ${files} fichiers, ${size}`,
+        scanAgain: "Analyser à nouveau",
+        retry: "Réessayer",
+        barLabel: "Progression de l'analyse"
+      },
       scanFailure: (path, error) => `Impossible d'analyser « ${path} » : ${error}`,
       fastScanDeclined: "Non approuvé — utilise toujours l'analyse dossier par dossier.",
       truncated: {
@@ -9441,6 +9597,18 @@ export const CATALOG = {
         fastExplain: (path) => `סריקה מהירה קוראת את אינדקס הקבצים של הדיסק עצמו — כל קובץ ב-${path} תוך שניות ספורות, בדיוק כפי ש-WizTree עושה זאת. Windows מאפשר לתוכנית לקרוא את האינדקס הזה רק עם הרשאות מנהל, ולכן זה מציג בקשת UAC.`,
         crawlExplain: 'החלופה עוברת בין תיקיות אחת אחרי השנייה. היא אינה דורשת הרשאה כלשהי והיא הכלי הנכון לתיקייה בודדת, אך אינה יכולה לסיים כרך שלם: בדיסק הזה היא הגיעה ל-4% מהמשמש לפני שנגמר הזמן, ו-96% הנותרים מוצגים כלא נסרקו במקום כמשהו שימושי.',
         crawlButton: 'עבור בין תיקיות במקום זאת'
+      },
+      scanProgress: {
+        scanning: (path) => `סורק את ${path}`,
+        filesProcessed: (files, size) => `${files} קבצים נסרקו · ${size} עובדו`,
+        noTotalNote: "לסריקה זו אין סכום כולל ידוע, ולכן אין אחוז — המונים מציגים את מה שנקרא עד כה.",
+        indexNote: "Windows אינה מדווחת על התקדמות בזמן קריאת אינדקס הכונן, ולכן אין אחוז — רק הזמן שחלף.",
+        elapsed: (time) => `זמן שחלף ${time}`,
+        complete: "הסריקה הושלמה",
+        completeCounts: (files, size) => `הסריקה הושלמה — ${files} קבצים, ${size}`,
+        scanAgain: "סרוק שוב",
+        retry: "נסה שוב",
+        barLabel: "התקדמות הסריקה"
       },
       scanFailure: (path, error) => `לא ניתן היה לסרוק את "${path}": ${error}`,
       fastScanDeclined: 'לא אושר — עדיין נעשה שימוש בסריקה תיקייה אחר תיקייה.',
@@ -10146,6 +10314,18 @@ export const CATALOG = {
         crawlExplain: 'Az alternatíva egyenként járja végig a mappákat. Nem igényel semmilyen jogosultságot, és a megfelelő eszköz egyetlen mappához, de nem tud befejezni egy teljes kötetet: ezen a lemezen a használt hely 4%-át érte el, mielőtt lejárt az idő, a fennmaradó 96% pedig nem vizsgáltként jelenik meg, nem pedig valami hasznosként.',
         crawlButton: 'Inkább a mappák bejárása'
       },
+      scanProgress: {
+        scanning: (path) => `${path} vizsgálata`,
+        filesProcessed: (files, size) => `${files} fájl átvizsgálva · ${size} feldolgozva`,
+        noTotalNote: "Ennek a vizsgálatnak az összmérete nem ismert, ezért nincs százalék — a számlálók az eddig beolvasottat mutatják.",
+        indexNote: "A Windows nem jelez előrehaladást a meghajtóindex olvasása közben, ezért nincs százalék — csak az eddig eltelt idő.",
+        elapsed: (time) => `Eltelt idő: ${time}`,
+        complete: "A vizsgálat kész",
+        completeCounts: (files, size) => `A vizsgálat kész — ${files} fájl, ${size}`,
+        scanAgain: "Vizsgálat újra",
+        retry: "Újra",
+        barLabel: "A vizsgálat állapota"
+      },
       scanFailure: (path, error) => `Nem sikerült megvizsgálni: „${path}”: ${error}`,
       fastScanDeclined: 'Nincs jóváhagyva — továbbra is a mappánkénti vizsgálatot használja.',
       truncated: {
@@ -10849,6 +11029,18 @@ export const CATALOG = {
         fastExplain: (path) => `Pemindaian cepat membaca indeks file milik disk itu sendiri — setiap file di ${path} dalam hitungan detik, sama seperti yang dilakukan WizTree. Windows hanya mengizinkan program membaca indeks itu dengan akses administrator, sehingga ini memicu permintaan UAC.`,
         crawlExplain: 'Alternatifnya menelusuri folder satu per satu. Ini tidak memerlukan izin apa pun dan merupakan alat yang tepat untuk satu folder, tetapi tidak dapat menyelesaikan seluruh volume: pada disk ini prosesnya mencapai 4% dari yang digunakan sebelum waktu habis, dan 96% sisanya ditampilkan sebagai belum dipindai, bukan sebagai sesuatu yang berguna.',
         crawlButton: 'Telusuri folder sebagai gantinya'
+      },
+      scanProgress: {
+        scanning: (path) => `Memindai ${path}`,
+        filesProcessed: (files, size) => `${files} berkas dipindai · ${size} diproses`,
+        noTotalNote: "Total untuk pemindaian ini tidak diketahui, jadi tidak ada persentase — penghitung menampilkan apa yang sudah dibaca sejauh ini.",
+        indexNote: "Windows tidak melaporkan kemajuan saat indeks drive dibaca, jadi tidak ada persentase — hanya waktu yang telah berlalu.",
+        elapsed: (time) => `Berlalu ${time}`,
+        complete: "Pemindaian selesai",
+        completeCounts: (files, size) => `Pemindaian selesai — ${files} berkas, ${size}`,
+        scanAgain: "Pindai lagi",
+        retry: "Coba lagi",
+        barLabel: "Kemajuan pemindaian"
       },
       scanFailure: (path, error) => `Gagal memindai "${path}": ${error}`,
       fastScanDeclined: 'Tidak disetujui — masih menggunakan pemindaian folder demi folder.',
@@ -11554,6 +11746,18 @@ export const CATALOG = {
         crawlExplain: 'Valkosturinn fer í gegnum möppur eina í einu. Hann krefst engrar heimildar og er rétta tólið fyrir eina möppu, en getur ekki lokið heilu bindi: á þessum diski náði hann 4% af því sem er í notkun áður en tíminn rann út, og hin 96% birtast sem óskönnuð frekar en eitthvað gagnlegt.',
         crawlButton: 'Fara frekar í gegnum möppur'
       },
+      scanProgress: {
+        scanning: (path) => `Skanna ${path}`,
+        filesProcessed: (files, size) => `${files} skrár skannaðar · ${size} unnar`,
+        noTotalNote: "Heildarstærð þessarar skönnunar er ekki þekkt, því er engin prósenta sýnd — teljararnir sýna það sem lesið hefur verið til þessa.",
+        indexNote: "Windows tilkynnir ekki framvindu meðan skráaskrá drifsins er lesin, því er engin prósenta sýnd — aðeins tíminn sem liðinn er.",
+        elapsed: (time) => `Liðinn tími ${time}`,
+        complete: "Skönnun lokið",
+        completeCounts: (files, size) => `Skönnun lokið — ${files} skrár, ${size}`,
+        scanAgain: "Skanna aftur",
+        retry: "Reyna aftur",
+        barLabel: "Framvinda skönnunar"
+      },
       scanFailure: (path, error) => `Ekki tókst að skanna „${path}“: ${error}`,
       fastScanDeclined: 'Ekki samþykkt — notar enn möppu-fyrir-möppu skönnun.',
       truncated: {
@@ -12257,6 +12461,18 @@ export const CATALOG = {
         fastExplain: (path) => `Una scansione rapida legge l'indice dei file proprio del disco — ogni file su ${path} in pochi secondi, proprio come fa WizTree. Windows permette a un programma di leggere quell'indice solo con accesso come amministratore, quindi questo genera una richiesta UAC.`,
         crawlExplain: "L'alternativa attraversa le cartelle una alla volta. Non richiede alcun permesso ed è lo strumento giusto per una singola cartella, ma non può completare un intero volume: su questo disco ha raggiunto il 4% di ciò che è in uso prima che il tempo scadesse, e l'altro 96% viene mostrato come non scansionato piuttosto che come qualcosa di utile.",
         crawlButton: 'Attraversa invece le cartelle'
+      },
+      scanProgress: {
+        scanning: (path) => `Analisi di ${path}`,
+        filesProcessed: (files, size) => `${files} file analizzati · ${size} elaborati`,
+        noTotalNote: "Per questa analisi non è noto alcun totale, quindi non viene mostrata alcuna percentuale: i contatori indicano quanto è stato letto finora.",
+        indexNote: "Windows non segnala l'avanzamento durante la lettura dell'indice dell'unità, quindi non viene mostrata alcuna percentuale, solo il tempo trascorso.",
+        elapsed: (time) => `Tempo trascorso ${time}`,
+        complete: "Analisi completata",
+        completeCounts: (files, size) => `Analisi completata — ${files} file, ${size}`,
+        scanAgain: "Analizza di nuovo",
+        retry: "Riprova",
+        barLabel: "Avanzamento dell'analisi"
       },
       scanFailure: (path, error) => `Impossibile scansionare "${path}": ${error}`,
       fastScanDeclined: 'Non approvato — continua a usare la scansione cartella per cartella.',
@@ -12962,6 +13178,18 @@ export const CATALOG = {
         crawlExplain: '代替方法はフォルダーを1つずつたどっていきます。権限は不要で単一のフォルダーには適していますが、ボリューム全体を終えることはできません。このドライブでは、時間切れになるまでに使用領域の4%に到達し、残りの96%は何か有用な情報としてではなく未スキャンとして表示されます。',
         crawlButton: '代わりにフォルダーをたどる'
       },
+      scanProgress: {
+        scanning: (path) => `${path} をスキャン中`,
+        filesProcessed: (files, size) => `${files} 個のファイルをスキャン済み · ${size} を処理`,
+        noTotalNote: "このスキャンには合計サイズが分からないため、パーセントは表示されません。カウンターにはここまでに読み取った量が表示されます。",
+        indexNote: "ドライブのインデックスを読み取っている間、Windows は進行状況を報告しないため、パーセントは表示されず、経過時間のみを表示します。",
+        elapsed: (time) => `経過時間 ${time}`,
+        complete: "スキャン完了",
+        completeCounts: (files, size) => `スキャン完了 — ${files} 個のファイル、${size}`,
+        scanAgain: "もう一度スキャン",
+        retry: "再試行",
+        barLabel: "スキャンの進行状況"
+      },
       scanFailure: (path, error) => `「${path}」をスキャンできませんでした: ${error}`,
       fastScanDeclined: '承認されませんでした — フォルダーごとのスキャンを引き続き使用します。',
       truncated: {
@@ -13665,6 +13893,18 @@ export const CATALOG = {
         fastExplain: (path) => `빠른 검사는 드라이브 자체 파일 색인을 읽습니다 — WizTree가 하는 방식과 마찬가지로 ${path}의 모든 파일을 몇 초 만에 읽습니다. Windows는 관리자 권한이 있는 프로그램만 해당 색인을 읽을 수 있게 하므로 UAC 요청이 표시됩니다.`,
         crawlExplain: '대안은 폴더를 하나씩 살펴봅니다. 권한이 필요 없으며 단일 폴더에 적합한 도구이지만 전체 볼륨을 완료할 수는 없습니다. 이 드라이브에서는 시간이 다 되기 전에 사용 중인 공간의 4%에 도달했으며, 나머지 96%는 유용한 정보가 아니라 검사되지 않음으로 표시됩니다.',
         crawlButton: '대신 폴더 살펴보기'
+      },
+      scanProgress: {
+        scanning: (path) => `${path} 검사 중`,
+        filesProcessed: (files, size) => `파일 ${files}개 검사됨 · ${size} 처리됨`,
+        noTotalNote: "이 검사는 전체 크기를 알 수 없어 백분율을 표시하지 않습니다. 카운터에는 지금까지 읽은 양이 표시됩니다.",
+        indexNote: "드라이브 인덱스를 읽는 동안 Windows가 진행률을 알려 주지 않으므로 백분율 없이 경과 시간만 표시합니다.",
+        elapsed: (time) => `경과 시간 ${time}`,
+        complete: "검사 완료",
+        completeCounts: (files, size) => `검사 완료 — 파일 ${files}개, ${size}`,
+        scanAgain: "다시 검사",
+        retry: "다시 시도",
+        barLabel: "검사 진행률"
       },
       scanFailure: (path, error) => `"${path}"을(를) 검사할 수 없습니다: ${error}`,
       fastScanDeclined: '승인되지 않음 — 여전히 폴더별 검사를 사용합니다.',
@@ -14370,6 +14610,18 @@ export const CATALOG = {
         crawlExplain: 'Alternatyva pereina aplankus po vieną. Jai nereikia jokio leidimo ir ji tinka vienam aplankui, tačiau ji negali užbaigti viso tomo: šiame diske ji pasiekė 4% naudojamos vietos, kol baigėsi laikas, o likę 96% rodomi kaip neskenuoti, o ne kaip kažkas naudingo.',
         crawlButton: 'Vietoj to pereiti aplankus'
       },
+      scanProgress: {
+        scanning: (path) => `Skenuojama ${path}`,
+        filesProcessed: (files, size) => `Nuskaityta failų: ${files} · apdorota ${size}`,
+        noTotalNote: "Šio nuskaitymo bendras dydis nežinomas, todėl procentai nerodomi — skaitikliai rodo, kas perskaityta iki šiol.",
+        indexNote: "Skaitant disko indeksą „Windows“ nepraneša apie eigą, todėl procentai nerodomi — tik praėjęs laikas.",
+        elapsed: (time) => `Praėjo ${time}`,
+        complete: "Nuskaitymas baigtas",
+        completeCounts: (files, size) => `Nuskaitymas baigtas — failų: ${files}, ${size}`,
+        scanAgain: "Nuskaityti dar kartą",
+        retry: "Bandyti dar kartą",
+        barLabel: "Nuskaitymo eiga"
+      },
       scanFailure: (path, error) => `Nepavyko nuskenuoti „${path}“: ${error}`,
       fastScanDeclined: 'Nepatvirtinta — vis dar naudojamas aplanko po aplanko skenavimas.',
       truncated: {
@@ -15073,6 +15325,18 @@ export const CATALOG = {
         fastExplain: (path) => `Imbasan pantas membaca indeks fail cakera itu sendiri — setiap fail pada ${path} dalam beberapa saat, sama seperti yang dilakukan oleh WizTree. Windows hanya membenarkan program membaca indeks itu dengan akses pentadbir, jadi ini mencetuskan permintaan UAC.`,
         crawlExplain: 'Alternatifnya melalui folder satu demi satu. Ia tidak memerlukan sebarang kebenaran dan merupakan alat yang sesuai untuk satu folder, tetapi ia tidak dapat menyelesaikan keseluruhan volum: pada cakera ini ia mencapai 4% daripada yang digunakan sebelum masa tamat, dan baki 96% dipaparkan sebagai tidak diimbas dan bukannya sesuatu yang berguna.',
         crawlButton: 'Melalui folder sebagai gantinya'
+      },
+      scanProgress: {
+        scanning: (path) => `Mengimbas ${path}`,
+        filesProcessed: (files, size) => `${files} fail diimbas · ${size} diproses`,
+        noTotalNote: "Jumlah untuk imbasan ini tidak diketahui, jadi tiada peratusan — pembilang menunjukkan apa yang telah dibaca setakat ini.",
+        indexNote: "Windows tidak melaporkan kemajuan semasa indeks pemacu dibaca, jadi tiada peratusan — hanya masa yang telah berlalu.",
+        elapsed: (time) => `Masa berlalu ${time}`,
+        complete: "Imbasan selesai",
+        completeCounts: (files, size) => `Imbasan selesai — ${files} fail, ${size}`,
+        scanAgain: "Imbas semula",
+        retry: "Cuba lagi",
+        barLabel: "Kemajuan imbasan"
       },
       scanFailure: (path, error) => `Gagal mengimbas "${path}": ${error}`,
       fastScanDeclined: 'Tidak diluluskan — masih menggunakan imbasan folder demi folder.',
@@ -15778,6 +16042,18 @@ export const CATALOG = {
         crawlExplain: 'Alternativet går gjennom mapper én om gangen. Det krever ingen tillatelse og er riktig verktøy for én enkelt mappe, men kan ikke fullføre et helt volum: på denne disken nådde den 4 % av det som er i bruk før tiden gikk ut, og de resterende 96 % vises som uskannet i stedet for noe nyttig.',
         crawlButton: 'Gå gjennom mapper i stedet'
       },
+      scanProgress: {
+        scanning: (path) => `Skanner ${path}`,
+        filesProcessed: (files, size) => `${files} filer skannet · ${size} behandlet`,
+        noTotalNote: "Det er ikke kjent hvor mye det er totalt i denne skanningen, så det vises ingen prosent — tellerne viser hva som er lest så langt.",
+        indexNote: "Windows rapporterer ikke fremdrift mens stasjonens indeks leses, så det vises ingen prosent — bare tiden så langt.",
+        elapsed: (time) => `Forløpt tid ${time}`,
+        complete: "Skanningen er fullført",
+        completeCounts: (files, size) => `Skanningen er fullført — ${files} filer, ${size}`,
+        scanAgain: "Skann på nytt",
+        retry: "Prøv igjen",
+        barLabel: "Skanningsfremdrift"
+      },
       scanFailure: (path, error) => `Kunne ikke skanne «${path}»: ${error}`,
       fastScanDeclined: 'Ikke godkjent — bruker fortsatt skanning mappe for mappe.',
       truncated: {
@@ -16481,6 +16757,18 @@ export const CATALOG = {
         fastExplain: (path) => `Een snelle scan leest de eigen bestandsindex van de schijf — elk bestand op ${path} in enkele seconden, precies zoals WizTree dat doet. Windows laat een programma die index alleen lezen met beheerderstoegang, dus dit veroorzaakt een UAC-melding.`,
         crawlExplain: 'Het alternatief doorloopt mappen één voor één. Het vereist geen toestemming en is het juiste hulpmiddel voor één map, maar kan geen heel volume voltooien: op deze schijf bereikte het 4% van wat in gebruik is voordat de tijd om was, en de overige 96% wordt getoond als niet-gescand in plaats van als iets nuttigs.',
         crawlButton: 'Doorloop in plaats daarvan mappen'
+      },
+      scanProgress: {
+        scanning: (path) => `${path} scannen`,
+        filesProcessed: (files, size) => `${files} bestanden gescand · ${size} verwerkt`,
+        noTotalNote: "Voor deze scan is geen totaal bekend, dus er is geen percentage — de tellers tonen wat tot nu toe is gelezen.",
+        indexNote: "Windows meldt geen voortgang terwijl de index van de schijf wordt gelezen, dus er is geen percentage — alleen de verstreken tijd.",
+        elapsed: (time) => `Verstreken ${time}`,
+        complete: "Scan voltooid",
+        completeCounts: (files, size) => `Scan voltooid — ${files} bestanden, ${size}`,
+        scanAgain: "Opnieuw scannen",
+        retry: "Opnieuw proberen",
+        barLabel: "Scanvoortgang"
       },
       scanFailure: (path, error) => `Kan "${path}" niet scannen: ${error}`,
       fastScanDeclined: 'Niet goedgekeurd — gebruikt nog steeds de map-voor-map-scan.',
@@ -17186,6 +17474,18 @@ export const CATALOG = {
         crawlExplain: 'Alternatywa przechodzi przez foldery jeden po drugim. Nie wymaga żadnych uprawnień i jest odpowiednim narzędziem dla pojedynczego folderu, ale nie może ukończyć całego woluminu: na tym dysku dotarła do 4% wykorzystanego miejsca, zanim skończył się czas, a pozostałe 96% jest pokazywane jako niezeskanowane, a nie jako coś przydatnego.',
         crawlButton: 'Zamiast tego przejdź przez foldery'
       },
+      scanProgress: {
+        scanning: (path) => `Skanowanie ${path}`,
+        filesProcessed: (files, size) => `Przeskanowano plików: ${files} · przetworzono ${size}`,
+        noTotalNote: "Dla tego skanowania nie jest znany łączny rozmiar, więc nie ma wartości procentowej — liczniki pokazują to, co zostało dotąd odczytane.",
+        indexNote: "System Windows nie zgłasza postępu podczas odczytu indeksu dysku, więc nie ma wartości procentowej — tylko czas, który upłynął.",
+        elapsed: (time) => `Upłynęło ${time}`,
+        complete: "Skanowanie zakończone",
+        completeCounts: (files, size) => `Skanowanie zakończone — plików: ${files}, ${size}`,
+        scanAgain: "Skanuj ponownie",
+        retry: "Spróbuj ponownie",
+        barLabel: "Postęp skanowania"
+      },
       scanFailure: (path, error) => `Nie udało się zeskanować „${path}”: ${error}`,
       fastScanDeclined: 'Nie zatwierdzono — nadal używane jest skanowanie folder po folderze.',
       truncated: {
@@ -17889,6 +18189,18 @@ export const CATALOG = {
         fastExplain: (path) => `چټک سکن د ډرایو خپل د فایل شاخص لولي — هر فایل په ${path} کې څو ثانیو کې، لکه څنګه چې WizTree دا کوي. Windows یوازې د اډمین لاسرسي سره پروګرام ته اجازه ورکوي چې دا شاخص ولولي، نو دا یو UAC غوښتنه رامینځته کوي.`,
         crawlExplain: 'بدیل فولډرونه یو په یو تیروي. دې ته هیڅ اجازه ته اړتیا نشته او دا د یوه فولډر لپاره سم وسیله ده، خو دا نشي کولی یو بشپړ حجم بشپړ کړي: پدې ډرایو کې دا کارول شوي 4٪ ته ورسید مخکې لدې چې وخت پای ته ورسیږي، او پاتې 96٪ د یو ګټور شی پر ځای د نه سکن شوي په توګه ښودل کیږي.',
         crawlButton: 'پرځای یې فولډرونه تیروئ'
+      },
+      scanProgress: {
+        scanning: (path) => `د ${path} سکین`,
+        filesProcessed: (files, size) => `${files} فایلونه سکین شول · ${size} پروسس شو`,
+        noTotalNote: "د دې سکین لپاره ټول مقدار نه دی معلوم، نو سلنه نشته — شمیرونکي هغه څه ښیي چې تر اوسه لوستل شوي.",
+        indexNote: "کله چې د ډرایو انډیکس لوستل کېږي، Windows پرمختګ نه راپور کوي، نو سلنه نشته — یوازې تېر شوی وخت.",
+        elapsed: (time) => `تېر وخت ${time}`,
+        complete: "سکین بشپړ شو",
+        completeCounts: (files, size) => `سکین بشپړ شو — ${files} فایلونه، ${size}`,
+        scanAgain: "بیا سکین کړئ",
+        retry: "بیا هڅه وکړئ",
+        barLabel: "د سکین پرمختګ"
       },
       scanFailure: (path, error) => `"${path}" سکن نشو: ${error}`,
       fastScanDeclined: 'تصویب نشو — لاهم د فولډر پر فولډر سکن کارول کیږي.',
@@ -18594,6 +18906,18 @@ export const CATALOG = {
         crawlExplain: 'A alternativa percorre as pastas uma de cada vez. Não precisa de nenhuma permissão e é a ferramenta certa para uma única pasta, mas não consegue terminar um volume inteiro: neste disco ela alcançou 4% do que está em uso antes de o tempo acabar, e os outros 96% aparecem como não escaneados em vez de algo útil.',
         crawlButton: 'Percorrer pastas em vez disso'
       },
+      scanProgress: {
+        scanning: (path) => `Verificando ${path}`,
+        filesProcessed: (files, size) => `${files} arquivos verificados · ${size} processados`,
+        noTotalNote: "Não há total conhecido para esta verificação, então não há porcentagem — os contadores mostram o que foi lido até agora.",
+        indexNote: "O Windows não informa o progresso enquanto o índice da unidade é lido, então não há porcentagem — apenas o tempo decorrido.",
+        elapsed: (time) => `Decorrido ${time}`,
+        complete: "Verificação concluída",
+        completeCounts: (files, size) => `Verificação concluída — ${files} arquivos, ${size}`,
+        scanAgain: "Verificar novamente",
+        retry: "Tentar novamente",
+        barLabel: "Progresso da verificação"
+      },
       scanFailure: (path, error) => `Não foi possível escanear "${path}": ${error}`,
       fastScanDeclined: 'Não aprovado — ainda usando o escaneamento pasta por pasta.',
       truncated: {
@@ -19297,6 +19621,18 @@ export const CATALOG = {
         fastExplain: (path) => `Uma análise rápida lê o próprio índice de ficheiros do disco — cada ficheiro em ${path} em poucos segundos, tal como o WizTree faz. O Windows só permite que um programa leia esse índice com acesso de administrador, pelo que isto gera um pedido UAC.`,
         crawlExplain: 'A alternativa percorre as pastas uma de cada vez. Não necessita de qualquer permissão e é a ferramenta certa para uma única pasta, mas não consegue concluir um volume inteiro: neste disco atingiu 4% do que está em uso antes de o tempo se esgotar, e os restantes 96% aparecem como não analisados em vez de algo útil.',
         crawlButton: 'Percorrer as pastas em vez disso'
+      },
+      scanProgress: {
+        scanning: (path) => `A analisar ${path}`,
+        filesProcessed: (files, size) => `${files} ficheiros analisados · ${size} processados`,
+        noTotalNote: "Não existe um total conhecido para esta análise, por isso não há percentagem — os contadores mostram o que foi lido até agora.",
+        indexNote: "O Windows não indica o progresso enquanto o índice da unidade é lido, por isso não há percentagem — apenas o tempo decorrido.",
+        elapsed: (time) => `Decorrido ${time}`,
+        complete: "Análise concluída",
+        completeCounts: (files, size) => `Análise concluída — ${files} ficheiros, ${size}`,
+        scanAgain: "Analisar novamente",
+        retry: "Tentar novamente",
+        barLabel: "Progresso da análise"
       },
       scanFailure: (path, error) => `Não foi possível analisar "${path}": ${error}`,
       fastScanDeclined: 'Não aprovado — continua a usar a análise pasta a pasta.',
@@ -20002,6 +20338,18 @@ export const CATALOG = {
         crawlExplain: 'Alternativa parcurge folderele unul câte unul. Nu necesită nicio permisiune și este instrumentul potrivit pentru un singur folder, dar nu poate finaliza un volum întreg: pe acest disc a ajuns la 4% din ce este utilizat înainte de a se termina timpul, iar celelalte 96% apar ca nescanate, nu ca ceva util.',
         crawlButton: 'Parcurge folderele în schimb'
       },
+      scanProgress: {
+        scanning: (path) => `Se scanează ${path}`,
+        filesProcessed: (files, size) => `${files} fișiere scanate · ${size} procesate`,
+        noTotalNote: "Pentru această scanare nu se cunoaște un total, deci nu există procent — contoarele arată ce a fost citit până acum.",
+        indexNote: "Windows nu raportează progresul în timp ce indexul unității este citit, deci nu există procent — doar timpul scurs.",
+        elapsed: (time) => `Timp scurs ${time}`,
+        complete: "Scanare încheiată",
+        completeCounts: (files, size) => `Scanare încheiată — ${files} fișiere, ${size}`,
+        scanAgain: "Scanează din nou",
+        retry: "Încearcă din nou",
+        barLabel: "Progresul scanării"
+      },
       scanFailure: (path, error) => `Nu s-a putut scana „${path}”: ${error}`,
       fastScanDeclined: 'Neaprobat — încă se folosește scanarea folder cu folder.',
       truncated: {
@@ -20705,6 +21053,18 @@ export const CATALOG = {
         fastExplain: (path) => `Быстрое сканирование читает собственный файловый индекс диска — каждый файл на ${path} за несколько секунд, точно так же, как это делает WizTree. Windows позволяет программе читать этот индекс только с правами администратора, поэтому это вызывает запрос UAC.`,
         crawlExplain: 'Альтернатива обходит папки по одной. Она не требует никаких разрешений и является правильным инструментом для одной папки, но не может завершить весь том: на этом диске она достигла 4% используемого пространства до истечения времени, а остальные 96% отображаются как несканированные, а не как что-то полезное.',
         crawlButton: 'Вместо этого обойти папки'
+      },
+      scanProgress: {
+        scanning: (path) => `Сканирование ${path}`,
+        filesProcessed: (files, size) => `Просканировано файлов: ${files} · обработано ${size}`,
+        noTotalNote: "Общий объём для этого сканирования неизвестен, поэтому процент не показывается — счётчики показывают, сколько прочитано на данный момент.",
+        indexNote: "Пока читается индекс диска, Windows не сообщает о ходе выполнения, поэтому процент не показывается — только прошедшее время.",
+        elapsed: (time) => `Прошло ${time}`,
+        complete: "Сканирование завершено",
+        completeCounts: (files, size) => `Сканирование завершено — файлов: ${files}, ${size}`,
+        scanAgain: "Сканировать снова",
+        retry: "Повторить",
+        barLabel: "Ход сканирования"
       },
       scanFailure: (path, error) => `Не удалось просканировать «${path}»: ${error}`,
       fastScanDeclined: 'Не подтверждено — по-прежнему используется сканирование папка за папкой.',
@@ -21410,6 +21770,18 @@ export const CATALOG = {
         crawlExplain: 'Alternatíva prechádza priečinky jeden po druhom. Nevyžaduje žiadne povolenie a je vhodná pre jeden priečinok, ale nedokáže dokončiť celý zväzok: na tomto disku dosiahla 4 % využitého miesta, kým sa minul čas, a zvyšných 96 % sa zobrazuje ako neprehľadané namiesto niečoho užitočného.',
         crawlButton: 'Namiesto toho prechádzať priečinky'
       },
+      scanProgress: {
+        scanning: (path) => `Prehľadáva sa ${path}`,
+        filesProcessed: (files, size) => `Prehľadaných súborov: ${files} · spracované ${size}`,
+        noTotalNote: "Celková veľkosť tohto skenovania nie je známa, preto sa nezobrazuje percento — počítadlá ukazujú, čo sa doteraz prečítalo.",
+        indexNote: "Windows počas čítania indexu disku nehlási priebeh, preto sa nezobrazuje percento — iba uplynutý čas.",
+        elapsed: (time) => `Uplynulo ${time}`,
+        complete: "Skenovanie je dokončené",
+        completeCounts: (files, size) => `Skenovanie je dokončené — súborov: ${files}, ${size}`,
+        scanAgain: "Skenovať znova",
+        retry: "Skúsiť znova",
+        barLabel: "Priebeh skenovania"
+      },
       scanFailure: (path, error) => `Nepodarilo sa prehľadať „${path}“: ${error}`,
       fastScanDeclined: 'Neschválené — stále sa používa prehľadávanie priečinok po priečinku.',
       truncated: {
@@ -22113,6 +22485,18 @@ export const CATALOG = {
         fastExplain: (path) => `Një skanim i shpejtë lexon vetë indeksin e skedarëve të diskut — çdo skedar në ${path} brenda pak sekondash, saktësisht ashtu siç bën WizTree. Windows lejon një program të lexojë atë indeks vetëm me qasje administratori, kështu që kjo shkakton një kërkesë UAC.`,
         crawlExplain: 'Alternativa kalon nëpër dosje një nga një. Nuk kërkon asnjë leje dhe është mjeti i duhur për një dosje të vetme, por nuk mund të përfundojë një vëllim të tërë: në këtë disk arriti në 4% të asaj që përdoret para se koha të mbaronte, dhe 96% e mbetur shfaqet si e paskanuar në vend të diçkaje të dobishme.',
         crawlButton: 'Kalo nëpër dosje në vend të kësaj'
+      },
+      scanProgress: {
+        scanning: (path) => `Po skanohet ${path}`,
+        filesProcessed: (files, size) => `${files} skedarë të skanuar · ${size} të përpunuar`,
+        noTotalNote: "Për këtë skanim nuk njihet një total, prandaj nuk ka përqindje — numëruesit tregojnë çfarë është lexuar deri tani.",
+        indexNote: "Windows nuk raporton përparim ndërsa lexohet indeksi i diskut, prandaj nuk ka përqindje — vetëm koha e kaluar.",
+        elapsed: (time) => `Koha e kaluar ${time}`,
+        complete: "Skanimi përfundoi",
+        completeCounts: (files, size) => `Skanimi përfundoi — ${files} skedarë, ${size}`,
+        scanAgain: "Skano përsëri",
+        retry: "Provo përsëri",
+        barLabel: "Përparimi i skanimit"
       },
       scanFailure: (path, error) => `Nuk u skanua dot "${path}": ${error}`,
       fastScanDeclined: 'I paaprovuar — ende po përdor skanimin dosje pas dosjeje.',
@@ -22818,6 +23202,18 @@ export const CATALOG = {
         crawlExplain: 'Алтернатива пролази кроз фасцикле једну по једну. Не захтева никакву дозволу и права је алатка за једну фасциклу, али не може да заврши читав волумен: на овом диску је досегла 4% онога што се користи пре него што је истекло време, а преосталих 96% се приказује као нескенирано уместо нечег корисног.',
         crawlButton: 'Уместо тога пролази кроз фасцикле'
       },
+      scanProgress: {
+        scanning: (path) => `Скенирање ${path}`,
+        filesProcessed: (files, size) => `Скенирано датотека: ${files} · обрађено ${size}`,
+        noTotalNote: "За ово скенирање није познат укупан обим, па се проценат не приказује — бројачи показују шта је до сада прочитано.",
+        indexNote: "Док се чита индекс диска, Windows не пријављује напредак, па се проценат не приказује — само протекло време.",
+        elapsed: (time) => `Протекло ${time}`,
+        complete: "Скенирање је завршено",
+        completeCounts: (files, size) => `Скенирање је завршено — датотека: ${files}, ${size}`,
+        scanAgain: "Скенирај поново",
+        retry: "Покушај поново",
+        barLabel: "Напредак скенирања"
+      },
       scanFailure: (path, error) => `Скенирање „${path}” није успело: ${error}`,
       fastScanDeclined: 'Није одобрено — и даље се користи скенирање фасцикла по фасцикла.',
       truncated: {
@@ -23521,6 +23917,18 @@ export const CATALOG = {
         fastExplain: (path) => `En snabbskanning läser diskens eget filregister — varje fil på ${path} på några sekunder, precis som WizTree gör. Windows låter bara ett program läsa det registret med administratörsåtkomst, så detta utlöser en UAC-fråga.`,
         crawlExplain: 'Alternativet går igenom mappar en i taget. Det kräver ingen behörighet och är rätt verktyg för en enda mapp, men kan inte slutföra en hel volym: på den här disken nådde den 4 % av det som används innan tiden tog slut, och de återstående 96 % visas som oskannat i stället för något användbart.',
         crawlButton: 'Gå igenom mappar istället'
+      },
+      scanProgress: {
+        scanning: (path) => `Skannar ${path}`,
+        filesProcessed: (files, size) => `${files} filer skannade · ${size} bearbetade`,
+        noTotalNote: "Ingen totalstorlek är känd för den här skanningen, så ingen procentsats visas – räknarna visar vad som har lästs hittills.",
+        indexNote: "Windows rapporterar ingen förloppsinformation medan enhetens index läses, så ingen procentsats visas – bara tiden hittills.",
+        elapsed: (time) => `Förfluten tid ${time}`,
+        complete: "Skanningen är klar",
+        completeCounts: (files, size) => `Skanningen är klar – ${files} filer, ${size}`,
+        scanAgain: "Skanna igen",
+        retry: "Försök igen",
+        barLabel: "Skanningsförlopp"
       },
       scanFailure: (path, error) => `Kunde inte skanna "${path}": ${error}`,
       fastScanDeclined: 'Ej godkänt — använder fortfarande mapp-för-mapp-skanning.',
@@ -24226,6 +24634,18 @@ export const CATALOG = {
         crawlExplain: 'อีกวิธีหนึ่งคือไล่ดูโฟลเดอร์ทีละรายการ ไม่ต้องขออนุญาตใด ๆ และเหมาะสำหรับโฟลเดอร์เดียว แต่ไม่สามารถสแกนไดรฟ์ทั้งหมดให้เสร็จได้ — บนไดรฟ์นี้มันเข้าถึงได้เพียง 4% ของพื้นที่ที่ใช้งานก่อนที่เวลาจะหมด และอีก 96% ที่เหลือจะแสดงเป็นยังไม่ได้สแกนแทนที่จะเป็นข้อมูลที่มีประโยชน์',
         crawlButton: 'ไล่ดูโฟลเดอร์แทน'
       },
+      scanProgress: {
+        scanning: (path) => `กำลังสแกน ${path}`,
+        filesProcessed: (files, size) => `สแกนแล้ว ${files} ไฟล์ · ประมวลผลแล้ว ${size}`,
+        noTotalNote: "การสแกนนี้ไม่ทราบขนาดรวม จึงไม่แสดงเปอร์เซ็นต์ — ตัวนับแสดงสิ่งที่อ่านได้จนถึงตอนนี้",
+        indexNote: "Windows ไม่รายงานความคืบหน้าขณะอ่านดัชนีของไดรฟ์ จึงไม่แสดงเปอร์เซ็นต์ — แสดงเฉพาะเวลาที่ผ่านไป",
+        elapsed: (time) => `ใช้เวลาไปแล้ว ${time}`,
+        complete: "สแกนเสร็จแล้ว",
+        completeCounts: (files, size) => `สแกนเสร็จแล้ว — ${files} ไฟล์, ${size}`,
+        scanAgain: "สแกนอีกครั้ง",
+        retry: "ลองอีกครั้ง",
+        barLabel: "ความคืบหน้าการสแกน"
+      },
       scanFailure: (path, error) => `ไม่สามารถสแกน "${path}" ได้: ${error}`,
       fastScanDeclined: 'ไม่ได้รับการอนุมัติ — ยังคงใช้การสแกนแบบทีละโฟลเดอร์',
       truncated: {
@@ -24929,6 +25349,18 @@ export const CATALOG = {
         fastExplain: (path) => `Hızlı tarama, diskin kendi dosya dizinini okur — WizTree'nin yaptığı gibi, ${path} üzerindeki her dosyayı birkaç saniyede. Windows, bir programın bu dizini okumasına yalnızca yönetici erişimiyle izin verir, bu yüzden bu bir UAC istemi tetikler.`,
         crawlExplain: "Alternatif, klasörleri tek tek gezer. Herhangi bir izin gerektirmez ve tek bir klasör için doğru araçtır, ancak tüm bir birimi tamamlayamaz: bu diskte, süre dolmadan önce kullanılan alanın %4'üne ulaştı ve kalan %96 kullanışlı bir şey yerine taranmamış olarak gösterilir.",
         crawlButton: 'Bunun yerine klasörleri gez'
+      },
+      scanProgress: {
+        scanning: (path) => `${path} taranıyor`,
+        filesProcessed: (files, size) => `${files} dosya tarandı · ${size} işlendi`,
+        noTotalNote: "Bu tarama için toplam boyut bilinmiyor, bu yüzden yüzde gösterilmiyor — sayaçlar şimdiye kadar okunanı gösterir.",
+        indexNote: "Sürücü dizini okunurken Windows ilerleme bildirmez, bu yüzden yüzde gösterilmiyor — yalnızca geçen süre gösterilir.",
+        elapsed: (time) => `Geçen süre ${time}`,
+        complete: "Tarama tamamlandı",
+        completeCounts: (files, size) => `Tarama tamamlandı — ${files} dosya, ${size}`,
+        scanAgain: "Yeniden tara",
+        retry: "Yeniden dene",
+        barLabel: "Tarama ilerlemesi"
       },
       scanFailure: (path, error) => `"${path}" taranamadı: ${error}`,
       fastScanDeclined: 'Onaylanmadı — hâlâ klasör klasör tarama kullanılıyor.',
@@ -25634,6 +26066,18 @@ export const CATALOG = {
         crawlExplain: 'Альтернатива обходить папки по одній. Вона не потребує жодного дозволу і є правильним інструментом для однієї папки, але не може завершити весь том: на цьому диску вона досягла 4% використаного простору до закінчення часу, а решта 96% відображаються як несканований, а не як щось корисне.',
         crawlButton: 'Замість цього обійти папки'
       },
+      scanProgress: {
+        scanning: (path) => `Сканування ${path}`,
+        filesProcessed: (files, size) => `Проскановано файлів: ${files} · оброблено ${size}`,
+        noTotalNote: "Загальний обсяг цього сканування невідомий, тому відсоток не показується — лічильники показують, скільки прочитано на цей момент.",
+        indexNote: "Поки читається індекс диска, Windows не повідомляє про перебіг, тому відсоток не показується — лише час, що минув.",
+        elapsed: (time) => `Минуло ${time}`,
+        complete: "Сканування завершено",
+        completeCounts: (files, size) => `Сканування завершено — файлів: ${files}, ${size}`,
+        scanAgain: "Сканувати знову",
+        retry: "Повторити",
+        barLabel: "Перебіг сканування"
+      },
       scanFailure: (path, error) => `Не вдалося сканувати «${path}»: ${error}`,
       fastScanDeclined: 'Не підтверджено — досі використовується сканування папка за папкою.',
       truncated: {
@@ -26337,6 +26781,18 @@ export const CATALOG = {
         fastExplain: (path) => `Quét nhanh sẽ đọc chỉ mục tệp riêng của ổ đĩa — mọi tệp trên ${path} chỉ trong vài giây, giống hệt như cách WizTree thực hiện. Windows chỉ cho phép chương trình đọc chỉ mục đó với quyền quản trị viên, do đó việc này sẽ kích hoạt yêu cầu UAC.`,
         crawlExplain: 'Phương án thay thế sẽ duyệt qua từng thư mục một. Nó không cần bất kỳ quyền nào và là công cụ phù hợp cho một thư mục đơn lẻ, nhưng không thể hoàn tất toàn bộ một ổ đĩa: trên ổ đĩa này, nó đạt tới 4% dung lượng đang sử dụng trước khi hết thời gian, và 96% còn lại được hiển thị là chưa quét thay vì một điều gì đó hữu ích.',
         crawlButton: 'Thay vào đó, duyệt qua các thư mục'
+      },
+      scanProgress: {
+        scanning: (path) => `Đang quét ${path}`,
+        filesProcessed: (files, size) => `Đã quét ${files} tệp · đã xử lý ${size}`,
+        noTotalNote: "Không biết tổng dung lượng của lần quét này nên không hiển thị phần trăm — bộ đếm cho biết lượng đã đọc cho đến nay.",
+        indexNote: "Windows không báo cáo tiến độ khi đọc chỉ mục của ổ đĩa nên không có phần trăm — chỉ có thời gian đã trôi qua.",
+        elapsed: (time) => `Đã trôi qua ${time}`,
+        complete: "Quét xong",
+        completeCounts: (files, size) => `Quét xong — ${files} tệp, ${size}`,
+        scanAgain: "Quét lại",
+        retry: "Thử lại",
+        barLabel: "Tiến độ quét"
       },
       scanFailure: (path, error) => `Không thể quét "${path}": ${error}`,
       fastScanDeclined: 'Không được phê duyệt — vẫn đang sử dụng phương pháp quét từng thư mục.',
@@ -27042,6 +27498,18 @@ export const CATALOG = {
         crawlExplain: '另一种方式是逐个遍历文件夹。它不需要任何权限，是处理单个文件夹的正确工具，但无法完成整个卷的扫描：在此驱动器上，它在时间耗尽前只处理了已用空间的 4%，其余 96% 显示为未扫描，而不是任何有用的信息。',
         crawlButton: '改为遍历文件夹'
       },
+      scanProgress: {
+        scanning: (path) => `正在扫描 ${path}`,
+        filesProcessed: (files, size) => `已扫描 ${files} 个文件 · 已处理 ${size}`,
+        noTotalNote: "此次扫描的总量未知，因此不显示百分比——计数器显示到目前为止已读取的内容。",
+        indexNote: "读取驱动器索引时 Windows 不会报告进度，因此不显示百分比，只显示已用时间。",
+        elapsed: (time) => `已用时间 ${time}`,
+        complete: "扫描完成",
+        completeCounts: (files, size) => `扫描完成——${files} 个文件，${size}`,
+        scanAgain: "重新扫描",
+        retry: "重试",
+        barLabel: "扫描进度"
+      },
       scanFailure: (path, error) => `无法扫描"${path}"：${error}`,
       fastScanDeclined: '未获批准 — 仍在使用逐个文件夹扫描。',
       truncated: {
@@ -27745,6 +28213,18 @@ export const CATALOG = {
         fastExplain: (path) => `快速掃描會讀取硬碟自身的檔案索引 — 幾秒鐘內讀取 ${path} 上的每個檔案，方式與 WizTree 完全相同。Windows 只允許具有系統管理員權限的程式讀取該索引，因此這會觸發 UAC 提示。`,
         crawlExplain: '另一種方式是逐一走訪資料夾。它不需要任何權限，是處理單一資料夾的正確工具，但無法完成整個磁碟區的掃描：在這個硬碟上，它在時間耗盡前只處理了已用空間的 4%，其餘 96% 顯示為未掃描，而不是任何有用的資訊。',
         crawlButton: '改為走訪資料夾'
+      },
+      scanProgress: {
+        scanning: (path) => `正在掃描 ${path}`,
+        filesProcessed: (files, size) => `已掃描 ${files} 個檔案 · 已處理 ${size}`,
+        noTotalNote: "此次掃描的總量未知，因此不顯示百分比——計數器顯示到目前為止已讀取的內容。",
+        indexNote: "讀取磁碟機索引時 Windows 不會回報進度，因此不顯示百分比，只顯示已經過的時間。",
+        elapsed: (time) => `已經過時間 ${time}`,
+        complete: "掃描完成",
+        completeCounts: (files, size) => `掃描完成——${files} 個檔案，${size}`,
+        scanAgain: "重新掃描",
+        retry: "重試",
+        barLabel: "掃描進度"
       },
       scanFailure: (path, error) => `無法掃描「${path}」：${error}`,
       fastScanDeclined: '未獲核准 — 仍在使用逐一資料夾掃描。',
