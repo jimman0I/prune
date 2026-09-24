@@ -66,7 +66,7 @@ const gigabytes = () => screen.getByLabelText('Maximum quarantine size in gigaby
 async function openCleanupTab() {
   const user = userEvent.setup();
   renderScreen(<SettingsPage />);
-  await user.click(await screen.findByRole('button', { name: 'Cleanup' }));
+  await user.click(await screen.findByRole('tab', { name: 'Cleanup' }));
   return user;
 }
 
@@ -245,7 +245,7 @@ describe('the About panel', () => {
     fetchUpdateCheck.mockResolvedValue({ enabled: false, current: '9.8.7' });
     const user = userEvent.setup();
     renderScreen(<SettingsPage />);
-    await user.click(await screen.findByRole('button', { name: 'About' }));
+    await user.click(await screen.findByRole('tab', { name: 'About' }));
 
     expect(await screen.findByText('v9.8.7')).toBeTruthy();
   });
@@ -258,7 +258,7 @@ describe('the Uninstall tab', () => {
   const openUninstallTab = async () => {
     const user = userEvent.setup();
     renderScreen(<SettingsPage />);
-    await user.click(await screen.findByRole('button', { name: 'Uninstall' }));
+    await user.click(await screen.findByRole('tab', { name: 'Uninstall' }));
     return user;
   };
 
@@ -399,8 +399,12 @@ describe('the quarantine limit fields', () => {
 
 describe('the guards beside them', () => {
   it('toggles the restore point off by sending only that key', async () => {
-    const user = await openCleanupTab();
-    await user.click(screen.getByRole('switch', { name: 'Create a restore point first' }));
+    // Lives on the Uninstall tab now (next to the uninstall restore point);
+    // the key and the value it writes are what this pins, and did not move.
+    const user = userEvent.setup();
+    renderScreen(<SettingsPage />);
+    await user.click(await screen.findByRole('tab', { name: 'Uninstall' }));
+    await user.click(await screen.findByRole('switch', { name: 'Create a restore point first' }));
     await waitFor(() => expect(lastSaved()).toEqual({ createRestorePoint: false }));
   });
 
@@ -434,7 +438,7 @@ describe('the remembered Settings tab', () => {
   it('writes the choice when a tab is clicked, so it survives the next relaunch', async () => {
     const user = userEvent.setup();
     renderScreen(<SettingsPage />);
-    await user.click(await screen.findByRole('button', { name: 'Cleanup' }));
+    await user.click(await screen.findByRole('tab', { name: 'Cleanup' }));
     expect(window.localStorage.getItem(SETTINGS_TAB_STORAGE_KEY)).toBe('cleanup');
   });
 });

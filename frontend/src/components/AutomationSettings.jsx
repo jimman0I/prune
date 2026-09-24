@@ -49,16 +49,21 @@ export default function AutomationSettings({ settings, save }) {
 
   return (
     <div>
-      <h3 className="text-[13.5px] font-medium text-[color:var(--text-primary)] mb-1.5">{t('settings.automation.title')}</h3>
-      <p className="text-[12.5px] text-[color:var(--text-secondary)] mb-4 max-w-[62ch]">
-        {t('settings.automation.description')}
-      </p>
-
-      <div className="flex items-center gap-3 mb-4">
-        <Toggle size="sm" label={t('settings.automation.title')} checked={automation.enabled === true} onChange={() => set({ enabled: !automation.enabled })} />
-        <span className="text-[12.5px] text-[color:var(--text-secondary)]">
-          {automation.enabled ? t('settings.automation.scheduled') : t('settings.automation.off')}
-        </span>
+      {/* The switch is in the right-hand slot, like every other row on
+          this screen, rather than under the text on its own line. */}
+      <div data-setting-row className="flex items-center justify-between gap-4 mb-4">
+        <div className="min-w-0">
+          <h2 className="text-[14px] font-medium text-[color:var(--text-primary)]">{t('settings.automation.title')}</h2>
+          <p className="text-[12.5px] text-[color:var(--text-secondary)] mt-1 leading-relaxed max-w-[62ch]">
+            {t('settings.automation.description')}
+          </p>
+        </div>
+        <div className="flex items-center gap-3 shrink-0">
+          <span className="text-[12.5px] text-[color:var(--text-secondary)]">
+            {automation.enabled ? t('settings.automation.scheduled') : t('settings.automation.off')}
+          </span>
+          <Toggle label={t('settings.automation.title')} checked={automation.enabled === true} onChange={() => set({ enabled: !automation.enabled })} />
+        </div>
       </div>
 
       {automation.enabled && (

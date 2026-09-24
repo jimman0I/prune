@@ -1,4 +1,4 @@
-import { useState, memo } from 'react';
+import { useRef, useState, memo } from 'react';
 import { runSandboxTest, openUpdatePage } from '../lib/api.js';
 import { classifyExclusion } from '../lib/exclusionInput.js';
 import { positiveOrOff } from '../lib/limitInput.js';
@@ -19,17 +19,30 @@ const APP_NAME = 'Prune';
 
 const TAB_IDS = ['general', 'uninstall', 'cleanup', 'about'];
 
-/** One switch with its explanation, for the panels that group several. */
-function SettingRow({ title, description, checked, onChange }) {
+/** The style every group heading on this screen shares -- the same small
+ * mono uppercase label as "Scan output" on Deep Clean, so a panel's heading
+ * reads as a label for the rows under it rather than as one more setting. */
+const HEADING_CLASS = 'text-[11px] font-mono uppercase tracking-[0.14em] text-[color:var(--text-muted)]';
+
+function SectionHeading({ id, children }) {
+  return <h2 id={id} className={`${HEADING_CLASS} mb-3`}>{children}</h2>;
+}
+
+/** One setting with its explanation, for the panels that group several.
+ *
+ * The control sits in the right-hand slot: a switch by default, or whatever
+ * `control` hands in (a number field and its unit). Every row of every panel
+ * is this shape, so the eye finds the control in the same place each time. */
+function SettingRow({ title, description, checked, onChange, control }) {
   return (
-    <div className="flex items-center justify-between gap-4 py-3 first:pt-0 last:pb-0">
+    <div data-setting-row className="flex items-center justify-between gap-4 py-3 first:pt-0 last:pb-0">
       <div className="min-w-0">
         <div className="text-[13.5px] font-medium text-[color:var(--text-primary)]">{title}</div>
         {description && (
           <p className="text-[12.5px] text-[color:var(--text-secondary)] mt-1 leading-relaxed max-w-[62ch]">{description}</p>
         )}
       </div>
-      <Toggle checked={checked} onChange={onChange} label={title} />
+      {control ?? <Toggle checked={checked} onChange={onChange} label={title} />}
     </div>
   );
 }
@@ -52,6 +65,9 @@ function StepRow({ step }) {
   );
 }
 
+const numberFieldClass =
+  'font-mono text-[12.5px] px-2.5 py-2 rounded-lg bg-[color:var(--surface-hover)] border border-[color:var(--border-subtle)] text-[color:var(--text-primary)] focus:border-[color:var(--accent-primary)]/50';
+
 function SettingsPage() {
   const [tab, setTab] = useState(() => readStoredSettingsTab(window.localStorage, TAB_IDS) ?? 'general');
   const [saveError, setSaveError] = useState(null);
@@ -59,6 +75,7 @@ function SettingsPage() {
   const [exclusionError, setExclusionError] = useState(null);
   const [sandboxRunning, setSandboxRunning] = useState(false);
   const [sandboxReport, setSandboxReport] = useState(null);
+  const tabRefs = useRef({});
 
   const { settings, loading, save: saveMutation } = useSettings();
   const { t } = useLanguage();
@@ -91,6 +108,25 @@ function SettingsPage() {
     writeStoredSettingsTab(window.localStorage, id);
   };
 
+  /** Arrow keys move between the tabs and select as they go, Home and End
+   * jump to the ends -- the standard tablist contract, with the tab that is
+   * selected the only one in the Tab order (roving tabindex) so Tab leaves
+   * the list instead of walking through four stops. */
+  const handleTabKeyDown = (event, index) => {
+    const last = TAB_IDS.length - 1;
+    let next = null;
+    if (event.key === 'ArrowRight') next = index === last ? 0 : index + 1;
+    else if (event.key === 'ArrowLeft') next = index === 0 ? last : index - 1;
+    else if (event.key === 'Home') next = 0;
+    else if (event.key === 'End') next = last;
+    if (next === null) return;
+
+    event.preventDefault();
+    const id = TAB_IDS[next];
+    handleTabChange(id);
+    tabRefs.current[id]?.focus();
+  };
+
   /** Optimistic, and it rolls back on a real failure.
    *
    * A toggle that waits for a disk write before moving feels broken, and
@@ -114,8 +150,7 @@ function SettingsPage() {
    * as a path prefix and an extension as a filename suffix, so they are
    * kept apart on disk. classifyExclusion decides once, here, where the
    * user's intent is clearest -- rather than every file of every scan
-   * having to guess whether "C:
-ode.js" is a folder or a file type.
+   * having to guess whether "C:\dev\node.js" is a folder or a file type.
    *
    * A bare word is refused with a message rather than guessed at, and the
    * message says the format. Guessing has two silent failure modes:
@@ -170,11 +205,18 @@ ode.js" is a folder or a file type.
     <div className="px-12 py-10 max-w-[1400px]">
       <h1 className="display-heading text-[30px] leading-none mb-6">{t('settings.title')}</h1>
 
-      <div className="flex items-center gap-1.5 mb-6">
-        {TABS.map((tabDef) => (
+      <div role="tablist" aria-label={t('settings.title')} className="flex items-center gap-1.5 mb-6">
+        {TABS.map((tabDef, index) => (
           <button
             key={tabDef.id}
+            ref={(el) => { tabRefs.current[tabDef.id] = el; }}
+            role="tab"
+            id={`settings-tab-${tabDef.id}`}
+            aria-selected={tab === tabDef.id}
+            aria-controls="settings-panel"
+            tabIndex={tab === tabDef.id ? 0 : -1}
             onClick={() => handleTabChange(tabDef.id)}
+            onKeyDown={(event) => handleTabKeyDown(event, index)}
             className={`px-4 py-2 rounded-lg text-[13px] font-medium transition-colors ${
               tab === tabDef.id
                 ? 'pill-selected bg-[color:var(--accent-primary-soft)] text-[color:var(--accent-primary)]'
@@ -186,6 +228,7 @@ ode.js" is a folder or a file type.
         ))}
       </div>
 
+      <div role="tabpanel" id="settings-panel" aria-labelledby={`settings-tab-${tab}`}>
       {/* Outside the settings gate, deliberately. Everything below waits
           on the backend, and this panel does not: the theme lives in
           localStorage and is applied before React renders. Gating it too
@@ -194,17 +237,17 @@ ode.js" is a folder or a file type.
           theme switch should be is a worse answer than the switch. */}
       {tab === 'general' && (
         <div className="flex flex-col gap-4 mb-4">
-              <div className="glass-panel p-6">
-                <div className="flex items-center justify-between gap-4">
-                  <div className="min-w-0">
-                    <h2 className="text-[14px] font-medium text-[color:var(--text-primary)] mb-1">{t('settings.appearance.title')}</h2>
-                    <p className="text-[12.5px] text-[color:var(--text-secondary)] leading-relaxed max-w-[62ch]">
-                      {t('settings.appearance.description')}
-                    </p>
-                  </div>
-                  <ThemeToggle />
-                </div>
+          <div className="glass-panel p-6">
+            <div className="flex items-center justify-between gap-4">
+              <div className="min-w-0">
+                <h2 className="text-[14px] font-medium text-[color:var(--text-primary)] mb-1">{t('settings.appearance.title')}</h2>
+                <p className="text-[12.5px] text-[color:var(--text-secondary)] leading-relaxed max-w-[62ch]">
+                  {t('settings.appearance.description')}
+                </p>
               </div>
+              <ThemeToggle />
+            </div>
+          </div>
         </div>
       )}
 
@@ -262,9 +305,9 @@ ode.js" is a folder or a file type.
 
               <div className="glass-panel p-6">
                 <div className="flex items-center justify-between gap-4">
-                  <div>
+                  <div className="min-w-0">
                     <div className="text-[14px] font-medium text-[color:var(--text-primary)]">{t('settings.minimizeToTray.title')}</div>
-                    <p className="text-[12.5px] text-[color:var(--text-secondary)] mt-1">
+                    <p className="text-[12.5px] text-[color:var(--text-secondary)] mt-1 leading-relaxed max-w-[62ch]">
                       {t('settings.minimizeToTray.description')}
                     </p>
                   </div>
@@ -340,17 +383,15 @@ ode.js" is a folder or a file type.
                   </div>
                 )}
               </div>
-            </div>
-          )}
 
-          {tab === 'general' && (
-            <div className="glass-panel p-6 mt-4">
-              <SettingRow
-                title={t('settings.showFreeSpace.title')}
-                description={t('settings.showFreeSpace.description')}
-                checked={isOnlyIfTrue('showFreeSpaceOnMap')}
-                onChange={() => save({ showFreeSpaceOnMap: !isOnlyIfTrue('showFreeSpaceOnMap') })}
-              />
+              <div className="glass-panel p-6">
+                <SettingRow
+                  title={t('settings.showFreeSpace.title')}
+                  description={t('settings.showFreeSpace.description')}
+                  checked={isOnlyIfTrue('showFreeSpaceOnMap')}
+                  onChange={() => save({ showFreeSpaceOnMap: !isOnlyIfTrue('showFreeSpaceOnMap') })}
+                />
+              </div>
             </div>
           )}
 
@@ -361,73 +402,32 @@ ode.js" is a folder or a file type.
               </div>
 
               <div className="glass-panel p-6">
-                <div className="flex items-center justify-between gap-4 mb-4">
-                  <div>
-                    <div className="text-[14px] font-medium text-[color:var(--text-primary)]">{t('settings.autoQuarantine.title')}</div>
-                    <p className="text-[12.5px] text-[color:var(--text-secondary)] mt-1">
-                      {t('settings.autoQuarantine.description')}
-                    </p>
-                  </div>
-                  <Toggle
-                    checked={settings.autoQuarantine}
-                    onChange={() => save({ autoQuarantine: !settings.autoQuarantine })}
-                    label={t('settings.autoQuarantine.title')}
+                <SectionHeading>{t('nav.deepClean')}</SectionHeading>
+                <div className="divide-y divide-[color:var(--border-subtle)]">
+                  <SettingRow
+                    title={t('settings.skipRecent.title')}
+                    description={t('settings.skipRecent.description')}
+                    control={(
+                      <div className="flex items-center gap-2 shrink-0">
+                        <input
+                          type="number"
+                          min="0"
+                          max="720"
+                          value={settings.skipRecentHours}
+                          onChange={(e) => save({ skipRecentHours: Math.max(0, Number(e.target.value) || 0) })}
+                          aria-label={t('settings.skipRecent.ariaLabel')}
+                          className={`w-[72px] ${numberFieldClass}`}
+                          style={{ fontVariantNumeric: 'tabular-nums' }}
+                        />
+                        <span className="text-[12.5px] text-[color:var(--text-muted)]">{t('settings.skipRecent.hoursUnit')}</span>
+                      </div>
+                    )}
                   />
-                </div>
-              </div>
-
-              <div className="glass-panel p-6">
-                <div className="flex items-center justify-between gap-4">
-                  <div className="min-w-0">
-                    <div className="text-[14px] font-medium text-[color:var(--text-primary)]">{t('settings.skipRecent.title')}</div>
-                    <p className="text-[12.5px] text-[color:var(--text-secondary)] mt-1">
-                      {t('settings.skipRecent.description')}
-                    </p>
-                  </div>
-                  <div className="flex items-center gap-2 shrink-0">
-                    <input
-                      type="number"
-                      min="0"
-                      max="720"
-                      value={settings.skipRecentHours}
-                      onChange={(e) => save({ skipRecentHours: Math.max(0, Number(e.target.value) || 0) })}
-                      aria-label={t('settings.skipRecent.ariaLabel')}
-                      className="w-[72px] font-mono text-[12.5px] px-2.5 py-2 rounded-lg bg-[color:var(--surface-hover)] border border-[color:var(--border-subtle)] text-[color:var(--text-primary)] focus:border-[color:var(--accent-primary)]/50"
-                      style={{ fontVariantNumeric: 'tabular-nums' }}
-                    />
-                    <span className="text-[12.5px] text-[color:var(--text-muted)]">{t('settings.skipRecent.hoursUnit')}</span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="glass-panel p-6">
-                <div className="flex items-center justify-between gap-4">
-                  <div className="min-w-0">
-                    <div className="text-[14px] font-medium text-[color:var(--text-primary)]">{t('settings.restorePointCleanup.title')}</div>
-                    <p className="text-[12.5px] text-[color:var(--text-secondary)] mt-1">
-                      {t('settings.restorePointCleanup.description')}
-                    </p>
-                  </div>
-                  <Toggle
-                    checked={settings.createRestorePoint}
-                    onChange={() => save({ createRestorePoint: !settings.createRestorePoint })}
-                    label={t('settings.restorePointCleanup.title')}
-                  />
-                </div>
-              </div>
-
-              <div className="glass-panel p-6">
-                <div className="flex items-center justify-between gap-4">
-                  <div className="min-w-0">
-                    <div className="text-[14px] font-medium text-[color:var(--text-primary)]">{t('settings.hideUnavailable.title')}</div>
-                    <p className="text-[12.5px] text-[color:var(--text-secondary)] mt-1">
-                      {t('settings.hideUnavailable.description')}
-                    </p>
-                  </div>
-                  <Toggle
+                  <SettingRow
+                    title={t('settings.hideUnavailable.title')}
+                    description={t('settings.hideUnavailable.description')}
                     checked={settings.hideUnavailableRules}
                     onChange={() => save({ hideUnavailableRules: !settings.hideUnavailableRules })}
-                    label={t('settings.hideUnavailable.title')}
                   />
                 </div>
               </div>
@@ -439,58 +439,60 @@ ode.js" is a folder or a file type.
                   and one that runs when it should not destroys the only
                   copy of something removed by accident. */}
               <div className="glass-panel p-6">
-                <div className="flex items-center justify-between gap-4">
-                  <div className="min-w-0">
-                    <div className="text-[14px] font-medium text-[color:var(--text-primary)]">{t('settings.quarantineRetention.title')}</div>
-                    <p className="text-[12.5px] text-[color:var(--text-secondary)] mt-1">
-                      {t('settings.quarantineRetention.description')}
-                    </p>
-                  </div>
-                  <div className="flex items-center gap-2 shrink-0">
-                    <input
-                      type="number"
-                      min="0"
-                      max="3650"
-                      value={settings.quarantineRetentionDays ?? ''}
-                      placeholder={t('settings.quarantineRetention.neverPlaceholder')}
-                      onChange={(e) => save({ quarantineRetentionDays: positiveOrOff(e.target.value) })}
-                      aria-label={t('settings.quarantineRetention.ariaLabel')}
-                      className="w-[88px] font-mono text-[12.5px] px-2.5 py-2 rounded-lg bg-[color:var(--surface-hover)] border border-[color:var(--border-subtle)] text-[color:var(--text-primary)] focus:border-[color:var(--accent-primary)]/50"
-                      style={{ fontVariantNumeric: 'tabular-nums' }}
-                    />
-                    <span className="text-[12.5px] text-[color:var(--text-muted)]">{t('settings.quarantineRetention.daysUnit')}</span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="glass-panel p-6">
-                <div className="flex items-center justify-between gap-4">
-                  <div className="min-w-0">
-                    <div className="text-[14px] font-medium text-[color:var(--text-primary)]">{t('settings.quarantineMaxSize.title')}</div>
-                    <p className="text-[12.5px] text-[color:var(--text-secondary)] mt-1">
-                      {t('settings.quarantineMaxSize.description')}
-                    </p>
-                  </div>
-                  <div className="flex items-center gap-2 shrink-0">
-                    <input
-                      type="number"
-                      min="0"
-                      step="0.5"
-                      value={settings.quarantineMaxSizeGb ?? ''}
-                      placeholder={t('settings.quarantineMaxSize.noLimitPlaceholder')}
-                      onChange={(e) => save({ quarantineMaxSizeGb: positiveOrOff(e.target.value) })}
-                      aria-label={t('settings.quarantineMaxSize.ariaLabel')}
-                      className="w-[88px] font-mono text-[12.5px] px-2.5 py-2 rounded-lg bg-[color:var(--surface-hover)] border border-[color:var(--border-subtle)] text-[color:var(--text-primary)] focus:border-[color:var(--accent-primary)]/50"
-                      style={{ fontVariantNumeric: 'tabular-nums' }}
-                    />
-                    <span className="text-[12.5px] text-[color:var(--text-muted)]">{t('settings.quarantineMaxSize.gbUnit')}</span>
-                  </div>
+                <SectionHeading>{t('nav.quarantine')}</SectionHeading>
+                <div className="divide-y divide-[color:var(--border-subtle)]">
+                  <SettingRow
+                    title={t('settings.autoQuarantine.title')}
+                    description={t('settings.autoQuarantine.description')}
+                    checked={settings.autoQuarantine}
+                    onChange={() => save({ autoQuarantine: !settings.autoQuarantine })}
+                  />
+                  <SettingRow
+                    title={t('settings.quarantineRetention.title')}
+                    description={t('settings.quarantineRetention.description')}
+                    control={(
+                      <div className="flex items-center gap-2 shrink-0">
+                        <input
+                          type="number"
+                          min="0"
+                          max="3650"
+                          value={settings.quarantineRetentionDays ?? ''}
+                          placeholder={t('settings.quarantineRetention.neverPlaceholder')}
+                          onChange={(e) => save({ quarantineRetentionDays: positiveOrOff(e.target.value) })}
+                          aria-label={t('settings.quarantineRetention.ariaLabel')}
+                          className={`w-[88px] ${numberFieldClass}`}
+                          style={{ fontVariantNumeric: 'tabular-nums' }}
+                        />
+                        <span className="text-[12.5px] text-[color:var(--text-muted)]">{t('settings.quarantineRetention.daysUnit')}</span>
+                      </div>
+                    )}
+                  />
+                  <SettingRow
+                    title={t('settings.quarantineMaxSize.title')}
+                    description={t('settings.quarantineMaxSize.description')}
+                    control={(
+                      <div className="flex items-center gap-2 shrink-0">
+                        <input
+                          type="number"
+                          min="0"
+                          step="0.5"
+                          value={settings.quarantineMaxSizeGb ?? ''}
+                          placeholder={t('settings.quarantineMaxSize.noLimitPlaceholder')}
+                          onChange={(e) => save({ quarantineMaxSizeGb: positiveOrOff(e.target.value) })}
+                          aria-label={t('settings.quarantineMaxSize.ariaLabel')}
+                          className={`w-[88px] ${numberFieldClass}`}
+                          style={{ fontVariantNumeric: 'tabular-nums' }}
+                        />
+                        <span className="text-[12.5px] text-[color:var(--text-muted)]">{t('settings.quarantineMaxSize.gbUnit')}</span>
+                      </div>
+                    )}
+                  />
                 </div>
               </div>
 
               <div className="glass-panel p-6">
                 <div className="text-[14px] font-medium text-[color:var(--text-primary)] mb-1">{t('settings.exclusions.title')}</div>
-                <p className="text-[12.5px] text-[color:var(--text-secondary)] mb-4">
+                <p className="text-[12.5px] text-[color:var(--text-secondary)] mb-4 max-w-[62ch]">
                   {t('settings.exclusions.description')}
                 </p>
 
@@ -522,12 +524,12 @@ ode.js" is a folder or a file type.
                 ) : (
                   <div className="flex flex-col gap-1.5">
                     {exclusions.map(({ kind, value }) => (
-                      <div key={`${kind}:${value}`} className="flex items-center justify-between gap-3 px-3 py-2 rounded-lg bg-[color:var(--surface-subtle)]">
+                      <div key={`${kind}:${value}`} className="flex items-center justify-between gap-3 pl-3 pr-1.5 py-1 rounded-lg bg-[color:var(--surface-subtle)]">
                         <div className="flex items-center gap-2 min-w-0">
                           {/* Which kind, at a glance. The two behave
                               differently and the row should not need to be
                               parsed to tell them apart. */}
-                          <span className="text-[9px] font-mono uppercase tracking-wider px-1.5 py-px rounded border shrink-0 border-[color:var(--border-subtle)] text-[color:var(--text-muted)]">
+                          <span className="text-[10px] font-mono uppercase tracking-wider px-1.5 py-px rounded border shrink-0 border-[color:var(--border-subtle)] text-[color:var(--text-muted)]">
                             {kind === 'extension' ? t('settings.exclusions.typeBadge') : t('settings.exclusions.folderBadge')}
                           </span>
                           <span className="font-mono text-[12px] text-[color:var(--text-secondary)] truncate min-w-0">{value}</span>
@@ -535,7 +537,7 @@ ode.js" is a folder or a file type.
                         <button
                           aria-label={t('settings.exclusions.removeAriaLabel', value)}
                           onClick={() => handleRemoveExclusion(kind, value)}
-                          className="text-[color:var(--text-muted)] hover:text-[color:var(--danger)] transition-colors shrink-0 text-[13px] leading-none px-1"
+                          className="w-6 h-6 inline-flex items-center justify-center rounded-md text-[color:var(--text-muted)] hover:text-[color:var(--danger)] transition-colors shrink-0 text-[13px] leading-none"
                         >
                           ✕
                         </button>
@@ -549,7 +551,7 @@ ode.js" is a folder or a file type.
 
               <div className="glass-panel p-6">
                 <div className="text-[14px] font-medium text-[color:var(--text-primary)] mb-1">{t('settings.sandboxTest.title')}</div>
-                <p className="text-[12.5px] text-[color:var(--text-secondary)] mb-4">
+                <p className="text-[12.5px] text-[color:var(--text-secondary)] mb-4 max-w-[62ch]">
                   {t('settings.sandboxTest.description')}
                 </p>
                 <button
@@ -578,19 +580,49 @@ ode.js" is a folder or a file type.
                   </div>
                 )}
               </div>
+
+              <div className="glass-panel p-6">
+                <SettingRow
+                  title={t('settings.warningConfirmations.title')}
+                  description={acknowledgedCount === 0
+                    ? t('settings.warningConfirmations.allAsk')
+                    : t('settings.warningConfirmations.someSet', acknowledgedCount)}
+                  control={(
+                    <button
+                      type="button"
+                      className="btn-ghost px-3 py-1.5 rounded-md text-[12.5px] shrink-0 disabled:opacity-40"
+                      disabled={acknowledgedCount === 0}
+                      onClick={() => save({ acknowledgedCleanWarnings: [] })}
+                    >
+                      {t('settings.warningConfirmations.reset')}
+                    </button>
+                  )}
+                />
+              </div>
             </div>
           )}
 
           {tab === 'uninstall' && (
             <div className="flex flex-col gap-4">
               <div className="glass-panel p-6">
-                <h2 className="text-[14px] font-medium text-[color:var(--text-primary)] mb-3">{t('settings.uninstallTab.beforeHeading')}</h2>
+                <SectionHeading>{t('settings.uninstallTab.beforeHeading')}</SectionHeading>
                 <div className="divide-y divide-[color:var(--border-subtle)]">
                   <SettingRow
                     title={t('settings.uninstallTab.restorePointUninstall.title')}
                     description={t('settings.uninstallTab.restorePointUninstall.description')}
                     checked={isOnlyIfTrue('restorePointBeforeUninstall')}
                     onChange={() => save({ restorePointBeforeUninstall: !isOnlyIfTrue('restorePointBeforeUninstall') })}
+                  />
+                  {/* Moved here from the Cleanup tab: it is the same kind of
+                      safety net as the row above, taken before a forced
+                      removal rather than a normal uninstall. Same setting
+                      key and stored value as before -- only where it is
+                      drawn changed. */}
+                  <SettingRow
+                    title={t('settings.restorePointCleanup.title')}
+                    description={t('settings.restorePointCleanup.description')}
+                    checked={settings.createRestorePoint}
+                    onChange={() => save({ createRestorePoint: !settings.createRestorePoint })}
                   />
                   <SettingRow
                     title={t('settings.uninstallTab.registryBackup.title')}
@@ -602,7 +634,7 @@ ode.js" is a folder or a file type.
               </div>
 
               <div className="glass-panel p-6">
-                <h2 className="text-[14px] font-medium text-[color:var(--text-primary)] mb-3">{t('settings.uninstallTab.afterHeading')}</h2>
+                <SectionHeading>{t('settings.uninstallTab.afterHeading')}</SectionHeading>
                 <div className="divide-y divide-[color:var(--border-subtle)]">
                   <SettingRow
                     title={t('settings.uninstallTab.scanLeftovers.title')}
@@ -632,7 +664,7 @@ ode.js" is a folder or a file type.
               </div>
 
               <div className="glass-panel p-6">
-                <h2 id="leftover-destination" className="text-[14px] font-medium text-[color:var(--text-primary)] mb-3">{t('settings.uninstallTab.destinationHeading')}</h2>
+                <SectionHeading id="leftover-destination">{t('settings.uninstallTab.destinationHeading')}</SectionHeading>
                 <div role="radiogroup" aria-labelledby="leftover-destination" className="flex flex-col gap-3">
                   {LEFTOVER_OPTIONS.map((option) => (
                     <label key={option.value} className="flex items-start gap-3 cursor-pointer">
@@ -646,7 +678,7 @@ ode.js" is a folder or a file type.
                       />
                       <span>
                         <span className="block text-[13.5px] font-medium text-[color:var(--text-primary)]">{option.label}</span>
-                        <span className="block text-[12.5px] text-[color:var(--text-secondary)]">{option.description}</span>
+                        <span className="block text-[12.5px] text-[color:var(--text-secondary)] max-w-[62ch]">{option.description}</span>
                       </span>
                     </label>
                   ))}
@@ -656,32 +688,9 @@ ode.js" is a folder or a file type.
                     {t('settings.uninstallTab.permanentWarning')}
                   </p>
                 )}
-                <p className="mt-3 text-[12px] text-[color:var(--text-muted)]">
+                <p className="mt-3 text-[12px] text-[color:var(--text-muted)] max-w-[62ch]">
                   {t('settings.uninstallTab.registryNote')}
                 </p>
-              </div>
-            </div>
-          )}
-
-          {tab === 'cleanup' && (
-            <div className="glass-panel p-6 mt-4">
-              <div className="flex items-center justify-between gap-4">
-                <div className="min-w-0">
-                  <div className="text-[14px] font-medium text-[color:var(--text-primary)]">{t('settings.warningConfirmations.title')}</div>
-                  <p className="text-[12.5px] text-[color:var(--text-secondary)] mt-1">
-                    {acknowledgedCount === 0
-                      ? t('settings.warningConfirmations.allAsk')
-                      : t('settings.warningConfirmations.someSet', acknowledgedCount)}
-                  </p>
-                </div>
-                <button
-                  type="button"
-                  className="btn-ghost px-3 py-1.5 rounded-md text-[12.5px] shrink-0 disabled:opacity-40"
-                  disabled={acknowledgedCount === 0}
-                  onClick={() => save({ acknowledgedCleanWarnings: [] })}
-                >
-                  {t('settings.warningConfirmations.reset')}
-                </button>
               </div>
             </div>
           )}
@@ -699,6 +708,7 @@ ode.js" is a folder or a file type.
           )}
         </>
       )}
+      </div>
     </div>
   );
 }
