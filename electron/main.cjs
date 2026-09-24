@@ -5,6 +5,7 @@ const { pathToFileURL } = require('node:url');
 const { autoUpdater } = require('electron-updater');
 const { createUpdater } = require('./updater.cjs');
 const { resolveWindowState, loadWindowState, saveWindowState, saveWindowStateSync } = require('./windowState.cjs');
+const { zoomActionForInput, applyZoomAction, resolveSavedZoom } = require('./zoom.cjs');
 
 const BACKEND_PORT = 3101;
 
@@ -235,17 +236,48 @@ async function createWindow() {
   win.removeMenu();
   nudgeOnDisplayChange(win);
 
+  /* Text zoom. removeMenu() above also removed the menu's zoom
+   * accelerators, so the small text could not be enlarged. The decisions
+   * (which key, how far, the clamp) live in zoom.cjs; this only feeds
+   * events in and applies the result. */
+  const wc = win.webContents;
+  // The one source of truth for the level, seeded from saved state. Saves
+  // read THIS, not wc.getZoomLevel(): a resize save that fires before the
+  // page has loaded would otherwise write 0 over the level being restored.
+  let zoomLevel = resolveSavedZoom(saved);
+  let onZoomChanged = () => {}; // bound below, once the state file is known
+  const setZoom = (level) => {
+    if (wc.isDestroyed()) return;
+    zoomLevel = level;
+    wc.setZoomLevel(level);
+    onZoomChanged();
+  };
+  wc.on('before-input-event', (event, input) => {
+    const action = zoomActionForInput(input);
+    if (!action) return;
+    event.preventDefault();
+    setZoom(applyZoomAction(zoomLevel, action));
+  });
+  // Ctrl+wheel: Electron reports the request, it does not act on it.
+  wc.on('zoom-changed', (_event, direction) => setZoom(applyZoomAction(zoomLevel, direction)));
+  // Restore the saved level once the page is up (a load can reset it).
+  wc.on('did-finish-load', () => {
+    if (wc.getZoomLevel() !== zoomLevel) wc.setZoomLevel(zoomLevel);
+  });
+
   if (resolvedBounds.isMaximized) win.maximize();
 
   if (stateFile) {
     let saveTimer = null;
+    const currentState = () => ({ ...win.getBounds(), isMaximized: win.isMaximized(), zoomLevel });
     const scheduleSave = () => {
       clearTimeout(saveTimer);
       saveTimer = setTimeout(() => {
         if (win.isDestroyed()) return;
-        saveWindowState(stateFile, { ...win.getBounds(), isMaximized: win.isMaximized() });
+        saveWindowState(stateFile, currentState());
       }, 500);
     };
+    onZoomChanged = scheduleSave;
     win.on('resize', scheduleSave);
     win.on('move', scheduleSave);
     win.on('close', () => {
@@ -255,7 +287,7 @@ async function createWindow() {
       // above use -- window-all-closed's app.quit() can fire before an
       // in-flight async write settles, silently losing the final save.
       clearTimeout(saveTimer);
-      saveWindowStateSync(stateFile, { ...win.getBounds(), isMaximized: win.isMaximized() });
+      saveWindowStateSync(stateFile, currentState());
     });
   }
 
