@@ -1,4 +1,4 @@
-import { readFileSync, existsSync } from 'node:fs';
+import { readFileSync, statSync } from 'node:fs';
 import { homedir } from 'node:os';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -236,7 +236,23 @@ export function scanRule(rule, guards = {}) {
 function rulePathsExistFor(expandedPath) {
   const [driveSegment, ...rest] = deleteAction.pathToSegments(expandedPath);
   if (!driveSegment) return false;
-  return deleteAction.resolveGlob(driveSegment, rest).some((match) => existsSync(match));
+  return deleteAction.resolveGlob(driveSegment, rest).some(pathExistsOrDenied);
+}
+
+/** Whether a resolved path is there, counting "access denied" as there.
+ * existsSync() returns false on EPERM, but Windows only answers "access
+ * denied" for something that exists to deny -- Defender's scan-history
+ * folders stat as EPERM to an unelevated process, and reading that as
+ * "not installed" dimmed the row and let "hide cleaners that don't apply"
+ * hide it, instead of showing "needs admin". Same EPERM/EACCES rule
+ * collectFiles already uses for `accessible`. */
+function pathExistsOrDenied(path) {
+  try {
+    statSync(path);
+    return true;
+  } catch (err) {
+    return err?.code === 'EPERM' || err?.code === 'EACCES';
+  }
 }
 
 /** Whether any of a rule's target paths exists at all -- which is a
@@ -247,7 +263,14 @@ function rulePathsExistFor(expandedPath) {
  * nothing. BleachBit's own UI makes the same distinction (it greys out
  * cleaners that don't apply to the machine), and with a rule set this
  * size most rules won't apply to any given user -- so the difference
- * carries most of the list's signal. */
+ * carries most of the list's signal.
+ *
+ * It used to read only `rule.paths`, so every actions-form rule (browser
+ * history, cookies, autofill...) was reported absent before a scan and
+ * hidden by "hide cleaners that don't apply". It now walks the normalized
+ * actions: `delete` paths and the bespoke actions' single `path` are
+ * checked on disk; `shell` and `winreg` can't be answered from the
+ * filesystem and count as present. */
 export function rulePathsExist(rule, guards = {}) {
   // A command rule has no paths to look for, and is always applicable:
   // `ipconfig /flushdns` works whether or not anything is cached. scanRule
@@ -259,8 +282,18 @@ export function rulePathsExist(rule, guards = {}) {
   if (rule?.command) return true;
   if (isRequiredProgramMissing(rule, guards)) return false;
 
-  for (const rawPath of rule?.paths || []) {
-    if (rulePathsExistFor(expandPath(rawPath))) return true;
+  // A malformed rule (none of actions/command/paths) is "nothing there",
+  // not a throw -- normalizeRule's own throw is for scan/execute, where a
+  // broken rule should fail loudly; here it would take down the whole list.
+  if (!rule?.actions && !rule?.paths) return false;
+  for (const action of normalizeRule(rule).actions) {
+    // Neither can be answered from the filesystem, and the pre-scan list
+    // keeps an unmeasured rule rather than hiding it (visibleRules.js).
+    if (action.type === 'shell' || action.type === 'winreg') return true;
+    const rawPaths = action.type === 'delete' ? action.paths : [action.path];
+    for (const rawPath of rawPaths || []) {
+      if (rawPath && rulePathsExistFor(expandPath(rawPath))) return true;
+    }
   }
   return false;
 }
