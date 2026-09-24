@@ -41,7 +41,7 @@ export const CATALOG = {
       saveError: (error) => `Couldn't save: ${error}`,
       appearance: {
         title: 'Appearance',
-        description: "Aurora Deck in dark or daylight. Both are real palettes rather than one inverted: the accent darkens for the light ground so a button can keep white text on it, and every tier was measured against the surfaces it actually sits on. Prune follows your system setting until you pick one here."
+        description: "Pick Light or Dark, or let System follow Windows."
       },
       minimizeToTray: {
         title: 'Minimize to tray',
@@ -86,14 +86,14 @@ export const CATALOG = {
         description: "Most of the list is for software this machine doesn't have. Hiding those leaves only what is actually here."
       },
       quarantineRetention: {
-        title: 'How long to keep undo',
+        title: 'How long to keep Quarantine items',
         description: 'Everything Prune removes goes to Quarantine first, and stays until you empty it. Set a number of days to drop backups older than that. Leave it blank to keep them forever.',
         neverPlaceholder: 'Never',
         daysUnit: 'days',
         ariaLabel: 'Days to keep quarantine backups'
       },
       quarantineMaxSize: {
-        title: 'How much undo to keep',
+        title: 'Quarantine size limit',
         description: 'A cap on the whole Quarantine folder. Over it, the oldest backups go first — the most recent one is never dropped, so something big you just removed stays recoverable even if it is larger than the cap on its own. Leave it blank for no limit.',
         noLimitPlaceholder: 'No limit',
         gbUnit: 'GB',
@@ -544,7 +544,8 @@ export const CATALOG = {
         header: 'Scan output',
         scanningAnnounce: (total) => `Scanning ${total} locations.`,
         finishedAnnounce: (scanned, total) => `Scan finished. ${scanned} of ${total} locations measured.`,
-        starting: 'Starting…'
+        starting: 'Starting…',
+        idle: "Press Preview to measure what can be cleaned."
       },
       emptyState: 'Nothing scanned yet.',
       scanErrorPrefix: (error) => `Couldn't scan: ${error}`,
@@ -569,7 +570,7 @@ export const CATALOG = {
       confirm: {
         prompt: (count, sizeKnown, formatted) => `Move ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'}) to Quarantine?`,
         cancel: 'Cancel',
-        confirmButton: 'Confirm',
+        confirmButton: "Move to Quarantine",
         cleaning: 'Cleaning…'
       },
       stop: 'Stop',
@@ -579,7 +580,10 @@ export const CATALOG = {
         selectCategoryAriaLabel: (category) => `Select everything under ${category}`,
         losesData: 'Loses data',
         needsAdmin: 'needs admin',
-        notInstalled: 'not installed'
+        notInstalled: 'not installed',
+        filterPlaceholder: "Filter cleaners…",
+        filterNone: "No cleaners match that filter.",
+        selectedOfTotal: (n, total) => `${n} of ${total} selected`
       },
       warning: {
         title: (label) => `Enable ${label}`,
@@ -732,6 +736,9 @@ export const CATALOG = {
       }
     },
     themeToggle: {
+      optionSystem: "System",
+      optionLight: "Light",
+      optionDark: "Dark",
       switchTo: (theme) => `Switch to ${theme} theme`,
       light: 'light',
       dark: 'dark'
@@ -773,7 +780,7 @@ export const CATALOG = {
       saveError: (error) => `Kon nie stoor nie: ${error}`,
       appearance: {
         title: 'Voorkoms',
-        description: "Aurora Deck in donker of daglig. Albei is regte palette eerder as een omgekeer: die aksent word donkerder vir die lig agtergrond sodat 'n knoppie wit teks daarop kan hou, en elke vlak is gemeet teen die oppervlaktes waarop dit werklik lê. Prune volg jou stelselinstelling totdat jy hier een kies."
+        description: "Kies Lig of Donker, of laat Stelsel Windows volg."
       },
       minimizeToTray: {
         title: 'Minimeer na Skinkbord',
@@ -1271,7 +1278,8 @@ export const CATALOG = {
         header: 'Skanderingsuitset',
         scanningAnnounce: (total) => `Skandeer ${total} plekke.`,
         finishedAnnounce: (scanned, total) => `Skandering voltooi. ${scanned} van ${total} plekke gemeet.`,
-        starting: 'Begin tans…'
+        starting: 'Begin tans…',
+        idle: "Druk Voorskou om te meet wat skoongemaak kan word."
       },
       emptyState: 'Nog niks geskandeer nie.',
       scanErrorPrefix: (error) => `Kon nie skandeer nie: ${error}`,
@@ -1296,7 +1304,7 @@ export const CATALOG = {
       confirm: {
         prompt: (count, sizeKnown, formatted) => `Skuif ${count} item${count === 1 ? '' : 's'} (${sizeKnown ? formatted : 'grootte nie gemeet nie'}) na Karantyn?`,
         cancel: 'Kanselleer',
-        confirmButton: 'Bevestig',
+        confirmButton: "Skuif na Karantyn",
         cleaning: 'Maak skoon…'
       },
       stop: 'Stop',
@@ -1306,7 +1314,10 @@ export const CATALOG = {
         selectCategoryAriaLabel: (category) => `Kies alles onder ${category}`,
         losesData: 'Verloor data',
         needsAdmin: 'benodig admin',
-        notInstalled: 'nie geïnstalleer nie'
+        notInstalled: 'nie geïnstalleer nie',
+        filterPlaceholder: "Filtreer skoonmakers…",
+        filterNone: "Geen skoonmakers pas by daardie filter nie.",
+        selectedOfTotal: (n, total) => `${n} van ${total} gekies`
       },
       warning: {
         title: (label) => `Aktiveer ${label}`,
@@ -1459,6 +1470,9 @@ export const CATALOG = {
       }
     },
     themeToggle: {
+      optionSystem: "Stelsel",
+      optionLight: "Lig",
+      optionDark: "Donker",
       switchTo: (theme) => `Wissel na ${theme} tema`,
       light: 'lig',
       dark: 'donker'
@@ -1500,7 +1514,7 @@ export const CATALOG = {
       saveError: (error) => `تعذر الحفظ: ${error}`,
       appearance: {
         title: 'المظهر',
-        description: 'Aurora Deck في الوضع الداكن أو النهاري. كلاهما لوحتا ألوان حقيقيتان بدلاً من واحدة معكوسة: يصبح اللون المميز أغمق للأرضية الفاتحة حتى يتمكن الزر من الاحتفاظ بنص أبيض عليه، وتم قياس كل مستوى مقابل الأسطح التي يجلس عليها فعليًا. يتبع Prune إعداد نظامك حتى تختار واحدًا هنا.'
+        description: "اختر فاتحًا أو داكنًا، أو دع النظام يتبع Windows."
       },
       minimizeToTray: {
         title: 'تصغير إلى علبة النظام',
@@ -1998,7 +2012,8 @@ export const CATALOG = {
         header: 'مخرجات الفحص',
         scanningAnnounce: (total) => `جارٍ فحص ${total} موقعًا.`,
         finishedAnnounce: (scanned, total) => `انتهى الفحص. تم قياس ${scanned} من ${total} موقعًا.`,
-        starting: 'جارٍ البدء…'
+        starting: 'جارٍ البدء…',
+        idle: "اضغط معاينة لقياس ما يمكن تنظيفه."
       },
       emptyState: 'لم يتم فحص شيء بعد.',
       scanErrorPrefix: (error) => `تعذر الفحص: ${error}`,
@@ -2023,7 +2038,7 @@ export const CATALOG = {
       confirm: {
         prompt: (count, sizeKnown, formatted) => `نقل ${count} عنصر (${sizeKnown ? formatted : 'الحجم غير مقاس'}) إلى الحجر الصحي؟`,
         cancel: 'إلغاء',
-        confirmButton: 'تأكيد',
+        confirmButton: "نقل إلى الحجر الصحي",
         cleaning: 'جارٍ التنظيف…'
       },
       stop: 'إيقاف',
@@ -2033,7 +2048,10 @@ export const CATALOG = {
         selectCategoryAriaLabel: (category) => `تحديد كل ما تحت ${category}`,
         losesData: 'يفقد بيانات',
         needsAdmin: 'يتطلب صلاحيات المسؤول',
-        notInstalled: 'غير مثبت'
+        notInstalled: 'غير مثبت',
+        filterPlaceholder: "تصفية أدوات التنظيف…",
+        filterNone: "لا توجد أدوات تنظيف تطابق هذه التصفية.",
+        selectedOfTotal: (n, total) => `${n} من ${total} محدد`
       },
       warning: {
         title: (label) => `تفعيل ${label}`,
@@ -2186,6 +2204,9 @@ export const CATALOG = {
       }
     },
     themeToggle: {
+      optionSystem: "النظام",
+      optionLight: "فاتح",
+      optionDark: "داكن",
       switchTo: (theme) => `التبديل إلى المظهر ${theme}`,
       light: 'الفاتح',
       dark: 'الداكن'
@@ -2227,7 +2248,7 @@ export const CATALOG = {
       saveError: (error) => `No s'ha pogut desar: ${error}`,
       appearance: {
         title: 'Aparença',
-        description: "Aurora Deck en fosc o de dia. Tots dos són paletes reals en lloc d'una d'invertida: l'accent s'enfosqueix per al fons clar perquè un botó pugui mantenir text blanc, i cada nivell s'ha mesurat contra les superfícies on realment se situa. El Prune segueix la teva configuració del sistema fins que en triïs una aquí."
+        description: "Tria Clar o Fosc, o deixa que Sistema segueixi Windows."
       },
       minimizeToTray: {
         title: 'Minimitza a la Safata',
@@ -2725,7 +2746,8 @@ export const CATALOG = {
         header: 'Sortida de l\'escaneig',
         scanningAnnounce: (total) => `Escanejant ${total} ubicacions.`,
         finishedAnnounce: (scanned, total) => `Escaneig finalitzat. ${scanned} de ${total} ubicacions mesurades.`,
-        starting: 'Iniciant…'
+        starting: 'Iniciant…',
+        idle: "Prem Previsualitza per mesurar què es pot netejar."
       },
       emptyState: 'Encara no s\'ha escanejat res.',
       scanErrorPrefix: (error) => `No s'ha pogut escanejar: ${error}`,
@@ -2750,7 +2772,7 @@ export const CATALOG = {
       confirm: {
         prompt: (count, sizeKnown, formatted) => `Vols moure ${count} element${count === 1 ? '' : 's'} (${sizeKnown ? formatted : 'mida no mesurada'}) a la Quarantena?`,
         cancel: 'Cancel·la',
-        confirmButton: 'Confirma',
+        confirmButton: "Mou a la Quarantena",
         cleaning: 'Netejant…'
       },
       stop: 'Atura',
@@ -2760,7 +2782,10 @@ export const CATALOG = {
         selectCategoryAriaLabel: (category) => `Selecciona-ho tot sota ${category}`,
         losesData: 'Perd dades',
         needsAdmin: 'necessita administrador',
-        notInstalled: 'no instal·lat'
+        notInstalled: 'no instal·lat',
+        filterPlaceholder: "Filtra els netejadors…",
+        filterNone: "Cap netejador coincideix amb el filtre.",
+        selectedOfTotal: (n, total) => `${n} de ${total} seleccionats`
       },
       warning: {
         title: (label) => `Activa ${label}`,
@@ -2913,6 +2938,9 @@ export const CATALOG = {
       }
     },
     themeToggle: {
+      optionSystem: "Sistema",
+      optionLight: "Clar",
+      optionDark: "Fosc",
       switchTo: (theme) => `Canvia al tema ${theme}`,
       light: 'clar',
       dark: 'fosc'
@@ -2954,7 +2982,7 @@ export const CATALOG = {
       saveError: (error) => `Nepodařilo se uložit: ${error}`,
       appearance: {
         title: 'Vzhled',
-        description: 'Aurora Deck v tmavém nebo denním provedení. Obě jsou skutečné palety, nikoli jedna obrácená: akcent tmavne pro světlé pozadí, aby tlačítko mohlo mít bílý text, a každá úroveň byla měřena proti povrchům, na kterých skutečně leží. Prune sleduje nastavení systému, dokud si zde nevyberete jedno.'
+        description: "Zvolte Světlý nebo Tmavý, nebo nechte Systém řídit se Windows."
       },
       minimizeToTray: {
         title: 'Minimalizovat do systémové lišty',
@@ -3452,7 +3480,8 @@ export const CATALOG = {
         header: 'Výstup skenování',
         scanningAnnounce: (total) => `Skenování ${total} umístění.`,
         finishedAnnounce: (scanned, total) => `Skenování dokončeno. Změřeno ${scanned} z ${total} umístění.`,
-        starting: 'Spouštění…'
+        starting: 'Spouštění…',
+        idle: "Stisknutím tlačítka Náhled změříte, co lze vyčistit."
       },
       emptyState: 'Zatím nic nenaskenováno.',
       scanErrorPrefix: (error) => `Skenování se nezdařilo: ${error}`,
@@ -3477,7 +3506,7 @@ export const CATALOG = {
       confirm: {
         prompt: (count, sizeKnown, formatted) => `Přesunout ${count} položek (${sizeKnown ? formatted : 'velikost nezměřena'}) do karantény?`,
         cancel: 'Zrušit',
-        confirmButton: 'Potvrdit',
+        confirmButton: "Přesunout do karantény",
         cleaning: 'Čištění…'
       },
       stop: 'Zastavit',
@@ -3487,7 +3516,10 @@ export const CATALOG = {
         selectCategoryAriaLabel: (category) => `Vybrat vše pod ${category}`,
         losesData: 'Ztráta dat',
         needsAdmin: 'vyžaduje správce',
-        notInstalled: 'není nainstalováno'
+        notInstalled: 'není nainstalováno',
+        filterPlaceholder: "Filtrovat čističe…",
+        filterNone: "Tomuto filtru neodpovídá žádný čistič.",
+        selectedOfTotal: (n, total) => `Vybráno ${n} z ${total}`
       },
       warning: {
         title: (label) => `Povolit ${label}`,
@@ -3640,6 +3672,9 @@ export const CATALOG = {
       }
     },
     themeToggle: {
+      optionSystem: "Systém",
+      optionLight: "Světlý",
+      optionDark: "Tmavý",
       switchTo: (theme) => `Přepnout na ${theme} motiv`,
       light: 'světlý',
       dark: 'tmavý'
@@ -3681,7 +3716,7 @@ export const CATALOG = {
       saveError: (error) => `Methu cadw: ${error}`,
       appearance: {
         title: 'Golwg',
-        description: "Aurora Deck mewn tywyllwch neu olau dydd. Mae'r ddwy yn baletau go iawn yn hytrach nag un wedi'i wrthdroi: mae'r acen yn tywyllu ar gyfer y cefndir golau fel y gall botwm gadw testun gwyn arno, a mesurwyd pob haen yn erbyn yr wynebau y mae'n eistedd arnynt mewn gwirionedd. Mae Prune yn dilyn gosodiad eich system nes i chi ddewis un yma."
+        description: "Dewiswch Golau neu Tywyll, neu gadewch i System ddilyn Windows."
       },
       minimizeToTray: {
         title: 'Lleihau i\'r Hambwrdd',
@@ -4179,7 +4214,8 @@ export const CATALOG = {
         header: 'Allbwn sgan',
         scanningAnnounce: (total) => `Sganio ${total} lleoliad.`,
         finishedAnnounce: (scanned, total) => `Sgan wedi gorffen. ${scanned} o ${total} lleoliad wedi'u mesur.`,
-        starting: 'Yn dechrau…'
+        starting: 'Yn dechrau…',
+        idle: "Pwyswch Rhagolwg i fesur beth y gellir ei lanhau."
       },
       emptyState: "Dim byd wedi'i sganio eto.",
       scanErrorPrefix: (error) => `Methu sganio: ${error}`,
@@ -4204,7 +4240,7 @@ export const CATALOG = {
       confirm: {
         prompt: (count, sizeKnown, formatted) => `Symud ${count} eitem (${sizeKnown ? formatted : "maint heb ei fesur"}) i gwarantin?`,
         cancel: 'Diddymu',
-        confirmButton: 'Cadarnhau',
+        confirmButton: "Symud i gwarantin",
         cleaning: 'Glanhau…'
       },
       stop: 'Stopio',
@@ -4214,7 +4250,10 @@ export const CATALOG = {
         selectCategoryAriaLabel: (category) => `Dewis popeth o dan ${category}`,
         losesData: 'Yn colli data',
         needsAdmin: 'angen gweinyddwr',
-        notInstalled: "heb ei osod"
+        notInstalled: "heb ei osod",
+        filterPlaceholder: "Hidlo glanhawyr…",
+        filterNone: "Nid oes glanhawr yn cyfateb i'r hidlydd hwnnw.",
+        selectedOfTotal: (n, total) => `${n} o ${total} wedi'u dewis`
       },
       warning: {
         title: (label) => `Galluogi ${label}`,
@@ -4367,6 +4406,9 @@ export const CATALOG = {
       }
     },
     themeToggle: {
+      optionSystem: "System",
+      optionLight: "Golau",
+      optionDark: "Tywyll",
       switchTo: (theme) => `Newid i thema ${theme}`,
       light: 'golau',
       dark: 'tywyll'
@@ -4408,7 +4450,7 @@ export const CATALOG = {
       saveError: (error) => `Kunne ikke gemme: ${error}`,
       appearance: {
         title: 'Udseende',
-        description: 'Aurora Deck i mørk eller dagslystilstand. Begge er rigtige paletter i stedet for én inverteret: accenten bliver mørkere for den lyse baggrund, så en knap kan beholde hvid tekst på den, og hvert niveau blev målt mod de flader, den faktisk sidder på. Prune følger din systemindstilling, indtil du vælger en her.'
+        description: "Vælg Lyst eller Mørkt, eller lad System følge Windows."
       },
       minimizeToTray: {
         title: 'Minimer til statusfeltet',
@@ -4906,7 +4948,8 @@ export const CATALOG = {
         header: 'Scanningsoutput',
         scanningAnnounce: (total) => `Scanner ${total} placeringer.`,
         finishedAnnounce: (scanned, total) => `Scanning færdig. ${scanned} af ${total} placeringer målt.`,
-        starting: 'Starter…'
+        starting: 'Starter…',
+        idle: "Tryk på Forhåndsvisning for at måle, hvad der kan renses."
       },
       emptyState: 'Intet scannet endnu.',
       scanErrorPrefix: (error) => `Kunne ikke scanne: ${error}`,
@@ -4931,7 +4974,7 @@ export const CATALOG = {
       confirm: {
         prompt: (count, sizeKnown, formatted) => `Flyt ${count} emner (${sizeKnown ? formatted : 'størrelse ikke målt'}) til karantæne?`,
         cancel: 'Annuller',
-        confirmButton: 'Bekræft',
+        confirmButton: "Flyt til karantæne",
         cleaning: 'Renser…'
       },
       stop: 'Stop',
@@ -4941,7 +4984,10 @@ export const CATALOG = {
         selectCategoryAriaLabel: (category) => `Vælg alt under ${category}`,
         losesData: 'Mister data',
         needsAdmin: 'kræver administrator',
-        notInstalled: 'ikke installeret'
+        notInstalled: 'ikke installeret',
+        filterPlaceholder: "Filtrer rensere…",
+        filterNone: "Ingen rensere matcher det filter.",
+        selectedOfTotal: (n, total) => `${n} af ${total} valgt`
       },
       warning: {
         title: (label) => `Aktivér ${label}`,
@@ -5094,6 +5140,9 @@ export const CATALOG = {
       }
     },
     themeToggle: {
+      optionSystem: "System",
+      optionLight: "Lyst",
+      optionDark: "Mørkt",
       switchTo: (theme) => `Skift til ${theme} tema`,
       light: 'lyst',
       dark: 'mørkt'
@@ -5135,7 +5184,7 @@ export const CATALOG = {
       saveError: (error) => `Speichern fehlgeschlagen: ${error}`,
       appearance: {
         title: 'Erscheinungsbild',
-        description: 'Aurora Deck in Dunkel oder Tageslicht. Beide sind echte Paletten statt einer invertierten: Der Akzent wird für den hellen Hintergrund dunkler, damit ein Button weißen Text behalten kann, und jede Stufe wurde gegen die Flächen gemessen, auf denen sie tatsächlich sitzt. Prune folgt deiner Systemeinstellung, bis du hier eine wählst.'
+        description: "Wählen Sie Hell oder Dunkel, oder lassen Sie System Windows folgen."
       },
       minimizeToTray: {
         title: 'In die Taskleiste minimieren',
@@ -5633,7 +5682,8 @@ export const CATALOG = {
         header: 'Scan-Ausgabe',
         scanningAnnounce: (total) => `${total} Orte werden gescannt.`,
         finishedAnnounce: (scanned, total) => `Scan abgeschlossen. ${scanned} von ${total} Orten gemessen.`,
-        starting: 'Wird gestartet…'
+        starting: 'Wird gestartet…',
+        idle: "Klicken Sie auf Vorschau, um zu messen, was sich bereinigen lässt."
       },
       emptyState: 'Noch nichts gescannt.',
       scanErrorPrefix: (error) => `Scan fehlgeschlagen: ${error}`,
@@ -5658,7 +5708,7 @@ export const CATALOG = {
       confirm: {
         prompt: (count, sizeKnown, formatted) => `${count} Element${count === 1 ? '' : 'e'} (${sizeKnown ? formatted : 'Größe nicht gemessen'}) in Quarantäne verschieben?`,
         cancel: 'Abbrechen',
-        confirmButton: 'Bestätigen',
+        confirmButton: "In Quarantäne verschieben",
         cleaning: 'Wird bereinigt…'
       },
       stop: 'Stopp',
@@ -5668,7 +5718,10 @@ export const CATALOG = {
         selectCategoryAriaLabel: (category) => `Alles unter ${category} auswählen`,
         losesData: 'Datenverlust',
         needsAdmin: 'benötigt Administrator',
-        notInstalled: 'nicht installiert'
+        notInstalled: 'nicht installiert',
+        filterPlaceholder: "Bereiniger filtern…",
+        filterNone: "Kein Bereiniger passt zu diesem Filter.",
+        selectedOfTotal: (n, total) => `${n} von ${total} ausgewählt`
       },
       warning: {
         title: (label) => `${label} aktivieren`,
@@ -5821,6 +5874,9 @@ export const CATALOG = {
       }
     },
     themeToggle: {
+      optionSystem: "System",
+      optionLight: "Hell",
+      optionDark: "Dunkel",
       switchTo: (theme) => `Zum ${theme} Erscheinungsbild wechseln`,
       light: 'hellen',
       dark: 'dunklen'
@@ -5862,7 +5918,7 @@ export const CATALOG = {
       saveError: (error) => `Αδυναμία αποθήκευσης: ${error}`,
       appearance: {
         title: 'Εμφάνιση',
-        description: 'Aurora Deck σε σκοτεινό ή ημερήσιο φωτισμό. Και οι δύο είναι πραγματικές παλέτες αντί για μία αντεστραμμένη: η έμφαση σκουραίνει για το ανοιχτόχρωμο φόντο ώστε ένα κουμπί να διατηρεί λευκό κείμενο πάνω του, και κάθε επίπεδο μετρήθηκε σε σχέση με τις επιφάνειες στις οποίες πράγματι βρίσκεται. Το Prune ακολουθεί τη ρύθμιση του συστήματός σας μέχρι να επιλέξετε ένα εδώ.'
+        description: "Επιλέξτε Ανοιχτό ή Σκούρο, ή αφήστε το Σύστημα να ακολουθεί τα Windows."
       },
       minimizeToTray: {
         title: 'Ελαχιστοποίηση στη γραμμή συστήματος',
@@ -6360,7 +6416,8 @@ export const CATALOG = {
         header: 'Έξοδος σάρωσης',
         scanningAnnounce: (total) => `Σάρωση ${total} τοποθεσιών.`,
         finishedAnnounce: (scanned, total) => `Η σάρωση ολοκληρώθηκε. Μετρήθηκαν ${scanned} από ${total} τοποθεσίες.`,
-        starting: 'Έναρξη…'
+        starting: 'Έναρξη…',
+        idle: "Πατήστε Προεπισκόπηση για να μετρήσετε τι μπορεί να καθαριστεί."
       },
       emptyState: 'Δεν έχει σαρωθεί τίποτα ακόμα.',
       scanErrorPrefix: (error) => `Αδυναμία σάρωσης: ${error}`,
@@ -6385,7 +6442,7 @@ export const CATALOG = {
       confirm: {
         prompt: (count, sizeKnown, formatted) => `Μετακίνηση ${count} στοιχείων (${sizeKnown ? formatted : 'το μέγεθος δεν μετρήθηκε'}) σε καραντίνα;`,
         cancel: 'Ακύρωση',
-        confirmButton: 'Επιβεβαίωση',
+        confirmButton: "Μετακίνηση σε καραντίνα",
         cleaning: 'Καθαρισμός…'
       },
       stop: 'Διακοπή',
@@ -6395,7 +6452,10 @@ export const CATALOG = {
         selectCategoryAriaLabel: (category) => `Επιλογή όλων στην κατηγορία ${category}`,
         losesData: 'Χάνει δεδομένα',
         needsAdmin: 'απαιτεί διαχειριστή',
-        notInstalled: 'δεν είναι εγκατεστημένο'
+        notInstalled: 'δεν είναι εγκατεστημένο',
+        filterPlaceholder: "Φιλτράρισμα καθαριστών…",
+        filterNone: "Κανένας καθαριστής δεν ταιριάζει με αυτό το φίλτρο.",
+        selectedOfTotal: (n, total) => `${n} από ${total} επιλεγμένα`
       },
       warning: {
         title: (label) => `Ενεργοποίηση ${label}`,
@@ -6548,6 +6608,9 @@ export const CATALOG = {
       }
     },
     themeToggle: {
+      optionSystem: "Σύστημα",
+      optionLight: "Ανοιχτό",
+      optionDark: "Σκούρο",
       switchTo: (theme) => `Εναλλαγή σε ${theme} θέμα`,
       light: 'ανοιχτόχρωμο',
       dark: 'σκοτεινό'
@@ -6589,7 +6652,7 @@ export const CATALOG = {
       saveError: (error) => `No se pudo guardar: ${error}`,
       appearance: {
         title: 'Apariencia',
-        description: 'Aurora Deck en modo oscuro o claro. Ambas son paletas reales en lugar de una invertida: el acento se oscurece para el fondo claro para que un botón pueda mantener texto blanco, y cada nivel se midió contra las superficies sobre las que realmente se apoya. Prune sigue la configuración de tu sistema hasta que elijas una aquí.'
+        description: "Elige Claro u Oscuro, o deja que Sistema siga a Windows."
       },
       minimizeToTray: {
         title: 'Minimizar a la bandeja',
@@ -7087,7 +7150,8 @@ export const CATALOG = {
         header: 'Salida del escaneo',
         scanningAnnounce: (total) => `Escaneando ${total} ubicaciones.`,
         finishedAnnounce: (scanned, total) => `Escaneo terminado. ${scanned} de ${total} ubicaciones medidas.`,
-        starting: 'Iniciando…'
+        starting: 'Iniciando…',
+        idle: "Pulsa Vista previa para medir qué se puede limpiar."
       },
       emptyState: 'Nada escaneado todavía.',
       scanErrorPrefix: (error) => `No se pudo escanear: ${error}`,
@@ -7112,7 +7176,7 @@ export const CATALOG = {
       confirm: {
         prompt: (count, sizeKnown, formatted) => `¿Mover ${count} elemento${count === 1 ? '' : 's'} (${sizeKnown ? formatted : 'tamaño no medido'}) a cuarentena?`,
         cancel: 'Cancelar',
-        confirmButton: 'Confirmar',
+        confirmButton: "Mover a cuarentena",
         cleaning: 'Limpiando…'
       },
       stop: 'Detener',
@@ -7122,7 +7186,10 @@ export const CATALOG = {
         selectCategoryAriaLabel: (category) => `Seleccionar todo en ${category}`,
         losesData: 'Pierde datos',
         needsAdmin: 'necesita administrador',
-        notInstalled: 'no instalado'
+        notInstalled: 'no instalado',
+        filterPlaceholder: "Filtrar limpiadores…",
+        filterNone: "Ningún limpiador coincide con ese filtro.",
+        selectedOfTotal: (n, total) => `${n} de ${total} seleccionados`
       },
       warning: {
         title: (label) => `Habilitar ${label}`,
@@ -7275,6 +7342,9 @@ export const CATALOG = {
       }
     },
     themeToggle: {
+      optionSystem: "Sistema",
+      optionLight: "Claro",
+      optionDark: "Oscuro",
       switchTo: (theme) => `Cambiar al tema ${theme}`,
       light: 'claro',
       dark: 'oscuro'
@@ -7316,7 +7386,7 @@ export const CATALOG = {
       saveError: (error) => `Salvestamine ebaõnnestus: ${error}`,
       appearance: {
         title: 'Välimus',
-        description: 'Aurora Deck tumedas või heledas toonis. Mõlemad on tõelised paletid, mitte üks ümberpööratud: aktsendivärv tumeneb heleda tausta jaoks, et nupp saaks hoida valget teksti, ja iga tase mõõdeti pindade järgi, millel see tegelikult asub. Prune järgib sinu süsteemi seadet, kuni valid siin ühe ise.'
+        description: "Vali Hele või Tume või lase Süsteemil Windowsi järgida."
       },
       minimizeToTray: {
         title: 'Minimeeri salve',
@@ -7814,7 +7884,8 @@ export const CATALOG = {
         header: 'Skannimise väljund',
         scanningAnnounce: (total) => `Skannitakse ${total} asukohta.`,
         finishedAnnounce: (scanned, total) => `Skannimine lõpetatud. Mõõdetud ${scanned} asukohta ${total}-st.`,
-        starting: 'Alustamine…'
+        starting: 'Alustamine…',
+        idle: "Vajuta Eelvaade, et mõõta, mida saab puhastada."
       },
       emptyState: 'Veel pole midagi skannitud.',
       scanErrorPrefix: (error) => `Skannimine ebaõnnestus: ${error}`,
@@ -7839,7 +7910,7 @@ export const CATALOG = {
       confirm: {
         prompt: (count, sizeKnown, formatted) => `Teisaldada ${count} üksust (${sizeKnown ? formatted : 'suurus mõõtmata'}) karantiini?`,
         cancel: 'Tühista',
-        confirmButton: 'Kinnita',
+        confirmButton: "Teisalda karantiini",
         cleaning: 'Puhastamine…'
       },
       stop: 'Peata',
@@ -7849,7 +7920,10 @@ export const CATALOG = {
         selectCategoryAriaLabel: (category) => `Vali kõik kategoorias ${category}`,
         losesData: 'Kaotab andmeid',
         needsAdmin: 'vajab administraatorit',
-        notInstalled: 'pole installitud'
+        notInstalled: 'pole installitud',
+        filterPlaceholder: "Filtreeri puhastajaid…",
+        filterNone: "Ükski puhastaja ei vasta sellele filtrile.",
+        selectedOfTotal: (n, total) => `${n} / ${total} valitud`
       },
       warning: {
         title: (label) => `Luba ${label}`,
@@ -8002,6 +8076,9 @@ export const CATALOG = {
       }
     },
     themeToggle: {
+      optionSystem: "Süsteem",
+      optionLight: "Hele",
+      optionDark: "Tume",
       switchTo: (theme) => `Lülitu ${theme} teemale`,
       light: 'heledale',
       dark: 'tumedale'
@@ -8043,7 +8120,7 @@ export const CATALOG = {
       saveError: (error) => `Tallennus epäonnistui: ${error}`,
       appearance: {
         title: 'Ulkoasu',
-        description: 'Aurora Deck tummana tai vaaleana. Molemmat ovat aitoja paletteja eivätkä yhtä käänteistä: korostusväri tummuu vaalealle pohjalle, jotta painike voi pitää valkoisen tekstin, ja jokainen taso mitattiin pinnoilta, joilla se todella lepää. Prune noudattaa järjestelmäsi asetusta, kunnes valitset tästä yhden.'
+        description: "Valitse Vaalea tai Tumma tai anna Järjestelmän seurata Windowsia."
       },
       minimizeToTray: {
         title: 'Pienennä ilmaisinalueelle',
@@ -8541,7 +8618,8 @@ export const CATALOG = {
         header: 'Skannauksen tuloste',
         scanningAnnounce: (total) => `Skannataan ${total} sijaintia.`,
         finishedAnnounce: (scanned, total) => `Skannaus valmis. ${scanned}/${total} sijaintia mitattu.`,
-        starting: 'Aloitetaan…'
+        starting: 'Aloitetaan…',
+        idle: "Mittaa puhdistettavissa oleva painamalla Esikatselu."
       },
       emptyState: 'Ei vielä skannattu mitään.',
       scanErrorPrefix: (error) => `Skannaus epäonnistui: ${error}`,
@@ -8566,7 +8644,7 @@ export const CATALOG = {
       confirm: {
         prompt: (count, sizeKnown, formatted) => `Siirretäänkö ${count} kohdetta (${sizeKnown ? formatted : 'kokoa ei mitattu'}) karanteeniin?`,
         cancel: 'Peruuta',
-        confirmButton: 'Vahvista',
+        confirmButton: "Siirrä karanteeniin",
         cleaning: 'Puhdistetaan…'
       },
       stop: 'Pysäytä',
@@ -8576,7 +8654,10 @@ export const CATALOG = {
         selectCategoryAriaLabel: (category) => `Valitse kaikki kategoriassa ${category}`,
         losesData: 'Menettää tietoja',
         needsAdmin: 'vaatii ylläpitäjän',
-        notInstalled: 'ei asennettu'
+        notInstalled: 'ei asennettu',
+        filterPlaceholder: "Suodata puhdistimia…",
+        filterNone: "Mikään puhdistin ei vastaa suodatinta.",
+        selectedOfTotal: (n, total) => `${n} / ${total} valittu`
       },
       warning: {
         title: (label) => `Ota käyttöön ${label}`,
@@ -8729,6 +8810,9 @@ export const CATALOG = {
       }
     },
     themeToggle: {
+      optionSystem: "Järjestelmä",
+      optionLight: "Vaalea",
+      optionDark: "Tumma",
       switchTo: (theme) => `Vaihda ${theme} teemaan`,
       light: 'vaaleaan',
       dark: 'tummaan'
@@ -8770,7 +8854,7 @@ export const CATALOG = {
       saveError: (error) => `Impossible d'enregistrer : ${error}`,
       appearance: {
         title: 'Apparence',
-        description: "Aurora Deck en sombre ou en clair. Les deux sont de vraies palettes plutôt qu'une inversée : l'accent s'assombrit pour le fond clair afin qu'un bouton puisse garder un texte blanc, et chaque niveau a été mesuré par rapport aux surfaces sur lesquelles il repose réellement. Prune suit le réglage de votre système jusqu'à ce que vous en choisissiez un ici."
+        description: "Choisissez Clair ou Sombre, ou laissez Système suivre Windows."
       },
       minimizeToTray: {
         title: 'Réduire dans la barre système',
@@ -9268,7 +9352,8 @@ export const CATALOG = {
         header: 'Sortie de l\'analyse',
         scanningAnnounce: (total) => `Analyse de ${total} emplacements.`,
         finishedAnnounce: (scanned, total) => `Analyse terminée. ${scanned} emplacements mesurés sur ${total}.`,
-        starting: 'Démarrage…'
+        starting: 'Démarrage…',
+        idle: "Appuyez sur Aperçu pour mesurer ce qui peut être nettoyé."
       },
       emptyState: 'Rien d\'analysé pour le moment.',
       scanErrorPrefix: (error) => `Impossible d'analyser : ${error}`,
@@ -9293,7 +9378,7 @@ export const CATALOG = {
       confirm: {
         prompt: (count, sizeKnown, formatted) => `Déplacer ${count} élément${count === 1 ? '' : 's'} (${sizeKnown ? formatted : 'taille non mesurée'}) vers la quarantaine ?`,
         cancel: 'Annuler',
-        confirmButton: 'Confirmer',
+        confirmButton: "Déplacer vers la quarantaine",
         cleaning: 'Nettoyage…'
       },
       stop: 'Arrêter',
@@ -9303,7 +9388,10 @@ export const CATALOG = {
         selectCategoryAriaLabel: (category) => `Tout sélectionner sous ${category}`,
         losesData: 'Perte de données',
         needsAdmin: 'nécessite administrateur',
-        notInstalled: 'non installé'
+        notInstalled: 'non installé',
+        filterPlaceholder: "Filtrer les nettoyeurs…",
+        filterNone: "Aucun nettoyeur ne correspond à ce filtre.",
+        selectedOfTotal: (n, total) => `${n} sur ${total} sélectionnés`
       },
       warning: {
         title: (label) => `Activer ${label}`,
@@ -9456,6 +9544,9 @@ export const CATALOG = {
       }
     },
     themeToggle: {
+      optionSystem: "Système",
+      optionLight: "Clair",
+      optionDark: "Sombre",
       switchTo: (theme) => `Passer au thème ${theme}`,
       light: 'clair',
       dark: 'sombre'
@@ -9497,7 +9588,7 @@ export const CATALOG = {
       saveError: (error) => `לא ניתן היה לשמור: ${error}`,
       appearance: {
         title: 'מראה',
-        description: 'Aurora Deck בכהה או באור יום. שתיהן פלטות אמיתיות ולא אחת הפוכה: הצבע המודגש מוכהה עבור הרקע הבהיר כדי שכפתור יוכל לשמור על טקסט לבן, וכל רמה נמדדה מול המשטחים שעליהם היא באמת יושבת. Prune עוקב אחר הגדרת המערכת שלך עד שתבחר אחת כאן.'
+        description: "בחרו בהיר או כהה, או תנו למערכת לעקוב אחרי Windows."
       },
       minimizeToTray: {
         title: 'מזעור למגש המערכת',
@@ -9995,7 +10086,8 @@ export const CATALOG = {
         header: 'פלט הסריקה',
         scanningAnnounce: (total) => `סורק ${total} מיקומים.`,
         finishedAnnounce: (scanned, total) => `הסריקה הסתיימה. נמדדו ${scanned} מתוך ${total} מיקומים.`,
-        starting: 'מתחיל…'
+        starting: 'מתחיל…',
+        idle: "לחצו על תצוגה מקדימה כדי למדוד מה אפשר לנקות."
       },
       emptyState: 'עדיין לא נסרק דבר.',
       scanErrorPrefix: (error) => `לא ניתן היה לסרוק: ${error}`,
@@ -10020,7 +10112,7 @@ export const CATALOG = {
       confirm: {
         prompt: (count, sizeKnown, formatted) => `להעביר ${count} פריטים (${sizeKnown ? formatted : 'הגודל לא נמדד'}) להסגר?`,
         cancel: 'ביטול',
-        confirmButton: 'אישור',
+        confirmButton: "העברה להסגר",
         cleaning: 'מנקה…'
       },
       stop: 'עצור',
@@ -10030,7 +10122,10 @@ export const CATALOG = {
         selectCategoryAriaLabel: (category) => `בחר הכל תחת ${category}`,
         losesData: 'מאבד נתונים',
         needsAdmin: 'דורש הרשאות מנהל',
-        notInstalled: 'לא מותקן'
+        notInstalled: 'לא מותקן',
+        filterPlaceholder: "סינון מנקים…",
+        filterNone: "אין מנקים שתואמים לסינון הזה.",
+        selectedOfTotal: (n, total) => `${n} מתוך ${total} נבחרו`
       },
       warning: {
         title: (label) => `הפעל ${label}`,
@@ -10183,6 +10278,9 @@ export const CATALOG = {
       }
     },
     themeToggle: {
+      optionSystem: "מערכת",
+      optionLight: "בהיר",
+      optionDark: "כהה",
       switchTo: (theme) => `עבור לערכת נושא ${theme}`,
       light: 'בהירה',
       dark: 'כהה'
@@ -10224,7 +10322,7 @@ export const CATALOG = {
       saveError: (error) => `Nem sikerült menteni: ${error}`,
       appearance: {
         title: 'Megjelenés',
-        description: 'Aurora Deck sötét vagy nappali fényben. Mindkettő valódi paletta, nem pedig egy megfordított: a hangsúlyszín a világos háttérhez sötétebb, hogy egy gomb fehér szöveget tarthasson magán, és minden szint azokhoz a felületekhez lett mérve, amelyeken ténylegesen áll. A Prune követi a rendszerbeállításodat, amíg itt nem választasz egyet.'
+        description: "Válassz Világos vagy Sötét témát, vagy hagyd, hogy a Rendszer kövesse a Windowst."
       },
       minimizeToTray: {
         title: 'Kicsinyítés a tálcára',
@@ -10722,7 +10820,8 @@ export const CATALOG = {
         header: 'Vizsgálati kimenet',
         scanningAnnounce: (total) => `${total} hely vizsgálata.`,
         finishedAnnounce: (scanned, total) => `A vizsgálat befejeződött. ${scanned}/${total} hely megmérve.`,
-        starting: 'Indítás…'
+        starting: 'Indítás…',
+        idle: "Nyomd meg az Előnézet gombot, hogy megmérd, mi tisztítható."
       },
       emptyState: 'Még semmi sincs megvizsgálva.',
       scanErrorPrefix: (error) => `Nem sikerült a vizsgálat: ${error}`,
@@ -10747,7 +10846,7 @@ export const CATALOG = {
       confirm: {
         prompt: (count, sizeKnown, formatted) => `Áthelyezed ${count} elemet (${sizeKnown ? formatted : 'a méret nincs megmérve'}) a karanténba?`,
         cancel: 'Mégse',
-        confirmButton: 'Megerősítés',
+        confirmButton: "Áthelyezés a karanténba",
         cleaning: 'Tisztítás…'
       },
       stop: 'Leállítás',
@@ -10757,7 +10856,10 @@ export const CATALOG = {
         selectCategoryAriaLabel: (category) => `Összes kijelölése itt: ${category}`,
         losesData: 'Adatvesztés',
         needsAdmin: 'rendszergazda szükséges',
-        notInstalled: 'nincs telepítve'
+        notInstalled: 'nincs telepítve',
+        filterPlaceholder: "Tisztítók szűrése…",
+        filterNone: "Egyetlen tisztító sem felel meg a szűrőnek.",
+        selectedOfTotal: (n, total) => `${n} / ${total} kijelölve`
       },
       warning: {
         title: (label) => `${label} engedélyezése`,
@@ -10910,6 +11012,9 @@ export const CATALOG = {
       }
     },
     themeToggle: {
+      optionSystem: "Rendszer",
+      optionLight: "Világos",
+      optionDark: "Sötét",
       switchTo: (theme) => `Váltás ${theme} témára`,
       light: 'világos',
       dark: 'sötét'
@@ -10951,7 +11056,7 @@ export const CATALOG = {
       saveError: (error) => `Tidak dapat menyimpan: ${error}`,
       appearance: {
         title: 'Tampilan',
-        description: 'Aurora Deck dalam gelap atau terang. Keduanya adalah palet asli, bukan satu yang dibalik: warna aksen menjadi lebih gelap untuk latar terang agar tombol tetap bisa memakai teks putih, dan setiap tingkat diukur berdasarkan permukaan tempatnya benar-benar berada. Prune mengikuti pengaturan sistemmu sampai kamu memilih satu di sini.'
+        description: "Pilih Terang atau Gelap, atau biarkan Sistem mengikuti Windows."
       },
       minimizeToTray: {
         title: 'Perkecil ke baki sistem',
@@ -11449,7 +11554,8 @@ export const CATALOG = {
         header: 'Output pemindaian',
         scanningAnnounce: (total) => `Memindai ${total} lokasi.`,
         finishedAnnounce: (scanned, total) => `Pemindaian selesai. ${scanned} dari ${total} lokasi diukur.`,
-        starting: 'Memulai…'
+        starting: 'Memulai…',
+        idle: "Tekan Pratinjau untuk mengukur apa yang bisa dibersihkan."
       },
       emptyState: 'Belum ada yang dipindai.',
       scanErrorPrefix: (error) => `Tidak dapat memindai: ${error}`,
@@ -11474,7 +11580,7 @@ export const CATALOG = {
       confirm: {
         prompt: (count, sizeKnown, formatted) => `Pindahkan ${count} item (${sizeKnown ? formatted : 'ukuran tidak terukur'}) ke karantina?`,
         cancel: 'Batal',
-        confirmButton: 'Konfirmasi',
+        confirmButton: "Pindahkan ke karantina",
         cleaning: 'Membersihkan…'
       },
       stop: 'Hentikan',
@@ -11484,7 +11590,10 @@ export const CATALOG = {
         selectCategoryAriaLabel: (category) => `Pilih semua di bawah ${category}`,
         losesData: 'Kehilangan data',
         needsAdmin: 'memerlukan admin',
-        notInstalled: 'tidak terpasang'
+        notInstalled: 'tidak terpasang',
+        filterPlaceholder: "Filter pembersih…",
+        filterNone: "Tidak ada pembersih yang cocok dengan filter itu.",
+        selectedOfTotal: (n, total) => `${n} dari ${total} dipilih`
       },
       warning: {
         title: (label) => `Aktifkan ${label}`,
@@ -11637,6 +11746,9 @@ export const CATALOG = {
       }
     },
     themeToggle: {
+      optionSystem: "Sistem",
+      optionLight: "Terang",
+      optionDark: "Gelap",
       switchTo: (theme) => `Beralih ke tema ${theme}`,
       light: 'terang',
       dark: 'gelap'
@@ -11678,7 +11790,7 @@ export const CATALOG = {
       saveError: (error) => `Ekki tókst að vista: ${error}`,
       appearance: {
         title: 'Útlit',
-        description: 'Aurora Deck í dökku eða björtu. Bæði eru raunveruleg litaspjöld frekar en eitt umsnúið: áherslulitur dökknar fyrir ljósan bakgrunn svo hnappur geti haldið hvítum texta, og hvert stig var mælt gegn þeim flötum sem það hvílir raunverulega á. Prune fylgir kerfisstillingunni þinni þar til þú velur eina hér.'
+        description: "Veldu Ljóst eða Dökkt, eða láttu Kerfi fylgja Windows."
       },
       minimizeToTray: {
         title: 'Lágmarka í kerfisbakka',
@@ -12176,7 +12288,8 @@ export const CATALOG = {
         header: 'Úttak skönnunar',
         scanningAnnounce: (total) => `Skanna ${total} staðsetningar.`,
         finishedAnnounce: (scanned, total) => `Skönnun lokið. ${scanned} af ${total} staðsetningum mældar.`,
-        starting: 'Er að byrja…'
+        starting: 'Er að byrja…',
+        idle: "Ýttu á Forskoðun til að mæla hvað er hægt að hreinsa."
       },
       emptyState: 'Ekkert skannað enn.',
       scanErrorPrefix: (error) => `Ekki tókst að skanna: ${error}`,
@@ -12201,7 +12314,7 @@ export const CATALOG = {
       confirm: {
         prompt: (count, sizeKnown, formatted) => `Flytja ${count} atriði (${sizeKnown ? formatted : 'stærð ómæld'}) í sóttkví?`,
         cancel: 'Hætta við',
-        confirmButton: 'Staðfesta',
+        confirmButton: "Færa í sóttkví",
         cleaning: 'Hreinsar…'
       },
       stop: 'Stöðva',
@@ -12211,7 +12324,10 @@ export const CATALOG = {
         selectCategoryAriaLabel: (category) => `Velja allt undir ${category}`,
         losesData: 'Tapar gögnum',
         needsAdmin: 'þarf kerfisstjóra',
-        notInstalled: 'ekki uppsett'
+        notInstalled: 'ekki uppsett',
+        filterPlaceholder: "Sía hreinsiforrit…",
+        filterNone: "Ekkert hreinsiforrit passar við þessa síu.",
+        selectedOfTotal: (n, total) => `${n} af ${total} valin`
       },
       warning: {
         title: (label) => `Virkja ${label}`,
@@ -12364,6 +12480,9 @@ export const CATALOG = {
       }
     },
     themeToggle: {
+      optionSystem: "Kerfi",
+      optionLight: "Ljóst",
+      optionDark: "Dökkt",
       switchTo: (theme) => `Skipta yfir í ${theme} þema`,
       light: 'ljóst',
       dark: 'dökkt'
@@ -12405,7 +12524,7 @@ export const CATALOG = {
       saveError: (error) => `Impossibile salvare: ${error}`,
       appearance: {
         title: 'Aspetto',
-        description: "Aurora Deck in scuro o chiaro alla luce del giorno. Entrambe sono palette reali anziché una invertita: l'accento si scurisce per lo sfondo chiaro così un pulsante può mantenere il testo bianco, e ogni livello è stato misurato rispetto alle superfici su cui poggia realmente. Prune segue l'impostazione del tuo sistema finché non ne scegli una qui."
+        description: "Scegli Chiaro o Scuro, oppure lascia che Sistema segua Windows."
       },
       minimizeToTray: {
         title: 'Riduci a icona nella barra di sistema',
@@ -12903,7 +13022,8 @@ export const CATALOG = {
         header: 'Output della scansione',
         scanningAnnounce: (total) => `Scansione di ${total} posizioni.`,
         finishedAnnounce: (scanned, total) => `Scansione completata. ${scanned} di ${total} posizioni misurate.`,
-        starting: 'Avvio…'
+        starting: 'Avvio…',
+        idle: "Premi Anteprima per misurare cosa si può pulire."
       },
       emptyState: 'Ancora nulla scansionato.',
       scanErrorPrefix: (error) => `Impossibile scansionare: ${error}`,
@@ -12928,7 +13048,7 @@ export const CATALOG = {
       confirm: {
         prompt: (count, sizeKnown, formatted) => `Spostare ${count} elementi (${sizeKnown ? formatted : 'dimensione non misurata'}) in quarantena?`,
         cancel: 'Annulla',
-        confirmButton: 'Conferma',
+        confirmButton: "Sposta in quarantena",
         cleaning: 'Pulizia…'
       },
       stop: 'Interrompi',
@@ -12938,7 +13058,10 @@ export const CATALOG = {
         selectCategoryAriaLabel: (category) => `Seleziona tutto in ${category}`,
         losesData: 'Perde dati',
         needsAdmin: 'richiede amministratore',
-        notInstalled: 'non installato'
+        notInstalled: 'non installato',
+        filterPlaceholder: "Filtra i pulitori…",
+        filterNone: "Nessun pulitore corrisponde a questo filtro.",
+        selectedOfTotal: (n, total) => `${n} di ${total} selezionati`
       },
       warning: {
         title: (label) => `Abilita ${label}`,
@@ -13091,6 +13214,9 @@ export const CATALOG = {
       }
     },
     themeToggle: {
+      optionSystem: "Sistema",
+      optionLight: "Chiaro",
+      optionDark: "Scuro",
       switchTo: (theme) => `Passa al tema ${theme}`,
       light: 'chiaro',
       dark: 'scuro'
@@ -13132,7 +13258,7 @@ export const CATALOG = {
       saveError: (error) => `保存できませんでした: ${error}`,
       appearance: {
         title: '外観',
-        description: 'Aurora Deck はダークまたはデイライトで表示されます。どちらも反転させたものではなく、それぞれ本物のパレットです。アクセントカラーは明るい背景用に暗くなっているため、ボタンは白いテキストを保てます。各段階は実際に配置される面に対して測定されています。Prune はここで選ぶまでシステムの設定に従います。'
+        description: "ライトまたはダークを選ぶか、システムで Windows の設定に合わせます。"
       },
       minimizeToTray: {
         title: 'システムトレイに最小化',
@@ -13630,7 +13756,8 @@ export const CATALOG = {
         header: 'スキャン出力',
         scanningAnnounce: (total) => `${total} 件の場所をスキャン中。`,
         finishedAnnounce: (scanned, total) => `スキャン完了。${total} 件中 ${scanned} 件の場所を測定しました。`,
-        starting: '開始中…'
+        starting: '開始中…',
+        idle: "「プレビュー」を押すと、クリーンアップできる量を測定します。"
       },
       emptyState: 'まだ何もスキャンされていません。',
       scanErrorPrefix: (error) => `スキャンできませんでした: ${error}`,
@@ -13655,7 +13782,7 @@ export const CATALOG = {
       confirm: {
         prompt: (count, sizeKnown, formatted) => `${count} 件の項目（${sizeKnown ? formatted : 'サイズ未測定'}）を隔離に移動しますか?`,
         cancel: 'キャンセル',
-        confirmButton: '確認',
+        confirmButton: "隔離に移動",
         cleaning: 'クリーン中…'
       },
       stop: '停止',
@@ -13665,7 +13792,10 @@ export const CATALOG = {
         selectCategoryAriaLabel: (category) => `${category} の下をすべて選択`,
         losesData: 'データを失う',
         needsAdmin: '管理者権限が必要',
-        notInstalled: '未インストール'
+        notInstalled: '未インストール',
+        filterPlaceholder: "クリーナーを絞り込む…",
+        filterNone: "この条件に一致するクリーナーはありません。",
+        selectedOfTotal: (n, total) => `${total} 件中 ${n} 件を選択`
       },
       warning: {
         title: (label) => `${label} を有効にする`,
@@ -13818,6 +13948,9 @@ export const CATALOG = {
       }
     },
     themeToggle: {
+      optionSystem: "システム",
+      optionLight: "ライト",
+      optionDark: "ダーク",
       switchTo: (theme) => `${theme}テーマに切り替え`,
       light: 'ライト',
       dark: 'ダーク'
@@ -13859,7 +13992,7 @@ export const CATALOG = {
       saveError: (error) => `저장할 수 없습니다: ${error}`,
       appearance: {
         title: '모양',
-        description: 'Aurora Deck는 어두운 모드 또는 밝은 모드로 표시됩니다. 둘 다 하나를 반전시킨 것이 아니라 실제 팔레트입니다. 강조 색상은 밝은 배경을 위해 더 어두워져서 버튼이 흰색 텍스트를 유지할 수 있으며, 각 단계는 실제로 놓이는 표면에 맞춰 측정되었습니다. Prune은 여기서 선택하기 전까지 시스템 설정을 따릅니다.'
+        description: "라이트 또는 다크를 고르거나, 시스템을 선택해 Windows 설정을 따르게 하세요."
       },
       minimizeToTray: {
         title: '시스템 트레이로 최소화',
@@ -14357,7 +14490,8 @@ export const CATALOG = {
         header: '스캔 출력',
         scanningAnnounce: (total) => `${total}개 위치를 스캔 중입니다.`,
         finishedAnnounce: (scanned, total) => `스캔 완료. ${total}개 중 ${scanned}개 위치가 측정되었습니다.`,
-        starting: '시작 중…'
+        starting: '시작 중…',
+        idle: "미리보기를 눌러 정리할 수 있는 항목을 측정하세요."
       },
       emptyState: '아직 스캔된 항목이 없습니다.',
       scanErrorPrefix: (error) => `스캔할 수 없습니다: ${error}`,
@@ -14382,7 +14516,7 @@ export const CATALOG = {
       confirm: {
         prompt: (count, sizeKnown, formatted) => `${count}개 항목(${sizeKnown ? formatted : '크기 측정되지 않음'})을 격리로 이동하시겠습니까?`,
         cancel: '취소',
-        confirmButton: '확인',
+        confirmButton: "격리로 이동",
         cleaning: '정리 중…'
       },
       stop: '중지',
@@ -14392,7 +14526,10 @@ export const CATALOG = {
         selectCategoryAriaLabel: (category) => `${category} 아래 모두 선택`,
         losesData: '데이터 손실',
         needsAdmin: '관리자 권한 필요',
-        notInstalled: '설치되지 않음'
+        notInstalled: '설치되지 않음',
+        filterPlaceholder: "클리너 필터…",
+        filterNone: "이 필터와 일치하는 클리너가 없습니다.",
+        selectedOfTotal: (n, total) => `${total}개 중 ${n}개 선택됨`
       },
       warning: {
         title: (label) => `${label} 사용`,
@@ -14545,6 +14682,9 @@ export const CATALOG = {
       }
     },
     themeToggle: {
+      optionSystem: "시스템",
+      optionLight: "라이트",
+      optionDark: "다크",
       switchTo: (theme) => `${theme} 테마로 전환`,
       light: '라이트',
       dark: '다크'
@@ -14586,7 +14726,7 @@ export const CATALOG = {
       saveError: (error) => `Nepavyko išsaugoti: ${error}`,
       appearance: {
         title: 'Išvaizda',
-        description: 'Aurora Deck tamsiu arba šviesiu režimu. Abu yra tikros paletės, o ne viena apversta: akcentinė spalva patamsėja šviesiam fonui, kad mygtukas galėtų išlaikyti baltą tekstą, ir kiekvienas lygis buvo matuojamas pagal paviršius, ant kurių jis iš tikrųjų remiasi. Prune seka jūsų sistemos nustatymu, kol čia pasirinksite vieną.'
+        description: "Pasirinkite Šviesi arba Tamsi arba leiskite Sistemai sekti Windows."
       },
       minimizeToTray: {
         title: 'Sumažinti į dėklą',
@@ -15084,7 +15224,8 @@ export const CATALOG = {
         header: 'Nuskaitymo išvestis',
         scanningAnnounce: (total) => `Nuskaitoma ${total} vietų.`,
         finishedAnnounce: (scanned, total) => `Nuskaitymas baigtas. Išmatuota ${scanned} iš ${total} vietų.`,
-        starting: 'Pradedama…'
+        starting: 'Pradedama…',
+        idle: "Paspauskite Peržiūra, kad išmatuotumėte, ką galima išvalyti."
       },
       emptyState: 'Kol kas nieko nenuskaityta.',
       scanErrorPrefix: (error) => `Nepavyko nuskaityti: ${error}`,
@@ -15109,7 +15250,7 @@ export const CATALOG = {
       confirm: {
         prompt: (count, sizeKnown, formatted) => `Perkelti ${count} elementus (${sizeKnown ? formatted : 'dydis neišmatuotas'}) į karantiną?`,
         cancel: 'Atšaukti',
-        confirmButton: 'Patvirtinti',
+        confirmButton: "Perkelti į karantiną",
         cleaning: 'Valoma…'
       },
       stop: 'Stabdyti',
@@ -15119,7 +15260,10 @@ export const CATALOG = {
         selectCategoryAriaLabel: (category) => `Pasirinkti viską skiltyje ${category}`,
         losesData: 'Prarandami duomenys',
         needsAdmin: 'reikia administratoriaus',
-        notInstalled: 'neįdiegta'
+        notInstalled: 'neįdiegta',
+        filterPlaceholder: "Filtruoti valiklius…",
+        filterNone: "Nė vienas valiklis neatitinka šio filtro.",
+        selectedOfTotal: (n, total) => `Pasirinkta ${n} iš ${total}`
       },
       warning: {
         title: (label) => `Įjungti ${label}`,
@@ -15272,6 +15416,9 @@ export const CATALOG = {
       }
     },
     themeToggle: {
+      optionSystem: "Sistema",
+      optionLight: "Šviesi",
+      optionDark: "Tamsi",
       switchTo: (theme) => `Perjungti į ${theme} temą`,
       light: 'šviesią',
       dark: 'tamsią'
@@ -15313,7 +15460,7 @@ export const CATALOG = {
       saveError: (error) => `Tidak dapat menyimpan: ${error}`,
       appearance: {
         title: 'Rupa',
-        description: 'Aurora Deck dalam gelap atau siang hari. Kedua-duanya adalah palet sebenar bukannya satu yang diterbalikkan: warna aksen menjadi lebih gelap untuk latar cerah supaya butang boleh mengekalkan teks putih, dan setiap tahap diukur berdasarkan permukaan tempat ia sebenarnya berada. Prune mengikut tetapan sistem anda sehingga anda memilih satu di sini.'
+        description: "Pilih Terang atau Gelap, atau biarkan Sistem mengikut Windows."
       },
       minimizeToTray: {
         title: 'Kecilkan ke dulang sistem',
@@ -15811,7 +15958,8 @@ export const CATALOG = {
         header: 'Output imbasan',
         scanningAnnounce: (total) => `Mengimbas ${total} lokasi.`,
         finishedAnnounce: (scanned, total) => `Imbasan selesai. ${scanned} daripada ${total} lokasi diukur.`,
-        starting: 'Memulakan…'
+        starting: 'Memulakan…',
+        idle: "Tekan Pratonton untuk mengukur apa yang boleh dibersihkan."
       },
       emptyState: 'Belum ada yang diimbas.',
       scanErrorPrefix: (error) => `Tidak dapat mengimbas: ${error}`,
@@ -15836,7 +15984,7 @@ export const CATALOG = {
       confirm: {
         prompt: (count, sizeKnown, formatted) => `Alih ${count} item (${sizeKnown ? formatted : 'saiz tidak diukur'}) ke kuarantin?`,
         cancel: 'Batal',
-        confirmButton: 'Sahkan',
+        confirmButton: "Alih ke kuarantin",
         cleaning: 'Membersihkan…'
       },
       stop: 'Henti',
@@ -15846,7 +15994,10 @@ export const CATALOG = {
         selectCategoryAriaLabel: (category) => `Pilih semua di bawah ${category}`,
         losesData: 'Kehilangan data',
         needsAdmin: 'perlu pentadbir',
-        notInstalled: 'tidak dipasang'
+        notInstalled: 'tidak dipasang',
+        filterPlaceholder: "Tapis pembersih…",
+        filterNone: "Tiada pembersih sepadan dengan penapis itu.",
+        selectedOfTotal: (n, total) => `${n} daripada ${total} dipilih`
       },
       warning: {
         title: (label) => `Dayakan ${label}`,
@@ -15999,6 +16150,9 @@ export const CATALOG = {
       }
     },
     themeToggle: {
+      optionSystem: "Sistem",
+      optionLight: "Terang",
+      optionDark: "Gelap",
       switchTo: (theme) => `Tukar kepada tema ${theme}`,
       light: 'terang',
       dark: 'gelap'
@@ -16040,7 +16194,7 @@ export const CATALOG = {
       saveError: (error) => `Kunne ikke lagre: ${error}`,
       appearance: {
         title: 'Utseende',
-        description: 'Aurora Deck i mørk eller lys modus. Begge er ekte paletter i stedet for én invertert: aksentfargen mørkner for den lyse bakgrunnen slik at en knapp kan beholde hvit tekst, og hvert nivå ble målt mot flatene den faktisk ligger på. Prune følger systeminnstillingen din til du velger en her.'
+        description: "Velg Lyst eller Mørkt, eller la System følge Windows."
       },
       minimizeToTray: {
         title: 'Minimer til systemstatusfelt',
@@ -16538,7 +16692,8 @@ export const CATALOG = {
         header: 'Skanningsutdata',
         scanningAnnounce: (total) => `Skanner ${total} steder.`,
         finishedAnnounce: (scanned, total) => `Skanning ferdig. ${scanned} av ${total} steder målt.`,
-        starting: 'Starter…'
+        starting: 'Starter…',
+        idle: "Trykk på Forhåndsvisning for å måle hva som kan renses."
       },
       emptyState: 'Ingenting skannet ennå.',
       scanErrorPrefix: (error) => `Kunne ikke skanne: ${error}`,
@@ -16563,7 +16718,7 @@ export const CATALOG = {
       confirm: {
         prompt: (count, sizeKnown, formatted) => `Flytt ${count} elementer (${sizeKnown ? formatted : 'størrelse ikke målt'}) til karantene?`,
         cancel: 'Avbryt',
-        confirmButton: 'Bekreft',
+        confirmButton: "Flytt til karantene",
         cleaning: 'Renser…'
       },
       stop: 'Stopp',
@@ -16573,7 +16728,10 @@ export const CATALOG = {
         selectCategoryAriaLabel: (category) => `Velg alt under ${category}`,
         losesData: 'Mister data',
         needsAdmin: 'krever administrator',
-        notInstalled: 'ikke installert'
+        notInstalled: 'ikke installert',
+        filterPlaceholder: "Filtrer renserne…",
+        filterNone: "Ingen rensere samsvarer med filteret.",
+        selectedOfTotal: (n, total) => `${n} av ${total} valgt`
       },
       warning: {
         title: (label) => `Aktiver ${label}`,
@@ -16726,6 +16884,9 @@ export const CATALOG = {
       }
     },
     themeToggle: {
+      optionSystem: "System",
+      optionLight: "Lyst",
+      optionDark: "Mørkt",
       switchTo: (theme) => `Bytt til ${theme} tema`,
       light: 'lyst',
       dark: 'mørkt'
@@ -16767,7 +16928,7 @@ export const CATALOG = {
       saveError: (error) => `Kon niet opslaan: ${error}`,
       appearance: {
         title: 'Uiterlijk',
-        description: "Aurora Deck in donker of daglicht. Beide zijn echte paletten in plaats van één omgekeerde: de accentkleur wordt donkerder voor de lichte achtergrond zodat een knop witte tekst kan behouden, en elk niveau is gemeten aan de oppervlakken waarop het daadwerkelijk rust. Prune volgt je systeeminstelling totdat je hier een kiest."
+        description: "Kies Licht of Donker, of laat Systeem Windows volgen."
       },
       minimizeToTray: {
         title: 'Minimaliseren naar systeemvak',
@@ -17265,7 +17426,8 @@ export const CATALOG = {
         header: 'Scanuitvoer',
         scanningAnnounce: (total) => `${total} locaties worden gescand.`,
         finishedAnnounce: (scanned, total) => `Scan voltooid. ${scanned} van ${total} locaties gemeten.`,
-        starting: 'Wordt gestart…'
+        starting: 'Wordt gestart…',
+        idle: "Druk op Voorbeeld om te meten wat er kan worden opgeruimd."
       },
       emptyState: 'Nog niets gescand.',
       scanErrorPrefix: (error) => `Kon niet scannen: ${error}`,
@@ -17290,7 +17452,7 @@ export const CATALOG = {
       confirm: {
         prompt: (count, sizeKnown, formatted) => `${count} items (${sizeKnown ? formatted : 'grootte niet gemeten'}) naar quarantaine verplaatsen?`,
         cancel: 'Annuleren',
-        confirmButton: 'Bevestigen',
+        confirmButton: "Naar quarantaine verplaatsen",
         cleaning: 'Bezig met opschonen…'
       },
       stop: 'Stoppen',
@@ -17300,7 +17462,10 @@ export const CATALOG = {
         selectCategoryAriaLabel: (category) => `Alles selecteren onder ${category}`,
         losesData: 'Verliest gegevens',
         needsAdmin: 'heeft beheerder nodig',
-        notInstalled: 'niet geïnstalleerd'
+        notInstalled: 'niet geïnstalleerd',
+        filterPlaceholder: "Reinigers filteren…",
+        filterNone: "Geen reiniger komt overeen met dat filter.",
+        selectedOfTotal: (n, total) => `${n} van ${total} geselecteerd`
       },
       warning: {
         title: (label) => `${label} inschakelen`,
@@ -17453,6 +17618,9 @@ export const CATALOG = {
       }
     },
     themeToggle: {
+      optionSystem: "Systeem",
+      optionLight: "Licht",
+      optionDark: "Donker",
       switchTo: (theme) => `Overschakelen naar ${theme} thema`,
       light: 'licht',
       dark: 'donker'
@@ -17494,7 +17662,7 @@ export const CATALOG = {
       saveError: (error) => `Nie udało się zapisać: ${error}`,
       appearance: {
         title: 'Wygląd',
-        description: 'Aurora Deck w trybie ciemnym lub jasnym. Oba są prawdziwymi paletami, a nie jedną odwróconą: kolor akcentu ciemnieje dla jasnego tła, aby przycisk mógł zachować biały tekst, a każdy poziom zmierzono względem powierzchni, na których faktycznie się znajduje. Prune podąża za ustawieniem systemowym, dopóki nie wybierzesz tutaj jednego.'
+        description: "Wybierz Jasny lub Ciemny albo pozwól, aby System podążał za Windows."
       },
       minimizeToTray: {
         title: 'Minimalizuj do zasobnika systemowego',
@@ -17992,7 +18160,8 @@ export const CATALOG = {
         header: 'Wynik skanowania',
         scanningAnnounce: (total) => `Skanowanie ${total} lokalizacji.`,
         finishedAnnounce: (scanned, total) => `Skanowanie zakończone. Zmierzono ${scanned} z ${total} lokalizacji.`,
-        starting: 'Uruchamianie…'
+        starting: 'Uruchamianie…',
+        idle: "Naciśnij Podgląd, aby zmierzyć, co można wyczyścić."
       },
       emptyState: 'Nic jeszcze nie zeskanowano.',
       scanErrorPrefix: (error) => `Nie udało się zeskanować: ${error}`,
@@ -18017,7 +18186,7 @@ export const CATALOG = {
       confirm: {
         prompt: (count, sizeKnown, formatted) => `Przenieść ${count} elementów (${sizeKnown ? formatted : 'rozmiar niezmierzony'}) do kwarantanny?`,
         cancel: 'Anuluj',
-        confirmButton: 'Potwierdź',
+        confirmButton: "Przenieś do kwarantanny",
         cleaning: 'Czyszczenie…'
       },
       stop: 'Zatrzymaj',
@@ -18027,7 +18196,10 @@ export const CATALOG = {
         selectCategoryAriaLabel: (category) => `Zaznacz wszystko w kategorii ${category}`,
         losesData: 'Utrata danych',
         needsAdmin: 'wymaga administratora',
-        notInstalled: 'niezainstalowane'
+        notInstalled: 'niezainstalowane',
+        filterPlaceholder: "Filtruj czyszczenia…",
+        filterNone: "Żadne czyszczenie nie pasuje do tego filtra.",
+        selectedOfTotal: (n, total) => `Wybrano ${n} z ${total}`
       },
       warning: {
         title: (label) => `Włącz ${label}`,
@@ -18180,6 +18352,9 @@ export const CATALOG = {
       }
     },
     themeToggle: {
+      optionSystem: "System",
+      optionLight: "Jasny",
+      optionDark: "Ciemny",
       switchTo: (theme) => `Przełącz na motyw ${theme}`,
       light: 'jasny',
       dark: 'ciemny'
@@ -18221,7 +18396,7 @@ export const CATALOG = {
       saveError: (error) => `ساتل ونشول: ${error}`,
       appearance: {
         title: 'بڼه',
-        description: 'Aurora Deck په تیاره یا رڼا کې. دواړه واقعي رنګ پلیټونه دي نه یو چپه شوی: د تمرکز رنګ د رڼا شالید لپاره تیاریږي ترڅو یو تڼۍ سپین متن وساتي، او هره کچه د هغو سطحو په وړاندې اندازه شوې چې دا واقعیا پرې ولاړ دی. Prune ستاسو د سیسټم ترتیب تعقیبوي تر څو چې دلته یو غوره کړئ.'
+        description: "رڼا یا تیاره وټاکئ، یا سیسټم پریږدئ چې Windows تعقیب کړي."
       },
       minimizeToTray: {
         title: 'د سیسټم ټرې ته کوچنی کول',
@@ -18719,7 +18894,8 @@ export const CATALOG = {
         header: 'د سکینینګ محصول',
         scanningAnnounce: (total) => `${total} ځایونه سکین کیږي.`,
         finishedAnnounce: (scanned, total) => `سکینینګ بشپړ شو. د ${total} څخه ${scanned} ځایونه اندازه شوي.`,
-        starting: 'پیل کیږي…'
+        starting: 'پیل کیږي…',
+        idle: "د پاکېدو وړ شیانو د اندازه کولو لپاره مخکتنه کېکاږئ."
       },
       emptyState: 'تراوسه هیڅ شی سکین شوی نه دی.',
       scanErrorPrefix: (error) => `سکینینګ ونشوای شي: ${error}`,
@@ -18744,7 +18920,7 @@ export const CATALOG = {
       confirm: {
         prompt: (count, sizeKnown, formatted) => `${count} توکي (${sizeKnown ? formatted : 'اندازه نامعلومه'}) قرنطین ته لیږدول شي؟`,
         cancel: 'لغوه کول',
-        confirmButton: 'تایید',
+        confirmButton: "قرنطین ته لیږدول",
         cleaning: 'پاکول کیږي…'
       },
       stop: 'ودرول',
@@ -18754,7 +18930,10 @@ export const CATALOG = {
         selectCategoryAriaLabel: (category) => `د ${category} لاندې هر څه ټاکل`,
         losesData: 'ډیټا له لاسه ورکوي',
         needsAdmin: 'اډمین ته اړتیا لري',
-        notInstalled: 'نصب شوی نه دی'
+        notInstalled: 'نصب شوی نه دی',
+        filterPlaceholder: "پاکوونکي فلتر کړئ…",
+        filterNone: "هیڅ پاکوونکی له دې فلټر سره نه ورګډیږي.",
+        selectedOfTotal: (n, total) => `${n} له ${total} څخه ټاکل شوي`
       },
       warning: {
         title: (label) => `${label} فعالول`,
@@ -18907,6 +19086,9 @@ export const CATALOG = {
       }
     },
     themeToggle: {
+      optionSystem: "سیسټم",
+      optionLight: "رڼا",
+      optionDark: "تیاره",
       switchTo: (theme) => `${theme} موضوع ته لاړ شئ`,
       light: 'رڼا',
       dark: 'تیاره'
@@ -18948,7 +19130,7 @@ export const CATALOG = {
       saveError: (error) => `Não foi possível salvar: ${error}`,
       appearance: {
         title: 'Aparência',
-        description: 'Aurora Deck no modo escuro ou claro. Ambas são paletas reais em vez de uma invertida: o acento escurece para o fundo claro para que um botão possa manter o texto branco, e cada nível foi medido em relação às superfícies em que realmente está apoiado. O Prune segue a configuração do seu sistema até você escolher uma aqui.'
+        description: "Escolha Claro ou Escuro, ou deixe o Sistema seguir o Windows."
       },
       minimizeToTray: {
         title: 'Minimizar para a bandeja',
@@ -19446,7 +19628,8 @@ export const CATALOG = {
         header: 'Saída da varredura',
         scanningAnnounce: (total) => `Varrendo ${total} locais.`,
         finishedAnnounce: (scanned, total) => `Varredura concluída. ${scanned} de ${total} locais medidos.`,
-        starting: 'Iniciando…'
+        starting: 'Iniciando…',
+        idle: "Pressione Prévia para medir o que pode ser limpo."
       },
       emptyState: 'Nada verificado ainda.',
       scanErrorPrefix: (error) => `Não foi possível verificar: ${error}`,
@@ -19471,7 +19654,7 @@ export const CATALOG = {
       confirm: {
         prompt: (count, sizeKnown, formatted) => `Mover ${count} itens (${sizeKnown ? formatted : 'tamanho não medido'}) para quarentena?`,
         cancel: 'Cancelar',
-        confirmButton: 'Confirmar',
+        confirmButton: "Mover para quarentena",
         cleaning: 'Limpando…'
       },
       stop: 'Parar',
@@ -19481,7 +19664,10 @@ export const CATALOG = {
         selectCategoryAriaLabel: (category) => `Selecionar tudo em ${category}`,
         losesData: 'Perde dados',
         needsAdmin: 'precisa de administrador',
-        notInstalled: 'não instalado'
+        notInstalled: 'não instalado',
+        filterPlaceholder: "Filtrar limpadores…",
+        filterNone: "Nenhum limpador corresponde a esse filtro.",
+        selectedOfTotal: (n, total) => `${n} de ${total} selecionados`
       },
       warning: {
         title: (label) => `Ativar ${label}`,
@@ -19634,6 +19820,9 @@ export const CATALOG = {
       }
     },
     themeToggle: {
+      optionSystem: "Sistema",
+      optionLight: "Claro",
+      optionDark: "Escuro",
       switchTo: (theme) => `Mudar para o tema ${theme}`,
       light: 'claro',
       dark: 'escuro'
@@ -19675,7 +19864,7 @@ export const CATALOG = {
       saveError: (error) => `Não foi possível guardar: ${error}`,
       appearance: {
         title: 'Aparência',
-        description: 'Aurora Deck em modo escuro ou claro. Ambas são paletas reais em vez de uma invertida: o acento escurece para o fundo claro para que um botão possa manter o texto branco, e cada nível foi medido em relação às superfícies em que realmente assenta. O Prune segue a definição do seu sistema até escolher uma aqui.'
+        description: "Escolha Claro ou Escuro, ou deixe o Sistema seguir o Windows."
       },
       minimizeToTray: {
         title: 'Minimizar para a bandeja',
@@ -20173,7 +20362,8 @@ export const CATALOG = {
         header: 'Saída da verificação',
         scanningAnnounce: (total) => `A verificar ${total} localizações.`,
         finishedAnnounce: (scanned, total) => `Verificação concluída. ${scanned} de ${total} localizações medidas.`,
-        starting: 'A iniciar…'
+        starting: 'A iniciar…',
+        idle: "Prima Pré-visualização para medir o que pode ser limpo."
       },
       emptyState: 'Nada verificado ainda.',
       scanErrorPrefix: (error) => `Não foi possível verificar: ${error}`,
@@ -20198,7 +20388,7 @@ export const CATALOG = {
       confirm: {
         prompt: (count, sizeKnown, formatted) => `Mover ${count} itens (${sizeKnown ? formatted : 'tamanho não medido'}) para a quarentena?`,
         cancel: 'Cancelar',
-        confirmButton: 'Confirmar',
+        confirmButton: "Mover para a quarentena",
         cleaning: 'A limpar…'
       },
       stop: 'Parar',
@@ -20208,7 +20398,10 @@ export const CATALOG = {
         selectCategoryAriaLabel: (category) => `Selecionar tudo em ${category}`,
         losesData: 'Perde dados',
         needsAdmin: 'precisa de administrador',
-        notInstalled: 'não instalado'
+        notInstalled: 'não instalado',
+        filterPlaceholder: "Filtrar limpadores…",
+        filterNone: "Nenhum limpador corresponde a esse filtro.",
+        selectedOfTotal: (n, total) => `${n} de ${total} selecionados`
       },
       warning: {
         title: (label) => `Ativar ${label}`,
@@ -20361,6 +20554,9 @@ export const CATALOG = {
       }
     },
     themeToggle: {
+      optionSystem: "Sistema",
+      optionLight: "Claro",
+      optionDark: "Escuro",
       switchTo: (theme) => `Mudar para o tema ${theme}`,
       light: 'claro',
       dark: 'escuro'
@@ -20402,7 +20598,7 @@ export const CATALOG = {
       saveError: (error) => `Nu s-a putut salva: ${error}`,
       appearance: {
         title: 'Aspect',
-        description: 'Aurora Deck în întuneric sau lumina zilei. Ambele sunt palete reale, nu una inversată: accentul se întunecă pentru fundalul deschis astfel încât un buton să poată păstra text alb, iar fiecare nivel a fost măsurat față de suprafețele pe care se așază de fapt. Prune urmează setarea sistemului tău până când alegi una aici.'
+        description: "Alege Luminos sau Întunecat sau lasă Sistem să urmeze Windows."
       },
       minimizeToTray: {
         title: 'Minimizează în bara de sistem',
@@ -20900,7 +21096,8 @@ export const CATALOG = {
         header: 'Rezultatul scanării',
         scanningAnnounce: (total) => `Se scanează ${total} locații.`,
         finishedAnnounce: (scanned, total) => `Scanare finalizată. ${scanned} din ${total} locații măsurate.`,
-        starting: 'Se pornește…'
+        starting: 'Se pornește…',
+        idle: "Apasă Previzualizare pentru a măsura ce se poate curăța."
       },
       emptyState: 'Nimic scanat încă.',
       scanErrorPrefix: (error) => `Scanarea a eșuat: ${error}`,
@@ -20925,7 +21122,7 @@ export const CATALOG = {
       confirm: {
         prompt: (count, sizeKnown, formatted) => `Muți ${count} elemente (${sizeKnown ? formatted : 'dimensiune nemăsurată'}) în carantină?`,
         cancel: 'Anulează',
-        confirmButton: 'Confirmă',
+        confirmButton: "Mută în carantină",
         cleaning: 'Se curăță…'
       },
       stop: 'Oprește',
@@ -20935,7 +21132,10 @@ export const CATALOG = {
         selectCategoryAriaLabel: (category) => `Selectează tot din ${category}`,
         losesData: 'Pierde date',
         needsAdmin: 'necesită administrator',
-        notInstalled: 'neinstalat'
+        notInstalled: 'neinstalat',
+        filterPlaceholder: "Filtrează curățătoarele…",
+        filterNone: "Nicio curățare nu se potrivește cu filtrul.",
+        selectedOfTotal: (n, total) => `${n} din ${total} selectate`
       },
       warning: {
         title: (label) => `Activează ${label}`,
@@ -21088,6 +21288,9 @@ export const CATALOG = {
       }
     },
     themeToggle: {
+      optionSystem: "Sistem",
+      optionLight: "Luminos",
+      optionDark: "Întunecat",
       switchTo: (theme) => `Comută la tema ${theme}`,
       light: 'deschisă',
       dark: 'întunecată'
@@ -21129,7 +21332,7 @@ export const CATALOG = {
       saveError: (error) => `Не удалось сохранить: ${error}`,
       appearance: {
         title: 'Внешний вид',
-        description: 'Aurora Deck в тёмном или дневном режиме. Обе — настоящие палитры, а не одна инвертированная: акцентный цвет темнеет для светлого фона, чтобы кнопка могла сохранить белый текст, и каждый уровень был измерен относительно поверхностей, на которых он реально находится. Prune следует настройке вашей системы, пока вы не выберете здесь что-то своё.'
+        description: "Выберите светлую или тёмную тему либо позвольте Системе следовать за Windows."
       },
       minimizeToTray: {
         title: 'Свернуть в системный трей',
@@ -21627,7 +21830,8 @@ export const CATALOG = {
         header: 'Вывод сканирования',
         scanningAnnounce: (total) => `Сканирование ${total} расположений.`,
         finishedAnnounce: (scanned, total) => `Сканирование завершено. Измерено ${scanned} из ${total} расположений.`,
-        starting: 'Запуск…'
+        starting: 'Запуск…',
+        idle: "Нажмите «Предпросмотр», чтобы измерить, что можно очистить."
       },
       emptyState: 'Пока ничего не отсканировано.',
       scanErrorPrefix: (error) => `Не удалось выполнить сканирование: ${error}`,
@@ -21652,7 +21856,7 @@ export const CATALOG = {
       confirm: {
         prompt: (count, sizeKnown, formatted) => `Переместить элементов: ${count} (${sizeKnown ? formatted : 'размер не измерен'}) в карантин?`,
         cancel: 'Отмена',
-        confirmButton: 'Подтвердить',
+        confirmButton: "Переместить в карантин",
         cleaning: 'Очистка…'
       },
       stop: 'Остановить',
@@ -21662,7 +21866,10 @@ export const CATALOG = {
         selectCategoryAriaLabel: (category) => `Выбрать всё в категории ${category}`,
         losesData: 'Потеря данных',
         needsAdmin: 'требуется администратор',
-        notInstalled: 'не установлено'
+        notInstalled: 'не установлено',
+        filterPlaceholder: "Фильтр очистителей…",
+        filterNone: "Ни один очиститель не соответствует фильтру.",
+        selectedOfTotal: (n, total) => `Выбрано ${n} из ${total}`
       },
       warning: {
         title: (label) => `Включить ${label}`,
@@ -21815,6 +22022,9 @@ export const CATALOG = {
       }
     },
     themeToggle: {
+      optionSystem: "Система",
+      optionLight: "Светлая",
+      optionDark: "Тёмная",
       switchTo: (theme) => `Переключиться на ${theme} тему`,
       light: 'светлую',
       dark: 'тёмную'
@@ -21856,7 +22066,7 @@ export const CATALOG = {
       saveError: (error) => `Nepodarilo sa uložiť: ${error}`,
       appearance: {
         title: 'Vzhľad',
-        description: 'Aurora Deck v tmavom alebo dennom režime. Obe sú skutočné palety, nie jedna prevrátená: akcentová farba tmavne pre svetlé pozadie, aby tlačidlo mohlo zachovať biely text, a každá úroveň bola meraná voči povrchom, na ktorých skutočne spočíva. Prune sleduje nastavenie vášho systému, kým si tu jedno nevyberiete.'
+        description: "Vyberte Svetlý alebo Tmavý, alebo nechajte Systém riadiť sa Windowsom."
       },
       minimizeToTray: {
         title: 'Minimalizovať do systémovej lišty',
@@ -22354,7 +22564,8 @@ export const CATALOG = {
         header: 'Výstup skenovania',
         scanningAnnounce: (total) => `Skenovanie ${total} miest.`,
         finishedAnnounce: (scanned, total) => `Skenovanie dokončené. Zmeraných ${scanned} z ${total} miest.`,
-        starting: 'Spúšťanie…'
+        starting: 'Spúšťanie…',
+        idle: "Stlačením tlačidla Náhľad zmeriate, čo sa dá vyčistiť."
       },
       emptyState: 'Zatiaľ nič nenaskenované.',
       scanErrorPrefix: (error) => `Skenovanie zlyhalo: ${error}`,
@@ -22379,7 +22590,7 @@ export const CATALOG = {
       confirm: {
         prompt: (count, sizeKnown, formatted) => `Presunúť ${count} položiek (${sizeKnown ? formatted : 'veľkosť nezmeraná'}) do karantény?`,
         cancel: 'Zrušiť',
-        confirmButton: 'Potvrdiť',
+        confirmButton: "Presunúť do karantény",
         cleaning: 'Čistenie…'
       },
       stop: 'Zastaviť',
@@ -22389,7 +22600,10 @@ export const CATALOG = {
         selectCategoryAriaLabel: (category) => `Vybrať všetko v kategórii ${category}`,
         losesData: 'Strata dát',
         needsAdmin: 'vyžaduje správcu',
-        notInstalled: 'nenainštalované'
+        notInstalled: 'nenainštalované',
+        filterPlaceholder: "Filtrovať čističe…",
+        filterNone: "Tomuto filtru nezodpovedá žiadny čistič.",
+        selectedOfTotal: (n, total) => `Vybraných ${n} z ${total}`
       },
       warning: {
         title: (label) => `Povoliť ${label}`,
@@ -22542,6 +22756,9 @@ export const CATALOG = {
       }
     },
     themeToggle: {
+      optionSystem: "Systém",
+      optionLight: "Svetlý",
+      optionDark: "Tmavý",
       switchTo: (theme) => `Prepnúť na ${theme} motív`,
       light: 'svetlý',
       dark: 'tmavý'
@@ -22583,7 +22800,7 @@ export const CATALOG = {
       saveError: (error) => `Nuk u ruajt dot: ${error}`,
       appearance: {
         title: 'Pamja',
-        description: 'Aurora Deck në errësirë ose dritë dite. Të dyja janë paleta të vërteta në vend të njërës të përmbysur: ngjyra theksuese errësohet për sfondin e çelët që një buton të mbajë tekst të bardhë, dhe çdo shkallë është matur kundrejt sipërfaqeve mbi të cilat mbështetet realisht. Prune ndjek cilësimin e sistemit tuaj derisa të zgjidhni një këtu.'
+        description: "Zgjidh të çelët ose të errët, ose lër Sistemin të ndjekë Windows."
       },
       minimizeToTray: {
         title: 'Minimizo në tabaka të sistemit',
@@ -23081,7 +23298,8 @@ export const CATALOG = {
         header: 'Rezultati i skanimit',
         scanningAnnounce: (total) => `Duke skanuar ${total} vendndodhje.`,
         finishedAnnounce: (scanned, total) => `Skanimi përfundoi. U matën ${scanned} nga ${total} vendndodhje.`,
-        starting: 'Duke filluar…'
+        starting: 'Duke filluar…',
+        idle: "Shtyp Parashikim për të matur çfarë mund të pastrohet."
       },
       emptyState: 'Ende nuk është skanuar asgjë.',
       scanErrorPrefix: (error) => `Skanimi dështoi: ${error}`,
@@ -23106,7 +23324,7 @@ export const CATALOG = {
       confirm: {
         prompt: (count, sizeKnown, formatted) => `Të lëvizen ${count} artikuj (${sizeKnown ? formatted : 'madhësia e pamatur'}) në karantinë?`,
         cancel: 'Anulo',
-        confirmButton: 'Konfirmo',
+        confirmButton: "Zhvendos në karantinë",
         cleaning: 'Duke pastruar…'
       },
       stop: 'Ndalo',
@@ -23116,7 +23334,10 @@ export const CATALOG = {
         selectCategoryAriaLabel: (category) => `Zgjidh gjithçka nën ${category}`,
         losesData: 'Humbet të dhëna',
         needsAdmin: 'kërkon administrator',
-        notInstalled: 'i painstaluar'
+        notInstalled: 'i painstaluar',
+        filterPlaceholder: "Filtro pastruesit…",
+        filterNone: "Asnjë pastrues nuk përputhet me atë filtër.",
+        selectedOfTotal: (n, total) => `${n} nga ${total} të zgjedhura`
       },
       warning: {
         title: (label) => `Aktivizo ${label}`,
@@ -23269,6 +23490,9 @@ export const CATALOG = {
       }
     },
     themeToggle: {
+      optionSystem: "Sistemi",
+      optionLight: "E çelët",
+      optionDark: "E errët",
       switchTo: (theme) => `Kalo te tema ${theme}`,
       light: 'e çelët',
       dark: 'e errët'
@@ -23310,7 +23534,7 @@ export const CATALOG = {
       saveError: (error) => `Чување није успело: ${error}`,
       appearance: {
         title: 'Изглед',
-        description: 'Aurora Deck у тамном или дневном режиму. Обе су праве палете, а не једна обрнута: акцентна боја постаје тамнија за светлу позадину како би дугме могло да задржи бели текст, а сваки ниво је мерен у односу на површине на којима заиста стоји. Prune прати подешавање вашег система док овде не изаберете једно.'
+        description: "Изаберите светлу или тамну тему, или пустите да Систем прати Windows."
       },
       minimizeToTray: {
         title: 'Умањи у системску касету',
@@ -23808,7 +24032,8 @@ export const CATALOG = {
         header: 'Излаз скенирања',
         scanningAnnounce: (total) => `Скенирање ${total} локација.`,
         finishedAnnounce: (scanned, total) => `Скенирање завршено. Измерено ${scanned} од ${total} локација.`,
-        starting: 'Покретање…'
+        starting: 'Покретање…',
+        idle: "Притисните Преглед да измерите шта се може очистити."
       },
       emptyState: 'Још ништа није скенирано.',
       scanErrorPrefix: (error) => `Скенирање није успело: ${error}`,
@@ -23833,7 +24058,7 @@ export const CATALOG = {
       confirm: {
         prompt: (count, sizeKnown, formatted) => `Преместити ставки: ${count} (${sizeKnown ? formatted : 'величина није измерена'}) у карантин?`,
         cancel: 'Откажи',
-        confirmButton: 'Потврди',
+        confirmButton: "Премести у карантин",
         cleaning: 'Чишћење…'
       },
       stop: 'Заустави',
@@ -23843,7 +24068,10 @@ export const CATALOG = {
         selectCategoryAriaLabel: (category) => `Изабери све у категорији ${category}`,
         losesData: 'Губи податке',
         needsAdmin: 'захтева администратора',
-        notInstalled: 'није инсталирано'
+        notInstalled: 'није инсталирано',
+        filterPlaceholder: "Филтрирај чистаче…",
+        filterNone: "Ниједан чистач не одговара том филтеру.",
+        selectedOfTotal: (n, total) => `Изабрано ${n} од ${total}`
       },
       warning: {
         title: (label) => `Омогући ${label}`,
@@ -23996,6 +24224,9 @@ export const CATALOG = {
       }
     },
     themeToggle: {
+      optionSystem: "Систем",
+      optionLight: "Светла",
+      optionDark: "Тамна",
       switchTo: (theme) => `Пређи на ${theme} тему`,
       light: 'светлу',
       dark: 'тамну'
@@ -24037,7 +24268,7 @@ export const CATALOG = {
       saveError: (error) => `Det gick inte att spara: ${error}`,
       appearance: {
         title: 'Utseende',
-        description: 'Aurora Deck i mörkt eller ljust läge. Båda är riktiga paletter i stället för en inverterad: accentfärgen blir mörkare för den ljusa bakgrunden så att en knapp kan behålla vit text, och varje nivå mättes mot ytorna den faktiskt vilar på. Prune följer din systeminställning tills du väljer en här.'
+        description: "Välj Ljust eller Mörkt, eller låt System följa Windows."
       },
       minimizeToTray: {
         title: 'Minimera till aktivitetsfältet',
@@ -24535,7 +24766,8 @@ export const CATALOG = {
         header: 'Skanningsutdata',
         scanningAnnounce: (total) => `Skannar ${total} platser.`,
         finishedAnnounce: (scanned, total) => `Skanning klar. ${scanned} av ${total} platser mätta.`,
-        starting: 'Startar…'
+        starting: 'Startar…',
+        idle: "Tryck på Förhandsgranska för att mäta vad som kan rensas."
       },
       emptyState: 'Inget skannat än.',
       scanErrorPrefix: (error) => `Kunde inte skanna: ${error}`,
@@ -24560,7 +24792,7 @@ export const CATALOG = {
       confirm: {
         prompt: (count, sizeKnown, formatted) => `Flytta ${count} objekt (${sizeKnown ? formatted : 'storlek ej mätt'}) till karantän?`,
         cancel: 'Avbryt',
-        confirmButton: 'Bekräfta',
+        confirmButton: "Flytta till karantän",
         cleaning: 'Rensar…'
       },
       stop: 'Stoppa',
@@ -24570,7 +24802,10 @@ export const CATALOG = {
         selectCategoryAriaLabel: (category) => `Markera allt under ${category}`,
         losesData: 'Förlorar data',
         needsAdmin: 'kräver administratör',
-        notInstalled: 'inte installerad'
+        notInstalled: 'inte installerad',
+        filterPlaceholder: "Filtrera rensare…",
+        filterNone: "Ingen rensare matchar filtret.",
+        selectedOfTotal: (n, total) => `${n} av ${total} valda`
       },
       warning: {
         title: (label) => `Aktivera ${label}`,
@@ -24723,6 +24958,9 @@ export const CATALOG = {
       }
     },
     themeToggle: {
+      optionSystem: "System",
+      optionLight: "Ljust",
+      optionDark: "Mörkt",
       switchTo: (theme) => `Byt till ${theme} tema`,
       light: 'ljust',
       dark: 'mörkt'
@@ -24764,7 +25002,7 @@ export const CATALOG = {
       saveError: (error) => `ไม่สามารถบันทึกได้: ${error}`,
       appearance: {
         title: 'รูปลักษณ์',
-        description: 'Aurora Deck ในโหมดมืดหรือโหมดกลางวัน ทั้งสองแบบเป็นชุดสีจริง ไม่ใช่การกลับสีจากอีกแบบหนึ่ง สีเน้นจะเข้มขึ้นสำหรับพื้นหลังสีอ่อนเพื่อให้ปุ่มยังคงข้อความสีขาวไว้ได้ และทุกระดับได้รับการวัดเทียบกับพื้นผิวที่มันวางอยู่จริง Prune จะทำตามการตั้งค่าระบบของคุณจนกว่าคุณจะเลือกที่นี่'
+        description: "เลือกสว่างหรือมืด หรือให้ระบบทำตาม Windows"
       },
       minimizeToTray: {
         title: 'ย่อไปที่ถาดระบบ',
@@ -25262,7 +25500,8 @@ export const CATALOG = {
         header: 'ผลลัพธ์การสแกน',
         scanningAnnounce: (total) => `กำลังสแกน ${total} ตำแหน่ง`,
         finishedAnnounce: (scanned, total) => `สแกนเสร็จสิ้น วัดผลแล้ว ${scanned} จาก ${total} ตำแหน่ง`,
-        starting: 'กำลังเริ่ม…'
+        starting: 'กำลังเริ่ม…',
+        idle: "กดดูตัวอย่างเพื่อวัดว่าล้างอะไรได้บ้าง"
       },
       emptyState: 'ยังไม่ได้สแกนสิ่งใด',
       scanErrorPrefix: (error) => `ไม่สามารถสแกนได้: ${error}`,
@@ -25287,7 +25526,7 @@ export const CATALOG = {
       confirm: {
         prompt: (count, sizeKnown, formatted) => `ย้าย ${count} รายการ (${sizeKnown ? formatted : 'ไม่ได้วัดขนาด'}) ไปยังกักกันหรือไม่`,
         cancel: 'ยกเลิก',
-        confirmButton: 'ยืนยัน',
+        confirmButton: "ย้ายไปยังกักกัน",
         cleaning: 'กำลังล้าง…'
       },
       stop: 'หยุด',
@@ -25297,7 +25536,10 @@ export const CATALOG = {
         selectCategoryAriaLabel: (category) => `เลือกทั้งหมดภายใต้ ${category}`,
         losesData: 'สูญเสียข้อมูล',
         needsAdmin: 'ต้องการสิทธิ์ผู้ดูแลระบบ',
-        notInstalled: 'ไม่ได้ติดตั้ง'
+        notInstalled: 'ไม่ได้ติดตั้ง',
+        filterPlaceholder: "กรองตัวล้าง…",
+        filterNone: "ไม่มีตัวล้างที่ตรงกับตัวกรองนี้",
+        selectedOfTotal: (n, total) => `เลือก ${n} จาก ${total} รายการ`
       },
       warning: {
         title: (label) => `เปิดใช้งาน ${label}`,
@@ -25450,6 +25692,9 @@ export const CATALOG = {
       }
     },
     themeToggle: {
+      optionSystem: "ระบบ",
+      optionLight: "สว่าง",
+      optionDark: "มืด",
       switchTo: (theme) => `เปลี่ยนเป็นธีม${theme}`,
       light: 'สว่าง',
       dark: 'มืด'
@@ -25491,7 +25736,7 @@ export const CATALOG = {
       saveError: (error) => `Kaydedilemedi: ${error}`,
       appearance: {
         title: 'Görünüm',
-        description: 'Aurora Deck karanlıkta veya gün ışığında. İkisi de ters çevrilmiş bir palet değil, gerçek paletlerdir: vurgu rengi açık zemin için koyulaşır, böylece bir düğme üzerinde beyaz metni koruyabilir ve her seviye gerçekten üzerinde durduğu yüzeylere göre ölçülmüştür. Prune burada birini seçene kadar sistem ayarınızı takip eder.'
+        description: "Açık veya Koyu'yu seçin ya da Sistem'in Windows'u izlemesine izin verin."
       },
       minimizeToTray: {
         title: 'Sistem tepsisine küçült',
@@ -25989,7 +26234,8 @@ export const CATALOG = {
         header: 'Tarama çıktısı',
         scanningAnnounce: (total) => `${total} konum taranıyor.`,
         finishedAnnounce: (scanned, total) => `Tarama tamamlandı. ${total} konumdan ${scanned} tanesi ölçüldü.`,
-        starting: 'Başlatılıyor…'
+        starting: 'Başlatılıyor…',
+        idle: "Nelerin temizlenebileceğini ölçmek için Önizleme'ye basın."
       },
       emptyState: 'Henüz hiçbir şey taranmadı.',
       scanErrorPrefix: (error) => `Taranamadı: ${error}`,
@@ -26014,7 +26260,7 @@ export const CATALOG = {
       confirm: {
         prompt: (count, sizeKnown, formatted) => `${count} öğe (${sizeKnown ? formatted : 'boyut ölçülmedi'}) karantinaya taşınsın mı?`,
         cancel: 'İptal',
-        confirmButton: 'Onayla',
+        confirmButton: "Karantinaya taşı",
         cleaning: 'Temizleniyor…'
       },
       stop: 'Durdur',
@@ -26024,7 +26270,10 @@ export const CATALOG = {
         selectCategoryAriaLabel: (category) => `${category} altındaki her şeyi seç`,
         losesData: 'Veri kaybı',
         needsAdmin: 'yönetici gerektirir',
-        notInstalled: 'yüklü değil'
+        notInstalled: 'yüklü değil',
+        filterPlaceholder: "Temizleyicileri filtrele…",
+        filterNone: "Bu filtreyle eşleşen temizleyici yok.",
+        selectedOfTotal: (n, total) => `${total} içinden ${n} seçildi`
       },
       warning: {
         title: (label) => `${label} etkinleştir`,
@@ -26177,6 +26426,9 @@ export const CATALOG = {
       }
     },
     themeToggle: {
+      optionSystem: "Sistem",
+      optionLight: "Açık",
+      optionDark: "Koyu",
       switchTo: (theme) => `${theme} temaya geç`,
       light: 'açık',
       dark: 'koyu'
@@ -26218,7 +26470,7 @@ export const CATALOG = {
       saveError: (error) => `Не вдалося зберегти: ${error}`,
       appearance: {
         title: 'Зовнішній вигляд',
-        description: 'Aurora Deck у темному або денному режимі. Обидва — справжні палітри, а не одна інвертована: акцентний колір темнішає для світлого фону, щоб кнопка могла зберегти білий текст, і кожен рівень виміряно відносно поверхонь, на яких він насправді знаходиться. Prune слідує налаштуванню вашої системи, поки ви не оберете тут своє.'
+        description: "Виберіть світлу або темну тему чи дозвольте Системі слідувати за Windows."
       },
       minimizeToTray: {
         title: 'Згорнути в системний трей',
@@ -26716,7 +26968,8 @@ export const CATALOG = {
         header: 'Вивід сканування',
         scanningAnnounce: (total) => `Сканування ${total} місць.`,
         finishedAnnounce: (scanned, total) => `Сканування завершено. Виміряно ${scanned} з ${total} місць.`,
-        starting: 'Запуск…'
+        starting: 'Запуск…',
+        idle: "Натисніть «Попередній перегляд», щоб виміряти, що можна очистити."
       },
       emptyState: 'Ще нічого не відскановано.',
       scanErrorPrefix: (error) => `Не вдалося виконати сканування: ${error}`,
@@ -26741,7 +26994,7 @@ export const CATALOG = {
       confirm: {
         prompt: (count, sizeKnown, formatted) => `Перемістити елементів: ${count} (${sizeKnown ? formatted : 'розмір не виміряно'}) у карантин?`,
         cancel: 'Скасувати',
-        confirmButton: 'Підтвердити',
+        confirmButton: "Перемістити в карантин",
         cleaning: 'Очищення…'
       },
       stop: 'Зупинити',
@@ -26751,7 +27004,10 @@ export const CATALOG = {
         selectCategoryAriaLabel: (category) => `Вибрати все в категорії ${category}`,
         losesData: 'Втрата даних',
         needsAdmin: 'потрібні права адміністратора',
-        notInstalled: 'не встановлено'
+        notInstalled: 'не встановлено',
+        filterPlaceholder: "Фільтр очисників…",
+        filterNone: "Жоден очисник не відповідає цьому фільтру.",
+        selectedOfTotal: (n, total) => `Вибрано ${n} із ${total}`
       },
       warning: {
         title: (label) => `Увімкнути ${label}`,
@@ -26904,6 +27160,9 @@ export const CATALOG = {
       }
     },
     themeToggle: {
+      optionSystem: "Система",
+      optionLight: "Світла",
+      optionDark: "Темна",
       switchTo: (theme) => `Перемкнутися на ${theme} тему`,
       light: 'світлу',
       dark: 'темну'
@@ -26945,7 +27204,7 @@ export const CATALOG = {
       saveError: (error) => `Không thể lưu: ${error}`,
       appearance: {
         title: 'Giao diện',
-        description: 'Aurora Deck ở chế độ tối hoặc chế độ ban ngày. Cả hai đều là bảng màu thực sự thay vì một bảng bị đảo ngược: màu nhấn tối hơn cho nền sáng để nút có thể giữ chữ trắng, và mỗi cấp độ đã được đo dựa trên các bề mặt mà nó thực sự đặt lên. Prune sẽ theo cài đặt hệ thống của bạn cho đến khi bạn chọn một cài đặt ở đây.'
+        description: "Chọn Sáng hoặc Tối, hoặc để Hệ thống theo Windows."
       },
       minimizeToTray: {
         title: 'Thu nhỏ vào khay hệ thống',
@@ -27443,7 +27702,8 @@ export const CATALOG = {
         header: 'Kết quả quét',
         scanningAnnounce: (total) => `Đang quét ${total} vị trí.`,
         finishedAnnounce: (scanned, total) => `Quét hoàn tất. Đã đo ${scanned} trong số ${total} vị trí.`,
-        starting: 'Đang bắt đầu…'
+        starting: 'Đang bắt đầu…',
+        idle: "Nhấn Xem trước để đo những gì có thể dọn dẹp."
       },
       emptyState: 'Chưa quét gì cả.',
       scanErrorPrefix: (error) => `Không thể quét: ${error}`,
@@ -27468,7 +27728,7 @@ export const CATALOG = {
       confirm: {
         prompt: (count, sizeKnown, formatted) => `Chuyển ${count} mục (${sizeKnown ? formatted : 'chưa đo kích thước'}) vào khu cách ly?`,
         cancel: 'Hủy',
-        confirmButton: 'Xác nhận',
+        confirmButton: "Chuyển vào khu cách ly",
         cleaning: 'Đang dọn dẹp…'
       },
       stop: 'Dừng',
@@ -27478,7 +27738,10 @@ export const CATALOG = {
         selectCategoryAriaLabel: (category) => `Chọn tất cả trong ${category}`,
         losesData: 'Mất dữ liệu',
         needsAdmin: 'cần quyền quản trị',
-        notInstalled: 'chưa cài đặt'
+        notInstalled: 'chưa cài đặt',
+        filterPlaceholder: "Lọc trình dọn dẹp…",
+        filterNone: "Không có trình dọn dẹp nào khớp với bộ lọc đó.",
+        selectedOfTotal: (n, total) => `Đã chọn ${n} trên ${total}`
       },
       warning: {
         title: (label) => `Bật ${label}`,
@@ -27631,6 +27894,9 @@ export const CATALOG = {
       }
     },
     themeToggle: {
+      optionSystem: "Hệ thống",
+      optionLight: "Sáng",
+      optionDark: "Tối",
       switchTo: (theme) => `Chuyển sang giao diện ${theme}`,
       light: 'sáng',
       dark: 'tối'
@@ -27672,7 +27938,7 @@ export const CATALOG = {
       saveError: (error) => `无法保存：${error}`,
       appearance: {
         title: '外观',
-        description: 'Aurora Deck 提供深色或日光两种模式。两者都是真正的独立配色方案，而不是一个反转另一个：强调色在浅色背景下会变深，以便按钮能保持白色文字，每一级都是根据它实际所处的表面测量得出的。在你在此处选择之前，Prune 会跟随系统设置。'
+        description: "选择浅色或深色，或让“系统”跟随 Windows。"
       },
       minimizeToTray: {
         title: '最小化到系统托盘',
@@ -28170,7 +28436,8 @@ export const CATALOG = {
         header: '扫描输出',
         scanningAnnounce: (total) => `正在扫描 ${total} 个位置。`,
         finishedAnnounce: (scanned, total) => `扫描完成。已测量 ${total} 个位置中的 ${scanned} 个。`,
-        starting: '正在开始…'
+        starting: '正在开始…',
+        idle: "点击“预览”以测量可清理的内容。"
       },
       emptyState: '尚未扫描任何内容。',
       scanErrorPrefix: (error) => `无法扫描：${error}`,
@@ -28195,7 +28462,7 @@ export const CATALOG = {
       confirm: {
         prompt: (count, sizeKnown, formatted) => `要将 ${count} 个项目（${sizeKnown ? formatted : '大小未测量'}）移至隔离区吗？`,
         cancel: '取消',
-        confirmButton: '确认',
+        confirmButton: "移至隔离区",
         cleaning: '正在清理…'
       },
       stop: '停止',
@@ -28205,7 +28472,10 @@ export const CATALOG = {
         selectCategoryAriaLabel: (category) => `全选 ${category} 下的所有项`,
         losesData: '会丢失数据',
         needsAdmin: '需要管理员权限',
-        notInstalled: '未安装'
+        notInstalled: '未安装',
+        filterPlaceholder: "筛选清理项…",
+        filterNone: "没有与该筛选条件匹配的清理项。",
+        selectedOfTotal: (n, total) => `已选 ${n} / ${total} 项`
       },
       warning: {
         title: (label) => `启用 ${label}`,
@@ -28358,6 +28628,9 @@ export const CATALOG = {
       }
     },
     themeToggle: {
+      optionSystem: "系统",
+      optionLight: "浅色",
+      optionDark: "深色",
       switchTo: (theme) => `切换到${theme}主题`,
       light: '浅色',
       dark: '深色'
@@ -28399,7 +28672,7 @@ export const CATALOG = {
       saveError: (error) => `無法儲存：${error}`,
       appearance: {
         title: '外觀',
-        description: 'Aurora Deck 提供深色或日光兩種模式。兩者都是真正獨立的調色盤，而不是一個反轉另一個：強調色在淺色背景下會變深，讓按鈕能保持白色文字，每個層級都是根據它實際所處的表面測量而來。在你在此處選擇之前，Prune 會跟隨系統設定。'
+        description: "選擇淺色或深色，或讓「系統」跟隨 Windows。"
       },
       minimizeToTray: {
         title: '最小化到系統匣',
@@ -28897,7 +29170,8 @@ export const CATALOG = {
         header: '掃描輸出',
         scanningAnnounce: (total) => `正在掃描 ${total} 個位置。`,
         finishedAnnounce: (scanned, total) => `掃描完成。已測量 ${total} 個位置中的 ${scanned} 個。`,
-        starting: '正在開始…'
+        starting: '正在開始…',
+        idle: "按一下「預覽」以測量可清理的內容。"
       },
       emptyState: '尚未掃描任何內容。',
       scanErrorPrefix: (error) => `無法掃描：${error}`,
@@ -28922,7 +29196,7 @@ export const CATALOG = {
       confirm: {
         prompt: (count, sizeKnown, formatted) => `要將 ${count} 個項目（${sizeKnown ? formatted : '大小未測量'}）移至隔離區嗎？`,
         cancel: '取消',
-        confirmButton: '確認',
+        confirmButton: "移至隔離區",
         cleaning: '正在清理…'
       },
       stop: '停止',
@@ -28932,7 +29206,10 @@ export const CATALOG = {
         selectCategoryAriaLabel: (category) => `全選 ${category} 下的所有項`,
         losesData: '會遺失資料',
         needsAdmin: '需要系統管理員權限',
-        notInstalled: '未安裝'
+        notInstalled: '未安裝',
+        filterPlaceholder: "篩選清理項目…",
+        filterNone: "沒有符合該篩選條件的清理項目。",
+        selectedOfTotal: (n, total) => `已選 ${n} / ${total} 項`
       },
       warning: {
         title: (label) => `啟用 ${label}`,
@@ -29085,6 +29362,9 @@ export const CATALOG = {
       }
     },
     themeToggle: {
+      optionSystem: "系統",
+      optionLight: "淺色",
+      optionDark: "深色",
       switchTo: (theme) => `切換為${theme}主題`,
       light: '淺色',
       dark: '深色'
