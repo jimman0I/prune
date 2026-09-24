@@ -123,7 +123,10 @@ export default function NavRail({ screen, onNavigate, footer = null }) {
           // group to be positioned and the label to escape via
           // translate rather than by widening anything.
           <div key={item.id} className="relative group">
-            <button
+            <motion.button
+              whileHover={{ scale: 1.06 }}
+              whileTap={{ scale: 0.94 }}
+              transition={{ type: 'spring', stiffness: 500, damping: 30 }}
               onClick={() => onNavigate(item.id)}
               aria-current={active ? 'page' : undefined}
               aria-label={label}
@@ -149,7 +152,7 @@ export default function NavRail({ screen, onNavigate, footer = null }) {
                 />
               )}
               <span className="relative">{item.icon}</span>
-            </button>
+            </motion.button>
 
             {/* Shown on hover AND on keyboard focus: someone tabbing the
                 rail needs the name at least as much as someone pointing

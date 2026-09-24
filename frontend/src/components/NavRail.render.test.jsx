@@ -92,6 +92,16 @@ describe('nav rail flyout labels', () => {
   });
 });
 
+describe('nav buttons under motion', () => {
+  it('still expose aria-current on the active item only', () => {
+    renderScreen(<NavRail screen="settings" onNavigate={() => {}} />);
+    for (const label of LABELS) {
+      const button = screen.getByRole('button', { name: label });
+      expect(button.getAttribute('aria-current')).toBe(label === 'Settings' ? 'page' : null);
+    }
+  });
+});
+
 describe('the footer slot', () => {
   // Where the update button goes. A slot rather than the button itself,
   // so the rail stays a list of destinations that makes no requests of
