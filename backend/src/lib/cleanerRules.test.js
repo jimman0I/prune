@@ -350,6 +350,38 @@ describe('rulePathsExist -- actions-form rules', () => {
   it('a shell action is kept visible', () => {
     expect(rulePathsExist({ id: 's', actions: [{ type: 'shell', command: 'x' }] })).toBe(true);
   });
+
+  it('a malformed rule is false, never a throw that would 500 the whole /rules list', () => {
+    expect(rulePathsExist({ id: 'x' })).toBe(false);
+    expect(rulePathsExist({ id: 'x', actions: [] })).toBe(false);
+    expect(rulePathsExist({ id: 'x', actions: [{ type: 'delete' }] })).toBe(false);
+    expect(rulePathsExist({ id: 'x', actions: [{ type: 'delete', paths: 'not-an-array' }] })).toBe(false);
+    expect(rulePathsExist({ id: 'x', actions: [{ type: 'delete', paths: [null, 5] }] })).toBe(false);
+  });
+
+  it('a ** path under a missing base is false, and true once a match exists', async () => {
+    const rule = { id: 'g', paths: ['%APPDATA%\\missing\\**\\*.tmp'] };
+    expect(rulePathsExist(rule)).toBe(false);
+
+    const exists = { id: 'g2', paths: ['%APPDATA%\\exists\\**\\*.tmp'] };
+    expect(rulePathsExist(exists)).toBe(false);
+    await mkdir(join(appDataDir, 'exists', 'sub'), { recursive: true });
+    await writeFile(join(appDataDir, 'exists', 'sub', 'a.tmp'), 'x');
+    expect(rulePathsExist(exists)).toBe(true);
+  });
+
+  it('a mixed rule is present when any one action is: absent delete + present chrome.history', async () => {
+    await mkdir(join(appDataDir, 'Prof', 'Default'), { recursive: true });
+    await writeFile(join(appDataDir, 'Prof', 'Default', 'History'), 'x');
+    const rule = {
+      id: 'm',
+      actions: [
+        { type: 'delete', paths: ['%APPDATA%\\NoSuchDir'] },
+        { type: 'chrome.history', path: '%APPDATA%\\Prof\\*\\History' }
+      ]
+    };
+    expect(rulePathsExist(rule)).toBe(true);
+  });
 });
 
 describe('scanAllRules', () => {

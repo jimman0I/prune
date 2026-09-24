@@ -83,12 +83,12 @@ router.get('/rules', async (req, res) => {
     const grouped = [];
     for (const rule of loadCleanerRules()) {
       // `present` is computed here, cheaply, even though sizeBytes is
-      // not. The two are very different costs: presence is an existsSync
-      // per path (74 rules in 126ms, measured on this machine), while a
-      // size needs a full directory walk and takes the better part of a
-      // minute for the set.
+      // not. The two are very different costs: presence is a stat per
+      // path, and now also walks actions-form rules (~150 ms for 80 rules,
+      // measured on this machine), while a size needs a full directory
+      // walk and takes the better part of a minute for the set.
       //
-      // Worth the 126ms because without it "hide cleaners that don't
+      // Worth the ~150ms because without it "hide cleaners that don't
       // apply" could not do anything until a scan had run -- the flag it
       // filters on did not exist yet -- so the list opened showing
       // Firefox, Opera and Vivaldi to someone who has none of them, and
