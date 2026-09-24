@@ -28,7 +28,7 @@ function Field({ label, children }) {
 }
 
 const selectClass =
-  'font-mono text-[12.5px] px-3 py-2 rounded-lg bg-[color:var(--surface-hover)] border border-[color:var(--border-subtle)] text-[color:var(--text-primary)] focus:outline-none focus:border-[color:var(--accent-primary)]/50';
+  'font-mono text-[12.5px] px-3 py-2 rounded-lg bg-[color:var(--surface-hover)] border border-[color:var(--border-subtle)] text-[color:var(--text-primary)] focus:border-[color:var(--accent-primary)]/50';
 
 export default function AutomationSettings({ settings, save }) {
   const { t } = useLanguage();
@@ -55,7 +55,7 @@ export default function AutomationSettings({ settings, save }) {
       </p>
 
       <div className="flex items-center gap-3 mb-4">
-        <Toggle size="sm" checked={automation.enabled === true} onChange={() => set({ enabled: !automation.enabled })} />
+        <Toggle size="sm" label={t('settings.automation.title')} checked={automation.enabled === true} onChange={() => set({ enabled: !automation.enabled })} />
         <span className="text-[12.5px] text-[color:var(--text-secondary)]">
           {automation.enabled ? t('settings.automation.scheduled') : t('settings.automation.off')}
         </span>

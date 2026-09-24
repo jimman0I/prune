@@ -101,6 +101,14 @@ describe('forced colors', () => {
   });
 });
 
+describe('keyboard focus', () => {
+  it('leaves the global :focus-visible ring on Settings fields instead of switching it off', () => {
+    for (const f of ['SettingsPage', 'AutomationSettings', 'CookieKeepListSettings']) {
+      expect(src(`src/components/${f}.jsx`), f).not.toMatch(/focus:outline-none/);
+    }
+  });
+});
+
 describe('reduced transparency', () => {
   const rt = () => media('prefers-reduced-transparency: reduce');
 

@@ -35,3 +35,11 @@ describe('the last scheduled run', () => {
     expect(isCopyable(screen.getByText('Automation'))).toBe(false);
   });
 });
+
+describe('the enable switch', () => {
+  it('is named after the panel, so a screen reader announces what it turns on', async () => {
+    fetchAutomation.mockResolvedValue({ nextRun: null, lastResult: null });
+    renderScreen(<AutomationSettings settings={settings} save={vi.fn()} />);
+    expect(await screen.findByRole('switch', { name: 'Automation' })).toBeTruthy();
+  });
+});

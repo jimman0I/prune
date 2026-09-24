@@ -251,7 +251,7 @@ ode.js" is a folder or a file type.
                     value={settings.language ?? 'en'}
                     onChange={(e) => save({ language: e.target.value })}
                     aria-label={t('settings.language.title')}
-                    className="bg-[color:var(--bg-panel)] border border-[color:var(--border-subtle)] rounded-lg px-3 py-2 text-[12.5px] text-[color:var(--text-primary)] focus:outline-none focus:border-[color:var(--accent-primary)] shrink-0"
+                    className="bg-[color:var(--bg-panel)] border border-[color:var(--border-subtle)] rounded-lg px-3 py-2 text-[12.5px] text-[color:var(--text-primary)] focus:border-[color:var(--accent-primary)] shrink-0"
                   >
                     {LANGUAGES.map((lang) => (
                       <option key={lang.code} value={lang.code}>{lang.native}</option>
@@ -392,7 +392,7 @@ ode.js" is a folder or a file type.
                       value={settings.skipRecentHours}
                       onChange={(e) => save({ skipRecentHours: Math.max(0, Number(e.target.value) || 0) })}
                       aria-label={t('settings.skipRecent.ariaLabel')}
-                      className="w-[72px] font-mono text-[12.5px] px-2.5 py-2 rounded-lg bg-[color:var(--surface-hover)] border border-[color:var(--border-subtle)] text-[color:var(--text-primary)] focus:outline-none focus:border-[color:var(--accent-primary)]/50"
+                      className="w-[72px] font-mono text-[12.5px] px-2.5 py-2 rounded-lg bg-[color:var(--surface-hover)] border border-[color:var(--border-subtle)] text-[color:var(--text-primary)] focus:border-[color:var(--accent-primary)]/50"
                       style={{ fontVariantNumeric: 'tabular-nums' }}
                     />
                     <span className="text-[12.5px] text-[color:var(--text-muted)]">{t('settings.skipRecent.hoursUnit')}</span>
@@ -455,7 +455,7 @@ ode.js" is a folder or a file type.
                       placeholder={t('settings.quarantineRetention.neverPlaceholder')}
                       onChange={(e) => save({ quarantineRetentionDays: positiveOrOff(e.target.value) })}
                       aria-label={t('settings.quarantineRetention.ariaLabel')}
-                      className="w-[88px] font-mono text-[12.5px] px-2.5 py-2 rounded-lg bg-[color:var(--surface-hover)] border border-[color:var(--border-subtle)] text-[color:var(--text-primary)] focus:outline-none focus:border-[color:var(--accent-primary)]/50"
+                      className="w-[88px] font-mono text-[12.5px] px-2.5 py-2 rounded-lg bg-[color:var(--surface-hover)] border border-[color:var(--border-subtle)] text-[color:var(--text-primary)] focus:border-[color:var(--accent-primary)]/50"
                       style={{ fontVariantNumeric: 'tabular-nums' }}
                     />
                     <span className="text-[12.5px] text-[color:var(--text-muted)]">{t('settings.quarantineRetention.daysUnit')}</span>
@@ -480,7 +480,7 @@ ode.js" is a folder or a file type.
                       placeholder={t('settings.quarantineMaxSize.noLimitPlaceholder')}
                       onChange={(e) => save({ quarantineMaxSizeGb: positiveOrOff(e.target.value) })}
                       aria-label={t('settings.quarantineMaxSize.ariaLabel')}
-                      className="w-[88px] font-mono text-[12.5px] px-2.5 py-2 rounded-lg bg-[color:var(--surface-hover)] border border-[color:var(--border-subtle)] text-[color:var(--text-primary)] focus:outline-none focus:border-[color:var(--accent-primary)]/50"
+                      className="w-[88px] font-mono text-[12.5px] px-2.5 py-2 rounded-lg bg-[color:var(--surface-hover)] border border-[color:var(--border-subtle)] text-[color:var(--text-primary)] focus:border-[color:var(--accent-primary)]/50"
                       style={{ fontVariantNumeric: 'tabular-nums' }}
                     />
                     <span className="text-[12.5px] text-[color:var(--text-muted)]">{t('settings.quarantineMaxSize.gbUnit')}</span>
@@ -503,7 +503,7 @@ ode.js" is a folder or a file type.
                     placeholder="D:\Games   or   *.iso"
                     aria-label={t('settings.exclusions.ariaLabel')}
                     aria-invalid={Boolean(exclusionError)}
-                    className="flex-1 min-w-0 font-mono text-[12.5px] px-3 py-2 rounded-lg bg-[color:var(--surface-hover)] border border-[color:var(--border-subtle)] text-[color:var(--text-primary)] placeholder:text-[color:var(--text-muted)] focus:outline-none focus:border-[color:var(--accent-primary)]/50"
+                    className="flex-1 min-w-0 font-mono text-[12.5px] px-3 py-2 rounded-lg bg-[color:var(--surface-hover)] border border-[color:var(--border-subtle)] text-[color:var(--text-primary)] placeholder:text-[color:var(--text-muted)] focus:border-[color:var(--accent-primary)]/50"
                   />
                   <button className="btn-ghost px-3.5 py-2 rounded-lg text-[12px] font-medium shrink-0" onClick={handleAddExclusion}>
                     {t('settings.exclusions.add')}
