@@ -34,7 +34,7 @@ async function runTask(task, guards) {
     // The rules a clean would tick by default, and only the ones with
     // something in them. A scheduled clean must not act on a rule the
     // scan proved is empty -- that is work with no result, and on a list
-    // of 74 rules it is most of them.
+    // of rules it is most of them.
     const scanned = scanAllRules(guards);
     const ids = scanned
       .flatMap((category) => category.items ?? [])
