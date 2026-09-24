@@ -34,14 +34,16 @@ function media(query) {
   return out.join('\n');
 }
 
-/** Declarations of the first rule in `scope` whose selector list contains
- * `selector` (exact, as one entry of a comma list). */
+/** Declarations of every rule in `scope` whose selector list contains
+ * `selector` (exact, as one entry of a comma list), joined. */
 function ruleIn(scope, selector) {
+  const found = [];
   for (const m of scope.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
     const sels = m[1].split(',').map((s) => s.trim());
-    if (sels.includes(selector)) return m[2];
+    if (sels.includes(selector)) found.push(m[2]);
   }
-  throw new Error(`no rule for ${selector}`);
+  if (!found.length) throw new Error(`no rule for ${selector}`);
+  return found.join(' ');
 }
 
 const src = (f) => read(f);
@@ -107,7 +109,7 @@ describe('forced colors', () => {
     expect(fc()).toMatch(/\[role="switch"\] > span \{ margin: -1px 0 0 -1px; \}/);
   });
 
-  it('beats the storage fill's inline colour, which a plain rule cannot', () => {
+  it('beats the inline colour on the storage fill, which a plain rule cannot', () => {
     expect(ruleIn(fc(), '.storage-bar-fill')).toMatch(/background:\s*Highlight !important/);
   });
 
