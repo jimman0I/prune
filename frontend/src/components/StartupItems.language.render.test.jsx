@@ -100,13 +100,29 @@ describe('the startup screen, in Greek', () => {
     expect(screen.getByText('Κατάσταση')).toBeTruthy();
   });
 
-  it('translates the switch aria-label for both directions', async () => {
+  it('translates the switch name, and it is the SAME name whether the entry is on or off', async () => {
+    fetchStartupItems.mockResolvedValue([
+      entry({ id: 'on', name: 'Thing', enabled: true }),
+      entry({ id: 'off', name: 'Other', enabled: false })
+    ]);
     renderScreen(<StartupItems />);
     await ready();
     await screen.findByText('Thing');
-    // The fixture entry is enabled, so the switch currently offers to
-    // disable it.
-    expect(screen.getByRole('switch', { name: 'Απενεργοποίηση του Thing κατά τη σύνδεση' })).toBeTruthy();
+
+    // Fixed name; the on/off state is aria-checked, not part of the words.
+    const on = screen.getByRole('checkbox', { name: 'Εκτέλεση του Thing κατά τη σύνδεση' });
+    const off = screen.getByRole('checkbox', { name: 'Εκτέλεση του Other κατά τη σύνδεση' });
+    expect(on.getAttribute('aria-checked')).toBe('true');
+    expect(off.getAttribute('aria-checked')).toBe('false');
+  });
+
+  it('says a disabled entry is off, in Greek, in the Status column', async () => {
+    fetchStartupItems.mockResolvedValue([entry({ id: 'off', name: 'Other', enabled: false })]);
+    renderScreen(<StartupItems />);
+    await ready();
+    await screen.findByText('Other');
+
+    expect(within(rowFor('Other')).getByText('Ανενεργό')).toBeTruthy();
   });
 
   it('translates the summary counts as whole bolded phrases', async () => {

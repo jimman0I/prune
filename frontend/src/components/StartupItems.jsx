@@ -25,14 +25,26 @@ import { useLanguage } from '../i18n/LanguageContext.jsx';
 
 /** The columns, defined once so the header and the rows cannot drift.
  * Revo's own: name, what it launches, what the file says it is, who signed
- * it, and whether it is running right now. */
-const COLUMNS = [
+ * it, and whether it is running right now.
+ *
+ * Every flexible column is `minmax(0, Nfr)`, never `minmax(Npx, Nfr)`. The
+ * old template had pixel minimums that added up to 806 px in a pane that is
+ * about 692 px wide at the 900 px window, so the grid overflowed and the
+ * panel's `overflow-hidden` sliced off the last column: Status, and with it
+ * the "Invalid" pill that is the reason to open this screen at all. A zero
+ * minimum lets the columns give way and truncate instead. The fixed ones
+ * (the switch, the icon and Status) are exact.
+ *
+ * `wideOnly` columns are hidden below 1100 px, by CSS: Description is the
+ * least useful of the five, and it is the one that goes so the rest keep a
+ * readable width. */
+export const COLUMNS = [
   { key: 'state', width: '30px' },
   { key: 'icon', width: '20px' },
-  { key: 'name', width: 'minmax(150px,0.9fr)' },
-  { key: 'command', width: 'minmax(180px,1.3fr)' },
-  { key: 'description', width: 'minmax(130px,0.9fr)' },
-  { key: 'publisher', width: 'minmax(120px,0.8fr)' },
+  { key: 'name', width: 'minmax(0,0.9fr)' },
+  { key: 'command', width: 'minmax(0,1.3fr)' },
+  { key: 'description', width: 'minmax(0,0.9fr)', wideOnly: true },
+  { key: 'publisher', width: 'minmax(0,0.8fr)' },
   { key: 'status', width: '104px' }
 ];
 
@@ -45,7 +57,16 @@ const COLUMN_KEYS = {
   status: 'startup.columns.status'
 };
 
-const GRID = COLUMNS.map((c) => c.width).join(' ');
+/** The grid, as two Tailwind classes: the narrow template without
+ * Description, and the wide one with it from 1100 px. Written out in full
+ * because Tailwind only emits classes it can read as whole strings in the
+ * source; StartupItems.render.test.jsx asserts they equal what COLUMNS
+ * says, so the two cannot drift apart. */
+export const GRID_NARROW = 'grid-cols-[30px_20px_minmax(0,0.9fr)_minmax(0,1.3fr)_minmax(0,0.8fr)_104px]';
+export const GRID_WIDE = 'min-[1100px]:grid-cols-[30px_20px_minmax(0,0.9fr)_minmax(0,1.3fr)_minmax(0,0.9fr)_minmax(0,0.8fr)_104px]';
+export const GRID_CLASS = `grid ${GRID_NARROW} ${GRID_WIDE}`;
+/** Applied to the Description cell in the header and in every row. */
+const WIDE_ONLY_CELL = 'hidden min-[1100px]:block';
 
 /** The tick itself, shared by the switch and the fixed indicator so the
  * two cannot drift apart visually. */
@@ -98,12 +119,16 @@ function EnabledSwitch({ item, pending, onToggle }) {
   }
 
   return (
+    // A checkbox with one fixed name ("Run X at sign-in"), and the state in
+    // aria-checked where it belongs. The name used to flip between "Disable X"
+    // and "Enable X" as well, so a screen reader announced the state twice and
+    // the two disagreed about which one was current.
     <button
       type="button"
-      role="switch"
+      role="checkbox"
       aria-checked={item.enabled}
       aria-busy={pending || undefined}
-      aria-label={t('startup.switchAriaLabel', item.enabled, item.name)}
+      aria-label={t('startup.switchAriaLabel', item.name)}
       onClick={() => !pending && onToggle(item)}
       // 24px, not the 13px the tick occupies: that is the floor WCAG 2.2
       // sets for a target, and the mark itself is half of it.
@@ -147,7 +172,7 @@ function StartupIcon({ item, src }) {
 
   return (
     <div
-      className="w-5 h-5 rounded-[4px] flex items-center justify-center text-[9px] font-bold shrink-0"
+      className="w-5 h-5 rounded-[4px] flex items-center justify-center text-[11px] font-bold shrink-0"
       style={{ background: tileColor(item.name), color: TILE_INK }}
     >
       {tileLetter(item.name, item.publisher)}
@@ -164,7 +189,7 @@ function StartupIcon({ item, src }) {
  * wins over the other two. */
 function StatusPill({ item }) {
   const { t } = useLanguage();
-  const base = 'text-[9px] font-mono uppercase tracking-wider px-1.5 py-px rounded border shrink-0';
+  const base = 'text-[10.5px] font-mono uppercase tracking-wider px-1.5 py-px rounded border shrink-0';
 
   if (item.exists === false) {
     return (
@@ -172,6 +197,12 @@ function StatusPill({ item }) {
         {t('startup.status.invalid')}
       </span>
     );
+  }
+  // Said in words. The row used to be dimmed to 55% opacity to show it, which
+  // put every word in it below the contrast floor and made the one thing you
+  // came here to read (the name) the hardest to read.
+  if (item.enabled === false) {
+    return <span className="text-[10.5px] font-mono text-[color:var(--text-secondary)]">{t('startup.status.off')}</span>;
   }
   if (item.running) {
     return (
@@ -195,17 +226,16 @@ function StatusPill({ item }) {
 function StartupRow({ item, iconSrc, pending, error, onToggle }) {
   return (
     <div
-      className={`grid gap-3 px-5 py-2 items-center transition-colors ${
-        item.enabled ? '' : 'opacity-55'
-      } ${error ? 'bg-[color:var(--danger-soft)]' : 'hover:bg-[color:var(--surface-subtle)]'}`}
-      style={{ gridTemplateColumns: GRID }}
+      className={`${GRID_CLASS} gap-3 px-5 py-2 items-center transition-colors ${
+        error ? 'bg-[color:var(--danger-soft)]' : 'hover:bg-[color:var(--surface-subtle)]'
+      }`}
     >
       <EnabledSwitch item={item} pending={pending} onToggle={onToggle} />
 
       <StartupIcon item={item} src={iconSrc} />
 
       <div className="min-w-0">
-        <div className="text-[12.5px] text-[color:var(--text-primary)] truncate">{item.name}</div>
+        <div className={`text-[12.5px] truncate ${item.enabled ? 'text-[color:var(--text-primary)]' : 'text-[color:var(--text-secondary)]'}`}>{item.name}</div>
         {/* Both of these say something the row cannot show any other way,
             so they are written out rather than hidden behind a hover --
             a reason nobody can find is the same as no reason. */}
@@ -223,7 +253,7 @@ function StartupRow({ item, iconSrc, pending, error, onToggle }) {
         {item.command}
       </div>
 
-      <div className="text-[11.5px] text-[color:var(--text-secondary)] truncate">
+      <div className={`${WIDE_ONLY_CELL} text-[11.5px] text-[color:var(--text-secondary)] truncate`}>
         {item.description || '—'}
       </div>
 
@@ -337,13 +367,12 @@ function StartupItems() {
 
           <div className="glass-panel overflow-hidden">
             <div
-              className="grid gap-3 px-5 py-2 border-b border-[color:var(--border-subtle)] bg-[color:var(--surface-subtle)]"
-              style={{ gridTemplateColumns: GRID }}
+              className={`${GRID_CLASS} gap-3 px-5 py-2 border-b border-[color:var(--border-subtle)] bg-[color:var(--surface-subtle)]`}
             >
               {COLUMNS.map((col) => (
                 <span
                   key={col.key}
-                  className="text-[10.5px] font-mono uppercase tracking-[0.13em] text-[color:var(--text-muted)]"
+                  className={`${col.wideOnly ? `${WIDE_ONLY_CELL} ` : ''}text-[10.5px] font-mono uppercase tracking-[0.13em] text-[color:var(--text-muted)]`}
                 >
                   {COLUMN_KEYS[col.key] ? t(COLUMN_KEYS[col.key]) : ''}
                 </span>
