@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { mkdtemp, rm, writeFile, mkdir, readFile } from 'node:fs/promises';
-import { existsSync } from 'node:fs';
+import { existsSync, readdirSync } from 'node:fs';
 import * as fs from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, dirname } from 'node:path';
@@ -831,6 +831,53 @@ describe('actions-array rules', () => {
     expect(result.registryKeysRemoved).toBe(1);
 
     try { await execFileAsync('reg', ['delete', testKey, '/f']); } catch { /* already gone, expected */ }
+  });
+
+  describe('winreg presence + single batch', () => {
+    const KEY = `HKCU\\Software\\prune-rules-winreg-${process.pid}`;
+    let regAsync;
+    beforeEach(async () => {
+      const { execFile } = await import('node:child_process');
+      const { promisify } = await import('node:util');
+      regAsync = promisify(execFile);
+    });
+    const cleanup = async () => { try { await regAsync('reg', ['delete', KEY, '/f']); } catch { /* gone */ } };
+
+    it('a winreg-only rule whose keys do not exist scans present:false, sizeBytes:null', () => {
+      const rule = { id: 'w1', category: 'Test', name: 'W1', actions: [{ type: 'winreg', key: `${KEY}\\A` }, { type: 'winreg', key: `${KEY}\\B` }] };
+      const result = scanRule(rule);
+      expect(result.present).toBe(false);
+      expect(result.sizeBytes).toBeNull();
+    });
+
+    it('scans present when only the SECOND action key exists', async () => {
+      try {
+        await regAsync('reg', ['add', `${KEY}\\B`, '/v', 'x', '/d', '1', '/f']);
+        const rule = { id: 'w2', category: 'Test', name: 'W2', actions: [{ type: 'winreg', key: `${KEY}\\A` }, { type: 'winreg', key: `${KEY}\\B` }] };
+        expect(scanRule(rule).present).toBe(true);
+      } finally { await cleanup(); }
+    });
+
+    it('a value action scans present only when that value exists', async () => {
+      try {
+        await regAsync('reg', ['add', KEY, '/v', 'V', '/d', '1', '/f']);
+        const has = { id: 'w3', category: 'Test', name: 'W3', actions: [{ type: 'winreg', key: KEY, value: 'V' }] };
+        const lacks = { id: 'w4', category: 'Test', name: 'W4', actions: [{ type: 'winreg', key: KEY, value: 'Nope' }] };
+        expect(scanRule(has).present).toBe(true);
+        expect(scanRule(lacks).present).toBe(false);
+      } finally { await cleanup(); }
+    });
+
+    it('executeRule sends two winreg actions through exactly one quarantine batch', async () => {
+      try {
+        await regAsync('reg', ['add', `${KEY}\\A`, '/v', 'x', '/d', '1', '/f']);
+        await regAsync('reg', ['add', `${KEY}\\B`, '/v', 'x', '/d', '1', '/f']);
+        const rule = { id: 'w5', category: 'Test', name: 'W5', actions: [{ type: 'winreg', key: `${KEY}\\A` }, { type: 'winreg', key: `${KEY}\\B` }] };
+        const result = await executeRule(rule);
+        expect(result.registryKeysRemoved).toBe(2);
+        expect(readdirSync(quarantineDir)).toHaveLength(1);
+      } finally { await cleanup(); }
+    });
   });
 
   it('scans a sqlite.vacuum-only rule, reporting the file size as sizeBytes', async () => {
