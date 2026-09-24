@@ -139,8 +139,8 @@ describe('the duplicates screen, in Greek', () => {
     await ready();
     await search(user);
 
-    await screen.findByText(`${FOLDER}\\a.jpg`);
-    const groupCard = screen.getByText(`${FOLDER}\\a.jpg`).closest('div.glass-panel');
+    await screen.findByText('a.jpg');
+    const groupCard = screen.getByText('a.jpg').closest('div.glass-panel');
     expect(within(groupCard).getByText('2 πανομοιότυπα αντίγραφα · 1 KB το καθένα')).toBeTruthy();
     // The group's own recoverable line, not the summary's -- both read
     // "1 KB ανακτήσιμα" in this fixture (same wasted-bytes value), which
@@ -169,7 +169,7 @@ describe('the duplicates screen, in Greek', () => {
 
     expect(await screen.findByRole('dialog', { name: 'Μετακίνηση διπλότυπων σε καραντίνα' })).toBeTruthy();
     expect(screen.getByRole('heading', { name: 'Μετακίνηση 1 αντιγράφων σε καραντίνα;' })).toBeTruthy();
-    expect(screen.getByText(/1 KB ανακτήθηκαν\. Κάθε σετ κρατά τουλάχιστον ένα αντίγραφο/)).toBeTruthy();
+    expect(screen.getByText(/Η μετακίνησή τους ελευθερώνει 1 KB μόλις αδειάσετε την Καραντίνα\. Κάθε σετ κρατά τουλάχιστον ένα αντίγραφο/)).toBeTruthy();
     expect(screen.getByRole('button', { name: 'Ακύρωση' })).toBeTruthy();
     expect(screen.getByRole('button', { name: 'Μετακίνηση σε καραντίνα' })).toBeTruthy();
   });
@@ -224,5 +224,37 @@ describe('the duplicates screen, in Greek', () => {
 
     expect(await screen.findByText('1 δεν μπόρεσαν να μετακινηθούν.')).toBeTruthy();
     expect(screen.getByText('Ενδέχεται να είναι ανοιχτά ή σε άλλο δίσκο.')).toBeTruthy();
+  });
+});
+
+describe('the Apple design pass strings, in Greek', () => {
+  it('translates the placeholder and the Keep / To quarantine tags', async () => {
+    fetchDuplicates.mockResolvedValue(oneGroup());
+    const user = userEvent.setup();
+    mount();
+    await ready();
+
+    expect(screen.getByLabelText('Φάκελος για αναζήτηση διπλότυπων').getAttribute('placeholder'))
+      .toMatch(/^Διαδρομή φακέλου, για παράδειγμα C:/);
+    await search(user);
+    await screen.findByText('a.jpg');
+    expect(screen.getAllByText('Διατήρηση')).toHaveLength(2);
+
+    await user.click((await screen.findAllByRole('checkbox'))[0]);
+    expect(screen.getByText('Στην καραντίνα')).toBeTruthy();
+  });
+
+  it('translates the elapsed timer and the stopped note', async () => {
+    fetchDuplicates.mockImplementation((_folder, signal) => new Promise((_, reject) => {
+      signal?.addEventListener('abort', () => reject(new Error('aborted')));
+    }));
+    const user = userEvent.setup();
+    mount();
+    await ready();
+    await search(user);
+
+    expect((await screen.findByTestId('duplicates-elapsed')).textContent).toBe('Χρόνος 00:00');
+    await user.click(screen.getByRole('button', { name: 'Διακοπή' }));
+    expect(await screen.findByText('Διακόπηκε — δεν συγκρίθηκε τίποτα.')).toBeTruthy();
   });
 });
