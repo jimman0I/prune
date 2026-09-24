@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { computeHealthScore } from './healthScore.js';
+import { computeHealthScore, healthBand } from './healthScore.js';
 
 const HEALTHY_DRIVE_VERDICT = { percent: 90, statusLabel: null, tone: 'success' };
 const DISK_SPACE_25_PERCENT_FREE = { freeBytes: 250, totalBytes: 1000 }; // 25% free
@@ -202,5 +202,22 @@ describe('computeHealthScore -- the composite score', () => {
     // and that a null errors component is excluded from both sides of the
     // average rather than silently scored as 0.
     expect(score).toBe(100);
+  });
+});
+
+describe('healthBand', () => {
+  it('75 and up is good, 50 and up is caution, below that is a problem', () => {
+    expect(healthBand(100)).toBe('good');
+    expect(healthBand(75)).toBe('good');
+    expect(healthBand(74)).toBe('caution');
+    expect(healthBand(50)).toBe('caution');
+    expect(healthBand(49)).toBe('problem');
+    expect(healthBand(0)).toBe('problem');
+  });
+
+  it('has no band for a score that has not arrived', () => {
+    expect(healthBand(null)).toBeNull();
+    expect(healthBand(undefined)).toBeNull();
+    expect(healthBand(NaN)).toBeNull();
   });
 });

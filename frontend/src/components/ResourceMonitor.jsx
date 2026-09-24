@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { fetchResources } from '../lib/api.js';
 import { keys } from '../lib/queryClient.js';
 import { useLanguage } from '../i18n/LanguageContext.jsx';
+import { gaugeColor } from '../lib/usageTone.js';
 
 /** CPU, memory and disk throughput, live.
  *
@@ -37,14 +38,17 @@ function formatRate(bytesPerSec) {
 /** The ring. `pathLength` rather than stroke-dashoffset arithmetic: the
  * value IS the fraction, so nothing has to convert a percentage into a
  * circumference and the two cannot drift apart. */
-function Gauge({ label, percent, caption, tone }) {
+function Gauge({ label, percent, caption, tone: baseTone }) {
   const known = Number.isFinite(percent);
+  // The gauge's own hue until it is nearly full, then amber: quiet until it
+  // is a reason to look. See lib/usageTone.js.
+  const tone = gaugeColor(percent, baseTone);
 
   return (
     <div className="flex flex-col items-center gap-1.5">
       <div className="relative w-[64px] h-[64px]">
         <svg width="64" height="64" viewBox="0 0 64 64" className="-rotate-90">
-          <circle cx="32" cy="32" r={RADIUS} fill="none" stroke="rgba(255,255,255,0.07)" strokeWidth="5" />
+          <circle cx="32" cy="32" r={RADIUS} fill="none" stroke="var(--surface-strong)" strokeWidth="5" />
           {known && (
             <motion.circle
               cx="32" cy="32" r={RADIUS} fill="none"
@@ -112,7 +116,7 @@ export default function ResourceMonitor() {
     : null;
 
   return (
-    <div className="glass-panel p-5 w-[268px] shrink-0 flex flex-col">
+    <div className="glass-panel p-5 flex flex-col">
       <div className="flex items-baseline justify-between mb-4">
         <h2 className="text-[11px] font-mono uppercase tracking-[0.14em] text-[color:var(--text-muted)]">
           {t('resourceMonitor.rightNow')}
@@ -133,14 +137,14 @@ export default function ResourceMonitor() {
           label={t('resourceMonitor.memory')}
           percent={data?.ram?.percent}
           tone="var(--accent-purple)"
-          // Short enough not to wrap in a 268px panel. "15.9 GB of 31.9
+          // Short enough not to wrap in a narrow panel. "15.9 GB of 31.9
           // GB" broke onto two lines and pushed the row out of line.
           caption={data?.ram ? `${formatGB(data.ram.usedBytes)} / ${formatGB(data.ram.totalBytes)} GB` : null}
         />
         <Gauge
           label={t('resourceMonitor.disk')}
           percent={diskPercent}
-          tone="var(--accent-primary)"
+          tone="var(--text-secondary)"
           caption={formatRate(data?.diskBytesPerSec)}
         />
       </div>
