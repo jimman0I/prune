@@ -282,6 +282,76 @@ describe('rulePathsExist -- requiresProgram gate', () => {
   });
 });
 
+// Windows Defender's scan-history folders (Scans\History\Results\Quick) stat
+// as EPERM to an unelevated process. "Access denied" is only ever the answer
+// for something that exists to deny, so it counts as present -- otherwise the
+// row dims and "hide cleaners that don't apply" hides it, instead of showing
+// "needs admin". The folder is deliberately never created here: the spy alone
+// stands in for the ACL.
+describe('access-denied paths count as present', () => {
+  function denyStat(deniedPath) {
+    const realStat = fs.statSync;
+    vi.spyOn(fs, 'statSync').mockImplementation((target, options) => {
+      if (String(target) === deniedPath) {
+        throw Object.assign(new Error('EPERM: operation not permitted'), { code: 'EPERM' });
+      }
+      return realStat(target, options);
+    });
+  }
+
+  it('scanRule reports present:true, accessible:false, 0 bytes for a path that stats EPERM', () => {
+    denyStat(join(appDataDir, 'Denied', 'Quick'));
+
+    const result = scanRule({ id: 'denied', paths: ['%APPDATA%\\Denied\\Quick'] });
+
+    expect(result.present).toBe(true);
+    expect(result.accessible).toBe(false);
+    expect(result.sizeBytes).toBe(0);
+  });
+
+  it('rulePathsExist is true for a path that stats EPERM', () => {
+    denyStat(join(appDataDir, 'Denied', 'Quick'));
+
+    expect(rulePathsExist({ id: 'denied', paths: ['%APPDATA%\\Denied\\Quick'] })).toBe(true);
+  });
+
+  it('rulePathsExist is false for a path that is genuinely absent (ENOENT)', () => {
+    expect(rulePathsExist({ id: 'denied', paths: ['%APPDATA%\\Denied\\Quick'] })).toBe(false);
+  });
+});
+
+// The pre-scan tree (GET /api/deep-clean/rules) used to read only
+// `rule.paths`, so every actions-form rule -- browser history, cookies,
+// autofill -- reported present:false before a scan and got hidden by "hide
+// cleaners that don't apply".
+describe('rulePathsExist -- actions-form rules', () => {
+  it('a delete action is present when its folder exists, absent when it does not', async () => {
+    const rule = { id: 'a', actions: [{ type: 'delete', paths: ['%APPDATA%\\ActDir'] }] };
+    expect(rulePathsExist(rule)).toBe(false);
+
+    await mkdir(join(appDataDir, 'ActDir'), { recursive: true });
+    expect(rulePathsExist(rule)).toBe(true);
+  });
+
+  it('a chrome.history action resolves its wildcard path to a real file', async () => {
+    const rule = { id: 'h', actions: [{ type: 'chrome.history', path: '%APPDATA%\\Prof\\*\\History' }] };
+    expect(rulePathsExist(rule)).toBe(false);
+
+    await mkdir(join(appDataDir, 'Prof', 'Default'), { recursive: true });
+    await writeFile(join(appDataDir, 'Prof', 'Default', 'History'), 'x');
+    expect(rulePathsExist(rule)).toBe(true);
+  });
+
+  it('a winreg action is kept visible (unmeasured) without touching the registry', () => {
+    const rule = { id: 'r', actions: [{ type: 'winreg', key: 'HKCU\\Software\\Nothing-here' }] };
+    expect(rulePathsExist(rule)).toBe(true);
+  });
+
+  it('a shell action is kept visible', () => {
+    expect(rulePathsExist({ id: 's', actions: [{ type: 'shell', command: 'x' }] })).toBe(true);
+  });
+});
+
 describe('scanAllRules', () => {
   it('groups every real rule from cleaners.json by category', () => {
     const grouped = scanAllRules();
