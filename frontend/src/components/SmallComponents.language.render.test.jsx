@@ -65,7 +65,9 @@ describe('ShortcutsModal in Greek', () => {
     expect(screen.getByText('Εμφάνιση αυτής της λίστας')).toBeTruthy();
     expect(screen.getByText('Κλείσιμο ενός παραθύρου διαλόγου')).toBeTruthy();
     expect(screen.getByText(/Μετακίνηση μεταξύ στοιχείων ελέγχου/)).toBeTruthy();
-    expect(screen.getByText('ή')).toBeTruthy();
+    expect(screen.getByText('Μεγέθυνση ή σμίκρυνση κειμένου')).toBeTruthy();
+    expect(screen.getByText('Επαναφορά μεγέθους κειμένου')).toBeTruthy();
+    expect(screen.getAllByText('ή').length).toBeGreaterThan(0);
     expect(screen.getByText(/Το Cmd λειτουργεί αντί για το Ctrl/)).toBeTruthy();
   });
 });

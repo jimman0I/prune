@@ -725,7 +725,9 @@ export const CATALOG = {
         openSettings: 'Open Settings',
         showThisList: 'Show this list',
         closeDialog: 'Close a dialog',
-        moveBetweenControls: 'Move between controls; inside a dialog, focus stays in it'
+        moveBetweenControls: 'Move between controls; inside a dialog, focus stays in it',
+        zoomInOut: 'Make text larger or smaller',
+        zoomReset: 'Reset text size'
       }
     },
     themeToggle: {
@@ -1449,7 +1451,9 @@ export const CATALOG = {
         openSettings: 'Maak Instellings oop',
         showThisList: 'Wys hierdie lys',
         closeDialog: 'Sluit \'n dialoog',
-        moveBetweenControls: "Beweeg tussen kontroles; binne 'n dialoog bly fokus daarin"
+        moveBetweenControls: "Beweeg tussen kontroles; binne 'n dialoog bly fokus daarin",
+        zoomInOut: 'Maak teks groter of kleiner',
+        zoomReset: 'Stel teksgrootte terug'
       }
     },
     themeToggle: {
@@ -2173,7 +2177,9 @@ export const CATALOG = {
         openSettings: 'فتح الإعدادات',
         showThisList: 'إظهار هذه القائمة',
         closeDialog: 'إغلاق مربع حوار',
-        moveBetweenControls: 'التنقل بين عناصر التحكم؛ داخل مربع حوار، يبقى التركيز فيه'
+        moveBetweenControls: 'التنقل بين عناصر التحكم؛ داخل مربع حوار، يبقى التركيز فيه',
+        zoomInOut: 'تكبير النص أو تصغيره',
+        zoomReset: 'إعادة ضبط حجم النص'
       }
     },
     themeToggle: {
@@ -2897,7 +2903,9 @@ export const CATALOG = {
         openSettings: 'Obre la Configuració',
         showThisList: 'Mostra aquesta llista',
         closeDialog: 'Tanca un diàleg',
-        moveBetweenControls: "Mou-te entre controls; dins d'un diàleg, el focus hi roman"
+        moveBetweenControls: "Mou-te entre controls; dins d'un diàleg, el focus hi roman",
+        zoomInOut: 'Fes el text més gran o més petit',
+        zoomReset: 'Restableix la mida del text'
       }
     },
     themeToggle: {
@@ -3621,7 +3629,9 @@ export const CATALOG = {
         openSettings: 'Otevřít Nastavení',
         showThisList: 'Zobrazit tento seznam',
         closeDialog: 'Zavřít dialogové okno',
-        moveBetweenControls: 'Pohybovat se mezi ovládacími prvky; uvnitř dialogového okna zůstává zaměření v něm'
+        moveBetweenControls: 'Pohybovat se mezi ovládacími prvky; uvnitř dialogového okna zůstává zaměření v něm',
+        zoomInOut: 'Zvětšit nebo zmenšit text',
+        zoomReset: 'Obnovit velikost textu'
       }
     },
     themeToggle: {
@@ -4345,7 +4355,9 @@ export const CATALOG = {
         openSettings: 'Agor Gosodiadau',
         showThisList: "Dangos y rhestr hon",
         closeDialog: 'Cau deialog',
-        moveBetweenControls: "Symud rhwng rheolyddion; y tu mewn i ddeialog, mae'r ffocws yn aros ynddo"
+        moveBetweenControls: "Symud rhwng rheolyddion; y tu mewn i ddeialog, mae'r ffocws yn aros ynddo",
+        zoomInOut: "Gwneud y testun yn fwy neu'n llai",
+        zoomReset: 'Ailosod maint y testun'
       }
     },
     themeToggle: {
@@ -5069,7 +5081,9 @@ export const CATALOG = {
         openSettings: 'Åbn Indstillinger',
         showThisList: 'Vis denne liste',
         closeDialog: 'Luk en dialog',
-        moveBetweenControls: 'Flyt mellem kontroller; inde i en dialog forbliver fokus i den'
+        moveBetweenControls: 'Flyt mellem kontroller; inde i en dialog forbliver fokus i den',
+        zoomInOut: 'Gør teksten større eller mindre',
+        zoomReset: 'Nulstil tekststørrelse'
       }
     },
     themeToggle: {
@@ -5793,7 +5807,9 @@ export const CATALOG = {
         openSettings: 'Einstellungen öffnen',
         showThisList: 'Diese Liste anzeigen',
         closeDialog: 'Dialog schließen',
-        moveBetweenControls: 'Zwischen Bedienelementen wechseln; innerhalb eines Dialogs bleibt der Fokus darin'
+        moveBetweenControls: 'Zwischen Bedienelementen wechseln; innerhalb eines Dialogs bleibt der Fokus darin',
+        zoomInOut: 'Text vergrößern oder verkleinern',
+        zoomReset: 'Textgröße zurücksetzen'
       }
     },
     themeToggle: {
@@ -6517,7 +6533,9 @@ export const CATALOG = {
         openSettings: 'Άνοιγμα Ρυθμίσεων',
         showThisList: 'Εμφάνιση αυτής της λίστας',
         closeDialog: 'Κλείσιμο ενός παραθύρου διαλόγου',
-        moveBetweenControls: 'Μετακίνηση μεταξύ στοιχείων ελέγχου· μέσα σε παράθυρο διαλόγου, η εστίαση παραμένει σε αυτό'
+        moveBetweenControls: 'Μετακίνηση μεταξύ στοιχείων ελέγχου· μέσα σε παράθυρο διαλόγου, η εστίαση παραμένει σε αυτό',
+        zoomInOut: 'Μεγέθυνση ή σμίκρυνση κειμένου',
+        zoomReset: 'Επαναφορά μεγέθους κειμένου'
       }
     },
     themeToggle: {
@@ -7241,7 +7259,9 @@ export const CATALOG = {
         openSettings: 'Abrir Configuración',
         showThisList: 'Mostrar esta lista',
         closeDialog: 'Cerrar un cuadro de diálogo',
-        moveBetweenControls: 'Moverse entre controles; dentro de un cuadro de diálogo, el enfoque permanece en él'
+        moveBetweenControls: 'Moverse entre controles; dentro de un cuadro de diálogo, el enfoque permanece en él',
+        zoomInOut: 'Aumentar o reducir el texto',
+        zoomReset: 'Restablecer el tamaño del texto'
       }
     },
     themeToggle: {
@@ -7965,7 +7985,9 @@ export const CATALOG = {
         openSettings: 'Ava seaded',
         showThisList: 'Näita seda loendit',
         closeDialog: 'Sulge dialoog',
-        moveBetweenControls: 'Liigu juhtelementide vahel; dialoogi sees jääb fookus sinna'
+        moveBetweenControls: 'Liigu juhtelementide vahel; dialoogi sees jääb fookus sinna',
+        zoomInOut: 'Suurenda või vähenda teksti',
+        zoomReset: 'Lähtesta teksti suurus'
       }
     },
     themeToggle: {
@@ -8689,7 +8711,9 @@ export const CATALOG = {
         openSettings: 'Avaa asetukset',
         showThisList: 'Näytä tämä luettelo',
         closeDialog: 'Sulje valintaikkuna',
-        moveBetweenControls: 'Siirry säätimien välillä; valintaikkunan sisällä kohdistus pysyy siinä'
+        moveBetweenControls: 'Siirry säätimien välillä; valintaikkunan sisällä kohdistus pysyy siinä',
+        zoomInOut: 'Suurenna tai pienennä tekstiä',
+        zoomReset: 'Palauta tekstin koko'
       }
     },
     themeToggle: {
@@ -9413,7 +9437,9 @@ export const CATALOG = {
         openSettings: 'Ouvrir les Paramètres',
         showThisList: 'Afficher cette liste',
         closeDialog: 'Fermer une boîte de dialogue',
-        moveBetweenControls: "Se déplacer entre les contrôles ; à l'intérieur d'une boîte de dialogue, le focus y reste"
+        moveBetweenControls: "Se déplacer entre les contrôles ; à l'intérieur d'une boîte de dialogue, le focus y reste",
+        zoomInOut: 'Agrandir ou réduire le texte',
+        zoomReset: 'Rétablir la taille du texte'
       }
     },
     themeToggle: {
@@ -10137,7 +10163,9 @@ export const CATALOG = {
         openSettings: 'פתח הגדרות',
         showThisList: 'הצג רשימה זו',
         closeDialog: 'סגור תיבת דו-שיח',
-        moveBetweenControls: 'עבור בין פקדים; בתוך תיבת דו-שיח, המיקוד נשאר בה'
+        moveBetweenControls: 'עבור בין פקדים; בתוך תיבת דו-שיח, המיקוד נשאר בה',
+        zoomInOut: 'הגדלה או הקטנה של הטקסט',
+        zoomReset: 'איפוס גודל הטקסט'
       }
     },
     themeToggle: {
@@ -10861,7 +10889,9 @@ export const CATALOG = {
         openSettings: 'Beállítások megnyitása',
         showThisList: 'Ennek a listának a megjelenítése',
         closeDialog: 'Párbeszédablak bezárása',
-        moveBetweenControls: 'Mozgás a vezérlők között; egy párbeszédablakon belül a fókusz ott marad'
+        moveBetweenControls: 'Mozgás a vezérlők között; egy párbeszédablakon belül a fókusz ott marad',
+        zoomInOut: 'Szöveg nagyítása vagy kicsinyítése',
+        zoomReset: 'Szövegméret visszaállítása'
       }
     },
     themeToggle: {
@@ -11585,7 +11615,9 @@ export const CATALOG = {
         openSettings: 'Buka Pengaturan',
         showThisList: 'Tampilkan daftar ini',
         closeDialog: 'Tutup dialog',
-        moveBetweenControls: 'Berpindah antar kontrol; di dalam dialog, fokus tetap di dalamnya'
+        moveBetweenControls: 'Berpindah antar kontrol; di dalam dialog, fokus tetap di dalamnya',
+        zoomInOut: 'Perbesar atau perkecil teks',
+        zoomReset: 'Setel ulang ukuran teks'
       }
     },
     themeToggle: {
@@ -12309,7 +12341,9 @@ export const CATALOG = {
         openSettings: 'Opna stillingar',
         showThisList: 'Sýna þennan lista',
         closeDialog: 'Loka glugga',
-        moveBetweenControls: 'Fara á milli stýringa; innan glugga helst fókusinn þar'
+        moveBetweenControls: 'Fara á milli stýringa; innan glugga helst fókusinn þar',
+        zoomInOut: 'Stækka eða minnka texta',
+        zoomReset: 'Endurstilla textastærð'
       }
     },
     themeToggle: {
@@ -13033,7 +13067,9 @@ export const CATALOG = {
         openSettings: 'Apri Impostazioni',
         showThisList: 'Mostra questo elenco',
         closeDialog: 'Chiudi una finestra di dialogo',
-        moveBetweenControls: "Spostati tra i controlli; all'interno di una finestra di dialogo, il focus vi resta"
+        moveBetweenControls: "Spostati tra i controlli; all'interno di una finestra di dialogo, il focus vi resta",
+        zoomInOut: 'Ingrandisci o riduci il testo',
+        zoomReset: 'Ripristina la dimensione del testo'
       }
     },
     themeToggle: {
@@ -13757,7 +13793,9 @@ export const CATALOG = {
         openSettings: '設定を開く',
         showThisList: 'このリストを表示',
         closeDialog: 'ダイアログを閉じる',
-        moveBetweenControls: 'コントロール間を移動；ダイアログ内ではフォーカスがその中にとどまる'
+        moveBetweenControls: 'コントロール間を移動；ダイアログ内ではフォーカスがその中にとどまる',
+        zoomInOut: '文字を拡大または縮小',
+        zoomReset: '文字サイズをリセット'
       }
     },
     themeToggle: {
@@ -14481,7 +14519,9 @@ export const CATALOG = {
         openSettings: '설정 열기',
         showThisList: '이 목록 표시',
         closeDialog: '대화 상자 닫기',
-        moveBetweenControls: '컨트롤 간 이동; 대화 상자 안에서는 포커스가 그 안에 유지됨'
+        moveBetweenControls: '컨트롤 간 이동; 대화 상자 안에서는 포커스가 그 안에 유지됨',
+        zoomInOut: '텍스트 확대 또는 축소',
+        zoomReset: '텍스트 크기 초기화'
       }
     },
     themeToggle: {
@@ -15205,7 +15245,9 @@ export const CATALOG = {
         openSettings: 'Atidaryti nustatymus',
         showThisList: 'Rodyti šį sąrašą',
         closeDialog: 'Uždaryti dialogo langą',
-        moveBetweenControls: 'Judėti tarp valdiklių; dialogo lange fokusas išlieka jame'
+        moveBetweenControls: 'Judėti tarp valdiklių; dialogo lange fokusas išlieka jame',
+        zoomInOut: 'Padidinti arba sumažinti tekstą',
+        zoomReset: 'Atkurti teksto dydį'
       }
     },
     themeToggle: {
@@ -15929,7 +15971,9 @@ export const CATALOG = {
         openSettings: 'Buka Tetapan',
         showThisList: 'Papar senarai ini',
         closeDialog: 'Tutup dialog',
-        moveBetweenControls: 'Bergerak antara kawalan; dalam dialog, fokus kekal di dalamnya'
+        moveBetweenControls: 'Bergerak antara kawalan; dalam dialog, fokus kekal di dalamnya',
+        zoomInOut: 'Besarkan atau kecilkan teks',
+        zoomReset: 'Tetapkan semula saiz teks'
       }
     },
     themeToggle: {
@@ -16653,7 +16697,9 @@ export const CATALOG = {
         openSettings: 'Åpne innstillinger',
         showThisList: 'Vis denne listen',
         closeDialog: 'Lukk en dialogboks',
-        moveBetweenControls: 'Flytt mellom kontroller; inne i en dialogboks blir fokuset værende der'
+        moveBetweenControls: 'Flytt mellom kontroller; inne i en dialogboks blir fokuset værende der',
+        zoomInOut: 'Gjør teksten større eller mindre',
+        zoomReset: 'Tilbakestill tekststørrelsen'
       }
     },
     themeToggle: {
@@ -17377,7 +17423,9 @@ export const CATALOG = {
         openSettings: 'Instellingen openen',
         showThisList: 'Deze lijst tonen',
         closeDialog: 'Een dialoogvenster sluiten',
-        moveBetweenControls: 'Verplaatsen tussen besturingselementen; binnen een dialoogvenster blijft de focus daarin'
+        moveBetweenControls: 'Verplaatsen tussen besturingselementen; binnen een dialoogvenster blijft de focus daarin',
+        zoomInOut: 'Tekst groter of kleiner maken',
+        zoomReset: 'Tekstgrootte herstellen'
       }
     },
     themeToggle: {
@@ -18101,7 +18149,9 @@ export const CATALOG = {
         openSettings: 'Otwórz ustawienia',
         showThisList: 'Pokaż tę listę',
         closeDialog: 'Zamknij okno dialogowe',
-        moveBetweenControls: 'Przechodzenie między elementami sterującymi; wewnątrz okna dialogowego fokus pozostaje w nim'
+        moveBetweenControls: 'Przechodzenie między elementami sterującymi; wewnątrz okna dialogowego fokus pozostaje w nim',
+        zoomInOut: 'Powiększ lub pomniejsz tekst',
+        zoomReset: 'Przywróć rozmiar tekstu'
       }
     },
     themeToggle: {
@@ -18825,7 +18875,9 @@ export const CATALOG = {
         openSettings: 'تنظیمات پرانیستل',
         showThisList: 'دا لیست ښودل',
         closeDialog: 'یو ډیالوګ بندول',
-        moveBetweenControls: 'د کنټرولونو ترمنځ حرکت؛ د ډیالوګ دننه، تمرکز په هغه کې پاتې کیږي'
+        moveBetweenControls: 'د کنټرولونو ترمنځ حرکت؛ د ډیالوګ دننه، تمرکز په هغه کې پاتې کیږي',
+        zoomInOut: 'متن لوی یا وړوکی کړئ',
+        zoomReset: 'د متن اندازه بیا تنظیم کړئ'
       }
     },
     themeToggle: {
@@ -19549,7 +19601,9 @@ export const CATALOG = {
         openSettings: 'Abrir Configurações',
         showThisList: 'Mostrar esta lista',
         closeDialog: 'Fechar uma caixa de diálogo',
-        moveBetweenControls: 'Mover entre controles; dentro de uma caixa de diálogo, o foco permanece nela'
+        moveBetweenControls: 'Mover entre controles; dentro de uma caixa de diálogo, o foco permanece nela',
+        zoomInOut: 'Aumentar ou diminuir o texto',
+        zoomReset: 'Redefinir o tamanho do texto'
       }
     },
     themeToggle: {
@@ -20273,7 +20327,9 @@ export const CATALOG = {
         openSettings: 'Abrir Definições',
         showThisList: 'Mostrar esta lista',
         closeDialog: 'Fechar uma caixa de diálogo',
-        moveBetweenControls: 'Mover entre controlos; dentro de uma caixa de diálogo, o foco permanece nela'
+        moveBetweenControls: 'Mover entre controlos; dentro de uma caixa de diálogo, o foco permanece nela',
+        zoomInOut: 'Aumentar ou diminuir o texto',
+        zoomReset: 'Repor o tamanho do texto'
       }
     },
     themeToggle: {
@@ -20997,7 +21053,9 @@ export const CATALOG = {
         openSettings: 'Deschide Setările',
         showThisList: 'Afișează această listă',
         closeDialog: 'Închide o casetă de dialog',
-        moveBetweenControls: 'Deplasare între comenzi; în interiorul unei casete de dialog, focalizarea rămâne acolo'
+        moveBetweenControls: 'Deplasare între comenzi; în interiorul unei casete de dialog, focalizarea rămâne acolo',
+        zoomInOut: 'Mărește sau micșorează textul',
+        zoomReset: 'Resetează dimensiunea textului'
       }
     },
     themeToggle: {
@@ -21721,7 +21779,9 @@ export const CATALOG = {
         openSettings: 'Открыть настройки',
         showThisList: 'Показать этот список',
         closeDialog: 'Закрыть диалоговое окно',
-        moveBetweenControls: 'Перемещение между элементами управления; внутри диалогового окна фокус остаётся в нём'
+        moveBetweenControls: 'Перемещение между элементами управления; внутри диалогового окна фокус остаётся в нём',
+        zoomInOut: 'Увеличить или уменьшить текст',
+        zoomReset: 'Сбросить размер текста'
       }
     },
     themeToggle: {
@@ -22445,7 +22505,9 @@ export const CATALOG = {
         openSettings: 'Otvoriť nastavenia',
         showThisList: 'Zobraziť tento zoznam',
         closeDialog: 'Zavrieť dialógové okno',
-        moveBetweenControls: 'Presúvanie medzi ovládacími prvkami; vnútri dialógového okna zostáva fokus v ňom'
+        moveBetweenControls: 'Presúvanie medzi ovládacími prvkami; vnútri dialógového okna zostáva fokus v ňom',
+        zoomInOut: 'Zväčšiť alebo zmenšiť text',
+        zoomReset: 'Obnoviť veľkosť textu'
       }
     },
     themeToggle: {
@@ -23169,7 +23231,9 @@ export const CATALOG = {
         openSettings: 'Hap Cilësimet',
         showThisList: 'Shfaq këtë listë',
         closeDialog: 'Mbyll një dialog',
-        moveBetweenControls: 'Lëviz mes kontrolleve; brenda një dialogu, fokusi mbetet aty'
+        moveBetweenControls: 'Lëviz mes kontrolleve; brenda një dialogu, fokusi mbetet aty',
+        zoomInOut: 'Zmadho ose zvogëlo tekstin',
+        zoomReset: 'Rivendos madhësinë e tekstit'
       }
     },
     themeToggle: {
@@ -23893,7 +23957,9 @@ export const CATALOG = {
         openSettings: 'Отвори подешавања',
         showThisList: 'Прикажи ову листу',
         closeDialog: 'Затвори дијалог',
-        moveBetweenControls: 'Кретање између контрола; унутар дијалога, фокус остаје у њему'
+        moveBetweenControls: 'Кретање између контрола; унутар дијалога, фокус остаје у њему',
+        zoomInOut: 'Увећај или умањи текст',
+        zoomReset: 'Врати величину текста'
       }
     },
     themeToggle: {
@@ -24617,7 +24683,9 @@ export const CATALOG = {
         openSettings: 'Öppna inställningar',
         showThisList: 'Visa denna lista',
         closeDialog: 'Stäng en dialogruta',
-        moveBetweenControls: 'Flytta mellan kontroller; inuti en dialogruta stannar fokus kvar där'
+        moveBetweenControls: 'Flytta mellan kontroller; inuti en dialogruta stannar fokus kvar där',
+        zoomInOut: 'Förstora eller förminska text',
+        zoomReset: 'Återställ textstorlek'
       }
     },
     themeToggle: {
@@ -25341,7 +25409,9 @@ export const CATALOG = {
         openSettings: 'เปิดการตั้งค่า',
         showThisList: 'แสดงรายการนี้',
         closeDialog: 'ปิดกล่องโต้ตอบ',
-        moveBetweenControls: 'ย้ายระหว่างตัวควบคุม; ภายในกล่องโต้ตอบ โฟกัสจะยังคงอยู่ในนั้น'
+        moveBetweenControls: 'ย้ายระหว่างตัวควบคุม; ภายในกล่องโต้ตอบ โฟกัสจะยังคงอยู่ในนั้น',
+        zoomInOut: 'ขยายหรือย่อข้อความ',
+        zoomReset: 'รีเซ็ตขนาดข้อความ'
       }
     },
     themeToggle: {
@@ -26065,7 +26135,9 @@ export const CATALOG = {
         openSettings: 'Ayarları aç',
         showThisList: 'Bu listeyi göster',
         closeDialog: 'Bir iletişim kutusunu kapat',
-        moveBetweenControls: 'Denetimler arasında gezinme; bir iletişim kutusu içinde odak orada kalır'
+        moveBetweenControls: 'Denetimler arasında gezinme; bir iletişim kutusu içinde odak orada kalır',
+        zoomInOut: 'Metni büyüt veya küçült',
+        zoomReset: 'Metin boyutunu sıfırla'
       }
     },
     themeToggle: {
@@ -26789,7 +26861,9 @@ export const CATALOG = {
         openSettings: 'Відкрити налаштування',
         showThisList: 'Показати цей список',
         closeDialog: 'Закрити діалогове вікно',
-        moveBetweenControls: 'Переміщення між елементами керування; всередині діалогового вікна фокус залишається в ньому'
+        moveBetweenControls: 'Переміщення між елементами керування; всередині діалогового вікна фокус залишається в ньому',
+        zoomInOut: 'Збільшити або зменшити текст',
+        zoomReset: 'Скинути розмір тексту'
       }
     },
     themeToggle: {
@@ -27513,7 +27587,9 @@ export const CATALOG = {
         openSettings: 'Mở Cài đặt',
         showThisList: 'Hiển thị danh sách này',
         closeDialog: 'Đóng một hộp thoại',
-        moveBetweenControls: 'Di chuyển giữa các điều khiển; bên trong hộp thoại, tiêu điểm vẫn ở lại đó'
+        moveBetweenControls: 'Di chuyển giữa các điều khiển; bên trong hộp thoại, tiêu điểm vẫn ở lại đó',
+        zoomInOut: 'Phóng to hoặc thu nhỏ văn bản',
+        zoomReset: 'Đặt lại cỡ văn bản'
       }
     },
     themeToggle: {
@@ -28237,7 +28313,9 @@ export const CATALOG = {
         openSettings: '打开设置',
         showThisList: '显示此列表',
         closeDialog: '关闭对话框',
-        moveBetweenControls: '在控件之间移动；在对话框内，焦点会保持在其中'
+        moveBetweenControls: '在控件之间移动；在对话框内，焦点会保持在其中',
+        zoomInOut: '放大或缩小文字',
+        zoomReset: '重置文字大小'
       }
     },
     themeToggle: {
@@ -28961,7 +29039,9 @@ export const CATALOG = {
         openSettings: '開啟設定',
         showThisList: '顯示此清單',
         closeDialog: '關閉對話方塊',
-        moveBetweenControls: '在控制項之間移動；在對話方塊內，焦點會保持在其中'
+        moveBetweenControls: '在控制項之間移動；在對話方塊內，焦點會保持在其中',
+        zoomInOut: '放大或縮小文字',
+        zoomReset: '重設文字大小'
       }
     },
     themeToggle: {
