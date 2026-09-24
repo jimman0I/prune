@@ -44,7 +44,7 @@ export const CATALOG = {
         description: "Aurora Deck in dark or daylight. Both are real palettes rather than one inverted: the accent darkens for the light ground so a button can keep white text on it, and every tier was measured against the surfaces it actually sits on. Prune follows your system setting until you pick one here."
       },
       minimizeToTray: {
-        title: 'Minimize to Tray',
+        title: 'Minimize to tray',
         description: 'Closing the window sends Prune to the system tray instead of quitting.'
       },
       updateCheck: {
@@ -100,7 +100,7 @@ export const CATALOG = {
         ariaLabel: 'Maximum quarantine size in gigabytes'
       },
       exclusions: {
-        title: 'Exclude Folders',
+        title: 'Exclude folders',
         description: "Folders and file types Prune will leave alone — skipped by Deep Clean and left out of the Disk Map — on top of the ones it already protects: System Volume Information, antivirus quarantines, the component store and a dozen others.",
         ariaLabel: 'Folder path or file type to exclude',
         add: 'Add',
@@ -125,9 +125,9 @@ export const CATALOG = {
         checkboxAriaLabel: (domain) => `Keep cookies from ${domain}`
       },
       sandboxTest: {
-        title: 'Sandbox Test',
+        title: 'Sandbox test',
         description: 'Runs the real cleanup engine against a throwaway temp directory only — never your actual Temp, Windows Temp, or thumbnail cache — to prove scanning and deletion genuinely work before you trust them on real files.',
-        run: 'Run Sandbox Test',
+        run: 'Run sandbox test',
         running: 'Running…',
         allPassed: 'All checks passed',
         failed: 'Sandbox test failed'
@@ -210,12 +210,12 @@ export const CATALOG = {
         due: 'A scheduled run is due'
       },
       systemHealth: {
-        title: 'System Health',
+        title: 'System health',
         breakdownLine: (drive, storage, apps, errors) => `Drive ${drive} · Storage ${storage} · Apps ${apps} · Errors ${errors}`,
         driveDetailHeading: 'Drive detail'
       },
       driveHealth: {
-        title: 'Drive Health',
+        title: 'Drive health',
         error: (message) => `Couldn't read drive health: ${message}`,
         loading: 'Reading drive health…',
         unknownStatus: 'Unknown',
@@ -242,26 +242,26 @@ export const CATALOG = {
         errorLogEntries: 'Error log entries'
       },
       storage: {
-        label: 'Total Storage',
-        usedTotal: (used, total) => `${used} Used / ${total} Total`,
+        label: 'Total storage',
+        usedTotal: (used, total) => `${used} used / ${total} total`,
         loading: 'Loading…',
         free: 'free'
       },
       apps: {
-        label: 'Installed Apps',
+        label: 'Installed apps',
         broken: (count) => `${count} left behind by a failed uninstall`,
         noBroken: 'No broken entries.',
         review: 'Review',
         manage: 'Manage'
       },
       junk: {
-        label: 'Junk Files',
+        label: 'Junk files',
         notMeasured: 'not measured',
         description: 'Measuring walks every cleaner path on the disk — about half a minute.',
         measure: 'Measure'
       },
       recentActivity: {
-        title: 'Recent Activity',
+        title: 'Recent activity',
         hide: 'Hide',
         show: 'Show',
         empty: 'No uninstalls yet.',
@@ -269,9 +269,9 @@ export const CATALOG = {
       }
     },
     diskMap: {
-      title: 'Disk Usage',
+      title: 'Disk Map',
       aggregateCell: (count) => `${count} smaller items`,
-      subtitle: 'What is using the space on this drive, and where.',
+      subtitle: 'Disk usage: what is using the space on this drive, and where.',
       fastIndexSummary: (count) => `${count} files and folders read from the drive's own index.`,
       browsingInstant: 'Browsing is instant from here.',
       indexIncomplete: "Part of the index couldn't be read, so totals are a lower bound.",
@@ -448,12 +448,12 @@ export const CATALOG = {
       deleteConfirmPrompt: 'Delete forever?',
       restore: 'Restore',
       restoring: 'Restoring…',
-      deletePermanently: 'Delete Permanently',
+      deletePermanently: 'Delete permanently',
       deleting: 'Deleting…'
     },
     startup: {
-      title: 'Runs at sign-in',
-      subtitle: 'The Run keys and Startup folders Windows reads when you sign in, grouped by where they live — which is what decides who an entry affects and what it takes to remove it. An entry whose file is gone was left behind by a program that was removed carelessly, and Windows keeps trying to launch it every time.',
+      title: 'Startup',
+      subtitle: 'What runs when you sign in: the Run keys and Startup folders Windows reads, grouped by where they live — which is what decides who an entry affects and what it takes to remove it. An entry whose file is gone was left behind by a program that was removed carelessly, and Windows keeps trying to launch it every time.',
       loading: 'Reading startup entries…',
       loadError: (error) => `Couldn't read the startup entries: ${error}`,
       empty: {
@@ -750,8 +750,8 @@ export const CATALOG = {
       tryAgain: 'Try again'
     },
     app: {
-      installedApplications: 'Installed applications',
-      applicationsSummary: (count, size) => `${count} applications · ${size} installed`,
+      installedApplications: 'Applications',
+      applicationsSummary: (count, size) => `${count} installed application${count === 1 ? '' : 's'} · ${size}`,
       removeStoreApp: (name) => `Remove ${name}`
     }
   },

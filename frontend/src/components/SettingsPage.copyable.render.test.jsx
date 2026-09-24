@@ -69,7 +69,7 @@ describe('what can be copied on the Settings screen', () => {
     const user = userEvent.setup();
     renderScreen(<SettingsPage />);
     await user.click(await screen.findByRole('button', { name: 'Cleanup' }));
-    await user.click(screen.getByRole('button', { name: 'Run Sandbox Test' }));
+    await user.click(screen.getByRole('button', { name: 'Run sandbox test' }));
 
     expect(isCopyable(await screen.findByText(/^EPERM: C:/))).toBe(true);
     expect(isCopyable(screen.getByText('The sandbox could not be cleaned up.'))).toBe(true);
