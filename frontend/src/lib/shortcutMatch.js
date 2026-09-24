@@ -41,6 +41,13 @@ export function matchShortcut(event) {
   // and Ctrl+A there is select-all.
   if (isTyping(event.target)) return null;
 
+  // Ctrl+1 to Ctrl+8: the Nth screen in the rail. Only 1-8 -- nine and zero
+  // are not screens, and Ctrl+0 is the text-zoom reset (electron/zoom.cjs),
+  // which must reach the shell untouched. Deferred to a focused field like
+  // the rest: Ctrl+digit means nothing to a text box either, but a person
+  // typing should never be teleported off the field they are typing in.
+  if (/^[1-8]$/.test(key)) return `screen:${key}`;
+
   if (key === 'k' || key === 'f') return 'search';
   if (key === '/' || key === '?') return 'help';
 
