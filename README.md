@@ -85,6 +85,12 @@ An interactive treemap of what is actually using the disk, from a full-drive
 scan that reads the NTFS MFT directly. Largest files, a folder table and a
 breakdown by type beside the map.
 
+Scans show live progress: files scanned and bytes processed as they happen,
+and, for a whole-drive folder walk of C:, a percentage that is a real ratio
+of bytes read to bytes in use. Where no total is known (one folder, or the
+admin fast scan, which cannot report progress) there is no percentage, only
+a moving bar. Interface motion respects Windows' reduce-motion setting.
+
 </td>
 <td width="50%" valign="top">
 
@@ -273,7 +279,7 @@ cd frontend && npm test
 cd electron && npm test
 ```
 
-1,918 tests: about half a minute each for the backend and frontend, a
+More than 2,600 tests: about half a minute each for the backend and frontend, a
 second for the electron suite. GitHub Actions runs all three on every push
 and pull request, but run them yourself before pushing — one at a time, for
 the reason [CONTRIBUTING.md](CONTRIBUTING.md) explains.

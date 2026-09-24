@@ -5,8 +5,8 @@ see v1.0.1 below) are documented here.
 
 ## v2.8.0
 
-Prune now remembers where you left it, and uninstallers that never opened
-now do.
+Prune now remembers where you left it, uninstallers that never opened now
+do, and the Disk Map shows real progress while it scans.
 
 ### Fixed
 
@@ -29,9 +29,29 @@ now do.
   itself stayed exactly where it was. Batch uninstall now waits for you
   to confirm the uninstallers are done before it scans, the same step
   the single-program uninstall already had.
+- **The "Read the whole drive" card's text now stays inside the card.**
+  Long lines wrap within a centred card of bounded width instead of
+  running to the edge, and the two buttons wrap onto a second row rather
+  than overflowing when the window is narrow.
 
 ### Added
 
+- **Real progress while the Disk Map walks folders.** The scan now streams
+  what it has done so far: a live count of files scanned and bytes
+  processed, and an animated bar. On a whole-drive scan of C: the bar
+  carries a percentage, and it is a real one -- bytes read divided by the
+  bytes Windows says are in use on the drive -- held at 99% until the scan
+  actually finishes, because the two figures never match exactly. For a
+  single folder, or another drive, no total is known, so there is no
+  percentage at all: a moving bar and the counters. The fast scan (admin)
+  cannot report progress (it runs in a separate elevated process that
+  only hands back its result at the end), so it shows elapsed time and
+  says why there is no percentage. Finished scans draw a checkmark and
+  offer "Scan again"; a failed one offers "Retry".
+- **Motion polish, all of it off under Windows' reduce-motion setting.**
+  Buttons swell slightly on hover and press in on click, nav items react
+  to hover and press, toggle switches slide on a spring, and the scan
+  counters count up to their value instead of jumping.
 - **The window reopens where you left it** -- same size, same position,
   maximized if it was. If the monitor it was on is no longer connected,
   it opens centred on one that is, rather than somewhere off-screen.
