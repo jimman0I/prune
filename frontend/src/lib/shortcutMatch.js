@@ -46,7 +46,16 @@ export function matchShortcut(event) {
   // which must reach the shell untouched. Deferred to a focused field like
   // the rest: Ctrl+digit means nothing to a text box either, but a person
   // typing should never be teleported off the field they are typing in.
+  // Matched on the KEY, and on the physical position as a second way in: on
+  // an AZERTY keyboard (French, Belgian) the unshifted top row types & and e
+  // rather than 1 and 2, so Ctrl+1 there reports key "&". `code` names the
+  // physical key regardless of layout. Shift is refused on that path, since
+  // Ctrl+Shift+digit is a different chord (and on a US layout arrives as "!").
   if (/^[1-8]$/.test(key)) return `screen:${key}`;
+  if (!event.shiftKey) {
+    const positional = /^(?:Digit|Numpad)([1-8])$/.exec(String(event.code || ''));
+    if (positional) return `screen:${positional[1]}`;
+  }
 
   if (key === 'k' || key === 'f') return 'search';
   if (key === '/' || key === '?') return 'help';
