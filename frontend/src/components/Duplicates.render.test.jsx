@@ -48,8 +48,13 @@ describe('what can be copied on the Duplicates screen', () => {
     });
     await search();
 
-    expect(isCopyable(await screen.findByText(`${FOLDER}\\a.jpg`))).toBe(true);
-    expect(isCopyable(screen.getByText(`${FOLDER}\\copy of a.jpg`))).toBe(true);
+    // The path is shown in pieces (name, then the folder cut in the middle)
+    // and every piece stays selectable, so the whole path can still be copied.
+    expect(isCopyable(await screen.findByText('a.jpg'))).toBe(true);
+    expect(isCopyable(screen.getByText('copy of a.jpg'))).toBe(true);
+    for (const piece of [...screen.getAllByText('C:\\Users\\jim'), ...screen.getAllByText('\\Pictures')]) {
+      expect(isCopyable(piece)).toBe(true);
+    }
     expect(isCopyable(screen.getByText(/2 identical copies/))).toBe(false);
   });
 

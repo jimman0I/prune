@@ -1,7 +1,8 @@
-import { useMemo, useState, memo } from 'react';
+import { useEffect, useMemo, useState, memo } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { fetchDuplicates, quarantineDiskPath } from '../lib/api.js';
 import { selectForRemoval, KEEP } from '../lib/duplicateSelection.js';
+import { splitPath } from '../lib/pathDisplay.js';
 import { useToasts } from '../hooks/useToasts.jsx';
 import ModalOverlay from './ModalOverlay.jsx';
 import { useLanguage } from '../i18n/LanguageContext.jsx';
@@ -26,7 +27,37 @@ function formatBytes(bytes) {
   return `${parseFloat((bytes / Math.pow(k, i)).toFixed(1))} ${sizes[i]}`;
 }
 
-const DEFAULT_FOLDER = 'C:\\Users';
+/** Shown inside the empty field as an example, not as a value. "C:\Users"
+ * on its own looked like a folder already chosen, and the button beside it
+ * stayed disabled for reasons nobody could see. */
+const EXAMPLE_FOLDER = 'C:\\Users\\you\\Downloads';
+
+/** "mm:ss" for a running scan. */
+function formatElapsed(totalSeconds) {
+  const m = Math.floor(totalSeconds / 60);
+  const s = totalSeconds % 60;
+  return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+}
+
+/** Seconds since `active` became true, ticking once a second. Hashing can
+ * run for minutes with nothing else to show, and time is the one honest
+ * figure a scan without a total has. */
+function useElapsedSeconds(active) {
+  const [seconds, setSeconds] = useState(0);
+  useEffect(() => {
+    if (!active) return undefined;
+    setSeconds(0);
+    const id = setInterval(() => setSeconds((n) => n + 1), 1000);
+    return () => clearInterval(id);
+  }, [active]);
+  return seconds;
+}
+
+/** Date AND time: two copies written the same day are told apart by the
+ * hour, and "which is newer" is the whole question on this screen. */
+function formatWhen(mtimeMs) {
+  return new Date(mtimeMs).toLocaleString(undefined, { dateStyle: 'short', timeStyle: 'short' });
+}
 
 function Duplicates() {
   const { t } = useLanguage();
@@ -35,6 +66,9 @@ function Duplicates() {
   const [selected, setSelected] = useState(() => new Set());
   const [confirming, setConfirming] = useState(false);
   const [removing, setRemoving] = useState(false);
+  // Set by Stop, cleared by the next search: without it a stopped search left
+  // an empty screen, which reads as "found nothing".
+  const [stopped, setStopped] = useState(false);
   const toasts = useToasts();
   const queryClient = useQueryClient();
 
@@ -50,6 +84,7 @@ function Duplicates() {
   });
 
   const groups = scan.data?.groups ?? [];
+  const elapsed = useElapsedSeconds(scan.isFetching);
 
   const toggle = (path) => {
     setSelected((prev) => {
@@ -123,8 +158,8 @@ function Duplicates() {
           type="text"
           value={folder}
           onChange={(e) => setFolder(e.target.value)}
-          onKeyDown={(e) => { if (e.key === 'Enter' && folder.trim()) setArmed(folder.trim()); }}
-          placeholder={DEFAULT_FOLDER}
+          onKeyDown={(e) => { if (e.key === 'Enter' && folder.trim()) { setStopped(false); setArmed(folder.trim()); } }}
+          placeholder={t('duplicates.folderPlaceholder', EXAMPLE_FOLDER)}
           data-app-search="duplicates"
           aria-label={t('duplicates.folderInputAriaLabel')}
           className="flex-1 min-w-0 font-mono text-[12.5px] px-3 py-2 rounded-lg bg-[color:var(--surface-hover)] border border-[color:var(--border-subtle)] text-[color:var(--text-primary)] placeholder:text-[color:var(--text-muted)] focus:outline-none focus:border-[color:var(--accent-primary)]/50"
@@ -132,7 +167,7 @@ function Duplicates() {
         {scan.isFetching ? (
           <button
             className="btn-ghost px-3.5 py-2 rounded-lg text-[12.5px] font-medium shrink-0"
-            onClick={() => { setArmed(null); queryClient.cancelQueries({ queryKey: ['duplicates', armed] }); }}
+            onClick={() => { setArmed(null); setStopped(true); queryClient.cancelQueries({ queryKey: ['duplicates', armed] }); }}
           >
             {t('duplicates.stop')}
           </button>
@@ -140,7 +175,7 @@ function Duplicates() {
           <button
             className="btn-primary px-4 py-2 rounded-lg text-[12.5px] font-medium shrink-0 disabled:opacity-50"
             disabled={!folder.trim()}
-            onClick={() => { setSelected(new Set()); setArmed(folder.trim()); }}
+            onClick={() => { setSelected(new Set()); setStopped(false); setArmed(folder.trim()); }}
           >
             {t('duplicates.findButton')}
           </button>
@@ -163,6 +198,16 @@ function Duplicates() {
           <p className="text-[12.5px] text-[color:var(--text-secondary)] mt-1.5 max-w-[52ch] mx-auto">
             {t('duplicates.readingNote')}
           </p>
+          <p className="text-[12.5px] text-[color:var(--text-primary)] mt-3 tabular-nums" data-testid="duplicates-elapsed">
+            {t('diskMap.scanProgress.elapsed', formatElapsed(elapsed))}
+          </p>
+        </div>
+      )}
+
+      {/* Stop is not "found nothing": say what happened and what it means. */}
+      {stopped && !scan.isFetching && (
+        <div role="status" className="glass-panel p-8 text-center">
+          <p className="text-[13.5px] text-[color:var(--text-secondary)]">{t('duplicates.stoppedNote')}</p>
         </div>
       )}
 
@@ -186,7 +231,7 @@ function Duplicates() {
                   translated catalog function can only return a plain
                   string, not JSX with an inline span partway through. */}
               <span className="text-[color:var(--text-primary)] font-medium">{t('duplicates.summarySets', groups.length)}</span>{' · '}
-              <span className="text-[color:var(--accent-primary)] font-medium">{t('duplicates.recoverable', formatBytes(scan.data.wastedBytes))}</span>
+              <span className="text-[color:var(--text-primary)] font-medium">{t('duplicates.recoverable', formatBytes(scan.data.wastedBytes))}</span>
             </span>
             <span className="flex-1" />
             <button className="btn-ghost px-3 py-1.5 rounded-lg text-[12px]" onClick={() => autoSelect(KEEP.OLDEST)}>
@@ -215,7 +260,7 @@ function Duplicates() {
                     <span className="text-[12.5px] text-[color:var(--text-primary)]">
                       {t('duplicates.group.identicalCopies', group.count, formatBytes(group.size))}
                     </span>
-                    <span className="text-[12px] text-[color:var(--accent-primary)]">
+                    <span className="text-[12px] text-[color:var(--text-secondary)]">
                       {t('duplicates.recoverable', formatBytes(group.wastedBytes))}
                     </span>
                   </div>
@@ -227,22 +272,48 @@ function Duplicates() {
                   )}
 
                   <div className="flex flex-col gap-1">
-                    {group.files.map((file) => (
-                      <label key={file.path} className="flex items-center gap-3 px-2 py-1.5 rounded-lg hover:bg-[color:var(--surface-subtle)] cursor-pointer">
-                        <input
-                          type="checkbox"
-                          className="prune-check"
-                          checked={selected.has(file.path)}
-                          onChange={() => toggle(file.path)}
-                        />
-                        <span className="font-mono text-[11.5px] text-[color:var(--text-secondary)] truncate min-w-0 flex-1 select-text">
-                          {file.path}
-                        </span>
-                        <span className="text-[11px] font-mono text-[color:var(--text-muted)] shrink-0">
-                          {new Date(file.mtimeMs).toLocaleDateString()}
-                        </span>
-                      </label>
-                    ))}
+                    {group.files.map((file) => {
+                      // Derived from the selection itself, here, on every render.
+                      // There is no second flag to keep in step: the tag can only
+                      // ever say what the checkbox beside it says.
+                      const toQuarantine = selected.has(file.path);
+                      const { name, head, tail } = splitPath(file.path);
+                      return (
+                        <label key={file.path} className="flex items-center gap-3 px-2 py-1.5 rounded-lg hover:bg-[color:var(--surface-subtle)] cursor-pointer">
+                          <input
+                            type="checkbox"
+                            className="prune-check"
+                            checked={toQuarantine}
+                            onChange={() => toggle(file.path)}
+                          />
+                          {/* The file's name on its own line, the folder beneath it cut in
+                              the middle: the end of a path is the part that says which copy
+                              this is, and the start is what every copy shares. */}
+                          <span className="min-w-0 flex-1">
+                            <span className="block text-[12.5px] text-[color:var(--text-primary)] truncate select-text">{name}</span>
+                            <span className="flex min-w-0 font-mono text-[11px] text-[color:var(--text-muted)] select-text">
+                              <span className="truncate min-w-0">{head}</span>
+                              <span className="shrink-0">{tail}</span>
+                            </span>
+                          </span>
+                          {/* aria-hidden: the checkbox already says it. Inside the label the
+                              name would otherwise change every time the box is ticked. */}
+                          <span
+                            aria-hidden="true"
+                            className={`shrink-0 text-[10.5px] font-mono uppercase tracking-wider px-1.5 py-px rounded border ${
+                              toQuarantine
+                                ? 'text-[color:var(--text-primary)] border-[color:var(--control-border)] bg-[color:var(--surface-hover)]'
+                                : 'text-[color:var(--text-secondary)] border-[color:var(--border-subtle)]'
+                            }`}
+                          >
+                            {toQuarantine ? t('duplicates.tags.toQuarantine') : t('duplicates.tags.keep')}
+                          </span>
+                          <span className="text-[11px] font-mono text-[color:var(--text-muted)] shrink-0">
+                            {formatWhen(file.mtimeMs)}
+                          </span>
+                        </label>
+                      );
+                    })}
                   </div>
                 </div>
               );
