@@ -340,10 +340,37 @@ describe('stopping a scan', () => {
     const { events } = await open.finish();
     const complete = events.find((e) => e.event === 'complete');
     expect(complete.data.truncated).toBe(true);
+    expect(complete.data.stoppedByUser).toBe(true);
     expect(complete.data.totalFiles).toBe(1);
     expect(events.some((e) => e.event === 'error')).toBe(false);
     const tree = await server.call(`/disk-scan/result/${complete.data.resultId}`);
     expect(tree.body).toMatchObject({ name: 'Users', truncated: true });
+  });
+
+  it('a scan that only ran out of time is truncated but NOT stoppedByUser', async () => {
+    vi.useFakeTimers({ toFake: ['setTimeout'] });
+    try {
+      const started = new Promise((resolve) => {
+        scanDirectory.mockImplementationOnce(async (path, depth, sig) => {
+          resolve();
+          await new Promise((r) => sig.addEventListener('abort', r));
+          return { name: 'C', size: 5, children: [] };
+        });
+      });
+      const request = readStream('?path=C%3A%5C');
+      await started;
+      vi.advanceTimersByTime(30_000);
+      const { events } = await request;
+      expect(events.at(-1).data).toMatchObject({ truncated: true, stoppedByUser: false });
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it('a scan that finishes on its own reports stoppedByUser false', async () => {
+    slowScan({ lingerMs: 0 });
+    const { events } = await readStream('?path=C%3A%5CUsers');
+    expect(events.find((e) => e.event === 'complete').data.stoppedByUser).toBe(false);
   });
 
   it('an unknown scan id is a 404, not a crash', async () => {
