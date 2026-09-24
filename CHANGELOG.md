@@ -6,7 +6,8 @@ see v1.0.1 below) are documented here.
 ## v2.8.0
 
 Prune now remembers where you left it, uninstallers that never opened now
-do, and the Disk Map shows real progress while it scans.
+do, the Disk Map shows real progress while it scans, and Deep Clean gains
+Windows Defender and WinRAR cleaners.
 
 ### Fixed
 
@@ -33,6 +34,12 @@ do, and the Disk Map shows real progress while it scans.
   Long lines wrap within a centred card of bounded width instead of
   running to the edge, and the two buttons wrap onto a second row rather
   than overflowing when the window is narrow.
+- **With "hide cleaners that don't apply" on, Deep Clean no longer hides
+  the browser history, cookie and autofill rules before a scan.** Those
+  rules were reported as not present until a scan had run, because the
+  check looked only at the older single-path rule form. Folders that
+  exist but that Windows won't let a normal user read (Defender's) now
+  count as present too.
 
 ### Added
 
@@ -54,6 +61,17 @@ do, and the Disk Map shows real progress while it scans.
   Buttons swell slightly on hover and press in on click, nav items react
   to hover and press, toggle switches slide on a spring, and the scan
   counters count up to their value instead of jumping.
+- **Windows Defender and WinRAR cleaners in Deep Clean**, matching what
+  BleachBit offers for both. Defender: its scan history, temporary files
+  and logs, plus its Quarantine and its definition-update backups.
+  Those last two are marked as losing data and are off by default --
+  Quarantine is how Defender restores a file it caught by mistake, and
+  the backup is what it rolls back to after a bad update. WinRAR: the
+  archive names, extract paths and search terms it remembers, and stray
+  `.tmp` files. Defender's folders need administrator access, so
+  without it those rules say "needs admin" instead of quietly showing
+  nothing. Whether an elevated Prune can move files out of Defender's
+  folders while its Tamper Protection is on has not been verified.
 - **The window reopens where you left it** -- same size, same position,
   maximized if it was. If the monitor it was on is no longer connected,
   it opens centred on one that is, rather than somewhere off-screen.
