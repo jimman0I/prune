@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { addToast, dismissToast, expireToasts, MAX_TOASTS } from './toastQueue.js';
+import { addToast, dismissToast, expireToasts, pauseToast, resumeToast, MAX_TOASTS, DEFAULT_TTL } from './toastQueue.js';
 
 const NOW = 1_000_000;
 
@@ -60,6 +60,31 @@ describe('addToast', () => {
   });
 });
 
+describe('how long each tone lives by default', () => {
+  it('lets info and success expire after the default life', () => {
+    for (const tone of ['info', 'success']) {
+      const [toast] = addToast([], { message: 'm', tone }, { now: NOW });
+      expect(toast.ttl, tone).toBe(DEFAULT_TTL);
+    }
+  });
+
+  it('keeps a warning and a failure until they are dismissed', () => {
+    // A warning is something to act on ("protected by Windows", "3 files
+    // locked"). Somebody who looked away must still find it.
+    for (const tone of ['warning', 'danger']) {
+      const [toast] = addToast([], { message: 'm', tone }, { now: NOW });
+      expect(toast.ttl, tone).toBe(0);
+    }
+  });
+
+  it('still honours a ttl the caller states explicitly', () => {
+    const [warn] = addToast([], { message: 'm', tone: 'warning', ttl: 3000 }, { now: NOW });
+    expect(warn.ttl).toBe(3000);
+    const [ok] = addToast([], { message: 'm', tone: 'success', ttl: 0 }, { now: NOW });
+    expect(ok.ttl).toBe(0);
+  });
+});
+
 describe('expireToasts', () => {
   it('drops a toast once its time is up', () => {
     const list = addToast([], { message: 'x', ttl: 4000 }, { now: NOW });
@@ -94,5 +119,47 @@ describe('dismissToast', () => {
   it('is unbothered by an id that is not there', () => {
     const list = addToast([], { message: 'a' }, { now: NOW });
     expect(dismissToast(list, 'nope')).toBe(list);
+  });
+});
+
+describe('pausing expiry while a toast is hovered or focused', () => {
+  const life = () => addToast([], { message: 'm', tone: 'success', ttl: 5000 }, { now: NOW });
+
+  it('never expires a paused toast', () => {
+    const list = life();
+    const paused = pauseToast(list, list[0].id, NOW + 1000);
+    expect(expireToasts(paused, NOW + 60_000)).toHaveLength(1);
+  });
+
+  it('does not count the time spent paused against the toast on resume', () => {
+    const list = life();
+    const paused = pauseToast(list, list[0].id, NOW + 4000); // 1000 ms left
+    const resumed = resumeToast(paused, list[0].id, NOW + 14_000);
+    expect(expireToasts(resumed, NOW + 14_000 + 999)).toHaveLength(1);
+    expect(expireToasts(resumed, NOW + 14_000 + 1001)).toHaveLength(0);
+  });
+
+  it('keeps the first pause moment if paused again, so hover then focus does not restart the clock', () => {
+    const list = life();
+    const once = pauseToast(list, list[0].id, NOW + 1000);
+    const twice = pauseToast(once, list[0].id, NOW + 3000);
+    expect(twice).toBe(once);
+  });
+
+  it('returns the same array for an unknown id, or resuming one that is not paused', () => {
+    const list = life();
+    expect(pauseToast(list, 'nope', NOW)).toBe(list);
+    expect(resumeToast(list, list[0].id, NOW)).toBe(list);
+    expect(resumeToast(list, 'nope', NOW)).toBe(list);
+  });
+
+  it('gives a repeat that lands on a hovered toast a full life from when the pointer leaves', () => {
+    const list = life();
+    const paused = pauseToast(list, list[0].id, NOW + 2000);
+    const repeated = addToast(paused, { message: 'm', tone: 'success', ttl: 5000 }, { now: NOW + 3000 });
+    expect(repeated[0].count).toBe(2);
+    const resumed = resumeToast(repeated, repeated[0].id, NOW + 9000);
+    expect(expireToasts(resumed, NOW + 9000 + 4999)).toHaveLength(1);
+    expect(expireToasts(resumed, NOW + 9000 + 5001)).toHaveLength(0);
   });
 });

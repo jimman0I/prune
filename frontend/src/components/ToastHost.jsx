@@ -1,4 +1,5 @@
 import { createPortal } from 'react-dom';
+import { useRef } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useToasts } from '../hooks/useToasts.jsx';
 import { useLanguage } from '../i18n/LanguageContext.jsx';
@@ -26,9 +27,16 @@ const TONE = {
 /** The brief's easing and timing: snappy, 0.2-0.3s, no overshoot. */
 const EASE = [0.2, 0.9, 0.3, 1];
 
-function ToastCard({ toast, onDismiss }) {
+function ToastCard({ toast, onDismiss, onPause, onResume }) {
   const { t } = useLanguage();
   const tone = TONE[toast.tone] ?? TONE.info;
+
+  /* Held on screen while the pointer is over it OR focus is inside it.
+   * Two independent reasons, so leaving with the mouse must not release a
+   * toast whose dismiss button still has focus, and vice versa. */
+  const hovered = useRef(false);
+  const focused = useRef(false);
+  const sync = () => (hovered.current || focused.current ? onPause(toast.id) : onResume(toast.id));
 
   return (
     <motion.div
@@ -39,9 +47,19 @@ function ToastCard({ toast, onDismiss }) {
       transition={{ duration: 0.24, ease: EASE }}
       className="glass-panel w-[330px] px-4 py-3 flex items-start gap-3 pointer-events-auto"
       style={{ borderColor: tone.soft }}
-      role="status"
-      // Failures are announced; routine confirmations are not. A screen
-      // reader interrupting to say "freed 2.4 GB" is worse than silence.
+      onMouseEnter={() => { hovered.current = true; sync(); }}
+      onMouseLeave={() => { hovered.current = false; sync(); }}
+      onFocus={() => { focused.current = true; sync(); }}
+      onBlur={(event) => {
+        // Focus moving between controls inside the card is not leaving it.
+        if (event.currentTarget.contains(event.relatedTarget)) return;
+        focused.current = false;
+        sync();
+      }}
+      // Failures are alerts; routine confirmations and warnings are polite
+      // status messages. A screen reader interrupting to say "freed 2.4 GB"
+      // is worse than silence.
+      role={toast.tone === 'danger' ? 'alert' : 'status'}
       aria-live={toast.tone === 'danger' ? 'assertive' : 'polite'}
     >
       <span className="w-[3px] self-stretch rounded-full shrink-0" style={{ background: tone.accent }} />
@@ -93,7 +111,7 @@ function ToastCard({ toast, onDismiss }) {
 }
 
 export default function ToastHost() {
-  const { toasts, dismiss } = useToasts();
+  const { toasts, dismiss, pause, resume } = useToasts();
 
   return createPortal(
     <div
@@ -103,7 +121,7 @@ export default function ToastHost() {
     >
       <AnimatePresence initial={false}>
         {toasts.map((toast) => (
-          <ToastCard key={toast.id} toast={toast} onDismiss={dismiss} />
+          <ToastCard key={toast.id} toast={toast} onDismiss={dismiss} onPause={pause} onResume={resume} />
         ))}
       </AnimatePresence>
     </div>,

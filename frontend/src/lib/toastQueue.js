@@ -15,6 +15,12 @@ export const MAX_TOASTS = 4;
  * actual bar -- people look up mid-way. */
 export const DEFAULT_TTL = 5000;
 
+/** Tones that stay until dismissed. A warning is something to act on
+ * ("protected by Windows", "3 files were locked"), and a failure is the
+ * only account of what went wrong: neither should vanish because the
+ * person looked away. Ordinary confirmations expire; these do not. */
+const PERSISTENT_TONES = new Set(['warning', 'danger']);
+
 /** Repeats inside this window are counted rather than stacked. */
 const DEDUPE_WINDOW = 8000;
 
@@ -37,9 +43,12 @@ export function addToast(toasts, toast, { now = Date.now(), max = MAX_TOASTS } =
   const list = toasts || [];
   if (!toast?.message) return list;
 
+  const tone = toast.tone ?? 'info';
   const entry = {
     tone: 'info',
-    ttl: DEFAULT_TTL,
+    // Stated by the caller wins; otherwise it depends on what kind of
+    // notice this is.
+    ttl: PERSISTENT_TONES.has(tone) ? 0 : DEFAULT_TTL,
     ...toast,
     id: `t${++sequence}`,
     createdAt: now,
@@ -48,7 +57,10 @@ export function addToast(toasts, toast, { now = Date.now(), max = MAX_TOASTS } =
 
   const existing = list.findIndex((t) => sameToast(t, entry) && now - t.createdAt < DEDUPE_WINDOW);
   if (existing >= 0) {
-    const bumped = { ...list[existing], count: list[existing].count + 1, createdAt: now };
+    const held = list[existing];
+    // A repeat lands on a toast somebody may be reading right now: keep it
+    // held (pausedAt moves to now so the fresh life starts at resume).
+    const bumped = { ...held, count: held.count + 1, createdAt: now, ...(held.pausedAt != null && { pausedAt: now }) };
     return [bumped, ...list.slice(0, existing), ...list.slice(existing + 1)];
   }
 
@@ -66,8 +78,33 @@ export function addToast(toasts, toast, { now = Date.now(), max = MAX_TOASTS } =
  * exit animation underneath it. */
 export function expireToasts(toasts, now = Date.now()) {
   const list = toasts || [];
-  const kept = list.filter((t) => !t.ttl || now - t.createdAt < t.ttl);
+  const kept = list.filter((t) => t.pausedAt != null || !t.ttl || now - t.createdAt < t.ttl);
   return kept.length === list.length ? list : kept;
+}
+
+/** Stops one toast's clock, for as long as it is hovered or focused.
+ *
+ * Somebody reading a toast, or moving to its dismiss button, must not have
+ * it taken away mid-sentence. The moment is remembered so resumeToast can
+ * give back exactly the time spent held. Pausing an already-paused toast
+ * keeps the FIRST moment: hover and then focus are one continuous hold. */
+export function pauseToast(toasts, id, now = Date.now()) {
+  const list = toasts || [];
+  const at = list.findIndex((t) => t.id === id);
+  if (at < 0 || list[at].pausedAt != null) return list;
+  return list.map((t, i) => (i === at ? { ...t, pausedAt: now } : t));
+}
+
+/** Restarts it, with the time spent held not counted against its life. */
+export function resumeToast(toasts, id, now = Date.now()) {
+  const list = toasts || [];
+  const at = list.findIndex((t) => t.id === id);
+  if (at < 0 || list[at].pausedAt == null) return list;
+  return list.map((t, i) => {
+    if (i !== at) return t;
+    const { pausedAt, ...rest } = t;
+    return { ...rest, createdAt: t.createdAt + (now - pausedAt) };
+  });
 }
 
 /** Removes one by id, and returns the same array if it was not there. */
