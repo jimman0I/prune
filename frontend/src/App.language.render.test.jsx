@@ -53,6 +53,8 @@ vi.mock('./lib/api.js', () => ({
   fetchDiskHealth: vi.fn(async () => ({})),
   unlockDiskWear: vi.fn(async () => ({})),
   fetchFileTypeIcons: vi.fn(async () => ({})),
+  // useIdlePrefetch warms this on a 1.2 s timer; a slow run reaches it.
+  fetchCleanerCategoryIcons: vi.fn(async () => ({})),
   fetchDiskSpace: vi.fn(async () => ({})),
   scanDriveFast: vi.fn(async () => ({})),
   fetchDiskScan: vi.fn(async () => ({})),
