@@ -20,10 +20,15 @@ function segmentToRegex(segment) {
  * the real filesystem, returning every concrete path it actually matches.
  * A path with no `*` anywhere resolves to exactly itself (existence is
  * checked later, by the caller) -- no directory listing needed for the
- * overwhelmingly common case. */
+ * overwhelmingly common case.
+ *
+ * A segment that is exactly `**` is different: it means "zero or more
+ * directory levels", so `Foo\**\*.tmp` finds a .tmp at any depth under Foo
+ * (see resolveRecursive). */
 export function resolveGlob(basePath, segments) {
   if (segments.length === 0) return [basePath];
   const [segment, ...rest] = segments;
+  if (segment === '**') return resolveRecursive(basePath, rest);
   if (!segment.includes('*')) return resolveGlob(join(basePath, segment), rest);
 
   let entries;
@@ -36,6 +41,26 @@ export function resolveGlob(basePath, segments) {
   const matches = [];
   for (const entry of entries) {
     if (regex.test(entry.name)) matches.push(...resolveGlob(join(basePath, entry.name), rest));
+  }
+  return matches;
+}
+
+/** `**` -- zero or more directory levels, then `rest`. Only real
+ * directories are descended into: a Dirent for a symlink or junction
+ * reports isDirectory() false, so a junction loop can't recurse forever.
+ * A trailing `**` is just its base path -- collectFiles already walks a
+ * directory recursively, and expanding it here would list every file twice. */
+function resolveRecursive(basePath, rest) {
+  if (rest.length === 0) return [basePath];
+  const matches = resolveGlob(basePath, rest);
+  let entries;
+  try {
+    entries = readdirSync(basePath, { withFileTypes: true });
+  } catch {
+    return matches;
+  }
+  for (const entry of entries) {
+    if (entry.isDirectory()) matches.push(...resolveRecursive(join(basePath, entry.name), rest));
   }
   return matches;
 }
