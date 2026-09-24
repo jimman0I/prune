@@ -483,11 +483,18 @@ body::before {
 /* ---------------------------------------------------------------------
    Motion.
    
-   All of it is CSS. There is no animation library here and adding one for
-   this would be a poor trade: every effect below is a compositor-friendly
-   transform/opacity change, and the one place motion genuinely mattered
-   for performance -- the treemap's hover focus -- specifically must NOT
-   go through React at all (see .treemap-cells).
+   The effects below are plain CSS: transform/opacity feedback such as
+   entrances, press states and the aurora, all compositor-friendly, and the
+   one place motion genuinely mattered for performance -- the treemap's hover
+   focus -- specifically must NOT go through React at all (see
+   .treemap-cells).
+
+   framer-motion (already a dependency, configured once in main.jsx) is used
+   only where it earns its keep and CSS cannot: the nav rail's sliding
+   layoutId indicator, spring-driven toggle thumbs, the toasts and context
+   menu, and the scan card's bar width and self-drawing checkmark
+   (pathLength). New motion should default to CSS and reach for it only for
+   those kinds of things.
 
    Every keyframe declares only `from`. The implicit `to` is the element's
    own computed value, so a component never has to state its target twice
@@ -628,9 +635,10 @@ body::before {
     inset 0 1px 0 rgba(255, 255, 255, 0.25),
     0 8px 24px -8px var(--accent-primary-glow),
     0 2px 6px rgba(0, 0, 0, 0.35);
-  /* Spring-feeling ease: the 1.56 control point overshoots slightly, so
-     the scale settles with a little give rather than stopping dead. */
-  transition: transform 220ms cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 200ms ease;
+  /* No overshoot: a tool that deletes things should not bounce (see
+     --ease-out-expo). Buttons are pressed constantly, so the motion is only
+     the press itself, quick and settling, not a flourish on every hover. */
+  transition: transform 120ms var(--ease-out-expo), box-shadow 200ms ease;
   font-weight: 600;
   letter-spacing: -0.01em;
   border-radius: 9999px;
@@ -638,7 +646,7 @@ body::before {
   cursor: pointer;
 }
 .btn-primary:hover:not(:disabled) {
-  transform: translateY(-2px) scale(1.02);
+  transform: translateY(-1px);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.3),
     0 12px 32px -8px var(--accent-primary-glow),
@@ -657,9 +665,9 @@ body::before {
   /* Named properties rather than `all`. `all` animates whatever happens to
      change, including layout properties, and quietly costs a frame on
      every one of them. */
-  transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease, transform 200ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease, transform 120ms var(--ease-out-expo);
 }
-.btn-ghost:hover:not(:disabled) { background: var(--surface-hover); border-color: var(--border-hover); transform: scale(1.02); }
+.btn-ghost:hover:not(:disabled) { background: var(--surface-hover); border-color: var(--border-hover); }
 /* Press feedback. Both of these had a hover state and nothing at all on
    mousedown, so a click on a slow action read as "did that register?" --
    the exact moment a user clicks a destructive control twice. */
@@ -673,9 +681,9 @@ body::before {
   border-radius: 9999px;
   padding: 6px 14px;
   cursor: pointer;
-  transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease, transform 200ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease, transform 120ms var(--ease-out-expo);
 }
-.btn-danger:hover:not(:disabled) { background: var(--danger-soft-hover); color: var(--danger-ink-hover); border-color: var(--danger-edge-hover); transform: scale(1.02); }
+.btn-danger:hover:not(:disabled) { background: var(--danger-soft-hover); color: var(--danger-ink-hover); border-color: var(--danger-edge-hover); }
 .btn-danger:active:not(:disabled) { transform: scale(0.98); background: var(--danger-soft-active); }
 .btn-danger:disabled { opacity: 0.45; cursor: not-allowed; }
 
@@ -790,6 +798,15 @@ body::after {
   z-index: -1;
 }
 
+/* The aurora holds still while the window is not in use (hooks/
+   useWindowActivity.js sets data-window-inactive on <html> when it loses
+   focus or is hidden). Nobody is watching a drift they cannot see, and two
+   full-viewport fixed layers should not keep animating behind another
+   window. Paused rather than removed, so it resumes where it stopped and
+   nothing jumps. */
+:root[data-window-inactive] body::before,
+:root[data-window-inactive] body::after { animation-play-state: paused; }
+
 /* Cards that lift.
  *
  * Opt-in, NOT applied to .glass-panel. That class is on every elevated
@@ -870,12 +887,11 @@ input[type="checkbox"].prune-check:active:not(:disabled),
   .skeleton-shimmer { animation: none; background-image: none; background-color: var(--surface-hover); }
   body::before, body::after { animation: none; }
   .lift:hover { transform: none; }
-  /* Button hover/press scale is motion, not feedback the layout needs. */
+  /* The primary button's 1px hover lift and every button's press scale are
+     motion, not feedback the layout needs. */
   .btn-primary:hover:not(:disabled),
   .btn-primary:active:not(:disabled),
-  .btn-ghost:hover:not(:disabled),
   .btn-ghost:active:not(:disabled),
-  .btn-danger:hover:not(:disabled),
   .btn-danger:active:not(:disabled) { transform: none; }
 }
 

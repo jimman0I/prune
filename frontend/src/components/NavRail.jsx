@@ -124,9 +124,12 @@ export default function NavRail({ screen, onNavigate, footer = null }) {
           // translate rather than by widening anything.
           <div key={item.id} className="relative group">
             <motion.button
-              whileHover={{ scale: 1.06 }}
-              whileTap={{ scale: 0.94 }}
-              transition={{ type: 'spring', stiffness: 500, damping: 30 }}
+              // Press only. Nav items are hit constantly, so no hover motion
+              // (HIG, Motion: avoid motion on frequent interactions) and a
+              // quick, non-bouncing tap. The sliding indicator below is the
+              // purposeful motion here.
+              whileTap={{ scale: 0.96 }}
+              transition={{ duration: 0.12, ease: [0.16, 1, 0.3, 1] }}
               onClick={() => onNavigate(item.id)}
               aria-current={active ? 'page' : undefined}
               aria-label={label}

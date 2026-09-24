@@ -63,10 +63,18 @@ Windows Defender and WinRAR cleaners.
   far. Finished scans draw a checkmark and offer "Scan again"; one that
   ran out of time says it stopped early (with a warning mark, not a
   checkmark) and offers the same; a failed one offers "Retry".
-- **Motion polish, all of it off under Windows' reduce-motion setting.**
-  Buttons swell slightly on hover and press in on click, nav items react
-  to hover and press, toggle switches slide on a spring, and the scan
-  counters count up to their value instead of jumping.
+- **A Stop button on the folder walk.** It asks the scanner to stop and
+  shows what was measured so far, worded as stopped early. The fast scan
+  (admin) has no Stop: it runs in a separate elevated process that cannot
+  be interrupted part-way. While a real percentage is showing, the card
+  shows only the bar and the counters; the spinner and rings appear only
+  when the length of the wait is unknown.
+- **Motion, kept restrained and off under Windows' reduce-motion
+  setting.** Buttons and nav items press in briefly when clicked and do
+  nothing on hover (the primary button lifts 1px), with no bounce; switching
+  tabs is a quick 160 ms fade instead of a slide; toggle switches slide on a
+  spring; the scan counters count up to their value instead of jumping. The
+  background glow stops drifting while the window is unfocused or hidden.
 - **Windows Defender and WinRAR cleaners in Deep Clean**, matching what
   BleachBit offers for both. Defender: its scan history, temporary files
   and logs, plus its Quarantine and its definition-update backups.
