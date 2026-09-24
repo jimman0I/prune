@@ -8,9 +8,10 @@
  * A stored value that is not one of the two palettes is treated as absent
  * rather than trusted (which includes 'system', the choice that means
  * "follow the operating system": it falls through to the OS preference,
- * which is exactly what it should do). localStorage survives upgrades and is editable by hand, so
- * "solarized" is a state that can genuinely reach this function, and
- * setting data-theme to it would leave the app with no palette at all.
+ * which is exactly what it should do). localStorage survives upgrades and
+ * is editable by hand, so "solarized" is a state that can genuinely reach
+ * this function, and setting data-theme to it would leave the app with no
+ * palette at all.
  */
 export const THEMES = ['dark', 'light'];
 

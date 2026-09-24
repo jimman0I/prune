@@ -345,9 +345,14 @@ function DeepClean() {
    * cleaners that don't apply" on, the unfiltered group holds rules that
    * are not on screen, and ticking a heading would silently select rules
    * the user cannot see. */
-  const handleToggleCategory = (category, checked) => {
-    const group = (shownCategories ?? []).find((g) => g.category === category);
-    if (!group) return;
+  const handleToggleCategory = (category, checked, visibleIds) => {
+    const shown = (shownCategories ?? []).find((g) => g.category === category);
+    if (!shown) return;
+    // While the tree's filter is active it passes the ids it is showing:
+    // the heading acts on those and nothing else.
+    const group = visibleIds
+      ? { ...shown, items: shown.items.filter((item) => visibleIds.includes(item.id)) }
+      : shown;
 
     if (!checked) {
       setSelected((prev) => {
@@ -491,7 +496,7 @@ function DeepClean() {
               actually side-by-side. */}
           <div
             data-testid="deep-clean-tree-column"
-            className="flex flex-col min-h-0 pr-1 lg:shrink-0 w-full lg:w-[var(--dc-tree-w)] transition-[width] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]"
+            className="flex flex-col min-h-[240px] lg:min-h-0 pr-1 lg:shrink-0 w-full lg:w-[var(--dc-tree-w)] transition-[width] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]"
             style={{ '--dc-tree-w': cleaning ? '260px' : 'calc(100% - 380px)' }}
           >
             {/* The action lives IN the empty state, not only in the
