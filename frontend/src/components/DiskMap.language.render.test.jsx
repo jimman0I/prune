@@ -166,7 +166,7 @@ describe('the Disk Map in another language, once a scan has produced a real tree
   it('translates the folder-table column headers and the not-scanned badge', async () => {
     await mountScanned();
 
-    const headerRow = screen.getByText('Μέγεθος').closest('div');
+    const headerRow = screen.getByText('Μέγεθος').closest('[role="row"]');
     for (const label of ['Φάκελος', 'Στοιχεία', 'Αρχεία', 'Φάκελοι', 'Τροποποιήθηκε']) {
       expect(within(headerRow).getByText(label)).toBeTruthy();
     }
@@ -414,6 +414,48 @@ describe('the Disk Map in another language, when a scan ran out of time', () => 
 
     expect(await screen.findByText(/Αυτή η σάρωση εξάντλησε τον χρόνο της: μέτρησε 40 GB από τα 800 GB που χρησιμοποιούνται \(5%\)\./))
       .toBeTruthy();
+  });
+});
+
+describe('the Disk Map in another language, after the user pressed Stop', () => {
+  async function stoppedScan() {
+    fetchDiskSpace.mockResolvedValue({ freeBytes: 200 * GB, totalBytes: 1000 * GB });
+    fetchDiskScan.mockImplementation(async (_path, _signal, opts) => {
+      opts?.onProgress?.({ type: 'complete', totalFiles: 10, totalBytes: 40 * GB, truncated: true, stoppedByUser: true, resultId: 'x' });
+      return { ...TREE, size: 40 * GB, truncated: true };
+    });
+    const user = userEvent.setup();
+    mount();
+    await user.click(await crawlButton());
+    return user;
+  }
+
+  it('says it once, in Greek, in the card, and never that time ran out', async () => {
+    await stoppedScan();
+
+    await screen.findByText(/Διακόψατε αυτή τη σάρωση: μέτρησε 40 GB από τα 800 GB/);
+    expect(screen.getAllByText(/μέτρησε 40 GB/)).toHaveLength(1);
+    expect(document.body.textContent).not.toMatch(/εξάντλησε τον χρόνο/);
+  });
+
+  it('names the unscanned block in Greek, not with the stored English key', async () => {
+    await stoppedScan();
+
+    await screen.findByText(/Διακόψατε αυτή τη σάρωση/);
+    const table = screen.getByRole('table');
+    expect(within(table).getByText('Δεν σαρώθηκε')).toBeTruthy();
+    expect(document.body.textContent).not.toContain('Not scanned');
+  });
+
+  it('gives every folder row a translated open label and a translated actions button', async () => {
+    fetchDiskScan.mockResolvedValue(TREE);
+    const user = userEvent.setup();
+    mount();
+    await user.click(await crawlButton());
+
+    const table = await screen.findByRole('table');
+    expect(within(table).getAllByRole('button', { name: /^Άνοιγμα .+, / }).length).toBeGreaterThan(0);
+    expect(within(table).getAllByRole('button', { name: /^Ενέργειες για το / }).length).toBeGreaterThan(0);
   });
 });
 
