@@ -87,7 +87,7 @@ export function executeLogLine(item) {
   if (item.registryKeysRemoved !== undefined) {
     const label = `Clear ${item.name ?? item.id}`;
     return item.registryKeysRemoved > 0
-      ? { label, detail: `${item.registryKeysRemoved} registry key${item.registryKeysRemoved === 1 ? '' : 's'}`, tone: 'size' }
+      ? { label, detail: `${item.registryKeysRemoved} registry ${item.registryKeysRemoved === 1 ? 'entry' : 'entries'}`, tone: 'size' }
       : { label, detail: 'already absent', tone: 'muted' };
   }
 

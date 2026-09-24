@@ -876,6 +876,8 @@ describe('actions-array rules', () => {
         const result = await executeRule(rule);
         expect(result.registryKeysRemoved).toBe(2);
         expect(readdirSync(quarantineDir)).toHaveLength(1);
+        const manifest = JSON.parse(await readFile(join(result.quarantineBatch, 'manifest.json'), 'utf8'));
+        expect(manifest.registryKeys).toHaveLength(2);
       } finally { await cleanup(); }
     });
   });

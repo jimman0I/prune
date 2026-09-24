@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
-import { mkdtemp, rm, readdir } from 'node:fs/promises';
+import { mkdtemp, rm, readdir, readFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { scan, scanSync, execute, executeAll } from './winreg.js';
@@ -111,12 +111,66 @@ describe('winreg executeAll', () => {
     ], 'Test Rule');
 
     expect(result.registryKeysRemoved).toBe(3);
-    expect(await readdir(scratchDir)).toHaveLength(1);
+    const batches = await readdir(scratchDir);
+    expect(batches).toHaveLength(1);
+    const manifest = JSON.parse(await readFile(join(result.quarantineBatch, 'manifest.json'), 'utf8'));
+    expect(manifest.registryKeys).toHaveLength(3);
   });
 
   it('reports zero and creates no batch when nothing is present', async () => {
     const result = await executeAll([{ expandedKey: `${TEST_KEY}\\Missing` }, { expandedKey: TEST_KEY, value: 'Nope' }], 'Test Rule');
     expect(result).toEqual({ freedBytes: 0, registryKeysRemoved: 0, skipped: [] });
     expect(await readdir(scratchDir)).toHaveLength(0);
+  });
+});
+
+describe('winreg executeAll overlapping targets', () => {
+  const add = (key) => execFileAsync('reg', ['add', key, '/v', 'x', '/d', '1', '/f']);
+
+  // A whole-key parent's export already contains its child, and deleting
+  // the parent first makes the child's own export fail -- which would be
+  // misreported as "protected or could not be removed". So descendants of
+  // a whole-key target are dropped, whatever the order. A dropped
+  // descendant is NOT counted: registryKeysRemoved is what
+  // quarantineAndDelete recorded, nothing more.
+  it('parent then child whole keys -> one removal, nothing skipped', async () => {
+    await add(`${TEST_KEY}\\A`); await add(`${TEST_KEY}\\A\\B`);
+    const result = await executeAll([{ expandedKey: `${TEST_KEY}\\A` }, { expandedKey: `${TEST_KEY}\\A\\B` }], 'Test Rule');
+    expect(result.registryKeysRemoved).toBe(1);
+    expect(result.skipped).toEqual([]);
+  });
+
+  it('child then parent whole keys -> one removal, nothing skipped', async () => {
+    await add(`${TEST_KEY}\\A`); await add(`${TEST_KEY}\\A\\B`);
+    const result = await executeAll([{ expandedKey: `${TEST_KEY}\\A\\B` }, { expandedKey: `${TEST_KEY}\\A` }], 'Test Rule');
+    expect(result.registryKeysRemoved).toBe(1);
+    expect(result.skipped).toEqual([]);
+  });
+
+  it('a target listed twice (any case) is removed once', async () => {
+    const result = await executeAll([{ expandedKey: TEST_KEY }, { expandedKey: TEST_KEY.toUpperCase() }], 'Test Rule');
+    expect(result.registryKeysRemoved).toBe(1);
+    expect(result.skipped).toEqual([]);
+  });
+
+  it('a value under a subkey of a whole-key target is dropped too', async () => {
+    await add(`${TEST_KEY}\\A`); await add(`${TEST_KEY}\\A\\B`);
+    const result = await executeAll([{ expandedKey: `${TEST_KEY}\\A\\B`, value: 'x' }, { expandedKey: `${TEST_KEY}\\A` }], 'Test Rule');
+    expect(result.registryKeysRemoved).toBe(1);
+    expect(result.skipped).toEqual([]);
+  });
+
+  it('a value in a key that is not itself a whole-key target is kept', async () => {
+    await add(`${TEST_KEY}\\A`);
+    const result = await executeAll([{ expandedKey: `${TEST_KEY}\\A`, value: 'x' }], 'Test Rule');
+    expect(result.registryKeysRemoved).toBe(1);
+  });
+
+  it('a protected target (depth 2, not an ancestor of the scratch key) lands in skipped with its path while a real key is still removed', async () => {
+    await add(`${TEST_KEY}\\A`);
+    const result = await executeAll([{ expandedKey: 'HKCU\\Environment' }, { expandedKey: `${TEST_KEY}\\A` }], 'Test Rule');
+    expect(result.registryKeysRemoved).toBe(1);
+    expect(result.skipped).toHaveLength(1);
+    expect(result.skipped[0].path).toBe('HKCU\\Environment');
   });
 });
