@@ -276,3 +276,97 @@ describe('GET /disk-scan/stream', () => {
     expect(putSpy).not.toHaveBeenCalled();
   });
 });
+
+/** Opens a stream and returns as soon as its `start` event has arrived, so a
+ * test can act on the running scan; `finish()` reads the rest. */
+async function openStream(query) {
+  const res = await fetch(`${server.base}/disk-scan/stream${query}`);
+  const reader = res.body.getReader();
+  const decoder = new TextDecoder();
+  let text = '';
+  while (!/"scanId":"[^"]+"/.test(text)) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    text += decoder.decode(value);
+  }
+  const scanId = /"scanId":"([^"]+)"/.exec(text)?.[1];
+  return {
+    scanId,
+    async finish() {
+      for (;;) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        text += decoder.decode(value);
+      }
+      const events = text.split('\n\n').filter(Boolean).map((block) => ({
+        event: /^event: (.*)$/m.exec(block)?.[1],
+        data: JSON.parse(/^data: (.*)$/m.exec(block)[1])
+      }));
+      return { text, events };
+    }
+  };
+}
+
+const stop = (id) => fetch(`${server.base}/disk-scan/stop/${id}`, { method: 'POST' });
+
+describe('stopping a scan', () => {
+  /** A scan that walks until it is aborted, then returns what it has: the
+   * same partial-tree behaviour the real walker has on abort. */
+  function runsUntilAborted(partial = TREE) {
+    scanDirectory.mockImplementationOnce(async (path, depth, sig, excl, onFile) => {
+      onFile(10);
+      await new Promise((r) => sig.addEventListener('abort', r));
+      return partial;
+    });
+  }
+
+  it('announces the scan id first, so the client has something to stop', async () => {
+    slowScan({ lingerMs: 100 });
+    const { events } = await readStream('?path=C%3A%5CUsers');
+
+    expect(events[0].event).toBe('start');
+    expect(events[0].data.type).toBe('start');
+    expect(typeof events[0].data.scanId).toBe('string');
+    expect(events[0].data.scanId.length).toBeGreaterThan(8);
+  });
+
+  it('POST /stop/:id ends the walk and the client still gets the PARTIAL tree, flagged truncated', async () => {
+    runsUntilAborted();
+    const open = await openStream('?path=C%3A%5CUsers');
+
+    const res = await stop(open.scanId);
+    expect(res.status).toBe(200);
+
+    const { events } = await open.finish();
+    const complete = events.find((e) => e.event === 'complete');
+    expect(complete.data.truncated).toBe(true);
+    expect(complete.data.totalFiles).toBe(1);
+    expect(events.some((e) => e.event === 'error')).toBe(false);
+    const tree = await server.call(`/disk-scan/result/${complete.data.resultId}`);
+    expect(tree.body).toMatchObject({ name: 'Users', truncated: true });
+  });
+
+  it('an unknown scan id is a 404, not a crash', async () => {
+    expect((await stop('not-a-scan')).status).toBe(404);
+  });
+
+  it('a finished scan can no longer be stopped', async () => {
+    slowScan({ lingerMs: 50 });
+    const { events } = await readStream('?path=C%3A%5CUsers');
+    expect((await stop(events[0].data.scanId)).status).toBe(404);
+  });
+
+  it('stopping before any result exists says it was stopped, not that it took too long', async () => {
+    scanDirectory.mockImplementationOnce(async (path, depth, sig) => {
+      await new Promise((r) => sig.addEventListener('abort', r));
+      return null;
+    });
+    const open = await openStream('?path=C%3A%5CUsers');
+    await stop(open.scanId);
+    const { text } = await open.finish();
+
+    expect(text).toMatch(/event: error/);
+    expect(text).toMatch(/stopped/);
+    expect(text).not.toMatch(/took too long/);
+  });
+});
