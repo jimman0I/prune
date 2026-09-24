@@ -23,8 +23,14 @@ import { iconKeyForNode, extensionsInCells, extensionOf, GENERIC_FILE_KEY } from
 import { limitCells } from '../lib/limitCells.js';
 import { useLanguage } from '../i18n/LanguageContext.jsx';
 import DiskScanProgress from './DiskScanProgress.jsx';
+import { readFastScanMs, writeFastScanMs } from '../lib/fastScanDuration.js';
 
 const DEFAULT_ROOT = 'C:\\';
+
+/** localStorage, or null where even touching it throws (site data blocked). */
+function safeStorage() {
+  try { return window.localStorage; } catch { return null; }
+}
 
 // Duplicated locally rather than imported from Dashboard.jsx/ProgramList.jsx
 // (both off-limits for this task) -- matches this codebase's own existing
@@ -63,10 +69,11 @@ export function isDriveRoot(path) {
  * A thin wrapper over DiskScanProgress. `percent`, `files` and `bytes` come
  * from the scan's real progress events; when the scan has no known total,
  * `percent` is null and no percentage is drawn -- never a made-up one. */
-export function LoadingState({ path, onFastScan, fastScanning, percent, files, bytes }) {
+export function LoadingState({ path, onFastScan, fastScanning, percent, files, bytes, remainingMs, remainingAt }) {
   const { t } = useLanguage();
   return (
-    <DiskScanProgress status="scanning" path={path} percent={percent} files={files} bytes={bytes}>
+    <DiskScanProgress status="scanning" path={path} percent={percent} files={files} bytes={bytes}
+      remainingMs={remainingMs} remainingAt={remainingAt}>
       {onFastScan && (
         <button
           className="btn-ghost mt-4 px-3.5 py-2 rounded-lg text-[12.5px] font-medium disabled:opacity-50"
@@ -600,6 +607,7 @@ function DiskMap() {
   const [fastStats, setFastStats] = useState(null);
   const [fastScanning, setFastScanning] = useState(false);
   const [fastNote, setFastNote] = useState(null);
+  const [fastExpectedMs, setFastExpectedMs] = useState(null);
   // The latest real progress event of the folder-by-folder scan
   // ({type:'progress'|'complete', files/bytes/percent or totalFiles/
   // totalBytes}, plus the path it belongs to). Only ever set from the
@@ -628,12 +636,19 @@ function DiskMap() {
   const handleFastScan = async () => {
     setFastScanning(true);
     setFastNote(null);
+    // What the last successful fast scan took, read fresh at the click: the
+    // card estimates from it. Nothing remembered means no estimate.
+    setFastExpectedMs(readFastScanMs(safeStorage()));
+    const startedAt = Date.now();
     try {
       const result = await scanDriveFast(DEFAULT_ROOT.slice(0, 1));
       if (result.cancelled) {
         setFastNote(t('diskMap.fastScanDeclined'));
         return;
       }
+      // Only a scan that actually finished is remembered. A declined prompt
+      // (above) or a failure (the catch) would teach the estimate nonsense.
+      writeFastScanMs(safeStorage(), Date.now() - startedAt);
       setFastTree(attachFullPaths(result.tree, DEFAULT_ROOT));
       setFastStats(result.stats);
       setCurrentPath(DEFAULT_ROOT);
@@ -718,7 +733,10 @@ function DiskMap() {
           setScanProgress((prev) => ({
             ...(prev?.path === currentPath ? prev : null),
             ...event,
-            path: currentPath
+            path: currentPath,
+            // When this reading arrived: the server's `remainingMs` is true
+            // as of now, and the card counts down from here.
+            receivedAt: Date.now()
           }));
         }
       });
@@ -972,6 +990,8 @@ function DiskMap() {
           percent={progressHere?.percent}
           files={progressHere?.files}
           bytes={progressHere?.bytes}
+          remainingMs={progressHere?.remainingMs}
+          remainingAt={progressHere?.receivedAt}
         />
       )}
 
@@ -989,7 +1009,7 @@ function DiskMap() {
       {/* The fast scan reads the MFT in an elevated process that has no
           progress channel, so this is time only: no percent, no counters. */}
       {!loading && fastScanning && (
-        <DiskScanProgress status="scanning" mode="index" path={currentPath} />
+        <DiskScanProgress status="scanning" mode="index" path={currentPath} expectedMs={fastExpectedMs} />
       )}
 
       {!loading && error && (

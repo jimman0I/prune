@@ -83,3 +83,24 @@ describe('the scan card in another language', () => {
     expect(onRetry).toHaveBeenCalledTimes(1);
   });
 });
+
+describe('the time-left lines in Greek', () => {
+  it('says "up to N s left" for a folder walk, and the stopped-early wording at the limit', async () => {
+    mount({ status: 'scanning', path: 'C:\\Users', percent: null, remainingMs: 25_000, remainingAt: Date.now() });
+
+    expect(await screen.findByText(/^Έως 2[45] δευτ\. ακόμη$/)).toBeTruthy();
+    cleanup();
+    mount({ status: 'complete', truncated: true, totalFiles: 10, totalBytes: 5 * GB });
+    expect(await screen.findByText(/^Η σάρωση σταμάτησε πρόωρα — μέχρι τώρα 10 αρχεία, 5 GB$/)).toBeTruthy();
+  });
+
+  it('says the fast-scan estimate and the overrun wording in Greek', async () => {
+    mount({ status: 'scanning', mode: 'index', path: 'C:\\', expectedMs: 30_000 });
+
+    expect(await screen.findByText(/^Περίπου \d+ δευτ\. ακόμη, με βάση την τελευταία σας σάρωση$/)).toBeTruthy();
+    expect(screen.getByText(/αυτή η εκτίμηση είναι η διάρκεια της τελευταίας σας σάρωσης/)).toBeTruthy();
+    cleanup();
+    mount({ status: 'scanning', mode: 'index', path: 'C:\\', expectedMs: 1000, elapsedMs: 5000 });
+    expect(await screen.findByText('Διαρκεί περισσότερο από την τελευταία σας σάρωση')).toBeTruthy();
+  });
+});

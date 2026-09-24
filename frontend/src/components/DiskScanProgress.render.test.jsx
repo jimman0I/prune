@@ -251,3 +251,112 @@ describe('error', () => {
     expect(screen.queryByRole('button', { name: 'Retry' })).toBeNull();
   });
 });
+
+describe('time left in a folder walk', () => {
+  const walk = (extra) => show({ status: 'scanning', path: 'Folder', percent: null, files: 5, bytes: 5, ...extra });
+
+  it('says "up to N s left", counting down from the server figure once a second', () => {
+    vi.useFakeTimers();
+    const receivedAt = Date.now();
+    walk({ remainingMs: 30_000, remainingAt: receivedAt });
+
+    expect(screen.getByTestId('scan-time-left').textContent).toBe('Up to 30 s left');
+    act(() => { vi.advanceTimersByTime(5000); });
+    expect(screen.getByTestId('scan-time-left').textContent).toBe('Up to 25 s left');
+    act(() => { vi.advanceTimersByTime(24_000); });
+    expect(screen.getByTestId('scan-time-left').textContent).toBe('Up to 1 s left');
+  });
+
+  it('never claims certainty: the wording is always an upper bound', () => {
+    walk({ remainingMs: 12_000, remainingAt: Date.now() });
+    expect(screen.getByTestId('scan-time-left').textContent).toMatch(/^Up to /);
+  });
+
+  it('switches to the stopped-early wording at the limit instead of sitting on 0 s', () => {
+    vi.useFakeTimers();
+    walk({ remainingMs: 3000, remainingAt: Date.now() });
+
+    act(() => { vi.advanceTimersByTime(3000); });
+    expect(screen.getByTestId('scan-time-left').textContent).toBe('Scan stopped early');
+    act(() => { vi.advanceTimersByTime(20_000); });
+    expect(screen.getByTestId('scan-time-left').textContent).toBe('Scan stopped early');
+    expect(document.body.textContent).not.toMatch(/\b0 s\b/);
+  });
+
+  it('shows a minutes form for longer figures', () => {
+    walk({ remainingMs: 65_000, remainingAt: Date.now() });
+    expect(screen.getByTestId('scan-time-left').textContent).toBe('Up to 1 min 5 s left');
+  });
+
+  it('shows nothing when the server sent no figure', () => {
+    walk({});
+    expect(screen.queryByTestId('scan-time-left')).toBeNull();
+  });
+
+  it('leaves the real percent bar exactly as it was and adds the line beneath it', () => {
+    walk({ percent: 37, remainingMs: 20_000, remainingAt: Date.now() });
+
+    expect(screen.getByText('37%')).toBeTruthy();
+    expect(screen.getByRole('progressbar').getAttribute('aria-valuenow')).toBe('37');
+    expect(screen.getByTestId('scan-time-left')).toBeTruthy();
+  });
+
+  it('has no animated number: the countdown is plain text, so reduced motion has nothing to turn off', () => {
+    walk({ remainingMs: 10_000, remainingAt: Date.now() });
+    const line = screen.getByTestId('scan-time-left');
+    expect(line.children.length).toBe(0);
+  });
+
+  it('clears its once-a-second timer on unmount', () => {
+    vi.useFakeTimers();
+    const setSpy = vi.spyOn(globalThis, 'setInterval');
+    const clearSpy = vi.spyOn(globalThis, 'clearInterval');
+    const { unmount } = walk({ remainingMs: 10_000, remainingAt: Date.now() });
+    const ids = setSpy.mock.calls
+      .map((call, i) => (call[1] === 1000 ? setSpy.mock.results[i].value : undefined))
+      .filter((id) => id !== undefined);
+    expect(ids.length).toBeGreaterThan(0);
+    unmount();
+    for (const id of ids) expect(clearSpy).toHaveBeenCalledWith(id);
+  });
+});
+
+describe('time left in the fast scan', () => {
+  const fast = (extra) => show({ status: 'scanning', mode: 'index', path: 'C:', ...extra });
+
+  it('gives NO number the first time ever, only the plain elapsed copy', () => {
+    fast({ expectedMs: null });
+
+    expect(screen.queryByTestId('scan-time-left')).toBeNull();
+    expect(screen.getByText('Elapsed 00:00')).toBeTruthy();
+    expect(screen.getByText(/only the time so far/)).toBeTruthy();
+    expect(document.body.textContent).not.toMatch(/left/);
+  });
+
+  it('counts down from how long the last scan took, labelled as an estimate', () => {
+    vi.useFakeTimers();
+    fast({ expectedMs: 10_000 });
+
+    expect(screen.getByTestId('scan-time-left').textContent).toBe('About 10 s left, based on your last scan');
+    act(() => { vi.advanceTimersByTime(4000); });
+    expect(screen.getByTestId('scan-time-left').textContent).toBe('About 6 s left, based on your last scan');
+    expect(screen.queryByText(/only the time so far/)).toBeNull();
+  });
+
+  it('says it is taking longer when it runs past the last scan, and never shows 0 s', () => {
+    vi.useFakeTimers();
+    fast({ expectedMs: 5000 });
+
+    act(() => { vi.advanceTimersByTime(5000); });
+    expect(screen.getByTestId('scan-time-left').textContent).toBe('Taking longer than your last scan');
+    act(() => { vi.advanceTimersByTime(60_000); });
+    expect(screen.getByTestId('scan-time-left').textContent).toBe('Taking longer than your last scan');
+    expect(document.body.textContent).not.toMatch(/\b0 s\b/);
+  });
+
+  it('keeps the indeterminate bar and never draws a percent', () => {
+    fast({ expectedMs: 10_000, percent: 55 });
+    expect(screen.getByRole('progressbar').hasAttribute('aria-valuenow')).toBe(false);
+    expect(document.body.textContent).not.toMatch(/\d\s*%/);
+  });
+});

@@ -66,6 +66,9 @@ router.get('/stream', async (req, res) => {
 
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), SCAN_TIMEOUT_MS);
+  // The deadline the abort above enforces, so the client can count down to
+  // the true stopping point instead of duplicating the constant.
+  const deadline = Date.now() + SCAN_TIMEOUT_MS;
   let clientGone = false;
   req.on('close', () => { clientGone = true; controller.abort(); });
 
@@ -79,7 +82,15 @@ router.get('/stream', async (req, res) => {
   }
 
   const ticker = setInterval(() => {
-    sendEvent(res, 'progress', { type: 'progress', files, bytes, percent: scanPercent(bytes, inUseBytes) });
+    sendEvent(res, 'progress', {
+      type: 'progress',
+      files,
+      bytes,
+      percent: scanPercent(bytes, inUseBytes),
+      // Time until the walk is forcibly stopped: an UPPER BOUND on what is
+      // left, since a scan that finishes sooner simply ends.
+      remainingMs: Math.max(0, deadline - Date.now())
+    });
   }, PROGRESS_INTERVAL_MS);
 
   try {

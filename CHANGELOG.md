@@ -50,13 +50,19 @@ Windows Defender and WinRAR cleaners.
   bytes Windows says are in use on the drive -- held at 99% until the scan
   actually finishes, because the two figures never match exactly. For a
   single folder, or another drive, no total is known, so there is no
-  percentage at all: a moving bar and the counters. The fast scan (admin)
-  cannot report progress (it runs in a separate elevated process that
-  only hands back its result at the end), so it shows elapsed time and
-  says why there is no percentage. Finished scans draw a checkmark and
-  offer "Scan again"; one that ran out of time says it stopped early
-  (with a warning mark, not a checkmark) and offers the same; a failed
-  one offers "Retry".
+  percentage at all: a moving bar and the counters.
+- **Time left, worded honestly.** A folder walk shows "up to N s left":
+  the walk has a 30-second time limit that the app reports and counts down
+  to, but a small folder finishes long before it, so it is an upper
+  bound, and at the limit it says the scan stopped early rather than
+  sitting on zero. The fast scan (admin) cannot report progress (it runs
+  in a separate elevated process that only hands back its result at the
+  end), so it estimates from how long your last fast scan took ("about N s
+  left, based on your last scan") and says so if it runs longer; the first
+  time, with nothing to base it on, it shows no estimate, only the time so
+  far. Finished scans draw a checkmark and offer "Scan again"; one that
+  ran out of time says it stopped early (with a warning mark, not a
+  checkmark) and offers the same; a failed one offers "Retry".
 - **Motion polish, all of it off under Windows' reduce-motion setting.**
   Buttons swell slightly on hover and press in on click, nav items react
   to hover and press, toggle switches slide on a spring, and the scan
