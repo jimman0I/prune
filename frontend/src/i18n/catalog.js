@@ -211,7 +211,7 @@ export const CATALOG = {
       },
       systemHealth: {
         title: 'System health',
-        breakdownLine: (drive, storage, apps, errors) => `Drive ${drive} · Storage ${storage} · Apps ${apps} · Errors ${errors}`,
+        breakdownLine: (drive, storage, apps, errors) => `Drive ${drive} · Storage ${storage} · Apps ${apps} · Error check ${errors}`,
         driveDetailHeading: 'Drive detail'
       },
       driveHealth: {
@@ -713,13 +713,13 @@ export const CATALOG = {
       cpu: 'CPU',
       memory: 'Memory',
       disk: 'Disk',
-      footer: 'A scan reads the whole disk, so these move while Prune is working — which is the point of having them here.'
+      footer: 'A scan reads the whole disk, so these move while Prune is working.'
     },
     shortcutsModal: {
       title: 'Keyboard shortcuts',
       close: 'Close',
       or: 'or',
-      footer: 'Cmd works in place of Ctrl. A chord is ignored while you are typing in a field, so Ctrl+F still reaches the search box you are already in.',
+      footer: 'A chord is ignored while you are typing in a field, so Ctrl+F still reaches the search box you are already in.',
       actions: {
         focusSearch: 'Focus the search box',
         openSettings: 'Open Settings',
@@ -727,7 +727,8 @@ export const CATALOG = {
         closeDialog: 'Close a dialog',
         moveBetweenControls: 'Move between controls; inside a dialog, focus stays in it',
         zoomInOut: 'Make text larger or smaller',
-        zoomReset: 'Reset text size'
+        zoomReset: 'Reset text size',
+        goToScreen: 'Go to a screen, in side bar order'
       }
     },
     themeToggle: {
@@ -1439,13 +1440,13 @@ export const CATALOG = {
       cpu: 'SVE',
       memory: 'Geheue',
       disk: 'Skyf',
-      footer: "'n Skandering lees die hele skyf, so hierdie beweeg terwyl Prune werk — wat die punt is om hulle hier te hê."
+      footer: "'n Skandering lees die hele skyf, so hierdie beweeg terwyl Prune werk."
     },
     shortcutsModal: {
       title: 'Sleutelbordkortpaaie',
       close: 'Sluit',
       or: 'of',
-      footer: "Cmd werk in plek van Ctrl. 'n Kombinasie word geïgnoreer terwyl jy in 'n veld tik, so Ctrl+F bereik steeds die soekkassie waarin jy reeds is.",
+      footer: "'n Kombinasie word geïgnoreer terwyl jy in 'n veld tik, so Ctrl+F bereik steeds die soekkassie waarin jy reeds is.",
       actions: {
         focusSearch: 'Fokus die soekkassie',
         openSettings: 'Maak Instellings oop',
@@ -1453,7 +1454,8 @@ export const CATALOG = {
         closeDialog: 'Sluit \'n dialoog',
         moveBetweenControls: "Beweeg tussen kontroles; binne 'n dialoog bly fokus daarin",
         zoomInOut: 'Maak teks groter of kleiner',
-        zoomReset: 'Stel teksgrootte terug'
+        zoomReset: 'Stel teksgrootte terug',
+        goToScreen: "Gaan na 'n skerm, in dieselfde volgorde as die sybalk"
       }
     },
     themeToggle: {
@@ -2165,13 +2167,13 @@ export const CATALOG = {
       cpu: 'المعالج',
       memory: 'الذاكرة',
       disk: 'القرص',
-      footer: 'يقرأ الفحص القرص بأكمله، لذا تتحرك هذه القيم أثناء عمل Prune — وهذا هو سبب وجودها هنا.'
+      footer: 'يقرأ الفحص القرص بأكمله، لذا تتحرك هذه القيم أثناء عمل Prune.'
     },
     shortcutsModal: {
       title: 'اختصارات لوحة المفاتيح',
       close: 'إغلاق',
       or: 'أو',
-      footer: 'يعمل Cmd بدلاً من Ctrl. يتم تجاهل الاختصار أثناء الكتابة في حقل، لذا يظل Ctrl+F يصل إلى مربع البحث الذي أنت فيه بالفعل.',
+      footer: 'يتم تجاهل الاختصار أثناء الكتابة في حقل، لذا يظل Ctrl+F يصل إلى مربع البحث الذي أنت فيه بالفعل.',
       actions: {
         focusSearch: 'التركيز على مربع البحث',
         openSettings: 'فتح الإعدادات',
@@ -2179,7 +2181,8 @@ export const CATALOG = {
         closeDialog: 'إغلاق مربع حوار',
         moveBetweenControls: 'التنقل بين عناصر التحكم؛ داخل مربع حوار، يبقى التركيز فيه',
         zoomInOut: 'تكبير النص أو تصغيره',
-        zoomReset: 'إعادة ضبط حجم النص'
+        zoomReset: 'إعادة ضبط حجم النص',
+        goToScreen: 'الانتقال إلى شاشة، بحسب ترتيب الشريط الجانبي'
       }
     },
     themeToggle: {
@@ -2891,13 +2894,13 @@ export const CATALOG = {
       cpu: 'CPU',
       memory: 'Memòria',
       disk: 'Disc',
-      footer: 'Un escaneig llegeix tot el disc, així que aquests es mouen mentre el Prune treballa — que és el sentit de tenir-los aquí.'
+      footer: 'Un escaneig llegeix tot el disc, així que aquests es mouen mentre el Prune treballa.'
     },
     shortcutsModal: {
       title: 'Dreceres de teclat',
       close: 'Tanca',
       or: 'o',
-      footer: "La tecla Cmd funciona en lloc de Ctrl. Un acord s'ignora mentre escrius en un camp, així que Ctrl+F encara arriba al quadre de cerca on ja ets.",
+      footer: "Un acord s'ignora mentre escrius en un camp, així que Ctrl+F encara arriba al quadre de cerca on ja ets.",
       actions: {
         focusSearch: 'Enfoca el quadre de cerca',
         openSettings: 'Obre la Configuració',
@@ -2905,7 +2908,8 @@ export const CATALOG = {
         closeDialog: 'Tanca un diàleg',
         moveBetweenControls: "Mou-te entre controls; dins d'un diàleg, el focus hi roman",
         zoomInOut: 'Fes el text més gran o més petit',
-        zoomReset: 'Restableix la mida del text'
+        zoomReset: 'Restableix la mida del text',
+        goToScreen: "Ves a una pantalla, en l'ordre de la barra lateral"
       }
     },
     themeToggle: {
@@ -3617,13 +3621,13 @@ export const CATALOG = {
       cpu: 'CPU',
       memory: 'Paměť',
       disk: 'Disk',
-      footer: 'Skenování čte celý disk, takže se tyto hodnoty mění, zatímco Prune pracuje — proto jsou zde.'
+      footer: 'Skenování čte celý disk, takže se tyto hodnoty mění, zatímco Prune pracuje.'
     },
     shortcutsModal: {
       title: 'Klávesové zkratky',
       close: 'Zavřít',
       or: 'nebo',
-      footer: 'Cmd funguje místo Ctrl. Zkratka je ignorována, když píšete do pole, takže Ctrl+F stále doputuje do vyhledávacího pole, ve kterém již jste.',
+      footer: 'Zkratka je ignorována, když píšete do pole, takže Ctrl+F stále doputuje do vyhledávacího pole, ve kterém již jste.',
       actions: {
         focusSearch: 'Zaměřit vyhledávací pole',
         openSettings: 'Otevřít Nastavení',
@@ -3631,7 +3635,8 @@ export const CATALOG = {
         closeDialog: 'Zavřít dialogové okno',
         moveBetweenControls: 'Pohybovat se mezi ovládacími prvky; uvnitř dialogového okna zůstává zaměření v něm',
         zoomInOut: 'Zvětšit nebo zmenšit text',
-        zoomReset: 'Obnovit velikost textu'
+        zoomReset: 'Obnovit velikost textu',
+        goToScreen: 'Přejít na obrazovku v pořadí postranního panelu'
       }
     },
     themeToggle: {
@@ -4343,13 +4348,13 @@ export const CATALOG = {
       cpu: 'CPU',
       memory: 'Cof',
       disk: 'Disg',
-      footer: "Mae sgan yn darllen y ddisg gyfan, felly mae'r rhain yn symud tra bo Prune yn gweithio — dyna pam maen nhw yma."
+      footer: "Mae sgan yn darllen y ddisg gyfan, felly mae'r rhain yn symud tra bo Prune yn gweithio."
     },
     shortcutsModal: {
       title: 'Byrlwybrau bysellfwrdd',
       close: 'Cau',
       or: 'neu',
-      footer: "Mae Cmd yn gweithio yn lle Ctrl. Anwybyddir cord tra byddwch yn teipio mewn maes, felly mae Ctrl+F yn dal i gyrraedd y blwch chwilio rydych ynddo eisoes.",
+      footer: 'Anwybyddir cord tra byddwch yn teipio mewn maes, felly mae Ctrl+F yn dal i gyrraedd y blwch chwilio rydych ynddo eisoes.',
       actions: {
         focusSearch: 'Ffocysu\'r blwch chwilio',
         openSettings: 'Agor Gosodiadau',
@@ -4357,7 +4362,8 @@ export const CATALOG = {
         closeDialog: 'Cau deialog',
         moveBetweenControls: "Symud rhwng rheolyddion; y tu mewn i ddeialog, mae'r ffocws yn aros ynddo",
         zoomInOut: "Gwneud y testun yn fwy neu'n llai",
-        zoomReset: 'Ailosod maint y testun'
+        zoomReset: 'Ailosod maint y testun',
+        goToScreen: 'Mynd i sgrin, yn nhrefn y bar ochr'
       }
     },
     themeToggle: {
@@ -5069,13 +5075,13 @@ export const CATALOG = {
       cpu: 'CPU',
       memory: 'Hukommelse',
       disk: 'Disk',
-      footer: 'En scanning læser hele disken, så disse bevæger sig, mens Prune arbejder — det er derfor de er her.'
+      footer: 'En scanning læser hele disken, så disse bevæger sig, mens Prune arbejder.'
     },
     shortcutsModal: {
       title: 'Tastaturgenveje',
       close: 'Luk',
       or: 'eller',
-      footer: 'Cmd fungerer i stedet for Ctrl. En genvej ignoreres, mens du skriver i et felt, så Ctrl+F stadig når søgefeltet, du allerede er i.',
+      footer: 'En genvej ignoreres, mens du skriver i et felt, så Ctrl+F stadig når søgefeltet, du allerede er i.',
       actions: {
         focusSearch: 'Fokusér søgefeltet',
         openSettings: 'Åbn Indstillinger',
@@ -5083,7 +5089,8 @@ export const CATALOG = {
         closeDialog: 'Luk en dialog',
         moveBetweenControls: 'Flyt mellem kontroller; inde i en dialog forbliver fokus i den',
         zoomInOut: 'Gør teksten større eller mindre',
-        zoomReset: 'Nulstil tekststørrelse'
+        zoomReset: 'Nulstil tekststørrelse',
+        goToScreen: 'Gå til en skærm i sidebjælkens rækkefølge'
       }
     },
     themeToggle: {
@@ -5795,13 +5802,13 @@ export const CATALOG = {
       cpu: 'CPU',
       memory: 'Arbeitsspeicher',
       disk: 'Festplatte',
-      footer: 'Ein Scan liest die gesamte Festplatte, daher bewegen sich diese Werte, während Prune arbeitet — genau deshalb sind sie hier.'
+      footer: 'Ein Scan liest die gesamte Festplatte, daher bewegen sich diese Werte, während Prune arbeitet.'
     },
     shortcutsModal: {
       title: 'Tastenkombinationen',
       close: 'Schließen',
       or: 'oder',
-      footer: 'Cmd funktioniert anstelle von Strg. Eine Kombination wird ignoriert, während du in ein Feld tippst, sodass Strg+F weiterhin das Suchfeld erreicht, in dem du dich bereits befindest.',
+      footer: 'Eine Kombination wird ignoriert, während du in ein Feld tippst, sodass Strg+F weiterhin das Suchfeld erreicht, in dem du dich bereits befindest.',
       actions: {
         focusSearch: 'Suchfeld fokussieren',
         openSettings: 'Einstellungen öffnen',
@@ -5809,7 +5816,8 @@ export const CATALOG = {
         closeDialog: 'Dialog schließen',
         moveBetweenControls: 'Zwischen Bedienelementen wechseln; innerhalb eines Dialogs bleibt der Fokus darin',
         zoomInOut: 'Text vergrößern oder verkleinern',
-        zoomReset: 'Textgröße zurücksetzen'
+        zoomReset: 'Textgröße zurücksetzen',
+        goToScreen: 'Zu einem Bereich wechseln, in der Reihenfolge der Seitenleiste'
       }
     },
     themeToggle: {
@@ -6521,13 +6529,13 @@ export const CATALOG = {
       cpu: 'CPU',
       memory: 'Μνήμη',
       disk: 'Δίσκος',
-      footer: 'Μια σάρωση διαβάζει ολόκληρο τον δίσκο, οπότε αυτά κινούνται όσο το Prune εργάζεται — αυτό είναι το νόημα να είναι εδώ.'
+      footer: 'Μια σάρωση διαβάζει ολόκληρο τον δίσκο, οπότε αυτά κινούνται όσο το Prune εργάζεται.'
     },
     shortcutsModal: {
       title: 'Συντομεύσεις πληκτρολογίου',
       close: 'Κλείσιμο',
       or: 'ή',
-      footer: 'Το Cmd λειτουργεί αντί για το Ctrl. Μια συντόμευση αγνοείται ενώ πληκτρολογείτε σε ένα πεδίο, οπότε το Ctrl+F εξακολουθεί να φτάνει στο πλαίσιο αναζήτησης στο οποίο βρίσκεστε ήδη.',
+      footer: 'Μια συντόμευση αγνοείται ενώ πληκτρολογείτε σε ένα πεδίο, οπότε το Ctrl+F εξακολουθεί να φτάνει στο πλαίσιο αναζήτησης στο οποίο βρίσκεστε ήδη.',
       actions: {
         focusSearch: 'Εστίαση στο πλαίσιο αναζήτησης',
         openSettings: 'Άνοιγμα Ρυθμίσεων',
@@ -6535,7 +6543,8 @@ export const CATALOG = {
         closeDialog: 'Κλείσιμο ενός παραθύρου διαλόγου',
         moveBetweenControls: 'Μετακίνηση μεταξύ στοιχείων ελέγχου· μέσα σε παράθυρο διαλόγου, η εστίαση παραμένει σε αυτό',
         zoomInOut: 'Μεγέθυνση ή σμίκρυνση κειμένου',
-        zoomReset: 'Επαναφορά μεγέθους κειμένου'
+        zoomReset: 'Επαναφορά μεγέθους κειμένου',
+        goToScreen: 'Μετάβαση σε οθόνη, με τη σειρά της πλαϊνής γραμμής'
       }
     },
     themeToggle: {
@@ -7247,13 +7256,13 @@ export const CATALOG = {
       cpu: 'CPU',
       memory: 'Memoria',
       disk: 'Disco',
-      footer: 'Un escaneo lee todo el disco, así que estos se mueven mientras Prune trabaja — que es el sentido de tenerlos aquí.'
+      footer: 'Un escaneo lee todo el disco, así que estos se mueven mientras Prune trabaja.'
     },
     shortcutsModal: {
       title: 'Atajos de teclado',
       close: 'Cerrar',
       or: 'o',
-      footer: 'Cmd funciona en lugar de Ctrl. Un atajo se ignora mientras escribes en un campo, así que Ctrl+F sigue llegando al cuadro de búsqueda en el que ya estás.',
+      footer: 'Un atajo se ignora mientras escribes en un campo, así que Ctrl+F sigue llegando al cuadro de búsqueda en el que ya estás.',
       actions: {
         focusSearch: 'Enfocar el cuadro de búsqueda',
         openSettings: 'Abrir Configuración',
@@ -7261,7 +7270,8 @@ export const CATALOG = {
         closeDialog: 'Cerrar un cuadro de diálogo',
         moveBetweenControls: 'Moverse entre controles; dentro de un cuadro de diálogo, el enfoque permanece en él',
         zoomInOut: 'Aumentar o reducir el texto',
-        zoomReset: 'Restablecer el tamaño del texto'
+        zoomReset: 'Restablecer el tamaño del texto',
+        goToScreen: 'Ir a una pantalla, en el orden de la barra lateral'
       }
     },
     themeToggle: {
@@ -7973,13 +7983,13 @@ export const CATALOG = {
       cpu: 'Protsessor',
       memory: 'Mälu',
       disk: 'Ketas',
-      footer: 'Skannimine loeb kogu ketast, seega need liiguvad, kui Prune töötab — see ongi mõte, miks need siin on.'
+      footer: 'Skannimine loeb kogu ketast, seega need liiguvad, kui Prune töötab.'
     },
     shortcutsModal: {
       title: 'Klaviatuuri otseteed',
       close: 'Sulge',
       or: 'või',
-      footer: 'Cmd töötab Ctrl asemel. Kiirklahvi eiratakse, kui kirjutad väljale, seega Ctrl+F jõuab siiski otsingukasti, kus juba oled.',
+      footer: 'Kiirklahvi eiratakse, kui kirjutad väljale, seega Ctrl+F jõuab siiski otsingukasti, kus juba oled.',
       actions: {
         focusSearch: 'Fokuseeri otsingukast',
         openSettings: 'Ava seaded',
@@ -7987,7 +7997,8 @@ export const CATALOG = {
         closeDialog: 'Sulge dialoog',
         moveBetweenControls: 'Liigu juhtelementide vahel; dialoogi sees jääb fookus sinna',
         zoomInOut: 'Suurenda või vähenda teksti',
-        zoomReset: 'Lähtesta teksti suurus'
+        zoomReset: 'Lähtesta teksti suurus',
+        goToScreen: 'Ava vaade külgriba järjekorras'
       }
     },
     themeToggle: {
@@ -8699,13 +8710,13 @@ export const CATALOG = {
       cpu: 'Suoritin',
       memory: 'Muisti',
       disk: 'Levy',
-      footer: 'Skannaus lukee koko levyn, joten nämä liikkuvat Prunen työskennellessä — siksi ne ovat täällä.'
+      footer: 'Skannaus lukee koko levyn, joten nämä liikkuvat Prunen työskennellessä.'
     },
     shortcutsModal: {
       title: 'Pikanäppäimet',
       close: 'Sulje',
       or: 'tai',
-      footer: 'Cmd toimii Ctrl:n sijaan. Pikanäppäin ohitetaan, kun kirjoitat kenttään, joten Ctrl+F saavuttaa silti hakukentän, jossa jo olet.',
+      footer: 'Pikanäppäin ohitetaan, kun kirjoitat kenttään, joten Ctrl+F saavuttaa silti hakukentän, jossa jo olet.',
       actions: {
         focusSearch: 'Kohdista hakukenttään',
         openSettings: 'Avaa asetukset',
@@ -8713,7 +8724,8 @@ export const CATALOG = {
         closeDialog: 'Sulje valintaikkuna',
         moveBetweenControls: 'Siirry säätimien välillä; valintaikkunan sisällä kohdistus pysyy siinä',
         zoomInOut: 'Suurenna tai pienennä tekstiä',
-        zoomReset: 'Palauta tekstin koko'
+        zoomReset: 'Palauta tekstin koko',
+        goToScreen: 'Siirry näkymään sivupalkin järjestyksessä'
       }
     },
     themeToggle: {
@@ -9425,13 +9437,13 @@ export const CATALOG = {
       cpu: 'CPU',
       memory: 'Mémoire',
       disk: 'Disque',
-      footer: "Une analyse lit tout le disque, donc ces valeurs bougent pendant que Prune travaille — c'est tout l'intérêt de les avoir ici."
+      footer: 'Une analyse lit tout le disque, donc ces valeurs bougent pendant que Prune travaille.'
     },
     shortcutsModal: {
       title: 'Raccourcis clavier',
       close: 'Fermer',
       or: 'ou',
-      footer: "Cmd fonctionne à la place de Ctrl. Un raccourci est ignoré pendant que vous tapez dans un champ, donc Ctrl+F atteint quand même le champ de recherche dans lequel vous êtes déjà.",
+      footer: 'Un raccourci est ignoré pendant que vous tapez dans un champ, donc Ctrl+F atteint quand même le champ de recherche dans lequel vous êtes déjà.',
       actions: {
         focusSearch: 'Placer le focus sur le champ de recherche',
         openSettings: 'Ouvrir les Paramètres',
@@ -9439,7 +9451,8 @@ export const CATALOG = {
         closeDialog: 'Fermer une boîte de dialogue',
         moveBetweenControls: "Se déplacer entre les contrôles ; à l'intérieur d'une boîte de dialogue, le focus y reste",
         zoomInOut: 'Agrandir ou réduire le texte',
-        zoomReset: 'Rétablir la taille du texte'
+        zoomReset: 'Rétablir la taille du texte',
+        goToScreen: "Aller à un écran, dans l'ordre de la barre latérale"
       }
     },
     themeToggle: {
@@ -10151,13 +10164,13 @@ export const CATALOG = {
       cpu: 'מעבד',
       memory: 'זיכרון',
       disk: 'דיסק',
-      footer: 'סריקה קוראת את כל הדיסק, כך שאלה משתנים בזמן ש-Prune עובד — וזו הסיבה שהם כאן.'
+      footer: 'סריקה קוראת את כל הדיסק, כך שאלה משתנים בזמן ש-Prune עובד.'
     },
     shortcutsModal: {
       title: 'קיצורי מקלדת',
       close: 'סגור',
       or: 'או',
-      footer: 'Cmd עובד במקום Ctrl. צירוף מקשים מתעלם בזמן שאתה מקליד בשדה, כך ש-Ctrl+F עדיין מגיע לתיבת החיפוש שבה אתה כבר נמצא.',
+      footer: 'צירוף מקשים מתעלם בזמן שאתה מקליד בשדה, כך ש-Ctrl+F עדיין מגיע לתיבת החיפוש שבה אתה כבר נמצא.',
       actions: {
         focusSearch: 'התמקד בתיבת החיפוש',
         openSettings: 'פתח הגדרות',
@@ -10165,7 +10178,8 @@ export const CATALOG = {
         closeDialog: 'סגור תיבת דו-שיח',
         moveBetweenControls: 'עבור בין פקדים; בתוך תיבת דו-שיח, המיקוד נשאר בה',
         zoomInOut: 'הגדלה או הקטנה של הטקסט',
-        zoomReset: 'איפוס גודל הטקסט'
+        zoomReset: 'איפוס גודל הטקסט',
+        goToScreen: 'מעבר למסך, לפי סדר סרגל הצד'
       }
     },
     themeToggle: {
@@ -10877,13 +10891,13 @@ export const CATALOG = {
       cpu: 'CPU',
       memory: 'Memória',
       disk: 'Lemez',
-      footer: 'Egy vizsgálat a teljes lemezt olvassa, ezért ezek mozognak, amíg a Prune dolgozik — ez a lényege annak, hogy itt vannak.'
+      footer: 'Egy vizsgálat a teljes lemezt olvassa, ezért ezek mozognak, amíg a Prune dolgozik.'
     },
     shortcutsModal: {
       title: 'Billentyűparancsok',
       close: 'Bezárás',
       or: 'vagy',
-      footer: 'A Cmd a Ctrl helyett működik. Egy billentyűkombinációt figyelmen kívül hagy a rendszer, amíg egy mezőbe gépelsz, így a Ctrl+F továbbra is eléri azt a keresőmezőt, amelyben már vagy.',
+      footer: 'Egy billentyűkombinációt figyelmen kívül hagy a rendszer, amíg egy mezőbe gépelsz, így a Ctrl+F továbbra is eléri azt a keresőmezőt, amelyben már vagy.',
       actions: {
         focusSearch: 'Fókusz a keresőmezőre',
         openSettings: 'Beállítások megnyitása',
@@ -10891,7 +10905,8 @@ export const CATALOG = {
         closeDialog: 'Párbeszédablak bezárása',
         moveBetweenControls: 'Mozgás a vezérlők között; egy párbeszédablakon belül a fókusz ott marad',
         zoomInOut: 'Szöveg nagyítása vagy kicsinyítése',
-        zoomReset: 'Szövegméret visszaállítása'
+        zoomReset: 'Szövegméret visszaállítása',
+        goToScreen: 'Ugrás egy képernyőre az oldalsáv sorrendjében'
       }
     },
     themeToggle: {
@@ -11603,13 +11618,13 @@ export const CATALOG = {
       cpu: 'CPU',
       memory: 'Memori',
       disk: 'Disk',
-      footer: 'Pemindaian membaca seluruh disk, jadi angka ini bergerak saat Prune bekerja — itulah gunanya ditampilkan di sini.'
+      footer: 'Pemindaian membaca seluruh disk, jadi angka ini bergerak saat Prune bekerja.'
     },
     shortcutsModal: {
       title: 'Pintasan keyboard',
       close: 'Tutup',
       or: 'atau',
-      footer: 'Cmd berfungsi menggantikan Ctrl. Pintasan diabaikan saat Anda mengetik di sebuah kolom, jadi Ctrl+F tetap mencapai kotak pencarian yang sedang Anda gunakan.',
+      footer: 'Pintasan diabaikan saat Anda mengetik di sebuah kolom, jadi Ctrl+F tetap mencapai kotak pencarian yang sedang Anda gunakan.',
       actions: {
         focusSearch: 'Fokus ke kotak pencarian',
         openSettings: 'Buka Pengaturan',
@@ -11617,7 +11632,8 @@ export const CATALOG = {
         closeDialog: 'Tutup dialog',
         moveBetweenControls: 'Berpindah antar kontrol; di dalam dialog, fokus tetap di dalamnya',
         zoomInOut: 'Perbesar atau perkecil teks',
-        zoomReset: 'Setel ulang ukuran teks'
+        zoomReset: 'Setel ulang ukuran teks',
+        goToScreen: 'Buka layar, sesuai urutan bilah samping'
       }
     },
     themeToggle: {
@@ -12329,13 +12345,13 @@ export const CATALOG = {
       cpu: 'Örgjörvi',
       memory: 'Minni',
       disk: 'Diskur',
-      footer: 'Skönnun les allan diskinn, svo þessar tölur breytast á meðan Prune vinnur — það er tilgangurinn með því að hafa þær hér.'
+      footer: 'Skönnun les allan diskinn, svo þessar tölur breytast á meðan Prune vinnur.'
     },
     shortcutsModal: {
       title: 'Flýtileiðir á lyklaborði',
       close: 'Loka',
       or: 'eða',
-      footer: 'Cmd virkar í stað Ctrl. Flýtileið er hunsuð á meðan þú skrifar í reit, svo Ctrl+F nær samt í leitarreitinn sem þú ert þegar í.',
+      footer: 'Flýtileið er hunsuð á meðan þú skrifar í reit, svo Ctrl+F nær samt í leitarreitinn sem þú ert þegar í.',
       actions: {
         focusSearch: 'Setja fókus á leitarreit',
         openSettings: 'Opna stillingar',
@@ -12343,7 +12359,8 @@ export const CATALOG = {
         closeDialog: 'Loka glugga',
         moveBetweenControls: 'Fara á milli stýringa; innan glugga helst fókusinn þar',
         zoomInOut: 'Stækka eða minnka texta',
-        zoomReset: 'Endurstilla textastærð'
+        zoomReset: 'Endurstilla textastærð',
+        goToScreen: 'Fara á skjá, í röð hliðarstikunnar'
       }
     },
     themeToggle: {
@@ -13055,13 +13072,13 @@ export const CATALOG = {
       cpu: 'CPU',
       memory: 'Memoria',
       disk: 'Disco',
-      footer: "Una scansione legge l'intero disco, quindi questi valori cambiano mentre Prune lavora — è proprio per questo che sono qui."
+      footer: "Una scansione legge l'intero disco, quindi questi valori cambiano mentre Prune lavora."
     },
     shortcutsModal: {
       title: 'Scorciatoie da tastiera',
       close: 'Chiudi',
       or: 'o',
-      footer: 'Cmd funziona al posto di Ctrl. Una combinazione viene ignorata mentre digiti in un campo, quindi Ctrl+F raggiunge comunque la casella di ricerca in cui ti trovi già.',
+      footer: 'Una combinazione viene ignorata mentre digiti in un campo, quindi Ctrl+F raggiunge comunque la casella di ricerca in cui ti trovi già.',
       actions: {
         focusSearch: 'Metti a fuoco la casella di ricerca',
         openSettings: 'Apri Impostazioni',
@@ -13069,7 +13086,8 @@ export const CATALOG = {
         closeDialog: 'Chiudi una finestra di dialogo',
         moveBetweenControls: "Spostati tra i controlli; all'interno di una finestra di dialogo, il focus vi resta",
         zoomInOut: 'Ingrandisci o riduci il testo',
-        zoomReset: 'Ripristina la dimensione del testo'
+        zoomReset: 'Ripristina la dimensione del testo',
+        goToScreen: "Vai a una schermata, nell'ordine della barra laterale"
       }
     },
     themeToggle: {
@@ -13781,13 +13799,13 @@ export const CATALOG = {
       cpu: 'CPU',
       memory: 'メモリ',
       disk: 'ディスク',
-      footer: 'スキャンはディスク全体を読み取るため、Prune が作業している間はこれらの値が変動します — だからこそここに表示する意味があります。'
+      footer: 'スキャンはディスク全体を読み取るため、Prune が作業している間はこれらの値が変動します。'
     },
     shortcutsModal: {
       title: 'キーボードショートカット',
       close: '閉じる',
       or: 'または',
-      footer: 'Cmd は Ctrl の代わりに使えます。フィールドに入力している間はショートカットが無視されるため、Ctrl+F はすでに入力中の検索ボックスに届きます。',
+      footer: 'フィールドに入力している間はショートカットが無視されるため、Ctrl+F はすでに入力中の検索ボックスに届きます。',
       actions: {
         focusSearch: '検索ボックスにフォーカス',
         openSettings: '設定を開く',
@@ -13795,7 +13813,8 @@ export const CATALOG = {
         closeDialog: 'ダイアログを閉じる',
         moveBetweenControls: 'コントロール間を移動；ダイアログ内ではフォーカスがその中にとどまる',
         zoomInOut: '文字を拡大または縮小',
-        zoomReset: '文字サイズをリセット'
+        zoomReset: '文字サイズをリセット',
+        goToScreen: 'サイドバーの順序で画面を移動'
       }
     },
     themeToggle: {
@@ -14507,13 +14526,13 @@ export const CATALOG = {
       cpu: 'CPU',
       memory: '메모리',
       disk: '디스크',
-      footer: '스캔은 디스크 전체를 읽기 때문에 Prune이 작업하는 동안 이 값들이 변합니다 — 그래서 여기에 표시하는 것입니다.'
+      footer: '스캔은 디스크 전체를 읽기 때문에 Prune이 작업하는 동안 이 값들이 변합니다.'
     },
     shortcutsModal: {
       title: '키보드 단축키',
       close: '닫기',
       or: '또는',
-      footer: 'Cmd는 Ctrl 대신 작동합니다. 필드에 입력하는 동안에는 단축키가 무시되므로, Ctrl+F는 이미 사용 중인 검색창에 도달합니다.',
+      footer: '필드에 입력하는 동안에는 단축키가 무시되므로, Ctrl+F는 이미 사용 중인 검색창에 도달합니다.',
       actions: {
         focusSearch: '검색창에 포커스',
         openSettings: '설정 열기',
@@ -14521,7 +14540,8 @@ export const CATALOG = {
         closeDialog: '대화 상자 닫기',
         moveBetweenControls: '컨트롤 간 이동; 대화 상자 안에서는 포커스가 그 안에 유지됨',
         zoomInOut: '텍스트 확대 또는 축소',
-        zoomReset: '텍스트 크기 초기화'
+        zoomReset: '텍스트 크기 초기화',
+        goToScreen: '사이드바 순서대로 화면 이동'
       }
     },
     themeToggle: {
@@ -15233,13 +15253,13 @@ export const CATALOG = {
       cpu: 'Procesorius',
       memory: 'Atmintis',
       disk: 'Diskas',
-      footer: 'Nuskaitymas skaito visą diską, todėl šios reikšmės keičiasi, kol Prune dirba — būtent todėl jos rodomos čia.'
+      footer: 'Nuskaitymas skaito visą diską, todėl šios reikšmės keičiasi, kol Prune dirba.'
     },
     shortcutsModal: {
       title: 'Klaviatūros trumpiniai',
       close: 'Uždaryti',
       or: 'arba',
-      footer: 'Cmd veikia vietoj Ctrl. Trumpinys ignoruojamas, kai rašote lauke, todėl Ctrl+F vis tiek pasiekia paieškos lauką, kuriame jau esate.',
+      footer: 'Trumpinys ignoruojamas, kai rašote lauke, todėl Ctrl+F vis tiek pasiekia paieškos lauką, kuriame jau esate.',
       actions: {
         focusSearch: 'Sufokusuoti paieškos lauką',
         openSettings: 'Atidaryti nustatymus',
@@ -15247,7 +15267,8 @@ export const CATALOG = {
         closeDialog: 'Uždaryti dialogo langą',
         moveBetweenControls: 'Judėti tarp valdiklių; dialogo lange fokusas išlieka jame',
         zoomInOut: 'Padidinti arba sumažinti tekstą',
-        zoomReset: 'Atkurti teksto dydį'
+        zoomReset: 'Atkurti teksto dydį',
+        goToScreen: 'Pereiti į ekraną šoninės juostos tvarka'
       }
     },
     themeToggle: {
@@ -15959,13 +15980,13 @@ export const CATALOG = {
       cpu: 'CPU',
       memory: 'Memori',
       disk: 'Cakera',
-      footer: 'Imbasan membaca seluruh cakera, jadi nilai ini berubah semasa Prune berfungsi — itulah sebabnya ia dipaparkan di sini.'
+      footer: 'Imbasan membaca seluruh cakera, jadi nilai ini berubah semasa Prune berfungsi.'
     },
     shortcutsModal: {
       title: 'Pintasan papan kekunci',
       close: 'Tutup',
       or: 'atau',
-      footer: 'Cmd berfungsi menggantikan Ctrl. Pintasan diabaikan semasa anda menaip dalam medan, jadi Ctrl+F tetap sampai ke kotak carian yang sedang anda gunakan.',
+      footer: 'Pintasan diabaikan semasa anda menaip dalam medan, jadi Ctrl+F tetap sampai ke kotak carian yang sedang anda gunakan.',
       actions: {
         focusSearch: 'Fokus pada kotak carian',
         openSettings: 'Buka Tetapan',
@@ -15973,7 +15994,8 @@ export const CATALOG = {
         closeDialog: 'Tutup dialog',
         moveBetweenControls: 'Bergerak antara kawalan; dalam dialog, fokus kekal di dalamnya',
         zoomInOut: 'Besarkan atau kecilkan teks',
-        zoomReset: 'Tetapkan semula saiz teks'
+        zoomReset: 'Tetapkan semula saiz teks',
+        goToScreen: 'Pergi ke skrin, mengikut susunan bar sisi'
       }
     },
     themeToggle: {
@@ -16685,13 +16707,13 @@ export const CATALOG = {
       cpu: 'CPU',
       memory: 'Minne',
       disk: 'Disk',
-      footer: 'Et søk leser hele disken, så disse verdiene beveger seg mens Prune jobber — det er poenget med å ha dem her.'
+      footer: 'Et søk leser hele disken, så disse verdiene beveger seg mens Prune jobber.'
     },
     shortcutsModal: {
       title: 'Tastatursnarveier',
       close: 'Lukk',
       or: 'eller',
-      footer: 'Cmd fungerer i stedet for Ctrl. En snarvei ignoreres mens du skriver i et felt, så Ctrl+F når likevel søkeboksen du allerede er i.',
+      footer: 'En snarvei ignoreres mens du skriver i et felt, så Ctrl+F når likevel søkeboksen du allerede er i.',
       actions: {
         focusSearch: 'Sett fokus på søkeboksen',
         openSettings: 'Åpne innstillinger',
@@ -16699,7 +16721,8 @@ export const CATALOG = {
         closeDialog: 'Lukk en dialogboks',
         moveBetweenControls: 'Flytt mellom kontroller; inne i en dialogboks blir fokuset værende der',
         zoomInOut: 'Gjør teksten større eller mindre',
-        zoomReset: 'Tilbakestill tekststørrelsen'
+        zoomReset: 'Tilbakestill tekststørrelsen',
+        goToScreen: 'Gå til en skjerm, i sidefeltets rekkefølge'
       }
     },
     themeToggle: {
@@ -17411,13 +17434,13 @@ export const CATALOG = {
       cpu: 'CPU',
       memory: 'Geheugen',
       disk: 'Schijf',
-      footer: 'Een scan leest de hele schijf, dus deze waarden bewegen terwijl Prune werkt — dat is precies waarom ze hier staan.'
+      footer: 'Een scan leest de hele schijf, dus deze waarden bewegen terwijl Prune werkt.'
     },
     shortcutsModal: {
       title: 'Sneltoetsen',
       close: 'Sluiten',
       or: 'of',
-      footer: 'Cmd werkt in plaats van Ctrl. Een sneltoets wordt genegeerd terwijl je in een veld typt, dus Ctrl+F bereikt nog steeds het zoekvak waarin je al zit.',
+      footer: 'Een sneltoets wordt genegeerd terwijl je in een veld typt, dus Ctrl+F bereikt nog steeds het zoekvak waarin je al zit.',
       actions: {
         focusSearch: 'Focus op het zoekvak',
         openSettings: 'Instellingen openen',
@@ -17425,7 +17448,8 @@ export const CATALOG = {
         closeDialog: 'Een dialoogvenster sluiten',
         moveBetweenControls: 'Verplaatsen tussen besturingselementen; binnen een dialoogvenster blijft de focus daarin',
         zoomInOut: 'Tekst groter of kleiner maken',
-        zoomReset: 'Tekstgrootte herstellen'
+        zoomReset: 'Tekstgrootte herstellen',
+        goToScreen: 'Naar een scherm gaan, in de volgorde van de zijbalk'
       }
     },
     themeToggle: {
@@ -18137,13 +18161,13 @@ export const CATALOG = {
       cpu: 'CPU',
       memory: 'Pamięć',
       disk: 'Dysk',
-      footer: 'Skanowanie odczytuje cały dysk, więc te wartości zmieniają się, gdy Prune pracuje — właśnie dlatego są tutaj.'
+      footer: 'Skanowanie odczytuje cały dysk, więc te wartości zmieniają się, gdy Prune pracuje.'
     },
     shortcutsModal: {
       title: 'Skróty klawiszowe',
       close: 'Zamknij',
       or: 'lub',
-      footer: 'Cmd działa zamiast Ctrl. Skrót jest ignorowany, gdy piszesz w polu, więc Ctrl+F nadal trafia do pola wyszukiwania, w którym już jesteś.',
+      footer: 'Skrót jest ignorowany, gdy piszesz w polu, więc Ctrl+F nadal trafia do pola wyszukiwania, w którym już jesteś.',
       actions: {
         focusSearch: 'Ustaw fokus na polu wyszukiwania',
         openSettings: 'Otwórz ustawienia',
@@ -18151,7 +18175,8 @@ export const CATALOG = {
         closeDialog: 'Zamknij okno dialogowe',
         moveBetweenControls: 'Przechodzenie między elementami sterującymi; wewnątrz okna dialogowego fokus pozostaje w nim',
         zoomInOut: 'Powiększ lub pomniejsz tekst',
-        zoomReset: 'Przywróć rozmiar tekstu'
+        zoomReset: 'Przywróć rozmiar tekstu',
+        goToScreen: 'Przejdź do ekranu, w kolejności paska bocznego'
       }
     },
     themeToggle: {
@@ -18863,13 +18888,13 @@ export const CATALOG = {
       cpu: 'پروسیسر',
       memory: 'حافظه',
       disk: 'ډیسک',
-      footer: 'یوه سکن ټوله ډیسک لولي، نو دا ارزښتونه هغه وخت بدلیږي چې Prune کار کوي — دا خو د دلته ښودلو موخه ده.'
+      footer: 'یوه سکن ټوله ډیسک لولي، نو دا ارزښتونه هغه وخت بدلیږي چې Prune کار کوي.'
     },
     shortcutsModal: {
       title: 'د کیبورډ شارټ کټونه',
       close: 'بندول',
       or: 'یا',
-      footer: 'Cmd د Ctrl پر ځای کار کوي. کله چې تاسو په یوه ساحه کې لیکئ، شارټ کټ له پامه غورځول کیږي، نو Ctrl+F بیا هم هغه لټون بکس ته رسیږي چې تاسو یې دمخه کې یاست.',
+      footer: 'کله چې تاسو په یوه ساحه کې لیکئ، شارټ کټ له پامه غورځول کیږي، نو Ctrl+F بیا هم هغه لټون بکس ته رسیږي چې تاسو یې دمخه کې یاست.',
       actions: {
         focusSearch: 'د لټون بکس ته تمرکز ورکول',
         openSettings: 'تنظیمات پرانیستل',
@@ -18877,7 +18902,8 @@ export const CATALOG = {
         closeDialog: 'یو ډیالوګ بندول',
         moveBetweenControls: 'د کنټرولونو ترمنځ حرکت؛ د ډیالوګ دننه، تمرکز په هغه کې پاتې کیږي',
         zoomInOut: 'متن لوی یا وړوکی کړئ',
-        zoomReset: 'د متن اندازه بیا تنظیم کړئ'
+        zoomReset: 'د متن اندازه بیا تنظیم کړئ',
+        goToScreen: 'یوې پردې ته لاړ شئ، د اړخ پټې په ترتیب'
       }
     },
     themeToggle: {
@@ -19589,13 +19615,13 @@ export const CATALOG = {
       cpu: 'CPU',
       memory: 'Memória',
       disk: 'Disco',
-      footer: 'Uma varredura lê o disco inteiro, então esses valores mudam enquanto o Prune trabalha — e é exatamente por isso que estão aqui.'
+      footer: 'Uma varredura lê o disco inteiro, então esses valores mudam enquanto o Prune trabalha.'
     },
     shortcutsModal: {
       title: 'Atalhos de teclado',
       close: 'Fechar',
       or: 'ou',
-      footer: 'O Cmd funciona no lugar do Ctrl. Um atalho é ignorado enquanto você digita em um campo, então Ctrl+F ainda chega à caixa de pesquisa em que você já está.',
+      footer: 'Um atalho é ignorado enquanto você digita em um campo, então Ctrl+F ainda chega à caixa de pesquisa em que você já está.',
       actions: {
         focusSearch: 'Focar na caixa de pesquisa',
         openSettings: 'Abrir Configurações',
@@ -19603,7 +19629,8 @@ export const CATALOG = {
         closeDialog: 'Fechar uma caixa de diálogo',
         moveBetweenControls: 'Mover entre controles; dentro de uma caixa de diálogo, o foco permanece nela',
         zoomInOut: 'Aumentar ou diminuir o texto',
-        zoomReset: 'Redefinir o tamanho do texto'
+        zoomReset: 'Redefinir o tamanho do texto',
+        goToScreen: 'Ir para uma tela, na ordem da barra lateral'
       }
     },
     themeToggle: {
@@ -20315,13 +20342,13 @@ export const CATALOG = {
       cpu: 'CPU',
       memory: 'Memória',
       disk: 'Disco',
-      footer: 'Uma análise lê todo o disco, por isso estes valores mudam enquanto o Prune trabalha — é exatamente por isso que estão aqui.'
+      footer: 'Uma análise lê todo o disco, por isso estes valores mudam enquanto o Prune trabalha.'
     },
     shortcutsModal: {
       title: 'Atalhos de teclado',
       close: 'Fechar',
       or: 'ou',
-      footer: 'O Cmd funciona em vez do Ctrl. Um atalho é ignorado enquanto está a escrever num campo, pelo que Ctrl+F continua a chegar à caixa de pesquisa em que já se encontra.',
+      footer: 'Um atalho é ignorado enquanto está a escrever num campo, pelo que Ctrl+F continua a chegar à caixa de pesquisa em que já se encontra.',
       actions: {
         focusSearch: 'Focar a caixa de pesquisa',
         openSettings: 'Abrir Definições',
@@ -20329,7 +20356,8 @@ export const CATALOG = {
         closeDialog: 'Fechar uma caixa de diálogo',
         moveBetweenControls: 'Mover entre controlos; dentro de uma caixa de diálogo, o foco permanece nela',
         zoomInOut: 'Aumentar ou diminuir o texto',
-        zoomReset: 'Repor o tamanho do texto'
+        zoomReset: 'Repor o tamanho do texto',
+        goToScreen: 'Ir para um ecrã, pela ordem da barra lateral'
       }
     },
     themeToggle: {
@@ -21041,13 +21069,13 @@ export const CATALOG = {
       cpu: 'CPU',
       memory: 'Memorie',
       disk: 'Disc',
-      footer: 'O scanare citește întregul disc, așa că aceste valori se mișcă în timp ce Prune lucrează — exact de aceea sunt afișate aici.'
+      footer: 'O scanare citește întregul disc, așa că aceste valori se mișcă în timp ce Prune lucrează.'
     },
     shortcutsModal: {
       title: 'Comenzi rapide de la tastatură',
       close: 'Închide',
       or: 'sau',
-      footer: 'Cmd funcționează în locul Ctrl. O comandă rapidă este ignorată în timp ce scrii într-un câmp, așa că Ctrl+F ajunge totuși la caseta de căutare în care te afli deja.',
+      footer: 'O comandă rapidă este ignorată în timp ce scrii într-un câmp, așa că Ctrl+F ajunge totuși la caseta de căutare în care te afli deja.',
       actions: {
         focusSearch: 'Focalizează caseta de căutare',
         openSettings: 'Deschide Setările',
@@ -21055,7 +21083,8 @@ export const CATALOG = {
         closeDialog: 'Închide o casetă de dialog',
         moveBetweenControls: 'Deplasare între comenzi; în interiorul unei casete de dialog, focalizarea rămâne acolo',
         zoomInOut: 'Mărește sau micșorează textul',
-        zoomReset: 'Resetează dimensiunea textului'
+        zoomReset: 'Resetează dimensiunea textului',
+        goToScreen: 'Mergi la un ecran, în ordinea barei laterale'
       }
     },
     themeToggle: {
@@ -21767,13 +21796,13 @@ export const CATALOG = {
       cpu: 'Процессор',
       memory: 'Память',
       disk: 'Диск',
-      footer: 'Сканирование читает весь диск, поэтому эти значения меняются, пока Prune работает — именно поэтому они здесь.'
+      footer: 'Сканирование читает весь диск, поэтому эти значения меняются, пока Prune работает.'
     },
     shortcutsModal: {
       title: 'Комбинации клавиш',
       close: 'Закрыть',
       or: 'или',
-      footer: 'Cmd работает вместо Ctrl. Комбинация игнорируется, пока вы печатаете в поле, поэтому Ctrl+F по-прежнему попадает в поле поиска, в котором вы уже находитесь.',
+      footer: 'Комбинация игнорируется, пока вы печатаете в поле, поэтому Ctrl+F по-прежнему попадает в поле поиска, в котором вы уже находитесь.',
       actions: {
         focusSearch: 'Установить фокус на поле поиска',
         openSettings: 'Открыть настройки',
@@ -21781,7 +21810,8 @@ export const CATALOG = {
         closeDialog: 'Закрыть диалоговое окно',
         moveBetweenControls: 'Перемещение между элементами управления; внутри диалогового окна фокус остаётся в нём',
         zoomInOut: 'Увеличить или уменьшить текст',
-        zoomReset: 'Сбросить размер текста'
+        zoomReset: 'Сбросить размер текста',
+        goToScreen: 'Перейти на экран в порядке боковой панели'
       }
     },
     themeToggle: {
@@ -22493,13 +22523,13 @@ export const CATALOG = {
       cpu: 'CPU',
       memory: 'Pamäť',
       disk: 'Disk',
-      footer: 'Kontrola číta celý disk, takže tieto hodnoty sa menia, kým Prune pracuje — presne preto sú tu.'
+      footer: 'Kontrola číta celý disk, takže tieto hodnoty sa menia, kým Prune pracuje.'
     },
     shortcutsModal: {
       title: 'Klávesové skratky',
       close: 'Zavrieť',
       or: 'alebo',
-      footer: 'Cmd funguje namiesto Ctrl. Skratka sa ignoruje, kým píšete do poľa, takže Ctrl+F sa aj tak dostane do vyhľadávacieho poľa, v ktorom už ste.',
+      footer: 'Skratka sa ignoruje, kým píšete do poľa, takže Ctrl+F sa aj tak dostane do vyhľadávacieho poľa, v ktorom už ste.',
       actions: {
         focusSearch: 'Zamerať vyhľadávacie pole',
         openSettings: 'Otvoriť nastavenia',
@@ -22507,7 +22537,8 @@ export const CATALOG = {
         closeDialog: 'Zavrieť dialógové okno',
         moveBetweenControls: 'Presúvanie medzi ovládacími prvkami; vnútri dialógového okna zostáva fokus v ňom',
         zoomInOut: 'Zväčšiť alebo zmenšiť text',
-        zoomReset: 'Obnoviť veľkosť textu'
+        zoomReset: 'Obnoviť veľkosť textu',
+        goToScreen: 'Prejsť na obrazovku v poradí bočného panela'
       }
     },
     themeToggle: {
@@ -23219,13 +23250,13 @@ export const CATALOG = {
       cpu: 'CPU',
       memory: 'Memoria',
       disk: 'Disku',
-      footer: 'Një skanim lexon të gjithë diskun, kështu që këto vlera lëvizin ndërsa Prune po punon — kjo është pikërisht arsyeja pse janë këtu.'
+      footer: 'Një skanim lexon të gjithë diskun, kështu që këto vlera lëvizin ndërsa Prune po punon.'
     },
     shortcutsModal: {
       title: 'Shkurtoret e tastierës',
       close: 'Mbyll',
       or: 'ose',
-      footer: 'Cmd funksionon në vend të Ctrl. Një shkurtore injorohet ndërsa po shkruani në një fushë, kështu që Ctrl+F arrin gjithsesi te kutia e kërkimit ku jeni tashmë.',
+      footer: 'Një shkurtore injorohet ndërsa po shkruani në një fushë, kështu që Ctrl+F arrin gjithsesi te kutia e kërkimit ku jeni tashmë.',
       actions: {
         focusSearch: 'Fokuso kutinë e kërkimit',
         openSettings: 'Hap Cilësimet',
@@ -23233,7 +23264,8 @@ export const CATALOG = {
         closeDialog: 'Mbyll një dialog',
         moveBetweenControls: 'Lëviz mes kontrolleve; brenda një dialogu, fokusi mbetet aty',
         zoomInOut: 'Zmadho ose zvogëlo tekstin',
-        zoomReset: 'Rivendos madhësinë e tekstit'
+        zoomReset: 'Rivendos madhësinë e tekstit',
+        goToScreen: 'Shko te një ekran, sipas radhës së shiritit anësor'
       }
     },
     themeToggle: {
@@ -23945,13 +23977,13 @@ export const CATALOG = {
       cpu: 'Процесор',
       memory: 'Меморија',
       disk: 'Диск',
-      footer: 'Скенирање чита цео диск, тако да се ове вредности мењају док Prune ради — управо зато су приказане овде.'
+      footer: 'Скенирање чита цео диск, тако да се ове вредности мењају док Prune ради.'
     },
     shortcutsModal: {
       title: 'Пречице на тастатури',
       close: 'Затвори',
       or: 'или',
-      footer: 'Cmd ради уместо Ctrl. Пречица се игнорише док куцате у пољу, тако да Ctrl+F ипак стиже до поља за претрагу у ком се већ налазите.',
+      footer: 'Пречица се игнорише док куцате у пољу, тако да Ctrl+F ипак стиже до поља за претрагу у ком се већ налазите.',
       actions: {
         focusSearch: 'Фокусирај поље за претрагу',
         openSettings: 'Отвори подешавања',
@@ -23959,7 +23991,8 @@ export const CATALOG = {
         closeDialog: 'Затвори дијалог',
         moveBetweenControls: 'Кретање између контрола; унутар дијалога, фокус остаје у њему',
         zoomInOut: 'Увећај или умањи текст',
-        zoomReset: 'Врати величину текста'
+        zoomReset: 'Врати величину текста',
+        goToScreen: 'Иди на екран, редом бочне траке'
       }
     },
     themeToggle: {
@@ -24671,13 +24704,13 @@ export const CATALOG = {
       cpu: 'CPU',
       memory: 'Minne',
       disk: 'Disk',
-      footer: 'En sökning läser hela disken, så dessa värden rör sig medan Prune arbetar — det är just poängen med att ha dem här.'
+      footer: 'En sökning läser hela disken, så dessa värden rör sig medan Prune arbetar.'
     },
     shortcutsModal: {
       title: 'Tangentbordsgenvägar',
       close: 'Stäng',
       or: 'eller',
-      footer: 'Cmd fungerar i stället för Ctrl. En genväg ignoreras medan du skriver i ett fält, så Ctrl+F når ändå sökrutan du redan är i.',
+      footer: 'En genväg ignoreras medan du skriver i ett fält, så Ctrl+F når ändå sökrutan du redan är i.',
       actions: {
         focusSearch: 'Fokusera sökrutan',
         openSettings: 'Öppna inställningar',
@@ -24685,7 +24718,8 @@ export const CATALOG = {
         closeDialog: 'Stäng en dialogruta',
         moveBetweenControls: 'Flytta mellan kontroller; inuti en dialogruta stannar fokus kvar där',
         zoomInOut: 'Förstora eller förminska text',
-        zoomReset: 'Återställ textstorlek'
+        zoomReset: 'Återställ textstorlek',
+        goToScreen: 'Gå till en skärm, i sidofältets ordning'
       }
     },
     themeToggle: {
@@ -25397,13 +25431,13 @@ export const CATALOG = {
       cpu: 'ซีพียู',
       memory: 'หน่วยความจำ',
       disk: 'ดิสก์',
-      footer: 'การสแกนอ่านทั้งดิสก์ ค่าเหล่านี้จึงเปลี่ยนแปลงขณะที่ Prune กำลังทำงาน — นั่นคือเหตุผลที่แสดงไว้ตรงนี้'
+      footer: 'การสแกนอ่านทั้งดิสก์ ค่าเหล่านี้จึงเปลี่ยนแปลงขณะที่ Prune กำลังทำงาน'
     },
     shortcutsModal: {
       title: 'แป้นพิมพ์ลัด',
       close: 'ปิด',
       or: 'หรือ',
-      footer: 'Cmd ใช้แทน Ctrl ได้ แป้นลัดจะถูกละเว้นขณะที่คุณกำลังพิมพ์ในช่อง ดังนั้น Ctrl+F ยังคงไปถึงช่องค้นหาที่คุณอยู่แล้ว',
+      footer: 'แป้นลัดจะถูกละเว้นขณะที่คุณกำลังพิมพ์ในช่อง ดังนั้น Ctrl+F ยังคงไปถึงช่องค้นหาที่คุณอยู่แล้ว',
       actions: {
         focusSearch: 'โฟกัสไปที่ช่องค้นหา',
         openSettings: 'เปิดการตั้งค่า',
@@ -25411,7 +25445,8 @@ export const CATALOG = {
         closeDialog: 'ปิดกล่องโต้ตอบ',
         moveBetweenControls: 'ย้ายระหว่างตัวควบคุม; ภายในกล่องโต้ตอบ โฟกัสจะยังคงอยู่ในนั้น',
         zoomInOut: 'ขยายหรือย่อข้อความ',
-        zoomReset: 'รีเซ็ตขนาดข้อความ'
+        zoomReset: 'รีเซ็ตขนาดข้อความ',
+        goToScreen: 'ไปยังหน้าจอตามลำดับของแถบด้านข้าง'
       }
     },
     themeToggle: {
@@ -26123,13 +26158,13 @@ export const CATALOG = {
       cpu: 'İşlemci',
       memory: 'Bellek',
       disk: 'Disk',
-      footer: 'Bir tarama tüm diski okur, bu yüzden Prune çalışırken bu değerler hareket eder — burada olmalarının amacı da bu.'
+      footer: 'Bir tarama tüm diski okur, bu yüzden Prune çalışırken bu değerler hareket eder.'
     },
     shortcutsModal: {
       title: 'Klavye kısayolları',
       close: 'Kapat',
       or: 'veya',
-      footer: 'Cmd, Ctrl yerine çalışır. Bir alana yazarken kısayol yok sayılır, bu yüzden Ctrl+F yine de zaten içinde bulunduğunuz arama kutusuna ulaşır.',
+      footer: 'Bir alana yazarken kısayol yok sayılır, bu yüzden Ctrl+F yine de zaten içinde bulunduğunuz arama kutusuna ulaşır.',
       actions: {
         focusSearch: 'Arama kutusuna odaklan',
         openSettings: 'Ayarları aç',
@@ -26137,7 +26172,8 @@ export const CATALOG = {
         closeDialog: 'Bir iletişim kutusunu kapat',
         moveBetweenControls: 'Denetimler arasında gezinme; bir iletişim kutusu içinde odak orada kalır',
         zoomInOut: 'Metni büyüt veya küçült',
-        zoomReset: 'Metin boyutunu sıfırla'
+        zoomReset: 'Metin boyutunu sıfırla',
+        goToScreen: 'Kenar çubuğu sırasına göre bir ekrana git'
       }
     },
     themeToggle: {
@@ -26849,13 +26885,13 @@ export const CATALOG = {
       cpu: 'Процесор',
       memory: "Пам'ять",
       disk: 'Диск',
-      footer: 'Сканування читає весь диск, тому ці значення змінюються, поки Prune працює — саме тому вони показані тут.'
+      footer: 'Сканування читає весь диск, тому ці значення змінюються, поки Prune працює.'
     },
     shortcutsModal: {
       title: 'Комбінації клавіш',
       close: 'Закрити',
       or: 'або',
-      footer: 'Cmd працює замість Ctrl. Комбінація ігнорується, поки ви друкуєте в полі, тому Ctrl+F все одно потрапляє в поле пошуку, в якому ви вже перебуваєте.',
+      footer: 'Комбінація ігнорується, поки ви друкуєте в полі, тому Ctrl+F все одно потрапляє в поле пошуку, в якому ви вже перебуваєте.',
       actions: {
         focusSearch: 'Встановити фокус на поле пошуку',
         openSettings: 'Відкрити налаштування',
@@ -26863,7 +26899,8 @@ export const CATALOG = {
         closeDialog: 'Закрити діалогове вікно',
         moveBetweenControls: 'Переміщення між елементами керування; всередині діалогового вікна фокус залишається в ньому',
         zoomInOut: 'Збільшити або зменшити текст',
-        zoomReset: 'Скинути розмір тексту'
+        zoomReset: 'Скинути розмір тексту',
+        goToScreen: 'Перейти на екран у порядку бічної панелі'
       }
     },
     themeToggle: {
@@ -27575,13 +27612,13 @@ export const CATALOG = {
       cpu: 'CPU',
       memory: 'Bộ nhớ',
       disk: 'Ổ đĩa',
-      footer: 'Một lượt quét đọc toàn bộ ổ đĩa, vì vậy các giá trị này thay đổi trong khi Prune đang hoạt động — đó chính là lý do chúng được hiển thị ở đây.'
+      footer: 'Một lượt quét đọc toàn bộ ổ đĩa, vì vậy các giá trị này thay đổi trong khi Prune đang hoạt động.'
     },
     shortcutsModal: {
       title: 'Phím tắt',
       close: 'Đóng',
       or: 'hoặc',
-      footer: 'Cmd hoạt động thay cho Ctrl. Một phím tắt sẽ bị bỏ qua khi bạn đang gõ trong một trường, vì vậy Ctrl+F vẫn đến được ô tìm kiếm mà bạn đang ở trong đó.',
+      footer: 'Một phím tắt sẽ bị bỏ qua khi bạn đang gõ trong một trường, vì vậy Ctrl+F vẫn đến được ô tìm kiếm mà bạn đang ở trong đó.',
       actions: {
         focusSearch: 'Đặt tiêu điểm vào ô tìm kiếm',
         openSettings: 'Mở Cài đặt',
@@ -27589,7 +27626,8 @@ export const CATALOG = {
         closeDialog: 'Đóng một hộp thoại',
         moveBetweenControls: 'Di chuyển giữa các điều khiển; bên trong hộp thoại, tiêu điểm vẫn ở lại đó',
         zoomInOut: 'Phóng to hoặc thu nhỏ văn bản',
-        zoomReset: 'Đặt lại cỡ văn bản'
+        zoomReset: 'Đặt lại cỡ văn bản',
+        goToScreen: 'Chuyển đến một màn hình, theo thứ tự thanh bên'
       }
     },
     themeToggle: {
@@ -28301,13 +28339,13 @@ export const CATALOG = {
       cpu: 'CPU',
       memory: '内存',
       disk: '磁盘',
-      footer: '扫描会读取整个磁盘，因此在 Prune 工作时这些数值会变化——这正是把它们放在这里的意义所在。'
+      footer: '扫描会读取整个磁盘，因此在 Prune 工作时这些数值会变化。'
     },
     shortcutsModal: {
       title: '键盘快捷键',
       close: '关闭',
       or: '或',
-      footer: 'Cmd 可代替 Ctrl 使用。当你在输入框中打字时，快捷键会被忽略，因此 Ctrl+F 仍会作用于你已经在使用的搜索框。',
+      footer: '当你在输入框中打字时，快捷键会被忽略，因此 Ctrl+F 仍会作用于你已经在使用的搜索框。',
       actions: {
         focusSearch: '聚焦到搜索框',
         openSettings: '打开设置',
@@ -28315,7 +28353,8 @@ export const CATALOG = {
         closeDialog: '关闭对话框',
         moveBetweenControls: '在控件之间移动；在对话框内，焦点会保持在其中',
         zoomInOut: '放大或缩小文字',
-        zoomReset: '重置文字大小'
+        zoomReset: '重置文字大小',
+        goToScreen: '按侧边栏顺序跳转到某个界面'
       }
     },
     themeToggle: {
@@ -29027,13 +29066,13 @@ export const CATALOG = {
       cpu: 'CPU',
       memory: '記憶體',
       disk: '磁碟',
-      footer: '掃描會讀取整個磁碟，因此在 Prune 運作時這些數值會變動——這正是把它們放在這裡的用意。'
+      footer: '掃描會讀取整個磁碟，因此在 Prune 運作時這些數值會變動。'
     },
     shortcutsModal: {
       title: '鍵盤快速鍵',
       close: '關閉',
       or: '或',
-      footer: 'Cmd 可代替 Ctrl 使用。當您在欄位中輸入時，快速鍵會被忽略，因此 Ctrl+F 仍會作用於您已經在使用的搜尋框。',
+      footer: '當您在欄位中輸入時，快速鍵會被忽略，因此 Ctrl+F 仍會作用於您已經在使用的搜尋框。',
       actions: {
         focusSearch: '將焦點移至搜尋框',
         openSettings: '開啟設定',
@@ -29041,7 +29080,8 @@ export const CATALOG = {
         closeDialog: '關閉對話方塊',
         moveBetweenControls: '在控制項之間移動；在對話方塊內，焦點會保持在其中',
         zoomInOut: '放大或縮小文字',
-        zoomReset: '重設文字大小'
+        zoomReset: '重設文字大小',
+        goToScreen: '依側邊欄順序跳到某個畫面'
       }
     },
     themeToggle: {
