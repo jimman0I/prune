@@ -187,7 +187,7 @@ function StopButton({ onStop }) {
       onClick={() => { setAsked(true); onStop(); }}
     >
       <span aria-hidden="true" className="w-2 h-2 rounded-[2px] bg-[color:var(--danger)]" />
-      {t('deepClean.stop')}
+      {asked ? t('diskMap.scanProgress.stopping') : t('deepClean.stop')}
     </button>
   );
 }
@@ -245,10 +245,27 @@ function Scanning({ path, percent, files, bytes, mode, elapsedMs, remainingMs, r
   );
 }
 
-/** A finished scan. A scan that ran out of time (`truncated`) is NOT
- * complete and must not say so: it gets "stopped early" wording and a
- * warning mark in place of the success checkmark. */
-function Complete({ totalFiles, totalBytes, truncated, onScanAgain }) {
+/** The one sentence that says WHY a scan did not finish and how much of the
+ * drive it did measure. It was a second banner under the card, which after
+ * Stop said "ran out of time" beside a card that said "stopped": two messages
+ * for one event, and the second one wrong. It lives in the card now, worded
+ * for the real cause -- the user pressed Stop, or the time limit was hit. */
+function partialExplanation(t, { stoppedByUser, coverage }) {
+  if (coverage) {
+    const args = [formatBytes(coverage.measured), formatBytes(coverage.used), coverage.percent];
+    return stoppedByUser
+      ? t('diskMap.truncated.stoppedWithCoverage', ...args)
+      : t('diskMap.truncated.withCoverage', ...args);
+  }
+  return stoppedByUser ? t('diskMap.truncated.stoppedWithoutCoverage') : t('diskMap.truncated.withoutCoverage');
+}
+
+/** A finished scan. A scan that did not finish (`truncated`) is NOT complete
+ * and must not say so: it gets "stopped early" wording and a warning mark in
+ * place of the success checkmark, plus the coverage sentence and, when the
+ * caller can, the way out (a fast scan). The card is a status region so the
+ * outcome is announced to a screen reader when the scan ends. */
+function Complete({ totalFiles, totalBytes, truncated, stoppedByUser, coverage, onScanAgain, onFastScan, fastScanning }) {
   const { t } = useLanguage();
   const known = Number.isFinite(totalFiles);
   const size = known ? [totalFiles.toLocaleString(), formatBytes(totalBytes)] : null;
@@ -259,7 +276,7 @@ function Complete({ totalFiles, totalBytes, truncated, onScanAgain }) {
     message = known ? t('diskMap.scanProgress.completeCounts', ...size) : t('diskMap.scanProgress.complete');
   }
   return (
-    <div className="glass-panel flex items-center gap-3 px-4 py-3 mb-5">
+    <div role="status" className="glass-panel flex items-center gap-3 px-4 py-3 mb-5">
       {truncated ? (
         <svg
           aria-hidden="true"
@@ -299,7 +316,26 @@ function Complete({ totalFiles, totalBytes, truncated, onScanAgain }) {
         />
       </motion.svg>
       )}
-      <p className="text-[13px] text-[color:var(--text-primary)] flex-1 min-w-0">{message}</p>
+      <div className="flex-1 min-w-0">
+        <p className="text-[13px] text-[color:var(--text-primary)]">{message}</p>
+        {truncated && (
+          <p className="text-[12.5px] text-[color:var(--text-secondary)] mt-1 select-text">
+            {partialExplanation(t, { stoppedByUser, coverage })}
+            {onFastScan && (
+              <>
+                {' '}
+                <button
+                  className="underline underline-offset-2 hover:text-[color:var(--text-primary)] transition-colors disabled:opacity-50"
+                  onClick={onFastScan}
+                  disabled={fastScanning}
+                >
+                  {fastScanning ? t('diskMap.scanningDrive') : t('diskMap.truncated.rescanLink')}
+                </button>
+              </>
+            )}
+          </p>
+        )}
+      </div>
       {onScanAgain && (
         <button
           className="btn-ghost px-3.5 py-2 rounded-lg text-[12.5px] font-medium shrink-0"
@@ -355,9 +391,13 @@ export default function DiskScanProgress({
   message,
   totalFiles,
   truncated = false,
+  stoppedByUser = false,
+  coverage = null,
   totalBytes,
   onRetry,
   onScanAgain,
+  onFastScan,
+  fastScanning = false,
   children
 }) {
   if (status === 'scanning') {
@@ -369,7 +409,10 @@ export default function DiskScanProgress({
     );
   }
   if (status === 'complete') {
-    return <Complete totalFiles={totalFiles} totalBytes={totalBytes} truncated={truncated} onScanAgain={onScanAgain} />;
+    return (
+      <Complete totalFiles={totalFiles} totalBytes={totalBytes} truncated={truncated} stoppedByUser={stoppedByUser}
+        coverage={coverage} onScanAgain={onScanAgain} onFastScan={onFastScan} fastScanning={fastScanning} />
+    );
   }
   if (status === 'error') return <Failed message={message} onRetry={onRetry} />;
   return null;

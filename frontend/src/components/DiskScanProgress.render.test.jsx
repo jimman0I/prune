@@ -233,6 +233,60 @@ describe('complete', () => {
   });
 });
 
+describe('complete, when a scan did not finish: ONE card says why and how much', () => {
+  const coverage = { measured: 15.8 * GB, used: 835.1 * GB, percent: 2 };
+
+  it('a scan the user stopped says so once, with the coverage sentence inside the same card', async () => {
+    show({ status: 'complete', truncated: true, stoppedByUser: true, coverage, totalFiles: 25677, totalBytes: 15.8 * GB, onScanAgain: vi.fn() });
+
+    const card = (await screen.findByRole('status'));
+    expect(card.textContent).toMatch(/Scan stopped early — 25[,.]677 files, 15\.8 GB so far/);
+    expect(card.textContent).toContain('You stopped this scan: it measured 15.8 GB of the 835.1 GB in use (2%).');
+    // The wording that was wrong after Stop.
+    expect(document.body.textContent).not.toMatch(/ran out of time/);
+  });
+
+  it('a scan that hit the time limit says that, in the same single card', async () => {
+    show({ status: 'complete', truncated: true, stoppedByUser: false, coverage, totalFiles: 10, totalBytes: 10 });
+
+    const card = await screen.findByRole('status');
+    expect(card.textContent).toContain('This scan ran out of time: it measured 15.8 GB of the 835.1 GB in use (2%).');
+    expect(document.body.textContent).not.toMatch(/You stopped/);
+  });
+
+  it('without a coverage figure it still explains, in its own words for each cause', async () => {
+    const { unmount } = show({ status: 'complete', truncated: true, stoppedByUser: true, coverage: null });
+    expect((await screen.findByRole('status')).textContent).toMatch(/You stopped this scan early\./);
+    unmount();
+
+    show({ status: 'complete', truncated: true, stoppedByUser: false, coverage: null });
+    expect((await screen.findByRole('status')).textContent).toMatch(/ran out of time before it finished the drive/);
+  });
+
+  it('offers the fast scan inside the card and calls it', async () => {
+    const onFastScan = vi.fn();
+    show({ status: 'complete', truncated: true, coverage, onFastScan });
+
+    fireEvent.click(await screen.findByRole('button', { name: 'Run a fast scan instead' }));
+    expect(onFastScan).toHaveBeenCalledTimes(1);
+  });
+
+  it('says it is busy once the fast scan has started, and cannot be pressed again', async () => {
+    show({ status: 'complete', truncated: true, coverage, onFastScan: vi.fn(), fastScanning: true });
+
+    const button = await screen.findByRole('button', { name: 'Scanning drive…' });
+    expect(button.disabled).toBe(true);
+  });
+
+  it('a finished scan has no coverage sentence and no fast-scan link, but is still a status region', async () => {
+    show({ status: 'complete', truncated: false, coverage, onFastScan: vi.fn(), totalFiles: 5, totalBytes: 5 });
+
+    const card = await screen.findByRole('status');
+    expect(card.textContent).not.toMatch(/measured|You stopped|ran out of time/);
+    expect(screen.queryByRole('button', { name: 'Run a fast scan instead' })).toBeNull();
+  });
+});
+
 describe('error', () => {
   it('shows the message in a selectable element and calls onRetry from Retry', async () => {
     const onRetry = vi.fn();
@@ -401,6 +455,15 @@ describe('Stop', () => {
 
     expect(onStop).toHaveBeenCalledTimes(1);
     expect(button.disabled).toBe(true);
+  });
+
+  it('says it is stopping once pressed, instead of sitting there looking unpressed', () => {
+    show({ status: 'scanning', path: 'Folder', percent: null, onStop: vi.fn() });
+
+    const button = screen.getByRole('button', { name: 'Stop' });
+    fireEvent.click(button);
+
+    expect(button.textContent).toBe('Stopping…');
   });
 
   it('is offered on a whole-drive walk with a real percent as well', () => {
