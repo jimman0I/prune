@@ -248,8 +248,10 @@ function rulePathsExistFor(expandedPath) {
  * collectFiles already uses for `accessible`. */
 function pathExistsOrDenied(path) {
   try {
-    statSync(path);
-    return true;
+    // throwIfNoEntry:false hands back undefined for a missing path instead
+    // of throwing -- missing is the common answer across the /rules list,
+    // and building an exception per absent path is wasted work.
+    return statSync(path, { throwIfNoEntry: false }) !== undefined;
   } catch (err) {
     return err?.code === 'EPERM' || err?.code === 'EACCES';
   }
@@ -270,7 +272,12 @@ function pathExistsOrDenied(path) {
  * hidden by "hide cleaners that don't apply". It now walks the normalized
  * actions: `delete` paths and the bespoke actions' single `path` are
  * checked on disk; `shell` and `winreg` can't be answered from the
- * filesystem and count as present. */
+ * filesystem and count as present.
+ *
+ * Caveat: a bespoke action module's own scan uses existsSync, so for an
+ * access-denied bespoke path the pre-scan `present` may be true and flip
+ * to false after the scan (unlikely: browser profile files are not
+ * ACL-denied). */
 export function rulePathsExist(rule, guards = {}) {
   // A command rule has no paths to look for, and is always applicable:
   // `ipconfig /flushdns` works whether or not anything is cached. scanRule
@@ -290,9 +297,9 @@ export function rulePathsExist(rule, guards = {}) {
     // Neither can be answered from the filesystem, and the pre-scan list
     // keeps an unmeasured rule rather than hiding it (visibleRules.js).
     if (action.type === 'shell' || action.type === 'winreg') return true;
-    const rawPaths = action.type === 'delete' ? action.paths : [action.path];
-    for (const rawPath of rawPaths || []) {
-      if (rawPath && rulePathsExistFor(expandPath(rawPath))) return true;
+    const rawPaths = action.type === 'delete' ? (Array.isArray(action.paths) ? action.paths : []) : [action.path];
+    for (const rawPath of rawPaths) {
+      if (typeof rawPath === 'string' && rawPath && rulePathsExistFor(expandPath(rawPath))) return true;
     }
   }
   return false;
