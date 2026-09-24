@@ -105,6 +105,34 @@ describe('the time-left lines in Greek', () => {
   });
 });
 
+describe('a scan the user stopped, in Greek', () => {
+  const coverage = { measured: 15.8 * GB, used: 835.1 * GB, percent: 2 };
+
+  it('says ONE thing: the user stopped it, with the coverage sentence inside the card', async () => {
+    mount({ status: 'complete', truncated: true, stoppedByUser: true, coverage, totalFiles: 10, totalBytes: 5 * GB, onFastScan: vi.fn() });
+
+    await screen.findByText(/Διακόψατε αυτή τη σάρωση/);
+    const card = screen.getByRole('status');
+    expect(card.textContent).toContain('Διακόψατε αυτή τη σάρωση: μέτρησε 15.8 GB από τα 835.1 GB που χρησιμοποιούνται (2%).');
+    expect(card.textContent).not.toMatch(/εξάντλησε τον χρόνο/);
+    expect(screen.getByRole('button', { name: "Εκτέλεσε αντ' αυτού μια γρήγορη σάρωση" })).toBeTruthy();
+  });
+
+  it('says the time limit in Greek when it was the time limit', async () => {
+    mount({ status: 'complete', truncated: true, stoppedByUser: false, coverage });
+
+    await screen.findByText(/Αυτή η σάρωση εξάντλησε/);
+    expect(screen.getByRole('status').textContent).toContain('Αυτή η σάρωση εξάντλησε τον χρόνο της: μέτρησε 15.8 GB από τα 835.1 GB');
+  });
+
+  it('shows the Stopping label in Greek once Stop is pressed', async () => {
+    mount({ status: 'scanning', path: 'C:\\Users', percent: null, onStop: vi.fn() });
+
+    fireEvent.click(await screen.findByRole('button', { name: 'Διακοπή' }));
+    expect(screen.getByRole('button', { name: 'Διακοπή…' })).toBeTruthy();
+  });
+});
+
 describe('Stop in Greek', () => {
   it('reuses the catalog Stop wording', async () => {
     const onStop = vi.fn();
