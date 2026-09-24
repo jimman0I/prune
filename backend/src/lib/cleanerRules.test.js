@@ -645,7 +645,9 @@ describe('recommended defaults', () => {
   });
 
   it('never recommends a rule that loses something the user can see', () => {
-    expect(rules.find(r => r.id === 'recent_items_jumplists').recommended).toBe(false);
+    for (const id of ['recent_items_jumplists', 'defender_history', 'winrar_history']) {
+      expect(rules.find(r => r.id === id).recommended, id).toBe(false);
+    }
   });
 
   it('never recommends a rule that makes the machine slower afterwards', () => {
@@ -1451,5 +1453,76 @@ describe('recursive ** glob segment', () => {
     const result = scanRule({ id: 'rar', paths: ['%APPDATA%\\nonexistent\\**\\*.tmp'] });
     expect(result.fileCount).toBe(0);
     expect(result.present).toBe(false);
+  });
+});
+
+describe('Windows Defender and WinRAR rules', () => {
+  const rules = loadCleanerRules();
+  const byId = id => rules.find(r => r.id === id);
+
+  const expected = [
+    ['defender_history', 'Windows Defender', false, false, true],
+    ['defender_temp', 'Windows Defender', false, true, true],
+    ['defender_quarantine', 'Windows Defender', true, false, false],
+    ['defender_backup', 'Windows Defender', true, false, false],
+    ['defender_logs', 'Windows Defender', false, true, true],
+    ['winrar_history', 'WinRAR', false, false, true],
+    ['winrar_temp', 'WinRAR', false, true, true]
+  ];
+
+  it.each(expected)('%s has the right category, risk and default', (id, category, risky, recommended, isSafe) => {
+    const rule = byId(id);
+    expect(rule, id).toBeDefined();
+    expect(rule.category).toBe(category);
+    if (risky) expect(rule.risky).toBe(true);
+    else expect(rule.risky).toBeUndefined();
+    expect(rule.recommended).toBe(recommended);
+    expect(rule.is_safe).toBe(isSafe);
+    expect(rule.requiresProgram).toBeUndefined();
+  });
+
+  it('warns that clearing quarantine forfeits false-positive restores', () => {
+    expect(byId('defender_quarantine').description).toMatch(/restor/i);
+    expect(byId('defender_quarantine').description).toMatch(/false positive/i);
+  });
+
+  it('warns that clearing the definition backup removes the rollback', () => {
+    expect(byId('defender_backup').description).toMatch(/roll back/i);
+  });
+
+  it('winrar_history clears exactly the expected keys and values', () => {
+    const actions = byId('winrar_history').actions;
+    expect(actions).toHaveLength(11);
+    expect(actions.every(a => a.type === 'winreg')).toBe(true);
+    const got = new Set(actions.map(a => `${a.key}|${a.value ?? ''}`));
+    const want = new Set([
+      'HKCU\\Software\\WinRAR\\ArcHistory|',
+      'HKCU\\Software\\WinRAR\\DialogEditHistory\\ArcName|',
+      'HKCU\\Software\\WinRAR\\DialogEditHistory\\ArcCmtName|',
+      'HKCU\\Software\\WinRAR\\DialogEditHistory\\ExtrPath|',
+      'HKCU\\Software\\WinRAR\\DialogEditHistory\\FindArcNames|',
+      'HKCU\\Software\\WinRAR\\DialogEditHistory\\FindNames|',
+      'HKCU\\Software\\WinRAR\\DialogEditHistory\\FindText|',
+      'HKCU\\Software\\WinRAR\\DialogEditHistory\\WizArcName|',
+      'HKCU\\Software\\WinRAR SFX|',
+      'HKCU\\Software\\WinRAR\\General|LastFolder',
+      'HKCU\\Software\\WinRAR\\General\\Info|CommentFile'
+    ]);
+    expect(got).toEqual(want);
+  });
+
+  it('winrar_temp only matches .tmp files in the three WinRAR locations', () => {
+    const paths = byId('winrar_temp').paths;
+    for (const p of paths) expect(p).toContain('**\\*.tmp');
+    expect(paths.some(p => p.includes('%LOCALAPPDATA%\\VirtualStore\\Program Files*\\WinRAR'))).toBe(true);
+    expect(paths.some(p => p.includes('%PROGRAMFILES%\\WinRAR'))).toBe(true);
+    expect(paths.some(p => p.includes('%PROGRAMFILES(X86)%\\WinRAR'))).toBe(true);
+  });
+
+  it('defender_temp covers the Defender logs and the update folder', () => {
+    const paths = byId('defender_temp').paths;
+    expect(paths).toContain('%WINDIR%\\Temp\\MpSigStub.log');
+    expect(paths).toContain('%WINDIR%\\Temp\\MpCmdRun.log');
+    expect(paths.some(p => p.endsWith('Definition Updates\\Updates'))).toBe(true);
   });
 });

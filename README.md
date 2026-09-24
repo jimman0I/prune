@@ -70,7 +70,7 @@ uninstall, and a choice of where leftover files go.
 
 ### 🧹 Deep Clean
 
-74 rules across 29 categories, scanned one at a time so the tree fills in as
+87 rules across 31 categories, scanned one at a time so the tree fills in as
 it goes. A rule that cannot be measured says whether the software is missing
 or the read needs admin — never `0 B`.
 
