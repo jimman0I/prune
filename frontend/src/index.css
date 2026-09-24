@@ -78,6 +78,14 @@
   /* The border a control shows when you point at it -- one step up from
      subtle, not a colour change. */
   --border-hover: rgba(255, 255, 255, 0.25);
+  /* The edge of a control that must be SEEN to be found: the unticked box,
+     an off switch. WCAG 1.4.11 asks 3:1 of a component's boundary against
+     what it sits on, and --border-subtle (6%) is a hairline for panels, not
+     for something you have to hit. 0.36 white is about 3.3:1 on the panel. */
+  --control-border: rgba(255, 255, 255, 0.36);
+  /* The scrollbar thumb under the pointer. A token so the light theme can
+     retune it; it used to be a zinc literal that was invisible on white. */
+  --scrollbar-thumb-hover: #3f3f46;
 
   /* Tinted surfaces -- table stripes, row hovers, group headers.
    *
@@ -224,6 +232,9 @@
 
   --border-subtle: rgba(28, 25, 23, 0.1);
   --border-hover: rgba(28, 25, 23, 0.32);
+  /* About 3.35:1 on white; see the dark value for why this exists. */
+  --control-border: rgba(28, 25, 23, 0.5);
+  --scrollbar-thumb-hover: rgba(28, 25, 23, 0.3);
 
   /* Tints go DOWN from the surface rather than up. Lower alphas than the
      dark side's, because dark ink on white separates at less strength
@@ -703,7 +714,7 @@ input[type="checkbox"].prune-check {
   appearance: none;
   width: 15px;
   height: 15px;
-  border: 1px solid var(--border-subtle);
+  border: 1px solid var(--control-border);
   border-radius: 4px;
   background: var(--surface-subtle);
   cursor: pointer;
@@ -733,7 +744,10 @@ input[type="checkbox"].prune-check:checked::after {
 ::-webkit-scrollbar { width: 10px; height: 10px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: var(--border-subtle); border-radius: 8px; border: 2px solid var(--bg-base); }
-::-webkit-scrollbar-thumb:hover { background: #3f3f46; }
+::-webkit-scrollbar-thumb:hover { background: var(--scrollbar-thumb-hover); }
+/* Where a vertical and a horizontal bar meet. Left alone it paints the
+   default light-grey square, which shows as a pale notch on the dark ground. */
+::-webkit-scrollbar-corner { background: transparent; }
 
 /* ─────────────────────────────────────────────────────────────────────
    Motion
@@ -923,4 +937,74 @@ input[type="checkbox"].prune-check:active:not(:disabled),
 @media (prefers-reduced-motion: reduce) {
   .scan-shimmer { animation: none; background: none; }
   .scan-indeterminate { animation: none; }
+}
+
+/* Reduced transparency (Windows "Transparency effects" off, macOS "Reduce
+ * transparency"). The glass surfaces lose their blur and sit on the solid
+ * panel colour, and the two aurora layers behind everything go, because
+ * they only exist to give the blur something to show. Contrast is the
+ * point: text on a blurred, tinted, moving backdrop has no fixed ground to
+ * be measured against. */
+@media (prefers-reduced-transparency: reduce) {
+  .glass-panel,
+  .diskmap-tooltip {
+    background: var(--bg-panel);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+  body::before,
+  body::after { display: none; }
+}
+
+/* Forced colours (Windows High Contrast). The browser replaces every
+ * author colour with the user's palette, and anything that was drawn ONLY
+ * as a background fill vanishes: the switch track, the rail's active tint,
+ * the selected tab, the storage bar. Each gets a system-colour border or
+ * outline so its state is still shown, and the bar and the checked switch
+ * opt out of the substitution so their fill is Highlight rather than
+ * Canvas. Verified against the forced-colors screenshots, where all of
+ * these were missing. */
+@media (forced-colors: active) {
+  [role="switch"] {
+    border: 1px solid ButtonText;
+    forced-color-adjust: none;
+    background: Canvas;
+  }
+  [role="switch"][aria-checked="true"] {
+    background: Highlight;
+    forced-color-adjust: none;
+  }
+  /* The thumb is ButtonText on the off track and HighlightText on the
+     Highlight fill, the pair the system guarantees is legible. */
+  [role="switch"] > span {
+    background: ButtonText;
+    forced-color-adjust: none;
+  }
+  [role="switch"][aria-checked="true"] > span { background: HighlightText; }
+
+  /* Active rail item: the tint behind it is a background, so it goes.
+     Inset, so it does not collide with the focus ring drawn outside. */
+  nav [aria-current="page"] {
+    outline: 2px solid Highlight;
+    outline-offset: -2px;
+  }
+  nav [aria-current="page"]:focus-visible { outline-offset: 2px; }
+
+  /* Selected Settings tab and selected filter chips. */
+  .pill-selected,
+  [role="tab"][aria-selected="true"],
+  button[aria-pressed="true"] {
+    outline: 2px solid Highlight;
+    outline-offset: -2px;
+  }
+
+  .storage-bar {
+    forced-color-adjust: none;
+    background: Canvas;
+    border: 1px solid ButtonText;
+  }
+  .storage-bar-fill {
+    forced-color-adjust: none;
+    background: Highlight;
+  }
 }

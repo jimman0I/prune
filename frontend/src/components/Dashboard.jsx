@@ -399,9 +399,9 @@ export default function Dashboard({ programs, totalSize, onNavigate = () => {} }
             </p>
           )}
           {diskSpace && (
-            <div className="h-1.5 rounded-full bg-[color:var(--surface-strong)] overflow-hidden">
+            <div className="storage-bar h-1.5 rounded-full bg-[color:var(--surface-strong)] overflow-hidden">
               <div
-                className="h-full rounded-full"
+                className="storage-bar-fill h-full rounded-full"
                 style={{ width: `${Math.round((1 - diskSpace.freeBytes / diskSpace.totalBytes) * 100)}%`, background: 'var(--accent-primary)' }}
               />
             </div>
