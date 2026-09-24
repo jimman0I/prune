@@ -151,6 +151,20 @@ describe('the Disk Map once a folder scan completes', () => {
     await waitFor(() => expect(calls).toBe(2));
   });
 
+  it('does not call a partial (ran-out-of-time) scan complete', async () => {
+    fetchDiskScan.mockImplementation(async (_path, _signal, opts) => {
+      opts?.onProgress?.({ type: 'complete', totalFiles: 82747, totalBytes: 34.8 * GB, truncated: true, resultId: 'x' });
+      return { ...TREE, truncated: true };
+    });
+    const user = userEvent.setup();
+    mount();
+    await crawl(user);
+
+    expect(await screen.findByText(/^Scan stopped early — 82[,.]747 files/)).toBeTruthy();
+    expect(screen.queryByText(/Scan complete/)).toBeNull();
+    expect(screen.getByTestId('scan-stopped-mark')).toBeTruthy();
+  });
+
   it('shows no complete strip when the scan never reported a completion', async () => {
     fetchDiskScan.mockResolvedValue(TREE);
     const user = userEvent.setup();
