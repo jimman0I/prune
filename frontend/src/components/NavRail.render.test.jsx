@@ -3,6 +3,7 @@ import { describe, it, expect } from 'vitest';
 import { screen } from '@testing-library/react';
 import { renderScreen } from '../testSupport/renderScreen.jsx';
 import NavRail from './NavRail.jsx';
+import { SCREEN_ORDER } from '../lib/screenOrder.js';
 
 /** The nav rail's flyout labels, and the pair of classes that show them.
  *
@@ -24,7 +25,14 @@ import NavRail from './NavRail.jsx';
  * failure mode is a class name going missing.
  */
 
-const LABELS = ['Dashboard', 'Disk Map', 'Applications', 'Quarantine', 'Settings', 'Startup', 'Duplicates', 'Deep Clean'];
+// Rail order, top to bottom: the seven places you go to work, then Settings
+// in the footer. The same order Ctrl+1 to Ctrl+8 follow.
+const LABELS = ['Dashboard', 'Disk Map', 'Applications', 'Quarantine', 'Startup', 'Duplicates', 'Deep Clean', 'Settings'];
+const IDS_BY_LABEL = {
+  'Dashboard': 'dashboard', 'Disk Map': 'diskmap', 'Applications': 'applications', 'Quarantine': 'quarantine',
+  'Startup': 'startup', 'Duplicates': 'duplicates', 'Deep Clean': 'deepclean', 'Settings': 'settings'
+};
+const classesOf = (el) => el.className.split(' ');
 
 /** The flyout for one item: the span that is a SIBLING of that item's
  * button, not a descendant of it.
@@ -43,11 +51,13 @@ function flyoutFor(label) {
 }
 
 describe('nav rail flyout labels', () => {
-  it('names every destination', () => {
+  it('names every destination and the key that goes to it', () => {
     renderScreen(<NavRail screen="dashboard" onNavigate={() => {}} />);
-    for (const label of LABELS) {
-      expect(flyoutFor(label).flyout.textContent).toBe(label);
-    }
+    LABELS.forEach((label, index) => {
+      // "Dashboard" + "Ctrl+1": the icon-only rail's tooltip is the one
+      // place its key is shown.
+      expect(flyoutFor(label).flyout.textContent).toBe(`${label}Ctrl+${index + 1}`);
+    });
   });
 
   it('reveals on keyboard focus, never on plain focus', () => {
@@ -92,6 +102,87 @@ describe('nav rail flyout labels', () => {
   });
 });
 
+describe('the rail order', () => {
+  it('is exactly the order Ctrl+1 to Ctrl+8 jump in', () => {
+    // Settings is in the footer, but it is still the eighth stop. If the JSX
+    // is reordered without lib/screenOrder.js, the number printed in a
+    // tooltip would send you to a different screen than the one it labels.
+    renderScreen(<NavRail screen="dashboard" onNavigate={() => {}} />);
+    const buttons = screen.getAllByRole('button');
+    expect(buttons.map((b) => b.getAttribute('aria-label'))).toEqual(LABELS);
+    expect(LABELS.map((label) => IDS_BY_LABEL[label])).toEqual(SCREEN_ORDER);
+  });
+
+  it('declares each key on the button for assistive tech', () => {
+    renderScreen(<NavRail screen="dashboard" onNavigate={() => {}} />);
+    LABELS.forEach((label, index) => {
+      expect(screen.getByRole('button', { name: label }).getAttribute('aria-keyshortcuts')).toBe(`Control+${index + 1}`);
+    });
+  });
+
+  it('navigates by the item id when a button is pressed', () => {
+    const seen = [];
+    renderScreen(<NavRail screen="dashboard" onNavigate={(id) => seen.push(id)} />);
+    for (const label of LABELS) screen.getByRole('button', { name: label }).click();
+    expect(seen).toEqual(SCREEN_ORDER);
+  });
+
+  it('gives the Dashboard a gauge, not the tiled grid the Disk Map uses', () => {
+    renderScreen(<NavRail screen="settings" onNavigate={() => {}} />);
+    const dash = screen.getByRole('button', { name: 'Dashboard' }).querySelector('svg');
+    const disk = screen.getByRole('button', { name: 'Disk Map' }).querySelector('svg');
+    expect(dash.innerHTML).not.toBe(disk.innerHTML);
+    expect(dash.querySelectorAll('rect')).toHaveLength(0);
+    expect(disk.querySelectorAll('rect').length).toBeGreaterThan(0);
+  });
+});
+
+describe('the two rail widths', () => {
+  // jsdom evaluates no CSS, so what is checkable is which classes carry each
+  // state. The behaviour itself -- the switch at 1100px of window width --
+  // is a media query Tailwind emits from `min-[1100px]:`, verified live.
+  it('is icons only by default and widens from 1100px', () => {
+    const { container } = renderScreen(<NavRail screen="dashboard" onNavigate={() => {}} />);
+    const nav = container.querySelector('nav');
+    expect(classesOf(nav)).toContain('w-[72px]');
+    expect(classesOf(nav)).toContain('min-[1100px]:w-[200px]');
+  });
+
+  it('prints the label in the row only when wide, and keeps it out of the accessible name', () => {
+    renderScreen(<NavRail screen="dashboard" onNavigate={() => {}} />);
+    const button = screen.getByRole('button', { name: 'Applications' });
+    const rowLabel = [...button.querySelectorAll('span')].find((el) => el.textContent === 'Applications');
+    expect(classesOf(rowLabel)).toContain('hidden');
+    expect(classesOf(rowLabel)).toContain('min-[1100px]:block');
+    // The button's name is its aria-label; the printed copy is decoration.
+    expect(rowLabel.getAttribute('aria-hidden')).toBe('true');
+  });
+
+  it('hides the flyout when wide, since the label is already in the row', () => {
+    renderScreen(<NavRail screen="dashboard" onNavigate={() => {}} />);
+    for (const label of LABELS) expect(classesOf(flyoutFor(label).flyout)).toContain('min-[1100px]:hidden');
+  });
+
+  it('shows the key at the row end on hover or keyboard focus when wide', () => {
+    renderScreen(<NavRail screen="dashboard" onNavigate={() => {}} />);
+    const hint = [...screen.getByRole('button', { name: 'Quarantine' }).querySelectorAll('span')].find((el) => el.textContent === 'Ctrl+4');
+    expect(hint).toBeTruthy();
+    expect(classesOf(hint)).toEqual(expect.arrayContaining([
+      'opacity-0', 'group-hover:opacity-100', 'group-has-[:focus-visible]:opacity-100', 'min-[1100px]:block'
+    ]));
+  });
+});
+
+describe('the active mark', () => {
+  it('is a 3px pill on the active item only, alongside the sliding tint', () => {
+    const { container } = renderScreen(<NavRail screen="quarantine" onNavigate={() => {}} />);
+    const pills = container.querySelectorAll('span[class*="w-[3px]"]');
+    expect(pills).toHaveLength(1);
+    expect(screen.getByRole('button', { name: 'Quarantine' }).contains(pills[0])).toBe(true);
+    expect(pills[0].getAttribute('aria-hidden')).toBe('true');
+  });
+});
+
 describe('nav buttons under motion', () => {
   it('still expose aria-current on the active item only', () => {
     renderScreen(<NavRail screen="settings" onNavigate={() => {}} />);
@@ -115,8 +206,21 @@ describe('the footer slot', () => {
     expect(footer.closest('.mt-auto')).toBeTruthy();
   });
 
-  it('adds nothing when there is no footer', () => {
+  it('puts Settings in the footer, below the update button', () => {
+    renderScreen(<NavRail screen="dashboard" onNavigate={() => {}} footer={<button type="button">Update</button>} />);
+    const update = screen.getByRole('button', { name: 'Update' });
+    const settings = screen.getByRole('button', { name: 'Settings' });
+    const last = screen.getByRole('button', { name: 'Deep Clean' });
+
+    expect(settings.closest('.mt-auto')).toBe(update.closest('.mt-auto'));
+    expect(last.closest('.mt-auto')).toBeNull();
+    expect(update.compareDocumentPosition(settings) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+  });
+
+  it('still shows Settings, and nothing else, when there is no update to offer', () => {
     const { container } = renderScreen(<NavRail screen="dashboard" onNavigate={() => {}} />);
-    expect(container.querySelector('.mt-auto')).toBeNull();
+    const footerZone = container.querySelector('.mt-auto');
+    expect(footerZone.querySelectorAll('button')).toHaveLength(1);
+    expect(footerZone.querySelector('button').getAttribute('aria-label')).toBe('Settings');
   });
 });

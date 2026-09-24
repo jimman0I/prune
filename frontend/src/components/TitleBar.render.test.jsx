@@ -105,11 +105,39 @@ describe('the logo, which has to line up with the nav rail underneath it', () =>
 
     const navPath = resolve(process.cwd(), 'src/components/NavRail.jsx');
     const navSource = readFileSync(navPath, 'utf8');
-    const railWidthMatch = navSource.match(/<nav[^>]*\bw-\[(\d+)px\]/);
-    expect(railWidthMatch, 'expected an arbitrary w-[Npx] rail width in NavRail.jsx').toBeTruthy();
-    const railCenter = Number(railWidthMatch[1]) / 2;
 
-    expect(logoCenter).toBe(railCenter);
+    // Narrow rail (icons only): the icon is centred in the fixed column.
+    const railWidthMatch = navSource.match(/<nav[^>]*?\sw-\[(\d+)px\]/);
+    expect(railWidthMatch, 'expected an arbitrary w-[Npx] rail width in NavRail.jsx').toBeTruthy();
+    const narrowIconCenter = Number(railWidthMatch[1]) / 2;
+
+    expect(logoCenter).toBe(narrowIconCenter);
+  });
+
+  it('also lines up with the icon column of the wide, labelled rail (1100px and up)', () => {
+    /* The wide rail is ~200px with the label beside each icon, and its icons
+     * are LEFT-aligned rather than centred -- so the centre is the sum of
+     * the rail's side gutter, the button's own left padding, and half the
+     * glyph. That sum has to land on the same x as the logo, or the mark
+     * jumps sideways relative to the icons the moment the window crosses
+     * 1100px. Read from the same source, for the same reason as above. */
+    render(<TitleBar />);
+    const logoLeft = Number(screen.getByRole('banner').className.match(/pl-\[(\d+)px\]/)[1]);
+    const logoCenter = logoLeft + Number(document.querySelector('img').className.match(/w-(\d+)/)[1]) * 4 / 2;
+
+    const navSource = readFileSync(resolve(process.cwd(), 'src/components/NavRail.jsx'), 'utf8');
+    const gutter = navSource.match(/<nav[^>]*\bmin-\[1100px\]:px-\[(\d+)px\]/);
+    const inset = navSource.match(/<motion\.button[\s\S]*?min-\[1100px\]:pl-\[(\d+)px\]/);
+    const wideWidth = navSource.match(/<nav[^>]*\bmin-\[1100px\]:w-\[(\d+)px\]/);
+    expect(gutter, 'expected min-[1100px]:px-[Npx] on the nav').toBeTruthy();
+    expect(inset, 'expected min-[1100px]:pl-[Npx] on the nav button').toBeTruthy();
+    expect(wideWidth, 'expected min-[1100px]:w-[Npx] on the nav').toBeTruthy();
+    const iconWidth = Number(navSource.match(/<svg[^>]*width="(\d+)"/)[1]);
+
+    const wideIconCenter = Number(gutter[1]) + Number(inset[1]) + iconWidth / 2;
+    expect(wideIconCenter).toBe(logoCenter);
+    // And the wide rail is wider than the narrow one, or the breakpoint does nothing.
+    expect(Number(wideWidth[1])).toBeGreaterThan(Number(navSource.match(/<nav[^>]*?\sw-\[(\d+)px\]/)[1]));
   });
 });
 

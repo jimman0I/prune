@@ -56,6 +56,11 @@ export default function TitleBar() {
       // center at x=36. The 20px logo's own center is its left edge
       // plus 10 -- pl-4 landed that at 16+10=26, ten pixels left of the
       // icons underneath it; pl-[26px] moves it to 26+10=36, matching.
+      //
+      // Also true of the wide, labelled rail (1100px and up): its icons are
+      // left-aligned with a 12px gutter and 14px inset, 12+14+10 = 36, so the
+      // logo does not move when the window crosses the breakpoint.
+      // TitleBar.render.test.jsx checks both rails against this number.
       className="h-10 shrink-0 flex items-center gap-2.5 pl-[26px] select-none border-b border-[color:var(--border-subtle)] bg-[color:var(--bg-base)]"
       style={{
         WebkitAppRegion: 'drag',
