@@ -93,7 +93,7 @@ describe('what can be copied', () => {
     renderScreen(<StartupItems />);
     await screen.findByText('Thing');
 
-    await user.click(screen.getByRole('switch'));
+    await user.click(screen.getByRole('checkbox'));
 
     expect(isCopyable(await screen.findByText('Access is denied.'))).toBe(true);
   });
@@ -145,7 +145,7 @@ describe('an entry Prune cannot switch', () => {
     await screen.findByText('OneDrive Reporting Task');
 
     const row = rowFor('OneDrive Reporting Task');
-    expect(within(row).queryByRole('switch')).toBeNull();
+    expect(within(row).queryByRole('checkbox')).toBeNull();
     expect(within(row).getByText(/This is a scheduled task/)).toBeTruthy();
   });
 
@@ -172,7 +172,7 @@ describe('an entry Prune cannot switch', () => {
     renderScreen(<StartupItems />);
     await screen.findByText('Thing');
 
-    expect(within(rowFor('Thing')).getByRole('switch')).toBeTruthy();
+    expect(within(rowFor('Thing')).getByRole('checkbox')).toBeTruthy();
   });
 });
 
@@ -188,7 +188,7 @@ describe('switching an entry', () => {
     renderScreen(<StartupItems />);
     await screen.findAllByText('Discord');
 
-    const enabledSwitch = screen.getByRole('switch', { name: /Disable Discord/ });
+    const enabledSwitch = screen.getAllByRole('checkbox', { name: /Run Discord at sign-in/, checked: true })[0];
     await user.click(enabledSwitch);
 
     expect(setStartupItemEnabled).toHaveBeenCalledTimes(1);
@@ -204,10 +204,10 @@ describe('switching an entry', () => {
     renderScreen(<StartupItems />);
     await screen.findByText('Thing');
 
-    await user.click(screen.getByRole('switch'));
+    await user.click(screen.getByRole('checkbox'));
 
     await waitFor(() => {
-      expect(screen.getByRole('switch').getAttribute('aria-checked')).toBe('false');
+      expect(screen.getByRole('checkbox').getAttribute('aria-checked')).toBe('false');
     });
   });
 
@@ -217,10 +217,10 @@ describe('switching an entry', () => {
     renderScreen(<StartupItems />);
     await screen.findByText('Thing');
 
-    await user.click(screen.getByRole('switch'));
+    await user.click(screen.getByRole('checkbox'));
 
     expect(await screen.findByText('Access is denied.')).toBeTruthy();
-    expect(screen.getByRole('switch').getAttribute('aria-checked')).toBe('true');
+    expect(screen.getByRole('checkbox').getAttribute('aria-checked')).toBe('true');
   });
 
   it('puts the row back in silence when the user declines the prompt', async () => {
@@ -235,10 +235,10 @@ describe('switching an entry', () => {
     renderScreen(<StartupItems />);
     await screen.findByText('Thing');
 
-    await user.click(screen.getByRole('switch'));
+    await user.click(screen.getByRole('checkbox'));
 
     await waitFor(() => {
-      expect(screen.getByRole('switch').getAttribute('aria-checked')).toBe('true');
+      expect(screen.getByRole('checkbox').getAttribute('aria-checked')).toBe('true');
     });
     expect(screen.queryByText(/denied|failed|couldn't|error/i)).toBeNull();
   });
@@ -252,10 +252,10 @@ describe('switching an entry', () => {
     renderScreen(<StartupItems />);
     await screen.findByText('Thing');
 
-    await user.click(screen.getByRole('switch'));
+    await user.click(screen.getByRole('checkbox'));
 
     expect(await screen.findByText(/Windows still has this enabled/)).toBeTruthy();
-    expect(screen.getByRole('switch').getAttribute('aria-checked')).toBe('true');
+    expect(screen.getByRole('checkbox').getAttribute('aria-checked')).toBe('true');
   });
 });
 
