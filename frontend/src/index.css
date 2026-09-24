@@ -83,6 +83,9 @@
      what it sits on, and --border-subtle (6%) is a hairline for panels, not
      for something you have to hit. 0.36 white is about 3.3:1 on the panel. */
   --control-border: rgba(255, 255, 255, 0.36);
+  /* Pointing at a control makes its edge stronger, never weaker:
+     --border-hover (0.25) is BELOW the resting --control-border. */
+  --control-border-hover: rgba(255, 255, 255, 0.6);
   /* The scrollbar thumb under the pointer. A token so the light theme can
      retune it; it used to be a zinc literal that was invisible on white. */
   --scrollbar-thumb-hover: #3f3f46;
@@ -234,6 +237,7 @@
   --border-hover: rgba(28, 25, 23, 0.32);
   /* About 3.35:1 on white; see the dark value for why this exists. */
   --control-border: rgba(28, 25, 23, 0.5);
+  --control-border-hover: rgba(28, 25, 23, 0.72);
   --scrollbar-thumb-hover: rgba(28, 25, 23, 0.3);
 
   /* Tints go DOWN from the surface rather than up. Lower alphas than the
@@ -724,7 +728,7 @@ input[type="checkbox"].prune-check {
   transition: background-color 140ms ease, border-color 140ms ease;
   flex-shrink: 0;
 }
-input[type="checkbox"].prune-check:hover:not(:disabled) { border-color: var(--border-hover); }
+input[type="checkbox"].prune-check:hover:not(:disabled) { border-color: var(--control-border-hover); }
 input[type="checkbox"].prune-check:disabled { opacity: 0.3; cursor: not-allowed; }
 input[type="checkbox"].prune-check:checked {
   background: var(--accent-primary);
@@ -970,6 +974,9 @@ input[type="checkbox"].prune-check:active:not(:disabled),
     forced-color-adjust: none;
     background: Canvas;
   }
+  /* The border shifts the thumb's containing block 1px in and down; pull it
+     back so it sits centred in the track as it does outside this mode. */
+  [role="switch"] > span { margin: -1px 0 0 -1px; }
   [role="switch"][aria-checked="true"] {
     background: Highlight;
     forced-color-adjust: none;
@@ -997,6 +1004,12 @@ input[type="checkbox"].prune-check:active:not(:disabled),
     outline: 2px solid Highlight;
     outline-offset: -2px;
   }
+  /* This block comes after the global :focus-visible rule and would
+     otherwise flatten it: keep the focus ring outside, where it reads as
+     different from the inset selected mark. */
+  .pill-selected:focus-visible,
+  [role="tab"][aria-selected="true"]:focus-visible,
+  button[aria-pressed="true"]:focus-visible { outline-offset: 2px; }
 
   .storage-bar {
     forced-color-adjust: none;
@@ -1005,6 +1018,8 @@ input[type="checkbox"].prune-check:active:not(:disabled),
   }
   .storage-bar-fill {
     forced-color-adjust: none;
-    background: Highlight;
+    /* !important because the fill's colour is an inline style (a width and
+       a colour set together in Dashboard.jsx), which beats any plain rule. */
+    background: Highlight !important;
   }
 }

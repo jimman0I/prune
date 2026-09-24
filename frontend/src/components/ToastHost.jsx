@@ -27,6 +27,17 @@ const TONE = {
 /** The brief's easing and timing: snappy, 0.2-0.3s, no overshoot. */
 const EASE = [0.2, 0.9, 0.3, 1];
 
+/** Whether focus arrived by keyboard. An engine without :focus-visible
+ * support throws on the selector; treat that as keyboard, the safe side
+ * (the toast is held rather than lost). */
+function isFocusVisible(element) {
+  try {
+    return element.matches(':focus-visible');
+  } catch {
+    return true;
+  }
+}
+
 function ToastCard({ toast, onDismiss, onPause, onResume }) {
   const { t } = useLanguage();
   const tone = TONE[toast.tone] ?? TONE.info;
@@ -49,7 +60,14 @@ function ToastCard({ toast, onDismiss, onPause, onResume }) {
       style={{ borderColor: tone.soft }}
       onMouseEnter={() => { hovered.current = true; sync(); }}
       onMouseLeave={() => { hovered.current = false; sync(); }}
-      onFocus={() => { focused.current = true; sync(); }}
+      onFocus={(event) => {
+        // Keyboard focus only. Clicking a control inside the card focuses it
+        // too, and a toast held open by a stale mouse focus would never
+        // leave: the pointer is gone but the focus is not.
+        if (!isFocusVisible(event.target)) return;
+        focused.current = true;
+        sync();
+      }}
       onBlur={(event) => {
         // Focus moving between controls inside the card is not leaving it.
         if (event.currentTarget.contains(event.relatedTarget)) return;
