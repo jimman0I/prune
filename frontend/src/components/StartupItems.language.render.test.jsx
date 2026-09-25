@@ -59,12 +59,12 @@ beforeEach(() => {
  * nothing about which language actually rendered. The title renders
  * unconditionally, so waiting for its Greek text is what actually proves
  * the language settled before a synchronous query runs. */
-const ready = () => screen.findByRole('heading', { name: 'Εκτελούνται κατά τη σύνδεση' });
+const ready = () => screen.findByRole('heading', { name: 'Εκκίνηση' });
 
 describe('the startup screen, in Greek', () => {
   it('translates the title and subtitle', async () => {
     renderScreen(<StartupItems />);
-    expect(await screen.findByRole('heading', { name: 'Εκτελούνται κατά τη σύνδεση' })).toBeTruthy();
+    expect(await screen.findByRole('heading', { name: 'Εκκίνηση' })).toBeTruthy();
     expect(screen.getByText(/τα Windows όταν συνδέεστε/)).toBeTruthy();
   });
 

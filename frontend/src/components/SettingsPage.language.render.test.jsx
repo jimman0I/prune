@@ -252,7 +252,7 @@ describe('the settings screen, in Greek', () => {
       await openTab('Καθαρισμός');
       const input = screen.getByLabelText('Ημέρες διατήρησης αντιγράφων ασφαλείας καραντίνας');
       expect(input.placeholder).toBe('Ποτέ');
-      expect(screen.getByText('Πόσο καιρό να διατηρείται η αναίρεση')).toBeTruthy();
+      expect(screen.getByText('Χρόνος διατήρησης στοιχείων Καραντίνας')).toBeTruthy();
       expect(screen.getByText(/Οτιδήποτε αφαιρεί το Prune πηγαίνει πρώτα/)).toBeTruthy();
       expect(screen.getByText('ημέρες')).toBeTruthy();
     });
@@ -261,7 +261,7 @@ describe('the settings screen, in Greek', () => {
       await openTab('Καθαρισμός');
       const input = screen.getByLabelText('Μέγιστο μέγεθος καραντίνας σε gigabyte');
       expect(input.placeholder).toBe('Χωρίς όριο');
-      expect(screen.getByText('Πόση αναίρεση να διατηρείται')).toBeTruthy();
+      expect(screen.getByText('Όριο μεγέθους Καραντίνας')).toBeTruthy();
       expect(screen.getByText(/Ένα όριο για ολόκληρο τον φάκελο Καραντίνας/)).toBeTruthy();
       // gbUnit's Greek translation is literally "GB", identical to the
       // English fallback -- rendering it correctly and rendering the
@@ -273,7 +273,7 @@ describe('the settings screen, in Greek', () => {
 
     it('translates the exclusions panel entirely', async () => {
       const user = await openTab('Καθαρισμός');
-      expect(screen.getByText('Εξαίρεση Φακέλων')).toBeTruthy();
+      expect(screen.getByText('Εξαίρεση φακέλων')).toBeTruthy();
       expect(screen.getByText(/Φάκελοι και τύποι αρχείων που το Prune θα αφήσει ήσυχους/)).toBeTruthy();
       expect(screen.getByText('Μια πλήρης διαδρομή φακέλου, ή ένας τύπος αρχείου γραμμένος ως *.iso')).toBeTruthy();
       expect(screen.getByText('Τίποτα δεν εξαιρείται.')).toBeTruthy();
@@ -303,9 +303,9 @@ describe('the settings screen, in Greek', () => {
       let resolveTest;
       runSandboxTest.mockReturnValue(new Promise((resolve) => { resolveTest = resolve; }));
       const user = await openTab('Καθαρισμός');
-      expect(screen.getByText('Δοκιμή Sandbox')).toBeTruthy();
+      expect(screen.getByText('Δοκιμή sandbox')).toBeTruthy();
       expect(screen.getByText(/Εκτελεί την πραγματική μηχανή καθαρισμού/)).toBeTruthy();
-      await user.click(screen.getByRole('button', { name: 'Εκτέλεση Δοκιμής Sandbox' }));
+      await user.click(screen.getByRole('button', { name: 'Εκτέλεση δοκιμής sandbox' }));
       expect(await screen.findByRole('button', { name: 'Εκτελείται…' })).toBeTruthy();
       resolveTest({ passed: true, steps: [] });
       expect(await screen.findByText('Όλοι οι έλεγχοι πέρασαν')).toBeTruthy();
@@ -314,7 +314,7 @@ describe('the settings screen, in Greek', () => {
     it('translates a failed Sandbox Test result', async () => {
       runSandboxTest.mockResolvedValue({ passed: false, steps: [], error: 'boom' });
       const user = await openTab('Καθαρισμός');
-      await user.click(screen.getByRole('button', { name: 'Εκτέλεση Δοκιμής Sandbox' }));
+      await user.click(screen.getByRole('button', { name: 'Εκτέλεση δοκιμής sandbox' }));
       expect(await screen.findByText('Η δοκιμή sandbox απέτυχε')).toBeTruthy();
     });
 

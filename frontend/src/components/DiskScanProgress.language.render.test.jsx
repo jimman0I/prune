@@ -41,14 +41,14 @@ describe('the scan card in another language', () => {
   it('says "Scanning C:\\" in Greek, in one element, and labels the bar', async () => {
     mount({ status: 'scanning', path: 'C:\\', percent: null });
 
-    expect(await screen.findByText('Σάρωση του C:\\')).toBeTruthy();
+    expect(await screen.findByText('Σάρωση: C:\\')).toBeTruthy();
     expect(screen.getByRole('progressbar', { name: 'Πρόοδος σάρωσης' })).toBeTruthy();
   });
 
   it('keeps both counters animating inside the Greek sentence', async () => {
     mount({ status: 'scanning', path: 'C:\\', percent: null, files: 1200, bytes: 5 * GB });
 
-    await screen.findByText('Σάρωση του C:\\');
+    await screen.findByText('Σάρωση: C:\\');
     expect(document.body.textContent).toMatch(/1[,.]200 αρχεία σαρώθηκαν · 5 GB επεξεργάστηκαν/);
     expect(screen.getByText(/δεν είναι γνωστό το συνολικό μέγεθος/)).toBeTruthy();
   });
@@ -56,7 +56,7 @@ describe('the scan card in another language', () => {
   it('says the index note and the elapsed time in Greek for the fast scan', async () => {
     mount({ status: 'scanning', mode: 'index', path: 'C:\\' });
 
-    expect(await screen.findByText('Χρόνος 00:00')).toBeTruthy();
+    expect(await screen.findByText('Πέρασαν 00:00')).toBeTruthy();
     expect(screen.getByText(/Τα Windows δεν αναφέρουν πρόοδο/)).toBeTruthy();
   });
 
@@ -65,7 +65,7 @@ describe('the scan card in another language', () => {
     mount({ status: 'complete', totalFiles: 1500, totalBytes: 2 * GB, onScanAgain });
 
     expect(await screen.findByText(/^Η σάρωση ολοκληρώθηκε — 1[,.]500 αρχεία, 2 GB$/)).toBeTruthy();
-    fireEvent.click(screen.getByRole('button', { name: 'Σάρωση ξανά' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Νέα σάρωση' }));
     expect(onScanAgain).toHaveBeenCalledTimes(1);
   });
 

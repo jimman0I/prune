@@ -62,7 +62,7 @@ const openAndUninstall = async () => {
  * readyToScan gate itself. */
 const openAndScan = async () => {
   const { user, onClose } = await openAndUninstall();
-  await user.click(await screen.findByRole('button', { name: 'Σάρωση' }));
+  await user.click(await screen.findByRole('button', { name: 'Σάρωση για κατάλοιπα' }));
   return { user, onClose };
 };
 
@@ -178,10 +178,10 @@ describe('the uninstall dialog, in Greek', () => {
 
   it('translates the readyToScan step: body copy and Scan button', async () => {
     const { user } = await openAndUninstall();
-    expect(await screen.findByText(/Αν ο δικός του απεγκαταστάτης του Thing εξακολουθεί να ολοκληρώνεται/)).toBeTruthy();
-    expect(screen.getByRole('button', { name: 'Σάρωση' })).toBeTruthy();
+    expect(await screen.findByText(/Αν ο απεγκαταστάτης του Thing δεν έχει τελειώσει ακόμα/)).toBeTruthy();
+    expect(screen.getByRole('button', { name: 'Σάρωση για κατάλοιπα' })).toBeTruthy();
     expect(scanForLeftovers).not.toHaveBeenCalled();
-    await user.click(screen.getByRole('button', { name: 'Σάρωση' }));
+    await user.click(screen.getByRole('button', { name: 'Σάρωση για κατάλοιπα' }));
     await waitFor(() => expect(scanForLeftovers).toHaveBeenCalledTimes(1));
   });
 

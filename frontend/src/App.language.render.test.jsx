@@ -105,10 +105,9 @@ describe('the Applications screen in Greek', () => {
 
     await goToApplications(user);
 
-    const heading = await screen.findByText('Εγκατεστημένες εφαρμογές');
+    const heading = await screen.findByRole('heading', { level: 1, name: 'Εφαρμογές' });
     expect(heading).toBeTruthy();
-    expect(screen.getByText(/3 εφαρμογές/)).toBeTruthy();
-    expect(screen.getByText(/εγκατεστημένα/)).toBeTruthy();
+    expect(screen.getByText(/3 εγκατεστημένες εφαρμογές/)).toBeTruthy();
     // Scoped past the heading, since the nav rail has its OWN "Καραντίνα"
     // button (translated in an earlier session pass) with the same name.
     const main = heading.closest('div').parentElement;

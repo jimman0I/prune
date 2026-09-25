@@ -48,14 +48,14 @@ describe('the Dashboard in another language', () => {
     render();
 
     expect(await screen.findByRole('heading', { name: 'Πίνακας ελέγχου' })).toBeTruthy();
-    expect(screen.getByText('Υγεία Δίσκου')).toBeTruthy();
-    expect(screen.getByText('Συνολικός Αποθηκευτικός Χώρος')).toBeTruthy();
-    expect(screen.getByText('Εγκατεστημένες Εφαρμογές')).toBeTruthy();
-    expect(screen.getByText('Άχρηστα Αρχεία')).toBeTruthy();
+    expect(screen.getByText('Υγεία δίσκου')).toBeTruthy();
+    expect(screen.getByText('Συνολικός αποθηκευτικός χώρος')).toBeTruthy();
+    expect(screen.getByText('Εγκατεστημένες εφαρμογές')).toBeTruthy();
+    expect(screen.getByText('Άχρηστα αρχεία')).toBeTruthy();
     expect(screen.getByText('δεν έχει μετρηθεί')).toBeTruthy();
     expect(screen.getByText('Η μέτρηση διατρέχει κάθε διαδρομή καθαρισμού στον δίσκο — περίπου μισό λεπτό.')).toBeTruthy();
     expect(screen.getByRole('button', { name: 'Μέτρηση' })).toBeTruthy();
-    expect(screen.getByRole('button', { name: 'Πρόσφατη Δραστηριότητα' })).toBeTruthy();
+    expect(screen.getByRole('button', { name: 'Πρόσφατη δραστηριότητα' })).toBeTruthy();
     // A chevron and aria-expanded now say hide/show; the words are gone.
     expect(screen.queryByText('Απόκρυψη')).toBeNull();
     expect(screen.getByText('Καμία απεγκατάσταση ακόμη.')).toBeTruthy();
@@ -67,7 +67,7 @@ describe('the Dashboard in another language', () => {
   it('collapses Recent Activity, reporting the state through aria-expanded', async () => {
     const user = userEvent.setup();
     render();
-    const toggle = await screen.findByRole('button', { name: /Πρόσφατη Δραστηριότητα/ });
+    const toggle = await screen.findByRole('button', { name: /Πρόσφατη δραστηριότητα/ });
     expect(toggle.getAttribute('aria-expanded')).toBe('true');
 
     await user.click(toggle);
@@ -83,7 +83,7 @@ describe('the Dashboard in another language', () => {
     expect(await screen.findByText('Φόρτωση…')).toBeTruthy();
     resolveDiskSpace({ freeBytes: 100 * GB, totalBytes: 500 * GB });
 
-    expect(await screen.findByText('400 GB σε χρήση / 500 GB σύνολο')).toBeTruthy();
+    expect(await screen.findByText('400 GB σε χρήση από 500 GB')).toBeTruthy();
     expect(await screen.findByText('ελεύθερο')).toBeTruthy();
   });
 
