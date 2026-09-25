@@ -319,7 +319,7 @@ function StartupItems() {
   return (
     <div className="px-12 py-10 max-w-[1400px]">
       <h1 className="display-heading text-[30px] leading-none mb-2">{t('startup.title')}</h1>
-      <p className="text-[13px] text-[color:var(--text-secondary)] mb-6 max-w-[62ch]">
+      <p className="text-[13px] text-[color:var(--text-secondary)] mb-6 max-w-[110ch]">
         {t('startup.subtitle')}
       </p>
 

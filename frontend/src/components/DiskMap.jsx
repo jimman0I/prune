@@ -1040,7 +1040,7 @@ function DiskMap() {
               )}
             </p>
           ) : (
-            <p className="text-[12px] text-[color:var(--text-secondary)] max-w-[62ch]">
+            <p className="text-[12px] text-[color:var(--text-secondary)] max-w-[110ch]">
               {t('diskMap.subtitle')}
             </p>
           )}
