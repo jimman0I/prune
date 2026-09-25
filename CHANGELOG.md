@@ -13,6 +13,18 @@ screen-reader access, and safer destructive actions.
 
 ### Fixed
 
+- **Deep Clean listed and ticked cleaners for software you never had.**
+  Slack, Teams, Zoom, Vivaldi, Telegram and other rules for programs that
+  aren't installed were shown, and a saved selection could tick them again.
+  Hiding cleaners that don't apply is now on by default, and a remembered
+  selection is checked against what is actually installed before it is
+  restored.
+- **At high zoom the Deep Clean footer covered the list.** The page now
+  scrolls inside its own area and the footer wraps its controls.
+- **Page descriptions were a narrow block on wide windows.** Deep Clean,
+  Disk Map, Duplicates and Startup now use the width they have.
+- **The Uninstall button on a hovered row looked like a dark box stuck to
+  the table edge.** It now matches the row and has room around it.
 - **An uninstall could be hidden by pressing Escape while it was still
   running.** Escape and Close are now off while an uninstall, leftover scan
   or removal is in progress, so the work can't carry on with no window.
