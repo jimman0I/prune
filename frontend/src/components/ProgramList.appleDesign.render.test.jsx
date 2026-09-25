@@ -155,25 +155,56 @@ describe('narrow windows', () => {
     expect(narrowFloor + 72 + 96).toBeLessThanOrEqual(WIDE_BREAKPOINT_PX - 1);
   });
 
-  it('keeps the action column stuck to the right edge, on the panel colour, and header sticky to the top', async () => {
+  it('keeps the action column stuck to the right edge and the header to the top', async () => {
     const { container } = render();
     await screen.findByRole('table');
     const actionCell = (row) => within(row).getAllByRole('cell').at(-1);
     const row = screen.getByText('Steam').closest('[role="row"]');
     expect(actionCell(row).className).toContain('sticky');
     expect(actionCell(row).className).toContain('right-0');
-    expect(actionCell(row).className).toContain('bg-[color:var(--bg-panel)]');
     const header = container.querySelector('[data-table-header]');
     expect(header.className).toContain('sticky');
     expect(header.className).toContain('top-0');
     expect(header.lastElementChild.className).toContain('right-0');
   });
 
-  it('shows the actions for keyboard focus anywhere in the row, not only hover', async () => {
+  it('paints no background on the sticky cell at rest, in the row or the header, and no opaque header bar', async () => {
+    const { container } = render();
+    await screen.findByRole('table');
+    const hasBg = (el) => /(^|\s)(bg-|\[background)/.test(el.className);
+    const header = container.querySelector('[data-table-header]');
+    for (const row of screen.getAllByRole('row').slice(1)) {
+      const cell = within(row).getAllByRole('cell').at(-1);
+      expect(hasBg(cell)).toBe(false);
+      expect(cell.className).not.toContain('bg-');
+    }
+    expect(hasBg(header.lastElementChild)).toBe(false);
+    // The header bar itself is the glass token, never the flat panel colour.
+    expect(header.className).toContain('--glass-bg');
+    expect(header.className).not.toContain('--bg-panel');
+  });
+
+  it('the opaque backing belongs to the buttons and shows only with them', async () => {
     render();
     await screen.findByRole('table');
-    const uninstall = within(screen.getByText('Steam').closest('[role="row"]')).getByRole('button', { name: 'Uninstall' });
-    expect(uninstall.className).toContain('group-focus-within:opacity-100');
+    const row = screen.getByText('Steam').closest('[role="row"]');
+    const backing = row.querySelector('[data-action-backing]');
+    expect(backing.className).toContain('bg-[color:var(--bg-panel)]');
+    // Invisible at rest; visible on hover or keyboard focus anywhere in the row.
+    expect(backing.className).toContain('opacity-0');
+    expect(backing.className).toContain('group-hover:opacity-100');
+    expect(backing.className).toContain('group-focus-within:opacity-100');
+    expect(within(backing).getByRole('button', { name: 'Uninstall' })).toBeTruthy();
+  });
+
+  it('a browser extension shows "via browser" outside the hidden backing', async () => {
+    const user = userEvent.setup();
+    render();
+    await screen.findByText('Steam');
+    await user.click(screen.getAllByRole('button').find((b) => b.textContent.trim().startsWith('Extensions')));
+    const row = (await screen.findByText('uBlock')).closest('[role="row"]');
+    const via = within(row).getByText('via browser');
+    expect(via.closest('[data-action-backing]')).toBeNull();
   });
 });
 
