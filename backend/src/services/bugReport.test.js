@@ -89,12 +89,16 @@ describe('openBugReport', () => {
 
     expect(opener).toHaveBeenCalledTimes(1);
     const [file, args] = opener.mock.calls[0];
-    expect(file).toBe('explorer.exe');
-    expect(args[0]).toBe(buildIssueUrl({ title: 't', description: 'd' }));
-    expect(result).toMatchObject({ ok: true, opened: args[0] });
+    // Not explorer.exe: given an address with a query string it opened the
+    // Documents folder instead of the browser. rundll32's URL handler goes
+    // straight to the default browser with the whole address as one argument.
+    expect(file).toBe('rundll32.exe');
+    expect(args[0]).toBe('url.dll,FileProtocolHandler');
+    expect(args[1]).toBe(buildIssueUrl({ title: 't', description: 'd' }));
+    expect(result).toMatchObject({ ok: true, opened: args[1] });
   });
 
-  it("counts explorer.exe's non-zero exit as success, like the release page does", async () => {
+  it("counts the handler's non-zero exit as success, since it exits oddly even when the page opened", async () => {
     const opener = (file, args, cb) => cb(Object.assign(new Error('exit 1'), { code: 1 }));
     expect(await openBugReport({ description: 'd' }, opener)).toMatchObject({ ok: true });
   });

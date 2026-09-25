@@ -75,17 +75,23 @@ export function buildIssueUrl(input) {
 
 /** Builds the report's address and opens it in the default browser.
  *
- * Re-checks the address before it reaches the shell, like
- * openReleasePage: this is the function that hands a URL to explorer.exe.
+ * Re-checks the address before it reaches the opener, like
+ * openReleasePage: this is the function that hands a URL to the system.
  * `opener` is a parameter so tests never launch a browser. Invalid input
  * throws, before anything is opened. */
 export async function openBugReport(input, opener = execFile) {
   const url = buildIssueUrl(input);
   if (!ISSUE_URL.test(url)) return { ok: false, error: 'Not a Prune issue page.' };
   return new Promise((resolve) => {
-    opener('explorer.exe', [url], (error) => {
-      // explorer.exe exits non-zero even when it worked -- see revealPath.js.
-      resolve({ ok: true, opened: url, spawnError: error?.code === 'ENOENT' ? 'explorer.exe not found' : null });
+    // rundll32's FileProtocolHandler, not explorer.exe. Handed this address
+    // (it has a query string), explorer.exe opened the user's Documents
+    // folder and never reached the browser; the release page has no query
+    // string, which is the only reason openReleasePage gets away with it.
+    // No shell is involved, so the address is a single argument and the
+    // '&' between its parameters is not interpreted.
+    opener('rundll32.exe', ['url.dll,FileProtocolHandler', url], (error) => {
+      // The handler's exit code says nothing about whether the page opened.
+      resolve({ ok: true, opened: url, spawnError: error?.code === 'ENOENT' ? 'rundll32.exe not found' : null });
     });
   });
 }
