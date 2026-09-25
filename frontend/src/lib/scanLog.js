@@ -36,6 +36,33 @@ export function mergeScannedRule(categories, item) {
   });
 }
 
+/** The wording around a rule's name in the live logs, in English. The
+ * screens hand in the current language's `deepClean.log` instead (see
+ * i18n/catalog.js); this default keeps the functions usable, and their
+ * tests readable, without a LanguageProvider -- the same arrangement
+ * cleanWarning.js's warningFor has. */
+export const DEFAULT_LOG_MESSAGES = {
+  scan: {
+    nothingToMeasure: 'nothing to measure',
+    needsAdmin: 'needs admin',
+    notInstalled: 'not installed',
+    empty: 'empty'
+  },
+  execute: {
+    delete: (name) => `Delete ${name}`,
+    recycle: (name) => `Recycle ${name}`,
+    clear: (name) => `Clear ${name}`,
+    compact: (name) => `Compact ${name}`,
+    trim: (name) => `Trim ${name}`,
+    registryEntries: (n) => `${n} registry ${n === 1 ? 'entry' : 'entries'}`,
+    alreadyAbsent: 'already absent',
+    skipped: (n) => `${n} skipped`,
+    alreadyEmpty: 'already empty',
+    locked: (n) => `${n} locked`,
+    lockedAfterSize: (size, n) => `${size}, ${n} locked`
+  }
+};
+
 /** One line of the live scan log: what was just looked at, and what was
  * found.
  *
@@ -45,19 +72,20 @@ export function mergeScannedRule(categories, item) {
  * to measure because the rule runs a command, or it really is empty --
  * and running past them at one line each is the clearest place to tell
  * them apart. */
-export function scanLogLine(item, nameOf = (rule) => rule.name) {
+export function scanLogLine(item, nameOf = (rule) => rule.name, messages = DEFAULT_LOG_MESSAGES) {
   const name = nameOf(item);
+  const say = messages.scan;
   if (item.sizeBytes === null || item.sizeBytes === undefined) {
-    return { label: name, detail: 'nothing to measure', tone: 'muted' };
+    return { label: name, detail: say.nothingToMeasure, tone: 'muted' };
   }
   if (item.accessible === false) {
-    return { label: name, detail: 'needs admin', tone: 'warning' };
+    return { label: name, detail: say.needsAdmin, tone: 'warning' };
   }
   if (item.present === false) {
-    return { label: name, detail: 'not installed', tone: 'muted' };
+    return { label: name, detail: say.notInstalled, tone: 'muted' };
   }
   if (item.sizeBytes === 0) {
-    return { label: name, detail: 'empty', tone: 'muted' };
+    return { label: name, detail: say.empty, tone: 'muted' };
   }
   return { label: name, detail: formatBytes(item.sizeBytes), tone: 'size' };
 }
@@ -71,8 +99,9 @@ export function scanLogLine(item, nameOf = (rule) => rule.name) {
  * same way BleachBit's does (Delete / Recycle), because "Chrome Cache"
  * on its own doesn't say what just happened to it -- only what was
  * chosen a screen ago. */
-export function executeLogLine(item, nameOf = (rule) => rule.name) {
+export function executeLogLine(item, nameOf = (rule) => rule.name, messages = DEFAULT_LOG_MESSAGES) {
   const name = nameOf(item) || item.id;
+  const say = messages.execute;
   if (item.error) {
     return { label: name, detail: item.error, tone: 'warning' };
   }
@@ -87,10 +116,10 @@ export function executeLogLine(item, nameOf = (rule) => rule.name) {
   // discriminator -- 0 means the action ran and found nothing to remove,
   // not that the field is absent.
   if (item.registryKeysRemoved !== undefined) {
-    const label = `Clear ${name}`;
+    const label = say.clear(name);
     return item.registryKeysRemoved > 0
-      ? { label, detail: `${item.registryKeysRemoved} registry ${item.registryKeysRemoved === 1 ? 'entry' : 'entries'}`, tone: 'size' }
-      : { label, detail: 'already absent', tone: 'muted' };
+      ? { label, detail: say.registryEntries(item.registryKeysRemoved), tone: 'size' }
+      : { label, detail: say.alreadyAbsent, tone: 'muted' };
   }
 
   // `vacuumed` is set iff executeRule ran a sqlite.vacuum action for this
@@ -104,14 +133,14 @@ export function executeLogLine(item, nameOf = (rule) => rule.name) {
   // so this follows the same freedBytes -> skipped -> empty shape the
   // Delete/Recycle fallthrough below already uses.
   if (item.vacuumed) {
-    const label = `Compact ${name}`;
+    const label = say.compact(name);
     if (item.freedBytes > 0) {
       return { label, detail: formatBytes(item.freedBytes), tone: 'size' };
     }
     if (item.skipped?.length > 0) {
-      return { label, detail: `${item.skipped.length} skipped`, tone: 'warning' };
+      return { label, detail: say.skipped(item.skipped.length), tone: 'warning' };
     }
-    return { label, detail: 'already empty', tone: 'muted' };
+    return { label, detail: say.alreadyEmpty, tone: 'muted' };
   }
 
   // `edited` is set iff executeRule ran a json action for this rule --
@@ -121,31 +150,31 @@ export function executeLogLine(item, nameOf = (rule) => rule.name) {
   // edited, so this follows the identical freedBytes -> skipped -> empty
   // fallthrough rather than an unconditional "success" label.
   if (item.edited) {
-    const label = `Trim ${name}`;
+    const label = say.trim(name);
     if (item.freedBytes > 0) {
       return { label, detail: formatBytes(item.freedBytes), tone: 'size' };
     }
     if (item.skipped?.length > 0) {
-      return { label, detail: `${item.skipped.length} skipped`, tone: 'warning' };
+      return { label, detail: say.skipped(item.skipped.length), tone: 'warning' };
     }
-    return { label, detail: 'already empty', tone: 'muted' };
+    return { label, detail: say.alreadyEmpty, tone: 'muted' };
   }
 
-  const verb = item.recycled ? 'Recycle' : 'Delete';
-  const label = `${verb} ${name}`;
+  const label = item.recycled ? say.recycle(name) : say.delete(name);
 
   if (item.freedBytes > 0) {
     // A rule with locked files still freed something -- Chrome's cache
     // is a thousand small files and a handful being open in another
     // process should read as "mostly done", not silently vanish behind
     // the size of everything else that came off.
-    const lockedSuffix = item.skipped?.length > 0 ? `, ${item.skipped.length} locked` : '';
-    return { label, detail: `${formatBytes(item.freedBytes)}${lockedSuffix}`, tone: 'size' };
+    const freed = formatBytes(item.freedBytes);
+    const detail = item.skipped?.length > 0 ? say.lockedAfterSize(freed, item.skipped.length) : freed;
+    return { label, detail, tone: 'size' };
   }
 
   if (item.skipped?.length > 0) {
-    return { label, detail: `${item.skipped.length} locked`, tone: 'warning' };
+    return { label, detail: say.locked(item.skipped.length), tone: 'warning' };
   }
 
-  return { label, detail: 'already empty', tone: 'muted' };
+  return { label, detail: say.alreadyEmpty, tone: 'muted' };
 }

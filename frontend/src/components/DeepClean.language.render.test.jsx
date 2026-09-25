@@ -413,3 +413,48 @@ describe('the warning dialog, in Greek', () => {
     expect(within(screen.getByRole('dialog')).getByText('Αυτή η επιλογή αφαιρεί δεδομένα που ίσως θέλετε να κρατήσετε.')).toBeTruthy();
   });
 });
+
+describe('the Deep Clean live logs, in Greek', () => {
+  it('words a scan log line in Greek', async () => {
+    streamDeepCleanScan.mockImplementation(async (onEvent) => {
+      onEvent('start', { total: 2 });
+      onEvent('rule', { id: 'temp', category: 'Sample OS', name: 'Temporary files', sizeBytes: 0, present: false });
+      onEvent('rule', { id: 'thumbs', category: 'Sample OS', name: 'Thumbnail cache', sizeBytes: 0, present: true, accessible: false });
+    });
+    const user = userEvent.setup();
+    mount();
+    await ready();
+    await screen.findByText('Temporary files');
+    await user.click(screen.getByRole('button', { name: 'Προεπισκόπηση' }));
+
+    const log = (await screen.findByText('Έξοδος σάρωσης')).closest('[class*="border-b"]').parentElement;
+    expect(await within(log).findByText('δεν είναι εγκατεστημένο')).toBeTruthy();
+    expect(within(log).getByText('απαιτεί διαχειριστή')).toBeTruthy();
+    // The English wording is not what the log shows.
+    expect(within(log).queryByText('not installed')).toBeNull();
+    expect(within(log).queryByText('needs admin')).toBeNull();
+  });
+
+  it('words a clean log line in Greek', async () => {
+    // Held open so the clean log is still the panel on screen: a finished
+    // clean immediately re-scans and replaces it.
+    streamDeepCleanExecute.mockImplementation(async (ruleIds, onEvent) => {
+      onEvent('start', { total: 1 });
+      onEvent('rule', { id: 'temp', name: 'Temporary files', freedBytes: 1024, skipped: [{ path: 'C:\a.tmp', reason: 'locked' }] });
+      await new Promise(() => {});
+    });
+    const user = userEvent.setup();
+    mount();
+    await ready();
+    await screen.findByText('Temporary files');
+    const boxes = screen.getAllByRole('checkbox');
+    await user.click(boxes[boxes.length - 1]);
+    await waitFor(() => expect(cleanButton().disabled).toBe(false));
+    await user.click(cleanButton());
+    await user.click(screen.getByRole('button', { name: 'Μετακίνηση σε καραντίνα' }));
+
+    expect(await screen.findByText('Διαγραφή: Temporary files')).toBeTruthy();
+    expect(screen.getByText('1 KB, κλειδωμένα: 1')).toBeTruthy();
+    expect(screen.queryByText(/Delete /)).toBeNull();
+  });
+});

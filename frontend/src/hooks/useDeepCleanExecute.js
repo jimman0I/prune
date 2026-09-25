@@ -25,10 +25,14 @@ import { executeLogLine } from '../lib/scanLog.js';
  * `currentId` (see useDeepCleanScan.js) answers, asked of the step that
  * can take noticeably longer per rule: a large shader cache is one
  * quarantine call, not many small ones. */
-export function useDeepCleanExecute(nameOf) {
+export function useDeepCleanExecute(nameOf, messages) {
   // See useDeepCleanScan: a ref so each line uses the current language.
   const nameOfRef = useRef(nameOf);
   nameOfRef.current = nameOf;
+  // Likewise the wording around the name (deepClean.log). Undefined falls
+  // through to scanLog.js's English default.
+  const messagesRef = useRef(messages);
+  messagesRef.current = messages;
   const [log, setLog] = useState([]);
   const [executed, setExecuted] = useState(0);
   const [total, setTotal] = useState(0);
@@ -57,7 +61,7 @@ export function useDeepCleanExecute(nameOf) {
         } else if (type === 'rule') {
           results.push(data);
           freedBytes += data.freedBytes || 0;
-          setLog((prev) => [...prev, executeLogLine(data, nameOfRef.current)]);
+          setLog((prev) => [...prev, executeLogLine(data, nameOfRef.current, messagesRef.current)]);
           setExecuted((n) => n + 1);
           setCurrentId(data.id);
         } else if (type === 'error') {
