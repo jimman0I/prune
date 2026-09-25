@@ -745,7 +745,7 @@ export const CATALOG = {
     bugReport: {
       title: 'Report a bug',
       intro: 'Opens a pre-filled issue on GitHub. Nothing is sent by Prune itself, and you see everything before it goes anywhere.',
-      summaryLabel: 'Summary',
+      summaryLabel: 'Summary (optional)',
       detailsLabel: 'What went wrong?',
       detailsPlaceholder: 'What you did, what you expected, and what happened instead.',
       includedHeading: 'What will be included',
@@ -758,11 +758,14 @@ export const CATALOG = {
       cancel: 'Cancel',
       open: 'Open on GitHub',
       opening: 'Opening…',
-      opened: 'Opened in your browser — post the issue there to send it.',
+      opened: 'Your browser should now show the report on GitHub. Post the issue there to send it. If nothing opened, copy the report and paste it into a new issue instead.',
       close: 'Close',
       failed: 'Could not open the report',
       copy: 'Copy report',
-      copied: 'Copied'
+      copied: 'Copied',
+      discardPrompt: 'Discard this report?',
+      keepWriting: 'Keep writing',
+      discard: 'Discard'
     },
     shortcutsModal: {
       title: 'Keyboard shortcuts',
@@ -1521,7 +1524,7 @@ export const CATALOG = {
     bugReport: {
       title: "Rapporteer 'n fout",
       intro: "Maak 'n vooraf ingevulde kwessie op GitHub oop. Prune self stuur niks, en jy sien alles voordat dit érens heen gaan.",
-      summaryLabel: 'Opsomming',
+      summaryLabel: 'Opsomming (opsioneel)',
       detailsLabel: 'Wat het verkeerd gegaan?',
       detailsPlaceholder: 'Wat jy gedoen het, wat jy verwag het en wat in plaas daarvan gebeur het.',
       includedHeading: 'Wat ingesluit sal word',
@@ -1534,11 +1537,14 @@ export const CATALOG = {
       cancel: 'Kanselleer',
       open: 'Maak oop op GitHub',
       opening: 'Maak tans oop…',
-      opened: 'In jou blaaier oopgemaak — plaas die kwessie daar om dit te stuur.',
+      opened: 'Jou blaaier behoort nou die verslag op GitHub te wys. Plaas die kwessie daar om dit te stuur. As niks oopgemaak het nie, kopieer die verslag en plak dit eerder in \'n nuwe kwessie.',
       close: 'Sluit',
       failed: 'Kon nie die verslag oopmaak nie',
       copy: 'Kopieer verslag',
-      copied: 'Gekopieer'
+      copied: 'Gekopieer',
+      discardPrompt: 'Gooi hierdie verslag weg?',
+      keepWriting: 'Hou aan skryf',
+      discard: 'Gooi weg'
     },
     shortcutsModal: {
       title: 'Sleutelbordkortpaaie',
@@ -2297,7 +2303,7 @@ export const CATALOG = {
     bugReport: {
       title: 'الإبلاغ عن خطأ',
       intro: 'يفتح بلاغًا معبأً مسبقًا على GitHub. لا يرسل Prune نفسه أي شيء، وترى كل شيء قبل أن يذهب إلى أي مكان.',
-      summaryLabel: 'الملخص',
+      summaryLabel: 'الملخص (اختياري)',
       detailsLabel: 'ما الذي حدث؟',
       detailsPlaceholder: 'ما فعلته، وما توقعته، وما حدث بدلًا من ذلك.',
       includedHeading: 'ما الذي سيتم تضمينه',
@@ -2310,11 +2316,14 @@ export const CATALOG = {
       cancel: 'إلغاء',
       open: 'فتح على GitHub',
       opening: 'جارٍ الفتح…',
-      opened: 'تم الفتح في متصفحك — انشر البلاغ هناك لإرساله.',
+      opened: 'يجب أن يعرض متصفحك الآن التقرير على GitHub. انشر المشكلة هناك لإرسالها. إذا لم يُفتح شيء، فانسخ التقرير والصقه في مشكلة جديدة بدلاً من ذلك.',
       close: 'إغلاق',
       failed: 'تعذر فتح التقرير',
       copy: 'نسخ التقرير',
-      copied: 'تم النسخ'
+      copied: 'تم النسخ',
+      discardPrompt: 'هل تريد تجاهل هذا التقرير؟',
+      keepWriting: 'متابعة الكتابة',
+      discard: 'تجاهل'
     },
     shortcutsModal: {
       title: 'اختصارات لوحة المفاتيح',
@@ -3073,7 +3082,7 @@ export const CATALOG = {
     bugReport: {
       title: "Informa d'un error",
       intro: 'Obre una incidència pre-omplerta a GitHub. Prune no envia res per si mateix i ho veus tot abans que vagi enlloc.',
-      summaryLabel: 'Resum',
+      summaryLabel: 'Resum (opcional)',
       detailsLabel: 'Què ha fallat?',
       detailsPlaceholder: 'Què vas fer, què esperaves i què va passar en canvi.',
       includedHeading: "Què s'inclourà",
@@ -3086,11 +3095,14 @@ export const CATALOG = {
       cancel: 'Cancel·la',
       open: 'Obre a GitHub',
       opening: "S'està obrint…",
-      opened: "S'ha obert al navegador — publica-hi la incidència per enviar-la.",
+      opened: 'El navegador hauria de mostrar ara l\'informe a GitHub. Publica-hi la incidència per enviar-lo. Si no s\'ha obert res, copia l\'informe i enganxa\'l en una incidència nova.',
       close: 'Tanca',
       failed: "No s'ha pogut obrir l'informe",
       copy: "Copia l'informe",
-      copied: 'Copiat'
+      copied: 'Copiat',
+      discardPrompt: 'Vols descartar aquest informe?',
+      keepWriting: 'Continua escrivint',
+      discard: 'Descarta'
     },
     shortcutsModal: {
       title: 'Dreceres de teclat',
@@ -3849,7 +3861,7 @@ export const CATALOG = {
     bugReport: {
       title: 'Nahlásit chybu',
       intro: 'Otevře předvyplněný požadavek na GitHubu. Prune sám nic neodesílá a vše uvidíte dřív, než to kam odejde.',
-      summaryLabel: 'Shrnutí',
+      summaryLabel: 'Shrnutí (volitelné)',
       detailsLabel: 'Co se pokazilo?',
       detailsPlaceholder: 'Co jste dělali, co jste očekávali a co se stalo místo toho.',
       includedHeading: 'Co bude zahrnuto',
@@ -3862,11 +3874,14 @@ export const CATALOG = {
       cancel: 'Zrušit',
       open: 'Otevřít na GitHubu',
       opening: 'Otevírání…',
-      opened: 'Otevřeno v prohlížeči — odešlete tam požadavek.',
+      opened: 'Prohlížeč by nyní měl zobrazit hlášení na GitHubu. Odešlete ho tam zveřejněním problému. Pokud se nic neotevřelo, zkopírujte hlášení a vložte ho do nového problému.',
       close: 'Zavřít',
       failed: 'Hlášení se nepodařilo otevřít',
       copy: 'Kopírovat hlášení',
-      copied: 'Zkopírováno'
+      copied: 'Zkopírováno',
+      discardPrompt: 'Zahodit toto hlášení?',
+      keepWriting: 'Psát dál',
+      discard: 'Zahodit'
     },
     shortcutsModal: {
       title: 'Klávesové zkratky',
@@ -4625,7 +4640,7 @@ export const CATALOG = {
     bugReport: {
       title: 'Rhoi gwybod am nam',
       intro: "Yn agor mater wedi'i lenwi ymlaen llaw ar GitHub. Nid yw Prune ei hun yn anfon dim, ac rydych chi'n gweld popeth cyn iddo fynd i unman.",
-      summaryLabel: 'Crynodeb',
+      summaryLabel: 'Crynodeb (dewisol)',
       detailsLabel: "Beth aeth o'i le?",
       detailsPlaceholder: "Beth wnaethoch chi, beth oeddech chi'n ei ddisgwyl, a beth ddigwyddodd yn lle hynny.",
       includedHeading: 'Beth fydd yn cael ei gynnwys',
@@ -4638,11 +4653,14 @@ export const CATALOG = {
       cancel: 'Diddymu',
       open: 'Agor ar GitHub',
       opening: 'Yn agor…',
-      opened: "Agorwyd yn eich porwr — postiwch y mater yno i'w anfon.",
+      opened: 'Dylai eich porwr fod yn dangos yr adroddiad ar GitHub nawr. Postiwch y mater yno i\'w anfon. Os na agorodd dim, copïwch yr adroddiad a\'i ludo i mewn i fater newydd yn lle hynny.',
       close: 'Cau',
       failed: 'Methu agor yr adroddiad',
       copy: "Copïo'r adroddiad",
-      copied: 'Wedi copïo'
+      copied: 'Wedi copïo',
+      discardPrompt: 'Taflu\'r adroddiad hwn?',
+      keepWriting: 'Parhau i ysgrifennu',
+      discard: 'Taflu'
     },
     shortcutsModal: {
       title: 'Byrlwybrau bysellfwrdd',
@@ -5401,7 +5419,7 @@ export const CATALOG = {
     bugReport: {
       title: 'Rapportér en fejl',
       intro: 'Åbner en forudfyldt sag på GitHub. Prune sender ikke selv noget, og du ser alt, før det går nogen steder hen.',
-      summaryLabel: 'Resumé',
+      summaryLabel: 'Resumé (valgfrit)',
       detailsLabel: 'Hvad gik galt?',
       detailsPlaceholder: 'Hvad du gjorde, hvad du forventede, og hvad der skete i stedet.',
       includedHeading: 'Hvad der medtages',
@@ -5414,11 +5432,14 @@ export const CATALOG = {
       cancel: 'Annuller',
       open: 'Åbn på GitHub',
       opening: 'Åbner…',
-      opened: 'Åbnet i din browser — opret sagen der for at sende den.',
+      opened: 'Din browser skulle nu vise rapporten på GitHub. Opret problemet dér for at sende den. Hvis intet åbnede, så kopier rapporten og indsæt den i et nyt problem i stedet.',
       close: 'Luk',
       failed: 'Kunne ikke åbne rapporten',
       copy: 'Kopiér rapport',
-      copied: 'Kopieret'
+      copied: 'Kopieret',
+      discardPrompt: 'Kassér denne rapport?',
+      keepWriting: 'Fortsæt med at skrive',
+      discard: 'Kassér'
     },
     shortcutsModal: {
       title: 'Tastaturgenveje',
@@ -6177,7 +6198,7 @@ export const CATALOG = {
     bugReport: {
       title: 'Fehler melden',
       intro: 'Öffnet ein vorausgefülltes Issue auf GitHub. Prune selbst sendet nichts, und Sie sehen alles, bevor es irgendwohin geht.',
-      summaryLabel: 'Zusammenfassung',
+      summaryLabel: 'Zusammenfassung (optional)',
       detailsLabel: 'Was ist schiefgelaufen?',
       detailsPlaceholder: 'Was Sie getan haben, was Sie erwartet haben und was stattdessen passiert ist.',
       includedHeading: 'Was enthalten sein wird',
@@ -6190,11 +6211,14 @@ export const CATALOG = {
       cancel: 'Abbrechen',
       open: 'Auf GitHub öffnen',
       opening: 'Wird geöffnet…',
-      opened: 'In Ihrem Browser geöffnet — senden Sie das Issue dort ab.',
+      opened: 'Ihr Browser sollte den Bericht jetzt auf GitHub anzeigen. Veröffentlichen Sie das Issue dort, um ihn zu senden. Falls sich nichts geöffnet hat, kopieren Sie den Bericht und fügen Sie ihn stattdessen in ein neues Issue ein.',
       close: 'Schließen',
       failed: 'Die Meldung konnte nicht geöffnet werden',
       copy: 'Meldung kopieren',
-      copied: 'Kopiert'
+      copied: 'Kopiert',
+      discardPrompt: 'Diesen Bericht verwerfen?',
+      keepWriting: 'Weiterschreiben',
+      discard: 'Verwerfen'
     },
     shortcutsModal: {
       title: 'Tastenkombinationen',
@@ -6953,7 +6977,7 @@ export const CATALOG = {
     bugReport: {
       title: 'Αναφορά σφάλματος',
       intro: 'Ανοίγει ένα προσυμπληρωμένο ζήτημα στο GitHub. Το ίδιο το Prune δεν στέλνει τίποτα και βλέπετε τα πάντα πριν πάνε οπουδήποτε.',
-      summaryLabel: 'Περίληψη',
+      summaryLabel: 'Περίληψη (προαιρετικό)',
       detailsLabel: 'Τι πήγε στραβά;',
       detailsPlaceholder: "Τι κάνατε, τι περιμένατε και τι συνέβη αντί γι' αυτό.",
       includedHeading: 'Τι θα συμπεριληφθεί',
@@ -6966,11 +6990,14 @@ export const CATALOG = {
       cancel: 'Ακύρωση',
       open: 'Άνοιγμα στο GitHub',
       opening: 'Άνοιγμα…',
-      opened: 'Άνοιξε στο πρόγραμμα περιήγησής σας — δημοσιεύστε εκεί το ζήτημα για να σταλεί.',
+      opened: 'Το πρόγραμμα περιήγησής σας θα πρέπει τώρα να εμφανίζει την αναφορά στο GitHub. Δημοσιεύστε εκεί το ζήτημα για να σταλεί. Αν δεν άνοιξε τίποτα, αντιγράψτε την αναφορά και επικολλήστε την σε ένα νέο ζήτημα.',
       close: 'Κλείσιμο',
       failed: 'Δεν ήταν δυνατό το άνοιγμα της αναφοράς',
       copy: 'Αντιγραφή αναφοράς',
-      copied: 'Αντιγράφηκε'
+      copied: 'Αντιγράφηκε',
+      discardPrompt: 'Απόρριψη αυτής της αναφοράς;',
+      keepWriting: 'Συνέχεια γραφής',
+      discard: 'Απόρριψη'
     },
     shortcutsModal: {
       title: 'Συντομεύσεις πληκτρολογίου',
@@ -7729,7 +7756,7 @@ export const CATALOG = {
     bugReport: {
       title: 'Informar de un error',
       intro: 'Abre una incidencia rellenada previamente en GitHub. Prune no envía nada por sí mismo y ves todo antes de que vaya a ningún sitio.',
-      summaryLabel: 'Resumen',
+      summaryLabel: 'Resumen (opcional)',
       detailsLabel: '¿Qué salió mal?',
       detailsPlaceholder: 'Qué hiciste, qué esperabas y qué ocurrió en su lugar.',
       includedHeading: 'Qué se incluirá',
@@ -7742,11 +7769,14 @@ export const CATALOG = {
       cancel: 'Cancelar',
       open: 'Abrir en GitHub',
       opening: 'Abriendo…',
-      opened: 'Abierto en tu navegador — publica allí la incidencia para enviarla.',
+      opened: 'Tu navegador debería mostrar ahora el informe en GitHub. Publica allí la incidencia para enviarlo. Si no se abrió nada, copia el informe y pégalo en una incidencia nueva.',
       close: 'Cerrar',
       failed: 'No se pudo abrir el informe',
       copy: 'Copiar informe',
-      copied: 'Copiado'
+      copied: 'Copiado',
+      discardPrompt: '¿Descartar este informe?',
+      keepWriting: 'Seguir escribiendo',
+      discard: 'Descartar'
     },
     shortcutsModal: {
       title: 'Atajos de teclado',
@@ -8505,7 +8535,7 @@ export const CATALOG = {
     bugReport: {
       title: 'Teata veast',
       intro: 'Avab GitHubis eeltäidetud probleemi. Prune ise ei saada midagi ja näed kõike enne, kui see kuhugi läheb.',
-      summaryLabel: 'Kokkuvõte',
+      summaryLabel: 'Kokkuvõte (valikuline)',
       detailsLabel: 'Mis valesti läks?',
       detailsPlaceholder: 'Mida sa tegid, mida ootasid ja mis selle asemel juhtus.',
       includedHeading: 'Mis lisatakse',
@@ -8518,11 +8548,14 @@ export const CATALOG = {
       cancel: 'Tühista',
       open: 'Ava GitHubis',
       opening: 'Avamine…',
-      opened: 'Avatud sinu brauseris — postita probleem seal, et see saata.',
+      opened: 'Sinu brauser peaks nüüd näitama aruannet GitHubis. Aruande saatmiseks postita seal probleem. Kui midagi ei avanenud, kopeeri aruanne ja kleebi see hoopis uude probleemi.',
       close: 'Sulge',
       failed: 'Teadet ei õnnestunud avada',
       copy: 'Kopeeri teade',
-      copied: 'Kopeeritud'
+      copied: 'Kopeeritud',
+      discardPrompt: 'Kas loobuda sellest aruandest?',
+      keepWriting: 'Jätka kirjutamist',
+      discard: 'Loobu'
     },
     shortcutsModal: {
       title: 'Klaviatuuri otseteed',
@@ -9281,7 +9314,7 @@ export const CATALOG = {
     bugReport: {
       title: 'Ilmoita virheestä',
       intro: 'Avaa valmiiksi täytetyn ongelmailmoituksen GitHubissa. Prune ei lähetä itse mitään, ja näet kaiken ennen kuin se menee minnekään.',
-      summaryLabel: 'Yhteenveto',
+      summaryLabel: 'Yhteenveto (valinnainen)',
       detailsLabel: 'Mikä meni pieleen?',
       detailsPlaceholder: 'Mitä teit, mitä odotit ja mitä sen sijaan tapahtui.',
       includedHeading: 'Mitä sisällytetään',
@@ -9294,11 +9327,14 @@ export const CATALOG = {
       cancel: 'Peruuta',
       open: 'Avaa GitHubissa',
       opening: 'Avataan…',
-      opened: 'Avattu selaimessasi — lähetä ilmoitus siellä.',
+      opened: 'Selaimesi pitäisi nyt näyttää raportin GitHubissa. Lähetä se julkaisemalla ongelma siellä. Jos mikään ei avautunut, kopioi raportti ja liitä se uuteen ongelmaan.',
       close: 'Sulje',
       failed: 'Ilmoitusta ei voitu avata',
       copy: 'Kopioi ilmoitus',
-      copied: 'Kopioitu'
+      copied: 'Kopioitu',
+      discardPrompt: 'Hylätäänkö tämä raportti?',
+      keepWriting: 'Jatka kirjoittamista',
+      discard: 'Hylkää'
     },
     shortcutsModal: {
       title: 'Pikanäppäimet',
@@ -10057,7 +10093,7 @@ export const CATALOG = {
     bugReport: {
       title: 'Signaler un bug',
       intro: "Ouvre un ticket pré-rempli sur GitHub. Prune n'envoie rien lui-même et vous voyez tout avant que cela parte où que ce soit.",
-      summaryLabel: 'Résumé',
+      summaryLabel: 'Résumé (facultatif)',
       detailsLabel: "Qu'est-ce qui a mal tourné ?",
       detailsPlaceholder: "Ce que vous avez fait, ce que vous attendiez et ce qui s'est passé à la place.",
       includedHeading: 'Ce qui sera inclus',
@@ -10070,11 +10106,14 @@ export const CATALOG = {
       cancel: 'Annuler',
       open: 'Ouvrir sur GitHub',
       opening: 'Ouverture…',
-      opened: "Ouvert dans votre navigateur — publiez le ticket là-bas pour l'envoyer.",
+      opened: 'Votre navigateur devrait maintenant afficher le rapport sur GitHub. Publiez-y le ticket pour l\'envoyer. Si rien ne s\'est ouvert, copiez le rapport et collez-le dans un nouveau ticket.',
       close: 'Fermer',
       failed: "Impossible d'ouvrir le rapport",
       copy: 'Copier le rapport',
-      copied: 'Copié'
+      copied: 'Copié',
+      discardPrompt: 'Abandonner ce rapport ?',
+      keepWriting: 'Continuer à écrire',
+      discard: 'Abandonner'
     },
     shortcutsModal: {
       title: 'Raccourcis clavier',
@@ -10833,7 +10872,7 @@ export const CATALOG = {
     bugReport: {
       title: 'דיווח על באג',
       intro: 'פותח דיווח ממולא מראש ב-GitHub. Prune עצמו לא שולח דבר, ואתה רואה הכול לפני שזה הולך לאנשהו.',
-      summaryLabel: 'סיכום',
+      summaryLabel: 'סיכום (אופציונלי)',
       detailsLabel: 'מה השתבש?',
       detailsPlaceholder: 'מה עשית, מה ציפית ומה קרה במקום זאת.',
       includedHeading: 'מה ייכלל',
@@ -10846,11 +10885,14 @@ export const CATALOG = {
       cancel: 'ביטול',
       open: 'פתח ב-GitHub',
       opening: 'פותח…',
-      opened: 'נפתח בדפדפן שלך — פרסם שם את הדיווח כדי לשלוח אותו.',
+      opened: 'הדפדפן שלך אמור להציג כעת את הדוח ב-GitHub. פרסם שם את הבעיה כדי לשלוח אותו. אם לא נפתח דבר, העתק את הדוח והדבק אותו בבעיה חדשה.',
       close: 'סגור',
       failed: 'לא ניתן היה לפתוח את הדיווח',
       copy: 'העתק דיווח',
-      copied: 'הועתק'
+      copied: 'הועתק',
+      discardPrompt: 'לבטל את הדוח הזה?',
+      keepWriting: 'המשך כתיבה',
+      discard: 'בטל'
     },
     shortcutsModal: {
       title: 'קיצורי מקלדת',
@@ -11609,7 +11651,7 @@ export const CATALOG = {
     bugReport: {
       title: 'Hiba jelentése',
       intro: 'Megnyit egy előre kitöltött hibajegyet a GitHubon. A Prune maga nem küld semmit, és mindent látsz, mielőtt bárhová eljutna.',
-      summaryLabel: 'Összefoglaló',
+      summaryLabel: 'Összefoglaló (nem kötelező)',
       detailsLabel: 'Mi ment félre?',
       detailsPlaceholder: 'Mit csináltál, mire számítottál, és mi történt helyette.',
       includedHeading: 'Mi lesz benne',
@@ -11622,11 +11664,14 @@ export const CATALOG = {
       cancel: 'Mégse',
       open: 'Megnyitás a GitHubon',
       opening: 'Megnyitás…',
-      opened: 'Megnyitva a böngészőben — tedd közzé ott a hibajegyet a küldéshez.',
+      opened: 'A böngészőben most a GitHubon kell látnia a jelentést. A küldéshez tegye közzé ott a hibajegyet. Ha semmi sem nyílt meg, másolja ki a jelentést, és illessze be egy új hibajegybe.',
       close: 'Bezárás',
       failed: 'Nem sikerült megnyitni a jelentést',
       copy: 'Jelentés másolása',
-      copied: 'Másolva'
+      copied: 'Másolva',
+      discardPrompt: 'Elveti ezt a jelentést?',
+      keepWriting: 'Írás folytatása',
+      discard: 'Elvetés'
     },
     shortcutsModal: {
       title: 'Billentyűparancsok',
@@ -12385,7 +12430,7 @@ export const CATALOG = {
     bugReport: {
       title: 'Laporkan bug',
       intro: 'Membuka isu yang sudah terisi di GitHub. Prune sendiri tidak mengirim apa pun, dan Anda melihat semuanya sebelum dikirim ke mana pun.',
-      summaryLabel: 'Ringkasan',
+      summaryLabel: 'Ringkasan (opsional)',
       detailsLabel: 'Apa yang salah?',
       detailsPlaceholder: 'Apa yang Anda lakukan, apa yang Anda harapkan, dan apa yang terjadi sebagai gantinya.',
       includedHeading: 'Yang akan disertakan',
@@ -12398,11 +12443,14 @@ export const CATALOG = {
       cancel: 'Batal',
       open: 'Buka di GitHub',
       opening: 'Membuka…',
-      opened: 'Dibuka di browser Anda — kirim isunya di sana.',
+      opened: 'Peramban Anda seharusnya kini menampilkan laporan di GitHub. Posting isu di sana untuk mengirimnya. Jika tidak ada yang terbuka, salin laporan dan tempelkan ke isu baru.',
       close: 'Tutup',
       failed: 'Tidak dapat membuka laporan',
       copy: 'Salin laporan',
-      copied: 'Disalin'
+      copied: 'Disalin',
+      discardPrompt: 'Buang laporan ini?',
+      keepWriting: 'Lanjutkan menulis',
+      discard: 'Buang'
     },
     shortcutsModal: {
       title: 'Pintasan keyboard',
@@ -13161,7 +13209,7 @@ export const CATALOG = {
     bugReport: {
       title: 'Tilkynna villu',
       intro: 'Opnar útfyllt vandamál á GitHub. Prune sendir sjálft ekkert og þú sérð allt áður en það fer nokkuð.',
-      summaryLabel: 'Samantekt',
+      summaryLabel: 'Samantekt (valfrjálst)',
       detailsLabel: 'Hvað fór úrskeiðis?',
       detailsPlaceholder: 'Hvað þú gerðir, hverju þú bjóst við og hvað gerðist í staðinn.',
       includedHeading: 'Hvað verður með',
@@ -13174,11 +13222,14 @@ export const CATALOG = {
       cancel: 'Hætta við',
       open: 'Opna á GitHub',
       opening: 'Opna…',
-      opened: 'Opnað í vafranum þínum — sendu vandamálið inn þar.',
+      opened: 'Vafrinn þinn ætti nú að sýna skýrsluna á GitHub. Birtu málið þar til að senda hana. Ef ekkert opnaðist skaltu afrita skýrsluna og líma hana í nýtt mál.',
       close: 'Loka',
       failed: 'Ekki tókst að opna skýrsluna',
       copy: 'Afrita skýrslu',
-      copied: 'Afritað'
+      copied: 'Afritað',
+      discardPrompt: 'Henda þessari skýrslu?',
+      keepWriting: 'Halda áfram að skrifa',
+      discard: 'Henda'
     },
     shortcutsModal: {
       title: 'Flýtileiðir á lyklaborði',
@@ -13937,7 +13988,7 @@ export const CATALOG = {
     bugReport: {
       title: 'Segnala un bug',
       intro: 'Apre una segnalazione precompilata su GitHub. Prune non invia nulla da solo e vedi tutto prima che vada da qualche parte.',
-      summaryLabel: 'Riepilogo',
+      summaryLabel: 'Riepilogo (facoltativo)',
       detailsLabel: 'Cosa è andato storto?',
       detailsPlaceholder: 'Cosa hai fatto, cosa ti aspettavi e cosa è successo invece.',
       includedHeading: 'Cosa sarà incluso',
@@ -13950,11 +14001,14 @@ export const CATALOG = {
       cancel: 'Annulla',
       open: 'Apri su GitHub',
       opening: 'Apertura…',
-      opened: 'Aperto nel browser — pubblica lì la segnalazione per inviarla.',
+      opened: 'Il browser dovrebbe ora mostrare la segnalazione su GitHub. Pubblica lì la issue per inviarla. Se non si è aperto nulla, copia la segnalazione e incollala in una nuova issue.',
       close: 'Chiudi',
       failed: 'Impossibile aprire la segnalazione',
       copy: 'Copia segnalazione',
-      copied: 'Copiato'
+      copied: 'Copiato',
+      discardPrompt: 'Scartare questa segnalazione?',
+      keepWriting: 'Continua a scrivere',
+      discard: 'Scarta'
     },
     shortcutsModal: {
       title: 'Scorciatoie da tastiera',
@@ -14713,7 +14767,7 @@ export const CATALOG = {
     bugReport: {
       title: 'バグを報告',
       intro: 'GitHub で入力済みの Issue を開きます。Prune 自体は何も送信せず、どこかへ送られる前にすべての内容を確認できます。',
-      summaryLabel: '概要',
+      summaryLabel: '概要（任意）',
       detailsLabel: '何が起きましたか?',
       detailsPlaceholder: '何をしたか、何を期待していたか、代わりに何が起きたかを書いてください。',
       includedHeading: '含まれる内容',
@@ -14726,11 +14780,14 @@ export const CATALOG = {
       cancel: 'キャンセル',
       open: 'GitHub で開く',
       opening: '開いています…',
-      opened: 'ブラウザーで開きました — 送信するには、そこで Issue を投稿してください。',
+      opened: 'ブラウザーに GitHub 上のレポートが表示されているはずです。送信するには、そこで issue を投稿してください。何も開かなかった場合は、レポートをコピーして新しい issue に貼り付けてください。',
       close: '閉じる',
       failed: 'レポートを開けませんでした',
       copy: 'レポートをコピー',
-      copied: 'コピーしました'
+      copied: 'コピーしました',
+      discardPrompt: 'このレポートを破棄しますか？',
+      keepWriting: '入力を続ける',
+      discard: '破棄'
     },
     shortcutsModal: {
       title: 'キーボードショートカット',
@@ -15489,7 +15546,7 @@ export const CATALOG = {
     bugReport: {
       title: '버그 신고',
       intro: 'GitHub에서 미리 채워진 이슈를 엽니다. Prune 자체는 아무것도 보내지 않으며, 어디로든 전송되기 전에 모든 내용을 확인할 수 있습니다.',
-      summaryLabel: '요약',
+      summaryLabel: '요약(선택 사항)',
       detailsLabel: '무엇이 잘못되었나요?',
       detailsPlaceholder: '무엇을 했는지, 무엇을 기대했는지, 대신 무슨 일이 일어났는지 적어 주세요.',
       includedHeading: '포함되는 내용',
@@ -15502,11 +15559,14 @@ export const CATALOG = {
       cancel: '취소',
       open: 'GitHub에서 열기',
       opening: '여는 중…',
-      opened: '브라우저에서 열었습니다 — 전송하려면 그곳에서 이슈를 게시하세요.',
+      opened: '이제 브라우저에 GitHub의 보고서가 표시되어야 합니다. 보내려면 그곳에서 이슈를 게시하세요. 아무것도 열리지 않았다면 보고서를 복사해 새 이슈에 붙여 넣으세요.',
       close: '닫기',
       failed: '신고를 열 수 없습니다',
       copy: '신고 복사',
-      copied: '복사됨'
+      copied: '복사됨',
+      discardPrompt: '이 보고서를 버릴까요?',
+      keepWriting: '계속 작성',
+      discard: '버리기'
     },
     shortcutsModal: {
       title: '키보드 단축키',
@@ -16265,7 +16325,7 @@ export const CATALOG = {
     bugReport: {
       title: 'Pranešti apie klaidą',
       intro: 'Atidaro iš anksto užpildytą pranešimą „GitHub“. „Prune“ pats nieko nesiunčia, o jūs viską matote, kol niekur nenueina.',
-      summaryLabel: 'Santrauka',
+      summaryLabel: 'Santrauka (neprivaloma)',
       detailsLabel: 'Kas nepavyko?',
       detailsPlaceholder: 'Ką darėte, ko tikėjotės ir kas įvyko vietoj to.',
       includedHeading: 'Kas bus įtraukta',
@@ -16278,11 +16338,14 @@ export const CATALOG = {
       cancel: 'Atšaukti',
       open: 'Atidaryti „GitHub“',
       opening: 'Atidaroma…',
-      opened: 'Atidaryta naršyklėje — paskelbkite pranešimą ten, kad jį išsiųstumėte.',
+      opened: 'Jūsų naršyklė dabar turėtų rodyti ataskaitą „GitHub“. Paskelbkite problemą ten, kad ją išsiųstumėte. Jei nieko neatsidarė, nukopijuokite ataskaitą ir įklijuokite ją į naują problemą.',
       close: 'Uždaryti',
       failed: 'Nepavyko atidaryti pranešimo',
       copy: 'Kopijuoti pranešimą',
-      copied: 'Nukopijuota'
+      copied: 'Nukopijuota',
+      discardPrompt: 'Atmesti šią ataskaitą?',
+      keepWriting: 'Tęsti rašymą',
+      discard: 'Atmesti'
     },
     shortcutsModal: {
       title: 'Klaviatūros trumpiniai',
@@ -17041,7 +17104,7 @@ export const CATALOG = {
     bugReport: {
       title: 'Laporkan pepijat',
       intro: 'Membuka isu yang telah diisi terlebih dahulu di GitHub. Prune sendiri tidak menghantar apa-apa, dan anda melihat semuanya sebelum ia dihantar ke mana-mana.',
-      summaryLabel: 'Ringkasan',
+      summaryLabel: 'Ringkasan (pilihan)',
       detailsLabel: 'Apa yang tidak kena?',
       detailsPlaceholder: 'Apa yang anda lakukan, apa yang anda jangkakan dan apa yang berlaku sebaliknya.',
       includedHeading: 'Apa yang akan disertakan',
@@ -17054,11 +17117,14 @@ export const CATALOG = {
       cancel: 'Batal',
       open: 'Buka di GitHub',
       opening: 'Membuka…',
-      opened: 'Dibuka dalam pelayar anda — hantar isu itu di sana.',
+      opened: 'Pelayar anda sepatutnya kini memaparkan laporan di GitHub. Siarkan isu di sana untuk menghantarnya. Jika tiada apa yang dibuka, salin laporan dan tampalkannya ke dalam isu baharu.',
       close: 'Tutup',
       failed: 'Tidak dapat membuka laporan',
       copy: 'Salin laporan',
-      copied: 'Disalin'
+      copied: 'Disalin',
+      discardPrompt: 'Buang laporan ini?',
+      keepWriting: 'Teruskan menulis',
+      discard: 'Buang'
     },
     shortcutsModal: {
       title: 'Pintasan papan kekunci',
@@ -17817,7 +17883,7 @@ export const CATALOG = {
     bugReport: {
       title: 'Rapporter en feil',
       intro: 'Åpner en forhåndsutfylt sak på GitHub. Prune sender ikke noe selv, og du ser alt før det går noe sted.',
-      summaryLabel: 'Sammendrag',
+      summaryLabel: 'Sammendrag (valgfritt)',
       detailsLabel: 'Hva gikk galt?',
       detailsPlaceholder: 'Hva du gjorde, hva du forventet og hva som skjedde i stedet.',
       includedHeading: 'Hva som tas med',
@@ -17830,11 +17896,14 @@ export const CATALOG = {
       cancel: 'Avbryt',
       open: 'Åpne på GitHub',
       opening: 'Åpner…',
-      opened: 'Åpnet i nettleseren din — opprett saken der for å sende den.',
+      opened: 'Nettleseren din skal nå vise rapporten på GitHub. Publiser saken der for å sende den. Hvis ingenting åpnet seg, kopierer du rapporten og limer den inn i en ny sak.',
       close: 'Lukk',
       failed: 'Kunne ikke åpne rapporten',
       copy: 'Kopier rapport',
-      copied: 'Kopiert'
+      copied: 'Kopiert',
+      discardPrompt: 'Forkaste denne rapporten?',
+      keepWriting: 'Fortsett å skrive',
+      discard: 'Forkast'
     },
     shortcutsModal: {
       title: 'Tastatursnarveier',
@@ -18593,7 +18662,7 @@ export const CATALOG = {
     bugReport: {
       title: 'Een bug melden',
       intro: 'Opent een vooraf ingevuld issue op GitHub. Prune verstuurt zelf niets en u ziet alles voordat het ergens heen gaat.',
-      summaryLabel: 'Samenvatting',
+      summaryLabel: 'Samenvatting (optioneel)',
       detailsLabel: 'Wat ging er mis?',
       detailsPlaceholder: 'Wat u deed, wat u verwachtte en wat er in plaats daarvan gebeurde.',
       includedHeading: 'Wat er wordt opgenomen',
@@ -18606,11 +18675,14 @@ export const CATALOG = {
       cancel: 'Annuleren',
       open: 'Openen op GitHub',
       opening: 'Openen…',
-      opened: 'Geopend in uw browser — plaats het issue daar om het te versturen.',
+      opened: 'Je browser zou het rapport nu op GitHub moeten tonen. Plaats het issue daar om het te versturen. Als er niets openging, kopieer je het rapport en plak je het in een nieuw issue.',
       close: 'Sluiten',
       failed: 'Kon de melding niet openen',
       copy: 'Melding kopiëren',
-      copied: 'Gekopieerd'
+      copied: 'Gekopieerd',
+      discardPrompt: 'Dit rapport weggooien?',
+      keepWriting: 'Verder schrijven',
+      discard: 'Weggooien'
     },
     shortcutsModal: {
       title: 'Sneltoetsen',
@@ -19369,7 +19441,7 @@ export const CATALOG = {
     bugReport: {
       title: 'Zgłoś błąd',
       intro: 'Otwiera wstępnie wypełnione zgłoszenie w serwisie GitHub. Prune sam niczego nie wysyła, a wszystko widzisz, zanim gdziekolwiek trafi.',
-      summaryLabel: 'Podsumowanie',
+      summaryLabel: 'Podsumowanie (opcjonalnie)',
       detailsLabel: 'Co poszło nie tak?',
       detailsPlaceholder: 'Co zrobiono, czego oczekiwano i co stało się zamiast tego.',
       includedHeading: 'Co zostanie dołączone',
@@ -19382,11 +19454,14 @@ export const CATALOG = {
       cancel: 'Anuluj',
       open: 'Otwórz w serwisie GitHub',
       opening: 'Otwieranie…',
-      opened: 'Otwarto w przeglądarce — opublikuj tam zgłoszenie, aby je wysłać.',
+      opened: 'Przeglądarka powinna teraz pokazywać zgłoszenie w serwisie GitHub. Opublikuj tam zgłoszenie, aby je wysłać. Jeśli nic się nie otworzyło, skopiuj raport i wklej go do nowego zgłoszenia.',
       close: 'Zamknij',
       failed: 'Nie udało się otworzyć zgłoszenia',
       copy: 'Kopiuj zgłoszenie',
-      copied: 'Skopiowano'
+      copied: 'Skopiowano',
+      discardPrompt: 'Odrzucić ten raport?',
+      keepWriting: 'Pisz dalej',
+      discard: 'Odrzuć'
     },
     shortcutsModal: {
       title: 'Skróty klawiszowe',
@@ -20145,7 +20220,7 @@ export const CATALOG = {
     bugReport: {
       title: 'د بګ راپور ورکړئ',
       intro: 'په GitHub کې مخکې ډکه شوې مسئله پرانیزي. Prune پخپله هیڅ نه لیږي، او تاسو هر څه مخکې له دې وینئ چې چیرته ولاړ شي.',
-      summaryLabel: 'لنډیز',
+      summaryLabel: 'لنډیز (اختیاري)',
       detailsLabel: 'څه غلط شول؟',
       detailsPlaceholder: 'تاسو څه وکړل، څه مو تمه درلوده، او پر ځای یې څه پیښ شول.',
       includedHeading: 'څه به شامل وي',
@@ -20158,11 +20233,14 @@ export const CATALOG = {
       cancel: 'لغوه کول',
       open: 'په GitHub کې پرانیزئ',
       opening: 'پرانیستل کیږي…',
-      opened: 'ستاسو په براوزر کې پرانیستل شو — لیږلو لپاره مسئله هلته خپره کړئ.',
+      opened: 'ستاسو براوزر باید اوس په GitHub کې راپور وښيي. د لیږلو لپاره هلته مسله خپره کړئ. که هیڅ نه وي خلاص شوي، راپور کاپي کړئ او پرځای یې په نوې مسله کې پیسټ کړئ.',
       close: 'بندول',
       failed: 'راپور پرانیستل نشو',
       copy: 'راپور کاپي کړئ',
-      copied: 'کاپي شو'
+      copied: 'کاپي شو',
+      discardPrompt: 'دا راپور ړنګ کړم؟',
+      keepWriting: 'لیکل ادامه ورکړئ',
+      discard: 'ړنګ کړئ'
     },
     shortcutsModal: {
       title: 'د کیبورډ شارټ کټونه',
@@ -20921,7 +20999,7 @@ export const CATALOG = {
     bugReport: {
       title: 'Relatar um bug',
       intro: 'Abre um problema pré-preenchido no GitHub. O Prune não envia nada por conta própria e você vê tudo antes de qualquer envio.',
-      summaryLabel: 'Resumo',
+      summaryLabel: 'Resumo (opcional)',
       detailsLabel: 'O que deu errado?',
       detailsPlaceholder: 'O que você fez, o que esperava e o que aconteceu em vez disso.',
       includedHeading: 'O que será incluído',
@@ -20934,11 +21012,14 @@ export const CATALOG = {
       cancel: 'Cancelar',
       open: 'Abrir no GitHub',
       opening: 'Abrindo…',
-      opened: 'Aberto no seu navegador — publique o problema lá para enviá-lo.',
+      opened: 'Seu navegador deve estar mostrando o relatório no GitHub agora. Publique a issue lá para enviá-lo. Se nada abriu, copie o relatório e cole-o em uma nova issue.',
       close: 'Fechar',
       failed: 'Não foi possível abrir o relato',
       copy: 'Copiar relato',
-      copied: 'Copiado'
+      copied: 'Copiado',
+      discardPrompt: 'Descartar este relatório?',
+      keepWriting: 'Continuar escrevendo',
+      discard: 'Descartar'
     },
     shortcutsModal: {
       title: 'Atalhos de teclado',
@@ -21697,7 +21778,7 @@ export const CATALOG = {
     bugReport: {
       title: 'Comunicar um erro',
       intro: 'Abre um problema pré-preenchido no GitHub. O Prune não envia nada por si só e vê tudo antes de qualquer envio.',
-      summaryLabel: 'Resumo',
+      summaryLabel: 'Resumo (opcional)',
       detailsLabel: 'O que correu mal?',
       detailsPlaceholder: 'O que fez, o que esperava e o que aconteceu em vez disso.',
       includedHeading: 'O que será incluído',
@@ -21710,11 +21791,14 @@ export const CATALOG = {
       cancel: 'Cancelar',
       open: 'Abrir no GitHub',
       opening: 'A abrir…',
-      opened: 'Aberto no seu navegador — publique o problema lá para o enviar.',
+      opened: 'O seu navegador deverá agora mostrar o relatório no GitHub. Publique lá o problema para o enviar. Se nada abriu, copie o relatório e cole-o num novo problema.',
       close: 'Fechar',
       failed: 'Não foi possível abrir a comunicação',
       copy: 'Copiar comunicação',
-      copied: 'Copiado'
+      copied: 'Copiado',
+      discardPrompt: 'Descartar este relatório?',
+      keepWriting: 'Continuar a escrever',
+      discard: 'Descartar'
     },
     shortcutsModal: {
       title: 'Atalhos de teclado',
@@ -22473,7 +22557,7 @@ export const CATALOG = {
     bugReport: {
       title: 'Raportează o eroare',
       intro: 'Deschide o problemă precompletată pe GitHub. Prune nu trimite nimic singur și vezi totul înainte să ajungă oriunde.',
-      summaryLabel: 'Rezumat',
+      summaryLabel: 'Rezumat (opțional)',
       detailsLabel: 'Ce a mers prost?',
       detailsPlaceholder: 'Ce ai făcut, ce te așteptai și ce s-a întâmplat în schimb.',
       includedHeading: 'Ce va fi inclus',
@@ -22486,11 +22570,14 @@ export const CATALOG = {
       cancel: 'Anulează',
       open: 'Deschide pe GitHub',
       opening: 'Se deschide…',
-      opened: 'Deschis în browser — postează problema acolo pentru a o trimite.',
+      opened: 'Browserul dvs. ar trebui să afișeze acum raportul pe GitHub. Postați acolo problema pentru a-l trimite. Dacă nu s-a deschis nimic, copiați raportul și lipiți-l într-o problemă nouă.',
       close: 'Închide',
       failed: 'Raportul nu a putut fi deschis',
       copy: 'Copiază raportul',
-      copied: 'Copiat'
+      copied: 'Copiat',
+      discardPrompt: 'Renunțați la acest raport?',
+      keepWriting: 'Continuați să scrieți',
+      discard: 'Renunță'
     },
     shortcutsModal: {
       title: 'Comenzi rapide de la tastatură',
@@ -23249,7 +23336,7 @@ export const CATALOG = {
     bugReport: {
       title: 'Сообщить об ошибке',
       intro: 'Открывает заполненную заранее заявку на GitHub. Сам Prune ничего не отправляет, и вы видите всё, прежде чем это куда-либо уйдёт.',
-      summaryLabel: 'Краткое описание',
+      summaryLabel: 'Краткое описание (необязательно)',
       detailsLabel: 'Что пошло не так?',
       detailsPlaceholder: 'Что вы делали, чего ожидали и что произошло на самом деле.',
       includedHeading: 'Что будет включено',
@@ -23262,11 +23349,14 @@ export const CATALOG = {
       cancel: 'Отмена',
       open: 'Открыть на GitHub',
       opening: 'Открывается…',
-      opened: 'Открыто в браузере — опубликуйте заявку там, чтобы отправить её.',
+      opened: 'Теперь в браузере должен отображаться отчёт на GitHub. Опубликуйте там задачу, чтобы отправить его. Если ничего не открылось, скопируйте отчёт и вставьте его в новую задачу.',
       close: 'Закрыть',
       failed: 'Не удалось открыть отчёт',
       copy: 'Копировать отчёт',
-      copied: 'Скопировано'
+      copied: 'Скопировано',
+      discardPrompt: 'Отбросить этот отчёт?',
+      keepWriting: 'Продолжить ввод',
+      discard: 'Отбросить'
     },
     shortcutsModal: {
       title: 'Комбинации клавиш',
@@ -24025,7 +24115,7 @@ export const CATALOG = {
     bugReport: {
       title: 'Nahlásiť chybu',
       intro: 'Otvorí predvyplnený problém na GitHube. Prune sám nič neodosiela a všetko uvidíte skôr, než to niekam pôjde.',
-      summaryLabel: 'Zhrnutie',
+      summaryLabel: 'Zhrnutie (voliteľné)',
       detailsLabel: 'Čo sa pokazilo?',
       detailsPlaceholder: 'Čo ste robili, čo ste očakávali a čo sa stalo namiesto toho.',
       includedHeading: 'Čo bude zahrnuté',
@@ -24038,11 +24128,14 @@ export const CATALOG = {
       cancel: 'Zrušiť',
       open: 'Otvoriť na GitHube',
       opening: 'Otvára sa…',
-      opened: 'Otvorené vo vašom prehliadači — odošlite tam problém.',
+      opened: 'Prehliadač by teraz mal zobrazovať hlásenie na GitHube. Odošlete ho zverejnením problému tam. Ak sa nič neotvorilo, skopírujte hlásenie a vložte ho do nového problému.',
       close: 'Zavrieť',
       failed: 'Hlásenie sa nepodarilo otvoriť',
       copy: 'Kopírovať hlásenie',
-      copied: 'Skopírované'
+      copied: 'Skopírované',
+      discardPrompt: 'Zahodiť toto hlásenie?',
+      keepWriting: 'Písať ďalej',
+      discard: 'Zahodiť'
     },
     shortcutsModal: {
       title: 'Klávesové skratky',
@@ -24801,7 +24894,7 @@ export const CATALOG = {
     bugReport: {
       title: 'Raporto një defekt',
       intro: 'Hap një problem të parambushur në GitHub. Vetë Prune nuk dërgon asgjë dhe ti sheh gjithçka para se të shkojë diku.',
-      summaryLabel: 'Përmbledhje',
+      summaryLabel: 'Përmbledhje (opsionale)',
       detailsLabel: 'Çfarë shkoi keq?',
       detailsPlaceholder: 'Çfarë bëre, çfarë priste dhe çfarë ndodhi në vend të kësaj.',
       includedHeading: 'Çfarë do të përfshihet',
@@ -24814,11 +24907,14 @@ export const CATALOG = {
       cancel: 'Anulo',
       open: 'Hap në GitHub',
       opening: 'Po hapet…',
-      opened: 'U hap në shfletuesin tënd — posto problemin atje për ta dërguar.',
+      opened: 'Shfletuesi juaj tani duhet ta shfaqë raportin në GitHub. Postojeni çështjen aty për ta dërguar. Nëse nuk u hap asgjë, kopjojeni raportin dhe ngjiteni në një çështje të re.',
       close: 'Mbyll',
       failed: 'Raporti nuk mund të hapej',
       copy: 'Kopjo raportin',
-      copied: 'U kopjua'
+      copied: 'U kopjua',
+      discardPrompt: 'Ta hidhni këtë raport?',
+      keepWriting: 'Vazhdo të shkruash',
+      discard: 'Hidhe'
     },
     shortcutsModal: {
       title: 'Shkurtoret e tastierës',
@@ -25577,7 +25673,7 @@ export const CATALOG = {
     bugReport: {
       title: 'Prijavi grešku',
       intro: 'Otvara unapred popunjen prijavu na GitHub-u. Prune sam ne šalje ništa, a vi vidite sve pre nego što ode bilo gde.',
-      summaryLabel: 'Rezime',
+      summaryLabel: 'Rezime (opciono)',
       detailsLabel: 'Šta je pošlo naopako?',
       detailsPlaceholder: 'Šta ste uradili, šta ste očekivali i šta se umesto toga desilo.',
       includedHeading: 'Šta će biti uključeno',
@@ -25590,11 +25686,14 @@ export const CATALOG = {
       cancel: 'Откажи',
       open: 'Otvori na GitHub-u',
       opening: 'Otvaranje…',
-      opened: 'Otvoreno u pregledaču — objavite prijavu tamo da biste je poslali.',
+      opened: 'Vaš pregledač bi sada trebalo da prikazuje izveštaj na GitHub-u. Objavite problem tamo da biste ga poslali. Ako se ništa nije otvorilo, kopirajte izveštaj i nalepite ga u novi problem.',
       close: 'Затвори',
       failed: 'Nije moguće otvoriti prijavu',
       copy: 'Kopiraj prijavu',
-      copied: 'Kopirano'
+      copied: 'Kopirano',
+      discardPrompt: 'Odbaciti ovaj izveštaj?',
+      keepWriting: 'Nastavi pisanje',
+      discard: 'Odbaci'
     },
     shortcutsModal: {
       title: 'Пречице на тастатури',
@@ -26353,7 +26452,7 @@ export const CATALOG = {
     bugReport: {
       title: 'Rapportera ett fel',
       intro: 'Öppnar ett förifyllt ärende på GitHub. Prune skickar inget själv, och du ser allt innan det går någonstans.',
-      summaryLabel: 'Sammanfattning',
+      summaryLabel: 'Sammanfattning (valfritt)',
       detailsLabel: 'Vad gick fel?',
       detailsPlaceholder: 'Vad du gjorde, vad du förväntade dig och vad som hände i stället.',
       includedHeading: 'Vad som tas med',
@@ -26366,11 +26465,14 @@ export const CATALOG = {
       cancel: 'Avbryt',
       open: 'Öppna på GitHub',
       opening: 'Öppnar…',
-      opened: 'Öppnat i din webbläsare — skicka in ärendet där.',
+      opened: 'Din webbläsare bör nu visa rapporten på GitHub. Publicera ärendet där för att skicka den. Om ingenting öppnades kopierar du rapporten och klistrar in den i ett nytt ärende.',
       close: 'Stäng',
       failed: 'Kunde inte öppna rapporten',
       copy: 'Kopiera rapport',
-      copied: 'Kopierat'
+      copied: 'Kopierat',
+      discardPrompt: 'Kassera den här rapporten?',
+      keepWriting: 'Fortsätt skriva',
+      discard: 'Kassera'
     },
     shortcutsModal: {
       title: 'Tangentbordsgenvägar',
@@ -27129,7 +27231,7 @@ export const CATALOG = {
     bugReport: {
       title: 'รายงานข้อบกพร่อง',
       intro: 'เปิดปัญหาที่กรอกไว้ล่วงหน้าบน GitHub Prune ไม่ส่งอะไรเอง และคุณจะเห็นทุกอย่างก่อนที่จะถูกส่งไปที่ใด',
-      summaryLabel: 'สรุป',
+      summaryLabel: 'สรุป (ไม่บังคับ)',
       detailsLabel: 'เกิดอะไรขึ้น',
       detailsPlaceholder: 'สิ่งที่คุณทำ สิ่งที่คุณคาดหวัง และสิ่งที่เกิดขึ้นแทน',
       includedHeading: 'สิ่งที่จะรวมไว้',
@@ -27142,11 +27244,14 @@ export const CATALOG = {
       cancel: 'ยกเลิก',
       open: 'เปิดบน GitHub',
       opening: 'กำลังเปิด…',
-      opened: 'เปิดในเบราว์เซอร์ของคุณแล้ว — โพสต์ปัญหาที่นั่นเพื่อส่ง',
+      opened: 'เบราว์เซอร์ของคุณควรแสดงรายงานบน GitHub แล้ว โพสต์ issue ที่นั่นเพื่อส่งรายงาน หากไม่มีอะไรเปิดขึ้น ให้คัดลอกรายงานแล้ววางลงใน issue ใหม่แทน',
       close: 'ปิด',
       failed: 'ไม่สามารถเปิดรายงานได้',
       copy: 'คัดลอกรายงาน',
-      copied: 'คัดลอกแล้ว'
+      copied: 'คัดลอกแล้ว',
+      discardPrompt: 'ทิ้งรายงานนี้หรือไม่',
+      keepWriting: 'เขียนต่อ',
+      discard: 'ทิ้ง'
     },
     shortcutsModal: {
       title: 'แป้นพิมพ์ลัด',
@@ -27905,7 +28010,7 @@ export const CATALOG = {
     bugReport: {
       title: 'Hata bildir',
       intro: "GitHub'da önceden doldurulmuş bir sorun açar. Prune kendisi hiçbir şey göndermez ve herhangi bir yere gitmeden önce her şeyi görürsünüz.",
-      summaryLabel: 'Özet',
+      summaryLabel: 'Özet (isteğe bağlı)',
       detailsLabel: 'Ne ters gitti?',
       detailsPlaceholder: 'Ne yaptığınızı, ne beklediğinizi ve bunun yerine ne olduğunu yazın.',
       includedHeading: 'Nelerin dahil edileceği',
@@ -27918,11 +28023,14 @@ export const CATALOG = {
       cancel: 'İptal',
       open: "GitHub'da aç",
       opening: 'Açılıyor…',
-      opened: 'Tarayıcınızda açıldı — göndermek için sorunu orada paylaşın.',
+      opened: 'Tarayıcınız şimdi raporu GitHub\'da göstermelidir. Göndermek için sorunu orada yayımlayın. Hiçbir şey açılmadıysa raporu kopyalayıp yeni bir soruna yapıştırın.',
       close: 'Kapat',
       failed: 'Rapor açılamadı',
       copy: 'Raporu kopyala',
-      copied: 'Kopyalandı'
+      copied: 'Kopyalandı',
+      discardPrompt: 'Bu rapor silinsin mi?',
+      keepWriting: 'Yazmaya devam et',
+      discard: 'Sil'
     },
     shortcutsModal: {
       title: 'Klavye kısayolları',
@@ -28681,7 +28789,7 @@ export const CATALOG = {
     bugReport: {
       title: 'Повідомити про помилку',
       intro: 'Відкриває заздалегідь заповнену заявку на GitHub. Сам Prune нічого не надсилає, і ви бачите все, перш ніж це кудись піде.',
-      summaryLabel: 'Короткий опис',
+      summaryLabel: 'Короткий опис (необов\'язково)',
       detailsLabel: 'Що пішло не так?',
       detailsPlaceholder: 'Що ви робили, чого очікували і що сталося натомість.',
       includedHeading: 'Що буде включено',
@@ -28694,11 +28802,14 @@ export const CATALOG = {
       cancel: 'Скасувати',
       open: 'Відкрити на GitHub',
       opening: 'Відкривається…',
-      opened: 'Відкрито у браузері — опублікуйте заявку там, щоб надіслати її.',
+      opened: 'Тепер у браузері має відображатися звіт на GitHub. Опублікуйте там завдання, щоб надіслати його. Якщо нічого не відкрилося, скопіюйте звіт і вставте його в нове завдання.',
       close: 'Закрити',
       failed: 'Не вдалося відкрити звіт',
       copy: 'Копіювати звіт',
-      copied: 'Скопійовано'
+      copied: 'Скопійовано',
+      discardPrompt: 'Відхилити цей звіт?',
+      keepWriting: 'Продовжити писати',
+      discard: 'Відхилити'
     },
     shortcutsModal: {
       title: 'Комбінації клавіш',
@@ -29457,7 +29568,7 @@ export const CATALOG = {
     bugReport: {
       title: 'Báo lỗi',
       intro: 'Mở một vấn đề được điền sẵn trên GitHub. Bản thân Prune không gửi gì, và bạn thấy mọi thứ trước khi nó đi đâu.',
-      summaryLabel: 'Tóm tắt',
+      summaryLabel: 'Tóm tắt (không bắt buộc)',
       detailsLabel: 'Đã xảy ra sự cố gì?',
       detailsPlaceholder: 'Bạn đã làm gì, mong đợi gì và thực tế đã xảy ra điều gì.',
       includedHeading: 'Những gì sẽ được đưa vào',
@@ -29470,11 +29581,14 @@ export const CATALOG = {
       cancel: 'Hủy',
       open: 'Mở trên GitHub',
       opening: 'Đang mở…',
-      opened: 'Đã mở trong trình duyệt — hãy đăng vấn đề ở đó để gửi.',
+      opened: 'Trình duyệt của bạn giờ sẽ hiển thị báo cáo trên GitHub. Hãy đăng vấn đề ở đó để gửi. Nếu không có gì mở ra, hãy sao chép báo cáo và dán vào một vấn đề mới.',
       close: 'Đóng',
       failed: 'Không thể mở báo cáo',
       copy: 'Sao chép báo cáo',
-      copied: 'Đã sao chép'
+      copied: 'Đã sao chép',
+      discardPrompt: 'Bỏ báo cáo này?',
+      keepWriting: 'Tiếp tục viết',
+      discard: 'Bỏ'
     },
     shortcutsModal: {
       title: 'Phím tắt',
@@ -30233,7 +30347,7 @@ export const CATALOG = {
     bugReport: {
       title: '报告错误',
       intro: '在 GitHub 上打开一个预先填好的问题。Prune 本身不会发送任何内容，在发送到任何地方之前，你都能看到全部内容。',
-      summaryLabel: '摘要',
+      summaryLabel: '摘要（可选）',
       detailsLabel: '出了什么问题？',
       detailsPlaceholder: '你做了什么、期望发生什么，以及实际发生了什么。',
       includedHeading: '将包含的内容',
@@ -30246,11 +30360,14 @@ export const CATALOG = {
       cancel: '取消',
       open: '在 GitHub 上打开',
       opening: '正在打开…',
-      opened: '已在浏览器中打开 — 请在那里发布该问题以完成发送。',
+      opened: '您的浏览器现在应会在 GitHub 上显示该报告。请在那里发布该问题以发送报告。如果没有打开任何内容，请复制报告并粘贴到新的问题中。',
       close: '关闭',
       failed: '无法打开报告',
       copy: '复制报告',
-      copied: '已复制'
+      copied: '已复制',
+      discardPrompt: '要放弃此报告吗？',
+      keepWriting: '继续编写',
+      discard: '放弃'
     },
     shortcutsModal: {
       title: '键盘快捷键',
@@ -31009,7 +31126,7 @@ export const CATALOG = {
     bugReport: {
       title: '回報錯誤',
       intro: '在 GitHub 上開啟一個預先填好的問題。Prune 本身不會傳送任何內容，在送到任何地方之前，你都能看到全部內容。',
-      summaryLabel: '摘要',
+      summaryLabel: '摘要（選填）',
       detailsLabel: '發生了什麼問題？',
       detailsPlaceholder: '你做了什麼、預期會發生什麼，以及實際發生了什麼。',
       includedHeading: '將包含的內容',
@@ -31022,11 +31139,14 @@ export const CATALOG = {
       cancel: '取消',
       open: '在 GitHub 上開啟',
       opening: '正在開啟…',
-      opened: '已在瀏覽器中開啟 — 請在那裡張貼該問題以完成傳送。',
+      opened: '您的瀏覽器現在應會在 GitHub 上顯示該報告。請在那裡張貼該問題以傳送報告。如果沒有開啟任何內容，請複製報告並貼到新的問題中。',
       close: '關閉',
       failed: '無法開啟回報',
       copy: '複製回報',
-      copied: '已複製'
+      copied: '已複製',
+      discardPrompt: '要捨棄此報告嗎？',
+      keepWriting: '繼續編寫',
+      discard: '捨棄'
     },
     shortcutsModal: {
       title: '鍵盤快速鍵',
