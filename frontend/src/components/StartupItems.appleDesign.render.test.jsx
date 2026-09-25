@@ -238,3 +238,17 @@ describe('the switch', () => {
     expect(within(rowFor('Task')).queryByRole('checkbox')).toBeNull();
   });
 });
+
+describe('table semantics', () => {
+  it('is a table with column headers, row groups and cells', async () => {
+    renderScreen(<StartupItems />);
+    await screen.findByText('Thing');
+
+    const table = screen.getByRole('table', { name: 'Startup' });
+    expect(within(table).getAllByRole('columnheader').map((h) => h.textContent)).toEqual(
+      ['', '', 'Startup name', 'Launch path', 'Description', 'Publisher', 'Status']);
+    expect(within(table).getAllByRole('rowgroup')).toHaveLength(1);
+    const row = within(table).getAllByRole('row').find((r) => r.textContent.includes('Thing Launcher'));
+    expect(within(row).getAllByRole('cell')).toHaveLength(7);
+  });
+});
