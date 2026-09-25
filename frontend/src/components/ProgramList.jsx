@@ -81,16 +81,21 @@ const COLUMN_KEYS = {
   website: 'applications.columns.website'
 };
 
-/** Version and Website are the two columns that can go. Below this width the
- * table needed about 900px of a window that gives it about 750, so the right
- * hand edge -- the Uninstall column -- was off screen. What is dropped is
- * what is least needed to pick a row: the version is in the row's own
- * details and the website was never sortable. Done in CSS (a `min-[1100px]`
- * variant on the cells and a second grid template) rather than in script, so
- * there is no resize listener and no frame in which the wrong one shows. */
+/** Version and Website are the two columns that can go. Without them the
+ * table fits a window down to about 900px; with them it needs about 1380px,
+ * because from 1100px the nav rail is 200px wide rather than 72 and the page
+ * has 96px of gutters, so the pane is the window minus about 296px. (The spec
+ * said "about 1100px", the width the rail changes at; measured against the
+ * real column floors, 1100 would have put the wide table into a 804px pane.)
+ * What is dropped is what is least needed to pick a row: the website was
+ * never sortable and the version is not what you choose an uninstall by.
+ * Done in CSS (a `min-[1380px]` variant on the cells and a second grid
+ * template) rather than in script, so there is no resize listener and no
+ * frame in which the wrong one shows. */
+export const WIDE_BREAKPOINT_PX = 1380;
 export const NARROW_HIDDEN = ['version', 'website'];
-export const WIDE_ONLY = 'hidden min-[1100px]:block';
-export const WIDE_ONLY_FLEX = 'hidden min-[1100px]:flex';
+export const WIDE_ONLY = 'hidden min-[1380px]:block';
+export const WIDE_ONLY_FLEX = 'hidden min-[1380px]:flex';
 
 const NARROW_COLUMNS = COLUMNS.filter((c) => !NARROW_HIDDEN.includes(c.key));
 const tracks = (columns) => columns.map((c) => c.width).join(' ');
@@ -99,14 +104,14 @@ const floorOf = (width) => Number(/(\d+)px/.exec(width)[1]);
 // Every row gets this as a minimum, so all of them are the same width when
 // the window is narrower than the table: header, rows and the sticky action
 // cell then line up, and the scroll area scrolls them together.
-const tableFloor = (columns) => `${columns.reduce((sum, c) => sum + floorOf(c.width), 0) + (columns.length - 1) * 10 + 32}px`;
+export const tableFloor = (columns) => `${columns.reduce((sum, c) => sum + floorOf(c.width), 0) + (columns.length - 1) * 10 + 32}px`;
 const TABLE_VARS = {
   '--cols-wide': tracks(COLUMNS),
   '--cols-narrow': tracks(NARROW_COLUMNS),
   '--min-wide': tableFloor(COLUMNS),
   '--min-narrow': tableFloor(NARROW_COLUMNS)
 };
-export const ROW_GRID = 'grid gap-2.5 px-4 items-center min-w-[var(--min-narrow)] min-[1100px]:min-w-[var(--min-wide)] [grid-template-columns:var(--cols-narrow)] min-[1100px]:[grid-template-columns:var(--cols-wide)]';
+export const ROW_GRID = 'grid gap-2.5 px-4 items-center min-w-[var(--min-narrow)] min-[1380px]:min-w-[var(--min-wide)] [grid-template-columns:var(--cols-narrow)] min-[1380px]:[grid-template-columns:var(--cols-wide)]';
 /** The action column stays in view when the table scrolls sideways, on the
  * panel's own colour so the cells scrolling underneath do not show through. */
 export const STICKY_ACTION = 'sticky right-0 z-[1] bg-[color:var(--bg-panel)] pl-2 group-hover:[background-image:linear-gradient(var(--surface-hover),var(--surface-hover))]';

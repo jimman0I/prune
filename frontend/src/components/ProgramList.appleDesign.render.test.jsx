@@ -23,7 +23,7 @@ vi.mock('../lib/api.js', () => ({
 
 const ProgramList = (await import('./ProgramList.jsx')).default;
 const ToastHost = (await import('./ToastHost.jsx')).default;
-const { SIZE_TONE_TEXT, rowMenuItems } = await import('./ProgramList.jsx');
+const { SIZE_TONE_TEXT, rowMenuItems, WIDE_BREAKPOINT_PX } = await import('./ProgramList.jsx');
 
 const program = (over = {}) => ({
   id: over.name || 'p', name: 'Thing', publisher: 'Acme', sizeBytes: 1024 * 1024,
@@ -116,10 +116,10 @@ describe('table semantics', () => {
 });
 
 describe('narrow windows', () => {
-  it('hides Version and Website below 1100 px, in the header and every row', async () => {
+  it('hides Version and Website below 1380 px, in the header and every row', async () => {
     render();
     const table = await screen.findByRole('table');
-    const hiddenUnder = (el) => el.className.includes('hidden') && /min-\[1100px\]:(block|flex)/.test(el.className);
+    const hiddenUnder = (el) => el.className.includes('hidden') && /min-\[1380px\]:(block|flex)/.test(el.className);
     expect(hiddenUnder(screen.getByRole('columnheader', { name: /Version/ }))).toBe(true);
     expect(hiddenUnder(screen.getByRole('columnheader', { name: /Website/ }))).toBe(true);
     const cells = within(within(table).getAllByRole('row')[1]).getAllByRole('cell');
@@ -130,7 +130,7 @@ describe('narrow windows', () => {
     expect(cells.filter(hiddenUnder)).toHaveLength(2);
   });
 
-  it('uses a narrower grid template and floor below 1100 px, and the wide one from 1100 up', async () => {
+  it('uses a narrower grid template and floor below 1380 px, and the wide one from 1380 up', async () => {
     const { container } = render();
     await screen.findByRole('table');
     const scroller = container.querySelector('[data-table-scroll]');
@@ -141,7 +141,18 @@ describe('narrow windows', () => {
     expect(parseInt(vars.getPropertyValue('--min-narrow'))).toBeLessThan(parseInt(vars.getPropertyValue('--min-wide')));
     const header = container.querySelector('[data-table-header]');
     expect(header.className).toContain('[grid-template-columns:var(--cols-narrow)]');
-    expect(header.className).toContain('min-[1100px]:[grid-template-columns:var(--cols-wide)]');
+    expect(header.className).toContain('min-[1380px]:[grid-template-columns:var(--cols-wide)]');
+  });
+
+  it('only brings the wide columns back once the pane can hold them (rail 200 + gutters 96 + the table floor)', async () => {
+    const { container } = render();
+    await screen.findByRole('table');
+    const wideFloor = parseInt(container.querySelector('[data-table-scroll]').style.getPropertyValue('--min-wide'));
+    const narrowFloor = parseInt(container.querySelector('[data-table-scroll]').style.getPropertyValue('--min-narrow'));
+    expect(wideFloor + 200 + 96).toBeLessThanOrEqual(WIDE_BREAKPOINT_PX);
+    // ...and the narrow table fits right up to that width (72px rail). Below
+    // about 1010px it scrolls sideways, which is what the sticky action cell is for.
+    expect(narrowFloor + 72 + 96).toBeLessThanOrEqual(WIDE_BREAKPOINT_PX - 1);
   });
 
   it('keeps the action column stuck to the right edge, on the panel colour, and header sticky to the top', async () => {
