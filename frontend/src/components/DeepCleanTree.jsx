@@ -158,7 +158,7 @@ function CategoryIcon({ category, src }) {
 
   return (
     <div
-      className="w-[18px] h-[18px] rounded-[4px] flex items-center justify-center text-[9px] font-bold shrink-0"
+      className="w-[18px] h-[18px] rounded-[4px] flex items-center justify-center text-[10px] font-bold shrink-0"
       style={{ background: tileColor(category), color: TILE_INK }}
     >
       {tileLetter(category)}
