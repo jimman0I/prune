@@ -9,6 +9,14 @@ import LeftoverReview from './LeftoverReview.jsx';
 import { selectionToRemoval } from './UninstallModal.jsx';
 import { useSettings } from '../hooks/useSystemQueries.js';
 import { leftoverDestinationFrom } from '../lib/leftoverDestination.js';
+
+/** How long one uninstaller may run before the dialog says it is still
+ * waiting and puts Stop in front. Unlike the single-program dialog, this one
+ * is NEVER made closable mid-run: the loop lives in this component, and
+ * closing it would leave it uninstalling the later programs with nothing on
+ * screen. The way out of a hung one is its own window or Task Manager, and
+ * that is what the line says. */
+export const STALL_MS = 30000;
 import { useLanguage } from '../i18n/LanguageContext.jsx';
 
 /** What a batch did, in the words of where its leftovers went. */
@@ -131,6 +139,18 @@ export default function BatchUninstallModal({ programs, onClose, onFinished, onB
    * parent turns Escape off while this is true, and the Close button below
    * refuses on the same condition. */
   const busy = phase === 'running' || phase === 'scanning' || phase === 'removing';
+
+  // The program on now, and whether it has been on for STALL_MS. Keyed on it,
+  // so each program gets its own thirty seconds.
+  const [stalled, setStalled] = useState(false);
+  const runningId = phase === 'running'
+    ? programs.find((program) => statuses[program.id]?.state === 'running')?.id
+    : undefined;
+  useEffect(() => {
+    if (runningId === undefined) return undefined;
+    const timer = setTimeout(() => setStalled(true), STALL_MS);
+    return () => { clearTimeout(timer); setStalled(false); };
+  }, [runningId]);
   const onBusyChangeRef = useRef(onBusyChange);
   onBusyChangeRef.current = onBusyChange;
   useEffect(() => { onBusyChangeRef.current?.(busy); }, [busy]);
@@ -409,11 +429,17 @@ export default function BatchUninstallModal({ programs, onClose, onFinished, onB
                 </div>
               );
             })}
+            {phase === 'running' && stalled && (
+              <p role="status" data-still-waiting className="text-[12.5px] text-[color:var(--text-secondary)] pt-3">
+                {t('batchUninstallModal.stillWaiting', canStop)}
+              </p>
+            )}
             {canStop && (
               <div className="pt-3">
                 <button
                   type="button"
-                  className="btn-ghost px-3 py-1.5 rounded-lg text-[12px] font-medium aria-disabled:opacity-60"
+                  className={`${stalled && !stopping ? 'btn-primary' : 'btn-ghost'} px-3 py-1.5 rounded-lg text-[12px] font-medium aria-disabled:opacity-60`}
+                  data-stop-prominent={stalled && !stopping ? '' : undefined}
                   // aria-disabled, not disabled: disabling the button under the
                   // user's focus would drop focus to the page body.
                   onClick={() => { if (!stopping) requestStop(); }}
