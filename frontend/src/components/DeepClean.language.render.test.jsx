@@ -22,10 +22,9 @@ import ToastHost from './ToastHost.jsx';
  * ToastHost -- the same reason Duplicates.language.render.test.jsx and
  * DiskMap.language.render.test.jsx each build their own mount().
  *
- * Rule/category names and descriptions (item.name, item.description,
- * group.category) are Prune's own backend cleaner-rule DATA and stay
- * untranslated by design -- see the comment at the top of
- * deepclean_blocks.py / catalog.js's `deepClean` namespace.
+ * Rule/category names and descriptions follow the language too, from
+ * i18n/cleaner/<lang>.js -- see DeepClean.cleanerText.render.test.jsx. The
+ * fixtures here use ids with no translation, so they stay English.
  */
 
 // The clean itself streams now -- see hooks/useDeepCleanExecute.js.
@@ -82,7 +81,7 @@ function mount() {
 }
 
 const rules = [{
-  category: 'Windows',
+  category: 'Sample OS',
   items: [
     { id: 'temp', name: 'Temporary files', sizeBytes: null, fileCount: null },
     { id: 'thumbs', name: 'Thumbnail cache', sizeBytes: null, fileCount: null }
@@ -90,11 +89,11 @@ const rules = [{
 }];
 
 const riskyRules = [{
-  category: 'Brave',
+  category: 'Sample Browser',
   items: [
-    { id: 'brave_cache', category: 'Brave', name: 'Cache', description: 'Regenerates on its own.', sizeBytes: null, fileCount: null },
+    { id: 'sample_cache', category: 'Sample Browser', name: 'Cache', description: 'Regenerates on its own.', sizeBytes: null, fileCount: null },
     {
-      id: 'brave_cookies', category: 'Brave', name: 'Cookies', risky: true,
+      id: 'sample_cookies', category: 'Sample Browser', name: 'Cookies', risky: true,
       description: 'Signs you out of every site that remembered you.',
       sizeBytes: null, fileCount: null
     }
@@ -173,7 +172,7 @@ describe('the Deep Clean screen, in Greek', () => {
     streamDeepCleanScan.mockImplementation(async (onEvent) => {
       onEvent('start', { total: 2 });
       announceScanning = await screen.findByText('Σάρωση 2 τοποθεσιών.');
-      onEvent('rule', { id: 'temp', category: 'Windows', name: 'Temporary files', sizeBytes: 100, present: true, accessible: true });
+      onEvent('rule', { id: 'temp', category: 'Sample OS', name: 'Temporary files', sizeBytes: 100, present: true, accessible: true });
     });
     const user = userEvent.setup();
     mount();
@@ -224,7 +223,7 @@ describe('the Deep Clean screen, in Greek', () => {
       skipRecentHours: 24, acknowledgedCleanWarnings: []
     };
     fetchDeepCleanRules.mockResolvedValue([{
-      category: 'Windows',
+      category: 'Sample OS',
       items: [{ id: 'temp', name: 'Temporary files', sizeBytes: null, fileCount: null, present: false }]
     }]);
     mount();
@@ -234,7 +233,7 @@ describe('the Deep Clean screen, in Greek', () => {
 
   it('translates the tree: aria-label, Loses data badge, needs admin / not installed', async () => {
     fetchDeepCleanRules.mockResolvedValue([{
-      category: 'Windows',
+      category: 'Sample OS',
       items: [
         { id: 'a', name: 'Item A', sizeBytes: null, fileCount: null, accessible: false, sizeBytesKnown: false },
         { id: 'b', name: 'Item B', sizeBytes: null, fileCount: null, present: false }
@@ -244,7 +243,7 @@ describe('the Deep Clean screen, in Greek', () => {
     await ready();
     await screen.findByText('Item A');
 
-    expect(screen.getByRole('checkbox', { name: 'Επιλογή όλων στην κατηγορία Windows' })).toBeTruthy();
+    expect(screen.getByRole('checkbox', { name: 'Επιλογή όλων στην κατηγορία Sample OS' })).toBeTruthy();
     // Item A has sizeBytes: null so SizeLabel short-circuits before
     // reaching `accessible`/`present` -- use one with a non-null size to
     // reach the needs-admin/not-installed branches.
@@ -252,7 +251,7 @@ describe('the Deep Clean screen, in Greek', () => {
 
   it('translates "needs admin" and "not installed" via a measured size', async () => {
     fetchDeepCleanRules.mockResolvedValue([{
-      category: 'Windows',
+      category: 'Sample OS',
       items: [
         { id: 'a', name: 'Item A', sizeBytes: 10, fileCount: 1, accessible: false },
         { id: 'b', name: 'Item B', sizeBytes: 10, fileCount: 1, present: false }
@@ -392,18 +391,18 @@ describe('the warning dialog, in Greek', () => {
     await tick(user, 'Cookies');
 
     const dialog = within(screen.getByRole('dialog'));
-    expect(dialog.getByText('Ενεργοποίηση Brave — Cookies')).toBeTruthy();
+    expect(dialog.getByText('Ενεργοποίηση Sample Browser — Cookies')).toBeTruthy();
     // The rule's own description is backend DATA and stays untranslated.
     expect(dialog.getByText('Signs you out of every site that remembered you.')).toBeTruthy();
-    expect(dialog.getByLabelText('Απομνημόνευση της επιλογής μου για Brave — Cookies')).toBeTruthy();
+    expect(dialog.getByLabelText('Απομνημόνευση της επιλογής μου για Sample Browser — Cookies')).toBeTruthy();
     expect(dialog.getByRole('button', { name: 'Ακύρωση' })).toBeTruthy();
     expect(dialog.getByRole('button', { name: 'Ενεργοποίηση ούτως ή άλλως' })).toBeTruthy();
   });
 
   it('falls back to the translated generic body for a rule with no description', async () => {
     fetchDeepCleanRules.mockResolvedValue([{
-      category: 'Brave',
-      items: [{ id: 'brave_x', category: 'Brave', name: 'X', risky: true, sizeBytes: null, fileCount: null }]
+      category: 'Sample Browser',
+      items: [{ id: 'sample_x', category: 'Sample Browser', name: 'X', risky: true, sizeBytes: null, fileCount: null }]
     }]);
     const user = userEvent.setup();
     mount();

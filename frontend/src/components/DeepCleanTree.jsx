@@ -5,6 +5,7 @@ import { readCollapsedCategories, writeCollapsedCategories } from '../lib/deepCl
 import { tileLetter } from '../lib/iconTileLetter.js';
 import { tileColor, TILE_INK } from '../lib/programTileColor.js';
 import { useLanguage } from '../i18n/LanguageContext.jsx';
+import { useCleanerText, ruleSearchText, categorySearchText } from '../i18n/cleanerText.js';
 
 /** The Deep Clean list.
  *
@@ -168,6 +169,10 @@ function CategoryIcon({ category, src }) {
 
 function CategorySection({ category, items, allItems = items, iconSrc, selected, onToggle, onToggleCategory, activeId, receiptMode = false, collapsed, onToggleCollapsed, filtering = false }) {
   const { t } = useLanguage();
+  // Display only: `category` and item.id stay the keys for icons, collapse
+  // state and selection.
+  const cleaner = useCleanerText();
+  const categoryLabel = cleaner.categoryName(category);
   // receiptMode -- and a filter that has matches in this category -- force
   // it open without touching the remembered collapse itself: a collapse the
   // user made while browsing has to still be there, exactly as they left
@@ -207,7 +212,7 @@ function CategorySection({ category, items, allItems = items, iconSrc, selected,
             <polyline points="9 18 15 12 9 6"></polyline>
           </svg>
           <CategoryIcon category={category} src={iconSrc} />
-          <span className="text-[12.5px] font-medium text-[color:var(--text-primary)] truncate">{category}</span>
+          <span className="text-[12.5px] font-medium text-[color:var(--text-primary)] truncate">{categoryLabel}</span>
           <span className="text-[10.5px] text-[color:var(--text-muted)] font-mono shrink-0">{allItems.length}</span>
         </button>
         {/* Negative margins so the 28 px target costs the row nothing: it
@@ -218,7 +223,7 @@ function CategorySection({ category, items, allItems = items, iconSrc, selected,
           hit={28}
           className="-my-1.5 -mr-1.5"
           disabled={receiptMode}
-          label={t('deepClean.tree.selectCategoryAriaLabel', category)}
+          label={t('deepClean.tree.selectCategoryAriaLabel', categoryLabel)}
           onChange={() => {
             const checked = nextCategoryChecked(state);
             if (filtering) onToggleCategory(category, checked, items.map((item) => item.id));
@@ -274,7 +279,7 @@ function CategorySection({ category, items, allItems = items, iconSrc, selected,
               {/* A rule for software that is not here reads muted rather than
                   faded: opacity dropped the whole row, its live checkbox
                   included, below legible contrast. */}
-              <span className={`text-[12px] shrink-0 ${item.present === false ? 'text-[color:var(--text-muted)]' : 'text-[color:var(--text-primary)]'}`}>{item.name}</span>
+              <span className={`text-[12px] min-w-0 ${item.present === false ? 'text-[color:var(--text-muted)]' : 'text-[color:var(--text-primary)]'}`}>{cleaner.ruleName(item)}</span>
 
               {/* Marked because "recoverable" is not "wanted". Clean moves
                   everything to Quarantine first, so nothing here is
@@ -307,7 +312,7 @@ function CategorySection({ category, items, allItems = items, iconSrc, selected,
                   said so. */}
               {measured && item.description && (
                 <span className="log-line-in text-[11px] text-[color:var(--text-muted)] truncate min-w-0 flex-1">
-                  {item.description}
+                  {cleaner.ruleDescription(item)}
                 </span>
               )}
               {!(measured && item.description) && <span className="flex-1" />}
@@ -318,7 +323,7 @@ function CategorySection({ category, items, allItems = items, iconSrc, selected,
                 state={selected.has(item.id) ? 'all' : 'none'}
                 size={14}
                 disabled={receiptMode}
-                label={item.name}
+                label={cleaner.ruleName(item)}
                 onChange={() => onToggle(item.id)}
               />
             </div>
@@ -338,6 +343,7 @@ function CategorySection({ category, items, allItems = items, iconSrc, selected,
  * arrive late -- every heading renders either way. */
 export default function DeepCleanTree({ categories, selected, onToggle, onToggleCategory, icons = {}, activeId = null, receiptMode = false }) {
   const { t } = useLanguage();
+  const { language } = useCleanerText();
   const [query, setQuery] = useState('');
   const [collapsed, setCollapsed] = useState(() => readCollapsedCategories(window.localStorage));
 
@@ -373,9 +379,10 @@ export default function DeepCleanTree({ categories, selected, onToggle, onToggle
       ? categories
           .map((group) => {
             // A match on the category's own name keeps all of its rules.
-            if (group.category.toLowerCase().includes(needle)) return { ...group, allItems: group.items };
-            const items = group.items.filter((item) =>
-              item.name.toLowerCase().includes(needle) || (item.description ?? '').toLowerCase().includes(needle));
+            if (categorySearchText(language, group.category).includes(needle)) return { ...group, allItems: group.items };
+            // Matches what is on screen AND the English, so a user typing
+            // the English word still finds a translated rule.
+            const items = group.items.filter((item) => ruleSearchText(language, item).includes(needle));
             return { ...group, allItems: group.items, items };
           })
           .filter((group) => group.items.length > 0)

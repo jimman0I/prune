@@ -45,20 +45,21 @@ export function mergeScannedRule(categories, item) {
  * to measure because the rule runs a command, or it really is empty --
  * and running past them at one line each is the clearest place to tell
  * them apart. */
-export function scanLogLine(item) {
+export function scanLogLine(item, nameOf = (rule) => rule.name) {
+  const name = nameOf(item);
   if (item.sizeBytes === null || item.sizeBytes === undefined) {
-    return { label: item.name, detail: 'nothing to measure', tone: 'muted' };
+    return { label: name, detail: 'nothing to measure', tone: 'muted' };
   }
   if (item.accessible === false) {
-    return { label: item.name, detail: 'needs admin', tone: 'warning' };
+    return { label: name, detail: 'needs admin', tone: 'warning' };
   }
   if (item.present === false) {
-    return { label: item.name, detail: 'not installed', tone: 'muted' };
+    return { label: name, detail: 'not installed', tone: 'muted' };
   }
   if (item.sizeBytes === 0) {
-    return { label: item.name, detail: 'empty', tone: 'muted' };
+    return { label: name, detail: 'empty', tone: 'muted' };
   }
-  return { label: item.name, detail: formatBytes(item.sizeBytes), tone: 'size' };
+  return { label: name, detail: formatBytes(item.sizeBytes), tone: 'size' };
 }
 
 /** One line of the live CLEAN log -- BleachBit's own "Delete ..." /
@@ -70,9 +71,10 @@ export function scanLogLine(item) {
  * same way BleachBit's does (Delete / Recycle), because "Chrome Cache"
  * on its own doesn't say what just happened to it -- only what was
  * chosen a screen ago. */
-export function executeLogLine(item) {
+export function executeLogLine(item, nameOf = (rule) => rule.name) {
+  const name = nameOf(item) || item.id;
   if (item.error) {
-    return { label: item.name ?? item.id, detail: item.error, tone: 'warning' };
+    return { label: name, detail: item.error, tone: 'warning' };
   }
 
   // The verb says what actually happened, not just what was chosen --
@@ -85,7 +87,7 @@ export function executeLogLine(item) {
   // discriminator -- 0 means the action ran and found nothing to remove,
   // not that the field is absent.
   if (item.registryKeysRemoved !== undefined) {
-    const label = `Clear ${item.name ?? item.id}`;
+    const label = `Clear ${name}`;
     return item.registryKeysRemoved > 0
       ? { label, detail: `${item.registryKeysRemoved} registry ${item.registryKeysRemoved === 1 ? 'entry' : 'entries'}`, tone: 'size' }
       : { label, detail: 'already absent', tone: 'muted' };
@@ -102,7 +104,7 @@ export function executeLogLine(item) {
   // so this follows the same freedBytes -> skipped -> empty shape the
   // Delete/Recycle fallthrough below already uses.
   if (item.vacuumed) {
-    const label = `Compact ${item.name ?? item.id}`;
+    const label = `Compact ${name}`;
     if (item.freedBytes > 0) {
       return { label, detail: formatBytes(item.freedBytes), tone: 'size' };
     }
@@ -119,7 +121,7 @@ export function executeLogLine(item) {
   // edited, so this follows the identical freedBytes -> skipped -> empty
   // fallthrough rather than an unconditional "success" label.
   if (item.edited) {
-    const label = `Trim ${item.name ?? item.id}`;
+    const label = `Trim ${name}`;
     if (item.freedBytes > 0) {
       return { label, detail: formatBytes(item.freedBytes), tone: 'size' };
     }
@@ -130,7 +132,7 @@ export function executeLogLine(item) {
   }
 
   const verb = item.recycled ? 'Recycle' : 'Delete';
-  const label = `${verb} ${item.name ?? item.id}`;
+  const label = `${verb} ${name}`;
 
   if (item.freedBytes > 0) {
     // A rule with locked files still freed something -- Chrome's cache

@@ -94,6 +94,11 @@ things from the machine you are developing on.
   registry keys are exported before removal. A change that makes a
   restore write the wrong thing, or to the wrong place, defeats every
   other guard in the app.
+- **Cleaner rules stay English in `backend/src/data/cleaners.json`.** Their
+  translated names, descriptions and category labels live in
+  `frontend/src/i18n/cleaner/<lang>.js`. The coverage test
+  (`cleanerText.coverage.test.js`) fails if a rule or a category is missing
+  in any language, so add a new rule to all of them.
 
 ## Commits
 
