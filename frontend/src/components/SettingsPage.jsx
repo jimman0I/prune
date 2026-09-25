@@ -51,7 +51,7 @@ function StepRow({ step }) {
   return (
     <div className="flex items-start gap-3 py-2">
       <div
-        className={`w-4 h-4 rounded-full mt-0.5 shrink-0 flex items-center justify-center text-[9px] font-bold ${
+        className={`w-4 h-4 rounded-full mt-0.5 shrink-0 flex items-center justify-center text-[10px] font-bold ${
           step.passed ? 'bg-[color:var(--success)]/20 text-[color:var(--success)]' : 'bg-[color:var(--danger)]/20 text-[color:var(--danger)]'
         }`}
       >
