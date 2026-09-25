@@ -1,22 +1,8 @@
-/** How much of the composite score each signal is worth. Drive wear
- * matters most (real data-loss risk); free space and broken apps are
- * real but recoverable annoyances; hardware errors are rare but serious
- * when present. See docs/superpowers/specs/2026-09-18-system-health-
- * score-design.md for the full reasoning behind these weights. */
-const WEIGHTS = { drive: 40, storage: 25, apps: 20, errors: 15 };
-
-/** Free-space percent at or below which storage scores 0 credit. */
-const STORAGE_ZERO_CREDIT_FREE_PERCENT = 2;
-
-/** Free-space percent at or above which storage scores full credit. */
-const STORAGE_FULL_CREDIT_FREE_PERCENT = 20;
-
-/** Points deducted from the apps component per broken/orphaned app. */
-const PER_BROKEN_APP_PENALTY = 25;
-
-function clamp01(x) {
-  return Math.max(0, Math.min(1, x));
-}
+/** Highest score a drive that reports uncorrected or media errors can show.
+ * Sits inside healthBand()'s lowest band (below 50) on purpose: a drive that
+ * is losing data is a problem however much wear life it has left, and a
+ * fresh SSD with bad blocks must not read as green. */
+const ERRORS_SCORE_CAP = 40;
 
 /** The drive's own life-remaining percent when one exists (the common
  * case for NVMe, readable without elevation -- see
@@ -34,28 +20,6 @@ function driveComponent(driveVerdict) {
   return toneScore[driveVerdict.tone] ?? null;
 }
 
-/** Full credit at 20% free or above, scaling linearly down to 0 at 2%
- * free or below -- roughly Windows' own low-disk-space warning range. */
-function storageComponent(diskSpace) {
-  if (!diskSpace || typeof diskSpace.freeBytes !== 'number' || typeof diskSpace.totalBytes !== 'number' || diskSpace.totalBytes <= 0) {
-    return null;
-  }
-  const freePercent = (diskSpace.freeBytes / diskSpace.totalBytes) * 100;
-  return Math.round(clamp01(
-    (freePercent - STORAGE_ZERO_CREDIT_FREE_PERCENT) /
-      (STORAGE_FULL_CREDIT_FREE_PERCENT - STORAGE_ZERO_CREDIT_FREE_PERCENT)
-  ) * 100);
-}
-
-/** brokenCount is always a real number (Dashboard.jsx computes it
- * synchronously from the programs prop, defaulting to 0), never a
- * loading state -- so this never returns null. -25 per broken app,
- * floored at 0. */
-function appsComponent(brokenCount) {
-  const count = typeof brokenCount === 'number' ? brokenCount : 0;
-  return Math.max(0, 100 - PER_BROKEN_APP_PENALTY * count);
-}
-
 /** Binary, not scaled: a single uncorrected error or bad media block is
  * already a real, actionable signal (the same reasoning Dashboard.jsx's
  * own SmartAttributes component already applies by highlighting either
@@ -69,45 +33,33 @@ function errorsComponent(primaryDisk) {
   return (mediaErrors > 0 || readErrors > 0 || writeErrors > 0) ? 0 : 100;
 }
 
-/** The Dashboard's composite "how healthy is this PC" score: 0-100,
- * combining drive health, free disk space, broken/orphaned apps and
- * hardware errors. Each `breakdown` entry is that component's own 0-100
- * normalized value (not its weighted points), so the UI can show
- * "Drive 92 · Storage 78 · Apps 100 · Errors 100" as comparable
- * percentages; the weights only apply when combining them into `score`.
+/** The Dashboard's drive-health score: 0-100, about the drive and nothing
+ * else. Prune is a storage tool; free space and broken apps have their own
+ * cards, and folding them in made a healthy SSD on a full disk read as
+ * unhealthy (see docs/superpowers/specs/2026-09-18-system-health-score-
+ * design.md). The score is the drive's life-remaining percent (or its
+ * status tone when the drive will not give a percent), capped at
+ * ERRORS_SCORE_CAP when it reports uncorrected or media errors.
  *
- * `score` is null until BOTH `breakdown.drive` and `breakdown.storage`
- * are known -- those are the only two components with genuine async
- * loading uncertainty (apps and errors either come from data that's
- * already loaded by the time this runs, or are excluded the same way).
- * Without this gate, the very first render (before any real disk data
- * has arrived) would show a fabricated "100% healthy" from the apps
- * component's own always-available default -- exactly the invented
- * number this app's HealthGauge and driveVerdict() already refuse to
- * show elsewhere. */
-export function computeHealthScore({ driveVerdict, primaryDisk, diskSpace, brokenCount }) {
+ * `breakdown` holds the two inputs on their own 0-100 scale: `drive` and
+ * `errors` (100 = clean, 0 = the drive reports errors).
+ *
+ * `score` is null until the drive has actually answered. Before that there
+ * is nothing true to show, and a default here would put a healthy-looking
+ * number on screen at exactly the moment nothing has been read -- the
+ * invented figure HealthGauge and driveVerdict() already refuse to show. */
+export function computeHealthScore({ driveVerdict, primaryDisk }) {
   const breakdown = {
     drive: driveComponent(driveVerdict),
-    storage: storageComponent(diskSpace),
-    apps: appsComponent(brokenCount),
     errors: errorsComponent(primaryDisk)
   };
 
-  if (breakdown.drive == null || breakdown.storage == null) {
-    return { score: null, breakdown };
-  }
+  if (breakdown.drive == null) return { score: null, breakdown };
 
-  let weightedSum = 0;
-  let totalWeight = 0;
-  for (const key of Object.keys(WEIGHTS)) {
-    const value = breakdown[key];
-    if (value == null) continue;
-    weightedSum += value * WEIGHTS[key];
-    totalWeight += WEIGHTS[key];
-  }
-
-  const score = totalWeight > 0 ? Math.round(weightedSum / totalWeight) : null;
-  return { score, breakdown };
+  const score = breakdown.errors === 0
+    ? Math.min(breakdown.drive, ERRORS_SCORE_CAP)
+    : breakdown.drive;
+  return { score: Math.round(score), breakdown };
 }
 
 /** Which colour band a score falls in: 75 and up is good, 50 and up is
@@ -116,8 +68,9 @@ export function computeHealthScore({ driveVerdict, primaryDisk, diskSpace, broke
  * (the same rule that keeps the score itself null until real data lands).
  *
  * The bands are the score's OWN, deliberately not the drive verdict's: a
- * healthy drive on a nearly full disk scores in the 50s, and painting that
- * green because the SSD is fine told people the opposite of the number. */
+ * drive with errors is capped into the lowest band even when its wear life
+ * looks fine, so the ring never paints green over a number that says
+ * otherwise. */
 export function healthBand(score) {
   if (typeof score !== 'number' || !Number.isFinite(score)) return null;
   if (score >= 75) return 'good';

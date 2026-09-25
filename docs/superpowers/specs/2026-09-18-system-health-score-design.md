@@ -1,5 +1,7 @@
 # System Health score: design
 
+> **Update 2026-09-25: the score is now drive-only.** Prune is a storage app, so the Dashboard panel is titled "Drive health" and scores the drive alone: life remaining (or its status tone when no percent exists), capped at 40 -- the red band -- when the drive reports media or uncorrected errors. Free space and broken apps were dropped from the score (they have their own cards, and a healthy SSD on a full disk read as unhealthy), the breakdown line was removed, and so was the live CPU/memory monitor beside it. The weights, the storage and apps components and the composite maths below describe the original design and no longer apply; the "null until loaded" guarantee still does.
+
 ## Why
 
 `docs/superpowers/specs/2026-08-29-unrevo-uninstaller-design.md` explicitly deferred a "Dashboard/health-score overview" as a future phase. No design or engine work exists for it yet. This closes that gap: a single at-a-glance "how healthy is this PC" number, replacing the Dashboard's current pure-drive-wear ring with a composite score.

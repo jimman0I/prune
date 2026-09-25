@@ -13,6 +13,11 @@ screen-reader access, and safer destructive actions.
 
 ### Fixed
 
+- **The Dashboard's health score is now only about your drive.** It used to
+  blend in free space and broken apps, so a healthy SSD on a nearly full disk
+  scored badly; those already have their own cards. A drive that reports
+  media or uncorrected errors now lands in the red band whatever its wear
+  life. The live CPU and memory gauges are gone too: Prune is a storage tool.
 - **Deep Clean listed and ticked cleaners for software you never had.**
   Slack, Teams, Zoom, Vivaldi, Telegram and other rules for programs that
   aren't installed were shown, and a saved selection could tick them again.

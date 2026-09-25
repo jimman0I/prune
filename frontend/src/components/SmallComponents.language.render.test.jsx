@@ -4,27 +4,24 @@ import { screen, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { renderScreen } from '../testSupport/renderScreen.jsx';
 
-/** Five small, otherwise-untested-for-language components share one file:
- * ResourceMonitor, ShortcutsModal (+ useKeyboardShortcuts.js's SHORTCUTS
+/** Four small, otherwise-untested-for-language components share one file:
+ * ShortcutsModal (+ useKeyboardShortcuts.js's SHORTCUTS
  * labels), ThemeToggle, ToastHost, UpdateButton. None is large enough to
- * warrant its own language file, and all five follow the same shape --
+ * warrant its own language file, and all four follow the same shape --
  * mock fetchSettings to answer Greek, render, and check the Greek text
  * that only a translated catalog produces (never English, which is also
  * the fallback these components render under when a key is missing). */
 
 const fetchSettings = vi.fn();
-const fetchResources = vi.fn();
 const fetchUpdateCheck = vi.fn();
 const openUpdatePage = vi.fn(async () => ({ ok: true }));
 vi.mock('../lib/api.js', () => ({
   fetchSettings: (...a) => fetchSettings(...a),
   updateSettings: vi.fn(async (partial) => partial),
-  fetchResources: (...a) => fetchResources(...a),
   fetchUpdateCheck: (...a) => fetchUpdateCheck(...a),
   openUpdatePage: (...a) => openUpdatePage(...a)
 }));
 
-const ResourceMonitor = (await import('./ResourceMonitor.jsx')).default;
 const ShortcutsModal = (await import('./ShortcutsModal.jsx')).default;
 const ThemeToggle = (await import('./ThemeToggle.jsx')).default;
 const ToastHost = (await import('./ToastHost.jsx')).default;
@@ -34,24 +31,6 @@ const UpdateButton = (await import('./UpdateButton.jsx')).default;
 beforeEach(() => {
   vi.clearAllMocks();
   fetchSettings.mockResolvedValue({ language: 'el' });
-});
-
-describe('ResourceMonitor in Greek', () => {
-  it('renders every label and the core count in Greek', async () => {
-    fetchResources.mockResolvedValue({
-      cpuPercent: 12, cores: 8,
-      ram: { percent: 40, usedBytes: 4 * 1024 ** 3, totalBytes: 16 * 1024 ** 3 },
-      diskBytesPerSec: 1024
-    });
-    renderScreen(<ResourceMonitor />);
-
-    expect(await screen.findByText('Αυτή τη στιγμή')).toBeTruthy();
-    expect(screen.getByText('8 πυρήνες')).toBeTruthy();
-    expect(screen.getByText('CPU')).toBeTruthy();
-    expect(screen.getByText('Μνήμη')).toBeTruthy();
-    expect(screen.getByText('Δίσκος')).toBeTruthy();
-    expect(screen.getByText(/Μια σάρωση διαβάζει ολόκληρο τον δίσκο/)).toBeTruthy();
-  });
 });
 
 describe('ShortcutsModal in Greek', () => {

@@ -23,7 +23,7 @@ deleted outright: it is quarantined first, so a bad match is recoverable.
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/screenshots/dashboard-dark.png" />
   <source media="(prefers-color-scheme: light)" srcset="docs/screenshots/dashboard-light.png" />
-  <img src="docs/screenshots/dashboard-dark.png" alt="Prune's dashboard: real SMART drive health, live CPU and memory, installed application count and recent activity" width="880" />
+  <img src="docs/screenshots/dashboard-dark.png" alt="Prune's dashboard: real SMART drive health, free space, installed application count and recent activity" width="880" />
 </picture>
 
 <sub>Real SMART data from the drive itself — not free space dressed up as health.<br/>

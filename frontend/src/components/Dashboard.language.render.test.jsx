@@ -29,7 +29,6 @@ vi.mock('../lib/api.js', () => ({
   unlockDiskWear: (...a) => unlockDiskWear(...a),
   fetchUninstallHistory: (...a) => fetchUninstallHistory(...a),
   fetchAutomation: (...a) => fetchAutomation(...a),
-  fetchResources: vi.fn(async () => ({ cpuPercent: 0, ram: { percent: 0 }, diskBytesPerSec: 0 }))
 }));
 
 const Dashboard = (await import('./Dashboard.jsx')).default;
@@ -49,7 +48,7 @@ describe('the Dashboard in another language', () => {
     render();
 
     expect(await screen.findByRole('heading', { name: 'Πίνακας ελέγχου' })).toBeTruthy();
-    expect(screen.getByText('Υγεία Συστήματος')).toBeTruthy();
+    expect(screen.getByText('Υγεία Δίσκου')).toBeTruthy();
     expect(screen.getByText('Συνολικός Αποθηκευτικός Χώρος')).toBeTruthy();
     expect(screen.getByText('Εγκατεστημένες Εφαρμογές')).toBeTruthy();
     expect(screen.getByText('Άχρηστα Αρχεία')).toBeTruthy();
@@ -148,8 +147,9 @@ describe('the Dashboard in another language', () => {
       disks: [{ deviceId: '0', model: 'Test NVMe', healthStatus: null, lifeRemainingPercent: null }]
     });
     render();
-    // driveVerdict's own fallback label, shown in the gauge's centre.
-    expect(await screen.findByText('Άγνωστο')).toBeTruthy();
+    // An unknown status is a real answer, so the ring shows the neutral
+    // score (75) rather than the word; the word lives in the sentence.
+    expect(await screen.findByText('75')).toBeTruthy();
     // The inline fallback inside the "Windows reports..." sentence -- a
     // different catalog key from the gauge's, and must stay so.
     expect(screen.getByText(/άγνωστη κατάσταση/)).toBeTruthy();

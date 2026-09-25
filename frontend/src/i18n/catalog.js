@@ -214,8 +214,6 @@ export const CATALOG = {
         due: 'A scheduled run is due'
       },
       systemHealth: {
-        title: 'System health',
-        breakdownLine: (drive, storage, apps, errors) => `Drive ${drive} · Storage ${storage} · Apps ${apps} · Error check ${errors}`,
         driveDetailHeading: 'Drive detail'
       },
       driveHealth: {
@@ -744,14 +742,6 @@ export const CATALOG = {
       quarantineNote: 'Everything above is still in Quarantine and can be put back.',
       failedRegistryKeys: (n) => `${n} registry key${n === 1 ? '' : 's'} couldn't be removed — these usually need Prune to be running as administrator.`
     },
-    resourceMonitor: {
-      rightNow: 'Right now',
-      cores: (n) => `${n} cores`,
-      cpu: 'CPU',
-      memory: 'Memory',
-      disk: 'Disk',
-      footer: 'A scan reads the whole disk, so these move while Prune is working.'
-    },
     bugReport: {
       title: 'Report a bug',
       intro: 'Opens a pre-filled issue on GitHub. Nothing is sent by Prune itself, and you see everything before it goes anywhere.',
@@ -1000,8 +990,6 @@ export const CATALOG = {
         due: "'n Geskeduleerde loop is nou nodig"
       },
       systemHealth: {
-        title: 'Stelselgesondheid',
-        breakdownLine: (drive, storage, apps, errors) => `Skyf ${drive} · Berging ${storage} · Toepassings ${apps} · Foute ${errors}`,
         driveDetailHeading: 'Skyfbesonderhede'
       },
       driveHealth: {
@@ -1530,14 +1518,6 @@ export const CATALOG = {
       quarantineNote: 'Alles hierbo is steeds in Kwarantyn en kan teruggesit word.',
       failedRegistryKeys: (n) => `${n} registersleutel${n === 1 ? '' : 's'} kon nie verwyder word nie — hierdie het gewoonlik nodig dat Prune as administrateur loop.`
     },
-    resourceMonitor: {
-      rightNow: 'Nou net',
-      cores: (n) => `${n} kerne`,
-      cpu: 'SVE',
-      memory: 'Geheue',
-      disk: 'Skyf',
-      footer: "'n Skandering lees die hele skyf, so hierdie beweeg terwyl Prune werk."
-    },
     bugReport: {
       title: "Rapporteer 'n fout",
       intro: "Maak 'n vooraf ingevulde kwessie op GitHub oop. Prune self stuur niks, en jy sien alles voordat dit érens heen gaan.",
@@ -1786,8 +1766,6 @@ export const CATALOG = {
         due: 'حان موعد تشغيل مجدول'
       },
       systemHealth: {
-        title: 'صحة النظام',
-        breakdownLine: (drive, storage, apps, errors) => `القرص ${drive} · التخزين ${storage} · التطبيقات ${apps} · الأخطاء ${errors}`,
         driveDetailHeading: 'تفاصيل القرص'
       },
       driveHealth: {
@@ -2316,14 +2294,6 @@ export const CATALOG = {
       quarantineNote: 'كل ما سبق لا يزال في الحجر الصحي ويمكن إعادته.',
       failedRegistryKeys: (n) => `تعذّرت إزالة ${n} مفتاح سجل — عادةً ما يتطلب هذا تشغيل Prune كمسؤول.`
     },
-    resourceMonitor: {
-      rightNow: 'الآن',
-      cores: (n) => `${n} أنوية`,
-      cpu: 'المعالج',
-      memory: 'الذاكرة',
-      disk: 'القرص',
-      footer: 'يقرأ الفحص القرص بأكمله، لذا تتحرك هذه القيم أثناء عمل Prune.'
-    },
     bugReport: {
       title: 'الإبلاغ عن خطأ',
       intro: 'يفتح بلاغًا معبأً مسبقًا على GitHub. لا يرسل Prune نفسه أي شيء، وترى كل شيء قبل أن يذهب إلى أي مكان.',
@@ -2572,8 +2542,6 @@ export const CATALOG = {
         due: 'Toca una execució programada'
       },
       systemHealth: {
-        title: 'Salut del sistema',
-        breakdownLine: (drive, storage, apps, errors) => `Disc ${drive} · Emmagatzematge ${storage} · Aplicacions ${apps} · Errors ${errors}`,
         driveDetailHeading: 'Detall del disc'
       },
       driveHealth: {
@@ -3102,14 +3070,6 @@ export const CATALOG = {
       quarantineNote: 'Tot l\'anterior encara és a la Quarantena i es pot recuperar.',
       failedRegistryKeys: (n) => `No s'${n === 1 ? 'ha' : 'han'} pogut eliminar ${n} clau${n === 1 ? '' : 's'} del registre — normalment cal que el Prune s'executi com a administrador.`
     },
-    resourceMonitor: {
-      rightNow: 'Ara mateix',
-      cores: (n) => `${n} nuclis`,
-      cpu: 'CPU',
-      memory: 'Memòria',
-      disk: 'Disc',
-      footer: 'Un escaneig llegeix tot el disc, així que aquests es mouen mentre el Prune treballa.'
-    },
     bugReport: {
       title: "Informa d'un error",
       intro: 'Obre una incidència pre-omplerta a GitHub. Prune no envia res per si mateix i ho veus tot abans que vagi enlloc.',
@@ -3358,8 +3318,6 @@ export const CATALOG = {
         due: 'Naplánované spuštění je splatné'
       },
       systemHealth: {
-        title: 'Stav systému',
-        breakdownLine: (drive, storage, apps, errors) => `Disk ${drive} · Úložiště ${storage} · Aplikace ${apps} · Chyby ${errors}`,
         driveDetailHeading: 'Podrobnosti o disku'
       },
       driveHealth: {
@@ -3888,14 +3846,6 @@ export const CATALOG = {
       quarantineNote: 'Vše výše je stále v karanténě a lze to vrátit zpět.',
       failedRegistryKeys: (n) => `Nepodařilo se odstranit ${n} klíč${n === 1 ? '' : (n < 5 ? 'e' : 'ů')} registru — ty obvykle vyžadují, aby Prune běžel jako správce.`
     },
-    resourceMonitor: {
-      rightNow: 'Právě teď',
-      cores: (n) => `${n} jader`,
-      cpu: 'CPU',
-      memory: 'Paměť',
-      disk: 'Disk',
-      footer: 'Skenování čte celý disk, takže se tyto hodnoty mění, zatímco Prune pracuje.'
-    },
     bugReport: {
       title: 'Nahlásit chybu',
       intro: 'Otevře předvyplněný požadavek na GitHubu. Prune sám nic neodesílá a vše uvidíte dřív, než to kam odejde.',
@@ -4144,8 +4094,6 @@ export const CATALOG = {
         due: 'Mae rhediad a drefnwyd yn ddyledus'
       },
       systemHealth: {
-        title: 'Iechyd y System',
-        breakdownLine: (drive, storage, apps, errors) => `Disg ${drive} · Storfa ${storage} · Rhaglenni ${apps} · Gwallau ${errors}`,
         driveDetailHeading: 'Manylion y Ddisg'
       },
       driveHealth: {
@@ -4674,14 +4622,6 @@ export const CATALOG = {
       quarantineNote: "Mae popeth uchod yn dal yn y Cwarantin ac yn gallu cael ei roi'n ôl.",
       failedRegistryKeys: (n) => `Methwyd tynnu ${n} allwedd gofrestrfa — mae'r rhain fel arfer angen i Prune redeg fel gweinyddwr.`
     },
-    resourceMonitor: {
-      rightNow: 'Ar hyn o bryd',
-      cores: (n) => `${n} craidd`,
-      cpu: 'CPU',
-      memory: 'Cof',
-      disk: 'Disg',
-      footer: "Mae sgan yn darllen y ddisg gyfan, felly mae'r rhain yn symud tra bo Prune yn gweithio."
-    },
     bugReport: {
       title: 'Rhoi gwybod am nam',
       intro: "Yn agor mater wedi'i lenwi ymlaen llaw ar GitHub. Nid yw Prune ei hun yn anfon dim, ac rydych chi'n gweld popeth cyn iddo fynd i unman.",
@@ -4930,8 +4870,6 @@ export const CATALOG = {
         due: 'En planlagt kørsel er forfalden'
       },
       systemHealth: {
-        title: 'Systemets tilstand',
-        breakdownLine: (drive, storage, apps, errors) => `Disk ${drive} · Lagerplads ${storage} · Programmer ${apps} · Fejl ${errors}`,
         driveDetailHeading: 'Diskdetaljer'
       },
       driveHealth: {
@@ -5460,14 +5398,6 @@ export const CATALOG = {
       quarantineNote: 'Alt ovenfor er stadig i karantæne og kan sættes tilbage.',
       failedRegistryKeys: (n) => `${n} registreringsnøgle${n === 1 ? '' : 'r'} kunne ikke fjernes — disse kræver som regel, at Prune kører som administrator.`
     },
-    resourceMonitor: {
-      rightNow: 'Lige nu',
-      cores: (n) => `${n} kerner`,
-      cpu: 'CPU',
-      memory: 'Hukommelse',
-      disk: 'Disk',
-      footer: 'En scanning læser hele disken, så disse bevæger sig, mens Prune arbejder.'
-    },
     bugReport: {
       title: 'Rapportér en fejl',
       intro: 'Åbner en forudfyldt sag på GitHub. Prune sender ikke selv noget, og du ser alt, før det går nogen steder hen.',
@@ -5716,8 +5646,6 @@ export const CATALOG = {
         due: 'Ein geplanter Lauf steht an'
       },
       systemHealth: {
-        title: 'Systemstatus',
-        breakdownLine: (drive, storage, apps, errors) => `Laufwerk ${drive} · Speicher ${storage} · Programme ${apps} · Fehler ${errors}`,
         driveDetailHeading: 'Laufwerksdetails'
       },
       driveHealth: {
@@ -6246,14 +6174,6 @@ export const CATALOG = {
       quarantineNote: 'Alles oben ist weiterhin in der Quarantäne und kann zurückgesetzt werden.',
       failedRegistryKeys: (n) => `${n} Registrierungsschlüssel konnte${n === 1 ? '' : 'n'} nicht entfernt werden — diese benötigen normalerweise, dass Prune als Administrator ausgeführt wird.`
     },
-    resourceMonitor: {
-      rightNow: 'Gerade jetzt',
-      cores: (n) => `${n} Kerne`,
-      cpu: 'CPU',
-      memory: 'Arbeitsspeicher',
-      disk: 'Festplatte',
-      footer: 'Ein Scan liest die gesamte Festplatte, daher bewegen sich diese Werte, während Prune arbeitet.'
-    },
     bugReport: {
       title: 'Fehler melden',
       intro: 'Öffnet ein vorausgefülltes Issue auf GitHub. Prune selbst sendet nichts, und Sie sehen alles, bevor es irgendwohin geht.',
@@ -6502,8 +6422,6 @@ export const CATALOG = {
         due: 'Μια προγραμματισμένη εκτέλεση εκκρεμεί'
       },
       systemHealth: {
-        title: 'Υγεία Συστήματος',
-        breakdownLine: (drive, storage, apps, errors) => `Δίσκος ${drive} · Αποθήκευση ${storage} · Εφαρμογές ${apps} · Σφάλματα ${errors}`,
         driveDetailHeading: 'Λεπτομέρειες δίσκου'
       },
       driveHealth: {
@@ -7032,14 +6950,6 @@ export const CATALOG = {
       quarantineNote: 'Όλα τα παραπάνω παραμένουν στην Καραντίνα και μπορούν να επανέλθουν.',
       failedRegistryKeys: (n) => `Αποτυχία αφαίρεσης ${n} κλειδι${n === 1 ? 'ού' : 'ών'} μητρώου — αυτά συνήθως απαιτούν το Prune να εκτελείται ως διαχειριστής.`
     },
-    resourceMonitor: {
-      rightNow: 'Αυτή τη στιγμή',
-      cores: (n) => `${n} πυρήνες`,
-      cpu: 'CPU',
-      memory: 'Μνήμη',
-      disk: 'Δίσκος',
-      footer: 'Μια σάρωση διαβάζει ολόκληρο τον δίσκο, οπότε αυτά κινούνται όσο το Prune εργάζεται.'
-    },
     bugReport: {
       title: 'Αναφορά σφάλματος',
       intro: 'Ανοίγει ένα προσυμπληρωμένο ζήτημα στο GitHub. Το ίδιο το Prune δεν στέλνει τίποτα και βλέπετε τα πάντα πριν πάνε οπουδήποτε.',
@@ -7288,8 +7198,6 @@ export const CATALOG = {
         due: 'Hay una ejecución programada pendiente'
       },
       systemHealth: {
-        title: 'Salud del sistema',
-        breakdownLine: (drive, storage, apps, errors) => `Disco ${drive} · Almacenamiento ${storage} · Aplicaciones ${apps} · Errores ${errors}`,
         driveDetailHeading: 'Detalle del disco'
       },
       driveHealth: {
@@ -7818,14 +7726,6 @@ export const CATALOG = {
       quarantineNote: 'Todo lo anterior sigue en Cuarentena y se puede devolver.',
       failedRegistryKeys: (n) => `No se ${n === 1 ? 'pudo' : 'pudieron'} eliminar ${n} clave${n === 1 ? '' : 's'} del registro — estas suelen necesitar que Prune se ejecute como administrador.`
     },
-    resourceMonitor: {
-      rightNow: 'Ahora mismo',
-      cores: (n) => `${n} núcleos`,
-      cpu: 'CPU',
-      memory: 'Memoria',
-      disk: 'Disco',
-      footer: 'Un escaneo lee todo el disco, así que estos se mueven mientras Prune trabaja.'
-    },
     bugReport: {
       title: 'Informar de un error',
       intro: 'Abre una incidencia rellenada previamente en GitHub. Prune no envía nada por sí mismo y ves todo antes de que vaya a ningún sitio.',
@@ -8074,8 +7974,6 @@ export const CATALOG = {
         due: 'Plaanitud käik on tähtaja ületanud'
       },
       systemHealth: {
-        title: 'Süsteemi seisund',
-        breakdownLine: (drive, storage, apps, errors) => `Ketas ${drive} · Maht ${storage} · Rakendused ${apps} · Vead ${errors}`,
         driveDetailHeading: 'Ketta üksikasjad'
       },
       driveHealth: {
@@ -8604,14 +8502,6 @@ export const CATALOG = {
       quarantineNote: 'Kõik ülaltoodu on endiselt karantiinis ja saab tagasi panna.',
       failedRegistryKeys: (n) => `${n} registrivõti${n === 1 ? '' : 't'} ei õnnestunud eemaldada — need vajavad tavaliselt, et Prune töötaks administraatorina.`
     },
-    resourceMonitor: {
-      rightNow: 'Praegu',
-      cores: (n) => `${n} tuuma`,
-      cpu: 'Protsessor',
-      memory: 'Mälu',
-      disk: 'Ketas',
-      footer: 'Skannimine loeb kogu ketast, seega need liiguvad, kui Prune töötab.'
-    },
     bugReport: {
       title: 'Teata veast',
       intro: 'Avab GitHubis eeltäidetud probleemi. Prune ise ei saada midagi ja näed kõike enne, kui see kuhugi läheb.',
@@ -8860,8 +8750,6 @@ export const CATALOG = {
         due: 'Ajastettu ajo on myöhässä'
       },
       systemHealth: {
-        title: 'Järjestelmän kunto',
-        breakdownLine: (drive, storage, apps, errors) => `Levy ${drive} · Tallennustila ${storage} · Sovellukset ${apps} · Virheet ${errors}`,
         driveDetailHeading: 'Levyn tiedot'
       },
       driveHealth: {
@@ -9390,14 +9278,6 @@ export const CATALOG = {
       quarantineNote: 'Kaikki yllä oleva on edelleen karanteenissa ja voidaan palauttaa.',
       failedRegistryKeys: (n) => `${n} rekisteriavainta ei voitu poistaa — nämä vaativat yleensä, että Prune toimii järjestelmänvalvojana.`
     },
-    resourceMonitor: {
-      rightNow: 'Juuri nyt',
-      cores: (n) => `${n} ydintä`,
-      cpu: 'Suoritin',
-      memory: 'Muisti',
-      disk: 'Levy',
-      footer: 'Skannaus lukee koko levyn, joten nämä liikkuvat Prunen työskennellessä.'
-    },
     bugReport: {
       title: 'Ilmoita virheestä',
       intro: 'Avaa valmiiksi täytetyn ongelmailmoituksen GitHubissa. Prune ei lähetä itse mitään, ja näet kaiken ennen kuin se menee minnekään.',
@@ -9646,8 +9526,6 @@ export const CATALOG = {
         due: 'Une exécution programmée est due'
       },
       systemHealth: {
-        title: 'État du système',
-        breakdownLine: (drive, storage, apps, errors) => `Disque ${drive} · Stockage ${storage} · Applications ${apps} · Erreurs ${errors}`,
         driveDetailHeading: 'Détails du disque'
       },
       driveHealth: {
@@ -10176,14 +10054,6 @@ export const CATALOG = {
       quarantineNote: "Tout ce qui précède est toujours en Quarantaine et peut être remis en place.",
       failedRegistryKeys: (n) => `${n} clé${n === 1 ? '' : 's'} de registre n'${n === 1 ? 'a' : 'ont'} pas pu être supprimée${n === 1 ? '' : 's'} — celles-ci nécessitent généralement que Prune s'exécute en tant qu'administrateur.`
     },
-    resourceMonitor: {
-      rightNow: 'En ce moment',
-      cores: (n) => `${n} cœurs`,
-      cpu: 'CPU',
-      memory: 'Mémoire',
-      disk: 'Disque',
-      footer: 'Une analyse lit tout le disque, donc ces valeurs bougent pendant que Prune travaille.'
-    },
     bugReport: {
       title: 'Signaler un bug',
       intro: "Ouvre un ticket pré-rempli sur GitHub. Prune n'envoie rien lui-même et vous voyez tout avant que cela parte où que ce soit.",
@@ -10432,8 +10302,6 @@ export const CATALOG = {
         due: 'הרצה מתוזמנת ממתינה'
       },
       systemHealth: {
-        title: 'תקינות המערכת',
-        breakdownLine: (drive, storage, apps, errors) => `דיסק ${drive} · אחסון ${storage} · אפליקציות ${apps} · שגיאות ${errors}`,
         driveDetailHeading: 'פרטי הדיסק'
       },
       driveHealth: {
@@ -10962,14 +10830,6 @@ export const CATALOG = {
       quarantineNote: 'כל האמור לעיל עדיין נמצא בהסגר וניתן להחזירו.',
       failedRegistryKeys: (n) => `לא ניתן היה להסיר ${n} מפתחות רישום — אלה בדרך כלל דורשים ש-Prune ירוץ כמנהל.`
     },
-    resourceMonitor: {
-      rightNow: 'כרגע',
-      cores: (n) => `${n} ליבות`,
-      cpu: 'מעבד',
-      memory: 'זיכרון',
-      disk: 'דיסק',
-      footer: 'סריקה קוראת את כל הדיסק, כך שאלה משתנים בזמן ש-Prune עובד.'
-    },
     bugReport: {
       title: 'דיווח על באג',
       intro: 'פותח דיווח ממולא מראש ב-GitHub. Prune עצמו לא שולח דבר, ואתה רואה הכול לפני שזה הולך לאנשהו.',
@@ -11218,8 +11078,6 @@ export const CATALOG = {
         due: 'Egy ütemezett futás esedékes'
       },
       systemHealth: {
-        title: 'Rendszer Állapota',
-        breakdownLine: (drive, storage, apps, errors) => `Meghajtó ${drive} · Tárhely ${storage} · Alkalmazások ${apps} · Hibák ${errors}`,
         driveDetailHeading: 'Meghajtó Részletei'
       },
       driveHealth: {
@@ -11748,14 +11606,6 @@ export const CATALOG = {
       quarantineNote: 'A fentiek mind a karanténban maradnak, és visszatehetők.',
       failedRegistryKeys: (n) => `${n} rendszerleíró kulcsot nem sikerült eltávolítani — ezekhez általában rendszergazdaként futó Prune szükséges.`
     },
-    resourceMonitor: {
-      rightNow: 'Éppen most',
-      cores: (n) => `${n} mag`,
-      cpu: 'CPU',
-      memory: 'Memória',
-      disk: 'Lemez',
-      footer: 'Egy vizsgálat a teljes lemezt olvassa, ezért ezek mozognak, amíg a Prune dolgozik.'
-    },
     bugReport: {
       title: 'Hiba jelentése',
       intro: 'Megnyit egy előre kitöltött hibajegyet a GitHubon. A Prune maga nem küld semmit, és mindent látsz, mielőtt bárhová eljutna.',
@@ -12004,8 +11854,6 @@ export const CATALOG = {
         due: 'Ada proses terjadwal yang jatuh tempo'
       },
       systemHealth: {
-        title: 'Kesehatan Sistem',
-        breakdownLine: (drive, storage, apps, errors) => `Disk ${drive} · Penyimpanan ${storage} · Aplikasi ${apps} · Kesalahan ${errors}`,
         driveDetailHeading: 'Detail disk'
       },
       driveHealth: {
@@ -12534,14 +12382,6 @@ export const CATALOG = {
       quarantineNote: 'Semua di atas masih ada di Karantina dan dapat dikembalikan.',
       failedRegistryKeys: (n) => `${n} kunci registri tidak dapat dihapus — ini biasanya memerlukan Prune berjalan sebagai administrator.`
     },
-    resourceMonitor: {
-      rightNow: 'Saat ini',
-      cores: (n) => `${n} inti`,
-      cpu: 'CPU',
-      memory: 'Memori',
-      disk: 'Disk',
-      footer: 'Pemindaian membaca seluruh disk, jadi angka ini bergerak saat Prune bekerja.'
-    },
     bugReport: {
       title: 'Laporkan bug',
       intro: 'Membuka isu yang sudah terisi di GitHub. Prune sendiri tidak mengirim apa pun, dan Anda melihat semuanya sebelum dikirim ke mana pun.',
@@ -12790,8 +12630,6 @@ export const CATALOG = {
         due: 'Áætluð keyrsla er á gjalddaga'
       },
       systemHealth: {
-        title: 'Heilsa Kerfisins',
-        breakdownLine: (drive, storage, apps, errors) => `Diskur ${drive} · Geymsla ${storage} · Forrit ${apps} · Villur ${errors}`,
         driveDetailHeading: 'Nánar um diskinn'
       },
       driveHealth: {
@@ -13320,14 +13158,6 @@ export const CATALOG = {
       quarantineNote: 'Allt hér að ofan er enn í sóttkví og hægt er að setja það aftur.',
       failedRegistryKeys: (n) => `Ekki tókst að fjarlægja ${n} skráningarlykil${n === 1 ? '' : 'a'} — þessir þurfa yfirleitt að Prune keyri sem stjórnandi.`
     },
-    resourceMonitor: {
-      rightNow: 'Núna',
-      cores: (n) => `${n} kjarnar`,
-      cpu: 'Örgjörvi',
-      memory: 'Minni',
-      disk: 'Diskur',
-      footer: 'Skönnun les allan diskinn, svo þessar tölur breytast á meðan Prune vinnur.'
-    },
     bugReport: {
       title: 'Tilkynna villu',
       intro: 'Opnar útfyllt vandamál á GitHub. Prune sendir sjálft ekkert og þú sérð allt áður en það fer nokkuð.',
@@ -13576,8 +13406,6 @@ export const CATALOG = {
         due: 'Un\'esecuzione programmata è in scadenza'
       },
       systemHealth: {
-        title: 'Salute del Sistema',
-        breakdownLine: (drive, storage, apps, errors) => `Disco ${drive} · Archiviazione ${storage} · Applicazioni ${apps} · Errori ${errors}`,
         driveDetailHeading: 'Dettagli del disco'
       },
       driveHealth: {
@@ -14106,14 +13934,6 @@ export const CATALOG = {
       quarantineNote: 'Tutto quanto sopra è ancora in Quarantena e può essere rimesso a posto.',
       failedRegistryKeys: (n) => `Impossibile rimuovere ${n} chiav${n === 1 ? 'e' : 'i'} di registro — queste di solito richiedono che Prune sia eseguito come amministratore.`
     },
-    resourceMonitor: {
-      rightNow: 'In questo momento',
-      cores: (n) => `${n} core`,
-      cpu: 'CPU',
-      memory: 'Memoria',
-      disk: 'Disco',
-      footer: "Una scansione legge l'intero disco, quindi questi valori cambiano mentre Prune lavora."
-    },
     bugReport: {
       title: 'Segnala un bug',
       intro: 'Apre una segnalazione precompilata su GitHub. Prune non invia nulla da solo e vedi tutto prima che vada da qualche parte.',
@@ -14362,8 +14182,6 @@ export const CATALOG = {
         due: '予定された実行が期限を過ぎています'
       },
       systemHealth: {
-        title: 'システムの状態',
-        breakdownLine: (drive, storage, apps, errors) => `ドライブ ${drive} · ストレージ ${storage} · アプリ ${apps} · エラー ${errors}`,
         driveDetailHeading: 'ドライブの詳細'
       },
       driveHealth: {
@@ -14892,14 +14710,6 @@ export const CATALOG = {
       quarantineNote: '上記のものはすべて隔離場所に残っており、元に戻すことができます。',
       failedRegistryKeys: (n) => `${n}件のレジストリキーを削除できませんでした — これらは通常、Prune を管理者として実行する必要があります。`
     },
-    resourceMonitor: {
-      rightNow: '現在',
-      cores: (n) => `${n} コア`,
-      cpu: 'CPU',
-      memory: 'メモリ',
-      disk: 'ディスク',
-      footer: 'スキャンはディスク全体を読み取るため、Prune が作業している間はこれらの値が変動します。'
-    },
     bugReport: {
       title: 'バグを報告',
       intro: 'GitHub で入力済みの Issue を開きます。Prune 自体は何も送信せず、どこかへ送られる前にすべての内容を確認できます。',
@@ -15148,8 +14958,6 @@ export const CATALOG = {
         due: '예약된 실행이 지연되고 있습니다'
       },
       systemHealth: {
-        title: '시스템 상태',
-        breakdownLine: (drive, storage, apps, errors) => `드라이브 ${drive} · 저장 공간 ${storage} · 앱 ${apps} · 오류 ${errors}`,
         driveDetailHeading: '드라이브 세부정보'
       },
       driveHealth: {
@@ -15678,14 +15486,6 @@ export const CATALOG = {
       quarantineNote: '위의 모든 항목은 여전히 격리 공간에 있으며 되돌릴 수 있습니다.',
       failedRegistryKeys: (n) => `${n}개 레지스트리 키를 제거할 수 없습니다 — 이 항목들은 보통 Prune이 관리자로 실행되어야 합니다.`
     },
-    resourceMonitor: {
-      rightNow: '지금',
-      cores: (n) => `코어 ${n}개`,
-      cpu: 'CPU',
-      memory: '메모리',
-      disk: '디스크',
-      footer: '스캔은 디스크 전체를 읽기 때문에 Prune이 작업하는 동안 이 값들이 변합니다.'
-    },
     bugReport: {
       title: '버그 신고',
       intro: 'GitHub에서 미리 채워진 이슈를 엽니다. Prune 자체는 아무것도 보내지 않으며, 어디로든 전송되기 전에 모든 내용을 확인할 수 있습니다.',
@@ -15934,8 +15734,6 @@ export const CATALOG = {
         due: 'Suplanuotas vykdymas jau vėluoja'
       },
       systemHealth: {
-        title: 'Sistemos Būklė',
-        breakdownLine: (drive, storage, apps, errors) => `Diskas ${drive} · Saugykla ${storage} · Programos ${apps} · Klaidos ${errors}`,
         driveDetailHeading: 'Disko duomenys'
       },
       driveHealth: {
@@ -16464,14 +16262,6 @@ export const CATALOG = {
       quarantineNote: 'Visa tai, kas aukščiau, vis dar yra karantine ir gali būti grąžinta.',
       failedRegistryKeys: (n) => `Nepavyko pašalinti ${n} registro rakt${n === 1 ? 'o' : 'ų'} — jiems paprastai reikia, kad „Prune“ veiktų administratoriaus teisėmis.`
     },
-    resourceMonitor: {
-      rightNow: 'Dabar',
-      cores: (n) => `${n} branduoliai`,
-      cpu: 'Procesorius',
-      memory: 'Atmintis',
-      disk: 'Diskas',
-      footer: 'Nuskaitymas skaito visą diską, todėl šios reikšmės keičiasi, kol Prune dirba.'
-    },
     bugReport: {
       title: 'Pranešti apie klaidą',
       intro: 'Atidaro iš anksto užpildytą pranešimą „GitHub“. „Prune“ pats nieko nesiunčia, o jūs viską matote, kol niekur nenueina.',
@@ -16720,8 +16510,6 @@ export const CATALOG = {
         due: 'Larian berjadual sudah tiba masanya'
       },
       systemHealth: {
-        title: 'Kesihatan Sistem',
-        breakdownLine: (drive, storage, apps, errors) => `Cakera ${drive} · Storan ${storage} · Aplikasi ${apps} · Ralat ${errors}`,
         driveDetailHeading: 'Butiran cakera'
       },
       driveHealth: {
@@ -17250,14 +17038,6 @@ export const CATALOG = {
       quarantineNote: 'Semua di atas masih dalam Kuarantin dan boleh dikembalikan.',
       failedRegistryKeys: (n) => `${n} kekunci registri tidak dapat dikeluarkan — ini biasanya memerlukan Prune berjalan sebagai pentadbir.`
     },
-    resourceMonitor: {
-      rightNow: 'Sekarang',
-      cores: (n) => `${n} teras`,
-      cpu: 'CPU',
-      memory: 'Memori',
-      disk: 'Cakera',
-      footer: 'Imbasan membaca seluruh cakera, jadi nilai ini berubah semasa Prune berfungsi.'
-    },
     bugReport: {
       title: 'Laporkan pepijat',
       intro: 'Membuka isu yang telah diisi terlebih dahulu di GitHub. Prune sendiri tidak menghantar apa-apa, dan anda melihat semuanya sebelum ia dihantar ke mana-mana.',
@@ -17506,8 +17286,6 @@ export const CATALOG = {
         due: 'En planlagt kjøring forfaller'
       },
       systemHealth: {
-        title: 'Systemhelse',
-        breakdownLine: (drive, storage, apps, errors) => `Disk ${drive} · Lagringsplass ${storage} · Programmer ${apps} · Feil ${errors}`,
         driveDetailHeading: 'Diskdetaljer'
       },
       driveHealth: {
@@ -18036,14 +17814,6 @@ export const CATALOG = {
       quarantineNote: 'Alt over er fortsatt i karantene og kan settes tilbake.',
       failedRegistryKeys: (n) => `${n} registernøk${n === 1 ? 'kel' : 'ler'} kunne ikke fjernes — disse krever vanligvis at Prune kjører som administrator.`
     },
-    resourceMonitor: {
-      rightNow: 'Akkurat nå',
-      cores: (n) => `${n} kjerner`,
-      cpu: 'CPU',
-      memory: 'Minne',
-      disk: 'Disk',
-      footer: 'Et søk leser hele disken, så disse verdiene beveger seg mens Prune jobber.'
-    },
     bugReport: {
       title: 'Rapporter en feil',
       intro: 'Åpner en forhåndsutfylt sak på GitHub. Prune sender ikke noe selv, og du ser alt før det går noe sted.',
@@ -18292,8 +18062,6 @@ export const CATALOG = {
         due: 'Een geplande uitvoering is verschuldigd'
       },
       systemHealth: {
-        title: 'Systeemstatus',
-        breakdownLine: (drive, storage, apps, errors) => `Schijf ${drive} · Opslag ${storage} · Toepassingen ${apps} · Fouten ${errors}`,
         driveDetailHeading: 'Schijfdetails'
       },
       driveHealth: {
@@ -18822,14 +18590,6 @@ export const CATALOG = {
       quarantineNote: 'Alles hierboven staat nog in Quarantaine en kan worden teruggezet.',
       failedRegistryKeys: (n) => `${n} registersleutel${n === 1 ? '' : 's'} kon${n === 1 ? '' : 'den'} niet worden verwijderd — deze vereisen meestal dat Prune als beheerder wordt uitgevoerd.`
     },
-    resourceMonitor: {
-      rightNow: 'Op dit moment',
-      cores: (n) => `${n} cores`,
-      cpu: 'CPU',
-      memory: 'Geheugen',
-      disk: 'Schijf',
-      footer: 'Een scan leest de hele schijf, dus deze waarden bewegen terwijl Prune werkt.'
-    },
     bugReport: {
       title: 'Een bug melden',
       intro: 'Opent een vooraf ingevuld issue op GitHub. Prune verstuurt zelf niets en u ziet alles voordat het ergens heen gaat.',
@@ -19078,8 +18838,6 @@ export const CATALOG = {
         due: 'Zaplanowane uruchomienie jest zaległe'
       },
       systemHealth: {
-        title: 'Stan Systemu',
-        breakdownLine: (drive, storage, apps, errors) => `Dysk ${drive} · Pamięć ${storage} · Aplikacje ${apps} · Błędy ${errors}`,
         driveDetailHeading: 'Szczegóły dysku'
       },
       driveHealth: {
@@ -19608,14 +19366,6 @@ export const CATALOG = {
       quarantineNote: 'Wszystko powyższe wciąż znajduje się w kwarantannie i można to przywrócić.',
       failedRegistryKeys: (n) => `Nie udało się usunąć ${n} klucz${n === 1 ? 'a' : 'y'} rejestru — do tego zwykle wymagane jest uruchomienie Prune jako administrator.`
     },
-    resourceMonitor: {
-      rightNow: 'W tej chwili',
-      cores: (n) => `${n} rdzeni`,
-      cpu: 'CPU',
-      memory: 'Pamięć',
-      disk: 'Dysk',
-      footer: 'Skanowanie odczytuje cały dysk, więc te wartości zmieniają się, gdy Prune pracuje.'
-    },
     bugReport: {
       title: 'Zgłoś błąd',
       intro: 'Otwiera wstępnie wypełnione zgłoszenie w serwisie GitHub. Prune sam niczego nie wysyła, a wszystko widzisz, zanim gdziekolwiek trafi.',
@@ -19864,8 +19614,6 @@ export const CATALOG = {
         due: 'مهالويش شوی چلون اوس اړین دی'
       },
       systemHealth: {
-        title: 'د سیسټم روغتیا',
-        breakdownLine: (drive, storage, apps, errors) => `ډرایو ${drive} · ذخیره ${storage} · اپلیکیشنونه ${apps} · تېروتنې ${errors}`,
         driveDetailHeading: 'د ډرایو توضیحات'
       },
       driveHealth: {
@@ -20394,14 +20142,6 @@ export const CATALOG = {
       quarantineNote: 'پورته ټول لا هم په قرنطین کې دي او بیرته ایښودل کیدی شي.',
       failedRegistryKeys: (n) => `${n} د راجستر کیلي لرې نشوای کیدی — دا معمولاً اړتیا لري چې Prune د اډمین په توګه وچلیږي.`
     },
-    resourceMonitor: {
-      rightNow: 'همدا اوس',
-      cores: (n) => `${n} کورونه`,
-      cpu: 'پروسیسر',
-      memory: 'حافظه',
-      disk: 'ډیسک',
-      footer: 'یوه سکن ټوله ډیسک لولي، نو دا ارزښتونه هغه وخت بدلیږي چې Prune کار کوي.'
-    },
     bugReport: {
       title: 'د بګ راپور ورکړئ',
       intro: 'په GitHub کې مخکې ډکه شوې مسئله پرانیزي. Prune پخپله هیڅ نه لیږي، او تاسو هر څه مخکې له دې وینئ چې چیرته ولاړ شي.',
@@ -20650,8 +20390,6 @@ export const CATALOG = {
         due: 'Uma execução agendada está pendente'
       },
       systemHealth: {
-        title: 'Saúde do Sistema',
-        breakdownLine: (drive, storage, apps, errors) => `Disco ${drive} · Armazenamento ${storage} · Aplicativos ${apps} · Erros ${errors}`,
         driveDetailHeading: 'Detalhes do disco'
       },
       driveHealth: {
@@ -21180,14 +20918,6 @@ export const CATALOG = {
       quarantineNote: 'Tudo acima ainda está na Quarentena e pode ser devolvido.',
       failedRegistryKeys: (n) => `${n} chave${n === 1 ? '' : 's'} de registro não p${n === 1 ? 'ôde' : 'uderam'} ser removida${n === 1 ? '' : 's'} — estas geralmente exigem que o Prune seja executado como administrador.`
     },
-    resourceMonitor: {
-      rightNow: 'Agora mesmo',
-      cores: (n) => `${n} núcleos`,
-      cpu: 'CPU',
-      memory: 'Memória',
-      disk: 'Disco',
-      footer: 'Uma varredura lê o disco inteiro, então esses valores mudam enquanto o Prune trabalha.'
-    },
     bugReport: {
       title: 'Relatar um bug',
       intro: 'Abre um problema pré-preenchido no GitHub. O Prune não envia nada por conta própria e você vê tudo antes de qualquer envio.',
@@ -21436,8 +21166,6 @@ export const CATALOG = {
         due: 'Uma execução agendada está pendente'
       },
       systemHealth: {
-        title: 'Saúde do Sistema',
-        breakdownLine: (drive, storage, apps, errors) => `Disco ${drive} · Armazenamento ${storage} · Aplicações ${apps} · Erros ${errors}`,
         driveDetailHeading: 'Detalhes do disco'
       },
       driveHealth: {
@@ -21966,14 +21694,6 @@ export const CATALOG = {
       quarantineNote: 'Tudo acima ainda está na Quarentena e pode ser reposto.',
       failedRegistryKeys: (n) => `${n} chave${n === 1 ? '' : 's'} de registo não p${n === 1 ? 'ôde' : 'uderam'} ser removida${n === 1 ? '' : 's'} — estas normalmente exigem que o Prune seja executado como administrador.`
     },
-    resourceMonitor: {
-      rightNow: 'Neste momento',
-      cores: (n) => `${n} núcleos`,
-      cpu: 'CPU',
-      memory: 'Memória',
-      disk: 'Disco',
-      footer: 'Uma análise lê todo o disco, por isso estes valores mudam enquanto o Prune trabalha.'
-    },
     bugReport: {
       title: 'Comunicar um erro',
       intro: 'Abre um problema pré-preenchido no GitHub. O Prune não envia nada por si só e vê tudo antes de qualquer envio.',
@@ -22222,8 +21942,6 @@ export const CATALOG = {
         due: 'O rulare programată este scadentă'
       },
       systemHealth: {
-        title: 'Starea Sistemului',
-        breakdownLine: (drive, storage, apps, errors) => `Disc ${drive} · Stocare ${storage} · Aplicații ${apps} · Erori ${errors}`,
         driveDetailHeading: 'Detalii disc'
       },
       driveHealth: {
@@ -22752,14 +22470,6 @@ export const CATALOG = {
       quarantineNote: 'Tot ce este mai sus este încă în Carantină și poate fi pus înapoi.',
       failedRegistryKeys: (n) => `${n} che${n === 1 ? 'ie' : 'i'} de registru nu ${n === 1 ? 'a putut fi eliminată' : 'au putut fi eliminate'} — acestea necesită de obicei ca Prune să ruleze ca administrator.`
     },
-    resourceMonitor: {
-      rightNow: 'Chiar acum',
-      cores: (n) => `${n} nuclee`,
-      cpu: 'CPU',
-      memory: 'Memorie',
-      disk: 'Disc',
-      footer: 'O scanare citește întregul disc, așa că aceste valori se mișcă în timp ce Prune lucrează.'
-    },
     bugReport: {
       title: 'Raportează o eroare',
       intro: 'Deschide o problemă precompletată pe GitHub. Prune nu trimite nimic singur și vezi totul înainte să ajungă oriunde.',
@@ -23008,8 +22718,6 @@ export const CATALOG = {
         due: 'Наступил срок запланированного запуска'
       },
       systemHealth: {
-        title: 'Состояние Системы',
-        breakdownLine: (drive, storage, apps, errors) => `Диск ${drive} · Хранилище ${storage} · Приложения ${apps} · Ошибки ${errors}`,
         driveDetailHeading: 'Сведения о диске'
       },
       driveHealth: {
@@ -23538,14 +23246,6 @@ export const CATALOG = {
       quarantineNote: 'Всё вышеперечисленное всё ещё находится в карантине и может быть возвращено обратно.',
       failedRegistryKeys: (n) => `Не удалось удалить ${n} ключей реестра — обычно для этого требуется, чтобы Prune был запущен от имени администратора.`
     },
-    resourceMonitor: {
-      rightNow: 'Прямо сейчас',
-      cores: (n) => `${n} ядер`,
-      cpu: 'Процессор',
-      memory: 'Память',
-      disk: 'Диск',
-      footer: 'Сканирование читает весь диск, поэтому эти значения меняются, пока Prune работает.'
-    },
     bugReport: {
       title: 'Сообщить об ошибке',
       intro: 'Открывает заполненную заранее заявку на GitHub. Сам Prune ничего не отправляет, и вы видите всё, прежде чем это куда-либо уйдёт.',
@@ -23794,8 +23494,6 @@ export const CATALOG = {
         due: 'Naplánované spustenie je splatné'
       },
       systemHealth: {
-        title: 'Stav Systému',
-        breakdownLine: (drive, storage, apps, errors) => `Disk ${drive} · Úložisko ${storage} · Aplikácie ${apps} · Chyby ${errors}`,
         driveDetailHeading: 'Podrobnosti o disku'
       },
       driveHealth: {
@@ -24324,14 +24022,6 @@ export const CATALOG = {
       quarantineNote: 'Všetko vyššie je stále v karanténe a možno to vrátiť späť.',
       failedRegistryKeys: (n) => `Nepodarilo sa odstrániť ${n} kľúč${n === 1 ? '' : (n < 5 ? 'e' : 'ov')} registra — tieto zvyčajne vyžadujú, aby Prune bežal ako správca.`
     },
-    resourceMonitor: {
-      rightNow: 'Práve teraz',
-      cores: (n) => `${n} jadier`,
-      cpu: 'CPU',
-      memory: 'Pamäť',
-      disk: 'Disk',
-      footer: 'Kontrola číta celý disk, takže tieto hodnoty sa menia, kým Prune pracuje.'
-    },
     bugReport: {
       title: 'Nahlásiť chybu',
       intro: 'Otvorí predvyplnený problém na GitHube. Prune sám nič neodosiela a všetko uvidíte skôr, než to niekam pôjde.',
@@ -24580,8 +24270,6 @@ export const CATALOG = {
         due: 'Një ekzekutim i planifikuar është i vonuar'
       },
       systemHealth: {
-        title: 'Shëndeti i Sistemit',
-        breakdownLine: (drive, storage, apps, errors) => `Disku ${drive} · Hapësira ${storage} · Aplikacionet ${apps} · Gabimet ${errors}`,
         driveDetailHeading: 'Detajet e diskut'
       },
       driveHealth: {
@@ -25110,14 +24798,6 @@ export const CATALOG = {
       quarantineNote: 'Gjithçka më sipër është ende në Karantinë dhe mund të vendoset përsëri.',
       failedRegistryKeys: (n) => `Nuk u hoqën dot ${n} çelësa regjistri — këto zakonisht kërkojnë që Prune të ekzekutohet si administrator.`
     },
-    resourceMonitor: {
-      rightNow: 'Tani',
-      cores: (n) => `${n} bërthama`,
-      cpu: 'CPU',
-      memory: 'Memoria',
-      disk: 'Disku',
-      footer: 'Një skanim lexon të gjithë diskun, kështu që këto vlera lëvizin ndërsa Prune po punon.'
-    },
     bugReport: {
       title: 'Raporto një defekt',
       intro: 'Hap një problem të parambushur në GitHub. Vetë Prune nuk dërgon asgjë dhe ti sheh gjithçka para se të shkojë diku.',
@@ -25366,8 +25046,6 @@ export const CATALOG = {
         due: 'Заказано покретање је доспело'
       },
       systemHealth: {
-        title: 'Стање Система',
-        breakdownLine: (drive, storage, apps, errors) => `Диск ${drive} · Складиште ${storage} · Апликације ${apps} · Грешке ${errors}`,
         driveDetailHeading: 'Детаљи диска'
       },
       driveHealth: {
@@ -25896,14 +25574,6 @@ export const CATALOG = {
       quarantineNote: 'Све горе наведено је и даље у карантини и може се вратити.',
       failedRegistryKeys: (n) => `Није могуће уклонити ${n} кључ${n === 1 ? '' : 'а'} регистра — ово обично захтева да Prune буде покренут као администратор.`
     },
-    resourceMonitor: {
-      rightNow: 'Управо сада',
-      cores: (n) => `${n} језгара`,
-      cpu: 'Процесор',
-      memory: 'Меморија',
-      disk: 'Диск',
-      footer: 'Скенирање чита цео диск, тако да се ове вредности мењају док Prune ради.'
-    },
     bugReport: {
       title: 'Prijavi grešku',
       intro: 'Otvara unapred popunjen prijavu na GitHub-u. Prune sam ne šalje ništa, a vi vidite sve pre nego što ode bilo gde.',
@@ -26152,8 +25822,6 @@ export const CATALOG = {
         due: 'En schemalagd körning är försenad'
       },
       systemHealth: {
-        title: 'Systemhälsa',
-        breakdownLine: (drive, storage, apps, errors) => `Disk ${drive} · Lagring ${storage} · Program ${apps} · Fel ${errors}`,
         driveDetailHeading: 'Diskdetaljer'
       },
       driveHealth: {
@@ -26682,14 +26350,6 @@ export const CATALOG = {
       quarantineNote: 'Allt ovan finns fortfarande i karantän och kan sättas tillbaka.',
       failedRegistryKeys: (n) => `${n} registernyck${n === 1 ? 'el' : 'lar'} kunde inte tas bort — dessa kräver vanligtvis att Prune körs som administratör.`
     },
-    resourceMonitor: {
-      rightNow: 'Just nu',
-      cores: (n) => `${n} kärnor`,
-      cpu: 'CPU',
-      memory: 'Minne',
-      disk: 'Disk',
-      footer: 'En sökning läser hela disken, så dessa värden rör sig medan Prune arbetar.'
-    },
     bugReport: {
       title: 'Rapportera ett fel',
       intro: 'Öppnar ett förifyllt ärende på GitHub. Prune skickar inget själv, och du ser allt innan det går någonstans.',
@@ -26938,8 +26598,6 @@ export const CATALOG = {
         due: 'ถึงกำหนดการทำงานตามตารางเวลาแล้ว'
       },
       systemHealth: {
-        title: 'สุขภาพระบบ',
-        breakdownLine: (drive, storage, apps, errors) => `ไดรฟ์ ${drive} · พื้นที่จัดเก็บ ${storage} · แอป ${apps} · ข้อผิดพลาด ${errors}`,
         driveDetailHeading: 'รายละเอียดไดรฟ์'
       },
       driveHealth: {
@@ -27468,14 +27126,6 @@ export const CATALOG = {
       quarantineNote: 'ทุกอย่างข้างต้นยังคงอยู่ในกักกันและสามารถนำกลับมาได้',
       failedRegistryKeys: (n) => `ไม่สามารถลบ ${n} คีย์รีจิสทรีได้ — โดยปกติสิ่งเหล่านี้ต้องการให้ Prune ทำงานในฐานะผู้ดูแลระบบ`
     },
-    resourceMonitor: {
-      rightNow: 'ตอนนี้',
-      cores: (n) => `${n} คอร์`,
-      cpu: 'ซีพียู',
-      memory: 'หน่วยความจำ',
-      disk: 'ดิสก์',
-      footer: 'การสแกนอ่านทั้งดิสก์ ค่าเหล่านี้จึงเปลี่ยนแปลงขณะที่ Prune กำลังทำงาน'
-    },
     bugReport: {
       title: 'รายงานข้อบกพร่อง',
       intro: 'เปิดปัญหาที่กรอกไว้ล่วงหน้าบน GitHub Prune ไม่ส่งอะไรเอง และคุณจะเห็นทุกอย่างก่อนที่จะถูกส่งไปที่ใด',
@@ -27724,8 +27374,6 @@ export const CATALOG = {
         due: 'Zamanlanmış bir çalıştırmanın vakti geldi'
       },
       systemHealth: {
-        title: 'Sistem Sağlığı',
-        breakdownLine: (drive, storage, apps, errors) => `Disk ${drive} · Depolama ${storage} · Uygulamalar ${apps} · Hatalar ${errors}`,
         driveDetailHeading: 'Disk ayrıntıları'
       },
       driveHealth: {
@@ -28254,14 +27902,6 @@ export const CATALOG = {
       quarantineNote: 'Yukarıdakilerin hepsi hâlâ Karantinada ve geri konulabilir.',
       failedRegistryKeys: (n) => `${n} kayıt defteri anahtarı kaldırılamadı — bunlar genellikle Prune'un yönetici olarak çalışmasını gerektirir.`
     },
-    resourceMonitor: {
-      rightNow: 'Şu anda',
-      cores: (n) => `${n} çekirdek`,
-      cpu: 'İşlemci',
-      memory: 'Bellek',
-      disk: 'Disk',
-      footer: 'Bir tarama tüm diski okur, bu yüzden Prune çalışırken bu değerler hareket eder.'
-    },
     bugReport: {
       title: 'Hata bildir',
       intro: "GitHub'da önceden doldurulmuş bir sorun açar. Prune kendisi hiçbir şey göndermez ve herhangi bir yere gitmeden önce her şeyi görürsünüz.",
@@ -28510,8 +28150,6 @@ export const CATALOG = {
         due: 'Настав час запланованого запуску'
       },
       systemHealth: {
-        title: 'Стан Системи',
-        breakdownLine: (drive, storage, apps, errors) => `Диск ${drive} · Сховище ${storage} · Застосунки ${apps} · Помилки ${errors}`,
         driveDetailHeading: 'Відомості про диск'
       },
       driveHealth: {
@@ -29040,14 +28678,6 @@ export const CATALOG = {
       quarantineNote: 'Усе вищезазначене все ще перебуває в карантині і може бути повернуто.',
       failedRegistryKeys: (n) => `Не вдалося видалити ${n} ключів реєстру — зазвичай для цього потрібно, щоб Prune було запущено від імені адміністратора.`
     },
-    resourceMonitor: {
-      rightNow: 'Просто зараз',
-      cores: (n) => `${n} ядер`,
-      cpu: 'Процесор',
-      memory: "Пам'ять",
-      disk: 'Диск',
-      footer: 'Сканування читає весь диск, тому ці значення змінюються, поки Prune працює.'
-    },
     bugReport: {
       title: 'Повідомити про помилку',
       intro: 'Відкриває заздалегідь заповнену заявку на GitHub. Сам Prune нічого не надсилає, і ви бачите все, перш ніж це кудись піде.',
@@ -29296,8 +28926,6 @@ export const CATALOG = {
         due: 'Đã đến hạn một lần chạy theo lịch'
       },
       systemHealth: {
-        title: 'Tình Trạng Hệ Thống',
-        breakdownLine: (drive, storage, apps, errors) => `Ổ đĩa ${drive} · Dung lượng ${storage} · Ứng dụng ${apps} · Lỗi ${errors}`,
         driveDetailHeading: 'Chi tiết ổ đĩa'
       },
       driveHealth: {
@@ -29826,14 +29454,6 @@ export const CATALOG = {
       quarantineNote: 'Tất cả những gì ở trên vẫn còn trong Cách ly và có thể được đưa trở lại.',
       failedRegistryKeys: (n) => `Không thể xóa ${n} khóa registry — những mục này thường yêu cầu Prune chạy với quyền quản trị viên.`
     },
-    resourceMonitor: {
-      rightNow: 'Ngay bây giờ',
-      cores: (n) => `${n} lõi`,
-      cpu: 'CPU',
-      memory: 'Bộ nhớ',
-      disk: 'Ổ đĩa',
-      footer: 'Một lượt quét đọc toàn bộ ổ đĩa, vì vậy các giá trị này thay đổi trong khi Prune đang hoạt động.'
-    },
     bugReport: {
       title: 'Báo lỗi',
       intro: 'Mở một vấn đề được điền sẵn trên GitHub. Bản thân Prune không gửi gì, và bạn thấy mọi thứ trước khi nó đi đâu.',
@@ -30082,8 +29702,6 @@ export const CATALOG = {
         due: '一次计划运行已到期'
       },
       systemHealth: {
-        title: '系统健康状况',
-        breakdownLine: (drive, storage, apps, errors) => `驱动器 ${drive} · 存储 ${storage} · 应用 ${apps} · 错误 ${errors}`,
         driveDetailHeading: '驱动器详情'
       },
       driveHealth: {
@@ -30612,14 +30230,6 @@ export const CATALOG = {
       quarantineNote: '以上所有内容仍在隔离区中，可以恢复。',
       failedRegistryKeys: (n) => `${n} 个注册表项无法删除——这些通常需要 Prune 以管理员身份运行。`
     },
-    resourceMonitor: {
-      rightNow: '当前',
-      cores: (n) => `${n} 核`,
-      cpu: 'CPU',
-      memory: '内存',
-      disk: '磁盘',
-      footer: '扫描会读取整个磁盘，因此在 Prune 工作时这些数值会变化。'
-    },
     bugReport: {
       title: '报告错误',
       intro: '在 GitHub 上打开一个预先填好的问题。Prune 本身不会发送任何内容，在发送到任何地方之前，你都能看到全部内容。',
@@ -30868,8 +30478,6 @@ export const CATALOG = {
         due: '一次排程執行已到期'
       },
       systemHealth: {
-        title: '系統健康狀態',
-        breakdownLine: (drive, storage, apps, errors) => `硬碟 ${drive} · 儲存空間 ${storage} · 應用程式 ${apps} · 錯誤 ${errors}`,
         driveDetailHeading: '硬碟詳情'
       },
       driveHealth: {
@@ -31397,14 +31005,6 @@ export const CATALOG = {
       restorePointFallback: '無法使用',
       quarantineNote: '以上所有內容仍在隔離區中，可以復原。',
       failedRegistryKeys: (n) => `${n} 個登錄機碼無法刪除——這些通常需要 Prune 以系統管理員身分執行。`
-    },
-    resourceMonitor: {
-      rightNow: '目前',
-      cores: (n) => `${n} 核心`,
-      cpu: 'CPU',
-      memory: '記憶體',
-      disk: '磁碟',
-      footer: '掃描會讀取整個磁碟，因此在 Prune 運作時這些數值會變動。'
     },
     bugReport: {
       title: '回報錯誤',
