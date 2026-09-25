@@ -149,7 +149,7 @@ function Duplicates() {
   return (
     <div className="px-12 py-10 max-w-[1400px]">
       <h1 className="display-heading text-[30px] leading-none mb-2">{t('duplicates.title')}</h1>
-      <p className="text-[13px] text-[color:var(--text-secondary)] mb-6 max-w-[64ch]">
+      <p className="text-[13px] text-[color:var(--text-secondary)] mb-6 max-w-[110ch]">
         {t('duplicates.subtitle')}
       </p>
 

@@ -428,7 +428,7 @@ function DeepClean() {
     <div className="h-full flex flex-col">
       <div className="flex-1 flex flex-col min-h-0 overflow-y-auto px-12 pt-10 pb-6 max-w-[1600px] w-full">
         <h1 className="display-heading text-[30px] leading-none mb-2">{t('deepClean.title')}</h1>
-        <p className="text-[13px] text-[color:var(--text-secondary)] mb-6 max-w-[62ch]">
+        <p className="text-[13px] text-[color:var(--text-secondary)] mb-6 max-w-[110ch]">
           {t('deepClean.subtitle')}
         </p>
 
