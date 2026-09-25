@@ -161,11 +161,11 @@ describe('narrow windows', () => {
     const actionCell = (row) => within(row).getAllByRole('cell').at(-1);
     const row = screen.getByText('Steam').closest('[role="row"]');
     expect(actionCell(row).className).toContain('sticky');
-    expect(actionCell(row).className).toContain('right-0');
+    expect(actionCell(row).className).toContain('right-2');
     const header = container.querySelector('[data-table-header]');
     expect(header.className).toContain('sticky');
     expect(header.className).toContain('top-0');
-    expect(header.lastElementChild.className).toContain('right-0');
+    expect(header.lastElementChild.className).toContain('right-2');
   });
 
   it('paints no background on the sticky cell at rest, in the row or the header, and no opaque header bar', async () => {
