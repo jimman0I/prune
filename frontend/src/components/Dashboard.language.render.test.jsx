@@ -53,7 +53,7 @@ describe('the Dashboard in another language', () => {
     expect(screen.getByText('Εγκατεστημένες εφαρμογές')).toBeTruthy();
     expect(screen.getByText('Άχρηστα αρχεία')).toBeTruthy();
     expect(screen.getByText('δεν έχει μετρηθεί')).toBeTruthy();
-    expect(screen.getByText('Η μέτρηση διατρέχει κάθε διαδρομή καθαρισμού στον δίσκο — περίπου μισό λεπτό.')).toBeTruthy();
+    expect(screen.getByText('Η μέτρηση διατρέχει τη διαδρομή κάθε καθαριστή στον δίσκο — περίπου μισό λεπτό.')).toBeTruthy();
     expect(screen.getByRole('button', { name: 'Μέτρηση' })).toBeTruthy();
     expect(screen.getByRole('button', { name: 'Πρόσφατη δραστηριότητα' })).toBeTruthy();
     // A chevron and aria-expanded now say hide/show; the words are gone.
@@ -96,7 +96,7 @@ describe('the Dashboard in another language', () => {
 
   it('says a broken app count, and offers a translated Review button', async () => {
     render([{ id: 'a', health: { orphaned: true } }]);
-    expect(await screen.findByText('1 απομεινάρια από αποτυχημένη απεγκατάσταση')).toBeTruthy();
+    expect(await screen.findByText('1 κατάλοιπο από αποτυχημένη απεγκατάσταση')).toBeTruthy();
     expect(screen.getByRole('button', { name: 'Έλεγχος' })).toBeTruthy();
   });
 

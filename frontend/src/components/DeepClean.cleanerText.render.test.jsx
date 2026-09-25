@@ -91,7 +91,7 @@ beforeEach(() => {
   streamDeepCleanExecute.mockImplementation(() => new Promise(() => {}));
 });
 
-const ready = () => screen.findByRole('heading', { name: 'Βαθύς Καθαρισμός' });
+const ready = () => screen.findByRole('heading', { name: 'Βαθύς καθαρισμός' });
 const filterBox = () => screen.getByRole('textbox');
 
 describe('Deep Clean rule text, in Greek', () => {

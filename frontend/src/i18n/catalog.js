@@ -835,7 +835,7 @@ export const CATALOG = {
       reportBug: "Rapporteer 'n fout",
       dashboard: 'Kontroleskerm', diskMap: 'Skyfkaart', applications: 'Toepassings',
       quarantine: 'Karantyn', settings: 'Instellings', startup: 'Opstart',
-      duplicates: 'Duplikate', deepClean: 'Grondige Skoonmaak',
+      duplicates: 'Duplikate', deepClean: "Diep Skoonmaak",
       landmark: 'Hoof'
     },
     settings: {
@@ -875,7 +875,7 @@ export const CATALOG = {
       },
       autoQuarantine: {
         title: 'Outo-Karantyn',
-        description: "Diep Skoonmaak skuif wat dit vat na Prune se eie Karantyn, waar jy dit kan terugsit. Skakel dit af en dit gaan eerder na die Windows-asblik toe — steeds herwinbaar, net iewers wat jy reeds weet hoe om leeg te maak."
+        description: "Diep Skoonmaak skuif wat dit vat na Prune se eie Karantyn, waar jy dit kan terugsit. Skakel dit af en dit gaan eerder na die Windows-asblik toe — steeds herstelbaar, net iewers wat jy reeds weet hoe om leeg te maak."
       },
       skipRecent: {
         title: 'Los onlangse lêers uit',
@@ -900,7 +900,7 @@ export const CATALOG = {
       },
       quarantineMaxSize: {
         title: "Grootte-limiet vir karantyn",
-        description: "'n Perk op die hele Karantyn-vouer. Daarbo gaan die oudste rugsteune eerste — die nuutste een word nooit laat val nie, sodat iets groot wat jy pas verwyder het herwinbaar bly selfs al is dit groter as die perk op sy eie. Los dit leeg vir geen perk nie.",
+        description: "'n Perk op die hele Karantyn-vouer. Daarbo gaan die oudste rugsteune eerste — die nuutste een word nooit laat val nie, sodat iets groot wat jy pas verwyder het herstelbaar bly selfs al is dit groter as die perk op sy eie. Los dit leeg vir geen perk nie.",
         noLimitPlaceholder: 'Geen perk',
         gbUnit: 'GB',
         ariaLabel: 'Maksimum karantyngrootte in gigagrepe'
@@ -941,7 +941,7 @@ export const CATALOG = {
       warningConfirmations: {
         title: 'Waarskuwingbevestigings',
         allAsk: 'Elke skoonmaker wat data verloor vra voordat dit loop.',
-        someSet: (count) => `${count} skoonmaak-waarskuwing${count === 1 ? '' : 's'} gestel om nie weer te vra nie.`,
+        someSet: (count) => `${count} skoonmaker-waarskuwing${count === 1 ? '' : 's'} gestel om nie weer te vra nie.`,
         reset: 'Stel waarskuwingbevestigings terug'
       },
       uninstallTab: {
@@ -968,13 +968,13 @@ export const CATALOG = {
           description: 'Die oorsig open met alles wat gevind is gemerk. Af, open dit met niks gemerk nie en jy kies.'
         },
         keepHistory: {
-          title: 'Hou \'n deïnstallasiegeskiedenis',
+          title: "Hou 'n deïnstalleringsgeskiedenis",
           description: "Die paneelbord se lys van onlangse verwyderings en die spasie wat hulle vrygemaak het. Af, word niks nuuts aangeteken nie."
         },
         destinationHeading: 'Oorblyfsellêers gaan na',
         leftoverOptions: {
-          quarantine: { label: 'Karantyn', description: "Geskuif na Prune se eie rugsteun, en herwinbaar vanaf die Karantyn-skerm. Die verstek." },
-          recycle: { label: 'Die Asblik', description: "Herwinbaar vanaf Windows se eie asblik, en vrygemaak wanneer jy dit leegmaak." },
+          quarantine: { label: 'Karantyn', description: "Geskuif na Prune se eie rugsteun, en herstelbaar vanaf die Karantyn-skerm. Die verstek." },
+          recycle: { label: 'Die Asblik', description: "Herstelbaar vanaf Windows se eie asblik, en vrygemaak wanneer jy dit leegmaak." },
           permanent: { label: 'Verwyder permanent', description: 'Reguit verwyder. Niks om te herstel nie.' }
         },
         permanentWarning: "Oorblyfsellêers sal reguit verwyder word en kan nie herstel word nie, van Karantyn of enige ander plek af. Kyk die lys na voordat jy dit bevestig.",
@@ -1051,7 +1051,7 @@ export const CATALOG = {
       },
       apps: {
         label: "Geïnstalleerde toepassings",
-        broken: (count) => `${count} agtergelaat deur 'n mislukte deïnstallasie`,
+        broken: (count) => `${count} agtergelaat deur 'n mislukte deïnstallering`,
         noBroken: 'Geen stukkende inskrywings nie.',
         review: 'Hersien',
         manage: 'Bestuur'
@@ -1059,12 +1059,12 @@ export const CATALOG = {
       junk: {
         label: 'Rommellêers',
         notMeasured: 'nie gemeet nie',
-        description: "Om te meet loop deur elke skoonmaakpad op die skyf — omtrent 'n halwe minuut.",
+        description: "Om te meet loop deur elke skoonmaker se pad op die skyf — omtrent 'n halwe minuut.",
         measure: 'Meet'
       },
       recentActivity: {
         title: "Onlangse aktiwiteit",
-        empty: 'Nog geen deïnstallasies nie.',
+        empty: "Nog geen deïnstalleringe nie.",
         freed: 'vrygemaak'
       }
     },
@@ -1076,7 +1076,7 @@ export const CATALOG = {
       fastIndexSummary: (count) => `${count} lêers en gidse gelees vanaf die skyf se eie indeks.`,
       browsingInstant: 'Blaai is onmiddellik vanaf hier.',
       indexIncomplete: "'n Deel van die indeks kon nie gelees word nie, dus is totale 'n ondergrens.",
-      scanningDrive: 'Deurskandeer skyf…',
+      scanningDrive: "Skandeer skyf…",
       readingDrive: 'Lees die skyf…',
       rescanButton: 'Skandeer skyf weer (admin)',
       fastScanButton: 'Vinnige skandering (admin)',
@@ -1230,7 +1230,7 @@ export const CATALOG = {
         storeNoPackage: 'Hierdie winkeltoepassing het geen pakketnaam om te verwyder nie.',
         storeProtected: 'Windows merk hierdie toepassing as deel van die stelsel en laat nie toe dat dit verwyder word nie.',
         storeUnknown: 'Windows het nie gesê of hierdie toepassing verwyder kan word nie, dus word dit uit die bondel gelaat.',
-        noCommand: 'Geen deïnstallasiebevel is vir hierdie program geregistreer nie.'
+        noCommand: "Geen deïnstalleer-opdrag is vir hierdie program geregistreer nie."
       },
       storeRemoveDialog: {
         heading: (name) => `Verwyder ${name}?`,
@@ -1258,7 +1258,7 @@ export const CATALOG = {
       emptying: 'Maak leeg…',
       empty: {
         heading: 'Niks in karantyn nie.',
-        body: "Enigiets wat 'n deïnstallering of 'n Diep Skoonmaak verwyder, land eers hier. Dit bly totdat jy dit leegmaak, sodat 'n lêer wat per ongeluk gevat is altyd herwinbaar is."
+        body: "Enigiets wat 'n deïnstallering of 'n Diep Skoonmaak verwyder, land eers hier. Dit bly totdat jy dit leegmaak, sodat 'n lêer wat per ongeluk gevat is altyd herstelbaar is."
       },
       deleteConfirmPrompt: 'Vir altyd verwyder?',
       restore: 'Herstel',
@@ -1451,9 +1451,9 @@ export const CATALOG = {
         uninstallEntry: 'Voeg by/Verwyder Programme-inskrywing'
       },
       destinations: {
-        quarantine: { text: 'Geselekteerde items gaan na Kwarantyn, waar jy hulle kan herstel.', button: 'Verwyder geselekteerdes' },
+        quarantine: { text: "Geselekteerde items gaan na Karantyn, waar jy hulle kan herstel.", button: 'Verwyder geselekteerdes' },
         recycle: { text: 'Geselekteerde lêers gaan na die Asblik. Registersleutels word geback-up voordat hulle verwyder word.', button: 'Verwyder geselekteerdes' },
-        permanent: { text: "Geselekteerde lêers sal permanent verwyder word en kan nie herstel word nie. Registersleutels word geback-up voordat hulle verwyder word.", button: 'Verwyder permanent' }
+        permanent: { text: "Geselekteerde lêers sal permanent verwyder word en kan nie herstel word nie. Registersleutels word gerugsteun voordat hulle verwyder word.", button: 'Verwyder permanent' }
       },
       clean: 'Geen oorblyfsels gevind — skoon deïnstallering.',
       done: 'Klaar',
@@ -1489,7 +1489,7 @@ export const CATALOG = {
         checkingCommand: 'Kontroleer lêerstelsel, register & geskeduleerde take…'
       },
       removing: {
-        quarantine: { title: 'Word na Kwarantyn geskuif', command: 'Niks word verwyder nie — elke item kan herstel word' },
+        quarantine: { title: "Word na Karantyn geskuif", command: 'Niks word verwyder nie — elke item kan herstel word' },
         recycle: { title: 'Word na die Asblik gestuur', command: 'Herstel hulle van die Asblik af as jy moet' },
         permanent: { title: 'Word permanent verwyder', command: 'Hierdie kan nie herstel word nie' }
       },
@@ -1503,20 +1503,20 @@ export const CATALOG = {
       summary: {
         item: (n) => `${n} item${n === 1 ? '' : 's'}`,
         registryKey: (n) => `${n} registersleutel${n === 1 ? '' : 's'}`,
-        recycle: (files, keys, freed) => `${files} na die Asblik gestuur en ${keys} verwyder, eers geback-up in Kwarantyn. ${freed} vrygemaak.`,
-        permanent: (files, keys, freed) => `${files} permanent verwyder en ${keys} verwyder, eers geback-up in Kwarantyn. ${freed} vrygemaak.`,
-        quarantine: (files, keys, freed) => `${files} en ${keys} na Kwarantyn geskuif, ${freed} vrygemaak. Herstel hulle enige tyd vanaf die Kwarantyn-skerm.`
+        recycle: (files, keys, freed) => `${files} na die Asblik gestuur en ${keys} verwyder, eers gerugsteun in Karantyn. ${freed} vrygemaak.`,
+        permanent: (files, keys, freed) => `${files} permanent verwyder en ${keys} verwyder, eers gerugsteun in Karantyn. ${freed} vrygemaak.`,
+        quarantine: (files, keys, freed) => `${files} en ${keys} na Karantyn geskuif, ${freed} vrygemaak. Herstel hulle enige tyd vanaf die Karantyn-skerm.`
       },
       failedFilesHeading: (n) => `${n} item${n === 1 ? '' : 's'} kon nie verwyder word nie:`,
       failedRegistryKeysHeading: (n) => `${n} registersleutel${n === 1 ? '' : 's'} kon nie verwyder word nie`,
       failedRegistryKeysNote: 'hierdie het gewoonlik nodig dat Prune as administrateur loop:',
       noRestorePoint: (reason) => `Geen herstelpunt is geskep nie (${reason}).`,
-      quarantineStillWorks: 'Die Kwarantyn-herstel werk steeds.',
+      quarantineStillWorks: "Die Karantyn-herstel werk steeds.",
       autoRemoveLeftovers: 'Verwyder outomaties alles wat die skandering vind, sonder om dit eers te hersien'
     },
     batchUninstallModal: {
       title: (n) => `Deïnstalleer ${n} program${n === 1 ? '' : 'me'}`,
-      historyLabel: (n) => `Groepsverwydering: ${n} programme`,
+      historyLabel: (n) => `Groepsdeïnstallering: ${n} programme`,
       close: 'Sluit',
       cancel: "Kanselleer",
       stillWaiting: (more) => more ? `Nog aan die wag vir hierdie deïnstalleerder. Sy eie venster is dalk agter Prune. Kies Stop na hierdie een om die res oor te slaan sodra dit klaar is.` : `Nog aan die wag vir hierdie deïnstalleerder. Sy eie venster is dalk agter Prune.`,
@@ -1528,15 +1528,15 @@ export const CATALOG = {
       mixedIntro: (hasStore) => `Elke program se eie deïnstalleerder loop een vir een, dan skandeer Prune vir wat hulle agterlaat en wys jou alles voordat enigiets verwyder word.${hasStore ? ' Store-programme word eerder deur Windows verwyder, sonder oorblyfsel-skandering daarna.' : ''}`,
       oneAtATime: "Een op 'n slag, want Windows laat net een installering of deïnstallering op 'n slag toe. Sommige deïnstalleerders sal hul eie vensters wys en jou vrae vra.",
       storeWarning: (count) => count === 1
-        ? "Die Store-program in hierdie bondel kan nie van Kwarantyn af herstel word nie: om dit te verwyder neem die app en sy gestoorde data, en om dit terug te kry beteken dit moet weer vanaf die Store geïnstalleer word."
-        : `Die ${count} Store-programme in hierdie bondel kan nie van Kwarantyn af herstel word nie: om een te verwyder neem die app en sy gestoorde data, en om dit terug te kry beteken dit moet weer vanaf die Store geïnstalleer word.`,
+        ? "Die Store-program in hierdie bondel kan nie van Karantyn af herstel word nie: om dit te verwyder neem die app en sy gestoorde data, en om dit terug te kry beteken dit moet weer vanaf die Store geïnstalleer word."
+        : `Die ${count} Store-programme in hierdie bondel kan nie van Karantyn af herstel word nie: om een te verwyder neem die app en sy gestoorde data, en om dit terug te kry beteken dit moet weer vanaf die Store geïnstalleer word.`,
       runsBefore: (name) => `loop voor ${name}`,
       reported: (bytes) => `${bytes} aangemeld`,
       unknownSizeSuffix: (n) => `, ${n} van onbekende grootte`,
       startButton: 'Begin deïnstallering',
       status: { waiting: 'wag', uninstalling: 'deïnstalleer…', removed: "gedeïnstalleer", failed: 'misluk' },
       removingLine: {
-        quarantine: 'Oorblyfsels word na Kwarantyn geskuif…',
+        quarantine: "Oorblyfsels word na Karantyn geskuif…",
         recycle: 'Oorblyfsels word na die Asblik gestuur…',
         permanent: 'Oorblyfsels word permanent verwyder…'
       },
@@ -1554,13 +1554,13 @@ export const CATALOG = {
       summary: {
         recycle: (programs, items, freed) => `${programs} gedeïnstalleer en ${items} na die Asblik gestuur, ${freed} vrygemaak.`,
         permanent: (programs, items, freed) => `${programs} gedeïnstalleer en ${items} permanent verwyder, ${freed} vrygemaak.`,
-        quarantine: (programs, items, freed) => `${programs} gedeïnstalleer en ${items} na Kwarantyn geskuif, ${freed} vrygemaak.`,
+        quarantine: (programs, items, freed) => `${programs} gedeïnstalleer en ${items} na Karantyn geskuif, ${freed} vrygemaak.`,
         programs: (n) => `${n} program${n === 1 ? '' : 'me'}`,
-        items: (n) => `${n} oorblywende item${n === 1 ? '' : 's'}`
+        items: (n) => `${n} ${n === 1 ? 'oorblyfsel' : 'oorblyfsels'}`
       },
       noRestorePoint: (reason) => `Geen herstelpunt is geskep nie (${reason}).`,
       restorePointFallback: 'nie beskikbaar nie',
-      quarantineNote: 'Alles hierbo is steeds in Kwarantyn en kan teruggesit word.',
+      quarantineNote: "Alles hierbo is steeds in Karantyn en kan teruggesit word.",
       failedRegistryKeys: (n) => `${n} registersleutel${n === 1 ? '' : 's'} kon nie verwyder word nie — hierdie het gewoonlik nodig dat Prune as administrateur loop.`
     },
     bugReport: {
@@ -1634,7 +1634,7 @@ export const CATALOG = {
     nav: {
       reportBug: 'الإبلاغ عن خطأ',
       dashboard: 'لوحة التحكم', diskMap: 'خريطة القرص', applications: 'التطبيقات',
-      quarantine: 'الحجر', settings: 'الإعدادات', startup: 'بدء التشغيل',
+      quarantine: "الحجر الصحي", settings: 'الإعدادات', startup: 'بدء التشغيل',
       duplicates: 'الملفات المكررة', deepClean: 'تنظيف عميق',
       landmark: 'الرئيسية'
     },
@@ -1675,7 +1675,7 @@ export const CATALOG = {
       },
       autoQuarantine: {
         title: 'الحجر الصحي التلقائي',
-        description: 'ينقل التنظيف العميق ما يأخذه إلى الحجر الصحي الخاص بـ Prune، حيث يمكنك إعادته. أوقف هذا وسينتقل إلى سلة المحذوفات في Windows بدلاً من ذلك — لا يزال قابلاً للاسترداد، فقط في مكان تعرف بالفعل كيفية إفراغه.'
+        description: "ينقل التنظيف العميق ما يأخذه إلى الحجر الصحي الخاص بـ Prune، حيث يمكنك استعادته. أوقف هذا وسينتقل إلى سلة المحذوفات في Windows بدلاً من ذلك — لا يزال قابلاً للاستعادة، فقط في مكان تعرف بالفعل كيفية إفراغه."
       },
       skipRecent: {
         title: 'ترك الملفات الحديثة وشأنها',
@@ -1700,14 +1700,14 @@ export const CATALOG = {
       },
       quarantineMaxSize: {
         title: "الحد الأقصى لحجم الحجر الصحي",
-        description: 'حد أقصى لمجلد الحجر الصحي بأكمله. عند تجاوزه، تذهب أقدم النسخ الاحتياطية أولاً — لا يتم إسقاط الأحدث أبدًا، لذا فإن أي شيء كبير أزلته للتو يبقى قابلاً للاسترداد حتى لو كان أكبر من الحد بمفرده. اتركه فارغًا لعدم وجود حد.',
+        description: "حد أقصى لمجلد الحجر الصحي بأكمله. عند تجاوزه، تذهب أقدم النسخ الاحتياطية أولاً — لا يتم إسقاط الأحدث أبدًا، لذا فإن أي شيء كبير أزلته للتو يبقى قابلاً للاستعادة حتى لو كان أكبر من الحد بمفرده. اتركه فارغًا لعدم وجود حد.",
         noLimitPlaceholder: 'بلا حد',
         gbUnit: 'جيجابايت',
         ariaLabel: 'الحد الأقصى لحجم الحجر الصحي بالجيجابايت'
       },
       exclusions: {
         title: 'استبعاد المجلدات',
-        description: 'المجلدات وأنواع الملفات التي سيتركها Prune وشأنها — يتخطاها التنظيف العميق ويستبعدها من خريطة القرص — بالإضافة إلى ما يحميه بالفعل: معلومات وحدة تخزين النظام، حجر مكافحات الفيروسات، مخزن المكونات وعشرات غيرها.',
+        description: "المجلدات وأنواع الملفات التي سيتركها Prune وشأنها — يتخطاها التنظيف العميق ويستبعدها من خريطة القرص — بالإضافة إلى ما يحميه بالفعل: معلومات وحدة تخزين النظام، الحجر الصحي لمكافحات الفيروسات، مخزن المكونات وعشرات غيرها.",
         ariaLabel: 'مسار المجلد أو نوع الملف المراد استبعاده',
         add: 'إضافة',
         invalidFormat: 'اكتب مسار مجلد كاملاً (D:\\Games) أو نوع ملف (*.iso).',
@@ -1719,14 +1719,14 @@ export const CATALOG = {
       },
       cookiesToPreserve: {
         title: 'ملفات تعريف الارتباط المراد الاحتفاظ بها',
-        description: 'كل شيء آخر في ملف تعريف الارتباط الخاص بالمتصفح يختفي بمجرد التنظيف. امسح لترى ما هو موجود فعليًا، وحدد أي شيء يستحق الاحتفاظ به.',
-        scanButton: 'البحث عن ملفات تعريف الارتباط',
+        description: "كل شيء آخر في ملف تعريف الارتباط الخاص بالمتصفح يختفي بمجرد التنظيف. افحص لترى ما هو موجود فعليًا، وحدد أي شيء يستحق الاحتفاظ به.",
+        scanButton: "فحص ملفات تعريف الارتباط",
         scanning: 'جارٍ الفحص…',
         filterPlaceholder: 'تصفية النطاقات…',
         countSuffix: (count) => `${count} ملف تعريف ارتباط`,
         none: 'لم يتم العثور على ملفات تعريف ارتباط.',
         staleBadge: 'لم يُشاهد في هذا الفحص',
-        scanErrorPrefix: (message) => `تعذر البحث عن ملفات تعريف الارتباط: ${message}`,
+        scanErrorPrefix: (message) => `تعذر فحص ملفات تعريف الارتباط: ${message}`,
         fileErrorsNote: (count) => `تعذرت قراءة ${count} ملف وتم تخطيه.`,
         checkboxAriaLabel: (domain) => `الاحتفاظ بملفات تعريف الارتباط من ${domain}`
       },
@@ -1741,14 +1741,14 @@ export const CATALOG = {
       warningConfirmations: {
         title: 'تأكيدات التحذير',
         allAsk: 'كل أداة تنظيف تفقد بيانات تسأل قبل تشغيلها.',
-        someSet: (count) => `${count} تحذير تنظيف تم ضبطه على عدم السؤال مرة أخرى.`,
+        someSet: (count) => `${count} تحذير من أدوات التنظيف تم ضبطه على عدم السؤال مرة أخرى.`,
         reset: 'إعادة تعيين تأكيدات التحذير'
       },
       uninstallTab: {
         beforeHeading: 'قبل إلغاء التثبيت',
         restorePointUninstall: {
           title: 'إنشاء نقطة استعادة قبل إلغاء التثبيت',
-          description: 'استعادة النظام الخاصة بـ Windows نفسه، تُنشأ قبل تشغيل برنامج إلغاء تثبيت البرنامج. يتطلب تشغيل Prune كمسؤول ويسمح Windows بواحدة يوميًا، لذا عندما لا يمكن إنشاؤها، يمضي إلغاء التثبيت قدمًا ويقول مربع الحوار ذلك.'
+          description: "استعادة النظام الخاصة بـ Windows نفسه، تُنشأ قبل تشغيل برنامج إلغاء التثبيت الخاص بالبرنامج. يتطلب تشغيل Prune كمسؤول ويسمح Windows بواحدة يوميًا، لذا عندما لا يمكن إنشاؤها، يمضي إلغاء التثبيت قدمًا ويقول مربع الحوار ذلك."
         },
         registryBackup: {
           title: 'نسخ السجل احتياطيًا قبل إلغاء التثبيت',
@@ -1761,30 +1761,30 @@ export const CATALOG = {
         afterHeading: 'بعد إلغاء التثبيت',
         scanLeftovers: {
           title: 'فحص المخلفات بعد إلغاء التثبيت',
-          description: 'يبحث عن الملفات ومفاتيح السجل والمهام المجدولة التي خلّفها برنامج إلغاء التثبيت. عند الإيقاف، يقوم Prune بتشغيل برنامج إلغاء تثبيت البرنامج نفسه ويتوقف عند ذلك.'
+          description: "يبحث عن الملفات ومفاتيح السجل والمهام المجدولة التي خلّفها برنامج إلغاء التثبيت. عند الإيقاف، يقوم Prune بتشغيل برنامج إلغاء التثبيت الخاص بالبرنامج نفسه ويتوقف عند ذلك."
         },
         preselect: {
-          title: 'تحديد كل مخلف افتراضيًا',
+          title: "تحديد كل المخلفات افتراضيًا",
           description: 'تفتح المراجعة بكل ما تم العثور عليه محددًا. عند الإيقاف، تفتح بلا شيء محدد وأنت تختار.'
         },
         keepHistory: {
           title: 'الاحتفاظ بسجل لإلغاء التثبيت',
           description: 'قائمة لوحة التحكم بعمليات الإزالة الأخيرة والمساحة التي حررتها. عند الإيقاف، لا يتم تسجيل أي شيء جديد.'
         },
-        destinationHeading: 'تذهب الملفات المتبقية إلى',
+        destinationHeading: "تذهب المخلفات إلى",
         leftoverOptions: {
           quarantine: { label: 'الحجر الصحي', description: 'تم نقلها إلى النسخة الاحتياطية الخاصة بـ Prune، وقابلة للاستعادة من شاشة الحجر الصحي. الافتراضي.' },
           recycle: { label: 'سلة المحذوفات', description: 'قابلة للاستعادة من سلة Windows الخاصة، وتُحرر عند إفراغها.' },
           permanent: { label: 'الحذف نهائيًا', description: 'يُحذف تمامًا. لا شيء لاستعادته.' }
         },
-        permanentWarning: 'سيتم حذف الملفات المتبقية تمامًا ولا يمكن استعادتها، من الحجر الصحي أو أي مكان آخر. تحقق من القائمة قبل التأكيد.',
+        permanentWarning: "سيتم حذف المخلفات تمامًا ولا يمكن استعادتها، من الحجر الصحي أو أي مكان آخر. تحقق من القائمة قبل التأكيد.",
         registryNote: 'يتم تصدير مفاتيح السجل إلى الحجر الصحي قبل إزالتها، أيًا كان اختيارك.'
       },
       about: {
         reportTitle: 'الإبلاغ عن خطأ',
         reportDescription: 'يفتح بلاغًا معبأً مسبقًا على GitHub. لا يرسل Prune نفسه أي شيء، وترى كل شيء قبل أن يذهب إلى أي مكان.',
         reportButton: 'الإبلاغ عن خطأ',
-        description: 'أداة إلغاء تثبيت وتنظيف محلية وغير متصلة بالإنترنت لنظام Windows — إزالة قسرية مع فحص الملفات المتبقية، حجر صحي آمن قبل الحذف، رسم خرائط القرص، وتنظيف الفوضى بنقرة واحدة.'
+        description: "أداة إلغاء تثبيت وتنظيف محلية وغير متصلة بالإنترنت لنظام Windows — إزالة قسرية مع فحص المخلفات، حجر صحي آمن قبل الحذف، خريطة القرص، وتنظيف الفوضى بنقرة واحدة."
       },
       automation: {
         title: 'الأتمتة',
@@ -1859,7 +1859,7 @@ export const CATALOG = {
       junk: {
         label: 'الملفات غير الضرورية',
         notMeasured: 'لم تُقاس',
-        description: 'يمر القياس بكل مسارات التنظيف على القرص — حوالي نصف دقيقة.',
+        description: "يمر القياس بمسار كل أداة تنظيف على القرص — حوالي نصف دقيقة.",
         measure: 'قياس'
       },
       recentActivity: {
@@ -1951,19 +1951,19 @@ export const CATALOG = {
       contextMenu: {
         openInExplorer: 'فتح في مستكشف الملفات',
         copyPath: 'نسخ المسار',
-        moveToQuarantineMenu: 'نقل إلى الحجر…'
+        moveToQuarantineMenu: "نقل إلى الحجر الصحي…"
       },
       toasts: {
-        moved: (name) => `تم النقل إلى الحجر: ${name}`,
-        restoreHint: 'استعده من شاشة الحجر.',
+        moved: (name) => `تم النقل إلى الحجر الصحي: ${name}`,
+        restoreHint: "استعده من شاشة الحجر الصحي.",
         pathCopied: 'تم نسخ المسار.',
         copyFailed: 'تعذّر نسخ هذا المسار.',
         moveFailed: 'تعذّر نقل هذا.'
       },
       removeModal: {
-        label: 'نقل إلى الحجر',
-        heading: 'هل تريد نقل هذا إلى الحجر؟',
-        note: 'يُنقل ولا يُحذف — استعده في أي وقت من شاشة الحجر.',
+        label: "نقل إلى الحجر الصحي",
+        heading: "هل تريد نقل هذا إلى الحجر الصحي؟",
+        note: "يُنقل ولا يُحذف — استعده في أي وقت من شاشة الحجر الصحي.",
         folder: 'مجلد',
         file: 'ملف',
         cancel: 'إلغاء'
@@ -2119,9 +2119,9 @@ export const CATALOG = {
       subtitle: 'ملفات متطابقة بايتًا بايت، وليس مجرد نفس الحجم. وجّهها إلى مجلد تحتفظ فيه فعليًا بأشياء — فقراءة قرص كامل لمقارنته بنفسه تستغرق وقتًا أطول بكثير مما يستحق، وتجد في الغالب نسخ الجهاز الخاصة من ملفاته الخاصة.',
       folderPlaceholder: (a) => `مسار المجلد، مثل ${a}`,
       stoppedNote: "تم الإيقاف — لم تتم مقارنة أي شيء.",
-      folderInputAriaLabel: 'المجلد للبحث عن التكرارات فيه',
+      folderInputAriaLabel: "المجلد للبحث فيه عن الملفات المكررة",
       stop: 'إيقاف',
-      findButton: 'البحث عن التكرارات',
+      findButton: "البحث عن الملفات المكررة",
       compareNote: 'تتم مقارنة الأحجام أولاً، ثم عينة، ثم الملف بأكمله — لذا لا تُقرأ معظم الملفات إطلاقًا.',
       reading: (folder) => `جارٍ قراءة ${folder}`,
       readingNote: 'الأحجام أولاً، ثم عينة 64 كيلوبايت من أي شيء يشترك في حجم، ثم المحتوى الكامل لما لا يزال متطابقًا.',
@@ -2148,7 +2148,7 @@ export const CATALOG = {
         moveButton: 'نقل المحدد إلى الحجر الصحي'
       },
       modal: {
-        label: 'نقل التكرارات إلى الحجر الصحي',
+        label: "نقل الملفات المكررة إلى الحجر الصحي",
         heading: (count) => `نقل النسخ المكررة (${count}) إلى الحجر الصحي؟`,
         body: (a) => `نقلها يحرّر ${a} بعد إفراغ الحجر الصحي. تحتفظ كل مجموعة بنسخة واحدة على الأقل، ولا يُحذف شيء — يمكنك استعادة أي منها من شاشة الحجر الصحي.`,
         cancel: 'إلغاء',
@@ -2162,8 +2162,8 @@ export const CATALOG = {
       }
     },
     deepClean: {
-      title: 'التنظيف العميق',
-      subtitle: 'كل ذاكرة تخزين مؤقت وسجل وملف تفريغ وبقايا يعرف Prune كيف يجدها، مقاسة على هذا الجهاز بدلاً من تقديرها. لا يُحذف شيء نهائيًا — كل ما يأخذه التنظيف ينتقل أولاً إلى الحجر الصحي، حيث يمكنك إعادته.',
+      title: "تنظيف عميق",
+      subtitle: "كل ذاكرة تخزين مؤقت وسجل وملف تفريغ وكل ما خلّفته البرامج يعرف Prune كيف يجدها، مقاسة على هذا الجهاز بدلاً من تقديرها. لا يُحذف شيء نهائيًا — كل ما يأخذه التنظيف ينتقل أولاً إلى الحجر الصحي، حيث يمكنك استعادته.",
       scanLog: {
         header: 'مخرجات الفحص',
         scanningAnnounce: (total) => `جارٍ فحص ${total} موقعًا.`,
@@ -2255,9 +2255,9 @@ export const CATALOG = {
         recycle: { text: 'تنتقل الملفات المحددة إلى سلة المحذوفات. يتم نسخ مفاتيح السجل احتياطيًا قبل إزالتها.', button: 'إزالة المحدد' },
         permanent: { text: 'سيتم حذف الملفات المحددة نهائيًا ولا يمكن استعادتها. يتم نسخ مفاتيح السجل احتياطيًا قبل إزالتها.', button: 'حذف نهائيًا' }
       },
-      clean: 'لم يتم العثور على مخلفات — إزالة نظيفة.',
+      clean: "لم يتم العثور على مخلفات — إلغاء تثبيت نظيف.",
       done: 'تم',
-      foundWarning: (count) => `عثر Prune على عناصر متبقية فاتت أداة إلغاء التثبيت الأصلية (${count}). راجعها قبل الإزالة.`,
+      foundWarning: (count) => `عثر Prune على مخلفات (${count}) فاتت برنامج إلغاء التثبيت الأصلي. راجعها قبل الإزالة.`,
       excludedNote: (count) => `تم استبعاد ${count} مجلد لأنه ضمن استثناءاتك.`,
       itemsSelected: 'عناصر محددة',
       reclaimable: 'قابل للاسترداد',
@@ -2268,23 +2268,23 @@ export const CATALOG = {
       titleNormal: (name) => `إلغاء تثبيت ${name}`,
       close: 'إغلاق',
       stillWaiting: "ما زال Prune ينتظر برنامج إلغاء التثبيت. يمكنك إغلاق هذه النافذة؛ سيواصل البرنامج عمله ولن يفحص Prune المخلفات.",
-      runningWarning: (name) => `${name} قيد التشغيل الآن. أغلقه أولًا — عادةً ما تفشل أداة إلغاء التثبيت مع برنامج مفتوح، وقد تترك ملفات يعيد التشغيل التالي إنشاءها.`,
+      runningWarning: (name) => `${name} قيد التشغيل الآن. أغلقه أولًا — يفشل برنامج إلغاء التثبيت عادةً مع برنامج مفتوح، وقد يترك ملفات يعيد التشغيل التالي إنشاءها.`,
       orphanedWarning: (reason) => `${reason} سيستمر Windows في إدراجه حتى تتم إزالة الإدخال.`,
       brokenIntro: 'سيبحث Prune عن الملفات ومفاتيح السجل المطابقة لهذا الاسم، بما في ذلك إدخال إضافة/إزالة البرامج الخاص به، ويعرض لك كل شيء قبل إزالة أي شيء.',
       searchForLabel: 'البحث عن',
       searchHint: (name) => `مأخوذ من "${name}" بدون رقم إصداره — تسمي برامج التثبيت المجلدات باسم المنتج، وليس الإصدار. عدّله إذا بدت النتائج غير صحيحة.`,
       scanFailed: (error) => `فشل الفحص: ${error}`,
-      searchButton: 'البحث عن المخلفات',
-      normalIntro: (name) => `يشغّل هذا أداة إلغاء التثبيت الخاصة بـ ${name}، ثم يفحص أي شيء يتركه وراءه.`,
+      searchButton: "فحص المخلفات",
+      normalIntro: (name) => `يشغّل هذا برنامج إلغاء التثبيت الخاص بـ ${name}، ثم يفحص أي شيء يتركه وراءه.`,
       uninstallFailed: (error) => `فشل إلغاء التثبيت: ${error}`,
       startButton: 'بدء إلغاء التثبيت',
-      noWorkingUninstaller: 'لا توجد أداة إلغاء تثبيت عاملة — البحث بالاسم بدلًا من ذلك',
+      noWorkingUninstaller: "لا يوجد برنامج إلغاء تثبيت عامل — البحث بالاسم بدلًا من ذلك",
       noUninstallCommand: 'لا يوجد أمر إلغاء تثبيت مسجَّل',
       progress: {
-        runningNative: 'تشغيل أداة إلغاء التثبيت الأصلية',
+        runningNative: "تشغيل برنامج إلغاء التثبيت الأصلي",
         backingUpRegistry: 'يجري نسخ السجل احتياطيًا',
         creatingRestorePoint: 'يجري إنشاء نقطة استعادة',
-        searchingLeftovers: 'البحث عن المخلفات',
+        searchingLeftovers: "فحص المخلفات",
         scanningLeftovers: 'فحص المخلفات',
         checkingCommand: 'التحقق من نظام الملفات والسجل والمهام المجدولة…'
       },
@@ -2293,7 +2293,7 @@ export const CATALOG = {
         recycle: { title: 'الإرسال إلى سلة المحذوفات', command: 'استعدها من سلة المحذوفات إذا لزم الأمر' },
         permanent: { title: 'الحذف نهائيًا', command: 'لا يمكن استعادة هذه' }
       },
-      noScan: (name) => `انتهت أداة إلغاء تثبيت ${name}. فحص المخلفات معطّل في الإعدادات، لذا لم يتم البحث عن أي شيء آخر.`,
+      noScan: (name) => `انتهى برنامج إلغاء تثبيت ${name}. فحص المخلفات معطّل في الإعدادات، لذا لم يتم البحث عن أي شيء آخر.`,
       readyToScan: {
         body: (name) => `إذا كان برنامج إلغاء تثبيت ${name} لا يزال يُنهي عمله، فاتركه يُغلق أولًا. وبعد انتهائه، انقر «فحص المخلفات» للبحث عمّا تركه خلفه.`,
         scanButton: "فحص المخلفات"
@@ -2316,7 +2316,7 @@ export const CATALOG = {
     },
     batchUninstallModal: {
       title: (n) => `إلغاء تثبيت ${n} برنامج`,
-      historyLabel: (n) => `إزالة دفعية: ${n} برنامج`,
+      historyLabel: (n) => `إلغاء تثبيت دفعي: ${n} برنامج`,
       close: 'إغلاق',
       cancel: "إلغاء",
       stillWaiting: (more) => more ? `ما زال Prune ينتظر برنامج إلغاء التثبيت هذا. قد تكون نافذته خلف Prune. اختر «التوقف بعد هذا البرنامج» لتخطي بقية البرامج بعد انتهائه.` : `ما زال Prune ينتظر برنامج إلغاء التثبيت هذا. قد تكون نافذته خلف Prune.`,
@@ -2325,8 +2325,8 @@ export const CATALOG = {
       statusSkipped: "تم التخطي",
       stoppedNote: (n) => `تم الإيقاف مبكرًا. لم يبدأ: ${n}.`,
       registryOnlyIntro: 'تتم إزالة كل تطبيق عبر Windows بالتتابع، ولا يوجد فحص للمخلفات بعد ذلك: يزيل Windows بيانات التطبيق الخاصة به معه.',
-      mixedIntro: (hasStore) => `تعمل أداة إلغاء التثبيت الخاصة بكل برنامج بالتتابع، ثم يفحص Prune ما تتركه ويعرض لك كل شيء قبل إزالة أي منه.${hasStore ? ' تتم إزالة تطبيقات المتجر عبر Windows بدلًا من ذلك، دون فحص مخلفات بعد ذلك.' : ''}`,
-      oneAtATime: 'واحدًا تلو الآخر، لأن Windows يسمح بتثبيت أو إلغاء تثبيت واحد فقط في كل مرة. ستعرض بعض أدوات إلغاء التثبيت نوافذها الخاصة وتطرح عليك أسئلة.',
+      mixedIntro: (hasStore) => `يعمل برنامج إلغاء التثبيت الخاص بكل برنامج بالتتابع، ثم يفحص Prune ما تتركه ويعرض لك كل شيء قبل إزالة أي منه.${hasStore ? ' تتم إزالة تطبيقات المتجر عبر Windows بدلًا من ذلك، دون فحص مخلفات بعد ذلك.' : ''}`,
+      oneAtATime: "واحدًا تلو الآخر، لأن Windows يسمح بتثبيت أو إلغاء تثبيت واحد فقط في كل مرة. ستعرض بعض برامج إلغاء التثبيت نوافذها الخاصة وتطرح عليك أسئلة.",
       storeWarning: (count) => count === 1
         ? 'لا يمكن استعادة تطبيق المتجر في هذه الدفعة من الحجر الصحي: إزالته تأخذ التطبيق وبياناته المحفوظة، واستعادته تعني إعادة تثبيته من المتجر.'
         : `لا يمكن استعادة تطبيقات المتجر الـ${count} في هذه الدفعة من الحجر الصحي: إزالة أحدها تأخذ التطبيق وبياناته المحفوظة، واستعادته تعني إعادة تثبيته من المتجر.`,
@@ -2356,11 +2356,11 @@ export const CATALOG = {
         permanent: (programs, items, freed) => `تم إلغاء تثبيت ${programs} وحذف ${items} نهائيًا، مما حرر ${freed}.`,
         quarantine: (programs, items, freed) => `تم إلغاء تثبيت ${programs} ونقل ${items} إلى الحجر الصحي، مما حرر ${freed}.`,
         programs: (n) => `${n} برنامج`,
-        items: (n) => `${n} عنصر متبقٍ`
+        items: (n) => `${n} عنصر من المخلفات`
       },
       noRestorePoint: (reason) => `لم يتم إنشاء نقطة استعادة للنظام (${reason}).`,
       restorePointFallback: 'غير متاح',
-      quarantineNote: 'كل ما سبق لا يزال في الحجر الصحي ويمكن إعادته.',
+      quarantineNote: "كل ما سبق لا يزال في الحجر الصحي ويمكن استعادته.",
       failedRegistryKeys: (n) => `تعذّرت إزالة ${n} مفتاح سجل — عادةً ما يتطلب هذا تشغيل Prune كمسؤول.`
     },
     bugReport: {
@@ -2470,12 +2470,12 @@ export const CATALOG = {
         openPageError: (error) => `No s'ha pogut obrir la pàgina: ${error}`
       },
       showFreeSpace: {
-        title: 'Mostra l\'espai lliure al Mapa de Disc',
+        title: "Mostra l'espai lliure al Mapa del disc",
         description: "Dibuixa l'espai lliure del disc com un bloc més quan escanejes un disc sencer, de manera que cada carpeta es llegeix com una part del disc en lloc de l'espai en ús."
       },
       autoQuarantine: {
         title: 'Quarantena Automàtica',
-        description: "La Neteja Profunda mou el que treu a la Quarantena del Prune, on ho pots tornar a posar. Desactiva-ho i anirà a la Paperera de Windows en lloc d'això — encara recuperable, només en un lloc que ja saps com buidar."
+        description: "La Neteja profunda mou el que treu a la Quarantena del Prune, on ho pots tornar a posar. Desactiva-ho i anirà a la Paperera de Windows en lloc d'això — encara es pot restaurar, només en un lloc que ja saps com buidar."
       },
       skipRecent: {
         title: 'Deixa els fitxers recents en pau',
@@ -2500,14 +2500,14 @@ export const CATALOG = {
       },
       quarantineMaxSize: {
         title: "Mida màxima de la quarantena",
-        description: "Un límit a tota la carpeta de Quarantena. Per sobre, les còpies més antigues cauen primer — la més recent mai es descarta, de manera que quelcom gran que acabes d'eliminar es manté recuperable fins i tot si és més gran que el límit per si sol. Deixa-ho en blanc per a cap límit.",
+        description: "Un límit a tota la carpeta de Quarantena. Per sobre, les còpies més antigues cauen primer — la més recent mai es descarta, de manera que quelcom gran que acabes d'eliminar es pot continuar restaurant fins i tot si és més gran que el límit per si sol. Deixa-ho en blanc per a cap límit.",
         noLimitPlaceholder: 'Sense límit',
         gbUnit: 'GB',
         ariaLabel: 'Mida màxima de la quarantena en gigabytes'
       },
       exclusions: {
         title: "Exclou carpetes",
-        description: "Carpetes i tipus de fitxer que el Prune deixarà en pau — omesos per la Neteja Profunda i exclosos del Mapa de Disc — a més dels que ja protegeix: Informació del volum del sistema, quarantenes d'antivirus, el magatzem de components i una dotzena més.",
+        description: "Carpetes i tipus de fitxer que el Prune deixarà en pau — omesos per la Neteja profunda i exclosos del Mapa del disc — a més dels que ja protegeix: Informació del volum del sistema, quarantenes d'antivirus, el magatzem de components i una dotzena més.",
         ariaLabel: 'Camí de carpeta o tipus de fitxer a excloure',
         add: 'Afegeix',
         invalidFormat: "Escriu un camí de carpeta complet (D:\\Games) o un tipus de fitxer (*.iso).",
@@ -2526,7 +2526,7 @@ export const CATALOG = {
         countSuffix: (count) => `${count} galet${count === 1 ? 'a' : 'es'}`,
         none: "No s'ha trobat cap galeta.",
         staleBadge: 'no vista en aquest escaneig',
-        scanErrorPrefix: (message) => `No s'han pogut cercar galetes: ${message}`,
+        scanErrorPrefix: (message) => `No s'han pogut escanejar galetes: ${message}`,
         fileErrorsNote: (count) => `${count} fitxer${count === 1 ? " no s'ha pogut llegir i s'ha omès" : " no s'han pogut llegir i s'han omesos"}.`,
         checkboxAriaLabel: (domain) => `Conserva les galetes de ${domain}`
       },
@@ -2560,31 +2560,31 @@ export const CATALOG = {
         },
         afterHeading: 'Després de desinstal·lar',
         scanLeftovers: {
-          title: 'Cerca romanents després de desinstal·lar',
+          title: "Escaneja restes després de desinstal·lar",
           description: "Cerca els fitxers, claus de registre i tasques programades que el desinstal·lador ha deixat enrere. Desactivat, el Prune només executa el propi desinstal·lador del programa i s'atura allà."
         },
         preselect: {
-          title: 'Marca cada romanent per defecte',
+          title: "Marca cada resta per defecte",
           description: 'La revisió s\'obre amb tot el que ha trobat marcat. Desactivat, s\'obre sense res marcat i tu tries.'
         },
         keepHistory: {
           title: 'Manté un historial de desinstal·lacions',
           description: "La llista del tauler de les eliminacions recents i l'espai que han alliberat. Desactivat, no es registra res de nou."
         },
-        destinationHeading: 'Els fitxers romanents van a',
+        destinationHeading: "Les restes van a",
         leftoverOptions: {
-          quarantine: { label: 'Quarantena', description: "Moguts a la còpia de seguretat pròpia del Prune, i recuperables des de la pantalla de Quarantena. Per defecte." },
-          recycle: { label: 'La Paperera', description: "Recuperables des de la pròpia paperera de Windows, i alliberats quan la buides." },
+          quarantine: { label: 'Quarantena', description: "Moguts a la còpia de seguretat pròpia del Prune, i restaurables des de la pantalla de Quarantena. Per defecte." },
+          recycle: { label: 'La Paperera', description: "Restaurables des de la pròpia paperera de Windows, i alliberats quan la buides." },
           permanent: { label: 'Elimina permanentment', description: 'Eliminats directament. Res a restaurar.' }
         },
-        permanentWarning: "Els fitxers romanents s'eliminaran directament i no es podran restaurar, ni des de la Quarantena ni des de cap altre lloc. Revisa la llista abans de confirmar-ho.",
+        permanentWarning: "Les restes s'eliminaran directament i no es podran restaurar, ni des de la Quarantena ni des de cap altre lloc. Revisa la llista abans de confirmar-ho.",
         registryNote: 'Les claus de registre s\'exporten a la Quarantena abans de ser eliminades, sigui quina sigui la teva elecció.'
       },
       about: {
         reportTitle: "Informa d'un error",
         reportDescription: "Obre a GitHub una incidència preomplerta. Prune no envia res per si mateix i veus tot el contingut abans que se'n vagi enlloc.",
         reportButton: "Informa d'un error",
-        description: 'Una eina de desinstal·lació i neteja local i fora de línia per a Windows — eliminació forçada amb escaneig de fitxers romanents, quarantena segura abans d\'eliminar, mapatge de disc, i neteja de brossa amb un clic.'
+        description: "Una eina de desinstal·lació i neteja local i fora de línia per a Windows — eliminació forçada amb escaneig de restes, quarantena segura abans d'eliminar, mapatge de disc, i neteja de brossa amb un clic."
       },
       automation: {
         title: 'Automatització',
@@ -2599,7 +2599,7 @@ export const CATALOG = {
         everyWeek: 'Cada setmana',
         measureOnly: 'Només mesura',
         clean: 'Neteja',
-        cleanWarning: "Això elimina fitxers sense que ningú ho vigili. Neteja les regles que la Neteja Profunda recomana i que realment tenen alguna cosa dins, i tot continua anant a la quarantena — així que revisa la configuració de retenció anterior abans de deixar això activat.",
+        cleanWarning: "Això elimina fitxers sense que ningú ho vigili. Neteja les regles que la Neteja profunda recomana i que realment tenen alguna cosa dins, i tot continua anant a la quarantena — així que revisa la configuració de retenció anterior abans de deixar això activat.",
         nextRun: 'Propera execució:',
         lastRun: 'Última execució:',
         weekdays: {
@@ -2659,7 +2659,7 @@ export const CATALOG = {
       junk: {
         label: 'Fitxers innecessaris',
         notMeasured: 'no mesurat',
-        description: 'Mesurar recorre tots els camins de neteja del disc — mig minut aproximadament.',
+        description: "Mesurar recorre el camí de cada netejador al disc — mig minut aproximadament.",
         measure: 'Mesura'
       },
       recentActivity: {
@@ -2858,7 +2858,7 @@ export const CATALOG = {
       emptying: 'Buidant…',
       empty: {
         heading: 'No hi ha res a la quarantena.',
-        body: "Tot el que una desinstal·lació o una Neteja Profunda elimina, arriba aquí primer. Es queda fins que el buidis, així que un fitxer eliminat per error sempre es pot recuperar."
+        body: "Tot el que una desinstal·lació o una Neteja profunda elimina, arriba aquí primer. Es queda fins que el buidis, així que un fitxer eliminat per error sempre es pot restaurar."
       },
       deleteConfirmPrompt: 'Eliminar per sempre?',
       restore: 'Restaura',
@@ -2962,8 +2962,8 @@ export const CATALOG = {
       }
     },
     deepClean: {
-      title: 'Neteja Profunda',
-      subtitle: 'Cada memòria cau, registre, bolcat i romanent que Prune sap trobar, mesurat en aquesta màquina en lloc d\'estimat. Res s\'elimina directament — tot el que Neteja treu va primer a la Quarantena, on el pots tornar a posar.',
+      title: "Neteja profunda",
+      subtitle: "Cada memòria cau, registre, bolcat i resta que Prune sap trobar, mesurat en aquesta màquina en lloc d'estimat. Res s'elimina directament — tot el que Neteja treu va primer a la Quarantena, on el pots tornar a posar.",
       scanLog: {
         header: 'Sortida de l\'escaneig',
         scanningAnnounce: (total) => `Escanejant ${total} ubicacions.`,
@@ -3067,7 +3067,7 @@ export const CATALOG = {
       titleForce: (name) => `Elimina forçadament ${name}`,
       titleNormal: (name) => `Desinstal·la ${name}`,
       close: 'Tanca',
-      stillWaiting: `Encara s'espera el desinstal·lador. Pots tancar aquesta finestra; el desinstal·lador continua executant-se i Prune no buscarà restes.`,
+      stillWaiting: "Encara s'espera el desinstal·lador. Pots tancar aquesta finestra; el desinstal·lador continua executant-se i Prune no escanejarà restes.",
       runningWarning: (name) => `${name} s'està executant ara mateix. Tanca'l primer — un desinstal·lador sol fallar amb un programa obert, i pot deixar fitxers que el proper inici torna a crear.`,
       orphanedWarning: (reason) => `${reason} El Windows el continuarà llistant fins que s'elimini l'entrada.`,
       brokenIntro: "El Prune buscarà fitxers i claus del registre que coincideixin amb aquest nom, incloent-hi la seva entrada d'Afegeix o suprimeix programes, i et mostrarà tot abans d'eliminar res.",
@@ -3156,11 +3156,11 @@ export const CATALOG = {
         permanent: (programs, items, freed) => `S'${'han'} desinstal·lat ${programs} i s'${'han'} suprimit ${items} definitivament, alliberant ${freed}.`,
         quarantine: (programs, items, freed) => `S'${'han'} desinstal·lat ${programs} i s'${'han'} mogut ${items} a la Quarantena, alliberant ${freed}.`,
         programs: (n) => `${n} programa${n === 1 ? '' : 's'}`,
-        items: (n) => `${n} element${n === 1 ? '' : 's'} residual${n === 1 ? '' : 's'}`
+        items: (n) => `${n} ${n === 1 ? 'resta' : 'restes'}`
       },
       noRestorePoint: (reason) => `No s'ha creat cap punt de restauració del sistema (${reason}).`,
       restorePointFallback: 'no disponible',
-      quarantineNote: 'Tot l\'anterior encara és a la Quarantena i es pot recuperar.',
+      quarantineNote: "Tot l'anterior encara és a la Quarantena i es pot restaurar.",
       failedRegistryKeys: (n) => `No s'${n === 1 ? 'ha' : 'han'} pogut eliminar ${n} clau${n === 1 ? '' : 's'} del registre — normalment cal que el Prune s'executi com a administrador.`
     },
     bugReport: {
@@ -3174,7 +3174,7 @@ export const CATALOG = {
       includedVersion: 'Versió de Prune',
       includedWindows: 'Versió de Windows',
       includedArch: 'Arquitectura',
-      includedNothingElse: "No es recull res més: ni rutes de fitxers, ni resultats d'anàlisi, ni nom d'usuari.",
+      includedNothingElse: "No es recull res més: ni rutes de fitxers, ni resultats d'escaneig, ni nom d'usuari.",
       publicNote: 'Els informes a GitHub són públics, així que no enganxis res privat. Necessites un compte de GitHub gratuït per publicar-ne un.',
       cancel: 'Cancel·la',
       open: 'Obre a GitHub',
@@ -3320,13 +3320,13 @@ export const CATALOG = {
       cookiesToPreserve: {
         title: 'Soubory cookie k zachování',
         description: 'Všechno ostatní v souboru cookie prohlížeče zmizí ve chvíli, kdy ho vyčistíte. Naskenujte a zjistěte, co tam skutečně je, a zaškrtněte vše, co stojí za to zachovat.',
-        scanButton: 'Vyhledat cookies',
+        scanButton: "Skenovat cookies",
         scanning: 'Skenování…',
         filterPlaceholder: 'Filtrovat domény…',
         countSuffix: (count) => `${count} cookie`,
         none: 'Nebyly nalezeny žádné cookies.',
         staleBadge: 'nebylo vidět při tomto skenování',
-        scanErrorPrefix: (message) => `Nepodařilo se vyhledat cookies: ${message}`,
+        scanErrorPrefix: (message) => `Nepodařilo se naskenovat cookies: ${message}`,
         fileErrorsNote: (count) => `${count} soubor${count === 1 ? ' se nepodařilo přečíst a byl přeskočen' : 'ů se nepodařilo přečíst a bylo přeskočeno'}.`,
         checkboxAriaLabel: (domain) => `Zachovat cookies z ${domain}`
       },
@@ -3348,7 +3348,7 @@ export const CATALOG = {
         beforeHeading: 'Před odinstalací',
         restorePointUninstall: {
           title: 'Vytvořit bod obnovení před odinstalací',
-          description: 'Vlastní Obnovení systému Windows, vytvořené předtím, než se spustí odinstalační program. Vyžaduje, aby Prune běžel jako správce, a Windows umožňuje jeden denně, takže když ho nelze vytvořit, odinstalace pokračuje a dialog to uvádí.'
+          description: "Vlastní Obnovení systému Windows, vytvořené předtím, než se spustí odinstalátor programu. Vyžaduje, aby Prune běžel jako správce, a Windows umožňuje jeden denně, takže když ho nelze vytvořit, odinstalace pokračuje a dialog to uvádí."
         },
         registryBackup: {
           title: 'Zálohovat registr před odinstalací',
@@ -3360,31 +3360,31 @@ export const CATALOG = {
         },
         afterHeading: 'Po odinstalaci',
         scanLeftovers: {
-          title: 'Vyhledat pozůstatky po odinstalaci',
-          description: 'Hledá soubory, klíče registru a naplánované úlohy, které po sobě odinstalační program zanechal. Vypnuto, Prune jen spustí vlastní odinstalační program a tam skončí.'
+          title: "Skenovat zbytky po odinstalaci",
+          description: "Hledá soubory, klíče registru a naplánované úlohy, které po sobě odinstalátor zanechal. Vypnuto, Prune jen spustí vlastní odinstalátor programu a tam skončí."
         },
         preselect: {
-          title: 'Ve výchozím nastavení zaškrtnout každý pozůstatek',
+          title: "Ve výchozím nastavení zaškrtnout každý zbytek",
           description: 'Kontrola se otevře se vším nalezeným zaškrtnutým. Vypnuto, otevře se s ničím zaškrtnutým a vyberete si sami.'
         },
         keepHistory: {
           title: 'Uchovávat historii odinstalací',
           description: 'Seznam nedávných odebrání a uvolněného místa na řídicím panelu. Vypnuto, nic nového se nezaznamenává.'
         },
-        destinationHeading: 'Zbylé soubory jdou do',
+        destinationHeading: "Zbytky jdou do",
         leftoverOptions: {
           quarantine: { label: 'Karanténa', description: 'Přesunuto do vlastní zálohy aplikace Prune a obnovitelné z obrazovky Karanténa. Výchozí.' },
           recycle: { label: 'Koš', description: 'Obnovitelné z vlastního koše Windows a uvolněné při jeho vyprázdnění.' },
           permanent: { label: 'Trvale odstranit', description: 'Rovnou smazáno. Nic k obnovení.' }
         },
-        permanentWarning: 'Zbylé soubory budou rovnou smazány a nelze je obnovit, ani z karantény, ani odjinud. Před potvrzením zkontrolujte seznam.',
+        permanentWarning: "Zbytky budou rovnou smazány a nelze je obnovit, ani z karantény, ani odjinud. Před potvrzením zkontrolujte seznam.",
         registryNote: 'Klíče registru se exportují do karantény před odebráním, ať už zvolíte cokoli.'
       },
       about: {
         reportTitle: 'Nahlásit chybu',
         reportDescription: "Otevře na GitHubu předvyplněné hlášení. Prune sám nic neodesílá a všechno uvidíte dřív, než to kam odejde.",
         reportButton: 'Nahlásit chybu',
-        description: 'Lokální, offline odinstalační a čisticí nástroj pro Windows — vynucené odebrání se skenováním pozůstatků, bezpečná karanténa před smazáním, mapování disku a jednoklikové čištění nepořádku.'
+        description: "Lokální, offline odinstalační a čisticí nástroj pro Windows — vynucené odebrání se skenováním zbytků, bezpečná karanténa před smazáním, Mapa disku a jednoklikové čištění nepořádku."
       },
       automation: {
         title: 'Automatizace',
@@ -3459,7 +3459,7 @@ export const CATALOG = {
       junk: {
         label: 'Nepotřebné soubory',
         notMeasured: 'neměřeno',
-        description: 'Měření projde všechny cesty čištění na disku — asi půl minuty.',
+        description: "Měření projde cesty všech čističů na disku — asi půl minuty.",
         measure: 'Změřit'
       },
       recentActivity: {
@@ -3470,16 +3470,16 @@ export const CATALOG = {
     },
     diskMap: {
       title: "Mapa disku",
-      unscannedLabel: "Neprohledáno",
+      unscannedLabel: "Nenaskenováno",
       aggregateCell: (count) => `${count} menších položek`,
       subtitle: "Využití disku: co na tomto disku zabírá místo a kde.",
       fastIndexSummary: (count) => `${count} souborů a složek načteno z vlastního indexu disku.`,
       browsingInstant: 'Procházení je odtud okamžité.',
       indexIncomplete: 'Část indexu se nepodařilo načíst, takže součty jsou dolní odhad.',
-      scanningDrive: 'Prohledávání disku…',
+      scanningDrive: "Skenování disku…",
       readingDrive: 'Čtení disku…',
       rescanButton: 'Znovu prohledat disk (admin)',
-      fastScanButton: 'Rychlé prohledání (admin)',
+      fastScanButton: "Rychlé skenování (admin)",
       loading: {
         heading: 'Čtení každé složky pod',
         note: 'Jedna složka po druhé, což je jediný způsob, jak to udělat bez oprávnění správce. Celý disk může trvat minutu a nemusí skončit.',
@@ -3487,7 +3487,7 @@ export const CATALOG = {
       },
       driveRootPrompt: {
         heading: 'Načíst celý disk',
-        fastTitle: "Rychlé prohledání",
+        fastTitle: "Rychlé skenování",
         recommended: "Doporučeno",
         fastExplain: (path) => `Načte vlastní index souborů disku: všechny soubory na ${path} za pár sekund.`,
         fastNeeds: "Vyžaduje oprávnění správce, proto Windows zobrazí výzvu UAC.",
@@ -3497,8 +3497,8 @@ export const CATALOG = {
         crawlButton: 'Místo toho procházet složky'
       },
       scanProgress: {
-        scanning: (path) => `Prohledávání ${path}`,
-        filesProcessed: (files, size) => `Prohledáno souborů: ${files} · zpracováno ${size}`,
+        scanning: (path) => `Skenování ${path}`,
+        filesProcessed: (files, size) => `Naskenováno souborů: ${files} · zpracováno ${size}`,
         noTotalNote: "Celková velikost tohoto skenování není známa, proto se nezobrazuje procento — čítače ukazují, co bylo dosud přečteno.",
         indexNote: "Windows během čtení indexu disku nehlásí průběh, proto se nezobrazuje procento — jen uplynulý čas.",
         elapsed: (time) => `Uplynulo ${time}`,
@@ -3517,20 +3517,20 @@ export const CATALOG = {
         retry: "Zkusit znovu",
         barLabel: "Průběh skenování"
       },
-      scanFailure: (path, error) => `Nepodařilo se prohledat „${path}“: ${error}`,
-      fastScanDeclined: 'Neschváleno — stále se používá prohledávání složka po složce.',
+      scanFailure: (path, error) => `Nepodařilo se naskenovat „${path}“: ${error}`,
+      fastScanDeclined: "Neschváleno — stále se používá skenování složka po složce.",
       truncated: {
-        withCoverage: (measured, used, percent) => `Toto prohledání vypršelo: změřilo ${measured} z ${used} využitého místa (${percent} %). Co změřilo, je skutečné; zbytek se zobrazuje jako neprohledaný, nikoli jako prázdný.`,
-        withoutCoverage: 'Toto prohledání vypršelo, než dokončilo disk. Vše, co skutečně změřilo, je skutečné, ale složky, ke kterým se nedostalo, se zobrazují jako neprohledané, nikoli jako prázdné — neberte to jako úplný obraz toho, co využívá vaše místo.',
-        stoppedWithCoverage: (a, b, c) => `Toto prohledání jste zastavili: změřilo ${a} z ${b} využitého místa (${c} %). Co změřilo, je skutečné; zbytek se zobrazuje jako neprohledaný, nikoli jako prázdný.`,
-        stoppedWithoutCoverage: "Toto prohledání jste předčasně zastavili. Co změřilo, je skutečné; složky, ke kterým se nedostalo, se zobrazují jako neprohledané, nikoli jako prázdné — nepovažujte to za úplný obraz toho, co zabírá místo.",
-        rescanLink: 'Místo toho spustit rychlé prohledání'
+        withCoverage: (measured, used, percent) => `Toto skenování vypršelo: změřilo ${measured} z ${used} využitého místa (${percent} %). Co změřilo, je skutečné; zbytek se zobrazuje jako nenaskenovaný, nikoli jako prázdný.`,
+        withoutCoverage: "Toto skenování vypršelo, než dokončilo disk. Vše, co skutečně změřilo, je skutečné, ale složky, ke kterým se nedostalo, se zobrazují jako nenaskenované, nikoli jako prázdné — neberte to jako úplný obraz toho, co využívá vaše místo.",
+        stoppedWithCoverage: (a, b, c) => `Toto skenování jste zastavili: změřilo ${a} z ${b} využitého místa (${c} %). Co změřilo, je skutečné; zbytek se zobrazuje jako nenaskenovaný, nikoli jako prázdný.`,
+        stoppedWithoutCoverage: "Toto skenování jste předčasně zastavili. Co změřilo, je skutečné; složky, ke kterým se nedostalo, se zobrazují jako nenaskenované, nikoli jako prázdné — nepovažujte to za úplný obraz toho, co zabírá místo.",
+        rescanLink: "Místo toho spustit rychlé skenování"
       },
       view: { tree: 'Strom', files: 'Soubory' },
       folderTable: {
         empty: 'V této složce není nic k zobrazení.',
         rowLabel: (a, b) => `Otevřít ${a}, ${b}`,
-        notScanned: 'neprohledáno',
+        notScanned: "nenaskenováno",
         columns: { folder: 'Složka', size: 'Velikost', items: 'Položky', files: 'Soubory', folders: 'Složky', modified: 'Změněno' }
       },
       extensionPanel: {
@@ -3538,13 +3538,13 @@ export const CATALOG = {
         typeCount: (n) => `${n} typů`,
         noType: 'bez typu',
         footer: (bytes, count) => `${bytes} napříč ${count} soubory`,
-        unopenedFolders: (bytes) => ` · ${bytes} ve složkách, které prohledání neotevřelo`
+        unopenedFolders: (bytes) => ` · ${bytes} ve složkách, které skenování neotevřelo`
       },
-      largestFiles: { empty: 'Prohledání nenašlo žádné soubory k zobrazení.' },
+      largestFiles: { empty: "Skenování nenašlo žádné soubory k zobrazení." },
       tooltip: {
         notMeasured: (bytes) => `${bytes} nezměřeno`,
         aggregated: 'Nejmenší položky v této složce, seskupené dohromady.',
-        unscanned: 'Prohledání se zastavilo, než se sem dostalo. Skutečná velikost není známa.'
+        unscanned: "Skenování se zastavilo, než se sem dostalo. Skutečná velikost není známa."
       },
       rowActionsLabel: (a) => `Akce pro ${a}`,
       cellOpenLabel: (name) => `Otevřít ${name}`,
@@ -3625,12 +3625,12 @@ export const CATALOG = {
         total: 'celkem'
       },
       batchReasons: {
-        orphaned: 'Jeho odinstalační program je poškozen — použijte místo toho Vynutit odstranění.',
+        orphaned: "Jeho odinstalátor je poškozen — použijte místo toho Vynutit odstranění.",
         extension: 'Rozšíření prohlížeče se odebírají přímo z prohlížeče.',
         storeNoPackage: 'Tato aplikace z obchodu nemá název balíčku k odebrání.',
         storeProtected: 'Windows označuje tuto aplikaci jako součást systému a neumožňuje její odebrání.',
         storeUnknown: 'Windows neuvedl, zda lze tuto aplikaci odebrat, proto je vynechána z dávky.',
-        noCommand: 'Pro tento program není zaregistrován žádný odinstalační příkaz.'
+        noCommand: "Pro tento program není zaregistrován žádný příkaz odinstalace."
       },
       storeRemoveDialog: {
         heading: (name) => `Odebrat ${name}?`,
@@ -3672,10 +3672,10 @@ export const CATALOG = {
       deleting: 'Odstraňování…'
     },
     startup: {
-      title: 'Spouští se při přihlášení',
+      title: "Po spuštění",
       subtitle: "Co se spouští při přihlášení: klíče Run a složky Po spuštění, které Windows čte, seskupené podle umístění — to určuje, koho se položka týká a co je potřeba k jejímu odstranění. Položku, jejíž soubor chybí, po sobě nechal neopatrně odinstalovaný program a Windows se ji pokaždé znovu pokouší spustit.",
-      loading: 'Čtení položek při spuštění…',
-      loadError: (error) => `Položky při spuštění se nepodařilo přečíst: ${error}`,
+      loading: "Čtení položek Po spuštění…",
+      loadError: (error) => `Položky Po spuštění se nepodařilo přečíst: ${error}`,
       empty: {
         heading: 'Při přihlášení se nic nespouští.',
         body: 'Prune zkontroloval klíče Run a RunOnce v obou registrech a obou složkách po spuštění. Program, který se přidá později, se zde zobrazí.'
@@ -3687,7 +3687,7 @@ export const CATALOG = {
         broken: (n) => `${n} ukazuje na chybějící soubor`
       },
       columns: {
-        name: 'Název při spuštění',
+        name: "Název položky Po spuštění",
         command: 'Cesta ke spuštění',
         description: 'Popis',
         publisher: 'Vydavatel',
@@ -3763,7 +3763,7 @@ export const CATALOG = {
     },
     deepClean: {
       title: 'Důkladné čištění',
-      subtitle: 'Každá mezipaměť, protokol, výpis a pozůstatek, které Prune umí najít, změřené na tomto počítači místo odhadu. Nic se rovnou nesmaže — vše, co Čištění vezme, jde nejprve do Karantény, odkud to lze vrátit zpět.',
+      subtitle: "Každá mezipaměť, protokol, výpis a zbytek, které Prune umí najít, změřené na tomto počítači místo odhadu. Nic se rovnou nesmaže — vše, co Čištění vezme, jde nejprve do Karantény, odkud to lze vrátit zpět.",
       scanLog: {
         header: 'Výstup skenování',
         scanningAnnounce: (total) => `Skenování ${total} umístění.`,
@@ -3875,17 +3875,17 @@ export const CATALOG = {
       searchHint: (name) => `Převzato z „${name}“ bez verze — instalátory pojmenovávají složky podle produktu, ne podle vydání. Upravte to, pokud výsledky vypadají špatně.`,
       scanFailed: (error) => `Skenování selhalo: ${error}`,
       searchButton: 'Hledat zbytky',
-      normalIntro: (name) => `Toto spustí vlastní odinstalátor ${name} a poté zkontroluje, co po sobě zanechal.`,
+      normalIntro: (name) => `Toto spustí vlastní odinstalátor ${name} a poté naskenuje, co po sobě zanechal.`,
       uninstallFailed: (error) => `Odinstalace selhala: ${error}`,
       startButton: 'Spustit odinstalaci',
       noWorkingUninstaller: 'Žádný funkční odinstalátor — místo toho se hledá podle názvu',
-      noUninstallCommand: 'Není registrován žádný odinstalační příkaz',
+      noUninstallCommand: "Není zaregistrován žádný příkaz odinstalace",
       progress: {
         runningNative: 'Spouští se nativní odinstalátor',
         backingUpRegistry: 'Zálohuje se registr',
         creatingRestorePoint: 'Vytváří se bod obnovení',
         searchingLeftovers: 'Hledají se zbytky',
-        scanningLeftovers: 'Kontrolují se zbytky',
+        scanningLeftovers: "Skenují se zbytky",
         checkingCommand: 'Kontrola souborového systému, registru a naplánovaných úloh…'
       },
       removing: {
@@ -3893,7 +3893,7 @@ export const CATALOG = {
         recycle: { title: 'Odesílá se do koše', command: 'V případě potřeby je obnovte z koše' },
         permanent: { title: 'Trvale se maže', command: 'Toto nelze obnovit' }
       },
-      noScan: (name) => `Odinstalátor ${name} dokončil svou práci. Kontrola zbytků je v Nastavení vypnutá, takže se nic dalšího nehledalo.`,
+      noScan: (name) => `Odinstalátor ${name} dokončil svou práci. Skenování zbytků je v Nastavení vypnuté, takže se nic dalšího nehledalo.`,
       readyToScan: {
         body: (name) => `Pokud odinstalátor programu ${name} ještě dokončuje práci, nechte ho nejdřív skončit. Pak kliknutím na Skenovat zbytky vyhledejte, co po sobě zanechal.`,
         scanButton: "Skenovat zbytky"
@@ -3916,7 +3916,7 @@ export const CATALOG = {
     },
     batchUninstallModal: {
       title: (n) => `Odinstalovat ${n} program${n === 1 ? '' : (n < 5 ? 'y' : 'ů')}`,
-      historyLabel: (n) => `Dávkové odinstalování: ${n} programů`,
+      historyLabel: (n) => `Dávková odinstalace: ${n} programů`,
       close: 'Zavřít',
       cancel: "Zrušit",
       stillWaiting: (more) => more ? `Stále čekáme na tento odinstalátor. Jeho vlastní okno může být za Prune. Zvolte „Zastavit po tomto“ a zbylé programy se po jeho dokončení přeskočí.` : `Stále čekáme na tento odinstalátor. Jeho vlastní okno může být za Prune.`,
@@ -3924,8 +3924,8 @@ export const CATALOG = {
       stopping: "Zastaví se po tomto…",
       statusSkipped: "přeskočeno",
       stoppedNote: (n) => `Zastaveno předčasně. Nespuštěno: ${n}.`,
-      registryOnlyIntro: 'Každá aplikace se postupně odstraní přes Windows a poté neprobíhá žádná kontrola zbytků: Windows odstraní vlastní data aplikace spolu s ní.',
-      mixedIntro: (hasStore) => `Vlastní odinstalátor každého programu se spustí postupně, poté Prune zkontroluje, co po sobě zanechaly, a před odstraněním čehokoli vám vše ukáže.${hasStore ? ' Aplikace ze Store se místo toho odstraňují přes Windows, bez následné kontroly zbytků.' : ''}`,
+      registryOnlyIntro: "Každá aplikace se postupně odstraní přes Windows a poté neprobíhá žádné skenování zbytků: Windows odstraní vlastní data aplikace spolu s ní.",
+      mixedIntro: (hasStore) => `Vlastní odinstalátor každého programu se spustí postupně, poté Prune naskenuje, co po sobě zanechaly, a před odstraněním čehokoli vám vše ukáže.${hasStore ? ' Aplikace ze Store se místo toho odstraňují přes Windows, bez následného skenování zbytků.' : ''}`,
       oneAtATime: 'Postupně po jedné, protože Windows umožňuje jen jednu instalaci nebo odinstalaci najednou. Některé odinstalátory zobrazí vlastní okna a budou vám klást otázky.',
       storeWarning: (count) => count === 1
         ? 'Aplikaci ze Store v této dávce nelze obnovit z karantény: jejím odstraněním zmizí aplikace i její uložená data a získat ji zpět znamená přeinstalovat ji ze Store.'
@@ -3934,13 +3934,13 @@ export const CATALOG = {
       reported: (bytes) => `nahlášeno ${bytes}`,
       unknownSizeSuffix: (n) => `, ${n} neznámé velikosti`,
       startButton: 'Spustit odinstalaci',
-      status: { waiting: 'čeká', uninstalling: 'odinstalovává se…', removed: 'odstraněno', failed: 'selhalo' },
+      status: { waiting: 'čeká', uninstalling: 'odinstalovává se…', removed: "odinstalováno", failed: 'selhalo' },
       removingLine: {
         quarantine: 'Zbytky se přesouvají do karantény…',
         recycle: 'Zbytky se odesílají do koše…',
         permanent: 'Zbytky se trvale mažou…'
       },
-      scanningLine: 'Kontrolují se zbytky…',
+      scanningLine: "Skenují se zbytky…",
       readyToScan: {
         body: (n) => `Odinstalátory, které dokončily práci: ${n}. Některé, zejména herní launchery, mažou soubory na pozadí i po zavření vlastního okna. Pokud si nejste jistí, chvíli počkejte a pak kliknutím na Skenovat zbytky zkontrolujte, jestli něco nezůstalo.`,
         scanButton: 'Skenovat zbytky'
@@ -3948,15 +3948,15 @@ export const CATALOG = {
       uninstalledOf: (removed, total) => `Odinstalováno ${removed} z ${total}.`,
       failedHeading: (n) => `${n} se nepodařilo odinstalovat a ${n === 1 ? 'zůstal' : 'zůstaly'} nedotčeny:`,
       removeLeftoversFailed: (error) => `Nepodařilo se odstranit zbytky: ${error}`,
-      noScanSettingsOff: 'Kontrola zbytků je v Nastavení vypnutá, takže se nic nehledalo.',
-      noScanStore: 'Po aplikaci ze Store neprobíhá žádná kontrola zbytků: Windows odstraní vlastní data aplikace spolu s ní.',
+      noScanSettingsOff: "Skenování zbytků je v Nastavení vypnuté, takže se nic nehledalo.",
+      noScanStore: "Po aplikaci ze Store neprobíhá žádné skenování zbytků: Windows odstraní vlastní data aplikace spolu s ní.",
       done: 'Hotovo',
       summary: {
         recycle: (programs, items, freed) => `Odinstalováno ${programs} a odesláno ${items} do koše, uvolněno ${freed}.`,
         permanent: (programs, items, freed) => `Odinstalováno ${programs} a trvale smazáno ${items}, uvolněno ${freed}.`,
         quarantine: (programs, items, freed) => `Odinstalováno ${programs} a přesunuto ${items} do karantény, uvolněno ${freed}.`,
         programs: (n) => `${n} program${n === 1 ? '' : (n < 5 ? 'y' : 'ů')}`,
-        items: (n) => `${n} zbytkov${n === 1 ? 'á položka' : (n < 5 ? 'é položky' : 'ých položek')}`
+        items: (n) => `${n} ${n === 1 ? 'zbytek' : (n < 5 ? 'zbytky' : 'zbytků')}`
       },
       noRestorePoint: (reason) => `Nebyl vytvořen žádný bod obnovení systému (${reason}).`,
       restorePointFallback: 'není k dispozici',
@@ -4075,7 +4075,7 @@ export const CATALOG = {
       },
       autoQuarantine: {
         title: 'Cwarantin Awtomatig',
-        description: "Mae Glanhau Dwfn yn symud yr hyn y mae'n ei gymryd i Gwarantin Prune, lle gallwch ei roi'n ôl. Diffoddwch hyn a bydd yn mynd i Fin Ailgylchu Windows yn lle hynny — yn dal i fod yn adferadwy, dim ond mewn man rydych eisoes yn gwybod sut i'w wacáu."
+        description: "Mae Glanhau Dwfn yn symud yr hyn y mae'n ei gymryd i'r Cwarantin yn Prune, lle gallwch ei roi'n ôl. Diffoddwch hyn a bydd yn mynd i Fin Ailgylchu Windows yn lle hynny — yn dal i fod yn adferadwy, dim ond mewn man rydych eisoes yn gwybod sut i'w wacáu."
       },
       skipRecent: {
         title: 'Gadewch ffeiliau diweddar yn llonydd',
@@ -4092,18 +4092,18 @@ export const CATALOG = {
         description: "Mae'r rhan fwyaf o'r rhestr ar gyfer meddalwedd nad oes gan y peiriant hwn. Mae cuddio'r rheiny'n gadael dim ond yr hyn sydd yma go iawn."
       },
       quarantineRetention: {
-        title: "Am ba hyd i gadw eitemau yn y cwarantin",
-        description: "Mae popeth mae Prune yn ei dynnu'n mynd i Gwarantin yn gyntaf, ac yn aros nes i chi ei wacáu. Gosodwch nifer o ddiwrnodau i ollwng copïau wrth gefn hŷn na hynny. Gadewch yn wag i'w cadw am byth.",
+        title: "Am ba hyd i gadw eitemau yn y Cwarantin",
+        description: "Mae popeth mae Prune yn ei dynnu'n mynd i'r Cwarantin yn gyntaf, ac yn aros nes i chi ei wacáu. Gosodwch nifer o ddiwrnodau i ollwng copïau wrth gefn hŷn na hynny. Gadewch yn wag i'w cadw am byth.",
         neverPlaceholder: 'Byth',
         daysUnit: 'diwrnod',
-        ariaLabel: 'Diwrnodau i gadw copïau wrth gefn cwarantin'
+        ariaLabel: "Diwrnodau i gadw copïau wrth gefn Cwarantin"
       },
       quarantineMaxSize: {
-        title: "Terfyn maint y cwarantin",
+        title: "Terfyn maint y Cwarantin",
         description: "Terfyn ar y ffolder Cwarantin cyfan. Uwch ei ben, mae'r copïau wrth gefn hynaf yn mynd yn gyntaf — ni chaiff yr un mwyaf diweddar ei ollwng byth, felly mae rhywbeth mawr rydych newydd ei dynnu'n aros yn adferadwy hyd yn oed os yw'n fwy na'r terfyn ar ei ben ei hun. Gadewch yn wag am ddim terfyn.",
         noLimitPlaceholder: 'Dim terfyn',
         gbUnit: 'GB',
-        ariaLabel: 'Maint mwyaf y cwarantin mewn gigabeitiau'
+        ariaLabel: "Maint mwyaf y Cwarantin mewn gigabeitiau"
       },
       exclusions: {
         title: "Eithrio ffolderi",
@@ -4141,7 +4141,7 @@ export const CATALOG = {
       warningConfirmations: {
         title: 'Cadarnhadau rhybudd',
         allAsk: "Mae pob glanhawr sy'n colli data'n gofyn cyn iddo redeg.",
-        someSet: (count) => `Gosodwyd ${count} rhybudd glanhau i beidio â gofyn eto.`,
+        someSet: (count) => `Gosodwyd ${count} rhybudd glanhawr i beidio â gofyn eto.`,
         reset: 'Ailosod cadarnhadau rhybudd'
       },
       uninstallTab: {
@@ -4164,27 +4164,27 @@ export const CATALOG = {
           description: "Yn chwilio am y ffeiliau, allweddi cofrestrfa a thasgau a drefnwyd y mae'r dadosodwr wedi'u gadael ar ôl. Wedi'i ddiffodd, mae Prune yn rhedeg dadosodwr ei hun y rhaglen ac yn stopio yno."
         },
         preselect: {
-          title: 'Ticio pob gweddill yn ddiofyn',
+          title: "Ticio pob un o'r olion yn ddiofyn",
           description: "Mae'r adolygiad yn agor gyda phopeth a ganfuwyd wedi'i dicio. Wedi'i ddiffodd, mae'n agor heb ddim wedi'i dicio ac rydych chi'n dewis."
         },
         keepHistory: {
           title: 'Cadw hanes dadosod',
           description: "Rhestr y dangosfwrdd o dynnu diweddar a'r lle y maent wedi'i ryddhau. Wedi'i ddiffodd, ni chaiff dim newydd ei gofnodi."
         },
-        destinationHeading: "Mae ffeiliau gweddilliol yn mynd i",
+        destinationHeading: "Mae ffeiliau'r olion yn mynd i",
         leftoverOptions: {
-          quarantine: { label: 'Cwarantin', description: "Wedi'u symud i gopi wrth gefn ei hun Prune, ac yn adferadwy o'r sgrin Gwarantin. Y rhagosodiad." },
+          quarantine: { label: 'Cwarantin', description: "Wedi'u symud i gopi wrth gefn ei hun Prune, ac yn adferadwy o'r sgrin Cwarantin. Y rhagosodiad." },
           recycle: { label: "Y Bin Ailgylchu", description: "Yn adferadwy o fin Windows ei hun, ac yn cael ei ryddhau pan fyddwch yn ei wacáu." },
           permanent: { label: "Dileu'n barhaol", description: "Wedi'u dileu'n llwyr. Dim byd i'w adfer." }
         },
-        permanentWarning: "Caiff ffeiliau gweddilliol eu dileu'n llwyr ac ni ellir eu hadfer, o Gwarantin nac unrhyw le arall. Gwiriwch y rhestr cyn i chi ei chadarnhau.",
-        registryNote: "Caiff allweddi cofrestrfa eu hallforio i Gwarantin cyn iddynt gael eu tynnu, pa un bynnag a ddewiswch."
+        permanentWarning: "Caiff ffeiliau'r olion eu dileu'n llwyr ac ni ellir eu hadfer, o'r Cwarantin nac unrhyw le arall. Gwiriwch y rhestr cyn i chi ei chadarnhau.",
+        registryNote: "Caiff allweddi cofrestrfa eu hallforio i'r Cwarantin cyn iddynt gael eu tynnu, pa un bynnag a ddewiswch."
       },
       about: {
         reportTitle: 'Rhoi gwybod am nam',
         reportDescription: "Yn agor mater wedi'i lenwi ymlaen llaw ar GitHub. Nid yw Prune ei hun yn anfon dim, ac rydych chi'n gweld popeth cyn i unrhyw beth gael ei anfon.",
         reportButton: 'Rhoi gwybod am nam',
-        description: "Offeryn dadosod a glanhau lleol, all-lein ar gyfer Windows — tynnu gorfodol gyda sganio ffeiliau gweddilliol, cwarantin diogel cyn dileu, mapio disg, a glanhau sbwriel un clic."
+        description: "Offeryn dadosod a glanhau lleol, all-lein ar gyfer Windows — tynnu gorfodol gyda sganio olion, Cwarantin diogel cyn dileu, Map Disg, a glanhau sbwriel un clic."
       },
       automation: {
         title: 'Awtomeiddio',
@@ -4199,7 +4199,7 @@ export const CATALOG = {
         everyWeek: 'Bob wythnos',
         measureOnly: "Mesur yn unig",
         clean: 'Glanhau',
-        cleanWarning: "Mae hyn yn tynnu ffeiliau heb i neb wylio. Mae'n glanhau'r rheolau y mae Glanhau Dwfn yn eu hargymell ac sydd wir â rhywbeth ynddynt, ac mae popeth yn dal i fynd i gwarantin — felly gwiriwch y gosodiad cadw uchod cyn gadael hyn ymlaen.",
+        cleanWarning: "Mae hyn yn tynnu ffeiliau heb i neb wylio. Mae'n glanhau'r rheolau y mae Glanhau Dwfn yn eu hargymell ac sydd wir â rhywbeth ynddynt, ac mae popeth yn dal i fynd i'r Cwarantin — felly gwiriwch y gosodiad cadw uchod cyn gadael hyn ymlaen.",
         nextRun: 'Rhediad nesaf:',
         lastRun: 'Rhediad diwethaf:',
         weekdays: {
@@ -4259,7 +4259,7 @@ export const CATALOG = {
       junk: {
         label: "Ffeiliau sbwriel",
         notMeasured: 'heb ei fesur',
-        description: 'Mae mesur yn cerdded pob llwybr glanhau ar y ddisg — tua hanner munud.',
+        description: "Mae mesur yn cerdded llwybr pob glanhawr ar y ddisg — tua hanner munud.",
         measure: 'Mesur'
       },
       recentActivity: {
@@ -4351,18 +4351,18 @@ export const CATALOG = {
       contextMenu: {
         openInExplorer: 'Agor yn yr Explorer',
         copyPath: "Copïo'r llwybr",
-        moveToQuarantineMenu: 'Symud i gwarantin…'
+        moveToQuarantineMenu: "Symud i'r Cwarantin…"
       },
       toasts: {
-        moved: (name) => `Wedi symud i gwarantin: ${name}`,
+        moved: (name) => `Wedi symud i'r Cwarantin: ${name}`,
         restoreHint: "Adferwch o'r sgrin Cwarantin.",
         pathCopied: "Llwybr wedi'i gopïo.",
         copyFailed: "Methwyd copïo'r llwybr hwnnw.",
         moveFailed: 'Methwyd symud hwn.'
       },
       removeModal: {
-        label: 'Symud i gwarantin',
-        heading: 'Symud hwn i gwarantin?',
+        label: "Symud i'r Cwarantin",
+        heading: "Symud hwn i'r Cwarantin?",
         note: "Caiff ei symud, nid ei ddileu — ei adfer unrhyw bryd o'r sgrin Cwarantin.",
         folder: 'Ffolder',
         file: 'Ffeil',
@@ -4434,7 +4434,7 @@ export const CATALOG = {
       },
       storeRemoveDialog: {
         heading: (name) => `Dileu ${name}?`,
-        body: "Mae hyn yn dileu'r ap ar gyfer eich cyfrif, ynghyd â'i osodiadau a'i ddata wedi'i gadw. Yn wahanol i bopeth arall mae Prune yn ei ddileu, nid yw'n mynd i Gwarantin ac ni ellir ei adfer o'r fan hon — mae ei gael yn ôl yn golygu ei osod eto o'r Microsoft Store.",
+        body: "Mae hyn yn dileu'r ap ar gyfer eich cyfrif, ynghyd â'i osodiadau a'i ddata wedi'i gadw. Yn wahanol i bopeth arall mae Prune yn ei ddileu, nid yw'n mynd i'r Cwarantin ac ni ellir ei adfer o'r fan hon — mae ei gael yn ôl yn golygu ei osod eto o'r Microsoft Store.",
         cancel: 'Diddymu',
         close: 'Cau',
         removeApp: "Dileu'r ap",
@@ -4443,8 +4443,8 @@ export const CATALOG = {
     },
     quarantine: {
       title: 'Cwarantin',
-      loading: 'Wrthi\'n llwytho\'r cwarantin…',
-      loadError: (error) => `Methu llwytho'r cwarantin: ${error}`,
+      loading: "Wrthi'n llwytho'r Cwarantin…",
+      loadError: (error) => `Methu llwytho'r Cwarantin: ${error}`,
       summary: {
         phrase: (count, total, atLeast) => `${count} ${count === 1 ? 'swp' : 'swp'} · ${atLeast ? 'o leiaf ' : ''}${total} wedi'i ddal`,
         withLimit: (count, total, atLeast, max) => `${count} ${count === 1 ? 'swp' : 'swp'} · ${atLeast ? 'o leiaf ' : ''}${total} wedi'i ddal o ${max}`,
@@ -4457,7 +4457,7 @@ export const CATALOG = {
       confirm: 'Cadarnhau',
       emptying: 'Gwacáu…',
       empty: {
-        heading: 'Dim byd yn y cwarantin.',
+        heading: "Dim byd yn y Cwarantin.",
         body: "Mae unrhyw beth mae dadosod neu Lanhau Dwfn yn ei ddileu yn glanio yma gyntaf. Mae'n aros nes i chi ei wacáu, felly gellir adfer ffeil a gymerwyd trwy gamgymeriad bob amser."
       },
       deleteConfirmPrompt: 'Dileu am byth?',
@@ -4536,7 +4536,7 @@ export const CATALOG = {
       keepNewest: 'Cadw\'r diweddaraf',
       clear: 'Clirio',
       truncatedWarning: "Cafodd y sgan ei dorri'n fyr, felly efallai bod mwy o setiau na'r rhain.",
-      tags: { keep: "Cadw", toQuarantine: "I'r gwarantin" },
+      tags: { keep: "Cadw", toQuarantine: "I'r Cwarantin" },
       group: {
         identicalCopies: (count, size) => `${count} copi union yr un fath · ${size} yr un`,
         allTickedWarning: "Mae pob copi yn y set hon wedi'i dicio — dad-diciwch un i'w gadw."
@@ -4545,25 +4545,25 @@ export const CATALOG = {
         selected: (count, formatted) => `${count} wedi'u dewis · ${formatted}`,
         moving: 'Wrthi\'n symud…',
         wouldLose: (count) => `Byddai ${count} set${count === 1 ? '' : 'iau'} yn colli pob copi`,
-        moveButton: 'Symud y dewisiedig i gwarantin'
+        moveButton: "Symud y dewisiedig i'r Cwarantin"
       },
       modal: {
-        label: 'Symud dyblygiadau i gwarantin',
-        heading: (count) => `Symud ${count} copi i gwarantin?`,
-        body: (a) => `Bydd eu symud yn rhyddhau ${a} pan fyddwch yn gwagio'r cwarantin. Mae pob grŵp yn cadw o leiaf un copi, ac ni chaiff dim ei ddileu — gallwch adfer unrhyw un ohonynt o'r sgrin Cwarantin.`,
+        label: "Symud dyblygiadau i'r Cwarantin",
+        heading: (count) => `Symud ${count} copi i'r Cwarantin?`,
+        body: (a) => `Bydd eu symud yn rhyddhau ${a} pan fyddwch yn gwagio'r Cwarantin. Mae pob grŵp yn cadw o leiaf un copi, ac ni chaiff dim ei ddileu — gallwch adfer unrhyw un ohonynt o'r sgrin Cwarantin.`,
         cancel: 'Diddymu',
-        confirmButton: 'Symud i gwarantin'
+        confirmButton: "Symud i'r Cwarantin"
       },
       toasts: {
-        moved: (count) => `Wedi symud ${count} copi i gwarantin.`,
-        restoreHint: "Adferwch nhw o'r sgrin Gwarantin.",
+        moved: (count) => `Wedi symud ${count} copi i'r Cwarantin.`,
+        restoreHint: "Adferwch nhw o'r sgrin Cwarantin.",
         failed: (count) => `Methwyd symud ${count}.`,
         failedDetail: "Efallai eu bod ar agor neu ar ddisg arall."
       }
     },
     deepClean: {
       title: 'Glanhau Dwfn',
-      subtitle: "Pob storfa dros dro, log, dympiad ac olion mae Prune yn gwybod sut i'w canfod, wedi'u mesur ar y peiriant hwn yn hytrach nag amcangyfrif. Ni chaiff dim ei ddileu'n uniongyrchol — mae popeth mae Glanhau yn ei gymryd yn mynd i Gwarantin yn gyntaf, lle gallwch ei roi'n ôl.",
+      subtitle: "Pob storfa dros dro, log, dympiad ac olion mae Prune yn gwybod sut i'w canfod, wedi'u mesur ar y peiriant hwn yn hytrach nag amcangyfrif. Ni chaiff dim ei ddileu'n uniongyrchol — mae popeth mae Glanhau yn ei gymryd yn mynd i'r Cwarantin yn gyntaf, lle gallwch ei roi'n ôl.",
       scanLog: {
         header: 'Allbwn sgan',
         scanningAnnounce: (total) => `Sganio ${total} lleoliad.`,
@@ -4592,9 +4592,9 @@ export const CATALOG = {
         selectedCount: (count) => `${count} wedi'u dewis`
       },
       confirm: {
-        prompt: (count, sizeKnown, formatted) => `Symud ${count} eitem (${sizeKnown ? formatted : "maint heb ei fesur"}) i gwarantin?`,
+        prompt: (count, sizeKnown, formatted) => `Symud ${count} eitem (${sizeKnown ? formatted : "maint heb ei fesur"}) i'r Cwarantin?`,
         cancel: 'Diddymu',
-        confirmButton: "Symud i gwarantin",
+        confirmButton: "Symud i'r Cwarantin",
         cleaning: 'Glanhau…'
       },
       stop: 'Stopio',
@@ -4667,7 +4667,7 @@ export const CATALOG = {
       titleForce: (name) => `Gorfodi tynnu ${name}`,
       titleNormal: (name) => `Dadosod ${name}`,
       close: 'Cau',
-      stillWaiting: `Yn dal i aros am y dadosodwr. Gallwch gau'r ffenestr hon; mae'r dadosodwr yn dal i redeg, ac ni fydd Prune yn sganio am weddillion.`,
+      stillWaiting: "Yn dal i aros am y dadosodwr. Gallwch gau'r ffenestr hon; mae'r dadosodwr yn dal i redeg, ac ni fydd Prune yn sganio am olion.",
       runningWarning: (name) => `Mae ${name} yn rhedeg ar hyn o bryd. Caewch ef yn gyntaf — mae dadosodwr fel arfer yn methu ar raglen sy'n agored, a gall adael ffeiliau ar ôl y bydd y lansiad nesaf yn eu hail-greu.`,
       orphanedWarning: (reason) => `${reason} Bydd Windows yn parhau i'w restru nes bod y cofnod yn cael ei dynnu.`,
       brokenIntro: "Bydd Prune yn chwilio am ffeiliau ac allweddi cofrestrfa sy'n cyfateb i'r enw hwn, gan gynnwys ei gofnod Ychwanegu/Tynnu Rhaglenni, ac yn dangos popeth i chi cyn tynnu unrhyw beth.",
@@ -4756,7 +4756,7 @@ export const CATALOG = {
         permanent: (programs, items, freed) => `Dadosodwyd ${programs} a dilewyd ${items} yn barhaol, gan ryddhau ${freed}.`,
         quarantine: (programs, items, freed) => `Dadosodwyd ${programs} a symudwyd ${items} i'r Cwarantin, gan ryddhau ${freed}.`,
         programs: (n) => `${n} rhaglen`,
-        items: (n) => `${n} eitem weddilliol`
+        items: (n) => `${n} eitem o olion`
       },
       noRestorePoint: (reason) => `Ni chrëwyd pwynt adfer system (${reason}).`,
       restorePointFallback: 'ddim ar gael',
@@ -4835,7 +4835,7 @@ export const CATALOG = {
       reportBug: 'Rapportér en fejl',
       dashboard: 'Oversigt', diskMap: 'Diskkort', applications: 'Programmer',
       quarantine: 'Karantæne', settings: 'Indstillinger', startup: 'Opstart',
-      duplicates: 'Dubletter', deepClean: 'Grundig oprydning',
+      duplicates: 'Dubletter', deepClean: "Dybderensning",
       landmark: 'Hoved'
     },
     settings: {
@@ -4875,7 +4875,7 @@ export const CATALOG = {
       },
       autoQuarantine: {
         title: 'Auto-karantæne',
-        description: 'Dybderensning flytter det, den fjerner, til Prunes egen karantæne, hvor du kan sætte det tilbage. Slå dette fra, og det går i stedet til Windows Papirkurv — stadig genoprettelig, bare et sted du allerede ved, hvordan du tømmer.'
+        description: "Dybderensning flytter det, den fjerner, til Prunes egen karantæne, hvor du kan sætte det tilbage. Slå dette fra, og det går i stedet til Windows Papirkurv — kan stadig gendannes, bare et sted du allerede ved, hvordan du tømmer."
       },
       skipRecent: {
         title: 'Lad nylige filer være',
@@ -4900,7 +4900,7 @@ export const CATALOG = {
       },
       quarantineMaxSize: {
         title: "Størrelsesgrænse for karantæne",
-        description: 'Et loft over hele karantænemappen. Over det går de ældste sikkerhedskopier først — den seneste droppes aldrig, så noget stort, du lige har fjernet, forbliver genoprettelig, selv hvis det er større end loftet alene. Lad det stå tomt for ingen grænse.',
+        description: "Et loft over hele karantænemappen. Over det går de ældste sikkerhedskopier først — den seneste droppes aldrig, så noget stort, du lige har fjernet, kan stadig gendannes, selv hvis det er større end loftet alene. Lad det stå tomt for ingen grænse.",
         noLimitPlaceholder: 'Ingen grænse',
         gbUnit: 'GB',
         ariaLabel: 'Maksimal karantænestørrelse i gigabyte'
@@ -4940,8 +4940,8 @@ export const CATALOG = {
       },
       warningConfirmations: {
         title: 'Advarselsbekræftelser',
-        allAsk: 'Hver rensning, der mister data, spørger, før den kører.',
-        someSet: (count) => `${count} rensningsadvarsel${count === 1 ? '' : 'er'} sat til ikke at spørge igen.`,
+        allAsk: "Hver renser, der mister data, spørger, før den kører.",
+        someSet: (count) => `${count} renseradvarsel${count === 1 ? '' : 'er'} sat til ikke at spørge igen.`,
         reset: 'Nulstil advarselsbekræftelser'
       },
       uninstallTab: {
@@ -4973,8 +4973,8 @@ export const CATALOG = {
         },
         destinationHeading: 'Restfiler går til',
         leftoverOptions: {
-          quarantine: { label: 'Karantæne', description: 'Flyttet til Prunes egen sikkerhedskopi og genoprettelig fra Karantæne-skærmen. Standard.' },
-          recycle: { label: 'Papirkurven', description: 'Genoprettelig fra Windows egen papirkurv og frigjort, når du tømmer den.' },
+          quarantine: { label: 'Karantæne', description: "Flyttet til Prunes egen sikkerhedskopi og kan gendannes fra Karantæne-skærmen. Standard." },
+          recycle: { label: 'Papirkurven', description: "Kan gendannes fra Windows egen papirkurv og frigøres, når du tømmer den." },
           permanent: { label: 'Slet permanent', description: 'Slettet direkte. Intet at gendanne.' }
         },
         permanentWarning: 'Restfiler slettes direkte og kan ikke gendannes, hverken fra karantæne eller andre steder. Tjek listen, før du bekræfter den.',
@@ -5059,7 +5059,7 @@ export const CATALOG = {
       junk: {
         label: "Overflødige filer",
         notMeasured: 'ikke målt',
-        description: 'At måle gennemgår hver oprydningssti på disken — omkring et halvt minut.',
+        description: "At måle gennemgår hver rensers sti på disken — omkring et halvt minut.",
         measure: 'Mål'
       },
       recentActivity: {
@@ -5273,12 +5273,12 @@ export const CATALOG = {
     },
     startup: {
       title: "Opstart",
-      subtitle: "Det, der kører, når du logger ind: de Run-nøgler og Startup-mapper, Windows læser, grupperet efter hvor de ligger — det afgør, hvem en post gælder for, og hvad der skal til for at fjerne den. En post, hvis fil er væk, er blevet efterladt af et program, der blev fjernet skødesløst, og Windows forsøger at starte den hver gang.",
+      subtitle: "Det, der kører, når du logger ind: de Run-nøgler og opstartsmapper, Windows læser, grupperet efter hvor de ligger — det afgør, hvem en post gælder for, og hvad der skal til for at fjerne den. En post, hvis fil er væk, er blevet efterladt af et program, der blev fjernet skødesløst, og Windows forsøger at starte den hver gang.",
       loading: 'Læser opstartsposter…',
       loadError: (error) => `Kunne ikke læse opstartsposterne: ${error}`,
       empty: {
         heading: 'Intet kører ved login.',
-        body: 'Prune tjekkede Run- og RunOnce-nøglerne i begge registreringsdatabase-hives og begge Startup-mapper. Et program, der tilføjer sig selv senere, vil dukke op her.'
+        body: "Prune tjekkede Run- og RunOnce-nøglerne i begge registreringsdatabase-hives og begge opstartsmapper. Et program, der tilføjer sig selv senere, vil dukke op her."
       },
       counts: {
         total: (n) => `${n} post${n === 1 ? '' : 'er'}`,
@@ -5302,8 +5302,8 @@ export const CATALOG = {
         notRunning: 'Kører ikke'
       },
       groups: {
-        'Startup folder|machine': 'Startup-mappe for alle brugere',
-        'Startup folder|user': 'Startup-mappe for aktuel bruger',
+        'Startup folder|machine': "Opstartsmappe for alle brugere",
+        'Startup folder|user': "Opstartsmappe for aktuel bruger",
         'Run|user': 'Register: HKCU Run',
         'Run|machine': 'Register: HKLM Run',
         'Run (32-bit)|machine': 'Register: HKLM Run (32-bit)',
@@ -5315,18 +5315,18 @@ export const CATALOG = {
       footerNote: 'At slå en post fra registrerer beslutningen i StartupApproved, det samme sted Windows' + " egne Startprogrammer-indstillinger og Jobliste læser og skriver til. Intet slettes: Run-værdien eller genvejen forbliver, hvor den er, så ændringen kan fortrydes herfra eller fra en af de to andre steder."
     },
     duplicates: {
-      title: 'Duplikerede filer',
+      title: "Dubletfiler",
       subtitle: 'Filer der er byte-for-byte identiske, ikke bare samme størrelse. Peg det mod en mappe, du faktisk opbevarer ting i — at læse et helt drev for at sammenligne det med sig selv tager langt længere tid, end det er værd, og finder for det meste maskinens egne kopier af sine egne filer.',
       folderPlaceholder: (a) => `Mappesti, for eksempel ${a}`,
       stoppedNote: "Stoppet — intet blev sammenlignet.",
-      folderInputAriaLabel: 'Mappe til søgning efter duplikater',
+      folderInputAriaLabel: "Mappe til søgning efter dubletter",
       stop: 'Stop',
-      findButton: 'Find duplikater',
+      findButton: "Find dubletter",
       compareNote: 'Sammenligner størrelser først, derefter en stikprøve, derefter hele filen — så de fleste filer læses aldrig.',
       reading: (folder) => `Læser ${folder}`,
       readingNote: 'Størrelser først, derefter en 64 KB-stikprøve af alt, der deler en, derefter hele indholdet af det, der stadig matcher.',
       empty: {
-        heading: 'Ingen duplikerede filer her.',
+        heading: "Ingen dubletfiler her.",
         scanned: (count) => `${count} filer sammenlignet.`,
         truncatedSuffix: ' Scanningen blev afbrudt, så dette er ikke hele mappen.'
       },
@@ -5348,7 +5348,7 @@ export const CATALOG = {
         moveButton: 'Flyt valgte til karantæne'
       },
       modal: {
-        label: 'Flyt duplikater til karantæne',
+        label: "Flyt dubletter til karantæne",
         heading: (count) => `Flyt ${count} ${count === 1 ? 'kopi' : 'kopier'} til karantæne?`,
         body: (a) => `Det frigør ${a}, når du tømmer karantænen. Hver gruppe beholder mindst én kopi, og intet slettes — du kan gendanne det hele fra Karantæne.`,
         cancel: 'Annuller',
@@ -5467,7 +5467,7 @@ export const CATALOG = {
       titleForce: (name) => `Tving fjernelse af ${name}`,
       titleNormal: (name) => `Afinstaller ${name}`,
       close: 'Luk',
-      stillWaiting: `Venter stadig på afinstallationsprogrammet. Du kan lukke dette vindue; programmet kører videre, og Prune søger ikke efter rester.`,
+      stillWaiting: "Venter stadig på afinstallationsprogrammet. Du kan lukke dette vindue; programmet kører videre, og Prune scanner ikke for rester.",
       runningWarning: (name) => `${name} kører lige nu. Luk det først — et afinstallationsprogram fejler som regel på et åbent program og kan efterlade filer, som næste opstart genskaber.`,
       orphanedWarning: (reason) => `${reason} Windows bliver ved med at vise det, indtil posten er fjernet.`,
       brokenIntro: 'Prune søger efter filer og registreringsnøgler, der matcher dette navn, inklusive dets post i Fjern eller rediger programmer, og viser dig alt, før noget fjernes.',
@@ -5670,12 +5670,12 @@ export const CATALOG = {
         openPageError: (error) => `Seite konnte nicht geöffnet werden: ${error}`
       },
       showFreeSpace: {
-        title: 'Freien Speicherplatz auf der Speicherplatzkarte anzeigen',
+        title: "Freien Speicherplatz auf der Festplattenkarte anzeigen",
         description: 'Zeichnet den freien Speicherplatz des Laufwerks als weiteren Block, wenn du ein ganzes Laufwerk scannst, sodass jeder Ordner als Anteil des Laufwerks statt des belegten Speicherplatzes gelesen wird.'
       },
       autoQuarantine: {
         title: 'Auto-Quarantäne',
-        description: 'Die Tiefenreinigung verschiebt, was sie entfernt, in Prunes eigene Quarantäne, wo du es zurückholen kannst. Schalte dies aus, und es wandert stattdessen in den Windows-Papierkorb — immer noch wiederherstellbar, nur an einem Ort, den du bereits kennst.'
+        description: "Die Gründliche Bereinigung verschiebt, was sie entfernt, in Prunes eigene Quarantäne, wo du es zurückholen kannst. Schalte dies aus, und es wandert stattdessen in den Windows-Papierkorb — immer noch wiederherstellbar, nur an einem Ort, den du bereits kennst."
       },
       skipRecent: {
         title: 'Kürzlich geänderte Dateien in Ruhe lassen',
@@ -5707,7 +5707,7 @@ export const CATALOG = {
       },
       exclusions: {
         title: 'Ordner ausschließen',
-        description: 'Ordner und Dateitypen, die Prune in Ruhe lässt — von der Tiefenreinigung übersprungen und von der Speicherplatzkarte ausgeschlossen — zusätzlich zu denen, die es bereits schützt: Systemvolumeninformationen, Antivirus-Quarantänen, der Komponentenspeicher und ein Dutzend andere.',
+        description: "Ordner und Dateitypen, die Prune in Ruhe lässt — von der Gründlichen Bereinigung übersprungen und von der Festplattenkarte ausgeschlossen — zusätzlich zu denen, die es bereits schützt: Systemvolumeninformationen, Antivirus-Quarantänen, der Komponentenspeicher und ein Dutzend andere.",
         ariaLabel: 'Ordnerpfad oder Dateityp zum Ausschließen',
         add: 'Hinzufügen',
         invalidFormat: 'Gib einen vollständigen Ordnerpfad (D:\\Games) oder einen Dateityp (*.iso) ein.',
@@ -5720,13 +5720,13 @@ export const CATALOG = {
       cookiesToPreserve: {
         title: 'Zu erhaltende Cookies',
         description: 'Alles andere in der Cookie-Datei eines Browsers ist weg, sobald du sie bereinigst. Scanne, um zu sehen, was tatsächlich vorhanden ist, und hake alles ab, was es wert ist, behalten zu werden.',
-        scanButton: 'Nach Cookies suchen',
+        scanButton: "Cookies scannen",
         scanning: 'Wird gescannt…',
         filterPlaceholder: 'Domains filtern…',
         countSuffix: (count) => `${count} Cookie${count === 1 ? '' : 's'}`,
         none: 'Keine Cookies gefunden.',
         staleBadge: 'bei diesem Scan nicht gesehen',
-        scanErrorPrefix: (message) => `Suche nach Cookies fehlgeschlagen: ${message}`,
+        scanErrorPrefix: (message) => `Cookies konnten nicht gescannt werden: ${message}`,
         fileErrorsNote: (count) => `${count} Datei${count === 1 ? ' konnte' : 'en konnten'} nicht gelesen werden und wurde${count === 1 ? '' : 'n'} übersprungen.`,
         checkboxAriaLabel: (domain) => `Cookies von ${domain} behalten`
       },
@@ -5760,31 +5760,31 @@ export const CATALOG = {
         },
         afterHeading: 'Nach der Deinstallation',
         scanLeftovers: {
-          title: 'Nach der Deinstallation nach Überresten suchen',
+          title: "Nach der Deinstallation nach Rückständen scannen",
           description: 'Sucht nach Dateien, Registrierungsschlüsseln und geplanten Aufgaben, die der Deinstaller zurückgelassen hat. Aus, führt Prune nur den eigenen Deinstaller des Programms aus und hört dort auf.'
         },
         preselect: {
-          title: 'Standardmäßig jeden Überrest ankreuzen',
+          title: "Standardmäßig jeden Rückstand ankreuzen",
           description: 'Die Überprüfung öffnet sich mit allem Gefundenen angekreuzt. Aus, öffnet sie sich mit nichts angekreuzt und du wählst.'
         },
         keepHistory: {
           title: 'Einen Deinstallationsverlauf führen',
           description: 'Die Liste der letzten Entfernungen und des freigegebenen Speicherplatzes im Dashboard. Aus, wird nichts Neues aufgezeichnet.'
         },
-        destinationHeading: 'Restdateien gehen an',
+        destinationHeading: "Rückstände gehen an",
         leftoverOptions: {
           quarantine: { label: 'Quarantäne', description: 'In Prunes eigene Sicherung verschoben und über den Bildschirm Quarantäne wiederherstellbar. Der Standard.' },
           recycle: { label: 'Papierkorb', description: 'Über Windows eigenen Papierkorb wiederherstellbar und freigegeben, wenn du ihn leerst.' },
           permanent: { label: 'Dauerhaft löschen', description: 'Sofort gelöscht. Nichts wiederherzustellen.' }
         },
-        permanentWarning: 'Restdateien werden sofort gelöscht und können nicht wiederhergestellt werden, weder aus der Quarantäne noch von anderswo. Überprüfe die Liste, bevor du sie bestätigst.',
+        permanentWarning: "Rückstände werden sofort gelöscht und können nicht wiederhergestellt werden, weder aus der Quarantäne noch von anderswo. Überprüfe die Liste, bevor du sie bestätigst.",
         registryNote: 'Registrierungsschlüssel werden vor der Entfernung in die Quarantäne exportiert, unabhängig davon, was du wählst.'
       },
       about: {
         reportTitle: 'Fehler melden',
         reportDescription: "Öffnet ein vorausgefülltes Issue auf GitHub. Prune selbst sendet nichts, und du siehst alles, bevor irgendetwas abgeschickt wird.",
         reportButton: 'Fehler melden',
-        description: 'Ein lokales, offline Deinstallations- und Bereinigungstool für Windows — erzwungene Entfernung mit Scannen nach Restdateien, sichere Quarantäne vor dem Löschen, Speicherplatzkartierung und Ein-Klick-Müllbereinigung.'
+        description: "Ein lokales, offline Deinstallations- und Bereinigungstool für Windows — erzwungene Entfernung mit Scannen nach Rückständen, sichere Quarantäne vor dem Löschen, Festplattenkarte und Ein-Klick-Müllbereinigung."
       },
       automation: {
         title: 'Automatisierung',
@@ -5799,7 +5799,7 @@ export const CATALOG = {
         everyWeek: 'Jede Woche',
         measureOnly: 'Nur messen',
         clean: 'Bereinigen',
-        cleanWarning: 'Dies entfernt Dateien, ohne dass jemand zusieht. Es bereinigt die Regeln, die die Tiefenreinigung empfiehlt und die tatsächlich etwas enthalten, und alles landet weiterhin in der Quarantäne — überprüfe also die obige Aufbewahrungseinstellung, bevor du dies eingeschaltet lässt.',
+        cleanWarning: "Dies entfernt Dateien, ohne dass jemand zusieht. Es führt die Reiniger aus, die die Gründliche Bereinigung empfiehlt und die tatsächlich etwas enthalten, und alles landet weiterhin in der Quarantäne — überprüfe also die obige Aufbewahrungseinstellung, bevor du dies eingeschaltet lässt.",
         nextRun: 'Nächster Lauf:',
         lastRun: 'Letzter Lauf:',
         weekdays: {
@@ -5859,7 +5859,7 @@ export const CATALOG = {
       junk: {
         label: 'Unnötige Dateien',
         notMeasured: 'nicht gemessen',
-        description: 'Das Messen durchläuft jeden Bereinigungspfad auf dem Laufwerk — etwa eine halbe Minute.',
+        description: "Das Messen durchläuft den Pfad jedes Reinigers auf dem Laufwerk — etwa eine halbe Minute.",
         measure: 'Messen'
       },
       recentActivity: {
@@ -6025,7 +6025,7 @@ export const CATALOG = {
         total: 'gesamt'
       },
       batchReasons: {
-        orphaned: 'Das Deinstallationsprogramm ist defekt — verwenden Sie stattdessen Entfernung erzwingen.',
+        orphaned: "Der Deinstaller ist defekt — verwenden Sie stattdessen Entfernung erzwingen.",
         extension: 'Browsererweiterungen werden aus dem Browser selbst entfernt.',
         storeNoPackage: 'Diese Store-App hat keinen Paketnamen zum Entfernen.',
         storeProtected: 'Windows kennzeichnet diese App als Teil des Systems und erlaubt keine Entfernung.',
@@ -6058,7 +6058,7 @@ export const CATALOG = {
       emptying: 'Wird geleert…',
       empty: {
         heading: 'Nichts in der Quarantäne.',
-        body: 'Alles, was eine Deinstallation oder eine Tiefenreinigung entfernt, landet zuerst hier. Es bleibt, bis du es leerst, sodass eine versehentlich entfernte Datei immer wiederherstellbar ist.'
+        body: "Alles, was eine Deinstallation oder eine Gründliche Bereinigung entfernt, landet zuerst hier. Es bleibt, bis du es leerst, sodass eine versehentlich entfernte Datei immer wiederherstellbar ist."
       },
       deleteConfirmPrompt: 'Für immer löschen?',
       restore: 'Wiederherstellen',
@@ -6162,8 +6162,8 @@ export const CATALOG = {
       }
     },
     deepClean: {
-      title: 'Tiefenreinigung',
-      subtitle: 'Jeder Cache, jedes Protokoll, jeder Dump und jeder Überrest, den Prune finden kann, auf diesem Rechner gemessen statt geschätzt. Nichts wird sofort gelöscht — alles, was die Reinigung mitnimmt, wandert zuerst in die Quarantäne, wo du es zurückholen kannst.',
+      title: "Gründliche Bereinigung",
+      subtitle: "Jeder Cache, jedes Protokoll, jeder Dump und jeder Rückstand, den Prune finden kann, auf diesem Rechner gemessen statt geschätzt. Nichts wird sofort gelöscht — alles, was die Reinigung mitnimmt, wandert zuerst in die Quarantäne, wo du es zurückholen kannst.",
       scanLog: {
         header: 'Scan-Ausgabe',
         scanningAnnounce: (total) => `${total} Orte werden gescannt.`,
@@ -6205,8 +6205,8 @@ export const CATALOG = {
         losesData: 'Datenverlust',
         needsAdmin: 'benötigt Administrator',
         notInstalled: 'nicht installiert',
-        filterPlaceholder: "Bereiniger filtern…",
-        filterNone: "Kein Bereiniger passt zu diesem Filter.",
+        filterPlaceholder: "Reiniger filtern…",
+        filterNone: "Kein Reiniger passt zu diesem Filter.",
         selectedOfTotal: (n, total) => `${n} von ${total} ausgewählt`
       },
       warning: {
@@ -6257,7 +6257,7 @@ export const CATALOG = {
       },
       clean: 'Keine Rückstände gefunden — saubere Deinstallation.',
       done: 'Fertig',
-      foundWarning: (count) => `${count} ${count === 1 ? 'Rückstand' : 'Rückstände'} gefunden, ${count === 1 ? 'den' : 'die'} das Deinstallationsprogramm übersehen hat. Vor dem Entfernen prüfen.`,
+      foundWarning: (count) => `${count} ${count === 1 ? 'Rückstand' : 'Rückstände'} gefunden, ${count === 1 ? 'den' : 'die'} der Deinstaller übersehen hat. Vor dem Entfernen prüfen.`,
       excludedNote: (count) => `${count} Ordner ausgelassen, da ${count === 1 ? 'er sich in deinen Ausnahmen befindet' : 'sie sich in deinen Ausnahmen befinden'}.`,
       itemsSelected: 'Elemente ausgewählt',
       reclaimable: 'wiederherstellbar',
@@ -6267,7 +6267,7 @@ export const CATALOG = {
       titleForce: (name) => `${name} zwangsweise entfernen`,
       titleNormal: (name) => `${name} deinstallieren`,
       close: 'Schließen',
-      stillWaiting: `Warte noch auf das Deinstallationsprogramm. Du kannst dieses Fenster schließen; das Programm läuft weiter, und Prune sucht nicht nach Resten.`,
+      stillWaiting: "Warte noch auf den Deinstaller. Du kannst dieses Fenster schließen; der Deinstaller läuft weiter, und Prune scannt nicht nach Rückständen.",
       runningWarning: (name) => `${name} läuft gerade. Schließe es zuerst — ein Deinstaller schlägt bei einem geöffneten Programm meist fehl und kann Dateien hinterlassen, die der nächste Start neu erstellt.`,
       orphanedWarning: (reason) => `${reason} Windows wird es weiterhin auflisten, bis der Eintrag entfernt wird.`,
       brokenIntro: 'Prune sucht nach Dateien und Registrierungsschlüsseln, die diesem Namen entsprechen, einschließlich seines Eintrags unter „Programme und Features“, und zeigt dir alles, bevor etwas entfernt wird.',
@@ -6275,7 +6275,7 @@ export const CATALOG = {
       searchHint: (name) => `Übernommen aus „${name}“ ohne Versionsnummer — Installationsprogramme benennen Ordner nach dem Produkt, nicht nach der Version. Bearbeite es, wenn die Ergebnisse falsch aussehen.`,
       scanFailed: (error) => `Scan fehlgeschlagen: ${error}`,
       searchButton: 'Nach Rückständen suchen',
-      normalIntro: (name) => `Dies führt den eigenen Deinstaller von ${name} aus und sucht anschließend nach allem, was zurückbleibt.`,
+      normalIntro: (name) => `Dies führt den eigenen Deinstaller von ${name} aus und scannt anschließend nach allem, was zurückbleibt.`,
       uninstallFailed: (error) => `Deinstallation fehlgeschlagen: ${error}`,
       startButton: 'Deinstallation starten',
       noWorkingUninstaller: 'Kein funktionierender Deinstaller — es wird stattdessen nach Namen gesucht',
@@ -6295,7 +6295,7 @@ export const CATALOG = {
       },
       noScan: (name) => `Der Deinstaller von ${name} ist fertig. Der Rückstands-Scan ist in den Einstellungen deaktiviert, daher wurde nach nichts weiterem gesucht.`,
       readyToScan: {
-        body: (name) => `Falls das Deinstallationsprogramm von ${name} noch nicht fertig ist, lass es zuerst schließen. Klicke danach auf „Nach Rückständen scannen“, um nach übrig gebliebenen Dateien zu suchen.`,
+        body: (name) => `Falls der Deinstaller von ${name} noch nicht fertig ist, lass ihn zuerst schließen. Klicke danach auf „Nach Rückständen scannen“, um nach übrig gebliebenen Dateien zu suchen.`,
         scanButton: "Nach Rückständen scannen"
       },
       removalFailed: (error) => `Entfernen fehlgeschlagen: ${error}`,
@@ -6305,7 +6305,7 @@ export const CATALOG = {
         registryKey: (n) => `${n} Registrierungsschlüssel`,
         recycle: (files, keys, freed) => `${files} in den Papierkorb verschoben und ${keys} entfernt, zuvor in der Quarantäne gesichert. ${freed} freigegeben.`,
         permanent: (files, keys, freed) => `${files} endgültig gelöscht und ${keys} entfernt, zuvor in der Quarantäne gesichert. ${freed} freigegeben.`,
-        quarantine: (files, keys, freed) => `${files} und ${keys} in die Quarantäne verschoben und dabei ${freed} freigegeben. Jederzeit über den Quarantäne-Bildschirm wiederherstellbar.`
+        quarantine: (files, keys, freed) => `${files} und ${keys} in die Quarantäne verschoben und dabei ${freed} freigegeben. Jederzeit über den Bildschirm Quarantäne wiederherstellbar.`
       },
       failedFilesHeading: (n) => `${n} Element${n === 1 ? '' : 'e'} konnte${n === 1 ? '' : 'n'} nicht entfernt werden:`,
       failedRegistryKeysHeading: (n) => `${n} Registrierungsschlüssel konnte${n === 1 ? '' : 'n'} nicht entfernt werden`,
@@ -6319,7 +6319,7 @@ export const CATALOG = {
       historyLabel: (n) => `Batch-Deinstallation: ${n} Programme`,
       close: 'Schließen',
       cancel: "Abbrechen",
-      stillWaiting: (more) => more ? `Warte noch auf dieses Deinstallationsprogramm. Sein eigenes Fenster liegt möglicherweise hinter Prune. Wähle „Nach diesem stoppen“, um die übrigen Programme zu überspringen, sobald es fertig ist.` : `Warte noch auf dieses Deinstallationsprogramm. Sein eigenes Fenster liegt möglicherweise hinter Prune.`,
+      stillWaiting: (more) => more ? `Warte noch auf diesen Deinstaller. Sein eigenes Fenster liegt möglicherweise hinter Prune. Wähle „Nach diesem stoppen“, um die übrigen Programme zu überspringen, sobald er fertig ist.` : `Warte noch auf diesen Deinstaller. Sein eigenes Fenster liegt möglicherweise hinter Prune.`,
       stopAfterThis: "Nach diesem stoppen",
       stopping: "Wird nach diesem gestoppt…",
       statusSkipped: "übersprungen",
@@ -6342,7 +6342,7 @@ export const CATALOG = {
       },
       scanningLine: 'Rückstände werden gescannt…',
       readyToScan: {
-        body: (n) => `${n} ${n === 1 ? 'Deinstallationsprogramm wurde' : 'Deinstallationsprogramme wurden'} beendet. Manche — vor allem Spiele-Launcher — entfernen im Hintergrund weiter Dateien, auch nachdem ihr Fenster geschlossen wurde. Warte im Zweifel einen Moment und klicke dann auf „Nach Rückständen scannen“, um zu prüfen, ob etwas übrig geblieben ist.`,
+        body: (n) => `${n} ${n === 1 ? 'Deinstaller wurde' : 'Deinstaller wurden'} beendet. Manche — vor allem Spiele-Launcher — entfernen im Hintergrund weiter Dateien, auch nachdem ihr Fenster geschlossen wurde. Warte im Zweifel einen Moment und klicke dann auf „Nach Rückständen scannen“, um zu prüfen, ob etwas übrig geblieben ist.`,
         scanButton: 'Nach Rückständen scannen'
       },
       uninstalledOf: (removed, total) => `${removed} von ${total} deinstalliert.`,
@@ -6356,11 +6356,11 @@ export const CATALOG = {
         permanent: (programs, items, freed) => `${programs} deinstalliert und ${items} endgültig gelöscht, dabei ${freed} freigegeben.`,
         quarantine: (programs, items, freed) => `${programs} deinstalliert und ${items} in die Quarantäne verschoben, dabei ${freed} freigegeben.`,
         programs: (n) => `${n} Programm${n === 1 ? '' : 'e'}`,
-        items: (n) => `${n} verbliebene${n === 1 ? 's' : 'n'} Element${n === 1 ? '' : 'e'}`
+        items: (n) => `${n} ${n === 1 ? 'Rückstand' : 'Rückstände'}`
       },
       noRestorePoint: (reason) => `Es wurde kein Systemwiederherstellungspunkt erstellt (${reason}).`,
       restorePointFallback: 'nicht verfügbar',
-      quarantineNote: 'Alles oben ist weiterhin in der Quarantäne und kann zurückgesetzt werden.',
+      quarantineNote: "Alles oben ist weiterhin in der Quarantäne und kann wiederhergestellt werden.",
       failedRegistryKeys: (n) => `${n} Registrierungsschlüssel konnte${n === 1 ? '' : 'n'} nicht entfernt werden — diese benötigen normalerweise, dass Prune als Administrator ausgeführt wird.`
     },
     bugReport: {
@@ -6470,12 +6470,12 @@ export const CATALOG = {
         openPageError: (error) => `Αδυναμία ανοίγματος σελίδας: ${error}`
       },
       showFreeSpace: {
-        title: 'Εμφάνιση ελεύθερου χώρου στον Χάρτη Δίσκου',
+        title: "Εμφάνιση ελεύθερου χώρου στον Χάρτη δίσκου",
         description: 'Σχεδιάζει τον ελεύθερο χώρο του δίσκου ως ένα ακόμα μπλοκ όταν σαρώνετε έναν ολόκληρο δίσκο, ώστε κάθε φάκελος να διαβάζεται ως μερίδιο του δίσκου αντί του χώρου σε χρήση.'
       },
       autoQuarantine: {
         title: 'Αυτόματη Καραντίνα',
-        description: 'Ο Βαθύς Καθαρισμός μετακινεί ό,τι αφαιρεί στην Καραντίνα του Prune, όπου μπορείτε να το επαναφέρετε. Απενεργοποιήστε το και θα πηγαίνει στον Κάδο Ανακύκλωσης των Windows αντ\' αυτού — ακόμα ανακτήσιμο, απλώς κάπου που ήδη ξέρετε πώς να αδειάσετε.'
+        description: "Ο Βαθύς καθαρισμός μετακινεί ό,τι αφαιρεί στην Καραντίνα του Prune, όπου μπορείτε να το επαναφέρετε. Απενεργοποιήστε το και θα πηγαίνει στον Κάδο Ανακύκλωσης των Windows αντ' αυτού — ακόμα ανακτήσιμο, απλώς κάπου που ήδη ξέρετε πώς να αδειάσετε."
       },
       skipRecent: {
         title: 'Αφήστε ήσυχα τα πρόσφατα αρχεία',
@@ -6507,7 +6507,7 @@ export const CATALOG = {
       },
       exclusions: {
         title: "Εξαίρεση φακέλων",
-        description: 'Φάκελοι και τύποι αρχείων που το Prune θα αφήσει ήσυχους — παραλείπονται από τον Βαθύ Καθαρισμό και εξαιρούνται από τον Χάρτη Δίσκου — επιπλέον αυτών που ήδη προστατεύει: Πληροφορίες τόμου συστήματος, καραντίνες προγραμμάτων προστασίας από ιούς, το κατάστημα στοιχείων και μια δωδεκάδα άλλα.',
+        description: "Φάκελοι και τύποι αρχείων που το Prune θα αφήσει ήσυχους — παραλείπονται από τον Βαθύ καθαρισμό και εξαιρούνται από τον Χάρτη δίσκου — επιπλέον αυτών που ήδη προστατεύει: Πληροφορίες τόμου συστήματος, καραντίνες προγραμμάτων προστασίας από ιούς, το κατάστημα στοιχείων και μια δωδεκάδα άλλα.",
         ariaLabel: 'Διαδρομή φακέλου ή τύπος αρχείου προς εξαίρεση',
         add: 'Προσθήκη',
         invalidFormat: 'Γράψτε μια πλήρη διαδρομή φακέλου (D:\\Games) ή έναν τύπο αρχείου (*.iso).',
@@ -6573,8 +6573,8 @@ export const CATALOG = {
         },
         destinationHeading: 'Τα κατάλοιπα αρχεία πηγαίνουν στο',
         leftoverOptions: {
-          quarantine: { label: 'Καραντίνα', description: 'Μετακινήθηκε στο δικό του αντίγραφο ασφαλείας του Prune, και είναι ανακτήσιμο από την οθόνη Καραντίνας. Η προεπιλογή.' },
-          recycle: { label: 'Ο Κάδος Ανακύκλωσης', description: 'Ανακτήσιμο από τον δικό τους κάδο των Windows, και ελευθερώνεται όταν τον αδειάσετε.' },
+          quarantine: { label: 'Καραντίνα', description: "Μετακινήθηκε στο δικό του αντίγραφο ασφαλείας του Prune και μπορεί να επαναφερθεί από την οθόνη Καραντίνα. Η προεπιλογή." },
+          recycle: { label: 'Ο Κάδος Ανακύκλωσης', description: "Μπορεί να επαναφερθεί από τον ίδιο τον κάδο των Windows και ελευθερώνεται όταν τον αδειάσετε." },
           permanent: { label: 'Οριστική διαγραφή', description: 'Διαγράφεται εντελώς. Τίποτα προς επαναφορά.' }
         },
         permanentWarning: 'Τα κατάλοιπα αρχεία θα διαγραφούν εντελώς και δεν μπορούν να επαναφερθούν, από την Καραντίνα ή οπουδήποτε αλλού. Ελέγξτε τη λίστα πριν την επιβεβαιώσετε.',
@@ -6584,7 +6584,7 @@ export const CATALOG = {
         reportTitle: 'Αναφορά σφάλματος',
         reportDescription: "Ανοίγει ένα προσυμπληρωμένο ζήτημα στο GitHub. Το ίδιο το Prune δεν στέλνει τίποτα και βλέπετε τα πάντα προτού σταλεί οτιδήποτε.",
         reportButton: 'Αναφορά σφάλματος',
-        description: 'Ένα τοπικό, εκτός σύνδεσης εργαλείο απεγκατάστασης και καθαρισμού για Windows — εξαναγκασμένη αφαίρεση με σάρωση καταλοίπων αρχείων, ασφαλή καραντίνα πριν τη διαγραφή, χαρτογράφηση δίσκου, και καθαρισμό σκουπιδιών με ένα κλικ.'
+        description: "Ένα τοπικό, εκτός σύνδεσης εργαλείο απεγκατάστασης και καθαρισμού για Windows — εξαναγκασμένη αφαίρεση με σάρωση καταλοίπων αρχείων, ασφαλή καραντίνα πριν τη διαγραφή, Χάρτη δίσκου και καθαρισμό σκουπιδιών με ένα κλικ."
       },
       automation: {
         title: 'Αυτοματισμός',
@@ -6599,7 +6599,7 @@ export const CATALOG = {
         everyWeek: 'Κάθε εβδομάδα',
         measureOnly: 'Μόνο μέτρηση',
         clean: 'Καθαρισμός',
-        cleanWarning: 'Αυτό αφαιρεί αρχεία χωρίς κανέναν να παρακολουθεί. Καθαρίζει τους κανόνες που συνιστά ο Βαθύς Καθαρισμός και που πράγματι έχουν κάτι μέσα τους, και όλα εξακολουθούν να πηγαίνουν σε καραντίνα — οπότε ελέγξτε τη ρύθμιση διατήρησης παραπάνω πριν το αφήσετε ενεργό.',
+        cleanWarning: "Αυτό αφαιρεί αρχεία χωρίς κανέναν να παρακολουθεί. Εκτελεί τους καθαριστές που συνιστά ο Βαθύς καθαρισμός και που πράγματι έχουν κάτι μέσα τους, και όλα εξακολουθούν να πηγαίνουν σε καραντίνα — οπότε ελέγξτε τη ρύθμιση διατήρησης παραπάνω πριν το αφήσετε ενεργό.",
         nextRun: 'Επόμενη εκτέλεση:',
         lastRun: 'Τελευταία εκτέλεση:',
         weekdays: {
@@ -6651,7 +6651,7 @@ export const CATALOG = {
       },
       apps: {
         label: "Εγκατεστημένες εφαρμογές",
-        broken: (count) => `${count} απομεινάρια από αποτυχημένη απεγκατάσταση`,
+        broken: (count) => `${count} ${count === 1 ? 'κατάλοιπο' : 'κατάλοιπα'} από αποτυχημένη απεγκατάσταση`,
         noBroken: 'Καμία κατεστραμμένη καταχώριση.',
         review: 'Έλεγχος',
         manage: 'Διαχείριση'
@@ -6659,7 +6659,7 @@ export const CATALOG = {
       junk: {
         label: "Άχρηστα αρχεία",
         notMeasured: 'δεν έχει μετρηθεί',
-        description: 'Η μέτρηση διατρέχει κάθε διαδρομή καθαρισμού στον δίσκο — περίπου μισό λεπτό.',
+        description: "Η μέτρηση διατρέχει τη διαδρομή κάθε καθαριστή στον δίσκο — περίπου μισό λεπτό.",
         measure: 'Μέτρηση'
       },
       recentActivity: {
@@ -6825,7 +6825,7 @@ export const CATALOG = {
         total: 'σύνολο'
       },
       batchReasons: {
-        orphaned: "Το πρόγραμμα απεγκατάστασής του είναι κατεστραμμένο — χρησιμοποιήστε αντ' αυτού την εξαναγκασμένη κατάργηση.",
+        orphaned: "Ο απεγκαταστάτης του είναι κατεστραμμένος — χρησιμοποιήστε αντ' αυτού την εξαναγκασμένη κατάργηση.",
         extension: 'Οι επεκτάσεις του προγράμματος περιήγησης καταργούνται από το ίδιο το πρόγραμμα περιήγησης.',
         storeNoPackage: 'Αυτή η εφαρμογή καταστήματος δεν έχει όνομα πακέτου για κατάργηση.',
         storeProtected: 'Τα Windows επισημαίνουν αυτήν την εφαρμογή ως μέρος του συστήματος και δεν επιτρέπουν την κατάργησή της.',
@@ -6858,7 +6858,7 @@ export const CATALOG = {
       emptying: 'Άδειασμα…',
       empty: {
         heading: 'Τίποτα στην καραντίνα.',
-        body: 'Οτιδήποτε αφαιρεί μια απεγκατάσταση ή ένας Βαθύς Καθαρισμός καταλήγει πρώτα εδώ. Παραμένει μέχρι να το αδειάσετε, οπότε ένα αρχείο που πάρθηκε κατά λάθος είναι πάντα ανακτήσιμο.'
+        body: "Οτιδήποτε αφαιρεί μια απεγκατάσταση ή ένας Βαθύς καθαρισμός καταλήγει πρώτα εδώ. Παραμένει μέχρι να το αδειάσετε, οπότε ένα αρχείο που πάρθηκε κατά λάθος είναι πάντα ανακτήσιμο."
       },
       deleteConfirmPrompt: 'Οριστική διαγραφή;',
       restore: 'Επαναφορά',
@@ -6962,7 +6962,7 @@ export const CATALOG = {
       }
     },
     deepClean: {
-      title: 'Βαθύς Καθαρισμός',
+      title: "Βαθύς καθαρισμός",
       subtitle: 'Κάθε κρυφή μνήμη, αρχείο καταγραφής, dump και κατάλοιπο που το Prune ξέρει να βρίσκει, μετρημένο σε αυτό το μηχάνημα αντί να εκτιμάται. Τίποτα δεν διαγράφεται απευθείας — οτιδήποτε παίρνει ο Καθαρισμός πηγαίνει πρώτα σε καραντίνα, όπου μπορείτε να το επαναφέρετε.',
       scanLog: {
         header: 'Έξοδος σάρωσης',
@@ -7067,7 +7067,7 @@ export const CATALOG = {
       titleForce: (name) => `Εξαναγκασμένη αφαίρεση ${name}`,
       titleNormal: (name) => `Απεγκατάσταση ${name}`,
       close: 'Κλείσιμο',
-      stillWaiting: `Αναμονή για το πρόγραμμα απεγκατάστασης. Μπορείτε να κλείσετε αυτό το παράθυρο· το πρόγραμμα συνεχίζει να εκτελείται και το Prune δεν θα αναζητήσει υπολείμματα.`,
+      stillWaiting: "Αναμονή για τον απεγκαταστάτη. Μπορείτε να κλείσετε αυτό το παράθυρο· ο απεγκαταστάτης συνεχίζει να εκτελείται και το Prune δεν θα σαρώσει για κατάλοιπα.",
       runningWarning: (name) => `Το ${name} εκτελείται αυτή τη στιγμή. Κλείστε το πρώτα — ένας απεγκαταστάτης συνήθως αποτυγχάνει σε ένα ανοιχτό πρόγραμμα και μπορεί να αφήσει πίσω αρχεία που η επόμενη εκκίνηση θα ξαναδημιουργήσει.`,
       orphanedWarning: (reason) => `${reason} Τα Windows θα συνεχίσουν να το καταχωρούν μέχρι να αφαιρεθεί η εγγραφή.`,
       brokenIntro: 'Το Prune θα αναζητήσει αρχεία και κλειδιά μητρώου που ταιριάζουν με αυτό το όνομα, συμπεριλαμβανομένης της καταχώρισης Προσθαφαίρεσης Προγραμμάτων, και θα σας δείξει τα πάντα πριν αφαιρέσει οτιδήποτε.',
@@ -7119,7 +7119,7 @@ export const CATALOG = {
       historyLabel: (n) => `Ομαδική απεγκατάσταση: ${n} προγράμματα`,
       close: 'Κλείσιμο',
       cancel: "Ακύρωση",
-      stillWaiting: (more) => more ? `Αναμονή για αυτό το πρόγραμμα απεγκατάστασης. Το δικό του παράθυρο μπορεί να βρίσκεται πίσω από το Prune. Επιλέξτε «Διακοπή μετά από αυτό» για να παραλειφθούν τα υπόλοιπα όταν τελειώσει.` : `Αναμονή για αυτό το πρόγραμμα απεγκατάστασης. Το δικό του παράθυρο μπορεί να βρίσκεται πίσω από το Prune.`,
+      stillWaiting: (more) => more ? `Αναμονή για αυτόν τον απεγκαταστάτη. Το δικό του παράθυρο μπορεί να βρίσκεται πίσω από το Prune. Επιλέξτε «Διακοπή μετά από αυτό» για να παραλειφθούν τα υπόλοιπα όταν τελειώσει.` : `Αναμονή για αυτόν τον απεγκαταστάτη. Το δικό του παράθυρο μπορεί να βρίσκεται πίσω από το Prune.`,
       stopAfterThis: "Διακοπή μετά από αυτό",
       stopping: "Διακοπή μετά από αυτό…",
       statusSkipped: "παραλείφθηκε",
@@ -7142,7 +7142,7 @@ export const CATALOG = {
       },
       scanningLine: 'Σάρωση καταλοίπων…',
       readyToScan: {
-        body: (n) => `Ολοκληρώθηκε η εκτέλεση ${n} ${n === 1 ? 'προγράμματος απεγκατάστασης' : 'προγραμμάτων απεγκατάστασης'}. Ορισμένα από αυτά — ειδικά οι εκκινητές παιχνιδιών — συνεχίζουν να αφαιρούν αρχεία στο παρασκήνιο και μετά το κλείσιμο του παραθύρου τους. Αν δεν είστε σίγουροι, περιμένετε λίγο και κάντε κλικ στο «Σάρωση για κατάλοιπα» για να δείτε αν έμεινε κάτι.`,
+        body: (n) => `Ολοκληρώθηκε η εκτέλεση ${n} ${n === 1 ? 'απεγκαταστάτη' : 'απεγκαταστατών'}. Ορισμένοι από αυτούς — ειδικά οι εκκινητές παιχνιδιών — συνεχίζουν να αφαιρούν αρχεία στο παρασκήνιο και μετά το κλείσιμο του παραθύρου τους. Αν δεν είστε σίγουροι, περιμένετε λίγο και κάντε κλικ στο «Σάρωση για κατάλοιπα» για να δείτε αν έμεινε κάτι.`,
         scanButton: 'Σάρωση για κατάλοιπα'
       },
       uninstalledOf: (removed, total) => `Απεγκαταστάθηκαν ${removed} από ${total}.`,
@@ -7160,7 +7160,7 @@ export const CATALOG = {
       },
       noRestorePoint: (reason) => `Δεν δημιουργήθηκε σημείο επαναφοράς συστήματος (${reason}).`,
       restorePointFallback: 'μη διαθέσιμο',
-      quarantineNote: 'Όλα τα παραπάνω παραμένουν στην Καραντίνα και μπορούν να επανέλθουν.',
+      quarantineNote: "Όλα τα παραπάνω παραμένουν στην Καραντίνα και μπορούν να επαναφερθούν.",
       failedRegistryKeys: (n) => `Αποτυχία αφαίρεσης ${n} κλειδι${n === 1 ? 'ού' : 'ών'} μητρώου — αυτά συνήθως απαιτούν το Prune να εκτελείται ως διαχειριστής.`
     },
     bugReport: {
@@ -7270,12 +7270,12 @@ export const CATALOG = {
         openPageError: (error) => `No se pudo abrir la página: ${error}`
       },
       showFreeSpace: {
-        title: 'Mostrar espacio libre en el Mapa de Disco',
+        title: "Mostrar espacio libre en el Mapa del disco",
         description: 'Dibuja el espacio libre de la unidad como un bloque más al escanear una unidad completa, para que cada carpeta se lea como una parte de la unidad en lugar de del espacio en uso.'
       },
       autoQuarantine: {
         title: 'Cuarentena automática',
-        description: 'La Limpieza Profunda mueve lo que quita a la Cuarentena de Prune, donde puedes devolverlo. Desactiva esto y en su lugar irá a la Papelera de Reciclaje de Windows — igual de recuperable, solo en un lugar que ya sabes vaciar.'
+        description: "La Limpieza profunda mueve lo que quita a la Cuarentena de Prune, donde puedes devolverlo. Desactiva esto y en su lugar irá a la Papelera de Reciclaje de Windows — igual de recuperable, solo en un lugar que ya sabes vaciar."
       },
       skipRecent: {
         title: 'Dejar en paz los archivos recientes',
@@ -7307,7 +7307,7 @@ export const CATALOG = {
       },
       exclusions: {
         title: "Excluir carpetas",
-        description: 'Carpetas y tipos de archivo que Prune dejará en paz — omitidos por la Limpieza Profunda y excluidos del Mapa de Disco — además de los que ya protege: Información de volumen del sistema, cuarentenas de antivirus, el almacén de componentes y una docena más.',
+        description: "Carpetas y tipos de archivo que Prune dejará en paz — omitidos por la Limpieza profunda y excluidos del Mapa del disco — además de los que ya protege: Información de volumen del sistema, cuarentenas de antivirus, el almacén de componentes y una docena más.",
         ariaLabel: 'Ruta de carpeta o tipo de archivo a excluir',
         add: 'Añadir',
         invalidFormat: 'Escribe una ruta de carpeta completa (D:\\Games) o un tipo de archivo (*.iso).',
@@ -7320,13 +7320,13 @@ export const CATALOG = {
       cookiesToPreserve: {
         title: 'Cookies a conservar',
         description: 'Todo lo demás en el archivo de cookies de un navegador desaparece en el momento en que lo limpias. Escanea para ver qué hay realmente, y marca todo lo que valga la pena conservar.',
-        scanButton: 'Buscar cookies',
+        scanButton: "Escanear cookies",
         scanning: 'Escaneando…',
         filterPlaceholder: 'Filtrar dominios…',
         countSuffix: (count) => `${count} cookie${count === 1 ? '' : 's'}`,
         none: 'No se encontraron cookies.',
         staleBadge: 'no vista en este escaneo',
-        scanErrorPrefix: (message) => `No se pudieron buscar cookies: ${message}`,
+        scanErrorPrefix: (message) => `No se pudieron escanear las cookies: ${message}`,
         fileErrorsNote: (count) => `${count} archivo${count === 1 ? ' no se pudo leer y fue' : 's no se pudieron leer y fueron'} omitido${count === 1 ? '' : 's'}.`,
         checkboxAriaLabel: (domain) => `Conservar cookies de ${domain}`
       },
@@ -7360,7 +7360,7 @@ export const CATALOG = {
         },
         afterHeading: 'Después de desinstalar',
         scanLeftovers: {
-          title: 'Buscar restos después de desinstalar',
+          title: "Escanear restos después de desinstalar",
           description: 'Busca los archivos, claves de registro y tareas programadas que dejó el desinstalador. Desactivado, Prune simplemente ejecuta el propio desinstalador del programa y se detiene ahí.'
         },
         preselect: {
@@ -7371,20 +7371,20 @@ export const CATALOG = {
           title: 'Mantener un historial de desinstalaciones',
           description: 'La lista del panel de las eliminaciones recientes y el espacio que liberaron. Desactivado, no se registra nada nuevo.'
         },
-        destinationHeading: 'Los archivos restantes van a',
+        destinationHeading: "Los restos van a",
         leftoverOptions: {
-          quarantine: { label: 'Cuarentena', description: 'Movido a la propia copia de seguridad de Prune, y recuperable desde la pantalla de Cuarentena. La opción predeterminada.' },
-          recycle: { label: 'La Papelera de Reciclaje', description: 'Recuperable desde la propia papelera de Windows, y liberado cuando la vacías.' },
+          quarantine: { label: 'Cuarentena', description: "Movido a la propia copia de seguridad de Prune, y restaurable desde la pantalla de Cuarentena. La opción predeterminada." },
+          recycle: { label: 'La Papelera de Reciclaje', description: "Restaurable desde la propia papelera de Windows, y liberado cuando la vacías." },
           permanent: { label: 'Eliminar permanentemente', description: 'Eliminado por completo. Nada que restaurar.' }
         },
-        permanentWarning: 'Los archivos restantes se eliminarán por completo y no se pueden restaurar, ni desde Cuarentena ni desde ningún otro lugar. Revisa la lista antes de confirmarla.',
+        permanentWarning: "Los restos se eliminarán por completo y no se pueden restaurar, ni desde Cuarentena ni desde ningún otro lugar. Revisa la lista antes de confirmarla.",
         registryNote: 'Las claves de registro se exportan a Cuarentena antes de eliminarse, sea cual sea tu elección.'
       },
       about: {
         reportTitle: 'Informar de un error',
         reportDescription: "Abre una incidencia prellenada en GitHub. Prune no envía nada por sí mismo y ves todo antes de que se envíe a ninguna parte.",
         reportButton: 'Informar de un error',
-        description: 'Una herramienta local y sin conexión de desinstalación y limpieza para Windows — eliminación forzada con escaneo de restos, cuarentena segura antes de borrar, mapeo de disco y limpieza de basura con un clic.'
+        description: "Una herramienta local y sin conexión de desinstalación y limpieza para Windows — eliminación forzada con escaneo de restos, cuarentena segura antes de borrar, Mapa del disco y limpieza de basura con un clic."
       },
       automation: {
         title: 'Automatización',
@@ -7399,7 +7399,7 @@ export const CATALOG = {
         everyWeek: 'Cada semana',
         measureOnly: 'Solo medir',
         clean: 'Limpiar',
-        cleanWarning: 'Esto elimina archivos sin que nadie lo vigile. Limpia las reglas que recomienda la Limpieza Profunda y que realmente tienen algo dentro, y todo sigue yendo a cuarentena — así que revisa la configuración de retención de arriba antes de dejar esto activado.',
+        cleanWarning: "Esto elimina archivos sin que nadie lo vigile. Ejecuta los limpiadores que recomienda la Limpieza profunda y que realmente tienen algo dentro, y todo sigue yendo a cuarentena — así que revisa la configuración de retención de arriba antes de dejar esto activado.",
         nextRun: 'Próxima ejecución:',
         lastRun: 'Última ejecución:',
         weekdays: {
@@ -7459,7 +7459,7 @@ export const CATALOG = {
       junk: {
         label: "Archivos innecesarios",
         notMeasured: 'sin medir',
-        description: 'Medir recorre cada ruta de limpieza del disco — medio minuto aproximadamente.',
+        description: "Medir recorre la ruta de cada limpiador del disco — medio minuto aproximadamente.",
         measure: 'Medir'
       },
       recentActivity: {
@@ -7658,7 +7658,7 @@ export const CATALOG = {
       emptying: 'Vaciando…',
       empty: {
         heading: 'Nada en la cuarentena.',
-        body: 'Todo lo que elimina una desinstalación o una Limpieza Profunda llega aquí primero. Permanece hasta que la vacíes, así que un archivo eliminado por error siempre se puede recuperar.'
+        body: "Todo lo que elimina una desinstalación o una Limpieza profunda llega aquí primero. Permanece hasta que la vacíes, así que un archivo eliminado por error siempre se puede recuperar."
       },
       deleteConfirmPrompt: '¿Eliminar para siempre?',
       restore: 'Restaurar',
@@ -7762,7 +7762,7 @@ export const CATALOG = {
       }
     },
     deepClean: {
-      title: 'Limpieza Profunda',
+      title: "Limpieza profunda",
       subtitle: 'Cada caché, registro, volcado y resto que Prune sabe encontrar, medido en esta máquina en lugar de estimado. Nada se elimina directamente — todo lo que Limpieza toma va primero a Cuarentena, donde puedes devolverlo.',
       scanLog: {
         header: 'Salida del escaneo',
@@ -7857,7 +7857,7 @@ export const CATALOG = {
       },
       clean: 'No se encontraron restos — desinstalación limpia.',
       done: 'Listo',
-      foundWarning: (count) => `Se encontr${count === 1 ? 'ó' : 'aron'} ${count} elemento${count === 1 ? '' : 's'} residual${count === 1 ? '' : 'es'} que el desinstalador del programa pasó por alto. Revisa antes de eliminar.`,
+      foundWarning: (count) => `Se encontr${count === 1 ? 'ó' : 'aron'} ${count} resto${count === 1 ? '' : 's'} que el desinstalador del programa pasó por alto. Revisa antes de eliminar.`,
       excludedNote: (count) => `${count} carpeta${count === 1 ? '' : 's'} omitida${count === 1 ? '' : 's'} porque ${count === 1 ? 'está' : 'están'} en tus exclusiones.`,
       itemsSelected: 'elementos seleccionados',
       reclaimable: 'recuperable',
@@ -7867,7 +7867,7 @@ export const CATALOG = {
       titleForce: (name) => `Forzar eliminación de ${name}`,
       titleNormal: (name) => `Desinstalar ${name}`,
       close: 'Cerrar',
-      stillWaiting: `Aún se espera al desinstalador. Puedes cerrar esta ventana; el desinstalador sigue ejecutándose y Prune no buscará restos.`,
+      stillWaiting: "Aún se espera al desinstalador. Puedes cerrar esta ventana; el desinstalador sigue ejecutándose y Prune no escaneará restos.",
       runningWarning: (name) => `${name} se está ejecutando ahora mismo. Ciérralo primero — un desinstalador suele fallar con un programa abierto, y puede dejar archivos que el próximo inicio recreará.`,
       orphanedWarning: (reason) => `${reason} Windows lo seguirá mostrando hasta que se elimine la entrada.`,
       brokenIntro: 'Prune buscará archivos y claves del registro que coincidan con este nombre, incluida su entrada de Agregar o quitar programas, y te mostrará todo antes de eliminar nada.',
@@ -7875,7 +7875,7 @@ export const CATALOG = {
       searchHint: (name) => `Tomado de "${name}" sin su versión — los instaladores nombran las carpetas según el producto, no la versión. Edítalo si los resultados parecen incorrectos.`,
       scanFailed: (error) => `El escaneo falló: ${error}`,
       searchButton: 'Buscar restos',
-      normalIntro: (name) => `Esto ejecuta el propio desinstalador de ${name} y luego busca cualquier cosa que deje atrás.`,
+      normalIntro: (name) => `Esto ejecuta el propio desinstalador de ${name} y luego escanea todo lo que deje atrás.`,
       uninstallFailed: (error) => `La desinstalación falló: ${error}`,
       startButton: 'Iniciar desinstalación',
       noWorkingUninstaller: 'No hay un desinstalador funcional — se buscará por nombre en su lugar',
@@ -7925,7 +7925,7 @@ export const CATALOG = {
       statusSkipped: "omitido",
       stoppedNote: (n) => `Detenido antes de tiempo. Sin iniciar: ${n}.`,
       registryOnlyIntro: 'Cada aplicación se elimina a través de Windows por turnos, y no hay escaneo de restos después: Windows elimina los datos propios de la aplicación junto con ella.',
-      mixedIntro: (hasStore) => `El propio desinstalador de cada programa se ejecuta por turnos, luego Prune busca lo que dejan atrás y te muestra todo antes de eliminar nada de ello.${hasStore ? ' Las aplicaciones de la Store se eliminan a través de Windows en su lugar, sin escaneo de restos después.' : ''}`,
+      mixedIntro: (hasStore) => `El propio desinstalador de cada programa se ejecuta por turnos, luego Prune escanea lo que dejan atrás y te muestra todo antes de eliminar nada de ello.${hasStore ? ' Las aplicaciones de la Store se eliminan a través de Windows en su lugar, sin escaneo de restos después.' : ''}`,
       oneAtATime: 'De una en una, porque Windows solo permite una instalación o desinstalación a la vez. Algunos desinstaladores mostrarán sus propias ventanas y te harán preguntas.',
       storeWarning: (count) => count === 1
         ? 'La aplicación de la Store en este lote no se puede restaurar desde Cuarentena: eliminarla se lleva la aplicación y sus datos guardados, y recuperarla significa reinstalarla desde la Store.'
@@ -7956,7 +7956,7 @@ export const CATALOG = {
         permanent: (programs, items, freed) => `Se desinstalaron ${programs} y se eliminaron ${items} permanentemente, liberando ${freed}.`,
         quarantine: (programs, items, freed) => `Se desinstalaron ${programs} y se movieron ${items} a Cuarentena, liberando ${freed}.`,
         programs: (n) => `${n} programa${n === 1 ? '' : 's'}`,
-        items: (n) => `${n} elemento${n === 1 ? '' : 's'} residual${n === 1 ? '' : 'es'}`
+        items: (n) => `${n} resto${n === 1 ? '' : 's'}`
       },
       noRestorePoint: (reason) => `No se creó ningún punto de restauración del sistema (${reason}).`,
       restorePointFallback: 'no disponible',
@@ -7974,7 +7974,7 @@ export const CATALOG = {
       includedVersion: 'Versión de Prune',
       includedWindows: 'Versión de Windows',
       includedArch: 'Arquitectura',
-      includedNothingElse: 'No se recopila nada más: ni rutas de archivos, ni resultados de análisis, ni nombre de usuario.',
+      includedNothingElse: "No se recopila nada más: ni rutas de archivos, ni resultados de escaneo, ni nombre de usuario.",
       publicNote: 'Los informes en GitHub son públicos, así que no pegues nada privado. Necesitas una cuenta de GitHub gratuita para publicar uno.',
       cancel: 'Cancelar',
       open: 'Abrir en GitHub',
@@ -8035,7 +8035,7 @@ export const CATALOG = {
       reportBug: 'Teata veast',
       dashboard: 'Töölaud', diskMap: 'Kettakaart', applications: 'Rakendused',
       quarantine: 'Karantiin', settings: 'Seaded', startup: 'Käivitus',
-      duplicates: 'Duplikaadid', deepClean: 'Põhjalik puhastus',
+      duplicates: 'Duplikaadid', deepClean: "Süvapuhastus",
       landmark: 'Peamine'
     },
     settings: {
@@ -8120,13 +8120,13 @@ export const CATALOG = {
       cookiesToPreserve: {
         title: 'Säilitatavad küpsised',
         description: 'Kõik muu brauseri küpsisefailis kaob niipea, kui sa selle puhastad. Skaneeri, et näha, mis seal tegelikult on, ja märgi kõik, mida tasub alles hoida.',
-        scanButton: 'Otsi küpsiseid',
+        scanButton: "Skanni küpsiseid",
         scanning: 'Skannimine…',
         filterPlaceholder: 'Filtreeri domeene…',
         countSuffix: (count) => `${count} küpsis${count === 1 ? '' : 't'}`,
         none: 'Küpsiseid ei leitud.',
         staleBadge: 'ei nähtud selles skannimises',
-        scanErrorPrefix: (message) => `Küpsiste otsimine ebaõnnestus: ${message}`,
+        scanErrorPrefix: (message) => `Küpsiste skannimine ebaõnnestus: ${message}`,
         fileErrorsNote: (count) => `${count} fail${count === 1 ? '' : 'i'} ei õnnestunud lugeda ja jäeti vahele.`,
         checkboxAriaLabel: (domain) => `Säilita küpsised domeenilt ${domain}`
       },
@@ -8148,7 +8148,7 @@ export const CATALOG = {
         beforeHeading: 'Enne desinstallimist',
         restorePointUninstall: {
           title: 'Loo enne desinstallimist taastepunkt',
-          description: 'Windowsi enda süsteemi taastamine, tehtud enne programmi desinstalliprogrammi käivitumist. Vajab, et Prune töötaks administraatorina, ja Windows lubab ühe päevas, seega kui seda ei saa luua, jätkub desinstallimine ja dialoog teatab sellest.'
+          description: "Windowsi enda süsteemi taastamine, tehtud enne programmi desinstallija käivitumist. Vajab, et Prune töötaks administraatorina, ja Windows lubab ühe päevas, seega kui seda ei saa luua, jätkub desinstallimine ja dialoog teatab sellest."
         },
         registryBackup: {
           title: 'Varunda register enne desinstallimist',
@@ -8160,8 +8160,8 @@ export const CATALOG = {
         },
         afterHeading: 'Pärast desinstallimist',
         scanLeftovers: {
-          title: 'Otsi pärast desinstallimist jääke',
-          description: 'Otsib faile, registrivõtmeid ja ajastatud ülesandeid, mille desinstalliprogramm maha jättis. Väljas lülitatuna käivitab Prune lihtsalt programmi enda desinstalliprogrammi ja peatub seal.'
+          title: "Skanni pärast desinstallimist jääke",
+          description: "Otsib faile, registrivõtmeid ja ajastatud ülesandeid, mille desinstallija maha jättis. Väljas lülitatuna käivitab Prune lihtsalt programmi enda desinstallijat ja peatub seal."
         },
         preselect: {
           title: 'Märgi vaikimisi iga jääk',
@@ -8171,13 +8171,13 @@ export const CATALOG = {
           title: 'Pea desinstallimiste ajalugu',
           description: 'Töölaua nimekiri hiljutistest eemaldamistest ja nende vabastatud ruumist. Väljas lülitatuna ei salvestata midagi uut.'
         },
-        destinationHeading: 'Ülejäänud failid lähevad',
+        destinationHeading: "Jääkfailid lähevad",
         leftoverOptions: {
           quarantine: { label: 'Karantiin', description: 'Liigutatud Prune\'i enda varukoopiasse ja taastatav karantiini vaatest. Vaikeväärtus.' },
           recycle: { label: 'Prügikast', description: 'Taastatav Windowsi enda prügikastist ja vabastatud, kui selle tühjendad.' },
           permanent: { label: 'Kustuta jäädavalt', description: 'Kustutatud täielikult. Midagi pole taastada.' }
         },
-        permanentWarning: 'Ülejäänud failid kustutatakse täielikult ja neid ei saa taastada, ei karantiinist ega kusagilt mujalt. Vaata nimekiri üle enne kinnitamist.',
+        permanentWarning: "Jääkfailid kustutatakse täielikult ja neid ei saa taastada, ei karantiinist ega kusagilt mujalt. Vaata nimekiri üle enne kinnitamist.",
         registryNote: 'Registrivõtmed eksporditakse karantiini enne eemaldamist, olenemata sinu valikust.'
       },
       about: {
@@ -8259,7 +8259,7 @@ export const CATALOG = {
       junk: {
         label: 'Prügifailid',
         notMeasured: 'mõõtmata',
-        description: 'Mõõtmine käib läbi iga puhastustee kettal — umbes pool minutit.',
+        description: "Mõõtmine käib läbi iga puhastaja tee kettal — umbes pool minutit.",
         measure: 'Mõõda'
       },
       recentActivity: {
@@ -8458,7 +8458,7 @@ export const CATALOG = {
       emptying: 'Tühjendamine…',
       empty: {
         heading: 'Karantiinis pole midagi.',
-        body: 'Kõik, mida desinstallimine või Sügavpuhastus eemaldab, jõuab kõigepealt siia. See jääb, kuni tühjendate selle, nii et kogemata võetud fail on alati taastatav.'
+        body: "Kõik, mida desinstallimine või Süvapuhastus eemaldab, jõuab kõigepealt siia. See jääb, kuni tühjendate selle, nii et kogemata võetud fail on alati taastatav."
       },
       deleteConfirmPrompt: 'Kustutada jäädavalt?',
       restore: 'Taasta',
@@ -8515,7 +8515,7 @@ export const CATALOG = {
       footerNote: "Kirje väljalülitamine salvestab otsuse StartupApproved kirjesse, samasse kohta, kust Windowsi enda Käivitusrakenduste seaded ja Task Manager loevad ja kirjutavad. Midagi ei kustutata: Run-väärtus või otsetee jääb täpselt sinna, kus see on, seega saab muudatuse siit või kummastki neist tagasi pöörata."
     },
     duplicates: {
-      title: 'Dubleerivad failid',
+      title: "Duplikaatfailid",
       subtitle: 'Failid, mis on baidi täpsusega identsed, mitte lihtsalt sama suurusega. Suunake see kausta, kuhu te tegelikult asju hoiate — terve draivi lugemine, et võrrelda seda iseendaga, võtab palju kauem aega, kui väärt on, ja leiab enamasti masina enda koopiaid omaenda failidest.',
       folderPlaceholder: (a) => `Kausta tee, näiteks ${a}`,
       stoppedNote: "Peatatud — midagi ei võrreldud.",
@@ -8526,7 +8526,7 @@ export const CATALOG = {
       reading: (folder) => `Loen ${folder}`,
       readingNote: 'Kõigepealt suurused, siis 64 KB näidis kõigest, mis jagab üht, siis kõik selle sisu, mis endiselt sobib.',
       empty: {
-        heading: 'Siin pole dubleerivaid faile.',
+        heading: "Siin pole duplikaatfaile.",
         scanned: (count) => `${count} faili võrreldud.`,
         truncatedSuffix: ' Skannimine katkestati enneaegselt, seega pole see terve kaust.'
       },
@@ -8562,7 +8562,7 @@ export const CATALOG = {
       }
     },
     deepClean: {
-      title: 'Sügavpuhastus',
+      title: "Süvapuhastus",
       subtitle: 'Iga vahemälu, logi, tõmmis ja jääk, mida Prune oskab leida, mõõdetud sellel masinal, mitte hinnatud. Midagi ei kustutata otsekohe — kõik, mida Puhastus võtab, läheb esmalt Karantiini, kust saad selle tagasi panna.',
       scanLog: {
         header: 'Skannimise väljund',
@@ -8582,7 +8582,7 @@ export const CATALOG = {
         scanning: 'Skannimine…',
         preview: 'Eelvaade'
       },
-      hiddenNote: (count) => `${count} puhastajat peidetud, kuna tarkvara pole installitud. Sätted › Puhastamine, et neid näidata.`,
+      hiddenNote: (count) => `${count} puhastajat peidetud, kuna tarkvara pole installitud. Seaded › Puhastamine, et neid näidata.`,
       footer: {
         totalLabel: 'Vabastatav ruum kokku:',
         notMeasuredYet: 'veel mõõtmata',
@@ -8667,7 +8667,7 @@ export const CATALOG = {
       titleForce: (name) => `Sundeemalda ${name}`,
       titleNormal: (name) => `Desinstalli ${name}`,
       close: 'Sulge',
-      stillWaiting: `Ootame endiselt desinstalleerijat. Võid selle akna sulgeda; desinstalleerija jätkab tööd ja Prune ei otsi jääke.`,
+      stillWaiting: "Ootame endiselt desinstallijat. Võid selle akna sulgeda; desinstallija jätkab tööd ja Prune ei skanni jääke.",
       runningWarning: (name) => `${name} töötab praegu. Sulge see esmalt — desinstallija ebaõnnestub tavaliselt avatud programmiga ja võib jätta maha faile, mille järgmine käivitamine uuesti loob.`,
       orphanedWarning: (reason) => `${reason} Windows jätkab selle kuvamist, kuni kirje eemaldatakse.`,
       brokenIntro: 'Prune otsib faile ja registrivõtmeid, mis vastavad sellele nimele, sealhulgas selle programmide lisamise/eemaldamise kirjet, ja näitab sulle kõike enne midagi eemaldamist.',
@@ -8719,7 +8719,7 @@ export const CATALOG = {
       historyLabel: (n) => `Rühmadesinstallimine: ${n} programmi`,
       close: 'Sulge',
       cancel: "Tühista",
-      stillWaiting: (more) => more ? `Ootame endiselt seda desinstalleerijat. Selle enda aken võib olla Prune'i taga. Vali „Peata pärast seda“, et ülejäänud lõpetamisel vahele jätta.` : `Ootame endiselt seda desinstalleerijat. Selle enda aken võib olla Prune'i taga.`,
+      stillWaiting: (more) => more ? `Ootame endiselt seda desinstallijat. Selle enda aken võib olla Prune'i taga. Vali „Peata pärast seda“, et ülejäänud lõpetamisel vahele jätta.` : `Ootame endiselt seda desinstallijat. Selle enda aken võib olla Prune'i taga.`,
       stopAfterThis: "Peata pärast seda",
       stopping: "Peatub pärast seda…",
       statusSkipped: "vahele jäetud",
@@ -8756,7 +8756,7 @@ export const CATALOG = {
         permanent: (programs, items, freed) => `Desinstalliti ${programs} ja kustutati jäädavalt ${items}, vabastades ${freed}.`,
         quarantine: (programs, items, freed) => `Desinstalliti ${programs} ja liigutati ${items} karantiini, vabastades ${freed}.`,
         programs: (n) => `${n} programm${n === 1 ? '' : 'i'}`,
-        items: (n) => `${n} allesjäänud üksus${n === 1 ? '' : 't'}`
+        items: (n) => `${n} jääk${n === 1 ? '' : 'i'}`
       },
       noRestorePoint: (reason) => `Süsteemi taastepunkti ei loodud (${reason}).`,
       restorePointFallback: 'pole saadaval',
@@ -8835,7 +8835,7 @@ export const CATALOG = {
       reportBug: 'Ilmoita virheestä',
       dashboard: 'Yhteenveto', diskMap: 'Levykartta', applications: 'Sovellukset',
       quarantine: 'Karanteeni', settings: 'Asetukset', startup: 'Käynnistys',
-      duplicates: 'Kaksoiskappaleet', deepClean: 'Perusteellinen siivous',
+      duplicates: 'Kaksoiskappaleet', deepClean: "Syväpuhdistus",
       landmark: 'Pää'
     },
     settings: {
@@ -8875,7 +8875,7 @@ export const CATALOG = {
       },
       autoQuarantine: {
         title: 'Automaattinen karanteeni',
-        description: 'Syväsiivous siirtää poistamansa Prunen karanteeniin, josta voit palauttaa sen. Poista tämä käytöstä, ja se menee sen sijaan Windowsin roskakoriin — silti palautettavissa, vain paikassa, jonka jo osaat tyhjentää.'
+        description: "Syväpuhdistus siirtää poistamansa Prunen karanteeniin, josta voit palauttaa sen. Poista tämä käytöstä, ja se menee sen sijaan Windowsin roskakoriin — silti palautettavissa, vain paikassa, jonka jo osaat tyhjentää."
       },
       skipRecent: {
         title: 'Jätä äskettäiset tiedostot rauhaan',
@@ -8888,7 +8888,7 @@ export const CATALOG = {
         description: 'Ennen pakotettua poistoa, jotta Windows itse voi palauttaa koneen. Vie muutaman sekunnin, eikä tee mitään, jos järjestelmän suojaus on pois käytöstä.'
       },
       hideUnavailable: {
-        title: 'Piilota siivoojat, jotka eivät päde',
+        title: "Piilota puhdistimet, jotka eivät päde",
         description: 'Suurin osa listasta on ohjelmistoille, joita tällä koneella ei ole. Niiden piilottaminen jättää jäljelle vain sen, mikä on todella täällä.'
       },
       quarantineRetention: {
@@ -8907,7 +8907,7 @@ export const CATALOG = {
       },
       exclusions: {
         title: 'Sulje kansioita pois',
-        description: 'Kansiot ja tiedostotyypit, jotka Prune jättää rauhaan — syväsiivous ohittaa ne ja levykartta jättää ne pois — niiden lisäksi, joita se jo suojaa: Järjestelmän taltiotiedot, virustorjunnan karanteenit, komponenttivarasto ja tusina muuta.',
+        description: "Kansiot ja tiedostotyypit, jotka Prune jättää rauhaan — syväpuhdistus ohittaa ne ja levykartta jättää ne pois — niiden lisäksi, joita se jo suojaa: Järjestelmän taltiotiedot, virustorjunnan karanteenit, komponenttivarasto ja tusina muuta.",
         ariaLabel: 'Poissuljettava kansiopolku tai tiedostotyyppi',
         add: 'Lisää',
         invalidFormat: 'Kirjoita täydellinen kansiopolku (D:\\Games) tai tiedostotyyppi (*.iso).',
@@ -8920,13 +8920,13 @@ export const CATALOG = {
       cookiesToPreserve: {
         title: 'Säilytettävät evästeet',
         description: 'Kaikki muu selaimen evästetiedostossa katoaa heti, kun puhdistat sen. Skannaa nähdäksesi, mitä siellä oikeasti on, ja rastita kaikki säilyttämisen arvoinen.',
-        scanButton: 'Etsi evästeitä',
+        scanButton: "Skannaa evästeet",
         scanning: 'Skannataan…',
         filterPlaceholder: 'Suodata verkkotunnuksia…',
         countSuffix: (count) => `${count} eväste${count === 1 ? '' : 'ttä'}`,
         none: 'Evästeitä ei löytynyt.',
         staleBadge: 'ei näkynyt tässä skannauksessa',
-        scanErrorPrefix: (message) => `Evästeiden etsiminen epäonnistui: ${message}`,
+        scanErrorPrefix: (message) => `Evästeiden skannaus epäonnistui: ${message}`,
         fileErrorsNote: (count) => `${count} tiedosto${count === 1 ? ' ei voitu lukea ja se ohitettiin' : 'a ei voitu lukea ja ne ohitettiin'}.`,
         checkboxAriaLabel: (domain) => `Säilytä evästeet verkkotunnuksesta ${domain}`
       },
@@ -8940,8 +8940,8 @@ export const CATALOG = {
       },
       warningConfirmations: {
         title: 'Varoitusten vahvistukset',
-        allAsk: 'Jokainen tietoja hävittävä siivooja kysyy ennen suorittamista.',
-        someSet: (count) => `${count} siivousvaroitus${count === 1 ? '' : 'ta'} asetettu olemaan kysymättä uudelleen.`,
+        allAsk: "Jokainen tietoja hävittävä puhdistin kysyy ennen suorittamista.",
+        someSet: (count) => `${count} puhdistinvaroitus${count === 1 ? '' : 'ta'} asetettu olemaan kysymättä uudelleen.`,
         reset: 'Nollaa varoitusten vahvistukset'
       },
       uninstallTab: {
@@ -8960,7 +8960,7 @@ export const CATALOG = {
         },
         afterHeading: 'Poiston jälkeen',
         scanLeftovers: {
-          title: 'Etsi jäänteitä poiston jälkeen',
+          title: "Skannaa jäänteet poiston jälkeen",
           description: 'Etsii tiedostoja, rekisteriavaimia ja ajastettuja tehtäviä, jotka poisto-ohjelma jätti jälkeensä. Pois päältä, Prune vain suorittaa ohjelman oman poisto-ohjelman ja pysähtyy siihen.'
         },
         preselect: {
@@ -8971,13 +8971,13 @@ export const CATALOG = {
           title: 'Pidä poistohistoriaa',
           description: 'Kojelaudan lista viimeaikaisista poistoista ja niiden vapauttamasta tilasta. Pois päältä, mitään uutta ei tallenneta.'
         },
-        destinationHeading: 'Jäljelle jääneet tiedostot menevät',
+        destinationHeading: "Jäännetiedostot menevät",
         leftoverOptions: {
           quarantine: { label: 'Karanteeni', description: 'Siirretty Prunen omaan varmuuskopioon, ja palautettavissa Karanteeni-näytöltä. Oletus.' },
           recycle: { label: 'Roskakori', description: 'Palautettavissa Windowsin omasta korista, ja vapautuu, kun tyhjennät sen.' },
           permanent: { label: 'Poista pysyvästi', description: 'Poistettu kokonaan. Ei mitään palautettavaa.' }
         },
-        permanentWarning: 'Jäljelle jääneet tiedostot poistetaan kokonaan eikä niitä voida palauttaa, ei karanteenista eikä mistään muualta. Tarkista lista ennen vahvistamista.',
+        permanentWarning: "Jäännetiedostot poistetaan kokonaan eikä niitä voida palauttaa, ei karanteenista eikä mistään muualta. Tarkista lista ennen vahvistamista.",
         registryNote: 'Rekisteriavaimet viedään karanteeniin ennen niiden poistoa, valinnastasi riippumatta.'
       },
       about: {
@@ -8999,7 +8999,7 @@ export const CATALOG = {
         everyWeek: 'Joka viikko',
         measureOnly: 'Vain mittaa',
         clean: 'Siivoa',
-        cleanWarning: 'Tämä poistaa tiedostoja ilman kenenkään valvontaa. Se siivoaa säännöt, joita syväsiivous suosittelee ja joissa on todella jotain sisällä, ja kaikki menee silti karanteeniin — joten tarkista yllä oleva säilytysasetus ennen kuin jätät tämän päälle.',
+        cleanWarning: "Tämä poistaa tiedostoja ilman kenenkään valvontaa. Se puhdistaa säännöt, joita Syväpuhdistus suosittelee ja joissa on todella jotain sisällä, ja kaikki menee silti karanteeniin — joten tarkista yllä oleva säilytysasetus ennen kuin jätät tämän päälle.",
         nextRun: 'Seuraava suoritus:',
         lastRun: 'Viimeisin suoritus:',
         weekdays: {
@@ -9059,7 +9059,7 @@ export const CATALOG = {
       junk: {
         label: 'Roskatiedostot',
         notMeasured: 'ei mitattu',
-        description: 'Mittaus käy läpi jokaisen puhdistuspolun levyllä — noin puoli minuuttia.',
+        description: "Mittaus käy läpi jokaisen puhdistimen polun levyllä — noin puoli minuuttia.",
         measure: 'Mittaa'
       },
       recentActivity: {
@@ -9382,7 +9382,7 @@ export const CATALOG = {
         scanning: 'Skannataan…',
         preview: 'Esikatselu'
       },
-      hiddenNote: (count) => `${count} puhdistajaa piilotettu, koska ohjelmistoa ei ole asennettu. Asetukset › Puhdistus näyttääksesi ne.`,
+      hiddenNote: (count) => `${count} puhdistin${count === 1 ? '' : 'ta'} piilotettu, koska ohjelmistoa ei ole asennettu. Asetukset › Puhdistus näyttääksesi ne.`,
       footer: {
         totalLabel: 'Vapautettava tila yhteensä:',
         notMeasuredYet: 'ei vielä mitattu',
@@ -9556,7 +9556,7 @@ export const CATALOG = {
         permanent: (programs, items, freed) => `Poistettiin ${programs} ja poistettiin pysyvästi ${items}, vapauttaen ${freed}.`,
         quarantine: (programs, items, freed) => `Poistettiin ${programs} ja siirrettiin ${items} karanteeniin, vapauttaen ${freed}.`,
         programs: (n) => `${n} ohjelma${n === 1 ? '' : 'a'}`,
-        items: (n) => `${n} jäljelle jäänyt${n === 1 ? '' : 'ttä'} kohde${n === 1 ? '' : 'tta'}`
+        items: (n) => `${n} jäänne${n === 1 ? '' : 'ttä'}`
       },
       noRestorePoint: (reason) => `Järjestelmän palautuspistettä ei luotu (${reason}).`,
       restorePointFallback: 'ei saatavilla',
@@ -9670,12 +9670,12 @@ export const CATALOG = {
         openPageError: (error) => `Impossible d'ouvrir la page : ${error}`
       },
       showFreeSpace: {
-        title: "Afficher l'espace libre sur la Carte du Disque",
+        title: "Afficher l'espace libre sur la Carte du disque",
         description: "Dessine l'espace libre du lecteur comme un bloc de plus lors de l'analyse d'un lecteur entier, afin que chaque dossier se lise comme une part du lecteur plutôt que de l'espace utilisé."
       },
       autoQuarantine: {
         title: 'Quarantaine automatique',
-        description: "Le Nettoyage en Profondeur déplace ce qu'il retire vers la Quarantaine de Prune, d'où vous pouvez le remettre en place. Désactivez ceci et cela ira à la Corbeille Windows à la place — toujours récupérable, juste à un endroit que vous savez déjà vider."
+        description: "Le Nettoyage approfondi déplace ce qu'il retire vers la Quarantaine de Prune, d'où vous pouvez le remettre en place. Désactivez ceci et cela ira à la Corbeille Windows à la place — toujours récupérable, juste à un endroit que vous savez déjà vider."
       },
       skipRecent: {
         title: 'Laisser tranquilles les fichiers récents',
@@ -9707,7 +9707,7 @@ export const CATALOG = {
       },
       exclusions: {
         title: 'Exclure des dossiers',
-        description: "Dossiers et types de fichiers que Prune laissera tranquilles — ignorés par le Nettoyage en Profondeur et exclus de la Carte du Disque — en plus de ceux qu'il protège déjà : Informations de volume système, quarantaines antivirus, le magasin de composants et une douzaine d'autres.",
+        description: "Dossiers et types de fichiers que Prune laissera tranquilles — ignorés par le Nettoyage approfondi et exclus de la Carte du disque — en plus de ceux qu'il protège déjà : Informations de volume système, quarantaines antivirus, le magasin de composants et une douzaine d'autres.",
         ariaLabel: 'Chemin de dossier ou type de fichier à exclure',
         add: 'Ajouter',
         invalidFormat: 'Écrivez un chemin de dossier complet (D:\\Games) ou un type de fichier (*.iso).',
@@ -9720,13 +9720,13 @@ export const CATALOG = {
       cookiesToPreserve: {
         title: 'Cookies à conserver',
         description: "Tout le reste du fichier de cookies d'un navigateur disparaît dès que vous le nettoyez. Analysez pour voir ce qui s'y trouve réellement, et cochez tout ce qui mérite d'être conservé.",
-        scanButton: 'Rechercher des cookies',
+        scanButton: "Analyser les cookies",
         scanning: 'Analyse en cours…',
         filterPlaceholder: 'Filtrer les domaines…',
         countSuffix: (count) => `${count} cookie${count === 1 ? '' : 's'}`,
         none: 'Aucun cookie trouvé.',
         staleBadge: 'non vu lors de cette analyse',
-        scanErrorPrefix: (message) => `Impossible de rechercher des cookies : ${message}`,
+        scanErrorPrefix: (message) => `Impossible d'analyser les cookies : ${message}`,
         fileErrorsNote: (count) => `${count} fichier${count === 1 ? '' : 's'} n'${count === 1 ? 'a' : 'ont'} pas pu être lu${count === 1 ? '' : 's'} et ${count === 1 ? 'a' : 'ont'} été ignoré${count === 1 ? '' : 's'}.`,
         checkboxAriaLabel: (domain) => `Conserver les cookies de ${domain}`
       },
@@ -9760,31 +9760,31 @@ export const CATALOG = {
         },
         afterHeading: 'Après la désinstallation',
         scanLeftovers: {
-          title: 'Rechercher les restes après la désinstallation',
+          title: "Analyser les résidus après la désinstallation",
           description: "Recherche les fichiers, clés de registre et tâches planifiées laissés par le désinstalleur. Désactivé, Prune exécute simplement le propre désinstalleur du programme et s'arrête là."
         },
         preselect: {
-          title: 'Cocher chaque reste par défaut',
+          title: "Cocher chaque résidu par défaut",
           description: "L'examen s'ouvre avec tout ce qui a été trouvé coché. Désactivé, il s'ouvre sans rien de coché et vous choisissez."
         },
         keepHistory: {
           title: 'Conserver un historique de désinstallation',
           description: "La liste du tableau de bord des suppressions récentes et de l'espace qu'elles ont libéré. Désactivé, rien de nouveau n'est enregistré."
         },
-        destinationHeading: 'Les fichiers restants vont vers',
+        destinationHeading: "Les fichiers résiduels vont vers",
         leftoverOptions: {
-          quarantine: { label: 'Quarantaine', description: "Déplacé vers la propre sauvegarde de Prune, et récupérable depuis l'écran Quarantaine. L'option par défaut." },
-          recycle: { label: 'La Corbeille', description: "Récupérable depuis la propre corbeille de Windows, et libéré lorsque vous la videz." },
+          quarantine: { label: 'Quarantaine', description: "Déplacé vers la propre sauvegarde de Prune, et restaurable depuis l'écran Quarantaine. L'option par défaut." },
+          recycle: { label: 'La Corbeille', description: "Restaurable depuis la propre corbeille de Windows, et libéré lorsque vous la videz." },
           permanent: { label: 'Supprimer définitivement', description: 'Supprimé complètement. Rien à restaurer.' }
         },
-        permanentWarning: "Les fichiers restants seront supprimés complètement et ne peuvent pas être restaurés, ni depuis la Quarantaine ni depuis ailleurs. Vérifiez la liste avant de confirmer.",
+        permanentWarning: "Les fichiers résiduels seront supprimés complètement et ne peuvent pas être restaurés, ni depuis la Quarantaine ni depuis ailleurs. Vérifiez la liste avant de confirmer.",
         registryNote: "Les clés de registre sont exportées vers la Quarantaine avant leur suppression, quel que soit votre choix."
       },
       about: {
         reportTitle: 'Signaler un bug',
         reportDescription: "Ouvre un ticket prérempli sur GitHub. Prune n'envoie rien lui-même, et vous voyez tout avant que quoi que ce soit ne soit transmis.",
         reportButton: 'Signaler un bug',
-        description: "Un outil local et hors ligne de désinstallation et de nettoyage pour Windows — suppression forcée avec analyse des fichiers restants, quarantaine sécurisée avant suppression, cartographie du disque et nettoyage des déchets en un clic."
+        description: "Un outil local et hors ligne de désinstallation et de nettoyage pour Windows — suppression forcée avec analyse des fichiers résiduels, quarantaine sécurisée avant suppression, cartographie du disque et nettoyage des déchets en un clic."
       },
       automation: {
         title: 'Automatisation',
@@ -9799,7 +9799,7 @@ export const CATALOG = {
         everyWeek: 'Chaque semaine',
         measureOnly: 'Mesurer seulement',
         clean: 'Nettoyer',
-        cleanWarning: "Cela supprime des fichiers sans surveillance. Cela nettoie les règles que le Nettoyage en Profondeur recommande et qui contiennent réellement quelque chose, et tout va toujours en quarantaine — vérifiez donc le paramètre de rétention ci-dessus avant de laisser ceci activé.",
+        cleanWarning: "Cela supprime des fichiers sans surveillance. Cela exécute les nettoyeurs que le Nettoyage approfondi recommande et qui contiennent réellement quelque chose, et tout va toujours en quarantaine — vérifiez donc le paramètre de rétention ci-dessus avant de laisser ceci activé.",
         nextRun: 'Prochaine exécution :',
         lastRun: 'Dernière exécution :',
         weekdays: {
@@ -9859,7 +9859,7 @@ export const CATALOG = {
       junk: {
         label: "Fichiers inutiles",
         notMeasured: 'non mesuré',
-        description: 'La mesure parcourt chaque chemin de nettoyage du disque — environ une demi-minute.',
+        description: "La mesure parcourt le chemin de chaque nettoyeur sur le disque — environ une demi-minute.",
         measure: 'Mesurer'
       },
       recentActivity: {
@@ -10058,7 +10058,7 @@ export const CATALOG = {
       emptying: 'Vidage…',
       empty: {
         heading: 'Rien en quarantaine.',
-        body: "Tout ce qu'une désinstallation ou un Nettoyage en profondeur supprime arrive ici en premier. Cela reste jusqu'à ce que vous le vidiez, donc un fichier pris par erreur est toujours récupérable."
+        body: "Tout ce qu'une désinstallation ou un Nettoyage approfondi supprime arrive ici en premier. Cela reste jusqu'à ce que vous le vidiez, donc un fichier pris par erreur est toujours récupérable."
       },
       deleteConfirmPrompt: 'Supprimer pour toujours ?',
       restore: 'Restaurer',
@@ -10162,8 +10162,8 @@ export const CATALOG = {
       }
     },
     deepClean: {
-      title: 'Nettoyage en profondeur',
-      subtitle: "Chaque cache, journal, vidage et reste que Prune sait trouver, mesuré sur cette machine plutôt qu'estimé. Rien n'est supprimé directement — tout ce que Nettoyer prend va d'abord en quarantaine, d'où vous pouvez le remettre en place.",
+      title: "Nettoyage approfondi",
+      subtitle: "Chaque cache, journal, vidage et résidu que Prune sait trouver, mesuré sur cette machine plutôt qu'estimé. Rien n'est supprimé directement — tout ce que Nettoyer prend va d'abord en quarantaine, d'où vous pouvez le remettre en place.",
       scanLog: {
         header: 'Sortie de l\'analyse',
         scanningAnnounce: (total) => `Analyse de ${total} emplacements.`,
@@ -10267,7 +10267,7 @@ export const CATALOG = {
       titleForce: (name) => `Forcer la suppression de ${name}`,
       titleNormal: (name) => `Désinstaller ${name}`,
       close: 'Fermer',
-      stillWaiting: "Toujours en attente du désinstalleur. Vous pouvez fermer cette fenêtre : il continue de s'exécuter et Prune ne recherchera pas de résidus.",
+      stillWaiting: "Toujours en attente du désinstalleur. Vous pouvez fermer cette fenêtre : il continue de s'exécuter et Prune n'analysera pas les résidus.",
       runningWarning: (name) => `${name} est en cours d'exécution en ce moment. Fermez-le d'abord — un désinstalleur échoue généralement sur un programme ouvert, et peut laisser des fichiers que le prochain lancement recréera.`,
       orphanedWarning: (reason) => `${reason} Windows continuera à le lister tant que l'entrée n'est pas supprimée.`,
       brokenIntro: "Prune recherchera les fichiers et clés de registre correspondant à ce nom, y compris son entrée Ajout/Suppression de programmes, et vous montrera tout avant de rien supprimer.",
@@ -10275,7 +10275,7 @@ export const CATALOG = {
       searchHint: (name) => `Extrait de « ${name} » sans sa version — les installateurs nomment les dossiers d'après le produit, pas la version. Modifiez-le si les résultats semblent incorrects.`,
       scanFailed: (error) => `L'analyse a échoué : ${error}`,
       searchButton: 'Rechercher les résidus',
-      normalIntro: (name) => `Ceci exécute le propre désinstalleur de ${name}, puis recherche tout ce qu'il laisse derrière lui.`,
+      normalIntro: (name) => `Ceci exécute le propre désinstalleur de ${name}, puis analyse tout ce qu'il laisse derrière lui.`,
       uninstallFailed: (error) => `La désinstallation a échoué : ${error}`,
       startButton: 'Démarrer la désinstallation',
       noWorkingUninstaller: 'Aucun désinstalleur fonctionnel — recherche par nom à la place',
@@ -10325,7 +10325,7 @@ export const CATALOG = {
       statusSkipped: "ignoré",
       stoppedNote: (n) => `Arrêté avant la fin. Non démarrés : ${n}.`,
       registryOnlyIntro: "Chaque application est supprimée via Windows à tour de rôle, et il n'y a pas d'analyse des résidus ensuite : Windows supprime les données propres de l'application en même temps qu'elle.",
-      mixedIntro: (hasStore) => `Le propre désinstalleur de chaque programme s'exécute à tour de rôle, puis Prune recherche ce qu'ils laissent derrière eux et vous montre tout avant d'en supprimer quoi que ce soit.${hasStore ? " Les applications du Store sont supprimées via Windows à la place, sans analyse des résidus ensuite." : ''}`,
+      mixedIntro: (hasStore) => `Le propre désinstalleur de chaque programme s'exécute à tour de rôle, puis Prune analyse ce qu'ils laissent derrière eux et vous montre tout avant d'en supprimer quoi que ce soit.${hasStore ? " Les applications du Store sont supprimées via Windows à la place, sans analyse des résidus ensuite." : ''}`,
       oneAtATime: "Une à la fois, car Windows ne permet qu'une seule installation ou désinstallation à la fois. Certains désinstalleurs afficheront leurs propres fenêtres et vous poseront des questions.",
       storeWarning: (count) => count === 1
         ? "L'application du Store dans ce lot ne peut pas être restaurée depuis la Quarantaine : la supprimer emporte l'application et ses données enregistrées, et la récupérer signifie la réinstaller depuis le Store."
@@ -10433,7 +10433,7 @@ export const CATALOG = {
   he: {
     nav: {
       reportBug: 'דיווח על באג',
-      dashboard: 'לוח בקרה', diskMap: 'מפת הדיסק', applications: 'יישומים',
+      dashboard: 'לוח בקרה', diskMap: 'מפת הדיסק', applications: "אפליקציות",
       quarantine: 'הסגר', settings: 'הגדרות', startup: 'הפעלה',
       duplicates: 'כפילויות', deepClean: 'ניקוי מעמיק',
       landmark: 'ראשי'
@@ -10475,7 +10475,7 @@ export const CATALOG = {
       },
       autoQuarantine: {
         title: 'הסגר אוטומטי',
-        description: 'ניקוי עמוק מעביר את מה שהוא מסיר להסגר של Prune, שממנו תוכל להחזיר אותו. כבה זאת והוא ילך במקום זאת לסל המיחזור של Windows — עדיין ניתן לשחזור, רק במקום שאתה כבר יודע איך לרוקן.'
+        description: "ניקוי מעמיק מעביר את מה שהוא מסיר להסגר של Prune, שממנו תוכל לשחזר אותו. כבה זאת והוא ילך במקום זאת לסל המיחזור של Windows — עדיין ניתן לשחזור, רק במקום שאתה כבר יודע איך לרוקן."
       },
       skipRecent: {
         title: 'השאר קבצים אחרונים לנפשם',
@@ -10488,7 +10488,7 @@ export const CATALOG = {
         description: 'לפני הסרה כפויה, כדי ש-Windows עצמו יוכל להחזיר את המחשב לאחור. עולה כמה שניות, ולא עושה כלום אם הגנת המערכת כבויה.'
       },
       hideUnavailable: {
-        title: 'הסתר מנקים שלא רלוונטיים',
+        title: "הסתר כלי ניקוי שלא רלוונטיים",
         description: 'רוב הרשימה מיועדת לתוכנה שלא קיימת במחשב הזה. הסתרתם משאירה רק את מה שבאמת כאן.'
       },
       quarantineRetention: {
@@ -10507,7 +10507,7 @@ export const CATALOG = {
       },
       exclusions: {
         title: "החרגת תיקיות",
-        description: 'תיקיות וסוגי קבצים ש-Prune ישאיר לנפשם — ידולגו על ידי הניקוי העמוק ויוחרגו ממפת הדיסק — בנוסף לאלה שהוא כבר מגן עליהם: מידע על כרך המערכת, הסגרי אנטי-וירוס, מאגר הרכיבים ותריסר נוספים.',
+        description: "תיקיות וסוגי קבצים ש-Prune ישאיר לנפשם — ידולגו על ידי הניקוי המעמיק ויוחרגו ממפת הדיסק — בנוסף לאלה שהוא כבר מגן עליהם: מידע על כרך המערכת, הסגרי אנטי-וירוס, מאגר הרכיבים ותריסר נוספים.",
         ariaLabel: 'נתיב תיקייה או סוג קובץ להחרגה',
         add: 'הוסף',
         invalidFormat: 'כתוב נתיב תיקייה מלא (D:\\Games) או סוג קובץ (*.iso).',
@@ -10540,8 +10540,8 @@ export const CATALOG = {
       },
       warningConfirmations: {
         title: 'אישורי אזהרה',
-        allAsk: 'כל מנקה שמאבד נתונים שואל לפני שהוא רץ.',
-        someSet: (count) => `${count} אזהרות ניקוי הוגדרו לא לשאול שוב.`,
+        allAsk: "כל כלי ניקוי שמאבד נתונים שואל לפני שהוא רץ.",
+        someSet: (count) => `${count} אזהרות של כלי ניקוי הוגדרו לא לשאול שוב.`,
         reset: 'אפס אישורי אזהרה'
       },
       uninstallTab: {
@@ -10571,20 +10571,20 @@ export const CATALOG = {
           title: 'שמור היסטוריית הסרות',
           description: 'רשימת לוח הבקרה של ההסרות האחרונות והשטח ששוחרר. כבוי, שום דבר חדש לא נרשם.'
         },
-        destinationHeading: 'קבצים שנותרו הולכים אל',
+        destinationHeading: "השאריות הולכות אל",
         leftoverOptions: {
           quarantine: { label: 'הסגר', description: 'הועבר לגיבוי של Prune עצמו, וניתן לשחזור ממסך ההסגר. ברירת המחדל.' },
           recycle: { label: 'סל המיחזור', description: 'ניתן לשחזור מסל המיחזור של Windows עצמו, ומשוחרר כשתרוקן אותו.' },
           permanent: { label: 'מחק לצמיתות', description: 'נמחק לחלוטין. אין מה לשחזר.' }
         },
-        permanentWarning: 'קבצים שנותרו יימחקו לחלוטין ולא ניתן לשחזרם, לא מהסגר ולא ממקום אחר. בדוק את הרשימה לפני האישור.',
+        permanentWarning: "השאריות יימחקו לחלוטין ולא ניתן יהיה לשחזרן, לא מהסגר ולא ממקום אחר. בדוק את הרשימה לפני האישור.",
         registryNote: 'מפתחות הרישום מיוצאים להסגר לפני שהם מוסרים, לא משנה מה תבחר.'
       },
       about: {
         reportTitle: 'דיווח על באג',
         reportDescription: "פותח דיווח ממולא מראש ב-GitHub. Prune עצמו לא שולח דבר, ואתה רואה הכול לפני שמשהו נשלח לכל מקום.",
         reportButton: 'דיווח על באג',
-        description: 'כלי הסרה וניקוי מקומי, לא מקוון, עבור Windows — הסרה כפויה עם סריקת קבצים שנותרו, הסגר בטוח לפני מחיקה, מיפוי דיסק וניקוי זבל בלחיצה אחת.'
+        description: "כלי הסרה וניקוי מקומי, לא מקוון, עבור Windows — הסרה כפויה עם סריקת שאריות, הסגר בטוח לפני מחיקה, מפת הדיסק וניקוי זבל בלחיצה אחת."
       },
       automation: {
         title: 'אוטומציה',
@@ -10599,7 +10599,7 @@ export const CATALOG = {
         everyWeek: 'כל שבוע',
         measureOnly: 'מדוד בלבד',
         clean: 'נקה',
-        cleanWarning: 'זה מסיר קבצים בלי שאף אחד יצפה. זה מנקה את הכללים שהניקוי העמוק ממליץ עליהם ושבאמת יש בהם משהו, והכול עדיין הולך להסגר — אז בדוק את הגדרת השמירה למעלה לפני שתשאיר את זה מופעל.',
+        cleanWarning: "זה מסיר קבצים בלי שאף אחד יצפה. זה מנקה את הכללים שהניקוי המעמיק ממליץ עליהם ושבאמת יש בהם משהו, והכול עדיין הולך להסגר — אז בדוק את הגדרת השמירה למעלה לפני שתשאיר את זה מופעל.",
         nextRun: 'הרצה הבאה:',
         lastRun: 'הרצה אחרונה:',
         weekdays: {
@@ -10659,12 +10659,12 @@ export const CATALOG = {
       junk: {
         label: 'קבצים מיותרים',
         notMeasured: 'לא נמדד',
-        description: 'המדידה עוברת בכל נתיבי הניקוי בדיסק — כחצי דקה.',
+        description: "המדידה עוברת בנתיבי כל כלי הניקוי בדיסק — כחצי דקה.",
         measure: 'מדוד'
       },
       recentActivity: {
         title: 'פעילות אחרונה',
-        empty: 'אין עדיין הסרות התקנה.',
+        empty: "אין עדיין הסרות.",
         freed: 'שוחרר'
       }
     },
@@ -10772,7 +10772,7 @@ export const CATALOG = {
     applications: {
       loading: 'קורא תוכניות מותקנות…',
       loadError: (error) => `טעינת התוכניות נכשלה: ${error}`,
-      search: { placeholder: 'חיפוש יישומים…', label: 'חיפוש יישומים' },
+      search: { placeholder: "חיפוש אפליקציות…", label: "חיפוש אפליקציות" },
       filters: {
         all: 'הכול',
         unused: 'לא בשימוש',
@@ -10784,7 +10784,7 @@ export const CATALOG = {
         brokenCount: (n) => `פגומים (${n})`
       },
       columns: {
-        application: 'יישום',
+        application: "אפליקציה",
         size: 'גודל',
         version: 'גרסה',
         type: 'סוג',
@@ -10800,11 +10800,11 @@ export const CATALOG = {
       reveal: { button: 'תיקייה', notFound: 'לא נמצא', ariaLabel: (name) => `פתח את התיקייה של ${name}` },
       viaBrowser: 'דרך הדפדפן',
       inWindows: { button: 'ב-Windows', ariaLabel: (name) => `פתח את הגדרות Windows — Windows אינו מאפשר להסיר את ${name} מכאן` },
-      uninstall: 'הסר התקנה',
+      uninstall: "הסר",
       forceRemove: 'הסרה מאולצת',
       openFolder: "פתח תיקייה",
-      copyUninstallCommand: "העתק פקודת הסרת התקנה",
-      commandCopied: "פקודת הסרת ההתקנה הועתקה.",
+      copyUninstallCommand: "העתק פקודת הסרה",
+      commandCopied: "פקודת ההסרה הועתקה.",
       copyFailed: "לא ניתן להעתיק.",
       empty: {
         plain: 'אין התאמות.',
@@ -10818,7 +10818,7 @@ export const CATALOG = {
         selected: (count) => `${count} נבחרו`,
         unknownSizes: (count) => `+ ${count} בגודל לא ידוע`,
         clear: 'נקה',
-        uninstallCount: (count) => `הסר התקנה של ${count} תוכניות`,
+        uninstallCount: (count) => `הסר ${count} תוכניות`,
         installations: (count) => `התקנות: ${count}`,
         showingOf: (shown, total) => `מציג ${shown} מתוך ${total}`,
         newInDays: (count, days) => `${count} חדשים ב-${days} הימים האחרונים`,
@@ -10830,7 +10830,7 @@ export const CATALOG = {
         storeNoPackage: 'ליישום חנות זה אין שם חבילה להסרה.',
         storeProtected: 'Windows מסמן יישום זה כחלק מהמערכת ואינו מאפשר את הסרתו.',
         storeUnknown: 'Windows לא ציין אם ניתן להסיר יישום זה, ולכן הוא מושמט מהאצווה.',
-        noCommand: 'לא רשומה פקודת הסרת התקנה עבור תוכנית זו.'
+        noCommand: "לא רשומה פקודת הסרה עבור תוכנית זו."
       },
       storeRemoveDialog: {
         heading: (name) => `להסיר את ${name}?`,
@@ -10873,7 +10873,7 @@ export const CATALOG = {
     },
     startup: {
       title: "הפעלה",
-      subtitle: "מה שפועל בעת הכניסה: מפתחות ה-Run ותיקיות Startup ש-Windows קורא, מקובצים לפי מיקומם — וזה קובע את מי כל רשומה משפיעה ומה נדרש כדי להסיר אותה. רשומה שהקובץ שלה חסר נשארה מתוכנית שהוסרה ברשלנות, ו-Windows ממשיך לנסות להפעיל אותה בכל פעם.",
+      subtitle: "מה שפועל בעת הכניסה: מפתחות ה-Run ותיקיות הפעלה ש-Windows קורא, מקובצים לפי מיקומם — וזה קובע את מי כל רשומה משפיעה ומה נדרש כדי להסיר אותה. רשומה שהקובץ שלה חסר נשארה מתוכנית שהוסרה ברשלנות, ו-Windows ממשיך לנסות להפעיל אותה בכל פעם.",
       loading: 'קורא רשומות הפעלה…',
       loadError: (error) => `לא ניתן היה לקרוא את רשומות ההפעלה: ${error}`,
       empty: {
@@ -10963,7 +10963,7 @@ export const CATALOG = {
     },
     deepClean: {
       title: 'ניקוי מעמיק',
-      subtitle: 'כל מטמון, יומן, קובץ dump ושארית ש-Prune יודע למצוא, נמדד במכשיר הזה במקום להיות מוערך. שום דבר לא נמחק ישירות — כל מה שהניקוי לוקח עובר קודם להסגר, שם ניתן להחזיר אותו.',
+      subtitle: "כל מטמון, יומן, קובץ dump ושארית ש-Prune יודע למצוא, נמדד במכשיר הזה במקום להיות מוערך. שום דבר לא נמחק ישירות — כל מה שהניקוי לוקח עובר קודם להסגר, שם ניתן לשחזר אותו.",
       scanLog: {
         header: 'פלט הסריקה',
         scanningAnnounce: (total) => `סורק ${total} מיקומים.`,
@@ -11074,7 +11074,7 @@ export const CATALOG = {
       searchForLabel: 'חפש עבור',
       searchHint: (name) => `נלקח מ-"${name}" ללא הגרסה — תוכניות התקנה קוראות לתיקיות על שם המוצר, לא הגרסה. ערוך זאת אם התוצאות נראות שגויות.`,
       scanFailed: (error) => `הסריקה נכשלה: ${error}`,
-      searchButton: 'חפש שאריות',
+      searchButton: "סרוק שאריות",
       normalIntro: (name) => `זה מריץ את תוכנית ההסרה של ${name} עצמו, ואז סורק אחר כל דבר שהוא משאיר מאחור.`,
       uninstallFailed: (error) => `ההסרה נכשלה: ${error}`,
       startButton: 'התחל הסרה',
@@ -11084,7 +11084,7 @@ export const CATALOG = {
         runningNative: 'מריץ את תוכנית ההסרה המקורית',
         backingUpRegistry: 'מגבה את הרישום',
         creatingRestorePoint: 'יוצר נקודת שחזור',
-        searchingLeftovers: 'מחפש שאריות',
+        searchingLeftovers: "סורק שאריות",
         scanningLeftovers: 'סורק שאריות',
         checkingCommand: 'בודק מערכת קבצים, רישום ומשימות מתוזמנות…'
       },
@@ -11156,11 +11156,11 @@ export const CATALOG = {
         permanent: (programs, items, freed) => `הוסרו ${programs} ונמחקו ${items} לצמיתות, ששחרר ${freed}.`,
         quarantine: (programs, items, freed) => `הוסרו ${programs} והועברו ${items} להסגר, ששחרר ${freed}.`,
         programs: (n) => `${n} תוכניות`,
-        items: (n) => `${n} פריטים שנותרו`
+        items: (n) => `${n === 1 ? 'שארית אחת' : `${n} שאריות`}`
       },
       noRestorePoint: (reason) => `לא נוצרה נקודת שחזור מערכת (${reason}).`,
       restorePointFallback: 'לא זמין',
-      quarantineNote: 'כל האמור לעיל עדיין נמצא בהסגר וניתן להחזירו.',
+      quarantineNote: "כל האמור לעיל עדיין נמצא בהסגר וניתן לשחזרו.",
       failedRegistryKeys: (n) => `לא ניתן היה להסיר ${n} מפתחות רישום — אלה בדרך כלל דורשים ש-Prune ירוץ כמנהל.`
     },
     bugReport: {
@@ -11224,8 +11224,8 @@ export const CATALOG = {
       tryAgain: 'נסה שוב'
     },
     app: {
-      installedApplications: "יישומים",
-      applicationsSummary: (count, size) => `יישומים מותקנים: ${count} · ${size}`,
+      installedApplications: "אפליקציות",
+      applicationsSummary: (count, size) => `אפליקציות מותקנות: ${count} · ${size}`,
       removeStoreApp: (name) => `הסר את ${name}`
     }
   },
@@ -11235,7 +11235,7 @@ export const CATALOG = {
       reportBug: 'Hiba jelentése',
       dashboard: 'Áttekintés', diskMap: 'Lemeztérkép', applications: 'Alkalmazások',
       quarantine: 'Karantén', settings: 'Beállítások', startup: 'Indítás',
-      duplicates: 'Duplikátumok', deepClean: 'Alapos tisztítás',
+      duplicates: 'Duplikátumok', deepClean: "Mélytisztítás",
       landmark: 'Fő'
     },
     settings: {
@@ -11275,7 +11275,7 @@ export const CATALOG = {
       },
       autoQuarantine: {
         title: 'Automatikus karantén',
-        description: 'A Mélytisztítás a Prune karanténjába helyezi, amit eltávolít, ahonnan visszahelyezheted. Kapcsold ki ezt, és helyette a Windows Lomtárba kerül — továbbra is visszaállítható, csak olyan helyen, amit már tudsz üríteni.'
+        description: "A Mélytisztítás a Prune karanténjába helyezi, amit eltávolít, ahonnan visszaállíthatod. Kapcsold ki ezt, és helyette a Windows Lomtárba kerül — továbbra is visszaállítható, csak olyan helyen, amit már tudsz üríteni."
       },
       skipRecent: {
         title: 'Hagyd békén a friss fájlokat',
@@ -11320,13 +11320,13 @@ export const CATALOG = {
       cookiesToPreserve: {
         title: 'Megőrzendő sütik',
         description: 'A böngésző sütifájljában lévő minden más eltűnik, amint megtisztítod. Vizsgáld meg, hogy valójában mi van ott, és pipáld ki, amit érdemes megtartani.',
-        scanButton: 'Sütik keresése',
+        scanButton: "Sütik vizsgálata",
         scanning: 'Vizsgálat…',
         filterPlaceholder: 'Domainek szűrése…',
         countSuffix: (count) => `${count} süti`,
         none: 'Nem található süti.',
         staleBadge: 'ebben a vizsgálatban nem látszott',
-        scanErrorPrefix: (message) => `Nem sikerült sütiket keresni: ${message}`,
+        scanErrorPrefix: (message) => `Nem sikerült megvizsgálni a sütiket: ${message}`,
         fileErrorsNote: (count) => `${count} fájlt nem sikerült beolvasni, ezért kimaradt.`,
         checkboxAriaLabel: (domain) => `Sütik megőrzése innen: ${domain}`
       },
@@ -11360,7 +11360,7 @@ export const CATALOG = {
         },
         afterHeading: 'Eltávolítás után',
         scanLeftovers: {
-          title: 'Maradványok keresése eltávolítás után',
+          title: "Maradványok vizsgálata eltávolítás után",
           description: 'Azokat a fájlokat, rendszerleíró kulcsokat és ütemezett feladatokat keresi, amiket az eltávolító hátrahagyott. Kikapcsolva a Prune egyszerűen lefuttatja a program saját eltávolítóját, és ott megáll.'
         },
         preselect: {
@@ -11371,20 +11371,20 @@ export const CATALOG = {
           title: 'Eltávolítási előzmények megőrzése',
           description: 'A vezérlőpult listája a legutóbbi eltávolításokról és a felszabadított helyről. Kikapcsolva semmi új nem kerül rögzítésre.'
         },
-        destinationHeading: 'A megmaradt fájlok célja',
+        destinationHeading: "A maradványok célja",
         leftoverOptions: {
           quarantine: { label: 'Karantén', description: 'A Prune saját biztonsági mentésébe kerül, és a Karantén képernyőről visszaállítható. Ez az alapértelmezett.' },
           recycle: { label: 'A Lomtár', description: 'A Windows saját Lomtárából visszaállítható, és felszabadul, amikor kiüríted.' },
           permanent: { label: 'Végleges törlés', description: 'Teljesen törölve. Nincs mit visszaállítani.' }
         },
-        permanentWarning: 'A megmaradt fájlok teljesen törlődnek, és nem állíthatók vissza sem a Karanténból, sem máshonnan. Ellenőrizd a listát, mielőtt megerősíted.',
+        permanentWarning: "A maradványok teljesen törlődnek, és nem állíthatók vissza sem a Karanténból, sem máshonnan. Ellenőrizd a listát, mielőtt megerősíted.",
         registryNote: 'A rendszerleíró kulcsok a Karanténba kerülnek exportálásra eltávolításuk előtt, függetlenül a választásodtól.'
       },
       about: {
         reportTitle: 'Hiba jelentése',
         reportDescription: 'Megnyit egy előre kitöltött hibajegyet a GitHubon. A Prune maga nem küld semmit, és mindent látsz, mielőtt bárhová eljutna.',
         reportButton: 'Hiba jelentése',
-        description: 'Helyi, offline eltávolító és tisztító eszköz Windowshoz — kényszerített eltávolítás maradványfájl-vizsgálattal, biztonságos karantén törlés előtt, lemeztérképezés és egykattintásos szemétisztítás.'
+        description: "Helyi, offline eltávolító és tisztító eszköz Windowshoz — kényszerített eltávolítás maradványfájl-vizsgálattal, biztonságos karantén törlés előtt, lemeztérkép és egykattintásos szemétisztítás."
       },
       automation: {
         title: 'Automatizálás',
@@ -11451,7 +11451,7 @@ export const CATALOG = {
       },
       apps: {
         label: "Telepített alkalmazások",
-        broken: (count) => `${count} sikertelen eltávolítás után maradt`,
+        broken: (count) => `${count} maradvány maradt egy sikertelen eltávolítás után`,
         noBroken: 'Nincsenek sérült bejegyzések.',
         review: 'Áttekintés',
         manage: 'Kezelés'
@@ -11763,7 +11763,7 @@ export const CATALOG = {
     },
     deepClean: {
       title: 'Mélytisztítás',
-      subtitle: 'Minden gyorsítótár, napló, memóriakép és maradvány, amit a Prune képes megtalálni, ezen a gépen mérve, nem becsülve. Semmi sem törlődik azonnal — mindent, amit a Tisztítás elvisz, először a Karanténba kerül, ahonnan visszahelyezheted.',
+      subtitle: "Minden gyorsítótár, napló, memóriakép és maradvány, amit a Prune képes megtalálni, ezen a gépen mérve, nem becsülve. Semmi sem törlődik azonnal — mindent, amit a Tisztítás elvisz, először a Karanténba kerül, ahonnan visszaállíthatod.",
       scanLog: {
         header: 'Vizsgálati kimenet',
         scanningAnnounce: (total) => `${total} hely vizsgálata.`,
@@ -11867,7 +11867,7 @@ export const CATALOG = {
       titleForce: (name) => `${name} kényszerített eltávolítása`,
       titleNormal: (name) => `${name} eltávolítása`,
       close: 'Bezárás',
-      stillWaiting: `Még várunk az eltávolítóra. Bezárhatod ezt az ablakot; az eltávolító tovább fut, a Prune pedig nem keres maradékot.`,
+      stillWaiting: "Még várunk az eltávolítóra. Bezárhatod ezt az ablakot; az eltávolító tovább fut, a Prune pedig nem keres maradványokat.",
       runningWarning: (name) => `A(z) ${name} éppen fut. Zárd be előbb — egy eltávolító általában sikertelen egy nyitott programnál, és fájlokat hagyhat hátra, amiket a következő indítás újra létrehoz.`,
       orphanedWarning: (reason) => `${reason} A Windows tovább fogja listázni, amíg a bejegyzést el nem távolítják.`,
       brokenIntro: 'A Prune ehhez a névhez illő fájlokat és rendszerleíró kulcsokat fog keresni, beleértve a Programok és szolgáltatások bejegyzést is, és megmutat mindent, mielőtt bármit eltávolítana.',
@@ -11895,8 +11895,8 @@ export const CATALOG = {
       },
       noScan: (name) => `A(z) ${name} eltávolítója befejezte a munkát. A maradványvizsgálat ki van kapcsolva a Beállításokban, így semmi mást nem kerestünk.`,
       readyToScan: {
-        body: (name) => `Ha a(z) ${name} saját eltávolítója még dolgozik, hagyd, hogy előbb bezáruljon. Ha végzett, kattints a Maradványok keresése gombra, hogy megnézd, mit hagyott hátra.`,
-        scanButton: "Maradványok keresése"
+        body: (name) => `Ha a(z) ${name} saját eltávolítója még dolgozik, hagyd, hogy előbb bezáruljon. Ha végzett, kattints a Maradványok vizsgálata gombra, hogy megnézd, mit hagyott hátra.`,
+        scanButton: "Maradványok vizsgálata"
       },
       removalFailed: (error) => `Az eltávolítás sikertelen: ${error}`,
       done: 'Kész',
@@ -11942,8 +11942,8 @@ export const CATALOG = {
       },
       scanningLine: 'Maradványok vizsgálata…',
       readyToScan: {
-        body: (n) => `${n} eltávolító lefutott. Egyesek — főleg a játékindítók — a saját ablakuk bezárása után is a háttérben törlik tovább a fájlokat. Ha nem vagy biztos benne, várj egy kicsit, aztán kattints a Maradványok keresése gombra, hogy lásd, maradt-e valami.`,
-        scanButton: 'Maradványok keresése'
+        body: (n) => `${n} eltávolító lefutott. Egyesek — főleg a játékindítók — a saját ablakuk bezárása után is a háttérben törlik tovább a fájlokat. Ha nem vagy biztos benne, várj egy kicsit, aztán kattints a Maradványok vizsgálata gombra, hogy lásd, maradt-e valami.`,
+        scanButton: "Maradványok vizsgálata"
       },
       uninstalledOf: (removed, total) => `${removed}/${total} eltávolítva.`,
       failedHeading: (n) => `${n} eltávolítása sikertelen volt, és érintetlenül maradt${n === 1 ? '' : 'ak'}:`,
@@ -11956,11 +11956,11 @@ export const CATALOG = {
         permanent: (programs, items, freed) => `${programs} eltávolítva, ${items} véglegesen törölve, ${freed} felszabadítva.`,
         quarantine: (programs, items, freed) => `${programs} eltávolítva, ${items} karanténba helyezve, ${freed} felszabadítva.`,
         programs: (n) => `${n} program`,
-        items: (n) => `${n} megmaradt elem`
+        items: (n) => `${n} maradvány`
       },
       noRestorePoint: (reason) => `Nem jött létre rendszer-visszaállítási pont (${reason}).`,
       restorePointFallback: 'nem érhető el',
-      quarantineNote: 'A fentiek mind a karanténban maradnak, és visszatehetők.',
+      quarantineNote: "A fentiek mind a karanténban maradnak, és visszaállíthatók.",
       failedRegistryKeys: (n) => `${n} rendszerleíró kulcsot nem sikerült eltávolítani — ezekhez általában rendszergazdaként futó Prune szükséges.`
     },
     bugReport: {
@@ -12034,8 +12034,8 @@ export const CATALOG = {
     nav: {
       reportBug: 'Laporkan bug',
       dashboard: 'Dasbor', diskMap: 'Peta Disk', applications: 'Aplikasi',
-      quarantine: 'Karantina', settings: 'Pengaturan', startup: 'Mulai Otomatis',
-      duplicates: 'Duplikat', deepClean: 'Pembersihan Menyeluruh',
+      quarantine: 'Karantina', settings: 'Pengaturan', startup: "Startup",
+      duplicates: 'Duplikat', deepClean: "Pembersihan Mendalam",
       landmark: 'Utama'
     },
     settings: {
@@ -12096,14 +12096,14 @@ export const CATALOG = {
         description: 'Semua yang dihapus Prune pergi ke Karantina terlebih dahulu, dan tetap di sana sampai kamu mengosongkannya. Atur jumlah hari untuk membuang cadangan yang lebih lama dari itu. Biarkan kosong untuk menyimpannya selamanya.',
         neverPlaceholder: 'Tidak pernah',
         daysUnit: 'hari',
-        ariaLabel: 'Hari untuk menyimpan cadangan karantina'
+        ariaLabel: "Hari untuk menyimpan cadangan Karantina"
       },
       quarantineMaxSize: {
         title: "Batas ukuran Karantina",
         description: 'Batas untuk seluruh folder Karantina. Di atasnya, cadangan tertua akan hilang lebih dulu — yang terbaru tidak pernah dibuang, jadi sesuatu yang besar yang baru saja kamu hapus tetap dapat dipulihkan meski lebih besar dari batas itu sendiri. Biarkan kosong untuk tanpa batas.',
         noLimitPlaceholder: 'Tanpa batas',
         gbUnit: 'GB',
-        ariaLabel: 'Ukuran karantina maksimum dalam gigabyte'
+        ariaLabel: "Ukuran Karantina maksimum dalam gigabyte"
       },
       exclusions: {
         title: "Kecualikan folder",
@@ -12141,14 +12141,14 @@ export const CATALOG = {
       warningConfirmations: {
         title: 'Konfirmasi peringatan',
         allAsk: 'Setiap pembersih yang menghilangkan data akan bertanya sebelum dijalankan.',
-        someSet: (count) => `${count} peringatan pembersihan diatur untuk tidak bertanya lagi.`,
+        someSet: (count) => `${count} peringatan pembersih diatur untuk tidak bertanya lagi.`,
         reset: 'Atur ulang konfirmasi peringatan'
       },
       uninstallTab: {
         beforeHeading: 'Sebelum uninstal',
         restorePointUninstall: {
           title: 'Buat titik pemulihan sebelum uninstal',
-          description: 'Pemulihan Sistem milik Windows sendiri, dibuat sebelum penghapus-instal program berjalan. Membutuhkan Prune berjalan sebagai administrator dan Windows mengizinkan satu per hari, jadi ketika tidak dapat dibuat, uninstal tetap berlanjut dan dialog memberitahukannya.'
+          description: "Pemulihan Sistem milik Windows sendiri, dibuat sebelum uninstaller program berjalan. Membutuhkan Prune berjalan sebagai administrator dan Windows mengizinkan satu per hari, jadi ketika tidak dapat dibuat, uninstal tetap berlanjut dan dialog memberitahukannya."
         },
         registryBackup: {
           title: 'Cadangkan registri sebelum uninstal',
@@ -12161,7 +12161,7 @@ export const CATALOG = {
         afterHeading: 'Setelah uninstal',
         scanLeftovers: {
           title: 'Pindai sisa setelah uninstal',
-          description: 'Mencari file, kunci registri, dan tugas terjadwal yang ditinggalkan penghapus-instal. Nonaktif, Prune hanya menjalankan penghapus-instal program itu sendiri dan berhenti di situ.'
+          description: "Mencari file, kunci registri, dan tugas terjadwal yang ditinggalkan uninstaller. Nonaktif, Prune hanya menjalankan uninstaller program itu sendiri dan berhenti di situ."
         },
         preselect: {
           title: 'Centang setiap sisa secara default',
@@ -12184,7 +12184,7 @@ export const CATALOG = {
         reportTitle: 'Laporkan bug',
         reportDescription: 'Membuka isu yang sudah terisi di GitHub. Prune sendiri tidak mengirim apa pun, dan Anda melihat semuanya sebelum dikirim ke mana pun.',
         reportButton: 'Laporkan bug',
-        description: 'Alat uninstal dan pembersihan lokal, offline untuk Windows — penghapusan paksa dengan pemindaian file sisa, karantina aman sebelum penghapusan, pemetaan disk, dan pembersihan sampah satu klik.'
+        description: "Alat uninstal dan pembersihan lokal, offline untuk Windows — penghapusan paksa dengan pemindaian file sisa, Karantina aman sebelum penghapusan, Peta Disk, dan pembersihan sampah satu klik."
       },
       automation: {
         title: 'Otomatisasi',
@@ -12199,7 +12199,7 @@ export const CATALOG = {
         everyWeek: 'Setiap minggu',
         measureOnly: 'Ukur saja',
         clean: 'Bersihkan',
-        cleanWarning: 'Ini menghapus file tanpa ada yang mengawasi. Ini membersihkan aturan yang direkomendasikan Pembersihan Mendalam dan yang sungguh berisi sesuatu, dan semuanya tetap masuk karantina — jadi periksa pengaturan retensi di atas sebelum membiarkan ini aktif.',
+        cleanWarning: "Ini menghapus file tanpa ada yang mengawasi. Ini membersihkan aturan yang direkomendasikan Pembersihan Mendalam dan yang sungguh berisi sesuatu, dan semuanya tetap masuk Karantina — jadi periksa pengaturan retensi di atas sebelum membiarkan ini aktif.",
         nextRun: 'Jalankan berikutnya:',
         lastRun: 'Terakhir dijalankan:',
         weekdays: {
@@ -12251,7 +12251,7 @@ export const CATALOG = {
       },
       apps: {
         label: 'Aplikasi Terpasang',
-        broken: (count) => `${count} tertinggal akibat pencopotan yang gagal`,
+        broken: (count) => `${count} tertinggal akibat uninstal yang gagal`,
         noBroken: 'Tidak ada entri yang rusak.',
         review: 'Tinjau',
         manage: 'Kelola'
@@ -12259,12 +12259,12 @@ export const CATALOG = {
       junk: {
         label: 'File Sampah',
         notMeasured: 'belum diukur',
-        description: 'Mengukur menelusuri setiap jalur pembersihan di disk — sekitar setengah menit.',
+        description: "Mengukur menelusuri setiap jalur pembersih di disk — sekitar setengah menit.",
         measure: 'Ukur'
       },
       recentActivity: {
         title: 'Aktivitas Terbaru',
-        empty: 'Belum ada pencopotan.',
+        empty: "Belum ada uninstal.",
         freed: 'dibebaskan'
       }
     },
@@ -12351,18 +12351,18 @@ export const CATALOG = {
       contextMenu: {
         openInExplorer: 'Buka di Explorer',
         copyPath: 'Salin jalur',
-        moveToQuarantineMenu: 'Pindahkan ke karantina…'
+        moveToQuarantineMenu: "Pindahkan ke Karantina…"
       },
       toasts: {
-        moved: (name) => `Dipindahkan ke karantina: ${name}`,
+        moved: (name) => `Dipindahkan ke Karantina: ${name}`,
         restoreHint: 'Pulihkan dari layar Karantina.',
         pathCopied: 'Jalur disalin.',
         copyFailed: 'Jalur itu tidak dapat disalin.',
         moveFailed: 'Ini tidak dapat dipindahkan.'
       },
       removeModal: {
-        label: 'Pindahkan ke karantina',
-        heading: 'Pindahkan ini ke karantina?',
+        label: "Pindahkan ke Karantina",
+        heading: "Pindahkan ini ke Karantina?",
         note: 'Ini dipindahkan, bukan dihapus — pulihkan kapan saja dari layar Karantina.',
         folder: 'Folder',
         file: 'File',
@@ -12400,7 +12400,7 @@ export const CATALOG = {
       reveal: { button: 'Folder', notFound: 'Tidak ditemukan', ariaLabel: (name) => `Buka folder untuk ${name}` },
       viaBrowser: 'melalui browser',
       inWindows: { button: 'Di Windows', ariaLabel: (name) => `Buka pengaturan Windows — Windows tidak mengizinkan ${name} dihapus dari sini` },
-      uninstall: 'Copot pemasangan',
+      uninstall: "Uninstal",
       forceRemove: 'Paksa hapus',
       openFolder: "Buka folder",
       copyUninstallCommand: "Salin perintah uninstal",
@@ -12418,19 +12418,19 @@ export const CATALOG = {
         selected: (count) => `${count} dipilih`,
         unknownSizes: (count) => `+ ${count} berukuran tidak diketahui`,
         clear: 'Hapus',
-        uninstallCount: (count) => `Copot pemasangan ${count} program`,
+        uninstallCount: (count) => `Uninstal ${count} program`,
         installations: (count) => `Pemasangan: ${count}`,
         showingOf: (shown, total) => `Menampilkan ${shown} dari ${total}`,
         newInDays: (count, days) => `${count} baru dalam ${days} hari`,
         total: 'total'
       },
       batchReasons: {
-        orphaned: 'Program pencopotannya rusak — gunakan Paksa hapus sebagai gantinya.',
+        orphaned: "Uninstaller-nya rusak — gunakan Paksa hapus sebagai gantinya.",
         extension: 'Ekstensi browser dihapus dari browser itu sendiri.',
         storeNoPackage: 'Aplikasi Store ini tidak memiliki nama paket untuk dihapus.',
         storeProtected: 'Windows menandai aplikasi ini sebagai bagian dari sistem dan tidak mengizinkan penghapusannya.',
         storeUnknown: 'Windows belum menyatakan apakah aplikasi ini dapat dihapus, jadi aplikasi ini dikecualikan dari batch.',
-        noCommand: 'Tidak ada perintah pencopotan yang terdaftar untuk program ini.'
+        noCommand: "Tidak ada perintah uninstal yang terdaftar untuk program ini."
       },
       storeRemoveDialog: {
         heading: (name) => `Hapus ${name}?`,
@@ -12443,8 +12443,8 @@ export const CATALOG = {
     },
     quarantine: {
       title: 'Karantina',
-      loading: 'Memuat karantina…',
-      loadError: (error) => `Tidak dapat memuat karantina: ${error}`,
+      loading: "Memuat Karantina…",
+      loadError: (error) => `Tidak dapat memuat Karantina: ${error}`,
       summary: {
         phrase: (count, total, atLeast) => `${count} batch · ${atLeast ? 'setidaknya ' : ''}${total} ditahan`,
         withLimit: (count, total, atLeast, max) => `${count} batch · ${atLeast ? 'setidaknya ' : ''}${total} ditahan dari ${max}`,
@@ -12457,8 +12457,8 @@ export const CATALOG = {
       confirm: 'Konfirmasi',
       emptying: 'Mengosongkan…',
       empty: {
-        heading: 'Tidak ada apa pun di karantina.',
-        body: 'Semua yang dihapus oleh penghapusan instalasi atau Pembersihan Mendalam mendarat di sini terlebih dahulu. Ini tetap ada sampai Anda mengosongkannya, jadi berkas yang terambil secara tidak sengaja selalu dapat dipulihkan.'
+        heading: "Tidak ada apa pun di Karantina.",
+        body: "Semua yang dihapus oleh uninstal atau Pembersihan Mendalam mendarat di sini terlebih dahulu. Ini tetap ada sampai Anda mengosongkannya, jadi berkas yang terambil secara tidak sengaja selalu dapat dipulihkan."
       },
       deleteConfirmPrompt: 'Hapus selamanya?',
       restore: 'Pulihkan',
@@ -12472,7 +12472,7 @@ export const CATALOG = {
       deleting: 'Menghapus…'
     },
     startup: {
-      title: "Mulai Otomatis",
+      title: "Startup",
       subtitle: "Apa yang berjalan saat Anda masuk: kunci Run dan folder Startup yang dibaca Windows, dikelompokkan menurut lokasinya — ini menentukan siapa yang terpengaruh oleh sebuah entri dan apa yang diperlukan untuk menghapusnya. Entri yang filenya sudah hilang ditinggalkan oleh program yang dihapus sembarangan, dan Windows terus mencoba menjalankannya setiap kali.",
       loading: 'Membaca entri startup…',
       loadError: (error) => `Entri startup tidak dapat dibaca: ${error}`,
@@ -12545,17 +12545,17 @@ export const CATALOG = {
         selected: (count, formatted) => `${count} dipilih · ${formatted}`,
         moving: 'Memindahkan…',
         wouldLose: (count) => `${count} set akan kehilangan semua salinan`,
-        moveButton: 'Pindahkan yang dipilih ke karantina'
+        moveButton: "Pindahkan yang dipilih ke Karantina"
       },
       modal: {
-        label: 'Pindahkan duplikat ke karantina',
+        label: "Pindahkan duplikat ke Karantina",
         heading: (count) => `Pindahkan ${count} salinan ke Karantina?`,
         body: (a) => `Memindahkannya akan membebaskan ${a} setelah Karantina dikosongkan. Setiap grup menyimpan setidaknya satu salinan, dan tidak ada yang dihapus — pulihkan dari layar Karantina kapan saja.`,
         cancel: 'Batal',
-        confirmButton: 'Pindahkan ke karantina'
+        confirmButton: "Pindahkan ke Karantina"
       },
       toasts: {
-        moved: (count) => `Memindahkan ${count} salinan ke karantina.`,
+        moved: (count) => `Memindahkan ${count} salinan ke Karantina.`,
         restoreHint: 'Pulihkan dari layar Karantina.',
         failed: (count) => `${count} tidak dapat dipindahkan.`,
         failedDetail: 'Mungkin sedang terbuka atau berada di drive lain.'
@@ -12592,7 +12592,7 @@ export const CATALOG = {
         selectedCount: (count) => `${count} dipilih`
       },
       confirm: {
-        prompt: (count, sizeKnown, formatted) => `Pindahkan ${count} item (${sizeKnown ? formatted : 'ukuran tidak terukur'}) ke karantina?`,
+        prompt: (count, sizeKnown, formatted) => `Pindahkan ${count} item (${sizeKnown ? formatted : 'ukuran tidak terukur'}) ke Karantina?`,
         cancel: 'Batal',
         confirmButton: "Pindahkan ke Karantina",
         cleaning: 'Membersihkan…'
@@ -12734,7 +12734,7 @@ export const CATALOG = {
       reported: (bytes) => `${bytes} dilaporkan`,
       unknownSizeSuffix: (n) => `, ${n} berukuran tidak diketahui`,
       startButton: 'Mulai uninstal',
-      status: { waiting: 'menunggu', uninstalling: 'menguninstal…', removed: 'dihapus', failed: 'gagal' },
+      status: { waiting: 'menunggu', uninstalling: 'menguninstal…', removed: "diuninstal", failed: 'gagal' },
       removingLine: {
         quarantine: 'Memindahkan sisa ke Karantina…',
         recycle: 'Mengirim sisa ke Recycle Bin…',
@@ -12835,7 +12835,7 @@ export const CATALOG = {
       reportBug: 'Tilkynna villu',
       dashboard: 'Yfirlit', diskMap: 'Diskakort', applications: 'Forrit',
       quarantine: 'Sóttkví', settings: 'Stillingar', startup: 'Ræsing',
-      duplicates: 'Tvítök', deepClean: 'Ítarleg hreinsun',
+      duplicates: 'Tvítök', deepClean: "Djúphreinsun",
       landmark: 'Aðal'
     },
     settings: {
@@ -12920,13 +12920,13 @@ export const CATALOG = {
       cookiesToPreserve: {
         title: 'Vefkökur til að varðveita',
         description: 'Allt annað í vefkökuskrá vafra hverfur um leið og þú hreinsar hann. Skannaðu til að sjá hvað er raunverulega þar, og hakaðu við allt sem er þess virði að halda.',
-        scanButton: 'Leita að vefkökum',
+        scanButton: "Skanna eftir vefkökum",
         scanning: 'Skanna…',
         filterPlaceholder: 'Sía lén…',
         countSuffix: (count) => `${count} ${count === 1 ? 'vefkaka' : 'vefkökur'}`,
         none: 'Engar vefkökur fundust.',
         staleBadge: 'sást ekki í þessari skönnun',
-        scanErrorPrefix: (message) => `Ekki tókst að leita að vefkökum: ${message}`,
+        scanErrorPrefix: (message) => `Ekki tókst að skanna eftir vefkökum: ${message}`,
         fileErrorsNote: (count) => `Ekki var hægt að lesa ${count} ${count === 1 ? 'skrá' : 'skrár'} og var þeim sleppt.`,
         checkboxAriaLabel: (domain) => `Halda vefkökum frá ${domain}`
       },
@@ -12941,7 +12941,7 @@ export const CATALOG = {
       warningConfirmations: {
         title: 'Staðfestingar viðvarana',
         allAsk: 'Sérhver hreinsari sem tapar gögnum spyr áður en hann keyrir.',
-        someSet: (count) => `${count} hreinsunarviðvaranir stilltar til að spyrja ekki aftur.`,
+        someSet: (count) => `${count} ${count % 10 === 1 && count % 100 !== 11 ? 'viðvörun hreinsara stillt' : 'viðvaranir hreinsara stilltar'} til að spyrja ekki aftur.`,
         reset: 'Endurstilla staðfestingar viðvarana'
       },
       uninstallTab: {
@@ -12971,20 +12971,20 @@ export const CATALOG = {
           title: 'Halda sögu fjarlæginga',
           description: 'Listi mælaborðsins yfir nýlegar fjarlægingar og plássið sem þær losuðu. Slökkt, er ekkert nýtt skráð.'
         },
-        destinationHeading: 'Afgangsskjöl fara í',
+        destinationHeading: "Leifaskrár fara í",
         leftoverOptions: {
-          quarantine: { label: 'Sóttkví', description: 'Flutt í eigið afrit Prune, og endurheimtanlegt af Sóttkvíarskjánum. Sjálfgefið.' },
+          quarantine: { label: 'Sóttkví', description: "Flutt í eigið afrit Prune, og endurheimtanlegt af sóttkvíarskjánum. Sjálfgefið." },
           recycle: { label: 'Ruslafatan', description: 'Endurheimtanlegt úr eigin fötu Windows, og losnar þegar þú tæmir hana.' },
           permanent: { label: 'Eyða varanlega', description: 'Eytt algjörlega. Ekkert að endurheimta.' }
         },
-        permanentWarning: 'Afgangsskjölum verður eytt algjörlega og ekki er hægt að endurheimta þau, hvorki úr sóttkví né annars staðar frá. Skoðaðu listann áður en þú staðfestir hann.',
+        permanentWarning: "Leifaskrám verður eytt algjörlega og ekki er hægt að endurheimta þau, hvorki úr sóttkví né annars staðar frá. Skoðaðu listann áður en þú staðfestir hann.",
         registryNote: 'Skráningarlyklar eru fluttir út í sóttkví áður en þeir eru fjarlægðir, sama hvað þú velur.'
       },
       about: {
         reportTitle: 'Tilkynna villu',
         reportDescription: "Opnar forútfyllt mál á GitHub. Prune sendir sjálft ekkert og þú sérð allt áður en nokkuð er sent.",
         reportButton: 'Tilkynna villu',
-        description: 'Staðbundið, ótengt fjarlægingar- og hreinsunartæki fyrir Windows — þvinguð fjarlæging með skönnun leifarskjala, örugg sóttkví fyrir eyðingu, diskakortlagning og ruslahreinsun með einum smelli.'
+        description: "Staðbundið, ótengt fjarlægingar- og hreinsunartæki fyrir Windows — þvinguð fjarlæging með skönnun leifaskráa, örugg sóttkví fyrir eyðingu, diskakortlagning og ruslahreinsun með einum smelli."
       },
       automation: {
         title: 'Sjálfvirkni',
@@ -13051,7 +13051,7 @@ export const CATALOG = {
       },
       apps: {
         label: "Uppsett forrit",
-        broken: (count) => `${count} skilin eftir vegna mistekinnar affermingar`,
+        broken: (count) => `${count} skilin eftir vegna misheppnaðrar fjarlægingar`,
         noBroken: 'Engar skemmdar færslur.',
         review: 'Yfirfara',
         manage: 'Stjórna'
@@ -13059,17 +13059,17 @@ export const CATALOG = {
       junk: {
         label: "Óþarfa skrár",
         notMeasured: 'ekki mælt',
-        description: 'Mæling fer yfir hverja hreinsileið á disknum — um hálfa mínútu.',
+        description: "Mæling fer yfir slóð hvers hreinsara á disknum — um hálfa mínútu.",
         measure: 'Mæla'
       },
       recentActivity: {
         title: "Nýleg virkni",
-        empty: 'Engar affermingar ennþá.',
+        empty: "Engar fjarlægingar ennþá.",
         freed: 'losað'
       }
     },
     diskMap: {
-      title: 'Diskanotkun',
+      title: "Diskakort",
       unscannedLabel: "Ekki skannað",
       aggregateCell: (count) => `${count} minni atriði`,
       subtitle: "Diskanotkun: hvað tekur pláss á þessum diski og hvar.",
@@ -13155,7 +13155,7 @@ export const CATALOG = {
       },
       toasts: {
         moved: (name) => `Fært í sóttkví: ${name}`,
-        restoreHint: 'Endurheimtu það af Sóttkví-skjánum.',
+        restoreHint: "Endurheimtu það af sóttkvíarskjánum.",
         pathCopied: 'Slóð afrituð.',
         copyFailed: 'Ekki tókst að afrita þá slóð.',
         moveFailed: 'Ekki tókst að færa þetta.'
@@ -13163,7 +13163,7 @@ export const CATALOG = {
       removeModal: {
         label: 'Færa í sóttkví',
         heading: 'Færa þetta í sóttkví?',
-        note: 'Það er fært, ekki eytt — endurheimtu það hvenær sem er af Sóttkví-skjánum.',
+        note: "Það er fært, ekki eytt — endurheimtu það hvenær sem er af sóttkvíarskjánum.",
         folder: 'Mappa',
         file: 'Skrá',
         cancel: 'Hætta við'
@@ -13258,7 +13258,7 @@ export const CATALOG = {
       emptying: 'Tæmi…',
       empty: {
         heading: 'Ekkert í sóttkví.',
-        body: 'Allt sem forritahreinsun eða Djúphreinsun fjarlægir lendir hér fyrst. Það helst þar til þú tæmir það, svo hægt er alltaf að endurheimta skrá sem var tekin fyrir mistök.'
+        body: "Allt sem fjarlæging forrits eða Djúphreinsun fjarlægir lendir hér fyrst. Það helst þar til þú tæmir það, svo hægt er alltaf að endurheimta skrá sem var tekin fyrir mistök."
       },
       deleteConfirmPrompt: 'Eyða að eilífu?',
       restore: 'Endurheimta',
@@ -13315,18 +13315,18 @@ export const CATALOG = {
       footerNote: 'Að slökkva á færslu skráir ákvörðunina í StartupApproved, sama stað og Windows eigin Ræsiforritastillingar og Verkefnastjóri lesa og skrifa. Engu er eytt: Run-gildið eða flýtileiðin er nákvæmlega þar sem hún er, svo hægt er að afturkalla breytinguna héðan eða frá hvorum staðnum sem er.'
     },
     duplicates: {
-      title: 'Tvítekin skrár',
+      title: "Tvítök",
       subtitle: 'Skrár sem eru bæti fyrir bæti eins, ekki bara sömu stærðar. Beindu því á möppu þar sem þú geymir raunverulega hluti — að lesa allan disk til að bera hann saman við sjálfan sig tekur mun lengri tíma en það er þess virði, og finnur að mestu eintök vélarinnar sjálfrar af eigin skrám.',
       folderPlaceholder: (a) => `Slóð möppu, til dæmis ${a}`,
       stoppedNote: "Stöðvað — engu var borið saman.",
-      folderInputAriaLabel: 'Mappa til að leita að tvíritum í',
+      folderInputAriaLabel: "Mappa til að leita að tvítökum í",
       stop: 'Stöðva',
-      findButton: 'Finna tvírit',
+      findButton: "Finna tvítök",
       compareNote: 'Ber saman stærðir fyrst, svo sýnishorn, svo alla skrána — svo flestar skrár eru aldrei lesnar.',
       reading: (folder) => `Les ${folder}`,
       readingNote: 'Stærðir fyrst, svo 64 KB sýnishorn af öllu sem deilir einni, svo allt innihald þess sem enn passar.',
       empty: {
-        heading: 'Engar tvíteknar skrár hér.',
+        heading: "Engin tvítök hér.",
         scanned: (count) => `${count} skrár bornar saman.`,
         truncatedSuffix: ' Skönnunin var stöðvuð fyrir tímann, svo þetta er ekki öll mappan.'
       },
@@ -13348,7 +13348,7 @@ export const CATALOG = {
         moveButton: 'Flytja valið í sóttkví'
       },
       modal: {
-        label: 'Flytja tvírit í sóttkví',
+        label: "Flytja tvítök í sóttkví",
         heading: (count) => `Flytja ${count} ${count % 10 === 1 && count % 100 !== 11 ? 'eintak' : 'eintök'} í sóttkví?`,
         body: (a) => `Þetta losar ${a} þegar þú tæmir sóttkví. Hver hópur heldur að minnsta kosti einu eintaki og engu er eytt — endurheimtu hvað sem er í Sóttkví.`,
         cancel: 'Hætta við',
@@ -13356,7 +13356,7 @@ export const CATALOG = {
       },
       toasts: {
         moved: (count) => `Flutti ${count} eintök í sóttkví.`,
-        restoreHint: 'Endurheimtu þau af Sóttkví-skjánum.',
+        restoreHint: "Endurheimtu þau af sóttkvíarskjánum.",
         failed: (count) => `${count} var ekki hægt að flytja.`,
         failedDetail: 'Þau gætu verið opin eða á öðrum diski.'
       }
@@ -13382,7 +13382,7 @@ export const CATALOG = {
         scanning: 'Skanna…',
         preview: 'Forskoðun'
       },
-      hiddenNote: (count) => `${count} hreinsiforrit falin vegna þess að hugbúnaðurinn er ekki uppsettur. Stillingar › Hreinsun til að sýna þau.`,
+      hiddenNote: (count) => `${count} ${count % 10 === 1 && count % 100 !== 11 ? 'hreinsari falinn' : 'hreinsarar faldir'} vegna þess að hugbúnaðurinn er ekki uppsettur. Stillingar › Hreinsun til að sýna þá.`,
       footer: {
         totalLabel: 'Heildarrými til að losa:',
         notMeasuredYet: 'ekki mælt enn',
@@ -13405,8 +13405,8 @@ export const CATALOG = {
         losesData: 'Tapar gögnum',
         needsAdmin: 'þarf kerfisstjóra',
         notInstalled: 'ekki uppsett',
-        filterPlaceholder: "Sía hreinsiforrit…",
-        filterNone: "Ekkert hreinsiforrit passar við þessa síu.",
+        filterPlaceholder: "Sía hreinsara…",
+        filterNone: "Enginn hreinsari passar við þessa síu.",
         selectedOfTotal: (n, total) => `${n} af ${total} valin`
       },
       warning: {
@@ -13467,7 +13467,7 @@ export const CATALOG = {
       titleForce: (name) => `Þvinga fjarlægingu á ${name}`,
       titleNormal: (name) => `Fjarlægja ${name}`,
       close: 'Loka',
-      stillWaiting: `Enn beðið eftir fjarlægingarforritinu. Þú getur lokað þessum glugga; forritið heldur áfram og Prune leitar ekki að leifum.`,
+      stillWaiting: "Enn beðið eftir fjarlægingarforritinu. Þú getur lokað þessum glugga; forritið heldur áfram og Prune skannar ekki eftir leifum.",
       runningWarning: (name) => `${name} er í gangi núna. Lokaðu því fyrst — fjarlægingarforrit mistekst yfirleitt með opið forrit og getur skilið eftir skrár sem næsta ræsing endurskapar.`,
       orphanedWarning: (reason) => `${reason} Windows mun halda áfram að skrá það þar til færslan er fjarlægð.`,
       brokenIntro: 'Prune mun leita að skrám og skráningarlyklum sem passa við þetta nafn, þar á meðal Bæta við/fjarlægja forrit-færslu þess, og sýna þér allt áður en nokkru er eytt.',
@@ -13556,7 +13556,7 @@ export const CATALOG = {
         permanent: (programs, items, freed) => `Fjarlægði ${programs} og eyddi ${items} varanlega, sem losaði ${freed}.`,
         quarantine: (programs, items, freed) => `Fjarlægði ${programs} og færði ${items} í sóttkví, sem losaði ${freed}.`,
         programs: (n) => `${n} forrit`,
-        items: (n) => `${n} eftirstandandi hlut${n === 1 ? 'ur' : 'ir'}`
+        items: (n) => `${n} leif${n === 1 ? '' : 'ar'}`
       },
       noRestorePoint: (reason) => `Enginn endurheimtunarpunktur kerfis var búinn til (${reason}).`,
       restorePointFallback: 'ekki tiltækt',
@@ -13670,12 +13670,12 @@ export const CATALOG = {
         openPageError: (error) => `Impossibile aprire la pagina: ${error}`
       },
       showFreeSpace: {
-        title: 'Mostra lo spazio libero sulla Mappa del Disco',
+        title: "Mostra lo spazio libero sulla Mappa del disco",
         description: "Disegna lo spazio libero dell'unità come un blocco in più quando scansioni un'intera unità, così ogni cartella si legge come una quota dell'unità anziché dello spazio in uso."
       },
       autoQuarantine: {
         title: 'Quarantena automatica',
-        description: "La Pulizia Approfondita sposta ciò che rimuove nella Quarantena di Prune, da dove puoi rimetterlo a posto. Disattiva questo e andrà invece nel Cestino di Windows — ancora recuperabile, solo in un posto che già sai svuotare."
+        description: "La Pulizia approfondita sposta ciò che rimuove nella Quarantena di Prune, da dove puoi rimetterlo a posto. Disattiva questo e andrà invece nel Cestino di Windows — ancora recuperabile, solo in un posto che già sai svuotare."
       },
       skipRecent: {
         title: 'Lascia stare i file recenti',
@@ -13688,7 +13688,7 @@ export const CATALOG = {
         description: "Prima di una rimozione forzata, così Windows stesso può riportare indietro il computer. Costa qualche secondo, e non fa nulla se la Protezione del sistema è disattivata."
       },
       hideUnavailable: {
-        title: 'Nascondi i pulitori non applicabili',
+        title: "Nascondi gli strumenti di pulizia non applicabili",
         description: "La maggior parte dell'elenco è per software che questo computer non ha. Nasconderli lascia solo ciò che è realmente qui."
       },
       quarantineRetention: {
@@ -13707,7 +13707,7 @@ export const CATALOG = {
       },
       exclusions: {
         title: 'Escludi cartelle',
-        description: "Cartelle e tipi di file che Prune lascerà stare — saltati dalla Pulizia Approfondita ed esclusi dalla Mappa del Disco — oltre a quelli che già protegge: Informazioni sul volume di sistema, quarantene antivirus, l'archivio componenti e una dozzina di altri.",
+        description: "Cartelle e tipi di file che Prune lascerà stare — saltati dalla Pulizia approfondita ed esclusi dalla Mappa del disco — oltre a quelli che già protegge: Informazioni sul volume di sistema, quarantene antivirus, l'archivio componenti e una dozzina di altri.",
         ariaLabel: 'Percorso cartella o tipo di file da escludere',
         add: 'Aggiungi',
         invalidFormat: 'Scrivi un percorso di cartella completo (D:\\Games) o un tipo di file (*.iso).',
@@ -13720,13 +13720,13 @@ export const CATALOG = {
       cookiesToPreserve: {
         title: 'Cookie da conservare',
         description: "Tutto il resto nel file dei cookie di un browser scompare non appena lo pulisci. Esegui una scansione per vedere cosa c'è realmente, e seleziona tutto ciò che vale la pena conservare.",
-        scanButton: 'Cerca cookie',
+        scanButton: "Scansiona cookie",
         scanning: 'Scansione…',
         filterPlaceholder: 'Filtra domini…',
         countSuffix: (count) => `${count} cookie`,
         none: 'Nessun cookie trovato.',
         staleBadge: 'non visto in questa scansione',
-        scanErrorPrefix: (message) => `Impossibile cercare i cookie: ${message}`,
+        scanErrorPrefix: (message) => `Impossibile scansionare i cookie: ${message}`,
         fileErrorsNote: (count) => `${count} file${count === 1 ? ' non è stato possibile leggerlo ed è stato ignorato' : ' non è stato possibile leggerli e sono stati ignorati'}.`,
         checkboxAriaLabel: (domain) => `Conserva i cookie da ${domain}`
       },
@@ -13740,7 +13740,7 @@ export const CATALOG = {
       },
       warningConfirmations: {
         title: 'Conferme di avviso',
-        allAsk: 'Ogni pulitore che perde dati chiede conferma prima di eseguire.',
+        allAsk: "Ogni strumento di pulizia che perde dati chiede conferma prima di essere eseguito.",
         someSet: (count) => `${count} avvis${count === 1 ? 'o di pulizia è impostato' : 'i di pulizia sono impostati'} per non chiedere più.`,
         reset: 'Ripristina le conferme di avviso'
       },
@@ -13760,7 +13760,7 @@ export const CATALOG = {
         },
         afterHeading: 'Dopo la disinstallazione',
         scanLeftovers: {
-          title: 'Cerca residui dopo la disinstallazione',
+          title: "Scansiona i residui dopo la disinstallazione",
           description: "Cerca i file, le chiavi di registro e le attività pianificate lasciate dal disinstallatore. Disattivato, Prune esegue semplicemente il disinstallatore del programma stesso e si ferma lì."
         },
         preselect: {
@@ -13773,8 +13773,8 @@ export const CATALOG = {
         },
         destinationHeading: 'I file residui vanno a',
         leftoverOptions: {
-          quarantine: { label: 'Quarantena', description: "Spostato nel backup di Prune stesso, e recuperabile dalla schermata Quarantena. L'impostazione predefinita." },
-          recycle: { label: 'Il Cestino', description: "Recuperabile dal cestino di Windows stesso, e liberato quando lo svuoti." },
+          quarantine: { label: 'Quarantena', description: "Spostato nel backup di Prune stesso, e ripristinabile dalla schermata Quarantena. L'impostazione predefinita." },
+          recycle: { label: 'Il Cestino', description: "Ripristinabile dal cestino di Windows stesso, e liberato quando lo svuoti." },
           permanent: { label: 'Elimina definitivamente', description: 'Eliminato completamente. Nulla da ripristinare.' }
         },
         permanentWarning: "I file residui verranno eliminati completamente e non possono essere ripristinati, né dalla Quarantena né da altrove. Controlla l'elenco prima di confermarlo.",
@@ -13799,7 +13799,7 @@ export const CATALOG = {
         everyWeek: 'Ogni settimana',
         measureOnly: 'Solo misurazione',
         clean: 'Pulisci',
-        cleanWarning: "Questo rimuove file senza che nessuno controlli. Pulisce le regole raccomandate dalla Pulizia Approfondita e che hanno davvero qualcosa dentro, e tutto va comunque in quarantena — quindi controlla l'impostazione di conservazione qui sopra prima di lasciarlo attivo.",
+        cleanWarning: "Questo rimuove file senza che nessuno controlli. Esegue gli strumenti di pulizia consigliati dalla Pulizia approfondita e che contengono davvero qualcosa, e tutto va comunque in quarantena — quindi controlla l'impostazione di conservazione qui sopra prima di lasciarlo attivo.",
         nextRun: 'Prossima esecuzione:',
         lastRun: 'Ultima esecuzione:',
         weekdays: {
@@ -13859,7 +13859,7 @@ export const CATALOG = {
       junk: {
         label: "File inutili",
         notMeasured: 'non misurato',
-        description: 'La misurazione percorre ogni percorso di pulizia sul disco — circa mezzo minuto.',
+        description: "La misurazione percorre ogni percorso degli strumenti di pulizia sul disco — circa mezzo minuto.",
         measure: 'Misura'
       },
       recentActivity: {
@@ -14058,7 +14058,7 @@ export const CATALOG = {
       emptying: 'Svuotamento…',
       empty: {
         heading: 'Niente in quarantena.',
-        body: "Tutto ciò che una disinstallazione o una Pulizia Profonda rimuove atterra prima qui. Resta finché non lo svuoti, quindi un file preso per errore è sempre recuperabile."
+        body: "Tutto ciò che una disinstallazione o una Pulizia approfondita rimuove atterra prima qui. Resta finché non lo svuoti, quindi un file preso per errore è sempre recuperabile."
       },
       deleteConfirmPrompt: 'Eliminare per sempre?',
       restore: 'Ripristina',
@@ -14162,7 +14162,7 @@ export const CATALOG = {
       }
     },
     deepClean: {
-      title: 'Pulizia Profonda',
+      title: "Pulizia approfondita",
       subtitle: 'Ogni cache, log, dump e residuo che Prune sa trovare, misurato su questo computer anziché stimato. Nulla viene eliminato direttamente — tutto ciò che Pulisci prende va prima in quarantena, da dove puoi rimetterlo a posto.',
       scanLog: {
         header: 'Output della scansione',
@@ -14182,7 +14182,7 @@ export const CATALOG = {
         scanning: 'Scansione…',
         preview: 'Anteprima'
       },
-      hiddenNote: (count) => `${count} strumenti di pulizia nascosti perché il software non è installato. Impostazioni › Pulizia per mostrarli.`,
+      hiddenNote: (count) => `${count} ${count === 1 ? 'strumento di pulizia nascosto' : 'strumenti di pulizia nascosti'} perché il software non è installato. Impostazioni › Pulizia per mostrarli.`,
       footer: {
         totalLabel: 'Spazio totale da liberare:',
         notMeasuredYet: 'non ancora misurato',
@@ -14205,8 +14205,8 @@ export const CATALOG = {
         losesData: 'Perde dati',
         needsAdmin: 'richiede amministratore',
         notInstalled: 'non installato',
-        filterPlaceholder: "Filtra i pulitori…",
-        filterNone: "Nessun pulitore corrisponde a questo filtro.",
+        filterPlaceholder: "Filtra gli strumenti di pulizia…",
+        filterNone: "Nessuno strumento di pulizia corrisponde a questo filtro.",
         selectedOfTotal: (n, total) => `${n} di ${total} selezionati`
       },
       warning: {
@@ -14267,7 +14267,7 @@ export const CATALOG = {
       titleForce: (name) => `Rimuovi forzatamente ${name}`,
       titleNormal: (name) => `Disinstalla ${name}`,
       close: 'Chiudi',
-      stillWaiting: "Ancora in attesa del programma di disinstallazione. Puoi chiudere questa finestra: il programma continua a funzionare e Prune non cercherà i residui.",
+      stillWaiting: "Ancora in attesa del programma di disinstallazione. Puoi chiudere questa finestra: il programma continua a funzionare e Prune non eseguirà la scansione dei residui.",
       runningWarning: (name) => `${name} è in esecuzione in questo momento. Chiudilo prima — un disinstallatore di solito fallisce con un programma aperto e può lasciare file che il prossimo avvio ricreerà.`,
       orphanedWarning: (reason) => `${reason} Windows continuerà a elencarlo finché la voce non verrà rimossa.`,
       brokenIntro: "Prune cercherà file e chiavi di registro corrispondenti a questo nome, inclusa la sua voce di Installazione applicazioni, e ti mostrerà tutto prima di rimuovere qualsiasi cosa.",
@@ -14275,7 +14275,7 @@ export const CATALOG = {
       searchHint: (name) => `Preso da "${name}" senza la versione — i programmi di installazione nominano le cartelle in base al prodotto, non alla release. Modificalo se i risultati sembrano sbagliati.`,
       scanFailed: (error) => `Scansione fallita: ${error}`,
       searchButton: 'Cerca residui',
-      normalIntro: (name) => `Questo esegue il disinstallatore proprio di ${name}, poi analizza tutto ciò che lascia dietro di sé.`,
+      normalIntro: (name) => `Questo esegue il disinstallatore proprio di ${name}, poi esegue la scansione di tutto ciò che lascia dietro di sé.`,
       uninstallFailed: (error) => `Disinstallazione fallita: ${error}`,
       startButton: 'Avvia disinstallazione',
       noWorkingUninstaller: 'Nessun disinstallatore funzionante — verrà cercato per nome invece',
@@ -14285,7 +14285,7 @@ export const CATALOG = {
         backingUpRegistry: 'Backup del registro in corso',
         creatingRestorePoint: 'Creazione di un punto di ripristino',
         searchingLeftovers: 'Ricerca dei residui',
-        scanningLeftovers: 'Analisi dei residui',
+        scanningLeftovers: "Scansione dei residui",
         checkingCommand: 'Controllo del file system, registro e attività pianificate…'
       },
       removing: {
@@ -14325,7 +14325,7 @@ export const CATALOG = {
       statusSkipped: "saltato",
       stoppedNote: (n) => `Interrotto in anticipo. Non avviati: ${n}.`,
       registryOnlyIntro: "Ogni app viene rimossa tramite Windows a turno, e non c'è alcuna scansione dei residui dopo: Windows rimuove i dati propri dell'app insieme ad essa.",
-      mixedIntro: (hasStore) => `Il disinstallatore proprio di ogni programma viene eseguito a turno, poi Prune analizza cosa lasciano dietro di sé e ti mostra tutto prima di rimuoverne qualcosa.${hasStore ? " Le app dello Store vengono rimosse tramite Windows invece, senza scansione dei residui dopo." : ''}`,
+      mixedIntro: (hasStore) => `Il disinstallatore proprio di ogni programma viene eseguito a turno, poi Prune esegue la scansione di ciò che lasciano dietro di sé e ti mostra tutto prima di rimuoverne qualcosa.${hasStore ? " Le app dello Store vengono rimosse tramite Windows invece, senza scansione dei residui dopo." : ''}`,
       oneAtATime: "Una alla volta, perché Windows consente solo un'installazione o disinstallazione alla volta. Alcuni disinstallatori mostreranno le proprie finestre e ti faranno domande.",
       storeWarning: (count) => count === 1
         ? "L'app dello Store in questo gruppo non può essere ripristinata dalla Quarantena: rimuoverla porta via l'app e i suoi dati salvati, e recuperarla significa reinstallarla dallo Store."
@@ -14340,7 +14340,7 @@ export const CATALOG = {
         recycle: 'Invio dei residui al Cestino…',
         permanent: 'Eliminazione definitiva dei residui…'
       },
-      scanningLine: 'Analisi dei residui…',
+      scanningLine: "Scansione dei residui…",
       readyToScan: {
         body: (n) => `${n} disinstallator${n === 1 ? 'e ha' : 'i hanno'} terminato l'esecuzione. Alcuni — soprattutto i launcher di giochi — continuano a rimuovere file in background dopo la chiusura della propria finestra. Se non sei sicuro, aspetta un momento e poi fai clic su «Scansiona residui» per verificare se è rimasto qualcosa.`,
         scanButton: 'Scansiona residui'
@@ -14475,7 +14475,7 @@ export const CATALOG = {
       },
       autoQuarantine: {
         title: '自動隔離',
-        description: 'ディープクリーンは削除するものを Prune の隔離場所に移動し、そこから戻すことができます。これをオフにすると、代わりに Windows のごみ箱に移動します — 復元は可能ですが、すでに空にする方法を知っている場所になるだけです。'
+        description: "ディープクリーンは削除するものを Prune の隔離に移動し、そこから復元できます。これをオフにすると、代わりに Windows のごみ箱に移動します — 復元は可能ですが、すでに空にする方法を知っている場所になるだけです。"
       },
       skipRecent: {
         title: '最近のファイルはそのままにする',
@@ -14493,7 +14493,7 @@ export const CATALOG = {
       },
       quarantineRetention: {
         title: "隔離の保持期間",
-        description: 'Prune が削除するものはすべて、まず隔離場所に行き、空にするまでそこに残ります。それより古いバックアップを破棄する日数を設定します。永久に保持するには空欄にします。',
+        description: "Prune が削除するものはすべて、まず隔離に送られ、空にするまでそこに残ります。それより古いバックアップを破棄する日数を設定します。永久に保持するには空欄にします。",
         neverPlaceholder: '無期限',
         daysUnit: '日',
         ariaLabel: '隔離バックアップを保持する日数'
@@ -14503,7 +14503,7 @@ export const CATALOG = {
         description: '隔離フォルダ全体の上限です。これを超えると、最も古いバックアップから先に消えます — 最新のものは決して破棄されないため、削除したばかりの大きなものは、それ自体が上限より大きくても復元可能なままです。上限なしにするには空欄にします。',
         noLimitPlaceholder: '上限なし',
         gbUnit: 'GB',
-        ariaLabel: '隔離場所の最大サイズ（ギガバイト）'
+        ariaLabel: "隔離の最大サイズ（ギガバイト）"
       },
       exclusions: {
         title: "フォルダーを除外",
@@ -14541,7 +14541,7 @@ export const CATALOG = {
       warningConfirmations: {
         title: '警告の確認',
         allAsk: 'データを失うすべてのクリーナーは、実行前に確認を求めます。',
-        someSet: (count) => `${count} 件のクリーンアップ警告が、再度確認しないように設定されています。`,
+        someSet: (count) => `${count} 件のクリーナー警告が、再度確認しないように設定されています。`,
         reset: '警告の確認をリセット'
       },
       uninstallTab: {
@@ -14571,20 +14571,20 @@ export const CATALOG = {
           title: 'アンインストール履歴を保持',
           description: '最近の削除とそれによって解放された容量のダッシュボードのリストです。オフの場合、新しく記録されるものはありません。'
         },
-        destinationHeading: '残留ファイルの移動先',
+        destinationHeading: "残留物の移動先",
         leftoverOptions: {
-          quarantine: { label: '隔離場所', description: 'Prune 独自のバックアップに移動され、隔離画面から復元できます。デフォルトです。' },
+          quarantine: { label: "隔離", description: 'Prune 独自のバックアップに移動され、隔離画面から復元できます。デフォルトです。' },
           recycle: { label: 'ごみ箱', description: 'Windows 独自のごみ箱から復元でき、空にすると解放されます。' },
           permanent: { label: '完全に削除', description: '完全に削除されます。復元するものはありません。' }
         },
-        permanentWarning: '残留ファイルは完全に削除され、隔離場所からもその他の場所からも復元できません。確認する前にリストを確認してください。',
-        registryNote: 'レジストリキーは、選択に関わらず、削除される前に隔離場所にエクスポートされます。'
+        permanentWarning: "残留物は完全に削除され、隔離からもその他の場所からも復元できません。確認する前にリストを確認してください。",
+        registryNote: "レジストリキーは、選択に関わらず、削除される前に隔離にエクスポートされます。"
       },
       about: {
         reportTitle: 'バグを報告',
         reportDescription: "GitHub で入力済みの Issue を開きます。Prune 自体は何も送信せず、内容はどこかへ送られる前にすべて確認できます。",
         reportButton: 'バグを報告',
-        description: 'Windows 向けのローカル・オフラインのアンインストールとクリーンアップツールです — 残留ファイルスキャン付きの強制削除、削除前の安全な隔離、ディスクマッピング、ワンクリックのジャンククリーンアップ。'
+        description: "Windows 向けのローカル・オフラインのアンインストールとクリーンアップツールです — 残留物スキャン付きの強制削除、削除前の安全な隔離、ディスクマップ、ワンクリックのジャンククリーンアップ。"
       },
       automation: {
         title: '自動化',
@@ -14599,7 +14599,7 @@ export const CATALOG = {
         everyWeek: '毎週',
         measureOnly: '測定のみ',
         clean: 'クリーンアップ',
-        cleanWarning: 'これは誰も見ていない状態でファイルを削除します。ディープクリーンが推奨し、実際に中身があるルールをクリーンアップし、すべてはそれでも隔離場所に送られます — これをオンのままにする前に、上の保持設定を確認してください。',
+        cleanWarning: "これは誰も見ていない状態でファイルを削除します。ディープクリーンが推奨し、実際に中身があるルールをクリーンアップし、すべてはそれでも隔離に送られます — これをオンのままにする前に、上の保持設定を確認してください。",
         nextRun: '次回の実行:',
         lastRun: '前回の実行:',
         weekdays: {
@@ -14659,7 +14659,7 @@ export const CATALOG = {
       junk: {
         label: '不要なファイル',
         notMeasured: '未測定',
-        description: '測定はディスク上のすべてのクリーンアップパスを調べます — 約30秒。',
+        description: "測定はディスク上のすべてのクリーナーのパスを調べます — 約30秒。",
         measure: '測定'
       },
       recentActivity: {
@@ -14772,7 +14772,7 @@ export const CATALOG = {
     applications: {
       loading: 'インストール済みのプログラムを読み取っています…',
       loadError: (error) => `プログラムを読み込めませんでした: ${error}`,
-      search: { placeholder: 'アプリを検索…', label: 'アプリを検索' },
+      search: { placeholder: "アプリケーションを検索…", label: "アプリケーションを検索" },
       filters: {
         all: 'すべて',
         unused: '未使用',
@@ -14963,7 +14963,7 @@ export const CATALOG = {
     },
     deepClean: {
       title: 'ディープクリーン',
-      subtitle: 'Prune が見つけ方を知っているすべてのキャッシュ、ログ、ダンプ、残留物を、推定ではなくこのマシンで実測します。何も即座には削除されません — クリーンが取り除くものはすべて、まず隔離に移動し、そこから元に戻せます。',
+      subtitle: "Prune が見つけ方を知っているすべてのキャッシュ、ログ、ダンプ、残留物を、推定ではなくこのマシンで実測します。何も即座には削除されません — クリーンが取り除くものはすべて、まず隔離に移動し、そこから復元できます。",
       scanLog: {
         header: 'スキャン出力',
         scanningAnnounce: (total) => `${total} 件の場所をスキャン中。`,
@@ -15051,7 +15051,7 @@ export const CATALOG = {
         uninstallEntry: 'プログラムと機能のエントリ'
       },
       destinations: {
-        quarantine: { text: '選択した項目は隔離場所に移動し、そこから復元できます。', button: '選択項目を削除' },
+        quarantine: { text: "選択した項目は隔離に移動し、そこから復元できます。", button: '選択項目を削除' },
         recycle: { text: '選択したファイルはごみ箱に移動します。レジストリキーは削除前にバックアップされます。', button: '選択項目を削除' },
         permanent: { text: '選択したファイルは完全に削除され、復元できません。レジストリキーは削除前にバックアップされます。', button: '完全に削除' }
       },
@@ -15074,7 +15074,7 @@ export const CATALOG = {
       searchForLabel: '検索対象',
       searchHint: (name) => `「${name}」からバージョンを除いたものです — インストーラーはリリースではなく製品名でフォルダーに名前を付けます。結果が間違っているように見える場合は編集してください。`,
       scanFailed: (error) => `スキャンに失敗しました: ${error}`,
-      searchButton: '残留物を検索',
+      searchButton: "残留物をスキャン",
       normalIntro: (name) => `これは ${name} 自身のアンインストーラーを実行し、その後に残されたものをスキャンします。`,
       uninstallFailed: (error) => `アンインストールに失敗しました: ${error}`,
       startButton: 'アンインストールを開始',
@@ -15084,16 +15084,16 @@ export const CATALOG = {
         runningNative: 'ネイティブのアンインストーラーを実行中',
         backingUpRegistry: 'レジストリをバックアップ中',
         creatingRestorePoint: '復元ポイントを作成中',
-        searchingLeftovers: '残留物を検索中',
+        searchingLeftovers: "残留物をスキャン中",
         scanningLeftovers: '残留物をスキャン中',
         checkingCommand: 'ファイルシステム、レジストリ、タスクスケジューラのタスクを確認中…'
       },
       removing: {
-        quarantine: { title: '隔離場所へ移動中', command: '何も削除されません — すべての項目を復元できます' },
+        quarantine: { title: "隔離へ移動中", command: '何も削除されません — すべての項目を復元できます' },
         recycle: { title: 'ごみ箱へ送信中', command: '必要な場合はごみ箱から復元してください' },
         permanent: { title: '完全に削除中', command: 'これらは復元できません' }
       },
-      noScan: (name) => `${name} のアンインストーラーが完了しました。残留物スキャンは設定でオフになっているため、他には何も検索されませんでした。`,
+      noScan: (name) => `${name} のアンインストーラーが完了しました。残留物スキャンは設定でオフになっているため、他には何もスキャンされませんでした。`,
       readyToScan: {
         body: (name) => `${name} のアンインストーラーがまだ終了処理中の場合は、完了するまでお待ちください。終わったら「残留物をスキャン」をクリックして、残っているものを探します。`,
         scanButton: "残留物をスキャン"
@@ -15103,15 +15103,15 @@ export const CATALOG = {
       summary: {
         item: (n) => `${n} 件の項目`,
         registryKey: (n) => `${n} 件のレジストリキー`,
-        recycle: (files, keys, freed) => `${files}をごみ箱に送信し、${keys}を削除しました（先に隔離場所にバックアップ済み）。${freed}を解放しました。`,
-        permanent: (files, keys, freed) => `${files}を完全に削除し、${keys}を削除しました（先に隔離場所にバックアップ済み）。${freed}を解放しました。`,
-        quarantine: (files, keys, freed) => `${files}と${keys}を隔離場所に移動し、${freed}を解放しました。隔離画面からいつでも復元できます。`
+        recycle: (files, keys, freed) => `${files}をごみ箱に送信し、${keys}を削除しました（先に隔離にバックアップ済み）。${freed}を解放しました。`,
+        permanent: (files, keys, freed) => `${files}を完全に削除し、${keys}を削除しました（先に隔離にバックアップ済み）。${freed}を解放しました。`,
+        quarantine: (files, keys, freed) => `${files}と${keys}を隔離に移動し、${freed}を解放しました。隔離画面からいつでも復元できます。`
       },
       failedFilesHeading: (n) => `${n} 件の項目を削除できませんでした:`,
       failedRegistryKeysHeading: (n) => `${n} 件のレジストリキーを削除できませんでした`,
       failedRegistryKeysNote: 'これらは通常、Prune を管理者として実行する必要があります:',
       noRestorePoint: (reason) => `システムの復元ポイントは作成されませんでした（${reason}）。`,
-      quarantineStillWorks: '隔離場所からの復元は引き続き機能します。',
+      quarantineStillWorks: "隔離からの復元は引き続き機能します。",
       autoRemoveLeftovers: '確認せずに、スキャンで見つかったものをすべて自動的に削除します'
     },
     batchUninstallModal: {
@@ -15128,15 +15128,15 @@ export const CATALOG = {
       mixedIntro: (hasStore) => `各プログラム自身のアンインストーラーが順番に実行され、その後 Prune が残されたものをスキャンし、何も削除する前にすべてを表示します。${hasStore ? ' ストアアプリは代わりに Windows を通じて削除され、その後の残留物スキャンはありません。' : ''}`,
       oneAtATime: 'Windows は一度に1つのインストールまたはアンインストールしか許可しないため、1つずつ実行されます。一部のアンインストーラーは独自のウィンドウを表示し、質問をしてきます。',
       storeWarning: (count) => count === 1
-        ? 'このバッチ内のストアアプリは隔離場所から復元できません。削除するとアプリとその保存データが失われ、取り戻すにはストアから再インストールする必要があります。'
-        : `このバッチ内の${count}個のストアアプリは隔離場所から復元できません。1つを削除するとアプリとその保存データが失われ、取り戻すにはストアから再インストールする必要があります。`,
+        ? 'このバッチ内のストアアプリは隔離から復元できません。削除するとアプリとその保存データが失われ、取り戻すにはストアから再インストールする必要があります。'
+        : `このバッチ内の${count}個のストアアプリは隔離から復元できません。1つを削除するとアプリとその保存データが失われ、取り戻すにはストアから再インストールする必要があります。`,
       runsBefore: (name) => `${name}の前に実行`,
       reported: (bytes) => `${bytes}を報告`,
       unknownSizeSuffix: (n) => `、サイズ不明が${n}件`,
       startButton: 'アンインストールを開始',
       status: { waiting: '待機中', uninstalling: 'アンインストール中…', removed: "アンインストール済み", failed: '失敗' },
       removingLine: {
-        quarantine: '残留物を隔離場所へ移動中…',
+        quarantine: "残留物を隔離へ移動中…",
         recycle: '残留物をごみ箱へ送信中…',
         permanent: '残留物を完全に削除中…'
       },
@@ -15148,19 +15148,19 @@ export const CATALOG = {
       uninstalledOf: (removed, total) => `${total}件中${removed}件をアンインストールしました。`,
       failedHeading: (n) => `${n}件をアンインストールできず、そのまま残されました:`,
       removeLeftoversFailed: (error) => `残留物を削除できませんでした: ${error}`,
-      noScanSettingsOff: '残留物スキャンは設定でオフになっているため、何も検索されませんでした。',
+      noScanSettingsOff: "残留物スキャンは設定でオフになっているため、何もスキャンされませんでした。",
       noScanStore: 'ストアアプリの後には残留物スキャンはありません。Windows はアプリ自身のデータもあわせて削除します。',
       done: '完了',
       summary: {
         recycle: (programs, items, freed) => `${programs}をアンインストールし、${items}をごみ箱に送信して${freed}を解放しました。`,
         permanent: (programs, items, freed) => `${programs}をアンインストールし、${items}を完全に削除して${freed}を解放しました。`,
-        quarantine: (programs, items, freed) => `${programs}をアンインストールし、${items}を隔離場所に移動して${freed}を解放しました。`,
+        quarantine: (programs, items, freed) => `${programs}をアンインストールし、${items}を隔離に移動して${freed}を解放しました。`,
         programs: (n) => `${n} 件のプログラム`,
-        items: (n) => `${n} 件の残留項目`
+        items: (n) => `${n} 件の残留物`
       },
       noRestorePoint: (reason) => `システムの復元ポイントは作成されませんでした（${reason}）。`,
       restorePointFallback: '利用できません',
-      quarantineNote: '上記のものはすべて隔離場所に残っており、元に戻すことができます。',
+      quarantineNote: "上記のものはすべて隔離に残っており、復元できます。",
       failedRegistryKeys: (n) => `${n}件のレジストリキーを削除できませんでした — これらは通常、Prune を管理者として実行する必要があります。`
     },
     bugReport: {
@@ -15271,11 +15271,11 @@ export const CATALOG = {
       },
       showFreeSpace: {
         title: '디스크 맵에 여유 공간 표시',
-        description: '전체 드라이브를 스캔할 때 드라이브의 여유 공간을 하나의 추가 블록으로 그려서, 각 폴더가 사용 중인 공간이 아닌 드라이브의 비율로 표시되도록 합니다.'
+        description: "전체 드라이브를 검사할 때 드라이브의 여유 공간을 하나의 추가 블록으로 그려서, 각 폴더가 사용 중인 공간이 아닌 드라이브의 비율로 표시되도록 합니다."
       },
       autoQuarantine: {
         title: '자동 격리',
-        description: '심층 정리는 제거하는 항목을 Prune의 격리 공간으로 이동하며, 그곳에서 되돌릴 수 있습니다. 이 기능을 끄면 대신 Windows 휴지통으로 이동합니다 — 여전히 복구 가능하지만, 이미 비우는 방법을 알고 있는 곳일 뿐입니다.'
+        description: "딥 클린은 제거하는 항목을 Prune의 격리로 이동하며, 그곳에서 복원할 수 있습니다. 이 기능을 끄면 대신 Windows 휴지통으로 이동합니다 — 여전히 복원 가능하지만, 이미 비우는 방법을 알고 있는 곳일 뿐입니다."
       },
       skipRecent: {
         title: '최근 파일은 건드리지 않기',
@@ -15293,21 +15293,21 @@ export const CATALOG = {
       },
       quarantineRetention: {
         title: "격리 보관 기간",
-        description: 'Prune이 제거하는 모든 것은 먼저 격리 공간으로 이동하며, 비울 때까지 그곳에 남아 있습니다. 그보다 오래된 백업을 삭제할 일수를 설정하세요. 영원히 보관하려면 비워 두세요.',
+        description: "Prune이 제거하는 모든 것은 먼저 격리로 이동하며, 비울 때까지 그곳에 남아 있습니다. 그보다 오래된 백업을 삭제할 일수를 설정하세요. 영원히 보관하려면 비워 두세요.",
         neverPlaceholder: '안 함',
         daysUnit: '일',
         ariaLabel: '격리 백업을 보관할 일수'
       },
       quarantineMaxSize: {
         title: "격리 용량 제한",
-        description: '전체 격리 폴더에 대한 상한선입니다. 이를 초과하면 가장 오래된 백업이 먼저 사라집니다 — 가장 최근 것은 절대 삭제되지 않으므로, 방금 제거한 큰 항목은 그 자체가 상한선보다 크더라도 복구 가능한 상태로 유지됩니다. 제한 없이 하려면 비워 두세요.',
+        description: "전체 격리 폴더에 대한 상한선입니다. 이를 초과하면 가장 오래된 백업이 먼저 사라집니다 — 가장 최근 것은 절대 삭제되지 않으므로, 방금 제거한 큰 항목은 그 자체가 상한선보다 크더라도 복원 가능한 상태로 유지됩니다. 제한 없이 하려면 비워 두세요.",
         noLimitPlaceholder: '제한 없음',
         gbUnit: 'GB',
         ariaLabel: '기가바이트 단위의 최대 격리 크기'
       },
       exclusions: {
         title: '폴더 제외',
-        description: 'Prune이 건드리지 않을 폴더와 파일 유형입니다 — 심층 정리에서 건너뛰고 디스크 맵에서 제외됩니다 — 이미 보호하고 있는 것들(시스템 볼륨 정보, 백신 격리 공간, 구성 요소 저장소 등 12개 이상) 외에 추가로 지정할 수 있습니다.',
+        description: "Prune이 건드리지 않을 폴더와 파일 유형입니다 — 딥 클린에서 건너뛰고 디스크 맵에서 제외됩니다 — 이미 보호하고 있는 것들(시스템 볼륨 정보, 백신 격리 공간, 구성 요소 저장소 등 12개 이상) 외에 추가로 지정할 수 있습니다.",
         ariaLabel: '제외할 폴더 경로 또는 파일 유형',
         add: '추가',
         invalidFormat: '전체 폴더 경로(D:\\Games) 또는 파일 유형(*.iso)을 입력하세요.',
@@ -15319,20 +15319,20 @@ export const CATALOG = {
       },
       cookiesToPreserve: {
         title: '유지할 쿠키',
-        description: '브라우저의 쿠키 파일에 있는 나머지 항목은 정리하는 순간 사라집니다. 스캔하여 실제로 무엇이 있는지 확인하고 유지할 가치가 있는 항목에 체크하세요.',
+        description: "브라우저의 쿠키 파일에 있는 나머지 항목은 정리하는 순간 사라집니다. 검사하여 실제로 무엇이 있는지 확인하고 유지할 가치가 있는 항목에 체크하세요.",
         scanButton: '쿠키 검사',
-        scanning: '스캔 중…',
+        scanning: "검사 중…",
         filterPlaceholder: '도메인 필터링…',
         countSuffix: (count) => `쿠키 ${count}개`,
         none: '쿠키를 찾을 수 없습니다.',
-        staleBadge: '이번 스캔에서 보이지 않음',
+        staleBadge: "이번 검사에서 보이지 않음",
         scanErrorPrefix: (message) => `쿠키를 검사할 수 없습니다: ${message}`,
         fileErrorsNote: (count) => `파일 ${count}개를 읽을 수 없어 건너뛰었습니다.`,
         checkboxAriaLabel: (domain) => `${domain}의 쿠키 유지`
       },
       sandboxTest: {
         title: '샌드박스 테스트',
-        description: '실제 정리 엔진을 일회용 임시 디렉터리에서만 실행합니다 — 실제 Temp, Windows Temp, 썸네일 캐시에서는 절대 실행하지 않습니다 — 실제 파일에 신뢰하기 전에 스캔과 삭제가 실제로 작동하는지 증명합니다.',
+        description: "실제 정리 엔진을 일회용 임시 디렉터리에서만 실행합니다 — 실제 Temp, Windows Temp, 썸네일 캐시에서는 절대 실행하지 않습니다 — 실제 파일에 신뢰하기 전에 검사와 삭제가 실제로 작동하는지 증명합니다.",
         run: '샌드박스 테스트 실행',
         running: '실행 중…',
         allPassed: '모든 검사 통과',
@@ -15341,7 +15341,7 @@ export const CATALOG = {
       warningConfirmations: {
         title: '경고 확인',
         allAsk: '데이터를 잃는 모든 클리너는 실행 전에 물어봅니다.',
-        someSet: (count) => `정리 경고 ${count}개가 다시 묻지 않도록 설정되었습니다.`,
+        someSet: (count) => `클리너 경고 ${count}개가 다시 묻지 않도록 설정되었습니다.`,
         reset: '경고 확인 재설정'
       },
       uninstallTab: {
@@ -15371,20 +15371,20 @@ export const CATALOG = {
           title: '제거 기록 유지',
           description: '최근 제거 항목과 확보된 공간에 대한 대시보드 목록입니다. 꺼져 있으면 새로 기록되는 것이 없습니다.'
         },
-        destinationHeading: '남은 파일이 이동하는 위치',
+        destinationHeading: "남은 항목이 이동하는 위치",
         leftoverOptions: {
-          quarantine: { label: '격리 공간', description: 'Prune 자체 백업으로 이동되며, 격리 화면에서 복구할 수 있습니다. 기본값입니다.' },
+          quarantine: { label: "격리", description: "Prune 자체 백업으로 이동되며, 격리 화면에서 복원할 수 있습니다. 기본값입니다." },
           recycle: { label: '휴지통', description: 'Windows 자체 휴지통에서 복구할 수 있으며, 비우면 공간이 확보됩니다.' },
           permanent: { label: '영구 삭제', description: '완전히 삭제됩니다. 복원할 것이 없습니다.' }
         },
-        permanentWarning: '남은 파일은 완전히 삭제되며 격리 공간이나 다른 어느 곳에서도 복원할 수 없습니다. 확인하기 전에 목록을 검토하세요.',
-        registryNote: '레지스트리 키는 선택과 관계없이 제거되기 전에 격리 공간으로 내보내집니다.'
+        permanentWarning: "남은 항목은 완전히 삭제되며 격리나 다른 어느 곳에서도 복원할 수 없습니다. 확인하기 전에 목록을 검토하세요.",
+        registryNote: "레지스트리 키는 선택과 관계없이 제거되기 전에 격리로 내보내집니다."
       },
       about: {
         reportTitle: '버그 신고',
         reportDescription: "GitHub에서 내용이 미리 채워진 이슈를 엽니다. Prune은 아무것도 직접 보내지 않으며, 어디로든 전송되기 전에 모든 내용을 확인할 수 있습니다.",
         reportButton: '버그 신고',
-        description: 'Windows용 로컬 오프라인 제거 및 정리 도구입니다 — 남은 파일 검사가 포함된 강제 제거, 삭제 전 안전한 격리, 디스크 매핑, 원클릭 잡동사니 정리.'
+        description: "Windows용 로컬 오프라인 제거 및 정리 도구입니다 — 남은 항목 검사가 포함된 강제 제거, 삭제 전 안전한 격리, 디스크 맵, 원클릭 잡동사니 정리."
       },
       automation: {
         title: '자동화',
@@ -15399,7 +15399,7 @@ export const CATALOG = {
         everyWeek: '매주',
         measureOnly: '측정만',
         clean: '정리',
-        cleanWarning: '아무도 지켜보지 않는 상태에서 파일을 제거합니다. 심층 정리가 권장하고 실제로 내용이 있는 규칙을 정리하며, 모든 것은 여전히 격리 공간으로 이동합니다 — 이 기능을 켜 두기 전에 위의 보관 설정을 확인하세요.',
+        cleanWarning: "아무도 지켜보지 않는 상태에서 파일을 제거합니다. 딥 클린이 권장하고 실제로 내용이 있는 규칙을 정리하며, 모든 것은 여전히 격리로 이동합니다 — 이 기능을 켜 두기 전에 위의 보관 설정을 확인하세요.",
         nextRun: '다음 실행:',
         lastRun: '마지막 실행:',
         weekdays: {
@@ -15459,7 +15459,7 @@ export const CATALOG = {
       junk: {
         label: '불필요한 파일',
         notMeasured: '측정되지 않음',
-        description: '측정은 디스크의 모든 정리 경로를 살펴봅니다 — 약 30초 소요.',
+        description: "측정은 디스크의 모든 클리너 경로를 살펴봅니다 — 약 30초 소요.",
         measure: '측정'
       },
       recentActivity: {
@@ -15572,7 +15572,7 @@ export const CATALOG = {
     applications: {
       loading: '설치된 프로그램을 읽는 중…',
       loadError: (error) => `프로그램을 불러오지 못했습니다: ${error}`,
-      search: { placeholder: '앱 검색…', label: '앱 검색' },
+      search: { placeholder: "애플리케이션 검색…", label: "애플리케이션 검색" },
       filters: {
         all: '전체',
         unused: '사용 안 함',
@@ -15658,7 +15658,7 @@ export const CATALOG = {
       emptying: '비우는 중…',
       empty: {
         heading: '격리 항목이 없습니다.',
-        body: '제거 또는 심층 정리가 삭제하는 모든 항목은 먼저 여기에 도착합니다. 비울 때까지 유지되므로 실수로 가져간 파일은 언제든지 복원할 수 있습니다.'
+        body: "제거 또는 딥 클린이 삭제하는 모든 항목은 먼저 여기에 도착합니다. 비울 때까지 유지되므로 실수로 가져간 파일은 언제든지 복원할 수 있습니다."
       },
       deleteConfirmPrompt: '영구적으로 삭제하시겠습니까?',
       restore: '복원',
@@ -15673,12 +15673,12 @@ export const CATALOG = {
     },
     startup: {
       title: "시작 프로그램",
-      subtitle: "로그인 시 실행되는 항목입니다. Windows가 읽는 Run 키와 시작프로그램 폴더를 위치별로 묶었습니다. 위치에 따라 항목의 영향을 받는 사용자와 제거에 필요한 권한이 달라집니다. 파일이 없는 항목은 제대로 제거되지 않은 프로그램이 남긴 것으로, Windows는 매번 실행을 시도합니다.",
-      loading: '시작프로그램 항목을 읽는 중…',
-      loadError: (error) => `시작프로그램 항목을 읽을 수 없습니다: ${error}`,
+      subtitle: "로그인 시 실행되는 항목입니다. Windows가 읽는 Run 키와 시작 프로그램 폴더를 위치별로 묶었습니다. 위치에 따라 항목의 영향을 받는 사용자와 제거에 필요한 권한이 달라집니다. 파일이 없는 항목은 제대로 제거되지 않은 프로그램이 남긴 것으로, Windows는 매번 실행을 시도합니다.",
+      loading: "시작 프로그램 항목을 읽는 중…",
+      loadError: (error) => `시작 프로그램 항목을 읽을 수 없습니다: ${error}`,
       empty: {
         heading: '로그인 시 실행되는 항목이 없습니다.',
-        body: 'Prune은 두 레지스트리 하이브와 두 시작프로그램 폴더의 Run 및 RunOnce 키를 확인했습니다. 나중에 스스로 추가되는 프로그램은 여기에 표시됩니다.'
+        body: "Prune은 두 레지스트리 하이브와 두 시작 프로그램 폴더의 Run 및 RunOnce 키를 확인했습니다. 나중에 스스로 추가되는 프로그램은 여기에 표시됩니다."
       },
       counts: {
         total: (n) => `${n}개 항목`,
@@ -15687,7 +15687,7 @@ export const CATALOG = {
         broken: (n) => `${n}개가 없는 파일을 가리킴`
       },
       columns: {
-        name: '시작프로그램 이름',
+        name: "시작 프로그램 이름",
         command: '실행 경로',
         description: '설명',
         publisher: '게시자',
@@ -15702,8 +15702,8 @@ export const CATALOG = {
         notRunning: '실행되지 않음'
       },
       groups: {
-        'Startup folder|machine': '모든 사용자 시작프로그램 폴더',
-        'Startup folder|user': '현재 사용자 시작프로그램 폴더',
+        'Startup folder|machine': "모든 사용자 시작 프로그램 폴더",
+        'Startup folder|user': "현재 사용자 시작 프로그램 폴더",
         'Run|user': '레지스트리: HKCU Run',
         'Run|machine': '레지스트리: HKLM Run',
         'Run (32-bit)|machine': '레지스트리: HKLM Run (32비트)',
@@ -15719,23 +15719,23 @@ export const CATALOG = {
       subtitle: '단순히 크기가 같은 것이 아니라 바이트 단위로 동일한 파일입니다. 실제로 파일을 보관하는 폴더를 지정하세요 — 드라이브 전체를 읽어 자신과 비교하는 것은 그만한 가치보다 훨씬 오래 걸리며, 대부분 컴퓨터 자체의 파일 사본만 찾아냅니다.',
       folderPlaceholder: (a) => `폴더 경로, 예: ${a}`,
       stoppedNote: "중지됨 — 아무것도 비교하지 않았습니다.",
-      folderInputAriaLabel: '중복 항목을 검색할 폴더',
+      folderInputAriaLabel: "중복 파일을 검색할 폴더",
       stop: '중지',
-      findButton: '중복 항목 찾기',
+      findButton: "중복 파일 찾기",
       compareNote: '먼저 크기를 비교한 다음 샘플을, 그다음 전체 파일을 비교합니다 — 그래서 대부분의 파일은 실제로 읽히지 않습니다.',
       reading: (folder) => `${folder} 읽는 중`,
       readingNote: '먼저 크기, 그다음 크기가 같은 모든 항목의 64KB 샘플, 그리고 여전히 일치하는 항목의 전체 내용 순으로 확인합니다.',
       empty: {
         heading: '여기에 중복 파일이 없습니다.',
         scanned: (count) => `${count}개 파일 비교됨.`,
-        truncatedSuffix: ' 스캔이 중간에 중단되어 전체 폴더가 아닙니다.'
+        truncatedSuffix: " 검사가 중간에 중단되어 전체 폴더가 아닙니다."
       },
       summarySets: (count) => `${count}개 세트`,
       recoverable: (formatted) => `${formatted} 회수 가능`,
       keepOldest: '가장 오래된 것 유지',
       keepNewest: '가장 최신 것 유지',
       clear: '지우기',
-      truncatedWarning: '스캔이 중간에 중단되어 이보다 더 많은 세트가 있을 수 있습니다.',
+      truncatedWarning: "검사가 중간에 중단되어 이보다 더 많은 세트가 있을 수 있습니다.",
       tags: { keep: "유지", toQuarantine: "격리 대상" },
       group: {
         identicalCopies: (count, size) => `동일한 사본 ${count}개 · 각 ${size}`,
@@ -15748,7 +15748,7 @@ export const CATALOG = {
         moveButton: '선택 항목을 격리로 이동'
       },
       modal: {
-        label: '중복 항목을 격리로 이동',
+        label: "중복 파일을 격리로 이동",
         heading: (count) => `${count}개 사본을 격리로 이동하시겠습니까?`,
         body: (a) => `이동하면 격리를 비울 때 ${a}이(가) 확보됩니다. 각 세트에는 사본이 최소 하나 남으며, 아무것도 삭제되지 않습니다. 격리 화면에서 언제든지 복원할 수 있습니다.`,
         cancel: '취소',
@@ -15762,27 +15762,27 @@ export const CATALOG = {
       }
     },
     deepClean: {
-      title: '심층 정리',
-      subtitle: 'Prune이 찾는 방법을 아는 모든 캐시, 로그, 덤프 및 잔여물을 추정이 아니라 이 컴퓨터에서 직접 측정합니다. 아무것도 즉시 삭제되지 않습니다 — 정리가 가져가는 모든 항목은 먼저 격리로 이동하며, 그곳에서 다시 되돌릴 수 있습니다.',
+      title: "딥 클린",
+      subtitle: "Prune이 찾는 방법을 아는 모든 캐시, 로그, 덤프 및 남은 항목을 추정이 아니라 이 컴퓨터에서 직접 측정합니다. 아무것도 즉시 삭제되지 않습니다 — 정리가 가져가는 모든 항목은 먼저 격리로 이동하며, 그곳에서 복원할 수 있습니다.",
       scanLog: {
-        header: '스캔 출력',
-        scanningAnnounce: (total) => `${total}개 위치를 스캔 중입니다.`,
-        finishedAnnounce: (scanned, total) => `스캔 완료. ${total}개 중 ${scanned}개 위치가 측정되었습니다.`,
+        header: "검사 출력",
+        scanningAnnounce: (total) => `${total}개 위치를 검사 중입니다.`,
+        finishedAnnounce: (scanned, total) => `검사 완료. ${total}개 중 ${scanned}개 위치가 측정되었습니다.`,
         starting: '시작 중…',
         idle: "미리보기를 눌러 정리할 수 있는 양을 측정하세요."
       },
-      emptyState: '아직 스캔된 항목이 없습니다.',
-      scanErrorPrefix: (error) => `스캔할 수 없습니다: ${error}`,
+      emptyState: "아직 검사된 항목이 없습니다.",
+      scanErrorPrefix: (error) => `검사할 수 없습니다: ${error}`,
       cleanErrorPrefix: (error) => `정리할 수 없습니다: ${error}`,
       cleanupComplete: '정리가 완료되었습니다.',
       resultFreed: (formatted) => `${formatted} 확보됨`,
       resultLockedSuffix: (count) => ` — 잠긴 파일 ${count}개를 건너뜀`,
       before: {
         body: 'Prune은 추정하지 않고 디스크의 모든 카테고리를 실제로 측정하며, 약 30초 정도 걸립니다.',
-        scanning: '스캔 중…',
+        scanning: "검사 중…",
         preview: '미리보기'
       },
-      hiddenNote: (count) => `소프트웨어가 설치되어 있지 않아 ${count}개의 정리 도구가 숨겨져 있습니다. 설정 › 정리에서 표시할 수 있습니다.`,
+      hiddenNote: (count) => `소프트웨어가 설치되어 있지 않아 ${count}개의 클리너가 숨겨져 있습니다. 설정 › 정리에서 표시할 수 있습니다.`,
       footer: {
         totalLabel: '확보할 총 공간:',
         notMeasuredYet: '아직 측정되지 않음',
@@ -15851,7 +15851,7 @@ export const CATALOG = {
         uninstallEntry: '프로그램 추가/제거 항목'
       },
       destinations: {
-        quarantine: { text: '선택한 항목은 격리 공간으로 이동하며, 그곳에서 복원할 수 있습니다.', button: '선택 항목 제거' },
+        quarantine: { text: "선택한 항목은 격리로 이동하며, 그곳에서 복원할 수 있습니다.", button: '선택 항목 제거' },
         recycle: { text: '선택한 파일은 휴지통으로 이동합니다. 레지스트리 키는 제거되기 전에 백업됩니다.', button: '선택 항목 제거' },
         permanent: { text: '선택한 파일은 완전히 삭제되며 복원할 수 없습니다. 레지스트리 키는 제거되기 전에 백업됩니다.', button: '완전히 삭제' }
       },
@@ -15874,7 +15874,7 @@ export const CATALOG = {
       searchForLabel: '검색어',
       searchHint: (name) => `"${name}"에서 버전을 뺀 것입니다 — 설치 프로그램은 릴리스가 아니라 제품 이름으로 폴더 이름을 짓습니다. 결과가 잘못되어 보이면 편집하세요.`,
       scanFailed: (error) => `검사 실패: ${error}`,
-      searchButton: '남은 항목 검색',
+      searchButton: "남은 항목 검사",
       normalIntro: (name) => `이 작업은 ${name}의 자체 제거 프로그램을 실행한 다음, 남기는 모든 항목을 검사합니다.`,
       uninstallFailed: (error) => `제거 실패: ${error}`,
       startButton: '제거 시작',
@@ -15884,16 +15884,16 @@ export const CATALOG = {
         runningNative: '기본 제거 프로그램 실행 중',
         backingUpRegistry: '레지스트리 백업 중',
         creatingRestorePoint: '복원 지점 생성 중',
-        searchingLeftovers: '남은 항목 검색 중',
+        searchingLeftovers: "남은 항목 검사 중",
         scanningLeftovers: '남은 항목 검사 중',
         checkingCommand: '파일 시스템, 레지스트리 및 예약된 작업 확인 중…'
       },
       removing: {
-        quarantine: { title: '격리 공간으로 이동 중', command: '아무것도 삭제되지 않습니다 — 모든 항목을 복원할 수 있습니다' },
+        quarantine: { title: "격리로 이동 중", command: '아무것도 삭제되지 않습니다 — 모든 항목을 복원할 수 있습니다' },
         recycle: { title: '휴지통으로 보내는 중', command: '필요한 경우 휴지통에서 복원하세요' },
         permanent: { title: '완전히 삭제 중', command: '이것들은 복원할 수 없습니다' }
       },
-      noScan: (name) => `${name}의 제거 프로그램이 완료되었습니다. 남은 항목 검사가 설정에서 꺼져 있어 다른 것은 검색되지 않았습니다.`,
+      noScan: (name) => `${name}의 제거 프로그램이 완료되었습니다. 남은 항목 검사가 설정에서 꺼져 있어 다른 것은 검사되지 않았습니다.`,
       readyToScan: {
         body: (name) => `${name}의 제거 프로그램이 아직 마무리 중이라면 완전히 끝날 때까지 기다리세요. 끝나면 “남은 항목 검사”를 클릭해 남은 항목을 찾아보세요.`,
         scanButton: "남은 항목 검사"
@@ -15903,15 +15903,15 @@ export const CATALOG = {
       summary: {
         item: (n) => `${n}개 항목`,
         registryKey: (n) => `${n}개 레지스트리 키`,
-        recycle: (files, keys, freed) => `${files}을(를) 휴지통으로 보내고 ${keys}을(를) 제거했으며, 먼저 격리 공간에 백업되었습니다. ${freed} 확보되었습니다.`,
-        permanent: (files, keys, freed) => `${files}을(를) 완전히 삭제하고 ${keys}을(를) 제거했으며, 먼저 격리 공간에 백업되었습니다. ${freed} 확보되었습니다.`,
-        quarantine: (files, keys, freed) => `${files}와(과) ${keys}을(를) 격리 공간으로 이동하여 ${freed}을(를) 확보했습니다. 격리 화면에서 언제든지 복원할 수 있습니다.`
+        recycle: (files, keys, freed) => `${files}을(를) 휴지통으로 보내고 ${keys}을(를) 제거했으며, 먼저 격리에 백업되었습니다. ${freed} 확보되었습니다.`,
+        permanent: (files, keys, freed) => `${files}을(를) 완전히 삭제하고 ${keys}을(를) 제거했으며, 먼저 격리에 백업되었습니다. ${freed} 확보되었습니다.`,
+        quarantine: (files, keys, freed) => `${files}와(과) ${keys}을(를) 격리로 이동하여 ${freed}을(를) 확보했습니다. 격리 화면에서 언제든지 복원할 수 있습니다.`
       },
       failedFilesHeading: (n) => `${n}개 항목을 제거할 수 없습니다:`,
       failedRegistryKeysHeading: (n) => `${n}개 레지스트리 키를 제거할 수 없습니다`,
       failedRegistryKeysNote: '이 항목들은 보통 Prune이 관리자로 실행되어야 합니다:',
       noRestorePoint: (reason) => `시스템 복원 지점이 생성되지 않았습니다(${reason}).`,
-      quarantineStillWorks: '격리 공간 복원은 여전히 작동합니다.',
+      quarantineStillWorks: "격리 복원은 여전히 작동합니다.",
       autoRemoveLeftovers: '검토 없이 검사에서 찾은 모든 항목을 자동으로 제거합니다'
     },
     batchUninstallModal: {
@@ -15928,15 +15928,15 @@ export const CATALOG = {
       mixedIntro: (hasStore) => `각 프로그램 자체의 제거 프로그램이 순서대로 실행된 다음, Prune이 남기는 것을 검사하여 무엇이든 제거하기 전에 모두 보여줍니다.${hasStore ? ' 스토어 앱은 대신 Windows를 통해 제거되며, 이후 남은 항목 검사는 없습니다.' : ''}`,
       oneAtATime: 'Windows는 한 번에 하나의 설치 또는 제거만 허용하므로 한 번에 하나씩 진행됩니다. 일부 제거 프로그램은 자체 창을 표시하고 질문을 할 수 있습니다.',
       storeWarning: (count) => count === 1
-        ? '이 배치의 스토어 앱은 격리 공간에서 복원할 수 없습니다. 제거하면 앱과 저장된 데이터가 함께 사라지며, 되찾으려면 스토어에서 다시 설치해야 합니다.'
-        : `이 배치의 스토어 앱 ${count}개는 격리 공간에서 복원할 수 없습니다. 하나를 제거하면 앱과 저장된 데이터가 함께 사라지며, 되찾으려면 스토어에서 다시 설치해야 합니다.`,
+        ? '이 배치의 스토어 앱은 격리에서 복원할 수 없습니다. 제거하면 앱과 저장된 데이터가 함께 사라지며, 되찾으려면 스토어에서 다시 설치해야 합니다.'
+        : `이 배치의 스토어 앱 ${count}개는 격리에서 복원할 수 없습니다. 하나를 제거하면 앱과 저장된 데이터가 함께 사라지며, 되찾으려면 스토어에서 다시 설치해야 합니다.`,
       runsBefore: (name) => `${name} 전에 실행됨`,
       reported: (bytes) => `${bytes} 보고됨`,
       unknownSizeSuffix: (n) => `, ${n}개는 크기 알 수 없음`,
       startButton: '제거 시작',
       status: { waiting: '대기 중', uninstalling: '제거 중…', removed: '제거됨', failed: '실패' },
       removingLine: {
-        quarantine: '남은 항목을 격리 공간으로 이동 중…',
+        quarantine: "남은 항목을 격리로 이동 중…",
         recycle: '남은 항목을 휴지통으로 보내는 중…',
         permanent: '남은 항목을 완전히 삭제 중…'
       },
@@ -15948,19 +15948,19 @@ export const CATALOG = {
       uninstalledOf: (removed, total) => `${total}개 중 ${removed}개를 제거했습니다.`,
       failedHeading: (n) => `${n}개를 제거할 수 없어 그대로 두었습니다:`,
       removeLeftoversFailed: (error) => `남은 항목을 제거할 수 없습니다: ${error}`,
-      noScanSettingsOff: '남은 항목 검사가 설정에서 꺼져 있어 아무것도 검색되지 않았습니다.',
+      noScanSettingsOff: "남은 항목 검사가 설정에서 꺼져 있어 아무것도 검사되지 않았습니다.",
       noScanStore: '스토어 앱 이후에는 남은 항목 검사가 없습니다. Windows는 앱 자체 데이터도 함께 제거합니다.',
       done: '완료',
       summary: {
         recycle: (programs, items, freed) => `${programs}을(를) 제거하고 ${items}을(를) 휴지통으로 보내 ${freed}을(를) 확보했습니다.`,
         permanent: (programs, items, freed) => `${programs}을(를) 제거하고 ${items}을(를) 완전히 삭제하여 ${freed}을(를) 확보했습니다.`,
-        quarantine: (programs, items, freed) => `${programs}을(를) 제거하고 ${items}을(를) 격리 공간으로 이동하여 ${freed}을(를) 확보했습니다.`,
+        quarantine: (programs, items, freed) => `${programs}을(를) 제거하고 ${items}을(를) 격리로 이동하여 ${freed}을(를) 확보했습니다.`,
         programs: (n) => `프로그램 ${n}개`,
         items: (n) => `남은 항목 ${n}개`
       },
       noRestorePoint: (reason) => `시스템 복원 지점이 생성되지 않았습니다(${reason}).`,
       restorePointFallback: '사용할 수 없음',
-      quarantineNote: '위의 모든 항목은 여전히 격리 공간에 있으며 되돌릴 수 있습니다.',
+      quarantineNote: "위의 모든 항목은 여전히 격리에 있으며 복원할 수 있습니다.",
       failedRegistryKeys: (n) => `${n}개 레지스트리 키를 제거할 수 없습니다 — 이 항목들은 보통 Prune이 관리자로 실행되어야 합니다.`
     },
     bugReport: {
@@ -16035,7 +16035,7 @@ export const CATALOG = {
       reportBug: 'Pranešti apie klaidą',
       dashboard: 'Valdymo skydas', diskMap: 'Disko žemėlapis', applications: 'Programos',
       quarantine: 'Karantinas', settings: 'Nustatymai', startup: 'Paleistis',
-      duplicates: 'Dublikatai', deepClean: 'Kruopštus valymas',
+      duplicates: 'Dublikatai', deepClean: "Gilus valymas",
       landmark: 'Pagrindinis'
     },
     settings: {
@@ -16075,7 +16075,7 @@ export const CATALOG = {
       },
       autoQuarantine: {
         title: 'Automatinis karantinas',
-        description: 'Gilus valymas perkelia tai, ką pašalina, į Prune karantiną, iš kur galite tai grąžinti. Išjunkite tai, ir vietoj to tai keliaus į Windows šiukšlinę — vis dar atkuriama, tik vietoje, kurią jau mokate ištuštinti.'
+        description: "Gilus valymas perkelia tai, ką pašalina, į Prune karantiną, iš kur galite tai atkurti. Išjunkite tai, ir vietoj to tai keliaus į Windows šiukšlinę — vis dar atkuriama, tik vietoje, kurią jau mokate ištuštinti."
       },
       skipRecent: {
         title: 'Palikite naujausius failus ramybėje',
@@ -16088,7 +16088,7 @@ export const CATALOG = {
         description: 'Prieš priverstinį šalinimą, kad pats „Windows“ galėtų grąžinti kompiuterį atgal. Kainuoja kelias sekundes ir visiškai nieko nedaro, jei sistemos apsauga išjungta.'
       },
       hideUnavailable: {
-        title: 'Slėpti netinkamus valytojus',
+        title: "Slėpti netinkamus valiklius",
         description: 'Didžioji sąrašo dalis skirta programinei įrangai, kurios šiame kompiuteryje nėra. Jų paslėpimas palieka tik tai, kas iš tikrųjų čia yra.'
       },
       quarantineRetention: {
@@ -16120,13 +16120,13 @@ export const CATALOG = {
       cookiesToPreserve: {
         title: 'Slapukai, kuriuos reikia išsaugoti',
         description: 'Viskas kita naršyklės slapukų faile dingsta, kai tik ją išvalote. Nuskaitykite, kad pamatytumėte, kas ten tikrai yra, ir pažymėkite viską, ką verta palikti.',
-        scanButton: 'Ieškoti slapukų',
-        scanning: 'Vykdoma…',
+        scanButton: "Nuskaityti slapukus",
+        scanning: "Nuskaitoma…",
         filterPlaceholder: 'Filtruoti domenus…',
         countSuffix: (count) => `${count} slapukai`,
         none: 'Slapukų nerasta.',
         staleBadge: 'nematytas šiame nuskaitymo cikle',
-        scanErrorPrefix: (message) => `Nepavyko ieškoti slapukų: ${message}`,
+        scanErrorPrefix: (message) => `Nepavyko nuskaityti slapukų: ${message}`,
         fileErrorsNote: (count) => `Nepavyko perskaityti ${count} failų, todėl jie buvo praleisti.`,
         checkboxAriaLabel: (domain) => `Išsaugoti slapukus iš ${domain}`
       },
@@ -16140,7 +16140,7 @@ export const CATALOG = {
       },
       warningConfirmations: {
         title: 'Įspėjimų patvirtinimai',
-        allAsk: 'Kiekvienas duomenis prarandantis valytojas klausia prieš paleidžiant.',
+        allAsk: "Kiekvienas duomenis prarandantis valiklis klausia prieš paleidžiant.",
         someSet: (count) => `${count} valymo įspėjimai nustatyti daugiau neklausti.`,
         reset: 'Atkurti įspėjimų patvirtinimus'
       },
@@ -16160,31 +16160,31 @@ export const CATALOG = {
         },
         afterHeading: 'Po šalinimo',
         scanLeftovers: {
-          title: 'Ieškoti liekanų po šalinimo',
+          title: "Nuskaityti liekanas po šalinimo",
           description: 'Ieško failų, registro raktų ir suplanuotų užduočių, kurias paliko šalinimo priemonė. Išjungus, Prune tiesiog paleidžia pačios programos šalinimo priemonę ir ten sustoja.'
         },
         preselect: {
-          title: 'Pagal numatytuosius nustatymus pažymėti kiekvieną likutį',
+          title: "Pagal numatytuosius nustatymus pažymėti kiekvieną liekaną",
           description: 'Peržiūra atsidaro su viskuo, kas rasta, pažymėta. Išjungus, ji atsidaro be nieko pažymėta ir jūs renkatės.'
         },
         keepHistory: {
           title: 'Saugoti šalinimo istoriją',
           description: 'Skydelio naujausių pašalinimų ir jų atlaisvintos vietos sąrašas. Išjungus, nieko naujo neįrašoma.'
         },
-        destinationHeading: 'Likę failai keliauja į',
+        destinationHeading: "Liekanos keliauja į",
         leftoverOptions: {
           quarantine: { label: 'Karantinas', description: 'Perkelta į paties Prune atsarginę kopiją ir atkuriama iš karantino ekrano. Numatytoji parinktis.' },
           recycle: { label: 'Šiukšlinė', description: 'Atkuriama iš paties „Windows“ šiukšlinės ir atlaisvinama, kai ją ištuštinate.' },
           permanent: { label: 'Ištrinti negrįžtamai', description: 'Visiškai ištrinta. Nėra ką atkurti.' }
         },
-        permanentWarning: 'Likę failai bus visiškai ištrinti ir jų negalima atkurti nei iš karantino, nei iš kur kitur. Peržiūrėkite sąrašą prieš patvirtindami.',
+        permanentWarning: "Liekanos bus visiškai ištrintos ir jų negalima atkurti nei iš karantino, nei iš kur kitur. Peržiūrėkite sąrašą prieš patvirtindami.",
         registryNote: 'Registro raktai eksportuojami į karantiną prieš juos pašalinant, nepriklausomai nuo jūsų pasirinkimo.'
       },
       about: {
         reportTitle: 'Pranešti apie klaidą',
         reportDescription: "Atidaro iš anksto užpildytą pranešimą „GitHub“. „Prune“ pats nieko nesiunčia, o viską pamatysite prieš išsiunčiant.",
         reportButton: 'Pranešti apie klaidą',
-        description: 'Vietinis, neprisijungęs prie interneto šalinimo ir valymo įrankis „Windows“ — priverstinis šalinimas su liekanų failų nuskaitymu, saugus karantinas prieš trynimą, disko žemėlapio sudarymas ir šiukšlių valymas vienu paspaudimu.'
+        description: "Vietinis, neprisijungęs prie interneto šalinimo ir valymo įrankis „Windows“ — priverstinis šalinimas su liekanų failų nuskaitymu, saugus karantinas prieš trynimą, disko žemėlapis ir šiukšlių valymas vienu paspaudimu."
       },
       automation: {
         title: 'Automatizavimas',
@@ -16251,7 +16251,7 @@ export const CATALOG = {
       },
       apps: {
         label: "Įdiegtos programos",
-        broken: (count) => `${count} liko po nepavykusio pašalinimo`,
+        broken: (count) => `Liekanų po nepavykusio šalinimo: ${count}`,
         noBroken: 'Sugadintų įrašų nėra.',
         review: 'Peržiūrėti',
         manage: 'Tvarkyti'
@@ -16264,22 +16264,22 @@ export const CATALOG = {
       },
       recentActivity: {
         title: "Naujausia veikla",
-        empty: 'Kol kas pašalinimų nebuvo.',
+        empty: "Kol kas šalinimų nebuvo.",
         freed: 'atlaisvinta'
       }
     },
     diskMap: {
       title: "Disko žemėlapis",
-      unscannedLabel: "Neskenuota",
+      unscannedLabel: "Nenuskaityta",
       aggregateCell: (count) => `${count} mažesni elementai`,
       subtitle: "Kas užima vietą šiame diske ir kur.",
       fastIndexSummary: (count) => `${count} failų ir aplankų nuskaityta iš paties disko indekso.`,
       browsingInstant: 'Naršymas nuo čia yra akimirksniu.',
       indexIncomplete: 'Dalies indekso nepavyko nuskaityti, todėl bendros sumos yra apatinė riba.',
-      scanningDrive: 'Skenuojamas diskas…',
+      scanningDrive: "Nuskaitomas diskas…",
       readingDrive: 'Skaitomas diskas…',
       rescanButton: 'Skenuoti diską iš naujo (administratorius)',
-      fastScanButton: 'Greitasis skenavimas (administratorius)',
+      fastScanButton: "Greitasis nuskaitymas (administratorius)",
       loading: {
         heading: 'Skaitomas kiekvienas aplankas po',
         note: 'Po vieną katalogą kartu — tai vienintelis būdas tai padaryti be administratoriaus teisių. Visas diskas gali užtrukti minutę ir gali nepavykti baigti.',
@@ -16287,7 +16287,7 @@ export const CATALOG = {
       },
       driveRootPrompt: {
         heading: 'Skaityti visą diską',
-        fastTitle: "Greitasis skenavimas",
+        fastTitle: "Greitasis nuskaitymas",
         recommended: "Rekomenduojama",
         fastExplain: (path) => `Skaito paties disko failų indeksą: visi ${path} failai per kelias sekundes.`,
         fastNeeds: "Reikia administratoriaus patvirtinimo, todėl „Windows“ rodo UAC užklausą.",
@@ -16297,7 +16297,7 @@ export const CATALOG = {
         crawlButton: 'Vietoj to pereiti aplankus'
       },
       scanProgress: {
-        scanning: (path) => `Skenuojama ${path}`,
+        scanning: (path) => `Nuskaitoma ${path}`,
         filesProcessed: (files, size) => `Nuskaityta failų: ${files} · apdorota ${size}`,
         noTotalNote: "Šio nuskaitymo bendras dydis nežinomas, todėl procentai nerodomi — skaitikliai rodo, kas perskaityta iki šiol.",
         indexNote: "Skaitant disko indeksą „Windows“ nepraneša apie eigą, todėl procentai nerodomi — tik praėjęs laikas.",
@@ -16317,20 +16317,20 @@ export const CATALOG = {
         retry: "Bandyti dar kartą",
         barLabel: "Nuskaitymo eiga"
       },
-      scanFailure: (path, error) => `Nepavyko nuskenuoti „${path}“: ${error}`,
-      fastScanDeclined: 'Nepatvirtinta — vis dar naudojamas aplanko po aplanko skenavimas.',
+      scanFailure: (path, error) => `Nepavyko nuskaityti „${path}“: ${error}`,
+      fastScanDeclined: "Nepatvirtinta — vis dar naudojamas aplanko po aplanko nuskaitymas.",
       truncated: {
-        withCoverage: (measured, used, percent) => `Šiam skenavimui baigėsi laikas: jis išmatavo ${measured} iš ${used} naudojamų (${percent}%). Tai, kas išmatuota, yra tikra; likusi dalis rodoma kaip neskenuota, o ne tuščia.`,
-        withoutCoverage: 'Šiam skenavimui baigėsi laikas prieš baigiant diską. Viskas, kas iš tikrųjų buvo išmatuota, yra tikra, tačiau aplankai, kurių jis niekada nepasiekė, rodomi kaip neskenuoti, o ne tušti — nelaikykite to pilnu vaizdu apie tai, kas naudoja jūsų vietą.',
-        stoppedWithCoverage: (a, b, c) => `Sustabdėte šį skenavimą: išmatuota ${a} iš ${b} naudojamų (${c}%). Tai, kas išmatuota, yra tikra; likusi dalis rodoma kaip neskenuota, o ne tuščia.`,
-        stoppedWithoutCoverage: "Sustabdėte šį skenavimą anksčiau laiko. Tai, kas išmatuota, yra tikra; aplankai, kurių jis nepasiekė, rodomi kaip neskenuoti, o ne tušti — tai nėra pilnas vaizdas, kas užima vietą.",
-        rescanLink: 'Vietoj to paleisti greitąjį skenavimą'
+        withCoverage: (measured, used, percent) => `Šiam nuskaitymui baigėsi laikas: jis išmatavo ${measured} iš ${used} naudojamų (${percent}%). Tai, kas išmatuota, yra tikra; likusi dalis rodoma kaip nenuskaityta, o ne tuščia.`,
+        withoutCoverage: "Šiam nuskaitymui baigėsi laikas prieš baigiant diską. Viskas, kas iš tikrųjų buvo išmatuota, yra tikra, tačiau aplankai, kurių jis niekada nepasiekė, rodomi kaip nenuskaityti, o ne tušti — nelaikykite to pilnu vaizdu apie tai, kas naudoja jūsų vietą.",
+        stoppedWithCoverage: (a, b, c) => `Sustabdėte šį nuskaitymą: išmatuota ${a} iš ${b} naudojamų (${c}%). Tai, kas išmatuota, yra tikra; likusi dalis rodoma kaip nenuskaityta, o ne tuščia.`,
+        stoppedWithoutCoverage: "Sustabdėte šį nuskaitymą anksčiau laiko. Tai, kas išmatuota, yra tikra; aplankai, kurių jis nepasiekė, rodomi kaip nenuskaityti, o ne tušti — tai nėra pilnas vaizdas, kas užima vietą.",
+        rescanLink: "Vietoj to paleisti greitąjį nuskaitymą"
       },
       view: { tree: 'Medis', files: 'Failai' },
       folderTable: {
         empty: 'Šiame aplanke nėra ko išvardyti.',
         rowLabel: (a, b) => `Atverti ${a}, ${b}`,
-        notScanned: 'neskenuota',
+        notScanned: "nenuskaityta",
         columns: { folder: 'Aplankas', size: 'Dydis', items: 'Elementai', files: 'Failai', folders: 'Aplankai', modified: 'Pakeista' }
       },
       extensionPanel: {
@@ -16338,13 +16338,13 @@ export const CATALOG = {
         typeCount: (n) => `${n} tipai`,
         noType: 'be tipo',
         footer: (bytes, count) => `${bytes} ${count} failuose`,
-        unopenedFolders: (bytes) => ` · ${bytes} aplankuose, kurių skenavimas neatidarė`
+        unopenedFolders: (bytes) => ` · ${bytes} aplankuose, kurių nuskaitymas neatidarė`
       },
-      largestFiles: { empty: 'Skenavimas nerado failų, kuriuos būtų galima išvardyti.' },
+      largestFiles: { empty: "Nuskaitymas nerado failų, kuriuos būtų galima išvardyti." },
       tooltip: {
         notMeasured: (bytes) => `${bytes} neišmatuota`,
         aggregated: 'Mažiausi šio aplanko įrašai, sugrupuoti kartu.',
-        unscanned: 'Skenavimas sustojo prieš pasiekiant šį. Tikras dydis nežinomas.'
+        unscanned: "Nuskaitymas sustojo prieš pasiekiant šį. Tikras dydis nežinomas."
       },
       rowActionsLabel: (a) => `Veiksmai: ${a}`,
       cellOpenLabel: (name) => `Atverti ${name}`,
@@ -16403,8 +16403,8 @@ export const CATALOG = {
       uninstall: 'Pašalinti',
       forceRemove: 'Priverstinai pašalinti',
       openFolder: "Atidaryti aplanką",
-      copyUninstallCommand: "Kopijuoti pašalinimo komandą",
-      commandCopied: "Pašalinimo komanda nukopijuota.",
+      copyUninstallCommand: "Kopijuoti šalinimo komandą",
+      commandCopied: "Šalinimo komanda nukopijuota.",
       copyFailed: "Nepavyko nukopijuoti.",
       empty: {
         plain: 'Nieko neatitinka.',
@@ -16425,7 +16425,7 @@ export const CATALOG = {
         total: 'iš viso'
       },
       batchReasons: {
-        orphaned: 'Jos šalinimo programa sugadinta — vietoj to naudokite Priverstinai pašalinti.',
+        orphaned: "Jos šalinimo priemonė sugadinta — vietoj to naudokite Priverstinai pašalinti.",
         extension: 'Naršyklės plėtiniai šalinami iš pačios naršyklės.',
         storeNoPackage: 'Ši parduotuvės programa neturi paketo pavadinimo pašalinimui.',
         storeProtected: '„Windows“ pažymi šią programą kaip sistemos dalį ir neleidžia jos pašalinti.',
@@ -16458,7 +16458,7 @@ export const CATALOG = {
       emptying: 'Tuštinama…',
       empty: {
         heading: 'Karantine nieko nėra.',
-        body: 'Viskas, ką pašalina programos šalinimas ar Gilus valymas, pirmiausia atsiduria čia. Tai lieka, kol tai ištuštinsite, todėl atsitiktinai paimtą failą visada galima atkurti.'
+        body: "Viskas, ką pašalina programos šalinimas ar Gilus valymas, pirmiausia atsiduria čia. Tai lieka, kol tai ištuštinsite, todėl atsitiktinai paimtą failą visada galima atkurti."
       },
       deleteConfirmPrompt: 'Ištrinti visam laikui?',
       restore: 'Atkurti',
@@ -16528,14 +16528,14 @@ export const CATALOG = {
       empty: {
         heading: 'Čia nėra pasikartojančių failų.',
         scanned: (count) => `Palyginta failų: ${count}.`,
-        truncatedSuffix: ' Skenavimas buvo nutrauktas anksčiau laiko, todėl tai nėra visas aplankas.'
+        truncatedSuffix: " Nuskaitymas buvo nutrauktas anksčiau laiko, todėl tai nėra visas aplankas."
       },
       summarySets: (count) => `${count} rinkin${count === 1 ? 'ys' : 'iai'}`,
       recoverable: (formatted) => `${formatted} galima atlaisvinti`,
       keepOldest: 'Palikti seniausią',
       keepNewest: 'Palikti naujausią',
       clear: 'Išvalyti',
-      truncatedWarning: 'Skenavimas buvo nutrauktas anksčiau laiko, todėl rinkinių gali būti daugiau nei šie.',
+      truncatedWarning: "Nuskaitymas buvo nutrauktas anksčiau laiko, todėl rinkinių gali būti daugiau nei šie.",
       tags: { keep: "Palikti", toQuarantine: "Į karantiną" },
       group: {
         identicalCopies: (count, size) => `${count} identiškos kopijos · po ${size}`,
@@ -16563,7 +16563,7 @@ export const CATALOG = {
     },
     deepClean: {
       title: 'Gilus valymas',
-      subtitle: 'Kiekvienas talpykla, žurnalas, išklotinė ir liekana, kurią „Prune“ moka rasti, išmatuota šiame kompiuteryje, o ne apskaičiuota. Niekas nėra iškart ištrinama — viskas, ką paima Valymas, pirmiausia keliauja į Karantiną, iš kur galite tai grąžinti.',
+      subtitle: "Kiekvienas talpykla, žurnalas, išklotinė ir liekana, kurią „Prune“ moka rasti, išmatuota šiame kompiuteryje, o ne apskaičiuota. Niekas nėra iškart ištrinama — viskas, ką paima Valymas, pirmiausia keliauja į Karantiną, iš kur galite tai atkurti.",
       scanLog: {
         header: 'Nuskaitymo išvestis',
         scanningAnnounce: (total) => `Nuskaitoma ${total} vietų.`,
@@ -16582,7 +16582,7 @@ export const CATALOG = {
         scanning: 'Nuskaitoma…',
         preview: 'Peržiūra'
       },
-      hiddenNote: (count) => `${count} valymo priemonės paslėptos, nes programinė įranga neįdiegta. Nustatymai › Valymas, kad jas parodytumėte.`,
+      hiddenNote: (count) => `Paslėptų valiklių: ${count}, nes programinė įranga neįdiegta. Nustatymai › Valymas, kad juos parodytumėte.`,
       footer: {
         totalLabel: 'Iš viso atlaisvinama vietos:',
         notMeasuredYet: 'dar neišmatuota',
@@ -16655,9 +16655,9 @@ export const CATALOG = {
         recycle: { text: 'Pasirinkti failai keliauja į šiukšlinę. Registro raktai atsargiai kopijuojami prieš juos pašalinant.', button: 'Pašalinti pasirinktus' },
         permanent: { text: 'Pasirinkti failai bus visiškai ištrinti ir jų negalima bus atkurti. Registro raktai atsargiai kopijuojami prieš juos pašalinant.', button: 'Ištrinti negrįžtamai' }
       },
-      clean: 'Liekanų nerasta — švarus pašalinimas.',
+      clean: "Liekanų nerasta — švarus šalinimas.",
       done: 'Atlikta',
-      foundWarning: (count) => `Originali šalinimo programa nepastebėjo likusių elementų: ${count}. Peržiūrėkite prieš šalindami.`,
+      foundWarning: (count) => `Originali šalinimo priemonė nepastebėjo liekanų: ${count}. Peržiūrėkite prieš šalindami.`,
       excludedNote: (count) => `${count} aplankas praleistas, nes yra jūsų išimtyse.`,
       itemsSelected: 'pasirinkti elementai',
       reclaimable: 'atlaisvinama',
@@ -16667,7 +16667,7 @@ export const CATALOG = {
       titleForce: (name) => `Priverstinai pašalinti ${name}`,
       titleNormal: (name) => `Pašalinti ${name}`,
       close: 'Uždaryti',
-      stillWaiting: `Vis dar laukiama šalinimo programos. Šį langą galite uždaryti; šalinimo programa toliau veikia, o Prune neieškos likučių.`,
+      stillWaiting: "Vis dar laukiama šalinimo priemonės. Šį langą galite uždaryti; šalinimo priemonė toliau veikia, o Prune neieškos liekanų.",
       runningWarning: (name) => `${name} šiuo metu veikia. Pirmiausia uždarykite jį — šalinimo priemonė paprastai nepavyksta su atidaryta programa ir gali palikti failus, kuriuos kitas paleidimas sukurs iš naujo.`,
       orphanedWarning: (reason) => `${reason} „Windows“ ir toliau ją rodys, kol įrašas bus pašalintas.`,
       brokenIntro: '„Prune“ ieškos failų ir registro raktų, atitinkančių šį pavadinimą, įskaitant jos programų pridėjimo/šalinimo įrašą, ir parodys jums viską prieš ką nors pašalindama.',
@@ -16676,7 +16676,7 @@ export const CATALOG = {
       scanFailed: (error) => `Nepavyko nuskaityti: ${error}`,
       searchButton: 'Ieškoti liekanų',
       normalIntro: (name) => `Tai paleidžia paties ${name} šalinimo priemonę, tada nuskaito viską, ką ji palieka.`,
-      uninstallFailed: (error) => `Pašalinimas nepavyko: ${error}`,
+      uninstallFailed: (error) => `Šalinimas nepavyko: ${error}`,
       startButton: 'Pradėti šalinimą',
       noWorkingUninstaller: 'Nėra veikiančios šalinimo priemonės — vietoj to ieškoma pagal pavadinimą',
       noUninstallCommand: 'Neregistruota jokia šalinimo komanda',
@@ -16695,8 +16695,8 @@ export const CATALOG = {
       },
       noScan: (name) => `${name} šalinimo priemonė baigė darbą. Liekanų nuskaitymas nustatymuose išjungtas, todėl daugiau nieko nebuvo ieškoma.`,
       readyToScan: {
-        body: (name) => `Jei ${name} šalinimo programa vis dar baigia darbą, leiskite jai pirmiausia užsidaryti. Kai ji baigs, spustelėkite Ieškoti liekanų, kad surastumėte viską, ką ji paliko.`,
-        scanButton: "Ieškoti liekanų"
+        body: (name) => `Jei ${name} šalinimo priemonė vis dar baigia darbą, leiskite jai pirmiausia užsidaryti. Kai ji baigs, spustelėkite Nuskaityti liekanas, kad surastumėte viską, ką ji paliko.`,
+        scanButton: "Nuskaityti liekanas"
       },
       removalFailed: (error) => `Pašalinimas nepavyko: ${error}`,
       done: 'Atlikta',
@@ -16719,17 +16719,17 @@ export const CATALOG = {
       historyLabel: (n) => `Paketinis šalinimas: ${n} programos`,
       close: 'Uždaryti',
       cancel: "Atšaukti",
-      stillWaiting: (more) => more ? `Vis dar laukiama šios šalinimo programos. Jos langas gali būti paslėptas už Prune. Pasirinkite „Sustoti po šios“, kad pabaigus šią likusios būtų praleistos.` : `Vis dar laukiama šios šalinimo programos. Jos langas gali būti paslėptas už Prune.`,
+      stillWaiting: (more) => more ? `Vis dar laukiama šios šalinimo priemonės. Jos langas gali būti paslėptas už Prune. Pasirinkite „Sustoti po šios“, kad pabaigus šią likusios būtų praleistos.` : `Vis dar laukiama šios šalinimo priemonės. Jos langas gali būti paslėptas už Prune.`,
       stopAfterThis: "Sustoti po šios",
       stopping: "Sustos po šios…",
       statusSkipped: "praleista",
       stoppedNote: (n) => `Sustabdyta anksčiau. Nepradėta: ${n}.`,
-      registryOnlyIntro: 'Kiekviena programėlė paeiliui pašalinama per „Windows“, ir po to jokio liekanų nuskaitymo nėra: „Windows“ pašalina nuosavus programėlės duomenis kartu su ja.',
-      mixedIntro: (hasStore) => `Kiekvienos programos pati šalinimo priemonė paleidžiama paeiliui, tada „Prune“ nuskaito, ką jos palieka, ir parodo jums viską prieš ką nors iš to pašalindama.${hasStore ? ' Store programėlės vietoj to pašalinamos per „Windows“, be vėlesnio liekanų nuskaitymo.' : ''}`,
+      registryOnlyIntro: "Kiekviena programa paeiliui pašalinama per „Windows“, ir po to jokio liekanų nuskaitymo nėra: „Windows“ pašalina nuosavus programos duomenis kartu su ja.",
+      mixedIntro: (hasStore) => `Kiekvienos programos pati šalinimo priemonė paleidžiama paeiliui, tada „Prune“ nuskaito, ką jos palieka, ir parodo jums viską prieš ką nors iš to pašalindama.${hasStore ? ' Store programos vietoj to pašalinamos per „Windows“, be vėlesnio liekanų nuskaitymo.' : ''}`,
       oneAtATime: 'Po vieną, nes „Windows“ vienu metu leidžia tik vieną diegimą ar šalinimą. Kai kurios šalinimo priemonės rodys savo langus ir užduos jums klausimų.',
       storeWarning: (count) => count === 1
-        ? 'Šios partijos Store programėlės negalima atkurti iš karantino: jos pašalinimas pasiima programėlę ir jos išsaugotus duomenis, o susigrąžinti reiškia įdiegti ją iš naujo iš Store.'
-        : `Šios partijos ${count} Store programėlių negalima atkurti iš karantino: vienos pašalinimas pasiima programėlę ir jos išsaugotus duomenis, o susigrąžinti reiškia įdiegti ją iš naujo iš Store.`,
+        ? 'Šios partijos Store programos negalima atkurti iš karantino: jos pašalinimas pasiima programą ir jos išsaugotus duomenis, o susigrąžinti reiškia įdiegti ją iš naujo iš Store.'
+        : `Šios partijos ${count} Store programų negalima atkurti iš karantino: vienos pašalinimas pasiima programą ir jos išsaugotus duomenis, o susigrąžinti reiškia įdiegti ją iš naujo iš Store.`,
       runsBefore: (name) => `vykdoma prieš ${name}`,
       reported: (bytes) => `${bytes} praneštas`,
       unknownSizeSuffix: (n) => `, ${n} nežinomo dydžio`,
@@ -16740,27 +16740,27 @@ export const CATALOG = {
         recycle: 'Liekanos siunčiamos į šiukšlinę…',
         permanent: 'Liekanos visiškai ištrinamos…'
       },
-      scanningLine: "Ieškoma liekanų…",
+      scanningLine: "Nuskaitomos liekanos…",
       readyToScan: {
-        body: (n) => `Šalinimo programos baigė darbą (${n}). Kai kurios — ypač žaidimų paleidyklės — toliau šalina failus fone, net kai jų pačių langas jau uždarytas. Jei nesate tikri, palaukite akimirką, tada spustelėkite Ieškoti liekanų, kad patikrintumėte, ar kas nors liko.`,
-        scanButton: 'Ieškoti liekanų'
+        body: (n) => `Šalinimo priemonės baigė darbą (${n}). Kai kurios — ypač žaidimų paleidyklės — toliau šalina failus fone, net kai jų pačių langas jau uždarytas. Jei nesate tikri, palaukite akimirką, tada spustelėkite Nuskaityti liekanas, kad patikrintumėte, ar kas nors liko.`,
+        scanButton: "Nuskaityti liekanas"
       },
       uninstalledOf: (removed, total) => `Pašalinta ${removed} iš ${total}.`,
       failedHeading: (n) => `${n} nepavyko pašalinti ir jos buvo paliktos ramybėje:`,
       removeLeftoversFailed: (error) => `Nepavyko pašalinti liekanų: ${error}`,
       noScanSettingsOff: 'Liekanų nuskaitymas nustatymuose išjungtas, todėl nieko nebuvo ieškoma.',
-      noScanStore: 'Po Store programėlės liekanų nuskaitymo nėra: „Windows“ pašalina nuosavus programėlės duomenis kartu su ja.',
+      noScanStore: "Po Store programos liekanų nuskaitymo nėra: „Windows“ pašalina nuosavus programos duomenis kartu su ja.",
       done: 'Atlikta',
       summary: {
         recycle: (programs, items, freed) => `Pašalinta ${programs} ir išsiųsta ${items} į šiukšlinę, atlaisvinant ${freed}.`,
         permanent: (programs, items, freed) => `Pašalinta ${programs} ir visiškai ištrinta ${items}, atlaisvinant ${freed}.`,
         quarantine: (programs, items, freed) => `Pašalinta ${programs} ir perkelta ${items} į karantiną, atlaisvinant ${freed}.`,
         programs: (n) => `${n} program${n === 1 ? 'a' : 'os'}`,
-        items: (n) => `${n} likę${n === 1 ? 's elementas' : ' elementai'}`
+        items: (n) => `Liekanų: ${n}`
       },
       noRestorePoint: (reason) => `Sistemos atkūrimo taškas nesukurtas (${reason}).`,
       restorePointFallback: 'nepasiekiama',
-      quarantineNote: 'Visa tai, kas aukščiau, vis dar yra karantine ir gali būti grąžinta.',
+      quarantineNote: "Visa tai, kas aukščiau, vis dar yra karantine ir gali būti atkurta.",
       failedRegistryKeys: (n) => `Nepavyko pašalinti ${n} registro rakt${n === 1 ? 'o' : 'ų'} — jiems paprastai reikia, kad „Prune“ veiktų administratoriaus teisėmis.`
     },
     bugReport: {
@@ -16835,7 +16835,7 @@ export const CATALOG = {
       reportBug: 'Laporkan pepijat',
       dashboard: 'Papan Pemuka', diskMap: 'Peta Cakera', applications: 'Aplikasi',
       quarantine: 'Kuarantin', settings: 'Tetapan', startup: 'Permulaan',
-      duplicates: 'Pendua', deepClean: 'Pembersihan Menyeluruh',
+      duplicates: 'Pendua', deepClean: "Pembersihan Mendalam",
       landmark: 'Utama'
     },
     settings: {
@@ -16892,18 +16892,18 @@ export const CATALOG = {
         description: 'Sebahagian besar senarai adalah untuk perisian yang tiada pada komputer ini. Menyembunyikannya hanya meninggalkan apa yang sebenarnya ada di sini.'
       },
       quarantineRetention: {
-        title: "Tempoh penyimpanan item kuarantin",
+        title: "Tempoh penyimpanan item Kuarantin",
         description: 'Semua yang dikeluarkan Prune pergi ke Kuarantin dahulu, dan kekal di sana sehingga anda mengosongkannya. Tetapkan bilangan hari untuk membuang sandaran yang lebih lama daripada itu. Biarkan kosong untuk menyimpannya selama-lamanya.',
         neverPlaceholder: 'Tidak sekali-kali',
         daysUnit: 'hari',
-        ariaLabel: 'Hari untuk menyimpan sandaran kuarantin'
+        ariaLabel: "Hari untuk menyimpan sandaran Kuarantin"
       },
       quarantineMaxSize: {
-        title: "Had saiz kuarantin",
+        title: "Had saiz Kuarantin",
         description: 'Had untuk keseluruhan folder Kuarantin. Melebihi itu, sandaran paling lama akan hilang dahulu — yang paling baharu tidak akan sesekali dibuang, jadi sesuatu yang besar yang baru anda keluarkan kekal boleh dipulihkan walaupun ia lebih besar daripada had itu sendiri. Biarkan kosong untuk tiada had.',
         noLimitPlaceholder: 'Tiada had',
         gbUnit: 'GB',
-        ariaLabel: 'Saiz maksimum kuarantin dalam gigabait'
+        ariaLabel: "Saiz maksimum Kuarantin dalam gigabait"
       },
       exclusions: {
         title: "Kecualikan folder",
@@ -16941,7 +16941,7 @@ export const CATALOG = {
       warningConfirmations: {
         title: 'Pengesahan amaran',
         allAsk: 'Setiap pembersih yang kehilangan data akan bertanya sebelum ia berjalan.',
-        someSet: (count) => `${count} amaran pembersihan ditetapkan supaya tidak bertanya lagi.`,
+        someSet: (count) => `${count} amaran pembersih ditetapkan supaya tidak bertanya lagi.`,
         reset: 'Set semula pengesahan amaran'
       },
       uninstallTab: {
@@ -16984,7 +16984,7 @@ export const CATALOG = {
         reportTitle: 'Laporkan pepijat',
         reportDescription: "Membuka isu yang telah diisi terlebih dahulu di GitHub. Prune sendiri tidak menghantar apa-apa, dan anda melihat semuanya sebelum apa-apa dihantar.",
         reportButton: 'Laporkan pepijat',
-        description: 'Alat penyahpasangan dan pembersihan tempatan, luar talian untuk Windows — penyingkiran paksa dengan imbasan fail baki, kuarantin selamat sebelum pemadaman, pemetaan cakera, dan pembersihan sampah satu klik.'
+        description: "Alat penyahpasangan dan pembersihan tempatan, luar talian untuk Windows — penyingkiran paksa dengan imbasan fail baki, Kuarantin selamat sebelum pemadaman, Peta Cakera, dan pembersihan sampah satu klik."
       },
       automation: {
         title: 'Automasi',
@@ -16999,7 +16999,7 @@ export const CATALOG = {
         everyWeek: 'Setiap minggu',
         measureOnly: 'Ukur sahaja',
         clean: 'Bersihkan',
-        cleanWarning: 'Ini mengeluarkan fail tanpa sesiapa memerhati. Ia membersihkan peraturan yang disyorkan oleh Pembersihan Mendalam dan yang sememangnya mempunyai sesuatu di dalamnya, dan semuanya tetap pergi ke kuarantin — jadi semak tetapan pengekalan di atas sebelum membiarkan ini dihidupkan.',
+        cleanWarning: "Ini mengeluarkan fail tanpa sesiapa memerhati. Ia membersihkan peraturan yang disyorkan oleh Pembersihan Mendalam dan yang sememangnya mempunyai sesuatu di dalamnya, dan semuanya tetap pergi ke Kuarantin — jadi semak tetapan pengekalan di atas sebelum membiarkan ini dihidupkan.",
         nextRun: 'Larian seterusnya:',
         lastRun: 'Larian terakhir:',
         weekdays: {
@@ -17059,7 +17059,7 @@ export const CATALOG = {
       junk: {
         label: "Fail sampah",
         notMeasured: 'belum diukur',
-        description: 'Mengukur melalui setiap laluan pembersihan pada cakera — kira-kira setengah minit.',
+        description: "Mengukur melalui setiap laluan pembersih pada cakera — kira-kira setengah minit.",
         measure: 'Ukur'
       },
       recentActivity: {
@@ -17151,18 +17151,18 @@ export const CATALOG = {
       contextMenu: {
         openInExplorer: 'Buka dalam Explorer',
         copyPath: 'Salin laluan',
-        moveToQuarantineMenu: 'Alih ke kuarantin…'
+        moveToQuarantineMenu: "Alih ke Kuarantin…"
       },
       toasts: {
-        moved: (name) => `Dialih ke kuarantin: ${name}`,
+        moved: (name) => `Dialih ke Kuarantin: ${name}`,
         restoreHint: 'Pulihkan daripada skrin Kuarantin.',
         pathCopied: 'Laluan disalin.',
         copyFailed: 'Laluan itu tidak dapat disalin.',
         moveFailed: 'Ini tidak dapat dialihkan.'
       },
       removeModal: {
-        label: 'Alih ke kuarantin',
-        heading: 'Alih ini ke kuarantin?',
+        label: "Alih ke Kuarantin",
+        heading: "Alih ini ke Kuarantin?",
         note: 'Ia dialihkan, bukan dipadamkan — pulihkan bila-bila masa daripada skrin Kuarantin.',
         folder: 'Folder',
         file: 'Fail',
@@ -17225,7 +17225,7 @@ export const CATALOG = {
         total: 'jumlah'
       },
       batchReasons: {
-        orphaned: 'Program nyahpasangnya rosak — gunakan Paksa alih keluar sebagai gantinya.',
+        orphaned: "Penyahpasangnya rosak — gunakan Paksa alih keluar sebagai gantinya.",
         extension: 'Sambungan pelayar dialih keluar dari pelayar itu sendiri.',
         storeNoPackage: 'Apl Kedai ini tiada nama pakej untuk dialih keluar.',
         storeProtected: 'Windows menandakan apl ini sebagai sebahagian daripada sistem dan tidak membenarkan ia dialih keluar.',
@@ -17243,8 +17243,8 @@ export const CATALOG = {
     },
     quarantine: {
       title: 'Kuarantin',
-      loading: 'Memuatkan kuarantin…',
-      loadError: (error) => `Tidak dapat memuatkan kuarantin: ${error}`,
+      loading: "Memuatkan Kuarantin…",
+      loadError: (error) => `Tidak dapat memuatkan Kuarantin: ${error}`,
       summary: {
         phrase: (count, total, atLeast) => `${count} kelompok · ${atLeast ? 'sekurang-kurangnya ' : ''}${total} ditahan`,
         withLimit: (count, total, atLeast, max) => `${count} kelompok · ${atLeast ? 'sekurang-kurangnya ' : ''}${total} ditahan daripada ${max}`,
@@ -17257,7 +17257,7 @@ export const CATALOG = {
       confirm: 'Sahkan',
       emptying: 'Mengosongkan…',
       empty: {
-        heading: 'Tiada apa-apa dalam kuarantin.',
+        heading: "Tiada apa-apa dalam Kuarantin.",
         body: 'Segala yang dialih keluar oleh nyahpasang atau Pembersihan Mendalam mendarat di sini dahulu. Ia kekal sehingga anda mengosongkannya, jadi fail yang diambil secara tidak sengaja sentiasa boleh dipulihkan.'
       },
       deleteConfirmPrompt: 'Padam selama-lamanya?',
@@ -17278,7 +17278,7 @@ export const CATALOG = {
       loadError: (error) => `Entri permulaan tidak dapat dibaca: ${error}`,
       empty: {
         heading: 'Tiada apa-apa berjalan semasa log masuk.',
-        body: 'Prune menyemak kekunci Run dan RunOnce dalam kedua-dua hive registri dan kedua-dua folder Startup. Program yang menambah dirinya kemudian akan muncul di sini.'
+        body: "Prune menyemak kekunci Run dan RunOnce dalam kedua-dua hive registri dan kedua-dua folder Permulaan. Program yang menambah dirinya kemudian akan muncul di sini."
       },
       counts: {
         total: (n) => `${n} entri`,
@@ -17302,8 +17302,8 @@ export const CATALOG = {
         notRunning: 'Tidak berjalan'
       },
       groups: {
-        'Startup folder|machine': 'Folder Startup semua pengguna',
-        'Startup folder|user': 'Folder Startup pengguna semasa',
+        'Startup folder|machine': "Folder Permulaan semua pengguna",
+        'Startup folder|user': "Folder Permulaan pengguna semasa",
         'Run|user': 'Registri: HKCU Run',
         'Run|machine': 'Registri: HKLM Run',
         'Run (32-bit)|machine': 'Registri: HKLM Run (32-bit)',
@@ -17336,7 +17336,7 @@ export const CATALOG = {
       keepNewest: 'Simpan yang paling baharu',
       clear: 'Kosongkan',
       truncatedWarning: 'Imbasan telah dihentikan awal, jadi mungkin ada lebih banyak set daripada ini.',
-      tags: { keep: "Simpan", toQuarantine: "Ke kuarantin" },
+      tags: { keep: "Simpan", toQuarantine: "Ke Kuarantin" },
       group: {
         identicalCopies: (count, size) => `${count} salinan serupa · ${size} setiap satu`,
         allTickedWarning: 'Setiap salinan dalam set ini ditanda — nyahtanda satu untuk menyimpannya.'
@@ -17345,17 +17345,17 @@ export const CATALOG = {
         selected: (count, formatted) => `${count} dipilih · ${formatted}`,
         moving: 'Mengalih…',
         wouldLose: (count) => `${count} set akan kehilangan semua salinan`,
-        moveButton: 'Alih yang dipilih ke kuarantin'
+        moveButton: "Alih yang dipilih ke Kuarantin"
       },
       modal: {
-        label: 'Alih pendua ke kuarantin',
-        heading: (count) => `Alih ${count} salinan ke kuarantin?`,
-        body: (a) => `Ini membebaskan ${a} apabila anda mengosongkan kuarantin. Setiap kumpulan mengekalkan sekurang-kurangnya satu salinan, dan tiada apa yang dipadamkan — pulihkan mana-mana daripadanya dari skrin Kuarantin.`,
+        label: "Alih pendua ke Kuarantin",
+        heading: (count) => `Alih ${count} salinan ke Kuarantin?`,
+        body: (a) => `Ini membebaskan ${a} apabila anda mengosongkan Kuarantin. Setiap kumpulan mengekalkan sekurang-kurangnya satu salinan, dan tiada apa yang dipadamkan — pulihkan mana-mana daripadanya dari skrin Kuarantin.`,
         cancel: 'Batal',
-        confirmButton: 'Alih ke kuarantin'
+        confirmButton: "Alih ke Kuarantin"
       },
       toasts: {
-        moved: (count) => `Mengalihkan ${count} salinan ke kuarantin.`,
+        moved: (count) => `Mengalihkan ${count} salinan ke Kuarantin.`,
         restoreHint: 'Pulihkan daripada skrin Kuarantin.',
         failed: (count) => `${count} tidak dapat dialihkan.`,
         failedDetail: 'Ia mungkin terbuka atau berada pada pemacu lain.'
@@ -17392,9 +17392,9 @@ export const CATALOG = {
         selectedCount: (count) => `${count} dipilih`
       },
       confirm: {
-        prompt: (count, sizeKnown, formatted) => `Alih ${count} item (${sizeKnown ? formatted : 'saiz tidak diukur'}) ke kuarantin?`,
+        prompt: (count, sizeKnown, formatted) => `Alih ${count} item (${sizeKnown ? formatted : 'saiz tidak diukur'}) ke Kuarantin?`,
         cancel: 'Batal',
-        confirmButton: "Alih ke kuarantin",
+        confirmButton: "Alih ke Kuarantin",
         cleaning: 'Membersihkan…'
       },
       stop: 'Henti',
@@ -17467,7 +17467,7 @@ export const CATALOG = {
       titleForce: (name) => `Paksa keluarkan ${name}`,
       titleNormal: (name) => `Nyahpasang ${name}`,
       close: 'Tutup',
-      stillWaiting: `Masih menunggu program nyahpasang. Anda boleh menutup tetingkap ini; program nyahpasang terus berjalan dan Prune tidak akan mengimbas baki.`,
+      stillWaiting: "Masih menunggu penyahpasang. Anda boleh menutup tetingkap ini; penyahpasang terus berjalan dan Prune tidak akan mengimbas baki.",
       runningWarning: (name) => `${name} sedang berjalan sekarang. Tutup dahulu — penyahpasang biasanya gagal pada program yang terbuka, dan boleh meninggalkan fail yang akan dicipta semula oleh pelancaran seterusnya.`,
       orphanedWarning: (reason) => `${reason} Windows akan terus menyenaraikannya sehingga entri dikeluarkan.`,
       brokenIntro: 'Prune akan mencari fail dan kekunci registri yang sepadan dengan nama ini, termasuk entri Tambah/Alih Keluar Program, dan menunjukkan semuanya kepada anda sebelum mengeluarkan apa-apa.',
@@ -17519,7 +17519,7 @@ export const CATALOG = {
       historyLabel: (n) => `Nyahpasang kelompok: ${n} program`,
       close: 'Tutup',
       cancel: "Batal",
-      stillWaiting: (more) => more ? `Masih menunggu program nyahpasang ini. Tetingkapnya sendiri mungkin di belakang Prune. Pilih «Berhenti selepas ini» untuk melangkau yang lain apabila selesai.` : `Masih menunggu program nyahpasang ini. Tetingkapnya sendiri mungkin di belakang Prune.`,
+      stillWaiting: (more) => more ? `Masih menunggu penyahpasang ini. Tetingkapnya sendiri mungkin di belakang Prune. Pilih «Berhenti selepas ini» untuk melangkau yang lain apabila selesai.` : `Masih menunggu penyahpasang ini. Tetingkapnya sendiri mungkin di belakang Prune.`,
       stopAfterThis: "Berhenti selepas ini",
       stopping: "Akan berhenti selepas ini…",
       statusSkipped: "dilangkau",
@@ -17675,7 +17675,7 @@ export const CATALOG = {
       },
       autoQuarantine: {
         title: 'Automatisk karantene',
-        description: 'Dyprens flytter det den fjerner til Prunes karantene, hvor du kan legge det tilbake. Slå dette av, og det går i stedet til Windows Papirkurv — fortsatt gjenopprettbart, bare et sted du allerede vet hvordan du tømmer.'
+        description: "Grundig opprydding flytter det den fjerner til Prunes karantene, hvor du kan legge det tilbake. Slå dette av, og det går i stedet til Windows Papirkurv — fortsatt gjenopprettbart, bare et sted du allerede vet hvordan du tømmer."
       },
       skipRecent: {
         title: 'La nylige filer være i fred',
@@ -17688,7 +17688,7 @@ export const CATALOG = {
         description: 'Før en tvungen fjerning, slik at Windows selv kan rulle tilbake maskinen. Koster noen sekunder, og gjør ingenting i det hele tatt hvis Systemgjenoppretting er slått av.'
       },
       hideUnavailable: {
-        title: 'Skjul renseprogrammer som ikke gjelder',
+        title: "Skjul rensere som ikke gjelder",
         description: 'Mesteparten av listen er for programvare denne maskinen ikke har. Å skjule dem etterlater bare det som faktisk er her.'
       },
       quarantineRetention: {
@@ -17707,7 +17707,7 @@ export const CATALOG = {
       },
       exclusions: {
         title: 'Ekskluder mapper',
-        description: 'Mapper og filtyper Prune vil la være i fred — hoppet over av Dyprens og utelatt fra Diskkartet — i tillegg til de den allerede beskytter: Systemvolumsinformasjon, antiviruskaranterne, komponentlageret og et dusin andre.',
+        description: "Mapper og filtyper Prune vil la være i fred — hoppet over av Grundig opprydding og utelatt fra Diskkartet — i tillegg til de den allerede beskytter: Systemvolumsinformasjon, antiviruskaranterne, komponentlageret og et dusin andre.",
         ariaLabel: 'Mappesti eller filtype å ekskludere',
         add: 'Legg til',
         invalidFormat: 'Skriv en fullstendig mappesti (D:\\Games) eller en filtype (*.iso).',
@@ -17740,7 +17740,7 @@ export const CATALOG = {
       },
       warningConfirmations: {
         title: 'Advarselsbekreftelser',
-        allAsk: 'Hvert renseprogram som mister data spør før det kjører.',
+        allAsk: "Hver renser som mister data spør før den kjører.",
         someSet: (count) => `${count} opprydningsadvars${count === 1 ? 'el er satt' : 'ler er satt'} til å ikke spørre igjen.`,
         reset: 'Tilbakestill advarselsbekreftelser'
       },
@@ -17771,20 +17771,20 @@ export const CATALOG = {
           title: 'Behold en avinstalleringshistorikk',
           description: 'Kontrollpanelets liste over nylige fjerninger og plassen de frigjorde. Av, registreres ingenting nytt.'
         },
-        destinationHeading: 'Gjenværende filer går til',
+        destinationHeading: "Rester går til",
         leftoverOptions: {
           quarantine: { label: 'Karantene', description: 'Flyttet til Prunes egen sikkerhetskopi, og gjenopprettbar fra Karantene-skjermen. Standardvalget.' },
           recycle: { label: 'Papirkurven', description: 'Gjenopprettbar fra Windows egen papirkurv, og frigjort når du tømmer den.' },
           permanent: { label: 'Slett permanent', description: 'Slettet helt. Ingenting å gjenopprette.' }
         },
-        permanentWarning: 'Gjenværende filer vil bli slettet helt og kan ikke gjenopprettes, verken fra Karantene eller andre steder. Sjekk listen før du bekrefter den.',
+        permanentWarning: "Rester vil bli slettet helt og kan ikke gjenopprettes, verken fra Karantene eller andre steder. Sjekk listen før du bekrefter den.",
         registryNote: 'Registernøkler eksporteres til Karantene før de fjernes, uansett hva du velger.'
       },
       about: {
         reportTitle: 'Rapporter en feil',
         reportDescription: "Åpner en forhåndsutfylt sak på GitHub. Prune sender ingenting selv, og du ser alt før noe sendes videre.",
         reportButton: 'Rapporter en feil',
-        description: 'Et lokalt, frakoblet avinstallerings- og opprydningsverktøy for Windows — tvungen fjerning med skanning etter rester, trygg karantene før sletting, diskkartlegging og rusk-opprydding med ett klikk.'
+        description: "Et lokalt, frakoblet avinstallerings- og opprydningsverktøy for Windows — tvungen fjerning med skanning etter rester, trygg karantene før sletting, Diskkart og rusk-opprydding med ett klikk."
       },
       automation: {
         title: 'Automatisering',
@@ -17799,7 +17799,7 @@ export const CATALOG = {
         everyWeek: 'Hver uke',
         measureOnly: 'Bare mål',
         clean: 'Rens',
-        cleanWarning: 'Dette fjerner filer uten at noen overvåker det. Det renser reglene Dyprens anbefaler og som faktisk har noe i seg, og alt går fortsatt til karantene — så sjekk oppbevaringsinnstillingen ovenfor før du lar denne stå på.',
+        cleanWarning: "Dette fjerner filer uten at noen overvåker det. Det renser reglene Grundig opprydding anbefaler og som faktisk har noe i seg, og alt går fortsatt til karantene — så sjekk oppbevaringsinnstillingen ovenfor før du lar denne stå på.",
         nextRun: 'Neste kjøring:',
         lastRun: 'Siste kjøring:',
         weekdays: {
@@ -17879,7 +17879,7 @@ export const CATALOG = {
       scanningDrive: 'Skanner disk…',
       readingDrive: 'Leser disken…',
       rescanButton: 'Skann disk på nytt (admin)',
-      fastScanButton: 'Hurtigskann (admin)',
+      fastScanButton: "Hurtigskanning (admin)",
       loading: {
         heading: 'Leser hver mappe under',
         note: 'Én mappe om gangen, som er den eneste måten å gjøre det på uten administratortilgang. En hel disk kan ta et minutt og fullfører kanskje ikke.',
@@ -17887,7 +17887,7 @@ export const CATALOG = {
       },
       driveRootPrompt: {
         heading: 'Les hele disken',
-        fastTitle: "Hurtigskann",
+        fastTitle: "Hurtigskanning",
         recommended: "Anbefalt",
         fastExplain: (path) => `Leser diskens eget filregister: hver fil på ${path} på noen sekunder.`,
         fastNeeds: "Krever administratorgodkjenning, så Windows viser en UAC-forespørsel.",
@@ -17920,11 +17920,11 @@ export const CATALOG = {
       scanFailure: (path, error) => `Kunne ikke skanne «${path}»: ${error}`,
       fastScanDeclined: 'Ikke godkjent — bruker fortsatt skanning mappe for mappe.',
       truncated: {
-        withCoverage: (measured, used, percent) => `Dette skannet gikk tom for tid: det målte ${measured} av de ${used} i bruk (${percent} %). Det som ble målt, er reelt; resten vises som uskannet, ikke som tomt.`,
-        withoutCoverage: 'Dette skannet gikk tom for tid før det fullførte disken. Alt det faktisk målte, er reelt, men mapper det aldri nådde, vises som uskannet i stedet for tomt — ikke les dette som et fullstendig bilde av hva som bruker plassen din.',
+        withCoverage: (measured, used, percent) => `Denne skanningen gikk tom for tid: den målte ${measured} av de ${used} i bruk (${percent} %). Det som ble målt, er reelt; resten vises som uskannet, ikke som tomt.`,
+        withoutCoverage: "Denne skanningen gikk tom for tid før den fullførte disken. Alt den faktisk målte, er reelt, men mapper den aldri nådde, vises som uskannet i stedet for tomt — ikke les dette som et fullstendig bilde av hva som bruker plassen din.",
         stoppedWithCoverage: (a, b, c) => `Du stoppet denne skanningen: den målte ${a} av de ${b} som er i bruk (${c} %). Det som ble målt, er reelt; resten vises som uskannet, ikke som tomt.`,
         stoppedWithoutCoverage: "Du stoppet denne skanningen tidlig. Det som ble målt, er reelt; mapper den aldri nådde, vises som uskannet, ikke som tomt — dette er ikke et fullstendig bilde av hva som bruker plassen din.",
-        rescanLink: 'Kjør et hurtigskann i stedet'
+        rescanLink: "Kjør en hurtigskanning i stedet"
       },
       view: { tree: 'Tre', files: 'Filer' },
       folderTable: {
@@ -18025,16 +18025,16 @@ export const CATALOG = {
         total: 'totalt'
       },
       batchReasons: {
-        orphaned: 'Avinstalleringsprogrammet er ødelagt — bruk Tving fjerning i stedet.',
+        orphaned: "Avinstallasjonsprogrammet er ødelagt — bruk Tving fjerning i stedet.",
         extension: 'Nettleserutvidelser fjernes fra selve nettleseren.',
         storeNoPackage: 'Denne Store-appen har ikke noe pakkenavn å fjerne.',
         storeProtected: 'Windows merker denne appen som en del av systemet og tillater ikke at den fjernes.',
         storeUnknown: 'Windows har ikke oppgitt om denne appen kan fjernes, så den er utelatt fra puljen.',
-        noCommand: 'Ingen avinstalleringskommando er registrert for dette programmet.'
+        noCommand: "Ingen avinstallasjonskommando er registrert for dette programmet."
       },
       storeRemoveDialog: {
         heading: (name) => `Fjerne ${name}?`,
-        body: 'Dette fjerner appen for kontoen din, sammen med innstillingene og lagrede data. I motsetning til alt annet Prune fjerner, går denne ikke til Karantene og kan ikke gjenopprettes herfra — å få den tilbake betyr å installere den på nytt fra Microsoft Store.',
+        body: "Dette fjerner programmet for kontoen din, sammen med innstillingene og lagrede data. I motsetning til alt annet Prune fjerner, går dette ikke til Karantene og kan ikke gjenopprettes herfra — å få det tilbake betyr å installere det på nytt fra Microsoft Store.",
         cancel: 'Avbryt',
         close: 'Lukk',
         removeApp: 'Fjern app',
@@ -18058,7 +18058,7 @@ export const CATALOG = {
       emptying: 'Tømmer…',
       empty: {
         heading: 'Ingenting i karantene.',
-        body: 'Alt en avinstallering eller en Dyprens fjerner, havner her først. Det blir liggende til du tømmer det, så en fil tatt ved en feil kan alltid gjenopprettes.'
+        body: "Alt en avinstallering eller en Grundig opprydding fjerner, havner her først. Det blir liggende til du tømmer det, så en fil tatt ved en feil kan alltid gjenopprettes."
       },
       deleteConfirmPrompt: 'Slette for godt?',
       restore: 'Gjenopprett',
@@ -18150,7 +18150,7 @@ export const CATALOG = {
       modal: {
         label: 'Flytt duplikater til karantene',
         heading: (count) => `Flytte ${count} ${count === 1 ? 'kopi' : 'kopier'} til Karantene?`,
-        body: (a) => `Flyttingen frigjør ${a} når du har tømt Karantene. Hvert sett beholder minst én kopi, og ingenting slettes — gjenopprett hvilken som helst fra skjermbildet Karantene.`,
+        body: (a) => `Flyttingen frigjør ${a} når du har tømt Karantene. Hvert sett beholder minst én kopi, og ingenting slettes — gjenopprett hvilken som helst fra Karantene-skjermen.`,
         cancel: 'Avbryt',
         confirmButton: 'Flytt til karantene'
       },
@@ -18162,7 +18162,7 @@ export const CATALOG = {
       }
     },
     deepClean: {
-      title: 'Dyprens',
+      title: "Grundig opprydding",
       subtitle: 'Hver hurtigbuffer, logg, dump og rest Prune vet hvordan man finner, målt på denne maskinen i stedet for anslått. Ingenting slettes umiddelbart — alt Rens tar går først til Karantene, hvor du kan legge det tilbake.',
       scanLog: {
         header: 'Skanningsutdata',
@@ -18267,7 +18267,7 @@ export const CATALOG = {
       titleForce: (name) => `Tving fjerning av ${name}`,
       titleNormal: (name) => `Avinstaller ${name}`,
       close: 'Lukk',
-      stillWaiting: `Venter fortsatt på avinstalleringsprogrammet. Du kan lukke dette vinduet; programmet kjører videre, og Prune søker ikke etter rester.`,
+      stillWaiting: "Venter fortsatt på avinstallasjonsprogrammet. Du kan lukke dette vinduet; programmet kjører videre, og Prune søker ikke etter rester.",
       runningWarning: (name) => `${name} kjører akkurat nå. Lukk det først — et avinstallasjonsprogram mislykkes vanligvis på et åpent program, og kan etterlate filer som neste oppstart gjenskaper.`,
       orphanedWarning: (reason) => `${reason} Windows vil fortsette å vise det til oppføringen fjernes.`,
       brokenIntro: 'Prune vil søke etter filer og registernøkler som matcher dette navnet, inkludert dets oppføring i Legg til/fjern programmer, og vise deg alt før noe fjernes.',
@@ -18305,7 +18305,7 @@ export const CATALOG = {
         registryKey: (n) => `${n} registernøk${n === 1 ? 'kel' : 'ler'}`,
         recycle: (files, keys, freed) => `Sendte ${files} til papirkurven og fjernet ${keys}, sikkerhetskopiert i karantene først. Frigjorde ${freed}.`,
         permanent: (files, keys, freed) => `Slettet ${files} permanent og fjernet ${keys}, sikkerhetskopiert i karantene først. Frigjorde ${freed}.`,
-        quarantine: (files, keys, freed) => `Flyttet ${files} og ${keys} til karantene, og frigjorde ${freed}. Gjenopprett dem når som helst fra karanteneskjermen.`
+        quarantine: (files, keys, freed) => `Flyttet ${files} og ${keys} til karantene, og frigjorde ${freed}. Gjenopprett dem når som helst fra Karantene-skjermen.`
       },
       failedFilesHeading: (n) => `${n} element${n === 1 ? '' : 'er'} kunne ikke fjernes:`,
       failedRegistryKeysHeading: (n) => `${n} registernøk${n === 1 ? 'kel' : 'ler'} kunne ikke fjernes`,
@@ -18319,17 +18319,15 @@ export const CATALOG = {
       historyLabel: (n) => `Gruppeavinstallering: ${n} programmer`,
       close: 'Lukk',
       cancel: "Avbryt",
-      stillWaiting: (more) => more ? `Venter fortsatt på dette avinstalleringsprogrammet. Vinduet kan ligge bak Prune. Velg «Stopp etter denne» for å hoppe over resten når det er ferdig.` : `Venter fortsatt på dette avinstalleringsprogrammet. Vinduet kan ligge bak Prune.`,
+      stillWaiting: (more) => more ? `Venter fortsatt på dette avinstallasjonsprogrammet. Vinduet kan ligge bak Prune. Velg «Stopp etter denne» for å hoppe over resten når det er ferdig.` : `Venter fortsatt på dette avinstallasjonsprogrammet. Vinduet kan ligge bak Prune.`,
       stopAfterThis: "Stopp etter denne",
       stopping: "Stopper etter denne…",
       statusSkipped: "hoppet over",
       stoppedNote: (n) => `Stoppet tidlig. Ikke startet: ${n}.`,
-      registryOnlyIntro: 'Hver app fjernes gjennom Windows etter tur, og det er ingen restskanning etterpå: Windows fjerner appens egne data sammen med den.',
-      mixedIntro: (hasStore) => `Hvert programs eget avinstallasjonsprogram kjører etter tur, deretter skanner Prune etter hva de etterlater og viser deg alt før noe av det fjernes.${hasStore ? ' Store-apper fjernes i stedet gjennom Windows, uten restskanning etterpå.' : ''}`,
+      registryOnlyIntro: "Hvert program fjernes gjennom Windows etter tur, og det er ingen restskanning etterpå: Windows fjerner programmets egne data sammen med det.",
+      mixedIntro: (hasStore) => `Hvert programs eget avinstallasjonsprogram kjører etter tur, deretter skanner Prune etter hva de etterlater og viser deg alt før noe av det fjernes.${hasStore ? ' Store-programmer fjernes i stedet gjennom Windows, uten restskanning etterpå.' : ''}`,
       oneAtATime: 'Én om gangen, fordi Windows kun tillater én installasjon eller avinstallasjon om gangen. Noen avinstallasjonsprogrammer vil vise egne vinduer og stille deg spørsmål.',
-      storeWarning: (count) => count === 1
-        ? 'Store-appen i denne batchen kan ikke gjenopprettes fra karantene: å fjerne den tar med seg appen og dens lagrede data, og å få den tilbake betyr å installere den på nytt fra Store.'
-        : `De ${count} Store-appene i denne batchen kan ikke gjenopprettes fra karantene: å fjerne én tar med seg appen og dens lagrede data, og å få den tilbake betyr å installere den på nytt fra Store.`,
+      storeWarning: (count) => count === 1 ? 'Store-programmet i denne batchen kan ikke gjenopprettes fra karantene: å fjerne det tar med seg programmet og dets lagrede data, og å få det tilbake betyr å installere det på nytt fra Store.' : `De ${count} Store-programmene i denne batchen kan ikke gjenopprettes fra karantene: å fjerne ett tar med seg programmet og dets lagrede data, og å få det tilbake betyr å installere det på nytt fra Store.`,
       runsBefore: (name) => `kjører før ${name}`,
       reported: (bytes) => `${bytes} rapportert`,
       unknownSizeSuffix: (n) => `, ${n} av ukjent størrelse`,
@@ -18349,14 +18347,14 @@ export const CATALOG = {
       failedHeading: (n) => `${n} kunne ikke avinstalleres og ble latt være:`,
       removeLeftoversFailed: (error) => `Kunne ikke fjerne rester: ${error}`,
       noScanSettingsOff: 'Restskanningen er slått av i Innstillinger, så ingenting ble søkt etter.',
-      noScanStore: 'Det er ingen restskanning etter en Store-app: Windows fjerner appens egne data sammen med den.',
+      noScanStore: "Det er ingen restskanning etter et Store-program: Windows fjerner programmets egne data sammen med det.",
       done: 'Ferdig',
       summary: {
         recycle: (programs, items, freed) => `Avinstallerte ${programs} og sendte ${items} til papirkurven, og frigjorde ${freed}.`,
         permanent: (programs, items, freed) => `Avinstallerte ${programs} og slettet ${items} permanent, og frigjorde ${freed}.`,
         quarantine: (programs, items, freed) => `Avinstallerte ${programs} og flyttet ${items} til karantene, og frigjorde ${freed}.`,
         programs: (n) => `${n} program${n === 1 ? '' : 'mer'}`,
-        items: (n) => `${n} gjenværende element${n === 1 ? '' : 'er'}`
+        items: (n) => `${n} rest${n === 1 ? '' : 'er'}`
       },
       noRestorePoint: (reason) => `Ingen systemgjenopprettingspunkt ble opprettet (${reason}).`,
       restorePointFallback: 'ikke tilgjengelig',
@@ -18475,7 +18473,7 @@ export const CATALOG = {
       },
       autoQuarantine: {
         title: 'Automatische quarantaine',
-        description: 'Diepschoonmaak verplaatst wat het verwijdert naar Prune\'s Quarantaine, van waaruit je het kunt terugzetten. Zet dit uit en het gaat in plaats daarvan naar de Windows Prullenbak — nog steeds herstelbaar, alleen op een plek waarvan je al weet hoe je die leegmaakt.'
+        description: "Grondige opschoning verplaatst wat ze verwijdert naar Prune's Quarantaine, van waaruit je het kunt terugzetten. Zet dit uit en het gaat in plaats daarvan naar de Windows Prullenbak — nog steeds herstelbaar, alleen op een plek waarvan je al weet hoe je die leegmaakt."
       },
       skipRecent: {
         title: 'Recente bestanden met rust laten',
@@ -18488,7 +18486,7 @@ export const CATALOG = {
         description: 'Vóór een geforceerde verwijdering, zodat Windows zelf de computer kan terugdraaien. Kost een paar seconden en doet helemaal niets als Systeembeveiliging is uitgeschakeld.'
       },
       hideUnavailable: {
-        title: 'Niet-toepasselijke schoonmakers verbergen',
+        title: "Niet-toepasselijke opschoners verbergen",
         description: 'Het grootste deel van de lijst is voor software die deze computer niet heeft. Ze verbergen laat alleen over wat hier daadwerkelijk is.'
       },
       quarantineRetention: {
@@ -18507,7 +18505,7 @@ export const CATALOG = {
       },
       exclusions: {
         title: 'Mappen uitsluiten',
-        description: 'Mappen en bestandstypen die Prune met rust laat — overgeslagen door Diepschoonmaak en uitgesloten van de Schijfkaart — bovenop degene die het al beschermt: Systeemvolume-informatie, antivirusquarantaines, de onderdelenopslag en een tiental andere.',
+        description: "Mappen en bestandstypen die Prune met rust laat — overgeslagen door Grondige opschoning en uitgesloten van de Schijfkaart — bovenop degene die het al beschermt: Systeemvolume-informatie, antivirusquarantaines, de onderdelenopslag en een tiental andere.",
         ariaLabel: 'Uit te sluiten mappad of bestandstype',
         add: 'Toevoegen',
         invalidFormat: 'Schrijf een volledig mappad (D:\\Games) of een bestandstype (*.iso).',
@@ -18521,7 +18519,7 @@ export const CATALOG = {
         title: 'Cookies om te bewaren',
         description: 'Al het andere in het cookiebestand van een browser is verdwenen zodra je opschoont. Scan om te zien wat er echt is, en vink aan wat de moeite waard is om te bewaren.',
         scanButton: 'Scannen naar cookies',
-        scanning: 'Bezig…',
+        scanning: "Bezig met scannen…",
         filterPlaceholder: 'Domeinen filteren…',
         countSuffix: (count) => `${count} cookie${count === 1 ? '' : 's'}`,
         none: 'Geen cookies gevonden.',
@@ -18540,7 +18538,7 @@ export const CATALOG = {
       },
       warningConfirmations: {
         title: 'Waarschuwingsbevestigingen',
-        allAsk: 'Elke schoonmaker die gegevens verliest vraagt om bevestiging voordat hij wordt uitgevoerd.',
+        allAsk: "Elke opschoner die gegevens verliest vraagt om bevestiging voordat hij wordt uitgevoerd.",
         someSet: (count) => `${count} opschoonwaarschuwing${count === 1 ? '' : 'en'} ingesteld om niet opnieuw te vragen.`,
         reset: 'Waarschuwingsbevestigingen resetten'
       },
@@ -18571,20 +18569,20 @@ export const CATALOG = {
           title: 'Een verwijderingsgeschiedenis bijhouden',
           description: "De lijst van het dashboard met recente verwijderingen en de ruimte die ze hebben vrijgemaakt. Uit, wordt er niets nieuws vastgelegd."
         },
-        destinationHeading: 'Overgebleven bestanden gaan naar',
+        destinationHeading: "Restanten gaan naar",
         leftoverOptions: {
           quarantine: { label: 'Quarantaine', description: "Verplaatst naar Prune's eigen back-up, en herstelbaar vanaf het Quarantaine-scherm. De standaard." },
           recycle: { label: 'De Prullenbak', description: "Herstelbaar vanuit Windows' eigen prullenbak, en vrijgemaakt wanneer je deze leegmaakt." },
           permanent: { label: 'Permanent verwijderen', description: 'Volledig verwijderd. Niets te herstellen.' }
         },
-        permanentWarning: 'Overgebleven bestanden worden volledig verwijderd en kunnen niet worden hersteld, noch vanuit Quarantaine, noch ergens anders vandaan. Controleer de lijst voordat je deze bevestigt.',
+        permanentWarning: "Restanten worden volledig verwijderd en kunnen niet worden hersteld, noch vanuit Quarantaine, noch ergens anders vandaan. Controleer de lijst voordat je deze bevestigt.",
         registryNote: 'Registersleutels worden geëxporteerd naar Quarantaine voordat ze worden verwijderd, wat je ook kiest.'
       },
       about: {
         reportTitle: 'Een bug melden',
         reportDescription: "Opent een vooraf ingevuld issue op GitHub. Prune verstuurt zelf niets en je ziet alles voordat het ergens heen gaat.",
         reportButton: 'Een bug melden',
-        description: 'Een lokale, offline verwijder- en opschoontool voor Windows — geforceerde verwijdering met scannen op restbestanden, veilige quarantaine voor verwijdering, schijfmapping en opschonen van rommel met één klik.'
+        description: "Een lokale, offline verwijder- en opschoontool voor Windows — geforceerde verwijdering met scannen op restanten, veilige quarantaine voor verwijdering, Schijfkaart en opschonen van rommel met één klik."
       },
       automation: {
         title: 'Automatisering',
@@ -18599,7 +18597,7 @@ export const CATALOG = {
         everyWeek: 'Elke week',
         measureOnly: 'Alleen meten',
         clean: 'Opschonen',
-        cleanWarning: 'Dit verwijdert bestanden zonder dat iemand toekijkt. Het schoont de regels op die Diepschoonmaak aanbeveelt en die daadwerkelijk iets bevatten, en alles gaat nog steeds naar quarantaine — controleer dus de bewaarinstelling hierboven voordat je dit aan laat staan.',
+        cleanWarning: "Dit verwijdert bestanden zonder dat iemand toekijkt. Het schoont de regels op die Grondige opschoning aanbeveelt en die daadwerkelijk iets bevatten, en alles gaat nog steeds naar quarantaine — controleer dus de bewaarinstelling hierboven voordat je dit aan laat staan.",
         nextRun: 'Volgende uitvoering:',
         lastRun: 'Laatste uitvoering:',
         weekdays: {
@@ -18721,7 +18719,7 @@ export const CATALOG = {
       fastScanDeclined: 'Niet goedgekeurd — gebruikt nog steeds de map-voor-map-scan.',
       truncated: {
         withCoverage: (measured, used, percent) => `Deze scan heeft geen tijd meer: er is ${measured} gemeten van de ${used} in gebruik (${percent}%). Wat is gemeten, is echt; de rest wordt getoond als niet-gescand, niet als leeg.`,
-        withoutCoverage: 'Deze scan heeft geen tijd meer voordat de schijf werd voltooid. Alles wat daadwerkelijk is gemeten, is echt, maar mappen die nooit zijn bereikt, worden getoond als niet-gescand in plaats van leeg — lees dit niet als een volledig beeld van wat uw ruimte gebruikt.',
+        withoutCoverage: "Deze scan heeft geen tijd meer voordat de schijf werd voltooid. Alles wat daadwerkelijk is gemeten, is echt, maar mappen die nooit zijn bereikt, worden getoond als niet-gescand in plaats van leeg — lees dit niet als een volledig beeld van wat je ruimte gebruikt.",
         stoppedWithCoverage: (a, b, c) => `Je hebt deze scan gestopt: er is ${a} gemeten van de ${b} in gebruik (${c}%). Wat is gemeten, is echt; de rest wordt getoond als niet-gescand, niet als leeg.`,
         stoppedWithoutCoverage: "Je hebt deze scan voortijdig gestopt. Wat is gemeten, is echt; mappen die niet zijn bereikt, worden getoond als niet-gescand, niet als leeg — dit is geen volledig beeld van wat je ruimte gebruikt.",
         rescanLink: 'Voer in plaats daarvan een snelle scan uit'
@@ -18825,7 +18823,7 @@ export const CATALOG = {
         total: 'totaal'
       },
       batchReasons: {
-        orphaned: 'De verwijderingstoepassing is kapot — gebruik in plaats daarvan Verwijderen forceren.',
+        orphaned: "Het verwijderprogramma is kapot — gebruik in plaats daarvan Verwijderen forceren.",
         extension: 'Browserextensies worden vanuit de browser zelf verwijderd.',
         storeNoPackage: 'Deze Store-app heeft geen pakketnaam om te verwijderen.',
         storeProtected: 'Windows markeert deze app als onderdeel van het systeem en staat niet toe dat deze wordt verwijderd.',
@@ -18834,7 +18832,7 @@ export const CATALOG = {
       },
       storeRemoveDialog: {
         heading: (name) => `${name} verwijderen?`,
-        body: 'Dit verwijdert de app voor je account, samen met de instellingen en opgeslagen gegevens. In tegenstelling tot al het andere dat Prune verwijdert, gaat deze niet naar Quarantaine en kan hij van hieruit niet worden hersteld — hem terugkrijgen betekent hem opnieuw installeren vanuit de Microsoft Store.',
+        body: "Dit verwijdert de toepassing voor je account, samen met de instellingen en opgeslagen gegevens. In tegenstelling tot al het andere dat Prune verwijdert, gaat deze niet naar Quarantaine en kan hij van hieruit niet worden hersteld — hem terugkrijgen betekent hem opnieuw installeren vanuit de Microsoft Store.",
         cancel: 'Annuleren',
         close: 'Sluiten',
         removeApp: 'App verwijderen',
@@ -18858,7 +18856,7 @@ export const CATALOG = {
       emptying: 'Leegmaken…',
       empty: {
         heading: 'Niets in quarantaine.',
-        body: 'Alles wat een verwijdering of een Diepe schoonmaak verwijdert, komt eerst hier terecht. Het blijft totdat je het leegmaakt, zodat een per ongeluk verwijderd bestand altijd herstelbaar is.'
+        body: "Alles wat een verwijdering of een Grondige opschoning verwijdert, komt eerst hier terecht. Het blijft totdat je het leegmaakt, zodat een per ongeluk verwijderd bestand altijd herstelbaar is."
       },
       deleteConfirmPrompt: 'Voor altijd verwijderen?',
       restore: 'Herstellen',
@@ -18962,8 +18960,8 @@ export const CATALOG = {
       }
     },
     deepClean: {
-      title: 'Diepe schoonmaak',
-      subtitle: 'Elke cache, log, dump en overblijfsel die Prune weet te vinden, gemeten op deze machine in plaats van geschat. Niets wordt direct verwijderd — alles wat Opschonen meeneemt gaat eerst naar Quarantaine, waar je het kunt terugzetten.',
+      title: "Grondige opschoning",
+      subtitle: "Elke cache, log, dump en elk restant dat Prune weet te vinden, gemeten op deze machine in plaats van geschat. Niets wordt direct verwijderd — alles wat Opschonen meeneemt gaat eerst naar Quarantaine, waar je het kunt terugzetten.",
       scanLog: {
         header: 'Scanuitvoer',
         scanningAnnounce: (total) => `${total} locaties worden gescand.`,
@@ -19067,7 +19065,7 @@ export const CATALOG = {
       titleForce: (name) => `${name} geforceerd verwijderen`,
       titleNormal: (name) => `${name} verwijderen`,
       close: 'Sluiten',
-      stillWaiting: `Wacht nog op het verwijderprogramma. Je kunt dit venster sluiten; het programma blijft draaien en Prune zoekt niet naar resten.`,
+      stillWaiting: "Wacht nog op het verwijderprogramma. Je kunt dit venster sluiten; het programma blijft draaien en Prune zoekt niet naar restanten.",
       runningWarning: (name) => `${name} draait op dit moment. Sluit het eerst af — een verwijderprogramma mislukt meestal bij een geopend programma en kan bestanden achterlaten die bij de volgende start opnieuw worden aangemaakt.`,
       orphanedWarning: (reason) => `${reason} Windows blijft het vermelden totdat het item is verwijderd.`,
       brokenIntro: 'Prune zoekt naar bestanden en registersleutels die overeenkomen met deze naam, inclusief het item in Programma\'s en onderdelen, en laat je alles zien voordat er iets wordt verwijderd.',
@@ -19124,12 +19122,10 @@ export const CATALOG = {
       stopping: "Stoppen na deze…",
       statusSkipped: "overgeslagen",
       stoppedNote: (n) => `Vroegtijdig gestopt. Niet gestart: ${n}.`,
-      registryOnlyIntro: 'Elke app wordt om de beurt via Windows verwijderd, en daarna is er geen restantenscan: Windows verwijdert de eigen gegevens van de app samen met de app.',
-      mixedIntro: (hasStore) => `Het eigen verwijderprogramma van elk programma wordt om de beurt uitgevoerd, waarna Prune scant op wat ze achterlaten en je alles laat zien voordat er iets van wordt verwijderd.${hasStore ? ' Store-apps worden in plaats daarvan via Windows verwijderd, zonder restantenscan achteraf.' : ''}`,
+      registryOnlyIntro: "Elke toepassing wordt om de beurt via Windows verwijderd, en daarna is er geen restantenscan: Windows verwijdert de eigen gegevens van de toepassing samen met de toepassing.",
+      mixedIntro: (hasStore) => `Het eigen verwijderprogramma van elk programma wordt om de beurt uitgevoerd, waarna Prune scant op wat ze achterlaten en je alles laat zien voordat er iets van wordt verwijderd.${hasStore ? ' Store-toepassingen worden in plaats daarvan via Windows verwijderd, zonder restantenscan achteraf.' : ''}`,
       oneAtATime: 'Eén voor één, omdat Windows slechts één installatie of verwijdering tegelijk toestaat. Sommige verwijderprogramma\'s tonen hun eigen vensters en stellen je vragen.',
-      storeWarning: (count) => count === 1
-        ? 'De Store-app in deze batch kan niet worden hersteld vanuit Quarantaine: het verwijderen ervan neemt de app en de opgeslagen gegevens mee, en het terugkrijgen ervan betekent opnieuw installeren vanuit de Store.'
-        : `De ${count} Store-apps in deze batch kunnen niet worden hersteld vanuit Quarantaine: het verwijderen van één neemt de app en de opgeslagen gegevens mee, en het terugkrijgen ervan betekent opnieuw installeren vanuit de Store.`,
+      storeWarning: (count) => count === 1 ? 'De Store-toepassing in deze batch kan niet worden hersteld vanuit Quarantaine: het verwijderen ervan neemt de toepassing en de opgeslagen gegevens mee, en het terugkrijgen ervan betekent opnieuw installeren vanuit de Store.' : `De ${count} Store-toepassingen in deze batch kunnen niet worden hersteld vanuit Quarantaine: het verwijderen van één neemt de toepassing en de opgeslagen gegevens mee, en het terugkrijgen ervan betekent opnieuw installeren vanuit de Store.`,
       runsBefore: (name) => `wordt uitgevoerd voor ${name}`,
       reported: (bytes) => `${bytes} gemeld`,
       unknownSizeSuffix: (n) => `, ${n} van onbekende grootte`,
@@ -19149,14 +19145,14 @@ export const CATALOG = {
       failedHeading: (n) => `${n} kon${n === 1 ? '' : 'den'} niet worden verwijderd en ${n === 1 ? 'is' : 'zijn'} met rust gelaten:`,
       removeLeftoversFailed: (error) => `Kon restanten niet verwijderen: ${error}`,
       noScanSettingsOff: 'De restantenscan staat uit in Instellingen, dus er is niets gezocht.',
-      noScanStore: 'Er is geen restantenscan na een Store-app: Windows verwijdert de eigen gegevens van de app samen met de app.',
+      noScanStore: "Er is geen restantenscan na een Store-toepassing: Windows verwijdert de eigen gegevens van de toepassing samen met de toepassing.",
       done: 'Klaar',
       summary: {
         recycle: (programs, items, freed) => `${programs} verwijderd en ${items} naar de Prullenbak gestuurd, waarbij ${freed} is vrijgemaakt.`,
         permanent: (programs, items, freed) => `${programs} verwijderd en ${items} definitief verwijderd, waarbij ${freed} is vrijgemaakt.`,
         quarantine: (programs, items, freed) => `${programs} verwijderd en ${items} verplaatst naar Quarantaine, waarbij ${freed} is vrijgemaakt.`,
         programs: (n) => `${n} programma${n === 1 ? '' : '\'s'}`,
-        items: (n) => `${n} overgebleven item${n === 1 ? '' : 's'}`
+        items: (n) => `${n} restant${n === 1 ? '' : 'en'}`
       },
       noRestorePoint: (reason) => `Er is geen systeemherstelpunt gemaakt (${reason}).`,
       restorePointFallback: 'niet beschikbaar',
@@ -19235,7 +19231,7 @@ export const CATALOG = {
       reportBug: 'Zgłoś błąd',
       dashboard: 'Panel', diskMap: 'Mapa dysku', applications: 'Aplikacje',
       quarantine: 'Kwarantanna', settings: 'Ustawienia', startup: 'Autostart',
-      duplicates: 'Duplikaty', deepClean: 'Dokładne czyszczenie',
+      duplicates: 'Duplikaty', deepClean: "Głębokie czyszczenie",
       landmark: 'Główna'
     },
     settings: {
@@ -19270,7 +19266,7 @@ export const CATALOG = {
         openPageError: (error) => `Nie udało się otworzyć strony: ${error}`
       },
       showFreeSpace: {
-        title: 'Pokaż wolne miejsce na Mapie Dysku',
+        title: "Pokaż wolne miejsce na Mapie dysku",
         description: 'Rysuje wolne miejsce dysku jako jeszcze jeden blok podczas skanowania całego dysku, dzięki czemu każdy folder jest odczytywany jako udział dysku, a nie zajętego miejsca.'
       },
       autoQuarantine: {
@@ -19288,7 +19284,7 @@ export const CATALOG = {
         description: 'Przed wymuszonym usunięciem, aby sam system Windows mógł cofnąć zmiany na komputerze. Kosztuje kilka sekund i nic nie robi, jeśli Ochrona systemu jest wyłączona.'
       },
       hideUnavailable: {
-        title: 'Ukryj czyszczące, które nie mają zastosowania',
+        title: "Ukryj moduły czyszczenia, które nie mają zastosowania",
         description: 'Większość listy dotyczy oprogramowania, którego nie ma na tym komputerze. Ukrycie ich pozostawia tylko to, co rzeczywiście tu jest.'
       },
       quarantineRetention: {
@@ -19307,7 +19303,7 @@ export const CATALOG = {
       },
       exclusions: {
         title: 'Wyklucz foldery',
-        description: 'Foldery i typy plików, które Prune zostawi w spokoju — pomijane przez Głębokie czyszczenie i wykluczone z Mapy Dysku — oprócz tych, które już chroni: informacje o woluminie systemowym, kwarantanny antywirusowe, magazyn składników i tuzin innych.',
+        description: "Foldery i typy plików, które Prune zostawi w spokoju — pomijane przez Głębokie czyszczenie i wykluczone z Mapy dysku — oprócz tych, które już chroni: informacje o woluminie systemowym, kwarantanny antywirusowe, magazyn składników i tuzin innych.",
         ariaLabel: 'Ścieżka folderu lub typ pliku do wykluczenia',
         add: 'Dodaj',
         invalidFormat: 'Wpisz pełną ścieżkę folderu (D:\\Games) lub typ pliku (*.iso).',
@@ -19321,12 +19317,12 @@ export const CATALOG = {
         title: 'Ciasteczka do zachowania',
         description: 'Wszystko inne w pliku ciasteczek przeglądarki znika w chwili czyszczenia. Przeskanuj, aby zobaczyć, co naprawdę tam jest, i zaznacz to, co warto zachować.',
         scanButton: 'Skanuj w poszukiwaniu ciasteczek',
-        scanning: 'Trwa…',
+        scanning: "Skanowanie…",
         filterPlaceholder: 'Filtruj domeny…',
         countSuffix: (count) => `${count} ciasteczek`,
         none: 'Nie znaleziono ciasteczek.',
         staleBadge: 'niewidoczne podczas tego skanowania',
-        scanErrorPrefix: (message) => `Nie udało się wyszukać ciasteczek: ${message}`,
+        scanErrorPrefix: (message) => `Nie udało się przeskanować ciasteczek: ${message}`,
         fileErrorsNote: (count) => `Nie udało się odczytać ${count} plików, więc zostały pominięte.`,
         checkboxAriaLabel: (domain) => `Zachowaj ciasteczka z ${domain}`
       },
@@ -19340,8 +19336,8 @@ export const CATALOG = {
       },
       warningConfirmations: {
         title: 'Potwierdzenia ostrzeżeń',
-        allAsk: 'Każdy program czyszczący, który utraci dane, pyta przed uruchomieniem.',
-        someSet: (count) => `${count} ostrzeżeń o czyszczeniu ustawiono, aby nie pytać ponownie.`,
+        allAsk: "Każdy moduł czyszczenia, który utraci dane, pyta przed uruchomieniem.",
+        someSet: (count) => `Liczba ostrzeżeń modułów czyszczenia ustawionych, aby nie pytać ponownie: ${count}.`,
         reset: 'Zresetuj potwierdzenia ostrzeżeń'
       },
       uninstallTab: {
@@ -19371,20 +19367,20 @@ export const CATALOG = {
           title: 'Prowadź historię odinstalowań',
           description: 'Lista pulpitu nawigacyjnego niedawnych usunięć i miejsca, które uwolniły. Wyłączone, nic nowego nie jest rejestrowane.'
         },
-        destinationHeading: 'Pozostałe pliki trafiają do',
+        destinationHeading: "Pozostałości trafiają do",
         leftoverOptions: {
           quarantine: { label: 'Kwarantanna', description: 'Przeniesione do własnej kopii zapasowej Prune i możliwe do przywrócenia z ekranu Kwarantanny. Domyślne.' },
           recycle: { label: 'Kosz', description: 'Możliwe do przywrócenia z własnego kosza Windows i zwalniane po jego opróżnieniu.' },
           permanent: { label: 'Usuń trwale', description: 'Usunięte całkowicie. Nic do przywrócenia.' }
         },
-        permanentWarning: 'Pozostałe pliki zostaną usunięte całkowicie i nie można ich przywrócić ani z kwarantanny, ani z żadnego innego miejsca. Sprawdź listę przed jej potwierdzeniem.',
+        permanentWarning: "Pozostałości zostaną usunięte całkowicie i nie można ich przywrócić ani z kwarantanny, ani z żadnego innego miejsca. Sprawdź listę przed jej potwierdzeniem.",
         registryNote: 'Klucze rejestru są eksportowane do kwarantanny przed ich usunięciem, niezależnie od wyboru.'
       },
       about: {
         reportTitle: 'Zgłoś błąd',
         reportDescription: "Otwiera w serwisie GitHub gotowe, wypełnione zgłoszenie. Prune sam niczego nie wysyła, a wszystko zobaczysz, zanim gdziekolwiek trafi.",
         reportButton: 'Zgłoś błąd',
-        description: 'Lokalne, działające offline narzędzie do odinstalowywania i czyszczenia dla Windows — wymuszone usuwanie ze skanowaniem pozostałości plików, bezpieczna kwarantanna przed usunięciem, mapowanie dysku i czyszczenie śmieci jednym kliknięciem.'
+        description: "Lokalne, działające offline narzędzie do odinstalowywania i czyszczenia dla Windows — wymuszone usuwanie ze skanowaniem pozostałości, bezpieczna kwarantanna przed usunięciem, mapa dysku i czyszczenie śmieci jednym kliknięciem."
       },
       automation: {
         title: 'Automatyzacja',
@@ -19451,7 +19447,7 @@ export const CATALOG = {
       },
       apps: {
         label: "Zainstalowane aplikacje",
-        broken: (count) => `${count} pozostawionych po nieudanej dezinstalacji`,
+        broken: (count) => `${count} pozostawionych po nieudanym odinstalowaniu`,
         noBroken: 'Brak uszkodzonych wpisów.',
         review: 'Przejrzyj',
         manage: 'Zarządzaj'
@@ -19459,12 +19455,12 @@ export const CATALOG = {
       junk: {
         label: "Zbędne pliki",
         notMeasured: 'niezmierzone',
-        description: 'Pomiar przechodzi przez każdą ścieżkę czyszczenia na dysku — około pół minuty.',
+        description: "Pomiar przechodzi przez ścieżki wszystkich modułów czyszczenia na dysku — około pół minuty.",
         measure: 'Zmierz'
       },
       recentActivity: {
         title: "Ostatnia aktywność",
-        empty: 'Jeszcze żadnych dezinstalacji.',
+        empty: "Jeszcze żadnych odinstalowań.",
         freed: 'zwolniono'
       }
     },
@@ -19517,11 +19513,11 @@ export const CATALOG = {
         retry: "Spróbuj ponownie",
         barLabel: "Postęp skanowania"
       },
-      scanFailure: (path, error) => `Nie udało się zeskanować „${path}”: ${error}`,
+      scanFailure: (path, error) => `Nie udało się przeskanować „${path}”: ${error}`,
       fastScanDeclined: 'Nie zatwierdzono — nadal używane jest skanowanie folder po folderze.',
       truncated: {
-        withCoverage: (measured, used, percent) => `Temu skanowaniu zabrakło czasu: zmierzyło ${measured} z ${used} wykorzystanych (${percent}%). To, co zmierzyło, jest prawdziwe; reszta jest pokazywana jako niezeskanowana, a nie jako pusta.`,
-        withoutCoverage: 'Temu skanowaniu zabrakło czasu, zanim ukończyło dysk. Wszystko, co faktycznie zmierzyło, jest prawdziwe, ale foldery, do których nigdy nie dotarło, są pokazywane jako niezeskanowane, a nie puste — nie odczytuj tego jako pełnego obrazu tego, co zajmuje twoje miejsce.',
+        withCoverage: (measured, used, percent) => `Temu skanowaniu zabrakło czasu: zmierzyło ${measured} z ${used} wykorzystanych (${percent}%). To, co zmierzyło, jest prawdziwe; reszta jest pokazywana jako nieprzeskanowana, a nie jako pusta.`,
+        withoutCoverage: "Temu skanowaniu zabrakło czasu, zanim ukończyło dysk. Wszystko, co faktycznie zmierzyło, jest prawdziwe, ale foldery, do których nigdy nie dotarło, są pokazywane jako nieprzeskanowane, a nie puste — nie odczytuj tego jako pełnego obrazu tego, co zajmuje twoje miejsce.",
         stoppedWithCoverage: (a, b, c) => `Skanowanie zostało przez Ciebie zatrzymane: zmierzono ${a} z ${b} używanych (${c}%). To, co zmierzono, jest prawdziwe; reszta jest pokazana jako nieprzeskanowana, a nie jako pusta.`,
         stoppedWithoutCoverage: "Skanowanie zostało przez Ciebie zatrzymane. To, co zmierzono, jest prawdziwe; foldery, do których nie dotarło, są pokazane jako nieprzeskanowane, a nie jako puste. To nie jest pełny obraz tego, co zajmuje miejsce.",
         rescanLink: 'Zamiast tego uruchom szybkie skanowanie'
@@ -19530,7 +19526,7 @@ export const CATALOG = {
       folderTable: {
         empty: 'Nic do wyświetlenia w tym folderze.',
         rowLabel: (a, b) => `Otwórz ${a}, ${b}`,
-        notScanned: 'niezeskanowane',
+        notScanned: "nieprzeskanowane",
         columns: { folder: 'Folder', size: 'Rozmiar', items: 'Elementy', files: 'Pliki', folders: 'Foldery', modified: 'Zmodyfikowano' }
       },
       extensionPanel: {
@@ -19625,12 +19621,12 @@ export const CATALOG = {
         total: 'razem'
       },
       batchReasons: {
-        orphaned: 'Jego deinstalator jest uszkodzony — użyj zamiast tego opcji Wymuś usunięcie.',
+        orphaned: "Jego dezinstalator jest uszkodzony — użyj zamiast tego opcji Wymuś usunięcie.",
         extension: 'Rozszerzenia przeglądarki są usuwane z samej przeglądarki.',
         storeNoPackage: 'Ta aplikacja ze sklepu nie ma nazwy pakietu do usunięcia.',
         storeProtected: 'Windows oznacza tę aplikację jako część systemu i nie pozwala jej usunąć.',
         storeUnknown: 'Windows nie określił, czy tę aplikację można usunąć, więc jest ona pomijana w tej partii.',
-        noCommand: 'Dla tego programu nie zarejestrowano żadnego polecenia dezinstalacji.'
+        noCommand: "Dla tego programu nie zarejestrowano żadnego polecenia odinstalowania."
       },
       storeRemoveDialog: {
         heading: (name) => `Usunąć ${name}?`,
@@ -19715,7 +19711,7 @@ export const CATALOG = {
       footerNote: 'Wyłączenie wpisu zapisuje decyzję w StartupApproved, tym samym miejscu, które odczytują i zapisują własne ustawienia aplikacji autostartu Windows oraz Menedżer zadań. Nic nie zostaje usunięte: wartość Run lub skrót pozostaje dokładnie tam, gdzie jest, więc zmianę można cofnąć stąd lub z dowolnego z tych dwóch miejsc.'
     },
     duplicates: {
-      title: 'Zduplikowane pliki',
+      title: "Duplikaty plików",
       subtitle: 'Pliki identyczne bit po bicie, a nie tylko tego samego rozmiaru. Wskaż folder, w którym rzeczywiście przechowujesz rzeczy — odczytanie całego dysku, aby porównać go z samym sobą, trwa znacznie dłużej, niż jest to warte, i znajduje głównie własne kopie plików samego komputera.',
       folderPlaceholder: (a) => `Ścieżka folderu, na przykład ${a}`,
       stoppedNote: "Zatrzymano — nic nie porównano.",
@@ -19726,7 +19722,7 @@ export const CATALOG = {
       reading: (folder) => `Odczytywanie ${folder}`,
       readingNote: 'Najpierw rozmiary, potem 64 KB próbka wszystkiego, co dzieli jeden rozmiar, a potem pełna zawartość tego, co nadal pasuje.',
       empty: {
-        heading: 'Brak zduplikowanych plików tutaj.',
+        heading: "Nie ma tu duplikatów plików.",
         scanned: (count) => `Porównano plików: ${count}.`,
         truncatedSuffix: ' Skanowanie zostało przerwane przedwcześnie, więc to nie jest cały folder.'
       },
@@ -19771,8 +19767,8 @@ export const CATALOG = {
         starting: 'Uruchamianie…',
         idle: "Kliknij Podgląd, aby zmierzyć, co można wyczyścić."
       },
-      emptyState: 'Nic jeszcze nie zeskanowano.',
-      scanErrorPrefix: (error) => `Nie udało się zeskanować: ${error}`,
+      emptyState: "Nic jeszcze nie przeskanowano.",
+      scanErrorPrefix: (error) => `Nie udało się przeskanować: ${error}`,
       cleanErrorPrefix: (error) => `Nie udało się wyczyścić: ${error}`,
       cleanupComplete: 'Czyszczenie zakończone.',
       resultFreed: (formatted) => `Zwolniono ${formatted}`,
@@ -19782,7 +19778,7 @@ export const CATALOG = {
         scanning: 'Skanowanie…',
         preview: 'Podgląd'
       },
-      hiddenNote: (count) => `${count} czyścideł ukrytych, ponieważ oprogramowanie nie jest zainstalowane. Ustawienia › Czyszczenie, aby je pokazać.`,
+      hiddenNote: (count) => `Ukryte moduły czyszczenia: ${count} — oprogramowanie nie jest zainstalowane. Ustawienia › Czyszczenie, aby je pokazać.`,
       footer: {
         totalLabel: 'Łączna ilość miejsca do zwolnienia:',
         notMeasuredYet: 'jeszcze nie zmierzono',
@@ -19956,7 +19952,7 @@ export const CATALOG = {
         permanent: (programs, items, freed) => `Odinstalowano ${programs} i trwale usunięto ${items}, zwalniając ${freed}.`,
         quarantine: (programs, items, freed) => `Odinstalowano ${programs} i przeniesiono ${items} do kwarantanny, zwalniając ${freed}.`,
         programs: (n) => `${n} program${n === 1 ? '' : (n < 5 ? 'y' : 'ów')}`,
-        items: (n) => `${n} pozostał${n === 1 ? 'y element' : 'e elementy'}`
+        items: (n) => `${n} ${n === 1 ? 'pozostałość' : 'pozostałości'}`
       },
       noRestorePoint: (reason) => `Nie utworzono punktu przywracania systemu (${reason}).`,
       restorePointFallback: 'niedostępne',
@@ -20075,7 +20071,7 @@ export const CATALOG = {
       },
       autoQuarantine: {
         title: 'اتومات قرنطین',
-        description: 'ژور پاکونه هغه څه چې لرې کوي د Prune قرنطین ته لیږدوي، چیرې چې تاسو یې بیرته راوستلی شئ. دا بند کړئ او پرځای به Windows ردي بکس ته ولاړ شي — لاهم بیرته راوستل کیدونکی، یوازې یو ځای چې تاسو یې لا مخکې پیژنئ چې څنګه خالي کړئ.'
+        description: "ژور پاکول هغه څه چې لرې کوي د Prune قرنطین ته لیږدوي، چیرې چې تاسو یې بیرته راوستلی شئ. دا بند کړئ او پرځای به Windows ردي بکس ته ولاړ شي — لاهم بیرته راوستل کیدونکی، یوازې یو ځای چې تاسو یې لا مخکې پیژنئ چې څنګه خالي کړئ."
       },
       skipRecent: {
         title: 'وروستي فایلونه پرېږدئ',
@@ -20088,7 +20084,7 @@ export const CATALOG = {
         description: 'د زوري لرې کولو دمخه، ترڅو Windows پخپله ماشین بیرته راولي. یو څو ثانیې لګوي، او که د سیسټم ساتنه بند وي هیڅ نه کوي.'
       },
       hideUnavailable: {
-        title: 'هغه پاکونکي پټ کړئ چې تړاو نه لري',
+        title: "هغه پاکوونکي پټ کړئ چې تړاو نه لري",
         description: 'د لیست ډیره برخه د هغه سافټویر لپاره ده چې دا ماشین یې نه لري. د دوی پټول یوازې هغه څه پرېږدي چې واقعیا دلته دي.'
       },
       quarantineRetention: {
@@ -20107,7 +20103,7 @@ export const CATALOG = {
       },
       exclusions: {
         title: 'فولډرونه استثنا کول',
-        description: 'فولډرونه او د فایل ډولونه چې Prune به یې پرېږدي — د ژور پاکونې لخوا پریښودل شوي او د ډیسک نقشې څخه استثنا شوي — د هغو سربیره چې دمخه یې ساتي: د سیسټم حجم معلومات، انټي ویروس قرنطینونه، د اجزاوو زیرمه، او یوولس نور.',
+        description: "فولډرونه او د فایل ډولونه چې Prune به یې پرېږدي — د ژور پاکولو لخوا پریښودل شوي او د ډیسک نقشې څخه استثنا شوي — د هغو سربیره چې دمخه یې ساتي: د سیسټم حجم معلومات، انټي ویروس قرنطینونه، د اجزاوو زیرمه، او یوولس نور.",
         ariaLabel: 'د استثنا کولو لپاره فولډر پته یا د فایل ډول',
         add: 'اضافه کول',
         invalidFormat: 'یو بشپړ فولډر پته (D:\\Games) یا د فایل ډول (*.iso) ولیکئ.',
@@ -20121,12 +20117,12 @@ export const CATALOG = {
         title: 'د ساتلو لپاره کوکیز',
         description: 'د براوزر په کوکي فایل کې نور هر څه، سملاسي چې تاسو یې پاکوئ، له منځه ځي. سکین وکړئ چې وګورئ څه شی په رښتیا شتون لري، او هر هغه څه چې د ساتلو ارزښت لري نښه کړئ.',
         scanButton: 'د کوکیزو لپاره سکین کول',
-        scanning: 'روان دی…',
+        scanning: "سکین کیږي…",
         filterPlaceholder: 'ډومینونه فلټر کول…',
         countSuffix: (count) => `${count} کوکیز`,
         none: 'هیڅ کوکي ونه موندل شول.',
         staleBadge: 'په دې سکین کې نه دی لیدل شوی',
-        scanErrorPrefix: (message) => `د کوکیزو لټون ونشول: ${message}`,
+        scanErrorPrefix: (message) => `د کوکیزو سکین ونشو: ${message}`,
         fileErrorsNote: (count) => `${count} فایلونه ونه لوستل شول او پریښودل شول.`,
         checkboxAriaLabel: (domain) => `د ${domain} کوکیز وساتئ`
       },
@@ -20140,8 +20136,8 @@ export const CATALOG = {
       },
       warningConfirmations: {
         title: 'د خبرداری تایید',
-        allAsk: 'هر پاکونکی چې معلومات له لاسه ورکوي مخکې له چلولو نه پوښتنه کوي.',
-        someSet: (count) => `${count} د پاکولو خبرداری تنظیم شوی چې بیا پوښتنه ونکړي.`,
+        allAsk: "هر پاکوونکی چې معلومات له لاسه ورکوي مخکې له چلولو نه پوښتنه کوي.",
+        someSet: (count) => `${count} د پاکوونکي خبرداری تنظیم شوی چې بیا پوښتنه ونکړي.`,
         reset: 'د خبرداری تایید بیا تنظیم کول'
       },
       uninstallTab: {
@@ -20171,20 +20167,20 @@ export const CATALOG = {
           title: 'د لرې کولو تاریخ ساتل',
           description: 'د ډشبورډ لیست د وروستیو لرې کولو او هغه ځای چې خلاص شوی. بند شوی، هیڅ نوی ثبت نه کیږي.'
         },
-        destinationHeading: 'پاتې فایلونه ورځي',
+        destinationHeading: "پاتې شونې ورځي",
         leftoverOptions: {
           quarantine: { label: 'قرنطین', description: 'د Prune خپل بیک اپ ته لیږدول شوی، او د قرنطین سکرین څخه بیرته راوستل کیدونکی. ډیفالټ.' },
           recycle: { label: 'ردي بکس', description: 'د Windows خپل بکس څخه بیرته راوستل کیدونکی، او خلاصیږي کله چې تاسو یې خالي کړئ.' },
           permanent: { label: 'د تل لپاره ړنګول', description: 'په بشپړ ډول ړنګ شوی. د بیرته راوستلو لپاره هیڅ نشته.' }
         },
-        permanentWarning: 'پاتې فایلونه به په بشپړ ډول ړنګ شي او نشي بیرته راوستل کیدی، نه له قرنطین نه او نه له بل ځای نه. لیست د تاییدولو دمخه وګورئ.',
+        permanentWarning: "پاتې شونې به په بشپړ ډول ړنګ شي او نشي بیرته راوستل کیدی، نه له قرنطین نه او نه له بل ځای نه. لیست د تاییدولو دمخه وګورئ.",
         registryNote: 'د رجسټري کیلي د لرې کیدو دمخه قرنطین ته صادریږي، پرته لدې چې تاسو کوم یو غوره کړئ.'
       },
       about: {
         reportTitle: 'د بګ راپور ورکړئ',
         reportDescription: "په GitHub کې یو مخکې ډک شوی Issue پرانیزي. Prune پخپله هیڅ نه لیږي، او تاسو هر څه مخکې له لیږلو وینئ.",
         reportButton: 'د بګ راپور ورکړئ',
-        description: 'د Windows لپاره یو محلي، آفلاین لرې کولو او پاکولو وسیله — د پاتې فایل سکین سره زوري لرې کول، د ړنګولو دمخه خوندي قرنطین، د ډیسک نقشه کول، او د یوې کلیک خځلو پاکول.'
+        description: "د Windows لپاره یو محلي، آفلاین لرې کولو او پاکولو وسیله — د پاتې شونو سکین سره زوري لرې کول، د ړنګولو دمخه خوندي قرنطین، د ډیسک نقشه، او د یوې کلیک خځلو پاکول."
       },
       automation: {
         title: 'اتومات کول',
@@ -20199,7 +20195,7 @@ export const CATALOG = {
         everyWeek: 'هره اونۍ',
         measureOnly: 'یوازې اندازه کول',
         clean: 'پاکول',
-        cleanWarning: 'دا فایلونه پرته له هرچا کتلو لرې کوي. دا هغه قواعد پاکوي چې ژور پاکونه یې وړاندیز کوي او واقعیا کې یو څه لري، او هرڅه لاهم قرنطین ته ځي — نو مخکې لدې چې دا فعال پریږدئ پورته د ساتنې تنظیم وګورئ.',
+        cleanWarning: "دا فایلونه پرته له هرچا کتلو لرې کوي. دا هغه قواعد پاکوي چې ژور پاکول یې وړاندیز کوي او واقعیا کې یو څه لري، او هرڅه لاهم قرنطین ته ځي — نو مخکې لدې چې دا فعال پریږدئ پورته د ساتنې تنظیم وګورئ.",
         nextRun: 'راتلونکی چلونه:',
         lastRun: 'وروستی چلونه:',
         weekdays: {
@@ -20259,7 +20255,7 @@ export const CATALOG = {
       junk: {
         label: 'غیر ضروري فایلونه',
         notMeasured: 'اندازه نشوې',
-        description: 'اندازه کول د ډیسک په هر پاکولو لاره کې ګرځي — شاوخوا نیم دقیقه.',
+        description: "اندازه کول د ډیسک د هر پاکوونکي په لارو کې ګرځي — شاوخوا نیم دقیقه.",
         measure: 'اندازه کول'
       },
       recentActivity: {
@@ -20276,10 +20272,10 @@ export const CATALOG = {
       fastIndexSummary: (count) => `${count} فایلونه او فولډرونه د ډرایو له خپل شاخص څخه ولوستل شول.`,
       browsingInstant: 'له دې ځایه لټون سمدلاسه دی.',
       indexIncomplete: 'د شاخص یوه برخه نه شوه لوستل، نو ټولې اندازې یو ټیټ حد دی.',
-      scanningDrive: 'ډرایو سکن کیږي…',
+      scanningDrive: "ډرایو سکین کیږي…",
       readingDrive: 'ډرایو لوستل کیږي…',
       rescanButton: 'ډرایو بیا سکن کړئ (اډمین)',
-      fastScanButton: 'چټک سکن (اډمین)',
+      fastScanButton: "چټک سکین (اډمین)",
       loading: {
         heading: 'هر فولډر لوستل کیږي لاندې',
         note: 'یو وخت یو ډایرکتوري، چې د اډمین لاسرسي پرته دا کار کولو یوازینۍ لاره ده. یو بشپړ ډرایو ممکن یوه دقیقه ونیسي او بشپړ نشي.',
@@ -20287,7 +20283,7 @@ export const CATALOG = {
       },
       driveRootPrompt: {
         heading: 'ټول ډرایو ولولئ',
-        fastTitle: "چټک سکن",
+        fastTitle: "چټک سکین",
         recommended: "وړاندیز شوی",
         fastExplain: (path) => `د ډرایو خپل د فایلونو شاخص لولي: په ${path} کې هر فایل په څو ثانیو کې.`,
         fastNeeds: "د مدیر اجازې ته اړتیا لري، نو Windows د UAC غوښتنه ښیي.",
@@ -20317,20 +20313,20 @@ export const CATALOG = {
         retry: "بیا هڅه وکړئ",
         barLabel: "د سکین پرمختګ"
       },
-      scanFailure: (path, error) => `"${path}" سکن نشو: ${error}`,
-      fastScanDeclined: 'تصویب نشو — لاهم د فولډر پر فولډر سکن کارول کیږي.',
+      scanFailure: (path, error) => `"${path}" سکین نشو: ${error}`,
+      fastScanDeclined: "تصویب نشو — لاهم د فولډر پر فولډر سکین کارول کیږي.",
       truncated: {
-        withCoverage: (measured, used, percent) => `دا سکن یې وخت پای ته ورسید: دا یې کارول شوي ${used} څخه ${measured} اندازه کړل (${percent}٪). هغه څه چې اندازه شوي واقعي دي؛ پاتې برخه د تشو پر ځای د نه سکن شوي په توګه ښودل کیږي.`,
-        withoutCoverage: 'دا سکن یې وخت پای ته ورسید مخکې لدې چې ډرایو بشپړ کړي. هر هغه څه چې واقعیا اندازه شوي واقعي دي، خو هغه فولډرونه چې دا هیڅکله ورته نه دی رسیدلی د تشو پر ځای د نه سکن شوي په توګه ښودل کیږي — دا د خپل ځای کارونکي شیانو د بشپړ انځور په توګه مه لولئ.',
+        withCoverage: (measured, used, percent) => `دا سکین یې وخت پای ته ورسید: دا یې کارول شوي ${used} څخه ${measured} اندازه کړل (${percent}٪). هغه څه چې اندازه شوي واقعي دي؛ پاتې برخه د تشو پر ځای د نه سکین شوي په توګه ښودل کیږي.`,
+        withoutCoverage: "دا سکین یې وخت پای ته ورسید مخکې لدې چې ډرایو بشپړ کړي. هر هغه څه چې واقعیا اندازه شوي واقعي دي، خو هغه فولډرونه چې دا هیڅکله ورته نه دی رسیدلی د تشو پر ځای د نه سکین شوي په توګه ښودل کیږي — دا د خپل ځای کارونکي شیانو د بشپړ انځور په توګه مه لولئ.",
         stoppedWithCoverage: (a, b, c) => `تاسو دا سکین ودراوه: له ${b} کارول شوي ځای څخه یې ${a} (${c}٪) اندازه کړل. هغه څه چې اندازه شوي واقعي دي؛ پاتې برخه د خالي پر ځای د نه سکین شوي په توګه ښودل کیږي.`,
         stoppedWithoutCoverage: "تاسو دا سکین وختي ودراوه. هغه څه چې اندازه شوي واقعي دي؛ هغه فولډرونه چې ورته نه دی رسېدلی د خالي پر ځای د نه سکین شویو په توګه ښودل کیږي — دا ستاسو د ځای د کارونې بشپړ انځور نه دی.",
-        rescanLink: 'پرځای یې یو چټک سکن پیل کړئ'
+        rescanLink: "پرځای یې یو چټک سکین پیل کړئ"
       },
       view: { tree: 'ونه', files: 'فایلونه' },
       folderTable: {
         empty: 'د دې فولډر دننه لیست کولو لپاره هیڅ شی نشته.',
         rowLabel: (a, b) => `${a} پرانیزئ، ${b}`,
-        notScanned: 'نه دی سکن شوی',
+        notScanned: "نه دی سکین شوی",
         columns: { folder: 'فولډر', size: 'اندازه', items: 'توکي', files: 'فایلونه', folders: 'فولډرونه', modified: 'بدل شوی' }
       },
       extensionPanel: {
@@ -20338,13 +20334,13 @@ export const CATALOG = {
         typeCount: (n) => `${n} ډولونه`,
         noType: 'هیڅ ډول نشته',
         footer: (bytes, count) => `${bytes} په ${count} فایلونو کې`,
-        unopenedFolders: (bytes) => ` · ${bytes} په هغو فولډرونو کې چې سکن یې نه دی خلاص کړی`
+        unopenedFolders: (bytes) => ` · ${bytes} په هغو فولډرونو کې چې سکین یې نه دی خلاص کړی`
       },
-      largestFiles: { empty: 'سکن هیڅ فایل ونه موند چې ولیست شي.' },
+      largestFiles: { empty: "سکین هیڅ فایل ونه موند چې ولیست شي." },
       tooltip: {
         notMeasured: (bytes) => `${bytes} اندازه نشوې`,
         aggregated: 'د دې فولډر ترټولو کوچني ننوتنې، سره یوځای شوي.',
-        unscanned: 'سکن دې ته رسیدو مخکې ودریدل. اصلي اندازه نامعلومه ده.'
+        unscanned: "سکین دې ته رسیدو مخکې ودریدل. اصلي اندازه نامعلومه ده."
       },
       rowActionsLabel: (a) => `د ${a} کړنې`,
       cellOpenLabel: (name) => `${name} خلاص کړئ`,
@@ -20355,7 +20351,7 @@ export const CATALOG = {
       },
       toasts: {
         moved: (name) => `قرنطین ته لیږدول شو: ${name}`,
-        restoreHint: 'دا د قرنطین پرده څخه بیا رغول کړئ.',
+        restoreHint: "دا د قرنطین پرده څخه بیرته راوړئ.",
         pathCopied: 'لاره کاپي شوه.',
         copyFailed: 'هغه لاره کاپي نشوه.',
         moveFailed: 'دا نشو لیږدول کیدلی.'
@@ -20363,7 +20359,7 @@ export const CATALOG = {
       removeModal: {
         label: 'قرنطین ته لیږدول',
         heading: 'دا قرنطین ته ولیږدول شي؟',
-        note: 'دا لیږدول کیږي، نه ړنګول کیږي — دا هر وخت د قرنطین پردې څخه بیا رغولی شئ.',
+        note: "دا لیږدول کیږي، نه ړنګول کیږي — دا هر وخت د قرنطین پردې څخه بیرته راوستلی شئ.",
         folder: 'فولډر',
         file: 'فایل',
         cancel: 'لغوه کول'
@@ -20425,7 +20421,7 @@ export const CATALOG = {
         total: 'ټول'
       },
       batchReasons: {
-        orphaned: 'د دې د لرې کولو پروګرام ماتې شوی — پرځای یې اجباري لرې کول وکاروئ.',
+        orphaned: "د دې لرې کوونکی ماتې شوی — پرځای یې اجباري لرې کول وکاروئ.",
         extension: 'د براوزر توسیعې د خپل براوزر څخه لرې کیږي.',
         storeNoPackage: 'دې پلورنځي غوښتنلیک لرې کولو لپاره د بستې نوم نلري.',
         storeProtected: 'Windows دا غوښتنلیک د سیسټم د یوې برخې په توګه نښه کوي او اجازه نه ورکوي چې لرې شي.',
@@ -20434,7 +20430,7 @@ export const CATALOG = {
       },
       storeRemoveDialog: {
         heading: (name) => `${name} لرې کړئ؟`,
-        body: 'دا اپلیکیشن ستاسو د حساب لپاره، د هغې د ترتیباتو او ساتل شویو ډیټا سره یوځای لرې کوي. د هغه هر څه برخلاف چې Prune یې لرې کوي، دا قرنطین ته نه ځي او له دې ځایه بیرته نشي راوستل کیدی — د بیا ترلاسه کولو معنی دا ده چې بیا یې د مایکروسافټ سټور څخه نصب کړئ.',
+        body: "دا غوښتنلیک ستاسو د حساب لپاره، د هغه د ترتیباتو او ساتل شویو ډیټا سره یوځای لرې کوي. د هغه هر څه برخلاف چې Prune یې لرې کوي، دا قرنطین ته نه ځي او له دې ځایه بیرته نشي راوستل کیدی — د بیا ترلاسه کولو معنی دا ده چې بیا یې د مایکروسافټ سټور څخه نصب کړئ.",
         cancel: 'لغوه کول',
         close: 'بندول',
         removeApp: 'د اپلیکیشن لرې کول',
@@ -20461,19 +20457,19 @@ export const CATALOG = {
         body: 'هر هغه څه چې لرې کول یا ژور پاکول یې لرې کوي، لومړی دلته راځي. دا پاتې کیږي تر څو یې تش نه کړئ، نو د تېروتنې له امله اخیستل شوی فایل تل بیرته ترلاسه کیدی شي.'
       },
       deleteConfirmPrompt: 'د تل لپاره ړنګ شي؟',
-      restore: 'بیرته راوړل',
-      restoring: 'بیرته راوړل کیږي…',
+      restore: "بیرته راوستل",
+      restoring: "بیرته راوستل کیږي…",
       deletePermanently: 'د تل لپاره ړنګول',
       deleteBatch: "ډله ړنګول",
       deleteAll: (n) => `ټول ړنګول (${n})`,
-      restored: (name) => `${name} بیرته راوړل شو.`,
+      restored: (name) => `${name} بیرته راوستل شو.`,
       showAllFiles: (n) => `ټول ${n} فایلونه ښکاره کړئ`,
       showFewerFiles: "لږ فایلونه ښکاره کړئ",
       deleting: 'ړنګول کیږي…'
     },
     startup: {
       title: "پیل",
-      subtitle: "هغه څه چې د ننوتلو پر مهال چلیږي: Run کلیدونه او Startup فولډرونه چې Windows یې لولي، د موقعیت له مخې ډلبندي شوي — دا پرېکړه کوي چې هره ننوتنه چا ته اغېز کوي او د لرې کولو لپاره څه په کار دي. هغه ننوتنه چې فایل یې ورک دی، د یوه بې پروایي سره لرې شوي پروګرام له خوا پاتې شوې، او Windows هر ځل هڅه کوي چې پیل یې کړي.",
+      subtitle: "هغه څه چې د ننوتلو پر مهال چلیږي: Run کلیدونه او د پیل فولډرونه چې Windows یې لولي، د موقعیت له مخې ډلبندي شوي — دا پرېکړه کوي چې هره ننوتنه چا ته اغېز کوي او د لرې کولو لپاره څه په کار دي. هغه ننوتنه چې فایل یې ورک دی، د یوه بې پروایي سره لرې شوي پروګرام له خوا پاتې شوې، او Windows هر ځل هڅه کوي چې پیل یې کړي.",
       loading: 'د پیل ننوتنې لوستل کیږي…',
       loadError: (error) => `د پیل ننوتنې ونشوای لوستل شي: ${error}`,
       empty: {
@@ -20512,30 +20508,30 @@ export const CATALOG = {
       },
       groupEnabledOf: (enabledCount, total) => `${enabledCount} د ${total} څخه فعالې`,
       groupAdminNote: 'د دې بدلول د اډمین اجازې غواړي',
-      footerNote: 'د یوې ننوتنې غیرفعالول دا پرېکړه په StartupApproved کې ثبتوي، همدا هغه ځای دی چې د Windows خپل د پیل اپلیکیشنونو ترتیبات او د دندو مدیر یې لولي او لیکي. هیڅ شی نه ړنګیږي: د Run ارزښت یا شارټ کټ سمدلاسه هلته پاتې کیږي چې دی، نو بدلون د دې دواړو ځایونو څخه بېرته اړول کیدی شي.'
+      footerNote: "د یوې ننوتنې غیرفعالول دا پرېکړه په StartupApproved کې ثبتوي، همدا هغه ځای دی چې د Windows خپل د پیل غوښتنلیکونو ترتیبات او د دندو مدیر یې لولي او لیکي. هیڅ شی نه ړنګیږي: د Run ارزښت یا شارټ کټ سمدلاسه هلته پاتې کیږي چې دی، نو بدلون د دې دواړو ځایونو څخه بېرته اړول کیدی شي."
     },
     duplicates: {
-      title: 'دوه ځله شوي فایلونه',
+      title: "تکراري فایلونه",
       subtitle: 'هغه فایلونه چې بایټ په بایټ یو شان دي، نه یوازې د یو شان اندازې. دا هغه فولډر ته ورسوئ چیرې چې تاسو واقعیا شیان ساتئ — د یو ټول ډرایو لوستل چې دا د ځان سره پرتله کړي ډیر وخت نیسي پداسې حال کې چې دا ارزښت نلري، او ډیری وختونه د ماشین خپل فایلونه یې خپل کاپي کوي.',
       folderPlaceholder: (a) => `د فولډر لار، د بېلګې په توګه ${a}`,
       stoppedNote: "ودرول شو — هیڅ شی پرتله نه شو.",
-      folderInputAriaLabel: 'د دوه ځلي موندلو لپاره فولډر',
+      folderInputAriaLabel: "د تکراري فایلونو د لټون فولډر",
       stop: 'ودرول',
-      findButton: 'دوه ځله شوي ومومئ',
+      findButton: "تکراري فایلونه ومومئ",
       compareNote: 'لومړی اندازې پرتله کوي، بیا یو نمونه، بیا ټول فایل — نو ډیری فایلونه هیڅکله نه لوستل کیږي.',
       reading: (folder) => `${folder} لوستل کیږي`,
       readingNote: 'لومړی اندازې، بیا د هر هغه شي 64 KB نمونه چې یو شریکوي، بیا د هر هغه شي بشپړ منځپانګه چې لاهم مطابقت لري.',
       empty: {
-        heading: 'دلته دوه ځله شوي فایلونه نشته.',
+        heading: "دلته تکراري فایلونه نشته.",
         scanned: (count) => `${count} فایلونه پرتله شوي.`,
-        truncatedSuffix: ' سکینینګ مخکې ودرول شو، نو دا ټول فولډر نه دی.'
+        truncatedSuffix: " سکین مخکې ودرول شو، نو دا ټول فولډر نه دی."
       },
       summarySets: (count) => `${count} سیټونه`,
       recoverable: (formatted) => `${formatted} بیرته ترلاسه کیدونکي`,
       keepOldest: 'زوړ وساتئ',
       keepNewest: 'نوی وساتئ',
       clear: 'پاک کول',
-      truncatedWarning: 'سکینینګ مخکې ودرول شو، نو ممکن له دې څخه ډیر سیټونه وي.',
+      truncatedWarning: "سکین مخکې ودرول شو، نو ممکن له دې څخه ډیر سیټونه وي.",
       tags: { keep: "وساتئ", toQuarantine: "قرنطین ته" },
       group: {
         identicalCopies: (count, size) => `${count} ورته کاپي · هره یوه ${size}`,
@@ -20548,9 +20544,9 @@ export const CATALOG = {
         moveButton: 'ټاکل شوي قرنطین ته لیږدول'
       },
       modal: {
-        label: 'دوه ځله شوي قرنطین ته لیږدول',
+        label: "تکراري فایلونه قرنطین ته لیږدول",
         heading: (count) => `${count} کاپي قرنطین ته لیږدول شي؟`,
-        body: (a) => `کله چې قرنطین خالي کړئ، لیږدول به ${a} خلاص کړي. هر سیټ لږترلږه یوه کاپي ساتي، او هیڅ شی نه ړنګیږي — هر څه د قرنطین له پردې بیرته راوړلی شئ.`,
+        body: (a) => `کله چې قرنطین خالي کړئ، لیږدول به ${a} خلاص کړي. هر سیټ لږترلږه یوه کاپي ساتي، او هیڅ شی نه ړنګیږي — هر څه د قرنطین له پردې بیرته راوستلی شئ.`,
         cancel: 'لغوه کول',
         confirmButton: 'قرنطین ته لیږدول'
       },
@@ -20563,23 +20559,23 @@ export const CATALOG = {
     },
     deepClean: {
       title: 'ژور پاکول',
-      subtitle: 'هره کیشه، لاگ، ډمپ او پاتې شونی چې Prune یې موندلو ته پوهیږي، پدې ماشین کې اندازه شوی نه چې اټکل شوی. هیڅ شی سمدلاسه نه ړنګیږي — هر هغه څه چې پاکول یې اخلي لومړی قرنطین ته ځي، چیرې چې تاسو یې بیرته ایښودلی شئ.',
+      subtitle: "هره کیشه، لاگ، ډمپ او پاتې شونې چې Prune یې موندلو ته پوهیږي، پدې ماشین کې اندازه شوې نه چې اټکل شوې. هیڅ شی سمدلاسه نه ړنګیږي — هر هغه څه چې پاکول یې اخلي لومړی قرنطین ته ځي، چیرې چې تاسو یې بیرته راوستلی شئ.",
       scanLog: {
-        header: 'د سکینینګ محصول',
+        header: "د سکین محصول",
         scanningAnnounce: (total) => `${total} ځایونه سکین کیږي.`,
-        finishedAnnounce: (scanned, total) => `سکینینګ بشپړ شو. د ${total} څخه ${scanned} ځایونه اندازه شوي.`,
+        finishedAnnounce: (scanned, total) => `سکین بشپړ شو. د ${total} څخه ${scanned} ځایونه اندازه شوي.`,
         starting: 'پیل کیږي…',
         idle: "د پاکولو وړ شیانو د اندازه کولو لپاره «مخکتنه» کېکاږئ."
       },
       emptyState: 'تراوسه هیڅ شی سکین شوی نه دی.',
-      scanErrorPrefix: (error) => `سکینینګ ونشوای شي: ${error}`,
+      scanErrorPrefix: (error) => `سکین ونشو: ${error}`,
       cleanErrorPrefix: (error) => `پاکول ونشوای شي: ${error}`,
       cleanupComplete: 'پاکول بشپړ شول.',
       resultFreed: (formatted) => `${formatted} خلاص شو`,
       resultLockedSuffix: (count) => ` — ${count} تړل شوي فایلونه پریښودل شوي`,
       before: {
         body: 'Prune په دیسک کې هره کټګوري واقعیا اندازه کوي نه چې اټکل یې کوي، دا شاوخوا نیم دقیقه وخت نیسي.',
-        scanning: 'سکینینګ کیږي…',
+        scanning: "سکین کیږي…",
         preview: 'مخکتنه'
       },
       hiddenNote: (count) => `${count} پاکوونکي پټ شوي ځکه چې سافټویر نصب شوی نه دی. تنظیمات › پاکول یې ښودلو لپاره.`,
@@ -20657,7 +20653,7 @@ export const CATALOG = {
       },
       clean: 'هیڅ پاتې شونې ونه موندل شوې — پاک لرې کول.',
       done: 'شوی',
-      foundWarning: (count) => `${count} پاتې شوي توکي وموندل شول چې د اصلي لرې کولو برنامې پرېښودل. مخکې له لرې کولو یې وڅېړئ.`,
+      foundWarning: (count) => `${count} پاتې شونې وموندل شوې چې د اصلي لرې کوونکي پرېښودې. مخکې له لرې کولو یې وڅېړئ.`,
       excludedNote: (count) => `${count} فولډرونه پریښودل شول ځکه چې دوی ستاسو په استثناوو کې دي.`,
       itemsSelected: 'توکي ټاکل شوي',
       reclaimable: 'بیا ترلاسه کیدونکی',
@@ -20667,14 +20663,14 @@ export const CATALOG = {
       titleForce: (name) => `${name} په زور لرې کول`,
       titleNormal: (name) => `${name} لرې کول`,
       close: 'بندول',
-      stillWaiting: "Prune لا هم د لرې کولو برنامې ته انتظار باسي. تاسو دا کړکۍ تړلی شئ؛ برنامه به روانه پاتې شي او Prune به پاتې شوني ونه لټوي.",
+      stillWaiting: "Prune لا هم د لرې کوونکي ته انتظار باسي. تاسو دا کړکۍ تړلی شئ؛ لرې کوونکی به روان پاتې شي او Prune به پاتې شونې ونه سکین کړي.",
       runningWarning: (name) => `${name} اوس مهال چلیږي. لومړی یې بند کړئ — یو لرې کوونکی معمولاً د خلاص پروګرام سره پاتې راځي، او کولی شي فایلونه پریږدي چې راتلونکی چلونه به یې بیا جوړ کړي.`,
       orphanedWarning: (reason) => `${reason} Windows به یې لا هم لیست کوي تر څو چې ننوتنه لرې نشي.`,
       brokenIntro: 'Prune به د دې نوم سره سمون لرونکي فایلونه او د راجستر کیلي ولټوي، په شمول د هغې د پروګرامونو اضافه کول/لرې کول ننوتنه، او تاسو ته به هرڅه وښیي مخکې لدې چې هرڅه لرې شي.',
       searchForLabel: 'د لټون لپاره',
       searchHint: (name) => `له "${name}" څخه اخیستل شوی پرته له نسخې نه — نصبونکي فولډرونه د محصول له مخې نومول کوي، نه د خپرونې. که پایلې غلطې ښکاري یې سمون ورکړئ.`,
       scanFailed: (error) => `سکین ناکام شو: ${error}`,
-      searchButton: 'د پاتې شونو لپاره لټون',
+      searchButton: "پاتې شوني سکین کړئ",
       normalIntro: (name) => `دا د ${name} خپل لرې کوونکی چلوي، بیا هغه هرڅه سکین کوي چې دا یې پریږدي.`,
       uninstallFailed: (error) => `لرې کول ناکام شول: ${error}`,
       startButton: 'لرې کول پیل کړئ',
@@ -20684,7 +20680,7 @@ export const CATALOG = {
         runningNative: 'اصلي لرې کوونکی چلیږي',
         backingUpRegistry: 'راجستر بیک اپ کیږي',
         creatingRestorePoint: 'د بیارغونې نقطه جوړیږي',
-        searchingLeftovers: 'د پاتې شونو لټون',
+        searchingLeftovers: "د پاتې شونو سکین کول",
         scanningLeftovers: 'د پاتې شونو سکین کول',
         checkingCommand: 'د فایل سیسټم، راجستر او مهالویش شویو دندو چیک کول…'
       },
@@ -20695,7 +20691,7 @@ export const CATALOG = {
       },
       noScan: (name) => `د ${name} لرې کوونکی بشپړ شو. د پاتې شونو سکین په تنظیماتو کې بند دی، نو بل هیڅ ونه لټول شو.`,
       readyToScan: {
-        body: (name) => `که د ${name} د لرې کولو برنامه لا پای ته نه وي رسېدلې، لومړی یې پرېږدئ چې وتړل شي. کله چې پای ته ورسېده، د پاتې شونو لټولو لپاره «پاتې شوني سکین کړئ» کېکاږئ.`,
+        body: (name) => `که د ${name} لرې کوونکی لا پای ته نه وي رسېدلی، لومړی یې پرېږدئ چې وتړل شي. کله چې پای ته ورسېد، د پاتې شونو لټولو لپاره «پاتې شوني سکین کړئ» کېکاږئ.`,
         scanButton: "پاتې شوني سکین کړئ"
       },
       removalFailed: (error) => `لرې کول ناکام شول: ${error}`,
@@ -20711,7 +20707,7 @@ export const CATALOG = {
       failedRegistryKeysHeading: (n) => `${n} د راجستر کیلي لرې نشوای کیدی`,
       failedRegistryKeysNote: 'دا معمولاً اړتیا لري چې Prune د اډمین په توګه وچلیږي:',
       noRestorePoint: (reason) => `د سیسټم بیارغونې نقطه جوړه نشوه (${reason}).`,
-      quarantineStillWorks: 'د قرنطین بیارغونه لاهم کار کوي.',
+      quarantineStillWorks: "د قرنطین بیرته راوستل لاهم کار کوي.",
       autoRemoveLeftovers: 'هرڅه چې سکین یې مومي، پرته له مخکینۍ کتنې، په اتوماتيک ډول لرې کړئ'
     },
     batchUninstallModal: {
@@ -20719,17 +20715,17 @@ export const CATALOG = {
       historyLabel: (n) => `ډله ییز لرې کول: ${n} پروګرامونه`,
       close: 'بندول',
       cancel: "لغوه کول",
-      stillWaiting: (more) => more ? `Prune لا هم د دې لرې کولو برنامې ته انتظار باسي. د هغې کړکۍ ښایي د Prune شاته وي. «د دې وروسته ودرول» وټاکئ ترڅو د دې له پای ته رسېدو وروسته پاتې برنامې پرېښودل شي.` : `Prune لا هم د دې لرې کولو برنامې ته انتظار باسي. د هغې کړکۍ ښایي د Prune شاته وي.`,
+      stillWaiting: (more) => more ? `Prune لا هم د دې لرې کوونکي ته انتظار باسي. د هغه کړکۍ ښایي د Prune شاته وي. «د دې وروسته ودرول» وټاکئ ترڅو د دې له پای ته رسېدو وروسته پاتې پروګرامونه پرېښودل شي.` : `Prune لا هم د دې لرې کوونکي ته انتظار باسي. د هغه کړکۍ ښایي د Prune شاته وي.`,
       stopAfterThis: "د دې وروسته ودرول",
       stopping: "د دې وروسته به ودریږي…",
       statusSkipped: "پرېښودل شو",
       stoppedNote: (n) => `مخکې له وخته ودرول شو. نه دي پیل شوي: ${n}.`,
-      registryOnlyIntro: 'هر اپلیکیشن په وار سره د Windows له لارې لرې کیږي، او له هغې وروسته د پاتې شونو سکین نشته: Windows د اپلیکیشن خپل ډاټا لرې کوي.',
-      mixedIntro: (hasStore) => `د هر پروګرام خپل لرې کوونکی په وار سره چلیږي، بیا Prune هغه څه سکین کوي چې دوی یې پریږدي او تاسو ته هرڅه ښیي مخکې لدې چې هرڅه لرې شي.${hasStore ? ' د پلورنځي اپلیکیشنونه پرځای یې د Windows له لارې لرې کیږي، پرته له وروستي پاتې شونو سکین نه.' : ''}`,
+      registryOnlyIntro: "هر غوښتنلیک په وار سره د Windows له لارې لرې کیږي، او له هغې وروسته د پاتې شونو سکین نشته: Windows د غوښتنلیک خپل ډاټا لرې کوي.",
+      mixedIntro: (hasStore) => `د هر پروګرام خپل لرې کوونکی په وار سره چلیږي، بیا Prune هغه څه سکین کوي چې دوی یې پریږدي او تاسو ته هرڅه ښیي مخکې لدې چې هرڅه لرې شي.${hasStore ? ' د پلورنځي غوښتنلیکونه پرځای یې د Windows له لارې لرې کیږي، پرته له وروستي پاتې شونو سکین نه.' : ''}`,
       oneAtATime: 'یو په وار، ځکه چې Windows یوازې یو نصبول یا لرې کول په یو وخت کې اجازه ورکوي. ځینې لرې کوونکي به خپل کړکۍ ښیي او له تاسو نه به پوښتنې وکړي.',
       storeWarning: (count) => count === 1
-        ? 'د دې بستې د پلورنځي اپلیکیشن د قرنطین څخه بیرته راوستل کیدی نشي: د دې لرې کول اپلیکیشن او د هغې خوندي شوي ډاټا اخلي، او د دې بیرته ترلاسه کول د پلورنځي څخه بیا نصبول معنی لري.'
-        : `د دې بستې ${count} د پلورنځي اپلیکیشنونه د قرنطین څخه بیرته راوستل کیدی نشي: د یوه لرې کول اپلیکیشن او د هغې خوندي شوي ډاټا اخلي، او د دې بیرته ترلاسه کول د پلورنځي څخه بیا نصبول معنی لري.`,
+        ? 'د دې بستې د پلورنځي غوښتنلیک د قرنطین څخه بیرته راوستل کیدی نشي: د دې لرې کول غوښتنلیک او د هغه خوندي شوي ډاټا اخلي، او د دې بیرته ترلاسه کول د پلورنځي څخه بیا نصبول معنی لري.'
+        : `د دې بستې ${count} د پلورنځي غوښتنلیکونه د قرنطین څخه بیرته راوستل کیدی نشي: د یوه لرې کول غوښتنلیک او د هغه خوندي شوي ډاټا اخلي، او د دې بیرته ترلاسه کول د پلورنځي څخه بیا نصبول معنی لري.`,
       runsBefore: (name) => `د ${name} دمخه چلیږي`,
       reported: (bytes) => `${bytes} راپور شوي`,
       unknownSizeSuffix: (n) => `، ${n} ناڅرګنده اندازه`,
@@ -20742,25 +20738,25 @@ export const CATALOG = {
       },
       scanningLine: "پاتې شوني سکین کیږي…",
       readyToScan: {
-        body: (n) => `د لرې کولو برنامې پای ته ورسېدې (${n}). ځینې — په ځانګړي توګه د لوبو لانچرونه — د خپلې کړکۍ تړلو وروسته هم په شاليد کې فایلونه لرې کوي. که ډاډه نه یاست یو څه صبر وکړئ، بیا «پاتې شوني سکین کړئ» کېکاږئ ترڅو وګورئ چې څه پاتې دي.`,
+        body: (n) => `د لرې کوونکو چلول پای ته ورسېدل (${n}). ځینې — په ځانګړي توګه د لوبو لانچرونه — د خپلې کړکۍ تړلو وروسته هم په شاليد کې فایلونه لرې کوي. که ډاډه نه یاست یو څه صبر وکړئ، بیا «پاتې شوني سکین کړئ» کېکاږئ ترڅو وګورئ چې څه پاتې دي.`,
         scanButton: "پاتې شوني سکین کړئ"
       },
       uninstalledOf: (removed, total) => `${removed} د ${total} څخه لرې شول.`,
       failedHeading: (n) => `${n} لرې نشوای کیدی او یوازې پریښودل شول:`,
       removeLeftoversFailed: (error) => `پاتې شونې لرې نشوای: ${error}`,
       noScanSettingsOff: 'د پاتې شونو سکین په تنظیماتو کې بند دی، نو هیڅ ونه لټول شو.',
-      noScanStore: 'د پلورنځي اپلیکیشن وروسته هیڅ پاتې شونو سکین نشته: Windows د اپلیکیشن خپل ډاټا لرې کوي.',
+      noScanStore: "د پلورنځي غوښتنلیک وروسته د پاتې شونو سکین نشته: Windows د غوښتنلیک خپل ډاټا لرې کوي.",
       done: 'شوی',
       summary: {
         recycle: (programs, items, freed) => `${programs} لرې شول او ${items} ردي بکس ته ولیږل شول، ${freed} خلاص شول.`,
         permanent: (programs, items, freed) => `${programs} لرې شول او ${items} د تل لپاره ړنګ شول، ${freed} خلاص شول.`,
         quarantine: (programs, items, freed) => `${programs} لرې شول او ${items} قرنطین ته ولیږدول شول، ${freed} خلاص شول.`,
         programs: (n) => `${n} پروګرامونه`,
-        items: (n) => `${n} پاتې شوي توکي`
+        items: (n) => `${n} پاتې شونې`
       },
       noRestorePoint: (reason) => `د سیسټم بیارغونې نقطه جوړه نشوه (${reason}).`,
       restorePointFallback: 'شتون نلري',
-      quarantineNote: 'پورته ټول لا هم په قرنطین کې دي او بیرته ایښودل کیدی شي.',
+      quarantineNote: "پورته ټول لا هم په قرنطین کې دي او بیرته راوستل کیدی شي.",
       failedRegistryKeys: (n) => `${n} د راجستر کیلي لرې نشوای کیدی — دا معمولاً اړتیا لري چې Prune د اډمین په توګه وچلیږي.`
     },
     bugReport: {
@@ -20870,12 +20866,12 @@ export const CATALOG = {
         openPageError: (error) => `Não foi possível abrir a página: ${error}`
       },
       showFreeSpace: {
-        title: 'Mostrar espaço livre no Mapa de Disco',
-        description: 'Desenha o espaço livre da unidade como mais um bloco ao escanear uma unidade inteira, para que cada pasta seja lida como uma parcela da unidade em vez do espaço em uso.'
+        title: "Mostrar espaço livre no Mapa do disco",
+        description: "Desenha o espaço livre da unidade como mais um bloco ao verificar uma unidade inteira, para que cada pasta seja lida como uma parcela da unidade em vez do espaço em uso."
       },
       autoQuarantine: {
         title: 'Quarentena automática',
-        description: 'A Limpeza Profunda move o que remove para a Quarentena do Prune, de onde você pode devolvê-lo. Desative isso e ele irá para a Lixeira do Windows em vez disso — ainda recuperável, apenas em um lugar que você já sabe esvaziar.'
+        description: "A Limpeza profunda move o que remove para a Quarentena do Prune, de onde você pode devolvê-lo. Desative isso e ele irá para a Lixeira do Windows em vez disso — ainda recuperável, apenas em um lugar que você já sabe esvaziar."
       },
       skipRecent: {
         title: 'Deixar os arquivos recentes em paz',
@@ -20907,7 +20903,7 @@ export const CATALOG = {
       },
       exclusions: {
         title: "Ignorar pastas",
-        description: 'Pastas e tipos de arquivo que o Prune deixará em paz — ignorados pela Limpeza Profunda e excluídos do Mapa de Disco — além dos que ele já protege: Informações do Volume do Sistema, quarentenas de antivírus, o repositório de componentes e uma dúzia de outros.',
+        description: "Pastas e tipos de arquivo que o Prune deixará em paz — ignorados pela Limpeza profunda e excluídos do Mapa do disco — além dos que ele já protege: Informações do Volume do Sistema, quarentenas de antivírus, o repositório de componentes e uma dúzia de outros.",
         ariaLabel: 'Caminho de pasta ou tipo de arquivo para excluir',
         add: 'Adicionar',
         invalidFormat: 'Escreva um caminho de pasta completo (D:\\Games) ou um tipo de arquivo (*.iso).',
@@ -20919,20 +20915,20 @@ export const CATALOG = {
       },
       cookiesToPreserve: {
         title: 'Cookies para preservar',
-        description: 'Tudo o mais no arquivo de cookies de um navegador desaparece no momento em que você o limpa. Faça a varredura para ver o que realmente está lá, e marque tudo o que valha a pena manter.',
-        scanButton: 'Procurar cookies',
-        scanning: 'Executando…',
+        description: "Tudo o mais no arquivo de cookies de um navegador desaparece no momento em que você o limpa. Faça a verificação para ver o que realmente está lá, e marque tudo o que valha a pena manter.",
+        scanButton: "Verificar cookies",
+        scanning: "Verificando…",
         filterPlaceholder: 'Filtrar domínios…',
         countSuffix: (count) => `${count} cookie${count === 1 ? '' : 's'}`,
         none: 'Nenhum cookie encontrado.',
-        staleBadge: 'não visto nesta varredura',
-        scanErrorPrefix: (message) => `Não foi possível procurar cookies: ${message}`,
+        staleBadge: "não visto nesta verificação",
+        scanErrorPrefix: (message) => `Não foi possível verificar cookies: ${message}`,
         fileErrorsNote: (count) => `${count} arquivo${count === 1 ? ' não pôde ser lido e foi' : 's não puderam ser lidos e foram'} ignorado${count === 1 ? '' : 's'}.`,
         checkboxAriaLabel: (domain) => `Manter cookies de ${domain}`
       },
       sandboxTest: {
         title: "Teste de sandbox",
-        description: 'Executa o mecanismo de limpeza real apenas contra um diretório temporário descartável — nunca seu Temp real, o Temp do Windows, ou o cache de miniaturas — para provar que a varredura e a exclusão realmente funcionam antes de confiar nelas com arquivos reais.',
+        description: "Executa o mecanismo de limpeza real apenas contra um diretório temporário descartável — nunca seu Temp real, o Temp do Windows, ou o cache de miniaturas — para provar que a verificação e a exclusão realmente funcionam antes de confiar nelas com arquivos reais.",
         run: "Executar teste de sandbox",
         running: 'Executando…',
         allPassed: 'Todas as verificações aprovadas',
@@ -20960,7 +20956,7 @@ export const CATALOG = {
         },
         afterHeading: 'Depois de desinstalar',
         scanLeftovers: {
-          title: 'Procurar resíduos depois de desinstalar',
+          title: "Verificar resíduos depois de desinstalar",
           description: 'Procura os arquivos, chaves de registro e tarefas agendadas que o desinstalador deixou para trás. Desativado, o Prune apenas executa o próprio desinstalador do programa e para por aí.'
         },
         preselect: {
@@ -20971,20 +20967,20 @@ export const CATALOG = {
           title: 'Manter um histórico de desinstalações',
           description: 'A lista do painel de remoções recentes e o espaço que elas liberaram. Desativado, nada novo é registrado.'
         },
-        destinationHeading: 'Os arquivos restantes vão para',
+        destinationHeading: "Os resíduos vão para",
         leftoverOptions: {
-          quarantine: { label: 'Quarentena', description: 'Movido para o próprio backup do Prune, e recuperável a partir da tela de Quarentena. O padrão.' },
-          recycle: { label: 'A Lixeira', description: 'Recuperável a partir da própria lixeira do Windows, e liberado quando você a esvazia.' },
+          quarantine: { label: 'Quarentena', description: "Movido para o próprio backup do Prune, e pode ser restaurado pela tela Quarentena. O padrão." },
+          recycle: { label: 'A Lixeira', description: "Pode ser restaurado da própria lixeira do Windows, e o espaço é liberado quando você a esvazia." },
           permanent: { label: 'Excluir permanentemente', description: 'Excluído completamente. Nada a restaurar.' }
         },
-        permanentWarning: 'Os arquivos restantes serão excluídos completamente e não podem ser restaurados, nem da Quarentena nem de qualquer outro lugar. Verifique a lista antes de confirmá-la.',
+        permanentWarning: "Os resíduos serão excluídos completamente e não podem ser restaurados, nem da Quarentena nem de qualquer outro lugar. Verifique a lista antes de confirmá-la.",
         registryNote: 'As chaves de registro são exportadas para a Quarentena antes de serem removidas, seja qual for sua escolha.'
       },
       about: {
         reportTitle: 'Relatar um bug',
         reportDescription: "Abre uma issue pré-preenchida no GitHub. O Prune não envia nada por conta própria, e você vê tudo antes de qualquer envio.",
         reportButton: 'Relatar um bug',
-        description: 'Uma ferramenta local e offline de desinstalação e limpeza para Windows — remoção forçada com varredura de arquivos residuais, quarentena segura antes da exclusão, mapeamento de disco e limpeza de lixo com um clique.'
+        description: "Uma ferramenta local e offline de desinstalação e limpeza para Windows — remoção forçada com verificação de resíduos, quarentena segura antes da exclusão, Mapa do disco e limpeza de lixo com um clique."
       },
       automation: {
         title: 'Automação',
@@ -20999,7 +20995,7 @@ export const CATALOG = {
         everyWeek: 'Toda semana',
         measureOnly: 'Apenas medir',
         clean: 'Limpar',
-        cleanWarning: 'Isso remove arquivos sem ninguém observando. Limpa as regras que a Limpeza Profunda recomenda e que realmente têm algo dentro, e tudo ainda vai para a quarentena — então verifique a configuração de retenção acima antes de deixar isso ativado.',
+        cleanWarning: "Isso remove arquivos sem ninguém observando. Limpa as regras que a Limpeza profunda recomenda e que realmente têm algo dentro, e tudo ainda vai para a quarentena — então verifique a configuração de retenção acima antes de deixar isso ativado.",
         nextRun: 'Próxima execução:',
         lastRun: 'Última execução:',
         weekdays: {
@@ -21070,16 +21066,16 @@ export const CATALOG = {
     },
     diskMap: {
       title: "Mapa do disco",
-      unscannedLabel: "Não escaneado",
+      unscannedLabel: "Não verificado",
       aggregateCell: (count) => `${count} itens menores`,
       subtitle: "Uso do disco: o que ocupa espaço nesta unidade e onde.",
       fastIndexSummary: (count) => `${count} arquivos e pastas lidos do próprio índice do disco.`,
       browsingInstant: 'A navegação é instantânea a partir daqui.',
       indexIncomplete: 'Parte do índice não pôde ser lida, então os totais são um limite inferior.',
-      scanningDrive: 'Escaneando o disco…',
+      scanningDrive: "Verificando o disco…",
       readingDrive: 'Lendo o disco…',
       rescanButton: 'Reescanear disco (admin)',
-      fastScanButton: 'Escaneamento rápido (admin)',
+      fastScanButton: "Verificação rápida (admin)",
       loading: {
         heading: 'Lendo cada pasta dentro de',
         note: 'Um diretório de cada vez, que é a única forma de fazer isso sem acesso de administrador. Um disco inteiro pode levar um minuto e talvez não termine.',
@@ -21087,7 +21083,7 @@ export const CATALOG = {
       },
       driveRootPrompt: {
         heading: 'Ler o disco inteiro',
-        fastTitle: "Escaneamento rápido",
+        fastTitle: "Verificação rápida",
         recommended: "Recomendado",
         fastExplain: (path) => `Lê o próprio índice de arquivos do disco: cada arquivo em ${path} em poucos segundos.`,
         fastNeeds: "Requer aprovação de administrador: o Windows exibirá um aviso do UAC.",
@@ -21117,20 +21113,20 @@ export const CATALOG = {
         retry: "Tentar novamente",
         barLabel: "Progresso da verificação"
       },
-      scanFailure: (path, error) => `Não foi possível escanear "${path}": ${error}`,
-      fastScanDeclined: 'Não aprovado — ainda usando o escaneamento pasta por pasta.',
+      scanFailure: (path, error) => `Não foi possível verificar "${path}": ${error}`,
+      fastScanDeclined: "Não aprovado — ainda usando a verificação pasta por pasta.",
       truncated: {
-        withCoverage: (measured, used, percent) => `Este escaneamento ficou sem tempo: mediu ${measured} dos ${used} em uso (${percent}%). O que foi medido é real; o resto aparece como não escaneado, não como vazio.`,
-        withoutCoverage: 'Este escaneamento ficou sem tempo antes de terminar o disco. Tudo o que realmente mediu é real, mas as pastas que nunca alcançou aparecem como não escaneadas em vez de vazias — não interprete isso como uma imagem completa do que está usando seu espaço.',
-        stoppedWithCoverage: (a, b, c) => `Você parou este escaneamento: ele mediu ${a} dos ${b} em uso (${c}%). O que foi medido é real; o resto aparece como não escaneado, não como vazio.`,
-        stoppedWithoutCoverage: "Você parou este escaneamento antes do fim. O que foi medido é real; as pastas que não foram alcançadas aparecem como não escaneadas, não como vazias — este não é um retrato completo do que ocupa seu espaço.",
-        rescanLink: 'Executar um escaneamento rápido em vez disso'
+        withCoverage: (measured, used, percent) => `Esta verificação ficou sem tempo: mediu ${measured} dos ${used} em uso (${percent}%). O que foi medido é real; o resto aparece como não verificado, não como vazio.`,
+        withoutCoverage: "Esta verificação ficou sem tempo antes de terminar o disco. Tudo o que realmente mediu é real, mas as pastas que nunca alcançou aparecem como não verificadas em vez de vazias — não interprete isso como uma imagem completa do que está usando seu espaço.",
+        stoppedWithCoverage: (a, b, c) => `Você parou esta verificação: ela mediu ${a} dos ${b} em uso (${c}%). O que foi medido é real; o resto aparece como não verificado, não como vazio.`,
+        stoppedWithoutCoverage: "Você parou esta verificação antes do fim. O que foi medido é real; as pastas que não foram alcançadas aparecem como não verificadas, não como vazias — este não é um retrato completo do que ocupa seu espaço.",
+        rescanLink: "Executar uma verificação rápida em vez disso"
       },
       view: { tree: 'Árvore', files: 'Arquivos' },
       folderTable: {
         empty: 'Nada para listar dentro desta pasta.',
         rowLabel: (a, b) => `Abrir ${a}, ${b}`,
-        notScanned: 'não escaneado',
+        notScanned: "não verificado",
         columns: { folder: 'Pasta', size: 'Tamanho', items: 'Itens', files: 'Arquivos', folders: 'Pastas', modified: 'Modificado' }
       },
       extensionPanel: {
@@ -21138,13 +21134,13 @@ export const CATALOG = {
         typeCount: (n) => `${n} tipos`,
         noType: 'sem tipo',
         footer: (bytes, count) => `${bytes} em ${count} arquivos`,
-        unopenedFolders: (bytes) => ` · ${bytes} em pastas que o escaneamento não abriu`
+        unopenedFolders: (bytes) => ` · ${bytes} em pastas que a verificação não abriu`
       },
-      largestFiles: { empty: 'O escaneamento não encontrou arquivos para listar.' },
+      largestFiles: { empty: "A verificação não encontrou arquivos para listar." },
       tooltip: {
         notMeasured: (bytes) => `${bytes} não medido`,
         aggregated: 'As menores entradas desta pasta, agrupadas.',
-        unscanned: 'O escaneamento parou antes de chegar aqui. O tamanho real é desconhecido.'
+        unscanned: "A verificação parou antes de chegar aqui. O tamanho real é desconhecido."
       },
       rowActionsLabel: (a) => `Ações para ${a}`,
       cellOpenLabel: (name) => `Abrir ${name}`,
@@ -21258,7 +21254,7 @@ export const CATALOG = {
       emptying: 'Esvaziando…',
       empty: {
         heading: 'Nada na quarentena.',
-        body: 'Tudo o que uma desinstalação ou uma Limpeza Profunda remove chega aqui primeiro. Permanece até que você o esvazie, então um arquivo pego por engano sempre pode ser recuperado.'
+        body: "Tudo o que uma desinstalação ou uma Limpeza profunda remove chega aqui primeiro. Permanece até que você o esvazie, então um arquivo pego por engano sempre pode ser recuperado."
       },
       deleteConfirmPrompt: 'Excluir para sempre?',
       restore: 'Restaurar',
@@ -21328,14 +21324,14 @@ export const CATALOG = {
       empty: {
         heading: 'Nenhum arquivo duplicado aqui.',
         scanned: (count) => `${count} arquivos comparados.`,
-        truncatedSuffix: ' O escaneamento foi interrompido, então esta não é a pasta inteira.'
+        truncatedSuffix: " A verificação foi interrompida, então esta não é a pasta inteira."
       },
       summarySets: (count) => `${count} conjunto${count === 1 ? '' : 's'}`,
       recoverable: (formatted) => `${formatted} recuperáveis`,
       keepOldest: 'Manter o mais antigo',
       keepNewest: 'Manter o mais recente',
       clear: 'Limpar',
-      truncatedWarning: 'O escaneamento foi interrompido, então pode haver mais conjuntos do que estes.',
+      truncatedWarning: "A verificação foi interrompida, então pode haver mais conjuntos do que estes.",
       tags: { keep: "Manter", toQuarantine: "Vai para a Quarentena" },
       group: {
         identicalCopies: (count, size) => `${count} cópias idênticas · ${size} cada`,
@@ -21362,12 +21358,12 @@ export const CATALOG = {
       }
     },
     deepClean: {
-      title: 'Limpeza Profunda',
-      subtitle: 'Cada cache, log, dump e resquício que o Prune sabe encontrar, medido nesta máquina em vez de estimado. Nada é excluído diretamente — tudo o que a Limpeza pega vai primeiro para a Quarentena, de onde você pode devolvê-lo.',
+      title: "Limpeza profunda",
+      subtitle: "Cada cache, log, dump e resíduo que o Prune sabe encontrar, medido nesta máquina em vez de estimado. Nada é excluído diretamente — tudo o que a Limpeza pega vai primeiro para a Quarentena, de onde você pode devolvê-lo.",
       scanLog: {
-        header: 'Saída da varredura',
-        scanningAnnounce: (total) => `Varrendo ${total} locais.`,
-        finishedAnnounce: (scanned, total) => `Varredura concluída. ${scanned} de ${total} locais medidos.`,
+        header: "Saída da verificação",
+        scanningAnnounce: (total) => `Verificando ${total} locais.`,
+        finishedAnnounce: (scanned, total) => `Verificação concluída. ${scanned} de ${total} locais medidos.`,
         starting: 'Iniciando…',
         idle: "Clique em Prévia para medir o que pode ser limpo."
       },
@@ -21524,12 +21520,10 @@ export const CATALOG = {
       stopping: "Parando depois deste…",
       statusSkipped: "ignorado",
       stoppedNote: (n) => `Interrompido antes do fim. Não iniciados: ${n}.`,
-      registryOnlyIntro: 'Cada app é removido pelo Windows por vez, e não há verificação de resíduos depois: o Windows remove os próprios dados do app junto com ele.',
-      mixedIntro: (hasStore) => `O próprio desinstalador de cada programa é executado por vez, depois o Prune verifica o que eles deixam para trás e mostra tudo antes de remover qualquer coisa.${hasStore ? ' Apps da Store são removidos pelo Windows em vez disso, sem verificação de resíduos depois.' : ''}`,
+      registryOnlyIntro: "Cada aplicativo é removido pelo Windows por vez, e não há verificação de resíduos depois: o Windows remove os próprios dados do aplicativo junto com ele.",
+      mixedIntro: (hasStore) => `O próprio desinstalador de cada programa é executado por vez, depois o Prune verifica o que eles deixam para trás e mostra tudo antes de remover qualquer coisa.${hasStore ? ' Aplicativos da Store são removidos pelo Windows em vez disso, sem verificação de resíduos depois.' : ''}`,
       oneAtATime: 'Um de cada vez, porque o Windows só permite uma instalação ou desinstalação por vez. Alguns desinstaladores mostrarão suas próprias janelas e farão perguntas a você.',
-      storeWarning: (count) => count === 1
-        ? 'O app da Store neste lote não pode ser restaurado da Quarentena: removê-lo leva o app e seus dados salvos, e recuperá-lo significa reinstalá-lo pela Store.'
-        : `Os ${count} apps da Store neste lote não podem ser restaurados da Quarentena: remover um leva o app e seus dados salvos, e recuperá-lo significa reinstalá-lo pela Store.`,
+      storeWarning: (count) => count === 1 ? 'O aplicativo da Store neste lote não pode ser restaurado da Quarentena: removê-lo leva o aplicativo e seus dados salvos, e recuperá-lo significa reinstalá-lo pela Store.' : `Os ${count} aplicativos da Store neste lote não podem ser restaurados da Quarentena: remover um leva o aplicativo e seus dados salvos, e recuperá-lo significa reinstalá-lo pela Store.`,
       runsBefore: (name) => `executa antes de ${name}`,
       reported: (bytes) => `${bytes} reportados`,
       unknownSizeSuffix: (n) => `, ${n} de tamanho desconhecido`,
@@ -21549,14 +21543,14 @@ export const CATALOG = {
       failedHeading: (n) => `${n} não p${n === 1 ? 'ôde' : 'uderam'} ser desinstalado${n === 1 ? '' : 's'} e f${n === 1 ? 'oi deixado' : 'oram deixados'} de lado:`,
       removeLeftoversFailed: (error) => `Não foi possível remover os resíduos: ${error}`,
       noScanSettingsOff: 'A verificação de resíduos está desativada nas Configurações, então nada foi procurado.',
-      noScanStore: 'Não há verificação de resíduos após um app da Store: o Windows remove os próprios dados do app junto com ele.',
+      noScanStore: "Não há verificação de resíduos após um aplicativo da Store: o Windows remove os próprios dados do aplicativo junto com ele.",
       done: 'Concluído',
       summary: {
         recycle: (programs, items, freed) => `Desinstalado${'s'} ${programs} e envi${'ados'} ${items} para a Lixeira, liberando ${freed}.`,
         permanent: (programs, items, freed) => `Desinstalado${'s'} ${programs} e excluído${'s'} ${items} permanentemente, liberando ${freed}.`,
         quarantine: (programs, items, freed) => `Desinstalado${'s'} ${programs} e movido${'s'} ${items} para a Quarentena, liberando ${freed}.`,
         programs: (n) => `${n} programa${n === 1 ? '' : 's'}`,
-        items: (n) => `${n} item${n === 1 ? '' : 's'} residual${n === 1 ? '' : 'is'}`
+        items: (n) => `${n} resíduo${n === 1 ? '' : 's'}`
       },
       noRestorePoint: (reason) => `Nenhum ponto de restauração do sistema foi criado (${reason}).`,
       restorePointFallback: 'não disponível',
@@ -21670,12 +21664,12 @@ export const CATALOG = {
         openPageError: (error) => `Não foi possível abrir a página: ${error}`
       },
       showFreeSpace: {
-        title: 'Mostrar espaço livre no Mapa de Disco',
+        title: "Mostrar espaço livre no Mapa do disco",
         description: 'Desenha o espaço livre da unidade como mais um bloco ao analisar uma unidade inteira, para que cada pasta seja lida como uma parcela da unidade em vez do espaço em uso.'
       },
       autoQuarantine: {
         title: 'Quarentena automática',
-        description: 'A Limpeza Profunda move o que remove para a Quarentena do Prune, de onde o pode devolver. Desative isto e irá para a Reciclagem do Windows em vez disso — ainda recuperável, apenas num lugar que já sabe esvaziar.'
+        description: "A Limpeza profunda move o que remove para a Quarentena do Prune, de onde o pode devolver. Desative isto e irá para a Reciclagem do Windows em vez disso — ainda recuperável, apenas num lugar que já sabe esvaziar."
       },
       skipRecent: {
         title: 'Deixar os ficheiros recentes em paz',
@@ -21707,7 +21701,7 @@ export const CATALOG = {
       },
       exclusions: {
         title: "Ignorar pastas",
-        description: 'Pastas e tipos de ficheiro que o Prune deixará em paz — ignorados pela Limpeza Profunda e excluídos do Mapa de Disco — além dos que já protege: Informações de Volume do Sistema, quarentenas de antivírus, o repositório de componentes e mais uma dezena.',
+        description: "Pastas e tipos de ficheiro que o Prune deixará em paz — ignorados pela Limpeza profunda e excluídos do Mapa do disco — além dos que já protege: Informações de Volume do Sistema, quarentenas de antivírus, o repositório de componentes e mais uma dezena.",
         ariaLabel: 'Caminho de pasta ou tipo de ficheiro a excluir',
         add: 'Adicionar',
         invalidFormat: 'Escreva um caminho de pasta completo (D:\\Games) ou um tipo de ficheiro (*.iso).',
@@ -21719,14 +21713,14 @@ export const CATALOG = {
       },
       cookiesToPreserve: {
         title: 'Cookies a preservar',
-        description: 'Tudo o resto no ficheiro de cookies de um navegador desaparece assim que o limpa. Digitalize para ver o que está lá realmente, e assinale tudo o que valha a pena manter.',
-        scanButton: 'Procurar cookies',
-        scanning: 'A executar…',
+        description: "Tudo o resto no ficheiro de cookies de um navegador desaparece assim que o limpa. Analise para ver o que está lá realmente, e assinale tudo o que valha a pena manter.",
+        scanButton: "Analisar cookies",
+        scanning: "A analisar…",
         filterPlaceholder: 'Filtrar domínios…',
         countSuffix: (count) => `${count} cookie${count === 1 ? '' : 's'}`,
         none: 'Nenhum cookie encontrado.',
         staleBadge: 'não visto nesta análise',
-        scanErrorPrefix: (message) => `Não foi possível procurar cookies: ${message}`,
+        scanErrorPrefix: (message) => `Não foi possível analisar cookies: ${message}`,
         fileErrorsNote: (count) => `${count} ficheiro${count === 1 ? ' não pôde ser lido e foi' : 's não puderam ser lidos e foram'} ignorado${count === 1 ? '' : 's'}.`,
         checkboxAriaLabel: (domain) => `Manter cookies de ${domain}`
       },
@@ -21760,7 +21754,7 @@ export const CATALOG = {
         },
         afterHeading: 'Depois de desinstalar',
         scanLeftovers: {
-          title: 'Procurar resíduos depois de desinstalar',
+          title: "Analisar resíduos depois de desinstalar",
           description: 'Procura os ficheiros, chaves de registo e tarefas agendadas que o desinstalador deixou para trás. Desativado, o Prune apenas executa o desinstalador do próprio programa e para aí.'
         },
         preselect: {
@@ -21771,20 +21765,20 @@ export const CATALOG = {
           title: 'Manter um histórico de desinstalações',
           description: 'A lista do painel de remoções recentes e o espaço que libertaram. Desativado, nada de novo é registado.'
         },
-        destinationHeading: 'Os ficheiros restantes vão para',
+        destinationHeading: "Os resíduos vão para",
         leftoverOptions: {
           quarantine: { label: 'Quarentena', description: 'Movido para a própria cópia de segurança do Prune, e recuperável a partir do ecrã de Quarentena. A predefinição.' },
           recycle: { label: 'A Reciclagem', description: 'Recuperável a partir da própria reciclagem do Windows, e libertado quando a esvazia.' },
           permanent: { label: 'Eliminar permanentemente', description: 'Eliminado por completo. Nada a restaurar.' }
         },
-        permanentWarning: 'Os ficheiros restantes serão eliminados por completo e não podem ser restaurados, nem da Quarentena nem de qualquer outro lugar. Verifique a lista antes de a confirmar.',
+        permanentWarning: "Os resíduos serão eliminados por completo e não podem ser restaurados, nem da Quarentena nem de qualquer outro lugar. Verifique a lista antes de a confirmar.",
         registryNote: 'As chaves de registo são exportadas para a Quarentena antes de serem removidas, seja qual for a sua escolha.'
       },
       about: {
         reportTitle: 'Comunicar um erro',
         reportDescription: "Abre uma issue pré-preenchida no GitHub. O Prune não envia nada por si só e mostra-lhe tudo antes de qualquer envio.",
         reportButton: 'Comunicar um erro',
-        description: 'Uma ferramenta local e offline de desinstalação e limpeza para Windows — remoção forçada com análise de ficheiros residuais, quarentena segura antes da eliminação, mapeamento de disco e limpeza de lixo com um clique.'
+        description: "Uma ferramenta local e offline de desinstalação e limpeza para Windows — remoção forçada com análise de resíduos, quarentena segura antes da eliminação, Mapa do disco e limpeza de lixo com um clique."
       },
       automation: {
         title: 'Automatização',
@@ -21799,7 +21793,7 @@ export const CATALOG = {
         everyWeek: 'Todas as semanas',
         measureOnly: 'Apenas medir',
         clean: 'Limpar',
-        cleanWarning: 'Isto remove ficheiros sem ninguém a observar. Limpa as regras que a Limpeza Profunda recomenda e que realmente têm algo dentro, e tudo continua a ir para a quarentena — por isso verifique a definição de retenção acima antes de deixar isto ativado.',
+        cleanWarning: "Isto remove ficheiros sem ninguém a observar. Limpa as regras que a Limpeza profunda recomenda e que realmente têm algo dentro, e tudo continua a ir para a quarentena — por isso verifique a definição de retenção acima antes de deixar isto ativado.",
         nextRun: 'Próxima execução:',
         lastRun: 'Última execução:',
         weekdays: {
@@ -22058,7 +22052,7 @@ export const CATALOG = {
       emptying: 'A esvaziar…',
       empty: {
         heading: 'Nada na quarentena.',
-        body: 'Tudo o que uma desinstalação ou uma Limpeza Profunda remove chega aqui primeiro. Permanece até a esvaziar, pelo que um ficheiro apanhado por engano é sempre recuperável.'
+        body: "Tudo o que uma desinstalação ou uma Limpeza profunda remove chega aqui primeiro. Permanece até a esvaziar, pelo que um ficheiro apanhado por engano é sempre recuperável."
       },
       deleteConfirmPrompt: 'Eliminar para sempre?',
       restore: 'Restaurar',
@@ -22128,14 +22122,14 @@ export const CATALOG = {
       empty: {
         heading: 'Nenhum ficheiro duplicado aqui.',
         scanned: (count) => `${count} ficheiros comparados.`,
-        truncatedSuffix: ' A verificação foi interrompida, pelo que esta não é a pasta inteira.'
+        truncatedSuffix: " A análise foi interrompida, pelo que esta não é a pasta inteira."
       },
       summarySets: (count) => `${count} conjunto${count === 1 ? '' : 's'}`,
       recoverable: (formatted) => `${formatted} recuperáveis`,
       keepOldest: 'Manter o mais antigo',
       keepNewest: 'Manter o mais recente',
       clear: 'Limpar',
-      truncatedWarning: 'A verificação foi interrompida, pelo que pode haver mais conjuntos do que estes.',
+      truncatedWarning: "A análise foi interrompida, pelo que pode haver mais conjuntos do que estes.",
       tags: { keep: "Manter", toQuarantine: "Vai para a Quarentena" },
       group: {
         identicalCopies: (count, size) => `${count} cópias idênticas · ${size} cada`,
@@ -22162,24 +22156,24 @@ export const CATALOG = {
       }
     },
     deepClean: {
-      title: 'Limpeza Profunda',
+      title: "Limpeza profunda",
       subtitle: 'Cada cache, registo, dump e resíduo que o Prune sabe encontrar, medido nesta máquina em vez de estimado. Nada é eliminado diretamente — tudo o que a Limpeza retira vai primeiro para a Quarentena, de onde pode devolvê-lo.',
       scanLog: {
-        header: 'Saída da verificação',
-        scanningAnnounce: (total) => `A verificar ${total} localizações.`,
-        finishedAnnounce: (scanned, total) => `Verificação concluída. ${scanned} de ${total} localizações medidas.`,
+        header: "Saída da análise",
+        scanningAnnounce: (total) => `A analisar ${total} localizações.`,
+        finishedAnnounce: (scanned, total) => `Análise concluída. ${scanned} de ${total} localizações medidas.`,
         starting: 'A iniciar…',
         idle: "Clique em Pré-visualização para medir o que pode ser limpo."
       },
-      emptyState: 'Nada verificado ainda.',
-      scanErrorPrefix: (error) => `Não foi possível verificar: ${error}`,
+      emptyState: "Nada analisado ainda.",
+      scanErrorPrefix: (error) => `Não foi possível analisar: ${error}`,
       cleanErrorPrefix: (error) => `Não foi possível limpar: ${error}`,
       cleanupComplete: 'Limpeza concluída.',
       resultFreed: (formatted) => `Libertados ${formatted}`,
       resultLockedSuffix: (count) => ` — ${count} ficheiro${count === 1 ? '' : 's'} bloqueado${count === 1 ? '' : 's'} ignorado${count === 1 ? '' : 's'}`,
       before: {
         body: 'O Prune mede de facto cada categoria no disco em vez de a estimar, o que demora cerca de meio minuto.',
-        scanning: 'A verificar…',
+        scanning: "A analisar…",
         preview: 'Pré-visualização'
       },
       hiddenNote: (count) => `${count} limpador${count === 1 ? '' : 'es'} oculto${count === 1 ? '' : 's'} porque o software não está instalado. Definições › Limpeza para os mostrar.`,
@@ -22273,9 +22267,9 @@ export const CATALOG = {
       brokenIntro: 'O Prune procurará ficheiros e chaves de registo que correspondam a este nome, incluindo a sua entrada de Adicionar/Remover Programas, e mostrar-lhe-á tudo antes de remover algo.',
       searchForLabel: 'Procurar por',
       searchHint: (name) => `Retirado de "${name}" sem a versão — os instaladores nomeiam pastas de acordo com o produto, não com o lançamento. Edite se os resultados parecerem errados.`,
-      scanFailed: (error) => `A verificação falhou: ${error}`,
+      scanFailed: (error) => `A análise falhou: ${error}`,
       searchButton: 'Procurar resíduos',
-      normalIntro: (name) => `Isto executa o próprio desinstalador do ${name}, e depois verifica tudo o que deixa para trás.`,
+      normalIntro: (name) => `Isto executa o próprio desinstalador do ${name}, e depois analisa tudo o que deixa para trás.`,
       uninstallFailed: (error) => `A desinstalação falhou: ${error}`,
       startButton: 'Iniciar desinstalação',
       noWorkingUninstaller: 'Nenhum desinstalador funcional — a procurar pelo nome em alternativa',
@@ -22285,7 +22279,7 @@ export const CATALOG = {
         backingUpRegistry: 'A copiar de segurança o registo',
         creatingRestorePoint: 'A criar um ponto de restauro',
         searchingLeftovers: 'A procurar resíduos',
-        scanningLeftovers: 'A verificar resíduos',
+        scanningLeftovers: "A analisar resíduos",
         checkingCommand: 'A verificar o sistema de ficheiros, o registo e as tarefas agendadas…'
       },
       removing: {
@@ -22293,7 +22287,7 @@ export const CATALOG = {
         recycle: { title: 'A enviar para a Reciclagem', command: 'Restaure-os a partir da Reciclagem se necessário' },
         permanent: { title: 'A eliminar permanentemente', command: 'Estes não podem ser restaurados' }
       },
-      noScan: (name) => `O desinstalador do ${name} terminou. A verificação de resíduos está desativada nas Definições, pelo que não se procurou mais nada.`,
+      noScan: (name) => `O desinstalador do ${name} terminou. A análise de resíduos está desativada nas Definições, pelo que não se procurou mais nada.`,
       readyToScan: {
         body: (name) => `Se o desinstalador de ${name} ainda estiver a terminar, deixe-o fechar primeiro. Depois, clique em Analisar resíduos para procurar o que ficou para trás.`,
         scanButton: "Analisar resíduos"
@@ -22312,7 +22306,7 @@ export const CATALOG = {
       failedRegistryKeysNote: 'estas normalmente exigem que o Prune seja executado como administrador:',
       noRestorePoint: (reason) => `Não foi criado nenhum ponto de restauro do sistema (${reason}).`,
       quarantineStillWorks: 'A restauração a partir da Quarentena continua a funcionar.',
-      autoRemoveLeftovers: 'Remover automaticamente tudo o que a verificação encontrar, sem o rever primeiro'
+      autoRemoveLeftovers: "Remover automaticamente tudo o que a análise encontrar, sem o rever primeiro"
     },
     batchUninstallModal: {
       title: (n) => `Desinstalar ${n} programa${n === 1 ? '' : 's'}`,
@@ -22324,8 +22318,8 @@ export const CATALOG = {
       stopping: "A parar depois deste…",
       statusSkipped: "ignorado",
       stoppedNote: (n) => `Interrompido antes do fim. Não iniciados: ${n}.`,
-      registryOnlyIntro: 'Cada aplicação é removida através do Windows por sua vez, e não há verificação de resíduos depois: o Windows remove os próprios dados da aplicação juntamente com ela.',
-      mixedIntro: (hasStore) => `O próprio desinstalador de cada programa é executado por sua vez, depois o Prune verifica o que deixam para trás e mostra-lhe tudo antes de remover algo disso.${hasStore ? ' As aplicações da Store são removidas através do Windows em alternativa, sem verificação de resíduos depois.' : ''}`,
+      registryOnlyIntro: "Cada aplicação é removida através do Windows por sua vez, e não há análise de resíduos depois: o Windows remove os próprios dados da aplicação juntamente com ela.",
+      mixedIntro: (hasStore) => `O próprio desinstalador de cada programa é executado por sua vez, depois o Prune analisa o que deixam para trás e mostra-lhe tudo antes de remover algo disso.${hasStore ? ' As aplicações da Store são removidas através do Windows em alternativa, sem análise de resíduos depois.' : ''}`,
       oneAtATime: 'Uma de cada vez, porque o Windows só permite uma instalação ou desinstalação de cada vez. Alguns desinstaladores mostrarão as suas próprias janelas e far-lhe-ão perguntas.',
       storeWarning: (count) => count === 1
         ? 'A aplicação da Store neste lote não pode ser restaurada a partir da Quarentena: removê-la leva a aplicação e os seus dados guardados, e recuperá-la significa reinstalá-la a partir da Store.'
@@ -22340,23 +22334,23 @@ export const CATALOG = {
         recycle: 'A enviar resíduos para a Reciclagem…',
         permanent: 'A eliminar resíduos permanentemente…'
       },
-      scanningLine: 'A verificar resíduos…',
+      scanningLine: "A analisar resíduos…",
       readyToScan: {
-        body: (n) => `${n} desinstalador${n === 1 ? '' : 'es'} termin${n === 1 ? 'ou' : 'aram'} de correr. Alguns — sobretudo os launchers de jogos — continuam a remover ficheiros em segundo plano depois de a própria janela se fechar. Dê-lhe um momento se não tiver a certeza e depois clique em Analisar resíduos para verificar se ficou algo por remover.`,
+        body: (n) => `${n} desinstalador${n === 1 ? '' : 'es'} termin${n === 1 ? 'ou' : 'aram'} de correr. Alguns — sobretudo os launchers de jogos — continuam a remover ficheiros em segundo plano depois de a própria janela se fechar. Dê-lhe um momento se não tiver a certeza e depois clique em Analisar resíduos para ver se ficou algo por remover.`,
         scanButton: 'Analisar resíduos'
       },
       uninstalledOf: (removed, total) => `Desinstalad${'os'} ${removed} de ${total}.`,
       failedHeading: (n) => `${n} não p${n === 1 ? 'ôde' : 'uderam'} ser desinstalado${n === 1 ? '' : 's'} e f${n === 1 ? 'oi deixado' : 'oram deixados'} intocado${n === 1 ? '' : 's'}:`,
       removeLeftoversFailed: (error) => `Não foi possível remover os resíduos: ${error}`,
-      noScanSettingsOff: 'A verificação de resíduos está desativada nas Definições, pelo que nada foi procurado.',
-      noScanStore: 'Não há verificação de resíduos após uma aplicação da Store: o Windows remove os próprios dados da aplicação juntamente com ela.',
+      noScanSettingsOff: "A análise de resíduos está desativada nas Definições, pelo que nada foi procurado.",
+      noScanStore: "Não há análise de resíduos após uma aplicação da Store: o Windows remove os próprios dados da aplicação juntamente com ela.",
       done: 'Concluído',
       summary: {
         recycle: (programs, items, freed) => `Desinstalad${'os'} ${programs} e envi${'ados'} ${items} para a Reciclagem, libertando ${freed}.`,
         permanent: (programs, items, freed) => `Desinstalad${'os'} ${programs} e eliminad${'os'} ${items} permanentemente, libertando ${freed}.`,
         quarantine: (programs, items, freed) => `Desinstalad${'os'} ${programs} e movid${'os'} ${items} para a Quarentena, libertando ${freed}.`,
         programs: (n) => `${n} programa${n === 1 ? '' : 's'}`,
-        items: (n) => `${n} elemento${n === 1 ? '' : 's'} residual${n === 1 ? '' : 'ais'}`
+        items: (n) => `${n} resíduo${n === 1 ? '' : 's'}`
       },
       noRestorePoint: (reason) => `Não foi criado nenhum ponto de restauro do sistema (${reason}).`,
       restorePointFallback: 'não disponível',
@@ -22435,7 +22429,7 @@ export const CATALOG = {
       reportBug: 'Raportează o eroare',
       dashboard: 'Panou', diskMap: 'Harta discului', applications: 'Aplicații',
       quarantine: 'Carantină', settings: 'Setări', startup: 'Pornire',
-      duplicates: 'Duplicate', deepClean: 'Curățare aprofundată',
+      duplicates: 'Duplicate', deepClean: "Curățare profundă",
       landmark: 'Principal'
     },
     settings: {
@@ -22470,12 +22464,12 @@ export const CATALOG = {
         openPageError: (error) => `Nu s-a putut deschide pagina: ${error}`
       },
       showFreeSpace: {
-        title: 'Afișează spațiul liber pe Harta Discului',
+        title: "Afișează spațiul liber pe Harta discului",
         description: 'Desenează spațiul liber al unității ca încă un bloc atunci când scanezi o unitate întreagă, astfel încât fiecare folder să se citească drept o cotă a unității, nu a spațiului utilizat.'
       },
       autoQuarantine: {
         title: 'Carantină automată',
-        description: 'Curățarea Profundă mută ceea ce elimină în Carantina Prune, de unde îl poți readuce. Dezactivează asta și va merge în schimb în Coșul de Reciclare Windows — încă recuperabil, doar într-un loc pe care știi deja cum să-l golești.'
+        description: "Curățarea profundă mută ceea ce elimină în Carantina Prune, de unde îl poți restaura. Dezactivează asta și va merge în schimb în Coșul de reciclare Windows — încă poate fi restaurat, doar într-un loc pe care știi deja cum să-l golești."
       },
       skipRecent: {
         title: 'Lasă fișierele recente în pace',
@@ -22500,14 +22494,14 @@ export const CATALOG = {
       },
       quarantineMaxSize: {
         title: "Limita de dimensiune a Carantinei",
-        description: 'O limită pentru întregul folder Carantină. Peste aceasta, cele mai vechi copii de rezervă dispar primele — cea mai recentă nu este niciodată renunțată, așa că ceva mare pe care tocmai l-ai eliminat rămâne recuperabil chiar dacă este mai mare decât limita de unul singur. Lasă gol pentru nicio limită.',
+        description: "O limită pentru întregul folder Carantină. Peste aceasta, cele mai vechi copii de rezervă dispar primele — cea mai recentă nu este niciodată renunțată, așa că ceva mare pe care tocmai l-ai eliminat poate fi restaurat chiar dacă este mai mare decât limita de unul singur. Lasă gol pentru nicio limită.",
         noLimitPlaceholder: 'Fără limită',
         gbUnit: 'GB',
         ariaLabel: 'Dimensiunea maximă a carantinei în gigabytes'
       },
       exclusions: {
         title: "Exclude foldere",
-        description: 'Foldere și tipuri de fișiere pe care Prune le va lăsa în pace — sărite de Curățarea Profundă și excluse din Harta Discului — pe lângă cele pe care le protejează deja: Informații despre Volumul de Sistem, carantine antivirus, depozitul de componente și încă o duzină.',
+        description: "Foldere și tipuri de fișiere pe care Prune le va lăsa în pace — sărite de Curățarea profundă și excluse din Harta discului — pe lângă cele pe care le protejează deja: Informații despre Volumul de Sistem, carantine antivirus, depozitul de componente și încă o duzină.",
         ariaLabel: 'Calea folderului sau tipul de fișier de exclus',
         add: 'Adaugă',
         invalidFormat: 'Scrie o cale de folder completă (D:\\Games) sau un tip de fișier (*.iso).',
@@ -22521,7 +22515,7 @@ export const CATALOG = {
         title: 'Cookie-uri de păstrat',
         description: 'Tot restul din fișierul de cookie-uri al unui browser dispare în momentul în care îl cureți. Scanează pentru a vedea ce este de fapt acolo, și bifează tot ce merită păstrat.',
         scanButton: 'Scanează după cookie-uri',
-        scanning: 'Se rulează…',
+        scanning: "Se scanează…",
         filterPlaceholder: 'Filtrează domeniile…',
         countSuffix: (count) => `${count} cookie${count === 1 ? '' : '-uri'}`,
         none: 'Niciun cookie găsit.',
@@ -22571,20 +22565,20 @@ export const CATALOG = {
           title: 'Păstrează un istoric al dezinstalărilor',
           description: 'Lista panoului de control cu eliminările recente și spațiul pe care l-au eliberat. Dezactivat, nimic nou nu este înregistrat.'
         },
-        destinationHeading: 'Fișierele rămase merg la',
+        destinationHeading: "Resturile merg la",
         leftoverOptions: {
-          quarantine: { label: 'Carantină', description: 'Mutat în propria copie de rezervă a Prune, și recuperabil din ecranul Carantină. Cea implicită.' },
-          recycle: { label: 'Coșul de Reciclare', description: 'Recuperabil din propriul coș Windows, și eliberat când îl golești.' },
+          quarantine: { label: 'Carantină', description: "Mutat în propria copie de rezervă a Prune, și poate fi restaurat din ecranul Carantină. Cea implicită." },
+          recycle: { label: 'Coșul de Reciclare', description: "Poate fi restaurat din propriul coș Windows, și este eliberat când îl golești." },
           permanent: { label: 'Șterge definitiv', description: 'Șters complet. Nimic de restaurat.' }
         },
-        permanentWarning: 'Fișierele rămase vor fi șterse complet și nu pot fi restaurate, nici din Carantină, nici de altundeva. Verifică lista înainte de a o confirma.',
+        permanentWarning: "Resturile vor fi șterse complet și nu pot fi restaurate, nici din Carantină, nici de altundeva. Verifică lista înainte de a o confirma.",
         registryNote: 'Cheile de registru sunt exportate în Carantină înainte de a fi eliminate, indiferent ce alegi.'
       },
       about: {
         reportTitle: 'Raportează o eroare',
         reportDescription: "Deschide un issue precompletat pe GitHub. Prune nu trimite nimic singur, iar tu vezi totul înainte ca ceva să plece oriunde.",
         reportButton: 'Raportează o eroare',
-        description: 'Un instrument local, offline de dezinstalare și curățare pentru Windows — eliminare forțată cu scanare de fișiere rămase, carantină sigură înainte de ștergere, cartografierea discului și curățare de gunoi cu un clic.'
+        description: "Un instrument local, offline de dezinstalare și curățare pentru Windows — eliminare forțată cu scanare de fișiere rămase, carantină sigură înainte de ștergere, harta discului și curățare de gunoi cu un clic."
       },
       automation: {
         title: 'Automatizare',
@@ -22599,7 +22593,7 @@ export const CATALOG = {
         everyWeek: 'În fiecare săptămână',
         measureOnly: 'Doar măsoară',
         clean: 'Curăță',
-        cleanWarning: 'Aceasta elimină fișiere fără ca nimeni să supravegheze. Curăță regulile pe care Curățarea Profundă le recomandă și care chiar au ceva în ele, și totul merge totuși în carantină — așa că verifică setarea de reținere de mai sus înainte de a lăsa aceasta activată.',
+        cleanWarning: "Aceasta elimină fișiere fără ca nimeni să supravegheze. Curăță regulile pe care Curățarea profundă le recomandă și care chiar au ceva în ele, și totul merge totuși în carantină — așa că verifică setarea de reținere de mai sus înainte de a lăsa aceasta activată.",
         nextRun: 'Următoarea rulare:',
         lastRun: 'Ultima rulare:',
         weekdays: {
@@ -22651,7 +22645,7 @@ export const CATALOG = {
       },
       apps: {
         label: "Aplicații instalate",
-        broken: (count) => `${count} rămase în urma unei dezinstalări eșuate`,
+        broken: (count) => `${count} ${count === 1 ? 'rest rămas' : `${count % 100 >= 1 && count % 100 < 20 ? '' : 'de '}resturi rămase`} în urma unei dezinstalări eșuate`,
         noBroken: 'Nicio intrare deteriorată.',
         review: 'Revizuiește',
         manage: 'Gestionează'
@@ -22858,7 +22852,7 @@ export const CATALOG = {
       emptying: 'Se golește…',
       empty: {
         heading: 'Nimic în carantină.',
-        body: 'Tot ce elimină o dezinstalare sau o Curățare profundă ajunge mai întâi aici. Rămâne aici până îl golești, deci un fișier luat din greșeală poate fi întotdeauna recuperat.'
+        body: "Tot ce elimină o dezinstalare sau o Curățare profundă ajunge mai întâi aici. Rămâne aici până îl golești, deci un fișier luat din greșeală poate fi întotdeauna restaurat."
       },
       deleteConfirmPrompt: 'Ștergi definitiv?',
       restore: 'Restaurează',
@@ -22963,7 +22957,7 @@ export const CATALOG = {
     },
     deepClean: {
       title: 'Curățare profundă',
-      subtitle: 'Fiecare cache, jurnal, dump și rest pe care Prune știe să-l găsească, măsurat pe acest calculator în loc să fie estimat. Nimic nu este șters direct — tot ce ia Curățarea merge mai întâi în Carantină, de unde îl poți pune înapoi.',
+      subtitle: "Fiecare cache, jurnal, dump și rest pe care Prune știe să-l găsească, măsurat pe acest calculator în loc să fie estimat. Nimic nu este șters direct — tot ce ia Curățarea merge mai întâi în Carantină, de unde îl poți restaura.",
       scanLog: {
         header: 'Rezultatul scanării',
         scanningAnnounce: (total) => `Se scanează ${total} locații.`,
@@ -22982,7 +22976,7 @@ export const CATALOG = {
         scanning: 'Se scanează…',
         preview: 'Previzualizare'
       },
-      hiddenNote: (count) => `${count} instrumente de curățare ascunse deoarece software-ul nu este instalat. Setări › Curățare pentru a le afișa.`,
+      hiddenNote: (count) => `${count} ${count % 100 >= 1 && count % 100 < 20 ? '' : 'de '}curățătoare ascunse deoarece software-ul nu este instalat. Setări › Curățare pentru a le afișa.`,
       footer: {
         totalLabel: 'Spațiu total de eliberat:',
         notMeasuredYet: 'încă nemăsurat',
@@ -23057,7 +23051,7 @@ export const CATALOG = {
       },
       clean: 'Nu s-au găsit resturi — dezinstalare curată.',
       done: 'Terminat',
-      foundWarning: (count) => count === 1 ? `Dezinstalatorul nativ a ratat un element rămas. Revizuiește înainte de eliminare.` : `Dezinstalatorul nativ a ratat ${count} ${count % 100 >= 1 && count % 100 < 20 ? '' : 'de '}elemente rămase. Revizuiește înainte de eliminare.`,
+      foundWarning: (count) => count === 1 ? `Dezinstalatorul nativ a ratat un rest. Revizuiește înainte de eliminare.` : `Dezinstalatorul nativ a ratat ${count} ${count % 100 >= 1 && count % 100 < 20 ? '' : 'de '}resturi. Revizuiește înainte de eliminare.`,
       excludedNote: (count) => `${count} folder${count === 1 ? '' : 'e'} las${count === 1 ? 'at' : 'ate'} deoparte pentru că ${count === 1 ? 'se află' : 'se află'} în excluderile tale.`,
       itemsSelected: 'elemente selectate',
       reclaimable: 'recuperabil',
@@ -23067,7 +23061,7 @@ export const CATALOG = {
       titleForce: (name) => `Forțează eliminarea ${name}`,
       titleNormal: (name) => `Dezinstalează ${name}`,
       close: 'Închide',
-      stillWaiting: `Încă se așteaptă programul de dezinstalare. Poți închide această fereastră; programul continuă să ruleze, iar Prune nu va căuta resturi.`,
+      stillWaiting: "Dezinstalatorul este încă așteptat. Poți închide această fereastră; dezinstalatorul continuă să ruleze, iar Prune nu va căuta resturi.",
       runningWarning: (name) => `${name} rulează chiar acum. Închide-l mai întâi — un dezinstalator eșuează de obicei cu un program deschis și poate lăsa fișiere pe care următoarea lansare le va recrea.`,
       orphanedWarning: (reason) => `${reason} Windows va continua să îl listeze până când intrarea este eliminată.`,
       brokenIntro: 'Prune va căuta fișiere și chei de registru care corespund acestui nume, inclusiv intrarea sa Adăugare/Eliminare programe, și îți va arăta totul înainte de a elimina orice.',
@@ -23119,7 +23113,7 @@ export const CATALOG = {
       historyLabel: (n) => `Dezinstalare în lot: ${n} programe`,
       close: 'Închide',
       cancel: "Anulează",
-      stillWaiting: (more) => more ? `Încă se așteaptă acest program de dezinstalare. Fereastra lui poate fi în spatele Prune. Alege „Oprește după acesta” pentru a omite restul după ce se termină.` : `Încă se așteaptă acest program de dezinstalare. Fereastra lui poate fi în spatele Prune.`,
+      stillWaiting: (more) => more ? `Acest dezinstalator este încă așteptat. Fereastra lui poate fi în spatele Prune. Alege „Oprește după acesta” pentru a omite restul după ce se termină.` : `Acest dezinstalator este încă așteptat. Fereastra lui poate fi în spatele Prune.`,
       stopAfterThis: "Oprește după acesta",
       stopping: "Se oprește după acesta…",
       statusSkipped: "omis",
@@ -23156,11 +23150,11 @@ export const CATALOG = {
         permanent: (programs, items, freed) => `S-au dezinstalat ${programs} și s-au șters definitiv ${items}, eliberând ${freed}.`,
         quarantine: (programs, items, freed) => `S-au dezinstalat ${programs} și s-au mutat ${items} în Carantină, eliberând ${freed}.`,
         programs: (n) => `${n} program${n === 1 ? '' : 'e'}`,
-        items: (n) => `${n} element${n === 1 ? '' : 'e'} rămas${n === 1 ? '' : 'e'}`
+        items: (n) => `${n} ${n === 1 ? 'rest' : `${n % 100 >= 1 && n % 100 < 20 ? '' : 'de '}resturi`}`
       },
       noRestorePoint: (reason) => `Nu s-a creat niciun punct de restaurare a sistemului (${reason}).`,
       restorePointFallback: 'indisponibil',
-      quarantineNote: 'Tot ce este mai sus este încă în Carantină și poate fi pus înapoi.',
+      quarantineNote: "Tot ce este mai sus este încă în Carantină și poate fi restaurat.",
       failedRegistryKeys: (n) => `${n} che${n === 1 ? 'ie' : 'i'} de registru nu ${n === 1 ? 'a putut fi eliminată' : 'au putut fi eliminate'} — acestea necesită de obicei ca Prune să ruleze ca administrator.`
     },
     bugReport: {
@@ -23320,13 +23314,13 @@ export const CATALOG = {
       cookiesToPreserve: {
         title: 'Файлы cookie для сохранения',
         description: 'Всё остальное в файле cookie браузера исчезает в момент очистки. Просканируйте, чтобы увидеть, что там есть на самом деле, и отметьте всё, что стоит сохранить.',
-        scanButton: 'Поиск файлов cookie',
-        scanning: 'Выполняется…',
+        scanButton: "Сканировать cookie",
+        scanning: "Сканирование…",
         filterPlaceholder: 'Фильтр доменов…',
         countSuffix: (count) => `${count} cookie-файлов`,
         none: 'Файлы cookie не найдены.',
         staleBadge: 'не обнаружено при этом сканировании',
-        scanErrorPrefix: (message) => `Не удалось найти файлы cookie: ${message}`,
+        scanErrorPrefix: (message) => `Не удалось просканировать cookie: ${message}`,
         fileErrorsNote: (count) => `Не удалось прочитать ${count} файлов, поэтому они были пропущены.`,
         checkboxAriaLabel: (domain) => `Сохранить файлы cookie с ${domain}`
       },
@@ -23371,20 +23365,20 @@ export const CATALOG = {
           title: 'Вести историю удалений',
           description: 'Список панели управления недавними удалениями и освобождённым ими местом. Выключено — ничего нового не записывается.'
         },
-        destinationHeading: 'Оставшиеся файлы отправляются в',
+        destinationHeading: "Остатки отправляются в",
         leftoverOptions: {
           quarantine: { label: 'Карантин', description: 'Перемещено в собственную резервную копию Prune и восстановимо с экрана карантина. Вариант по умолчанию.' },
           recycle: { label: 'Корзину', description: 'Восстановимо из собственной корзины Windows и освобождается при её очистке.' },
           permanent: { label: 'Удалить навсегда', description: 'Удалено полностью. Восстанавливать нечего.' }
         },
-        permanentWarning: 'Оставшиеся файлы будут удалены полностью и не могут быть восстановлены ни из карантина, ни откуда-либо ещё. Проверьте список перед подтверждением.',
+        permanentWarning: "Остатки будут удалены полностью и не могут быть восстановлены ни из карантина, ни откуда-либо ещё. Проверьте список перед подтверждением.",
         registryNote: 'Ключи реестра экспортируются в карантин перед удалением, независимо от вашего выбора.'
       },
       about: {
         reportTitle: 'Сообщить об ошибке',
         reportDescription: "Открывает на GitHub уже заполненное обращение. Сам Prune ничего не отправляет, и вы видите всё до того, как это куда-либо уйдёт.",
         reportButton: 'Сообщить об ошибке',
-        description: 'Локальный, автономный инструмент удаления и очистки для Windows — принудительное удаление со сканированием остаточных файлов, безопасный карантин перед удалением, картирование диска и очистка мусора в один клик.'
+        description: "Локальный, автономный инструмент удаления и очистки для Windows — принудительное удаление со сканированием остатков, безопасный карантин перед удалением, карта диска и очистка мусора в один клик."
       },
       automation: {
         title: 'Автоматизация',
@@ -23459,7 +23453,7 @@ export const CATALOG = {
       junk: {
         label: "Ненужные файлы",
         notMeasured: 'не измерено',
-        description: 'Измерение проходит по каждому пути очистки на диске — примерно полминуты.',
+        description: "Измерение проходит по путям каждого средства очистки на диске — примерно полминуты.",
         measure: 'Измерить'
       },
       recentActivity: {
@@ -23625,7 +23619,7 @@ export const CATALOG = {
         total: 'всего'
       },
       batchReasons: {
-        orphaned: 'Его программа удаления повреждена — используйте вместо этого принудительное удаление.',
+        orphaned: "Его деинсталлятор повреждён — используйте вместо этого принудительное удаление.",
         extension: 'Расширения браузера удаляются из самого браузера.',
         storeNoPackage: 'У этого приложения из магазина нет имени пакета для удаления.',
         storeProtected: 'Windows отмечает это приложение как часть системы и не позволяет его удалить.',
@@ -23715,7 +23709,7 @@ export const CATALOG = {
       footerNote: 'Отключение записи фиксирует решение в StartupApproved — там же, где читают и пишут собственные параметры Windows «Приложения при автозапуске» и Диспетчер задач. Ничего не удаляется: значение Run или ярлык остаётся точно на своём месте, поэтому изменение можно отменить отсюда или из любого из этих двух мест.'
     },
     duplicates: {
-      title: 'Повторяющиеся файлы',
+      title: "Дубликаты файлов",
       subtitle: 'Файлы, идентичные побайтово, а не просто одинакового размера. Укажите папку, в которой вы действительно храните вещи — чтение всего диска для сравнения его с самим собой занимает намного больше времени, чем оно того стоит, и в основном находит собственные копии машиной своих же файлов.',
       folderPlaceholder: (a) => `Путь к папке, например ${a}`,
       stoppedNote: "Остановлено — ничего не сравнивалось.",
@@ -23726,7 +23720,7 @@ export const CATALOG = {
       reading: (folder) => `Чтение ${folder}`,
       readingNote: 'Сначала размеры, затем образец в 64 КБ всего, что имеет одинаковый размер, затем полное содержимое того, что всё ещё совпадает.',
       empty: {
-        heading: 'Здесь нет повторяющихся файлов.',
+        heading: "Здесь нет дубликатов файлов.",
         scanned: (count) => `Сравнено файлов: ${count}.`,
         truncatedSuffix: ' Сканирование было прервано раньше времени, так что это не вся папка.'
       },
@@ -23771,7 +23765,7 @@ export const CATALOG = {
         starting: 'Запуск…',
         idle: "Нажмите «Предпросмотр», чтобы измерить, что можно очистить."
       },
-      emptyState: 'Пока ничего не отсканировано.',
+      emptyState: "Пока ничего не просканировано.",
       scanErrorPrefix: (error) => `Не удалось выполнить сканирование: ${error}`,
       cleanErrorPrefix: (error) => `Не удалось выполнить очистку: ${error}`,
       cleanupComplete: 'Очистка завершена.',
@@ -23782,7 +23776,7 @@ export const CATALOG = {
         scanning: 'Сканирование…',
         preview: 'Предпросмотр'
       },
-      hiddenNote: (count) => `Скрыто чистильщиков: ${count}, так как программа не установлена. Настройки › Очистка, чтобы их показать.`,
+      hiddenNote: (count) => `Скрыто средств очистки: ${count}, так как программа не установлена. Настройки › Очистка, чтобы их показать.`,
       footer: {
         totalLabel: 'Всего места будет освобождено:',
         notMeasuredYet: 'ещё не измерено',
@@ -23857,7 +23851,7 @@ export const CATALOG = {
       },
       clean: 'Остатков не найдено — чистое удаление.',
       done: 'Готово',
-      foundWarning: (count) => `Найдено остатков, которые пропустила программа удаления: ${count}. Проверьте их перед удалением.`,
+      foundWarning: (count) => `Найдено остатков, которые пропустил деинсталлятор: ${count}. Проверьте их перед удалением.`,
       excludedNote: (count) => `${count} папок исключено, так как они находятся в ваших исключениях.`,
       itemsSelected: 'элементов выбрано',
       reclaimable: 'можно освободить',
@@ -23867,7 +23861,7 @@ export const CATALOG = {
       titleForce: (name) => `Принудительно удалить ${name}`,
       titleNormal: (name) => `Удалить ${name}`,
       close: 'Закрыть',
-      stillWaiting: `Всё ещё ждём программу удаления. Это окно можно закрыть: программа продолжит работу, а Prune не будет искать остатки.`,
+      stillWaiting: "Всё ещё ждём деинсталлятор. Это окно можно закрыть: он продолжит работу, а Prune не будет искать остатки.",
       runningWarning: (name) => `${name} сейчас запущена. Сначала закройте её — деинсталлятор обычно завершается с ошибкой при открытой программе и может оставить файлы, которые следующий запуск создаст заново.`,
       orphanedWarning: (reason) => `${reason} Windows продолжит отображать её, пока запись не будет удалена.`,
       brokenIntro: 'Prune найдёт файлы и ключи реестра, соответствующие этому имени, включая запись в списке программ и компонентов, и покажет вам всё перед удалением чего-либо.',
@@ -23895,7 +23889,7 @@ export const CATALOG = {
       },
       noScan: (name) => `Деинсталлятор ${name} завершил работу. Сканирование остатков отключено в настройках, поэтому ничего другого не искалось.`,
       readyToScan: {
-        body: (name) => `Если программа удаления ${name} ещё завершает работу, дайте ей закрыться. Когда она закончит, нажмите «Сканировать остатки», чтобы найти всё, что после неё осталось.`,
+        body: (name) => `Если деинсталлятор ${name} ещё завершает работу, дайте ему закрыться. Когда он закончит, нажмите «Сканировать остатки», чтобы найти всё, что после него осталось.`,
         scanButton: "Сканировать остатки"
       },
       removalFailed: (error) => `Удаление не удалось: ${error}`,
@@ -23919,8 +23913,8 @@ export const CATALOG = {
       historyLabel: (n) => `Пакетное удаление: ${n} программ`,
       close: 'Закрыть',
       cancel: "Отмена",
-      stillWaiting: (more) => more ? `Всё ещё ждём эту программу удаления. Её окно может находиться за окном Prune. Выберите «Остановить после этой», чтобы пропустить остальные после её завершения.` : `Всё ещё ждём эту программу удаления. Её окно может находиться за окном Prune.`,
-      stopAfterThis: "Остановить после этой",
+      stillWaiting: (more) => more ? `Всё ещё ждём этот деинсталлятор. Его окно может находиться за окном Prune. Выберите «Остановить после этого», чтобы пропустить остальные программы после его завершения.` : `Всё ещё ждём этот деинсталлятор. Его окно может находиться за окном Prune.`,
+      stopAfterThis: "Остановить после этого",
       stopping: "Остановка после этой…",
       statusSkipped: "пропущено",
       stoppedNote: (n) => `Остановлено досрочно. Не начато: ${n}.`,
@@ -23942,7 +23936,7 @@ export const CATALOG = {
       },
       scanningLine: 'Сканирование остатков…',
       readyToScan: {
-        body: (n) => `Завершили работу программы удаления: ${n}. Некоторые из них, особенно лаунчеры игр, продолжают удалять файлы в фоне и после закрытия своего окна. Если не уверены, немного подождите и нажмите «Сканировать остатки», чтобы проверить, не осталось ли что-нибудь.`,
+        body: (n) => `Завершили работу деинсталляторы: ${n}. Некоторые из них, особенно лаунчеры игр, продолжают удалять файлы в фоне и после закрытия своего окна. Если не уверены, немного подождите и нажмите «Сканировать остатки», чтобы проверить, не осталось ли что-нибудь.`,
         scanButton: 'Сканировать остатки'
       },
       uninstalledOf: (removed, total) => `Удалено ${removed} из ${total}.`,
@@ -23956,7 +23950,7 @@ export const CATALOG = {
         permanent: (programs, items, freed) => `Удалено ${programs} и безвозвратно удалено ${items}, освободив ${freed}.`,
         quarantine: (programs, items, freed) => `Удалено ${programs} и перемещено ${items} в карантин, освободив ${freed}.`,
         programs: (n) => `${n} программ`,
-        items: (n) => `${n} оставшихся элементов`
+        items: (n) => { const m10 = n % 10, m100 = n % 100; const w = m10 === 1 && m100 !== 11 ? 'остаток' : (m10 >= 2 && m10 <= 4 && (m100 < 12 || m100 > 14)) ? 'остатка' : 'остатков'; return `${n} ${w}`; }
       },
       noRestorePoint: (reason) => `Точка восстановления системы не была создана (${reason}).`,
       restorePointFallback: 'недоступно',
@@ -24035,7 +24029,7 @@ export const CATALOG = {
       reportBug: 'Nahlásiť chybu',
       dashboard: 'Prehľad', diskMap: 'Mapa disku', applications: 'Aplikácie',
       quarantine: 'Karanténa', settings: 'Nastavenia', startup: 'Po spustení',
-      duplicates: 'Duplicity', deepClean: 'Dôkladné čistenie',
+      duplicates: 'Duplicity', deepClean: "Hĺbkové čistenie",
       landmark: 'Hlavná'
     },
     settings: {
@@ -24088,7 +24082,7 @@ export const CATALOG = {
         description: 'Pred vynúteným odstránením, aby samotný Windows mohol vrátiť počítač späť. Stojí to pár sekúnd a nerobí to vôbec nič, ak je Ochrana systému vypnutá.'
       },
       hideUnavailable: {
-        title: 'Skryť nástroje na čistenie, ktoré sa neuplatňujú',
+        title: "Skryť čističe, ktoré sa neuplatňujú",
         description: 'Väčšina zoznamu je pre softvér, ktorý tento počítač nemá. Ich skrytím zostane iba to, čo je tu skutočne prítomné.'
       },
       quarantineRetention: {
@@ -24120,13 +24114,13 @@ export const CATALOG = {
       cookiesToPreserve: {
         title: 'Súbory cookie na zachovanie',
         description: 'Všetko ostatné v súbore cookie prehliadača zmizne vo chvíli, keď ho vyčistíte. Naskenujte a zistite, čo tam skutočne je, a začiarknite všetko, čo stojí za zachovanie.',
-        scanButton: 'Vyhľadať súbory cookie',
-        scanning: 'Prebieha…',
+        scanButton: "Skenovať súbory cookie",
+        scanning: "Skenovanie…",
         filterPlaceholder: 'Filtrovať domény…',
         countSuffix: (count) => `${count} cookie`,
         none: 'Nenašli sa žiadne súbory cookie.',
         staleBadge: 'nezistené pri tomto skenovaní',
-        scanErrorPrefix: (message) => `Nepodarilo sa vyhľadať súbory cookie: ${message}`,
+        scanErrorPrefix: (message) => `Nepodarilo sa naskenovať súbory cookie: ${message}`,
         fileErrorsNote: (count) => `${count} súbor${count === 1 ? ' sa nepodarilo prečítať a bol' : 'ov sa nepodarilo prečítať a boli'} preskočen${count === 1 ? 'ý' : 'é'}.`,
         checkboxAriaLabel: (domain) => `Zachovať súbory cookie z ${domain}`
       },
@@ -24140,7 +24134,7 @@ export const CATALOG = {
       },
       warningConfirmations: {
         title: 'Potvrdenia upozornení',
-        allAsk: 'Každý nástroj na čistenie, ktorý stráca dáta, sa pred spustením spýta.',
+        allAsk: "Každý čistič, ktorý stráca dáta, sa pred spustením spýta.",
         someSet: (count) => `${count} upozornen${count === 1 ? 'ie o čistení je nastavené' : 'í o čistení je nastavených'}, aby sa už nepýtali.`,
         reset: 'Obnoviť potvrdenia upozornení'
       },
@@ -24171,20 +24165,20 @@ export const CATALOG = {
           title: 'Uchovávať históriu odinštalovaní',
           description: 'Zoznam nedávnych odstránení a uvoľneného miesta na paneli. Vypnuté, nič nové sa nezaznamenáva.'
         },
-        destinationHeading: 'Zostávajúce súbory idú do',
+        destinationHeading: "Zvyšky idú do",
         leftoverOptions: {
           quarantine: { label: 'Karanténa', description: 'Presunuté do vlastnej zálohy Prune a obnoviteľné z obrazovky karantény. Predvolené.' },
           recycle: { label: 'Kôš', description: 'Obnoviteľné z vlastného koša Windows a uvoľnené pri jeho vyprázdnení.' },
           permanent: { label: 'Trvalo odstrániť', description: 'Úplne odstránené. Nič na obnovenie.' }
         },
-        permanentWarning: 'Zostávajúce súbory budú úplne odstránené a nemožno ich obnoviť, ani z karantény, ani odinakiaľ. Skontrolujte zoznam pred potvrdením.',
+        permanentWarning: "Zvyšky budú úplne odstránené a nemožno ich obnoviť, ani z karantény, ani odinakiaľ. Skontrolujte zoznam pred potvrdením.",
         registryNote: 'Kľúče registra sa exportujú do karantény pred ich odstránením, bez ohľadu na váš výber.'
       },
       about: {
         reportTitle: 'Nahlásiť chybu',
         reportDescription: "Otvorí na GitHube predvyplnené hlásenie. Prune sám nič neodosiela a všetko uvidíte skôr, než to niekam odíde.",
         reportButton: 'Nahlásiť chybu',
-        description: 'Lokálny, offline nástroj na odinštalovanie a čistenie pre Windows — vynútené odstránenie so skenovaním zvyšných súborov, bezpečná karanténa pred vymazaním, mapovanie disku a jednoklikové čistenie odpadu.'
+        description: "Lokálny, offline nástroj na odinštalovanie a čistenie pre Windows — vynútené odstránenie so skenovaním zvyškov, bezpečná karanténa pred vymazaním, Mapa disku a jednoklikové čistenie odpadu."
       },
       automation: {
         title: 'Automatizácia',
@@ -24251,7 +24245,7 @@ export const CATALOG = {
       },
       apps: {
         label: "Nainštalované aplikácie",
-        broken: (count) => `${count} zanechaných po neúspešnej odinštalácii`,
+        broken: (count) => `${count} zanechaných po neúspešnom odinštalovaní`,
         noBroken: 'Žiadne poškodené položky.',
         review: 'Skontrolovať',
         manage: 'Spravovať'
@@ -24259,27 +24253,27 @@ export const CATALOG = {
       junk: {
         label: "Nepotrebné súbory",
         notMeasured: 'nezmerané',
-        description: 'Meranie prechádza každou cestou čistenia na disku — asi pol minúty.',
+        description: "Meranie prechádza cesty všetkých čističov na disku — asi pol minúty.",
         measure: 'Zmerať'
       },
       recentActivity: {
         title: "Nedávna aktivita",
-        empty: 'Zatiaľ žiadne odinštalácie.',
+        empty: "Zatiaľ žiadne odinštalovania.",
         freed: 'uvoľnené'
       }
     },
     diskMap: {
       title: "Mapa disku",
-      unscannedLabel: "Neprehľadané",
+      unscannedLabel: "Nenaskenované",
       aggregateCell: (count) => `${count} menších položiek`,
       subtitle: "Využitie disku: čo na tomto disku zaberá miesto a kde.",
       fastIndexSummary: (count) => `${count} súborov a priečinkov načítaných z vlastného indexu disku.`,
       browsingInstant: 'Prehliadanie je odtiaľto okamžité.',
       indexIncomplete: 'Časť indexu sa nepodarilo načítať, takže súčty sú dolný odhad.',
-      scanningDrive: 'Prehľadávanie disku…',
+      scanningDrive: "Skenovanie disku…",
       readingDrive: 'Čítanie disku…',
       rescanButton: 'Znova prehľadať disk (správca)',
-      fastScanButton: 'Rýchle prehľadanie (správca)',
+      fastScanButton: "Rýchle skenovanie (správca)",
       loading: {
         heading: 'Čítanie každého priečinka v',
         note: 'Jeden adresár po druhom, čo je jediný spôsob, ako to urobiť bez oprávnení správcu. Celý disk môže trvať minútu a nemusí sa skončiť.',
@@ -24287,7 +24281,7 @@ export const CATALOG = {
       },
       driveRootPrompt: {
         heading: 'Načítať celý disk',
-        fastTitle: "Rýchle prehľadanie",
+        fastTitle: "Rýchle skenovanie",
         recommended: "Odporúčané",
         fastExplain: (path) => `Načíta vlastný index súborov disku: všetky súbory na ${path} za pár sekúnd.`,
         fastNeeds: "Vyžaduje oprávnenie správcu, preto Windows zobrazí výzvu UAC.",
@@ -24297,8 +24291,8 @@ export const CATALOG = {
         crawlButton: 'Namiesto toho prechádzať priečinky'
       },
       scanProgress: {
-        scanning: (path) => `Prehľadáva sa ${path}`,
-        filesProcessed: (files, size) => `Prehľadaných súborov: ${files} · spracované ${size}`,
+        scanning: (path) => `Skenuje sa ${path}`,
+        filesProcessed: (files, size) => `Naskenovaných súborov: ${files} · spracované ${size}`,
         noTotalNote: "Celková veľkosť tohto skenovania nie je známa, preto sa nezobrazuje percento — počítadlá ukazujú, čo sa doteraz prečítalo.",
         indexNote: "Windows počas čítania indexu disku nehlási priebeh, preto sa nezobrazuje percento — iba uplynutý čas.",
         elapsed: (time) => `Uplynulo ${time}`,
@@ -24317,20 +24311,20 @@ export const CATALOG = {
         retry: "Skúsiť znova",
         barLabel: "Priebeh skenovania"
       },
-      scanFailure: (path, error) => `Nepodarilo sa prehľadať „${path}“: ${error}`,
-      fastScanDeclined: 'Neschválené — stále sa používa prehľadávanie priečinok po priečinku.',
+      scanFailure: (path, error) => `Nepodarilo sa naskenovať „${path}“: ${error}`,
+      fastScanDeclined: "Neschválené — stále sa používa skenovanie priečinok po priečinku.",
       truncated: {
-        withCoverage: (measured, used, percent) => `Tomuto prehľadaniu vypršal čas: zmeralo ${measured} z ${used} využitého miesta (${percent} %). To, čo zmeralo, je skutočné; zvyšok sa zobrazuje ako neprehľadaný, nie ako prázdny.`,
-        withoutCoverage: 'Tomuto prehľadaniu vypršal čas skôr, ako dokončilo disk. Všetko, čo skutočne zmeralo, je skutočné, ale priečinky, ku ktorým sa nikdy nedostalo, sa zobrazujú ako neprehľadané, nie ako prázdne — neberte to ako úplný obraz toho, čo využíva vaše miesto.',
-        stoppedWithCoverage: (a, b, c) => `Toto prehľadávanie ste zastavili: zmeralo ${a} z ${b} využitého miesta (${c} %). To, čo zmeralo, je skutočné; zvyšok sa zobrazuje ako neprehľadaný, nie ako prázdny.`,
-        stoppedWithoutCoverage: "Toto prehľadávanie ste zastavili predčasne. To, čo zmeralo, je skutočné; priečinky, ktoré nestihlo, sa zobrazujú ako neprehľadané, nie ako prázdne — nepovažujte to za úplný obraz toho, čo zaberá miesto.",
-        rescanLink: 'Namiesto toho spustiť rýchle prehľadanie'
+        withCoverage: (measured, used, percent) => `Tomuto skenovaniu vypršal čas: zmeralo ${measured} z ${used} využitého miesta (${percent} %). To, čo zmeralo, je skutočné; zvyšok sa zobrazuje ako nenaskenovaný, nie ako prázdny.`,
+        withoutCoverage: "Tomuto skenovaniu vypršal čas skôr, ako dokončilo disk. Všetko, čo skutočne zmeralo, je skutočné, ale priečinky, ku ktorým sa nikdy nedostalo, sa zobrazujú ako nenaskenované, nie ako prázdne — neberte to ako úplný obraz toho, čo využíva vaše miesto.",
+        stoppedWithCoverage: (a, b, c) => `Toto skenovanie ste zastavili: zmeralo ${a} z ${b} využitého miesta (${c} %). To, čo zmeralo, je skutočné; zvyšok sa zobrazuje ako nenaskenovaný, nie ako prázdny.`,
+        stoppedWithoutCoverage: "Toto skenovanie ste zastavili predčasne. To, čo zmeralo, je skutočné; priečinky, ktoré nestihlo, sa zobrazujú ako nenaskenované, nie ako prázdne — nepovažujte to za úplný obraz toho, čo zaberá miesto.",
+        rescanLink: "Namiesto toho spustiť rýchle skenovanie"
       },
       view: { tree: 'Strom', files: 'Súbory' },
       folderTable: {
         empty: 'V tomto priečinku nie je nič na zobrazenie.',
         rowLabel: (a, b) => `Otvoriť ${a}, ${b}`,
-        notScanned: 'neprehľadané',
+        notScanned: "nenaskenované",
         columns: { folder: 'Priečinok', size: 'Veľkosť', items: 'Položky', files: 'Súbory', folders: 'Priečinky', modified: 'Zmenené' }
       },
       extensionPanel: {
@@ -24338,13 +24332,13 @@ export const CATALOG = {
         typeCount: (n) => `${n} typov`,
         noType: 'bez typu',
         footer: (bytes, count) => `${bytes} v ${count} súboroch`,
-        unopenedFolders: (bytes) => ` · ${bytes} v priečinkoch, ktoré prehľadanie neotvorilo`
+        unopenedFolders: (bytes) => ` · ${bytes} v priečinkoch, ktoré skenovanie neotvorilo`
       },
-      largestFiles: { empty: 'Prehľadanie nenašlo žiadne súbory na zobrazenie.' },
+      largestFiles: { empty: "Skenovanie nenašlo žiadne súbory na zobrazenie." },
       tooltip: {
         notMeasured: (bytes) => `${bytes} nezmerané`,
         aggregated: 'Najmenšie položky v tomto priečinku, zoskupené spolu.',
-        unscanned: 'Prehľadanie sa zastavilo, kým sa sem dostalo. Skutočná veľkosť nie je známa.'
+        unscanned: "Skenovanie sa zastavilo, kým sa sem dostalo. Skutočná veľkosť nie je známa."
       },
       rowActionsLabel: (a) => `Akcie pre ${a}`,
       cellOpenLabel: (name) => `Otvoriť ${name}`,
@@ -24425,12 +24419,12 @@ export const CATALOG = {
         total: 'spolu'
       },
       batchReasons: {
-        orphaned: 'Jeho odinštalačný program je poškodený — namiesto toho použite Vynútiť odstránenie.',
+        orphaned: "Jeho odinštalátor je poškodený — namiesto toho použite Vynútiť odstránenie.",
         extension: 'Rozšírenia prehliadača sa odstraňujú priamo z prehliadača.',
         storeNoPackage: 'Táto aplikácia z obchodu nemá názov balíka na odstránenie.',
         storeProtected: 'Windows označuje túto aplikáciu ako súčasť systému a neumožňuje jej odstránenie.',
         storeUnknown: 'Windows neuviedol, či je možné túto aplikáciu odstrániť, preto je vynechaná z dávky.',
-        noCommand: 'Pre tento program nie je zaregistrovaný žiadny odinštalačný príkaz.'
+        noCommand: "Pre tento program nie je zaregistrovaný žiadny príkaz odinštalovania."
       },
       storeRemoveDialog: {
         heading: (name) => `Odstrániť ${name}?`,
@@ -24472,10 +24466,10 @@ export const CATALOG = {
       deleting: 'Odstraňuje sa…'
     },
     startup: {
-      title: 'Spúšťa sa pri prihlásení',
+      title: "Po spustení",
       subtitle: "Čo sa spúšťa pri prihlásení: kľúče Run a priečinky Po spustení, ktoré Windows číta, zoskupené podľa umiestnenia — to určuje, koho sa položka týka a čo treba na jej odstránenie. Položku, ktorej súbor chýba, po sebe nechal neopatrne odinštalovaný program a Windows sa ju pri každom prihlásení znova pokúša spustiť.",
-      loading: 'Čítanie položiek pri spustení…',
-      loadError: (error) => `Položky pri spustení sa nepodarilo prečítať: ${error}`,
+      loading: "Čítanie položiek Po spustení…",
+      loadError: (error) => `Položky Po spustení sa nepodarilo prečítať: ${error}`,
       empty: {
         heading: 'Pri prihlásení sa nič nespúšťa.',
         body: 'Prune skontroloval kľúče Run a RunOnce v oboch vetvách registra a oboch priečinkoch Po spustení. Program, ktorý sa pridá neskôr, sa zobrazí tu.'
@@ -24487,7 +24481,7 @@ export const CATALOG = {
         broken: (n) => `${n} ukazuje na chýbajúci súbor`
       },
       columns: {
-        name: 'Názov pri spustení',
+        name: "Názov položky Po spustení",
         command: 'Cesta k spusteniu',
         description: 'Popis',
         publisher: 'Vydavateľ',
@@ -24563,7 +24557,7 @@ export const CATALOG = {
     },
     deepClean: {
       title: 'Hĺbkové čistenie',
-      subtitle: 'Každá vyrovnávacia pamäť, protokol, výpis a pozostatok, ktoré Prune vie nájsť, zmeraný na tomto počítači namiesto odhadu. Nič sa hneď nevymaže — všetko, čo si Čistenie vezme, ide najprv do karantény, odkiaľ to môžete vrátiť.',
+      subtitle: "Každá vyrovnávacia pamäť, protokol, výpis a zvyšok, ktoré Prune vie nájsť, zmerané na tomto počítači namiesto odhadu. Nič sa hneď nevymaže — všetko, čo si Čistenie vezme, ide najprv do karantény, odkiaľ to môžete vrátiť.",
       scanLog: {
         header: 'Výstup skenovania',
         scanningAnnounce: (total) => `Skenovanie ${total} miest.`,
@@ -24679,7 +24673,7 @@ export const CATALOG = {
       uninstallFailed: (error) => `Odinštalovanie zlyhalo: ${error}`,
       startButton: 'Spustiť odinštalovanie',
       noWorkingUninstaller: 'Žiadny funkčný odinštalátor — namiesto toho sa hľadá podľa názvu',
-      noUninstallCommand: 'Nie je zaregistrovaný žiadny príkaz na odinštalovanie',
+      noUninstallCommand: "Nie je zaregistrovaný žiadny príkaz odinštalovania",
       progress: {
         runningNative: 'Spúšťa sa natívny odinštalátor',
         backingUpRegistry: 'Zálohuje sa register',
@@ -24695,8 +24689,8 @@ export const CATALOG = {
       },
       noScan: (name) => `Odinštalátor ${name} dokončil prácu. Skenovanie zvyškov je vypnuté v Nastaveniach, takže sa nič iné nehľadalo.`,
       readyToScan: {
-        body: (name) => `Ak odinštalátor programu ${name} ešte dokončuje prácu, nechajte ho najprv skončiť. Potom kliknutím na Vyhľadať zvyšky nájdite, čo po sebe zanechal.`,
-        scanButton: "Vyhľadať zvyšky"
+        body: (name) => `Ak odinštalátor programu ${name} ešte dokončuje prácu, nechajte ho najprv skončiť. Potom kliknutím na Skenovať zvyšky nájdite, čo po sebe zanechal.`,
+        scanButton: "Skenovať zvyšky"
       },
       removalFailed: (error) => `Odstránenie zlyhalo: ${error}`,
       done: 'Hotovo',
@@ -24734,7 +24728,7 @@ export const CATALOG = {
       reported: (bytes) => `nahlásených ${bytes}`,
       unknownSizeSuffix: (n) => `, ${n} neznámej veľkosti`,
       startButton: 'Spustiť odinštalovanie',
-      status: { waiting: 'čaká', uninstalling: 'odinštalováva sa…', removed: 'odstránené', failed: 'zlyhalo' },
+      status: { waiting: 'čaká', uninstalling: 'odinštalováva sa…', removed: "odinštalované", failed: 'zlyhalo' },
       removingLine: {
         quarantine: 'Zvyšky sa presúvajú do karantény…',
         recycle: 'Zvyšky sa odosielajú do koša…',
@@ -24742,8 +24736,8 @@ export const CATALOG = {
       },
       scanningLine: 'Skenujú sa zvyšky…',
       readyToScan: {
-        body: (n) => `Odinštalátory, ktoré dokončili prácu: ${n}. Niektoré, najmä herné launchery, mažú súbory na pozadí aj po zatvorení vlastného okna. Ak si nie ste istí, chvíľu počkajte a potom kliknutím na Vyhľadať zvyšky skontrolujte, či niečo nezostalo.`,
-        scanButton: 'Vyhľadať zvyšky'
+        body: (n) => `Odinštalátory, ktoré dokončili prácu: ${n}. Niektoré, najmä herné launchery, mažú súbory na pozadí aj po zatvorení vlastného okna. Ak si nie ste istí, chvíľu počkajte a potom kliknutím na Skenovať zvyšky skontrolujte, či niečo nezostalo.`,
+        scanButton: "Skenovať zvyšky"
       },
       uninstalledOf: (removed, total) => `Odinštalovaných ${removed} z ${total}.`,
       failedHeading: (n) => `${n} sa nepodarilo odinštalovať a boli ponechané tak, ako sú:`,
@@ -24756,7 +24750,7 @@ export const CATALOG = {
         permanent: (programs, items, freed) => `Odinštalovaných ${programs} a natrvalo odstránených ${items}, uvoľnené ${freed}.`,
         quarantine: (programs, items, freed) => `Odinštalovaných ${programs} a presunutých ${items} do karantény, uvoľnené ${freed}.`,
         programs: (n) => `${n} program${n === 1 ? '' : (n < 5 ? 'y' : 'ov')}`,
-        items: (n) => `${n} zvyšn${n === 1 ? 'á položka' : (n < 5 ? 'é položky' : 'ých položiek')}`
+        items: (n) => `${n} ${n === 1 ? 'zvyšok' : (n < 5 ? 'zvyšky' : 'zvyškov')}`
       },
       noRestorePoint: (reason) => `Nebol vytvorený žiadny bod obnovenia systému (${reason}).`,
       restorePointFallback: 'nie je k dispozícii',
@@ -24875,7 +24869,7 @@ export const CATALOG = {
       },
       autoQuarantine: {
         title: 'Karantinë automatike',
-        description: 'Pastrimi i Thellë e zhvendos atë që heq në Karantinën e Prune-it, nga ku mund ta ktheni. Çaktivizojeni këtë dhe në vend të kësaj do të shkojë në Koshin e Riciklimit të Windows — ende i rikuperueshëm, thjesht në një vend që tashmë e dini si ta zbrazni.'
+        description: "Pastrimi i thellë e zhvendos atë që heq në Karantinën e Prune-it, nga ku mund ta ktheni. Çaktivizojeni këtë dhe në vend të kësaj do të shkojë në Koshin e Riciklimit të Windows — ende i rikthyeshëm, thjesht në një vend që tashmë e dini si ta zbrazni."
       },
       skipRecent: {
         title: 'Lëri qetë skedarët e fundit',
@@ -24892,22 +24886,22 @@ export const CATALOG = {
         description: 'Pjesa më e madhe e listës është për softuer që kjo makinë nuk e ka. Fshehja e tyre lë vetëm atë që gjendet realisht këtu.'
       },
       quarantineRetention: {
-        title: "Sa kohë mbahen artikujt në karantinë",
+        title: "Sa kohë mbahen artikujt në Karantinë",
         description: 'Çdo gjë që Prune heq shkon fillimisht në Karantinë, dhe qëndron atje derisa ta zbrazni. Vendosni një numër ditësh për të hedhur kopjet rezervë më të vjetra se kaq. Lëreni bosh për t\'i mbajtur përgjithmonë.',
         neverPlaceholder: 'Kurrë',
         daysUnit: 'ditë',
-        ariaLabel: 'Ditët për të mbajtur kopjet rezervë të karantinës'
+        ariaLabel: "Ditët për të mbajtur kopjet rezervë të Karantinës"
       },
       quarantineMaxSize: {
-        title: "Kufiri i madhësisë së karantinës",
-        description: 'Një kufi për të gjithë dosjen e Karantinës. Mbi të, kopjet rezervë më të vjetra ikin të parat — më e fundit nuk hidhet kurrë, kështu që diçka e madhe që sapo hoqët mbetet e rikuperueshme edhe nëse është vetë më e madhe se kufiri. Lëreni bosh për asnjë kufi.',
+        title: "Kufiri i madhësisë së Karantinës",
+        description: "Një kufi për të gjithë dosjen e Karantinës. Mbi të, kopjet rezervë më të vjetra ikin të parat — më e fundit nuk hidhet kurrë, kështu që diçka e madhe që sapo hoqët mbetet e rikthyeshme edhe nëse është vetë më e madhe se kufiri. Lëreni bosh për asnjë kufi.",
         noLimitPlaceholder: 'Pa kufi',
         gbUnit: 'GB',
-        ariaLabel: 'Madhësia maksimale e karantinës në gigabajt'
+        ariaLabel: "Madhësia maksimale e Karantinës në gigabajt"
       },
       exclusions: {
         title: "Përjashto dosje",
-        description: 'Dosje dhe lloje skedarësh që Prune do t\'i lërë qetë — anashkaluar nga Pastrimi i Thellë dhe të përjashtuara nga Harta e Diskut — përveç atyre që tashmë mbron: Informacioni i Vëllimit të Sistemit, karantinat antivirus, depoja e komponentëve dhe një duzinë të tjera.',
+        description: "Dosje dhe lloje skedarësh që Prune do t'i lërë qetë — anashkaluar nga Pastrimi i thellë dhe të përjashtuara nga Harta e Diskut — përveç atyre që tashmë mbron: Informacioni i Vëllimit të Sistemit, karantinat antivirus, depoja e komponentëve dhe një duzinë të tjera.",
         ariaLabel: 'Shtegu i dosjes ose lloji i skedarit për t\'u përjashtuar',
         add: 'Shto',
         invalidFormat: 'Shkruani një shteg të plotë dosjeje (D:\\Games) ose një lloj skedari (*.iso).',
@@ -24921,7 +24915,7 @@ export const CATALOG = {
         title: "Cookie për t'u ruajtur",
         description: 'Gjithçka tjetër në skedarin e cookie-ve të shfletuesit zhduket në momentin që e pastroni. Skanoni për të parë çfarë ka në të vërtetë, dhe shënoni gjithçka që ia vlen të ruhet.',
         scanButton: 'Skano për cookie',
-        scanning: 'Po ekzekutohet…',
+        scanning: "Duke skanuar…",
         filterPlaceholder: 'Filtro domenet…',
         countSuffix: (count) => `${count} cookie`,
         none: 'Nuk u gjet asnjë cookie.',
@@ -24941,14 +24935,14 @@ export const CATALOG = {
       warningConfirmations: {
         title: 'Konfirmimet e paralajmërimeve',
         allAsk: 'Çdo pastrues që humbet të dhëna pyet përpara se të ekzekutohet.',
-        someSet: (count) => `${count} paralajmërim${count === 1 ? '' : 'e'} pastrimi ${count === 1 ? 'është caktuar' : 'janë caktuar'} të mos pyesin më.`,
+        someSet: (count) => `${count} paralajmërim${count === 1 ? '' : 'e'} të pastruesve ${count === 1 ? 'është caktuar' : 'janë caktuar'} të mos pyesin më.`,
         reset: 'Rivendos konfirmimet e paralajmërimeve'
       },
       uninstallTab: {
         beforeHeading: 'Para çinstalimit',
         restorePointUninstall: {
           title: 'Krijo një pikë rikthimi para çinstalimit',
-          description: 'Rikuperimi i vetë Sistemit të Windows, krijuar përpara se çinstaluesi i programit të ekzekutohet. Kërkon që Prune të ekzekutohet si administrator dhe Windows lejon një në ditë, kështu që kur nuk mund të krijohet, çinstalimi vazhdon dhe dialogu e thotë këtë.'
+          description: "Rikthimi i vetë Sistemit të Windows, krijuar përpara se çinstaluesi i programit të ekzekutohet. Kërkon që Prune të ekzekutohet si administrator dhe Windows lejon një në ditë, kështu që kur nuk mund të krijohet, çinstalimi vazhdon dhe dialogu e thotë këtë."
         },
         registryBackup: {
           title: 'Bëj kopje rezervë të regjistrit para çinstalimit',
@@ -24973,8 +24967,8 @@ export const CATALOG = {
         },
         destinationHeading: 'Skedarët e mbetur shkojnë te',
         leftoverOptions: {
-          quarantine: { label: 'Karantina', description: 'Zhvendosur në kopjen rezervë të vetë Prune-it, dhe e rikuperueshme nga ekrani i Karantinës. E parazgjedhura.' },
-          recycle: { label: 'Koshi i Riciklimit', description: 'I rikuperueshëm nga koshi i vetë Windows, dhe liruar kur e zbrazni.' },
+          quarantine: { label: 'Karantina', description: "Zhvendosur në kopjen rezervë të vetë Prune-it, dhe e rikthyeshme nga ekrani i Karantinës. E parazgjedhura." },
+          recycle: { label: 'Koshi i Riciklimit', description: "I rikthyeshëm nga koshi i vetë Windows, dhe liruar kur e zbrazni." },
           permanent: { label: 'Fshi përgjithmonë', description: 'Fshirë krejtësisht. Asgjë për t\'u rikthyer.' }
         },
         permanentWarning: 'Skedarët e mbetur do të fshihen krejtësisht dhe nuk mund të rikthehen, as nga Karantina, as nga diku tjetër. Kontrolloni listën përpara se ta konfirmoni.',
@@ -24984,7 +24978,7 @@ export const CATALOG = {
         reportTitle: 'Raporto një defekt',
         reportDescription: "Hap një çështje të plotësuar paraprakisht në GitHub. Vetë Prune nuk dërgon asgjë dhe ti sheh gjithçka para se të dërgohet diku.",
         reportButton: 'Raporto një defekt',
-        description: 'Një mjet lokal, jashtë linje çinstalimi dhe pastrimi për Windows — heqje e detyruar me skanim skedarësh të mbetur, karantinë e sigurt përpara fshirjes, hartëzim disku, dhe pastrim mbeturinash me një klikim.'
+        description: "Një mjet lokal, jashtë linje çinstalimi dhe pastrimi për Windows — heqje e detyruar me skanim mbetjesh, Karantinë e sigurt përpara fshirjes, Harta e Diskut, dhe pastrim mbeturinash me një klikim."
       },
       automation: {
         title: 'Automatizimi',
@@ -24999,7 +24993,7 @@ export const CATALOG = {
         everyWeek: 'Çdo javë',
         measureOnly: 'Vetëm mat',
         clean: 'Pastro',
-        cleanWarning: 'Kjo heq skedarë pa askënd që të vëzhgojë. Pastron rregullat që Pastrimi i Thellë rekomandon dhe që kanë vërtet diçka brenda, dhe gjithçka shkon prapëseprapë në karantinë — prandaj kontrolloni cilësimin e mbajtjes më lart përpara se ta lini këtë të aktivizuar.',
+        cleanWarning: "Kjo heq skedarë pa askënd që të vëzhgojë. Pastron rregullat që Pastrimi i thellë rekomandon dhe që kanë vërtet diçka brenda, dhe gjithçka shkon prapëseprapë në Karantinë — prandaj kontrolloni cilësimin e mbajtjes më lart përpara se ta lini këtë të aktivizuar.",
         nextRun: 'Ekzekutimi tjetër:',
         lastRun: 'Ekzekutimi i fundit:',
         weekdays: {
@@ -25059,7 +25053,7 @@ export const CATALOG = {
       junk: {
         label: "Skedarë të panevojshëm",
         notMeasured: 'i pamatur',
-        description: 'Matja kalon çdo shteg pastrimi në disk — rreth gjysmë minuti.',
+        description: "Matja kalon shtegun e çdo pastruesi në disk — rreth gjysmë minuti.",
         measure: 'Mat'
       },
       recentActivity: {
@@ -25151,18 +25145,18 @@ export const CATALOG = {
       contextMenu: {
         openInExplorer: 'Hap në Explorer',
         copyPath: 'Kopjo shtegun',
-        moveToQuarantineMenu: 'Zhvendos në karantinë…'
+        moveToQuarantineMenu: "Zhvendos në Karantinë…"
       },
       toasts: {
-        moved: (name) => `U zhvendos në karantinë: ${name}`,
+        moved: (name) => `U zhvendos në Karantinë: ${name}`,
         restoreHint: 'Rikthejeni nga ekrani Karantina.',
         pathCopied: 'Shtegu u kopjua.',
         copyFailed: 'Ai shteg nuk mund të kopjohej.',
         moveFailed: 'Kjo nuk mund të zhvendosej.'
       },
       removeModal: {
-        label: 'Zhvendos në karantinë',
-        heading: 'Ta zhvendos këtë në karantinë?',
+        label: "Zhvendos në Karantinë",
+        heading: "Ta zhvendos këtë në Karantinë?",
         note: 'Zhvendoset, nuk fshihet — rikthejeni në çdo kohë nga ekrani Karantina.',
         folder: 'Dosja',
         file: 'Skedari',
@@ -25242,8 +25236,8 @@ export const CATALOG = {
       }
     },
     quarantine: {
-      title: 'Karantinë',
-      loading: 'Duke ngarkuar karantinën…',
+      title: "Karantina",
+      loading: "Duke ngarkuar Karantinën…",
       loadError: (error) => `Karantina nuk mundi të ngarkohej: ${error}`,
       summary: {
         phrase: (count, total, atLeast) => `${count} ${count === 1 ? 'grumbull' : 'grumbuj'} · ${atLeast ? 'të paktën ' : ''}${total} të mbajtura`,
@@ -25257,7 +25251,7 @@ export const CATALOG = {
       confirm: 'Konfirmo',
       emptying: 'Duke zbrazur…',
       empty: {
-        heading: 'Asgjë në karantinë.',
+        heading: "Asgjë në Karantinë.",
         body: 'Çdo gjë që heq një çinstalim ose një Pastrim i thellë, zbret këtu së pari. Mbetet derisa ta zbrazësh, kështu që një skedar i marrë gabimisht mund të rikthehet gjithmonë.'
       },
       deleteConfirmPrompt: 'Të fshihet përgjithmonë?',
@@ -25315,7 +25309,7 @@ export const CATALOG = {
       footerNote: 'Çaktivizimi i një hyrjeje regjistron vendimin në StartupApproved, po atë vend ku lexojnë dhe shkruajnë vetë cilësimet e Aplikacioneve të Nisjes të Windows dhe Menaxheri i Detyrave. Asgjë nuk fshihet: vlera Run ose shkurtorja mbetet saktësisht aty ku është, kështu që ndryshimi mund të kthehet mbrapsht që këtu ose nga cilido prej dy vendeve.'
     },
     duplicates: {
-      title: 'Skedarë të dyfishtë',
+      title: "Skedarë dublikatë",
       subtitle: 'Skedarë identikë bajt për bajt, jo thjesht të së njëjtës madhësi. Drejtoje te një dosje ku vërtet mban gjëra — leximi i një disku të tërë për ta krahasuar me veten e tij zgjat shumë më tepër se sa vlen, dhe gjen kryesisht kopjet e vetë makinës nga skedarët e saj.',
       folderPlaceholder: (a) => `Rruga e dosjes, për shembull ${a}`,
       stoppedNote: "U ndal — nuk u krahasua asgjë.",
@@ -25326,7 +25320,7 @@ export const CATALOG = {
       reading: (folder) => `Duke lexuar ${folder}`,
       readingNote: 'Madhësitë fillimisht, pastaj një mostër 64 KB e çdo gjëje me të njëjtën madhësi, pastaj përmbajtja e plotë e asaj që përputhet ende.',
       empty: {
-        heading: 'Nuk ka skedarë të dyfishtë këtu.',
+        heading: "Nuk ka skedarë dublikatë këtu.",
         scanned: (count) => `${count} skedarë të krahasuar.`,
         truncatedSuffix: ' Skanimi u ndërpre para kohe, kështu që ky nuk është i gjithë dosja.'
       },
@@ -25336,7 +25330,7 @@ export const CATALOG = {
       keepNewest: 'Mbaj më të renë',
       clear: 'Pastro',
       truncatedWarning: 'Skanimi u ndërpre para kohe, kështu që mund të ketë më shumë bashkësi se këto.',
-      tags: { keep: "Mbaj", toQuarantine: "Në karantinë" },
+      tags: { keep: "Mbaj", toQuarantine: "Në Karantinë" },
       group: {
         identicalCopies: (count, size) => `${count} kopje identike · ${size} secila`,
         allTickedWarning: 'Çdo kopje në këtë bashkësi është shënuar — hiq shenjën nga një për ta mbajtur.'
@@ -25345,17 +25339,17 @@ export const CATALOG = {
         selected: (count, formatted) => `${count} të zgjedhura · ${formatted}`,
         moving: 'Duke lëvizur…',
         wouldLose: (count) => `${count} bashkësi do të humbisnin çdo kopje`,
-        moveButton: 'Lëviz të zgjedhurat në karantinë'
+        moveButton: "Lëviz të zgjedhurat në Karantinë"
       },
       modal: {
-        label: 'Lëviz dublikatat në karantinë',
-        heading: (count) => `Të lëvizen ${count} kopje në karantinë?`,
-        body: (a) => `Kjo çliron ${a} sapo ta zbrazësh karantinën. Çdo grup mban të paktën një kopje dhe asgjë nuk fshihet — mund ta rikthesh gjithçka nga ekrani Karantina.`,
+        label: "Lëviz dublikatat në Karantinë",
+        heading: (count) => `Të lëvizen ${count} kopje në Karantinë?`,
+        body: (a) => `Kjo çliron ${a} sapo ta zbrazësh Karantinën. Çdo grup mban të paktën një kopje dhe asgjë nuk fshihet — mund ta rikthesh gjithçka nga ekrani Karantina.`,
         cancel: 'Anulo',
-        confirmButton: 'Lëviz në karantinë'
+        confirmButton: "Lëviz në Karantinë"
       },
       toasts: {
-        moved: (count) => `U lëvizën ${count} kopje në karantinë.`,
+        moved: (count) => `U lëvizën ${count} kopje në Karantinë.`,
         restoreHint: 'Riktheji nga ekrani i Karantinës.',
         failed: (count) => `${count} nuk mundën të lëviznin.`,
         failedDetail: 'Mund të jenë të hapura ose në një disk tjetër.'
@@ -25363,7 +25357,7 @@ export const CATALOG = {
     },
     deepClean: {
       title: 'Pastrim i thellë',
-      subtitle: 'Çdo memorie e fshehtë, regjistër, dump dhe mbetje që Prune di t\'i gjejë, e matur në këtë kompjuter në vend të vlerësuar. Asgjë nuk fshihet menjëherë — çdo gjë që merr Pastrimi shkon fillimisht në karantinë, ku mund ta rikthesh.',
+      subtitle: "Çdo memorie e fshehtë, regjistër, dump dhe mbetje që Prune di t'i gjejë, e matur në këtë kompjuter në vend të vlerësuar. Asgjë nuk fshihet menjëherë — çdo gjë që merr Pastrimi shkon fillimisht në Karantinë, ku mund ta rikthesh.",
       scanLog: {
         header: 'Rezultati i skanimit',
         scanningAnnounce: (total) => `Duke skanuar ${total} vendndodhje.`,
@@ -25392,9 +25386,9 @@ export const CATALOG = {
         selectedCount: (count) => `${count} të zgjedhura`
       },
       confirm: {
-        prompt: (count, sizeKnown, formatted) => `Të lëvizen ${count} artikuj (${sizeKnown ? formatted : 'madhësia e pamatur'}) në karantinë?`,
+        prompt: (count, sizeKnown, formatted) => `Të lëvizen ${count} artikuj (${sizeKnown ? formatted : 'madhësia e pamatur'}) në Karantinë?`,
         cancel: 'Anulo',
-        confirmButton: "Zhvendos në karantinë",
+        confirmButton: "Zhvendos në Karantinë",
         cleaning: 'Duke pastruar…'
       },
       stop: 'Ndalo',
@@ -25451,9 +25445,9 @@ export const CATALOG = {
         uninstallEntry: 'Hyrje e Shto/Hiq Programet'
       },
       destinations: {
-        quarantine: { text: 'Artikujt e zgjedhur shkojnë në Karantinë, ku mund t\'i rikuperoni.', button: 'Hiq të zgjedhurat' },
+        quarantine: { text: "Artikujt e zgjedhur shkojnë në Karantinë, ku mund t'i riktheni.", button: 'Hiq të zgjedhurat' },
         recycle: { text: 'Skedarët e zgjedhur shkojnë në Koshin e Riciklimit. Çelësat e regjistrit ruhen si kopje rezervë përpara se të hiqen.', button: 'Hiq të zgjedhurat' },
-        permanent: { text: 'Skedarët e zgjedhur do të fshihen përgjithmonë dhe nuk mund të rikuperohen. Çelësat e regjistrit ruhen si kopje rezervë përpara se të hiqen.', button: 'Fshi përgjithmonë' }
+        permanent: { text: "Skedarët e zgjedhur do të fshihen përgjithmonë dhe nuk mund të rikthehen. Çelësat e regjistrit ruhen si kopje rezervë përpara se të hiqen.", button: 'Fshi përgjithmonë' }
       },
       clean: 'Nuk u gjetën mbetje — çinstalim i pastër.',
       done: 'Përfundoi',
@@ -25489,9 +25483,9 @@ export const CATALOG = {
         checkingCommand: 'Duke kontrolluar sistemin e skedarëve, regjistrin dhe detyrat e planifikuara…'
       },
       removing: {
-        quarantine: { title: 'Duke lëvizur në Karantinë', command: 'Asgjë nuk fshihet — çdo artikull mund të rikuperohet' },
-        recycle: { title: 'Duke dërguar në Koshin e Riciklimit', command: 'Rikuperojini nga Koshi i Riciklimit nëse është e nevojshme' },
-        permanent: { title: 'Duke fshirë përgjithmonë', command: 'Këto nuk mund të rikuperohen' }
+        quarantine: { title: 'Duke lëvizur në Karantinë', command: "Asgjë nuk fshihet — çdo artikull mund të rikthehet" },
+        recycle: { title: 'Duke dërguar në Koshin e Riciklimit', command: "Riktheji nga Koshi i Riciklimit nëse është e nevojshme" },
+        permanent: { title: 'Duke fshirë përgjithmonë', command: "Këto nuk mund të rikthehen" }
       },
       noScan: (name) => `Çinstaluesi i ${name} ka përfunduar. Skanimi i mbetjeve është çaktivizuar në Cilësimet, kështu që nuk u kërkua asgjë tjetër.`,
       readyToScan: {
@@ -25505,7 +25499,7 @@ export const CATALOG = {
         registryKey: (n) => `${n} çelësa regjistri`,
         recycle: (files, keys, freed) => `U dërguan ${files} në Koshin e Riciklimit dhe u hoqën ${keys}, të ruajtur si kopje rezervë në Karantinë së pari. U liruan ${freed}.`,
         permanent: (files, keys, freed) => `U fshinë përgjithmonë ${files} dhe u hoqën ${keys}, të ruajtur si kopje rezervë në Karantinë së pari. U liruan ${freed}.`,
-        quarantine: (files, keys, freed) => `U lëvizën ${files} dhe ${keys} në Karantinë, duke liruar ${freed}. Rikuperojini kurdo nga ekrani i Karantinës.`
+        quarantine: (files, keys, freed) => `U lëvizën ${files} dhe ${keys} në Karantinë, duke liruar ${freed}. Riktheji kurdo nga ekrani i Karantinës.`
       },
       failedFilesHeading: (n) => `Nuk u hoqën dot ${n} artikuj:`,
       failedRegistryKeysHeading: (n) => `Nuk u hoqën dot ${n} çelësa regjistri`,
@@ -25528,8 +25522,8 @@ export const CATALOG = {
       mixedIntro: (hasStore) => `Çinstaluesi i vetë çdo programi ekzekutohet me radhë, pastaj Prune skanon çfarë lënë pas dhe ju tregon gjithçka përpara se të hiqet gjë prej saj.${hasStore ? ' Aplikacionet e Store hiqen përmes Windows në vend të kësaj, pa skanim mbetjesh më pas.' : ''}`,
       oneAtATime: 'Një nga një, sepse Windows lejon vetëm një instalim ose çinstalim në një kohë. Disa çinstalues do të shfaqin dritaret e tyre dhe do t\'ju bëjnë pyetje.',
       storeWarning: (count) => count === 1
-        ? 'Aplikacioni i Store në këtë grup nuk mund të rikuperohet nga Karantina: heqja e tij merr aplikacionin dhe të dhënat e tij të ruajtura, dhe rimarrja e tij do të thotë ta instaloni përsëri nga Store.'
-        : `${count} aplikacionet e Store në këtë grup nuk mund të rikuperohen nga Karantina: heqja e njërit merr aplikacionin dhe të dhënat e tij të ruajtura, dhe rimarrja e tij do të thotë ta instaloni përsëri nga Store.`,
+        ? 'Aplikacioni i Store në këtë grup nuk mund të rikthehet nga Karantina: heqja e tij merr aplikacionin dhe të dhënat e tij të ruajtura, dhe rimarrja e tij do të thotë ta instaloni përsëri nga Store.'
+        : `${count} aplikacionet e Store në këtë grup nuk mund të rikthehen nga Karantina: heqja e njërit merr aplikacionin dhe të dhënat e tij të ruajtura, dhe rimarrja e tij do të thotë ta instaloni përsëri nga Store.`,
       runsBefore: (name) => `ekzekutohet përpara ${name}`,
       reported: (bytes) => `${bytes} raportuar`,
       unknownSizeSuffix: (n) => `, ${n} me madhësi të panjohur`,
@@ -25556,7 +25550,7 @@ export const CATALOG = {
         permanent: (programs, items, freed) => `U çinstaluan ${programs} dhe u fshinë ${items} përgjithmonë, duke liruar ${freed}.`,
         quarantine: (programs, items, freed) => `U çinstaluan ${programs} dhe u lëvizën ${items} në Karantinë, duke liruar ${freed}.`,
         programs: (n) => `${n} programe`,
-        items: (n) => `${n} artikuj të mbetur`
+        items: (n) => `${n} mbetje`
       },
       noRestorePoint: (reason) => `Nuk u krijua asnjë pikë rikthimi sistemi (${reason}).`,
       restorePointFallback: 'jo i disponueshëm',
@@ -25635,7 +25629,7 @@ export const CATALOG = {
       reportBug: "Пријави грешку",
       dashboard: 'Контролна табла', diskMap: 'Мапа диска', applications: 'Апликације',
       quarantine: 'Карантин', settings: 'Подешавања', startup: 'Покретање',
-      duplicates: 'Дупликати', deepClean: 'Дубинско чишћење',
+      duplicates: 'Дупликати', deepClean: "Дубоко чишћење",
       landmark: 'Главна'
     },
     settings: {
@@ -25674,8 +25668,8 @@ export const CATALOG = {
         description: 'Исцртава слободан простор диска као још један блок када скенирате цео диск, тако да се сваки фолдер чита као удео диска, а не заузетог простора.'
       },
       autoQuarantine: {
-        title: 'Аутоматска карантина',
-        description: 'Дубоко чишћење премешта оно што уклони у Prune карантину, одакле можете то да вратите. Искључите ово и уместо тога ће отићи у Windows корпу за отпатке — и даље се може вратити, само на месту које већ знате да испразните.'
+        title: "Аутоматски карантин",
+        description: "Дубоко чишћење премешта оно што уклони у Prune карантин, одакле можете то да вратите. Искључите ово и уместо тога ће отићи у Windows корпу за отпатке — и даље се може вратити, само на месту које већ знате да испразните."
       },
       skipRecent: {
         title: 'Остави недавне датотеке на миру',
@@ -25693,17 +25687,17 @@ export const CATALOG = {
       },
       quarantineRetention: {
         title: "Колико дуго чувати ставке у карантину",
-        description: 'Све што Prune уклони прво иде у карантину, и остаје тамо док је не испразните. Поставите број дана да бисте одбацили резервне копије старије од тога. Оставите празно да их чувате заувек.',
+        description: "Све што Prune уклони прво иде у карантин, и остаје тамо док га не испразните. Поставите број дана да бисте одбацили резервне копије старије од тога. Оставите празно да их чувате заувек.",
         neverPlaceholder: 'Никада',
         daysUnit: 'дана',
         ariaLabel: 'Дани за чување резервних копија карантине'
       },
       quarantineMaxSize: {
         title: "Ограничење величине карантина",
-        description: 'Ограничење за читав фолдер карантине. Изнад тога, најстарије резервне копије нестају прве — најновија се никада не одбацује, тако да нешто велико што сте управо уклонили остаје обновљиво чак и ако је само по себи веће од ограничења. Оставите празно за без ограничења.',
+        description: "Ограничење за читав фолдер карантина. Изнад тога, најстарије резервне копије нестају прве — најновија се никада не одбацује, тако да се нешто велико што сте управо уклонили може вратити чак и ако је само по себи веће од ограничења. Оставите празно за без ограничења.",
         noLimitPlaceholder: 'Без ограничења',
         gbUnit: 'GB',
-        ariaLabel: 'Максимална величина карантине у гигабајтима'
+        ariaLabel: "Максимална величина карантина у гигабајтима"
       },
       exclusions: {
         title: "Изузми фасцикле",
@@ -25721,7 +25715,7 @@ export const CATALOG = {
         title: 'Колачићи за чување',
         description: 'Све остало у датотеци колачића прегледача нестаје у тренутку када га очистите. Скенирајте да бисте видели шта се заиста тамо налази, и означите све што вреди сачувати.',
         scanButton: 'Скенирај колачиће',
-        scanning: 'У току…',
+        scanning: "Скенирање…",
         filterPlaceholder: 'Филтрирај домене…',
         countSuffix: (count) => `${count} колачића`,
         none: 'Нису пронађени колачићи.',
@@ -25771,20 +25765,20 @@ export const CATALOG = {
           title: 'Чувај историју деинсталација',
           description: 'Листа контролне табле недавних уклањања и простора који су ослободили. Искључено, ништа ново се не бележи.'
         },
-        destinationHeading: 'Преостале датотеке иду у',
+        destinationHeading: "Остаци иду у",
         leftoverOptions: {
-          quarantine: { label: 'Карантина', description: 'Премештено у сопствену резервну копију Prune-а, и може се вратити са екрана карантине. Подразумевано.' },
+          quarantine: { label: "Карантин", description: "Премештено у сопствену резервну копију Prune-а, и може се вратити са екрана Карантин. Подразумевано." },
           recycle: { label: 'Корпа за отпатке', description: 'Може се вратити из сопствене Windows корпе, и ослобађа се када је испразните.' },
           permanent: { label: 'Трајно обриши', description: 'Потпуно обрисано. Ништа за враћање.' }
         },
-        permanentWarning: 'Преостале датотеке ће бити потпуно обрисане и не могу се вратити, ни из карантине ни одакле другде. Проверите листу пре потврђивања.',
-        registryNote: 'Кључеви регистра се извозе у карантину пре уклањања, без обзира на ваш избор.'
+        permanentWarning: "Остаци ће бити потпуно обрисани и не могу се вратити, ни из карантина ни одакле другде. Проверите листу пре потврђивања.",
+        registryNote: "Кључеви регистра се извозе у карантин пре уклањања, без обзира на ваш избор."
       },
       about: {
         reportTitle: "Пријави грешку",
         reportDescription: "Отвара унапред попуњену пријаву на GitHub-у. Сам Prune не шаље ништа, а ви све видите пре него што било шта оде било где.",
         reportButton: "Пријави грешку",
-        description: 'Локални, офлајн алат за деинсталацију и чишћење за Windows — присилно уклањање са скенирањем преосталих датотека, безбедна карантина пре брисања, мапирање диска и чишћење смећа једним кликом.'
+        description: "Локални, офлајн алат за деинсталацију и чишћење за Windows — присилно уклањање са скенирањем остатака, безбедни карантин пре брисања, мапа диска и чишћење смећа једним кликом."
       },
       automation: {
         title: 'Аутоматизација',
@@ -25799,7 +25793,7 @@ export const CATALOG = {
         everyWeek: 'Сваке недеље',
         measureOnly: 'Само мери',
         clean: 'Очисти',
-        cleanWarning: 'Ово уклања датотеке без надзора. Чисти правила која Дубоко чишћење препоручује и која заиста имају нешто у себи, а све и даље иде у карантину — зато проверите подешавање задржавања изнад пре него што ово оставите укљученим.',
+        cleanWarning: "Ово уклања датотеке без надзора. Чисти правила која Дубоко чишћење препоручује и која заиста имају нешто у себи, а све и даље иде у карантин — зато проверите подешавање задржавања изнад пре него што ово оставите укљученим.",
         nextRun: 'Следеће покретање:',
         lastRun: 'Последње покретање:',
         weekdays: {
@@ -25851,7 +25845,7 @@ export const CATALOG = {
       },
       apps: {
         label: "Инсталиране апликације",
-        broken: (count) => `${count} остављено неуспелом деинсталацијом`,
+        broken: (count) => `Остаци после неуспеле деинсталације: ${count}`,
         noBroken: 'Нема оштећених уноса.',
         review: 'Прегледај',
         manage: 'Управљај'
@@ -26025,7 +26019,7 @@ export const CATALOG = {
         total: 'укупно'
       },
       batchReasons: {
-        orphaned: 'Његов програм за деинсталацију је оштећен — уместо тога користите Присилно уклањање.',
+        orphaned: "Његов деинсталатер је оштећен — уместо тога користите Присилно уклањање.",
         extension: 'Екстензије прегледача се уклањају из самог прегледача.',
         storeNoPackage: 'Ова апликација из продавнице нема назив пакета за уклањање.',
         storeProtected: 'Windows означава ову апликацију као део система и не дозвољава њено уклањање.',
@@ -26058,7 +26052,7 @@ export const CATALOG = {
       emptying: 'Празни се…',
       empty: {
         heading: 'Нема ничега у карантину.',
-        body: 'Све што деинсталација или Дубоко чишћење уклони, прво стиже овде. Остаје докле год га не испразните, тако да фајл узет грешком увек може да се врати.'
+        body: "Све што деинсталација или Дубоко чишћење уклони, прво стиже овде. Остаје докле год га не испразните, тако да фајл узет грешком увек може да се врати."
       },
       deleteConfirmPrompt: 'Обрисати заувек?',
       restore: 'Врати',
@@ -26182,7 +26176,7 @@ export const CATALOG = {
         scanning: 'Скенирање…',
         preview: 'Преглед'
       },
-      hiddenNote: (count) => `Скривено средстава за чишћење: ${count}, јер софтвер није инсталиран. Подешавања › Чишћење да их прикажете.`,
+      hiddenNote: (count) => `Скривено чистача: ${count}, јер софтвер није инсталиран. Подешавања › Чишћење да их прикажете.`,
       footer: {
         totalLabel: 'Укупно простора за ослобађање:',
         notMeasuredYet: 'још није измерено',
@@ -26251,11 +26245,11 @@ export const CATALOG = {
         uninstallEntry: 'Ставка Додај/уклони програме'
       },
       destinations: {
-        quarantine: { text: 'Означене ставке иду у карантину, одакле их можете вратити.', button: 'Уклони означено' },
+        quarantine: { text: "Означене ставке иду у карантин, одакле их можете вратити.", button: 'Уклони означено' },
         recycle: { text: 'Означене датотеке иду у корпу за отпатке. Кључеви регистра се архивирају пре уклањања.', button: 'Уклони означено' },
         permanent: { text: 'Означене датотеке ће бити трајно обрисане и не могу се вратити. Кључеви регистра се архивирају пре уклањања.', button: 'Обриши трајно' }
       },
-      clean: 'Није пронађен ниједан остатак — чисто деинсталирање.',
+      clean: "Није пронађен ниједан остатак — чиста деинсталација.",
       done: 'Готово',
       foundWarning: (count) => `Изворни деинсталатер је пропустио ${count} ${count % 10 === 1 && count % 100 !== 11 ? 'остатак' : (count % 10 >= 2 && count % 10 <= 4 && (count % 100 < 12 || count % 100 > 14)) ? 'остатка' : 'остатака'}. Прегледајте пре уклањања.`,
       excludedNote: (count) => `${count} фасцикли је изостављено јер су у вашим изузецима.`,
@@ -26276,20 +26270,20 @@ export const CATALOG = {
       scanFailed: (error) => `Скенирање није успело: ${error}`,
       searchButton: 'Тражи остатке',
       normalIntro: (name) => `Ово покреће сопствени деинсталатер програма ${name}, а затим скенира све што остане иза њега.`,
-      uninstallFailed: (error) => `Деинсталирање није успело: ${error}`,
-      startButton: 'Покрени деинсталирање',
+      uninstallFailed: (error) => `Деинсталација није успела: ${error}`,
+      startButton: "Покрени деинсталацију",
       noWorkingUninstaller: 'Нема функционалног деинсталатера — уместо тога се тражи по имену',
-      noUninstallCommand: 'Нема регистроване команде за деинсталирање',
+      noUninstallCommand: "Нема регистроване команде за деинсталацију",
       progress: {
         runningNative: 'Извршава се изворни деинсталатер',
         backingUpRegistry: 'Прави се резервна копија регистра',
         creatingRestorePoint: 'Прави се тачка опоравка',
-        searchingLeftovers: 'Тражи се остатке',
+        searchingLeftovers: "Траже се остаци",
         scanningLeftovers: 'Скенирају се остаци',
         checkingCommand: 'Проверава се систем датотека, регистар и заказани задаци…'
       },
       removing: {
-        quarantine: { title: 'Премешта се у карантину', command: 'Ништа се не брише — свака ставка се може вратити' },
+        quarantine: { title: "Премешта се у карантин", command: 'Ништа се не брише — свака ставка се може вратити' },
         recycle: { title: 'Шаље се у корпу за отпатке', command: 'Вратите их из корпе за отпатке ако је потребно' },
         permanent: { title: 'Трајно се брише', command: 'Ово се не може вратити' }
       },
@@ -26303,20 +26297,20 @@ export const CATALOG = {
       summary: {
         item: (n) => `${n} ставк${n === 1 ? 'а' : 'и'}`,
         registryKey: (n) => `${n} кључ${n === 1 ? '' : 'а'} регистра`,
-        recycle: (files, keys, freed) => `Послато ${files} у корпу за отпатке и уклоњено ${keys}, претходно архивирано у карантини. Ослобођено ${freed}.`,
-        permanent: (files, keys, freed) => `Трајно обрисано ${files} и уклоњено ${keys}, претходно архивирано у карантини. Ослобођено ${freed}.`,
-        quarantine: (files, keys, freed) => `Премештено ${files} и ${keys} у карантину, ослобађајући ${freed}. Вратите их било када са екрана карантине.`
+        recycle: (files, keys, freed) => `Послато ${files} у корпу за отпатке и уклоњено ${keys}, претходно архивирано у карантину. Ослобођено ${freed}.`,
+        permanent: (files, keys, freed) => `Трајно обрисано ${files} и уклоњено ${keys}, претходно архивирано у карантину. Ослобођено ${freed}.`,
+        quarantine: (files, keys, freed) => `Премештено ${files} и ${keys} у карантин, ослобађајући ${freed}. Вратите их било када са екрана Карантин.`
       },
       failedFilesHeading: (n) => `Није могуће уклонити ${n} ставк${n === 1 ? 'у' : 'и'}:`,
       failedRegistryKeysHeading: (n) => `Није могуће уклонити ${n} кључ${n === 1 ? '' : 'а'} регистра`,
       failedRegistryKeysNote: 'ово обично захтева да Prune буде покренут као администратор:',
       noRestorePoint: (reason) => `Није направљена тачка опоравка система (${reason}).`,
-      quarantineStillWorks: 'Опоравак из карантине и даље ради.',
+      quarantineStillWorks: "Враћање из карантина и даље ради.",
       autoRemoveLeftovers: 'Аутоматски уклони све што пронађе скенирање, без претходног прегледа'
     },
     batchUninstallModal: {
       title: (n) => `Деинсталирај ${n} програма`,
-      historyLabel: (n) => `Групно деинсталирање: ${n} програма`,
+      historyLabel: (n) => `Групна деинсталација: ${n} програма`,
       close: 'Затвори',
       cancel: "Откажи",
       stillWaiting: (more) => more ? `Још се чека овај деинсталатер. Његов прозор може бити иза Prune-а. Изаберите „Заустави после овог“ да се остали програми прескоче када заврши.` : `Још се чека овај деинсталатер. Његов прозор може бити иза Prune-а.`,
@@ -26328,15 +26322,15 @@ export const CATALOG = {
       mixedIntro: (hasStore) => `Сопствени деинсталатер сваког програма се извршава редом, а затим Prune скенира шта остављају иза себе и приказује вам све пре него што било шта од тога уклони.${hasStore ? ' Апликације из продавнице се уместо тога уклањају преко Windows-а, без скенирања остатака после тога.' : ''}`,
       oneAtATime: 'Једно по једно, јер Windows дозвољава само једну инсталацију или деинсталацију у једном тренутку. Неки деинсталатери ће приказати сопствене прозоре и поставити вам питања.',
       storeWarning: (count) => count === 1
-        ? 'Апликација из продавнице у овој серији не може се вратити из карантине: њеним уклањањем нестају апликација и њени сачувани подаци, а њено враћање значи поновну инсталацију из продавнице.'
-        : `${count} апликације из продавнице у овој серији не могу се вратити из карантине: уклањањем једне нестају апликација и њени сачувани подаци, а њено враћање значи поновну инсталацију из продавнице.`,
+        ? 'Апликација из продавнице у овој серији не може се вратити из карантина: њеним уклањањем нестају апликација и њени сачувани подаци, а њено враћање значи поновну инсталацију из продавнице.'
+        : `${count} апликације из продавнице у овој серији не могу се вратити из карантина: уклањањем једне нестају апликација и њени сачувани подаци, а њено враћање значи поновну инсталацију из продавнице.`,
       runsBefore: (name) => `извршава се пре ${name}`,
       reported: (bytes) => `${bytes} пријављено`,
       unknownSizeSuffix: (n) => `, ${n} непознате величине`,
-      startButton: 'Покрени деинсталирање',
+      startButton: "Покрени деинсталацију",
       status: { waiting: 'чека', uninstalling: 'деинсталира се…', removed: "деинсталирано", failed: 'неуспешно' },
       removingLine: {
-        quarantine: 'Премештају се остаци у карантину…',
+        quarantine: "Премештају се остаци у карантин…",
         recycle: 'Шаљу се остаци у корпу за отпатке…',
         permanent: 'Трајно се бришу остаци…'
       },
@@ -26354,13 +26348,13 @@ export const CATALOG = {
       summary: {
         recycle: (programs, items, freed) => `Деинсталирано ${programs} и послато ${items} у корпу за отпатке, ослобађајући ${freed}.`,
         permanent: (programs, items, freed) => `Деинсталирано ${programs} и трајно обрисано ${items}, ослобађајући ${freed}.`,
-        quarantine: (programs, items, freed) => `Деинсталирано ${programs} и премештено ${items} у карантину, ослобађајући ${freed}.`,
+        quarantine: (programs, items, freed) => `Деинсталирано ${programs} и премештено ${items} у карантин, ослобађајући ${freed}.`,
         programs: (n) => `${n} програма`,
-        items: (n) => `${n} преосталих ставки`
+        items: (n) => `${n} ${n % 10 === 1 && n % 100 !== 11 ? 'остатак' : (n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14)) ? 'остатка' : 'остатака'}`
       },
       noRestorePoint: (reason) => `Није направљена тачка опоравка система (${reason}).`,
       restorePointFallback: 'није доступно',
-      quarantineNote: 'Све горе наведено је и даље у карантини и може се вратити.',
+      quarantineNote: "Све горе наведено је и даље у карантину и може се вратити.",
       failedRegistryKeys: (n) => `Није могуће уклонити ${n} кључ${n === 1 ? '' : 'а'} регистра — ово обично захтева да Prune буде покренут као администратор.`
     },
     bugReport: {
@@ -26475,7 +26469,7 @@ export const CATALOG = {
       },
       autoQuarantine: {
         title: 'Automatisk karantän',
-        description: 'Djuprensning flyttar det den tar bort till Prunes karantän, varifrån du kan lägga tillbaka det. Stäng av detta och det går till Papperskorgen i Windows i stället — fortfarande återställbart, bara på en plats du redan vet hur du tömmer.'
+        description: "Grundlig rensning flyttar det den tar bort till Prunes karantän, varifrån du kan lägga tillbaka det. Stäng av detta och det går till Papperskorgen i Windows i stället — fortfarande återställbart, bara på en plats du redan vet hur du tömmer."
       },
       skipRecent: {
         title: 'Lämna nya filer i fred',
@@ -26488,7 +26482,7 @@ export const CATALOG = {
         description: 'Före en tvingad borttagning, så att Windows själv kan återställa datorn. Kostar några sekunder och gör absolut ingenting om Systemskydd är avstängt.'
       },
       hideUnavailable: {
-        title: 'Dölj rensningsverktyg som inte gäller',
+        title: "Dölj rensare som inte gäller",
         description: 'Merparten av listan är för programvara som den här datorn inte har. Att dölja dem lämnar bara kvar det som faktiskt finns här.'
       },
       quarantineRetention: {
@@ -26507,7 +26501,7 @@ export const CATALOG = {
       },
       exclusions: {
         title: "Undanta mappar",
-        description: 'Mappar och filtyper som Prune lämnar i fred — hoppas över av Djuprensning och utesluts från Diskkartan — utöver de den redan skyddar: Systemvolyminformation, antiviruskaranterner, komponentlagret och ett dussin till.',
+        description: "Mappar och filtyper som Prune lämnar i fred — hoppas över av Grundlig rensning och utesluts från Diskkartan — utöver de den redan skyddar: Systemvolyminformation, antiviruskaranterner, komponentlagret och ett dussin till.",
         ariaLabel: 'Mappsökväg eller filtyp att utesluta',
         add: 'Lägg till',
         invalidFormat: 'Skriv en fullständig mappsökväg (D:\\Games) eller en filtyp (*.iso).',
@@ -26520,13 +26514,13 @@ export const CATALOG = {
       cookiesToPreserve: {
         title: 'Kakor att bevara',
         description: 'Allt annat i webbläsarens kakfil försvinner så snart du rensar den. Skanna för att se vad som faktiskt finns där, och kryssa i allt som är värt att behålla.',
-        scanButton: 'Sök efter kakor',
-        scanning: 'Körs…',
+        scanButton: "Skanna efter kakor",
+        scanning: "Skannar…",
         filterPlaceholder: 'Filtrera domäner…',
         countSuffix: (count) => `${count} kak${count === 1 ? 'a' : 'or'}`,
         none: 'Inga kakor hittades.',
         staleBadge: 'syntes inte vid denna skanning',
-        scanErrorPrefix: (message) => `Det gick inte att söka efter kakor: ${message}`,
+        scanErrorPrefix: (message) => `Det gick inte att skanna efter kakor: ${message}`,
         fileErrorsNote: (count) => `${count} fil${count === 1 ? ' kunde' : 'er kunde'} inte läsas och hoppades över.`,
         checkboxAriaLabel: (domain) => `Behåll kakor från ${domain}`
       },
@@ -26540,7 +26534,7 @@ export const CATALOG = {
       },
       warningConfirmations: {
         title: 'Varningsbekräftelser',
-        allAsk: 'Varje rensningsverktyg som förlorar data frågar innan det körs.',
+        allAsk: "Varje rensare som förlorar data frågar innan den körs.",
         someSet: (count) => `${count} rensningsvarning${count === 1 ? '' : 'ar'} inställd${count === 1 ? '' : 'a'} på att inte fråga igen.`,
         reset: 'Återställ varningsbekräftelser'
       },
@@ -26560,31 +26554,31 @@ export const CATALOG = {
         },
         afterHeading: 'Efter avinstallation',
         scanLeftovers: {
-          title: 'Sök efter kvarlevor efter avinstallation',
+          title: "Skanna efter rester efter en avinstallation",
           description: 'Letar efter filerna, registernycklarna och schemalagda uppgifter som avinstallationsprogrammet lämnat kvar. Av, kör Prune bara programmets eget avinstallationsprogram och stannar där.'
         },
         preselect: {
-          title: 'Markera varje kvarleva som standard',
+          title: "Markera varje rest som standard",
           description: 'Granskningen öppnas med allt som hittats markerat. Av, öppnas den utan något markerat och du väljer.'
         },
         keepHistory: {
           title: 'Håll en avinstallationshistorik',
           description: 'Instrumentpanelens lista över nyligen genomförda borttagningar och det utrymme de frigjorde. Av, registreras inget nytt.'
         },
-        destinationHeading: 'Kvarvarande filer går till',
+        destinationHeading: "Rester går till",
         leftoverOptions: {
           quarantine: { label: 'Karantän', description: 'Flyttad till Prunes egen säkerhetskopia, och återställbar från Karantän-skärmen. Standardvalet.' },
           recycle: { label: 'Papperskorgen', description: 'Återställbar från Windows egen papperskorg, och frigörs när du tömmer den.' },
           permanent: { label: 'Radera permanent', description: 'Raderad helt. Inget att återställa.' }
         },
-        permanentWarning: 'Kvarvarande filer kommer att raderas helt och kan inte återställas, varken från Karantän eller någon annanstans. Kontrollera listan innan du bekräftar den.',
+        permanentWarning: "Rester kommer att raderas helt och kan inte återställas, varken från Karantän eller någon annanstans. Kontrollera listan innan du bekräftar den.",
         registryNote: 'Registernycklar exporteras till Karantän innan de tas bort, oavsett vad du väljer.'
       },
       about: {
         reportTitle: 'Rapportera ett fel',
         reportDescription: "Öppnar ett förifyllt ärende på GitHub. Prune skickar ingenting själv, och du ser allt innan något skickas vidare.",
         reportButton: 'Rapportera ett fel',
-        description: 'Ett lokalt, offline avinstallations- och rensningsverktyg för Windows — tvingad borttagning med skanning av kvarvarande filer, säker karantän före radering, diskkartläggning och skräprensning med ett klick.'
+        description: "Ett lokalt, offline avinstallations- och rensningsverktyg för Windows — tvingad borttagning med skanning av rester, säker karantän före radering, Diskkarta och skräprensning med ett klick."
       },
       automation: {
         title: 'Automatisering',
@@ -26599,7 +26593,7 @@ export const CATALOG = {
         everyWeek: 'Varje vecka',
         measureOnly: 'Mät bara',
         clean: 'Rensa',
-        cleanWarning: 'Detta tar bort filer utan att någon övervakar. Det rensar reglerna som Djuprensning rekommenderar och som verkligen har något i sig, och allt går fortfarande till karantän — så kontrollera bevarandeinställningen ovan innan du lämnar detta påslaget.',
+        cleanWarning: "Detta tar bort filer utan att någon övervakar. Det rensar reglerna som Grundlig rensning rekommenderar och som verkligen har något i sig, och allt går fortfarande till karantän — så kontrollera bevarandeinställningen ovan innan du lämnar detta påslaget.",
         nextRun: 'Nästa körning:',
         lastRun: 'Senaste körning:',
         weekdays: {
@@ -26834,7 +26828,7 @@ export const CATALOG = {
       },
       storeRemoveDialog: {
         heading: (name) => `Ta bort ${name}?`,
-        body: 'Detta tar bort appen för ditt konto, tillsammans med dess inställningar och sparade data. Till skillnad från allt annat Prune tar bort går denna inte till Karantän och kan inte återställas härifrån — att få tillbaka den innebär att installera om den från Microsoft Store.',
+        body: "Detta tar bort programmet för ditt konto, tillsammans med dess inställningar och sparade data. Till skillnad från allt annat Prune tar bort går detta inte till Karantän och kan inte återställas härifrån — att få tillbaka det innebär att installera om det från Microsoft Store.",
         cancel: 'Avbryt',
         close: 'Stäng',
         removeApp: 'Ta bort app',
@@ -26858,7 +26852,7 @@ export const CATALOG = {
       emptying: 'Tömmer…',
       empty: {
         heading: 'Inget i karantän.',
-        body: 'Allt som en avinstallation eller en Djuprensning tar bort hamnar här först. Det ligger kvar tills du tömmer det, så en fil som tagits av misstag kan alltid återställas.'
+        body: "Allt som en avinstallation eller Grundlig rensning tar bort hamnar här först. Det ligger kvar tills du tömmer det, så en fil som tagits av misstag kan alltid återställas."
       },
       deleteConfirmPrompt: 'Ta bort för alltid?',
       restore: 'Återställ',
@@ -26962,8 +26956,8 @@ export const CATALOG = {
       }
     },
     deepClean: {
-      title: 'Djuprensning',
-      subtitle: 'Varje cache, logg, dump och kvarleva som Prune vet hur man hittar, uppmätt på den här datorn i stället för uppskattat. Inget tas bort direkt — allt som Rensa tar går först till Karantän, där du kan lägga tillbaka det.',
+      title: "Grundlig rensning",
+      subtitle: "Varje cache, logg, dump och rest som Prune vet hur man hittar, uppmätt på den här datorn i stället för uppskattat. Inget tas bort direkt — allt som Rensa tar går först till Karantän, där du kan lägga tillbaka det.",
       scanLog: {
         header: 'Skanningsutdata',
         scanningAnnounce: (total) => `Skannar ${total} platser.`,
@@ -27124,12 +27118,10 @@ export const CATALOG = {
       stopping: "Stoppar efter denna…",
       statusSkipped: "hoppades över",
       stoppedNote: (n) => `Stoppades i förtid. Inte startade: ${n}.`,
-      registryOnlyIntro: 'Varje app tas bort via Windows i tur och ordning, och det finns ingen restskanning efteråt: Windows tar bort appens egna data tillsammans med den.',
-      mixedIntro: (hasStore) => `Varje programs eget avinstallationsprogram körs i tur och ordning, sedan skannar Prune efter vad de lämnar kvar och visar dig allt innan något av det tas bort.${hasStore ? ' Store-appar tas istället bort via Windows, utan restskanning efteråt.' : ''}`,
+      registryOnlyIntro: "Varje program tas bort via Windows i tur och ordning, och det finns ingen restskanning efteråt: Windows tar bort programmets egna data tillsammans med det.",
+      mixedIntro: (hasStore) => `Varje programs eget avinstallationsprogram körs i tur och ordning, sedan skannar Prune efter vad de lämnar kvar och visar dig allt innan något av det tas bort.${hasStore ? ' Store-program tas istället bort via Windows, utan restskanning efteråt.' : ''}`,
       oneAtATime: 'En i taget, eftersom Windows bara tillåter en installation eller avinstallation åt gången. Vissa avinstallationsprogram visar sina egna fönster och ställer frågor till dig.',
-      storeWarning: (count) => count === 1
-        ? 'Store-appen i den här omgången kan inte återställas från karantän: att ta bort den tar med sig appen och dess sparade data, och att få tillbaka den innebär att installera om den från Store.'
-        : `De ${count} Store-apparna i den här omgången kan inte återställas från karantän: att ta bort en tar med sig appen och dess sparade data, och att få tillbaka den innebär att installera om den från Store.`,
+      storeWarning: (count) => count === 1 ? 'Store-programmet i den här omgången kan inte återställas från karantän: att ta bort det tar med sig programmet och dess sparade data, och att få tillbaka det innebär att installera om det från Store.' : `De ${count} Store-programmen i den här omgången kan inte återställas från karantän: att ta bort ett tar med sig programmet och dess sparade data, och att få tillbaka det innebär att installera om det från Store.`,
       runsBefore: (name) => `körs före ${name}`,
       reported: (bytes) => `${bytes} rapporterat`,
       unknownSizeSuffix: (n) => `, ${n} av okänd storlek`,
@@ -27149,14 +27141,14 @@ export const CATALOG = {
       failedHeading: (n) => `${n} kunde inte avinstalleras och lämnades ifred:`,
       removeLeftoversFailed: (error) => `Det gick inte att ta bort rester: ${error}`,
       noScanSettingsOff: 'Restskanningen är avstängd i Inställningar, så inget söktes.',
-      noScanStore: 'Det finns ingen restskanning efter en Store-app: Windows tar bort appens egna data tillsammans med den.',
+      noScanStore: "Det finns ingen restskanning efter ett Store-program: Windows tar bort programmets egna data tillsammans med det.",
       done: 'Klar',
       summary: {
         recycle: (programs, items, freed) => `Avinstallerade ${programs} och skickade ${items} till papperskorgen, vilket frigjorde ${freed}.`,
         permanent: (programs, items, freed) => `Avinstallerade ${programs} och raderade ${items} permanent, vilket frigjorde ${freed}.`,
         quarantine: (programs, items, freed) => `Avinstallerade ${programs} och flyttade ${items} till karantän, vilket frigjorde ${freed}.`,
         programs: (n) => `${n} program`,
-        items: (n) => `${n} kvarvarande objekt`
+        items: (n) => `${n} rest${n === 1 ? '' : 'er'}`
       },
       noRestorePoint: (reason) => `Ingen systemåterställningspunkt skapades (${reason}).`,
       restorePointFallback: 'inte tillgänglig',
@@ -27234,7 +27226,7 @@ export const CATALOG = {
     nav: {
       reportBug: 'รายงานข้อบกพร่อง',
       dashboard: 'แดชบอร์ด', diskMap: 'แผนที่ดิสก์', applications: 'แอปพลิเคชัน',
-      quarantine: 'กักกัน', settings: 'การตั้งค่า', startup: 'โปรแกรมเริ่มต้น',
+      quarantine: 'กักกัน', settings: 'การตั้งค่า', startup: "เริ่มต้นระบบ",
       duplicates: 'ไฟล์ซ้ำ', deepClean: 'ทำความสะอาดเชิงลึก',
       landmark: 'หลัก'
     },
@@ -27275,7 +27267,7 @@ export const CATALOG = {
       },
       autoQuarantine: {
         title: 'กักกันอัตโนมัติ',
-        description: 'การล้างข้อมูลเชิงลึกจะย้ายสิ่งที่ลบไปยังกักกันของ Prune ซึ่งคุณสามารถนำกลับมาได้ ปิดสิ่งนี้แล้วมันจะไปที่ถังรีไซเคิลของ Windows แทน — ยังคงกู้คืนได้ เพียงแค่อยู่ในที่ที่คุณรู้วิธีล้างอยู่แล้ว'
+        description: "การทำความสะอาดเชิงลึกจะย้ายสิ่งที่ลบไปยังกักกันของ Prune ซึ่งคุณสามารถนำกลับมาได้ ปิดสิ่งนี้แล้วมันจะไปที่ถังรีไซเคิลของ Windows แทน — ยังคงกู้คืนได้ เพียงแค่อยู่ในที่ที่คุณรู้วิธีล้างอยู่แล้ว"
       },
       skipRecent: {
         title: 'ปล่อยไฟล์ล่าสุดไว้',
@@ -27307,7 +27299,7 @@ export const CATALOG = {
       },
       exclusions: {
         title: 'ยกเว้นโฟลเดอร์',
-        description: 'โฟลเดอร์และประเภทไฟล์ที่ Prune จะปล่อยไว้ — ถูกข้ามโดยการล้างข้อมูลเชิงลึกและถูกยกเว้นจากแผนที่ดิสก์ — นอกเหนือจากสิ่งที่มันปกป้องอยู่แล้ว: ข้อมูลโวลุ่มระบบ, กักกันของแอนตี้ไวรัส, คลังส่วนประกอบ และอีกสิบกว่าอย่าง',
+        description: "โฟลเดอร์และประเภทไฟล์ที่ Prune จะปล่อยไว้ — ถูกข้ามโดยการทำความสะอาดเชิงลึกและถูกยกเว้นจากแผนที่ดิสก์ — นอกเหนือจากสิ่งที่มันปกป้องอยู่แล้ว: ข้อมูลโวลุ่มระบบ, กักกันของแอนตี้ไวรัส, คลังส่วนประกอบ และอีกสิบกว่าอย่าง",
         ariaLabel: 'เส้นทางโฟลเดอร์หรือประเภทไฟล์ที่จะยกเว้น',
         add: 'เพิ่ม',
         invalidFormat: 'เขียนเส้นทางโฟลเดอร์แบบเต็ม (D:\\Games) หรือประเภทไฟล์ (*.iso)',
@@ -27321,7 +27313,7 @@ export const CATALOG = {
         title: 'คุกกี้ที่จะเก็บไว้',
         description: 'สิ่งอื่นทั้งหมดในไฟล์คุกกี้ของเบราว์เซอร์จะหายไปทันทีที่คุณล้างข้อมูล สแกนเพื่อดูว่ามีอะไรอยู่จริง แล้วทำเครื่องหมายสิ่งที่คุ้มค่าจะเก็บไว้',
         scanButton: 'สแกนหาคุกกี้',
-        scanning: 'กำลังทำงาน…',
+        scanning: "กำลังสแกน…",
         filterPlaceholder: 'กรองโดเมน…',
         countSuffix: (count) => `คุกกี้ ${count} รายการ`,
         none: 'ไม่พบคุกกี้',
@@ -27341,7 +27333,7 @@ export const CATALOG = {
       warningConfirmations: {
         title: 'การยืนยันคำเตือน',
         allAsk: 'ตัวล้างข้อมูลทุกตัวที่ทำให้สูญเสียข้อมูลจะถามก่อนที่จะทำงาน',
-        someSet: (count) => `คำเตือนการล้างข้อมูล ${count} รายการถูกตั้งค่าให้ไม่ต้องถามอีก`,
+        someSet: (count) => `คำเตือนของตัวล้างข้อมูล ${count} รายการถูกตั้งค่าให้ไม่ต้องถามอีก`,
         reset: 'รีเซ็ตการยืนยันคำเตือน'
       },
       uninstallTab: {
@@ -27371,20 +27363,20 @@ export const CATALOG = {
           title: 'เก็บประวัติการถอนการติดตั้ง',
           description: 'รายการในแดชบอร์ดของการลบล่าสุดและพื้นที่ที่มันปลดปล่อย ปิดไว้ จะไม่มีการบันทึกสิ่งใหม่'
         },
-        destinationHeading: 'ไฟล์ที่เหลืออยู่จะไปที่',
+        destinationHeading: "ไฟล์ตกค้างจะไปที่",
         leftoverOptions: {
           quarantine: { label: 'กักกัน', description: 'ย้ายไปยังข้อมูลสำรองของ Prune เอง และสามารถกู้คืนได้จากหน้าจอกักกัน ค่าเริ่มต้น' },
           recycle: { label: 'ถังรีไซเคิล', description: 'สามารถกู้คืนได้จากถังของ Windows เอง และปลดปล่อยเมื่อคุณล้างมัน' },
           permanent: { label: 'ลบถาวร', description: 'ถูกลบไปทั้งหมด ไม่มีอะไรให้กู้คืน' }
         },
-        permanentWarning: 'ไฟล์ที่เหลืออยู่จะถูกลบไปทั้งหมดและไม่สามารถกู้คืนได้ ไม่ว่าจะจากกักกันหรือที่อื่นใด ตรวจสอบรายการก่อนที่จะยืนยัน',
+        permanentWarning: "ไฟล์ตกค้างจะถูกลบไปทั้งหมดและไม่สามารถกู้คืนได้ ไม่ว่าจะจากกักกันหรือที่อื่นใด ตรวจสอบรายการก่อนที่จะยืนยัน",
         registryNote: 'คีย์รีจิสทรีจะถูกส่งออกไปยังกักกันก่อนที่จะถูกลบ ไม่ว่าคุณจะเลือกแบบใดก็ตาม'
       },
       about: {
         reportTitle: 'รายงานข้อบกพร่อง',
         reportDescription: "เปิด issue ที่กรอกข้อมูลไว้ให้แล้วบน GitHub Prune ไม่ส่งอะไรเอง และคุณจะเห็นทุกอย่างก่อนที่จะมีการส่งไปที่ใด",
         reportButton: 'รายงานข้อบกพร่อง',
-        description: 'เครื่องมือถอนการติดตั้งและล้างข้อมูลแบบออฟไลน์ในเครื่องสำหรับ Windows — การลบแบบบังคับพร้อมการสแกนไฟล์ตกค้าง, การกักกันอย่างปลอดภัยก่อนลบ, การทำแผนที่ดิสก์ และการล้างขยะด้วยคลิกเดียว'
+        description: "เครื่องมือถอนการติดตั้งและล้างข้อมูลแบบออฟไลน์ในเครื่องสำหรับ Windows — การลบแบบบังคับพร้อมการสแกนไฟล์ตกค้าง, การกักกันอย่างปลอดภัยก่อนลบ, แผนที่ดิสก์ และการล้างขยะด้วยคลิกเดียว"
       },
       automation: {
         title: 'การทำงานอัตโนมัติ',
@@ -27399,7 +27391,7 @@ export const CATALOG = {
         everyWeek: 'ทุกสัปดาห์',
         measureOnly: 'วัดเท่านั้น',
         clean: 'ล้างข้อมูล',
-        cleanWarning: 'สิ่งนี้จะลบไฟล์โดยไม่มีใครเฝ้าดู มันจะล้างกฎที่การล้างข้อมูลเชิงลึกแนะนำและที่มีบางอย่างอยู่จริงข้างใน และทุกอย่างยังคงไปที่กักกัน — ดังนั้นตรวจสอบการตั้งค่าการเก็บรักษาด้านบนก่อนที่จะเปิดสิ่งนี้ไว้',
+        cleanWarning: "สิ่งนี้จะลบไฟล์โดยไม่มีใครเฝ้าดู มันจะล้างกฎที่การทำความสะอาดเชิงลึกแนะนำและที่มีบางอย่างอยู่จริงข้างใน และทุกอย่างยังคงไปที่กักกัน — ดังนั้นตรวจสอบการตั้งค่าการเก็บรักษาด้านบนก่อนที่จะเปิดสิ่งนี้ไว้",
         nextRun: 'การทำงานครั้งถัดไป:',
         lastRun: 'การทำงานครั้งล่าสุด:',
         weekdays: {
@@ -27459,7 +27451,7 @@ export const CATALOG = {
       junk: {
         label: "ไฟล์ขยะ",
         notMeasured: 'ยังไม่ได้วัด',
-        description: 'การวัดจะตรวจทุกเส้นทางการล้างข้อมูลบนดิสก์ — ประมาณครึ่งนาที',
+        description: "การวัดจะตรวจทุกเส้นทางของตัวล้างข้อมูลบนดิสก์ — ประมาณครึ่งนาที",
         measure: 'วัด'
       },
       recentActivity: {
@@ -27625,7 +27617,7 @@ export const CATALOG = {
         total: 'รวม'
       },
       batchReasons: {
-        orphaned: 'โปรแกรมถอนการติดตั้งเสียหาย — ใช้บังคับลบแทน',
+        orphaned: "ตัวถอนการติดตั้งเสียหาย — ใช้บังคับลบแทน",
         extension: 'ส่วนขยายเบราว์เซอร์จะถูกลบจากเบราว์เซอร์เอง',
         storeNoPackage: 'แอปสโตร์นี้ไม่มีชื่อแพ็กเกจให้ลบ',
         storeProtected: 'Windows ระบุว่าแอปนี้เป็นส่วนหนึ่งของระบบและไม่อนุญาตให้ลบ',
@@ -27658,7 +27650,7 @@ export const CATALOG = {
       emptying: 'กำลังล้าง…',
       empty: {
         heading: 'ไม่มีอะไรในการกักกัน',
-        body: 'สิ่งที่การถอนการติดตั้งหรือการล้างเชิงลึกลบทิ้งจะมาที่นี่ก่อน มันจะอยู่ที่นี่จนกว่าคุณจะล้างมัน ดังนั้นไฟล์ที่ถูกนำออกโดยไม่ตั้งใจจึงสามารถกู้คืนได้เสมอ'
+        body: "สิ่งที่การถอนการติดตั้งหรือการทำความสะอาดเชิงลึกลบทิ้งจะมาที่นี่ก่อน มันจะอยู่ที่นี่จนกว่าคุณจะล้างมัน ดังนั้นไฟล์ที่ถูกนำออกโดยไม่ตั้งใจจึงสามารถกู้คืนได้เสมอ"
       },
       deleteConfirmPrompt: 'ลบทิ้งถาวรใช่หรือไม่',
       restore: 'กู้คืน',
@@ -27672,8 +27664,8 @@ export const CATALOG = {
       deleting: 'กำลังลบ…'
     },
     startup: {
-      title: "โปรแกรมเริ่มต้น",
-      subtitle: "สิ่งที่ทำงานเมื่อลงชื่อเข้าใช้: คีย์ Run และโฟลเดอร์ Startup ที่ Windows อ่าน จัดกลุ่มตามตำแหน่งที่อยู่ ซึ่งเป็นตัวกำหนดว่ารายการนั้นมีผลกับใครและต้องทำอย่างไรจึงจะลบได้ รายการที่ไฟล์หายไปคือของที่โปรแกรมซึ่งถูกลบอย่างไม่รอบคอบทิ้งไว้ และ Windows จะพยายามเปิดรายการนั้นทุกครั้ง",
+      title: "เริ่มต้นระบบ",
+      subtitle: "สิ่งที่ทำงานเมื่อลงชื่อเข้าใช้: คีย์ Run และโฟลเดอร์เริ่มต้นระบบที่ Windows อ่าน จัดกลุ่มตามตำแหน่งที่อยู่ ซึ่งเป็นตัวกำหนดว่ารายการนั้นมีผลกับใครและต้องทำอย่างไรจึงจะลบได้ รายการที่ไฟล์หายไปคือของที่โปรแกรมซึ่งถูกลบอย่างไม่รอบคอบทิ้งไว้ และ Windows จะพยายามเปิดรายการนั้นทุกครั้ง",
       loading: 'กำลังอ่านรายการเริ่มต้นระบบ…',
       loadError: (error) => `ไม่สามารถอ่านรายการเริ่มต้นระบบได้: ${error}`,
       empty: {
@@ -27687,7 +27679,7 @@ export const CATALOG = {
         broken: (n) => `${n} ชี้ไปยังไฟล์ที่หายไป`
       },
       columns: {
-        name: 'ชื่อการเริ่มต้น',
+        name: "ชื่อเริ่มต้นระบบ",
         command: 'พาธการเรียกใช้',
         description: 'คำอธิบาย',
         publisher: 'ผู้เผยแพร่',
@@ -27715,18 +27707,18 @@ export const CATALOG = {
       footerNote: 'การปิดใช้งานรายการจะบันทึกการตัดสินใจไว้ใน StartupApproved ซึ่งเป็นตำแหน่งเดียวกับที่การตั้งค่าแอปเริ่มต้นระบบของ Windows เองและตัวจัดการงานอ่านและเขียน ไม่มีอะไรถูกลบ ค่า Run หรือทางลัดยังคงอยู่ตรงตำแหน่งเดิม ดังนั้นการเปลี่ยนแปลงจึงย้อนกลับได้จากที่นี่หรือจากที่ใดที่หนึ่งในสองแห่งนั้น'
     },
     duplicates: {
-      title: 'ไฟล์ที่ซ้ำกัน',
+      title: "ไฟล์ซ้ำ",
       subtitle: 'ไฟล์ที่เหมือนกันทุกไบต์ ไม่ใช่แค่ขนาดเท่ากัน ชี้ไปยังโฟลเดอร์ที่คุณเก็บสิ่งต่าง ๆ จริง ๆ — การอ่านทั้งไดรฟ์เพื่อเปรียบเทียบกับตัวเองใช้เวลานานกว่าที่คุ้มค่า และส่วนใหญ่จะพบสำเนาไฟล์ของเครื่องเองเท่านั้น',
       folderPlaceholder: (a) => `เส้นทางโฟลเดอร์ เช่น ${a}`,
       stoppedNote: "หยุดแล้ว — ยังไม่ได้เปรียบเทียบอะไร",
-      folderInputAriaLabel: 'โฟลเดอร์สำหรับค้นหาไฟล์ที่ซ้ำกัน',
+      folderInputAriaLabel: "โฟลเดอร์สำหรับค้นหาไฟล์ซ้ำ",
       stop: 'หยุด',
-      findButton: 'ค้นหาไฟล์ที่ซ้ำกัน',
+      findButton: "ค้นหาไฟล์ซ้ำ",
       compareNote: 'เปรียบเทียบขนาดก่อน จากนั้นตัวอย่าง จากนั้นทั้งไฟล์ — ดังนั้นไฟล์ส่วนใหญ่จึงไม่เคยถูกอ่านเลย',
       reading: (folder) => `กำลังอ่าน ${folder}`,
       readingNote: 'ขนาดก่อน จากนั้นตัวอย่างขนาด 64 KB ของสิ่งที่มีขนาดเดียวกัน จากนั้นเนื้อหาทั้งหมดของสิ่งที่ยังคงตรงกัน',
       empty: {
-        heading: 'ไม่มีไฟล์ที่ซ้ำกันที่นี่',
+        heading: "ไม่มีไฟล์ซ้ำที่นี่",
         scanned: (count) => `เปรียบเทียบแล้ว ${count} ไฟล์`,
         truncatedSuffix: ' การสแกนถูกตัดให้สั้นลง ดังนั้นนี่ไม่ใช่ทั้งโฟลเดอร์'
       },
@@ -27748,7 +27740,7 @@ export const CATALOG = {
         moveButton: 'ย้ายรายการที่เลือกไปยังกักกัน'
       },
       modal: {
-        label: 'ย้ายไฟล์ที่ซ้ำกันไปยังกักกัน',
+        label: "ย้ายไฟล์ซ้ำไปยังกักกัน",
         heading: (count) => `ย้ายไฟล์ซ้ำ ${count} รายการไปยังกักกันหรือไม่`,
         body: (a) => `การย้ายจะคืนพื้นที่ ${a} เมื่อคุณล้างกักกัน แต่ละชุดจะเก็บสำเนาไว้อย่างน้อยหนึ่งชุด และไม่มีอะไรถูกลบ — คุณสามารถกู้คืนรายการใดก็ได้จากหน้าจอกักกัน`,
         cancel: 'ยกเลิก',
@@ -27762,8 +27754,8 @@ export const CATALOG = {
       }
     },
     deepClean: {
-      title: 'การล้างเชิงลึก',
-      subtitle: 'แคช บันทึก ดัมพ์ และเศษเหลือทุกอย่างที่ Prune รู้วิธีค้นหา วัดผลจริงบนเครื่องนี้แทนการประมาณ ไม่มีอะไรถูกลบทันที — ทุกอย่างที่การล้างเก็บไปจะไปที่กักกันก่อน ซึ่งคุณสามารถนำกลับมาได้',
+      title: "ทำความสะอาดเชิงลึก",
+      subtitle: "แคช บันทึก ดัมพ์ และสิ่งตกค้างทุกอย่างที่ Prune รู้วิธีค้นหา วัดผลจริงบนเครื่องนี้แทนการประมาณ ไม่มีอะไรถูกลบทันที — ทุกอย่างที่การล้างเก็บไปจะไปที่กักกันก่อน ซึ่งคุณสามารถนำกลับมาได้",
       scanLog: {
         header: 'ผลลัพธ์การสแกน',
         scanningAnnounce: (total) => `กำลังสแกน ${total} ตำแหน่ง`,
@@ -27782,7 +27774,7 @@ export const CATALOG = {
         scanning: 'กำลังสแกน…',
         preview: 'ดูตัวอย่าง'
       },
-      hiddenNote: (count) => `เครื่องมือล้าง ${count} รายการถูกซ่อนเพราะไม่ได้ติดตั้งซอฟต์แวร์ ตั้งค่า › การล้างข้อมูล เพื่อแสดงรายการเหล่านี้`,
+      hiddenNote: (count) => `ตัวล้างข้อมูล ${count} รายการถูกซ่อนเพราะไม่ได้ติดตั้งซอฟต์แวร์ ไปที่ การตั้งค่า › การล้างข้อมูล เพื่อแสดงรายการเหล่านี้`,
       footer: {
         totalLabel: 'พื้นที่ทั้งหมดที่จะเพิ่มว่าง:',
         notMeasuredYet: 'ยังไม่ได้วัดผล',
@@ -27805,8 +27797,8 @@ export const CATALOG = {
         losesData: 'สูญเสียข้อมูล',
         needsAdmin: 'ต้องการสิทธิ์ผู้ดูแลระบบ',
         notInstalled: 'ไม่ได้ติดตั้ง',
-        filterPlaceholder: "กรองตัวล้าง…",
-        filterNone: "ไม่มีตัวล้างที่ตรงกับตัวกรองนี้",
+        filterPlaceholder: "กรองตัวล้างข้อมูล…",
+        filterNone: "ไม่มีตัวล้างข้อมูลที่ตรงกับตัวกรองนี้",
         selectedOfTotal: (n, total) => `เลือก ${n} จาก ${total} รายการ`
       },
       warning: {
@@ -27857,7 +27849,7 @@ export const CATALOG = {
       },
       clean: 'ไม่พบสิ่งตกค้าง — ถอนการติดตั้งสะอาด',
       done: 'เสร็จสิ้น',
-      foundWarning: (count) => `พบสิ่งตกค้าง ${count} รายการที่โปรแกรมถอนการติดตั้งเดิมพลาดไป ตรวจสอบก่อนลบ`,
+      foundWarning: (count) => `พบสิ่งตกค้าง ${count} รายการที่ตัวถอนการติดตั้งเดิมพลาดไป ตรวจสอบก่อนลบ`,
       excludedNote: (count) => `${count} โฟลเดอร์ถูกละไว้เพราะอยู่ในรายการยกเว้นของคุณ`,
       itemsSelected: 'รายการที่เลือก',
       reclaimable: 'สามารถเรียกคืนได้',
@@ -27867,7 +27859,7 @@ export const CATALOG = {
       titleForce: (name) => `บังคับลบ ${name}`,
       titleNormal: (name) => `ถอนการติดตั้ง ${name}`,
       close: 'ปิด',
-      stillWaiting: "ยังรอโปรแกรมถอนการติดตั้งอยู่ คุณปิดหน้าต่างนี้ได้ โปรแกรมถอนการติดตั้งจะทำงานต่อ และ Prune จะไม่สแกนหาสิ่งตกค้าง",
+      stillWaiting: "ยังรอตัวถอนการติดตั้งอยู่ คุณปิดหน้าต่างนี้ได้ ตัวถอนการติดตั้งจะทำงานต่อ และ Prune จะไม่สแกนหาสิ่งตกค้าง",
       runningWarning: (name) => `${name} กำลังทำงานอยู่ในขณะนี้ กรุณาปิดก่อน — ตัวถอนการติดตั้งมักจะล้มเหลวเมื่อโปรแกรมเปิดอยู่ และอาจทิ้งไฟล์ที่การเปิดครั้งถัดไปจะสร้างขึ้นใหม่`,
       orphanedWarning: (reason) => `${reason} Windows จะยังคงแสดงรายการนี้จนกว่าจะลบรายการนี้ออก`,
       brokenIntro: 'Prune จะค้นหาไฟล์และคีย์รีจิสทรีที่ตรงกับชื่อนี้ รวมถึงรายการเพิ่ม/ลบโปรแกรม และแสดงทุกอย่างให้คุณเห็นก่อนที่จะลบสิ่งใด',
@@ -27895,7 +27887,7 @@ export const CATALOG = {
       },
       noScan: (name) => `ตัวถอนการติดตั้งของ ${name} เสร็จสิ้นแล้ว การสแกนสิ่งตกค้างถูกปิดในการตั้งค่า จึงไม่มีการค้นหาสิ่งอื่นเพิ่มเติม`,
       readyToScan: {
-        body: (name) => `หากโปรแกรมถอนการติดตั้งของ ${name} ยังทำงานไม่เสร็จ ให้รอให้ปิดตัวลงก่อน เมื่อเสร็จแล้ว คลิก "สแกนหาสิ่งตกค้าง" เพื่อค้นหาสิ่งที่หลงเหลืออยู่`,
+        body: (name) => `หากตัวถอนการติดตั้งของ ${name} ยังทำงานไม่เสร็จ ให้รอให้ปิดตัวลงก่อน เมื่อเสร็จแล้ว คลิก "สแกนหาสิ่งตกค้าง" เพื่อค้นหาสิ่งที่หลงเหลืออยู่`,
         scanButton: "สแกนหาสิ่งตกค้าง"
       },
       removalFailed: (error) => `การลบล้มเหลว: ${error}`,
@@ -27919,7 +27911,7 @@ export const CATALOG = {
       historyLabel: (n) => `ถอนการติดตั้งแบบชุด: ${n} โปรแกรม`,
       close: 'ปิด',
       cancel: "ยกเลิก",
-      stillWaiting: (more) => more ? `ยังรอโปรแกรมถอนการติดตั้งนี้อยู่ หน้าต่างของโปรแกรมอาจอยู่หลัง Prune เลือก "หยุดหลังรายการนี้" เพื่อข้ามรายการที่เหลือเมื่อเสร็จ` : `ยังรอโปรแกรมถอนการติดตั้งนี้อยู่ หน้าต่างของโปรแกรมอาจอยู่หลัง Prune`,
+      stillWaiting: (more) => more ? `ยังรอตัวถอนการติดตั้งนี้อยู่ หน้าต่างของโปรแกรมอาจอยู่หลัง Prune เลือก "หยุดหลังรายการนี้" เพื่อข้ามรายการที่เหลือเมื่อเสร็จ` : `ยังรอตัวถอนการติดตั้งนี้อยู่ หน้าต่างของโปรแกรมอาจอยู่หลัง Prune`,
       stopAfterThis: "หยุดหลังรายการนี้",
       stopping: "จะหยุดหลังรายการนี้…",
       statusSkipped: "ข้ามแล้ว",
@@ -27942,7 +27934,7 @@ export const CATALOG = {
       },
       scanningLine: 'กำลังสแกนสิ่งตกค้าง…',
       readyToScan: {
-        body: (n) => `โปรแกรมถอนการติดตั้ง ${n} รายการทำงานเสร็จแล้ว บางโปรแกรม — โดยเฉพาะเกมแลนเชอร์ — ยังคงลบไฟล์อยู่เบื้องหลังหลังจากหน้าต่างของตัวเองปิดลง หากไม่แน่ใจ ให้รอสักครู่ แล้วคลิก "สแกนหาสิ่งตกค้าง" เพื่อตรวจสอบว่ามีอะไรหลงเหลืออยู่หรือไม่`,
+        body: (n) => `ตัวถอนการติดตั้ง ${n} รายการทำงานเสร็จแล้ว บางโปรแกรม — โดยเฉพาะเกมแลนเชอร์ — ยังคงลบไฟล์อยู่เบื้องหลังหลังจากหน้าต่างของตัวเองปิดลง หากไม่แน่ใจ ให้รอสักครู่ แล้วคลิก "สแกนหาสิ่งตกค้าง" เพื่อตรวจสอบว่ามีอะไรหลงเหลืออยู่หรือไม่`,
         scanButton: 'สแกนหาสิ่งตกค้าง'
       },
       uninstalledOf: (removed, total) => `ถอนการติดตั้งแล้ว ${removed} จาก ${total}`,
@@ -27956,7 +27948,7 @@ export const CATALOG = {
         permanent: (programs, items, freed) => `ถอนการติดตั้ง ${programs} และลบ ${items} ถาวร เพิ่มพื้นที่ว่าง ${freed}`,
         quarantine: (programs, items, freed) => `ถอนการติดตั้ง ${programs} และย้าย ${items} ไปยังกักกัน เพิ่มพื้นที่ว่าง ${freed}`,
         programs: (n) => `${n} โปรแกรม`,
-        items: (n) => `${n} รายการที่ตกค้าง`
+        items: (n) => `สิ่งตกค้าง ${n} รายการ`
       },
       noRestorePoint: (reason) => `ไม่ได้สร้างจุดคืนค่าระบบ (${reason})`,
       restorePointFallback: 'ไม่พร้อมใช้งาน',
@@ -28035,7 +28027,7 @@ export const CATALOG = {
       reportBug: 'Hata bildir',
       dashboard: 'Panel', diskMap: 'Disk Haritası', applications: 'Uygulamalar',
       quarantine: 'Karantina', settings: 'Ayarlar', startup: 'Başlangıç',
-      duplicates: 'Yinelenenler', deepClean: 'Derinlemesine Temizlik',
+      duplicates: 'Yinelenenler', deepClean: "Derin Temizlik",
       landmark: 'Ana'
     },
     settings: {
@@ -28075,7 +28067,7 @@ export const CATALOG = {
       },
       autoQuarantine: {
         title: 'Otomatik karantina',
-        description: 'Derin Temizlik, kaldırdığı şeyi geri koyabileceğiniz Prune\'un Karantinasına taşır. Bunu kapatın, bunun yerine Windows Geri Dönüşüm Kutusuna gider — hâlâ kurtarılabilir, sadece nasıl boşaltacağınızı zaten bildiğiniz bir yerde.'
+        description: "Derin Temizlik, kaldırdığı şeyi geri yükleyebileceğiniz Prune'un Karantinasına taşır. Bunu kapatın, bunun yerine Windows Geri Dönüşüm Kutusuna gider — hâlâ geri yüklenebilir, sadece nasıl boşaltacağınızı zaten bildiğiniz bir yerde."
       },
       skipRecent: {
         title: 'Yakın zamandaki dosyaları rahat bırak',
@@ -28100,7 +28092,7 @@ export const CATALOG = {
       },
       quarantineMaxSize: {
         title: "Karantina boyut sınırı",
-        description: 'Tüm Karantina klasörü için bir üst sınır. Bunun üzerinde en eski yedeklemeler önce gider — en yenisi asla atılmaz, bu yüzden yeni kaldırdığınız büyük bir şey, tek başına sınırdan büyük olsa bile kurtarılabilir kalır. Sınır olmaması için boş bırakın.',
+        description: "Tüm Karantina klasörü için bir üst sınır. Bunun üzerinde en eski yedeklemeler önce gider — en yenisi asla atılmaz, bu yüzden yeni kaldırdığınız büyük bir şey, tek başına sınırdan büyük olsa bile geri yüklenebilir kalır. Sınır olmaması için boş bırakın.",
         noLimitPlaceholder: 'Sınır yok',
         gbUnit: 'GB',
         ariaLabel: 'Gigabayt cinsinden maksimum karantina boyutu'
@@ -28121,7 +28113,7 @@ export const CATALOG = {
         title: 'Korunacak çerezler',
         description: "Bir tarayıcının çerez dosyasındaki geri kalan her şey, temizlediğiniz anda kaybolur. Gerçekte ne olduğunu görmek için tarayın ve saklamaya değer her şeyi işaretleyin.",
         scanButton: 'Çerezleri tara',
-        scanning: 'Çalışıyor…',
+        scanning: "Taranıyor…",
         filterPlaceholder: 'Alan adlarını filtrele…',
         countSuffix: (count) => `${count} çerez`,
         none: 'Çerez bulunamadı.',
@@ -28171,13 +28163,13 @@ export const CATALOG = {
           title: 'Bir kaldırma geçmişi tut',
           description: 'Panonun son kaldırmalar ve serbest bıraktıkları alan listesi. Kapalıyken, yeni hiçbir şey kaydedilmez.'
         },
-        destinationHeading: 'Kalan dosyalar şuraya gider',
+        destinationHeading: "Artıklar şuraya gider",
         leftoverOptions: {
-          quarantine: { label: 'Karantina', description: 'Prune\'un kendi yedeğine taşındı ve Karantina ekranından kurtarılabilir. Varsayılan.' },
-          recycle: { label: 'Geri Dönüşüm Kutusu', description: 'Windows\'un kendi kutusundan kurtarılabilir ve siz onu boşalttığınızda serbest kalır.' },
+          quarantine: { label: 'Karantina', description: "Prune'un kendi yedeğine taşındı ve Karantina ekranından geri yüklenebilir. Varsayılan." },
+          recycle: { label: 'Geri Dönüşüm Kutusu', description: "Windows'un kendi kutusundan geri yüklenebilir ve siz onu boşalttığınızda serbest kalır." },
           permanent: { label: 'Kalıcı olarak sil', description: 'Tamamen silindi. Geri yüklenecek bir şey yok.' }
         },
-        permanentWarning: 'Kalan dosyalar tamamen silinecek ve ne Karantinadan ne de başka bir yerden geri yüklenemeyecek. Onaylamadan önce listeyi kontrol edin.',
+        permanentWarning: "Artıklar tamamen silinecek ve ne Karantinadan ne de başka bir yerden geri yüklenemeyecek. Onaylamadan önce listeyi kontrol edin.",
         registryNote: 'Kayıt defteri anahtarları, ne seçerseniz seçin, kaldırılmadan önce Karantinaya aktarılır.'
       },
       about: {
@@ -28251,7 +28243,7 @@ export const CATALOG = {
       },
       apps: {
         label: "Yüklü uygulamalar",
-        broken: (count) => `Başarısız kaldırma nedeniyle kalan ${count} öğe`,
+        broken: (count) => `Başarısız kaldırmalardan kalan ${count} artık öğe`,
         noBroken: 'Bozuk öğe yok.',
         review: 'İncele',
         manage: 'Yönet'
@@ -28458,7 +28450,7 @@ export const CATALOG = {
       emptying: 'Boşaltılıyor…',
       empty: {
         heading: 'Karantinada hiçbir şey yok.',
-        body: 'Bir kaldırma veya bir Derin Temizlik ile silinen her şey önce buraya iner. Boşaltana kadar burada kalır, bu yüzden yanlışlıkla alınan bir dosya her zaman geri alınabilir.'
+        body: "Bir kaldırma veya bir Derin Temizlik ile silinen her şey önce buraya iner. Boşaltana kadar burada kalır, bu yüzden yanlışlıkla alınan bir dosya her zaman geri yüklenebilir."
       },
       deleteConfirmPrompt: 'Kalıcı olarak silinsin mi?',
       restore: 'Geri yükle',
@@ -28563,7 +28555,7 @@ export const CATALOG = {
     },
     deepClean: {
       title: 'Derin Temizlik',
-      subtitle: "Prune'un bulmayı bildiği her önbellek, günlük, döküm ve kalıntı, tahmin edilmek yerine bu makinede ölçülür. Hiçbir şey hemen silinmez — Temizle'nin aldığı her şey önce Karantina'ya gider, oradan geri koyabilirsiniz.",
+      subtitle: "Prune'un bulmayı bildiği her önbellek, günlük, döküm ve kalıntı, tahmin edilmek yerine bu makinede ölçülür. Hiçbir şey hemen silinmez — Temizle'nin aldığı her şey önce Karantina'ya gider, oradan geri yükleyebilirsiniz.",
       scanLog: {
         header: 'Tarama çıktısı',
         scanningAnnounce: (total) => `${total} konum taranıyor.`,
@@ -28760,7 +28752,7 @@ export const CATALOG = {
       },
       noRestorePoint: (reason) => `Sistem geri yükleme noktası oluşturulmadı (${reason}).`,
       restorePointFallback: 'kullanılamıyor',
-      quarantineNote: 'Yukarıdakilerin hepsi hâlâ Karantinada ve geri konulabilir.',
+      quarantineNote: "Yukarıdakilerin hepsi hâlâ Karantinada ve geri yüklenebilir.",
       failedRegistryKeys: (n) => `${n} kayıt defteri anahtarı kaldırılamadı — bunlar genellikle Prune'un yönetici olarak çalışmasını gerektirir.`
     },
     bugReport: {
@@ -28920,13 +28912,13 @@ export const CATALOG = {
       cookiesToPreserve: {
         title: 'Файли cookie для збереження',
         description: 'Усе інше у файлі cookie браузера зникає в момент очищення. Скануйте, щоб побачити, що там є насправді, і позначте все, що варто зберегти.',
-        scanButton: 'Пошук файлів cookie',
-        scanning: 'Виконується…',
+        scanButton: "Сканувати cookie",
+        scanning: "Сканування…",
         filterPlaceholder: 'Фільтрувати домени…',
         countSuffix: (count) => `${count} файлів cookie`,
         none: 'Файли cookie не знайдено.',
         staleBadge: 'не виявлено під час цього сканування',
-        scanErrorPrefix: (message) => `Не вдалося знайти файли cookie: ${message}`,
+        scanErrorPrefix: (message) => `Не вдалося просканувати cookie: ${message}`,
         fileErrorsNote: (count) => `Не вдалося прочитати ${count} файлів, тому їх пропущено.`,
         checkboxAriaLabel: (domain) => `Зберегти файли cookie з ${domain}`
       },
@@ -28971,20 +28963,20 @@ export const CATALOG = {
           title: 'Вести історію видалень',
           description: 'Список панелі керування нещодавніми видаленнями та звільненим ними місцем. Вимкнено — нічого нового не записується.'
         },
-        destinationHeading: 'Файли, що залишилися, переходять до',
+        destinationHeading: "Залишки потрапляють до",
         leftoverOptions: {
           quarantine: { label: 'Карантин', description: 'Переміщено у власну резервну копію Prune і відновлюване з екрана карантину. Варіант за замовчуванням.' },
           recycle: { label: 'Кошик', description: 'Відновлюване з власного кошика Windows і звільняється при його очищенні.' },
           permanent: { label: 'Видалити назавжди', description: 'Видалено повністю. Нічого відновлювати.' }
         },
-        permanentWarning: 'Файли, що залишилися, буде видалено повністю, і їх не можна відновити ні з карантину, ні звідки-небудь ще. Перевірте список перед підтвердженням.',
+        permanentWarning: "Залишки буде видалено повністю, і їх не можна відновити ні з карантину, ні звідки-небудь ще. Перевірте список перед підтвердженням.",
         registryNote: 'Ключі реєстру експортуються до карантину перед видаленням, незалежно від вашого вибору.'
       },
       about: {
         reportTitle: 'Повідомити про помилку',
         reportDescription: "Відкриває на GitHub уже заповнене звернення. Сам Prune нічого не надсилає, і ви бачите все до того, як воно кудись потрапить.",
         reportButton: 'Повідомити про помилку',
-        description: 'Локальний, автономний інструмент видалення та очищення для Windows — примусове видалення зі скануванням залишкових файлів, безпечний карантин перед видаленням, картографування диска та очищення сміття в один клік.'
+        description: "Локальний, автономний інструмент видалення та очищення для Windows — примусове видалення зі скануванням залишків, безпечний карантин перед видаленням, карта диска та очищення сміття в один клік."
       },
       automation: {
         title: 'Автоматизація',
@@ -29059,7 +29051,7 @@ export const CATALOG = {
       junk: {
         label: "Непотрібні файли",
         notMeasured: 'не виміряно',
-        description: 'Вимірювання проходить кожним шляхом очищення на диску — приблизно півхвилини.',
+        description: "Вимірювання проходить шляхами кожного засобу очищення на диску — приблизно півхвилини.",
         measure: 'Виміряти'
       },
       recentActivity: {
@@ -29120,17 +29112,17 @@ export const CATALOG = {
       scanFailure: (path, error) => `Не вдалося сканувати «${path}»: ${error}`,
       fastScanDeclined: 'Не підтверджено — досі використовується сканування папка за папкою.',
       truncated: {
-        withCoverage: (measured, used, percent) => `У цього сканування закінчився час: воно виміряло ${measured} з ${used} використаних (${percent}%). Те, що виміряно, реальне; решта відображається як несканована, а не як порожня.`,
-        withoutCoverage: 'У цього сканування закінчився час до завершення диска. Усе, що фактично виміряно, реальне, але папки, яких воно так і не досягло, відображаються як несканований, а не порожні — не сприймайте це як повну картину того, що займає ваш простір.',
+        withCoverage: (measured, used, percent) => `У цього сканування закінчився час: воно виміряло ${measured} з ${used} використаних (${percent}%). Те, що виміряно, реальне; решта відображається як непроскановане, а не як порожнє.`,
+        withoutCoverage: "У цього сканування закінчився час до завершення диска. Усе, що фактично виміряно, реальне, але папки, яких воно так і не досягло, відображаються як непроскановані, а не порожні — не сприймайте це як повну картину того, що займає ваш простір.",
         stoppedWithCoverage: (a, b, c) => `Ви зупинили сканування: виміряно ${a} із ${b} використаних (${c}%). Виміряне — реальні дані, решту показано як непроскановану, а не як порожню.`,
-        stoppedWithoutCoverage: "Ви достроково зупинили сканування. Виміряне — реальні дані; папки, до яких воно не дійшло, показано як непросканованими, а не як порожні. Це не повна картина того, що займає місце.",
+        stoppedWithoutCoverage: "Ви достроково зупинили сканування. Виміряне — реальні дані; папки, до яких воно не дійшло, показано як непроскановані, а не як порожні. Це не повна картина того, що займає місце.",
         rescanLink: 'Замість цього запустити швидке сканування'
       },
       view: { tree: 'Дерево', files: 'Файли' },
       folderTable: {
         empty: 'У цій папці немає чого перелічувати.',
         rowLabel: (a, b) => `Відкрити ${a}, ${b}`,
-        notScanned: 'не скановано',
+        notScanned: "не проскановано",
         columns: { folder: 'Папка', size: 'Розмір', items: 'Елементи', files: 'Файли', folders: 'Папки', modified: 'Змінено' }
       },
       extensionPanel: {
@@ -29225,7 +29217,7 @@ export const CATALOG = {
         total: 'усього'
       },
       batchReasons: {
-        orphaned: 'Його програма видалення пошкоджена — використайте замість цього примусове видалення.',
+        orphaned: "Його деінсталятор пошкоджено — використайте замість цього примусове видалення.",
         extension: 'Розширення браузера видаляються з самого браузера.',
         storeNoPackage: 'Цей застосунок магазину не має назви пакета для видалення.',
         storeProtected: 'Windows позначає цей застосунок як частину системи і не дозволяє його видалити.',
@@ -29371,7 +29363,7 @@ export const CATALOG = {
         starting: 'Запуск…',
         idle: "Натисніть «Попередній перегляд», щоб виміряти, що можна очистити."
       },
-      emptyState: 'Ще нічого не відскановано.',
+      emptyState: "Ще нічого не проскановано.",
       scanErrorPrefix: (error) => `Не вдалося виконати сканування: ${error}`,
       cleanErrorPrefix: (error) => `Не вдалося виконати очищення: ${error}`,
       cleanupComplete: 'Очищення завершено.',
@@ -29457,7 +29449,7 @@ export const CATALOG = {
       },
       clean: 'Залишків не знайдено — чисте видалення.',
       done: 'Готово',
-      foundWarning: (count) => `Знайдено залишків, які пропустила програма видалення: ${count}. Перевірте їх перед видаленням.`,
+      foundWarning: (count) => `Знайдено залишків, які пропустив деінсталятор: ${count}. Перевірте їх перед видаленням.`,
       excludedNote: (count) => `${count} папок пропущено, оскільки вони входять до ваших винятків.`,
       itemsSelected: 'елементів вибрано',
       reclaimable: 'можна звільнити',
@@ -29467,7 +29459,7 @@ export const CATALOG = {
       titleForce: (name) => `Примусово видалити ${name}`,
       titleNormal: (name) => `Видалити ${name}`,
       close: 'Закрити',
-      stillWaiting: `Усе ще чекаємо програму видалення. Це вікно можна закрити: програма продовжить роботу, а Prune не шукатиме залишків.`,
+      stillWaiting: "Усе ще чекаємо деінсталятор. Це вікно можна закрити: він продовжить роботу, а Prune не шукатиме залишків.",
       runningWarning: (name) => `${name} зараз запущено. Спочатку закрийте його — деінсталятор зазвичай завершується невдало з відкритою програмою і може залишити файли, які наступний запуск створить знову.`,
       orphanedWarning: (reason) => `${reason} Windows продовжуватиме відображати його, доки запис не буде видалено.`,
       brokenIntro: 'Prune шукатиме файли та ключі реєстру, що відповідають цій назві, включно з записом у списку програм і компонентів, і покаже вам усе перед видаленням будь-чого.',
@@ -29495,7 +29487,7 @@ export const CATALOG = {
       },
       noScan: (name) => `Деінсталятор ${name} завершив роботу. Сканування залишків вимкнено в налаштуваннях, тому нічого іншого не шукали.`,
       readyToScan: {
-        body: (name) => `Якщо програма видалення ${name} ще завершує роботу, дайте їй закритися. Коли вона закінчить, натисніть «Сканувати залишки», щоб знайти все, що після неї залишилося.`,
+        body: (name) => `Якщо деінсталятор ${name} ще завершує роботу, дайте йому закритися. Коли він закінчить, натисніть «Сканувати залишки», щоб знайти все, що після нього залишилося.`,
         scanButton: "Сканувати залишки"
       },
       removalFailed: (error) => `Видалення не вдалося: ${error}`,
@@ -29519,8 +29511,8 @@ export const CATALOG = {
       historyLabel: (n) => `Пакетне видалення: ${n} програм`,
       close: 'Закрити',
       cancel: "Скасувати",
-      stillWaiting: (more) => more ? `Усе ще чекаємо цю програму видалення. Її вікно може бути за вікном Prune. Виберіть «Зупинити після цієї», щоб пропустити решту після її завершення.` : `Усе ще чекаємо цю програму видалення. Її вікно може бути за вікном Prune.`,
-      stopAfterThis: "Зупинити після цієї",
+      stillWaiting: (more) => more ? `Усе ще чекаємо цей деінсталятор. Його вікно може бути за вікном Prune. Виберіть «Зупинити після цього», щоб пропустити решту програм після його завершення.` : `Усе ще чекаємо цей деінсталятор. Його вікно може бути за вікном Prune.`,
+      stopAfterThis: "Зупинити після цього",
       stopping: "Зупинка після цієї…",
       statusSkipped: "пропущено",
       stoppedNote: (n) => `Зупинено достроково. Не розпочато: ${n}.`,
@@ -29542,7 +29534,7 @@ export const CATALOG = {
       },
       scanningLine: 'Сканування залишків…',
       readyToScan: {
-        body: (n) => `Програми видалення завершили роботу: ${n}. Деякі з них, особливо лаунчери ігор, продовжують видаляти файли у фоні й після закриття свого вікна. Якщо не впевнені, трохи зачекайте й натисніть «Сканувати залишки», щоб перевірити, чи щось не залишилося.`,
+        body: (n) => `Деінсталятори завершили роботу: ${n}. Деякі з них, особливо лаунчери ігор, продовжують видаляти файли у фоні й після закриття свого вікна. Якщо не впевнені, трохи зачекайте й натисніть «Сканувати залишки», щоб перевірити, чи щось не залишилося.`,
         scanButton: 'Сканувати залишки'
       },
       uninstalledOf: (removed, total) => `Видалено ${removed} з ${total}.`,
@@ -29556,7 +29548,7 @@ export const CATALOG = {
         permanent: (programs, items, freed) => `Видалено ${programs} і остаточно видалено ${items}, звільнивши ${freed}.`,
         quarantine: (programs, items, freed) => `Видалено ${programs} і переміщено ${items} у карантин, звільнивши ${freed}.`,
         programs: (n) => `${n} програм`,
-        items: (n) => `${n} елементів, що залишилися`
+        items: (n) => { const m10 = n % 10, m100 = n % 100; const w = m10 === 1 && m100 !== 11 ? 'залишок' : (m10 >= 2 && m10 <= 4 && (m100 < 12 || m100 > 14)) ? 'залишки' : 'залишків'; return `${n} ${w}`; }
       },
       noRestorePoint: (reason) => `Точку відновлення системи не було створено (${reason}).`,
       restorePointFallback: 'недоступно',
@@ -29634,7 +29626,7 @@ export const CATALOG = {
     nav: {
       reportBug: 'Báo lỗi',
       dashboard: 'Bảng điều khiển', diskMap: 'Bản đồ ổ đĩa', applications: 'Ứng dụng',
-      quarantine: 'Cách ly', settings: 'Cài đặt', startup: 'Khởi động cùng',
+      quarantine: "Khu cách ly", settings: 'Cài đặt', startup: "Khởi động",
       duplicates: 'Tệp trùng lặp', deepClean: 'Dọn dẹp sâu',
       landmark: 'Chính'
     },
@@ -29670,12 +29662,12 @@ export const CATALOG = {
         openPageError: (error) => `Không thể mở trang: ${error}`
       },
       showFreeSpace: {
-        title: 'Hiển thị dung lượng trống trên Bản đồ Ổ đĩa',
+        title: "Hiển thị dung lượng trống trên Bản đồ ổ đĩa",
         description: 'Vẽ dung lượng trống của ổ đĩa như một khối khác khi bạn quét toàn bộ ổ đĩa, để mỗi thư mục được đọc như một phần của ổ đĩa thay vì của dung lượng đang sử dụng.'
       },
       autoQuarantine: {
         title: 'Cách ly tự động',
-        description: 'Dọn dẹp Sâu di chuyển những gì nó loại bỏ vào Cách ly của Prune, nơi bạn có thể đưa nó trở lại. Tắt tính năng này và nó sẽ đi vào Thùng rác của Windows thay vào đó — vẫn có thể khôi phục, chỉ là ở một nơi mà bạn đã biết cách làm trống.'
+        description: "Dọn dẹp sâu di chuyển những gì nó loại bỏ vào khu cách ly của Prune, nơi bạn có thể khôi phục nó. Tắt tính năng này và nó sẽ đi vào Thùng rác của Windows thay vào đó — vẫn có thể khôi phục, chỉ là ở một nơi mà bạn đã biết cách làm trống."
       },
       skipRecent: {
         title: 'Để yên các tệp gần đây',
@@ -29693,21 +29685,21 @@ export const CATALOG = {
       },
       quarantineRetention: {
         title: "Thời gian giữ mục cách ly",
-        description: 'Mọi thứ Prune loại bỏ trước tiên sẽ vào Cách ly, và ở đó cho đến khi bạn làm trống nó. Đặt số ngày để loại bỏ các bản sao lưu cũ hơn thế. Để trống để giữ chúng mãi mãi.',
+        description: "Mọi thứ Prune loại bỏ trước tiên sẽ vào khu cách ly, và ở đó cho đến khi bạn làm trống nó. Đặt số ngày để loại bỏ các bản sao lưu cũ hơn thế. Để trống để giữ chúng mãi mãi.",
         neverPlaceholder: 'Không bao giờ',
         daysUnit: 'ngày',
         ariaLabel: 'Số ngày giữ bản sao lưu cách ly'
       },
       quarantineMaxSize: {
         title: "Giới hạn dung lượng khu cách ly",
-        description: 'Giới hạn cho toàn bộ thư mục Cách ly. Vượt quá mức đó, các bản sao lưu cũ nhất sẽ biến mất trước — bản mới nhất không bao giờ bị loại bỏ, vì vậy một thứ lớn mà bạn vừa loại bỏ vẫn có thể khôi phục ngay cả khi bản thân nó lớn hơn giới hạn. Để trống để không có giới hạn.',
+        description: "Giới hạn cho toàn bộ thư mục khu cách ly. Vượt quá mức đó, các bản sao lưu cũ nhất sẽ biến mất trước — bản mới nhất không bao giờ bị loại bỏ, vì vậy một thứ lớn mà bạn vừa loại bỏ vẫn có thể khôi phục ngay cả khi bản thân nó lớn hơn giới hạn. Để trống để không có giới hạn.",
         noLimitPlaceholder: 'Không giới hạn',
         gbUnit: 'GB',
         ariaLabel: 'Kích thước cách ly tối đa tính bằng gigabyte'
       },
       exclusions: {
         title: "Loại trừ thư mục",
-        description: 'Các thư mục và loại tệp mà Prune sẽ để yên — được Dọn dẹp Sâu bỏ qua và bị loại khỏi Bản đồ Ổ đĩa — ngoài những gì nó đã bảo vệ: Thông tin ổ đĩa hệ thống, cách ly diệt vi-rút, kho lưu trữ thành phần và hàng chục thứ khác.',
+        description: "Các thư mục và loại tệp mà Prune sẽ để yên — được Dọn dẹp sâu bỏ qua và bị loại khỏi Bản đồ ổ đĩa — ngoài những gì nó đã bảo vệ: Thông tin ổ đĩa hệ thống, cách ly diệt vi-rút, kho lưu trữ thành phần và hàng chục thứ khác.",
         ariaLabel: 'Đường dẫn thư mục hoặc loại tệp cần loại trừ',
         add: 'Thêm',
         invalidFormat: 'Nhập đường dẫn thư mục đầy đủ (D:\\Games) hoặc loại tệp (*.iso).',
@@ -29721,7 +29713,7 @@ export const CATALOG = {
         title: 'Cookie cần giữ lại',
         description: 'Mọi thứ khác trong tệp cookie của trình duyệt sẽ biến mất ngay khi bạn dọn dẹp nó. Quét để xem thực sự có gì ở đó, và đánh dấu bất cứ thứ gì đáng giữ lại.',
         scanButton: 'Quét tìm cookie',
-        scanning: 'Đang chạy…',
+        scanning: "Đang quét…",
         filterPlaceholder: 'Lọc miền…',
         countSuffix: (count) => `${count} cookie`,
         none: 'Không tìm thấy cookie nào.',
@@ -29741,7 +29733,7 @@ export const CATALOG = {
       warningConfirmations: {
         title: 'Xác nhận cảnh báo',
         allAsk: 'Mọi công cụ dọn dẹp làm mất dữ liệu đều hỏi trước khi chạy.',
-        someSet: (count) => `${count} cảnh báo dọn dẹp được đặt để không hỏi lại nữa.`,
+        someSet: (count) => `${count} cảnh báo công cụ dọn dẹp được đặt để không hỏi lại nữa.`,
         reset: 'Đặt lại xác nhận cảnh báo'
       },
       uninstallTab: {
@@ -29760,31 +29752,31 @@ export const CATALOG = {
         },
         afterHeading: 'Sau khi gỡ cài đặt',
         scanLeftovers: {
-          title: 'Quét tìm phần còn sót lại sau khi gỡ cài đặt',
+          title: "Quét tệp sót lại sau khi gỡ cài đặt",
           description: 'Tìm kiếm các tệp, khóa registry và tác vụ đã lên lịch mà trình gỡ cài đặt để lại. Tắt, Prune chỉ chạy trình gỡ cài đặt riêng của chương trình và dừng lại ở đó.'
         },
         preselect: {
-          title: 'Đánh dấu mọi phần còn sót lại theo mặc định',
+          title: "Đánh dấu mọi tệp sót lại theo mặc định",
           description: 'Quá trình xem xét mở ra với mọi thứ được tìm thấy đã được đánh dấu. Tắt, nó mở ra mà không có gì được đánh dấu và bạn tự chọn.'
         },
         keepHistory: {
           title: 'Giữ lịch sử gỡ cài đặt',
           description: 'Danh sách trên bảng điều khiển về các lần loại bỏ gần đây và dung lượng chúng đã giải phóng. Tắt, không có gì mới được ghi lại.'
         },
-        destinationHeading: 'Các tệp còn sót lại sẽ đi đến',
+        destinationHeading: "Các tệp sót lại sẽ đi đến",
         leftoverOptions: {
-          quarantine: { label: 'Cách ly', description: 'Được chuyển vào bản sao lưu riêng của Prune, và có thể khôi phục từ màn hình Cách ly. Tùy chọn mặc định.' },
+          quarantine: { label: "Khu cách ly", description: "Được chuyển vào bản sao lưu riêng của Prune, và có thể khôi phục từ màn hình khu cách ly. Tùy chọn mặc định." },
           recycle: { label: 'Thùng rác', description: 'Có thể khôi phục từ thùng rác riêng của Windows, và được giải phóng khi bạn làm trống nó.' },
           permanent: { label: 'Xóa vĩnh viễn', description: 'Bị xóa hoàn toàn. Không có gì để khôi phục.' }
         },
-        permanentWarning: 'Các tệp còn sót lại sẽ bị xóa hoàn toàn và không thể khôi phục, dù từ Cách ly hay bất kỳ nơi nào khác. Kiểm tra danh sách trước khi xác nhận.',
-        registryNote: 'Các khóa registry được xuất vào Cách ly trước khi chúng bị loại bỏ, bất kể bạn chọn gì.'
+        permanentWarning: "Các tệp sót lại sẽ bị xóa hoàn toàn và không thể khôi phục, dù từ khu cách ly hay bất kỳ nơi nào khác. Kiểm tra danh sách trước khi xác nhận.",
+        registryNote: "Các khóa registry được xuất vào khu cách ly trước khi chúng bị loại bỏ, bất kể bạn chọn gì."
       },
       about: {
         reportTitle: 'Báo lỗi',
         reportDescription: "Mở một issue được điền sẵn trên GitHub. Bản thân Prune không gửi gì, và bạn xem được toàn bộ nội dung trước khi nó đến bất cứ đâu.",
         reportButton: 'Báo lỗi',
-        description: 'Một công cụ gỡ cài đặt và dọn dẹp cục bộ, ngoại tuyến cho Windows — buộc loại bỏ với quét tệp còn sót lại, cách ly an toàn trước khi xóa, lập bản đồ ổ đĩa, và dọn dẹp rác chỉ với một cú nhấp chuột.'
+        description: "Một công cụ gỡ cài đặt và dọn dẹp cục bộ, ngoại tuyến cho Windows — buộc loại bỏ với quét tệp sót lại, cách ly an toàn trước khi xóa, lập bản đồ ổ đĩa, và dọn dẹp rác chỉ với một cú nhấp chuột."
       },
       automation: {
         title: 'Tự động hóa',
@@ -29799,7 +29791,7 @@ export const CATALOG = {
         everyWeek: 'Mỗi tuần',
         measureOnly: 'Chỉ đo lường',
         clean: 'Dọn dẹp',
-        cleanWarning: 'Điều này loại bỏ các tệp mà không ai theo dõi. Nó dọn dẹp các quy tắc mà Dọn dẹp Sâu đề xuất và thực sự có thứ gì đó trong đó, và mọi thứ vẫn đi vào cách ly — vì vậy hãy kiểm tra cài đặt lưu giữ ở trên trước khi để tính năng này bật.',
+        cleanWarning: "Điều này loại bỏ các tệp mà không ai theo dõi. Nó dọn dẹp các quy tắc mà Dọn dẹp sâu đề xuất và thực sự có thứ gì đó trong đó, và mọi thứ vẫn đi vào khu cách ly — vì vậy hãy kiểm tra cài đặt lưu giữ ở trên trước khi để tính năng này bật.",
         nextRun: 'Lần chạy tiếp theo:',
         lastRun: 'Lần chạy cuối:',
         weekdays: {
@@ -29851,7 +29843,7 @@ export const CATALOG = {
       },
       apps: {
         label: "Ứng dụng đã cài",
-        broken: (count) => `${count} mục còn sót lại do gỡ cài đặt thất bại`,
+        broken: (count) => `${count} mục sót lại do gỡ cài đặt thất bại`,
         noBroken: 'Không có mục bị hỏng.',
         review: 'Xem lại',
         manage: 'Quản lý'
@@ -29859,7 +29851,7 @@ export const CATALOG = {
       junk: {
         label: "Tệp rác",
         notMeasured: 'chưa đo',
-        description: 'Việc đo lường sẽ quét qua từng đường dẫn dọn dẹp trên ổ đĩa — khoảng nửa phút.',
+        description: "Việc đo lường sẽ quét qua từng đường dẫn của công cụ dọn dẹp trên ổ đĩa — khoảng nửa phút.",
         measure: 'Đo lường'
       },
       recentActivity: {
@@ -29955,7 +29947,7 @@ export const CATALOG = {
       },
       toasts: {
         moved: (name) => `Đã chuyển vào khu cách ly: ${name}`,
-        restoreHint: 'Khôi phục từ màn hình Cách ly.',
+        restoreHint: "Khôi phục từ màn hình khu cách ly.",
         pathCopied: 'Đã sao chép đường dẫn.',
         copyFailed: 'Không thể sao chép đường dẫn đó.',
         moveFailed: 'Không thể di chuyển mục này.'
@@ -29963,7 +29955,7 @@ export const CATALOG = {
       removeModal: {
         label: 'Chuyển vào khu cách ly',
         heading: 'Chuyển mục này vào khu cách ly?',
-        note: 'Mục này được di chuyển, không bị xóa — khôi phục bất cứ lúc nào từ màn hình Cách ly.',
+        note: "Mục này được di chuyển, không bị xóa — khôi phục bất cứ lúc nào từ màn hình khu cách ly.",
         folder: 'Thư mục',
         file: 'Tệp',
         cancel: 'Hủy'
@@ -30034,7 +30026,7 @@ export const CATALOG = {
       },
       storeRemoveDialog: {
         heading: (name) => `Xóa ${name}?`,
-        body: 'Thao tác này sẽ xóa ứng dụng khỏi tài khoản của bạn, cùng với các cài đặt và dữ liệu đã lưu. Không giống như mọi thứ khác mà Prune xóa, ứng dụng này không được chuyển vào Khu cách ly và không thể khôi phục từ đây — để lấy lại, bạn cần cài đặt lại từ Microsoft Store.',
+        body: "Thao tác này sẽ xóa ứng dụng khỏi tài khoản của bạn, cùng với các cài đặt và dữ liệu đã lưu. Không giống như mọi thứ khác mà Prune xóa, ứng dụng này không được chuyển vào khu cách ly và không thể khôi phục từ đây — để lấy lại, bạn cần cài đặt lại từ Microsoft Store.",
         cancel: 'Hủy',
         close: 'Đóng',
         removeApp: 'Xóa ứng dụng',
@@ -30072,7 +30064,7 @@ export const CATALOG = {
       deleting: 'Đang xóa…'
     },
     startup: {
-      title: "Khởi động cùng",
+      title: "Khởi động",
       subtitle: "Những gì chạy khi bạn đăng nhập: các khóa Run và thư mục Khởi động mà Windows đọc, được nhóm theo vị trí — vị trí quyết định mục đó ảnh hưởng đến ai và cần gì để gỡ bỏ. Mục có tệp đã mất là do chương trình bị gỡ cài đặt cẩu thả bỏ lại, và Windows vẫn cố khởi chạy nó mỗi lần.",
       loading: 'Đang đọc các mục khởi động…',
       loadError: (error) => `Không thể đọc các mục khởi động: ${error}`,
@@ -30150,20 +30142,20 @@ export const CATALOG = {
       modal: {
         label: 'Chuyển tệp trùng lặp vào khu cách ly',
         heading: (count) => `Chuyển ${count} bản sao vào khu cách ly?`,
-        body: (a) => `Sau khi bạn dọn sạch khu cách ly, ${a} sẽ được giải phóng. Mỗi nhóm giữ lại ít nhất một bản sao và không có gì bị xóa — bạn có thể khôi phục bất kỳ bản nào từ màn hình Cách ly.`,
+        body: (a) => `Sau khi bạn dọn sạch khu cách ly, ${a} sẽ được giải phóng. Mỗi nhóm giữ lại ít nhất một bản sao và không có gì bị xóa — bạn có thể khôi phục bất kỳ bản nào từ màn hình khu cách ly.`,
         cancel: 'Hủy',
         confirmButton: 'Chuyển vào khu cách ly'
       },
       toasts: {
         moved: (count) => `Đã chuyển ${count} bản sao vào khu cách ly.`,
-        restoreHint: 'Khôi phục chúng từ màn hình Khu cách ly.',
+        restoreHint: "Khôi phục chúng từ màn hình khu cách ly.",
         failed: (count) => `Không thể chuyển ${count} mục.`,
         failedDetail: 'Chúng có thể đang mở hoặc nằm trên ổ đĩa khác.'
       }
     },
     deepClean: {
       title: 'Dọn dẹp sâu',
-      subtitle: 'Mọi bộ nhớ đệm, nhật ký, tệp dump và tàn dư mà Prune biết cách tìm, được đo trên máy này thay vì ước tính. Không có gì bị xóa ngay lập tức — mọi thứ mà Dọn dẹp lấy đi đều vào Khu cách ly trước, nơi bạn có thể đưa nó trở lại.',
+      subtitle: "Mọi bộ nhớ đệm, nhật ký, tệp dump và tệp sót lại mà Prune biết cách tìm, được đo trên máy này thay vì ước tính. Không có gì bị xóa ngay lập tức — mọi thứ mà Dọn dẹp lấy đi đều vào khu cách ly trước, nơi bạn có thể khôi phục nó.",
       scanLog: {
         header: 'Kết quả quét',
         scanningAnnounce: (total) => `Đang quét ${total} vị trí.`,
@@ -30251,13 +30243,13 @@ export const CATALOG = {
         uninstallEntry: 'Mục Thêm/Gỡ bỏ Chương trình'
       },
       destinations: {
-        quarantine: { text: 'Các mục đã chọn sẽ vào Cách ly, nơi bạn có thể khôi phục chúng.', button: 'Xóa mục đã chọn' },
+        quarantine: { text: "Các mục đã chọn sẽ vào khu cách ly, nơi bạn có thể khôi phục chúng.", button: 'Xóa mục đã chọn' },
         recycle: { text: 'Các tệp đã chọn sẽ vào Thùng rác. Các khóa registry được sao lưu trước khi bị xóa.', button: 'Xóa mục đã chọn' },
         permanent: { text: 'Các tệp đã chọn sẽ bị xóa vĩnh viễn và không thể khôi phục. Các khóa registry được sao lưu trước khi bị xóa.', button: 'Xóa vĩnh viễn' }
       },
       clean: 'Không tìm thấy tệp sót lại — gỡ cài đặt sạch sẽ.',
       done: 'Xong',
-      foundWarning: (count) => `Tìm thấy ${count} mục còn sót lại mà trình gỡ cài đặt của chương trình đã bỏ sót. Hãy xem lại trước khi xóa.`,
+      foundWarning: (count) => `Tìm thấy ${count} mục sót lại mà trình gỡ cài đặt của chương trình đã bỏ sót. Hãy xem lại trước khi xóa.`,
       excludedNote: (count) => `${count} thư mục đã bị loại trừ vì chúng nằm trong danh sách loại trừ của bạn.`,
       itemsSelected: 'mục đã chọn',
       reclaimable: 'có thể thu hồi',
@@ -30267,14 +30259,14 @@ export const CATALOG = {
       titleForce: (name) => `Buộc gỡ bỏ ${name}`,
       titleNormal: (name) => `Gỡ cài đặt ${name}`,
       close: 'Đóng',
-      stillWaiting: "Vẫn đang chờ trình gỡ cài đặt. Bạn có thể đóng cửa sổ này; trình gỡ cài đặt vẫn tiếp tục chạy, nhưng Prune sẽ không quét tệp còn sót lại.",
+      stillWaiting: "Vẫn đang chờ trình gỡ cài đặt. Bạn có thể đóng cửa sổ này; trình gỡ cài đặt vẫn tiếp tục chạy, nhưng Prune sẽ không quét tệp sót lại.",
       runningWarning: (name) => `${name} hiện đang chạy. Hãy đóng nó trước — trình gỡ cài đặt thường thất bại với một chương trình đang mở, và có thể để lại các tệp mà lần khởi chạy tiếp theo sẽ tạo lại.`,
       orphanedWarning: (reason) => `${reason} Windows sẽ tiếp tục liệt kê nó cho đến khi mục này bị xóa.`,
       brokenIntro: 'Prune sẽ tìm kiếm các tệp và khóa registry khớp với tên này, bao gồm cả mục Thêm/Gỡ bỏ Chương trình của nó, và hiển thị cho bạn mọi thứ trước khi xóa bất cứ điều gì.',
       searchForLabel: 'Tìm kiếm',
       searchHint: (name) => `Được lấy từ "${name}" không có phiên bản của nó — trình cài đặt đặt tên thư mục theo sản phẩm, không phải theo bản phát hành. Chỉnh sửa nếu kết quả trông không đúng.`,
       scanFailed: (error) => `Quét thất bại: ${error}`,
-      searchButton: 'Tìm kiếm tệp sót lại',
+      searchButton: "Quét tệp sót lại",
       normalIntro: (name) => `Thao tác này chạy trình gỡ cài đặt riêng của ${name}, sau đó quét bất cứ thứ gì nó để lại.`,
       uninstallFailed: (error) => `Gỡ cài đặt thất bại: ${error}`,
       startButton: 'Bắt đầu gỡ cài đặt',
@@ -30284,16 +30276,16 @@ export const CATALOG = {
         runningNative: 'Đang chạy trình gỡ cài đặt gốc',
         backingUpRegistry: 'Đang sao lưu registry',
         creatingRestorePoint: 'Đang tạo điểm khôi phục',
-        searchingLeftovers: 'Đang tìm kiếm tệp sót lại',
+        searchingLeftovers: "Đang quét tệp sót lại",
         scanningLeftovers: 'Đang quét tệp sót lại',
         checkingCommand: 'Đang kiểm tra hệ thống tệp, registry & tác vụ đã lên lịch…'
       },
       removing: {
-        quarantine: { title: 'Đang di chuyển vào Cách ly', command: 'Không có gì bị xóa — mỗi mục đều có thể khôi phục' },
+        quarantine: { title: "Đang di chuyển vào khu cách ly", command: 'Không có gì bị xóa — mỗi mục đều có thể khôi phục' },
         recycle: { title: 'Đang gửi đến Thùng rác', command: 'Khôi phục chúng từ Thùng rác nếu cần' },
         permanent: { title: 'Đang xóa vĩnh viễn', command: 'Những mục này không thể khôi phục' }
       },
-      noScan: (name) => `Trình gỡ cài đặt của ${name} đã hoàn tất. Quét tệp sót lại đã bị tắt trong Cài đặt, vì vậy không có gì khác được tìm kiếm.`,
+      noScan: (name) => `Trình gỡ cài đặt của ${name} đã hoàn tất. Quét tệp sót lại đã bị tắt trong Cài đặt, vì vậy không có gì khác được quét.`,
       readyToScan: {
         body: (name) => `Nếu trình gỡ cài đặt của ${name} vẫn đang hoàn tất, hãy chờ nó đóng lại. Khi xong, bấm “Quét tệp sót lại” để tìm những gì nó để lại.`,
         scanButton: "Quét tệp sót lại"
@@ -30303,15 +30295,15 @@ export const CATALOG = {
       summary: {
         item: (n) => `${n} mục`,
         registryKey: (n) => `${n} khóa registry`,
-        recycle: (files, keys, freed) => `Đã gửi ${files} đến Thùng rác và xóa ${keys}, được sao lưu trước vào Cách ly. Đã giải phóng ${freed}.`,
-        permanent: (files, keys, freed) => `Đã xóa vĩnh viễn ${files} và xóa ${keys}, được sao lưu trước vào Cách ly. Đã giải phóng ${freed}.`,
-        quarantine: (files, keys, freed) => `Đã di chuyển ${files} và ${keys} vào Cách ly, giải phóng ${freed}. Khôi phục chúng bất cứ lúc nào từ màn hình Cách ly.`
+        recycle: (files, keys, freed) => `Đã gửi ${files} đến Thùng rác và xóa ${keys}, được sao lưu trước vào khu cách ly. Đã giải phóng ${freed}.`,
+        permanent: (files, keys, freed) => `Đã xóa vĩnh viễn ${files} và xóa ${keys}, được sao lưu trước vào khu cách ly. Đã giải phóng ${freed}.`,
+        quarantine: (files, keys, freed) => `Đã di chuyển ${files} và ${keys} vào khu cách ly, giải phóng ${freed}. Khôi phục chúng bất cứ lúc nào từ màn hình khu cách ly.`
       },
       failedFilesHeading: (n) => `Không thể xóa ${n} mục:`,
       failedRegistryKeysHeading: (n) => `Không thể xóa ${n} khóa registry`,
       failedRegistryKeysNote: 'những mục này thường yêu cầu Prune chạy với quyền quản trị viên:',
       noRestorePoint: (reason) => `Không có điểm khôi phục hệ thống nào được tạo (${reason}).`,
-      quarantineStillWorks: 'Khôi phục từ Cách ly vẫn hoạt động.',
+      quarantineStillWorks: "Khôi phục từ khu cách ly vẫn hoạt động.",
       autoRemoveLeftovers: 'Tự động xóa mọi thứ mà quá trình quét tìm thấy, mà không cần xem lại trước'
     },
     batchUninstallModal: {
@@ -30328,15 +30320,15 @@ export const CATALOG = {
       mixedIntro: (hasStore) => `Trình gỡ cài đặt riêng của mỗi chương trình chạy lần lượt, sau đó Prune quét những gì chúng để lại và hiển thị cho bạn mọi thứ trước khi xóa bất cứ thứ gì trong đó.${hasStore ? ' Các ứng dụng Store thay vào đó được gỡ bỏ thông qua Windows, không có quét tệp sót lại sau đó.' : ''}`,
       oneAtATime: 'Từng cái một, vì Windows chỉ cho phép một lần cài đặt hoặc gỡ cài đặt tại một thời điểm. Một số trình gỡ cài đặt sẽ hiển thị cửa sổ riêng của chúng và đặt câu hỏi cho bạn.',
       storeWarning: (count) => count === 1
-        ? 'Ứng dụng Store trong đợt này không thể khôi phục từ Cách ly: việc xóa nó sẽ lấy đi ứng dụng và dữ liệu đã lưu của nó, và lấy lại nó có nghĩa là cài đặt lại từ Store.'
-        : `${count} ứng dụng Store trong đợt này không thể khôi phục từ Cách ly: việc xóa một ứng dụng sẽ lấy đi ứng dụng và dữ liệu đã lưu của nó, và lấy lại nó có nghĩa là cài đặt lại từ Store.`,
+        ? 'Ứng dụng Store trong đợt này không thể khôi phục từ khu cách ly: việc xóa nó sẽ lấy đi ứng dụng và dữ liệu đã lưu của nó, và lấy lại nó có nghĩa là cài đặt lại từ Store.'
+        : `${count} ứng dụng Store trong đợt này không thể khôi phục từ khu cách ly: việc xóa một ứng dụng sẽ lấy đi ứng dụng và dữ liệu đã lưu của nó, và lấy lại nó có nghĩa là cài đặt lại từ Store.`,
       runsBefore: (name) => `chạy trước ${name}`,
       reported: (bytes) => `${bytes} đã báo cáo`,
       unknownSizeSuffix: (n) => `, ${n} kích thước không xác định`,
       startButton: 'Bắt đầu gỡ cài đặt',
       status: { waiting: 'đang chờ', uninstalling: 'đang gỡ cài đặt…', removed: "đã gỡ cài đặt", failed: 'thất bại' },
       removingLine: {
-        quarantine: 'Đang di chuyển tệp sót lại vào Cách ly…',
+        quarantine: "Đang di chuyển tệp sót lại vào khu cách ly…",
         recycle: 'Đang gửi tệp sót lại đến Thùng rác…',
         permanent: 'Đang xóa tệp sót lại vĩnh viễn…'
       },
@@ -30348,19 +30340,19 @@ export const CATALOG = {
       uninstalledOf: (removed, total) => `Đã gỡ cài đặt ${removed} trong số ${total}.`,
       failedHeading: (n) => `${n} không thể gỡ cài đặt và đã bị bỏ qua:`,
       removeLeftoversFailed: (error) => `Không thể xóa tệp sót lại: ${error}`,
-      noScanSettingsOff: 'Quét tệp sót lại đã bị tắt trong Cài đặt, vì vậy không có gì được tìm kiếm.',
+      noScanSettingsOff: "Quét tệp sót lại đã bị tắt trong Cài đặt, vì vậy không có gì được quét.",
       noScanStore: 'Không có quét tệp sót lại sau một ứng dụng Store: Windows xóa dữ liệu riêng của ứng dụng cùng với nó.',
       done: 'Xong',
       summary: {
         recycle: (programs, items, freed) => `Đã gỡ cài đặt ${programs} và gửi ${items} đến Thùng rác, giải phóng ${freed}.`,
         permanent: (programs, items, freed) => `Đã gỡ cài đặt ${programs} và xóa vĩnh viễn ${items}, giải phóng ${freed}.`,
-        quarantine: (programs, items, freed) => `Đã gỡ cài đặt ${programs} và di chuyển ${items} vào Cách ly, giải phóng ${freed}.`,
+        quarantine: (programs, items, freed) => `Đã gỡ cài đặt ${programs} và di chuyển ${items} vào khu cách ly, giải phóng ${freed}.`,
         programs: (n) => `${n} chương trình`,
-        items: (n) => `${n} mục còn sót lại`
+        items: (n) => `${n} mục sót lại`
       },
       noRestorePoint: (reason) => `Không có điểm khôi phục hệ thống nào được tạo (${reason}).`,
       restorePointFallback: 'không có sẵn',
-      quarantineNote: 'Tất cả những gì ở trên vẫn còn trong Cách ly và có thể được đưa trở lại.',
+      quarantineNote: "Tất cả những gì ở trên vẫn còn trong khu cách ly và có thể khôi phục.",
       failedRegistryKeys: (n) => `Không thể xóa ${n} khóa registry — những mục này thường yêu cầu Prune chạy với quyền quản trị viên.`
     },
     bugReport: {
@@ -30475,7 +30467,7 @@ export const CATALOG = {
       },
       autoQuarantine: {
         title: '自动隔离',
-        description: '深度清理会将删除的内容移动到 Prune 的隔离区，你可以从那里将其放回。关闭此选项后，内容会改为进入 Windows 回收站——仍然可以恢复，只是在一个你已经知道如何清空的地方。'
+        description: "深度清理会将删除的内容移动到 Prune 的隔离区，你可以从那里将其恢复。关闭此选项后，内容会改为进入 Windows 回收站——仍然可以恢复，只是在一个你已经知道如何清空的地方。"
       },
       skipRecent: {
         title: '不动最近的文件',
@@ -30521,7 +30513,7 @@ export const CATALOG = {
         title: '要保留的 Cookie',
         description: '浏览器 Cookie 文件中的其他所有内容在清理的那一刻就会消失。扫描以查看实际存在的内容，并勾选值得保留的项目。',
         scanButton: '扫描 Cookie',
-        scanning: '正在运行…',
+        scanning: "正在扫描…",
         filterPlaceholder: '筛选域名…',
         countSuffix: (count) => `${count} 个 Cookie`,
         none: '未找到任何 Cookie。',
@@ -30541,7 +30533,7 @@ export const CATALOG = {
       warningConfirmations: {
         title: '警告确认',
         allAsk: '每个会丢失数据的清理项在运行前都会询问。',
-        someSet: (count) => `已设置 ${count} 个清理警告不再询问。`,
+        someSet: (count) => `已设置 ${count} 个清理项警告不再询问。`,
         reset: '重置警告确认'
       },
       uninstallTab: {
@@ -30560,7 +30552,7 @@ export const CATALOG = {
         },
         afterHeading: '卸载之后',
         scanLeftovers: {
-          title: '卸载后扫描残留',
+          title: "卸载后扫描残留项",
           description: '查找卸载程序遗留下来的文件、注册表项和计划任务。关闭后，Prune 只会运行程序自带的卸载程序并到此为止。'
         },
         preselect: {
@@ -30571,20 +30563,20 @@ export const CATALOG = {
           title: '保留卸载历史记录',
           description: '仪表盘中最近删除项及其释放空间的列表。关闭后，不会记录任何新内容。'
         },
-        destinationHeading: '残留文件的去向',
+        destinationHeading: "残留项的去向",
         leftoverOptions: {
           quarantine: { label: '隔离区', description: '移动到 Prune 自己的备份中，可以从隔离区界面恢复。默认选项。' },
           recycle: { label: '回收站', description: '可以从 Windows 自带的回收站恢复，清空回收站时会释放空间。' },
           permanent: { label: '永久删除', description: '彻底删除。无法恢复。' }
         },
-        permanentWarning: '残留文件将被彻底删除，无法从隔离区或其他任何地方恢复。确认之前请检查列表。',
+        permanentWarning: "残留项将被彻底删除，无法从隔离区或其他任何地方恢复。确认之前请检查列表。",
         registryNote: '无论你如何选择，注册表项在删除前都会导出到隔离区。'
       },
       about: {
         reportTitle: '报告错误',
         reportDescription: "在 GitHub 上打开一个已预先填好的议题。Prune 本身不会发送任何内容，所有内容在发出之前你都能看到。",
         reportButton: '报告错误',
-        description: '一款本地、离线的 Windows 卸载与清理工具——具有残留文件扫描的强制删除、删除前的安全隔离、磁盘映射，以及一键垃圾清理。'
+        description: "一款本地、离线的 Windows 卸载与清理工具——具有残留项扫描的强制删除、删除前的安全隔离、磁盘地图，以及一键垃圾清理。"
       },
       automation: {
         title: '自动化',
@@ -30659,7 +30651,7 @@ export const CATALOG = {
       junk: {
         label: '垃圾文件',
         notMeasured: '尚未测量',
-        description: '测量会遍历磁盘上的每条清理路径 — 大约需要半分钟。',
+        description: "测量会遍历磁盘上的每个清理项的路径 — 大约需要半分钟。",
         measure: '测量'
       },
       recentActivity: {
@@ -30755,7 +30747,7 @@ export const CATALOG = {
       },
       toasts: {
         moved: (name) => `已移至隔离区：${name}`,
-        restoreHint: '请从隔离区界面还原。',
+        restoreHint: "请从隔离区界面恢复。",
         pathCopied: '路径已复制。',
         copyFailed: '无法复制该路径。',
         moveFailed: '无法移动此项。'
@@ -30763,7 +30755,7 @@ export const CATALOG = {
       removeModal: {
         label: '移至隔离区',
         heading: '要将其移至隔离区吗？',
-        note: '此操作是移动而非删除 — 可随时从隔离区界面还原。',
+        note: "此操作是移动而非删除 — 可随时从隔离区界面恢复。",
         folder: '文件夹',
         file: '文件',
         cancel: '取消'
@@ -30772,7 +30764,7 @@ export const CATALOG = {
     applications: {
       loading: '正在读取已安装的程序…',
       loadError: (error) => `无法加载程序：${error}`,
-      search: { placeholder: '搜索应用…', label: '搜索应用' },
+      search: { placeholder: "搜索应用程序…", label: "搜索应用程序" },
       filters: {
         all: '全部',
         unused: '未使用',
@@ -30784,7 +30776,7 @@ export const CATALOG = {
         brokenCount: (n) => `已损坏 (${n})`
       },
       columns: {
-        application: '应用',
+        application: "应用程序",
         size: '大小',
         version: '版本',
         type: '类型',
@@ -30887,7 +30879,7 @@ export const CATALOG = {
         broken: (n) => `${n} 个指向丢失的文件`
       },
       columns: {
-        name: '启动名称',
+        name: "启动项名称",
         command: '启动路径',
         description: '说明',
         publisher: '发布者',
@@ -30919,9 +30911,9 @@ export const CATALOG = {
       subtitle: '逐字节完全相同的文件，而不仅仅是大小相同。将其指向一个你确实存放东西的文件夹——读取整个驱动器以与自身比较所花费的时间远超其价值，而且大多数情况下只会找到机器自身文件的自我副本。',
       folderPlaceholder: (a) => `文件夹路径，例如 ${a}`,
       stoppedNote: "已停止——未比较任何内容。",
-      folderInputAriaLabel: '要搜索重复项的文件夹',
+      folderInputAriaLabel: "要搜索重复文件的文件夹",
       stop: '停止',
-      findButton: '查找重复项',
+      findButton: "查找重复文件",
       compareNote: '先比较大小，再比较样本，再比较整个文件——因此大多数文件根本不会被读取。',
       reading: (folder) => `正在读取 ${folder}`,
       readingNote: '先比较大小，然后比较大小相同的所有文件的 64 KB 样本，最后比较仍然匹配的文件的完整内容。',
@@ -30948,22 +30940,22 @@ export const CATALOG = {
         moveButton: '将所选内容移至隔离区'
       },
       modal: {
-        label: '将重复项移至隔离区',
+        label: "将重复文件移至隔离区",
         heading: (count) => `要将 ${count} 个副本移至隔离区吗？`,
-        body: (a) => `清空隔离区时将释放 ${a}。每组至少保留一个副本，不会删除任何内容——你可以随时在隔离区页面恢复。`,
+        body: (a) => `清空隔离区时将释放 ${a}。每组至少保留一个副本，不会删除任何内容——你可以随时在隔离区界面恢复。`,
         cancel: '取消',
         confirmButton: '移至隔离区'
       },
       toasts: {
         moved: (count) => `已将 ${count} 个副本移至隔离区。`,
-        restoreHint: '从隔离区屏幕恢复它们。',
+        restoreHint: "从隔离区界面恢复它们。",
         failed: (count) => `${count} 个未能移动。`,
         failedDetail: '它们可能正被打开或位于另一个驱动器上。'
       }
     },
     deepClean: {
       title: '深度清理',
-      subtitle: 'Prune 知道如何查找的每一个缓存、日志、转储和残留，都是在这台机器上实际测量的，而非估算。没有任何内容会被直接删除——清理所取走的一切都会先进入隔离区，你可以从那里放回原处。',
+      subtitle: "Prune 知道如何查找的每一个缓存、日志、转储和残留项，都是在这台机器上实际测量的，而非估算。没有任何内容会被直接删除——清理所取走的一切都会先进入隔离区，你可以从那里恢复。",
       scanLog: {
         header: '扫描输出',
         scanningAnnounce: (total) => `正在扫描 ${total} 个位置。`,
@@ -31074,7 +31066,7 @@ export const CATALOG = {
       searchForLabel: '搜索',
       searchHint: (name) => `取自"${name}"并去除了版本号——安装程序按产品而非发行版本命名文件夹。如果结果看起来不正确，请编辑它。`,
       scanFailed: (error) => `扫描失败：${error}`,
-      searchButton: '搜索残留项',
+      searchButton: "扫描残留项",
       normalIntro: (name) => `此操作会运行 ${name} 自己的卸载程序，然后扫描它遗留下的任何内容。`,
       uninstallFailed: (error) => `卸载失败：${error}`,
       startButton: '开始卸载',
@@ -31084,7 +31076,7 @@ export const CATALOG = {
         runningNative: '正在运行原生卸载程序',
         backingUpRegistry: '正在备份注册表',
         creatingRestorePoint: '正在创建还原点',
-        searchingLeftovers: '正在搜索残留项',
+        searchingLeftovers: "正在扫描残留项",
         scanningLeftovers: '正在扫描残留项',
         checkingCommand: '正在检查文件系统、注册表和计划任务…'
       },
@@ -31093,7 +31085,7 @@ export const CATALOG = {
         recycle: { title: '正在发送到回收站', command: '如有需要，可从回收站恢复它们' },
         permanent: { title: '正在永久删除', command: '这些内容无法恢复' }
       },
-      noScan: (name) => `${name} 的卸载程序已完成。残留项扫描在设置中已关闭，因此未搜索其他内容。`,
+      noScan: (name) => `${name} 的卸载程序已完成。残留项扫描在设置中已关闭，因此未扫描其他内容。`,
       readyToScan: {
         body: (name) => `如果 ${name} 自己的卸载程序仍在收尾，请等它关闭。完成后，点击“扫描残留项”，查找它遗留的内容。`,
         scanButton: "扫描残留项"
@@ -31148,7 +31140,7 @@ export const CATALOG = {
       uninstalledOf: (removed, total) => `已卸载 ${total} 个中的 ${removed} 个。`,
       failedHeading: (n) => `${n} 个无法卸载，已保持原样：`,
       removeLeftoversFailed: (error) => `无法删除残留项：${error}`,
-      noScanSettingsOff: '残留项扫描在设置中已关闭，因此未搜索任何内容。',
+      noScanSettingsOff: "残留项扫描在设置中已关闭，因此未扫描任何内容。",
       noScanStore: '应用商店应用之后不会进行残留项扫描：Windows 会连同应用自身的数据一起删除。',
       done: '完成',
       summary: {
@@ -31275,7 +31267,7 @@ export const CATALOG = {
       },
       autoQuarantine: {
         title: '自動隔離',
-        description: '深度清理會將移除的內容移到 Prune 的隔離區，你可以從那裡將其放回。關閉此選項後，內容會改為進入 Windows 資源回收筒——仍然可以復原，只是在一個你已經知道如何清空的地方。'
+        description: "深度清理會將移除的內容移到 Prune 的隔離區，你可以從那裡將其還原。關閉此選項後，內容會改為進入 Windows 資源回收筒——仍然可以還原，只是在一個你已經知道如何清空的地方。"
       },
       skipRecent: {
         title: '不動最近的檔案',
@@ -31300,7 +31292,7 @@ export const CATALOG = {
       },
       quarantineMaxSize: {
         title: "隔離區大小上限",
-        description: '整個隔離資料夾的上限。超過此限制後，最舊的備份會先被移除——最新的備份永遠不會被捨棄，因此你剛剛移除的大檔案即使單獨超過限制也仍然可以復原。留空表示無限制。',
+        description: "整個隔離資料夾的上限。超過此限制後，最舊的備份會先被移除——最新的備份永遠不會被捨棄，因此你剛剛移除的大檔案即使單獨超過限制也仍然可以還原。留空表示無限制。",
         noLimitPlaceholder: '無限制',
         gbUnit: 'GB',
         ariaLabel: '最大隔離區大小（GB）'
@@ -31321,7 +31313,7 @@ export const CATALOG = {
         title: '要保留的 Cookie',
         description: '瀏覽器 Cookie 檔案中的其他所有內容，在清理的那一刻就會消失。掃描以查看實際存在的內容，並勾選值得保留的項目。',
         scanButton: '掃描 Cookie',
-        scanning: '正在執行…',
+        scanning: "正在掃描…",
         filterPlaceholder: '篩選網域…',
         countSuffix: (count) => `${count} 個 Cookie`,
         none: '未找到任何 Cookie。',
@@ -31341,7 +31333,7 @@ export const CATALOG = {
       warningConfirmations: {
         title: '警告確認',
         allAsk: '每個會遺失資料的清理項目在執行前都會詢問。',
-        someSet: (count) => `已設定 ${count} 個清理警告不再詢問。`,
+        someSet: (count) => `已設定 ${count} 個清理項目警告不再詢問。`,
         reset: '重設警告確認'
       },
       uninstallTab: {
@@ -31371,20 +31363,20 @@ export const CATALOG = {
           title: '保留解除安裝記錄',
           description: '儀表板中最近移除項目及其釋放空間的清單。關閉後，不會記錄任何新內容。'
         },
-        destinationHeading: '殘留檔案的去向',
+        destinationHeading: "殘留項目的去向",
         leftoverOptions: {
-          quarantine: { label: '隔離區', description: '移到 Prune 自己的備份中，可以從隔離區畫面復原。預設選項。' },
-          recycle: { label: '資源回收筒', description: '可以從 Windows 內建的資源回收筒復原，清空資源回收筒時會釋放空間。' },
-          permanent: { label: '永久刪除', description: '徹底刪除。無法復原。' }
+          quarantine: { label: '隔離區', description: "移到 Prune 自己的備份中，可以從隔離區畫面還原。預設選項。" },
+          recycle: { label: '資源回收筒', description: "可以從 Windows 內建的資源回收筒還原，清空資源回收筒時會釋放空間。" },
+          permanent: { label: '永久刪除', description: "徹底刪除。無法還原。" }
         },
-        permanentWarning: '殘留檔案將被徹底刪除，無法從隔離區或其他任何地方復原。確認之前請檢查清單。',
+        permanentWarning: "殘留項目將被徹底刪除，無法從隔離區或其他任何地方還原。確認之前請檢查清單。",
         registryNote: '無論你如何選擇，登錄機碼在移除前都會匯出到隔離區。'
       },
       about: {
         reportTitle: '回報錯誤',
         reportDescription: "在 GitHub 上開啟一則已預先填好的議題。Prune 本身不會傳送任何內容，所有內容在送出之前你都能看到。",
         reportButton: '回報錯誤',
-        description: '一款本機、離線的 Windows 解除安裝與清理工具——具有殘留檔案掃描的強制移除、刪除前的安全隔離、磁碟對應，以及一鍵垃圾清理。'
+        description: "一款本機、離線的 Windows 解除安裝與清理工具——具有殘留項目掃描的強制移除、刪除前的安全隔離、磁碟地圖，以及一鍵垃圾清理。"
       },
       automation: {
         title: '自動化',
@@ -31459,7 +31451,7 @@ export const CATALOG = {
       junk: {
         label: '垃圾檔案',
         notMeasured: '尚未測量',
-        description: '測量會走訪磁碟上的每條清理路徑 — 大約需要半分鐘。',
+        description: "測量會走訪磁碟上的每個清理項目的路徑 — 大約需要半分鐘。",
         measure: '測量'
       },
       recentActivity: {
@@ -31687,7 +31679,7 @@ export const CATALOG = {
         broken: (n) => `${n} 個指向遺失的檔案`
       },
       columns: {
-        name: '啟動名稱',
+        name: "啟動項目名稱",
         command: '啟動路徑',
         description: '描述',
         publisher: '發行者',
@@ -31719,9 +31711,9 @@ export const CATALOG = {
       subtitle: '逐位元組完全相同的檔案，而不僅僅是大小相同。將其指向一個你確實存放東西的資料夾——讀取整個磁碟以與自身比較所花費的時間遠超其價值，而且大多情況下只會找到機器自身檔案的自我副本。',
       folderPlaceholder: (a) => `資料夾路徑，例如 ${a}`,
       stoppedNote: "已停止——未比較任何內容。",
-      folderInputAriaLabel: '要搜尋重複項的資料夾',
+      folderInputAriaLabel: "要搜尋重複檔案的資料夾",
       stop: '停止',
-      findButton: '尋找重複項',
+      findButton: "尋找重複檔案",
       compareNote: '先比較大小，再比較樣本，再比較整個檔案——因此大多數檔案根本不會被讀取。',
       reading: (folder) => `正在讀取 ${folder}`,
       readingNote: '先比較大小，然後比較大小相同的所有檔案的 64 KB 樣本，最後比較仍然相符的檔案的完整內容。',
@@ -31748,9 +31740,9 @@ export const CATALOG = {
         moveButton: '將所選內容移至隔離區'
       },
       modal: {
-        label: '將重複項移至隔離區',
+        label: "將重複檔案移至隔離區",
         heading: (count) => `要將 ${count} 個副本移至隔離區嗎？`,
-        body: (a) => `清空隔離區時將釋出 ${a}。每組至少保留一個副本，不會刪除任何內容——你可以隨時在隔離區頁面還原。`,
+        body: (a) => `清空隔離區時將釋出 ${a}。每組至少保留一個副本，不會刪除任何內容——你可以隨時在隔離區畫面還原。`,
         cancel: '取消',
         confirmButton: '移至隔離區'
       },
@@ -31763,7 +31755,7 @@ export const CATALOG = {
     },
     deepClean: {
       title: '深度清理',
-      subtitle: 'Prune 知道如何尋找的每一個快取、記錄、傾印檔與殘留，都是在這台機器上實際測量的，而非估算。沒有任何內容會被直接刪除——清理所取走的一切都會先進入隔離區，你可以從那裡放回原處。',
+      subtitle: "Prune 知道如何尋找的每一個快取、記錄、傾印檔與殘留項目，都是在這台機器上實際測量的，而非估算。沒有任何內容會被直接刪除——清理所取走的一切都會先進入隔離區，你可以從那裡還原。",
       scanLog: {
         header: '掃描輸出',
         scanningAnnounce: (total) => `正在掃描 ${total} 個位置。`,
@@ -31851,9 +31843,9 @@ export const CATALOG = {
         uninstallEntry: '「新增/移除程式」項目'
       },
       destinations: {
-        quarantine: { text: '選取的項目會進入隔離區，你可以從那裡復原它們。', button: '移除所選項目' },
+        quarantine: { text: "選取的項目會進入隔離區，你可以從那裡還原它們。", button: '移除所選項目' },
         recycle: { text: '選取的檔案會進入資源回收筒。登錄機碼會在移除前先備份。', button: '移除所選項目' },
-        permanent: { text: '選取的檔案將被徹底刪除且無法復原。登錄機碼會在移除前先備份。', button: '永久刪除' }
+        permanent: { text: "選取的檔案將被徹底刪除且無法還原。登錄機碼會在移除前先備份。", button: '永久刪除' }
       },
       clean: '未找到殘留項目——乾淨解除安裝。',
       done: '完成',
@@ -31874,7 +31866,7 @@ export const CATALOG = {
       searchForLabel: '搜尋',
       searchHint: (name) => `取自「${name}」並移除了版本號——安裝程式依產品而非發行版本命名資料夾。如果結果看起來不正確，請編輯它。`,
       scanFailed: (error) => `掃描失敗：${error}`,
-      searchButton: '搜尋殘留項目',
+      searchButton: "掃描殘留項目",
       normalIntro: (name) => `此操作會執行 ${name} 自己的解除安裝程式，然後掃描它遺留下的任何內容。`,
       uninstallFailed: (error) => `解除安裝失敗：${error}`,
       startButton: '開始解除安裝',
@@ -31884,16 +31876,16 @@ export const CATALOG = {
         runningNative: '正在執行原生解除安裝程式',
         backingUpRegistry: '正在備份登錄檔',
         creatingRestorePoint: '正在建立還原點',
-        searchingLeftovers: '正在搜尋殘留項目',
+        searchingLeftovers: "正在掃描殘留項目",
         scanningLeftovers: '正在掃描殘留項目',
         checkingCommand: '正在檢查檔案系統、登錄檔和排程工作…'
       },
       removing: {
-        quarantine: { title: '正在移動到隔離區', command: '不會刪除任何內容——每個項目都可以復原' },
-        recycle: { title: '正在傳送到資源回收筒', command: '如有需要，可從資源回收筒復原它們' },
-        permanent: { title: '正在永久刪除', command: '這些內容無法復原' }
+        quarantine: { title: '正在移動到隔離區', command: "不會刪除任何內容——每個項目都可以還原" },
+        recycle: { title: '正在傳送到資源回收筒', command: "如有需要，可從資源回收筒還原它們" },
+        permanent: { title: '正在永久刪除', command: "這些內容無法還原" }
       },
-      noScan: (name) => `${name} 的解除安裝程式已完成。殘留項目掃描在設定中已關閉，因此未搜尋其他內容。`,
+      noScan: (name) => `${name} 的解除安裝程式已完成。殘留項目掃描在設定中已關閉，因此未掃描其他內容。`,
       readyToScan: {
         body: (name) => `如果 ${name} 自己的解除安裝程式仍在收尾，請等它關閉。完成後，按一下「掃描殘留項目」，尋找它遺留的內容。`,
         scanButton: "掃描殘留項目"
@@ -31905,13 +31897,13 @@ export const CATALOG = {
         registryKey: (n) => `${n} 個登錄機碼`,
         recycle: (files, keys, freed) => `已將 ${files} 傳送到資源回收筒並刪除了 ${keys}，先前已在隔離區備份。釋放了 ${freed}。`,
         permanent: (files, keys, freed) => `已永久刪除 ${files} 並刪除了 ${keys}，先前已在隔離區備份。釋放了 ${freed}。`,
-        quarantine: (files, keys, freed) => `已將 ${files} 和 ${keys} 移動到隔離區，釋放了 ${freed}。可隨時從隔離區畫面復原它們。`
+        quarantine: (files, keys, freed) => `已將 ${files} 和 ${keys} 移動到隔離區，釋放了 ${freed}。可隨時從隔離區畫面還原它們。`
       },
       failedFilesHeading: (n) => `${n} 個項目無法刪除：`,
       failedRegistryKeysHeading: (n) => `${n} 個登錄機碼無法刪除`,
       failedRegistryKeysNote: '這些通常需要 Prune 以系統管理員身分執行：',
       noRestorePoint: (reason) => `未建立系統還原點（${reason}）。`,
-      quarantineStillWorks: '隔離區復原功能仍然有效。',
+      quarantineStillWorks: "隔離區還原功能仍然有效。",
       autoRemoveLeftovers: '自動移除掃描找到的所有殘留項目，無需事先查看'
     },
     batchUninstallModal: {
@@ -31928,8 +31920,8 @@ export const CATALOG = {
       mixedIntro: (hasStore) => `每個程式自己的解除安裝程式會依序執行，然後 Prune 會掃描它們遺留下的內容，並在刪除任何內容之前向你顯示所有內容。${hasStore ? ' 市集應用程式會改為透過 Windows 移除，之後不進行殘留項目掃描。' : ''}`,
       oneAtATime: '逐一進行，因為 Windows 一次只允許一個安裝或解除安裝作業。有些解除安裝程式會顯示自己的視窗並向你提問。',
       storeWarning: (count) => count === 1
-        ? '此批次中的市集應用程式無法從隔離區復原：刪除它會連同應用程式及其儲存的資料一起消失，找回它代表需要從市集重新安裝。'
-        : `此批次中的 ${count} 個市集應用程式無法從隔離區復原：刪除其中一個會連同應用程式及其儲存的資料一起消失，找回它代表需要從市集重新安裝。`,
+        ? '此批次中的市集應用程式無法從隔離區還原：刪除它會連同應用程式及其儲存的資料一起消失，找回它代表需要從市集重新安裝。'
+        : `此批次中的 ${count} 個市集應用程式無法從隔離區還原：刪除其中一個會連同應用程式及其儲存的資料一起消失，找回它代表需要從市集重新安裝。`,
       runsBefore: (name) => `在 ${name} 之前執行`,
       reported: (bytes) => `已回報 ${bytes}`,
       unknownSizeSuffix: (n) => `，${n} 個大小未知`,
@@ -31948,7 +31940,7 @@ export const CATALOG = {
       uninstalledOf: (removed, total) => `已解除安裝 ${total} 個中的 ${removed} 個。`,
       failedHeading: (n) => `${n} 個無法解除安裝，已保持原樣：`,
       removeLeftoversFailed: (error) => `無法刪除殘留項目：${error}`,
-      noScanSettingsOff: '殘留項目掃描在設定中已關閉，因此未搜尋任何內容。',
+      noScanSettingsOff: "殘留項目掃描在設定中已關閉，因此未掃描任何內容。",
       noScanStore: '市集應用程式之後不會進行殘留項目掃描：Windows 會連同應用程式自身的資料一起刪除。',
       done: '完成',
       summary: {
@@ -31960,7 +31952,7 @@ export const CATALOG = {
       },
       noRestorePoint: (reason) => `未建立系統還原點（${reason}）。`,
       restorePointFallback: '無法使用',
-      quarantineNote: '以上所有內容仍在隔離區中，可以復原。',
+      quarantineNote: "以上所有內容仍在隔離區中，可以還原。",
       failedRegistryKeys: (n) => `${n} 個登錄機碼無法刪除——這些通常需要 Prune 以系統管理員身分執行。`
     },
     bugReport: {

@@ -192,7 +192,7 @@ describe('in Greek', () => {
     fireEvent.click(startBtn);
     await flush();
     await advance(31000);
-    expect(screen.getByText(/Αναμονή για το πρόγραμμα απεγκατάστασης\./)).toBeTruthy();
+    expect(screen.getByText(/Αναμονή για τον απεγκαταστάτη\./)).toBeTruthy();
   });
 
   it('translates the batch line', async () => {
@@ -204,6 +204,6 @@ describe('in Greek', () => {
     fireEvent.click(startBtn);
     await flush();
     await advance(31000);
-    expect(screen.getByText(/Αναμονή για αυτό το πρόγραμμα απεγκατάστασης\./)).toBeTruthy();
+    expect(screen.getByText(/Αναμονή για αυτόν τον απεγκαταστάτη\./)).toBeTruthy();
   });
 });

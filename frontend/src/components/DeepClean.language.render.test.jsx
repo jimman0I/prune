@@ -115,7 +115,7 @@ beforeEach(() => {
  * persisted setting does, so the very first render is always English --
  * waiting for the Greek-only title is what actually proves the language
  * settled before a synchronous query runs. */
-const ready = () => screen.findByRole('heading', { name: 'Βαθύς Καθαρισμός' });
+const ready = () => screen.findByRole('heading', { name: 'Βαθύς καθαρισμός' });
 const cleanButton = () => screen.getByRole('button', { name: 'Καθαρισμός' });
 
 describe('the Deep Clean screen, in Greek', () => {
