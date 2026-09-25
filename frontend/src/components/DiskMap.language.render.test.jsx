@@ -122,7 +122,7 @@ describe('the Disk Map in another language, before any scan has run', () => {
     expect(screen.getByText('Τι χρησιμοποιεί τον χώρο σε αυτόν τον δίσκο, και πού.')).toBeTruthy();
     expect(screen.getByText('Ανάγνωση ολόκληρου του δίσκου')).toBeTruthy();
     expect(screen.getByText(/κάθε αρχείο στο C: μέσα σε λίγα δευτερόλεπτα/)).toBeTruthy();
-    expect(screen.getByText(/4% του χώρου που χρησιμοποιείται/)).toBeTruthy();
+    expect(screen.getByText(/Δεν μπορεί να ολοκληρώσει ολόκληρο δίσκο/)).toBeTruthy();
     expect(screen.getByRole('button', { name: 'Γρήγορη σάρωση (διαχειριστής)' })).toBeTruthy();
     expect(screen.getByRole('button', { name: "Διάτρεξε τους φακέλους αντ' αυτού" })).toBeTruthy();
   });

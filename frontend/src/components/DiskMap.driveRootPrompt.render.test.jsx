@@ -4,11 +4,9 @@ import { screen, cleanup, fireEvent } from '@testing-library/react';
 import { renderScreen } from '../testSupport/renderScreen.jsx';
 import { DriveRootPrompt } from './DiskMap.jsx';
 
-/** The "Read the whole drive" card must contain its own text: the card caps
- * its width (720px, which fits the 900px minimum window's content column of
- * 900 - 72 nav - 96 padding = 732px), wraps an unbreakable token instead of
- * overflowing, and lets the button row wrap. jsdom has no layout, so the
- * classes that do that are what is asserted. */
+/** The "Read the whole drive" chooser: two options side by side, aligned
+ * with the page rather than centred in it, stacking on a narrow window.
+ * jsdom has no layout, so the classes that do that are what is asserted. */
 
 vi.mock('../lib/api.js', () => ({
   fetchSettings: vi.fn(async () => ({})),
@@ -17,49 +15,43 @@ vi.mock('../lib/api.js', () => ({
 
 afterEach(cleanup);
 
-function cardOf(el) {
-  return el.closest('.glass-panel');
-}
+const render = (props = {}) =>
+  renderScreen(<DriveRootPrompt path={'C:\\'} onFastScan={() => {}} onCrawl={() => {}} {...props} />);
 
-describe('the drive-root card', () => {
-  it('caps and centres its width and wraps unbreakable text', async () => {
-    renderScreen(<DriveRootPrompt path={'C:\\'} onFastScan={() => {}} onCrawl={() => {}} />);
-
-    const card = cardOf(await screen.findByText('Read the whole drive'));
-    for (const cls of ['max-w-[720px]', 'mx-auto', 'w-full', 'p-8', 'leading-[1.6]', '[overflow-wrap:anywhere]']) {
-      expect(card.classList.contains(cls), cls).toBe(true);
+describe('the drive-root chooser', () => {
+  it('is left-aligned and capped, not a centred card, and wraps unbreakable text', async () => {
+    render();
+    const section = (await screen.findByText('Read the whole drive')).closest('section');
+    for (const cls of ['w-full', 'max-w-[860px]', '[overflow-wrap:anywhere]']) {
+      expect(section.classList.contains(cls), cls).toBe(true);
     }
+    expect(section.classList.contains('mx-auto')).toBe(false);
   });
 
-  it('sizes the title and the paragraphs, with no dangling margin on the last one', async () => {
-    renderScreen(<DriveRootPrompt path={'C:\\'} onFastScan={() => {}} onCrawl={() => {}} />);
-
-    const title = await screen.findByText('Read the whole drive');
-    expect(title.className).toContain('text-[18px]');
-    expect(title.className).toContain('font-semibold');
-    const paragraphs = cardOf(title).querySelectorAll('p');
-    expect(paragraphs).toHaveLength(2);
-    for (const p of paragraphs) {
-      expect(p.className).toContain('text-[14px]');
-      expect(p.className).toContain('text-[color:var(--text-secondary)]');
-    }
-    expect(paragraphs[0].className).toContain('mb-3');
-    expect(paragraphs[1].className).toContain('mb-0');
+  it('lays the two options out side by side and stacks them when narrow', async () => {
+    render();
+    const grid = (await screen.findByRole('heading', { level: 3, name: 'Fast scan' })).closest('.grid');
+    expect(grid.className).toContain('grid-cols-1');
+    expect(grid.className).toContain('min-[640px]:grid-cols-2');
+    expect(grid.querySelectorAll('h3')).toHaveLength(2);
   });
 
-  it('lets the button row wrap, with a real gap', async () => {
-    renderScreen(<DriveRootPrompt path={'C:\\'} onFastScan={() => {}} onCrawl={() => {}} />);
+  it('marks the fast scan as recommended and says what it costs', async () => {
+    render();
+    expect(await screen.findByText('Recommended')).toBeTruthy();
+    expect(screen.getByText(/Needs administrator approval/)).toBeTruthy();
+    expect(screen.getByText(/cannot finish a whole drive/)).toBeTruthy();
+  });
 
-    const row = (await screen.findByRole('button', { name: 'Fast scan (admin)' })).parentElement;
-    for (const cls of ['flex', 'flex-wrap', 'gap-3', 'mt-6']) {
-      expect(row.classList.contains(cls), cls).toBe(true);
-    }
+  it('names the drive without its trailing backslash', async () => {
+    render();
+    expect(await screen.findByText(/every file on C: in a few seconds/)).toBeTruthy();
   });
 
   it('still fires both buttons', async () => {
     const onFastScan = vi.fn();
     const onCrawl = vi.fn();
-    renderScreen(<DriveRootPrompt path={'C:\\'} onFastScan={onFastScan} onCrawl={onCrawl} />);
+    render({ onFastScan, onCrawl });
 
     fireEvent.click(await screen.findByRole('button', { name: 'Fast scan (admin)' }));
     fireEvent.click(screen.getByRole('button', { name: 'Walk folders instead' }));
@@ -68,15 +60,8 @@ describe('the drive-root card', () => {
   });
 
   it('disables the fast scan and says so while it is reading', async () => {
-    renderScreen(<DriveRootPrompt path={'C:\\'} onFastScan={() => {}} fastScanning onCrawl={() => {}} />);
-
+    render({ fastScanning: true });
     const button = await screen.findByRole('button', { name: 'Reading the drive…' });
     expect(button.disabled).toBe(true);
-  });
-
-  it('names the drive without its trailing backslash', async () => {
-    renderScreen(<DriveRootPrompt path={'C:\\'} onFastScan={() => {}} onCrawl={() => {}} />);
-
-    expect(await screen.findByText(/every file on C: in a few seconds/)).toBeTruthy();
   });
 });

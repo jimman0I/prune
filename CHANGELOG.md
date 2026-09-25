@@ -19,6 +19,7 @@ screen-reader access, and safer destructive actions.
   Hiding cleaners that don't apply is now on by default, and a remembered
   selection is checked against what is actually installed before it is
   restored.
+- **Disk Map's first screen was a wall of text.** Choosing between the fast scan and walking folders is now two side-by-side options, aligned with the page, with the fast scan marked recommended and each one's catch in a single line.
 - **At high zoom the Deep Clean footer covered the list.** The page now
   scrolls inside its own area and the footer wraps its controls.
 - **Page descriptions were a narrow block on wide windows.** Deep Clean,

@@ -90,38 +90,71 @@ export function LoadingState({ path, onFastScan, fastScanning, percent, files, b
 /** The drive-root chooser, shown before any scan has been picked. Exported
  * so a render test can assert on it without scanning anything.
  *
- * Contained: the card caps its own width (720px, which fits the 900px
- * minimum window's content column), wraps an unbreakable token instead of
- * overflowing, and lets the button row wrap rather than push past the edge. */
+ * Two options side by side, left-aligned with the page title, each with a
+ * title, one line on what it does, one on its catch, and its own button.
+ * The recommended one says so. Contained: the row caps its width, wraps an
+ * unbreakable token instead of overflowing, and stacks below 640px so the
+ * 900px minimum window never clips it. */
+function ScanOption({ title, badge, explain, note, recommended, children }) {
+  return (
+    <div
+      className={`flex flex-col gap-2 rounded-xl p-5 border ${
+        recommended
+          ? 'border-[color:var(--accent-primary)]/40 bg-[color:var(--accent-primary)]/[0.06]'
+          : 'border-[color:var(--border-subtle)] bg-[color:var(--surface-hover)]'
+      }`}
+    >
+      <div className="flex items-center gap-2">
+        <h3 className="text-[15px] font-semibold text-[color:var(--text-primary)]">{title}</h3>
+        {badge && (
+          <span className="text-[10.5px] font-medium px-1.5 py-0.5 rounded-full bg-[color:var(--accent-primary)]/15 text-[color:var(--accent-primary)]">
+            {badge}
+          </span>
+        )}
+      </div>
+      <p className="text-[13px] text-[color:var(--text-primary)]">{explain}</p>
+      <p className="text-[12.5px] text-[color:var(--text-secondary)] mb-3">{note}</p>
+      <div className="mt-auto">{children}</div>
+    </div>
+  );
+}
+
 export function DriveRootPrompt({ path, onFastScan, fastScanning, onCrawl }) {
   const { t } = useLanguage();
   return (
-    <div className="glass-panel mx-auto w-full max-w-[720px] p-8 leading-[1.6] [overflow-wrap:anywhere]">
+    <section className="w-full max-w-[860px] leading-[1.55] [overflow-wrap:anywhere]">
       <h2 className="text-[18px] font-semibold text-[color:var(--text-primary)] mb-4">
         {t('diskMap.driveRootPrompt.heading')}
       </h2>
-      <p className="text-[14px] text-[color:var(--text-secondary)] mb-3">
-        {t('diskMap.driveRootPrompt.fastExplain', path.replace(/\\+$/, ''))}
-      </p>
-      <p className="text-[14px] text-[color:var(--text-secondary)] mb-0">
-        {t('diskMap.driveRootPrompt.crawlExplain')}
-      </p>
-
-      <div className="flex flex-wrap gap-3 mt-6">
-        <button className="btn-primary px-4 py-2 rounded-lg text-[13px] font-medium disabled:opacity-50"
-          onClick={onFastScan}
-          disabled={fastScanning}
+      <div className="grid gap-4 grid-cols-1 min-[640px]:grid-cols-2">
+        <ScanOption
+          recommended
+          title={t('diskMap.driveRootPrompt.fastTitle')}
+          badge={t('diskMap.driveRootPrompt.recommended')}
+          explain={t('diskMap.driveRootPrompt.fastExplain', path.replace(/\\+$/, ''))}
+          note={t('diskMap.driveRootPrompt.fastNeeds')}
         >
-          {fastScanning ? t('diskMap.readingDrive') : t('diskMap.fastScanButton')}
-        </button>
-        <button
-          className="btn-ghost px-3.5 py-2 rounded-lg text-[12.5px] font-medium"
-          onClick={onCrawl}
+          <button className="btn-primary px-4 py-2 rounded-lg text-[13px] font-medium disabled:opacity-50"
+            onClick={onFastScan}
+            disabled={fastScanning}
+          >
+            {fastScanning ? t('diskMap.readingDrive') : t('diskMap.fastScanButton')}
+          </button>
+        </ScanOption>
+        <ScanOption
+          title={t('diskMap.driveRootPrompt.crawlTitle')}
+          explain={t('diskMap.driveRootPrompt.crawlExplain')}
+          note={t('diskMap.driveRootPrompt.crawlLimit')}
         >
-          {t('diskMap.driveRootPrompt.crawlButton')}
-        </button>
+          <button
+            className="btn-ghost px-3.5 py-2 rounded-lg text-[12.5px] font-medium"
+            onClick={onCrawl}
+          >
+            {t('diskMap.driveRootPrompt.crawlButton')}
+          </button>
+        </ScanOption>
       </div>
-    </div>
+    </section>
   );
 }
 
