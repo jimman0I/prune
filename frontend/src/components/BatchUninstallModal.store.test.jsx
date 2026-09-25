@@ -161,7 +161,9 @@ describe('what the confirm step says will happen', () => {
   });
 
   it('keeps the uninstaller wording, and nothing about Store apps, when there are none', () => {
-    renderScreen(<BatchUninstallModal programs={[thing]} onClose={() => {}} onFinished={() => {}} />);
+    // Two programs: a batch of one gets the single-program sentence instead
+    // (see BatchUninstallModal.appleDesign.render.test.jsx).
+    renderScreen(<BatchUninstallModal programs={[thing, { ...thing, id: 'thing2', name: 'Thing Two' }]} onClose={() => {}} onFinished={() => {}} />);
 
     expect(screen.getByText(/scans for what/i)).toBeTruthy();
     expect(screen.getByText(/own windows/i)).toBeTruthy();

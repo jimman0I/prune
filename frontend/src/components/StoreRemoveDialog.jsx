@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { useSingleFlight } from '../hooks/useSingleFlight.js';
 import { removeStoreApp, appendHistoryEntry } from '../lib/api.js';
 import { useLanguage } from '../i18n/LanguageContext.jsx';
 
@@ -19,15 +20,23 @@ import { useLanguage } from '../i18n/LanguageContext.jsx';
  * is what gives it role="dialog", a focus trap, Escape, and focus handed
  * back to the row that opened it.
  */
-export default function StoreRemoveDialog({ app, onClose, onRemoved }) {
+export default function StoreRemoveDialog({ app, onClose, onRemoved, onBusyChange }) {
   const { t } = useLanguage();
   const [state, setState] = useState('asking');
   const [error, setError] = useState(null);
 
-  const confirm = async () => {
-    // Guarded rather than relying on the button disappearing: a second
-    // Enter on a focused button is faster than a re-render.
-    if (state === 'removing') return;
+  /* While Remove-AppxPackage runs this dialog is the only thing that knows
+   * it is running, so the parent is told (Escape then does not close it) and
+   * Cancel refuses below. */
+  const busy = state === 'removing';
+  const onBusyChangeRef = useRef(onBusyChange);
+  onBusyChangeRef.current = onBusyChange;
+  useEffect(() => { onBusyChangeRef.current?.(busy); }, [busy]);
+  useEffect(() => () => onBusyChangeRef.current?.(false), []);
+
+  // Single-flight, not a read of `state`: a second Enter on a focused button
+  // lands before the re-render that would have shown 'removing'.
+  const confirm = useSingleFlight(async () => {
     setState('removing');
     setError(null);
     try {
@@ -44,7 +53,7 @@ export default function StoreRemoveDialog({ app, onClose, onRemoved }) {
       setState('asking');
       setError(err.message);
     }
-  };
+  });
 
   return (
     <div className="glass-panel w-full max-w-[520px] p-6 rounded-xl">
@@ -68,7 +77,7 @@ export default function StoreRemoveDialog({ app, onClose, onRemoved }) {
       )}
 
       <div className="flex justify-end gap-2">
-        <button type="button" className="btn-ghost px-3 py-1.5 rounded-md text-[12.5px]" onClick={onClose}>
+        <button type="button" className="btn-ghost px-3 py-1.5 rounded-md text-[12.5px] disabled:opacity-40" onClick={onClose} disabled={busy}>
           {state === 'done' ? t('applications.storeRemoveDialog.close') : t('applications.storeRemoveDialog.cancel')}
         </button>
         {state !== 'done' && (

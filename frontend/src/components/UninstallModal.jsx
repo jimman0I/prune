@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useSingleFlight } from '../hooks/useSingleFlight.js';
 import { scanForLeftovers, scanForcedUninstall, streamUninstall, removeQuarantined, appendHistoryEntry } from '../lib/api.js';
 import { deriveSearchTerm } from '../lib/searchTerm.js';
@@ -10,17 +10,24 @@ import { useLanguage } from '../i18n/LanguageContext.jsx';
 /** Shared spinner + live-command UI for both the "running the native
  * uninstaller" and "scanning for leftovers" phases -- same treatment,
  * different label/command text, matching the mockup's own reuse of one
- * progress view for both phases. */
-function ProgressPhase({ title, command, progress }) {
+ * progress view for both phases.
+ *
+ * The bar is indeterminate on purpose. It used to be handed 45, 85 and 95
+ * as a width, numbers nobody measured: an uninstaller reports no progress
+ * and the scan does not know how many places it has left to look, so those
+ * were an invented sense of how far along it was. A sliding segment says
+ * "working" and claims nothing, and a progressbar with no value is how that
+ * is said to assistive technology. */
+function ProgressPhase({ title, command }) {
   return (
-    <div className="flex flex-col items-center justify-center py-10">
+    <div className="flex flex-col items-center justify-center py-10" role="status">
       <div className="w-14 h-14 rounded-2xl bg-[color:var(--accent-primary)]/10 border border-[color:var(--accent-primary)]/25 flex items-center justify-center mb-5">
         <div className="w-6 h-6 border-2 border-[color:var(--accent-primary)] border-t-transparent rounded-full animate-spin"></div>
       </div>
       <p className="text-[15px] font-medium mb-1">{title}</p>
       <p className="text-[12.5px] text-[color:var(--text-secondary)] font-mono mb-6 max-w-full truncate px-6">{command}</p>
-      <div className="w-full max-w-sm h-1 rounded-full bg-[color:var(--bg-panel)] overflow-hidden">
-        <div className="h-full rounded-full bg-gradient-to-r from-[color:var(--accent-primary)] to-[#e8624f] transition-all duration-500" style={{ width: `${progress}%` }}></div>
+      <div role="progressbar" aria-label={title} className="relative w-full max-w-sm h-1 rounded-full bg-[color:var(--bg-panel)] overflow-hidden">
+        <div className="scan-indeterminate absolute inset-y-0 left-0 rounded-full bg-[color:var(--accent-primary)]" style={{ width: '35%' }}></div>
       </div>
     </div>
   );
@@ -80,7 +87,7 @@ export function selectionToRemoval(scanResult, selected) {
   };
 }
 
-export default function UninstallModal({ program, running = false, onClose }) {
+export default function UninstallModal({ program, running = false, onClose, onBusyChange }) {
   const { t } = useLanguage();
 
   const REMOVING = {
@@ -113,6 +120,27 @@ export default function UninstallModal({ program, running = false, onClose }) {
   const preselect = settings?.preselectLeftovers !== false;
   const scanAfter = settings?.scanLeftoversAfterUninstall !== false;
   const [progressTitle, setProgressTitle] = useState(null);
+
+  /* Working, as opposed to waiting on the person. While the real uninstaller
+   * runs, or a scan or a removal is in flight, this dialog is the only thing
+   * on screen that knows something is happening: closing it does not stop the
+   * process, it only hides it. The parent reads this to stop Escape closing
+   * the dialog (dismissible={!busy}) and the Close button below refuses for
+   * the same reason. Reported through a callback rather than lifted state so
+   * the steps stay this component's own business. */
+  const busy = step === 'uninstalling' || step === 'scanning' || step === 'removing';
+  const onBusyChangeRef = useRef(onBusyChange);
+  onBusyChangeRef.current = onBusyChange;
+  useEffect(() => { onBusyChangeRef.current?.(busy); }, [busy]);
+  // A dialog that goes away must not leave the parent believing it is busy.
+  useEffect(() => () => onBusyChangeRef.current?.(false), []);
+
+  // Decision 4: the "remove everything without reviewing" shortcut exists
+  // only when the leftovers go to Quarantine, where a wrong match can be put
+  // back. For the Recycle Bin and permanent deletion the review is the
+  // safety, so the shortcut is not offered -- and it is ignored here as well
+  // as hidden, so a box ticked before the setting changed cannot skip it.
+  const autoRemoveOffered = destination === 'quarantine';
 
   // Every "group:index" key a scan result contains, regardless of any
   // setting -- the one shape both selectEverythingIn (gated by the
@@ -190,7 +218,7 @@ export default function UninstallModal({ program, running = false, onClose }) {
       // away. It still goes through the exact same quarantine call the
       // manual review's own confirm button does -- this only skips the
       // SELECTION step, not the safety of the removal itself.
-      if (autoRemoveLeftovers) {
+      if (autoRemoveLeftovers && autoRemoveOffered) {
         const full = allFoundIn(result);
         setSelected(full);
         setStep('removing');
@@ -271,16 +299,23 @@ export default function UninstallModal({ program, running = false, onClose }) {
     : program.uninstallString || t('uninstallModal.noUninstallCommand');
 
   return (
-    <div className="glass-panel rounded-2xl overflow-hidden max-w-[680px] w-full flex flex-col">
-      <div className="flex items-center justify-between px-6 py-5 border-b border-[color:var(--border-subtle)]">
+    /* Height capped and the body scrolls: the leftover review can be as long
+       as the scan is thorough, and at 900x600 an uncapped panel pushed its
+       own Remove and Skip buttons off the bottom of the window. */
+    <div data-modal-panel className="glass-panel rounded-2xl overflow-hidden max-w-[680px] w-full flex flex-col max-h-[85vh]">
+      <div className="flex items-center justify-between gap-4 px-6 py-5 border-b border-[color:var(--border-subtle)] shrink-0">
         <h2 className="text-[15px] font-semibold tracking-tight text-[color:var(--text-primary)] truncate">
           {broken ? t('uninstallModal.titleForce', program.name) : t('uninstallModal.titleNormal', program.name)}
         </h2>
-        <button onClick={onClose} className="btn-ghost px-3 py-1.5 rounded-lg text-[12px] font-medium">
+        <button
+          onClick={onClose}
+          disabled={busy}
+          className="btn-ghost px-3 py-1.5 rounded-lg text-[12px] font-medium disabled:opacity-40"
+        >
           {t('uninstallModal.close')}
         </button>
       </div>
-      <div className="px-6 py-6">
+      <div data-modal-body className="px-6 py-5 overflow-y-auto min-h-0">
         {step === 'confirm' && (
           <div>
             {/* Where the warning actually bites. Revo warns before
@@ -341,15 +376,17 @@ export default function UninstallModal({ program, running = false, onClose }) {
                 </p>
                 <p className="text-[11.5px] text-[color:var(--text-muted)] font-mono mb-6 break-all select-text">{command}</p>
                 {error && <p className="text-[12.5px] text-[color:var(--danger)] mb-4 select-text">{t('uninstallModal.uninstallFailed', error)}</p>}
-                <label className="flex items-center gap-2.5 mb-5 cursor-pointer select-none">
-                  <input
-                    type="checkbox"
-                    checked={autoRemoveLeftovers}
-                    onChange={(e) => setAutoRemoveLeftovers(e.target.checked)}
-                    className="w-[15px] h-[15px] accent-[color:var(--accent-primary)] cursor-pointer"
-                  />
-                  <span className="text-[12.5px] text-[color:var(--text-secondary)]">{t('uninstallModal.autoRemoveLeftovers')}</span>
-                </label>
+                {autoRemoveOffered && (
+                  <label className="flex items-center gap-2.5 mb-5 cursor-pointer select-none">
+                    <input
+                      type="checkbox"
+                      checked={autoRemoveLeftovers}
+                      onChange={(e) => setAutoRemoveLeftovers(e.target.checked)}
+                      className="w-[15px] h-[15px] accent-[color:var(--accent-primary)] cursor-pointer"
+                    />
+                    <span className="text-[12.5px] text-[color:var(--text-secondary)]">{t('uninstallModal.autoRemoveLeftovers')}</span>
+                  </label>
+                )}
                 <button className="btn-primary" onClick={startUninstall} disabled={!program.uninstallString}>
                   {t('uninstallModal.startButton')}
                 </button>
@@ -358,7 +395,7 @@ export default function UninstallModal({ program, running = false, onClose }) {
           </div>
         )}
         {step === 'uninstalling' && (
-          <ProgressPhase title={progressTitle || t('uninstallModal.progress.runningNative')} command={command} progress={45} />
+          <ProgressPhase title={progressTitle || t('uninstallModal.progress.runningNative')} command={command} />
         )}
         {step === 'readyToScan' && (
           <div className="py-4">
@@ -376,14 +413,12 @@ export default function UninstallModal({ program, running = false, onClose }) {
           <ProgressPhase
             title={broken ? t('uninstallModal.progress.searchingLeftovers') : t('uninstallModal.progress.scanningLeftovers')}
             command={t('uninstallModal.progress.checkingCommand')}
-            progress={85}
           />
         )}
         {step === 'removing' && (
           <ProgressPhase
             title={REMOVING[destination].title}
             command={REMOVING[destination].command}
-            progress={95}
           />
         )}
         {step === 'noScan' && (
