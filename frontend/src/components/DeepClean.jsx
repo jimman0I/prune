@@ -426,7 +426,7 @@ function DeepClean() {
 
   return (
     <div className="h-full flex flex-col">
-      <div className="flex-1 flex flex-col min-h-0 px-12 pt-10 pb-6 max-w-[1600px] w-full">
+      <div className="flex-1 flex flex-col min-h-0 overflow-y-auto px-12 pt-10 pb-6 max-w-[1600px] w-full">
         <h1 className="display-heading text-[30px] leading-none mb-2">{t('deepClean.title')}</h1>
         <p className="text-[13px] text-[color:var(--text-secondary)] mb-6 max-w-[62ch]">
           {t('deepClean.subtitle')}
@@ -569,11 +569,11 @@ function DeepClean() {
       </div>
 
       <div
-        className="shrink-0 glass-panel flex items-center justify-between gap-4 px-12 py-4"
+        className="shrink-0 glass-panel flex flex-wrap items-center justify-between gap-x-4 gap-y-2 px-12 py-4"
         style={{ borderRadius: 0, borderLeft: 'none', borderRight: 'none', borderBottom: 'none' }}
       >
-        <div className="flex items-center gap-3 min-w-0">
-          <div className="text-[13px] text-[color:var(--text-secondary)]">
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 min-w-0">
+          <div className="text-[13px] text-[color:var(--text-secondary)] whitespace-nowrap">
             {/* "0 B" would be a claim here, not a result: with the tree
                 listed but unmeasured, nothing has been asked of the disk
                 yet. Same rule as the version column -- say what is not
@@ -613,7 +613,7 @@ function DeepClean() {
             </div>
           )}
         </div>
-        <div className="flex items-center gap-2.5">
+        <div className="flex flex-wrap items-center gap-2.5">
           {confirmClean ? (
             <>
               {/* The confirm carries the SIZE, not just the count. "Move
