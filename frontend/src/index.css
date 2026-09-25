@@ -711,6 +711,28 @@ body::before {
 .btn-danger:active:not(:disabled) { transform: scale(0.98); background: var(--danger-soft-active); }
 .btn-danger:disabled { opacity: 0.45; cursor: not-allowed; }
 
+/* The per-row Uninstall: quiet until aimed at. A filled red pill on every
+   hovered row read as an alarm; this is a neutral outlined button with a
+   bin glyph that turns to the danger colours only under the pointer. */
+.btn-remove {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 24px;
+  padding: 4px 10px;
+  font-size: 11.5px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  background: transparent;
+  border: 1px solid var(--control-border);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease, transform 120ms var(--ease-out-expo);
+}
+.btn-remove:hover, .btn-remove:focus-visible { background: var(--danger-soft); color: var(--danger-ink); border-color: var(--danger-edge); }
+.btn-remove:active { transform: scale(0.98); background: var(--danger-soft-active); }
+.btn-remove:focus-visible { outline: 2px solid var(--danger-edge-hover); outline-offset: 2px; }
+
 /* The app's one checkbox.
  *
  * There were two. The program list and the Deep Clean tree drew their own

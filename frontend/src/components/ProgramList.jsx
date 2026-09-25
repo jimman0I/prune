@@ -224,6 +224,17 @@ function SortArrow({ active, direction }) {
  * where. Shown only when there is a folder to open -- most Store apps and
  * every extension have one, but plenty of registry entries record none,
  * and a button that cannot work is worse than no button. */
+/** The bin glyph on the Uninstall buttons: an action reads faster as a
+ * shape plus a word than as a coloured pill. Decorative, so hidden from
+ * assistive tech -- the word carries the meaning. */
+function BinIcon() {
+  return (
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className="shrink-0">
+      <path d="M3 6h18" /><path d="M8 6V4h8v2" /><path d="M6 6l1 14h10l1-14" /><path d="M10 11v5" /><path d="M14 11v5" />
+    </svg>
+  );
+}
+
 function RevealButton({ program }) {
   const { t } = useLanguage();
   const [failed, setFailed] = useState(null);
@@ -404,15 +415,17 @@ function ProgramRow({ program, iconSrc, checked, running, isNew, onToggle, onUni
         // actually made, rather than crammed into a button.
         <button
           onClick={() => onRemoveStoreApp(program)}
-          className="btn-danger px-2.5 py-1 rounded-md text-[11px] font-medium"
+          className="btn-remove"
         >
+          <BinIcon />
           {t('applications.uninstall')}
         </button>
       ) : (
         <button
           onClick={() => onUninstall(program)}
-          className="btn-danger px-2.5 py-1 rounded-md text-[11px] font-medium"
+          className="btn-remove"
         >
+          <BinIcon />
           {program.health?.orphaned ? t('applications.forceRemove') : t('applications.uninstall')}
         </button>
       )}
