@@ -87,6 +87,12 @@ export function selectionToRemoval(scanResult, selected) {
   };
 }
 
+/** How long the real uninstaller may run before the dialog stops insisting on
+ * being watched. Vendor uninstallers sometimes wait on a prompt nobody sees
+ * (a launcher's "are you sure" window behind this one), and a dialog that can
+ * neither be closed nor make progress would trap the person in it. */
+export const STALL_MS = 30000;
+
 export default function UninstallModal({ program, running = false, onClose, onBusyChange }) {
   const { t } = useLanguage();
 
@@ -128,7 +134,24 @@ export default function UninstallModal({ program, running = false, onClose, onBu
    * the dialog (dismissible={!busy}) and the Close button below refuses for
    * the same reason. Reported through a callback rather than lifted state so
    * the steps stay this component's own business. */
-  const busy = step === 'uninstalling' || step === 'scanning' || step === 'removing';
+  // After STALL_MS on the uninstaller alone (never on a scan or a removal,
+  // which Prune itself is running and which must not be walked away from) the
+  // dialog says it is still waiting and lets go of the lock. Closing then only
+  // abandons Prune's own follow-up; see `alive` below.
+  const [stalled, setStalled] = useState(false);
+  useEffect(() => {
+    if (step !== 'uninstalling') return undefined;
+    const timer = setTimeout(() => setStalled(true), STALL_MS);
+    return () => { clearTimeout(timer); setStalled(false); };
+  }, [step]);
+  const busy = (step === 'uninstalling' && !stalled) || step === 'scanning' || step === 'removing';
+
+  // False once the dialog is gone. The uninstaller outlives a closed dialog;
+  // what must not is anything of Prune's: nothing after the process exits may
+  // move the dialog on, and the scan and the removal only ever start from a
+  // click inside it, so with it unmounted there is nothing left to start them.
+  const alive = useRef(true);
+  useEffect(() => { alive.current = true; return () => { alive.current = false; }; }, []);
   const onBusyChangeRef = useRef(onBusyChange);
   onBusyChangeRef.current = onBusyChange;
   useEffect(() => { onBusyChangeRef.current?.(busy); }, [busy]);
@@ -180,11 +203,14 @@ export default function UninstallModal({ program, running = false, onClose, onBu
           setProgressTitle(null);
         }
       });
+      // Recorded even if the dialog was closed while it ran: the program
+      // really was uninstalled, and this is a log of that, not a next step.
       appendHistoryEntry({ programName: program.name, publisher: program.publisher, sizeBytes: program.sizeBytes }).catch(() => {
         // Best-effort logging -- a failed history write must never block
         // or fail the uninstall flow itself, the uninstall already
         // genuinely succeeded by this point.
       });
+      if (!alive.current) return;
       if (!scanAfter) { setStep('noScan'); return; }
       // Revo's own screen after the real uninstaller runs: it does not
       // race into a scan the instant the spawned process exits, because
@@ -193,6 +219,7 @@ export default function UninstallModal({ program, running = false, onClose, onBu
       // The person confirms readiness themselves with an explicit click.
       setStep('readyToScan');
     } catch (err) {
+      if (!alive.current) return;
       setError(err.message);
       setStep('confirm');
     }
@@ -395,7 +422,14 @@ export default function UninstallModal({ program, running = false, onClose, onBu
           </div>
         )}
         {step === 'uninstalling' && (
-          <ProgressPhase title={progressTitle || t('uninstallModal.progress.runningNative')} command={command} />
+          <>
+            <ProgressPhase title={progressTitle || t('uninstallModal.progress.runningNative')} command={command} />
+            {stalled && (
+              <p role="status" data-still-waiting className="text-[12.5px] text-[color:var(--text-secondary)] text-center -mt-4 pb-2 px-4">
+                {t('uninstallModal.stillWaiting')}
+              </p>
+            )}
+          </>
         )}
         {step === 'readyToScan' && (
           <div className="py-4">
