@@ -24,8 +24,7 @@ screen-reader access, and safer destructive actions.
   scrolls inside its own area and the footer wraps its controls.
 - **Page descriptions were a narrow block on wide windows.** Deep Clean,
   Disk Map, Duplicates and Startup now use the width they have.
-- **The Uninstall button on a hovered row looked like a dark box stuck to
-  the table edge.** It now matches the row and has room around it.
+- **The Uninstall button on a hovered row looked like an alarm.** It is now a quiet outlined button with a bin icon that turns red only when you point at it.
 - **An uninstall could be hidden by pressing Escape while it was still
   running.** Escape and Close are now off while an uninstall, leftover scan
   or removal is in progress, so the work can't carry on with no window.
