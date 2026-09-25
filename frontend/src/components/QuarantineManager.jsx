@@ -43,12 +43,16 @@ export const ARM_DELAY_MS = 500;
  * belonged to the first. */
 function useArmed(key, delayMs = ARM_DELAY_MS) {
   const [armedKey, setArmedKey] = useState(null);
+  // Bumped by an early click: the clock starts over, so someone hammering the
+  // button is only let through once they have stopped for the full delay.
+  const [restarts, setRestarts] = useState(0);
   useEffect(() => {
     if (key === null || key === undefined || key === false) return undefined;
     const timer = setTimeout(() => setArmedKey(key), delayMs);
     return () => { clearTimeout(timer); setArmedKey(null); };
-  }, [key, delayMs]);
-  return key !== null && key !== undefined && key !== false && armedKey === key;
+  }, [key, delayMs, restarts]);
+  const armed = key !== null && key !== undefined && key !== false && armedKey === key;
+  return [armed, () => setRestarts((n) => n + 1)];
 }
 
 /** Files shown per batch before "Show all N files". A batch from a temp-folder
@@ -65,8 +69,8 @@ function QuarantineManager() {
   const [notice, setNotice] = useState(null);
   // Batches whose whole file list is showing.
   const [expanded, setExpanded] = useState(() => new Set());
-  const deleteArmed = useArmed(confirmDeleteDir);
-  const emptyArmed = useArmed(confirmEmpty ? 'empty' : null);
+  const [deleteArmed, restartDeleteArm] = useArmed(confirmDeleteDir);
+  const [emptyArmed, restartEmptyArm] = useArmed(confirmEmpty ? 'empty' : null);
 
   const { batches, totals, loading, error, restore, remove, empty } = useQuarantine();
 
@@ -98,11 +102,11 @@ function QuarantineManager() {
   // Both permanent deletions ignore a click made before they are armed. Not
   // `disabled`: that would drop focus off a button the user just reached.
   const handleDeletePermanently = (batch) => {
-    if (!deleteArmed) return;
+    if (!deleteArmed) { restartDeleteArm(); return; }
     runAction(remove, batch.batchDir, () => setConfirmDeleteDir(null));
   };
   const handleEmptyQuarantine = () => {
-    if (!emptyArmed) return;
+    if (!emptyArmed) { restartEmptyArm(); return; }
     runAction(empty, undefined, () => setConfirmEmpty(false));
   };
 

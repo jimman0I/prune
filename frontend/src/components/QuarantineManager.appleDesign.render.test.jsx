@@ -64,6 +64,26 @@ describe('the arm delay on a permanent delete', () => {
     expect(firstArg(deleteQuarantineBatch)).toBe('C:\\q\\1-Thing');
   });
 
+  it('an early click restarts the clock, so hammering the button never gets through', async () => {
+    renderScreen(<QuarantineManager />);
+    const ask = await screen.findByRole('button', { name: 'Delete permanently' });
+
+    vi.useFakeTimers();
+    fireEvent.click(ask);
+    const confirm = screen.getByRole('button', { name: 'Delete batch' });
+    act(() => { vi.advanceTimersByTime(400); });
+    fireEvent.click(confirm); // early: restarts the 500 ms
+    act(() => { vi.advanceTimersByTime(400); }); // 800 ms after opening, but only 400 after the click
+    fireEvent.click(confirm); // still early
+    await act(async () => { await Promise.resolve(); await Promise.resolve(); });
+    expect(deleteQuarantineBatch).not.toHaveBeenCalled();
+
+    act(() => { vi.advanceTimersByTime(600); }); // now a full pause since the last click
+    fireEvent.click(confirm);
+    vi.useRealTimers();
+    await waitFor(() => expect(deleteQuarantineBatch).toHaveBeenCalledTimes(1));
+  });
+
   it('a double-click on Delete permanently cannot reach the confirm', async () => {
     const user = userEvent.setup();
     renderScreen(<QuarantineManager />);
