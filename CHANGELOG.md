@@ -6,10 +6,38 @@ see v1.0.1 below) are documented here.
 ## v2.8.0
 
 Prune now remembers where you left it, uninstallers that never opened now
-do, the Disk Map shows real progress while it scans, and Deep Clean gains
-Windows Defender and WinRAR cleaners.
+do, the Disk Map shows real progress while it scans, Deep Clean gains
+Windows Defender and WinRAR cleaners, and every screen has been reviewed
+against Apple's Human Interface Guidelines for legibility, keyboard and
+screen-reader access, and safer destructive actions.
 
 ### Fixed
+
+- **An uninstall could be hidden by pressing Escape while it was still
+  running.** Escape and Close are now off while an uninstall, leftover scan
+  or removal is in progress, so the work can't carry on with no window.
+  If a vendor's own uninstaller stalls for 30 seconds, the single-program
+  dialog says so and can then be closed (Prune does nothing further after
+  that); a batch stays open and puts "Stop after this one" in front.
+- **The leftover review's buttons could sit off-screen** at the smallest
+  window size. The dialog now scrolls and keeps its buttons in view.
+- **Text couldn't be made larger.** Removing the window menu had also
+  removed Ctrl+Plus, Ctrl+Minus, Ctrl+0 and Ctrl+mouse wheel. They work
+  again, and the zoom level is remembered.
+- **In Windows high-contrast themes, switches, the current page in the
+  side bar, selected tabs and the storage bar disappeared.** They now draw
+  with the system's own colours.
+- **Small text and small targets.** Text under 10 px is gone from the whole
+  app, the tiny checkboxes in Applications and Deep Clean can be clicked
+  from the whole row, unticked boxes and off switches are visible in light
+  mode, and disabled or not-installed rows are readable again.
+- **Startup lost its Status column below about 1000 px**, taking the
+  "Invalid" marker with it. It stays visible now.
+- **Disk Map's folder table could only be used with a mouse.** Its rows are
+  keyboard-operable, treemap labels meet contrast, and stopping a scan
+  shows one message instead of two.
+- **Deleting a Quarantine batch could be confirmed by a double-click.**
+  The confirm button ignores clicks for half a second.
 
 - **Uninstallers whose path contains a space never started at all.**
   Clicking Uninstall on VALORANT (and any program whose registered
@@ -43,6 +71,31 @@ Windows Defender and WinRAR cleaners.
 
 ### Added
 
+- **A labelled side bar.** From 1100 px of window width the rail widens to
+  show each screen's name; below that it stays icons only. Dashboard has
+  its own gauge icon, Settings sits at the bottom, and Ctrl+1 to Ctrl+8
+  jump between screens. Page headings now match their names in the bar
+  (Disk Map, Startup, Applications).
+- **Choose System, Light or Dark.** "System" follows Windows again after
+  you've picked a theme by hand.
+- **Deep Clean can be filtered**, shows "N of M selected", remembers which
+  categories you collapsed, and the whole row is the click target. While a
+  clean is running, rows are read-only.
+- **Applications: a right-click menu** (Uninstall, Open folder, Copy
+  uninstall command), an Uninstall button that stays reachable in a narrow
+  window, and sizes that no longer turn red -- red is kept for broken
+  programs and destructive actions.
+- **"Stop after this one" for a batch uninstall**, and the "automatically
+  remove everything found" option is only offered when leftovers go to
+  Quarantine, so the one-click path is always undoable.
+- **Toasts wait for you.** Warnings stay until dismissed, and hovering or
+  tabbing to a message pauses its timer.
+- **Dashboard:** a health ring coloured by its own score and shown out of
+  100, free space as the storage headline, and a layout that stacks
+  instead of cutting off drive details at the smallest window size.
+- **Duplicates says what actually happens.** Files go to Quarantine and are
+  freed when you empty it; each copy is marked Keep or To quarantine, and a
+  new search clears earlier ticks.
 - **Real progress while the Disk Map walks folders.** The scan now streams
   what it has done so far: a live count of files scanned and bytes
   processed, and an animated bar. On a whole-drive scan of C: the bar
