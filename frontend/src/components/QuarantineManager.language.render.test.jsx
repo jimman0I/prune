@@ -219,3 +219,16 @@ describe('the quarantine screen, in Greek', () => {
     resolveRestore({ restored: true });
   });
 });
+
+describe('the Apple design pass strings, in Greek', () => {
+  it('says how many files there are to show, and that a restore worked', async () => {
+    const files = Array.from({ length: 8 }, (_, i) => ({ originalPath: `C:/T/f${i}.tmp`, sizeBytes: 1 }));
+    fetchQuarantineBatches.mockResolvedValue(payload({ batches: [{ ...batch('Thing', 'C:/q/1-Thing', GIB), files }] }));
+    const user = userEvent.setup();
+    renderScreen(<QuarantineManager />);
+    expect(await screen.findByRole('button', { name: 'Εμφάνιση όλων των 8 αρχείων' })).toBeTruthy();
+
+    await user.click(screen.getByRole('button', { name: 'Επαναφορά' }));
+    expect((await screen.findByRole('status')).textContent).toBe('Έγινε επαναφορά του Thing.');
+  });
+});

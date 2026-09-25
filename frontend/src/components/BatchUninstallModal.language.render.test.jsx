@@ -290,3 +290,19 @@ describe('the batch uninstall dialog, in Greek', () => {
     expect(removeQuarantined.mock.calls[0][0].programName).toBe('Ομαδική απεγκατάσταση: 2 προγράμματα');
   });
 });
+
+describe('the Apple design pass strings, in Greek', () => {
+  it('has a translated Cancel beside Start, and a translated Stop while it runs', async () => {
+    let release;
+    streamUninstall.mockReturnValue(new Promise((res) => { release = res; }));
+    const user = userEvent.setup();
+    renderScreen(<BatchUninstallModal programs={programs} onClose={vi.fn()} />);
+    await ready();
+    expect(screen.getByRole('button', { name: 'Ακύρωση' })).toBeTruthy();
+
+    await user.click(screen.getByRole('button', { name: 'Έναρξη απεγκατάστασης' }));
+    await user.click(await screen.findByRole('button', { name: 'Διακοπή μετά από αυτό' }));
+    expect(screen.getByRole('button', { name: 'Διακοπή μετά από αυτό…' })).toBeTruthy();
+    release();
+  });
+});

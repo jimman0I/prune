@@ -383,3 +383,15 @@ describe('the footer, in Greek', () => {
     expect(screen.queryByText('2 επιλέχθηκαν')).toBeNull();
   });
 });
+
+describe('the row context menu, in Greek', () => {
+  it('names its items in the chosen language', async () => {
+    const { fireEvent } = await import('@testing-library/react');
+    render();
+    await ready();
+    fireEvent.contextMenu((await rowFor('Steam')), { clientX: 10, clientY: 10 });
+    const menu = await screen.findByRole('menu');
+    expect(within(menu).getByRole('menuitem', { name: 'Άνοιγμα φακέλου' })).toBeTruthy();
+    expect(within(menu).getByRole('menuitem', { name: 'Αντιγραφή εντολής απεγκατάστασης' })).toBeTruthy();
+  });
+});
