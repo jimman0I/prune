@@ -14,6 +14,7 @@ const streamUninstall = vi.fn();
 const scanForLeftovers = vi.fn();
 const removeQuarantined = vi.fn();
 const fetchSettings = vi.fn();
+const removeStoreApp = vi.fn();
 vi.mock('../lib/api.js', () => ({
   streamUninstall: (...a) => streamUninstall(...a),
   scanForLeftovers: (...a) => scanForLeftovers(...a),
@@ -21,13 +22,14 @@ vi.mock('../lib/api.js', () => ({
   fetchSettings: (...a) => fetchSettings(...a),
   updateSettings: vi.fn(),
   scanForcedUninstall: vi.fn(),
-  removeStoreApp: vi.fn(),
+  removeStoreApp: (...a) => removeStoreApp(...a),
   appendHistoryEntry: vi.fn(async () => {})
 }));
 
 const UninstallModal = (await import('./UninstallModal.jsx')).default;
 const BatchUninstallModal = (await import('./BatchUninstallModal.jsx')).default;
 const LeftoverReview = (await import('./LeftoverReview.jsx')).default;
+const StoreRemoveDialog = (await import('./StoreRemoveDialog.jsx')).default;
 
 const mk = (id, name) => ({ id, name, publisher: 'Acme', sizeBytes: 1024, uninstallString: `"C:\\${name}\\u.exe"` });
 const thing = mk('thing', 'Thing');
@@ -184,7 +186,7 @@ describe('Stop after this one', () => {
     await user.click(screen.getByRole('button', { name: 'Start uninstalling' }));
 
     await user.click(await screen.findByRole('button', { name: 'Stop after this one' }));
-    expect(screen.getByRole('button', { name: 'Stopping after this one…' }).disabled).toBe(true);
+    expect(screen.getByRole('button', { name: 'Stopping after this one…' }).getAttribute('aria-disabled')).toBe('true');
     // The uninstaller that was running is not interrupted: still one call, still running.
     expect(streamUninstall).toHaveBeenCalledTimes(1);
 
@@ -260,5 +262,71 @@ describe('the confirm step', () => {
   it('a batch of two still explains the queue', () => {
     renderScreen(<BatchUninstallModal programs={[thing, mk('b', 'Bee')]} onClose={vi.fn()} />);
     expect(screen.getByText(/One at a time/)).toBeTruthy();
+  });
+});
+
+describe('busy never gets stuck: every failure path hands the dialog back', () => {
+  const closeEnabled = () => screen.getAllByRole('button', { name: 'Close' })[0].disabled === false;
+
+  it('single: a failed uninstall, a failed scan and a failed removal each leave Close usable and report not busy', async () => {
+    const onBusyChange = vi.fn();
+    const user = userEvent.setup();
+    streamUninstall.mockRejectedValueOnce(new Error('boom'));
+    renderScreen(<UninstallModal program={thing} onClose={vi.fn()} onBusyChange={onBusyChange} />);
+
+    await user.click(screen.getByRole('button', { name: 'Start uninstalling' }));
+    expect(await screen.findByText(/Uninstall failed: boom/)).toBeTruthy();
+    expect(closeEnabled()).toBe(true);
+    expect(onBusyChange).toHaveBeenLastCalledWith(false);
+
+    await user.click(screen.getByRole('button', { name: 'Start uninstalling' }));
+    scanForLeftovers.mockRejectedValueOnce(new Error('scan broke'));
+    await user.click(await screen.findByRole('button', { name: 'Scan for leftovers' }));
+    expect(await screen.findByText(/Scan failed: scan broke/)).toBeTruthy();
+    expect(closeEnabled()).toBe(true);
+    expect(onBusyChange).toHaveBeenLastCalledWith(false);
+
+    removeQuarantined.mockRejectedValueOnce(new Error('EACCES'));
+    await user.click(screen.getByRole('button', { name: 'Scan for leftovers' }));
+    await user.click(await screen.findByRole('button', { name: 'Remove selected' }));
+    expect(await screen.findByText(/Removal failed: EACCES/)).toBeTruthy();
+    expect(closeEnabled()).toBe(true);
+    expect(onBusyChange).toHaveBeenLastCalledWith(false);
+  });
+
+  it('batch: a failed scan and a failed removal each leave Close usable', async () => {
+    const onBusyChange = vi.fn();
+    const user = userEvent.setup();
+    renderScreen(<BatchUninstallModal programs={[thing, mk('b', 'Bee')]} onClose={vi.fn()} onBusyChange={onBusyChange} />);
+    await user.click(screen.getByRole('button', { name: 'Start uninstalling' }));
+    scanForLeftovers.mockRejectedValueOnce(new Error('scan broke'));
+    await user.click(await screen.findByRole('button', { name: 'Scan for leftovers' }));
+    expect(await screen.findByText(/Scan failed: scan broke/)).toBeTruthy();
+    expect(closeEnabled()).toBe(true);
+    expect(onBusyChange).toHaveBeenLastCalledWith(false);
+
+    removeQuarantined.mockRejectedValueOnce(new Error('EACCES'));
+    await user.click(screen.getByRole('button', { name: 'Scan for leftovers' }));
+    await user.click(await screen.findByRole('button', { name: 'Remove selected' }));
+    expect(await screen.findByText(/Couldn't remove leftovers: EACCES/)).toBeTruthy();
+    expect(closeEnabled()).toBe(true);
+    expect(onBusyChange).toHaveBeenLastCalledWith(false);
+  });
+
+  it('store: Cancel is disabled while removing and comes back after a refusal', async () => {
+    const run = deferred();
+    removeStoreApp.mockReturnValueOnce(run.promise);
+    const onBusyChange = vi.fn();
+    const user = userEvent.setup();
+    const app = { id: 'store:c', name: 'Calc', publisher: 'MS', packageFullName: 'Calc_1', sizeBytes: 1 };
+    renderScreen(<StoreRemoveDialog app={app} onClose={vi.fn()} onRemoved={vi.fn()} onBusyChange={onBusyChange} />);
+    await user.click(screen.getByRole('button', { name: 'Remove app' }));
+    expect(screen.getByRole('button', { name: 'Cancel' }).disabled).toBe(true);
+    expect(onBusyChange).toHaveBeenLastCalledWith(true);
+
+    await act(async () => { run.reject(new Error('in use')); await run.promise.catch(() => {}); });
+    expect(await screen.findByText('in use')).toBeTruthy();
+    expect(screen.getByRole('button', { name: 'Cancel' }).disabled).toBe(false);
+    expect(onBusyChange).toHaveBeenLastCalledWith(false);
   });
 });

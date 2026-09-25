@@ -413,9 +413,11 @@ export default function BatchUninstallModal({ programs, onClose, onFinished, onB
               <div className="pt-3">
                 <button
                   type="button"
-                  className="btn-ghost px-3 py-1.5 rounded-lg text-[12px] font-medium disabled:opacity-60"
-                  onClick={requestStop}
-                  disabled={stopping}
+                  className="btn-ghost px-3 py-1.5 rounded-lg text-[12px] font-medium aria-disabled:opacity-60"
+                  // aria-disabled, not disabled: disabling the button under the
+                  // user's focus would drop focus to the page body.
+                  onClick={() => { if (!stopping) requestStop(); }}
+                  aria-disabled={stopping || undefined}
                   aria-busy={stopping || undefined}
                 >
                   {stopping ? t('batchUninstallModal.stopping') : t('batchUninstallModal.stopAfterThis')}
