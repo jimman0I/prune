@@ -44,7 +44,7 @@ const uninstall = async () => {
   const onClose = vi.fn();
   const user = userEvent.setup();
   renderScreen(<UninstallModal program={program} onClose={onClose} />);
-  await user.click(screen.getByRole('button', { name: 'Start uninstall' }));
+  await user.click(screen.getByRole('button', { name: 'Start uninstalling' }));
   return { user, onClose };
 };
 
@@ -54,7 +54,7 @@ describe('where the leftovers go', () => {
     removeQuarantined.mockResolvedValue({ destination: 'permanent', files: [{ originalPath: 'x', sizeBytes: 2048 }], registryKeys: [], failedFiles: [], totalSizeBytes: 2048 });
     const { user } = await uninstall();
 
-    await user.click(await screen.findByRole('button', { name: 'Scan' }));
+    await user.click(await screen.findByRole('button', { name: 'Scan for leftovers' }));
     await user.click(await screen.findByRole('button', { name: 'Delete permanently' }));
     await waitFor(() => expect(removeQuarantined).toHaveBeenCalledTimes(1));
     expect(removeQuarantined.mock.calls[0][0].destination).toBe('permanent');
@@ -67,7 +67,7 @@ describe('where the leftovers go', () => {
     fetchSettings.mockRejectedValue(new Error('backend down'));
     const { user } = await uninstall();
 
-    await user.click(await screen.findByRole('button', { name: 'Scan' }));
+    await user.click(await screen.findByRole('button', { name: 'Scan for leftovers' }));
     await user.click(await screen.findByRole('button', { name: 'Remove selected' }));
     await waitFor(() => expect(removeQuarantined).toHaveBeenCalledTimes(1));
     expect(removeQuarantined.mock.calls[0][0].destination).toBe('quarantine');
@@ -78,7 +78,7 @@ describe('where the leftovers go', () => {
     removeQuarantined.mockResolvedValue({ destination: 'recycle', files: [{ originalPath: 'x', sizeBytes: 2048 }], registryKeys: ['k'], failedFiles: [], totalSizeBytes: 2048 });
     const { user } = await uninstall();
 
-    await user.click(await screen.findByRole('button', { name: 'Scan' }));
+    await user.click(await screen.findByRole('button', { name: 'Scan for leftovers' }));
     await user.click(await screen.findByRole('button', { name: 'Remove selected' }));
     expect(await screen.findByText(/sent 1 item to the Recycle Bin/i)).toBeTruthy();
   });
@@ -91,7 +91,7 @@ describe('where the leftovers go', () => {
     });
     const { user } = await uninstall();
 
-    await user.click(await screen.findByRole('button', { name: 'Scan' }));
+    await user.click(await screen.findByRole('button', { name: 'Scan for leftovers' }));
     await user.click(await screen.findByRole('button', { name: 'Delete permanently' }));
     expect(await screen.findByText(/couldn.t be removed/i)).toBeTruthy();
     expect(screen.getByText(/The file is in use/)).toBeTruthy();
@@ -102,7 +102,7 @@ describe('what can be copied', () => {
   it('the uninstall command it is about to run', () => {
     renderScreen(<UninstallModal program={program} onClose={vi.fn()} />);
     expect(isCopyable(screen.getByText(/uninst\.exe/))).toBe(true);
-    expect(isCopyable(screen.getByRole('button', { name: 'Start uninstall' }))).toBe(false);
+    expect(isCopyable(screen.getByRole('button', { name: 'Start uninstalling' }))).toBe(false);
   });
 
   it('the reason an uninstall failed', async () => {
@@ -129,7 +129,7 @@ describe('what can be copied', () => {
     removeQuarantined.mockRejectedValue(new Error('EACCES: permission denied'));
     const { user } = await uninstall();
 
-    await user.click(await screen.findByRole('button', { name: 'Scan' }));
+    await user.click(await screen.findByRole('button', { name: 'Scan for leftovers' }));
     await user.click(await screen.findByRole('button', { name: 'Remove selected' }));
     expect(isCopyable(await screen.findByText(/Removal failed: EACCES/))).toBe(true);
   });
@@ -142,7 +142,7 @@ describe('what can be copied', () => {
     });
     const { user } = await uninstall();
 
-    await user.click(await screen.findByRole('button', { name: 'Scan' }));
+    await user.click(await screen.findByRole('button', { name: 'Scan for leftovers' }));
     await user.click(await screen.findByRole('button', { name: 'Delete permanently' }));
     expect(isCopyable(await screen.findByText(/The file is in use/))).toBe(true);
   });
@@ -151,14 +151,14 @@ describe('what can be copied', () => {
 describe('ticking leftovers', () => {
   it('starts with everything ticked, as it always has', async () => {
     const { user } = await uninstall();
-    await user.click(await screen.findByRole('button', { name: 'Scan' }));
+    await user.click(await screen.findByRole('button', { name: 'Scan for leftovers' }));
     expect(await screen.findByText(/^2$/)).toBeTruthy();
   });
 
   it('starts with nothing ticked when the setting is off', async () => {
     fetchSettings.mockResolvedValue({ preselectLeftovers: false });
     const { user } = await uninstall();
-    await user.click(await screen.findByRole('button', { name: 'Scan' }));
+    await user.click(await screen.findByRole('button', { name: 'Scan for leftovers' }));
     expect(await screen.findByText(/^0$/)).toBeTruthy();
   });
 });
@@ -183,14 +183,14 @@ describe('the leftover scan', () => {
   it('lands on a manual readyToScan step after a real uninstall, without scanning yet -- Revo-style, no racing the still-finishing native uninstaller', async () => {
     await uninstall();
 
-    expect(await screen.findByRole('button', { name: 'Scan' })).toBeTruthy();
+    expect(await screen.findByRole('button', { name: 'Scan for leftovers' })).toBeTruthy();
     expect(scanForLeftovers).not.toHaveBeenCalled();
   });
 
   it('only scans once Scan is clicked on the readyToScan step, then proceeds through scanning to review', async () => {
     const { user } = await uninstall();
 
-    const scanButton = await screen.findByRole('button', { name: 'Scan' });
+    const scanButton = await screen.findByRole('button', { name: 'Scan for leftovers' });
     expect(scanForLeftovers).not.toHaveBeenCalled();
     await user.click(scanButton);
 
@@ -201,7 +201,7 @@ describe('the leftover scan', () => {
   it('closes without ever scanning when Close is clicked on the readyToScan step', async () => {
     const { user, onClose } = await uninstall();
 
-    await screen.findByRole('button', { name: 'Scan' });
+    await screen.findByRole('button', { name: 'Scan for leftovers' });
     // Two "Close" buttons exist once the readyToScan step is up: the
     // dialog header's own, and the readyToScan step's cancel action --
     // both wired to onClose, but this test targets the new one, which
@@ -217,11 +217,11 @@ describe('the leftover scan', () => {
     scanForLeftovers.mockRejectedValueOnce(new Error('The registry could not be read.'));
     const { user } = await uninstall();
 
-    await user.click(await screen.findByRole('button', { name: 'Scan' }));
+    await user.click(await screen.findByRole('button', { name: 'Scan for leftovers' }));
     expect(await screen.findByText(/Scan failed: The registry could not be read/)).toBeTruthy();
     // Still on readyToScan (Scan button is back), not the normal-flow confirm view.
-    expect(screen.getByRole('button', { name: 'Scan' })).toBeTruthy();
-    expect(screen.queryByRole('button', { name: 'Start uninstall' })).toBeNull();
+    expect(screen.getByRole('button', { name: 'Scan for leftovers' })).toBeTruthy();
+    expect(screen.queryByRole('button', { name: 'Start uninstalling' })).toBeNull();
   });
 });
 
@@ -229,7 +229,7 @@ describe('the "automatically delete all found leftovers" checkbox', () => {
   it('is unticked by default, and the flow still lands on review after Scan -- unchanged regression coverage', async () => {
     const { user } = await uninstall();
 
-    await user.click(await screen.findByRole('button', { name: 'Scan' }));
+    await user.click(await screen.findByRole('button', { name: 'Scan for leftovers' }));
     await waitFor(() => expect(scanForLeftovers).toHaveBeenCalledTimes(1));
     // The review screen renders (its own "Remove selected" action), and
     // removeQuarantined has NOT run yet -- it waits for that click, exactly
@@ -245,8 +245,8 @@ describe('the "automatically delete all found leftovers" checkbox', () => {
     // The checkbox lives on the confirm step, above "Start uninstall" --
     // it has to be ticked before that click, not after.
     await user.click(screen.getByRole('checkbox', { name: /Automatically remove everything the scan finds/i }));
-    await user.click(screen.getByRole('button', { name: 'Start uninstall' }));
-    await user.click(await screen.findByRole('button', { name: 'Scan' }));
+    await user.click(screen.getByRole('button', { name: 'Start uninstalling' }));
+    await user.click(await screen.findByRole('button', { name: 'Scan for leftovers' }));
 
     // Lands on 'done' without ever rendering the review step's own controls.
     expect(await screen.findByRole('button', { name: 'Done' })).toBeTruthy();
@@ -266,8 +266,8 @@ describe('the "automatically delete all found leftovers" checkbox', () => {
     const user = userEvent.setup();
     renderScreen(<UninstallModal program={program} onClose={vi.fn()} />);
     await user.click(screen.getByRole('checkbox', { name: /Automatically remove everything the scan finds/i }));
-    await user.click(screen.getByRole('button', { name: 'Start uninstall' }));
-    await user.click(await screen.findByRole('button', { name: 'Scan' }));
+    await user.click(screen.getByRole('button', { name: 'Start uninstalling' }));
+    await user.click(await screen.findByRole('button', { name: 'Scan for leftovers' }));
 
     expect(await screen.findByText(/Removal failed: EACCES/)).toBeTruthy();
     // Landed on the manual review screen, not stuck or silently dropped.

@@ -171,22 +171,35 @@ export default function LeftoverReview({ scanResult, selected, onToggle, onConfi
           {t('leftoverReview.excludedNote', excluded)}
         </p>
       )}
-      <p className={`text-[12px] mt-4 ${copy.danger ? 'text-[color:var(--danger)]' : 'text-[color:var(--text-secondary)]'}`}>
-        {copy.text}
-      </p>
-
-      <div className="flex items-center justify-between mt-4 pt-4 border-t border-[color:var(--border-subtle)]">
-        <div className="text-[12px] text-[color:var(--text-secondary)]">
-          <span className="text-[color:var(--text-primary)] font-medium">{selectedCount}</span> {t('leftoverReview.itemsSelected')}
-          {selectedSize > 0 && (
-            <> · <span className="text-[color:var(--accent-primary)] font-medium">{formatBytes(selectedSize)}</span> {t('leftoverReview.reclaimable')}</>
-          )}
-        </div>
-        <div className="flex items-center gap-2.5">
-          <button className="btn-ghost px-4 py-2 rounded-lg text-[12.5px] font-medium" onClick={onSkip}>{t('leftoverReview.skip')}</button>
-          <button className={`${copy.danger ? 'btn-danger' : 'btn-primary'} px-4 py-2 rounded-lg text-[12.5px] font-medium`} onClick={onConfirm}>
-            {copy.button}
-          </button>
+      {/* Sticky to the bottom of the dialog body, which is the scroll
+          container (both dialogs cap their height and scroll the body). The
+          list above can be hundreds of rows long; at 900x600 the buttons used
+          to sit below the fold with no hint they existed. The consequence
+          sentence travels with them so what a click does is always in view
+          next to the click. The negative margins and matching padding are
+          the body's own padding: sticky sticks to the scrollport edge, and
+          without them list rows would scroll visibly through that gap. The
+          background is the opaque panel colour for the same reason. */}
+      <div
+        data-leftover-actions
+        className="sticky bottom-0 -mx-6 -mb-5 mt-4 px-6 pt-4 pb-5 bg-[color:var(--bg-panel)] border-t border-[color:var(--border-subtle)]"
+      >
+        <p className={`text-[12px] mb-3 ${copy.danger ? 'text-[color:var(--danger)]' : 'text-[color:var(--text-secondary)]'}`}>
+          {copy.text}
+        </p>
+        <div className="flex items-center justify-between gap-4">
+          <div className="text-[12px] text-[color:var(--text-secondary)]">
+            <span className="text-[color:var(--text-primary)] font-medium">{selectedCount}</span> {t('leftoverReview.itemsSelected')}
+            {selectedSize > 0 && (
+              <> · <span className="text-[color:var(--accent-primary)] font-medium">{formatBytes(selectedSize)}</span> {t('leftoverReview.reclaimable')}</>
+            )}
+          </div>
+          <div className="flex items-center gap-2.5 shrink-0">
+            <button className="btn-ghost px-4 py-2 rounded-lg text-[12.5px] font-medium" onClick={onSkip}>{t('leftoverReview.skip')}</button>
+            <button className={`${copy.danger ? 'btn-danger' : 'btn-primary'} px-4 py-2 rounded-lg text-[12.5px] font-medium`} onClick={onConfirm}>
+              {copy.button}
+            </button>
+          </div>
         </div>
       </div>
     </div>

@@ -1,4 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
+import { keys } from './lib/queryClient.js';
 import NavRail from './components/NavRail.jsx';
 import TitleBar from './components/TitleBar.jsx';
 import Dashboard from './components/Dashboard.jsx';
@@ -52,6 +54,15 @@ export default function App() {
   // does not have.
   const [storeAppToRemove, setStoreAppToRemove] = useState(null);
 
+  /* Whether the open uninstall dialog is in the middle of something it
+   * cannot take back: a running uninstaller, a scan, a removal. Only one of
+   * the three dialogs is ever open, so one flag serves them. Each reports it
+   * through onBusyChange, and it turns Escape off (dismissible below). A
+   * dialog closed mid-uninstall would keep running behind a screen that
+   * still lists the program. */
+  const [dialogBusy, setDialogBusy] = useState(false);
+  const queryClient = useQueryClient();
+
   // Eight endpoints, merged at render. See hooks/usePrograms.js -- the
   // separation is load-bearing, not tidiness: these all cache on the
   // backend, so a warmed one can reply before the program list does, and
@@ -59,6 +70,18 @@ export default function App() {
   // the fast answer.
   const { programs, icons, totalSize, extensions, running, loading, error, refresh: refreshPrograms } =
     useProgramData();
+
+  /* What every one of the three dialogs does when it closes, however it was
+   * closed (its own button, Escape, a Done). The single-program dialog used to
+   * close without telling anyone, so an uninstalled program stayed in the list
+   * until something else refreshed it; and what a removal moved into
+   * Quarantine was not on that screen until it was next fetched. */
+  const closeDialog = (clear) => () => {
+    clear(null);
+    setDialogBusy(false);
+    refreshPrograms();
+    queryClient.invalidateQueries({ queryKey: keys.quarantine });
+  };
 
   /* Reads the startup screen's list and icons while the app is idle.
    *
@@ -165,36 +188,41 @@ export default function App() {
       {batchPrograms && (
         <ModalOverlay
           label={t('batchUninstallModal.title', batchPrograms.length)}
-          onClose={() => setBatchPrograms(null)}
+          onClose={closeDialog(setBatchPrograms)}
+          dismissible={!dialogBusy}
         >
           <BatchUninstallModal
             programs={batchPrograms}
-            onClose={() => setBatchPrograms(null)}
-            onFinished={refreshPrograms}
+            onClose={closeDialog(setBatchPrograms)}
+            onBusyChange={setDialogBusy}
           />
         </ModalOverlay>
       )}
       {storeAppToRemove && (
         <ModalOverlay
           label={t('app.removeStoreApp', storeAppToRemove.name)}
-          onClose={() => setStoreAppToRemove(null)}
+          onClose={closeDialog(setStoreAppToRemove)}
+          dismissible={!dialogBusy}
         >
           <StoreRemoveDialog
             app={storeAppToRemove}
-            onClose={() => setStoreAppToRemove(null)}
+            onClose={closeDialog(setStoreAppToRemove)}
             onRemoved={refreshPrograms}
+            onBusyChange={setDialogBusy}
           />
         </ModalOverlay>
       )}
       {selectedProgram && (
         <ModalOverlay
           label={t('uninstallModal.titleNormal', selectedProgram.name)}
-          onClose={() => setSelectedProgram(null)}
+          onClose={closeDialog(setSelectedProgram)}
+          dismissible={!dialogBusy}
         >
           <UninstallModal
             program={selectedProgram}
             running={Boolean(running[selectedProgram.id])}
-            onClose={() => setSelectedProgram(null)}
+            onClose={closeDialog(setSelectedProgram)}
+            onBusyChange={setDialogBusy}
           />
         </ModalOverlay>
       )}

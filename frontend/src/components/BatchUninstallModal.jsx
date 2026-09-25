@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useSingleFlight } from '../hooks/useSingleFlight.js';
 import { streamUninstall, removeStoreApp, scanForLeftovers, removeQuarantined, appendHistoryEntry } from '../lib/api.js';
 import { deriveSearchTerm } from '../lib/searchTerm.js';
@@ -43,7 +43,26 @@ const STATUS_STYLE = {
   pending: 'text-[color:var(--text-muted)]',
   running: 'text-[color:var(--accent-primary)]',
   done: 'text-[color:var(--success)]',
-  failed: 'text-[color:var(--danger)]'
+  failed: 'text-[color:var(--danger)]',
+  // Neither a success nor a failure: it was never attempted.
+  skipped: 'text-[color:var(--text-muted)]'
+};
+
+/** How the outcome banner is drawn, chosen from the counts and never fixed.
+ * It used to be green whatever happened, so a batch in which nothing was
+ * uninstalled opened with a green "Uninstalled 0 of 3." The tone is the
+ * claim: green only when everything asked for was done, red when nothing
+ * was, amber for everything between (including a batch stopped early). */
+export function batchOutcomeTone(removed, total) {
+  if (removed <= 0) return 'danger';
+  if (removed >= total) return 'success';
+  return 'warning';
+}
+
+const OUTCOME_BANNER = {
+  success: 'bg-[color:var(--success)]/10 border-[color:var(--success)]/25 text-[color:var(--success)]',
+  warning: 'bg-[color:var(--warning-soft)] border-[color:var(--warning)]/25 text-[color:var(--warning)]',
+  danger: 'bg-[color:var(--danger-soft)] border-[color:var(--danger)]/25 text-[color:var(--danger)]'
 };
 
 /** Runs several uninstallers in turn, then reviews everything they left
@@ -58,7 +77,7 @@ const STATUS_STYLE = {
  * One program failing doesn't stop the queue. A batch that abandoned the
  * remaining nine because the first one errored would be worse than
  * uninstalling them one at a time. */
-export default function BatchUninstallModal({ programs, onClose, onFinished }) {
+export default function BatchUninstallModal({ programs, onClose, onFinished, onBusyChange }) {
   const { t } = useLanguage();
 
   const REMOVING_LINE = {
@@ -70,7 +89,8 @@ export default function BatchUninstallModal({ programs, onClose, onFinished }) {
     pending: t('batchUninstallModal.status.waiting'),
     running: t('batchUninstallModal.status.uninstalling'),
     done: t('batchUninstallModal.status.removed'),
-    failed: t('batchUninstallModal.status.failed')
+    failed: t('batchUninstallModal.status.failed'),
+    skipped: t('batchUninstallModal.statusSkipped')
   };
 
   const [phase, setPhase] = useState('confirm');
@@ -89,6 +109,14 @@ export default function BatchUninstallModal({ programs, onClose, onFinished }) {
   // gate opens; read once the gate's own Scan button is clicked. See
   // docs/superpowers/specs/2026-09-19-batch-uninstall-scan-gate-design.md.
   const [scannable, setScannable] = useState([]);
+  // "Stop after this one". A ref for the loop to read (it is a closure that
+  // outlives many renders) and state for the button to show it was heard.
+  // It ends the queue BETWEEN programs and never touches the one running:
+  // killing a half-run uninstaller is how a program ends up neither
+  // installed nor removed.
+  const stopRequested = useRef(false);
+  const [stopping, setStopping] = useState(false);
+  const requestStop = () => { stopRequested.current = true; setStopping(true); };
 
   // The same three settings the single-program dialog follows, read the
   // same way: a failed settings request leaves the batch as it always was.
@@ -98,6 +126,15 @@ export default function BatchUninstallModal({ programs, onClose, onFinished }) {
   const scanAfter = settings?.scanLeftoversAfterUninstall !== false;
 
   const summary = batchSummary(programs);
+
+  /* Working, as opposed to waiting on the person; see UninstallModal. The
+   * parent turns Escape off while this is true, and the Close button below
+   * refuses on the same condition. */
+  const busy = phase === 'running' || phase === 'scanning' || phase === 'removing';
+  const onBusyChangeRef = useRef(onBusyChange);
+  onBusyChangeRef.current = onBusyChange;
+  useEffect(() => { onBusyChangeRef.current?.(busy); }, [busy]);
+  useEffect(() => () => onBusyChangeRef.current?.(false), []);
 
   /* Dependents before the program they uninstall through. A Steam game's
    * uninstall command IS steam.exe, so removing Steam first would leave
@@ -123,6 +160,13 @@ export default function BatchUninstallModal({ programs, onClose, onFinished }) {
     const succeeded = [];
 
     for (const program of ordered) {
+      // Checked before each program starts, so a program already running
+      // always finishes. Everything after the stop is marked, not dropped:
+      // the list must still say what happened to each one.
+      if (stopRequested.current) {
+        setStatus(program.id, { state: 'skipped' });
+        continue;
+      }
       setStatus(program.id, { state: 'running' });
       try {
         // A Store app has no registered uninstall command for the stream to
@@ -251,23 +295,30 @@ export default function BatchUninstallModal({ programs, onClose, onFinished }) {
 
   const failed = programs.filter((p) => statuses[p.id]?.state === 'failed');
   const removed = programs.filter((p) => statuses[p.id]?.state === 'done');
+  const skipped = programs.filter((p) => statuses[p.id]?.state === 'skipped');
+  const pendingCount = programs.filter((p) => statuses[p.id]?.state === 'pending').length;
+  const outcomeTone = batchOutcomeTone(removed.length, programs.length);
+  // Nothing to stop once the last program has started.
+  const canStop = phase === 'running' && pendingCount > 0;
+  // One program is not a "batch" to the person who ticked one row.
+  const singleRegistry = programs.length === 1 && registryCount === 1;
 
   return (
-    <div className="glass-panel rounded-2xl overflow-hidden max-w-[720px] w-full flex flex-col max-h-[85vh]">
+    <div data-modal-panel className="glass-panel rounded-2xl overflow-hidden max-w-[720px] w-full flex flex-col max-h-[85vh]">
       <div className="flex items-center justify-between px-6 py-5 border-b border-[color:var(--border-subtle)] shrink-0">
         <h2 className="text-[15px] font-semibold tracking-tight text-[color:var(--text-primary)]">
           {t('batchUninstallModal.title', programs.length)}
         </h2>
         <button
           onClick={onClose}
-          disabled={phase === 'running' || phase === 'scanning' || phase === 'removing'}
+          disabled={busy}
           className="btn-ghost px-3 py-1.5 rounded-lg text-[12px] font-medium disabled:opacity-40"
         >
           {t('batchUninstallModal.close')}
         </button>
       </div>
 
-      <div className="px-6 py-5 overflow-y-auto min-h-0">
+      <div data-modal-body className="px-6 py-5 overflow-y-auto min-h-0">
         {phase === 'confirm' && (
           <>
             {/* What will actually happen, which depends on what was ticked.
@@ -277,6 +328,12 @@ export default function BatchUninstallModal({ programs, onClose, onFinished }) {
             {registryCount === 0 ? (
               <p className="text-[13px] text-[color:var(--text-secondary)] mb-5">
                 {t('batchUninstallModal.registryOnlyIntro')}
+              </p>
+            ) : singleRegistry ? (
+              // The same sentence the single-program dialog uses, and none of
+              // the talk of turns and queues that means nothing for one.
+              <p className="text-[13px] text-[color:var(--text-secondary)] mb-5">
+                {t('uninstallModal.normalIntro', programs[0].name)}
               </p>
             ) : (
               <>
@@ -327,9 +384,14 @@ export default function BatchUninstallModal({ programs, onClose, onFinished }) {
                 {t('batchUninstallModal.reported', formatBytes(summary.totalBytes))}
                 {summary.unknownSizes > 0 && t('batchUninstallModal.unknownSizeSuffix', summary.unknownSizes)}
               </span>
-              <button className="btn-primary px-5 py-2 text-[12.5px] font-medium" onClick={runBatch}>
-                {t('batchUninstallModal.startButton')}
-              </button>
+              <div className="flex items-center gap-2.5 shrink-0">
+                <button className="btn-ghost px-3 py-1.5 rounded-lg text-[12px] font-medium" onClick={onClose}>
+                  {t('batchUninstallModal.cancel')}
+                </button>
+                <button className="btn-primary px-5 py-2 text-[12.5px] font-medium" onClick={runBatch}>
+                  {t('batchUninstallModal.startButton')}
+                </button>
+              </div>
             </div>
           </>
         )}
@@ -347,6 +409,19 @@ export default function BatchUninstallModal({ programs, onClose, onFinished }) {
                 </div>
               );
             })}
+            {canStop && (
+              <div className="pt-3">
+                <button
+                  type="button"
+                  className="btn-ghost px-3 py-1.5 rounded-lg text-[12px] font-medium disabled:opacity-60"
+                  onClick={requestStop}
+                  disabled={stopping}
+                  aria-busy={stopping || undefined}
+                >
+                  {stopping ? t('batchUninstallModal.stopping') : t('batchUninstallModal.stopAfterThis')}
+                </button>
+              </div>
+            )}
             {phase === 'removing' && (
               <p className="text-[12.5px] text-[color:var(--text-secondary)] pt-3">
                 {REMOVING_LINE[destination]}
@@ -375,11 +450,21 @@ export default function BatchUninstallModal({ programs, onClose, onFinished }) {
 
         {phase === 'review' && leftovers && (
           <>
-            <div className="flex items-center gap-2.5 mb-4 px-3.5 py-3 rounded-xl bg-[color:var(--success)]/10 border border-[color:var(--success)]/25">
-              <p className="text-[12.5px] text-[color:var(--success)]">
+            <div
+              role="status"
+              data-outcome-tone={outcomeTone}
+              className={`flex items-center gap-2.5 mb-4 px-3.5 py-3 rounded-xl border ${OUTCOME_BANNER[outcomeTone]}`}
+            >
+              <p className="text-[12.5px]">
                 {t('batchUninstallModal.uninstalledOf', removed.length, programs.length)}
               </p>
             </div>
+
+            {skipped.length > 0 && (
+              <p className="text-[12px] text-[color:var(--text-muted)] mb-4">
+                {t('batchUninstallModal.stoppedNote', skipped.length)}
+              </p>
+            )}
 
             {failed.length > 0 && (
               <div className="mb-4 px-3.5 py-3 rounded-xl bg-[color:var(--danger-soft)] border border-[color:var(--danger)]/25">
