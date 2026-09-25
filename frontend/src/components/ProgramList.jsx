@@ -114,7 +114,17 @@ const TABLE_VARS = {
 export const ROW_GRID = 'grid gap-2.5 px-4 items-center min-w-[var(--min-narrow)] min-[1380px]:min-w-[var(--min-wide)] [grid-template-columns:var(--cols-narrow)] min-[1380px]:[grid-template-columns:var(--cols-wide)]';
 /** The action column stays in view when the table scrolls sideways, on the
  * panel's own colour so the cells scrolling underneath do not show through. */
-export const STICKY_ACTION = 'sticky right-0 z-[1] bg-[color:var(--bg-panel)] pl-2 group-hover:[background-image:linear-gradient(var(--surface-hover),var(--surface-hover))]';
+/* The action column stays in view when the table scrolls sideways. The CELL
+ * has no background, on purpose: it used to paint an opaque panel-coloured
+ * box on every row, a visible ghost rectangle at rest that also hid the
+ * Company column beneath it. What needs to be legible over the columns under
+ * it is only the buttons, and only while they are showing, so the backing
+ * belongs to them (ACTION_BACKING) and appears with them. */
+export const STICKY_ACTION = 'sticky right-0 z-[1] pl-2';
+/** The buttons' group: invisible at rest, shown on hover or when anything in
+ * the row has keyboard focus, and only then opaque, so it never paints a box
+ * of its own colour into the glass. */
+export const ACTION_BACKING = 'inline-flex items-center gap-1.5 rounded-md bg-[color:var(--bg-panel)] opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity';
 
 /** The program's own icon, falling back to a lettered tile.
  *
@@ -233,7 +243,7 @@ function RevealButton({ program }) {
         }
       }}
       aria-label={t('applications.reveal.ariaLabel', program.name)}
-      className="btn-ghost px-2 py-1 rounded-md text-[11px] font-medium opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 focus-visible:opacity-100 transition-opacity"
+      className="btn-ghost px-2 py-1 rounded-md text-[11px] font-medium"
     >
       {failed ? t('applications.reveal.notFound') : t('applications.reveal.button')}
     </button>
@@ -362,11 +372,18 @@ function ProgramRow({ program, iconSrc, checked, running, isNew, onToggle, onUni
     </div>
 
     <div role="cell" className={`${STICKY_ACTION} text-right flex items-center justify-end gap-1.5`}>
-      <RevealButton program={program} />
       {program.source === 'extension' ? (
-        // Removing one is a browser operation, not an uninstaller.
-        <span className="text-[11px] font-mono text-[color:var(--text-muted)]">{t('applications.viaBrowser')}</span>
-      ) : program.source === 'store' && program.nonRemovable ? (
+        <>
+          {program.installLocation && (
+            <div data-action-backing className={ACTION_BACKING}><RevealButton program={program} /></div>
+          )}
+          {/* Removing one is a browser operation, not an uninstaller. */}
+          <span className="text-[11px] font-mono text-[color:var(--text-muted)]">{t('applications.viaBrowser')}</span>
+        </>
+      ) : (
+      <div data-action-backing className={ACTION_BACKING}>
+      <RevealButton program={program} />
+      {program.source === 'store' && program.nonRemovable ? (
         /* Windows marks this package as part of the system and will not
          * let it go -- on the dev machine that is the Security interface
          * and the app installer. Prune could offer a button and let
@@ -376,7 +393,7 @@ function ProgramRow({ program, iconSrc, checked, running, isNew, onToggle, onUni
         <button
           onClick={() => { openInstalledAppsSettings().catch(() => {}); }}
           aria-label={t('applications.inWindows.ariaLabel', program.name)}
-          className="btn-ghost px-2 py-1 rounded-md text-[11px] font-medium opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 focus-visible:opacity-100 transition-opacity"
+          className="btn-ghost px-2 py-1 rounded-md text-[11px] font-medium"
         >
           {t('applications.inWindows.button')}
         </button>
@@ -387,17 +404,19 @@ function ProgramRow({ program, iconSrc, checked, running, isNew, onToggle, onUni
         // actually made, rather than crammed into a button.
         <button
           onClick={() => onRemoveStoreApp(program)}
-          className="btn-danger px-2.5 py-1 rounded-md text-[11px] font-medium opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 focus-visible:opacity-100 transition-opacity"
+          className="btn-danger px-2.5 py-1 rounded-md text-[11px] font-medium"
         >
           {t('applications.uninstall')}
         </button>
       ) : (
         <button
           onClick={() => onUninstall(program)}
-          className="btn-danger px-2.5 py-1 rounded-md text-[11px] font-medium opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 focus-visible:opacity-100 transition-opacity"
+          className="btn-danger px-2.5 py-1 rounded-md text-[11px] font-medium"
         >
           {program.health?.orphaned ? t('applications.forceRemove') : t('applications.uninstall')}
         </button>
+      )}
+      </div>
       )}
     </div>
   </div>
@@ -571,7 +590,7 @@ export default function ProgramList({ programs: initialPrograms, extensions = []
         <div
           role="row"
           data-table-header
-          className={`${ROW_GRID} sticky top-0 z-10 border-b border-[color:var(--border-subtle)] bg-[color:var(--bg-panel)] shrink-0`}
+          className={`${ROW_GRID} sticky top-0 z-10 border-b border-[color:var(--border-subtle)] bg-[color:var(--glass-bg)] backdrop-blur-xl shrink-0`}
         >
           {COLUMNS.map((col) => {
             const wide = NARROW_HIDDEN.includes(col.key);
