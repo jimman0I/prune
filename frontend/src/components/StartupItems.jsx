@@ -186,7 +186,9 @@ function StartupIcon({ item, src }) {
  * was closed) and one that is switched OFF may be running because
  * something else started it. And an entry whose file is gone is neither:
  * it is a leftover, which is the reason to be on this screen at all, so it
- * wins over the other two. */
+ * wins over the rest. Precedence: Invalid, then Off (the switch is off; the
+ * status says what Windows will do at sign-in), then Running, Not checked,
+ * Not running. */
 function StatusPill({ item }) {
   const { t } = useLanguage();
   const base = 'text-[10.5px] font-mono uppercase tracking-wider px-1.5 py-px rounded border shrink-0';
@@ -198,7 +200,9 @@ function StatusPill({ item }) {
       </span>
     );
   }
-  // Said in words. The row used to be dimmed to 55% opacity to show it, which
+  // A switched-off entry says Off (an entry something else started may still
+  // be running; the "running now" count above still includes it). Said in
+  // words. The row used to be dimmed to 55% opacity to show it, which
   // put every word in it below the contrast floor and made the one thing you
   // came here to read (the name) the hardest to read.
   if (item.enabled === false) {
@@ -226,15 +230,16 @@ function StatusPill({ item }) {
 function StartupRow({ item, iconSrc, pending, error, onToggle }) {
   return (
     <div
+      role="row"
       className={`${GRID_CLASS} gap-3 px-5 py-2 items-center transition-colors ${
         error ? 'bg-[color:var(--danger-soft)]' : 'hover:bg-[color:var(--surface-subtle)]'
       }`}
     >
-      <EnabledSwitch item={item} pending={pending} onToggle={onToggle} />
+      <div role="cell"><EnabledSwitch item={item} pending={pending} onToggle={onToggle} /></div>
 
-      <StartupIcon item={item} src={iconSrc} />
+      <div role="cell"><StartupIcon item={item} src={iconSrc} /></div>
 
-      <div className="min-w-0">
+      <div role="cell" className="min-w-0">
         <div className={`text-[12.5px] truncate ${item.enabled ? 'text-[color:var(--text-primary)]' : 'text-[color:var(--text-secondary)]'}`}>{item.name}</div>
         {/* Both of these say something the row cannot show any other way,
             so they are written out rather than hidden behind a hover --
@@ -249,19 +254,19 @@ function StartupRow({ item, iconSrc, pending, error, onToggle }) {
         )}
       </div>
 
-      <div className="text-[11px] font-mono text-[color:var(--text-muted)] truncate select-text">
+      <div role="cell" className="text-[11px] font-mono text-[color:var(--text-muted)] truncate select-text">
         {item.command}
       </div>
 
-      <div className={`${WIDE_ONLY_CELL} text-[11.5px] text-[color:var(--text-secondary)] truncate`}>
+      <div role="cell" className={`${WIDE_ONLY_CELL} text-[11.5px] text-[color:var(--text-secondary)] truncate`}>
         {item.description || '—'}
       </div>
 
-      <div className="text-[11.5px] text-[color:var(--text-secondary)] truncate">
+      <div role="cell" className="text-[11.5px] text-[color:var(--text-secondary)] truncate">
         {item.publisher || '—'}
       </div>
 
-      <div><StatusPill item={item} /></div>
+      <div role="cell"><StatusPill item={item} /></div>
     </div>
   );
 }
@@ -365,13 +370,15 @@ function StartupItems() {
             )}
           </div>
 
-          <div className="glass-panel overflow-hidden">
+          <div className="glass-panel overflow-hidden" role="table" aria-label={t('startup.title')}>
             <div
+              role="row"
               className={`${GRID_CLASS} gap-3 px-5 py-2 border-b border-[color:var(--border-subtle)] bg-[color:var(--surface-subtle)]`}
             >
               {COLUMNS.map((col) => (
                 <span
                   key={col.key}
+                  role="columnheader"
                   className={`${col.wideOnly ? `${WIDE_ONLY_CELL} ` : ''}text-[10.5px] font-mono uppercase tracking-[0.13em] text-[color:var(--text-muted)]`}
                 >
                   {COLUMN_KEYS[col.key] ? t(COLUMN_KEYS[col.key]) : ''}
@@ -380,11 +387,11 @@ function StartupItems() {
             </div>
 
             {groups.map((group) => (
-              <div key={group.key}>
+              <div key={group.key} role="rowgroup">
                 {/* Revo puts the count in the heading and it is the useful
                     part: "3 of 11 enabled" answers a question no row can. */}
-                <div className="flex items-baseline gap-2 px-5 py-1.5 bg-[color:var(--surface-subtle)] border-y border-[color:var(--border-subtle)]">
-                  <span className="text-[11px] font-mono uppercase tracking-[0.14em] text-[color:var(--text-secondary)]">
+                <div role="row" className="flex items-baseline gap-2 px-5 py-1.5 bg-[color:var(--surface-subtle)] border-y border-[color:var(--border-subtle)]">
+                  <span role="rowheader" aria-colspan={COLUMNS.length} className="text-[11px] font-mono uppercase tracking-[0.14em] text-[color:var(--text-secondary)]">
                     {group.label}
                   </span>
                   <span className="text-[11px] font-mono text-[color:var(--text-muted)]">
