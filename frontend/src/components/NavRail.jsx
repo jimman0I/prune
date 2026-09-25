@@ -172,7 +172,7 @@ function NavItem({ item, screen, onNavigate, label }) {
           />
         )}
         <span className="relative">{item.icon}</span>
-        <span aria-hidden="true" className="relative hidden min-[1100px]:block text-[13px] font-medium truncate">
+        <span aria-hidden="true" className="relative hidden min-[1100px]:block min-w-0 text-left text-[13px] leading-[1.15] font-medium [display:-webkit-box] [-webkit-line-clamp:2] [-webkit-box-orient:vertical] overflow-hidden">
           {label}
         </span>
       </motion.button>
@@ -202,7 +202,8 @@ function NavItem({ item, screen, onNavigate, label }) {
           flyout drops the name (`min-[1100px]:hidden` on it) and keeps only
           the key: a small chip beside the rail on hover or focus. Putting
           the key IN the row instead reserved ~38px the label needed -- at
-          200px it truncated "Applications". */}
+          200px it truncated "Applications". Labels wrap to two lines rather than
+          truncate: a longer translation (Greek "Αναφορά σφάλματος") lost its tail. */}
       <span
         aria-hidden="true"
         className="pointer-events-none absolute left-full top-1/2 -translate-y-1/2 ml-2 px-2 py-1 rounded-md whitespace-nowrap text-[11.5px] font-medium bg-[color:var(--bg-panel)] text-[color:var(--text-primary)] border border-[color:var(--border-subtle)] shadow-lg opacity-0 group-hover:opacity-100 peer-focus-visible:opacity-100 transition-opacity duration-150 z-flyout"
@@ -250,7 +251,7 @@ function ActionItem({ icon, label, onClick }) {
         className="peer relative w-11 h-11 rounded-xl flex items-center justify-center min-[1100px]:w-full min-[1100px]:justify-start min-[1100px]:gap-3 min-[1100px]:pl-[14px] min-[1100px]:pr-3 transition-colors text-[color:var(--text-secondary)] hover:text-[color:var(--text-primary)] hover:bg-[color:var(--surface-hover)]"
       >
         <span className="relative">{icon}</span>
-        <span aria-hidden="true" className="relative hidden min-[1100px]:block text-[13px] font-medium truncate">
+        <span aria-hidden="true" className="relative hidden min-[1100px]:block min-w-0 text-left text-[13px] leading-[1.15] font-medium [display:-webkit-box] [-webkit-line-clamp:2] [-webkit-box-orient:vertical] overflow-hidden">
           {label}
         </span>
       </button>
