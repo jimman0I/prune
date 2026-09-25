@@ -47,7 +47,7 @@ describe('POST /bug-report/open', () => {
     expect(opened.searchParams.get('title')).toBe('Crash');
     expect(opened.searchParams.get('body')).toContain('It closed & vanished');
     expect(opener).toHaveBeenCalledTimes(1);
-    expect(opener.mock.calls[0][1][0]).toBe(res.body.opened);
+    expect(opener.mock.calls[0][1].at(-1)).toBe(res.body.opened);
   });
 
   it('ignores any address sent with the request', async () => {
@@ -56,8 +56,8 @@ describe('POST /bug-report/open', () => {
     const res = await post({ url: 'https://evil.example.com/', title: 't', description: 'd' });
     expect(res.status).toBe(200);
     expect(res.body.opened.startsWith('https://github.com/jimman0I/prune/issues/new?')).toBe(true);
-    expect(opener.mock.calls[0][1][0].startsWith('https://github.com/jimman0I/prune/issues/new?')).toBe(true);
-    expect(opener.mock.calls[0][1][0]).not.toContain('evil.example.com');
+    expect(opener.mock.calls[0][1].at(-1).startsWith('https://github.com/jimman0I/prune/issues/new?')).toBe(true);
+    expect(opener.mock.calls[0][1].at(-1)).not.toContain('evil.example.com');
   });
 
   it('refuses an empty description without opening anything', async () => {
