@@ -285,8 +285,13 @@ export const CATALOG = {
       },
       driveRootPrompt: {
         heading: 'Read the whole drive',
-        fastExplain: (path) => `A fast scan reads the drive's own file index — every file on ${path} in a few seconds, which is how WizTree does it. Windows only lets a program read that index with administrator access, so this raises a UAC prompt.`,
-        crawlExplain: "The alternative walks folders one at a time. It needs no permission and is the right tool for a single folder, but it cannot finish a volume: on this drive it reached 4% of what's in use before running out of time, and the other 96% shows as unscanned rather than as anything useful.",
+        fastTitle: 'Fast scan',
+        recommended: 'Recommended',
+        fastExplain: (path) => `Reads the drive's own file index: every file on ${path} in a few seconds.`,
+        fastNeeds: 'Needs administrator approval, so Windows shows a UAC prompt.',
+        crawlTitle: 'Walk folders',
+        crawlExplain: 'Opens folders one at a time. No permission needed.',
+        crawlLimit: 'Right for a single folder. It cannot finish a whole drive, and most of it shows as unscanned.',
         crawlButton: 'Walk folders instead'
       },
       scanProgress: {
@@ -1040,8 +1045,13 @@ export const CATALOG = {
       },
       driveRootPrompt: {
         heading: 'Lees die hele skyf',
-        fastExplain: (path) => `'n Vinnige skandering lees die skyf se eie lêerindeks — elke lêer op ${path} in 'n paar sekondes, soos WizTree dit doen. Windows laat 'n program slegs met administrateurtoegang daardie indeks lees, dus veroorsaak dit 'n UAC-versoek.`,
-        crawlExplain: "Die alternatief loop deur gidse een op 'n slag. Dit benodig geen toestemming nie en is die regte manier vir 'n enkele gids, maar dit kan nie 'n hele volume voltooi nie: op hierdie skyf het dit 4% van wat in gebruik is, bereik voor tyd opgeraak het, en die ander 96% word as ongeskandeer gewys eerder as iets bruikbaars.",
+        fastTitle: "Vinnige skandering",
+        recommended: "Aanbeveel",
+        fastExplain: (path) => `Lees die skyf se eie lêerindeks: elke lêer op ${path} in 'n paar sekondes.`,
+        fastNeeds: "Vereis administrateurgoedkeuring, dus wys Windows 'n UAC-versoek.",
+        crawlTitle: "Loop deur gidse",
+        crawlExplain: "Maak gidse een op 'n slag oop. Geen toestemming nodig nie.",
+        crawlLimit: "Reg vir 'n enkele gids. Dit kan nie 'n hele skyf voltooi nie, en die meeste daarvan word as ongeskandeer gewys.",
         crawlButton: 'Loop eerder deur gidse'
       },
       scanProgress: {
@@ -1795,8 +1805,13 @@ export const CATALOG = {
       },
       driveRootPrompt: {
         heading: 'قراءة القرص بأكمله',
-        fastExplain: (path) => `يقرأ الفحص السريع فهرس ملفات القرص نفسه — كل ملف على ${path} في ثوانٍ معدودة، بنفس طريقة WizTree. لا يسمح Windows لأي برنامج بقراءة ذلك الفهرس إلا بصلاحيات المسؤول، لذا يظهر طلب UAC.`,
-        crawlExplain: 'البديل يمر عبر المجلدات واحدًا تلو الآخر. لا يحتاج إلى أي إذن وهو الأداة المناسبة لمجلد واحد، لكنه لا يستطيع إنهاء مجلد كامل: على هذا القرص وصل إلى 4% مما هو مستخدم قبل نفاد الوقت، وتظهر النسبة الأخرى 96% كغير مفحوصة بدلاً من أي شيء مفيد.',
+        fastTitle: "فحص سريع",
+        recommended: "موصى به",
+        fastExplain: (path) => `يقرأ فهرس الملفات الخاص بالقرص: كل ملف على ${path} في ثوانٍ معدودة.`,
+        fastNeeds: "يتطلب موافقة المسؤول، لذا يعرض Windows طلب UAC.",
+        crawlTitle: "المرور عبر المجلدات",
+        crawlExplain: "يفتح المجلدات واحدًا تلو الآخر. لا يحتاج إلى أي إذن.",
+        crawlLimit: "مناسب لمجلد واحد. لا يستطيع إنهاء قرص كامل، ويظهر معظمه كغير مفحوص.",
         crawlButton: 'المرور عبر المجلدات بدلاً من ذلك'
       },
       scanProgress: {
@@ -2550,8 +2565,13 @@ export const CATALOG = {
       },
       driveRootPrompt: {
         heading: 'Llegeix tot el disc',
-        fastExplain: (path) => `Un escaneig ràpid llegeix l'índex de fitxers propi del disc — cada fitxer de ${path} en pocs segons, tal com fa WizTree. El Windows només deixa a un programa llegir aquest índex amb accés d'administrador, per això apareix un avís UAC.`,
-        crawlExplain: "L'alternativa recorre les carpetes d'una en una. No necessita cap permís i és l'eina adequada per a una sola carpeta, però no pot acabar un volum sencer: en aquest disc va arribar al 4% del que s'utilitza abans d'esgotar el temps, i l'altre 96% es mostra com a no escanejat en lloc de com a res útil.",
+        fastTitle: "Escaneig ràpid",
+        recommended: "Recomanat",
+        fastExplain: (path) => `Llegeix l'índex de fitxers propi del disc: cada fitxer de ${path} en pocs segons.`,
+        fastNeeds: "Necessita l'aprovació de l'administrador, per això el Windows mostra un avís UAC.",
+        crawlTitle: "Recórrer carpetes",
+        crawlExplain: "Obre les carpetes una per una. No cal cap permís.",
+        crawlLimit: "Adequat per a una sola carpeta. No pot acabar un disc sencer i la major part apareix com a no escanejada.",
         crawlButton: "Recorre les carpetes en lloc d'això"
       },
       scanProgress: {
@@ -3305,8 +3325,13 @@ export const CATALOG = {
       },
       driveRootPrompt: {
         heading: 'Načíst celý disk',
-        fastExplain: (path) => `Rychlé prohledání načte vlastní souborový index disku — každý soubor na ${path} za pár sekund, stejně jako to dělá WizTree. Windows umožňuje programu číst tento index pouze s oprávněním správce, takže se zobrazí výzva UAC.`,
-        crawlExplain: 'Alternativa prochází složky jednu po druhé. Nevyžaduje žádné oprávnění a je vhodná pro jednu složku, ale nedokáže dokončit celý svazek: na tomto disku dosáhla 4 % využitého místa, než jí došel čas, a zbylých 96 % se zobrazuje jako neprohledáno místo jako cokoli užitečného.',
+        fastTitle: "Rychlé prohledání",
+        recommended: "Doporučeno",
+        fastExplain: (path) => `Načte vlastní souborový index disku: každý soubor na ${path} za pár sekund.`,
+        fastNeeds: "Vyžaduje schválení správcem, proto Windows zobrazí výzvu UAC.",
+        crawlTitle: "Procházet složky",
+        crawlExplain: "Otevírá složky jednu po druhé. Není potřeba žádné oprávnění.",
+        crawlLimit: "Vhodné pro jednu složku. Celý disk dokončit nedokáže a většina z něj se zobrazí jako neprohledaná.",
         crawlButton: 'Místo toho procházet složky'
       },
       scanProgress: {
@@ -4060,8 +4085,13 @@ export const CATALOG = {
       },
       driveRootPrompt: {
         heading: 'Darllen y ddisg gyfan',
-        fastExplain: (path) => `Mae sgan cyflym yn darllen mynegai ffeiliau ei hun y ddisg — pob ffeil ar ${path} mewn ychydig eiliadau, yr un ffordd ag y mae WizTree yn ei wneud. Dim ond gyda mynediad gweinyddwr y mae Windows yn gadael i raglen ddarllen y mynegai hwnnw, felly mae hyn yn codi cais UAC.`,
-        crawlExplain: "Mae'r dewis arall yn cerdded drwy ffolderi fesul un. Nid oes angen unrhyw ganiatâd arno ac mae'n arf priodol ar gyfer un ffolder, ond ni all orffen cyfrol gyfan: ar y ddisg hon fe gyrhaeddodd 4% o'r hyn sydd mewn defnydd cyn i amser redeg allan, ac mae'r 96% arall yn dangos fel heb ei sganio yn hytrach nag unrhyw beth defnyddiol.",
+        fastTitle: "Sgan cyflym",
+        recommended: "Argymhellir",
+        fastExplain: (path) => `Yn darllen mynegai ffeiliau'r ddisg ei hun: pob ffeil ar ${path} mewn ychydig eiliadau.`,
+        fastNeeds: "Mae angen cymeradwyaeth gweinyddwr, felly mae Windows yn dangos anogwr UAC.",
+        crawlTitle: "Cerdded drwy ffolderi",
+        crawlExplain: "Yn agor ffolderi fesul un. Nid oes angen caniatâd.",
+        crawlLimit: "Yn iawn ar gyfer un ffolder. Ni all orffen disg gyfan, ac mae'r rhan fwyaf ohoni'n ymddangos heb ei sganio.",
         crawlButton: "Cerdded drwy ffolderi yn lle hynny"
       },
       scanProgress: {
@@ -4815,8 +4845,13 @@ export const CATALOG = {
       },
       driveRootPrompt: {
         heading: 'Læs hele disken',
-        fastExplain: (path) => `En hurtig scanning læser diskens eget filindeks — hver fil på ${path} på få sekunder, ligesom WizTree gør det. Windows tillader kun et program at læse dette indeks med administratoradgang, så dette udløser en UAC-anmodning.`,
-        crawlExplain: 'Alternativet gennemgår mapper én ad gangen. Det kræver ingen tilladelse og er det rette redskab til en enkelt mappe, men kan ikke gennemføre en hel diskenhed: på denne disk nåede den 4% af det brugte, før tiden løb ud, og de resterende 96% vises som uscannet i stedet for noget nyttigt.',
+        fastTitle: "Hurtig scanning",
+        recommended: "Anbefalet",
+        fastExplain: (path) => `Læser diskens eget filindeks: hver fil på ${path} på få sekunder.`,
+        fastNeeds: "Kræver administratorgodkendelse, så Windows viser en UAC-anmodning.",
+        crawlTitle: "Gennemgå mapper",
+        crawlExplain: "Åbner mapper én ad gangen. Ingen tilladelse nødvendig.",
+        crawlLimit: "Velegnet til én enkelt mappe. Den kan ikke fuldføre et helt drev, og det meste vises som ikke scannet.",
         crawlButton: 'Gennemgå mapper i stedet'
       },
       scanProgress: {
@@ -5570,8 +5605,13 @@ export const CATALOG = {
       },
       driveRootPrompt: {
         heading: 'Das ganze Laufwerk lesen',
-        fastExplain: (path) => `Ein Schnellscan liest den eigenen Dateiindex des Laufwerks — jede Datei auf ${path} in wenigen Sekunden, genau wie WizTree es macht. Windows erlaubt einem Programm nur mit Administratorrechten, diesen Index zu lesen, daher erscheint eine UAC-Aufforderung.`,
-        crawlExplain: 'Die Alternative durchläuft Ordner einzeln nacheinander. Sie benötigt keine Berechtigung und ist das richtige Werkzeug für einen einzelnen Ordner, kann aber kein ganzes Volume abschließen: Auf diesem Laufwerk erreichte sie 4 % des belegten Speicherplatzes, bevor die Zeit ablief, und die restlichen 96 % werden als nicht gescannt angezeigt statt als etwas Brauchbares.',
+        fastTitle: "Schnellscan",
+        recommended: "Empfohlen",
+        fastExplain: (path) => `Liest den eigenen Dateiindex des Laufwerks: jede Datei auf ${path} in wenigen Sekunden.`,
+        fastNeeds: "Erfordert Administratorgenehmigung, daher zeigt Windows eine UAC-Aufforderung.",
+        crawlTitle: "Ordner durchlaufen",
+        crawlExplain: "Öffnet Ordner einzeln nacheinander. Keine Berechtigung nötig.",
+        crawlLimit: "Richtig für einen einzelnen Ordner. Ein ganzes Laufwerk schafft es nicht, und der Großteil wird als nicht gescannt angezeigt.",
         crawlButton: 'Stattdessen Ordner durchlaufen'
       },
       scanProgress: {
@@ -6325,8 +6365,13 @@ export const CATALOG = {
       },
       driveRootPrompt: {
         heading: 'Ανάγνωση ολόκληρου του δίσκου',
-        fastExplain: (path) => `Μια γρήγορη σάρωση διαβάζει το δικό του ευρετήριο αρχείων του δίσκου — κάθε αρχείο στο ${path} μέσα σε λίγα δευτερόλεπτα, όπως ακριβώς το κάνει το WizTree. Τα Windows επιτρέπουν σε ένα πρόγραμμα να διαβάσει αυτό το ευρετήριο μόνο με πρόσβαση διαχειριστή, οπότε αυτό προκαλεί ένα αίτημα UAC.`,
-        crawlExplain: 'Η εναλλακτική διατρέχει τους φακέλους έναν προς έναν. Δεν χρειάζεται καμία άδεια και είναι το σωστό εργαλείο για έναν μόνο φάκελο, αλλά δεν μπορεί να ολοκληρώσει έναν ολόκληρο τόμο: σε αυτόν τον δίσκο έφτασε στο 4% του χώρου που χρησιμοποιείται πριν εξαντληθεί ο χρόνος, και το υπόλοιπο 96% εμφανίζεται ως μη σαρωμένο αντί για κάτι χρήσιμο.',
+        fastTitle: "Γρήγορη σάρωση",
+        recommended: "Προτείνεται",
+        fastExplain: (path) => `Διαβάζει το ίδιο το ευρετήριο αρχείων του δίσκου: κάθε αρχείο στο ${path} μέσα σε λίγα δευτερόλεπτα.`,
+        fastNeeds: "Απαιτεί έγκριση διαχειριστή, γι' αυτό τα Windows εμφανίζουν μήνυμα UAC.",
+        crawlTitle: "Διάτρεξη φακέλων",
+        crawlExplain: "Ανοίγει τους φακέλους έναν έναν. Δεν απαιτείται άδεια.",
+        crawlLimit: "Κατάλληλο για έναν μόνο φάκελο. Δεν μπορεί να ολοκληρώσει ολόκληρο δίσκο και το μεγαλύτερο μέρος του εμφανίζεται ως μη σαρωμένο.",
         crawlButton: "Διάτρεξε τους φακέλους αντ' αυτού"
       },
       scanProgress: {
@@ -7080,8 +7125,13 @@ export const CATALOG = {
       },
       driveRootPrompt: {
         heading: 'Leer todo el disco',
-        fastExplain: (path) => `Un escaneo rápido lee el propio índice de archivos del disco — cada archivo en ${path} en unos segundos, tal como lo hace WizTree. Windows solo permite a un programa leer ese índice con acceso de administrador, por lo que esto genera una solicitud de UAC.`,
-        crawlExplain: 'La alternativa recorre las carpetas una a una. No necesita ningún permiso y es la herramienta adecuada para una sola carpeta, pero no puede terminar un volumen entero: en este disco alcanzó el 4% de lo que está en uso antes de agotarse el tiempo, y el otro 96% se muestra como no escaneado en lugar de algo útil.',
+        fastTitle: "Escaneo rápido",
+        recommended: "Recomendado",
+        fastExplain: (path) => `Lee el propio índice de archivos del disco: cada archivo en ${path} en unos segundos.`,
+        fastNeeds: "Necesita la aprobación del administrador, por lo que Windows muestra una solicitud de UAC.",
+        crawlTitle: "Recorrer carpetas",
+        crawlExplain: "Abre las carpetas una a una. No necesita permiso.",
+        crawlLimit: "Adecuado para una sola carpeta. No puede terminar un disco entero y la mayor parte aparece como sin escanear.",
         crawlButton: 'Recorrer carpetas en su lugar'
       },
       scanProgress: {
@@ -7835,8 +7885,13 @@ export const CATALOG = {
       },
       driveRootPrompt: {
         heading: 'Loe kogu ketas',
-        fastExplain: (path) => `Kiirskann loeb ketta enda failiregistrit — iga faili asukohas ${path} mõne sekundiga, samamoodi nagu seda teeb WizTree. Windows lubab programmil seda registrit lugeda ainult administraatoriõigustega, seega kuvatakse UAC-taotlus.`,
-        crawlExplain: 'Alternatiiv käib kaustadest läbi ühekaupa. See ei vaja luba ja sobib ühe kausta jaoks, kuid ei suuda lõpetada tervet köidet: sellel kettal jõudis see 4%-ni kasutusel olevast enne aja lõppemist ja ülejäänud 96% kuvatakse skannimata, mitte millegi kasulikuna.',
+        fastTitle: "Kiirskann",
+        recommended: "Soovitatav",
+        fastExplain: (path) => `Loeb ketta enda failiregistrit: iga faili asukohas ${path} mõne sekundiga.`,
+        fastNeeds: "Vajab administraatori luba, seega kuvab Windows UAC-taotluse.",
+        crawlTitle: "Kaustadest läbikäimine",
+        crawlExplain: "Avab kaustu ükshaaval. Luba pole vaja.",
+        crawlLimit: "Sobib ühe kausta jaoks. Terve ketta lõpuni skannida ei suuda ning enamik jääb skannimata.",
         crawlButton: 'Käi selle asemel kaustadest läbi'
       },
       scanProgress: {
@@ -8590,8 +8645,13 @@ export const CATALOG = {
       },
       driveRootPrompt: {
         heading: 'Lue koko levy',
-        fastExplain: (path) => `Pikaskannaus lukee levyn oman tiedostohakemiston — jokaisen tiedoston kohteessa ${path} muutamassa sekunnissa, aivan kuten WizTree tekee. Windows sallii ohjelman lukea tämän hakemiston vain järjestelmänvalvojan oikeuksilla, joten tämä käynnistää UAC-kehotteen.`,
-        crawlExplain: 'Vaihtoehto käy kansiot läpi yksitellen. Se ei vaadi mitään oikeuksia ja on oikea työkalu yhdelle kansiolle, mutta se ei pysty saattamaan koko taltiota loppuun: tällä levyllä se saavutti 4 % käytössä olevasta ennen ajan loppumista, ja loput 96 % näkyy skannaamattomana eikä minään hyödyllisenä.',
+        fastTitle: "Pikaskannaus",
+        recommended: "Suositeltu",
+        fastExplain: (path) => `Lukee levyn oman tiedostohakemiston: jokaisen tiedoston kohteessa ${path} muutamassa sekunnissa.`,
+        fastNeeds: "Vaatii järjestelmänvalvojan hyväksynnän, joten Windows näyttää UAC-kehotteen.",
+        crawlTitle: "Käy kansiot läpi",
+        crawlExplain: "Avaa kansiot yksi kerrallaan. Lupaa ei tarvita.",
+        crawlLimit: "Sopii yksittäiselle kansiolle. Se ei pysty käymään läpi koko levyä, ja suurin osa näkyy skannaamattomana.",
         crawlButton: 'Käy sen sijaan kansiot läpi'
       },
       scanProgress: {
@@ -9345,8 +9405,13 @@ export const CATALOG = {
       },
       driveRootPrompt: {
         heading: 'Lire tout le disque',
-        fastExplain: (path) => `Une analyse rapide lit l'index de fichiers propre du disque — chaque fichier sur ${path} en quelques secondes, comme le fait WizTree. Windows ne laisse un programme lire cet index qu'avec un accès administrateur, ce qui déclenche une invite UAC.`,
-        crawlExplain: "L'alternative parcourt les dossiers un par un. Elle ne nécessite aucune permission et est l'outil adapté à un seul dossier, mais elle ne peut pas terminer un volume entier : sur ce disque, elle a atteint 4 % de ce qui est utilisé avant que le temps ne s'épuise, et les 96 % restants s'affichent comme non analysés plutôt que comme quelque chose d'utile.",
+        fastTitle: "Analyse rapide",
+        recommended: "Recommandé",
+        fastExplain: (path) => `Lit l'index de fichiers propre du disque : chaque fichier sur ${path} en quelques secondes.`,
+        fastNeeds: "Nécessite l'approbation de l'administrateur, donc Windows affiche une invite UAC.",
+        crawlTitle: "Parcourir les dossiers",
+        crawlExplain: "Ouvre les dossiers un par un. Aucune autorisation requise.",
+        crawlLimit: "Adapté à un seul dossier. Il ne peut pas terminer un disque entier, et la plus grande partie apparaît comme non analysée.",
         crawlButton: 'Parcourir les dossiers à la place'
       },
       scanProgress: {
@@ -10100,8 +10165,13 @@ export const CATALOG = {
       },
       driveRootPrompt: {
         heading: 'קרא את כל הדיסק',
-        fastExplain: (path) => `סריקה מהירה קוראת את אינדקס הקבצים של הדיסק עצמו — כל קובץ ב-${path} תוך שניות ספורות, בדיוק כפי ש-WizTree עושה זאת. Windows מאפשר לתוכנית לקרוא את האינדקס הזה רק עם הרשאות מנהל, ולכן זה מציג בקשת UAC.`,
-        crawlExplain: 'החלופה עוברת בין תיקיות אחת אחרי השנייה. היא אינה דורשת הרשאה כלשהי והיא הכלי הנכון לתיקייה בודדת, אך אינה יכולה לסיים כרך שלם: בדיסק הזה היא הגיעה ל-4% מהמשמש לפני שנגמר הזמן, ו-96% הנותרים מוצגים כלא נסרקו במקום כמשהו שימושי.',
+        fastTitle: "סריקה מהירה",
+        recommended: "מומלץ",
+        fastExplain: (path) => `קורא את אינדקס הקבצים של הדיסק עצמו: כל קובץ ב-${path} תוך שניות ספורות.`,
+        fastNeeds: "דורש אישור מנהל, ולכן Windows מציג הנחיית UAC.",
+        crawlTitle: "מעבר בין תיקיות",
+        crawlExplain: "פותח תיקיות אחת אחרי השנייה. אין צורך באישור.",
+        crawlLimit: "מתאים לתיקייה אחת. אינו יכול לסיים דיסק שלם, ורובו מוצג כלא נסרק.",
         crawlButton: 'עבור בין תיקיות במקום זאת'
       },
       scanProgress: {
@@ -10855,8 +10925,13 @@ export const CATALOG = {
       },
       driveRootPrompt: {
         heading: 'Az egész lemez olvasása',
-        fastExplain: (path) => `A gyors vizsgálat a lemez saját fájlindexét olvassa — minden fájlt a(z) ${path} helyen néhány másodperc alatt, pontosan úgy, ahogy a WizTree teszi. A Windows csak rendszergazdai hozzáféréssel engedi egy programnak az index olvasását, ezért ez UAC-kérést jelenít meg.`,
-        crawlExplain: 'Az alternatíva egyenként járja végig a mappákat. Nem igényel semmilyen jogosultságot, és a megfelelő eszköz egyetlen mappához, de nem tud befejezni egy teljes kötetet: ezen a lemezen a használt hely 4%-át érte el, mielőtt lejárt az idő, a fennmaradó 96% pedig nem vizsgáltként jelenik meg, nem pedig valami hasznosként.',
+        fastTitle: "Gyors vizsgálat",
+        recommended: "Ajánlott",
+        fastExplain: (path) => `A lemez saját fájlindexét olvassa: minden fájlt a(z) ${path} helyen néhány másodperc alatt.`,
+        fastNeeds: "Rendszergazdai jóváhagyást igényel, ezért a Windows UAC-kérést jelenít meg.",
+        crawlTitle: "Mappák bejárása",
+        crawlExplain: "A mappákat egyenként nyitja meg. Nincs szükség engedélyre.",
+        crawlLimit: "Egyetlen mappához megfelelő. Egy teljes lemezt nem tud befejezni, és a legnagyobb része nem vizsgáltként jelenik meg.",
         crawlButton: 'Inkább a mappák bejárása'
       },
       scanProgress: {
@@ -11610,8 +11685,13 @@ export const CATALOG = {
       },
       driveRootPrompt: {
         heading: 'Baca seluruh disk',
-        fastExplain: (path) => `Pemindaian cepat membaca indeks file milik disk itu sendiri — setiap file di ${path} dalam hitungan detik, sama seperti yang dilakukan WizTree. Windows hanya mengizinkan program membaca indeks itu dengan akses administrator, sehingga ini memicu permintaan UAC.`,
-        crawlExplain: 'Alternatifnya menelusuri folder satu per satu. Ini tidak memerlukan izin apa pun dan merupakan alat yang tepat untuk satu folder, tetapi tidak dapat menyelesaikan seluruh volume: pada disk ini prosesnya mencapai 4% dari yang digunakan sebelum waktu habis, dan 96% sisanya ditampilkan sebagai belum dipindai, bukan sebagai sesuatu yang berguna.',
+        fastTitle: "Pemindaian cepat",
+        recommended: "Disarankan",
+        fastExplain: (path) => `Membaca indeks file milik disk itu sendiri: setiap file di ${path} dalam hitungan detik.`,
+        fastNeeds: "Memerlukan persetujuan administrator, sehingga Windows menampilkan permintaan UAC.",
+        crawlTitle: "Telusuri folder",
+        crawlExplain: "Membuka folder satu per satu. Tidak perlu izin.",
+        crawlLimit: "Cocok untuk satu folder. Tidak bisa menyelesaikan satu disk penuh, dan sebagian besarnya ditampilkan sebagai belum dipindai.",
         crawlButton: 'Telusuri folder sebagai gantinya'
       },
       scanProgress: {
@@ -12365,8 +12445,13 @@ export const CATALOG = {
       },
       driveRootPrompt: {
         heading: 'Lesa allan diskinn',
-        fastExplain: (path) => `Hraðskönnun les eigin skráaskrá disksins — hverja skrá á ${path} á fáeinum sekúndum, nákvæmlega eins og WizTree gerir. Windows leyfir forriti aðeins að lesa þá skrá með kerfisstjóraaðgangi, svo þetta veldur UAC-beiðni.`,
-        crawlExplain: 'Valkosturinn fer í gegnum möppur eina í einu. Hann krefst engrar heimildar og er rétta tólið fyrir eina möppu, en getur ekki lokið heilu bindi: á þessum diski náði hann 4% af því sem er í notkun áður en tíminn rann út, og hin 96% birtast sem óskönnuð frekar en eitthvað gagnlegt.',
+        fastTitle: "Hraðskönnun",
+        recommended: "Mælt með",
+        fastExplain: (path) => `Les eigin skráaskrá disksins: hverja skrá á ${path} á fáeinum sekúndum.`,
+        fastNeeds: "Krefst samþykkis kerfisstjóra, svo Windows sýnir UAC-beiðni.",
+        crawlTitle: "Fara í gegnum möppur",
+        crawlExplain: "Opnar möppur eina í einu. Engin heimild nauðsynleg.",
+        crawlLimit: "Hentar fyrir eina möppu. Getur ekki klárað heilan disk og mestur hluti hans birtist sem óskannaður.",
         crawlButton: 'Fara frekar í gegnum möppur'
       },
       scanProgress: {
@@ -13120,8 +13205,13 @@ export const CATALOG = {
       },
       driveRootPrompt: {
         heading: "Leggi l'intero disco",
-        fastExplain: (path) => `Una scansione rapida legge l'indice dei file proprio del disco — ogni file su ${path} in pochi secondi, proprio come fa WizTree. Windows permette a un programma di leggere quell'indice solo con accesso come amministratore, quindi questo genera una richiesta UAC.`,
-        crawlExplain: "L'alternativa attraversa le cartelle una alla volta. Non richiede alcun permesso ed è lo strumento giusto per una singola cartella, ma non può completare un intero volume: su questo disco ha raggiunto il 4% di ciò che è in uso prima che il tempo scadesse, e l'altro 96% viene mostrato come non scansionato piuttosto che come qualcosa di utile.",
+        fastTitle: "Scansione rapida",
+        recommended: "Consigliato",
+        fastExplain: (path) => `Legge l'indice dei file proprio del disco: ogni file su ${path} in pochi secondi.`,
+        fastNeeds: "Richiede l'approvazione dell'amministratore, quindi Windows mostra una richiesta UAC.",
+        crawlTitle: "Attraversa le cartelle",
+        crawlExplain: "Apre le cartelle una alla volta. Nessuna autorizzazione necessaria.",
+        crawlLimit: "Adatto a una singola cartella. Non riesce a completare un intero disco e la maggior parte risulta non sottoposta a scansione.",
         crawlButton: 'Attraversa invece le cartelle'
       },
       scanProgress: {
@@ -13875,8 +13965,13 @@ export const CATALOG = {
       },
       driveRootPrompt: {
         heading: 'ドライブ全体を読み取る',
-        fastExplain: (path) => `高速スキャンはドライブ自身のファイルインデックスを読み取ります — WizTree と同じ方法で、${path} 上のすべてのファイルを数秒で読み取ります。Windows は管理者権限を持つプログラムにしかそのインデックスの読み取りを許可しないため、UAC の確認が表示されます。`,
-        crawlExplain: '代替方法はフォルダーを1つずつたどっていきます。権限は不要で単一のフォルダーには適していますが、ボリューム全体を終えることはできません。このドライブでは、時間切れになるまでに使用領域の4%に到達し、残りの96%は何か有用な情報としてではなく未スキャンとして表示されます。',
+        fastTitle: "高速スキャン",
+        recommended: "推奨",
+        fastExplain: (path) => `ドライブ自身のファイルインデックスを読み取ります。${path} 上のすべてのファイルを数秒で読み取ります。`,
+        fastNeeds: "管理者の承認が必要なため、Windows に UAC の確認が表示されます。",
+        crawlTitle: "フォルダーをたどる",
+        crawlExplain: "フォルダーを 1 つずつ開いていきます。権限は不要です。",
+        crawlLimit: "1 つのフォルダーに適しています。ドライブ全体は完了できず、大部分が未スキャンとして表示されます。",
         crawlButton: '代わりにフォルダーをたどる'
       },
       scanProgress: {
@@ -14630,8 +14725,13 @@ export const CATALOG = {
       },
       driveRootPrompt: {
         heading: '전체 드라이브 읽기',
-        fastExplain: (path) => `빠른 검사는 드라이브 자체 파일 색인을 읽습니다 — WizTree가 하는 방식과 마찬가지로 ${path}의 모든 파일을 몇 초 만에 읽습니다. Windows는 관리자 권한이 있는 프로그램만 해당 색인을 읽을 수 있게 하므로 UAC 요청이 표시됩니다.`,
-        crawlExplain: '대안은 폴더를 하나씩 살펴봅니다. 권한이 필요 없으며 단일 폴더에 적합한 도구이지만 전체 볼륨을 완료할 수는 없습니다. 이 드라이브에서는 시간이 다 되기 전에 사용 중인 공간의 4%에 도달했으며, 나머지 96%는 유용한 정보가 아니라 검사되지 않음으로 표시됩니다.',
+        fastTitle: "빠른 검사",
+        recommended: "권장",
+        fastExplain: (path) => `드라이브 자체 파일 색인을 읽습니다. ${path}의 모든 파일을 몇 초 만에 읽습니다.`,
+        fastNeeds: "관리자 승인이 필요하므로 Windows에 UAC 요청이 표시됩니다.",
+        crawlTitle: "폴더 살펴보기",
+        crawlExplain: "폴더를 하나씩 엽니다. 권한이 필요하지 않습니다.",
+        crawlLimit: "단일 폴더에 적합합니다. 드라이브 전체는 끝낼 수 없으며 대부분이 검사되지 않은 것으로 표시됩니다.",
         crawlButton: '대신 폴더 살펴보기'
       },
       scanProgress: {
@@ -15385,8 +15485,13 @@ export const CATALOG = {
       },
       driveRootPrompt: {
         heading: 'Skaityti visą diską',
-        fastExplain: (path) => `Greitasis skenavimas skaito paties disko failų indeksą — kiekvieną failą ${path} per kelias sekundes, lygiai taip pat, kaip tai daro WizTree. „Windows“ leidžia programai skaityti tą indeksą tik su administratoriaus teisėmis, todėl tai sukelia UAC užklausą.`,
-        crawlExplain: 'Alternatyva pereina aplankus po vieną. Jai nereikia jokio leidimo ir ji tinka vienam aplankui, tačiau ji negali užbaigti viso tomo: šiame diske ji pasiekė 4% naudojamos vietos, kol baigėsi laikas, o likę 96% rodomi kaip neskenuoti, o ne kaip kažkas naudingo.',
+        fastTitle: "Greitasis skenavimas",
+        recommended: "Rekomenduojama",
+        fastExplain: (path) => `Skaito paties disko failų indeksą: kiekvieną failą ${path} per kelias sekundes.`,
+        fastNeeds: "Reikia administratoriaus patvirtinimo, todėl „Windows“ rodo UAC užklausą.",
+        crawlTitle: "Aplankų peržiūra",
+        crawlExplain: "Atidaro aplankus po vieną. Leidimo nereikia.",
+        crawlLimit: "Tinka vienam aplankui. Viso disko užbaigti negali, o didžioji jo dalis rodoma kaip nenuskenuota.",
         crawlButton: 'Vietoj to pereiti aplankus'
       },
       scanProgress: {
@@ -16140,8 +16245,13 @@ export const CATALOG = {
       },
       driveRootPrompt: {
         heading: 'Baca keseluruhan cakera',
-        fastExplain: (path) => `Imbasan pantas membaca indeks fail cakera itu sendiri — setiap fail pada ${path} dalam beberapa saat, sama seperti yang dilakukan oleh WizTree. Windows hanya membenarkan program membaca indeks itu dengan akses pentadbir, jadi ini mencetuskan permintaan UAC.`,
-        crawlExplain: 'Alternatifnya melalui folder satu demi satu. Ia tidak memerlukan sebarang kebenaran dan merupakan alat yang sesuai untuk satu folder, tetapi ia tidak dapat menyelesaikan keseluruhan volum: pada cakera ini ia mencapai 4% daripada yang digunakan sebelum masa tamat, dan baki 96% dipaparkan sebagai tidak diimbas dan bukannya sesuatu yang berguna.',
+        fastTitle: "Imbasan pantas",
+        recommended: "Disyorkan",
+        fastExplain: (path) => `Membaca indeks fail cakera itu sendiri: setiap fail pada ${path} dalam beberapa saat.`,
+        fastNeeds: "Memerlukan kelulusan pentadbir, jadi Windows memaparkan gesaan UAC.",
+        crawlTitle: "Lalui folder",
+        crawlExplain: "Membuka folder satu demi satu. Tiada kebenaran diperlukan.",
+        crawlLimit: "Sesuai untuk satu folder. Ia tidak dapat menyelesaikan keseluruhan cakera, dan kebanyakannya dipaparkan sebagai belum diimbas.",
         crawlButton: 'Melalui folder sebagai gantinya'
       },
       scanProgress: {
@@ -16895,8 +17005,13 @@ export const CATALOG = {
       },
       driveRootPrompt: {
         heading: 'Les hele disken',
-        fastExplain: (path) => `Et hurtigskann leser diskens eget filregister — hver fil på ${path} på noen sekunder, akkurat slik WizTree gjør det. Windows lar bare et program lese det registeret med administratortilgang, så dette utløser en UAC-forespørsel.`,
-        crawlExplain: 'Alternativet går gjennom mapper én om gangen. Det krever ingen tillatelse og er riktig verktøy for én enkelt mappe, men kan ikke fullføre et helt volum: på denne disken nådde den 4 % av det som er i bruk før tiden gikk ut, og de resterende 96 % vises som uskannet i stedet for noe nyttig.',
+        fastTitle: "Hurtigskann",
+        recommended: "Anbefalt",
+        fastExplain: (path) => `Leser diskens eget filregister: hver fil på ${path} på noen sekunder.`,
+        fastNeeds: "Krever administratorgodkjenning, så Windows viser en UAC-forespørsel.",
+        crawlTitle: "Gå gjennom mapper",
+        crawlExplain: "Åpner mapper én om gangen. Ingen tillatelse nødvendig.",
+        crawlLimit: "Passer for én enkelt mappe. Den kan ikke fullføre en hel disk, og det meste vises som ikke skannet.",
         crawlButton: 'Gå gjennom mapper i stedet'
       },
       scanProgress: {
@@ -17650,8 +17765,13 @@ export const CATALOG = {
       },
       driveRootPrompt: {
         heading: 'Lees de hele schijf',
-        fastExplain: (path) => `Een snelle scan leest de eigen bestandsindex van de schijf — elk bestand op ${path} in enkele seconden, precies zoals WizTree dat doet. Windows laat een programma die index alleen lezen met beheerderstoegang, dus dit veroorzaakt een UAC-melding.`,
-        crawlExplain: 'Het alternatief doorloopt mappen één voor één. Het vereist geen toestemming en is het juiste hulpmiddel voor één map, maar kan geen heel volume voltooien: op deze schijf bereikte het 4% van wat in gebruik is voordat de tijd om was, en de overige 96% wordt getoond als niet-gescand in plaats van als iets nuttigs.',
+        fastTitle: "Snelle scan",
+        recommended: "Aanbevolen",
+        fastExplain: (path) => `Leest de eigen bestandsindex van de schijf: elk bestand op ${path} in enkele seconden.`,
+        fastNeeds: "Vereist goedkeuring van een beheerder, dus Windows toont een UAC-melding.",
+        crawlTitle: "Mappen doorlopen",
+        crawlExplain: "Opent mappen één voor één. Geen toestemming nodig.",
+        crawlLimit: "Geschikt voor één map. Een hele schijf kan het niet afmaken en het grootste deel wordt als niet gescand getoond.",
         crawlButton: 'Doorloop in plaats daarvan mappen'
       },
       scanProgress: {
@@ -18405,8 +18525,13 @@ export const CATALOG = {
       },
       driveRootPrompt: {
         heading: 'Odczytaj cały dysk',
-        fastExplain: (path) => `Szybkie skanowanie odczytuje własny indeks plików dysku — każdy plik na ${path} w ciągu kilku sekund, dokładnie tak, jak robi to WizTree. Windows pozwala programowi odczytać ten indeks tylko z uprawnieniami administratora, więc powoduje to monit UAC.`,
-        crawlExplain: 'Alternatywa przechodzi przez foldery jeden po drugim. Nie wymaga żadnych uprawnień i jest odpowiednim narzędziem dla pojedynczego folderu, ale nie może ukończyć całego woluminu: na tym dysku dotarła do 4% wykorzystanego miejsca, zanim skończył się czas, a pozostałe 96% jest pokazywane jako niezeskanowane, a nie jako coś przydatnego.',
+        fastTitle: "Szybkie skanowanie",
+        recommended: "Zalecane",
+        fastExplain: (path) => `Odczytuje własny indeks plików dysku: każdy plik na ${path} w ciągu kilku sekund.`,
+        fastNeeds: "Wymaga zatwierdzenia przez administratora, więc Windows wyświetla monit UAC.",
+        crawlTitle: "Przejdź przez foldery",
+        crawlExplain: "Otwiera foldery jeden po drugim. Nie są potrzebne żadne uprawnienia.",
+        crawlLimit: "Dobre dla jednego folderu. Nie jest w stanie dokończyć całego dysku, a większość z niego jest pokazana jako nieskanowana.",
         crawlButton: 'Zamiast tego przejdź przez foldery'
       },
       scanProgress: {
@@ -19160,8 +19285,13 @@ export const CATALOG = {
       },
       driveRootPrompt: {
         heading: 'ټول ډرایو ولولئ',
-        fastExplain: (path) => `چټک سکن د ډرایو خپل د فایل شاخص لولي — هر فایل په ${path} کې څو ثانیو کې، لکه څنګه چې WizTree دا کوي. Windows یوازې د اډمین لاسرسي سره پروګرام ته اجازه ورکوي چې دا شاخص ولولي، نو دا یو UAC غوښتنه رامینځته کوي.`,
-        crawlExplain: 'بدیل فولډرونه یو په یو تیروي. دې ته هیڅ اجازه ته اړتیا نشته او دا د یوه فولډر لپاره سم وسیله ده، خو دا نشي کولی یو بشپړ حجم بشپړ کړي: پدې ډرایو کې دا کارول شوي 4٪ ته ورسید مخکې لدې چې وخت پای ته ورسیږي، او پاتې 96٪ د یو ګټور شی پر ځای د نه سکن شوي په توګه ښودل کیږي.',
+        fastTitle: "چټک سکن",
+        recommended: "سپارښتنه شوې",
+        fastExplain: (path) => `د ډرایو خپل د فایل شاخص لولي: هر فایل په ${path} کې څو ثانیو کې.`,
+        fastNeeds: "د اډمین تصویب ته اړتیا لري، نو Windows د UAC پوښتنه ښیي.",
+        crawlTitle: "فولډرونه تیرول",
+        crawlExplain: "فولډرونه یو په یو خلاصوي. هېڅ اجازې ته اړتیا نشته.",
+        crawlLimit: "د یو فولډر لپاره سم دی. یو بشپړ ډرایو نه شي بشپړولی، او ډیره برخه یې ناسکن شوې ښکاري.",
         crawlButton: 'پرځای یې فولډرونه تیروئ'
       },
       scanProgress: {
@@ -19915,8 +20045,13 @@ export const CATALOG = {
       },
       driveRootPrompt: {
         heading: 'Ler o disco inteiro',
-        fastExplain: (path) => `Um escaneamento rápido lê o próprio índice de arquivos do disco — cada arquivo em ${path} em poucos segundos, exatamente como o WizTree faz. O Windows só permite que um programa leia esse índice com acesso de administrador, então isso gera uma solicitação UAC.`,
-        crawlExplain: 'A alternativa percorre as pastas uma de cada vez. Não precisa de nenhuma permissão e é a ferramenta certa para uma única pasta, mas não consegue terminar um volume inteiro: neste disco ela alcançou 4% do que está em uso antes de o tempo acabar, e os outros 96% aparecem como não escaneados em vez de algo útil.',
+        fastTitle: "Escaneamento rápido",
+        recommended: "Recomendado",
+        fastExplain: (path) => `Lê o próprio índice de arquivos do disco: cada arquivo em ${path} em poucos segundos.`,
+        fastNeeds: "Precisa da aprovação do administrador, então o Windows mostra uma solicitação UAC.",
+        crawlTitle: "Percorrer pastas",
+        crawlExplain: "Abre as pastas uma de cada vez. Não precisa de permissão.",
+        crawlLimit: "Serve para uma única pasta. Não consegue concluir um disco inteiro, e a maior parte aparece como não escaneada.",
         crawlButton: 'Percorrer pastas em vez disso'
       },
       scanProgress: {
@@ -20670,8 +20805,13 @@ export const CATALOG = {
       },
       driveRootPrompt: {
         heading: 'Ler o disco inteiro',
-        fastExplain: (path) => `Uma análise rápida lê o próprio índice de ficheiros do disco — cada ficheiro em ${path} em poucos segundos, tal como o WizTree faz. O Windows só permite que um programa leia esse índice com acesso de administrador, pelo que isto gera um pedido UAC.`,
-        crawlExplain: 'A alternativa percorre as pastas uma de cada vez. Não necessita de qualquer permissão e é a ferramenta certa para uma única pasta, mas não consegue concluir um volume inteiro: neste disco atingiu 4% do que está em uso antes de o tempo se esgotar, e os restantes 96% aparecem como não analisados em vez de algo útil.',
+        fastTitle: "Análise rápida",
+        recommended: "Recomendado",
+        fastExplain: (path) => `Lê o próprio índice de ficheiros do disco: cada ficheiro em ${path} em poucos segundos.`,
+        fastNeeds: "Precisa da aprovação do administrador, pelo que o Windows mostra um pedido UAC.",
+        crawlTitle: "Percorrer pastas",
+        crawlExplain: "Abre as pastas uma de cada vez. Não precisa de permissão.",
+        crawlLimit: "Serve para uma única pasta. Não consegue concluir um disco inteiro, e a maior parte aparece como não analisada.",
         crawlButton: 'Percorrer as pastas em vez disso'
       },
       scanProgress: {
@@ -21425,8 +21565,13 @@ export const CATALOG = {
       },
       driveRootPrompt: {
         heading: 'Citește întregul disc',
-        fastExplain: (path) => `O scanare rapidă citește propriul index de fișiere al discului — fiecare fișier de pe ${path} în câteva secunde, exact cum face WizTree. Windows permite unui program să citească acel index doar cu acces de administrator, deci acest lucru generează o solicitare UAC.`,
-        crawlExplain: 'Alternativa parcurge folderele unul câte unul. Nu necesită nicio permisiune și este instrumentul potrivit pentru un singur folder, dar nu poate finaliza un volum întreg: pe acest disc a ajuns la 4% din ce este utilizat înainte de a se termina timpul, iar celelalte 96% apar ca nescanate, nu ca ceva util.',
+        fastTitle: "Scanare rapidă",
+        recommended: "Recomandat",
+        fastExplain: (path) => `Citește propriul index de fișiere al discului: fiecare fișier de pe ${path} în câteva secunde.`,
+        fastNeeds: "Necesită aprobarea administratorului, așa că Windows afișează o solicitare UAC.",
+        crawlTitle: "Parcurge folderele",
+        crawlExplain: "Deschide folderele pe rând. Nu este nevoie de permisiune.",
+        crawlLimit: "Potrivit pentru un singur folder. Nu poate termina un disc întreg, iar cea mai mare parte apare ca nescanată.",
         crawlButton: 'Parcurge folderele în schimb'
       },
       scanProgress: {
@@ -22180,8 +22325,13 @@ export const CATALOG = {
       },
       driveRootPrompt: {
         heading: 'Прочитать весь диск',
-        fastExplain: (path) => `Быстрое сканирование читает собственный файловый индекс диска — каждый файл на ${path} за несколько секунд, точно так же, как это делает WizTree. Windows позволяет программе читать этот индекс только с правами администратора, поэтому это вызывает запрос UAC.`,
-        crawlExplain: 'Альтернатива обходит папки по одной. Она не требует никаких разрешений и является правильным инструментом для одной папки, но не может завершить весь том: на этом диске она достигла 4% используемого пространства до истечения времени, а остальные 96% отображаются как несканированные, а не как что-то полезное.',
+        fastTitle: "Быстрое сканирование",
+        recommended: "Рекомендуется",
+        fastExplain: (path) => `Читает собственный файловый индекс диска: каждый файл на ${path} за несколько секунд.`,
+        fastNeeds: "Требуется подтверждение администратора, поэтому Windows показывает запрос UAC.",
+        crawlTitle: "Обход папок",
+        crawlExplain: "Открывает папки по одной. Разрешение не требуется.",
+        crawlLimit: "Подходит для одной папки. Целый диск он завершить не может, и большая его часть отображается как непросканированная.",
         crawlButton: 'Вместо этого обойти папки'
       },
       scanProgress: {
@@ -22935,8 +23085,13 @@ export const CATALOG = {
       },
       driveRootPrompt: {
         heading: 'Načítať celý disk',
-        fastExplain: (path) => `Rýchle prehľadanie načíta vlastný súborový index disku — každý súbor na ${path} za pár sekúnd, presne tak, ako to robí WizTree. Windows umožňuje programu čítať tento index iba s oprávneniami správcu, takže sa zobrazí výzva UAC.`,
-        crawlExplain: 'Alternatíva prechádza priečinky jeden po druhom. Nevyžaduje žiadne povolenie a je vhodná pre jeden priečinok, ale nedokáže dokončiť celý zväzok: na tomto disku dosiahla 4 % využitého miesta, kým sa minul čas, a zvyšných 96 % sa zobrazuje ako neprehľadané namiesto niečoho užitočného.',
+        fastTitle: "Rýchle prehľadanie",
+        recommended: "Odporúčané",
+        fastExplain: (path) => `Načíta vlastný súborový index disku: každý súbor na ${path} za pár sekúnd.`,
+        fastNeeds: "Vyžaduje schválenie správcom, preto Windows zobrazí výzvu UAC.",
+        crawlTitle: "Prechádzať priečinky",
+        crawlExplain: "Otvára priečinky jeden po druhom. Nie je potrebné žiadne povolenie.",
+        crawlLimit: "Vhodné pre jeden priečinok. Celý disk dokončiť nedokáže a väčšina z neho sa zobrazí ako neprehľadaná.",
         crawlButton: 'Namiesto toho prechádzať priečinky'
       },
       scanProgress: {
@@ -23690,8 +23845,13 @@ export const CATALOG = {
       },
       driveRootPrompt: {
         heading: 'Lexo të gjithë diskun',
-        fastExplain: (path) => `Një skanim i shpejtë lexon vetë indeksin e skedarëve të diskut — çdo skedar në ${path} brenda pak sekondash, saktësisht ashtu siç bën WizTree. Windows lejon një program të lexojë atë indeks vetëm me qasje administratori, kështu që kjo shkakton një kërkesë UAC.`,
-        crawlExplain: 'Alternativa kalon nëpër dosje një nga një. Nuk kërkon asnjë leje dhe është mjeti i duhur për një dosje të vetme, por nuk mund të përfundojë një vëllim të tërë: në këtë disk arriti në 4% të asaj që përdoret para se koha të mbaronte, dhe 96% e mbetur shfaqet si e paskanuar në vend të diçkaje të dobishme.',
+        fastTitle: "Skanim i shpejtë",
+        recommended: "E rekomanduar",
+        fastExplain: (path) => `Lexon vetë indeksin e skedarëve të diskut: çdo skedar në ${path} brenda pak sekondash.`,
+        fastNeeds: "Kërkon miratimin e administratorit, ndaj Windows shfaq një kërkesë UAC.",
+        crawlTitle: "Kalo nëpër dosje",
+        crawlExplain: "Hap dosjet një nga një. Nuk nevojitet leje.",
+        crawlLimit: "E përshtatshme për një dosje të vetme. Nuk mund ta përfundojë një disk të plotë dhe pjesa më e madhe shfaqet si e paskanuar.",
         crawlButton: 'Kalo nëpër dosje në vend të kësaj'
       },
       scanProgress: {
@@ -24445,8 +24605,13 @@ export const CATALOG = {
       },
       driveRootPrompt: {
         heading: 'Прочитај цео диск',
-        fastExplain: (path) => `Брзо скенирање чита сопствени индекс датотека диска — сваку датотеку на ${path} за неколико секунди, потпуно исто као што то ради WizTree. Windows дозвољава програму да прочита тај индекс само са администраторским приступом, па се приказује UAC захтев.`,
-        crawlExplain: 'Алтернатива пролази кроз фасцикле једну по једну. Не захтева никакву дозволу и права је алатка за једну фасциклу, али не може да заврши читав волумен: на овом диску је досегла 4% онога што се користи пре него што је истекло време, а преосталих 96% се приказује као нескенирано уместо нечег корисног.',
+        fastTitle: "Брзо скенирање",
+        recommended: "Препоручено",
+        fastExplain: (path) => `Чита сопствени индекс датотека диска: сваку датотеку на ${path} за неколико секунди.`,
+        fastNeeds: "Потребно је одобрење администратора, па Windows приказује UAC захтев.",
+        crawlTitle: "Пролазак кроз фасцикле",
+        crawlExplain: "Отвара фасцикле једну по једну. Није потребна дозвола.",
+        crawlLimit: "Одговара за једну фасциклу. Не може да заврши цео диск, а већи део се приказује као нескенирано.",
         crawlButton: 'Уместо тога пролази кроз фасцикле'
       },
       scanProgress: {
@@ -25200,8 +25365,13 @@ export const CATALOG = {
       },
       driveRootPrompt: {
         heading: 'Läs hela disken',
-        fastExplain: (path) => `En snabbskanning läser diskens eget filregister — varje fil på ${path} på några sekunder, precis som WizTree gör. Windows låter bara ett program läsa det registret med administratörsåtkomst, så detta utlöser en UAC-fråga.`,
-        crawlExplain: 'Alternativet går igenom mappar en i taget. Det kräver ingen behörighet och är rätt verktyg för en enda mapp, men kan inte slutföra en hel volym: på den här disken nådde den 4 % av det som används innan tiden tog slut, och de återstående 96 % visas som oskannat i stället för något användbart.',
+        fastTitle: "Snabbskanning",
+        recommended: "Rekommenderas",
+        fastExplain: (path) => `Läser diskens eget filregister: varje fil på ${path} på några sekunder.`,
+        fastNeeds: "Kräver administratörsgodkännande, så Windows visar en UAC-fråga.",
+        crawlTitle: "Gå igenom mappar",
+        crawlExplain: "Öppnar mappar en i taget. Ingen behörighet behövs.",
+        crawlLimit: "Passar för en enskild mapp. Den kan inte slutföra en hel disk, och det mesta visas som oskannat.",
         crawlButton: 'Gå igenom mappar istället'
       },
       scanProgress: {
@@ -25955,8 +26125,13 @@ export const CATALOG = {
       },
       driveRootPrompt: {
         heading: 'อ่านทั้งไดรฟ์',
-        fastExplain: (path) => `การสแกนแบบเร็วจะอ่านดัชนีไฟล์ของไดรฟ์เอง — ทุกไฟล์ใน ${path} ภายในไม่กี่วินาที เช่นเดียวกับที่ WizTree ทำ Windows อนุญาตให้โปรแกรมอ่านดัชนีนั้นได้ก็ต่อเมื่อมีสิทธิ์ผู้ดูแลระบบเท่านั้น จึงทำให้เกิดการแจ้งเตือน UAC`,
-        crawlExplain: 'อีกวิธีหนึ่งคือไล่ดูโฟลเดอร์ทีละรายการ ไม่ต้องขออนุญาตใด ๆ และเหมาะสำหรับโฟลเดอร์เดียว แต่ไม่สามารถสแกนไดรฟ์ทั้งหมดให้เสร็จได้ — บนไดรฟ์นี้มันเข้าถึงได้เพียง 4% ของพื้นที่ที่ใช้งานก่อนที่เวลาจะหมด และอีก 96% ที่เหลือจะแสดงเป็นยังไม่ได้สแกนแทนที่จะเป็นข้อมูลที่มีประโยชน์',
+        fastTitle: "สแกนแบบเร็ว",
+        recommended: "แนะนำ",
+        fastExplain: (path) => `อ่านดัชนีไฟล์ของไดรฟ์เอง: ทุกไฟล์ใน ${path} ภายในไม่กี่วินาที`,
+        fastNeeds: "ต้องได้รับการอนุมัติจากผู้ดูแลระบบ Windows จึงแสดงพรอมต์ UAC",
+        crawlTitle: "ไล่ดูโฟลเดอร์",
+        crawlExplain: "เปิดโฟลเดอร์ทีละโฟลเดอร์ ไม่ต้องขอสิทธิ์",
+        crawlLimit: "เหมาะกับโฟลเดอร์เดียว ไม่สามารถสแกนทั้งไดรฟ์ให้เสร็จได้ และส่วนใหญ่จะแสดงเป็นยังไม่ได้สแกน",
         crawlButton: 'ไล่ดูโฟลเดอร์แทน'
       },
       scanProgress: {
@@ -26710,8 +26885,13 @@ export const CATALOG = {
       },
       driveRootPrompt: {
         heading: 'Tüm diski oku',
-        fastExplain: (path) => `Hızlı tarama, diskin kendi dosya dizinini okur — WizTree'nin yaptığı gibi, ${path} üzerindeki her dosyayı birkaç saniyede. Windows, bir programın bu dizini okumasına yalnızca yönetici erişimiyle izin verir, bu yüzden bu bir UAC istemi tetikler.`,
-        crawlExplain: "Alternatif, klasörleri tek tek gezer. Herhangi bir izin gerektirmez ve tek bir klasör için doğru araçtır, ancak tüm bir birimi tamamlayamaz: bu diskte, süre dolmadan önce kullanılan alanın %4'üne ulaştı ve kalan %96 kullanışlı bir şey yerine taranmamış olarak gösterilir.",
+        fastTitle: "Hızlı tarama",
+        recommended: "Önerilen",
+        fastExplain: (path) => `Diskin kendi dosya dizinini okur: ${path} üzerindeki her dosyayı birkaç saniyede.`,
+        fastNeeds: "Yönetici onayı gerekir, bu yüzden Windows bir UAC istemi gösterir.",
+        crawlTitle: "Klasörleri gez",
+        crawlExplain: "Klasörleri tek tek açar. İzin gerekmez.",
+        crawlLimit: "Tek bir klasör için uygundur. Bir diskin tamamını bitiremez ve büyük kısmı taranmamış olarak görünür.",
         crawlButton: 'Bunun yerine klasörleri gez'
       },
       scanProgress: {
@@ -27465,8 +27645,13 @@ export const CATALOG = {
       },
       driveRootPrompt: {
         heading: 'Прочитати весь диск',
-        fastExplain: (path) => `Швидке сканування читає власний файловий індекс диска — кожен файл у ${path} за кілька секунд, так само як це робить WizTree. Windows дозволяє програмі читати цей індекс лише з правами адміністратора, тому це викликає запит UAC.`,
-        crawlExplain: 'Альтернатива обходить папки по одній. Вона не потребує жодного дозволу і є правильним інструментом для однієї папки, але не може завершити весь том: на цьому диску вона досягла 4% використаного простору до закінчення часу, а решта 96% відображаються як несканований, а не як щось корисне.',
+        fastTitle: "Швидке сканування",
+        recommended: "Рекомендовано",
+        fastExplain: (path) => `Читає власний файловий індекс диска: кожен файл у ${path} за кілька секунд.`,
+        fastNeeds: "Потрібне підтвердження адміністратора, тому Windows показує запит UAC.",
+        crawlTitle: "Обхід папок",
+        crawlExplain: "Відкриває папки по одній. Дозвіл не потрібен.",
+        crawlLimit: "Підходить для однієї папки. Цілий диск він завершити не може, і більша його частина відображається як не просканована.",
         crawlButton: 'Замість цього обійти папки'
       },
       scanProgress: {
@@ -28220,8 +28405,13 @@ export const CATALOG = {
       },
       driveRootPrompt: {
         heading: 'Đọc toàn bộ ổ đĩa',
-        fastExplain: (path) => `Quét nhanh sẽ đọc chỉ mục tệp riêng của ổ đĩa — mọi tệp trên ${path} chỉ trong vài giây, giống hệt như cách WizTree thực hiện. Windows chỉ cho phép chương trình đọc chỉ mục đó với quyền quản trị viên, do đó việc này sẽ kích hoạt yêu cầu UAC.`,
-        crawlExplain: 'Phương án thay thế sẽ duyệt qua từng thư mục một. Nó không cần bất kỳ quyền nào và là công cụ phù hợp cho một thư mục đơn lẻ, nhưng không thể hoàn tất toàn bộ một ổ đĩa: trên ổ đĩa này, nó đạt tới 4% dung lượng đang sử dụng trước khi hết thời gian, và 96% còn lại được hiển thị là chưa quét thay vì một điều gì đó hữu ích.',
+        fastTitle: "Quét nhanh",
+        recommended: "Khuyên dùng",
+        fastExplain: (path) => `Đọc chỉ mục tệp riêng của ổ đĩa: mọi tệp trên ${path} chỉ trong vài giây.`,
+        fastNeeds: "Cần quyền phê duyệt của quản trị viên, nên Windows hiển thị lời nhắc UAC.",
+        crawlTitle: "Duyệt qua các thư mục",
+        crawlExplain: "Mở từng thư mục một. Không cần cấp quyền.",
+        crawlLimit: "Phù hợp với một thư mục. Không thể hoàn tất cả một ổ đĩa, và phần lớn sẽ hiển thị là chưa quét.",
         crawlButton: 'Thay vào đó, duyệt qua các thư mục'
       },
       scanProgress: {
@@ -28975,8 +29165,13 @@ export const CATALOG = {
       },
       driveRootPrompt: {
         heading: '读取整个驱动器',
-        fastExplain: (path) => `快速扫描会读取驱动器自身的文件索引 — 几秒钟内读取 ${path} 上的每个文件，方式与 WizTree 完全相同。Windows 只允许具有管理员权限的程序读取该索引，因此这会触发 UAC 提示。`,
-        crawlExplain: '另一种方式是逐个遍历文件夹。它不需要任何权限，是处理单个文件夹的正确工具，但无法完成整个卷的扫描：在此驱动器上，它在时间耗尽前只处理了已用空间的 4%，其余 96% 显示为未扫描，而不是任何有用的信息。',
+        fastTitle: "快速扫描",
+        recommended: "推荐",
+        fastExplain: (path) => `读取驱动器自身的文件索引：几秒钟内读取 ${path} 上的每个文件。`,
+        fastNeeds: "需要管理员批准，因此 Windows 会显示 UAC 提示。",
+        crawlTitle: "遍历文件夹",
+        crawlExplain: "逐个打开文件夹。无需权限。",
+        crawlLimit: "适合单个文件夹。无法完成整个驱动器，其中大部分会显示为未扫描。",
         crawlButton: '改为遍历文件夹'
       },
       scanProgress: {
@@ -29730,8 +29925,13 @@ export const CATALOG = {
       },
       driveRootPrompt: {
         heading: '讀取整個硬碟',
-        fastExplain: (path) => `快速掃描會讀取硬碟自身的檔案索引 — 幾秒鐘內讀取 ${path} 上的每個檔案，方式與 WizTree 完全相同。Windows 只允許具有系統管理員權限的程式讀取該索引，因此這會觸發 UAC 提示。`,
-        crawlExplain: '另一種方式是逐一走訪資料夾。它不需要任何權限，是處理單一資料夾的正確工具，但無法完成整個磁碟區的掃描：在這個硬碟上，它在時間耗盡前只處理了已用空間的 4%，其餘 96% 顯示為未掃描，而不是任何有用的資訊。',
+        fastTitle: "快速掃描",
+        recommended: "建議",
+        fastExplain: (path) => `讀取硬碟自身的檔案索引：幾秒鐘內讀取 ${path} 上的每個檔案。`,
+        fastNeeds: "需要系統管理員核准，因此 Windows 會顯示 UAC 提示。",
+        crawlTitle: "走訪資料夾",
+        crawlExplain: "逐一開啟資料夾。不需要權限。",
+        crawlLimit: "適合單一資料夾。無法完成整個硬碟，其中大部分會顯示為未掃描。",
         crawlButton: '改為走訪資料夾'
       },
       scanProgress: {
