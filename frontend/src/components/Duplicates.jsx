@@ -158,7 +158,7 @@ function Duplicates() {
           type="text"
           value={folder}
           onChange={(e) => setFolder(e.target.value)}
-          onKeyDown={(e) => { if (e.key === 'Enter' && folder.trim()) { setStopped(false); setArmed(folder.trim()); } }}
+          onKeyDown={(e) => { if (e.key === 'Enter' && folder.trim()) { setSelected(new Set()); setStopped(false); setArmed(folder.trim()); } }}
           placeholder={t('duplicates.folderPlaceholder', EXAMPLE_FOLDER)}
           data-app-search="duplicates"
           aria-label={t('duplicates.folderInputAriaLabel')}
@@ -212,7 +212,7 @@ function Duplicates() {
       )}
 
       {!scan.isFetching && scan.data && groups.length === 0 && (
-        <div className="glass-panel p-8 text-center">
+        <div role="status" className="glass-panel p-8 text-center">
           <p className="text-[13.5px] text-[color:var(--text-secondary)]">{t('duplicates.empty.heading')}</p>
           <p className="text-[12.5px] text-[color:var(--text-muted)] mt-1.5">
             {t('duplicates.empty.scanned', scan.data.scannedFiles.toLocaleString())}
@@ -224,7 +224,8 @@ function Duplicates() {
       {!scan.isFetching && groups.length > 0 && (
         <>
           <div className="flex items-center flex-wrap gap-3 mb-4">
-            <span className="text-[12.5px] text-[color:var(--text-secondary)]">
+            {/* The outcome of the search, announced when it lands. */}
+            <span role="status" className="text-[12.5px] text-[color:var(--text-secondary)]">
               {/* Each phrase is bolded/accented as one unit rather than
                   just the number within it -- the same tradeoff every
                   other screen's own count line already made, since a
