@@ -3,6 +3,38 @@
 All notable changes to Prune (formerly named unrevo -- rebranded 2026-09-01,
 see v1.0.1 below) are documented here.
 
+## v2.8.1
+
+Every language reads better, and Deep Clean now speaks yours: its rule names,
+descriptions and scan log were English in every language until now.
+
+### Fixed
+
+- **Translations were stiff, literal or inconsistent.** About 120 strings
+  from 2.8 (Report a bug, the Disk Map chooser, the batch uninstaller,
+  Quarantine settings, theme and shortcut labels) were reviewed in all 39
+  languages and rewritten where they read as translated rather than
+  written. Page titles now match the side bar labels, the "scan for
+  leftovers" action has one name in both uninstall dialogs, the Quarantine
+  settings no longer read as "undo", counts like "1 copies" are grammatical,
+  and Serbian's Latin-script strings inside the Cyrillic text are Cyrillic.
+- **The Report a bug label in the side bar was cut off in longer
+  languages.** Side bar labels now wrap to two lines instead of truncating.
+- **The Thumbnail Cache rule described itself as "a deeper pass than Smart
+  Cleanup"**, a feature that no longer exists. It is now just "Thumbnail
+  Cache", with a plain description.
+
+### Added
+
+- **Deep Clean is translated.** All 87 rule names and descriptions and the
+  31 category labels are in 39 languages; product names (Brave, Discord,
+  Steam and so on) stay as they are. A rule that is ever missing in a
+  language falls back to English rather than showing blank, and the filter
+  box finds a rule by its translated name or its English one.
+- **Deep Clean's scan and clean log is translated too**: the status words
+  (empty, not installed, needs admin, locked, skipped) and the Delete,
+  Recycle, Clear, Compact and Trim verbs.
+
 ## v2.8.0
 
 Prune now remembers where you left it, uninstallers that never opened now
