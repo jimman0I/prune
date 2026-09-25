@@ -52,13 +52,23 @@ export const DEFAULT_WARNING_MESSAGES = {
   fallbackBody: 'This option removes data you may want to keep.'
 };
 
-/** The dialog's text for one rule.
+/** The rule's own English, for callers that pass no translated text. */
+const ENGLISH_TEXT = {
+  ruleName: (item) => item?.name,
+  ruleDescription: (item) => item?.description,
+  categoryName: (category) => category
+};
+
+/** The dialog's text for one rule. `text` is the useCleanerText() trio, so
+ * the dialog reads in the user's language; the default is the rule's own
+ * English.
  *
  * Titled with the category as well as the name because that is how the
  * row reads -- "Cookies" under a "Brave" heading -- and three browsers
  * ship a rule called Cookies. */
-export function warningFor(item, messages = DEFAULT_WARNING_MESSAGES) {
-  const label = item?.category ? `${item.category} — ${item.name}` : item?.name;
+export function warningFor(item, messages = DEFAULT_WARNING_MESSAGES, text = ENGLISH_TEXT) {
+  const name = text.ruleName(item);
+  const label = item?.category ? `${text.categoryName(item.category)} — ${name}` : name;
   return {
     id: item?.id,
     title: messages.title(label),
@@ -67,7 +77,7 @@ export function warningFor(item, messages = DEFAULT_WARNING_MESSAGES) {
     // written as the consequence rather than the mechanism. The fallback
     // exists so a rule added later without one still warns about
     // something rather than showing an empty dialog.
-    body: item?.description || messages.fallbackBody
+    body: text.ruleDescription(item) || messages.fallbackBody
   };
 }
 

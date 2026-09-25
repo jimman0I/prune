@@ -15,6 +15,7 @@ import { categoryTickPlan } from '../lib/categoryTickPlan.js';
 import DeepCleanTree from './DeepCleanTree.jsx';
 import CleanWarningDialog from './CleanWarningDialog.jsx';
 import { useLanguage } from '../i18n/LanguageContext.jsx';
+import { useCleanerText } from '../i18n/cleanerText.js';
 
 const LOG_TONE = {
   size: 'text-[color:var(--accent-primary)]',
@@ -128,6 +129,7 @@ function formatBytes(bytes) {
 
 function DeepClean() {
   const { t } = useLanguage();
+  const cleaner = useCleanerText();
   // No auto-scan on mount, per spec -- the tree stays empty until the
   // user explicitly clicks Preview.
   const [selected, setSelected] = useState(new Set());
@@ -170,7 +172,7 @@ function DeepClean() {
     tree: categories, scanning, hasScanned, log: logLines,
     scanned, total, error: scanError, currentId: scanningId,
     start, stop: stopPreview, cleanableIds: scannedIds
-  } = useDeepCleanScan();
+  } = useDeepCleanScan(cleaner.ruleName);
 
   // The clean itself, streamed the same way -- see hooks/useDeepCleanExecute.js.
   // `run` throws on a real failure (same contract the old one-shot
@@ -179,7 +181,7 @@ function DeepClean() {
   const {
     run: runClean, stop: stopClean, cleaning,
     log: cleanLog, executed: cleanExecuted, total: cleanTotalCount, currentId: cleaningId
-  } = useDeepCleanExecute();
+  } = useDeepCleanExecute(cleaner.ruleName);
 
   // BleachBit's "hide irrelevant cleaners". Most of a 74-rule list is for
   // software this machine does not have.

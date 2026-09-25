@@ -2,6 +2,7 @@ import { useState } from 'react';
 import ModalOverlay from './ModalOverlay.jsx';
 import { warningFor } from '../lib/cleanWarning.js';
 import { useLanguage } from '../i18n/LanguageContext.jsx';
+import { useCleanerText } from '../i18n/cleanerText.js';
 
 /** The question in front of a Deep Clean rule that loses something.
  *
@@ -24,11 +25,12 @@ import { useLanguage } from '../i18n/LanguageContext.jsx';
  */
 export default function CleanWarningDialog({ item, onCancel, onConfirm }) {
   const { t } = useLanguage();
+  const cleaner = useCleanerText();
   // Unticked each time the dialog opens rather than remembered across
   // rules: it names one rule, and carrying a tick over from the last one
   // would silence a warning nobody read.
   const [remember, setRemember] = useState(false);
-  const { title, remember: rememberLabel, body } = warningFor(item, t('deepClean.warning'));
+  const { title, remember: rememberLabel, body } = warningFor(item, t('deepClean.warning'), cleaner);
 
   return (
     <ModalOverlay label={title} onClose={onCancel}>

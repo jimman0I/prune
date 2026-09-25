@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { fetchDeepCleanRules, streamDeepCleanScan } from '../lib/api.js';
 import { mergeScannedRule, scanLogLine } from '../lib/scanLog.js';
@@ -22,8 +22,13 @@ import { keys } from '../lib/queryClient.js';
  * The scan is armed rather than automatic. It costs about nineteen
  * seconds of disk walking and must never start because a tab was opened.
  */
-export function useDeepCleanScan() {
+export function useDeepCleanScan(nameOf) {
   const queryClient = useQueryClient();
+  // The log is built inside a long-lived stream callback; a ref keeps it
+  // on the language current when each line lands rather than the one the
+  // scan started in. `nameOf` shows a rule by its translated name.
+  const nameOfRef = useRef(nameOf);
+  nameOfRef.current = nameOf;
 
   // The listed tree: a JSON file the backend reads in ~40ms, so every
   // category and rule is on screen immediately with a dash for its size.
@@ -91,7 +96,7 @@ export function useDeepCleanScan() {
             built = mergeScannedRule(prev ?? rulesQuery.data ?? [], data);
             return built;
           });
-          setLog((prev) => [...prev, scanLogLine(data)]);
+          setLog((prev) => [...prev, scanLogLine(data, nameOfRef.current)]);
           setScanned((n) => n + 1);
           setCurrentId(data.id);
         } else if (type === 'error') {
