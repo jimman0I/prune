@@ -140,7 +140,7 @@ describe('the quarantine screen, in Greek', () => {
   it('gates a permanent delete behind the translated confirm prompt, and Cancel backs out', async () => {
     const user = userEvent.setup();
     renderScreen(<QuarantineManager />);
-    await user.click(await screen.findByRole('button', { name: 'Οριστική Διαγραφή' }));
+    await user.click(await screen.findByRole('button', { name: 'Οριστική διαγραφή' }));
 
     expect(deleteQuarantineBatch).not.toHaveBeenCalled();
     expect(screen.getByText('Οριστική διαγραφή;')).toBeTruthy();
@@ -154,7 +154,7 @@ describe('the quarantine screen, in Greek', () => {
   it('deletes only on the translated Confirm, sending the batch directory', async () => {
     const user = userEvent.setup();
     renderScreen(<QuarantineManager />);
-    await user.click(await screen.findByRole('button', { name: 'Οριστική Διαγραφή' }));
+    await user.click(await screen.findByRole('button', { name: 'Οριστική διαγραφή' }));
         await act(async () => { await new Promise((r) => setTimeout(r, 600)); });
     await user.click(screen.getByRole('button', { name: 'Διαγραφή παρτίδας' }));
 
@@ -167,7 +167,7 @@ describe('the quarantine screen, in Greek', () => {
     deleteQuarantineBatch.mockReturnValue(new Promise((resolve) => { resolveDelete = resolve; }));
     const user = userEvent.setup();
     renderScreen(<QuarantineManager />);
-    await user.click(await screen.findByRole('button', { name: 'Οριστική Διαγραφή' }));
+    await user.click(await screen.findByRole('button', { name: 'Οριστική διαγραφή' }));
         await act(async () => { await new Promise((r) => setTimeout(r, 600)); });
     await user.click(screen.getByRole('button', { name: 'Διαγραφή παρτίδας' }));
 

@@ -168,8 +168,8 @@ describe('the duplicates screen, in Greek', () => {
     await user.click(screen.getByRole('button', { name: 'Μετακίνηση επιλεγμένων σε καραντίνα' }));
 
     expect(await screen.findByRole('dialog', { name: 'Μετακίνηση διπλότυπων σε καραντίνα' })).toBeTruthy();
-    expect(screen.getByRole('heading', { name: 'Μετακίνηση 1 αντιγράφων σε καραντίνα;' })).toBeTruthy();
-    expect(screen.getByText(/Η μετακίνησή τους ελευθερώνει 1 KB μόλις αδειάσετε την Καραντίνα\. Κάθε σετ κρατά τουλάχιστον ένα αντίγραφο/)).toBeTruthy();
+    expect(screen.getByRole('heading', { name: 'Μετακίνηση 1 αντιγράφου σε καραντίνα;' })).toBeTruthy();
+    expect(screen.getByText(/Μόλις αδειάσετε την Καραντίνα, θα ελευθερωθούν 1 KB\. Κάθε ομάδα κρατά τουλάχιστον ένα αντίγραφο/)).toBeTruthy();
     expect(screen.getByRole('button', { name: 'Ακύρωση' })).toBeTruthy();
     expect(screen.getByRole('button', { name: 'Μετακίνηση σε καραντίνα' })).toBeTruthy();
   });
@@ -253,7 +253,7 @@ describe('the Apple design pass strings, in Greek', () => {
     await ready();
     await search(user);
 
-    expect((await screen.findByTestId('duplicates-elapsed')).textContent).toBe('Χρόνος 00:00');
+    expect((await screen.findByTestId('duplicates-elapsed')).textContent).toBe('Πέρασαν 00:00');
     await user.click(screen.getByRole('button', { name: 'Διακοπή' }));
     expect(await screen.findByText('Διακόπηκε — δεν συγκρίθηκε τίποτα.')).toBeTruthy();
   });

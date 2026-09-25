@@ -166,7 +166,7 @@ describe('the batch uninstall dialog, in Greek', () => {
     await screen.findByRole('heading', { name: /Απεγκατάσταση 3 προγραμμάτων/ });
     const user = userEvent.setup();
     await user.click(screen.getByRole('button', { name: 'Έναρξη απεγκατάστασης' }));
-    expect(await screen.findByText('αφαιρέθηκε')).toBeTruthy();
+    expect(await screen.findByText('απεγκαταστάθηκε')).toBeTruthy();
     expect(await screen.findByText('απέτυχε')).toBeTruthy();
   });
 

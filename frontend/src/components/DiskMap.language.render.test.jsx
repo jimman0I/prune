@@ -118,11 +118,11 @@ describe('the Disk Map in another language, before any scan has run', () => {
   it('translates the title, the subtitle, and the drive-root choice panel', async () => {
     mount();
 
-    expect(await screen.findByRole('heading', { level: 1, name: 'Χρήση Δίσκου' })).toBeTruthy();
-    expect(screen.getByText('Τι χρησιμοποιεί τον χώρο σε αυτόν τον δίσκο, και πού.')).toBeTruthy();
+    expect(await screen.findByRole('heading', { level: 1, name: 'Χάρτης δίσκου' })).toBeTruthy();
+    expect(screen.getByText('Χρήση δίσκου: τι καταλαμβάνει χώρο σε αυτόν τον δίσκο και πού.')).toBeTruthy();
     expect(screen.getByText('Ανάγνωση ολόκληρου του δίσκου')).toBeTruthy();
     expect(screen.getByText(/κάθε αρχείο στο C: μέσα σε λίγα δευτερόλεπτα/)).toBeTruthy();
-    expect(screen.getByText(/Δεν μπορεί να ολοκληρώσει ολόκληρο δίσκο/)).toBeTruthy();
+    expect(screen.getByText(/Δεν μπορεί να ολοκληρωθεί σε ολόκληρο δίσκο/)).toBeTruthy();
     expect(screen.getByRole('button', { name: 'Γρήγορη σάρωση (διαχειριστής)' })).toBeTruthy();
     expect(screen.getByRole('button', { name: "Διάτρεξε τους φακέλους αντ' αυτού" })).toBeTruthy();
   });
@@ -134,9 +134,9 @@ describe('the Disk Map in another language, before any scan has run', () => {
 
     await user.click(await crawlButton());
 
-    // The scan card labels itself "Σάρωση του <path>" in one element now
+    // The scan card labels itself "Σάρωση: <path>" in one element now
     // (it used to be a heading plus a separate path line).
-    expect(await screen.findByText('Σάρωση του C:\\')).toBeTruthy();
+    expect(await screen.findByText('Σάρωση: C:\\')).toBeTruthy();
     expect(screen.getByText(/Έναν κατάλογο τη φορά/)).toBeTruthy();
     expect(screen.getByRole('button', { name: "Ανάγνωση του ευρετηρίου δίσκου αντ' αυτού (διαχειριστής)" })).toBeTruthy();
   });
