@@ -817,8 +817,8 @@
   {
     "id": "thumbnail_cache_deep",
     "category": "Windows",
-    "name": "Thumbnail Cache (Deep)",
-    "description": "Every cached thumbnail database. A deeper pass than Smart Cleanup's quick Thumbnail Cache category.",
+    "name": "Thumbnail Cache",
+    "description": "Every cached thumbnail database. Windows rebuilds them as you open folders.",
     "paths": [
       "%LOCALAPPDATA%\\Microsoft\\Windows\\Explorer\\thumbcache_*.db"
     ],

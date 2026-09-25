@@ -1,7 +1,24 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
+// Test-owned fixture instead of the real generated files: the tests below prove the
+// lookup and the English fallback, and must not change when a translation is reworded.
+// Deliberately incomplete (3 rules, 2 categories).
+vi.mock('./cleaner/index.js', () => ({ CLEANER_TEXT: {
+  el: {
+    rules: {
+      brave_cache: { name: 'Προσωρινή μνήμη', description: 'Αποθηκευμένες σελίδες και εικόνες. Ξαναδημιουργούνται καθώς περιηγείστε.' },
+      brave_cookies: { name: 'Cookies', description: 'Σας αποσυνδέει από κάθε ιστότοπο που σας θυμόταν.' },
+      chrome_cache: { name: 'Προσωρινή μνήμη', description: 'Αποθηκευμένες σελίδες και εικόνες του Chrome.' }
+    },
+    categories: {
+      Brave: 'Πρόγραμμα περιήγησης Brave',
+      Chrome: 'Πρόγραμμα περιήγησης Chrome'
+    }
+  }
+} }));
+
 import { ruleName, ruleDescription, categoryName, ruleSearchText, categorySearchText } from './cleanerText.js';
 
-// Uses the real `el` module's own ids (brave_cache is translated, brave_history is not).
+// brave_cache is translated in the fixture above, brave_history is not.
 const cache = { id: 'brave_cache', category: 'Brave', name: 'Cache', description: 'Rebuilt as you browse.' };
 const history = { id: 'brave_history', category: 'Brave', name: 'History', description: 'Pages you visited.' };
 

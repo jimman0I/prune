@@ -10,9 +10,26 @@ import { makeTestClient } from '../testSupport/renderScreen.jsx';
 
 /** Deep Clean's rule names, descriptions and category headings follow the
  * language, and the English stays a working fallback and a working search
- * term. Rendered in Greek against the test fixture in i18n/cleaner/el.js,
+ * term. Rendered in Greek against a fixture module (mocked above),
  * which translates brave_cache and brave_cookies and the Brave category and
  * deliberately nothing else -- brave_history is the untranslated rule. */
+
+// Test-owned fixture instead of the real generated files: the tests below prove the
+// lookup and the English fallback, and must not change when a translation is reworded.
+// Deliberately incomplete (3 rules, 2 categories).
+vi.mock('../i18n/cleaner/index.js', () => ({ CLEANER_TEXT: {
+  el: {
+    rules: {
+      brave_cache: { name: 'Προσωρινή μνήμη', description: 'Αποθηκευμένες σελίδες και εικόνες. Ξαναδημιουργούνται καθώς περιηγείστε.' },
+      brave_cookies: { name: 'Cookies', description: 'Σας αποσυνδέει από κάθε ιστότοπο που σας θυμόταν.' },
+      chrome_cache: { name: 'Προσωρινή μνήμη', description: 'Αποθηκευμένες σελίδες και εικόνες του Chrome.' }
+    },
+    categories: {
+      Brave: 'Πρόγραμμα περιήγησης Brave',
+      Chrome: 'Πρόγραμμα περιήγησης Chrome'
+    }
+  }
+} }));
 
 const streamDeepCleanExecute = vi.fn();
 const fetchDeepCleanRules = vi.fn();
