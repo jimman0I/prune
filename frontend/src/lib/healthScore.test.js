@@ -34,11 +34,11 @@ describe('computeHealthScore -- drive component', () => {
     expect(score).toBe(0);
   });
 
-  it('a genuinely unknown drive verdict (a real answer, not a loading state) scores as neutral, not failing', () => {
+  it('a genuinely unknown drive verdict has no score, rather than an invented neutral one', () => {
     const { score } = computeHealthScore({
       driveVerdict: { percent: null, statusLabel: 'Unknown', tone: 'muted' }, primaryDisk: CLEAN_DISK
     });
-    expect(score).toBe(75);
+    expect(score).toBeNull();
   });
 
   it('is null until the drive has answered, never a made-up healthy number', () => {

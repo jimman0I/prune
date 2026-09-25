@@ -147,9 +147,7 @@ describe('the Dashboard in another language', () => {
       disks: [{ deviceId: '0', model: 'Test NVMe', healthStatus: null, lifeRemainingPercent: null }]
     });
     render();
-    // An unknown status is a real answer, so the ring shows the neutral
-    // score (75) rather than the word; the word lives in the sentence.
-    expect(await screen.findByText('75')).toBeTruthy();
+    expect(await screen.findByText('Άγνωστο')).toBeTruthy();
     // The inline fallback inside the "Windows reports..." sentence -- a
     // different catalog key from the gauge's, and must stay so.
     expect(screen.getByText(/άγνωστη κατάσταση/)).toBeTruthy();
