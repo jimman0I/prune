@@ -185,3 +185,12 @@ describe('cleanGuardsFrom', () => {
     expect(cleanGuardsFrom({ skipRecentHours: '12' }).skipRecentHours).toBe(12);
   });
 });
+
+describe('hideUnavailableRules default', () => {
+  it('is on, so Deep Clean lists only software that is on this machine', async () => {
+    // Off, it listed and pre-ticked Slack, Teams, Vivaldi... on PCs that
+    // never had them.
+    const settings = await getSettings();
+    expect(settings.hideUnavailableRules).toBe(true);
+  });
+});

@@ -8,7 +8,7 @@ import { useDeepCleanExecute } from '../hooks/useDeepCleanExecute.js';
 import { useSettings } from '../hooks/useSystemQueries.js';
 import { lockedFileSummary } from '../lib/lockedFiles.js';
 import { useToasts } from '../hooks/useToasts.jsx';
-import { defaultSelection, selectableIds } from '../lib/defaultSelection.js';
+import { defaultSelection, restoreSelection, selectableIds } from '../lib/defaultSelection.js';
 import { selectionTotal } from '../lib/selectionTotal.js';
 import { needsWarning, rememberedWith } from '../lib/cleanWarning.js';
 import { categoryTickPlan } from '../lib/categoryTickPlan.js';

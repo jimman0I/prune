@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { defaultSelection, selectableIds, cleanableIds } from './defaultSelection.js';
+import { defaultSelection, selectableIds, cleanableIds, restoreSelection } from './defaultSelection.js';
 
 const categories = [
   {
@@ -131,5 +131,29 @@ describe('cleanableIds', () => {
 
   it('returns an empty set for nothing scanned', () => {
     expect(cleanableIds(null)).toEqual(new Set());
+  });
+});
+
+describe('restoreSelection', () => {
+  const listed = [{ category: 'Apps', items: [
+    { id: 'vivaldi_cache', name: 'Vivaldi', present: false },
+    { id: 'slack_cache', name: 'Slack', present: false },
+    { id: 'thumbs', name: 'Thumbnails', present: true, recommended: true },
+    { id: 'unmeasured', name: 'Command rule' }
+  ] }];
+
+  it('drops saved ticks for software that is not on this machine', () => {
+    // A tick saved on an earlier scan (or another version) must not put
+    // Vivaldi back in the batch on a PC that has never had it.
+    const restored = restoreSelection(['vivaldi_cache', 'slack_cache', 'thumbs', 'unmeasured'], listed);
+    expect([...restored].sort()).toEqual(['thumbs', 'unmeasured']);
+  });
+
+  it('falls back to the defaults when nothing saved still applies', () => {
+    expect([...restoreSelection(['vivaldi_cache'], listed)]).toEqual(['thumbs']);
+  });
+
+  it('falls back to the defaults when nothing was saved', () => {
+    expect([...restoreSelection(undefined, listed)]).toEqual(['thumbs']);
   });
 });
