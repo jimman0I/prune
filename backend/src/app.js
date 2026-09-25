@@ -32,6 +32,7 @@ import forcedUninstallRoutes from './routes/forcedUninstall.js';
 import mftScanRoutes from './routes/mftScan.js';
 import fileIconsRoutes from './routes/fileIcons.js';
 import updateCheckRoutes from './routes/updateCheck.js';
+import bugReportRoutes from './routes/bugReport.js';
 
 export function createApp({ port } = {}) {
   const app = express();
@@ -82,6 +83,7 @@ export function createApp({ port } = {}) {
   app.use('/api/mft-scan', mftScanRoutes);
   app.use('/api/file-icons', fileIconsRoutes);
   app.use('/api/update-check', updateCheckRoutes);
+  app.use('/api/bug-report', bugReportRoutes);
 
   /** Anything still unanswered is a path this app does not serve. After
    * every route, so it can only see what none of them matched. */

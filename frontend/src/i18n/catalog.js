@@ -19,6 +19,7 @@
 export const CATALOG = {
   en: {
     nav: {
+      reportBug: 'Report a bug',
       dashboard: 'Dashboard',
       diskMap: 'Disk Map',
       applications: 'Applications',
@@ -175,6 +176,9 @@ export const CATALOG = {
         registryNote: 'Registry keys are exported to Quarantine before they are removed, whichever you choose.'
       },
       about: {
+        reportTitle: 'Report a bug',
+        reportDescription: 'Opens a pre-filled issue on GitHub. Nothing is sent by Prune itself, and you see everything before it goes anywhere.',
+        reportButton: 'Report a bug',
         description: 'A local, offline uninstaller and cleanup tool for Windows — forced removal with leftover-file scanning, safe quarantine-before-delete, disk mapping, and one-click junk cleanup.'
       },
       automation: {
@@ -748,6 +752,28 @@ export const CATALOG = {
       disk: 'Disk',
       footer: 'A scan reads the whole disk, so these move while Prune is working.'
     },
+    bugReport: {
+      title: 'Report a bug',
+      intro: 'Opens a pre-filled issue on GitHub. Nothing is sent by Prune itself, and you see everything before it goes anywhere.',
+      summaryLabel: 'Summary',
+      detailsLabel: 'What went wrong?',
+      detailsPlaceholder: 'What you did, what you expected, and what happened instead.',
+      includedHeading: 'What will be included',
+      includedText: 'The text you write here',
+      includedVersion: 'Prune version',
+      includedWindows: 'Windows version',
+      includedArch: 'Architecture',
+      includedNothingElse: 'Nothing else is collected: no file paths, no scan results, no user name.',
+      publicNote: 'Reports on GitHub are public, so do not paste anything private. You need a free GitHub account to post one.',
+      cancel: 'Cancel',
+      open: 'Open on GitHub',
+      opening: 'Opening…',
+      opened: 'Opened in your browser — post the issue there to send it.',
+      close: 'Close',
+      failed: 'Could not open the report',
+      copy: 'Copy report',
+      copied: 'Copied'
+    },
     shortcutsModal: {
       title: 'Keyboard shortcuts',
       close: 'Close',
@@ -792,6 +818,7 @@ export const CATALOG = {
 
   af: {
     nav: {
+      reportBug: "Rapporteer 'n fout",
       dashboard: 'Kontroleskerm', diskMap: 'Skyfkaart', applications: 'Toepassings',
       quarantine: 'Karantyn', settings: 'Instellings', startup: 'Opstart',
       duplicates: 'Duplikate', deepClean: 'Grondige Skoonmaak',
@@ -940,6 +967,9 @@ export const CATALOG = {
         registryNote: 'Registersleutels word na Karantyn uitgevoer voordat hulle verwyder word, wat ook al jy kies.'
       },
       about: {
+        reportTitle: "Rapporteer 'n fout",
+        reportDescription: "Maak 'n vooraf ingevulde kwessie op GitHub oop. Prune self stuur niks, en jy sien alles voordat dit érens heen gaan.",
+        reportButton: "Rapporteer 'n fout",
         description: "'n Plaaslike, vanlyn deïnstalleerder en skoonmaakhulpmiddel vir Windows — geforseerde verwydering met oorblyfsellêerskandering, veilige karantyn-voor-verwydering, skyfkartering, en een-klik-vullis-skoonmaak."
       },
       automation: {
@@ -1508,6 +1538,28 @@ export const CATALOG = {
       disk: 'Skyf',
       footer: "'n Skandering lees die hele skyf, so hierdie beweeg terwyl Prune werk."
     },
+    bugReport: {
+      title: "Rapporteer 'n fout",
+      intro: "Maak 'n vooraf ingevulde kwessie op GitHub oop. Prune self stuur niks, en jy sien alles voordat dit érens heen gaan.",
+      summaryLabel: 'Opsomming',
+      detailsLabel: 'Wat het verkeerd gegaan?',
+      detailsPlaceholder: 'Wat jy gedoen het, wat jy verwag het en wat in plaas daarvan gebeur het.',
+      includedHeading: 'Wat ingesluit sal word',
+      includedText: 'Die teks wat jy hier skryf',
+      includedVersion: 'Prune-weergawe',
+      includedWindows: 'Windows-weergawe',
+      includedArch: 'Argitektuur',
+      includedNothingElse: 'Niks anders word ingesamel nie: geen lêerpaaie, geen skandeerresultate, geen gebruikersnaam nie.',
+      publicNote: "Verslae op GitHub is openbaar, so moenie iets privaats plak nie. Jy het 'n gratis GitHub-rekening nodig om een te plaas.",
+      cancel: 'Kanselleer',
+      open: 'Maak oop op GitHub',
+      opening: 'Maak tans oop…',
+      opened: 'In jou blaaier oopgemaak — plaas die kwessie daar om dit te stuur.',
+      close: 'Sluit',
+      failed: 'Kon nie die verslag oopmaak nie',
+      copy: 'Kopieer verslag',
+      copied: 'Gekopieer'
+    },
     shortcutsModal: {
       title: 'Sleutelbordkortpaaie',
       close: 'Sluit',
@@ -1552,6 +1604,7 @@ export const CATALOG = {
 
   ar: {
     nav: {
+      reportBug: 'الإبلاغ عن خطأ',
       dashboard: 'لوحة التحكم', diskMap: 'خريطة القرص', applications: 'التطبيقات',
       quarantine: 'الحجر', settings: 'الإعدادات', startup: 'بدء التشغيل',
       duplicates: 'الملفات المكررة', deepClean: 'تنظيف عميق',
@@ -1700,6 +1753,9 @@ export const CATALOG = {
         registryNote: 'يتم تصدير مفاتيح السجل إلى الحجر الصحي قبل إزالتها، أيًا كان اختيارك.'
       },
       about: {
+        reportTitle: 'الإبلاغ عن خطأ',
+        reportDescription: 'يفتح بلاغًا معبأً مسبقًا على GitHub. لا يرسل Prune نفسه أي شيء، وترى كل شيء قبل أن يذهب إلى أي مكان.',
+        reportButton: 'الإبلاغ عن خطأ',
         description: 'أداة إلغاء تثبيت وتنظيف محلية وغير متصلة بالإنترنت لنظام Windows — إزالة قسرية مع فحص الملفات المتبقية، حجر صحي آمن قبل الحذف، رسم خرائط القرص، وتنظيف الفوضى بنقرة واحدة.'
       },
       automation: {
@@ -2268,6 +2324,28 @@ export const CATALOG = {
       disk: 'القرص',
       footer: 'يقرأ الفحص القرص بأكمله، لذا تتحرك هذه القيم أثناء عمل Prune.'
     },
+    bugReport: {
+      title: 'الإبلاغ عن خطأ',
+      intro: 'يفتح بلاغًا معبأً مسبقًا على GitHub. لا يرسل Prune نفسه أي شيء، وترى كل شيء قبل أن يذهب إلى أي مكان.',
+      summaryLabel: 'الملخص',
+      detailsLabel: 'ما الذي حدث؟',
+      detailsPlaceholder: 'ما فعلته، وما توقعته، وما حدث بدلًا من ذلك.',
+      includedHeading: 'ما الذي سيتم تضمينه',
+      includedText: 'النص الذي تكتبه هنا',
+      includedVersion: 'إصدار Prune',
+      includedWindows: 'إصدار Windows',
+      includedArch: 'البنية',
+      includedNothingElse: 'لا يُجمع أي شيء آخر: لا مسارات ملفات ولا نتائج فحص ولا اسم مستخدم.',
+      publicNote: 'التقارير على GitHub عامة، لذا لا تلصق أي شيء خاص. تحتاج إلى حساب GitHub مجاني لنشر تقرير.',
+      cancel: 'إلغاء',
+      open: 'فتح على GitHub',
+      opening: 'جارٍ الفتح…',
+      opened: 'تم الفتح في متصفحك — انشر البلاغ هناك لإرساله.',
+      close: 'إغلاق',
+      failed: 'تعذر فتح التقرير',
+      copy: 'نسخ التقرير',
+      copied: 'تم النسخ'
+    },
     shortcutsModal: {
       title: 'اختصارات لوحة المفاتيح',
       close: 'إغلاق',
@@ -2312,6 +2390,7 @@ export const CATALOG = {
 
   ca: {
     nav: {
+      reportBug: "Informa d'un error",
       dashboard: 'Tauler', diskMap: 'Mapa del disc', applications: 'Aplicacions',
       quarantine: 'Quarantena', settings: 'Configuració', startup: 'Inici',
       duplicates: 'Duplicats', deepClean: 'Neteja profunda',
@@ -2460,6 +2539,9 @@ export const CATALOG = {
         registryNote: 'Les claus de registre s\'exporten a la Quarantena abans de ser eliminades, sigui quina sigui la teva elecció.'
       },
       about: {
+        reportTitle: "Informa d'un error",
+        reportDescription: 'Obre una incidència pre-omplerta a GitHub. Prune no envia res per si mateix i ho veus tot abans que vagi enlloc.',
+        reportButton: "Informa d'un error",
         description: 'Una eina de desinstal·lació i neteja local i fora de línia per a Windows — eliminació forçada amb escaneig de fitxers romanents, quarantena segura abans d\'eliminar, mapatge de disc, i neteja de brossa amb un clic.'
       },
       automation: {
@@ -3028,6 +3110,28 @@ export const CATALOG = {
       disk: 'Disc',
       footer: 'Un escaneig llegeix tot el disc, així que aquests es mouen mentre el Prune treballa.'
     },
+    bugReport: {
+      title: "Informa d'un error",
+      intro: 'Obre una incidència pre-omplerta a GitHub. Prune no envia res per si mateix i ho veus tot abans que vagi enlloc.',
+      summaryLabel: 'Resum',
+      detailsLabel: 'Què ha fallat?',
+      detailsPlaceholder: 'Què vas fer, què esperaves i què va passar en canvi.',
+      includedHeading: "Què s'inclourà",
+      includedText: 'El text que escriguis aquí',
+      includedVersion: 'Versió de Prune',
+      includedWindows: 'Versió de Windows',
+      includedArch: 'Arquitectura',
+      includedNothingElse: "No es recull res més: ni rutes de fitxers, ni resultats d'anàlisi, ni nom d'usuari.",
+      publicNote: 'Els informes a GitHub són públics, així que no enganxis res privat. Necessites un compte de GitHub gratuït per publicar-ne un.',
+      cancel: 'Cancel·la',
+      open: 'Obre a GitHub',
+      opening: "S'està obrint…",
+      opened: "S'ha obert al navegador — publica-hi la incidència per enviar-la.",
+      close: 'Tanca',
+      failed: "No s'ha pogut obrir l'informe",
+      copy: "Copia l'informe",
+      copied: 'Copiat'
+    },
     shortcutsModal: {
       title: 'Dreceres de teclat',
       close: 'Tanca',
@@ -3072,6 +3176,7 @@ export const CATALOG = {
 
   cs: {
     nav: {
+      reportBug: 'Nahlásit chybu',
       dashboard: 'Přehled', diskMap: 'Mapa disku', applications: 'Aplikace',
       quarantine: 'Karanténa', settings: 'Nastavení', startup: 'Po spuštění',
       duplicates: 'Duplicity', deepClean: 'Důkladné čištění',
@@ -3220,6 +3325,9 @@ export const CATALOG = {
         registryNote: 'Klíče registru se exportují do karantény před odebráním, ať už zvolíte cokoli.'
       },
       about: {
+        reportTitle: 'Nahlásit chybu',
+        reportDescription: 'Otevře předvyplněný požadavek na GitHubu. Prune sám nic neodesílá a vše uvidíte dřív, než to kam odejde.',
+        reportButton: 'Nahlásit chybu',
         description: 'Lokální, offline odinstalační a čisticí nástroj pro Windows — vynucené odebrání se skenováním pozůstatků, bezpečná karanténa před smazáním, mapování disku a jednoklikové čištění nepořádku.'
       },
       automation: {
@@ -3788,6 +3896,28 @@ export const CATALOG = {
       disk: 'Disk',
       footer: 'Skenování čte celý disk, takže se tyto hodnoty mění, zatímco Prune pracuje.'
     },
+    bugReport: {
+      title: 'Nahlásit chybu',
+      intro: 'Otevře předvyplněný požadavek na GitHubu. Prune sám nic neodesílá a vše uvidíte dřív, než to kam odejde.',
+      summaryLabel: 'Shrnutí',
+      detailsLabel: 'Co se pokazilo?',
+      detailsPlaceholder: 'Co jste dělali, co jste očekávali a co se stalo místo toho.',
+      includedHeading: 'Co bude zahrnuto',
+      includedText: 'Text, který sem napíšete',
+      includedVersion: 'Verze Prune',
+      includedWindows: 'Verze Windows',
+      includedArch: 'Architektura',
+      includedNothingElse: 'Nic dalšího se neshromažďuje: žádné cesty k souborům, žádné výsledky skenování, žádné uživatelské jméno.',
+      publicNote: 'Hlášení na GitHubu jsou veřejná, takže nevkládejte nic soukromého. K odeslání potřebujete bezplatný účet GitHub.',
+      cancel: 'Zrušit',
+      open: 'Otevřít na GitHubu',
+      opening: 'Otevírání…',
+      opened: 'Otevřeno v prohlížeči — odešlete tam požadavek.',
+      close: 'Zavřít',
+      failed: 'Hlášení se nepodařilo otevřít',
+      copy: 'Kopírovat hlášení',
+      copied: 'Zkopírováno'
+    },
     shortcutsModal: {
       title: 'Klávesové zkratky',
       close: 'Zavřít',
@@ -3832,6 +3962,7 @@ export const CATALOG = {
 
   cy: {
     nav: {
+      reportBug: 'Rhoi gwybod am nam',
       dashboard: 'Dangosfwrdd', diskMap: 'Map Disg', applications: 'Rhaglenni',
       quarantine: 'Cwarantin', settings: 'Gosodiadau', startup: 'Cychwyn',
       duplicates: 'Dyblygiadau', deepClean: 'Glanhau Dwfn',
@@ -3980,6 +4111,9 @@ export const CATALOG = {
         registryNote: "Caiff allweddi cofrestrfa eu hallforio i Gwarantin cyn iddynt gael eu tynnu, pa un bynnag a ddewiswch."
       },
       about: {
+        reportTitle: 'Rhoi gwybod am nam',
+        reportDescription: "Yn agor mater wedi'i lenwi ymlaen llaw ar GitHub. Nid yw Prune ei hun yn anfon dim, ac rydych chi'n gweld popeth cyn iddo fynd i unman.",
+        reportButton: 'Rhoi gwybod am nam',
         description: "Offeryn dadosod a glanhau lleol, all-lein ar gyfer Windows — tynnu gorfodol gyda sganio ffeiliau gweddilliol, cwarantin diogel cyn dileu, mapio disg, a glanhau sbwriel un clic."
       },
       automation: {
@@ -4548,6 +4682,28 @@ export const CATALOG = {
       disk: 'Disg',
       footer: "Mae sgan yn darllen y ddisg gyfan, felly mae'r rhain yn symud tra bo Prune yn gweithio."
     },
+    bugReport: {
+      title: 'Rhoi gwybod am nam',
+      intro: "Yn agor mater wedi'i lenwi ymlaen llaw ar GitHub. Nid yw Prune ei hun yn anfon dim, ac rydych chi'n gweld popeth cyn iddo fynd i unman.",
+      summaryLabel: 'Crynodeb',
+      detailsLabel: "Beth aeth o'i le?",
+      detailsPlaceholder: "Beth wnaethoch chi, beth oeddech chi'n ei ddisgwyl, a beth ddigwyddodd yn lle hynny.",
+      includedHeading: 'Beth fydd yn cael ei gynnwys',
+      includedText: "Y testun rydych chi'n ei ysgrifennu yma",
+      includedVersion: 'Fersiwn Prune',
+      includedWindows: 'Fersiwn Windows',
+      includedArch: 'Pensaernïaeth',
+      includedNothingElse: 'Ni chesglir dim arall: dim llwybrau ffeil, dim canlyniadau sganio, dim enw defnyddiwr.',
+      publicNote: 'Mae adroddiadau ar GitHub yn gyhoeddus, felly peidiwch â gludo dim preifat. Mae angen cyfrif GitHub am ddim arnoch i bostio un.',
+      cancel: 'Diddymu',
+      open: 'Agor ar GitHub',
+      opening: 'Yn agor…',
+      opened: "Agorwyd yn eich porwr — postiwch y mater yno i'w anfon.",
+      close: 'Cau',
+      failed: 'Methu agor yr adroddiad',
+      copy: "Copïo'r adroddiad",
+      copied: 'Wedi copïo'
+    },
     shortcutsModal: {
       title: 'Byrlwybrau bysellfwrdd',
       close: 'Cau',
@@ -4592,6 +4748,7 @@ export const CATALOG = {
 
   da: {
     nav: {
+      reportBug: 'Rapportér en fejl',
       dashboard: 'Oversigt', diskMap: 'Diskkort', applications: 'Programmer',
       quarantine: 'Karantæne', settings: 'Indstillinger', startup: 'Opstart',
       duplicates: 'Dubletter', deepClean: 'Grundig oprydning',
@@ -4740,6 +4897,9 @@ export const CATALOG = {
         registryNote: 'Registreringsnøgler eksporteres til karantæne, før de fjernes, uanset hvad du vælger.'
       },
       about: {
+        reportTitle: 'Rapportér en fejl',
+        reportDescription: 'Åbner en forudfyldt sag på GitHub. Prune sender ikke selv noget, og du ser alt, før det går nogen steder hen.',
+        reportButton: 'Rapportér en fejl',
         description: 'Et lokalt, offline afinstallations- og oprydningsværktøj til Windows — tvungen fjernelse med scanning af restfiler, sikker karantæne før sletning, diskkortlægning og oprydning af skidt med ét klik.'
       },
       automation: {
@@ -5308,6 +5468,28 @@ export const CATALOG = {
       disk: 'Disk',
       footer: 'En scanning læser hele disken, så disse bevæger sig, mens Prune arbejder.'
     },
+    bugReport: {
+      title: 'Rapportér en fejl',
+      intro: 'Åbner en forudfyldt sag på GitHub. Prune sender ikke selv noget, og du ser alt, før det går nogen steder hen.',
+      summaryLabel: 'Resumé',
+      detailsLabel: 'Hvad gik galt?',
+      detailsPlaceholder: 'Hvad du gjorde, hvad du forventede, og hvad der skete i stedet.',
+      includedHeading: 'Hvad der medtages',
+      includedText: 'Den tekst, du skriver her',
+      includedVersion: 'Prune-version',
+      includedWindows: 'Windows-version',
+      includedArch: 'Arkitektur',
+      includedNothingElse: 'Der indsamles ikke andet: ingen filstier, ingen scanningsresultater, intet brugernavn.',
+      publicNote: 'Rapporter på GitHub er offentlige, så indsæt ikke noget privat. Du skal bruge en gratis GitHub-konto for at oprette en.',
+      cancel: 'Annuller',
+      open: 'Åbn på GitHub',
+      opening: 'Åbner…',
+      opened: 'Åbnet i din browser — opret sagen der for at sende den.',
+      close: 'Luk',
+      failed: 'Kunne ikke åbne rapporten',
+      copy: 'Kopiér rapport',
+      copied: 'Kopieret'
+    },
     shortcutsModal: {
       title: 'Tastaturgenveje',
       close: 'Luk',
@@ -5352,6 +5534,7 @@ export const CATALOG = {
 
   de: {
     nav: {
+      reportBug: 'Fehler melden',
       dashboard: 'Übersicht', diskMap: 'Festplattenkarte', applications: 'Anwendungen',
       quarantine: 'Quarantäne', settings: 'Einstellungen', startup: 'Autostart',
       duplicates: 'Duplikate', deepClean: 'Gründliche Bereinigung',
@@ -5500,6 +5683,9 @@ export const CATALOG = {
         registryNote: 'Registrierungsschlüssel werden vor der Entfernung in die Quarantäne exportiert, unabhängig davon, was du wählst.'
       },
       about: {
+        reportTitle: 'Fehler melden',
+        reportDescription: 'Öffnet ein vorausgefülltes Issue auf GitHub. Prune selbst sendet nichts, und Sie sehen alles, bevor es irgendwohin geht.',
+        reportButton: 'Fehler melden',
         description: 'Ein lokales, offline Deinstallations- und Bereinigungstool für Windows — erzwungene Entfernung mit Scannen nach Restdateien, sichere Quarantäne vor dem Löschen, Speicherplatzkartierung und Ein-Klick-Müllbereinigung.'
       },
       automation: {
@@ -6068,6 +6254,28 @@ export const CATALOG = {
       disk: 'Festplatte',
       footer: 'Ein Scan liest die gesamte Festplatte, daher bewegen sich diese Werte, während Prune arbeitet.'
     },
+    bugReport: {
+      title: 'Fehler melden',
+      intro: 'Öffnet ein vorausgefülltes Issue auf GitHub. Prune selbst sendet nichts, und Sie sehen alles, bevor es irgendwohin geht.',
+      summaryLabel: 'Zusammenfassung',
+      detailsLabel: 'Was ist schiefgelaufen?',
+      detailsPlaceholder: 'Was Sie getan haben, was Sie erwartet haben und was stattdessen passiert ist.',
+      includedHeading: 'Was enthalten sein wird',
+      includedText: 'Der Text, den Sie hier schreiben',
+      includedVersion: 'Prune-Version',
+      includedWindows: 'Windows-Version',
+      includedArch: 'Architektur',
+      includedNothingElse: 'Sonst wird nichts erfasst: keine Dateipfade, keine Scan-Ergebnisse, kein Benutzername.',
+      publicNote: 'Meldungen auf GitHub sind öffentlich, fügen Sie daher nichts Privates ein. Zum Absenden brauchen Sie ein kostenloses GitHub-Konto.',
+      cancel: 'Abbrechen',
+      open: 'Auf GitHub öffnen',
+      opening: 'Wird geöffnet…',
+      opened: 'In Ihrem Browser geöffnet — senden Sie das Issue dort ab.',
+      close: 'Schließen',
+      failed: 'Die Meldung konnte nicht geöffnet werden',
+      copy: 'Meldung kopieren',
+      copied: 'Kopiert'
+    },
     shortcutsModal: {
       title: 'Tastenkombinationen',
       close: 'Schließen',
@@ -6112,6 +6320,7 @@ export const CATALOG = {
 
   el: {
     nav: {
+      reportBug: 'Αναφορά σφάλματος',
       dashboard: 'Πίνακας ελέγχου', diskMap: 'Χάρτης δίσκου', applications: 'Εφαρμογές',
       quarantine: 'Καραντίνα', settings: 'Ρυθμίσεις', startup: 'Εκκίνηση',
       duplicates: 'Διπλότυπα', deepClean: 'Βαθύς καθαρισμός',
@@ -6260,6 +6469,9 @@ export const CATALOG = {
         registryNote: 'Τα κλειδιά μητρώου εξάγονται στην Καραντίνα πριν αφαιρεθούν, όποιο κι αν επιλέξετε.'
       },
       about: {
+        reportTitle: 'Αναφορά σφάλματος',
+        reportDescription: 'Ανοίγει ένα προσυμπληρωμένο ζήτημα στο GitHub. Το ίδιο το Prune δεν στέλνει τίποτα και βλέπετε τα πάντα πριν πάνε οπουδήποτε.',
+        reportButton: 'Αναφορά σφάλματος',
         description: 'Ένα τοπικό, εκτός σύνδεσης εργαλείο απεγκατάστασης και καθαρισμού για Windows — εξαναγκασμένη αφαίρεση με σάρωση καταλοίπων αρχείων, ασφαλή καραντίνα πριν τη διαγραφή, χαρτογράφηση δίσκου, και καθαρισμό σκουπιδιών με ένα κλικ.'
       },
       automation: {
@@ -6828,6 +7040,28 @@ export const CATALOG = {
       disk: 'Δίσκος',
       footer: 'Μια σάρωση διαβάζει ολόκληρο τον δίσκο, οπότε αυτά κινούνται όσο το Prune εργάζεται.'
     },
+    bugReport: {
+      title: 'Αναφορά σφάλματος',
+      intro: 'Ανοίγει ένα προσυμπληρωμένο ζήτημα στο GitHub. Το ίδιο το Prune δεν στέλνει τίποτα και βλέπετε τα πάντα πριν πάνε οπουδήποτε.',
+      summaryLabel: 'Περίληψη',
+      detailsLabel: 'Τι πήγε στραβά;',
+      detailsPlaceholder: "Τι κάνατε, τι περιμένατε και τι συνέβη αντί γι' αυτό.",
+      includedHeading: 'Τι θα συμπεριληφθεί',
+      includedText: 'Το κείμενο που γράφετε εδώ',
+      includedVersion: 'Έκδοση Prune',
+      includedWindows: 'Έκδοση Windows',
+      includedArch: 'Αρχιτεκτονική',
+      includedNothingElse: 'Δεν συλλέγεται τίποτα άλλο: ούτε διαδρομές αρχείων, ούτε αποτελέσματα σάρωσης, ούτε όνομα χρήστη.',
+      publicNote: "Οι αναφορές στο GitHub είναι δημόσιες, γι' αυτό μην επικολλήσετε τίποτα ιδιωτικό. Χρειάζεστε δωρεάν λογαριασμό GitHub για να δημοσιεύσετε.",
+      cancel: 'Ακύρωση',
+      open: 'Άνοιγμα στο GitHub',
+      opening: 'Άνοιγμα…',
+      opened: 'Άνοιξε στο πρόγραμμα περιήγησής σας — δημοσιεύστε εκεί το ζήτημα για να σταλεί.',
+      close: 'Κλείσιμο',
+      failed: 'Δεν ήταν δυνατό το άνοιγμα της αναφοράς',
+      copy: 'Αντιγραφή αναφοράς',
+      copied: 'Αντιγράφηκε'
+    },
     shortcutsModal: {
       title: 'Συντομεύσεις πληκτρολογίου',
       close: 'Κλείσιμο',
@@ -6872,6 +7106,7 @@ export const CATALOG = {
 
   es: {
     nav: {
+      reportBug: 'Informar de un error',
       dashboard: 'Panel', diskMap: 'Mapa del disco', applications: 'Aplicaciones',
       quarantine: 'Cuarentena', settings: 'Configuración', startup: 'Inicio',
       duplicates: 'Duplicados', deepClean: 'Limpieza profunda',
@@ -7020,6 +7255,9 @@ export const CATALOG = {
         registryNote: 'Las claves de registro se exportan a Cuarentena antes de eliminarse, sea cual sea tu elección.'
       },
       about: {
+        reportTitle: 'Informar de un error',
+        reportDescription: 'Abre una incidencia rellenada previamente en GitHub. Prune no envía nada por sí mismo y ves todo antes de que vaya a ningún sitio.',
+        reportButton: 'Informar de un error',
         description: 'Una herramienta local y sin conexión de desinstalación y limpieza para Windows — eliminación forzada con escaneo de restos, cuarentena segura antes de borrar, mapeo de disco y limpieza de basura con un clic.'
       },
       automation: {
@@ -7588,6 +7826,28 @@ export const CATALOG = {
       disk: 'Disco',
       footer: 'Un escaneo lee todo el disco, así que estos se mueven mientras Prune trabaja.'
     },
+    bugReport: {
+      title: 'Informar de un error',
+      intro: 'Abre una incidencia rellenada previamente en GitHub. Prune no envía nada por sí mismo y ves todo antes de que vaya a ningún sitio.',
+      summaryLabel: 'Resumen',
+      detailsLabel: '¿Qué salió mal?',
+      detailsPlaceholder: 'Qué hiciste, qué esperabas y qué ocurrió en su lugar.',
+      includedHeading: 'Qué se incluirá',
+      includedText: 'El texto que escribas aquí',
+      includedVersion: 'Versión de Prune',
+      includedWindows: 'Versión de Windows',
+      includedArch: 'Arquitectura',
+      includedNothingElse: 'No se recopila nada más: ni rutas de archivos, ni resultados de análisis, ni nombre de usuario.',
+      publicNote: 'Los informes en GitHub son públicos, así que no pegues nada privado. Necesitas una cuenta de GitHub gratuita para publicar uno.',
+      cancel: 'Cancelar',
+      open: 'Abrir en GitHub',
+      opening: 'Abriendo…',
+      opened: 'Abierto en tu navegador — publica allí la incidencia para enviarla.',
+      close: 'Cerrar',
+      failed: 'No se pudo abrir el informe',
+      copy: 'Copiar informe',
+      copied: 'Copiado'
+    },
     shortcutsModal: {
       title: 'Atajos de teclado',
       close: 'Cerrar',
@@ -7632,6 +7892,7 @@ export const CATALOG = {
 
   et: {
     nav: {
+      reportBug: 'Teata veast',
       dashboard: 'Töölaud', diskMap: 'Kettakaart', applications: 'Rakendused',
       quarantine: 'Karantiin', settings: 'Seaded', startup: 'Käivitus',
       duplicates: 'Duplikaadid', deepClean: 'Põhjalik puhastus',
@@ -7780,6 +8041,9 @@ export const CATALOG = {
         registryNote: 'Registrivõtmed eksporditakse karantiini enne eemaldamist, olenemata sinu valikust.'
       },
       about: {
+        reportTitle: 'Teata veast',
+        reportDescription: 'Avab GitHubis eeltäidetud probleemi. Prune ise ei saada midagi ja näed kõike enne, kui see kuhugi läheb.',
+        reportButton: 'Teata veast',
         description: 'Kohalik, võrguühenduseta desinstallimis- ja puhastustööriist Windowsile — sundeemaldamine koos jääkfailide skannimisega, turvaline karantiin enne kustutamist, kettakaardistus ja ühe klõpsuga prügipuhastus.'
       },
       automation: {
@@ -8348,6 +8612,28 @@ export const CATALOG = {
       disk: 'Ketas',
       footer: 'Skannimine loeb kogu ketast, seega need liiguvad, kui Prune töötab.'
     },
+    bugReport: {
+      title: 'Teata veast',
+      intro: 'Avab GitHubis eeltäidetud probleemi. Prune ise ei saada midagi ja näed kõike enne, kui see kuhugi läheb.',
+      summaryLabel: 'Kokkuvõte',
+      detailsLabel: 'Mis valesti läks?',
+      detailsPlaceholder: 'Mida sa tegid, mida ootasid ja mis selle asemel juhtus.',
+      includedHeading: 'Mis lisatakse',
+      includedText: 'Tekst, mille siia kirjutad',
+      includedVersion: 'Pruned versioon',
+      includedWindows: 'Windowsi versioon',
+      includedArch: 'Arhitektuur',
+      includedNothingElse: 'Muud ei koguta: ei failiteid, skannimistulemusi ega kasutajanime.',
+      publicNote: 'GitHubi teated on avalikud, seega ära kleebi midagi privaatset. Teate postitamiseks on vaja tasuta GitHubi kontot.',
+      cancel: 'Tühista',
+      open: 'Ava GitHubis',
+      opening: 'Avamine…',
+      opened: 'Avatud sinu brauseris — postita probleem seal, et see saata.',
+      close: 'Sulge',
+      failed: 'Teadet ei õnnestunud avada',
+      copy: 'Kopeeri teade',
+      copied: 'Kopeeritud'
+    },
     shortcutsModal: {
       title: 'Klaviatuuri otseteed',
       close: 'Sulge',
@@ -8392,6 +8678,7 @@ export const CATALOG = {
 
   fi: {
     nav: {
+      reportBug: 'Ilmoita virheestä',
       dashboard: 'Yhteenveto', diskMap: 'Levykartta', applications: 'Sovellukset',
       quarantine: 'Karanteeni', settings: 'Asetukset', startup: 'Käynnistys',
       duplicates: 'Kaksoiskappaleet', deepClean: 'Perusteellinen siivous',
@@ -8540,6 +8827,9 @@ export const CATALOG = {
         registryNote: 'Rekisteriavaimet viedään karanteeniin ennen niiden poistoa, valinnastasi riippumatta.'
       },
       about: {
+        reportTitle: 'Ilmoita virheestä',
+        reportDescription: 'Avaa valmiiksi täytetyn ongelmailmoituksen GitHubissa. Prune ei lähetä itse mitään, ja näet kaiken ennen kuin se menee minnekään.',
+        reportButton: 'Ilmoita virheestä',
         description: 'Paikallinen, offline-poisto- ja siivoustyökalu Windowsille — pakotettu poisto jäännetiedostojen skannauksella, turvallinen karanteeni ennen poistoa, levykartoitus ja yhden klikkauksen roskasiivous.'
       },
       automation: {
@@ -9108,6 +9398,28 @@ export const CATALOG = {
       disk: 'Levy',
       footer: 'Skannaus lukee koko levyn, joten nämä liikkuvat Prunen työskennellessä.'
     },
+    bugReport: {
+      title: 'Ilmoita virheestä',
+      intro: 'Avaa valmiiksi täytetyn ongelmailmoituksen GitHubissa. Prune ei lähetä itse mitään, ja näet kaiken ennen kuin se menee minnekään.',
+      summaryLabel: 'Yhteenveto',
+      detailsLabel: 'Mikä meni pieleen?',
+      detailsPlaceholder: 'Mitä teit, mitä odotit ja mitä sen sijaan tapahtui.',
+      includedHeading: 'Mitä sisällytetään',
+      includedText: 'Tähän kirjoittamasi teksti',
+      includedVersion: 'Prunen versio',
+      includedWindows: 'Windowsin versio',
+      includedArch: 'Arkkitehtuuri',
+      includedNothingElse: 'Muuta ei kerätä: ei tiedostopolkuja, ei tarkistustuloksia, ei käyttäjänimeä.',
+      publicNote: 'GitHubin ilmoitukset ovat julkisia, joten älä liitä mitään yksityistä. Ilmoituksen lähettämiseen tarvitaan ilmainen GitHub-tili.',
+      cancel: 'Peruuta',
+      open: 'Avaa GitHubissa',
+      opening: 'Avataan…',
+      opened: 'Avattu selaimessasi — lähetä ilmoitus siellä.',
+      close: 'Sulje',
+      failed: 'Ilmoitusta ei voitu avata',
+      copy: 'Kopioi ilmoitus',
+      copied: 'Kopioitu'
+    },
     shortcutsModal: {
       title: 'Pikanäppäimet',
       close: 'Sulje',
@@ -9152,6 +9464,7 @@ export const CATALOG = {
 
   fr: {
     nav: {
+      reportBug: 'Signaler un bug',
       dashboard: 'Tableau de bord', diskMap: 'Carte du disque', applications: 'Applications',
       quarantine: 'Quarantaine', settings: 'Paramètres', startup: 'Démarrage',
       duplicates: 'Doublons', deepClean: 'Nettoyage approfondi',
@@ -9300,6 +9613,9 @@ export const CATALOG = {
         registryNote: "Les clés de registre sont exportées vers la Quarantaine avant leur suppression, quel que soit votre choix."
       },
       about: {
+        reportTitle: 'Signaler un bug',
+        reportDescription: "Ouvre un ticket pré-rempli sur GitHub. Prune n'envoie rien lui-même et vous voyez tout avant que cela parte où que ce soit.",
+        reportButton: 'Signaler un bug',
         description: "Un outil local et hors ligne de désinstallation et de nettoyage pour Windows — suppression forcée avec analyse des fichiers restants, quarantaine sécurisée avant suppression, cartographie du disque et nettoyage des déchets en un clic."
       },
       automation: {
@@ -9868,6 +10184,28 @@ export const CATALOG = {
       disk: 'Disque',
       footer: 'Une analyse lit tout le disque, donc ces valeurs bougent pendant que Prune travaille.'
     },
+    bugReport: {
+      title: 'Signaler un bug',
+      intro: "Ouvre un ticket pré-rempli sur GitHub. Prune n'envoie rien lui-même et vous voyez tout avant que cela parte où que ce soit.",
+      summaryLabel: 'Résumé',
+      detailsLabel: "Qu'est-ce qui a mal tourné ?",
+      detailsPlaceholder: "Ce que vous avez fait, ce que vous attendiez et ce qui s'est passé à la place.",
+      includedHeading: 'Ce qui sera inclus',
+      includedText: 'Le texte que vous écrivez ici',
+      includedVersion: 'Version de Prune',
+      includedWindows: 'Version de Windows',
+      includedArch: 'Architecture',
+      includedNothingElse: "Rien d'autre n'est collecté : ni chemins de fichiers, ni résultats d'analyse, ni nom d'utilisateur.",
+      publicNote: 'Les rapports sur GitHub sont publics, ne collez donc rien de privé. Il faut un compte GitHub gratuit pour en publier un.',
+      cancel: 'Annuler',
+      open: 'Ouvrir sur GitHub',
+      opening: 'Ouverture…',
+      opened: "Ouvert dans votre navigateur — publiez le ticket là-bas pour l'envoyer.",
+      close: 'Fermer',
+      failed: "Impossible d'ouvrir le rapport",
+      copy: 'Copier le rapport',
+      copied: 'Copié'
+    },
     shortcutsModal: {
       title: 'Raccourcis clavier',
       close: 'Fermer',
@@ -9912,6 +10250,7 @@ export const CATALOG = {
 
   he: {
     nav: {
+      reportBug: 'דיווח על באג',
       dashboard: 'לוח בקרה', diskMap: 'מפת הדיסק', applications: 'יישומים',
       quarantine: 'הסגר', settings: 'הגדרות', startup: 'הפעלה',
       duplicates: 'כפילויות', deepClean: 'ניקוי מעמיק',
@@ -10060,6 +10399,9 @@ export const CATALOG = {
         registryNote: 'מפתחות הרישום מיוצאים להסגר לפני שהם מוסרים, לא משנה מה תבחר.'
       },
       about: {
+        reportTitle: 'דיווח על באג',
+        reportDescription: 'פותח דיווח ממולא מראש ב-GitHub. Prune עצמו לא שולח דבר, ואתה רואה הכול לפני שזה הולך לאנשהו.',
+        reportButton: 'דיווח על באג',
         description: 'כלי הסרה וניקוי מקומי, לא מקוון, עבור Windows — הסרה כפויה עם סריקת קבצים שנותרו, הסגר בטוח לפני מחיקה, מיפוי דיסק וניקוי זבל בלחיצה אחת.'
       },
       automation: {
@@ -10628,6 +10970,28 @@ export const CATALOG = {
       disk: 'דיסק',
       footer: 'סריקה קוראת את כל הדיסק, כך שאלה משתנים בזמן ש-Prune עובד.'
     },
+    bugReport: {
+      title: 'דיווח על באג',
+      intro: 'פותח דיווח ממולא מראש ב-GitHub. Prune עצמו לא שולח דבר, ואתה רואה הכול לפני שזה הולך לאנשהו.',
+      summaryLabel: 'סיכום',
+      detailsLabel: 'מה השתבש?',
+      detailsPlaceholder: 'מה עשית, מה ציפית ומה קרה במקום זאת.',
+      includedHeading: 'מה ייכלל',
+      includedText: 'הטקסט שתכתוב כאן',
+      includedVersion: 'גרסת Prune',
+      includedWindows: 'גרסת Windows',
+      includedArch: 'ארכיטקטורה',
+      includedNothingElse: 'שום דבר אחר לא נאסף: אין נתיבי קבצים, אין תוצאות סריקה, אין שם משתמש.',
+      publicNote: 'דיווחים ב-GitHub הם ציבוריים, לכן אל תדביק שום דבר פרטי. נדרש חשבון GitHub חינמי כדי לפרסם דיווח.',
+      cancel: 'ביטול',
+      open: 'פתח ב-GitHub',
+      opening: 'פותח…',
+      opened: 'נפתח בדפדפן שלך — פרסם שם את הדיווח כדי לשלוח אותו.',
+      close: 'סגור',
+      failed: 'לא ניתן היה לפתוח את הדיווח',
+      copy: 'העתק דיווח',
+      copied: 'הועתק'
+    },
     shortcutsModal: {
       title: 'קיצורי מקלדת',
       close: 'סגור',
@@ -10672,6 +11036,7 @@ export const CATALOG = {
 
   hu: {
     nav: {
+      reportBug: 'Hiba jelentése',
       dashboard: 'Áttekintés', diskMap: 'Lemeztérkép', applications: 'Alkalmazások',
       quarantine: 'Karantén', settings: 'Beállítások', startup: 'Indítás',
       duplicates: 'Duplikátumok', deepClean: 'Alapos tisztítás',
@@ -10820,6 +11185,9 @@ export const CATALOG = {
         registryNote: 'A rendszerleíró kulcsok a Karanténba kerülnek exportálásra eltávolításuk előtt, függetlenül a választásodtól.'
       },
       about: {
+        reportTitle: 'Hiba jelentése',
+        reportDescription: 'Megnyit egy előre kitöltött hibajegyet a GitHubon. A Prune maga nem küld semmit, és mindent látsz, mielőtt bárhová eljutna.',
+        reportButton: 'Hiba jelentése',
         description: 'Helyi, offline eltávolító és tisztító eszköz Windowshoz — kényszerített eltávolítás maradványfájl-vizsgálattal, biztonságos karantén törlés előtt, lemeztérképezés és egykattintásos szemétisztítás.'
       },
       automation: {
@@ -11388,6 +11756,28 @@ export const CATALOG = {
       disk: 'Lemez',
       footer: 'Egy vizsgálat a teljes lemezt olvassa, ezért ezek mozognak, amíg a Prune dolgozik.'
     },
+    bugReport: {
+      title: 'Hiba jelentése',
+      intro: 'Megnyit egy előre kitöltött hibajegyet a GitHubon. A Prune maga nem küld semmit, és mindent látsz, mielőtt bárhová eljutna.',
+      summaryLabel: 'Összefoglaló',
+      detailsLabel: 'Mi ment félre?',
+      detailsPlaceholder: 'Mit csináltál, mire számítottál, és mi történt helyette.',
+      includedHeading: 'Mi lesz benne',
+      includedText: 'Az itt megírt szöveg',
+      includedVersion: 'Prune-verzió',
+      includedWindows: 'Windows-verzió',
+      includedArch: 'Architektúra',
+      includedNothingElse: 'Semmi mást nem gyűjtünk: nincsenek fájlútvonalak, vizsgálati eredmények vagy felhasználónév.',
+      publicNote: 'A GitHubon a jelentések nyilvánosak, ezért ne illessz be semmi privátot. A közzétételhez ingyenes GitHub-fiók kell.',
+      cancel: 'Mégse',
+      open: 'Megnyitás a GitHubon',
+      opening: 'Megnyitás…',
+      opened: 'Megnyitva a böngészőben — tedd közzé ott a hibajegyet a küldéshez.',
+      close: 'Bezárás',
+      failed: 'Nem sikerült megnyitni a jelentést',
+      copy: 'Jelentés másolása',
+      copied: 'Másolva'
+    },
     shortcutsModal: {
       title: 'Billentyűparancsok',
       close: 'Bezárás',
@@ -11432,6 +11822,7 @@ export const CATALOG = {
 
   id: {
     nav: {
+      reportBug: 'Laporkan bug',
       dashboard: 'Dasbor', diskMap: 'Peta Disk', applications: 'Aplikasi',
       quarantine: 'Karantina', settings: 'Pengaturan', startup: 'Mulai Otomatis',
       duplicates: 'Duplikat', deepClean: 'Pembersihan Menyeluruh',
@@ -11580,6 +11971,9 @@ export const CATALOG = {
         registryNote: 'Kunci registri diekspor ke Karantina sebelum dihapus, apa pun pilihanmu.'
       },
       about: {
+        reportTitle: 'Laporkan bug',
+        reportDescription: 'Membuka isu yang sudah terisi di GitHub. Prune sendiri tidak mengirim apa pun, dan Anda melihat semuanya sebelum dikirim ke mana pun.',
+        reportButton: 'Laporkan bug',
         description: 'Alat uninstal dan pembersihan lokal, offline untuk Windows — penghapusan paksa dengan pemindaian file sisa, karantina aman sebelum penghapusan, pemetaan disk, dan pembersihan sampah satu klik.'
       },
       automation: {
@@ -12148,6 +12542,28 @@ export const CATALOG = {
       disk: 'Disk',
       footer: 'Pemindaian membaca seluruh disk, jadi angka ini bergerak saat Prune bekerja.'
     },
+    bugReport: {
+      title: 'Laporkan bug',
+      intro: 'Membuka isu yang sudah terisi di GitHub. Prune sendiri tidak mengirim apa pun, dan Anda melihat semuanya sebelum dikirim ke mana pun.',
+      summaryLabel: 'Ringkasan',
+      detailsLabel: 'Apa yang salah?',
+      detailsPlaceholder: 'Apa yang Anda lakukan, apa yang Anda harapkan, dan apa yang terjadi sebagai gantinya.',
+      includedHeading: 'Yang akan disertakan',
+      includedText: 'Teks yang Anda tulis di sini',
+      includedVersion: 'Versi Prune',
+      includedWindows: 'Versi Windows',
+      includedArch: 'Arsitektur',
+      includedNothingElse: 'Tidak ada yang lain yang dikumpulkan: tanpa jalur file, tanpa hasil pemindaian, tanpa nama pengguna.',
+      publicNote: 'Laporan di GitHub bersifat publik, jadi jangan menempelkan sesuatu yang pribadi. Anda memerlukan akun GitHub gratis untuk mengirimnya.',
+      cancel: 'Batal',
+      open: 'Buka di GitHub',
+      opening: 'Membuka…',
+      opened: 'Dibuka di browser Anda — kirim isunya di sana.',
+      close: 'Tutup',
+      failed: 'Tidak dapat membuka laporan',
+      copy: 'Salin laporan',
+      copied: 'Disalin'
+    },
     shortcutsModal: {
       title: 'Pintasan keyboard',
       close: 'Tutup',
@@ -12192,6 +12608,7 @@ export const CATALOG = {
 
   is: {
     nav: {
+      reportBug: 'Tilkynna villu',
       dashboard: 'Yfirlit', diskMap: 'Diskakort', applications: 'Forrit',
       quarantine: 'Sóttkví', settings: 'Stillingar', startup: 'Ræsing',
       duplicates: 'Tvítök', deepClean: 'Ítarleg hreinsun',
@@ -12340,6 +12757,9 @@ export const CATALOG = {
         registryNote: 'Skráningarlyklar eru fluttir út í sóttkví áður en þeir eru fjarlægðir, sama hvað þú velur.'
       },
       about: {
+        reportTitle: 'Tilkynna villu',
+        reportDescription: 'Opnar útfyllt vandamál á GitHub. Prune sendir sjálft ekkert og þú sérð allt áður en það fer nokkuð.',
+        reportButton: 'Tilkynna villu',
         description: 'Staðbundið, ótengt fjarlægingar- og hreinsunartæki fyrir Windows — þvinguð fjarlæging með skönnun leifarskjala, örugg sóttkví fyrir eyðingu, diskakortlagning og ruslahreinsun með einum smelli.'
       },
       automation: {
@@ -12908,6 +13328,28 @@ export const CATALOG = {
       disk: 'Diskur',
       footer: 'Skönnun les allan diskinn, svo þessar tölur breytast á meðan Prune vinnur.'
     },
+    bugReport: {
+      title: 'Tilkynna villu',
+      intro: 'Opnar útfyllt vandamál á GitHub. Prune sendir sjálft ekkert og þú sérð allt áður en það fer nokkuð.',
+      summaryLabel: 'Samantekt',
+      detailsLabel: 'Hvað fór úrskeiðis?',
+      detailsPlaceholder: 'Hvað þú gerðir, hverju þú bjóst við og hvað gerðist í staðinn.',
+      includedHeading: 'Hvað verður með',
+      includedText: 'Textinn sem þú skrifar hér',
+      includedVersion: 'Prune-útgáfa',
+      includedWindows: 'Windows-útgáfa',
+      includedArch: 'Arkitektúr',
+      includedNothingElse: 'Engu öðru er safnað: engar skráarslóðir, engar skönnunarniðurstöður, ekkert notandanafn.',
+      publicNote: 'Skýrslur á GitHub eru opinberar, svo límdu ekkert einkamál inn. Þú þarft ókeypis GitHub-reikning til að senda inn.',
+      cancel: 'Hætta við',
+      open: 'Opna á GitHub',
+      opening: 'Opna…',
+      opened: 'Opnað í vafranum þínum — sendu vandamálið inn þar.',
+      close: 'Loka',
+      failed: 'Ekki tókst að opna skýrsluna',
+      copy: 'Afrita skýrslu',
+      copied: 'Afritað'
+    },
     shortcutsModal: {
       title: 'Flýtileiðir á lyklaborði',
       close: 'Loka',
@@ -12952,6 +13394,7 @@ export const CATALOG = {
 
   it: {
     nav: {
+      reportBug: 'Segnala un bug',
       dashboard: 'Pannello', diskMap: 'Mappa del disco', applications: 'Applicazioni',
       quarantine: 'Quarantena', settings: 'Impostazioni', startup: 'Avvio',
       duplicates: 'Duplicati', deepClean: 'Pulizia approfondita',
@@ -13100,6 +13543,9 @@ export const CATALOG = {
         registryNote: 'Le chiavi di registro vengono esportate nella Quarantena prima di essere rimosse, qualunque sia la tua scelta.'
       },
       about: {
+        reportTitle: 'Segnala un bug',
+        reportDescription: 'Apre una segnalazione precompilata su GitHub. Prune non invia nulla da solo e vedi tutto prima che vada da qualche parte.',
+        reportButton: 'Segnala un bug',
         description: "Uno strumento locale e offline di disinstallazione e pulizia per Windows — rimozione forzata con scansione dei file residui, quarantena sicura prima dell'eliminazione, mappatura del disco e pulizia dei rifiuti con un clic."
       },
       automation: {
@@ -13668,6 +14114,28 @@ export const CATALOG = {
       disk: 'Disco',
       footer: "Una scansione legge l'intero disco, quindi questi valori cambiano mentre Prune lavora."
     },
+    bugReport: {
+      title: 'Segnala un bug',
+      intro: 'Apre una segnalazione precompilata su GitHub. Prune non invia nulla da solo e vedi tutto prima che vada da qualche parte.',
+      summaryLabel: 'Riepilogo',
+      detailsLabel: 'Cosa è andato storto?',
+      detailsPlaceholder: 'Cosa hai fatto, cosa ti aspettavi e cosa è successo invece.',
+      includedHeading: 'Cosa sarà incluso',
+      includedText: 'Il testo che scrivi qui',
+      includedVersion: 'Versione di Prune',
+      includedWindows: 'Versione di Windows',
+      includedArch: 'Architettura',
+      includedNothingElse: "Non viene raccolto nient'altro: né percorsi di file, né risultati di scansione, né nome utente.",
+      publicNote: 'Le segnalazioni su GitHub sono pubbliche, quindi non incollare nulla di privato. Serve un account GitHub gratuito per pubblicarne una.',
+      cancel: 'Annulla',
+      open: 'Apri su GitHub',
+      opening: 'Apertura…',
+      opened: 'Aperto nel browser — pubblica lì la segnalazione per inviarla.',
+      close: 'Chiudi',
+      failed: 'Impossibile aprire la segnalazione',
+      copy: 'Copia segnalazione',
+      copied: 'Copiato'
+    },
     shortcutsModal: {
       title: 'Scorciatoie da tastiera',
       close: 'Chiudi',
@@ -13712,6 +14180,7 @@ export const CATALOG = {
 
   ja: {
     nav: {
+      reportBug: 'バグを報告',
       dashboard: 'ダッシュボード', diskMap: 'ディスクマップ', applications: 'アプリケーション',
       quarantine: '隔離', settings: '設定', startup: 'スタートアップ',
       duplicates: '重複ファイル', deepClean: 'ディープクリーン',
@@ -13860,6 +14329,9 @@ export const CATALOG = {
         registryNote: 'レジストリキーは、選択に関わらず、削除される前に隔離場所にエクスポートされます。'
       },
       about: {
+        reportTitle: 'バグを報告',
+        reportDescription: 'GitHub で入力済みの Issue を開きます。Prune 自体は何も送信せず、どこかへ送られる前にすべての内容を確認できます。',
+        reportButton: 'バグを報告',
         description: 'Windows 向けのローカル・オフラインのアンインストールとクリーンアップツールです — 残留ファイルスキャン付きの強制削除、削除前の安全な隔離、ディスクマッピング、ワンクリックのジャンククリーンアップ。'
       },
       automation: {
@@ -14428,6 +14900,28 @@ export const CATALOG = {
       disk: 'ディスク',
       footer: 'スキャンはディスク全体を読み取るため、Prune が作業している間はこれらの値が変動します。'
     },
+    bugReport: {
+      title: 'バグを報告',
+      intro: 'GitHub で入力済みの Issue を開きます。Prune 自体は何も送信せず、どこかへ送られる前にすべての内容を確認できます。',
+      summaryLabel: '概要',
+      detailsLabel: '何が起きましたか?',
+      detailsPlaceholder: '何をしたか、何を期待していたか、代わりに何が起きたかを書いてください。',
+      includedHeading: '含まれる内容',
+      includedText: 'ここに書いたテキスト',
+      includedVersion: 'Prune のバージョン',
+      includedWindows: 'Windows のバージョン',
+      includedArch: 'アーキテクチャ',
+      includedNothingElse: 'それ以外は収集しません。ファイルパス、スキャン結果、ユーザー名は含まれません。',
+      publicNote: 'GitHub のレポートは公開されるため、個人的な情報は貼り付けないでください。投稿には無料の GitHub アカウントが必要です。',
+      cancel: 'キャンセル',
+      open: 'GitHub で開く',
+      opening: '開いています…',
+      opened: 'ブラウザーで開きました — 送信するには、そこで Issue を投稿してください。',
+      close: '閉じる',
+      failed: 'レポートを開けませんでした',
+      copy: 'レポートをコピー',
+      copied: 'コピーしました'
+    },
     shortcutsModal: {
       title: 'キーボードショートカット',
       close: '閉じる',
@@ -14472,6 +14966,7 @@ export const CATALOG = {
 
   ko: {
     nav: {
+      reportBug: '버그 신고',
       dashboard: '대시보드', diskMap: '디스크 맵', applications: '애플리케이션',
       quarantine: '격리', settings: '설정', startup: '시작 프로그램',
       duplicates: '중복 파일', deepClean: '딥 클린',
@@ -14620,6 +15115,9 @@ export const CATALOG = {
         registryNote: '레지스트리 키는 선택과 관계없이 제거되기 전에 격리 공간으로 내보내집니다.'
       },
       about: {
+        reportTitle: '버그 신고',
+        reportDescription: 'GitHub에서 미리 채워진 이슈를 엽니다. Prune 자체는 아무것도 보내지 않으며, 어디로든 전송되기 전에 모든 내용을 확인할 수 있습니다.',
+        reportButton: '버그 신고',
         description: 'Windows용 로컬 오프라인 제거 및 정리 도구입니다 — 남은 파일 검사가 포함된 강제 제거, 삭제 전 안전한 격리, 디스크 매핑, 원클릭 잡동사니 정리.'
       },
       automation: {
@@ -15188,6 +15686,28 @@ export const CATALOG = {
       disk: '디스크',
       footer: '스캔은 디스크 전체를 읽기 때문에 Prune이 작업하는 동안 이 값들이 변합니다.'
     },
+    bugReport: {
+      title: '버그 신고',
+      intro: 'GitHub에서 미리 채워진 이슈를 엽니다. Prune 자체는 아무것도 보내지 않으며, 어디로든 전송되기 전에 모든 내용을 확인할 수 있습니다.',
+      summaryLabel: '요약',
+      detailsLabel: '무엇이 잘못되었나요?',
+      detailsPlaceholder: '무엇을 했는지, 무엇을 기대했는지, 대신 무슨 일이 일어났는지 적어 주세요.',
+      includedHeading: '포함되는 내용',
+      includedText: '여기에 작성하는 텍스트',
+      includedVersion: 'Prune 버전',
+      includedWindows: 'Windows 버전',
+      includedArch: '아키텍처',
+      includedNothingElse: '그 외에는 아무것도 수집하지 않습니다. 파일 경로, 검사 결과, 사용자 이름은 포함되지 않습니다.',
+      publicNote: 'GitHub의 신고는 공개되므로 개인적인 내용은 붙여넣지 마세요. 게시하려면 무료 GitHub 계정이 필요합니다.',
+      cancel: '취소',
+      open: 'GitHub에서 열기',
+      opening: '여는 중…',
+      opened: '브라우저에서 열었습니다 — 전송하려면 그곳에서 이슈를 게시하세요.',
+      close: '닫기',
+      failed: '신고를 열 수 없습니다',
+      copy: '신고 복사',
+      copied: '복사됨'
+    },
     shortcutsModal: {
       title: '키보드 단축키',
       close: '닫기',
@@ -15232,6 +15752,7 @@ export const CATALOG = {
 
   lt: {
     nav: {
+      reportBug: 'Pranešti apie klaidą',
       dashboard: 'Valdymo skydas', diskMap: 'Disko žemėlapis', applications: 'Programos',
       quarantine: 'Karantinas', settings: 'Nustatymai', startup: 'Paleistis',
       duplicates: 'Dublikatai', deepClean: 'Kruopštus valymas',
@@ -15380,6 +15901,9 @@ export const CATALOG = {
         registryNote: 'Registro raktai eksportuojami į karantiną prieš juos pašalinant, nepriklausomai nuo jūsų pasirinkimo.'
       },
       about: {
+        reportTitle: 'Pranešti apie klaidą',
+        reportDescription: 'Atidaro iš anksto užpildytą pranešimą „GitHub“. „Prune“ pats nieko nesiunčia, o jūs viską matote, kol niekur nenueina.',
+        reportButton: 'Pranešti apie klaidą',
         description: 'Vietinis, neprisijungęs prie interneto šalinimo ir valymo įrankis „Windows“ — priverstinis šalinimas su liekanų failų nuskaitymu, saugus karantinas prieš trynimą, disko žemėlapio sudarymas ir šiukšlių valymas vienu paspaudimu.'
       },
       automation: {
@@ -15948,6 +16472,28 @@ export const CATALOG = {
       disk: 'Diskas',
       footer: 'Nuskaitymas skaito visą diską, todėl šios reikšmės keičiasi, kol Prune dirba.'
     },
+    bugReport: {
+      title: 'Pranešti apie klaidą',
+      intro: 'Atidaro iš anksto užpildytą pranešimą „GitHub“. „Prune“ pats nieko nesiunčia, o jūs viską matote, kol niekur nenueina.',
+      summaryLabel: 'Santrauka',
+      detailsLabel: 'Kas nepavyko?',
+      detailsPlaceholder: 'Ką darėte, ko tikėjotės ir kas įvyko vietoj to.',
+      includedHeading: 'Kas bus įtraukta',
+      includedText: 'Čia parašytas tekstas',
+      includedVersion: '„Prune“ versija',
+      includedWindows: '„Windows“ versija',
+      includedArch: 'Architektūra',
+      includedNothingElse: 'Daugiau nieko nerenkama: jokių failų kelių, nuskaitymo rezultatų ar naudotojo vardo.',
+      publicNote: '„GitHub“ pranešimai yra vieši, todėl neįklijuokite nieko privataus. Norint paskelbti, reikia nemokamos „GitHub“ paskyros.',
+      cancel: 'Atšaukti',
+      open: 'Atidaryti „GitHub“',
+      opening: 'Atidaroma…',
+      opened: 'Atidaryta naršyklėje — paskelbkite pranešimą ten, kad jį išsiųstumėte.',
+      close: 'Uždaryti',
+      failed: 'Nepavyko atidaryti pranešimo',
+      copy: 'Kopijuoti pranešimą',
+      copied: 'Nukopijuota'
+    },
     shortcutsModal: {
       title: 'Klaviatūros trumpiniai',
       close: 'Uždaryti',
@@ -15992,6 +16538,7 @@ export const CATALOG = {
 
   ms: {
     nav: {
+      reportBug: 'Laporkan pepijat',
       dashboard: 'Papan Pemuka', diskMap: 'Peta Cakera', applications: 'Aplikasi',
       quarantine: 'Kuarantin', settings: 'Tetapan', startup: 'Permulaan',
       duplicates: 'Pendua', deepClean: 'Pembersihan Menyeluruh',
@@ -16140,6 +16687,9 @@ export const CATALOG = {
         registryNote: 'Kekunci registri dieksport ke Kuarantin sebelum dikeluarkan, walau apa pun pilihan anda.'
       },
       about: {
+        reportTitle: 'Laporkan pepijat',
+        reportDescription: 'Membuka isu yang telah diisi terlebih dahulu di GitHub. Prune sendiri tidak menghantar apa-apa, dan anda melihat semuanya sebelum ia dihantar ke mana-mana.',
+        reportButton: 'Laporkan pepijat',
         description: 'Alat penyahpasangan dan pembersihan tempatan, luar talian untuk Windows — penyingkiran paksa dengan imbasan fail baki, kuarantin selamat sebelum pemadaman, pemetaan cakera, dan pembersihan sampah satu klik.'
       },
       automation: {
@@ -16708,6 +17258,28 @@ export const CATALOG = {
       disk: 'Cakera',
       footer: 'Imbasan membaca seluruh cakera, jadi nilai ini berubah semasa Prune berfungsi.'
     },
+    bugReport: {
+      title: 'Laporkan pepijat',
+      intro: 'Membuka isu yang telah diisi terlebih dahulu di GitHub. Prune sendiri tidak menghantar apa-apa, dan anda melihat semuanya sebelum ia dihantar ke mana-mana.',
+      summaryLabel: 'Ringkasan',
+      detailsLabel: 'Apa yang tidak kena?',
+      detailsPlaceholder: 'Apa yang anda lakukan, apa yang anda jangkakan dan apa yang berlaku sebaliknya.',
+      includedHeading: 'Apa yang akan disertakan',
+      includedText: 'Teks yang anda tulis di sini',
+      includedVersion: 'Versi Prune',
+      includedWindows: 'Versi Windows',
+      includedArch: 'Seni bina',
+      includedNothingElse: 'Tiada yang lain dikumpulkan: tiada laluan fail, tiada keputusan imbasan, tiada nama pengguna.',
+      publicNote: 'Laporan di GitHub adalah awam, jadi jangan tampal apa-apa yang peribadi. Anda memerlukan akaun GitHub percuma untuk menghantarnya.',
+      cancel: 'Batal',
+      open: 'Buka di GitHub',
+      opening: 'Membuka…',
+      opened: 'Dibuka dalam pelayar anda — hantar isu itu di sana.',
+      close: 'Tutup',
+      failed: 'Tidak dapat membuka laporan',
+      copy: 'Salin laporan',
+      copied: 'Disalin'
+    },
     shortcutsModal: {
       title: 'Pintasan papan kekunci',
       close: 'Tutup',
@@ -16752,6 +17324,7 @@ export const CATALOG = {
 
   nb: {
     nav: {
+      reportBug: 'Rapporter en feil',
       dashboard: 'Oversikt', diskMap: 'Diskkart', applications: 'Programmer',
       quarantine: 'Karantene', settings: 'Innstillinger', startup: 'Oppstart',
       duplicates: 'Duplikater', deepClean: 'Grundig opprydding',
@@ -16900,6 +17473,9 @@ export const CATALOG = {
         registryNote: 'Registernøkler eksporteres til Karantene før de fjernes, uansett hva du velger.'
       },
       about: {
+        reportTitle: 'Rapporter en feil',
+        reportDescription: 'Åpner en forhåndsutfylt sak på GitHub. Prune sender ikke noe selv, og du ser alt før det går noe sted.',
+        reportButton: 'Rapporter en feil',
         description: 'Et lokalt, frakoblet avinstallerings- og opprydningsverktøy for Windows — tvungen fjerning med skanning etter rester, trygg karantene før sletting, diskkartlegging og rusk-opprydding med ett klikk.'
       },
       automation: {
@@ -17468,6 +18044,28 @@ export const CATALOG = {
       disk: 'Disk',
       footer: 'Et søk leser hele disken, så disse verdiene beveger seg mens Prune jobber.'
     },
+    bugReport: {
+      title: 'Rapporter en feil',
+      intro: 'Åpner en forhåndsutfylt sak på GitHub. Prune sender ikke noe selv, og du ser alt før det går noe sted.',
+      summaryLabel: 'Sammendrag',
+      detailsLabel: 'Hva gikk galt?',
+      detailsPlaceholder: 'Hva du gjorde, hva du forventet og hva som skjedde i stedet.',
+      includedHeading: 'Hva som tas med',
+      includedText: 'Teksten du skriver her',
+      includedVersion: 'Prune-versjon',
+      includedWindows: 'Windows-versjon',
+      includedArch: 'Arkitektur',
+      includedNothingElse: 'Ingenting annet samles inn: ingen filbaner, ingen skanneresultater, ikke noe brukernavn.',
+      publicNote: 'Rapporter på GitHub er offentlige, så ikke lim inn noe privat. Du trenger en gratis GitHub-konto for å opprette en.',
+      cancel: 'Avbryt',
+      open: 'Åpne på GitHub',
+      opening: 'Åpner…',
+      opened: 'Åpnet i nettleseren din — opprett saken der for å sende den.',
+      close: 'Lukk',
+      failed: 'Kunne ikke åpne rapporten',
+      copy: 'Kopier rapport',
+      copied: 'Kopiert'
+    },
     shortcutsModal: {
       title: 'Tastatursnarveier',
       close: 'Lukk',
@@ -17512,6 +18110,7 @@ export const CATALOG = {
 
   nl: {
     nav: {
+      reportBug: 'Een bug melden',
       dashboard: 'Dashboard', diskMap: 'Schijfkaart', applications: 'Toepassingen',
       quarantine: 'Quarantaine', settings: 'Instellingen', startup: 'Opstarten',
       duplicates: 'Duplicaten', deepClean: 'Grondige opschoning',
@@ -17660,6 +18259,9 @@ export const CATALOG = {
         registryNote: 'Registersleutels worden geëxporteerd naar Quarantaine voordat ze worden verwijderd, wat je ook kiest.'
       },
       about: {
+        reportTitle: 'Een bug melden',
+        reportDescription: 'Opent een vooraf ingevuld issue op GitHub. Prune verstuurt zelf niets en u ziet alles voordat het ergens heen gaat.',
+        reportButton: 'Een bug melden',
         description: 'Een lokale, offline verwijder- en opschoontool voor Windows — geforceerde verwijdering met scannen op restbestanden, veilige quarantaine voor verwijdering, schijfmapping en opschonen van rommel met één klik.'
       },
       automation: {
@@ -18228,6 +18830,28 @@ export const CATALOG = {
       disk: 'Schijf',
       footer: 'Een scan leest de hele schijf, dus deze waarden bewegen terwijl Prune werkt.'
     },
+    bugReport: {
+      title: 'Een bug melden',
+      intro: 'Opent een vooraf ingevuld issue op GitHub. Prune verstuurt zelf niets en u ziet alles voordat het ergens heen gaat.',
+      summaryLabel: 'Samenvatting',
+      detailsLabel: 'Wat ging er mis?',
+      detailsPlaceholder: 'Wat u deed, wat u verwachtte en wat er in plaats daarvan gebeurde.',
+      includedHeading: 'Wat er wordt opgenomen',
+      includedText: 'De tekst die u hier schrijft',
+      includedVersion: 'Prune-versie',
+      includedWindows: 'Windows-versie',
+      includedArch: 'Architectuur',
+      includedNothingElse: 'Er wordt niets anders verzameld: geen bestandspaden, geen scanresultaten, geen gebruikersnaam.',
+      publicNote: 'Meldingen op GitHub zijn openbaar, dus plak niets privés. U hebt een gratis GitHub-account nodig om er een te plaatsen.',
+      cancel: 'Annuleren',
+      open: 'Openen op GitHub',
+      opening: 'Openen…',
+      opened: 'Geopend in uw browser — plaats het issue daar om het te versturen.',
+      close: 'Sluiten',
+      failed: 'Kon de melding niet openen',
+      copy: 'Melding kopiëren',
+      copied: 'Gekopieerd'
+    },
     shortcutsModal: {
       title: 'Sneltoetsen',
       close: 'Sluiten',
@@ -18272,6 +18896,7 @@ export const CATALOG = {
 
   pl: {
     nav: {
+      reportBug: 'Zgłoś błąd',
       dashboard: 'Panel', diskMap: 'Mapa dysku', applications: 'Aplikacje',
       quarantine: 'Kwarantanna', settings: 'Ustawienia', startup: 'Autostart',
       duplicates: 'Duplikaty', deepClean: 'Dokładne czyszczenie',
@@ -18420,6 +19045,9 @@ export const CATALOG = {
         registryNote: 'Klucze rejestru są eksportowane do kwarantanny przed ich usunięciem, niezależnie od wyboru.'
       },
       about: {
+        reportTitle: 'Zgłoś błąd',
+        reportDescription: 'Otwiera wstępnie wypełnione zgłoszenie w serwisie GitHub. Prune sam niczego nie wysyła, a wszystko widzisz, zanim gdziekolwiek trafi.',
+        reportButton: 'Zgłoś błąd',
         description: 'Lokalne, działające offline narzędzie do odinstalowywania i czyszczenia dla Windows — wymuszone usuwanie ze skanowaniem pozostałości plików, bezpieczna kwarantanna przed usunięciem, mapowanie dysku i czyszczenie śmieci jednym kliknięciem.'
       },
       automation: {
@@ -18988,6 +19616,28 @@ export const CATALOG = {
       disk: 'Dysk',
       footer: 'Skanowanie odczytuje cały dysk, więc te wartości zmieniają się, gdy Prune pracuje.'
     },
+    bugReport: {
+      title: 'Zgłoś błąd',
+      intro: 'Otwiera wstępnie wypełnione zgłoszenie w serwisie GitHub. Prune sam niczego nie wysyła, a wszystko widzisz, zanim gdziekolwiek trafi.',
+      summaryLabel: 'Podsumowanie',
+      detailsLabel: 'Co poszło nie tak?',
+      detailsPlaceholder: 'Co zrobiono, czego oczekiwano i co stało się zamiast tego.',
+      includedHeading: 'Co zostanie dołączone',
+      includedText: 'Tekst, który tu wpiszesz',
+      includedVersion: 'Wersja Prune',
+      includedWindows: 'Wersja Windows',
+      includedArch: 'Architektura',
+      includedNothingElse: 'Nic więcej nie jest zbierane: żadnych ścieżek plików, wyników skanowania ani nazwy użytkownika.',
+      publicNote: 'Zgłoszenia w serwisie GitHub są publiczne, więc nie wklejaj niczego prywatnego. Do opublikowania zgłoszenia potrzebne jest bezpłatne konto GitHub.',
+      cancel: 'Anuluj',
+      open: 'Otwórz w serwisie GitHub',
+      opening: 'Otwieranie…',
+      opened: 'Otwarto w przeglądarce — opublikuj tam zgłoszenie, aby je wysłać.',
+      close: 'Zamknij',
+      failed: 'Nie udało się otworzyć zgłoszenia',
+      copy: 'Kopiuj zgłoszenie',
+      copied: 'Skopiowano'
+    },
     shortcutsModal: {
       title: 'Skróty klawiszowe',
       close: 'Zamknij',
@@ -19032,6 +19682,7 @@ export const CATALOG = {
 
   ps: {
     nav: {
+      reportBug: 'د بګ راپور ورکړئ',
       dashboard: 'ډشبورډ', diskMap: 'د ډیسک نقشه', applications: 'غوښتنلیکونه',
       quarantine: 'قرنطین', settings: 'تنظیمات', startup: 'پیل',
       duplicates: 'تکراري فایلونه', deepClean: 'ژور پاکول',
@@ -19180,6 +19831,9 @@ export const CATALOG = {
         registryNote: 'د رجسټري کیلي د لرې کیدو دمخه قرنطین ته صادریږي، پرته لدې چې تاسو کوم یو غوره کړئ.'
       },
       about: {
+        reportTitle: 'د بګ راپور ورکړئ',
+        reportDescription: 'په GitHub کې مخکې ډکه شوې مسئله پرانیزي. Prune پخپله هیڅ نه لیږي، او تاسو هر څه مخکې له دې وینئ چې چیرته ولاړ شي.',
+        reportButton: 'د بګ راپور ورکړئ',
         description: 'د Windows لپاره یو محلي، آفلاین لرې کولو او پاکولو وسیله — د پاتې فایل سکین سره زوري لرې کول، د ړنګولو دمخه خوندي قرنطین، د ډیسک نقشه کول، او د یوې کلیک خځلو پاکول.'
       },
       automation: {
@@ -19748,6 +20402,28 @@ export const CATALOG = {
       disk: 'ډیسک',
       footer: 'یوه سکن ټوله ډیسک لولي، نو دا ارزښتونه هغه وخت بدلیږي چې Prune کار کوي.'
     },
+    bugReport: {
+      title: 'د بګ راپور ورکړئ',
+      intro: 'په GitHub کې مخکې ډکه شوې مسئله پرانیزي. Prune پخپله هیڅ نه لیږي، او تاسو هر څه مخکې له دې وینئ چې چیرته ولاړ شي.',
+      summaryLabel: 'لنډیز',
+      detailsLabel: 'څه غلط شول؟',
+      detailsPlaceholder: 'تاسو څه وکړل، څه مو تمه درلوده، او پر ځای یې څه پیښ شول.',
+      includedHeading: 'څه به شامل وي',
+      includedText: 'هغه متن چې دلته یې لیکئ',
+      includedVersion: 'د Prune نسخه',
+      includedWindows: 'د Windows نسخه',
+      includedArch: 'جوړښت',
+      includedNothingElse: 'بل هیڅ نه راټولیږي: د فایل لارې نه، د سکین پایلې نه، د کارن نوم نه.',
+      publicNote: 'په GitHub کې راپورونه عامه دي، نو هیڅ شخصي شی مه پیسټ کوئ. د یو خپرولو لپاره تاسو وړیا GitHub حساب ته اړتیا لرئ.',
+      cancel: 'لغوه کول',
+      open: 'په GitHub کې پرانیزئ',
+      opening: 'پرانیستل کیږي…',
+      opened: 'ستاسو په براوزر کې پرانیستل شو — لیږلو لپاره مسئله هلته خپره کړئ.',
+      close: 'بندول',
+      failed: 'راپور پرانیستل نشو',
+      copy: 'راپور کاپي کړئ',
+      copied: 'کاپي شو'
+    },
     shortcutsModal: {
       title: 'د کیبورډ شارټ کټونه',
       close: 'بندول',
@@ -19792,6 +20468,7 @@ export const CATALOG = {
 
   'pt-BR': {
     nav: {
+      reportBug: 'Relatar um bug',
       dashboard: 'Painel', diskMap: 'Mapa do disco', applications: 'Aplicativos',
       quarantine: 'Quarentena', settings: 'Configurações', startup: 'Inicialização',
       duplicates: 'Duplicados', deepClean: 'Limpeza profunda',
@@ -19940,6 +20617,9 @@ export const CATALOG = {
         registryNote: 'As chaves de registro são exportadas para a Quarentena antes de serem removidas, seja qual for sua escolha.'
       },
       about: {
+        reportTitle: 'Relatar um bug',
+        reportDescription: 'Abre um problema pré-preenchido no GitHub. O Prune não envia nada por conta própria e você vê tudo antes de qualquer envio.',
+        reportButton: 'Relatar um bug',
         description: 'Uma ferramenta local e offline de desinstalação e limpeza para Windows — remoção forçada com varredura de arquivos residuais, quarentena segura antes da exclusão, mapeamento de disco e limpeza de lixo com um clique.'
       },
       automation: {
@@ -20508,6 +21188,28 @@ export const CATALOG = {
       disk: 'Disco',
       footer: 'Uma varredura lê o disco inteiro, então esses valores mudam enquanto o Prune trabalha.'
     },
+    bugReport: {
+      title: 'Relatar um bug',
+      intro: 'Abre um problema pré-preenchido no GitHub. O Prune não envia nada por conta própria e você vê tudo antes de qualquer envio.',
+      summaryLabel: 'Resumo',
+      detailsLabel: 'O que deu errado?',
+      detailsPlaceholder: 'O que você fez, o que esperava e o que aconteceu em vez disso.',
+      includedHeading: 'O que será incluído',
+      includedText: 'O texto que você escrever aqui',
+      includedVersion: 'Versão do Prune',
+      includedWindows: 'Versão do Windows',
+      includedArch: 'Arquitetura',
+      includedNothingElse: 'Nada mais é coletado: nem caminhos de arquivos, nem resultados de verificação, nem nome de usuário.',
+      publicNote: 'Os relatos no GitHub são públicos, então não cole nada privado. Você precisa de uma conta gratuita do GitHub para publicar um.',
+      cancel: 'Cancelar',
+      open: 'Abrir no GitHub',
+      opening: 'Abrindo…',
+      opened: 'Aberto no seu navegador — publique o problema lá para enviá-lo.',
+      close: 'Fechar',
+      failed: 'Não foi possível abrir o relato',
+      copy: 'Copiar relato',
+      copied: 'Copiado'
+    },
     shortcutsModal: {
       title: 'Atalhos de teclado',
       close: 'Fechar',
@@ -20552,6 +21254,7 @@ export const CATALOG = {
 
   pt: {
     nav: {
+      reportBug: 'Comunicar um erro',
       dashboard: 'Painel', diskMap: 'Mapa do disco', applications: 'Aplicações',
       quarantine: 'Quarentena', settings: 'Definições', startup: 'Arranque',
       duplicates: 'Duplicados', deepClean: 'Limpeza profunda',
@@ -20700,6 +21403,9 @@ export const CATALOG = {
         registryNote: 'As chaves de registo são exportadas para a Quarentena antes de serem removidas, seja qual for a sua escolha.'
       },
       about: {
+        reportTitle: 'Comunicar um erro',
+        reportDescription: 'Abre um problema pré-preenchido no GitHub. O Prune não envia nada por si só e vê tudo antes de qualquer envio.',
+        reportButton: 'Comunicar um erro',
         description: 'Uma ferramenta local e offline de desinstalação e limpeza para Windows — remoção forçada com análise de ficheiros residuais, quarentena segura antes da eliminação, mapeamento de disco e limpeza de lixo com um clique.'
       },
       automation: {
@@ -21268,6 +21974,28 @@ export const CATALOG = {
       disk: 'Disco',
       footer: 'Uma análise lê todo o disco, por isso estes valores mudam enquanto o Prune trabalha.'
     },
+    bugReport: {
+      title: 'Comunicar um erro',
+      intro: 'Abre um problema pré-preenchido no GitHub. O Prune não envia nada por si só e vê tudo antes de qualquer envio.',
+      summaryLabel: 'Resumo',
+      detailsLabel: 'O que correu mal?',
+      detailsPlaceholder: 'O que fez, o que esperava e o que aconteceu em vez disso.',
+      includedHeading: 'O que será incluído',
+      includedText: 'O texto que escrever aqui',
+      includedVersion: 'Versão do Prune',
+      includedWindows: 'Versão do Windows',
+      includedArch: 'Arquitetura',
+      includedNothingElse: 'Não é recolhido mais nada: nem caminhos de ficheiros, nem resultados de análise, nem nome de utilizador.',
+      publicNote: 'As comunicações no GitHub são públicas, por isso não cole nada privado. Precisa de uma conta GitHub gratuita para publicar uma.',
+      cancel: 'Cancelar',
+      open: 'Abrir no GitHub',
+      opening: 'A abrir…',
+      opened: 'Aberto no seu navegador — publique o problema lá para o enviar.',
+      close: 'Fechar',
+      failed: 'Não foi possível abrir a comunicação',
+      copy: 'Copiar comunicação',
+      copied: 'Copiado'
+    },
     shortcutsModal: {
       title: 'Atalhos de teclado',
       close: 'Fechar',
@@ -21312,6 +22040,7 @@ export const CATALOG = {
 
   ro: {
     nav: {
+      reportBug: 'Raportează o eroare',
       dashboard: 'Panou', diskMap: 'Harta discului', applications: 'Aplicații',
       quarantine: 'Carantină', settings: 'Setări', startup: 'Pornire',
       duplicates: 'Duplicate', deepClean: 'Curățare aprofundată',
@@ -21460,6 +22189,9 @@ export const CATALOG = {
         registryNote: 'Cheile de registru sunt exportate în Carantină înainte de a fi eliminate, indiferent ce alegi.'
       },
       about: {
+        reportTitle: 'Raportează o eroare',
+        reportDescription: 'Deschide o problemă precompletată pe GitHub. Prune nu trimite nimic singur și vezi totul înainte să ajungă oriunde.',
+        reportButton: 'Raportează o eroare',
         description: 'Un instrument local, offline de dezinstalare și curățare pentru Windows — eliminare forțată cu scanare de fișiere rămase, carantină sigură înainte de ștergere, cartografierea discului și curățare de gunoi cu un clic.'
       },
       automation: {
@@ -22028,6 +22760,28 @@ export const CATALOG = {
       disk: 'Disc',
       footer: 'O scanare citește întregul disc, așa că aceste valori se mișcă în timp ce Prune lucrează.'
     },
+    bugReport: {
+      title: 'Raportează o eroare',
+      intro: 'Deschide o problemă precompletată pe GitHub. Prune nu trimite nimic singur și vezi totul înainte să ajungă oriunde.',
+      summaryLabel: 'Rezumat',
+      detailsLabel: 'Ce a mers prost?',
+      detailsPlaceholder: 'Ce ai făcut, ce te așteptai și ce s-a întâmplat în schimb.',
+      includedHeading: 'Ce va fi inclus',
+      includedText: 'Textul pe care îl scrii aici',
+      includedVersion: 'Versiunea Prune',
+      includedWindows: 'Versiunea Windows',
+      includedArch: 'Arhitectură',
+      includedNothingElse: 'Nu se colectează nimic altceva: nicio cale de fișier, niciun rezultat de scanare, niciun nume de utilizator.',
+      publicNote: 'Rapoartele de pe GitHub sunt publice, așa că nu lipi nimic privat. Ai nevoie de un cont GitHub gratuit pentru a posta unul.',
+      cancel: 'Anulează',
+      open: 'Deschide pe GitHub',
+      opening: 'Se deschide…',
+      opened: 'Deschis în browser — postează problema acolo pentru a o trimite.',
+      close: 'Închide',
+      failed: 'Raportul nu a putut fi deschis',
+      copy: 'Copiază raportul',
+      copied: 'Copiat'
+    },
     shortcutsModal: {
       title: 'Comenzi rapide de la tastatură',
       close: 'Închide',
@@ -22072,6 +22826,7 @@ export const CATALOG = {
 
   ru: {
     nav: {
+      reportBug: 'Сообщить об ошибке',
       dashboard: 'Панель', diskMap: 'Карта диска', applications: 'Приложения',
       quarantine: 'Карантин', settings: 'Настройки', startup: 'Автозагрузка',
       duplicates: 'Дубликаты', deepClean: 'Глубокая очистка',
@@ -22220,6 +22975,9 @@ export const CATALOG = {
         registryNote: 'Ключи реестра экспортируются в карантин перед удалением, независимо от вашего выбора.'
       },
       about: {
+        reportTitle: 'Сообщить об ошибке',
+        reportDescription: 'Открывает заполненную заранее заявку на GitHub. Сам Prune ничего не отправляет, и вы видите всё, прежде чем это куда-либо уйдёт.',
+        reportButton: 'Сообщить об ошибке',
         description: 'Локальный, автономный инструмент удаления и очистки для Windows — принудительное удаление со сканированием остаточных файлов, безопасный карантин перед удалением, картирование диска и очистка мусора в один клик.'
       },
       automation: {
@@ -22788,6 +23546,28 @@ export const CATALOG = {
       disk: 'Диск',
       footer: 'Сканирование читает весь диск, поэтому эти значения меняются, пока Prune работает.'
     },
+    bugReport: {
+      title: 'Сообщить об ошибке',
+      intro: 'Открывает заполненную заранее заявку на GitHub. Сам Prune ничего не отправляет, и вы видите всё, прежде чем это куда-либо уйдёт.',
+      summaryLabel: 'Краткое описание',
+      detailsLabel: 'Что пошло не так?',
+      detailsPlaceholder: 'Что вы делали, чего ожидали и что произошло на самом деле.',
+      includedHeading: 'Что будет включено',
+      includedText: 'Текст, который вы напишете здесь',
+      includedVersion: 'Версия Prune',
+      includedWindows: 'Версия Windows',
+      includedArch: 'Архитектура',
+      includedNothingElse: 'Больше ничего не собирается: ни путей к файлам, ни результатов сканирования, ни имени пользователя.',
+      publicNote: 'Отчёты на GitHub общедоступны, поэтому не вставляйте ничего личного. Чтобы опубликовать заявку, нужна бесплатная учётная запись GitHub.',
+      cancel: 'Отмена',
+      open: 'Открыть на GitHub',
+      opening: 'Открывается…',
+      opened: 'Открыто в браузере — опубликуйте заявку там, чтобы отправить её.',
+      close: 'Закрыть',
+      failed: 'Не удалось открыть отчёт',
+      copy: 'Копировать отчёт',
+      copied: 'Скопировано'
+    },
     shortcutsModal: {
       title: 'Комбинации клавиш',
       close: 'Закрыть',
@@ -22832,6 +23612,7 @@ export const CATALOG = {
 
   sk: {
     nav: {
+      reportBug: 'Nahlásiť chybu',
       dashboard: 'Prehľad', diskMap: 'Mapa disku', applications: 'Aplikácie',
       quarantine: 'Karanténa', settings: 'Nastavenia', startup: 'Po spustení',
       duplicates: 'Duplicity', deepClean: 'Dôkladné čistenie',
@@ -22980,6 +23761,9 @@ export const CATALOG = {
         registryNote: 'Kľúče registra sa exportujú do karantény pred ich odstránením, bez ohľadu na váš výber.'
       },
       about: {
+        reportTitle: 'Nahlásiť chybu',
+        reportDescription: 'Otvorí predvyplnený problém na GitHube. Prune sám nič neodosiela a všetko uvidíte skôr, než to niekam pôjde.',
+        reportButton: 'Nahlásiť chybu',
         description: 'Lokálny, offline nástroj na odinštalovanie a čistenie pre Windows — vynútené odstránenie so skenovaním zvyšných súborov, bezpečná karanténa pred vymazaním, mapovanie disku a jednoklikové čistenie odpadu.'
       },
       automation: {
@@ -23548,6 +24332,28 @@ export const CATALOG = {
       disk: 'Disk',
       footer: 'Kontrola číta celý disk, takže tieto hodnoty sa menia, kým Prune pracuje.'
     },
+    bugReport: {
+      title: 'Nahlásiť chybu',
+      intro: 'Otvorí predvyplnený problém na GitHube. Prune sám nič neodosiela a všetko uvidíte skôr, než to niekam pôjde.',
+      summaryLabel: 'Zhrnutie',
+      detailsLabel: 'Čo sa pokazilo?',
+      detailsPlaceholder: 'Čo ste robili, čo ste očakávali a čo sa stalo namiesto toho.',
+      includedHeading: 'Čo bude zahrnuté',
+      includedText: 'Text, ktorý sem napíšete',
+      includedVersion: 'Verzia Prune',
+      includedWindows: 'Verzia Windows',
+      includedArch: 'Architektúra',
+      includedNothingElse: 'Nezhromažďuje sa nič iné: žiadne cesty k súborom, žiadne výsledky skenovania, žiadne používateľské meno.',
+      publicNote: 'Hlásenia na GitHube sú verejné, takže nevkladajte nič súkromné. Na odoslanie potrebujete bezplatný účet GitHub.',
+      cancel: 'Zrušiť',
+      open: 'Otvoriť na GitHube',
+      opening: 'Otvára sa…',
+      opened: 'Otvorené vo vašom prehliadači — odošlite tam problém.',
+      close: 'Zavrieť',
+      failed: 'Hlásenie sa nepodarilo otvoriť',
+      copy: 'Kopírovať hlásenie',
+      copied: 'Skopírované'
+    },
     shortcutsModal: {
       title: 'Klávesové skratky',
       close: 'Zavrieť',
@@ -23592,6 +24398,7 @@ export const CATALOG = {
 
   sq: {
     nav: {
+      reportBug: 'Raporto një defekt',
       dashboard: 'Paneli', diskMap: 'Harta e Diskut', applications: 'Aplikacionet',
       quarantine: 'Karantina', settings: 'Cilësimet', startup: 'Nisja',
       duplicates: 'Dublikatat', deepClean: 'Pastrim i thellë',
@@ -23740,6 +24547,9 @@ export const CATALOG = {
         registryNote: 'Çelësat e regjistrit eksportohen në Karantinë përpara se të hiqen, cilëndo zgjedhje që të bëni.'
       },
       about: {
+        reportTitle: 'Raporto një defekt',
+        reportDescription: 'Hap një problem të parambushur në GitHub. Vetë Prune nuk dërgon asgjë dhe ti sheh gjithçka para se të shkojë diku.',
+        reportButton: 'Raporto një defekt',
         description: 'Një mjet lokal, jashtë linje çinstalimi dhe pastrimi për Windows — heqje e detyruar me skanim skedarësh të mbetur, karantinë e sigurt përpara fshirjes, hartëzim disku, dhe pastrim mbeturinash me një klikim.'
       },
       automation: {
@@ -24308,6 +25118,28 @@ export const CATALOG = {
       disk: 'Disku',
       footer: 'Një skanim lexon të gjithë diskun, kështu që këto vlera lëvizin ndërsa Prune po punon.'
     },
+    bugReport: {
+      title: 'Raporto një defekt',
+      intro: 'Hap një problem të parambushur në GitHub. Vetë Prune nuk dërgon asgjë dhe ti sheh gjithçka para se të shkojë diku.',
+      summaryLabel: 'Përmbledhje',
+      detailsLabel: 'Çfarë shkoi keq?',
+      detailsPlaceholder: 'Çfarë bëre, çfarë priste dhe çfarë ndodhi në vend të kësaj.',
+      includedHeading: 'Çfarë do të përfshihet',
+      includedText: 'Teksti që shkruan këtu',
+      includedVersion: 'Versioni i Prune',
+      includedWindows: 'Versioni i Windows',
+      includedArch: 'Arkitektura',
+      includedNothingElse: 'Nuk mblidhet asgjë tjetër: as shtigje skedarësh, as rezultate skanimi, as emër përdoruesi.',
+      publicNote: 'Raportet në GitHub janë publike, prandaj mos ngjit asgjë private. Të duhet një llogari GitHub falas për ta postuar.',
+      cancel: 'Anulo',
+      open: 'Hap në GitHub',
+      opening: 'Po hapet…',
+      opened: 'U hap në shfletuesin tënd — posto problemin atje për ta dërguar.',
+      close: 'Mbyll',
+      failed: 'Raporti nuk mund të hapej',
+      copy: 'Kopjo raportin',
+      copied: 'U kopjua'
+    },
     shortcutsModal: {
       title: 'Shkurtoret e tastierës',
       close: 'Mbyll',
@@ -24352,6 +25184,7 @@ export const CATALOG = {
 
   sr: {
     nav: {
+      reportBug: 'Prijavi grešku',
       dashboard: 'Контролна табла', diskMap: 'Мапа диска', applications: 'Апликације',
       quarantine: 'Карантин', settings: 'Подешавања', startup: 'Покретање',
       duplicates: 'Дупликати', deepClean: 'Дубинско чишћење',
@@ -24500,6 +25333,9 @@ export const CATALOG = {
         registryNote: 'Кључеви регистра се извозе у карантину пре уклањања, без обзира на ваш избор.'
       },
       about: {
+        reportTitle: 'Prijavi grešku',
+        reportDescription: 'Otvara unapred popunjen prijavu na GitHub-u. Prune sam ne šalje ništa, a vi vidite sve pre nego što ode bilo gde.',
+        reportButton: 'Prijavi grešku',
         description: 'Локални, офлајн алат за деинсталацију и чишћење за Windows — присилно уклањање са скенирањем преосталих датотека, безбедна карантина пре брисања, мапирање диска и чишћење смећа једним кликом.'
       },
       automation: {
@@ -25068,6 +25904,28 @@ export const CATALOG = {
       disk: 'Диск',
       footer: 'Скенирање чита цео диск, тако да се ове вредности мењају док Prune ради.'
     },
+    bugReport: {
+      title: 'Prijavi grešku',
+      intro: 'Otvara unapred popunjen prijavu na GitHub-u. Prune sam ne šalje ništa, a vi vidite sve pre nego što ode bilo gde.',
+      summaryLabel: 'Rezime',
+      detailsLabel: 'Šta je pošlo naopako?',
+      detailsPlaceholder: 'Šta ste uradili, šta ste očekivali i šta se umesto toga desilo.',
+      includedHeading: 'Šta će biti uključeno',
+      includedText: 'Tekst koji ovde napišete',
+      includedVersion: 'Verzija programa Prune',
+      includedWindows: 'Verzija sistema Windows',
+      includedArch: 'Arhitektura',
+      includedNothingElse: 'Ništa drugo se ne prikuplja: nema putanja datoteka, rezultata skeniranja ni korisničkog imena.',
+      publicNote: 'Prijave na GitHub-u su javne, zato ne lepite ništa privatno. Za objavu vam treba besplatan GitHub nalog.',
+      cancel: 'Откажи',
+      open: 'Otvori na GitHub-u',
+      opening: 'Otvaranje…',
+      opened: 'Otvoreno u pregledaču — objavite prijavu tamo da biste je poslali.',
+      close: 'Затвори',
+      failed: 'Nije moguće otvoriti prijavu',
+      copy: 'Kopiraj prijavu',
+      copied: 'Kopirano'
+    },
     shortcutsModal: {
       title: 'Пречице на тастатури',
       close: 'Затвори',
@@ -25112,6 +25970,7 @@ export const CATALOG = {
 
   sv: {
     nav: {
+      reportBug: 'Rapportera ett fel',
       dashboard: 'Översikt', diskMap: 'Diskkarta', applications: 'Program',
       quarantine: 'Karantän', settings: 'Inställningar', startup: 'Startprogram',
       duplicates: 'Dubbletter', deepClean: 'Grundlig rensning',
@@ -25260,6 +26119,9 @@ export const CATALOG = {
         registryNote: 'Registernycklar exporteras till Karantän innan de tas bort, oavsett vad du väljer.'
       },
       about: {
+        reportTitle: 'Rapportera ett fel',
+        reportDescription: 'Öppnar ett förifyllt ärende på GitHub. Prune skickar inget själv, och du ser allt innan det går någonstans.',
+        reportButton: 'Rapportera ett fel',
         description: 'Ett lokalt, offline avinstallations- och rensningsverktyg för Windows — tvingad borttagning med skanning av kvarvarande filer, säker karantän före radering, diskkartläggning och skräprensning med ett klick.'
       },
       automation: {
@@ -25828,6 +26690,28 @@ export const CATALOG = {
       disk: 'Disk',
       footer: 'En sökning läser hela disken, så dessa värden rör sig medan Prune arbetar.'
     },
+    bugReport: {
+      title: 'Rapportera ett fel',
+      intro: 'Öppnar ett förifyllt ärende på GitHub. Prune skickar inget själv, och du ser allt innan det går någonstans.',
+      summaryLabel: 'Sammanfattning',
+      detailsLabel: 'Vad gick fel?',
+      detailsPlaceholder: 'Vad du gjorde, vad du förväntade dig och vad som hände i stället.',
+      includedHeading: 'Vad som tas med',
+      includedText: 'Texten du skriver här',
+      includedVersion: 'Prune-version',
+      includedWindows: 'Windows-version',
+      includedArch: 'Arkitektur',
+      includedNothingElse: 'Inget annat samlas in: inga filsökvägar, inga skanningsresultat, inget användarnamn.',
+      publicNote: 'Rapporter på GitHub är offentliga, så klistra inte in något privat. Du behöver ett gratis GitHub-konto för att skicka in en.',
+      cancel: 'Avbryt',
+      open: 'Öppna på GitHub',
+      opening: 'Öppnar…',
+      opened: 'Öppnat i din webbläsare — skicka in ärendet där.',
+      close: 'Stäng',
+      failed: 'Kunde inte öppna rapporten',
+      copy: 'Kopiera rapport',
+      copied: 'Kopierat'
+    },
     shortcutsModal: {
       title: 'Tangentbordsgenvägar',
       close: 'Stäng',
@@ -25872,6 +26756,7 @@ export const CATALOG = {
 
   th: {
     nav: {
+      reportBug: 'รายงานข้อบกพร่อง',
       dashboard: 'แดชบอร์ด', diskMap: 'แผนที่ดิสก์', applications: 'แอปพลิเคชัน',
       quarantine: 'กักกัน', settings: 'การตั้งค่า', startup: 'โปรแกรมเริ่มต้น',
       duplicates: 'ไฟล์ซ้ำ', deepClean: 'ทำความสะอาดเชิงลึก',
@@ -26020,6 +26905,9 @@ export const CATALOG = {
         registryNote: 'คีย์รีจิสทรีจะถูกส่งออกไปยังกักกันก่อนที่จะถูกลบ ไม่ว่าคุณจะเลือกแบบใดก็ตาม'
       },
       about: {
+        reportTitle: 'รายงานข้อบกพร่อง',
+        reportDescription: 'เปิดปัญหาที่กรอกไว้ล่วงหน้าบน GitHub Prune ไม่ส่งอะไรเอง และคุณจะเห็นทุกอย่างก่อนที่จะถูกส่งไปที่ใด',
+        reportButton: 'รายงานข้อบกพร่อง',
         description: 'เครื่องมือถอนการติดตั้งและล้างข้อมูลแบบออฟไลน์ในเครื่องสำหรับ Windows — การลบแบบบังคับพร้อมการสแกนไฟล์ตกค้าง, การกักกันอย่างปลอดภัยก่อนลบ, การทำแผนที่ดิสก์ และการล้างขยะด้วยคลิกเดียว'
       },
       automation: {
@@ -26588,6 +27476,28 @@ export const CATALOG = {
       disk: 'ดิสก์',
       footer: 'การสแกนอ่านทั้งดิสก์ ค่าเหล่านี้จึงเปลี่ยนแปลงขณะที่ Prune กำลังทำงาน'
     },
+    bugReport: {
+      title: 'รายงานข้อบกพร่อง',
+      intro: 'เปิดปัญหาที่กรอกไว้ล่วงหน้าบน GitHub Prune ไม่ส่งอะไรเอง และคุณจะเห็นทุกอย่างก่อนที่จะถูกส่งไปที่ใด',
+      summaryLabel: 'สรุป',
+      detailsLabel: 'เกิดอะไรขึ้น',
+      detailsPlaceholder: 'สิ่งที่คุณทำ สิ่งที่คุณคาดหวัง และสิ่งที่เกิดขึ้นแทน',
+      includedHeading: 'สิ่งที่จะรวมไว้',
+      includedText: 'ข้อความที่คุณเขียนที่นี่',
+      includedVersion: 'เวอร์ชัน Prune',
+      includedWindows: 'เวอร์ชัน Windows',
+      includedArch: 'สถาปัตยกรรม',
+      includedNothingElse: 'ไม่มีการเก็บข้อมูลอื่นใด: ไม่มีเส้นทางไฟล์ ไม่มีผลการสแกน ไม่มีชื่อผู้ใช้',
+      publicNote: 'รายงานบน GitHub เป็นสาธารณะ จึงไม่ควรวางข้อมูลส่วนตัว คุณต้องมีบัญชี GitHub ฟรีเพื่อโพสต์',
+      cancel: 'ยกเลิก',
+      open: 'เปิดบน GitHub',
+      opening: 'กำลังเปิด…',
+      opened: 'เปิดในเบราว์เซอร์ของคุณแล้ว — โพสต์ปัญหาที่นั่นเพื่อส่ง',
+      close: 'ปิด',
+      failed: 'ไม่สามารถเปิดรายงานได้',
+      copy: 'คัดลอกรายงาน',
+      copied: 'คัดลอกแล้ว'
+    },
     shortcutsModal: {
       title: 'แป้นพิมพ์ลัด',
       close: 'ปิด',
@@ -26632,6 +27542,7 @@ export const CATALOG = {
 
   tr: {
     nav: {
+      reportBug: 'Hata bildir',
       dashboard: 'Panel', diskMap: 'Disk Haritası', applications: 'Uygulamalar',
       quarantine: 'Karantina', settings: 'Ayarlar', startup: 'Başlangıç',
       duplicates: 'Yinelenenler', deepClean: 'Derinlemesine Temizlik',
@@ -26780,6 +27691,9 @@ export const CATALOG = {
         registryNote: 'Kayıt defteri anahtarları, ne seçerseniz seçin, kaldırılmadan önce Karantinaya aktarılır.'
       },
       about: {
+        reportTitle: 'Hata bildir',
+        reportDescription: "GitHub'da önceden doldurulmuş bir sorun açar. Prune kendisi hiçbir şey göndermez ve herhangi bir yere gitmeden önce her şeyi görürsünüz.",
+        reportButton: 'Hata bildir',
         description: "Windows için yerel, çevrimdışı bir kaldırma ve temizlik aracı — artık dosya taramasıyla zorla kaldırma, silmeden önce güvenli karantina, disk haritalama ve tek tıkla çöp temizliği."
       },
       automation: {
@@ -27348,6 +28262,28 @@ export const CATALOG = {
       disk: 'Disk',
       footer: 'Bir tarama tüm diski okur, bu yüzden Prune çalışırken bu değerler hareket eder.'
     },
+    bugReport: {
+      title: 'Hata bildir',
+      intro: "GitHub'da önceden doldurulmuş bir sorun açar. Prune kendisi hiçbir şey göndermez ve herhangi bir yere gitmeden önce her şeyi görürsünüz.",
+      summaryLabel: 'Özet',
+      detailsLabel: 'Ne ters gitti?',
+      detailsPlaceholder: 'Ne yaptığınızı, ne beklediğinizi ve bunun yerine ne olduğunu yazın.',
+      includedHeading: 'Nelerin dahil edileceği',
+      includedText: 'Buraya yazdığınız metin',
+      includedVersion: 'Prune sürümü',
+      includedWindows: 'Windows sürümü',
+      includedArch: 'Mimari',
+      includedNothingElse: 'Başka hiçbir şey toplanmaz: dosya yolu, tarama sonucu ya da kullanıcı adı yok.',
+      publicNote: "GitHub'daki raporlar herkese açıktır, bu yüzden özel hiçbir şey yapıştırmayın. Paylaşmak için ücretsiz bir GitHub hesabı gerekir.",
+      cancel: 'İptal',
+      open: "GitHub'da aç",
+      opening: 'Açılıyor…',
+      opened: 'Tarayıcınızda açıldı — göndermek için sorunu orada paylaşın.',
+      close: 'Kapat',
+      failed: 'Rapor açılamadı',
+      copy: 'Raporu kopyala',
+      copied: 'Kopyalandı'
+    },
     shortcutsModal: {
       title: 'Klavye kısayolları',
       close: 'Kapat',
@@ -27392,6 +28328,7 @@ export const CATALOG = {
 
   uk: {
     nav: {
+      reportBug: 'Повідомити про помилку',
       dashboard: 'Панель', diskMap: 'Карта диска', applications: 'Застосунки',
       quarantine: 'Карантин', settings: 'Налаштування', startup: 'Автозавантаження',
       duplicates: 'Дублікати', deepClean: 'Глибоке очищення',
@@ -27540,6 +28477,9 @@ export const CATALOG = {
         registryNote: 'Ключі реєстру експортуються до карантину перед видаленням, незалежно від вашого вибору.'
       },
       about: {
+        reportTitle: 'Повідомити про помилку',
+        reportDescription: 'Відкриває заздалегідь заповнену заявку на GitHub. Сам Prune нічого не надсилає, і ви бачите все, перш ніж це кудись піде.',
+        reportButton: 'Повідомити про помилку',
         description: 'Локальний, автономний інструмент видалення та очищення для Windows — примусове видалення зі скануванням залишкових файлів, безпечний карантин перед видаленням, картографування диска та очищення сміття в один клік.'
       },
       automation: {
@@ -28108,6 +29048,28 @@ export const CATALOG = {
       disk: 'Диск',
       footer: 'Сканування читає весь диск, тому ці значення змінюються, поки Prune працює.'
     },
+    bugReport: {
+      title: 'Повідомити про помилку',
+      intro: 'Відкриває заздалегідь заповнену заявку на GitHub. Сам Prune нічого не надсилає, і ви бачите все, перш ніж це кудись піде.',
+      summaryLabel: 'Короткий опис',
+      detailsLabel: 'Що пішло не так?',
+      detailsPlaceholder: 'Що ви робили, чого очікували і що сталося натомість.',
+      includedHeading: 'Що буде включено',
+      includedText: 'Текст, який ви напишете тут',
+      includedVersion: 'Версія Prune',
+      includedWindows: 'Версія Windows',
+      includedArch: 'Архітектура',
+      includedNothingElse: 'Більше нічого не збирається: ні шляхів до файлів, ні результатів сканування, ні імені користувача.',
+      publicNote: 'Звіти на GitHub є публічними, тому не вставляйте нічого приватного. Щоб опублікувати заявку, потрібен безплатний обліковий запис GitHub.',
+      cancel: 'Скасувати',
+      open: 'Відкрити на GitHub',
+      opening: 'Відкривається…',
+      opened: 'Відкрито у браузері — опублікуйте заявку там, щоб надіслати її.',
+      close: 'Закрити',
+      failed: 'Не вдалося відкрити звіт',
+      copy: 'Копіювати звіт',
+      copied: 'Скопійовано'
+    },
     shortcutsModal: {
       title: 'Комбінації клавіш',
       close: 'Закрити',
@@ -28152,6 +29114,7 @@ export const CATALOG = {
 
   vi: {
     nav: {
+      reportBug: 'Báo lỗi',
       dashboard: 'Bảng điều khiển', diskMap: 'Bản đồ ổ đĩa', applications: 'Ứng dụng',
       quarantine: 'Cách ly', settings: 'Cài đặt', startup: 'Khởi động cùng',
       duplicates: 'Tệp trùng lặp', deepClean: 'Dọn dẹp sâu',
@@ -28300,6 +29263,9 @@ export const CATALOG = {
         registryNote: 'Các khóa registry được xuất vào Cách ly trước khi chúng bị loại bỏ, bất kể bạn chọn gì.'
       },
       about: {
+        reportTitle: 'Báo lỗi',
+        reportDescription: 'Mở một vấn đề được điền sẵn trên GitHub. Bản thân Prune không gửi gì, và bạn thấy mọi thứ trước khi nó đi đâu.',
+        reportButton: 'Báo lỗi',
         description: 'Một công cụ gỡ cài đặt và dọn dẹp cục bộ, ngoại tuyến cho Windows — buộc loại bỏ với quét tệp còn sót lại, cách ly an toàn trước khi xóa, lập bản đồ ổ đĩa, và dọn dẹp rác chỉ với một cú nhấp chuột.'
       },
       automation: {
@@ -28868,6 +29834,28 @@ export const CATALOG = {
       disk: 'Ổ đĩa',
       footer: 'Một lượt quét đọc toàn bộ ổ đĩa, vì vậy các giá trị này thay đổi trong khi Prune đang hoạt động.'
     },
+    bugReport: {
+      title: 'Báo lỗi',
+      intro: 'Mở một vấn đề được điền sẵn trên GitHub. Bản thân Prune không gửi gì, và bạn thấy mọi thứ trước khi nó đi đâu.',
+      summaryLabel: 'Tóm tắt',
+      detailsLabel: 'Đã xảy ra sự cố gì?',
+      detailsPlaceholder: 'Bạn đã làm gì, mong đợi gì và thực tế đã xảy ra điều gì.',
+      includedHeading: 'Những gì sẽ được đưa vào',
+      includedText: 'Văn bản bạn viết ở đây',
+      includedVersion: 'Phiên bản Prune',
+      includedWindows: 'Phiên bản Windows',
+      includedArch: 'Kiến trúc',
+      includedNothingElse: 'Không thu thập gì khác: không có đường dẫn tệp, kết quả quét hay tên người dùng.',
+      publicNote: 'Báo cáo trên GitHub là công khai, vì vậy đừng dán bất kỳ thông tin riêng tư nào. Bạn cần tài khoản GitHub miễn phí để đăng.',
+      cancel: 'Hủy',
+      open: 'Mở trên GitHub',
+      opening: 'Đang mở…',
+      opened: 'Đã mở trong trình duyệt — hãy đăng vấn đề ở đó để gửi.',
+      close: 'Đóng',
+      failed: 'Không thể mở báo cáo',
+      copy: 'Sao chép báo cáo',
+      copied: 'Đã sao chép'
+    },
     shortcutsModal: {
       title: 'Phím tắt',
       close: 'Đóng',
@@ -28912,6 +29900,7 @@ export const CATALOG = {
 
   'zh-CN': {
     nav: {
+      reportBug: '报告错误',
       dashboard: '仪表盘', diskMap: '磁盘地图', applications: '应用程序',
       quarantine: '隔离区', settings: '设置', startup: '启动项',
       duplicates: '重复文件', deepClean: '深度清理',
@@ -29060,6 +30049,9 @@ export const CATALOG = {
         registryNote: '无论你如何选择，注册表项在删除前都会导出到隔离区。'
       },
       about: {
+        reportTitle: '报告错误',
+        reportDescription: '在 GitHub 上打开一个预先填好的问题。Prune 本身不会发送任何内容，在发送到任何地方之前，你都能看到全部内容。',
+        reportButton: '报告错误',
         description: '一款本地、离线的 Windows 卸载与清理工具——具有残留文件扫描的强制删除、删除前的安全隔离、磁盘映射，以及一键垃圾清理。'
       },
       automation: {
@@ -29628,6 +30620,28 @@ export const CATALOG = {
       disk: '磁盘',
       footer: '扫描会读取整个磁盘，因此在 Prune 工作时这些数值会变化。'
     },
+    bugReport: {
+      title: '报告错误',
+      intro: '在 GitHub 上打开一个预先填好的问题。Prune 本身不会发送任何内容，在发送到任何地方之前，你都能看到全部内容。',
+      summaryLabel: '摘要',
+      detailsLabel: '出了什么问题？',
+      detailsPlaceholder: '你做了什么、期望发生什么，以及实际发生了什么。',
+      includedHeading: '将包含的内容',
+      includedText: '你在此处写下的文字',
+      includedVersion: 'Prune 版本',
+      includedWindows: 'Windows 版本',
+      includedArch: '架构',
+      includedNothingElse: '不会收集其他任何内容：没有文件路径、扫描结果或用户名。',
+      publicNote: 'GitHub 上的报告是公开的，请不要粘贴任何私人内容。发布报告需要一个免费的 GitHub 账户。',
+      cancel: '取消',
+      open: '在 GitHub 上打开',
+      opening: '正在打开…',
+      opened: '已在浏览器中打开 — 请在那里发布该问题以完成发送。',
+      close: '关闭',
+      failed: '无法打开报告',
+      copy: '复制报告',
+      copied: '已复制'
+    },
     shortcutsModal: {
       title: '键盘快捷键',
       close: '关闭',
@@ -29672,6 +30686,7 @@ export const CATALOG = {
 
   'zh-TW': {
     nav: {
+      reportBug: '回報錯誤',
       dashboard: '儀表板', diskMap: '磁碟地圖', applications: '應用程式',
       quarantine: '隔離區', settings: '設定', startup: '啟動項目',
       duplicates: '重複檔案', deepClean: '深度清理',
@@ -29820,6 +30835,9 @@ export const CATALOG = {
         registryNote: '無論你如何選擇，登錄機碼在移除前都會匯出到隔離區。'
       },
       about: {
+        reportTitle: '回報錯誤',
+        reportDescription: '在 GitHub 上開啟一個預先填好的問題。Prune 本身不會傳送任何內容，在送到任何地方之前，你都能看到全部內容。',
+        reportButton: '回報錯誤',
         description: '一款本機、離線的 Windows 解除安裝與清理工具——具有殘留檔案掃描的強制移除、刪除前的安全隔離、磁碟對應，以及一鍵垃圾清理。'
       },
       automation: {
@@ -30387,6 +31405,28 @@ export const CATALOG = {
       memory: '記憶體',
       disk: '磁碟',
       footer: '掃描會讀取整個磁碟，因此在 Prune 運作時這些數值會變動。'
+    },
+    bugReport: {
+      title: '回報錯誤',
+      intro: '在 GitHub 上開啟一個預先填好的問題。Prune 本身不會傳送任何內容，在送到任何地方之前，你都能看到全部內容。',
+      summaryLabel: '摘要',
+      detailsLabel: '發生了什麼問題？',
+      detailsPlaceholder: '你做了什麼、預期會發生什麼，以及實際發生了什麼。',
+      includedHeading: '將包含的內容',
+      includedText: '你在此處寫下的文字',
+      includedVersion: 'Prune 版本',
+      includedWindows: 'Windows 版本',
+      includedArch: '架構',
+      includedNothingElse: '不會收集其他任何內容：沒有檔案路徑、掃描結果或使用者名稱。',
+      publicNote: 'GitHub 上的回報是公開的，請不要貼上任何私人內容。張貼回報需要免費的 GitHub 帳號。',
+      cancel: '取消',
+      open: '在 GitHub 上開啟',
+      opening: '正在開啟…',
+      opened: '已在瀏覽器中開啟 — 請在那裡張貼該問題以完成傳送。',
+      close: '關閉',
+      failed: '無法開啟回報',
+      copy: '複製回報',
+      copied: '已複製'
     },
     shortcutsModal: {
       title: '鍵盤快速鍵',

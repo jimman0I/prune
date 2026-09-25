@@ -399,6 +399,29 @@ export async function openUpdatePage() {
   return data;
 }
 
+/** What a bug report will say about this machine: Prune's version,
+ * Windows' version and the architecture. The dialog lists these so the user
+ * sees exactly what goes along with their text. */
+export async function fetchBugReportInfo() {
+  const res = await fetch(`${API_URL}/bug-report/info`);
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
+  return data;
+}
+
+/** Opens a prefilled GitHub issue in the browser. Sends the user's title
+ * and description and no address: the backend builds the URL itself. */
+export async function openBugReport({ title, description }) {
+  const res = await fetch(`${API_URL}/bug-report/open`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ title, description })
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
+  return data;
+}
+
 export async function runSandboxTest() {
   const res = await fetch(`${API_URL}/sandbox-test`, { method: 'POST' });
   const data = await res.json();

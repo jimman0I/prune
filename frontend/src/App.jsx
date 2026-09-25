@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { keys } from './lib/queryClient.js';
 import NavRail from './components/NavRail.jsx';
@@ -11,6 +11,7 @@ import { useProgramData } from './hooks/usePrograms.js';
 import ToastHost from './components/ToastHost.jsx';
 import UpdateButton from './components/UpdateButton.jsx';
 import ShortcutsModal from './components/ShortcutsModal.jsx';
+import BugReportModal from './components/BugReportModal.jsx';
 import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts.js';
 import ProgramList from './components/ProgramList.jsx';
 import BatchUninstallModal from './components/BatchUninstallModal.jsx';
@@ -101,6 +102,10 @@ export default function App() {
   useWindowActivity();
 
   const [showShortcuts, setShowShortcuts] = useState(false);
+  // One dialog, opened from the rail and from Settings > About. Stable, so
+  // the memoised SettingsPage that receives it does not re-render with App.
+  const [showBugReport, setShowBugReport] = useState(false);
+  const openBugReport = useCallback(() => setShowBugReport(true), []);
 
   /** The app's global chords.
    *
@@ -141,14 +146,14 @@ export default function App() {
       <TitleBar />
       <div className="flex-1 flex min-h-0">
       <ToastHost />
-      <NavRail screen={screen} onNavigate={setScreen} footer={<UpdateButton />} />
+      <NavRail screen={screen} onNavigate={setScreen} footer={<UpdateButton />} onReportBug={openBugReport} />
       <div ref={stageRef} className="flex-1 overflow-y-auto min-h-0">
         <Screen active={screen === 'dashboard'} visited={visited.has('dashboard')}>
           <Dashboard programs={programs} totalSize={totalSize} onNavigate={setScreen} />
         </Screen>
         <Screen active={screen === 'diskmap'} visited={visited.has('diskmap')}><DiskMap /></Screen>
         <Screen active={screen === 'quarantine'} visited={visited.has('quarantine')}><QuarantineManager /></Screen>
-        <Screen active={screen === 'settings'} visited={visited.has('settings')}><SettingsPage /></Screen>
+        <Screen active={screen === 'settings'} visited={visited.has('settings')}><SettingsPage onReportBug={openBugReport} /></Screen>
         <Screen active={screen === 'startup'} visited={visited.has('startup')}><StartupItems /></Screen>
         <Screen active={screen === 'deepclean'} visited={visited.has('deepclean')}><DeepClean /></Screen>
         <Screen active={screen === 'duplicates'} visited={visited.has('duplicates')}><Duplicates /></Screen>
@@ -184,6 +189,7 @@ export default function App() {
           it, so the user was driving the table they were about to delete
           from while the dialog was still up. */}
       {showShortcuts && <ShortcutsModal onClose={() => setShowShortcuts(false)} />}
+      {showBugReport && <BugReportModal onClose={() => setShowBugReport(false)} />}
 
       {batchPrograms && (
         <ModalOverlay
