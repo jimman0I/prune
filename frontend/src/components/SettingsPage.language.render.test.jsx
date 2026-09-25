@@ -195,7 +195,7 @@ describe('the settings screen, in Greek', () => {
   it('translates Show free space on the Disk Map, switch name and description', async () => {
     renderScreen(<SettingsPage />);
     await ready();
-    expect(await screen.findByRole('switch', { name: 'Εμφάνιση ελεύθερου χώρου στον Χάρτη Δίσκου' })).toBeTruthy();
+    expect(await screen.findByRole('switch', { name: 'Εμφάνιση ελεύθερου χώρου στον Χάρτη δίσκου' })).toBeTruthy();
     expect(screen.getByText(/κάθε φάκελος να διαβάζεται ως μερίδιο του δίσκου/)).toBeTruthy();
   });
 
@@ -203,7 +203,7 @@ describe('the settings screen, in Greek', () => {
     updateSettings.mockRejectedValue(new Error('disk full'));
     const user = userEvent.setup();
     renderScreen(<SettingsPage />);
-    await user.click(await screen.findByRole('switch', { name: 'Εμφάνιση ελεύθερου χώρου στον Χάρτη Δίσκου' }));
+    await user.click(await screen.findByRole('switch', { name: 'Εμφάνιση ελεύθερου χώρου στον Χάρτη δίσκου' }));
     expect(await screen.findByText('Αδυναμία αποθήκευσης: disk full')).toBeTruthy();
   });
 
@@ -212,7 +212,7 @@ describe('the settings screen, in Greek', () => {
       const user = await openTab('Καθαρισμός');
       expect(screen.getByText('Αυτόματη Καραντίνα')).toBeTruthy();
       expect(screen.getByRole('switch', { name: 'Αυτόματη Καραντίνα' })).toBeTruthy();
-      expect(screen.getByText(/Ο Βαθύς Καθαρισμός μετακινεί/)).toBeTruthy();
+      expect(screen.getByText(/Ο Βαθύς καθαρισμός μετακινεί/)).toBeTruthy();
       void user;
     });
 
