@@ -1,0 +1,66 @@
+<svg viewBox="0 0 1200 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Prune is local-first. The Prune window talks only to its own backend on 127.0.0.1, inside your PC. Nothing is sent to the internet: no telemetry, no crash reports, no analytics. The one exception is opt-in and off by default: an update check that asks api.github.com once a day whether a newer release exists, sending a User-Agent and nothing else.">
+  <desc>Animated diagram. Small packets pass back and forth between the Prune window and its local backend inside a box labelled your PC. A packet heading for the internet stops at a barrier. A faint dashed line marks the opt-in update check, off by default. Every label is readable on the first frame and with motion turned off.</desc>
+  <style>
+    .sans { font-family: 'Segoe UI', Inter, Arial, Helvetica, system-ui, sans-serif; }
+    .mono { font-family: Consolas, 'Cascadia Mono', 'Courier New', monospace; }
+    .go   { animation: go 3s ease-in-out infinite; }
+    .back { animation: back 3s ease-in-out infinite; animation-delay: 1.5s; }
+    .blocked { animation: blocked 4s ease-in infinite; }
+    .shake { animation: shake 4s ease-in infinite; }
+    @keyframes go   { 0% { transform: translateX(0);    opacity: 0; } 15% { opacity: 1; } 85% { opacity: 1; } 100% { transform: translateX(232px);  opacity: 0; } }
+    @keyframes back { 0% { transform: translateX(0);    opacity: 0; } 15% { opacity: 1; } 85% { opacity: 1; } 100% { transform: translateX(-232px); opacity: 0; } }
+    @keyframes blocked {
+      0%   { transform: translateX(0);    opacity: 0; }
+      12%  { opacity: 1; }
+      55%  { transform: translateX(68px); opacity: 1; }
+      62%  { transform: translateX(68px); opacity: 0; }
+      100% { transform: translateX(68px); opacity: 0; }
+    }
+    @keyframes shake {
+      0%, 52%  { opacity: .55; }
+      58%      { opacity: 1; }
+      80%,100% { opacity: .55; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .go, .back, .blocked, .shake { animation: none !important; }
+      .go, .back, .blocked { opacity: 0; }
+      .shake { opacity: 1; }
+    }
+  </style>
+
+  <rect width="1200" height="320" rx="18" fill="#0b0d12"/>
+  <text x="48" y="52" class="mono" font-size="12.5" letter-spacing="2.5" fill="#67e8f9">PRIVATE &amp; LOCAL-FIRST</text>
+  <text x="1152" y="52" text-anchor="end" class="mono" font-size="12" letter-spacing="1.5" fill="#71717a">NO TELEMETRY · NO ANALYTICS · NO CRASH REPORTS</text>
+
+  <!-- your PC -->
+  <rect x="48" y="84" width="700" height="188" rx="16" fill="#0e1218" stroke="#22d3ee" stroke-opacity=".45" stroke-width="2" stroke-dasharray="6 6"/>
+  <text x="72" y="112" class="mono" font-size="12" letter-spacing="2" fill="#67e8f9">YOUR PC</text>
+
+  <rect x="80" y="140" width="190" height="92" rx="12" fill="#12151c" stroke="#232b38" stroke-width="1.5"/>
+  <text x="175" y="180" text-anchor="middle" class="sans" font-size="18" font-weight="700" fill="#e9edf3">Prune window</text>
+  <text x="175" y="204" text-anchor="middle" class="sans" font-size="13" fill="#a1a1aa">what you see</text>
+
+  <rect x="522" y="140" width="190" height="92" rx="12" fill="#12151c" stroke="#232b38" stroke-width="1.5"/>
+  <text x="617" y="180" text-anchor="middle" class="sans" font-size="18" font-weight="700" fill="#e9edf3">Prune backend</text>
+  <text x="617" y="204" text-anchor="middle" class="mono" font-size="13" fill="#86efac">127.0.0.1</text>
+
+  <line x1="270" y1="176" x2="522" y2="176" stroke="#2f3a4a" stroke-width="2"/>
+  <line x1="270" y1="198" x2="522" y2="198" stroke="#2f3a4a" stroke-width="2"/>
+  <circle class="go"   cx="284" cy="176" r="5" fill="#22d3ee" opacity="0"/>
+  <circle class="back" cx="508" cy="198" r="5" fill="#86efac" opacity="0"/>
+  <text x="396" y="166" text-anchor="middle" class="mono" font-size="11" fill="#71717a">loopback only</text>
+
+  <!-- barrier + internet -->
+  <line x1="792" y1="84" x2="792" y2="272" stroke="#f87171" stroke-width="3" stroke-linecap="round" stroke-dasharray="2 8"/>
+  <circle class="blocked" cx="720" cy="176" r="5" fill="#f87171" opacity="0"/>
+  <g class="shake">
+    <path d="M776 168l32 16M808 168l-32 16" stroke="#f87171" stroke-width="3" stroke-linecap="round" transform="translate(0,-6)"/>
+  </g>
+
+  <rect x="852" y="132" width="300" height="108" rx="14" fill="#12151c" stroke="#232b38" stroke-width="1.5"/>
+  <text x="1002" y="176" text-anchor="middle" class="sans" font-size="19" font-weight="700" fill="#e9edf3">The internet</text>
+  <text x="1002" y="204" text-anchor="middle" class="sans" font-size="14" fill="#f87171" font-weight="600">nothing is sent</text>
+
+  <!-- opt-in update check: said in words below; a line here would contradict "nothing is sent" -->
+  <text x="600" y="296" text-anchor="middle" class="sans" font-size="13.5" fill="#a1a1aa">The one exception is opt-in and off by default: an update check asks <tspan class="mono" fill="#e9edf3">api.github.com</tspan> once a day — a User-Agent, nothing else.</text>
+</svg>

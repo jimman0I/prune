@@ -13,7 +13,7 @@
 
 # ✂️ Prune — The Uninstaller That Finishes the Job
 
-**Run the program's own uninstaller. Then find everything it forgot. Nothing is deleted until you say so.**
+<img src="docs/diagrams/readme-hero.svg" width="100%" alt="Prune: uninstall it, then find what it left behind. Every leftover file, registry key and scheduled task is quarantined first, so nothing is lost by mistake. 87 cleaner rules, 31 categories, 40 languages, zero telemetry." />
 
 <br/>
 
@@ -73,15 +73,7 @@ something it says so instead of printing a confident zero.
 
 ## 🎬 How an Uninstall Works
 
-```mermaid
-flowchart LR
-    A["🗑️ Choose programs"] --> B["📦 Run each program's<br/>own uninstaller"]
-    B --> C["🔍 Scan for leftovers<br/>files · registry · tasks"]
-    C --> D["👀 Review what was found"]
-    D --> E["🛟 Quarantine<br/>files moved, keys exported"]
-    E --> F["↩️ Restore any time"]
-    E --> G["🔥 Delete for good<br/>only when you say so, twice"]
-```
+<img src="docs/diagrams/uninstall-flow.svg" width="100%" alt="How an uninstall works in Prune: choose programs, run each program's own uninstaller, scan for leftover files, registry keys and scheduled tasks, review what was found, then quarantine it — files moved, registry keys exported. Anything quarantined can be restored at any time." />
 
 A bad match is recoverable by design: by default **nothing is deleted
 outright** — it is moved to Quarantine first.
@@ -219,6 +211,8 @@ anything leaves the app.
 <br/>
 
 ## 🔒 Private &amp; Local-First
+
+<img src="docs/diagrams/privacy-local.svg" width="100%" alt="The Prune window talks only to its own backend on 127.0.0.1 inside your PC. Nothing is sent to the internet: no telemetry, no crash reports, no analytics. The one exception is an opt-in update check, off by default." />
 
 No telemetry, no crash reporting, no analytics, and **no update check unless
 you turn one on**. The only HTTP in the app is the window talking to its own
