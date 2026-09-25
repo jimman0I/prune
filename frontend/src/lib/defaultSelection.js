@@ -80,3 +80,23 @@ export function selectableIds(categories, acknowledged) {
   }
   return ids;
 }
+
+/** What to tick when a saved selection is reopened.
+ *
+ * A saved tick can outlive its reason: it was made on an earlier scan, on
+ * another version, or before the software was removed. Restoring it as-is
+ * put Vivaldi or Slack in the batch on a machine that has neither. Only
+ * ids the current listing says are still cleanable survive; if none do,
+ * the defaults apply, exactly as if nothing had been saved. */
+export function restoreSelection(saved, categories) {
+  if (Array.isArray(saved) && saved.length > 0) {
+    const valid = cleanableIds(categories);
+    // A rule the listing does not know at all (a command rule, or one this
+    // version dropped) is not "not installed"; only a known-bad id is cut.
+    const known = new Set();
+    for (const group of categories || []) for (const item of group.items || []) known.add(item.id);
+    const kept = new Set(saved.filter((id) => valid.has(id) || !known.has(id)));
+    if (kept.size > 0) return kept;
+  }
+  return defaultSelection(categories);
+}

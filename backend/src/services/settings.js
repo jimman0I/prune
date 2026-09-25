@@ -41,7 +41,9 @@ export function settingsPath() {
  *   is a slow no-op.
  *
  *   hideUnavailableRules -- BleachBit's "hide irrelevant cleaners". Most
- *   of a 74-rule list is for software the user does not have. */
+ *   of a 74-rule list is for software the user does not have, so it is
+ *   on by default: listed and pre-ticked, Slack or Vivaldi on a PC that
+ *   never had them reads as Prune making things up. */
 const DEFAULT_SETTINGS = {
   excludeFolders: [],
   /* File types the cleaner and the disk scanner both skip, stored as
@@ -67,7 +69,7 @@ const DEFAULT_SETTINGS = {
   minimizeToTray: false,
   skipRecentHours: 24,
   createRestorePoint: true,
-  hideUnavailableRules: false,
+  hideUnavailableRules: true,
   /* Deep Clean rules whose "this loses data" warning the user has ticked
      "remember my choice" on, by rule id. Sixteen rules are marked risky
      -- history, cookies, sessions, autofill and site data across three
