@@ -18,8 +18,51 @@ const EASE = [0.2, 0.9, 0.3, 1];
 const WIDTH = 210;
 const ITEM_HEIGHT = 34;
 
+/** The menu items that can be chosen, in order. */
+const enabledItems = (menu) => [...menu.querySelectorAll('[role="menuitem"]:not(:disabled)')];
+
 export default function ContextMenu({ open, x, y, items, onClose }) {
   const ref = useRef(null);
+  // What had focus when the menu opened: the "..." button, a treemap cell, or
+  // nothing in particular after a right-click. Focus goes back there on close.
+  const openerRef = useRef(null);
+
+  /* Reachable and usable without a mouse.
+   *
+   * The menu is portaled to the end of <body>, so without this a keyboard
+   * user who pressed Enter on a row's "..." button stayed on that button
+   * with the menu somewhere they could only reach by tabbing through the
+   * rest of the page. Opening moves focus onto the first choice, Up/Down/
+   * Home/End move between choices, Tab leaves (closing it), and closing
+   * hands focus back to what opened it -- unless something else (the
+   * confirmation dialog a choice raises) has already taken it. */
+  useEffect(() => {
+    if (!open) return undefined;
+    openerRef.current = document.activeElement;
+    enabledItems(ref.current ?? document.body)[0]?.focus();
+    return () => {
+      const opener = openerRef.current;
+      const active = document.activeElement;
+      // Focus still on the menu (or nowhere): it is ours to give back.
+      const stillOurs = !active || active === document.body || ref.current?.contains(active) || !document.body.contains(active);
+      if (stillOurs && opener && opener !== document.body && document.body.contains(opener)) opener.focus();
+    };
+  }, [open]);
+
+  const onMenuKeyDown = (event) => {
+    if (event.key === 'Tab') { onClose(); return; }
+    if (!['ArrowDown', 'ArrowUp', 'Home', 'End'].includes(event.key)) return;
+    event.preventDefault();
+    const list = enabledItems(event.currentTarget);
+    if (list.length === 0) return;
+    const at = list.indexOf(document.activeElement);
+    let next;
+    if (event.key === 'Home') next = 0;
+    else if (event.key === 'End') next = list.length - 1;
+    else if (event.key === 'ArrowDown') next = at < 0 ? 0 : (at + 1) % list.length;
+    else next = at < 0 ? list.length - 1 : (at - 1 + list.length) % list.length;
+    list[next].focus();
+  };
 
   useEffect(() => {
     if (!open) return;
@@ -64,6 +107,7 @@ export default function ContextMenu({ open, x, y, items, onClose }) {
           key="context-menu"
           ref={ref}
           role="menu"
+          onKeyDown={onMenuKeyDown}
           initial={{ opacity: 0, scale: 0.96, y: -4 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.96, y: -4 }}
