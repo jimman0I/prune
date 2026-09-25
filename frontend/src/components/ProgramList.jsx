@@ -120,11 +120,11 @@ export const ROW_GRID = 'grid gap-2.5 px-4 items-center min-w-[var(--min-narrow)
  * Company column beneath it. What needs to be legible over the columns under
  * it is only the buttons, and only while they are showing, so the backing
  * belongs to them (ACTION_BACKING) and appears with them. */
-export const STICKY_ACTION = 'sticky right-0 z-[1] pl-2';
+export const STICKY_ACTION = 'sticky right-2 z-[1] pl-2';
 /** The buttons' group: invisible at rest, shown on hover or when anything in
  * the row has keyboard focus, and only then opaque, so it never paints a box
  * of its own colour into the glass. */
-export const ACTION_BACKING = 'inline-flex items-center gap-1.5 rounded-md bg-[color:var(--bg-panel)] opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity';
+export const ACTION_BACKING = 'inline-flex items-center gap-1.5 rounded-md px-1 py-0.5 bg-[color:var(--bg-panel)] [background-image:linear-gradient(var(--surface-hover),var(--surface-hover))] opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity';
 
 /** The program's own icon, falling back to a lettered tile.
  *
