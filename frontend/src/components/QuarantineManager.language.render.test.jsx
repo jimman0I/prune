@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { screen, waitFor } from '@testing-library/react';
+import { screen, waitFor, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { renderScreen } from '../testSupport/renderScreen.jsx';
 
@@ -155,7 +155,8 @@ describe('the quarantine screen, in Greek', () => {
     const user = userEvent.setup();
     renderScreen(<QuarantineManager />);
     await user.click(await screen.findByRole('button', { name: 'Οριστική Διαγραφή' }));
-    await user.click(screen.getByRole('button', { name: 'Επιβεβαίωση' }));
+        await act(async () => { await new Promise((r) => setTimeout(r, 600)); });
+    await user.click(screen.getByRole('button', { name: 'Διαγραφή παρτίδας' }));
 
     await waitFor(() => expect(deleteQuarantineBatch).toHaveBeenCalledTimes(1));
     expect(firstArg(deleteQuarantineBatch)).toBe('C:\\q\\1-Thing');
@@ -167,7 +168,8 @@ describe('the quarantine screen, in Greek', () => {
     const user = userEvent.setup();
     renderScreen(<QuarantineManager />);
     await user.click(await screen.findByRole('button', { name: 'Οριστική Διαγραφή' }));
-    await user.click(screen.getByRole('button', { name: 'Επιβεβαίωση' }));
+        await act(async () => { await new Promise((r) => setTimeout(r, 600)); });
+    await user.click(screen.getByRole('button', { name: 'Διαγραφή παρτίδας' }));
 
     expect(await screen.findByRole('button', { name: 'Διαγραφή…' })).toBeTruthy();
     resolveDelete({ deleted: true });
@@ -191,7 +193,8 @@ describe('the quarantine screen, in Greek', () => {
     const user = userEvent.setup();
     renderScreen(<QuarantineManager />);
     await user.click(await screen.findByRole('button', { name: 'Άδειασμα Καραντίνας' }));
-    await user.click(screen.getByRole('button', { name: 'Επιβεβαίωση' }));
+        await act(async () => { await new Promise((r) => setTimeout(r, 600)); });
+    await user.click(screen.getByRole('button', { name: 'Διαγραφή όλων (1)' }));
 
     expect(await screen.findByRole('button', { name: 'Άδειασμα…' })).toBeTruthy();
     resolveEmpty({ deletedCount: 1, freedBytes: 0 });
