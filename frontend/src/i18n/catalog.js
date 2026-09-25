@@ -616,6 +616,27 @@ export const CATALOG = {
         cancel: 'Cancel',
         enableAnyway: 'Enable anyway'
       },
+      log: {
+        scan: {
+          nothingToMeasure: "nothing to measure",
+          needsAdmin: "needs admin",
+          notInstalled: "not installed",
+          empty: "empty"
+        },
+        execute: {
+          delete: (name) => `Delete ${name}`,
+          recycle: (name) => `Recycle ${name}`,
+          clear: (name) => `Clear ${name}`,
+          compact: (name) => `Compact ${name}`,
+          trim: (name) => `Trim ${name}`,
+          registryEntries: (n) => `${n} registry ${n === 1 ? 'entry' : 'entries'}`,
+          alreadyAbsent: "already absent",
+          skipped: (n) => `${n} skipped`,
+          alreadyEmpty: "already empty",
+          locked: (n) => `${n} locked`,
+          lockedAfterSize: (size, n) => `${size}, ${n} locked`
+        }
+      },
       locked: {
         message: (count) => `Skipped ${count} locked ${count === 1 ? 'file' : 'files'}.`,
         detail: 'Close the apps using them and clean again.'
@@ -1394,6 +1415,27 @@ export const CATALOG = {
         fallbackBody: '\'n Hierdie opsie verwyder data wat jy dalk wil behou.',
         cancel: 'Kanselleer',
         enableAnyway: 'Aktiveer in elk geval'
+      },
+      log: {
+        scan: {
+          nothingToMeasure: "niks om te meet nie",
+          needsAdmin: "benodig admin",
+          notInstalled: "nie geïnstalleer nie",
+          empty: "leeg"
+        },
+        execute: {
+          delete: (name) => `Verwyder ${name}`,
+          recycle: (name) => `Stuur ${name} na die Asblik`,
+          clear: (name) => `Maak ${name} skoon`,
+          compact: (name) => `Kompakteer ${name}`,
+          trim: (name) => `Snoei ${name}`,
+          registryEntries: (n) => `Registerinskrywings: ${n}`,
+          alreadyAbsent: "reeds afwesig",
+          skipped: (n) => `Oorgeslaan: ${n}`,
+          alreadyEmpty: "reeds leeg",
+          locked: (n) => `Gesluit: ${n}`,
+          lockedAfterSize: (size, n) => `${size}, gesluit: ${n}`
+        }
       },
       locked: {
         message: (count) => `${count} geslote lêer${count === 1 ? '' : 's'} oorgeslaan.`,
@@ -2174,6 +2216,27 @@ export const CATALOG = {
         cancel: 'إلغاء',
         enableAnyway: 'تفعيل على أي حال'
       },
+      log: {
+        scan: {
+          nothingToMeasure: "لا شيء للقياس",
+          needsAdmin: "يتطلب صلاحيات المسؤول",
+          notInstalled: "غير مثبت",
+          empty: "فارغ"
+        },
+        execute: {
+          delete: (name) => `حذف ${name}`,
+          recycle: (name) => `إرسال ${name} إلى سلة المحذوفات`,
+          clear: (name) => `مسح ${name}`,
+          compact: (name) => `ضغط ${name}`,
+          trim: (name) => `تقليص ${name}`,
+          registryEntries: (n) => `إدخالات السجل: ${n}`,
+          alreadyAbsent: "غير موجود أصلًا",
+          skipped: (n) => `تم تخطي: ${n}`,
+          alreadyEmpty: "فارغ أصلًا",
+          locked: (n) => `مقفل: ${n}`,
+          lockedAfterSize: (size, n) => `${size}، مقفل: ${n}`
+        }
+      },
       locked: {
         message: (count) => `تم تخطي ${count} ملف مقفل.`,
         detail: 'أغلق التطبيقات التي تستخدمها ونظّف مرة أخرى.'
@@ -2952,6 +3015,27 @@ export const CATALOG = {
         fallbackBody: 'Aquesta opció elimina dades que potser voldràs conservar.',
         cancel: 'Cancel·la',
         enableAnyway: 'Activa igualment'
+      },
+      log: {
+        scan: {
+          nothingToMeasure: "res per mesurar",
+          needsAdmin: "necessita administrador",
+          notInstalled: "no instal·lat",
+          empty: "buit"
+        },
+        execute: {
+          delete: (name) => `Elimina ${name}`,
+          recycle: (name) => `Envia ${name} a la Paperera`,
+          clear: (name) => `Neteja ${name}`,
+          compact: (name) => `Compacta ${name}`,
+          trim: (name) => `Retalla ${name}`,
+          registryEntries: (n) => `Entrades del registre: ${n}`,
+          alreadyAbsent: "ja no hi és",
+          skipped: (n) => `Omesos: ${n}`,
+          alreadyEmpty: "ja és buit",
+          locked: (n) => `Bloquejats: ${n}`,
+          lockedAfterSize: (size, n) => `${size}, bloquejats: ${n}`
+        }
       },
       locked: {
         message: (count) => `${count} fitxer${count === 1 ? '' : 's'} bloquej${count === 1 ? 'at' : 'ats'} omès${count === 1 ? '' : 'os'}.`,
@@ -3732,6 +3816,27 @@ export const CATALOG = {
         cancel: 'Zrušit',
         enableAnyway: 'Přesto povolit'
       },
+      log: {
+        scan: {
+          nothingToMeasure: "není co měřit",
+          needsAdmin: "vyžaduje správce",
+          notInstalled: "není nainstalováno",
+          empty: "prázdné"
+        },
+        execute: {
+          delete: (name) => `Odstranit ${name}`,
+          recycle: (name) => `Odeslat ${name} do koše`,
+          clear: (name) => `Vymazat ${name}`,
+          compact: (name) => `Zhutnit ${name}`,
+          trim: (name) => `Oříznout ${name}`,
+          registryEntries: (n) => `Položky registru: ${n}`,
+          alreadyAbsent: "již neexistuje",
+          skipped: (n) => `Přeskočeno: ${n}`,
+          alreadyEmpty: "již prázdné",
+          locked: (n) => `Uzamčeno: ${n}`,
+          lockedAfterSize: (size, n) => `${size}, uzamčeno: ${n}`
+        }
+      },
       locked: {
         message: (count) => `Přeskočeno ${count} uzamčených souborů.`,
         detail: 'Zavřete aplikace, které je používají, a vyčistěte znovu.'
@@ -4510,6 +4615,27 @@ export const CATALOG = {
         fallbackBody: "Mae'r opsiwn hwn yn dileu data efallai y byddwch am ei gadw.",
         cancel: 'Diddymu',
         enableAnyway: 'Galluogi beth bynnag'
+      },
+      log: {
+        scan: {
+          nothingToMeasure: "dim i'w fesur",
+          needsAdmin: "angen gweinyddwr",
+          notInstalled: "heb ei osod",
+          empty: "gwag"
+        },
+        execute: {
+          delete: (name) => `Dileu ${name}`,
+          recycle: (name) => `Anfon ${name} i'r Bin Ailgylchu`,
+          clear: (name) => `Clirio ${name}`,
+          compact: (name) => `Cywasgu ${name}`,
+          trim: (name) => `Tocio ${name}`,
+          registryEntries: (n) => `Cofnodion y gofrestrfa: ${n}`,
+          alreadyAbsent: "eisoes yn absennol",
+          skipped: (n) => `Hepgorwyd: ${n}`,
+          alreadyEmpty: "eisoes yn wag",
+          locked: (n) => `Ar glo: ${n}`,
+          lockedAfterSize: (size, n) => `${size}, ar glo: ${n}`
+        }
       },
       locked: {
         message: (count) => `${count} ffeil ar glo wedi'u hepgor.`,
@@ -5290,6 +5416,27 @@ export const CATALOG = {
         cancel: 'Annuller',
         enableAnyway: 'Aktivér alligevel'
       },
+      log: {
+        scan: {
+          nothingToMeasure: "intet at måle",
+          needsAdmin: "kræver administrator",
+          notInstalled: "ikke installeret",
+          empty: "tom"
+        },
+        execute: {
+          delete: (name) => `Slet ${name}`,
+          recycle: (name) => `Send ${name} til papirkurven`,
+          clear: (name) => `Ryd ${name}`,
+          compact: (name) => `Komprimer ${name}`,
+          trim: (name) => `Beskær ${name}`,
+          registryEntries: (n) => `Registreringsposter: ${n}`,
+          alreadyAbsent: "allerede væk",
+          skipped: (n) => `Sprunget over: ${n}`,
+          alreadyEmpty: "allerede tom",
+          locked: (n) => `Låst: ${n}`,
+          lockedAfterSize: (size, n) => `${size}, låst: ${n}`
+        }
+      },
       locked: {
         message: (count) => `Sprang ${count} låste filer over.`,
         detail: 'Luk de apps, der bruger dem, og rens igen.'
@@ -6068,6 +6215,27 @@ export const CATALOG = {
         fallbackBody: 'Diese Option entfernt Daten, die du vielleicht behalten möchtest.',
         cancel: 'Abbrechen',
         enableAnyway: 'Trotzdem aktivieren'
+      },
+      log: {
+        scan: {
+          nothingToMeasure: "nichts zu messen",
+          needsAdmin: "benötigt Administrator",
+          notInstalled: "nicht installiert",
+          empty: "leer"
+        },
+        execute: {
+          delete: (name) => `${name} löschen`,
+          recycle: (name) => `${name} in den Papierkorb`,
+          clear: (name) => `${name} leeren`,
+          compact: (name) => `${name} verdichten`,
+          trim: (name) => `${name} kürzen`,
+          registryEntries: (n) => `Registrierungseinträge: ${n}`,
+          alreadyAbsent: "bereits nicht vorhanden",
+          skipped: (n) => `${n} übersprungen`,
+          alreadyEmpty: "bereits leer",
+          locked: (n) => `${n} gesperrt`,
+          lockedAfterSize: (size, n) => `${size}, ${n} gesperrt`
+        }
       },
       locked: {
         message: (count) => `${count} gesperrte Datei${count === 1 ? '' : 'en'} übersprungen.`,
@@ -6848,6 +7016,27 @@ export const CATALOG = {
         cancel: 'Ακύρωση',
         enableAnyway: 'Ενεργοποίηση ούτως ή άλλως'
       },
+      log: {
+        scan: {
+          nothingToMeasure: "τίποτα προς μέτρηση",
+          needsAdmin: "απαιτεί διαχειριστή",
+          notInstalled: "δεν είναι εγκατεστημένο",
+          empty: "κενό"
+        },
+        execute: {
+          delete: (name) => `Διαγραφή: ${name}`,
+          recycle: (name) => `Αποστολή στον Κάδο: ${name}`,
+          clear: (name) => `Καθαρισμός: ${name}`,
+          compact: (name) => `Συμπίεση: ${name}`,
+          trim: (name) => `Περικοπή: ${name}`,
+          registryEntries: (n) => `Καταχωρήσεις μητρώου: ${n}`,
+          alreadyAbsent: "δεν υπάρχει ήδη",
+          skipped: (n) => `Παραλείφθηκαν: ${n}`,
+          alreadyEmpty: "ήδη κενό",
+          locked: (n) => `Κλειδωμένα: ${n}`,
+          lockedAfterSize: (size, n) => `${size}, κλειδωμένα: ${n}`
+        }
+      },
       locked: {
         message: (count) => `Παραλείφθηκε${count === 1 ? '' : 'αν'} ${count} κλειδωμέν${count === 1 ? 'ο αρχείο' : 'α αρχεία'}.`,
         detail: 'Κλείστε τις εφαρμογές που τα χρησιμοποιούν και καθαρίστε ξανά.'
@@ -7626,6 +7815,27 @@ export const CATALOG = {
         fallbackBody: 'Esta opción elimina datos que quizá quieras conservar.',
         cancel: 'Cancelar',
         enableAnyway: 'Habilitar de todos modos'
+      },
+      log: {
+        scan: {
+          nothingToMeasure: "nada que medir",
+          needsAdmin: "necesita administrador",
+          notInstalled: "no instalado",
+          empty: "vacío"
+        },
+        execute: {
+          delete: (name) => `Eliminar ${name}`,
+          recycle: (name) => `Enviar ${name} a la Papelera`,
+          clear: (name) => `Limpiar ${name}`,
+          compact: (name) => `Compactar ${name}`,
+          trim: (name) => `Recortar ${name}`,
+          registryEntries: (n) => `Entradas de registro: ${n}`,
+          alreadyAbsent: "ya no existe",
+          skipped: (n) => `Omitidos: ${n}`,
+          alreadyEmpty: "ya está vacío",
+          locked: (n) => `Bloqueados: ${n}`,
+          lockedAfterSize: (size, n) => `${size}, bloqueados: ${n}`
+        }
       },
       locked: {
         message: (count) => `${count} archivo${count === 1 ? '' : 's'} bloqueado${count === 1 ? '' : 's'} omitido${count === 1 ? '' : 's'}.`,
@@ -8406,6 +8616,27 @@ export const CATALOG = {
         cancel: 'Tühista',
         enableAnyway: 'Luba ikkagi'
       },
+      log: {
+        scan: {
+          nothingToMeasure: "pole midagi mõõta",
+          needsAdmin: "vajab administraatorit",
+          notInstalled: "pole installitud",
+          empty: "tühi"
+        },
+        execute: {
+          delete: (name) => `Kustuta ${name}`,
+          recycle: (name) => `Saada ${name} prügikasti`,
+          clear: (name) => `Tühjenda ${name}`,
+          compact: (name) => `Tihenda ${name}`,
+          trim: (name) => `Kärbi ${name}`,
+          registryEntries: (n) => `Registrikirjeid: ${n}`,
+          alreadyAbsent: "juba puudub",
+          skipped: (n) => `Vahele jäetud: ${n}`,
+          alreadyEmpty: "juba tühi",
+          locked: (n) => `Lukustatud: ${n}`,
+          lockedAfterSize: (size, n) => `${size}, lukustatud: ${n}`
+        }
+      },
       locked: {
         message: (count) => `Jäeti vahele ${count} lukustatud fail${count === 1 ? '' : 'i'}.`,
         detail: 'Sulge rakendused, mis neid kasutavad, ja puhasta uuesti.'
@@ -9184,6 +9415,27 @@ export const CATALOG = {
         fallbackBody: 'Tämä vaihtoehto poistaa tietoja, jotka saatat haluta säilyttää.',
         cancel: 'Peruuta',
         enableAnyway: 'Ota silti käyttöön'
+      },
+      log: {
+        scan: {
+          nothingToMeasure: "ei mitattavaa",
+          needsAdmin: "vaatii ylläpitäjän",
+          notInstalled: "ei asennettu",
+          empty: "tyhjä"
+        },
+        execute: {
+          delete: (name) => `Poista ${name}`,
+          recycle: (name) => `Lähetä ${name} roskakoriin`,
+          clear: (name) => `Tyhjennä ${name}`,
+          compact: (name) => `Tiivistä ${name}`,
+          trim: (name) => `Typistä ${name}`,
+          registryEntries: (n) => `Rekisterimerkintöjä: ${n}`,
+          alreadyAbsent: "jo poissa",
+          skipped: (n) => `Ohitettu: ${n}`,
+          alreadyEmpty: "jo tyhjä",
+          locked: (n) => `Lukittu: ${n}`,
+          lockedAfterSize: (size, n) => `${size}, lukittu: ${n}`
+        }
       },
       locked: {
         message: (count) => `Ohitettiin ${count} lukittua tiedostoa.`,
@@ -9964,6 +10216,27 @@ export const CATALOG = {
         cancel: 'Annuler',
         enableAnyway: 'Activer quand même'
       },
+      log: {
+        scan: {
+          nothingToMeasure: "rien à mesurer",
+          needsAdmin: "nécessite administrateur",
+          notInstalled: "non installé",
+          empty: "vide"
+        },
+        execute: {
+          delete: (name) => `Supprimer ${name}`,
+          recycle: (name) => `Envoyer ${name} à la Corbeille`,
+          clear: (name) => `Effacer ${name}`,
+          compact: (name) => `Compacter ${name}`,
+          trim: (name) => `Élaguer ${name}`,
+          registryEntries: (n) => `Entrées de registre : ${n}`,
+          alreadyAbsent: "déjà absent",
+          skipped: (n) => `Ignorés : ${n}`,
+          alreadyEmpty: "déjà vide",
+          locked: (n) => `Verrouillés : ${n}`,
+          lockedAfterSize: (size, n) => `${size}, verrouillés : ${n}`
+        }
+      },
       locked: {
         message: (count) => `${count} fichier${count === 1 ? '' : 's'} verrouillé${count === 1 ? '' : 's'} ignoré${count === 1 ? '' : 's'}.`,
         detail: 'Fermez les applications qui les utilisent et nettoyez à nouveau.'
@@ -10742,6 +11015,27 @@ export const CATALOG = {
         fallbackBody: 'אפשרות זו מסירה נתונים שאולי תרצה לשמור.',
         cancel: 'ביטול',
         enableAnyway: 'הפעל בכל זאת'
+      },
+      log: {
+        scan: {
+          nothingToMeasure: "אין מה למדוד",
+          needsAdmin: "דורש הרשאות מנהל",
+          notInstalled: "לא מותקן",
+          empty: "ריק"
+        },
+        execute: {
+          delete: (name) => `מחק ${name}`,
+          recycle: (name) => `שלח ${name} לסל המיחזור`,
+          clear: (name) => `נקה ${name}`,
+          compact: (name) => `דחוס ${name}`,
+          trim: (name) => `קצץ ${name}`,
+          registryEntries: (n) => `ערכי רישום: ${n}`,
+          alreadyAbsent: "כבר לא קיים",
+          skipped: (n) => `דולגו: ${n}`,
+          alreadyEmpty: "כבר ריק",
+          locked: (n) => `נעולים: ${n}`,
+          lockedAfterSize: (size, n) => `${size}, נעולים: ${n}`
+        }
       },
       locked: {
         message: (count) => `דולגו ${count} קבצים נעולים.`,
@@ -11522,6 +11816,27 @@ export const CATALOG = {
         cancel: 'Mégse',
         enableAnyway: 'Engedélyezés mindenképp'
       },
+      log: {
+        scan: {
+          nothingToMeasure: "nincs mit mérni",
+          needsAdmin: "rendszergazda szükséges",
+          notInstalled: "nincs telepítve",
+          empty: "üres"
+        },
+        execute: {
+          delete: (name) => `Törlés: ${name}`,
+          recycle: (name) => `Lomtárba küldés: ${name}`,
+          clear: (name) => `Ürítés: ${name}`,
+          compact: (name) => `Tömörítés: ${name}`,
+          trim: (name) => `Nyesés: ${name}`,
+          registryEntries: (n) => `${n} rendszerleíró bejegyzés`,
+          alreadyAbsent: "már nincs meg",
+          skipped: (n) => `${n} kihagyva`,
+          alreadyEmpty: "már üres",
+          locked: (n) => `${n} zárolva`,
+          lockedAfterSize: (size, n) => `${size}, ${n} zárolva`
+        }
+      },
       locked: {
         message: (count) => `${count} zárolt fájl kihagyva.`,
         detail: 'Zárd be az azokat használó alkalmazásokat, és tisztíts újra.'
@@ -12300,6 +12615,27 @@ export const CATALOG = {
         fallbackBody: 'Opsi ini menghapus data yang mungkin ingin Anda simpan.',
         cancel: 'Batal',
         enableAnyway: 'Aktifkan saja'
+      },
+      log: {
+        scan: {
+          nothingToMeasure: "tidak ada yang diukur",
+          needsAdmin: "memerlukan admin",
+          notInstalled: "tidak terpasang",
+          empty: "kosong"
+        },
+        execute: {
+          delete: (name) => `Hapus ${name}`,
+          recycle: (name) => `Kirim ${name} ke Recycle Bin`,
+          clear: (name) => `Bersihkan ${name}`,
+          compact: (name) => `Padatkan ${name}`,
+          trim: (name) => `Pangkas ${name}`,
+          registryEntries: (n) => `${n} entri registri`,
+          alreadyAbsent: "sudah tidak ada",
+          skipped: (n) => `${n} dilewati`,
+          alreadyEmpty: "sudah kosong",
+          locked: (n) => `${n} terkunci`,
+          lockedAfterSize: (size, n) => `${size}, ${n} terkunci`
+        }
       },
       locked: {
         message: (count) => `Melewati ${count} berkas terkunci.`,
@@ -13080,6 +13416,27 @@ export const CATALOG = {
         cancel: 'Hætta við',
         enableAnyway: 'Virkja samt'
       },
+      log: {
+        scan: {
+          nothingToMeasure: "ekkert til að mæla",
+          needsAdmin: "þarf kerfisstjóra",
+          notInstalled: "ekki uppsett",
+          empty: "tómt"
+        },
+        execute: {
+          delete: (name) => `Eyða ${name}`,
+          recycle: (name) => `Senda ${name} í ruslafötuna`,
+          clear: (name) => `Hreinsa ${name}`,
+          compact: (name) => `Þjappa ${name}`,
+          trim: (name) => `Snyrta ${name}`,
+          registryEntries: (n) => `Skráningarfærslur: ${n}`,
+          alreadyAbsent: "þegar horfið",
+          skipped: (n) => `Sleppt: ${n}`,
+          alreadyEmpty: "þegar tómt",
+          locked: (n) => `Læst: ${n}`,
+          lockedAfterSize: (size, n) => `${size}, læst: ${n}`
+        }
+      },
       locked: {
         message: (count) => `Sleppti ${count} læstum skrám.`,
         detail: 'Lokaðu forritunum sem nota þær og hreinsaðu aftur.'
@@ -13858,6 +14215,27 @@ export const CATALOG = {
         fallbackBody: 'Questa opzione rimuove dati che potresti voler conservare.',
         cancel: 'Annulla',
         enableAnyway: 'Abilita comunque'
+      },
+      log: {
+        scan: {
+          nothingToMeasure: "niente da misurare",
+          needsAdmin: "richiede amministratore",
+          notInstalled: "non installato",
+          empty: "vuoto"
+        },
+        execute: {
+          delete: (name) => `Elimina ${name}`,
+          recycle: (name) => `Invia ${name} al Cestino`,
+          clear: (name) => `Pulisci ${name}`,
+          compact: (name) => `Compatta ${name}`,
+          trim: (name) => `Rifila ${name}`,
+          registryEntries: (n) => `Voci di registro: ${n}`,
+          alreadyAbsent: "già assente",
+          skipped: (n) => `Saltati: ${n}`,
+          alreadyEmpty: "già vuoto",
+          locked: (n) => `Bloccati: ${n}`,
+          lockedAfterSize: (size, n) => `${size}, bloccati: ${n}`
+        }
       },
       locked: {
         message: (count) => `Saltati ${count} file bloccati.`,
@@ -14638,6 +15016,27 @@ export const CATALOG = {
         cancel: 'キャンセル',
         enableAnyway: 'それでも有効にする'
       },
+      log: {
+        scan: {
+          nothingToMeasure: "測定対象なし",
+          needsAdmin: "管理者権限が必要",
+          notInstalled: "未インストール",
+          empty: "空"
+        },
+        execute: {
+          delete: (name) => `${name}を削除`,
+          recycle: (name) => `${name}をごみ箱へ送る`,
+          clear: (name) => `${name}をクリア`,
+          compact: (name) => `${name}を圧縮`,
+          trim: (name) => `${name}を整理`,
+          registryEntries: (n) => `レジストリ項目 ${n} 件`,
+          alreadyAbsent: "すでに存在しません",
+          skipped: (n) => `${n} 件スキップ`,
+          alreadyEmpty: "すでに空",
+          locked: (n) => `${n} 件ロック中`,
+          lockedAfterSize: (size, n) => `${size}、${n} 件ロック中`
+        }
+      },
       locked: {
         message: (count) => `ロックされたファイルを ${count} 件スキップしました。`,
         detail: 'それらを使用しているアプリを閉じてから、もう一度クリーンしてください。'
@@ -15416,6 +15815,27 @@ export const CATALOG = {
         fallbackBody: '이 옵션은 보관하고 싶을 수 있는 데이터를 제거합니다.',
         cancel: '취소',
         enableAnyway: '그래도 사용'
+      },
+      log: {
+        scan: {
+          nothingToMeasure: "측정할 항목 없음",
+          needsAdmin: "관리자 권한 필요",
+          notInstalled: "설치되지 않음",
+          empty: "비어 있음"
+        },
+        execute: {
+          delete: (name) => `${name} 삭제`,
+          recycle: (name) => `${name} 휴지통으로 이동`,
+          clear: (name) => `${name} 지우기`,
+          compact: (name) => `${name} 압축`,
+          trim: (name) => `${name} 다듬기`,
+          registryEntries: (n) => `레지스트리 항목 ${n}개`,
+          alreadyAbsent: "이미 없음",
+          skipped: (n) => `${n}개 건너뜀`,
+          alreadyEmpty: "이미 비어 있음",
+          locked: (n) => `${n}개 잠김`,
+          lockedAfterSize: (size, n) => `${size}, ${n}개 잠김`
+        }
       },
       locked: {
         message: (count) => `잠긴 파일 ${count}개를 건너뛰었습니다.`,
@@ -16196,6 +16616,27 @@ export const CATALOG = {
         cancel: 'Atšaukti',
         enableAnyway: 'Vis tiek įjungti'
       },
+      log: {
+        scan: {
+          nothingToMeasure: "nėra ką matuoti",
+          needsAdmin: "reikia administratoriaus",
+          notInstalled: "neįdiegta",
+          empty: "tuščia"
+        },
+        execute: {
+          delete: (name) => `Ištrinti ${name}`,
+          recycle: (name) => `Siųsti ${name} į šiukšlinę`,
+          clear: (name) => `Išvalyti ${name}`,
+          compact: (name) => `Suglaudinti ${name}`,
+          trim: (name) => `Apkarpyti ${name}`,
+          registryEntries: (n) => `Registro įrašai: ${n}`,
+          alreadyAbsent: "jau nėra",
+          skipped: (n) => `Praleista: ${n}`,
+          alreadyEmpty: "jau tuščia",
+          locked: (n) => `Užrakinta: ${n}`,
+          lockedAfterSize: (size, n) => `${size}, užrakinta: ${n}`
+        }
+      },
       locked: {
         message: (count) => `Praleista ${count} užrakintų failų.`,
         detail: 'Uždarykite juos naudojančias programas ir valykite iš naujo.'
@@ -16974,6 +17415,27 @@ export const CATALOG = {
         fallbackBody: 'Pilihan ini mengalih keluar data yang mungkin anda mahu simpan.',
         cancel: 'Batal',
         enableAnyway: 'Dayakan juga'
+      },
+      log: {
+        scan: {
+          nothingToMeasure: "tiada apa untuk diukur",
+          needsAdmin: "perlu pentadbir",
+          notInstalled: "tidak dipasang",
+          empty: "kosong"
+        },
+        execute: {
+          delete: (name) => `Padam ${name}`,
+          recycle: (name) => `Hantar ${name} ke Tong Kitar Semula`,
+          clear: (name) => `Kosongkan ${name}`,
+          compact: (name) => `Padatkan ${name}`,
+          trim: (name) => `Pangkas ${name}`,
+          registryEntries: (n) => `${n} entri registri`,
+          alreadyAbsent: "sudah tiada",
+          skipped: (n) => `${n} dilangkau`,
+          alreadyEmpty: "sudah kosong",
+          locked: (n) => `${n} dikunci`,
+          lockedAfterSize: (size, n) => `${size}, ${n} dikunci`
+        }
       },
       locked: {
         message: (count) => `Melangkau ${count} fail yang dikunci.`,
@@ -17754,6 +18216,27 @@ export const CATALOG = {
         cancel: 'Avbryt',
         enableAnyway: 'Aktiver likevel'
       },
+      log: {
+        scan: {
+          nothingToMeasure: "ingenting å måle",
+          needsAdmin: "krever administrator",
+          notInstalled: "ikke installert",
+          empty: "tom"
+        },
+        execute: {
+          delete: (name) => `Slett ${name}`,
+          recycle: (name) => `Send ${name} til papirkurven`,
+          clear: (name) => `Tøm ${name}`,
+          compact: (name) => `Komprimer ${name}`,
+          trim: (name) => `Beskjær ${name}`,
+          registryEntries: (n) => `Registeroppføringer: ${n}`,
+          alreadyAbsent: "allerede borte",
+          skipped: (n) => `Hoppet over: ${n}`,
+          alreadyEmpty: "allerede tom",
+          locked: (n) => `Låst: ${n}`,
+          lockedAfterSize: (size, n) => `${size}, låst: ${n}`
+        }
+      },
       locked: {
         message: (count) => `Hoppet over ${count} låste filer.`,
         detail: 'Lukk appene som bruker dem, og rens på nytt.'
@@ -18532,6 +19015,27 @@ export const CATALOG = {
         fallbackBody: 'Deze optie verwijdert gegevens die je misschien wilt behouden.',
         cancel: 'Annuleren',
         enableAnyway: 'Toch inschakelen'
+      },
+      log: {
+        scan: {
+          nothingToMeasure: "niets te meten",
+          needsAdmin: "heeft beheerder nodig",
+          notInstalled: "niet geïnstalleerd",
+          empty: "leeg"
+        },
+        execute: {
+          delete: (name) => `${name} verwijderen`,
+          recycle: (name) => `${name} naar de Prullenbak`,
+          clear: (name) => `${name} wissen`,
+          compact: (name) => `${name} comprimeren`,
+          trim: (name) => `${name} inkorten`,
+          registryEntries: (n) => `Registervermeldingen: ${n}`,
+          alreadyAbsent: "al afwezig",
+          skipped: (n) => `${n} overgeslagen`,
+          alreadyEmpty: "al leeg",
+          locked: (n) => `${n} vergrendeld`,
+          lockedAfterSize: (size, n) => `${size}, ${n} vergrendeld`
+        }
       },
       locked: {
         message: (count) => `${count} vergrendelde bestanden overgeslagen.`,
@@ -19312,6 +19816,27 @@ export const CATALOG = {
         cancel: 'Anuluj',
         enableAnyway: 'Włącz mimo to'
       },
+      log: {
+        scan: {
+          nothingToMeasure: "nic do zmierzenia",
+          needsAdmin: "wymaga administratora",
+          notInstalled: "niezainstalowane",
+          empty: "puste"
+        },
+        execute: {
+          delete: (name) => `Usuń ${name}`,
+          recycle: (name) => `Wyślij ${name} do kosza`,
+          clear: (name) => `Wyczyść ${name}`,
+          compact: (name) => `Skompaktuj ${name}`,
+          trim: (name) => `Przytnij ${name}`,
+          registryEntries: (n) => `Wpisy rejestru: ${n}`,
+          alreadyAbsent: "już nieobecne",
+          skipped: (n) => `Pominięto: ${n}`,
+          alreadyEmpty: "już puste",
+          locked: (n) => `Zablokowano: ${n}`,
+          lockedAfterSize: (size, n) => `${size}, zablokowano: ${n}`
+        }
+      },
       locked: {
         message: (count) => `Pominięto ${count} zablokowanych plików.`,
         detail: 'Zamknij aplikacje, które ich używają, i wyczyść ponownie.'
@@ -20090,6 +20615,27 @@ export const CATALOG = {
         fallbackBody: 'دا اختیار هغه ډیټا لرې کوي چې تاسو یې ساتل غواړئ.',
         cancel: 'لغوه کول',
         enableAnyway: 'بیا هم فعالول'
+      },
+      log: {
+        scan: {
+          nothingToMeasure: "د اندازه کولو لپاره هیڅ نشته",
+          needsAdmin: "اډمین ته اړتیا لري",
+          notInstalled: "نصب شوی نه دی",
+          empty: "خالي"
+        },
+        execute: {
+          delete: (name) => `${name} ړنګول`,
+          recycle: (name) => `${name} ردي بکس ته لیږل`,
+          clear: (name) => `${name} پاکول`,
+          compact: (name) => `${name} فشرول`,
+          trim: (name) => `${name} پرې کول`,
+          registryEntries: (n) => `د راجستر ننوتنې: ${n}`,
+          alreadyAbsent: "دمخه نشته",
+          skipped: (n) => `پرېښودل شوي: ${n}`,
+          alreadyEmpty: "دمخه خالي",
+          locked: (n) => `تړل شوي: ${n}`,
+          lockedAfterSize: (size, n) => `${size}، تړل شوي: ${n}`
+        }
       },
       locked: {
         message: (count) => `${count} تړل شوي فایلونه پریښودل شوي.`,
@@ -20870,6 +21416,27 @@ export const CATALOG = {
         cancel: 'Cancelar',
         enableAnyway: 'Ativar mesmo assim'
       },
+      log: {
+        scan: {
+          nothingToMeasure: "nada a medir",
+          needsAdmin: "precisa de administrador",
+          notInstalled: "não instalado",
+          empty: "vazio"
+        },
+        execute: {
+          delete: (name) => `Excluir ${name}`,
+          recycle: (name) => `Enviar ${name} para a Lixeira`,
+          clear: (name) => `Limpar ${name}`,
+          compact: (name) => `Compactar ${name}`,
+          trim: (name) => `Aparar ${name}`,
+          registryEntries: (n) => `Entradas do registro: ${n}`,
+          alreadyAbsent: "já ausente",
+          skipped: (n) => `Ignorados: ${n}`,
+          alreadyEmpty: "já vazio",
+          locked: (n) => `Bloqueados: ${n}`,
+          lockedAfterSize: (size, n) => `${size}, bloqueados: ${n}`
+        }
+      },
       locked: {
         message: (count) => `${count} arquivo${count === 1 ? '' : 's'} bloqueado${count === 1 ? '' : 's'} ignorado${count === 1 ? '' : 's'}.`,
         detail: 'Feche os aplicativos que os usam e limpe novamente.'
@@ -21648,6 +22215,27 @@ export const CATALOG = {
         fallbackBody: 'Esta opção remove dados que talvez queira manter.',
         cancel: 'Cancelar',
         enableAnyway: 'Ativar na mesma'
+      },
+      log: {
+        scan: {
+          nothingToMeasure: "nada a medir",
+          needsAdmin: "precisa de administrador",
+          notInstalled: "não instalado",
+          empty: "vazio"
+        },
+        execute: {
+          delete: (name) => `Eliminar ${name}`,
+          recycle: (name) => `Enviar ${name} para a Reciclagem`,
+          clear: (name) => `Limpar ${name}`,
+          compact: (name) => `Compactar ${name}`,
+          trim: (name) => `Aparar ${name}`,
+          registryEntries: (n) => `Entradas do registo: ${n}`,
+          alreadyAbsent: "já ausente",
+          skipped: (n) => `Ignorados: ${n}`,
+          alreadyEmpty: "já vazio",
+          locked: (n) => `Bloqueados: ${n}`,
+          lockedAfterSize: (size, n) => `${size}, bloqueados: ${n}`
+        }
       },
       locked: {
         message: (count) => `${count} ficheiro${count === 1 ? '' : 's'} bloqueado${count === 1 ? '' : 's'} ignorado${count === 1 ? '' : 's'}.`,
@@ -22428,6 +23016,27 @@ export const CATALOG = {
         cancel: 'Anulează',
         enableAnyway: 'Activează oricum'
       },
+      log: {
+        scan: {
+          nothingToMeasure: "nimic de măsurat",
+          needsAdmin: "necesită administrator",
+          notInstalled: "neinstalat",
+          empty: "gol"
+        },
+        execute: {
+          delete: (name) => `Șterge ${name}`,
+          recycle: (name) => `Trimite ${name} în Coșul de reciclare`,
+          clear: (name) => `Curăță ${name}`,
+          compact: (name) => `Compactează ${name}`,
+          trim: (name) => `Reduce ${name}`,
+          registryEntries: (n) => `Intrări de registru: ${n}`,
+          alreadyAbsent: "deja absent",
+          skipped: (n) => `Omise: ${n}`,
+          alreadyEmpty: "deja gol",
+          locked: (n) => `Blocate: ${n}`,
+          lockedAfterSize: (size, n) => `${size}, blocate: ${n}`
+        }
+      },
       locked: {
         message: (count) => `S-au omis ${count} fișiere blocate.`,
         detail: 'Închide aplicațiile care le folosesc și curăță din nou.'
@@ -23206,6 +23815,27 @@ export const CATALOG = {
         fallbackBody: 'Этот параметр удаляет данные, которые вы, возможно, захотите сохранить.',
         cancel: 'Отмена',
         enableAnyway: 'Всё равно включить'
+      },
+      log: {
+        scan: {
+          nothingToMeasure: "нечего измерять",
+          needsAdmin: "требуется администратор",
+          notInstalled: "не установлено",
+          empty: "пусто"
+        },
+        execute: {
+          delete: (name) => `Удалить ${name}`,
+          recycle: (name) => `Отправить ${name} в корзину`,
+          clear: (name) => `Очистить ${name}`,
+          compact: (name) => `Сжать ${name}`,
+          trim: (name) => `Обрезать ${name}`,
+          registryEntries: (n) => `Записи реестра: ${n}`,
+          alreadyAbsent: "уже отсутствует",
+          skipped: (n) => `Пропущено: ${n}`,
+          alreadyEmpty: "уже пусто",
+          locked: (n) => `Заблокировано: ${n}`,
+          lockedAfterSize: (size, n) => `${size}, заблокировано: ${n}`
+        }
       },
       locked: {
         message: (count) => `Пропущено заблокированных файлов: ${count}.`,
@@ -23986,6 +24616,27 @@ export const CATALOG = {
         cancel: 'Zrušiť',
         enableAnyway: 'Aj tak povoliť'
       },
+      log: {
+        scan: {
+          nothingToMeasure: "nie je čo merať",
+          needsAdmin: "vyžaduje správcu",
+          notInstalled: "nenainštalované",
+          empty: "prázdne"
+        },
+        execute: {
+          delete: (name) => `Odstrániť ${name}`,
+          recycle: (name) => `Odoslať ${name} do koša`,
+          clear: (name) => `Vymazať ${name}`,
+          compact: (name) => `Zhutniť ${name}`,
+          trim: (name) => `Orezať ${name}`,
+          registryEntries: (n) => `Položky registra: ${n}`,
+          alreadyAbsent: "už neexistuje",
+          skipped: (n) => `Preskočené: ${n}`,
+          alreadyEmpty: "už prázdne",
+          locked: (n) => `Uzamknuté: ${n}`,
+          lockedAfterSize: (size, n) => `${size}, uzamknuté: ${n}`
+        }
+      },
       locked: {
         message: (count) => `Preskočených ${count} uzamknutých súborov.`,
         detail: 'Zatvorte aplikácie, ktoré ich používajú, a vyčistite znova.'
@@ -24764,6 +25415,27 @@ export const CATALOG = {
         fallbackBody: 'Ky opsion heq të dhëna që mund të dëshirosh t\'i mbash.',
         cancel: 'Anulo',
         enableAnyway: 'Aktivizo gjithsesi'
+      },
+      log: {
+        scan: {
+          nothingToMeasure: "asgjë për t'u matur",
+          needsAdmin: "kërkon administrator",
+          notInstalled: "i painstaluar",
+          empty: "bosh"
+        },
+        execute: {
+          delete: (name) => `Fshi ${name}`,
+          recycle: (name) => `Dërgo ${name} në Koshin e Riciklimit`,
+          clear: (name) => `Pastro ${name}`,
+          compact: (name) => `Ngjeshe ${name}`,
+          trim: (name) => `Shkurto ${name}`,
+          registryEntries: (n) => `Hyrje regjistri: ${n}`,
+          alreadyAbsent: "tashmë mungon",
+          skipped: (n) => `Të anashkaluara: ${n}`,
+          alreadyEmpty: "tashmë bosh",
+          locked: (n) => `Të kyçura: ${n}`,
+          lockedAfterSize: (size, n) => `${size}, të kyçura: ${n}`
+        }
       },
       locked: {
         message: (count) => `U anashkaluan ${count} skedarë të kyçur.`,
@@ -25544,6 +26216,27 @@ export const CATALOG = {
         cancel: 'Откажи',
         enableAnyway: 'Омогући свакако'
       },
+      log: {
+        scan: {
+          nothingToMeasure: "нема шта да се мери",
+          needsAdmin: "захтева администратора",
+          notInstalled: "није инсталирано",
+          empty: "празно"
+        },
+        execute: {
+          delete: (name) => `Обриши ${name}`,
+          recycle: (name) => `Пошаљи ${name} у корпу за отпатке`,
+          clear: (name) => `Испразни ${name}`,
+          compact: (name) => `Сажми ${name}`,
+          trim: (name) => `Скрати ${name}`,
+          registryEntries: (n) => `Ставке регистра: ${n}`,
+          alreadyAbsent: "већ не постоји",
+          skipped: (n) => `Прескочено: ${n}`,
+          alreadyEmpty: "већ празно",
+          locked: (n) => `Закључано: ${n}`,
+          lockedAfterSize: (size, n) => `${size}, закључано: ${n}`
+        }
+      },
       locked: {
         message: (count) => `Прескочено закључаних фајлова: ${count}.`,
         detail: 'Затворите апликације које их користе и очистите поново.'
@@ -26322,6 +27015,27 @@ export const CATALOG = {
         fallbackBody: 'Det här alternativet tar bort data du kanske vill behålla.',
         cancel: 'Avbryt',
         enableAnyway: 'Aktivera ändå'
+      },
+      log: {
+        scan: {
+          nothingToMeasure: "inget att mäta",
+          needsAdmin: "kräver administratör",
+          notInstalled: "inte installerad",
+          empty: "tom"
+        },
+        execute: {
+          delete: (name) => `Ta bort ${name}`,
+          recycle: (name) => `Skicka ${name} till papperskorgen`,
+          clear: (name) => `Rensa ${name}`,
+          compact: (name) => `Komprimera ${name}`,
+          trim: (name) => `Trimma ${name}`,
+          registryEntries: (n) => `Registerposter: ${n}`,
+          alreadyAbsent: "redan borta",
+          skipped: (n) => `Överhoppade: ${n}`,
+          alreadyEmpty: "redan tom",
+          locked: (n) => `Låsta: ${n}`,
+          lockedAfterSize: (size, n) => `${size}, låsta: ${n}`
+        }
       },
       locked: {
         message: (count) => `Hoppade över ${count} låsta filer.`,
@@ -27102,6 +27816,27 @@ export const CATALOG = {
         cancel: 'ยกเลิก',
         enableAnyway: 'เปิดใช้งานต่อไป'
       },
+      log: {
+        scan: {
+          nothingToMeasure: "ไม่มีอะไรให้วัด",
+          needsAdmin: "ต้องการสิทธิ์ผู้ดูแลระบบ",
+          notInstalled: "ไม่ได้ติดตั้ง",
+          empty: "ว่างเปล่า"
+        },
+        execute: {
+          delete: (name) => `ลบ ${name}`,
+          recycle: (name) => `ส่ง ${name} ไปยังถังรีไซเคิล`,
+          clear: (name) => `ล้าง ${name}`,
+          compact: (name) => `บีบอัด ${name}`,
+          trim: (name) => `ตัดแต่ง ${name}`,
+          registryEntries: (n) => `รายการรีจิสทรี ${n} รายการ`,
+          alreadyAbsent: "ไม่มีอยู่แล้ว",
+          skipped: (n) => `ข้าม ${n} รายการ`,
+          alreadyEmpty: "ว่างอยู่แล้ว",
+          locked: (n) => `ถูกล็อก ${n} รายการ`,
+          lockedAfterSize: (size, n) => `${size}, ถูกล็อก ${n} รายการ`
+        }
+      },
       locked: {
         message: (count) => `ข้าม ${count} ไฟล์ที่ถูกล็อก`,
         detail: 'ปิดแอปที่ใช้ไฟล์เหล่านั้นแล้วล้างอีกครั้ง'
@@ -27880,6 +28615,27 @@ export const CATALOG = {
         fallbackBody: 'Bu seçenek, saklamak isteyebileceğiniz verileri kaldırır.',
         cancel: 'İptal',
         enableAnyway: 'Yine de etkinleştir'
+      },
+      log: {
+        scan: {
+          nothingToMeasure: "ölçülecek bir şey yok",
+          needsAdmin: "yönetici gerektirir",
+          notInstalled: "yüklü değil",
+          empty: "boş"
+        },
+        execute: {
+          delete: (name) => `${name} sil`,
+          recycle: (name) => `${name} Geri Dönüşüm Kutusuna gönder`,
+          clear: (name) => `${name} temizle`,
+          compact: (name) => `${name} sıkıştır`,
+          trim: (name) => `${name} kırp`,
+          registryEntries: (n) => `${n} kayıt defteri girdisi`,
+          alreadyAbsent: "zaten yok",
+          skipped: (n) => `${n} atlandı`,
+          alreadyEmpty: "zaten boş",
+          locked: (n) => `${n} kilitli`,
+          lockedAfterSize: (size, n) => `${size}, ${n} kilitli`
+        }
       },
       locked: {
         message: (count) => `${count} kilitli dosya atlandı.`,
@@ -28660,6 +29416,27 @@ export const CATALOG = {
         cancel: 'Скасувати',
         enableAnyway: 'Усе одно увімкнути'
       },
+      log: {
+        scan: {
+          nothingToMeasure: "нічого вимірювати",
+          needsAdmin: "потрібні права адміністратора",
+          notInstalled: "не встановлено",
+          empty: "порожньо"
+        },
+        execute: {
+          delete: (name) => `Видалити ${name}`,
+          recycle: (name) => `Надіслати ${name} у кошик`,
+          clear: (name) => `Очистити ${name}`,
+          compact: (name) => `Стиснути ${name}`,
+          trim: (name) => `Обрізати ${name}`,
+          registryEntries: (n) => `Записи реєстру: ${n}`,
+          alreadyAbsent: "уже відсутнє",
+          skipped: (n) => `Пропущено: ${n}`,
+          alreadyEmpty: "уже порожньо",
+          locked: (n) => `Заблоковано: ${n}`,
+          lockedAfterSize: (size, n) => `${size}, заблоковано: ${n}`
+        }
+      },
       locked: {
         message: (count) => `Пропущено заблокованих файлів: ${count}.`,
         detail: 'Закрийте застосунки, які їх використовують, і очистіть знову.'
@@ -29438,6 +30215,27 @@ export const CATALOG = {
         fallbackBody: 'Tùy chọn này xóa dữ liệu mà bạn có thể muốn giữ lại.',
         cancel: 'Hủy',
         enableAnyway: 'Vẫn bật'
+      },
+      log: {
+        scan: {
+          nothingToMeasure: "không có gì để đo",
+          needsAdmin: "cần quyền quản trị",
+          notInstalled: "chưa cài đặt",
+          empty: "trống"
+        },
+        execute: {
+          delete: (name) => `Xóa ${name}`,
+          recycle: (name) => `Gửi ${name} vào Thùng rác`,
+          clear: (name) => `Dọn sạch ${name}`,
+          compact: (name) => `Nén ${name}`,
+          trim: (name) => `Cắt gọn ${name}`,
+          registryEntries: (n) => `${n} mục registry`,
+          alreadyAbsent: "đã không còn",
+          skipped: (n) => `Đã bỏ qua ${n}`,
+          alreadyEmpty: "đã trống",
+          locked: (n) => `${n} bị khóa`,
+          lockedAfterSize: (size, n) => `${size}, ${n} bị khóa`
+        }
       },
       locked: {
         message: (count) => `Đã bỏ qua ${count} tệp bị khóa.`,
@@ -30218,6 +31016,27 @@ export const CATALOG = {
         cancel: '取消',
         enableAnyway: '仍然启用'
       },
+      log: {
+        scan: {
+          nothingToMeasure: "无可测量内容",
+          needsAdmin: "需要管理员权限",
+          notInstalled: "未安装",
+          empty: "空"
+        },
+        execute: {
+          delete: (name) => `删除${name}`,
+          recycle: (name) => `将${name}移至回收站`,
+          clear: (name) => `清除${name}`,
+          compact: (name) => `压缩${name}`,
+          trim: (name) => `精简${name}`,
+          registryEntries: (n) => `${n} 个注册表项`,
+          alreadyAbsent: "已不存在",
+          skipped: (n) => `已跳过 ${n} 项`,
+          alreadyEmpty: "已为空",
+          locked: (n) => `${n} 个被锁定`,
+          lockedAfterSize: (size, n) => `${size}，${n} 个被锁定`
+        }
+      },
       locked: {
         message: (count) => `跳过了 ${count} 个被锁定的文件。`,
         detail: '关闭正在使用它们的应用后再次清理。'
@@ -30996,6 +31815,27 @@ export const CATALOG = {
         fallbackBody: '此選項會刪除你可能想保留的資料。',
         cancel: '取消',
         enableAnyway: '仍然啟用'
+      },
+      log: {
+        scan: {
+          nothingToMeasure: "沒有可測量的內容",
+          needsAdmin: "需要系統管理員權限",
+          notInstalled: "未安裝",
+          empty: "空"
+        },
+        execute: {
+          delete: (name) => `刪除${name}`,
+          recycle: (name) => `將${name}移至資源回收筒`,
+          clear: (name) => `清除${name}`,
+          compact: (name) => `壓縮${name}`,
+          trim: (name) => `精簡${name}`,
+          registryEntries: (n) => `${n} 個登錄機碼`,
+          alreadyAbsent: "已不存在",
+          skipped: (n) => `已略過 ${n} 項`,
+          alreadyEmpty: "已為空",
+          locked: (n) => `${n} 個已鎖定`,
+          lockedAfterSize: (size, n) => `${size}，${n} 個已鎖定`
+        }
       },
       locked: {
         message: (count) => `跳過了 ${count} 個被鎖定的檔案。`,

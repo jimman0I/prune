@@ -22,13 +22,17 @@ import { keys } from '../lib/queryClient.js';
  * The scan is armed rather than automatic. It costs about nineteen
  * seconds of disk walking and must never start because a tab was opened.
  */
-export function useDeepCleanScan(nameOf) {
+export function useDeepCleanScan(nameOf, messages) {
   const queryClient = useQueryClient();
   // The log is built inside a long-lived stream callback; a ref keeps it
   // on the language current when each line lands rather than the one the
   // scan started in. `nameOf` shows a rule by its translated name.
   const nameOfRef = useRef(nameOf);
   nameOfRef.current = nameOf;
+  // Likewise the wording around the name (deepClean.log). Undefined falls
+  // through to scanLog.js's English default.
+  const messagesRef = useRef(messages);
+  messagesRef.current = messages;
 
   // The listed tree: a JSON file the backend reads in ~40ms, so every
   // category and rule is on screen immediately with a dash for its size.
@@ -96,7 +100,7 @@ export function useDeepCleanScan(nameOf) {
             built = mergeScannedRule(prev ?? rulesQuery.data ?? [], data);
             return built;
           });
-          setLog((prev) => [...prev, scanLogLine(data, nameOfRef.current)]);
+          setLog((prev) => [...prev, scanLogLine(data, nameOfRef.current, messagesRef.current)]);
           setScanned((n) => n + 1);
           setCurrentId(data.id);
         } else if (type === 'error') {

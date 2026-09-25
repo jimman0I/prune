@@ -184,6 +184,6 @@ describe('Deep Clean rule text, in Greek', () => {
     await user.click(screen.getByRole('checkbox', { name: CACHE_EL }));
     await user.click(await screen.findByRole('button', { name: 'Καθαρισμός' }));
     await user.click(screen.getByRole('button', { name: 'Μετακίνηση σε καραντίνα' }));
-    expect(await screen.findByText(`Delete ${CACHE_EL}`)).toBeTruthy();
+    expect(await screen.findByText(`Διαγραφή: ${CACHE_EL}`)).toBeTruthy();
   });
 });

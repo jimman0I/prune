@@ -172,7 +172,7 @@ function DeepClean() {
     tree: categories, scanning, hasScanned, log: logLines,
     scanned, total, error: scanError, currentId: scanningId,
     start, stop: stopPreview, cleanableIds: scannedIds
-  } = useDeepCleanScan(cleaner.ruleName);
+  } = useDeepCleanScan(cleaner.ruleName, t('deepClean.log'));
 
   // The clean itself, streamed the same way -- see hooks/useDeepCleanExecute.js.
   // `run` throws on a real failure (same contract the old one-shot
@@ -181,7 +181,7 @@ function DeepClean() {
   const {
     run: runClean, stop: stopClean, cleaning,
     log: cleanLog, executed: cleanExecuted, total: cleanTotalCount, currentId: cleaningId
-  } = useDeepCleanExecute(cleaner.ruleName);
+  } = useDeepCleanExecute(cleaner.ruleName, t('deepClean.log'));
 
   // BleachBit's "hide irrelevant cleaners". Most of a 74-rule list is for
   // software this machine does not have.

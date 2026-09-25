@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { mergeScannedRule, scanLogLine, executeLogLine } from './scanLog.js';
+import { mergeScannedRule, scanLogLine, executeLogLine, DEFAULT_LOG_MESSAGES } from './scanLog.js';
 
 describe('mergeScannedRule', () => {
   it('creates the category on the first rule that belongs to it', () => {
@@ -186,5 +186,78 @@ describe('mergeScannedRule over a pre-listed tree', () => {
   it('still appends a rule with no placeholder', () => {
     const next = mergeScannedRule(listed, { id: 'brand_new', category: 'Applications', sizeBytes: 7 });
     expect(next[0].items.map((i) => i.id)).toEqual(['discord_cache', 'spotify_cache', 'brand_new']);
+  });
+});
+
+/* The wording around a rule's name is the current language's, handed in as
+ * `messages`. A recognisably non-English set proves every branch reads its
+ * wording from there and none of it is still built in code. */
+const FAKE = {
+  scan: { nothingToMeasure: 'S-none', needsAdmin: 'S-admin', notInstalled: 'S-absent', empty: 'S-empty' },
+  execute: {
+    delete: (name) => `X-delete ${name}`,
+    recycle: (name) => `X-recycle ${name}`,
+    clear: (name) => `X-clear ${name}`,
+    compact: (name) => `X-compact ${name}`,
+    trim: (name) => `X-trim ${name}`,
+    registryEntries: (n) => `X-reg ${n}`,
+    alreadyAbsent: 'X-absent',
+    skipped: (n) => `X-skipped ${n}`,
+    alreadyEmpty: 'X-empty',
+    locked: (n) => `X-locked ${n}`,
+    lockedAfterSize: (size, n) => `${size} X-and-locked ${n}`
+  }
+};
+const named = (rule) => rule.name;
+
+describe('scanLogLine with another language messages', () => {
+  it('words every non-size answer from the messages', () => {
+    expect(scanLogLine({ name: 'A' }, named, FAKE).detail).toBe('S-none');
+    expect(scanLogLine({ name: 'A', sizeBytes: 0, present: true, accessible: false }, named, FAKE).detail).toBe('S-admin');
+    expect(scanLogLine({ name: 'A', sizeBytes: 0, present: false }, named, FAKE).detail).toBe('S-absent');
+    expect(scanLogLine({ name: 'A', sizeBytes: 0, present: true }, named, FAKE).detail).toBe('S-empty');
+  });
+
+  it('keeps the tones and formats a size the same in every language', () => {
+    expect(scanLogLine({ name: 'A', sizeBytes: 2048, present: true }, named, FAKE)).toEqual({ label: 'A', detail: '2 KB', tone: 'size' });
+    expect(scanLogLine({ name: 'A', sizeBytes: 0, present: true, accessible: false }, named, FAKE).tone).toBe('warning');
+  });
+
+  it('defaults to the English wording', () => {
+    expect(scanLogLine({ name: 'A', sizeBytes: 0, present: false }, named, DEFAULT_LOG_MESSAGES).detail).toBe('not installed');
+  });
+});
+
+describe('executeLogLine with another language messages', () => {
+  const run = (item) => executeLogLine({ id: 'r', name: 'A', ...item }, named, FAKE);
+
+  it('words the registry branch', () => {
+    expect(run({ registryKeysRemoved: 3 })).toEqual({ label: 'X-clear A', detail: 'X-reg 3', tone: 'size' });
+    expect(run({ registryKeysRemoved: 0 })).toEqual({ label: 'X-clear A', detail: 'X-absent', tone: 'muted' });
+  });
+
+  it('words the compact and trim branches', () => {
+    for (const [flag, verb] of [['vacuumed', 'X-compact'], ['edited', 'X-trim']]) {
+      expect(run({ [flag]: true, freedBytes: 1024 })).toEqual({ label: `${verb} A`, detail: '1 KB', tone: 'size' });
+      expect(run({ [flag]: true, freedBytes: 0, skipped: [1, 2] })).toEqual({ label: `${verb} A`, detail: 'X-skipped 2', tone: 'warning' });
+      expect(run({ [flag]: true, freedBytes: 0 })).toEqual({ label: `${verb} A`, detail: 'X-empty', tone: 'muted' });
+    }
+  });
+
+  it('words the delete and recycle branches, with and without locked files', () => {
+    expect(run({ freedBytes: 1024 })).toEqual({ label: 'X-delete A', detail: '1 KB', tone: 'size' });
+    expect(run({ freedBytes: 1024, recycled: true }).label).toBe('X-recycle A');
+    expect(run({ freedBytes: 1024, skipped: [1] }).detail).toBe('1 KB X-and-locked 1');
+    expect(run({ freedBytes: 0, skipped: [1, 2, 3] })).toEqual({ label: 'X-delete A', detail: 'X-locked 3', tone: 'warning' });
+    expect(run({ freedBytes: 0 })).toEqual({ label: 'X-delete A', detail: 'X-empty', tone: 'muted' });
+  });
+
+  it('passes an error through untouched', () => {
+    expect(run({ error: 'boom' })).toEqual({ label: 'A', detail: 'boom', tone: 'warning' });
+  });
+
+  it('keeps the English plural for one registry entry by default', () => {
+    expect(executeLogLine({ id: 'r', name: 'A', registryKeysRemoved: 1 }).detail).toBe('1 registry entry');
+    expect(executeLogLine({ id: 'r', name: 'A', registryKeysRemoved: 2 }).detail).toBe('2 registry entries');
   });
 });
