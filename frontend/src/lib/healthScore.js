@@ -8,15 +8,16 @@ const ERRORS_SCORE_CAP = 40;
  * case for NVMe, readable without elevation -- see
  * backend/src/services/diskHealth.js's getNvmeSmart()). Otherwise a
  * tone-based fallback matching Dashboard.jsx's own driveVerdict()
- * classification. `muted` -- a REAL answer that genuinely doesn't know,
- * not a loading state -- scores neutral rather than failing: an unknown
- * is not a known problem. Null only when there is no verdict at all
- * (nothing has loaded yet); see this file's caller for how that's kept
- * distinct from a real "unknown" answer. */
+ * classification. Null when there is no verdict yet, and also for `muted`
+ * (a real "unknown"): the caller tells those apart by the status word it
+ * shows in place of a number. */
 function driveComponent(driveVerdict) {
   if (!driveVerdict) return null;
   if (driveVerdict.percent != null) return driveVerdict.percent;
-  const toneScore = { success: 100, warning: 50, danger: 0, muted: 75 };
+  // `muted` is a real answer that genuinely doesn't know. It has no number:
+  // inventing one (this used to be 75) would put a healthy-looking figure on
+  // a drive nobody has measured. The ring shows the status word instead.
+  const toneScore = { success: 100, warning: 50, danger: 0 };
   return toneScore[driveVerdict.tone] ?? null;
 }
 
