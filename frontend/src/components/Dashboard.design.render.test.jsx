@@ -23,7 +23,6 @@ vi.mock('../lib/api.js', () => ({
   unlockDiskWear: vi.fn(),
   fetchUninstallHistory: (...a) => fetchUninstallHistory(...a),
   fetchAutomation: vi.fn(async () => ({ enabled: false, nextRun: null, missed: 0 })),
-  fetchResources: vi.fn(async () => ({ cpuPercent: 5, cores: 8, ram: { percent: 40 }, diskBytesPerSec: 0 })),
   fetchSettings: vi.fn(async () => ({})),
   updateSettings: vi.fn()
 }));
@@ -52,48 +51,50 @@ const ringTrack = (container) => container.querySelector('svg[width="140"]').que
 describe('the health ring', () => {
   it('shows the score over 100, in the good colour, when it is 75 or more', async () => {
     const { container } = render();
-    // drive 100, storage 100, apps 100, errors 100 -> 100
+    // 100% life left, no errors -> 100
     expect(await screen.findByText('100')).toBeTruthy();
     expect(screen.getByText('/100')).toBeTruthy();
     expect(ringArc(container).getAttribute('stroke')).toBe('var(--success)');
   });
 
-  it('is caution-coloured from 50 to 74, even though the drive itself is fine', async () => {
-    // Two broken apps: apps 50. drive 100*40 + storage 0*25 + apps 50*20 + errors 100*15 = 6500 -> 65.
-    fetchDiskSpace.mockResolvedValue({ freeBytes: 20 * GB, totalBytes: 1000 * GB }); // 2% free -> 0
-    const { container } = render([{ health: { orphaned: true } }, { health: { orphaned: true } }]);
+  it('is caution-coloured from 50 to 74, even though the drive verdict itself is fine', async () => {
+    // 65% life left: the drive verdict is "success" (above 25%), but the
+    // score is 65, so the ring must NOT borrow that green for it.
+    fetchDiskHealth.mockResolvedValue(drive({ lifeRemainingPercent: 65 }));
+    const { container } = render();
     expect(await screen.findByText('65')).toBeTruthy();
-    // The drive verdict is "success" (100% life left); the ring must NOT
-    // borrow that green for a 65.
     expect(ringArc(container).getAttribute('stroke')).toBe('var(--warning)');
   });
 
   it('is problem-coloured below 50', async () => {
-    // drive 0*40 + storage 0 + apps 100*20 + errors 100*15 = 3500 -> 35.
-    fetchDiskHealth.mockResolvedValue(drive({ lifeRemainingPercent: 0 }));
-    fetchDiskSpace.mockResolvedValue({ freeBytes: 10 * GB, totalBytes: 1000 * GB });
+    fetchDiskHealth.mockResolvedValue(drive({ lifeRemainingPercent: 35 }));
     const { container } = render();
     expect(await screen.findByText('35')).toBeTruthy();
     expect(ringArc(container).getAttribute('stroke')).toBe('var(--danger)');
   });
 
-  it('never shows a number, a band or "/100" before both drive and storage have loaded', async () => {
-    // The anti-fabrication gate: apps and errors default to 100, so a score
-    // computed from them alone would read as a healthy PC before anything
-    // was measured.
+  it('is problem-coloured for a drive with media errors, even with full wear life', async () => {
+    fetchDiskHealth.mockResolvedValue(drive({ smart: { mediaErrors: 4 } }));
+    const { container } = render();
+    expect(await screen.findByText('40')).toBeTruthy();
+    expect(ringArc(container).getAttribute('stroke')).toBe('var(--danger)');
+  });
+
+  it('never shows a number, a band or "/100" before the drive has loaded', async () => {
+    // The anti-fabrication gate: nothing has been measured, so no
+    // healthy-looking figure may appear.
     fetchDiskHealth.mockImplementation(() => new Promise(() => {}));
-    fetchDiskSpace.mockImplementation(() => new Promise(() => {}));
     const { container } = render();
     expect(await screen.findByText('Reading drive health…')).toBeTruthy();
     expect(screen.queryByText('/100')).toBeNull();
     expect(container.querySelector('svg[width="140"]').querySelectorAll('circle')).toHaveLength(1);
   });
 
-  it('still waits when only the drive has answered', async () => {
+  it('does not wait for disk space: the score is the drive alone', async () => {
     fetchDiskSpace.mockImplementation(() => new Promise(() => {}));
     render();
     expect(await screen.findByText(/Test NVMe/)).toBeTruthy();
-    expect(screen.queryByText('/100')).toBeNull();
+    expect(screen.getByText('/100')).toBeTruthy();
   });
 
   it('draws its empty track from the theme token, so it is visible in light mode', async () => {
@@ -102,9 +103,11 @@ describe('the health ring', () => {
     expect(ringTrack(container).getAttribute('stroke')).toBe('var(--surface-strong)');
   });
 
-  it('writes each part of the breakdown as a score out of 100, so "Errors 100" cannot read as a count', async () => {
+  it('carries no breakdown line: the ring is the drive and nothing else', async () => {
     render();
-    expect(await screen.findByText('Drive 100/100 · Storage 100/100 · Apps 100/100 · Error check 100/100')).toBeTruthy();
+    await screen.findByText('/100');
+    expect(screen.queryByText(/Storage \d+\/100/)).toBeNull();
+    expect(screen.queryByText(/Error check/)).toBeNull();
   });
 });
 
@@ -187,15 +190,23 @@ describe('the page frame and layout', () => {
     expect(container.firstElementChild.className).toContain('max-w-[1400px]');
   });
 
-  it('stacks the monitor under the health panel below 1100px, and puts it beside it from there', async () => {
+  it('gives the drive-health panel the whole row, with no live-gauge panel beside it', async () => {
     const { container } = render();
     await screen.findByText('/100');
     const health = container.querySelector('svg[width="140"]').closest('.glass-panel');
-    const grid = health.parentElement;
-    expect(grid.className.split(' ')).toEqual(expect.arrayContaining(['grid', 'grid-cols-1']));
-    expect(grid.className).toMatch(/min-\[1100px\]:grid-cols-\[/);
-    // No fixed 268px column left anywhere on the screen.
+    // Alone in its row: nothing shares the wrapper, and no fixed-width column.
+    expect(health.parentElement.children).toHaveLength(1);
+    expect(container.innerHTML).not.toContain('min-[1100px]:grid-cols-[');
     expect(container.innerHTML).not.toContain('w-[268px]');
+  });
+
+  it('has no CPU, memory or throughput gauges: Prune is a storage tool', async () => {
+    const { container } = render();
+    await screen.findByText('/100');
+    expect(screen.queryByText('Right now')).toBeNull();
+    expect(screen.queryByText('CPU')).toBeNull();
+    expect(screen.queryByText('Memory')).toBeNull();
+    expect(container.querySelectorAll('svg[width="64"]')).toHaveLength(0);
   });
 
   it('lets SMART labels wrap instead of truncating them', async () => {

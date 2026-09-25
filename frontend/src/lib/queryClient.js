@@ -59,7 +59,6 @@ export const keys = {
   settings: ['settings'],
   updateCheck: ['update-check'],
   automation: ['automation'],
-  resources: ['resources'],
   diskSpace: ['disk', 'space'],
   deepCleanRules: ['deepClean', 'rules'],
   deepCleanScan: ['deepClean', 'scan'],

@@ -25,7 +25,6 @@ vi.mock('./lib/api.js', () => ({
   fetchBrowserExtensions: vi.fn(async () => ({})),
   fetchStartupItems: vi.fn(async () => []),
   fetchStartupIcons: vi.fn(async () => ({})),
-  fetchResources: vi.fn(async () => ({})),
   fetchAutomation: vi.fn(async () => ({})),
   checkAutomation: vi.fn(async () => ({})),
   fetchDuplicates: vi.fn(async () => ({})),

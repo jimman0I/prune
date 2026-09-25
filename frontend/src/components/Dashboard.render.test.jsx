@@ -26,7 +26,6 @@ vi.mock('../lib/api.js', () => ({
   unlockDiskWear: (...a) => unlockDiskWear(...a),
   fetchUninstallHistory: (...a) => fetchUninstallHistory(...a),
   fetchAutomation: (...a) => fetchAutomation(...a),
-  fetchResources: vi.fn(async () => ({ cpuPercent: 5, ram: { percent: 40 }, diskBytesPerSec: 0 })),
   fetchStartupItems: vi.fn(), fetchStartupIcons: vi.fn(), setStartupItemEnabled: vi.fn(),
   fetchQuarantineBatches: vi.fn(), restoreQuarantineBatch: vi.fn(),
   deleteQuarantineBatch: vi.fn(), emptyQuarantine: vi.fn(),
@@ -97,8 +96,8 @@ describe('the Dashboard reads', () => {
   });
 });
 
-describe('the System Health score', () => {
-  it('shows the composite score, not the raw drive-wear percent, and a breakdown line', async () => {
+describe('the Drive health score', () => {
+  it('titles the panel Drive health and shows the drive score, not a breakdown line', async () => {
     fetchDiskHealth.mockResolvedValue({
       disks: [{
         deviceId: '0', model: 'Test NVMe', mediaType: 'SSD', healthStatus: 'Healthy',
@@ -106,30 +105,39 @@ describe('the System Health score', () => {
         smart: { mediaErrors: 0 }
       }]
     });
-    fetchDiskSpace.mockResolvedValue({ freeBytes: 500 * GB, totalBytes: 1000 * GB }); // 50% free, full storage credit
     render();
 
-    // drive 100*40 + storage 100*25 + apps 100*20 + errors 100*15 = 100
-    expect(await screen.findByText('System health')).toBeTruthy();
+    expect(await screen.findByText('Drive health')).toBeTruthy();
+    expect(screen.queryByText('System health')).toBeNull();
     expect(await screen.findByText('100')).toBeTruthy();
-    expect(await screen.findByText(/Drive 100.*Storage 100.*Apps 100.*Error check 100/)).toBeTruthy();
+    expect(screen.queryByText(/Storage .*Apps/)).toBeNull();
   });
 
-  it('reflects a broken app in both the score and the breakdown line', async () => {
+  it('is not moved by a nearly full disk or a broken app, which have their own cards', async () => {
+    fetchDiskHealth.mockResolvedValue({
+      disks: [{
+        deviceId: '0', model: 'Test NVMe', mediaType: 'SSD', healthStatus: 'Healthy',
+        lifeRemainingPercent: 88, readErrorsUncorrected: 0, writeErrorsUncorrected: 0,
+        smart: { mediaErrors: 0 }
+      }]
+    });
+    fetchDiskSpace.mockResolvedValue({ freeBytes: 10 * GB, totalBytes: 1000 * GB }); // 1% free
+    renderScreen(<Dashboard programs={[{ health: { orphaned: true } }]} totalSize={0} onNavigate={() => {}} />);
+
+    expect(await screen.findByText('88')).toBeTruthy();
+  });
+
+  it('drops a drive that reports media errors into the problem band, whatever its wear', async () => {
     fetchDiskHealth.mockResolvedValue({
       disks: [{
         deviceId: '0', model: 'Test NVMe', mediaType: 'SSD', healthStatus: 'Healthy',
         lifeRemainingPercent: 100, readErrorsUncorrected: 0, writeErrorsUncorrected: 0,
-        smart: { mediaErrors: 0 }
+        smart: { mediaErrors: 2 }
       }]
     });
-    fetchDiskSpace.mockResolvedValue({ freeBytes: 500 * GB, totalBytes: 1000 * GB });
-    const programs = [{ health: { orphaned: true } }];
-    renderScreen(<Dashboard programs={programs} totalSize={0} onNavigate={() => {}} />);
+    render();
 
-    // drive 100*40 + storage 100*25 + apps 75*20 + errors 100*15 = 9500/100 = 95
-    expect(await screen.findByText('95')).toBeTruthy();
-    expect(await screen.findByText(/Apps 75/)).toBeTruthy();
+    expect(await screen.findByText('40')).toBeTruthy();
   });
 
   it('shows the drive detail sub-heading above the existing drive-specific content', async () => {

@@ -19,9 +19,6 @@ vi.mock('../services/scheduleRunner.js', () => ({
   startScheduler: () => {}
 }));
 
-const readResources = vi.fn(() => ({ cpuPercent: 12, memoryPercent: 40, diskBytesPerSec: 0 }));
-vi.mock('../services/resourceMonitor.js', () => ({ readResources: (...a) => readResources(...a) }));
-
 let server;
 beforeAll(async () => { server = await startTestServer(); });
 afterAll(async () => { await server.close(); });
@@ -67,24 +64,5 @@ describe('POST /automation/check', () => {
     const res = await server.call('/automation/check', { method: 'POST' });
     expect(res.status).toBe(500);
     expect(res.body.error).toBe('clean failed');
-  });
-});
-
-describe('GET /resources', () => {
-  it('answers a reading without doing any work of its own', async () => {
-    // Three numbers copied out of a counter that is already running.
-    // Making the widget's poll expensive would make the widget the thing
-    // consuming the resources it reports.
-    const res = await server.call('/resources');
-    expect(res.status).toBe(200);
-    expect(res.body).toEqual({ cpuPercent: 12, memoryPercent: 40, diskBytesPerSec: 0 });
-  });
-
-  it('reports a broken counter as a 500 rather than zeroes', async () => {
-    // Zeroes would draw a flat graph, which is a claim about the machine
-    // rather than an admission that nothing was measured.
-    readResources.mockImplementationOnce(() => { throw new Error('counter gone'); });
-    const res = await server.call('/resources');
-    expect(res.status).toBe(500);
   });
 });

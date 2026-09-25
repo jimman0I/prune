@@ -3,7 +3,6 @@ import { unlockDiskWear, fetchUninstallHistory } from '../lib/api.js';
 import { formatRelativeTime } from '../lib/formatRelativeTime.js';
 import StatCard from './StatCard.jsx';
 import { useCountUp } from '../hooks/useCountUp.js';
-import ResourceMonitor from './ResourceMonitor.jsx';
 import { useQuery } from '@tanstack/react-query';
 import { fetchAutomation } from '../lib/api.js';
 import { keys } from '../lib/queryClient.js';
@@ -74,9 +73,9 @@ function toneColor(tone) {
  * fine. */
 const BAND_COLOR = { good: 'var(--success)', caution: 'var(--warning)', problem: 'var(--danger)' };
 
-/** Shows the composite score out of 100 when one exists, and a short status
+/** Shows the drive-health score out of 100 when one exists, and a short status
  * word when it doesn't -- never a stand-in number. `score` stays null until
- * both the drive and the storage have genuinely loaded (healthScore.js), so
+ * the drive has genuinely answered (healthScore.js), so
  * neither the number, the "/100" nor a colour band appears before then: a
  * ring that invents a healthy-looking figure is worse than one that admits
  * it hasn't read the machine yet. Until then the ring shows the drive's own
@@ -152,12 +151,6 @@ function driveVerdict(disk, unknownLabel) {
 
 function formatCount(value) {
   return typeof value === 'number' ? value.toLocaleString() : '—';
-}
-
-/** Each breakdown part is a score out of 100, and says so: a bare "Errors
- * 100" read as a hundred errors, which is the opposite of what it means. */
-function formatComponent(value) {
-  return value === null || value === undefined ? '—' : `${value}/100`;
 }
 
 /** The drive's own SMART attributes, the set CrystalDiskInfo shows.
@@ -288,18 +281,10 @@ export default function Dashboard({ programs, totalSize, onNavigate = () => {} }
   // correctly excluding it as "not loaded yet", which is what lets the
   // very first render show a fabricated high score. See healthScore.js's
   // own doc comment for the full reasoning.
-  const { score: healthScore, breakdown } = computeHealthScore({
+  const { score: healthScore } = computeHealthScore({
     driveVerdict: primaryDisk ? verdict : null,
-    primaryDisk,
-    diskSpace,
-    brokenCount
+    primaryDisk
   });
-  const formattedBreakdown = {
-    drive: formatComponent(breakdown.drive),
-    storage: formatComponent(breakdown.storage),
-    apps: formatComponent(breakdown.apps),
-    errors: formatComponent(breakdown.errors)
-  };
 
   return (
     <Page>
@@ -308,27 +293,16 @@ export default function Dashboard({ programs, totalSize, onNavigate = () => {} }
         <ScheduleBadge onNavigate={onNavigate} />
       </div>
 
-      {/* The live gauges sit BESIDE drive health rather than as a fourth
-          stat card. Making that row four-up squeezed the existing three
-          enough to wrap "819.2 GB Used / 952.9 GB Total" onto two lines,
-          and this panel had a conspicuously empty right half already --
-          the two readouts also belong together: one is what the drive has
-          been through, the other is what it is doing now. */}
-      {/* A grid rather than a flex row with a fixed 268px monitor: at a 900px
-          window the two panels had a 732px row to share and the health panel's
-          text column collapsed to nothing. Stacked below 1100px (the same
-          window-width breakpoint the nav rail widens at), side by side from
-          there with the monitor taking what it needs. */}
-      <div className="grid grid-cols-1 min-[1100px]:grid-cols-[minmax(0,1fr)_minmax(268px,320px)] items-stretch gap-4 mb-6">
+      {/* Drive health only: Prune is a storage tool, so the panel is the
+          drive's score and its SMART detail, full width. Free space and
+          apps have their own cards below. The text column takes the rest
+          of the row (flex-1) so the SMART grid can spread out instead of
+          hugging the ring. */}
+      <div className="mb-6">
         <div className="glass-panel flex items-center gap-6 p-8 min-w-0">
         <HealthGauge score={healthScore} statusLabel={verdict.statusLabel} tone={verdict.tone} />
-        <div className="min-w-0">
-          <div className="text-[18px] font-medium text-[color:var(--text-primary)] mb-1">{t('dashboard.systemHealth.title')}</div>
-          {healthScore != null && (
-            <div className="text-[12px] font-mono text-[color:var(--text-secondary)] mb-2">
-              {t('dashboard.systemHealth.breakdownLine', formattedBreakdown.drive, formattedBreakdown.storage, formattedBreakdown.apps, formattedBreakdown.errors)}
-            </div>
-          )}
+        <div className="min-w-0 flex-1">
+          <div className="text-[18px] font-medium text-[color:var(--text-primary)] mb-2">{t('dashboard.driveHealth.title')}</div>
 
           {diskHealthError && (
             <div className="text-[13px] text-[color:var(--text-secondary)] select-text">{t('dashboard.driveHealth.error', diskHealthError)}</div>
@@ -391,8 +365,6 @@ export default function Dashboard({ programs, totalSize, onNavigate = () => {} }
           )}
           </div>
         </div>
-
-        <ResourceMonitor />
       </div>
 
       {/* Staggered on entry. The delay is small and one-directional --

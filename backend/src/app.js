@@ -20,7 +20,6 @@ import leftoversRoutes from './routes/leftovers.js';
 import quarantineRoutes from './routes/quarantine.js';
 import duplicateRoutes from './routes/duplicates.js';
 import automationRoutes from './routes/automation.js';
-import resourceRoutes from './routes/resources.js';
 import diskSpaceRoutes from './routes/diskSpace.js';
 import uninstallHistoryRoutes from './routes/uninstallHistory.js';
 import diskScanRoutes from './routes/diskScan.js';
@@ -71,7 +70,6 @@ export function createApp({ port } = {}) {
   app.use('/api/quarantine', quarantineRoutes);
   app.use('/api/duplicates', duplicateRoutes);
   app.use('/api/automation', automationRoutes);
-  app.use('/api/resources', resourceRoutes);
   app.use('/api/disk-space', diskSpaceRoutes);
   app.use('/api/uninstall-history', uninstallHistoryRoutes);
   app.use('/api/disk-scan', diskScanRoutes);
