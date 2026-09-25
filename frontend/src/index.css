@@ -945,11 +945,14 @@ input[type="checkbox"].prune-check:active:not(:disabled),
 }
 
 /* Reduced motion for the scan bar. After the rules it overrides, so it wins
-   on order at equal specificity. A still bar (the indeterminate segment
-   parked at the left, no shimmer) still reads as "in progress". */
+   on order at equal specificity. A still bar (no shimmer; the
+   indeterminate segment faint and full width) still reads as "in progress". */
 @media (prefers-reduced-motion: reduce) {
   .scan-shimmer { animation: none; background: none; }
-  .scan-indeterminate { animation: none; }
+  /* Not parked at its 35% width: a still segment a third of the way along
+     reads as "35% done", a number nobody measured. Full width and faint
+     says only "working". !important because the segment's width is inline. */
+  .scan-indeterminate { animation: none; width: 100% !important; opacity: 0.35; }
 }
 
 /* Reduced transparency (Windows "Transparency effects" off, macOS "Reduce
