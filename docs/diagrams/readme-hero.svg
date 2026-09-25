@@ -1,24 +1,43 @@
 <svg viewBox="0 0 1200 540" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Prune: uninstall it, then find what it left behind. Every leftover file, registry key and scheduled task is quarantined first, so nothing is lost by mistake. 87 cleaner rules, 31 categories, 40 languages, zero telemetry.">
-  <desc>Animated hero card. Three leftovers found after an uninstall (a folder, a registry key and a scheduled task) slide one after another into a Quarantine box, on a loop. Everything that matters is readable on the first frame and with motion turned off.</desc>
+  <desc>Animated hero card. Three leftovers found after an uninstall (a folder, a registry key and a scheduled task) are checked off one after another as quarantined, in place, on a slow loop. Everything that matters is readable on the first frame and with motion turned off.</desc>
   <style>
     .sans { font-family: 'Segoe UI', Inter, Arial, Helvetica, system-ui, sans-serif; }
     .mono { font-family: Consolas, 'Cascadia Mono', 'Courier New', monospace; }
-    .row  { animation: slide 9s cubic-bezier(.45,.05,.35,1) infinite; }
-    .r2   { animation-delay: .55s; }
-    .r3   { animation-delay: 1.1s; }
-    .pulse { animation: glow 9s ease-in-out infinite; }
-    .dot  { animation: travel 6s linear infinite; }
-    @keyframes slide {
-      0%, 18%  { transform: translateX(0);     opacity: 1; }
-      44%      { transform: translateX(440px); opacity: 1; }
-      52%      { transform: translateX(480px); opacity: 0; }
-      86%      { transform: translateX(0);     opacity: 0; }
-      94%,100% { transform: translateX(0);     opacity: 1; }
-    }
+
+    /* One 10s loop. Row N is "found" (cyan flash) just before its time, then
+       settles to quarantined (green, dimmed) and holds until the shared fade
+       back at 84-92%. Nothing translates: state changes in place. */
+    .row   { animation-duration: 10s; animation-iteration-count: infinite; animation-timing-function: ease-in-out; }
+    .r1 { animation-name: dim1; } .r2 { animation-name: dim2; } .r3 { animation-name: dim3; }
+    .tag   { animation-duration: 10s; animation-iteration-count: infinite; animation-timing-function: ease-in-out; }
+    .t1 { animation-name: tag1; } .t2 { animation-name: tag2; } .t3 { animation-name: tag3; }
+    .ok    { opacity: 0; animation-duration: 10s; animation-iteration-count: infinite; animation-timing-function: ease-in-out; }
+    .o1 { animation-name: ok1; } .o2 { animation-name: ok2; } .o3 { animation-name: ok3; }
+    .flash { opacity: 0; animation-duration: 10s; animation-iteration-count: infinite; animation-timing-function: ease-out; }
+    .f1 { animation-name: fl1; } .f2 { animation-name: fl2; } .f3 { animation-name: fl3; }
+    .pulse { animation: glow 10s ease-in-out infinite; }
+    .dot   { animation: travel 6s linear infinite; }
+
+    @keyframes dim1 { 0%,17% { opacity:1; } 24%,84% { opacity:.62; } 92%,100% { opacity:1; } }
+    @keyframes dim2 { 0%,31% { opacity:1; } 38%,84% { opacity:.62; } 92%,100% { opacity:1; } }
+    @keyframes dim3 { 0%,45% { opacity:1; } 52%,84% { opacity:.62; } 92%,100% { opacity:1; } }
+
+    @keyframes tag1 { 0%,19% { opacity:1; } 24%,84% { opacity:0; } 92%,100% { opacity:1; } }
+    @keyframes tag2 { 0%,33% { opacity:1; } 38%,84% { opacity:0; } 92%,100% { opacity:1; } }
+    @keyframes tag3 { 0%,47% { opacity:1; } 52%,84% { opacity:0; } 92%,100% { opacity:1; } }
+
+    @keyframes ok1 { 0%,19% { opacity:0; } 24%,84% { opacity:1; } 92%,100% { opacity:0; } }
+    @keyframes ok2 { 0%,33% { opacity:0; } 38%,84% { opacity:1; } 92%,100% { opacity:0; } }
+    @keyframes ok3 { 0%,47% { opacity:0; } 52%,84% { opacity:1; } 92%,100% { opacity:0; } }
+
+    @keyframes fl1 { 0%,12% { opacity:0; } 17% { opacity:1; } 24%,100% { opacity:0; } }
+    @keyframes fl2 { 0%,26% { opacity:0; } 31% { opacity:1; } 38%,100% { opacity:0; } }
+    @keyframes fl3 { 0%,40% { opacity:0; } 45% { opacity:1; } 52%,100% { opacity:0; } }
+
     @keyframes glow {
-      0%, 34%  { stroke-opacity: .35; }
-      50%      { stroke-opacity: 1; }
-      70%,100% { stroke-opacity: .35; }
+      0%,18%  { stroke-opacity:.35; } 24% { stroke-opacity:.9; } 30%,32% { stroke-opacity:.4; }
+      38% { stroke-opacity:.9; } 44%,46% { stroke-opacity:.4; } 52% { stroke-opacity:1; }
+      62%,100% { stroke-opacity:.35; }
     }
     @keyframes travel {
       0%   { transform: translateX(0);      opacity: 0; }
@@ -27,8 +46,8 @@
       100% { transform: translateX(1104px); opacity: 0; }
     }
     @media (prefers-reduced-motion: reduce) {
-      .row, .pulse, .dot { animation: none !important; }
-      .dot { opacity: 0; }
+      .row, .tag, .ok, .flash, .pulse, .dot { animation: none !important; }
+      .ok, .flash, .dot { opacity: 0; }
     }
   </style>
   <defs>
@@ -68,32 +87,52 @@
   <!-- leftovers -->
   <text x="48" y="308" class="mono" font-size="11.5" letter-spacing="2" fill="#71717a">LEFT BEHIND AFTER THE UNINSTALL</text>
 
-  <g class="row">
-    <rect x="48" y="322" width="540" height="46" rx="10" fill="#12151c" stroke="#232b38"/>
-    <g transform="translate(68,336)" fill="none" stroke="#67e8f9" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M2 5a2 2 0 0 1 2-2h4l2 2.5h6a2 2 0 0 1 2 2V16a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2z"/>
+  <!-- row 1: folder -->
+  <g>
+    <g class="row r1">
+      <rect x="48" y="322" width="540" height="46" rx="10" fill="#12151c" stroke="#232b38"/>
+      <g transform="translate(68,336)" fill="none" stroke="#67e8f9" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M2 5a2 2 0 0 1 2-2h4l2 2.5h6a2 2 0 0 1 2 2V16a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2z"/>
+      </g>
+      <text x="100" y="351" class="mono" font-size="14" fill="#e9edf3">C:\Users\you\AppData\Roaming\OldApp</text>
+      <text class="tag t1 mono" x="574" y="351" text-anchor="end" font-size="11" fill="#71717a">folder</text>
     </g>
-    <text x="100" y="351" class="mono" font-size="14" fill="#e9edf3">C:\Users\you\AppData\Roaming\OldApp</text>
-    <text x="574" y="351" text-anchor="end" class="mono" font-size="11" fill="#71717a">folder</text>
-  </g>
-  <g class="row r2">
-    <rect x="48" y="378" width="540" height="46" rx="10" fill="#12151c" stroke="#232b38"/>
-    <g transform="translate(68,392)" fill="none" stroke="#a5b4fc" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-      <rect x="2" y="3" width="16" height="14" rx="2"/><path d="M6 8h8M6 12h5"/>
-    </g>
-    <text x="100" y="407" class="mono" font-size="14" fill="#e9edf3">HKCU\Software\OldApp\Run</text>
-    <text x="574" y="407" text-anchor="end" class="mono" font-size="11" fill="#71717a">registry key</text>
-  </g>
-  <g class="row r3">
-    <rect x="48" y="434" width="540" height="46" rx="10" fill="#12151c" stroke="#232b38"/>
-    <g transform="translate(68,448)" fill="none" stroke="#fcd34d" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-      <circle cx="10" cy="10" r="8"/><path d="M10 5.5V10l3 2"/>
-    </g>
-    <text x="100" y="463" class="mono" font-size="14" fill="#e9edf3">Task Scheduler\OldApp Updater</text>
-    <text x="574" y="463" text-anchor="end" class="mono" font-size="11" fill="#71717a">scheduled task</text>
+    <rect class="flash f1" x="48" y="322" width="540" height="46" rx="10" fill="#22d3ee" fill-opacity=".08" stroke="#22d3ee" stroke-width="1.5"/>
+    <rect class="ok o1" x="48" y="322" width="540" height="46" rx="10" fill="none" stroke="#4ade80" stroke-opacity=".6" stroke-width="1.5"/>
+    <text class="ok o1 mono" x="574" y="351" text-anchor="end" font-size="11" fill="#86efac">✓ quarantined</text>
   </g>
 
-  <!-- quarantine box: drawn after the rows so they slide in behind it -->
+  <!-- row 2: registry key -->
+  <g>
+    <g class="row r2">
+      <rect x="48" y="378" width="540" height="46" rx="10" fill="#12151c" stroke="#232b38"/>
+      <g transform="translate(68,392)" fill="none" stroke="#a5b4fc" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="2" y="3" width="16" height="14" rx="2"/><path d="M6 8h8M6 12h5"/>
+      </g>
+      <text x="100" y="407" class="mono" font-size="14" fill="#e9edf3">HKCU\Software\OldApp\Run</text>
+      <text class="tag t2 mono" x="574" y="407" text-anchor="end" font-size="11" fill="#71717a">registry key</text>
+    </g>
+    <rect class="flash f2" x="48" y="378" width="540" height="46" rx="10" fill="#22d3ee" fill-opacity=".08" stroke="#22d3ee" stroke-width="1.5"/>
+    <rect class="ok o2" x="48" y="378" width="540" height="46" rx="10" fill="none" stroke="#4ade80" stroke-opacity=".6" stroke-width="1.5"/>
+    <text class="ok o2 mono" x="574" y="407" text-anchor="end" font-size="11" fill="#86efac">✓ quarantined</text>
+  </g>
+
+  <!-- row 3: scheduled task -->
+  <g>
+    <g class="row r3">
+      <rect x="48" y="434" width="540" height="46" rx="10" fill="#12151c" stroke="#232b38"/>
+      <g transform="translate(68,448)" fill="none" stroke="#fcd34d" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="10" cy="10" r="8"/><path d="M10 5.5V10l3 2"/>
+      </g>
+      <text x="100" y="463" class="mono" font-size="14" fill="#e9edf3">Task Scheduler\OldApp Updater</text>
+      <text class="tag t3 mono" x="574" y="463" text-anchor="end" font-size="11" fill="#71717a">scheduled task</text>
+    </g>
+    <rect class="flash f3" x="48" y="434" width="540" height="46" rx="10" fill="#22d3ee" fill-opacity=".08" stroke="#22d3ee" stroke-width="1.5"/>
+    <rect class="ok o3" x="48" y="434" width="540" height="46" rx="10" fill="none" stroke="#4ade80" stroke-opacity=".6" stroke-width="1.5"/>
+    <text class="ok o3 mono" x="574" y="463" text-anchor="end" font-size="11" fill="#86efac">✓ quarantined</text>
+  </g>
+
+  <!-- quarantine box -->
   <rect x="716" y="316" width="436" height="170" rx="14" fill="#0e1218" stroke="#22d3ee" stroke-width="2" class="pulse" stroke-opacity="0.35"/>
   <g transform="translate(744,342)" fill="none" stroke="#22d3ee" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
     <path d="M14 1l12 6v9c0 7-5 12-12 14C7 28 2 23 2 16V7z"/><path d="M8.5 15l4 4 7-8"/>
