@@ -214,7 +214,47 @@ function NavItem({ item, screen, onNavigate, label }) {
   );
 }
 
-export default function NavRail({ screen, onNavigate, footer = null }) {
+/** "Report a bug", in the footer beside Settings.
+ *
+ * An action, not a place: it opens a dialog, so it has no Ctrl+N key, no
+ * route and no active state, and is left out of SCREEN_ORDER. It borrows the
+ * rail rows' geometry (same 44px button, same icon centre at x=36) so the
+ * footer reads as one column, and the same label flyout for the icon-only
+ * rail -- minus the key chip, since there is no chord to show. */
+const REPORT_ICON = (
+  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M21 12a8 8 0 0 1-11.6 7.1L4 20.5l1.4-4.6A8 8 0 1 1 21 12z"></path>
+    <path d="M12 8v4"></path>
+    <path d="M12 15.5v.01"></path>
+  </svg>
+);
+
+function ActionItem({ icon, label, onClick }) {
+  return (
+    <div className="relative group">
+      <button
+        type="button"
+        onClick={onClick}
+        aria-label={label}
+        aria-haspopup="dialog"
+        className="peer relative w-11 h-11 rounded-xl flex items-center justify-center min-[1100px]:w-full min-[1100px]:justify-start min-[1100px]:gap-3 min-[1100px]:pl-[14px] min-[1100px]:pr-3 transition-colors text-[color:var(--text-secondary)] hover:text-[color:var(--text-primary)] hover:bg-[color:var(--surface-hover)]"
+      >
+        <span className="relative">{icon}</span>
+        <span aria-hidden="true" className="relative hidden min-[1100px]:block text-[13px] font-medium truncate">
+          {label}
+        </span>
+      </button>
+      <span
+        aria-hidden="true"
+        className="min-[1100px]:hidden pointer-events-none absolute left-full top-1/2 -translate-y-1/2 ml-2 px-2 py-1 rounded-md whitespace-nowrap text-[11.5px] font-medium bg-[color:var(--bg-panel)] text-[color:var(--text-primary)] border border-[color:var(--border-subtle)] shadow-lg opacity-0 group-hover:opacity-100 peer-focus-visible:opacity-100 transition-opacity duration-150 z-flyout"
+      >
+        {label}
+      </span>
+    </div>
+  );
+}
+
+export default function NavRail({ screen, onNavigate, footer = null, onReportBug = null }) {
   const { t } = useLanguage();
   return (
     <nav className="relative flex flex-col items-center min-[1100px]:items-stretch gap-2 py-6 w-[72px] min-[1100px]:w-[200px] min-[1100px]:px-[12px] shrink-0" aria-label={t('nav.landmark')}>
@@ -246,6 +286,7 @@ export default function NavRail({ screen, onNavigate, footer = null }) {
           the 14px the icons' buttons start at). */}
       <div className="relative mt-auto flex flex-col items-center min-[1100px]:items-stretch gap-2">
         {footer && <div className="flex flex-col items-center min-[1100px]:items-start min-[1100px]:pl-[2px]">{footer}</div>}
+        {onReportBug && <ActionItem icon={REPORT_ICON} label={t('nav.reportBug')} onClick={onReportBug} />}
         <NavItem item={SETTINGS_ITEM} screen={screen} onNavigate={onNavigate} label={t(NAV_KEYS.settings)} />
       </div>
     </nav>

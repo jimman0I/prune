@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
-import { describe, it, expect } from 'vitest';
-import { screen } from '@testing-library/react';
+import { describe, it, expect, vi } from 'vitest';
+import { screen, fireEvent } from '@testing-library/react';
 import { renderScreen } from '../testSupport/renderScreen.jsx';
 import NavRail from './NavRail.jsx';
 import { SCREEN_ORDER } from '../lib/screenOrder.js';
@@ -232,5 +232,32 @@ describe('the footer slot', () => {
     const footerZone = container.querySelector('.mt-auto');
     expect(footerZone.querySelectorAll('button')).toHaveLength(1);
     expect(footerZone.querySelector('button').getAttribute('aria-label')).toBe('Settings');
+  });
+});
+
+describe('the Report a bug item', () => {
+  it('sits in the footer beside Settings and calls its handler', () => {
+    const onReportBug = vi.fn();
+    const { container } = renderScreen(<NavRail screen="dashboard" onNavigate={() => {}} onReportBug={onReportBug} />);
+    const report = screen.getByRole('button', { name: 'Report a bug' });
+    const settings = screen.getByRole('button', { name: 'Settings' });
+
+    expect(report.closest('.mt-auto')).toBe(settings.closest('.mt-auto'));
+    expect(container.querySelector('.mt-auto').querySelectorAll('button')).toHaveLength(2);
+    fireEvent.click(report);
+    expect(onReportBug).toHaveBeenCalledTimes(1);
+  });
+
+  it('is not a screen: no Ctrl+N key and no current state', () => {
+    renderScreen(<NavRail screen="dashboard" onNavigate={() => {}} onReportBug={() => {}} />);
+    const report = screen.getByRole('button', { name: 'Report a bug' });
+    expect(report.getAttribute('aria-keyshortcuts')).toBeNull();
+    expect(report.getAttribute('aria-current')).toBeNull();
+    expect(report.parentElement.textContent).not.toMatch(/Ctrl\+/);
+  });
+
+  it('is absent when nothing handles it', () => {
+    renderScreen(<NavRail screen="dashboard" onNavigate={() => {}} />);
+    expect(screen.queryByRole('button', { name: 'Report a bug' })).toBeNull();
   });
 });

@@ -83,6 +83,12 @@ screen-reader access, and safer destructive actions.
 
 ### Added
 
+- **Report a bug from inside Prune.** A "Report a bug" button in the side bar
+  and in Settings > About opens a prefilled issue on GitHub in your browser.
+  Prune sends nothing itself: you see the whole report first, and it holds
+  only what you write plus the Prune version, Windows version and
+  architecture (no file paths, scan results or user name). Reports on
+  GitHub are public and need a free GitHub account.
 - **A labelled side bar.** From 1100 px of window width the rail widens to
   show each screen's name; below that it stays icons only. Dashboard has
   its own gauge icon, Settings sits at the bottom, and Ctrl+1 to Ctrl+8

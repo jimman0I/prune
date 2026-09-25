@@ -68,7 +68,7 @@ function StepRow({ step }) {
 const numberFieldClass =
   'font-mono text-[12.5px] px-2.5 py-2 rounded-lg bg-[color:var(--surface-hover)] border border-[color:var(--border-subtle)] text-[color:var(--text-primary)] focus:border-[color:var(--accent-primary)]/50';
 
-function SettingsPage() {
+function SettingsPage({ onReportBug = null }) {
   const [tab, setTab] = useState(() => readStoredSettingsTab(window.localStorage, TAB_IDS) ?? 'general');
   const [saveError, setSaveError] = useState(null);
   const [newExclusion, setNewExclusion] = useState('');
@@ -704,6 +704,19 @@ function SettingsPage() {
               <p className="text-[13px] text-[color:var(--text-secondary)] leading-relaxed max-w-[52ch]">
                 {t('settings.about.description')}
               </p>
+              {/* The dialog itself belongs to App, so the rail's item and
+                  this row open the same one and two can never be up at once. */}
+              {onReportBug && (
+                <div className="mt-5 pt-4 border-t border-[color:var(--border-subtle)] flex items-center justify-between gap-4">
+                  <div className="min-w-0">
+                    <div className="text-[13px] font-medium text-[color:var(--text-primary)]">{t('settings.about.reportTitle')}</div>
+                    <p className="text-[12px] text-[color:var(--text-muted)] mt-0.5 max-w-[52ch]">{t('settings.about.reportDescription')}</p>
+                  </div>
+                  <button type="button" className="btn-ghost shrink-0 px-3 py-1.5 rounded-lg text-[12.5px] min-h-[24px]" onClick={onReportBug}>
+                    {t('settings.about.reportButton')}
+                  </button>
+                </div>
+              )}
             </div>
           )}
         </>
@@ -722,8 +735,8 @@ function SettingsPage() {
  * switches, once per switch, and that cost grows with every tab the user
  * has visited.
  *
- * Safe here specifically because this component takes no props at all, so
- * the comparison is between two empty objects and can never produce a
+ * Safe here specifically because its one prop, onReportBug, is a stable
+ * callback from App (useCallback), so the comparison can never produce a
  * stale screen. A component with unstable props would gain nothing from
  * this and is deliberately left alone. */
 export default memo(SettingsPage);
