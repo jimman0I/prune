@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { screen, waitFor } from '@testing-library/react';
+import { screen, waitFor, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { renderScreen } from '../testSupport/renderScreen.jsx';
 import { isCopyable } from '../testSupport/copyable.js';
@@ -93,7 +93,8 @@ describe('what can be copied', () => {
     deleteQuarantineBatch.mockRejectedValueOnce(new Error('EBUSY'));
     renderScreen(<QuarantineManager />);
     await user.click(await screen.findByRole('button', { name: 'Delete permanently' }));
-    await user.click(screen.getByRole('button', { name: 'Confirm' }));
+    await act(async () => { await new Promise((r) => setTimeout(r, 600)); });
+    await user.click(screen.getByRole('button', { name: 'Delete batch' }));
 
     expect(isCopyable(await screen.findByText('EBUSY'))).toBe(true);
   });
@@ -161,7 +162,8 @@ describe('the gate in front of a permanent delete', () => {
     const user = userEvent.setup();
     renderScreen(<QuarantineManager />);
     await user.click(await screen.findByRole('button', { name: 'Delete permanently' }));
-    await user.click(screen.getByRole('button', { name: 'Confirm' }));
+    await act(async () => { await new Promise((r) => setTimeout(r, 600)); });
+    await user.click(screen.getByRole('button', { name: 'Delete batch' }));
 
     await waitFor(() => expect(deleteQuarantineBatch).toHaveBeenCalledTimes(1));
     expect(firstArg(deleteQuarantineBatch)).toBe('C:\\q\\1-Thing');
@@ -186,7 +188,8 @@ describe('the gate in front of a permanent delete', () => {
     deleteQuarantineBatch.mockRejectedValueOnce(new Error('EBUSY'));
     renderScreen(<QuarantineManager />);
     await user.click(await screen.findByRole('button', { name: 'Delete permanently' }));
-    await user.click(screen.getByRole('button', { name: 'Confirm' }));
+    await act(async () => { await new Promise((r) => setTimeout(r, 600)); });
+    await user.click(screen.getByRole('button', { name: 'Delete batch' }));
 
     expect(await screen.findByText('EBUSY')).toBeTruthy();
     // The batch is still listed, because it is still there.

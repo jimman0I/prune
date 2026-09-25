@@ -1,4 +1,5 @@
-import { useState, memo } from 'react';
+import { useEffect, useState, memo } from 'react';
+import Page from './Page.jsx';
 import { useQuarantine } from '../hooks/useSystemQueries.js';
 import { useLanguage } from '../i18n/LanguageContext.jsx';
 
@@ -27,11 +28,45 @@ function formatDate(ms) {
   });
 }
 
+/** How long a permanent-delete confirm ignores clicks after it appears.
+ *
+ * "Delete forever?" and its button appear exactly where the button that asked
+ * the question was, so a double-click on "Delete permanently" lands its second
+ * click on the confirm. Half a second is longer than a double-click and much
+ * shorter than reading the question. */
+export const ARM_DELAY_MS = 500;
+
+/** True once `key` has been showing for the arm delay; false for a null key.
+ *
+ * Keyed rather than a bare boolean so that moving the confirm from one batch
+ * to another restarts the clock instead of inheriting an armed state that
+ * belonged to the first. */
+function useArmed(key, delayMs = ARM_DELAY_MS) {
+  const [armedKey, setArmedKey] = useState(null);
+  useEffect(() => {
+    if (key === null || key === undefined || key === false) return undefined;
+    const timer = setTimeout(() => setArmedKey(key), delayMs);
+    return () => { clearTimeout(timer); setArmedKey(null); };
+  }, [key, delayMs]);
+  return key !== null && key !== undefined && key !== false && armedKey === key;
+}
+
+/** Files shown per batch before "Show all N files". A batch from a temp-folder
+ * clean can hold thousands; the screen used to be a wall of them. */
+export const FILES_COLLAPSED = 5;
+
 function QuarantineManager() {
   const { t } = useLanguage();
   const [actionError, setActionError] = useState(null);
   const [confirmDeleteDir, setConfirmDeleteDir] = useState(null);
   const [confirmEmpty, setConfirmEmpty] = useState(false);
+  // The last restore, said back: restoring makes the row vanish, and a row
+  // that vanishes with no word is indistinguishable from one that failed.
+  const [notice, setNotice] = useState(null);
+  // Batches whose whole file list is showing.
+  const [expanded, setExpanded] = useState(() => new Set());
+  const deleteArmed = useArmed(confirmDeleteDir);
+  const emptyArmed = useArmed(confirmEmpty ? 'empty' : null);
 
   const { batches, totals, loading, error, restore, remove, empty } = useQuarantine();
 
@@ -48,19 +83,28 @@ function QuarantineManager() {
    * to write and quietly wrong: restoring a batch puts files back on disk
    * and the quarantine folder is the source of truth for what is left. A
    * re-read cannot disagree with it; a local splice can. */
-  const runAction = (mutation, argument, after) => {
+  const runAction = (mutation, argument, after, onSuccess) => {
     setActionError(null);
+    setNotice(null);
     mutation.mutate(argument, {
+      onSuccess,
       onError: (err) => setActionError(err.message),
       onSettled: after
     });
   };
 
-  const handleRestore = (batch) => runAction(restore, batch.batchDir);
-  const handleDeletePermanently = (batch) =>
+  const handleRestore = (batch) =>
+    runAction(restore, batch.batchDir, undefined, () => setNotice(t('quarantine.restored', batch.programName)));
+  // Both permanent deletions ignore a click made before they are armed. Not
+  // `disabled`: that would drop focus off a button the user just reached.
+  const handleDeletePermanently = (batch) => {
+    if (!deleteArmed) return;
     runAction(remove, batch.batchDir, () => setConfirmDeleteDir(null));
-  const handleEmptyQuarantine = () =>
+  };
+  const handleEmptyQuarantine = () => {
+    if (!emptyArmed) return;
     runAction(empty, undefined, () => setConfirmEmpty(false));
+  };
 
   // From the backend rather than added up here. It is the same figure the
   // size cap is enforced against, and a second sum on this side could
@@ -69,7 +113,7 @@ function QuarantineManager() {
   const overCap = maxBytes !== null && totalBytes > maxBytes;
 
   return (
-    <div className="px-12 py-10 max-w-[1400px]">
+    <Page>
       <div className="flex items-baseline justify-between mb-8">
         <div>
           <h1 className="display-heading text-[30px] leading-none">{t('quarantine.title')}</h1>
@@ -116,8 +160,13 @@ function QuarantineManager() {
               <button className="btn-ghost px-3.5 py-1.5 rounded-lg text-[12px] font-medium" onClick={() => setConfirmEmpty(false)} disabled={emptying}>
                 {t('quarantine.cancel')}
               </button>
-              <button className="btn-danger px-3.5 py-1.5 rounded-lg text-[12px] font-medium" onClick={handleEmptyQuarantine} disabled={emptying}>
-                {emptying ? t('quarantine.emptying') : t('quarantine.confirm')}
+              <button
+                className={`btn-danger px-3.5 py-1.5 rounded-lg text-[12px] font-medium ${emptyArmed || emptying ? '' : 'opacity-60'}`}
+                onClick={handleEmptyQuarantine}
+                disabled={emptying}
+                aria-disabled={!emptyArmed || emptying || undefined}
+              >
+                {emptying ? t('quarantine.emptying') : t('quarantine.deleteAll', batches.length)}
               </button>
             </div>
           ) : (
@@ -149,6 +198,12 @@ function QuarantineManager() {
 
       {!loading && !error && (
         <>
+          {notice && (
+            <div role="status" className="mb-5 px-3.5 py-3 rounded-xl bg-[color:var(--success)]/10 border border-[color:var(--success)]/25">
+              <p className="text-[12.5px] text-[color:var(--success)]">{notice}</p>
+            </div>
+          )}
+
           {actionError && (
             <div className="mb-5 px-3.5 py-3 rounded-xl bg-[color:var(--danger-soft)] border border-[color:var(--danger)]/25">
               <p className="text-[12.5px] text-[color:var(--danger)] select-text">{actionError}</p>
@@ -188,11 +243,12 @@ function QuarantineManager() {
                               {t('quarantine.cancel')}
                             </button>
                             <button
-                              className="btn-danger px-3.5 py-1.5 rounded-lg text-[12px] font-medium"
+                              className={`btn-danger px-3.5 py-1.5 rounded-lg text-[12px] font-medium ${deleteArmed || busy ? '' : 'opacity-60'}`}
                               onClick={() => handleDeletePermanently(batch)}
                               disabled={busy}
+                              aria-disabled={!deleteArmed || busy || undefined}
                             >
-                              {busy ? t('quarantine.deleting') : t('quarantine.confirm')}
+                              {busy ? t('quarantine.deleting') : t('quarantine.deleteBatch')}
                             </button>
                           </>
                         ) : (
@@ -218,12 +274,28 @@ function QuarantineManager() {
 
                     {batch.files?.length > 0 && (
                       <div className="border-t border-[color:var(--border-subtle)] pt-3 flex flex-col gap-1.5">
-                        {batch.files.map((f) => (
+                        {(expanded.has(batch.batchDir) ? batch.files : batch.files.slice(0, FILES_COLLAPSED)).map((f) => (
                           <div key={f.originalPath} className="flex items-center justify-between gap-4">
                             <div className="font-mono text-[11.5px] text-[color:var(--text-muted)] truncate min-w-0 select-text">{f.originalPath}</div>
                             <div className="font-mono text-[11px] text-[color:var(--text-secondary)] shrink-0">{formatBytes(f.sizeBytes)}</div>
                           </div>
                         ))}
+                        {batch.files.length > FILES_COLLAPSED && (
+                          <button
+                            type="button"
+                            className="self-start mt-1 -ml-1 px-1 py-1 text-[12px] text-[color:var(--accent-primary)] hover:underline"
+                            aria-expanded={expanded.has(batch.batchDir)}
+                            onClick={() => setExpanded((prev) => {
+                              const next = new Set(prev);
+                              if (next.has(batch.batchDir)) next.delete(batch.batchDir); else next.add(batch.batchDir);
+                              return next;
+                            })}
+                          >
+                            {expanded.has(batch.batchDir)
+                              ? t('quarantine.showFewerFiles')
+                              : t('quarantine.showAllFiles', batch.files.length)}
+                          </button>
+                        )}
                       </div>
                     )}
                   </div>
@@ -233,7 +305,7 @@ function QuarantineManager() {
           )}
         </>
       )}
-    </div>
+    </Page>
   );
 }
 
