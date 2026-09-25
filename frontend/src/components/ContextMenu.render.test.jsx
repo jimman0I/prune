@@ -172,6 +172,91 @@ describe('where it lands', () => {
   });
 });
 
+describe('keyboard', () => {
+  it('moves focus to the first available item when it opens, so the menu can be used without a mouse', () => {
+    open();
+    expect(document.activeElement).toBe(screen.getByRole('menuitem', { name: /^Open folder/ }));
+  });
+
+  it('skips a disabled first item', () => {
+    open({ items: [{ label: 'Off', disabled: true, onSelect: vi.fn() }, { label: 'On', onSelect: vi.fn() }] });
+    expect(document.activeElement).toBe(screen.getByRole('menuitem', { name: 'On' }));
+  });
+
+  it('ArrowDown and ArrowUp move between items, wrapping, and never land on a disabled one', () => {
+    open();
+    const menu = screen.getByRole('menu');
+    const focused = () => document.activeElement.textContent;
+
+    fireEvent.keyDown(menu, { key: 'ArrowDown' });
+    expect(focused()).toContain('Copy path');
+    fireEvent.keyDown(menu, { key: 'ArrowDown' });
+    expect(focused()).toContain('Delete');
+    // Restore is disabled: the next stop is the first item again.
+    fireEvent.keyDown(menu, { key: 'ArrowDown' });
+    expect(focused()).toContain('Open folder');
+    fireEvent.keyDown(menu, { key: 'ArrowUp' });
+    expect(focused()).toContain('Delete');
+  });
+
+  it('Home and End jump to the first and last available item', () => {
+    open();
+    const menu = screen.getByRole('menu');
+
+    fireEvent.keyDown(menu, { key: 'End' });
+    expect(document.activeElement.textContent).toContain('Delete');
+    fireEvent.keyDown(menu, { key: 'Home' });
+    expect(document.activeElement.textContent).toContain('Open folder');
+  });
+
+  it('Enter on the focused item runs it and closes', async () => {
+    const onSelect = vi.fn();
+    const user = userEvent.setup();
+    const { onClose } = open({ items: [{ label: 'Go', onSelect }] });
+
+    await user.keyboard('{Enter}');
+
+    expect(onClose).toHaveBeenCalled();
+    expect(onSelect).toHaveBeenCalledTimes(1);
+  });
+
+  it('Tab closes it rather than walking off into the page behind', () => {
+    const { onClose } = open();
+    fireEvent.keyDown(screen.getByRole('menu'), { key: 'Tab' });
+    expect(onClose).toHaveBeenCalled();
+  });
+
+  it('gives focus back to what opened it when it closes', () => {
+    const trigger = document.createElement('button');
+    document.body.appendChild(trigger);
+    trigger.focus();
+
+    const props = { x: 100, y: 100, items: ITEMS, onClose: vi.fn() };
+    const { rerender } = render(<ContextMenu open={true} {...props} />);
+    expect(document.activeElement).not.toBe(trigger);
+
+    rerender(<ContextMenu open={false} {...props} />);
+    expect(document.activeElement).toBe(trigger);
+    trigger.remove();
+  });
+
+  it('does not steal focus back when something else (a dialog) has already taken it', () => {
+    const trigger = document.createElement('button');
+    const dialogButton = document.createElement('button');
+    document.body.append(trigger, dialogButton);
+    trigger.focus();
+
+    const props = { x: 100, y: 100, items: ITEMS, onClose: vi.fn() };
+    const { rerender } = render(<ContextMenu open={true} {...props} />);
+    dialogButton.focus();
+    rerender(<ContextMenu open={false} {...props} />);
+
+    expect(document.activeElement).toBe(dialogButton);
+    trigger.remove();
+    dialogButton.remove();
+  });
+});
+
 /* Not asserted here: that a dismissed menu leaves nothing behind.
  *
  * AnimatePresence tracks its children BY KEY, and without one it cannot
