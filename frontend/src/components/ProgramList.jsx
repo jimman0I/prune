@@ -1,4 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
+import ContextMenu from './ContextMenu.jsx';
+import { useToasts } from '../hooks/useToasts.jsx';
 import { fetchPrograms, revealInExplorer, openInstalledAppsSettings } from '../lib/api.js';
 import { sizeBadgeTone } from '../lib/sizeBadgeTone.js';
 import { sortPrograms, nextSortState } from '../lib/sortPrograms.js';
@@ -18,18 +20,19 @@ function formatBytes(bytes) {
   return `${parseFloat((bytes / Math.pow(k, i)).toFixed(1))} ${sizes[i]}`;
 }
 
-/** The severity bands, painted.
+/** The severity bands, painted: quiet, then brighter, then amber, then
+ * amber and heavier.
  *
- * A real ramp now: quiet neutral, then blue, amber, red. The old mapping
- * ran cyan -> blue -> amber -> coral, which had the biggest programs
- * wearing the PRIMARY action colour -- the same one on every button --
- * and the smallest wearing what is now that colour. Neither said anything
- * about size. Ascending temperature does. */
-const SIZE_TONE_TEXT = {
+ * A ramp from neutral to amber and never to red. Red on this screen would
+ * read as "broken" -- the Broken badge and the failed states own it -- and a
+ * 105 GB game is not broken, it is big. The last step is weight rather than
+ * a new hue for the same reason. (Before that it went blue, amber, red; the
+ * blue was also the Store badge's colour.) */
+export const SIZE_TONE_TEXT = {
   low: 'text-[color:var(--text-secondary)]',
-  moderate: 'text-[color:var(--accent-blue)]',
+  moderate: 'text-[color:var(--text-primary)]',
   high: 'text-[color:var(--warning)]',
-  peak: 'text-[color:var(--danger)]'
+  peak: 'text-[color:var(--warning)] font-semibold'
 };
 
 /** The grid, defined once so the header and every row cannot drift apart.
@@ -78,7 +81,35 @@ const COLUMN_KEYS = {
   website: 'applications.columns.website'
 };
 
-const GRID_TEMPLATE = COLUMNS.map((c) => c.width).join(' ');
+/** Version and Website are the two columns that can go. Below this width the
+ * table needed about 900px of a window that gives it about 750, so the right
+ * hand edge -- the Uninstall column -- was off screen. What is dropped is
+ * what is least needed to pick a row: the version is in the row's own
+ * details and the website was never sortable. Done in CSS (a `min-[1100px]`
+ * variant on the cells and a second grid template) rather than in script, so
+ * there is no resize listener and no frame in which the wrong one shows. */
+export const NARROW_HIDDEN = ['version', 'website'];
+export const WIDE_ONLY = 'hidden min-[1100px]:block';
+export const WIDE_ONLY_FLEX = 'hidden min-[1100px]:flex';
+
+const NARROW_COLUMNS = COLUMNS.filter((c) => !NARROW_HIDDEN.includes(c.key));
+const tracks = (columns) => columns.map((c) => c.width).join(' ');
+// A track's floor: its fixed width, or the first number inside minmax().
+const floorOf = (width) => Number(/(\d+)px/.exec(width)[1]);
+// Every row gets this as a minimum, so all of them are the same width when
+// the window is narrower than the table: header, rows and the sticky action
+// cell then line up, and the scroll area scrolls them together.
+const tableFloor = (columns) => `${columns.reduce((sum, c) => sum + floorOf(c.width), 0) + (columns.length - 1) * 10 + 32}px`;
+const TABLE_VARS = {
+  '--cols-wide': tracks(COLUMNS),
+  '--cols-narrow': tracks(NARROW_COLUMNS),
+  '--min-wide': tableFloor(COLUMNS),
+  '--min-narrow': tableFloor(NARROW_COLUMNS)
+};
+export const ROW_GRID = 'grid gap-2.5 px-4 items-center min-w-[var(--min-narrow)] min-[1100px]:min-w-[var(--min-wide)] [grid-template-columns:var(--cols-narrow)] min-[1100px]:[grid-template-columns:var(--cols-wide)]';
+/** The action column stays in view when the table scrolls sideways, on the
+ * panel's own colour so the cells scrolling underneath do not show through. */
+export const STICKY_ACTION = 'sticky right-0 z-[1] bg-[color:var(--bg-panel)] pl-2 group-hover:[background-image:linear-gradient(var(--surface-hover),var(--surface-hover))]';
 
 /** The program's own icon, falling back to a lettered tile.
  *
@@ -112,7 +143,7 @@ function ProgramIcon({ program, src }) {
 
   return (
     <div
-      className="w-5 h-5 rounded-[4px] flex items-center justify-center text-[9px] font-bold shrink-0"
+      className="w-5 h-5 rounded-[4px] flex items-center justify-center text-[10px] font-bold shrink-0"
       style={{ background: tileColor(program.name), color: TILE_INK }}
     >
       {tileLetter(program.name, program.publisher)}
@@ -135,19 +166,26 @@ function RowCheckbox({ checked, disabled, label, onChange }) {
       aria-label={label}
       disabled={disabled}
       onClick={onChange}
-      className={`w-[15px] h-[15px] rounded-[4px] flex items-center justify-center shrink-0 border transition-colors ${
-        disabled
-          ? 'border-[color:var(--border-subtle)] opacity-30 cursor-not-allowed'
-          : checked
-            ? 'bg-[color:var(--accent-primary)] border-[color:var(--accent-primary)]'
-            : 'bg-[color:var(--surface-subtle)] border-[color:var(--border-subtle)] hover:border-[color:var(--border-hover)]'
-      }`}
+      // The button is the 24px target; the box people see is the span inside
+      // it, still 15px. The negative vertical margin gives back the height
+      // the bigger target would otherwise add to every row.
+      className={`group/box w-6 h-6 -my-0.5 flex items-center justify-center shrink-0 ${disabled ? 'cursor-not-allowed' : ''}`}
     >
-      {checked && !disabled && (
-        <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="var(--accent-ink)" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
-          <polyline points="20 6 9 17 4 12"></polyline>
-        </svg>
-      )}
+      <span
+        className={`w-[15px] h-[15px] rounded-[4px] flex items-center justify-center border transition-colors ${
+          disabled
+            ? 'border-[color:var(--border-subtle)] opacity-30'
+            : checked
+              ? 'bg-[color:var(--accent-primary)] border-[color:var(--accent-primary)]'
+              : 'bg-[color:var(--surface-subtle)] border-[color:var(--control-border)] group-hover/box:border-[color:var(--control-border-hover)]'
+        }`}
+      >
+        {checked && !disabled && (
+          <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="var(--accent-ink)" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+        )}
+      </span>
     </button>
   );
 }
@@ -190,32 +228,35 @@ function RevealButton({ program }) {
         }
       }}
       aria-label={t('applications.reveal.ariaLabel', program.name)}
-      className="btn-ghost px-2 py-1 rounded-md text-[11px] font-medium opacity-0 group-hover:opacity-100 focus-visible:opacity-100 transition-opacity"
+      className="btn-ghost px-2 py-1 rounded-md text-[11px] font-medium opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 focus-visible:opacity-100 transition-opacity"
     >
       {failed ? t('applications.reveal.notFound') : t('applications.reveal.button')}
     </button>
   );
 }
 
-function ProgramRow({ program, iconSrc, checked, running, isNew, onToggle, onUninstall, onRemoveStoreApp }) {
+function ProgramRow({ program, iconSrc, checked, running, isNew, onToggle, onUninstall, onRemoveStoreApp, onContextMenu }) {
   const { t } = useLanguage();
   return (
     <div
-    className="grid gap-2.5 px-4 py-1.5 items-center group hover:bg-[color:var(--surface-hover)] transition-colors"
-    style={{ gridTemplateColumns: GRID_TEMPLATE }}
+    role="row"
+    className={`${ROW_GRID} py-1.5 group hover:bg-[color:var(--surface-hover)] transition-colors`}
+    onContextMenu={(event) => onContextMenu?.(program, event)}
   >
-    <RowCheckbox
-      checked={checked}
-      disabled={!canBatchUninstall(program)}
-      label={batchIneligibleReason(program, t('applications.batchReasons')) || t('applications.selectRow', program.name)}
-      onChange={onToggle}
-    />
+    <div role="cell">
+      <RowCheckbox
+        checked={checked}
+        disabled={!canBatchUninstall(program)}
+        label={batchIneligibleReason(program, t('applications.batchReasons')) || t('applications.selectRow', program.name)}
+        onChange={onToggle}
+      />
+    </div>
 
-    <div className="flex items-center gap-2.5 min-w-0">
+    <div role="cell" className="flex items-center gap-2.5 min-w-0">
       <ProgramIcon program={program} src={iconSrc} />
       <span className="text-[12.5px] truncate">{program.name}</span>
       {program.health?.orphaned && (
-        <span className="text-[9px] font-mono uppercase tracking-wider px-1 py-px rounded bg-[color:var(--danger-soft)] text-[color:var(--danger)] border border-[color:var(--danger)]/25 shrink-0">
+        <span className="text-[10px] font-mono uppercase tracking-wider px-1 py-px rounded bg-[color:var(--danger-soft)] text-[color:var(--danger)] border border-[color:var(--danger)]/25 shrink-0">
           {t('applications.badges.broken')}
         </span>
       )}
@@ -224,21 +265,21 @@ function ProgramRow({ program, iconSrc, checked, running, isNew, onToggle, onUni
           either fails, or half-succeeds and leaves files behind that the
           next launch recreates. */}
       {running && (
-        <span className="text-[9px] font-mono uppercase tracking-wider px-1 py-px rounded bg-[color:var(--success-soft)] text-[color:var(--success)] border border-[color:var(--success)]/25 shrink-0">
+        <span className="text-[10px] font-mono uppercase tracking-wider px-1 py-px rounded bg-[color:var(--success-soft)] text-[color:var(--success)] border border-[color:var(--success)]/25 shrink-0">
           {t('applications.badges.running')}
         </span>
       )}
       {/* Marked, because how you remove one is genuinely different --
           a Store app has no uninstaller to run. */}
       {program.source === 'store' && (
-        <span className="text-[9px] font-mono uppercase tracking-wider px-1 py-px rounded bg-[color:var(--accent-blue)]/15 text-[color:var(--accent-blue)] border border-[color:var(--accent-blue)]/25 shrink-0">
+        <span className="text-[10px] font-mono uppercase tracking-wider px-1 py-px rounded bg-[color:var(--accent-blue)]/15 text-[color:var(--accent-blue)] border border-[color:var(--accent-blue)]/25 shrink-0">
           {t('applications.badges.store')}
         </span>
       )}
       {/* Which browser it belongs to is the identifying fact here -- the
           same extension is often installed in two of them. */}
       {program.source === 'extension' && (
-        <span className="text-[9px] font-mono uppercase tracking-wider px-1 py-px rounded bg-[color:var(--accent-purple)]/15 text-[color:var(--accent-purple)] border border-[color:var(--accent-purple)]/25 shrink-0">
+        <span className="text-[10px] font-mono uppercase tracking-wider px-1 py-px rounded bg-[color:var(--accent-purple)]/15 text-[color:var(--accent-purple)] border border-[color:var(--accent-purple)]/25 shrink-0">
           {program.browser}
         </span>
       )}
@@ -248,32 +289,33 @@ function ProgramRow({ program, iconSrc, checked, running, isNew, onToggle, onUni
           rows say nothing rather than guessing "enabled". A disabled
           add-on still occupies disk, which is what this list is about. */}
       {program.source === 'extension' && program.enabled === false && (
-        <span className="text-[9px] font-mono uppercase tracking-wider px-1 py-px rounded bg-[color:var(--surface-hover)] text-[color:var(--text-muted)] border border-[color:var(--border-subtle)] shrink-0">
+        <span className="text-[10px] font-mono uppercase tracking-wider px-1 py-px rounded bg-[color:var(--surface-hover)] text-[color:var(--text-muted)] border border-[color:var(--border-subtle)] shrink-0">
           {t('applications.badges.disabled')}
         </span>
       )}
       {program.unused && !program.health?.orphaned && (
-        <span className="text-[9px] font-mono uppercase tracking-wider px-1 py-px rounded bg-[color:var(--warning-soft)] text-[color:var(--warning)] border border-[color:var(--warning)]/25 shrink-0">
+        <span className="text-[10px] font-mono uppercase tracking-wider px-1 py-px rounded bg-[color:var(--warning-soft)] text-[color:var(--warning)] border border-[color:var(--warning)]/25 shrink-0">
           {t('applications.badges.unused')}
         </span>
       )}
     </div>
 
     <div
+      role="cell"
       className={`text-[12px] font-mono text-right ${SIZE_TONE_TEXT[sizeBadgeTone(program.sizeBytes)]}`}
       style={{ fontVariantNumeric: 'tabular-nums' }}
     >
       {formatBytes(program.sizeBytes)}
     </div>
 
-    <div className="text-[11.5px] font-mono text-[color:var(--text-secondary)] truncate">
+    <div role="cell" className={`${WIDE_ONLY} text-[11.5px] font-mono text-[color:var(--text-secondary)] truncate`}>
       {program.version || '—'}
     </div>
 
     {/* Blank rather than a guess: a per-user registry entry
         carries no architecture, and a wrong "64-bit" is a fact
         stated confidently and incorrectly. */}
-    <div className="text-[11.5px] font-mono text-[color:var(--text-muted)]">
+    <div role="cell" className="text-[11.5px] font-mono text-[color:var(--text-muted)]">
       {program.architecture || '—'}
     </div>
 
@@ -283,6 +325,7 @@ function ProgramRow({ program, iconSrc, checked, running, isNew, onToggle, onUni
         claim -- an update rewrites the key too. Revo shows both
         identically; saying which is which costs nothing. */}
     <div
+      role="cell"
       className={`text-[11.5px] font-mono ${
         program.installDateApproximate
           ? 'text-[color:var(--text-muted)]'
@@ -295,25 +338,25 @@ function ProgramRow({ program, iconSrc, checked, running, isNew, onToggle, onUni
     {/* Blank, not a dash, for everything else. A dash means "we have no
         value here"; almost nothing is new, and 120 dashes down a column
         would read as 120 unknowns. */}
-    <div className="flex items-center">
+    <div role="cell" className="flex items-center">
       {isNew && (
         <span
-          className="text-[9px] font-mono uppercase tracking-wider px-1 py-px rounded bg-[color:var(--accent-primary)]/15 text-[color:var(--accent-primary)] border border-[color:var(--accent-primary)]/25"
+          className="text-[10px] font-mono uppercase tracking-wider px-1 py-px rounded bg-[color:var(--accent-primary)]/15 text-[color:var(--accent-primary)] border border-[color:var(--accent-primary)]/25"
         >
           {t('applications.columns.new')}
         </span>
       )}
     </div>
 
-    <div className="text-[11.5px] text-[color:var(--text-secondary)] truncate">
+    <div role="cell" className="text-[11.5px] text-[color:var(--text-secondary)] truncate">
       {program.publisher}
     </div>
 
-    <div className="text-[11.5px] font-mono text-[color:var(--text-muted)] truncate">
+    <div role="cell" className={`${WIDE_ONLY} text-[11.5px] font-mono text-[color:var(--text-muted)] truncate`}>
       {program.website ? program.website.replace(/^https?:\/\//, '') : '—'}
     </div>
 
-    <div className="text-right flex items-center justify-end gap-1.5">
+    <div role="cell" className={`${STICKY_ACTION} text-right flex items-center justify-end gap-1.5`}>
       <RevealButton program={program} />
       {program.source === 'extension' ? (
         // Removing one is a browser operation, not an uninstaller.
@@ -328,7 +371,7 @@ function ProgramRow({ program, iconSrc, checked, running, isNew, onToggle, onUni
         <button
           onClick={() => { openInstalledAppsSettings().catch(() => {}); }}
           aria-label={t('applications.inWindows.ariaLabel', program.name)}
-          className="btn-ghost px-2 py-1 rounded-md text-[11px] font-medium opacity-0 group-hover:opacity-100 focus-visible:opacity-100 transition-opacity"
+          className="btn-ghost px-2 py-1 rounded-md text-[11px] font-medium opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 focus-visible:opacity-100 transition-opacity"
         >
           {t('applications.inWindows.button')}
         </button>
@@ -339,14 +382,14 @@ function ProgramRow({ program, iconSrc, checked, running, isNew, onToggle, onUni
         // actually made, rather than crammed into a button.
         <button
           onClick={() => onRemoveStoreApp(program)}
-          className="btn-danger px-2.5 py-1 rounded-md text-[11px] font-medium opacity-0 group-hover:opacity-100 focus-visible:opacity-100 transition-opacity"
+          className="btn-danger px-2.5 py-1 rounded-md text-[11px] font-medium opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 focus-visible:opacity-100 transition-opacity"
         >
           {t('applications.uninstall')}
         </button>
       ) : (
         <button
           onClick={() => onUninstall(program)}
-          className="btn-danger px-2.5 py-1 rounded-md text-[11px] font-medium opacity-0 group-hover:opacity-100 focus-visible:opacity-100 transition-opacity"
+          className="btn-danger px-2.5 py-1 rounded-md text-[11px] font-medium opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 focus-visible:opacity-100 transition-opacity"
         >
           {program.health?.orphaned ? t('applications.forceRemove') : t('applications.uninstall')}
         </button>
@@ -358,6 +401,13 @@ function ProgramRow({ program, iconSrc, checked, running, isNew, onToggle, onUni
 
 export default function ProgramList({ programs: initialPrograms, extensions = [], icons = {}, running = {}, onUninstall, onBatchUninstall, onRemoveStoreApp = () => {} }) {
   const { t } = useLanguage();
+  const toasts = useToasts();
+  // The row a right-click landed on, and where, for the context menu.
+  const [menu, setMenu] = useState(null);
+  const openMenu = (program, event) => {
+    event.preventDefault();
+    setMenu({ program, x: event.clientX, y: event.clientY });
+  };
   const [programs, setPrograms] = useState(initialPrograms || []);
   const [loading, setLoading] = useState(!initialPrograms);
   const [error, setError] = useState(null);
@@ -494,6 +544,7 @@ export default function ProgramList({ programs: initialPrograms, extensions = []
           ].map(f => (
             <button
               key={f.id}
+              aria-pressed={filter === f.id}
               onClick={() => setFilter(f.id)}
               className={`px-3 py-1.5 rounded-lg text-[12.5px] font-medium transition ${filter === f.id ? 'pill-selected bg-[color:var(--surface-hover)] text-[color:var(--text-primary)]' : 'text-[color:var(--text-muted)] hover:text-[color:var(--text-primary)]'}`}
             >
@@ -504,23 +555,31 @@ export default function ProgramList({ programs: initialPrograms, extensions = []
       </div>
 
       <div className="glass-panel overflow-hidden flex flex-col min-h-0">
-        {/* Sticky header. Sorting lives here rather than in a separate
-            control: with eight columns on screen, the thing you want to
-            sort by is already in front of you. */}
+        {/* One scroll area for the header and the rows, so a table wider than
+            the window scrolls them together (the header used to stay put while
+            the rows slid under it). The header sticks to the top of it, and
+            sorting lives there rather than in a separate control: with eight
+            columns on screen, the thing you want to sort by is already in
+            front of you. */}
+        <div data-table-scroll className="overflow-auto min-h-0 flex-1" style={TABLE_VARS}>
+        <div role="table" aria-label={t('app.installedApplications')} aria-rowcount={filtered.length + 1}>
         <div
-          className="grid gap-2.5 px-4 py-2 border-b border-[color:var(--border-subtle)] bg-[color:var(--surface-subtle)] shrink-0"
-          style={{ gridTemplateColumns: GRID_TEMPLATE }}
+          role="row"
+          data-table-header
+          className={`${ROW_GRID} sticky top-0 z-10 border-b border-[color:var(--border-subtle)] bg-[color:var(--bg-panel)] shrink-0`}
         >
           {COLUMNS.map((col) => {
+            const wide = NARROW_HIDDEN.includes(col.key);
             if (col.key === 'select') {
               return (
-                <RowCheckbox
-                  key={col.key}
-                  checked={allSelected}
-                  disabled={selectable.length === 0}
-                  label={allSelected ? t('applications.clearSelection') : t('applications.selectAll')}
-                  onChange={toggleAll}
-                />
+                <div key={col.key} role="columnheader" className="flex items-center">
+                  <RowCheckbox
+                    checked={allSelected}
+                    disabled={selectable.length === 0}
+                    label={allSelected ? t('applications.clearSelection') : t('applications.selectAll')}
+                    onChange={toggleAll}
+                  />
+                </div>
               );
             }
             const active = sort.column === col.sort;
@@ -530,25 +589,52 @@ export default function ProgramList({ programs: initialPrograms, extensions = []
                 <SortArrow active={active} direction={sort.direction} />
               </>
             );
-            const classes = `flex items-center gap-1 text-[10.5px] font-mono uppercase tracking-[0.13em] ${
+            const classes = `flex items-center gap-1 min-h-8 text-[10.5px] font-mono uppercase tracking-[0.13em] ${
               active ? 'text-[color:var(--accent-primary)]' : 'text-[color:var(--text-muted)]'
             } ${col.align === 'right' ? 'justify-end' : ''}`;
+            const cellClass = `${wide ? WIDE_ONLY_FLEX : 'flex'} ${col.key === 'action' ? STICKY_ACTION : ''}`.trim();
 
-            return col.sort ? (
-              <button
+            return (
+              <div
                 key={col.key}
-                onClick={() => setSort((s) => nextSortState(s, col.sort))}
-                className={`${classes} hover:text-[color:var(--text-primary)] transition-colors`}
+                role="columnheader"
+                aria-sort={col.sort ? (active ? (sort.direction === 'asc' ? 'ascending' : 'descending') : 'none') : undefined}
+                className={cellClass}
               >
-                {content}
-              </button>
-            ) : (
-              <span key={col.key} className={classes}>{content}</span>
+                {col.sort ? (
+                  <button
+                    onClick={() => setSort((s) => nextSortState(s, col.sort))}
+                    className={`${classes} w-full hover:text-[color:var(--text-primary)] transition-colors`}
+                  >
+                    {content}
+                  </button>
+                ) : (
+                  <span className={`${classes} w-full`}>{content}</span>
+                )}
+              </div>
             );
           })}
         </div>
 
-        <div className="overflow-y-auto min-h-0 divide-y divide-[color:var(--border-subtle)]">
+        <div role="rowgroup" className="divide-y divide-[color:var(--border-subtle)]">
+          {filtered.map((program) => (
+            <ProgramRow
+              key={program.id}
+              program={program}
+              iconSrc={icons[program.id]}
+              checked={selected.has(program.id)}
+              running={Boolean(running[program.id])}
+              isNew={newIds.has(program.id)}
+              onToggle={() => toggleRow(program)}
+              onUninstall={onUninstall}
+              onRemoveStoreApp={onRemoveStoreApp}
+              onContextMenu={openMenu}
+            />
+          ))}
+        </div>
+        </div>
+
+        <div className="divide-y divide-[color:var(--border-subtle)]">
           {filtered.length === 0 && (
             // An empty result on this screen is almost always a filter the
             // user forgot, not an empty machine -- there are 210 programs
@@ -575,19 +661,7 @@ export default function ProgramList({ programs: initialPrograms, extensions = []
               </button>
             </div>
           )}
-          {filtered.map((program) => (
-            <ProgramRow
-              key={program.id}
-              program={program}
-              iconSrc={icons[program.id]}
-              checked={selected.has(program.id)}
-              running={Boolean(running[program.id])}
-              isNew={newIds.has(program.id)}
-              onToggle={() => toggleRow(program)}
-              onUninstall={onUninstall}
-              onRemoveStoreApp={onRemoveStoreApp}
-            />
-          ))}
+        </div>
         </div>
 
         {/* Revo puts the installation count at the bottom of the window,
@@ -607,7 +681,7 @@ export default function ProgramList({ programs: initialPrograms, extensions = []
             </span>
             <div className="flex items-center gap-2.5">
               <button
-                className="text-[11.5px] text-[color:var(--text-secondary)] hover:text-[color:var(--accent-primary)] transition-colors"
+                className="min-h-6 px-2 text-[11.5px] text-[color:var(--text-secondary)] hover:text-[color:var(--accent-primary)] transition-colors"
                 onClick={() => setSelected(new Set())}
               >
                 {t('applications.footer.clear')}
@@ -642,6 +716,60 @@ export default function ProgramList({ programs: initialPrograms, extensions = []
           </div>
         )}
       </div>
+
+      <ContextMenu
+        open={Boolean(menu)}
+        x={menu?.x ?? 0}
+        y={menu?.y ?? 0}
+        onClose={() => setMenu(null)}
+        items={menu ? rowMenuItems(menu.program, { t, toasts, onUninstall, onRemoveStoreApp }) : []}
+      />
     </div>
   );
+}
+
+/** What a right-click on a row offers.
+ *
+ * Nothing here is new behaviour: Uninstall hands the program to the same
+ * handlers the row's own button does (so it opens the same confirmation
+ * dialog and removes nothing by itself), Open folder is the Folder button,
+ * and Copy is a read. An item that has nothing to act on is left out rather
+ * than shown dead. */
+export function rowMenuItems(program, { t, toasts, onUninstall, onRemoveStoreApp }) {
+  const items = [];
+
+  if (program.source === 'store' && program.nonRemovable) {
+    items.push({
+      label: t('applications.inWindows.button'),
+      onSelect: () => { openInstalledAppsSettings().catch(() => {}); }
+    });
+  } else if (program.source === 'store') {
+    items.push({ label: t('applications.uninstall'), danger: true, onSelect: () => onRemoveStoreApp?.(program) });
+  } else if (program.source !== 'extension') {
+    items.push({
+      label: program.health?.orphaned ? t('applications.forceRemove') : t('applications.uninstall'),
+      danger: true,
+      onSelect: () => onUninstall?.(program)
+    });
+  }
+
+  if (program.installLocation) {
+    items.push({
+      label: t('applications.openFolder'),
+      onSelect: () => revealInExplorer(program.installLocation)
+        .catch((error) => toasts.error(t('applications.reveal.notFound'), { detail: error.message }))
+    });
+  }
+
+  if (program.uninstallString && program.source !== 'store' && program.source !== 'extension') {
+    items.push({
+      label: t('applications.copyUninstallCommand'),
+      onSelect: () => Promise.resolve()
+        .then(() => navigator.clipboard.writeText(program.uninstallString))
+        .then(() => toasts.info(t('applications.commandCopied')))
+        .catch(() => toasts.error(t('applications.copyFailed')))
+    });
+  }
+
+  return items;
 }

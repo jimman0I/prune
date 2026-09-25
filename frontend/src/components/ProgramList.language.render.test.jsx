@@ -153,7 +153,7 @@ describe('column headers, in Greek', () => {
     expect(screen.getByText('Εγκαταστάθηκε')).toBeTruthy();
     expect(screen.getByText('Εταιρεία')).toBeTruthy();
 
-    const headerRow = sizeHeader.closest('button').parentElement;
+    const headerRow = sizeHeader.closest('[role="row"]');
     expect(within(headerRow).getByText('Νέο')).toBeTruthy();
   });
 });
