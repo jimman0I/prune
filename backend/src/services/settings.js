@@ -70,6 +70,9 @@ const DEFAULT_SETTINGS = {
   skipRecentHours: 24,
   createRestorePoint: true,
   hideUnavailableRules: true,
+  /* Set once the on-by-default change has been applied to a file written
+     before it existed. See getSettings. */
+  hideUnavailableDefaultApplied: true,
   /* Deep Clean rules whose "this loses data" warning the user has ticked
      "remember my choice" on, by rule id. Sixteen rules are marked risky
      -- history, cookies, sessions, autofill and site data across three
@@ -229,7 +232,17 @@ export async function getSettings({ detectLanguage = detectDefaultLanguage } = {
   const path = settingsPath();
   if (!existsSync(path)) return { ...DEFAULT_SETTINGS, language: await detectLanguage() };
   try {
-    return { ...DEFAULT_SETTINGS, ...JSON.parse(await readFile(path, 'utf8')) };
+    const stored = JSON.parse(await readFile(path, 'utf8'));
+    // Older files carry `hideUnavailableRules: false`, saved when that was
+    // the default rather than chosen. Left alone, upgrading changes nothing
+    // and Deep Clean keeps listing software the PC never had. Applied once:
+    // the marker is written with the next save, after which a deliberate
+    // "off" is respected.
+    if (stored.hideUnavailableDefaultApplied !== true) {
+      stored.hideUnavailableRules = true;
+      stored.hideUnavailableDefaultApplied = true;
+    }
+    return { ...DEFAULT_SETTINGS, ...stored };
   } catch {
     // A corrupted settings file must not crash every screen that reads
     // settings -- fall back to defaults, same as "never configured".

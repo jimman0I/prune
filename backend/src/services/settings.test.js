@@ -194,3 +194,18 @@ describe('hideUnavailableRules default', () => {
     expect(settings.hideUnavailableRules).toBe(true);
   });
 });
+
+describe('hideUnavailableRules on an existing settings file', () => {
+  const write = (obj) => writeFile(process.env.UNREVO_SETTINGS_PATH, JSON.stringify(obj), 'utf8');
+
+  it('turns on once for a file saved when off was the default', async () => {
+    await write({ autoQuarantine: false, hideUnavailableRules: false });
+    expect((await getSettings()).hideUnavailableRules).toBe(true);
+  });
+
+  it('respects a later deliberate off, because the first save records the marker', async () => {
+    await write({ hideUnavailableRules: false });
+    await updateSettings({ hideUnavailableRules: false });
+    expect((await getSettings()).hideUnavailableRules).toBe(false);
+  });
+});
