@@ -256,3 +256,33 @@ describe('sizes use text colour, not the accent that marks buttons and ticked bo
     }
   });
 });
+
+describe('a new search by Enter starts clean, like the button does', () => {
+  it('drops the previous ticks, so an old path can never reach Quarantine', async () => {
+    const user = await showResults();
+    await user.click(screen.getByRole('button', { name: 'Keep oldest' }));
+    expect(screen.getByText(/1 selected/)).toBeTruthy();
+
+    const input = screen.getByLabelText('Folder to search for duplicates');
+    await user.type(input, '{Enter}');
+
+    await screen.findByText('a.jpg');
+    expect(screen.getByText(/0 selected/)).toBeTruthy();
+    expect(screen.getAllByRole('checkbox').every((c) => !c.checked)).toBe(true);
+  });
+});
+
+describe('the outcome is announced', () => {
+  it('the result summary is a status region', async () => {
+    await showResults();
+    expect(screen.getByRole('status').textContent).toContain('1 set');
+  });
+
+  it('so is "no duplicates here"', async () => {
+    fetchDuplicates.mockResolvedValue({ groups: [], wastedBytes: 0, scannedFiles: 10, truncated: false });
+    const user = userEvent.setup();
+    renderScreen(<Duplicates />);
+    await search(user);
+    expect((await screen.findByRole('status')).textContent).toContain('No duplicate files here.');
+  });
+});
