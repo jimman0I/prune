@@ -1,0 +1,97 @@
+<svg viewBox="0 0 1200 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="How an uninstall works in Prune, in five steps: choose programs; run each program's own uninstaller; scan for leftover files, registry keys and scheduled tasks; review what was found; quarantine it, with files moved and registry keys exported. Anything quarantined can be restored at any time, and is only deleted for good when you say so.">
+  <desc>Animated flow. A dot travels along the line from step to step and each step lights up as it arrives, on a loop. All five steps and their labels are readable on the first frame and with motion turned off.</desc>
+  <style>
+    .sans { font-family: 'Segoe UI', Inter, Arial, Helvetica, system-ui, sans-serif; }
+    .mono { font-family: Consolas, 'Cascadia Mono', 'Courier New', monospace; }
+    .dot  { animation: travel 10s linear infinite; }
+    .lit  { animation: lit 10s ease-in-out infinite; opacity: .25; }
+    .s2 { animation-delay: 2s; } .s3 { animation-delay: 4s; } .s4 { animation-delay: 6s; } .s5 { animation-delay: 8s; }
+    @keyframes travel {
+      0%   { transform: translateX(0);      opacity: 0; }
+      4%   { opacity: 1; }
+      92%  { opacity: 1; }
+      100% { transform: translateX(960px);  opacity: 0; }
+    }
+    /* Each ring is bright for the fifth of the loop when the dot reaches it. */
+    @keyframes lit {
+      0%       { opacity: .25; }
+      4%, 16%  { opacity: 1; }
+      24%,100% { opacity: .25; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .dot { animation: none !important; opacity: 0; }
+      .lit { animation: none !important; opacity: 1; }
+    }
+  </style>
+  <defs>
+    <linearGradient id="brand" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#22d3ee"/>
+      <stop offset="100%" stop-color="#818cf8"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="300" rx="18" fill="#0b0d12"/>
+  <text x="48" y="52" class="mono" font-size="12.5" letter-spacing="2.5" fill="#67e8f9">HOW AN UNINSTALL WORKS</text>
+  <text x="1152" y="52" text-anchor="end" class="mono" font-size="12" letter-spacing="1.5" fill="#71717a">NOTHING IS DELETED OUTRIGHT</text>
+
+  <!-- track -->
+  <line x1="120" y1="126" x2="1080" y2="126" stroke="#232b38" stroke-width="2"/>
+  <circle class="dot" cx="120" cy="126" r="5" fill="url(#brand)" opacity="0"/>
+
+  <!-- 1 choose -->
+  <g>
+    <circle cx="120" cy="126" r="34" fill="#12151c" stroke="#232b38" stroke-width="2"/>
+    <circle class="lit" cx="120" cy="126" r="34" fill="none" stroke="#22d3ee" stroke-width="2.5"/>
+    <g transform="translate(104,110)" fill="none" stroke="#e9edf3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3 6h26"/><path d="M11 6V3h10v3"/><path d="M6 6l1.5 21h17L26 6"/><path d="M13 12v10M19 12v10"/>
+    </g>
+    <text x="120" y="194" text-anchor="middle" class="sans" font-size="17" font-weight="700" fill="#e9edf3">Choose programs</text>
+    <text x="120" y="217" text-anchor="middle" class="sans" font-size="13.5" fill="#a1a1aa">one, or a whole batch</text>
+  </g>
+
+  <!-- 2 uninstall -->
+  <g>
+    <circle cx="360" cy="126" r="34" fill="#12151c" stroke="#232b38" stroke-width="2"/>
+    <circle class="lit s2" cx="360" cy="126" r="34" fill="none" stroke="#22d3ee" stroke-width="2.5"/>
+    <g transform="translate(344,110)" fill="none" stroke="#e9edf3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M16 2l12 6v16l-12 6L4 24V8z"/><path d="M4 8l12 6 12-6"/><path d="M16 14v16"/>
+    </g>
+    <text x="360" y="194" text-anchor="middle" class="sans" font-size="17" font-weight="700" fill="#e9edf3">Run its own uninstaller</text>
+    <text x="360" y="217" text-anchor="middle" class="sans" font-size="13.5" fill="#a1a1aa">silent where it is safe to be</text>
+  </g>
+
+  <!-- 3 scan -->
+  <g>
+    <circle cx="600" cy="126" r="34" fill="#12151c" stroke="#232b38" stroke-width="2"/>
+    <circle class="lit s3" cx="600" cy="126" r="34" fill="none" stroke="#22d3ee" stroke-width="2.5"/>
+    <g transform="translate(584,110)" fill="none" stroke="#e9edf3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="14" cy="14" r="9"/><path d="M21 21l8 8"/>
+    </g>
+    <text x="600" y="194" text-anchor="middle" class="sans" font-size="17" font-weight="700" fill="#e9edf3">Scan for leftovers</text>
+    <text x="600" y="217" text-anchor="middle" class="sans" font-size="13.5" fill="#a1a1aa">files · registry keys · tasks</text>
+  </g>
+
+  <!-- 4 review -->
+  <g>
+    <circle cx="840" cy="126" r="34" fill="#12151c" stroke="#232b38" stroke-width="2"/>
+    <circle class="lit s4" cx="840" cy="126" r="34" fill="none" stroke="#22d3ee" stroke-width="2.5"/>
+    <g transform="translate(824,110)" fill="none" stroke="#e9edf3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M2 16S8 5 16 5s14 11 14 11-6 11-14 11S2 16 2 16z"/><circle cx="16" cy="16" r="4"/>
+    </g>
+    <text x="840" y="194" text-anchor="middle" class="sans" font-size="17" font-weight="700" fill="#e9edf3">Review what it found</text>
+    <text x="840" y="217" text-anchor="middle" class="sans" font-size="13.5" fill="#a1a1aa">you decide, item by item</text>
+  </g>
+
+  <!-- 5 quarantine -->
+  <g>
+    <circle cx="1080" cy="126" r="34" fill="#12151c" stroke="#232b38" stroke-width="2"/>
+    <circle class="lit s5" cx="1080" cy="126" r="34" fill="none" stroke="#86efac" stroke-width="2.5"/>
+    <g transform="translate(1064,110)" fill="none" stroke="#e9edf3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M16 2l12 5v9c0 7-5 12-12 14C9 28 4 23 4 16V7z"/><path d="M10.5 16l4 4 7-8"/>
+    </g>
+    <text x="1080" y="194" text-anchor="middle" class="sans" font-size="17" font-weight="700" fill="#e9edf3">Quarantine</text>
+    <text x="1080" y="217" text-anchor="middle" class="sans" font-size="13.5" fill="#a1a1aa">moved, keys exported</text>
+  </g>
+
+  <text x="600" y="270" text-anchor="middle" class="sans" font-size="15" fill="#a1a1aa">Restore any item at any time — <tspan fill="#e9edf3" font-weight="600">deleted for good only when you say so, twice.</tspan></text>
+</svg>
