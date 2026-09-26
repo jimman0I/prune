@@ -1,26 +1,18 @@
 import { useEffect, useMemo, useState } from 'react';
 import { unlockDiskWear, fetchUninstallHistory } from '../lib/api.js';
 import { formatRelativeTime } from '../lib/formatRelativeTime.js';
-import StatCard from './StatCard.jsx';
-import { useCountUp } from '../hooks/useCountUp.js';
 import { useQuery } from '@tanstack/react-query';
 import { fetchAutomation } from '../lib/api.js';
 import { keys } from '../lib/queryClient.js';
 import { useDiskSpace, useDiskHealth } from '../hooks/useSystemQueries.js';
 import { useLanguage } from '../i18n/LanguageContext.jsx';
 import { computeHealthScore, healthBand } from '../lib/healthScore.js';
-import { storageBarColor } from '../lib/usageTone.js';
+import { formatBytes } from '../lib/formatBytes.js';
+import { spaceBreakdown, largestPrograms } from '../lib/spaceBreakdown.js';
+import { useJunkMeasure } from '../hooks/useJunkMeasure.js';
+import SpaceQuestion from './SpaceQuestion.jsx';
+import LargestPrograms from './LargestPrograms.jsx';
 import Page from './Page.jsx';
-
-function formatBytes(bytes) {
-  if (bytes === null || bytes === undefined) return '—';
-  if (bytes === 0) return '0 B';
-  const k = 1024;
-  const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
-  const i = Math.floor(Math.log(bytes) / Math.log(k));
-  return `${parseFloat((bytes / Math.pow(k, i)).toFixed(1))} ${sizes[i]}`;
-}
-
 
 /** Says something only when there is something to say.
  *
@@ -202,20 +194,38 @@ function SmartAttributes({ smart }) {
   );
 }
 
-export default function Dashboard({ programs, totalSize, onNavigate = () => {} }) {
-  const { t } = useLanguage();
-  /* The count settles rather than snapping.
-   *
-   * It arrives a second or so after the card does, and appearing fully
-   * formed gave no sign anything had happened -- on a panel with three
-   * figures on it, the one that changed was easy to miss. Counting from
-   * the value already on screen, so a poll that moves 210 to 211 ticks by
-   * one instead of restarting from zero. `tabular-nums` on the element
-   * keeps the digits from reflowing while it runs. */
-  const shownPrograms = useCountUp(programs?.length ?? 0);
+/** One cell of the quiet row: a small title, then whatever that item has to
+ * say. Cells are separated by hairlines, not boxed -- three cards side by
+ * side is the stat-card grid this screen used to be. */
+function QuietItem({ title, children }) {
+  return (
+    <div className="min-w-0 px-6 py-5">
+      <div className="text-[13px] font-medium text-[color:var(--text-secondary)] mb-2">{title}</div>
+      {children}
+    </div>
+  );
+}
 
-  // The one fact on the Installed Apps card worth crossing the app for: an
-  // entry whose uninstaller is gone, which Windows will list forever.
+/** Reused for the disclosure chevron and Recent activity's, so the two turn
+ * the same way. */
+function Chevron({ open }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+      stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"
+      className={`text-[color:var(--text-muted)] transition-transform duration-150 motion-reduce:transition-none ${open ? '' : '-rotate-90'}`}
+    >
+      <path d="M6 9l6 6 6-6"></path>
+    </svg>
+  );
+}
+
+export default function Dashboard({ programs, programsMeasured = false, onNavigate = () => {} }) {
+  const { t } = useLanguage();
+
+  /* Programs left behind by a failed uninstall: an entry whose uninstaller
+   * is gone, which Windows will list forever. Read from the list, so it is
+   * only claimed -- including "nothing" -- once the list is settled. */
   const brokenCount = useMemo(
     () => (programs || []).filter((p) => p.health?.orphaned).length,
     [programs]
@@ -231,6 +241,8 @@ export default function Dashboard({ programs, totalSize, onNavigate = () => {} }
   const { health: diskHealth, error: diskHealthError, setHealth: setDiskHealth } = useDiskHealth();
   const [history, setHistory] = useState([]);
   const [historyOpen, setHistoryOpen] = useState(true);
+  const [driveOpen, setDriveOpen] = useState(false);
+  const junk = useJunkMeasure();
 
   useEffect(() => {
     let cancelled = false;
@@ -286,6 +298,15 @@ export default function Dashboard({ programs, totalSize, onNavigate = () => {} }
     primaryDisk
   });
 
+  const breakdown = useMemo(
+    () => spaceBreakdown({ diskSpace, programs, programsMeasured }),
+    [diskSpace, programs, programsMeasured]
+  );
+  const top = useMemo(() => (programsMeasured ? largestPrograms(programs) : []), [programs, programsMeasured]);
+  // The backend measures the system drive; it does not report its letter, and
+  // a machine whose Windows is not on C: is the exception this leaves as is.
+  const driveLetter = diskSpace?.driveLetter ?? 'C';
+
   return (
     <Page>
       <div className="flex items-baseline justify-between gap-4 mb-8">
@@ -293,32 +314,141 @@ export default function Dashboard({ programs, totalSize, onNavigate = () => {} }
         <ScheduleBadge onNavigate={onNavigate} />
       </div>
 
-      {/* Drive health only: Prune is a storage tool, so the panel is the
-          drive's score and its SMART detail, full width. Free space and
-          apps have their own cards below. The text column takes the rest
-          of the row (flex-1) so the SMART grid can spread out instead of
-          hugging the ring. */}
-      <div className="mb-6">
-        <div className="glass-panel flex items-center gap-6 p-8 min-w-0">
-        <HealthGauge score={healthScore} statusLabel={verdict.statusLabel} tone={verdict.tone} />
-        <div className="min-w-0 flex-1">
-          <div className="text-[18px] font-medium text-[color:var(--text-primary)] mb-2">{t('dashboard.driveHealth.title')}</div>
+      <SpaceQuestion diskSpaceError={diskSpaceError} breakdown={breakdown} driveLetter={driveLetter} />
 
-          {diskHealthError && (
-            <div className="text-[13px] text-[color:var(--text-secondary)] select-text">{t('dashboard.driveHealth.error', diskHealthError)}</div>
-          )}
+      <LargestPrograms
+        top={top}
+        measured={programsMeasured}
+        installedCount={(programs || []).length}
+        otherBytes={breakdown.ready ? breakdown.otherBytes : 0}
+        onOpenApplications={() => onNavigate('applications')}
+        onOpenDiskMap={() => onNavigate('diskmap')}
+      />
 
-          {!diskHealthError && !primaryDisk && (
-            <div className="text-[13px] text-[color:var(--text-secondary)]">{t('dashboard.driveHealth.loading')}</div>
-          )}
+      {/* The quiet row. Three facts that are worth a glance and rarely worth
+          a click, side by side under hairlines rather than in cards. Every
+          button in it is secondary: nothing on this screen is the one thing
+          to do. Stacks to one column below ~720px of content (888px window
+          with the icon rail). */}
+      <div className="glass-panel mb-6 overflow-hidden">
+        <div className="grid grid-cols-1 min-[888px]:grid-cols-3 divide-y min-[888px]:divide-y-0 min-[888px]:divide-x divide-[color:var(--border-subtle)]">
+          <QuietItem title={t('dashboard.driveHealth.title')}>
+            {diskHealthError && (
+              <div className="text-[13px] text-[color:var(--text-secondary)] select-text">{t('dashboard.driveHealth.error', diskHealthError)}</div>
+            )}
+            {!diskHealthError && !primaryDisk && (
+              <div className="text-[13px] text-[color:var(--text-secondary)]">{t('dashboard.driveHealth.loading')}</div>
+            )}
+            {primaryDisk && (
+              <>
+                <div className="text-[18px] font-medium text-[color:var(--text-primary)]" style={{ fontVariantNumeric: 'tabular-nums' }}>
+                  {healthScore != null ? t('dashboard.quiet.scoreOf', healthScore) : (verdict.statusLabel || '—')}
+                </div>
+                <div className="mt-1 text-[13px] text-[color:var(--text-secondary)]" style={{ fontVariantNumeric: 'tabular-nums' }}>
+                  {primaryDisk.lifeRemainingPercent != null ? (
+                    <>
+                      {t('dashboard.driveHealth.lifeRemaining', primaryDisk.lifeRemainingPercent)}
+                      {primaryDisk.temperatureC != null && ` · ${primaryDisk.temperatureC} °C`}
+                    </>
+                  ) : (
+                    // The status word stays inside the translated sentence
+                    // rather than in its own styled span: word order around
+                    // it is not the same in every language.
+                    t('dashboard.driveHealth.reportsStatus', primaryDisk.healthStatus || t('dashboard.driveHealth.statusUnknown'))
+                  )}
+                </div>
+                <button
+                  type="button"
+                  className="btn-ghost mt-3 px-3 py-1.5 rounded-lg text-[12px] font-medium inline-flex items-center gap-2 min-h-[28px]"
+                  aria-expanded={driveOpen}
+                  aria-controls="drive-details-panel"
+                  onClick={() => setDriveOpen((o) => !o)}
+                >
+                  {t('dashboard.quiet.driveDetails')}
+                  <Chevron open={driveOpen} />
+                </button>
+              </>
+            )}
+          </QuietItem>
 
-          {primaryDisk && (
-            <>
+          {/* Junk cannot show a number until it is measured, and measuring
+              walks 74 rule paths across the disk -- about half a minute --
+              so the front page never starts it on its own. It says what is
+              true and carries the control. */}
+          <QuietItem title={t('dashboard.quiet.junkTitle')}>
+            {junk.status === 'done' ? (
+              <>
+                <div className="font-mono text-[18px] font-medium text-[color:var(--text-primary)]" style={{ fontVariantNumeric: 'tabular-nums' }}>
+                  {formatBytes(junk.bytes)}
+                </div>
+                <div className="mt-1 text-[13px] text-[color:var(--text-secondary)]" style={{ fontVariantNumeric: 'tabular-nums' }}>
+                  {t('dashboard.quiet.junkBasis', junk.cleanerCount)}
+                </div>
+                <button
+                  type="button"
+                  className="btn-ghost mt-3 px-3 py-1.5 rounded-lg text-[12px] font-medium min-h-[28px]"
+                  onClick={() => onNavigate('deepclean')}
+                >
+                  {t('dashboard.quiet.openDeepClean')}
+                </button>
+              </>
+            ) : (
+              <>
+                <div className="font-mono text-[15px] text-[color:var(--text-muted)]" style={{ fontVariantNumeric: 'tabular-nums' }}>
+                  {junk.status === 'measuring'
+                    ? (junk.total > 0 ? t('dashboard.quiet.junkProgress', junk.scanned, junk.total) : t('dashboard.quiet.junkMeasuring'))
+                    : t('dashboard.quiet.junkNotMeasured')}
+                </div>
+                {junk.status === 'error' && (
+                  <div className="mt-1 text-[13px] text-[color:var(--text-secondary)] select-text">{t('dashboard.quiet.junkError', junk.error)}</div>
+                )}
+                <button
+                  type="button"
+                  className="btn-ghost mt-3 px-3 py-1.5 rounded-lg text-[12px] font-medium min-h-[28px]"
+                  onClick={junk.start}
+                  disabled={junk.status === 'measuring'}
+                >
+                  {t('dashboard.quiet.junkMeasure')}
+                </button>
+              </>
+            )}
+          </QuietItem>
+
+          <QuietItem title={t('dashboard.quiet.leftTitle')}>
+            {!programsMeasured ? (
+              <div className="text-[13px] text-[color:var(--text-muted)]">{t('dashboard.measuring')}</div>
+            ) : brokenCount > 0 ? (
+              <>
+                <div className="text-[18px] font-medium text-[color:var(--text-primary)]" style={{ fontVariantNumeric: 'tabular-nums' }}>
+                  {t('dashboard.quiet.leftCount', brokenCount)}
+                </div>
+                <button
+                  type="button"
+                  className="btn-ghost mt-3 px-3 py-1.5 rounded-lg text-[12px] font-medium min-h-[28px]"
+                  onClick={() => onNavigate('applications')}
+                >
+                  {t('dashboard.quiet.leftReview')}
+                </button>
+              </>
+            ) : (
+              <div className="text-[13px] text-[color:var(--text-secondary)]">{t('dashboard.quiet.leftNone')}</div>
+            )}
+          </QuietItem>
+        </div>
+
+        {/* The drive's own detail, exactly as it was when this was a card of
+            its own: the ring and its verdict, model, wear, the admin unlock,
+            the SMART attributes and any uncorrected errors. Collapsed
+            because it is reference, not news. */}
+        {driveOpen && primaryDisk && (
+          <div id="drive-details-panel" className="border-t border-[color:var(--border-subtle)] px-6 py-6 flex items-center gap-6 min-w-0">
+            <HealthGauge score={healthScore} statusLabel={verdict.statusLabel} tone={verdict.tone} />
+            <div className="min-w-0 flex-1">
               <div className="text-[11px] font-mono uppercase tracking-[0.14em] text-[color:var(--text-muted)] mb-2.5">
                 {t('dashboard.systemHealth.driveDetailHeading')}
               </div>
               {/* model/mediaType/busType are Windows' own strings, same as
-                  healthStatus below -- left untranslated. */}
+                  healthStatus -- left untranslated. */}
               <div className="text-[13px] text-[color:var(--text-primary)] truncate">
                 {primaryDisk.model}
                 {primaryDisk.mediaType && <span className="text-[color:var(--text-secondary)]"> · {primaryDisk.mediaType}</span>}
@@ -333,9 +463,6 @@ export default function Dashboard({ programs, totalSize, onNavigate = () => {} }
                 </div>
               ) : (
                 <div className="text-[13px] text-[color:var(--text-secondary)] mt-1">
-                  {/* The status word stays inside the translated sentence
-                      rather than in its own styled span: word order around
-                      it is not the same in every language. */}
                   {t('dashboard.driveHealth.reportsStatus', primaryDisk.healthStatus || t('dashboard.driveHealth.statusUnknown'))}
                   {' '}{t('dashboard.driveHealth.needsAdmin')}
                 </div>
@@ -361,115 +488,9 @@ export default function Dashboard({ programs, totalSize, onNavigate = () => {} }
                   {t('dashboard.driveHealth.uncorrectedErrors', primaryDisk.readErrorsUncorrected || 0, primaryDisk.writeErrorsUncorrected || 0)}
                 </div>
               )}
-            </>
-          )}
-          </div>
-        </div>
-      </div>
-
-      {/* Staggered on entry. The delay is small and one-directional --
-          60ms apart, rising, no overshoot -- so it reads as the panel
-          settling rather than as three separate animations competing.
-          Runs again on every return to this tab, because Screen.jsx hides
-          inactive tabs with `display: none` and an animation restarts
-          when its element is displayed again. */}
-      <div className="grid grid-cols-3 gap-4 mb-6 stagger">
-        <StatCard
-          label={t('dashboard.storage.label')}
-          value={
-            diskSpace ? (
-              // Free space is the headline: it is what someone opens this
-              // card to find out. "835 GB used / 952 GB total" is two
-              // numbers to subtract, so used and total drop to a secondary
-              // line beneath it.
-              <div className="text-[18px] font-medium text-[color:var(--text-primary)] mb-1">
-                <span>{formatBytes(diskSpace.freeBytes)}</span>{' '}{t('dashboard.storage.free')}
-              </div>
-            ) : (
-              <div className="text-[13px] text-[color:var(--text-secondary)]">{diskSpaceError || t('dashboard.storage.loading')}</div>
-            )
-          }
-        >
-          {diskSpace && (
-            <p className="text-[12px] text-[color:var(--text-secondary)] mb-3">
-              {t('dashboard.storage.usedTotal', formatBytes(diskSpace.totalBytes - diskSpace.freeBytes), formatBytes(diskSpace.totalBytes))}
-            </p>
-          )}
-          {diskSpace && (
-            <div className="storage-bar h-1.5 rounded-full bg-[color:var(--surface-strong)] overflow-hidden">
-              {/* Neutral, amber under 10% free -- never the primary accent,
-                  which is for actions. The class stays: the forced-colors
-                  rules in index.css key on it. */}
-              <div
-                className="storage-bar-fill h-full rounded-full"
-                style={{
-                  width: `${Math.round((1 - diskSpace.freeBytes / diskSpace.totalBytes) * 100)}%`,
-                  background: storageBarColor(diskSpace.freeBytes, diskSpace.totalBytes)
-                }}
-              />
             </div>
-          )}
-        </StatCard>
-        <StatCard
-          label={t('dashboard.apps.label')}
-          value={<div className="display-heading text-[28px] text-[color:var(--text-primary)] tabular-nums">{Math.round(shownPrograms)}</div>}
-          sublabel={
-            // A bare count is not actionable; a broken entry is the one
-            // thing on this card worth crossing the app for.
-            brokenCount > 0 ? (
-              <p className="text-[12px] text-[color:var(--danger)] mt-1.5">
-                {t('dashboard.apps.broken', brokenCount)}
-              </p>
-            ) : (
-              <p className="text-[12px] text-[color:var(--text-secondary)] mt-1.5">
-                {t('dashboard.apps.noBroken')}
-              </p>
-            )
-          }
-        >
-          <button
-            className="btn-ghost mt-3 px-3 py-1.5 rounded-lg text-[12px] font-medium"
-            onClick={() => onNavigate('applications')}
-          >
-            {brokenCount > 0 ? t('dashboard.apps.review') : t('dashboard.apps.manage')}
-          </button>
-        </StatCard>
-        {/* This tile used to read "Run Deep Clean to find out." -- a card
-            whose entire content was an instruction to go somewhere else,
-            sitting between two that carry real numbers.
-
-            It cannot show a number: measuring junk means walking 74 rule
-            paths across the disk, which takes about half a minute and is
-            not something the front page should start on its own. So it
-            says what is true and carries the control, the same shape the
-            Disk Map's drive root uses. */}
-        <StatCard
-          label={t('dashboard.junk.label')}
-          value={
-            <div className="font-mono text-[15px] text-[color:var(--text-muted)]">{t('dashboard.junk.notMeasured')}</div>
-          }
-          sublabel={
-            <p className="text-[12px] text-[color:var(--text-secondary)] mt-1.5">
-              {t('dashboard.junk.description')}
-            </p>
-          }
-        >
-          <button
-            className="btn-ghost mt-3 px-3 py-1.5 rounded-lg text-[12px] font-medium"
-            onClick={() => onNavigate('deepclean')}
-          >
-            {t('dashboard.junk.measure')}
-          </button>
-        </StatCard>
-      </div>
-
-      <div className="flex items-center gap-3 mb-6">
-        {/* One action. Disk Map and Applications used to sit beside it, but
-            they are already one click away in the rail on every screen, and
-            three buttons of equal weight made "what should I do" a choice.
-            Named with nav.deepClean so the button and its destination can
-            never be translated two ways. */}
-        <button className="btn-primary" onClick={() => onNavigate('deepclean')}>{t('nav.deepClean')}</button>
+          </div>
+        )}
       </div>
 
       <div className="glass-panel p-6">
@@ -484,13 +505,7 @@ export default function Dashboard({ programs, totalSize, onNavigate = () => {} }
           className="w-full min-h-[28px] flex items-center justify-between text-left"
         >
           <span className="text-[13px] font-medium text-[color:var(--text-primary)]">{t('dashboard.recentActivity.title')}</span>
-          <svg
-            xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"
-            className={`text-[color:var(--text-muted)] transition-transform duration-150 motion-reduce:transition-none ${historyOpen ? '' : '-rotate-90'}`}
-          >
-            <path d="M6 9l6 6 6-6"></path>
-          </svg>
+          <Chevron open={historyOpen} />
         </button>
         {historyOpen && (
           <div id="recent-activity-panel" className="mt-4">
