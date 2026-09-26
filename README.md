@@ -202,7 +202,7 @@ anything leaves the app.
 <table>
 <tr>
 <td width="50%"><img src="docs/screenshots/applications-dark.png" alt="The Applications screen: 210 installed programs with real icons, measured sizes, versions and install dates, filterable by Unused, Store, Extensions and Broken" /></td>
-<td width="50%"><img src="docs/screenshots/deep-clean-dark.png" alt="Deep Clean after a scan: measured sizes per rule, a Loses data badge on the ones that sign you out or clear history, a scan log beside the tree, and a line saying 19 cleaners are hidden because that software is not installed" /></td>
+<td width="50%"><img src="docs/screenshots/deep-clean-dark.png" alt="Deep Clean after a scan: measured sizes per rule, a Loses data badge on the ones that sign you out or clear history, the new Deep scan group of backup, Office temp, Vim swap, .DS_Store and Thumbs.db rules, a scan log beside the tree, and a footer saying Deletes immediately when Delete now is chosen" /></td>
 </tr>
 <tr>
 <td align="center"><b>Applications</b><br/><sub>Every hive, plus Store apps and extensions</sub></td>
