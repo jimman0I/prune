@@ -39,6 +39,7 @@ vi.mock('../lib/api.js', async (importOriginal) => ({
 }));
 
 const StartupItems = (await import('./StartupItems.jsx')).default;
+const ToastHost = (await import('./ToastHost.jsx')).default;
 
 /* `location` and `rawScope` are on the base fixture because they are what
  * groupStartupItems buckets by -- an entry missing them lands in a group
@@ -147,6 +148,22 @@ describe('an entry Prune cannot switch', () => {
     const row = rowFor('OneDrive Reporting Task');
     expect(within(row).queryByRole('checkbox')).toBeNull();
     expect(within(row).getByText(/This is a scheduled task/)).toBeTruthy();
+  });
+
+  it('says it once for a group, not on every row of it', async () => {
+    fetchStartupItems.mockResolvedValue([
+      entry({ id: 'task1', name: 'Task A', source: 'task', location: 'Scheduled task', toggleNote: TASK_NOTE }),
+      entry({ id: 'task2', name: 'Task B', source: 'task', location: 'Scheduled task', toggleNote: TASK_NOTE }),
+      entry({ id: 'task3', name: 'Task C', source: 'task', location: 'Scheduled task', toggleNote: TASK_NOTE })
+    ]);
+    renderScreen(<StartupItems />);
+    await screen.findByText('Task A');
+
+    expect(screen.getAllByText(/This is a scheduled task/)).toHaveLength(1);
+    // Not just moved somewhere unreachable: it sits in the group's own heading row.
+    const note = screen.getByText(/This is a scheduled task/);
+    expect(note.closest('[role="rowgroup"]')).toBe(rowFor('Task A').closest('[role="rowgroup"]'));
+    expect(within(rowFor('Task A')).queryByText(/This is a scheduled task/)).toBeNull();
   });
 
   it('still shows whether it is on, since that is a fact about the machine', async () => {
@@ -329,5 +346,62 @@ describe('the group headings', () => {
 
     const machineHeading = screen.getByText('Registry: HKLM Run').closest('div');
     expect(within(machineHeading).getByText('1 of 1 enabled')).toBeTruthy();
+  });
+});
+
+describe('the launch path', () => {
+  const LONG = 'C:\\Program Files (x86)\\Some Vendor\\Some Product\\Updater\\updater-service.exe --background --silent';
+  beforeEach(() => {
+    fetchStartupItems.mockResolvedValue([entry({ command: LONG })]);
+  });
+  // userEvent.setup() installs its own clipboard, so the spy goes on after it.
+  const setup = () => {
+    const user = userEvent.setup();
+    return { user, writeText: vi.spyOn(navigator.clipboard, 'writeText') };
+  };
+  const renderWithToasts = () => renderScreen(<><StartupItems /><ToastHost /></>);
+
+  it('is a button, so it is reachable by keyboard, and its name is the whole path', async () => {
+    renderWithToasts();
+    const toggle = await screen.findByRole('button', { name: /updater-service\.exe/ });
+    expect(toggle.getAttribute('aria-expanded')).toBe('false');
+    // Truncated by CSS only: the full text is in the DOM for a screen reader.
+    expect(toggle.textContent).toBe(LONG);
+  });
+
+  it('opens the whole path on its own line with Enter, and closes again', async () => {
+    const { user } = setup();
+    renderWithToasts();
+    const toggle = await screen.findByRole('button', { name: /updater-service\.exe/ });
+
+    toggle.focus();
+    await user.keyboard('{Enter}');
+    expect(toggle.getAttribute('aria-expanded')).toBe('true');
+    const full = screen.getByTestId('full-launch-path');
+    expect(full.textContent).toBe(LONG);
+    expect(isCopyable(full)).toBe(true);
+    expect(full.className).toContain('break-all');
+
+    await user.keyboard('{Enter}');
+    expect(screen.queryByTestId('full-launch-path')).toBeNull();
+  });
+
+  it('copies the path and says so', async () => {
+    const { user, writeText } = setup();
+    renderWithToasts();
+    await user.click(await screen.findByRole('button', { name: /updater-service\.exe/ }));
+
+    await user.click(screen.getByRole('button', { name: 'Copy path' }));
+    expect(writeText).toHaveBeenCalledWith(LONG);
+    expect(await screen.findByText('Path copied.')).toBeTruthy();
+  });
+
+  it('says when it could not copy', async () => {
+    const { user, writeText } = setup();
+    writeText.mockRejectedValue(new Error('denied'));
+    renderWithToasts();
+    await user.click(await screen.findByRole('button', { name: /updater-service\.exe/ }));
+    await user.click(screen.getByRole('button', { name: 'Copy path' }));
+    expect(await screen.findByText("Couldn't copy that.")).toBeTruthy();
   });
 });

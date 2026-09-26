@@ -169,8 +169,9 @@ describe('Deep Clean rule text, in Greek', () => {
     await ready();
     await screen.findByText(CACHE_EL);
     await user.click(screen.getAllByRole('button', { name: 'Προεπισκόπηση' })[0]);
-    // One in the tree row, one in the log line.
-    await waitFor(() => expect(screen.getAllByText(CACHE_EL)).toHaveLength(2));
+    // The tree row says the bare name; the log line leads with the category,
+    // because three rules are all called Cache.
+    expect(await screen.findByText(`${BRAVE_EL} · ${CACHE_EL}`)).toBeTruthy();
   });
 
   it('the clean log names a rule by its translated name', async () => {
@@ -188,6 +189,6 @@ describe('Deep Clean rule text, in Greek', () => {
     await user.click(screen.getByRole('checkbox', { name: CACHE_EL }));
     await user.click(await screen.findByRole('button', { name: 'Καθαρισμός' }));
     await user.click(screen.getByRole('button', { name: 'Μετακίνηση σε καραντίνα' }));
-    expect(await screen.findByText(`Διαγραφή: ${CACHE_EL}`)).toBeTruthy();
+    expect(await screen.findByText(`Διαγραφή: ${BRAVE_EL} · ${CACHE_EL}`)).toBeTruthy();
   });
 });

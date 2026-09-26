@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { mergeScannedRule, scanLogLine, executeLogLine, DEFAULT_LOG_MESSAGES } from './scanLog.js';
+import { mergeScannedRule, scanLogLine, executeLogLine, logRuleName, DEFAULT_LOG_MESSAGES } from './scanLog.js';
 
 describe('mergeScannedRule', () => {
   it('creates the category on the first rule that belongs to it', () => {
@@ -259,5 +259,31 @@ describe('executeLogLine with another language messages', () => {
   it('keeps the English plural for one registry entry by default', () => {
     expect(executeLogLine({ id: 'r', name: 'A', registryKeysRemoved: 1 }).detail).toBe('1 registry entry');
     expect(executeLogLine({ id: 'r', name: 'A', registryKeysRemoved: 2 }).detail).toBe('2 registry entries');
+  });
+});
+
+describe('logRuleName', () => {
+  // Three rules are all called "Cache"; the log is the one place they sit
+  // in a flat list with nothing above them to say which application they
+  // belong to.
+  const label = { categoryName: (c) => `<${c}>`, ruleName: (r) => r.name };
+
+  it('leads with the category the rule belongs to', () => {
+    expect(logRuleName({ id: 'brave-cache', name: 'Cache', category: 'Brave' }, label)).toBe('<Brave> · Cache');
+  });
+
+  it('finds the category from the tree when the event carries none, as a clean result does', () => {
+    const categoryOf = (id) => (id === 'brave-cache' ? 'Brave' : undefined);
+    expect(logRuleName({ id: 'brave-cache', name: 'Cache' }, { ...label, categoryOf })).toBe('<Brave> · Cache');
+  });
+
+  it('is just the name when the category cannot be found, rather than a blank prefix', () => {
+    expect(logRuleName({ id: 'x', name: 'Cache' }, label)).toBe('Cache');
+  });
+
+  it('shows through both log lines', () => {
+    const nameOf = (item) => logRuleName(item, label);
+    expect(scanLogLine({ id: 'a', name: 'Cache', category: 'Brave', sizeBytes: 0, present: false }, nameOf).label).toBe('<Brave> · Cache');
+    expect(executeLogLine({ id: 'a', name: 'Cache', category: 'Brave', freedBytes: 1024 }, nameOf).label).toBe('Delete <Brave> · Cache');
   });
 });

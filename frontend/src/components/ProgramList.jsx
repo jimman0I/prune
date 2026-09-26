@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import ContextMenu from './ContextMenu.jsx';
 import { useToasts } from '../hooks/useToasts.jsx';
 import { fetchPrograms, revealInExplorer, openInstalledAppsSettings } from '../lib/api.js';
@@ -122,8 +122,9 @@ export const ROW_GRID = 'grid gap-2.5 px-4 items-center min-w-[var(--min-narrow)
  * belongs to them (ACTION_BACKING) and appears with them. */
 export const STICKY_ACTION = 'sticky right-2 z-[1] pl-2';
 /** The buttons' group: invisible at rest, shown on hover or when anything in
- * the row has keyboard focus, and only then opaque, so it never paints a box
- * of its own colour into the glass. */
+ * the row has keyboard focus -- the row itself included, which is what the
+ * arrow keys land on -- and only then opaque, so it never paints a box of its
+ * own colour into the glass. */
 export const ACTION_BACKING = 'inline-flex items-center gap-1.5 rounded-md px-1 py-0.5 bg-[color:var(--bg-panel)] [background-image:linear-gradient(var(--surface-hover),var(--surface-hover))] opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity';
 
 /** The program's own icon, falling back to a lettered tile.
@@ -261,12 +262,19 @@ function RevealButton({ program }) {
   );
 }
 
-function ProgramRow({ program, iconSrc, checked, running, isNew, onToggle, onUninstall, onRemoveStoreApp, onContextMenu }) {
+function ProgramRow({ program, iconSrc, checked, running, isNew, tabStop, onFocusRow, onToggle, onUninstall, onRemoveStoreApp, onContextMenu }) {
   const { t } = useLanguage();
   return (
     <div
     role="row"
-    className={`${ROW_GRID} py-1.5 group hover:bg-[color:var(--surface-hover)] transition-colors`}
+    // One row in the Tab order and the rest one arrow key away (see the
+    // rowgroup's handler): the actions are shown for a focused row, so a
+    // keyboard user meets them on a row they can see rather than tabbing
+    // through buttons that are drawn nowhere. Negative offset so the ring
+    // is not clipped by the panel's overflow.
+    tabIndex={tabStop ? 0 : -1}
+    onFocus={onFocusRow}
+    className={`${ROW_GRID} py-1.5 group hover:bg-[color:var(--surface-hover)] focus-visible:bg-[color:var(--surface-hover)] focus-visible:[outline-offset:-2px] transition-colors`}
     onContextMenu={(event) => onContextMenu?.(program, event)}
   >
     <div role="cell">
@@ -436,7 +444,7 @@ function ProgramRow({ program, iconSrc, checked, running, isNew, onToggle, onUni
   );
 }
 
-export default function ProgramList({ programs: initialPrograms, extensions = [], icons = {}, running = {}, onUninstall, onBatchUninstall, onRemoveStoreApp = () => {} }) {
+export default function ProgramList({ programs: initialPrograms, extensions = [], icons = {}, running = {}, onUninstall, onBatchUninstall, onRemoveStoreApp = () => {}, onViewChange }) {
   const { t } = useLanguage();
   const toasts = useToasts();
   // The row a right-click landed on, and where, for the context menu.
@@ -452,6 +460,9 @@ export default function ProgramList({ programs: initialPrograms, extensions = []
   const [filter, setFilter] = useState('all');
   const [sort, setSort] = useState({ column: 'sizeBytes', direction: 'desc' });
   const [selected, setSelected] = useState(new Set());
+  // The row the arrow keys are on: the one Tab stop in the list.
+  const [cursorId, setCursorId] = useState(null);
+  const rowsRef = useRef(null);
 
   useEffect(() => {
     if (initialPrograms) {
@@ -469,6 +480,10 @@ export default function ProgramList({ programs: initialPrograms, extensions = []
 
   const brokenCount = useMemo(() => programs.filter(p => p.health?.orphaned).length, [programs]);
   const storeCount = useMemo(() => programs.filter(p => p.source === 'store').length, [programs]);
+  // Offered only when something carries the flag, like Broken and Store: the
+  // backend has no launch history to derive it from, so on a list where
+  // nothing is flagged this chip could only ever open an empty table.
+  const unusedCount = useMemo(() => programs.filter(p => p.unused).length, [programs]);
 
   const filtered = useMemo(() => {
     // Extensions are their own list, not part of the program list. Revo
@@ -490,6 +505,33 @@ export default function ProgramList({ programs: initialPrograms, extensions = []
     () => filtered.reduce((sum, p) => sum + (p.sizeBytes || 0), 0),
     [filtered]
   );
+
+  // What the page's heading needs to say about this list. The search and the
+  // filter live here, the heading does not, and a count that ignores them
+  // stays at "210 installed applications" over a single visible row.
+  const isNarrowed = query.trim() !== '' || filter !== 'all';
+  const shownTotal = (filter === 'extensions' ? extensions : programs).length;
+  useEffect(() => {
+    onViewChange?.({ filtered: isNarrowed, shown: filtered.length, total: shownTotal, bytes: totalBytes });
+  }, [onViewChange, isNarrowed, filtered.length, shownTotal, totalBytes]);
+
+  // Arrow keys move between rows only while the row itself has focus. From a
+  // button or checkbox inside it they are left alone, so a control that uses
+  // them keeps them.
+  const onRowsKeyDown = (event) => {
+    if (event.target.getAttribute('role') !== 'row') return;
+    const keys = { ArrowDown: 1, ArrowUp: -1 };
+    if (!(event.key in keys) && event.key !== 'Home' && event.key !== 'End') return;
+    const rows = [...rowsRef.current.querySelectorAll(':scope > [role="row"]')];
+    const at = rows.indexOf(event.target);
+    if (at < 0) return;
+    event.preventDefault();
+    const next = event.key === 'Home' ? 0
+      : event.key === 'End' ? rows.length - 1
+        : Math.min(rows.length - 1, Math.max(0, at + keys[event.key]));
+    rows[next].focus();
+  };
+  const tabStopId = filtered.some((p) => p.id === cursorId) ? cursorId : filtered[0]?.id;
 
   // Which rows carry the New badge, decided once per render rather than
   // per row: every one of them would otherwise build its own Date to ask
@@ -570,11 +612,11 @@ export default function ProgramList({ programs: initialPrograms, extensions = []
         <div className="flex items-center gap-1 p-1 bg-[color:var(--bg-panel)] border border-[color:var(--border-subtle)] rounded-xl">
           {[
             { id: 'all', label: t('applications.filters.all') },
-            { id: 'unused', label: t('applications.filters.unused') },
             // Only offered when there's something to see. On a healthy
             // machine this filter would return an empty list every time,
             // and a permanently-empty view teaches people to ignore it --
             // when it does appear, it means something.
+            ...(unusedCount > 0 ? [{ id: 'unused', label: t('applications.filters.unused') }] : []),
             ...(storeCount > 0 ? [{ id: 'store', label: t('applications.filters.storeCount', storeCount) }] : []),
             ...(extensions.length > 0 ? [{ id: 'extensions', label: t('applications.filters.extensionsCount', extensions.length) }] : []),
             ...(brokenCount > 0 ? [{ id: 'broken', label: t('applications.filters.brokenCount', brokenCount) }] : [])
@@ -590,6 +632,13 @@ export default function ProgramList({ programs: initialPrograms, extensions = []
           ))}
         </div>
       </div>
+
+      {/* Said while the filter is on rather than left for a tooltip: "unused"
+          is a claim about the user's habits, and a technical reader checks
+          what it is based on before removing anything by it. */}
+      {filter === 'unused' && (
+        <p className="text-[12px] text-[color:var(--text-secondary)] -mt-2 mb-3 shrink-0">{t('applications.unusedDefinition')}</p>
+      )}
 
       <div className="glass-panel overflow-hidden flex flex-col min-h-0">
         {/* One scroll area for the header and the rows, so a table wider than
@@ -653,11 +702,13 @@ export default function ProgramList({ programs: initialPrograms, extensions = []
           })}
         </div>
 
-        <div role="rowgroup" className="divide-y divide-[color:var(--border-subtle)]">
+        <div ref={rowsRef} role="rowgroup" onKeyDown={onRowsKeyDown} className="divide-y divide-[color:var(--border-subtle)]">
           {filtered.map((program) => (
             <ProgramRow
               key={program.id}
               program={program}
+              tabStop={program.id === tabStopId}
+              onFocusRow={() => setCursorId(program.id)}
               iconSrc={icons[program.id]}
               checked={selected.has(program.id)}
               running={Boolean(running[program.id])}
