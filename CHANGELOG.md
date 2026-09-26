@@ -3,6 +3,41 @@
 All notable changes to Prune (formerly named unrevo -- rebranded 2026-09-01,
 see v1.0.1 below) are documented here.
 
+## v2.8.2
+
+A second, deeper pass over every translation. Every language now uses one
+word for each feature everywhere, and a review that translated each string
+back to English without the original caught wrong meanings that a normal
+read-through misses.
+
+### Fixed
+
+- **Scheduled runs said the wrong thing in about ten languages.** "Due" was
+  translated as "overdue", "expired" or "payable", and "missed" as
+  "skipped".
+- **Wrong quantities and wrong words.** Russian said the Deep Clean
+  measuring takes "about half an hour" instead of half a minute, Vietnamese
+  turned "a dozen others" into "dozens", Lithuanian translated "Open in File
+  Explorer" as "Open in the browser", and Serbian's "Sandbox test failed"
+  read as "sand test". Several languages called the disk index a "registry"
+  and the app's own Dashboard "Control Panel".
+- **The Windows folder name "System Volume Information" had been
+  translated** in about ten languages, so users would not recognise it on
+  disk. It is the literal name again.
+- **"Clear selection" buttons read like the Clean or Delete action** in
+  Spanish, French, Italian and Indonesian. They now say what they do.
+- **The same feature had different names in different places.** Deep Clean,
+  Quarantine, Disk Map, Startup, scan, leftovers, restore, cleaner and
+  uninstaller each now have one term per language, page titles match the
+  side bar labels, and the grammar around every changed word was corrected.
+  A few side bar labels changed where the old name was the odd one out
+  (Deep Clean in Polish, Slovak, Turkish, Romanian, Hungarian, Serbian,
+  Lithuanian, Indonesian and Malay; Startup in Thai, Indonesian and
+  Vietnamese; Quarantine and Dashboard in Vietnamese).
+- **Plurals and counts.** "1 copies", "1 programs" and similar were fixed in
+  most languages, including proper forms for Slavic, Baltic, Arabic and
+  Hebrew counts, and a Greek verb form.
+
 ## v2.8.1
 
 Every language reads better, and Deep Clean now speaks yours: its rule names,
