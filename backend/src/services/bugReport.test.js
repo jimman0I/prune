@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import os from 'node:os';
 import { appVersion } from './updateCheck.js';
-import { bugReportInfo, buildIssueUrl, openBugReport, ISSUE_BASE, MAX_URL } from './bugReport.js';
+import { bugReportInfo, windowsName, buildIssueUrl, openBugReport, ISSUE_BASE, MAX_URL } from './bugReport.js';
 
 /** The "Report a bug" link is built here and nowhere else: a prefilled
  * GitHub issue on Prune's own repository, opened in the user's browser.
@@ -9,11 +9,27 @@ import { bugReportInfo, buildIssueUrl, openBugReport, ISSUE_BASE, MAX_URL } from
 
 const parse = (url) => new URL(url).searchParams;
 
+describe('windowsName', () => {
+  it('calls build 22000 and up Windows 11, keeping the build number', () => {
+    expect(windowsName('Windows_NT', '10.0.26200')).toBe('Windows 11 (build 26200)');
+    expect(windowsName('Windows_NT', '10.0.22000')).toBe('Windows 11 (build 22000)');
+  });
+
+  it('calls anything below that on 10.0 Windows 10', () => {
+    expect(windowsName('Windows_NT', '10.0.19045')).toBe('Windows 10 (build 19045)');
+  });
+
+  it('leaves anything it does not recognise as the raw OS string', () => {
+    expect(windowsName('Windows_NT', '6.3.9600')).toBe('Windows_NT 6.3.9600');
+    expect(windowsName('Linux', '6.1.0')).toBe('Linux 6.1.0');
+  });
+});
+
 describe('bugReportInfo', () => {
   it('is the version, Windows version and architecture, and nothing else', () => {
     expect(bugReportInfo()).toEqual({
       version: appVersion(),
-      windows: `${os.type()} ${os.release()}`,
+      windows: windowsName(os.type(), os.release()),
       arch: os.arch()
     });
   });

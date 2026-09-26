@@ -24,10 +24,22 @@ const MAX_DESCRIPTION = 4000;
 // little past this; staying under it keeps the link working everywhere.
 export const MAX_URL = 7000;
 
+/** "Windows_NT 10.0.26200" is what Node reports, and it reads as a machine
+ * name rather than a Windows. Windows 11 still identifies itself as 10.0;
+ * build 22000 is where it starts, so that is what tells the two apart. The
+ * build number stays in the text because it is the fact a maintainer
+ * needs. Anything else keeps its raw string rather than a guess. */
+export function windowsName(type, release) {
+  const match = /^10\.0\.(\d+)$/.exec(release);
+  if (type !== 'Windows_NT' || !match) return `${type} ${release}`;
+  const build = Number(match[1]);
+  return `${build >= 22000 ? 'Windows 11' : 'Windows 10'} (build ${build})`;
+}
+
 /** What the report will say about this machine. Read from Node's own `os`
  * module, so it is exactly what the user is shown before they send it. */
 export function bugReportInfo() {
-  return { version: appVersion(), windows: `${os.type()} ${os.release()}`, arch: os.arch() };
+  return { version: appVersion(), windows: windowsName(os.type(), os.release()), arch: os.arch() };
 }
 
 const urlFor = (title, description, info) => {
