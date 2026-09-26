@@ -21,7 +21,7 @@ const BugReportModal = (await import('./BugReportModal.jsx')).default;
 
 beforeEach(() => {
   vi.clearAllMocks();
-  fetchBugReportInfo.mockResolvedValue({ version: '2.8.0', windows: 'Windows_NT 10.0.26200', arch: 'x64' });
+  fetchBugReportInfo.mockResolvedValue({ version: '2.8.0', windows: 'Windows 11 (build 26200)', arch: 'x64' });
   openBugReport.mockResolvedValue({ ok: true, opened: 'https://github.com/jimman0I/prune/issues/new?x=1' });
 });
 
@@ -41,7 +41,7 @@ describe('BugReportModal', () => {
     expect(screen.getByLabelText('What went wrong?')).toBeTruthy();
     expect(screen.getByText('What will be included')).toBeTruthy();
     expect(await screen.findByText('Prune version: 2.8.0')).toBeTruthy();
-    expect(screen.getByText('Windows version: Windows_NT 10.0.26200')).toBeTruthy();
+    expect(screen.getByText('Windows version: Windows 11 (build 26200)')).toBeTruthy();
     expect(screen.getByText('Architecture: x64')).toBeTruthy();
     expect(screen.getByText(/no file paths, no scan results, no user name/i)).toBeTruthy();
     expect(screen.getByText(/public/i)).toBeTruthy();

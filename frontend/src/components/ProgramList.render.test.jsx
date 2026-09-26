@@ -118,11 +118,11 @@ describe('the filters', () => {
     await user.click(button);
   };
 
-  it('shows only orphaned entries under Broken', async () => {
+  it('shows only orphaned entries under Left behind', async () => {
     const user = userEvent.setup();
     render();
     await screen.findByText('Steam');
-    await clickFilter(user, 'Broken');
+    await clickFilter(user, 'Left behind');
 
     expect(screen.getByText('Broken Thing')).toBeTruthy();
     expect(screen.queryByText('Steam')).toBeNull();
@@ -258,7 +258,7 @@ describe('a selection that has been filtered away', () => {
     expect(batchButton().textContent).toMatch(/Uninstall 1 program/);
 
     // Now show only Broken, where Steam does not appear.
-    await user.click(screen.getAllByRole('button').find((b) => b.textContent.trim().startsWith('Broken')));
+    await user.click(screen.getAllByRole('button').find((b) => b.textContent.trim().startsWith('Left behind')));
     expect(screen.queryByText('Steam')).toBeNull();
 
     // The bar must be gone: nothing selected is visible any more.

@@ -3,6 +3,7 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { renderScreen } from '../testSupport/renderScreen.jsx';
+import { CATALOG } from '../i18n/catalog.js';
 
 /** The Applications list's own copy follows the chosen language -- the
  * property no English-only test can show, since English is also the
@@ -24,12 +25,16 @@ import { renderScreen } from '../testSupport/renderScreen.jsx';
  *   same way: the header via the row the "Μέγεθος" header sits in, the
  *   badge via the data row "New Thing" sits in.
  *
- * The fixture deliberately has no `unused: true` program, so clicking the
- * always-visible Unused tab (unlike Store/Extensions/Broken, it isn't
- * gated on a nonzero count) produces a real zero-result screen -- the one
- * empty-state variant (`withFilter`) that a filter with a positive count
- * can never reach in this list.
+ * The Unused tab is gated on a flagged program like the others, so the
+ * fixture has one (Mystery App) and no filter here can be empty on its own:
+ * the filter-only empty state (`withFilter`) is unreachable, and only the
+ * query variants are asserted.
+ *
+ * The strings for the Broken (now "left behind") state are read from the
+ * catalog rather than written out: their wording is still being settled
+ * per language, and what this file checks is that the screen uses them.
  */
+const GR = CATALOG.el.applications;
 
 vi.mock('../lib/api.js', () => ({
   fetchPrograms: vi.fn(async () => []),
@@ -60,7 +65,7 @@ const PROGRAMS = [
   program({ id: 'storeapp', name: 'Store App', publisher: 'Microsoft', sizeBytes: 3e9, source: 'store', nonRemovable: false, packageFullName: 'x', uninstallString: undefined }),
   program({ id: 'sechealth', name: 'Windows Security', publisher: 'Microsoft', sizeBytes: 1e8, source: 'store', nonRemovable: true, packageFullName: 'y', uninstallString: undefined }),
   program({ id: 'fresh', name: 'New Thing', publisher: 'Someone', sizeBytes: 5e6, installDate: TODAY }),
-  program({ id: 'unknownsize', name: 'Mystery App', publisher: 'Nobody Knows', sizeBytes: null })
+  program({ id: 'unknownsize', name: 'Mystery App', publisher: 'Nobody Knows', sizeBytes: null, unused: true })
 ];
 
 const EXTENSIONS = [
@@ -133,7 +138,7 @@ describe('search and filters, in Greek', () => {
     // storeCount = 2 (Store App + Windows Security), extensions = 1, broken = 1.
     expect(screen.getByRole('button', { name: 'Κατάστημα (2)' })).toBeTruthy();
     expect(screen.getByRole('button', { name: 'Επεκτάσεις (1)' })).toBeTruthy();
-    expect(screen.getByRole('button', { name: 'Κατεστραμμένα (1)' })).toBeTruthy();
+    expect(screen.getByRole('button', { name: GR.filters.brokenCount(1) })).toBeTruthy();
   });
 });
 
@@ -163,7 +168,7 @@ describe('row badges, in Greek', () => {
     render();
     await ready();
     const row = await rowFor('Broken Thing');
-    expect(within(row).getByText('Κατεστραμμένο')).toBeTruthy();
+    expect(within(row).getByText(GR.badges.broken)).toBeTruthy();
     expect(within(row).getByRole('button', { name: 'Εξαναγκασμένη κατάργηση' })).toBeTruthy();
   });
 
@@ -311,24 +316,14 @@ describe('the empty state, in every Greek variant', () => {
     expect(screen.getByText(/6 καταχωρίσεις είναι κρυμμένες/)).toBeTruthy();
   });
 
-  it('translates the filter-only variant, using a filter with zero matches', async () => {
-    const user = userEvent.setup();
-    render();
-    await ready();
-    // Unused carries no count gate, and nothing in this fixture is unused.
-    await clickFilter(user, 'Αχρησιμοποίητα');
-
-    expect(await screen.findByText('Τίποτα δεν ταιριάζει στο Αχρησιμοποίητα.')).toBeTruthy();
-  });
-
   it('translates the query-and-filter variant, naming both', async () => {
     const user = userEvent.setup();
     render();
     await ready();
-    await clickFilter(user, 'Κατεστραμμένα');
+    await clickFilter(user, GR.filters.broken);
     await user.type(screen.getByPlaceholderText(/Αναζήτηση/), 'nomatch');
 
-    expect(await screen.findByText('Τίποτα δεν ταιριάζει με «nomatch» στο Κατεστραμμένα.')).toBeTruthy();
+    expect(await screen.findByText(GR.empty.withQueryAndFilter('nomatch', GR.filters.broken))).toBeTruthy();
   });
 
   it('clears the search and filter through the translated button', async () => {
