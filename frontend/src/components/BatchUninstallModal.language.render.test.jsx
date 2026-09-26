@@ -79,7 +79,7 @@ describe('the batch uninstall dialog, in Greek', () => {
 
   it('translates the registry-only intro when the batch is entirely Store apps', async () => {
     renderScreen(<BatchUninstallModal programs={[{ id: 's', name: 'Store Thing', source: 'store', sizeBytes: 100 }]} onClose={vi.fn()} onFinished={vi.fn()} />);
-    await screen.findByRole('heading', { name: /Απεγκατάσταση 1 προγραμμάτων/ });
+    await screen.findByRole('heading', { name: /Απεγκατάσταση 1 προγράμματος/ });
     expect(screen.getByText(/Κάθε εφαρμογή αφαιρείται μέσω των Windows με τη σειρά/)).toBeTruthy();
   });
 
@@ -242,7 +242,7 @@ describe('the batch uninstall dialog, in Greek', () => {
     });
     const { user } = await run();
     await user.click(await screen.findByRole('button', { name: 'Αφαίρεση επιλεγμένων' }));
-    expect(await screen.findByText(/Απεγκαταστάθηκαν 2 πρόγραμμ.*μεταφέρθηκαν.*στην Καραντίνα, ελευθερώνοντας/)).toBeTruthy();
+    expect(await screen.findByText(/Απεγκαταστάθηκαν 2 προγράμματα.*μεταφέρθηκαν.*στην Καραντίνα, ελευθερώνοντας/)).toBeTruthy();
     expect(screen.getByText(/Δεν δημιουργήθηκε σημείο επαναφοράς συστήματος \(System Protection is off\)/)).toBeTruthy();
     expect(screen.getByText(/Όλα τα παραπάνω παραμένουν στην Καραντίνα/)).toBeTruthy();
     expect(screen.getByRole('button', { name: 'Τέλος' })).toBeTruthy();

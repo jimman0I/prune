@@ -56,7 +56,7 @@ describe('the scan card in another language', () => {
   it('says the index note and the elapsed time in Greek for the fast scan', async () => {
     mount({ status: 'scanning', mode: 'index', path: 'C:\\' });
 
-    expect(await screen.findByText('Πέρασαν 00:00')).toBeTruthy();
+    expect(await screen.findByText('Χρόνος: 00:00')).toBeTruthy();
     expect(screen.getByText(/Τα Windows δεν αναφέρουν πρόοδο/)).toBeTruthy();
   });
 
@@ -88,7 +88,7 @@ describe('the time-left lines in Greek', () => {
   it('says "up to N s left" for a folder walk, and the stopped-early wording at the limit', async () => {
     mount({ status: 'scanning', path: 'C:\\Users', percent: null, remainingMs: 25_000, remainingAt: Date.now() });
 
-    expect(await screen.findByText(/^Έως 2[45] δευτ\. ακόμη$/)).toBeTruthy();
+    expect(await screen.findByText(/^Απομένουν έως 2[45] δευτ\.$/)).toBeTruthy();
     cleanup();
     mount({ status: 'complete', truncated: true, totalFiles: 10, totalBytes: 5 * GB });
     expect(await screen.findByText(/^Η σάρωση σταμάτησε πρόωρα — μέχρι τώρα 10 αρχεία, 5 GB$/)).toBeTruthy();
@@ -97,7 +97,7 @@ describe('the time-left lines in Greek', () => {
   it('says the fast-scan estimate and the overrun wording in Greek', async () => {
     mount({ status: 'scanning', mode: 'index', path: 'C:\\', expectedMs: 30_000 });
 
-    expect(await screen.findByText(/^Περίπου \d+ δευτ\. ακόμη, με βάση την τελευταία σας σάρωση$/)).toBeTruthy();
+    expect(await screen.findByText(/^Απομένουν περίπου \d+ δευτ\., με βάση την τελευταία σας σάρωση$/)).toBeTruthy();
     expect(screen.getByText(/αυτή η εκτίμηση είναι η διάρκεια της τελευταίας σας σάρωσης/)).toBeTruthy();
     cleanup();
     mount({ status: 'scanning', mode: 'index', path: 'C:\\', expectedMs: 1000, elapsedMs: 5000 });
@@ -115,7 +115,7 @@ describe('a scan the user stopped, in Greek', () => {
     const card = screen.getByRole('status');
     expect(card.textContent).toContain('Διακόψατε αυτή τη σάρωση: μέτρησε 15.8 GB από τα 835.1 GB που χρησιμοποιούνται (2%).');
     expect(card.textContent).not.toMatch(/εξάντλησε τον χρόνο/);
-    expect(screen.getByRole('button', { name: "Εκτέλεσε αντ' αυτού μια γρήγορη σάρωση" })).toBeTruthy();
+    expect(screen.getByRole('button', { name: "Εκτελέστε αντ' αυτού μια γρήγορη σάρωση" })).toBeTruthy();
   });
 
   it('says the time limit in Greek when it was the time limit', async () => {

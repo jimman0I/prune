@@ -164,12 +164,12 @@ describe('the duplicates screen, in Greek', () => {
     const [firstCheckbox] = await screen.findAllByRole('checkbox');
     await user.click(firstCheckbox);
 
-    expect(screen.getByText('1 επιλέχθηκαν · 1 KB')).toBeTruthy();
+    expect(screen.getByText('1 επιλέχθηκε · 1 KB')).toBeTruthy();
     await user.click(screen.getByRole('button', { name: 'Μετακίνηση επιλεγμένων σε καραντίνα' }));
 
     expect(await screen.findByRole('dialog', { name: 'Μετακίνηση διπλότυπων σε καραντίνα' })).toBeTruthy();
     expect(screen.getByRole('heading', { name: 'Μετακίνηση 1 αντιγράφου σε καραντίνα;' })).toBeTruthy();
-    expect(screen.getByText(/Μόλις αδειάσετε την Καραντίνα, θα ελευθερωθούν 1 KB\. Κάθε ομάδα κρατά τουλάχιστον ένα αντίγραφο/)).toBeTruthy();
+    expect(screen.getByText(/Μόλις αδειάσετε την Καραντίνα, θα ελευθερωθούν 1 KB\. Κάθε σετ κρατά τουλάχιστον ένα αντίγραφο/)).toBeTruthy();
     expect(screen.getByRole('button', { name: 'Ακύρωση' })).toBeTruthy();
     expect(screen.getByRole('button', { name: 'Μετακίνηση σε καραντίνα' })).toBeTruthy();
   });
@@ -222,7 +222,7 @@ describe('the duplicates screen, in Greek', () => {
     await user.click(screen.getByRole('button', { name: 'Μετακίνηση επιλεγμένων σε καραντίνα' }));
     await user.click(await screen.findByRole('button', { name: 'Μετακίνηση σε καραντίνα' }));
 
-    expect(await screen.findByText('1 δεν μπόρεσαν να μετακινηθούν.')).toBeTruthy();
+    expect(await screen.findByText('1 δεν μπόρεσε να μετακινηθεί.')).toBeTruthy();
     expect(screen.getByText('Ενδέχεται να είναι ανοιχτά ή σε άλλο δίσκο.')).toBeTruthy();
   });
 });
@@ -253,7 +253,7 @@ describe('the Apple design pass strings, in Greek', () => {
     await ready();
     await search(user);
 
-    expect((await screen.findByTestId('duplicates-elapsed')).textContent).toBe('Πέρασαν 00:00');
+    expect((await screen.findByTestId('duplicates-elapsed')).textContent).toBe('Χρόνος: 00:00');
     await user.click(screen.getByRole('button', { name: 'Διακοπή' }));
     expect(await screen.findByText('Διακόπηκε — δεν συγκρίθηκε τίποτα.')).toBeTruthy();
   });
