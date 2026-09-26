@@ -3,6 +3,48 @@
 All notable changes to Prune (formerly named unrevo -- rebranded 2026-09-01,
 see v1.0.1 below) are documented here.
 
+## Unreleased
+
+### Added
+
+- **A Delete now mode for Deep Clean, like BleachBit.** Settings › Cleanup has a
+  new choice, When Deep Clean removes files: Move to Quarantine (the default, and
+  what Prune has always done) or Delete now, which removes files outright so the
+  space is free straight away. The choice is read from your settings by the
+  backend, never from a request. Exclusions, the recent-files guard and locked
+  files still apply, rules that lose data still ask first, and scheduled cleans
+  always go to Quarantine. Deep Clean says which mode is on beside Clean, and the
+  confirm reads Delete 37 items (15.7 GB)? This can't be undone. with a red
+  Delete button. Auto-Quarantine is switched off, with the reason beside it, while
+  Delete now is chosen.
+- **A Deep scan category, mirroring BleachBit's.** Backup files, Office temporary
+  files, Vim swap files, .DS_Store files and Thumbs.db files, found anywhere
+  under your user folder with BleachBit's own patterns. The search is bounded
+  (entry, depth, match and time limits), never follows a junction out of your
+  profile or enters Prune's own folders, streams what it is doing while it runs,
+  and stops when you press Stop. A search that hit a limit is labelled partial
+  instead of being shown as a total. Backup, Office temp and Vim swap files are
+  marked as losing data and none of these is ticked by default.
+- **Free disk space, BleachBit's system.empty_space.** Overwrites the drive's
+  free space with zeros and deletes the filler so earlier deletions cannot be
+  recovered. It is never recommended, never reached by Select everything, never
+  remembered from a previous session, and asks every time with the drive, how much
+  will be written and a time estimate from a one-second write test. It always
+  leaves the larger of 2 GB and 2% of the drive free, stops at once on Stop,
+  deletes its filler even after an error, and removes anything a crashed run left
+  behind on the next start. It frees no space, does nothing useful on an SSD with
+  TRIM and adds write wear, which is why it is off by default.
+
+### Fixed
+
+- **Deep Clean no longer says Freed for files it only moved.** Clean moves files
+  into Quarantine by default, which frees nothing until Quarantine is emptied,
+  yet the result said Freed 15.7 GB. Results now keep deleted bytes and moved
+  bytes apart: Freed appears only for space that is really back, and a move reads
+  Moved 15.7 GB to Quarantine. The space comes back when you empty it. with an
+  Open Quarantine button. The same applies to the Recycle Bin and to the
+  sandbox self-test.
+
 ## v2.9.0
 
 A design pass over the whole app. The Dashboard now answers one question,

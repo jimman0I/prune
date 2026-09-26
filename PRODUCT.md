@@ -42,6 +42,10 @@ estimated, every removal is reversible, and anything it could not determine says
 so instead of showing a plausible zero. The tone is a competent colleague
 telling you what they found, including the parts that are inconvenient.
 
+Reversibility is the default: Deep Clean moves files to Quarantine unless the
+person opts in to Delete now in Settings, an explicit choice that mirrors
+BleachBit and is never a side effect of anything else.
+
 Precise, quiet, and unhurried. It never celebrates. Clearing 40 GB gets a number,
 not a confetti animation.
 

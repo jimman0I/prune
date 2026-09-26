@@ -112,6 +112,16 @@ Cleaners for software that isn't installed are hidden, and rules that lose
 something (history, cookies, sessions) are marked and never ticked by
 default. Includes Windows Defender and WinRAR cleaners.
 
+**Deep Clean vs BleachBit.** Same idea, same measured preview, and the same
+deep-scan patterns for backup, Office temp, Vim swap, .DS_Store and Thumbs.db
+files. Two things differ on purpose. By default Clean moves files into
+Quarantine so you can put them back, which frees no space until you empty it;
+Prune says *Moved*, not *Freed*, when that is what happened. Settings › Cleanup
+can switch Deep Clean to **Delete now**, which removes files outright and frees
+the space at once, as BleachBit does. The free-space wipe (BleachBit's
+*Free disk space*) is there but off by default and asks every time: it frees
+nothing, it does nothing useful on an SSD with TRIM, and it adds write wear.
+
 </td>
 </tr>
 <tr>
