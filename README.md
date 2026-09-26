@@ -3,7 +3,7 @@
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/screenshots/dashboard-dark.png" />
   <source media="(prefers-color-scheme: light)" srcset="docs/screenshots/dashboard-light.png" />
-  <img src="docs/screenshots/dashboard-dark.png" alt="Prune's dashboard: real SMART drive health, free space, installed application count and recent activity" width="880" />
+  <img src="docs/screenshots/dashboard-dark.png" alt="Prune's dashboard, answering where the disk space is going: a bar splitting the drive into installed programs, everything else and free space, the five largest programs, and a quiet row for drive health, junk files and programs left behind" width="880" />
 </picture>
 
 <br/>
@@ -200,7 +200,7 @@ anything leaves the app.
 </tr>
 <tr>
 <td width="50%"><img src="docs/screenshots/startup-dark.png" alt="The Startup screen: 56 sign-in entries grouped by registry hive and Startup folder, showing which are enabled and which are running now" /></td>
-<td width="50%"><img src="docs/screenshots/dashboard-light.png" alt="The dashboard in the light theme, showing drive health and storage cards on a light ground" /></td>
+<td width="50%"><img src="docs/screenshots/dashboard-light.png" alt="The dashboard in the light theme: the same space bar, largest programs and quiet row on a light ground" /></td>
 </tr>
 <tr>
 <td align="center"><b>Startup</b><br/><sub>Grouped by where an entry lives, because that decides how to remove it</sub></td>
