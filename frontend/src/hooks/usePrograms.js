@@ -97,6 +97,10 @@ export function useProgramData() {
     extensions: extensionsQuery.data ?? [],
     running: runningQuery.data ?? {},
     loading: programsQuery.isPending,
+    /** True once the list, the measured sizes and the Store apps have each
+     * answered (or failed). The sizes come from a slower walk than the list,
+     * so a total taken before this is a number that changes later. */
+    sizesSettled: !programsQuery.isPending && !sizesQuery.isPending && !storeQuery.isPending,
     // Only the list can fail the screen.
     error: programsQuery.error ? programsQuery.error.message : null,
     /** Re-reads the list after something is removed. The batch uninstall

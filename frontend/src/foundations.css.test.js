@@ -109,20 +109,22 @@ describe('forced colors', () => {
     expect(fc()).toMatch(/\[role="switch"\] > span \{ margin: -1px 0 0 -1px; \}/);
   });
 
-  it('beats the inline colour on the storage fill, which a plain rule cannot', () => {
-    expect(ruleIn(fc(), '.storage-bar-fill')).toMatch(/background:\s*Highlight !important/);
+  it('beats the inline colour on the space bar segments, which a plain rule cannot', () => {
+    expect(ruleIn(fc(), '.space-bar-programs')).toMatch(/background:\s*Highlight !important/);
+    expect(ruleIn(fc(), '.space-bar-other')).toMatch(/background:\s*GrayText !important/);
   });
 
-  it('opts the storage bar out of forced colours so the fill survives', () => {
+  it('opts the space bar out of forced colours so the segments survive', () => {
     const scope = fc();
-    expect(ruleIn(scope, '.storage-bar')).toMatch(/forced-color-adjust:\s*none/);
-    expect(ruleIn(scope, '.storage-bar')).toMatch(/border:\s*1px solid ButtonText/);
-    expect(ruleIn(scope, '.storage-bar-fill')).toMatch(/background:\s*Highlight/);
+    expect(ruleIn(scope, '.space-bar')).toMatch(/forced-color-adjust:\s*none/);
+    expect(ruleIn(scope, '.space-bar')).toMatch(/border:\s*1px solid ButtonText/);
+    expect(ruleIn(scope, '.space-bar-programs')).toMatch(/forced-color-adjust:\s*none/);
   });
 
   it('marks the real markup the selectors depend on', () => {
-    expect(src('src/components/Dashboard.jsx')).toMatch(/className="[^"]*\bstorage-bar\b/);
-    expect(src('src/components/Dashboard.jsx')).toMatch(/className="[^"]*\bstorage-bar-fill\b/);
+    expect(src('src/components/SpaceQuestion.jsx')).toMatch(/className=[{][`]space-bar\b/);
+    expect(src('src/components/SpaceQuestion.jsx')).toMatch(/className="[^"]*\bspace-bar-programs\b/);
+    expect(src('src/components/SpaceQuestion.jsx')).toMatch(/className="[^"]*\bspace-bar-other\b/);
     expect(src('src/components/SettingsPage.jsx')).toMatch(/pill-selected/);
     expect(src('src/components/ProgramList.jsx')).toMatch(/pill-selected/);
   });
