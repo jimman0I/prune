@@ -51,7 +51,7 @@ function StepRow({ step }) {
   return (
     <div className="flex items-start gap-3 py-2">
       <div
-        className={`w-4 h-4 rounded-full mt-0.5 shrink-0 flex items-center justify-center text-[10px] font-bold ${
+        className={`w-[18px] h-[18px] rounded-full mt-0.5 shrink-0 flex items-center justify-center text-[11px] font-bold ${
           step.passed ? 'bg-[color:var(--success)]/20 text-[color:var(--success)]' : 'bg-[color:var(--danger)]/20 text-[color:var(--danger)]'
         }`}
       >
@@ -529,7 +529,7 @@ function SettingsPage({ onReportBug = null }) {
                           {/* Which kind, at a glance. The two behave
                               differently and the row should not need to be
                               parsed to tell them apart. */}
-                          <span className="text-[10px] font-mono uppercase tracking-wider px-1.5 py-px rounded border shrink-0 border-[color:var(--border-subtle)] text-[color:var(--text-muted)]">
+                          <span className="text-[11px] font-mono uppercase tracking-wider px-1.5 py-px rounded border shrink-0 border-[color:var(--border-subtle)] text-[color:var(--text-muted)]">
                             {kind === 'extension' ? t('settings.exclusions.typeBadge') : t('settings.exclusions.folderBadge')}
                           </span>
                           <span className="font-mono text-[12px] text-[color:var(--text-secondary)] truncate min-w-0">{value}</span>

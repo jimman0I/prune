@@ -177,13 +177,13 @@ function SmartAttributes({ smart }) {
 
   return (
     <div className="mt-4 pt-4 border-t border-[color:var(--border-subtle)]">
-      <div className="text-[10.5px] font-mono uppercase tracking-[0.14em] text-[color:var(--text-muted)] mb-2.5">
+      <div className="text-[11px] font-mono uppercase tracking-[0.14em] text-[color:var(--text-muted)] mb-2.5">
         {t('dashboard.smart.header')}
       </div>
       <div className="grid grid-cols-[repeat(auto-fit,minmax(120px,1fr))] gap-x-6 gap-y-2">
         {rows.map(([label, value, tone]) => (
           <div key={label} className="min-w-0">
-            <div className="text-[10.5px] leading-snug text-[color:var(--text-muted)] break-words">{label}</div>
+            <div className="text-[11px] leading-snug text-[color:var(--text-muted)] break-words">{label}</div>
             <div
               className={`text-[13px] font-mono ${
                 tone === 'bad' ? 'text-[color:var(--danger)]'
@@ -314,7 +314,7 @@ export default function Dashboard({ programs, totalSize, onNavigate = () => {} }
 
           {primaryDisk && (
             <>
-              <div className="text-[10.5px] font-mono uppercase tracking-[0.14em] text-[color:var(--text-muted)] mb-2.5">
+              <div className="text-[11px] font-mono uppercase tracking-[0.14em] text-[color:var(--text-muted)] mb-2.5">
                 {t('dashboard.systemHealth.driveDetailHeading')}
               </div>
               {/* model/mediaType/busType are Windows' own strings, same as

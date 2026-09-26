@@ -3,6 +3,30 @@
 All notable changes to Prune (formerly named unrevo -- rebranded 2026-09-01,
 see v1.0.1 below) are documented here.
 
+## Unreleased
+
+### Changed
+
+- **The right-click menu no longer starts on Uninstall.** It opens with focus
+  on the menu itself, so pressing Enter straight after the right-click does
+  nothing. Down and Up step in from the first and last choice, and Uninstall
+  is now the last item, set apart in red, below Open folder and Copy
+  uninstall command.
+- **Clean waits for a Preview.** Deep Clean's Clean button stays off until a
+  Preview has measured something you have ticked, and says so beside it.
+  Until then Preview is the highlighted button; afterwards Clean is.
+- **Leftovers are no longer ticked by default on new installs.** The review
+  after an uninstall opens with nothing ticked and you choose. Installs that
+  already have the setting keep whatever they had; it is still under
+  Settings, Uninstall, "Tick every leftover by default".
+- **Cyan now marks only what you click.** The NEW badge and its "new in 7
+  days" count, the sorted column heading, the Recommended tag on the Disk Map
+  chooser, leftover notes and the reclaimable size, sizes in the scan log,
+  a running batch item and info toasts use neutral text instead.
+- **Bigger click targets and a larger minimum text size.** Every Deep Clean
+  checkbox and category heading is now at least 24 by 24 pixels (the boxes
+  look the same), and no text anywhere is smaller than 11 pixels.
+
 ## v2.8.2
 
 A second, deeper pass over every translation. Every language now uses one

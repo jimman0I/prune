@@ -209,7 +209,7 @@ function NavItem({ item, screen, onNavigate, label }) {
         className="pointer-events-none absolute left-full top-1/2 -translate-y-1/2 ml-2 px-2 py-1 rounded-md whitespace-nowrap text-[11.5px] font-medium bg-[color:var(--bg-panel)] text-[color:var(--text-primary)] border border-[color:var(--border-subtle)] shadow-lg opacity-0 group-hover:opacity-100 peer-focus-visible:opacity-100 transition-opacity duration-150 z-flyout"
       >
         <span className="min-[1100px]:hidden">{label}</span>
-        <span className="ml-2 min-[1100px]:ml-0 font-mono text-[10.5px] text-[color:var(--text-muted)]">{shortcut}</span>
+        <span className="ml-2 min-[1100px]:ml-0 font-mono text-[11px] text-[color:var(--text-muted)]">{shortcut}</span>
       </span>
     </div>
   );

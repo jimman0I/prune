@@ -158,7 +158,7 @@ function ProgramIcon({ program, src }) {
 
   return (
     <div
-      className="w-5 h-5 rounded-[4px] flex items-center justify-center text-[10px] font-bold shrink-0"
+      className="w-5 h-5 rounded-[4px] flex items-center justify-center text-[11px] font-bold shrink-0"
       style={{ background: tileColor(program.name), color: TILE_INK }}
     >
       {tileLetter(program.name, program.publisher)}
@@ -282,7 +282,7 @@ function ProgramRow({ program, iconSrc, checked, running, isNew, onToggle, onUni
       <ProgramIcon program={program} src={iconSrc} />
       <span className="text-[12.5px] truncate">{program.name}</span>
       {program.health?.orphaned && (
-        <span className="text-[10px] font-mono uppercase tracking-wider px-1 py-px rounded bg-[color:var(--danger-soft)] text-[color:var(--danger)] border border-[color:var(--danger)]/25 shrink-0">
+        <span className="text-[11px] font-mono uppercase tracking-wider px-1 py-px rounded bg-[color:var(--danger-soft)] text-[color:var(--danger)] border border-[color:var(--danger)]/25 shrink-0">
           {t('applications.badges.broken')}
         </span>
       )}
@@ -291,21 +291,21 @@ function ProgramRow({ program, iconSrc, checked, running, isNew, onToggle, onUni
           either fails, or half-succeeds and leaves files behind that the
           next launch recreates. */}
       {running && (
-        <span className="text-[10px] font-mono uppercase tracking-wider px-1 py-px rounded bg-[color:var(--success-soft)] text-[color:var(--success)] border border-[color:var(--success)]/25 shrink-0">
+        <span className="text-[11px] font-mono uppercase tracking-wider px-1 py-px rounded bg-[color:var(--success-soft)] text-[color:var(--success)] border border-[color:var(--success)]/25 shrink-0">
           {t('applications.badges.running')}
         </span>
       )}
       {/* Marked, because how you remove one is genuinely different --
           a Store app has no uninstaller to run. */}
       {program.source === 'store' && (
-        <span className="text-[10px] font-mono uppercase tracking-wider px-1 py-px rounded bg-[color:var(--accent-blue)]/15 text-[color:var(--accent-blue)] border border-[color:var(--accent-blue)]/25 shrink-0">
+        <span className="text-[11px] font-mono uppercase tracking-wider px-1 py-px rounded bg-[color:var(--accent-blue)]/15 text-[color:var(--accent-blue)] border border-[color:var(--accent-blue)]/25 shrink-0">
           {t('applications.badges.store')}
         </span>
       )}
       {/* Which browser it belongs to is the identifying fact here -- the
           same extension is often installed in two of them. */}
       {program.source === 'extension' && (
-        <span className="text-[10px] font-mono uppercase tracking-wider px-1 py-px rounded bg-[color:var(--accent-purple)]/15 text-[color:var(--accent-purple)] border border-[color:var(--accent-purple)]/25 shrink-0">
+        <span className="text-[11px] font-mono uppercase tracking-wider px-1 py-px rounded bg-[color:var(--accent-purple)]/15 text-[color:var(--accent-purple)] border border-[color:var(--accent-purple)]/25 shrink-0">
           {program.browser}
         </span>
       )}
@@ -315,12 +315,12 @@ function ProgramRow({ program, iconSrc, checked, running, isNew, onToggle, onUni
           rows say nothing rather than guessing "enabled". A disabled
           add-on still occupies disk, which is what this list is about. */}
       {program.source === 'extension' && program.enabled === false && (
-        <span className="text-[10px] font-mono uppercase tracking-wider px-1 py-px rounded bg-[color:var(--surface-hover)] text-[color:var(--text-muted)] border border-[color:var(--border-subtle)] shrink-0">
+        <span className="text-[11px] font-mono uppercase tracking-wider px-1 py-px rounded bg-[color:var(--surface-hover)] text-[color:var(--text-muted)] border border-[color:var(--border-subtle)] shrink-0">
           {t('applications.badges.disabled')}
         </span>
       )}
       {program.unused && !program.health?.orphaned && (
-        <span className="text-[10px] font-mono uppercase tracking-wider px-1 py-px rounded bg-[color:var(--warning-soft)] text-[color:var(--warning)] border border-[color:var(--warning)]/25 shrink-0">
+        <span className="text-[11px] font-mono uppercase tracking-wider px-1 py-px rounded bg-[color:var(--warning-soft)] text-[color:var(--warning)] border border-[color:var(--warning)]/25 shrink-0">
           {t('applications.badges.unused')}
         </span>
       )}
@@ -367,7 +367,7 @@ function ProgramRow({ program, iconSrc, checked, running, isNew, onToggle, onUni
     <div role="cell" className="flex items-center">
       {isNew && (
         <span
-          className="text-[10px] font-mono uppercase tracking-wider px-1 py-px rounded bg-[color:var(--surface-hover)] text-[color:var(--text-secondary)] border border-[color:var(--control-border)]"
+          className="text-[11px] font-mono uppercase tracking-wider px-1 py-px rounded bg-[color:var(--surface-hover)] text-[color:var(--text-secondary)] border border-[color:var(--control-border)]"
         >
           {t('applications.columns.new')}
         </span>
@@ -626,7 +626,7 @@ export default function ProgramList({ programs: initialPrograms, extensions = []
                 <SortArrow active={active} direction={sort.direction} />
               </>
             );
-            const classes = `flex items-center gap-1 min-h-8 text-[10.5px] font-mono uppercase tracking-[0.13em] ${
+            const classes = `flex items-center gap-1 min-h-8 text-[11px] font-mono uppercase tracking-[0.13em] ${
               active ? 'text-[color:var(--text-primary)]' : 'text-[color:var(--text-muted)]'
             } ${col.align === 'right' ? 'justify-end' : ''}`;
             const cellClass = `${wide ? WIDE_ONLY_FLEX : 'flex'} ${col.key === 'action' ? STICKY_ACTION : ''}`.trim();

@@ -264,18 +264,18 @@ describe('small targets and badges', () => {
     expect(remove.className).toMatch(/(?:^|\s)h-6(?:\s|$)/);
   });
 
-  it('draws the exclusion kind badge at 10px, not 9px', async () => {
+  it('draws the exclusion kind badge at 11px, not 9px', async () => {
     await open('Cleanup');
     const badge = await screen.findByText('Folder');
-    expect(badge.className).toContain('text-[10px]');
+    expect(badge.className).toContain('text-[11px]');
     expect(badge.className).not.toContain('text-[9px]');
   });
 
-  it('draws the cookie "not seen this scan" badge at 10px', async () => {
+  it('draws the cookie "not seen this scan" badge at 11px', async () => {
     const user = await open('Cleanup');
     await user.click(await screen.findByRole('button', { name: 'Scan for cookies' }));
     const badge = await screen.findByText('not seen this scan');
-    expect(badge.className).toContain('text-[10px]');
+    expect(badge.className).toContain('text-[11px]');
     expect(badge.className).not.toContain('text-[9px]');
   });
 });

@@ -116,7 +116,7 @@ export default function CookieKeepListSettings({ settings, save }) {
                   {row.domain}
                 </span>
                 {row.stale && (
-                  <span className="text-[10px] font-mono uppercase tracking-wider px-1.5 py-px rounded border shrink-0 border-[color:var(--border-subtle)] text-[color:var(--text-muted)]">
+                  <span className="text-[11px] font-mono uppercase tracking-wider px-1.5 py-px rounded border shrink-0 border-[color:var(--border-subtle)] text-[color:var(--text-muted)]">
                     {t('settings.cookiesToPreserve.staleBadge')}
                   </span>
                 )}

@@ -17,8 +17,8 @@ function Keys({ keys }) {
     <span className="inline-flex items-center gap-1">
       {keys.map((key, i) => (
         <span key={key} className="inline-flex items-center gap-1">
-          {i > 0 && <span className="text-[10px] text-[color:var(--text-muted)]">+</span>}
-          <kbd className="font-mono text-[10.5px] px-1.5 py-0.5 rounded border border-[color:var(--border-subtle)] bg-[color:var(--surface-hover)] text-[color:var(--text-secondary)]">
+          {i > 0 && <span className="text-[11px] text-[color:var(--text-muted)]">+</span>}
+          <kbd className="font-mono text-[11px] px-1.5 py-0.5 rounded border border-[color:var(--border-subtle)] bg-[color:var(--surface-hover)] text-[color:var(--text-secondary)]">
             {key}
           </kbd>
         </span>
@@ -50,7 +50,7 @@ export default function ShortcutsModal({ onClose }) {
                 <Keys keys={shortcut.keys} />
                 {shortcut.alternative && (
                   <>
-                    <span className="mx-1.5 text-[10.5px] text-[color:var(--text-muted)]">{t('shortcutsModal.or')}</span>
+                    <span className="mx-1.5 text-[11px] text-[color:var(--text-muted)]">{t('shortcutsModal.or')}</span>
                     <Keys keys={shortcut.alternative} />
                   </>
                 )}

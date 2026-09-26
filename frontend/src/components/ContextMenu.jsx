@@ -141,7 +141,7 @@ export default function ContextMenu({ open, x, y, items, onClose }) {
             >
               <span>{item.label}</span>
               {item.hint && (
-                <span className="text-[10.5px] font-mono text-[color:var(--text-muted)] shrink-0">
+                <span className="text-[11px] font-mono text-[color:var(--text-muted)] shrink-0">
                   {item.hint}
                 </span>
               )}

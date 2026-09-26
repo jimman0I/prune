@@ -46,13 +46,13 @@ const render = (props = {}, withToasts = false) => renderScreen(
 
 beforeEach(() => { vi.clearAllMocks(); });
 
-describe('text no smaller than 10 px', () => {
-  it('has no 9 px text anywhere in the component source, and its badges are 10 px', async () => {
+describe('text no smaller than 11 px', () => {
+  it('has no 9 px or 10 px text anywhere in the component source, and its badges are 11 px', async () => {
     expect(readFileSync('src/components/ProgramList.jsx', 'utf8')).not.toContain('text-[9px]');
     const { container } = render();
     await screen.findByText('Steam');
     const badge = within(screen.getByText('Steam').closest('[role="row"]')).getByText('Running');
-    expect(badge.className).toContain('text-[10px]');
+    expect(badge.className).toContain('text-[11px]');
     expect(container.innerHTML).not.toContain('text-[9px]');
   });
 });
