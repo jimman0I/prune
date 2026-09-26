@@ -73,7 +73,7 @@ export default function App() {
   // backend, so a warmed one can reply before the program list does, and
   // folding them into shared state used to let the slow list overwrite
   // the fast answer.
-  const { programs, icons, totalSize, extensions, running, loading, error, refresh: refreshPrograms } =
+  const { programs, icons, totalSize, extensions, running, loading, error, sizesSettled, refresh: refreshPrograms } =
     useProgramData();
 
   /* What every one of the three dialogs does when it closes, however it was
@@ -153,7 +153,7 @@ export default function App() {
       <NavRail screen={screen} onNavigate={setScreen} footer={<UpdateButton />} onReportBug={openBugReport} />
       <div ref={stageRef} className="flex-1 overflow-y-auto min-h-0">
         <Screen active={screen === 'dashboard'} visited={visited.has('dashboard')}>
-          <Dashboard programs={programs} totalSize={totalSize} onNavigate={setScreen} />
+          <Dashboard programs={programs} programsMeasured={sizesSettled} onNavigate={setScreen} />
         </Screen>
         <Screen active={screen === 'diskmap'} visited={visited.has('diskmap')}><DiskMap /></Screen>
         <Screen active={screen === 'quarantine'} visited={visited.has('quarantine')}><QuarantineManager /></Screen>

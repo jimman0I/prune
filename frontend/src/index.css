@@ -524,10 +524,6 @@ body::before {
    no overshoot -- a tool that deletes things should not bounce. */
 :root { --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1); }
 
-@keyframes rise-in {
-  from { opacity: 0; transform: translateY(10px); }
-}
-
 @keyframes screen-in {
   from { opacity: 0; transform: translateY(6px); }
 }
@@ -578,19 +574,6 @@ body::before {
 .screen > * {
   animation: screen-in 240ms var(--ease-out-expo) both;
 }
-
-/* Staggered children. The delay is per-item rather than per-container so
-   a list can set it from an index; the nth-child fallbacks cover the
-   fixed-size groups (the dashboard's three stat cards) that have no index
-   to give. */
-.stagger > * {
-  animation: rise-in 420ms var(--ease-out-expo) both;
-}
-.stagger > *:nth-child(1) { animation-delay: 0ms; }
-.stagger > *:nth-child(2) { animation-delay: 60ms; }
-.stagger > *:nth-child(3) { animation-delay: 120ms; }
-.stagger > *:nth-child(4) { animation-delay: 180ms; }
-.stagger > *:nth-child(5) { animation-delay: 240ms; }
 
 /* Treemap cells: reveal, and hover focus.
  *
@@ -856,26 +839,6 @@ body::after {
 :root[data-window-inactive] body::before,
 :root[data-window-inactive] body::after { animation-play-state: paused; }
 
-/* Cards that lift.
- *
- * Opt-in, NOT applied to .glass-panel. That class is on every elevated
- * surface in the app including the program table and the 2,700px Deep
- * Clean list, and lifting one of those on hover would be absurd. This is
- * for things that are actually cards.
- *
- * The shadow is declared on both states so it interpolates rather than
- * popping, but the movement is a transform -- the part that has to be
- * cheap, since it runs on pointer-move. */
-.lift {
-  transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1),
-              box-shadow 220ms cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.lift:hover {
-  transform: translateY(-3px);
-  box-shadow: var(--shadow-raised);
-}
-
 /* Press feedback, app-wide, for every button that is not already one of
    the three named button classes -- table sort headers, breadcrumbs, tab
    toggles, the footer's text-styled actions, context menu rows. Those
@@ -935,7 +898,6 @@ input[type="checkbox"].prune-check:active:not(:disabled),
 @media (prefers-reduced-motion: reduce) {
   .skeleton-shimmer { animation: none; background-image: none; background-color: var(--surface-hover); }
   body::before, body::after { animation: none; }
-  .lift:hover { transform: none; }
   /* The primary button's 1px hover lift and every button's press scale are
      motion, not feedback the layout needs. */
   .btn-primary:hover:not(:disabled),
@@ -1045,15 +1007,23 @@ input[type="checkbox"].prune-check:active:not(:disabled),
   [role="tab"][aria-selected="true"]:focus-visible,
   button[aria-pressed="true"]:focus-visible { outline-offset: 2px; }
 
-  .storage-bar {
+  /* The Dashboard's stacked space bar. Its segments are neutral fills that
+     forced colours would otherwise flatten into one, so each gets a system
+     colour of its own: programs the selection colour, everything else the
+     grey text colour, free left as the empty canvas inside the border. */
+  .space-bar {
     forced-color-adjust: none;
     background: Canvas;
     border: 1px solid ButtonText;
   }
-  .storage-bar-fill {
+  .space-bar-programs {
     forced-color-adjust: none;
     /* !important because the fill's colour is an inline style (a width and
-       a colour set together in Dashboard.jsx), which beats any plain rule. */
+       a colour set together in SpaceQuestion.jsx), which beats any plain rule. */
     background: Highlight !important;
+  }
+  .space-bar-other {
+    forced-color-adjust: none;
+    background: GrayText !important;
   }
 }
