@@ -307,7 +307,7 @@ describe('the Deep Clean screen, in Greek', () => {
     await waitFor(() => expect(cleanButton().disabled).toBe(false));
     await user.click(cleanButton());
 
-    expect(screen.getByText(/Μετακίνηση 1 στοιχείων \(το μέγεθος δεν μετρήθηκε\) σε καραντίνα;/)).toBeTruthy();
+    expect(screen.getByText(/Μετακίνηση 1 στοιχείου \(το μέγεθος δεν μετρήθηκε\) σε καραντίνα;/)).toBeTruthy();
     expect(screen.getByRole('button', { name: 'Ακύρωση' })).toBeTruthy();
     expect(screen.getByRole('button', { name: 'Μετακίνηση σε καραντίνα' })).toBeTruthy();
   });

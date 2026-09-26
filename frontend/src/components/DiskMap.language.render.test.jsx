@@ -112,7 +112,7 @@ const TREE = {
   ]
 };
 
-const crawlButton = () => screen.findByRole('button', { name: "Διάτρεξε τους φακέλους αντ' αυτού" });
+const crawlButton = () => screen.findByRole('button', { name: "Διατρέξτε τους φακέλους αντ' αυτού" });
 
 describe('the Disk Map in another language, before any scan has run', () => {
   it('translates the title, the subtitle, and the drive-root choice panel', async () => {
@@ -124,7 +124,7 @@ describe('the Disk Map in another language, before any scan has run', () => {
     expect(screen.getByText(/κάθε αρχείο στο C: μέσα σε λίγα δευτερόλεπτα/)).toBeTruthy();
     expect(screen.getByText(/Δεν μπορεί να ολοκληρωθεί σε ολόκληρο δίσκο/)).toBeTruthy();
     expect(screen.getByRole('button', { name: 'Γρήγορη σάρωση (διαχειριστής)' })).toBeTruthy();
-    expect(screen.getByRole('button', { name: "Διάτρεξε τους φακέλους αντ' αυτού" })).toBeTruthy();
+    expect(screen.getByRole('button', { name: "Διατρέξτε τους φακέλους αντ' αυτού" })).toBeTruthy();
   });
 
   it('shows the translated loading state after choosing to walk folders', async () => {
@@ -398,7 +398,7 @@ describe('the Disk Map in another language, when a scan ran out of time', () => 
     await user.click(await crawlButton());
 
     expect(await screen.findByText(/Αυτή η σάρωση εξάντλησε τον χρόνο της πριν ολοκληρώσει τον δίσκο\./)).toBeTruthy();
-    expect(screen.getByRole('button', { name: "Εκτέλεσε αντ' αυτού μια γρήγορη σάρωση" })).toBeTruthy();
+    expect(screen.getByRole('button', { name: "Εκτελέστε αντ' αυτού μια γρήγορη σάρωση" })).toBeTruthy();
   });
 
   it('translates the banner WITH a coverage figure, once real used-space is known', async () => {

@@ -82,7 +82,7 @@ describe('the uninstall dialog, in Greek', () => {
   it('translates the normal-flow intro, command fallback and start button', async () => {
     renderScreen(<UninstallModal program={{ ...program, uninstallString: '' }} onClose={vi.fn()} />);
     await ready();
-    expect(screen.getByText(/Αυτό εκτελεί τον δικό του απεγκαταστάτη του Thing/)).toBeTruthy();
+    expect(screen.getByText(/Αυτό εκτελεί τον απεγκαταστάτη του Thing/)).toBeTruthy();
     expect(screen.getByText('Δεν έχει καταχωρηθεί εντολή απεγκατάστασης')).toBeTruthy();
     expect(screen.getByRole('button', { name: 'Έναρξη απεγκατάστασης' })).toBeTruthy();
   });
@@ -90,7 +90,7 @@ describe('the uninstall dialog, in Greek', () => {
   it('translates the broken-uninstaller flow: warning, intro, label, hint and search button', async () => {
     renderScreen(<UninstallModal program={{ ...program, health: { orphaned: true, reason: 'The registry entry has no working uninstaller.' } }} onClose={vi.fn()} />);
     await ready('Εξαναγκασμένη αφαίρεση Thing');
-    expect(screen.getByText(/Τα Windows θα συνεχίσουν να το καταχωρούν/)).toBeTruthy();
+    expect(screen.getByText(/Τα Windows θα συνεχίσουν να το εμφανίζουν/)).toBeTruthy();
     expect(screen.getByText(/Το Prune θα αναζητήσει αρχεία και κλειδιά μητρώου/)).toBeTruthy();
     expect(screen.getByText('Αναζήτηση για')).toBeTruthy();
     expect(screen.getByText(/Λήφθηκε από "Thing" χωρίς την έκδοσή του/)).toBeTruthy();

@@ -124,7 +124,7 @@ describe('the Dashboard in another language', () => {
       disks: [{ deviceId: '0', model: 'Test NVMe', lifeRemainingPercent: 80, powerOnHours: 1200 }]
     });
     render();
-    expect(await screen.findByText(/80% διάρκειας ζωής απομένει/)).toBeTruthy();
+    expect(await screen.findByText(/Απομένει 80% της διάρκειας ζωής/)).toBeTruthy();
     expect(screen.getByText(/1,200 ώρες σε λειτουργία|1\.200 ώρες σε λειτουργία/)).toBeTruthy();
   });
 

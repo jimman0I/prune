@@ -135,7 +135,7 @@ describe('the startup screen, in Greek', () => {
     await screen.findByText('Steam');
 
     expect(screen.getByText('2 καταχωρίσεις')).toBeTruthy();
-    expect(screen.getByText('1 ενεργοποιημένες')).toBeTruthy();
+    expect(screen.getByText('1 ενεργοποιημένη')).toBeTruthy();
   });
 
   it('translates the broken-entry count when a file is missing', async () => {
@@ -146,7 +146,7 @@ describe('the startup screen, in Greek', () => {
     await ready();
     await screen.findByText('Ghost');
 
-    expect(screen.getByText(/1.*δείχνουν σε αρχείο που δεν υπάρχει/)).toBeTruthy();
+    expect(screen.getByText(/1.*δείχνει σε αρχείο που δεν υπάρχει/)).toBeTruthy();
   });
 
   it('translates the status pill words', async () => {
@@ -180,7 +180,7 @@ describe('the startup screen, in Greek', () => {
     await screen.findByText('Live');
 
     expect(within(rowFor('Live')).getByText('Σε λειτουργία')).toBeTruthy();
-    expect(screen.getByText('1 εκτελούνται τώρα')).toBeTruthy();
+    expect(screen.getByText('1 εκτελείται τώρα')).toBeTruthy();
   });
 
   it('translates the group labels via the translated labels override, and the per-group enabled count', async () => {

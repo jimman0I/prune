@@ -95,7 +95,7 @@ describe('the quarantine screen, in Greek', () => {
     await ready();
     await screen.findByText('Thing');
     expect(headerText()).toContain('παρτίδα');
-    expect(headerText()).toContain('σε κράτηση');
+    expect(headerText()).toContain('σε καραντίνα');
   });
 
   it('translates the with-limit phrase, and omits it when no limit is set', async () => {

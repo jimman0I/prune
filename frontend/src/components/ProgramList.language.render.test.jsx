@@ -369,7 +369,7 @@ describe('the footer, in Greek', () => {
     const steamRow = await rowFor('Steam');
     await user.click(within(steamRow).getByRole('checkbox'));
 
-    expect(screen.getByText('1 επιλέχθηκαν')).toBeTruthy();
+    expect(screen.getByText('1 επιλέχθηκε')).toBeTruthy();
     expect(screen.getByRole('button', { name: 'Απεγκατάσταση 1 προγράμματος' })).toBeTruthy();
 
     const unknownRow = await rowFor('Mystery App');
