@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { screen } from '@testing-library/react';
+import { screen, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { renderScreen } from '../testSupport/renderScreen.jsx';
 import { CATALOG } from '../i18n/catalog.js';
@@ -10,17 +10,23 @@ import { CATALOG } from '../i18n/catalog.js';
  * fallback its assertions render under. Windows' own strings (the drive
  * model, healthStatus) are checked to stay AS Windows wrote them.
  *
- * Every t() call this screen makes gets its own assertion here, copied
- * verbatim from catalog.js's `el` block: the goal is that swapping any
- * one of them for its English literal -- invisible to
- * Dashboard.render.test.jsx, since English is also what that file
- * defaults to -- fails a test in THIS file. */
+ * Every t() call this screen makes gets its own assertion here: the goal is
+ * that swapping any one of them for its English literal -- invisible to
+ * Dashboard.render.test.jsx, since English is also what that file defaults
+ * to -- fails a test in THIS file.
+ *
+ * Strings that predate the redesign are pinned as Greek literals, copied
+ * verbatim from catalog.js's `el` block. The redesign's own strings are read
+ * from CATALOG.el rather than pinned, so the translation pass that follows
+ * them does not have to touch this file: they hold whatever the catalog says,
+ * and fail if the component stops going through t(). */
 
 const fetchDiskSpace = vi.fn();
 const fetchDiskHealth = vi.fn();
 const unlockDiskWear = vi.fn();
 const fetchUninstallHistory = vi.fn(async () => []);
 const fetchAutomation = vi.fn(async () => ({ enabled: false, nextRun: null, missed: 0 }));
+const streamDeepCleanScan = vi.fn(() => new Promise(() => {}));
 
 vi.mock('../lib/api.js', () => ({
   fetchSettings: vi.fn(async () => ({ language: 'el' })),
@@ -30,39 +36,40 @@ vi.mock('../lib/api.js', () => ({
   unlockDiskWear: (...a) => unlockDiskWear(...a),
   fetchUninstallHistory: (...a) => fetchUninstallHistory(...a),
   fetchAutomation: (...a) => fetchAutomation(...a),
+  streamDeepCleanScan: (...a) => streamDeepCleanScan(...a),
 }));
 
 const Dashboard = (await import('./Dashboard.jsx')).default;
 
 const GB = 1024 ** 3;
+const D = () => CATALOG.el.dashboard;
 
 beforeEach(() => {
   vi.clearAllMocks();
   fetchDiskSpace.mockResolvedValue(null);
   fetchDiskHealth.mockResolvedValue({ disks: [] });
+  streamDeepCleanScan.mockImplementation(() => new Promise(() => {}));
 });
 
-const render = (programs = []) => renderScreen(<Dashboard programs={programs} totalSize={0} onNavigate={() => {}} />);
+const render = (programs = [], props = {}) => renderScreen(
+  <Dashboard programs={programs} programsMeasured onNavigate={() => {}} {...props} />
+);
+// Drive details is a translated button; its name is read from the catalog.
+const openDetails = async (user) => user.click(await screen.findByRole('button', { name: D().quiet.driveDetails }));
 
 describe('the Dashboard in another language', () => {
-  it('translates the title, the three stat card labels, and Recent Activity while empty', async () => {
+  it('translates the title, the drive-health title and Recent Activity while empty', async () => {
     render();
 
     expect(await screen.findByRole('heading', { name: 'Πίνακας ελέγχου' })).toBeTruthy();
     expect(screen.getByText('Υγεία δίσκου')).toBeTruthy();
-    expect(screen.getByText('Συνολικός αποθηκευτικός χώρος')).toBeTruthy();
-    expect(screen.getByText('Εγκατεστημένες εφαρμογές')).toBeTruthy();
-    expect(screen.getByText('Άχρηστα αρχεία')).toBeTruthy();
-    expect(screen.getByText('δεν έχει μετρηθεί')).toBeTruthy();
-    expect(screen.getByText('Η μέτρηση διατρέχει τη διαδρομή κάθε καθαριστή στον δίσκο — περίπου μισό λεπτό.')).toBeTruthy();
-    expect(screen.getByRole('button', { name: 'Μέτρηση' })).toBeTruthy();
     expect(screen.getByRole('button', { name: 'Πρόσφατη δραστηριότητα' })).toBeTruthy();
     // A chevron and aria-expanded now say hide/show; the words are gone.
     expect(screen.queryByText('Απόκρυψη')).toBeNull();
     expect(screen.getByText('Καμία απεγκατάσταση ακόμη.')).toBeTruthy();
-    // Navigation, so it reuses nav.* rather than keeping a second,
-    // independently-translatable copy of the same word.
-    expect(screen.getByRole('button', { name: 'Βαθύς καθαρισμός' })).toBeTruthy();
+    // The old stat cards and the Deep Clean pill are gone in every language.
+    expect(screen.queryByText('Συνολικός αποθηκευτικός χώρος')).toBeNull();
+    expect(screen.queryByRole('button', { name: 'Βαθύς καθαρισμός' })).toBeNull();
   });
 
   it('collapses Recent Activity, reporting the state through aria-expanded', async () => {
@@ -76,16 +83,54 @@ describe('the Dashboard in another language', () => {
     expect(screen.queryByText('Καμία απεγκατάσταση ακόμη.')).toBeNull();
   });
 
-  it('shows the translated loading word, then the used/total and free lines', async () => {
+  it('shows the translated loading state, then the question, the summary line and the bar label', async () => {
     let resolveDiskSpace;
     fetchDiskSpace.mockImplementation(() => new Promise((r) => { resolveDiskSpace = r; }));
-    render();
+    render([{ id: 'a', name: 'A', sizeBytes: 100 * GB }]);
 
-    expect(await screen.findByText('Φόρτωση…')).toBeTruthy();
+    expect(await screen.findByRole('img', { name: D().space.loading })).toBeTruthy();
+    expect(screen.getByRole('heading', { level: 2, name: D().space.heading })).toBeTruthy();
+    expect(screen.getByText(D().space.drive('C'))).toBeTruthy();
     resolveDiskSpace({ freeBytes: 100 * GB, totalBytes: 500 * GB });
 
-    expect(await screen.findByText('400 GB σε χρήση από 500 GB')).toBeTruthy();
-    expect(await screen.findByText('ελεύθερο')).toBeTruthy();
+    expect(await screen.findByText(D().space.summary('400 GB', '500 GB', '100 GB'))).toBeTruthy();
+    expect(screen.getByRole('img', { name: D().space.barLabel('100 GB', '300 GB', '100 GB') })).toBeTruthy();
+    for (const label of [D().space.legendPrograms, D().space.legendOther, D().space.legendFree]) {
+      expect(screen.getByText(label)).toBeTruthy();
+    }
+  });
+
+  it('translates the measuring state: the used legend, the placeholder and the bar label', async () => {
+    fetchDiskSpace.mockResolvedValue({ freeBytes: 100 * GB, totalBytes: 500 * GB });
+    render([{ id: 'a', name: 'A', sizeBytes: 100 * GB }], { programsMeasured: false });
+    expect(await screen.findByRole('img', { name: D().space.barLabelMeasuring('400 GB', '100 GB') })).toBeTruthy();
+    expect(screen.getByText(D().space.legendUsed)).toBeTruthy();
+    expect(screen.getByText(`${D().space.legendPrograms}:`)).toBeTruthy();
+    expect(screen.getAllByText(D().measuring).length).toBeGreaterThan(0);
+    expect(screen.getByText(D().largest.measuring)).toBeTruthy();
+  });
+
+  it('translates the unsized note and the exceeds-used note', async () => {
+    fetchDiskSpace.mockResolvedValue({ freeBytes: 100 * GB, totalBytes: 500 * GB });
+    render([{ id: 'a', name: 'A', sizeBytes: 450 * GB }, { id: 'b', name: 'B' }]);
+    expect(await screen.findByText(D().space.unsized(1))).toBeTruthy();
+    expect(screen.getByText(D().space.exceedsUsed)).toBeTruthy();
+  });
+
+  it('translates Largest programs: heading, link, count, remainder sentence and Disk Map link', async () => {
+    fetchDiskSpace.mockResolvedValue({ freeBytes: 100 * GB, totalBytes: 500 * GB });
+    render([{ id: 'a', name: 'Alpha', sizeBytes: 100 * GB }]);
+    expect(await screen.findByRole('heading', { name: D().largest.heading })).toBeTruthy();
+    expect(screen.getByRole('button', { name: D().largest.openApplications })).toBeTruthy();
+    expect(screen.getByText(D().largest.installedCount(1))).toBeTruthy();
+    const sentence = D().largest.notInList('300 GB');
+    expect(screen.getByText((content) => content.includes(sentence))).toBeTruthy();
+    expect(screen.getByRole('button', { name: D().largest.seeDiskMap })).toBeTruthy();
+  });
+
+  it('translates the empty Largest programs state', async () => {
+    render([{ id: 'a', name: 'Ext' }]);
+    expect(await screen.findByText(D().largest.none)).toBeTruthy();
   });
 
   it('shows the reason disk space could not be read, in place of the translated loading word', async () => {
@@ -95,18 +140,54 @@ describe('the Dashboard in another language', () => {
     expect(await screen.findByText('E_DISKSPACE', {}, { timeout: 5000 })).toBeTruthy();
   });
 
-  it('says a broken app count, and offers a translated Review button', async () => {
+  it('says how many programs a failed uninstall left behind, and offers a translated Review button', async () => {
     render([{ id: 'a', health: { orphaned: true } }]);
-    expect(await screen.findByText('1 κατάλοιπο από αποτυχημένη απεγκατάσταση')).toBeTruthy();
-    expect(screen.getByRole('button', { name: 'Έλεγχος' })).toBeTruthy();
+    expect(await screen.findByText(D().quiet.leftTitle)).toBeTruthy();
+    expect(screen.getByText(D().quiet.leftCount(1))).toBeTruthy();
+    expect(screen.getByRole('button', { name: D().quiet.leftReview })).toBeTruthy();
   });
 
-  it('says no broken apps, and offers a translated Manage button, when nothing is broken', async () => {
+  it('says nothing is left behind, with no Review button, when nothing is', async () => {
     render([{ id: 'a', health: {} }]);
-    // The button first: it proves the language has loaded, and until it has
-    // the English fallback would satisfy the text lookup on its own.
-    expect(await screen.findByRole('button', { name: 'Διαχείριση' })).toBeTruthy();
-    expect(screen.getByText(CATALOG.el.dashboard.apps.noBroken)).toBeTruthy();
+    expect(await screen.findByText(D().quiet.leftNone)).toBeTruthy();
+    expect(screen.queryByRole('button', { name: D().quiet.leftReview })).toBeNull();
+  });
+
+  it('translates the junk item: not measured, Measure, progress, total, basis and Open Deep Clean', async () => {
+    const user = userEvent.setup();
+    let emit;
+    let finish;
+    streamDeepCleanScan.mockImplementation((onEvent) => new Promise((resolve) => { emit = onEvent; finish = resolve; }));
+    render();
+    expect(await screen.findByText(D().quiet.junkTitle)).toBeTruthy();
+    expect(screen.getByText(D().quiet.junkNotMeasured)).toBeTruthy();
+    await user.click(screen.getByRole('button', { name: D().quiet.junkMeasure }));
+    expect(screen.getByText(D().quiet.junkMeasuring)).toBeTruthy();
+    act(() => {
+      emit('start', { total: 3 });
+      emit('rule', { id: 'a', recommended: true, present: true, accessible: true, sizeBytes: GB });
+    });
+    expect(screen.getByText(D().quiet.junkProgress(1, 3))).toBeTruthy();
+    await act(async () => { finish(); });
+    expect(await screen.findByText(D().quiet.junkBasis(1))).toBeTruthy();
+    expect(screen.getByRole('button', { name: D().quiet.openDeepClean })).toBeTruthy();
+  });
+
+  it('translates the junk measuring failure', async () => {
+    const user = userEvent.setup();
+    streamDeepCleanScan.mockRejectedValueOnce(new Error('E_SCAN'));
+    render();
+    await user.click(await screen.findByRole('button', { name: D().quiet.junkMeasure }));
+    expect(await screen.findByText(D().quiet.junkError('E_SCAN'))).toBeTruthy();
+  });
+
+  it('translates the score line and the Drive details button', async () => {
+    fetchDiskHealth.mockResolvedValue({
+      disks: [{ deviceId: '0', model: 'Test NVMe', lifeRemainingPercent: 80 }]
+    });
+    render();
+    expect(await screen.findByText(D().quiet.scoreOf(80))).toBeTruthy();
+    expect(screen.getByRole('button', { name: D().quiet.driveDetails })).toBeTruthy();
   });
 
   it('names the reason drive health could not be read', async () => {
@@ -122,37 +203,41 @@ describe('the Dashboard in another language', () => {
     expect(await screen.findByText('Ανάγνωση υγείας δίσκου…')).toBeTruthy();
   });
 
-  it('translates the life-remaining and powered-on-hours line for a drive that reports one', async () => {
+  it('translates the life-remaining line in the summary, and the powered-on-hours line in the details', async () => {
+    const user = userEvent.setup();
     fetchDiskHealth.mockResolvedValue({
       disks: [{ deviceId: '0', model: 'Test NVMe', lifeRemainingPercent: 80, powerOnHours: 1200 }]
     });
     render();
     expect(await screen.findByText(/Απομένει 80% της διάρκειας ζωής/)).toBeTruthy();
+    await openDetails(user);
     expect(screen.getByText(/1,200 ώρες σε λειτουργία|1\.200 ώρες σε λειτουργία/)).toBeTruthy();
   });
 
   it('leaves the drive\'s own reported status untranslated inside the translated sentence, and translates the admin-access note beside it', async () => {
     // healthStatus is Windows' own word, not Prune's copy -- it must
     // appear exactly as reported, even mid-sentence in Greek.
+    const user = userEvent.setup();
     fetchDiskHealth.mockResolvedValue({
       disks: [{ deviceId: '0', model: 'Test NVMe', healthStatus: 'Warning', lifeRemainingPercent: null }]
     });
     render();
 
-    // Not a bare /Warning/: the gauge's own centre label separately shows
-    // the same raw word, unrelated to the sentence this test is about.
+    // The summary line carries the sentence; the details repeat it with the
+    // admin-access note, so it is asserted once there.
     expect(await screen.findByText(/Windows.*Warning/)).toBeTruthy();
+    await openDetails(user);
     expect(screen.getByText(/Η φθορά, η θερμοκρασία και οι ώρες λειτουργίας απαιτούν πρόσβαση διαχειριστή/)).toBeTruthy();
   });
 
-  it('falls back to translated "unknown" copy -- in the gauge, and inside the sentence -- when Windows reports no status at all', async () => {
+  it('falls back to translated "unknown" copy -- in the score slot, and inside the sentence -- when Windows reports no status at all', async () => {
     fetchDiskHealth.mockResolvedValue({
       disks: [{ deviceId: '0', model: 'Test NVMe', healthStatus: null, lifeRemainingPercent: null }]
     });
     render();
     expect(await screen.findByText('Άγνωστο')).toBeTruthy();
     // The inline fallback inside the "Windows reports..." sentence -- a
-    // different catalog key from the gauge's, and must stay so.
+    // different catalog key from the score slot's, and must stay so.
     expect(screen.getByText(/άγνωστη κατάσταση/)).toBeTruthy();
   });
 
@@ -164,6 +249,7 @@ describe('the Dashboard in another language', () => {
     let resolveUnlock;
     unlockDiskWear.mockImplementation(() => new Promise((r) => { resolveUnlock = r; }));
     render();
+    await openDetails(user);
 
     const button = await screen.findByRole('button', { name: 'Ανάγνωση φθοράς δίσκου (διαχειριστής)' });
     await user.click(button);
@@ -183,6 +269,7 @@ describe('the Dashboard in another language', () => {
       reliabilityAvailable: false
     });
     render();
+    await openDetails(user);
 
     const button = await screen.findByRole('button', { name: 'Ανάγνωση φθοράς δίσκου (διαχειριστής)' });
     await user.click(button);
@@ -190,6 +277,7 @@ describe('the Dashboard in another language', () => {
   });
 
   it('translates the uncorrected-errors line', async () => {
+    const user = userEvent.setup();
     fetchDiskHealth.mockResolvedValue({
       disks: [{
         deviceId: '0', model: 'Test NVMe', healthStatus: 'Healthy', lifeRemainingPercent: 80,
@@ -197,10 +285,12 @@ describe('the Dashboard in another language', () => {
       }]
     });
     render();
+    await openDetails(user);
     expect(await screen.findByText('2 μη διορθωμένα σφάλματα ανάγνωσης · 1 μη διορθωμένα σφάλματα εγγραφής')).toBeTruthy();
   });
 
   it('translates the SMART header and every attribute row label', async () => {
+    const user = userEvent.setup();
     fetchDiskHealth.mockResolvedValue({
       disks: [{
         deviceId: '0', model: 'Test NVMe', healthStatus: 'Healthy', lifeRemainingPercent: 80,
@@ -211,6 +301,7 @@ describe('the Dashboard in another language', () => {
       }]
     });
     render();
+    await openDetails(user);
     expect(await screen.findByText('Όπως αναφέρεται από τον δίσκο')).toBeTruthy();
     for (const label of [
       'Ώρες λειτουργίας', 'Κύκλοι ενεργοποίησης', 'Δεδομένα που γράφτηκαν', 'Δεδομένα που διαβάστηκαν',

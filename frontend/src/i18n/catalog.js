@@ -243,24 +243,45 @@ export const CATALOG = {
         mediaErrors: 'Media errors',
         errorLogEntries: 'Error log entries'
       },
-      storage: {
-        label: 'Total storage',
-        usedTotal: (used, total) => `${used} used / ${total} total`,
-        loading: 'Loading…',
-        free: 'free'
+      measuring: 'measuring…',
+      space: {
+        drive: (letter) => `Drive ${letter}:`,
+        heading: 'Where is my space going?',
+        summary: (used, total, free) => `${used} used of ${total} · ${free} free`,
+        loading: 'Reading drive space…',
+        barLabel: (programs, other, free) => `Drive space: installed programs ${programs}, everything else ${other}, free ${free}.`,
+        barLabelMeasuring: (used, free) => `Drive space: ${used} used, ${free} free. Installed programs are still being measured.`,
+        legendPrograms: 'Installed programs',
+        legendOther: 'Everything else',
+        legendUsed: 'Used',
+        legendFree: 'Free',
+        unsized: (count) => `${count} ${count === 1 ? 'program' : 'programs'} without a size`,
+        exceedsUsed: 'Program sizes add up to more than is used on this drive.'
       },
-      apps: {
-        label: 'Installed apps',
-        broken: (count) => `${count} left behind by a failed uninstall`,
-        noBroken: 'Nothing left behind.',
-        review: 'Review',
-        manage: 'Manage'
+      largest: {
+        heading: 'Largest programs',
+        openApplications: 'Open Applications',
+        installedCount: (count) => `${count} installed`,
+        measuring: 'Measuring program sizes…',
+        none: 'No program has a measured size yet.',
+        notInList: (size) => `The other ${size} is not in the program list.`,
+        seeDiskMap: 'See it in Disk Map.'
       },
-      junk: {
-        label: 'Junk files',
-        notMeasured: 'not measured',
-        description: 'Measuring walks every cleaner path on the disk — about half a minute.',
-        measure: 'Measure'
+      quiet: {
+        scoreOf: (score) => `${score} of 100`,
+        driveDetails: 'Drive details',
+        junkTitle: 'Junk files',
+        junkNotMeasured: 'Not measured',
+        junkMeasure: 'Measure',
+        junkProgress: (scanned, total) => `Measuring… ${scanned} of ${total}`,
+        junkMeasuring: 'Measuring…',
+        junkBasis: (count) => `Across ${count} recommended ${count === 1 ? 'cleaner' : 'cleaners'}`,
+        junkError: (message) => `Couldn't measure junk files: ${message}`,
+        openDeepClean: 'Open Deep Clean',
+        leftTitle: 'Left behind',
+        leftCount: (count) => `${count} ${count === 1 ? 'program' : 'programs'}`,
+        leftNone: 'Nothing left behind.',
+        leftReview: 'Review'
       },
       recentActivity: {
         title: 'Recent activity',
@@ -1049,24 +1070,45 @@ export const CATALOG = {
         mediaErrors: 'Mediafoute',
         errorLogEntries: 'Foutlogboekinskrywings'
       },
-      storage: {
-        label: "Totale berging",
-        usedTotal: (used, total) => `${used} gebruik / ${total} totaal`,
-        loading: 'Laai…',
-        free: 'vry'
+      measuring: 'measuring…',
+      space: {
+        drive: (letter) => `Drive ${letter}:`,
+        heading: 'Where is my space going?',
+        summary: (used, total, free) => `${used} used of ${total} · ${free} free`,
+        loading: 'Reading drive space…',
+        barLabel: (programs, other, free) => `Drive space: installed programs ${programs}, everything else ${other}, free ${free}.`,
+        barLabelMeasuring: (used, free) => `Drive space: ${used} used, ${free} free. Installed programs are still being measured.`,
+        legendPrograms: 'Installed programs',
+        legendOther: 'Everything else',
+        legendUsed: 'Used',
+        legendFree: 'Free',
+        unsized: (count) => `${count} ${count === 1 ? 'program' : 'programs'} without a size`,
+        exceedsUsed: 'Program sizes add up to more than is used on this drive.'
       },
-      apps: {
-        label: "Geïnstalleerde toepassings",
-        broken: (count) => `${count} agtergelaat deur 'n mislukte deïnstallering`,
-        noBroken: 'Nothing left behind.',
-        review: 'Hersien',
-        manage: 'Bestuur'
+      largest: {
+        heading: 'Largest programs',
+        openApplications: 'Open Applications',
+        installedCount: (count) => `${count} installed`,
+        measuring: 'Measuring program sizes…',
+        none: 'No program has a measured size yet.',
+        notInList: (size) => `The other ${size} is not in the program list.`,
+        seeDiskMap: 'See it in Disk Map.'
       },
-      junk: {
-        label: 'Rommellêers',
-        notMeasured: 'nie gemeet nie',
-        description: "Om te meet loop deur elke skoonmaker se pad op die skyf — omtrent 'n halwe minuut.",
-        measure: 'Meet'
+      quiet: {
+        scoreOf: (score) => `${score} of 100`,
+        driveDetails: 'Drive details',
+        junkTitle: 'Junk files',
+        junkNotMeasured: 'Not measured',
+        junkMeasure: 'Measure',
+        junkProgress: (scanned, total) => `Measuring… ${scanned} of ${total}`,
+        junkMeasuring: 'Measuring…',
+        junkBasis: (count) => `Across ${count} recommended ${count === 1 ? 'cleaner' : 'cleaners'}`,
+        junkError: (message) => `Couldn't measure junk files: ${message}`,
+        openDeepClean: 'Open Deep Clean',
+        leftTitle: 'Left behind',
+        leftCount: (count) => `${count} ${count === 1 ? 'program' : 'programs'}`,
+        leftNone: 'Nothing left behind.',
+        leftReview: 'Review'
       },
       recentActivity: {
         title: "Onlangse aktiwiteit",
@@ -1855,24 +1897,45 @@ export const CATALOG = {
         mediaErrors: 'أخطاء الوسائط',
         errorLogEntries: 'إدخالات سجل الأخطاء'
       },
-      storage: {
-        label: 'مساحة التخزين الكلية',
-        usedTotal: (used, total) => `${used} مستخدمة من ${total}`,
-        loading: 'جارٍ التحميل…',
-        free: 'متاح'
+      measuring: 'measuring…',
+      space: {
+        drive: (letter) => `Drive ${letter}:`,
+        heading: 'Where is my space going?',
+        summary: (used, total, free) => `${used} used of ${total} · ${free} free`,
+        loading: 'Reading drive space…',
+        barLabel: (programs, other, free) => `Drive space: installed programs ${programs}, everything else ${other}, free ${free}.`,
+        barLabelMeasuring: (used, free) => `Drive space: ${used} used, ${free} free. Installed programs are still being measured.`,
+        legendPrograms: 'Installed programs',
+        legendOther: 'Everything else',
+        legendUsed: 'Used',
+        legendFree: 'Free',
+        unsized: (count) => `${count} ${count === 1 ? 'program' : 'programs'} without a size`,
+        exceedsUsed: 'Program sizes add up to more than is used on this drive.'
       },
-      apps: {
-        label: 'التطبيقات المثبتة',
-        broken: (count) => `${count} تُركت بعد إلغاء تثبيت فاشل`,
-        noBroken: 'Nothing left behind.',
-        review: 'مراجعة',
-        manage: 'إدارة'
+      largest: {
+        heading: 'Largest programs',
+        openApplications: 'Open Applications',
+        installedCount: (count) => `${count} installed`,
+        measuring: 'Measuring program sizes…',
+        none: 'No program has a measured size yet.',
+        notInList: (size) => `The other ${size} is not in the program list.`,
+        seeDiskMap: 'See it in Disk Map.'
       },
-      junk: {
-        label: 'الملفات غير الضرورية',
-        notMeasured: 'لم تُقاس',
-        description: "يمر القياس بمسار كل أداة تنظيف على القرص — حوالي نصف دقيقة.",
-        measure: 'قياس'
+      quiet: {
+        scoreOf: (score) => `${score} of 100`,
+        driveDetails: 'Drive details',
+        junkTitle: 'Junk files',
+        junkNotMeasured: 'Not measured',
+        junkMeasure: 'Measure',
+        junkProgress: (scanned, total) => `Measuring… ${scanned} of ${total}`,
+        junkMeasuring: 'Measuring…',
+        junkBasis: (count) => `Across ${count} recommended ${count === 1 ? 'cleaner' : 'cleaners'}`,
+        junkError: (message) => `Couldn't measure junk files: ${message}`,
+        openDeepClean: 'Open Deep Clean',
+        leftTitle: 'Left behind',
+        leftCount: (count) => `${count} ${count === 1 ? 'program' : 'programs'}`,
+        leftNone: 'Nothing left behind.',
+        leftReview: 'Review'
       },
       recentActivity: {
         title: 'النشاط الأخير',
@@ -2661,24 +2724,45 @@ export const CATALOG = {
         mediaErrors: 'Errors del suport',
         errorLogEntries: 'Entrades del registre d\'errors'
       },
-      storage: {
-        label: 'Emmagatzematge total',
-        usedTotal: (used, total) => `${used} usat / ${total} total`,
-        loading: 'Carregant…',
-        free: 'lliure'
+      measuring: 'measuring…',
+      space: {
+        drive: (letter) => `Drive ${letter}:`,
+        heading: 'Where is my space going?',
+        summary: (used, total, free) => `${used} used of ${total} · ${free} free`,
+        loading: 'Reading drive space…',
+        barLabel: (programs, other, free) => `Drive space: installed programs ${programs}, everything else ${other}, free ${free}.`,
+        barLabelMeasuring: (used, free) => `Drive space: ${used} used, ${free} free. Installed programs are still being measured.`,
+        legendPrograms: 'Installed programs',
+        legendOther: 'Everything else',
+        legendUsed: 'Used',
+        legendFree: 'Free',
+        unsized: (count) => `${count} ${count === 1 ? 'program' : 'programs'} without a size`,
+        exceedsUsed: 'Program sizes add up to more than is used on this drive.'
       },
-      apps: {
-        label: 'Aplicacions instal·lades',
-        broken: (count) => `${count} deixades per una desinstal·lació fallida`,
-        noBroken: 'Nothing left behind.',
-        review: 'Revisa',
-        manage: 'Gestiona'
+      largest: {
+        heading: 'Largest programs',
+        openApplications: 'Open Applications',
+        installedCount: (count) => `${count} installed`,
+        measuring: 'Measuring program sizes…',
+        none: 'No program has a measured size yet.',
+        notInList: (size) => `The other ${size} is not in the program list.`,
+        seeDiskMap: 'See it in Disk Map.'
       },
-      junk: {
-        label: 'Fitxers innecessaris',
-        notMeasured: 'no mesurat',
-        description: "Mesurar recorre el camí de cada netejador al disc — mig minut aproximadament.",
-        measure: 'Mesura'
+      quiet: {
+        scoreOf: (score) => `${score} of 100`,
+        driveDetails: 'Drive details',
+        junkTitle: 'Junk files',
+        junkNotMeasured: 'Not measured',
+        junkMeasure: 'Measure',
+        junkProgress: (scanned, total) => `Measuring… ${scanned} of ${total}`,
+        junkMeasuring: 'Measuring…',
+        junkBasis: (count) => `Across ${count} recommended ${count === 1 ? 'cleaner' : 'cleaners'}`,
+        junkError: (message) => `Couldn't measure junk files: ${message}`,
+        openDeepClean: 'Open Deep Clean',
+        leftTitle: 'Left behind',
+        leftCount: (count) => `${count} ${count === 1 ? 'program' : 'programs'}`,
+        leftNone: 'Nothing left behind.',
+        leftReview: 'Review'
       },
       recentActivity: {
         title: 'Activitat recent',
@@ -3467,24 +3551,45 @@ export const CATALOG = {
         mediaErrors: 'Chyby média',
         errorLogEntries: 'Záznamy chybového protokolu'
       },
-      storage: {
-        label: 'Celkové úložiště',
-        usedTotal: (used, total) => `Využito ${used} z ${total}`,
-        loading: 'Načítání…',
-        free: 'volné'
+      measuring: 'measuring…',
+      space: {
+        drive: (letter) => `Drive ${letter}:`,
+        heading: 'Where is my space going?',
+        summary: (used, total, free) => `${used} used of ${total} · ${free} free`,
+        loading: 'Reading drive space…',
+        barLabel: (programs, other, free) => `Drive space: installed programs ${programs}, everything else ${other}, free ${free}.`,
+        barLabelMeasuring: (used, free) => `Drive space: ${used} used, ${free} free. Installed programs are still being measured.`,
+        legendPrograms: 'Installed programs',
+        legendOther: 'Everything else',
+        legendUsed: 'Used',
+        legendFree: 'Free',
+        unsized: (count) => `${count} ${count === 1 ? 'program' : 'programs'} without a size`,
+        exceedsUsed: 'Program sizes add up to more than is used on this drive.'
       },
-      apps: {
-        label: 'Nainstalované aplikace',
-        broken: (count) => `Zanecháno neúspěšnou odinstalací: ${count}`,
-        noBroken: 'Nothing left behind.',
-        review: 'Zkontrolovat',
-        manage: 'Spravovat'
+      largest: {
+        heading: 'Largest programs',
+        openApplications: 'Open Applications',
+        installedCount: (count) => `${count} installed`,
+        measuring: 'Measuring program sizes…',
+        none: 'No program has a measured size yet.',
+        notInList: (size) => `The other ${size} is not in the program list.`,
+        seeDiskMap: 'See it in Disk Map.'
       },
-      junk: {
-        label: 'Nepotřebné soubory',
-        notMeasured: 'neměřeno',
-        description: "Měření projde cesty všech čističů na disku — asi půl minuty.",
-        measure: 'Změřit'
+      quiet: {
+        scoreOf: (score) => `${score} of 100`,
+        driveDetails: 'Drive details',
+        junkTitle: 'Junk files',
+        junkNotMeasured: 'Not measured',
+        junkMeasure: 'Measure',
+        junkProgress: (scanned, total) => `Measuring… ${scanned} of ${total}`,
+        junkMeasuring: 'Measuring…',
+        junkBasis: (count) => `Across ${count} recommended ${count === 1 ? 'cleaner' : 'cleaners'}`,
+        junkError: (message) => `Couldn't measure junk files: ${message}`,
+        openDeepClean: 'Open Deep Clean',
+        leftTitle: 'Left behind',
+        leftCount: (count) => `${count} ${count === 1 ? 'program' : 'programs'}`,
+        leftNone: 'Nothing left behind.',
+        leftReview: 'Review'
       },
       recentActivity: {
         title: 'Nedávná aktivita',
@@ -4271,24 +4376,45 @@ export const CATALOG = {
         mediaErrors: 'Gwallau cyfrwng',
         errorLogEntries: 'Cofnodion log gwallau'
       },
-      storage: {
-        label: "Cyfanswm y storfa",
-        usedTotal: (used, total) => `${used} wedi'i ddefnyddio / ${total} cyfanswm`,
-        loading: 'Llwytho…',
-        free: 'rhydd'
+      measuring: 'measuring…',
+      space: {
+        drive: (letter) => `Drive ${letter}:`,
+        heading: 'Where is my space going?',
+        summary: (used, total, free) => `${used} used of ${total} · ${free} free`,
+        loading: 'Reading drive space…',
+        barLabel: (programs, other, free) => `Drive space: installed programs ${programs}, everything else ${other}, free ${free}.`,
+        barLabelMeasuring: (used, free) => `Drive space: ${used} used, ${free} free. Installed programs are still being measured.`,
+        legendPrograms: 'Installed programs',
+        legendOther: 'Everything else',
+        legendUsed: 'Used',
+        legendFree: 'Free',
+        unsized: (count) => `${count} ${count === 1 ? 'program' : 'programs'} without a size`,
+        exceedsUsed: 'Program sizes add up to more than is used on this drive.'
       },
-      apps: {
-        label: "Rhaglenni wedi'u gosod",
-        broken: (count) => `${count} wedi'u gadael gan ddadosodiad aflwyddiannus`,
-        noBroken: 'Nothing left behind.',
-        review: 'Adolygu',
-        manage: 'Rheoli'
+      largest: {
+        heading: 'Largest programs',
+        openApplications: 'Open Applications',
+        installedCount: (count) => `${count} installed`,
+        measuring: 'Measuring program sizes…',
+        none: 'No program has a measured size yet.',
+        notInList: (size) => `The other ${size} is not in the program list.`,
+        seeDiskMap: 'See it in Disk Map.'
       },
-      junk: {
-        label: "Ffeiliau sbwriel",
-        notMeasured: 'heb ei fesur',
-        description: "Mae mesur yn cerdded llwybr pob glanhawr ar y ddisg — tua hanner munud.",
-        measure: 'Mesur'
+      quiet: {
+        scoreOf: (score) => `${score} of 100`,
+        driveDetails: 'Drive details',
+        junkTitle: 'Junk files',
+        junkNotMeasured: 'Not measured',
+        junkMeasure: 'Measure',
+        junkProgress: (scanned, total) => `Measuring… ${scanned} of ${total}`,
+        junkMeasuring: 'Measuring…',
+        junkBasis: (count) => `Across ${count} recommended ${count === 1 ? 'cleaner' : 'cleaners'}`,
+        junkError: (message) => `Couldn't measure junk files: ${message}`,
+        openDeepClean: 'Open Deep Clean',
+        leftTitle: 'Left behind',
+        leftCount: (count) => `${count} ${count === 1 ? 'program' : 'programs'}`,
+        leftNone: 'Nothing left behind.',
+        leftReview: 'Review'
       },
       recentActivity: {
         title: "Gweithgaredd diweddar",
@@ -5077,24 +5203,45 @@ export const CATALOG = {
         mediaErrors: 'Mediefejl',
         errorLogEntries: 'Fejlloggens poster'
       },
-      storage: {
-        label: "Samlet lagerplads",
-        usedTotal: (used, total) => `${used} brugt / ${total} i alt`,
-        loading: 'Indlæser…',
-        free: 'fri'
+      measuring: 'measuring…',
+      space: {
+        drive: (letter) => `Drive ${letter}:`,
+        heading: 'Where is my space going?',
+        summary: (used, total, free) => `${used} used of ${total} · ${free} free`,
+        loading: 'Reading drive space…',
+        barLabel: (programs, other, free) => `Drive space: installed programs ${programs}, everything else ${other}, free ${free}.`,
+        barLabelMeasuring: (used, free) => `Drive space: ${used} used, ${free} free. Installed programs are still being measured.`,
+        legendPrograms: 'Installed programs',
+        legendOther: 'Everything else',
+        legendUsed: 'Used',
+        legendFree: 'Free',
+        unsized: (count) => `${count} ${count === 1 ? 'program' : 'programs'} without a size`,
+        exceedsUsed: 'Program sizes add up to more than is used on this drive.'
       },
-      apps: {
-        label: "Installerede programmer",
-        broken: (count) => `${count} efterladt af en mislykket afinstallation`,
-        noBroken: 'Nothing left behind.',
-        review: 'Gennemgå',
-        manage: 'Administrer'
+      largest: {
+        heading: 'Largest programs',
+        openApplications: 'Open Applications',
+        installedCount: (count) => `${count} installed`,
+        measuring: 'Measuring program sizes…',
+        none: 'No program has a measured size yet.',
+        notInList: (size) => `The other ${size} is not in the program list.`,
+        seeDiskMap: 'See it in Disk Map.'
       },
-      junk: {
-        label: "Overflødige filer",
-        notMeasured: 'ikke målt',
-        description: "At måle gennemgår hver rensers sti på disken — omkring et halvt minut.",
-        measure: 'Mål'
+      quiet: {
+        scoreOf: (score) => `${score} of 100`,
+        driveDetails: 'Drive details',
+        junkTitle: 'Junk files',
+        junkNotMeasured: 'Not measured',
+        junkMeasure: 'Measure',
+        junkProgress: (scanned, total) => `Measuring… ${scanned} of ${total}`,
+        junkMeasuring: 'Measuring…',
+        junkBasis: (count) => `Across ${count} recommended ${count === 1 ? 'cleaner' : 'cleaners'}`,
+        junkError: (message) => `Couldn't measure junk files: ${message}`,
+        openDeepClean: 'Open Deep Clean',
+        leftTitle: 'Left behind',
+        leftCount: (count) => `${count} ${count === 1 ? 'program' : 'programs'}`,
+        leftNone: 'Nothing left behind.',
+        leftReview: 'Review'
       },
       recentActivity: {
         title: "Seneste aktivitet",
@@ -5883,24 +6030,45 @@ export const CATALOG = {
         mediaErrors: 'Medienfehler',
         errorLogEntries: 'Fehlerprotokolleinträge'
       },
-      storage: {
-        label: 'Gesamtspeicher',
-        usedTotal: (used, total) => `${used} von ${total} belegt`,
-        loading: 'Wird geladen…',
-        free: 'frei'
+      measuring: 'measuring…',
+      space: {
+        drive: (letter) => `Drive ${letter}:`,
+        heading: 'Where is my space going?',
+        summary: (used, total, free) => `${used} used of ${total} · ${free} free`,
+        loading: 'Reading drive space…',
+        barLabel: (programs, other, free) => `Drive space: installed programs ${programs}, everything else ${other}, free ${free}.`,
+        barLabelMeasuring: (used, free) => `Drive space: ${used} used, ${free} free. Installed programs are still being measured.`,
+        legendPrograms: 'Installed programs',
+        legendOther: 'Everything else',
+        legendUsed: 'Used',
+        legendFree: 'Free',
+        unsized: (count) => `${count} ${count === 1 ? 'program' : 'programs'} without a size`,
+        exceedsUsed: 'Program sizes add up to more than is used on this drive.'
       },
-      apps: {
-        label: 'Installierte Programme',
-        broken: (count) => `${count} von einer fehlgeschlagenen Deinstallation zurückgelassen`,
-        noBroken: 'Nothing left behind.',
-        review: 'Überprüfen',
-        manage: 'Verwalten'
+      largest: {
+        heading: 'Largest programs',
+        openApplications: 'Open Applications',
+        installedCount: (count) => `${count} installed`,
+        measuring: 'Measuring program sizes…',
+        none: 'No program has a measured size yet.',
+        notInList: (size) => `The other ${size} is not in the program list.`,
+        seeDiskMap: 'See it in Disk Map.'
       },
-      junk: {
-        label: 'Unnötige Dateien',
-        notMeasured: 'nicht gemessen',
-        description: "Das Messen durchläuft den Pfad jedes Reinigers auf dem Laufwerk — etwa eine halbe Minute.",
-        measure: 'Messen'
+      quiet: {
+        scoreOf: (score) => `${score} of 100`,
+        driveDetails: 'Drive details',
+        junkTitle: 'Junk files',
+        junkNotMeasured: 'Not measured',
+        junkMeasure: 'Measure',
+        junkProgress: (scanned, total) => `Measuring… ${scanned} of ${total}`,
+        junkMeasuring: 'Measuring…',
+        junkBasis: (count) => `Across ${count} recommended ${count === 1 ? 'cleaner' : 'cleaners'}`,
+        junkError: (message) => `Couldn't measure junk files: ${message}`,
+        openDeepClean: 'Open Deep Clean',
+        leftTitle: 'Left behind',
+        leftCount: (count) => `${count} ${count === 1 ? 'program' : 'programs'}`,
+        leftNone: 'Nothing left behind.',
+        leftReview: 'Review'
       },
       recentActivity: {
         title: 'Letzte Aktivität',
@@ -6689,24 +6857,45 @@ export const CATALOG = {
         mediaErrors: 'Σφάλματα μέσου',
         errorLogEntries: 'Καταχωρίσεις αρχείου σφαλμάτων'
       },
-      storage: {
-        label: "Συνολικός αποθηκευτικός χώρος",
-        usedTotal: (used, total) => `${used} σε χρήση από ${total}`,
-        loading: 'Φόρτωση…',
-        free: 'ελεύθερο'
+      measuring: 'measuring…',
+      space: {
+        drive: (letter) => `Drive ${letter}:`,
+        heading: 'Where is my space going?',
+        summary: (used, total, free) => `${used} used of ${total} · ${free} free`,
+        loading: 'Reading drive space…',
+        barLabel: (programs, other, free) => `Drive space: installed programs ${programs}, everything else ${other}, free ${free}.`,
+        barLabelMeasuring: (used, free) => `Drive space: ${used} used, ${free} free. Installed programs are still being measured.`,
+        legendPrograms: 'Installed programs',
+        legendOther: 'Everything else',
+        legendUsed: 'Used',
+        legendFree: 'Free',
+        unsized: (count) => `${count} ${count === 1 ? 'program' : 'programs'} without a size`,
+        exceedsUsed: 'Program sizes add up to more than is used on this drive.'
       },
-      apps: {
-        label: "Εγκατεστημένες εφαρμογές",
-        broken: (count) => `${count} ${count === 1 ? 'κατάλοιπο' : 'κατάλοιπα'} από αποτυχημένη απεγκατάσταση`,
-        noBroken: 'Nothing left behind.',
-        review: 'Έλεγχος',
-        manage: 'Διαχείριση'
+      largest: {
+        heading: 'Largest programs',
+        openApplications: 'Open Applications',
+        installedCount: (count) => `${count} installed`,
+        measuring: 'Measuring program sizes…',
+        none: 'No program has a measured size yet.',
+        notInList: (size) => `The other ${size} is not in the program list.`,
+        seeDiskMap: 'See it in Disk Map.'
       },
-      junk: {
-        label: "Άχρηστα αρχεία",
-        notMeasured: 'δεν έχει μετρηθεί',
-        description: "Η μέτρηση διατρέχει τη διαδρομή κάθε καθαριστή στον δίσκο — περίπου μισό λεπτό.",
-        measure: 'Μέτρηση'
+      quiet: {
+        scoreOf: (score) => `${score} of 100`,
+        driveDetails: 'Drive details',
+        junkTitle: 'Junk files',
+        junkNotMeasured: 'Not measured',
+        junkMeasure: 'Measure',
+        junkProgress: (scanned, total) => `Measuring… ${scanned} of ${total}`,
+        junkMeasuring: 'Measuring…',
+        junkBasis: (count) => `Across ${count} recommended ${count === 1 ? 'cleaner' : 'cleaners'}`,
+        junkError: (message) => `Couldn't measure junk files: ${message}`,
+        openDeepClean: 'Open Deep Clean',
+        leftTitle: 'Left behind',
+        leftCount: (count) => `${count} ${count === 1 ? 'program' : 'programs'}`,
+        leftNone: 'Nothing left behind.',
+        leftReview: 'Review'
       },
       recentActivity: {
         title: "Πρόσφατη δραστηριότητα",
@@ -7495,24 +7684,45 @@ export const CATALOG = {
         mediaErrors: 'Errores de medio',
         errorLogEntries: 'Entradas del registro de errores'
       },
-      storage: {
-        label: "Almacenamiento total",
-        usedTotal: (used, total) => `${used} usados de ${total}`,
-        loading: 'Cargando…',
-        free: 'libre'
+      measuring: 'measuring…',
+      space: {
+        drive: (letter) => `Drive ${letter}:`,
+        heading: 'Where is my space going?',
+        summary: (used, total, free) => `${used} used of ${total} · ${free} free`,
+        loading: 'Reading drive space…',
+        barLabel: (programs, other, free) => `Drive space: installed programs ${programs}, everything else ${other}, free ${free}.`,
+        barLabelMeasuring: (used, free) => `Drive space: ${used} used, ${free} free. Installed programs are still being measured.`,
+        legendPrograms: 'Installed programs',
+        legendOther: 'Everything else',
+        legendUsed: 'Used',
+        legendFree: 'Free',
+        unsized: (count) => `${count} ${count === 1 ? 'program' : 'programs'} without a size`,
+        exceedsUsed: 'Program sizes add up to more than is used on this drive.'
       },
-      apps: {
-        label: "Aplicaciones instaladas",
-        broken: (count) => `${count} ${count === 1 ? 'dejada' : 'dejadas'} por una desinstalación fallida`,
-        noBroken: 'Nothing left behind.',
-        review: 'Revisar',
-        manage: 'Gestionar'
+      largest: {
+        heading: 'Largest programs',
+        openApplications: 'Open Applications',
+        installedCount: (count) => `${count} installed`,
+        measuring: 'Measuring program sizes…',
+        none: 'No program has a measured size yet.',
+        notInList: (size) => `The other ${size} is not in the program list.`,
+        seeDiskMap: 'See it in Disk Map.'
       },
-      junk: {
-        label: "Archivos innecesarios",
-        notMeasured: 'sin medir',
-        description: "Medir recorre la ruta de cada limpiador del disco — medio minuto aproximadamente.",
-        measure: 'Medir'
+      quiet: {
+        scoreOf: (score) => `${score} of 100`,
+        driveDetails: 'Drive details',
+        junkTitle: 'Junk files',
+        junkNotMeasured: 'Not measured',
+        junkMeasure: 'Measure',
+        junkProgress: (scanned, total) => `Measuring… ${scanned} of ${total}`,
+        junkMeasuring: 'Measuring…',
+        junkBasis: (count) => `Across ${count} recommended ${count === 1 ? 'cleaner' : 'cleaners'}`,
+        junkError: (message) => `Couldn't measure junk files: ${message}`,
+        openDeepClean: 'Open Deep Clean',
+        leftTitle: 'Left behind',
+        leftCount: (count) => `${count} ${count === 1 ? 'program' : 'programs'}`,
+        leftNone: 'Nothing left behind.',
+        leftReview: 'Review'
       },
       recentActivity: {
         title: "Actividad reciente",
@@ -8301,24 +8511,45 @@ export const CATALOG = {
         mediaErrors: 'Andmekandja vead',
         errorLogEntries: 'Vealogi kirjed'
       },
-      storage: {
-        label: 'Kogumaht',
-        usedTotal: (used, total) => `${used} kasutusel / ${total} kokku`,
-        loading: 'Laadimine…',
-        free: 'vaba'
+      measuring: 'measuring…',
+      space: {
+        drive: (letter) => `Drive ${letter}:`,
+        heading: 'Where is my space going?',
+        summary: (used, total, free) => `${used} used of ${total} · ${free} free`,
+        loading: 'Reading drive space…',
+        barLabel: (programs, other, free) => `Drive space: installed programs ${programs}, everything else ${other}, free ${free}.`,
+        barLabelMeasuring: (used, free) => `Drive space: ${used} used, ${free} free. Installed programs are still being measured.`,
+        legendPrograms: 'Installed programs',
+        legendOther: 'Everything else',
+        legendUsed: 'Used',
+        legendFree: 'Free',
+        unsized: (count) => `${count} ${count === 1 ? 'program' : 'programs'} without a size`,
+        exceedsUsed: 'Program sizes add up to more than is used on this drive.'
       },
-      apps: {
-        label: "Installitud rakendused",
-        broken: (count) => `${count} jäänud maha ebaõnnestunud desinstallimisest`,
-        noBroken: 'Nothing left behind.',
-        review: 'Vaata üle',
-        manage: 'Halda'
+      largest: {
+        heading: 'Largest programs',
+        openApplications: 'Open Applications',
+        installedCount: (count) => `${count} installed`,
+        measuring: 'Measuring program sizes…',
+        none: 'No program has a measured size yet.',
+        notInList: (size) => `The other ${size} is not in the program list.`,
+        seeDiskMap: 'See it in Disk Map.'
       },
-      junk: {
-        label: 'Prügifailid',
-        notMeasured: 'mõõtmata',
-        description: "Mõõtmine käib läbi iga puhastaja tee kettal — umbes pool minutit.",
-        measure: 'Mõõda'
+      quiet: {
+        scoreOf: (score) => `${score} of 100`,
+        driveDetails: 'Drive details',
+        junkTitle: 'Junk files',
+        junkNotMeasured: 'Not measured',
+        junkMeasure: 'Measure',
+        junkProgress: (scanned, total) => `Measuring… ${scanned} of ${total}`,
+        junkMeasuring: 'Measuring…',
+        junkBasis: (count) => `Across ${count} recommended ${count === 1 ? 'cleaner' : 'cleaners'}`,
+        junkError: (message) => `Couldn't measure junk files: ${message}`,
+        openDeepClean: 'Open Deep Clean',
+        leftTitle: 'Left behind',
+        leftCount: (count) => `${count} ${count === 1 ? 'program' : 'programs'}`,
+        leftNone: 'Nothing left behind.',
+        leftReview: 'Review'
       },
       recentActivity: {
         title: "Hiljutine tegevus",
@@ -9107,24 +9338,45 @@ export const CATALOG = {
         mediaErrors: 'Tallennusvälinevirheet',
         errorLogEntries: 'Virhelokin merkinnät'
       },
-      storage: {
-        label: "Tallennustila yhteensä",
-        usedTotal: (used, total) => `${used} käytetty / ${total} yhteensä`,
-        loading: 'Ladataan…',
-        free: 'vapaana'
+      measuring: 'measuring…',
+      space: {
+        drive: (letter) => `Drive ${letter}:`,
+        heading: 'Where is my space going?',
+        summary: (used, total, free) => `${used} used of ${total} · ${free} free`,
+        loading: 'Reading drive space…',
+        barLabel: (programs, other, free) => `Drive space: installed programs ${programs}, everything else ${other}, free ${free}.`,
+        barLabelMeasuring: (used, free) => `Drive space: ${used} used, ${free} free. Installed programs are still being measured.`,
+        legendPrograms: 'Installed programs',
+        legendOther: 'Everything else',
+        legendUsed: 'Used',
+        legendFree: 'Free',
+        unsized: (count) => `${count} ${count === 1 ? 'program' : 'programs'} without a size`,
+        exceedsUsed: 'Program sizes add up to more than is used on this drive.'
       },
-      apps: {
-        label: "Asennetut sovellukset",
-        broken: (count) => `Epäonnistuneiden poistojen jäänteitä: ${count}`,
-        noBroken: 'Nothing left behind.',
-        review: 'Tarkista',
-        manage: 'Hallitse'
+      largest: {
+        heading: 'Largest programs',
+        openApplications: 'Open Applications',
+        installedCount: (count) => `${count} installed`,
+        measuring: 'Measuring program sizes…',
+        none: 'No program has a measured size yet.',
+        notInList: (size) => `The other ${size} is not in the program list.`,
+        seeDiskMap: 'See it in Disk Map.'
       },
-      junk: {
-        label: 'Roskatiedostot',
-        notMeasured: 'ei mitattu',
-        description: "Mittaus käy läpi jokaisen puhdistimen polun levyllä — noin puoli minuuttia.",
-        measure: 'Mittaa'
+      quiet: {
+        scoreOf: (score) => `${score} of 100`,
+        driveDetails: 'Drive details',
+        junkTitle: 'Junk files',
+        junkNotMeasured: 'Not measured',
+        junkMeasure: 'Measure',
+        junkProgress: (scanned, total) => `Measuring… ${scanned} of ${total}`,
+        junkMeasuring: 'Measuring…',
+        junkBasis: (count) => `Across ${count} recommended ${count === 1 ? 'cleaner' : 'cleaners'}`,
+        junkError: (message) => `Couldn't measure junk files: ${message}`,
+        openDeepClean: 'Open Deep Clean',
+        leftTitle: 'Left behind',
+        leftCount: (count) => `${count} ${count === 1 ? 'program' : 'programs'}`,
+        leftNone: 'Nothing left behind.',
+        leftReview: 'Review'
       },
       recentActivity: {
         title: "Viimeaikainen toiminta",
@@ -9913,24 +10165,45 @@ export const CATALOG = {
         mediaErrors: 'Erreurs de support',
         errorLogEntries: 'Entrées du journal d\'erreurs'
       },
-      storage: {
-        label: "Stockage total",
-        usedTotal: (used, total) => `${used} utilisés sur ${total}`,
-        loading: 'Chargement…',
-        free: 'libre'
+      measuring: 'measuring…',
+      space: {
+        drive: (letter) => `Drive ${letter}:`,
+        heading: 'Where is my space going?',
+        summary: (used, total, free) => `${used} used of ${total} · ${free} free`,
+        loading: 'Reading drive space…',
+        barLabel: (programs, other, free) => `Drive space: installed programs ${programs}, everything else ${other}, free ${free}.`,
+        barLabelMeasuring: (used, free) => `Drive space: ${used} used, ${free} free. Installed programs are still being measured.`,
+        legendPrograms: 'Installed programs',
+        legendOther: 'Everything else',
+        legendUsed: 'Used',
+        legendFree: 'Free',
+        unsized: (count) => `${count} ${count === 1 ? 'program' : 'programs'} without a size`,
+        exceedsUsed: 'Program sizes add up to more than is used on this drive.'
       },
-      apps: {
-        label: "Applications installées",
-        broken: (count) => `${count} laissée${count === 1 ? '' : 's'} par une désinstallation échouée`,
-        noBroken: 'Nothing left behind.',
-        review: 'Vérifier',
-        manage: 'Gérer'
+      largest: {
+        heading: 'Largest programs',
+        openApplications: 'Open Applications',
+        installedCount: (count) => `${count} installed`,
+        measuring: 'Measuring program sizes…',
+        none: 'No program has a measured size yet.',
+        notInList: (size) => `The other ${size} is not in the program list.`,
+        seeDiskMap: 'See it in Disk Map.'
       },
-      junk: {
-        label: "Fichiers inutiles",
-        notMeasured: 'non mesuré',
-        description: "La mesure parcourt le chemin de chaque nettoyeur sur le disque — environ une demi-minute.",
-        measure: 'Mesurer'
+      quiet: {
+        scoreOf: (score) => `${score} of 100`,
+        driveDetails: 'Drive details',
+        junkTitle: 'Junk files',
+        junkNotMeasured: 'Not measured',
+        junkMeasure: 'Measure',
+        junkProgress: (scanned, total) => `Measuring… ${scanned} of ${total}`,
+        junkMeasuring: 'Measuring…',
+        junkBasis: (count) => `Across ${count} recommended ${count === 1 ? 'cleaner' : 'cleaners'}`,
+        junkError: (message) => `Couldn't measure junk files: ${message}`,
+        openDeepClean: 'Open Deep Clean',
+        leftTitle: 'Left behind',
+        leftCount: (count) => `${count} ${count === 1 ? 'program' : 'programs'}`,
+        leftNone: 'Nothing left behind.',
+        leftReview: 'Review'
       },
       recentActivity: {
         title: "Activité récente",
@@ -10719,24 +10992,45 @@ export const CATALOG = {
         mediaErrors: 'שגיאות מדיה',
         errorLogEntries: 'רשומות יומן שגיאות'
       },
-      storage: {
-        label: 'אחסון כולל',
-        usedTotal: (used, total) => `${used} בשימוש מתוך ${total}`,
-        loading: 'טוען…',
-        free: 'פנוי'
+      measuring: 'measuring…',
+      space: {
+        drive: (letter) => `Drive ${letter}:`,
+        heading: 'Where is my space going?',
+        summary: (used, total, free) => `${used} used of ${total} · ${free} free`,
+        loading: 'Reading drive space…',
+        barLabel: (programs, other, free) => `Drive space: installed programs ${programs}, everything else ${other}, free ${free}.`,
+        barLabelMeasuring: (used, free) => `Drive space: ${used} used, ${free} free. Installed programs are still being measured.`,
+        legendPrograms: 'Installed programs',
+        legendOther: 'Everything else',
+        legendUsed: 'Used',
+        legendFree: 'Free',
+        unsized: (count) => `${count} ${count === 1 ? 'program' : 'programs'} without a size`,
+        exceedsUsed: 'Program sizes add up to more than is used on this drive.'
       },
-      apps: {
-        label: 'אפליקציות מותקנות',
-        broken: (count) => count === 1 ? 'אחד נותר מהסרה שנכשלה' : `${count} נותרו מהסרה שנכשלה`,
-        noBroken: 'Nothing left behind.',
-        review: 'סקירה',
-        manage: 'ניהול'
+      largest: {
+        heading: 'Largest programs',
+        openApplications: 'Open Applications',
+        installedCount: (count) => `${count} installed`,
+        measuring: 'Measuring program sizes…',
+        none: 'No program has a measured size yet.',
+        notInList: (size) => `The other ${size} is not in the program list.`,
+        seeDiskMap: 'See it in Disk Map.'
       },
-      junk: {
-        label: 'קבצים מיותרים',
-        notMeasured: 'לא נמדד',
-        description: "המדידה עוברת בנתיבי כל כלי הניקוי בדיסק — כחצי דקה.",
-        measure: 'מדוד'
+      quiet: {
+        scoreOf: (score) => `${score} of 100`,
+        driveDetails: 'Drive details',
+        junkTitle: 'Junk files',
+        junkNotMeasured: 'Not measured',
+        junkMeasure: 'Measure',
+        junkProgress: (scanned, total) => `Measuring… ${scanned} of ${total}`,
+        junkMeasuring: 'Measuring…',
+        junkBasis: (count) => `Across ${count} recommended ${count === 1 ? 'cleaner' : 'cleaners'}`,
+        junkError: (message) => `Couldn't measure junk files: ${message}`,
+        openDeepClean: 'Open Deep Clean',
+        leftTitle: 'Left behind',
+        leftCount: (count) => `${count} ${count === 1 ? 'program' : 'programs'}`,
+        leftNone: 'Nothing left behind.',
+        leftReview: 'Review'
       },
       recentActivity: {
         title: 'פעילות אחרונה',
@@ -11525,24 +11819,45 @@ export const CATALOG = {
         mediaErrors: 'Adathordozó-hibák',
         errorLogEntries: 'Hibanapló-bejegyzések'
       },
-      storage: {
-        label: "Teljes tárhely",
-        usedTotal: (used, total) => `${used} felhasználva / ${total} összesen`,
-        loading: 'Betöltés…',
-        free: 'szabad'
+      measuring: 'measuring…',
+      space: {
+        drive: (letter) => `Drive ${letter}:`,
+        heading: 'Where is my space going?',
+        summary: (used, total, free) => `${used} used of ${total} · ${free} free`,
+        loading: 'Reading drive space…',
+        barLabel: (programs, other, free) => `Drive space: installed programs ${programs}, everything else ${other}, free ${free}.`,
+        barLabelMeasuring: (used, free) => `Drive space: ${used} used, ${free} free. Installed programs are still being measured.`,
+        legendPrograms: 'Installed programs',
+        legendOther: 'Everything else',
+        legendUsed: 'Used',
+        legendFree: 'Free',
+        unsized: (count) => `${count} ${count === 1 ? 'program' : 'programs'} without a size`,
+        exceedsUsed: 'Program sizes add up to more than is used on this drive.'
       },
-      apps: {
-        label: "Telepített alkalmazások",
-        broken: (count) => `${count} maradvány maradt egy sikertelen eltávolítás után`,
-        noBroken: 'Nothing left behind.',
-        review: 'Áttekintés',
-        manage: 'Kezelés'
+      largest: {
+        heading: 'Largest programs',
+        openApplications: 'Open Applications',
+        installedCount: (count) => `${count} installed`,
+        measuring: 'Measuring program sizes…',
+        none: 'No program has a measured size yet.',
+        notInList: (size) => `The other ${size} is not in the program list.`,
+        seeDiskMap: 'See it in Disk Map.'
       },
-      junk: {
-        label: "Felesleges fájlok",
-        notMeasured: 'nincs megmérve',
-        description: 'A mérés végigmegy a lemez minden tisztítási útvonalán — kb. fél perc.',
-        measure: 'Mérés'
+      quiet: {
+        scoreOf: (score) => `${score} of 100`,
+        driveDetails: 'Drive details',
+        junkTitle: 'Junk files',
+        junkNotMeasured: 'Not measured',
+        junkMeasure: 'Measure',
+        junkProgress: (scanned, total) => `Measuring… ${scanned} of ${total}`,
+        junkMeasuring: 'Measuring…',
+        junkBasis: (count) => `Across ${count} recommended ${count === 1 ? 'cleaner' : 'cleaners'}`,
+        junkError: (message) => `Couldn't measure junk files: ${message}`,
+        openDeepClean: 'Open Deep Clean',
+        leftTitle: 'Left behind',
+        leftCount: (count) => `${count} ${count === 1 ? 'program' : 'programs'}`,
+        leftNone: 'Nothing left behind.',
+        leftReview: 'Review'
       },
       recentActivity: {
         title: "Legutóbbi tevékenység",
@@ -12331,24 +12646,45 @@ export const CATALOG = {
         mediaErrors: 'Kesalahan media',
         errorLogEntries: 'Entri log kesalahan'
       },
-      storage: {
-        label: 'Total Penyimpanan',
-        usedTotal: (used, total) => `${used} terpakai dari ${total}`,
-        loading: 'Memuat…',
-        free: "kosong"
+      measuring: 'measuring…',
+      space: {
+        drive: (letter) => `Drive ${letter}:`,
+        heading: 'Where is my space going?',
+        summary: (used, total, free) => `${used} used of ${total} · ${free} free`,
+        loading: 'Reading drive space…',
+        barLabel: (programs, other, free) => `Drive space: installed programs ${programs}, everything else ${other}, free ${free}.`,
+        barLabelMeasuring: (used, free) => `Drive space: ${used} used, ${free} free. Installed programs are still being measured.`,
+        legendPrograms: 'Installed programs',
+        legendOther: 'Everything else',
+        legendUsed: 'Used',
+        legendFree: 'Free',
+        unsized: (count) => `${count} ${count === 1 ? 'program' : 'programs'} without a size`,
+        exceedsUsed: 'Program sizes add up to more than is used on this drive.'
       },
-      apps: {
-        label: 'Aplikasi Terpasang',
-        broken: (count) => `${count} tertinggal akibat uninstal yang gagal`,
-        noBroken: 'Nothing left behind.',
-        review: 'Tinjau',
-        manage: 'Kelola'
+      largest: {
+        heading: 'Largest programs',
+        openApplications: 'Open Applications',
+        installedCount: (count) => `${count} installed`,
+        measuring: 'Measuring program sizes…',
+        none: 'No program has a measured size yet.',
+        notInList: (size) => `The other ${size} is not in the program list.`,
+        seeDiskMap: 'See it in Disk Map.'
       },
-      junk: {
-        label: 'File Sampah',
-        notMeasured: 'belum diukur',
-        description: "Mengukur menelusuri setiap jalur pembersih di disk — sekitar setengah menit.",
-        measure: 'Ukur'
+      quiet: {
+        scoreOf: (score) => `${score} of 100`,
+        driveDetails: 'Drive details',
+        junkTitle: 'Junk files',
+        junkNotMeasured: 'Not measured',
+        junkMeasure: 'Measure',
+        junkProgress: (scanned, total) => `Measuring… ${scanned} of ${total}`,
+        junkMeasuring: 'Measuring…',
+        junkBasis: (count) => `Across ${count} recommended ${count === 1 ? 'cleaner' : 'cleaners'}`,
+        junkError: (message) => `Couldn't measure junk files: ${message}`,
+        openDeepClean: 'Open Deep Clean',
+        leftTitle: 'Left behind',
+        leftCount: (count) => `${count} ${count === 1 ? 'program' : 'programs'}`,
+        leftNone: 'Nothing left behind.',
+        leftReview: 'Review'
       },
       recentActivity: {
         title: 'Aktivitas Terbaru',
@@ -13137,24 +13473,45 @@ export const CATALOG = {
         mediaErrors: 'Miðilsvillur',
         errorLogEntries: 'Færslur í villuskrá'
       },
-      storage: {
-        label: 'Heildargeymsla',
-        usedTotal: (used, total) => `${used} notað / ${total} samtals`,
-        loading: 'Hleð…',
-        free: 'laust'
+      measuring: 'measuring…',
+      space: {
+        drive: (letter) => `Drive ${letter}:`,
+        heading: 'Where is my space going?',
+        summary: (used, total, free) => `${used} used of ${total} · ${free} free`,
+        loading: 'Reading drive space…',
+        barLabel: (programs, other, free) => `Drive space: installed programs ${programs}, everything else ${other}, free ${free}.`,
+        barLabelMeasuring: (used, free) => `Drive space: ${used} used, ${free} free. Installed programs are still being measured.`,
+        legendPrograms: 'Installed programs',
+        legendOther: 'Everything else',
+        legendUsed: 'Used',
+        legendFree: 'Free',
+        unsized: (count) => `${count} ${count === 1 ? 'program' : 'programs'} without a size`,
+        exceedsUsed: 'Program sizes add up to more than is used on this drive.'
       },
-      apps: {
-        label: "Uppsett forrit",
-        broken: (count) => `${count} skilin eftir vegna misheppnaðrar fjarlægingar`,
-        noBroken: 'Nothing left behind.',
-        review: 'Yfirfara',
-        manage: 'Stjórna'
+      largest: {
+        heading: 'Largest programs',
+        openApplications: 'Open Applications',
+        installedCount: (count) => `${count} installed`,
+        measuring: 'Measuring program sizes…',
+        none: 'No program has a measured size yet.',
+        notInList: (size) => `The other ${size} is not in the program list.`,
+        seeDiskMap: 'See it in Disk Map.'
       },
-      junk: {
-        label: "Óþarfa skrár",
-        notMeasured: 'ekki mælt',
-        description: "Mæling fer yfir slóð hvers hreinsara á disknum — um hálfa mínútu.",
-        measure: 'Mæla'
+      quiet: {
+        scoreOf: (score) => `${score} of 100`,
+        driveDetails: 'Drive details',
+        junkTitle: 'Junk files',
+        junkNotMeasured: 'Not measured',
+        junkMeasure: 'Measure',
+        junkProgress: (scanned, total) => `Measuring… ${scanned} of ${total}`,
+        junkMeasuring: 'Measuring…',
+        junkBasis: (count) => `Across ${count} recommended ${count === 1 ? 'cleaner' : 'cleaners'}`,
+        junkError: (message) => `Couldn't measure junk files: ${message}`,
+        openDeepClean: 'Open Deep Clean',
+        leftTitle: 'Left behind',
+        leftCount: (count) => `${count} ${count === 1 ? 'program' : 'programs'}`,
+        leftNone: 'Nothing left behind.',
+        leftReview: 'Review'
       },
       recentActivity: {
         title: "Nýleg virkni",
@@ -13943,24 +14300,45 @@ export const CATALOG = {
         mediaErrors: 'Errori del supporto',
         errorLogEntries: 'Voci del registro errori'
       },
-      storage: {
-        label: "Spazio di archiviazione totale",
-        usedTotal: (used, total) => `${used} usati su ${total}`,
-        loading: 'Caricamento…',
-        free: 'libero'
+      measuring: 'measuring…',
+      space: {
+        drive: (letter) => `Drive ${letter}:`,
+        heading: 'Where is my space going?',
+        summary: (used, total, free) => `${used} used of ${total} · ${free} free`,
+        loading: 'Reading drive space…',
+        barLabel: (programs, other, free) => `Drive space: installed programs ${programs}, everything else ${other}, free ${free}.`,
+        barLabelMeasuring: (used, free) => `Drive space: ${used} used, ${free} free. Installed programs are still being measured.`,
+        legendPrograms: 'Installed programs',
+        legendOther: 'Everything else',
+        legendUsed: 'Used',
+        legendFree: 'Free',
+        unsized: (count) => `${count} ${count === 1 ? 'program' : 'programs'} without a size`,
+        exceedsUsed: 'Program sizes add up to more than is used on this drive.'
       },
-      apps: {
-        label: "Applicazioni installate",
-        broken: (count) => `${count} ${count === 1 ? 'lasciata' : 'lasciate'} da una disinstallazione non riuscita`,
-        noBroken: 'Nothing left behind.',
-        review: 'Rivedi',
-        manage: 'Gestisci'
+      largest: {
+        heading: 'Largest programs',
+        openApplications: 'Open Applications',
+        installedCount: (count) => `${count} installed`,
+        measuring: 'Measuring program sizes…',
+        none: 'No program has a measured size yet.',
+        notInList: (size) => `The other ${size} is not in the program list.`,
+        seeDiskMap: 'See it in Disk Map.'
       },
-      junk: {
-        label: "File inutili",
-        notMeasured: 'non misurato',
-        description: "La misurazione percorre ogni percorso degli strumenti di pulizia sul disco — circa mezzo minuto.",
-        measure: 'Misura'
+      quiet: {
+        scoreOf: (score) => `${score} of 100`,
+        driveDetails: 'Drive details',
+        junkTitle: 'Junk files',
+        junkNotMeasured: 'Not measured',
+        junkMeasure: 'Measure',
+        junkProgress: (scanned, total) => `Measuring… ${scanned} of ${total}`,
+        junkMeasuring: 'Measuring…',
+        junkBasis: (count) => `Across ${count} recommended ${count === 1 ? 'cleaner' : 'cleaners'}`,
+        junkError: (message) => `Couldn't measure junk files: ${message}`,
+        openDeepClean: 'Open Deep Clean',
+        leftTitle: 'Left behind',
+        leftCount: (count) => `${count} ${count === 1 ? 'program' : 'programs'}`,
+        leftNone: 'Nothing left behind.',
+        leftReview: 'Review'
       },
       recentActivity: {
         title: "Attività recente",
@@ -14749,24 +15127,45 @@ export const CATALOG = {
         mediaErrors: 'メディアエラー',
         errorLogEntries: 'エラーログの件数'
       },
-      storage: {
-        label: 'ストレージ合計',
-        usedTotal: (used, total) => `${used} 使用中 / ${total}`,
-        loading: '読み込み中…',
-        free: '空き'
+      measuring: 'measuring…',
+      space: {
+        drive: (letter) => `Drive ${letter}:`,
+        heading: 'Where is my space going?',
+        summary: (used, total, free) => `${used} used of ${total} · ${free} free`,
+        loading: 'Reading drive space…',
+        barLabel: (programs, other, free) => `Drive space: installed programs ${programs}, everything else ${other}, free ${free}.`,
+        barLabelMeasuring: (used, free) => `Drive space: ${used} used, ${free} free. Installed programs are still being measured.`,
+        legendPrograms: 'Installed programs',
+        legendOther: 'Everything else',
+        legendUsed: 'Used',
+        legendFree: 'Free',
+        unsized: (count) => `${count} ${count === 1 ? 'program' : 'programs'} without a size`,
+        exceedsUsed: 'Program sizes add up to more than is used on this drive.'
       },
-      apps: {
-        label: 'インストール済みアプリ',
-        broken: (count) => `アンインストール失敗により残された項目が${count}件`,
-        noBroken: 'Nothing left behind.',
-        review: '確認',
-        manage: '管理'
+      largest: {
+        heading: 'Largest programs',
+        openApplications: 'Open Applications',
+        installedCount: (count) => `${count} installed`,
+        measuring: 'Measuring program sizes…',
+        none: 'No program has a measured size yet.',
+        notInList: (size) => `The other ${size} is not in the program list.`,
+        seeDiskMap: 'See it in Disk Map.'
       },
-      junk: {
-        label: '不要なファイル',
-        notMeasured: '未測定',
-        description: "測定はディスク上のすべてのクリーナーのパスを調べます — 約30秒。",
-        measure: '測定'
+      quiet: {
+        scoreOf: (score) => `${score} of 100`,
+        driveDetails: 'Drive details',
+        junkTitle: 'Junk files',
+        junkNotMeasured: 'Not measured',
+        junkMeasure: 'Measure',
+        junkProgress: (scanned, total) => `Measuring… ${scanned} of ${total}`,
+        junkMeasuring: 'Measuring…',
+        junkBasis: (count) => `Across ${count} recommended ${count === 1 ? 'cleaner' : 'cleaners'}`,
+        junkError: (message) => `Couldn't measure junk files: ${message}`,
+        openDeepClean: 'Open Deep Clean',
+        leftTitle: 'Left behind',
+        leftCount: (count) => `${count} ${count === 1 ? 'program' : 'programs'}`,
+        leftNone: 'Nothing left behind.',
+        leftReview: 'Review'
       },
       recentActivity: {
         title: '最近のアクティビティ',
@@ -15555,24 +15954,45 @@ export const CATALOG = {
         mediaErrors: '미디어 오류',
         errorLogEntries: '오류 로그 항목'
       },
-      storage: {
-        label: '총 저장 공간',
-        usedTotal: (used, total) => `전체 ${total} 중 ${used} 사용`,
-        loading: '불러오는 중…',
-        free: '여유 공간'
+      measuring: 'measuring…',
+      space: {
+        drive: (letter) => `Drive ${letter}:`,
+        heading: 'Where is my space going?',
+        summary: (used, total, free) => `${used} used of ${total} · ${free} free`,
+        loading: 'Reading drive space…',
+        barLabel: (programs, other, free) => `Drive space: installed programs ${programs}, everything else ${other}, free ${free}.`,
+        barLabelMeasuring: (used, free) => `Drive space: ${used} used, ${free} free. Installed programs are still being measured.`,
+        legendPrograms: 'Installed programs',
+        legendOther: 'Everything else',
+        legendUsed: 'Used',
+        legendFree: 'Free',
+        unsized: (count) => `${count} ${count === 1 ? 'program' : 'programs'} without a size`,
+        exceedsUsed: 'Program sizes add up to more than is used on this drive.'
       },
-      apps: {
-        label: '설치된 앱',
-        broken: (count) => `제거 실패로 남은 항목 ${count}개`,
-        noBroken: 'Nothing left behind.',
-        review: '검토',
-        manage: '관리'
+      largest: {
+        heading: 'Largest programs',
+        openApplications: 'Open Applications',
+        installedCount: (count) => `${count} installed`,
+        measuring: 'Measuring program sizes…',
+        none: 'No program has a measured size yet.',
+        notInList: (size) => `The other ${size} is not in the program list.`,
+        seeDiskMap: 'See it in Disk Map.'
       },
-      junk: {
-        label: '불필요한 파일',
-        notMeasured: '측정되지 않음',
-        description: "측정은 디스크의 모든 클리너 경로를 살펴봅니다 — 약 30초 소요.",
-        measure: '측정'
+      quiet: {
+        scoreOf: (score) => `${score} of 100`,
+        driveDetails: 'Drive details',
+        junkTitle: 'Junk files',
+        junkNotMeasured: 'Not measured',
+        junkMeasure: 'Measure',
+        junkProgress: (scanned, total) => `Measuring… ${scanned} of ${total}`,
+        junkMeasuring: 'Measuring…',
+        junkBasis: (count) => `Across ${count} recommended ${count === 1 ? 'cleaner' : 'cleaners'}`,
+        junkError: (message) => `Couldn't measure junk files: ${message}`,
+        openDeepClean: 'Open Deep Clean',
+        leftTitle: 'Left behind',
+        leftCount: (count) => `${count} ${count === 1 ? 'program' : 'programs'}`,
+        leftNone: 'Nothing left behind.',
+        leftReview: 'Review'
       },
       recentActivity: {
         title: '최근 활동',
@@ -16361,24 +16781,45 @@ export const CATALOG = {
         mediaErrors: 'Laikmenos klaidos',
         errorLogEntries: 'Klaidų žurnalo įrašai'
       },
-      storage: {
-        label: "Bendra talpa",
-        usedTotal: (used, total) => `${used} naudojama / ${total} iš viso`,
-        loading: 'Įkeliama…',
-        free: 'laisva'
+      measuring: 'measuring…',
+      space: {
+        drive: (letter) => `Drive ${letter}:`,
+        heading: 'Where is my space going?',
+        summary: (used, total, free) => `${used} used of ${total} · ${free} free`,
+        loading: 'Reading drive space…',
+        barLabel: (programs, other, free) => `Drive space: installed programs ${programs}, everything else ${other}, free ${free}.`,
+        barLabelMeasuring: (used, free) => `Drive space: ${used} used, ${free} free. Installed programs are still being measured.`,
+        legendPrograms: 'Installed programs',
+        legendOther: 'Everything else',
+        legendUsed: 'Used',
+        legendFree: 'Free',
+        unsized: (count) => `${count} ${count === 1 ? 'program' : 'programs'} without a size`,
+        exceedsUsed: 'Program sizes add up to more than is used on this drive.'
       },
-      apps: {
-        label: "Įdiegtos programos",
-        broken: (count) => `Liekanų po nepavykusio šalinimo: ${count}`,
-        noBroken: 'Nothing left behind.',
-        review: 'Peržiūrėti',
-        manage: 'Tvarkyti'
+      largest: {
+        heading: 'Largest programs',
+        openApplications: 'Open Applications',
+        installedCount: (count) => `${count} installed`,
+        measuring: 'Measuring program sizes…',
+        none: 'No program has a measured size yet.',
+        notInList: (size) => `The other ${size} is not in the program list.`,
+        seeDiskMap: 'See it in Disk Map.'
       },
-      junk: {
-        label: "Nereikalingi failai",
-        notMeasured: 'nematuota',
-        description: 'Matavimas peržiūri kiekvieną valymo kelią diske — apie pusę minutės.',
-        measure: 'Matuoti'
+      quiet: {
+        scoreOf: (score) => `${score} of 100`,
+        driveDetails: 'Drive details',
+        junkTitle: 'Junk files',
+        junkNotMeasured: 'Not measured',
+        junkMeasure: 'Measure',
+        junkProgress: (scanned, total) => `Measuring… ${scanned} of ${total}`,
+        junkMeasuring: 'Measuring…',
+        junkBasis: (count) => `Across ${count} recommended ${count === 1 ? 'cleaner' : 'cleaners'}`,
+        junkError: (message) => `Couldn't measure junk files: ${message}`,
+        openDeepClean: 'Open Deep Clean',
+        leftTitle: 'Left behind',
+        leftCount: (count) => `${count} ${count === 1 ? 'program' : 'programs'}`,
+        leftNone: 'Nothing left behind.',
+        leftReview: 'Review'
       },
       recentActivity: {
         title: "Naujausia veikla",
@@ -17165,24 +17606,45 @@ export const CATALOG = {
         mediaErrors: 'Ralat media',
         errorLogEntries: 'Entri log ralat'
       },
-      storage: {
-        label: "Jumlah storan",
-        usedTotal: (used, total) => `${used} digunakan daripada ${total}`,
-        loading: 'Memuatkan…',
-        free: 'bebas'
+      measuring: 'measuring…',
+      space: {
+        drive: (letter) => `Drive ${letter}:`,
+        heading: 'Where is my space going?',
+        summary: (used, total, free) => `${used} used of ${total} · ${free} free`,
+        loading: 'Reading drive space…',
+        barLabel: (programs, other, free) => `Drive space: installed programs ${programs}, everything else ${other}, free ${free}.`,
+        barLabelMeasuring: (used, free) => `Drive space: ${used} used, ${free} free. Installed programs are still being measured.`,
+        legendPrograms: 'Installed programs',
+        legendOther: 'Everything else',
+        legendUsed: 'Used',
+        legendFree: 'Free',
+        unsized: (count) => `${count} ${count === 1 ? 'program' : 'programs'} without a size`,
+        exceedsUsed: 'Program sizes add up to more than is used on this drive.'
       },
-      apps: {
-        label: "Aplikasi yang dipasang",
-        broken: (count) => `${count} ditinggalkan oleh nyahpasangan yang gagal`,
-        noBroken: 'Nothing left behind.',
-        review: 'Semak',
-        manage: 'Urus'
+      largest: {
+        heading: 'Largest programs',
+        openApplications: 'Open Applications',
+        installedCount: (count) => `${count} installed`,
+        measuring: 'Measuring program sizes…',
+        none: 'No program has a measured size yet.',
+        notInList: (size) => `The other ${size} is not in the program list.`,
+        seeDiskMap: 'See it in Disk Map.'
       },
-      junk: {
-        label: "Fail sampah",
-        notMeasured: 'belum diukur',
-        description: "Mengukur melalui setiap laluan pembersih pada cakera — kira-kira setengah minit.",
-        measure: 'Ukur'
+      quiet: {
+        scoreOf: (score) => `${score} of 100`,
+        driveDetails: 'Drive details',
+        junkTitle: 'Junk files',
+        junkNotMeasured: 'Not measured',
+        junkMeasure: 'Measure',
+        junkProgress: (scanned, total) => `Measuring… ${scanned} of ${total}`,
+        junkMeasuring: 'Measuring…',
+        junkBasis: (count) => `Across ${count} recommended ${count === 1 ? 'cleaner' : 'cleaners'}`,
+        junkError: (message) => `Couldn't measure junk files: ${message}`,
+        openDeepClean: 'Open Deep Clean',
+        leftTitle: 'Left behind',
+        leftCount: (count) => `${count} ${count === 1 ? 'program' : 'programs'}`,
+        leftNone: 'Nothing left behind.',
+        leftReview: 'Review'
       },
       recentActivity: {
         title: "Aktiviti terkini",
@@ -17971,24 +18433,45 @@ export const CATALOG = {
         mediaErrors: 'Mediefeil',
         errorLogEntries: 'Feilloggoppføringer'
       },
-      storage: {
-        label: "Total lagringsplass",
-        usedTotal: (used, total) => `${used} brukt / ${total} totalt`,
-        loading: 'Laster…',
-        free: 'ledig'
+      measuring: 'measuring…',
+      space: {
+        drive: (letter) => `Drive ${letter}:`,
+        heading: 'Where is my space going?',
+        summary: (used, total, free) => `${used} used of ${total} · ${free} free`,
+        loading: 'Reading drive space…',
+        barLabel: (programs, other, free) => `Drive space: installed programs ${programs}, everything else ${other}, free ${free}.`,
+        barLabelMeasuring: (used, free) => `Drive space: ${used} used, ${free} free. Installed programs are still being measured.`,
+        legendPrograms: 'Installed programs',
+        legendOther: 'Everything else',
+        legendUsed: 'Used',
+        legendFree: 'Free',
+        unsized: (count) => `${count} ${count === 1 ? 'program' : 'programs'} without a size`,
+        exceedsUsed: 'Program sizes add up to more than is used on this drive.'
       },
-      apps: {
-        label: "Installerte programmer",
-        broken: (count) => `${count} etterlatt${count === 1 ? '' : 'e'} av en mislykket avinstallering`,
-        noBroken: 'Nothing left behind.',
-        review: 'Gjennomgå',
-        manage: 'Administrer'
+      largest: {
+        heading: 'Largest programs',
+        openApplications: 'Open Applications',
+        installedCount: (count) => `${count} installed`,
+        measuring: 'Measuring program sizes…',
+        none: 'No program has a measured size yet.',
+        notInList: (size) => `The other ${size} is not in the program list.`,
+        seeDiskMap: 'See it in Disk Map.'
       },
-      junk: {
-        label: "Unødvendige filer",
-        notMeasured: 'ikke målt',
-        description: 'Måling går gjennom hver opprydningssti på disken — omtrent et halvt minutt.',
-        measure: 'Mål'
+      quiet: {
+        scoreOf: (score) => `${score} of 100`,
+        driveDetails: 'Drive details',
+        junkTitle: 'Junk files',
+        junkNotMeasured: 'Not measured',
+        junkMeasure: 'Measure',
+        junkProgress: (scanned, total) => `Measuring… ${scanned} of ${total}`,
+        junkMeasuring: 'Measuring…',
+        junkBasis: (count) => `Across ${count} recommended ${count === 1 ? 'cleaner' : 'cleaners'}`,
+        junkError: (message) => `Couldn't measure junk files: ${message}`,
+        openDeepClean: 'Open Deep Clean',
+        leftTitle: 'Left behind',
+        leftCount: (count) => `${count} ${count === 1 ? 'program' : 'programs'}`,
+        leftNone: 'Nothing left behind.',
+        leftReview: 'Review'
       },
       recentActivity: {
         title: "Nylig aktivitet",
@@ -18775,24 +19258,45 @@ export const CATALOG = {
         mediaErrors: 'Mediafouten',
         errorLogEntries: 'Foutlogboekvermeldingen'
       },
-      storage: {
-        label: "Totale opslag",
-        usedTotal: (used, total) => `${used} gebruikt / ${total} totaal`,
-        loading: 'Laden…',
-        free: 'vrij'
+      measuring: 'measuring…',
+      space: {
+        drive: (letter) => `Drive ${letter}:`,
+        heading: 'Where is my space going?',
+        summary: (used, total, free) => `${used} used of ${total} · ${free} free`,
+        loading: 'Reading drive space…',
+        barLabel: (programs, other, free) => `Drive space: installed programs ${programs}, everything else ${other}, free ${free}.`,
+        barLabelMeasuring: (used, free) => `Drive space: ${used} used, ${free} free. Installed programs are still being measured.`,
+        legendPrograms: 'Installed programs',
+        legendOther: 'Everything else',
+        legendUsed: 'Used',
+        legendFree: 'Free',
+        unsized: (count) => `${count} ${count === 1 ? 'program' : 'programs'} without a size`,
+        exceedsUsed: 'Program sizes add up to more than is used on this drive.'
       },
-      apps: {
-        label: "Geïnstalleerde toepassingen",
-        broken: (count) => `${count} achtergelaten door een mislukte verwijdering`,
-        noBroken: 'Nothing left behind.',
-        review: 'Bekijken',
-        manage: 'Beheren'
+      largest: {
+        heading: 'Largest programs',
+        openApplications: 'Open Applications',
+        installedCount: (count) => `${count} installed`,
+        measuring: 'Measuring program sizes…',
+        none: 'No program has a measured size yet.',
+        notInList: (size) => `The other ${size} is not in the program list.`,
+        seeDiskMap: 'See it in Disk Map.'
       },
-      junk: {
-        label: "Onnodige bestanden",
-        notMeasured: 'niet gemeten',
-        description: 'Meten doorloopt elk opschoningspad op de schijf — ongeveer een halve minuut.',
-        measure: 'Meten'
+      quiet: {
+        scoreOf: (score) => `${score} of 100`,
+        driveDetails: 'Drive details',
+        junkTitle: 'Junk files',
+        junkNotMeasured: 'Not measured',
+        junkMeasure: 'Measure',
+        junkProgress: (scanned, total) => `Measuring… ${scanned} of ${total}`,
+        junkMeasuring: 'Measuring…',
+        junkBasis: (count) => `Across ${count} recommended ${count === 1 ? 'cleaner' : 'cleaners'}`,
+        junkError: (message) => `Couldn't measure junk files: ${message}`,
+        openDeepClean: 'Open Deep Clean',
+        leftTitle: 'Left behind',
+        leftCount: (count) => `${count} ${count === 1 ? 'program' : 'programs'}`,
+        leftNone: 'Nothing left behind.',
+        leftReview: 'Review'
       },
       recentActivity: {
         title: "Recente activiteit",
@@ -19579,24 +20083,45 @@ export const CATALOG = {
         mediaErrors: 'Błędy nośnika',
         errorLogEntries: 'Wpisy dziennika błędów'
       },
-      storage: {
-        label: "Całkowita pojemność",
-        usedTotal: (used, total) => `Użyto ${used} z ${total}`,
-        loading: 'Wczytywanie…',
-        free: 'wolne'
+      measuring: 'measuring…',
+      space: {
+        drive: (letter) => `Drive ${letter}:`,
+        heading: 'Where is my space going?',
+        summary: (used, total, free) => `${used} used of ${total} · ${free} free`,
+        loading: 'Reading drive space…',
+        barLabel: (programs, other, free) => `Drive space: installed programs ${programs}, everything else ${other}, free ${free}.`,
+        barLabelMeasuring: (used, free) => `Drive space: ${used} used, ${free} free. Installed programs are still being measured.`,
+        legendPrograms: 'Installed programs',
+        legendOther: 'Everything else',
+        legendUsed: 'Used',
+        legendFree: 'Free',
+        unsized: (count) => `${count} ${count === 1 ? 'program' : 'programs'} without a size`,
+        exceedsUsed: 'Program sizes add up to more than is used on this drive.'
       },
-      apps: {
-        label: "Zainstalowane aplikacje",
-        broken: (count) => `Pozostawione po nieudanym odinstalowaniu: ${count}`,
-        noBroken: 'Nothing left behind.',
-        review: 'Przejrzyj',
-        manage: 'Zarządzaj'
+      largest: {
+        heading: 'Largest programs',
+        openApplications: 'Open Applications',
+        installedCount: (count) => `${count} installed`,
+        measuring: 'Measuring program sizes…',
+        none: 'No program has a measured size yet.',
+        notInList: (size) => `The other ${size} is not in the program list.`,
+        seeDiskMap: 'See it in Disk Map.'
       },
-      junk: {
-        label: "Zbędne pliki",
-        notMeasured: 'niezmierzone',
-        description: "Pomiar przechodzi przez ścieżki wszystkich modułów czyszczenia na dysku — około pół minuty.",
-        measure: 'Zmierz'
+      quiet: {
+        scoreOf: (score) => `${score} of 100`,
+        driveDetails: 'Drive details',
+        junkTitle: 'Junk files',
+        junkNotMeasured: 'Not measured',
+        junkMeasure: 'Measure',
+        junkProgress: (scanned, total) => `Measuring… ${scanned} of ${total}`,
+        junkMeasuring: 'Measuring…',
+        junkBasis: (count) => `Across ${count} recommended ${count === 1 ? 'cleaner' : 'cleaners'}`,
+        junkError: (message) => `Couldn't measure junk files: ${message}`,
+        openDeepClean: 'Open Deep Clean',
+        leftTitle: 'Left behind',
+        leftCount: (count) => `${count} ${count === 1 ? 'program' : 'programs'}`,
+        leftNone: 'Nothing left behind.',
+        leftReview: 'Review'
       },
       recentActivity: {
         title: "Ostatnia aktywność",
@@ -20383,24 +20908,45 @@ export const CATALOG = {
         mediaErrors: 'د رسنیو تېروتنې',
         errorLogEntries: 'د تېروتنو لاګ ننوتنې'
       },
-      storage: {
-        label: "ټوله ذخیره",
-        usedTotal: (used, total) => `له ${total} څخه ${used} کارول شوي`,
-        loading: 'بارول کیږي…',
-        free: 'خالي'
+      measuring: 'measuring…',
+      space: {
+        drive: (letter) => `Drive ${letter}:`,
+        heading: 'Where is my space going?',
+        summary: (used, total, free) => `${used} used of ${total} · ${free} free`,
+        loading: 'Reading drive space…',
+        barLabel: (programs, other, free) => `Drive space: installed programs ${programs}, everything else ${other}, free ${free}.`,
+        barLabelMeasuring: (used, free) => `Drive space: ${used} used, ${free} free. Installed programs are still being measured.`,
+        legendPrograms: 'Installed programs',
+        legendOther: 'Everything else',
+        legendUsed: 'Used',
+        legendFree: 'Free',
+        unsized: (count) => `${count} ${count === 1 ? 'program' : 'programs'} without a size`,
+        exceedsUsed: 'Program sizes add up to more than is used on this drive.'
       },
-      apps: {
-        label: "نصب شوي غوښتنلیکونه",
-        broken: (count) => `${count} د ناکامې لرې کولو له امله پاتې شوي`,
-        noBroken: 'Nothing left behind.',
-        review: 'بیاکتنه',
-        manage: 'مدیریت'
+      largest: {
+        heading: 'Largest programs',
+        openApplications: 'Open Applications',
+        installedCount: (count) => `${count} installed`,
+        measuring: 'Measuring program sizes…',
+        none: 'No program has a measured size yet.',
+        notInList: (size) => `The other ${size} is not in the program list.`,
+        seeDiskMap: 'See it in Disk Map.'
       },
-      junk: {
-        label: 'غیر ضروري فایلونه',
-        notMeasured: 'اندازه نشوې',
-        description: "اندازه کول د ډیسک د هر پاکوونکي په لارو کې ګرځي — شاوخوا نیم دقیقه.",
-        measure: 'اندازه کول'
+      quiet: {
+        scoreOf: (score) => `${score} of 100`,
+        driveDetails: 'Drive details',
+        junkTitle: 'Junk files',
+        junkNotMeasured: 'Not measured',
+        junkMeasure: 'Measure',
+        junkProgress: (scanned, total) => `Measuring… ${scanned} of ${total}`,
+        junkMeasuring: 'Measuring…',
+        junkBasis: (count) => `Across ${count} recommended ${count === 1 ? 'cleaner' : 'cleaners'}`,
+        junkError: (message) => `Couldn't measure junk files: ${message}`,
+        openDeepClean: 'Open Deep Clean',
+        leftTitle: 'Left behind',
+        leftCount: (count) => `${count} ${count === 1 ? 'program' : 'programs'}`,
+        leftNone: 'Nothing left behind.',
+        leftReview: 'Review'
       },
       recentActivity: {
         title: "وروستي فعالیتونه",
@@ -21189,24 +21735,45 @@ export const CATALOG = {
         mediaErrors: 'Erros de mídia',
         errorLogEntries: 'Entradas do log de erros'
       },
-      storage: {
-        label: "Armazenamento total",
-        usedTotal: (used, total) => `${used} usado / ${total} total`,
-        loading: 'Carregando…',
-        free: 'livre'
+      measuring: 'measuring…',
+      space: {
+        drive: (letter) => `Drive ${letter}:`,
+        heading: 'Where is my space going?',
+        summary: (used, total, free) => `${used} used of ${total} · ${free} free`,
+        loading: 'Reading drive space…',
+        barLabel: (programs, other, free) => `Drive space: installed programs ${programs}, everything else ${other}, free ${free}.`,
+        barLabelMeasuring: (used, free) => `Drive space: ${used} used, ${free} free. Installed programs are still being measured.`,
+        legendPrograms: 'Installed programs',
+        legendOther: 'Everything else',
+        legendUsed: 'Used',
+        legendFree: 'Free',
+        unsized: (count) => `${count} ${count === 1 ? 'program' : 'programs'} without a size`,
+        exceedsUsed: 'Program sizes add up to more than is used on this drive.'
       },
-      apps: {
-        label: "Aplicativos instalados",
-        broken: (count) => `${count} deixado${count === 1 ? '' : 's'} por uma desinstalação malsucedida`,
-        noBroken: 'Nothing left behind.',
-        review: 'Revisar',
-        manage: 'Gerenciar'
+      largest: {
+        heading: 'Largest programs',
+        openApplications: 'Open Applications',
+        installedCount: (count) => `${count} installed`,
+        measuring: 'Measuring program sizes…',
+        none: 'No program has a measured size yet.',
+        notInList: (size) => `The other ${size} is not in the program list.`,
+        seeDiskMap: 'See it in Disk Map.'
       },
-      junk: {
-        label: "Arquivos desnecessários",
-        notMeasured: 'não medido',
-        description: 'Medir percorre cada caminho de limpeza no disco — cerca de meio minuto.',
-        measure: 'Medir'
+      quiet: {
+        scoreOf: (score) => `${score} of 100`,
+        driveDetails: 'Drive details',
+        junkTitle: 'Junk files',
+        junkNotMeasured: 'Not measured',
+        junkMeasure: 'Measure',
+        junkProgress: (scanned, total) => `Measuring… ${scanned} of ${total}`,
+        junkMeasuring: 'Measuring…',
+        junkBasis: (count) => `Across ${count} recommended ${count === 1 ? 'cleaner' : 'cleaners'}`,
+        junkError: (message) => `Couldn't measure junk files: ${message}`,
+        openDeepClean: 'Open Deep Clean',
+        leftTitle: 'Left behind',
+        leftCount: (count) => `${count} ${count === 1 ? 'program' : 'programs'}`,
+        leftNone: 'Nothing left behind.',
+        leftReview: 'Review'
       },
       recentActivity: {
         title: "Atividade recente",
@@ -21993,24 +22560,45 @@ export const CATALOG = {
         mediaErrors: 'Erros de suporte',
         errorLogEntries: 'Entradas do registo de erros'
       },
-      storage: {
-        label: "Armazenamento total",
-        usedTotal: (used, total) => `${used} usado / ${total} total`,
-        loading: 'A carregar…',
-        free: 'livre'
+      measuring: 'measuring…',
+      space: {
+        drive: (letter) => `Drive ${letter}:`,
+        heading: 'Where is my space going?',
+        summary: (used, total, free) => `${used} used of ${total} · ${free} free`,
+        loading: 'Reading drive space…',
+        barLabel: (programs, other, free) => `Drive space: installed programs ${programs}, everything else ${other}, free ${free}.`,
+        barLabelMeasuring: (used, free) => `Drive space: ${used} used, ${free} free. Installed programs are still being measured.`,
+        legendPrograms: 'Installed programs',
+        legendOther: 'Everything else',
+        legendUsed: 'Used',
+        legendFree: 'Free',
+        unsized: (count) => `${count} ${count === 1 ? 'program' : 'programs'} without a size`,
+        exceedsUsed: 'Program sizes add up to more than is used on this drive.'
       },
-      apps: {
-        label: "Aplicações instaladas",
-        broken: (count) => `${count} deixada${count === 1 ? '' : 's'} por uma desinstalação falhada`,
-        noBroken: 'Nothing left behind.',
-        review: 'Rever',
-        manage: 'Gerir'
+      largest: {
+        heading: 'Largest programs',
+        openApplications: 'Open Applications',
+        installedCount: (count) => `${count} installed`,
+        measuring: 'Measuring program sizes…',
+        none: 'No program has a measured size yet.',
+        notInList: (size) => `The other ${size} is not in the program list.`,
+        seeDiskMap: 'See it in Disk Map.'
       },
-      junk: {
-        label: "Ficheiros desnecessários",
-        notMeasured: 'não medido',
-        description: 'Medir percorre cada caminho de limpeza no disco — cerca de meio minuto.',
-        measure: 'Medir'
+      quiet: {
+        scoreOf: (score) => `${score} of 100`,
+        driveDetails: 'Drive details',
+        junkTitle: 'Junk files',
+        junkNotMeasured: 'Not measured',
+        junkMeasure: 'Measure',
+        junkProgress: (scanned, total) => `Measuring… ${scanned} of ${total}`,
+        junkMeasuring: 'Measuring…',
+        junkBasis: (count) => `Across ${count} recommended ${count === 1 ? 'cleaner' : 'cleaners'}`,
+        junkError: (message) => `Couldn't measure junk files: ${message}`,
+        openDeepClean: 'Open Deep Clean',
+        leftTitle: 'Left behind',
+        leftCount: (count) => `${count} ${count === 1 ? 'program' : 'programs'}`,
+        leftNone: 'Nothing left behind.',
+        leftReview: 'Review'
       },
       recentActivity: {
         title: "Atividade recente",
@@ -22799,24 +23387,45 @@ export const CATALOG = {
         mediaErrors: 'Erori media',
         errorLogEntries: 'Intrări în jurnalul de erori'
       },
-      storage: {
-        label: "Stocare totală",
-        usedTotal: (used, total) => `${used} utilizat / ${total} total`,
-        loading: 'Se încarcă…',
-        free: 'liber'
+      measuring: 'measuring…',
+      space: {
+        drive: (letter) => `Drive ${letter}:`,
+        heading: 'Where is my space going?',
+        summary: (used, total, free) => `${used} used of ${total} · ${free} free`,
+        loading: 'Reading drive space…',
+        barLabel: (programs, other, free) => `Drive space: installed programs ${programs}, everything else ${other}, free ${free}.`,
+        barLabelMeasuring: (used, free) => `Drive space: ${used} used, ${free} free. Installed programs are still being measured.`,
+        legendPrograms: 'Installed programs',
+        legendOther: 'Everything else',
+        legendUsed: 'Used',
+        legendFree: 'Free',
+        unsized: (count) => `${count} ${count === 1 ? 'program' : 'programs'} without a size`,
+        exceedsUsed: 'Program sizes add up to more than is used on this drive.'
       },
-      apps: {
-        label: "Aplicații instalate",
-        broken: (count) => `${count} ${count === 1 ? 'rest rămas' : `${count % 100 >= 1 && count % 100 < 20 ? '' : 'de '}resturi rămase`} în urma unei dezinstalări eșuate`,
-        noBroken: 'Nothing left behind.',
-        review: 'Revizuiește',
-        manage: 'Gestionează'
+      largest: {
+        heading: 'Largest programs',
+        openApplications: 'Open Applications',
+        installedCount: (count) => `${count} installed`,
+        measuring: 'Measuring program sizes…',
+        none: 'No program has a measured size yet.',
+        notInList: (size) => `The other ${size} is not in the program list.`,
+        seeDiskMap: 'See it in Disk Map.'
       },
-      junk: {
-        label: "Fișiere inutile",
-        notMeasured: 'nemăsurat',
-        description: 'Măsurarea parcurge fiecare cale de curățare de pe disc — aproximativ jumătate de minut.',
-        measure: 'Măsoară'
+      quiet: {
+        scoreOf: (score) => `${score} of 100`,
+        driveDetails: 'Drive details',
+        junkTitle: 'Junk files',
+        junkNotMeasured: 'Not measured',
+        junkMeasure: 'Measure',
+        junkProgress: (scanned, total) => `Measuring… ${scanned} of ${total}`,
+        junkMeasuring: 'Measuring…',
+        junkBasis: (count) => `Across ${count} recommended ${count === 1 ? 'cleaner' : 'cleaners'}`,
+        junkError: (message) => `Couldn't measure junk files: ${message}`,
+        openDeepClean: 'Open Deep Clean',
+        leftTitle: 'Left behind',
+        leftCount: (count) => `${count} ${count === 1 ? 'program' : 'programs'}`,
+        leftNone: 'Nothing left behind.',
+        leftReview: 'Review'
       },
       recentActivity: {
         title: "Activitate recentă",
@@ -23605,24 +24214,45 @@ export const CATALOG = {
         mediaErrors: 'Ошибки носителя',
         errorLogEntries: 'Записи журнала ошибок'
       },
-      storage: {
-        label: "Всего места",
-        usedTotal: (used, total) => `${used} использовано / ${total} всего`,
-        loading: 'Загрузка…',
-        free: 'свободно'
+      measuring: 'measuring…',
+      space: {
+        drive: (letter) => `Drive ${letter}:`,
+        heading: 'Where is my space going?',
+        summary: (used, total, free) => `${used} used of ${total} · ${free} free`,
+        loading: 'Reading drive space…',
+        barLabel: (programs, other, free) => `Drive space: installed programs ${programs}, everything else ${other}, free ${free}.`,
+        barLabelMeasuring: (used, free) => `Drive space: ${used} used, ${free} free. Installed programs are still being measured.`,
+        legendPrograms: 'Installed programs',
+        legendOther: 'Everything else',
+        legendUsed: 'Used',
+        legendFree: 'Free',
+        unsized: (count) => `${count} ${count === 1 ? 'program' : 'programs'} without a size`,
+        exceedsUsed: 'Program sizes add up to more than is used on this drive.'
       },
-      apps: {
-        label: "Установленные приложения",
-        broken: (count) => `${count} осталось после неудачного удаления`,
-        noBroken: 'Nothing left behind.',
-        review: 'Проверить',
-        manage: 'Управление'
+      largest: {
+        heading: 'Largest programs',
+        openApplications: 'Open Applications',
+        installedCount: (count) => `${count} installed`,
+        measuring: 'Measuring program sizes…',
+        none: 'No program has a measured size yet.',
+        notInList: (size) => `The other ${size} is not in the program list.`,
+        seeDiskMap: 'See it in Disk Map.'
       },
-      junk: {
-        label: "Ненужные файлы",
-        notMeasured: 'не измерено',
-        description: "Измерение проходит по путям каждого средства очистки на диске — примерно полминуты.",
-        measure: 'Измерить'
+      quiet: {
+        scoreOf: (score) => `${score} of 100`,
+        driveDetails: 'Drive details',
+        junkTitle: 'Junk files',
+        junkNotMeasured: 'Not measured',
+        junkMeasure: 'Measure',
+        junkProgress: (scanned, total) => `Measuring… ${scanned} of ${total}`,
+        junkMeasuring: 'Measuring…',
+        junkBasis: (count) => `Across ${count} recommended ${count === 1 ? 'cleaner' : 'cleaners'}`,
+        junkError: (message) => `Couldn't measure junk files: ${message}`,
+        openDeepClean: 'Open Deep Clean',
+        leftTitle: 'Left behind',
+        leftCount: (count) => `${count} ${count === 1 ? 'program' : 'programs'}`,
+        leftNone: 'Nothing left behind.',
+        leftReview: 'Review'
       },
       recentActivity: {
         title: "Недавняя активность",
@@ -24409,24 +25039,45 @@ export const CATALOG = {
         mediaErrors: 'Chyby média',
         errorLogEntries: 'Záznamy denníka chýb'
       },
-      storage: {
-        label: "Celkové úložisko",
-        usedTotal: (used, total) => `Využité ${used} z ${total}`,
-        loading: 'Načítava sa…',
-        free: 'voľné'
+      measuring: 'measuring…',
+      space: {
+        drive: (letter) => `Drive ${letter}:`,
+        heading: 'Where is my space going?',
+        summary: (used, total, free) => `${used} used of ${total} · ${free} free`,
+        loading: 'Reading drive space…',
+        barLabel: (programs, other, free) => `Drive space: installed programs ${programs}, everything else ${other}, free ${free}.`,
+        barLabelMeasuring: (used, free) => `Drive space: ${used} used, ${free} free. Installed programs are still being measured.`,
+        legendPrograms: 'Installed programs',
+        legendOther: 'Everything else',
+        legendUsed: 'Used',
+        legendFree: 'Free',
+        unsized: (count) => `${count} ${count === 1 ? 'program' : 'programs'} without a size`,
+        exceedsUsed: 'Program sizes add up to more than is used on this drive.'
       },
-      apps: {
-        label: "Nainštalované aplikácie",
-        broken: (count) => `Zanechané po neúspešnom odinštalovaní: ${count}`,
-        noBroken: 'Nothing left behind.',
-        review: 'Skontrolovať',
-        manage: 'Spravovať'
+      largest: {
+        heading: 'Largest programs',
+        openApplications: 'Open Applications',
+        installedCount: (count) => `${count} installed`,
+        measuring: 'Measuring program sizes…',
+        none: 'No program has a measured size yet.',
+        notInList: (size) => `The other ${size} is not in the program list.`,
+        seeDiskMap: 'See it in Disk Map.'
       },
-      junk: {
-        label: "Nepotrebné súbory",
-        notMeasured: 'nezmerané',
-        description: "Meranie prechádza cesty všetkých čističov na disku — asi pol minúty.",
-        measure: 'Zmerať'
+      quiet: {
+        scoreOf: (score) => `${score} of 100`,
+        driveDetails: 'Drive details',
+        junkTitle: 'Junk files',
+        junkNotMeasured: 'Not measured',
+        junkMeasure: 'Measure',
+        junkProgress: (scanned, total) => `Measuring… ${scanned} of ${total}`,
+        junkMeasuring: 'Measuring…',
+        junkBasis: (count) => `Across ${count} recommended ${count === 1 ? 'cleaner' : 'cleaners'}`,
+        junkError: (message) => `Couldn't measure junk files: ${message}`,
+        openDeepClean: 'Open Deep Clean',
+        leftTitle: 'Left behind',
+        leftCount: (count) => `${count} ${count === 1 ? 'program' : 'programs'}`,
+        leftNone: 'Nothing left behind.',
+        leftReview: 'Review'
       },
       recentActivity: {
         title: "Nedávna aktivita",
@@ -25213,24 +25864,45 @@ export const CATALOG = {
         mediaErrors: 'Gabime media',
         errorLogEntries: 'Hyrje të regjistrit të gabimeve'
       },
-      storage: {
-        label: "Hapësira totale",
-        usedTotal: (used, total) => `${used} përdorur / ${total} total`,
-        loading: 'Duke ngarkuar…',
-        free: 'e lirë'
+      measuring: 'measuring…',
+      space: {
+        drive: (letter) => `Drive ${letter}:`,
+        heading: 'Where is my space going?',
+        summary: (used, total, free) => `${used} used of ${total} · ${free} free`,
+        loading: 'Reading drive space…',
+        barLabel: (programs, other, free) => `Drive space: installed programs ${programs}, everything else ${other}, free ${free}.`,
+        barLabelMeasuring: (used, free) => `Drive space: ${used} used, ${free} free. Installed programs are still being measured.`,
+        legendPrograms: 'Installed programs',
+        legendOther: 'Everything else',
+        legendUsed: 'Used',
+        legendFree: 'Free',
+        unsized: (count) => `${count} ${count === 1 ? 'program' : 'programs'} without a size`,
+        exceedsUsed: 'Program sizes add up to more than is used on this drive.'
       },
-      apps: {
-        label: "Aplikacionet e instaluara",
-        broken: (count) => `${count} të lëna nga një çinstalim i dështuar`,
-        noBroken: 'Nothing left behind.',
-        review: 'Shqyrto',
-        manage: 'Menaxho'
+      largest: {
+        heading: 'Largest programs',
+        openApplications: 'Open Applications',
+        installedCount: (count) => `${count} installed`,
+        measuring: 'Measuring program sizes…',
+        none: 'No program has a measured size yet.',
+        notInList: (size) => `The other ${size} is not in the program list.`,
+        seeDiskMap: 'See it in Disk Map.'
       },
-      junk: {
-        label: "Skedarë të panevojshëm",
-        notMeasured: 'i pamatur',
-        description: "Matja kalon shtegun e çdo pastruesi në disk — rreth gjysmë minuti.",
-        measure: 'Mat'
+      quiet: {
+        scoreOf: (score) => `${score} of 100`,
+        driveDetails: 'Drive details',
+        junkTitle: 'Junk files',
+        junkNotMeasured: 'Not measured',
+        junkMeasure: 'Measure',
+        junkProgress: (scanned, total) => `Measuring… ${scanned} of ${total}`,
+        junkMeasuring: 'Measuring…',
+        junkBasis: (count) => `Across ${count} recommended ${count === 1 ? 'cleaner' : 'cleaners'}`,
+        junkError: (message) => `Couldn't measure junk files: ${message}`,
+        openDeepClean: 'Open Deep Clean',
+        leftTitle: 'Left behind',
+        leftCount: (count) => `${count} ${count === 1 ? 'program' : 'programs'}`,
+        leftNone: 'Nothing left behind.',
+        leftReview: 'Review'
       },
       recentActivity: {
         title: "Aktiviteti i fundit",
@@ -26019,24 +26691,45 @@ export const CATALOG = {
         mediaErrors: 'Грешке медија',
         errorLogEntries: 'Уноси дневника грешака'
       },
-      storage: {
-        label: "Укупан капацитет",
-        usedTotal: (used, total) => `${used} искоришћено / ${total} укупно`,
-        loading: 'Учитавање…',
-        free: 'слободно'
+      measuring: 'measuring…',
+      space: {
+        drive: (letter) => `Drive ${letter}:`,
+        heading: 'Where is my space going?',
+        summary: (used, total, free) => `${used} used of ${total} · ${free} free`,
+        loading: 'Reading drive space…',
+        barLabel: (programs, other, free) => `Drive space: installed programs ${programs}, everything else ${other}, free ${free}.`,
+        barLabelMeasuring: (used, free) => `Drive space: ${used} used, ${free} free. Installed programs are still being measured.`,
+        legendPrograms: 'Installed programs',
+        legendOther: 'Everything else',
+        legendUsed: 'Used',
+        legendFree: 'Free',
+        unsized: (count) => `${count} ${count === 1 ? 'program' : 'programs'} without a size`,
+        exceedsUsed: 'Program sizes add up to more than is used on this drive.'
       },
-      apps: {
-        label: "Инсталиране апликације",
-        broken: (count) => `Остаци после неуспеле деинсталације: ${count}`,
-        noBroken: 'Nothing left behind.',
-        review: 'Прегледај',
-        manage: 'Управљај'
+      largest: {
+        heading: 'Largest programs',
+        openApplications: 'Open Applications',
+        installedCount: (count) => `${count} installed`,
+        measuring: 'Measuring program sizes…',
+        none: 'No program has a measured size yet.',
+        notInList: (size) => `The other ${size} is not in the program list.`,
+        seeDiskMap: 'See it in Disk Map.'
       },
-      junk: {
-        label: "Непотребне датотеке",
-        notMeasured: 'није измерено',
-        description: 'Мерење пролази кроз сваку путању чишћења на диску — око пола минута.',
-        measure: 'Измери'
+      quiet: {
+        scoreOf: (score) => `${score} of 100`,
+        driveDetails: 'Drive details',
+        junkTitle: 'Junk files',
+        junkNotMeasured: 'Not measured',
+        junkMeasure: 'Measure',
+        junkProgress: (scanned, total) => `Measuring… ${scanned} of ${total}`,
+        junkMeasuring: 'Measuring…',
+        junkBasis: (count) => `Across ${count} recommended ${count === 1 ? 'cleaner' : 'cleaners'}`,
+        junkError: (message) => `Couldn't measure junk files: ${message}`,
+        openDeepClean: 'Open Deep Clean',
+        leftTitle: 'Left behind',
+        leftCount: (count) => `${count} ${count === 1 ? 'program' : 'programs'}`,
+        leftNone: 'Nothing left behind.',
+        leftReview: 'Review'
       },
       recentActivity: {
         title: "Недавна активност",
@@ -26823,24 +27516,45 @@ export const CATALOG = {
         mediaErrors: 'Mediefel',
         errorLogEntries: 'Felloggposter'
       },
-      storage: {
-        label: "Total lagring",
-        usedTotal: (used, total) => `${used} använt / ${total} totalt`,
-        loading: 'Laddar…',
-        free: 'ledigt'
+      measuring: 'measuring…',
+      space: {
+        drive: (letter) => `Drive ${letter}:`,
+        heading: 'Where is my space going?',
+        summary: (used, total, free) => `${used} used of ${total} · ${free} free`,
+        loading: 'Reading drive space…',
+        barLabel: (programs, other, free) => `Drive space: installed programs ${programs}, everything else ${other}, free ${free}.`,
+        barLabelMeasuring: (used, free) => `Drive space: ${used} used, ${free} free. Installed programs are still being measured.`,
+        legendPrograms: 'Installed programs',
+        legendOther: 'Everything else',
+        legendUsed: 'Used',
+        legendFree: 'Free',
+        unsized: (count) => `${count} ${count === 1 ? 'program' : 'programs'} without a size`,
+        exceedsUsed: 'Program sizes add up to more than is used on this drive.'
       },
-      apps: {
-        label: "Installerade program",
-        broken: (count) => `${count} ${count === 1 ? 'kvarlämnad' : 'kvarlämnade'} av en misslyckad avinstallation`,
-        noBroken: 'Nothing left behind.',
-        review: 'Granska',
-        manage: 'Hantera'
+      largest: {
+        heading: 'Largest programs',
+        openApplications: 'Open Applications',
+        installedCount: (count) => `${count} installed`,
+        measuring: 'Measuring program sizes…',
+        none: 'No program has a measured size yet.',
+        notInList: (size) => `The other ${size} is not in the program list.`,
+        seeDiskMap: 'See it in Disk Map.'
       },
-      junk: {
-        label: "Onödiga filer",
-        notMeasured: 'inte uppmätt',
-        description: 'Mätning går igenom varje rensningsväg på disken — ungefär en halv minut.',
-        measure: 'Mät'
+      quiet: {
+        scoreOf: (score) => `${score} of 100`,
+        driveDetails: 'Drive details',
+        junkTitle: 'Junk files',
+        junkNotMeasured: 'Not measured',
+        junkMeasure: 'Measure',
+        junkProgress: (scanned, total) => `Measuring… ${scanned} of ${total}`,
+        junkMeasuring: 'Measuring…',
+        junkBasis: (count) => `Across ${count} recommended ${count === 1 ? 'cleaner' : 'cleaners'}`,
+        junkError: (message) => `Couldn't measure junk files: ${message}`,
+        openDeepClean: 'Open Deep Clean',
+        leftTitle: 'Left behind',
+        leftCount: (count) => `${count} ${count === 1 ? 'program' : 'programs'}`,
+        leftNone: 'Nothing left behind.',
+        leftReview: 'Review'
       },
       recentActivity: {
         title: "Senaste aktivitet",
@@ -27627,24 +28341,45 @@ export const CATALOG = {
         mediaErrors: 'ข้อผิดพลาดของสื่อ',
         errorLogEntries: 'รายการบันทึกข้อผิดพลาด'
       },
-      storage: {
-        label: 'พื้นที่จัดเก็บทั้งหมด',
-        usedTotal: (used, total) => `ใช้ไป ${used} จาก ${total}`,
-        loading: 'กำลังโหลด…',
-        free: 'ว่าง'
+      measuring: 'measuring…',
+      space: {
+        drive: (letter) => `Drive ${letter}:`,
+        heading: 'Where is my space going?',
+        summary: (used, total, free) => `${used} used of ${total} · ${free} free`,
+        loading: 'Reading drive space…',
+        barLabel: (programs, other, free) => `Drive space: installed programs ${programs}, everything else ${other}, free ${free}.`,
+        barLabelMeasuring: (used, free) => `Drive space: ${used} used, ${free} free. Installed programs are still being measured.`,
+        legendPrograms: 'Installed programs',
+        legendOther: 'Everything else',
+        legendUsed: 'Used',
+        legendFree: 'Free',
+        unsized: (count) => `${count} ${count === 1 ? 'program' : 'programs'} without a size`,
+        exceedsUsed: 'Program sizes add up to more than is used on this drive.'
       },
-      apps: {
-        label: 'แอปที่ติดตั้ง',
-        broken: (count) => `เหลือค้าง ${count} รายการจากการถอนการติดตั้งที่ล้มเหลว`,
-        noBroken: 'Nothing left behind.',
-        review: 'ตรวจสอบ',
-        manage: 'จัดการ'
+      largest: {
+        heading: 'Largest programs',
+        openApplications: 'Open Applications',
+        installedCount: (count) => `${count} installed`,
+        measuring: 'Measuring program sizes…',
+        none: 'No program has a measured size yet.',
+        notInList: (size) => `The other ${size} is not in the program list.`,
+        seeDiskMap: 'See it in Disk Map.'
       },
-      junk: {
-        label: "ไฟล์ขยะ",
-        notMeasured: 'ยังไม่ได้วัด',
-        description: "การวัดจะตรวจทุกเส้นทางของตัวล้างข้อมูลบนดิสก์ — ประมาณครึ่งนาที",
-        measure: 'วัด'
+      quiet: {
+        scoreOf: (score) => `${score} of 100`,
+        driveDetails: 'Drive details',
+        junkTitle: 'Junk files',
+        junkNotMeasured: 'Not measured',
+        junkMeasure: 'Measure',
+        junkProgress: (scanned, total) => `Measuring… ${scanned} of ${total}`,
+        junkMeasuring: 'Measuring…',
+        junkBasis: (count) => `Across ${count} recommended ${count === 1 ? 'cleaner' : 'cleaners'}`,
+        junkError: (message) => `Couldn't measure junk files: ${message}`,
+        openDeepClean: 'Open Deep Clean',
+        leftTitle: 'Left behind',
+        leftCount: (count) => `${count} ${count === 1 ? 'program' : 'programs'}`,
+        leftNone: 'Nothing left behind.',
+        leftReview: 'Review'
       },
       recentActivity: {
         title: 'กิจกรรมล่าสุด',
@@ -28433,24 +29168,45 @@ export const CATALOG = {
         mediaErrors: 'Ortam hataları',
         errorLogEntries: 'Hata günlüğü kayıtları'
       },
-      storage: {
-        label: "Toplam depolama",
-        usedTotal: (used, total) => `${used} kullanılan / ${total} toplam`,
-        loading: 'Yükleniyor…',
-        free: 'boş'
+      measuring: 'measuring…',
+      space: {
+        drive: (letter) => `Drive ${letter}:`,
+        heading: 'Where is my space going?',
+        summary: (used, total, free) => `${used} used of ${total} · ${free} free`,
+        loading: 'Reading drive space…',
+        barLabel: (programs, other, free) => `Drive space: installed programs ${programs}, everything else ${other}, free ${free}.`,
+        barLabelMeasuring: (used, free) => `Drive space: ${used} used, ${free} free. Installed programs are still being measured.`,
+        legendPrograms: 'Installed programs',
+        legendOther: 'Everything else',
+        legendUsed: 'Used',
+        legendFree: 'Free',
+        unsized: (count) => `${count} ${count === 1 ? 'program' : 'programs'} without a size`,
+        exceedsUsed: 'Program sizes add up to more than is used on this drive.'
       },
-      apps: {
-        label: "Yüklü uygulamalar",
-        broken: (count) => `Başarısız kaldırmalardan kalan ${count} artık öğe`,
-        noBroken: 'Nothing left behind.',
-        review: 'İncele',
-        manage: 'Yönet'
+      largest: {
+        heading: 'Largest programs',
+        openApplications: 'Open Applications',
+        installedCount: (count) => `${count} installed`,
+        measuring: 'Measuring program sizes…',
+        none: 'No program has a measured size yet.',
+        notInList: (size) => `The other ${size} is not in the program list.`,
+        seeDiskMap: 'See it in Disk Map.'
       },
-      junk: {
-        label: "Gereksiz dosyalar",
-        notMeasured: 'ölçülmedi',
-        description: 'Ölçüm, diskteki her temizleme yolunu tarar — yaklaşık yarım dakika.',
-        measure: 'Ölç'
+      quiet: {
+        scoreOf: (score) => `${score} of 100`,
+        driveDetails: 'Drive details',
+        junkTitle: 'Junk files',
+        junkNotMeasured: 'Not measured',
+        junkMeasure: 'Measure',
+        junkProgress: (scanned, total) => `Measuring… ${scanned} of ${total}`,
+        junkMeasuring: 'Measuring…',
+        junkBasis: (count) => `Across ${count} recommended ${count === 1 ? 'cleaner' : 'cleaners'}`,
+        junkError: (message) => `Couldn't measure junk files: ${message}`,
+        openDeepClean: 'Open Deep Clean',
+        leftTitle: 'Left behind',
+        leftCount: (count) => `${count} ${count === 1 ? 'program' : 'programs'}`,
+        leftNone: 'Nothing left behind.',
+        leftReview: 'Review'
       },
       recentActivity: {
         title: "Son etkinlik",
@@ -29239,24 +29995,45 @@ export const CATALOG = {
         mediaErrors: 'Помилки носія',
         errorLogEntries: 'Записи журналу помилок'
       },
-      storage: {
-        label: "Загальний обсяг",
-        usedTotal: (used, total) => `${used} використано / ${total} всього`,
-        loading: 'Завантаження…',
-        free: 'вільно'
+      measuring: 'measuring…',
+      space: {
+        drive: (letter) => `Drive ${letter}:`,
+        heading: 'Where is my space going?',
+        summary: (used, total, free) => `${used} used of ${total} · ${free} free`,
+        loading: 'Reading drive space…',
+        barLabel: (programs, other, free) => `Drive space: installed programs ${programs}, everything else ${other}, free ${free}.`,
+        barLabelMeasuring: (used, free) => `Drive space: ${used} used, ${free} free. Installed programs are still being measured.`,
+        legendPrograms: 'Installed programs',
+        legendOther: 'Everything else',
+        legendUsed: 'Used',
+        legendFree: 'Free',
+        unsized: (count) => `${count} ${count === 1 ? 'program' : 'programs'} without a size`,
+        exceedsUsed: 'Program sizes add up to more than is used on this drive.'
       },
-      apps: {
-        label: "Встановлені застосунки",
-        broken: (count) => `${count} залишилося після невдалого видалення`,
-        noBroken: 'Nothing left behind.',
-        review: 'Переглянути',
-        manage: 'Керувати'
+      largest: {
+        heading: 'Largest programs',
+        openApplications: 'Open Applications',
+        installedCount: (count) => `${count} installed`,
+        measuring: 'Measuring program sizes…',
+        none: 'No program has a measured size yet.',
+        notInList: (size) => `The other ${size} is not in the program list.`,
+        seeDiskMap: 'See it in Disk Map.'
       },
-      junk: {
-        label: "Непотрібні файли",
-        notMeasured: 'не виміряно',
-        description: "Вимірювання проходить шляхами кожного засобу очищення на диску — приблизно півхвилини.",
-        measure: 'Виміряти'
+      quiet: {
+        scoreOf: (score) => `${score} of 100`,
+        driveDetails: 'Drive details',
+        junkTitle: 'Junk files',
+        junkNotMeasured: 'Not measured',
+        junkMeasure: 'Measure',
+        junkProgress: (scanned, total) => `Measuring… ${scanned} of ${total}`,
+        junkMeasuring: 'Measuring…',
+        junkBasis: (count) => `Across ${count} recommended ${count === 1 ? 'cleaner' : 'cleaners'}`,
+        junkError: (message) => `Couldn't measure junk files: ${message}`,
+        openDeepClean: 'Open Deep Clean',
+        leftTitle: 'Left behind',
+        leftCount: (count) => `${count} ${count === 1 ? 'program' : 'programs'}`,
+        leftNone: 'Nothing left behind.',
+        leftReview: 'Review'
       },
       recentActivity: {
         title: "Остання активність",
@@ -30043,24 +30820,45 @@ export const CATALOG = {
         mediaErrors: 'Lỗi phương tiện lưu trữ',
         errorLogEntries: 'Mục nhật ký lỗi'
       },
-      storage: {
-        label: "Tổng dung lượng",
-        usedTotal: (used, total) => `Đã dùng ${used} / ${total}`,
-        loading: 'Đang tải…',
-        free: 'trống'
+      measuring: 'measuring…',
+      space: {
+        drive: (letter) => `Drive ${letter}:`,
+        heading: 'Where is my space going?',
+        summary: (used, total, free) => `${used} used of ${total} · ${free} free`,
+        loading: 'Reading drive space…',
+        barLabel: (programs, other, free) => `Drive space: installed programs ${programs}, everything else ${other}, free ${free}.`,
+        barLabelMeasuring: (used, free) => `Drive space: ${used} used, ${free} free. Installed programs are still being measured.`,
+        legendPrograms: 'Installed programs',
+        legendOther: 'Everything else',
+        legendUsed: 'Used',
+        legendFree: 'Free',
+        unsized: (count) => `${count} ${count === 1 ? 'program' : 'programs'} without a size`,
+        exceedsUsed: 'Program sizes add up to more than is used on this drive.'
       },
-      apps: {
-        label: "Ứng dụng đã cài",
-        broken: (count) => `${count} mục sót lại do gỡ cài đặt thất bại`,
-        noBroken: 'Nothing left behind.',
-        review: 'Xem lại',
-        manage: 'Quản lý'
+      largest: {
+        heading: 'Largest programs',
+        openApplications: 'Open Applications',
+        installedCount: (count) => `${count} installed`,
+        measuring: 'Measuring program sizes…',
+        none: 'No program has a measured size yet.',
+        notInList: (size) => `The other ${size} is not in the program list.`,
+        seeDiskMap: 'See it in Disk Map.'
       },
-      junk: {
-        label: "Tệp rác",
-        notMeasured: 'chưa đo',
-        description: "Việc đo lường sẽ quét qua từng đường dẫn của công cụ dọn dẹp trên ổ đĩa — khoảng nửa phút.",
-        measure: 'Đo lường'
+      quiet: {
+        scoreOf: (score) => `${score} of 100`,
+        driveDetails: 'Drive details',
+        junkTitle: 'Junk files',
+        junkNotMeasured: 'Not measured',
+        junkMeasure: 'Measure',
+        junkProgress: (scanned, total) => `Measuring… ${scanned} of ${total}`,
+        junkMeasuring: 'Measuring…',
+        junkBasis: (count) => `Across ${count} recommended ${count === 1 ? 'cleaner' : 'cleaners'}`,
+        junkError: (message) => `Couldn't measure junk files: ${message}`,
+        openDeepClean: 'Open Deep Clean',
+        leftTitle: 'Left behind',
+        leftCount: (count) => `${count} ${count === 1 ? 'program' : 'programs'}`,
+        leftNone: 'Nothing left behind.',
+        leftReview: 'Review'
       },
       recentActivity: {
         title: "Hoạt động gần đây",
@@ -30849,24 +31647,45 @@ export const CATALOG = {
         mediaErrors: '介质错误',
         errorLogEntries: '错误日志条目'
       },
-      storage: {
-        label: '总存储空间',
-        usedTotal: (used, total) => `已用 ${used} / 共 ${total}`,
-        loading: '加载中…',
-        free: '可用'
+      measuring: 'measuring…',
+      space: {
+        drive: (letter) => `Drive ${letter}:`,
+        heading: 'Where is my space going?',
+        summary: (used, total, free) => `${used} used of ${total} · ${free} free`,
+        loading: 'Reading drive space…',
+        barLabel: (programs, other, free) => `Drive space: installed programs ${programs}, everything else ${other}, free ${free}.`,
+        barLabelMeasuring: (used, free) => `Drive space: ${used} used, ${free} free. Installed programs are still being measured.`,
+        legendPrograms: 'Installed programs',
+        legendOther: 'Everything else',
+        legendUsed: 'Used',
+        legendFree: 'Free',
+        unsized: (count) => `${count} ${count === 1 ? 'program' : 'programs'} without a size`,
+        exceedsUsed: 'Program sizes add up to more than is used on this drive.'
       },
-      apps: {
-        label: '已安装的应用',
-        broken: (count) => `因卸载失败而残留 ${count} 项`,
-        noBroken: 'Nothing left behind.',
-        review: '查看',
-        manage: '管理'
+      largest: {
+        heading: 'Largest programs',
+        openApplications: 'Open Applications',
+        installedCount: (count) => `${count} installed`,
+        measuring: 'Measuring program sizes…',
+        none: 'No program has a measured size yet.',
+        notInList: (size) => `The other ${size} is not in the program list.`,
+        seeDiskMap: 'See it in Disk Map.'
       },
-      junk: {
-        label: '垃圾文件',
-        notMeasured: '尚未测量',
-        description: "测量会遍历磁盘上的每个清理项的路径 — 大约需要半分钟。",
-        measure: '测量'
+      quiet: {
+        scoreOf: (score) => `${score} of 100`,
+        driveDetails: 'Drive details',
+        junkTitle: 'Junk files',
+        junkNotMeasured: 'Not measured',
+        junkMeasure: 'Measure',
+        junkProgress: (scanned, total) => `Measuring… ${scanned} of ${total}`,
+        junkMeasuring: 'Measuring…',
+        junkBasis: (count) => `Across ${count} recommended ${count === 1 ? 'cleaner' : 'cleaners'}`,
+        junkError: (message) => `Couldn't measure junk files: ${message}`,
+        openDeepClean: 'Open Deep Clean',
+        leftTitle: 'Left behind',
+        leftCount: (count) => `${count} ${count === 1 ? 'program' : 'programs'}`,
+        leftNone: 'Nothing left behind.',
+        leftReview: 'Review'
       },
       recentActivity: {
         title: '最近活动',
@@ -31655,24 +32474,45 @@ export const CATALOG = {
         mediaErrors: '媒體錯誤',
         errorLogEntries: '錯誤記錄項目'
       },
-      storage: {
-        label: '總儲存空間',
-        usedTotal: (used, total) => `已用 ${used} / 共 ${total}`,
-        loading: '載入中…',
-        free: '可用'
+      measuring: 'measuring…',
+      space: {
+        drive: (letter) => `Drive ${letter}:`,
+        heading: 'Where is my space going?',
+        summary: (used, total, free) => `${used} used of ${total} · ${free} free`,
+        loading: 'Reading drive space…',
+        barLabel: (programs, other, free) => `Drive space: installed programs ${programs}, everything else ${other}, free ${free}.`,
+        barLabelMeasuring: (used, free) => `Drive space: ${used} used, ${free} free. Installed programs are still being measured.`,
+        legendPrograms: 'Installed programs',
+        legendOther: 'Everything else',
+        legendUsed: 'Used',
+        legendFree: 'Free',
+        unsized: (count) => `${count} ${count === 1 ? 'program' : 'programs'} without a size`,
+        exceedsUsed: 'Program sizes add up to more than is used on this drive.'
       },
-      apps: {
-        label: '已安裝的應用程式',
-        broken: (count) => `因解除安裝失敗而殘留 ${count} 項`,
-        noBroken: 'Nothing left behind.',
-        review: '檢視',
-        manage: '管理'
+      largest: {
+        heading: 'Largest programs',
+        openApplications: 'Open Applications',
+        installedCount: (count) => `${count} installed`,
+        measuring: 'Measuring program sizes…',
+        none: 'No program has a measured size yet.',
+        notInList: (size) => `The other ${size} is not in the program list.`,
+        seeDiskMap: 'See it in Disk Map.'
       },
-      junk: {
-        label: '垃圾檔案',
-        notMeasured: '尚未測量',
-        description: "測量會走訪磁碟上的每個清理項目的路徑 — 大約需要半分鐘。",
-        measure: '測量'
+      quiet: {
+        scoreOf: (score) => `${score} of 100`,
+        driveDetails: 'Drive details',
+        junkTitle: 'Junk files',
+        junkNotMeasured: 'Not measured',
+        junkMeasure: 'Measure',
+        junkProgress: (scanned, total) => `Measuring… ${scanned} of ${total}`,
+        junkMeasuring: 'Measuring…',
+        junkBasis: (count) => `Across ${count} recommended ${count === 1 ? 'cleaner' : 'cleaners'}`,
+        junkError: (message) => `Couldn't measure junk files: ${message}`,
+        openDeepClean: 'Open Deep Clean',
+        leftTitle: 'Left behind',
+        leftCount: (count) => `${count} ${count === 1 ? 'program' : 'programs'}`,
+        leftNone: 'Nothing left behind.',
+        leftReview: 'Review'
       },
       recentActivity: {
         title: '最近活動',
