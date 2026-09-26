@@ -148,7 +148,7 @@ export default function LeftoverReview({ scanResult, selected, onToggle, onConfi
                             // makes Windows list the program at all, and a
                             // value's path is a key shared with every
                             // other program that starts with Windows.
-                            <div className="text-[10.5px] text-[color:var(--accent-primary)] mt-0.5">
+                            <div className="text-[10.5px] text-[color:var(--text-secondary)] mt-0.5">
                               {leftoverItemNote(item, t('leftoverReview.itemNote'))}
                             </div>
                           )}
@@ -191,7 +191,7 @@ export default function LeftoverReview({ scanResult, selected, onToggle, onConfi
           <div className="text-[12px] text-[color:var(--text-secondary)]">
             <span className="text-[color:var(--text-primary)] font-medium">{selectedCount}</span> {t('leftoverReview.itemsSelected')}
             {selectedSize > 0 && (
-              <> · <span className="text-[color:var(--accent-primary)] font-medium">{formatBytes(selectedSize)}</span> {t('leftoverReview.reclaimable')}</>
+              <> · <span className="text-[color:var(--text-primary)] font-medium">{formatBytes(selectedSize)}</span> {t('leftoverReview.reclaimable')}</>
             )}
           </div>
           <div className="flex items-center gap-2.5 shrink-0">

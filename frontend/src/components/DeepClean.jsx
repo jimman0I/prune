@@ -18,7 +18,7 @@ import { useLanguage } from '../i18n/LanguageContext.jsx';
 import { useCleanerText } from '../i18n/cleanerText.js';
 
 const LOG_TONE = {
-  size: 'text-[color:var(--accent-primary)]',
+  size: 'text-[color:var(--text-primary)]',
   warning: 'text-[color:var(--warning)]',
   muted: 'text-[color:var(--text-muted)]'
 };

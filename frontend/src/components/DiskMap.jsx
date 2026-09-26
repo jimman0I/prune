@@ -100,14 +100,14 @@ function ScanOption({ title, badge, explain, note, recommended, children }) {
     <div
       className={`flex flex-col gap-2 rounded-xl p-5 border ${
         recommended
-          ? 'border-[color:var(--accent-primary)]/40 bg-[color:var(--accent-primary)]/[0.06]'
+          ? 'border-[color:var(--control-border)] bg-[color:var(--surface-hover)]'
           : 'border-[color:var(--border-subtle)] bg-[color:var(--surface-hover)]'
       }`}
     >
       <div className="flex items-center gap-2">
         <h3 className="text-[15px] font-semibold text-[color:var(--text-primary)]">{title}</h3>
         {badge && (
-          <span className="text-[10.5px] font-medium px-1.5 py-0.5 rounded-full bg-[color:var(--accent-primary)]/15 text-[color:var(--accent-primary)]">
+          <span className="text-[10.5px] font-medium px-1.5 py-0.5 rounded-full border border-[color:var(--control-border)] text-[color:var(--text-secondary)]">
             {badge}
           </span>
         )}
