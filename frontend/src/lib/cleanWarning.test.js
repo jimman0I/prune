@@ -128,3 +128,16 @@ describe('rememberedWith', () => {
     expect(rememberedWith('nonsense', 'brave_cookies', true)).toEqual(['brave_cookies']);
   });
 });
+
+describe('needsWarning, a rule that must be confirmed every time', () => {
+  const wipe = { id: 'system_empty_space', confirmEveryTime: true, risky: undefined };
+
+  it('asks whenever it is ticked, even if the id was acknowledged before', () => {
+    expect(needsWarning(wipe, { checking: true, acknowledged: [] })).toBe(true);
+    expect(needsWarning(wipe, { checking: true, acknowledged: ['system_empty_space'] })).toBe(true);
+  });
+
+  it('never asks when it is unticked', () => {
+    expect(needsWarning(wipe, { checking: false, acknowledged: [] })).toBe(false);
+  });
+});

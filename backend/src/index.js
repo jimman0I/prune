@@ -2,6 +2,7 @@ import { createServer } from 'node:http';
 import { createApp } from './app.js';
 import { startScheduler, checkSchedule } from './services/scheduleRunner.js';
 import { enforceQuarantineLimits } from './services/quarantineLimits.js';
+import { cleanupWipeLeftovers } from './lib/cleanerActions/wipeFreeSpace.js';
 import { getSettings } from './services/settings.js';
 import { applyInstallerChoices } from './services/installerChoices.js';
 import { initTray } from './lib/trayManager.js';
@@ -32,6 +33,16 @@ const app = createApp({ port: PORT });
 // was off, and the app opening is the first moment anything can notice.
 startScheduler();
 checkSchedule().catch(() => { /* a failed check must never stop the server booting */ });
+
+// A free-space wipe that was killed mid-run (power cut, crash, task kill)
+// leaves its zero-filled files on the drive, and until they are deleted the
+// drive is nearly full. They live in a folder of their own under a name only
+// the wipe uses, so removing them is safe and happens on every start.
+cleanupWipeLeftovers()
+  .then((removed) => {
+    if (removed.files > 0) console.log(`Removed ${removed.files} leftover free-space wipe files (${removed.bytes} bytes).`);
+  })
+  .catch(() => { /* they are tried again on the next start */ });
 
 // The quarantine's two limits, applied once on start.
 //

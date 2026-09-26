@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { defaultSelection, selectableIds, cleanableIds, restoreSelection } from './defaultSelection.js';
+import { defaultSelection, selectableIds, cleanableIds, restoreSelection, dropConfirmEveryTime } from './defaultSelection.js';
 
 const categories = [
   {
@@ -155,5 +155,26 @@ describe('restoreSelection', () => {
 
   it('falls back to the defaults when nothing was saved', () => {
     expect([...restoreSelection(undefined, listed)]).toEqual(['thumbs']);
+  });
+});
+
+describe('a rule that must be confirmed every time', () => {
+  const groups = [{ category: 'Windows', items: [
+    { id: 'temp', present: true, recommended: true },
+    { id: 'wipe', present: true, recommended: false, confirmEveryTime: true }
+  ] }];
+
+  it('is never reached by select-all, even when it was acknowledged', () => {
+    expect(selectableIds(groups, ['wipe'])).toEqual(new Set(['temp']));
+  });
+
+  it('is never ticked by default', () => {
+    expect(defaultSelection(groups)).toEqual(new Set(['temp']));
+  });
+
+  it('is dropped from a saved selection, so it never reopens ticked', () => {
+    expect(restoreSelection(['temp', 'wipe'], groups)).toEqual(new Set(['temp']));
+    expect(dropConfirmEveryTime(['temp', 'wipe'], groups)).toEqual(['temp']);
+    expect(dropConfirmEveryTime(new Set(['wipe']), groups)).toEqual(new Set());
   });
 });

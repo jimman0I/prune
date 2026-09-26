@@ -46,6 +46,13 @@ vi.mock('../services/settings.js', () => ({
   updateSettings: async (p) => p
 }));
 
+const estimateWipe = vi.fn(async () => ({ drive: 'C:', freeBytes: 10, totalBytes: 100, reserveBytes: 2, bytesToWrite: 8, bytesPerSecond: 4, seconds: 2 }));
+let wipeRunning = false;
+vi.mock('../lib/cleanerActions/wipeFreeSpace.js', () => ({
+  estimateWipe: (...a) => estimateWipe(...a),
+  wipeInProgress: () => wipeRunning
+}));
+
 const listCookieDomains = vi.fn(async () => ({ domains: [{ domain: 'example.com', count: 3 }], errors: [] }));
 vi.mock('../lib/cleanerActions/cookieDomains.js', () => ({
   listCookieDomains: (...a) => listCookieDomains(...a)
@@ -94,6 +101,28 @@ describe('POST /deep-clean/execute', () => {
     const res = await server.call('/deep-clean/execute');
     expect(res.status).toBe(404);
     expect(executeRules).not.toHaveBeenCalled();
+  });
+});
+
+describe('GET /deep-clean/wipe-estimate', () => {
+  it('answers with the drive, what would be written and a time', async () => {
+    const res = await server.call('/deep-clean/wipe-estimate');
+    expect(res.status).toBe(200);
+    expect(res.body).toMatchObject({ drive: 'C:', bytesToWrite: 8, seconds: 2 });
+  });
+
+  it('refuses to measure while a wipe is running, since its own filler would skew it', async () => {
+    wipeRunning = true;
+    const res = await server.call('/deep-clean/wipe-estimate');
+    wipeRunning = false;
+    expect(res.status).toBe(409);
+  });
+
+  it('reports a failure as 500', async () => {
+    estimateWipe.mockRejectedValueOnce(new Error('no drive'));
+    const res = await server.call('/deep-clean/wipe-estimate');
+    expect(res.status).toBe(500);
+    expect(res.body.error).toBe('no drive');
   });
 });
 
