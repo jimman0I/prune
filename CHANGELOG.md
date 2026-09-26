@@ -26,6 +26,34 @@ see v1.0.1 below) are documented here.
 - **Bigger click targets and a larger minimum text size.** Every Deep Clean
   checkbox and category heading is now at least 24 by 24 pixels (the boxes
   look the same), and no text anywhere is smaller than 11 pixels.
+- **Applications rows can be reached with the keyboard.** One row is in the
+  Tab order, the arrow keys, Home and End move between rows, and a focused
+  row shows its Folder and Uninstall buttons and a focus ring, as hovering
+  does.
+- **The Applications count follows your search and filter.** Under a search
+  or a filter the heading reads, for example, "1 of 210 shown · 105.3 GB"
+  instead of the total for the whole machine.
+- **Long startup paths can be read and copied.** Selecting a launch path
+  opens the whole thing wrapped on its own line, with a Copy path button. It
+  is a button, so the keyboard and screen readers reach it too.
+- **Deep Clean descriptions wrap to two lines** instead of being cut
+  mid-word, and its scan and clean logs name each rule with its category
+  ("Brave · Cache"), so three rules all called Cache can be told apart.
+- **Unused says what it means.** Selecting the filter shows a line saying
+  Prune keeps no launch history, and the filter is only offered when
+  something is flagged, since nothing on this machine could be.
+- **Clearer settings and wording.** The two restore-point switches now say
+  what each covers (before an uninstaller runs, and before leftovers are
+  removed), the registry backup no longer quotes a size from the author's
+  machine, the About text no longer says "one-click", and the state named
+  Broken on Applications is now "Left behind" to match the Dashboard.
+- **Startup states the scheduled-task explanation once** at the top of the
+  group instead of on every row.
+
+### Fixed
+
+- **Bug reports name the Windows version.** The report says "Windows 11
+  (build 26200)" instead of "Windows_NT 10.0.26200".
 
 ## v2.8.2
 

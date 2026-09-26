@@ -135,12 +135,12 @@ describe('the theme control lives in General', () => {
 });
 
 describe('the restore-point switch moved to Uninstall, its behaviour did not', () => {
-  const NAME = 'Create a restore point first';
+  const NAME = 'Restore point before removing leftovers';
 
   it('is on the Uninstall tab, in the same panel as "before uninstalling"', async () => {
     await open('Uninstall');
     const forced = await screen.findByRole('switch', { name: NAME });
-    const before = screen.getByRole('switch', { name: 'Create a restore point before uninstalling' });
+    const before = screen.getByRole('switch', { name: 'Restore point before running an uninstaller' });
     expect(panelOf(forced)).toBe(panelOf(before));
   });
 

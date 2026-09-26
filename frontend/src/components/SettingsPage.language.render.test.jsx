@@ -3,6 +3,11 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { renderScreen } from '../testSupport/renderScreen.jsx';
+import { CATALOG } from '../i18n/catalog.js';
+
+// Strings whose wording is still being settled per language are read from the
+// catalog: what these tests check is that the screen shows them.
+const EL = CATALOG.el.settings;
 
 /** The Settings screen's own copy follows the chosen language -- covering
  * both SettingsPage.jsx (General/Uninstall/Cleanup/About tabs, including
@@ -234,9 +239,9 @@ describe('the settings screen, in Greek', () => {
   describe('the restore-point guard, which moved to the Uninstall tab', () => {
     it('translates the restore-point guard, heading and description', async () => {
       await openTab('Απεγκατάσταση');
-      expect(screen.getByText('Δημιουργία σημείου επαναφοράς πρώτα')).toBeTruthy();
-      expect(screen.getByRole('switch', { name: 'Δημιουργία σημείου επαναφοράς πρώτα' })).toBeTruthy();
-      expect(screen.getByText(/Πριν από μια εξαναγκασμένη αφαίρεση/)).toBeTruthy();
+      expect(screen.getByText(EL.restorePointCleanup.title)).toBeTruthy();
+      expect(screen.getByRole('switch', { name: EL.restorePointCleanup.title })).toBeTruthy();
+      expect(screen.getByText(EL.restorePointCleanup.description)).toBeTruthy();
     });
   });
 
@@ -394,10 +399,10 @@ describe('the settings screen, in Greek', () => {
       await openTab('Απεγκατάσταση');
       expect(screen.getByText('Πριν την απεγκατάσταση')).toBeTruthy();
       expect(screen.getByText('Μετά την απεγκατάσταση')).toBeTruthy();
-      expect(screen.getByRole('switch', { name: 'Δημιουργία σημείου επαναφοράς πριν την απεγκατάσταση' })).toBeTruthy();
-      expect(screen.getByText(/Η δική τους Επαναφορά Συστήματος των Windows/)).toBeTruthy();
+      expect(screen.getByRole('switch', { name: EL.uninstallTab.restorePointUninstall.title })).toBeTruthy();
+      expect(screen.getByText(EL.uninstallTab.restorePointUninstall.description)).toBeTruthy();
       expect(screen.getByRole('switch', { name: 'Δημιουργία αντιγράφου ασφαλείας μητρώου πριν την απεγκατάσταση' })).toBeTruthy();
-      expect(screen.getByText(/Εξάγει τα HKLM\\SOFTWARE/)).toBeTruthy();
+      expect(screen.getByText(EL.uninstallTab.registryBackup.description)).toBeTruthy();
       expect(screen.getByRole('switch', { name: 'Σάρωση για κατάλοιπα μετά την απεγκατάσταση' })).toBeTruthy();
       expect(screen.getByText(/Αναζητά τα αρχεία, τα κλειδιά μητρώου/)).toBeTruthy();
       expect(screen.getByRole('switch', { name: 'Επιλογή κάθε καταλοίπου από προεπιλογή' })).toBeTruthy();
@@ -426,7 +431,7 @@ describe('the settings screen, in Greek', () => {
   describe('the About tab', () => {
     it('translates the description', async () => {
       await openTab('Σχετικά');
-      expect(await screen.findByText(/εργαλείο απεγκατάστασης και καθαρισμού για Windows/)).toBeTruthy();
+      expect(await screen.findByText(EL.about.description)).toBeTruthy();
     });
   });
 });

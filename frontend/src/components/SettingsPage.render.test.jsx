@@ -263,7 +263,7 @@ describe('the Uninstall tab', () => {
   };
 
   it.each([
-    ['Create a restore point before uninstalling', { restorePointBeforeUninstall: true }],
+    ['Restore point before running an uninstaller', { restorePointBeforeUninstall: true }],
     ['Back up the registry before uninstalling', { registryBackupBeforeUninstall: true }],
     ['Scan for leftovers after uninstalling', { scanLeftoversAfterUninstall: false }],
     ['Tick every leftover by default', { preselectLeftovers: true }],
@@ -277,7 +277,9 @@ describe('the Uninstall tab', () => {
 
   it('says what the registry backup costs, and what happens if it fails', async () => {
     await openUninstallTab();
-    expect(await screen.findByText(/140 MB/)).toBeTruthy();
+    expect(await screen.findByText(/several hundred MB/)).toBeTruthy();
+    // No size taken from the author's own machine.
+    expect(screen.queryByText(/built on/)).toBeNull();
     expect(screen.getByText(/newest 3/)).toBeTruthy();
     expect(screen.getByText(/doesn.t run/i)).toBeTruthy();
   });
@@ -404,7 +406,7 @@ describe('the guards beside them', () => {
     const user = userEvent.setup();
     renderScreen(<SettingsPage />);
     await user.click(await screen.findByRole('tab', { name: 'Uninstall' }));
-    await user.click(await screen.findByRole('switch', { name: 'Create a restore point first' }));
+    await user.click(await screen.findByRole('switch', { name: 'Restore point before removing leftovers' }));
     await waitFor(() => expect(lastSaved()).toEqual({ createRestorePoint: false }));
   });
 

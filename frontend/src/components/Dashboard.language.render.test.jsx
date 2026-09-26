@@ -3,6 +3,7 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { renderScreen } from '../testSupport/renderScreen.jsx';
+import { CATALOG } from '../i18n/catalog.js';
 
 /** The Dashboard's own copy follows the chosen language -- the property
  * Dashboard.render.test.jsx cannot show, since English is also the
@@ -102,8 +103,10 @@ describe('the Dashboard in another language', () => {
 
   it('says no broken apps, and offers a translated Manage button, when nothing is broken', async () => {
     render([{ id: 'a', health: {} }]);
-    expect(await screen.findByText('Καμία κατεστραμμένη καταχώριση.')).toBeTruthy();
-    expect(screen.getByRole('button', { name: 'Διαχείριση' })).toBeTruthy();
+    // The button first: it proves the language has loaded, and until it has
+    // the English fallback would satisfy the text lookup on its own.
+    expect(await screen.findByRole('button', { name: 'Διαχείριση' })).toBeTruthy();
+    expect(screen.getByText(CATALOG.el.dashboard.apps.noBroken)).toBeTruthy();
   });
 
   it('names the reason drive health could not be read', async () => {

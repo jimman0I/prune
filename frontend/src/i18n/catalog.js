@@ -79,8 +79,8 @@ export const CATALOG = {
         ariaLabel: 'Hours to leave recent files alone'
       },
       restorePointCleanup: {
-        title: 'Create a restore point first',
-        description: 'Before a forced removal, so Windows itself can roll the machine back. Costs a few seconds, and does nothing at all if System Protection is turned off.'
+        title: "Restore point before removing leftovers",
+        description: "Taken before Prune removes the leftover files and registry keys you selected, including after Force remove. On by default; does nothing at all if System Protection is turned off."
       },
       hideUnavailable: {
         title: "Hide cleaners that don't apply",
@@ -142,12 +142,12 @@ export const CATALOG = {
       uninstallTab: {
         beforeHeading: 'Before uninstalling',
         restorePointUninstall: {
-          title: 'Create a restore point before uninstalling',
-          description: "Windows' own System Restore, made before the program's uninstaller runs. It needs Prune to be running as administrator and Windows allows one a day, so when it can't be made the uninstall goes ahead and the dialog says so."
+          title: "Restore point before running an uninstaller",
+          description: "Taken before the program's own uninstaller runs. It needs Prune to be running as administrator and Windows allows one a day, so when it can't be made the uninstall goes ahead and the dialog says so."
         },
         registryBackup: {
           title: 'Back up the registry before uninstalling',
-          description: "Exports HKLM\\SOFTWARE and HKCU\\Software (about 140 MB on the machine Prune is built on) and keeps the newest 3. If the backup can't be made, the uninstall doesn't run."
+          description: "Exports HKLM\\SOFTWARE and HKCU\\Software, typically several hundred MB, and keeps the newest 3. If the backup can't be made, the uninstall doesn't run."
         },
         deleteLockedFiles: {
           title: 'Delete locked files on next restart',
@@ -179,7 +179,7 @@ export const CATALOG = {
         reportTitle: 'Report a bug',
         reportDescription: 'Opens a pre-filled issue on GitHub. Nothing is sent by Prune itself, and you see everything before it goes anywhere.',
         reportButton: 'Report a bug',
-        description: 'A local, offline uninstaller and cleanup tool for Windows — forced removal with leftover-file scanning, safe quarantine-before-delete, disk mapping, and one-click junk cleanup.'
+        description: "A local, offline uninstaller and cleanup tool for Windows — forced removal with leftover-file scanning, safe quarantine-before-delete, disk mapping, and a cleaner that shows a preview before it removes anything."
       },
       automation: {
         title: 'Automation',
@@ -252,7 +252,7 @@ export const CATALOG = {
       apps: {
         label: 'Installed apps',
         broken: (count) => `${count} left behind by a failed uninstall`,
-        noBroken: 'No broken entries.',
+        noBroken: 'Nothing left behind.',
         review: 'Review',
         manage: 'Manage'
       },
@@ -378,10 +378,10 @@ export const CATALOG = {
         unused: 'Unused',
         store: 'Store',
         extensions: 'Extensions',
-        broken: 'Broken',
+        broken: 'Left behind',
         storeCount: (n) => `Store (${n})`,
         extensionsCount: (n) => `Extensions (${n})`,
-        brokenCount: (n) => `Broken (${n})`
+        brokenCount: (n) => `Left behind (${n})`
       },
       columns: {
         application: 'Application',
@@ -393,7 +393,7 @@ export const CATALOG = {
         company: 'Company',
         website: 'Website'
       },
-      badges: { broken: 'Broken', running: 'Running', store: 'Store', disabled: 'Disabled', unused: 'Unused' },
+      badges: { broken: 'Left behind', running: 'Running', store: 'Store', disabled: 'Disabled', unused: 'Unused' },
       selectRow: (name) => `Select ${name}`,
       selectAll: 'Select all shown',
       clearSelection: 'Clear selection',
@@ -405,6 +405,7 @@ export const CATALOG = {
       openFolder: "Open folder",
       copyUninstallCommand: "Copy uninstall command",
       commandCopied: "Uninstall command copied.",
+      unusedDefinition: "Flagged as not used recently. Prune keeps no launch history of its own, so check before you remove anything on this list.",
       copyFailed: "Couldn't copy that.",
       empty: {
         plain: 'Nothing matches.',
@@ -494,6 +495,9 @@ export const CATALOG = {
         status: 'Status'
       },
       switchAriaLabel: (name) => `Run ${name} at sign-in`,
+      copyPath: 'Copy path',
+      pathCopied: 'Path copied.',
+      copyFailed: "Couldn't copy that.",
       status: {
         invalid: 'Invalid',
         running: 'Running',
@@ -827,6 +831,7 @@ export const CATALOG = {
     app: {
       installedApplications: 'Applications',
       applicationsSummary: (count, size) => `${count} installed application${count === 1 ? '' : 's'} · ${size}`,
+      applicationsSummaryFiltered: (shown, total, size) => `${shown} of ${total} shown · ${size}`,
       removeStoreApp: (name) => `Remove ${name}`
     }
   },
@@ -885,8 +890,8 @@ export const CATALOG = {
         ariaLabel: 'Ure om onlangse lêers uit te los'
       },
       restorePointCleanup: {
-        title: 'Skep eers \'n herstelpunt',
-        description: "Voor 'n geforseerde verwydering, sodat Windows self die masjien kan terugrol. Kos 'n paar sekondes, en doen niks as Stelselbeskerming afgeskakel is nie."
+        title: "Restore point before removing leftovers",
+        description: "Taken before Prune removes the leftover files and registry keys you selected, including after Force remove. On by default; does nothing at all if System Protection is turned off."
       },
       hideUnavailable: {
         title: "Versteek skoonmakers wat nie van toepassing is nie",
@@ -948,12 +953,12 @@ export const CATALOG = {
       uninstallTab: {
         beforeHeading: 'Voor deïnstallering',
         restorePointUninstall: {
-          title: 'Skep \'n herstelpunt voor deïnstallering',
-          description: "Windows se eie Stelselherstel, gemaak voordat die program se deïnstalleerder loop. Dit benodig dat Prune as administrateur loop en Windows laat een per dag toe, so wanneer dit nie gemaak kan word nie, gaan die deïnstallering voort en die dialoog sê so."
+          title: "Restore point before running an uninstaller",
+          description: "Taken before the program's own uninstaller runs. It needs Prune to be running as administrator and Windows allows one a day, so when it can't be made the uninstall goes ahead and the dialog says so."
         },
         registryBackup: {
           title: 'Rugsteun die register voor deïnstallering',
-          description: "Voer HKLM\\SOFTWARE en HKCU\\Software uit (omtrent 140 MB op die masjien waarop Prune gebou is) en hou die nuutste 3. As die rugsteun nie gemaak kan word nie, loop die deïnstallering nie."
+          description: "Exports HKLM\\SOFTWARE and HKCU\\Software, typically several hundred MB, and keeps the newest 3. If the backup can't be made, the uninstall doesn't run."
         },
         deleteLockedFiles: {
           title: 'Verwyder gesluite lêers by die volgende herbegin',
@@ -985,7 +990,7 @@ export const CATALOG = {
         reportTitle: "Rapporteer 'n fout",
         reportDescription: "Maak 'n vooraf ingevulde kwessie op GitHub oop. Prune self stuur niks, en jy sien alles voordat enigiets gestuur word.",
         reportButton: "Rapporteer 'n fout",
-        description: "'n Plaaslike, vanlyn deïnstalleerder en skoonmaakhulpmiddel vir Windows — geforseerde verwydering met oorblyfsellêerskandering, veilige karantyn-voor-verwydering, skyfkartering, en een-klik-vullis-skoonmaak."
+        description: "A local, offline uninstaller and cleanup tool for Windows — forced removal with leftover-file scanning, safe quarantine-before-delete, disk mapping, and a cleaner that shows a preview before it removes anything."
       },
       automation: {
         title: 'Outomatisering',
@@ -1053,7 +1058,7 @@ export const CATALOG = {
       apps: {
         label: "Geïnstalleerde toepassings",
         broken: (count) => `${count} agtergelaat deur 'n mislukte deïnstallering`,
-        noBroken: 'Geen stukkende inskrywings nie.',
+        noBroken: 'Nothing left behind.',
         review: 'Hersien',
         manage: 'Bestuur'
       },
@@ -1179,10 +1184,10 @@ export const CATALOG = {
         unused: 'Ongebruik',
         store: 'Winkel',
         extensions: 'Uitbreidings',
-        broken: 'Stukkend',
+        broken: 'Left behind',
         storeCount: (n) => `Winkel (${n})`,
         extensionsCount: (n) => `Uitbreidings (${n})`,
-        brokenCount: (n) => `Stukkend (${n})`
+        brokenCount: (n) => `Left behind (${n})`
       },
       columns: {
         application: 'Toepassing',
@@ -1194,7 +1199,7 @@ export const CATALOG = {
         company: 'Maatskappy',
         website: 'Webwerf'
       },
-      badges: { broken: 'Stukkend', running: 'Loop', store: 'Winkel', disabled: 'Gedeaktiveer', unused: 'Ongebruik' },
+      badges: { broken: 'Left behind', running: 'Loop', store: 'Winkel', disabled: 'Gedeaktiveer', unused: 'Ongebruik' },
       selectRow: (name) => `Kies ${name}`,
       selectAll: 'Kies alles wat gewys word',
       clearSelection: 'Maak keuse skoon',
@@ -1206,6 +1211,7 @@ export const CATALOG = {
       openFolder: "Maak vouer oop",
       copyUninstallCommand: "Kopieer deïnstalleer-opdrag",
       commandCopied: "Deïnstalleer-opdrag gekopieer.",
+      unusedDefinition: "Flagged as not used recently. Prune keeps no launch history of its own, so check before you remove anything on this list.",
       copyFailed: "Kon dit nie kopieer nie.",
       empty: {
         plain: 'Niks pas nie.',
@@ -1295,6 +1301,9 @@ export const CATALOG = {
         status: 'Status'
       },
       switchAriaLabel: (name) => `Begin ${name} by aanmelding`,
+      copyPath: 'Copy path',
+      pathCopied: 'Path copied.',
+      copyFailed: "Couldn't copy that.",
       status: {
         invalid: 'Ongeldig',
         running: 'Loop',
@@ -1628,6 +1637,7 @@ export const CATALOG = {
     app: {
       installedApplications: "Toepassings",
       applicationsSummary: (count, size) => `${count} geïnstalleerde ${count === 1 ? 'toepassing' : 'toepassings'} · ${size}`,
+      applicationsSummaryFiltered: (shown, total, size) => `${shown} of ${total} shown · ${size}`,
       removeStoreApp: (name) => `Verwyder ${name}`
     }
   },
@@ -1686,8 +1696,8 @@ export const CATALOG = {
         ariaLabel: 'عدد الساعات لترك الملفات الحديثة وشأنها'
       },
       restorePointCleanup: {
-        title: 'إنشاء نقطة استعادة أولاً',
-        description: "قبل الإزالة القسرية، حتى يتمكن Windows نفسه من إعادة الجهاز إلى حالته السابقة. يستغرق بضع ثوانٍ، ولا يفعل شيئًا على الإطلاق إذا كانت حماية النظام متوقفة."
+        title: "Restore point before removing leftovers",
+        description: "Taken before Prune removes the leftover files and registry keys you selected, including after Force remove. On by default; does nothing at all if System Protection is turned off."
       },
       hideUnavailable: {
         title: 'إخفاء أدوات التنظيف التي لا تنطبق',
@@ -1749,12 +1759,12 @@ export const CATALOG = {
       uninstallTab: {
         beforeHeading: 'قبل إلغاء التثبيت',
         restorePointUninstall: {
-          title: 'إنشاء نقطة استعادة قبل إلغاء التثبيت',
-          description: "استعادة النظام الخاصة بـ Windows نفسه، تُنشأ قبل تشغيل برنامج إلغاء التثبيت الخاص بالبرنامج. يتطلب تشغيل Prune كمسؤول ويسمح Windows بواحدة يوميًا، لذا عندما لا يمكن إنشاؤها، يمضي إلغاء التثبيت قدمًا ويقول مربع الحوار ذلك."
+          title: "Restore point before running an uninstaller",
+          description: "Taken before the program's own uninstaller runs. It needs Prune to be running as administrator and Windows allows one a day, so when it can't be made the uninstall goes ahead and the dialog says so."
         },
         registryBackup: {
           title: 'نسخ السجل احتياطيًا قبل إلغاء التثبيت',
-          description: 'يصدّر HKLM\\SOFTWARE و HKCU\\Software (حوالي 140 ميجابايت على الجهاز الذي تم بناء Prune عليه) ويحتفظ بأحدث 3 نسخ. إذا تعذر إنشاء النسخة الاحتياطية، فلن يتم تشغيل إلغاء التثبيت.'
+          description: "Exports HKLM\\SOFTWARE and HKCU\\Software, typically several hundred MB, and keeps the newest 3. If the backup can't be made, the uninstall doesn't run."
         },
         deleteLockedFiles: {
           title: 'حذف الملفات المقفلة عند إعادة التشغيل التالية',
@@ -1786,7 +1796,7 @@ export const CATALOG = {
         reportTitle: 'الإبلاغ عن خطأ',
         reportDescription: 'يفتح بلاغًا معبأً مسبقًا على GitHub. لا يرسل Prune نفسه أي شيء، وترى كل شيء قبل أن يذهب إلى أي مكان.',
         reportButton: 'الإبلاغ عن خطأ',
-        description: "أداة إلغاء تثبيت وتنظيف محلية وغير متصلة بالإنترنت لنظام Windows — إزالة قسرية مع فحص المخلفات، حجر صحي آمن قبل الحذف، خريطة القرص، وتنظيف الفوضى بنقرة واحدة."
+        description: "A local, offline uninstaller and cleanup tool for Windows — forced removal with leftover-file scanning, safe quarantine-before-delete, disk mapping, and a cleaner that shows a preview before it removes anything."
       },
       automation: {
         title: 'الأتمتة',
@@ -1854,7 +1864,7 @@ export const CATALOG = {
       apps: {
         label: 'التطبيقات المثبتة',
         broken: (count) => `${count} تُركت بعد إلغاء تثبيت فاشل`,
-        noBroken: 'لا توجد إدخالات معطوبة.',
+        noBroken: 'Nothing left behind.',
         review: 'مراجعة',
         manage: 'إدارة'
       },
@@ -1980,10 +1990,10 @@ export const CATALOG = {
         unused: 'غير مستخدم',
         store: 'المتجر',
         extensions: 'الإضافات',
-        broken: 'معطوب',
+        broken: 'Left behind',
         storeCount: (n) => `المتجر (${n})`,
         extensionsCount: (n) => `الإضافات (${n})`,
-        brokenCount: (n) => `معطوب (${n})`
+        brokenCount: (n) => `Left behind (${n})`
       },
       columns: {
         application: 'التطبيق',
@@ -1995,7 +2005,7 @@ export const CATALOG = {
         company: 'الشركة',
         website: 'الموقع الإلكتروني'
       },
-      badges: { broken: 'معطوب', running: 'قيد التشغيل', store: 'متجر', disabled: 'معطّل', unused: 'غير مستخدم' },
+      badges: { broken: 'Left behind', running: 'قيد التشغيل', store: 'متجر', disabled: 'معطّل', unused: 'غير مستخدم' },
       selectRow: (name) => `تحديد ${name}`,
       selectAll: 'تحديد كل ما هو معروض',
       clearSelection: 'إلغاء التحديد',
@@ -2007,6 +2017,7 @@ export const CATALOG = {
       openFolder: "فتح المجلد",
       copyUninstallCommand: "نسخ أمر إلغاء التثبيت",
       commandCopied: "تم نسخ أمر إلغاء التثبيت.",
+      unusedDefinition: "Flagged as not used recently. Prune keeps no launch history of its own, so check before you remove anything on this list.",
       copyFailed: "تعذّر النسخ.",
       empty: {
         plain: 'لا توجد نتائج مطابقة.',
@@ -2096,6 +2107,9 @@ export const CATALOG = {
         status: 'الحالة'
       },
       switchAriaLabel: (name) => `تشغيل ${name} عند تسجيل الدخول`,
+      copyPath: 'Copy path',
+      pathCopied: 'Path copied.',
+      copyFailed: "Couldn't copy that.",
       status: {
         invalid: 'غير صالح',
         running: 'قيد التشغيل',
@@ -2429,6 +2443,7 @@ export const CATALOG = {
     app: {
       installedApplications: "التطبيقات",
       applicationsSummary: (count, size) => `التطبيقات المثبتة: ${count} · ${size}`,
+      applicationsSummaryFiltered: (shown, total, size) => `${shown} of ${total} shown · ${size}`,
       removeStoreApp: (name) => `إزالة ${name}`
     }
   },
@@ -2487,8 +2502,8 @@ export const CATALOG = {
         ariaLabel: 'Hores per deixar els fitxers recents en pau'
       },
       restorePointCleanup: {
-        title: 'Crea primer un punt de restauració',
-        description: "Abans d'una eliminació forçada, perquè el mateix Windows pugui revertir la màquina. Costa uns segons, i no fa res si la Protecció del Sistema està desactivada."
+        title: "Restore point before removing leftovers",
+        description: "Taken before Prune removes the leftover files and registry keys you selected, including after Force remove. On by default; does nothing at all if System Protection is turned off."
       },
       hideUnavailable: {
         title: "Amaga els netejadors que no s'apliquen",
@@ -2550,12 +2565,12 @@ export const CATALOG = {
       uninstallTab: {
         beforeHeading: 'Abans de desinstal·lar',
         restorePointUninstall: {
-          title: 'Crea un punt de restauració abans de desinstal·lar',
-          description: "La pròpia Restauració del Sistema de Windows, feta abans que s'executi el desinstal·lador del programa. Necessita que el Prune s'executi com a administrador i Windows en permet una per dia, així que quan no es pot fer, la desinstal·lació continua i el diàleg ho diu."
+          title: "Restore point before running an uninstaller",
+          description: "Taken before the program's own uninstaller runs. It needs Prune to be running as administrator and Windows allows one a day, so when it can't be made the uninstall goes ahead and the dialog says so."
         },
         registryBackup: {
           title: 'Fes còpia de seguretat del registre abans de desinstal·lar',
-          description: "Exporta HKLM\\SOFTWARE i HKCU\\Software (uns 140 MB a la màquina on es construeix el Prune) i manté les 3 més recents. Si no es pot fer la còpia de seguretat, la desinstal·lació no s'executa."
+          description: "Exports HKLM\\SOFTWARE and HKCU\\Software, typically several hundred MB, and keeps the newest 3. If the backup can't be made, the uninstall doesn't run."
         },
         deleteLockedFiles: {
           title: 'Suprimeix els fitxers bloquejats en el següent reinici',
@@ -2587,7 +2602,7 @@ export const CATALOG = {
         reportTitle: "Informa d'un error",
         reportDescription: "Obre a GitHub una incidència preomplerta. Prune no envia res per si mateix i veus tot el contingut abans que se'n vagi enlloc.",
         reportButton: "Informa d'un error",
-        description: "Una eina de desinstal·lació i neteja local i fora de línia per a Windows — eliminació forçada amb escaneig de restes, quarantena segura abans d'eliminar, mapatge de disc, i neteja de brossa amb un clic."
+        description: "A local, offline uninstaller and cleanup tool for Windows — forced removal with leftover-file scanning, safe quarantine-before-delete, disk mapping, and a cleaner that shows a preview before it removes anything."
       },
       automation: {
         title: 'Automatització',
@@ -2655,7 +2670,7 @@ export const CATALOG = {
       apps: {
         label: 'Aplicacions instal·lades',
         broken: (count) => `${count} deixades per una desinstal·lació fallida`,
-        noBroken: 'Cap entrada trencada.',
+        noBroken: 'Nothing left behind.',
         review: 'Revisa',
         manage: 'Gestiona'
       },
@@ -2781,10 +2796,10 @@ export const CATALOG = {
         unused: 'Sense ús',
         store: 'Botiga',
         extensions: 'Extensions',
-        broken: 'Trencades',
+        broken: 'Left behind',
         storeCount: (n) => `Botiga (${n})`,
         extensionsCount: (n) => `Extensions (${n})`,
-        brokenCount: (n) => `Trencades (${n})`
+        brokenCount: (n) => `Left behind (${n})`
       },
       columns: {
         application: 'Aplicació',
@@ -2796,7 +2811,7 @@ export const CATALOG = {
         company: 'Empresa',
         website: 'Lloc web'
       },
-      badges: { broken: 'Trencada', running: 'En execució', store: 'Botiga', disabled: 'Desactivada', unused: 'Sense ús' },
+      badges: { broken: 'Left behind', running: 'En execució', store: 'Botiga', disabled: 'Desactivada', unused: 'Sense ús' },
       selectRow: (name) => `Selecciona ${name}`,
       selectAll: "Selecciona tot el que es mostra",
       clearSelection: 'Neteja la selecció',
@@ -2808,6 +2823,7 @@ export const CATALOG = {
       openFolder: "Obre la carpeta",
       copyUninstallCommand: "Copia l'ordre de desinstal·lació",
       commandCopied: "S'ha copiat l'ordre de desinstal·lació.",
+      unusedDefinition: "Flagged as not used recently. Prune keeps no launch history of its own, so check before you remove anything on this list.",
       copyFailed: "No s'ha pogut copiar.",
       empty: {
         plain: 'Res coincideix.',
@@ -2897,6 +2913,9 @@ export const CATALOG = {
         status: 'Estat'
       },
       switchAriaLabel: (name) => `Executa ${name} en iniciar sessió`,
+      copyPath: 'Copy path',
+      pathCopied: 'Path copied.',
+      copyFailed: "Couldn't copy that.",
       status: {
         invalid: 'No vàlid',
         running: 'En execució',
@@ -3230,6 +3249,7 @@ export const CATALOG = {
     app: {
       installedApplications: "Aplicacions",
       applicationsSummary: (count, size) => `${count} ${count === 1 ? 'aplicació instal·lada' : 'aplicacions instal·lades'} · ${size}`,
+      applicationsSummaryFiltered: (shown, total, size) => `${shown} of ${total} shown · ${size}`,
       removeStoreApp: (name) => `Elimina ${name}`
     }
   },
@@ -3288,8 +3308,8 @@ export const CATALOG = {
         ariaLabel: 'Počet hodin, po které nechat nedávné soubory na pokoji'
       },
       restorePointCleanup: {
-        title: 'Nejprve vytvořit bod obnovení',
-        description: 'Před vynuceným odebráním, aby mohl sám Windows vrátit počítač zpět. Stojí to pár sekund a nic to neudělá, pokud je Ochrana systému vypnutá.'
+        title: "Restore point before removing leftovers",
+        description: "Taken before Prune removes the leftover files and registry keys you selected, including after Force remove. On by default; does nothing at all if System Protection is turned off."
       },
       hideUnavailable: {
         title: "Skrýt nepoužitelné čističe",
@@ -3351,12 +3371,12 @@ export const CATALOG = {
       uninstallTab: {
         beforeHeading: 'Před odinstalací',
         restorePointUninstall: {
-          title: 'Vytvořit bod obnovení před odinstalací',
-          description: "Vlastní Obnovení systému Windows, vytvořené předtím, než se spustí odinstalátor programu. Vyžaduje, aby Prune běžel jako správce, a Windows umožňuje jeden denně, takže když ho nelze vytvořit, odinstalace pokračuje a dialog to uvádí."
+          title: "Restore point before running an uninstaller",
+          description: "Taken before the program's own uninstaller runs. It needs Prune to be running as administrator and Windows allows one a day, so when it can't be made the uninstall goes ahead and the dialog says so."
         },
         registryBackup: {
           title: 'Zálohovat registr před odinstalací',
-          description: 'Exportuje HKLM\\SOFTWARE a HKCU\\Software (asi 140 MB na počítači, na kterém je Prune sestaven) a ponechá nejnovější 3. Pokud se zálohu nepodaří vytvořit, odinstalace se nespustí.'
+          description: "Exports HKLM\\SOFTWARE and HKCU\\Software, typically several hundred MB, and keeps the newest 3. If the backup can't be made, the uninstall doesn't run."
         },
         deleteLockedFiles: {
           title: 'Odstranit uzamčené soubory při příštím restartu',
@@ -3388,7 +3408,7 @@ export const CATALOG = {
         reportTitle: 'Nahlásit chybu',
         reportDescription: "Otevře na GitHubu předvyplněné hlášení. Prune sám nic neodesílá a všechno uvidíte dřív, než to kam odejde.",
         reportButton: 'Nahlásit chybu',
-        description: "Lokální, offline odinstalační a čisticí nástroj pro Windows — vynucené odebrání se skenováním zbytků, bezpečná karanténa před smazáním, Mapa disku a jednoklikové čištění nepořádku."
+        description: "A local, offline uninstaller and cleanup tool for Windows — forced removal with leftover-file scanning, safe quarantine-before-delete, disk mapping, and a cleaner that shows a preview before it removes anything."
       },
       automation: {
         title: 'Automatizace',
@@ -3456,7 +3476,7 @@ export const CATALOG = {
       apps: {
         label: 'Nainstalované aplikace',
         broken: (count) => `Zanecháno neúspěšnou odinstalací: ${count}`,
-        noBroken: 'Žádné poškozené položky.',
+        noBroken: 'Nothing left behind.',
         review: 'Zkontrolovat',
         manage: 'Spravovat'
       },
@@ -3582,10 +3602,10 @@ export const CATALOG = {
         unused: 'Nepoužívané',
         store: 'Obchod',
         extensions: 'Rozšíření',
-        broken: 'Poškozené',
+        broken: 'Left behind',
         storeCount: (n) => `Obchod (${n})`,
         extensionsCount: (n) => `Rozšíření (${n})`,
-        brokenCount: (n) => `Poškozené (${n})`
+        brokenCount: (n) => `Left behind (${n})`
       },
       columns: {
         application: 'Aplikace',
@@ -3597,7 +3617,7 @@ export const CATALOG = {
         company: 'Společnost',
         website: 'Web'
       },
-      badges: { broken: 'Poškozeno', running: 'Spuštěno', store: 'Obchod', disabled: 'Vypnuto', unused: 'Nepoužívané' },
+      badges: { broken: 'Left behind', running: 'Spuštěno', store: 'Obchod', disabled: 'Vypnuto', unused: 'Nepoužívané' },
       selectRow: (name) => `Vybrat ${name}`,
       selectAll: 'Vybrat vše zobrazené',
       clearSelection: 'Zrušit výběr',
@@ -3609,6 +3629,7 @@ export const CATALOG = {
       openFolder: "Otevřít složku",
       copyUninstallCommand: "Kopírovat příkaz odinstalace",
       commandCopied: "Příkaz odinstalace zkopírován.",
+      unusedDefinition: "Flagged as not used recently. Prune keeps no launch history of its own, so check before you remove anything on this list.",
       copyFailed: "Kopírování se nezdařilo.",
       empty: {
         plain: 'Nic neodpovídá.',
@@ -3698,6 +3719,9 @@ export const CATALOG = {
         status: 'Stav'
       },
       switchAriaLabel: (name) => `Spouštět ${name} při přihlášení`,
+      copyPath: 'Copy path',
+      pathCopied: 'Path copied.',
+      copyFailed: "Couldn't copy that.",
       status: {
         invalid: 'Neplatné',
         running: 'Spuštěno',
@@ -4029,6 +4053,7 @@ export const CATALOG = {
     app: {
       installedApplications: "Aplikace",
       applicationsSummary: (count, size) => `Nainstalované aplikace: ${count} · ${size}`,
+      applicationsSummaryFiltered: (shown, total, size) => `${shown} of ${total} shown · ${size}`,
       removeStoreApp: (name) => `Odebrat ${name}`
     }
   },
@@ -4087,8 +4112,8 @@ export const CATALOG = {
         ariaLabel: 'Oriau i adael ffeiliau diweddar yn llonydd'
       },
       restorePointCleanup: {
-        title: 'Creu pwynt adfer yn gyntaf',
-        description: "Cyn tynnu gorfodol, fel y gall Windows ei hun droi'r peiriant yn ôl. Yn costio ychydig eiliadau, ac nid yw'n gwneud dim o gwbl os yw Diogelu System wedi'i ddiffodd."
+        title: "Restore point before removing leftovers",
+        description: "Taken before Prune removes the leftover files and registry keys you selected, including after Force remove. On by default; does nothing at all if System Protection is turned off."
       },
       hideUnavailable: {
         title: "Cuddio glanhawyr nad ydynt yn berthnasol",
@@ -4150,12 +4175,12 @@ export const CATALOG = {
       uninstallTab: {
         beforeHeading: 'Cyn dadosod',
         restorePointUninstall: {
-          title: 'Creu pwynt adfer cyn dadosod',
-          description: "Adferiad System Windows ei hun, wedi'i wneud cyn i ddadosodwr y rhaglen redeg. Mae angen i Prune redeg fel gweinyddwr ac mae Windows yn caniatáu un y dydd, felly pan na ellir ei wneud, mae'r dadosod yn mynd yn ei flaen ac mae'r ddeialog yn dweud hynny."
+          title: "Restore point before running an uninstaller",
+          description: "Taken before the program's own uninstaller runs. It needs Prune to be running as administrator and Windows allows one a day, so when it can't be made the uninstall goes ahead and the dialog says so."
         },
         registryBackup: {
           title: 'Cadw copi wrth gefn o\'r gofrestrfa cyn dadosod',
-          description: "Yn allforio HKLM\\SOFTWARE a HKCU\\Software (tua 140 MB ar y peiriant y mae Prune wedi'i adeiladu arno) ac yn cadw'r 3 diweddaraf. Os na ellir gwneud y copi wrth gefn, ni fydd y dadosod yn rhedeg."
+          description: "Exports HKLM\\SOFTWARE and HKCU\\Software, typically several hundred MB, and keeps the newest 3. If the backup can't be made, the uninstall doesn't run."
         },
         deleteLockedFiles: {
           title: "Dileu ffeiliau wedi'u cloi adeg yr ailgychwyn nesaf",
@@ -4187,7 +4212,7 @@ export const CATALOG = {
         reportTitle: 'Rhoi gwybod am nam',
         reportDescription: "Yn agor mater wedi'i lenwi ymlaen llaw ar GitHub. Nid yw Prune ei hun yn anfon dim, ac rydych chi'n gweld popeth cyn i unrhyw beth gael ei anfon.",
         reportButton: 'Rhoi gwybod am nam',
-        description: "Offeryn dadosod a glanhau lleol, all-lein ar gyfer Windows — tynnu gorfodol gyda sganio olion, Cwarantin diogel cyn dileu, Map Disg, a glanhau sbwriel un clic."
+        description: "A local, offline uninstaller and cleanup tool for Windows — forced removal with leftover-file scanning, safe quarantine-before-delete, disk mapping, and a cleaner that shows a preview before it removes anything."
       },
       automation: {
         title: 'Awtomeiddio',
@@ -4255,7 +4280,7 @@ export const CATALOG = {
       apps: {
         label: "Rhaglenni wedi'u gosod",
         broken: (count) => `${count} wedi'u gadael gan ddadosodiad aflwyddiannus`,
-        noBroken: 'Dim cofnodion wedi torri.',
+        noBroken: 'Nothing left behind.',
         review: 'Adolygu',
         manage: 'Rheoli'
       },
@@ -4381,10 +4406,10 @@ export const CATALOG = {
         unused: "Heb eu defnyddio",
         store: 'Siop',
         extensions: 'Estyniadau',
-        broken: 'Wedi torri',
+        broken: 'Left behind',
         storeCount: (n) => `Siop (${n})`,
         extensionsCount: (n) => `Estyniadau (${n})`,
-        brokenCount: (n) => `Wedi torri (${n})`
+        brokenCount: (n) => `Left behind (${n})`
       },
       columns: {
         application: 'Rhaglen',
@@ -4396,7 +4421,7 @@ export const CATALOG = {
         company: 'Cwmni',
         website: 'Gwefan'
       },
-      badges: { broken: "Wedi torri", running: 'Yn rhedeg', store: 'Siop', disabled: "Wedi'i analluogi", unused: "Heb ei ddefnyddio" },
+      badges: { broken: 'Left behind', running: 'Yn rhedeg', store: 'Siop', disabled: "Wedi'i analluogi", unused: "Heb ei ddefnyddio" },
       selectRow: (name) => `Dewis ${name}`,
       selectAll: "Dewis pob un a ddangosir",
       clearSelection: "Clirio'r dewis",
@@ -4408,6 +4433,7 @@ export const CATALOG = {
       openFolder: "Agor y ffolder",
       copyUninstallCommand: "Copïo'r gorchymyn dadosod",
       commandCopied: "Copïwyd y gorchymyn dadosod.",
+      unusedDefinition: "Flagged as not used recently. Prune keeps no launch history of its own, so check before you remove anything on this list.",
       copyFailed: "Methu copïo hynny.",
       empty: {
         plain: 'Dim byd yn cyfateb.',
@@ -4497,6 +4523,9 @@ export const CATALOG = {
         status: 'Statws'
       },
       switchAriaLabel: (name) => `Rhedeg ${name} wrth fewngofnodi`,
+      copyPath: 'Copy path',
+      pathCopied: 'Path copied.',
+      copyFailed: "Couldn't copy that.",
       status: {
         invalid: 'Annilys',
         running: 'Yn rhedeg',
@@ -4830,6 +4859,7 @@ export const CATALOG = {
     app: {
       installedApplications: "Rhaglenni",
       applicationsSummary: (count, size) => `${count} rhaglen wedi'u gosod · ${size}`,
+      applicationsSummaryFiltered: (shown, total, size) => `${shown} of ${total} shown · ${size}`,
       removeStoreApp: (name) => `Tynnu ${name}`
     }
   },
@@ -4888,8 +4918,8 @@ export const CATALOG = {
         ariaLabel: "Antal timer, nylige filer lades i fred"
       },
       restorePointCleanup: {
-        title: 'Opret et gendannelsespunkt først',
-        description: 'Før en tvungen fjernelse, så Windows selv kan rulle maskinen tilbage. Koster et par sekunder og gør ingenting, hvis Systembeskyttelse er slået fra.'
+        title: "Restore point before removing leftovers",
+        description: "Taken before Prune removes the leftover files and registry keys you selected, including after Force remove. On by default; does nothing at all if System Protection is turned off."
       },
       hideUnavailable: {
         title: 'Skjul rensere, der ikke gælder',
@@ -4951,12 +4981,12 @@ export const CATALOG = {
       uninstallTab: {
         beforeHeading: 'Før afinstallation',
         restorePointUninstall: {
-          title: 'Opret et gendannelsespunkt før afinstallation',
-          description: 'Windows egen systemgendannelse, oprettet før programmets afinstallationsprogram kører. Kræver at Prune kører som administrator, og Windows tillader én om dagen, så når den ikke kan oprettes, fortsætter afinstallationen, og dialogen siger det.'
+          title: "Restore point before running an uninstaller",
+          description: "Taken before the program's own uninstaller runs. It needs Prune to be running as administrator and Windows allows one a day, so when it can't be made the uninstall goes ahead and the dialog says so."
         },
         registryBackup: {
           title: 'Sikkerhedskopier registreringsdatabasen før afinstallation',
-          description: 'Eksporterer HKLM\\SOFTWARE og HKCU\\Software (ca. 140 MB på den maskine, Prune er bygget på) og beholder de nyeste 3. Hvis sikkerhedskopien ikke kan oprettes, kører afinstallationen ikke.'
+          description: "Exports HKLM\\SOFTWARE and HKCU\\Software, typically several hundred MB, and keeps the newest 3. If the backup can't be made, the uninstall doesn't run."
         },
         deleteLockedFiles: {
           title: 'Slet låste filer ved næste genstart',
@@ -4988,7 +5018,7 @@ export const CATALOG = {
         reportTitle: 'Rapportér en fejl',
         reportDescription: "Åbner et forudfyldt issue på GitHub. Prune sender ikke selv noget, og du ser alt, før noget bliver sendt.",
         reportButton: 'Rapportér en fejl',
-        description: "Et lokalt, offline afinstallations- og oprydningsværktøj til Windows — tvungen fjernelse med scanning af restfiler, sikker karantæne før sletning, diskkortlægning og oprydning af overflødige filer med ét klik."
+        description: "A local, offline uninstaller and cleanup tool for Windows — forced removal with leftover-file scanning, safe quarantine-before-delete, disk mapping, and a cleaner that shows a preview before it removes anything."
       },
       automation: {
         title: 'Automatisering',
@@ -5056,7 +5086,7 @@ export const CATALOG = {
       apps: {
         label: "Installerede programmer",
         broken: (count) => `${count} efterladt af en mislykket afinstallation`,
-        noBroken: 'Ingen ødelagte poster.',
+        noBroken: 'Nothing left behind.',
         review: 'Gennemgå',
         manage: 'Administrer'
       },
@@ -5182,10 +5212,10 @@ export const CATALOG = {
         unused: 'Ubrugt',
         store: 'Store',
         extensions: 'Udvidelser',
-        broken: 'Defekt',
+        broken: 'Left behind',
         storeCount: (n) => `Store (${n})`,
         extensionsCount: (n) => `Udvidelser (${n})`,
-        brokenCount: (n) => `Defekt (${n})`
+        brokenCount: (n) => `Left behind (${n})`
       },
       columns: {
         application: 'Program',
@@ -5197,7 +5227,7 @@ export const CATALOG = {
         company: 'Firma',
         website: 'Websted'
       },
-      badges: { broken: 'Defekt', running: 'Kører', store: 'Store', disabled: 'Deaktiveret', unused: 'Ubrugt' },
+      badges: { broken: 'Left behind', running: 'Kører', store: 'Store', disabled: 'Deaktiveret', unused: 'Ubrugt' },
       selectRow: (name) => `Vælg ${name}`,
       selectAll: 'Vælg alle viste',
       clearSelection: 'Ryd markering',
@@ -5209,6 +5239,7 @@ export const CATALOG = {
       openFolder: "Åbn mappe",
       copyUninstallCommand: "Kopiér afinstallationskommando",
       commandCopied: "Afinstallationskommandoen er kopieret.",
+      unusedDefinition: "Flagged as not used recently. Prune keeps no launch history of its own, so check before you remove anything on this list.",
       copyFailed: "Kunne ikke kopiere det.",
       empty: {
         plain: 'Intet matcher.',
@@ -5298,6 +5329,9 @@ export const CATALOG = {
         status: 'Status'
       },
       switchAriaLabel: (name) => `Start ${name} ved login`,
+      copyPath: 'Copy path',
+      pathCopied: 'Path copied.',
+      copyFailed: "Couldn't copy that.",
       status: {
         invalid: 'Ugyldig',
         running: 'Kører',
@@ -5631,6 +5665,7 @@ export const CATALOG = {
     app: {
       installedApplications: "Programmer",
       applicationsSummary: (count, size) => `${count} ${count === 1 ? 'installeret program' : 'installerede programmer'} · ${size}`,
+      applicationsSummaryFiltered: (shown, total, size) => `${shown} of ${total} shown · ${size}`,
       removeStoreApp: (name) => `Fjern ${name}`
     }
   },
@@ -5689,8 +5724,8 @@ export const CATALOG = {
         ariaLabel: "Stunden, in denen kürzlich geänderte Dateien in Ruhe gelassen werden"
       },
       restorePointCleanup: {
-        title: 'Zuerst einen Wiederherstellungspunkt erstellen',
-        description: 'Vor einer erzwungenen Entfernung, damit Windows selbst den Rechner zurücksetzen kann. Kostet ein paar Sekunden und bewirkt gar nichts, wenn der Systemschutz deaktiviert ist.'
+        title: "Restore point before removing leftovers",
+        description: "Taken before Prune removes the leftover files and registry keys you selected, including after Force remove. On by default; does nothing at all if System Protection is turned off."
       },
       hideUnavailable: {
         title: 'Nicht zutreffende Reiniger ausblenden',
@@ -5752,12 +5787,12 @@ export const CATALOG = {
       uninstallTab: {
         beforeHeading: 'Vor der Deinstallation',
         restorePointUninstall: {
-          title: 'Vor der Deinstallation einen Wiederherstellungspunkt erstellen',
-          description: "Die eigene Systemwiederherstellung von Windows, erstellt, bevor der Deinstaller des Programms läuft. Erfordert, dass Prune als Administrator läuft, und Windows erlaubt einen pro Tag, sodass die Deinstallation fortgesetzt wird, wenn er nicht erstellt werden kann, und der Dialog dies mitteilt."
+          title: "Restore point before running an uninstaller",
+          description: "Taken before the program's own uninstaller runs. It needs Prune to be running as administrator and Windows allows one a day, so when it can't be made the uninstall goes ahead and the dialog says so."
         },
         registryBackup: {
           title: 'Registrierung vor der Deinstallation sichern',
-          description: 'Exportiert HKLM\\SOFTWARE und HKCU\\Software (etwa 140 MB auf dem Rechner, auf dem Prune gebaut ist) und behält die neuesten 3. Wenn die Sicherung nicht erstellt werden kann, läuft die Deinstallation nicht.'
+          description: "Exports HKLM\\SOFTWARE and HKCU\\Software, typically several hundred MB, and keeps the newest 3. If the backup can't be made, the uninstall doesn't run."
         },
         deleteLockedFiles: {
           title: 'Gesperrte Dateien beim nächsten Neustart löschen',
@@ -5789,7 +5824,7 @@ export const CATALOG = {
         reportTitle: 'Fehler melden',
         reportDescription: "Öffnet ein vorausgefülltes Issue auf GitHub. Prune selbst sendet nichts, und du siehst alles, bevor irgendetwas abgeschickt wird.",
         reportButton: 'Fehler melden',
-        description: "Ein lokales Offline-Tool zum Deinstallieren und Bereinigen für Windows — erzwungene Entfernung mit Scannen nach Rückständen, sichere Quarantäne vor dem Löschen, Festplattenkarte und Ein-Klick-Müllbereinigung."
+        description: "A local, offline uninstaller and cleanup tool for Windows — forced removal with leftover-file scanning, safe quarantine-before-delete, disk mapping, and a cleaner that shows a preview before it removes anything."
       },
       automation: {
         title: 'Automatisierung',
@@ -5857,7 +5892,7 @@ export const CATALOG = {
       apps: {
         label: 'Installierte Programme',
         broken: (count) => `${count} von einer fehlgeschlagenen Deinstallation zurückgelassen`,
-        noBroken: 'Keine defekten Einträge.',
+        noBroken: 'Nothing left behind.',
         review: 'Überprüfen',
         manage: 'Verwalten'
       },
@@ -5983,10 +6018,10 @@ export const CATALOG = {
         unused: 'Ungenutzt',
         store: 'Store',
         extensions: 'Erweiterungen',
-        broken: 'Defekt',
+        broken: 'Left behind',
         storeCount: (n) => `Store (${n})`,
         extensionsCount: (n) => `Erweiterungen (${n})`,
-        brokenCount: (n) => `Defekt (${n})`
+        brokenCount: (n) => `Left behind (${n})`
       },
       columns: {
         application: 'Anwendung',
@@ -5998,7 +6033,7 @@ export const CATALOG = {
         company: 'Unternehmen',
         website: 'Website'
       },
-      badges: { broken: 'Defekt', running: 'Läuft', store: 'Store', disabled: 'Deaktiviert', unused: 'Ungenutzt' },
+      badges: { broken: 'Left behind', running: 'Läuft', store: 'Store', disabled: 'Deaktiviert', unused: 'Ungenutzt' },
       selectRow: (name) => `${name} auswählen`,
       selectAll: 'Alle angezeigten auswählen',
       clearSelection: 'Auswahl aufheben',
@@ -6010,6 +6045,7 @@ export const CATALOG = {
       openFolder: "Ordner öffnen",
       copyUninstallCommand: "Deinstallationsbefehl kopieren",
       commandCopied: "Deinstallationsbefehl kopiert.",
+      unusedDefinition: "Flagged as not used recently. Prune keeps no launch history of its own, so check before you remove anything on this list.",
       copyFailed: "Kopieren fehlgeschlagen.",
       empty: {
         plain: 'Nichts entspricht der Suche.',
@@ -6099,6 +6135,9 @@ export const CATALOG = {
         status: 'Status'
       },
       switchAriaLabel: (name) => `${name} bei der Anmeldung ausführen`,
+      copyPath: 'Copy path',
+      pathCopied: 'Path copied.',
+      copyFailed: "Couldn't copy that.",
       status: {
         invalid: 'Ungültig',
         running: 'Läuft',
@@ -6432,6 +6471,7 @@ export const CATALOG = {
     app: {
       installedApplications: "Anwendungen",
       applicationsSummary: (count, size) => `${count} installierte ${count === 1 ? 'Anwendung' : 'Anwendungen'} · ${size}`,
+      applicationsSummaryFiltered: (shown, total, size) => `${shown} of ${total} shown · ${size}`,
       removeStoreApp: (name) => `${name} entfernen`
     }
   },
@@ -6490,8 +6530,8 @@ export const CATALOG = {
         ariaLabel: 'Ώρες για να αφήσετε ήσυχα τα πρόσφατα αρχεία'
       },
       restorePointCleanup: {
-        title: 'Δημιουργία σημείου επαναφοράς πρώτα',
-        description: 'Πριν από μια εξαναγκασμένη αφαίρεση, ώστε τα ίδια τα Windows να μπορούν να επαναφέρουν το μηχάνημα. Κοστίζει μερικά δευτερόλεπτα, και δεν κάνει τίποτα αν η Προστασία Συστήματος είναι απενεργοποιημένη.'
+        title: "Restore point before removing leftovers",
+        description: "Taken before Prune removes the leftover files and registry keys you selected, including after Force remove. On by default; does nothing at all if System Protection is turned off."
       },
       hideUnavailable: {
         title: 'Απόκρυψη καθαριστών που δεν ισχύουν',
@@ -6553,12 +6593,12 @@ export const CATALOG = {
       uninstallTab: {
         beforeHeading: 'Πριν την απεγκατάσταση',
         restorePointUninstall: {
-          title: 'Δημιουργία σημείου επαναφοράς πριν την απεγκατάσταση',
-          description: 'Η δική τους Επαναφορά Συστήματος των Windows, δημιουργημένη πριν εκτελεστεί ο απεγκαταστάτης του προγράμματος. Χρειάζεται το Prune να εκτελείται ως διαχειριστής και τα Windows επιτρέπουν ένα την ημέρα, οπότε όταν δεν μπορεί να δημιουργηθεί, η απεγκατάσταση προχωρά και το παράθυρο διαλόγου το λέει.'
+          title: "Restore point before running an uninstaller",
+          description: "Taken before the program's own uninstaller runs. It needs Prune to be running as administrator and Windows allows one a day, so when it can't be made the uninstall goes ahead and the dialog says so."
         },
         registryBackup: {
           title: 'Δημιουργία αντιγράφου ασφαλείας μητρώου πριν την απεγκατάσταση',
-          description: 'Εξάγει τα HKLM\\SOFTWARE και HKCU\\Software (περίπου 140 MB στο μηχάνημα στο οποίο είναι χτισμένο το Prune) και κρατά τα 3 πιο πρόσφατα. Αν το αντίγραφο ασφαλείας δεν μπορεί να δημιουργηθεί, η απεγκατάσταση δεν εκτελείται.'
+          description: "Exports HKLM\\SOFTWARE and HKCU\\Software, typically several hundred MB, and keeps the newest 3. If the backup can't be made, the uninstall doesn't run."
         },
         deleteLockedFiles: {
           title: 'Διαγραφή κλειδωμένων αρχείων στην επόμενη επανεκκίνηση',
@@ -6590,7 +6630,7 @@ export const CATALOG = {
         reportTitle: 'Αναφορά σφάλματος',
         reportDescription: "Ανοίγει ένα προσυμπληρωμένο ζήτημα στο GitHub. Το ίδιο το Prune δεν στέλνει τίποτα και βλέπετε τα πάντα προτού σταλεί οτιδήποτε.",
         reportButton: 'Αναφορά σφάλματος',
-        description: "Ένα τοπικό, εκτός σύνδεσης εργαλείο απεγκατάστασης και καθαρισμού για Windows — εξαναγκασμένη αφαίρεση με σάρωση καταλοίπων αρχείων, ασφαλή καραντίνα πριν τη διαγραφή, Χάρτη δίσκου και καθαρισμό σκουπιδιών με ένα κλικ."
+        description: "A local, offline uninstaller and cleanup tool for Windows — forced removal with leftover-file scanning, safe quarantine-before-delete, disk mapping, and a cleaner that shows a preview before it removes anything."
       },
       automation: {
         title: 'Αυτοματισμός',
@@ -6658,7 +6698,7 @@ export const CATALOG = {
       apps: {
         label: "Εγκατεστημένες εφαρμογές",
         broken: (count) => `${count} ${count === 1 ? 'κατάλοιπο' : 'κατάλοιπα'} από αποτυχημένη απεγκατάσταση`,
-        noBroken: 'Καμία κατεστραμμένη καταχώριση.',
+        noBroken: 'Nothing left behind.',
         review: 'Έλεγχος',
         manage: 'Διαχείριση'
       },
@@ -6784,10 +6824,10 @@ export const CATALOG = {
         unused: 'Αχρησιμοποίητα',
         store: 'Κατάστημα',
         extensions: 'Επεκτάσεις',
-        broken: 'Κατεστραμμένα',
+        broken: 'Left behind',
         storeCount: (n) => `Κατάστημα (${n})`,
         extensionsCount: (n) => `Επεκτάσεις (${n})`,
-        brokenCount: (n) => `Κατεστραμμένα (${n})`
+        brokenCount: (n) => `Left behind (${n})`
       },
       columns: {
         application: 'Εφαρμογή',
@@ -6799,7 +6839,7 @@ export const CATALOG = {
         company: 'Εταιρεία',
         website: 'Ιστότοπος'
       },
-      badges: { broken: 'Κατεστραμμένο', running: 'Σε λειτουργία', store: 'Κατάστημα', disabled: 'Απενεργοποιημένο', unused: 'Αχρησιμοποίητο' },
+      badges: { broken: 'Left behind', running: 'Σε λειτουργία', store: 'Κατάστημα', disabled: 'Απενεργοποιημένο', unused: 'Αχρησιμοποίητο' },
       selectRow: (name) => `Επιλογή ${name}`,
       selectAll: 'Επιλογή όλων των εμφανιζόμενων',
       clearSelection: 'Απαλοιφή επιλογής',
@@ -6811,6 +6851,7 @@ export const CATALOG = {
       openFolder: "Άνοιγμα φακέλου",
       copyUninstallCommand: "Αντιγραφή εντολής απεγκατάστασης",
       commandCopied: "Η εντολή απεγκατάστασης αντιγράφηκε.",
+      unusedDefinition: "Flagged as not used recently. Prune keeps no launch history of its own, so check before you remove anything on this list.",
       copyFailed: "Δεν ήταν δυνατή η αντιγραφή.",
       empty: {
         plain: 'Τίποτα δεν ταιριάζει.',
@@ -6900,6 +6941,9 @@ export const CATALOG = {
         status: 'Κατάσταση'
       },
       switchAriaLabel: (name) => `Εκτέλεση του ${name} κατά τη σύνδεση`,
+      copyPath: 'Copy path',
+      pathCopied: 'Path copied.',
+      copyFailed: "Couldn't copy that.",
       status: {
         invalid: 'Μη έγκυρο',
         running: 'Σε λειτουργία',
@@ -7233,6 +7277,7 @@ export const CATALOG = {
     app: {
       installedApplications: "Εφαρμογές",
       applicationsSummary: (count, size) => `${count} ${count === 1 ? 'εγκατεστημένη εφαρμογή' : 'εγκατεστημένες εφαρμογές'} · ${size}`,
+      applicationsSummaryFiltered: (shown, total, size) => `${shown} of ${total} shown · ${size}`,
       removeStoreApp: (name) => `Κατάργηση ${name}`
     }
   },
@@ -7291,8 +7336,8 @@ export const CATALOG = {
         ariaLabel: 'Horas para dejar en paz los archivos recientes'
       },
       restorePointCleanup: {
-        title: 'Crear un punto de restauración primero',
-        description: 'Antes de una eliminación forzada, para que Windows mismo pueda restaurar el equipo. Cuesta unos segundos, y no hace nada en absoluto si la Protección del Sistema está desactivada.'
+        title: "Restore point before removing leftovers",
+        description: "Taken before Prune removes the leftover files and registry keys you selected, including after Force remove. On by default; does nothing at all if System Protection is turned off."
       },
       hideUnavailable: {
         title: 'Ocultar limpiadores que no aplican',
@@ -7354,12 +7399,12 @@ export const CATALOG = {
       uninstallTab: {
         beforeHeading: 'Antes de desinstalar',
         restorePointUninstall: {
-          title: 'Crear un punto de restauración antes de desinstalar',
-          description: 'La propia Restauración del Sistema de Windows, creada antes de que se ejecute el desinstalador del programa. Necesita que Prune se ejecute como administrador y Windows permite uno al día, así que cuando no se puede crear, la desinstalación continúa y el diálogo lo indica.'
+          title: "Restore point before running an uninstaller",
+          description: "Taken before the program's own uninstaller runs. It needs Prune to be running as administrator and Windows allows one a day, so when it can't be made the uninstall goes ahead and the dialog says so."
         },
         registryBackup: {
           title: 'Respaldar el registro antes de desinstalar',
-          description: 'Exporta HKLM\\SOFTWARE y HKCU\\Software (unos 140 MB en el equipo donde se compila Prune) y conserva los 3 más recientes. Si no se puede crear la copia de seguridad, la desinstalación no se ejecuta.'
+          description: "Exports HKLM\\SOFTWARE and HKCU\\Software, typically several hundred MB, and keeps the newest 3. If the backup can't be made, the uninstall doesn't run."
         },
         deleteLockedFiles: {
           title: 'Eliminar archivos bloqueados en el próximo reinicio',
@@ -7391,7 +7436,7 @@ export const CATALOG = {
         reportTitle: 'Informar de un error',
         reportDescription: "Abre una incidencia prellenada en GitHub. Prune no envía nada por sí mismo y ves todo antes de que se envíe a ninguna parte.",
         reportButton: 'Informar de un error',
-        description: "Una herramienta local y sin conexión de desinstalación y limpieza para Windows — eliminación forzada con escaneo de restos, cuarentena segura antes de borrar, Mapa del disco y limpieza de basura con un clic."
+        description: "A local, offline uninstaller and cleanup tool for Windows — forced removal with leftover-file scanning, safe quarantine-before-delete, disk mapping, and a cleaner that shows a preview before it removes anything."
       },
       automation: {
         title: 'Automatización',
@@ -7459,7 +7504,7 @@ export const CATALOG = {
       apps: {
         label: "Aplicaciones instaladas",
         broken: (count) => `${count} ${count === 1 ? 'dejada' : 'dejadas'} por una desinstalación fallida`,
-        noBroken: 'Sin entradas rotas.',
+        noBroken: 'Nothing left behind.',
         review: 'Revisar',
         manage: 'Gestionar'
       },
@@ -7585,10 +7630,10 @@ export const CATALOG = {
         unused: 'Sin usar',
         store: 'Tienda',
         extensions: 'Extensiones',
-        broken: 'Rotas',
+        broken: 'Left behind',
         storeCount: (n) => `Tienda (${n})`,
         extensionsCount: (n) => `Extensiones (${n})`,
-        brokenCount: (n) => `Rotas (${n})`
+        brokenCount: (n) => `Left behind (${n})`
       },
       columns: {
         application: 'Aplicación',
@@ -7600,7 +7645,7 @@ export const CATALOG = {
         company: 'Empresa',
         website: 'Sitio web'
       },
-      badges: { broken: 'Rota', running: 'En ejecución', store: 'Tienda', disabled: 'Deshabilitada', unused: 'Sin usar' },
+      badges: { broken: 'Left behind', running: 'En ejecución', store: 'Tienda', disabled: 'Deshabilitada', unused: 'Sin usar' },
       selectRow: (name) => `Seleccionar ${name}`,
       selectAll: 'Seleccionar todo lo mostrado',
       clearSelection: "Quitar selección",
@@ -7612,6 +7657,7 @@ export const CATALOG = {
       openFolder: "Abrir carpeta",
       copyUninstallCommand: "Copiar comando de desinstalación",
       commandCopied: "Comando de desinstalación copiado.",
+      unusedDefinition: "Flagged as not used recently. Prune keeps no launch history of its own, so check before you remove anything on this list.",
       copyFailed: "No se pudo copiar.",
       empty: {
         plain: 'Nada coincide.',
@@ -7701,6 +7747,9 @@ export const CATALOG = {
         status: 'Estado'
       },
       switchAriaLabel: (name) => `Ejecutar ${name} al iniciar sesión`,
+      copyPath: 'Copy path',
+      pathCopied: 'Path copied.',
+      copyFailed: "Couldn't copy that.",
       status: {
         invalid: 'No válido',
         running: 'En ejecución',
@@ -8034,6 +8083,7 @@ export const CATALOG = {
     app: {
       installedApplications: "Aplicaciones",
       applicationsSummary: (count, size) => `${count} ${count === 1 ? 'aplicación instalada' : 'aplicaciones instaladas'} · ${size}`,
+      applicationsSummaryFiltered: (shown, total, size) => `${shown} of ${total} shown · ${size}`,
       removeStoreApp: (name) => `Quitar ${name}`
     }
   },
@@ -8092,8 +8142,8 @@ export const CATALOG = {
         ariaLabel: 'Tunnid, mille jooksul hiljutised failid rahule jätta'
       },
       restorePointCleanup: {
-        title: 'Loo esmalt taastepunkt',
-        description: 'Enne sundeemaldamist, et Windows ise saaks arvuti tagasi keerata. Kulutab paar sekundit ja ei tee midagi, kui süsteemikaitse on välja lülitatud.'
+        title: "Restore point before removing leftovers",
+        description: "Taken before Prune removes the leftover files and registry keys you selected, including after Force remove. On by default; does nothing at all if System Protection is turned off."
       },
       hideUnavailable: {
         title: 'Peida sobimatud puhastajad',
@@ -8155,12 +8205,12 @@ export const CATALOG = {
       uninstallTab: {
         beforeHeading: 'Enne desinstallimist',
         restorePointUninstall: {
-          title: 'Loo enne desinstallimist taastepunkt',
-          description: "Windowsi enda süsteemi taastamine, tehtud enne programmi desinstallija käivitumist. Vajab, et Prune töötaks administraatorina, ja Windows lubab ühe päevas, seega kui seda ei saa luua, jätkub desinstallimine ja dialoog teatab sellest."
+          title: "Restore point before running an uninstaller",
+          description: "Taken before the program's own uninstaller runs. It needs Prune to be running as administrator and Windows allows one a day, so when it can't be made the uninstall goes ahead and the dialog says so."
         },
         registryBackup: {
           title: 'Varunda register enne desinstallimist',
-          description: 'Ekspordib HKLM\\SOFTWARE ja HKCU\\Software (umbes 140 MB arvutis, kus Prune on ehitatud) ja hoiab uusimat 3. Kui varukoopiat ei saa luua, desinstallimist ei toimu.'
+          description: "Exports HKLM\\SOFTWARE and HKCU\\Software, typically several hundred MB, and keeps the newest 3. If the backup can't be made, the uninstall doesn't run."
         },
         deleteLockedFiles: {
           title: 'Kustuta lukustatud failid järgmisel taaskäivitusel',
@@ -8192,7 +8242,7 @@ export const CATALOG = {
         reportTitle: 'Teata veast',
         reportDescription: "Avab GitHubis eeltäidetud teate. Prune ise midagi ei saada ja sa näed kõike enne, kui see kuhugi jõuab.",
         reportButton: 'Teata veast',
-        description: 'Kohalik, võrguühenduseta desinstallimis- ja puhastustööriist Windowsile — sundeemaldamine koos jääkfailide skannimisega, turvaline karantiin enne kustutamist, kettakaardistus ja ühe klõpsuga prügipuhastus.'
+        description: "A local, offline uninstaller and cleanup tool for Windows — forced removal with leftover-file scanning, safe quarantine-before-delete, disk mapping, and a cleaner that shows a preview before it removes anything."
       },
       automation: {
         title: 'Automatiseerimine',
@@ -8260,7 +8310,7 @@ export const CATALOG = {
       apps: {
         label: "Installitud rakendused",
         broken: (count) => `${count} jäänud maha ebaõnnestunud desinstallimisest`,
-        noBroken: 'Rikutud kirjeid pole.',
+        noBroken: 'Nothing left behind.',
         review: 'Vaata üle',
         manage: 'Halda'
       },
@@ -8386,10 +8436,10 @@ export const CATALOG = {
         unused: 'Kasutamata',
         store: 'Pood',
         extensions: 'Laiendused',
-        broken: 'Katki',
+        broken: 'Left behind',
         storeCount: (n) => `Pood (${n})`,
         extensionsCount: (n) => `Laiendused (${n})`,
-        brokenCount: (n) => `Katki (${n})`
+        brokenCount: (n) => `Left behind (${n})`
       },
       columns: {
         application: 'Rakendus',
@@ -8401,7 +8451,7 @@ export const CATALOG = {
         company: 'Ettevõte',
         website: 'Veebisait'
       },
-      badges: { broken: 'Katki', running: 'Töötab', store: 'Pood', disabled: 'Keelatud', unused: 'Kasutamata' },
+      badges: { broken: 'Left behind', running: 'Töötab', store: 'Pood', disabled: 'Keelatud', unused: 'Kasutamata' },
       selectRow: (name) => `Vali ${name}`,
       selectAll: 'Vali kõik kuvatud',
       clearSelection: "Tühjenda valik",
@@ -8413,6 +8463,7 @@ export const CATALOG = {
       openFolder: "Ava kaust",
       copyUninstallCommand: "Kopeeri desinstallimise käsk",
       commandCopied: "Desinstallimise käsk kopeeritud.",
+      unusedDefinition: "Flagged as not used recently. Prune keeps no launch history of its own, so check before you remove anything on this list.",
       copyFailed: "Kopeerimine ebaõnnestus.",
       empty: {
         plain: 'Miski ei vasta.',
@@ -8502,6 +8553,9 @@ export const CATALOG = {
         status: 'Olek'
       },
       switchAriaLabel: (name) => `Käivita ${name} sisselogimisel`,
+      copyPath: 'Copy path',
+      pathCopied: 'Path copied.',
+      copyFailed: "Couldn't copy that.",
       status: {
         invalid: 'Vigane',
         running: 'Töötab',
@@ -8835,6 +8889,7 @@ export const CATALOG = {
     app: {
       installedApplications: "Rakendused",
       applicationsSummary: (count, size) => `Installitud rakendusi: ${count} · ${size}`,
+      applicationsSummaryFiltered: (shown, total, size) => `${shown} of ${total} shown · ${size}`,
       removeStoreApp: (name) => `Eemalda ${name}`
     }
   },
@@ -8893,8 +8948,8 @@ export const CATALOG = {
         ariaLabel: 'Tunnit, joiden ajan äskettäiset tiedostot jätetään rauhaan'
       },
       restorePointCleanup: {
-        title: 'Luo palautuspiste ensin',
-        description: 'Ennen pakotettua poistoa, jotta Windows itse voi palauttaa koneen. Vie muutaman sekunnin, eikä tee mitään, jos järjestelmän suojaus on pois käytöstä.'
+        title: "Restore point before removing leftovers",
+        description: "Taken before Prune removes the leftover files and registry keys you selected, including after Force remove. On by default; does nothing at all if System Protection is turned off."
       },
       hideUnavailable: {
         title: "Piilota puhdistimet, jotka eivät koske tätä konetta",
@@ -8956,12 +9011,12 @@ export const CATALOG = {
       uninstallTab: {
         beforeHeading: 'Ennen poistoa',
         restorePointUninstall: {
-          title: 'Luo palautuspiste ennen poistoa',
-          description: 'Windowsin oma järjestelmän palautus, tehty ennen ohjelman poisto-ohjelman suoritusta. Vaatii, että Prune toimii järjestelmänvalvojana, ja Windows sallii yhden päivässä, joten kun sitä ei voida luoda, poisto jatkuu ja valintaikkuna kertoo siitä.'
+          title: "Restore point before running an uninstaller",
+          description: "Taken before the program's own uninstaller runs. It needs Prune to be running as administrator and Windows allows one a day, so when it can't be made the uninstall goes ahead and the dialog says so."
         },
         registryBackup: {
           title: 'Varmuuskopioi rekisteri ennen poistoa',
-          description: 'Vie HKLM\\SOFTWARE- ja HKCU\\Software-avaimet (noin 140 Mt koneella, jolla Prune on koottu) ja säilyttää uusimmat 3. Jos varmuuskopiota ei voida luoda, poistoa ei suoriteta.'
+          description: "Exports HKLM\\SOFTWARE and HKCU\\Software, typically several hundred MB, and keeps the newest 3. If the backup can't be made, the uninstall doesn't run."
         },
         deleteLockedFiles: {
           title: 'Poista lukitut tiedostot seuraavassa uudelleenkäynnistyksessä',
@@ -8993,7 +9048,7 @@ export const CATALOG = {
         reportTitle: 'Ilmoita virheestä',
         reportDescription: "Avaa GitHubissa valmiiksi täytetyn ilmoituksen. Prune ei itse lähetä mitään, ja näet kaiken ennen kuin mitään lähtee minnekään.",
         reportButton: 'Ilmoita virheestä',
-        description: 'Paikallinen, offline-poisto- ja siivoustyökalu Windowsille — pakotettu poisto jäännetiedostojen skannauksella, turvallinen karanteeni ennen poistoa, levykartoitus ja yhden klikkauksen roskasiivous.'
+        description: "A local, offline uninstaller and cleanup tool for Windows — forced removal with leftover-file scanning, safe quarantine-before-delete, disk mapping, and a cleaner that shows a preview before it removes anything."
       },
       automation: {
         title: 'Automaatio',
@@ -9061,7 +9116,7 @@ export const CATALOG = {
       apps: {
         label: "Asennetut sovellukset",
         broken: (count) => `Epäonnistuneiden poistojen jäänteitä: ${count}`,
-        noBroken: 'Ei rikkinäisiä merkintöjä.',
+        noBroken: 'Nothing left behind.',
         review: 'Tarkista',
         manage: 'Hallitse'
       },
@@ -9187,10 +9242,10 @@ export const CATALOG = {
         unused: 'Käyttämättömät',
         store: 'Kauppa',
         extensions: 'Laajennukset',
-        broken: 'Rikkinäiset',
+        broken: 'Left behind',
         storeCount: (n) => `Kauppa (${n})`,
         extensionsCount: (n) => `Laajennukset (${n})`,
-        brokenCount: (n) => `Rikkinäiset (${n})`
+        brokenCount: (n) => `Left behind (${n})`
       },
       columns: {
         application: 'Sovellus',
@@ -9202,7 +9257,7 @@ export const CATALOG = {
         company: 'Yritys',
         website: 'Verkkosivusto'
       },
-      badges: { broken: 'Rikki', running: 'Käynnissä', store: 'Kauppa', disabled: 'Poistettu käytöstä', unused: 'Käyttämätön' },
+      badges: { broken: 'Left behind', running: 'Käynnissä', store: 'Kauppa', disabled: 'Poistettu käytöstä', unused: 'Käyttämätön' },
       selectRow: (name) => `Valitse ${name}`,
       selectAll: 'Valitse kaikki näkyvät',
       clearSelection: 'Tyhjennä valinta',
@@ -9214,6 +9269,7 @@ export const CATALOG = {
       openFolder: "Avaa kansio",
       copyUninstallCommand: "Kopioi poistokomento",
       commandCopied: "Poistokomento kopioitu.",
+      unusedDefinition: "Flagged as not used recently. Prune keeps no launch history of its own, so check before you remove anything on this list.",
       copyFailed: "Kopiointi epäonnistui.",
       empty: {
         plain: 'Ei osumia.',
@@ -9303,6 +9359,9 @@ export const CATALOG = {
         status: 'Tila'
       },
       switchAriaLabel: (name) => `Käynnistä ${name} kirjautuessa`,
+      copyPath: 'Copy path',
+      pathCopied: 'Path copied.',
+      copyFailed: "Couldn't copy that.",
       status: {
         invalid: 'Virheellinen',
         running: 'Käynnissä',
@@ -9636,6 +9695,7 @@ export const CATALOG = {
     app: {
       installedApplications: "Sovellukset",
       applicationsSummary: (count, size) => `Asennettuja sovelluksia: ${count} · ${size}`,
+      applicationsSummaryFiltered: (shown, total, size) => `${shown} of ${total} shown · ${size}`,
       removeStoreApp: (name) => `Poista ${name}`
     }
   },
@@ -9694,8 +9754,8 @@ export const CATALOG = {
         ariaLabel: 'Heures pendant lesquelles laisser tranquilles les fichiers récents'
       },
       restorePointCleanup: {
-        title: "Créer d'abord un point de restauration",
-        description: "Avant une suppression forcée, pour que Windows lui-même puisse restaurer la machine. Coûte quelques secondes, et ne fait rien du tout si la Protection du système est désactivée."
+        title: "Restore point before removing leftovers",
+        description: "Taken before Prune removes the leftover files and registry keys you selected, including after Force remove. On by default; does nothing at all if System Protection is turned off."
       },
       hideUnavailable: {
         title: "Masquer les nettoyeurs qui ne s'appliquent pas",
@@ -9757,12 +9817,12 @@ export const CATALOG = {
       uninstallTab: {
         beforeHeading: 'Avant la désinstallation',
         restorePointUninstall: {
-          title: 'Créer un point de restauration avant la désinstallation',
-          description: "La propre Restauration du système de Windows, créée avant que le désinstalleur du programme s'exécute. Nécessite que Prune s'exécute en tant qu'administrateur et Windows en autorise un par jour, donc quand il ne peut pas être créé, la désinstallation continue et la boîte de dialogue le signale."
+          title: "Restore point before running an uninstaller",
+          description: "Taken before the program's own uninstaller runs. It needs Prune to be running as administrator and Windows allows one a day, so when it can't be made the uninstall goes ahead and the dialog says so."
         },
         registryBackup: {
           title: 'Sauvegarder le registre avant la désinstallation',
-          description: "Exporte HKLM\\SOFTWARE et HKCU\\Software (environ 140 Mo sur la machine où Prune est compilé) et conserve les 3 plus récentes. Si la sauvegarde ne peut pas être créée, la désinstallation ne s'exécute pas."
+          description: "Exports HKLM\\SOFTWARE and HKCU\\Software, typically several hundred MB, and keeps the newest 3. If the backup can't be made, the uninstall doesn't run."
         },
         deleteLockedFiles: {
           title: 'Supprimer les fichiers verrouillés au prochain redémarrage',
@@ -9794,7 +9854,7 @@ export const CATALOG = {
         reportTitle: 'Signaler un bug',
         reportDescription: "Ouvre un ticket prérempli sur GitHub. Prune n'envoie rien lui-même, et vous voyez tout avant que quoi que ce soit ne soit transmis.",
         reportButton: 'Signaler un bug',
-        description: "Un outil local et hors ligne de désinstallation et de nettoyage pour Windows — suppression forcée avec analyse des fichiers résiduels, quarantaine sécurisée avant suppression, Carte du disque et nettoyage des déchets en un clic."
+        description: "A local, offline uninstaller and cleanup tool for Windows — forced removal with leftover-file scanning, safe quarantine-before-delete, disk mapping, and a cleaner that shows a preview before it removes anything."
       },
       automation: {
         title: 'Automatisation',
@@ -9862,7 +9922,7 @@ export const CATALOG = {
       apps: {
         label: "Applications installées",
         broken: (count) => `${count} laissée${count === 1 ? '' : 's'} par une désinstallation échouée`,
-        noBroken: 'Aucune entrée corrompue.',
+        noBroken: 'Nothing left behind.',
         review: 'Vérifier',
         manage: 'Gérer'
       },
@@ -9988,10 +10048,10 @@ export const CATALOG = {
         unused: 'Inutilisées',
         store: 'Store',
         extensions: 'Extensions',
-        broken: 'Corrompues',
+        broken: 'Left behind',
         storeCount: (n) => `Store (${n})`,
         extensionsCount: (n) => `Extensions (${n})`,
-        brokenCount: (n) => `Corrompues (${n})`
+        brokenCount: (n) => `Left behind (${n})`
       },
       columns: {
         application: 'Application',
@@ -10003,7 +10063,7 @@ export const CATALOG = {
         company: 'Société',
         website: 'Site web'
       },
-      badges: { broken: 'Corrompu', running: 'En cours', store: 'Store', disabled: 'Désactivé', unused: 'Inutilisé' },
+      badges: { broken: 'Left behind', running: 'En cours', store: 'Store', disabled: 'Désactivé', unused: 'Inutilisé' },
       selectRow: (name) => `Sélectionner ${name}`,
       selectAll: 'Sélectionner tout ce qui est affiché',
       clearSelection: 'Effacer la sélection',
@@ -10015,6 +10075,7 @@ export const CATALOG = {
       openFolder: "Ouvrir le dossier",
       copyUninstallCommand: "Copier la commande de désinstallation",
       commandCopied: "Commande de désinstallation copiée.",
+      unusedDefinition: "Flagged as not used recently. Prune keeps no launch history of its own, so check before you remove anything on this list.",
       copyFailed: "Copie impossible.",
       empty: {
         plain: 'Aucune correspondance.',
@@ -10104,6 +10165,9 @@ export const CATALOG = {
         status: 'État'
       },
       switchAriaLabel: (name) => `Lancer ${name} à la connexion`,
+      copyPath: 'Copy path',
+      pathCopied: 'Path copied.',
+      copyFailed: "Couldn't copy that.",
       status: {
         invalid: 'Non valide',
         running: 'En cours',
@@ -10437,6 +10501,7 @@ export const CATALOG = {
     app: {
       installedApplications: "Applications",
       applicationsSummary: (count, size) => `${count} ${count === 1 ? 'application installée' : 'applications installées'} · ${size}`,
+      applicationsSummaryFiltered: (shown, total, size) => `${shown} of ${total} shown · ${size}`,
       removeStoreApp: (name) => `Supprimer ${name}`
     }
   },
@@ -10495,8 +10560,8 @@ export const CATALOG = {
         ariaLabel: 'שעות להשאיר קבצים אחרונים לנפשם'
       },
       restorePointCleanup: {
-        title: 'צור נקודת שחזור תחילה',
-        description: 'לפני הסרה כפויה, כדי ש-Windows עצמו יוכל להחזיר את המחשב לאחור. עולה כמה שניות, ולא עושה כלום אם הגנת המערכת כבויה.'
+        title: "Restore point before removing leftovers",
+        description: "Taken before Prune removes the leftover files and registry keys you selected, including after Force remove. On by default; does nothing at all if System Protection is turned off."
       },
       hideUnavailable: {
         title: "הסתר כלי ניקוי שלא רלוונטיים",
@@ -10558,12 +10623,12 @@ export const CATALOG = {
       uninstallTab: {
         beforeHeading: 'לפני ההסרה',
         restorePointUninstall: {
-          title: 'צור נקודת שחזור לפני ההסרה',
-          description: 'שחזור המערכת של Windows עצמו, שנוצר לפני שתוכנית ההסרה של התוכנה רצה. דורש ש-Prune ירוץ כמנהל ו-Windows מאפשר אחת ביום, אז כשלא ניתן ליצור אותה, ההסרה ממשיכה ותיבת הדו-שיח מציינת זאת.'
+          title: "Restore point before running an uninstaller",
+          description: "Taken before the program's own uninstaller runs. It needs Prune to be running as administrator and Windows allows one a day, so when it can't be made the uninstall goes ahead and the dialog says so."
         },
         registryBackup: {
           title: 'גבה את הרישום לפני ההסרה',
-          description: 'מייצא את HKLM\\SOFTWARE ו-HKCU\\Software (כ-140 MB במחשב שבו Prune נבנה) ושומר את 3 העדכניים ביותר. אם לא ניתן ליצור את הגיבוי, ההסרה לא רצה.'
+          description: "Exports HKLM\\SOFTWARE and HKCU\\Software, typically several hundred MB, and keeps the newest 3. If the backup can't be made, the uninstall doesn't run."
         },
         deleteLockedFiles: {
           title: 'מחיקת קבצים נעולים באתחול הבא',
@@ -10595,7 +10660,7 @@ export const CATALOG = {
         reportTitle: 'דיווח על באג',
         reportDescription: "פותח דיווח ממולא מראש ב-GitHub. Prune עצמו לא שולח דבר, ואתה רואה הכול לפני שמשהו נשלח לכל מקום.",
         reportButton: 'דיווח על באג',
-        description: "כלי הסרה וניקוי מקומי, לא מקוון, עבור Windows — הסרה כפויה עם סריקת שאריות, הסגר בטוח לפני מחיקה, מפת הדיסק וניקוי זבל בלחיצה אחת."
+        description: "A local, offline uninstaller and cleanup tool for Windows — forced removal with leftover-file scanning, safe quarantine-before-delete, disk mapping, and a cleaner that shows a preview before it removes anything."
       },
       automation: {
         title: 'אוטומציה',
@@ -10663,7 +10728,7 @@ export const CATALOG = {
       apps: {
         label: 'אפליקציות מותקנות',
         broken: (count) => count === 1 ? 'אחד נותר מהסרה שנכשלה' : `${count} נותרו מהסרה שנכשלה`,
-        noBroken: 'אין רשומות פגומות.',
+        noBroken: 'Nothing left behind.',
         review: 'סקירה',
         manage: 'ניהול'
       },
@@ -10789,10 +10854,10 @@ export const CATALOG = {
         unused: 'לא בשימוש',
         store: 'חנות',
         extensions: 'תוספים',
-        broken: 'פגומים',
+        broken: 'Left behind',
         storeCount: (n) => `חנות (${n})`,
         extensionsCount: (n) => `תוספים (${n})`,
-        brokenCount: (n) => `פגומים (${n})`
+        brokenCount: (n) => `Left behind (${n})`
       },
       columns: {
         application: "אפליקציה",
@@ -10804,7 +10869,7 @@ export const CATALOG = {
         company: 'חברה',
         website: 'אתר אינטרנט'
       },
-      badges: { broken: 'פגום', running: 'פועל', store: 'חנות', disabled: 'מושבת', unused: 'לא בשימוש' },
+      badges: { broken: 'Left behind', running: 'פועל', store: 'חנות', disabled: 'מושבת', unused: 'לא בשימוש' },
       selectRow: (name) => `בחר את ${name}`,
       selectAll: 'בחר את כל המוצג',
       clearSelection: 'נקה בחירה',
@@ -10816,6 +10881,7 @@ export const CATALOG = {
       openFolder: "פתח תיקייה",
       copyUninstallCommand: "העתק פקודת הסרה",
       commandCopied: "פקודת ההסרה הועתקה.",
+      unusedDefinition: "Flagged as not used recently. Prune keeps no launch history of its own, so check before you remove anything on this list.",
       copyFailed: "לא ניתן להעתיק.",
       empty: {
         plain: 'אין התאמות.',
@@ -10905,6 +10971,9 @@ export const CATALOG = {
         status: 'סטטוס'
       },
       switchAriaLabel: (name) => `הפעל את ${name} בכניסה למערכת`,
+      copyPath: 'Copy path',
+      pathCopied: 'Path copied.',
+      copyFailed: "Couldn't copy that.",
       status: {
         invalid: 'לא תקין',
         running: 'פועל',
@@ -11238,6 +11307,7 @@ export const CATALOG = {
     app: {
       installedApplications: "אפליקציות",
       applicationsSummary: (count, size) => `אפליקציות מותקנות: ${count} · ${size}`,
+      applicationsSummaryFiltered: (shown, total, size) => `${shown} of ${total} shown · ${size}`,
       removeStoreApp: (name) => `הסר את ${name}`
     }
   },
@@ -11296,8 +11366,8 @@ export const CATALOG = {
         ariaLabel: 'Hány órán át hagyjuk békén a friss fájlokat'
       },
       restorePointCleanup: {
-        title: "Előzetes visszaállítási pont létrehozása",
-        description: 'Egy kényszerített eltávolítás előtt, hogy maga a Windows visszaállíthassa a gépet. Néhány másodpercbe kerül, és semmit sem csinál, ha a Rendszervédelem ki van kapcsolva.'
+        title: "Restore point before removing leftovers",
+        description: "Taken before Prune removes the leftover files and registry keys you selected, including after Force remove. On by default; does nothing at all if System Protection is turned off."
       },
       hideUnavailable: {
         title: 'Nem alkalmazható tisztítók elrejtése',
@@ -11359,12 +11429,12 @@ export const CATALOG = {
       uninstallTab: {
         beforeHeading: 'Eltávolítás előtt',
         restorePointUninstall: {
-          title: 'Visszaállítási pont létrehozása eltávolítás előtt',
-          description: 'A Windows saját Rendszer-visszaállítása, ami a program eltávolítójának futása előtt jön létre. Ehhez a Prune-nak rendszergazdaként kell futnia, és a Windows naponta egyet enged, így ha nem hozható létre, az eltávolítás folytatódik, és a párbeszédablak jelzi ezt.'
+          title: "Restore point before running an uninstaller",
+          description: "Taken before the program's own uninstaller runs. It needs Prune to be running as administrator and Windows allows one a day, so when it can't be made the uninstall goes ahead and the dialog says so."
         },
         registryBackup: {
           title: 'Rendszerleíró adatbázis biztonsági mentése eltávolítás előtt',
-          description: 'Exportálja a HKLM\\SOFTWARE-t és a HKCU\\Software-t (kb. 140 MB azon a gépen, amelyen a Prune-t építik), és a legfrissebb 3-at megtartja. Ha a mentés nem hozható létre, az eltávolítás nem fut le.'
+          description: "Exports HKLM\\SOFTWARE and HKCU\\Software, typically several hundred MB, and keeps the newest 3. If the backup can't be made, the uninstall doesn't run."
         },
         deleteLockedFiles: {
           title: 'Zárolt fájlok törlése a következő újraindításkor',
@@ -11396,7 +11466,7 @@ export const CATALOG = {
         reportTitle: 'Hiba jelentése',
         reportDescription: 'Megnyit egy előre kitöltött hibajegyet a GitHubon. A Prune maga nem küld semmit, és mindent látsz, mielőtt bárhová eljutna.',
         reportButton: 'Hiba jelentése',
-        description: "Helyi, offline eltávolító és tisztító eszköz Windowshoz — kényszerített eltávolítás maradványfájl-vizsgálattal, biztonságos karantén törlés előtt, lemeztérkép és egykattintásos szemétisztítás."
+        description: "A local, offline uninstaller and cleanup tool for Windows — forced removal with leftover-file scanning, safe quarantine-before-delete, disk mapping, and a cleaner that shows a preview before it removes anything."
       },
       automation: {
         title: 'Automatizálás',
@@ -11464,7 +11534,7 @@ export const CATALOG = {
       apps: {
         label: "Telepített alkalmazások",
         broken: (count) => `${count} maradvány maradt egy sikertelen eltávolítás után`,
-        noBroken: 'Nincsenek sérült bejegyzések.',
+        noBroken: 'Nothing left behind.',
         review: 'Áttekintés',
         manage: 'Kezelés'
       },
@@ -11590,10 +11660,10 @@ export const CATALOG = {
         unused: 'Nem használt',
         store: 'Áruház',
         extensions: 'Bővítmények',
-        broken: 'Sérült',
+        broken: 'Left behind',
         storeCount: (n) => `Áruház (${n})`,
         extensionsCount: (n) => `Bővítmények (${n})`,
-        brokenCount: (n) => `Sérült (${n})`
+        brokenCount: (n) => `Left behind (${n})`
       },
       columns: {
         application: 'Alkalmazás',
@@ -11605,7 +11675,7 @@ export const CATALOG = {
         company: 'Vállalat',
         website: 'Weboldal'
       },
-      badges: { broken: 'Sérült', running: 'Fut', store: 'Áruház', disabled: 'Letiltva', unused: 'Nem használt' },
+      badges: { broken: 'Left behind', running: 'Fut', store: 'Áruház', disabled: 'Letiltva', unused: 'Nem használt' },
       selectRow: (name) => `${name} kiválasztása`,
       selectAll: 'Az összes megjelenített kiválasztása',
       clearSelection: 'Kijelölés törlése',
@@ -11617,6 +11687,7 @@ export const CATALOG = {
       openFolder: "Mappa megnyitása",
       copyUninstallCommand: "Eltávolítási parancs másolása",
       commandCopied: "Az eltávolítási parancs átmásolva.",
+      unusedDefinition: "Flagged as not used recently. Prune keeps no launch history of its own, so check before you remove anything on this list.",
       copyFailed: "Nem sikerült másolni.",
       empty: {
         plain: 'Semmi sem egyezik.',
@@ -11706,6 +11777,9 @@ export const CATALOG = {
         status: 'Állapot'
       },
       switchAriaLabel: (name) => `${name} futtatása bejelentkezéskor`,
+      copyPath: 'Copy path',
+      pathCopied: 'Path copied.',
+      copyFailed: "Couldn't copy that.",
       status: {
         invalid: 'Érvénytelen',
         running: 'Fut',
@@ -12039,6 +12113,7 @@ export const CATALOG = {
     app: {
       installedApplications: "Alkalmazások",
       applicationsSummary: (count, size) => `${count} telepített alkalmazás · ${size}`,
+      applicationsSummaryFiltered: (shown, total, size) => `${shown} of ${total} shown · ${size}`,
       removeStoreApp: (name) => `${name} eltávolítása`
     }
   },
@@ -12097,8 +12172,8 @@ export const CATALOG = {
         ariaLabel: 'Jam untuk membiarkan file terbaru'
       },
       restorePointCleanup: {
-        title: 'Buat titik pemulihan terlebih dahulu',
-        description: 'Sebelum penghapusan paksa, agar Windows sendiri dapat mengembalikan komputer. Butuh beberapa detik, dan tidak melakukan apa pun jika Perlindungan Sistem dimatikan.'
+        title: "Restore point before removing leftovers",
+        description: "Taken before Prune removes the leftover files and registry keys you selected, including after Force remove. On by default; does nothing at all if System Protection is turned off."
       },
       hideUnavailable: {
         title: 'Sembunyikan pembersih yang tidak berlaku',
@@ -12160,12 +12235,12 @@ export const CATALOG = {
       uninstallTab: {
         beforeHeading: 'Sebelum uninstal',
         restorePointUninstall: {
-          title: 'Buat titik pemulihan sebelum uninstal',
-          description: "Pemulihan Sistem milik Windows sendiri, dibuat sebelum uninstaller program berjalan. Membutuhkan Prune berjalan sebagai administrator dan Windows mengizinkan satu per hari, jadi ketika tidak dapat dibuat, uninstal tetap berlanjut dan dialog memberitahukannya."
+          title: "Restore point before running an uninstaller",
+          description: "Taken before the program's own uninstaller runs. It needs Prune to be running as administrator and Windows allows one a day, so when it can't be made the uninstall goes ahead and the dialog says so."
         },
         registryBackup: {
           title: 'Cadangkan registri sebelum uninstal',
-          description: 'Mengekspor HKLM\\SOFTWARE dan HKCU\\Software (sekitar 140 MB pada komputer tempat Prune dibangun) dan menyimpan 3 yang terbaru. Jika cadangan tidak dapat dibuat, uninstal tidak berjalan.'
+          description: "Exports HKLM\\SOFTWARE and HKCU\\Software, typically several hundred MB, and keeps the newest 3. If the backup can't be made, the uninstall doesn't run."
         },
         deleteLockedFiles: {
           title: 'Hapus file terkunci saat mulai ulang berikutnya',
@@ -12197,7 +12272,7 @@ export const CATALOG = {
         reportTitle: 'Laporkan bug',
         reportDescription: 'Membuka isu yang sudah terisi di GitHub. Prune sendiri tidak mengirim apa pun, dan Anda melihat semuanya sebelum dikirim ke mana pun.',
         reportButton: 'Laporkan bug',
-        description: "Alat uninstal dan pembersihan lokal, offline untuk Windows — penghapusan paksa dengan pemindaian file sisa, Karantina aman sebelum penghapusan, Peta Disk, dan pembersihan sampah satu klik."
+        description: "A local, offline uninstaller and cleanup tool for Windows — forced removal with leftover-file scanning, safe quarantine-before-delete, disk mapping, and a cleaner that shows a preview before it removes anything."
       },
       automation: {
         title: 'Otomatisasi',
@@ -12265,7 +12340,7 @@ export const CATALOG = {
       apps: {
         label: 'Aplikasi Terpasang',
         broken: (count) => `${count} tertinggal akibat uninstal yang gagal`,
-        noBroken: 'Tidak ada entri yang rusak.',
+        noBroken: 'Nothing left behind.',
         review: 'Tinjau',
         manage: 'Kelola'
       },
@@ -12391,10 +12466,10 @@ export const CATALOG = {
         unused: 'Tidak digunakan',
         store: 'Store',
         extensions: 'Ekstensi',
-        broken: 'Rusak',
+        broken: 'Left behind',
         storeCount: (n) => `Store (${n})`,
         extensionsCount: (n) => `Ekstensi (${n})`,
-        brokenCount: (n) => `Rusak (${n})`
+        brokenCount: (n) => `Left behind (${n})`
       },
       columns: {
         application: 'Aplikasi',
@@ -12406,7 +12481,7 @@ export const CATALOG = {
         company: 'Perusahaan',
         website: 'Situs web'
       },
-      badges: { broken: 'Rusak', running: 'Berjalan', store: 'Store', disabled: 'Dinonaktifkan', unused: 'Tidak digunakan' },
+      badges: { broken: 'Left behind', running: 'Berjalan', store: 'Store', disabled: 'Dinonaktifkan', unused: 'Tidak digunakan' },
       selectRow: (name) => `Pilih ${name}`,
       selectAll: 'Pilih semua yang ditampilkan',
       clearSelection: 'Hapus pilihan',
@@ -12418,6 +12493,7 @@ export const CATALOG = {
       openFolder: "Buka folder",
       copyUninstallCommand: "Salin perintah uninstal",
       commandCopied: "Perintah uninstal disalin.",
+      unusedDefinition: "Flagged as not used recently. Prune keeps no launch history of its own, so check before you remove anything on this list.",
       copyFailed: "Tidak dapat menyalin.",
       empty: {
         plain: 'Tidak ada yang cocok.',
@@ -12507,6 +12583,9 @@ export const CATALOG = {
         status: 'Status'
       },
       switchAriaLabel: (name) => `Jalankan ${name} saat masuk`,
+      copyPath: 'Copy path',
+      pathCopied: 'Path copied.',
+      copyFailed: "Couldn't copy that.",
       status: {
         invalid: 'Tidak valid',
         running: 'Berjalan',
@@ -12840,6 +12919,7 @@ export const CATALOG = {
     app: {
       installedApplications: "Aplikasi",
       applicationsSummary: (count, size) => `${count} aplikasi terpasang · ${size}`,
+      applicationsSummaryFiltered: (shown, total, size) => `${shown} of ${total} shown · ${size}`,
       removeStoreApp: (name) => `Hapus ${name}`
     }
   },
@@ -12898,8 +12978,8 @@ export const CATALOG = {
         ariaLabel: "Klukkustundir til að láta nýlegar skrár í friði"
       },
       restorePointCleanup: {
-        title: 'Búa til endurheimtunarpunkt fyrst',
-        description: 'Fyrir þvingaða fjarlægingu, svo Windows sjálft geti fært vélina til baka. Kostar nokkrar sekúndur og gerir alls ekkert ef Kerfisvörn er slökkt.'
+        title: "Restore point before removing leftovers",
+        description: "Taken before Prune removes the leftover files and registry keys you selected, including after Force remove. On by default; does nothing at all if System Protection is turned off."
       },
       hideUnavailable: {
         title: 'Fela hreinsara sem eiga ekki við',
@@ -12961,12 +13041,12 @@ export const CATALOG = {
       uninstallTab: {
         beforeHeading: 'Áður en fjarlægt er',
         restorePointUninstall: {
-          title: 'Búa til endurheimtunarpunkt áður en fjarlægt er',
-          description: 'Eigin Kerfisendurheimt Windows, búin til áður en fjarlægingarforrit forritsins keyrir. Krefst þess að Prune keyri sem stjórnandi og Windows leyfir eina á dag, svo þegar ekki er hægt að búa hana til heldur fjarlægingin áfram og glugginn segir frá því.'
+          title: "Restore point before running an uninstaller",
+          description: "Taken before the program's own uninstaller runs. It needs Prune to be running as administrator and Windows allows one a day, so when it can't be made the uninstall goes ahead and the dialog says so."
         },
         registryBackup: {
           title: 'Taka afrit af skráningargrunni áður en fjarlægt er',
-          description: 'Flytur út HKLM\\SOFTWARE og HKCU\\Software (um 140 MB á vélinni sem Prune er byggt á) og geymir nýjustu 3. Ef ekki er hægt að búa til afritið keyrir fjarlægingin ekki.'
+          description: "Exports HKLM\\SOFTWARE and HKCU\\Software, typically several hundred MB, and keeps the newest 3. If the backup can't be made, the uninstall doesn't run."
         },
         deleteLockedFiles: {
           title: 'Eyða læstum skrám við næstu endurræsingu',
@@ -12998,7 +13078,7 @@ export const CATALOG = {
         reportTitle: 'Tilkynna villu',
         reportDescription: "Opnar forútfyllt mál á GitHub. Prune sendir sjálft ekkert og þú sérð allt áður en nokkuð er sent.",
         reportButton: 'Tilkynna villu',
-        description: "Staðbundið, ótengt fjarlægingar- og hreinsunartæki fyrir Windows — þvinguð fjarlæging með skönnun leifaskráa, örugg sóttkví fyrir eyðingu, diskakortlagning og ruslahreinsun með einum smelli."
+        description: "A local, offline uninstaller and cleanup tool for Windows — forced removal with leftover-file scanning, safe quarantine-before-delete, disk mapping, and a cleaner that shows a preview before it removes anything."
       },
       automation: {
         title: 'Sjálfvirkni',
@@ -13066,7 +13146,7 @@ export const CATALOG = {
       apps: {
         label: "Uppsett forrit",
         broken: (count) => `${count} skilin eftir vegna misheppnaðrar fjarlægingar`,
-        noBroken: 'Engar skemmdar færslur.',
+        noBroken: 'Nothing left behind.',
         review: 'Yfirfara',
         manage: 'Stjórna'
       },
@@ -13192,10 +13272,10 @@ export const CATALOG = {
         unused: 'Ónotað',
         store: 'Verslun',
         extensions: 'Viðbætur',
-        broken: 'Skemmt',
+        broken: 'Left behind',
         storeCount: (n) => `Verslun (${n})`,
         extensionsCount: (n) => `Viðbætur (${n})`,
-        brokenCount: (n) => `Skemmt (${n})`
+        brokenCount: (n) => `Left behind (${n})`
       },
       columns: {
         application: 'Forrit',
@@ -13207,7 +13287,7 @@ export const CATALOG = {
         company: 'Fyrirtæki',
         website: 'Vefsíða'
       },
-      badges: { broken: 'Skemmt', running: 'Í gangi', store: 'Verslun', disabled: 'Óvirkt', unused: 'Ónotað' },
+      badges: { broken: 'Left behind', running: 'Í gangi', store: 'Verslun', disabled: 'Óvirkt', unused: 'Ónotað' },
       selectRow: (name) => `Velja ${name}`,
       selectAll: 'Velja allt sem sýnt er',
       clearSelection: 'Hreinsa val',
@@ -13219,6 +13299,7 @@ export const CATALOG = {
       openFolder: "Opna möppu",
       copyUninstallCommand: "Afrita fjarlægingarskipun",
       commandCopied: "Fjarlægingarskipun afrituð.",
+      unusedDefinition: "Flagged as not used recently. Prune keeps no launch history of its own, so check before you remove anything on this list.",
       copyFailed: "Ekki tókst að afrita.",
       empty: {
         plain: 'Ekkert passar.',
@@ -13308,6 +13389,9 @@ export const CATALOG = {
         status: 'Staða'
       },
       switchAriaLabel: (name) => `Keyra ${name} við innskráningu`,
+      copyPath: 'Copy path',
+      pathCopied: 'Path copied.',
+      copyFailed: "Couldn't copy that.",
       status: {
         invalid: 'Ógilt',
         running: 'Í gangi',
@@ -13641,6 +13725,7 @@ export const CATALOG = {
     app: {
       installedApplications: "Forrit",
       applicationsSummary: (count, size) => `Uppsett forrit: ${count} · ${size}`,
+      applicationsSummaryFiltered: (shown, total, size) => `${shown} of ${total} shown · ${size}`,
       removeStoreApp: (name) => `Fjarlægja ${name}`
     }
   },
@@ -13699,8 +13784,8 @@ export const CATALOG = {
         ariaLabel: 'Ore per cui lasciare stare i file recenti'
       },
       restorePointCleanup: {
-        title: 'Crea prima un punto di ripristino',
-        description: "Prima di una rimozione forzata, così Windows stesso può riportare indietro il computer. Costa qualche secondo, e non fa nulla se la Protezione del sistema è disattivata."
+        title: "Restore point before removing leftovers",
+        description: "Taken before Prune removes the leftover files and registry keys you selected, including after Force remove. On by default; does nothing at all if System Protection is turned off."
       },
       hideUnavailable: {
         title: "Nascondi gli strumenti di pulizia non applicabili",
@@ -13762,12 +13847,12 @@ export const CATALOG = {
       uninstallTab: {
         beforeHeading: 'Prima di disinstallare',
         restorePointUninstall: {
-          title: 'Crea un punto di ripristino prima di disinstallare',
-          description: "Il Ripristino configurazione di sistema di Windows, creato prima che venga eseguito il disinstallatore del programma. Richiede che Prune sia eseguito come amministratore e Windows ne permette uno al giorno, quindi quando non può essere creato la disinstallazione procede e la finestra di dialogo lo segnala."
+          title: "Restore point before running an uninstaller",
+          description: "Taken before the program's own uninstaller runs. It needs Prune to be running as administrator and Windows allows one a day, so when it can't be made the uninstall goes ahead and the dialog says so."
         },
         registryBackup: {
           title: 'Backup del registro prima di disinstallare',
-          description: "Esporta HKLM\\SOFTWARE e HKCU\\Software (circa 140 MB sul computer su cui è compilato Prune) e conserva i 3 più recenti. Se il backup non può essere creato, la disinstallazione non viene eseguita."
+          description: "Exports HKLM\\SOFTWARE and HKCU\\Software, typically several hundred MB, and keeps the newest 3. If the backup can't be made, the uninstall doesn't run."
         },
         deleteLockedFiles: {
           title: 'Elimina i file bloccati al prossimo riavvio',
@@ -13799,7 +13884,7 @@ export const CATALOG = {
         reportTitle: 'Segnala un bug',
         reportDescription: "Apre una segnalazione precompilata su GitHub. Prune non invia nulla da solo e vedi tutto prima che venga inviato qualsiasi cosa.",
         reportButton: 'Segnala un bug',
-        description: "Uno strumento locale e offline di disinstallazione e pulizia per Windows — rimozione forzata con scansione dei file residui, quarantena sicura prima dell'eliminazione, Mappa del disco e pulizia dei file inutili con un clic."
+        description: "A local, offline uninstaller and cleanup tool for Windows — forced removal with leftover-file scanning, safe quarantine-before-delete, disk mapping, and a cleaner that shows a preview before it removes anything."
       },
       automation: {
         title: 'Automazione',
@@ -13867,7 +13952,7 @@ export const CATALOG = {
       apps: {
         label: "Applicazioni installate",
         broken: (count) => `${count} ${count === 1 ? 'lasciata' : 'lasciate'} da una disinstallazione non riuscita`,
-        noBroken: 'Nessuna voce danneggiata.',
+        noBroken: 'Nothing left behind.',
         review: 'Rivedi',
         manage: 'Gestisci'
       },
@@ -13993,10 +14078,10 @@ export const CATALOG = {
         unused: 'Non usate',
         store: 'Store',
         extensions: 'Estensioni',
-        broken: 'Danneggiate',
+        broken: 'Left behind',
         storeCount: (n) => `Store (${n})`,
         extensionsCount: (n) => `Estensioni (${n})`,
-        brokenCount: (n) => `Danneggiate (${n})`
+        brokenCount: (n) => `Left behind (${n})`
       },
       columns: {
         application: 'Applicazione',
@@ -14008,7 +14093,7 @@ export const CATALOG = {
         company: 'Azienda',
         website: 'Sito web'
       },
-      badges: { broken: 'Danneggiato', running: 'In esecuzione', store: 'Store', disabled: 'Disabilitato', unused: 'Non usato' },
+      badges: { broken: 'Left behind', running: 'In esecuzione', store: 'Store', disabled: 'Disabilitato', unused: 'Non usato' },
       selectRow: (name) => `Seleziona ${name}`,
       selectAll: 'Seleziona tutti quelli mostrati',
       clearSelection: "Deseleziona tutto",
@@ -14020,6 +14105,7 @@ export const CATALOG = {
       openFolder: "Apri cartella",
       copyUninstallCommand: "Copia comando di disinstallazione",
       commandCopied: "Comando di disinstallazione copiato.",
+      unusedDefinition: "Flagged as not used recently. Prune keeps no launch history of its own, so check before you remove anything on this list.",
       copyFailed: "Impossibile copiare.",
       empty: {
         plain: 'Nessuna corrispondenza.',
@@ -14109,6 +14195,9 @@ export const CATALOG = {
         status: 'Stato'
       },
       switchAriaLabel: (name) => `Esegui ${name} all'accesso`,
+      copyPath: 'Copy path',
+      pathCopied: 'Path copied.',
+      copyFailed: "Couldn't copy that.",
       status: {
         invalid: 'Non valido',
         running: 'In esecuzione',
@@ -14442,6 +14531,7 @@ export const CATALOG = {
     app: {
       installedApplications: "Applicazioni",
       applicationsSummary: (count, size) => `${count} ${count === 1 ? 'applicazione installata' : 'applicazioni installate'} · ${size}`,
+      applicationsSummaryFiltered: (shown, total, size) => `${shown} of ${total} shown · ${size}`,
       removeStoreApp: (name) => `Rimuovi ${name}`
     }
   },
@@ -14500,8 +14590,8 @@ export const CATALOG = {
         ariaLabel: '最近のファイルをそのままにする時間'
       },
       restorePointCleanup: {
-        title: '先に復元ポイントを作成',
-        description: '強制削除の前に、Windows 自体がマシンを元に戻せるようにします。数秒かかり、システムの保護がオフの場合は何も起こりません。'
+        title: "Restore point before removing leftovers",
+        description: "Taken before Prune removes the leftover files and registry keys you selected, including after Force remove. On by default; does nothing at all if System Protection is turned off."
       },
       hideUnavailable: {
         title: '該当しないクリーナーを非表示',
@@ -14563,12 +14653,12 @@ export const CATALOG = {
       uninstallTab: {
         beforeHeading: 'アンインストール前',
         restorePointUninstall: {
-          title: 'アンインストール前に復元ポイントを作成',
-          description: 'プログラムのアンインストーラーが実行される前に作成される、Windows 独自のシステムの復元です。Prune を管理者として実行する必要があり、Windows は1日に1回しか許可しないため、作成できない場合はアンインストールがそのまま進み、ダイアログでその旨が表示されます。'
+          title: "Restore point before running an uninstaller",
+          description: "Taken before the program's own uninstaller runs. It needs Prune to be running as administrator and Windows allows one a day, so when it can't be made the uninstall goes ahead and the dialog says so."
         },
         registryBackup: {
           title: 'アンインストール前にレジストリをバックアップ',
-          description: 'HKLM\\SOFTWARE と HKCU\\Software をエクスポートし（Prune がビルドされているマシンで約140 MB）、最新の3つを保持します。バックアップを作成できない場合、アンインストールは実行されません。'
+          description: "Exports HKLM\\SOFTWARE and HKCU\\Software, typically several hundred MB, and keeps the newest 3. If the backup can't be made, the uninstall doesn't run."
         },
         deleteLockedFiles: {
           title: '次回の再起動時にロックされたファイルを削除',
@@ -14600,7 +14690,7 @@ export const CATALOG = {
         reportTitle: 'バグを報告',
         reportDescription: "GitHub で入力済みの Issue を開きます。Prune 自体は何も送信せず、内容はどこかへ送られる前にすべて確認できます。",
         reportButton: 'バグを報告',
-        description: "Windows 向けのローカル・オフラインのアンインストールとクリーンアップツールです — 残留物スキャン付きの強制削除、削除前の安全な隔離、ディスクマップ、ワンクリックのジャンククリーンアップ。"
+        description: "A local, offline uninstaller and cleanup tool for Windows — forced removal with leftover-file scanning, safe quarantine-before-delete, disk mapping, and a cleaner that shows a preview before it removes anything."
       },
       automation: {
         title: '自動化',
@@ -14668,7 +14758,7 @@ export const CATALOG = {
       apps: {
         label: 'インストール済みアプリ',
         broken: (count) => `アンインストール失敗により残された項目が${count}件`,
-        noBroken: '壊れた項目はありません。',
+        noBroken: 'Nothing left behind.',
         review: '確認',
         manage: '管理'
       },
@@ -14794,10 +14884,10 @@ export const CATALOG = {
         unused: '未使用',
         store: 'ストア',
         extensions: '拡張機能',
-        broken: '破損',
+        broken: 'Left behind',
         storeCount: (n) => `ストア (${n})`,
         extensionsCount: (n) => `拡張機能 (${n})`,
-        brokenCount: (n) => `破損 (${n})`
+        brokenCount: (n) => `Left behind (${n})`
       },
       columns: {
         application: 'アプリケーション',
@@ -14809,7 +14899,7 @@ export const CATALOG = {
         company: '発行元',
         website: 'ウェブサイト'
       },
-      badges: { broken: '破損', running: '実行中', store: 'ストア', disabled: '無効', unused: '未使用' },
+      badges: { broken: 'Left behind', running: '実行中', store: 'ストア', disabled: '無効', unused: '未使用' },
       selectRow: (name) => `${name} を選択`,
       selectAll: '表示されているものをすべて選択',
       clearSelection: '選択を解除',
@@ -14821,6 +14911,7 @@ export const CATALOG = {
       openFolder: "フォルダーを開く",
       copyUninstallCommand: "アンインストールコマンドをコピー",
       commandCopied: "アンインストールコマンドをコピーしました。",
+      unusedDefinition: "Flagged as not used recently. Prune keeps no launch history of its own, so check before you remove anything on this list.",
       copyFailed: "コピーできませんでした。",
       empty: {
         plain: '一致するものがありません。',
@@ -14910,6 +15001,9 @@ export const CATALOG = {
         status: '状態'
       },
       switchAriaLabel: (name) => `サインイン時に ${name} を実行`,
+      copyPath: 'Copy path',
+      pathCopied: 'Path copied.',
+      copyFailed: "Couldn't copy that.",
       status: {
         invalid: '無効な項目',
         running: '実行中',
@@ -15243,6 +15337,7 @@ export const CATALOG = {
     app: {
       installedApplications: 'インストール済みアプリケーション',
       applicationsSummary: (count, size) => `インストール済みアプリケーション ${count} 件 · ${size}`,
+      applicationsSummaryFiltered: (shown, total, size) => `${shown} of ${total} shown · ${size}`,
       removeStoreApp: (name) => `${name} を削除`
     }
   },
@@ -15301,8 +15396,8 @@ export const CATALOG = {
         ariaLabel: '최근 파일을 건드리지 않을 시간'
       },
       restorePointCleanup: {
-        title: '먼저 복원 지점 만들기',
-        description: '강제 제거 전에 Windows 자체가 컴퓨터를 되돌릴 수 있도록 합니다. 몇 초가 걸리며, 시스템 보호가 꺼져 있으면 아무 작업도 하지 않습니다.'
+        title: "Restore point before removing leftovers",
+        description: "Taken before Prune removes the leftover files and registry keys you selected, including after Force remove. On by default; does nothing at all if System Protection is turned off."
       },
       hideUnavailable: {
         title: '해당하지 않는 클리너 숨기기',
@@ -15364,12 +15459,12 @@ export const CATALOG = {
       uninstallTab: {
         beforeHeading: '제거 전',
         restorePointUninstall: {
-          title: '제거 전 복원 지점 만들기',
-          description: '프로그램의 제거 프로그램이 실행되기 전에 만들어지는 Windows 자체의 시스템 복원입니다. Prune이 관리자로 실행되어야 하며 Windows는 하루에 하나만 허용하므로, 만들 수 없는 경우 제거가 계속 진행되고 대화 상자에 그 사실이 표시됩니다.'
+          title: "Restore point before running an uninstaller",
+          description: "Taken before the program's own uninstaller runs. It needs Prune to be running as administrator and Windows allows one a day, so when it can't be made the uninstall goes ahead and the dialog says so."
         },
         registryBackup: {
           title: '제거 전 레지스트리 백업',
-          description: 'HKLM\\SOFTWARE와 HKCU\\Software를 내보내고(Prune이 빌드되는 컴퓨터에서 약 140MB) 최신 3개를 보관합니다. 백업을 만들 수 없으면 제거가 실행되지 않습니다.'
+          description: "Exports HKLM\\SOFTWARE and HKCU\\Software, typically several hundred MB, and keeps the newest 3. If the backup can't be made, the uninstall doesn't run."
         },
         deleteLockedFiles: {
           title: '다음 재부팅 시 잠긴 파일 삭제',
@@ -15401,7 +15496,7 @@ export const CATALOG = {
         reportTitle: '버그 신고',
         reportDescription: "GitHub에서 내용이 미리 채워진 이슈를 엽니다. Prune은 아무것도 직접 보내지 않으며, 어디로든 전송되기 전에 모든 내용을 확인할 수 있습니다.",
         reportButton: '버그 신고',
-        description: "Windows용 로컬 오프라인 제거 및 정리 도구입니다 — 남은 항목 검사가 포함된 강제 제거, 삭제 전 안전한 격리, 디스크 맵, 원클릭 불필요한 파일 정리."
+        description: "A local, offline uninstaller and cleanup tool for Windows — forced removal with leftover-file scanning, safe quarantine-before-delete, disk mapping, and a cleaner that shows a preview before it removes anything."
       },
       automation: {
         title: '자동화',
@@ -15469,7 +15564,7 @@ export const CATALOG = {
       apps: {
         label: '설치된 앱',
         broken: (count) => `제거 실패로 남은 항목 ${count}개`,
-        noBroken: '손상된 항목이 없습니다.',
+        noBroken: 'Nothing left behind.',
         review: '검토',
         manage: '관리'
       },
@@ -15595,10 +15690,10 @@ export const CATALOG = {
         unused: "미사용",
         store: '스토어',
         extensions: '확장 프로그램',
-        broken: '손상됨',
+        broken: 'Left behind',
         storeCount: (n) => `스토어 (${n})`,
         extensionsCount: (n) => `확장 프로그램 (${n})`,
-        brokenCount: (n) => `손상됨 (${n})`
+        brokenCount: (n) => `Left behind (${n})`
       },
       columns: {
         application: '애플리케이션',
@@ -15610,7 +15705,7 @@ export const CATALOG = {
         company: '게시자',
         website: '웹사이트'
       },
-      badges: { broken: '손상됨', running: '실행 중', store: '스토어', disabled: '사용 안 함', unused: "미사용" },
+      badges: { broken: 'Left behind', running: '실행 중', store: '스토어', disabled: '사용 안 함', unused: "미사용" },
       selectRow: (name) => `${name} 선택`,
       selectAll: '표시된 항목 모두 선택',
       clearSelection: '선택 해제',
@@ -15622,6 +15717,7 @@ export const CATALOG = {
       openFolder: "폴더 열기",
       copyUninstallCommand: "제거 명령 복사",
       commandCopied: "제거 명령을 복사했습니다.",
+      unusedDefinition: "Flagged as not used recently. Prune keeps no launch history of its own, so check before you remove anything on this list.",
       copyFailed: "복사할 수 없습니다.",
       empty: {
         plain: '일치하는 항목이 없습니다.',
@@ -15711,6 +15807,9 @@ export const CATALOG = {
         status: '상태'
       },
       switchAriaLabel: (name) => `로그인 시 ${name} 실행`,
+      copyPath: 'Copy path',
+      pathCopied: 'Path copied.',
+      copyFailed: "Couldn't copy that.",
       status: {
         invalid: '유효하지 않음',
         running: '실행 중',
@@ -16044,6 +16143,7 @@ export const CATALOG = {
     app: {
       installedApplications: "애플리케이션",
       applicationsSummary: (count, size) => `설치된 애플리케이션 ${count}개 · ${size}`,
+      applicationsSummaryFiltered: (shown, total, size) => `${shown} of ${total} shown · ${size}`,
       removeStoreApp: (name) => `${name} 제거`
     }
   },
@@ -16102,8 +16202,8 @@ export const CATALOG = {
         ariaLabel: 'Valandos, per kurias palikti naujausius failus ramybėje'
       },
       restorePointCleanup: {
-        title: 'Pirma sukurti atkūrimo tašką',
-        description: 'Prieš priverstinį šalinimą, kad pats „Windows“ galėtų grąžinti kompiuterį atgal. Kainuoja kelias sekundes ir visiškai nieko nedaro, jei sistemos apsauga išjungta.'
+        title: "Restore point before removing leftovers",
+        description: "Taken before Prune removes the leftover files and registry keys you selected, including after Force remove. On by default; does nothing at all if System Protection is turned off."
       },
       hideUnavailable: {
         title: "Slėpti netinkamus valiklius",
@@ -16165,12 +16265,12 @@ export const CATALOG = {
       uninstallTab: {
         beforeHeading: 'Prieš šalinant',
         restorePointUninstall: {
-          title: 'Sukurti atkūrimo tašką prieš šalinant',
-          description: 'Paties „Windows“ sistemos atkūrimas, sukurtas prieš paleidžiant programos šalinimo priemonę. Reikia, kad Prune veiktų administratoriaus teisėmis, o „Windows“ leidžia vieną per dieną, todėl kai jo negalima sukurti, šalinimas tęsiasi ir dialogo lange tai nurodoma.'
+          title: "Restore point before running an uninstaller",
+          description: "Taken before the program's own uninstaller runs. It needs Prune to be running as administrator and Windows allows one a day, so when it can't be made the uninstall goes ahead and the dialog says so."
         },
         registryBackup: {
           title: 'Sukurti registro atsarginę kopiją prieš šalinant',
-          description: 'Eksportuoja HKLM\\SOFTWARE ir HKCU\\Software (apie 140 MB kompiuteryje, kuriame kuriamas Prune) ir saugo 3 naujausias. Jei atsarginės kopijos sukurti nepavyksta, šalinimas nevykdomas.'
+          description: "Exports HKLM\\SOFTWARE and HKCU\\Software, typically several hundred MB, and keeps the newest 3. If the backup can't be made, the uninstall doesn't run."
         },
         deleteLockedFiles: {
           title: 'Ištrinti užrakintus failus per kitą paleidimą iš naujo',
@@ -16202,7 +16302,7 @@ export const CATALOG = {
         reportTitle: 'Pranešti apie klaidą',
         reportDescription: "Atidaro iš anksto užpildytą pranešimą „GitHub“. „Prune“ pats nieko nesiunčia, o viską pamatysite prieš išsiunčiant.",
         reportButton: 'Pranešti apie klaidą',
-        description: "Vietinis, neprisijungęs prie interneto šalinimo ir valymo įrankis „Windows“ — priverstinis šalinimas su liekanų failų nuskaitymu, saugus karantinas prieš trynimą, disko žemėlapis ir šiukšlių valymas vienu paspaudimu."
+        description: "A local, offline uninstaller and cleanup tool for Windows — forced removal with leftover-file scanning, safe quarantine-before-delete, disk mapping, and a cleaner that shows a preview before it removes anything."
       },
       automation: {
         title: 'Automatizavimas',
@@ -16270,7 +16370,7 @@ export const CATALOG = {
       apps: {
         label: "Įdiegtos programos",
         broken: (count) => `Liekanų po nepavykusio šalinimo: ${count}`,
-        noBroken: 'Sugadintų įrašų nėra.',
+        noBroken: 'Nothing left behind.',
         review: 'Peržiūrėti',
         manage: 'Tvarkyti'
       },
@@ -16396,10 +16496,10 @@ export const CATALOG = {
         unused: 'Nenaudojamos',
         store: 'Parduotuvė',
         extensions: 'Plėtiniai',
-        broken: 'Sugadintos',
+        broken: 'Left behind',
         storeCount: (n) => `Parduotuvė (${n})`,
         extensionsCount: (n) => `Plėtiniai (${n})`,
-        brokenCount: (n) => `Sugadintos (${n})`
+        brokenCount: (n) => `Left behind (${n})`
       },
       columns: {
         application: 'Programa',
@@ -16411,7 +16511,7 @@ export const CATALOG = {
         company: 'Bendrovė',
         website: 'Svetainė'
       },
-      badges: { broken: 'Sugadinta', running: 'Veikia', store: 'Parduotuvė', disabled: 'Išjungta', unused: 'Nenaudojama' },
+      badges: { broken: 'Left behind', running: 'Veikia', store: 'Parduotuvė', disabled: 'Išjungta', unused: 'Nenaudojama' },
       selectRow: (name) => `Pasirinkti ${name}`,
       selectAll: 'Pasirinkti visas rodomas',
       clearSelection: 'Išvalyti pasirinkimą',
@@ -16423,6 +16523,7 @@ export const CATALOG = {
       openFolder: "Atidaryti aplanką",
       copyUninstallCommand: "Kopijuoti šalinimo komandą",
       commandCopied: "Šalinimo komanda nukopijuota.",
+      unusedDefinition: "Flagged as not used recently. Prune keeps no launch history of its own, so check before you remove anything on this list.",
       copyFailed: "Nepavyko nukopijuoti.",
       empty: {
         plain: 'Nieko neatitinka.',
@@ -16512,6 +16613,9 @@ export const CATALOG = {
         status: 'Būsena'
       },
       switchAriaLabel: (name) => `Paleisti ${name} prisijungus`,
+      copyPath: 'Copy path',
+      pathCopied: 'Path copied.',
+      copyFailed: "Couldn't copy that.",
       status: {
         invalid: 'Netinkamas',
         running: 'Veikia',
@@ -16843,6 +16947,7 @@ export const CATALOG = {
     app: {
       installedApplications: "Programos",
       applicationsSummary: (count, size) => `Įdiegtų programų: ${count} · ${size}`,
+      applicationsSummaryFiltered: (shown, total, size) => `${shown} of ${total} shown · ${size}`,
       removeStoreApp: (name) => `Pašalinti ${name}`
     }
   },
@@ -16901,8 +17006,8 @@ export const CATALOG = {
         ariaLabel: 'Jam untuk membiarkan fail terkini'
       },
       restorePointCleanup: {
-        title: 'Cipta titik pemulihan dahulu',
-        description: 'Sebelum penyingkiran paksa, supaya Windows sendiri boleh mengembalikan komputer. Mengambil masa beberapa saat, dan tidak melakukan apa-apa jika Perlindungan Sistem dimatikan.'
+        title: "Restore point before removing leftovers",
+        description: "Taken before Prune removes the leftover files and registry keys you selected, including after Force remove. On by default; does nothing at all if System Protection is turned off."
       },
       hideUnavailable: {
         title: 'Sembunyikan pembersih yang tidak berkenaan',
@@ -16964,12 +17069,12 @@ export const CATALOG = {
       uninstallTab: {
         beforeHeading: 'Sebelum menyahpasang',
         restorePointUninstall: {
-          title: 'Cipta titik pemulihan sebelum menyahpasang',
-          description: 'Pemulihan Sistem Windows sendiri, dicipta sebelum penyahpasang program berjalan. Memerlukan Prune berjalan sebagai pentadbir dan Windows membenarkan satu setiap hari, jadi apabila ia tidak boleh dicipta, penyahpasangan diteruskan dan dialog menyatakannya.'
+          title: "Restore point before running an uninstaller",
+          description: "Taken before the program's own uninstaller runs. It needs Prune to be running as administrator and Windows allows one a day, so when it can't be made the uninstall goes ahead and the dialog says so."
         },
         registryBackup: {
           title: 'Sandarkan registri sebelum menyahpasang',
-          description: 'Mengeksport HKLM\\SOFTWARE dan HKCU\\Software (kira-kira 140 MB pada komputer tempat Prune dibina) dan menyimpan 3 yang terbaharu. Jika sandaran tidak boleh dicipta, penyahpasangan tidak berjalan.'
+          description: "Exports HKLM\\SOFTWARE and HKCU\\Software, typically several hundred MB, and keeps the newest 3. If the backup can't be made, the uninstall doesn't run."
         },
         deleteLockedFiles: {
           title: 'Padam fail terkunci pada mula semula seterusnya',
@@ -17001,7 +17106,7 @@ export const CATALOG = {
         reportTitle: 'Laporkan pepijat',
         reportDescription: "Membuka isu yang telah diisi terlebih dahulu di GitHub. Prune sendiri tidak menghantar apa-apa, dan anda melihat semuanya sebelum apa-apa dihantar.",
         reportButton: 'Laporkan pepijat',
-        description: "Alat penyahpasangan dan pembersihan tempatan, luar talian untuk Windows — penyingkiran paksa dengan imbasan fail baki, Kuarantin selamat sebelum pemadaman, Peta Cakera, dan pembersihan sampah satu klik."
+        description: "A local, offline uninstaller and cleanup tool for Windows — forced removal with leftover-file scanning, safe quarantine-before-delete, disk mapping, and a cleaner that shows a preview before it removes anything."
       },
       automation: {
         title: 'Automasi',
@@ -17069,7 +17174,7 @@ export const CATALOG = {
       apps: {
         label: "Aplikasi yang dipasang",
         broken: (count) => `${count} ditinggalkan oleh nyahpasangan yang gagal`,
-        noBroken: 'Tiada entri rosak.',
+        noBroken: 'Nothing left behind.',
         review: 'Semak',
         manage: 'Urus'
       },
@@ -17195,10 +17300,10 @@ export const CATALOG = {
         unused: 'Tidak digunakan',
         store: 'Kedai',
         extensions: 'Sambungan',
-        broken: 'Rosak',
+        broken: 'Left behind',
         storeCount: (n) => `Kedai (${n})`,
         extensionsCount: (n) => `Sambungan (${n})`,
-        brokenCount: (n) => `Rosak (${n})`
+        brokenCount: (n) => `Left behind (${n})`
       },
       columns: {
         application: 'Aplikasi',
@@ -17210,7 +17315,7 @@ export const CATALOG = {
         company: 'Syarikat',
         website: 'Laman web'
       },
-      badges: { broken: 'Rosak', running: 'Berjalan', store: 'Kedai', disabled: 'Dilumpuhkan', unused: 'Tidak digunakan' },
+      badges: { broken: 'Left behind', running: 'Berjalan', store: 'Kedai', disabled: 'Dilumpuhkan', unused: 'Tidak digunakan' },
       selectRow: (name) => `Pilih ${name}`,
       selectAll: 'Pilih semua yang dipaparkan',
       clearSelection: 'Kosongkan pilihan',
@@ -17222,6 +17327,7 @@ export const CATALOG = {
       openFolder: "Buka folder",
       copyUninstallCommand: "Salin arahan nyahpasang",
       commandCopied: "Arahan nyahpasang disalin.",
+      unusedDefinition: "Flagged as not used recently. Prune keeps no launch history of its own, so check before you remove anything on this list.",
       copyFailed: "Tidak dapat menyalin.",
       empty: {
         plain: 'Tiada padanan.',
@@ -17311,6 +17417,9 @@ export const CATALOG = {
         status: 'Status'
       },
       switchAriaLabel: (name) => `Jalankan ${name} semasa log masuk`,
+      copyPath: 'Copy path',
+      pathCopied: 'Path copied.',
+      copyFailed: "Couldn't copy that.",
       status: {
         invalid: 'Tidak sah',
         running: 'Berjalan',
@@ -17644,6 +17753,7 @@ export const CATALOG = {
     app: {
       installedApplications: "Aplikasi",
       applicationsSummary: (count, size) => `${count} aplikasi dipasang · ${size}`,
+      applicationsSummaryFiltered: (shown, total, size) => `${shown} of ${total} shown · ${size}`,
       removeStoreApp: (name) => `Alih keluar ${name}`
     }
   },
@@ -17702,8 +17812,8 @@ export const CATALOG = {
         ariaLabel: 'Timer å la nylige filer være i fred'
       },
       restorePointCleanup: {
-        title: 'Opprett et gjenopprettingspunkt først',
-        description: "Før en tvungen fjerning, slik at Windows selv kan rulle tilbake maskinen. Koster noen sekunder, og gjør ingenting i det hele tatt hvis Systembeskyttelse er slått av."
+        title: "Restore point before removing leftovers",
+        description: "Taken before Prune removes the leftover files and registry keys you selected, including after Force remove. On by default; does nothing at all if System Protection is turned off."
       },
       hideUnavailable: {
         title: "Skjul rensere som ikke gjelder",
@@ -17765,12 +17875,12 @@ export const CATALOG = {
       uninstallTab: {
         beforeHeading: 'Før avinstallering',
         restorePointUninstall: {
-          title: 'Opprett et gjenopprettingspunkt før avinstallering',
-          description: 'Windows egen Systemgjenoppretting, laget før programmets avinstallasjonsprogram kjører. Krever at Prune kjører som administrator, og Windows tillater én per dag, så når det ikke kan lages, fortsetter avinstalleringen og dialogboksen sier det.'
+          title: "Restore point before running an uninstaller",
+          description: "Taken before the program's own uninstaller runs. It needs Prune to be running as administrator and Windows allows one a day, so when it can't be made the uninstall goes ahead and the dialog says so."
         },
         registryBackup: {
           title: 'Sikkerhetskopier registeret før avinstallering',
-          description: 'Eksporterer HKLM\\SOFTWARE og HKCU\\Software (ca. 140 MB på maskinen Prune er bygget på) og beholder de nyeste 3. Hvis sikkerhetskopien ikke kan lages, kjøres ikke avinstalleringen.'
+          description: "Exports HKLM\\SOFTWARE and HKCU\\Software, typically several hundred MB, and keeps the newest 3. If the backup can't be made, the uninstall doesn't run."
         },
         deleteLockedFiles: {
           title: 'Slett låste filer ved neste omstart',
@@ -17802,7 +17912,7 @@ export const CATALOG = {
         reportTitle: 'Rapporter en feil',
         reportDescription: "Åpner en forhåndsutfylt sak på GitHub. Prune sender ingenting selv, og du ser alt før noe sendes videre.",
         reportButton: 'Rapporter en feil',
-        description: "Et lokalt, frakoblet avinstallerings- og opprydningsverktøy for Windows — tvungen fjerning med skanning etter rester, trygg karantene før sletting, Diskkart og rusk-opprydding med ett klikk."
+        description: "A local, offline uninstaller and cleanup tool for Windows — forced removal with leftover-file scanning, safe quarantine-before-delete, disk mapping, and a cleaner that shows a preview before it removes anything."
       },
       automation: {
         title: 'Automatisering',
@@ -17870,7 +17980,7 @@ export const CATALOG = {
       apps: {
         label: "Installerte programmer",
         broken: (count) => `${count} etterlatt${count === 1 ? '' : 'e'} av en mislykket avinstallering`,
-        noBroken: 'Ingen ødelagte oppføringer.',
+        noBroken: 'Nothing left behind.',
         review: 'Gjennomgå',
         manage: 'Administrer'
       },
@@ -17996,10 +18106,10 @@ export const CATALOG = {
         unused: 'Ubrukt',
         store: 'Store',
         extensions: 'Utvidelser',
-        broken: 'Ødelagt',
+        broken: 'Left behind',
         storeCount: (n) => `Store (${n})`,
         extensionsCount: (n) => `Utvidelser (${n})`,
-        brokenCount: (n) => `Ødelagt (${n})`
+        brokenCount: (n) => `Left behind (${n})`
       },
       columns: {
         application: 'Program',
@@ -18011,7 +18121,7 @@ export const CATALOG = {
         company: 'Firma',
         website: 'Nettsted'
       },
-      badges: { broken: 'Ødelagt', running: 'Kjører', store: 'Store', disabled: 'Deaktivert', unused: 'Ubrukt' },
+      badges: { broken: 'Left behind', running: 'Kjører', store: 'Store', disabled: 'Deaktivert', unused: 'Ubrukt' },
       selectRow: (name) => `Velg ${name}`,
       selectAll: 'Velg alle viste',
       clearSelection: 'Fjern merking',
@@ -18023,6 +18133,7 @@ export const CATALOG = {
       openFolder: "Åpne mappe",
       copyUninstallCommand: "Kopier avinstallasjonskommando",
       commandCopied: "Avinstallasjonskommandoen er kopiert.",
+      unusedDefinition: "Flagged as not used recently. Prune keeps no launch history of its own, so check before you remove anything on this list.",
       copyFailed: "Kunne ikke kopiere.",
       empty: {
         plain: 'Ingenting samsvarer.',
@@ -18112,6 +18223,9 @@ export const CATALOG = {
         status: 'Status'
       },
       switchAriaLabel: (name) => `Kjør ${name} ved pålogging`,
+      copyPath: 'Copy path',
+      pathCopied: 'Path copied.',
+      copyFailed: "Couldn't copy that.",
       status: {
         invalid: 'Ugyldig',
         running: 'Kjører',
@@ -18443,6 +18557,7 @@ export const CATALOG = {
     app: {
       installedApplications: "Programmer",
       applicationsSummary: (count, size) => `${count} installert${count === 1 ? ' program' : 'e programmer'} · ${size}`,
+      applicationsSummaryFiltered: (shown, total, size) => `${shown} of ${total} shown · ${size}`,
       removeStoreApp: (name) => `Fjern ${name}`
     }
   },
@@ -18501,8 +18616,8 @@ export const CATALOG = {
         ariaLabel: 'Uren om recente bestanden met rust te laten'
       },
       restorePointCleanup: {
-        title: 'Eerst een herstelpunt maken',
-        description: 'Vóór een geforceerde verwijdering, zodat Windows zelf de computer kan terugdraaien. Kost een paar seconden en doet helemaal niets als Systeembeveiliging is uitgeschakeld.'
+        title: "Restore point before removing leftovers",
+        description: "Taken before Prune removes the leftover files and registry keys you selected, including after Force remove. On by default; does nothing at all if System Protection is turned off."
       },
       hideUnavailable: {
         title: "Niet-toepasselijke opschoners verbergen",
@@ -18564,12 +18679,12 @@ export const CATALOG = {
       uninstallTab: {
         beforeHeading: 'Voor het verwijderen',
         restorePointUninstall: {
-          title: 'Herstelpunt maken voor het verwijderen',
-          description: "Windows' eigen Systeemherstel, gemaakt voordat het verwijderprogramma van het programma wordt uitgevoerd. Vereist dat Prune als beheerder wordt uitgevoerd en Windows staat er één per dag toe, dus als het niet kan worden gemaakt, gaat de verwijdering door en meldt het dialoogvenster dit."
+          title: "Restore point before running an uninstaller",
+          description: "Taken before the program's own uninstaller runs. It needs Prune to be running as administrator and Windows allows one a day, so when it can't be made the uninstall goes ahead and the dialog says so."
         },
         registryBackup: {
           title: 'Register back-uppen voor het verwijderen',
-          description: "Exporteert HKLM\\SOFTWARE en HKCU\\Software (ongeveer 140 MB op de computer waarop Prune is gebouwd) en behoudt de nieuwste 3. Als de back-up niet kan worden gemaakt, wordt de verwijdering niet uitgevoerd."
+          description: "Exports HKLM\\SOFTWARE and HKCU\\Software, typically several hundred MB, and keeps the newest 3. If the backup can't be made, the uninstall doesn't run."
         },
         deleteLockedFiles: {
           title: 'Vergrendelde bestanden verwijderen bij de volgende herstart',
@@ -18601,7 +18716,7 @@ export const CATALOG = {
         reportTitle: 'Een bug melden',
         reportDescription: "Opent een vooraf ingevuld issue op GitHub. Prune verstuurt zelf niets en je ziet alles voordat het ergens heen gaat.",
         reportButton: 'Een bug melden',
-        description: "Een lokale, offline verwijder- en opschoontool voor Windows — geforceerde verwijdering met scannen op restanten, veilige quarantaine voor verwijdering, Schijfkaart en opschonen van rommel met één klik."
+        description: "A local, offline uninstaller and cleanup tool for Windows — forced removal with leftover-file scanning, safe quarantine-before-delete, disk mapping, and a cleaner that shows a preview before it removes anything."
       },
       automation: {
         title: 'Automatisering',
@@ -18669,7 +18784,7 @@ export const CATALOG = {
       apps: {
         label: "Geïnstalleerde toepassingen",
         broken: (count) => `${count} achtergelaten door een mislukte verwijdering`,
-        noBroken: 'Geen kapotte items.',
+        noBroken: 'Nothing left behind.',
         review: 'Bekijken',
         manage: 'Beheren'
       },
@@ -18795,10 +18910,10 @@ export const CATALOG = {
         unused: 'Ongebruikt',
         store: 'Store',
         extensions: 'Extensies',
-        broken: 'Kapot',
+        broken: 'Left behind',
         storeCount: (n) => `Store (${n})`,
         extensionsCount: (n) => `Extensies (${n})`,
-        brokenCount: (n) => `Kapot (${n})`
+        brokenCount: (n) => `Left behind (${n})`
       },
       columns: {
         application: 'Toepassing',
@@ -18810,7 +18925,7 @@ export const CATALOG = {
         company: 'Bedrijf',
         website: 'Website'
       },
-      badges: { broken: 'Kapot', running: 'Actief', store: 'Store', disabled: 'Uitgeschakeld', unused: 'Ongebruikt' },
+      badges: { broken: 'Left behind', running: 'Actief', store: 'Store', disabled: 'Uitgeschakeld', unused: 'Ongebruikt' },
       selectRow: (name) => `${name} selecteren`,
       selectAll: 'Alle getoonde selecteren',
       clearSelection: 'Selectie wissen',
@@ -18822,6 +18937,7 @@ export const CATALOG = {
       openFolder: "Map openen",
       copyUninstallCommand: "Verwijderopdracht kopiëren",
       commandCopied: "Verwijderopdracht gekopieerd.",
+      unusedDefinition: "Flagged as not used recently. Prune keeps no launch history of its own, so check before you remove anything on this list.",
       copyFailed: "Kopiëren mislukt.",
       empty: {
         plain: 'Niets komt overeen.',
@@ -18911,6 +19027,9 @@ export const CATALOG = {
         status: 'Status'
       },
       switchAriaLabel: (name) => `${name} uitvoeren bij aanmelden`,
+      copyPath: 'Copy path',
+      pathCopied: 'Path copied.',
+      copyFailed: "Couldn't copy that.",
       status: {
         invalid: 'Ongeldig',
         running: 'Actief',
@@ -19242,6 +19361,7 @@ export const CATALOG = {
     app: {
       installedApplications: 'Geïnstalleerde toepassingen',
       applicationsSummary: (count, size) => `${count} geïnstalleerde toepassing${count === 1 ? '' : 'en'} · ${size}`,
+      applicationsSummaryFiltered: (shown, total, size) => `${shown} of ${total} shown · ${size}`,
       removeStoreApp: (name) => `${name} verwijderen`
     }
   },
@@ -19300,8 +19420,8 @@ export const CATALOG = {
         ariaLabel: 'Godziny, przez które zostawiać niedawne pliki w spokoju'
       },
       restorePointCleanup: {
-        title: 'Najpierw utwórz punkt przywracania',
-        description: 'Przed wymuszonym usunięciem, aby sam system Windows mógł cofnąć zmiany na komputerze. Kosztuje kilka sekund i nic nie robi, jeśli Ochrona systemu jest wyłączona.'
+        title: "Restore point before removing leftovers",
+        description: "Taken before Prune removes the leftover files and registry keys you selected, including after Force remove. On by default; does nothing at all if System Protection is turned off."
       },
       hideUnavailable: {
         title: "Ukryj moduły czyszczenia, które nie mają zastosowania",
@@ -19363,12 +19483,12 @@ export const CATALOG = {
       uninstallTab: {
         beforeHeading: 'Przed odinstalowaniem',
         restorePointUninstall: {
-          title: 'Utwórz punkt przywracania przed odinstalowaniem',
-          description: 'Własne Przywracanie systemu Windows, tworzone przed uruchomieniem dezinstalatora programu. Wymaga uruchomienia Prune jako administrator, a Windows pozwala na jeden dziennie, więc gdy nie można go utworzyć, odinstalowanie kontynuuje działanie, a okno dialogowe o tym informuje.'
+          title: "Restore point before running an uninstaller",
+          description: "Taken before the program's own uninstaller runs. It needs Prune to be running as administrator and Windows allows one a day, so when it can't be made the uninstall goes ahead and the dialog says so."
         },
         registryBackup: {
           title: 'Utwórz kopię zapasową rejestru przed odinstalowaniem',
-          description: 'Eksportuje HKLM\\SOFTWARE i HKCU\\Software (około 140 MB na komputerze, na którym zbudowano Prune) i przechowuje 3 najnowsze. Jeśli nie można utworzyć kopii zapasowej, odinstalowanie się nie uruchamia.'
+          description: "Exports HKLM\\SOFTWARE and HKCU\\Software, typically several hundred MB, and keeps the newest 3. If the backup can't be made, the uninstall doesn't run."
         },
         deleteLockedFiles: {
           title: 'Usuń zablokowane pliki przy następnym ponownym uruchomieniu',
@@ -19400,7 +19520,7 @@ export const CATALOG = {
         reportTitle: 'Zgłoś błąd',
         reportDescription: "Otwiera w serwisie GitHub gotowe, wypełnione zgłoszenie. Prune sam niczego nie wysyła, a wszystko zobaczysz, zanim gdziekolwiek trafi.",
         reportButton: 'Zgłoś błąd',
-        description: "Lokalne, działające offline narzędzie do odinstalowywania i czyszczenia dla Windows — wymuszone usuwanie ze skanowaniem pozostałości, bezpieczna kwarantanna przed usunięciem, mapa dysku i czyszczenie śmieci jednym kliknięciem."
+        description: "A local, offline uninstaller and cleanup tool for Windows — forced removal with leftover-file scanning, safe quarantine-before-delete, disk mapping, and a cleaner that shows a preview before it removes anything."
       },
       automation: {
         title: 'Automatyzacja',
@@ -19468,7 +19588,7 @@ export const CATALOG = {
       apps: {
         label: "Zainstalowane aplikacje",
         broken: (count) => `Pozostawione po nieudanym odinstalowaniu: ${count}`,
-        noBroken: 'Brak uszkodzonych wpisów.',
+        noBroken: 'Nothing left behind.',
         review: 'Przejrzyj',
         manage: 'Zarządzaj'
       },
@@ -19594,10 +19714,10 @@ export const CATALOG = {
         unused: 'Nieużywane',
         store: 'Sklep',
         extensions: 'Rozszerzenia',
-        broken: 'Uszkodzone',
+        broken: 'Left behind',
         storeCount: (n) => `Sklep (${n})`,
         extensionsCount: (n) => `Rozszerzenia (${n})`,
-        brokenCount: (n) => `Uszkodzone (${n})`
+        brokenCount: (n) => `Left behind (${n})`
       },
       columns: {
         application: 'Aplikacja',
@@ -19609,7 +19729,7 @@ export const CATALOG = {
         company: 'Firma',
         website: 'Strona internetowa'
       },
-      badges: { broken: 'Uszkodzone', running: 'Uruchomione', store: 'Sklep', disabled: 'Wyłączone', unused: 'Nieużywane' },
+      badges: { broken: 'Left behind', running: 'Uruchomione', store: 'Sklep', disabled: 'Wyłączone', unused: 'Nieużywane' },
       selectRow: (name) => `Zaznacz ${name}`,
       selectAll: 'Zaznacz wszystkie wyświetlane',
       clearSelection: 'Wyczyść zaznaczenie',
@@ -19621,6 +19741,7 @@ export const CATALOG = {
       openFolder: "Otwórz folder",
       copyUninstallCommand: "Kopiuj polecenie odinstalowania",
       commandCopied: "Skopiowano polecenie odinstalowania.",
+      unusedDefinition: "Flagged as not used recently. Prune keeps no launch history of its own, so check before you remove anything on this list.",
       copyFailed: "Nie udało się skopiować.",
       empty: {
         plain: 'Nic nie pasuje.',
@@ -19710,6 +19831,9 @@ export const CATALOG = {
         status: 'Stan'
       },
       switchAriaLabel: (name) => `Uruchamiaj ${name} przy logowaniu`,
+      copyPath: 'Copy path',
+      pathCopied: 'Path copied.',
+      copyFailed: "Couldn't copy that.",
       status: {
         invalid: 'Nieprawidłowy',
         running: 'Uruchomione',
@@ -20041,6 +20165,7 @@ export const CATALOG = {
     app: {
       installedApplications: "Aplikacje",
       applicationsSummary: (count, size) => `Zainstalowane aplikacje: ${count} · ${size}`,
+      applicationsSummaryFiltered: (shown, total, size) => `${shown} of ${total} shown · ${size}`,
       removeStoreApp: (name) => `Usuń ${name}`
     }
   },
@@ -20099,8 +20224,8 @@ export const CATALOG = {
         ariaLabel: 'ساعتونه چې وروستي فایلونه پرې پریږدل شي'
       },
       restorePointCleanup: {
-        title: 'لومړی د بیارغونې نقطه جوړول',
-        description: 'د زوري لرې کولو دمخه، ترڅو Windows پخپله ماشین بیرته راولي. یو څو ثانیې لګوي، او که د سیسټم ساتنه بند وي هیڅ نه کوي.'
+        title: "Restore point before removing leftovers",
+        description: "Taken before Prune removes the leftover files and registry keys you selected, including after Force remove. On by default; does nothing at all if System Protection is turned off."
       },
       hideUnavailable: {
         title: "هغه پاکوونکي پټ کړئ چې تړاو نه لري",
@@ -20162,12 +20287,12 @@ export const CATALOG = {
       uninstallTab: {
         beforeHeading: 'د لرې کولو دمخه',
         restorePointUninstall: {
-          title: 'د لرې کولو دمخه د بیارغونې نقطه جوړول',
-          description: 'د Windows خپل سیسټم بیارغونه، چې د پروګرام د لرې کوونکي له چلولو دمخه جوړیږي. اړتیا لري چې Prune د اډمین په توګه وچلیږي او Windows یوازې یو په ورځ کې اجازه ورکوي، نو کله چې دا جوړ نشي، لرې کول دوام کوي او ډیالوګ دا وایي.'
+          title: "Restore point before running an uninstaller",
+          description: "Taken before the program's own uninstaller runs. It needs Prune to be running as administrator and Windows allows one a day, so when it can't be made the uninstall goes ahead and the dialog says so."
         },
         registryBackup: {
           title: 'د لرې کولو دمخه رجسټری بیک اپ کول',
-          description: 'HKLM\\SOFTWARE او HKCU\\Software صادروي (شاوخوا 140 MB په هغه ماشین چې Prune پرې جوړ شوی) او تازه ترین 3 ساتي. که بیک اپ جوړ نشي، لرې کول ندي چلیدلی.'
+          description: "Exports HKLM\\SOFTWARE and HKCU\\Software, typically several hundred MB, and keeps the newest 3. If the backup can't be made, the uninstall doesn't run."
         },
         deleteLockedFiles: {
           title: 'په راتلونکي بیا پیل کې د بند شوو فایلونو حذف کول',
@@ -20199,7 +20324,7 @@ export const CATALOG = {
         reportTitle: 'د بګ راپور ورکړئ',
         reportDescription: "په GitHub کې یو مخکې ډک شوی Issue پرانیزي. Prune پخپله هیڅ نه لیږي، او تاسو هر څه مخکې له لیږلو وینئ.",
         reportButton: 'د بګ راپور ورکړئ',
-        description: "د Windows لپاره یو محلي، آفلاین لرې کولو او پاکولو وسیله — د پاتې شونو سکین سره زوري لرې کول، د ړنګولو دمخه خوندي قرنطین، د ډیسک نقشه، او د یوې کلیک خځلو پاکول."
+        description: "A local, offline uninstaller and cleanup tool for Windows — forced removal with leftover-file scanning, safe quarantine-before-delete, disk mapping, and a cleaner that shows a preview before it removes anything."
       },
       automation: {
         title: 'اتومات کول',
@@ -20267,7 +20392,7 @@ export const CATALOG = {
       apps: {
         label: "نصب شوي غوښتنلیکونه",
         broken: (count) => `${count} د ناکامې لرې کولو له امله پاتې شوي`,
-        noBroken: 'هیڅ ماتې شوې ننوتنه نشته.',
+        noBroken: 'Nothing left behind.',
         review: 'بیاکتنه',
         manage: 'مدیریت'
       },
@@ -20393,10 +20518,10 @@ export const CATALOG = {
         unused: "نه کارول شوي",
         store: 'پلورنځی',
         extensions: 'توسیعې',
-        broken: 'ماتې شوي',
+        broken: 'Left behind',
         storeCount: (n) => `پلورنځی (${n})`,
         extensionsCount: (n) => `توسیعې (${n})`,
-        brokenCount: (n) => `ماتې شوي (${n})`
+        brokenCount: (n) => `Left behind (${n})`
       },
       columns: {
         application: 'غوښتنلیک',
@@ -20408,7 +20533,7 @@ export const CATALOG = {
         company: 'شرکت',
         website: 'ویب پاڼه'
       },
-      badges: { broken: 'ماتې شوی', running: 'روان', store: 'پلورنځی', disabled: 'غیرفعال شوی', unused: "نه کارول شوی" },
+      badges: { broken: 'Left behind', running: 'روان', store: 'پلورنځی', disabled: 'غیرفعال شوی', unused: "نه کارول شوی" },
       selectRow: (name) => `${name} غوره کړئ`,
       selectAll: 'ټول ښودل شوي غوره کړئ',
       clearSelection: 'ټاکنه پاکه کړئ',
@@ -20420,6 +20545,7 @@ export const CATALOG = {
       openFolder: "فولډر پرانیزئ",
       copyUninstallCommand: "د لرې کولو امر کاپي کړئ",
       commandCopied: "د لرې کولو امر کاپي شو.",
+      unusedDefinition: "Flagged as not used recently. Prune keeps no launch history of its own, so check before you remove anything on this list.",
       copyFailed: "کاپي ونه شوه.",
       empty: {
         plain: 'هیڅ شی ونه موندل شو.',
@@ -20509,6 +20635,9 @@ export const CATALOG = {
         status: 'حالت'
       },
       switchAriaLabel: (name) => `د ننوتلو پر مهال ${name} چلول`,
+      copyPath: 'Copy path',
+      pathCopied: 'Path copied.',
+      copyFailed: "Couldn't copy that.",
       status: {
         invalid: 'ناسمه',
         running: 'روان',
@@ -20842,6 +20971,7 @@ export const CATALOG = {
     app: {
       installedApplications: "غوښتنلیکونه",
       applicationsSummary: (count, size) => `نصب شوي غوښتنلیکونه: ${count} · ${size}`,
+      applicationsSummaryFiltered: (shown, total, size) => `${shown} of ${total} shown · ${size}`,
       removeStoreApp: (name) => `${name} لرې کول`
     }
   },
@@ -20900,8 +21030,8 @@ export const CATALOG = {
         ariaLabel: 'Horas para deixar os arquivos recentes em paz'
       },
       restorePointCleanup: {
-        title: 'Criar um ponto de restauração primeiro',
-        description: 'Antes de uma remoção forçada, para que o próprio Windows possa reverter a máquina. Custa alguns segundos e não faz nada se a Proteção do Sistema estiver desativada.'
+        title: "Restore point before removing leftovers",
+        description: "Taken before Prune removes the leftover files and registry keys you selected, including after Force remove. On by default; does nothing at all if System Protection is turned off."
       },
       hideUnavailable: {
         title: 'Ocultar limpadores que não se aplicam',
@@ -20963,12 +21093,12 @@ export const CATALOG = {
       uninstallTab: {
         beforeHeading: 'Antes de desinstalar',
         restorePointUninstall: {
-          title: 'Criar um ponto de restauração antes de desinstalar',
-          description: 'A própria Restauração do Sistema do Windows, criada antes que o desinstalador do programa seja executado. Requer que o Prune seja executado como administrador e o Windows permite um por dia, então quando não pode ser criado, a desinstalação continua e a caixa de diálogo informa isso.'
+          title: "Restore point before running an uninstaller",
+          description: "Taken before the program's own uninstaller runs. It needs Prune to be running as administrator and Windows allows one a day, so when it can't be made the uninstall goes ahead and the dialog says so."
         },
         registryBackup: {
           title: 'Fazer backup do registro antes de desinstalar',
-          description: 'Exporta HKLM\\SOFTWARE e HKCU\\Software (cerca de 140 MB na máquina onde o Prune é compilado) e mantém os 3 mais recentes. Se o backup não puder ser criado, a desinstalação não é executada.'
+          description: "Exports HKLM\\SOFTWARE and HKCU\\Software, typically several hundred MB, and keeps the newest 3. If the backup can't be made, the uninstall doesn't run."
         },
         deleteLockedFiles: {
           title: 'Excluir arquivos bloqueados na próxima reinicialização',
@@ -21000,7 +21130,7 @@ export const CATALOG = {
         reportTitle: 'Relatar um bug',
         reportDescription: "Abre uma issue pré-preenchida no GitHub. O Prune não envia nada por conta própria, e você vê tudo antes de qualquer envio.",
         reportButton: 'Relatar um bug',
-        description: "Uma ferramenta local e offline de desinstalação e limpeza para Windows — remoção forçada com verificação de resíduos, quarentena segura antes da exclusão, Mapa do disco e limpeza de lixo com um clique."
+        description: "A local, offline uninstaller and cleanup tool for Windows — forced removal with leftover-file scanning, safe quarantine-before-delete, disk mapping, and a cleaner that shows a preview before it removes anything."
       },
       automation: {
         title: 'Automação',
@@ -21068,7 +21198,7 @@ export const CATALOG = {
       apps: {
         label: "Aplicativos instalados",
         broken: (count) => `${count} deixado${count === 1 ? '' : 's'} por uma desinstalação malsucedida`,
-        noBroken: 'Nenhuma entrada corrompida.',
+        noBroken: 'Nothing left behind.',
         review: 'Revisar',
         manage: 'Gerenciar'
       },
@@ -21194,10 +21324,10 @@ export const CATALOG = {
         unused: 'Não usados',
         store: 'Loja',
         extensions: 'Extensões',
-        broken: 'Corrompidos',
+        broken: 'Left behind',
         storeCount: (n) => `Loja (${n})`,
         extensionsCount: (n) => `Extensões (${n})`,
-        brokenCount: (n) => `Corrompidos (${n})`
+        brokenCount: (n) => `Left behind (${n})`
       },
       columns: {
         application: 'Aplicativo',
@@ -21209,7 +21339,7 @@ export const CATALOG = {
         company: 'Empresa',
         website: 'Site'
       },
-      badges: { broken: 'Corrompido', running: 'Em execução', store: 'Loja', disabled: 'Desativado', unused: 'Não usado' },
+      badges: { broken: 'Left behind', running: 'Em execução', store: 'Loja', disabled: 'Desativado', unused: 'Não usado' },
       selectRow: (name) => `Selecionar ${name}`,
       selectAll: 'Selecionar tudo que está sendo exibido',
       clearSelection: 'Limpar seleção',
@@ -21221,6 +21351,7 @@ export const CATALOG = {
       openFolder: "Abrir pasta",
       copyUninstallCommand: "Copiar comando de desinstalação",
       commandCopied: "Comando de desinstalação copiado.",
+      unusedDefinition: "Flagged as not used recently. Prune keeps no launch history of its own, so check before you remove anything on this list.",
       copyFailed: "Não foi possível copiar.",
       empty: {
         plain: 'Nada corresponde.',
@@ -21310,6 +21441,9 @@ export const CATALOG = {
         status: 'Status'
       },
       switchAriaLabel: (name) => `Executar ${name} ao entrar`,
+      copyPath: 'Copy path',
+      pathCopied: 'Path copied.',
+      copyFailed: "Couldn't copy that.",
       status: {
         invalid: 'Inválido',
         running: 'Em execução',
@@ -21641,6 +21775,7 @@ export const CATALOG = {
     app: {
       installedApplications: "Aplicativos",
       applicationsSummary: (count, size) => `${count} aplicativo${count === 1 ? '' : 's'} instalado${count === 1 ? '' : 's'} · ${size}`,
+      applicationsSummaryFiltered: (shown, total, size) => `${shown} of ${total} shown · ${size}`,
       removeStoreApp: (name) => `Remover ${name}`
     }
   },
@@ -21699,8 +21834,8 @@ export const CATALOG = {
         ariaLabel: 'Horas para deixar os ficheiros recentes em paz'
       },
       restorePointCleanup: {
-        title: 'Criar um ponto de restauro primeiro',
-        description: 'Antes de uma remoção forçada, para que o próprio Windows possa reverter a máquina. Custa alguns segundos e não faz nada se a Proteção do Sistema estiver desativada.'
+        title: "Restore point before removing leftovers",
+        description: "Taken before Prune removes the leftover files and registry keys you selected, including after Force remove. On by default; does nothing at all if System Protection is turned off."
       },
       hideUnavailable: {
         title: 'Ocultar limpadores que não se aplicam',
@@ -21762,12 +21897,12 @@ export const CATALOG = {
       uninstallTab: {
         beforeHeading: 'Antes de desinstalar',
         restorePointUninstall: {
-          title: 'Criar um ponto de restauro antes de desinstalar',
-          description: 'A própria Restauração do Sistema do Windows, criada antes de o desinstalador do programa ser executado. Requer que o Prune seja executado como administrador e o Windows permite um por dia, pelo que quando não pode ser criado, a desinstalação continua e a caixa de diálogo informa isso.'
+          title: "Restore point before running an uninstaller",
+          description: "Taken before the program's own uninstaller runs. It needs Prune to be running as administrator and Windows allows one a day, so when it can't be made the uninstall goes ahead and the dialog says so."
         },
         registryBackup: {
           title: 'Fazer cópia de segurança do registo antes de desinstalar',
-          description: 'Exporta HKLM\\SOFTWARE e HKCU\\Software (cerca de 140 MB na máquina onde o Prune é compilado) e mantém as 3 mais recentes. Se a cópia de segurança não puder ser criada, a desinstalação não é executada.'
+          description: "Exports HKLM\\SOFTWARE and HKCU\\Software, typically several hundred MB, and keeps the newest 3. If the backup can't be made, the uninstall doesn't run."
         },
         deleteLockedFiles: {
           title: 'Eliminar ficheiros bloqueados no próximo reinício',
@@ -21799,7 +21934,7 @@ export const CATALOG = {
         reportTitle: 'Comunicar um erro',
         reportDescription: "Abre uma issue pré-preenchida no GitHub. O Prune não envia nada por si só e mostra-lhe tudo antes de qualquer envio.",
         reportButton: 'Comunicar um erro',
-        description: "Uma ferramenta local e offline de desinstalação e limpeza para Windows — remoção forçada com análise de resíduos, quarentena segura antes da eliminação, Mapa do disco e limpeza de lixo com um clique."
+        description: "A local, offline uninstaller and cleanup tool for Windows — forced removal with leftover-file scanning, safe quarantine-before-delete, disk mapping, and a cleaner that shows a preview before it removes anything."
       },
       automation: {
         title: 'Automatização',
@@ -21867,7 +22002,7 @@ export const CATALOG = {
       apps: {
         label: "Aplicações instaladas",
         broken: (count) => `${count} deixada${count === 1 ? '' : 's'} por uma desinstalação falhada`,
-        noBroken: 'Nenhuma entrada danificada.',
+        noBroken: 'Nothing left behind.',
         review: 'Rever',
         manage: 'Gerir'
       },
@@ -21993,10 +22128,10 @@ export const CATALOG = {
         unused: 'Não usadas',
         store: 'Loja',
         extensions: 'Extensões',
-        broken: 'Danificadas',
+        broken: 'Left behind',
         storeCount: (n) => `Loja (${n})`,
         extensionsCount: (n) => `Extensões (${n})`,
-        brokenCount: (n) => `Danificadas (${n})`
+        brokenCount: (n) => `Left behind (${n})`
       },
       columns: {
         application: 'Aplicação',
@@ -22008,7 +22143,7 @@ export const CATALOG = {
         company: 'Empresa',
         website: 'Site'
       },
-      badges: { broken: 'Danificada', running: 'Em execução', store: 'Loja', disabled: 'Desativada', unused: 'Não usada' },
+      badges: { broken: 'Left behind', running: 'Em execução', store: 'Loja', disabled: 'Desativada', unused: 'Não usada' },
       selectRow: (name) => `Selecionar ${name}`,
       selectAll: 'Selecionar tudo o que está apresentado',
       clearSelection: 'Limpar seleção',
@@ -22020,6 +22155,7 @@ export const CATALOG = {
       openFolder: "Abrir pasta",
       copyUninstallCommand: "Copiar comando de desinstalação",
       commandCopied: "Comando de desinstalação copiado.",
+      unusedDefinition: "Flagged as not used recently. Prune keeps no launch history of its own, so check before you remove anything on this list.",
       copyFailed: "Não foi possível copiar.",
       empty: {
         plain: 'Nada corresponde.',
@@ -22109,6 +22245,9 @@ export const CATALOG = {
         status: 'Estado'
       },
       switchAriaLabel: (name) => `Executar ${name} ao iniciar sessão`,
+      copyPath: 'Copy path',
+      pathCopied: 'Path copied.',
+      copyFailed: "Couldn't copy that.",
       status: {
         invalid: 'Inválido',
         running: 'Em execução',
@@ -22442,6 +22581,7 @@ export const CATALOG = {
     app: {
       installedApplications: "Aplicações",
       applicationsSummary: (count, size) => `${count} aplicaç${count === 1 ? 'ão instalada' : 'ões instaladas'} · ${size}`,
+      applicationsSummaryFiltered: (shown, total, size) => `${shown} of ${total} shown · ${size}`,
       removeStoreApp: (name) => `Remover ${name}`
     }
   },
@@ -22500,8 +22640,8 @@ export const CATALOG = {
         ariaLabel: 'Ore pentru care să lași fișierele recente în pace'
       },
       restorePointCleanup: {
-        title: 'Creează mai întâi un punct de restaurare',
-        description: 'Înainte de o eliminare forțată, astfel încât Windows însuși să poată readuce calculatorul înapoi. Costă câteva secunde și nu face nimic dacă Protecția Sistemului este dezactivată.'
+        title: "Restore point before removing leftovers",
+        description: "Taken before Prune removes the leftover files and registry keys you selected, including after Force remove. On by default; does nothing at all if System Protection is turned off."
       },
       hideUnavailable: {
         title: 'Ascunde curățătoarele care nu se aplică',
@@ -22563,12 +22703,12 @@ export const CATALOG = {
       uninstallTab: {
         beforeHeading: 'Înainte de dezinstalare',
         restorePointUninstall: {
-          title: 'Creează un punct de restaurare înainte de dezinstalare',
-          description: 'Propria Restaurare a Sistemului Windows, creată înainte ca dezinstalatorul programului să ruleze. Necesită ca Prune să ruleze ca administrator și Windows permite una pe zi, așa că atunci când nu poate fi creată, dezinstalarea continuă și dialogul spune asta.'
+          title: "Restore point before running an uninstaller",
+          description: "Taken before the program's own uninstaller runs. It needs Prune to be running as administrator and Windows allows one a day, so when it can't be made the uninstall goes ahead and the dialog says so."
         },
         registryBackup: {
           title: 'Copiază de rezervă registrul înainte de dezinstalare',
-          description: 'Exportă HKLM\\SOFTWARE și HKCU\\Software (aproximativ 140 MB pe calculatorul pe care este construit Prune) și păstrează cele mai recente 3. Dacă copia de rezervă nu poate fi creată, dezinstalarea nu rulează.'
+          description: "Exports HKLM\\SOFTWARE and HKCU\\Software, typically several hundred MB, and keeps the newest 3. If the backup can't be made, the uninstall doesn't run."
         },
         deleteLockedFiles: {
           title: 'Șterge fișierele blocate la următoarea repornire',
@@ -22600,7 +22740,7 @@ export const CATALOG = {
         reportTitle: 'Raportează o eroare',
         reportDescription: "Deschide un issue precompletat pe GitHub. Prune nu trimite nimic singur, iar tu vezi totul înainte ca ceva să plece oriunde.",
         reportButton: 'Raportează o eroare',
-        description: "Un instrument local, offline de dezinstalare și curățare pentru Windows — eliminare forțată cu scanare de fișiere rămase, carantină sigură înainte de ștergere, harta discului și curățare de gunoi cu un clic."
+        description: "A local, offline uninstaller and cleanup tool for Windows — forced removal with leftover-file scanning, safe quarantine-before-delete, disk mapping, and a cleaner that shows a preview before it removes anything."
       },
       automation: {
         title: 'Automatizare',
@@ -22668,7 +22808,7 @@ export const CATALOG = {
       apps: {
         label: "Aplicații instalate",
         broken: (count) => `${count} ${count === 1 ? 'rest rămas' : `${count % 100 >= 1 && count % 100 < 20 ? '' : 'de '}resturi rămase`} în urma unei dezinstalări eșuate`,
-        noBroken: 'Nicio intrare deteriorată.',
+        noBroken: 'Nothing left behind.',
         review: 'Revizuiește',
         manage: 'Gestionează'
       },
@@ -22794,10 +22934,10 @@ export const CATALOG = {
         unused: 'Neutilizate',
         store: 'Magazin',
         extensions: 'Extensii',
-        broken: 'Deteriorate',
+        broken: 'Left behind',
         storeCount: (n) => `Magazin (${n})`,
         extensionsCount: (n) => `Extensii (${n})`,
-        brokenCount: (n) => `Deteriorate (${n})`
+        brokenCount: (n) => `Left behind (${n})`
       },
       columns: {
         application: 'Aplicație',
@@ -22809,7 +22949,7 @@ export const CATALOG = {
         company: 'Companie',
         website: 'Site web'
       },
-      badges: { broken: 'Deteriorată', running: 'În execuție', store: 'Magazin', disabled: 'Dezactivată', unused: 'Neutilizată' },
+      badges: { broken: 'Left behind', running: 'În execuție', store: 'Magazin', disabled: 'Dezactivată', unused: 'Neutilizată' },
       selectRow: (name) => `Selectează ${name}`,
       selectAll: 'Selectează tot ce este afișat',
       clearSelection: 'Golește selecția',
@@ -22821,6 +22961,7 @@ export const CATALOG = {
       openFolder: "Deschide folderul",
       copyUninstallCommand: "Copiază comanda de dezinstalare",
       commandCopied: "Comanda de dezinstalare a fost copiată.",
+      unusedDefinition: "Flagged as not used recently. Prune keeps no launch history of its own, so check before you remove anything on this list.",
       copyFailed: "Nu s-a putut copia.",
       empty: {
         plain: 'Nimic nu se potrivește.',
@@ -22910,6 +23051,9 @@ export const CATALOG = {
         status: 'Stare'
       },
       switchAriaLabel: (name) => `Rulează ${name} la conectare`,
+      copyPath: 'Copy path',
+      pathCopied: 'Path copied.',
+      copyFailed: "Couldn't copy that.",
       status: {
         invalid: 'Nevalid',
         running: 'În execuție',
@@ -23243,6 +23387,7 @@ export const CATALOG = {
     app: {
       installedApplications: "Aplicații",
       applicationsSummary: (count, size) => `${count === 1 ? '1 aplicație instalată' : `${count} ${count % 100 >= 1 && count % 100 < 20 ? '' : 'de '}aplicații instalate`} · ${size}`,
+      applicationsSummaryFiltered: (shown, total, size) => `${shown} of ${total} shown · ${size}`,
       removeStoreApp: (name) => `Elimină ${name}`
     }
   },
@@ -23301,8 +23446,8 @@ export const CATALOG = {
         ariaLabel: 'Часы, в течение которых не трогать недавние файлы'
       },
       restorePointCleanup: {
-        title: 'Сначала создать точку восстановления',
-        description: 'Перед принудительным удалением, чтобы сам Windows мог откатить систему. Занимает несколько секунд и ничего не делает, если Защита системы отключена.'
+        title: "Restore point before removing leftovers",
+        description: "Taken before Prune removes the leftover files and registry keys you selected, including after Force remove. On by default; does nothing at all if System Protection is turned off."
       },
       hideUnavailable: {
         title: 'Скрывать неприменимые средства очистки',
@@ -23364,12 +23509,12 @@ export const CATALOG = {
       uninstallTab: {
         beforeHeading: 'Перед удалением',
         restorePointUninstall: {
-          title: 'Создать точку восстановления перед удалением',
-          description: 'Собственное Восстановление системы Windows, создаваемое до запуска деинсталлятора программы. Требует запуска Prune от имени администратора, а Windows разрешает одну в день, поэтому когда её нельзя создать, удаление продолжается, и диалог сообщает об этом.'
+          title: "Restore point before running an uninstaller",
+          description: "Taken before the program's own uninstaller runs. It needs Prune to be running as administrator and Windows allows one a day, so when it can't be made the uninstall goes ahead and the dialog says so."
         },
         registryBackup: {
           title: 'Резервировать реестр перед удалением',
-          description: 'Экспортирует HKLM\\SOFTWARE и HKCU\\Software (около 140 МБ на компьютере, на котором собран Prune) и хранит 3 последних. Если резервную копию нельзя создать, удаление не выполняется.'
+          description: "Exports HKLM\\SOFTWARE and HKCU\\Software, typically several hundred MB, and keeps the newest 3. If the backup can't be made, the uninstall doesn't run."
         },
         deleteLockedFiles: {
           title: 'Удалить заблокированные файлы при следующей перезагрузке',
@@ -23401,7 +23546,7 @@ export const CATALOG = {
         reportTitle: 'Сообщить об ошибке',
         reportDescription: "Открывает на GitHub уже заполненное обращение. Сам Prune ничего не отправляет, и вы видите всё до того, как это куда-либо уйдёт.",
         reportButton: 'Сообщить об ошибке',
-        description: "Локальный, автономный инструмент удаления и очистки для Windows — принудительное удаление со сканированием остатков, безопасный карантин перед удалением, карта диска и очистка мусора в один клик."
+        description: "A local, offline uninstaller and cleanup tool for Windows — forced removal with leftover-file scanning, safe quarantine-before-delete, disk mapping, and a cleaner that shows a preview before it removes anything."
       },
       automation: {
         title: 'Автоматизация',
@@ -23469,7 +23614,7 @@ export const CATALOG = {
       apps: {
         label: "Установленные приложения",
         broken: (count) => `${count} осталось после неудачного удаления`,
-        noBroken: 'Повреждённых записей нет.',
+        noBroken: 'Nothing left behind.',
         review: 'Проверить',
         manage: 'Управление'
       },
@@ -23595,10 +23740,10 @@ export const CATALOG = {
         unused: 'Неиспользуемые',
         store: 'Магазин',
         extensions: 'Расширения',
-        broken: 'Повреждённые',
+        broken: 'Left behind',
         storeCount: (n) => `Магазин (${n})`,
         extensionsCount: (n) => `Расширения (${n})`,
-        brokenCount: (n) => `Повреждённые (${n})`
+        brokenCount: (n) => `Left behind (${n})`
       },
       columns: {
         application: 'Приложение',
@@ -23610,7 +23755,7 @@ export const CATALOG = {
         company: 'Компания',
         website: 'Веб-сайт'
       },
-      badges: { broken: 'Повреждено', running: 'Работает', store: 'Магазин', disabled: 'Отключено', unused: 'Не используется' },
+      badges: { broken: 'Left behind', running: 'Работает', store: 'Магазин', disabled: 'Отключено', unused: 'Не используется' },
       selectRow: (name) => `Выбрать ${name}`,
       selectAll: 'Выбрать все показанные',
       clearSelection: 'Снять выделение',
@@ -23622,6 +23767,7 @@ export const CATALOG = {
       openFolder: "Открыть папку",
       copyUninstallCommand: "Копировать команду удаления",
       commandCopied: "Команда удаления скопирована.",
+      unusedDefinition: "Flagged as not used recently. Prune keeps no launch history of its own, so check before you remove anything on this list.",
       copyFailed: "Не удалось скопировать.",
       empty: {
         plain: 'Ничего не найдено.',
@@ -23711,6 +23857,9 @@ export const CATALOG = {
         status: 'Состояние'
       },
       switchAriaLabel: (name) => `Запускать ${name} при входе`,
+      copyPath: 'Copy path',
+      pathCopied: 'Path copied.',
+      copyFailed: "Couldn't copy that.",
       status: {
         invalid: 'Недействительно',
         running: 'Работает',
@@ -24042,6 +24191,7 @@ export const CATALOG = {
     app: {
       installedApplications: "Приложения",
       applicationsSummary: (count, size) => `Установлено приложений: ${count} · ${size}`,
+      applicationsSummaryFiltered: (shown, total, size) => `${shown} of ${total} shown · ${size}`,
       removeStoreApp: (name) => `Удалить ${name}`
     }
   },
@@ -24100,8 +24250,8 @@ export const CATALOG = {
         ariaLabel: 'Hodiny, počas ktorých nechať nedávne súbory na pokoji'
       },
       restorePointCleanup: {
-        title: 'Najprv vytvoriť bod obnovenia',
-        description: 'Pred vynúteným odstránením, aby samotný Windows mohol vrátiť počítač späť. Stojí to pár sekúnd a nerobí to vôbec nič, ak je Ochrana systému vypnutá.'
+        title: "Restore point before removing leftovers",
+        description: "Taken before Prune removes the leftover files and registry keys you selected, including after Force remove. On by default; does nothing at all if System Protection is turned off."
       },
       hideUnavailable: {
         title: "Skryť čističe, ktoré sa neuplatňujú",
@@ -24163,12 +24313,12 @@ export const CATALOG = {
       uninstallTab: {
         beforeHeading: 'Pred odinštalovaním',
         restorePointUninstall: {
-          title: 'Vytvoriť bod obnovenia pred odinštalovaním',
-          description: 'Vlastná Obnova systému Windows, vytvorená pred spustením odinštalátora programu. Vyžaduje, aby Prune bežal ako správca, a Windows povoľuje jednu za deň, takže keď ju nemožno vytvoriť, odinštalovanie pokračuje a dialógové okno to oznámi.'
+          title: "Restore point before running an uninstaller",
+          description: "Taken before the program's own uninstaller runs. It needs Prune to be running as administrator and Windows allows one a day, so when it can't be made the uninstall goes ahead and the dialog says so."
         },
         registryBackup: {
           title: 'Zálohovať register pred odinštalovaním',
-          description: 'Exportuje HKLM\\SOFTWARE a HKCU\\Software (asi 140 MB na počítači, na ktorom je Prune zostavený) a uchováva 3 najnovšie. Ak zálohu nemožno vytvoriť, odinštalovanie sa nespustí.'
+          description: "Exports HKLM\\SOFTWARE and HKCU\\Software, typically several hundred MB, and keeps the newest 3. If the backup can't be made, the uninstall doesn't run."
         },
         deleteLockedFiles: {
           title: 'Odstrániť uzamknuté súbory pri ďalšom reštarte',
@@ -24200,7 +24350,7 @@ export const CATALOG = {
         reportTitle: 'Nahlásiť chybu',
         reportDescription: "Otvorí na GitHube predvyplnené hlásenie. Prune sám nič neodosiela a všetko uvidíte skôr, než to niekam odíde.",
         reportButton: 'Nahlásiť chybu',
-        description: "Lokálny, offline nástroj na odinštalovanie a čistenie pre Windows — vynútené odstránenie so skenovaním zvyškov, bezpečná karanténa pred vymazaním, Mapa disku a jednoklikové čistenie odpadu."
+        description: "A local, offline uninstaller and cleanup tool for Windows — forced removal with leftover-file scanning, safe quarantine-before-delete, disk mapping, and a cleaner that shows a preview before it removes anything."
       },
       automation: {
         title: 'Automatizácia',
@@ -24268,7 +24418,7 @@ export const CATALOG = {
       apps: {
         label: "Nainštalované aplikácie",
         broken: (count) => `Zanechané po neúspešnom odinštalovaní: ${count}`,
-        noBroken: 'Žiadne poškodené položky.',
+        noBroken: 'Nothing left behind.',
         review: 'Skontrolovať',
         manage: 'Spravovať'
       },
@@ -24394,10 +24544,10 @@ export const CATALOG = {
         unused: 'Nepoužívané',
         store: 'Obchod',
         extensions: 'Rozšírenia',
-        broken: 'Poškodené',
+        broken: 'Left behind',
         storeCount: (n) => `Obchod (${n})`,
         extensionsCount: (n) => `Rozšírenia (${n})`,
-        brokenCount: (n) => `Poškodené (${n})`
+        brokenCount: (n) => `Left behind (${n})`
       },
       columns: {
         application: 'Aplikácia',
@@ -24409,7 +24559,7 @@ export const CATALOG = {
         company: 'Spoločnosť',
         website: 'Webová stránka'
       },
-      badges: { broken: 'Poškodené', running: 'Spustené', store: 'Obchod', disabled: 'Vypnuté', unused: 'Nepoužívané' },
+      badges: { broken: 'Left behind', running: 'Spustené', store: 'Obchod', disabled: 'Vypnuté', unused: 'Nepoužívané' },
       selectRow: (name) => `Vybrať ${name}`,
       selectAll: 'Vybrať všetky zobrazené',
       clearSelection: 'Zrušiť výber',
@@ -24421,6 +24571,7 @@ export const CATALOG = {
       openFolder: "Otvoriť priečinok",
       copyUninstallCommand: "Kopírovať príkaz odinštalovania",
       commandCopied: "Príkaz odinštalovania skopírovaný.",
+      unusedDefinition: "Flagged as not used recently. Prune keeps no launch history of its own, so check before you remove anything on this list.",
       copyFailed: "Kopírovanie zlyhalo.",
       empty: {
         plain: 'Nič nezodpovedá.',
@@ -24510,6 +24661,9 @@ export const CATALOG = {
         status: 'Stav'
       },
       switchAriaLabel: (name) => `Spúšťať ${name} pri prihlásení`,
+      copyPath: 'Copy path',
+      pathCopied: 'Path copied.',
+      copyFailed: "Couldn't copy that.",
       status: {
         invalid: 'Neplatné',
         running: 'Spustené',
@@ -24841,6 +24995,7 @@ export const CATALOG = {
     app: {
       installedApplications: "Aplikácie",
       applicationsSummary: (count, size) => `Nainštalované aplikácie: ${count} · ${size}`,
+      applicationsSummaryFiltered: (shown, total, size) => `${shown} of ${total} shown · ${size}`,
       removeStoreApp: (name) => `Odstrániť ${name}`
     }
   },
@@ -24899,8 +25054,8 @@ export const CATALOG = {
         ariaLabel: 'Orët për të lënë qetë skedarët e fundit'
       },
       restorePointCleanup: {
-        title: 'Krijo së pari një pikë rikthimi',
-        description: 'Përpara një heqjeje të detyruar, në mënyrë që vetë Windows të mund ta rikthejë makinën prapa. Kushton disa sekonda dhe nuk bën asgjë fare nëse Mbrojtja e Sistemit është e çaktivizuar.'
+        title: "Restore point before removing leftovers",
+        description: "Taken before Prune removes the leftover files and registry keys you selected, including after Force remove. On by default; does nothing at all if System Protection is turned off."
       },
       hideUnavailable: {
         title: 'Fshih pastruesit që nuk zbatohen',
@@ -24962,12 +25117,12 @@ export const CATALOG = {
       uninstallTab: {
         beforeHeading: 'Para çinstalimit',
         restorePointUninstall: {
-          title: 'Krijo një pikë rikthimi para çinstalimit',
-          description: "Rikthimi i vetë Sistemit të Windows, krijuar përpara se çinstaluesi i programit të ekzekutohet. Kërkon që Prune të ekzekutohet si administrator dhe Windows lejon një në ditë, kështu që kur nuk mund të krijohet, çinstalimi vazhdon dhe dialogu e thotë këtë."
+          title: "Restore point before running an uninstaller",
+          description: "Taken before the program's own uninstaller runs. It needs Prune to be running as administrator and Windows allows one a day, so when it can't be made the uninstall goes ahead and the dialog says so."
         },
         registryBackup: {
           title: 'Bëj kopje rezervë të regjistrit para çinstalimit',
-          description: 'Eksporton HKLM\\SOFTWARE dhe HKCU\\Software (rreth 140 MB në makinën ku është ndërtuar Prune) dhe mban 3 më të fundit. Nëse kopja rezervë nuk mund të krijohet, çinstalimi nuk ekzekutohet.'
+          description: "Exports HKLM\\SOFTWARE and HKCU\\Software, typically several hundred MB, and keeps the newest 3. If the backup can't be made, the uninstall doesn't run."
         },
         deleteLockedFiles: {
           title: 'Fshi skedarët e kyçur në rinisjen tjetër',
@@ -24999,7 +25154,7 @@ export const CATALOG = {
         reportTitle: 'Raporto një defekt',
         reportDescription: "Hap një çështje të plotësuar paraprakisht në GitHub. Vetë Prune nuk dërgon asgjë dhe ti sheh gjithçka para se të dërgohet diku.",
         reportButton: 'Raporto një defekt',
-        description: "Një mjet lokal, jashtë linje çinstalimi dhe pastrimi për Windows — heqje e detyruar me skanim mbetjesh, Karantinë e sigurt përpara fshirjes, Harta e Diskut, dhe pastrim mbeturinash me një klikim."
+        description: "A local, offline uninstaller and cleanup tool for Windows — forced removal with leftover-file scanning, safe quarantine-before-delete, disk mapping, and a cleaner that shows a preview before it removes anything."
       },
       automation: {
         title: 'Automatizimi',
@@ -25067,7 +25222,7 @@ export const CATALOG = {
       apps: {
         label: "Aplikacionet e instaluara",
         broken: (count) => `${count} të lëna nga një çinstalim i dështuar`,
-        noBroken: 'Asnjë hyrje e dëmtuar.',
+        noBroken: 'Nothing left behind.',
         review: 'Shqyrto',
         manage: 'Menaxho'
       },
@@ -25193,10 +25348,10 @@ export const CATALOG = {
         unused: 'Të papërdorura',
         store: 'Dyqan',
         extensions: 'Shtesa',
-        broken: 'Të dëmtuara',
+        broken: 'Left behind',
         storeCount: (n) => `Dyqan (${n})`,
         extensionsCount: (n) => `Shtesa (${n})`,
-        brokenCount: (n) => `Të dëmtuara (${n})`
+        brokenCount: (n) => `Left behind (${n})`
       },
       columns: {
         application: 'Aplikacioni',
@@ -25208,7 +25363,7 @@ export const CATALOG = {
         company: 'Kompania',
         website: 'Faqja e internetit'
       },
-      badges: { broken: 'I dëmtuar', running: 'Në ekzekutim', store: 'Dyqan', disabled: 'I çaktivizuar', unused: 'I papërdorur' },
+      badges: { broken: 'Left behind', running: 'Në ekzekutim', store: 'Dyqan', disabled: 'I çaktivizuar', unused: 'I papërdorur' },
       selectRow: (name) => `Zgjidh ${name}`,
       selectAll: 'Zgjidh gjithçka të shfaqur',
       clearSelection: 'Pastro përzgjedhjen',
@@ -25220,6 +25375,7 @@ export const CATALOG = {
       openFolder: "Hap dosjen",
       copyUninstallCommand: "Kopjo komandën e çinstalimit",
       commandCopied: "Komanda e çinstalimit u kopjua.",
+      unusedDefinition: "Flagged as not used recently. Prune keeps no launch history of its own, so check before you remove anything on this list.",
       copyFailed: "Nuk u kopjua dot.",
       empty: {
         plain: 'Asgjë nuk përputhet.',
@@ -25309,6 +25465,9 @@ export const CATALOG = {
         status: 'Statusi'
       },
       switchAriaLabel: (name) => `Ekzekuto ${name} në hyrje`,
+      copyPath: 'Copy path',
+      pathCopied: 'Path copied.',
+      copyFailed: "Couldn't copy that.",
       status: {
         invalid: 'I pavlefshëm',
         running: 'Në ekzekutim',
@@ -25642,6 +25801,7 @@ export const CATALOG = {
     app: {
       installedApplications: "Aplikacionet",
       applicationsSummary: (count, size) => `Aplikacione të instaluara: ${count} · ${size}`,
+      applicationsSummaryFiltered: (shown, total, size) => `${shown} of ${total} shown · ${size}`,
       removeStoreApp: (name) => `Hiq ${name}`
     }
   },
@@ -25700,8 +25860,8 @@ export const CATALOG = {
         ariaLabel: 'Сати за остављање недавних датотека на миру'
       },
       restorePointCleanup: {
-        title: 'Прво направи тачку опоравка',
-        description: 'Пре присилног уклањања, како би сам Windows могао да врати рачунар уназад. Кошта неколико секунди и не ради ништа ако је Заштита система искључена.'
+        title: "Restore point before removing leftovers",
+        description: "Taken before Prune removes the leftover files and registry keys you selected, including after Force remove. On by default; does nothing at all if System Protection is turned off."
       },
       hideUnavailable: {
         title: 'Сакриј чистаче који се не примењују',
@@ -25763,12 +25923,12 @@ export const CATALOG = {
       uninstallTab: {
         beforeHeading: 'Пре деинсталације',
         restorePointUninstall: {
-          title: 'Направи тачку опоравка пре деинсталације',
-          description: 'Сопствени Windows опоравак система, направљен пре него што се покрене деинсталатер програма. Захтева да Prune буде покренут као администратор, а Windows дозвољава једну дневно, па када не може да се направи, деинсталација се наставља и дијалог то наводи.'
+          title: "Restore point before running an uninstaller",
+          description: "Taken before the program's own uninstaller runs. It needs Prune to be running as administrator and Windows allows one a day, so when it can't be made the uninstall goes ahead and the dialog says so."
         },
         registryBackup: {
           title: 'Направи резервну копију регистра пре деинсталације',
-          description: 'Извози HKLM\\SOFTWARE и HKCU\\Software (око 140 MB на рачунару на коме је Prune изграђен) и чува најновије 3. Ако резервна копија не може да се направи, деинсталација се не покреће.'
+          description: "Exports HKLM\\SOFTWARE and HKCU\\Software, typically several hundred MB, and keeps the newest 3. If the backup can't be made, the uninstall doesn't run."
         },
         deleteLockedFiles: {
           title: 'Обриши закључане датотеке при следећем поновном покретању',
@@ -25800,7 +25960,7 @@ export const CATALOG = {
         reportTitle: "Пријави грешку",
         reportDescription: "Отвара унапред попуњену пријаву на GitHub-у. Сам Prune не шаље ништа, а ви све видите пре него што било шта оде било где.",
         reportButton: "Пријави грешку",
-        description: "Локални, офлајн алат за деинсталацију и чишћење за Windows — присилно уклањање са скенирањем остатака, безбедни карантин пре брисања, мапа диска и чишћење смећа једним кликом."
+        description: "A local, offline uninstaller and cleanup tool for Windows — forced removal with leftover-file scanning, safe quarantine-before-delete, disk mapping, and a cleaner that shows a preview before it removes anything."
       },
       automation: {
         title: 'Аутоматизација',
@@ -25868,7 +26028,7 @@ export const CATALOG = {
       apps: {
         label: "Инсталиране апликације",
         broken: (count) => `Остаци после неуспеле деинсталације: ${count}`,
-        noBroken: 'Нема оштећених уноса.',
+        noBroken: 'Nothing left behind.',
         review: 'Прегледај',
         manage: 'Управљај'
       },
@@ -25994,10 +26154,10 @@ export const CATALOG = {
         unused: 'Некоришћене',
         store: 'Продавница',
         extensions: 'Екстензије',
-        broken: 'Оштећене',
+        broken: 'Left behind',
         storeCount: (n) => `Продавница (${n})`,
         extensionsCount: (n) => `Екстензије (${n})`,
-        brokenCount: (n) => `Оштећене (${n})`
+        brokenCount: (n) => `Left behind (${n})`
       },
       columns: {
         application: 'Апликација',
@@ -26009,7 +26169,7 @@ export const CATALOG = {
         company: 'Компанија',
         website: 'Веб-сајт'
       },
-      badges: { broken: 'Оштећено', running: 'Покренуто', store: 'Продавница', disabled: 'Онемогућено', unused: 'Некоришћено' },
+      badges: { broken: 'Left behind', running: 'Покренуто', store: 'Продавница', disabled: 'Онемогућено', unused: 'Некоришћено' },
       selectRow: (name) => `Изабери ${name}`,
       selectAll: 'Изабери све приказано',
       clearSelection: 'Обриши избор',
@@ -26021,6 +26181,7 @@ export const CATALOG = {
       openFolder: "Отвори фасциклу",
       copyUninstallCommand: "Копирај команду за деинсталацију",
       commandCopied: "Команда за деинсталацију је копирана.",
+      unusedDefinition: "Flagged as not used recently. Prune keeps no launch history of its own, so check before you remove anything on this list.",
       copyFailed: "Копирање није успело.",
       empty: {
         plain: 'Ништа се не поклапа.',
@@ -26110,6 +26271,9 @@ export const CATALOG = {
         status: 'Статус'
       },
       switchAriaLabel: (name) => `Покрени ${name} при пријави`,
+      copyPath: 'Copy path',
+      pathCopied: 'Path copied.',
+      copyFailed: "Couldn't copy that.",
       status: {
         invalid: 'Неважеће',
         running: 'Покренуто',
@@ -26441,6 +26605,7 @@ export const CATALOG = {
     app: {
       installedApplications: "Апликације",
       applicationsSummary: (count, size) => `Инсталираних апликација: ${count} · ${size}`,
+      applicationsSummaryFiltered: (shown, total, size) => `${shown} of ${total} shown · ${size}`,
       removeStoreApp: (name) => `Уклони ${name}`
     }
   },
@@ -26499,8 +26664,8 @@ export const CATALOG = {
         ariaLabel: 'Timmar att lämna nya filer i fred'
       },
       restorePointCleanup: {
-        title: 'Skapa en återställningspunkt först',
-        description: 'Före en tvingad borttagning, så att Windows själv kan återställa datorn. Kostar några sekunder och gör absolut ingenting om Systemskydd är avstängt.'
+        title: "Restore point before removing leftovers",
+        description: "Taken before Prune removes the leftover files and registry keys you selected, including after Force remove. On by default; does nothing at all if System Protection is turned off."
       },
       hideUnavailable: {
         title: "Dölj rensare som inte gäller",
@@ -26562,12 +26727,12 @@ export const CATALOG = {
       uninstallTab: {
         beforeHeading: 'Före avinstallation',
         restorePointUninstall: {
-          title: 'Skapa en återställningspunkt före avinstallation',
-          description: 'Windows egen Systemåterställning, skapad innan programmets avinstallationsprogram körs. Kräver att Prune körs som administratör och Windows tillåter en per dag, så när den inte kan skapas fortsätter avinstallationen och dialogrutan säger det.'
+          title: "Restore point before running an uninstaller",
+          description: "Taken before the program's own uninstaller runs. It needs Prune to be running as administrator and Windows allows one a day, so when it can't be made the uninstall goes ahead and the dialog says so."
         },
         registryBackup: {
           title: 'Säkerhetskopiera registret före avinstallation',
-          description: 'Exporterar HKLM\\SOFTWARE och HKCU\\Software (cirka 140 MB på datorn Prune är byggd på) och behåller de 3 senaste. Om säkerhetskopian inte kan skapas körs inte avinstallationen.'
+          description: "Exports HKLM\\SOFTWARE and HKCU\\Software, typically several hundred MB, and keeps the newest 3. If the backup can't be made, the uninstall doesn't run."
         },
         deleteLockedFiles: {
           title: 'Ta bort låsta filer vid nästa omstart',
@@ -26599,7 +26764,7 @@ export const CATALOG = {
         reportTitle: 'Rapportera ett fel',
         reportDescription: "Öppnar ett förifyllt ärende på GitHub. Prune skickar ingenting själv, och du ser allt innan något skickas vidare.",
         reportButton: 'Rapportera ett fel',
-        description: "Ett lokalt, offline avinstallations- och rensningsverktyg för Windows — tvingad borttagning med skanning av rester, säker karantän före radering, Diskkarta och skräprensning med ett klick."
+        description: "A local, offline uninstaller and cleanup tool for Windows — forced removal with leftover-file scanning, safe quarantine-before-delete, disk mapping, and a cleaner that shows a preview before it removes anything."
       },
       automation: {
         title: 'Automatisering',
@@ -26667,7 +26832,7 @@ export const CATALOG = {
       apps: {
         label: "Installerade program",
         broken: (count) => `${count} ${count === 1 ? 'kvarlämnad' : 'kvarlämnade'} av en misslyckad avinstallation`,
-        noBroken: 'Inga trasiga poster.',
+        noBroken: 'Nothing left behind.',
         review: 'Granska',
         manage: 'Hantera'
       },
@@ -26793,10 +26958,10 @@ export const CATALOG = {
         unused: 'Oanvända',
         store: 'Store',
         extensions: 'Tillägg',
-        broken: 'Trasiga',
+        broken: 'Left behind',
         storeCount: (n) => `Store (${n})`,
         extensionsCount: (n) => `Tillägg (${n})`,
-        brokenCount: (n) => `Trasiga (${n})`
+        brokenCount: (n) => `Left behind (${n})`
       },
       columns: {
         application: 'Program',
@@ -26808,7 +26973,7 @@ export const CATALOG = {
         company: 'Företag',
         website: 'Webbplats'
       },
-      badges: { broken: 'Trasig', running: 'Körs', store: 'Store', disabled: 'Inaktiverad', unused: 'Oanvänd' },
+      badges: { broken: 'Left behind', running: 'Körs', store: 'Store', disabled: 'Inaktiverad', unused: 'Oanvänd' },
       selectRow: (name) => `Välj ${name}`,
       selectAll: 'Välj alla visade',
       clearSelection: 'Rensa markering',
@@ -26820,6 +26985,7 @@ export const CATALOG = {
       openFolder: "Öppna mapp",
       copyUninstallCommand: "Kopiera avinstallationskommando",
       commandCopied: "Avinstallationskommandot kopierades.",
+      unusedDefinition: "Flagged as not used recently. Prune keeps no launch history of its own, so check before you remove anything on this list.",
       copyFailed: "Det gick inte att kopiera.",
       empty: {
         plain: 'Inget matchar.',
@@ -26909,6 +27075,9 @@ export const CATALOG = {
         status: 'Status'
       },
       switchAriaLabel: (name) => `Kör ${name} vid inloggning`,
+      copyPath: 'Copy path',
+      pathCopied: 'Path copied.',
+      copyFailed: "Couldn't copy that.",
       status: {
         invalid: 'Ogiltig',
         running: 'Körs',
@@ -27240,6 +27409,7 @@ export const CATALOG = {
     app: {
       installedApplications: "Program",
       applicationsSummary: (count, size) => `${count} installerade program · ${size}`,
+      applicationsSummaryFiltered: (shown, total, size) => `${shown} of ${total} shown · ${size}`,
       removeStoreApp: (name) => `Ta bort ${name}`
     }
   },
@@ -27298,8 +27468,8 @@ export const CATALOG = {
         ariaLabel: 'จำนวนชั่วโมงที่จะปล่อยไฟล์ล่าสุดไว้'
       },
       restorePointCleanup: {
-        title: 'สร้างจุดคืนค่าก่อน',
-        description: 'ก่อนการลบแบบบังคับ เพื่อให้ Windows เองสามารถย้อนกลับเครื่องได้ ใช้เวลาไม่กี่วินาที และไม่ทำอะไรเลยหากการป้องกันระบบถูกปิดอยู่'
+        title: "Restore point before removing leftovers",
+        description: "Taken before Prune removes the leftover files and registry keys you selected, including after Force remove. On by default; does nothing at all if System Protection is turned off."
       },
       hideUnavailable: {
         title: 'ซ่อนตัวล้างข้อมูลที่ไม่เกี่ยวข้อง',
@@ -27361,12 +27531,12 @@ export const CATALOG = {
       uninstallTab: {
         beforeHeading: 'ก่อนถอนการติดตั้ง',
         restorePointUninstall: {
-          title: 'สร้างจุดคืนค่าก่อนถอนการติดตั้ง',
-          description: 'การคืนค่าระบบของ Windows เอง ที่สร้างขึ้นก่อนที่ตัวถอนการติดตั้งของโปรแกรมจะทำงาน ต้องให้ Prune ทำงานในฐานะผู้ดูแลระบบ และ Windows อนุญาตให้ทำได้วันละครั้ง ดังนั้นเมื่อไม่สามารถสร้างได้ การถอนการติดตั้งจะดำเนินต่อไปและกล่องโต้ตอบจะแจ้งเรื่องนี้'
+          title: "Restore point before running an uninstaller",
+          description: "Taken before the program's own uninstaller runs. It needs Prune to be running as administrator and Windows allows one a day, so when it can't be made the uninstall goes ahead and the dialog says so."
         },
         registryBackup: {
           title: 'สำรองข้อมูลรีจิสทรีก่อนถอนการติดตั้ง',
-          description: 'ส่งออก HKLM\\SOFTWARE และ HKCU\\Software (ประมาณ 140 MB บนเครื่องที่ Prune ถูกสร้างขึ้น) และเก็บ 3 รายการล่าสุด หากไม่สามารถสร้างข้อมูลสำรองได้ การถอนการติดตั้งจะไม่ทำงาน'
+          description: "Exports HKLM\\SOFTWARE and HKCU\\Software, typically several hundred MB, and keeps the newest 3. If the backup can't be made, the uninstall doesn't run."
         },
         deleteLockedFiles: {
           title: 'ลบไฟล์ที่ถูกล็อกเมื่อรีสตาร์ทครั้งถัดไป',
@@ -27398,7 +27568,7 @@ export const CATALOG = {
         reportTitle: 'รายงานข้อบกพร่อง',
         reportDescription: "เปิด issue ที่กรอกข้อมูลไว้ให้แล้วบน GitHub Prune ไม่ส่งอะไรเอง และคุณจะเห็นทุกอย่างก่อนที่จะมีการส่งไปที่ใด",
         reportButton: 'รายงานข้อบกพร่อง',
-        description: "เครื่องมือถอนการติดตั้งและล้างข้อมูลแบบออฟไลน์ในเครื่องสำหรับ Windows — การลบแบบบังคับพร้อมการสแกนไฟล์ตกค้าง, การกักกันอย่างปลอดภัยก่อนลบ, แผนที่ดิสก์ และการล้างขยะด้วยคลิกเดียว"
+        description: "A local, offline uninstaller and cleanup tool for Windows — forced removal with leftover-file scanning, safe quarantine-before-delete, disk mapping, and a cleaner that shows a preview before it removes anything."
       },
       automation: {
         title: 'การทำงานอัตโนมัติ',
@@ -27466,7 +27636,7 @@ export const CATALOG = {
       apps: {
         label: 'แอปที่ติดตั้ง',
         broken: (count) => `เหลือค้าง ${count} รายการจากการถอนการติดตั้งที่ล้มเหลว`,
-        noBroken: 'ไม่มีรายการที่เสียหาย',
+        noBroken: 'Nothing left behind.',
         review: 'ตรวจสอบ',
         manage: 'จัดการ'
       },
@@ -27592,10 +27762,10 @@ export const CATALOG = {
         unused: 'ไม่ได้ใช้งาน',
         store: 'สโตร์',
         extensions: 'ส่วนขยาย',
-        broken: 'เสียหาย',
+        broken: 'Left behind',
         storeCount: (n) => `สโตร์ (${n})`,
         extensionsCount: (n) => `ส่วนขยาย (${n})`,
-        brokenCount: (n) => `เสียหาย (${n})`
+        brokenCount: (n) => `Left behind (${n})`
       },
       columns: {
         application: 'แอปพลิเคชัน',
@@ -27607,7 +27777,7 @@ export const CATALOG = {
         company: 'บริษัท',
         website: 'เว็บไซต์'
       },
-      badges: { broken: 'เสียหาย', running: 'กำลังทำงาน', store: 'สโตร์', disabled: 'ปิดใช้งาน', unused: 'ไม่ได้ใช้งาน' },
+      badges: { broken: 'Left behind', running: 'กำลังทำงาน', store: 'สโตร์', disabled: 'ปิดใช้งาน', unused: 'ไม่ได้ใช้งาน' },
       selectRow: (name) => `เลือก ${name}`,
       selectAll: 'เลือกทั้งหมดที่แสดง',
       clearSelection: 'ล้างการเลือก',
@@ -27619,6 +27789,7 @@ export const CATALOG = {
       openFolder: "เปิดโฟลเดอร์",
       copyUninstallCommand: "คัดลอกคำสั่งถอนการติดตั้ง",
       commandCopied: "คัดลอกคำสั่งถอนการติดตั้งแล้ว",
+      unusedDefinition: "Flagged as not used recently. Prune keeps no launch history of its own, so check before you remove anything on this list.",
       copyFailed: "คัดลอกไม่ได้",
       empty: {
         plain: 'ไม่พบรายการที่ตรงกัน',
@@ -27708,6 +27879,9 @@ export const CATALOG = {
         status: 'สถานะ'
       },
       switchAriaLabel: (name) => `เรียกใช้ ${name} เมื่อลงชื่อเข้าใช้`,
+      copyPath: 'Copy path',
+      pathCopied: 'Path copied.',
+      copyFailed: "Couldn't copy that.",
       status: {
         invalid: 'ไม่ถูกต้อง',
         running: 'กำลังทำงาน',
@@ -28041,6 +28215,7 @@ export const CATALOG = {
     app: {
       installedApplications: "แอปพลิเคชัน",
       applicationsSummary: (count, size) => `แอปพลิเคชันที่ติดตั้ง ${count} รายการ · ${size}`,
+      applicationsSummaryFiltered: (shown, total, size) => `${shown} of ${total} shown · ${size}`,
       removeStoreApp: (name) => `นำ ${name} ออก`
     }
   },
@@ -28099,8 +28274,8 @@ export const CATALOG = {
         ariaLabel: "Yakın zamandaki dosyalara dokunulmayacak saat sayısı"
       },
       restorePointCleanup: {
-        title: 'Önce bir geri yükleme noktası oluştur',
-        description: 'Zorla kaldırmadan önce, böylece Windows\'un kendisi makineyi geri alabilir. Birkaç saniye sürer ve Sistem Koruması kapalıysa hiçbir şey yapmaz.'
+        title: "Restore point before removing leftovers",
+        description: "Taken before Prune removes the leftover files and registry keys you selected, including after Force remove. On by default; does nothing at all if System Protection is turned off."
       },
       hideUnavailable: {
         title: 'Uygulanamayan temizleyicileri gizle',
@@ -28162,12 +28337,12 @@ export const CATALOG = {
       uninstallTab: {
         beforeHeading: 'Kaldırmadan önce',
         restorePointUninstall: {
-          title: 'Kaldırmadan önce bir geri yükleme noktası oluştur',
-          description: "Programın kaldırma programı çalışmadan önce oluşturulan, Windows'un kendi Sistem Geri Yüklemesi. Prune'un yönetici olarak çalışmasını gerektirir ve Windows günde bir tanesine izin verir, bu yüzden oluşturulamadığında kaldırma devam eder ve iletişim kutusu bunu belirtir."
+          title: "Restore point before running an uninstaller",
+          description: "Taken before the program's own uninstaller runs. It needs Prune to be running as administrator and Windows allows one a day, so when it can't be made the uninstall goes ahead and the dialog says so."
         },
         registryBackup: {
           title: 'Kaldırmadan önce kayıt defterini yedekle',
-          description: 'HKLM\\SOFTWARE ve HKCU\\Software\'ı dışa aktarır (Prune\'un derlendiği makinede yaklaşık 140 MB) ve en yeni 3\'ünü tutar. Yedekleme oluşturulamazsa, kaldırma çalışmaz.'
+          description: "Exports HKLM\\SOFTWARE and HKCU\\Software, typically several hundred MB, and keeps the newest 3. If the backup can't be made, the uninstall doesn't run."
         },
         deleteLockedFiles: {
           title: 'Sonraki yeniden başlatmada kilitli dosyaları sil',
@@ -28199,7 +28374,7 @@ export const CATALOG = {
         reportTitle: 'Hata bildir',
         reportDescription: "GitHub'da önceden doldurulmuş bir issue açar. Prune'un kendisi hiçbir şey göndermez; hiçbir yere gitmeden önce her şeyi siz görürsünüz.",
         reportButton: 'Hata bildir',
-        description: "Windows için yerel, çevrimdışı bir kaldırma ve temizlik aracı — artık dosya taramasıyla zorla kaldırma, silmeden önce güvenli karantina, disk haritalama ve tek tıkla çöp temizliği."
+        description: "A local, offline uninstaller and cleanup tool for Windows — forced removal with leftover-file scanning, safe quarantine-before-delete, disk mapping, and a cleaner that shows a preview before it removes anything."
       },
       automation: {
         title: 'Otomasyon',
@@ -28267,7 +28442,7 @@ export const CATALOG = {
       apps: {
         label: "Yüklü uygulamalar",
         broken: (count) => `Başarısız kaldırmalardan kalan ${count} artık öğe`,
-        noBroken: 'Bozuk öğe yok.',
+        noBroken: 'Nothing left behind.',
         review: 'İncele',
         manage: 'Yönet'
       },
@@ -28393,10 +28568,10 @@ export const CATALOG = {
         unused: 'Kullanılmayan',
         store: 'Mağaza',
         extensions: 'Uzantılar',
-        broken: 'Bozuk',
+        broken: 'Left behind',
         storeCount: (n) => `Mağaza (${n})`,
         extensionsCount: (n) => `Uzantılar (${n})`,
-        brokenCount: (n) => `Bozuk (${n})`
+        brokenCount: (n) => `Left behind (${n})`
       },
       columns: {
         application: 'Uygulama',
@@ -28408,7 +28583,7 @@ export const CATALOG = {
         company: 'Şirket',
         website: 'Web sitesi'
       },
-      badges: { broken: 'Bozuk', running: 'Çalışıyor', store: 'Mağaza', disabled: 'Devre dışı', unused: 'Kullanılmıyor' },
+      badges: { broken: 'Left behind', running: 'Çalışıyor', store: 'Mağaza', disabled: 'Devre dışı', unused: 'Kullanılmıyor' },
       selectRow: (name) => `${name} öğesini seç`,
       selectAll: 'Görüntülenen her şeyi seç',
       clearSelection: 'Seçimi temizle',
@@ -28420,6 +28595,7 @@ export const CATALOG = {
       openFolder: "Klasörü aç",
       copyUninstallCommand: "Kaldırma komutunu kopyala",
       commandCopied: "Kaldırma komutu kopyalandı.",
+      unusedDefinition: "Flagged as not used recently. Prune keeps no launch history of its own, so check before you remove anything on this list.",
       copyFailed: "Kopyalanamadı.",
       empty: {
         plain: 'Hiçbir şey eşleşmiyor.',
@@ -28509,6 +28685,9 @@ export const CATALOG = {
         status: 'Durum'
       },
       switchAriaLabel: (name) => `${name} öğesini oturum açılışında çalıştır`,
+      copyPath: 'Copy path',
+      pathCopied: 'Path copied.',
+      copyFailed: "Couldn't copy that.",
       status: {
         invalid: 'Geçersiz',
         running: 'Çalışıyor',
@@ -28842,6 +29021,7 @@ export const CATALOG = {
     app: {
       installedApplications: "Uygulamalar",
       applicationsSummary: (count, size) => `${count} yüklü uygulama · ${size}`,
+      applicationsSummaryFiltered: (shown, total, size) => `${shown} of ${total} shown · ${size}`,
       removeStoreApp: (name) => `${name} kaldır`
     }
   },
@@ -28900,8 +29080,8 @@ export const CATALOG = {
         ariaLabel: 'Години, протягом яких не чіпати нещодавні файли'
       },
       restorePointCleanup: {
-        title: 'Спочатку створити точку відновлення',
-        description: 'Перед примусовим видаленням, щоб сам Windows міг відкотити систему. Займає кілька секунд і нічого не робить, якщо Захист системи вимкнено.'
+        title: "Restore point before removing leftovers",
+        description: "Taken before Prune removes the leftover files and registry keys you selected, including after Force remove. On by default; does nothing at all if System Protection is turned off."
       },
       hideUnavailable: {
         title: 'Приховувати непридатні засоби очищення',
@@ -28963,12 +29143,12 @@ export const CATALOG = {
       uninstallTab: {
         beforeHeading: 'Перед видаленням',
         restorePointUninstall: {
-          title: 'Створити точку відновлення перед видаленням',
-          description: 'Власне Відновлення системи Windows, створене до запуску деінсталятора програми. Потребує запуску Prune від імені адміністратора, а Windows дозволяє одну на день, тому коли її не можна створити, видалення продовжується, а діалогове вікно повідомляє про це.'
+          title: "Restore point before running an uninstaller",
+          description: "Taken before the program's own uninstaller runs. It needs Prune to be running as administrator and Windows allows one a day, so when it can't be made the uninstall goes ahead and the dialog says so."
         },
         registryBackup: {
           title: 'Резервувати реєстр перед видаленням',
-          description: 'Експортує HKLM\\SOFTWARE та HKCU\\Software (близько 140 МБ на комп\'ютері, на якому зібрано Prune) і зберігає 3 найновіші. Якщо резервну копію неможливо створити, видалення не виконується.'
+          description: "Exports HKLM\\SOFTWARE and HKCU\\Software, typically several hundred MB, and keeps the newest 3. If the backup can't be made, the uninstall doesn't run."
         },
         deleteLockedFiles: {
           title: 'Видалити заблоковані файли під час наступного перезавантаження',
@@ -29000,7 +29180,7 @@ export const CATALOG = {
         reportTitle: 'Повідомити про помилку',
         reportDescription: "Відкриває на GitHub уже заповнене звернення. Сам Prune нічого не надсилає, і ви бачите все до того, як воно кудись потрапить.",
         reportButton: 'Повідомити про помилку',
-        description: "Локальний, автономний інструмент видалення та очищення для Windows — примусове видалення зі скануванням залишків, безпечний карантин перед видаленням, карта диска та очищення сміття в один клік."
+        description: "A local, offline uninstaller and cleanup tool for Windows — forced removal with leftover-file scanning, safe quarantine-before-delete, disk mapping, and a cleaner that shows a preview before it removes anything."
       },
       automation: {
         title: 'Автоматизація',
@@ -29068,7 +29248,7 @@ export const CATALOG = {
       apps: {
         label: "Встановлені застосунки",
         broken: (count) => `${count} залишилося після невдалого видалення`,
-        noBroken: 'Пошкоджених записів немає.',
+        noBroken: 'Nothing left behind.',
         review: 'Переглянути',
         manage: 'Керувати'
       },
@@ -29194,10 +29374,10 @@ export const CATALOG = {
         unused: 'Невикористані',
         store: 'Магазин',
         extensions: 'Розширення',
-        broken: 'Пошкоджені',
+        broken: 'Left behind',
         storeCount: (n) => `Магазин (${n})`,
         extensionsCount: (n) => `Розширення (${n})`,
-        brokenCount: (n) => `Пошкоджені (${n})`
+        brokenCount: (n) => `Left behind (${n})`
       },
       columns: {
         application: 'Застосунок',
@@ -29209,7 +29389,7 @@ export const CATALOG = {
         company: 'Компанія',
         website: 'Веб-сайт'
       },
-      badges: { broken: 'Пошкоджено', running: 'Виконується', store: 'Магазин', disabled: 'Вимкнено', unused: 'Не використовується' },
+      badges: { broken: 'Left behind', running: 'Виконується', store: 'Магазин', disabled: 'Вимкнено', unused: 'Не використовується' },
       selectRow: (name) => `Вибрати ${name}`,
       selectAll: 'Вибрати всі показані',
       clearSelection: 'Зняти виділення',
@@ -29221,6 +29401,7 @@ export const CATALOG = {
       openFolder: "Відкрити папку",
       copyUninstallCommand: "Копіювати команду видалення",
       commandCopied: "Команду видалення скопійовано.",
+      unusedDefinition: "Flagged as not used recently. Prune keeps no launch history of its own, so check before you remove anything on this list.",
       copyFailed: "Не вдалося скопіювати.",
       empty: {
         plain: 'Нічого не знайдено.',
@@ -29310,6 +29491,9 @@ export const CATALOG = {
         status: 'Стан'
       },
       switchAriaLabel: (name) => `Запускати ${name} під час входу`,
+      copyPath: 'Copy path',
+      pathCopied: 'Path copied.',
+      copyFailed: "Couldn't copy that.",
       status: {
         invalid: 'Недійсний',
         running: 'Виконується',
@@ -29641,6 +29825,7 @@ export const CATALOG = {
     app: {
       installedApplications: "Застосунки",
       applicationsSummary: (count, size) => `Встановлено застосунків: ${count} · ${size}`,
+      applicationsSummaryFiltered: (shown, total, size) => `${shown} of ${total} shown · ${size}`,
       removeStoreApp: (name) => `Видалити ${name}`
     }
   },
@@ -29699,8 +29884,8 @@ export const CATALOG = {
         ariaLabel: 'Số giờ để yên các tệp gần đây'
       },
       restorePointCleanup: {
-        title: 'Tạo điểm khôi phục trước',
-        description: 'Trước khi buộc gỡ bỏ, để chính Windows có thể khôi phục lại máy. Tốn vài giây và không làm gì cả nếu Bảo vệ Hệ thống bị tắt.'
+        title: "Restore point before removing leftovers",
+        description: "Taken before Prune removes the leftover files and registry keys you selected, including after Force remove. On by default; does nothing at all if System Protection is turned off."
       },
       hideUnavailable: {
         title: 'Ẩn các công cụ dọn dẹp không áp dụng',
@@ -29762,12 +29947,12 @@ export const CATALOG = {
       uninstallTab: {
         beforeHeading: 'Trước khi gỡ cài đặt',
         restorePointUninstall: {
-          title: 'Tạo điểm khôi phục trước khi gỡ cài đặt',
-          description: 'Tính năng Khôi phục Hệ thống riêng của Windows, được tạo trước khi trình gỡ cài đặt của chương trình chạy. Yêu cầu Prune chạy với quyền quản trị viên và Windows chỉ cho phép một lần mỗi ngày, vì vậy khi không thể tạo, quá trình gỡ cài đặt vẫn tiếp tục và hộp thoại sẽ cho biết điều đó.'
+          title: "Restore point before running an uninstaller",
+          description: "Taken before the program's own uninstaller runs. It needs Prune to be running as administrator and Windows allows one a day, so when it can't be made the uninstall goes ahead and the dialog says so."
         },
         registryBackup: {
           title: 'Sao lưu registry trước khi gỡ cài đặt',
-          description: 'Xuất HKLM\\SOFTWARE và HKCU\\Software (khoảng 140 MB trên máy nơi Prune được xây dựng) và giữ 3 bản mới nhất. Nếu không thể tạo bản sao lưu, quá trình gỡ cài đặt sẽ không chạy.'
+          description: "Exports HKLM\\SOFTWARE and HKCU\\Software, typically several hundred MB, and keeps the newest 3. If the backup can't be made, the uninstall doesn't run."
         },
         deleteLockedFiles: {
           title: 'Xóa các tệp bị khóa vào lần khởi động lại tiếp theo',
@@ -29799,7 +29984,7 @@ export const CATALOG = {
         reportTitle: 'Báo lỗi',
         reportDescription: "Mở một issue được điền sẵn trên GitHub. Bản thân Prune không gửi gì, và bạn xem được toàn bộ nội dung trước khi nó đến bất cứ đâu.",
         reportButton: 'Báo lỗi',
-        description: "Một công cụ gỡ cài đặt và dọn dẹp cục bộ, ngoại tuyến cho Windows — buộc loại bỏ với quét tệp sót lại, cách ly an toàn trước khi xóa, lập bản đồ ổ đĩa, và dọn dẹp rác chỉ với một cú nhấp chuột."
+        description: "A local, offline uninstaller and cleanup tool for Windows — forced removal with leftover-file scanning, safe quarantine-before-delete, disk mapping, and a cleaner that shows a preview before it removes anything."
       },
       automation: {
         title: 'Tự động hóa',
@@ -29867,7 +30052,7 @@ export const CATALOG = {
       apps: {
         label: "Ứng dụng đã cài",
         broken: (count) => `${count} mục sót lại do gỡ cài đặt thất bại`,
-        noBroken: 'Không có mục bị hỏng.',
+        noBroken: 'Nothing left behind.',
         review: 'Xem lại',
         manage: 'Quản lý'
       },
@@ -29993,10 +30178,10 @@ export const CATALOG = {
         unused: 'Không sử dụng',
         store: 'Cửa hàng',
         extensions: 'Tiện ích mở rộng',
-        broken: 'Bị hỏng',
+        broken: 'Left behind',
         storeCount: (n) => `Cửa hàng (${n})`,
         extensionsCount: (n) => `Tiện ích mở rộng (${n})`,
-        brokenCount: (n) => `Bị hỏng (${n})`
+        brokenCount: (n) => `Left behind (${n})`
       },
       columns: {
         application: 'Ứng dụng',
@@ -30008,7 +30193,7 @@ export const CATALOG = {
         company: 'Công ty',
         website: 'Trang web'
       },
-      badges: { broken: 'Bị hỏng', running: 'Đang chạy', store: 'Cửa hàng', disabled: 'Đã tắt', unused: 'Không sử dụng' },
+      badges: { broken: 'Left behind', running: 'Đang chạy', store: 'Cửa hàng', disabled: 'Đã tắt', unused: 'Không sử dụng' },
       selectRow: (name) => `Chọn ${name}`,
       selectAll: 'Chọn tất cả mục đang hiển thị',
       clearSelection: 'Bỏ chọn',
@@ -30020,6 +30205,7 @@ export const CATALOG = {
       openFolder: "Mở thư mục",
       copyUninstallCommand: "Sao chép lệnh gỡ cài đặt",
       commandCopied: "Đã sao chép lệnh gỡ cài đặt.",
+      unusedDefinition: "Flagged as not used recently. Prune keeps no launch history of its own, so check before you remove anything on this list.",
       copyFailed: "Không thể sao chép.",
       empty: {
         plain: 'Không có gì khớp.',
@@ -30109,6 +30295,9 @@ export const CATALOG = {
         status: 'Trạng thái'
       },
       switchAriaLabel: (name) => `Chạy ${name} khi đăng nhập`,
+      copyPath: 'Copy path',
+      pathCopied: 'Path copied.',
+      copyFailed: "Couldn't copy that.",
       status: {
         invalid: 'Không hợp lệ',
         running: 'Đang chạy',
@@ -30442,6 +30631,7 @@ export const CATALOG = {
     app: {
       installedApplications: "Ứng dụng",
       applicationsSummary: (count, size) => `${count} ứng dụng đã cài đặt · ${size}`,
+      applicationsSummaryFiltered: (shown, total, size) => `${shown} of ${total} shown · ${size}`,
       removeStoreApp: (name) => `Xóa ${name}`
     }
   },
@@ -30500,8 +30690,8 @@ export const CATALOG = {
         ariaLabel: '不动最近文件的小时数'
       },
       restorePointCleanup: {
-        title: '先创建还原点',
-        description: '在强制删除之前创建，以便 Windows 本身能够回滚系统。会花费几秒钟，如果系统保护已关闭则不会执行任何操作。'
+        title: "Restore point before removing leftovers",
+        description: "Taken before Prune removes the leftover files and registry keys you selected, including after Force remove. On by default; does nothing at all if System Protection is turned off."
       },
       hideUnavailable: {
         title: '隐藏不适用的清理项',
@@ -30563,12 +30753,12 @@ export const CATALOG = {
       uninstallTab: {
         beforeHeading: '卸载之前',
         restorePointUninstall: {
-          title: '卸载前创建还原点',
-          description: 'Windows 自带的系统还原，在程序的卸载程序运行之前创建。需要 Prune 以管理员身份运行，而且 Windows 每天只允许创建一次，因此如果无法创建，卸载将继续进行，对话框会说明这一点。'
+          title: "Restore point before running an uninstaller",
+          description: "Taken before the program's own uninstaller runs. It needs Prune to be running as administrator and Windows allows one a day, so when it can't be made the uninstall goes ahead and the dialog says so."
         },
         registryBackup: {
           title: '卸载前备份注册表',
-          description: '导出 HKLM\\SOFTWARE 和 HKCU\\Software（在构建 Prune 的机器上约 140 MB），并保留最新的 3 个。如果无法创建备份，卸载将不会运行。'
+          description: "Exports HKLM\\SOFTWARE and HKCU\\Software, typically several hundred MB, and keeps the newest 3. If the backup can't be made, the uninstall doesn't run."
         },
         deleteLockedFiles: {
           title: '在下次重启时删除被锁定的文件',
@@ -30600,7 +30790,7 @@ export const CATALOG = {
         reportTitle: '报告错误',
         reportDescription: "在 GitHub 上打开一个已预先填好的议题。Prune 本身不会发送任何内容，所有内容在发出之前你都能看到。",
         reportButton: '报告错误',
-        description: "一款本地、离线的 Windows 卸载与清理工具——具有残留项扫描的强制删除、删除前的安全隔离、磁盘地图，以及一键垃圾清理。"
+        description: "A local, offline uninstaller and cleanup tool for Windows — forced removal with leftover-file scanning, safe quarantine-before-delete, disk mapping, and a cleaner that shows a preview before it removes anything."
       },
       automation: {
         title: '自动化',
@@ -30668,7 +30858,7 @@ export const CATALOG = {
       apps: {
         label: '已安装的应用',
         broken: (count) => `因卸载失败而残留 ${count} 项`,
-        noBroken: '没有损坏的条目。',
+        noBroken: 'Nothing left behind.',
         review: '查看',
         manage: '管理'
       },
@@ -30794,10 +30984,10 @@ export const CATALOG = {
         unused: '未使用',
         store: '商店',
         extensions: '扩展程序',
-        broken: '已损坏',
+        broken: 'Left behind',
         storeCount: (n) => `商店 (${n})`,
         extensionsCount: (n) => `扩展程序 (${n})`,
-        brokenCount: (n) => `已损坏 (${n})`
+        brokenCount: (n) => `Left behind (${n})`
       },
       columns: {
         application: "应用程序",
@@ -30809,7 +30999,7 @@ export const CATALOG = {
         company: '公司',
         website: '网站'
       },
-      badges: { broken: '已损坏', running: '运行中', store: '商店', disabled: '已禁用', unused: '未使用' },
+      badges: { broken: 'Left behind', running: '运行中', store: '商店', disabled: '已禁用', unused: '未使用' },
       selectRow: (name) => `选择 ${name}`,
       selectAll: '选择所有显示项',
       clearSelection: '清除选择',
@@ -30821,6 +31011,7 @@ export const CATALOG = {
       openFolder: "打开文件夹",
       copyUninstallCommand: "复制卸载命令",
       commandCopied: "已复制卸载命令。",
+      unusedDefinition: "Flagged as not used recently. Prune keeps no launch history of its own, so check before you remove anything on this list.",
       copyFailed: "无法复制。",
       empty: {
         plain: '没有匹配项。',
@@ -30910,6 +31101,9 @@ export const CATALOG = {
         status: '状态'
       },
       switchAriaLabel: (name) => `登录时运行 ${name}`,
+      copyPath: 'Copy path',
+      pathCopied: 'Path copied.',
+      copyFailed: "Couldn't copy that.",
       status: {
         invalid: '无效',
         running: '运行中',
@@ -31243,6 +31437,7 @@ export const CATALOG = {
     app: {
       installedApplications: "应用程序",
       applicationsSummary: (count, size) => `${count} 个已安装的应用程序 · ${size}`,
+      applicationsSummaryFiltered: (shown, total, size) => `${shown} of ${total} shown · ${size}`,
       removeStoreApp: (name) => `移除 ${name}`
     }
   },
@@ -31301,8 +31496,8 @@ export const CATALOG = {
         ariaLabel: '不動最近檔案的小時數'
       },
       restorePointCleanup: {
-        title: '先建立還原點',
-        description: '在強制移除之前建立，以便 Windows 本身能夠回復系統。會花費幾秒鐘，如果系統保護已關閉則不會執行任何動作。'
+        title: "Restore point before removing leftovers",
+        description: "Taken before Prune removes the leftover files and registry keys you selected, including after Force remove. On by default; does nothing at all if System Protection is turned off."
       },
       hideUnavailable: {
         title: '隱藏不適用的清理項目',
@@ -31364,12 +31559,12 @@ export const CATALOG = {
       uninstallTab: {
         beforeHeading: '解除安裝之前',
         restorePointUninstall: {
-          title: '解除安裝前建立還原點',
-          description: 'Windows 內建的系統還原，在程式的解除安裝程式執行之前建立。需要 Prune 以系統管理員身分執行，而且 Windows 每天只允許建立一次，因此如果無法建立，解除安裝將繼續進行，對話方塊會說明這一點。'
+          title: "Restore point before running an uninstaller",
+          description: "Taken before the program's own uninstaller runs. It needs Prune to be running as administrator and Windows allows one a day, so when it can't be made the uninstall goes ahead and the dialog says so."
         },
         registryBackup: {
           title: '解除安裝前備份登錄檔',
-          description: '匯出 HKLM\\SOFTWARE 和 HKCU\\Software（在建置 Prune 的機器上約 140 MB），並保留最新的 3 個。如果無法建立備份，解除安裝將不會執行。'
+          description: "Exports HKLM\\SOFTWARE and HKCU\\Software, typically several hundred MB, and keeps the newest 3. If the backup can't be made, the uninstall doesn't run."
         },
         deleteLockedFiles: {
           title: '在下次重新啟動時刪除被鎖定的檔案',
@@ -31401,7 +31596,7 @@ export const CATALOG = {
         reportTitle: '回報錯誤',
         reportDescription: "在 GitHub 上開啟一則已預先填好的議題。Prune 本身不會傳送任何內容，所有內容在送出之前你都能看到。",
         reportButton: '回報錯誤',
-        description: "一款本機、離線的 Windows 解除安裝與清理工具——具有殘留項目掃描的強制移除、刪除前的安全隔離、磁碟地圖，以及一鍵垃圾清理。"
+        description: "A local, offline uninstaller and cleanup tool for Windows — forced removal with leftover-file scanning, safe quarantine-before-delete, disk mapping, and a cleaner that shows a preview before it removes anything."
       },
       automation: {
         title: '自動化',
@@ -31469,7 +31664,7 @@ export const CATALOG = {
       apps: {
         label: '已安裝的應用程式',
         broken: (count) => `因解除安裝失敗而殘留 ${count} 項`,
-        noBroken: '沒有損壞的項目。',
+        noBroken: 'Nothing left behind.',
         review: '檢視',
         manage: '管理'
       },
@@ -31595,10 +31790,10 @@ export const CATALOG = {
         unused: '未使用',
         store: '市集',
         extensions: '擴充功能',
-        broken: '已損壞',
+        broken: 'Left behind',
         storeCount: (n) => `市集 (${n})`,
         extensionsCount: (n) => `擴充功能 (${n})`,
-        brokenCount: (n) => `已損壞 (${n})`
+        brokenCount: (n) => `Left behind (${n})`
       },
       columns: {
         application: '應用程式',
@@ -31610,7 +31805,7 @@ export const CATALOG = {
         company: '公司',
         website: '網站'
       },
-      badges: { broken: '已損壞', running: '執行中', store: '市集', disabled: '已停用', unused: '未使用' },
+      badges: { broken: 'Left behind', running: '執行中', store: '市集', disabled: '已停用', unused: '未使用' },
       selectRow: (name) => `選取 ${name}`,
       selectAll: '選取所有顯示項目',
       clearSelection: '清除選取',
@@ -31622,6 +31817,7 @@ export const CATALOG = {
       openFolder: "開啟資料夾",
       copyUninstallCommand: "複製解除安裝命令",
       commandCopied: "已複製解除安裝命令。",
+      unusedDefinition: "Flagged as not used recently. Prune keeps no launch history of its own, so check before you remove anything on this list.",
       copyFailed: "無法複製。",
       empty: {
         plain: '沒有相符項目。',
@@ -31711,6 +31907,9 @@ export const CATALOG = {
         status: '狀態'
       },
       switchAriaLabel: (name) => `登入時執行 ${name}`,
+      copyPath: 'Copy path',
+      pathCopied: 'Path copied.',
+      copyFailed: "Couldn't copy that.",
       status: {
         invalid: '無效',
         running: '執行中',
@@ -32044,6 +32243,7 @@ export const CATALOG = {
     app: {
       installedApplications: "應用程式",
       applicationsSummary: (count, size) => `${count} 個已安裝的應用程式 · ${size}`,
+      applicationsSummaryFiltered: (shown, total, size) => `${shown} of ${total} shown · ${size}`,
       removeStoreApp: (name) => `移除 ${name}`
     }
   }
