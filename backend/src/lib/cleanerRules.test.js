@@ -14,8 +14,10 @@ import {
   executeRules,
   executeRulesProgressively,
   scanRulesProgressively,
+  scanRuleAsync,
   normalizeRule
 } from './cleanerRules.js';
+import { BACKUP, TMP, VIM_SWAP_USER, DS_STORE, THUMBS_DB } from './cleanerActions/deepscan.js';
 import * as sqliteVacuum from './cleanerActions/sqliteVacuum.js';
 
 // Every raw path string a rule names, however it names it -- the legacy
@@ -53,7 +55,7 @@ let localAppDataDir;
 let quarantineDir;
 let savedEnv;
 
-const ENV_KEYS = ['APPDATA', 'LOCALAPPDATA', 'UNREVO_QUARANTINE_ROOT', 'ProgramFiles', 'ProgramFiles(x86)'];
+const ENV_KEYS = ['APPDATA', 'LOCALAPPDATA', 'UNREVO_QUARANTINE_ROOT', 'ProgramFiles', 'ProgramFiles(x86)', 'USERPROFILE', 'HOME'];
 
 beforeEach(async () => {
   appDataDir = await mkdtemp(join(tmpdir(), 'unrevo-cleaner-appdata-'));
@@ -63,6 +65,10 @@ beforeEach(async () => {
   process.env.APPDATA = appDataDir;
   process.env.LOCALAPPDATA = localAppDataDir;
   process.env.UNREVO_QUARANTINE_ROOT = quarantineDir;
+  // The Deep scan rules walk the user's profile. Point it at an empty temp
+  // folder so no test ever walks (let alone touches) the real one.
+  process.env.USERPROFILE = localAppDataDir;
+  process.env.HOME = localAppDataDir;
 });
 
 afterEach(async () => {
@@ -423,7 +429,9 @@ describe('executeRule', () => {
     const result = await executeRule(rule);
 
     expect(existsSync(filePath)).toBe(false); // gone from its original location
-    expect(result.freedBytes).toBe(5);
+    expect(result.movedBytes).toBe(5);
+    // Moved into Quarantine, not deleted: no space is free until it is emptied.
+    expect(result.freedBytes).toBe(0);
     expect(result.skipped).toEqual([]);
     // it really landed in quarantine, not just vanished
     expect(existsSync(quarantineDir)).toBe(true);
@@ -456,7 +464,7 @@ describe('executeRule', () => {
 
     expect(existsSync(freePath)).toBe(false); // the unlocked file still got cleaned
     expect(existsSync(lockedPath)).toBe(true); // the locked one is untouched
-    expect(result.freedBytes).toBe(10);
+    expect(result.movedBytes).toBe(10);
     expect(result.skipped.length).toBe(1);
     expect(result.skipped[0].path).toBe(lockedPath);
   });
@@ -480,7 +488,7 @@ describe('executeRules', () => {
 
     const summary = await executeRules(['discord_cache', 'vscode_cache']);
 
-    expect(summary.freedBytes).toBe(15);
+    expect(summary.movedBytes).toBe(15);
     expect(summary.results).toHaveLength(2);
   });
 
@@ -506,9 +514,9 @@ describe('executeRulesProgressively', () => {
     expect(seen.map((i) => i.id)).toEqual(['discord_cache', 'vscode_cache']);
     expect(seen[0].name).toBeTruthy();
     expect(seen[0].category).toBeTruthy();
-    expect(seen[0].freedBytes).toBe(5);
-    expect(seen[1].freedBytes).toBe(10);
-    expect(summary.freedBytes).toBe(15);
+    expect(seen[0].movedBytes).toBe(5);
+    expect(seen[1].movedBytes).toBe(10);
+    expect(summary.movedBytes).toBe(15);
     expect(summary.executed).toBe(2);
     expect(summary.aborted).toBe(false);
   });
@@ -543,7 +551,7 @@ describe('executeRulesProgressively', () => {
     await writeFile(join(dir1, 'a.bin'), '12345');
 
     const summary = await executeRules(['discord_cache']);
-    expect(summary.freedBytes).toBe(5);
+    expect(summary.movedBytes).toBe(5);
   });
 });
 
@@ -811,7 +819,8 @@ describe('actions-array rules', () => {
 
     const result = await executeRule(rule);
 
-    expect(result.freedBytes).toBeGreaterThan(5); // the 5-byte file, plus real vacuum reclaim
+    expect(result.movedBytes).toBe(5); // the quarantined 5-byte file
+    expect(result.freedBytes).toBeGreaterThan(0); // the vacuum really reclaimed space in place
     expect(statSync(dbPath).size).toBeLessThan(dbSizeBefore);
   });
 
@@ -948,7 +957,7 @@ describe('json action, wired', () => {
 
     const result = await executeRule(rule);
 
-    expect(result.freedBytes).toBeGreaterThan(0);
+    expect(result.movedBytes).toBeGreaterThan(0);
     const after = JSON.parse(await (await import('node:fs/promises')).readFile(filePath, 'utf8'));
     expect(after.sync).toBeUndefined();
     expect(after.keep).toBe(1);
@@ -974,7 +983,7 @@ describe('json action, wired', () => {
 
     const result = await executeRule(rule);
 
-    expect(result.freedBytes).toBeGreaterThan(5); // the 5-byte file, plus a real JSON size reduction
+    expect(result.movedBytes).toBeGreaterThan(5); // the 5-byte file, plus a real JSON size reduction
   });
 });
 
@@ -1015,7 +1024,7 @@ describe('cookie action, wired', () => {
     const result = await executeRule(rule, { cookieKeepList: [] });
 
     expect(existsSync(filePath)).toBe(false);
-    expect(result.freedBytes).toBeGreaterThan(0);
+    expect(result.movedBytes).toBeGreaterThan(0);
     expect(result.quarantineBatch).toBeTruthy();
   });
 
@@ -1091,7 +1100,7 @@ describe('glob-resolved bespoke actions', () => {
     // resolved to two concrete paths, not just one (or a literal '*').
     expect(existsSync(join(profile1Dir, 'Cookies'))).toBe(false);
     expect(existsSync(join(profile2Dir, 'Cookies'))).toBe(false);
-    expect(result.freedBytes).toBeGreaterThan(0);
+    expect(result.movedBytes).toBeGreaterThan(0);
   });
 
   it('a non-wildcarded bespoke action path is completely unaffected by this change', async () => {
@@ -1108,7 +1117,7 @@ describe('glob-resolved bespoke actions', () => {
     const result = await executeRule(rule, { cookieKeepList: [] });
 
     expect(existsSync(filePath)).toBe(false);
-    expect(result.freedBytes).toBeGreaterThan(0);
+    expect(result.movedBytes).toBeGreaterThan(0);
     expect(result.quarantineBatch).toBeTruthy();
   });
 });
@@ -1209,7 +1218,7 @@ describe('phase D actions, wired', () => {
     expect(scanned.present).toBe(true);
 
     const result = await executeRule(rule);
-    expect(result.freedBytes).toBeGreaterThan(0);
+    expect(result.movedBytes).toBeGreaterThan(0);
     expect(result.quarantineBatch).toBeTruthy();
     // Load-bearing: only the real chromeAutofill.execute() empties this
     // specific table -- a no-op dispatcher would leave all 50 rows intact.
@@ -1551,5 +1560,195 @@ describe('Windows Defender and WinRAR rules', () => {
     expect(paths).toContain('%WINDIR%\\Temp\\MpSigStub.log');
     expect(paths).toContain('%WINDIR%\\Temp\\MpCmdRun.log');
     expect(paths.some(p => p.endsWith('Definition Updates\\Updates'))).toBe(true);
+  });
+});
+
+describe("Deep Clean removal mode ('delete' -- free the space now)", () => {
+  const cacheRule = { id: 'discord_cache', name: 'Discord Cache', paths: ['%APPDATA%\\discord\\Cache'] };
+  let dir;
+  beforeEach(async () => {
+    dir = join(appDataDir, 'discord', 'Cache');
+    await mkdir(dir, { recursive: true });
+  });
+
+  it('deletes outright, reports the bytes as freed, and puts nothing in Quarantine', async () => {
+    const file = join(dir, 'a.bin');
+    await writeFile(file, '12345');
+    const result = await executeRule(cacheRule, { removal: 'delete' });
+
+    expect(existsSync(file)).toBe(false);
+    expect(result.freedBytes).toBe(5);
+    expect(result.movedBytes).toBe(0);
+    expect(result.quarantineBatch).toBeUndefined();
+    expect(result.recycled).toBeUndefined();
+    expect(readdirSync(quarantineDir)).toEqual([]);
+  });
+
+  it('ignores autoQuarantine:false -- it means the Recycle Bin, and delete mode does not use it', async () => {
+    const file = join(dir, 'a.bin');
+    await writeFile(file, '12345');
+    const result = await executeRule(cacheRule, { removal: 'delete', autoQuarantine: false });
+    expect(existsSync(file)).toBe(false);
+    expect(result.recycled).toBeUndefined();
+    expect(result.freedBytes).toBe(5);
+  });
+
+  it('keeps the exclusion and recency guards: a held file survives and says why', async () => {
+    const kept = join(dir, 'keep.bin');
+    await writeFile(kept, '12345');
+    const held = await executeRule(cacheRule, { removal: 'delete', excludeFolders: [dir] });
+    expect(existsSync(kept)).toBe(true);
+    expect(held.freedBytes).toBe(0);
+    expect(held.skipped).toEqual([{ path: kept, reason: 'in an excluded folder' }]);
+
+    const recent = await executeRule(cacheRule, { removal: 'delete', skipRecentHours: 24 });
+    expect(existsSync(kept)).toBe(true); // just written
+    expect(recent.skipped[0].reason).toMatch(/modified in the last 24 hours/);
+  });
+
+  it('reports a locked file as skipped and still deletes the free one', async () => {
+    const lockedPath = join(dir, 'locked.bin');
+    const freePath = join(dir, 'free.bin');
+    await writeFile(lockedPath, '12345');
+    await writeFile(freePath, '1234567890');
+    const realOpen = fs.__actualPromises.open;
+    fs.promises.open.mockImplementation((path, ...args) => {
+      if (path === lockedPath) return Promise.reject(Object.assign(new Error('EBUSY'), { code: 'EBUSY' }));
+      return realOpen(path, ...args);
+    });
+
+    const result = await executeRule(cacheRule, { removal: 'delete' });
+    expect(existsSync(freePath)).toBe(false);
+    expect(existsSync(lockedPath)).toBe(true);
+    expect(result.freedBytes).toBe(10);
+    expect(result.skipped.map((s) => s.path)).toEqual([lockedPath]);
+  });
+
+  it("never reaches into Prune's own Quarantine, even if a rule points at it", async () => {
+    const inQuarantine = join(quarantineDir, 'batch1', 'file.bin');
+    await mkdir(dirname(inQuarantine), { recursive: true });
+    await writeFile(inQuarantine, '12345');
+    const rule = { id: 'q', name: 'Q', paths: [quarantineDir] };
+    const result = await executeRule(rule, { removal: 'delete' });
+    expect(existsSync(inQuarantine)).toBe(true);
+    expect(result.freedBytes).toBe(0);
+  });
+
+  it('leaves the default alone: without removal set, files still go to Quarantine', async () => {
+    const file = join(dir, 'a.bin');
+    await writeFile(file, '12345');
+    const result = await executeRule(cacheRule, {});
+    expect(result.freedBytes).toBe(0);
+    expect(result.movedBytes).toBe(5);
+    expect(result.quarantineBatch).toBeTruthy();
+  });
+
+  it('adds up real freed bytes across rules in the summary', async () => {
+    await writeFile(join(dir, 'a.bin'), '12345');
+    const summary = await executeRules(['discord_cache'], { removal: 'delete' });
+    expect(summary.freedBytes).toBe(5);
+    expect(summary.movedBytes).toBe(0);
+  });
+});
+
+describe('the Deep scan rules', () => {
+  const rules = loadCleanerRules();
+  const deep = rules.filter((r) => r.category === 'Deep scan');
+  const byId = (id) => rules.find((r) => r.id === id);
+
+  it("mirror BleachBit's five Windows options, and not the Linux-only sixth", () => {
+    expect(deep.map((r) => r.id).sort()).toEqual([
+      'deepscan_backup', 'deepscan_ds_store', 'deepscan_thumbs_db', 'deepscan_tmp', 'deepscan_vim_swap'
+    ]);
+  });
+
+  it("use exactly the patterns the action module tests", () => {
+    const patternsOf = (id) => byId(id).actions[0].patterns;
+    expect(patternsOf('deepscan_backup')).toEqual(BACKUP);
+    expect(patternsOf('deepscan_tmp')).toEqual(TMP);
+    expect(patternsOf('deepscan_vim_swap')).toEqual(VIM_SWAP_USER);
+    expect(patternsOf('deepscan_ds_store')).toEqual(DS_STORE);
+    expect(patternsOf('deepscan_thumbs_db')).toEqual(THUMBS_DB);
+  });
+
+  it('are never recommended, so nothing ticks them by default', () => {
+    for (const rule of deep) expect(rule.recommended, rule.id).toBe(false);
+  });
+
+  it('mark the ones that can hold the only copy of something as risky', () => {
+    for (const id of ['deepscan_backup', 'deepscan_tmp', 'deepscan_vim_swap']) expect(byId(id).risky, id).toBe(true);
+    for (const id of ['deepscan_ds_store', 'deepscan_thumbs_db']) expect(byId(id).risky, id).toBeUndefined();
+  });
+
+  it('count as present before any scan, so the list keeps them', () => {
+    for (const rule of deep) expect(rulePathsExist(rule), rule.id).toBe(true);
+  });
+
+  it('are measured by the async scan against the profile, and only there', async () => {
+    const file = join(localAppDataDir, 'projects', 'app', 'notes.bak');
+    await mkdir(dirname(file), { recursive: true });
+    await writeFile(file, '12345');
+    const rule = byId('deepscan_backup');
+
+    // The synchronous scan must not freeze the loop walking a profile.
+    expect(scanRule(rule).sizeBytes).toBeNull();
+
+    const result = await scanRuleAsync(rule);
+    expect(result.sizeBytes).toBe(5);
+    expect(result.fileCount).toBe(1);
+    expect(result.present).toBe(true);
+    expect(existsSync(file)).toBe(true); // a scan touches nothing
+  });
+
+  it('stream progress from the walk, tagged with the rule, and can be stopped', async () => {
+    await mkdir(join(localAppDataDir, 'a', 'b'), { recursive: true });
+    await writeFile(join(localAppDataDir, 'a', 'b', 'x.bak'), 'x');
+    const progress = [];
+    const seen = [];
+    await scanRulesProgressively((item) => seen.push(item.id), {
+      onProgress: (p) => progress.push(p),
+      // every rule but the first deep one is irrelevant to this assertion
+      limits: undefined
+    });
+    expect(seen).toContain('deepscan_backup');
+    expect(progress.some((p) => p.id === 'deepscan_backup')).toBe(true);
+
+    const controller = new AbortController();
+    controller.abort();
+    const result = await scanRulesProgressively(() => {}, { signal: controller.signal });
+    expect(result.aborted).toBe(true);
+  }, 60000);
+
+  it('clean: Quarantine mode moves matches and counts them as moved', async () => {
+    const file = join(localAppDataDir, 'old', 'draft.bak');
+    await mkdir(dirname(file), { recursive: true });
+    await writeFile(file, '12345');
+    const past = new Date(Date.now() - 100 * 3600_000);
+    await (await import('node:fs/promises')).utimes(file, past, past);
+
+    const result = await executeRule(byId('deepscan_backup'), {});
+    expect(existsSync(file)).toBe(false);
+    expect(result.movedBytes).toBe(5);
+    expect(result.freedBytes).toBe(0);
+    expect(result.quarantineBatch).toBeTruthy();
+  });
+
+  it("clean: 'delete' mode deletes outright and counts real freed bytes", async () => {
+    const file = join(localAppDataDir, 'old', 'draft.bak');
+    await mkdir(dirname(file), { recursive: true });
+    await writeFile(file, '12345');
+    const result = await executeRule(byId('deepscan_backup'), { removal: 'delete' });
+    expect(existsSync(file)).toBe(false);
+    expect(result.freedBytes).toBe(5);
+    expect(result.movedBytes).toBe(0);
+  });
+
+  it('clean: honours the recent-files guard', async () => {
+    const file = join(localAppDataDir, 'fresh.bak');
+    await writeFile(file, '12345'); // just written
+    const result = await executeRule(byId('deepscan_backup'), { removal: 'delete', skipRecentHours: 24 });
+    expect(existsSync(file)).toBe(true);
+    expect(result.freedBytes).toBe(0);
+    expect(result.skipped[0].reason).toMatch(/last 24 hours/);
   });
 });

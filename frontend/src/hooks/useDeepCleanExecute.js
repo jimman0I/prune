@@ -38,6 +38,8 @@ export function useDeepCleanExecute(nameOf, messages) {
   const [total, setTotal] = useState(0);
   const [cleaning, setCleaning] = useState(false);
   const [currentId, setCurrentId] = useState(null);
+  // Live status of a profile-wide rule's search, as on the scan side.
+  const [progress, setProgress] = useState(null);
   const abortRef = useRef(null);
 
   const run = useCallback(async (ruleIds) => {
@@ -45,12 +47,16 @@ export function useDeepCleanExecute(nameOf, messages) {
     setExecuted(0);
     setTotal(ruleIds.length);
     setCurrentId(null);
+    setProgress(null);
     setCleaning(true);
 
     const controller = new AbortController();
     abortRef.current = controller;
 
+    // Deleted and moved are different facts and stay different numbers: only
+    // the first is free space on the drive.
     let freedBytes = 0;
+    let movedBytes = 0;
     const results = [];
     let streamError = null;
 
@@ -61,9 +67,13 @@ export function useDeepCleanExecute(nameOf, messages) {
         } else if (type === 'rule') {
           results.push(data);
           freedBytes += data.freedBytes || 0;
+          movedBytes += data.movedBytes || 0;
           setLog((prev) => [...prev, executeLogLine(data, nameOfRef.current, messagesRef.current)]);
           setExecuted((n) => n + 1);
           setCurrentId(data.id);
+          setProgress(null);
+        } else if (type === 'progress') {
+          setProgress(data);
         } else if (type === 'error') {
           // Held rather than thrown immediately: the stream has already
           // sent whatever it cleaned before the failure, and that stays
@@ -75,22 +85,23 @@ export function useDeepCleanExecute(nameOf, messages) {
       // Stop is a user action, not a failure -- whatever was cleaned
       // before that point already happened and is returned, not thrown.
       if (err.name === 'AbortError' || /abort/i.test(err.message || '')) {
-        return { freedBytes, results, aborted: true };
+        return { freedBytes, movedBytes, results, aborted: true };
       }
       throw err;
     } finally {
       setCleaning(false);
       setCurrentId(null);
+      setProgress(null);
       abortRef.current = null;
     }
 
     if (streamError) throw new Error(streamError);
-    return { freedBytes, results };
+    return { freedBytes, movedBytes, results };
   }, []);
 
   const stop = useCallback(() => {
     abortRef.current?.abort();
   }, []);
 
-  return { run, stop, cleaning, log, executed, total, currentId };
+  return { run, stop, cleaning, log, executed, total, currentId, progress };
 }

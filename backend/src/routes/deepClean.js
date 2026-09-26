@@ -55,7 +55,14 @@ router.get('/scan/stream', async (req, res) => {
     sendEvent(res, 'start', { total: rules.length });
     const summary = await scanRulesProgressively(
       (item) => sendEvent(res, 'rule', item),
-      { signal: controller.signal, ...cleanGuardsFrom(await getSettings()), installedProgramNames: await installedProgramNames() }
+      {
+        signal: controller.signal,
+        // The profile-wide Deep scan rules take a while; this is how the
+        // screen says what they are doing instead of sitting silent.
+        onProgress: (progress) => { if (!controller.signal.aborted) sendEvent(res, 'progress', progress); },
+        ...cleanGuardsFrom(await getSettings()),
+        installedProgramNames: await installedProgramNames()
+      }
     );
     if (!controller.signal.aborted) sendEvent(res, 'done', summary);
   } catch (err) {
@@ -170,7 +177,11 @@ router.get('/execute/stream', async (req, res) => {
     const summary = await executeRulesProgressively(
       ids,
       (item) => sendEvent(res, 'rule', item),
-      { signal: controller.signal, ...cleanGuardsFrom(await getSettings()) }
+      {
+        signal: controller.signal,
+        onProgress: (progress) => { if (!controller.signal.aborted) sendEvent(res, 'progress', progress); },
+        ...cleanGuardsFrom(await getSettings())
+      }
     );
     if (!controller.signal.aborted) sendEvent(res, 'done', summary);
   } catch (err) {

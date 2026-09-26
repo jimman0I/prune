@@ -159,7 +159,7 @@ export default function App() {
         <Screen active={screen === 'quarantine'} visited={visited.has('quarantine')}><QuarantineManager /></Screen>
         <Screen active={screen === 'settings'} visited={visited.has('settings')}><SettingsPage onReportBug={openBugReport} /></Screen>
         <Screen active={screen === 'startup'} visited={visited.has('startup')}><StartupItems /></Screen>
-        <Screen active={screen === 'deepclean'} visited={visited.has('deepclean')}><DeepClean /></Screen>
+        <Screen active={screen === 'deepclean'} visited={visited.has('deepclean')}><DeepClean onNavigate={setScreen} /></Screen>
         <Screen active={screen === 'duplicates'} visited={visited.has('duplicates')}><Duplicates /></Screen>
         <Screen active={screen === 'applications'} visited={visited.has('applications')}>
           <Page className="h-full flex flex-col min-h-0">

@@ -444,3 +444,48 @@ describe('the remembered Settings tab', () => {
     expect(window.localStorage.getItem(SETTINGS_TAB_STORAGE_KEY)).toBe('cleanup');
   });
 });
+
+describe('when Deep Clean removes files', () => {
+  const quarantineRadio = () => screen.getByRole('radio', { name: /Move to Quarantine \(you can put it back\)/ });
+  const deleteRadio = () => screen.getByRole('radio', { name: /Delete now \(frees the space/ });
+  const autoQuarantine = () => screen.getByRole('switch', { name: 'Auto-Quarantine' });
+
+  it('offers exactly the two outcomes, with Quarantine chosen by default', async () => {
+    await openCleanupTab();
+    expect(screen.getByRole('radiogroup', { name: 'When Deep Clean removes files' })).toBeTruthy();
+    expect(quarantineRadio().checked).toBe(true);
+    expect(deleteRadio().checked).toBe(false);
+  });
+
+  it('saves the choice as deepCleanRemoval', async () => {
+    const user = await openCleanupTab();
+    await user.click(deleteRadio());
+    await waitFor(() => expect(lastSaved()).toEqual({ deepCleanRemoval: 'delete' }));
+  });
+
+  it('warns that Delete now cannot be undone, and only when it is chosen', async () => {
+    fetchSettings.mockResolvedValue({ ...DEFAULTS, deepCleanRemoval: 'delete' });
+    await openCleanupTab();
+    expect(await screen.findByText(/Clean can't be undone/)).toBeTruthy();
+    expect(deleteRadio().checked).toBe(true);
+  });
+
+  it('does not show that warning in Quarantine mode', async () => {
+    await openCleanupTab();
+    expect(screen.queryByText(/Clean can't be undone/)).toBeNull();
+  });
+
+  it('turns Auto-Quarantine off and says why while Delete now is chosen', async () => {
+    fetchSettings.mockResolvedValue({ ...DEFAULTS, deepCleanRemoval: 'delete' });
+    await openCleanupTab();
+    await screen.findByText(/Clean can't be undone/);
+    expect(autoQuarantine().disabled).toBe(true);
+    expect(screen.getByText('Not used while Deep Clean deletes files immediately.')).toBeTruthy();
+  });
+
+  it('leaves Auto-Quarantine usable in Quarantine mode', async () => {
+    await openCleanupTab();
+    expect(autoQuarantine().disabled).toBe(false);
+    expect(screen.queryByText('Not used while Deep Clean deletes files immediately.')).toBeNull();
+  });
+});

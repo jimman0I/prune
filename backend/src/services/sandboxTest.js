@@ -105,11 +105,12 @@ export async function runSandboxTest() {
     if (!scanOk) throw new Error('scanRule() did not report the expected sandbox sizes');
 
     const result = await executeRule(RULE);
-    const executeOk = result.freedBytes === expectedBytes && result.skipped.length === 0;
+    // Quarantine moves rather than deletes, so the bytes are `moved`, not `freed`.
+    const executeOk = result.movedBytes === expectedBytes && result.skipped.length === 0;
     steps.push({
       name: 'Run the real executeRule() against the sandbox',
       passed: executeOk,
-      detail: `freed ${result.freedBytes}B (expected ${expectedBytes}), ${result.skipped.length} skipped`
+      detail: `moved ${result.movedBytes}B (expected ${expectedBytes}), ${result.skipped.length} skipped`
     });
     if (!executeOk) throw new Error('executeRule() did not free the expected amount');
 

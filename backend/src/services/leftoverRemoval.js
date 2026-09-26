@@ -103,6 +103,25 @@ async function pathSize(path) {
   return total;
 }
 
+/** Deletes each candidate outright -- the one place in the app that does.
+ * Uninstall's "Delete permanently" and Deep Clean's "Delete now" both come
+ * through here, so there is a single implementation of what "gone" means.
+ * Each caller decides what it may hand over; this only removes, and reports
+ * a file it could not remove (locked, permission) rather than throwing. */
+export async function removePermanently(candidates) {
+  const removed = [];
+  const failed = [];
+  for (const { path, sizeBytes } of candidates) {
+    try {
+      await rm(path, { recursive: true, force: false });
+      removed.push({ originalPath: path, sizeBytes });
+    } catch (err) {
+      failed.push({ path, reason: err.message });
+    }
+  }
+  return { removed, failed };
+}
+
 /** Removes an uninstall's leftovers to the chosen destination. Reports
  * rather than throws, like quarantineAndDelete: one locked file is a
  * partial success with a name attached, not a failure of the whole run.
@@ -152,14 +171,9 @@ export async function removeLeftovers({ programName, files = [], registryKeys = 
       }
     }
   } else {
-    for (const { path, sizeBytes } of candidates) {
-      try {
-        await rm(path, { recursive: true, force: false });
-        removed.push({ originalPath: path, sizeBytes });
-      } catch (err) {
-        failedFiles.push({ path, reason: err.message });
-      }
-    }
+    const result = await removePermanently(candidates);
+    removed.push(...result.removed);
+    failedFiles.push(...result.failed);
   }
 
   let registry = { registryKeys: [], failedRegistryKeys: [], batchDir: null };

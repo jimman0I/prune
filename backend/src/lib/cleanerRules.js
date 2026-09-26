@@ -14,6 +14,7 @@ import * as chromeKeywordsAction from './cleanerActions/chromeKeywords.js';
 import * as chromeHistoryAction from './cleanerActions/chromeHistory.js';
 import * as mozillaUrlHistoryAction from './cleanerActions/mozillaUrlHistory.js';
 import * as mozillaFaviconsAction from './cleanerActions/mozillaFavicons.js';
+import * as deepscanAction from './cleanerActions/deepscan.js';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const CLEANERS_JSON_PATH = join(here, '..', 'data', 'cleaners.json');
@@ -213,10 +214,61 @@ export function scanRule(rule, guards = {}) {
         sizeBytes = (sizeBytes ?? 0) + result.sizeBytes;
         if (result.present) present = true;
       }
+    } else if (action.type === 'deepscan') {
+      // A profile-wide search cannot be measured synchronously -- it would
+      // freeze the event loop for as long as the walk takes. It is present
+      // (the profile is always there) and unmeasured here, so the one-shot
+      // scan and the scheduler read it as "nothing to measure"; the
+      // streamed Preview measures it properly via scanRuleAsync.
+      present = true;
     }
   }
 
   return { id: rule.id, sizeBytes, fileCount, heldCount, present, accessible };
+}
+
+/** The scan for a rule that includes a `deepscan` action, which walks the
+ * whole profile and so has to be asynchronous, cancellable and able to
+ * report progress. Every other action still goes through the ordinary
+ * synchronous scanRule; a rule without a deepscan action is simply
+ * delegated to it. Merges the same way: sizes and counts summed,
+ * `accessible` ANDed, plus `incomplete` (why the walk stopped short, when
+ * it did) so a partial figure is never presented as a total. */
+export async function scanRuleAsync(rule, guards = {}) {
+  const normalized = normalizeRule(rule);
+  const deepActions = normalized.actions.filter((a) => a.type === 'deepscan');
+  if (deepActions.length === 0) return scanRule(rule, guards);
+
+  const others = normalized.actions.filter((a) => a.type !== 'deepscan');
+  const base = others.length > 0
+    ? scanRule({ ...normalized, actions: others }, guards)
+    : { id: rule.id, sizeBytes: null, fileCount: null, heldCount: 0, present: false, accessible: true };
+  let { sizeBytes, fileCount, heldCount, accessible } = base;
+  let incomplete;
+
+  for (const action of deepActions) {
+    const result = await deepscanAction.scan(deepscanTarget(action), deepscanGuards(rule, guards));
+    sizeBytes = (sizeBytes ?? 0) + result.sizeBytes;
+    fileCount = (fileCount ?? 0) + result.fileCount;
+    heldCount += result.heldCount;
+    accessible = accessible && result.accessible;
+    if (result.incomplete) incomplete = result.incomplete;
+  }
+  return { id: rule.id, sizeBytes, fileCount, heldCount, present: true, accessible, ...(incomplete ? { incomplete } : {}) };
+}
+
+/** A deepscan action as the action module wants it: the root already
+ * expanded (`~` is the user's profile) and the patterns as written. */
+function deepscanTarget(action) {
+  return { expandedRoot: expandPath(action.root || '~'), patterns: action.patterns };
+}
+
+/** Tags a walk's progress with the rule it belongs to, so the stream can
+ * say which rule is being searched. */
+function deepscanGuards(rule, guards) {
+  if (!guards.onProgress) return guards;
+  const { onProgress } = guards;
+  return { ...guards, onProgress: (progress) => onProgress({ id: rule.id, ...progress }) };
 }
 
 /** Whether ONE already-expanded path (from a delete action) exists --
@@ -292,6 +344,9 @@ export function rulePathsExist(rule, guards = {}) {
     // Neither can be answered from the filesystem, and the pre-scan list
     // keeps an unmeasured rule rather than hiding it (visibleRules.js).
     if (action.type === 'shell' || action.type === 'winreg') return true;
+    // A profile-wide search and the free-space wipe have no path to look
+    // for; both are always applicable, and the list keeps them.
+    if (action.type === 'deepscan' || action.type === 'wipe.freespace') return true;
     const rawPaths = action.type === 'delete' ? (Array.isArray(action.paths) ? action.paths : []) : [action.path];
     for (const rawPath of rawPaths) {
       if (typeof rawPath === 'string' && rawPath && rulePathsExistFor(expandPath(rawPath))) return true;
@@ -317,7 +372,8 @@ export function scanAllRules(guards = {}) {
 /** Executes one rule for real. Normalizes the rule to its `actions` array
  * (normalizeRule) and dispatches each action to its own module's
  * `execute()` by `type`, merging their results into one summary:
- * `freedBytes` summed across every action, `skipped` concatenated, and
+ * `freedBytes` (really deleted) and `movedBytes` (quarantined or recycled)
+ * summed across every action, `skipped` concatenated, and
  * `registryKeysRemoved`/`vacuumed`/`recycled`/`quarantineBatch`/
  * `ranCommand`/`error` each included only when an action of the matching
  * type actually produced one (never present-but-undefined).
@@ -365,7 +421,18 @@ export function scanAllRules(guards = {}) {
  * `freedBytes` across all of them, not just the first. */
 export async function executeRule(rule, guards = {}) {
   const normalized = normalizeRule(rule);
+  // Two different numbers, kept apart on purpose. `freedBytes` is space that
+  // is actually back on the drive: something was deleted, or a database was
+  // vacuumed in place. `movedBytes` is what was taken out of its folder but
+  // still exists -- in Quarantine, or in the Recycle Bin -- and comes back
+  // as free space only when that is emptied. Summing them into one "freed"
+  // figure told someone 15.7 GB was free while the drive had not changed.
   let freedBytes = 0;
+  let movedBytes = 0;
+  const tally = (result) => {
+    if (result.quarantineBatch || result.recycled) movedBytes += result.freedBytes || 0;
+    else freedBytes += result.freedBytes || 0;
+  };
   let registryKeysRemoved;
   const skipped = [];
   let recycled, quarantineBatch, ranCommand, error, vacuumed, edited;
@@ -378,13 +445,13 @@ export async function executeRule(rule, guards = {}) {
     } else if (action.type === 'delete') {
       const expandedPaths = action.paths.map(expandPath);
       const result = await deleteAction.execute({ expandedPaths }, rule.name, guards);
-      freedBytes += result.freedBytes;
+      tally(result);
       skipped.push(...result.skipped);
       if (result.recycled) recycled = true;
       if (result.quarantineBatch) quarantineBatch = result.quarantineBatch;
     } else if (action.type === 'sqlite.vacuum') {
       const result = await sqliteVacuumAction.execute({ expandedPath: expandPath(action.path) }, guards);
-      freedBytes += result.freedBytes;
+      tally(result);
       skipped.push(...result.skipped);
       // The one discriminator a frontend has for "this result came from a
       // sqlite.vacuum action" -- freedBytes alone is indistinguishable
@@ -394,10 +461,16 @@ export async function executeRule(rule, guards = {}) {
       // execute's dispatcher returns). Same conditional-only-when-true
       // shape as `recycled`/`registryKeysRemoved` below.
       vacuumed = true;
+    } else if (action.type === 'deepscan') {
+      const result = await deepscanAction.execute(deepscanTarget(action), rule.name, deepscanGuards(rule, guards));
+      tally(result);
+      skipped.push(...result.skipped);
+      if (result.recycled) recycled = true;
+      if (result.quarantineBatch) quarantineBatch = result.quarantineBatch;
     } else if (action.type === 'json') {
       for (const concretePath of resolveBespokeActionPaths(expandPath(action.path))) {
         const result = await jsonAction.execute({ expandedPath: concretePath, address: action.address }, rule.name, guards);
-        freedBytes += result.freedBytes;
+        tally(result);
         skipped.push(...result.skipped);
         if (result.recycled) recycled = true;
         if (result.quarantineBatch) quarantineBatch = result.quarantineBatch;
@@ -410,7 +483,7 @@ export async function executeRule(rule, guards = {}) {
     } else if (action.type === 'cookie') {
       for (const concretePath of resolveBespokeActionPaths(expandPath(action.path))) {
         const result = await cookieAction.execute({ expandedPath: concretePath }, rule.name, guards);
-        freedBytes += result.freedBytes;
+        tally(result);
         skipped.push(...result.skipped);
         if (result.recycled) recycled = true;
         if (result.quarantineBatch) quarantineBatch = result.quarantineBatch;
@@ -418,35 +491,35 @@ export async function executeRule(rule, guards = {}) {
     } else if (action.type === 'chrome.autofill') {
       for (const concretePath of resolveBespokeActionPaths(expandPath(action.path))) {
         const result = await chromeAutofillAction.execute({ expandedPath: concretePath }, rule.name, guards);
-        freedBytes += result.freedBytes;
+        tally(result);
         skipped.push(...result.skipped);
         if (result.quarantineBatch) quarantineBatch = result.quarantineBatch;
       }
     } else if (action.type === 'chrome.keywords') {
       for (const concretePath of resolveBespokeActionPaths(expandPath(action.path))) {
         const result = await chromeKeywordsAction.execute({ expandedPath: concretePath }, rule.name, guards);
-        freedBytes += result.freedBytes;
+        tally(result);
         skipped.push(...result.skipped);
         if (result.quarantineBatch) quarantineBatch = result.quarantineBatch;
       }
     } else if (action.type === 'chrome.history') {
       for (const concretePath of resolveBespokeActionPaths(expandPath(action.path))) {
         const result = await chromeHistoryAction.execute({ expandedPath: concretePath }, rule.name, guards);
-        freedBytes += result.freedBytes;
+        tally(result);
         skipped.push(...result.skipped);
         if (result.quarantineBatch) quarantineBatch = result.quarantineBatch;
       }
     } else if (action.type === 'mozilla.url.history') {
       for (const concretePath of resolveBespokeActionPaths(expandPath(action.path))) {
         const result = await mozillaUrlHistoryAction.execute({ expandedPath: concretePath }, rule.name, guards);
-        freedBytes += result.freedBytes;
+        tally(result);
         skipped.push(...result.skipped);
         if (result.quarantineBatch) quarantineBatch = result.quarantineBatch;
       }
     } else if (action.type === 'mozilla.favicons') {
       for (const concretePath of resolveBespokeActionPaths(expandPath(action.path))) {
         const result = await mozillaFaviconsAction.execute({ expandedPath: concretePath }, rule.name, guards);
-        freedBytes += result.freedBytes;
+        tally(result);
         skipped.push(...result.skipped);
         if (result.quarantineBatch) quarantineBatch = result.quarantineBatch;
       }
@@ -462,7 +535,7 @@ export async function executeRule(rule, guards = {}) {
       winregActions.map((action) => ({ expandedKey: expandPath(action.key), value: action.value })),
       rule.name
     );
-    freedBytes += result.freedBytes;
+    tally(result);
     registryKeysRemoved = (registryKeysRemoved || 0) + result.registryKeysRemoved;
     skipped.push(...result.skipped);
     if (result.quarantineBatch) quarantineBatch = result.quarantineBatch;
@@ -471,6 +544,7 @@ export async function executeRule(rule, guards = {}) {
   return {
     id: rule.id,
     freedBytes,
+    movedBytes,
     skipped,
     ...(registryKeysRemoved !== undefined ? { registryKeysRemoved } : {}),
     ...(vacuumed ? { vacuumed } : {}),
@@ -500,14 +574,15 @@ export async function executeRule(rule, guards = {}) {
  * already in progress still runs to completion -- quarantining a batch
  * half-deleted is a worse state than finishing the one rule already
  * underway. */
-export async function executeRulesProgressively(ruleIds, onItem, { signal, ...guards } = {}) {
+export async function executeRulesProgressively(ruleIds, onItem, { signal, onProgress, ...guards } = {}) {
   const rules = loadCleanerRules();
   const results = [];
   let freedBytes = 0;
+  let movedBytes = 0;
   let executed = 0;
 
   for (const id of ruleIds) {
-    if (signal?.aborted) return { aborted: true, total: ruleIds.length, executed, freedBytes, results };
+    if (signal?.aborted) return { aborted: true, total: ruleIds.length, executed, freedBytes, movedBytes, results };
 
     const rule = rules.find((r) => r.id === id);
     if (!rule) {
@@ -518,15 +593,16 @@ export async function executeRulesProgressively(ruleIds, onItem, { signal, ...gu
       continue;
     }
 
-    const result = await executeRule(rule, guards);
+    const result = await executeRule(rule, { ...guards, signal, onProgress });
     freedBytes += result.freedBytes || 0;
+    movedBytes += result.movedBytes || 0;
     results.push(result);
     onItem({ ...result, name: rule.name, category: rule.category });
     executed++;
     await new Promise((resolve) => setImmediate(resolve));
   }
 
-  return { aborted: false, total: ruleIds.length, executed, freedBytes, results };
+  return { aborted: false, total: ruleIds.length, executed, freedBytes, movedBytes, results };
 }
 
 /** Executes every requested rule id in turn, summing freed bytes into one
@@ -539,8 +615,8 @@ export async function executeRulesProgressively(ruleIds, onItem, { signal, ...gu
  * tests) that just want the final summary and have no stream to write
  * progress to. */
 export async function executeRules(ruleIds, guards = {}) {
-  const { freedBytes, results } = await executeRulesProgressively(ruleIds, () => {}, guards);
-  return { freedBytes, results };
+  const { freedBytes, movedBytes, results } = await executeRulesProgressively(ruleIds, () => {}, guards);
+  return { freedBytes, movedBytes, results };
 }
 
 /** Scans every rule, handing each result to `onItem` as soon as it's
@@ -562,13 +638,17 @@ export async function executeRules(ruleIds, guards = {}) {
  * `signal` lets a caller stop early, which is what the UI's Abort button
  * and a client hanging up both come down to. Returns a summary rather
  * than throwing on abort -- a cancelled scan is an ordinary outcome. */
-export async function scanRulesProgressively(onItem, { signal, ...guards } = {}) {
+export async function scanRulesProgressively(onItem, { signal, onProgress, ...guards } = {}) {
   const rules = loadCleanerRules();
   let scanned = 0;
 
   for (const rule of rules) {
     if (signal?.aborted) return { aborted: true, total: rules.length, scanned };
-    onItem({ ...rule, ...scanRule(rule, guards) });
+    const result = await scanRuleAsync(rule, { ...guards, signal, onProgress });
+    // A Stop during a profile walk leaves a partial figure; it is dropped
+    // rather than shown as though that rule had been measured.
+    if (signal?.aborted) return { aborted: true, total: rules.length, scanned };
+    onItem({ ...rule, ...result });
     scanned++;
     // setImmediate, not a 0ms timer: it runs after I/O callbacks in the
     // same loop iteration, so a pending socket write goes out before the

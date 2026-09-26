@@ -4,6 +4,8 @@ import { join } from 'node:path';
 import { partitionCleanableFiles } from '../cleanGuards.js';
 import { quarantineAndDelete } from '../../services/quarantine.js';
 import { sendToRecycleBin } from '../../services/recycleBin.js';
+import { removePermanently } from '../../services/leftoverRemoval.js';
+import { protectionReason } from '../../services/pathGuard.js';
 
 /** Converts one `*`-bearing path SEGMENT (not a full path) into a
  * case-insensitive RegExp matching a filename/dirname against it --
@@ -221,7 +223,16 @@ export function scan(action, guards = {}) {
  * moved, not deleted outright, so a bad match is always recoverable the
  * same way an uninstall's own leftover removal already is. */
 export async function execute(action, ruleName, guards = {}) {
-  const { files: candidates, held } = resolveActionFiles(action.expandedPaths, guards);
+  const { files, held } = resolveActionFiles(action.expandedPaths, guards);
+  return executeFiles(files, held, ruleName, guards);
+}
+
+/** The removal half of `execute`, for any action that has already worked
+ * out WHICH files (and which the guards held back). `delete` finds them
+ * from paths; `deepscan` finds them by walking the profile; both then take
+ * exactly the same road from here -- locked-file check, then Quarantine,
+ * the Recycle Bin or a real delete depending on `guards`. */
+export async function executeFiles(candidates, held, ruleName, guards = {}) {
   const accessible = [];
   // Seeded with what the guards refused, each carrying its own reason.
   // Reported rather than dropped: the only way a user ever discovers that
@@ -233,6 +244,14 @@ export async function execute(action, ruleName, guards = {}) {
   }
 
   if (accessible.length === 0) return { freedBytes: 0, skipped };
+
+  // 'Delete now' -- BleachBit's behaviour, chosen in Settings and read from
+  // there by the route, never sent by a client. The same guards have already
+  // run above (exclusions, recency, locked files); what is left is removed
+  // through the one delete implementation the uninstall flow's "Delete
+  // permanently" also uses. autoQuarantine is deliberately not consulted:
+  // it chooses between Quarantine and the Recycle Bin, and this is neither.
+  if (guards.removal === 'delete') return deletePermanently(accessible, candidates, skipped);
 
   // The other half of `autoQuarantine`, which used to be a switch in
   // Settings that decided nothing at all. Off means the Recycle Bin rather
@@ -269,4 +288,33 @@ export async function execute(action, ruleName, guards = {}) {
       skipped: [...skipped, ...accessible.map((p) => ({ path: p, reason: err.message }))]
     };
   }
+}
+
+/** What may never be deleted outright by a Deep Clean rule, whatever it
+ * matched: a whole drive, a relative or climbing path, a user profile
+ * folder, or Prune's own Quarantine.
+ *
+ * Deliberately NOT the uninstall path's fuller list: C:\Windows\Temp,
+ * Prefetch and the logs are ordinary Deep Clean targets and sit under
+ * Windows, and Program Files caches under Program Files. The rule set is
+ * curated; this is only the backstop against a rule that matches too much. */
+function deleteRefusal(path) {
+  return protectionReason(path, { systemRoot: '', programFiles: '', programFilesX86: '' });
+}
+
+async function deletePermanently(accessible, candidates, skipped) {
+  const sizeOf = new Map(candidates.map((f) => [f.path, f.sizeBytes]));
+  const allowed = [];
+  for (const path of accessible) {
+    const refusal = deleteRefusal(path);
+    if (refusal) skipped.push({ path, reason: refusal });
+    else allowed.push({ path, sizeBytes: sizeOf.get(path) || 0 });
+  }
+  const { removed, failed } = await removePermanently(allowed);
+  for (const { path, reason } of failed) skipped.push({ path, reason });
+  return {
+    // Summed from what was actually removed, not from what was asked for.
+    freedBytes: removed.reduce((sum, f) => sum + f.sizeBytes, 0),
+    skipped
+  };
 }

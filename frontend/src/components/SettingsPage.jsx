@@ -8,6 +8,7 @@ import Toggle from './Toggle.jsx';
 import CookieKeepListSettings from './CookieKeepListSettings.jsx';
 import { useSettings, useUpdateCheck } from '../hooks/useSystemQueries.js';
 import { leftoverDestinationFrom } from '../lib/leftoverDestination.js';
+import { removalModeFrom } from '../lib/cleanOutcome.js';
 import { useLanguage, LANGUAGES } from '../i18n/LanguageContext.jsx';
 import { readStoredSettingsTab, writeStoredSettingsTab } from '../lib/settingsTab.js';
 
@@ -33,7 +34,7 @@ function SectionHeading({ id, children }) {
  * The control sits in the right-hand slot: a switch by default, or whatever
  * `control` hands in (a number field and its unit). Every row of every panel
  * is this shape, so the eye finds the control in the same place each time. */
-function SettingRow({ title, description, checked, onChange, control }) {
+function SettingRow({ title, description, checked, onChange, control, disabled = false, note }) {
   return (
     <div data-setting-row className="flex items-center justify-between gap-4 py-3 first:pt-0 last:pb-0">
       <div className="min-w-0">
@@ -41,8 +42,11 @@ function SettingRow({ title, description, checked, onChange, control }) {
         {description && (
           <p className="text-[12.5px] text-[color:var(--text-secondary)] mt-1 leading-relaxed max-w-[62ch]">{description}</p>
         )}
+        {/* Why the control is off, in words: a greyed switch with no reason
+            reads as broken. */}
+        {note && <p className="text-[12.5px] text-[color:var(--text-muted)] mt-1 max-w-[62ch]">{note}</p>}
       </div>
-      {control ?? <Toggle checked={checked} onChange={onChange} label={title} />}
+      {control ?? <Toggle checked={checked} onChange={onChange} label={title} disabled={disabled} />}
     </div>
   );
 }
@@ -81,6 +85,7 @@ function SettingsPage({ onReportBug = null }) {
   const { t } = useLanguage();
   const update = useUpdateCheck(settings?.updateCheck === true);
   const destination = leftoverDestinationFrom(settings);
+  const deleteNow = removalModeFrom(settings) === 'delete';
 
   const TABS = TAB_IDS.map((id) => ({ id, label: t(`settings.tabs.${id}`) }));
 
@@ -90,6 +95,10 @@ function SettingsPage({ onReportBug = null }) {
     { value: 'quarantine', label: t('settings.uninstallTab.leftoverOptions.quarantine.label'), description: t('settings.uninstallTab.leftoverOptions.quarantine.description') },
     { value: 'recycle', label: t('settings.uninstallTab.leftoverOptions.recycle.label'), description: t('settings.uninstallTab.leftoverOptions.recycle.description') },
     { value: 'permanent', label: t('settings.uninstallTab.leftoverOptions.permanent.label'), description: t('settings.uninstallTab.leftoverOptions.permanent.description') }
+  ];
+  const REMOVAL_OPTIONS = [
+    { value: 'quarantine', label: t('settings.deepCleanRemoval.quarantine.label'), description: t('settings.deepCleanRemoval.quarantine.description') },
+    { value: 'delete', label: t('settings.deepCleanRemoval.delete.label'), description: t('settings.deepCleanRemoval.delete.description') }
   ];
   const acknowledgedCount = Array.isArray(settings?.acknowledgedCleanWarnings) ? settings.acknowledgedCleanWarnings.length : 0;
   // Everything but an explicit false keeps the behaviour Prune always had.
@@ -403,6 +412,39 @@ function SettingsPage({ onReportBug = null }) {
 
               <div className="glass-panel p-6">
                 <SectionHeading>{t('nav.deepClean')}</SectionHeading>
+                {/* The one setting that decides whether Clean can be undone,
+                    so it is a labelled choice with both outcomes spelled out
+                    rather than a switch. Quarantine is the default; Delete
+                    now is BleachBit's behaviour and is never the side effect
+                    of anything else. */}
+                <div className="pb-4 mb-4 border-b border-[color:var(--border-subtle)]">
+                  <div id="deep-clean-removal" className="text-[13.5px] font-medium text-[color:var(--text-primary)] mb-3">
+                    {t('settings.deepCleanRemoval.title')}
+                  </div>
+                  <div role="radiogroup" aria-labelledby="deep-clean-removal" className="flex flex-col gap-3">
+                    {REMOVAL_OPTIONS.map((option) => (
+                      <label key={option.value} className="flex items-start gap-3 cursor-pointer">
+                        <input
+                          type="radio"
+                          name="deep-clean-removal"
+                          value={option.value}
+                          checked={(deleteNow ? 'delete' : 'quarantine') === option.value}
+                          onChange={() => save({ deepCleanRemoval: option.value })}
+                          className="mt-1 accent-[color:var(--accent-primary)]"
+                        />
+                        <span>
+                          <span className="block text-[13.5px] font-medium text-[color:var(--text-primary)]">{option.label}</span>
+                          <span className="block text-[12.5px] text-[color:var(--text-secondary)] max-w-[62ch]">{option.description}</span>
+                        </span>
+                      </label>
+                    ))}
+                  </div>
+                  {deleteNow && (
+                    <p className="mt-3 text-[12.5px] text-[color:var(--danger)] leading-relaxed max-w-[62ch]">
+                      {t('settings.deepCleanRemoval.deleteWarning')}
+                    </p>
+                  )}
+                </div>
                 <div className="divide-y divide-[color:var(--border-subtle)]">
                   <SettingRow
                     title={t('settings.skipRecent.title')}
@@ -446,6 +488,12 @@ function SettingsPage({ onReportBug = null }) {
                     description={t('settings.autoQuarantine.description')}
                     checked={settings.autoQuarantine}
                     onChange={() => save({ autoQuarantine: !settings.autoQuarantine })}
+                    // In Delete now mode nothing is quarantined or recycled,
+                    // so this switch would decide nothing. Disabled with the
+                    // reason beside it rather than left as a second,
+                    // contradictory answer to the same question.
+                    disabled={deleteNow}
+                    note={deleteNow ? t('settings.deepCleanRemoval.autoQuarantineNote') : undefined}
                   />
                   <SettingRow
                     title={t('settings.quarantineRetention.title')}

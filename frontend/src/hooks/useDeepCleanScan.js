@@ -56,6 +56,10 @@ export function useDeepCleanScan(nameOf, messages) {
   // it doing right now" the log line already answers, asked of the tree
   // that sits beside it.
   const [currentId, setCurrentId] = useState(null);
+  // What a profile-wide search is doing right now -- { id, dirs, entries,
+  // matches } -- or null. It is the only rule kind that takes long enough
+  // for silence to look like a hang, so it reports while it works.
+  const [progress, setProgress] = useState(null);
 
   const tree = scannedTree ?? rulesQuery.data ?? null;
 
@@ -83,6 +87,7 @@ export function useDeepCleanScan(nameOf, messages) {
       setScanned(0);
       setTotal(0);
       setCurrentId(null);
+      setProgress(null);
 
       // Mirrors the tree outside state: the stream delivers forty events
       // and the selection step afterwards needs the complete set, which a
@@ -103,6 +108,9 @@ export function useDeepCleanScan(nameOf, messages) {
           setLog((prev) => [...prev, scanLogLine(data, nameOfRef.current, messagesRef.current)]);
           setScanned((n) => n + 1);
           setCurrentId(data.id);
+          setProgress(null);
+        } else if (type === 'progress') {
+          setProgress(data);
         } else if (type === 'error') {
           setStreamError(data.message);
         }
@@ -110,6 +118,7 @@ export function useDeepCleanScan(nameOf, messages) {
 
       setHasScanned(true);
       setCurrentId(null);
+      setProgress(null);
       return built;
     }
   });
@@ -154,6 +163,7 @@ export function useDeepCleanScan(nameOf, messages) {
     total,
     error,
     currentId,
+    progress,
     start,
     stop,
     /** The ids a scan proved are worth cleaning. Before a scan the tree

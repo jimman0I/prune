@@ -65,6 +65,14 @@ const DEFAULT_SETTINGS = {
    * behavior of the list itself, not a sign the UI is missing. */
   cookieKeepList: [],
   autoQuarantine: true,
+  /* What Deep Clean does with the files it removes: 'quarantine' moves them
+     into Prune's Quarantine (undoable, but the space is not free until the
+     Quarantine is emptied) and 'delete' removes them outright -- what
+     BleachBit does, and the only way the drive actually gets its space
+     back at once. Reversibility is the default; 'delete' is an explicit
+     choice in Settings and never anything else's side effect. Read from
+     here by the backend, never from a request. See normalizeRemoval. */
+  deepCleanRemoval: 'quarantine',
   theme: 'dark',
   minimizeToTray: false,
   skipRecentHours: 24,
@@ -189,8 +197,16 @@ export function cleanGuardsFrom(settings) {
     skipRecentHours: Number.isFinite(hours) && hours > 0 ? hours : 0,
     // Only an explicit false turns quarantining off. A settings file
     // written before this key existed must keep the safer behaviour.
-    autoQuarantine: settings?.autoQuarantine !== false
+    autoQuarantine: settings?.autoQuarantine !== false,
+    removal: normalizeRemoval(settings?.deepCleanRemoval)
   };
+}
+
+/** 'delete' only when it is exactly that. Anything else -- a missing key, a
+ * typo, a value from a future version -- is 'quarantine', the reversible
+ * one. The choice that cannot be undone never comes from a fallback. */
+export function normalizeRemoval(value) {
+  return value === 'delete' ? 'delete' : 'quarantine';
 }
 
 /** The language Prune opens in before anyone -- the installer included --
@@ -248,7 +264,7 @@ export async function getSettings({ detectLanguage = detectDefaultLanguage } = {
     // A file that never recorded a choice was behaving as "on", and flipping
     // it would change what an existing install does without being asked.
     if (!('preselectLeftovers' in stored)) stored.preselectLeftovers = true;
-    return { ...DEFAULT_SETTINGS, ...stored };
+    return { ...DEFAULT_SETTINGS, ...stored, deepCleanRemoval: normalizeRemoval(stored.deepCleanRemoval) };
   } catch {
     // A corrupted settings file must not crash every screen that reads
     // settings -- fall back to defaults, same as "never configured".
@@ -264,6 +280,7 @@ export async function getSettings({ detectLanguage = detectDefaultLanguage } = {
 export async function updateSettings(partial) {
   const current = await getSettings();
   const updated = { ...current, ...partial };
+  updated.deepCleanRemoval = normalizeRemoval(updated.deepCleanRemoval);
   const path = settingsPath();
   await mkdir(dirname(path), { recursive: true });
   await writeFile(path, JSON.stringify(updated, null, 2), 'utf8');

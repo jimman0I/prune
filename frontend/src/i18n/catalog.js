@@ -68,6 +68,19 @@ export const CATALOG = {
         title: 'Show free space on the Disk Map',
         description: "Draws the drive's free space as one more block when you scan a whole drive, so every folder reads as a share of the drive rather than of the space in use."
       },
+      deepCleanRemoval: {
+        title: 'When Deep Clean removes files',
+        quarantine: {
+          label: 'Move to Quarantine (you can put it back)',
+          description: "Nothing is deleted. Files go into Prune's Quarantine and the drive gets the space back when you empty it."
+        },
+        delete: {
+          label: "Delete now (frees the space, can't be undone — like BleachBit)",
+          description: 'Files are removed as soon as you confirm, so the space is free straight away. Rules that lose data still ask first.'
+        },
+        deleteWarning: "With Delete now, Clean can't be undone. Scheduled cleans still move files to Quarantine.",
+        autoQuarantineNote: 'Not used while Deep Clean deletes files immediately.'
+      },
       autoQuarantine: {
         title: 'Auto-Quarantine',
         description: "Deep Clean moves what it takes into Prune's Quarantine, where you can put it back. Turn this off and it goes to the Windows Recycle Bin instead — still recoverable, just somewhere you already know how to empty."
@@ -589,10 +602,12 @@ export const CATALOG = {
     deepClean: {
       title: 'Deep Clean',
       subtitle: 'Every cache, log, dump and leftover Prune knows how to find, measured on this machine rather than estimated. Nothing is deleted outright — everything Clean takes goes to Quarantine first, where you can put it back.',
+      subtitleDelete: "Every cache, log, dump and leftover Prune knows how to find, measured on this machine rather than estimated. Clean deletes what you tick immediately and frees the space, the way BleachBit does. It can't be undone.",
       scanLog: {
         header: 'Scan output',
         scanningAnnounce: (total) => `Scanning ${total} locations.`,
         finishedAnnounce: (scanned, total) => `Scan finished. ${scanned} of ${total} locations measured.`,
+        searching: (items) => `Searching your profile… ${items} items checked`,
         starting: 'Starting…',
         idle: "Press Preview to measure what can be cleaned."
       },
@@ -601,6 +616,9 @@ export const CATALOG = {
       cleanErrorPrefix: (error) => `Couldn't clean: ${error}`,
       cleanupComplete: 'Cleanup complete.',
       resultFreed: (formatted) => `Freed ${formatted}`,
+      resultMoved: (formatted) => `Moved ${formatted} to Quarantine. The space comes back when you empty it.`,
+      resultRecycled: (formatted) => `Moved ${formatted} to the Recycle Bin. The space comes back when you empty it.`,
+      openQuarantine: 'Open Quarantine',
       resultLockedSuffix: (count) => ` — skipped ${count} locked ${count === 1 ? 'file' : 'files'}`,
       before: {
         body: 'Prune measures every category on disk for real rather than estimating, which takes about half a minute.',
@@ -613,6 +631,9 @@ export const CATALOG = {
         notMeasuredYet: 'not measured yet',
         previewFirst: 'Preview first to see what will be freed.',
         unmeasuredSuffix: (count) => ` · ${count} not measured`,
+        modeQuarantine: 'Moves to Quarantine.',
+        modeRecycle: 'Moves to the Recycle Bin.',
+        modeDelete: 'Deletes immediately.',
         selectEverything: 'Select everything',
         clear: 'Clear',
         selectedCount: (count) => `${count} selected`
@@ -621,6 +642,10 @@ export const CATALOG = {
         prompt: (count, sizeKnown, formatted) => `Move ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'}) to Quarantine?`,
         cancel: 'Cancel',
         confirmButton: "Move to Quarantine",
+        promptDelete: (count, sizeKnown, formatted) => `Delete ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'})? This can't be undone.`,
+        deleteButton: 'Delete',
+        promptRecycle: (count, sizeKnown, formatted) => `Move ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'}) to the Recycle Bin?`,
+        recycleButton: 'Move to Recycle Bin',
         cleaning: 'Cleaning…'
       },
       stop: 'Stop',
@@ -628,6 +653,7 @@ export const CATALOG = {
       clean: 'Clean',
       tree: {
         selectCategoryAriaLabel: (category) => `Select everything under ${category}`,
+        atLeast: (size) => `at least ${size}`,
         losesData: 'Loses data',
         needsAdmin: 'needs admin',
         notInstalled: 'not installed',
@@ -644,6 +670,7 @@ export const CATALOG = {
       },
       log: {
         scan: {
+          partial: (size) => `${size}, partial`,
           nothingToMeasure: "nothing to measure",
           needsAdmin: "needs admin",
           notInstalled: "not installed",
@@ -651,6 +678,7 @@ export const CATALOG = {
         },
         execute: {
           delete: (name) => `Delete ${name}`,
+          quarantine: (name) => `Quarantine ${name}`,
           recycle: (name) => `Recycle ${name}`,
           clear: (name) => `Clear ${name}`,
           compact: (name) => `Compact ${name}`,
@@ -899,6 +927,19 @@ export const CATALOG = {
       showFreeSpace: {
         title: 'Wys vrye spasie op die Skyfkaart',
         description: "Trek die skyf se vrye spasie as nog 'n blok wanneer jy 'n hele skyf skandeer, sodat elke vouer lees as 'n deel van die skyf eerder as van die spasie wat gebruik word."
+      },
+      deepCleanRemoval: {
+        title: 'When Deep Clean removes files',
+        quarantine: {
+          label: 'Move to Quarantine (you can put it back)',
+          description: "Nothing is deleted. Files go into Prune's Quarantine and the drive gets the space back when you empty it."
+        },
+        delete: {
+          label: "Delete now (frees the space, can't be undone — like BleachBit)",
+          description: 'Files are removed as soon as you confirm, so the space is free straight away. Rules that lose data still ask first.'
+        },
+        deleteWarning: "With Delete now, Clean can't be undone. Scheduled cleans still move files to Quarantine.",
+        autoQuarantineNote: 'Not used while Deep Clean deletes files immediately.'
       },
       autoQuarantine: {
         title: 'Outo-Karantyn',
@@ -1416,10 +1457,12 @@ export const CATALOG = {
     deepClean: {
       title: 'Diep Skoonmaak',
       subtitle: 'Elke kas, log, dump en oorblyfsel wat Prune weet om te vind, gemeet op hierdie masjien in plaas van beraam. Niks word summier verwyder nie — alles wat Skoonmaak vat gaan eers na Karantyn, waar jy dit kan terugsit.',
+      subtitleDelete: "Every cache, log, dump and leftover Prune knows how to find, measured on this machine rather than estimated. Clean deletes what you tick immediately and frees the space, the way BleachBit does. It can't be undone.",
       scanLog: {
         header: 'Skanderingsuitset',
         scanningAnnounce: (total) => `Skandeer ${total} plekke.`,
         finishedAnnounce: (scanned, total) => `Skandering voltooi. ${scanned} van ${total} plekke gemeet.`,
+        searching: (items) => `Searching your profile… ${items} items checked`,
         starting: 'Begin tans…',
         idle: "Druk Voorskou om te meet wat skoongemaak kan word."
       },
@@ -1428,6 +1471,9 @@ export const CATALOG = {
       cleanErrorPrefix: (error) => `Kon nie skoonmaak nie: ${error}`,
       cleanupComplete: 'Skoonmaak voltooi.',
       resultFreed: (formatted) => `${formatted} vrygemaak`,
+      resultMoved: (formatted) => `Moved ${formatted} to Quarantine. The space comes back when you empty it.`,
+      resultRecycled: (formatted) => `Moved ${formatted} to the Recycle Bin. The space comes back when you empty it.`,
+      openQuarantine: 'Open Quarantine',
       resultLockedSuffix: (count) => ` — ${count} geslote lêer${count === 1 ? '' : 's'} oorgeslaan`,
       before: {
         body: 'Prune meet elke kategorie regtig op skyf eerder as om te beraam, wat omtrent \'n halwe minuut neem.',
@@ -1440,6 +1486,9 @@ export const CATALOG = {
         notMeasuredYet: 'nog nie gemeet nie',
         previewFirst: "Voorskou eers om te sien wat vrygemaak sal word.",
         unmeasuredSuffix: (count) => ` · ${count} nie gemeet nie`,
+        modeQuarantine: 'Moves to Quarantine.',
+        modeRecycle: 'Moves to the Recycle Bin.',
+        modeDelete: 'Deletes immediately.',
         selectEverything: 'Kies alles',
         clear: 'Maak skoon',
         selectedCount: (count) => `${count} gekies`
@@ -1448,6 +1497,10 @@ export const CATALOG = {
         prompt: (count, sizeKnown, formatted) => `Skuif ${count} item${count === 1 ? '' : 's'} (${sizeKnown ? formatted : 'grootte nie gemeet nie'}) na Karantyn?`,
         cancel: 'Kanselleer',
         confirmButton: "Skuif na Karantyn",
+        promptDelete: (count, sizeKnown, formatted) => `Delete ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'})? This can't be undone.`,
+        deleteButton: 'Delete',
+        promptRecycle: (count, sizeKnown, formatted) => `Move ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'}) to the Recycle Bin?`,
+        recycleButton: 'Move to Recycle Bin',
         cleaning: 'Maak skoon…'
       },
       stop: 'Stop',
@@ -1455,6 +1508,7 @@ export const CATALOG = {
       clean: 'Maak skoon',
       tree: {
         selectCategoryAriaLabel: (category) => `Kies alles onder ${category}`,
+        atLeast: (size) => `at least ${size}`,
         losesData: 'Verloor data',
         needsAdmin: 'benodig admin',
         notInstalled: 'nie geïnstalleer nie',
@@ -1471,6 +1525,7 @@ export const CATALOG = {
       },
       log: {
         scan: {
+          partial: (size) => `${size}, partial`,
           nothingToMeasure: "niks om te meet nie",
           needsAdmin: "benodig admin",
           notInstalled: "nie geïnstalleer nie",
@@ -1478,6 +1533,7 @@ export const CATALOG = {
         },
         execute: {
           delete: (name) => `Verwyder ${name}`,
+          quarantine: (name) => `Quarantine ${name}`,
           recycle: (name) => `Stuur ${name} na die Asblik`,
           clear: (name) => `Maak ${name} skoon`,
           compact: (name) => `Kompakteer ${name}`,
@@ -1726,6 +1782,19 @@ export const CATALOG = {
       showFreeSpace: {
         title: 'إظهار المساحة الحرة في خريطة القرص',
         description: 'يرسم المساحة الحرة للقرص ككتلة إضافية عند فحص قرص كامل، بحيث يُقرأ كل مجلد كحصة من القرص بدلاً من المساحة المستخدمة.'
+      },
+      deepCleanRemoval: {
+        title: 'When Deep Clean removes files',
+        quarantine: {
+          label: 'Move to Quarantine (you can put it back)',
+          description: "Nothing is deleted. Files go into Prune's Quarantine and the drive gets the space back when you empty it."
+        },
+        delete: {
+          label: "Delete now (frees the space, can't be undone — like BleachBit)",
+          description: 'Files are removed as soon as you confirm, so the space is free straight away. Rules that lose data still ask first.'
+        },
+        deleteWarning: "With Delete now, Clean can't be undone. Scheduled cleans still move files to Quarantine.",
+        autoQuarantineNote: 'Not used while Deep Clean deletes files immediately.'
       },
       autoQuarantine: {
         title: 'الحجر الصحي التلقائي',
@@ -2243,10 +2312,12 @@ export const CATALOG = {
     deepClean: {
       title: "تنظيف عميق",
       subtitle: "كل ذاكرة تخزين مؤقت وسجل وملف تفريغ وكل ما خلّفته البرامج يعرف Prune كيف يجدها، مقاسة على هذا الجهاز بدلاً من تقديرها. لا يُحذف شيء نهائيًا — كل ما يأخذه التنظيف ينتقل أولاً إلى الحجر الصحي، حيث يمكنك استعادته.",
+      subtitleDelete: "Every cache, log, dump and leftover Prune knows how to find, measured on this machine rather than estimated. Clean deletes what you tick immediately and frees the space, the way BleachBit does. It can't be undone.",
       scanLog: {
         header: 'مخرجات الفحص',
         scanningAnnounce: (total) => `جارٍ فحص ${total} موقعًا.`,
         finishedAnnounce: (scanned, total) => `انتهى الفحص. تم قياس ${scanned} من ${total} موقعًا.`,
+        searching: (items) => `Searching your profile… ${items} items checked`,
         starting: 'جارٍ البدء…',
         idle: "اضغط معاينة لقياس ما يمكن تنظيفه."
       },
@@ -2255,6 +2326,9 @@ export const CATALOG = {
       cleanErrorPrefix: (error) => `تعذر التنظيف: ${error}`,
       cleanupComplete: 'اكتمل التنظيف.',
       resultFreed: (formatted) => `تم تحرير ${formatted}`,
+      resultMoved: (formatted) => `Moved ${formatted} to Quarantine. The space comes back when you empty it.`,
+      resultRecycled: (formatted) => `Moved ${formatted} to the Recycle Bin. The space comes back when you empty it.`,
+      openQuarantine: 'Open Quarantine',
       resultLockedSuffix: (count) => ` — تم تخطي ${count} ملف مقفل`,
       before: {
         body: 'يقيس Prune كل فئة على القرص فعليًا بدلاً من التقدير، وهو ما يستغرق حوالي نصف دقيقة.',
@@ -2267,6 +2341,9 @@ export const CATALOG = {
         notMeasuredYet: 'لم يتم قياسها بعد',
         previewFirst: "اضغط معاينة أولاً لترى ما سيتم تحريره.",
         unmeasuredSuffix: (count) => ` · ${count} غير مقاس`,
+        modeQuarantine: 'Moves to Quarantine.',
+        modeRecycle: 'Moves to the Recycle Bin.',
+        modeDelete: 'Deletes immediately.',
         selectEverything: 'تحديد الكل',
         clear: 'مسح',
         selectedCount: (count) => `تم تحديد ${count}`
@@ -2275,6 +2352,10 @@ export const CATALOG = {
         prompt: (count, sizeKnown, formatted) => `نقل ${count} عنصر (${sizeKnown ? formatted : 'الحجم غير مقاس'}) إلى الحجر الصحي؟`,
         cancel: 'إلغاء',
         confirmButton: "نقل إلى الحجر الصحي",
+        promptDelete: (count, sizeKnown, formatted) => `Delete ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'})? This can't be undone.`,
+        deleteButton: 'Delete',
+        promptRecycle: (count, sizeKnown, formatted) => `Move ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'}) to the Recycle Bin?`,
+        recycleButton: 'Move to Recycle Bin',
         cleaning: 'جارٍ التنظيف…'
       },
       stop: 'إيقاف',
@@ -2282,6 +2363,7 @@ export const CATALOG = {
       clean: 'تنظيف',
       tree: {
         selectCategoryAriaLabel: (category) => `تحديد كل ما تحت ${category}`,
+        atLeast: (size) => `at least ${size}`,
         losesData: 'يفقد بيانات',
         needsAdmin: 'يتطلب صلاحيات المسؤول',
         notInstalled: 'غير مثبت',
@@ -2298,6 +2380,7 @@ export const CATALOG = {
       },
       log: {
         scan: {
+          partial: (size) => `${size}, partial`,
           nothingToMeasure: "لا شيء للقياس",
           needsAdmin: "يتطلب صلاحيات المسؤول",
           notInstalled: "غير مثبت",
@@ -2305,6 +2388,7 @@ export const CATALOG = {
         },
         execute: {
           delete: (name) => `حذف ${name}`,
+          quarantine: (name) => `Quarantine ${name}`,
           recycle: (name) => `إرسال ${name} إلى سلة المحذوفات`,
           clear: (name) => `مسح ${name}`,
           compact: (name) => `ضغط ${name}`,
@@ -2553,6 +2637,19 @@ export const CATALOG = {
       showFreeSpace: {
         title: "Mostra l'espai lliure al Mapa del disc",
         description: "Dibuixa l'espai lliure del disc com un bloc més quan escanejes un disc sencer, de manera que cada carpeta es llegeix com una part del disc en lloc de l'espai en ús."
+      },
+      deepCleanRemoval: {
+        title: 'When Deep Clean removes files',
+        quarantine: {
+          label: 'Move to Quarantine (you can put it back)',
+          description: "Nothing is deleted. Files go into Prune's Quarantine and the drive gets the space back when you empty it."
+        },
+        delete: {
+          label: "Delete now (frees the space, can't be undone — like BleachBit)",
+          description: 'Files are removed as soon as you confirm, so the space is free straight away. Rules that lose data still ask first.'
+        },
+        deleteWarning: "With Delete now, Clean can't be undone. Scheduled cleans still move files to Quarantine.",
+        autoQuarantineNote: 'Not used while Deep Clean deletes files immediately.'
       },
       autoQuarantine: {
         title: "Quarantena automàtica",
@@ -3070,10 +3167,12 @@ export const CATALOG = {
     deepClean: {
       title: "Neteja profunda",
       subtitle: "Cada memòria cau, registre, bolcat i resta que Prune sap trobar, mesurat en aquesta màquina en lloc d'estimat. Res s'elimina directament — tot el que Neteja treu va primer a la Quarantena, on el pots tornar a posar.",
+      subtitleDelete: "Every cache, log, dump and leftover Prune knows how to find, measured on this machine rather than estimated. Clean deletes what you tick immediately and frees the space, the way BleachBit does. It can't be undone.",
       scanLog: {
         header: 'Sortida de l\'escaneig',
         scanningAnnounce: (total) => `Escanejant ${total} ubicacions.`,
         finishedAnnounce: (scanned, total) => `Escaneig finalitzat. ${scanned} de ${total} ubicacions mesurades.`,
+        searching: (items) => `Searching your profile… ${items} items checked`,
         starting: 'Iniciant…',
         idle: "Prem Previsualitza per mesurar què es pot netejar."
       },
@@ -3082,6 +3181,9 @@ export const CATALOG = {
       cleanErrorPrefix: (error) => `No s'ha pogut netejar: ${error}`,
       cleanupComplete: 'Neteja completada.',
       resultFreed: (formatted) => `${formatted} alliberats`,
+      resultMoved: (formatted) => `Moved ${formatted} to Quarantine. The space comes back when you empty it.`,
+      resultRecycled: (formatted) => `Moved ${formatted} to the Recycle Bin. The space comes back when you empty it.`,
+      openQuarantine: 'Open Quarantine',
       resultLockedSuffix: (count) => ` — ${count} ${count === 1 ? 'fitxer bloquejat omès' : 'fitxers bloquejats omesos'}`,
       before: {
         body: 'El Prune mesura cada categoria al disc de veritat en lloc d\'estimar-la, cosa que triga uns trenta segons.',
@@ -3094,6 +3196,9 @@ export const CATALOG = {
         notMeasuredYet: 'encara no mesurat',
         previewFirst: "Previsualitza primer per veure què s'alliberarà.",
         unmeasuredSuffix: (count) => ` · ${count} sense mesurar`,
+        modeQuarantine: 'Moves to Quarantine.',
+        modeRecycle: 'Moves to the Recycle Bin.',
+        modeDelete: 'Deletes immediately.',
         selectEverything: 'Selecciona-ho tot',
         clear: 'Neteja',
         selectedCount: (count) => `${count} seleccionats`
@@ -3102,6 +3207,10 @@ export const CATALOG = {
         prompt: (count, sizeKnown, formatted) => `Vols moure ${count} element${count === 1 ? '' : 's'} (${sizeKnown ? formatted : 'mida no mesurada'}) a la Quarantena?`,
         cancel: 'Cancel·la',
         confirmButton: "Mou a la Quarantena",
+        promptDelete: (count, sizeKnown, formatted) => `Delete ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'})? This can't be undone.`,
+        deleteButton: 'Delete',
+        promptRecycle: (count, sizeKnown, formatted) => `Move ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'}) to the Recycle Bin?`,
+        recycleButton: 'Move to Recycle Bin',
         cleaning: 'Netejant…'
       },
       stop: 'Atura',
@@ -3109,6 +3218,7 @@ export const CATALOG = {
       clean: 'Neteja',
       tree: {
         selectCategoryAriaLabel: (category) => `Selecciona-ho tot sota ${category}`,
+        atLeast: (size) => `at least ${size}`,
         losesData: 'Perd dades',
         needsAdmin: 'necessita administrador',
         notInstalled: 'no instal·lat',
@@ -3125,6 +3235,7 @@ export const CATALOG = {
       },
       log: {
         scan: {
+          partial: (size) => `${size}, partial`,
           nothingToMeasure: "res per mesurar",
           needsAdmin: "necessita administrador",
           notInstalled: "no instal·lat",
@@ -3132,6 +3243,7 @@ export const CATALOG = {
         },
         execute: {
           delete: (name) => `Elimina ${name}`,
+          quarantine: (name) => `Quarantine ${name}`,
           recycle: (name) => `Envia ${name} a la Paperera`,
           clear: (name) => `Neteja ${name}`,
           compact: (name) => `Compacta ${name}`,
@@ -3380,6 +3492,19 @@ export const CATALOG = {
       showFreeSpace: {
         title: 'Zobrazit volné místo v Mapě disku',
         description: 'Vykreslí volné místo na disku jako další blok při skenování celého disku, takže se každá složka čte jako podíl na disku, nikoli na využitém místě.'
+      },
+      deepCleanRemoval: {
+        title: 'When Deep Clean removes files',
+        quarantine: {
+          label: 'Move to Quarantine (you can put it back)',
+          description: "Nothing is deleted. Files go into Prune's Quarantine and the drive gets the space back when you empty it."
+        },
+        delete: {
+          label: "Delete now (frees the space, can't be undone — like BleachBit)",
+          description: 'Files are removed as soon as you confirm, so the space is free straight away. Rules that lose data still ask first.'
+        },
+        deleteWarning: "With Delete now, Clean can't be undone. Scheduled cleans still move files to Quarantine.",
+        autoQuarantineNote: 'Not used while Deep Clean deletes files immediately.'
       },
       autoQuarantine: {
         title: 'Automatická karanténa',
@@ -3897,10 +4022,12 @@ export const CATALOG = {
     deepClean: {
       title: 'Důkladné čištění',
       subtitle: "Každá mezipaměť, protokol, výpis a zbytek, které Prune umí najít, změřené na tomto počítači místo odhadu. Nic se rovnou nesmaže — vše, co Čištění odebere, jde nejprve do Karantény, odkud to lze vrátit zpět.",
+      subtitleDelete: "Every cache, log, dump and leftover Prune knows how to find, measured on this machine rather than estimated. Clean deletes what you tick immediately and frees the space, the way BleachBit does. It can't be undone.",
       scanLog: {
         header: 'Výstup skenování',
         scanningAnnounce: (total) => `Skenování ${total} umístění.`,
         finishedAnnounce: (scanned, total) => `Skenování dokončeno. Změřeno ${scanned} z ${total} umístění.`,
+        searching: (items) => `Searching your profile… ${items} items checked`,
         starting: 'Spouštění…',
         idle: "Klikněte na Náhled a zjistěte, co lze vyčistit."
       },
@@ -3909,6 +4036,9 @@ export const CATALOG = {
       cleanErrorPrefix: (error) => `Čištění se nezdařilo: ${error}`,
       cleanupComplete: 'Čištění dokončeno.',
       resultFreed: (formatted) => `Uvolněno ${formatted}`,
+      resultMoved: (formatted) => `Moved ${formatted} to Quarantine. The space comes back when you empty it.`,
+      resultRecycled: (formatted) => `Moved ${formatted} to the Recycle Bin. The space comes back when you empty it.`,
+      openQuarantine: 'Open Quarantine',
       resultLockedSuffix: (count) => ` — přeskočeno ${count} ${count === 1 ? 'uzamčený soubor' : (count >= 2 && count <= 4) ? 'uzamčené soubory' : 'uzamčených souborů'}`,
       before: {
         body: 'Prune měří každou kategorii na disku skutečně, místo aby ji odhadoval, což trvá zhruba půl minuty.',
@@ -3921,6 +4051,9 @@ export const CATALOG = {
         notMeasuredYet: 'zatím nezměřeno',
         previewFirst: "Nejdřív klikněte na Náhled, abyste viděli, co se uvolní.",
         unmeasuredSuffix: (count) => ` · nezměřeno: ${count}`,
+        modeQuarantine: 'Moves to Quarantine.',
+        modeRecycle: 'Moves to the Recycle Bin.',
+        modeDelete: 'Deletes immediately.',
         selectEverything: 'Vybrat vše',
         clear: 'Vymazat',
         selectedCount: (count) => `Vybráno: ${count}`
@@ -3929,6 +4062,10 @@ export const CATALOG = {
         prompt: (count, sizeKnown, formatted) => `Přesunout ${count} ${count === 1 ? 'položku' : (count >= 2 && count <= 4) ? 'položky' : 'položek'} (${sizeKnown ? formatted : 'velikost nezměřena'}) do karantény?`,
         cancel: 'Zrušit',
         confirmButton: "Přesunout do karantény",
+        promptDelete: (count, sizeKnown, formatted) => `Delete ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'})? This can't be undone.`,
+        deleteButton: 'Delete',
+        promptRecycle: (count, sizeKnown, formatted) => `Move ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'}) to the Recycle Bin?`,
+        recycleButton: 'Move to Recycle Bin',
         cleaning: 'Čištění…'
       },
       stop: 'Zastavit',
@@ -3936,6 +4073,7 @@ export const CATALOG = {
       clean: 'Vyčistit',
       tree: {
         selectCategoryAriaLabel: (category) => `Vybrat vše v kategorii ${category}`,
+        atLeast: (size) => `at least ${size}`,
         losesData: 'Ztráta dat',
         needsAdmin: 'vyžaduje správce',
         notInstalled: 'není nainstalováno',
@@ -3952,6 +4090,7 @@ export const CATALOG = {
       },
       log: {
         scan: {
+          partial: (size) => `${size}, partial`,
           nothingToMeasure: "není co měřit",
           needsAdmin: "vyžaduje správce",
           notInstalled: "není nainstalováno",
@@ -3959,6 +4098,7 @@ export const CATALOG = {
         },
         execute: {
           delete: (name) => `Odstranit ${name}`,
+          quarantine: (name) => `Quarantine ${name}`,
           recycle: (name) => `Odeslat ${name} do koše`,
           clear: (name) => `Vymazat ${name}`,
           compact: (name) => `Zhutnit ${name}`,
@@ -4205,6 +4345,19 @@ export const CATALOG = {
       showFreeSpace: {
         title: 'Dangos lle rhydd ar y Map Disg',
         description: "Yn tynnu lle rhydd y ddisg fel bloc arall pan fyddwch yn sganio disg gyfan, fel bod pob ffolder yn darllen fel cyfran o'r ddisg yn hytrach na'r lle sy'n cael ei ddefnyddio."
+      },
+      deepCleanRemoval: {
+        title: 'When Deep Clean removes files',
+        quarantine: {
+          label: 'Move to Quarantine (you can put it back)',
+          description: "Nothing is deleted. Files go into Prune's Quarantine and the drive gets the space back when you empty it."
+        },
+        delete: {
+          label: "Delete now (frees the space, can't be undone — like BleachBit)",
+          description: 'Files are removed as soon as you confirm, so the space is free straight away. Rules that lose data still ask first.'
+        },
+        deleteWarning: "With Delete now, Clean can't be undone. Scheduled cleans still move files to Quarantine.",
+        autoQuarantineNote: 'Not used while Deep Clean deletes files immediately.'
       },
       autoQuarantine: {
         title: 'Cwarantin Awtomatig',
@@ -4722,10 +4875,12 @@ export const CATALOG = {
     deepClean: {
       title: 'Glanhau Dwfn',
       subtitle: "Pob storfa dros dro, log, dympiad ac olion mae Prune yn gwybod sut i'w canfod, wedi'u mesur ar y peiriant hwn yn hytrach nag amcangyfrif. Ni chaiff dim ei ddileu'n uniongyrchol — mae popeth mae Glanhau yn ei gymryd yn mynd i'r Cwarantin yn gyntaf, lle gallwch ei roi'n ôl.",
+      subtitleDelete: "Every cache, log, dump and leftover Prune knows how to find, measured on this machine rather than estimated. Clean deletes what you tick immediately and frees the space, the way BleachBit does. It can't be undone.",
       scanLog: {
         header: 'Allbwn sgan',
         scanningAnnounce: (total) => `Sganio ${total} lleoliad.`,
         finishedAnnounce: (scanned, total) => `Sgan wedi gorffen. ${scanned} o ${total} lleoliad wedi'u mesur.`,
+        searching: (items) => `Searching your profile… ${items} items checked`,
         starting: 'Yn dechrau…',
         idle: "Pwyswch Rhagolwg i fesur beth y gellir ei lanhau."
       },
@@ -4734,6 +4889,9 @@ export const CATALOG = {
       cleanErrorPrefix: (error) => `Methu glanhau: ${error}`,
       cleanupComplete: 'Glanhau wedi\'i gwblhau.',
       resultFreed: (formatted) => `Wedi rhyddhau ${formatted}`,
+      resultMoved: (formatted) => `Moved ${formatted} to Quarantine. The space comes back when you empty it.`,
+      resultRecycled: (formatted) => `Moved ${formatted} to the Recycle Bin. The space comes back when you empty it.`,
+      openQuarantine: 'Open Quarantine',
       resultLockedSuffix: (count) => ` — ${count} ffeil ar glo wedi'u hepgor`,
       before: {
         body: "Mae Prune yn mesur pob categori ar y ddisg go iawn yn hytrach na dyfalu, sy'n cymryd tua hanner munud.",
@@ -4746,6 +4904,9 @@ export const CATALOG = {
         notMeasuredYet: 'heb ei fesur eto',
         previewFirst: "Cymerwch Ragolwg yn gyntaf i weld beth a ryddheir.",
         unmeasuredSuffix: (count) => ` · ${count} heb eu mesur`,
+        modeQuarantine: 'Moves to Quarantine.',
+        modeRecycle: 'Moves to the Recycle Bin.',
+        modeDelete: 'Deletes immediately.',
         selectEverything: 'Dewis popeth',
         clear: 'Clirio',
         selectedCount: (count) => `${count} wedi'u dewis`
@@ -4754,6 +4915,10 @@ export const CATALOG = {
         prompt: (count, sizeKnown, formatted) => `Symud ${count} eitem (${sizeKnown ? formatted : "maint heb ei fesur"}) i'r Cwarantin?`,
         cancel: 'Diddymu',
         confirmButton: "Symud i'r Cwarantin",
+        promptDelete: (count, sizeKnown, formatted) => `Delete ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'})? This can't be undone.`,
+        deleteButton: 'Delete',
+        promptRecycle: (count, sizeKnown, formatted) => `Move ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'}) to the Recycle Bin?`,
+        recycleButton: 'Move to Recycle Bin',
         cleaning: 'Glanhau…'
       },
       stop: 'Stopio',
@@ -4761,6 +4926,7 @@ export const CATALOG = {
       clean: 'Glanhau',
       tree: {
         selectCategoryAriaLabel: (category) => `Dewis popeth o dan ${category}`,
+        atLeast: (size) => `at least ${size}`,
         losesData: 'Yn colli data',
         needsAdmin: 'angen gweinyddwr',
         notInstalled: "heb ei osod",
@@ -4777,6 +4943,7 @@ export const CATALOG = {
       },
       log: {
         scan: {
+          partial: (size) => `${size}, partial`,
           nothingToMeasure: "dim i'w fesur",
           needsAdmin: "angen gweinyddwr",
           notInstalled: "heb ei osod",
@@ -4784,6 +4951,7 @@ export const CATALOG = {
         },
         execute: {
           delete: (name) => `Dileu ${name}`,
+          quarantine: (name) => `Quarantine ${name}`,
           recycle: (name) => `Anfon ${name} i'r Bin Ailgylchu`,
           clear: (name) => `Clirio ${name}`,
           compact: (name) => `Cywasgu ${name}`,
@@ -5032,6 +5200,19 @@ export const CATALOG = {
       showFreeSpace: {
         title: 'Vis ledig plads på Diskkortet',
         description: 'Tegner drevets ledige plads som endnu en blok, når du scanner et helt drev, så hver mappe læses som en andel af drevet i stedet for af den plads, der er i brug.'
+      },
+      deepCleanRemoval: {
+        title: 'When Deep Clean removes files',
+        quarantine: {
+          label: 'Move to Quarantine (you can put it back)',
+          description: "Nothing is deleted. Files go into Prune's Quarantine and the drive gets the space back when you empty it."
+        },
+        delete: {
+          label: "Delete now (frees the space, can't be undone — like BleachBit)",
+          description: 'Files are removed as soon as you confirm, so the space is free straight away. Rules that lose data still ask first.'
+        },
+        deleteWarning: "With Delete now, Clean can't be undone. Scheduled cleans still move files to Quarantine.",
+        autoQuarantineNote: 'Not used while Deep Clean deletes files immediately.'
       },
       autoQuarantine: {
         title: 'Auto-karantæne',
@@ -5549,10 +5730,12 @@ export const CATALOG = {
     deepClean: {
       title: 'Dybderensning',
       subtitle: "Alle caches, logfiler, dumps og rester, som Prune kan finde, målt på denne maskine i stedet for anslået. Intet slettes direkte — alt, hvad Rens tager, går først til Karantæne, hvor du kan sætte det tilbage.",
+      subtitleDelete: "Every cache, log, dump and leftover Prune knows how to find, measured on this machine rather than estimated. Clean deletes what you tick immediately and frees the space, the way BleachBit does. It can't be undone.",
       scanLog: {
         header: 'Scanningsoutput',
         scanningAnnounce: (total) => `Scanner ${total} placeringer.`,
         finishedAnnounce: (scanned, total) => `Scanning færdig. ${scanned} af ${total} placeringer målt.`,
+        searching: (items) => `Searching your profile… ${items} items checked`,
         starting: 'Starter…',
         idle: "Tryk på Forhåndsvisning for at måle, hvad der kan renses."
       },
@@ -5561,6 +5744,9 @@ export const CATALOG = {
       cleanErrorPrefix: (error) => `Kunne ikke rense: ${error}`,
       cleanupComplete: 'Oprydning fuldført.',
       resultFreed: (formatted) => `Frigjorde ${formatted}`,
+      resultMoved: (formatted) => `Moved ${formatted} to Quarantine. The space comes back when you empty it.`,
+      resultRecycled: (formatted) => `Moved ${formatted} to the Recycle Bin. The space comes back when you empty it.`,
+      openQuarantine: 'Open Quarantine',
       resultLockedSuffix: (count) => ` — sprang ${count} ${count === 1 ? 'låst fil' : 'låste filer'} over`,
       before: {
         body: "Prune måler hver kategori på disken i stedet for at anslå. Det tager cirka et halvt minut.",
@@ -5573,6 +5759,9 @@ export const CATALOG = {
         notMeasuredYet: 'ikke målt endnu',
         previewFirst: "Se først en forhåndsvisning for at se, hvad der frigøres.",
         unmeasuredSuffix: (count) => ` · ${count} ikke målt`,
+        modeQuarantine: 'Moves to Quarantine.',
+        modeRecycle: 'Moves to the Recycle Bin.',
+        modeDelete: 'Deletes immediately.',
         selectEverything: 'Vælg alt',
         clear: 'Ryd',
         selectedCount: (count) => `${count} valgt`
@@ -5581,6 +5770,10 @@ export const CATALOG = {
         prompt: (count, sizeKnown, formatted) => `Flyt ${count} ${count === 1 ? 'emne' : 'emner'} (${sizeKnown ? formatted : 'størrelse ikke målt'}) til karantæne?`,
         cancel: 'Annuller',
         confirmButton: "Flyt til karantæne",
+        promptDelete: (count, sizeKnown, formatted) => `Delete ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'})? This can't be undone.`,
+        deleteButton: 'Delete',
+        promptRecycle: (count, sizeKnown, formatted) => `Move ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'}) to the Recycle Bin?`,
+        recycleButton: 'Move to Recycle Bin',
         cleaning: 'Renser…'
       },
       stop: 'Stop',
@@ -5588,6 +5781,7 @@ export const CATALOG = {
       clean: 'Rens',
       tree: {
         selectCategoryAriaLabel: (category) => `Vælg alt under ${category}`,
+        atLeast: (size) => `at least ${size}`,
         losesData: 'Mister data',
         needsAdmin: 'kræver administrator',
         notInstalled: 'ikke installeret',
@@ -5604,6 +5798,7 @@ export const CATALOG = {
       },
       log: {
         scan: {
+          partial: (size) => `${size}, partial`,
           nothingToMeasure: "intet at måle",
           needsAdmin: "kræver administrator",
           notInstalled: "ikke installeret",
@@ -5611,6 +5806,7 @@ export const CATALOG = {
         },
         execute: {
           delete: (name) => `Slet ${name}`,
+          quarantine: (name) => `Quarantine ${name}`,
           recycle: (name) => `Send ${name} til papirkurven`,
           clear: (name) => `Ryd ${name}`,
           compact: (name) => `Komprimer ${name}`,
@@ -5859,6 +6055,19 @@ export const CATALOG = {
       showFreeSpace: {
         title: "Freien Speicherplatz auf der Festplattenkarte anzeigen",
         description: 'Zeichnet den freien Speicherplatz des Laufwerks als weiteren Block, wenn du ein ganzes Laufwerk scannst, sodass jeder Ordner als Anteil des Laufwerks statt des belegten Speicherplatzes gelesen wird.'
+      },
+      deepCleanRemoval: {
+        title: 'When Deep Clean removes files',
+        quarantine: {
+          label: 'Move to Quarantine (you can put it back)',
+          description: "Nothing is deleted. Files go into Prune's Quarantine and the drive gets the space back when you empty it."
+        },
+        delete: {
+          label: "Delete now (frees the space, can't be undone — like BleachBit)",
+          description: 'Files are removed as soon as you confirm, so the space is free straight away. Rules that lose data still ask first.'
+        },
+        deleteWarning: "With Delete now, Clean can't be undone. Scheduled cleans still move files to Quarantine.",
+        autoQuarantineNote: 'Not used while Deep Clean deletes files immediately.'
       },
       autoQuarantine: {
         title: 'Auto-Quarantäne',
@@ -6376,10 +6585,12 @@ export const CATALOG = {
     deepClean: {
       title: "Gründliche Bereinigung",
       subtitle: "Jeder Cache, jedes Protokoll, jeder Dump und jeder Rückstand, den Prune finden kann, auf diesem Rechner gemessen statt geschätzt. Nichts wird sofort gelöscht — alles, was die Reinigung mitnimmt, wandert zuerst in die Quarantäne, wo du es zurückholen kannst.",
+      subtitleDelete: "Every cache, log, dump and leftover Prune knows how to find, measured on this machine rather than estimated. Clean deletes what you tick immediately and frees the space, the way BleachBit does. It can't be undone.",
       scanLog: {
         header: 'Scan-Ausgabe',
         scanningAnnounce: (total) => `${total} Orte werden gescannt.`,
         finishedAnnounce: (scanned, total) => `Scan abgeschlossen. ${scanned} von ${total} Orten gemessen.`,
+        searching: (items) => `Searching your profile… ${items} items checked`,
         starting: 'Wird gestartet…',
         idle: "Klicke auf Vorschau, um zu messen, was sich bereinigen lässt."
       },
@@ -6388,6 +6599,9 @@ export const CATALOG = {
       cleanErrorPrefix: (error) => `Reinigung fehlgeschlagen: ${error}`,
       cleanupComplete: 'Bereinigung abgeschlossen.',
       resultFreed: (formatted) => `${formatted} freigegeben`,
+      resultMoved: (formatted) => `Moved ${formatted} to Quarantine. The space comes back when you empty it.`,
+      resultRecycled: (formatted) => `Moved ${formatted} to the Recycle Bin. The space comes back when you empty it.`,
+      openQuarantine: 'Open Quarantine',
       resultLockedSuffix: (count) => ` — ${count} gesperrte Datei${count === 1 ? '' : 'en'} übersprungen`,
       before: {
         body: "Prune misst jede Kategorie tatsächlich auf der Festplatte, statt zu schätzen. Das dauert etwa eine halbe Minute.",
@@ -6400,6 +6614,9 @@ export const CATALOG = {
         notMeasuredYet: 'noch nicht gemessen',
         previewFirst: "Sieh dir zuerst die Vorschau an, was freigegeben wird.",
         unmeasuredSuffix: (count) => ` · ${count} nicht gemessen`,
+        modeQuarantine: 'Moves to Quarantine.',
+        modeRecycle: 'Moves to the Recycle Bin.',
+        modeDelete: 'Deletes immediately.',
         selectEverything: 'Alles auswählen',
         clear: "Abwählen",
         selectedCount: (count) => `${count} ausgewählt`
@@ -6408,6 +6625,10 @@ export const CATALOG = {
         prompt: (count, sizeKnown, formatted) => `${count} Element${count === 1 ? '' : 'e'} (${sizeKnown ? formatted : 'Größe nicht gemessen'}) in Quarantäne verschieben?`,
         cancel: 'Abbrechen',
         confirmButton: "In Quarantäne verschieben",
+        promptDelete: (count, sizeKnown, formatted) => `Delete ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'})? This can't be undone.`,
+        deleteButton: 'Delete',
+        promptRecycle: (count, sizeKnown, formatted) => `Move ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'}) to the Recycle Bin?`,
+        recycleButton: 'Move to Recycle Bin',
         cleaning: 'Wird bereinigt…'
       },
       stop: 'Stopp',
@@ -6415,6 +6636,7 @@ export const CATALOG = {
       clean: 'Bereinigen',
       tree: {
         selectCategoryAriaLabel: (category) => `Alles unter ${category} auswählen`,
+        atLeast: (size) => `at least ${size}`,
         losesData: 'Datenverlust',
         needsAdmin: 'benötigt Administrator',
         notInstalled: 'nicht installiert',
@@ -6431,6 +6653,7 @@ export const CATALOG = {
       },
       log: {
         scan: {
+          partial: (size) => `${size}, partial`,
           nothingToMeasure: "nichts zu messen",
           needsAdmin: "benötigt Administrator",
           notInstalled: "nicht installiert",
@@ -6438,6 +6661,7 @@ export const CATALOG = {
         },
         execute: {
           delete: (name) => `${name} löschen`,
+          quarantine: (name) => `Quarantine ${name}`,
           recycle: (name) => `${name} in den Papierkorb`,
           clear: (name) => `${name} leeren`,
           compact: (name) => `${name} verdichten`,
@@ -6686,6 +6910,19 @@ export const CATALOG = {
       showFreeSpace: {
         title: "Εμφάνιση ελεύθερου χώρου στον Χάρτη δίσκου",
         description: 'Σχεδιάζει τον ελεύθερο χώρο του δίσκου ως ένα ακόμα μπλοκ όταν σαρώνετε έναν ολόκληρο δίσκο, ώστε κάθε φάκελος να διαβάζεται ως μερίδιο του δίσκου αντί του χώρου σε χρήση.'
+      },
+      deepCleanRemoval: {
+        title: 'When Deep Clean removes files',
+        quarantine: {
+          label: 'Move to Quarantine (you can put it back)',
+          description: "Nothing is deleted. Files go into Prune's Quarantine and the drive gets the space back when you empty it."
+        },
+        delete: {
+          label: "Delete now (frees the space, can't be undone — like BleachBit)",
+          description: 'Files are removed as soon as you confirm, so the space is free straight away. Rules that lose data still ask first.'
+        },
+        deleteWarning: "With Delete now, Clean can't be undone. Scheduled cleans still move files to Quarantine.",
+        autoQuarantineNote: 'Not used while Deep Clean deletes files immediately.'
       },
       autoQuarantine: {
         title: 'Αυτόματη Καραντίνα',
@@ -7203,10 +7440,12 @@ export const CATALOG = {
     deepClean: {
       title: "Βαθύς καθαρισμός",
       subtitle: 'Κάθε κρυφή μνήμη, αρχείο καταγραφής, dump και κατάλοιπο που το Prune ξέρει να βρίσκει, μετρημένο σε αυτό το μηχάνημα αντί να εκτιμάται. Τίποτα δεν διαγράφεται απευθείας — οτιδήποτε παίρνει ο Καθαρισμός πηγαίνει πρώτα σε καραντίνα, όπου μπορείτε να το επαναφέρετε.',
+      subtitleDelete: "Every cache, log, dump and leftover Prune knows how to find, measured on this machine rather than estimated. Clean deletes what you tick immediately and frees the space, the way BleachBit does. It can't be undone.",
       scanLog: {
         header: 'Έξοδος σάρωσης',
         scanningAnnounce: (total) => `Σάρωση ${total} τοποθεσιών.`,
         finishedAnnounce: (scanned, total) => `Η σάρωση ολοκληρώθηκε. Μετρήθηκαν ${scanned} από ${total} τοποθεσίες.`,
+        searching: (items) => `Searching your profile… ${items} items checked`,
         starting: 'Έναρξη…',
         idle: "Πατήστε Προεπισκόπηση για να μετρήσετε τι μπορεί να καθαριστεί."
       },
@@ -7215,6 +7454,9 @@ export const CATALOG = {
       cleanErrorPrefix: (error) => `Αδυναμία καθαρισμού: ${error}`,
       cleanupComplete: 'Ο καθαρισμός ολοκληρώθηκε.',
       resultFreed: (formatted) => `Ελευθερώθηκαν ${formatted}`,
+      resultMoved: (formatted) => `Moved ${formatted} to Quarantine. The space comes back when you empty it.`,
+      resultRecycled: (formatted) => `Moved ${formatted} to the Recycle Bin. The space comes back when you empty it.`,
+      openQuarantine: 'Open Quarantine',
       resultLockedSuffix: (count) => ` — παραλείφθηκ${count === 1 ? 'ε' : 'αν'} ${count} κλειδωμέν${count === 1 ? 'ο αρχείο' : 'α αρχεία'}`,
       before: {
         body: 'Το Prune μετρά κάθε κατηγορία πραγματικά στον δίσκο αντί να εκτιμά, κάτι που διαρκεί περίπου μισό λεπτό.',
@@ -7227,6 +7469,9 @@ export const CATALOG = {
         notMeasuredYet: 'δεν έχει μετρηθεί ακόμα',
         previewFirst: "Κάντε πρώτα προεπισκόπηση για να δείτε τι θα ελευθερωθεί.",
         unmeasuredSuffix: (count) => ` · ${count} χωρίς μέτρηση`,
+        modeQuarantine: 'Moves to Quarantine.',
+        modeRecycle: 'Moves to the Recycle Bin.',
+        modeDelete: 'Deletes immediately.',
         selectEverything: 'Επιλογή όλων',
         clear: 'Απαλοιφή',
         selectedCount: (count) => `${count} ${count === 1 ? 'επιλέχθηκε' : 'επιλέχθηκαν'}`
@@ -7235,6 +7480,10 @@ export const CATALOG = {
         prompt: (count, sizeKnown, formatted) => `Μετακίνηση ${count} ${count === 1 ? 'στοιχείου' : 'στοιχείων'} (${sizeKnown ? formatted : 'το μέγεθος δεν μετρήθηκε'}) σε καραντίνα;`,
         cancel: 'Ακύρωση',
         confirmButton: "Μετακίνηση σε καραντίνα",
+        promptDelete: (count, sizeKnown, formatted) => `Delete ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'})? This can't be undone.`,
+        deleteButton: 'Delete',
+        promptRecycle: (count, sizeKnown, formatted) => `Move ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'}) to the Recycle Bin?`,
+        recycleButton: 'Move to Recycle Bin',
         cleaning: 'Καθαρισμός…'
       },
       stop: 'Διακοπή',
@@ -7242,6 +7491,7 @@ export const CATALOG = {
       clean: 'Καθαρισμός',
       tree: {
         selectCategoryAriaLabel: (category) => `Επιλογή όλων στην κατηγορία ${category}`,
+        atLeast: (size) => `at least ${size}`,
         losesData: 'Χάνει δεδομένα',
         needsAdmin: 'απαιτεί διαχειριστή',
         notInstalled: 'δεν είναι εγκατεστημένο',
@@ -7258,6 +7508,7 @@ export const CATALOG = {
       },
       log: {
         scan: {
+          partial: (size) => `${size}, partial`,
           nothingToMeasure: "τίποτα προς μέτρηση",
           needsAdmin: "απαιτεί διαχειριστή",
           notInstalled: "δεν είναι εγκατεστημένο",
@@ -7265,6 +7516,7 @@ export const CATALOG = {
         },
         execute: {
           delete: (name) => `Διαγραφή: ${name}`,
+          quarantine: (name) => `Quarantine ${name}`,
           recycle: (name) => `Αποστολή στον Κάδο: ${name}`,
           clear: (name) => `Καθαρισμός: ${name}`,
           compact: (name) => `Συμπίεση: ${name}`,
@@ -7513,6 +7765,19 @@ export const CATALOG = {
       showFreeSpace: {
         title: "Mostrar espacio libre en el Mapa del disco",
         description: "Dibuja el espacio libre de la unidad como un bloque más al escanear una unidad completa, para que cada carpeta se lea como una parte de la unidad y no del espacio en uso."
+      },
+      deepCleanRemoval: {
+        title: 'When Deep Clean removes files',
+        quarantine: {
+          label: 'Move to Quarantine (you can put it back)',
+          description: "Nothing is deleted. Files go into Prune's Quarantine and the drive gets the space back when you empty it."
+        },
+        delete: {
+          label: "Delete now (frees the space, can't be undone — like BleachBit)",
+          description: 'Files are removed as soon as you confirm, so the space is free straight away. Rules that lose data still ask first.'
+        },
+        deleteWarning: "With Delete now, Clean can't be undone. Scheduled cleans still move files to Quarantine.",
+        autoQuarantineNote: 'Not used while Deep Clean deletes files immediately.'
       },
       autoQuarantine: {
         title: 'Cuarentena automática',
@@ -8030,10 +8295,12 @@ export const CATALOG = {
     deepClean: {
       title: "Limpieza profunda",
       subtitle: "Cada caché, registro, volcado y resto que Prune sabe encontrar, medido en esta máquina en lugar de estimado. Nada se elimina directamente — todo lo que Limpieza toma va primero a Cuarentena, donde puedes restaurarlo.",
+      subtitleDelete: "Every cache, log, dump and leftover Prune knows how to find, measured on this machine rather than estimated. Clean deletes what you tick immediately and frees the space, the way BleachBit does. It can't be undone.",
       scanLog: {
         header: 'Salida del escaneo',
         scanningAnnounce: (total) => `Escaneando ${total} ubicaciones.`,
         finishedAnnounce: (scanned, total) => `Escaneo terminado. ${scanned} de ${total} ubicaciones medidas.`,
+        searching: (items) => `Searching your profile… ${items} items checked`,
         starting: 'Iniciando…',
         idle: "Pulsa Vista previa para medir qué se puede limpiar."
       },
@@ -8042,6 +8309,9 @@ export const CATALOG = {
       cleanErrorPrefix: (error) => `No se pudo limpiar: ${error}`,
       cleanupComplete: 'Limpieza completada.',
       resultFreed: (formatted) => `${formatted} liberados`,
+      resultMoved: (formatted) => `Moved ${formatted} to Quarantine. The space comes back when you empty it.`,
+      resultRecycled: (formatted) => `Moved ${formatted} to the Recycle Bin. The space comes back when you empty it.`,
+      openQuarantine: 'Open Quarantine',
       resultLockedSuffix: (count) => ` — ${count} archivo${count === 1 ? '' : 's'} bloqueado${count === 1 ? '' : 's'} omitido${count === 1 ? '' : 's'}`,
       before: {
         body: 'Prune mide cada categoría realmente en el disco en lugar de estimarla, lo que toma alrededor de medio minuto.',
@@ -8054,6 +8324,9 @@ export const CATALOG = {
         notMeasuredYet: 'aún no medido',
         previewFirst: "Usa primero la vista previa para ver qué se liberará.",
         unmeasuredSuffix: (count) => ` · ${count} sin medir`,
+        modeQuarantine: 'Moves to Quarantine.',
+        modeRecycle: 'Moves to the Recycle Bin.',
+        modeDelete: 'Deletes immediately.',
         selectEverything: 'Seleccionar todo',
         clear: "Deseleccionar",
         selectedCount: (count) => `${count} ${count === 1 ? 'seleccionado' : 'seleccionados'}`
@@ -8062,6 +8335,10 @@ export const CATALOG = {
         prompt: (count, sizeKnown, formatted) => `¿Mover ${count} elemento${count === 1 ? '' : 's'} (${sizeKnown ? formatted : 'tamaño no medido'}) a cuarentena?`,
         cancel: 'Cancelar',
         confirmButton: "Mover a cuarentena",
+        promptDelete: (count, sizeKnown, formatted) => `Delete ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'})? This can't be undone.`,
+        deleteButton: 'Delete',
+        promptRecycle: (count, sizeKnown, formatted) => `Move ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'}) to the Recycle Bin?`,
+        recycleButton: 'Move to Recycle Bin',
         cleaning: 'Limpiando…'
       },
       stop: 'Detener',
@@ -8069,6 +8346,7 @@ export const CATALOG = {
       clean: 'Limpiar',
       tree: {
         selectCategoryAriaLabel: (category) => `Seleccionar todo en ${category}`,
+        atLeast: (size) => `at least ${size}`,
         losesData: 'Pierde datos',
         needsAdmin: 'necesita administrador',
         notInstalled: 'no instalado',
@@ -8085,6 +8363,7 @@ export const CATALOG = {
       },
       log: {
         scan: {
+          partial: (size) => `${size}, partial`,
           nothingToMeasure: "nada que medir",
           needsAdmin: "necesita administrador",
           notInstalled: "no instalado",
@@ -8092,6 +8371,7 @@ export const CATALOG = {
         },
         execute: {
           delete: (name) => `Eliminar ${name}`,
+          quarantine: (name) => `Quarantine ${name}`,
           recycle: (name) => `Enviar ${name} a la Papelera`,
           clear: (name) => `Limpiar ${name}`,
           compact: (name) => `Compactar ${name}`,
@@ -8340,6 +8620,19 @@ export const CATALOG = {
       showFreeSpace: {
         title: 'Näita vaba ruumi kettakaardil',
         description: 'Joonistab terve ketta skannimisel vaba ruumi ühe lisaplokina, nii et iga kaust loetakse ketta, mitte kasutuses oleva ruumi osana.'
+      },
+      deepCleanRemoval: {
+        title: 'When Deep Clean removes files',
+        quarantine: {
+          label: 'Move to Quarantine (you can put it back)',
+          description: "Nothing is deleted. Files go into Prune's Quarantine and the drive gets the space back when you empty it."
+        },
+        delete: {
+          label: "Delete now (frees the space, can't be undone — like BleachBit)",
+          description: 'Files are removed as soon as you confirm, so the space is free straight away. Rules that lose data still ask first.'
+        },
+        deleteWarning: "With Delete now, Clean can't be undone. Scheduled cleans still move files to Quarantine.",
+        autoQuarantineNote: 'Not used while Deep Clean deletes files immediately.'
       },
       autoQuarantine: {
         title: 'Automaatne karantiin',
@@ -8857,10 +9150,12 @@ export const CATALOG = {
     deepClean: {
       title: "Süvapuhastus",
       subtitle: 'Iga vahemälu, logi, tõmmis ja jääk, mida Prune oskab leida, mõõdetud sellel masinal, mitte hinnatud. Midagi ei kustutata otsekohe — kõik, mida Puhastus võtab, läheb esmalt Karantiini, kust saad selle tagasi panna.',
+      subtitleDelete: "Every cache, log, dump and leftover Prune knows how to find, measured on this machine rather than estimated. Clean deletes what you tick immediately and frees the space, the way BleachBit does. It can't be undone.",
       scanLog: {
         header: 'Skannimise väljund',
         scanningAnnounce: (total) => `Skannitakse ${total} asukohta.`,
         finishedAnnounce: (scanned, total) => `Skannimine lõpetatud. Mõõdetud ${scanned} asukohta ${total}-st.`,
+        searching: (items) => `Searching your profile… ${items} items checked`,
         starting: 'Alustamine…',
         idle: "Vajuta Eelvaade, et näha, mida saab puhastada."
       },
@@ -8869,6 +9164,9 @@ export const CATALOG = {
       cleanErrorPrefix: (error) => `Puhastamine ebaõnnestus: ${error}`,
       cleanupComplete: 'Puhastamine lõpetatud.',
       resultFreed: (formatted) => `Vabastati ${formatted}`,
+      resultMoved: (formatted) => `Moved ${formatted} to Quarantine. The space comes back when you empty it.`,
+      resultRecycled: (formatted) => `Moved ${formatted} to the Recycle Bin. The space comes back when you empty it.`,
+      openQuarantine: 'Open Quarantine',
       resultLockedSuffix: (count) => ` — jäeti vahele ${count} lukustatud fail${count === 1 ? '' : 'i'}`,
       before: {
         body: 'Prune mõõdab iga kategooriat kettal tegelikult, mitte ei hinda seda, mis võtab aega umbes pool minutit.',
@@ -8881,6 +9179,9 @@ export const CATALOG = {
         notMeasuredYet: 'veel mõõtmata',
         previewFirst: "Vaata kõigepealt Eelvaadet, et näha, mis vabaneb.",
         unmeasuredSuffix: (count) => ` · ${count} mõõtmata`,
+        modeQuarantine: 'Moves to Quarantine.',
+        modeRecycle: 'Moves to the Recycle Bin.',
+        modeDelete: 'Deletes immediately.',
         selectEverything: 'Vali kõik',
         clear: 'Tühjenda',
         selectedCount: (count) => `${count} valitud`
@@ -8889,6 +9190,10 @@ export const CATALOG = {
         prompt: (count, sizeKnown, formatted) => `Teisaldada ${count} ${count === 1 ? 'üksus' : 'üksust'} (${sizeKnown ? formatted : 'suurus mõõtmata'}) karantiini?`,
         cancel: 'Tühista',
         confirmButton: "Teisalda karantiini",
+        promptDelete: (count, sizeKnown, formatted) => `Delete ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'})? This can't be undone.`,
+        deleteButton: 'Delete',
+        promptRecycle: (count, sizeKnown, formatted) => `Move ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'}) to the Recycle Bin?`,
+        recycleButton: 'Move to Recycle Bin',
         cleaning: 'Puhastamine…'
       },
       stop: 'Peata',
@@ -8896,6 +9201,7 @@ export const CATALOG = {
       clean: 'Puhasta',
       tree: {
         selectCategoryAriaLabel: (category) => `Vali kõik kategoorias ${category}`,
+        atLeast: (size) => `at least ${size}`,
         losesData: 'Kaotab andmeid',
         needsAdmin: 'vajab administraatorit',
         notInstalled: 'pole installitud',
@@ -8912,6 +9218,7 @@ export const CATALOG = {
       },
       log: {
         scan: {
+          partial: (size) => `${size}, partial`,
           nothingToMeasure: "pole midagi mõõta",
           needsAdmin: "vajab administraatorit",
           notInstalled: "pole installitud",
@@ -8919,6 +9226,7 @@ export const CATALOG = {
         },
         execute: {
           delete: (name) => `Kustuta ${name}`,
+          quarantine: (name) => `Quarantine ${name}`,
           recycle: (name) => `Saada ${name} prügikasti`,
           clear: (name) => `Tühjenda ${name}`,
           compact: (name) => `Tihenda ${name}`,
@@ -9167,6 +9475,19 @@ export const CATALOG = {
       showFreeSpace: {
         title: 'Näytä vapaa tila levykartalla',
         description: 'Piirtää levyn vapaan tilan yhtenä lisälohkona koko levyä skannattaessa, jotta jokainen kansio näkyy osuutena levystä eikä käytössä olevasta tilasta.'
+      },
+      deepCleanRemoval: {
+        title: 'When Deep Clean removes files',
+        quarantine: {
+          label: 'Move to Quarantine (you can put it back)',
+          description: "Nothing is deleted. Files go into Prune's Quarantine and the drive gets the space back when you empty it."
+        },
+        delete: {
+          label: "Delete now (frees the space, can't be undone — like BleachBit)",
+          description: 'Files are removed as soon as you confirm, so the space is free straight away. Rules that lose data still ask first.'
+        },
+        deleteWarning: "With Delete now, Clean can't be undone. Scheduled cleans still move files to Quarantine.",
+        autoQuarantineNote: 'Not used while Deep Clean deletes files immediately.'
       },
       autoQuarantine: {
         title: 'Automaattinen karanteeni',
@@ -9684,10 +10005,12 @@ export const CATALOG = {
     deepClean: {
       title: 'Syväpuhdistus',
       subtitle: 'Jokainen välimuisti, loki, vedos ja jäänne, jonka Prune osaa löytää, mitattu tällä koneella arvioinnin sijaan. Mitään ei poisteta suoraan — kaikki, mitä Puhdistus vie, menee ensin Karanteeniin, josta sen voi palauttaa.',
+      subtitleDelete: "Every cache, log, dump and leftover Prune knows how to find, measured on this machine rather than estimated. Clean deletes what you tick immediately and frees the space, the way BleachBit does. It can't be undone.",
       scanLog: {
         header: 'Skannauksen tuloste',
         scanningAnnounce: (total) => `Skannataan ${total} sijaintia.`,
         finishedAnnounce: (scanned, total) => `Skannaus valmis. ${scanned}/${total} sijaintia mitattu.`,
+        searching: (items) => `Searching your profile… ${items} items checked`,
         starting: 'Aloitetaan…',
         idle: "Paina Esikatselu, niin näet, mitä voi puhdistaa."
       },
@@ -9696,6 +10019,9 @@ export const CATALOG = {
       cleanErrorPrefix: (error) => `Puhdistus epäonnistui: ${error}`,
       cleanupComplete: 'Puhdistus valmis.',
       resultFreed: (formatted) => `Vapautettiin ${formatted}`,
+      resultMoved: (formatted) => `Moved ${formatted} to Quarantine. The space comes back when you empty it.`,
+      resultRecycled: (formatted) => `Moved ${formatted} to the Recycle Bin. The space comes back when you empty it.`,
+      openQuarantine: 'Open Quarantine',
       resultLockedSuffix: (count) => ` — ohitettiin ${count} ${count === 1 ? 'lukittu tiedosto' : 'lukittua tiedostoa'}`,
       before: {
         body: "Prune mittaa jokaisen kategorian levyltä oikeasti arvioimisen sijaan. Siihen menee noin puoli minuuttia.",
@@ -9708,6 +10034,9 @@ export const CATALOG = {
         notMeasuredYet: 'ei vielä mitattu',
         previewFirst: "Esikatsele ensin nähdäksesi, mitä vapautuu.",
         unmeasuredSuffix: (count) => ` · ${count} mittaamatta`,
+        modeQuarantine: 'Moves to Quarantine.',
+        modeRecycle: 'Moves to the Recycle Bin.',
+        modeDelete: 'Deletes immediately.',
         selectEverything: 'Valitse kaikki',
         clear: 'Tyhjennä',
         selectedCount: (count) => `${count} valittu`
@@ -9716,6 +10045,10 @@ export const CATALOG = {
         prompt: (count, sizeKnown, formatted) => `Siirretäänkö ${count} kohdetta (${sizeKnown ? formatted : 'kokoa ei mitattu'}) karanteeniin?`,
         cancel: 'Peruuta',
         confirmButton: "Siirrä karanteeniin",
+        promptDelete: (count, sizeKnown, formatted) => `Delete ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'})? This can't be undone.`,
+        deleteButton: 'Delete',
+        promptRecycle: (count, sizeKnown, formatted) => `Move ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'}) to the Recycle Bin?`,
+        recycleButton: 'Move to Recycle Bin',
         cleaning: 'Puhdistetaan…'
       },
       stop: 'Pysäytä',
@@ -9723,6 +10056,7 @@ export const CATALOG = {
       clean: 'Puhdista',
       tree: {
         selectCategoryAriaLabel: (category) => `Valitse kaikki kategoriassa ${category}`,
+        atLeast: (size) => `at least ${size}`,
         losesData: 'Menettää tietoja',
         needsAdmin: "vaatii järjestelmänvalvojan",
         notInstalled: 'ei asennettu',
@@ -9739,6 +10073,7 @@ export const CATALOG = {
       },
       log: {
         scan: {
+          partial: (size) => `${size}, partial`,
           nothingToMeasure: "ei mitattavaa",
           needsAdmin: "vaatii järjestelmänvalvojan",
           notInstalled: "ei asennettu",
@@ -9746,6 +10081,7 @@ export const CATALOG = {
         },
         execute: {
           delete: (name) => `Poista ${name}`,
+          quarantine: (name) => `Quarantine ${name}`,
           recycle: (name) => `Lähetä ${name} roskakoriin`,
           clear: (name) => `Tyhjennä ${name}`,
           compact: (name) => `Tiivistä ${name}`,
@@ -9994,6 +10330,19 @@ export const CATALOG = {
       showFreeSpace: {
         title: "Afficher l'espace libre sur la Carte du disque",
         description: "Dessine l'espace libre du lecteur comme un bloc de plus lors de l'analyse d'un lecteur entier, afin que chaque dossier se lise comme une part du lecteur plutôt que de l'espace utilisé."
+      },
+      deepCleanRemoval: {
+        title: 'When Deep Clean removes files',
+        quarantine: {
+          label: 'Move to Quarantine (you can put it back)',
+          description: "Nothing is deleted. Files go into Prune's Quarantine and the drive gets the space back when you empty it."
+        },
+        delete: {
+          label: "Delete now (frees the space, can't be undone — like BleachBit)",
+          description: 'Files are removed as soon as you confirm, so the space is free straight away. Rules that lose data still ask first.'
+        },
+        deleteWarning: "With Delete now, Clean can't be undone. Scheduled cleans still move files to Quarantine.",
+        autoQuarantineNote: 'Not used while Deep Clean deletes files immediately.'
       },
       autoQuarantine: {
         title: 'Quarantaine automatique',
@@ -10511,10 +10860,12 @@ export const CATALOG = {
     deepClean: {
       title: "Nettoyage approfondi",
       subtitle: "Chaque cache, journal, vidage et résidu que Prune sait trouver, mesuré sur cette machine plutôt qu'estimé. Rien n'est supprimé directement — tout ce que Nettoyer prend va d'abord en quarantaine, d'où vous pouvez le restaurer.",
+      subtitleDelete: "Every cache, log, dump and leftover Prune knows how to find, measured on this machine rather than estimated. Clean deletes what you tick immediately and frees the space, the way BleachBit does. It can't be undone.",
       scanLog: {
         header: 'Sortie de l\'analyse',
         scanningAnnounce: (total) => `Analyse de ${total} emplacements.`,
         finishedAnnounce: (scanned, total) => `Analyse terminée. ${scanned} emplacements mesurés sur ${total}.`,
+        searching: (items) => `Searching your profile… ${items} items checked`,
         starting: 'Démarrage…',
         idle: "Appuyez sur Aperçu pour mesurer ce qui peut être nettoyé."
       },
@@ -10523,6 +10874,9 @@ export const CATALOG = {
       cleanErrorPrefix: (error) => `Impossible de nettoyer : ${error}`,
       cleanupComplete: 'Nettoyage terminé.',
       resultFreed: (formatted) => `${formatted} libérés`,
+      resultMoved: (formatted) => `Moved ${formatted} to Quarantine. The space comes back when you empty it.`,
+      resultRecycled: (formatted) => `Moved ${formatted} to the Recycle Bin. The space comes back when you empty it.`,
+      openQuarantine: 'Open Quarantine',
       resultLockedSuffix: (count) => ` — ${count} fichier${count === 1 ? '' : 's'} verrouillé${count === 1 ? '' : 's'} ignoré${count === 1 ? '' : 's'}`,
       before: {
         body: "Prune mesure réellement chaque catégorie sur le disque plutôt que de l'estimer, ce qui prend environ une demi-minute.",
@@ -10535,6 +10889,9 @@ export const CATALOG = {
         notMeasuredYet: 'pas encore mesuré',
         previewFirst: "Faites d'abord un aperçu pour voir ce qui sera libéré.",
         unmeasuredSuffix: (count) => ` · ${count} non mesurés`,
+        modeQuarantine: 'Moves to Quarantine.',
+        modeRecycle: 'Moves to the Recycle Bin.',
+        modeDelete: 'Deletes immediately.',
         selectEverything: 'Tout sélectionner',
         clear: "Désélectionner",
         selectedCount: (count) => `${count} ${count === 1 ? 'sélectionné' : 'sélectionnés'}`
@@ -10543,6 +10900,10 @@ export const CATALOG = {
         prompt: (count, sizeKnown, formatted) => `Déplacer ${count} élément${count === 1 ? '' : 's'} (${sizeKnown ? formatted : 'taille non mesurée'}) vers la quarantaine ?`,
         cancel: 'Annuler',
         confirmButton: "Déplacer vers la quarantaine",
+        promptDelete: (count, sizeKnown, formatted) => `Delete ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'})? This can't be undone.`,
+        deleteButton: 'Delete',
+        promptRecycle: (count, sizeKnown, formatted) => `Move ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'}) to the Recycle Bin?`,
+        recycleButton: 'Move to Recycle Bin',
         cleaning: 'Nettoyage…'
       },
       stop: 'Arrêter',
@@ -10550,6 +10911,7 @@ export const CATALOG = {
       clean: 'Nettoyer',
       tree: {
         selectCategoryAriaLabel: (category) => `Tout sélectionner sous ${category}`,
+        atLeast: (size) => `at least ${size}`,
         losesData: 'Perte de données',
         needsAdmin: "nécessite les droits administrateur",
         notInstalled: 'non installé',
@@ -10566,6 +10928,7 @@ export const CATALOG = {
       },
       log: {
         scan: {
+          partial: (size) => `${size}, partial`,
           nothingToMeasure: "rien à mesurer",
           needsAdmin: "nécessite les droits administrateur",
           notInstalled: "non installé",
@@ -10573,6 +10936,7 @@ export const CATALOG = {
         },
         execute: {
           delete: (name) => `Supprimer ${name}`,
+          quarantine: (name) => `Quarantine ${name}`,
           recycle: (name) => `Envoyer ${name} à la Corbeille`,
           clear: (name) => `Effacer ${name}`,
           compact: (name) => `Compacter ${name}`,
@@ -10821,6 +11185,19 @@ export const CATALOG = {
       showFreeSpace: {
         title: 'הצג שטח פנוי במפת הדיסק',
         description: 'מצייר את השטח הפנוי בכונן כבלוק נוסף כשסורקים כונן שלם, כך שכל תיקייה נקראת כחלק מהכונן ולא מהשטח בשימוש.'
+      },
+      deepCleanRemoval: {
+        title: 'When Deep Clean removes files',
+        quarantine: {
+          label: 'Move to Quarantine (you can put it back)',
+          description: "Nothing is deleted. Files go into Prune's Quarantine and the drive gets the space back when you empty it."
+        },
+        delete: {
+          label: "Delete now (frees the space, can't be undone — like BleachBit)",
+          description: 'Files are removed as soon as you confirm, so the space is free straight away. Rules that lose data still ask first.'
+        },
+        deleteWarning: "With Delete now, Clean can't be undone. Scheduled cleans still move files to Quarantine.",
+        autoQuarantineNote: 'Not used while Deep Clean deletes files immediately.'
       },
       autoQuarantine: {
         title: 'הסגר אוטומטי',
@@ -11338,10 +11715,12 @@ export const CATALOG = {
     deepClean: {
       title: 'ניקוי מעמיק',
       subtitle: "כל מטמון, יומן, קובץ dump ושארית ש-Prune יודע למצוא, נמדד במכשיר הזה במקום להיות מוערך. שום דבר לא נמחק לצמיתות — כל מה שהניקוי לוקח עובר קודם להסגר, שם ניתן לשחזר אותו.",
+      subtitleDelete: "Every cache, log, dump and leftover Prune knows how to find, measured on this machine rather than estimated. Clean deletes what you tick immediately and frees the space, the way BleachBit does. It can't be undone.",
       scanLog: {
         header: 'פלט הסריקה',
         scanningAnnounce: (total) => total === 1 ? 'סורק מיקום אחד.' : total === 2 ? 'סורק שני מיקומים.' : `סורק ${total} מיקומים.`,
         finishedAnnounce: (scanned, total) => `הסריקה הסתיימה. נמדדו ${scanned} מתוך ${total} מיקומים.`,
+        searching: (items) => `Searching your profile… ${items} items checked`,
         starting: 'מתחיל…',
         idle: "לחץ על ״תצוגה מקדימה״ כדי למדוד מה אפשר לנקות."
       },
@@ -11350,6 +11729,9 @@ export const CATALOG = {
       cleanErrorPrefix: (error) => `לא ניתן היה לנקות: ${error}`,
       cleanupComplete: 'הניקוי הושלם.',
       resultFreed: (formatted) => `פונו ${formatted}`,
+      resultMoved: (formatted) => `Moved ${formatted} to Quarantine. The space comes back when you empty it.`,
+      resultRecycled: (formatted) => `Moved ${formatted} to the Recycle Bin. The space comes back when you empty it.`,
+      openQuarantine: 'Open Quarantine',
       resultLockedSuffix: (count) => count === 1 ? ' — דולג קובץ נעול אחד' : count === 2 ? ' — דולגו שני קבצים נעולים' : ` — דולגו ${count} קבצים נעולים`,
       before: {
         body: 'Prune מודד כל קטגוריה על הדיסק בפועל במקום להעריך, מה שלוקח כחצי דקה.',
@@ -11362,6 +11744,9 @@ export const CATALOG = {
         notMeasuredYet: 'טרם נמדד',
         previewFirst: "לחץ קודם על ״תצוגה מקדימה״ כדי לראות מה יפונה.",
         unmeasuredSuffix: (count) => ` · ${count} לא נמדד`,
+        modeQuarantine: 'Moves to Quarantine.',
+        modeRecycle: 'Moves to the Recycle Bin.',
+        modeDelete: 'Deletes immediately.',
         selectEverything: 'בחר הכל',
         clear: 'נקה',
         selectedCount: (count) => count === 1 ? '1 נבחר' : `${count} נבחרו`
@@ -11370,6 +11755,10 @@ export const CATALOG = {
         prompt: (count, sizeKnown, formatted) => `להעביר ${count === 1 ? 'פריט אחד' : count === 2 ? 'שני פריטים' : count + ' פריטים'} (${sizeKnown ? formatted : 'הגודל לא נמדד'}) להסגר?`,
         cancel: 'ביטול',
         confirmButton: "העברה להסגר",
+        promptDelete: (count, sizeKnown, formatted) => `Delete ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'})? This can't be undone.`,
+        deleteButton: 'Delete',
+        promptRecycle: (count, sizeKnown, formatted) => `Move ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'}) to the Recycle Bin?`,
+        recycleButton: 'Move to Recycle Bin',
         cleaning: 'מנקה…'
       },
       stop: 'עצור',
@@ -11377,6 +11766,7 @@ export const CATALOG = {
       clean: 'נקה',
       tree: {
         selectCategoryAriaLabel: (category) => `בחר הכל תחת ${category}`,
+        atLeast: (size) => `at least ${size}`,
         losesData: 'מאבד נתונים',
         needsAdmin: 'דורש הרשאות מנהל',
         notInstalled: 'לא מותקן',
@@ -11393,6 +11783,7 @@ export const CATALOG = {
       },
       log: {
         scan: {
+          partial: (size) => `${size}, partial`,
           nothingToMeasure: "אין מה למדוד",
           needsAdmin: "דורש הרשאות מנהל",
           notInstalled: "לא מותקן",
@@ -11400,6 +11791,7 @@ export const CATALOG = {
         },
         execute: {
           delete: (name) => `מחק ${name}`,
+          quarantine: (name) => `Quarantine ${name}`,
           recycle: (name) => `שלח ${name} לסל המיחזור`,
           clear: (name) => `נקה ${name}`,
           compact: (name) => `דחוס ${name}`,
@@ -11648,6 +12040,19 @@ export const CATALOG = {
       showFreeSpace: {
         title: 'Szabad hely megjelenítése a Lemeztérképen',
         description: 'A meghajtó szabad helyét egy további blokként rajzolja ki egy teljes meghajtó vizsgálatakor, így minden mappa a meghajtó, nem pedig a használt hely arányaként olvasható.'
+      },
+      deepCleanRemoval: {
+        title: 'When Deep Clean removes files',
+        quarantine: {
+          label: 'Move to Quarantine (you can put it back)',
+          description: "Nothing is deleted. Files go into Prune's Quarantine and the drive gets the space back when you empty it."
+        },
+        delete: {
+          label: "Delete now (frees the space, can't be undone — like BleachBit)",
+          description: 'Files are removed as soon as you confirm, so the space is free straight away. Rules that lose data still ask first.'
+        },
+        deleteWarning: "With Delete now, Clean can't be undone. Scheduled cleans still move files to Quarantine.",
+        autoQuarantineNote: 'Not used while Deep Clean deletes files immediately.'
       },
       autoQuarantine: {
         title: 'Automatikus karantén',
@@ -12165,10 +12570,12 @@ export const CATALOG = {
     deepClean: {
       title: 'Mélytisztítás',
       subtitle: "Minden gyorsítótár, napló, memóriakép és maradvány, amit a Prune képes megtalálni, ezen a gépen mérve, nem becsülve. Semmi sem törlődik azonnal — minden, amit a Tisztítás elvisz, először a Karanténba kerül, ahonnan visszaállíthatod.",
+      subtitleDelete: "Every cache, log, dump and leftover Prune knows how to find, measured on this machine rather than estimated. Clean deletes what you tick immediately and frees the space, the way BleachBit does. It can't be undone.",
       scanLog: {
         header: 'Vizsgálati kimenet',
         scanningAnnounce: (total) => `${total} hely vizsgálata.`,
         finishedAnnounce: (scanned, total) => `A vizsgálat befejeződött. ${scanned}/${total} hely megmérve.`,
+        searching: (items) => `Searching your profile… ${items} items checked`,
         starting: 'Indítás…',
         idle: "Nyomd meg az Előnézet gombot, hogy megmérd, mi tisztítható."
       },
@@ -12177,6 +12584,9 @@ export const CATALOG = {
       cleanErrorPrefix: (error) => `Nem sikerült a tisztítás: ${error}`,
       cleanupComplete: 'A tisztítás befejeződött.',
       resultFreed: (formatted) => `${formatted} felszabadítva`,
+      resultMoved: (formatted) => `Moved ${formatted} to Quarantine. The space comes back when you empty it.`,
+      resultRecycled: (formatted) => `Moved ${formatted} to the Recycle Bin. The space comes back when you empty it.`,
+      openQuarantine: 'Open Quarantine',
       resultLockedSuffix: (count) => ` — ${count} zárolt fájl kihagyva`,
       before: {
         body: 'A Prune ténylegesen méri a lemezen minden kategóriát becslés helyett, ami körülbelül fél percet vesz igénybe.',
@@ -12189,6 +12599,9 @@ export const CATALOG = {
         notMeasuredYet: 'még nincs megmérve',
         previewFirst: "Előbb nézd meg az előnézetet, hogy lásd, mi szabadul fel.",
         unmeasuredSuffix: (count) => ` · ${count} nem mért`,
+        modeQuarantine: 'Moves to Quarantine.',
+        modeRecycle: 'Moves to the Recycle Bin.',
+        modeDelete: 'Deletes immediately.',
         selectEverything: 'Összes kijelölése',
         clear: 'Törlés',
         selectedCount: (count) => `${count} kijelölve`
@@ -12197,6 +12610,10 @@ export const CATALOG = {
         prompt: (count, sizeKnown, formatted) => `Áthelyezed ${count} elemet (${sizeKnown ? formatted : 'a méret nincs megmérve'}) a karanténba?`,
         cancel: 'Mégse',
         confirmButton: "Áthelyezés a karanténba",
+        promptDelete: (count, sizeKnown, formatted) => `Delete ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'})? This can't be undone.`,
+        deleteButton: 'Delete',
+        promptRecycle: (count, sizeKnown, formatted) => `Move ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'}) to the Recycle Bin?`,
+        recycleButton: 'Move to Recycle Bin',
         cleaning: 'Tisztítás…'
       },
       stop: 'Leállítás',
@@ -12204,6 +12621,7 @@ export const CATALOG = {
       clean: 'Tisztítás',
       tree: {
         selectCategoryAriaLabel: (category) => `Összes kijelölése itt: ${category}`,
+        atLeast: (size) => `at least ${size}`,
         losesData: 'Adatvesztés',
         needsAdmin: 'rendszergazda szükséges',
         notInstalled: 'nincs telepítve',
@@ -12220,6 +12638,7 @@ export const CATALOG = {
       },
       log: {
         scan: {
+          partial: (size) => `${size}, partial`,
           nothingToMeasure: "nincs mit mérni",
           needsAdmin: "rendszergazda szükséges",
           notInstalled: "nincs telepítve",
@@ -12227,6 +12646,7 @@ export const CATALOG = {
         },
         execute: {
           delete: (name) => `Törlés: ${name}`,
+          quarantine: (name) => `Quarantine ${name}`,
           recycle: (name) => `Lomtárba küldés: ${name}`,
           clear: (name) => `Ürítés: ${name}`,
           compact: (name) => `Tömörítés: ${name}`,
@@ -12475,6 +12895,19 @@ export const CATALOG = {
       showFreeSpace: {
         title: 'Tampilkan ruang kosong di Peta Disk',
         description: 'Menggambar ruang kosong drive sebagai satu blok tambahan saat memindai seluruh drive, sehingga setiap folder terbaca sebagai bagian dari drive, bukan dari ruang yang terpakai.'
+      },
+      deepCleanRemoval: {
+        title: 'When Deep Clean removes files',
+        quarantine: {
+          label: 'Move to Quarantine (you can put it back)',
+          description: "Nothing is deleted. Files go into Prune's Quarantine and the drive gets the space back when you empty it."
+        },
+        delete: {
+          label: "Delete now (frees the space, can't be undone — like BleachBit)",
+          description: 'Files are removed as soon as you confirm, so the space is free straight away. Rules that lose data still ask first.'
+        },
+        deleteWarning: "With Delete now, Clean can't be undone. Scheduled cleans still move files to Quarantine.",
+        autoQuarantineNote: 'Not used while Deep Clean deletes files immediately.'
       },
       autoQuarantine: {
         title: 'Karantina otomatis',
@@ -12992,10 +13425,12 @@ export const CATALOG = {
     deepClean: {
       title: 'Pembersihan Mendalam',
       subtitle: 'Setiap cache, log, dump, dan sisa yang diketahui Prune cara menemukannya, diukur di komputer ini alih-alih diperkirakan. Tidak ada yang langsung dihapus — semua yang diambil Bersihkan pergi ke Karantina terlebih dahulu, tempat Anda dapat mengembalikannya.',
+      subtitleDelete: "Every cache, log, dump and leftover Prune knows how to find, measured on this machine rather than estimated. Clean deletes what you tick immediately and frees the space, the way BleachBit does. It can't be undone.",
       scanLog: {
         header: 'Output pemindaian',
         scanningAnnounce: (total) => `Memindai ${total} lokasi.`,
         finishedAnnounce: (scanned, total) => `Pemindaian selesai. ${scanned} dari ${total} lokasi diukur.`,
+        searching: (items) => `Searching your profile… ${items} items checked`,
         starting: 'Memulai…',
         idle: "Tekan Pratinjau untuk mengukur apa yang bisa dibersihkan."
       },
@@ -13004,6 +13439,9 @@ export const CATALOG = {
       cleanErrorPrefix: (error) => `Tidak dapat membersihkan: ${error}`,
       cleanupComplete: 'Pembersihan selesai.',
       resultFreed: (formatted) => `Membebaskan ${formatted}`,
+      resultMoved: (formatted) => `Moved ${formatted} to Quarantine. The space comes back when you empty it.`,
+      resultRecycled: (formatted) => `Moved ${formatted} to the Recycle Bin. The space comes back when you empty it.`,
+      openQuarantine: 'Open Quarantine',
       resultLockedSuffix: (count) => ` — melewati ${count} berkas terkunci`,
       before: {
         body: 'Prune benar-benar mengukur setiap kategori di disk alih-alih memperkirakan, yang memakan waktu sekitar setengah menit.',
@@ -13016,6 +13454,9 @@ export const CATALOG = {
         notMeasuredYet: 'belum diukur',
         previewFirst: "Klik Pratinjau dulu untuk melihat apa yang akan dibebaskan.",
         unmeasuredSuffix: (count) => ` · ${count} tidak terukur`,
+        modeQuarantine: 'Moves to Quarantine.',
+        modeRecycle: 'Moves to the Recycle Bin.',
+        modeDelete: 'Deletes immediately.',
         selectEverything: 'Pilih semua',
         clear: "Hapus pilihan",
         selectedCount: (count) => `${count} dipilih`
@@ -13024,6 +13465,10 @@ export const CATALOG = {
         prompt: (count, sizeKnown, formatted) => `Pindahkan ${count} item (${sizeKnown ? formatted : 'ukuran tidak terukur'}) ke Karantina?`,
         cancel: 'Batal',
         confirmButton: "Pindahkan ke Karantina",
+        promptDelete: (count, sizeKnown, formatted) => `Delete ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'})? This can't be undone.`,
+        deleteButton: 'Delete',
+        promptRecycle: (count, sizeKnown, formatted) => `Move ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'}) to the Recycle Bin?`,
+        recycleButton: 'Move to Recycle Bin',
         cleaning: 'Membersihkan…'
       },
       stop: 'Hentikan',
@@ -13031,6 +13476,7 @@ export const CATALOG = {
       clean: 'Bersihkan',
       tree: {
         selectCategoryAriaLabel: (category) => `Pilih semua di bawah ${category}`,
+        atLeast: (size) => `at least ${size}`,
         losesData: 'Kehilangan data',
         needsAdmin: 'memerlukan admin',
         notInstalled: 'tidak terpasang',
@@ -13047,6 +13493,7 @@ export const CATALOG = {
       },
       log: {
         scan: {
+          partial: (size) => `${size}, partial`,
           nothingToMeasure: "tidak ada yang diukur",
           needsAdmin: "memerlukan admin",
           notInstalled: "tidak terpasang",
@@ -13054,6 +13501,7 @@ export const CATALOG = {
         },
         execute: {
           delete: (name) => `Hapus ${name}`,
+          quarantine: (name) => `Quarantine ${name}`,
           recycle: (name) => `Kirim ${name} ke Recycle Bin`,
           clear: (name) => `Bersihkan ${name}`,
           compact: (name) => `Padatkan ${name}`,
@@ -13302,6 +13750,19 @@ export const CATALOG = {
       showFreeSpace: {
         title: 'Sýna laust pláss á Diskakortinu',
         description: 'Teiknar laust pláss drifsins sem einn blokk til viðbótar þegar heilt drif er skannað, svo hver mappa lesist sem hlutfall af drifinu frekar en af notuðu plássi.'
+      },
+      deepCleanRemoval: {
+        title: 'When Deep Clean removes files',
+        quarantine: {
+          label: 'Move to Quarantine (you can put it back)',
+          description: "Nothing is deleted. Files go into Prune's Quarantine and the drive gets the space back when you empty it."
+        },
+        delete: {
+          label: "Delete now (frees the space, can't be undone — like BleachBit)",
+          description: 'Files are removed as soon as you confirm, so the space is free straight away. Rules that lose data still ask first.'
+        },
+        deleteWarning: "With Delete now, Clean can't be undone. Scheduled cleans still move files to Quarantine.",
+        autoQuarantineNote: 'Not used while Deep Clean deletes files immediately.'
       },
       autoQuarantine: {
         title: 'Sjálfvirk sóttkví',
@@ -13819,10 +14280,12 @@ export const CATALOG = {
     deepClean: {
       title: 'Djúphreinsun',
       subtitle: 'Öll skyndiminni, annálar, dumpar og leifar sem Prune kann að finna, mæld á þessari vél frekar en áætluð. Engu er eytt beint — allt sem Hreinsun tekur fer fyrst í sóttkví, þar sem þú getur sett það til baka.',
+      subtitleDelete: "Every cache, log, dump and leftover Prune knows how to find, measured on this machine rather than estimated. Clean deletes what you tick immediately and frees the space, the way BleachBit does. It can't be undone.",
       scanLog: {
         header: 'Úttak skönnunar',
         scanningAnnounce: (total) => `Skanna ${total} staðsetningar.`,
         finishedAnnounce: (scanned, total) => `Skönnun lokið. ${scanned} af ${total} staðsetningum mældar.`,
+        searching: (items) => `Searching your profile… ${items} items checked`,
         starting: 'Er að byrja…',
         idle: "Ýttu á Forskoðun til að mæla hvað er hægt að hreinsa."
       },
@@ -13831,6 +14294,9 @@ export const CATALOG = {
       cleanErrorPrefix: (error) => `Ekki tókst að hreinsa: ${error}`,
       cleanupComplete: 'Hreinsun lokið.',
       resultFreed: (formatted) => `Losaði ${formatted}`,
+      resultMoved: (formatted) => `Moved ${formatted} to Quarantine. The space comes back when you empty it.`,
+      resultRecycled: (formatted) => `Moved ${formatted} to the Recycle Bin. The space comes back when you empty it.`,
+      openQuarantine: 'Open Quarantine',
       resultLockedSuffix: (count) => ` — sleppti ${count} ${count === 1 ? 'læstri skrá' : 'læstum skrám'}`,
       before: {
         body: 'Prune mælir hvern flokk raunverulega á disknum frekar en að áætla, sem tekur um hálfa mínútu.',
@@ -13843,6 +14309,9 @@ export const CATALOG = {
         notMeasuredYet: 'ekki mælt enn',
         previewFirst: "Skoðaðu forskoðun fyrst til að sjá hvað losnar.",
         unmeasuredSuffix: (count) => ` · ${count} ómælt`,
+        modeQuarantine: 'Moves to Quarantine.',
+        modeRecycle: 'Moves to the Recycle Bin.',
+        modeDelete: 'Deletes immediately.',
         selectEverything: 'Velja allt',
         clear: 'Hreinsa',
         selectedCount: (count) => `${count} valin`
@@ -13851,6 +14320,10 @@ export const CATALOG = {
         prompt: (count, sizeKnown, formatted) => `Flytja ${count} atriði (${sizeKnown ? formatted : 'stærð ómæld'}) í sóttkví?`,
         cancel: 'Hætta við',
         confirmButton: "Færa í sóttkví",
+        promptDelete: (count, sizeKnown, formatted) => `Delete ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'})? This can't be undone.`,
+        deleteButton: 'Delete',
+        promptRecycle: (count, sizeKnown, formatted) => `Move ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'}) to the Recycle Bin?`,
+        recycleButton: 'Move to Recycle Bin',
         cleaning: 'Hreinsar…'
       },
       stop: 'Stöðva',
@@ -13858,6 +14331,7 @@ export const CATALOG = {
       clean: 'Hreinsa',
       tree: {
         selectCategoryAriaLabel: (category) => `Velja allt undir ${category}`,
+        atLeast: (size) => `at least ${size}`,
         losesData: 'Tapar gögnum',
         needsAdmin: 'þarf kerfisstjóra',
         notInstalled: 'ekki uppsett',
@@ -13874,6 +14348,7 @@ export const CATALOG = {
       },
       log: {
         scan: {
+          partial: (size) => `${size}, partial`,
           nothingToMeasure: "ekkert til að mæla",
           needsAdmin: "þarf kerfisstjóra",
           notInstalled: "ekki uppsett",
@@ -13881,6 +14356,7 @@ export const CATALOG = {
         },
         execute: {
           delete: (name) => `Eyða ${name}`,
+          quarantine: (name) => `Quarantine ${name}`,
           recycle: (name) => `Senda ${name} í ruslafötuna`,
           clear: (name) => `Hreinsa ${name}`,
           compact: (name) => `Þjappa ${name}`,
@@ -14129,6 +14605,19 @@ export const CATALOG = {
       showFreeSpace: {
         title: "Mostra lo spazio libero sulla Mappa del disco",
         description: "Disegna lo spazio libero dell'unità come un blocco in più quando scansioni un'intera unità, così ogni cartella si legge come una quota dell'unità anziché dello spazio in uso."
+      },
+      deepCleanRemoval: {
+        title: 'When Deep Clean removes files',
+        quarantine: {
+          label: 'Move to Quarantine (you can put it back)',
+          description: "Nothing is deleted. Files go into Prune's Quarantine and the drive gets the space back when you empty it."
+        },
+        delete: {
+          label: "Delete now (frees the space, can't be undone — like BleachBit)",
+          description: 'Files are removed as soon as you confirm, so the space is free straight away. Rules that lose data still ask first.'
+        },
+        deleteWarning: "With Delete now, Clean can't be undone. Scheduled cleans still move files to Quarantine.",
+        autoQuarantineNote: 'Not used while Deep Clean deletes files immediately.'
       },
       autoQuarantine: {
         title: 'Quarantena automatica',
@@ -14646,10 +15135,12 @@ export const CATALOG = {
     deepClean: {
       title: "Pulizia approfondita",
       subtitle: "Ogni cache, log, dump e residuo che Prune sa trovare, misurato su questo computer anziché stimato. Nulla viene eliminato direttamente — tutto ciò che Pulisci prende va prima in quarantena, da dove puoi ripristinarlo.",
+      subtitleDelete: "Every cache, log, dump and leftover Prune knows how to find, measured on this machine rather than estimated. Clean deletes what you tick immediately and frees the space, the way BleachBit does. It can't be undone.",
       scanLog: {
         header: 'Output della scansione',
         scanningAnnounce: (total) => `Scansione di ${total} posizioni.`,
         finishedAnnounce: (scanned, total) => `Scansione completata. ${scanned} di ${total} posizioni misurate.`,
+        searching: (items) => `Searching your profile… ${items} items checked`,
         starting: 'Avvio…',
         idle: "Premi Anteprima per misurare cosa si può pulire."
       },
@@ -14658,6 +15149,9 @@ export const CATALOG = {
       cleanErrorPrefix: (error) => `Impossibile pulire: ${error}`,
       cleanupComplete: 'Pulizia completata.',
       resultFreed: (formatted) => `Liberati ${formatted}`,
+      resultMoved: (formatted) => `Moved ${formatted} to Quarantine. The space comes back when you empty it.`,
+      resultRecycled: (formatted) => `Moved ${formatted} to the Recycle Bin. The space comes back when you empty it.`,
+      openQuarantine: 'Open Quarantine',
       resultLockedSuffix: (count) => ` — ${count === 1 ? 'saltato' : 'saltati'} ${count} ${count === 1 ? 'file bloccato' : 'file bloccati'}`,
       before: {
         body: 'Prune misura davvero ogni categoria sul disco anziché stimarla, il che richiede circa mezzo minuto.',
@@ -14670,6 +15164,9 @@ export const CATALOG = {
         notMeasuredYet: 'non ancora misurato',
         previewFirst: "Guarda prima l'anteprima per vedere cosa verrà liberato.",
         unmeasuredSuffix: (count) => ` · ${count} non misurati`,
+        modeQuarantine: 'Moves to Quarantine.',
+        modeRecycle: 'Moves to the Recycle Bin.',
+        modeDelete: 'Deletes immediately.',
         selectEverything: 'Seleziona tutto',
         clear: "Deseleziona",
         selectedCount: (count) => `${count} ${count === 1 ? 'selezionato' : 'selezionati'}`
@@ -14678,6 +15175,10 @@ export const CATALOG = {
         prompt: (count, sizeKnown, formatted) => `Spostare ${count} ${count === 1 ? 'elemento' : 'elementi'} (${sizeKnown ? formatted : 'dimensione non misurata'}) in quarantena?`,
         cancel: 'Annulla',
         confirmButton: "Sposta in quarantena",
+        promptDelete: (count, sizeKnown, formatted) => `Delete ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'})? This can't be undone.`,
+        deleteButton: 'Delete',
+        promptRecycle: (count, sizeKnown, formatted) => `Move ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'}) to the Recycle Bin?`,
+        recycleButton: 'Move to Recycle Bin',
         cleaning: 'Pulizia…'
       },
       stop: 'Interrompi',
@@ -14685,6 +15186,7 @@ export const CATALOG = {
       clean: 'Pulisci',
       tree: {
         selectCategoryAriaLabel: (category) => `Seleziona tutto in ${category}`,
+        atLeast: (size) => `at least ${size}`,
         losesData: 'Perde dati',
         needsAdmin: 'richiede amministratore',
         notInstalled: 'non installato',
@@ -14701,6 +15203,7 @@ export const CATALOG = {
       },
       log: {
         scan: {
+          partial: (size) => `${size}, partial`,
           nothingToMeasure: "niente da misurare",
           needsAdmin: "richiede amministratore",
           notInstalled: "non installato",
@@ -14708,6 +15211,7 @@ export const CATALOG = {
         },
         execute: {
           delete: (name) => `Elimina ${name}`,
+          quarantine: (name) => `Quarantine ${name}`,
           recycle: (name) => `Invia ${name} al Cestino`,
           clear: (name) => `Pulisci ${name}`,
           compact: (name) => `Compatta ${name}`,
@@ -14956,6 +15460,19 @@ export const CATALOG = {
       showFreeSpace: {
         title: 'ディスクマップに空き容量を表示',
         description: 'ドライブ全体をスキャンするとき、ドライブの空き容量をもう一つのブロックとして描画し、各フォルダが使用中の容量ではなくドライブ全体に対する割合として表示されるようにします。'
+      },
+      deepCleanRemoval: {
+        title: 'When Deep Clean removes files',
+        quarantine: {
+          label: 'Move to Quarantine (you can put it back)',
+          description: "Nothing is deleted. Files go into Prune's Quarantine and the drive gets the space back when you empty it."
+        },
+        delete: {
+          label: "Delete now (frees the space, can't be undone — like BleachBit)",
+          description: 'Files are removed as soon as you confirm, so the space is free straight away. Rules that lose data still ask first.'
+        },
+        deleteWarning: "With Delete now, Clean can't be undone. Scheduled cleans still move files to Quarantine.",
+        autoQuarantineNote: 'Not used while Deep Clean deletes files immediately.'
       },
       autoQuarantine: {
         title: '自動隔離',
@@ -15473,10 +15990,12 @@ export const CATALOG = {
     deepClean: {
       title: 'ディープクリーン',
       subtitle: "Prune が見つけ方を知っているすべてのキャッシュ、ログ、ダンプ、残留物を、推定ではなくこのマシンで実測します。何も即座には削除されません — クリーンが取り除くものはすべて、まず隔離に移動し、そこから復元できます。",
+      subtitleDelete: "Every cache, log, dump and leftover Prune knows how to find, measured on this machine rather than estimated. Clean deletes what you tick immediately and frees the space, the way BleachBit does. It can't be undone.",
       scanLog: {
         header: 'スキャン出力',
         scanningAnnounce: (total) => `${total} 件の場所をスキャン中。`,
         finishedAnnounce: (scanned, total) => `スキャン完了。${total} 件中 ${scanned} 件の場所を測定しました。`,
+        searching: (items) => `Searching your profile… ${items} items checked`,
         starting: '開始中…',
         idle: "「プレビュー」を押すと、クリーンアップできる量を測定します。"
       },
@@ -15485,6 +16004,9 @@ export const CATALOG = {
       cleanErrorPrefix: (error) => `クリーンできませんでした: ${error}`,
       cleanupComplete: 'クリーンアップが完了しました。',
       resultFreed: (formatted) => `${formatted} を解放しました`,
+      resultMoved: (formatted) => `Moved ${formatted} to Quarantine. The space comes back when you empty it.`,
+      resultRecycled: (formatted) => `Moved ${formatted} to the Recycle Bin. The space comes back when you empty it.`,
+      openQuarantine: 'Open Quarantine',
       resultLockedSuffix: (count) => ` — ロックされたファイルを ${count} 件スキップしました`,
       before: {
         body: 'Prune は推定ではなく、ディスク上のすべてのカテゴリを実際に測定します。これには約30秒かかります。',
@@ -15497,6 +16019,9 @@ export const CATALOG = {
         notMeasuredYet: '未測定',
         previewFirst: "まずプレビューで、解放される量を確認してください。",
         unmeasuredSuffix: (count) => ` · 未測定 ${count} 件`,
+        modeQuarantine: 'Moves to Quarantine.',
+        modeRecycle: 'Moves to the Recycle Bin.',
+        modeDelete: 'Deletes immediately.',
         selectEverything: 'すべて選択',
         clear: 'クリア',
         selectedCount: (count) => `${count} 件選択中`
@@ -15505,6 +16030,10 @@ export const CATALOG = {
         prompt: (count, sizeKnown, formatted) => `${count} 件の項目（${sizeKnown ? formatted : 'サイズ未測定'}）を隔離に移動しますか?`,
         cancel: 'キャンセル',
         confirmButton: "隔離に移動",
+        promptDelete: (count, sizeKnown, formatted) => `Delete ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'})? This can't be undone.`,
+        deleteButton: 'Delete',
+        promptRecycle: (count, sizeKnown, formatted) => `Move ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'}) to the Recycle Bin?`,
+        recycleButton: 'Move to Recycle Bin',
         cleaning: 'クリーン中…'
       },
       stop: '停止',
@@ -15512,6 +16041,7 @@ export const CATALOG = {
       clean: 'クリーン',
       tree: {
         selectCategoryAriaLabel: (category) => `${category} の下をすべて選択`,
+        atLeast: (size) => `at least ${size}`,
         losesData: 'データを失う',
         needsAdmin: '管理者権限が必要',
         notInstalled: '未インストール',
@@ -15528,6 +16058,7 @@ export const CATALOG = {
       },
       log: {
         scan: {
+          partial: (size) => `${size}, partial`,
           nothingToMeasure: "測定対象なし",
           needsAdmin: "管理者権限が必要",
           notInstalled: "未インストール",
@@ -15535,6 +16066,7 @@ export const CATALOG = {
         },
         execute: {
           delete: (name) => `${name}を削除`,
+          quarantine: (name) => `Quarantine ${name}`,
           recycle: (name) => `${name}をごみ箱へ送る`,
           clear: (name) => `${name}をクリア`,
           compact: (name) => `${name}を圧縮`,
@@ -15783,6 +16315,19 @@ export const CATALOG = {
       showFreeSpace: {
         title: '디스크 맵에 여유 공간 표시',
         description: "전체 드라이브를 검사할 때 드라이브의 여유 공간을 하나의 추가 블록으로 그려서, 각 폴더가 사용 중인 공간이 아닌 드라이브의 비율로 표시되도록 합니다."
+      },
+      deepCleanRemoval: {
+        title: 'When Deep Clean removes files',
+        quarantine: {
+          label: 'Move to Quarantine (you can put it back)',
+          description: "Nothing is deleted. Files go into Prune's Quarantine and the drive gets the space back when you empty it."
+        },
+        delete: {
+          label: "Delete now (frees the space, can't be undone — like BleachBit)",
+          description: 'Files are removed as soon as you confirm, so the space is free straight away. Rules that lose data still ask first.'
+        },
+        deleteWarning: "With Delete now, Clean can't be undone. Scheduled cleans still move files to Quarantine.",
+        autoQuarantineNote: 'Not used while Deep Clean deletes files immediately.'
       },
       autoQuarantine: {
         title: '자동 격리',
@@ -16300,10 +16845,12 @@ export const CATALOG = {
     deepClean: {
       title: "딥 클린",
       subtitle: "Prune이 찾는 방법을 아는 모든 캐시, 로그, 덤프 및 남은 항목을 추정이 아니라 이 컴퓨터에서 직접 측정합니다. 아무것도 즉시 삭제되지 않습니다 — 정리가 가져가는 모든 항목은 먼저 격리로 이동하며, 그곳에서 복원할 수 있습니다.",
+      subtitleDelete: "Every cache, log, dump and leftover Prune knows how to find, measured on this machine rather than estimated. Clean deletes what you tick immediately and frees the space, the way BleachBit does. It can't be undone.",
       scanLog: {
         header: "검사 출력",
         scanningAnnounce: (total) => `${total}개 위치를 검사 중입니다.`,
         finishedAnnounce: (scanned, total) => `검사 완료. ${total}개 중 ${scanned}개 위치가 측정되었습니다.`,
+        searching: (items) => `Searching your profile… ${items} items checked`,
         starting: '시작 중…',
         idle: "미리보기를 눌러 정리할 수 있는 양을 측정하세요."
       },
@@ -16312,6 +16859,9 @@ export const CATALOG = {
       cleanErrorPrefix: (error) => `정리할 수 없습니다: ${error}`,
       cleanupComplete: '정리가 완료되었습니다.',
       resultFreed: (formatted) => `${formatted} 확보됨`,
+      resultMoved: (formatted) => `Moved ${formatted} to Quarantine. The space comes back when you empty it.`,
+      resultRecycled: (formatted) => `Moved ${formatted} to the Recycle Bin. The space comes back when you empty it.`,
+      openQuarantine: 'Open Quarantine',
       resultLockedSuffix: (count) => ` — 잠긴 파일 ${count}개를 건너뜀`,
       before: {
         body: 'Prune은 추정하지 않고 디스크의 모든 카테고리를 실제로 측정하며, 약 30초 정도 걸립니다.',
@@ -16324,6 +16874,9 @@ export const CATALOG = {
         notMeasuredYet: '아직 측정되지 않음',
         previewFirst: "먼저 미리보기로 확보될 공간을 확인하세요.",
         unmeasuredSuffix: (count) => ` · 측정되지 않음 ${count}개`,
+        modeQuarantine: 'Moves to Quarantine.',
+        modeRecycle: 'Moves to the Recycle Bin.',
+        modeDelete: 'Deletes immediately.',
         selectEverything: '모두 선택',
         clear: '지우기',
         selectedCount: (count) => `${count}개 선택됨`
@@ -16332,6 +16885,10 @@ export const CATALOG = {
         prompt: (count, sizeKnown, formatted) => `${count}개 항목(${sizeKnown ? formatted : '크기 측정되지 않음'})을 격리로 이동하시겠습니까?`,
         cancel: '취소',
         confirmButton: "격리로 이동",
+        promptDelete: (count, sizeKnown, formatted) => `Delete ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'})? This can't be undone.`,
+        deleteButton: 'Delete',
+        promptRecycle: (count, sizeKnown, formatted) => `Move ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'}) to the Recycle Bin?`,
+        recycleButton: 'Move to Recycle Bin',
         cleaning: '정리 중…'
       },
       stop: '중지',
@@ -16339,6 +16896,7 @@ export const CATALOG = {
       clean: '정리',
       tree: {
         selectCategoryAriaLabel: (category) => `${category} 아래 모두 선택`,
+        atLeast: (size) => `at least ${size}`,
         losesData: '데이터 손실',
         needsAdmin: '관리자 권한 필요',
         notInstalled: '설치되지 않음',
@@ -16355,6 +16913,7 @@ export const CATALOG = {
       },
       log: {
         scan: {
+          partial: (size) => `${size}, partial`,
           nothingToMeasure: "측정할 항목 없음",
           needsAdmin: "관리자 권한 필요",
           notInstalled: "설치되지 않음",
@@ -16362,6 +16921,7 @@ export const CATALOG = {
         },
         execute: {
           delete: (name) => `${name} 삭제`,
+          quarantine: (name) => `Quarantine ${name}`,
           recycle: (name) => `${name} 휴지통으로 이동`,
           clear: (name) => `${name} 지우기`,
           compact: (name) => `${name} 압축`,
@@ -16610,6 +17170,19 @@ export const CATALOG = {
       showFreeSpace: {
         title: 'Rodyti laisvą vietą disko žemėlapyje',
         description: 'Nuskaitant visą diską, piešia disko laisvą vietą kaip dar vieną bloką, todėl kiekvienas aplankas skaitomas kaip disko, o ne naudojamos vietos dalis.'
+      },
+      deepCleanRemoval: {
+        title: 'When Deep Clean removes files',
+        quarantine: {
+          label: 'Move to Quarantine (you can put it back)',
+          description: "Nothing is deleted. Files go into Prune's Quarantine and the drive gets the space back when you empty it."
+        },
+        delete: {
+          label: "Delete now (frees the space, can't be undone — like BleachBit)",
+          description: 'Files are removed as soon as you confirm, so the space is free straight away. Rules that lose data still ask first.'
+        },
+        deleteWarning: "With Delete now, Clean can't be undone. Scheduled cleans still move files to Quarantine.",
+        autoQuarantineNote: 'Not used while Deep Clean deletes files immediately.'
       },
       autoQuarantine: {
         title: 'Automatinis karantinas',
@@ -17127,10 +17700,12 @@ export const CATALOG = {
     deepClean: {
       title: 'Gilus valymas',
       subtitle: "Viskas, ką „Prune“ moka rasti — talpyklos, žurnalai, išklotinės ir liekanos — išmatuota šiame kompiuteryje, o ne apskaičiuota. Niekas nėra iškart ištrinama — viskas, ką paima Valymas, pirmiausia keliauja į Karantiną, iš kur galite tai atkurti.",
+      subtitleDelete: "Every cache, log, dump and leftover Prune knows how to find, measured on this machine rather than estimated. Clean deletes what you tick immediately and frees the space, the way BleachBit does. It can't be undone.",
       scanLog: {
         header: 'Nuskaitymo išvestis',
         scanningAnnounce: (total) => `Nuskaitoma vietų: ${total}.`,
         finishedAnnounce: (scanned, total) => `Nuskaitymas baigtas. Išmatuota ${scanned} iš ${total} vietų.`,
+        searching: (items) => `Searching your profile… ${items} items checked`,
         starting: 'Pradedama…',
         idle: "Paspauskite Peržiūra, kad išmatuotumėte, ką galima išvalyti."
       },
@@ -17139,6 +17714,9 @@ export const CATALOG = {
       cleanErrorPrefix: (error) => `Nepavyko išvalyti: ${error}`,
       cleanupComplete: 'Valymas baigtas.',
       resultFreed: (formatted) => `Atlaisvinta ${formatted}`,
+      resultMoved: (formatted) => `Moved ${formatted} to Quarantine. The space comes back when you empty it.`,
+      resultRecycled: (formatted) => `Moved ${formatted} to the Recycle Bin. The space comes back when you empty it.`,
+      openQuarantine: 'Open Quarantine',
       resultLockedSuffix: (count) => ` — praleista užrakintų failų: ${count}`,
       before: {
         body: '„Prune“ realiai matuoja kiekvieną kategoriją diske, o ne apskaičiuoja, o tai užtrunka apie pusę minutės.',
@@ -17151,6 +17729,9 @@ export const CATALOG = {
         notMeasuredYet: 'dar neišmatuota',
         previewFirst: "Pirmiausia peržiūrėkite, kad pamatytumėte, kas bus atlaisvinta.",
         unmeasuredSuffix: (count) => ` · ${count} neišmatuota`,
+        modeQuarantine: 'Moves to Quarantine.',
+        modeRecycle: 'Moves to the Recycle Bin.',
+        modeDelete: 'Deletes immediately.',
         selectEverything: 'Pasirinkti viską',
         clear: 'Išvalyti',
         selectedCount: (count) => `${count} pasirinkta`
@@ -17159,6 +17740,10 @@ export const CATALOG = {
         prompt: (count, sizeKnown, formatted) => { const lt = (n, a, b, c) => n % 10 === 1 && n % 100 !== 11 ? a : (n % 10 === 0 || (n % 100 >= 11 && n % 100 <= 19)) ? c : b; return `Perkelti ${count} ${lt(count, 'elementą', 'elementus', 'elementų')} (${sizeKnown ? formatted : 'dydis neišmatuotas'}) į karantiną?`; },
         cancel: 'Atšaukti',
         confirmButton: "Perkelti į karantiną",
+        promptDelete: (count, sizeKnown, formatted) => `Delete ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'})? This can't be undone.`,
+        deleteButton: 'Delete',
+        promptRecycle: (count, sizeKnown, formatted) => `Move ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'}) to the Recycle Bin?`,
+        recycleButton: 'Move to Recycle Bin',
         cleaning: 'Valoma…'
       },
       stop: 'Stabdyti',
@@ -17166,6 +17751,7 @@ export const CATALOG = {
       clean: 'Valyti',
       tree: {
         selectCategoryAriaLabel: (category) => `Pasirinkti viską skiltyje ${category}`,
+        atLeast: (size) => `at least ${size}`,
         losesData: 'Prarandami duomenys',
         needsAdmin: 'reikia administratoriaus',
         notInstalled: 'neįdiegta',
@@ -17182,6 +17768,7 @@ export const CATALOG = {
       },
       log: {
         scan: {
+          partial: (size) => `${size}, partial`,
           nothingToMeasure: "nėra ką matuoti",
           needsAdmin: "reikia administratoriaus",
           notInstalled: "neįdiegta",
@@ -17189,6 +17776,7 @@ export const CATALOG = {
         },
         execute: {
           delete: (name) => `Ištrinti ${name}`,
+          quarantine: (name) => `Quarantine ${name}`,
           recycle: (name) => `Siųsti ${name} į šiukšlinę`,
           clear: (name) => `Išvalyti ${name}`,
           compact: (name) => `Suglaudinti ${name}`,
@@ -17435,6 +18023,19 @@ export const CATALOG = {
       showFreeSpace: {
         title: 'Tunjukkan ruang bebas pada Peta Cakera',
         description: 'Melukis ruang bebas pemacu sebagai satu lagi blok apabila anda mengimbas keseluruhan pemacu, supaya setiap folder dibaca sebagai bahagian pemacu dan bukannya ruang yang digunakan.'
+      },
+      deepCleanRemoval: {
+        title: 'When Deep Clean removes files',
+        quarantine: {
+          label: 'Move to Quarantine (you can put it back)',
+          description: "Nothing is deleted. Files go into Prune's Quarantine and the drive gets the space back when you empty it."
+        },
+        delete: {
+          label: "Delete now (frees the space, can't be undone — like BleachBit)",
+          description: 'Files are removed as soon as you confirm, so the space is free straight away. Rules that lose data still ask first.'
+        },
+        deleteWarning: "With Delete now, Clean can't be undone. Scheduled cleans still move files to Quarantine.",
+        autoQuarantineNote: 'Not used while Deep Clean deletes files immediately.'
       },
       autoQuarantine: {
         title: 'Kuarantin automatik',
@@ -17952,10 +18553,12 @@ export const CATALOG = {
     deepClean: {
       title: 'Pembersihan Mendalam',
       subtitle: 'Setiap cache, log, dump dan baki yang diketahui Prune cara mencarinya, diukur pada mesin ini bukannya dianggarkan. Tiada apa dipadamkan serta-merta — segala yang diambil oleh Bersih pergi ke Kuarantin dahulu, di mana anda boleh mengembalikannya.',
+      subtitleDelete: "Every cache, log, dump and leftover Prune knows how to find, measured on this machine rather than estimated. Clean deletes what you tick immediately and frees the space, the way BleachBit does. It can't be undone.",
       scanLog: {
         header: 'Output imbasan',
         scanningAnnounce: (total) => `Mengimbas ${total} lokasi.`,
         finishedAnnounce: (scanned, total) => `Imbasan selesai. ${scanned} daripada ${total} lokasi diukur.`,
+        searching: (items) => `Searching your profile… ${items} items checked`,
         starting: 'Memulakan…',
         idle: "Tekan Pratonton untuk mengukur apa yang boleh dibersihkan."
       },
@@ -17964,6 +18567,9 @@ export const CATALOG = {
       cleanErrorPrefix: (error) => `Tidak dapat membersihkan: ${error}`,
       cleanupComplete: 'Pembersihan selesai.',
       resultFreed: (formatted) => `${formatted} dibebaskan`,
+      resultMoved: (formatted) => `Moved ${formatted} to Quarantine. The space comes back when you empty it.`,
+      resultRecycled: (formatted) => `Moved ${formatted} to the Recycle Bin. The space comes back when you empty it.`,
+      openQuarantine: 'Open Quarantine',
       resultLockedSuffix: (count) => ` — ${count} fail yang dikunci dilangkau`,
       before: {
         body: 'Prune mengukur setiap kategori pada cakera secara sebenar bukannya menganggar, yang mengambil masa kira-kira setengah minit.',
@@ -17976,6 +18582,9 @@ export const CATALOG = {
         notMeasuredYet: 'belum diukur',
         previewFirst: "Pratonton dahulu untuk melihat apa yang akan dibebaskan.",
         unmeasuredSuffix: (count) => ` · ${count} tidak diukur`,
+        modeQuarantine: 'Moves to Quarantine.',
+        modeRecycle: 'Moves to the Recycle Bin.',
+        modeDelete: 'Deletes immediately.',
         selectEverything: 'Pilih semua',
         clear: 'Kosongkan',
         selectedCount: (count) => `${count} dipilih`
@@ -17984,6 +18593,10 @@ export const CATALOG = {
         prompt: (count, sizeKnown, formatted) => `Alih ${count} item (${sizeKnown ? formatted : 'saiz tidak diukur'}) ke Kuarantin?`,
         cancel: 'Batal',
         confirmButton: "Alih ke Kuarantin",
+        promptDelete: (count, sizeKnown, formatted) => `Delete ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'})? This can't be undone.`,
+        deleteButton: 'Delete',
+        promptRecycle: (count, sizeKnown, formatted) => `Move ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'}) to the Recycle Bin?`,
+        recycleButton: 'Move to Recycle Bin',
         cleaning: 'Membersihkan…'
       },
       stop: 'Henti',
@@ -17991,6 +18604,7 @@ export const CATALOG = {
       clean: 'Bersihkan',
       tree: {
         selectCategoryAriaLabel: (category) => `Pilih semua di bawah ${category}`,
+        atLeast: (size) => `at least ${size}`,
         losesData: 'Kehilangan data',
         needsAdmin: 'perlu pentadbir',
         notInstalled: 'tidak dipasang',
@@ -18007,6 +18621,7 @@ export const CATALOG = {
       },
       log: {
         scan: {
+          partial: (size) => `${size}, partial`,
           nothingToMeasure: "tiada apa untuk diukur",
           needsAdmin: "perlu pentadbir",
           notInstalled: "tidak dipasang",
@@ -18014,6 +18629,7 @@ export const CATALOG = {
         },
         execute: {
           delete: (name) => `Padam ${name}`,
+          quarantine: (name) => `Quarantine ${name}`,
           recycle: (name) => `Hantar ${name} ke Tong Kitar Semula`,
           clear: (name) => `Kosongkan ${name}`,
           compact: (name) => `Padatkan ${name}`,
@@ -18262,6 +18878,19 @@ export const CATALOG = {
       showFreeSpace: {
         title: 'Vis ledig plass på Diskkartet',
         description: 'Tegner stasjonens ledige plass som enda en blokk når du skanner en hel stasjon, slik at hver mappe leses som en andel av stasjonen i stedet for av plassen som er i bruk.'
+      },
+      deepCleanRemoval: {
+        title: 'When Deep Clean removes files',
+        quarantine: {
+          label: 'Move to Quarantine (you can put it back)',
+          description: "Nothing is deleted. Files go into Prune's Quarantine and the drive gets the space back when you empty it."
+        },
+        delete: {
+          label: "Delete now (frees the space, can't be undone — like BleachBit)",
+          description: 'Files are removed as soon as you confirm, so the space is free straight away. Rules that lose data still ask first.'
+        },
+        deleteWarning: "With Delete now, Clean can't be undone. Scheduled cleans still move files to Quarantine.",
+        autoQuarantineNote: 'Not used while Deep Clean deletes files immediately.'
       },
       autoQuarantine: {
         title: 'Automatisk karantene',
@@ -18779,10 +19408,12 @@ export const CATALOG = {
     deepClean: {
       title: "Grundig opprydding",
       subtitle: 'Hver hurtigbuffer, logg, dump og rest Prune vet hvordan man finner, målt på denne maskinen i stedet for anslått. Ingenting slettes umiddelbart — alt Rens tar går først til Karantene, hvor du kan legge det tilbake.',
+      subtitleDelete: "Every cache, log, dump and leftover Prune knows how to find, measured on this machine rather than estimated. Clean deletes what you tick immediately and frees the space, the way BleachBit does. It can't be undone.",
       scanLog: {
         header: 'Skanningsutdata',
         scanningAnnounce: (total) => `Skanner ${total} steder.`,
         finishedAnnounce: (scanned, total) => `Skanning ferdig. ${scanned} av ${total} steder målt.`,
+        searching: (items) => `Searching your profile… ${items} items checked`,
         starting: 'Starter…',
         idle: "Klikk på Forhåndsvisning for å måle hva som kan renses."
       },
@@ -18791,6 +19422,9 @@ export const CATALOG = {
       cleanErrorPrefix: (error) => `Kunne ikke rense: ${error}`,
       cleanupComplete: 'Opprydding fullført.',
       resultFreed: (formatted) => `Frigjorde ${formatted}`,
+      resultMoved: (formatted) => `Moved ${formatted} to Quarantine. The space comes back when you empty it.`,
+      resultRecycled: (formatted) => `Moved ${formatted} to the Recycle Bin. The space comes back when you empty it.`,
+      openQuarantine: 'Open Quarantine',
       resultLockedSuffix: (count) => ` — hoppet over ${count} ${count === 1 ? 'låst fil' : 'låste filer'}`,
       before: {
         body: 'Prune måler hver kategori faktisk på disken i stedet for å anslå, noe som tar rundt et halvt minutt.',
@@ -18803,6 +19437,9 @@ export const CATALOG = {
         notMeasuredYet: 'ikke målt ennå',
         previewFirst: "Forhåndsvis først for å se hva som frigjøres.",
         unmeasuredSuffix: (count) => ` · ${count} ikke målt`,
+        modeQuarantine: 'Moves to Quarantine.',
+        modeRecycle: 'Moves to the Recycle Bin.',
+        modeDelete: 'Deletes immediately.',
         selectEverything: 'Velg alt',
         clear: "Fjern merking",
         selectedCount: (count) => `${count} valgt`
@@ -18811,6 +19448,10 @@ export const CATALOG = {
         prompt: (count, sizeKnown, formatted) => `Flytt ${count} ${count === 1 ? 'element' : 'elementer'} (${sizeKnown ? formatted : 'størrelse ikke målt'}) til karantene?`,
         cancel: 'Avbryt',
         confirmButton: "Flytt til Karantene",
+        promptDelete: (count, sizeKnown, formatted) => `Delete ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'})? This can't be undone.`,
+        deleteButton: 'Delete',
+        promptRecycle: (count, sizeKnown, formatted) => `Move ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'}) to the Recycle Bin?`,
+        recycleButton: 'Move to Recycle Bin',
         cleaning: 'Renser…'
       },
       stop: 'Stopp',
@@ -18818,6 +19459,7 @@ export const CATALOG = {
       clean: 'Rens',
       tree: {
         selectCategoryAriaLabel: (category) => `Velg alt under ${category}`,
+        atLeast: (size) => `at least ${size}`,
         losesData: 'Mister data',
         needsAdmin: 'krever administrator',
         notInstalled: 'ikke installert',
@@ -18834,6 +19476,7 @@ export const CATALOG = {
       },
       log: {
         scan: {
+          partial: (size) => `${size}, partial`,
           nothingToMeasure: "ingenting å måle",
           needsAdmin: "krever administrator",
           notInstalled: "ikke installert",
@@ -18841,6 +19484,7 @@ export const CATALOG = {
         },
         execute: {
           delete: (name) => `Slett ${name}`,
+          quarantine: (name) => `Quarantine ${name}`,
           recycle: (name) => `Send ${name} til papirkurven`,
           clear: (name) => `Tøm ${name}`,
           compact: (name) => `Komprimer ${name}`,
@@ -19087,6 +19731,19 @@ export const CATALOG = {
       showFreeSpace: {
         title: 'Vrije ruimte tonen op de Schijfkaart',
         description: 'Tekent de vrije ruimte van de schijf als nog een blok wanneer je een hele schijf scant, zodat elke map leesbaar is als een aandeel van de schijf in plaats van de gebruikte ruimte.'
+      },
+      deepCleanRemoval: {
+        title: 'When Deep Clean removes files',
+        quarantine: {
+          label: 'Move to Quarantine (you can put it back)',
+          description: "Nothing is deleted. Files go into Prune's Quarantine and the drive gets the space back when you empty it."
+        },
+        delete: {
+          label: "Delete now (frees the space, can't be undone — like BleachBit)",
+          description: 'Files are removed as soon as you confirm, so the space is free straight away. Rules that lose data still ask first.'
+        },
+        deleteWarning: "With Delete now, Clean can't be undone. Scheduled cleans still move files to Quarantine.",
+        autoQuarantineNote: 'Not used while Deep Clean deletes files immediately.'
       },
       autoQuarantine: {
         title: 'Automatische quarantaine',
@@ -19604,10 +20261,12 @@ export const CATALOG = {
     deepClean: {
       title: "Grondige opschoning",
       subtitle: "Elke cache, log, dump en elk restant dat Prune weet te vinden, gemeten op deze machine in plaats van geschat. Niets wordt direct verwijderd — alles wat Opschonen meeneemt gaat eerst naar Quarantaine, waar je het kunt terugzetten.",
+      subtitleDelete: "Every cache, log, dump and leftover Prune knows how to find, measured on this machine rather than estimated. Clean deletes what you tick immediately and frees the space, the way BleachBit does. It can't be undone.",
       scanLog: {
         header: 'Scanuitvoer',
         scanningAnnounce: (total) => `${total} locaties worden gescand.`,
         finishedAnnounce: (scanned, total) => `Scan voltooid. ${scanned} van ${total} locaties gemeten.`,
+        searching: (items) => `Searching your profile… ${items} items checked`,
         starting: 'Wordt gestart…',
         idle: "Klik op Voorbeeld om te meten wat er kan worden opgeruimd."
       },
@@ -19616,6 +20275,9 @@ export const CATALOG = {
       cleanErrorPrefix: (error) => `Kon niet opschonen: ${error}`,
       cleanupComplete: 'Opschonen voltooid.',
       resultFreed: (formatted) => `${formatted} vrijgemaakt`,
+      resultMoved: (formatted) => `Moved ${formatted} to Quarantine. The space comes back when you empty it.`,
+      resultRecycled: (formatted) => `Moved ${formatted} to the Recycle Bin. The space comes back when you empty it.`,
+      openQuarantine: 'Open Quarantine',
       resultLockedSuffix: (count) => ` — ${count} vergrendeld${count === 1 ? ' bestand' : 'e bestanden'} overgeslagen`,
       before: {
         body: 'Prune meet elke categorie daadwerkelijk op de schijf in plaats van te schatten, wat ongeveer een halve minuut duurt.',
@@ -19628,6 +20290,9 @@ export const CATALOG = {
         notMeasuredYet: 'nog niet gemeten',
         previewFirst: "Bekijk eerst het voorbeeld om te zien wat er wordt vrijgemaakt.",
         unmeasuredSuffix: (count) => ` · ${count} niet gemeten`,
+        modeQuarantine: 'Moves to Quarantine.',
+        modeRecycle: 'Moves to the Recycle Bin.',
+        modeDelete: 'Deletes immediately.',
         selectEverything: 'Alles selecteren',
         clear: 'Wissen',
         selectedCount: (count) => `${count} geselecteerd`
@@ -19636,6 +20301,10 @@ export const CATALOG = {
         prompt: (count, sizeKnown, formatted) => `${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'grootte niet gemeten'}) naar Quarantaine verplaatsen?`,
         cancel: 'Annuleren',
         confirmButton: "Naar Quarantaine verplaatsen",
+        promptDelete: (count, sizeKnown, formatted) => `Delete ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'})? This can't be undone.`,
+        deleteButton: 'Delete',
+        promptRecycle: (count, sizeKnown, formatted) => `Move ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'}) to the Recycle Bin?`,
+        recycleButton: 'Move to Recycle Bin',
         cleaning: 'Bezig met opschonen…'
       },
       stop: 'Stoppen',
@@ -19643,6 +20312,7 @@ export const CATALOG = {
       clean: 'Opschonen',
       tree: {
         selectCategoryAriaLabel: (category) => `Alles selecteren onder ${category}`,
+        atLeast: (size) => `at least ${size}`,
         losesData: 'Verliest gegevens',
         needsAdmin: 'heeft beheerder nodig',
         notInstalled: 'niet geïnstalleerd',
@@ -19659,6 +20329,7 @@ export const CATALOG = {
       },
       log: {
         scan: {
+          partial: (size) => `${size}, partial`,
           nothingToMeasure: "niets te meten",
           needsAdmin: "heeft beheerder nodig",
           notInstalled: "niet geïnstalleerd",
@@ -19666,6 +20337,7 @@ export const CATALOG = {
         },
         execute: {
           delete: (name) => `${name} verwijderen`,
+          quarantine: (name) => `Quarantine ${name}`,
           recycle: (name) => `${name} naar de Prullenbak`,
           clear: (name) => `${name} wissen`,
           compact: (name) => `${name} comprimeren`,
@@ -19912,6 +20584,19 @@ export const CATALOG = {
       showFreeSpace: {
         title: "Pokaż wolne miejsce na Mapie dysku",
         description: 'Rysuje wolne miejsce dysku jako jeszcze jeden blok podczas skanowania całego dysku, dzięki czemu każdy folder jest odczytywany jako udział dysku, a nie zajętego miejsca.'
+      },
+      deepCleanRemoval: {
+        title: 'When Deep Clean removes files',
+        quarantine: {
+          label: 'Move to Quarantine (you can put it back)',
+          description: "Nothing is deleted. Files go into Prune's Quarantine and the drive gets the space back when you empty it."
+        },
+        delete: {
+          label: "Delete now (frees the space, can't be undone — like BleachBit)",
+          description: 'Files are removed as soon as you confirm, so the space is free straight away. Rules that lose data still ask first.'
+        },
+        deleteWarning: "With Delete now, Clean can't be undone. Scheduled cleans still move files to Quarantine.",
+        autoQuarantineNote: 'Not used while Deep Clean deletes files immediately.'
       },
       autoQuarantine: {
         title: 'Automatyczna kwarantanna',
@@ -20429,10 +21114,12 @@ export const CATALOG = {
     deepClean: {
       title: 'Głębokie czyszczenie',
       subtitle: "Każda pamięć podręczna, dziennik, zrzut i pozostałość, które Prune potrafi znaleźć, zmierzone na tym komputerze zamiast szacowane. Nic nie jest usuwane od razu — wszystko, co usuwa Czyszczenie, trafia najpierw do kwarantanny, skąd można to przywrócić.",
+      subtitleDelete: "Every cache, log, dump and leftover Prune knows how to find, measured on this machine rather than estimated. Clean deletes what you tick immediately and frees the space, the way BleachBit does. It can't be undone.",
       scanLog: {
         header: 'Wynik skanowania',
         scanningAnnounce: (total) => `Skanowanie lokalizacji: ${total}.`,
         finishedAnnounce: (scanned, total) => `Skanowanie zakończone. Zmierzono ${scanned} z ${total} lokalizacji.`,
+        searching: (items) => `Searching your profile… ${items} items checked`,
         starting: 'Uruchamianie…',
         idle: "Kliknij Podgląd, aby zmierzyć, co można wyczyścić."
       },
@@ -20441,6 +21128,9 @@ export const CATALOG = {
       cleanErrorPrefix: (error) => `Nie udało się wyczyścić: ${error}`,
       cleanupComplete: 'Czyszczenie zakończone.',
       resultFreed: (formatted) => `Zwolniono ${formatted}`,
+      resultMoved: (formatted) => `Moved ${formatted} to Quarantine. The space comes back when you empty it.`,
+      resultRecycled: (formatted) => `Moved ${formatted} to the Recycle Bin. The space comes back when you empty it.`,
+      openQuarantine: 'Open Quarantine',
       resultLockedSuffix: (count) => { const m10 = count % 10, m100 = count % 100; const w = count === 1 ? 'zablokowany plik' : (m10 >= 2 && m10 <= 4 && (m100 < 12 || m100 > 14)) ? 'zablokowane pliki' : 'zablokowanych plików'; return ` — pominięto ${count} ${w}`; },
       before: {
         body: 'Prune rzeczywiście mierzy każdą kategorię na dysku zamiast ją szacować, co zajmuje około pół minuty.',
@@ -20453,6 +21143,9 @@ export const CATALOG = {
         notMeasuredYet: 'jeszcze nie zmierzono',
         previewFirst: "Najpierw użyj Podglądu, aby zobaczyć, co zostanie zwolnione.",
         unmeasuredSuffix: (count) => ` · niezmierzone: ${count}`,
+        modeQuarantine: 'Moves to Quarantine.',
+        modeRecycle: 'Moves to the Recycle Bin.',
+        modeDelete: 'Deletes immediately.',
         selectEverything: 'Zaznacz wszystko',
         clear: 'Wyczyść',
         selectedCount: (count) => `Wybrano: ${count}`
@@ -20461,6 +21154,10 @@ export const CATALOG = {
         prompt: (count, sizeKnown, formatted) => { const m10 = count % 10, m100 = count % 100; const w = count === 1 ? 'element' : (m10 >= 2 && m10 <= 4 && (m100 < 12 || m100 > 14)) ? 'elementy' : 'elementów'; return `Przenieść ${count} ${w} (${sizeKnown ? formatted : 'rozmiar niezmierzony'}) do kwarantanny?`; },
         cancel: 'Anuluj',
         confirmButton: "Przenieś do kwarantanny",
+        promptDelete: (count, sizeKnown, formatted) => `Delete ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'})? This can't be undone.`,
+        deleteButton: 'Delete',
+        promptRecycle: (count, sizeKnown, formatted) => `Move ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'}) to the Recycle Bin?`,
+        recycleButton: 'Move to Recycle Bin',
         cleaning: 'Czyszczenie…'
       },
       stop: 'Zatrzymaj',
@@ -20468,6 +21165,7 @@ export const CATALOG = {
       clean: 'Wyczyść',
       tree: {
         selectCategoryAriaLabel: (category) => `Zaznacz wszystko w kategorii ${category}`,
+        atLeast: (size) => `at least ${size}`,
         losesData: 'Utrata danych',
         needsAdmin: 'wymaga administratora',
         notInstalled: 'niezainstalowane',
@@ -20484,6 +21182,7 @@ export const CATALOG = {
       },
       log: {
         scan: {
+          partial: (size) => `${size}, partial`,
           nothingToMeasure: "nic do zmierzenia",
           needsAdmin: "wymaga administratora",
           notInstalled: "niezainstalowane",
@@ -20491,6 +21190,7 @@ export const CATALOG = {
         },
         execute: {
           delete: (name) => `Usuń ${name}`,
+          quarantine: (name) => `Quarantine ${name}`,
           recycle: (name) => `Wyślij ${name} do kosza`,
           clear: (name) => `Wyczyść ${name}`,
           compact: (name) => `Skompaktuj ${name}`,
@@ -20737,6 +21437,19 @@ export const CATALOG = {
       showFreeSpace: {
         title: 'د ډیسک نقشه کې خالي ځای ښودل',
         description: 'د بشپړ ډرایو سکین کولو پر مهال د ډرایو خالي ځای د یو نور بلاک په توګه رسموي، ترڅو هر فولډر د کارول شوي ځای پرځای د ډرایو یوه برخه وګڼل شي.'
+      },
+      deepCleanRemoval: {
+        title: 'When Deep Clean removes files',
+        quarantine: {
+          label: 'Move to Quarantine (you can put it back)',
+          description: "Nothing is deleted. Files go into Prune's Quarantine and the drive gets the space back when you empty it."
+        },
+        delete: {
+          label: "Delete now (frees the space, can't be undone — like BleachBit)",
+          description: 'Files are removed as soon as you confirm, so the space is free straight away. Rules that lose data still ask first.'
+        },
+        deleteWarning: "With Delete now, Clean can't be undone. Scheduled cleans still move files to Quarantine.",
+        autoQuarantineNote: 'Not used while Deep Clean deletes files immediately.'
       },
       autoQuarantine: {
         title: 'اتومات قرنطین',
@@ -21254,10 +21967,12 @@ export const CATALOG = {
     deepClean: {
       title: 'ژور پاکول',
       subtitle: "هره کیشه، لاگ، ډمپ او پاتې شونې چې Prune یې موندلو ته پوهیږي، پدې ماشین کې اندازه شوې نه چې اټکل شوې. هیڅ شی د تل لپاره نه ړنګیږي — هر هغه څه چې پاکول یې اخلي لومړی قرنطین ته ځي، چیرې چې تاسو یې بیرته راوستلی شئ.",
+      subtitleDelete: "Every cache, log, dump and leftover Prune knows how to find, measured on this machine rather than estimated. Clean deletes what you tick immediately and frees the space, the way BleachBit does. It can't be undone.",
       scanLog: {
         header: "د سکین محصول",
         scanningAnnounce: (total) => `${total} ځایونه سکین کیږي.`,
         finishedAnnounce: (scanned, total) => `سکین بشپړ شو. د ${total} څخه ${scanned} ځایونه اندازه شوي.`,
+        searching: (items) => `Searching your profile… ${items} items checked`,
         starting: 'پیل کیږي…',
         idle: "د پاکولو وړ شیانو د اندازه کولو لپاره «مخکتنه» کېکاږئ."
       },
@@ -21266,6 +21981,9 @@ export const CATALOG = {
       cleanErrorPrefix: (error) => `پاکول ونشوای شي: ${error}`,
       cleanupComplete: 'پاکول بشپړ شول.',
       resultFreed: (formatted) => `${formatted} خلاص شو`,
+      resultMoved: (formatted) => `Moved ${formatted} to Quarantine. The space comes back when you empty it.`,
+      resultRecycled: (formatted) => `Moved ${formatted} to the Recycle Bin. The space comes back when you empty it.`,
+      openQuarantine: 'Open Quarantine',
       resultLockedSuffix: (count) => count === 1 ? ' — 1 تړل شوی فایل پریښودل شو' : ` — ${count} تړل شوي فایلونه پریښودل شوي`,
       before: {
         body: 'Prune په دیسک کې هره کټګوري واقعیا اندازه کوي نه چې اټکل یې کوي، دا شاوخوا نیم دقیقه وخت نیسي.',
@@ -21278,6 +21996,9 @@ export const CATALOG = {
         notMeasuredYet: 'تراوسه اندازه شوی نه دی',
         previewFirst: "لومړی «مخکتنه» کېکاږئ چې وګورئ څه به خلاص شي.",
         unmeasuredSuffix: (count) => ` · ${count} نامعلومه اندازه`,
+        modeQuarantine: 'Moves to Quarantine.',
+        modeRecycle: 'Moves to the Recycle Bin.',
+        modeDelete: 'Deletes immediately.',
         selectEverything: 'هر څه ټاکل',
         clear: 'پاک کول',
         selectedCount: (count) => `${count} ټاکل شوي`
@@ -21286,6 +22007,10 @@ export const CATALOG = {
         prompt: (count, sizeKnown, formatted) => `${count === 1 ? '1 توکی' : count + ' توکي'} (${sizeKnown ? formatted : 'اندازه نامعلومه'}) قرنطین ته لیږدول شي؟`,
         cancel: 'لغوه کول',
         confirmButton: "قرنطین ته لیږدول",
+        promptDelete: (count, sizeKnown, formatted) => `Delete ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'})? This can't be undone.`,
+        deleteButton: 'Delete',
+        promptRecycle: (count, sizeKnown, formatted) => `Move ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'}) to the Recycle Bin?`,
+        recycleButton: 'Move to Recycle Bin',
         cleaning: 'پاکول کیږي…'
       },
       stop: 'ودرول',
@@ -21293,6 +22018,7 @@ export const CATALOG = {
       clean: 'پاکول',
       tree: {
         selectCategoryAriaLabel: (category) => `د ${category} لاندې هر څه ټاکل`,
+        atLeast: (size) => `at least ${size}`,
         losesData: 'ډیټا له لاسه ورکوي',
         needsAdmin: 'اډمین ته اړتیا لري',
         notInstalled: 'نصب شوی نه دی',
@@ -21309,6 +22035,7 @@ export const CATALOG = {
       },
       log: {
         scan: {
+          partial: (size) => `${size}, partial`,
           nothingToMeasure: "د اندازه کولو لپاره هیڅ نشته",
           needsAdmin: "اډمین ته اړتیا لري",
           notInstalled: "نصب شوی نه دی",
@@ -21316,6 +22043,7 @@ export const CATALOG = {
         },
         execute: {
           delete: (name) => `${name} ړنګول`,
+          quarantine: (name) => `Quarantine ${name}`,
           recycle: (name) => `${name} ردي بکس ته لیږل`,
           clear: (name) => `${name} پاکول`,
           compact: (name) => `${name} فشرول`,
@@ -21564,6 +22292,19 @@ export const CATALOG = {
       showFreeSpace: {
         title: "Mostrar espaço livre no Mapa do disco",
         description: "Desenha o espaço livre da unidade como mais um bloco ao verificar uma unidade inteira, para que cada pasta seja lida como uma parcela da unidade em vez do espaço em uso."
+      },
+      deepCleanRemoval: {
+        title: 'When Deep Clean removes files',
+        quarantine: {
+          label: 'Move to Quarantine (you can put it back)',
+          description: "Nothing is deleted. Files go into Prune's Quarantine and the drive gets the space back when you empty it."
+        },
+        delete: {
+          label: "Delete now (frees the space, can't be undone — like BleachBit)",
+          description: 'Files are removed as soon as you confirm, so the space is free straight away. Rules that lose data still ask first.'
+        },
+        deleteWarning: "With Delete now, Clean can't be undone. Scheduled cleans still move files to Quarantine.",
+        autoQuarantineNote: 'Not used while Deep Clean deletes files immediately.'
       },
       autoQuarantine: {
         title: 'Quarentena automática',
@@ -22081,10 +22822,12 @@ export const CATALOG = {
     deepClean: {
       title: "Limpeza profunda",
       subtitle: "Cada cache, log, dump e resíduo que o Prune sabe encontrar, medido nesta máquina em vez de estimado. Nada é excluído diretamente — tudo o que a Limpeza pega vai primeiro para a Quarentena, de onde você pode devolvê-lo.",
+      subtitleDelete: "Every cache, log, dump and leftover Prune knows how to find, measured on this machine rather than estimated. Clean deletes what you tick immediately and frees the space, the way BleachBit does. It can't be undone.",
       scanLog: {
         header: "Saída da verificação",
         scanningAnnounce: (total) => `Verificando ${total} locais.`,
         finishedAnnounce: (scanned, total) => `Verificação concluída. ${scanned} de ${total} locais medidos.`,
+        searching: (items) => `Searching your profile… ${items} items checked`,
         starting: 'Iniciando…',
         idle: "Clique em Prévia para medir o que pode ser limpo."
       },
@@ -22093,6 +22836,9 @@ export const CATALOG = {
       cleanErrorPrefix: (error) => `Não foi possível limpar: ${error}`,
       cleanupComplete: 'Limpeza concluída.',
       resultFreed: (formatted) => `Liberados ${formatted}`,
+      resultMoved: (formatted) => `Moved ${formatted} to Quarantine. The space comes back when you empty it.`,
+      resultRecycled: (formatted) => `Moved ${formatted} to the Recycle Bin. The space comes back when you empty it.`,
+      openQuarantine: 'Open Quarantine',
       resultLockedSuffix: (count) => ` — ${count} arquivo${count === 1 ? '' : 's'} bloqueado${count === 1 ? '' : 's'} ignorado${count === 1 ? '' : 's'}`,
       before: {
         body: 'O Prune mede de fato cada categoria no disco em vez de estimar, o que leva cerca de meio minuto.',
@@ -22105,6 +22851,9 @@ export const CATALOG = {
         notMeasuredYet: 'ainda não medido',
         previewFirst: "Faça a prévia primeiro para ver o que será liberado.",
         unmeasuredSuffix: (count) => ` · ${count} não medido${count === 1 ? '' : 's'}`,
+        modeQuarantine: 'Moves to Quarantine.',
+        modeRecycle: 'Moves to the Recycle Bin.',
+        modeDelete: 'Deletes immediately.',
         selectEverything: 'Selecionar tudo',
         clear: 'Limpar',
         selectedCount: (count) => `${count} selecionado${count === 1 ? '' : 's'}`
@@ -22113,6 +22862,10 @@ export const CATALOG = {
         prompt: (count, sizeKnown, formatted) => `Mover ${count} ${count === 1 ? 'item' : 'itens'} (${sizeKnown ? formatted : 'tamanho não medido'}) para a Quarentena?`,
         cancel: 'Cancelar',
         confirmButton: "Mover para a Quarentena",
+        promptDelete: (count, sizeKnown, formatted) => `Delete ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'})? This can't be undone.`,
+        deleteButton: 'Delete',
+        promptRecycle: (count, sizeKnown, formatted) => `Move ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'}) to the Recycle Bin?`,
+        recycleButton: 'Move to Recycle Bin',
         cleaning: 'Limpando…'
       },
       stop: 'Parar',
@@ -22120,6 +22873,7 @@ export const CATALOG = {
       clean: 'Limpar',
       tree: {
         selectCategoryAriaLabel: (category) => `Selecionar tudo em ${category}`,
+        atLeast: (size) => `at least ${size}`,
         losesData: 'Perde dados',
         needsAdmin: 'precisa de administrador',
         notInstalled: 'não instalado',
@@ -22136,6 +22890,7 @@ export const CATALOG = {
       },
       log: {
         scan: {
+          partial: (size) => `${size}, partial`,
           nothingToMeasure: "nada a medir",
           needsAdmin: "precisa de administrador",
           notInstalled: "não instalado",
@@ -22143,6 +22898,7 @@ export const CATALOG = {
         },
         execute: {
           delete: (name) => `Excluir ${name}`,
+          quarantine: (name) => `Quarantine ${name}`,
           recycle: (name) => `Enviar ${name} para a Lixeira`,
           clear: (name) => `Limpar ${name}`,
           compact: (name) => `Compactar ${name}`,
@@ -22389,6 +23145,19 @@ export const CATALOG = {
       showFreeSpace: {
         title: "Mostrar espaço livre no Mapa do disco",
         description: 'Desenha o espaço livre da unidade como mais um bloco ao analisar uma unidade inteira, para que cada pasta seja lida como uma parcela da unidade em vez do espaço em uso.'
+      },
+      deepCleanRemoval: {
+        title: 'When Deep Clean removes files',
+        quarantine: {
+          label: 'Move to Quarantine (you can put it back)',
+          description: "Nothing is deleted. Files go into Prune's Quarantine and the drive gets the space back when you empty it."
+        },
+        delete: {
+          label: "Delete now (frees the space, can't be undone — like BleachBit)",
+          description: 'Files are removed as soon as you confirm, so the space is free straight away. Rules that lose data still ask first.'
+        },
+        deleteWarning: "With Delete now, Clean can't be undone. Scheduled cleans still move files to Quarantine.",
+        autoQuarantineNote: 'Not used while Deep Clean deletes files immediately.'
       },
       autoQuarantine: {
         title: 'Quarentena automática',
@@ -22906,10 +23675,12 @@ export const CATALOG = {
     deepClean: {
       title: "Limpeza profunda",
       subtitle: 'Cada cache, registo, dump e resíduo que o Prune sabe encontrar, medido nesta máquina em vez de estimado. Nada é eliminado diretamente — tudo o que a Limpeza retira vai primeiro para a Quarentena, de onde pode devolvê-lo.',
+      subtitleDelete: "Every cache, log, dump and leftover Prune knows how to find, measured on this machine rather than estimated. Clean deletes what you tick immediately and frees the space, the way BleachBit does. It can't be undone.",
       scanLog: {
         header: "Saída da análise",
         scanningAnnounce: (total) => `A analisar ${total} localizações.`,
         finishedAnnounce: (scanned, total) => `Análise concluída. ${scanned} de ${total} localizações medidas.`,
+        searching: (items) => `Searching your profile… ${items} items checked`,
         starting: 'A iniciar…',
         idle: "Clique em Pré-visualização para medir o que pode ser limpo."
       },
@@ -22918,6 +23689,9 @@ export const CATALOG = {
       cleanErrorPrefix: (error) => `Não foi possível limpar: ${error}`,
       cleanupComplete: 'Limpeza concluída.',
       resultFreed: (formatted) => `Libertados ${formatted}`,
+      resultMoved: (formatted) => `Moved ${formatted} to Quarantine. The space comes back when you empty it.`,
+      resultRecycled: (formatted) => `Moved ${formatted} to the Recycle Bin. The space comes back when you empty it.`,
+      openQuarantine: 'Open Quarantine',
       resultLockedSuffix: (count) => ` — ${count} ficheiro${count === 1 ? '' : 's'} bloqueado${count === 1 ? '' : 's'} ignorado${count === 1 ? '' : 's'}`,
       before: {
         body: 'O Prune mede de facto cada categoria no disco em vez de a estimar, o que demora cerca de meio minuto.',
@@ -22930,6 +23704,9 @@ export const CATALOG = {
         notMeasuredYet: 'ainda não medido',
         previewFirst: "Faça primeiro a pré-visualização para ver o que será libertado.",
         unmeasuredSuffix: (count) => ` · ${count} não medido${count === 1 ? '' : 's'}`,
+        modeQuarantine: 'Moves to Quarantine.',
+        modeRecycle: 'Moves to the Recycle Bin.',
+        modeDelete: 'Deletes immediately.',
         selectEverything: 'Selecionar tudo',
         clear: 'Limpar',
         selectedCount: (count) => `${count} selecionado${count === 1 ? '' : 's'}`
@@ -22938,6 +23715,10 @@ export const CATALOG = {
         prompt: (count, sizeKnown, formatted) => `Mover ${count} ${count === 1 ? 'item' : 'itens'} (${sizeKnown ? formatted : 'tamanho não medido'}) para a Quarentena?`,
         cancel: 'Cancelar',
         confirmButton: "Mover para a Quarentena",
+        promptDelete: (count, sizeKnown, formatted) => `Delete ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'})? This can't be undone.`,
+        deleteButton: 'Delete',
+        promptRecycle: (count, sizeKnown, formatted) => `Move ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'}) to the Recycle Bin?`,
+        recycleButton: 'Move to Recycle Bin',
         cleaning: 'A limpar…'
       },
       stop: 'Parar',
@@ -22945,6 +23726,7 @@ export const CATALOG = {
       clean: 'Limpar',
       tree: {
         selectCategoryAriaLabel: (category) => `Selecionar tudo em ${category}`,
+        atLeast: (size) => `at least ${size}`,
         losesData: 'Perde dados',
         needsAdmin: 'precisa de administrador',
         notInstalled: 'não instalado',
@@ -22961,6 +23743,7 @@ export const CATALOG = {
       },
       log: {
         scan: {
+          partial: (size) => `${size}, partial`,
           nothingToMeasure: "nada a medir",
           needsAdmin: "precisa de administrador",
           notInstalled: "não instalado",
@@ -22968,6 +23751,7 @@ export const CATALOG = {
         },
         execute: {
           delete: (name) => `Eliminar ${name}`,
+          quarantine: (name) => `Quarantine ${name}`,
           recycle: (name) => `Enviar ${name} para a Reciclagem`,
           clear: (name) => `Limpar ${name}`,
           compact: (name) => `Compactar ${name}`,
@@ -23216,6 +24000,19 @@ export const CATALOG = {
       showFreeSpace: {
         title: "Afișează spațiul liber pe Harta discului",
         description: 'Desenează spațiul liber al unității ca încă un bloc atunci când scanezi o unitate întreagă, astfel încât fiecare folder să se citească drept o cotă a unității, nu a spațiului utilizat.'
+      },
+      deepCleanRemoval: {
+        title: 'When Deep Clean removes files',
+        quarantine: {
+          label: 'Move to Quarantine (you can put it back)',
+          description: "Nothing is deleted. Files go into Prune's Quarantine and the drive gets the space back when you empty it."
+        },
+        delete: {
+          label: "Delete now (frees the space, can't be undone — like BleachBit)",
+          description: 'Files are removed as soon as you confirm, so the space is free straight away. Rules that lose data still ask first.'
+        },
+        deleteWarning: "With Delete now, Clean can't be undone. Scheduled cleans still move files to Quarantine.",
+        autoQuarantineNote: 'Not used while Deep Clean deletes files immediately.'
       },
       autoQuarantine: {
         title: 'Carantină automată',
@@ -23733,10 +24530,12 @@ export const CATALOG = {
     deepClean: {
       title: 'Curățare profundă',
       subtitle: "Fiecare cache, jurnal, dump și rest pe care Prune știe să-l găsească, măsurat pe acest calculator în loc să fie estimat. Nimic nu este șters direct — tot ce ia Curățarea merge mai întâi în Carantină, de unde îl poți restaura.",
+      subtitleDelete: "Every cache, log, dump and leftover Prune knows how to find, measured on this machine rather than estimated. Clean deletes what you tick immediately and frees the space, the way BleachBit does. It can't be undone.",
       scanLog: {
         header: 'Rezultatul scanării',
         scanningAnnounce: (total) => { const d = total % 100 >= 1 && total % 100 < 20 ? '' : 'de '; return total === 1 ? 'Se scanează o locație.' : `Se scanează ${total} ${d}locații.`; },
         finishedAnnounce: (scanned, total) => `Scanare finalizată. ${scanned} din ${total} locații măsurate.`,
+        searching: (items) => `Searching your profile… ${items} items checked`,
         starting: 'Se pornește…',
         idle: "Apasă Previzualizare pentru a măsura ce se poate curăța."
       },
@@ -23745,6 +24544,9 @@ export const CATALOG = {
       cleanErrorPrefix: (error) => `Curățarea a eșuat: ${error}`,
       cleanupComplete: 'Curățare finalizată.',
       resultFreed: (formatted) => `Eliberat ${formatted}`,
+      resultMoved: (formatted) => `Moved ${formatted} to Quarantine. The space comes back when you empty it.`,
+      resultRecycled: (formatted) => `Moved ${formatted} to the Recycle Bin. The space comes back when you empty it.`,
+      openQuarantine: 'Open Quarantine',
       resultLockedSuffix: (count) => { const d = count % 100 >= 1 && count % 100 < 20 ? '' : 'de '; return count === 1 ? ' — s-a omis 1 fișier blocat' : ` — s-au omis ${count} ${d}fișiere blocate`; },
       before: {
         body: 'Prune măsoară efectiv fiecare categorie de pe disc în loc să o estimeze, ceea ce durează aproximativ jumătate de minut.',
@@ -23757,6 +24559,9 @@ export const CATALOG = {
         notMeasuredYet: 'încă nemăsurat',
         previewFirst: "Previzualizează mai întâi ca să vezi ce va fi eliberat.",
         unmeasuredSuffix: (count) => count === 1 ? ' · 1 nemăsurat' : ` · ${count} nemăsurate`,
+        modeQuarantine: 'Moves to Quarantine.',
+        modeRecycle: 'Moves to the Recycle Bin.',
+        modeDelete: 'Deletes immediately.',
         selectEverything: 'Selectează tot',
         clear: 'Golește',
         selectedCount: (count) => `${count} ${count === 1 ? 'selectat' : 'selectate'}`
@@ -23765,6 +24570,10 @@ export const CATALOG = {
         prompt: (count, sizeKnown, formatted) => { const d = count % 100 >= 1 && count % 100 < 20 ? '' : 'de '; return `Muți ${count === 1 ? 'un element' : `${count} ${d}elemente`} (${sizeKnown ? formatted : 'dimensiune nemăsurată'}) în carantină?`; },
         cancel: 'Anulează',
         confirmButton: "Mută în carantină",
+        promptDelete: (count, sizeKnown, formatted) => `Delete ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'})? This can't be undone.`,
+        deleteButton: 'Delete',
+        promptRecycle: (count, sizeKnown, formatted) => `Move ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'}) to the Recycle Bin?`,
+        recycleButton: 'Move to Recycle Bin',
         cleaning: 'Se curăță…'
       },
       stop: 'Oprește',
@@ -23772,6 +24581,7 @@ export const CATALOG = {
       clean: 'Curăță',
       tree: {
         selectCategoryAriaLabel: (category) => `Selectează tot din ${category}`,
+        atLeast: (size) => `at least ${size}`,
         losesData: 'Pierde date',
         needsAdmin: 'necesită administrator',
         notInstalled: 'neinstalat',
@@ -23788,6 +24598,7 @@ export const CATALOG = {
       },
       log: {
         scan: {
+          partial: (size) => `${size}, partial`,
           nothingToMeasure: "nimic de măsurat",
           needsAdmin: "necesită administrator",
           notInstalled: "neinstalat",
@@ -23795,6 +24606,7 @@ export const CATALOG = {
         },
         execute: {
           delete: (name) => `Șterge ${name}`,
+          quarantine: (name) => `Quarantine ${name}`,
           recycle: (name) => `Trimite ${name} în Coșul de reciclare`,
           clear: (name) => `Curăță ${name}`,
           compact: (name) => `Compactează ${name}`,
@@ -24043,6 +24855,19 @@ export const CATALOG = {
       showFreeSpace: {
         title: 'Показывать свободное место на Карте диска',
         description: 'Рисует свободное место диска как ещё один блок при сканировании всего диска, чтобы каждая папка читалась как доля диска, а не занятого пространства.'
+      },
+      deepCleanRemoval: {
+        title: 'When Deep Clean removes files',
+        quarantine: {
+          label: 'Move to Quarantine (you can put it back)',
+          description: "Nothing is deleted. Files go into Prune's Quarantine and the drive gets the space back when you empty it."
+        },
+        delete: {
+          label: "Delete now (frees the space, can't be undone — like BleachBit)",
+          description: 'Files are removed as soon as you confirm, so the space is free straight away. Rules that lose data still ask first.'
+        },
+        deleteWarning: "With Delete now, Clean can't be undone. Scheduled cleans still move files to Quarantine.",
+        autoQuarantineNote: 'Not used while Deep Clean deletes files immediately.'
       },
       autoQuarantine: {
         title: 'Автоматический карантин',
@@ -24560,10 +25385,12 @@ export const CATALOG = {
     deepClean: {
       title: 'Глубокая очистка',
       subtitle: 'Каждый кэш, журнал, дамп и остаток, которые умеет находить Prune, измеряются на этом компьютере, а не оцениваются. Ничего не удаляется сразу — всё, что забирает Очистка, сначала попадает в карантин, откуда это можно вернуть.',
+      subtitleDelete: "Every cache, log, dump and leftover Prune knows how to find, measured on this machine rather than estimated. Clean deletes what you tick immediately and frees the space, the way BleachBit does. It can't be undone.",
       scanLog: {
         header: 'Вывод сканирования',
         scanningAnnounce: (total) => `Сканирование расположений: ${total}.`,
         finishedAnnounce: (scanned, total) => `Сканирование завершено. Измерено ${scanned} из ${total} расположений.`,
+        searching: (items) => `Searching your profile… ${items} items checked`,
         starting: 'Запуск…',
         idle: "Нажмите «Предпросмотр», чтобы измерить, что можно очистить."
       },
@@ -24572,6 +25399,9 @@ export const CATALOG = {
       cleanErrorPrefix: (error) => `Не удалось выполнить очистку: ${error}`,
       cleanupComplete: 'Очистка завершена.',
       resultFreed: (formatted) => `Освобождено ${formatted}`,
+      resultMoved: (formatted) => `Moved ${formatted} to Quarantine. The space comes back when you empty it.`,
+      resultRecycled: (formatted) => `Moved ${formatted} to the Recycle Bin. The space comes back when you empty it.`,
+      openQuarantine: 'Open Quarantine',
       resultLockedSuffix: (count) => ` — пропущено заблокированных файлов: ${count}`,
       before: {
         body: "Prune действительно измеряет каждую категорию на диске, а не оценивает её, что занимает около полуминуты.",
@@ -24584,6 +25414,9 @@ export const CATALOG = {
         notMeasuredYet: 'ещё не измерено',
         previewFirst: "Сначала выполните предпросмотр, чтобы увидеть, что будет освобождено.",
         unmeasuredSuffix: (count) => ` · не измерено: ${count}`,
+        modeQuarantine: 'Moves to Quarantine.',
+        modeRecycle: 'Moves to the Recycle Bin.',
+        modeDelete: 'Deletes immediately.',
         selectEverything: 'Выбрать всё',
         clear: 'Очистить',
         selectedCount: (count) => `Выбрано: ${count}`
@@ -24592,6 +25425,10 @@ export const CATALOG = {
         prompt: (count, sizeKnown, formatted) => `Переместить элементов: ${count} (${sizeKnown ? formatted : 'размер не измерен'}) в карантин?`,
         cancel: 'Отмена',
         confirmButton: "Переместить в карантин",
+        promptDelete: (count, sizeKnown, formatted) => `Delete ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'})? This can't be undone.`,
+        deleteButton: 'Delete',
+        promptRecycle: (count, sizeKnown, formatted) => `Move ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'}) to the Recycle Bin?`,
+        recycleButton: 'Move to Recycle Bin',
         cleaning: 'Очистка…'
       },
       stop: 'Остановить',
@@ -24599,6 +25436,7 @@ export const CATALOG = {
       clean: 'Очистить',
       tree: {
         selectCategoryAriaLabel: (category) => `Выбрать всё в категории ${category}`,
+        atLeast: (size) => `at least ${size}`,
         losesData: 'Потеря данных',
         needsAdmin: 'требуется администратор',
         notInstalled: 'не установлено',
@@ -24615,6 +25453,7 @@ export const CATALOG = {
       },
       log: {
         scan: {
+          partial: (size) => `${size}, partial`,
           nothingToMeasure: "нечего измерять",
           needsAdmin: "требуется администратор",
           notInstalled: "не установлено",
@@ -24622,6 +25461,7 @@ export const CATALOG = {
         },
         execute: {
           delete: (name) => `Удалить ${name}`,
+          quarantine: (name) => `Quarantine ${name}`,
           recycle: (name) => `Отправить ${name} в корзину`,
           clear: (name) => `Очистить ${name}`,
           compact: (name) => `Сжать ${name}`,
@@ -24868,6 +25708,19 @@ export const CATALOG = {
       showFreeSpace: {
         title: 'Zobraziť voľné miesto na Mape disku',
         description: 'Pri skenovaní celej jednotky vykreslí voľné miesto jednotky ako ďalší blok, takže každý priečinok sa číta ako podiel jednotky, nie ako podiel využitého miesta.'
+      },
+      deepCleanRemoval: {
+        title: 'When Deep Clean removes files',
+        quarantine: {
+          label: 'Move to Quarantine (you can put it back)',
+          description: "Nothing is deleted. Files go into Prune's Quarantine and the drive gets the space back when you empty it."
+        },
+        delete: {
+          label: "Delete now (frees the space, can't be undone — like BleachBit)",
+          description: 'Files are removed as soon as you confirm, so the space is free straight away. Rules that lose data still ask first.'
+        },
+        deleteWarning: "With Delete now, Clean can't be undone. Scheduled cleans still move files to Quarantine.",
+        autoQuarantineNote: 'Not used while Deep Clean deletes files immediately.'
       },
       autoQuarantine: {
         title: 'Automatická karanténa',
@@ -25385,10 +26238,12 @@ export const CATALOG = {
     deepClean: {
       title: 'Hĺbkové čistenie',
       subtitle: "Každá vyrovnávacia pamäť, protokol, výpis a zvyšok, ktoré Prune vie nájsť, zmerané na tomto počítači namiesto odhadu. Nič sa hneď nevymaže — všetko, čo Čistenie odstráni, ide najprv do karantény, odkiaľ to môžete vrátiť.",
+      subtitleDelete: "Every cache, log, dump and leftover Prune knows how to find, measured on this machine rather than estimated. Clean deletes what you tick immediately and frees the space, the way BleachBit does. It can't be undone.",
       scanLog: {
         header: 'Výstup skenovania',
         scanningAnnounce: (total) => `Skenovanie miest: ${total}.`,
         finishedAnnounce: (scanned, total) => `Skenovanie dokončené. Zmerané miesta: ${scanned} z ${total}.`,
+        searching: (items) => `Searching your profile… ${items} items checked`,
         starting: 'Spúšťanie…',
         idle: "Kliknite na Náhľad a zistite, čo sa dá vyčistiť."
       },
@@ -25397,6 +26252,9 @@ export const CATALOG = {
       cleanErrorPrefix: (error) => `Čistenie zlyhalo: ${error}`,
       cleanupComplete: 'Čistenie dokončené.',
       resultFreed: (formatted) => `Uvoľnené ${formatted}`,
+      resultMoved: (formatted) => `Moved ${formatted} to Quarantine. The space comes back when you empty it.`,
+      resultRecycled: (formatted) => `Moved ${formatted} to the Recycle Bin. The space comes back when you empty it.`,
+      openQuarantine: 'Open Quarantine',
       resultLockedSuffix: (count) => ` — preskočené uzamknuté súbory: ${count}`,
       before: {
         body: 'Prune skutočne meria každú kategóriu na disku namiesto odhadu, čo trvá približne pol minúty.',
@@ -25409,6 +26267,9 @@ export const CATALOG = {
         notMeasuredYet: 'zatiaľ nezmerané',
         previewFirst: "Najprv kliknite na Náhľad, aby ste videli, čo sa uvoľní.",
         unmeasuredSuffix: (count) => ` · nezmerané: ${count}`,
+        modeQuarantine: 'Moves to Quarantine.',
+        modeRecycle: 'Moves to the Recycle Bin.',
+        modeDelete: 'Deletes immediately.',
         selectEverything: 'Vybrať všetko',
         clear: 'Vymazať',
         selectedCount: (count) => `Vybrané: ${count}`
@@ -25417,6 +26278,10 @@ export const CATALOG = {
         prompt: (count, sizeKnown, formatted) => `Presunúť ${count} ${count === 1 ? 'položku' : (count >= 2 && count <= 4) ? 'položky' : 'položiek'} (${sizeKnown ? formatted : 'veľkosť nezmeraná'}) do karantény?`,
         cancel: 'Zrušiť',
         confirmButton: "Presunúť do karantény",
+        promptDelete: (count, sizeKnown, formatted) => `Delete ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'})? This can't be undone.`,
+        deleteButton: 'Delete',
+        promptRecycle: (count, sizeKnown, formatted) => `Move ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'}) to the Recycle Bin?`,
+        recycleButton: 'Move to Recycle Bin',
         cleaning: 'Čistenie…'
       },
       stop: 'Zastaviť',
@@ -25424,6 +26289,7 @@ export const CATALOG = {
       clean: 'Vyčistiť',
       tree: {
         selectCategoryAriaLabel: (category) => `Vybrať všetko v kategórii ${category}`,
+        atLeast: (size) => `at least ${size}`,
         losesData: 'Strata dát',
         needsAdmin: 'vyžaduje správcu',
         notInstalled: 'nenainštalované',
@@ -25440,6 +26306,7 @@ export const CATALOG = {
       },
       log: {
         scan: {
+          partial: (size) => `${size}, partial`,
           nothingToMeasure: "nie je čo merať",
           needsAdmin: "vyžaduje správcu",
           notInstalled: "nenainštalované",
@@ -25447,6 +26314,7 @@ export const CATALOG = {
         },
         execute: {
           delete: (name) => `Odstrániť ${name}`,
+          quarantine: (name) => `Quarantine ${name}`,
           recycle: (name) => `Odoslať ${name} do koša`,
           clear: (name) => `Vymazať ${name}`,
           compact: (name) => `Zhutniť ${name}`,
@@ -25693,6 +26561,19 @@ export const CATALOG = {
       showFreeSpace: {
         title: 'Shfaq hapësirën e lirë në Hartën e Diskut',
         description: "Vizaton hapësirën e lirë të diskut si edhe një bllok tjetër kur skanon një disk të tërë, kështu që çdo dosje lexohet si pjesë e diskut në vend të hapësirës në përdorim."
+      },
+      deepCleanRemoval: {
+        title: 'When Deep Clean removes files',
+        quarantine: {
+          label: 'Move to Quarantine (you can put it back)',
+          description: "Nothing is deleted. Files go into Prune's Quarantine and the drive gets the space back when you empty it."
+        },
+        delete: {
+          label: "Delete now (frees the space, can't be undone — like BleachBit)",
+          description: 'Files are removed as soon as you confirm, so the space is free straight away. Rules that lose data still ask first.'
+        },
+        deleteWarning: "With Delete now, Clean can't be undone. Scheduled cleans still move files to Quarantine.",
+        autoQuarantineNote: 'Not used while Deep Clean deletes files immediately.'
       },
       autoQuarantine: {
         title: 'Karantinë automatike',
@@ -26210,10 +27091,12 @@ export const CATALOG = {
     deepClean: {
       title: 'Pastrim i thellë',
       subtitle: "Çdo memorie e fshehtë, ditar, dump dhe mbetje që Prune di t'i gjejë, e matur në këtë kompjuter në vend të vlerësuar. Asgjë nuk fshihet menjëherë — çdo gjë që merr Pastrimi shkon fillimisht në Karantinë, ku mund ta rikthesh.",
+      subtitleDelete: "Every cache, log, dump and leftover Prune knows how to find, measured on this machine rather than estimated. Clean deletes what you tick immediately and frees the space, the way BleachBit does. It can't be undone.",
       scanLog: {
         header: 'Rezultati i skanimit',
         scanningAnnounce: (total) => `Duke skanuar ${total} vendndodhje.`,
         finishedAnnounce: (scanned, total) => `Skanimi përfundoi. U matën ${scanned} nga ${total} vendndodhje.`,
+        searching: (items) => `Searching your profile… ${items} items checked`,
         starting: 'Duke filluar…',
         idle: "Shtyp Pamje paraprake për të matur çfarë mund të pastrohet."
       },
@@ -26222,6 +27105,9 @@ export const CATALOG = {
       cleanErrorPrefix: (error) => `Pastrimi dështoi: ${error}`,
       cleanupComplete: 'Pastrimi përfundoi.',
       resultFreed: (formatted) => `U liruan ${formatted}`,
+      resultMoved: (formatted) => `Moved ${formatted} to Quarantine. The space comes back when you empty it.`,
+      resultRecycled: (formatted) => `Moved ${formatted} to the Recycle Bin. The space comes back when you empty it.`,
+      openQuarantine: 'Open Quarantine',
       resultLockedSuffix: (count) => ` — ${count === 1 ? 'u anashkalua' : 'u anashkaluan'} ${count} ${count === 1 ? 'skedar i kyçur' : 'skedarë të kyçur'}`,
       before: {
         body: 'Prune mat vërtet çdo kategori në disk në vend që ta vlerësojë, gjë që zgjat rreth gjysmë minute.',
@@ -26234,6 +27120,9 @@ export const CATALOG = {
         notMeasuredYet: 'ende e pamatur',
         previewFirst: "Shiko fillimisht Pamjen paraprake për të parë çfarë do të lirohet.",
         unmeasuredSuffix: (count) => ` · ${count} të pamatura`,
+        modeQuarantine: 'Moves to Quarantine.',
+        modeRecycle: 'Moves to the Recycle Bin.',
+        modeDelete: 'Deletes immediately.',
         selectEverything: 'Zgjidh gjithçka',
         clear: 'Pastro',
         selectedCount: (count) => `${count} të zgjedhura`
@@ -26242,6 +27131,10 @@ export const CATALOG = {
         prompt: (count, sizeKnown, formatted) => `${count === 1 ? 'Të lëvizet' : 'Të lëvizen'} ${count} ${count === 1 ? 'artikull' : 'artikuj'} (${sizeKnown ? formatted : 'madhësia e pamatur'}) në Karantinë?`,
         cancel: 'Anulo',
         confirmButton: "Zhvendos në Karantinë",
+        promptDelete: (count, sizeKnown, formatted) => `Delete ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'})? This can't be undone.`,
+        deleteButton: 'Delete',
+        promptRecycle: (count, sizeKnown, formatted) => `Move ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'}) to the Recycle Bin?`,
+        recycleButton: 'Move to Recycle Bin',
         cleaning: 'Duke pastruar…'
       },
       stop: 'Ndalo',
@@ -26249,6 +27142,7 @@ export const CATALOG = {
       clean: 'Pastro',
       tree: {
         selectCategoryAriaLabel: (category) => `Zgjidh gjithçka nën ${category}`,
+        atLeast: (size) => `at least ${size}`,
         losesData: 'Humbet të dhëna',
         needsAdmin: 'kërkon administrator',
         notInstalled: 'i painstaluar',
@@ -26265,6 +27159,7 @@ export const CATALOG = {
       },
       log: {
         scan: {
+          partial: (size) => `${size}, partial`,
           nothingToMeasure: "asgjë për t'u matur",
           needsAdmin: "kërkon administrator",
           notInstalled: "i painstaluar",
@@ -26272,6 +27167,7 @@ export const CATALOG = {
         },
         execute: {
           delete: (name) => `Fshi ${name}`,
+          quarantine: (name) => `Quarantine ${name}`,
           recycle: (name) => `Dërgo ${name} në Koshin e Riciklimit`,
           clear: (name) => `Pastro ${name}`,
           compact: (name) => `Ngjeshe ${name}`,
@@ -26520,6 +27416,19 @@ export const CATALOG = {
       showFreeSpace: {
         title: 'Прикажи слободан простор на Мапи диска',
         description: "Исцртава слободан простор диска као још један блок када скенирате цео диск, тако да се свака фасцикла чита као удео диска, а не заузетог простора."
+      },
+      deepCleanRemoval: {
+        title: 'When Deep Clean removes files',
+        quarantine: {
+          label: 'Move to Quarantine (you can put it back)',
+          description: "Nothing is deleted. Files go into Prune's Quarantine and the drive gets the space back when you empty it."
+        },
+        delete: {
+          label: "Delete now (frees the space, can't be undone — like BleachBit)",
+          description: 'Files are removed as soon as you confirm, so the space is free straight away. Rules that lose data still ask first.'
+        },
+        deleteWarning: "With Delete now, Clean can't be undone. Scheduled cleans still move files to Quarantine.",
+        autoQuarantineNote: 'Not used while Deep Clean deletes files immediately.'
       },
       autoQuarantine: {
         title: "Аутоматски карантин",
@@ -27037,10 +27946,12 @@ export const CATALOG = {
     deepClean: {
       title: 'Дубоко чишћење',
       subtitle: "Све што Prune зна да пронађе — кеш меморије, дневнике, дампове и остатке — мери се на овом рачунару уместо да се процењује. Ништа се не брише одмах — све што Чишћење узме иде прво у карантин, одакле то можете вратити.",
+      subtitleDelete: "Every cache, log, dump and leftover Prune knows how to find, measured on this machine rather than estimated. Clean deletes what you tick immediately and frees the space, the way BleachBit does. It can't be undone.",
       scanLog: {
         header: 'Излаз скенирања',
         scanningAnnounce: (total) => `Скенирање ${total} локација.`,
         finishedAnnounce: (scanned, total) => `Скенирање завршено. Измерено ${scanned} од ${total} локација.`,
+        searching: (items) => `Searching your profile… ${items} items checked`,
         starting: 'Покретање…',
         idle: "Притисните Преглед да измерите шта се може очистити."
       },
@@ -27049,6 +27960,9 @@ export const CATALOG = {
       cleanErrorPrefix: (error) => `Чишћење није успело: ${error}`,
       cleanupComplete: 'Чишћење завршено.',
       resultFreed: (formatted) => `Ослобођено ${formatted}`,
+      resultMoved: (formatted) => `Moved ${formatted} to Quarantine. The space comes back when you empty it.`,
+      resultRecycled: (formatted) => `Moved ${formatted} to the Recycle Bin. The space comes back when you empty it.`,
+      openQuarantine: 'Open Quarantine',
       resultLockedSuffix: (count) => ` — прескочено закључаних датотека: ${count}`,
       before: {
         body: 'Prune заиста мери сваку категорију на диску уместо да је процењује, што траје око пола минута.',
@@ -27061,6 +27975,9 @@ export const CATALOG = {
         notMeasuredYet: 'још није измерено',
         previewFirst: "Прво погледајте преглед да видите шта ће бити ослобођено.",
         unmeasuredSuffix: (count) => ` · ${count} немерено`,
+        modeQuarantine: 'Moves to Quarantine.',
+        modeRecycle: 'Moves to the Recycle Bin.',
+        modeDelete: 'Deletes immediately.',
         selectEverything: 'Изабери све',
         clear: 'Обриши',
         selectedCount: (count) => `${count} изабрано`
@@ -27069,6 +27986,10 @@ export const CATALOG = {
         prompt: (count, sizeKnown, formatted) => { const p = (n, a, b, c) => n % 10 === 1 && n % 100 !== 11 ? a : (n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14)) ? b : c; return `Преместити ${count} ${p(count, 'ставку', 'ставке', 'ставки')} (${sizeKnown ? formatted : 'величина није измерена'}) у карантин?`; },
         cancel: 'Откажи',
         confirmButton: "Премести у карантин",
+        promptDelete: (count, sizeKnown, formatted) => `Delete ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'})? This can't be undone.`,
+        deleteButton: 'Delete',
+        promptRecycle: (count, sizeKnown, formatted) => `Move ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'}) to the Recycle Bin?`,
+        recycleButton: 'Move to Recycle Bin',
         cleaning: 'Чишћење…'
       },
       stop: 'Заустави',
@@ -27076,6 +27997,7 @@ export const CATALOG = {
       clean: 'Очисти',
       tree: {
         selectCategoryAriaLabel: (category) => `Изабери све у категорији ${category}`,
+        atLeast: (size) => `at least ${size}`,
         losesData: 'Губи податке',
         needsAdmin: 'захтева администратора',
         notInstalled: 'није инсталирано',
@@ -27092,6 +28014,7 @@ export const CATALOG = {
       },
       log: {
         scan: {
+          partial: (size) => `${size}, partial`,
           nothingToMeasure: "нема шта да се мери",
           needsAdmin: "захтева администратора",
           notInstalled: "није инсталирано",
@@ -27099,6 +28022,7 @@ export const CATALOG = {
         },
         execute: {
           delete: (name) => `Обриши ${name}`,
+          quarantine: (name) => `Quarantine ${name}`,
           recycle: (name) => `Пошаљи ${name} у корпу за отпатке`,
           clear: (name) => `Испразни ${name}`,
           compact: (name) => `Сажми ${name}`,
@@ -27345,6 +28269,19 @@ export const CATALOG = {
       showFreeSpace: {
         title: 'Visa ledigt utrymme på Diskkartan',
         description: 'Ritar enhetens lediga utrymme som ytterligare ett block när du skannar en hel enhet, så att varje mapp läses som en andel av enheten i stället för av det använda utrymmet.'
+      },
+      deepCleanRemoval: {
+        title: 'When Deep Clean removes files',
+        quarantine: {
+          label: 'Move to Quarantine (you can put it back)',
+          description: "Nothing is deleted. Files go into Prune's Quarantine and the drive gets the space back when you empty it."
+        },
+        delete: {
+          label: "Delete now (frees the space, can't be undone — like BleachBit)",
+          description: 'Files are removed as soon as you confirm, so the space is free straight away. Rules that lose data still ask first.'
+        },
+        deleteWarning: "With Delete now, Clean can't be undone. Scheduled cleans still move files to Quarantine.",
+        autoQuarantineNote: 'Not used while Deep Clean deletes files immediately.'
       },
       autoQuarantine: {
         title: 'Automatisk karantän',
@@ -27862,10 +28799,12 @@ export const CATALOG = {
     deepClean: {
       title: "Grundlig rensning",
       subtitle: "Varje cache, logg, dump och rest som Prune vet hur man hittar, uppmätt på den här datorn i stället för uppskattat. Inget tas bort direkt — allt som Rensa tar går först till Karantän, där du kan lägga tillbaka det.",
+      subtitleDelete: "Every cache, log, dump and leftover Prune knows how to find, measured on this machine rather than estimated. Clean deletes what you tick immediately and frees the space, the way BleachBit does. It can't be undone.",
       scanLog: {
         header: 'Skanningsutdata',
         scanningAnnounce: (total) => `Skannar ${total} platser.`,
         finishedAnnounce: (scanned, total) => `Skanning klar. ${scanned} av ${total} platser mätta.`,
+        searching: (items) => `Searching your profile… ${items} items checked`,
         starting: 'Startar…',
         idle: "Klicka på Förhandsgranska för att mäta vad som kan rensas."
       },
@@ -27874,6 +28813,9 @@ export const CATALOG = {
       cleanErrorPrefix: (error) => `Kunde inte rensa: ${error}`,
       cleanupComplete: 'Rensning klar.',
       resultFreed: (formatted) => `Frigjorde ${formatted}`,
+      resultMoved: (formatted) => `Moved ${formatted} to Quarantine. The space comes back when you empty it.`,
+      resultRecycled: (formatted) => `Moved ${formatted} to the Recycle Bin. The space comes back when you empty it.`,
+      openQuarantine: 'Open Quarantine',
       resultLockedSuffix: (count) => ` — hoppade över ${count} ${count === 1 ? 'låst fil' : 'låsta filer'}`,
       before: {
         body: 'Prune mäter faktiskt varje kategori på disken i stället för att uppskatta, vilket tar ungefär en halv minut.',
@@ -27886,6 +28828,9 @@ export const CATALOG = {
         notMeasuredYet: 'inte mätt än',
         previewFirst: "Förhandsgranska först för att se vad som frigörs.",
         unmeasuredSuffix: (count) => ` · ${count} ej ${count === 1 ? 'mätt' : 'mätta'}`,
+        modeQuarantine: 'Moves to Quarantine.',
+        modeRecycle: 'Moves to the Recycle Bin.',
+        modeDelete: 'Deletes immediately.',
         selectEverything: 'Markera allt',
         clear: 'Rensa',
         selectedCount: (count) => `${count} ${count === 1 ? 'vald' : 'valda'}`
@@ -27894,6 +28839,10 @@ export const CATALOG = {
         prompt: (count, sizeKnown, formatted) => `Flytta ${count} objekt (${sizeKnown ? formatted : 'storlek ej mätt'}) till karantän?`,
         cancel: 'Avbryt',
         confirmButton: "Flytta till Karantän",
+        promptDelete: (count, sizeKnown, formatted) => `Delete ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'})? This can't be undone.`,
+        deleteButton: 'Delete',
+        promptRecycle: (count, sizeKnown, formatted) => `Move ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'}) to the Recycle Bin?`,
+        recycleButton: 'Move to Recycle Bin',
         cleaning: 'Rensar…'
       },
       stop: 'Stoppa',
@@ -27901,6 +28850,7 @@ export const CATALOG = {
       clean: 'Rensa',
       tree: {
         selectCategoryAriaLabel: (category) => `Markera allt under ${category}`,
+        atLeast: (size) => `at least ${size}`,
         losesData: 'Förlorar data',
         needsAdmin: 'kräver administratör',
         notInstalled: 'inte installerad',
@@ -27917,6 +28867,7 @@ export const CATALOG = {
       },
       log: {
         scan: {
+          partial: (size) => `${size}, partial`,
           nothingToMeasure: "inget att mäta",
           needsAdmin: "kräver administratör",
           notInstalled: "inte installerad",
@@ -27924,6 +28875,7 @@ export const CATALOG = {
         },
         execute: {
           delete: (name) => `Ta bort ${name}`,
+          quarantine: (name) => `Quarantine ${name}`,
           recycle: (name) => `Skicka ${name} till papperskorgen`,
           clear: (name) => `Rensa ${name}`,
           compact: (name) => `Komprimera ${name}`,
@@ -28170,6 +29122,19 @@ export const CATALOG = {
       showFreeSpace: {
         title: 'แสดงพื้นที่ว่างบนแผนที่ดิสก์',
         description: 'วาดพื้นที่ว่างของไดรฟ์เป็นอีกหนึ่งบล็อกเมื่อคุณสแกนไดรฟ์ทั้งหมด เพื่อให้แต่ละโฟลเดอร์อ่านเป็นสัดส่วนของไดรฟ์แทนที่จะเป็นพื้นที่ที่ใช้งานอยู่'
+      },
+      deepCleanRemoval: {
+        title: 'When Deep Clean removes files',
+        quarantine: {
+          label: 'Move to Quarantine (you can put it back)',
+          description: "Nothing is deleted. Files go into Prune's Quarantine and the drive gets the space back when you empty it."
+        },
+        delete: {
+          label: "Delete now (frees the space, can't be undone — like BleachBit)",
+          description: 'Files are removed as soon as you confirm, so the space is free straight away. Rules that lose data still ask first.'
+        },
+        deleteWarning: "With Delete now, Clean can't be undone. Scheduled cleans still move files to Quarantine.",
+        autoQuarantineNote: 'Not used while Deep Clean deletes files immediately.'
       },
       autoQuarantine: {
         title: 'กักกันอัตโนมัติ',
@@ -28687,10 +29652,12 @@ export const CATALOG = {
     deepClean: {
       title: "ทำความสะอาดเชิงลึก",
       subtitle: "แคช บันทึก ดัมพ์ และสิ่งตกค้างทุกอย่างที่ Prune รู้วิธีค้นหา วัดผลจริงบนเครื่องนี้แทนการประมาณ ไม่มีอะไรถูกลบทันที — ทุกอย่างที่การล้างเก็บไปจะไปที่กักกันก่อน ซึ่งคุณสามารถนำกลับมาได้",
+      subtitleDelete: "Every cache, log, dump and leftover Prune knows how to find, measured on this machine rather than estimated. Clean deletes what you tick immediately and frees the space, the way BleachBit does. It can't be undone.",
       scanLog: {
         header: 'ผลลัพธ์การสแกน',
         scanningAnnounce: (total) => `กำลังสแกน ${total} ตำแหน่ง`,
         finishedAnnounce: (scanned, total) => `สแกนเสร็จสิ้น วัดผลแล้ว ${scanned} จาก ${total} ตำแหน่ง`,
+        searching: (items) => `Searching your profile… ${items} items checked`,
         starting: 'กำลังเริ่ม…',
         idle: "กด \"ดูตัวอย่าง\" เพื่อวัดว่าล้างอะไรได้บ้าง"
       },
@@ -28699,6 +29666,9 @@ export const CATALOG = {
       cleanErrorPrefix: (error) => `ไม่สามารถล้างได้: ${error}`,
       cleanupComplete: 'การล้างข้อมูลเสร็จสมบูรณ์',
       resultFreed: (formatted) => `เพิ่มพื้นที่ว่าง ${formatted}`,
+      resultMoved: (formatted) => `Moved ${formatted} to Quarantine. The space comes back when you empty it.`,
+      resultRecycled: (formatted) => `Moved ${formatted} to the Recycle Bin. The space comes back when you empty it.`,
+      openQuarantine: 'Open Quarantine',
       resultLockedSuffix: (count) => ` — ข้าม ${count} ไฟล์ที่ถูกล็อก`,
       before: {
         body: 'Prune วัดผลแต่ละหมวดหมู่บนดิสก์จริง แทนการประมาณ ซึ่งใช้เวลาประมาณครึ่งนาที',
@@ -28711,6 +29681,9 @@ export const CATALOG = {
         notMeasuredYet: 'ยังไม่ได้วัดผล',
         previewFirst: "กด \"ดูตัวอย่าง\" ก่อนเพื่อดูว่าจะเพิ่มพื้นที่ว่างได้เท่าใด",
         unmeasuredSuffix: (count) => ` · ไม่ได้วัดผล ${count} รายการ`,
+        modeQuarantine: 'Moves to Quarantine.',
+        modeRecycle: 'Moves to the Recycle Bin.',
+        modeDelete: 'Deletes immediately.',
         selectEverything: 'เลือกทั้งหมด',
         clear: 'ล้าง',
         selectedCount: (count) => `เลือก ${count} รายการ`
@@ -28719,6 +29692,10 @@ export const CATALOG = {
         prompt: (count, sizeKnown, formatted) => `ย้าย ${count} รายการ (${sizeKnown ? formatted : 'ไม่ได้วัดขนาด'}) ไปยังกักกันหรือไม่`,
         cancel: 'ยกเลิก',
         confirmButton: "ย้ายไปยังกักกัน",
+        promptDelete: (count, sizeKnown, formatted) => `Delete ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'})? This can't be undone.`,
+        deleteButton: 'Delete',
+        promptRecycle: (count, sizeKnown, formatted) => `Move ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'}) to the Recycle Bin?`,
+        recycleButton: 'Move to Recycle Bin',
         cleaning: 'กำลังล้าง…'
       },
       stop: 'หยุด',
@@ -28726,6 +29703,7 @@ export const CATALOG = {
       clean: 'ล้าง',
       tree: {
         selectCategoryAriaLabel: (category) => `เลือกทั้งหมดภายใต้ ${category}`,
+        atLeast: (size) => `at least ${size}`,
         losesData: 'สูญเสียข้อมูล',
         needsAdmin: 'ต้องการสิทธิ์ผู้ดูแลระบบ',
         notInstalled: 'ไม่ได้ติดตั้ง',
@@ -28742,6 +29720,7 @@ export const CATALOG = {
       },
       log: {
         scan: {
+          partial: (size) => `${size}, partial`,
           nothingToMeasure: "ไม่มีอะไรให้วัด",
           needsAdmin: "ต้องการสิทธิ์ผู้ดูแลระบบ",
           notInstalled: "ไม่ได้ติดตั้ง",
@@ -28749,6 +29728,7 @@ export const CATALOG = {
         },
         execute: {
           delete: (name) => `ลบ ${name}`,
+          quarantine: (name) => `Quarantine ${name}`,
           recycle: (name) => `ส่ง ${name} ไปยังถังรีไซเคิล`,
           clear: (name) => `ล้าง ${name}`,
           compact: (name) => `บีบอัด ${name}`,
@@ -28997,6 +29977,19 @@ export const CATALOG = {
       showFreeSpace: {
         title: 'Disk Haritasında boş alanı göster',
         description: 'Tüm bir sürücüyü tararken sürücünün boş alanını bir blok daha olarak çizer, böylece her klasör kullanılan alanın değil, sürücünün bir payı olarak okunur.'
+      },
+      deepCleanRemoval: {
+        title: 'When Deep Clean removes files',
+        quarantine: {
+          label: 'Move to Quarantine (you can put it back)',
+          description: "Nothing is deleted. Files go into Prune's Quarantine and the drive gets the space back when you empty it."
+        },
+        delete: {
+          label: "Delete now (frees the space, can't be undone — like BleachBit)",
+          description: 'Files are removed as soon as you confirm, so the space is free straight away. Rules that lose data still ask first.'
+        },
+        deleteWarning: "With Delete now, Clean can't be undone. Scheduled cleans still move files to Quarantine.",
+        autoQuarantineNote: 'Not used while Deep Clean deletes files immediately.'
       },
       autoQuarantine: {
         title: 'Otomatik karantina',
@@ -29514,10 +30507,12 @@ export const CATALOG = {
     deepClean: {
       title: 'Derin Temizlik',
       subtitle: "Prune'un bulmayı bildiği her önbellek, günlük, döküm ve kalıntı, tahmin edilmek yerine bu makinede ölçülür. Hiçbir şey hemen silinmez — Temizle'nin aldığı her şey önce Karantina'ya gider, oradan geri yükleyebilirsiniz.",
+      subtitleDelete: "Every cache, log, dump and leftover Prune knows how to find, measured on this machine rather than estimated. Clean deletes what you tick immediately and frees the space, the way BleachBit does. It can't be undone.",
       scanLog: {
         header: 'Tarama çıktısı',
         scanningAnnounce: (total) => `${total} konum taranıyor.`,
         finishedAnnounce: (scanned, total) => `Tarama tamamlandı. ${total} konumdan ${scanned} tanesi ölçüldü.`,
+        searching: (items) => `Searching your profile… ${items} items checked`,
         starting: 'Başlatılıyor…',
         idle: "Nelerin temizlenebileceğini ölçmek için Önizleme'ye basın."
       },
@@ -29526,6 +30521,9 @@ export const CATALOG = {
       cleanErrorPrefix: (error) => `Temizlenemedi: ${error}`,
       cleanupComplete: 'Temizlik tamamlandı.',
       resultFreed: (formatted) => `${formatted} boşaltıldı`,
+      resultMoved: (formatted) => `Moved ${formatted} to Quarantine. The space comes back when you empty it.`,
+      resultRecycled: (formatted) => `Moved ${formatted} to the Recycle Bin. The space comes back when you empty it.`,
+      openQuarantine: 'Open Quarantine',
       resultLockedSuffix: (count) => ` — ${count} kilitli dosya atlandı`,
       before: {
         body: "Prune, tahmin etmek yerine diskteki her kategoriyi gerçekten ölçer, bu da yaklaşık yarım dakika sürer.",
@@ -29538,6 +30536,9 @@ export const CATALOG = {
         notMeasuredYet: 'henüz ölçülmedi',
         previewFirst: "Nelerin boşaltılacağını görmek için önce önizleyin.",
         unmeasuredSuffix: (count) => ` · ${count} ölçülmedi`,
+        modeQuarantine: 'Moves to Quarantine.',
+        modeRecycle: 'Moves to the Recycle Bin.',
+        modeDelete: 'Deletes immediately.',
         selectEverything: 'Tümünü seç',
         clear: 'Temizle',
         selectedCount: (count) => `${count} seçildi`
@@ -29546,6 +30547,10 @@ export const CATALOG = {
         prompt: (count, sizeKnown, formatted) => `${count} öğe (${sizeKnown ? formatted : 'boyut ölçülmedi'}) karantinaya taşınsın mı?`,
         cancel: 'İptal',
         confirmButton: "Karantinaya taşı",
+        promptDelete: (count, sizeKnown, formatted) => `Delete ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'})? This can't be undone.`,
+        deleteButton: 'Delete',
+        promptRecycle: (count, sizeKnown, formatted) => `Move ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'}) to the Recycle Bin?`,
+        recycleButton: 'Move to Recycle Bin',
         cleaning: 'Temizleniyor…'
       },
       stop: 'Durdur',
@@ -29553,6 +30558,7 @@ export const CATALOG = {
       clean: 'Temizle',
       tree: {
         selectCategoryAriaLabel: (category) => `${category} altındaki her şeyi seç`,
+        atLeast: (size) => `at least ${size}`,
         losesData: 'Veri kaybı',
         needsAdmin: 'yönetici gerektirir',
         notInstalled: 'yüklü değil',
@@ -29569,6 +30575,7 @@ export const CATALOG = {
       },
       log: {
         scan: {
+          partial: (size) => `${size}, partial`,
           nothingToMeasure: "ölçülecek bir şey yok",
           needsAdmin: "yönetici gerektirir",
           notInstalled: "yüklü değil",
@@ -29576,6 +30583,7 @@ export const CATALOG = {
         },
         execute: {
           delete: (name) => `${name} sil`,
+          quarantine: (name) => `Quarantine ${name}`,
           recycle: (name) => `${name} Geri Dönüşüm Kutusuna gönder`,
           clear: (name) => `${name} temizle`,
           compact: (name) => `${name} sıkıştır`,
@@ -29824,6 +30832,19 @@ export const CATALOG = {
       showFreeSpace: {
         title: 'Показувати вільне місце на Карті диска',
         description: 'Малює вільне місце диска як ще один блок під час сканування всього диска, щоб кожна папка читалася як частка диска, а не зайнятого простору.'
+      },
+      deepCleanRemoval: {
+        title: 'When Deep Clean removes files',
+        quarantine: {
+          label: 'Move to Quarantine (you can put it back)',
+          description: "Nothing is deleted. Files go into Prune's Quarantine and the drive gets the space back when you empty it."
+        },
+        delete: {
+          label: "Delete now (frees the space, can't be undone — like BleachBit)",
+          description: 'Files are removed as soon as you confirm, so the space is free straight away. Rules that lose data still ask first.'
+        },
+        deleteWarning: "With Delete now, Clean can't be undone. Scheduled cleans still move files to Quarantine.",
+        autoQuarantineNote: 'Not used while Deep Clean deletes files immediately.'
       },
       autoQuarantine: {
         title: 'Автоматичний карантин',
@@ -30341,10 +31362,12 @@ export const CATALOG = {
     deepClean: {
       title: 'Глибоке очищення',
       subtitle: 'Кожен кеш, журнал, дамп і залишок, які вміє знаходити Prune, вимірюється на цьому комп\'ютері, а не оцінюється. Нічого не видаляється одразу — усе, що забирає Очищення, спершу потрапляє в карантин, звідки це можна повернути.',
+      subtitleDelete: "Every cache, log, dump and leftover Prune knows how to find, measured on this machine rather than estimated. Clean deletes what you tick immediately and frees the space, the way BleachBit does. It can't be undone.",
       scanLog: {
         header: 'Вивід сканування',
         scanningAnnounce: (total) => `Сканування місць: ${total}.`,
         finishedAnnounce: (scanned, total) => `Сканування завершено. Виміряно місць: ${scanned} з ${total}.`,
+        searching: (items) => `Searching your profile… ${items} items checked`,
         starting: 'Запуск…',
         idle: "Натисніть «Попередній перегляд», щоб виміряти, що можна очистити."
       },
@@ -30353,6 +31376,9 @@ export const CATALOG = {
       cleanErrorPrefix: (error) => `Не вдалося виконати очищення: ${error}`,
       cleanupComplete: 'Очищення завершено.',
       resultFreed: (formatted) => `Звільнено ${formatted}`,
+      resultMoved: (formatted) => `Moved ${formatted} to Quarantine. The space comes back when you empty it.`,
+      resultRecycled: (formatted) => `Moved ${formatted} to the Recycle Bin. The space comes back when you empty it.`,
+      openQuarantine: 'Open Quarantine',
       resultLockedSuffix: (count) => ` — пропущено заблокованих файлів: ${count}`,
       before: {
         body: 'Prune справді вимірює кожну категорію на диску, а не оцінює її, що займає близько півхвилини.',
@@ -30365,6 +31391,9 @@ export const CATALOG = {
         notMeasuredYet: 'ще не виміряно',
         previewFirst: "Спочатку виконайте попередній перегляд, щоб побачити, що буде звільнено.",
         unmeasuredSuffix: (count) => ` · не виміряно: ${count}`,
+        modeQuarantine: 'Moves to Quarantine.',
+        modeRecycle: 'Moves to the Recycle Bin.',
+        modeDelete: 'Deletes immediately.',
         selectEverything: 'Вибрати все',
         clear: 'Очистити',
         selectedCount: (count) => `Вибрано: ${count}`
@@ -30373,6 +31402,10 @@ export const CATALOG = {
         prompt: (count, sizeKnown, formatted) => `Перемістити елементів: ${count} (${sizeKnown ? formatted : 'розмір не виміряно'}) у карантин?`,
         cancel: 'Скасувати',
         confirmButton: "Перемістити в карантин",
+        promptDelete: (count, sizeKnown, formatted) => `Delete ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'})? This can't be undone.`,
+        deleteButton: 'Delete',
+        promptRecycle: (count, sizeKnown, formatted) => `Move ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'}) to the Recycle Bin?`,
+        recycleButton: 'Move to Recycle Bin',
         cleaning: 'Очищення…'
       },
       stop: 'Зупинити',
@@ -30380,6 +31413,7 @@ export const CATALOG = {
       clean: 'Очистити',
       tree: {
         selectCategoryAriaLabel: (category) => `Вибрати все в категорії ${category}`,
+        atLeast: (size) => `at least ${size}`,
         losesData: 'Втрата даних',
         needsAdmin: 'потрібні права адміністратора',
         notInstalled: 'не встановлено',
@@ -30396,6 +31430,7 @@ export const CATALOG = {
       },
       log: {
         scan: {
+          partial: (size) => `${size}, partial`,
           nothingToMeasure: "нічого вимірювати",
           needsAdmin: "потрібні права адміністратора",
           notInstalled: "не встановлено",
@@ -30403,6 +31438,7 @@ export const CATALOG = {
         },
         execute: {
           delete: (name) => `Видалити ${name}`,
+          quarantine: (name) => `Quarantine ${name}`,
           recycle: (name) => `Надіслати ${name} у кошик`,
           clear: (name) => `Очистити ${name}`,
           compact: (name) => `Стиснути ${name}`,
@@ -30649,6 +31685,19 @@ export const CATALOG = {
       showFreeSpace: {
         title: "Hiển thị dung lượng trống trên Bản đồ ổ đĩa",
         description: 'Vẽ dung lượng trống của ổ đĩa như một khối khác khi bạn quét toàn bộ ổ đĩa, để mỗi thư mục được đọc như một phần của ổ đĩa thay vì của dung lượng đang sử dụng.'
+      },
+      deepCleanRemoval: {
+        title: 'When Deep Clean removes files',
+        quarantine: {
+          label: 'Move to Quarantine (you can put it back)',
+          description: "Nothing is deleted. Files go into Prune's Quarantine and the drive gets the space back when you empty it."
+        },
+        delete: {
+          label: "Delete now (frees the space, can't be undone — like BleachBit)",
+          description: 'Files are removed as soon as you confirm, so the space is free straight away. Rules that lose data still ask first.'
+        },
+        deleteWarning: "With Delete now, Clean can't be undone. Scheduled cleans still move files to Quarantine.",
+        autoQuarantineNote: 'Not used while Deep Clean deletes files immediately.'
       },
       autoQuarantine: {
         title: 'Cách ly tự động',
@@ -31166,10 +32215,12 @@ export const CATALOG = {
     deepClean: {
       title: 'Dọn dẹp sâu',
       subtitle: "Mọi bộ nhớ đệm, nhật ký, tệp dump và tệp sót lại mà Prune biết cách tìm, được đo trên máy này thay vì ước tính. Không có gì bị xóa ngay lập tức — mọi thứ mà Dọn dẹp lấy đi đều vào khu cách ly trước, nơi bạn có thể khôi phục nó.",
+      subtitleDelete: "Every cache, log, dump and leftover Prune knows how to find, measured on this machine rather than estimated. Clean deletes what you tick immediately and frees the space, the way BleachBit does. It can't be undone.",
       scanLog: {
         header: 'Kết quả quét',
         scanningAnnounce: (total) => `Đang quét ${total} vị trí.`,
         finishedAnnounce: (scanned, total) => `Quét hoàn tất. Đã đo ${scanned} trong số ${total} vị trí.`,
+        searching: (items) => `Searching your profile… ${items} items checked`,
         starting: 'Đang bắt đầu…',
         idle: "Nhấn Xem trước để đo những gì có thể dọn dẹp."
       },
@@ -31178,6 +32229,9 @@ export const CATALOG = {
       cleanErrorPrefix: (error) => `Không thể dọn dẹp: ${error}`,
       cleanupComplete: 'Dọn dẹp hoàn tất.',
       resultFreed: (formatted) => `Đã giải phóng ${formatted}`,
+      resultMoved: (formatted) => `Moved ${formatted} to Quarantine. The space comes back when you empty it.`,
+      resultRecycled: (formatted) => `Moved ${formatted} to the Recycle Bin. The space comes back when you empty it.`,
+      openQuarantine: 'Open Quarantine',
       resultLockedSuffix: (count) => ` — đã bỏ qua ${count} tệp bị khóa`,
       before: {
         body: 'Prune thực sự đo từng danh mục trên đĩa thay vì ước tính, việc này mất khoảng nửa phút.',
@@ -31190,6 +32244,9 @@ export const CATALOG = {
         notMeasuredYet: 'chưa đo',
         previewFirst: "Hãy xem trước để biết sẽ giải phóng được bao nhiêu.",
         unmeasuredSuffix: (count) => ` · ${count} chưa đo`,
+        modeQuarantine: 'Moves to Quarantine.',
+        modeRecycle: 'Moves to the Recycle Bin.',
+        modeDelete: 'Deletes immediately.',
         selectEverything: 'Chọn tất cả',
         clear: 'Xóa',
         selectedCount: (count) => `${count} đã chọn`
@@ -31198,6 +32255,10 @@ export const CATALOG = {
         prompt: (count, sizeKnown, formatted) => `Chuyển ${count} mục (${sizeKnown ? formatted : 'chưa đo kích thước'}) vào khu cách ly?`,
         cancel: 'Hủy',
         confirmButton: "Chuyển vào khu cách ly",
+        promptDelete: (count, sizeKnown, formatted) => `Delete ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'})? This can't be undone.`,
+        deleteButton: 'Delete',
+        promptRecycle: (count, sizeKnown, formatted) => `Move ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'}) to the Recycle Bin?`,
+        recycleButton: 'Move to Recycle Bin',
         cleaning: 'Đang dọn dẹp…'
       },
       stop: 'Dừng',
@@ -31205,6 +32266,7 @@ export const CATALOG = {
       clean: 'Dọn dẹp',
       tree: {
         selectCategoryAriaLabel: (category) => `Chọn tất cả trong ${category}`,
+        atLeast: (size) => `at least ${size}`,
         losesData: 'Mất dữ liệu',
         needsAdmin: 'cần quyền quản trị',
         notInstalled: 'chưa cài đặt',
@@ -31221,6 +32283,7 @@ export const CATALOG = {
       },
       log: {
         scan: {
+          partial: (size) => `${size}, partial`,
           nothingToMeasure: "không có gì để đo",
           needsAdmin: "cần quyền quản trị",
           notInstalled: "chưa cài đặt",
@@ -31228,6 +32291,7 @@ export const CATALOG = {
         },
         execute: {
           delete: (name) => `Xóa ${name}`,
+          quarantine: (name) => `Quarantine ${name}`,
           recycle: (name) => `Gửi ${name} vào Thùng rác`,
           clear: (name) => `Dọn sạch ${name}`,
           compact: (name) => `Nén ${name}`,
@@ -31476,6 +32540,19 @@ export const CATALOG = {
       showFreeSpace: {
         title: '在磁盘地图上显示可用空间',
         description: '扫描整个驱动器时，将驱动器的可用空间绘制为另一个色块，这样每个文件夹显示的就是占驱动器的比例，而不是占已用空间的比例。'
+      },
+      deepCleanRemoval: {
+        title: 'When Deep Clean removes files',
+        quarantine: {
+          label: 'Move to Quarantine (you can put it back)',
+          description: "Nothing is deleted. Files go into Prune's Quarantine and the drive gets the space back when you empty it."
+        },
+        delete: {
+          label: "Delete now (frees the space, can't be undone — like BleachBit)",
+          description: 'Files are removed as soon as you confirm, so the space is free straight away. Rules that lose data still ask first.'
+        },
+        deleteWarning: "With Delete now, Clean can't be undone. Scheduled cleans still move files to Quarantine.",
+        autoQuarantineNote: 'Not used while Deep Clean deletes files immediately.'
       },
       autoQuarantine: {
         title: '自动隔离',
@@ -31993,10 +33070,12 @@ export const CATALOG = {
     deepClean: {
       title: '深度清理',
       subtitle: "Prune 知道如何查找的每一个缓存、日志、转储和残留项，都是在这台机器上实际测量的，而非估算。没有任何内容会被直接删除——清理所取走的一切都会先进入隔离区，你可以从那里恢复。",
+      subtitleDelete: "Every cache, log, dump and leftover Prune knows how to find, measured on this machine rather than estimated. Clean deletes what you tick immediately and frees the space, the way BleachBit does. It can't be undone.",
       scanLog: {
         header: '扫描输出',
         scanningAnnounce: (total) => `正在扫描 ${total} 个位置。`,
         finishedAnnounce: (scanned, total) => `扫描完成。已测量 ${total} 个位置中的 ${scanned} 个。`,
+        searching: (items) => `Searching your profile… ${items} items checked`,
         starting: '正在开始…',
         idle: "点击“预览”以测量可清理的内容。"
       },
@@ -32005,6 +33084,9 @@ export const CATALOG = {
       cleanErrorPrefix: (error) => `无法清理：${error}`,
       cleanupComplete: '清理完成。',
       resultFreed: (formatted) => `已释放 ${formatted}`,
+      resultMoved: (formatted) => `Moved ${formatted} to Quarantine. The space comes back when you empty it.`,
+      resultRecycled: (formatted) => `Moved ${formatted} to the Recycle Bin. The space comes back when you empty it.`,
+      openQuarantine: 'Open Quarantine',
       resultLockedSuffix: (count) => ` — 跳过了 ${count} 个被锁定的文件`,
       before: {
         body: 'Prune 会实际测量磁盘上的每个类别，而不是估算，这大约需要半分钟。',
@@ -32017,6 +33099,9 @@ export const CATALOG = {
         notMeasuredYet: '尚未测量',
         previewFirst: "请先预览，查看将释放多少空间。",
         unmeasuredSuffix: (count) => ` · ${count} 项未测量`,
+        modeQuarantine: 'Moves to Quarantine.',
+        modeRecycle: 'Moves to the Recycle Bin.',
+        modeDelete: 'Deletes immediately.',
         selectEverything: '全选',
         clear: '清除',
         selectedCount: (count) => `已选 ${count} 项`
@@ -32025,6 +33110,10 @@ export const CATALOG = {
         prompt: (count, sizeKnown, formatted) => `要将 ${count} 个项目（${sizeKnown ? formatted : '大小未测量'}）移至隔离区吗？`,
         cancel: '取消',
         confirmButton: "移至隔离区",
+        promptDelete: (count, sizeKnown, formatted) => `Delete ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'})? This can't be undone.`,
+        deleteButton: 'Delete',
+        promptRecycle: (count, sizeKnown, formatted) => `Move ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'}) to the Recycle Bin?`,
+        recycleButton: 'Move to Recycle Bin',
         cleaning: '正在清理…'
       },
       stop: '停止',
@@ -32032,6 +33121,7 @@ export const CATALOG = {
       clean: '清理',
       tree: {
         selectCategoryAriaLabel: (category) => `全选 ${category} 下的所有项`,
+        atLeast: (size) => `at least ${size}`,
         losesData: '会丢失数据',
         needsAdmin: '需要管理员权限',
         notInstalled: '未安装',
@@ -32048,6 +33138,7 @@ export const CATALOG = {
       },
       log: {
         scan: {
+          partial: (size) => `${size}, partial`,
           nothingToMeasure: "无可测量内容",
           needsAdmin: "需要管理员权限",
           notInstalled: "未安装",
@@ -32055,6 +33146,7 @@ export const CATALOG = {
         },
         execute: {
           delete: (name) => `删除${name}`,
+          quarantine: (name) => `Quarantine ${name}`,
           recycle: (name) => `将${name}移至回收站`,
           clear: (name) => `清除${name}`,
           compact: (name) => `压缩${name}`,
@@ -32303,6 +33395,19 @@ export const CATALOG = {
       showFreeSpace: {
         title: '在磁碟地圖上顯示可用空間',
         description: '掃描整個磁碟機時，將磁碟機的可用空間繪製為另一個區塊，讓每個資料夾顯示的是佔磁碟機的比例，而不是佔已用空間的比例。'
+      },
+      deepCleanRemoval: {
+        title: 'When Deep Clean removes files',
+        quarantine: {
+          label: 'Move to Quarantine (you can put it back)',
+          description: "Nothing is deleted. Files go into Prune's Quarantine and the drive gets the space back when you empty it."
+        },
+        delete: {
+          label: "Delete now (frees the space, can't be undone — like BleachBit)",
+          description: 'Files are removed as soon as you confirm, so the space is free straight away. Rules that lose data still ask first.'
+        },
+        deleteWarning: "With Delete now, Clean can't be undone. Scheduled cleans still move files to Quarantine.",
+        autoQuarantineNote: 'Not used while Deep Clean deletes files immediately.'
       },
       autoQuarantine: {
         title: '自動隔離',
@@ -32820,10 +33925,12 @@ export const CATALOG = {
     deepClean: {
       title: '深度清理',
       subtitle: "Prune 知道如何尋找的每一個快取、記錄、傾印檔與殘留項目，都是在這台機器上實際測量的，而非估算。沒有任何內容會被直接刪除——清理所取走的一切都會先進入隔離區，你可以從那裡還原。",
+      subtitleDelete: "Every cache, log, dump and leftover Prune knows how to find, measured on this machine rather than estimated. Clean deletes what you tick immediately and frees the space, the way BleachBit does. It can't be undone.",
       scanLog: {
         header: '掃描輸出',
         scanningAnnounce: (total) => `正在掃描 ${total} 個位置。`,
         finishedAnnounce: (scanned, total) => `掃描完成。已測量 ${total} 個位置中的 ${scanned} 個。`,
+        searching: (items) => `Searching your profile… ${items} items checked`,
         starting: '正在開始…',
         idle: "按一下「預覽」以測量可清理的內容。"
       },
@@ -32832,6 +33939,9 @@ export const CATALOG = {
       cleanErrorPrefix: (error) => `無法清理：${error}`,
       cleanupComplete: '清理完成。',
       resultFreed: (formatted) => `已釋放 ${formatted}`,
+      resultMoved: (formatted) => `Moved ${formatted} to Quarantine. The space comes back when you empty it.`,
+      resultRecycled: (formatted) => `Moved ${formatted} to the Recycle Bin. The space comes back when you empty it.`,
+      openQuarantine: 'Open Quarantine',
       resultLockedSuffix: (count) => ` — 略過了 ${count} 個被鎖定的檔案`,
       before: {
         body: 'Prune 會實際測量磁碟上的每個類別，而不是估算，這大約需要半分鐘。',
@@ -32844,6 +33954,9 @@ export const CATALOG = {
         notMeasuredYet: '尚未測量',
         previewFirst: "請先預覽，查看將釋放多少空間。",
         unmeasuredSuffix: (count) => ` · ${count} 項未測量`,
+        modeQuarantine: 'Moves to Quarantine.',
+        modeRecycle: 'Moves to the Recycle Bin.',
+        modeDelete: 'Deletes immediately.',
         selectEverything: '全選',
         clear: '清除',
         selectedCount: (count) => `已選 ${count} 項`
@@ -32852,6 +33965,10 @@ export const CATALOG = {
         prompt: (count, sizeKnown, formatted) => `要將 ${count} 個項目（${sizeKnown ? formatted : '大小未測量'}）移至隔離區嗎？`,
         cancel: '取消',
         confirmButton: "移至隔離區",
+        promptDelete: (count, sizeKnown, formatted) => `Delete ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'})? This can't be undone.`,
+        deleteButton: 'Delete',
+        promptRecycle: (count, sizeKnown, formatted) => `Move ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'}) to the Recycle Bin?`,
+        recycleButton: 'Move to Recycle Bin',
         cleaning: '正在清理…'
       },
       stop: '停止',
@@ -32859,6 +33976,7 @@ export const CATALOG = {
       clean: '清理',
       tree: {
         selectCategoryAriaLabel: (category) => `全選 ${category} 下的所有項`,
+        atLeast: (size) => `at least ${size}`,
         losesData: '會遺失資料',
         needsAdmin: '需要系統管理員權限',
         notInstalled: '未安裝',
@@ -32875,6 +33993,7 @@ export const CATALOG = {
       },
       log: {
         scan: {
+          partial: (size) => `${size}, partial`,
           nothingToMeasure: "沒有可測量的內容",
           needsAdmin: "需要系統管理員權限",
           notInstalled: "未安裝",
@@ -32882,6 +34001,7 @@ export const CATALOG = {
         },
         execute: {
           delete: (name) => `刪除${name}`,
+          quarantine: (name) => `Quarantine ${name}`,
           recycle: (name) => `將${name}移至資源回收筒`,
           clear: (name) => `清除${name}`,
           compact: (name) => `壓縮${name}`,

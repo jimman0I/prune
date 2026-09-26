@@ -46,10 +46,12 @@ export const DEFAULT_LOG_MESSAGES = {
     nothingToMeasure: 'nothing to measure',
     needsAdmin: 'needs admin',
     notInstalled: 'not installed',
-    empty: 'empty'
+    empty: 'empty',
+    partial: (size) => `${size}, partial`
   },
   execute: {
     delete: (name) => `Delete ${name}`,
+    quarantine: (name) => `Quarantine ${name}`,
     recycle: (name) => `Recycle ${name}`,
     clear: (name) => `Clear ${name}`,
     compact: (name) => `Compact ${name}`,
@@ -100,6 +102,11 @@ export function scanLogLine(item, nameOf = (rule) => rule.name, messages = DEFAU
   if (item.sizeBytes === 0) {
     return { label: name, detail: say.empty, tone: 'muted' };
   }
+  // A profile-wide search that hit a cap or was cut short: the number is
+  // real but it is not the total, and the log says so.
+  if (item.incomplete) {
+    return { label: name, detail: (say.partial ?? ((s) => `${s}, partial`))(formatBytes(item.sizeBytes)), tone: 'warning' };
+  }
   return { label: name, detail: formatBytes(item.sizeBytes), tone: 'size' };
 }
 
@@ -115,6 +122,9 @@ export function scanLogLine(item, nameOf = (rule) => rule.name, messages = DEFAU
 export function executeLogLine(item, nameOf = (rule) => rule.name, messages = DEFAULT_LOG_MESSAGES) {
   const name = nameOf(item) || item.id;
   const say = messages.execute;
+  // Deleted plus moved: how much came out of its folder. Which of the two
+  // it was is the verb's job, not the number's.
+  const removedBytes = (item.freedBytes || 0) + (item.movedBytes || 0);
   if (item.error) {
     return { label: name, detail: item.error, tone: 'warning' };
   }
@@ -164,8 +174,8 @@ export function executeLogLine(item, nameOf = (rule) => rule.name, messages = DE
   // fallthrough rather than an unconditional "success" label.
   if (item.edited) {
     const label = say.trim(name);
-    if (item.freedBytes > 0) {
-      return { label, detail: formatBytes(item.freedBytes), tone: 'size' };
+    if (removedBytes > 0) {
+      return { label, detail: formatBytes(removedBytes), tone: 'size' };
     }
     if (item.skipped?.length > 0) {
       return { label, detail: say.skipped(item.skipped.length), tone: 'warning' };
@@ -173,14 +183,18 @@ export function executeLogLine(item, nameOf = (rule) => rule.name, messages = DE
     return { label, detail: say.alreadyEmpty, tone: 'muted' };
   }
 
-  const label = item.recycled ? say.recycle(name) : say.delete(name);
+  // The verb is what happened to the files. Quarantine and Recycle move
+  // them and free nothing yet; only Delete gives the space back.
+  const label = item.recycled ? say.recycle(name)
+    : item.quarantineBatch ? (say.quarantine ?? say.delete)(name)
+      : say.delete(name);
 
-  if (item.freedBytes > 0) {
+  if (removedBytes > 0) {
     // A rule with locked files still freed something -- Chrome's cache
     // is a thousand small files and a handful being open in another
     // process should read as "mostly done", not silently vanish behind
     // the size of everything else that came off.
-    const freed = formatBytes(item.freedBytes);
+    const freed = formatBytes(removedBytes);
     const detail = item.skipped?.length > 0 ? say.lockedAfterSize(freed, item.skipped.length) : freed;
     return { label, detail, tone: 'size' };
   }

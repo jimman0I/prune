@@ -48,6 +48,7 @@ async function runTask(task, guards) {
       ok: true,
       task,
       freedBytes: result.freedBytes ?? 0,
+      movedBytes: result.movedBytes ?? 0,
       summary: `Cleaned ${ids.length} ${ids.length === 1 ? 'rule' : 'rules'}.`
     };
   }
@@ -77,7 +78,10 @@ export async function checkSchedule(now = new Date()) {
 
   running = true;
   try {
-    const result = await runTask(automation.task, cleanGuardsFrom(settings));
+    // Always 'quarantine', whatever Settings says for a manual Deep Clean.
+    // "Delete now" is a choice made with the confirm dialog in front of it;
+    // an unattended 2 AM run has no dialog, so it never gets to delete.
+    const result = await runTask(automation.task, { ...cleanGuardsFrom(settings), removal: 'quarantine' });
     await updateSettings({
       automation: {
         ...automation,
