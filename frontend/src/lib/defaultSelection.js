@@ -81,6 +81,23 @@ export function selectableIds(categories, acknowledged) {
   return ids;
 }
 
+/** Ids with every rule that must be confirmed each time taken out.
+ *
+ * A saved tick on the free-space wipe would reopen next session already
+ * ticked, with the dialog that is supposed to stand between it and a
+ * multi-hour drive-filling job long since answered. Such a rule is chosen
+ * in the session it runs in, or not at all -- so it is neither restored
+ * from nor written to the saved selection. */
+export function dropConfirmEveryTime(ids, categories) {
+  if (!Array.isArray(ids) && !(ids instanceof Set)) return ids;
+  const barred = new Set();
+  for (const group of categories || []) {
+    for (const item of group.items || []) if (item.confirmEveryTime) barred.add(item.id);
+  }
+  const kept = [...ids].filter((id) => !barred.has(id));
+  return Array.isArray(ids) ? kept : new Set(kept);
+}
+
 /** What to tick when a saved selection is reopened.
  *
  * A saved tick can outlive its reason: it was made on an earlier scan, on
@@ -89,6 +106,7 @@ export function selectableIds(categories, acknowledged) {
  * ids the current listing says are still cleanable survive; if none do,
  * the defaults apply, exactly as if nothing had been saved. */
 export function restoreSelection(saved, categories) {
+  saved = dropConfirmEveryTime(saved, categories);
   if (Array.isArray(saved) && saved.length > 0) {
     const valid = cleanableIds(categories);
     // A rule the listing does not know at all (a command rule, or one this

@@ -15,6 +15,7 @@ import * as chromeHistoryAction from './cleanerActions/chromeHistory.js';
 import * as mozillaUrlHistoryAction from './cleanerActions/mozillaUrlHistory.js';
 import * as mozillaFaviconsAction from './cleanerActions/mozillaFavicons.js';
 import * as deepscanAction from './cleanerActions/deepscan.js';
+import * as wipeFreeSpaceAction from './cleanerActions/wipeFreeSpace.js';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const CLEANERS_JSON_PATH = join(here, '..', 'data', 'cleaners.json');
@@ -221,6 +222,10 @@ export function scanRule(rule, guards = {}) {
       // scan and the scheduler read it as "nothing to measure"; the
       // streamed Preview measures it properly via scanRuleAsync.
       present = true;
+    } else if (action.type === 'wipe.freespace') {
+      // Frees nothing, so there is nothing to measure -- sizeBytes stays
+      // null and the log reads "nothing to measure" rather than a zero.
+      present = true;
     }
   }
 
@@ -263,8 +268,9 @@ function deepscanTarget(action) {
   return { expandedRoot: expandPath(action.root || '~'), patterns: action.patterns };
 }
 
-/** Tags a walk's progress with the rule it belongs to, so the stream can
- * say which rule is being searched. */
+/** Tags a long-running action's progress (a profile walk, a free-space
+ * wipe) with the rule it belongs to, so the stream can say which rule is
+ * working. */
 function deepscanGuards(rule, guards) {
   if (!guards.onProgress) return guards;
   const { onProgress } = guards;
@@ -435,7 +441,7 @@ export async function executeRule(rule, guards = {}) {
   };
   let registryKeysRemoved;
   const skipped = [];
-  let recycled, quarantineBatch, ranCommand, error, vacuumed, edited;
+  let recycled, quarantineBatch, ranCommand, error, vacuumed, edited, wiped;
 
   for (const action of normalized.actions) {
     if (action.type === 'shell') {
@@ -467,6 +473,12 @@ export async function executeRule(rule, guards = {}) {
       skipped.push(...result.skipped);
       if (result.recycled) recycled = true;
       if (result.quarantineBatch) quarantineBatch = result.quarantineBatch;
+    } else if (action.type === 'wipe.freespace') {
+      // Independent of the removal mode: it writes and deletes its own
+      // filler and never touches a user's file, so there is nothing to
+      // quarantine and nothing that Delete now could make worse.
+      const result = await wipeFreeSpaceAction.execute(action, rule.name, deepscanGuards(rule, guards));
+      wiped = result.wiped;
     } else if (action.type === 'json') {
       for (const concretePath of resolveBespokeActionPaths(expandPath(action.path))) {
         const result = await jsonAction.execute({ expandedPath: concretePath, address: action.address }, rule.name, guards);
@@ -549,6 +561,7 @@ export async function executeRule(rule, guards = {}) {
     ...(registryKeysRemoved !== undefined ? { registryKeysRemoved } : {}),
     ...(vacuumed ? { vacuumed } : {}),
     ...(edited ? { edited } : {}),
+    ...(wiped ? { wiped } : {}),
     ...(recycled ? { recycled } : {}),
     ...(quarantineBatch ? { quarantineBatch } : {}),
     ...(ranCommand ? { ranCommand } : {}),

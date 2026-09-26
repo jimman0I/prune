@@ -295,6 +295,13 @@ function CategorySection({ category, items, allItems = items, iconSrc, selected,
                   {t('deepClean.tree.losesData')}
                 </span>
               )}
+              {/* The wipe loses nothing; what it costs is time and, on an
+                  SSD, wear. A different fact gets a different badge. */}
+              {item.confirmEveryTime && (
+                <span className="text-[11px] font-mono uppercase tracking-wider px-1 rounded bg-[color:var(--warning-soft)] text-[color:var(--warning)] border border-[color:var(--warning)]/25 shrink-0">
+                  {t('deepClean.tree.longRunning')}
+                </span>
+              )}
 
               {/* On the name's own line rather than under it. This is what
                   buys the density back: BleachBit's rows are one line

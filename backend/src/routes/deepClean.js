@@ -4,6 +4,7 @@ import { getSettings, cleanGuardsFrom } from '../services/settings.js';
 import { getCleanerCategoryIcons } from '../services/cleanerCategoryIcons.js';
 import { listCookieDomains } from '../lib/cleanerActions/cookieDomains.js';
 import { listInstalledPrograms } from '../services/programs.js';
+import { estimateWipe, wipeInProgress } from '../lib/cleanerActions/wipeFreeSpace.js';
 
 const router = Router();
 
@@ -130,6 +131,21 @@ router.get('/category-icons', async (req, res) => {
 router.get('/cookie-domains', async (req, res) => {
   try {
     res.json(await listCookieDomains());
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+/** What a free-space wipe would do on this machine, for the confirm dialog:
+ * the drive, how much it would write, and a rough time from a real write
+ * test of about a second. Read-only apart from that one throwaway file. */
+router.get('/wipe-estimate', async (req, res) => {
+  if (wipeInProgress()) {
+    res.status(409).json({ error: 'A free-space wipe is already running.' });
+    return;
+  }
+  try {
+    res.json(await estimateWipe());
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

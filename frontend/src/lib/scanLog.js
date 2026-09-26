@@ -56,6 +56,9 @@ export const DEFAULT_LOG_MESSAGES = {
     clear: (name) => `Clear ${name}`,
     compact: (name) => `Compact ${name}`,
     trim: (name) => `Trim ${name}`,
+    wipe: (name) => `Wipe ${name}`,
+    wiped: (size) => `${size} written`,
+    wipeStopped: (size) => `stopped after ${size}`,
     registryEntries: (n) => `${n} registry ${n === 1 ? 'entry' : 'entries'}`,
     alreadyAbsent: 'already absent',
     skipped: (n) => `${n} skipped`,
@@ -185,6 +188,15 @@ export function executeLogLine(item, nameOf = (rule) => rule.name, messages = DE
 
   // The verb is what happened to the files. Quarantine and Recycle move
   // them and free nothing yet; only Delete gives the space back.
+  // The free-space wipe deletes and moves nothing: its line says how much
+  // it wrote, and whether Stop cut it short.
+  if (item.wiped) {
+    const label = (say.wipe ?? ((n) => `Wipe ${n}`))(name);
+    const written = formatBytes(item.wiped.bytesWritten);
+    const detail = item.wiped.aborted ? (say.wipeStopped ?? ((s) => `stopped after ${s}`))(written) : (say.wiped ?? ((s) => `${s} written`))(written);
+    return { label, detail, tone: item.wiped.aborted ? 'warning' : 'size' };
+  }
+
   const label = item.recycled ? say.recycle(name)
     : item.quarantineBatch ? (say.quarantine ?? say.delete)(name)
       : say.delete(name);

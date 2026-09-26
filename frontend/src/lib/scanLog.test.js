@@ -299,3 +299,15 @@ describe('logRuleName', () => {
     expect(executeLogLine({ id: 'a', name: 'Cache', category: 'Brave', freedBytes: 1024 }, nameOf).label).toBe('Delete <Brave> · Cache');
   });
 });
+
+describe('executeLogLine, the free-space wipe', () => {
+  it('says how much it wrote, not that it deleted something', () => {
+    const line = executeLogLine({ id: 'system_empty_space', name: 'Free disk space', freedBytes: 0, skipped: [], wiped: { bytesWritten: 2048, aborted: false } });
+    expect(line).toEqual({ label: 'Wipe Free disk space', detail: '2 KB written', tone: 'size' });
+  });
+
+  it('says so when Stop ended it early', () => {
+    const line = executeLogLine({ id: 'system_empty_space', name: 'Free disk space', freedBytes: 0, skipped: [], wiped: { bytesWritten: 1024, aborted: true } });
+    expect(line).toEqual({ label: 'Wipe Free disk space', detail: 'stopped after 1 KB', tone: 'warning' });
+  });
+});

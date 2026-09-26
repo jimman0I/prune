@@ -70,3 +70,15 @@ describe('categoryTickPlan, ticking on', () => {
     expect(plan.askAbout.map((i) => i.id)).toEqual(['cookies', 'history']);
   });
 });
+
+describe('categoryTickPlan, the free-space wipe', () => {
+  it('is neither selected nor asked about when a whole category is ticked', () => {
+    const plan = categoryTickPlan(
+      [{ id: 'temp' }, { id: 'system_empty_space', confirmEveryTime: true }],
+      new Set(),
+      []
+    );
+    expect(plan.selectNow).toEqual(['temp']);
+    expect(plan.askAbout).toEqual([]);
+  });
+});

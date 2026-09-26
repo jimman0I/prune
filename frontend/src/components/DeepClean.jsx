@@ -9,13 +9,14 @@ import { useSettings } from '../hooks/useSystemQueries.js';
 import { lockedFileSummary } from '../lib/lockedFiles.js';
 import { logRuleName } from '../lib/scanLog.js';
 import { useToasts } from '../hooks/useToasts.jsx';
-import { defaultSelection, restoreSelection, selectableIds } from '../lib/defaultSelection.js';
+import { defaultSelection, dropConfirmEveryTime, restoreSelection, selectableIds } from '../lib/defaultSelection.js';
 import { selectionTotal } from '../lib/selectionTotal.js';
 import { needsWarning, rememberedWith } from '../lib/cleanWarning.js';
 import { categoryTickPlan } from '../lib/categoryTickPlan.js';
 import { removalModeFrom, cleanOutcome } from '../lib/cleanOutcome.js';
 import DeepCleanTree from './DeepCleanTree.jsx';
 import CleanWarningDialog from './CleanWarningDialog.jsx';
+import WipeFreeSpaceDialog from './WipeFreeSpaceDialog.jsx';
 import { useLanguage } from '../i18n/LanguageContext.jsx';
 import { useCleanerText } from '../i18n/cleanerText.js';
 
@@ -106,7 +107,9 @@ function ScanLog({ lines, scanning, scanned, total, progress }) {
           says what it is doing: honest and live, and Stop still works. */}
       {scanning && progress && (
         <p data-testid="deep-clean-progress" className="px-4 pt-3 text-[12px] font-mono text-[color:var(--text-secondary)] shrink-0">
-          {t('deepClean.scanLog.searching', progress.entries.toLocaleString())}
+          {progress.wipe
+            ? t('deepClean.scanLog.wiping', formatBytes(progress.bytesWritten), formatBytes(progress.totalBytes))
+            : t('deepClean.scanLog.searching', progress.entries.toLocaleString())}
         </p>
       )}
 
@@ -265,7 +268,9 @@ function DeepClean({ onNavigate }) {
     setSelected((prev) => {
       if (prev.size > 0) return prev;
       const saved = settings.deepCleanSelection;
-      if (Array.isArray(saved) && saved.length > 0) return new Set(saved);
+      // Minus the free-space wipe, which is never restored ticked: see
+      // dropConfirmEveryTime.
+      if (Array.isArray(saved) && saved.length > 0) return new Set(dropConfirmEveryTime(saved, categories));
       return defaultSelection(categories);
     });
   }, [categories, settings]);
@@ -281,7 +286,7 @@ function DeepClean({ onNavigate }) {
   // settled on a real value (saved, or computed defaults).
   useEffect(() => {
     if (!categories) return;
-    saveSettings.mutate({ deepCleanSelection: [...selected] });
+    saveSettings.mutate({ deepCleanSelection: [...dropConfirmEveryTime(selected, categories)] });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selected]);
 
@@ -431,7 +436,12 @@ function DeepClean({ onNavigate }) {
   const resultSentences = (result) => {
     const { freedBytes, movedBytes, movedTo } = cleanOutcome(result);
     const sentences = [];
-    if (freedBytes > 0 || movedBytes === 0) sentences.push(t('deepClean.resultFreed', formatBytes(freedBytes)));
+    const wipe = (result?.results ?? []).map((r) => r?.wiped).find(Boolean);
+    // A wipe frees nothing, so "Freed 0 B" beside it would only mislead.
+    if (freedBytes > 0 || (movedBytes === 0 && !wipe)) sentences.push(t('deepClean.resultFreed', formatBytes(freedBytes)));
+    if (wipe) {
+      sentences.push(t(wipe.aborted ? 'deepClean.resultWipeStopped' : 'deepClean.resultWiped', formatBytes(wipe.bytesWritten)));
+    }
     if (movedBytes > 0) {
       sentences.push(movedTo === 'recycle'
         ? t('deepClean.resultRecycled', formatBytes(movedBytes))
@@ -495,8 +505,11 @@ function DeepClean({ onNavigate }) {
   const cleanTotal = selectionTotal(categories, selected);
   // Nothing can be cleaned blind: a completed Preview that measured at least
   // one ticked item is the precondition, and a running scan or clean is not.
+  // The free-space wipe frees nothing and so is never "measured"; ticking it
+  // is what makes a Clean worth allowing when it is all that is selected.
+  const wipeSelected = (categories ?? []).some((g) => g.items.some((i) => i.confirmEveryTime && selected.has(i.id)));
   const canClean = Boolean(categories) && hasScanned && !scanning && !cleaning
-    && selected.size > 0 && cleanTotal.anyMeasured;
+    && selected.size > 0 && (cleanTotal.anyMeasured || wipeSelected);
 
   return (
     <div className="h-full flex flex-col">
@@ -714,6 +727,7 @@ function DeepClean({ onNavigate }) {
                   function can only return a plain string. */}
               <span className="text-[12.5px] text-[color:var(--text-primary)] mr-1">
                 {t(CONFIRM_PROMPT[removalMode], selected.size, cleanTotal.anyMeasured, formatBytes(cleanTotal.bytes))}
+                {wipeSelected && <> {t('deepClean.confirm.wipeNote')}</>}
               </span>
               {/* Once the delete is actually in flight, Cancel no longer
                   means anything -- rules already finished stay cleaned.
@@ -801,13 +815,15 @@ function DeepClean({ onNavigate }) {
         </div>
       </div>
 
-      {warnAbout && (
+      {warnAbout && (warnAbout.confirmEveryTime ? (
+        <WipeFreeSpaceDialog onCancel={dismissWarning} onConfirm={confirmWarning} />
+      ) : (
         <CleanWarningDialog
           item={warnAbout}
           onCancel={dismissWarning}
           onConfirm={confirmWarning}
         />
-      )}
+      ))}
     </div>
   );
 }

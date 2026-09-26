@@ -496,6 +496,16 @@ export async function fetchDeepCleanRules() {
   return data.categories ?? [];
 }
 
+/** What a free-space wipe would do on this machine -- the drive, how much it
+ * would write and a time estimate from a real ~1 second write test -- for
+ * the confirm dialog. Not called until that dialog opens. */
+export async function fetchWipeEstimate() {
+  const res = await fetch(`${API_URL}/deep-clean/wipe-estimate`);
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
+  return data;
+}
+
 /** The icon for each Deep Clean category, as { category: dataUri }.
  *
  * Never throws, for the same reason the startup icons don't: these are

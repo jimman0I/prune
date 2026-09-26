@@ -1022,6 +1022,18 @@
     "recommended": true
   },
   {
+    "id": "system_empty_space",
+    "category": "Windows",
+    "name": "Free disk space",
+    "description": "Overwrites the free space on the drive with zeros, then deletes the filler, so files you deleted earlier can't be recovered. It can take hours. It frees no space, does nothing useful on an SSD with TRIM, and adds write wear.",
+    "actions": [
+      { "type": "wipe.freespace" }
+    ],
+    "is_safe": false,
+    "confirmEveryTime": true,
+    "recommended": false
+  },
+  {
     "id": "defender_history",
     "category": "Windows Defender",
     "name": "Scan history",

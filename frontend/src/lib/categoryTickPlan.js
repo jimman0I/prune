@@ -27,6 +27,9 @@ export function categoryTickPlan(items, selected, acknowledged) {
 
   for (const item of items || []) {
     if (!item?.id || selected?.has(item.id)) continue;
+    // Ticking a whole application never reaches for the free-space wipe,
+    // not even to ask: it is chosen on its own row or not at all.
+    if (item.confirmEveryTime) continue;
     if (needsWarning(item, { checking: true, acknowledged })) askAbout.push(item);
     else selectNow.push(item.id);
   }

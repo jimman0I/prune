@@ -33,6 +33,11 @@ function acknowledgedList(acknowledged) {
  * anything, and a dialog in front of the safe direction is how people
  * learn to click through the one in front of the unsafe direction. */
 export function needsWarning(item, { checking, acknowledged } = {}) {
+  // A rule flagged `confirmEveryTime` (the free-space wipe) is asked about
+  // on every tick, whatever was acknowledged before: it takes hours and
+  // writes a drive's worth of data, so a remembered "yes" is not consent to
+  // the next run. Unticking still never asks.
+  if (item?.confirmEveryTime) return Boolean(checking);
   if (!item || !checking || !item.risky) return false;
   return !acknowledgedList(acknowledged).includes(item.id);
 }
