@@ -1162,5 +1162,96 @@
     ],
     "is_safe": true,
     "recommended": true
+  },
+  {
+    "id": "deepscan_backup",
+    "category": "Deep scan",
+    "name": "Backup files",
+    "description": "Files ending in .bak, or in up to four letters and a tilde (such as notes.txt~), anywhere in your user folder. Editors often leave the only copy of something behind as a backup, so check the preview for anything you want to keep.",
+    "actions": [
+      {
+        "type": "deepscan",
+        "root": "~",
+        "patterns": [
+          "\\.[Bb][Aa][Kk]$",
+          "[a-zA-Z]{1,4}~$"
+        ]
+      }
+    ],
+    "is_safe": false,
+    "risky": true,
+    "recommended": false
+  },
+  {
+    "id": "deepscan_tmp",
+    "category": "Deep scan",
+    "name": "Office temporary files",
+    "description": "Word (~wr and four digits) and PowerPoint (ppt and four digits) working files, anywhere in your user folder. After a crash, one can hold the only copy of unsaved work.",
+    "actions": [
+      {
+        "type": "deepscan",
+        "root": "~",
+        "patterns": [
+          "^~wr[a-z][0-9]{4}\\.tmp$",
+          "^ppt[0-9]{4}\\.tmp$"
+        ]
+      }
+    ],
+    "is_safe": false,
+    "risky": true,
+    "recommended": false
+  },
+  {
+    "id": "deepscan_vim_swap",
+    "category": "Deep scan",
+    "name": "Vim swap files",
+    "description": "Vim's .swp, .swo and .swn files, anywhere in your user folder. Vim writes them while you edit, and after a crash they hold the unsaved changes.",
+    "actions": [
+      {
+        "type": "deepscan",
+        "root": "~",
+        "patterns": [
+          "^.*\\.sw[nop]$"
+        ]
+      }
+    ],
+    "is_safe": false,
+    "risky": true,
+    "recommended": false
+  },
+  {
+    "id": "deepscan_ds_store",
+    "category": "Deep scan",
+    "name": ".DS_Store files",
+    "description": "Folder-view files that macOS leaves in folders copied from a Mac. Nothing reads them on Windows.",
+    "actions": [
+      {
+        "type": "deepscan",
+        "root": "~",
+        "patterns": [
+          "^\\.DS_Store$"
+        ]
+      }
+    ],
+    "is_safe": false,
+    "recommended": false
+  },
+  {
+    "id": "deepscan_thumbs_db",
+    "category": "Deep scan",
+    "name": "Thumbs.db files",
+    "description": "Thumbnail caches that older versions of Windows left in picture folders. Explorer builds new ones if it needs them.",
+    "actions": [
+      {
+        "type": "deepscan",
+        "root": "~",
+        "patterns": [
+          "^Thumbs\\.db$",
+          "^Thumbs\\.db:encryptable$"
+        ]
+      }
+    ],
+    "is_safe": false,
+    "recommended": false
   }
 ]

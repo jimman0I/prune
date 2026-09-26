@@ -89,6 +89,11 @@ export default {
     defender_logs: { name: "記錄", description: "Defender 自身的服務和診斷記錄。僅在排解 Defender 本身的問題時有用；它執行時會寫入新的記錄。" },
     winrar_history: { name: "記錄", description: "WinRAR 記住的壓縮檔名稱、解壓縮目的資料夾和搜尋字詞。壓縮檔本身不受影響。" },
     winrar_temp: { name: "暫存檔", description: "WinRAR 遺留在自身程式資料夾中的暫存檔。壓縮檔和設定不受影響。" },
+    deepscan_backup: { name: "Backup files", description: "Files ending in .bak, or in up to four letters and a tilde (such as notes.txt~), anywhere in your user folder. Editors often leave the only copy of something behind as a backup, so check the preview for anything you want to keep." },
+    deepscan_tmp: { name: "Office temporary files", description: "Word (~wr and four digits) and PowerPoint (ppt and four digits) working files, anywhere in your user folder. After a crash, one can hold the only copy of unsaved work." },
+    deepscan_vim_swap: { name: "Vim swap files", description: "Vim's .swp, .swo and .swn files, anywhere in your user folder. Vim writes them while you edit, and after a crash they hold the unsaved changes." },
+    deepscan_ds_store: { name: ".DS_Store files", description: "Folder-view files that macOS leaves in folders copied from a Mac. Nothing reads them on Windows." },
+    deepscan_thumbs_db: { name: "Thumbs.db files", description: "Thumbnail caches that older versions of Windows left in picture folders. Explorer builds new ones if it needs them." },
   },
   categories: {
     "Brave": "Brave",
@@ -122,5 +127,6 @@ export default {
     "League of Legends": "League of Legends",
     "Windows Defender": "Windows Defender",
     "WinRAR": "WinRAR",
+    "Deep scan": "Deep scan",
   }
 };

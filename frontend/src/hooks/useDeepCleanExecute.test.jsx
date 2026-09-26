@@ -56,6 +56,18 @@ describe('useDeepCleanExecute', () => {
     expect(outcome.results).toEqual([{ id: 'a', name: 'A Cache', freedBytes: 500, skipped: [{ path: 'x', reason: 'locked' }] }]);
   });
 
+  it('sums moved bytes separately from freed bytes', async () => {
+    streamDeepCleanExecute.mockImplementation(async (ids, onEvent) => {
+      onEvent('rule', { id: 'a', name: 'A', freedBytes: 0, movedBytes: 300, quarantineBatch: 'b', skipped: [] });
+      onEvent('rule', { id: 'b', name: 'B', freedBytes: 50, movedBytes: 0, skipped: [] });
+    });
+    const { result } = renderHook(() => useDeepCleanExecute());
+    let outcome;
+    await act(async () => { outcome = await result.current.run(['a', 'b']); });
+    expect(outcome.freedBytes).toBe(50);
+    expect(outcome.movedBytes).toBe(300);
+  });
+
   it('throws on a mid-stream error event, same contract the one-shot call had', async () => {
     streamDeepCleanExecute.mockImplementation(async (ids, onEvent) => {
       onEvent('error', { message: 'disk full' });

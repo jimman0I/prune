@@ -97,6 +97,30 @@ describe('POST /deep-clean/execute', () => {
   });
 });
 
+describe('progress events', () => {
+  it('streams the profile walk progress on the scan stream, tagged with its rule', async () => {
+    scanRulesProgressively.mockImplementationOnce(async (emit, options) => {
+      options.onProgress({ id: 'deepscan_backup', dirs: 12, entries: 340, matches: 1 });
+      emit({ id: 'deepscan_backup', sizeBytes: 5 });
+      return { aborted: false, total: 1, scanned: 1 };
+    });
+    const body = await (await fetch(`${server.base}/deep-clean/scan/stream`)).text();
+    expect(body).toContain('event: progress');
+    expect(body).toContain('"id":"deepscan_backup"');
+    expect(body).toContain('"entries":340');
+    expect(body.indexOf('event: progress')).toBeLessThan(body.indexOf('event: rule'));
+  });
+
+  it('streams it on the clean stream too', async () => {
+    executeRulesProgressively.mockImplementationOnce(async (ids, emit, options) => {
+      options.onProgress({ id: 'deepscan_backup', dirs: 3, entries: 9, matches: 0 });
+      return { aborted: false, total: 1, executed: 1, freedBytes: 0 };
+    });
+    const body = await (await fetch(`${server.base}/deep-clean/execute/stream?ids=deepscan_backup`)).text();
+    expect(body).toContain('event: progress');
+  });
+});
+
 describe('GET /deep-clean/execute/stream', () => {
   it('streams a start, a line per cleaned rule, and a done -- the BleachBit-style clean output', async () => {
     const res = await fetch(`${server.base}/deep-clean/execute/stream?ids=temp,thumbs`);
@@ -111,6 +135,19 @@ describe('GET /deep-clean/execute/stream', () => {
     expect(body).toContain('event: done');
     expect(body).toContain('"freedBytes":10');
     expect(executeRulesProgressively).toHaveBeenCalledWith(['temp', 'thumbs'], expect.any(Function), expect.objectContaining(guards));
+  });
+
+  it("never lets a request choose how files are removed -- 'delete' comes from settings only", async () => {
+    await (await fetch(`${server.base}/deep-clean/execute/stream?ids=temp&removal=delete`)).text();
+    const options = executeRulesProgressively.mock.calls.at(-1)[2];
+    expect(options.removal).toBeUndefined();
+
+    await server.call('/deep-clean/execute', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ruleIds: ['temp'], removal: 'delete' })
+    });
+    expect(executeRules.mock.calls.at(-1)[1].removal).toBeUndefined();
   });
 
   it('refuses an empty or missing id list rather than cleaning nothing silently', async () => {

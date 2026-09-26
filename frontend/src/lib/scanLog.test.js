@@ -60,6 +60,13 @@ describe('scanLogLine', () => {
   });
 });
 
+describe('scanLogLine, partial searches', () => {
+  it('says partial when a profile search stopped short of the end', () => {
+    expect(scanLogLine({ name: 'Backup files', sizeBytes: 2048, present: true, accessible: true, incomplete: 'time' }))
+      .toEqual({ label: 'Backup files', detail: '2 KB, partial', tone: 'warning' });
+  });
+});
+
 describe('executeLogLine', () => {
   it('reports a real deletion, BleachBit-style ("Delete <name>")', () => {
     expect(executeLogLine({ id: 'discord_cache', name: 'Discord Cache', freedBytes: 396361728, skipped: [] }))
@@ -69,6 +76,11 @@ describe('executeLogLine', () => {
   it('says Recycle instead of Delete when autoQuarantine is off', () => {
     expect(executeLogLine({ id: 'x', name: 'X Cache', freedBytes: 1024, recycled: true, skipped: [] }).label)
       .toBe('Recycle X Cache');
+  });
+
+  it('says Quarantine, not Delete, for files that were moved rather than deleted', () => {
+    expect(executeLogLine({ id: 'x', name: 'X Cache', freedBytes: 0, movedBytes: 2048, quarantineBatch: 'b1', skipped: [] }))
+      .toEqual({ label: 'Quarantine X Cache', detail: '2 KB', tone: 'size' });
   });
 
   it('reports a rule that was already empty as empty, not as a silent zero', () => {

@@ -120,7 +120,8 @@ function SizeLabel({ item }) {
   }
   return (
     <span className={`log-line-in font-mono text-[11px] shrink-0 ${item.sizeBytes ? 'text-[color:var(--text-secondary)]' : 'text-[color:var(--text-muted)]'}`}>
-      {formatBytes(item.sizeBytes)}
+      {/* A search that stopped short of the end is a floor, not a total. */}
+      {item.incomplete ? t('deepClean.tree.atLeast', formatBytes(item.sizeBytes)) : formatBytes(item.sizeBytes)}
     </span>
   );
 }

@@ -13,6 +13,7 @@ import { defaultSelection, restoreSelection, selectableIds } from '../lib/defaul
 import { selectionTotal } from '../lib/selectionTotal.js';
 import { needsWarning, rememberedWith } from '../lib/cleanWarning.js';
 import { categoryTickPlan } from '../lib/categoryTickPlan.js';
+import { removalModeFrom, cleanOutcome } from '../lib/cleanOutcome.js';
 import DeepCleanTree from './DeepCleanTree.jsx';
 import CleanWarningDialog from './CleanWarningDialog.jsx';
 import { useLanguage } from '../i18n/LanguageContext.jsx';
@@ -29,7 +30,7 @@ const LOG_TONE = {
  * into something you can watch. Auto-scrolls, but only while pinned to
  * the bottom -- yanking the view back down while someone is reading
  * further up is worse than not scrolling at all. */
-function ScanLog({ lines, scanning, scanned, total }) {
+function ScanLog({ lines, scanning, scanned, total, progress }) {
   const { t } = useLanguage();
   const boxRef = useRef(null);
   const pinnedRef = useRef(true);
@@ -101,6 +102,14 @@ function ScanLog({ lines, scanning, scanned, total }) {
         </div>
       )}
 
+      {/* A profile-wide search can run for minutes between two rules, so it
+          says what it is doing: honest and live, and Stop still works. */}
+      {scanning && progress && (
+        <p data-testid="deep-clean-progress" className="px-4 pt-3 text-[12px] font-mono text-[color:var(--text-secondary)] shrink-0">
+          {t('deepClean.scanLog.searching', progress.entries.toLocaleString())}
+        </p>
+      )}
+
       <div ref={boxRef} onScroll={onScroll} className="flex-1 overflow-y-auto min-h-0 px-4 py-3 space-y-1">
         {lines.length === 0 && (
           <p className="text-[12px] text-[color:var(--text-muted)] font-mono">
@@ -119,6 +128,22 @@ function ScanLog({ lines, scanning, scanned, total }) {
   );
 }
 
+const CONFIRM_PROMPT = {
+  quarantine: 'deepClean.confirm.prompt',
+  recycle: 'deepClean.confirm.promptRecycle',
+  delete: 'deepClean.confirm.promptDelete'
+};
+const CONFIRM_BUTTON = {
+  quarantine: 'deepClean.confirm.confirmButton',
+  recycle: 'deepClean.confirm.recycleButton',
+  delete: 'deepClean.confirm.deleteButton'
+};
+const MODE_TEXT = {
+  quarantine: 'deepClean.footer.modeQuarantine',
+  recycle: 'deepClean.footer.modeRecycle',
+  delete: 'deepClean.footer.modeDelete'
+};
+
 function formatBytes(bytes) {
   if (bytes === null || bytes === undefined) return '—';
   if (bytes === 0) return '0 B';
@@ -128,7 +153,7 @@ function formatBytes(bytes) {
   return `${parseFloat((bytes / Math.pow(k, i)).toFixed(1))} ${sizes[i]}`;
 }
 
-function DeepClean() {
+function DeepClean({ onNavigate }) {
   const { t } = useLanguage();
   const cleaner = useCleanerText();
   // No auto-scan on mount, per spec -- the tree stays empty until the
@@ -183,6 +208,7 @@ function DeepClean() {
   const {
     tree: categories, scanning, hasScanned, log: logLines,
     scanned, total, error: scanError, currentId: scanningId,
+    progress: scanProgress,
     start, stop: stopPreview, cleanableIds: scannedIds
   } = useDeepCleanScan(logName, t('deepClean.log'));
 
@@ -192,7 +218,8 @@ function DeepClean() {
   // change) and resolves quietly on Stop.
   const {
     run: runClean, stop: stopClean, cleaning,
-    log: cleanLog, executed: cleanExecuted, total: cleanTotalCount, currentId: cleaningId
+    log: cleanLog, executed: cleanExecuted, total: cleanTotalCount, currentId: cleaningId,
+    progress: cleanProgress
   } = useDeepCleanExecute(logName, t('deepClean.log'));
 
   categoryByRuleRef.current = new Map(
@@ -203,6 +230,9 @@ function DeepClean() {
   // software this machine does not have.
   const { settings, save: saveSettings } = useSettings();
   const hideUnavailable = settings?.hideUnavailableRules === true;
+  // What Clean will do to the files, read from settings only to say so
+  // beforehand -- the backend decides for itself and takes no flag from here.
+  const removalMode = removalModeFrom(settings);
 
   const shownCategories = useMemo(
     () => (categories ? visibleCategories(categories, hideUnavailable) : null),
@@ -396,6 +426,28 @@ function DeepClean() {
     if (plan.askAbout.length > 0) setWarnQueue(plan.askAbout);
   };
 
+  /** What a finished clean says: deleted bytes as "Freed", moved bytes as
+   * "Moved to ...". Never "Freed" for files that only changed folders. */
+  const resultSentences = (result) => {
+    const { freedBytes, movedBytes, movedTo } = cleanOutcome(result);
+    const sentences = [];
+    if (freedBytes > 0 || movedBytes === 0) sentences.push(t('deepClean.resultFreed', formatBytes(freedBytes)));
+    if (movedBytes > 0) {
+      sentences.push(movedTo === 'recycle'
+        ? t('deepClean.resultRecycled', formatBytes(movedBytes))
+        : t('deepClean.resultMoved', formatBytes(movedBytes)));
+    }
+    return sentences;
+  };
+  // Freed and moved read as separate sentences; "Freed 5 KB. Moved 3 MB to ..."
+  const resultSentence = (result) => resultSentences(result).map((x) => (/[.!?]$/.test(x) ? x : `${x}.`)).join(' ');
+  // The banner leaves a lone "Freed 5 KB" as it always read, and only adds
+  // full stops once there are two sentences to tell apart.
+  const bannerText = (result) => {
+    const sentences = resultSentences(result);
+    return sentences.length === 1 ? sentences[0] : resultSentence(result);
+  };
+
   const handleClean = async () => {
     setCleanError(null);
     try {
@@ -414,7 +466,7 @@ function DeepClean() {
       // to be the whole story and the failures were a passive clause
       // appended to it -- "some files were skipped (in use)" -- with no
       // count, no paths, and nothing to act on.
-      toasts.success(`${t('deepClean.cleanupComplete')} ${t('deepClean.resultFreed', formatBytes(result.freedBytes))}.`);
+      toasts.success(`${t('deepClean.cleanupComplete')} ${resultSentence(result)}`);
       const locked = lockedFileSummary(result, t('deepClean.locked'));
       if (locked) {
         // A warning, and one that does not expire: the whole point is
@@ -451,7 +503,7 @@ function DeepClean() {
       <div className="flex-1 flex flex-col min-h-0 overflow-y-auto px-12 pt-10 pb-6 max-w-[1600px] w-full">
         <h1 className="display-heading text-[30px] leading-none mb-2">{t('deepClean.title')}</h1>
         <p className="text-[13px] text-[color:var(--text-secondary)] mb-6 max-w-[110ch]">
-          {t('deepClean.subtitle')}
+          {removalMode === 'delete' ? t('deepClean.subtitleDelete') : t('deepClean.subtitle')}
         </p>
 
         {scanError && (
@@ -467,9 +519,9 @@ function DeepClean() {
         )}
 
         {cleanResult && (
-          <div className="flex items-center gap-2.5 mb-5 px-3.5 py-3 rounded-xl bg-[color:var(--success)]/10 border border-[color:var(--success)]/25">
-            <div className="text-[12.5px] text-[color:var(--success)]">
-              {t('deepClean.resultFreed', formatBytes(cleanResult.freedBytes))}
+          <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 mb-5 px-3.5 py-3 rounded-xl bg-[color:var(--success)]/10 border border-[color:var(--success)]/25">
+            <div className="text-[12.5px] text-[color:var(--success)]" data-testid="deep-clean-result">
+              {bannerText(cleanResult)}
               {/* A dedicated catalog phrase rather than reusing
                   lockedFileSummary()'s own `message` lower-cased: that
                   transform is an English-only trick (case has no meaning
@@ -479,6 +531,17 @@ function DeepClean() {
                   runtime. */}
               {lockedFileSummary(cleanResult) && t('deepClean.resultLockedSuffix', lockedFileSummary(cleanResult).count)}
             </div>
+            {/* The space is not back until Quarantine is emptied, so the
+                way there is one click away -- but a way, not the deed:
+                emptying is permanent and lives on its own screen. */}
+            {cleanOutcome(cleanResult).movedTo === 'quarantine' && onNavigate && (
+              <button
+                className="btn-ghost px-3.5 py-1.5 rounded-lg text-[12.5px] font-medium shrink-0"
+                onClick={() => onNavigate('quarantine')}
+              >
+                {t('deepClean.openQuarantine')}
+              </button>
+            )}
           </div>
         )}
 
@@ -586,6 +649,7 @@ function DeepClean() {
             scanning={cleaning || scanning}
             scanned={cleaning ? cleanExecuted : scanned}
             total={cleaning ? cleanTotalCount : total}
+            progress={cleaning ? cleanProgress : scanProgress}
           />
         </div>
       </div>
@@ -649,7 +713,7 @@ function DeepClean() {
                   confirm bar already made, since a translated catalog
                   function can only return a plain string. */}
               <span className="text-[12.5px] text-[color:var(--text-primary)] mr-1">
-                {t('deepClean.confirm.prompt', selected.size, cleanTotal.anyMeasured, formatBytes(cleanTotal.bytes))}
+                {t(CONFIRM_PROMPT[removalMode], selected.size, cleanTotal.anyMeasured, formatBytes(cleanTotal.bytes))}
               </span>
               {/* Once the delete is actually in flight, Cancel no longer
                   means anything -- rules already finished stay cleaned.
@@ -670,8 +734,14 @@ function DeepClean() {
                   {t('deepClean.confirm.cancel')}
                 </button>
               )}
-              <button className="btn-primary px-5 py-2 text-[12.5px] font-medium disabled:opacity-50" onClick={handleClean} disabled={cleaning}>
-                {cleaning ? t('deepClean.confirm.cleaning') : t('deepClean.confirm.confirmButton')}
+              {/* Danger, not accent, when the confirm cannot be undone: the
+                  accent is for the safe primary action. */}
+              <button
+                className={`${removalMode === 'delete' ? 'btn-danger rounded-lg' : 'btn-primary'} px-5 py-2 text-[12.5px] font-medium disabled:opacity-50`}
+                onClick={handleClean}
+                disabled={cleaning}
+              >
+                {cleaning ? t('deepClean.confirm.cleaning') : t(CONFIRM_BUTTON[removalMode])}
               </button>
             </>
           ) : (
@@ -696,6 +766,16 @@ function DeepClean() {
                 >
                   {hasScanned ? t('deepClean.rescan') : t('deepClean.before.preview')}
                 </button>
+              )}
+              {/* What Clean will do, in plain text next to the button that
+                  does it -- not a tooltip, and not only in the confirm. */}
+              {categories && (
+                <span
+                  data-testid="deep-clean-mode"
+                  className={`text-[12px] ${removalMode === 'delete' ? 'text-[color:var(--warning)]' : 'text-[color:var(--text-muted)]'}`}
+                >
+                  {t(MODE_TEXT[removalMode])}
+                </span>
               )}
               {/* Visible text rather than a tooltip: the reason Clean is
                   off is worth reading without hovering over it. */}
@@ -741,8 +821,8 @@ function DeepClean() {
  * switches, once per switch, and that cost grows with every tab the user
  * has visited.
  *
- * Safe here specifically because this component takes no props at all, so
- * the comparison is between two empty objects and can never produce a
- * stale screen. A component with unstable props would gain nothing from
- * this and is deliberately left alone. */
+ * Safe here because its one prop, `onNavigate`, is App's own `setScreen` --
+ * a state setter, whose identity never changes -- so the comparison can
+ * never produce a stale screen. A component with unstable props would gain
+ * nothing from this and is deliberately left alone. */
 export default memo(DeepClean);

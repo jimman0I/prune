@@ -89,6 +89,11 @@ export default {
     defender_logs: { name: "Registos", description: "Os registos de serviço e de diagnóstico do próprio Defender. Úteis apenas para resolver problemas do próprio Defender; grava novos enquanto executa." },
     winrar_history: { name: "Histórico", description: "Os nomes de ficheiros comprimidos, pastas de extração e termos de pesquisa memorizados pelo WinRAR. Os ficheiros comprimidos em si não são afetados." },
     winrar_temp: { name: "Ficheiros temporários", description: "Ficheiros temporários que o WinRAR deixou na sua própria pasta de programa. Os ficheiros comprimidos e as definições não são afetados." },
+    deepscan_backup: { name: "Backup files", description: "Files ending in .bak, or in up to four letters and a tilde (such as notes.txt~), anywhere in your user folder. Editors often leave the only copy of something behind as a backup, so check the preview for anything you want to keep." },
+    deepscan_tmp: { name: "Office temporary files", description: "Word (~wr and four digits) and PowerPoint (ppt and four digits) working files, anywhere in your user folder. After a crash, one can hold the only copy of unsaved work." },
+    deepscan_vim_swap: { name: "Vim swap files", description: "Vim's .swp, .swo and .swn files, anywhere in your user folder. Vim writes them while you edit, and after a crash they hold the unsaved changes." },
+    deepscan_ds_store: { name: ".DS_Store files", description: "Folder-view files that macOS leaves in folders copied from a Mac. Nothing reads them on Windows." },
+    deepscan_thumbs_db: { name: "Thumbs.db files", description: "Thumbnail caches that older versions of Windows left in picture folders. Explorer builds new ones if it needs them." },
   },
   categories: {
     "Brave": "Brave",
@@ -122,5 +127,6 @@ export default {
     "League of Legends": "League of Legends",
     "Windows Defender": "Windows Defender",
     "WinRAR": "WinRAR",
+    "Deep scan": "Deep scan",
   }
 };

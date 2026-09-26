@@ -38,6 +38,7 @@ describe('getSettings', () => {
     expect(settings.excludeExtensions).toEqual([]);
     expect(settings.updateCheck).toBe(false);          // nothing leaves the machine
     expect(settings.leftoverDestination).toBe('quarantine'); // leftovers can be put back
+    expect(settings.deepCleanRemoval).toBe('quarantine');    // Deep Clean's removals can be put back
     expect(settings.preselectLeftovers).toBe(false);   // the review opens with nothing ticked
     expect(settings.scanLeftoversAfterUninstall).toBe(true);
     expect(settings.keepUninstallHistory).toBe(true);
@@ -227,5 +228,29 @@ describe('preselectLeftovers on an existing settings file', () => {
   it('keeps the old behaviour for a file that never recorded a choice, rather than flipping it unasked', async () => {
     await write({ autoQuarantine: true });
     expect((await getSettings()).preselectLeftovers).toBe(true);
+  });
+});
+
+describe('deepCleanRemoval', () => {
+  it("is 'delete' only when it is exactly 'delete'", async () => {
+    expect((await updateSettings({ deepCleanRemoval: 'delete' })).deepCleanRemoval).toBe('delete');
+    expect((await getSettings()).deepCleanRemoval).toBe('delete');
+    for (const junk of ['DELETE', 'permanent', '', null, 7, true, undefined]) {
+      expect((await updateSettings({ deepCleanRemoval: junk })).deepCleanRemoval).toBe('quarantine');
+    }
+  });
+
+  it('reads a hand-edited bad value back as quarantine', async () => {
+    await mkdir(dirname(process.env.UNREVO_SETTINGS_PATH), { recursive: true });
+    await writeFile(process.env.UNREVO_SETTINGS_PATH, JSON.stringify({ deepCleanRemoval: 'shred' }));
+    expect((await getSettings()).deepCleanRemoval).toBe('quarantine');
+  });
+
+  it('reaches the cleaner as guards.removal, defaulting to quarantine', () => {
+    expect(cleanGuardsFrom({ deepCleanRemoval: 'delete' }).removal).toBe('delete');
+    expect(cleanGuardsFrom({ deepCleanRemoval: 'quarantine' }).removal).toBe('quarantine');
+    expect(cleanGuardsFrom({}).removal).toBe('quarantine');
+    expect(cleanGuardsFrom(undefined).removal).toBe('quarantine');
+    expect(cleanGuardsFrom({ deepCleanRemoval: 'nonsense' }).removal).toBe('quarantine');
   });
 });
