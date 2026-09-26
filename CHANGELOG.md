@@ -3,7 +3,14 @@
 All notable changes to Prune (formerly named unrevo -- rebranded 2026-09-01,
 see v1.0.1 below) are documented here.
 
-## Unreleased
+## v2.9.0
+
+A design pass over the whole app. The Dashboard now answers one question,
+the dangerous choice is never the easy one (a safer right-click menu, Clean
+that waits for a Preview, leftovers left unticked), colour is kept for what
+you click, and everything is reachable and readable from the keyboard.
+Deep Clean now works like BleachBit too: an opt-in Delete now mode that frees
+space straight away, Deep scan rules, and a free-space wipe.
 
 ### Added
 
@@ -34,23 +41,6 @@ see v1.0.1 below) are documented here.
   deletes its filler even after an error, and removes anything a crashed run left
   behind on the next start. It frees no space, does nothing useful on an SSD with
   TRIM and adds write wear, which is why it is off by default.
-
-### Fixed
-
-- **Deep Clean no longer says Freed for files it only moved.** Clean moves files
-  into Quarantine by default, which frees nothing until Quarantine is emptied,
-  yet the result said Freed 15.7 GB. Results now keep deleted bytes and moved
-  bytes apart: Freed appears only for space that is really back, and a move reads
-  Moved 15.7 GB to Quarantine. The space comes back when you empty it. with an
-  Open Quarantine button. The same applies to the Recycle Bin and to the
-  sandbox self-test.
-
-## v2.9.0
-
-A design pass over the whole app. The Dashboard now answers one question,
-the dangerous choice is never the easy one (a safer right-click menu, Clean
-that waits for a Preview, leftovers left unticked), colour is kept for what
-you click, and everything is reachable and readable from the keyboard.
 
 ### Changed
 
@@ -106,10 +96,18 @@ you click, and everything is reachable and readable from the keyboard.
 - **Startup states the scheduled-task explanation once** at the top of the
   group instead of on every row.
 
-- **New wording is translated in all 39 languages**, using each language's
+- **New wording, including Delete now, Deep scan and the free-space wipe, is translated in all 39 languages**, using each language's
   existing terms for Left behind, Junk files, Drive details and the rest.
 
 ### Fixed
+
+- **Deep Clean no longer says Freed for files it only moved.** Clean moves files
+  into Quarantine by default, which frees nothing until Quarantine is emptied,
+  yet the result said Freed 15.7 GB. Results now keep deleted bytes and moved
+  bytes apart: Freed appears only for space that is really back, and a move reads
+  Moved 15.7 GB to Quarantine. The space comes back when you empty it. with an
+  Open Quarantine button. The same applies to the Recycle Bin and to the
+  sandbox self-test.
 
 - **Bug reports name the Windows version.** The report says "Windows 11
   (build 26200)" instead of "Windows_NT 10.0.26200".

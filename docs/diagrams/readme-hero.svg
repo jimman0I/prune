@@ -1,4 +1,4 @@
-<svg viewBox="0 0 1200 540" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Prune: uninstall it, then find what it left behind. Every leftover file, registry key and scheduled task is quarantined first, so nothing is lost by mistake. 87 cleaner rules, 31 categories, 40 languages, zero telemetry.">
+<svg viewBox="0 0 1200 540" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Prune: uninstall it, then find what it left behind. Every leftover file, registry key and scheduled task is quarantined first, so nothing is lost by mistake. 93 cleaner rules, 32 categories, 40 languages, zero telemetry.">
   <desc>Animated hero card. Three leftovers found after an uninstall (a folder, a registry key and a scheduled task) are checked off one after another as quarantined, in place, on a slow loop. Everything that matters is readable on the first frame and with motion turned off.</desc>
   <style>
     .sans { font-family: 'Segoe UI', Inter, Arial, Helvetica, system-ui, sans-serif; }
@@ -144,6 +144,6 @@
 
   <!-- stats -->
   <g class="mono" font-size="13" letter-spacing="1" fill="#71717a">
-    <text x="48" y="516"><tspan fill="#22d3ee" font-weight="700">87</tspan> CLEANER RULES   ·   <tspan fill="#22d3ee" font-weight="700">31</tspan> CATEGORIES   ·   <tspan fill="#22d3ee" font-weight="700">40</tspan> LANGUAGES   ·   <tspan fill="#22d3ee" font-weight="700">0</tspan> TELEMETRY</text>
+    <text x="48" y="516"><tspan fill="#22d3ee" font-weight="700">93</tspan> CLEANER RULES   ·   <tspan fill="#22d3ee" font-weight="700">32</tspan> CATEGORIES   ·   <tspan fill="#22d3ee" font-weight="700">40</tspan> LANGUAGES   ·   <tspan fill="#22d3ee" font-weight="700">0</tspan> TELEMETRY</text>
   </g>
 </svg>

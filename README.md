@@ -13,7 +13,7 @@
 
 # ✂️ Prune — The Uninstaller That Finishes the Job
 
-<img src="docs/diagrams/readme-hero.svg" width="100%" alt="Prune: uninstall it, then find what it left behind. Every leftover file, registry key and scheduled task is quarantined first, so nothing is lost by mistake. 87 cleaner rules, 31 categories, 40 languages, zero telemetry." />
+<img src="docs/diagrams/readme-hero.svg" width="100%" alt="Prune: uninstall it, then find what it left behind. Every leftover file, registry key and scheduled task is quarantined first, so nothing is lost by mistake. 93 cleaner rules, 32 categories, 40 languages, zero telemetry." />
 
 <br/>
 
@@ -26,7 +26,7 @@
 
 <br/>
 
-**87 cleaner rules** · **31 categories** · **40 languages** · **0 telemetry** · **100% local**
+**93 cleaner rules** · **32 categories** · **40 languages** · **0 telemetry** · **100% local**
 
 [**⬇️ Download for Windows**](https://github.com/jimman0I/prune/releases/latest) &nbsp;·&nbsp; [Quick start](#quick-start) &nbsp;·&nbsp; [What sets it apart](#what-sets-prune-apart) &nbsp;·&nbsp; [Report a bug](https://github.com/jimman0I/prune/issues/new)
 
@@ -104,7 +104,7 @@ files go.
 
 ### 🧹 Deep Clean
 
-**87 rules across 31 categories**, scanned one at a time so the tree fills
+**93 rules across 32 categories**, scanned one at a time so the tree fills
 in as it goes. A rule that cannot be measured says whether the software is
 missing or the read needs admin — never `0 B`.
 
@@ -244,7 +244,16 @@ off. [SECURITY.md](SECURITY.md) says exactly what the updater trusts.
 
 <br/>
 
-## 📰 What's New in 2.8
+## 📰 What's New in 2.9
+
+- **Deep Clean like BleachBit** — an opt-in *Delete now* mode that frees space straight away (Quarantine stays the default), *Deep scan* rules for backup, Office temp, Vim swap, `.DS_Store` and `Thumbs.db` files, and an opt-in free-space wipe.
+- **A Dashboard that answers one question** — where is my space going? One bar, your five largest programs, and drive health on demand.
+- **Safer by default** — Clean waits for a Preview, leftovers start unticked, and the right-click menu no longer opens on Uninstall.
+- **All 39 translations reviewed** for consistent terms.
+
+Full notes: [CHANGELOG.md](CHANGELOG.md).
+
+## What's New in 2.8
 
 - **Remembers where you left it** — window size and position, the Settings tab, Deep Clean's ticks and collapsed groups.
 - **Batch uninstall that actually uninstalls** — a paths-with-spaces quoting bug made some uninstallers never open; fixed, with a single "ready to scan" gate.
