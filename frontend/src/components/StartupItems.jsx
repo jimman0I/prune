@@ -5,6 +5,7 @@ import TableSkeleton from './TableSkeleton.jsx';
 import { tileLetter } from '../lib/iconTileLetter.js';
 import { tileColor, TILE_INK } from '../lib/programTileColor.js';
 import { useLanguage } from '../i18n/LanguageContext.jsx';
+import { useToasts } from '../hooks/useToasts.jsx';
 
 /** What Windows launches when you sign in.
  *
@@ -227,7 +228,35 @@ function StatusPill({ item }) {
   return <span className="text-[11px] font-mono text-[color:var(--text-muted)]">{t('startup.status.notRunning')}</span>;
 }
 
-function StartupRow({ item, iconSrc, pending, error, onToggle }) {
+/** The launch path, cut to the column by CSS and open in full on request.
+ *
+ * A path is the one thing on this screen a person may need to read to the
+ * end -- the file name is what the tail of it says -- and at ~160px it was
+ * cut with no way to see, select or copy the rest. A button rather than
+ * hover text: the full string is the button's own text, so a screen reader
+ * gets it whole, the keyboard reaches it, and Enter opens the complete path
+ * wrapped on a line of its own under the row. */
+function LaunchPath({ item, open, onToggle }) {
+  return (
+    <button
+      type="button"
+      aria-expanded={open}
+      onClick={onToggle}
+      className="min-h-6 -my-1 block w-full min-w-0 text-left text-[11px] font-mono text-[color:var(--text-muted)] hover:text-[color:var(--text-secondary)] transition-colors"
+    >
+      <span className="block truncate select-text" data-launch-path>{item.command}</span>
+    </button>
+  );
+}
+
+function StartupRow({ item, iconSrc, pending, error, onToggle, hideNote = false }) {
+  const { t } = useLanguage();
+  const toasts = useToasts();
+  const [pathOpen, setPathOpen] = useState(false);
+  const copyPath = () => Promise.resolve()
+    .then(() => navigator.clipboard.writeText(item.command))
+    .then(() => toasts.info(t('startup.pathCopied')))
+    .catch(() => toasts.error(t('startup.copyFailed')));
   return (
     <div
       role="row"
@@ -244,7 +273,7 @@ function StartupRow({ item, iconSrc, pending, error, onToggle }) {
         {/* Both of these say something the row cannot show any other way,
             so they are written out rather than hidden behind a hover --
             a reason nobody can find is the same as no reason. */}
-        {item.toggleNote && (
+        {item.toggleNote && !hideNote && (
           <div className="text-[11px] text-[color:var(--text-muted)] leading-snug mt-0.5">
             {item.toggleNote}
           </div>
@@ -254,8 +283,8 @@ function StartupRow({ item, iconSrc, pending, error, onToggle }) {
         )}
       </div>
 
-      <div role="cell" className="text-[11px] font-mono text-[color:var(--text-muted)] truncate select-text">
-        {item.command}
+      <div role="cell" className="min-w-0">
+        <LaunchPath item={item} open={pathOpen} onToggle={() => setPathOpen((open) => !open)} />
       </div>
 
       <div role="cell" className={`${WIDE_ONLY_CELL} text-[11.5px] text-[color:var(--text-secondary)] truncate`}>
@@ -267,8 +296,30 @@ function StartupRow({ item, iconSrc, pending, error, onToggle }) {
       </div>
 
       <div role="cell"><StatusPill item={item} /></div>
+
+      {pathOpen && (
+        // Under the whole row, so the path gets the full width rather than a
+        // column's worth. Wrapped anywhere: a path has no spaces to break at.
+        <div role="cell" className="col-span-full flex items-start gap-3 pt-1 pb-0.5">
+          <span data-testid="full-launch-path" className="flex-1 min-w-0 text-[11.5px] font-mono text-[color:var(--text-secondary)] break-all select-text">
+            {item.command}
+          </span>
+          <button type="button" onClick={copyPath} className="btn-ghost shrink-0 px-2 py-1 rounded-md text-[11px] font-medium">
+            {t('startup.copyPath')}
+          </button>
+        </div>
+      )}
     </div>
   );
+}
+
+/** The reason a group's rows cannot be switched, when it is one reason for
+ * more than one of them. A lone row keeps its own note, where it is read
+ * with the row it explains. */
+function sharedNote(group) {
+  const [first, ...rest] = group.items;
+  if (!first?.toggleNote || rest.length === 0) return null;
+  return rest.every((item) => item.toggleNote === first.toggleNote) ? first.toggleNote : null;
 }
 
 function StartupItems() {
@@ -390,7 +441,7 @@ function StartupItems() {
               <div key={group.key} role="rowgroup">
                 {/* Revo puts the count in the heading and it is the useful
                     part: "3 of 11 enabled" answers a question no row can. */}
-                <div role="row" className="flex items-baseline gap-2 px-5 py-1.5 bg-[color:var(--surface-subtle)] border-y border-[color:var(--border-subtle)]">
+                <div role="row" className="flex items-baseline flex-wrap gap-x-2 gap-y-0.5 px-5 py-1.5 bg-[color:var(--surface-subtle)] border-y border-[color:var(--border-subtle)]">
                   <span role="rowheader" aria-colspan={COLUMNS.length} className="text-[11px] font-mono uppercase tracking-[0.14em] text-[color:var(--text-secondary)]">
                     {group.label}
                   </span>
@@ -406,6 +457,14 @@ function StartupItems() {
                       {t('startup.groupAdminNote')}
                     </span>
                   )}
+                  {/* Why these rows have no switch, said once here when every
+                      row of the group has the same reason. Three scheduled
+                      tasks used to carry the same two sentences each. */}
+                  {sharedNote(group) && (
+                    <span className="basis-full text-[11px] text-[color:var(--text-muted)] leading-snug">
+                      {sharedNote(group)}
+                    </span>
+                  )}
                 </div>
                 <div className="divide-y divide-[color:var(--border-subtle)]">
                   {group.items.map((item) => (
@@ -415,6 +474,7 @@ function StartupItems() {
                       iconSrc={icons[item.id]}
                       pending={Boolean(pending[item.id])}
                       error={rowErrors[item.id]}
+                      hideNote={Boolean(sharedNote(group))}
                       onToggle={onToggle}
                     />
                   ))}

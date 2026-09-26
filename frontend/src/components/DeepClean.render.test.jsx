@@ -330,7 +330,7 @@ describe('the clean-in-progress output', () => {
     await user.click(screen.getByRole('button', { name: 'Move to Quarantine' }));
     act(() => { onEventRef('rule', { id: 'thumbs', name: 'Thumbnail cache', freedBytes: 2048, skipped: [] }); });
 
-    expect(await screen.findByText('Delete Thumbnail cache')).toBeTruthy();
+    expect(await screen.findByText('Delete Windows · Thumbnail cache')).toBeTruthy();
     expect(screen.getByText('2 KB')).toBeTruthy();
   });
 

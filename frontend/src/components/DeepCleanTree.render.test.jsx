@@ -428,3 +428,15 @@ describe('collapsing a category', () => {
     expect(headingBox('Brave').getAttribute('aria-checked')).toBe('mixed');
   });
 });
+
+describe('a rule description that is long', () => {
+  it('wraps to two lines instead of being cut to one, and is never a hover reveal', () => {
+    const long = 'Bookmarks, saved logins and history kept by the browser for every profile on this machine, removed together';
+    draw({ categories: [{ category: 'Brave', items: [rule({ id: 'brave-long', name: 'Profile data', description: long })] }] });
+    const description = screen.getByText(long);
+    // The whole string is in the DOM, clamped to two lines by CSS -- not one
+    // line with `truncate`, which is what cut "...Bookmar" mid-word.
+    expect(description.className).toContain('line-clamp-2');
+    expect(description.className).not.toContain('truncate');
+  });
+});

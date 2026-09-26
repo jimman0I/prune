@@ -9,6 +9,7 @@ import { ToastProvider } from '../hooks/useToasts.jsx';
 import { makeTestClient } from '../testSupport/renderScreen.jsx';
 import { measuredScan, runMeasuredPreview } from '../testSupport/deepCleanPreview.js';
 import ToastHost from './ToastHost.jsx';
+import { categoryName } from '../i18n/cleanerText.js';
 
 /** The Deep Clean screen's own copy follows the chosen language -- the
  * property no English-only test can show, since English is also the
@@ -465,7 +466,7 @@ describe('the Deep Clean live logs, in Greek', () => {
     await user.click(cleanButton());
     await user.click(screen.getByRole('button', { name: 'Μετακίνηση σε καραντίνα' }));
 
-    expect(await screen.findByText('Διαγραφή: Temporary files')).toBeTruthy();
+    expect(await screen.findByText(`Διαγραφή: ${categoryName('el', 'Sample OS')} · Temporary files`)).toBeTruthy();
     expect(screen.getByText('1 KB, κλειδωμένα: 1')).toBeTruthy();
     expect(screen.queryByText(/Delete /)).toBeNull();
   });

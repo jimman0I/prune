@@ -28,6 +28,7 @@ import { useIdlePrefetch } from './hooks/useIdlePrefetch.js';
 import { useScreenFade } from './hooks/useScreenFade.js';
 import { useWindowActivity } from './hooks/useWindowActivity.js';
 import { useLanguage } from './i18n/LanguageContext.jsx';
+import { applicationsSummary } from './lib/applicationsSummary.js';
 
 function formatBytes(bytes) {
   if (bytes === null || bytes === undefined) return '—';
@@ -54,6 +55,9 @@ export default function App() {
   // UninstallModal, which runs a registered uninstaller a Store app
   // does not have.
   const [storeAppToRemove, setStoreAppToRemove] = useState(null);
+  // What the Applications list is showing under its search and filter, for the
+  // heading's count. The list owns both; the heading only reads the result.
+  const [appsView, setAppsView] = useState(null);
 
   /* Whether the open uninstall dialog is in the middle of something it
    * cannot take back: a running uninstaller, a scan, a removal. Only one of
@@ -165,7 +169,7 @@ export default function App() {
                   {t('app.installedApplications')}
                 </h1>
                 <p className="text-[13px] text-[color:var(--text-secondary)] mt-2.5">
-                  {t('app.applicationsSummary', programs.length, formatBytes(totalSize))}
+                  {applicationsSummary({ t, view: appsView, count: programs.length, sizeBytes: totalSize, format: formatBytes })}
                 </p>
               </div>
               <button className="btn-ghost" onClick={() => setScreen('quarantine')}>{t('nav.quarantine')}</button>
@@ -178,6 +182,7 @@ export default function App() {
               onUninstall={setSelectedProgram}
               onBatchUninstall={setBatchPrograms}
               onRemoveStoreApp={setStoreAppToRemove}
+              onViewChange={setAppsView}
             />
           </Page>
         </Screen>

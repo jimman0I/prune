@@ -63,6 +63,19 @@ export const DEFAULT_LOG_MESSAGES = {
   }
 };
 
+/** A rule's name as the live logs write it: "Brave · Cache".
+ *
+ * Three rules are all called "Cache", and a log is a flat list with no
+ * heading above a line to say whose it is. `categoryOf(id)` covers events
+ * that do not carry their category (a clean's results do not); a rule whose
+ * category is not known is shown by its own name rather than behind an
+ * empty prefix. */
+export function logRuleName(item, { ruleName, categoryName, categoryOf = () => undefined }) {
+  const name = ruleName(item);
+  const category = item.category ?? categoryOf(item.id);
+  return category ? `${categoryName(category)} · ${name}` : name;
+}
+
 /** One line of the live scan log: what was just looked at, and what was
  * found.
  *

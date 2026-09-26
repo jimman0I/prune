@@ -298,7 +298,9 @@ function CategorySection({ category, items, allItems = items, iconSrc, selected,
               {/* On the name's own line rather than under it. This is what
                   buys the density back: BleachBit's rows are one line
                   because they say nothing but the name, and these stay one
-                  line while still saying what the rule does.
+                  line while still saying what the rule does -- or two, at
+                  most: a description cut to one line ended mid-word
+                  ("...Bookmar") and there was no way to read the rest.
 
                   Held back until THIS rule is actually measured, though --
                   BleachBit's own list is bare (name and a checkbox, nothing
@@ -314,7 +316,7 @@ function CategorySection({ category, items, allItems = items, iconSrc, selected,
                   someone tick something that loses data before the app has
                   said so. */}
               {measured && item.description && (
-                <span className="log-line-in text-[11px] text-[color:var(--text-muted)] truncate min-w-0 flex-1">
+                <span className="log-line-in text-[11px] leading-snug text-[color:var(--text-muted)] line-clamp-2 min-w-0 flex-1">
                   {cleaner.ruleDescription(item)}
                 </span>
               )}

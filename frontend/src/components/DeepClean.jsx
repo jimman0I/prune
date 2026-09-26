@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState, memo } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, memo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { visibleCategories, hiddenRuleCount } from '../lib/visibleRules.js';
 import { fetchCleanerCategoryIcons } from '../lib/api.js';
@@ -7,6 +7,7 @@ import { useDeepCleanScan } from '../hooks/useDeepCleanScan.js';
 import { useDeepCleanExecute } from '../hooks/useDeepCleanExecute.js';
 import { useSettings } from '../hooks/useSystemQueries.js';
 import { lockedFileSummary } from '../lib/lockedFiles.js';
+import { logRuleName } from '../lib/scanLog.js';
 import { useToasts } from '../hooks/useToasts.jsx';
 import { defaultSelection, restoreSelection, selectableIds } from '../lib/defaultSelection.js';
 import { selectionTotal } from '../lib/selectionTotal.js';
@@ -164,6 +165,17 @@ function DeepClean() {
   const warnAbout = warnQueue[0] ?? null;
   const toasts = useToasts();
 
+  // How a rule is named in the two live logs: with its category in front, so
+  // the three rules called "Cache" are told apart. A clean's results carry
+  // no category, so it is looked up from the tree by id; the hooks call this
+  // from inside the stream, hence a ref that is current rather than a value.
+  const categoryByRuleRef = useRef(new Map());
+  const logName = useCallback((item) => logRuleName(item, {
+    ruleName: cleaner.ruleName,
+    categoryName: cleaner.categoryName,
+    categoryOf: (id) => categoryByRuleRef.current.get(id)
+  }), [cleaner.ruleName, cleaner.categoryName]);
+
   // The tree, the scan and its cancellation all live in the hook now --
   // see hooks/useDeepCleanScan.js. What useQuery buys here is the thing
   // the stream needed most: an AbortSignal with a real lifecycle, so Stop
@@ -172,7 +184,7 @@ function DeepClean() {
     tree: categories, scanning, hasScanned, log: logLines,
     scanned, total, error: scanError, currentId: scanningId,
     start, stop: stopPreview, cleanableIds: scannedIds
-  } = useDeepCleanScan(cleaner.ruleName, t('deepClean.log'));
+  } = useDeepCleanScan(logName, t('deepClean.log'));
 
   // The clean itself, streamed the same way -- see hooks/useDeepCleanExecute.js.
   // `run` throws on a real failure (same contract the old one-shot
@@ -181,7 +193,11 @@ function DeepClean() {
   const {
     run: runClean, stop: stopClean, cleaning,
     log: cleanLog, executed: cleanExecuted, total: cleanTotalCount, currentId: cleaningId
-  } = useDeepCleanExecute(cleaner.ruleName, t('deepClean.log'));
+  } = useDeepCleanExecute(logName, t('deepClean.log'));
+
+  categoryByRuleRef.current = new Map(
+    (categories ?? []).flatMap((group) => group.items.map((item) => [item.id, group.category]))
+  );
 
   // BleachBit's "hide irrelevant cleaners". Most of a 74-rule list is for
   // software this machine does not have.
