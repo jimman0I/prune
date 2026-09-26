@@ -3,7 +3,12 @@
 All notable changes to Prune (formerly named unrevo -- rebranded 2026-09-01,
 see v1.0.1 below) are documented here.
 
-## Unreleased
+## v2.9.0
+
+A design pass over the whole app. The Dashboard now answers one question,
+the dangerous choice is never the easy one (a safer right-click menu, Clean
+that waits for a Preview, leftovers left unticked), colour is kept for what
+you click, and everything is reachable and readable from the keyboard.
 
 ### Changed
 
@@ -58,6 +63,9 @@ see v1.0.1 below) are documented here.
   Broken on Applications is now "Left behind" to match the Dashboard.
 - **Startup states the scheduled-task explanation once** at the top of the
   group instead of on every row.
+
+- **New wording is translated in all 39 languages**, using each language's
+  existing terms for Left behind, Junk files, Drive details and the rest.
 
 ### Fixed
 
