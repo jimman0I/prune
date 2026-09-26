@@ -911,8 +911,8 @@ export const CATALOG = {
         ariaLabel: 'Ure om onlangse lêers uit te los'
       },
       restorePointCleanup: {
-        title: "Restore point before removing leftovers",
-        description: "Taken before Prune removes the leftover files and registry keys you selected, including after Force remove. On by default; does nothing at all if System Protection is turned off."
+        title: "Herstelpunt voordat oorblyfsels verwyder word",
+        description: "Word geskep voordat Prune die oorblyflêers en registersleutels wat jy gekies het verwyder, ook ná Dwing verwydering af. Standaard aan; doen glad niks as Stelselbeskerming afgeskakel is nie."
       },
       hideUnavailable: {
         title: "Versteek skoonmakers wat nie van toepassing is nie",
@@ -974,12 +974,12 @@ export const CATALOG = {
       uninstallTab: {
         beforeHeading: 'Voor deïnstallering',
         restorePointUninstall: {
-          title: "Restore point before running an uninstaller",
-          description: "Taken before the program's own uninstaller runs. It needs Prune to be running as administrator and Windows allows one a day, so when it can't be made the uninstall goes ahead and the dialog says so."
+          title: "Herstelpunt voordat 'n deïnstalleerder loop",
+          description: "Word geskep voordat die program se eie deïnstalleerder loop. Dit vereis dat Prune as administrateur loop en Windows laat een per dag toe, so as dit nie geskep kan word nie, gaan die deïnstallering voort en die dialoog sê so."
         },
         registryBackup: {
           title: 'Rugsteun die register voor deïnstallering',
-          description: "Exports HKLM\\SOFTWARE and HKCU\\Software, typically several hundred MB, and keeps the newest 3. If the backup can't be made, the uninstall doesn't run."
+          description: "Voer HKLM\\SOFTWARE en HKCU\\Software uit, gewoonlik etlike honderde MB, en hou die nuutste 3. As die rugsteun nie gemaak kan word nie, loop die deïnstallering nie."
         },
         deleteLockedFiles: {
           title: 'Verwyder gesluite lêers by die volgende herbegin',
@@ -1011,7 +1011,7 @@ export const CATALOG = {
         reportTitle: "Rapporteer 'n fout",
         reportDescription: "Maak 'n vooraf ingevulde kwessie op GitHub oop. Prune self stuur niks, en jy sien alles voordat enigiets gestuur word.",
         reportButton: "Rapporteer 'n fout",
-        description: "A local, offline uninstaller and cleanup tool for Windows — forced removal with leftover-file scanning, safe quarantine-before-delete, disk mapping, and a cleaner that shows a preview before it removes anything."
+        description: "'n Plaaslike, vanlyn deïnstalleer- en opruimingsprogram vir Windows — gedwonge verwydering met oorblyflêer-skandering, veilige karantyn voor uitvee, skyfkartering en 'n skoonmaker wat 'n voorskou wys voordat dit enigiets verwyder."
       },
       automation: {
         title: 'Outomatisering',
@@ -1070,45 +1070,45 @@ export const CATALOG = {
         mediaErrors: 'Mediafoute',
         errorLogEntries: 'Foutlogboekinskrywings'
       },
-      measuring: 'measuring…',
+      measuring: "meet tans…",
       space: {
-        drive: (letter) => `Drive ${letter}:`,
-        heading: 'Where is my space going?',
-        summary: (used, total, free) => `${used} used of ${total} · ${free} free`,
-        loading: 'Reading drive space…',
-        barLabel: (programs, other, free) => `Drive space: installed programs ${programs}, everything else ${other}, free ${free}.`,
-        barLabelMeasuring: (used, free) => `Drive space: ${used} used, ${free} free. Installed programs are still being measured.`,
-        legendPrograms: 'Installed programs',
-        legendOther: 'Everything else',
-        legendUsed: 'Used',
-        legendFree: 'Free',
-        unsized: (count) => `${count} ${count === 1 ? 'program' : 'programs'} without a size`,
-        exceedsUsed: 'Program sizes add up to more than is used on this drive.'
+        drive: (letter) => `Skyf ${letter}:`,
+        heading: "Waarheen gaan my spasie?",
+        summary: (used, total, free) => `${used} van ${total} gebruik · ${free} vry`,
+        loading: "Lees skyfspasie…",
+        barLabel: (programs, other, free) => `Skyfspasie: geïnstalleerde programme ${programs}, alles anders ${other}, vry ${free}.`,
+        barLabelMeasuring: (used, free) => `Skyfspasie: ${used} gebruik, ${free} vry. Geïnstalleerde programme word nog gemeet.`,
+        legendPrograms: "Geïnstalleerde programme",
+        legendOther: "Alles anders",
+        legendUsed: "Gebruik",
+        legendFree: "Vry",
+        unsized: (count) => `${count} program${count === 1 ? '' : 'me'} sonder grootte`,
+        exceedsUsed: "Programgroottes tel op tot meer as wat op hierdie skyf gebruik word."
       },
       largest: {
-        heading: 'Largest programs',
-        openApplications: 'Open Applications',
-        installedCount: (count) => `${count} installed`,
-        measuring: 'Measuring program sizes…',
-        none: 'No program has a measured size yet.',
-        notInList: (size) => `The other ${size} is not in the program list.`,
-        seeDiskMap: 'See it in Disk Map.'
+        heading: "Grootste programme",
+        openApplications: "Maak Toepassings oop",
+        installedCount: (count) => `${count} geïnstalleer`,
+        measuring: "Meet programgroottes…",
+        none: "Nog geen program het 'n gemete grootte nie.",
+        notInList: (size) => `Die ander ${size} is nie in die programlys nie.`,
+        seeDiskMap: "Kyk daarna in Skyfkaart."
       },
       quiet: {
-        scoreOf: (score) => `${score} of 100`,
-        driveDetails: 'Drive details',
-        junkTitle: 'Junk files',
-        junkNotMeasured: 'Not measured',
-        junkMeasure: 'Measure',
-        junkProgress: (scanned, total) => `Measuring… ${scanned} of ${total}`,
-        junkMeasuring: 'Measuring…',
-        junkBasis: (count) => `Across ${count} recommended ${count === 1 ? 'cleaner' : 'cleaners'}`,
-        junkError: (message) => `Couldn't measure junk files: ${message}`,
-        openDeepClean: 'Open Deep Clean',
-        leftTitle: 'Left behind',
-        leftCount: (count) => `${count} ${count === 1 ? 'program' : 'programs'}`,
-        leftNone: 'Nothing left behind.',
-        leftReview: 'Review'
+        scoreOf: (score) => `${score} van 100`,
+        driveDetails: "Skyfbesonderhede",
+        junkTitle: "Rommellêers",
+        junkNotMeasured: "Nie gemeet nie",
+        junkMeasure: "Meet",
+        junkProgress: (scanned, total) => `Meet tans… ${scanned} van ${total}`,
+        junkMeasuring: "Meet tans…",
+        junkBasis: (count) => `Oor ${count} aanbevole ${count === 1 ? 'skoonmaker' : 'skoonmakers'}`,
+        junkError: (message) => `Kon nie rommellêers meet nie: ${message}`,
+        openDeepClean: "Maak Diep Skoonmaak oop",
+        leftTitle: "Oorblyfsels",
+        leftCount: (count) => `${count} program${count === 1 ? '' : 'me'}`,
+        leftNone: "Geen oorblyfsels nie.",
+        leftReview: "Hersien"
       },
       recentActivity: {
         title: "Onlangse aktiwiteit",
@@ -1226,10 +1226,10 @@ export const CATALOG = {
         unused: 'Ongebruik',
         store: 'Winkel',
         extensions: 'Uitbreidings',
-        broken: 'Left behind',
+        broken: "Oorblyfsels",
         storeCount: (n) => `Winkel (${n})`,
         extensionsCount: (n) => `Uitbreidings (${n})`,
-        brokenCount: (n) => `Left behind (${n})`
+        brokenCount: (n) => `Oorblyfsels (${n})`
       },
       columns: {
         application: 'Toepassing',
@@ -1241,7 +1241,7 @@ export const CATALOG = {
         company: 'Maatskappy',
         website: 'Webwerf'
       },
-      badges: { broken: 'Left behind', running: 'Loop', store: 'Winkel', disabled: 'Gedeaktiveer', unused: 'Ongebruik' },
+      badges: { broken: "Oorblyfsels", running: 'Loop', store: 'Winkel', disabled: 'Gedeaktiveer', unused: 'Ongebruik' },
       selectRow: (name) => `Kies ${name}`,
       selectAll: 'Kies alles wat gewys word',
       clearSelection: 'Maak keuse skoon',
@@ -1253,7 +1253,7 @@ export const CATALOG = {
       openFolder: "Maak vouer oop",
       copyUninstallCommand: "Kopieer deïnstalleer-opdrag",
       commandCopied: "Deïnstalleer-opdrag gekopieer.",
-      unusedDefinition: "Flagged as not used recently. Prune keeps no launch history of its own, so check before you remove anything on this list.",
+      unusedDefinition: "Gemerk as onlangs nie gebruik nie. Prune hou nie sy eie aanvanghistorie by nie, so kontroleer voordat jy enigiets op hierdie lys verwyder.",
       copyFailed: "Kon dit nie kopieer nie.",
       empty: {
         plain: 'Niks pas nie.',
@@ -1343,9 +1343,9 @@ export const CATALOG = {
         status: 'Status'
       },
       switchAriaLabel: (name) => `Begin ${name} by aanmelding`,
-      copyPath: 'Copy path',
-      pathCopied: 'Path copied.',
-      copyFailed: "Couldn't copy that.",
+      copyPath: "Kopieer pad",
+      pathCopied: "Pad gekopieer.",
+      copyFailed: "Kon dit nie kopieer nie.",
       status: {
         invalid: 'Ongeldig',
         running: 'Loop',
@@ -1438,7 +1438,7 @@ export const CATALOG = {
       footer: {
         totalLabel: 'Totale spasie om vry te maak:',
         notMeasuredYet: 'nog nie gemeet nie',
-        previewFirst: 'Preview first to see what will be freed.',
+        previewFirst: "Voorskou eers om te sien wat vrygemaak sal word.",
         unmeasuredSuffix: (count) => ` · ${count} nie gemeet nie`,
         selectEverything: 'Kies alles',
         clear: 'Maak skoon',
@@ -1679,7 +1679,7 @@ export const CATALOG = {
     app: {
       installedApplications: "Toepassings",
       applicationsSummary: (count, size) => `${count} geïnstalleerde ${count === 1 ? 'toepassing' : 'toepassings'} · ${size}`,
-      applicationsSummaryFiltered: (shown, total, size) => `${shown} of ${total} shown · ${size}`,
+      applicationsSummaryFiltered: (shown, total, size) => `${shown} van ${total} gewys · ${size}`,
       removeStoreApp: (name) => `Verwyder ${name}`
     }
   },
@@ -1738,8 +1738,8 @@ export const CATALOG = {
         ariaLabel: 'عدد الساعات لترك الملفات الحديثة وشأنها'
       },
       restorePointCleanup: {
-        title: "Restore point before removing leftovers",
-        description: "Taken before Prune removes the leftover files and registry keys you selected, including after Force remove. On by default; does nothing at all if System Protection is turned off."
+        title: "نقطة استعادة قبل إزالة المخلفات",
+        description: "تُنشأ قبل أن يزيل Prune ملفات المخلفات ومفاتيح السجل التي حددتها، بما في ذلك بعد «إزالة قسرية». مفعّلة افتراضيًا، ولا تفعل شيئًا إذا كانت «حماية النظام» متوقفة."
       },
       hideUnavailable: {
         title: 'إخفاء أدوات التنظيف التي لا تنطبق',
@@ -1801,12 +1801,12 @@ export const CATALOG = {
       uninstallTab: {
         beforeHeading: 'قبل إلغاء التثبيت',
         restorePointUninstall: {
-          title: "Restore point before running an uninstaller",
-          description: "Taken before the program's own uninstaller runs. It needs Prune to be running as administrator and Windows allows one a day, so when it can't be made the uninstall goes ahead and the dialog says so."
+          title: "نقطة استعادة قبل تشغيل برنامج إلغاء التثبيت",
+          description: "تُنشأ قبل تشغيل برنامج إلغاء التثبيت الخاص بالبرنامج. تتطلب تشغيل Prune كمسؤول، ويسمح Windows بواحدة فقط في اليوم، لذا إذا تعذّر إنشاؤها يستمر إلغاء التثبيت وتذكر النافذة ذلك."
         },
         registryBackup: {
           title: 'نسخ السجل احتياطيًا قبل إلغاء التثبيت',
-          description: "Exports HKLM\\SOFTWARE and HKCU\\Software, typically several hundred MB, and keeps the newest 3. If the backup can't be made, the uninstall doesn't run."
+          description: "يصدّر HKLM\\SOFTWARE وHKCU\\Software، وعادةً عدة مئات من الميجابايت، ويحتفظ بأحدث 3 نسخ. إذا تعذّر إنشاء النسخة الاحتياطية فلن يبدأ إلغاء التثبيت."
         },
         deleteLockedFiles: {
           title: 'حذف الملفات المقفلة عند إعادة التشغيل التالية',
@@ -1838,7 +1838,7 @@ export const CATALOG = {
         reportTitle: 'الإبلاغ عن خطأ',
         reportDescription: 'يفتح بلاغًا معبأً مسبقًا على GitHub. لا يرسل Prune نفسه أي شيء، وترى كل شيء قبل أن يذهب إلى أي مكان.',
         reportButton: 'الإبلاغ عن خطأ',
-        description: "A local, offline uninstaller and cleanup tool for Windows — forced removal with leftover-file scanning, safe quarantine-before-delete, disk mapping, and a cleaner that shows a preview before it removes anything."
+        description: "أداة محلية تعمل دون اتصال لإلغاء التثبيت والتنظيف على Windows — إزالة قسرية مع فحص المخلفات، وحجر صحي آمن قبل الحذف، وخريطة للقرص، ومنظّف يعرض معاينة قبل أن يزيل أي شيء."
       },
       automation: {
         title: 'الأتمتة',
@@ -1897,45 +1897,45 @@ export const CATALOG = {
         mediaErrors: 'أخطاء الوسائط',
         errorLogEntries: 'إدخالات سجل الأخطاء'
       },
-      measuring: 'measuring…',
+      measuring: "جارٍ القياس…",
       space: {
-        drive: (letter) => `Drive ${letter}:`,
-        heading: 'Where is my space going?',
-        summary: (used, total, free) => `${used} used of ${total} · ${free} free`,
-        loading: 'Reading drive space…',
-        barLabel: (programs, other, free) => `Drive space: installed programs ${programs}, everything else ${other}, free ${free}.`,
-        barLabelMeasuring: (used, free) => `Drive space: ${used} used, ${free} free. Installed programs are still being measured.`,
-        legendPrograms: 'Installed programs',
-        legendOther: 'Everything else',
-        legendUsed: 'Used',
-        legendFree: 'Free',
-        unsized: (count) => `${count} ${count === 1 ? 'program' : 'programs'} without a size`,
-        exceedsUsed: 'Program sizes add up to more than is used on this drive.'
+        drive: (letter) => `القرص ${letter}:\u200E`,
+        heading: "إلى أين تذهب مساحتي؟",
+        summary: (used, total, free) => `${used} مستخدمة من ${total} · ${free} متاحة`,
+        loading: "جارٍ قراءة مساحة القرص…",
+        barLabel: (programs, other, free) => `مساحة القرص: البرامج المثبتة ${programs}، كل شيء آخر ${other}، المتاح ${free}.`,
+        barLabelMeasuring: (used, free) => `مساحة القرص: ${used} مستخدمة، ${free} متاحة. لم ينتهِ قياس البرامج المثبتة بعد.`,
+        legendPrograms: "البرامج المثبتة",
+        legendOther: "كل شيء آخر",
+        legendUsed: "المستخدم",
+        legendFree: "المتاح",
+        unsized: (count) => count === 1 ? 'برنامج واحد بلا حجم' : count === 2 ? 'برنامجان بلا حجم' : (count % 100 >= 3 && count % 100 <= 10) ? `${count} برامج بلا حجم` : count === 0 ? `${count} برنامج بلا حجم` : `${count} برنامجًا بلا حجم`,
+        exceedsUsed: "مجموع أحجام البرامج يتجاوز المساحة المستخدمة على هذا القرص."
       },
       largest: {
-        heading: 'Largest programs',
-        openApplications: 'Open Applications',
-        installedCount: (count) => `${count} installed`,
-        measuring: 'Measuring program sizes…',
-        none: 'No program has a measured size yet.',
-        notInList: (size) => `The other ${size} is not in the program list.`,
-        seeDiskMap: 'See it in Disk Map.'
+        heading: "أكبر البرامج",
+        openApplications: "فتح التطبيقات",
+        installedCount: (count) => `المثبّتة: ${count}`,
+        measuring: "جارٍ قياس أحجام البرامج…",
+        none: "لم يُقَس حجم أي برنامج بعد.",
+        notInList: (size) => `المساحة الأخرى البالغة ${size} ليست ضمن قائمة البرامج.`,
+        seeDiskMap: "اعرضها في خريطة القرص."
       },
       quiet: {
-        scoreOf: (score) => `${score} of 100`,
-        driveDetails: 'Drive details',
-        junkTitle: 'Junk files',
-        junkNotMeasured: 'Not measured',
-        junkMeasure: 'Measure',
-        junkProgress: (scanned, total) => `Measuring… ${scanned} of ${total}`,
-        junkMeasuring: 'Measuring…',
-        junkBasis: (count) => `Across ${count} recommended ${count === 1 ? 'cleaner' : 'cleaners'}`,
-        junkError: (message) => `Couldn't measure junk files: ${message}`,
-        openDeepClean: 'Open Deep Clean',
-        leftTitle: 'Left behind',
-        leftCount: (count) => `${count} ${count === 1 ? 'program' : 'programs'}`,
-        leftNone: 'Nothing left behind.',
-        leftReview: 'Review'
+        scoreOf: (score) => `${score} من 100`,
+        driveDetails: "تفاصيل القرص",
+        junkTitle: "الملفات غير الضرورية",
+        junkNotMeasured: "لم تُقَس بعد",
+        junkMeasure: "قياس",
+        junkProgress: (scanned, total) => `جارٍ القياس… ${scanned} من ${total}`,
+        junkMeasuring: "جارٍ القياس…",
+        junkBasis: (count) => count === 1 ? 'ضمن أداة تنظيف واحدة موصى بها' : count === 2 ? 'ضمن أداتي تنظيف موصى بهما' : (count % 100 >= 3 && count % 100 <= 10) ? `ضمن ${count} أدوات تنظيف موصى بها` : `ضمن ${count} أداة تنظيف موصى بها`,
+        junkError: (message) => `تعذّر قياس الملفات غير الضرورية: ${message}`,
+        openDeepClean: "فتح التنظيف العميق",
+        leftTitle: "المخلفات",
+        leftCount: (count) => count === 1 ? 'برنامج واحد' : count === 2 ? 'برنامجان' : (count % 100 >= 3 && count % 100 <= 10) ? `${count} برامج` : count === 0 ? `${count} برنامج` : `${count} برنامجًا`,
+        leftNone: "لا توجد مخلفات.",
+        leftReview: "مراجعة"
       },
       recentActivity: {
         title: 'النشاط الأخير',
@@ -2053,10 +2053,10 @@ export const CATALOG = {
         unused: 'غير مستخدم',
         store: 'المتجر',
         extensions: 'الإضافات',
-        broken: 'Left behind',
+        broken: "المخلفات",
         storeCount: (n) => `المتجر (${n})`,
         extensionsCount: (n) => `الإضافات (${n})`,
-        brokenCount: (n) => `Left behind (${n})`
+        brokenCount: (n) => `المخلفات (${n})`
       },
       columns: {
         application: 'التطبيق',
@@ -2068,7 +2068,7 @@ export const CATALOG = {
         company: 'الشركة',
         website: 'الموقع الإلكتروني'
       },
-      badges: { broken: 'Left behind', running: 'قيد التشغيل', store: 'متجر', disabled: 'معطّل', unused: 'غير مستخدم' },
+      badges: { broken: "مخلفات", running: 'قيد التشغيل', store: 'متجر', disabled: 'معطّل', unused: 'غير مستخدم' },
       selectRow: (name) => `تحديد ${name}`,
       selectAll: 'تحديد كل ما هو معروض',
       clearSelection: 'إلغاء التحديد',
@@ -2080,7 +2080,7 @@ export const CATALOG = {
       openFolder: "فتح المجلد",
       copyUninstallCommand: "نسخ أمر إلغاء التثبيت",
       commandCopied: "تم نسخ أمر إلغاء التثبيت.",
-      unusedDefinition: "Flagged as not used recently. Prune keeps no launch history of its own, so check before you remove anything on this list.",
+      unusedDefinition: "مُعلَّم على أنه لم يُستخدم مؤخرًا. لا يحتفظ Prune بسجل تشغيل خاص به، لذا تحقق قبل إزالة أي شيء من هذه القائمة.",
       copyFailed: "تعذّر النسخ.",
       empty: {
         plain: 'لا توجد نتائج مطابقة.',
@@ -2170,9 +2170,9 @@ export const CATALOG = {
         status: 'الحالة'
       },
       switchAriaLabel: (name) => `تشغيل ${name} عند تسجيل الدخول`,
-      copyPath: 'Copy path',
-      pathCopied: 'Path copied.',
-      copyFailed: "Couldn't copy that.",
+      copyPath: "نسخ المسار",
+      pathCopied: "تم نسخ المسار.",
+      copyFailed: "تعذّر النسخ.",
       status: {
         invalid: 'غير صالح',
         running: 'قيد التشغيل',
@@ -2265,7 +2265,7 @@ export const CATALOG = {
       footer: {
         totalLabel: 'إجمالي المساحة المراد تحريرها:',
         notMeasuredYet: 'لم يتم قياسها بعد',
-        previewFirst: 'Preview first to see what will be freed.',
+        previewFirst: "اضغط معاينة أولاً لترى ما سيتم تحريره.",
         unmeasuredSuffix: (count) => ` · ${count} غير مقاس`,
         selectEverything: 'تحديد الكل',
         clear: 'مسح',
@@ -2409,7 +2409,7 @@ export const CATALOG = {
       oneAtATime: "واحدًا تلو الآخر، لأن Windows يسمح بتثبيت أو إلغاء تثبيت واحد فقط في كل مرة. ستعرض بعض برامج إلغاء التثبيت نوافذها الخاصة وتطرح عليك أسئلة.",
       storeWarning: (count) => count === 1
         ? 'لا يمكن استعادة تطبيق المتجر في هذه الدفعة من الحجر الصحي: إزالته تأخذ التطبيق وبياناته المحفوظة، واستعادته تعني إعادة تثبيته من المتجر.'
-        : `لا يمكن استعادة تطبيقات المتجر (${count}) الموجودة في هذه الدفعة من الحجر الصحي: إزالة أحدها تأخذ التطبيق وبياناته المحفوظة، واستعادته تعني إعادة تثبيته من المتجر.`,
+        : `لا يمكن استعادة تطبيقات المتجر (${count}) الموجودة في هذه الدفعة من الحجر الصحي: إزالة أي منها تأخذ التطبيق وبياناته المحفوظة، واستعادته تعني إعادة تثبيته من المتجر.`,
       runsBefore: (name) => `يعمل قبل ${name}`,
       reported: (bytes) => `${bytes} تم الإبلاغ عنها`,
       unknownSizeSuffix: (n) => `، ${n} بحجم غير معروف`,
@@ -2506,7 +2506,7 @@ export const CATALOG = {
     app: {
       installedApplications: "التطبيقات",
       applicationsSummary: (count, size) => `التطبيقات المثبتة: ${count} · ${size}`,
-      applicationsSummaryFiltered: (shown, total, size) => `${shown} of ${total} shown · ${size}`,
+      applicationsSummaryFiltered: (shown, total, size) => `المعروض ${shown} من ${total} · ${size}`,
       removeStoreApp: (name) => `إزالة ${name}`
     }
   },
@@ -2565,8 +2565,8 @@ export const CATALOG = {
         ariaLabel: 'Hores per deixar els fitxers recents en pau'
       },
       restorePointCleanup: {
-        title: "Restore point before removing leftovers",
-        description: "Taken before Prune removes the leftover files and registry keys you selected, including after Force remove. On by default; does nothing at all if System Protection is turned off."
+        title: "Punt de restauració abans d'eliminar restes",
+        description: "Es crea abans que el Prune elimini els fitxers i les claus de registre restants que has seleccionat, també després de Força la supressió. Activat per defecte; no fa res si la Protecció del sistema està desactivada."
       },
       hideUnavailable: {
         title: "Amaga els netejadors que no s'apliquen",
@@ -2628,12 +2628,12 @@ export const CATALOG = {
       uninstallTab: {
         beforeHeading: 'Abans de desinstal·lar',
         restorePointUninstall: {
-          title: "Restore point before running an uninstaller",
-          description: "Taken before the program's own uninstaller runs. It needs Prune to be running as administrator and Windows allows one a day, so when it can't be made the uninstall goes ahead and the dialog says so."
+          title: "Punt de restauració abans d'executar un desinstal·lador",
+          description: "Es crea abans que s'executi el desinstal·lador del mateix programa. Requereix que el Prune s'executi com a administrador i Windows en permet un al dia, així que si no es pot crear, la desinstal·lació continua i el diàleg ho indica."
         },
         registryBackup: {
           title: 'Fes còpia de seguretat del registre abans de desinstal·lar',
-          description: "Exports HKLM\\SOFTWARE and HKCU\\Software, typically several hundred MB, and keeps the newest 3. If the backup can't be made, the uninstall doesn't run."
+          description: "Exporta HKLM\\SOFTWARE i HKCU\\Software, normalment diversos centenars de MB, i conserva els 3 més recents. Si no es pot fer la còpia de seguretat, la desinstal·lació no s'executa."
         },
         deleteLockedFiles: {
           title: 'Suprimeix els fitxers bloquejats en el següent reinici',
@@ -2665,7 +2665,7 @@ export const CATALOG = {
         reportTitle: "Informa d'un error",
         reportDescription: "Obre a GitHub una incidència preomplerta. Prune no envia res per si mateix i veus tot el contingut abans que se'n vagi enlloc.",
         reportButton: "Informa d'un error",
-        description: "A local, offline uninstaller and cleanup tool for Windows — forced removal with leftover-file scanning, safe quarantine-before-delete, disk mapping, and a cleaner that shows a preview before it removes anything."
+        description: "Una eina local i fora de línia de desinstal·lació i neteja per a Windows — supressió forçada amb escaneig de fitxers restants, quarantena segura abans d'esborrar, mapa del disc i un netejador que mostra una previsualització abans d'eliminar res."
       },
       automation: {
         title: 'Automatització',
@@ -2724,45 +2724,45 @@ export const CATALOG = {
         mediaErrors: 'Errors del suport',
         errorLogEntries: 'Entrades del registre d\'errors'
       },
-      measuring: 'measuring…',
+      measuring: "mesurant…",
       space: {
-        drive: (letter) => `Drive ${letter}:`,
-        heading: 'Where is my space going?',
-        summary: (used, total, free) => `${used} used of ${total} · ${free} free`,
-        loading: 'Reading drive space…',
-        barLabel: (programs, other, free) => `Drive space: installed programs ${programs}, everything else ${other}, free ${free}.`,
-        barLabelMeasuring: (used, free) => `Drive space: ${used} used, ${free} free. Installed programs are still being measured.`,
-        legendPrograms: 'Installed programs',
-        legendOther: 'Everything else',
-        legendUsed: 'Used',
-        legendFree: 'Free',
-        unsized: (count) => `${count} ${count === 1 ? 'program' : 'programs'} without a size`,
-        exceedsUsed: 'Program sizes add up to more than is used on this drive.'
+        drive: (letter) => `Disc ${letter}:`,
+        heading: "On va a parar l'espai?",
+        summary: (used, total, free) => `${used} utilitzats de ${total} · ${free} lliures`,
+        loading: "Llegint l'espai del disc…",
+        barLabel: (programs, other, free) => `Espai del disc: programes instal·lats ${programs}, tota la resta ${other}, lliure ${free}.`,
+        barLabelMeasuring: (used, free) => `Espai del disc: ${used} utilitzats, ${free} lliures. Els programes instal·lats encara s'estan mesurant.`,
+        legendPrograms: "Programes instal·lats",
+        legendOther: "Tota la resta",
+        legendUsed: "Utilitzat",
+        legendFree: "Lliure",
+        unsized: (count) => `${count} ${count === 1 ? 'programa' : 'programes'} sense mida`,
+        exceedsUsed: "Les mides dels programes sumen més del que s'utilitza en aquest disc."
       },
       largest: {
-        heading: 'Largest programs',
-        openApplications: 'Open Applications',
-        installedCount: (count) => `${count} installed`,
-        measuring: 'Measuring program sizes…',
-        none: 'No program has a measured size yet.',
-        notInList: (size) => `The other ${size} is not in the program list.`,
-        seeDiskMap: 'See it in Disk Map.'
+        heading: "Programes més grans",
+        openApplications: "Obre Aplicacions",
+        installedCount: (count) => `${count} ${count === 1 ? 'instal·lat' : 'instal·lats'}`,
+        measuring: "Mesurant les mides dels programes…",
+        none: "Cap programa té encara una mida mesurada.",
+        notInList: (size) => `Els altres ${size} no són a la llista de programes.`,
+        seeDiskMap: "Consulta-ho al Mapa del disc."
       },
       quiet: {
-        scoreOf: (score) => `${score} of 100`,
-        driveDetails: 'Drive details',
-        junkTitle: 'Junk files',
-        junkNotMeasured: 'Not measured',
-        junkMeasure: 'Measure',
-        junkProgress: (scanned, total) => `Measuring… ${scanned} of ${total}`,
-        junkMeasuring: 'Measuring…',
-        junkBasis: (count) => `Across ${count} recommended ${count === 1 ? 'cleaner' : 'cleaners'}`,
-        junkError: (message) => `Couldn't measure junk files: ${message}`,
-        openDeepClean: 'Open Deep Clean',
-        leftTitle: 'Left behind',
-        leftCount: (count) => `${count} ${count === 1 ? 'program' : 'programs'}`,
-        leftNone: 'Nothing left behind.',
-        leftReview: 'Review'
+        scoreOf: (score) => `${score} de 100`,
+        driveDetails: "Detalls del disc",
+        junkTitle: "Fitxers brossa",
+        junkNotMeasured: "No mesurat",
+        junkMeasure: "Mesura",
+        junkProgress: (scanned, total) => `Mesurant… ${scanned} de ${total}`,
+        junkMeasuring: "Mesurant…",
+        junkBasis: (count) => `En ${count} ${count === 1 ? 'netejador recomanat' : 'netejadors recomanats'}`,
+        junkError: (message) => `No s'han pogut mesurar els fitxers brossa: ${message}`,
+        openDeepClean: "Obre Neteja profunda",
+        leftTitle: "Restes",
+        leftCount: (count) => `${count} ${count === 1 ? 'programa' : 'programes'}`,
+        leftNone: "No hi ha restes.",
+        leftReview: "Revisa"
       },
       recentActivity: {
         title: 'Activitat recent',
@@ -2880,10 +2880,10 @@ export const CATALOG = {
         unused: 'Sense ús',
         store: 'Botiga',
         extensions: 'Extensions',
-        broken: 'Left behind',
+        broken: "Restes",
         storeCount: (n) => `Botiga (${n})`,
         extensionsCount: (n) => `Extensions (${n})`,
-        brokenCount: (n) => `Left behind (${n})`
+        brokenCount: (n) => `Restes (${n})`
       },
       columns: {
         application: 'Aplicació',
@@ -2895,7 +2895,7 @@ export const CATALOG = {
         company: 'Empresa',
         website: 'Lloc web'
       },
-      badges: { broken: 'Left behind', running: 'En execució', store: 'Botiga', disabled: 'Desactivada', unused: 'Sense ús' },
+      badges: { broken: "Restes", running: 'En execució', store: 'Botiga', disabled: 'Desactivada', unused: 'Sense ús' },
       selectRow: (name) => `Selecciona ${name}`,
       selectAll: "Selecciona tot el que es mostra",
       clearSelection: 'Neteja la selecció',
@@ -2907,7 +2907,7 @@ export const CATALOG = {
       openFolder: "Obre la carpeta",
       copyUninstallCommand: "Copia l'ordre de desinstal·lació",
       commandCopied: "S'ha copiat l'ordre de desinstal·lació.",
-      unusedDefinition: "Flagged as not used recently. Prune keeps no launch history of its own, so check before you remove anything on this list.",
+      unusedDefinition: "Marcat com a no utilitzat recentment. El Prune no manté cap historial d'execucions propi, així que comprova-ho abans d'eliminar res d'aquesta llista.",
       copyFailed: "No s'ha pogut copiar.",
       empty: {
         plain: 'Res coincideix.',
@@ -2997,9 +2997,9 @@ export const CATALOG = {
         status: 'Estat'
       },
       switchAriaLabel: (name) => `Executa ${name} en iniciar sessió`,
-      copyPath: 'Copy path',
-      pathCopied: 'Path copied.',
-      copyFailed: "Couldn't copy that.",
+      copyPath: "Copia el camí",
+      pathCopied: "Camí copiat.",
+      copyFailed: "No s'ha pogut copiar.",
       status: {
         invalid: 'No vàlid',
         running: 'En execució',
@@ -3092,7 +3092,7 @@ export const CATALOG = {
       footer: {
         totalLabel: 'Espai total a alliberar:',
         notMeasuredYet: 'encara no mesurat',
-        previewFirst: 'Preview first to see what will be freed.',
+        previewFirst: "Previsualitza primer per veure què s'alliberarà.",
         unmeasuredSuffix: (count) => ` · ${count} sense mesurar`,
         selectEverything: 'Selecciona-ho tot',
         clear: 'Neteja',
@@ -3333,7 +3333,7 @@ export const CATALOG = {
     app: {
       installedApplications: "Aplicacions",
       applicationsSummary: (count, size) => `${count} ${count === 1 ? 'aplicació instal·lada' : 'aplicacions instal·lades'} · ${size}`,
-      applicationsSummaryFiltered: (shown, total, size) => `${shown} of ${total} shown · ${size}`,
+      applicationsSummaryFiltered: (shown, total, size) => `${shown} de ${total} mostrats · ${size}`,
       removeStoreApp: (name) => `Elimina ${name}`
     }
   },
@@ -3392,8 +3392,8 @@ export const CATALOG = {
         ariaLabel: 'Počet hodin, po které nechat nedávné soubory na pokoji'
       },
       restorePointCleanup: {
-        title: "Restore point before removing leftovers",
-        description: "Taken before Prune removes the leftover files and registry keys you selected, including after Force remove. On by default; does nothing at all if System Protection is turned off."
+        title: "Bod obnovení před odstraněním zbytků",
+        description: "Vytvoří se před tím, než Prune odstraní vámi vybrané zbylé soubory a klíče registru, i po vynuceném odstranění. Ve výchozím stavu zapnuto; pokud je vypnutá Ochrana systému, nedělá nic."
       },
       hideUnavailable: {
         title: "Skrýt nepoužitelné čističe",
@@ -3455,12 +3455,12 @@ export const CATALOG = {
       uninstallTab: {
         beforeHeading: 'Před odinstalací',
         restorePointUninstall: {
-          title: "Restore point before running an uninstaller",
-          description: "Taken before the program's own uninstaller runs. It needs Prune to be running as administrator and Windows allows one a day, so when it can't be made the uninstall goes ahead and the dialog says so."
+          title: "Bod obnovení před spuštěním odinstalátoru",
+          description: "Vytvoří se před spuštěním vlastního odinstalátoru programu. Vyžaduje, aby Prune běžel jako správce, a Windows povoluje jeden za den, takže když ho nelze vytvořit, odinstalace pokračuje a dialog to oznámí."
         },
         registryBackup: {
           title: 'Zálohovat registr před odinstalací',
-          description: "Exports HKLM\\SOFTWARE and HKCU\\Software, typically several hundred MB, and keeps the newest 3. If the backup can't be made, the uninstall doesn't run."
+          description: "Exportuje HKLM\\SOFTWARE a HKCU\\Software, obvykle několik set MB, a uchovává 3 nejnovější. Pokud zálohu nelze vytvořit, odinstalace se nespustí."
         },
         deleteLockedFiles: {
           title: 'Odstranit uzamčené soubory při příštím restartu',
@@ -3492,7 +3492,7 @@ export const CATALOG = {
         reportTitle: 'Nahlásit chybu',
         reportDescription: "Otevře na GitHubu předvyplněné hlášení. Prune sám nic neodesílá a všechno uvidíte dřív, než to kam odejde.",
         reportButton: 'Nahlásit chybu',
-        description: "A local, offline uninstaller and cleanup tool for Windows — forced removal with leftover-file scanning, safe quarantine-before-delete, disk mapping, and a cleaner that shows a preview before it removes anything."
+        description: "Místní offline nástroj pro odinstalaci a čištění pro Windows — vynucené odstranění se skenováním zbytků, bezpečná karanténa před smazáním, mapa disku a čištění, které před odstraněním čehokoli ukáže náhled."
       },
       automation: {
         title: 'Automatizace',
@@ -3551,45 +3551,45 @@ export const CATALOG = {
         mediaErrors: 'Chyby média',
         errorLogEntries: 'Záznamy chybového protokolu'
       },
-      measuring: 'measuring…',
+      measuring: "měří se…",
       space: {
-        drive: (letter) => `Drive ${letter}:`,
-        heading: 'Where is my space going?',
-        summary: (used, total, free) => `${used} used of ${total} · ${free} free`,
-        loading: 'Reading drive space…',
-        barLabel: (programs, other, free) => `Drive space: installed programs ${programs}, everything else ${other}, free ${free}.`,
-        barLabelMeasuring: (used, free) => `Drive space: ${used} used, ${free} free. Installed programs are still being measured.`,
-        legendPrograms: 'Installed programs',
-        legendOther: 'Everything else',
-        legendUsed: 'Used',
-        legendFree: 'Free',
-        unsized: (count) => `${count} ${count === 1 ? 'program' : 'programs'} without a size`,
-        exceedsUsed: 'Program sizes add up to more than is used on this drive.'
+        drive: (letter) => `Disk ${letter}:`,
+        heading: "Kam mizí moje místo?",
+        summary: (used, total, free) => `Využito ${used} z ${total} · volno ${free}`,
+        loading: "Čtení místa na disku…",
+        barLabel: (programs, other, free) => `Místo na disku: nainstalované programy ${programs}, vše ostatní ${other}, volné ${free}.`,
+        barLabelMeasuring: (used, free) => `Místo na disku: využito ${used}, volné ${free}. Nainstalované programy se stále měří.`,
+        legendPrograms: "Nainstalované programy",
+        legendOther: "Vše ostatní",
+        legendUsed: "Využito",
+        legendFree: "Volné",
+        unsized: (count) => `Programy bez velikosti: ${count}`,
+        exceedsUsed: "Velikosti programů dohromady převyšují využité místo na tomto disku."
       },
       largest: {
-        heading: 'Largest programs',
-        openApplications: 'Open Applications',
-        installedCount: (count) => `${count} installed`,
-        measuring: 'Measuring program sizes…',
-        none: 'No program has a measured size yet.',
-        notInList: (size) => `The other ${size} is not in the program list.`,
-        seeDiskMap: 'See it in Disk Map.'
+        heading: "Největší programy",
+        openApplications: "Otevřít Aplikace",
+        installedCount: (count) => `Nainstalováno: ${count}`,
+        measuring: "Měří se velikosti programů…",
+        none: "Zatím nemá žádný program změřenou velikost.",
+        notInList: (size) => `Zbylých ${size} není v seznamu programů.`,
+        seeDiskMap: "Zobrazit v Mapě disku."
       },
       quiet: {
-        scoreOf: (score) => `${score} of 100`,
-        driveDetails: 'Drive details',
-        junkTitle: 'Junk files',
-        junkNotMeasured: 'Not measured',
-        junkMeasure: 'Measure',
-        junkProgress: (scanned, total) => `Measuring… ${scanned} of ${total}`,
-        junkMeasuring: 'Measuring…',
-        junkBasis: (count) => `Across ${count} recommended ${count === 1 ? 'cleaner' : 'cleaners'}`,
-        junkError: (message) => `Couldn't measure junk files: ${message}`,
-        openDeepClean: 'Open Deep Clean',
-        leftTitle: 'Left behind',
-        leftCount: (count) => `${count} ${count === 1 ? 'program' : 'programs'}`,
-        leftNone: 'Nothing left behind.',
-        leftReview: 'Review'
+        scoreOf: (score) => `${score} ze 100`,
+        driveDetails: "Podrobnosti o disku",
+        junkTitle: "Nepotřebné soubory",
+        junkNotMeasured: "Neměřeno",
+        junkMeasure: "Změřit",
+        junkProgress: (scanned, total) => `Měření… ${scanned} z ${total}`,
+        junkMeasuring: "Měření…",
+        junkBasis: (count) => `Z doporučených čističů: ${count}`,
+        junkError: (message) => `Nepodařilo se změřit nepotřebné soubory: ${message}`,
+        openDeepClean: "Otevřít Důkladné čištění",
+        leftTitle: "Zbytky",
+        leftCount: (count) => `Programy: ${count}`,
+        leftNone: "Žádné zbytky.",
+        leftReview: "Zkontrolovat"
       },
       recentActivity: {
         title: 'Nedávná aktivita',
@@ -3707,10 +3707,10 @@ export const CATALOG = {
         unused: 'Nepoužívané',
         store: 'Obchod',
         extensions: 'Rozšíření',
-        broken: 'Left behind',
+        broken: "Zbytky",
         storeCount: (n) => `Obchod (${n})`,
         extensionsCount: (n) => `Rozšíření (${n})`,
-        brokenCount: (n) => `Left behind (${n})`
+        brokenCount: (n) => `Zbytky (${n})`
       },
       columns: {
         application: 'Aplikace',
@@ -3722,7 +3722,7 @@ export const CATALOG = {
         company: 'Společnost',
         website: 'Web'
       },
-      badges: { broken: 'Left behind', running: 'Spuštěno', store: 'Obchod', disabled: 'Vypnuto', unused: 'Nepoužívané' },
+      badges: { broken: "Zbytky", running: 'Spuštěno', store: 'Obchod', disabled: 'Vypnuto', unused: 'Nepoužívané' },
       selectRow: (name) => `Vybrat ${name}`,
       selectAll: 'Vybrat vše zobrazené',
       clearSelection: 'Zrušit výběr',
@@ -3734,7 +3734,7 @@ export const CATALOG = {
       openFolder: "Otevřít složku",
       copyUninstallCommand: "Kopírovat příkaz odinstalace",
       commandCopied: "Příkaz odinstalace zkopírován.",
-      unusedDefinition: "Flagged as not used recently. Prune keeps no launch history of its own, so check before you remove anything on this list.",
+      unusedDefinition: "Označeno jako v poslední době nepoužívané. Prune si nevede vlastní historii spouštění, takže před odstraněním čehokoli z tohoto seznamu si to ověřte.",
       copyFailed: "Kopírování se nezdařilo.",
       empty: {
         plain: 'Nic neodpovídá.',
@@ -3824,9 +3824,9 @@ export const CATALOG = {
         status: 'Stav'
       },
       switchAriaLabel: (name) => `Spouštět ${name} při přihlášení`,
-      copyPath: 'Copy path',
-      pathCopied: 'Path copied.',
-      copyFailed: "Couldn't copy that.",
+      copyPath: "Kopírovat cestu",
+      pathCopied: "Cesta zkopírována.",
+      copyFailed: "Kopírování se nezdařilo.",
       status: {
         invalid: 'Neplatné',
         running: 'Spuštěno',
@@ -3919,7 +3919,7 @@ export const CATALOG = {
       footer: {
         totalLabel: 'Celkový prostor k uvolnění:',
         notMeasuredYet: 'zatím nezměřeno',
-        previewFirst: 'Preview first to see what will be freed.',
+        previewFirst: "Nejdřív klikněte na Náhled, abyste viděli, co se uvolní.",
         unmeasuredSuffix: (count) => ` · nezměřeno: ${count}`,
         selectEverything: 'Vybrat vše',
         clear: 'Vymazat',
@@ -4158,7 +4158,7 @@ export const CATALOG = {
     app: {
       installedApplications: "Aplikace",
       applicationsSummary: (count, size) => `Nainstalované aplikace: ${count} · ${size}`,
-      applicationsSummaryFiltered: (shown, total, size) => `${shown} of ${total} shown · ${size}`,
+      applicationsSummaryFiltered: (shown, total, size) => `Zobrazeno ${shown} z ${total} · ${size}`,
       removeStoreApp: (name) => `Odebrat ${name}`
     }
   },
@@ -4217,8 +4217,8 @@ export const CATALOG = {
         ariaLabel: 'Oriau i adael ffeiliau diweddar yn llonydd'
       },
       restorePointCleanup: {
-        title: "Restore point before removing leftovers",
-        description: "Taken before Prune removes the leftover files and registry keys you selected, including after Force remove. On by default; does nothing at all if System Protection is turned off."
+        title: "Pwynt adfer cyn tynnu gweddillion",
+        description: "Yn cael ei greu cyn i Prune dynnu'r ffeiliau gweddill a'r allweddi cofrestrfa a ddewisoch, gan gynnwys ar ôl Gorfodi tynnu. Ymlaen yn ddiofyn; ni wna ddim o gwbl os yw Diogelu System wedi'i ddiffodd."
       },
       hideUnavailable: {
         title: "Cuddio glanhawyr nad ydynt yn berthnasol",
@@ -4280,12 +4280,12 @@ export const CATALOG = {
       uninstallTab: {
         beforeHeading: 'Cyn dadosod',
         restorePointUninstall: {
-          title: "Restore point before running an uninstaller",
-          description: "Taken before the program's own uninstaller runs. It needs Prune to be running as administrator and Windows allows one a day, so when it can't be made the uninstall goes ahead and the dialog says so."
+          title: "Pwynt adfer cyn rhedeg dadosodwr",
+          description: "Yn cael ei greu cyn i ddadosodwr y rhaglen ei hun redeg. Mae angen i Prune redeg fel gweinyddwr ac mae Windows yn caniatáu un y dydd, felly os na ellir ei greu, mae'r dadosod yn mynd yn ei flaen ac mae'r ddeialog yn dweud hynny."
         },
         registryBackup: {
           title: 'Cadw copi wrth gefn o\'r gofrestrfa cyn dadosod',
-          description: "Exports HKLM\\SOFTWARE and HKCU\\Software, typically several hundred MB, and keeps the newest 3. If the backup can't be made, the uninstall doesn't run."
+          description: "Yn allforio HKLM\\SOFTWARE a HKCU\\Software, sawl cant o MB fel arfer, ac yn cadw'r 3 diweddaraf. Os na ellir gwneud y copi wrth gefn, nid yw'r dadosod yn rhedeg."
         },
         deleteLockedFiles: {
           title: "Dileu ffeiliau wedi'u cloi adeg yr ailgychwyn nesaf",
@@ -4317,7 +4317,7 @@ export const CATALOG = {
         reportTitle: 'Rhoi gwybod am nam',
         reportDescription: "Yn agor mater wedi'i lenwi ymlaen llaw ar GitHub. Nid yw Prune ei hun yn anfon dim, ac rydych chi'n gweld popeth cyn i unrhyw beth gael ei anfon.",
         reportButton: 'Rhoi gwybod am nam',
-        description: "A local, offline uninstaller and cleanup tool for Windows — forced removal with leftover-file scanning, safe quarantine-before-delete, disk mapping, and a cleaner that shows a preview before it removes anything."
+        description: "Offeryn dadosod a glanhau lleol, all-lein ar gyfer Windows — tynnu gorfodol gyda sganio am ffeiliau gweddill, cwarantin diogel cyn dileu, mapio disg, a glanhawr sy'n dangos rhagolwg cyn tynnu unrhyw beth."
       },
       automation: {
         title: 'Awtomeiddio',
@@ -4376,45 +4376,45 @@ export const CATALOG = {
         mediaErrors: 'Gwallau cyfrwng',
         errorLogEntries: 'Cofnodion log gwallau'
       },
-      measuring: 'measuring…',
+      measuring: "yn mesur…",
       space: {
-        drive: (letter) => `Drive ${letter}:`,
-        heading: 'Where is my space going?',
-        summary: (used, total, free) => `${used} used of ${total} · ${free} free`,
-        loading: 'Reading drive space…',
-        barLabel: (programs, other, free) => `Drive space: installed programs ${programs}, everything else ${other}, free ${free}.`,
-        barLabelMeasuring: (used, free) => `Drive space: ${used} used, ${free} free. Installed programs are still being measured.`,
-        legendPrograms: 'Installed programs',
-        legendOther: 'Everything else',
-        legendUsed: 'Used',
-        legendFree: 'Free',
-        unsized: (count) => `${count} ${count === 1 ? 'program' : 'programs'} without a size`,
-        exceedsUsed: 'Program sizes add up to more than is used on this drive.'
+        drive: (letter) => `Disg ${letter}:`,
+        heading: "I ble mae fy lle yn mynd?",
+        summary: (used, total, free) => `Defnyddiwyd ${used} o ${total} · ${free} yn rhydd`,
+        loading: "Darllen lle ar y ddisg…",
+        barLabel: (programs, other, free) => `Lle ar y ddisg: rhaglenni wedi'u gosod ${programs}, popeth arall ${other}, rhydd ${free}.`,
+        barLabelMeasuring: (used, free) => `Lle ar y ddisg: defnyddiwyd ${used}, ${free} yn rhydd. Mae'r rhaglenni wedi'u gosod yn dal i gael eu mesur.`,
+        legendPrograms: "Rhaglenni wedi'u gosod",
+        legendOther: "Popeth arall",
+        legendUsed: "Wedi'i ddefnyddio",
+        legendFree: "Rhydd",
+        unsized: (count) => `${count} rhaglen heb faint`,
+        exceedsUsed: "Mae meintiau'r rhaglenni'n adio i fwy na'r hyn a ddefnyddir ar y ddisg hon."
       },
       largest: {
-        heading: 'Largest programs',
-        openApplications: 'Open Applications',
-        installedCount: (count) => `${count} installed`,
-        measuring: 'Measuring program sizes…',
-        none: 'No program has a measured size yet.',
-        notInList: (size) => `The other ${size} is not in the program list.`,
-        seeDiskMap: 'See it in Disk Map.'
+        heading: "Y rhaglenni mwyaf",
+        openApplications: "Agor Rhaglenni",
+        installedCount: (count) => `${count} wedi'u gosod`,
+        measuring: "Mesur meintiau rhaglenni…",
+        none: "Nid oes gan unrhyw raglen faint wedi'i fesur eto.",
+        notInList: (size) => `Nid yw'r ${size} arall yn y rhestr rhaglenni.`,
+        seeDiskMap: "Gweler ef ym Map Disg."
       },
       quiet: {
-        scoreOf: (score) => `${score} of 100`,
-        driveDetails: 'Drive details',
-        junkTitle: 'Junk files',
-        junkNotMeasured: 'Not measured',
-        junkMeasure: 'Measure',
-        junkProgress: (scanned, total) => `Measuring… ${scanned} of ${total}`,
-        junkMeasuring: 'Measuring…',
-        junkBasis: (count) => `Across ${count} recommended ${count === 1 ? 'cleaner' : 'cleaners'}`,
-        junkError: (message) => `Couldn't measure junk files: ${message}`,
-        openDeepClean: 'Open Deep Clean',
-        leftTitle: 'Left behind',
-        leftCount: (count) => `${count} ${count === 1 ? 'program' : 'programs'}`,
-        leftNone: 'Nothing left behind.',
-        leftReview: 'Review'
+        scoreOf: (score) => `${score} o 100`,
+        driveDetails: "Manylion y ddisg",
+        junkTitle: "Ffeiliau sbwriel",
+        junkNotMeasured: "Heb ei fesur",
+        junkMeasure: "Mesur",
+        junkProgress: (scanned, total) => `Yn mesur… ${scanned} o ${total}`,
+        junkMeasuring: "Yn mesur…",
+        junkBasis: (count) => `Ar draws ${count} glanhawr a argymhellir`,
+        junkError: (message) => `Methu mesur ffeiliau sbwriel: ${message}`,
+        openDeepClean: "Agor Glanhau Dwfn",
+        leftTitle: "Gweddillion",
+        leftCount: (count) => `${count} rhaglen`,
+        leftNone: "Dim gweddillion.",
+        leftReview: "Adolygu"
       },
       recentActivity: {
         title: "Gweithgaredd diweddar",
@@ -4532,10 +4532,10 @@ export const CATALOG = {
         unused: "Heb eu defnyddio",
         store: 'Siop',
         extensions: 'Estyniadau',
-        broken: 'Left behind',
+        broken: "Gweddillion",
         storeCount: (n) => `Siop (${n})`,
         extensionsCount: (n) => `Estyniadau (${n})`,
-        brokenCount: (n) => `Left behind (${n})`
+        brokenCount: (n) => `Gweddillion (${n})`
       },
       columns: {
         application: 'Rhaglen',
@@ -4547,7 +4547,7 @@ export const CATALOG = {
         company: 'Cwmni',
         website: 'Gwefan'
       },
-      badges: { broken: 'Left behind', running: 'Yn rhedeg', store: 'Siop', disabled: "Wedi'i analluogi", unused: "Heb ei ddefnyddio" },
+      badges: { broken: "Gweddillion", running: 'Yn rhedeg', store: 'Siop', disabled: "Wedi'i analluogi", unused: "Heb ei ddefnyddio" },
       selectRow: (name) => `Dewis ${name}`,
       selectAll: "Dewis pob un a ddangosir",
       clearSelection: "Clirio'r dewis",
@@ -4559,7 +4559,7 @@ export const CATALOG = {
       openFolder: "Agor y ffolder",
       copyUninstallCommand: "Copïo'r gorchymyn dadosod",
       commandCopied: "Copïwyd y gorchymyn dadosod.",
-      unusedDefinition: "Flagged as not used recently. Prune keeps no launch history of its own, so check before you remove anything on this list.",
+      unusedDefinition: "Wedi'i nodi fel heb ei ddefnyddio'n ddiweddar. Nid yw Prune yn cadw hanes lansio ei hun, felly gwiriwch cyn tynnu unrhyw beth ar y rhestr hon.",
       copyFailed: "Methu copïo hynny.",
       empty: {
         plain: 'Dim byd yn cyfateb.',
@@ -4649,9 +4649,9 @@ export const CATALOG = {
         status: 'Statws'
       },
       switchAriaLabel: (name) => `Rhedeg ${name} wrth fewngofnodi`,
-      copyPath: 'Copy path',
-      pathCopied: 'Path copied.',
-      copyFailed: "Couldn't copy that.",
+      copyPath: "Copïo'r llwybr",
+      pathCopied: "Llwybr wedi'i gopïo.",
+      copyFailed: "Methu copïo hynny.",
       status: {
         invalid: 'Annilys',
         running: 'Yn rhedeg',
@@ -4744,7 +4744,7 @@ export const CATALOG = {
       footer: {
         totalLabel: "Cyfanswm lle i'w ryddhau:",
         notMeasuredYet: 'heb ei fesur eto',
-        previewFirst: 'Preview first to see what will be freed.',
+        previewFirst: "Cymerwch Ragolwg yn gyntaf i weld beth a ryddheir.",
         unmeasuredSuffix: (count) => ` · ${count} heb eu mesur`,
         selectEverything: 'Dewis popeth',
         clear: 'Clirio',
@@ -4985,7 +4985,7 @@ export const CATALOG = {
     app: {
       installedApplications: "Rhaglenni",
       applicationsSummary: (count, size) => `${count} rhaglen wedi'u gosod · ${size}`,
-      applicationsSummaryFiltered: (shown, total, size) => `${shown} of ${total} shown · ${size}`,
+      applicationsSummaryFiltered: (shown, total, size) => `${shown} o ${total} yn cael eu dangos · ${size}`,
       removeStoreApp: (name) => `Tynnu ${name}`
     }
   },
@@ -5044,8 +5044,8 @@ export const CATALOG = {
         ariaLabel: "Antal timer, nylige filer lades i fred"
       },
       restorePointCleanup: {
-        title: "Restore point before removing leftovers",
-        description: "Taken before Prune removes the leftover files and registry keys you selected, including after Force remove. On by default; does nothing at all if System Protection is turned off."
+        title: "Gendannelsespunkt før fjernelse af rester",
+        description: "Oprettes, før Prune fjerner de restfiler og registreringsnøgler, du har valgt, også efter Gennemtving fjernelse. Slået til som standard; gør slet intet, hvis Systembeskyttelse er slået fra."
       },
       hideUnavailable: {
         title: 'Skjul rensere, der ikke gælder',
@@ -5107,12 +5107,12 @@ export const CATALOG = {
       uninstallTab: {
         beforeHeading: 'Før afinstallation',
         restorePointUninstall: {
-          title: "Restore point before running an uninstaller",
-          description: "Taken before the program's own uninstaller runs. It needs Prune to be running as administrator and Windows allows one a day, so when it can't be made the uninstall goes ahead and the dialog says so."
+          title: "Gendannelsespunkt før kørsel af et afinstallationsprogram",
+          description: "Oprettes, før programmets eget afinstallationsprogram kører. Det kræver, at Prune kører som administrator, og Windows tillader ét om dagen, så hvis det ikke kan oprettes, fortsætter afinstallationen, og dialogen fortæller det."
         },
         registryBackup: {
           title: 'Sikkerhedskopier registreringsdatabasen før afinstallation',
-          description: "Exports HKLM\\SOFTWARE and HKCU\\Software, typically several hundred MB, and keeps the newest 3. If the backup can't be made, the uninstall doesn't run."
+          description: "Eksporterer HKLM\\SOFTWARE og HKCU\\Software, typisk flere hundrede MB, og beholder de nyeste 3. Kan sikkerhedskopien ikke oprettes, kører afinstallationen ikke."
         },
         deleteLockedFiles: {
           title: 'Slet låste filer ved næste genstart',
@@ -5144,7 +5144,7 @@ export const CATALOG = {
         reportTitle: 'Rapportér en fejl',
         reportDescription: "Åbner et forudfyldt issue på GitHub. Prune sender ikke selv noget, og du ser alt, før noget bliver sendt.",
         reportButton: 'Rapportér en fejl',
-        description: "A local, offline uninstaller and cleanup tool for Windows — forced removal with leftover-file scanning, safe quarantine-before-delete, disk mapping, and a cleaner that shows a preview before it removes anything."
+        description: "Et lokalt, offline afinstallations- og oprydningsværktøj til Windows — tvungen fjernelse med scanning efter restfiler, sikker karantæne før sletning, diskkortlægning og en renser, der viser en forhåndsvisning, før den fjerner noget."
       },
       automation: {
         title: 'Automatisering',
@@ -5203,45 +5203,45 @@ export const CATALOG = {
         mediaErrors: 'Mediefejl',
         errorLogEntries: 'Fejlloggens poster'
       },
-      measuring: 'measuring…',
+      measuring: "måler…",
       space: {
-        drive: (letter) => `Drive ${letter}:`,
-        heading: 'Where is my space going?',
-        summary: (used, total, free) => `${used} used of ${total} · ${free} free`,
-        loading: 'Reading drive space…',
-        barLabel: (programs, other, free) => `Drive space: installed programs ${programs}, everything else ${other}, free ${free}.`,
-        barLabelMeasuring: (used, free) => `Drive space: ${used} used, ${free} free. Installed programs are still being measured.`,
-        legendPrograms: 'Installed programs',
-        legendOther: 'Everything else',
-        legendUsed: 'Used',
-        legendFree: 'Free',
-        unsized: (count) => `${count} ${count === 1 ? 'program' : 'programs'} without a size`,
-        exceedsUsed: 'Program sizes add up to more than is used on this drive.'
+        drive: (letter) => `Disk ${letter}:`,
+        heading: "Hvor bliver pladsen af?",
+        summary: (used, total, free) => `${used} brugt af ${total} · ${free} ledig`,
+        loading: "Læser diskplads…",
+        barLabel: (programs, other, free) => `Diskplads: installerede programmer ${programs}, alt andet ${other}, ledig ${free}.`,
+        barLabelMeasuring: (used, free) => `Diskplads: ${used} brugt, ${free} ledig. Installerede programmer måles stadig.`,
+        legendPrograms: "Installerede programmer",
+        legendOther: "Alt andet",
+        legendUsed: "Brugt",
+        legendFree: "Ledig",
+        unsized: (count) => `${count} program${count === 1 ? '' : 'mer'} uden størrelse`,
+        exceedsUsed: "Programmernes samlede størrelse er større end det, der er brugt på denne disk."
       },
       largest: {
-        heading: 'Largest programs',
-        openApplications: 'Open Applications',
-        installedCount: (count) => `${count} installed`,
-        measuring: 'Measuring program sizes…',
-        none: 'No program has a measured size yet.',
-        notInList: (size) => `The other ${size} is not in the program list.`,
-        seeDiskMap: 'See it in Disk Map.'
+        heading: "Største programmer",
+        openApplications: "Åbn Programmer",
+        installedCount: (count) => `Installeret: ${count}`,
+        measuring: "Måler programstørrelser…",
+        none: "Ingen programmer har en målt størrelse endnu.",
+        notInList: (size) => `De øvrige ${size} står ikke på programlisten.`,
+        seeDiskMap: "Se det i Diskkort."
       },
       quiet: {
-        scoreOf: (score) => `${score} of 100`,
-        driveDetails: 'Drive details',
-        junkTitle: 'Junk files',
-        junkNotMeasured: 'Not measured',
-        junkMeasure: 'Measure',
-        junkProgress: (scanned, total) => `Measuring… ${scanned} of ${total}`,
-        junkMeasuring: 'Measuring…',
-        junkBasis: (count) => `Across ${count} recommended ${count === 1 ? 'cleaner' : 'cleaners'}`,
-        junkError: (message) => `Couldn't measure junk files: ${message}`,
-        openDeepClean: 'Open Deep Clean',
-        leftTitle: 'Left behind',
-        leftCount: (count) => `${count} ${count === 1 ? 'program' : 'programs'}`,
-        leftNone: 'Nothing left behind.',
-        leftReview: 'Review'
+        scoreOf: (score) => `${score} af 100`,
+        driveDetails: "Diskoplysninger",
+        junkTitle: "Uønskede filer",
+        junkNotMeasured: "Ikke målt",
+        junkMeasure: "Mål",
+        junkProgress: (scanned, total) => `Måler… ${scanned} af ${total}`,
+        junkMeasuring: "Måler…",
+        junkBasis: (count) => `På tværs af ${count} anbefalede ${count === 1 ? 'renser' : 'rensere'}`,
+        junkError: (message) => `Kunne ikke måle uønskede filer: ${message}`,
+        openDeepClean: "Åbn Dybderensning",
+        leftTitle: "Rester",
+        leftCount: (count) => `${count} program${count === 1 ? '' : 'mer'}`,
+        leftNone: "Ingen rester.",
+        leftReview: "Gennemgå"
       },
       recentActivity: {
         title: "Seneste aktivitet",
@@ -5359,10 +5359,10 @@ export const CATALOG = {
         unused: 'Ubrugt',
         store: 'Store',
         extensions: 'Udvidelser',
-        broken: 'Left behind',
+        broken: "Rester",
         storeCount: (n) => `Store (${n})`,
         extensionsCount: (n) => `Udvidelser (${n})`,
-        brokenCount: (n) => `Left behind (${n})`
+        brokenCount: (n) => `Rester (${n})`
       },
       columns: {
         application: 'Program',
@@ -5374,7 +5374,7 @@ export const CATALOG = {
         company: 'Firma',
         website: 'Websted'
       },
-      badges: { broken: 'Left behind', running: 'Kører', store: 'Store', disabled: 'Deaktiveret', unused: 'Ubrugt' },
+      badges: { broken: "Rester", running: 'Kører', store: 'Store', disabled: 'Deaktiveret', unused: 'Ubrugt' },
       selectRow: (name) => `Vælg ${name}`,
       selectAll: 'Vælg alle viste',
       clearSelection: 'Ryd markering',
@@ -5386,7 +5386,7 @@ export const CATALOG = {
       openFolder: "Åbn mappe",
       copyUninstallCommand: "Kopiér afinstallationskommando",
       commandCopied: "Afinstallationskommandoen er kopieret.",
-      unusedDefinition: "Flagged as not used recently. Prune keeps no launch history of its own, so check before you remove anything on this list.",
+      unusedDefinition: "Markeret som ikke brugt for nylig. Prune fører ikke sin egen startshistorik, så tjek, før du fjerner noget på denne liste.",
       copyFailed: "Kunne ikke kopiere det.",
       empty: {
         plain: 'Intet matcher.',
@@ -5476,9 +5476,9 @@ export const CATALOG = {
         status: 'Status'
       },
       switchAriaLabel: (name) => `Start ${name} ved login`,
-      copyPath: 'Copy path',
-      pathCopied: 'Path copied.',
-      copyFailed: "Couldn't copy that.",
+      copyPath: "Kopiér sti",
+      pathCopied: "Sti kopieret.",
+      copyFailed: "Kunne ikke kopiere det.",
       status: {
         invalid: 'Ugyldig',
         running: 'Kører',
@@ -5571,7 +5571,7 @@ export const CATALOG = {
       footer: {
         totalLabel: 'Samlet plads at frigøre:',
         notMeasuredYet: 'ikke målt endnu',
-        previewFirst: 'Preview first to see what will be freed.',
+        previewFirst: "Se først en forhåndsvisning for at se, hvad der frigøres.",
         unmeasuredSuffix: (count) => ` · ${count} ikke målt`,
         selectEverything: 'Vælg alt',
         clear: 'Ryd',
@@ -5812,7 +5812,7 @@ export const CATALOG = {
     app: {
       installedApplications: "Programmer",
       applicationsSummary: (count, size) => `${count} ${count === 1 ? 'installeret program' : 'installerede programmer'} · ${size}`,
-      applicationsSummaryFiltered: (shown, total, size) => `${shown} of ${total} shown · ${size}`,
+      applicationsSummaryFiltered: (shown, total, size) => `${shown} af ${total} vist · ${size}`,
       removeStoreApp: (name) => `Fjern ${name}`
     }
   },
@@ -5871,8 +5871,8 @@ export const CATALOG = {
         ariaLabel: "Stunden, in denen kürzlich geänderte Dateien in Ruhe gelassen werden"
       },
       restorePointCleanup: {
-        title: "Restore point before removing leftovers",
-        description: "Taken before Prune removes the leftover files and registry keys you selected, including after Force remove. On by default; does nothing at all if System Protection is turned off."
+        title: "Wiederherstellungspunkt vor dem Entfernen von Rückständen",
+        description: "Wird erstellt, bevor Prune die ausgewählten Rückstandsdateien und Registrierungsschlüssel entfernt, auch nach „Entfernung erzwingen“. Standardmäßig aktiviert; tut gar nichts, wenn der Computerschutz ausgeschaltet ist."
       },
       hideUnavailable: {
         title: 'Nicht zutreffende Reiniger ausblenden',
@@ -5934,12 +5934,12 @@ export const CATALOG = {
       uninstallTab: {
         beforeHeading: 'Vor der Deinstallation',
         restorePointUninstall: {
-          title: "Restore point before running an uninstaller",
-          description: "Taken before the program's own uninstaller runs. It needs Prune to be running as administrator and Windows allows one a day, so when it can't be made the uninstall goes ahead and the dialog says so."
+          title: "Wiederherstellungspunkt vor dem Ausführen eines Deinstallationsprogramms",
+          description: "Wird erstellt, bevor das eigene Deinstallationsprogramm des Programms läuft. Prune muss dafür als Administrator laufen, und Windows erlaubt nur einen pro Tag; kann er nicht erstellt werden, wird trotzdem deinstalliert, und der Dialog weist darauf hin."
         },
         registryBackup: {
           title: 'Registrierung vor der Deinstallation sichern',
-          description: "Exports HKLM\\SOFTWARE and HKCU\\Software, typically several hundred MB, and keeps the newest 3. If the backup can't be made, the uninstall doesn't run."
+          description: "Exportiert HKLM\\SOFTWARE und HKCU\\Software, meist mehrere hundert MB, und behält die neuesten 3. Kann die Sicherung nicht erstellt werden, wird die Deinstallation nicht ausgeführt."
         },
         deleteLockedFiles: {
           title: 'Gesperrte Dateien beim nächsten Neustart löschen',
@@ -5971,7 +5971,7 @@ export const CATALOG = {
         reportTitle: 'Fehler melden',
         reportDescription: "Öffnet ein vorausgefülltes Issue auf GitHub. Prune selbst sendet nichts, und du siehst alles, bevor irgendetwas abgeschickt wird.",
         reportButton: 'Fehler melden',
-        description: "A local, offline uninstaller and cleanup tool for Windows — forced removal with leftover-file scanning, safe quarantine-before-delete, disk mapping, and a cleaner that shows a preview before it removes anything."
+        description: "Ein lokales Offline-Werkzeug zum Deinstallieren und Bereinigen für Windows — erzwungenes Entfernen mit Scan nach Rückstandsdateien, sichere Quarantäne vor dem Löschen, Festplattenkartierung und ein Reiniger, der eine Vorschau zeigt, bevor er etwas entfernt."
       },
       automation: {
         title: 'Automatisierung',
@@ -6030,45 +6030,45 @@ export const CATALOG = {
         mediaErrors: 'Medienfehler',
         errorLogEntries: 'Fehlerprotokolleinträge'
       },
-      measuring: 'measuring…',
+      measuring: "wird gemessen…",
       space: {
-        drive: (letter) => `Drive ${letter}:`,
-        heading: 'Where is my space going?',
-        summary: (used, total, free) => `${used} used of ${total} · ${free} free`,
-        loading: 'Reading drive space…',
-        barLabel: (programs, other, free) => `Drive space: installed programs ${programs}, everything else ${other}, free ${free}.`,
-        barLabelMeasuring: (used, free) => `Drive space: ${used} used, ${free} free. Installed programs are still being measured.`,
-        legendPrograms: 'Installed programs',
-        legendOther: 'Everything else',
-        legendUsed: 'Used',
-        legendFree: 'Free',
-        unsized: (count) => `${count} ${count === 1 ? 'program' : 'programs'} without a size`,
-        exceedsUsed: 'Program sizes add up to more than is used on this drive.'
+        drive: (letter) => `Laufwerk ${letter}:`,
+        heading: "Wohin verschwindet mein Speicherplatz?",
+        summary: (used, total, free) => `${used} belegt von ${total} · ${free} frei`,
+        loading: "Laufwerksspeicher wird gelesen…",
+        barLabel: (programs, other, free) => `Laufwerksspeicher: installierte Programme ${programs}, alles andere ${other}, frei ${free}.`,
+        barLabelMeasuring: (used, free) => `Laufwerksspeicher: ${used} belegt, ${free} frei. Die installierten Programme werden noch gemessen.`,
+        legendPrograms: "Installierte Programme",
+        legendOther: "Alles andere",
+        legendUsed: "Belegt",
+        legendFree: "Frei",
+        unsized: (count) => `${count} ${count === 1 ? 'Programm' : 'Programme'} ohne Größe`,
+        exceedsUsed: "Die Programmgrößen ergeben zusammen mehr, als auf diesem Laufwerk belegt ist."
       },
       largest: {
-        heading: 'Largest programs',
-        openApplications: 'Open Applications',
-        installedCount: (count) => `${count} installed`,
-        measuring: 'Measuring program sizes…',
-        none: 'No program has a measured size yet.',
-        notInList: (size) => `The other ${size} is not in the program list.`,
-        seeDiskMap: 'See it in Disk Map.'
+        heading: "Größte Programme",
+        openApplications: "Anwendungen öffnen",
+        installedCount: (count) => `${count} installiert`,
+        measuring: "Programmgrößen werden gemessen…",
+        none: "Noch kein Programm hat eine gemessene Größe.",
+        notInList: (size) => `Die übrigen ${size} stehen nicht in der Programmliste.`,
+        seeDiskMap: "Sieh es dir in der Festplattenkarte an."
       },
       quiet: {
-        scoreOf: (score) => `${score} of 100`,
-        driveDetails: 'Drive details',
-        junkTitle: 'Junk files',
-        junkNotMeasured: 'Not measured',
-        junkMeasure: 'Measure',
-        junkProgress: (scanned, total) => `Measuring… ${scanned} of ${total}`,
-        junkMeasuring: 'Measuring…',
-        junkBasis: (count) => `Across ${count} recommended ${count === 1 ? 'cleaner' : 'cleaners'}`,
-        junkError: (message) => `Couldn't measure junk files: ${message}`,
-        openDeepClean: 'Open Deep Clean',
-        leftTitle: 'Left behind',
-        leftCount: (count) => `${count} ${count === 1 ? 'program' : 'programs'}`,
-        leftNone: 'Nothing left behind.',
-        leftReview: 'Review'
+        scoreOf: (score) => `${score} von 100`,
+        driveDetails: "Laufwerksdetails",
+        junkTitle: "Unnötige Dateien",
+        junkNotMeasured: "Nicht gemessen",
+        junkMeasure: "Messen",
+        junkProgress: (scanned, total) => `Wird gemessen… ${scanned} von ${total}`,
+        junkMeasuring: "Wird gemessen…",
+        junkBasis: (count) => `Über ${count} ${count === 1 ? 'empfohlenen Reiniger' : 'empfohlene Reiniger'}`,
+        junkError: (message) => `Unnötige Dateien konnten nicht gemessen werden: ${message}`,
+        openDeepClean: "Gründliche Bereinigung öffnen",
+        leftTitle: "Rückstände",
+        leftCount: (count) => `${count} ${count === 1 ? 'Programm' : 'Programme'}`,
+        leftNone: "Keine Rückstände.",
+        leftReview: "Prüfen"
       },
       recentActivity: {
         title: 'Letzte Aktivität',
@@ -6186,10 +6186,10 @@ export const CATALOG = {
         unused: 'Ungenutzt',
         store: 'Store',
         extensions: 'Erweiterungen',
-        broken: 'Left behind',
+        broken: "Rückstände",
         storeCount: (n) => `Store (${n})`,
         extensionsCount: (n) => `Erweiterungen (${n})`,
-        brokenCount: (n) => `Left behind (${n})`
+        brokenCount: (n) => `Rückstände (${n})`
       },
       columns: {
         application: 'Anwendung',
@@ -6201,7 +6201,7 @@ export const CATALOG = {
         company: 'Unternehmen',
         website: 'Website'
       },
-      badges: { broken: 'Left behind', running: 'Läuft', store: 'Store', disabled: 'Deaktiviert', unused: 'Ungenutzt' },
+      badges: { broken: "Rückstände", running: 'Läuft', store: 'Store', disabled: 'Deaktiviert', unused: 'Ungenutzt' },
       selectRow: (name) => `${name} auswählen`,
       selectAll: 'Alle angezeigten auswählen',
       clearSelection: 'Auswahl aufheben',
@@ -6213,7 +6213,7 @@ export const CATALOG = {
       openFolder: "Ordner öffnen",
       copyUninstallCommand: "Deinstallationsbefehl kopieren",
       commandCopied: "Deinstallationsbefehl kopiert.",
-      unusedDefinition: "Flagged as not used recently. Prune keeps no launch history of its own, so check before you remove anything on this list.",
+      unusedDefinition: "Als zuletzt nicht verwendet markiert. Prune führt keinen eigenen Startverlauf, prüfe also, bevor du etwas aus dieser Liste entfernst.",
       copyFailed: "Kopieren fehlgeschlagen.",
       empty: {
         plain: 'Nichts entspricht der Suche.',
@@ -6303,9 +6303,9 @@ export const CATALOG = {
         status: 'Status'
       },
       switchAriaLabel: (name) => `${name} bei der Anmeldung ausführen`,
-      copyPath: 'Copy path',
-      pathCopied: 'Path copied.',
-      copyFailed: "Couldn't copy that.",
+      copyPath: "Pfad kopieren",
+      pathCopied: "Pfad kopiert.",
+      copyFailed: "Das konnte nicht kopiert werden.",
       status: {
         invalid: 'Ungültig',
         running: 'Läuft',
@@ -6398,7 +6398,7 @@ export const CATALOG = {
       footer: {
         totalLabel: 'Gesamt freizugebender Speicherplatz:',
         notMeasuredYet: 'noch nicht gemessen',
-        previewFirst: 'Preview first to see what will be freed.',
+        previewFirst: "Sieh dir zuerst die Vorschau an, was freigegeben wird.",
         unmeasuredSuffix: (count) => ` · ${count} nicht gemessen`,
         selectEverything: 'Alles auswählen',
         clear: "Abwählen",
@@ -6639,7 +6639,7 @@ export const CATALOG = {
     app: {
       installedApplications: "Anwendungen",
       applicationsSummary: (count, size) => `${count} installierte ${count === 1 ? 'Anwendung' : 'Anwendungen'} · ${size}`,
-      applicationsSummaryFiltered: (shown, total, size) => `${shown} of ${total} shown · ${size}`,
+      applicationsSummaryFiltered: (shown, total, size) => `${shown} von ${total} angezeigt · ${size}`,
       removeStoreApp: (name) => `${name} entfernen`
     }
   },
@@ -6698,8 +6698,8 @@ export const CATALOG = {
         ariaLabel: 'Ώρες για να αφήσετε ήσυχα τα πρόσφατα αρχεία'
       },
       restorePointCleanup: {
-        title: "Restore point before removing leftovers",
-        description: "Taken before Prune removes the leftover files and registry keys you selected, including after Force remove. On by default; does nothing at all if System Protection is turned off."
+        title: "Σημείο επαναφοράς πριν από την αφαίρεση καταλοίπων",
+        description: "Δημιουργείται πριν το Prune αφαιρέσει τα αρχεία και τα κλειδιά μητρώου καταλοίπων που επιλέξατε, ακόμα και μετά από Εξαναγκασμένη κατάργηση. Είναι ενεργό από προεπιλογή· δεν κάνει τίποτα αν η Προστασία συστήματος είναι απενεργοποιημένη."
       },
       hideUnavailable: {
         title: 'Απόκρυψη καθαριστών που δεν ισχύουν',
@@ -6761,12 +6761,12 @@ export const CATALOG = {
       uninstallTab: {
         beforeHeading: 'Πριν την απεγκατάσταση',
         restorePointUninstall: {
-          title: "Restore point before running an uninstaller",
-          description: "Taken before the program's own uninstaller runs. It needs Prune to be running as administrator and Windows allows one a day, so when it can't be made the uninstall goes ahead and the dialog says so."
+          title: "Σημείο επαναφοράς πριν από την εκτέλεση προγράμματος απεγκατάστασης",
+          description: "Δημιουργείται πριν εκτελεστεί το δικό του πρόγραμμα απεγκατάστασης. Απαιτεί το Prune να εκτελείται ως διαχειριστής και τα Windows επιτρέπουν ένα την ημέρα, οπότε όταν δεν μπορεί να δημιουργηθεί η απεγκατάσταση συνεχίζεται και το παράθυρο το αναφέρει."
         },
         registryBackup: {
           title: 'Δημιουργία αντιγράφου ασφαλείας μητρώου πριν την απεγκατάσταση',
-          description: "Exports HKLM\\SOFTWARE and HKCU\\Software, typically several hundred MB, and keeps the newest 3. If the backup can't be made, the uninstall doesn't run."
+          description: "Εξάγει τα HKLM\\SOFTWARE και HKCU\\Software, συνήθως αρκετές εκατοντάδες MB, και κρατά τα 3 πιο πρόσφατα. Αν δεν μπορεί να δημιουργηθεί το αντίγραφο ασφαλείας, η απεγκατάσταση δεν εκτελείται."
         },
         deleteLockedFiles: {
           title: 'Διαγραφή κλειδωμένων αρχείων στην επόμενη επανεκκίνηση',
@@ -6798,7 +6798,7 @@ export const CATALOG = {
         reportTitle: 'Αναφορά σφάλματος',
         reportDescription: "Ανοίγει ένα προσυμπληρωμένο ζήτημα στο GitHub. Το ίδιο το Prune δεν στέλνει τίποτα και βλέπετε τα πάντα προτού σταλεί οτιδήποτε.",
         reportButton: 'Αναφορά σφάλματος',
-        description: "A local, offline uninstaller and cleanup tool for Windows — forced removal with leftover-file scanning, safe quarantine-before-delete, disk mapping, and a cleaner that shows a preview before it removes anything."
+        description: "Ένα τοπικό εργαλείο απεγκατάστασης και καθαρισμού για τα Windows, χωρίς σύνδεση — εξαναγκασμένη κατάργηση με σάρωση καταλοίπων, ασφαλής καραντίνα πριν από τη διαγραφή, χαρτογράφηση δίσκου και καθαριστής που δείχνει προεπισκόπηση πριν αφαιρέσει οτιδήποτε."
       },
       automation: {
         title: 'Αυτοματισμός',
@@ -6857,45 +6857,45 @@ export const CATALOG = {
         mediaErrors: 'Σφάλματα μέσου',
         errorLogEntries: 'Καταχωρίσεις αρχείου σφαλμάτων'
       },
-      measuring: 'measuring…',
+      measuring: "γίνεται μέτρηση…",
       space: {
-        drive: (letter) => `Drive ${letter}:`,
-        heading: 'Where is my space going?',
-        summary: (used, total, free) => `${used} used of ${total} · ${free} free`,
-        loading: 'Reading drive space…',
-        barLabel: (programs, other, free) => `Drive space: installed programs ${programs}, everything else ${other}, free ${free}.`,
-        barLabelMeasuring: (used, free) => `Drive space: ${used} used, ${free} free. Installed programs are still being measured.`,
-        legendPrograms: 'Installed programs',
-        legendOther: 'Everything else',
-        legendUsed: 'Used',
-        legendFree: 'Free',
-        unsized: (count) => `${count} ${count === 1 ? 'program' : 'programs'} without a size`,
-        exceedsUsed: 'Program sizes add up to more than is used on this drive.'
+        drive: (letter) => `Δίσκος ${letter}:`,
+        heading: "Πού πηγαίνει ο χώρος μου;",
+        summary: (used, total, free) => `${used} σε χρήση από ${total} · ${free} ελεύθερα`,
+        loading: "Ανάγνωση χώρου δίσκου…",
+        barLabel: (programs, other, free) => `Χώρος δίσκου: εγκατεστημένα προγράμματα ${programs}, όλα τα υπόλοιπα ${other}, ελεύθερος χώρος ${free}.`,
+        barLabelMeasuring: (used, free) => `Χώρος δίσκου: ${used} σε χρήση, ${free} ελεύθερα. Τα εγκατεστημένα προγράμματα εξακολουθούν να μετριούνται.`,
+        legendPrograms: "Εγκατεστημένα προγράμματα",
+        legendOther: "Όλα τα υπόλοιπα",
+        legendUsed: "Σε χρήση",
+        legendFree: "Ελεύθερος",
+        unsized: (count) => `${count} ${count === 1 ? 'πρόγραμμα' : 'προγράμματα'} χωρίς μέγεθος`,
+        exceedsUsed: "Τα μεγέθη των προγραμμάτων αθροίζουν περισσότερα από όσα χρησιμοποιούνται σε αυτόν τον δίσκο."
       },
       largest: {
-        heading: 'Largest programs',
-        openApplications: 'Open Applications',
-        installedCount: (count) => `${count} installed`,
-        measuring: 'Measuring program sizes…',
-        none: 'No program has a measured size yet.',
-        notInList: (size) => `The other ${size} is not in the program list.`,
-        seeDiskMap: 'See it in Disk Map.'
+        heading: "Μεγαλύτερα προγράμματα",
+        openApplications: "Άνοιγμα των Εφαρμογών",
+        installedCount: (count) => `${count} ${count === 1 ? 'εγκατεστημένο' : 'εγκατεστημένα'}`,
+        measuring: "Μέτρηση μεγεθών προγραμμάτων…",
+        none: "Κανένα πρόγραμμα δεν έχει ακόμα μετρημένο μέγεθος.",
+        notInList: (size) => `Τα υπόλοιπα ${size} δεν περιλαμβάνονται στη λίστα προγραμμάτων.`,
+        seeDiskMap: "Δείτε το στον Χάρτη δίσκου."
       },
       quiet: {
-        scoreOf: (score) => `${score} of 100`,
-        driveDetails: 'Drive details',
-        junkTitle: 'Junk files',
-        junkNotMeasured: 'Not measured',
-        junkMeasure: 'Measure',
-        junkProgress: (scanned, total) => `Measuring… ${scanned} of ${total}`,
-        junkMeasuring: 'Measuring…',
-        junkBasis: (count) => `Across ${count} recommended ${count === 1 ? 'cleaner' : 'cleaners'}`,
-        junkError: (message) => `Couldn't measure junk files: ${message}`,
-        openDeepClean: 'Open Deep Clean',
-        leftTitle: 'Left behind',
-        leftCount: (count) => `${count} ${count === 1 ? 'program' : 'programs'}`,
-        leftNone: 'Nothing left behind.',
-        leftReview: 'Review'
+        scoreOf: (score) => `${score} στα 100`,
+        driveDetails: "Λεπτομέρειες δίσκου",
+        junkTitle: "Άχρηστα αρχεία",
+        junkNotMeasured: "Δεν έχει μετρηθεί",
+        junkMeasure: "Μέτρηση",
+        junkProgress: (scanned, total) => `Μέτρηση… ${scanned} από ${total}`,
+        junkMeasuring: "Μέτρηση…",
+        junkBasis: (count) => `Σε ${count} ${count === 1 ? 'προτεινόμενο καθαριστή' : 'προτεινόμενους καθαριστές'}`,
+        junkError: (message) => `Αδυναμία μέτρησης των άχρηστων αρχείων: ${message}`,
+        openDeepClean: "Άνοιγμα του Βαθύ καθαρισμού",
+        leftTitle: "Κατάλοιπα",
+        leftCount: (count) => `${count} ${count === 1 ? 'πρόγραμμα' : 'προγράμματα'}`,
+        leftNone: "Κανένα κατάλοιπο.",
+        leftReview: "Έλεγχος"
       },
       recentActivity: {
         title: "Πρόσφατη δραστηριότητα",
@@ -7013,10 +7013,10 @@ export const CATALOG = {
         unused: 'Αχρησιμοποίητα',
         store: 'Κατάστημα',
         extensions: 'Επεκτάσεις',
-        broken: 'Left behind',
+        broken: "Κατάλοιπα",
         storeCount: (n) => `Κατάστημα (${n})`,
         extensionsCount: (n) => `Επεκτάσεις (${n})`,
-        brokenCount: (n) => `Left behind (${n})`
+        brokenCount: (n) => `Κατάλοιπα (${n})`
       },
       columns: {
         application: 'Εφαρμογή',
@@ -7028,7 +7028,7 @@ export const CATALOG = {
         company: 'Εταιρεία',
         website: 'Ιστότοπος'
       },
-      badges: { broken: 'Left behind', running: 'Σε λειτουργία', store: 'Κατάστημα', disabled: 'Απενεργοποιημένο', unused: 'Αχρησιμοποίητο' },
+      badges: { broken: "Κατάλοιπα", running: 'Σε λειτουργία', store: 'Κατάστημα', disabled: 'Απενεργοποιημένο', unused: 'Αχρησιμοποίητο' },
       selectRow: (name) => `Επιλογή ${name}`,
       selectAll: 'Επιλογή όλων των εμφανιζόμενων',
       clearSelection: 'Απαλοιφή επιλογής',
@@ -7040,7 +7040,7 @@ export const CATALOG = {
       openFolder: "Άνοιγμα φακέλου",
       copyUninstallCommand: "Αντιγραφή εντολής απεγκατάστασης",
       commandCopied: "Η εντολή απεγκατάστασης αντιγράφηκε.",
-      unusedDefinition: "Flagged as not used recently. Prune keeps no launch history of its own, so check before you remove anything on this list.",
+      unusedDefinition: "Επισημάνθηκε ως μη χρησιμοποιημένο πρόσφατα. Το Prune δεν κρατά δικό του ιστορικό εκκινήσεων, γι᾽ αυτό ελέγξτε πριν αφαιρέσετε οτιδήποτε από αυτή τη λίστα.",
       copyFailed: "Δεν ήταν δυνατή η αντιγραφή.",
       empty: {
         plain: 'Τίποτα δεν ταιριάζει.',
@@ -7130,9 +7130,9 @@ export const CATALOG = {
         status: 'Κατάσταση'
       },
       switchAriaLabel: (name) => `Εκτέλεση του ${name} κατά τη σύνδεση`,
-      copyPath: 'Copy path',
-      pathCopied: 'Path copied.',
-      copyFailed: "Couldn't copy that.",
+      copyPath: "Αντιγραφή διαδρομής",
+      pathCopied: "Η διαδρομή αντιγράφηκε.",
+      copyFailed: "Αδυναμία αντιγραφής.",
       status: {
         invalid: 'Μη έγκυρο',
         running: 'Σε λειτουργία',
@@ -7225,7 +7225,7 @@ export const CATALOG = {
       footer: {
         totalLabel: 'Συνολικός χώρος προς απελευθέρωση:',
         notMeasuredYet: 'δεν έχει μετρηθεί ακόμα',
-        previewFirst: 'Preview first to see what will be freed.',
+        previewFirst: "Κάντε πρώτα προεπισκόπηση για να δείτε τι θα ελευθερωθεί.",
         unmeasuredSuffix: (count) => ` · ${count} χωρίς μέτρηση`,
         selectEverything: 'Επιλογή όλων',
         clear: 'Απαλοιφή',
@@ -7466,7 +7466,7 @@ export const CATALOG = {
     app: {
       installedApplications: "Εφαρμογές",
       applicationsSummary: (count, size) => `${count} ${count === 1 ? 'εγκατεστημένη εφαρμογή' : 'εγκατεστημένες εφαρμογές'} · ${size}`,
-      applicationsSummaryFiltered: (shown, total, size) => `${shown} of ${total} shown · ${size}`,
+      applicationsSummaryFiltered: (shown, total, size) => `${shown} από ${total} εμφανίζονται · ${size}`,
       removeStoreApp: (name) => `Κατάργηση ${name}`
     }
   },
@@ -7525,8 +7525,8 @@ export const CATALOG = {
         ariaLabel: 'Horas para dejar en paz los archivos recientes'
       },
       restorePointCleanup: {
-        title: "Restore point before removing leftovers",
-        description: "Taken before Prune removes the leftover files and registry keys you selected, including after Force remove. On by default; does nothing at all if System Protection is turned off."
+        title: "Punto de restauración antes de eliminar restos",
+        description: "Se crea antes de que Prune elimine los archivos y las claves del registro sobrantes que seleccionaste, también después de Forzar eliminación. Activado por defecto; no hace nada si la Protección del sistema está desactivada."
       },
       hideUnavailable: {
         title: 'Ocultar limpiadores que no aplican',
@@ -7588,12 +7588,12 @@ export const CATALOG = {
       uninstallTab: {
         beforeHeading: 'Antes de desinstalar',
         restorePointUninstall: {
-          title: "Restore point before running an uninstaller",
-          description: "Taken before the program's own uninstaller runs. It needs Prune to be running as administrator and Windows allows one a day, so when it can't be made the uninstall goes ahead and the dialog says so."
+          title: "Punto de restauración antes de ejecutar un desinstalador",
+          description: "Se crea antes de que se ejecute el desinstalador propio del programa. Requiere que Prune se ejecute como administrador y Windows permite uno al día, así que cuando no se puede crear, la desinstalación continúa y el cuadro de diálogo lo indica."
         },
         registryBackup: {
           title: 'Respaldar el registro antes de desinstalar',
-          description: "Exports HKLM\\SOFTWARE and HKCU\\Software, typically several hundred MB, and keeps the newest 3. If the backup can't be made, the uninstall doesn't run."
+          description: "Exporta HKLM\\SOFTWARE y HKCU\\Software, normalmente varios cientos de MB, y conserva los 3 más recientes. Si no se puede crear la copia de seguridad, la desinstalación no se ejecuta."
         },
         deleteLockedFiles: {
           title: 'Eliminar archivos bloqueados en el próximo reinicio',
@@ -7625,7 +7625,7 @@ export const CATALOG = {
         reportTitle: 'Informar de un error',
         reportDescription: "Abre una incidencia prellenada en GitHub. Prune no envía nada por sí mismo y ves todo antes de que se envíe a ninguna parte.",
         reportButton: 'Informar de un error',
-        description: "A local, offline uninstaller and cleanup tool for Windows — forced removal with leftover-file scanning, safe quarantine-before-delete, disk mapping, and a cleaner that shows a preview before it removes anything."
+        description: "Una herramienta local y sin conexión para desinstalar y limpiar en Windows: eliminación forzada con escaneo de restos, cuarentena segura antes de borrar, mapeo del disco y un limpiador que muestra una vista previa antes de eliminar nada."
       },
       automation: {
         title: 'Automatización',
@@ -7684,45 +7684,45 @@ export const CATALOG = {
         mediaErrors: 'Errores de medio',
         errorLogEntries: 'Entradas del registro de errores'
       },
-      measuring: 'measuring…',
+      measuring: "midiendo…",
       space: {
-        drive: (letter) => `Drive ${letter}:`,
-        heading: 'Where is my space going?',
-        summary: (used, total, free) => `${used} used of ${total} · ${free} free`,
-        loading: 'Reading drive space…',
-        barLabel: (programs, other, free) => `Drive space: installed programs ${programs}, everything else ${other}, free ${free}.`,
-        barLabelMeasuring: (used, free) => `Drive space: ${used} used, ${free} free. Installed programs are still being measured.`,
-        legendPrograms: 'Installed programs',
-        legendOther: 'Everything else',
-        legendUsed: 'Used',
-        legendFree: 'Free',
-        unsized: (count) => `${count} ${count === 1 ? 'program' : 'programs'} without a size`,
-        exceedsUsed: 'Program sizes add up to more than is used on this drive.'
+        drive: (letter) => `Disco ${letter}:`,
+        heading: "¿A dónde se va mi espacio?",
+        summary: (used, total, free) => `${used} usados de ${total} · ${free} libres`,
+        loading: "Leyendo el espacio del disco…",
+        barLabel: (programs, other, free) => `Espacio del disco: programas instalados ${programs}, todo lo demás ${other}, libre ${free}.`,
+        barLabelMeasuring: (used, free) => `Espacio del disco: ${used} usados, ${free} libres. Los programas instalados aún se están midiendo.`,
+        legendPrograms: "Programas instalados",
+        legendOther: "Todo lo demás",
+        legendUsed: "Usado",
+        legendFree: "Libre",
+        unsized: (count) => `${count} ${count === 1 ? 'programa' : 'programas'} sin tamaño`,
+        exceedsUsed: "Los tamaños de los programas suman más de lo que se usa en este disco."
       },
       largest: {
-        heading: 'Largest programs',
-        openApplications: 'Open Applications',
-        installedCount: (count) => `${count} installed`,
-        measuring: 'Measuring program sizes…',
-        none: 'No program has a measured size yet.',
-        notInList: (size) => `The other ${size} is not in the program list.`,
-        seeDiskMap: 'See it in Disk Map.'
+        heading: "Programas más grandes",
+        openApplications: "Abrir Aplicaciones",
+        installedCount: (count) => `${count} ${count === 1 ? 'instalado' : 'instalados'}`,
+        measuring: "Midiendo el tamaño de los programas…",
+        none: "Ningún programa tiene aún un tamaño medido.",
+        notInList: (size) => `Los otros ${size} no están en la lista de programas.`,
+        seeDiskMap: "Míralo en Mapa del disco."
       },
       quiet: {
-        scoreOf: (score) => `${score} of 100`,
-        driveDetails: 'Drive details',
-        junkTitle: 'Junk files',
-        junkNotMeasured: 'Not measured',
-        junkMeasure: 'Measure',
-        junkProgress: (scanned, total) => `Measuring… ${scanned} of ${total}`,
-        junkMeasuring: 'Measuring…',
-        junkBasis: (count) => `Across ${count} recommended ${count === 1 ? 'cleaner' : 'cleaners'}`,
-        junkError: (message) => `Couldn't measure junk files: ${message}`,
-        openDeepClean: 'Open Deep Clean',
-        leftTitle: 'Left behind',
-        leftCount: (count) => `${count} ${count === 1 ? 'program' : 'programs'}`,
-        leftNone: 'Nothing left behind.',
-        leftReview: 'Review'
+        scoreOf: (score) => `${score} de 100`,
+        driveDetails: "Detalle del disco",
+        junkTitle: "Archivos basura",
+        junkNotMeasured: "Sin medir",
+        junkMeasure: "Medir",
+        junkProgress: (scanned, total) => `Midiendo… ${scanned} de ${total}`,
+        junkMeasuring: "Midiendo…",
+        junkBasis: (count) => `En ${count} ${count === 1 ? 'limpiador recomendado' : 'limpiadores recomendados'}`,
+        junkError: (message) => `No se pudieron medir los archivos basura: ${message}`,
+        openDeepClean: "Abrir Limpieza profunda",
+        leftTitle: "Restos",
+        leftCount: (count) => `${count} ${count === 1 ? 'programa' : 'programas'}`,
+        leftNone: "No queda ningún resto.",
+        leftReview: "Revisar"
       },
       recentActivity: {
         title: "Actividad reciente",
@@ -7840,10 +7840,10 @@ export const CATALOG = {
         unused: 'Sin usar',
         store: 'Tienda',
         extensions: 'Extensiones',
-        broken: 'Left behind',
+        broken: "Restos",
         storeCount: (n) => `Tienda (${n})`,
         extensionsCount: (n) => `Extensiones (${n})`,
-        brokenCount: (n) => `Left behind (${n})`
+        brokenCount: (n) => `Restos (${n})`
       },
       columns: {
         application: 'Aplicación',
@@ -7855,7 +7855,7 @@ export const CATALOG = {
         company: 'Empresa',
         website: 'Sitio web'
       },
-      badges: { broken: 'Left behind', running: 'En ejecución', store: 'Tienda', disabled: 'Deshabilitada', unused: 'Sin usar' },
+      badges: { broken: "Restos", running: 'En ejecución', store: 'Tienda', disabled: 'Deshabilitada', unused: 'Sin usar' },
       selectRow: (name) => `Seleccionar ${name}`,
       selectAll: 'Seleccionar todo lo mostrado',
       clearSelection: "Quitar selección",
@@ -7867,7 +7867,7 @@ export const CATALOG = {
       openFolder: "Abrir carpeta",
       copyUninstallCommand: "Copiar comando de desinstalación",
       commandCopied: "Comando de desinstalación copiado.",
-      unusedDefinition: "Flagged as not used recently. Prune keeps no launch history of its own, so check before you remove anything on this list.",
+      unusedDefinition: "Marcado como no usado recientemente. Prune no guarda su propio historial de ejecución, así que comprueba antes de eliminar algo de esta lista.",
       copyFailed: "No se pudo copiar.",
       empty: {
         plain: 'Nada coincide.',
@@ -7957,9 +7957,9 @@ export const CATALOG = {
         status: 'Estado'
       },
       switchAriaLabel: (name) => `Ejecutar ${name} al iniciar sesión`,
-      copyPath: 'Copy path',
-      pathCopied: 'Path copied.',
-      copyFailed: "Couldn't copy that.",
+      copyPath: "Copiar ruta",
+      pathCopied: "Ruta copiada.",
+      copyFailed: "No se pudo copiar.",
       status: {
         invalid: 'No válido',
         running: 'En ejecución',
@@ -8052,7 +8052,7 @@ export const CATALOG = {
       footer: {
         totalLabel: 'Espacio total a liberar:',
         notMeasuredYet: 'aún no medido',
-        previewFirst: 'Preview first to see what will be freed.',
+        previewFirst: "Usa primero la vista previa para ver qué se liberará.",
         unmeasuredSuffix: (count) => ` · ${count} sin medir`,
         selectEverything: 'Seleccionar todo',
         clear: "Deseleccionar",
@@ -8293,7 +8293,7 @@ export const CATALOG = {
     app: {
       installedApplications: "Aplicaciones",
       applicationsSummary: (count, size) => `${count} ${count === 1 ? 'aplicación instalada' : 'aplicaciones instaladas'} · ${size}`,
-      applicationsSummaryFiltered: (shown, total, size) => `${shown} of ${total} shown · ${size}`,
+      applicationsSummaryFiltered: (shown, total, size) => `${shown} de ${total} mostrados · ${size}`,
       removeStoreApp: (name) => `Quitar ${name}`
     }
   },
@@ -8352,8 +8352,8 @@ export const CATALOG = {
         ariaLabel: 'Tunnid, mille jooksul hiljutised failid rahule jätta'
       },
       restorePointCleanup: {
-        title: "Restore point before removing leftovers",
-        description: "Taken before Prune removes the leftover files and registry keys you selected, including after Force remove. On by default; does nothing at all if System Protection is turned off."
+        title: "Taastepunkt enne jääkide eemaldamist",
+        description: "Luuakse enne, kui Prune eemaldab sinu valitud jäägifailid ja registrivõtmed, ka pärast Sunni eemaldamist. Vaikimisi sees; ei tee midagi, kui Süsteemikaitse on välja lülitatud."
       },
       hideUnavailable: {
         title: 'Peida sobimatud puhastajad',
@@ -8415,12 +8415,12 @@ export const CATALOG = {
       uninstallTab: {
         beforeHeading: 'Enne desinstallimist',
         restorePointUninstall: {
-          title: "Restore point before running an uninstaller",
-          description: "Taken before the program's own uninstaller runs. It needs Prune to be running as administrator and Windows allows one a day, so when it can't be made the uninstall goes ahead and the dialog says so."
+          title: "Taastepunkt enne desinstallija käivitamist",
+          description: "Luuakse enne programmi enda desinstallija käivitamist. Prune peab töötama administraatorina ja Windows lubab ühe päevas, seega kui taastepunkti ei saa luua, desinstallimine jätkub ja dialoog annab sellest teada."
         },
         registryBackup: {
           title: 'Varunda register enne desinstallimist',
-          description: "Exports HKLM\\SOFTWARE and HKCU\\Software, typically several hundred MB, and keeps the newest 3. If the backup can't be made, the uninstall doesn't run."
+          description: "Ekspordib HKLM\\SOFTWARE ja HKCU\\Software, tavaliselt mitusada MB, ja hoiab alles 3 viimast. Kui varukoopiat ei saa luua, desinstallimist ei käivitata."
         },
         deleteLockedFiles: {
           title: 'Kustuta lukustatud failid järgmisel taaskäivitusel',
@@ -8452,7 +8452,7 @@ export const CATALOG = {
         reportTitle: 'Teata veast',
         reportDescription: "Avab GitHubis eeltäidetud teate. Prune ise midagi ei saada ja sa näed kõike enne, kui see kuhugi jõuab.",
         reportButton: 'Teata veast',
-        description: "A local, offline uninstaller and cleanup tool for Windows — forced removal with leftover-file scanning, safe quarantine-before-delete, disk mapping, and a cleaner that shows a preview before it removes anything."
+        description: "Kohalik võrguühenduseta desinstallimis- ja puhastustööriist Windowsile — sundeemaldamine jäägifailide skannimisega, turvaline karantiin enne kustutamist, kettakaardistus ning puhastaja, mis näitab eelvaadet enne millegi eemaldamist."
       },
       automation: {
         title: 'Automatiseerimine',
@@ -8511,45 +8511,45 @@ export const CATALOG = {
         mediaErrors: 'Andmekandja vead',
         errorLogEntries: 'Vealogi kirjed'
       },
-      measuring: 'measuring…',
+      measuring: "mõõdetakse…",
       space: {
-        drive: (letter) => `Drive ${letter}:`,
-        heading: 'Where is my space going?',
-        summary: (used, total, free) => `${used} used of ${total} · ${free} free`,
-        loading: 'Reading drive space…',
-        barLabel: (programs, other, free) => `Drive space: installed programs ${programs}, everything else ${other}, free ${free}.`,
-        barLabelMeasuring: (used, free) => `Drive space: ${used} used, ${free} free. Installed programs are still being measured.`,
-        legendPrograms: 'Installed programs',
-        legendOther: 'Everything else',
-        legendUsed: 'Used',
-        legendFree: 'Free',
-        unsized: (count) => `${count} ${count === 1 ? 'program' : 'programs'} without a size`,
-        exceedsUsed: 'Program sizes add up to more than is used on this drive.'
+        drive: (letter) => `Ketas ${letter}:`,
+        heading: "Kuhu mu ruum kaob?",
+        summary: (used, total, free) => `Kasutusel ${used} / ${total} · vaba ${free}`,
+        loading: "Ketta ruumi lugemine…",
+        barLabel: (programs, other, free) => `Ketta ruum: installitud programmid ${programs}, kõik muu ${other}, vaba ${free}.`,
+        barLabelMeasuring: (used, free) => `Ketta ruum: kasutusel ${used}, vaba ${free}. Installitud programmide suurust mõõdetakse veel.`,
+        legendPrograms: "Installitud programmid",
+        legendOther: "Kõik muu",
+        legendUsed: "Kasutusel",
+        legendFree: "Vaba",
+        unsized: (count) => `${count} ${count === 1 ? 'programm' : 'programmi'} ilma suuruseta`,
+        exceedsUsed: "Programmide suurused kokku on suuremad kui sellel kettal kasutatav maht."
       },
       largest: {
-        heading: 'Largest programs',
-        openApplications: 'Open Applications',
-        installedCount: (count) => `${count} installed`,
-        measuring: 'Measuring program sizes…',
-        none: 'No program has a measured size yet.',
-        notInList: (size) => `The other ${size} is not in the program list.`,
-        seeDiskMap: 'See it in Disk Map.'
+        heading: "Suurimad programmid",
+        openApplications: "Ava Rakendused",
+        installedCount: (count) => `${count} installitud`,
+        measuring: "Programmide suuruste mõõtmine…",
+        none: "Ühelgi programmil pole veel mõõdetud suurust.",
+        notInList: (size) => `Ülejäänud ${size} pole programmide loendis.`,
+        seeDiskMap: "Vaata seda Kettakaardilt."
       },
       quiet: {
-        scoreOf: (score) => `${score} of 100`,
-        driveDetails: 'Drive details',
-        junkTitle: 'Junk files',
-        junkNotMeasured: 'Not measured',
-        junkMeasure: 'Measure',
-        junkProgress: (scanned, total) => `Measuring… ${scanned} of ${total}`,
-        junkMeasuring: 'Measuring…',
-        junkBasis: (count) => `Across ${count} recommended ${count === 1 ? 'cleaner' : 'cleaners'}`,
-        junkError: (message) => `Couldn't measure junk files: ${message}`,
-        openDeepClean: 'Open Deep Clean',
-        leftTitle: 'Left behind',
-        leftCount: (count) => `${count} ${count === 1 ? 'program' : 'programs'}`,
-        leftNone: 'Nothing left behind.',
-        leftReview: 'Review'
+        scoreOf: (score) => `${score} / 100`,
+        driveDetails: "Ketta üksikasjad",
+        junkTitle: "Rämpsfailid",
+        junkNotMeasured: "Mõõtmata",
+        junkMeasure: "Mõõda",
+        junkProgress: (scanned, total) => `Mõõtmine… ${scanned} / ${total}`,
+        junkMeasuring: "Mõõtmine…",
+        junkBasis: (count) => `Soovitatud puhastajaid: ${count}`,
+        junkError: (message) => `Rämpsfaile ei saanud mõõta: ${message}`,
+        openDeepClean: "Ava Süvapuhastus",
+        leftTitle: "Jäägid",
+        leftCount: (count) => `${count} ${count === 1 ? 'programm' : 'programmi'}`,
+        leftNone: "Jääke ei ole.",
+        leftReview: "Vaata üle"
       },
       recentActivity: {
         title: "Hiljutine tegevus",
@@ -8667,10 +8667,10 @@ export const CATALOG = {
         unused: 'Kasutamata',
         store: 'Pood',
         extensions: 'Laiendused',
-        broken: 'Left behind',
+        broken: "Jäägid",
         storeCount: (n) => `Pood (${n})`,
         extensionsCount: (n) => `Laiendused (${n})`,
-        brokenCount: (n) => `Left behind (${n})`
+        brokenCount: (n) => `Jäägid (${n})`
       },
       columns: {
         application: 'Rakendus',
@@ -8682,7 +8682,7 @@ export const CATALOG = {
         company: 'Ettevõte',
         website: 'Veebisait'
       },
-      badges: { broken: 'Left behind', running: 'Töötab', store: 'Pood', disabled: 'Keelatud', unused: 'Kasutamata' },
+      badges: { broken: "Jäägid", running: 'Töötab', store: 'Pood', disabled: 'Keelatud', unused: 'Kasutamata' },
       selectRow: (name) => `Vali ${name}`,
       selectAll: 'Vali kõik kuvatud',
       clearSelection: "Tühjenda valik",
@@ -8694,7 +8694,7 @@ export const CATALOG = {
       openFolder: "Ava kaust",
       copyUninstallCommand: "Kopeeri desinstallimise käsk",
       commandCopied: "Desinstallimise käsk kopeeritud.",
-      unusedDefinition: "Flagged as not used recently. Prune keeps no launch history of its own, so check before you remove anything on this list.",
+      unusedDefinition: "Märgitud hiljuti kasutamata. Prune ei pea oma käivitusajalugu, seega kontrolli enne, kui selles loendis midagi eemaldad.",
       copyFailed: "Kopeerimine ebaõnnestus.",
       empty: {
         plain: 'Miski ei vasta.',
@@ -8784,9 +8784,9 @@ export const CATALOG = {
         status: 'Olek'
       },
       switchAriaLabel: (name) => `Käivita ${name} sisselogimisel`,
-      copyPath: 'Copy path',
-      pathCopied: 'Path copied.',
-      copyFailed: "Couldn't copy that.",
+      copyPath: "Kopeeri asukoht",
+      pathCopied: "Asukoht kopeeritud.",
+      copyFailed: "Kopeerimine ebaõnnestus.",
       status: {
         invalid: 'Vigane',
         running: 'Töötab',
@@ -8879,7 +8879,7 @@ export const CATALOG = {
       footer: {
         totalLabel: 'Vabastatav ruum kokku:',
         notMeasuredYet: 'veel mõõtmata',
-        previewFirst: 'Preview first to see what will be freed.',
+        previewFirst: "Vaata kõigepealt Eelvaadet, et näha, mis vabaneb.",
         unmeasuredSuffix: (count) => ` · ${count} mõõtmata`,
         selectEverything: 'Vali kõik',
         clear: 'Tühjenda',
@@ -9120,7 +9120,7 @@ export const CATALOG = {
     app: {
       installedApplications: "Rakendused",
       applicationsSummary: (count, size) => `Installitud rakendusi: ${count} · ${size}`,
-      applicationsSummaryFiltered: (shown, total, size) => `${shown} of ${total} shown · ${size}`,
+      applicationsSummaryFiltered: (shown, total, size) => `Kuvatud ${shown} / ${total} · ${size}`,
       removeStoreApp: (name) => `Eemalda ${name}`
     }
   },
@@ -9179,8 +9179,8 @@ export const CATALOG = {
         ariaLabel: 'Tunnit, joiden ajan äskettäiset tiedostot jätetään rauhaan'
       },
       restorePointCleanup: {
-        title: "Restore point before removing leftovers",
-        description: "Taken before Prune removes the leftover files and registry keys you selected, including after Force remove. On by default; does nothing at all if System Protection is turned off."
+        title: "Palautuspiste ennen jäänteiden poistamista",
+        description: "Luodaan ennen kuin Prune poistaa valitsemasi jäännetiedostot ja rekisteriavaimet, myös Pakota poisto -toiminnon jälkeen. Oletuksena päällä; ei tee mitään, jos Järjestelmän suojaus on pois päältä."
       },
       hideUnavailable: {
         title: "Piilota puhdistimet, jotka eivät koske tätä konetta",
@@ -9242,12 +9242,12 @@ export const CATALOG = {
       uninstallTab: {
         beforeHeading: 'Ennen poistoa',
         restorePointUninstall: {
-          title: "Restore point before running an uninstaller",
-          description: "Taken before the program's own uninstaller runs. It needs Prune to be running as administrator and Windows allows one a day, so when it can't be made the uninstall goes ahead and the dialog says so."
+          title: "Palautuspiste ennen poisto-ohjelman suorittamista",
+          description: "Luodaan ennen kuin ohjelman oma poisto-ohjelma suoritetaan. Prunen on toimittava järjestelmänvalvojana, ja Windows sallii yhden päivässä, joten jos palautuspistettä ei voi luoda, poisto jatkuu ja ikkuna kertoo siitä."
         },
         registryBackup: {
           title: 'Varmuuskopioi rekisteri ennen poistoa',
-          description: "Exports HKLM\\SOFTWARE and HKCU\\Software, typically several hundred MB, and keeps the newest 3. If the backup can't be made, the uninstall doesn't run."
+          description: "Vie HKLM\\SOFTWARE- ja HKCU\\Software-avaimet, tyypillisesti useita satoja MB, ja säilyttää uusimmat 3. Jos varmuuskopiota ei voi luoda, poistoa ei suoriteta."
         },
         deleteLockedFiles: {
           title: 'Poista lukitut tiedostot seuraavassa uudelleenkäynnistyksessä',
@@ -9279,7 +9279,7 @@ export const CATALOG = {
         reportTitle: 'Ilmoita virheestä',
         reportDescription: "Avaa GitHubissa valmiiksi täytetyn ilmoituksen. Prune ei itse lähetä mitään, ja näet kaiken ennen kuin mitään lähtee minnekään.",
         reportButton: 'Ilmoita virheestä',
-        description: "A local, offline uninstaller and cleanup tool for Windows — forced removal with leftover-file scanning, safe quarantine-before-delete, disk mapping, and a cleaner that shows a preview before it removes anything."
+        description: "Paikallinen, offline-käytössä toimiva poisto- ja siivoustyökalu Windowsille — pakotettu poisto jäännetiedostojen skannauksella, turvallinen karanteeni ennen poistamista, levyn kartoitus sekä puhdistin, joka näyttää esikatselun ennen kuin poistaa mitään."
       },
       automation: {
         title: 'Automaatio',
@@ -9338,45 +9338,45 @@ export const CATALOG = {
         mediaErrors: 'Tallennusvälinevirheet',
         errorLogEntries: 'Virhelokin merkinnät'
       },
-      measuring: 'measuring…',
+      measuring: "mitataan…",
       space: {
-        drive: (letter) => `Drive ${letter}:`,
-        heading: 'Where is my space going?',
-        summary: (used, total, free) => `${used} used of ${total} · ${free} free`,
-        loading: 'Reading drive space…',
-        barLabel: (programs, other, free) => `Drive space: installed programs ${programs}, everything else ${other}, free ${free}.`,
-        barLabelMeasuring: (used, free) => `Drive space: ${used} used, ${free} free. Installed programs are still being measured.`,
-        legendPrograms: 'Installed programs',
-        legendOther: 'Everything else',
-        legendUsed: 'Used',
-        legendFree: 'Free',
-        unsized: (count) => `${count} ${count === 1 ? 'program' : 'programs'} without a size`,
-        exceedsUsed: 'Program sizes add up to more than is used on this drive.'
+        drive: (letter) => `Levy ${letter}:`,
+        heading: "Mihin tila menee?",
+        summary: (used, total, free) => `${used} / ${total} käytössä · ${free} vapaana`,
+        loading: "Luetaan levytilaa…",
+        barLabel: (programs, other, free) => `Levytila: asennetut ohjelmat ${programs}, kaikki muu ${other}, vapaana ${free}.`,
+        barLabelMeasuring: (used, free) => `Levytila: ${used} käytössä, ${free} vapaana. Asennettujen ohjelmien kokoa mitataan vielä.`,
+        legendPrograms: "Asennetut ohjelmat",
+        legendOther: "Kaikki muu",
+        legendUsed: "Käytetty",
+        legendFree: "Vapaa",
+        unsized: (count) => `Ohjelmia ilman kokotietoa: ${count}`,
+        exceedsUsed: "Ohjelmien koot ovat yhteensä suuremmat kuin tällä levyllä on käytössä."
       },
       largest: {
-        heading: 'Largest programs',
-        openApplications: 'Open Applications',
-        installedCount: (count) => `${count} installed`,
-        measuring: 'Measuring program sizes…',
-        none: 'No program has a measured size yet.',
-        notInList: (size) => `The other ${size} is not in the program list.`,
-        seeDiskMap: 'See it in Disk Map.'
+        heading: "Suurimmat ohjelmat",
+        openApplications: "Avaa Sovellukset",
+        installedCount: (count) => `${count} asennettu`,
+        measuring: "Mitataan ohjelmien kokoja…",
+        none: "Yhdenkään ohjelman kokoa ei ole vielä mitattu.",
+        notInList: (size) => `Loput ${size} eivät ole ohjelmaluettelossa.`,
+        seeDiskMap: "Katso Levykartalta."
       },
       quiet: {
-        scoreOf: (score) => `${score} of 100`,
-        driveDetails: 'Drive details',
-        junkTitle: 'Junk files',
-        junkNotMeasured: 'Not measured',
-        junkMeasure: 'Measure',
-        junkProgress: (scanned, total) => `Measuring… ${scanned} of ${total}`,
-        junkMeasuring: 'Measuring…',
-        junkBasis: (count) => `Across ${count} recommended ${count === 1 ? 'cleaner' : 'cleaners'}`,
-        junkError: (message) => `Couldn't measure junk files: ${message}`,
-        openDeepClean: 'Open Deep Clean',
-        leftTitle: 'Left behind',
-        leftCount: (count) => `${count} ${count === 1 ? 'program' : 'programs'}`,
-        leftNone: 'Nothing left behind.',
-        leftReview: 'Review'
+        scoreOf: (score) => `${score} / 100`,
+        driveDetails: "Levyn tiedot",
+        junkTitle: "Roskatiedostot",
+        junkNotMeasured: "Ei mitattu",
+        junkMeasure: "Mittaa",
+        junkProgress: (scanned, total) => `Mitataan… ${scanned}/${total}`,
+        junkMeasuring: "Mitataan…",
+        junkBasis: (count) => `${count} suositellun puhdistimen osalta`,
+        junkError: (message) => `Roskatiedostoja ei voitu mitata: ${message}`,
+        openDeepClean: "Avaa Syväpuhdistus",
+        leftTitle: "Jäänteet",
+        leftCount: (count) => `${count} ohjelma${count === 1 ? '' : 'a'}`,
+        leftNone: "Jäänteitä ei ole.",
+        leftReview: "Tarkista"
       },
       recentActivity: {
         title: "Viimeaikainen toiminta",
@@ -9494,10 +9494,10 @@ export const CATALOG = {
         unused: 'Käyttämättömät',
         store: 'Kauppa',
         extensions: 'Laajennukset',
-        broken: 'Left behind',
+        broken: "Jäänteet",
         storeCount: (n) => `Kauppa (${n})`,
         extensionsCount: (n) => `Laajennukset (${n})`,
-        brokenCount: (n) => `Left behind (${n})`
+        brokenCount: (n) => `Jäänteet (${n})`
       },
       columns: {
         application: 'Sovellus',
@@ -9509,7 +9509,7 @@ export const CATALOG = {
         company: 'Yritys',
         website: 'Verkkosivusto'
       },
-      badges: { broken: 'Left behind', running: 'Käynnissä', store: 'Kauppa', disabled: 'Poistettu käytöstä', unused: 'Käyttämätön' },
+      badges: { broken: "Jäänteet", running: 'Käynnissä', store: 'Kauppa', disabled: 'Poistettu käytöstä', unused: 'Käyttämätön' },
       selectRow: (name) => `Valitse ${name}`,
       selectAll: 'Valitse kaikki näkyvät',
       clearSelection: 'Tyhjennä valinta',
@@ -9521,7 +9521,7 @@ export const CATALOG = {
       openFolder: "Avaa kansio",
       copyUninstallCommand: "Kopioi poistokomento",
       commandCopied: "Poistokomento kopioitu.",
-      unusedDefinition: "Flagged as not used recently. Prune keeps no launch history of its own, so check before you remove anything on this list.",
+      unusedDefinition: "Merkitty äskettäin käyttämättömäksi. Prune ei pidä omaa käynnistyshistoriaa, joten tarkista ennen kuin poistat mitään tämän luettelon kohteista.",
       copyFailed: "Kopiointi epäonnistui.",
       empty: {
         plain: 'Ei osumia.',
@@ -9611,9 +9611,9 @@ export const CATALOG = {
         status: 'Tila'
       },
       switchAriaLabel: (name) => `Käynnistä ${name} kirjautuessa`,
-      copyPath: 'Copy path',
-      pathCopied: 'Path copied.',
-      copyFailed: "Couldn't copy that.",
+      copyPath: "Kopioi polku",
+      pathCopied: "Polku kopioitu.",
+      copyFailed: "Kopiointi epäonnistui.",
       status: {
         invalid: 'Virheellinen',
         running: 'Käynnissä',
@@ -9706,7 +9706,7 @@ export const CATALOG = {
       footer: {
         totalLabel: 'Vapautettava tila yhteensä:',
         notMeasuredYet: 'ei vielä mitattu',
-        previewFirst: 'Preview first to see what will be freed.',
+        previewFirst: "Esikatsele ensin nähdäksesi, mitä vapautuu.",
         unmeasuredSuffix: (count) => ` · ${count} mittaamatta`,
         selectEverything: 'Valitse kaikki',
         clear: 'Tyhjennä',
@@ -9947,7 +9947,7 @@ export const CATALOG = {
     app: {
       installedApplications: "Sovellukset",
       applicationsSummary: (count, size) => `Asennettuja sovelluksia: ${count} · ${size}`,
-      applicationsSummaryFiltered: (shown, total, size) => `${shown} of ${total} shown · ${size}`,
+      applicationsSummaryFiltered: (shown, total, size) => `Näytetään ${shown}/${total} · ${size}`,
       removeStoreApp: (name) => `Poista ${name}`
     }
   },
@@ -10006,8 +10006,8 @@ export const CATALOG = {
         ariaLabel: 'Heures pendant lesquelles laisser tranquilles les fichiers récents'
       },
       restorePointCleanup: {
-        title: "Restore point before removing leftovers",
-        description: "Taken before Prune removes the leftover files and registry keys you selected, including after Force remove. On by default; does nothing at all if System Protection is turned off."
+        title: "Point de restauration avant la suppression des résidus",
+        description: "Créé avant que Prune supprime les fichiers et clés de registre résiduels que vous avez sélectionnés, y compris après Forcer la suppression. Activé par défaut ; ne fait rien du tout si la Protection du système est désactivée."
       },
       hideUnavailable: {
         title: "Masquer les nettoyeurs qui ne s'appliquent pas",
@@ -10069,12 +10069,12 @@ export const CATALOG = {
       uninstallTab: {
         beforeHeading: 'Avant la désinstallation',
         restorePointUninstall: {
-          title: "Restore point before running an uninstaller",
-          description: "Taken before the program's own uninstaller runs. It needs Prune to be running as administrator and Windows allows one a day, so when it can't be made the uninstall goes ahead and the dialog says so."
+          title: "Point de restauration avant l'exécution d'un programme de désinstallation",
+          description: "Créé avant l'exécution du programme de désinstallation propre au programme. Il nécessite que Prune s'exécute en tant qu'administrateur et Windows n'en autorise qu'un par jour ; lorsqu'il ne peut pas être créé, la désinstallation se poursuit et la boîte de dialogue l'indique."
         },
         registryBackup: {
           title: 'Sauvegarder le registre avant la désinstallation',
-          description: "Exports HKLM\\SOFTWARE and HKCU\\Software, typically several hundred MB, and keeps the newest 3. If the backup can't be made, the uninstall doesn't run."
+          description: "Exporte HKLM\\SOFTWARE et HKCU\\Software, généralement plusieurs centaines de MB, et conserve les 3 plus récents. Si la sauvegarde ne peut pas être créée, la désinstallation ne s'exécute pas."
         },
         deleteLockedFiles: {
           title: 'Supprimer les fichiers verrouillés au prochain redémarrage',
@@ -10106,7 +10106,7 @@ export const CATALOG = {
         reportTitle: 'Signaler un bug',
         reportDescription: "Ouvre un ticket prérempli sur GitHub. Prune n'envoie rien lui-même, et vous voyez tout avant que quoi que ce soit ne soit transmis.",
         reportButton: 'Signaler un bug',
-        description: "A local, offline uninstaller and cleanup tool for Windows — forced removal with leftover-file scanning, safe quarantine-before-delete, disk mapping, and a cleaner that shows a preview before it removes anything."
+        description: "Un outil local et hors ligne de désinstallation et de nettoyage pour Windows — suppression forcée avec analyse des fichiers résiduels, quarantaine sécurisée avant suppression, cartographie du disque et un nettoyeur qui affiche un aperçu avant de supprimer quoi que ce soit."
       },
       automation: {
         title: 'Automatisation',
@@ -10165,45 +10165,45 @@ export const CATALOG = {
         mediaErrors: 'Erreurs de support',
         errorLogEntries: 'Entrées du journal d\'erreurs'
       },
-      measuring: 'measuring…',
+      measuring: "mesure en cours…",
       space: {
-        drive: (letter) => `Drive ${letter}:`,
-        heading: 'Where is my space going?',
-        summary: (used, total, free) => `${used} used of ${total} · ${free} free`,
-        loading: 'Reading drive space…',
-        barLabel: (programs, other, free) => `Drive space: installed programs ${programs}, everything else ${other}, free ${free}.`,
-        barLabelMeasuring: (used, free) => `Drive space: ${used} used, ${free} free. Installed programs are still being measured.`,
-        legendPrograms: 'Installed programs',
-        legendOther: 'Everything else',
-        legendUsed: 'Used',
-        legendFree: 'Free',
-        unsized: (count) => `${count} ${count === 1 ? 'program' : 'programs'} without a size`,
-        exceedsUsed: 'Program sizes add up to more than is used on this drive.'
+        drive: (letter) => `Disque ${letter}:`,
+        heading: "Où va mon espace disque ?",
+        summary: (used, total, free) => `${used} utilisés sur ${total} · ${free} libres`,
+        loading: "Lecture de l'espace disque…",
+        barLabel: (programs, other, free) => `Espace disque : programmes installés ${programs}, tout le reste ${other}, libre ${free}.`,
+        barLabelMeasuring: (used, free) => `Espace disque : ${used} utilisés, ${free} libres. Les programmes installés sont encore en cours de mesure.`,
+        legendPrograms: "Programmes installés",
+        legendOther: "Tout le reste",
+        legendUsed: "Utilisé",
+        legendFree: "Libre",
+        unsized: (count) => `${count} ${count === 1 ? 'programme' : 'programmes'} sans taille`,
+        exceedsUsed: "La somme des tailles des programmes dépasse l'espace utilisé sur ce disque."
       },
       largest: {
-        heading: 'Largest programs',
-        openApplications: 'Open Applications',
-        installedCount: (count) => `${count} installed`,
-        measuring: 'Measuring program sizes…',
-        none: 'No program has a measured size yet.',
-        notInList: (size) => `The other ${size} is not in the program list.`,
-        seeDiskMap: 'See it in Disk Map.'
+        heading: "Plus gros programmes",
+        openApplications: "Ouvrir Applications",
+        installedCount: (count) => `${count} ${count === 1 ? 'installé' : 'installés'}`,
+        measuring: "Mesure de la taille des programmes…",
+        none: "Aucun programme n'a encore de taille mesurée.",
+        notInList: (size) => `Les ${size} restants ne figurent pas dans la liste des programmes.`,
+        seeDiskMap: "Voir dans Carte du disque."
       },
       quiet: {
-        scoreOf: (score) => `${score} of 100`,
-        driveDetails: 'Drive details',
-        junkTitle: 'Junk files',
-        junkNotMeasured: 'Not measured',
-        junkMeasure: 'Measure',
-        junkProgress: (scanned, total) => `Measuring… ${scanned} of ${total}`,
-        junkMeasuring: 'Measuring…',
-        junkBasis: (count) => `Across ${count} recommended ${count === 1 ? 'cleaner' : 'cleaners'}`,
-        junkError: (message) => `Couldn't measure junk files: ${message}`,
-        openDeepClean: 'Open Deep Clean',
-        leftTitle: 'Left behind',
-        leftCount: (count) => `${count} ${count === 1 ? 'program' : 'programs'}`,
-        leftNone: 'Nothing left behind.',
-        leftReview: 'Review'
+        scoreOf: (score) => `${score} sur 100`,
+        driveDetails: "Détails du disque",
+        junkTitle: "Fichiers inutiles",
+        junkNotMeasured: "Non mesuré",
+        junkMeasure: "Mesurer",
+        junkProgress: (scanned, total) => `Mesure… ${scanned} sur ${total}`,
+        junkMeasuring: "Mesure en cours…",
+        junkBasis: (count) => `Sur ${count} ${count === 1 ? 'nettoyeur recommandé' : 'nettoyeurs recommandés'}`,
+        junkError: (message) => `Impossible de mesurer les fichiers inutiles : ${message}`,
+        openDeepClean: "Ouvrir Nettoyage approfondi",
+        leftTitle: "Résidus",
+        leftCount: (count) => `${count} ${count === 1 ? 'programme' : 'programmes'}`,
+        leftNone: "Aucun résidu.",
+        leftReview: "Examiner"
       },
       recentActivity: {
         title: "Activité récente",
@@ -10321,10 +10321,10 @@ export const CATALOG = {
         unused: 'Inutilisées',
         store: 'Store',
         extensions: 'Extensions',
-        broken: 'Left behind',
+        broken: "Résidus",
         storeCount: (n) => `Store (${n})`,
         extensionsCount: (n) => `Extensions (${n})`,
-        brokenCount: (n) => `Left behind (${n})`
+        brokenCount: (n) => `Résidus (${n})`
       },
       columns: {
         application: 'Application',
@@ -10336,7 +10336,7 @@ export const CATALOG = {
         company: 'Société',
         website: 'Site web'
       },
-      badges: { broken: 'Left behind', running: 'En cours', store: 'Store', disabled: 'Désactivé', unused: 'Inutilisé' },
+      badges: { broken: "Résidus", running: 'En cours', store: 'Store', disabled: 'Désactivé', unused: 'Inutilisé' },
       selectRow: (name) => `Sélectionner ${name}`,
       selectAll: 'Sélectionner tout ce qui est affiché',
       clearSelection: 'Effacer la sélection',
@@ -10348,7 +10348,7 @@ export const CATALOG = {
       openFolder: "Ouvrir le dossier",
       copyUninstallCommand: "Copier la commande de désinstallation",
       commandCopied: "Commande de désinstallation copiée.",
-      unusedDefinition: "Flagged as not used recently. Prune keeps no launch history of its own, so check before you remove anything on this list.",
+      unusedDefinition: "Signalé comme non utilisé récemment. Prune ne conserve pas son propre historique de lancement ; vérifiez donc avant de supprimer quoi que ce soit dans cette liste.",
       copyFailed: "Copie impossible.",
       empty: {
         plain: 'Aucune correspondance.',
@@ -10438,9 +10438,9 @@ export const CATALOG = {
         status: 'État'
       },
       switchAriaLabel: (name) => `Lancer ${name} à la connexion`,
-      copyPath: 'Copy path',
-      pathCopied: 'Path copied.',
-      copyFailed: "Couldn't copy that.",
+      copyPath: "Copier le chemin",
+      pathCopied: "Chemin copié.",
+      copyFailed: "Impossible de copier.",
       status: {
         invalid: 'Non valide',
         running: 'En cours',
@@ -10533,7 +10533,7 @@ export const CATALOG = {
       footer: {
         totalLabel: 'Espace total à libérer :',
         notMeasuredYet: 'pas encore mesuré',
-        previewFirst: 'Preview first to see what will be freed.',
+        previewFirst: "Faites d'abord un aperçu pour voir ce qui sera libéré.",
         unmeasuredSuffix: (count) => ` · ${count} non mesurés`,
         selectEverything: 'Tout sélectionner',
         clear: "Désélectionner",
@@ -10774,7 +10774,7 @@ export const CATALOG = {
     app: {
       installedApplications: "Applications",
       applicationsSummary: (count, size) => `${count} ${count === 1 ? 'application installée' : 'applications installées'} · ${size}`,
-      applicationsSummaryFiltered: (shown, total, size) => `${shown} of ${total} shown · ${size}`,
+      applicationsSummaryFiltered: (shown, total, size) => `${shown} sur ${total} affichés · ${size}`,
       removeStoreApp: (name) => `Supprimer ${name}`
     }
   },
@@ -10833,8 +10833,8 @@ export const CATALOG = {
         ariaLabel: 'שעות להשאיר קבצים אחרונים לנפשם'
       },
       restorePointCleanup: {
-        title: "Restore point before removing leftovers",
-        description: "Taken before Prune removes the leftover files and registry keys you selected, including after Force remove. On by default; does nothing at all if System Protection is turned off."
+        title: "נקודת שחזור לפני הסרת שאריות",
+        description: "נוצרת לפני ש-Prune מסיר את קובצי השאריות ומפתחות הרישום שבחרת, כולל אחרי הסרה כפויה. מופעלת כברירת מחדל; אינה עושה דבר אם הגנת המערכת כבויה."
       },
       hideUnavailable: {
         title: "הסתר כלי ניקוי שלא רלוונטיים",
@@ -10896,12 +10896,12 @@ export const CATALOG = {
       uninstallTab: {
         beforeHeading: 'לפני ההסרה',
         restorePointUninstall: {
-          title: "Restore point before running an uninstaller",
-          description: "Taken before the program's own uninstaller runs. It needs Prune to be running as administrator and Windows allows one a day, so when it can't be made the uninstall goes ahead and the dialog says so."
+          title: "נקודת שחזור לפני הפעלת תוכנית הסרה",
+          description: "נוצרת לפני שתוכנית ההסרה של התוכנית עצמה פועלת. דורשת ש-Prune יפעל כמנהל, ו-Windows מאפשר אחת ביום, ולכן כשאי אפשר ליצור אותה ההסרה ממשיכה והחלון מציין זאת."
         },
         registryBackup: {
           title: 'גבה את הרישום לפני ההסרה',
-          description: "Exports HKLM\\SOFTWARE and HKCU\\Software, typically several hundred MB, and keeps the newest 3. If the backup can't be made, the uninstall doesn't run."
+          description: "מייצא את HKLM\\SOFTWARE ואת HKCU\\Software, בדרך כלל כמה מאות MB, ושומר את 3 החדשים ביותר. אם אי אפשר ליצור את הגיבוי, ההסרה לא תרוץ."
         },
         deleteLockedFiles: {
           title: 'מחיקת קבצים נעולים באתחול הבא',
@@ -10933,7 +10933,7 @@ export const CATALOG = {
         reportTitle: 'דיווח על באג',
         reportDescription: "פותח דיווח ממולא מראש ב-GitHub. Prune עצמו לא שולח דבר, ואתה רואה הכול לפני שמשהו נשלח לכל מקום.",
         reportButton: 'דיווח על באג',
-        description: "A local, offline uninstaller and cleanup tool for Windows — forced removal with leftover-file scanning, safe quarantine-before-delete, disk mapping, and a cleaner that shows a preview before it removes anything."
+        description: "כלי הסרה וניקוי מקומי ולא מקוון עבור Windows — הסרה כפויה עם סריקת שאריות, הסגר בטוח לפני מחיקה, מיפוי דיסק, ומנקה שמציג תצוגה מקדימה לפני שהוא מסיר משהו."
       },
       automation: {
         title: 'אוטומציה',
@@ -10992,45 +10992,45 @@ export const CATALOG = {
         mediaErrors: 'שגיאות מדיה',
         errorLogEntries: 'רשומות יומן שגיאות'
       },
-      measuring: 'measuring…',
+      measuring: "נמדד…",
       space: {
-        drive: (letter) => `Drive ${letter}:`,
-        heading: 'Where is my space going?',
-        summary: (used, total, free) => `${used} used of ${total} · ${free} free`,
-        loading: 'Reading drive space…',
-        barLabel: (programs, other, free) => `Drive space: installed programs ${programs}, everything else ${other}, free ${free}.`,
-        barLabelMeasuring: (used, free) => `Drive space: ${used} used, ${free} free. Installed programs are still being measured.`,
-        legendPrograms: 'Installed programs',
-        legendOther: 'Everything else',
-        legendUsed: 'Used',
-        legendFree: 'Free',
-        unsized: (count) => `${count} ${count === 1 ? 'program' : 'programs'} without a size`,
-        exceedsUsed: 'Program sizes add up to more than is used on this drive.'
+        drive: (letter) => `דיסק ${letter}:\u200E`,
+        heading: "לאן הולך המקום שלי?",
+        summary: (used, total, free) => `${used} בשימוש מתוך ${total} · ${free} פנויים`,
+        loading: "קורא את השטח בדיסק…",
+        barLabel: (programs, other, free) => `שטח הדיסק: תוכניות מותקנות ${programs}, כל השאר ${other}, פנוי ${free}.`,
+        barLabelMeasuring: (used, free) => `שטח הדיסק: ${used} בשימוש, ${free} פנויים. גודלן של התוכניות המותקנות עדיין נמדד.`,
+        legendPrograms: "תוכניות מותקנות",
+        legendOther: "כל השאר",
+        legendUsed: "בשימוש",
+        legendFree: "פנוי",
+        unsized: (count) => count === 1 ? 'תוכנית אחת ללא גודל' : count === 2 ? 'שתי תוכניות ללא גודל' : `${count} תוכניות ללא גודל`,
+        exceedsUsed: "סכום גדלי התוכניות גדול מהשטח שבשימוש בדיסק זה."
       },
       largest: {
-        heading: 'Largest programs',
-        openApplications: 'Open Applications',
-        installedCount: (count) => `${count} installed`,
-        measuring: 'Measuring program sizes…',
-        none: 'No program has a measured size yet.',
-        notInList: (size) => `The other ${size} is not in the program list.`,
-        seeDiskMap: 'See it in Disk Map.'
+        heading: "התוכניות הגדולות ביותר",
+        openApplications: "פתח אפליקציות",
+        installedCount: (count) => `מותקנות: ${count}`,
+        measuring: "מודד גדלי תוכניות…",
+        none: "עדיין לא נמדד גודלה של אף תוכנית.",
+        notInList: (size) => `${size} הנוספים אינם ברשימת התוכניות.`,
+        seeDiskMap: "ראה זאת במפת הדיסק."
       },
       quiet: {
-        scoreOf: (score) => `${score} of 100`,
-        driveDetails: 'Drive details',
-        junkTitle: 'Junk files',
-        junkNotMeasured: 'Not measured',
-        junkMeasure: 'Measure',
-        junkProgress: (scanned, total) => `Measuring… ${scanned} of ${total}`,
-        junkMeasuring: 'Measuring…',
-        junkBasis: (count) => `Across ${count} recommended ${count === 1 ? 'cleaner' : 'cleaners'}`,
-        junkError: (message) => `Couldn't measure junk files: ${message}`,
-        openDeepClean: 'Open Deep Clean',
-        leftTitle: 'Left behind',
-        leftCount: (count) => `${count} ${count === 1 ? 'program' : 'programs'}`,
-        leftNone: 'Nothing left behind.',
-        leftReview: 'Review'
+        scoreOf: (score) => `${score} מתוך 100`,
+        driveDetails: "פרטי הדיסק",
+        junkTitle: "קבצים מיותרים",
+        junkNotMeasured: "לא נמדד",
+        junkMeasure: "מדוד",
+        junkProgress: (scanned, total) => `מודד… ${scanned} מתוך ${total}`,
+        junkMeasuring: "מודד…",
+        junkBasis: (count) => count === 1 ? 'על פני כלי ניקוי מומלץ אחד' : count === 2 ? 'על פני שני כלי ניקוי מומלצים' : `על פני ${count} כלי ניקוי מומלצים`,
+        junkError: (message) => `לא ניתן היה למדוד קבצים מיותרים: ${message}`,
+        openDeepClean: "פתח ניקוי מעמיק",
+        leftTitle: "שאריות",
+        leftCount: (count) => count === 1 ? 'תוכנית אחת' : count === 2 ? 'שתי תוכניות' : `${count} תוכניות`,
+        leftNone: "אין שאריות.",
+        leftReview: "סקור"
       },
       recentActivity: {
         title: 'פעילות אחרונה',
@@ -11148,10 +11148,10 @@ export const CATALOG = {
         unused: 'לא בשימוש',
         store: 'חנות',
         extensions: 'תוספים',
-        broken: 'Left behind',
+        broken: "שאריות",
         storeCount: (n) => `חנות (${n})`,
         extensionsCount: (n) => `תוספים (${n})`,
-        brokenCount: (n) => `Left behind (${n})`
+        brokenCount: (n) => `שאריות (${n})`
       },
       columns: {
         application: "אפליקציה",
@@ -11163,7 +11163,7 @@ export const CATALOG = {
         company: 'חברה',
         website: 'אתר אינטרנט'
       },
-      badges: { broken: 'Left behind', running: 'פועל', store: 'חנות', disabled: 'מושבת', unused: 'לא בשימוש' },
+      badges: { broken: "שאריות", running: 'פועל', store: 'חנות', disabled: 'מושבת', unused: 'לא בשימוש' },
       selectRow: (name) => `בחר את ${name}`,
       selectAll: 'בחר את כל המוצג',
       clearSelection: 'נקה בחירה',
@@ -11175,7 +11175,7 @@ export const CATALOG = {
       openFolder: "פתח תיקייה",
       copyUninstallCommand: "העתק פקודת הסרה",
       commandCopied: "פקודת ההסרה הועתקה.",
-      unusedDefinition: "Flagged as not used recently. Prune keeps no launch history of its own, so check before you remove anything on this list.",
+      unusedDefinition: "מסומן כלא בשימוש לאחרונה. Prune אינו שומר היסטוריית הפעלות משלו, לכן בדוק לפני שתסיר משהו מרשימה זו.",
       copyFailed: "לא ניתן להעתיק.",
       empty: {
         plain: 'אין התאמות.',
@@ -11265,9 +11265,9 @@ export const CATALOG = {
         status: 'סטטוס'
       },
       switchAriaLabel: (name) => `הפעל את ${name} בכניסה למערכת`,
-      copyPath: 'Copy path',
-      pathCopied: 'Path copied.',
-      copyFailed: "Couldn't copy that.",
+      copyPath: "העתק נתיב",
+      pathCopied: "הנתיב הועתק.",
+      copyFailed: "לא ניתן להעתיק.",
       status: {
         invalid: 'לא תקין',
         running: 'פועל',
@@ -11360,7 +11360,7 @@ export const CATALOG = {
       footer: {
         totalLabel: 'סה"כ שטח לפינוי:',
         notMeasuredYet: 'טרם נמדד',
-        previewFirst: 'Preview first to see what will be freed.',
+        previewFirst: "לחץ קודם על ״תצוגה מקדימה״ כדי לראות מה יפונה.",
         unmeasuredSuffix: (count) => ` · ${count} לא נמדד`,
         selectEverything: 'בחר הכל',
         clear: 'נקה',
@@ -11504,7 +11504,7 @@ export const CATALOG = {
       oneAtATime: 'אחת בכל פעם, כי Windows מאפשר רק התקנה או הסרה אחת בכל פעם. חלק מתוכניות ההסרה יציגו את חלונותיהן שלהן וישאלו אותך שאלות.',
       storeWarning: (count) => count === 1
         ? 'לא ניתן לשחזר את אפליקציית החנות באצווה זו מההסגר: הסרתה לוקחת את האפליקציה והנתונים השמורים שלה, והחזרתה משמעה התקנה מחדש מהחנות.'
-        : `לא ניתן לשחזר את ${count} אפליקציות החנות באצווה זו מההסגר: הסרת אחת לוקחת את האפליקציה והנתונים השמורים שלה, והחזרתה משמעה התקנה מחדש מהחנות.`,
+        : `לא ניתן לשחזר את ${count} אפליקציות החנות באצווה זו מההסגר: הסרת אחת מהן לוקחת את האפליקציה והנתונים השמורים שלה, והחזרתה משמעה התקנה מחדש מהחנות.`,
       runsBefore: (name) => `רץ לפני ${name}`,
       reported: (bytes) => `${bytes} דווח`,
       unknownSizeSuffix: (n) => `, ${n} בגודל לא ידוע`,
@@ -11601,7 +11601,7 @@ export const CATALOG = {
     app: {
       installedApplications: "אפליקציות",
       applicationsSummary: (count, size) => `אפליקציות מותקנות: ${count} · ${size}`,
-      applicationsSummaryFiltered: (shown, total, size) => `${shown} of ${total} shown · ${size}`,
+      applicationsSummaryFiltered: (shown, total, size) => `${shown} מתוך ${total} מוצגים · ${size}`,
       removeStoreApp: (name) => `הסר את ${name}`
     }
   },
@@ -11660,8 +11660,8 @@ export const CATALOG = {
         ariaLabel: 'Hány órán át hagyjuk békén a friss fájlokat'
       },
       restorePointCleanup: {
-        title: "Restore point before removing leftovers",
-        description: "Taken before Prune removes the leftover files and registry keys you selected, including after Force remove. On by default; does nothing at all if System Protection is turned off."
+        title: "Visszaállítási pont a maradványok eltávolítása előtt",
+        description: "Azelőtt jön létre, hogy a Prune eltávolítja a kijelölt maradványfájlokat és rendszerleíró kulcsokat, az Eltávolítás kényszerítése után is. Alapértelmezetten be van kapcsolva; ha a Rendszervédelem ki van kapcsolva, egyáltalán nem csinál semmit."
       },
       hideUnavailable: {
         title: 'Nem alkalmazható tisztítók elrejtése',
@@ -11723,12 +11723,12 @@ export const CATALOG = {
       uninstallTab: {
         beforeHeading: 'Eltávolítás előtt',
         restorePointUninstall: {
-          title: "Restore point before running an uninstaller",
-          description: "Taken before the program's own uninstaller runs. It needs Prune to be running as administrator and Windows allows one a day, so when it can't be made the uninstall goes ahead and the dialog says so."
+          title: "Visszaállítási pont az eltávolító futtatása előtt",
+          description: "Azelőtt jön létre, hogy a program saját eltávolítója lefutna. Ehhez a Prune-nak rendszergazdaként kell futnia, és a Windows naponta egyet engedélyez, ezért ha nem hozható létre, az eltávolítás mégis folytatódik, és a párbeszédablak ezt jelzi."
         },
         registryBackup: {
           title: 'Rendszerleíró adatbázis biztonsági mentése eltávolítás előtt',
-          description: "Exports HKLM\\SOFTWARE and HKCU\\Software, typically several hundred MB, and keeps the newest 3. If the backup can't be made, the uninstall doesn't run."
+          description: "Exportálja a HKLM\\SOFTWARE és a HKCU\\Software ágat, jellemzően több száz MB-ot, és a legfrissebb 3 mentést megtartja. Ha a mentés nem hozható létre, az eltávolítás nem fut le."
         },
         deleteLockedFiles: {
           title: 'Zárolt fájlok törlése a következő újraindításkor',
@@ -11760,7 +11760,7 @@ export const CATALOG = {
         reportTitle: 'Hiba jelentése',
         reportDescription: 'Megnyit egy előre kitöltött hibajegyet a GitHubon. A Prune maga nem küld semmit, és mindent látsz, mielőtt bárhová eljutna.',
         reportButton: 'Hiba jelentése',
-        description: "A local, offline uninstaller and cleanup tool for Windows — forced removal with leftover-file scanning, safe quarantine-before-delete, disk mapping, and a cleaner that shows a preview before it removes anything."
+        description: "Helyi, offline eltávolító és tisztítóeszköz Windowshoz — kényszerített eltávolítás maradványfájlok vizsgálatával, biztonságos karantén törlés előtt, lemeztérképezés, valamint egy tisztító, amely bármi eltávolítása előtt előnézetet mutat."
       },
       automation: {
         title: 'Automatizálás',
@@ -11819,45 +11819,45 @@ export const CATALOG = {
         mediaErrors: 'Adathordozó-hibák',
         errorLogEntries: 'Hibanapló-bejegyzések'
       },
-      measuring: 'measuring…',
+      measuring: "mérés…",
       space: {
-        drive: (letter) => `Drive ${letter}:`,
-        heading: 'Where is my space going?',
-        summary: (used, total, free) => `${used} used of ${total} · ${free} free`,
-        loading: 'Reading drive space…',
-        barLabel: (programs, other, free) => `Drive space: installed programs ${programs}, everything else ${other}, free ${free}.`,
-        barLabelMeasuring: (used, free) => `Drive space: ${used} used, ${free} free. Installed programs are still being measured.`,
-        legendPrograms: 'Installed programs',
-        legendOther: 'Everything else',
-        legendUsed: 'Used',
-        legendFree: 'Free',
-        unsized: (count) => `${count} ${count === 1 ? 'program' : 'programs'} without a size`,
-        exceedsUsed: 'Program sizes add up to more than is used on this drive.'
+        drive: (letter) => `${letter}: meghajtó`,
+        heading: "Hová tűnik a helyem?",
+        summary: (used, total, free) => `${total} közül ${used} használt · ${free} szabad`,
+        loading: "Meghajtó helyének beolvasása…",
+        barLabel: (programs, other, free) => `Meghajtó helyfoglalása: telepített programok ${programs}, minden más ${other}, szabad ${free}.`,
+        barLabelMeasuring: (used, free) => `Meghajtó helyfoglalása: ${used} használt, ${free} szabad. A telepített programok mérése még folyamatban van.`,
+        legendPrograms: "Telepített programok",
+        legendOther: "Minden más",
+        legendUsed: "Használt",
+        legendFree: "Szabad",
+        unsized: (count) => `${count} ismeretlen méretű program`,
+        exceedsUsed: "A programok méretének összege több, mint amennyi ezen a meghajtón használatban van."
       },
       largest: {
-        heading: 'Largest programs',
-        openApplications: 'Open Applications',
-        installedCount: (count) => `${count} installed`,
-        measuring: 'Measuring program sizes…',
-        none: 'No program has a measured size yet.',
-        notInList: (size) => `The other ${size} is not in the program list.`,
-        seeDiskMap: 'See it in Disk Map.'
+        heading: "Legnagyobb programok",
+        openApplications: "Alkalmazások megnyitása",
+        installedCount: (count) => `${count} telepítve`,
+        measuring: "Programméretek mérése…",
+        none: "Még egyetlen program mérete sincs megmérve.",
+        notInList: (size) => `A többi ${size} nincs benne a programlistában.`,
+        seeDiskMap: "Megtekintés a Lemeztérképen."
       },
       quiet: {
-        scoreOf: (score) => `${score} of 100`,
-        driveDetails: 'Drive details',
-        junkTitle: 'Junk files',
-        junkNotMeasured: 'Not measured',
-        junkMeasure: 'Measure',
-        junkProgress: (scanned, total) => `Measuring… ${scanned} of ${total}`,
-        junkMeasuring: 'Measuring…',
-        junkBasis: (count) => `Across ${count} recommended ${count === 1 ? 'cleaner' : 'cleaners'}`,
-        junkError: (message) => `Couldn't measure junk files: ${message}`,
-        openDeepClean: 'Open Deep Clean',
-        leftTitle: 'Left behind',
-        leftCount: (count) => `${count} ${count === 1 ? 'program' : 'programs'}`,
-        leftNone: 'Nothing left behind.',
-        leftReview: 'Review'
+        scoreOf: (score) => `${score} / 100`,
+        driveDetails: "Meghajtó részletei",
+        junkTitle: "Felesleges fájlok",
+        junkNotMeasured: "Nincs megmérve",
+        junkMeasure: "Mérés",
+        junkProgress: (scanned, total) => `Mérés… ${scanned} / ${total}`,
+        junkMeasuring: "Mérés…",
+        junkBasis: (count) => `${count} ajánlott tisztító alapján`,
+        junkError: (message) => `A felesleges fájlok nem mérhetők meg: ${message}`,
+        openDeepClean: "Mélytisztítás megnyitása",
+        leftTitle: "Maradványok",
+        leftCount: (count) => `${count} program`,
+        leftNone: "Nincs hátramaradt maradvány.",
+        leftReview: "Átnézés"
       },
       recentActivity: {
         title: "Legutóbbi tevékenység",
@@ -11975,10 +11975,10 @@ export const CATALOG = {
         unused: 'Nem használt',
         store: 'Áruház',
         extensions: 'Bővítmények',
-        broken: 'Left behind',
+        broken: "Maradványok",
         storeCount: (n) => `Áruház (${n})`,
         extensionsCount: (n) => `Bővítmények (${n})`,
-        brokenCount: (n) => `Left behind (${n})`
+        brokenCount: (n) => `Maradványok (${n})`
       },
       columns: {
         application: 'Alkalmazás',
@@ -11990,7 +11990,7 @@ export const CATALOG = {
         company: 'Vállalat',
         website: 'Weboldal'
       },
-      badges: { broken: 'Left behind', running: 'Fut', store: 'Áruház', disabled: 'Letiltva', unused: 'Nem használt' },
+      badges: { broken: "Maradvány", running: 'Fut', store: 'Áruház', disabled: 'Letiltva', unused: 'Nem használt' },
       selectRow: (name) => `${name} kiválasztása`,
       selectAll: 'Az összes megjelenített kiválasztása',
       clearSelection: 'Kijelölés törlése',
@@ -12002,7 +12002,7 @@ export const CATALOG = {
       openFolder: "Mappa megnyitása",
       copyUninstallCommand: "Eltávolítási parancs másolása",
       commandCopied: "Az eltávolítási parancs átmásolva.",
-      unusedDefinition: "Flagged as not used recently. Prune keeps no launch history of its own, so check before you remove anything on this list.",
+      unusedDefinition: "Mostanában nem használtként megjelölve. A Prune nem vezet saját indítási előzményt, ezért ellenőrizd, mielőtt bármit eltávolítasz erről a listáról.",
       copyFailed: "Nem sikerült másolni.",
       empty: {
         plain: 'Semmi sem egyezik.',
@@ -12092,9 +12092,9 @@ export const CATALOG = {
         status: 'Állapot'
       },
       switchAriaLabel: (name) => `${name} futtatása bejelentkezéskor`,
-      copyPath: 'Copy path',
-      pathCopied: 'Path copied.',
-      copyFailed: "Couldn't copy that.",
+      copyPath: "Útvonal másolása",
+      pathCopied: "Útvonal átmásolva.",
+      copyFailed: "Ezt nem sikerült átmásolni.",
       status: {
         invalid: 'Érvénytelen',
         running: 'Fut',
@@ -12187,7 +12187,7 @@ export const CATALOG = {
       footer: {
         totalLabel: 'Felszabadítható hely összesen:',
         notMeasuredYet: 'még nincs megmérve',
-        previewFirst: 'Preview first to see what will be freed.',
+        previewFirst: "Előbb nézd meg az előnézetet, hogy lásd, mi szabadul fel.",
         unmeasuredSuffix: (count) => ` · ${count} nem mért`,
         selectEverything: 'Összes kijelölése',
         clear: 'Törlés',
@@ -12428,7 +12428,7 @@ export const CATALOG = {
     app: {
       installedApplications: "Alkalmazások",
       applicationsSummary: (count, size) => `${count} telepített alkalmazás · ${size}`,
-      applicationsSummaryFiltered: (shown, total, size) => `${shown} of ${total} shown · ${size}`,
+      applicationsSummaryFiltered: (shown, total, size) => `${total} közül ${shown} látható · ${size}`,
       removeStoreApp: (name) => `${name} eltávolítása`
     }
   },
@@ -12487,8 +12487,8 @@ export const CATALOG = {
         ariaLabel: 'Jam untuk membiarkan file terbaru'
       },
       restorePointCleanup: {
-        title: "Restore point before removing leftovers",
-        description: "Taken before Prune removes the leftover files and registry keys you selected, including after Force remove. On by default; does nothing at all if System Protection is turned off."
+        title: "Titik pemulihan sebelum menghapus sisa",
+        description: "Dibuat sebelum Prune menghapus file sisa dan kunci registri yang dipilih, termasuk setelah Paksa hapus. Aktif secara bawaan; tidak melakukan apa pun jika Perlindungan Sistem dinonaktifkan."
       },
       hideUnavailable: {
         title: 'Sembunyikan pembersih yang tidak berlaku',
@@ -12550,12 +12550,12 @@ export const CATALOG = {
       uninstallTab: {
         beforeHeading: 'Sebelum uninstal',
         restorePointUninstall: {
-          title: "Restore point before running an uninstaller",
-          description: "Taken before the program's own uninstaller runs. It needs Prune to be running as administrator and Windows allows one a day, so when it can't be made the uninstall goes ahead and the dialog says so."
+          title: "Titik pemulihan sebelum menjalankan uninstaller",
+          description: "Dibuat sebelum uninstaller milik program berjalan. Memerlukan Prune berjalan sebagai administrator dan Windows hanya mengizinkan satu per hari, jadi jika tidak bisa dibuat, uninstal tetap dilanjutkan dan dialog memberi tahu."
         },
         registryBackup: {
           title: 'Cadangkan registri sebelum uninstal',
-          description: "Exports HKLM\\SOFTWARE and HKCU\\Software, typically several hundred MB, and keeps the newest 3. If the backup can't be made, the uninstall doesn't run."
+          description: "Mengekspor HKLM\\SOFTWARE dan HKCU\\Software, biasanya beberapa ratus MB, dan menyimpan 3 yang terbaru. Jika cadangan tidak dapat dibuat, uninstal tidak dijalankan."
         },
         deleteLockedFiles: {
           title: 'Hapus file terkunci saat mulai ulang berikutnya',
@@ -12587,7 +12587,7 @@ export const CATALOG = {
         reportTitle: 'Laporkan bug',
         reportDescription: 'Membuka isu yang sudah terisi di GitHub. Prune sendiri tidak mengirim apa pun, dan Anda melihat semuanya sebelum dikirim ke mana pun.',
         reportButton: 'Laporkan bug',
-        description: "A local, offline uninstaller and cleanup tool for Windows — forced removal with leftover-file scanning, safe quarantine-before-delete, disk mapping, and a cleaner that shows a preview before it removes anything."
+        description: "Alat uninstal dan pembersihan lokal dan offline untuk Windows — penghapusan paksa dengan pemindaian sisa, karantina aman sebelum hapus, pemetaan disk, dan pembersih yang menampilkan pratinjau sebelum menghapus apa pun."
       },
       automation: {
         title: 'Otomatisasi',
@@ -12646,45 +12646,45 @@ export const CATALOG = {
         mediaErrors: 'Kesalahan media',
         errorLogEntries: 'Entri log kesalahan'
       },
-      measuring: 'measuring…',
+      measuring: "mengukur…",
       space: {
-        drive: (letter) => `Drive ${letter}:`,
-        heading: 'Where is my space going?',
-        summary: (used, total, free) => `${used} used of ${total} · ${free} free`,
-        loading: 'Reading drive space…',
-        barLabel: (programs, other, free) => `Drive space: installed programs ${programs}, everything else ${other}, free ${free}.`,
-        barLabelMeasuring: (used, free) => `Drive space: ${used} used, ${free} free. Installed programs are still being measured.`,
-        legendPrograms: 'Installed programs',
-        legendOther: 'Everything else',
-        legendUsed: 'Used',
-        legendFree: 'Free',
-        unsized: (count) => `${count} ${count === 1 ? 'program' : 'programs'} without a size`,
-        exceedsUsed: 'Program sizes add up to more than is used on this drive.'
+        drive: (letter) => `Disk ${letter}:`,
+        heading: "Ke mana perginya ruang saya?",
+        summary: (used, total, free) => `${used} terpakai dari ${total} · ${free} kosong`,
+        loading: "Membaca ruang disk…",
+        barLabel: (programs, other, free) => `Ruang disk: program terpasang ${programs}, semua yang lain ${other}, kosong ${free}.`,
+        barLabelMeasuring: (used, free) => `Ruang disk: ${used} terpakai, ${free} kosong. Program terpasang masih diukur.`,
+        legendPrograms: "Program terpasang",
+        legendOther: "Semua yang lain",
+        legendUsed: "Terpakai",
+        legendFree: "Kosong",
+        unsized: (count) => `${count} program tanpa ukuran`,
+        exceedsUsed: "Total ukuran program melebihi ruang yang terpakai di disk ini."
       },
       largest: {
-        heading: 'Largest programs',
-        openApplications: 'Open Applications',
-        installedCount: (count) => `${count} installed`,
-        measuring: 'Measuring program sizes…',
-        none: 'No program has a measured size yet.',
-        notInList: (size) => `The other ${size} is not in the program list.`,
-        seeDiskMap: 'See it in Disk Map.'
+        heading: "Program terbesar",
+        openApplications: "Buka Aplikasi",
+        installedCount: (count) => `${count} terpasang`,
+        measuring: "Mengukur ukuran program…",
+        none: "Belum ada program yang ukurannya terukur.",
+        notInList: (size) => `${size} lainnya tidak ada di daftar program.`,
+        seeDiskMap: "Lihat di Peta Disk."
       },
       quiet: {
-        scoreOf: (score) => `${score} of 100`,
-        driveDetails: 'Drive details',
-        junkTitle: 'Junk files',
-        junkNotMeasured: 'Not measured',
-        junkMeasure: 'Measure',
-        junkProgress: (scanned, total) => `Measuring… ${scanned} of ${total}`,
-        junkMeasuring: 'Measuring…',
-        junkBasis: (count) => `Across ${count} recommended ${count === 1 ? 'cleaner' : 'cleaners'}`,
-        junkError: (message) => `Couldn't measure junk files: ${message}`,
-        openDeepClean: 'Open Deep Clean',
-        leftTitle: 'Left behind',
-        leftCount: (count) => `${count} ${count === 1 ? 'program' : 'programs'}`,
-        leftNone: 'Nothing left behind.',
-        leftReview: 'Review'
+        scoreOf: (score) => `${score} dari 100`,
+        driveDetails: "Detail disk",
+        junkTitle: "File sampah",
+        junkNotMeasured: "Belum diukur",
+        junkMeasure: "Ukur",
+        junkProgress: (scanned, total) => `Mengukur… ${scanned} dari ${total}`,
+        junkMeasuring: "Mengukur…",
+        junkBasis: (count) => `Dari ${count} pembersih yang direkomendasikan`,
+        junkError: (message) => `Tidak dapat mengukur file sampah: ${message}`,
+        openDeepClean: "Buka Pembersihan Mendalam",
+        leftTitle: "Sisa",
+        leftCount: (count) => `${count} program`,
+        leftNone: "Tidak ada sisa.",
+        leftReview: "Tinjau"
       },
       recentActivity: {
         title: 'Aktivitas Terbaru',
@@ -12802,10 +12802,10 @@ export const CATALOG = {
         unused: 'Tidak digunakan',
         store: 'Store',
         extensions: 'Ekstensi',
-        broken: 'Left behind',
+        broken: "Sisa",
         storeCount: (n) => `Store (${n})`,
         extensionsCount: (n) => `Ekstensi (${n})`,
-        brokenCount: (n) => `Left behind (${n})`
+        brokenCount: (n) => `Sisa (${n})`
       },
       columns: {
         application: 'Aplikasi',
@@ -12817,7 +12817,7 @@ export const CATALOG = {
         company: 'Perusahaan',
         website: 'Situs web'
       },
-      badges: { broken: 'Left behind', running: 'Berjalan', store: 'Store', disabled: 'Dinonaktifkan', unused: 'Tidak digunakan' },
+      badges: { broken: "Sisa", running: 'Berjalan', store: 'Store', disabled: 'Dinonaktifkan', unused: 'Tidak digunakan' },
       selectRow: (name) => `Pilih ${name}`,
       selectAll: 'Pilih semua yang ditampilkan',
       clearSelection: 'Hapus pilihan',
@@ -12829,7 +12829,7 @@ export const CATALOG = {
       openFolder: "Buka folder",
       copyUninstallCommand: "Salin perintah uninstal",
       commandCopied: "Perintah uninstal disalin.",
-      unusedDefinition: "Flagged as not used recently. Prune keeps no launch history of its own, so check before you remove anything on this list.",
+      unusedDefinition: "Ditandai tidak digunakan baru-baru ini. Prune tidak menyimpan riwayat peluncuran sendiri, jadi periksa dulu sebelum menghapus apa pun dari daftar ini.",
       copyFailed: "Tidak dapat menyalin.",
       empty: {
         plain: 'Tidak ada yang cocok.',
@@ -12919,9 +12919,9 @@ export const CATALOG = {
         status: 'Status'
       },
       switchAriaLabel: (name) => `Jalankan ${name} saat masuk`,
-      copyPath: 'Copy path',
-      pathCopied: 'Path copied.',
-      copyFailed: "Couldn't copy that.",
+      copyPath: "Salin jalur",
+      pathCopied: "Jalur disalin.",
+      copyFailed: "Tidak dapat menyalin.",
       status: {
         invalid: 'Tidak valid',
         running: 'Berjalan',
@@ -13014,7 +13014,7 @@ export const CATALOG = {
       footer: {
         totalLabel: 'Total ruang yang akan dibebaskan:',
         notMeasuredYet: 'belum diukur',
-        previewFirst: 'Preview first to see what will be freed.',
+        previewFirst: "Klik Pratinjau dulu untuk melihat apa yang akan dibebaskan.",
         unmeasuredSuffix: (count) => ` · ${count} tidak terukur`,
         selectEverything: 'Pilih semua',
         clear: "Hapus pilihan",
@@ -13255,7 +13255,7 @@ export const CATALOG = {
     app: {
       installedApplications: "Aplikasi",
       applicationsSummary: (count, size) => `${count} aplikasi terpasang · ${size}`,
-      applicationsSummaryFiltered: (shown, total, size) => `${shown} of ${total} shown · ${size}`,
+      applicationsSummaryFiltered: (shown, total, size) => `${shown} dari ${total} ditampilkan · ${size}`,
       removeStoreApp: (name) => `Hapus ${name}`
     }
   },
@@ -13314,8 +13314,8 @@ export const CATALOG = {
         ariaLabel: "Klukkustundir til að láta nýlegar skrár í friði"
       },
       restorePointCleanup: {
-        title: "Restore point before removing leftovers",
-        description: "Taken before Prune removes the leftover files and registry keys you selected, including after Force remove. On by default; does nothing at all if System Protection is turned off."
+        title: "Endurheimtunarpunktur áður en leifar eru fjarlægðar",
+        description: "Búinn til áður en Prune fjarlægir leifaskrárnar og skráningarlyklana sem þú valdir, einnig eftir Þvinga fjarlægingu. Virkt sjálfgefið; gerir ekkert ef Kerfisvernd er slökkt."
       },
       hideUnavailable: {
         title: 'Fela hreinsara sem eiga ekki við',
@@ -13377,12 +13377,12 @@ export const CATALOG = {
       uninstallTab: {
         beforeHeading: 'Áður en fjarlægt er',
         restorePointUninstall: {
-          title: "Restore point before running an uninstaller",
-          description: "Taken before the program's own uninstaller runs. It needs Prune to be running as administrator and Windows allows one a day, so when it can't be made the uninstall goes ahead and the dialog says so."
+          title: "Endurheimtunarpunktur áður en fjarlægingarforrit er keyrt",
+          description: "Búinn til áður en eigið fjarlægingarforrit forritsins keyrir. Það krefst þess að Prune keyri sem kerfisstjóri og Windows leyfir einn á dag, þannig að ef ekki er hægt að búa hann til heldur fjarlægingin áfram og glugginn segir frá því."
         },
         registryBackup: {
           title: 'Taka afrit af skráningargrunni áður en fjarlægt er',
-          description: "Exports HKLM\\SOFTWARE and HKCU\\Software, typically several hundred MB, and keeps the newest 3. If the backup can't be made, the uninstall doesn't run."
+          description: "Flytur út HKLM\\SOFTWARE og HKCU\\Software, venjulega nokkur hundruð MB, og heldur nýjustu 3. Ef ekki er hægt að taka afritið er fjarlæging ekki keyrð."
         },
         deleteLockedFiles: {
           title: 'Eyða læstum skrám við næstu endurræsingu',
@@ -13414,7 +13414,7 @@ export const CATALOG = {
         reportTitle: 'Tilkynna villu',
         reportDescription: "Opnar forútfyllt mál á GitHub. Prune sendir sjálft ekkert og þú sérð allt áður en nokkuð er sent.",
         reportButton: 'Tilkynna villu',
-        description: "A local, offline uninstaller and cleanup tool for Windows — forced removal with leftover-file scanning, safe quarantine-before-delete, disk mapping, and a cleaner that shows a preview before it removes anything."
+        description: "Staðbundið tól án nettengingar til að fjarlægja og hreinsa í Windows — þvinguð fjarlæging með skönnun eftir leifaskrám, örugg sóttkví áður en eytt er, diskakortlagning og hreinsari sem sýnir forskoðun áður en nokkru er eytt."
       },
       automation: {
         title: 'Sjálfvirkni',
@@ -13473,45 +13473,45 @@ export const CATALOG = {
         mediaErrors: 'Miðilsvillur',
         errorLogEntries: 'Færslur í villuskrá'
       },
-      measuring: 'measuring…',
+      measuring: "mæli…",
       space: {
-        drive: (letter) => `Drive ${letter}:`,
-        heading: 'Where is my space going?',
-        summary: (used, total, free) => `${used} used of ${total} · ${free} free`,
-        loading: 'Reading drive space…',
-        barLabel: (programs, other, free) => `Drive space: installed programs ${programs}, everything else ${other}, free ${free}.`,
-        barLabelMeasuring: (used, free) => `Drive space: ${used} used, ${free} free. Installed programs are still being measured.`,
-        legendPrograms: 'Installed programs',
-        legendOther: 'Everything else',
-        legendUsed: 'Used',
-        legendFree: 'Free',
-        unsized: (count) => `${count} ${count === 1 ? 'program' : 'programs'} without a size`,
-        exceedsUsed: 'Program sizes add up to more than is used on this drive.'
+        drive: (letter) => `Diskur ${letter}:`,
+        heading: "Hvert fer plássið mitt?",
+        summary: (used, total, free) => `Notað: ${used} af ${total} · laust: ${free}`,
+        loading: "Les pláss disksins…",
+        barLabel: (programs, other, free) => `Diskpláss: uppsett forrit ${programs}, allt annað ${other}, laust ${free}.`,
+        barLabelMeasuring: (used, free) => `Diskpláss: ${used} notað, ${free} laust. Enn er verið að mæla uppsett forrit.`,
+        legendPrograms: "Uppsett forrit",
+        legendOther: "Allt annað",
+        legendUsed: "Notað",
+        legendFree: "Laust",
+        unsized: (count) => `${count} forrit án stærðar`,
+        exceedsUsed: "Stærðir forritanna eru samtals meiri en það sem er notað á þessum diski."
       },
       largest: {
-        heading: 'Largest programs',
-        openApplications: 'Open Applications',
-        installedCount: (count) => `${count} installed`,
-        measuring: 'Measuring program sizes…',
-        none: 'No program has a measured size yet.',
-        notInList: (size) => `The other ${size} is not in the program list.`,
-        seeDiskMap: 'See it in Disk Map.'
+        heading: "Stærstu forritin",
+        openApplications: "Opna Forrit",
+        installedCount: (count) => `${count} uppsett`,
+        measuring: "Mæli stærðir forrita…",
+        none: "Ekkert forrit hefur mælda stærð enn.",
+        notInList: (size) => `Hin ${size} eru ekki á forritalistanum.`,
+        seeDiskMap: "Sjá það í Diskakorti."
       },
       quiet: {
-        scoreOf: (score) => `${score} of 100`,
-        driveDetails: 'Drive details',
-        junkTitle: 'Junk files',
-        junkNotMeasured: 'Not measured',
-        junkMeasure: 'Measure',
-        junkProgress: (scanned, total) => `Measuring… ${scanned} of ${total}`,
-        junkMeasuring: 'Measuring…',
-        junkBasis: (count) => `Across ${count} recommended ${count === 1 ? 'cleaner' : 'cleaners'}`,
-        junkError: (message) => `Couldn't measure junk files: ${message}`,
-        openDeepClean: 'Open Deep Clean',
-        leftTitle: 'Left behind',
-        leftCount: (count) => `${count} ${count === 1 ? 'program' : 'programs'}`,
-        leftNone: 'Nothing left behind.',
-        leftReview: 'Review'
+        scoreOf: (score) => `${score} af 100`,
+        driveDetails: "Upplýsingar um disk",
+        junkTitle: "Óþarfa skrár",
+        junkNotMeasured: "Ekki mælt",
+        junkMeasure: "Mæla",
+        junkProgress: (scanned, total) => `Mæli… ${scanned} af ${total}`,
+        junkMeasuring: "Mæli…",
+        junkBasis: (count) => `Ráðlagðir hreinsarar: ${count}`,
+        junkError: (message) => `Ekki tókst að mæla óþarfa skrár: ${message}`,
+        openDeepClean: "Opna Djúphreinsun",
+        leftTitle: "Leifar",
+        leftCount: (count) => `${count} forrit`,
+        leftNone: "Engar leifar.",
+        leftReview: "Fara yfir"
       },
       recentActivity: {
         title: "Nýleg virkni",
@@ -13629,10 +13629,10 @@ export const CATALOG = {
         unused: 'Ónotað',
         store: 'Verslun',
         extensions: 'Viðbætur',
-        broken: 'Left behind',
+        broken: "Leifar",
         storeCount: (n) => `Verslun (${n})`,
         extensionsCount: (n) => `Viðbætur (${n})`,
-        brokenCount: (n) => `Left behind (${n})`
+        brokenCount: (n) => `Leifar (${n})`
       },
       columns: {
         application: 'Forrit',
@@ -13644,7 +13644,7 @@ export const CATALOG = {
         company: 'Fyrirtæki',
         website: 'Vefsíða'
       },
-      badges: { broken: 'Left behind', running: 'Í gangi', store: 'Verslun', disabled: 'Óvirkt', unused: 'Ónotað' },
+      badges: { broken: "Leifar", running: 'Í gangi', store: 'Verslun', disabled: 'Óvirkt', unused: 'Ónotað' },
       selectRow: (name) => `Velja ${name}`,
       selectAll: 'Velja allt sem sýnt er',
       clearSelection: 'Hreinsa val',
@@ -13656,7 +13656,7 @@ export const CATALOG = {
       openFolder: "Opna möppu",
       copyUninstallCommand: "Afrita fjarlægingarskipun",
       commandCopied: "Fjarlægingarskipun afrituð.",
-      unusedDefinition: "Flagged as not used recently. Prune keeps no launch history of its own, so check before you remove anything on this list.",
+      unusedDefinition: "Merkt sem ekki notað nýlega. Prune heldur ekki eigin sögu um ræsingar, svo athugaðu áður en þú fjarlægir eitthvað á þessum lista.",
       copyFailed: "Ekki tókst að afrita.",
       empty: {
         plain: 'Ekkert passar.',
@@ -13746,9 +13746,9 @@ export const CATALOG = {
         status: 'Staða'
       },
       switchAriaLabel: (name) => `Keyra ${name} við innskráningu`,
-      copyPath: 'Copy path',
-      pathCopied: 'Path copied.',
-      copyFailed: "Couldn't copy that.",
+      copyPath: "Afrita slóð",
+      pathCopied: "Slóð afrituð.",
+      copyFailed: "Ekki tókst að afrita.",
       status: {
         invalid: 'Ógilt',
         running: 'Í gangi',
@@ -13841,7 +13841,7 @@ export const CATALOG = {
       footer: {
         totalLabel: 'Heildarrými til að losa:',
         notMeasuredYet: 'ekki mælt enn',
-        previewFirst: 'Preview first to see what will be freed.',
+        previewFirst: "Skoðaðu forskoðun fyrst til að sjá hvað losnar.",
         unmeasuredSuffix: (count) => ` · ${count} ómælt`,
         selectEverything: 'Velja allt',
         clear: 'Hreinsa',
@@ -14082,7 +14082,7 @@ export const CATALOG = {
     app: {
       installedApplications: "Forrit",
       applicationsSummary: (count, size) => `Uppsett forrit: ${count} · ${size}`,
-      applicationsSummaryFiltered: (shown, total, size) => `${shown} of ${total} shown · ${size}`,
+      applicationsSummaryFiltered: (shown, total, size) => `Sýni ${shown} af ${total} · ${size}`,
       removeStoreApp: (name) => `Fjarlægja ${name}`
     }
   },
@@ -14141,8 +14141,8 @@ export const CATALOG = {
         ariaLabel: 'Ore per cui lasciare stare i file recenti'
       },
       restorePointCleanup: {
-        title: "Restore point before removing leftovers",
-        description: "Taken before Prune removes the leftover files and registry keys you selected, including after Force remove. On by default; does nothing at all if System Protection is turned off."
+        title: "Punto di ripristino prima di rimuovere i residui",
+        description: "Creato prima che Prune rimuova i file e le chiavi di registro residui che hai selezionato, anche dopo Forza rimozione. Attivo per impostazione predefinita; non fa nulla se la Protezione sistema è disattivata."
       },
       hideUnavailable: {
         title: "Nascondi gli strumenti di pulizia non applicabili",
@@ -14204,12 +14204,12 @@ export const CATALOG = {
       uninstallTab: {
         beforeHeading: 'Prima di disinstallare',
         restorePointUninstall: {
-          title: "Restore point before running an uninstaller",
-          description: "Taken before the program's own uninstaller runs. It needs Prune to be running as administrator and Windows allows one a day, so when it can't be made the uninstall goes ahead and the dialog says so."
+          title: "Punto di ripristino prima di eseguire un programma di disinstallazione",
+          description: "Creato prima che venga eseguito il programma di disinstallazione del programma stesso. Richiede che Prune sia in esecuzione come amministratore e Windows ne consente uno al giorno, quindi quando non può essere creato la disinstallazione prosegue e la finestra lo segnala."
         },
         registryBackup: {
           title: 'Backup del registro prima di disinstallare',
-          description: "Exports HKLM\\SOFTWARE and HKCU\\Software, typically several hundred MB, and keeps the newest 3. If the backup can't be made, the uninstall doesn't run."
+          description: "Esporta HKLM\\SOFTWARE e HKCU\\Software, in genere diverse centinaia di MB, e conserva i 3 più recenti. Se il backup non può essere creato, la disinstallazione non viene eseguita."
         },
         deleteLockedFiles: {
           title: 'Elimina i file bloccati al prossimo riavvio',
@@ -14241,7 +14241,7 @@ export const CATALOG = {
         reportTitle: 'Segnala un bug',
         reportDescription: "Apre una segnalazione precompilata su GitHub. Prune non invia nulla da solo e vedi tutto prima che venga inviato qualsiasi cosa.",
         reportButton: 'Segnala un bug',
-        description: "A local, offline uninstaller and cleanup tool for Windows — forced removal with leftover-file scanning, safe quarantine-before-delete, disk mapping, and a cleaner that shows a preview before it removes anything."
+        description: "Uno strumento locale, offline, di disinstallazione e pulizia per Windows — rimozione forzata con scansione dei file residui, quarantena sicura prima dell'eliminazione, mappatura del disco e un sistema di pulizia che mostra un'anteprima prima di rimuovere qualsiasi cosa."
       },
       automation: {
         title: 'Automazione',
@@ -14300,45 +14300,45 @@ export const CATALOG = {
         mediaErrors: 'Errori del supporto',
         errorLogEntries: 'Voci del registro errori'
       },
-      measuring: 'measuring…',
+      measuring: "misurazione in corso…",
       space: {
-        drive: (letter) => `Drive ${letter}:`,
-        heading: 'Where is my space going?',
-        summary: (used, total, free) => `${used} used of ${total} · ${free} free`,
-        loading: 'Reading drive space…',
-        barLabel: (programs, other, free) => `Drive space: installed programs ${programs}, everything else ${other}, free ${free}.`,
-        barLabelMeasuring: (used, free) => `Drive space: ${used} used, ${free} free. Installed programs are still being measured.`,
-        legendPrograms: 'Installed programs',
-        legendOther: 'Everything else',
-        legendUsed: 'Used',
-        legendFree: 'Free',
-        unsized: (count) => `${count} ${count === 1 ? 'program' : 'programs'} without a size`,
-        exceedsUsed: 'Program sizes add up to more than is used on this drive.'
+        drive: (letter) => `Disco ${letter}:`,
+        heading: "Dove va a finire il mio spazio?",
+        summary: (used, total, free) => `${used} usati su ${total} · ${free} liberi`,
+        loading: "Lettura dello spazio del disco…",
+        barLabel: (programs, other, free) => `Spazio del disco: programmi installati ${programs}, tutto il resto ${other}, libero ${free}.`,
+        barLabelMeasuring: (used, free) => `Spazio del disco: ${used} usati, ${free} liberi. I programmi installati sono ancora in fase di misurazione.`,
+        legendPrograms: "Programmi installati",
+        legendOther: "Tutto il resto",
+        legendUsed: "Usato",
+        legendFree: "Libero",
+        unsized: (count) => `${count} ${count === 1 ? 'programma' : 'programmi'} senza dimensione`,
+        exceedsUsed: "Le dimensioni dei programmi sommate superano lo spazio usato su questo disco."
       },
       largest: {
-        heading: 'Largest programs',
-        openApplications: 'Open Applications',
-        installedCount: (count) => `${count} installed`,
-        measuring: 'Measuring program sizes…',
-        none: 'No program has a measured size yet.',
-        notInList: (size) => `The other ${size} is not in the program list.`,
-        seeDiskMap: 'See it in Disk Map.'
+        heading: "Programmi più grandi",
+        openApplications: "Apri Applicazioni",
+        installedCount: (count) => `${count} ${count === 1 ? 'installato' : 'installati'}`,
+        measuring: "Misurazione delle dimensioni dei programmi…",
+        none: "Nessun programma ha ancora una dimensione misurata.",
+        notInList: (size) => `Gli altri ${size} non sono nell'elenco dei programmi.`,
+        seeDiskMap: "Guardalo in Mappa del disco."
       },
       quiet: {
-        scoreOf: (score) => `${score} of 100`,
-        driveDetails: 'Drive details',
-        junkTitle: 'Junk files',
-        junkNotMeasured: 'Not measured',
-        junkMeasure: 'Measure',
-        junkProgress: (scanned, total) => `Measuring… ${scanned} of ${total}`,
-        junkMeasuring: 'Measuring…',
-        junkBasis: (count) => `Across ${count} recommended ${count === 1 ? 'cleaner' : 'cleaners'}`,
-        junkError: (message) => `Couldn't measure junk files: ${message}`,
-        openDeepClean: 'Open Deep Clean',
-        leftTitle: 'Left behind',
-        leftCount: (count) => `${count} ${count === 1 ? 'program' : 'programs'}`,
-        leftNone: 'Nothing left behind.',
-        leftReview: 'Review'
+        scoreOf: (score) => `${score} su 100`,
+        driveDetails: "Dettagli del disco",
+        junkTitle: "File inutili",
+        junkNotMeasured: "Non misurato",
+        junkMeasure: "Misura",
+        junkProgress: (scanned, total) => `Misurazione… ${scanned} su ${total}`,
+        junkMeasuring: "Misurazione in corso…",
+        junkBasis: (count) => `Su ${count} ${count === 1 ? 'strumento di pulizia consigliato' : 'strumenti di pulizia consigliati'}`,
+        junkError: (message) => `Impossibile misurare i file inutili: ${message}`,
+        openDeepClean: "Apri Pulizia approfondita",
+        leftTitle: "Residui",
+        leftCount: (count) => `${count} ${count === 1 ? 'programma' : 'programmi'}`,
+        leftNone: "Nessun residuo.",
+        leftReview: "Controlla"
       },
       recentActivity: {
         title: "Attività recente",
@@ -14456,10 +14456,10 @@ export const CATALOG = {
         unused: 'Non usate',
         store: 'Store',
         extensions: 'Estensioni',
-        broken: 'Left behind',
+        broken: "Residui",
         storeCount: (n) => `Store (${n})`,
         extensionsCount: (n) => `Estensioni (${n})`,
-        brokenCount: (n) => `Left behind (${n})`
+        brokenCount: (n) => `Residui (${n})`
       },
       columns: {
         application: 'Applicazione',
@@ -14471,7 +14471,7 @@ export const CATALOG = {
         company: 'Azienda',
         website: 'Sito web'
       },
-      badges: { broken: 'Left behind', running: 'In esecuzione', store: 'Store', disabled: 'Disabilitato', unused: 'Non usato' },
+      badges: { broken: "Residui", running: 'In esecuzione', store: 'Store', disabled: 'Disabilitato', unused: 'Non usato' },
       selectRow: (name) => `Seleziona ${name}`,
       selectAll: 'Seleziona tutti quelli mostrati',
       clearSelection: "Deseleziona tutto",
@@ -14483,7 +14483,7 @@ export const CATALOG = {
       openFolder: "Apri cartella",
       copyUninstallCommand: "Copia comando di disinstallazione",
       commandCopied: "Comando di disinstallazione copiato.",
-      unusedDefinition: "Flagged as not used recently. Prune keeps no launch history of its own, so check before you remove anything on this list.",
+      unusedDefinition: "Segnalato come non usato di recente. Prune non conserva una propria cronologia degli avvii, quindi controlla prima di rimuovere qualsiasi cosa da questo elenco.",
       copyFailed: "Impossibile copiare.",
       empty: {
         plain: 'Nessuna corrispondenza.',
@@ -14573,9 +14573,9 @@ export const CATALOG = {
         status: 'Stato'
       },
       switchAriaLabel: (name) => `Esegui ${name} all'accesso`,
-      copyPath: 'Copy path',
-      pathCopied: 'Path copied.',
-      copyFailed: "Couldn't copy that.",
+      copyPath: "Copia percorso",
+      pathCopied: "Percorso copiato.",
+      copyFailed: "Impossibile copiare.",
       status: {
         invalid: 'Non valido',
         running: 'In esecuzione',
@@ -14668,7 +14668,7 @@ export const CATALOG = {
       footer: {
         totalLabel: 'Spazio totale da liberare:',
         notMeasuredYet: 'non ancora misurato',
-        previewFirst: 'Preview first to see what will be freed.',
+        previewFirst: "Guarda prima l'anteprima per vedere cosa verrà liberato.",
         unmeasuredSuffix: (count) => ` · ${count} non misurati`,
         selectEverything: 'Seleziona tutto',
         clear: "Deseleziona",
@@ -14909,7 +14909,7 @@ export const CATALOG = {
     app: {
       installedApplications: "Applicazioni",
       applicationsSummary: (count, size) => `${count} ${count === 1 ? 'applicazione installata' : 'applicazioni installate'} · ${size}`,
-      applicationsSummaryFiltered: (shown, total, size) => `${shown} of ${total} shown · ${size}`,
+      applicationsSummaryFiltered: (shown, total, size) => `${shown} di ${total} mostrati · ${size}`,
       removeStoreApp: (name) => `Rimuovi ${name}`
     }
   },
@@ -14968,8 +14968,8 @@ export const CATALOG = {
         ariaLabel: '最近のファイルをそのままにする時間'
       },
       restorePointCleanup: {
-        title: "Restore point before removing leftovers",
-        description: "Taken before Prune removes the leftover files and registry keys you selected, including after Force remove. On by default; does nothing at all if System Protection is turned off."
+        title: "残留物を削除する前に復元ポイントを作成",
+        description: "Prune が選択された残留ファイルとレジストリキーを削除する前に作成されます。強制削除の後も同様です。デフォルトではオンです。「システムの保護」がオフの場合は何も行われません。"
       },
       hideUnavailable: {
         title: '該当しないクリーナーを非表示',
@@ -15031,12 +15031,12 @@ export const CATALOG = {
       uninstallTab: {
         beforeHeading: 'アンインストール前',
         restorePointUninstall: {
-          title: "Restore point before running an uninstaller",
-          description: "Taken before the program's own uninstaller runs. It needs Prune to be running as administrator and Windows allows one a day, so when it can't be made the uninstall goes ahead and the dialog says so."
+          title: "アンインストーラーを実行する前に復元ポイントを作成",
+          description: "そのプログラム自身のアンインストーラーが実行される前に作成されます。Prune を管理者として実行している必要があり、Windows では 1 日 1 回しか作成できません。作成できない場合はアンインストールをそのまま続行し、ダイアログでお知らせします。"
         },
         registryBackup: {
           title: 'アンインストール前にレジストリをバックアップ',
-          description: "Exports HKLM\\SOFTWARE and HKCU\\Software, typically several hundred MB, and keeps the newest 3. If the backup can't be made, the uninstall doesn't run."
+          description: "HKLM\\SOFTWARE と HKCU\\Software をエクスポートします。通常は数百 MB になり、最新の 3 件を保持します。バックアップを作成できない場合、アンインストールは実行されません。"
         },
         deleteLockedFiles: {
           title: '次回の再起動時にロックされたファイルを削除',
@@ -15068,7 +15068,7 @@ export const CATALOG = {
         reportTitle: 'バグを報告',
         reportDescription: "GitHub で入力済みの Issue を開きます。Prune 自体は何も送信せず、内容はどこかへ送られる前にすべて確認できます。",
         reportButton: 'バグを報告',
-        description: "A local, offline uninstaller and cleanup tool for Windows — forced removal with leftover-file scanning, safe quarantine-before-delete, disk mapping, and a cleaner that shows a preview before it removes anything."
+        description: "Windows 向けのローカル・オフラインのアンインストール／クリーンアップツールです。残留ファイルのスキャンによる強制削除、削除前の安全な隔離、ディスクマップ、そして何かを削除する前にプレビューを表示するクリーナーを備えています。"
       },
       automation: {
         title: '自動化',
@@ -15127,45 +15127,45 @@ export const CATALOG = {
         mediaErrors: 'メディアエラー',
         errorLogEntries: 'エラーログの件数'
       },
-      measuring: 'measuring…',
+      measuring: "測定中…",
       space: {
-        drive: (letter) => `Drive ${letter}:`,
-        heading: 'Where is my space going?',
-        summary: (used, total, free) => `${used} used of ${total} · ${free} free`,
-        loading: 'Reading drive space…',
-        barLabel: (programs, other, free) => `Drive space: installed programs ${programs}, everything else ${other}, free ${free}.`,
-        barLabelMeasuring: (used, free) => `Drive space: ${used} used, ${free} free. Installed programs are still being measured.`,
-        legendPrograms: 'Installed programs',
-        legendOther: 'Everything else',
-        legendUsed: 'Used',
-        legendFree: 'Free',
-        unsized: (count) => `${count} ${count === 1 ? 'program' : 'programs'} without a size`,
-        exceedsUsed: 'Program sizes add up to more than is used on this drive.'
+        drive: (letter) => `ドライブ ${letter}:`,
+        heading: "容量は何に使われている？",
+        summary: (used, total, free) => `${total} 中 ${used} を使用 · 空き ${free}`,
+        loading: "ドライブの容量を読み取っています…",
+        barLabel: (programs, other, free) => `ドライブの容量: インストール済みのプログラム ${programs}、その他すべて ${other}、空き ${free}。`,
+        barLabelMeasuring: (used, free) => `ドライブの容量: 使用中 ${used}、空き ${free}。インストール済みのプログラムはまだ測定中です。`,
+        legendPrograms: "インストール済みのプログラム",
+        legendOther: "その他すべて",
+        legendUsed: "使用中",
+        legendFree: "空き",
+        unsized: (count) => `サイズ不明のプログラム ${count} 個`,
+        exceedsUsed: "プログラムのサイズの合計が、このドライブの使用量を超えています。"
       },
       largest: {
-        heading: 'Largest programs',
-        openApplications: 'Open Applications',
-        installedCount: (count) => `${count} installed`,
-        measuring: 'Measuring program sizes…',
-        none: 'No program has a measured size yet.',
-        notInList: (size) => `The other ${size} is not in the program list.`,
-        seeDiskMap: 'See it in Disk Map.'
+        heading: "サイズの大きいプログラム",
+        openApplications: "アプリケーションを開く",
+        installedCount: (count) => `${count} 個インストール済み`,
+        measuring: "プログラムのサイズを測定しています…",
+        none: "サイズを測定済みのプログラムはまだありません。",
+        notInList: (size) => `残りの ${size} はプログラム一覧に含まれていません。`,
+        seeDiskMap: "ディスクマップで確認"
       },
       quiet: {
-        scoreOf: (score) => `${score} of 100`,
-        driveDetails: 'Drive details',
-        junkTitle: 'Junk files',
-        junkNotMeasured: 'Not measured',
-        junkMeasure: 'Measure',
-        junkProgress: (scanned, total) => `Measuring… ${scanned} of ${total}`,
-        junkMeasuring: 'Measuring…',
-        junkBasis: (count) => `Across ${count} recommended ${count === 1 ? 'cleaner' : 'cleaners'}`,
-        junkError: (message) => `Couldn't measure junk files: ${message}`,
-        openDeepClean: 'Open Deep Clean',
-        leftTitle: 'Left behind',
-        leftCount: (count) => `${count} ${count === 1 ? 'program' : 'programs'}`,
-        leftNone: 'Nothing left behind.',
-        leftReview: 'Review'
+        scoreOf: (score) => `100 点中 ${score} 点`,
+        driveDetails: "ドライブの詳細",
+        junkTitle: "ジャンクファイル",
+        junkNotMeasured: "未測定",
+        junkMeasure: "測定",
+        junkProgress: (scanned, total) => `測定中… ${total} 件中 ${scanned} 件`,
+        junkMeasuring: "測定中…",
+        junkBasis: (count) => `推奨クリーナー ${count} 件の合計`,
+        junkError: (message) => `ジャンクファイルを測定できませんでした: ${message}`,
+        openDeepClean: "ディープクリーンを開く",
+        leftTitle: "残留物",
+        leftCount: (count) => `${count} 個のプログラム`,
+        leftNone: "残留物はありません。",
+        leftReview: "確認"
       },
       recentActivity: {
         title: '最近のアクティビティ',
@@ -15283,10 +15283,10 @@ export const CATALOG = {
         unused: '未使用',
         store: 'ストア',
         extensions: '拡張機能',
-        broken: 'Left behind',
+        broken: "残留物",
         storeCount: (n) => `ストア (${n})`,
         extensionsCount: (n) => `拡張機能 (${n})`,
-        brokenCount: (n) => `Left behind (${n})`
+        brokenCount: (n) => `残留物 (${n})`
       },
       columns: {
         application: 'アプリケーション',
@@ -15298,7 +15298,7 @@ export const CATALOG = {
         company: '発行元',
         website: 'ウェブサイト'
       },
-      badges: { broken: 'Left behind', running: '実行中', store: 'ストア', disabled: '無効', unused: '未使用' },
+      badges: { broken: "残留物", running: '実行中', store: 'ストア', disabled: '無効', unused: '未使用' },
       selectRow: (name) => `${name} を選択`,
       selectAll: '表示されているものをすべて選択',
       clearSelection: '選択を解除',
@@ -15310,7 +15310,7 @@ export const CATALOG = {
       openFolder: "フォルダーを開く",
       copyUninstallCommand: "アンインストールコマンドをコピー",
       commandCopied: "アンインストールコマンドをコピーしました。",
-      unusedDefinition: "Flagged as not used recently. Prune keeps no launch history of its own, so check before you remove anything on this list.",
+      unusedDefinition: "最近使われていないものとして表示しています。Prune は独自の起動履歴を保持していないため、この一覧のものを削除する前にご確認ください。",
       copyFailed: "コピーできませんでした。",
       empty: {
         plain: '一致するものがありません。',
@@ -15400,9 +15400,9 @@ export const CATALOG = {
         status: '状態'
       },
       switchAriaLabel: (name) => `サインイン時に ${name} を実行`,
-      copyPath: 'Copy path',
-      pathCopied: 'Path copied.',
-      copyFailed: "Couldn't copy that.",
+      copyPath: "パスをコピー",
+      pathCopied: "パスをコピーしました。",
+      copyFailed: "コピーできませんでした。",
       status: {
         invalid: '無効な項目',
         running: '実行中',
@@ -15495,7 +15495,7 @@ export const CATALOG = {
       footer: {
         totalLabel: '解放される容量の合計:',
         notMeasuredYet: '未測定',
-        previewFirst: 'Preview first to see what will be freed.',
+        previewFirst: "まずプレビューで、解放される量を確認してください。",
         unmeasuredSuffix: (count) => ` · 未測定 ${count} 件`,
         selectEverything: 'すべて選択',
         clear: 'クリア',
@@ -15736,7 +15736,7 @@ export const CATALOG = {
     app: {
       installedApplications: 'インストール済みアプリケーション',
       applicationsSummary: (count, size) => `インストール済みアプリケーション ${count} 件 · ${size}`,
-      applicationsSummaryFiltered: (shown, total, size) => `${shown} of ${total} shown · ${size}`,
+      applicationsSummaryFiltered: (shown, total, size) => `${total} 件中 ${shown} 件を表示 · ${size}`,
       removeStoreApp: (name) => `${name} を削除`
     }
   },
@@ -15795,8 +15795,8 @@ export const CATALOG = {
         ariaLabel: '최근 파일을 건드리지 않을 시간'
       },
       restorePointCleanup: {
-        title: "Restore point before removing leftovers",
-        description: "Taken before Prune removes the leftover files and registry keys you selected, including after Force remove. On by default; does nothing at all if System Protection is turned off."
+        title: "남은 항목을 제거하기 전에 복원 지점 만들기",
+        description: "Prune이 선택한 남은 파일과 레지스트리 키를 제거하기 전에 만들어집니다. 강제 제거 후에도 마찬가지입니다. 기본값은 켜짐이며, 시스템 보호가 꺼져 있으면 아무 작업도 하지 않습니다."
       },
       hideUnavailable: {
         title: '해당하지 않는 클리너 숨기기',
@@ -15858,12 +15858,12 @@ export const CATALOG = {
       uninstallTab: {
         beforeHeading: '제거 전',
         restorePointUninstall: {
-          title: "Restore point before running an uninstaller",
-          description: "Taken before the program's own uninstaller runs. It needs Prune to be running as administrator and Windows allows one a day, so when it can't be made the uninstall goes ahead and the dialog says so."
+          title: "제거 프로그램을 실행하기 전에 복원 지점 만들기",
+          description: "프로그램 자체의 제거 프로그램이 실행되기 전에 만들어집니다. Prune이 관리자 권한으로 실행 중이어야 하며 Windows는 하루에 하나만 허용하므로, 만들 수 없는 경우에는 제거가 그대로 진행되고 대화 상자에 안내됩니다."
         },
         registryBackup: {
           title: '제거 전 레지스트리 백업',
-          description: "Exports HKLM\\SOFTWARE and HKCU\\Software, typically several hundred MB, and keeps the newest 3. If the backup can't be made, the uninstall doesn't run."
+          description: "HKLM\\SOFTWARE와 HKCU\\Software를 내보내며, 보통 수백 MB이고 최신 3개를 보관합니다. 백업을 만들 수 없으면 제거가 실행되지 않습니다."
         },
         deleteLockedFiles: {
           title: '다음 재부팅 시 잠긴 파일 삭제',
@@ -15895,7 +15895,7 @@ export const CATALOG = {
         reportTitle: '버그 신고',
         reportDescription: "GitHub에서 내용이 미리 채워진 이슈를 엽니다. Prune은 아무것도 직접 보내지 않으며, 어디로든 전송되기 전에 모든 내용을 확인할 수 있습니다.",
         reportButton: '버그 신고',
-        description: "A local, offline uninstaller and cleanup tool for Windows — forced removal with leftover-file scanning, safe quarantine-before-delete, disk mapping, and a cleaner that shows a preview before it removes anything."
+        description: "Windows용 로컬 오프라인 제거 및 정리 도구입니다. 남은 파일 검사를 포함한 강제 제거, 삭제 전 안전한 격리, 디스크 맵, 무언가를 제거하기 전에 미리보기를 보여 주는 클리너를 제공합니다."
       },
       automation: {
         title: '자동화',
@@ -15954,45 +15954,45 @@ export const CATALOG = {
         mediaErrors: '미디어 오류',
         errorLogEntries: '오류 로그 항목'
       },
-      measuring: 'measuring…',
+      measuring: "측정 중…",
       space: {
-        drive: (letter) => `Drive ${letter}:`,
-        heading: 'Where is my space going?',
-        summary: (used, total, free) => `${used} used of ${total} · ${free} free`,
-        loading: 'Reading drive space…',
-        barLabel: (programs, other, free) => `Drive space: installed programs ${programs}, everything else ${other}, free ${free}.`,
-        barLabelMeasuring: (used, free) => `Drive space: ${used} used, ${free} free. Installed programs are still being measured.`,
-        legendPrograms: 'Installed programs',
-        legendOther: 'Everything else',
-        legendUsed: 'Used',
-        legendFree: 'Free',
-        unsized: (count) => `${count} ${count === 1 ? 'program' : 'programs'} without a size`,
-        exceedsUsed: 'Program sizes add up to more than is used on this drive.'
+        drive: (letter) => `드라이브 ${letter}:`,
+        heading: "공간은 어디에 쓰이고 있나요?",
+        summary: (used, total, free) => `${total} 중 ${used} 사용 · ${free} 여유`,
+        loading: "드라이브 공간을 읽는 중…",
+        barLabel: (programs, other, free) => `드라이브 공간: 설치된 프로그램 ${programs}, 그 외 모든 항목 ${other}, 여유 공간 ${free}.`,
+        barLabelMeasuring: (used, free) => `드라이브 공간: ${used} 사용, ${free} 여유. 설치된 프로그램은 아직 측정 중입니다.`,
+        legendPrograms: "설치된 프로그램",
+        legendOther: "그 외 모든 항목",
+        legendUsed: "사용 중",
+        legendFree: "여유",
+        unsized: (count) => `크기를 알 수 없는 프로그램 ${count}개`,
+        exceedsUsed: "프로그램 크기의 합계가 이 드라이브의 사용량보다 큽니다."
       },
       largest: {
-        heading: 'Largest programs',
-        openApplications: 'Open Applications',
-        installedCount: (count) => `${count} installed`,
-        measuring: 'Measuring program sizes…',
-        none: 'No program has a measured size yet.',
-        notInList: (size) => `The other ${size} is not in the program list.`,
-        seeDiskMap: 'See it in Disk Map.'
+        heading: "용량이 큰 프로그램",
+        openApplications: "애플리케이션 열기",
+        installedCount: (count) => `${count}개 설치됨`,
+        measuring: "프로그램 크기를 측정하는 중…",
+        none: "아직 크기가 측정된 프로그램이 없습니다.",
+        notInList: (size) => `나머지 ${size}는 프로그램 목록에 없습니다.`,
+        seeDiskMap: "디스크 맵에서 보기"
       },
       quiet: {
-        scoreOf: (score) => `${score} of 100`,
-        driveDetails: 'Drive details',
-        junkTitle: 'Junk files',
-        junkNotMeasured: 'Not measured',
-        junkMeasure: 'Measure',
-        junkProgress: (scanned, total) => `Measuring… ${scanned} of ${total}`,
-        junkMeasuring: 'Measuring…',
-        junkBasis: (count) => `Across ${count} recommended ${count === 1 ? 'cleaner' : 'cleaners'}`,
-        junkError: (message) => `Couldn't measure junk files: ${message}`,
-        openDeepClean: 'Open Deep Clean',
-        leftTitle: 'Left behind',
-        leftCount: (count) => `${count} ${count === 1 ? 'program' : 'programs'}`,
-        leftNone: 'Nothing left behind.',
-        leftReview: 'Review'
+        scoreOf: (score) => `100점 중 ${score}점`,
+        driveDetails: "드라이브 세부 정보",
+        junkTitle: "불필요한 파일",
+        junkNotMeasured: "측정 안 됨",
+        junkMeasure: "측정",
+        junkProgress: (scanned, total) => `측정 중… ${total}개 중 ${scanned}개`,
+        junkMeasuring: "측정 중…",
+        junkBasis: (count) => `추천 클리너 ${count}개 기준`,
+        junkError: (message) => `불필요한 파일을 측정할 수 없습니다: ${message}`,
+        openDeepClean: "딥 클린 열기",
+        leftTitle: "남은 항목",
+        leftCount: (count) => `프로그램 ${count}개`,
+        leftNone: "남은 항목이 없습니다.",
+        leftReview: "검토"
       },
       recentActivity: {
         title: '최근 활동',
@@ -16110,10 +16110,10 @@ export const CATALOG = {
         unused: "미사용",
         store: '스토어',
         extensions: '확장 프로그램',
-        broken: 'Left behind',
+        broken: "남은 항목",
         storeCount: (n) => `스토어 (${n})`,
         extensionsCount: (n) => `확장 프로그램 (${n})`,
-        brokenCount: (n) => `Left behind (${n})`
+        brokenCount: (n) => `남은 항목 (${n})`
       },
       columns: {
         application: '애플리케이션',
@@ -16125,7 +16125,7 @@ export const CATALOG = {
         company: '게시자',
         website: '웹사이트'
       },
-      badges: { broken: 'Left behind', running: '실행 중', store: '스토어', disabled: '사용 안 함', unused: "미사용" },
+      badges: { broken: "남은 항목", running: '실행 중', store: '스토어', disabled: '사용 안 함', unused: "미사용" },
       selectRow: (name) => `${name} 선택`,
       selectAll: '표시된 항목 모두 선택',
       clearSelection: '선택 해제',
@@ -16137,7 +16137,7 @@ export const CATALOG = {
       openFolder: "폴더 열기",
       copyUninstallCommand: "제거 명령 복사",
       commandCopied: "제거 명령을 복사했습니다.",
-      unusedDefinition: "Flagged as not used recently. Prune keeps no launch history of its own, so check before you remove anything on this list.",
+      unusedDefinition: "최근에 사용되지 않은 것으로 표시되었습니다. Prune은 자체 실행 기록을 보관하지 않으므로, 이 목록의 항목을 제거하기 전에 직접 확인하세요.",
       copyFailed: "복사할 수 없습니다.",
       empty: {
         plain: '일치하는 항목이 없습니다.',
@@ -16227,9 +16227,9 @@ export const CATALOG = {
         status: '상태'
       },
       switchAriaLabel: (name) => `로그인 시 ${name} 실행`,
-      copyPath: 'Copy path',
-      pathCopied: 'Path copied.',
-      copyFailed: "Couldn't copy that.",
+      copyPath: "경로 복사",
+      pathCopied: "경로를 복사했습니다.",
+      copyFailed: "복사할 수 없습니다.",
       status: {
         invalid: '유효하지 않음',
         running: '실행 중',
@@ -16322,7 +16322,7 @@ export const CATALOG = {
       footer: {
         totalLabel: '확보할 총 공간:',
         notMeasuredYet: '아직 측정되지 않음',
-        previewFirst: 'Preview first to see what will be freed.',
+        previewFirst: "먼저 미리보기로 확보될 공간을 확인하세요.",
         unmeasuredSuffix: (count) => ` · 측정되지 않음 ${count}개`,
         selectEverything: '모두 선택',
         clear: '지우기',
@@ -16563,7 +16563,7 @@ export const CATALOG = {
     app: {
       installedApplications: "애플리케이션",
       applicationsSummary: (count, size) => `설치된 애플리케이션 ${count}개 · ${size}`,
-      applicationsSummaryFiltered: (shown, total, size) => `${shown} of ${total} shown · ${size}`,
+      applicationsSummaryFiltered: (shown, total, size) => `${total}개 중 ${shown}개 표시 · ${size}`,
       removeStoreApp: (name) => `${name} 제거`
     }
   },
@@ -16622,8 +16622,8 @@ export const CATALOG = {
         ariaLabel: 'Valandos, per kurias palikti naujausius failus ramybėje'
       },
       restorePointCleanup: {
-        title: "Restore point before removing leftovers",
-        description: "Taken before Prune removes the leftover files and registry keys you selected, including after Force remove. On by default; does nothing at all if System Protection is turned off."
+        title: "Atkūrimo taškas prieš šalinant liekanas",
+        description: "Sukuriamas prieš „Prune“ pašalinant jūsų pasirinktus liekanų failus ir registro raktus, taip pat ir po priverstinio pašalinimo. Pagal numatytuosius nustatymus įjungta; jei Sistemos apsauga išjungta, nedaro nieko."
       },
       hideUnavailable: {
         title: "Slėpti netinkamus valiklius",
@@ -16685,12 +16685,12 @@ export const CATALOG = {
       uninstallTab: {
         beforeHeading: 'Prieš šalinant',
         restorePointUninstall: {
-          title: "Restore point before running an uninstaller",
-          description: "Taken before the program's own uninstaller runs. It needs Prune to be running as administrator and Windows allows one a day, so when it can't be made the uninstall goes ahead and the dialog says so."
+          title: "Atkūrimo taškas prieš paleidžiant šalinimo priemonę",
+          description: "Sukuriamas prieš paleidžiant pačios programos šalinimo priemonę. Reikia, kad „Prune“ veiktų kaip administratorius, o „Windows“ leidžia vieną per dieną, todėl jei jo sukurti nepavyksta, šalinimas vis tiek tęsiamas, o dialogo langas tai nurodo."
         },
         registryBackup: {
           title: 'Sukurti registro atsarginę kopiją prieš šalinant',
-          description: "Exports HKLM\\SOFTWARE and HKCU\\Software, typically several hundred MB, and keeps the newest 3. If the backup can't be made, the uninstall doesn't run."
+          description: "Eksportuoja HKLM\\SOFTWARE ir HKCU\\Software, paprastai kelis šimtus MB, ir palieka 3 naujausias kopijas. Jei atsarginės kopijos sukurti nepavyksta, šalinimas nevykdomas."
         },
         deleteLockedFiles: {
           title: 'Ištrinti užrakintus failus per kitą paleidimą iš naujo',
@@ -16722,7 +16722,7 @@ export const CATALOG = {
         reportTitle: 'Pranešti apie klaidą',
         reportDescription: "Atidaro iš anksto užpildytą pranešimą „GitHub“. „Prune“ pats nieko nesiunčia, o viską pamatysite prieš išsiunčiant.",
         reportButton: 'Pranešti apie klaidą',
-        description: "A local, offline uninstaller and cleanup tool for Windows — forced removal with leftover-file scanning, safe quarantine-before-delete, disk mapping, and a cleaner that shows a preview before it removes anything."
+        description: "Vietinė, neprisijungusi „Windows“ šalinimo ir valymo priemonė — priverstinis šalinimas su liekanų failų nuskaitymu, saugus karantinas prieš ištrinant, disko žemėlapis ir valiklis, kuris prieš ką nors pašalindamas parodo peržiūrą."
       },
       automation: {
         title: 'Automatizavimas',
@@ -16781,45 +16781,45 @@ export const CATALOG = {
         mediaErrors: 'Laikmenos klaidos',
         errorLogEntries: 'Klaidų žurnalo įrašai'
       },
-      measuring: 'measuring…',
+      measuring: "matuojama…",
       space: {
-        drive: (letter) => `Drive ${letter}:`,
-        heading: 'Where is my space going?',
-        summary: (used, total, free) => `${used} used of ${total} · ${free} free`,
-        loading: 'Reading drive space…',
-        barLabel: (programs, other, free) => `Drive space: installed programs ${programs}, everything else ${other}, free ${free}.`,
-        barLabelMeasuring: (used, free) => `Drive space: ${used} used, ${free} free. Installed programs are still being measured.`,
-        legendPrograms: 'Installed programs',
-        legendOther: 'Everything else',
-        legendUsed: 'Used',
-        legendFree: 'Free',
-        unsized: (count) => `${count} ${count === 1 ? 'program' : 'programs'} without a size`,
-        exceedsUsed: 'Program sizes add up to more than is used on this drive.'
+        drive: (letter) => `Diskas ${letter}:`,
+        heading: "Kur dingsta mano vieta?",
+        summary: (used, total, free) => `Naudojama ${used} iš ${total} · laisva ${free}`,
+        loading: "Skaitoma disko vieta…",
+        barLabel: (programs, other, free) => `Disko vieta: įdiegtos programos ${programs}, visa kita ${other}, laisva ${free}.`,
+        barLabelMeasuring: (used, free) => `Disko vieta: naudojama ${used}, laisva ${free}. Įdiegtų programų dydžiai vis dar matuojami.`,
+        legendPrograms: "Įdiegtos programos",
+        legendOther: "Visa kita",
+        legendUsed: "Naudojama",
+        legendFree: "Laisva",
+        unsized: (count) => { const lt = (n, a, b, c) => n % 10 === 1 && n % 100 !== 11 ? a : (n % 10 === 0 || (n % 100 >= 11 && n % 100 <= 19)) ? c : b; return `${count} ${lt(count, 'programa', 'programos', 'programų')} be žinomo dydžio`; },
+        exceedsUsed: "Programų dydžių suma didesnė už šiame diske naudojamą vietą."
       },
       largest: {
-        heading: 'Largest programs',
-        openApplications: 'Open Applications',
-        installedCount: (count) => `${count} installed`,
-        measuring: 'Measuring program sizes…',
-        none: 'No program has a measured size yet.',
-        notInList: (size) => `The other ${size} is not in the program list.`,
-        seeDiskMap: 'See it in Disk Map.'
+        heading: "Didžiausios programos",
+        openApplications: "Atverti Programas",
+        installedCount: (count) => `Įdiegta: ${count}`,
+        measuring: "Matuojami programų dydžiai…",
+        none: "Nė vienos programos dydis dar neišmatuotas.",
+        notInList: (size) => `Likusių ${size} nėra programų sąraše.`,
+        seeDiskMap: "Žiūrėti Disko žemėlapyje."
       },
       quiet: {
-        scoreOf: (score) => `${score} of 100`,
-        driveDetails: 'Drive details',
-        junkTitle: 'Junk files',
-        junkNotMeasured: 'Not measured',
-        junkMeasure: 'Measure',
-        junkProgress: (scanned, total) => `Measuring… ${scanned} of ${total}`,
-        junkMeasuring: 'Measuring…',
-        junkBasis: (count) => `Across ${count} recommended ${count === 1 ? 'cleaner' : 'cleaners'}`,
-        junkError: (message) => `Couldn't measure junk files: ${message}`,
-        openDeepClean: 'Open Deep Clean',
-        leftTitle: 'Left behind',
-        leftCount: (count) => `${count} ${count === 1 ? 'program' : 'programs'}`,
-        leftNone: 'Nothing left behind.',
-        leftReview: 'Review'
+        scoreOf: (score) => `${score} iš 100`,
+        driveDetails: "Disko informacija",
+        junkTitle: "Nereikalingi failai",
+        junkNotMeasured: "Neišmatuota",
+        junkMeasure: "Matuoti",
+        junkProgress: (scanned, total) => `Matuojama… ${scanned} iš ${total}`,
+        junkMeasuring: "Matuojama…",
+        junkBasis: (count) => `Rekomenduojamų valiklių: ${count}`,
+        junkError: (message) => `Nepavyko išmatuoti nereikalingų failų: ${message}`,
+        openDeepClean: "Atverti Gilų valymą",
+        leftTitle: "Liekanos",
+        leftCount: (count) => { const lt = (n, a, b, c) => n % 10 === 1 && n % 100 !== 11 ? a : (n % 10 === 0 || (n % 100 >= 11 && n % 100 <= 19)) ? c : b; return `${count} ${lt(count, 'programa', 'programos', 'programų')}`; },
+        leftNone: "Liekanų nėra.",
+        leftReview: "Patikrinti"
       },
       recentActivity: {
         title: "Naujausia veikla",
@@ -16937,10 +16937,10 @@ export const CATALOG = {
         unused: 'Nenaudojamos',
         store: 'Parduotuvė',
         extensions: 'Plėtiniai',
-        broken: 'Left behind',
+        broken: "Liekanos",
         storeCount: (n) => `Parduotuvė (${n})`,
         extensionsCount: (n) => `Plėtiniai (${n})`,
-        brokenCount: (n) => `Left behind (${n})`
+        brokenCount: (n) => `Liekanos (${n})`
       },
       columns: {
         application: 'Programa',
@@ -16952,7 +16952,7 @@ export const CATALOG = {
         company: 'Bendrovė',
         website: 'Svetainė'
       },
-      badges: { broken: 'Left behind', running: 'Veikia', store: 'Parduotuvė', disabled: 'Išjungta', unused: 'Nenaudojama' },
+      badges: { broken: "Liekanos", running: 'Veikia', store: 'Parduotuvė', disabled: 'Išjungta', unused: 'Nenaudojama' },
       selectRow: (name) => `Pasirinkti ${name}`,
       selectAll: 'Pasirinkti visas rodomas',
       clearSelection: 'Išvalyti pasirinkimą',
@@ -16964,7 +16964,7 @@ export const CATALOG = {
       openFolder: "Atidaryti aplanką",
       copyUninstallCommand: "Kopijuoti šalinimo komandą",
       commandCopied: "Šalinimo komanda nukopijuota.",
-      unusedDefinition: "Flagged as not used recently. Prune keeps no launch history of its own, so check before you remove anything on this list.",
+      unusedDefinition: "Pažymėta kaip neseniai nenaudota. „Prune“ nesaugo savo paleidimų istorijos, todėl prieš pašalindami ką nors iš šio sąrašo, pasitikrinkite.",
       copyFailed: "Nepavyko nukopijuoti.",
       empty: {
         plain: 'Nieko neatitinka.',
@@ -17054,9 +17054,9 @@ export const CATALOG = {
         status: 'Būsena'
       },
       switchAriaLabel: (name) => `Paleisti ${name} prisijungus`,
-      copyPath: 'Copy path',
-      pathCopied: 'Path copied.',
-      copyFailed: "Couldn't copy that.",
+      copyPath: "Kopijuoti kelią",
+      pathCopied: "Kelias nukopijuotas.",
+      copyFailed: "Nepavyko nukopijuoti.",
       status: {
         invalid: 'Netinkamas',
         running: 'Veikia',
@@ -17149,7 +17149,7 @@ export const CATALOG = {
       footer: {
         totalLabel: 'Iš viso atlaisvinama vietos:',
         notMeasuredYet: 'dar neišmatuota',
-        previewFirst: 'Preview first to see what will be freed.',
+        previewFirst: "Pirmiausia peržiūrėkite, kad pamatytumėte, kas bus atlaisvinta.",
         unmeasuredSuffix: (count) => ` · ${count} neišmatuota`,
         selectEverything: 'Pasirinkti viską',
         clear: 'Išvalyti',
@@ -17388,7 +17388,7 @@ export const CATALOG = {
     app: {
       installedApplications: "Programos",
       applicationsSummary: (count, size) => `Įdiegtų programų: ${count} · ${size}`,
-      applicationsSummaryFiltered: (shown, total, size) => `${shown} of ${total} shown · ${size}`,
+      applicationsSummaryFiltered: (shown, total, size) => `Rodoma ${shown} iš ${total} · ${size}`,
       removeStoreApp: (name) => `Pašalinti ${name}`
     }
   },
@@ -17447,8 +17447,8 @@ export const CATALOG = {
         ariaLabel: 'Jam untuk membiarkan fail terkini'
       },
       restorePointCleanup: {
-        title: "Restore point before removing leftovers",
-        description: "Taken before Prune removes the leftover files and registry keys you selected, including after Force remove. On by default; does nothing at all if System Protection is turned off."
+        title: "Titik pemulihan sebelum mengalih keluar baki",
+        description: "Dicipta sebelum Prune mengalih keluar fail baki dan kekunci registri yang anda pilih, termasuk selepas Paksa alih keluar. Dihidupkan secara lalai; tidak berbuat apa-apa jika Perlindungan Sistem dimatikan."
       },
       hideUnavailable: {
         title: 'Sembunyikan pembersih yang tidak berkenaan',
@@ -17510,12 +17510,12 @@ export const CATALOG = {
       uninstallTab: {
         beforeHeading: 'Sebelum menyahpasang',
         restorePointUninstall: {
-          title: "Restore point before running an uninstaller",
-          description: "Taken before the program's own uninstaller runs. It needs Prune to be running as administrator and Windows allows one a day, so when it can't be made the uninstall goes ahead and the dialog says so."
+          title: "Titik pemulihan sebelum menjalankan penyahpasang",
+          description: "Dicipta sebelum penyahpasang program itu sendiri dijalankan. Ia memerlukan Prune berjalan sebagai pentadbir dan Windows membenarkan satu sehari, jadi jika ia tidak dapat dicipta, penyahpasangan diteruskan dan dialog memaklumkannya."
         },
         registryBackup: {
           title: 'Sandarkan registri sebelum menyahpasang',
-          description: "Exports HKLM\\SOFTWARE and HKCU\\Software, typically several hundred MB, and keeps the newest 3. If the backup can't be made, the uninstall doesn't run."
+          description: "Mengeksport HKLM\\SOFTWARE dan HKCU\\Software, biasanya beberapa ratus MB, dan menyimpan 3 yang terkini. Jika sandaran tidak dapat dibuat, penyahpasangan tidak dijalankan."
         },
         deleteLockedFiles: {
           title: 'Padam fail terkunci pada mula semula seterusnya',
@@ -17547,7 +17547,7 @@ export const CATALOG = {
         reportTitle: 'Laporkan pepijat',
         reportDescription: "Membuka isu yang telah diisi terlebih dahulu di GitHub. Prune sendiri tidak menghantar apa-apa, dan anda melihat semuanya sebelum apa-apa dihantar.",
         reportButton: 'Laporkan pepijat',
-        description: "A local, offline uninstaller and cleanup tool for Windows — forced removal with leftover-file scanning, safe quarantine-before-delete, disk mapping, and a cleaner that shows a preview before it removes anything."
+        description: "Alat nyahpasang dan pembersihan tempatan, luar talian untuk Windows — pengalihan keluar paksa dengan pengimbasan fail baki, kuarantin selamat sebelum padam, pemetaan cakera, dan pembersih yang menunjukkan pratonton sebelum mengalih keluar apa-apa."
       },
       automation: {
         title: 'Automasi',
@@ -17606,45 +17606,45 @@ export const CATALOG = {
         mediaErrors: 'Ralat media',
         errorLogEntries: 'Entri log ralat'
       },
-      measuring: 'measuring…',
+      measuring: "mengukur…",
       space: {
-        drive: (letter) => `Drive ${letter}:`,
-        heading: 'Where is my space going?',
-        summary: (used, total, free) => `${used} used of ${total} · ${free} free`,
-        loading: 'Reading drive space…',
-        barLabel: (programs, other, free) => `Drive space: installed programs ${programs}, everything else ${other}, free ${free}.`,
-        barLabelMeasuring: (used, free) => `Drive space: ${used} used, ${free} free. Installed programs are still being measured.`,
-        legendPrograms: 'Installed programs',
-        legendOther: 'Everything else',
-        legendUsed: 'Used',
-        legendFree: 'Free',
-        unsized: (count) => `${count} ${count === 1 ? 'program' : 'programs'} without a size`,
-        exceedsUsed: 'Program sizes add up to more than is used on this drive.'
+        drive: (letter) => `Cakera ${letter}:`,
+        heading: "Ke mana perginya ruang saya?",
+        summary: (used, total, free) => `${used} digunakan daripada ${total} · ${free} bebas`,
+        loading: "Membaca ruang cakera…",
+        barLabel: (programs, other, free) => `Ruang cakera: program dipasang ${programs}, semua yang lain ${other}, bebas ${free}.`,
+        barLabelMeasuring: (used, free) => `Ruang cakera: ${used} digunakan, ${free} bebas. Program yang dipasang masih diukur.`,
+        legendPrograms: "Program dipasang",
+        legendOther: "Semua yang lain",
+        legendUsed: "Digunakan",
+        legendFree: "Bebas",
+        unsized: (count) => `${count} program tanpa saiz`,
+        exceedsUsed: "Jumlah saiz program melebihi ruang yang digunakan pada cakera ini."
       },
       largest: {
-        heading: 'Largest programs',
-        openApplications: 'Open Applications',
-        installedCount: (count) => `${count} installed`,
-        measuring: 'Measuring program sizes…',
-        none: 'No program has a measured size yet.',
-        notInList: (size) => `The other ${size} is not in the program list.`,
-        seeDiskMap: 'See it in Disk Map.'
+        heading: "Program terbesar",
+        openApplications: "Buka Aplikasi",
+        installedCount: (count) => `${count} dipasang`,
+        measuring: "Mengukur saiz program…",
+        none: "Belum ada program yang saiznya telah diukur.",
+        notInList: (size) => `${size} selebihnya tiada dalam senarai program.`,
+        seeDiskMap: "Lihat dalam Peta Cakera."
       },
       quiet: {
-        scoreOf: (score) => `${score} of 100`,
-        driveDetails: 'Drive details',
-        junkTitle: 'Junk files',
-        junkNotMeasured: 'Not measured',
-        junkMeasure: 'Measure',
-        junkProgress: (scanned, total) => `Measuring… ${scanned} of ${total}`,
-        junkMeasuring: 'Measuring…',
-        junkBasis: (count) => `Across ${count} recommended ${count === 1 ? 'cleaner' : 'cleaners'}`,
-        junkError: (message) => `Couldn't measure junk files: ${message}`,
-        openDeepClean: 'Open Deep Clean',
-        leftTitle: 'Left behind',
-        leftCount: (count) => `${count} ${count === 1 ? 'program' : 'programs'}`,
-        leftNone: 'Nothing left behind.',
-        leftReview: 'Review'
+        scoreOf: (score) => `${score} daripada 100`,
+        driveDetails: "Butiran cakera",
+        junkTitle: "Fail sampah",
+        junkNotMeasured: "Belum diukur",
+        junkMeasure: "Ukur",
+        junkProgress: (scanned, total) => `Mengukur… ${scanned} daripada ${total}`,
+        junkMeasuring: "Mengukur…",
+        junkBasis: (count) => `Merentas ${count} pembersih yang disyorkan`,
+        junkError: (message) => `Tidak dapat mengukur fail sampah: ${message}`,
+        openDeepClean: "Buka Pembersihan Mendalam",
+        leftTitle: "Baki",
+        leftCount: (count) => `${count} program`,
+        leftNone: "Tiada baki.",
+        leftReview: "Semak"
       },
       recentActivity: {
         title: "Aktiviti terkini",
@@ -17762,10 +17762,10 @@ export const CATALOG = {
         unused: 'Tidak digunakan',
         store: 'Kedai',
         extensions: 'Sambungan',
-        broken: 'Left behind',
+        broken: "Baki",
         storeCount: (n) => `Kedai (${n})`,
         extensionsCount: (n) => `Sambungan (${n})`,
-        brokenCount: (n) => `Left behind (${n})`
+        brokenCount: (n) => `Baki (${n})`
       },
       columns: {
         application: 'Aplikasi',
@@ -17777,7 +17777,7 @@ export const CATALOG = {
         company: 'Syarikat',
         website: 'Laman web'
       },
-      badges: { broken: 'Left behind', running: 'Berjalan', store: 'Kedai', disabled: 'Dilumpuhkan', unused: 'Tidak digunakan' },
+      badges: { broken: "Baki", running: 'Berjalan', store: 'Kedai', disabled: 'Dilumpuhkan', unused: 'Tidak digunakan' },
       selectRow: (name) => `Pilih ${name}`,
       selectAll: 'Pilih semua yang dipaparkan',
       clearSelection: 'Kosongkan pilihan',
@@ -17789,7 +17789,7 @@ export const CATALOG = {
       openFolder: "Buka folder",
       copyUninstallCommand: "Salin arahan nyahpasang",
       commandCopied: "Arahan nyahpasang disalin.",
-      unusedDefinition: "Flagged as not used recently. Prune keeps no launch history of its own, so check before you remove anything on this list.",
+      unusedDefinition: "Ditandakan sebagai lama tidak digunakan. Prune tidak menyimpan sejarah pelancaran sendiri, jadi semak sebelum anda mengalih keluar sebarang item dalam senarai ini.",
       copyFailed: "Tidak dapat menyalin.",
       empty: {
         plain: 'Tiada padanan.',
@@ -17879,9 +17879,9 @@ export const CATALOG = {
         status: 'Status'
       },
       switchAriaLabel: (name) => `Jalankan ${name} semasa log masuk`,
-      copyPath: 'Copy path',
-      pathCopied: 'Path copied.',
-      copyFailed: "Couldn't copy that.",
+      copyPath: "Salin laluan",
+      pathCopied: "Laluan disalin.",
+      copyFailed: "Tidak dapat menyalin.",
       status: {
         invalid: 'Tidak sah',
         running: 'Berjalan',
@@ -17974,7 +17974,7 @@ export const CATALOG = {
       footer: {
         totalLabel: 'Jumlah ruang untuk dibebaskan:',
         notMeasuredYet: 'belum diukur',
-        previewFirst: 'Preview first to see what will be freed.',
+        previewFirst: "Pratonton dahulu untuk melihat apa yang akan dibebaskan.",
         unmeasuredSuffix: (count) => ` · ${count} tidak diukur`,
         selectEverything: 'Pilih semua',
         clear: 'Kosongkan',
@@ -18215,7 +18215,7 @@ export const CATALOG = {
     app: {
       installedApplications: "Aplikasi",
       applicationsSummary: (count, size) => `${count} aplikasi dipasang · ${size}`,
-      applicationsSummaryFiltered: (shown, total, size) => `${shown} of ${total} shown · ${size}`,
+      applicationsSummaryFiltered: (shown, total, size) => `${shown} daripada ${total} dipaparkan · ${size}`,
       removeStoreApp: (name) => `Alih keluar ${name}`
     }
   },
@@ -18274,8 +18274,8 @@ export const CATALOG = {
         ariaLabel: 'Timer å la nylige filer være i fred'
       },
       restorePointCleanup: {
-        title: "Restore point before removing leftovers",
-        description: "Taken before Prune removes the leftover files and registry keys you selected, including after Force remove. On by default; does nothing at all if System Protection is turned off."
+        title: "Gjenopprettingspunkt før rester fjernes",
+        description: "Opprettes før Prune fjerner restene (filer og registernøkler) du har valgt, også etter Tving fjerning. På som standard; gjør ingenting hvis Systembeskyttelse er slått av."
       },
       hideUnavailable: {
         title: "Skjul rensere som ikke gjelder",
@@ -18337,12 +18337,12 @@ export const CATALOG = {
       uninstallTab: {
         beforeHeading: 'Før avinstallering',
         restorePointUninstall: {
-          title: "Restore point before running an uninstaller",
-          description: "Taken before the program's own uninstaller runs. It needs Prune to be running as administrator and Windows allows one a day, so when it can't be made the uninstall goes ahead and the dialog says so."
+          title: "Gjenopprettingspunkt før et avinstallasjonsprogram kjøres",
+          description: "Opprettes før programmets eget avinstallasjonsprogram kjøres. Det krever at Prune kjører som administrator, og Windows tillater ett per dag, så når det ikke kan opprettes, fortsetter avinstallasjonen likevel og dialogen sier fra om det."
         },
         registryBackup: {
           title: 'Sikkerhetskopier registeret før avinstallering',
-          description: "Exports HKLM\\SOFTWARE and HKCU\\Software, typically several hundred MB, and keeps the newest 3. If the backup can't be made, the uninstall doesn't run."
+          description: "Eksporterer HKLM\\SOFTWARE og HKCU\\Software, vanligvis flere hundre MB, og beholder de 3 nyeste. Hvis sikkerhetskopien ikke kan lages, kjøres ikke avinstallasjonen."
         },
         deleteLockedFiles: {
           title: 'Slett låste filer ved neste omstart',
@@ -18374,7 +18374,7 @@ export const CATALOG = {
         reportTitle: 'Rapporter en feil',
         reportDescription: "Åpner en forhåndsutfylt sak på GitHub. Prune sender ingenting selv, og du ser alt før noe sendes videre.",
         reportButton: 'Rapporter en feil',
-        description: "A local, offline uninstaller and cleanup tool for Windows — forced removal with leftover-file scanning, safe quarantine-before-delete, disk mapping, and a cleaner that shows a preview before it removes anything."
+        description: "Et lokalt verktøy som fungerer frakoblet for avinstallering og opprydding i Windows — tvungen fjerning med skanning etter rester, trygg karantene før sletting, diskkart og en renser som viser en forhåndsvisning før noe fjernes."
       },
       automation: {
         title: 'Automatisering',
@@ -18433,45 +18433,45 @@ export const CATALOG = {
         mediaErrors: 'Mediefeil',
         errorLogEntries: 'Feilloggoppføringer'
       },
-      measuring: 'measuring…',
+      measuring: "måler…",
       space: {
-        drive: (letter) => `Drive ${letter}:`,
-        heading: 'Where is my space going?',
-        summary: (used, total, free) => `${used} used of ${total} · ${free} free`,
-        loading: 'Reading drive space…',
-        barLabel: (programs, other, free) => `Drive space: installed programs ${programs}, everything else ${other}, free ${free}.`,
-        barLabelMeasuring: (used, free) => `Drive space: ${used} used, ${free} free. Installed programs are still being measured.`,
-        legendPrograms: 'Installed programs',
-        legendOther: 'Everything else',
-        legendUsed: 'Used',
-        legendFree: 'Free',
-        unsized: (count) => `${count} ${count === 1 ? 'program' : 'programs'} without a size`,
-        exceedsUsed: 'Program sizes add up to more than is used on this drive.'
+        drive: (letter) => `Disk ${letter}:`,
+        heading: "Hvor blir plassen av?",
+        summary: (used, total, free) => `${used} brukt av ${total} · ${free} ledig`,
+        loading: "Leser diskplass…",
+        barLabel: (programs, other, free) => `Diskplass: installerte programmer ${programs}, alt annet ${other}, ledig ${free}.`,
+        barLabelMeasuring: (used, free) => `Diskplass: ${used} brukt, ${free} ledig. Installerte programmer måles fortsatt.`,
+        legendPrograms: "Installerte programmer",
+        legendOther: "Alt annet",
+        legendUsed: "Brukt",
+        legendFree: "Ledig",
+        unsized: (count) => `${count} ${count === 1 ? 'program' : 'programmer'} uten størrelse`,
+        exceedsUsed: "Programstørrelsene summerer seg til mer enn det som er i bruk på denne disken."
       },
       largest: {
-        heading: 'Largest programs',
-        openApplications: 'Open Applications',
-        installedCount: (count) => `${count} installed`,
-        measuring: 'Measuring program sizes…',
-        none: 'No program has a measured size yet.',
-        notInList: (size) => `The other ${size} is not in the program list.`,
-        seeDiskMap: 'See it in Disk Map.'
+        heading: "Største programmer",
+        openApplications: "Åpne Programmer",
+        installedCount: (count) => `${count} installert${count === 1 ? '' : 'e'}`,
+        measuring: "Måler programstørrelser…",
+        none: "Ingen programmer har en målt størrelse ennå.",
+        notInList: (size) => `De resterende ${size} står ikke i programlisten.`,
+        seeDiskMap: "Se det i Diskkart."
       },
       quiet: {
-        scoreOf: (score) => `${score} of 100`,
-        driveDetails: 'Drive details',
-        junkTitle: 'Junk files',
-        junkNotMeasured: 'Not measured',
-        junkMeasure: 'Measure',
-        junkProgress: (scanned, total) => `Measuring… ${scanned} of ${total}`,
-        junkMeasuring: 'Measuring…',
-        junkBasis: (count) => `Across ${count} recommended ${count === 1 ? 'cleaner' : 'cleaners'}`,
-        junkError: (message) => `Couldn't measure junk files: ${message}`,
-        openDeepClean: 'Open Deep Clean',
-        leftTitle: 'Left behind',
-        leftCount: (count) => `${count} ${count === 1 ? 'program' : 'programs'}`,
-        leftNone: 'Nothing left behind.',
-        leftReview: 'Review'
+        scoreOf: (score) => `${score} av 100`,
+        driveDetails: "Diskdetaljer",
+        junkTitle: "Søppelfiler",
+        junkNotMeasured: "Ikke målt",
+        junkMeasure: "Mål",
+        junkProgress: (scanned, total) => `Måler… ${scanned} av ${total}`,
+        junkMeasuring: "Måler…",
+        junkBasis: (count) => `På tvers av ${count} ${count === 1 ? 'anbefalt renser' : 'anbefalte rensere'}`,
+        junkError: (message) => `Kunne ikke måle søppelfiler: ${message}`,
+        openDeepClean: "Åpne Grundig opprydding",
+        leftTitle: "Rester",
+        leftCount: (count) => `${count} ${count === 1 ? 'program' : 'programmer'}`,
+        leftNone: "Ingen rester.",
+        leftReview: "Gjennomgå"
       },
       recentActivity: {
         title: "Nylig aktivitet",
@@ -18589,10 +18589,10 @@ export const CATALOG = {
         unused: 'Ubrukt',
         store: 'Store',
         extensions: 'Utvidelser',
-        broken: 'Left behind',
+        broken: "Rester",
         storeCount: (n) => `Store (${n})`,
         extensionsCount: (n) => `Utvidelser (${n})`,
-        brokenCount: (n) => `Left behind (${n})`
+        brokenCount: (n) => `Rester (${n})`
       },
       columns: {
         application: 'Program',
@@ -18604,7 +18604,7 @@ export const CATALOG = {
         company: 'Firma',
         website: 'Nettsted'
       },
-      badges: { broken: 'Left behind', running: 'Kjører', store: 'Store', disabled: 'Deaktivert', unused: 'Ubrukt' },
+      badges: { broken: "Rester", running: 'Kjører', store: 'Store', disabled: 'Deaktivert', unused: 'Ubrukt' },
       selectRow: (name) => `Velg ${name}`,
       selectAll: 'Velg alle viste',
       clearSelection: 'Fjern merking',
@@ -18616,7 +18616,7 @@ export const CATALOG = {
       openFolder: "Åpne mappe",
       copyUninstallCommand: "Kopier avinstallasjonskommando",
       commandCopied: "Avinstallasjonskommandoen er kopiert.",
-      unusedDefinition: "Flagged as not used recently. Prune keeps no launch history of its own, so check before you remove anything on this list.",
+      unusedDefinition: "Merket som ikke brukt i det siste. Prune fører ikke sin egen logg over når programmer startes, så sjekk før du fjerner noe fra denne listen.",
       copyFailed: "Kunne ikke kopiere.",
       empty: {
         plain: 'Ingenting samsvarer.',
@@ -18706,9 +18706,9 @@ export const CATALOG = {
         status: 'Status'
       },
       switchAriaLabel: (name) => `Kjør ${name} ved pålogging`,
-      copyPath: 'Copy path',
-      pathCopied: 'Path copied.',
-      copyFailed: "Couldn't copy that.",
+      copyPath: "Kopier sti",
+      pathCopied: "Stien er kopiert.",
+      copyFailed: "Kunne ikke kopiere.",
       status: {
         invalid: 'Ugyldig',
         running: 'Kjører',
@@ -18801,7 +18801,7 @@ export const CATALOG = {
       footer: {
         totalLabel: 'Total plass å frigjøre:',
         notMeasuredYet: 'ikke målt ennå',
-        previewFirst: 'Preview first to see what will be freed.',
+        previewFirst: "Forhåndsvis først for å se hva som frigjøres.",
         unmeasuredSuffix: (count) => ` · ${count} ikke målt`,
         selectEverything: 'Velg alt',
         clear: "Fjern merking",
@@ -19040,7 +19040,7 @@ export const CATALOG = {
     app: {
       installedApplications: "Programmer",
       applicationsSummary: (count, size) => `${count} installert${count === 1 ? ' program' : 'e programmer'} · ${size}`,
-      applicationsSummaryFiltered: (shown, total, size) => `${shown} of ${total} shown · ${size}`,
+      applicationsSummaryFiltered: (shown, total, size) => `${shown} av ${total} vist · ${size}`,
       removeStoreApp: (name) => `Fjern ${name}`
     }
   },
@@ -19099,8 +19099,8 @@ export const CATALOG = {
         ariaLabel: 'Uren om recente bestanden met rust te laten'
       },
       restorePointCleanup: {
-        title: "Restore point before removing leftovers",
-        description: "Taken before Prune removes the leftover files and registry keys you selected, including after Force remove. On by default; does nothing at all if System Protection is turned off."
+        title: "Herstelpunt vóór het verwijderen van restanten",
+        description: "Wordt gemaakt voordat Prune de restanten (bestanden en registersleutels) verwijdert die je hebt geselecteerd, ook na Verwijderen forceren. Standaard ingeschakeld; doet niets als Systeembeveiliging is uitgeschakeld."
       },
       hideUnavailable: {
         title: "Niet-toepasselijke opschoners verbergen",
@@ -19162,12 +19162,12 @@ export const CATALOG = {
       uninstallTab: {
         beforeHeading: 'Voor het verwijderen',
         restorePointUninstall: {
-          title: "Restore point before running an uninstaller",
-          description: "Taken before the program's own uninstaller runs. It needs Prune to be running as administrator and Windows allows one a day, so when it can't be made the uninstall goes ahead and the dialog says so."
+          title: "Herstelpunt vóór het uitvoeren van een verwijderprogramma",
+          description: "Wordt gemaakt voordat het eigen verwijderprogramma van het programma wordt uitgevoerd. Prune moet daarvoor als beheerder draaien en Windows staat er één per dag toe; kan het niet worden gemaakt, dan gaat het verwijderen toch door en meldt het dialoogvenster dat."
         },
         registryBackup: {
           title: 'Register back-uppen voor het verwijderen',
-          description: "Exports HKLM\\SOFTWARE and HKCU\\Software, typically several hundred MB, and keeps the newest 3. If the backup can't be made, the uninstall doesn't run."
+          description: "Exporteert HKLM\\SOFTWARE en HKCU\\Software, meestal enkele honderden MB, en bewaart de nieuwste 3. Als de back-up niet kan worden gemaakt, wordt het verwijderen niet uitgevoerd."
         },
         deleteLockedFiles: {
           title: 'Vergrendelde bestanden verwijderen bij de volgende herstart',
@@ -19199,7 +19199,7 @@ export const CATALOG = {
         reportTitle: 'Een bug melden',
         reportDescription: "Opent een vooraf ingevuld issue op GitHub. Prune verstuurt zelf niets en je ziet alles voordat het ergens heen gaat.",
         reportButton: 'Een bug melden',
-        description: "A local, offline uninstaller and cleanup tool for Windows — forced removal with leftover-file scanning, safe quarantine-before-delete, disk mapping, and a cleaner that shows a preview before it removes anything."
+        description: "Een lokaal, offline verwijder- en opschoonprogramma voor Windows — geforceerd verwijderen met een scan op restanten, veilige quarantaine vóór het verwijderen, schijfkaart en een opschoner die een voorbeeld toont voordat er iets wordt verwijderd."
       },
       automation: {
         title: 'Automatisering',
@@ -19258,45 +19258,45 @@ export const CATALOG = {
         mediaErrors: 'Mediafouten',
         errorLogEntries: 'Foutlogboekvermeldingen'
       },
-      measuring: 'measuring…',
+      measuring: "meten…",
       space: {
-        drive: (letter) => `Drive ${letter}:`,
-        heading: 'Where is my space going?',
-        summary: (used, total, free) => `${used} used of ${total} · ${free} free`,
-        loading: 'Reading drive space…',
-        barLabel: (programs, other, free) => `Drive space: installed programs ${programs}, everything else ${other}, free ${free}.`,
-        barLabelMeasuring: (used, free) => `Drive space: ${used} used, ${free} free. Installed programs are still being measured.`,
-        legendPrograms: 'Installed programs',
-        legendOther: 'Everything else',
-        legendUsed: 'Used',
-        legendFree: 'Free',
-        unsized: (count) => `${count} ${count === 1 ? 'program' : 'programs'} without a size`,
-        exceedsUsed: 'Program sizes add up to more than is used on this drive.'
+        drive: (letter) => `Schijf ${letter}:`,
+        heading: "Waar gaat mijn ruimte naartoe?",
+        summary: (used, total, free) => `${used} gebruikt van ${total} · ${free} vrij`,
+        loading: "Schijfruimte lezen…",
+        barLabel: (programs, other, free) => `Schijfruimte: geïnstalleerde toepassingen ${programs}, al het andere ${other}, vrij ${free}.`,
+        barLabelMeasuring: (used, free) => `Schijfruimte: ${used} gebruikt, ${free} vrij. Geïnstalleerde toepassingen worden nog gemeten.`,
+        legendPrograms: "Geïnstalleerde toepassingen",
+        legendOther: "Al het andere",
+        legendUsed: "Gebruikt",
+        legendFree: "Vrij",
+        unsized: (count) => `${count} ${count === 1 ? 'toepassing' : 'toepassingen'} zonder grootte`,
+        exceedsUsed: "De groottes van de toepassingen samen zijn meer dan er op deze schijf in gebruik is."
       },
       largest: {
-        heading: 'Largest programs',
-        openApplications: 'Open Applications',
-        installedCount: (count) => `${count} installed`,
-        measuring: 'Measuring program sizes…',
-        none: 'No program has a measured size yet.',
-        notInList: (size) => `The other ${size} is not in the program list.`,
-        seeDiskMap: 'See it in Disk Map.'
+        heading: "Grootste toepassingen",
+        openApplications: "Toepassingen openen",
+        installedCount: (count) => `${count} geïnstalleerd`,
+        measuring: "Grootte van toepassingen meten…",
+        none: "Nog geen enkele toepassing heeft een gemeten grootte.",
+        notInList: (size) => `De overige ${size} staat niet in de toepassingslijst.`,
+        seeDiskMap: "Bekijk het in Schijfkaart."
       },
       quiet: {
-        scoreOf: (score) => `${score} of 100`,
-        driveDetails: 'Drive details',
-        junkTitle: 'Junk files',
-        junkNotMeasured: 'Not measured',
-        junkMeasure: 'Measure',
-        junkProgress: (scanned, total) => `Measuring… ${scanned} of ${total}`,
-        junkMeasuring: 'Measuring…',
-        junkBasis: (count) => `Across ${count} recommended ${count === 1 ? 'cleaner' : 'cleaners'}`,
-        junkError: (message) => `Couldn't measure junk files: ${message}`,
-        openDeepClean: 'Open Deep Clean',
-        leftTitle: 'Left behind',
-        leftCount: (count) => `${count} ${count === 1 ? 'program' : 'programs'}`,
-        leftNone: 'Nothing left behind.',
-        leftReview: 'Review'
+        scoreOf: (score) => `${score} van 100`,
+        driveDetails: "Schijfdetails",
+        junkTitle: "Overbodige bestanden",
+        junkNotMeasured: "Niet gemeten",
+        junkMeasure: "Meten",
+        junkProgress: (scanned, total) => `Meten… ${scanned} van ${total}`,
+        junkMeasuring: "Meten…",
+        junkBasis: (count) => `Over ${count} aanbevolen ${count === 1 ? 'opschoner' : 'opschoners'}`,
+        junkError: (message) => `Overbodige bestanden konden niet worden gemeten: ${message}`,
+        openDeepClean: "Grondige opschoning openen",
+        leftTitle: "Restanten",
+        leftCount: (count) => `${count} ${count === 1 ? 'toepassing' : 'toepassingen'}`,
+        leftNone: "Geen restanten.",
+        leftReview: "Bekijken"
       },
       recentActivity: {
         title: "Recente activiteit",
@@ -19414,10 +19414,10 @@ export const CATALOG = {
         unused: 'Ongebruikt',
         store: 'Store',
         extensions: 'Extensies',
-        broken: 'Left behind',
+        broken: "Restanten",
         storeCount: (n) => `Store (${n})`,
         extensionsCount: (n) => `Extensies (${n})`,
-        brokenCount: (n) => `Left behind (${n})`
+        brokenCount: (n) => `Restanten (${n})`
       },
       columns: {
         application: 'Toepassing',
@@ -19429,7 +19429,7 @@ export const CATALOG = {
         company: 'Bedrijf',
         website: 'Website'
       },
-      badges: { broken: 'Left behind', running: 'Actief', store: 'Store', disabled: 'Uitgeschakeld', unused: 'Ongebruikt' },
+      badges: { broken: "Restanten", running: 'Actief', store: 'Store', disabled: 'Uitgeschakeld', unused: 'Ongebruikt' },
       selectRow: (name) => `${name} selecteren`,
       selectAll: 'Alle getoonde selecteren',
       clearSelection: 'Selectie wissen',
@@ -19441,7 +19441,7 @@ export const CATALOG = {
       openFolder: "Map openen",
       copyUninstallCommand: "Verwijderopdracht kopiëren",
       commandCopied: "Verwijderopdracht gekopieerd.",
-      unusedDefinition: "Flagged as not used recently. Prune keeps no launch history of its own, so check before you remove anything on this list.",
+      unusedDefinition: "Gemarkeerd als recent niet gebruikt. Prune houdt zelf geen startgeschiedenis bij, dus controleer dit voordat je iets van deze lijst verwijdert.",
       copyFailed: "Kopiëren mislukt.",
       empty: {
         plain: 'Niets komt overeen.',
@@ -19531,9 +19531,9 @@ export const CATALOG = {
         status: 'Status'
       },
       switchAriaLabel: (name) => `${name} uitvoeren bij aanmelden`,
-      copyPath: 'Copy path',
-      pathCopied: 'Path copied.',
-      copyFailed: "Couldn't copy that.",
+      copyPath: "Pad kopiëren",
+      pathCopied: "Pad gekopieerd.",
+      copyFailed: "Kopiëren is niet gelukt.",
       status: {
         invalid: 'Ongeldig',
         running: 'Actief',
@@ -19626,7 +19626,7 @@ export const CATALOG = {
       footer: {
         totalLabel: 'Totale vrij te maken ruimte:',
         notMeasuredYet: 'nog niet gemeten',
-        previewFirst: 'Preview first to see what will be freed.',
+        previewFirst: "Bekijk eerst het voorbeeld om te zien wat er wordt vrijgemaakt.",
         unmeasuredSuffix: (count) => ` · ${count} niet gemeten`,
         selectEverything: 'Alles selecteren',
         clear: 'Wissen',
@@ -19865,7 +19865,7 @@ export const CATALOG = {
     app: {
       installedApplications: 'Geïnstalleerde toepassingen',
       applicationsSummary: (count, size) => `${count} geïnstalleerde toepassing${count === 1 ? '' : 'en'} · ${size}`,
-      applicationsSummaryFiltered: (shown, total, size) => `${shown} of ${total} shown · ${size}`,
+      applicationsSummaryFiltered: (shown, total, size) => `${shown} van ${total} getoond · ${size}`,
       removeStoreApp: (name) => `${name} verwijderen`
     }
   },
@@ -19924,8 +19924,8 @@ export const CATALOG = {
         ariaLabel: 'Godziny, przez które zostawiać niedawne pliki w spokoju'
       },
       restorePointCleanup: {
-        title: "Restore point before removing leftovers",
-        description: "Taken before Prune removes the leftover files and registry keys you selected, including after Force remove. On by default; does nothing at all if System Protection is turned off."
+        title: "Punkt przywracania przed usunięciem pozostałości",
+        description: "Tworzony, zanim Prune usunie wybrane przez Ciebie pozostałe pliki i klucze rejestru, także po wymuszonym usunięciu. Domyślnie włączone; nic nie robi, jeśli Ochrona systemu jest wyłączona."
       },
       hideUnavailable: {
         title: "Ukryj moduły czyszczenia, które nie mają zastosowania",
@@ -19987,12 +19987,12 @@ export const CATALOG = {
       uninstallTab: {
         beforeHeading: 'Przed odinstalowaniem',
         restorePointUninstall: {
-          title: "Restore point before running an uninstaller",
-          description: "Taken before the program's own uninstaller runs. It needs Prune to be running as administrator and Windows allows one a day, so when it can't be made the uninstall goes ahead and the dialog says so."
+          title: "Punkt przywracania przed uruchomieniem dezinstalatora",
+          description: "Tworzony, zanim uruchomi się własny dezinstalator programu. Wymaga uruchomienia Prune jako administrator, a Windows pozwala na jeden dziennie, więc gdy nie można go utworzyć, odinstalowanie przebiega dalej, a okno o tym informuje."
         },
         registryBackup: {
           title: 'Utwórz kopię zapasową rejestru przed odinstalowaniem',
-          description: "Exports HKLM\\SOFTWARE and HKCU\\Software, typically several hundred MB, and keeps the newest 3. If the backup can't be made, the uninstall doesn't run."
+          description: "Eksportuje HKLM\\SOFTWARE i HKCU\\Software, zwykle kilkaset MB, i zachowuje 3 najnowsze kopie. Jeśli nie można utworzyć kopii zapasowej, odinstalowanie nie jest uruchamiane."
         },
         deleteLockedFiles: {
           title: 'Usuń zablokowane pliki przy następnym ponownym uruchomieniu',
@@ -20024,7 +20024,7 @@ export const CATALOG = {
         reportTitle: 'Zgłoś błąd',
         reportDescription: "Otwiera w serwisie GitHub gotowe, wypełnione zgłoszenie. Prune sam niczego nie wysyła, a wszystko zobaczysz, zanim gdziekolwiek trafi.",
         reportButton: 'Zgłoś błąd',
-        description: "A local, offline uninstaller and cleanup tool for Windows — forced removal with leftover-file scanning, safe quarantine-before-delete, disk mapping, and a cleaner that shows a preview before it removes anything."
+        description: "Lokalne narzędzie offline do odinstalowywania i czyszczenia w Windows — wymuszone usuwanie ze skanowaniem pozostałości, bezpieczna kwarantanna przed usunięciem, mapa dysku i czyszczenie, które przed usunięciem czegokolwiek pokazuje podgląd."
       },
       automation: {
         title: 'Automatyzacja',
@@ -20083,45 +20083,45 @@ export const CATALOG = {
         mediaErrors: 'Błędy nośnika',
         errorLogEntries: 'Wpisy dziennika błędów'
       },
-      measuring: 'measuring…',
+      measuring: "mierzenie…",
       space: {
-        drive: (letter) => `Drive ${letter}:`,
-        heading: 'Where is my space going?',
-        summary: (used, total, free) => `${used} used of ${total} · ${free} free`,
-        loading: 'Reading drive space…',
-        barLabel: (programs, other, free) => `Drive space: installed programs ${programs}, everything else ${other}, free ${free}.`,
-        barLabelMeasuring: (used, free) => `Drive space: ${used} used, ${free} free. Installed programs are still being measured.`,
-        legendPrograms: 'Installed programs',
-        legendOther: 'Everything else',
-        legendUsed: 'Used',
-        legendFree: 'Free',
-        unsized: (count) => `${count} ${count === 1 ? 'program' : 'programs'} without a size`,
-        exceedsUsed: 'Program sizes add up to more than is used on this drive.'
+        drive: (letter) => `Dysk ${letter}:`,
+        heading: "Gdzie znika moje miejsce?",
+        summary: (used, total, free) => `Użyto ${used} z ${total} · wolne: ${free}`,
+        loading: "Odczytywanie miejsca na dysku…",
+        barLabel: (programs, other, free) => `Miejsce na dysku: zainstalowane programy ${programs}, wszystko inne ${other}, wolne ${free}.`,
+        barLabelMeasuring: (used, free) => `Miejsce na dysku: użyto ${used}, wolne ${free}. Zainstalowane programy są nadal mierzone.`,
+        legendPrograms: "Zainstalowane programy",
+        legendOther: "Wszystko inne",
+        legendUsed: "Użyte",
+        legendFree: "Wolne",
+        unsized: (count) => `Programy bez rozmiaru: ${count}`,
+        exceedsUsed: "Rozmiary programów sumują się do więcej, niż jest użyte na tym dysku."
       },
       largest: {
-        heading: 'Largest programs',
-        openApplications: 'Open Applications',
-        installedCount: (count) => `${count} installed`,
-        measuring: 'Measuring program sizes…',
-        none: 'No program has a measured size yet.',
-        notInList: (size) => `The other ${size} is not in the program list.`,
-        seeDiskMap: 'See it in Disk Map.'
+        heading: "Największe programy",
+        openApplications: "Otwórz Aplikacje",
+        installedCount: (count) => `Zainstalowano: ${count}`,
+        measuring: "Mierzenie rozmiarów programów…",
+        none: "Żaden program nie ma jeszcze zmierzonego rozmiaru.",
+        notInList: (size) => `Pozostałe ${size} nie ma na liście programów.`,
+        seeDiskMap: "Zobacz to w Mapie dysku."
       },
       quiet: {
-        scoreOf: (score) => `${score} of 100`,
-        driveDetails: 'Drive details',
-        junkTitle: 'Junk files',
-        junkNotMeasured: 'Not measured',
-        junkMeasure: 'Measure',
-        junkProgress: (scanned, total) => `Measuring… ${scanned} of ${total}`,
-        junkMeasuring: 'Measuring…',
-        junkBasis: (count) => `Across ${count} recommended ${count === 1 ? 'cleaner' : 'cleaners'}`,
-        junkError: (message) => `Couldn't measure junk files: ${message}`,
-        openDeepClean: 'Open Deep Clean',
-        leftTitle: 'Left behind',
-        leftCount: (count) => `${count} ${count === 1 ? 'program' : 'programs'}`,
-        leftNone: 'Nothing left behind.',
-        leftReview: 'Review'
+        scoreOf: (score) => `${score} na 100`,
+        driveDetails: "Szczegóły dysku",
+        junkTitle: "Zbędne pliki",
+        junkNotMeasured: "Nie zmierzono",
+        junkMeasure: "Zmierz",
+        junkProgress: (scanned, total) => `Mierzenie… ${scanned} z ${total}`,
+        junkMeasuring: "Mierzenie…",
+        junkBasis: (count) => `Z zalecanych czyszczeń: ${count}`,
+        junkError: (message) => `Nie udało się zmierzyć zbędnych plików: ${message}`,
+        openDeepClean: "Otwórz Głębokie czyszczenie",
+        leftTitle: "Pozostałości",
+        leftCount: (count) => `Programy: ${count}`,
+        leftNone: "Brak pozostałości.",
+        leftReview: "Przejrzyj"
       },
       recentActivity: {
         title: "Ostatnia aktywność",
@@ -20239,10 +20239,10 @@ export const CATALOG = {
         unused: 'Nieużywane',
         store: 'Sklep',
         extensions: 'Rozszerzenia',
-        broken: 'Left behind',
+        broken: "Pozostałości",
         storeCount: (n) => `Sklep (${n})`,
         extensionsCount: (n) => `Rozszerzenia (${n})`,
-        brokenCount: (n) => `Left behind (${n})`
+        brokenCount: (n) => `Pozostałości (${n})`
       },
       columns: {
         application: 'Aplikacja',
@@ -20254,7 +20254,7 @@ export const CATALOG = {
         company: 'Firma',
         website: 'Strona internetowa'
       },
-      badges: { broken: 'Left behind', running: 'Uruchomione', store: 'Sklep', disabled: 'Wyłączone', unused: 'Nieużywane' },
+      badges: { broken: "Pozostałości", running: 'Uruchomione', store: 'Sklep', disabled: 'Wyłączone', unused: 'Nieużywane' },
       selectRow: (name) => `Zaznacz ${name}`,
       selectAll: 'Zaznacz wszystkie wyświetlane',
       clearSelection: 'Wyczyść zaznaczenie',
@@ -20266,7 +20266,7 @@ export const CATALOG = {
       openFolder: "Otwórz folder",
       copyUninstallCommand: "Kopiuj polecenie odinstalowania",
       commandCopied: "Skopiowano polecenie odinstalowania.",
-      unusedDefinition: "Flagged as not used recently. Prune keeps no launch history of its own, so check before you remove anything on this list.",
+      unusedDefinition: "Oznaczone jako niedawno nieużywane. Prune nie prowadzi własnej historii uruchomień, więc sprawdź, zanim usuniesz cokolwiek z tej listy.",
       copyFailed: "Nie udało się skopiować.",
       empty: {
         plain: 'Nic nie pasuje.',
@@ -20356,9 +20356,9 @@ export const CATALOG = {
         status: 'Stan'
       },
       switchAriaLabel: (name) => `Uruchamiaj ${name} przy logowaniu`,
-      copyPath: 'Copy path',
-      pathCopied: 'Path copied.',
-      copyFailed: "Couldn't copy that.",
+      copyPath: "Kopiuj ścieżkę",
+      pathCopied: "Ścieżka skopiowana.",
+      copyFailed: "Nie udało się skopiować.",
       status: {
         invalid: 'Nieprawidłowy',
         running: 'Uruchomione',
@@ -20451,7 +20451,7 @@ export const CATALOG = {
       footer: {
         totalLabel: 'Łączna ilość miejsca do zwolnienia:',
         notMeasuredYet: 'jeszcze nie zmierzono',
-        previewFirst: 'Preview first to see what will be freed.',
+        previewFirst: "Najpierw użyj Podglądu, aby zobaczyć, co zostanie zwolnione.",
         unmeasuredSuffix: (count) => ` · niezmierzone: ${count}`,
         selectEverything: 'Zaznacz wszystko',
         clear: 'Wyczyść',
@@ -20690,7 +20690,7 @@ export const CATALOG = {
     app: {
       installedApplications: "Aplikacje",
       applicationsSummary: (count, size) => `Zainstalowane aplikacje: ${count} · ${size}`,
-      applicationsSummaryFiltered: (shown, total, size) => `${shown} of ${total} shown · ${size}`,
+      applicationsSummaryFiltered: (shown, total, size) => `Pokazano ${shown} z ${total} · ${size}`,
       removeStoreApp: (name) => `Usuń ${name}`
     }
   },
@@ -20749,8 +20749,8 @@ export const CATALOG = {
         ariaLabel: 'ساعتونه چې وروستي فایلونه پرې پریږدل شي'
       },
       restorePointCleanup: {
-        title: "Restore point before removing leftovers",
-        description: "Taken before Prune removes the leftover files and registry keys you selected, including after Force remove. On by default; does nothing at all if System Protection is turned off."
+        title: "د پاتې شونو لرې کولو دمخه د بیارغونې نقطه",
+        description: "مخکې له دې چې Prune ستاسو ټاکل شوي پاتې شوي فایلونه او د رجسټري کیلي لرې کړي جوړیږي، د زوري لرې کولو وروسته هم. په ډیفالټ فعاله ده؛ که د سیسټم ساتنه بنده وي هیڅ نه کوي."
       },
       hideUnavailable: {
         title: "هغه پاکوونکي پټ کړئ چې تړاو نه لري",
@@ -20812,12 +20812,12 @@ export const CATALOG = {
       uninstallTab: {
         beforeHeading: 'د لرې کولو دمخه',
         restorePointUninstall: {
-          title: "Restore point before running an uninstaller",
-          description: "Taken before the program's own uninstaller runs. It needs Prune to be running as administrator and Windows allows one a day, so when it can't be made the uninstall goes ahead and the dialog says so."
+          title: "د لرې کوونکي چلولو دمخه د بیارغونې نقطه",
+          description: "د پروګرام د خپل لرې کوونکي له چلولو مخکې جوړیږي. دا ته اړتیا لري چې Prune د اډمین په توګه چلیږي او Windows په ورځ کې یوازې یوه اجازه ورکوي، نو کله چې نشي جوړېدلی لرې کول دوام کوي او کړکۍ دا وایي."
         },
         registryBackup: {
           title: 'د لرې کولو دمخه رجسټری بیک اپ کول',
-          description: "Exports HKLM\\SOFTWARE and HKCU\\Software, typically several hundred MB, and keeps the newest 3. If the backup can't be made, the uninstall doesn't run."
+          description: "HKLM\\SOFTWARE او HKCU\\Software صادروي، معمولاً څو سوه MB، او تر ټولو نوي 3 ساتي. که بیک اپ جوړ نشي، لرې کول نه چلیږي."
         },
         deleteLockedFiles: {
           title: 'په راتلونکي بیا پیل کې د بند شوو فایلونو حذف کول',
@@ -20849,7 +20849,7 @@ export const CATALOG = {
         reportTitle: 'د بګ راپور ورکړئ',
         reportDescription: "په GitHub کې یو مخکې ډک شوی Issue پرانیزي. Prune پخپله هیڅ نه لیږي، او تاسو هر څه مخکې له لیږلو وینئ.",
         reportButton: 'د بګ راپور ورکړئ',
-        description: "A local, offline uninstaller and cleanup tool for Windows — forced removal with leftover-file scanning, safe quarantine-before-delete, disk mapping, and a cleaner that shows a preview before it removes anything."
+        description: "د Windows لپاره یو محلي، آفلاین لرې کوونکی او پاکولو وسیله — د پاتې شونو سکین سره زوري لرې کول، د ړنګولو دمخه خوندي قرنطین، د ډیسک نقشه جوړول، او یو پاکوونکی چې د هر څه لرې کولو دمخه مخکتنه ښیي."
       },
       automation: {
         title: 'اتومات کول',
@@ -20908,45 +20908,45 @@ export const CATALOG = {
         mediaErrors: 'د رسنیو تېروتنې',
         errorLogEntries: 'د تېروتنو لاګ ننوتنې'
       },
-      measuring: 'measuring…',
+      measuring: "اندازه کیږي…",
       space: {
-        drive: (letter) => `Drive ${letter}:`,
-        heading: 'Where is my space going?',
-        summary: (used, total, free) => `${used} used of ${total} · ${free} free`,
-        loading: 'Reading drive space…',
-        barLabel: (programs, other, free) => `Drive space: installed programs ${programs}, everything else ${other}, free ${free}.`,
-        barLabelMeasuring: (used, free) => `Drive space: ${used} used, ${free} free. Installed programs are still being measured.`,
-        legendPrograms: 'Installed programs',
-        legendOther: 'Everything else',
-        legendUsed: 'Used',
-        legendFree: 'Free',
-        unsized: (count) => `${count} ${count === 1 ? 'program' : 'programs'} without a size`,
-        exceedsUsed: 'Program sizes add up to more than is used on this drive.'
+        drive: (letter) => `ډرایو ${letter}:\u200E`,
+        heading: "زما ځای چیرته ځي؟",
+        summary: (used, total, free) => `${used} کارول شوي له ${total} څخه · ${free} خالي`,
+        loading: "د ډرایو ځای لوستل کیږي…",
+        barLabel: (programs, other, free) => `د ډرایو ځای: نصب شوي پروګرامونه ${programs}، نور هر څه ${other}، خالي ${free}.`,
+        barLabelMeasuring: (used, free) => `د ډرایو ځای: ${used} کارول شوي، ${free} خالي. د نصب شویو پروګرامونو اندازه کول لا روان دي.`,
+        legendPrograms: "نصب شوي پروګرامونه",
+        legendOther: "نور هر څه",
+        legendUsed: "کارول شوی",
+        legendFree: "خالي",
+        unsized: (count) => `${count} ${count === 1 ? 'پروګرام' : 'پروګرامونه'} پرته له اندازې`,
+        exceedsUsed: "د پروګرامونو د اندازو مجموعه په دې ډرایو کې له کارول شوي ځای څخه زیاته ده."
       },
       largest: {
-        heading: 'Largest programs',
-        openApplications: 'Open Applications',
-        installedCount: (count) => `${count} installed`,
-        measuring: 'Measuring program sizes…',
-        none: 'No program has a measured size yet.',
-        notInList: (size) => `The other ${size} is not in the program list.`,
-        seeDiskMap: 'See it in Disk Map.'
+        heading: "تر ټولو لوی پروګرامونه",
+        openApplications: "غوښتنلیکونه پرانیزئ",
+        installedCount: (count) => `نصب شوي: ${count}`,
+        measuring: "د پروګرامونو اندازې اندازه کیږي…",
+        none: "لا تر اوسه د هیڅ پروګرام اندازه نه ده اندازه شوې.",
+        notInList: (size) => `پاتې ${size} د پروګرامونو په لیست کې نشته.`,
+        seeDiskMap: "د ډیسک په نقشه کې یې وګورئ."
       },
       quiet: {
-        scoreOf: (score) => `${score} of 100`,
-        driveDetails: 'Drive details',
-        junkTitle: 'Junk files',
-        junkNotMeasured: 'Not measured',
-        junkMeasure: 'Measure',
-        junkProgress: (scanned, total) => `Measuring… ${scanned} of ${total}`,
-        junkMeasuring: 'Measuring…',
-        junkBasis: (count) => `Across ${count} recommended ${count === 1 ? 'cleaner' : 'cleaners'}`,
-        junkError: (message) => `Couldn't measure junk files: ${message}`,
-        openDeepClean: 'Open Deep Clean',
-        leftTitle: 'Left behind',
-        leftCount: (count) => `${count} ${count === 1 ? 'program' : 'programs'}`,
-        leftNone: 'Nothing left behind.',
-        leftReview: 'Review'
+        scoreOf: (score) => `${score} له 100 څخه`,
+        driveDetails: "د ډرایو توضیحات",
+        junkTitle: "بې ګټې فایلونه",
+        junkNotMeasured: "اندازه شوي نه دي",
+        junkMeasure: "اندازه کړئ",
+        junkProgress: (scanned, total) => `اندازه کیږي… ${total} څخه ${scanned}`,
+        junkMeasuring: "اندازه کیږي…",
+        junkBasis: (count) => count === 1 ? 'په 1 وړاندیز شوي پاکوونکي کې' : `په ${count} وړاندیز شویو پاکوونکو کې`,
+        junkError: (message) => `بې ګټې فایلونه اندازه نشول کیدی: ${message}`,
+        openDeepClean: "ژور پاکول پرانیزئ",
+        leftTitle: "پاتې شونې",
+        leftCount: (count) => `${count} ${count === 1 ? 'پروګرام' : 'پروګرامونه'}`,
+        leftNone: "هیڅ پاتې شونې نشته.",
+        leftReview: "وڅېړئ"
       },
       recentActivity: {
         title: "وروستي فعالیتونه",
@@ -21064,10 +21064,10 @@ export const CATALOG = {
         unused: "نه کارول شوي",
         store: 'پلورنځی',
         extensions: 'توسیعې',
-        broken: 'Left behind',
+        broken: "پاتې شونې",
         storeCount: (n) => `پلورنځی (${n})`,
         extensionsCount: (n) => `توسیعې (${n})`,
-        brokenCount: (n) => `Left behind (${n})`
+        brokenCount: (n) => `پاتې شونې (${n})`
       },
       columns: {
         application: 'غوښتنلیک',
@@ -21079,7 +21079,7 @@ export const CATALOG = {
         company: 'شرکت',
         website: 'ویب پاڼه'
       },
-      badges: { broken: 'Left behind', running: 'روان', store: 'پلورنځی', disabled: 'غیرفعال شوی', unused: "نه کارول شوی" },
+      badges: { broken: "پاتې شونې", running: 'روان', store: 'پلورنځی', disabled: 'غیرفعال شوی', unused: "نه کارول شوی" },
       selectRow: (name) => `${name} غوره کړئ`,
       selectAll: 'ټول ښودل شوي غوره کړئ',
       clearSelection: 'ټاکنه پاکه کړئ',
@@ -21091,7 +21091,7 @@ export const CATALOG = {
       openFolder: "فولډر پرانیزئ",
       copyUninstallCommand: "د لرې کولو امر کاپي کړئ",
       commandCopied: "د لرې کولو امر کاپي شو.",
-      unusedDefinition: "Flagged as not used recently. Prune keeps no launch history of its own, so check before you remove anything on this list.",
+      unusedDefinition: "په دې وروستیو کې نه کارول شوی په توګه نښه شوی. Prune خپل د پیل کولو تاریخ نه ساتي، نو مخکې له دې چې د دې لیست څخه یو څه لرې کړئ، وګورئ.",
       copyFailed: "کاپي ونه شوه.",
       empty: {
         plain: 'هیڅ شی ونه موندل شو.',
@@ -21181,9 +21181,9 @@ export const CATALOG = {
         status: 'حالت'
       },
       switchAriaLabel: (name) => `د ننوتلو پر مهال ${name} چلول`,
-      copyPath: 'Copy path',
-      pathCopied: 'Path copied.',
-      copyFailed: "Couldn't copy that.",
+      copyPath: "لاره کاپي کړئ",
+      pathCopied: "لاره کاپي شوه.",
+      copyFailed: "کاپي ونه شوه.",
       status: {
         invalid: 'ناسمه',
         running: 'روان',
@@ -21276,7 +21276,7 @@ export const CATALOG = {
       footer: {
         totalLabel: 'د خلاصولو ټول ځای:',
         notMeasuredYet: 'تراوسه اندازه شوی نه دی',
-        previewFirst: 'Preview first to see what will be freed.',
+        previewFirst: "لومړی «مخکتنه» کېکاږئ چې وګورئ څه به خلاص شي.",
         unmeasuredSuffix: (count) => ` · ${count} نامعلومه اندازه`,
         selectEverything: 'هر څه ټاکل',
         clear: 'پاک کول',
@@ -21517,7 +21517,7 @@ export const CATALOG = {
     app: {
       installedApplications: "غوښتنلیکونه",
       applicationsSummary: (count, size) => `نصب شوي غوښتنلیکونه: ${count} · ${size}`,
-      applicationsSummaryFiltered: (shown, total, size) => `${shown} of ${total} shown · ${size}`,
+      applicationsSummaryFiltered: (shown, total, size) => `${total} څخه ${shown} ښودل شوي · ${size}`,
       removeStoreApp: (name) => `${name} لرې کول`
     }
   },
@@ -21576,8 +21576,8 @@ export const CATALOG = {
         ariaLabel: 'Horas para deixar os arquivos recentes em paz'
       },
       restorePointCleanup: {
-        title: "Restore point before removing leftovers",
-        description: "Taken before Prune removes the leftover files and registry keys you selected, including after Force remove. On by default; does nothing at all if System Protection is turned off."
+        title: "Ponto de restauração antes de remover resíduos",
+        description: "Criado antes de o Prune remover os resíduos (arquivos e chaves de registro) que você selecionou, inclusive depois de Forçar remoção. Ativado por padrão; não faz nada se a Proteção do Sistema estiver desativada."
       },
       hideUnavailable: {
         title: 'Ocultar limpadores que não se aplicam',
@@ -21639,12 +21639,12 @@ export const CATALOG = {
       uninstallTab: {
         beforeHeading: 'Antes de desinstalar',
         restorePointUninstall: {
-          title: "Restore point before running an uninstaller",
-          description: "Taken before the program's own uninstaller runs. It needs Prune to be running as administrator and Windows allows one a day, so when it can't be made the uninstall goes ahead and the dialog says so."
+          title: "Ponto de restauração antes de executar um desinstalador",
+          description: "Criado antes de o desinstalador do próprio programa ser executado. Exige que o Prune esteja sendo executado como administrador, e o Windows permite um por dia; quando não é possível criá-lo, a desinstalação segue em frente e a caixa de diálogo avisa."
         },
         registryBackup: {
           title: 'Fazer backup do registro antes de desinstalar',
-          description: "Exports HKLM\\SOFTWARE and HKCU\\Software, typically several hundred MB, and keeps the newest 3. If the backup can't be made, the uninstall doesn't run."
+          description: "Exporta HKLM\\SOFTWARE e HKCU\\Software, normalmente várias centenas de MB, e mantém os 3 mais recentes. Se o backup não puder ser feito, a desinstalação não é executada."
         },
         deleteLockedFiles: {
           title: 'Excluir arquivos bloqueados na próxima reinicialização',
@@ -21676,7 +21676,7 @@ export const CATALOG = {
         reportTitle: 'Relatar um bug',
         reportDescription: "Abre uma issue pré-preenchida no GitHub. O Prune não envia nada por conta própria, e você vê tudo antes de qualquer envio.",
         reportButton: 'Relatar um bug',
-        description: "A local, offline uninstaller and cleanup tool for Windows — forced removal with leftover-file scanning, safe quarantine-before-delete, disk mapping, and a cleaner that shows a preview before it removes anything."
+        description: "Uma ferramenta local e offline de desinstalação e limpeza para Windows — remoção forçada com verificação de resíduos, quarentena segura antes de excluir, mapeamento de disco e um limpador que mostra uma prévia antes de remover qualquer coisa."
       },
       automation: {
         title: 'Automação',
@@ -21735,45 +21735,45 @@ export const CATALOG = {
         mediaErrors: 'Erros de mídia',
         errorLogEntries: 'Entradas do log de erros'
       },
-      measuring: 'measuring…',
+      measuring: "medindo…",
       space: {
-        drive: (letter) => `Drive ${letter}:`,
-        heading: 'Where is my space going?',
-        summary: (used, total, free) => `${used} used of ${total} · ${free} free`,
-        loading: 'Reading drive space…',
-        barLabel: (programs, other, free) => `Drive space: installed programs ${programs}, everything else ${other}, free ${free}.`,
-        barLabelMeasuring: (used, free) => `Drive space: ${used} used, ${free} free. Installed programs are still being measured.`,
-        legendPrograms: 'Installed programs',
-        legendOther: 'Everything else',
-        legendUsed: 'Used',
-        legendFree: 'Free',
-        unsized: (count) => `${count} ${count === 1 ? 'program' : 'programs'} without a size`,
-        exceedsUsed: 'Program sizes add up to more than is used on this drive.'
+        drive: (letter) => `Disco ${letter}:`,
+        heading: "Para onde está indo meu espaço?",
+        summary: (used, total, free) => `${used} usados de ${total} · ${free} livres`,
+        loading: "Lendo o espaço do disco…",
+        barLabel: (programs, other, free) => `Espaço do disco: aplicativos instalados ${programs}, todo o resto ${other}, livre ${free}.`,
+        barLabelMeasuring: (used, free) => `Espaço do disco: ${used} usados, ${free} livres. Os aplicativos instalados ainda estão sendo medidos.`,
+        legendPrograms: "Aplicativos instalados",
+        legendOther: "Todo o resto",
+        legendUsed: "Usado",
+        legendFree: "Livre",
+        unsized: (count) => `${count} aplicativo${count === 1 ? '' : 's'} sem tamanho`,
+        exceedsUsed: "Os tamanhos dos aplicativos somam mais do que o espaço usado neste disco."
       },
       largest: {
-        heading: 'Largest programs',
-        openApplications: 'Open Applications',
-        installedCount: (count) => `${count} installed`,
-        measuring: 'Measuring program sizes…',
-        none: 'No program has a measured size yet.',
-        notInList: (size) => `The other ${size} is not in the program list.`,
-        seeDiskMap: 'See it in Disk Map.'
+        heading: "Maiores aplicativos",
+        openApplications: "Abrir Aplicativos",
+        installedCount: (count) => `${count} instalado${count === 1 ? '' : 's'}`,
+        measuring: "Medindo o tamanho dos aplicativos…",
+        none: "Nenhum aplicativo tem tamanho medido ainda.",
+        notInList: (size) => `Os outros ${size} não estão na lista de aplicativos.`,
+        seeDiskMap: "Veja no Mapa do disco."
       },
       quiet: {
-        scoreOf: (score) => `${score} of 100`,
-        driveDetails: 'Drive details',
-        junkTitle: 'Junk files',
-        junkNotMeasured: 'Not measured',
-        junkMeasure: 'Measure',
-        junkProgress: (scanned, total) => `Measuring… ${scanned} of ${total}`,
-        junkMeasuring: 'Measuring…',
-        junkBasis: (count) => `Across ${count} recommended ${count === 1 ? 'cleaner' : 'cleaners'}`,
-        junkError: (message) => `Couldn't measure junk files: ${message}`,
-        openDeepClean: 'Open Deep Clean',
-        leftTitle: 'Left behind',
-        leftCount: (count) => `${count} ${count === 1 ? 'program' : 'programs'}`,
-        leftNone: 'Nothing left behind.',
-        leftReview: 'Review'
+        scoreOf: (score) => `${score} de 100`,
+        driveDetails: "Detalhes do disco",
+        junkTitle: "Arquivos inúteis",
+        junkNotMeasured: "Não medido",
+        junkMeasure: "Medir",
+        junkProgress: (scanned, total) => `Medindo… ${scanned} de ${total}`,
+        junkMeasuring: "Medindo…",
+        junkBasis: (count) => `Em ${count} ${count === 1 ? 'limpador recomendado' : 'limpadores recomendados'}`,
+        junkError: (message) => `Não foi possível medir os arquivos inúteis: ${message}`,
+        openDeepClean: "Abrir Limpeza profunda",
+        leftTitle: "Resíduos",
+        leftCount: (count) => `${count} aplicativo${count === 1 ? '' : 's'}`,
+        leftNone: "Nenhum resíduo.",
+        leftReview: "Revisar"
       },
       recentActivity: {
         title: "Atividade recente",
@@ -21891,10 +21891,10 @@ export const CATALOG = {
         unused: 'Não usados',
         store: 'Loja',
         extensions: 'Extensões',
-        broken: 'Left behind',
+        broken: "Resíduos",
         storeCount: (n) => `Loja (${n})`,
         extensionsCount: (n) => `Extensões (${n})`,
-        brokenCount: (n) => `Left behind (${n})`
+        brokenCount: (n) => `Resíduos (${n})`
       },
       columns: {
         application: 'Aplicativo',
@@ -21906,7 +21906,7 @@ export const CATALOG = {
         company: 'Empresa',
         website: 'Site'
       },
-      badges: { broken: 'Left behind', running: 'Em execução', store: 'Loja', disabled: 'Desativado', unused: 'Não usado' },
+      badges: { broken: "Resíduos", running: 'Em execução', store: 'Loja', disabled: 'Desativado', unused: 'Não usado' },
       selectRow: (name) => `Selecionar ${name}`,
       selectAll: 'Selecionar tudo que está sendo exibido',
       clearSelection: 'Limpar seleção',
@@ -21918,7 +21918,7 @@ export const CATALOG = {
       openFolder: "Abrir pasta",
       copyUninstallCommand: "Copiar comando de desinstalação",
       commandCopied: "Comando de desinstalação copiado.",
-      unusedDefinition: "Flagged as not used recently. Prune keeps no launch history of its own, so check before you remove anything on this list.",
+      unusedDefinition: "Marcado como não usado recentemente. O Prune não mantém um histórico próprio de execuções, então confira antes de remover qualquer item desta lista.",
       copyFailed: "Não foi possível copiar.",
       empty: {
         plain: 'Nada corresponde.',
@@ -22008,9 +22008,9 @@ export const CATALOG = {
         status: 'Status'
       },
       switchAriaLabel: (name) => `Executar ${name} ao entrar`,
-      copyPath: 'Copy path',
-      pathCopied: 'Path copied.',
-      copyFailed: "Couldn't copy that.",
+      copyPath: "Copiar caminho",
+      pathCopied: "Caminho copiado.",
+      copyFailed: "Não foi possível copiar.",
       status: {
         invalid: 'Inválido',
         running: 'Em execução',
@@ -22103,7 +22103,7 @@ export const CATALOG = {
       footer: {
         totalLabel: 'Espaço total a liberar:',
         notMeasuredYet: 'ainda não medido',
-        previewFirst: 'Preview first to see what will be freed.',
+        previewFirst: "Faça a prévia primeiro para ver o que será liberado.",
         unmeasuredSuffix: (count) => ` · ${count} não medido${count === 1 ? '' : 's'}`,
         selectEverything: 'Selecionar tudo',
         clear: 'Limpar',
@@ -22342,7 +22342,7 @@ export const CATALOG = {
     app: {
       installedApplications: "Aplicativos",
       applicationsSummary: (count, size) => `${count} aplicativo${count === 1 ? '' : 's'} instalado${count === 1 ? '' : 's'} · ${size}`,
-      applicationsSummaryFiltered: (shown, total, size) => `${shown} of ${total} shown · ${size}`,
+      applicationsSummaryFiltered: (shown, total, size) => `${shown} de ${total} exibidos · ${size}`,
       removeStoreApp: (name) => `Remover ${name}`
     }
   },
@@ -22401,8 +22401,8 @@ export const CATALOG = {
         ariaLabel: 'Horas para deixar os ficheiros recentes em paz'
       },
       restorePointCleanup: {
-        title: "Restore point before removing leftovers",
-        description: "Taken before Prune removes the leftover files and registry keys you selected, including after Force remove. On by default; does nothing at all if System Protection is turned off."
+        title: "Ponto de restauro antes de remover resíduos",
+        description: "Criado antes de o Prune remover os resíduos (ficheiros e chaves de registo) que selecionou, incluindo depois de Forçar remoção. Ativado por predefinição; não faz nada se a Proteção do Sistema estiver desativada."
       },
       hideUnavailable: {
         title: 'Ocultar limpadores que não se aplicam',
@@ -22464,12 +22464,12 @@ export const CATALOG = {
       uninstallTab: {
         beforeHeading: 'Antes de desinstalar',
         restorePointUninstall: {
-          title: "Restore point before running an uninstaller",
-          description: "Taken before the program's own uninstaller runs. It needs Prune to be running as administrator and Windows allows one a day, so when it can't be made the uninstall goes ahead and the dialog says so."
+          title: "Ponto de restauro antes de executar um desinstalador",
+          description: "Criado antes de o desinstalador do próprio programa ser executado. Exige que o Prune esteja a ser executado como administrador e o Windows permite um por dia; quando não é possível criá-lo, a desinstalação prossegue e a caixa de diálogo indica-o."
         },
         registryBackup: {
           title: 'Fazer cópia de segurança do registo antes de desinstalar',
-          description: "Exports HKLM\\SOFTWARE and HKCU\\Software, typically several hundred MB, and keeps the newest 3. If the backup can't be made, the uninstall doesn't run."
+          description: "Exporta HKLM\\SOFTWARE e HKCU\\Software, normalmente várias centenas de MB, e mantém os 3 mais recentes. Se não for possível fazer a cópia de segurança, a desinstalação não é executada."
         },
         deleteLockedFiles: {
           title: 'Eliminar ficheiros bloqueados no próximo reinício',
@@ -22501,7 +22501,7 @@ export const CATALOG = {
         reportTitle: 'Comunicar um erro',
         reportDescription: "Abre uma issue pré-preenchida no GitHub. O Prune não envia nada por si só e mostra-lhe tudo antes de qualquer envio.",
         reportButton: 'Comunicar um erro',
-        description: "A local, offline uninstaller and cleanup tool for Windows — forced removal with leftover-file scanning, safe quarantine-before-delete, disk mapping, and a cleaner that shows a preview before it removes anything."
+        description: "Uma ferramenta local e offline de desinstalação e limpeza para Windows — remoção forçada com análise de resíduos, quarentena segura antes de eliminar, mapeamento de disco e um limpador que mostra uma pré-visualização antes de remover o que quer que seja."
       },
       automation: {
         title: 'Automatização',
@@ -22560,45 +22560,45 @@ export const CATALOG = {
         mediaErrors: 'Erros de suporte',
         errorLogEntries: 'Entradas do registo de erros'
       },
-      measuring: 'measuring…',
+      measuring: "a medir…",
       space: {
-        drive: (letter) => `Drive ${letter}:`,
-        heading: 'Where is my space going?',
-        summary: (used, total, free) => `${used} used of ${total} · ${free} free`,
-        loading: 'Reading drive space…',
-        barLabel: (programs, other, free) => `Drive space: installed programs ${programs}, everything else ${other}, free ${free}.`,
-        barLabelMeasuring: (used, free) => `Drive space: ${used} used, ${free} free. Installed programs are still being measured.`,
-        legendPrograms: 'Installed programs',
-        legendOther: 'Everything else',
-        legendUsed: 'Used',
-        legendFree: 'Free',
-        unsized: (count) => `${count} ${count === 1 ? 'program' : 'programs'} without a size`,
-        exceedsUsed: 'Program sizes add up to more than is used on this drive.'
+        drive: (letter) => `Disco ${letter}:`,
+        heading: "Para onde está a ir o meu espaço?",
+        summary: (used, total, free) => `${used} usados de ${total} · ${free} livres`,
+        loading: "A ler o espaço do disco…",
+        barLabel: (programs, other, free) => `Espaço do disco: aplicações instaladas ${programs}, tudo o resto ${other}, livre ${free}.`,
+        barLabelMeasuring: (used, free) => `Espaço do disco: ${used} usados, ${free} livres. As aplicações instaladas ainda estão a ser medidas.`,
+        legendPrograms: "Aplicações instaladas",
+        legendOther: "Tudo o resto",
+        legendUsed: "Usado",
+        legendFree: "Livre",
+        unsized: (count) => `${count} ${count === 1 ? 'aplicação' : 'aplicações'} sem tamanho`,
+        exceedsUsed: "Os tamanhos das aplicações somam mais do que o espaço usado neste disco."
       },
       largest: {
-        heading: 'Largest programs',
-        openApplications: 'Open Applications',
-        installedCount: (count) => `${count} installed`,
-        measuring: 'Measuring program sizes…',
-        none: 'No program has a measured size yet.',
-        notInList: (size) => `The other ${size} is not in the program list.`,
-        seeDiskMap: 'See it in Disk Map.'
+        heading: "Maiores aplicações",
+        openApplications: "Abrir Aplicações",
+        installedCount: (count) => `${count} ${count === 1 ? 'instalada' : 'instaladas'}`,
+        measuring: "A medir o tamanho das aplicações…",
+        none: "Nenhuma aplicação tem ainda um tamanho medido.",
+        notInList: (size) => `Os outros ${size} não estão na lista de aplicações.`,
+        seeDiskMap: "Veja no Mapa do disco."
       },
       quiet: {
-        scoreOf: (score) => `${score} of 100`,
-        driveDetails: 'Drive details',
-        junkTitle: 'Junk files',
-        junkNotMeasured: 'Not measured',
-        junkMeasure: 'Measure',
-        junkProgress: (scanned, total) => `Measuring… ${scanned} of ${total}`,
-        junkMeasuring: 'Measuring…',
-        junkBasis: (count) => `Across ${count} recommended ${count === 1 ? 'cleaner' : 'cleaners'}`,
-        junkError: (message) => `Couldn't measure junk files: ${message}`,
-        openDeepClean: 'Open Deep Clean',
-        leftTitle: 'Left behind',
-        leftCount: (count) => `${count} ${count === 1 ? 'program' : 'programs'}`,
-        leftNone: 'Nothing left behind.',
-        leftReview: 'Review'
+        scoreOf: (score) => `${score} de 100`,
+        driveDetails: "Detalhes do disco",
+        junkTitle: "Ficheiros inúteis",
+        junkNotMeasured: "Não medido",
+        junkMeasure: "Medir",
+        junkProgress: (scanned, total) => `A medir… ${scanned} de ${total}`,
+        junkMeasuring: "A medir…",
+        junkBasis: (count) => `Em ${count} ${count === 1 ? 'limpador recomendado' : 'limpadores recomendados'}`,
+        junkError: (message) => `Não foi possível medir os ficheiros inúteis: ${message}`,
+        openDeepClean: "Abrir Limpeza profunda",
+        leftTitle: "Resíduos",
+        leftCount: (count) => `${count} ${count === 1 ? 'aplicação' : 'aplicações'}`,
+        leftNone: "Sem resíduos.",
+        leftReview: "Rever"
       },
       recentActivity: {
         title: "Atividade recente",
@@ -22716,10 +22716,10 @@ export const CATALOG = {
         unused: 'Não usadas',
         store: 'Loja',
         extensions: 'Extensões',
-        broken: 'Left behind',
+        broken: "Resíduos",
         storeCount: (n) => `Loja (${n})`,
         extensionsCount: (n) => `Extensões (${n})`,
-        brokenCount: (n) => `Left behind (${n})`
+        brokenCount: (n) => `Resíduos (${n})`
       },
       columns: {
         application: 'Aplicação',
@@ -22731,7 +22731,7 @@ export const CATALOG = {
         company: 'Empresa',
         website: 'Site'
       },
-      badges: { broken: 'Left behind', running: 'Em execução', store: 'Loja', disabled: 'Desativada', unused: 'Não usada' },
+      badges: { broken: "Resíduos", running: 'Em execução', store: 'Loja', disabled: 'Desativada', unused: 'Não usada' },
       selectRow: (name) => `Selecionar ${name}`,
       selectAll: 'Selecionar tudo o que está apresentado',
       clearSelection: 'Limpar seleção',
@@ -22743,7 +22743,7 @@ export const CATALOG = {
       openFolder: "Abrir pasta",
       copyUninstallCommand: "Copiar comando de desinstalação",
       commandCopied: "Comando de desinstalação copiado.",
-      unusedDefinition: "Flagged as not used recently. Prune keeps no launch history of its own, so check before you remove anything on this list.",
+      unusedDefinition: "Assinalada como não usada recentemente. O Prune não guarda um histórico de execuções próprio, por isso confirme antes de remover qualquer item desta lista.",
       copyFailed: "Não foi possível copiar.",
       empty: {
         plain: 'Nada corresponde.',
@@ -22833,9 +22833,9 @@ export const CATALOG = {
         status: 'Estado'
       },
       switchAriaLabel: (name) => `Executar ${name} ao iniciar sessão`,
-      copyPath: 'Copy path',
-      pathCopied: 'Path copied.',
-      copyFailed: "Couldn't copy that.",
+      copyPath: "Copiar caminho",
+      pathCopied: "Caminho copiado.",
+      copyFailed: "Não foi possível copiar.",
       status: {
         invalid: 'Inválido',
         running: 'Em execução',
@@ -22928,7 +22928,7 @@ export const CATALOG = {
       footer: {
         totalLabel: 'Espaço total a libertar:',
         notMeasuredYet: 'ainda não medido',
-        previewFirst: 'Preview first to see what will be freed.',
+        previewFirst: "Faça primeiro a pré-visualização para ver o que será libertado.",
         unmeasuredSuffix: (count) => ` · ${count} não medido${count === 1 ? '' : 's'}`,
         selectEverything: 'Selecionar tudo',
         clear: 'Limpar',
@@ -23169,7 +23169,7 @@ export const CATALOG = {
     app: {
       installedApplications: "Aplicações",
       applicationsSummary: (count, size) => `${count} aplicaç${count === 1 ? 'ão instalada' : 'ões instaladas'} · ${size}`,
-      applicationsSummaryFiltered: (shown, total, size) => `${shown} of ${total} shown · ${size}`,
+      applicationsSummaryFiltered: (shown, total, size) => `${shown} de ${total} apresentadas · ${size}`,
       removeStoreApp: (name) => `Remover ${name}`
     }
   },
@@ -23228,8 +23228,8 @@ export const CATALOG = {
         ariaLabel: 'Ore pentru care să lași fișierele recente în pace'
       },
       restorePointCleanup: {
-        title: "Restore point before removing leftovers",
-        description: "Taken before Prune removes the leftover files and registry keys you selected, including after Force remove. On by default; does nothing at all if System Protection is turned off."
+        title: "Punct de restaurare înainte de eliminarea resturilor",
+        description: "Se creează înainte ca Prune să elimine fișierele rămase și cheile de registru selectate, inclusiv după Forțează eliminarea. Activat implicit; nu face nimic dacă Protecția sistemului este dezactivată."
       },
       hideUnavailable: {
         title: 'Ascunde curățătoarele care nu se aplică',
@@ -23291,12 +23291,12 @@ export const CATALOG = {
       uninstallTab: {
         beforeHeading: 'Înainte de dezinstalare',
         restorePointUninstall: {
-          title: "Restore point before running an uninstaller",
-          description: "Taken before the program's own uninstaller runs. It needs Prune to be running as administrator and Windows allows one a day, so when it can't be made the uninstall goes ahead and the dialog says so."
+          title: "Punct de restaurare înainte de rularea unui dezinstalator",
+          description: "Se creează înainte ca dezinstalatorul propriu al programului să ruleze. Necesită ca Prune să ruleze ca administrator, iar Windows permite unul pe zi, așa că, atunci când nu poate fi creat, dezinstalarea continuă, iar dialogul spune asta."
         },
         registryBackup: {
           title: 'Copiază de rezervă registrul înainte de dezinstalare',
-          description: "Exports HKLM\\SOFTWARE and HKCU\\Software, typically several hundred MB, and keeps the newest 3. If the backup can't be made, the uninstall doesn't run."
+          description: "Exportă HKLM\\SOFTWARE și HKCU\\Software, de obicei câteva sute de MB, și păstrează ultimele 3. Dacă backup-ul nu poate fi creat, dezinstalarea nu rulează."
         },
         deleteLockedFiles: {
           title: 'Șterge fișierele blocate la următoarea repornire',
@@ -23328,7 +23328,7 @@ export const CATALOG = {
         reportTitle: 'Raportează o eroare',
         reportDescription: "Deschide un issue precompletat pe GitHub. Prune nu trimite nimic singur, iar tu vezi totul înainte ca ceva să plece oriunde.",
         reportButton: 'Raportează o eroare',
-        description: "A local, offline uninstaller and cleanup tool for Windows — forced removal with leftover-file scanning, safe quarantine-before-delete, disk mapping, and a cleaner that shows a preview before it removes anything."
+        description: "Un instrument local, offline, de dezinstalare și curățare pentru Windows — eliminare forțată cu scanare de resturi, carantină sigură înainte de ștergere, hartă a discului și un curățător care arată o previzualizare înainte de a elimina ceva."
       },
       automation: {
         title: 'Automatizare',
@@ -23387,45 +23387,45 @@ export const CATALOG = {
         mediaErrors: 'Erori media',
         errorLogEntries: 'Intrări în jurnalul de erori'
       },
-      measuring: 'measuring…',
+      measuring: "se măsoară…",
       space: {
-        drive: (letter) => `Drive ${letter}:`,
-        heading: 'Where is my space going?',
-        summary: (used, total, free) => `${used} used of ${total} · ${free} free`,
-        loading: 'Reading drive space…',
-        barLabel: (programs, other, free) => `Drive space: installed programs ${programs}, everything else ${other}, free ${free}.`,
-        barLabelMeasuring: (used, free) => `Drive space: ${used} used, ${free} free. Installed programs are still being measured.`,
-        legendPrograms: 'Installed programs',
-        legendOther: 'Everything else',
-        legendUsed: 'Used',
-        legendFree: 'Free',
-        unsized: (count) => `${count} ${count === 1 ? 'program' : 'programs'} without a size`,
-        exceedsUsed: 'Program sizes add up to more than is used on this drive.'
+        drive: (letter) => `Discul ${letter}:`,
+        heading: "Unde se duce spațiul meu?",
+        summary: (used, total, free) => `Utilizat: ${used} din ${total} · Liber: ${free}`,
+        loading: "Se citește spațiul discului…",
+        barLabel: (programs, other, free) => `Spațiul discului: programe instalate ${programs}, tot restul ${other}, liber ${free}.`,
+        barLabelMeasuring: (used, free) => `Spațiul discului: ${used} utilizat, ${free} liber. Programele instalate sunt încă în curs de măsurare.`,
+        legendPrograms: "Programe instalate",
+        legendOther: "Tot restul",
+        legendUsed: "Utilizat",
+        legendFree: "Liber",
+        unsized: (count) => count === 1 ? '1 program cu dimensiune necunoscută' : `${count} ${count % 100 >= 1 && count % 100 < 20 ? '' : 'de '}programe cu dimensiune necunoscută`,
+        exceedsUsed: "Dimensiunile programelor însumate depășesc spațiul utilizat pe acest disc."
       },
       largest: {
-        heading: 'Largest programs',
-        openApplications: 'Open Applications',
-        installedCount: (count) => `${count} installed`,
-        measuring: 'Measuring program sizes…',
-        none: 'No program has a measured size yet.',
-        notInList: (size) => `The other ${size} is not in the program list.`,
-        seeDiskMap: 'See it in Disk Map.'
+        heading: "Cele mai mari programe",
+        openApplications: "Deschide Aplicații",
+        installedCount: (count) => count === 1 ? '1 instalat' : `${count} ${count % 100 >= 1 && count % 100 < 20 ? '' : 'de '}instalate`,
+        measuring: "Se măsoară dimensiunile programelor…",
+        none: "Niciun program nu are încă o dimensiune măsurată.",
+        notInList: (size) => `Restul de ${size} nu se află în lista de programe.`,
+        seeDiskMap: "Vezi în Harta discului."
       },
       quiet: {
-        scoreOf: (score) => `${score} of 100`,
-        driveDetails: 'Drive details',
-        junkTitle: 'Junk files',
-        junkNotMeasured: 'Not measured',
-        junkMeasure: 'Measure',
-        junkProgress: (scanned, total) => `Measuring… ${scanned} of ${total}`,
-        junkMeasuring: 'Measuring…',
-        junkBasis: (count) => `Across ${count} recommended ${count === 1 ? 'cleaner' : 'cleaners'}`,
-        junkError: (message) => `Couldn't measure junk files: ${message}`,
-        openDeepClean: 'Open Deep Clean',
-        leftTitle: 'Left behind',
-        leftCount: (count) => `${count} ${count === 1 ? 'program' : 'programs'}`,
-        leftNone: 'Nothing left behind.',
-        leftReview: 'Review'
+        scoreOf: (score) => `${score} din 100`,
+        driveDetails: "Detalii disc",
+        junkTitle: "Fișiere inutile",
+        junkNotMeasured: "Nemăsurat",
+        junkMeasure: "Măsoară",
+        junkProgress: (scanned, total) => `Se măsoară… ${scanned} din ${total}`,
+        junkMeasuring: "Se măsoară…",
+        junkBasis: (count) => count === 1 ? 'Pe baza unui curățător recomandat' : `Pe baza a ${count} ${count % 100 >= 1 && count % 100 < 20 ? '' : 'de '}curățători recomandați`,
+        junkError: (message) => `Nu s-au putut măsura fișierele inutile: ${message}`,
+        openDeepClean: "Deschide Curățare profundă",
+        leftTitle: "Resturi",
+        leftCount: (count) => count === 1 ? '1 program' : `${count} ${count % 100 >= 1 && count % 100 < 20 ? '' : 'de '}programe`,
+        leftNone: "Nu au rămas resturi.",
+        leftReview: "Revizuiește"
       },
       recentActivity: {
         title: "Activitate recentă",
@@ -23543,10 +23543,10 @@ export const CATALOG = {
         unused: 'Neutilizate',
         store: 'Magazin',
         extensions: 'Extensii',
-        broken: 'Left behind',
+        broken: "Resturi",
         storeCount: (n) => `Magazin (${n})`,
         extensionsCount: (n) => `Extensii (${n})`,
-        brokenCount: (n) => `Left behind (${n})`
+        brokenCount: (n) => `Resturi (${n})`
       },
       columns: {
         application: 'Aplicație',
@@ -23558,7 +23558,7 @@ export const CATALOG = {
         company: 'Companie',
         website: 'Site web'
       },
-      badges: { broken: 'Left behind', running: 'În execuție', store: 'Magazin', disabled: 'Dezactivată', unused: 'Neutilizată' },
+      badges: { broken: "Resturi", running: 'În execuție', store: 'Magazin', disabled: 'Dezactivată', unused: 'Neutilizată' },
       selectRow: (name) => `Selectează ${name}`,
       selectAll: 'Selectează tot ce este afișat',
       clearSelection: 'Golește selecția',
@@ -23570,7 +23570,7 @@ export const CATALOG = {
       openFolder: "Deschide folderul",
       copyUninstallCommand: "Copiază comanda de dezinstalare",
       commandCopied: "Comanda de dezinstalare a fost copiată.",
-      unusedDefinition: "Flagged as not used recently. Prune keeps no launch history of its own, so check before you remove anything on this list.",
+      unusedDefinition: "Marcat ca nefolosit recent. Prune nu păstrează un istoric propriu al lansărilor, așa că verifică înainte de a elimina ceva din această listă.",
       copyFailed: "Nu s-a putut copia.",
       empty: {
         plain: 'Nimic nu se potrivește.',
@@ -23660,9 +23660,9 @@ export const CATALOG = {
         status: 'Stare'
       },
       switchAriaLabel: (name) => `Rulează ${name} la conectare`,
-      copyPath: 'Copy path',
-      pathCopied: 'Path copied.',
-      copyFailed: "Couldn't copy that.",
+      copyPath: "Copiază calea",
+      pathCopied: "Calea a fost copiată.",
+      copyFailed: "Nu s-a putut copia.",
       status: {
         invalid: 'Nevalid',
         running: 'În execuție',
@@ -23755,7 +23755,7 @@ export const CATALOG = {
       footer: {
         totalLabel: 'Spațiu total de eliberat:',
         notMeasuredYet: 'încă nemăsurat',
-        previewFirst: 'Preview first to see what will be freed.',
+        previewFirst: "Previzualizează mai întâi ca să vezi ce va fi eliberat.",
         unmeasuredSuffix: (count) => count === 1 ? ' · 1 nemăsurat' : ` · ${count} nemăsurate`,
         selectEverything: 'Selectează tot',
         clear: 'Golește',
@@ -23996,7 +23996,7 @@ export const CATALOG = {
     app: {
       installedApplications: "Aplicații",
       applicationsSummary: (count, size) => `${count === 1 ? '1 aplicație instalată' : `${count} ${count % 100 >= 1 && count % 100 < 20 ? '' : 'de '}aplicații instalate`} · ${size}`,
-      applicationsSummaryFiltered: (shown, total, size) => `${shown} of ${total} shown · ${size}`,
+      applicationsSummaryFiltered: (shown, total, size) => `${shown} din ${total} afișate · ${size}`,
       removeStoreApp: (name) => `Elimină ${name}`
     }
   },
@@ -24055,8 +24055,8 @@ export const CATALOG = {
         ariaLabel: 'Часы, в течение которых не трогать недавние файлы'
       },
       restorePointCleanup: {
-        title: "Restore point before removing leftovers",
-        description: "Taken before Prune removes the leftover files and registry keys you selected, including after Force remove. On by default; does nothing at all if System Protection is turned off."
+        title: "Точка восстановления перед удалением остатков",
+        description: "Создаётся перед тем, как Prune удалит выбранные вами файлы и ключи реестра, оставшиеся после программы, в том числе после принудительного удаления. По умолчанию включено; если защита системы отключена, ничего не делает."
       },
       hideUnavailable: {
         title: 'Скрывать неприменимые средства очистки',
@@ -24118,12 +24118,12 @@ export const CATALOG = {
       uninstallTab: {
         beforeHeading: 'Перед удалением',
         restorePointUninstall: {
-          title: "Restore point before running an uninstaller",
-          description: "Taken before the program's own uninstaller runs. It needs Prune to be running as administrator and Windows allows one a day, so when it can't be made the uninstall goes ahead and the dialog says so."
+          title: "Точка восстановления перед запуском деинсталлятора",
+          description: "Создаётся перед запуском собственного деинсталлятора программы. Для этого Prune должен быть запущен от имени администратора, а Windows разрешает одну точку в сутки, поэтому, если создать её не удаётся, удаление продолжается, и окно сообщает об этом."
         },
         registryBackup: {
           title: 'Резервировать реестр перед удалением',
-          description: "Exports HKLM\\SOFTWARE and HKCU\\Software, typically several hundred MB, and keeps the newest 3. If the backup can't be made, the uninstall doesn't run."
+          description: "Экспортирует HKLM\\SOFTWARE и HKCU\\Software, обычно несколько сотен МБ, и хранит 3 последние копии. Если резервную копию создать не удаётся, удаление не запускается."
         },
         deleteLockedFiles: {
           title: 'Удалить заблокированные файлы при следующей перезагрузке',
@@ -24155,7 +24155,7 @@ export const CATALOG = {
         reportTitle: 'Сообщить об ошибке',
         reportDescription: "Открывает на GitHub уже заполненное обращение. Сам Prune ничего не отправляет, и вы видите всё до того, как это куда-либо уйдёт.",
         reportButton: 'Сообщить об ошибке',
-        description: "A local, offline uninstaller and cleanup tool for Windows — forced removal with leftover-file scanning, safe quarantine-before-delete, disk mapping, and a cleaner that shows a preview before it removes anything."
+        description: "Локальная автономная программа для удаления и очистки в Windows — принудительное удаление с поиском остатков, безопасный карантин перед удалением, карта диска и очистка, которая перед удалением чего-либо показывает предпросмотр."
       },
       automation: {
         title: 'Автоматизация',
@@ -24214,45 +24214,45 @@ export const CATALOG = {
         mediaErrors: 'Ошибки носителя',
         errorLogEntries: 'Записи журнала ошибок'
       },
-      measuring: 'measuring…',
+      measuring: "измеряется…",
       space: {
-        drive: (letter) => `Drive ${letter}:`,
-        heading: 'Where is my space going?',
-        summary: (used, total, free) => `${used} used of ${total} · ${free} free`,
-        loading: 'Reading drive space…',
-        barLabel: (programs, other, free) => `Drive space: installed programs ${programs}, everything else ${other}, free ${free}.`,
-        barLabelMeasuring: (used, free) => `Drive space: ${used} used, ${free} free. Installed programs are still being measured.`,
-        legendPrograms: 'Installed programs',
-        legendOther: 'Everything else',
-        legendUsed: 'Used',
-        legendFree: 'Free',
-        unsized: (count) => `${count} ${count === 1 ? 'program' : 'programs'} without a size`,
-        exceedsUsed: 'Program sizes add up to more than is used on this drive.'
+        drive: (letter) => `Диск ${letter}:`,
+        heading: "Куда уходит место?",
+        summary: (used, total, free) => `${used} занято из ${total} · ${free} свободно`,
+        loading: "Чтение места на диске…",
+        barLabel: (programs, other, free) => `Место на диске: установленные программы — ${programs}, всё остальное — ${other}, свободно — ${free}.`,
+        barLabelMeasuring: (used, free) => `Место на диске: занято ${used}, свободно ${free}. Размер установленных программ ещё измеряется.`,
+        legendPrograms: "Установленные программы",
+        legendOther: "Всё остальное",
+        legendUsed: "Занято",
+        legendFree: "Свободно",
+        unsized: (count) => `Программ без размера: ${count}`,
+        exceedsUsed: "Суммарный размер программ больше, чем занято на этом диске."
       },
       largest: {
-        heading: 'Largest programs',
-        openApplications: 'Open Applications',
-        installedCount: (count) => `${count} installed`,
-        measuring: 'Measuring program sizes…',
-        none: 'No program has a measured size yet.',
-        notInList: (size) => `The other ${size} is not in the program list.`,
-        seeDiskMap: 'See it in Disk Map.'
+        heading: "Самые большие программы",
+        openApplications: "Открыть «Приложения»",
+        installedCount: (count) => `Установлено: ${count}`,
+        measuring: "Измерение размеров программ…",
+        none: "Пока ни у одной программы не измерен размер.",
+        notInList: (size) => `Остальные ${size} не входят в список программ.`,
+        seeDiskMap: "Посмотреть в «Карте диска»."
       },
       quiet: {
-        scoreOf: (score) => `${score} of 100`,
-        driveDetails: 'Drive details',
-        junkTitle: 'Junk files',
-        junkNotMeasured: 'Not measured',
-        junkMeasure: 'Measure',
-        junkProgress: (scanned, total) => `Measuring… ${scanned} of ${total}`,
-        junkMeasuring: 'Measuring…',
-        junkBasis: (count) => `Across ${count} recommended ${count === 1 ? 'cleaner' : 'cleaners'}`,
-        junkError: (message) => `Couldn't measure junk files: ${message}`,
-        openDeepClean: 'Open Deep Clean',
-        leftTitle: 'Left behind',
-        leftCount: (count) => `${count} ${count === 1 ? 'program' : 'programs'}`,
-        leftNone: 'Nothing left behind.',
-        leftReview: 'Review'
+        scoreOf: (score) => `${score} из 100`,
+        driveDetails: "Сведения о диске",
+        junkTitle: "Ненужные файлы",
+        junkNotMeasured: "Не измерено",
+        junkMeasure: "Измерить",
+        junkProgress: (scanned, total) => `Измерение… ${scanned} из ${total}`,
+        junkMeasuring: "Измерение…",
+        junkBasis: (count) => `По рекомендуемым средствам очистки: ${count}`,
+        junkError: (message) => `Не удалось измерить ненужные файлы: ${message}`,
+        openDeepClean: "Открыть «Глубокая очистка»",
+        leftTitle: "Остатки",
+        leftCount: (count) => `Программ: ${count}`,
+        leftNone: "Остатков нет.",
+        leftReview: "Проверить"
       },
       recentActivity: {
         title: "Недавняя активность",
@@ -24370,10 +24370,10 @@ export const CATALOG = {
         unused: 'Неиспользуемые',
         store: 'Магазин',
         extensions: 'Расширения',
-        broken: 'Left behind',
+        broken: "Остатки",
         storeCount: (n) => `Магазин (${n})`,
         extensionsCount: (n) => `Расширения (${n})`,
-        brokenCount: (n) => `Left behind (${n})`
+        brokenCount: (n) => `Остатки (${n})`
       },
       columns: {
         application: 'Приложение',
@@ -24385,7 +24385,7 @@ export const CATALOG = {
         company: 'Компания',
         website: 'Веб-сайт'
       },
-      badges: { broken: 'Left behind', running: 'Работает', store: 'Магазин', disabled: 'Отключено', unused: 'Не используется' },
+      badges: { broken: "Остатки", running: 'Работает', store: 'Магазин', disabled: 'Отключено', unused: 'Не используется' },
       selectRow: (name) => `Выбрать ${name}`,
       selectAll: 'Выбрать все показанные',
       clearSelection: 'Снять выделение',
@@ -24397,7 +24397,7 @@ export const CATALOG = {
       openFolder: "Открыть папку",
       copyUninstallCommand: "Копировать команду удаления",
       commandCopied: "Команда удаления скопирована.",
-      unusedDefinition: "Flagged as not used recently. Prune keeps no launch history of its own, so check before you remove anything on this list.",
+      unusedDefinition: "Помечены как давно не использовавшиеся. Prune не ведёт собственную историю запусков, поэтому проверьте, прежде чем удалять что-либо из этого списка.",
       copyFailed: "Не удалось скопировать.",
       empty: {
         plain: 'Ничего не найдено.',
@@ -24487,9 +24487,9 @@ export const CATALOG = {
         status: 'Состояние'
       },
       switchAriaLabel: (name) => `Запускать ${name} при входе`,
-      copyPath: 'Copy path',
-      pathCopied: 'Path copied.',
-      copyFailed: "Couldn't copy that.",
+      copyPath: "Копировать путь",
+      pathCopied: "Путь скопирован.",
+      copyFailed: "Не удалось скопировать.",
       status: {
         invalid: 'Недействительно',
         running: 'Работает',
@@ -24582,7 +24582,7 @@ export const CATALOG = {
       footer: {
         totalLabel: 'Всего места будет освобождено:',
         notMeasuredYet: 'ещё не измерено',
-        previewFirst: 'Preview first to see what will be freed.',
+        previewFirst: "Сначала выполните предпросмотр, чтобы увидеть, что будет освобождено.",
         unmeasuredSuffix: (count) => ` · не измерено: ${count}`,
         selectEverything: 'Выбрать всё',
         clear: 'Очистить',
@@ -24821,7 +24821,7 @@ export const CATALOG = {
     app: {
       installedApplications: "Приложения",
       applicationsSummary: (count, size) => `Установлено приложений: ${count} · ${size}`,
-      applicationsSummaryFiltered: (shown, total, size) => `${shown} of ${total} shown · ${size}`,
+      applicationsSummaryFiltered: (shown, total, size) => `Показано ${shown} из ${total} · ${size}`,
       removeStoreApp: (name) => `Удалить ${name}`
     }
   },
@@ -24880,8 +24880,8 @@ export const CATALOG = {
         ariaLabel: 'Hodiny, počas ktorých nechať nedávne súbory na pokoji'
       },
       restorePointCleanup: {
-        title: "Restore point before removing leftovers",
-        description: "Taken before Prune removes the leftover files and registry keys you selected, including after Force remove. On by default; does nothing at all if System Protection is turned off."
+        title: "Bod obnovenia pred odstránením zvyškov",
+        description: "Vytvorí sa predtým, ako Prune odstráni vami vybrané zvyškové súbory a kľúče registra, aj po vynútenom odstránení. Predvolene zapnuté; ak je Ochrana systému vypnutá, nerobí nič."
       },
       hideUnavailable: {
         title: "Skryť čističe, ktoré sa neuplatňujú",
@@ -24943,12 +24943,12 @@ export const CATALOG = {
       uninstallTab: {
         beforeHeading: 'Pred odinštalovaním',
         restorePointUninstall: {
-          title: "Restore point before running an uninstaller",
-          description: "Taken before the program's own uninstaller runs. It needs Prune to be running as administrator and Windows allows one a day, so when it can't be made the uninstall goes ahead and the dialog says so."
+          title: "Bod obnovenia pred spustením odinštalátora",
+          description: "Vytvorí sa pred spustením vlastného odinštalátora programu. Vyžaduje, aby Prune bežal ako správca, a Windows povoľuje jeden za deň, takže keď ho nemožno vytvoriť, odinštalovanie pokračuje a dialóg to oznámi."
         },
         registryBackup: {
           title: 'Zálohovať register pred odinštalovaním',
-          description: "Exports HKLM\\SOFTWARE and HKCU\\Software, typically several hundred MB, and keeps the newest 3. If the backup can't be made, the uninstall doesn't run."
+          description: "Exportuje HKLM\\SOFTWARE a HKCU\\Software, zvyčajne niekoľko stoviek MB, a uchováva 3 najnovšie. Ak zálohu nemožno vytvoriť, odinštalovanie sa nespustí."
         },
         deleteLockedFiles: {
           title: 'Odstrániť uzamknuté súbory pri ďalšom reštarte',
@@ -24980,7 +24980,7 @@ export const CATALOG = {
         reportTitle: 'Nahlásiť chybu',
         reportDescription: "Otvorí na GitHube predvyplnené hlásenie. Prune sám nič neodosiela a všetko uvidíte skôr, než to niekam odíde.",
         reportButton: 'Nahlásiť chybu',
-        description: "A local, offline uninstaller and cleanup tool for Windows — forced removal with leftover-file scanning, safe quarantine-before-delete, disk mapping, and a cleaner that shows a preview before it removes anything."
+        description: "Lokálny offline nástroj na odinštalovanie a čistenie pre Windows — vynútené odstránenie so skenovaním zvyškov, bezpečná karanténa pred vymazaním, mapa disku a čistenie, ktoré pred odstránením čohokoľvek ukáže náhľad."
       },
       automation: {
         title: 'Automatizácia',
@@ -25039,45 +25039,45 @@ export const CATALOG = {
         mediaErrors: 'Chyby média',
         errorLogEntries: 'Záznamy denníka chýb'
       },
-      measuring: 'measuring…',
+      measuring: "meria sa…",
       space: {
-        drive: (letter) => `Drive ${letter}:`,
-        heading: 'Where is my space going?',
-        summary: (used, total, free) => `${used} used of ${total} · ${free} free`,
-        loading: 'Reading drive space…',
-        barLabel: (programs, other, free) => `Drive space: installed programs ${programs}, everything else ${other}, free ${free}.`,
-        barLabelMeasuring: (used, free) => `Drive space: ${used} used, ${free} free. Installed programs are still being measured.`,
-        legendPrograms: 'Installed programs',
-        legendOther: 'Everything else',
-        legendUsed: 'Used',
-        legendFree: 'Free',
-        unsized: (count) => `${count} ${count === 1 ? 'program' : 'programs'} without a size`,
-        exceedsUsed: 'Program sizes add up to more than is used on this drive.'
+        drive: (letter) => `Disk ${letter}:`,
+        heading: "Kam mizne moje miesto?",
+        summary: (used, total, free) => `Využité ${used} z ${total} · voľné ${free}`,
+        loading: "Načítava sa miesto na disku…",
+        barLabel: (programs, other, free) => `Miesto na disku: nainštalované programy ${programs}, všetko ostatné ${other}, voľné ${free}.`,
+        barLabelMeasuring: (used, free) => `Miesto na disku: využité ${used}, voľné ${free}. Nainštalované programy sa ešte merajú.`,
+        legendPrograms: "Nainštalované programy",
+        legendOther: "Všetko ostatné",
+        legendUsed: "Využité",
+        legendFree: "Voľné",
+        unsized: (count) => `Programy bez veľkosti: ${count}`,
+        exceedsUsed: "Veľkosti programov spolu presahujú využité miesto na tomto disku."
       },
       largest: {
-        heading: 'Largest programs',
-        openApplications: 'Open Applications',
-        installedCount: (count) => `${count} installed`,
-        measuring: 'Measuring program sizes…',
-        none: 'No program has a measured size yet.',
-        notInList: (size) => `The other ${size} is not in the program list.`,
-        seeDiskMap: 'See it in Disk Map.'
+        heading: "Najväčšie programy",
+        openApplications: "Otvoriť Aplikácie",
+        installedCount: (count) => `Nainštalované: ${count}`,
+        measuring: "Merajú sa veľkosti programov…",
+        none: "Zatiaľ nemá žiadny program zmeranú veľkosť.",
+        notInList: (size) => `Zvyšných ${size} nie je v zozname programov.`,
+        seeDiskMap: "Zobraziť v Mape disku."
       },
       quiet: {
-        scoreOf: (score) => `${score} of 100`,
-        driveDetails: 'Drive details',
-        junkTitle: 'Junk files',
-        junkNotMeasured: 'Not measured',
-        junkMeasure: 'Measure',
-        junkProgress: (scanned, total) => `Measuring… ${scanned} of ${total}`,
-        junkMeasuring: 'Measuring…',
-        junkBasis: (count) => `Across ${count} recommended ${count === 1 ? 'cleaner' : 'cleaners'}`,
-        junkError: (message) => `Couldn't measure junk files: ${message}`,
-        openDeepClean: 'Open Deep Clean',
-        leftTitle: 'Left behind',
-        leftCount: (count) => `${count} ${count === 1 ? 'program' : 'programs'}`,
-        leftNone: 'Nothing left behind.',
-        leftReview: 'Review'
+        scoreOf: (score) => `${score} zo 100`,
+        driveDetails: "Podrobnosti o disku",
+        junkTitle: "Nepotrebné súbory",
+        junkNotMeasured: "Nezmerané",
+        junkMeasure: "Zmerať",
+        junkProgress: (scanned, total) => `Meranie… ${scanned} z ${total}`,
+        junkMeasuring: "Meranie…",
+        junkBasis: (count) => `Z odporúčaných čističov: ${count}`,
+        junkError: (message) => `Nepodarilo sa zmerať nepotrebné súbory: ${message}`,
+        openDeepClean: "Otvoriť Hĺbkové čistenie",
+        leftTitle: "Zvyšky",
+        leftCount: (count) => `Programy: ${count}`,
+        leftNone: "Žiadne zvyšky.",
+        leftReview: "Skontrolovať"
       },
       recentActivity: {
         title: "Nedávna aktivita",
@@ -25195,10 +25195,10 @@ export const CATALOG = {
         unused: 'Nepoužívané',
         store: 'Obchod',
         extensions: 'Rozšírenia',
-        broken: 'Left behind',
+        broken: "Zvyšky",
         storeCount: (n) => `Obchod (${n})`,
         extensionsCount: (n) => `Rozšírenia (${n})`,
-        brokenCount: (n) => `Left behind (${n})`
+        brokenCount: (n) => `Zvyšky (${n})`
       },
       columns: {
         application: 'Aplikácia',
@@ -25210,7 +25210,7 @@ export const CATALOG = {
         company: 'Spoločnosť',
         website: 'Webová stránka'
       },
-      badges: { broken: 'Left behind', running: 'Spustené', store: 'Obchod', disabled: 'Vypnuté', unused: 'Nepoužívané' },
+      badges: { broken: "Zvyšky", running: 'Spustené', store: 'Obchod', disabled: 'Vypnuté', unused: 'Nepoužívané' },
       selectRow: (name) => `Vybrať ${name}`,
       selectAll: 'Vybrať všetky zobrazené',
       clearSelection: 'Zrušiť výber',
@@ -25222,7 +25222,7 @@ export const CATALOG = {
       openFolder: "Otvoriť priečinok",
       copyUninstallCommand: "Kopírovať príkaz odinštalovania",
       commandCopied: "Príkaz odinštalovania skopírovaný.",
-      unusedDefinition: "Flagged as not used recently. Prune keeps no launch history of its own, so check before you remove anything on this list.",
+      unusedDefinition: "Označené ako nedávno nepoužívané. Prune si nevedie vlastnú históriu spúšťania, takže pred odstránením čohokoľvek z tohto zoznamu si to overte.",
       copyFailed: "Kopírovanie zlyhalo.",
       empty: {
         plain: 'Nič nezodpovedá.',
@@ -25312,9 +25312,9 @@ export const CATALOG = {
         status: 'Stav'
       },
       switchAriaLabel: (name) => `Spúšťať ${name} pri prihlásení`,
-      copyPath: 'Copy path',
-      pathCopied: 'Path copied.',
-      copyFailed: "Couldn't copy that.",
+      copyPath: "Kopírovať cestu",
+      pathCopied: "Cesta skopírovaná.",
+      copyFailed: "Kopírovanie zlyhalo.",
       status: {
         invalid: 'Neplatné',
         running: 'Spustené',
@@ -25407,7 +25407,7 @@ export const CATALOG = {
       footer: {
         totalLabel: 'Celkové miesto na uvoľnenie:',
         notMeasuredYet: 'zatiaľ nezmerané',
-        previewFirst: 'Preview first to see what will be freed.',
+        previewFirst: "Najprv kliknite na Náhľad, aby ste videli, čo sa uvoľní.",
         unmeasuredSuffix: (count) => ` · nezmerané: ${count}`,
         selectEverything: 'Vybrať všetko',
         clear: 'Vymazať',
@@ -25646,7 +25646,7 @@ export const CATALOG = {
     app: {
       installedApplications: "Aplikácie",
       applicationsSummary: (count, size) => `Nainštalované aplikácie: ${count} · ${size}`,
-      applicationsSummaryFiltered: (shown, total, size) => `${shown} of ${total} shown · ${size}`,
+      applicationsSummaryFiltered: (shown, total, size) => `Zobrazených ${shown} z ${total} · ${size}`,
       removeStoreApp: (name) => `Odstrániť ${name}`
     }
   },
@@ -25705,8 +25705,8 @@ export const CATALOG = {
         ariaLabel: 'Orët për të lënë qetë skedarët e fundit'
       },
       restorePointCleanup: {
-        title: "Restore point before removing leftovers",
-        description: "Taken before Prune removes the leftover files and registry keys you selected, including after Force remove. On by default; does nothing at all if System Protection is turned off."
+        title: "Pikë rikthimi para heqjes së mbetjeve",
+        description: "Krijohet përpara se Prune të heqë skedarët e mbetjeve dhe çelësat e regjistrit që ke zgjedhur, edhe pas Detyro heqjen. E aktivizuar si parazgjedhje; nuk bën asgjë nëse Mbrojtja e sistemit është e çaktivizuar."
       },
       hideUnavailable: {
         title: 'Fshih pastruesit që nuk zbatohen',
@@ -25768,12 +25768,12 @@ export const CATALOG = {
       uninstallTab: {
         beforeHeading: 'Para çinstalimit',
         restorePointUninstall: {
-          title: "Restore point before running an uninstaller",
-          description: "Taken before the program's own uninstaller runs. It needs Prune to be running as administrator and Windows allows one a day, so when it can't be made the uninstall goes ahead and the dialog says so."
+          title: "Pikë rikthimi para ekzekutimit të një çinstaluesi",
+          description: "Krijohet përpara se të ekzekutohet çinstaluesi i vetë programit. Kërkon që Prune të ekzekutohet si administrator dhe Windows lejon një në ditë, prandaj nëse nuk mund të krijohet, çinstalimi vazhdon dhe dialogu e thotë këtë."
         },
         registryBackup: {
           title: 'Bëj kopje rezervë të regjistrit para çinstalimit',
-          description: "Exports HKLM\\SOFTWARE and HKCU\\Software, typically several hundred MB, and keeps the newest 3. If the backup can't be made, the uninstall doesn't run."
+          description: "Eksporton HKLM\\SOFTWARE dhe HKCU\\Software, zakonisht disa qindra MB, dhe mban 3 më të rejat. Nëse kopja rezervë nuk mund të bëhet, çinstalimi nuk ekzekutohet."
         },
         deleteLockedFiles: {
           title: 'Fshi skedarët e kyçur në rinisjen tjetër',
@@ -25805,7 +25805,7 @@ export const CATALOG = {
         reportTitle: 'Raporto një defekt',
         reportDescription: "Hap një çështje të plotësuar paraprakisht në GitHub. Vetë Prune nuk dërgon asgjë dhe ti sheh gjithçka para se të dërgohet diku.",
         reportButton: 'Raporto një defekt',
-        description: "A local, offline uninstaller and cleanup tool for Windows — forced removal with leftover-file scanning, safe quarantine-before-delete, disk mapping, and a cleaner that shows a preview before it removes anything."
+        description: "Një mjet lokal, jashtë linje për çinstalim dhe pastrim për Windows — heqje e detyruar me skanim të skedarëve të mbetjeve, karantinë e sigurt para fshirjes, harta e diskut dhe një pastrues që shfaq një pamje paraprake përpara se të heqë ndonjë gjë."
       },
       automation: {
         title: 'Automatizimi',
@@ -25864,45 +25864,45 @@ export const CATALOG = {
         mediaErrors: 'Gabime media',
         errorLogEntries: 'Hyrje të regjistrit të gabimeve'
       },
-      measuring: 'measuring…',
+      measuring: "duke matur…",
       space: {
-        drive: (letter) => `Drive ${letter}:`,
-        heading: 'Where is my space going?',
-        summary: (used, total, free) => `${used} used of ${total} · ${free} free`,
-        loading: 'Reading drive space…',
-        barLabel: (programs, other, free) => `Drive space: installed programs ${programs}, everything else ${other}, free ${free}.`,
-        barLabelMeasuring: (used, free) => `Drive space: ${used} used, ${free} free. Installed programs are still being measured.`,
-        legendPrograms: 'Installed programs',
-        legendOther: 'Everything else',
-        legendUsed: 'Used',
-        legendFree: 'Free',
-        unsized: (count) => `${count} ${count === 1 ? 'program' : 'programs'} without a size`,
-        exceedsUsed: 'Program sizes add up to more than is used on this drive.'
+        drive: (letter) => `Disku ${letter}:`,
+        heading: "Ku shkon hapësira ime?",
+        summary: (used, total, free) => `${used} të përdorura nga ${total} · ${free} të lira`,
+        loading: "Duke lexuar hapësirën e diskut…",
+        barLabel: (programs, other, free) => `Hapësira e diskut: programe të instaluara ${programs}, gjithçka tjetër ${other}, e lirë ${free}.`,
+        barLabelMeasuring: (used, free) => `Hapësira e diskut: ${used} të përdorura, ${free} të lira. Programet e instaluara po maten ende.`,
+        legendPrograms: "Programe të instaluara",
+        legendOther: "Gjithçka tjetër",
+        legendUsed: "E përdorur",
+        legendFree: "E lirë",
+        unsized: (count) => `${count} ${count === 1 ? 'program' : 'programe'} pa madhësi`,
+        exceedsUsed: "Madhësitë e programeve mblidhen në më shumë se sa përdoret në këtë disk."
       },
       largest: {
-        heading: 'Largest programs',
-        openApplications: 'Open Applications',
-        installedCount: (count) => `${count} installed`,
-        measuring: 'Measuring program sizes…',
-        none: 'No program has a measured size yet.',
-        notInList: (size) => `The other ${size} is not in the program list.`,
-        seeDiskMap: 'See it in Disk Map.'
+        heading: "Programet më të mëdha",
+        openApplications: "Hap Aplikacionet",
+        installedCount: (count) => `${count} ${count === 1 ? 'i instaluar' : 'të instaluar'}`,
+        measuring: "Duke matur madhësitë e programeve…",
+        none: "Asnjë program nuk ka ende madhësi të matur.",
+        notInList: (size) => `Pjesa tjetër prej ${size} nuk është në listën e programeve.`,
+        seeDiskMap: "Shihe te Harta e Diskut."
       },
       quiet: {
-        scoreOf: (score) => `${score} of 100`,
-        driveDetails: 'Drive details',
-        junkTitle: 'Junk files',
-        junkNotMeasured: 'Not measured',
-        junkMeasure: 'Measure',
-        junkProgress: (scanned, total) => `Measuring… ${scanned} of ${total}`,
-        junkMeasuring: 'Measuring…',
-        junkBasis: (count) => `Across ${count} recommended ${count === 1 ? 'cleaner' : 'cleaners'}`,
-        junkError: (message) => `Couldn't measure junk files: ${message}`,
-        openDeepClean: 'Open Deep Clean',
-        leftTitle: 'Left behind',
-        leftCount: (count) => `${count} ${count === 1 ? 'program' : 'programs'}`,
-        leftNone: 'Nothing left behind.',
-        leftReview: 'Review'
+        scoreOf: (score) => `${score} nga 100`,
+        driveDetails: "Detajet e diskut",
+        junkTitle: "Skedarë të panevojshëm",
+        junkNotMeasured: "Pa u matur",
+        junkMeasure: "Mat",
+        junkProgress: (scanned, total) => `Duke matur… ${scanned} nga ${total}`,
+        junkMeasuring: "Duke matur…",
+        junkBasis: (count) => `Në ${count} ${count === 1 ? 'pastrues të rekomanduar' : 'pastrues të rekomanduar'}`,
+        junkError: (message) => `Skedarët e panevojshëm nuk u matën dot: ${message}`,
+        openDeepClean: "Hap Pastrimin e thellë",
+        leftTitle: "Mbetje",
+        leftCount: (count) => `${count} ${count === 1 ? 'program' : 'programe'}`,
+        leftNone: "Nuk ka mbetje.",
+        leftReview: "Rishiko"
       },
       recentActivity: {
         title: "Aktiviteti i fundit",
@@ -26020,10 +26020,10 @@ export const CATALOG = {
         unused: 'Të papërdorura',
         store: 'Dyqan',
         extensions: 'Shtesa',
-        broken: 'Left behind',
+        broken: "Mbetje",
         storeCount: (n) => `Dyqan (${n})`,
         extensionsCount: (n) => `Shtesa (${n})`,
-        brokenCount: (n) => `Left behind (${n})`
+        brokenCount: (n) => `Mbetje (${n})`
       },
       columns: {
         application: 'Aplikacioni',
@@ -26035,7 +26035,7 @@ export const CATALOG = {
         company: 'Kompania',
         website: 'Faqja e internetit'
       },
-      badges: { broken: 'Left behind', running: 'Në ekzekutim', store: 'Dyqan', disabled: 'I çaktivizuar', unused: 'I papërdorur' },
+      badges: { broken: "Mbetje", running: 'Në ekzekutim', store: 'Dyqan', disabled: 'I çaktivizuar', unused: 'I papërdorur' },
       selectRow: (name) => `Zgjidh ${name}`,
       selectAll: 'Zgjidh gjithçka të shfaqur',
       clearSelection: 'Pastro përzgjedhjen',
@@ -26047,7 +26047,7 @@ export const CATALOG = {
       openFolder: "Hap dosjen",
       copyUninstallCommand: "Kopjo komandën e çinstalimit",
       commandCopied: "Komanda e çinstalimit u kopjua.",
-      unusedDefinition: "Flagged as not used recently. Prune keeps no launch history of its own, so check before you remove anything on this list.",
+      unusedDefinition: "Shënuar si i papërdorur së fundmi. Prune nuk mban histori të vetën të nisjeve, prandaj kontrollo para se të heqësh diçka nga kjo listë.",
       copyFailed: "Nuk u kopjua dot.",
       empty: {
         plain: 'Asgjë nuk përputhet.',
@@ -26137,9 +26137,9 @@ export const CATALOG = {
         status: 'Statusi'
       },
       switchAriaLabel: (name) => `Ekzekuto ${name} në hyrje`,
-      copyPath: 'Copy path',
-      pathCopied: 'Path copied.',
-      copyFailed: "Couldn't copy that.",
+      copyPath: "Kopjo shtegun",
+      pathCopied: "Shtegu u kopjua.",
+      copyFailed: "Nuk u kopjua dot.",
       status: {
         invalid: 'I pavlefshëm',
         running: 'Në ekzekutim',
@@ -26232,7 +26232,7 @@ export const CATALOG = {
       footer: {
         totalLabel: 'Hapësira totale për t\'u liruar:',
         notMeasuredYet: 'ende e pamatur',
-        previewFirst: 'Preview first to see what will be freed.',
+        previewFirst: "Shiko fillimisht Pamjen paraprake për të parë çfarë do të lirohet.",
         unmeasuredSuffix: (count) => ` · ${count} të pamatura`,
         selectEverything: 'Zgjidh gjithçka',
         clear: 'Pastro',
@@ -26473,7 +26473,7 @@ export const CATALOG = {
     app: {
       installedApplications: "Aplikacionet",
       applicationsSummary: (count, size) => `Aplikacione të instaluara: ${count} · ${size}`,
-      applicationsSummaryFiltered: (shown, total, size) => `${shown} of ${total} shown · ${size}`,
+      applicationsSummaryFiltered: (shown, total, size) => `${shown} nga ${total} të shfaqura · ${size}`,
       removeStoreApp: (name) => `Hiq ${name}`
     }
   },
@@ -26532,8 +26532,8 @@ export const CATALOG = {
         ariaLabel: 'Сати за остављање недавних датотека на миру'
       },
       restorePointCleanup: {
-        title: "Restore point before removing leftovers",
-        description: "Taken before Prune removes the leftover files and registry keys you selected, including after Force remove. On by default; does nothing at all if System Protection is turned off."
+        title: "Тачка опоравка пре уклањања остатака",
+        description: "Прави се пре него што Prune уклони изабране датотеке остатака и кључеве регистра, укључујући и након Присилног уклањања. Подразумевано је укључено; не ради ништа ако је Заштита система искључена."
       },
       hideUnavailable: {
         title: 'Сакриј чистаче који се не примењују',
@@ -26595,12 +26595,12 @@ export const CATALOG = {
       uninstallTab: {
         beforeHeading: 'Пре деинсталације',
         restorePointUninstall: {
-          title: "Restore point before running an uninstaller",
-          description: "Taken before the program's own uninstaller runs. It needs Prune to be running as administrator and Windows allows one a day, so when it can't be made the uninstall goes ahead and the dialog says so."
+          title: "Тачка опоравка пре покретања деинсталатера",
+          description: "Прави се пре него што се покрене сопствени деинсталатер програма. Захтева да Prune ради као администратор, а Windows дозвољава једну дневно, па ако не може да се направи, деинсталација се ипак наставља и дијалог то каже."
         },
         registryBackup: {
           title: 'Направи резервну копију регистра пре деинсталације',
-          description: "Exports HKLM\\SOFTWARE and HKCU\\Software, typically several hundred MB, and keeps the newest 3. If the backup can't be made, the uninstall doesn't run."
+          description: "Извози HKLM\\SOFTWARE и HKCU\\Software, обично неколико стотина MB, и чува 3 најновије. Ако резервна копија не може да се направи, деинсталација се не покреће."
         },
         deleteLockedFiles: {
           title: 'Обриши закључане датотеке при следећем поновном покретању',
@@ -26632,7 +26632,7 @@ export const CATALOG = {
         reportTitle: "Пријави грешку",
         reportDescription: "Отвара унапред попуњену пријаву на GitHub-у. Сам Prune не шаље ништа, а ви све видите пре него што било шта оде било где.",
         reportButton: "Пријави грешку",
-        description: "A local, offline uninstaller and cleanup tool for Windows — forced removal with leftover-file scanning, safe quarantine-before-delete, disk mapping, and a cleaner that shows a preview before it removes anything."
+        description: "Локални, офлајн алат за деинсталацију и чишћење за Windows — присилно уклањање са скенирањем остатака, безбедан карантин пре брисања, мапирање диска и чистач који пре уклањања било чега приказује преглед."
       },
       automation: {
         title: 'Аутоматизација',
@@ -26691,45 +26691,45 @@ export const CATALOG = {
         mediaErrors: 'Грешке медија',
         errorLogEntries: 'Уноси дневника грешака'
       },
-      measuring: 'measuring…',
+      measuring: "мери се…",
       space: {
-        drive: (letter) => `Drive ${letter}:`,
-        heading: 'Where is my space going?',
-        summary: (used, total, free) => `${used} used of ${total} · ${free} free`,
-        loading: 'Reading drive space…',
-        barLabel: (programs, other, free) => `Drive space: installed programs ${programs}, everything else ${other}, free ${free}.`,
-        barLabelMeasuring: (used, free) => `Drive space: ${used} used, ${free} free. Installed programs are still being measured.`,
-        legendPrograms: 'Installed programs',
-        legendOther: 'Everything else',
-        legendUsed: 'Used',
-        legendFree: 'Free',
-        unsized: (count) => `${count} ${count === 1 ? 'program' : 'programs'} without a size`,
-        exceedsUsed: 'Program sizes add up to more than is used on this drive.'
+        drive: (letter) => `Диск ${letter}:`,
+        heading: "Куда одлази мој простор?",
+        summary: (used, total, free) => `Искоришћено ${used} од ${total} · слободно ${free}`,
+        loading: "Чита се простор на диску…",
+        barLabel: (programs, other, free) => `Простор на диску: инсталирани програми ${programs}, све остало ${other}, слободно ${free}.`,
+        barLabelMeasuring: (used, free) => `Простор на диску: искоришћено ${used}, слободно ${free}. Инсталирани програми се још мере.`,
+        legendPrograms: "Инсталирани програми",
+        legendOther: "Све остало",
+        legendUsed: "Искоришћено",
+        legendFree: "Слободно",
+        unsized: (count) => { const p = (n, a, b, c) => n % 10 === 1 && n % 100 !== 11 ? a : (n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14)) ? b : c; return `${count} ${p(count, 'програм', 'програма', 'програма')} без познате величине`; },
+        exceedsUsed: "Збир величина програма већи је од простора који је искоришћен на овом диску."
       },
       largest: {
-        heading: 'Largest programs',
-        openApplications: 'Open Applications',
-        installedCount: (count) => `${count} installed`,
-        measuring: 'Measuring program sizes…',
-        none: 'No program has a measured size yet.',
-        notInList: (size) => `The other ${size} is not in the program list.`,
-        seeDiskMap: 'See it in Disk Map.'
+        heading: "Највећи програми",
+        openApplications: "Отвори Апликације",
+        installedCount: (count) => `${count} инсталирано`,
+        measuring: "Мере се величине програма…",
+        none: "Ниједан програм још нема измерену величину.",
+        notInList: (size) => `Осталих ${size} нема на листи програма.`,
+        seeDiskMap: "Погледајте на Мапи диска."
       },
       quiet: {
-        scoreOf: (score) => `${score} of 100`,
-        driveDetails: 'Drive details',
-        junkTitle: 'Junk files',
-        junkNotMeasured: 'Not measured',
-        junkMeasure: 'Measure',
-        junkProgress: (scanned, total) => `Measuring… ${scanned} of ${total}`,
-        junkMeasuring: 'Measuring…',
-        junkBasis: (count) => `Across ${count} recommended ${count === 1 ? 'cleaner' : 'cleaners'}`,
-        junkError: (message) => `Couldn't measure junk files: ${message}`,
-        openDeepClean: 'Open Deep Clean',
-        leftTitle: 'Left behind',
-        leftCount: (count) => `${count} ${count === 1 ? 'program' : 'programs'}`,
-        leftNone: 'Nothing left behind.',
-        leftReview: 'Review'
+        scoreOf: (score) => `${score} од 100`,
+        driveDetails: "Детаљи диска",
+        junkTitle: "Непотребне датотеке",
+        junkNotMeasured: "Није измерено",
+        junkMeasure: "Измери",
+        junkProgress: (scanned, total) => `Мери се… ${scanned} од ${total}`,
+        junkMeasuring: "Мери се…",
+        junkBasis: (count) => `На основу препоручених чистача: ${count}`,
+        junkError: (message) => `Непотребне датотеке није могуће измерити: ${message}`,
+        openDeepClean: "Отвори Дубоко чишћење",
+        leftTitle: "Остаци",
+        leftCount: (count) => { const p = (n, a, b, c) => n % 10 === 1 && n % 100 !== 11 ? a : (n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14)) ? b : c; return `${count} ${p(count, 'програм', 'програма', 'програма')}`; },
+        leftNone: "Нема остатака.",
+        leftReview: "Провери"
       },
       recentActivity: {
         title: "Недавна активност",
@@ -26847,10 +26847,10 @@ export const CATALOG = {
         unused: 'Некоришћене',
         store: 'Продавница',
         extensions: 'Екстензије',
-        broken: 'Left behind',
+        broken: "Остаци",
         storeCount: (n) => `Продавница (${n})`,
         extensionsCount: (n) => `Екстензије (${n})`,
-        brokenCount: (n) => `Left behind (${n})`
+        brokenCount: (n) => `Остаци (${n})`
       },
       columns: {
         application: 'Апликација',
@@ -26862,7 +26862,7 @@ export const CATALOG = {
         company: 'Компанија',
         website: 'Веб-сајт'
       },
-      badges: { broken: 'Left behind', running: 'Покренуто', store: 'Продавница', disabled: 'Онемогућено', unused: 'Некоришћено' },
+      badges: { broken: "Остаци", running: 'Покренуто', store: 'Продавница', disabled: 'Онемогућено', unused: 'Некоришћено' },
       selectRow: (name) => `Изабери ${name}`,
       selectAll: 'Изабери све приказано',
       clearSelection: 'Обриши избор',
@@ -26874,7 +26874,7 @@ export const CATALOG = {
       openFolder: "Отвори фасциклу",
       copyUninstallCommand: "Копирај команду за деинсталацију",
       commandCopied: "Команда за деинсталацију је копирана.",
-      unusedDefinition: "Flagged as not used recently. Prune keeps no launch history of its own, so check before you remove anything on this list.",
+      unusedDefinition: "Означено као недавно некоришћено. Prune не води сопствену историју покретања, па проверите пре него што уклоните нешто са ове листе.",
       copyFailed: "Копирање није успело.",
       empty: {
         plain: 'Ништа се не поклапа.',
@@ -26964,9 +26964,9 @@ export const CATALOG = {
         status: 'Статус'
       },
       switchAriaLabel: (name) => `Покрени ${name} при пријави`,
-      copyPath: 'Copy path',
-      pathCopied: 'Path copied.',
-      copyFailed: "Couldn't copy that.",
+      copyPath: "Копирај путању",
+      pathCopied: "Путања је копирана.",
+      copyFailed: "Копирање није успело.",
       status: {
         invalid: 'Неважеће',
         running: 'Покренуто',
@@ -27059,7 +27059,7 @@ export const CATALOG = {
       footer: {
         totalLabel: 'Укупно простора за ослобађање:',
         notMeasuredYet: 'још није измерено',
-        previewFirst: 'Preview first to see what will be freed.',
+        previewFirst: "Прво погледајте преглед да видите шта ће бити ослобођено.",
         unmeasuredSuffix: (count) => ` · ${count} немерено`,
         selectEverything: 'Изабери све',
         clear: 'Обриши',
@@ -27298,7 +27298,7 @@ export const CATALOG = {
     app: {
       installedApplications: "Апликације",
       applicationsSummary: (count, size) => `Инсталираних апликација: ${count} · ${size}`,
-      applicationsSummaryFiltered: (shown, total, size) => `${shown} of ${total} shown · ${size}`,
+      applicationsSummaryFiltered: (shown, total, size) => `Приказано ${shown} од ${total} · ${size}`,
       removeStoreApp: (name) => `Уклони ${name}`
     }
   },
@@ -27357,8 +27357,8 @@ export const CATALOG = {
         ariaLabel: 'Timmar att lämna nya filer i fred'
       },
       restorePointCleanup: {
-        title: "Restore point before removing leftovers",
-        description: "Taken before Prune removes the leftover files and registry keys you selected, including after Force remove. On by default; does nothing at all if System Protection is turned off."
+        title: "Återställningspunkt innan rester tas bort",
+        description: "Skapas innan Prune tar bort de rester (filer och registernycklar) du har valt, även efter Tvinga borttagning. På som standard; gör ingenting alls om Systemskydd är avstängt."
       },
       hideUnavailable: {
         title: "Dölj rensare som inte gäller",
@@ -27420,12 +27420,12 @@ export const CATALOG = {
       uninstallTab: {
         beforeHeading: 'Före avinstallation',
         restorePointUninstall: {
-          title: "Restore point before running an uninstaller",
-          description: "Taken before the program's own uninstaller runs. It needs Prune to be running as administrator and Windows allows one a day, so when it can't be made the uninstall goes ahead and the dialog says so."
+          title: "Återställningspunkt innan ett avinstallationsprogram körs",
+          description: "Skapas innan programmets eget avinstallationsprogram körs. Det kräver att Prune körs som administratör och Windows tillåter en per dag, så när den inte kan skapas fortsätter avinstallationen ändå och dialogrutan meddelar det."
         },
         registryBackup: {
           title: 'Säkerhetskopiera registret före avinstallation',
-          description: "Exports HKLM\\SOFTWARE and HKCU\\Software, typically several hundred MB, and keeps the newest 3. If the backup can't be made, the uninstall doesn't run."
+          description: "Exporterar HKLM\\SOFTWARE och HKCU\\Software, vanligtvis flera hundra MB, och behåller de 3 senaste. Om säkerhetskopian inte kan göras körs inte avinstallationen."
         },
         deleteLockedFiles: {
           title: 'Ta bort låsta filer vid nästa omstart',
@@ -27457,7 +27457,7 @@ export const CATALOG = {
         reportTitle: 'Rapportera ett fel',
         reportDescription: "Öppnar ett förifyllt ärende på GitHub. Prune skickar ingenting själv, och du ser allt innan något skickas vidare.",
         reportButton: 'Rapportera ett fel',
-        description: "A local, offline uninstaller and cleanup tool for Windows — forced removal with leftover-file scanning, safe quarantine-before-delete, disk mapping, and a cleaner that shows a preview before it removes anything."
+        description: "Ett lokalt verktyg som fungerar offline för avinstallation och rensning i Windows — tvångsborttagning med skanning efter rester, säker karantän före radering, diskkarta och en rensare som visar en förhandsgranskning innan något tas bort."
       },
       automation: {
         title: 'Automatisering',
@@ -27516,45 +27516,45 @@ export const CATALOG = {
         mediaErrors: 'Mediefel',
         errorLogEntries: 'Felloggposter'
       },
-      measuring: 'measuring…',
+      measuring: "mäter…",
       space: {
-        drive: (letter) => `Drive ${letter}:`,
-        heading: 'Where is my space going?',
-        summary: (used, total, free) => `${used} used of ${total} · ${free} free`,
-        loading: 'Reading drive space…',
-        barLabel: (programs, other, free) => `Drive space: installed programs ${programs}, everything else ${other}, free ${free}.`,
-        barLabelMeasuring: (used, free) => `Drive space: ${used} used, ${free} free. Installed programs are still being measured.`,
-        legendPrograms: 'Installed programs',
-        legendOther: 'Everything else',
-        legendUsed: 'Used',
-        legendFree: 'Free',
-        unsized: (count) => `${count} ${count === 1 ? 'program' : 'programs'} without a size`,
-        exceedsUsed: 'Program sizes add up to more than is used on this drive.'
+        drive: (letter) => `Disk ${letter}:`,
+        heading: "Vart tar mitt utrymme vägen?",
+        summary: (used, total, free) => `${used} används av ${total} · ${free} ledigt`,
+        loading: "Läser diskutrymme…",
+        barLabel: (programs, other, free) => `Diskutrymme: installerade program ${programs}, allt annat ${other}, ledigt ${free}.`,
+        barLabelMeasuring: (used, free) => `Diskutrymme: ${used} används, ${free} ledigt. Installerade program mäts fortfarande.`,
+        legendPrograms: "Installerade program",
+        legendOther: "Allt annat",
+        legendUsed: "Använt",
+        legendFree: "Ledigt",
+        unsized: (count) => `${count} program utan storlek`,
+        exceedsUsed: "Programmens storlekar summerar till mer än vad som används på den här disken."
       },
       largest: {
-        heading: 'Largest programs',
-        openApplications: 'Open Applications',
-        installedCount: (count) => `${count} installed`,
-        measuring: 'Measuring program sizes…',
-        none: 'No program has a measured size yet.',
-        notInList: (size) => `The other ${size} is not in the program list.`,
-        seeDiskMap: 'See it in Disk Map.'
+        heading: "Största program",
+        openApplications: "Öppna Program",
+        installedCount: (count) => `${count} ${count === 1 ? 'installerat' : 'installerade'}`,
+        measuring: "Mäter programstorlekar…",
+        none: "Inget program har någon uppmätt storlek än.",
+        notInList: (size) => `Övriga ${size} finns inte i programlistan.`,
+        seeDiskMap: "Se det i Diskkarta."
       },
       quiet: {
-        scoreOf: (score) => `${score} of 100`,
-        driveDetails: 'Drive details',
-        junkTitle: 'Junk files',
-        junkNotMeasured: 'Not measured',
-        junkMeasure: 'Measure',
-        junkProgress: (scanned, total) => `Measuring… ${scanned} of ${total}`,
-        junkMeasuring: 'Measuring…',
-        junkBasis: (count) => `Across ${count} recommended ${count === 1 ? 'cleaner' : 'cleaners'}`,
-        junkError: (message) => `Couldn't measure junk files: ${message}`,
-        openDeepClean: 'Open Deep Clean',
-        leftTitle: 'Left behind',
-        leftCount: (count) => `${count} ${count === 1 ? 'program' : 'programs'}`,
-        leftNone: 'Nothing left behind.',
-        leftReview: 'Review'
+        scoreOf: (score) => `${score} av 100`,
+        driveDetails: "Diskdetaljer",
+        junkTitle: "Skräpfiler",
+        junkNotMeasured: "Inte mätt",
+        junkMeasure: "Mät",
+        junkProgress: (scanned, total) => `Mäter… ${scanned} av ${total}`,
+        junkMeasuring: "Mäter…",
+        junkBasis: (count) => `Över ${count} ${count === 1 ? 'rekommenderad rensare' : 'rekommenderade rensare'}`,
+        junkError: (message) => `Kunde inte mäta skräpfiler: ${message}`,
+        openDeepClean: "Öppna Grundlig rensning",
+        leftTitle: "Rester",
+        leftCount: (count) => `${count} program`,
+        leftNone: "Inga rester.",
+        leftReview: "Granska"
       },
       recentActivity: {
         title: "Senaste aktivitet",
@@ -27672,10 +27672,10 @@ export const CATALOG = {
         unused: 'Oanvända',
         store: 'Store',
         extensions: 'Tillägg',
-        broken: 'Left behind',
+        broken: "Rester",
         storeCount: (n) => `Store (${n})`,
         extensionsCount: (n) => `Tillägg (${n})`,
-        brokenCount: (n) => `Left behind (${n})`
+        brokenCount: (n) => `Rester (${n})`
       },
       columns: {
         application: 'Program',
@@ -27687,7 +27687,7 @@ export const CATALOG = {
         company: 'Företag',
         website: 'Webbplats'
       },
-      badges: { broken: 'Left behind', running: 'Körs', store: 'Store', disabled: 'Inaktiverad', unused: 'Oanvänd' },
+      badges: { broken: "Rester", running: 'Körs', store: 'Store', disabled: 'Inaktiverad', unused: 'Oanvänd' },
       selectRow: (name) => `Välj ${name}`,
       selectAll: 'Välj alla visade',
       clearSelection: 'Rensa markering',
@@ -27699,7 +27699,7 @@ export const CATALOG = {
       openFolder: "Öppna mapp",
       copyUninstallCommand: "Kopiera avinstallationskommando",
       commandCopied: "Avinstallationskommandot kopierades.",
-      unusedDefinition: "Flagged as not used recently. Prune keeps no launch history of its own, so check before you remove anything on this list.",
+      unusedDefinition: "Markerat som inte använt på sistone. Prune för ingen egen logg över när program startas, så kontrollera innan du tar bort något i den här listan.",
       copyFailed: "Det gick inte att kopiera.",
       empty: {
         plain: 'Inget matchar.',
@@ -27789,9 +27789,9 @@ export const CATALOG = {
         status: 'Status'
       },
       switchAriaLabel: (name) => `Kör ${name} vid inloggning`,
-      copyPath: 'Copy path',
-      pathCopied: 'Path copied.',
-      copyFailed: "Couldn't copy that.",
+      copyPath: "Kopiera sökväg",
+      pathCopied: "Sökvägen kopierades.",
+      copyFailed: "Det gick inte att kopiera.",
       status: {
         invalid: 'Ogiltig',
         running: 'Körs',
@@ -27884,7 +27884,7 @@ export const CATALOG = {
       footer: {
         totalLabel: 'Totalt utrymme att frigöra:',
         notMeasuredYet: 'inte mätt än',
-        previewFirst: 'Preview first to see what will be freed.',
+        previewFirst: "Förhandsgranska först för att se vad som frigörs.",
         unmeasuredSuffix: (count) => ` · ${count} ej ${count === 1 ? 'mätt' : 'mätta'}`,
         selectEverything: 'Markera allt',
         clear: 'Rensa',
@@ -28123,7 +28123,7 @@ export const CATALOG = {
     app: {
       installedApplications: "Program",
       applicationsSummary: (count, size) => `${count} installerade program · ${size}`,
-      applicationsSummaryFiltered: (shown, total, size) => `${shown} of ${total} shown · ${size}`,
+      applicationsSummaryFiltered: (shown, total, size) => `${shown} av ${total} visas · ${size}`,
       removeStoreApp: (name) => `Ta bort ${name}`
     }
   },
@@ -28182,8 +28182,8 @@ export const CATALOG = {
         ariaLabel: 'จำนวนชั่วโมงที่จะปล่อยไฟล์ล่าสุดไว้'
       },
       restorePointCleanup: {
-        title: "Restore point before removing leftovers",
-        description: "Taken before Prune removes the leftover files and registry keys you selected, including after Force remove. On by default; does nothing at all if System Protection is turned off."
+        title: "จุดคืนค่าก่อนลบสิ่งตกค้าง",
+        description: "สร้างก่อนที่ Prune จะลบไฟล์ตกค้างและคีย์รีจิสทรีที่คุณเลือก รวมถึงหลังการบังคับลบ เปิดไว้โดยค่าเริ่มต้น และไม่ทำอะไรเลยหากปิดการป้องกันระบบอยู่"
       },
       hideUnavailable: {
         title: 'ซ่อนตัวล้างข้อมูลที่ไม่เกี่ยวข้อง',
@@ -28245,12 +28245,12 @@ export const CATALOG = {
       uninstallTab: {
         beforeHeading: 'ก่อนถอนการติดตั้ง',
         restorePointUninstall: {
-          title: "Restore point before running an uninstaller",
-          description: "Taken before the program's own uninstaller runs. It needs Prune to be running as administrator and Windows allows one a day, so when it can't be made the uninstall goes ahead and the dialog says so."
+          title: "จุดคืนค่าก่อนรันตัวถอนการติดตั้ง",
+          description: "สร้างก่อนที่ตัวถอนการติดตั้งของโปรแกรมเองจะทำงาน ต้องให้ Prune ทำงานในฐานะผู้ดูแลระบบ และ Windows อนุญาตให้สร้างได้วันละหนึ่งจุด ดังนั้นหากสร้างไม่ได้ การถอนการติดตั้งจะดำเนินต่อไปและหน้าต่างจะแจ้งให้ทราบ"
         },
         registryBackup: {
           title: 'สำรองข้อมูลรีจิสทรีก่อนถอนการติดตั้ง',
-          description: "Exports HKLM\\SOFTWARE and HKCU\\Software, typically several hundred MB, and keeps the newest 3. If the backup can't be made, the uninstall doesn't run."
+          description: "ส่งออก HKLM\\SOFTWARE และ HKCU\\Software ซึ่งมักมีขนาดหลายร้อย MB และเก็บ 3 ชุดล่าสุดไว้ หากสร้างข้อมูลสำรองไม่ได้ การถอนการติดตั้งจะไม่ทำงาน"
         },
         deleteLockedFiles: {
           title: 'ลบไฟล์ที่ถูกล็อกเมื่อรีสตาร์ทครั้งถัดไป',
@@ -28282,7 +28282,7 @@ export const CATALOG = {
         reportTitle: 'รายงานข้อบกพร่อง',
         reportDescription: "เปิด issue ที่กรอกข้อมูลไว้ให้แล้วบน GitHub Prune ไม่ส่งอะไรเอง และคุณจะเห็นทุกอย่างก่อนที่จะมีการส่งไปที่ใด",
         reportButton: 'รายงานข้อบกพร่อง',
-        description: "A local, offline uninstaller and cleanup tool for Windows — forced removal with leftover-file scanning, safe quarantine-before-delete, disk mapping, and a cleaner that shows a preview before it removes anything."
+        description: "เครื่องมือถอนการติดตั้งและทำความสะอาดสำหรับ Windows ที่ทำงานในเครื่องแบบออฟไลน์ — บังคับลบพร้อมสแกนสิ่งตกค้าง กักกันอย่างปลอดภัยก่อนลบ จัดทำแผนที่ดิสก์ และตัวล้างข้อมูลที่แสดงตัวอย่างก่อนลบสิ่งใด"
       },
       automation: {
         title: 'การทำงานอัตโนมัติ',
@@ -28341,45 +28341,45 @@ export const CATALOG = {
         mediaErrors: 'ข้อผิดพลาดของสื่อ',
         errorLogEntries: 'รายการบันทึกข้อผิดพลาด'
       },
-      measuring: 'measuring…',
+      measuring: "กำลังวัด…",
       space: {
-        drive: (letter) => `Drive ${letter}:`,
-        heading: 'Where is my space going?',
-        summary: (used, total, free) => `${used} used of ${total} · ${free} free`,
-        loading: 'Reading drive space…',
-        barLabel: (programs, other, free) => `Drive space: installed programs ${programs}, everything else ${other}, free ${free}.`,
-        barLabelMeasuring: (used, free) => `Drive space: ${used} used, ${free} free. Installed programs are still being measured.`,
-        legendPrograms: 'Installed programs',
-        legendOther: 'Everything else',
-        legendUsed: 'Used',
-        legendFree: 'Free',
-        unsized: (count) => `${count} ${count === 1 ? 'program' : 'programs'} without a size`,
-        exceedsUsed: 'Program sizes add up to more than is used on this drive.'
+        drive: (letter) => `ไดรฟ์ ${letter}:`,
+        heading: "พื้นที่ของฉันหมดไปกับอะไร?",
+        summary: (used, total, free) => `ใช้ไป ${used} จาก ${total} · ว่าง ${free}`,
+        loading: "กำลังอ่านพื้นที่ไดรฟ์…",
+        barLabel: (programs, other, free) => `พื้นที่ไดรฟ์: โปรแกรมที่ติดตั้ง ${programs}, อย่างอื่นทั้งหมด ${other}, ว่าง ${free}`,
+        barLabelMeasuring: (used, free) => `พื้นที่ไดรฟ์: ใช้ไป ${used}, ว่าง ${free} ยังวัดขนาดโปรแกรมที่ติดตั้งไม่เสร็จ`,
+        legendPrograms: "โปรแกรมที่ติดตั้ง",
+        legendOther: "อย่างอื่นทั้งหมด",
+        legendUsed: "ใช้ไป",
+        legendFree: "ว่าง",
+        unsized: (count) => `${count} โปรแกรมที่ไม่มีขนาด`,
+        exceedsUsed: "ขนาดโปรแกรมรวมกันมากกว่าพื้นที่ที่ใช้ไปบนไดรฟ์นี้"
       },
       largest: {
-        heading: 'Largest programs',
-        openApplications: 'Open Applications',
-        installedCount: (count) => `${count} installed`,
-        measuring: 'Measuring program sizes…',
-        none: 'No program has a measured size yet.',
-        notInList: (size) => `The other ${size} is not in the program list.`,
-        seeDiskMap: 'See it in Disk Map.'
+        heading: "โปรแกรมที่ใหญ่ที่สุด",
+        openApplications: "เปิดแอปพลิเคชัน",
+        installedCount: (count) => `ติดตั้งแล้ว ${count} รายการ`,
+        measuring: "กำลังวัดขนาดโปรแกรม…",
+        none: "ยังไม่มีโปรแกรมใดที่วัดขนาดแล้ว",
+        notInList: (size) => `อีก ${size} ไม่อยู่ในรายการโปรแกรม`,
+        seeDiskMap: "ดูในแผนที่ดิสก์"
       },
       quiet: {
-        scoreOf: (score) => `${score} of 100`,
-        driveDetails: 'Drive details',
-        junkTitle: 'Junk files',
-        junkNotMeasured: 'Not measured',
-        junkMeasure: 'Measure',
-        junkProgress: (scanned, total) => `Measuring… ${scanned} of ${total}`,
-        junkMeasuring: 'Measuring…',
-        junkBasis: (count) => `Across ${count} recommended ${count === 1 ? 'cleaner' : 'cleaners'}`,
-        junkError: (message) => `Couldn't measure junk files: ${message}`,
-        openDeepClean: 'Open Deep Clean',
-        leftTitle: 'Left behind',
-        leftCount: (count) => `${count} ${count === 1 ? 'program' : 'programs'}`,
-        leftNone: 'Nothing left behind.',
-        leftReview: 'Review'
+        scoreOf: (score) => `${score} จาก 100`,
+        driveDetails: "รายละเอียดไดรฟ์",
+        junkTitle: "ไฟล์ขยะ",
+        junkNotMeasured: "ยังไม่ได้วัด",
+        junkMeasure: "วัด",
+        junkProgress: (scanned, total) => `กำลังวัด… ${scanned} จาก ${total}`,
+        junkMeasuring: "กำลังวัด…",
+        junkBasis: (count) => `จากตัวล้างข้อมูลที่แนะนำ ${count} รายการ`,
+        junkError: (message) => `ไม่สามารถวัดไฟล์ขยะได้: ${message}`,
+        openDeepClean: "เปิดทำความสะอาดเชิงลึก",
+        leftTitle: "สิ่งตกค้าง",
+        leftCount: (count) => `${count} โปรแกรม`,
+        leftNone: "ไม่มีสิ่งตกค้าง",
+        leftReview: "ตรวจสอบ"
       },
       recentActivity: {
         title: 'กิจกรรมล่าสุด',
@@ -28497,10 +28497,10 @@ export const CATALOG = {
         unused: 'ไม่ได้ใช้งาน',
         store: 'สโตร์',
         extensions: 'ส่วนขยาย',
-        broken: 'Left behind',
+        broken: "สิ่งตกค้าง",
         storeCount: (n) => `สโตร์ (${n})`,
         extensionsCount: (n) => `ส่วนขยาย (${n})`,
-        brokenCount: (n) => `Left behind (${n})`
+        brokenCount: (n) => `สิ่งตกค้าง (${n})`
       },
       columns: {
         application: 'แอปพลิเคชัน',
@@ -28512,7 +28512,7 @@ export const CATALOG = {
         company: 'บริษัท',
         website: 'เว็บไซต์'
       },
-      badges: { broken: 'Left behind', running: 'กำลังทำงาน', store: 'สโตร์', disabled: 'ปิดใช้งาน', unused: 'ไม่ได้ใช้งาน' },
+      badges: { broken: "สิ่งตกค้าง", running: 'กำลังทำงาน', store: 'สโตร์', disabled: 'ปิดใช้งาน', unused: 'ไม่ได้ใช้งาน' },
       selectRow: (name) => `เลือก ${name}`,
       selectAll: 'เลือกทั้งหมดที่แสดง',
       clearSelection: 'ล้างการเลือก',
@@ -28524,7 +28524,7 @@ export const CATALOG = {
       openFolder: "เปิดโฟลเดอร์",
       copyUninstallCommand: "คัดลอกคำสั่งถอนการติดตั้ง",
       commandCopied: "คัดลอกคำสั่งถอนการติดตั้งแล้ว",
-      unusedDefinition: "Flagged as not used recently. Prune keeps no launch history of its own, so check before you remove anything on this list.",
+      unusedDefinition: "ทำเครื่องหมายว่าไม่ได้ใช้งานเมื่อเร็วๆ นี้ Prune ไม่เก็บประวัติการเปิดใช้งานของตัวเอง ดังนั้นควรตรวจสอบก่อนลบสิ่งใดในรายการนี้",
       copyFailed: "คัดลอกไม่ได้",
       empty: {
         plain: 'ไม่พบรายการที่ตรงกัน',
@@ -28614,9 +28614,9 @@ export const CATALOG = {
         status: 'สถานะ'
       },
       switchAriaLabel: (name) => `เรียกใช้ ${name} เมื่อลงชื่อเข้าใช้`,
-      copyPath: 'Copy path',
-      pathCopied: 'Path copied.',
-      copyFailed: "Couldn't copy that.",
+      copyPath: "คัดลอกพาธ",
+      pathCopied: "คัดลอกพาธแล้ว",
+      copyFailed: "ไม่สามารถคัดลอกได้",
       status: {
         invalid: 'ไม่ถูกต้อง',
         running: 'กำลังทำงาน',
@@ -28709,7 +28709,7 @@ export const CATALOG = {
       footer: {
         totalLabel: 'พื้นที่ทั้งหมดที่จะเพิ่มว่าง:',
         notMeasuredYet: 'ยังไม่ได้วัดผล',
-        previewFirst: 'Preview first to see what will be freed.',
+        previewFirst: "กด \"ดูตัวอย่าง\" ก่อนเพื่อดูว่าจะเพิ่มพื้นที่ว่างได้เท่าใด",
         unmeasuredSuffix: (count) => ` · ไม่ได้วัดผล ${count} รายการ`,
         selectEverything: 'เลือกทั้งหมด',
         clear: 'ล้าง',
@@ -28950,7 +28950,7 @@ export const CATALOG = {
     app: {
       installedApplications: "แอปพลิเคชัน",
       applicationsSummary: (count, size) => `แอปพลิเคชันที่ติดตั้ง ${count} รายการ · ${size}`,
-      applicationsSummaryFiltered: (shown, total, size) => `${shown} of ${total} shown · ${size}`,
+      applicationsSummaryFiltered: (shown, total, size) => `แสดง ${shown} จาก ${total} · ${size}`,
       removeStoreApp: (name) => `นำ ${name} ออก`
     }
   },
@@ -29009,8 +29009,8 @@ export const CATALOG = {
         ariaLabel: "Yakın zamandaki dosyalara dokunulmayacak saat sayısı"
       },
       restorePointCleanup: {
-        title: "Restore point before removing leftovers",
-        description: "Taken before Prune removes the leftover files and registry keys you selected, including after Force remove. On by default; does nothing at all if System Protection is turned off."
+        title: "Artıkları kaldırmadan önce geri yükleme noktası",
+        description: "Prune, seçtiğiniz artık dosyaları ve kayıt defteri anahtarlarını kaldırmadan önce alınır; Kaldırmayı zorla işleminden sonra da geçerlidir. Varsayılan olarak açıktır; Sistem Koruması kapalıysa hiçbir şey yapmaz."
       },
       hideUnavailable: {
         title: 'Uygulanamayan temizleyicileri gizle',
@@ -29072,12 +29072,12 @@ export const CATALOG = {
       uninstallTab: {
         beforeHeading: 'Kaldırmadan önce',
         restorePointUninstall: {
-          title: "Restore point before running an uninstaller",
-          description: "Taken before the program's own uninstaller runs. It needs Prune to be running as administrator and Windows allows one a day, so when it can't be made the uninstall goes ahead and the dialog says so."
+          title: "Kaldırma programını çalıştırmadan önce geri yükleme noktası",
+          description: "Programın kendi kaldırma programı çalışmadan önce alınır. Prune'un yönetici olarak çalışmasını gerektirir ve Windows günde yalnızca bir tanesine izin verir; bu yüzden oluşturulamazsa kaldırma yine de devam eder ve pencere bunu belirtir."
         },
         registryBackup: {
           title: 'Kaldırmadan önce kayıt defterini yedekle',
-          description: "Exports HKLM\\SOFTWARE and HKCU\\Software, typically several hundred MB, and keeps the newest 3. If the backup can't be made, the uninstall doesn't run."
+          description: "HKLM\\SOFTWARE ve HKCU\\Software anahtarlarını dışa aktarır; genellikle birkaç yüz MB tutar ve en yeni 3 yedeği saklar. Yedek oluşturulamazsa kaldırma çalışmaz."
         },
         deleteLockedFiles: {
           title: 'Sonraki yeniden başlatmada kilitli dosyaları sil',
@@ -29109,7 +29109,7 @@ export const CATALOG = {
         reportTitle: 'Hata bildir',
         reportDescription: "GitHub'da önceden doldurulmuş bir issue açar. Prune'un kendisi hiçbir şey göndermez; hiçbir yere gitmeden önce her şeyi siz görürsünüz.",
         reportButton: 'Hata bildir',
-        description: "A local, offline uninstaller and cleanup tool for Windows — forced removal with leftover-file scanning, safe quarantine-before-delete, disk mapping, and a cleaner that shows a preview before it removes anything."
+        description: "Windows için yerel, çevrimdışı bir kaldırma ve temizlik aracı — artık dosya taramalı zorla kaldırma, silmeden önce güvenli karantina, disk haritalama ve bir şeyi kaldırmadan önce önizleme gösteren bir temizleyici."
       },
       automation: {
         title: 'Otomasyon',
@@ -29168,45 +29168,45 @@ export const CATALOG = {
         mediaErrors: 'Ortam hataları',
         errorLogEntries: 'Hata günlüğü kayıtları'
       },
-      measuring: 'measuring…',
+      measuring: "ölçülüyor…",
       space: {
-        drive: (letter) => `Drive ${letter}:`,
-        heading: 'Where is my space going?',
-        summary: (used, total, free) => `${used} used of ${total} · ${free} free`,
-        loading: 'Reading drive space…',
-        barLabel: (programs, other, free) => `Drive space: installed programs ${programs}, everything else ${other}, free ${free}.`,
-        barLabelMeasuring: (used, free) => `Drive space: ${used} used, ${free} free. Installed programs are still being measured.`,
-        legendPrograms: 'Installed programs',
-        legendOther: 'Everything else',
-        legendUsed: 'Used',
-        legendFree: 'Free',
-        unsized: (count) => `${count} ${count === 1 ? 'program' : 'programs'} without a size`,
-        exceedsUsed: 'Program sizes add up to more than is used on this drive.'
+        drive: (letter) => `Disk ${letter}:`,
+        heading: "Alanım nereye gidiyor?",
+        summary: (used, total, free) => `${total} içinden ${used} kullanılıyor · ${free} boş`,
+        loading: "Disk alanı okunuyor…",
+        barLabel: (programs, other, free) => `Disk alanı: yüklü programlar ${programs}, diğer her şey ${other}, boş ${free}.`,
+        barLabelMeasuring: (used, free) => `Disk alanı: ${used} kullanılıyor, ${free} boş. Yüklü programlar hâlâ ölçülüyor.`,
+        legendPrograms: "Yüklü programlar",
+        legendOther: "Diğer her şey",
+        legendUsed: "Kullanılan",
+        legendFree: "Boş",
+        unsized: (count) => `Boyutu bilinmeyen ${count} program`,
+        exceedsUsed: "Program boyutlarının toplamı bu diskte kullanılan alandan fazla."
       },
       largest: {
-        heading: 'Largest programs',
-        openApplications: 'Open Applications',
-        installedCount: (count) => `${count} installed`,
-        measuring: 'Measuring program sizes…',
-        none: 'No program has a measured size yet.',
-        notInList: (size) => `The other ${size} is not in the program list.`,
-        seeDiskMap: 'See it in Disk Map.'
+        heading: "En büyük programlar",
+        openApplications: "Uygulamalar'ı aç",
+        installedCount: (count) => `${count} yüklü`,
+        measuring: "Program boyutları ölçülüyor…",
+        none: "Henüz boyutu ölçülmüş bir program yok.",
+        notInList: (size) => `Diğer ${size} program listesinde yer almıyor.`,
+        seeDiskMap: "Disk Haritası'nda gör."
       },
       quiet: {
-        scoreOf: (score) => `${score} of 100`,
-        driveDetails: 'Drive details',
-        junkTitle: 'Junk files',
-        junkNotMeasured: 'Not measured',
-        junkMeasure: 'Measure',
-        junkProgress: (scanned, total) => `Measuring… ${scanned} of ${total}`,
-        junkMeasuring: 'Measuring…',
-        junkBasis: (count) => `Across ${count} recommended ${count === 1 ? 'cleaner' : 'cleaners'}`,
-        junkError: (message) => `Couldn't measure junk files: ${message}`,
-        openDeepClean: 'Open Deep Clean',
-        leftTitle: 'Left behind',
-        leftCount: (count) => `${count} ${count === 1 ? 'program' : 'programs'}`,
-        leftNone: 'Nothing left behind.',
-        leftReview: 'Review'
+        scoreOf: (score) => `100 üzerinden ${score}`,
+        driveDetails: "Disk ayrıntıları",
+        junkTitle: "Gereksiz dosyalar",
+        junkNotMeasured: "Ölçülmedi",
+        junkMeasure: "Ölç",
+        junkProgress: (scanned, total) => `Ölçülüyor… ${scanned} / ${total}`,
+        junkMeasuring: "Ölçülüyor…",
+        junkBasis: (count) => `Önerilen ${count} temizleyici genelinde`,
+        junkError: (message) => `Gereksiz dosyalar ölçülemedi: ${message}`,
+        openDeepClean: "Derin Temizlik'i aç",
+        leftTitle: "Artık kalanlar",
+        leftCount: (count) => `${count} program`,
+        leftNone: "Artık kalan yok.",
+        leftReview: "İncele"
       },
       recentActivity: {
         title: "Son etkinlik",
@@ -29324,10 +29324,10 @@ export const CATALOG = {
         unused: 'Kullanılmayan',
         store: 'Mağaza',
         extensions: 'Uzantılar',
-        broken: 'Left behind',
+        broken: "Artık kalanlar",
         storeCount: (n) => `Mağaza (${n})`,
         extensionsCount: (n) => `Uzantılar (${n})`,
-        brokenCount: (n) => `Left behind (${n})`
+        brokenCount: (n) => `Artık kalanlar (${n})`
       },
       columns: {
         application: 'Uygulama',
@@ -29339,7 +29339,7 @@ export const CATALOG = {
         company: 'Şirket',
         website: 'Web sitesi'
       },
-      badges: { broken: 'Left behind', running: 'Çalışıyor', store: 'Mağaza', disabled: 'Devre dışı', unused: 'Kullanılmıyor' },
+      badges: { broken: "Artık kalan", running: 'Çalışıyor', store: 'Mağaza', disabled: 'Devre dışı', unused: 'Kullanılmıyor' },
       selectRow: (name) => `${name} öğesini seç`,
       selectAll: 'Görüntülenen her şeyi seç',
       clearSelection: 'Seçimi temizle',
@@ -29351,7 +29351,7 @@ export const CATALOG = {
       openFolder: "Klasörü aç",
       copyUninstallCommand: "Kaldırma komutunu kopyala",
       commandCopied: "Kaldırma komutu kopyalandı.",
-      unusedDefinition: "Flagged as not used recently. Prune keeps no launch history of its own, so check before you remove anything on this list.",
+      unusedDefinition: "Yakın zamanda kullanılmadığı için işaretlendi. Prune kendi başlatma geçmişini tutmaz, bu yüzden bu listedeki bir şeyi kaldırmadan önce kontrol edin.",
       copyFailed: "Kopyalanamadı.",
       empty: {
         plain: 'Hiçbir şey eşleşmiyor.',
@@ -29441,9 +29441,9 @@ export const CATALOG = {
         status: 'Durum'
       },
       switchAriaLabel: (name) => `${name} öğesini oturum açılışında çalıştır`,
-      copyPath: 'Copy path',
-      pathCopied: 'Path copied.',
-      copyFailed: "Couldn't copy that.",
+      copyPath: "Yolu kopyala",
+      pathCopied: "Yol kopyalandı.",
+      copyFailed: "Kopyalanamadı.",
       status: {
         invalid: 'Geçersiz',
         running: 'Çalışıyor',
@@ -29536,7 +29536,7 @@ export const CATALOG = {
       footer: {
         totalLabel: 'Boşaltılacak toplam alan:',
         notMeasuredYet: 'henüz ölçülmedi',
-        previewFirst: 'Preview first to see what will be freed.',
+        previewFirst: "Nelerin boşaltılacağını görmek için önce önizleyin.",
         unmeasuredSuffix: (count) => ` · ${count} ölçülmedi`,
         selectEverything: 'Tümünü seç',
         clear: 'Temizle',
@@ -29679,7 +29679,7 @@ export const CATALOG = {
       mixedIntro: (hasStore) => `Her programın kendi kaldırma programı sırayla çalışır, ardından Prune geride bıraktıklarını tarar ve herhangi birini kaldırmadan önce size her şeyi gösterir.${hasStore ? ' Store uygulamaları bunun yerine Windows aracılığıyla kaldırılır, sonrasında artık taraması yapılmaz.' : ''}`,
       oneAtATime: "Birer birer, çünkü Windows aynı anda yalnızca bir kurulum veya kaldırma işlemine izin verir. Bazı kaldırma programları kendi pencerelerini gösterecek ve size sorular soracaktır.",
       storeWarning: (count) => count === 1
-        ? 'Bu gruptaki Store uygulaması Karantinadan geri yüklenemez: kaldırılması uygulamayı ve kayıtlı verilerini götürür, geri almak ise onu Store\'dan yeniden yüklemek anlamına gelir.'
+        ? `Bu gruptaki Store uygulaması Karantinadan geri yüklenemez: kaldırılması uygulamayı ve kayıtlı verilerini götürür, geri almak ise onu Store'dan yeniden yüklemek anlamına gelir.`
         : `Bu gruptaki ${count} Store uygulaması Karantinadan geri yüklenemez: birinin kaldırılması uygulamayı ve kayıtlı verilerini götürür, geri almak ise onu Store'dan yeniden yüklemek anlamına gelir.`,
       runsBefore: (name) => `Şundan önce çalışır: ${name}`,
       reported: (bytes) => `${bytes} bildirildi`,
@@ -29777,7 +29777,7 @@ export const CATALOG = {
     app: {
       installedApplications: "Uygulamalar",
       applicationsSummary: (count, size) => `${count} yüklü uygulama · ${size}`,
-      applicationsSummaryFiltered: (shown, total, size) => `${shown} of ${total} shown · ${size}`,
+      applicationsSummaryFiltered: (shown, total, size) => `${total} içinden ${shown} gösteriliyor · ${size}`,
       removeStoreApp: (name) => `${name} kaldır`
     }
   },
@@ -29836,8 +29836,8 @@ export const CATALOG = {
         ariaLabel: 'Години, протягом яких не чіпати нещодавні файли'
       },
       restorePointCleanup: {
-        title: "Restore point before removing leftovers",
-        description: "Taken before Prune removes the leftover files and registry keys you selected, including after Force remove. On by default; does nothing at all if System Protection is turned off."
+        title: "Точка відновлення перед видаленням залишків",
+        description: "Створюється перед тим, як Prune видалить вибрані вами файли та ключі реєстру, що залишилися після програми, зокрема після примусового видалення. Типово увімкнено; якщо захист системи вимкнено, нічого не робить."
       },
       hideUnavailable: {
         title: 'Приховувати непридатні засоби очищення',
@@ -29899,12 +29899,12 @@ export const CATALOG = {
       uninstallTab: {
         beforeHeading: 'Перед видаленням',
         restorePointUninstall: {
-          title: "Restore point before running an uninstaller",
-          description: "Taken before the program's own uninstaller runs. It needs Prune to be running as administrator and Windows allows one a day, so when it can't be made the uninstall goes ahead and the dialog says so."
+          title: "Точка відновлення перед запуском деінсталятора",
+          description: "Створюється перед запуском власного деінсталятора програми. Для цього Prune має бути запущено від імені адміністратора, а Windows дозволяє одну точку на добу, тож якщо створити її не вдається, видалення триває, і вікно повідомляє про це."
         },
         registryBackup: {
           title: 'Резервувати реєстр перед видаленням',
-          description: "Exports HKLM\\SOFTWARE and HKCU\\Software, typically several hundred MB, and keeps the newest 3. If the backup can't be made, the uninstall doesn't run."
+          description: "Експортує HKLM\\SOFTWARE і HKCU\\Software, зазвичай кілька сотень МБ, і зберігає 3 найновіші копії. Якщо резервну копію створити не вдається, видалення не запускається."
         },
         deleteLockedFiles: {
           title: 'Видалити заблоковані файли під час наступного перезавантаження',
@@ -29936,7 +29936,7 @@ export const CATALOG = {
         reportTitle: 'Повідомити про помилку',
         reportDescription: "Відкриває на GitHub уже заповнене звернення. Сам Prune нічого не надсилає, і ви бачите все до того, як воно кудись потрапить.",
         reportButton: 'Повідомити про помилку',
-        description: "A local, offline uninstaller and cleanup tool for Windows — forced removal with leftover-file scanning, safe quarantine-before-delete, disk mapping, and a cleaner that shows a preview before it removes anything."
+        description: "Локальна автономна програма для видалення та очищення у Windows — примусове видалення з пошуком залишків, безпечний карантин перед видаленням, карта диска й очищення, яке перед видаленням будь-чого показує попередній перегляд."
       },
       automation: {
         title: 'Автоматизація',
@@ -29995,45 +29995,45 @@ export const CATALOG = {
         mediaErrors: 'Помилки носія',
         errorLogEntries: 'Записи журналу помилок'
       },
-      measuring: 'measuring…',
+      measuring: "вимірюється…",
       space: {
-        drive: (letter) => `Drive ${letter}:`,
-        heading: 'Where is my space going?',
-        summary: (used, total, free) => `${used} used of ${total} · ${free} free`,
-        loading: 'Reading drive space…',
-        barLabel: (programs, other, free) => `Drive space: installed programs ${programs}, everything else ${other}, free ${free}.`,
-        barLabelMeasuring: (used, free) => `Drive space: ${used} used, ${free} free. Installed programs are still being measured.`,
-        legendPrograms: 'Installed programs',
-        legendOther: 'Everything else',
-        legendUsed: 'Used',
-        legendFree: 'Free',
-        unsized: (count) => `${count} ${count === 1 ? 'program' : 'programs'} without a size`,
-        exceedsUsed: 'Program sizes add up to more than is used on this drive.'
+        drive: (letter) => `Диск ${letter}:`,
+        heading: "Куди зникає місце?",
+        summary: (used, total, free) => `${used} зайнято з ${total} · ${free} вільно`,
+        loading: "Читання місця на диску…",
+        barLabel: (programs, other, free) => `Місце на диску: встановлені програми — ${programs}, усе інше — ${other}, вільно — ${free}.`,
+        barLabelMeasuring: (used, free) => `Місце на диску: зайнято ${used}, вільно ${free}. Розмір встановлених програм ще вимірюється.`,
+        legendPrograms: "Встановлені програми",
+        legendOther: "Усе інше",
+        legendUsed: "Зайнято",
+        legendFree: "Вільно",
+        unsized: (count) => `Програм без розміру: ${count}`,
+        exceedsUsed: "Сумарний розмір програм більший, ніж зайнято на цьому диску."
       },
       largest: {
-        heading: 'Largest programs',
-        openApplications: 'Open Applications',
-        installedCount: (count) => `${count} installed`,
-        measuring: 'Measuring program sizes…',
-        none: 'No program has a measured size yet.',
-        notInList: (size) => `The other ${size} is not in the program list.`,
-        seeDiskMap: 'See it in Disk Map.'
+        heading: "Найбільші програми",
+        openApplications: "Відкрити «Застосунки»",
+        installedCount: (count) => `Встановлено: ${count}`,
+        measuring: "Вимірювання розмірів програм…",
+        none: "Поки що в жодної програми не виміряно розмір.",
+        notInList: (size) => `Решта ${size} не входить до списку програм.`,
+        seeDiskMap: "Переглянути в «Карті диска»."
       },
       quiet: {
-        scoreOf: (score) => `${score} of 100`,
-        driveDetails: 'Drive details',
-        junkTitle: 'Junk files',
-        junkNotMeasured: 'Not measured',
-        junkMeasure: 'Measure',
-        junkProgress: (scanned, total) => `Measuring… ${scanned} of ${total}`,
-        junkMeasuring: 'Measuring…',
-        junkBasis: (count) => `Across ${count} recommended ${count === 1 ? 'cleaner' : 'cleaners'}`,
-        junkError: (message) => `Couldn't measure junk files: ${message}`,
-        openDeepClean: 'Open Deep Clean',
-        leftTitle: 'Left behind',
-        leftCount: (count) => `${count} ${count === 1 ? 'program' : 'programs'}`,
-        leftNone: 'Nothing left behind.',
-        leftReview: 'Review'
+        scoreOf: (score) => `${score} зі 100`,
+        driveDetails: "Відомості про диск",
+        junkTitle: "Непотрібні файли",
+        junkNotMeasured: "Не виміряно",
+        junkMeasure: "Виміряти",
+        junkProgress: (scanned, total) => `Вимірювання… ${scanned} із ${total}`,
+        junkMeasuring: "Вимірювання…",
+        junkBasis: (count) => `За рекомендованими засобами очищення: ${count}`,
+        junkError: (message) => `Не вдалося виміряти непотрібні файли: ${message}`,
+        openDeepClean: "Відкрити «Глибоке очищення»",
+        leftTitle: "Залишки",
+        leftCount: (count) => `Програм: ${count}`,
+        leftNone: "Залишків немає.",
+        leftReview: "Перевірити"
       },
       recentActivity: {
         title: "Остання активність",
@@ -30151,10 +30151,10 @@ export const CATALOG = {
         unused: 'Невикористані',
         store: 'Магазин',
         extensions: 'Розширення',
-        broken: 'Left behind',
+        broken: "Залишки",
         storeCount: (n) => `Магазин (${n})`,
         extensionsCount: (n) => `Розширення (${n})`,
-        brokenCount: (n) => `Left behind (${n})`
+        brokenCount: (n) => `Залишки (${n})`
       },
       columns: {
         application: 'Застосунок',
@@ -30166,7 +30166,7 @@ export const CATALOG = {
         company: 'Компанія',
         website: 'Веб-сайт'
       },
-      badges: { broken: 'Left behind', running: 'Виконується', store: 'Магазин', disabled: 'Вимкнено', unused: 'Не використовується' },
+      badges: { broken: "Залишки", running: 'Виконується', store: 'Магазин', disabled: 'Вимкнено', unused: 'Не використовується' },
       selectRow: (name) => `Вибрати ${name}`,
       selectAll: 'Вибрати всі показані',
       clearSelection: 'Зняти виділення',
@@ -30178,7 +30178,7 @@ export const CATALOG = {
       openFolder: "Відкрити папку",
       copyUninstallCommand: "Копіювати команду видалення",
       commandCopied: "Команду видалення скопійовано.",
-      unusedDefinition: "Flagged as not used recently. Prune keeps no launch history of its own, so check before you remove anything on this list.",
+      unusedDefinition: "Позначено як такі, що давно не використовувалися. Prune не веде власної історії запусків, тому перевірте, перш ніж видаляти щось із цього списку.",
       copyFailed: "Не вдалося скопіювати.",
       empty: {
         plain: 'Нічого не знайдено.',
@@ -30268,9 +30268,9 @@ export const CATALOG = {
         status: 'Стан'
       },
       switchAriaLabel: (name) => `Запускати ${name} під час входу`,
-      copyPath: 'Copy path',
-      pathCopied: 'Path copied.',
-      copyFailed: "Couldn't copy that.",
+      copyPath: "Копіювати шлях",
+      pathCopied: "Шлях скопійовано.",
+      copyFailed: "Не вдалося скопіювати.",
       status: {
         invalid: 'Недійсний',
         running: 'Виконується',
@@ -30363,7 +30363,7 @@ export const CATALOG = {
       footer: {
         totalLabel: 'Загальний обсяг місця для звільнення:',
         notMeasuredYet: 'ще не виміряно',
-        previewFirst: 'Preview first to see what will be freed.',
+        previewFirst: "Спочатку виконайте попередній перегляд, щоб побачити, що буде звільнено.",
         unmeasuredSuffix: (count) => ` · не виміряно: ${count}`,
         selectEverything: 'Вибрати все',
         clear: 'Очистити',
@@ -30602,7 +30602,7 @@ export const CATALOG = {
     app: {
       installedApplications: "Застосунки",
       applicationsSummary: (count, size) => `Встановлено застосунків: ${count} · ${size}`,
-      applicationsSummaryFiltered: (shown, total, size) => `${shown} of ${total} shown · ${size}`,
+      applicationsSummaryFiltered: (shown, total, size) => `Показано ${shown} із ${total} · ${size}`,
       removeStoreApp: (name) => `Видалити ${name}`
     }
   },
@@ -30661,8 +30661,8 @@ export const CATALOG = {
         ariaLabel: 'Số giờ để yên các tệp gần đây'
       },
       restorePointCleanup: {
-        title: "Restore point before removing leftovers",
-        description: "Taken before Prune removes the leftover files and registry keys you selected, including after Force remove. On by default; does nothing at all if System Protection is turned off."
+        title: "Điểm khôi phục trước khi xóa tệp sót lại",
+        description: "Được tạo trước khi Prune xóa các tệp sót lại và khóa registry bạn đã chọn, kể cả sau khi Buộc gỡ bỏ. Bật theo mặc định; hoàn toàn không có tác dụng nếu Bảo vệ hệ thống đang tắt."
       },
       hideUnavailable: {
         title: 'Ẩn các công cụ dọn dẹp không áp dụng',
@@ -30724,12 +30724,12 @@ export const CATALOG = {
       uninstallTab: {
         beforeHeading: 'Trước khi gỡ cài đặt',
         restorePointUninstall: {
-          title: "Restore point before running an uninstaller",
-          description: "Taken before the program's own uninstaller runs. It needs Prune to be running as administrator and Windows allows one a day, so when it can't be made the uninstall goes ahead and the dialog says so."
+          title: "Điểm khôi phục trước khi chạy trình gỡ cài đặt",
+          description: "Được tạo trước khi trình gỡ cài đặt riêng của chương trình chạy. Cần chạy Prune với quyền quản trị viên và Windows chỉ cho phép một điểm mỗi ngày, nên khi không tạo được, việc gỡ cài đặt vẫn tiếp tục và hộp thoại sẽ thông báo."
         },
         registryBackup: {
           title: 'Sao lưu registry trước khi gỡ cài đặt',
-          description: "Exports HKLM\\SOFTWARE and HKCU\\Software, typically several hundred MB, and keeps the newest 3. If the backup can't be made, the uninstall doesn't run."
+          description: "Xuất HKLM\\SOFTWARE và HKCU\\Software, thường vài trăm MB, và giữ 3 bản mới nhất. Nếu không tạo được bản sao lưu, việc gỡ cài đặt sẽ không chạy."
         },
         deleteLockedFiles: {
           title: 'Xóa các tệp bị khóa vào lần khởi động lại tiếp theo',
@@ -30761,7 +30761,7 @@ export const CATALOG = {
         reportTitle: 'Báo lỗi',
         reportDescription: "Mở một issue được điền sẵn trên GitHub. Bản thân Prune không gửi gì, và bạn xem được toàn bộ nội dung trước khi nó đến bất cứ đâu.",
         reportButton: 'Báo lỗi',
-        description: "A local, offline uninstaller and cleanup tool for Windows — forced removal with leftover-file scanning, safe quarantine-before-delete, disk mapping, and a cleaner that shows a preview before it removes anything."
+        description: "Công cụ gỡ cài đặt và dọn dẹp cục bộ, ngoại tuyến dành cho Windows — gỡ bỏ bắt buộc kèm quét tệp sót lại, khu cách ly an toàn trước khi xóa, bản đồ ổ đĩa, và trình dọn dẹp hiển thị bản xem trước trước khi xóa bất cứ thứ gì."
       },
       automation: {
         title: 'Tự động hóa',
@@ -30820,45 +30820,45 @@ export const CATALOG = {
         mediaErrors: 'Lỗi phương tiện lưu trữ',
         errorLogEntries: 'Mục nhật ký lỗi'
       },
-      measuring: 'measuring…',
+      measuring: "đang đo…",
       space: {
-        drive: (letter) => `Drive ${letter}:`,
-        heading: 'Where is my space going?',
-        summary: (used, total, free) => `${used} used of ${total} · ${free} free`,
-        loading: 'Reading drive space…',
-        barLabel: (programs, other, free) => `Drive space: installed programs ${programs}, everything else ${other}, free ${free}.`,
-        barLabelMeasuring: (used, free) => `Drive space: ${used} used, ${free} free. Installed programs are still being measured.`,
-        legendPrograms: 'Installed programs',
-        legendOther: 'Everything else',
-        legendUsed: 'Used',
-        legendFree: 'Free',
-        unsized: (count) => `${count} ${count === 1 ? 'program' : 'programs'} without a size`,
-        exceedsUsed: 'Program sizes add up to more than is used on this drive.'
+        drive: (letter) => `Ổ đĩa ${letter}:`,
+        heading: "Dung lượng của tôi đi đâu?",
+        summary: (used, total, free) => `Đã dùng ${used} trên ${total} · còn trống ${free}`,
+        loading: "Đang đọc dung lượng ổ đĩa…",
+        barLabel: (programs, other, free) => `Dung lượng ổ đĩa: chương trình đã cài đặt ${programs}, mọi thứ khác ${other}, còn trống ${free}.`,
+        barLabelMeasuring: (used, free) => `Dung lượng ổ đĩa: đã dùng ${used}, còn trống ${free}. Các chương trình đã cài đặt vẫn đang được đo.`,
+        legendPrograms: "Chương trình đã cài đặt",
+        legendOther: "Mọi thứ khác",
+        legendUsed: "Đã dùng",
+        legendFree: "Còn trống",
+        unsized: (count) => `${count} chương trình chưa có kích thước`,
+        exceedsUsed: "Tổng kích thước các chương trình lớn hơn dung lượng đã dùng trên ổ đĩa này."
       },
       largest: {
-        heading: 'Largest programs',
-        openApplications: 'Open Applications',
-        installedCount: (count) => `${count} installed`,
-        measuring: 'Measuring program sizes…',
-        none: 'No program has a measured size yet.',
-        notInList: (size) => `The other ${size} is not in the program list.`,
-        seeDiskMap: 'See it in Disk Map.'
+        heading: "Chương trình lớn nhất",
+        openApplications: "Mở Ứng dụng",
+        installedCount: (count) => `${count} đã cài đặt`,
+        measuring: "Đang đo kích thước chương trình…",
+        none: "Chưa có chương trình nào được đo kích thước.",
+        notInList: (size) => `${size} còn lại không nằm trong danh sách chương trình.`,
+        seeDiskMap: "Xem trong Bản đồ ổ đĩa."
       },
       quiet: {
-        scoreOf: (score) => `${score} of 100`,
-        driveDetails: 'Drive details',
-        junkTitle: 'Junk files',
-        junkNotMeasured: 'Not measured',
-        junkMeasure: 'Measure',
-        junkProgress: (scanned, total) => `Measuring… ${scanned} of ${total}`,
-        junkMeasuring: 'Measuring…',
-        junkBasis: (count) => `Across ${count} recommended ${count === 1 ? 'cleaner' : 'cleaners'}`,
-        junkError: (message) => `Couldn't measure junk files: ${message}`,
-        openDeepClean: 'Open Deep Clean',
-        leftTitle: 'Left behind',
-        leftCount: (count) => `${count} ${count === 1 ? 'program' : 'programs'}`,
-        leftNone: 'Nothing left behind.',
-        leftReview: 'Review'
+        scoreOf: (score) => `${score}/100`,
+        driveDetails: "Chi tiết ổ đĩa",
+        junkTitle: "Tệp rác",
+        junkNotMeasured: "Chưa đo",
+        junkMeasure: "Đo",
+        junkProgress: (scanned, total) => `Đang đo… ${scanned}/${total}`,
+        junkMeasuring: "Đang đo…",
+        junkBasis: (count) => `Trên ${count} công cụ dọn dẹp được đề xuất`,
+        junkError: (message) => `Không thể đo tệp rác: ${message}`,
+        openDeepClean: "Mở Dọn dẹp sâu",
+        leftTitle: "Tệp sót lại",
+        leftCount: (count) => `${count} chương trình`,
+        leftNone: "Không có tệp nào sót lại.",
+        leftReview: "Xem xét"
       },
       recentActivity: {
         title: "Hoạt động gần đây",
@@ -30976,10 +30976,10 @@ export const CATALOG = {
         unused: 'Không sử dụng',
         store: 'Cửa hàng',
         extensions: 'Tiện ích mở rộng',
-        broken: 'Left behind',
+        broken: "Tệp sót lại",
         storeCount: (n) => `Cửa hàng (${n})`,
         extensionsCount: (n) => `Tiện ích mở rộng (${n})`,
-        brokenCount: (n) => `Left behind (${n})`
+        brokenCount: (n) => `Tệp sót lại (${n})`
       },
       columns: {
         application: 'Ứng dụng',
@@ -30991,7 +30991,7 @@ export const CATALOG = {
         company: 'Công ty',
         website: 'Trang web'
       },
-      badges: { broken: 'Left behind', running: 'Đang chạy', store: 'Cửa hàng', disabled: 'Đã tắt', unused: 'Không sử dụng' },
+      badges: { broken: "Tệp sót lại", running: 'Đang chạy', store: 'Cửa hàng', disabled: 'Đã tắt', unused: 'Không sử dụng' },
       selectRow: (name) => `Chọn ${name}`,
       selectAll: 'Chọn tất cả mục đang hiển thị',
       clearSelection: 'Bỏ chọn',
@@ -31003,7 +31003,7 @@ export const CATALOG = {
       openFolder: "Mở thư mục",
       copyUninstallCommand: "Sao chép lệnh gỡ cài đặt",
       commandCopied: "Đã sao chép lệnh gỡ cài đặt.",
-      unusedDefinition: "Flagged as not used recently. Prune keeps no launch history of its own, so check before you remove anything on this list.",
+      unusedDefinition: "Được đánh dấu là gần đây không sử dụng. Prune không tự lưu lịch sử khởi chạy, vì vậy hãy kiểm tra trước khi gỡ bỏ bất kỳ mục nào trong danh sách này.",
       copyFailed: "Không thể sao chép.",
       empty: {
         plain: 'Không có gì khớp.',
@@ -31093,9 +31093,9 @@ export const CATALOG = {
         status: 'Trạng thái'
       },
       switchAriaLabel: (name) => `Chạy ${name} khi đăng nhập`,
-      copyPath: 'Copy path',
-      pathCopied: 'Path copied.',
-      copyFailed: "Couldn't copy that.",
+      copyPath: "Sao chép đường dẫn",
+      pathCopied: "Đã sao chép đường dẫn.",
+      copyFailed: "Không thể sao chép.",
       status: {
         invalid: 'Không hợp lệ',
         running: 'Đang chạy',
@@ -31188,7 +31188,7 @@ export const CATALOG = {
       footer: {
         totalLabel: 'Tổng dung lượng sẽ giải phóng:',
         notMeasuredYet: 'chưa đo',
-        previewFirst: 'Preview first to see what will be freed.',
+        previewFirst: "Hãy xem trước để biết sẽ giải phóng được bao nhiêu.",
         unmeasuredSuffix: (count) => ` · ${count} chưa đo`,
         selectEverything: 'Chọn tất cả',
         clear: 'Xóa',
@@ -31429,7 +31429,7 @@ export const CATALOG = {
     app: {
       installedApplications: "Ứng dụng",
       applicationsSummary: (count, size) => `${count} ứng dụng đã cài đặt · ${size}`,
-      applicationsSummaryFiltered: (shown, total, size) => `${shown} of ${total} shown · ${size}`,
+      applicationsSummaryFiltered: (shown, total, size) => `Hiển thị ${shown} trên ${total} · ${size}`,
       removeStoreApp: (name) => `Xóa ${name}`
     }
   },
@@ -31488,8 +31488,8 @@ export const CATALOG = {
         ariaLabel: '不动最近文件的小时数'
       },
       restorePointCleanup: {
-        title: "Restore point before removing leftovers",
-        description: "Taken before Prune removes the leftover files and registry keys you selected, including after Force remove. On by default; does nothing at all if System Protection is turned off."
+        title: "移除残留项之前创建还原点",
+        description: "在 Prune 移除你所选的残留文件和注册表项之前创建，强制移除之后同样如此。默认开启；如果系统保护已关闭，则完全不起作用。"
       },
       hideUnavailable: {
         title: '隐藏不适用的清理项',
@@ -31551,12 +31551,12 @@ export const CATALOG = {
       uninstallTab: {
         beforeHeading: '卸载之前',
         restorePointUninstall: {
-          title: "Restore point before running an uninstaller",
-          description: "Taken before the program's own uninstaller runs. It needs Prune to be running as administrator and Windows allows one a day, so when it can't be made the uninstall goes ahead and the dialog says so."
+          title: "运行卸载程序之前创建还原点",
+          description: "在程序自带的卸载程序运行之前创建。这需要 Prune 以管理员身份运行，且 Windows 每天只允许创建一个；无法创建时，卸载会照常进行，并在对话框中说明。"
         },
         registryBackup: {
           title: '卸载前备份注册表',
-          description: "Exports HKLM\\SOFTWARE and HKCU\\Software, typically several hundred MB, and keeps the newest 3. If the backup can't be made, the uninstall doesn't run."
+          description: "导出 HKLM\\SOFTWARE 和 HKCU\\Software，通常有数百 MB，并保留最新的 3 份。如果无法创建备份，则不会执行卸载。"
         },
         deleteLockedFiles: {
           title: '在下次重启时删除被锁定的文件',
@@ -31588,7 +31588,7 @@ export const CATALOG = {
         reportTitle: '报告错误',
         reportDescription: "在 GitHub 上打开一个已预先填好的议题。Prune 本身不会发送任何内容，所有内容在发出之前你都能看到。",
         reportButton: '报告错误',
-        description: "A local, offline uninstaller and cleanup tool for Windows — forced removal with leftover-file scanning, safe quarantine-before-delete, disk mapping, and a cleaner that shows a preview before it removes anything."
+        description: "一款适用于 Windows 的本地离线卸载与清理工具——具备带残留文件扫描的强制移除、先隔离再删除的安全机制、磁盘地图，以及在移除任何内容之前先显示预览的清理器。"
       },
       automation: {
         title: '自动化',
@@ -31647,45 +31647,45 @@ export const CATALOG = {
         mediaErrors: '介质错误',
         errorLogEntries: '错误日志条目'
       },
-      measuring: 'measuring…',
+      measuring: "测量中…",
       space: {
-        drive: (letter) => `Drive ${letter}:`,
-        heading: 'Where is my space going?',
-        summary: (used, total, free) => `${used} used of ${total} · ${free} free`,
-        loading: 'Reading drive space…',
-        barLabel: (programs, other, free) => `Drive space: installed programs ${programs}, everything else ${other}, free ${free}.`,
-        barLabelMeasuring: (used, free) => `Drive space: ${used} used, ${free} free. Installed programs are still being measured.`,
-        legendPrograms: 'Installed programs',
-        legendOther: 'Everything else',
-        legendUsed: 'Used',
-        legendFree: 'Free',
-        unsized: (count) => `${count} ${count === 1 ? 'program' : 'programs'} without a size`,
-        exceedsUsed: 'Program sizes add up to more than is used on this drive.'
+        drive: (letter) => `驱动器 ${letter}:`,
+        heading: "空间都用在哪儿了？",
+        summary: (used, total, free) => `已用 ${used}，共 ${total} · 可用 ${free}`,
+        loading: "正在读取驱动器空间…",
+        barLabel: (programs, other, free) => `驱动器空间：已安装程序 ${programs}，其他所有内容 ${other}，可用 ${free}。`,
+        barLabelMeasuring: (used, free) => `驱动器空间：已用 ${used}，可用 ${free}。已安装程序仍在测量中。`,
+        legendPrograms: "已安装程序",
+        legendOther: "其他所有内容",
+        legendUsed: "已用",
+        legendFree: "可用",
+        unsized: (count) => `${count} 个程序没有大小信息`,
+        exceedsUsed: "各程序大小之和超过了此驱动器的已用空间。"
       },
       largest: {
-        heading: 'Largest programs',
-        openApplications: 'Open Applications',
-        installedCount: (count) => `${count} installed`,
-        measuring: 'Measuring program sizes…',
-        none: 'No program has a measured size yet.',
-        notInList: (size) => `The other ${size} is not in the program list.`,
-        seeDiskMap: 'See it in Disk Map.'
+        heading: "占用空间最大的程序",
+        openApplications: "打开应用程序",
+        installedCount: (count) => `已安装 ${count} 个`,
+        measuring: "正在测量程序大小…",
+        none: "目前还没有已测量大小的程序。",
+        notInList: (size) => `其余 ${size} 不在程序列表中。`,
+        seeDiskMap: "在磁盘地图中查看。"
       },
       quiet: {
-        scoreOf: (score) => `${score} of 100`,
-        driveDetails: 'Drive details',
-        junkTitle: 'Junk files',
-        junkNotMeasured: 'Not measured',
-        junkMeasure: 'Measure',
-        junkProgress: (scanned, total) => `Measuring… ${scanned} of ${total}`,
-        junkMeasuring: 'Measuring…',
-        junkBasis: (count) => `Across ${count} recommended ${count === 1 ? 'cleaner' : 'cleaners'}`,
-        junkError: (message) => `Couldn't measure junk files: ${message}`,
-        openDeepClean: 'Open Deep Clean',
-        leftTitle: 'Left behind',
-        leftCount: (count) => `${count} ${count === 1 ? 'program' : 'programs'}`,
-        leftNone: 'Nothing left behind.',
-        leftReview: 'Review'
+        scoreOf: (score) => `${score} 分（满分 100）`,
+        driveDetails: "驱动器详情",
+        junkTitle: "垃圾文件",
+        junkNotMeasured: "未测量",
+        junkMeasure: "测量",
+        junkProgress: (scanned, total) => `测量中… ${scanned} / ${total}`,
+        junkMeasuring: "测量中…",
+        junkBasis: (count) => `涵盖 ${count} 个推荐的清理项`,
+        junkError: (message) => `无法测量垃圾文件：${message}`,
+        openDeepClean: "打开深度清理",
+        leftTitle: "残留项",
+        leftCount: (count) => `${count} 个程序`,
+        leftNone: "没有残留项。",
+        leftReview: "查看"
       },
       recentActivity: {
         title: '最近活动',
@@ -31803,10 +31803,10 @@ export const CATALOG = {
         unused: '未使用',
         store: '商店',
         extensions: '扩展程序',
-        broken: 'Left behind',
+        broken: "残留项",
         storeCount: (n) => `商店 (${n})`,
         extensionsCount: (n) => `扩展程序 (${n})`,
-        brokenCount: (n) => `Left behind (${n})`
+        brokenCount: (n) => `残留项 (${n})`
       },
       columns: {
         application: "应用程序",
@@ -31818,7 +31818,7 @@ export const CATALOG = {
         company: '公司',
         website: '网站'
       },
-      badges: { broken: 'Left behind', running: '运行中', store: '商店', disabled: '已禁用', unused: '未使用' },
+      badges: { broken: "残留项", running: '运行中', store: '商店', disabled: '已禁用', unused: '未使用' },
       selectRow: (name) => `选择 ${name}`,
       selectAll: '选择所有显示项',
       clearSelection: '清除选择',
@@ -31830,7 +31830,7 @@ export const CATALOG = {
       openFolder: "打开文件夹",
       copyUninstallCommand: "复制卸载命令",
       commandCopied: "已复制卸载命令。",
-      unusedDefinition: "Flagged as not used recently. Prune keeps no launch history of its own, so check before you remove anything on this list.",
+      unusedDefinition: "已标记为最近未使用。Prune 自身不保留启动历史记录，因此在移除此列表中的任何内容之前，请先确认。",
       copyFailed: "无法复制。",
       empty: {
         plain: '没有匹配项。',
@@ -31920,9 +31920,9 @@ export const CATALOG = {
         status: '状态'
       },
       switchAriaLabel: (name) => `登录时运行 ${name}`,
-      copyPath: 'Copy path',
-      pathCopied: 'Path copied.',
-      copyFailed: "Couldn't copy that.",
+      copyPath: "复制路径",
+      pathCopied: "已复制路径。",
+      copyFailed: "无法复制。",
       status: {
         invalid: '无效',
         running: '运行中',
@@ -32015,7 +32015,7 @@ export const CATALOG = {
       footer: {
         totalLabel: '可释放的总空间：',
         notMeasuredYet: '尚未测量',
-        previewFirst: 'Preview first to see what will be freed.',
+        previewFirst: "请先预览，查看将释放多少空间。",
         unmeasuredSuffix: (count) => ` · ${count} 项未测量`,
         selectEverything: '全选',
         clear: '清除',
@@ -32256,7 +32256,7 @@ export const CATALOG = {
     app: {
       installedApplications: "应用程序",
       applicationsSummary: (count, size) => `${count} 个已安装的应用程序 · ${size}`,
-      applicationsSummaryFiltered: (shown, total, size) => `${shown} of ${total} shown · ${size}`,
+      applicationsSummaryFiltered: (shown, total, size) => `显示 ${shown} / ${total} 个 · ${size}`,
       removeStoreApp: (name) => `移除 ${name}`
     }
   },
@@ -32315,8 +32315,8 @@ export const CATALOG = {
         ariaLabel: '不動最近檔案的小時數'
       },
       restorePointCleanup: {
-        title: "Restore point before removing leftovers",
-        description: "Taken before Prune removes the leftover files and registry keys you selected, including after Force remove. On by default; does nothing at all if System Protection is turned off."
+        title: "移除殘留項目之前建立還原點",
+        description: "在 Prune 移除你所選的殘留檔案和登錄機碼之前建立，強制移除之後同樣如此。預設為開啟；如果系統保護已關閉，則完全不會作用。"
       },
       hideUnavailable: {
         title: '隱藏不適用的清理項目',
@@ -32378,12 +32378,12 @@ export const CATALOG = {
       uninstallTab: {
         beforeHeading: '解除安裝之前',
         restorePointUninstall: {
-          title: "Restore point before running an uninstaller",
-          description: "Taken before the program's own uninstaller runs. It needs Prune to be running as administrator and Windows allows one a day, so when it can't be made the uninstall goes ahead and the dialog says so."
+          title: "執行解除安裝程式之前建立還原點",
+          description: "在程式內建的解除安裝程式執行之前建立。這需要 Prune 以系統管理員身分執行，且 Windows 每天只允許建立一個；無法建立時，解除安裝會照常進行，並在對話方塊中說明。"
         },
         registryBackup: {
           title: '解除安裝前備份登錄檔',
-          description: "Exports HKLM\\SOFTWARE and HKCU\\Software, typically several hundred MB, and keeps the newest 3. If the backup can't be made, the uninstall doesn't run."
+          description: "匯出 HKLM\\SOFTWARE 和 HKCU\\Software，通常有數百 MB，並保留最新的 3 份。如果無法建立備份，則不會執行解除安裝。"
         },
         deleteLockedFiles: {
           title: '在下次重新啟動時刪除被鎖定的檔案',
@@ -32415,7 +32415,7 @@ export const CATALOG = {
         reportTitle: '回報錯誤',
         reportDescription: "在 GitHub 上開啟一則已預先填好的議題。Prune 本身不會傳送任何內容，所有內容在送出之前你都能看到。",
         reportButton: '回報錯誤',
-        description: "A local, offline uninstaller and cleanup tool for Windows — forced removal with leftover-file scanning, safe quarantine-before-delete, disk mapping, and a cleaner that shows a preview before it removes anything."
+        description: "一款適用於 Windows 的本機離線解除安裝與清理工具——具備含殘留檔案掃描的強制移除、先隔離再刪除的安全機制、磁碟地圖，以及在移除任何內容之前先顯示預覽的清理器。"
       },
       automation: {
         title: '自動化',
@@ -32474,45 +32474,45 @@ export const CATALOG = {
         mediaErrors: '媒體錯誤',
         errorLogEntries: '錯誤記錄項目'
       },
-      measuring: 'measuring…',
+      measuring: "測量中…",
       space: {
-        drive: (letter) => `Drive ${letter}:`,
-        heading: 'Where is my space going?',
-        summary: (used, total, free) => `${used} used of ${total} · ${free} free`,
-        loading: 'Reading drive space…',
-        barLabel: (programs, other, free) => `Drive space: installed programs ${programs}, everything else ${other}, free ${free}.`,
-        barLabelMeasuring: (used, free) => `Drive space: ${used} used, ${free} free. Installed programs are still being measured.`,
-        legendPrograms: 'Installed programs',
-        legendOther: 'Everything else',
-        legendUsed: 'Used',
-        legendFree: 'Free',
-        unsized: (count) => `${count} ${count === 1 ? 'program' : 'programs'} without a size`,
-        exceedsUsed: 'Program sizes add up to more than is used on this drive.'
+        drive: (letter) => `硬碟 ${letter}:`,
+        heading: "空間都用在哪裡了？",
+        summary: (used, total, free) => `已使用 ${used}，共 ${total} · 可用 ${free}`,
+        loading: "正在讀取硬碟空間…",
+        barLabel: (programs, other, free) => `硬碟空間：已安裝程式 ${programs}，其他所有內容 ${other}，可用 ${free}。`,
+        barLabelMeasuring: (used, free) => `硬碟空間：已使用 ${used}，可用 ${free}。已安裝程式仍在測量中。`,
+        legendPrograms: "已安裝程式",
+        legendOther: "其他所有內容",
+        legendUsed: "已使用",
+        legendFree: "可用",
+        unsized: (count) => `${count} 個程式沒有大小資訊`,
+        exceedsUsed: "各程式大小的總和超過了此硬碟的已使用空間。"
       },
       largest: {
-        heading: 'Largest programs',
-        openApplications: 'Open Applications',
-        installedCount: (count) => `${count} installed`,
-        measuring: 'Measuring program sizes…',
-        none: 'No program has a measured size yet.',
-        notInList: (size) => `The other ${size} is not in the program list.`,
-        seeDiskMap: 'See it in Disk Map.'
+        heading: "佔用空間最大的程式",
+        openApplications: "開啟應用程式",
+        installedCount: (count) => `已安裝 ${count} 個`,
+        measuring: "正在測量程式大小…",
+        none: "目前還沒有已測量大小的程式。",
+        notInList: (size) => `其餘 ${size} 不在程式清單中。`,
+        seeDiskMap: "在磁碟地圖中檢視。"
       },
       quiet: {
-        scoreOf: (score) => `${score} of 100`,
-        driveDetails: 'Drive details',
-        junkTitle: 'Junk files',
-        junkNotMeasured: 'Not measured',
-        junkMeasure: 'Measure',
-        junkProgress: (scanned, total) => `Measuring… ${scanned} of ${total}`,
-        junkMeasuring: 'Measuring…',
-        junkBasis: (count) => `Across ${count} recommended ${count === 1 ? 'cleaner' : 'cleaners'}`,
-        junkError: (message) => `Couldn't measure junk files: ${message}`,
-        openDeepClean: 'Open Deep Clean',
-        leftTitle: 'Left behind',
-        leftCount: (count) => `${count} ${count === 1 ? 'program' : 'programs'}`,
-        leftNone: 'Nothing left behind.',
-        leftReview: 'Review'
+        scoreOf: (score) => `${score} 分（滿分 100）`,
+        driveDetails: "硬碟詳情",
+        junkTitle: "垃圾檔案",
+        junkNotMeasured: "尚未測量",
+        junkMeasure: "測量",
+        junkProgress: (scanned, total) => `測量中… ${scanned} / ${total}`,
+        junkMeasuring: "測量中…",
+        junkBasis: (count) => `涵蓋 ${count} 個建議的清理項目`,
+        junkError: (message) => `無法測量垃圾檔案：${message}`,
+        openDeepClean: "開啟深度清理",
+        leftTitle: "殘留項目",
+        leftCount: (count) => `${count} 個程式`,
+        leftNone: "沒有殘留項目。",
+        leftReview: "檢視"
       },
       recentActivity: {
         title: '最近活動',
@@ -32630,10 +32630,10 @@ export const CATALOG = {
         unused: '未使用',
         store: '市集',
         extensions: '擴充功能',
-        broken: 'Left behind',
+        broken: "殘留項目",
         storeCount: (n) => `市集 (${n})`,
         extensionsCount: (n) => `擴充功能 (${n})`,
-        brokenCount: (n) => `Left behind (${n})`
+        brokenCount: (n) => `殘留項目 (${n})`
       },
       columns: {
         application: '應用程式',
@@ -32645,7 +32645,7 @@ export const CATALOG = {
         company: '公司',
         website: '網站'
       },
-      badges: { broken: 'Left behind', running: '執行中', store: '市集', disabled: '已停用', unused: '未使用' },
+      badges: { broken: "殘留項目", running: '執行中', store: '市集', disabled: '已停用', unused: '未使用' },
       selectRow: (name) => `選取 ${name}`,
       selectAll: '選取所有顯示項目',
       clearSelection: '清除選取',
@@ -32657,7 +32657,7 @@ export const CATALOG = {
       openFolder: "開啟資料夾",
       copyUninstallCommand: "複製解除安裝命令",
       commandCopied: "已複製解除安裝命令。",
-      unusedDefinition: "Flagged as not used recently. Prune keeps no launch history of its own, so check before you remove anything on this list.",
+      unusedDefinition: "已標示為最近未使用。Prune 本身不保留啟動記錄，因此在移除此清單中的任何項目之前，請先確認。",
       copyFailed: "無法複製。",
       empty: {
         plain: '沒有相符項目。',
@@ -32747,9 +32747,9 @@ export const CATALOG = {
         status: '狀態'
       },
       switchAriaLabel: (name) => `登入時執行 ${name}`,
-      copyPath: 'Copy path',
-      pathCopied: 'Path copied.',
-      copyFailed: "Couldn't copy that.",
+      copyPath: "複製路徑",
+      pathCopied: "已複製路徑。",
+      copyFailed: "無法複製。",
       status: {
         invalid: '無效',
         running: '執行中',
@@ -32842,7 +32842,7 @@ export const CATALOG = {
       footer: {
         totalLabel: '可釋放的總空間：',
         notMeasuredYet: '尚未測量',
-        previewFirst: 'Preview first to see what will be freed.',
+        previewFirst: "請先預覽，查看將釋放多少空間。",
         unmeasuredSuffix: (count) => ` · ${count} 項未測量`,
         selectEverything: '全選',
         clear: '清除',
@@ -33083,7 +33083,7 @@ export const CATALOG = {
     app: {
       installedApplications: "應用程式",
       applicationsSummary: (count, size) => `${count} 個已安裝的應用程式 · ${size}`,
-      applicationsSummaryFiltered: (shown, total, size) => `${shown} of ${total} shown · ${size}`,
+      applicationsSummaryFiltered: (shown, total, size) => `顯示 ${shown} / ${total} 個 · ${size}`,
       removeStoreApp: (name) => `移除 ${name}`
     }
   }
