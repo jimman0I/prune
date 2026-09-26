@@ -75,3 +75,14 @@ describe('excluded folders', () => {
     expect(screen.queryByText(/left out because/i)).toBeNull();
   });
 });
+
+describe('the accent colour is only ever an action', () => {
+  it('leaves the item notes and the reclaimable size in neutral text', () => {
+    const { container } = show({ scanResult: {
+      ...scanResult,
+      registryKeys: { ok: true, items: [{ path: 'HKCU\Software\Thing', name: 'Thing', kind: 'uninstall-entry' }] }
+    } });
+    expect(screen.getByText(/reclaimable/i)).toBeTruthy();
+    expect(container.innerHTML).not.toContain('var(--accent-primary)');
+  });
+});

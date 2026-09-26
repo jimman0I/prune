@@ -348,3 +348,30 @@ describe('Clear in the batch bar', () => {
     expect(clear.className).toContain('px-2');
   });
 });
+
+describe('the accent colour is only ever an action or a selection', () => {
+  // PRODUCT.md: cyan means "the thing you click". A NEW badge, a sorted
+  // header and the "n new in 7 days" count are readouts, not actions.
+  const RECENT = program({ id: 'fresh', name: 'Fresh', sizeBytes: 3e6, installDate: new Date().toISOString().slice(0, 10) });
+
+  it('leaves the NEW badge, the sorted column header and the new-count footer neutral', async () => {
+    const { container } = render({ programs: [STEAM, RECENT] });
+    await screen.findByText('Fresh');
+    const badge = within(screen.getByText('Fresh').closest('[role="row"]')).getByText('New');
+    expect(badge.className).not.toContain('accent-primary');
+    expect(screen.getByText(/new in 7 days/).className).not.toContain('accent-primary');
+    // Focus rings are the one legitimate use left on this screen.
+    expect(container.innerHTML.replace(/focus[\w-]*:[^\s"]+/g, '')).not.toContain('var(--accent-primary)');
+  });
+
+  it('marks the sorted column with an arrow and aria-sort as well as its stronger text', async () => {
+    const user = userEvent.setup();
+    render();
+    await screen.findByText('Steam');
+    const size = screen.getAllByRole('columnheader').find((h) => /size/i.test(h.textContent));
+    await user.click(within(size).getByRole('button'));
+    expect(size.getAttribute('aria-sort')).toMatch(/ascending|descending/);
+    expect(size.querySelector('svg')).toBeTruthy();
+    expect(size.innerHTML).not.toContain('accent-primary');
+  });
+});

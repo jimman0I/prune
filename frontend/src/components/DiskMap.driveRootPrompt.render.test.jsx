@@ -65,3 +65,11 @@ describe('the drive-root chooser', () => {
     expect(button.disabled).toBe(true);
   });
 });
+
+describe('the recommended option', () => {
+  it('says so in words and a neutral border, not in the accent colour', async () => {
+    const { container } = render();
+    await screen.findByText('Read the whole drive');
+    expect(container.innerHTML).not.toContain('var(--accent-primary)');
+  });
+});

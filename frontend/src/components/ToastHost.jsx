@@ -21,7 +21,9 @@ const TONE = {
   success: { accent: 'var(--success)', soft: 'var(--success-soft)' },
   danger: { accent: 'var(--danger)', soft: 'var(--danger-soft)' },
   warning: { accent: 'var(--warning)', soft: 'var(--warning-soft)' },
-  info: { accent: 'var(--accent-primary)', soft: 'var(--accent-primary-soft)' }
+  // Neutral: an info toast is a report, not an action, and the accent is
+  // only ever the colour of the thing you press.
+  info: { accent: 'var(--text-secondary)', soft: 'var(--surface-hover)' }
 };
 
 /** The brief's easing and timing: snappy, 0.2-0.3s, no overshoot. */

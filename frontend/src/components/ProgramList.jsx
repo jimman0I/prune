@@ -367,7 +367,7 @@ function ProgramRow({ program, iconSrc, checked, running, isNew, onToggle, onUni
     <div role="cell" className="flex items-center">
       {isNew && (
         <span
-          className="text-[10px] font-mono uppercase tracking-wider px-1 py-px rounded bg-[color:var(--accent-primary)]/15 text-[color:var(--accent-primary)] border border-[color:var(--accent-primary)]/25"
+          className="text-[10px] font-mono uppercase tracking-wider px-1 py-px rounded bg-[color:var(--surface-hover)] text-[color:var(--text-secondary)] border border-[color:var(--control-border)]"
         >
           {t('applications.columns.new')}
         </span>
@@ -627,7 +627,7 @@ export default function ProgramList({ programs: initialPrograms, extensions = []
               </>
             );
             const classes = `flex items-center gap-1 min-h-8 text-[10.5px] font-mono uppercase tracking-[0.13em] ${
-              active ? 'text-[color:var(--accent-primary)]' : 'text-[color:var(--text-muted)]'
+              active ? 'text-[color:var(--text-primary)]' : 'text-[color:var(--text-muted)]'
             } ${col.align === 'right' ? 'justify-end' : ''}`;
             const cellClass = `${wide ? WIDE_ONLY_FLEX : 'flex'} ${col.key === 'action' ? STICKY_ACTION : ''}`.trim();
 
@@ -744,7 +744,7 @@ export default function ProgramList({ programs: initialPrograms, extensions = []
                   the only place the column's window is spelled out. A
                   badge saying New is not self-explanatory about how new. */}
               {newIds.size > 0 && (
-                <span className="text-[color:var(--accent-primary)]">
+                <span className="text-[color:var(--text-secondary)]">
                   {' · '}{t('applications.footer.newInDays', newIds.size, RECENT_DAYS)}
                 </span>
               )}
