@@ -82,6 +82,7 @@ export default {
     league_of_legends_logs: { name: "יומני משחק", description: "יומני לקוח ומשחק לכל משחק. נשמרים ללא הגבלת זמן, כמעט אף פעם לא נקראים." },
     recycle_bin: { name: "סל המיחזור", description: "קבצים שכבר מחקת ועדיין תופסים מקום עד שהסל מתרוקן. הריקון הוא המטרה, ולכן שום דבר כאן לא יחזור מעצמו." },
     user_temp: { name: "תיקיית Temp", description: "תיקיית העבודה ש-Windows, מתקינים וחצי מהתוכניות במחשב כותבים אליה ולעיתים רחוקות מנקים אחריהם." },
+    system_empty_space: { name: "שטח פנוי בדיסק", description: "כותב אפסים על השטח הפנוי בכונן ואז מוחק את קובץ המילוי, כך שאי אפשר לשחזר קבצים שמחקת קודם. הפעולה עשויה להימשך שעות. היא לא משחררת מקום, אין בה שום תועלת בכונן SSD עם TRIM, והיא מוסיפה שחיקת כתיבה." },
     defender_history: { name: "היסטוריית סריקות", description: "תוצאות שמורות של סריקות Defender קודמות והיומן שמפרט אותן. ההגנה לא נפגעת; Defender פותח רשומה חדשה בסריקה הבאה." },
     defender_temp: { name: "קבצים זמניים", description: "מתקיני עדכון ויומנים ש-Defender משאיר בתיקיות ה-Temp והעדכון של Windows אחרי שהשתמש בהם." },
     defender_quarantine: { name: "קבצים בהסגר", description: "קבצים ש-Defender תפס ונעל. ההסגר הוא הדרך של Defender להחזיר קובץ שסומן בטעות — לאחר ניקוי האפשרות הזו, לעולם אי אפשר לשחזר זיהוי שגוי." },
@@ -89,12 +90,11 @@ export default {
     defender_logs: { name: "יומנים", description: "יומני השירות והאבחון של Defender עצמו. שימושיים רק בפתרון בעיות ב-Defender; הוא כותב חדשים בזמן הריצה." },
     winrar_history: { name: "היסטוריה", description: "שמות ארכיונים, תיקיות חילוץ ומונחי חיפוש ש-WinRAR זוכר. הארכיונים עצמם לא נפגעים." },
     winrar_temp: { name: "קבצים זמניים", description: "קבצים זמניים ש-WinRAR השאיר בתיקיית התוכנה שלו. ארכיונים והגדרות לא נפגעים." },
-    deepscan_backup: { name: "Backup files", description: "Files ending in .bak, or in up to four letters and a tilde (such as notes.txt~), anywhere in your user folder. Editors often leave the only copy of something behind as a backup, so check the preview for anything you want to keep." },
-    deepscan_tmp: { name: "Office temporary files", description: "Word (~wr and four digits) and PowerPoint (ppt and four digits) working files, anywhere in your user folder. After a crash, one can hold the only copy of unsaved work." },
-    deepscan_vim_swap: { name: "Vim swap files", description: "Vim's .swp, .swo and .swn files, anywhere in your user folder. Vim writes them while you edit, and after a crash they hold the unsaved changes." },
-    deepscan_ds_store: { name: ".DS_Store files", description: "Folder-view files that macOS leaves in folders copied from a Mac. Nothing reads them on Windows." },
-    deepscan_thumbs_db: { name: "Thumbs.db files", description: "Thumbnail caches that older versions of Windows left in picture folders. Explorer builds new ones if it needs them." },
-    system_empty_space: { name: "Free disk space", description: "Overwrites the free space on the drive with zeros, then deletes the filler, so files you deleted earlier can't be recovered. It can take hours. It frees no space, does nothing useful on an SSD with TRIM, and adds write wear." },
+    deepscan_backup: { name: "קובצי גיבוי", description: "קבצים שמסתיימים ב-.bak, או בעד ארבע אותיות ואחריהן טילדה (כמו notes.txt~), בכל מקום בתיקיית המשתמש שלך. עורכים משאירים לא פעם את העותק היחיד של משהו כקובץ גיבוי, ולכן כדאי לבדוק בתצוגה המקדימה אם יש משהו שרוצים לשמור." },
+    deepscan_tmp: { name: "קובצי Office זמניים", description: "קובצי עבודה של Word (‏~wr ואחריו ארבע ספרות) ושל PowerPoint (‏ppt ואחריו ארבע ספרות), בכל מקום בתיקיית המשתמש שלך. אחרי קריסה, אחד מהם יכול להכיל את העותק היחיד של עבודה שלא נשמרה." },
+    deepscan_vim_swap: { name: "קובצי swap של Vim", description: "קובצי ‎.swp,‏ ‎.swo ו-‎.swn של Vim, בכל מקום בתיקיית המשתמש שלך. Vim כותב אותם בזמן העריכה, ואחרי קריסה הם מחזיקים את השינויים שלא נשמרו." },
+    deepscan_ds_store: { name: "קובצי ‎.DS_Store", description: "קובצי תצוגת תיקייה ש-macOS משאיר בתיקיות שהועתקו ממחשב Mac. שום דבר לא קורא אותם ב-Windows." },
+    deepscan_thumbs_db: { name: "קובצי Thumbs.db", description: "מטמוני תמונות ממוזערות שגרסאות ישנות יותר של Windows השאירו בתיקיות תמונות. Explorer בונה חדשים אם הוא צריך." },
   },
   categories: {
     "Brave": "Brave",
@@ -128,6 +128,6 @@ export default {
     "League of Legends": "League of Legends",
     "Windows Defender": "Windows Defender",
     "WinRAR": "WinRAR",
-    "Deep scan": "Deep scan",
+    "Deep scan": "סריקה מעמיקה",
   }
 };

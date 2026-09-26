@@ -82,6 +82,7 @@ export default {
     league_of_legends_logs: { name: "Leikjaannálar", description: "Annálar viðskiptaforrits og leiks fyrir hvern leik. Geymdir endalaust og nánast aldrei lesnir." },
     recycle_bin: { name: "Ruslafatan", description: "Skrár sem þú hefur þegar eytt og taka enn pláss þar til ruslafatan er tæmd. Tilgangurinn er einmitt að tæma hana, svo ekkert héðan kemur aftur af sjálfu sér." },
     user_temp: { name: "Temp-mappa", description: "Vinnumappan sem Windows, uppsetningarforrit og helmingur forrita vélarinnar skrifa í og hreinsa sjaldan eftir sig." },
+    system_empty_space: { name: "Laust diskpláss", description: "Skrifar núll yfir laust pláss á drifinu og eyðir síðan fyllingarskránni, þannig að ekki sé hægt að endurheimta skrár sem þú eyddir áður. Það getur tekið klukkustundir. Það losar ekkert pláss, gagnast ekki á SSD-drifi með TRIM og eykur slit vegna skrifa." },
     defender_history: { name: "Skönnunarsaga", description: "Vistaðar niðurstöður fyrri Defender-skannana og annállinn sem listar þær. Vörnin er ósnert; Defender byrjar nýja færslu við næstu skönnun." },
     defender_temp: { name: "Tímabundnar skrár", description: "Uppfærsluuppsetningarforrit og annálar sem Defender skilur eftir í tímabundnum möppum og uppfærslumöppum Windows eftir notkun." },
     defender_quarantine: { name: "Skrár í sóttkví", description: "Skrár sem Defender hefur fangað og læst inni. Sóttkví er leið Defender til að skila skrá sem var merkt fyrir mistök — þegar þetta er hreinsað er aldrei hægt að endurheimta ranga jákvæða greiningu." },
@@ -89,12 +90,11 @@ export default {
     defender_logs: { name: "Annálar", description: "Eigin þjónustu- og greiningarannálar Defender. Aðeins gagnlegir við bilanaleit í Defender sjálfum; hann skrifar nýja á meðan hann keyrir." },
     winrar_history: { name: "Saga", description: "Skjalasafnsnöfn, útdráttarmöppur og leitarorð sem WinRAR man. Skjalasöfnin sjálf eru ósnert." },
     winrar_temp: { name: "Tímabundnar skrár", description: "Tímabundnar skrár sem WinRAR skildi eftir í eigin forritsmöppu. Skjalasöfn og stillingar eru ósnert." },
-    deepscan_backup: { name: "Backup files", description: "Files ending in .bak, or in up to four letters and a tilde (such as notes.txt~), anywhere in your user folder. Editors often leave the only copy of something behind as a backup, so check the preview for anything you want to keep." },
-    deepscan_tmp: { name: "Office temporary files", description: "Word (~wr and four digits) and PowerPoint (ppt and four digits) working files, anywhere in your user folder. After a crash, one can hold the only copy of unsaved work." },
-    deepscan_vim_swap: { name: "Vim swap files", description: "Vim's .swp, .swo and .swn files, anywhere in your user folder. Vim writes them while you edit, and after a crash they hold the unsaved changes." },
-    deepscan_ds_store: { name: ".DS_Store files", description: "Folder-view files that macOS leaves in folders copied from a Mac. Nothing reads them on Windows." },
-    deepscan_thumbs_db: { name: "Thumbs.db files", description: "Thumbnail caches that older versions of Windows left in picture folders. Explorer builds new ones if it needs them." },
-    system_empty_space: { name: "Free disk space", description: "Overwrites the free space on the drive with zeros, then deletes the filler, so files you deleted earlier can't be recovered. It can take hours. It frees no space, does nothing useful on an SSD with TRIM, and adds write wear." },
+    deepscan_backup: { name: "Öryggisafritsskrár", description: "Skrár sem enda á .bak, eða á allt að fjórum stöfum og tilde (eins og notes.txt~), hvar sem er í notandamöppunni þinni. Ritlar skilja oft eftir eina eintakið af einhverju sem öryggisafrit, svo athugaðu forskoðunina fyrir allt sem þú vilt geyma." },
+    deepscan_tmp: { name: "Tímabundnar Office-skrár", description: "Vinnuskrár Word (~wr og fjórir tölustafir) og PowerPoint (ppt og fjórir tölustafir), hvar sem er í notandamöppunni þinni. Eftir hrun getur ein þeirra geymt eina eintakið af óvistaðri vinnu." },
+    deepscan_vim_swap: { name: "Swap-skrár Vim", description: "Vim-skrárnar .swp, .swo og .swn, hvar sem er í notandamöppunni þinni. Vim skrifar þær á meðan þú breytir og eftir hrun geyma þær óvistuðu breytingarnar." },
+    deepscan_ds_store: { name: ".DS_Store-skrár", description: "Möppuskoðunarskrár sem macOS skilur eftir í möppum sem afritaðar eru af Mac. Ekkert les þær í Windows." },
+    deepscan_thumbs_db: { name: "Thumbs.db-skrár", description: "Smámyndaskyndiminni sem eldri útgáfur Windows skildu eftir í myndamöppum. Explorer býr til ný ef hann þarf á þeim að halda." },
   },
   categories: {
     "Brave": "Brave",
@@ -128,6 +128,6 @@ export default {
     "League of Legends": "League of Legends",
     "Windows Defender": "Windows Defender",
     "WinRAR": "WinRAR",
-    "Deep scan": "Deep scan",
+    "Deep scan": "Djúpskönnun",
   }
 };

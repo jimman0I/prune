@@ -82,6 +82,7 @@ export default {
     league_of_legends_logs: { name: "Herné protokoly", description: "Protokoly klienta a hry pre jednotlivé zápasy. Uchovávajú sa neobmedzene, čítajú sa takmer nikdy." },
     recycle_bin: { name: "Kôš", description: "Súbory, ktoré ste už odstránili, no stále zaberajú miesto, kým sa kôš nevyprázdni. Vyprázdnenie je práve zmyslom, takže nič odtiaľto sa samo nevráti." },
     user_temp: { name: "Priečinok Temp", description: "Pracovný priečinok, do ktorého zapisujú Windows, inštalátory aj polovica programov v počítači a len zriedka po sebe upratujú." },
+    system_empty_space: { name: "Voľné miesto na disku", description: "Prepíše voľné miesto na disku nulami a potom odstráni vypĺňací súbor, takže skôr odstránené súbory nemožno obnoviť. Môže to trvať hodiny. Neuvoľní žiadne miesto, na SSD s TRIM to nemá žiadny úžitok a zvyšuje opotrebenie zápisom." },
     defender_history: { name: "História skenovania", description: "Uložené výsledky predchádzajúcich kontrol Defendera a protokol, ktorý ich vypisuje. Ochrana zostane nedotknutá; Defender založí nový záznam pri ďalšej kontrole." },
     defender_temp: { name: "Dočasné súbory", description: "Inštalátory aktualizácií a protokoly, ktoré Defender po použití necháva v dočasných priečinkoch Windows a priečinkoch aktualizácií." },
     defender_quarantine: { name: "Súbory v karanténe", description: "Súbory, ktoré Defender zachytil a zamkol. Karanténa je spôsob, ako Defender vracia omylom označený súbor — po jej vymazaní už falošný poplach obnoviť nemožno." },
@@ -89,12 +90,11 @@ export default {
     defender_logs: { name: "Protokoly", description: "Vlastné prevádzkové a diagnostické protokoly Defendera. Užitočné len pri riešení problémov so samotným Defenderom; nové zapisuje za behu." },
     winrar_history: { name: "História", description: "Názvy archívov, priečinky na rozbalenie a hľadané výrazy, ktoré si WinRAR pamätá. Samotné archívy zostanú nedotknuté." },
     winrar_temp: { name: "Dočasné súbory", description: "Dočasné súbory, ktoré WinRAR nechal vo vlastnom priečinku programu. Archívy a nastavenia zostanú nedotknuté." },
-    deepscan_backup: { name: "Backup files", description: "Files ending in .bak, or in up to four letters and a tilde (such as notes.txt~), anywhere in your user folder. Editors often leave the only copy of something behind as a backup, so check the preview for anything you want to keep." },
-    deepscan_tmp: { name: "Office temporary files", description: "Word (~wr and four digits) and PowerPoint (ppt and four digits) working files, anywhere in your user folder. After a crash, one can hold the only copy of unsaved work." },
-    deepscan_vim_swap: { name: "Vim swap files", description: "Vim's .swp, .swo and .swn files, anywhere in your user folder. Vim writes them while you edit, and after a crash they hold the unsaved changes." },
-    deepscan_ds_store: { name: ".DS_Store files", description: "Folder-view files that macOS leaves in folders copied from a Mac. Nothing reads them on Windows." },
-    deepscan_thumbs_db: { name: "Thumbs.db files", description: "Thumbnail caches that older versions of Windows left in picture folders. Explorer builds new ones if it needs them." },
-    system_empty_space: { name: "Free disk space", description: "Overwrites the free space on the drive with zeros, then deletes the filler, so files you deleted earlier can't be recovered. It can take hours. It frees no space, does nothing useful on an SSD with TRIM, and adds write wear." },
+    deepscan_backup: { name: "Záložné súbory", description: "Súbory .bak a súbory s príponou až so štyrmi písmenami zakončenou vlnovkou (napríklad notes.txt~) kdekoľvek vo vašom používateľskom priečinku. Editory často zanechávajú jedinú kópiu niečoho práve ako záložný súbor, preto v náhľade skontrolujte, či tam nie je niečo, čo si chcete ponechať." },
+    deepscan_tmp: { name: "Dočasné súbory Office", description: "Pracovné súbory Wordu (~wr a štyri číslice) a PowerPointu (ppt a štyri číslice) kdekoľvek vo vašom používateľskom priečinku. Po páde môže takýto súbor obsahovať jedinú kópiu neuloženej práce." },
+    deepscan_vim_swap: { name: "Odkladacie súbory Vimu", description: "Súbory .swp, .swo a .swn programu Vim kdekoľvek vo vašom používateľskom priečinku. Vim ich zapisuje pri úpravách a po páde obsahujú neuložené zmeny." },
+    deepscan_ds_store: { name: "Súbory .DS_Store", description: "Súbory so zobrazením priečinka, ktoré macOS zanecháva v priečinkoch skopírovaných z Macu. Vo Windows ich nič nečíta." },
+    deepscan_thumbs_db: { name: "Súbory Thumbs.db", description: "Vyrovnávacie pamäte miniatúr, ktoré staršie verzie Windows zanechávali v priečinkoch s obrázkami. Explorer si v prípade potreby vytvorí nové." },
   },
   categories: {
     "Brave": "Brave",
@@ -128,6 +128,6 @@ export default {
     "League of Legends": "League of Legends",
     "Windows Defender": "Windows Defender",
     "WinRAR": "WinRAR",
-    "Deep scan": "Deep scan",
+    "Deep scan": "Hĺbkové skenovanie",
   }
 };

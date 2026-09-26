@@ -82,6 +82,7 @@ export default {
     league_of_legends_logs: { name: "Játéknaplók", description: "Meccsenkénti kliens- és játéknaplók. Határozatlan ideig megmaradnak, szinte soha nem olvassák őket." },
     recycle_bin: { name: "Lomtár", description: "Az általad már törölt fájlok, amelyek a lomtár kiürítéséig még foglalják a helyet. A kiürítés a lényeg, ezért innen semmi sem tér vissza magától." },
     user_temp: { name: "Ideiglenes mappa", description: "A Windows, a telepítők és a gépen lévő programok fele által használt ideiglenes mappa, amelyet ritkán takarítanak ki maguk után." },
+    system_empty_space: { name: "Szabad lemezterület", description: "Nullákkal írja felül a meghajtó szabad területét, majd törli a kitöltőfájlt, így a korábban törölt fájlok nem állíthatók helyre. Órákig tarthat. Nem szabadít fel helyet, TRIM-mel rendelkező SSD-n nincs értelme, és növeli az írási kopást." },
     defender_history: { name: "Vizsgálati előzmények", description: "A korábbi Defender-vizsgálatok tárolt eredményei és az azokat felsoroló napló. A védelmet nem érinti; a Defender a következő vizsgálattal új bejegyzést kezd." },
     defender_temp: { name: "Ideiglenes fájlok", description: "Frissítéstelepítők és naplók, amelyeket a Defender a használatuk után a Windows ideiglenes és frissítési mappáiban hagy hátra." },
     defender_quarantine: { name: "Karanténba helyezett fájlok", description: "A Defender által elkapott és elzárt fájlok. A karantén az a módszer, amellyel a Defender visszaadja a tévesen megjelölt fájlt — ha ezt törlöd, a téves riasztás soha többé nem állítható vissza." },
@@ -89,12 +90,11 @@ export default {
     defender_logs: { name: "Naplók", description: "A Defender saját szolgáltatás- és diagnosztikai naplói. Csak magának a Defendernek a hibaelhárításához hasznosak; futás közben újakat ír." },
     winrar_history: { name: "Előzmények", description: "A WinRAR által megjegyzett archívumnevek, kicsomagolási mappák és keresési kifejezések. Magukat az archívumokat nem érinti." },
     winrar_temp: { name: "Ideiglenes fájlok", description: "A WinRAR által a saját programmappájában hátrahagyott ideiglenes fájlok. Az archívumokat és a beállításokat nem érinti." },
-    deepscan_backup: { name: "Backup files", description: "Files ending in .bak, or in up to four letters and a tilde (such as notes.txt~), anywhere in your user folder. Editors often leave the only copy of something behind as a backup, so check the preview for anything you want to keep." },
-    deepscan_tmp: { name: "Office temporary files", description: "Word (~wr and four digits) and PowerPoint (ppt and four digits) working files, anywhere in your user folder. After a crash, one can hold the only copy of unsaved work." },
-    deepscan_vim_swap: { name: "Vim swap files", description: "Vim's .swp, .swo and .swn files, anywhere in your user folder. Vim writes them while you edit, and after a crash they hold the unsaved changes." },
-    deepscan_ds_store: { name: ".DS_Store files", description: "Folder-view files that macOS leaves in folders copied from a Mac. Nothing reads them on Windows." },
-    deepscan_thumbs_db: { name: "Thumbs.db files", description: "Thumbnail caches that older versions of Windows left in picture folders. Explorer builds new ones if it needs them." },
-    system_empty_space: { name: "Free disk space", description: "Overwrites the free space on the drive with zeros, then deletes the filler, so files you deleted earlier can't be recovered. It can take hours. It frees no space, does nothing useful on an SSD with TRIM, and adds write wear." },
+    deepscan_backup: { name: "Biztonsági mentési fájlok", description: "A felhasználói mappádban bárhol található, .bak-ra vagy legfeljebb négy betűre és egy hullámvonalra végződő fájlok (például notes.txt~). A szerkesztők néha biztonsági mentésként hagyják hátra valami egyetlen példányát, ezért nézd át az előnézetet, hogy nincs-e köztük megtartandó." },
+    deepscan_tmp: { name: "Office ideiglenes fájlok", description: "Word- (~wr és négy számjegy) és PowerPoint-munkafájlok (ppt és négy számjegy) a felhasználói mappádban bárhol. Összeomlás után az egyik lehet a nem mentett munka egyetlen példánya." },
+    deepscan_vim_swap: { name: "Vim cserefájlok", description: "A Vim .swp, .swo és .swn fájljai a felhasználói mappádban bárhol. A Vim szerkesztés közben írja őket, és összeomlás után ezek őrzik a nem mentett módosításokat." },
+    deepscan_ds_store: { name: ".DS_Store fájlok", description: "Mappanézeti fájlok, amelyeket a macOS hagy a Mac-ről másolt mappákban. Windowson semmi sem olvassa őket." },
+    deepscan_thumbs_db: { name: "Thumbs.db fájlok", description: "Miniatűr-gyorsítótárak, amelyeket a Windows régebbi verziói hagytak a képmappákban. Az Explorer újat készít, ha szüksége van rá." },
   },
   categories: {
     "Brave": "Brave",
@@ -128,6 +128,6 @@ export default {
     "League of Legends": "League of Legends",
     "Windows Defender": "Windows Defender",
     "WinRAR": "WinRAR",
-    "Deep scan": "Deep scan",
+    "Deep scan": "Mélyvizsgálat",
   }
 };

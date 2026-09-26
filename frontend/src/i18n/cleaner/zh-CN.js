@@ -82,6 +82,7 @@ export default {
     league_of_legends_logs: { name: "游戏日志", description: "每场对局的客户端和游戏日志。会被无限期保留，却几乎从不被读取。" },
     recycle_bin: { name: "回收站", description: "你已删除的文件，在清空回收站之前仍占用着空间。清空正是目的所在，所以这里的内容不会自行恢复。" },
     user_temp: { name: "Temp 文件夹", description: "Windows、安装程序和机器上许多程序写入、却很少自行清理的临时工作文件夹。" },
+    system_empty_space: { name: "可用磁盘空间", description: "用零覆盖驱动器上的可用空间，然后删除填充文件，使你之前删除的文件无法恢复。可能需要数小时。它不会释放任何空间，在支持 TRIM 的 SSD 上没有实际作用，还会增加写入损耗。" },
     defender_history: { name: "扫描历史记录", description: "Defender 过往扫描的已保存结果及列出它们的日志。不影响防护；Defender 会在下次扫描时开始新的记录。" },
     defender_temp: { name: "临时文件", description: "Defender 用完后遗留在 Windows 临时文件夹和更新文件夹中的更新安装程序和日志。" },
     defender_quarantine: { name: "已隔离的文件", description: "Defender 检测到并锁定隔离的文件。隔离是 Defender 归还被误报文件的方式——一旦清除，误报的文件就再也无法恢复。" },
@@ -89,12 +90,11 @@ export default {
     defender_logs: { name: "日志", description: "Defender 自身的服务和诊断日志。仅在排查 Defender 本身的问题时有用；它运行时会写入新的日志。" },
     winrar_history: { name: "历史记录", description: "WinRAR 记住的压缩文件名、解压目标文件夹和搜索词。压缩文件本身不受影响。" },
     winrar_temp: { name: "临时文件", description: "WinRAR 遗留在自身程序文件夹中的临时文件。压缩文件和设置不受影响。" },
-    deepscan_backup: { name: "Backup files", description: "Files ending in .bak, or in up to four letters and a tilde (such as notes.txt~), anywhere in your user folder. Editors often leave the only copy of something behind as a backup, so check the preview for anything you want to keep." },
-    deepscan_tmp: { name: "Office temporary files", description: "Word (~wr and four digits) and PowerPoint (ppt and four digits) working files, anywhere in your user folder. After a crash, one can hold the only copy of unsaved work." },
-    deepscan_vim_swap: { name: "Vim swap files", description: "Vim's .swp, .swo and .swn files, anywhere in your user folder. Vim writes them while you edit, and after a crash they hold the unsaved changes." },
-    deepscan_ds_store: { name: ".DS_Store files", description: "Folder-view files that macOS leaves in folders copied from a Mac. Nothing reads them on Windows." },
-    deepscan_thumbs_db: { name: "Thumbs.db files", description: "Thumbnail caches that older versions of Windows left in picture folders. Explorer builds new ones if it needs them." },
-    system_empty_space: { name: "Free disk space", description: "Overwrites the free space on the drive with zeros, then deletes the filler, so files you deleted earlier can't be recovered. It can take hours. It frees no space, does nothing useful on an SSD with TRIM, and adds write wear." },
+    deepscan_backup: { name: "备份文件", description: "用户文件夹中任何位置的 .bak 文件，以及以最多四个字母加波浪号结尾的文件（例如 notes.txt~）。编辑器常会把唯一的副本留作备份，所以请先在预览中确认没有想保留的内容。" },
+    deepscan_tmp: { name: "Office 临时文件", description: "用户文件夹中任何位置的 Word（~wr 加四位数字）和 PowerPoint（ppt 加四位数字）工作文件。崩溃之后，它们可能保存着未保存工作的唯一副本。" },
+    deepscan_vim_swap: { name: "Vim 交换文件", description: "用户文件夹中任何位置的 Vim .swp、.swo 和 .swn 文件。Vim 在你编辑时写入这些文件，崩溃之后，未保存的更改就保存在其中。" },
+    deepscan_ds_store: { name: ".DS_Store 文件", description: "macOS 在从 Mac 复制过来的文件夹中留下的文件夹视图文件。Windows 上没有任何程序会读取它们。" },
+    deepscan_thumbs_db: { name: "Thumbs.db 文件", description: "旧版 Windows 在图片文件夹中留下的缩略图缓存。需要时，Explorer 会重新生成。" },
   },
   categories: {
     "Brave": "Brave",
@@ -128,6 +128,6 @@ export default {
     "League of Legends": "League of Legends",
     "Windows Defender": "Windows Defender",
     "WinRAR": "WinRAR",
-    "Deep scan": "Deep scan",
+    "Deep scan": "深度扫描",
   }
 };

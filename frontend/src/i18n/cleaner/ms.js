@@ -82,6 +82,7 @@ export default {
     league_of_legends_logs: { name: "Log permainan", description: "Log klien dan permainan bagi setiap perlawanan. Disimpan tanpa had, hampir tidak pernah dibaca." },
     recycle_bin: { name: "Tong Kitar Semula", description: "Fail yang sudah anda padamkan tetapi masih menggunakan ruang sehingga tong dikosongkan. Mengosongkannya memang tujuannya, jadi tiada apa di sini akan kembali dengan sendirinya." },
     user_temp: { name: "Folder Temp", description: "Folder sementara tempat Windows, pemasang dan separuh daripada program pada mesin menulis, dan jarang mengemas selepasnya." },
+    system_empty_space: { name: "Ruang cakera kosong", description: "Menimpa ruang kosong pada pemacu dengan sifar, kemudian memadam fail pengisi, supaya fail yang anda padam sebelum ini tidak boleh dipulihkan. Ia boleh mengambil masa berjam-jam. Ia tidak membebaskan ruang, tidak berguna pada SSD dengan TRIM dan menambah kehausan tulis." },
     defender_history: { name: "Sejarah imbasan", description: "Keputusan tersimpan bagi imbasan Defender yang lalu dan log yang menyenaraikannya. Perlindungan tidak terjejas; Defender memulakan rekod baharu dengan imbasan seterusnya." },
     defender_temp: { name: "Fail sementara", description: "Pemasang kemas kini dan log yang ditinggalkan Defender dalam folder temp dan kemas kini Windows selepas digunakan." },
     defender_quarantine: { name: "Fail dalam kuarantin", description: "Fail yang ditangkap Defender dan dikunci. Kuarantin ialah cara Defender memulangkan fail yang ditandakan secara silap — setelah ini dikosongkan, positif palsu tidak akan dapat dipulihkan." },
@@ -89,12 +90,11 @@ export default {
     defender_logs: { name: "Log", description: "Log perkhidmatan dan diagnostik Defender sendiri. Hanya berguna semasa menyelesaikan masalah Defender itu sendiri; ia menulis yang baharu semasa berjalan." },
     winrar_history: { name: "Sejarah", description: "Nama arkib, folder ekstrak dan istilah carian yang diingati WinRAR. Arkib itu sendiri tidak disentuh." },
     winrar_temp: { name: "Fail sementara", description: "Fail temp yang ditinggalkan WinRAR dalam folder programnya sendiri. Arkib dan tetapan tidak disentuh." },
-    deepscan_backup: { name: "Backup files", description: "Files ending in .bak, or in up to four letters and a tilde (such as notes.txt~), anywhere in your user folder. Editors often leave the only copy of something behind as a backup, so check the preview for anything you want to keep." },
-    deepscan_tmp: { name: "Office temporary files", description: "Word (~wr and four digits) and PowerPoint (ppt and four digits) working files, anywhere in your user folder. After a crash, one can hold the only copy of unsaved work." },
-    deepscan_vim_swap: { name: "Vim swap files", description: "Vim's .swp, .swo and .swn files, anywhere in your user folder. Vim writes them while you edit, and after a crash they hold the unsaved changes." },
-    deepscan_ds_store: { name: ".DS_Store files", description: "Folder-view files that macOS leaves in folders copied from a Mac. Nothing reads them on Windows." },
-    deepscan_thumbs_db: { name: "Thumbs.db files", description: "Thumbnail caches that older versions of Windows left in picture folders. Explorer builds new ones if it needs them." },
-    system_empty_space: { name: "Free disk space", description: "Overwrites the free space on the drive with zeros, then deletes the filler, so files you deleted earlier can't be recovered. It can take hours. It frees no space, does nothing useful on an SSD with TRIM, and adds write wear." },
+    deepscan_backup: { name: "Fail sandaran", description: "Fail yang berakhir dengan .bak, atau dengan sehingga empat huruf dan tilde (seperti notes.txt~), di mana-mana dalam folder pengguna anda. Editor sering meninggalkan satu-satunya salinan sesuatu sebagai sandaran, jadi semak pratonton untuk apa-apa yang anda mahu simpan." },
+    deepscan_tmp: { name: "Fail sementara Office", description: "Fail kerja Word (~wr dan empat digit) dan PowerPoint (ppt dan empat digit), di mana-mana dalam folder pengguna anda. Selepas ranap, salah satunya mungkin menyimpan satu-satunya salinan kerja yang belum disimpan." },
+    deepscan_vim_swap: { name: "Fail swap Vim", description: "Fail .swp, .swo dan .swn Vim, di mana-mana dalam folder pengguna anda. Vim menulisnya semasa anda menyunting, dan selepas ranap ia menyimpan perubahan yang belum disimpan." },
+    deepscan_ds_store: { name: "Fail .DS_Store", description: "Fail paparan folder yang ditinggalkan macOS dalam folder yang disalin dari Mac. Tiada apa membacanya pada Windows." },
+    deepscan_thumbs_db: { name: "Fail Thumbs.db", description: "Cache gambar kecil yang ditinggalkan versi Windows yang lebih lama dalam folder gambar. Explorer membina yang baharu jika perlu." },
   },
   categories: {
     "Brave": "Brave",
@@ -128,6 +128,6 @@ export default {
     "League of Legends": "League of Legends",
     "Windows Defender": "Windows Defender",
     "WinRAR": "WinRAR",
-    "Deep scan": "Deep scan",
+    "Deep scan": "Imbasan Mendalam",
   }
 };

@@ -82,6 +82,7 @@ export default {
     league_of_legends_logs: { name: "ゲームログ", description: "試合ごとのクライアントログとゲームログです。無期限に保持されますが、ほとんど読まれません。" },
     recycle_bin: { name: "ごみ箱", description: "すでに削除したファイルで、ごみ箱を空にするまで容量を使い続けています。空にすること自体が目的なので、ここにあるものは自動では元に戻りません。" },
     user_temp: { name: "Temp フォルダー", description: "Windows やインストーラー、そしてマシン上の多くのプログラムが書き込み、ほとんど後片付けをしない作業用フォルダーです。" },
+    system_empty_space: { name: "空きディスク領域", description: "ドライブの空き領域をゼロで上書きしてから、書き込みに使った一時ファイルを削除し、以前に削除したファイルを復元できなくします。数時間かかることがあります。空き容量は増えず、TRIM が有効な SSD では意味がなく、書き込みによる摩耗を増やします。" },
     defender_history: { name: "スキャン履歴", description: "過去の Defender スキャンの保存済みの結果と、それを一覧にしたログです。保護機能には影響せず、Defender は次回のスキャンで新しい記録を作成します。" },
     defender_temp: { name: "一時ファイル", description: "Defender が使い終えたあと、Windows の一時フォルダーと更新フォルダーに残す更新インストーラーとログです。" },
     defender_quarantine: { name: "隔離されたファイル", description: "Defender が検出して隔離したファイルです。隔離は、Defender が誤って検出したファイルを元に戻すための仕組みです — これを消去すると、誤検出を復元できなくなります。" },
@@ -89,12 +90,11 @@ export default {
     defender_logs: { name: "ログ", description: "Defender 自身のサービスログと診断ログです。Defender 自体のトラブルシューティング時にのみ役立ちます。動作中に新しいログが書き込まれます。" },
     winrar_history: { name: "履歴", description: "WinRAR が記憶しているアーカイブ名、展開先フォルダー、検索語です。アーカイブ自体には影響しません。" },
     winrar_temp: { name: "一時ファイル", description: "WinRAR が自身のプログラムフォルダーに残した一時ファイルです。アーカイブと設定には影響しません。" },
-    deepscan_backup: { name: "Backup files", description: "Files ending in .bak, or in up to four letters and a tilde (such as notes.txt~), anywhere in your user folder. Editors often leave the only copy of something behind as a backup, so check the preview for anything you want to keep." },
-    deepscan_tmp: { name: "Office temporary files", description: "Word (~wr and four digits) and PowerPoint (ppt and four digits) working files, anywhere in your user folder. After a crash, one can hold the only copy of unsaved work." },
-    deepscan_vim_swap: { name: "Vim swap files", description: "Vim's .swp, .swo and .swn files, anywhere in your user folder. Vim writes them while you edit, and after a crash they hold the unsaved changes." },
-    deepscan_ds_store: { name: ".DS_Store files", description: "Folder-view files that macOS leaves in folders copied from a Mac. Nothing reads them on Windows." },
-    deepscan_thumbs_db: { name: "Thumbs.db files", description: "Thumbnail caches that older versions of Windows left in picture folders. Explorer builds new ones if it needs them." },
-    system_empty_space: { name: "Free disk space", description: "Overwrites the free space on the drive with zeros, then deletes the filler, so files you deleted earlier can't be recovered. It can take hours. It frees no space, does nothing useful on an SSD with TRIM, and adds write wear." },
+    deepscan_backup: { name: "バックアップファイル", description: "ユーザーフォルダー内のどこにある場合でも、.bak で終わるファイルと、最大 4 文字の後にチルダが付くファイル（notes.txt~ など）が対象です。エディターは唯一のコピーをバックアップとして残すことがよくあるため、残したいものがないかプレビューで確認してください。" },
+    deepscan_tmp: { name: "Office の一時ファイル", description: "ユーザーフォルダー内のどこにある場合でも、Word（~wr と 4 桁の数字）と PowerPoint（ppt と 4 桁の数字）の作業ファイルが対象です。クラッシュ後は、未保存の作業の唯一のコピーが入っていることがあります。" },
+    deepscan_vim_swap: { name: "Vim のスワップファイル", description: "ユーザーフォルダー内のどこにある場合でも、Vim の .swp、.swo、.swn ファイルが対象です。Vim は編集中にこれらを書き込み、クラッシュ後は未保存の変更がここに残ります。" },
+    deepscan_ds_store: { name: ".DS_Store ファイル", description: "Mac からコピーしたフォルダーに macOS が残す、フォルダー表示用のファイルです。Windows では何も読み取りません。" },
+    deepscan_thumbs_db: { name: "Thumbs.db ファイル", description: "古いバージョンの Windows がピクチャフォルダーに残したサムネイルキャッシュです。必要になると、Explorer が新しく作成します。" },
   },
   categories: {
     "Brave": "Brave",
@@ -128,6 +128,6 @@ export default {
     "League of Legends": "League of Legends",
     "Windows Defender": "Windows Defender",
     "WinRAR": "WinRAR",
-    "Deep scan": "Deep scan",
+    "Deep scan": "ディープスキャン",
   }
 };

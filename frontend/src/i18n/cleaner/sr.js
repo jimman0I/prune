@@ -82,6 +82,7 @@ export default {
     league_of_legends_logs: { name: "Дневници игре", description: "Дневници клијента и игре по мечу. Чувају се заувек, скоро никад се не читају." },
     recycle_bin: { name: "Корпа за отпатке", description: "Датотеке које сте већ обрисали, а које и даље заузимају простор док се корпа не испразни. Пражњење је сврха, зато се одавде ништа не враћа само од себе." },
     user_temp: { name: "Привремена фасцикла", description: "Радна фасцикла у коју пишу Windows, инсталатери и половина програма на рачунару и коју ретко чисте за собом." },
+    system_empty_space: { name: "Слободан простор на диску", description: "Преписује слободан простор на диску нулама, а затим брише датотеку за попуну, па се раније обрисане датотеке не могу повратити. Може трајати сатима. Не ослобађа простор, није од користи на SSD-у са TRIM-ом и повећава хабање услед писања." },
     defender_history: { name: "Историја скенирања", description: "Сачувани резултати претходних скенирања програма Defender и дневник који их наводи. Заштита остаје нетакнута; Defender започиње нови запис при следећем скенирању." },
     defender_temp: { name: "Привремене датотеке", description: "Инсталатери ажурирања и дневници које Defender оставља у привременим фасциклама и фасциклама за ажурирање система Windows након употребе." },
     defender_quarantine: { name: "Датотеке у карантину", description: "Датотеке које је Defender ухватио и закључао. Карантин је начин на који Defender враћа датотеку коју је погрешно означио — када се ово очисти, лажно позитиван налаз се никада не може вратити." },
@@ -89,12 +90,11 @@ export default {
     defender_logs: { name: "Дневници", description: "Сопствени дневници услуге и дијагностике програма Defender. Корисни само при отклањању проблема са самим Defender-ом; током рада записује нове." },
     winrar_history: { name: "Историја", description: "Имена архива, фасцикле за издвајање и појмови за претрагу које WinRAR памти. Саме архиве остају нетакнуте." },
     winrar_temp: { name: "Привремене датотеке", description: "Привремене датотеке које је WinRAR оставио у сопственој фасцикли програма. Архиве и подешавања остају нетакнути." },
-    deepscan_backup: { name: "Backup files", description: "Files ending in .bak, or in up to four letters and a tilde (such as notes.txt~), anywhere in your user folder. Editors often leave the only copy of something behind as a backup, so check the preview for anything you want to keep." },
-    deepscan_tmp: { name: "Office temporary files", description: "Word (~wr and four digits) and PowerPoint (ppt and four digits) working files, anywhere in your user folder. After a crash, one can hold the only copy of unsaved work." },
-    deepscan_vim_swap: { name: "Vim swap files", description: "Vim's .swp, .swo and .swn files, anywhere in your user folder. Vim writes them while you edit, and after a crash they hold the unsaved changes." },
-    deepscan_ds_store: { name: ".DS_Store files", description: "Folder-view files that macOS leaves in folders copied from a Mac. Nothing reads them on Windows." },
-    deepscan_thumbs_db: { name: "Thumbs.db files", description: "Thumbnail caches that older versions of Windows left in picture folders. Explorer builds new ones if it needs them." },
-    system_empty_space: { name: "Free disk space", description: "Overwrites the free space on the drive with zeros, then deletes the filler, so files you deleted earlier can't be recovered. It can take hours. It frees no space, does nothing useful on an SSD with TRIM, and adds write wear." },
+    deepscan_backup: { name: "Резервне датотеке", description: "Датотеке које се завршавају на .bak или на до четири слова и тилду (на пример notes.txt~), било где у вашем корисничком фолдеру. Уређивачи понекад као резервну копију оставе једину копију нечега, зато у прегледу проверите има ли нечега што желите да задржите." },
+    deepscan_tmp: { name: "Привремене Office датотеке", description: "Word (~wr и четири цифре) и PowerPoint (ppt и четири цифре) радне датотеке, било где у вашем корисничком фолдеру. После пада једна може садржати једину копију несачуваног рада." },
+    deepscan_vim_swap: { name: "Vim swap датотеке", description: "Vim-ове .swp, .swo и .swn датотеке, било где у вашем корисничком фолдеру. Vim их пише док уређујете, а после пада оне чувају несачуване измене." },
+    deepscan_ds_store: { name: ".DS_Store датотеке", description: "Датотеке са приказом фолдера које macOS оставља у фолдерима копираним са Mac-а. На Windows-у их ништа не чита." },
+    deepscan_thumbs_db: { name: "Thumbs.db датотеке", description: "Кеш сличица које су старије верзије Windows-а остављале у фолдерима са сликама. Explorer прави нове када му затребају." },
   },
   categories: {
     "Brave": "Brave",
@@ -128,6 +128,6 @@ export default {
     "League of Legends": "League of Legends",
     "Windows Defender": "Windows Defender",
     "WinRAR": "WinRAR",
-    "Deep scan": "Deep scan",
+    "Deep scan": "Дубоко скенирање",
   }
 };

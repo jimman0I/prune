@@ -82,6 +82,7 @@ export default {
     league_of_legends_logs: { name: "บันทึกเกม", description: "บันทึกไคลเอนต์และเกมของแต่ละแมตช์ เก็บไว้ไม่มีกำหนด แทบไม่เคยถูกอ่าน" },
     recycle_bin: { name: "ถังรีไซเคิล", description: "ไฟล์ที่ลบไปแล้วแต่ยังกินพื้นที่อยู่จนกว่าจะล้างถัง การล้างถังคือจุดประสงค์ จึงไม่มีสิ่งใดที่นี่กลับมาได้เอง" },
     user_temp: { name: "โฟลเดอร์ Temp", description: "โฟลเดอร์พักงานที่ Windows ตัวติดตั้ง และโปรแกรมอีกครึ่งค่อนเครื่องเขียนลงไป และแทบไม่เก็บกวาดเอง" },
+    system_empty_space: { name: "พื้นที่ว่างของดิสก์", description: "เขียนเลขศูนย์ทับพื้นที่ว่างบนไดรฟ์ แล้วลบไฟล์ที่ใช้เติมพื้นที่ทิ้ง ทำให้กู้คืนไฟล์ที่ลบไปก่อนหน้านี้ไม่ได้ อาจใช้เวลาหลายชั่วโมง ไม่ได้เพิ่มพื้นที่ว่าง ไม่มีประโยชน์บน SSD ที่มี TRIM และเพิ่มการสึกหรอจากการเขียน" },
     defender_history: { name: "ประวัติการสแกน", description: "ผลการสแกนของ Defender ในอดีตที่จัดเก็บไว้ และบันทึกที่แสดงรายการเหล่านั้น การป้องกันไม่ได้รับผลกระทบ Defender จะเริ่มบันทึกใหม่ในการสแกนครั้งถัดไป" },
     defender_temp: { name: "ไฟล์ชั่วคราว", description: "ตัวติดตั้งอัปเดตและบันทึกที่ Defender ทิ้งไว้ในโฟลเดอร์ Temp และโฟลเดอร์อัปเดตของ Windows หลังใช้งานเสร็จ" },
     defender_quarantine: { name: "ไฟล์ที่ถูกกักกัน", description: "ไฟล์ที่ Defender จับได้และล็อกไว้ การกักกันคือวิธีที่ Defender คืนไฟล์ที่ตรวจพบผิดพลาด — เมื่อล้างส่วนนี้แล้ว จะกู้คืนไฟล์ที่ตรวจพบผิดพลาดไม่ได้อีกเลย" },
@@ -89,12 +90,11 @@ export default {
     defender_logs: { name: "บันทึก", description: "บันทึกบริการและการวินิจฉัยของ Defender เอง มีประโยชน์เฉพาะเมื่อแก้ปัญหา Defender เอง มันจะเขียนบันทึกใหม่ขณะทำงาน" },
     winrar_history: { name: "ประวัติ", description: "ชื่อไฟล์เก็บถาวร โฟลเดอร์ปลายทางการแตกไฟล์ และคำค้นหาที่ WinRAR จำไว้ ไฟล์เก็บถาวรเองไม่ถูกแตะต้อง" },
     winrar_temp: { name: "ไฟล์ชั่วคราว", description: "ไฟล์ชั่วคราวที่ WinRAR ทิ้งไว้ในโฟลเดอร์โปรแกรมของตัวเอง ไฟล์เก็บถาวรและการตั้งค่าไม่ถูกแตะต้อง" },
-    deepscan_backup: { name: "Backup files", description: "Files ending in .bak, or in up to four letters and a tilde (such as notes.txt~), anywhere in your user folder. Editors often leave the only copy of something behind as a backup, so check the preview for anything you want to keep." },
-    deepscan_tmp: { name: "Office temporary files", description: "Word (~wr and four digits) and PowerPoint (ppt and four digits) working files, anywhere in your user folder. After a crash, one can hold the only copy of unsaved work." },
-    deepscan_vim_swap: { name: "Vim swap files", description: "Vim's .swp, .swo and .swn files, anywhere in your user folder. Vim writes them while you edit, and after a crash they hold the unsaved changes." },
-    deepscan_ds_store: { name: ".DS_Store files", description: "Folder-view files that macOS leaves in folders copied from a Mac. Nothing reads them on Windows." },
-    deepscan_thumbs_db: { name: "Thumbs.db files", description: "Thumbnail caches that older versions of Windows left in picture folders. Explorer builds new ones if it needs them." },
-    system_empty_space: { name: "Free disk space", description: "Overwrites the free space on the drive with zeros, then deletes the filler, so files you deleted earlier can't be recovered. It can take hours. It frees no space, does nothing useful on an SSD with TRIM, and adds write wear." },
+    deepscan_backup: { name: "ไฟล์สำรอง", description: "ไฟล์ที่ลงท้ายด้วย .bak หรือด้วยตัวอักษรไม่เกินสี่ตัวตามด้วยเครื่องหมายทิลดา (เช่น notes.txt~) ทุกที่ในโฟลเดอร์ผู้ใช้ของคุณ โปรแกรมแก้ไขมักทิ้งสำเนาเดียวของบางอย่างไว้เป็นไฟล์สำรอง จึงควรดูตัวอย่างก่อนว่ามีสิ่งที่ต้องการเก็บไว้หรือไม่" },
+    deepscan_tmp: { name: "ไฟล์ชั่วคราวของ Office", description: "ไฟล์ทำงานของ Word (~wr ตามด้วยตัวเลขสี่หลัก) และ PowerPoint (ppt ตามด้วยตัวเลขสี่หลัก) ทุกที่ในโฟลเดอร์ผู้ใช้ของคุณ หลังโปรแกรมขัดข้อง ไฟล์เหล่านี้อาจเป็นสำเนาเดียวของงานที่ยังไม่ได้บันทึก" },
+    deepscan_vim_swap: { name: "ไฟล์ swap ของ Vim", description: "ไฟล์ .swp, .swo และ .swn ของ Vim ทุกที่ในโฟลเดอร์ผู้ใช้ของคุณ Vim เขียนไฟล์เหล่านี้ระหว่างที่คุณแก้ไข และหลังโปรแกรมขัดข้องไฟล์เหล่านี้จะเก็บการเปลี่ยนแปลงที่ยังไม่ได้บันทึกไว้" },
+    deepscan_ds_store: { name: "ไฟล์ .DS_Store", description: "ไฟล์การแสดงผลโฟลเดอร์ที่ macOS ทิ้งไว้ในโฟลเดอร์ที่คัดลอกมาจาก Mac ไม่มีสิ่งใดอ่านไฟล์เหล่านี้บน Windows" },
+    deepscan_thumbs_db: { name: "ไฟล์ Thumbs.db", description: "แคชภาพขนาดย่อที่ Windows รุ่นเก่าทิ้งไว้ในโฟลเดอร์รูปภาพ Explorer จะสร้างไฟล์ใหม่เองหากจำเป็น" },
   },
   categories: {
     "Brave": "Brave",
@@ -128,6 +128,6 @@ export default {
     "League of Legends": "League of Legends",
     "Windows Defender": "Windows Defender",
     "WinRAR": "WinRAR",
-    "Deep scan": "Deep scan",
+    "Deep scan": "สแกนเชิงลึก",
   }
 };

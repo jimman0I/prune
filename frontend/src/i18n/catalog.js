@@ -952,17 +952,17 @@ export const CATALOG = {
         description: "Trek die skyf se vrye spasie as nog 'n blok wanneer jy 'n hele skyf skandeer, sodat elke vouer lees as 'n deel van die skyf eerder as van die spasie wat gebruik word."
       },
       deepCleanRemoval: {
-        title: 'When Deep Clean removes files',
+        title: "Wanneer Diep Skoonmaak lêers verwyder",
         quarantine: {
-          label: 'Move to Quarantine (you can put it back)',
-          description: "Nothing is deleted. Files go into Prune's Quarantine and the drive gets the space back when you empty it."
+          label: "Skuif na Karantyn (jy kan dit terugsit)",
+          description: "Niks word verwyder nie. Lêers gaan na Prune se Karantyn en die aandrywer kry die spasie terug wanneer jy dit leegmaak."
         },
         delete: {
-          label: "Delete now (frees the space, can't be undone — like BleachBit)",
-          description: 'Files are removed as soon as you confirm, so the space is free straight away. Rules that lose data still ask first.'
+          label: "Verwyder nou (maak die spasie vry, kan nie ongedaan gemaak word nie — soos BleachBit)",
+          description: "Lêers word verwyder sodra jy bevestig, so die spasie is dadelik vry. Reëls wat data verloor vra steeds eers."
         },
-        deleteWarning: "With Delete now, Clean can't be undone. Scheduled cleans still move files to Quarantine.",
-        autoQuarantineNote: 'Not used while Deep Clean deletes files immediately.'
+        deleteWarning: "Met Verwyder nou kan Skoonmaak nie ongedaan gemaak word nie. Geskeduleerde skoonmaakwerk skuif lêers steeds na Karantyn.",
+        autoQuarantineNote: "Word nie gebruik terwyl Diep Skoonmaak lêers onmiddellik verwyder nie."
       },
       autoQuarantine: {
         title: 'Outo-Karantyn',
@@ -1480,13 +1480,13 @@ export const CATALOG = {
     deepClean: {
       title: 'Diep Skoonmaak',
       subtitle: 'Elke kas, log, dump en oorblyfsel wat Prune weet om te vind, gemeet op hierdie masjien in plaas van beraam. Niks word summier verwyder nie — alles wat Skoonmaak vat gaan eers na Karantyn, waar jy dit kan terugsit.',
-      subtitleDelete: "Every cache, log, dump and leftover Prune knows how to find, measured on this machine rather than estimated. Clean deletes what you tick immediately and frees the space, the way BleachBit does. It can't be undone.",
+      subtitleDelete: "Elke kas, log, dump en oorblyfsel wat Prune weet om te vind, gemeet op hierdie masjien in plaas van beraam. Skoonmaak verwyder dít wat jy aangemerk het onmiddellik en maak die spasie vry, soos BleachBit. Dit kan nie ongedaan gemaak word nie.",
       scanLog: {
         header: 'Skanderingsuitset',
         scanningAnnounce: (total) => `Skandeer ${total} plekke.`,
         finishedAnnounce: (scanned, total) => `Skandering voltooi. ${scanned} van ${total} plekke gemeet.`,
-        searching: (items) => `Searching your profile… ${items} items checked`,
-        wiping: (written, total) => `Writing zeros… ${written} of ${total}`,
+        searching: (items) => `Soek deur jou profiel… ${items} items nagegaan`,
+        wiping: (written, total) => `Skryf nulle… ${written} van ${total}`,
         starting: 'Begin tans…',
         idle: "Druk Voorskou om te meet wat skoongemaak kan word."
       },
@@ -1495,11 +1495,11 @@ export const CATALOG = {
       cleanErrorPrefix: (error) => `Kon nie skoonmaak nie: ${error}`,
       cleanupComplete: 'Skoonmaak voltooi.',
       resultFreed: (formatted) => `${formatted} vrygemaak`,
-      resultMoved: (formatted) => `Moved ${formatted} to Quarantine. The space comes back when you empty it.`,
-      resultRecycled: (formatted) => `Moved ${formatted} to the Recycle Bin. The space comes back when you empty it.`,
-      openQuarantine: 'Open Quarantine',
-      resultWiped: (size) => `Wrote ${size} of zeros over the free space, then deleted it. No space was freed.`,
-      resultWipeStopped: (size) => `Stopped after writing ${size} of zeros over the free space. The filler was deleted.`,
+      resultMoved: (formatted) => `${formatted} na Karantyn geskuif. Die spasie kom terug wanneer jy dit leegmaak.`,
+      resultRecycled: (formatted) => `${formatted} na die Asblik geskuif. Die spasie kom terug wanneer jy dit leegmaak.`,
+      openQuarantine: "Maak Karantyn oop",
+      resultWiped: (size) => `${size} nulle oor die vrye spasie geskryf en dit daarna verwyder. Geen spasie is vrygemaak nie.`,
+      resultWipeStopped: (size) => `Gestop nadat ${size} nulle oor die vrye spasie geskryf is. Die vullêer is verwyder.`,
       resultLockedSuffix: (count) => ` — ${count} geslote lêer${count === 1 ? '' : 's'} oorgeslaan`,
       before: {
         body: 'Prune meet elke kategorie regtig op skyf eerder as om te beraam, wat omtrent \'n halwe minuut neem.',
@@ -1512,9 +1512,9 @@ export const CATALOG = {
         notMeasuredYet: 'nog nie gemeet nie',
         previewFirst: "Voorskou eers om te sien wat vrygemaak sal word.",
         unmeasuredSuffix: (count) => ` · ${count} nie gemeet nie`,
-        modeQuarantine: 'Moves to Quarantine.',
-        modeRecycle: 'Moves to the Recycle Bin.',
-        modeDelete: 'Deletes immediately.',
+        modeQuarantine: "Skuif na Karantyn.",
+        modeRecycle: "Skuif na die Asblik.",
+        modeDelete: "Verwyder onmiddellik.",
         selectEverything: 'Kies alles',
         clear: 'Maak skoon',
         selectedCount: (count) => `${count} gekies`
@@ -1523,35 +1523,35 @@ export const CATALOG = {
         prompt: (count, sizeKnown, formatted) => `Skuif ${count} item${count === 1 ? '' : 's'} (${sizeKnown ? formatted : 'grootte nie gemeet nie'}) na Karantyn?`,
         cancel: 'Kanselleer',
         confirmButton: "Skuif na Karantyn",
-        promptDelete: (count, sizeKnown, formatted) => `Delete ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'})? This can't be undone.`,
-        deleteButton: 'Delete',
-        promptRecycle: (count, sizeKnown, formatted) => `Move ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'}) to the Recycle Bin?`,
-        recycleButton: 'Move to Recycle Bin',
-        wipeNote: 'Includes wiping free disk space, which can take hours.',
+        promptDelete: (count, sizeKnown, formatted) => `Verwyder ${count} item${count === 1 ? '' : 's'} (${sizeKnown ? formatted : 'grootte nie gemeet nie'})? Dit kan nie ongedaan gemaak word nie.`,
+        deleteButton: "Verwyder",
+        promptRecycle: (count, sizeKnown, formatted) => `Skuif ${count} item${count === 1 ? '' : 's'} (${sizeKnown ? formatted : 'grootte nie gemeet nie'}) na die Asblik?`,
+        recycleButton: "Skuif na die Asblik",
+        wipeNote: "Sluit die oorskryf van vrye skyfspasie in, wat ure kan neem.",
         cleaning: 'Maak skoon…'
       },
       wipe: {
-        title: 'Wipe free disk space',
-        body: "This overwrites the free space on the drive with zeros, then deletes the filler, so files you deleted earlier can't be recovered. It frees no space.",
-        ssdWarning: 'On an SSD with TRIM this does nothing useful and adds write wear. Use it on a hard disk, or when you know you need it.',
-        driveLine: (drive) => `Drive: ${drive}`,
-        writeLine: (size) => `About ${size} will be written.`,
-        timeLine: (duration, speed) => `Roughly ${duration}, from a one-second write test at ${speed}. The drive slows as it fills, so it can take longer.`,
+        title: "Oorskryf vrye skyfspasie",
+        body: "Dit oorskryf die vrye spasie op die aandrywer met nulle en verwyder dan die vullêer, sodat lêers wat jy vroeër verwyder het nie herstel kan word nie. Dit maak geen spasie vry nie.",
+        ssdWarning: "Op 'n SSD met TRIM doen dit niks nuttigs nie en verhoog dit skryfslytasie. Gebruik dit op 'n hardeskyf, of wanneer jy weet jy het dit nodig.",
+        driveLine: (drive) => `Aandrywer: ${drive}`,
+        writeLine: (size) => `Ongeveer ${size} sal geskryf word.`,
+        timeLine: (duration, speed) => `Ongeveer ${duration}, gebaseer op 'n een-sekonde-skryftoets teen ${speed}. Die aandrywer word stadiger namate dit vol raak, so dit kan langer neem.`,
         duration: (hours, minutes) => (hours > 0 ? `${hours} h ${minutes} min` : `${minutes} min`),
-        reserveLine: (size) => `${size} always stays free so Windows keeps working.`,
-        stopNote: 'Stop ends it at once and deletes the filler.',
-        measuring: 'Measuring the drive…',
-        estimateFailed: (error) => `Couldn't measure the drive: ${error}`,
-        cancel: 'Cancel',
-        confirm: 'Add to this clean'
+        reserveLine: (size) => `${size} bly altyd vry sodat Windows aanhou werk.`,
+        stopNote: "Stop beëindig dit dadelik en verwyder die vullêer.",
+        measuring: "Meet die aandrywer…",
+        estimateFailed: (error) => `Kon nie die aandrywer meet nie: ${error}`,
+        cancel: "Kanselleer",
+        confirm: "Voeg by hierdie skoonmaak"
       },
       stop: 'Stop',
       rescan: 'Skandeer weer',
       clean: 'Maak skoon',
       tree: {
         selectCategoryAriaLabel: (category) => `Kies alles onder ${category}`,
-        atLeast: (size) => `at least ${size}`,
-        longRunning: 'Takes a long time',
+        atLeast: (size) => `ten minste ${size}`,
+        longRunning: "Neem lank",
         losesData: 'Verloor data',
         needsAdmin: 'benodig admin',
         notInstalled: 'nie geïnstalleer nie',
@@ -1568,7 +1568,7 @@ export const CATALOG = {
       },
       log: {
         scan: {
-          partial: (size) => `${size}, partial`,
+          partial: (size) => `${size}, gedeeltelik`,
           nothingToMeasure: "niks om te meet nie",
           needsAdmin: "benodig admin",
           notInstalled: "nie geïnstalleer nie",
@@ -1576,10 +1576,10 @@ export const CATALOG = {
         },
         execute: {
           delete: (name) => `Verwyder ${name}`,
-          wipe: (name) => `Wipe ${name}`,
-          wiped: (size) => `${size} written`,
-          wipeStopped: (size) => `stopped after ${size}`,
-          quarantine: (name) => `Quarantine ${name}`,
+          wipe: (name) => `Oorskryf ${name}`,
+          wiped: (size) => `${size} geskryf`,
+          wipeStopped: (size) => `gestop na ${size}`,
+          quarantine: (name) => `Skuif na Karantyn: ${name}`,
           recycle: (name) => `Stuur ${name} na die Asblik`,
           clear: (name) => `Maak ${name} skoon`,
           compact: (name) => `Kompakteer ${name}`,
@@ -1830,17 +1830,17 @@ export const CATALOG = {
         description: 'يرسم المساحة الحرة للقرص ككتلة إضافية عند فحص قرص كامل، بحيث يُقرأ كل مجلد كحصة من القرص بدلاً من المساحة المستخدمة.'
       },
       deepCleanRemoval: {
-        title: 'When Deep Clean removes files',
+        title: "عندما يزيل التنظيف العميق الملفات",
         quarantine: {
-          label: 'Move to Quarantine (you can put it back)',
-          description: "Nothing is deleted. Files go into Prune's Quarantine and the drive gets the space back when you empty it."
+          label: "النقل إلى الحجر الصحي (يمكنك إعادتها)",
+          description: "لا يُحذف شيء. تنتقل الملفات إلى الحجر الصحي في Prune، وتعود المساحة إلى القرص عند إفراغه."
         },
         delete: {
-          label: "Delete now (frees the space, can't be undone — like BleachBit)",
-          description: 'Files are removed as soon as you confirm, so the space is free straight away. Rules that lose data still ask first.'
+          label: "الحذف الآن (يحرر المساحة، ولا يمكن التراجع عنه — مثل BleachBit)",
+          description: "تُزال الملفات بمجرد تأكيدك، فتتحرر المساحة فورًا. القواعد التي تفقد بيانات تسأل أولًا كالمعتاد."
         },
-        deleteWarning: "With Delete now, Clean can't be undone. Scheduled cleans still move files to Quarantine.",
-        autoQuarantineNote: 'Not used while Deep Clean deletes files immediately.'
+        deleteWarning: "مع «الحذف الآن» لا يمكن التراجع عن التنظيف. أما عمليات التنظيف المجدولة فما زالت تنقل الملفات إلى الحجر الصحي.",
+        autoQuarantineNote: "لا يُستخدم أثناء حذف التنظيف العميق للملفات فورًا."
       },
       autoQuarantine: {
         title: 'الحجر الصحي التلقائي',
@@ -2358,13 +2358,13 @@ export const CATALOG = {
     deepClean: {
       title: "تنظيف عميق",
       subtitle: "كل ذاكرة تخزين مؤقت وسجل وملف تفريغ وكل ما خلّفته البرامج يعرف Prune كيف يجدها، مقاسة على هذا الجهاز بدلاً من تقديرها. لا يُحذف شيء نهائيًا — كل ما يأخذه التنظيف ينتقل أولاً إلى الحجر الصحي، حيث يمكنك استعادته.",
-      subtitleDelete: "Every cache, log, dump and leftover Prune knows how to find, measured on this machine rather than estimated. Clean deletes what you tick immediately and frees the space, the way BleachBit does. It can't be undone.",
+      subtitleDelete: "كل ذاكرة تخزين مؤقت وسجل وملف تفريغ وكل ما خلّفته البرامج يعرف Prune كيف يجدها، مقاسة على هذا الجهاز بدلاً من تقديرها. يحذف التنظيف ما حددته فورًا ويحرر المساحة، كما يفعل BleachBit. لا يمكن التراجع عن ذلك.",
       scanLog: {
         header: 'مخرجات الفحص',
         scanningAnnounce: (total) => `جارٍ فحص ${total} موقعًا.`,
         finishedAnnounce: (scanned, total) => `انتهى الفحص. تم قياس ${scanned} من ${total} موقعًا.`,
-        searching: (items) => `Searching your profile… ${items} items checked`,
-        wiping: (written, total) => `Writing zeros… ${written} of ${total}`,
+        searching: (items) => `جارٍ البحث في ملفك الشخصي… العناصر التي تم فحصها: ${items}`,
+        wiping: (written, total) => `جارٍ كتابة الأصفار… ${written} من ${total}`,
         starting: 'جارٍ البدء…',
         idle: "اضغط معاينة لقياس ما يمكن تنظيفه."
       },
@@ -2373,11 +2373,11 @@ export const CATALOG = {
       cleanErrorPrefix: (error) => `تعذر التنظيف: ${error}`,
       cleanupComplete: 'اكتمل التنظيف.',
       resultFreed: (formatted) => `تم تحرير ${formatted}`,
-      resultMoved: (formatted) => `Moved ${formatted} to Quarantine. The space comes back when you empty it.`,
-      resultRecycled: (formatted) => `Moved ${formatted} to the Recycle Bin. The space comes back when you empty it.`,
-      openQuarantine: 'Open Quarantine',
-      resultWiped: (size) => `Wrote ${size} of zeros over the free space, then deleted it. No space was freed.`,
-      resultWipeStopped: (size) => `Stopped after writing ${size} of zeros over the free space. The filler was deleted.`,
+      resultMoved: (formatted) => `تم نقل ${formatted} إلى الحجر الصحي. تعود المساحة عند إفراغه.`,
+      resultRecycled: (formatted) => `تم نقل ${formatted} إلى سلة المحذوفات. تعود المساحة عند إفراغها.`,
+      openQuarantine: "فتح الحجر الصحي",
+      resultWiped: (size) => `تمت كتابة ${size} من الأصفار فوق المساحة الفارغة ثم حُذفت. لم تتحرر أي مساحة.`,
+      resultWipeStopped: (size) => `توقفت العملية بعد كتابة ${size} من الأصفار فوق المساحة الفارغة. وقد حُذف ملف التعبئة.`,
       resultLockedSuffix: (count) => ` — تم تخطي ${count} ملف مقفل`,
       before: {
         body: 'يقيس Prune كل فئة على القرص فعليًا بدلاً من التقدير، وهو ما يستغرق حوالي نصف دقيقة.',
@@ -2390,9 +2390,9 @@ export const CATALOG = {
         notMeasuredYet: 'لم يتم قياسها بعد',
         previewFirst: "اضغط معاينة أولاً لترى ما سيتم تحريره.",
         unmeasuredSuffix: (count) => ` · ${count} غير مقاس`,
-        modeQuarantine: 'Moves to Quarantine.',
-        modeRecycle: 'Moves to the Recycle Bin.',
-        modeDelete: 'Deletes immediately.',
+        modeQuarantine: "تُنقل إلى الحجر الصحي.",
+        modeRecycle: "تُنقل إلى سلة المحذوفات.",
+        modeDelete: "تُحذف فورًا.",
         selectEverything: 'تحديد الكل',
         clear: 'مسح',
         selectedCount: (count) => `تم تحديد ${count}`
@@ -2401,35 +2401,35 @@ export const CATALOG = {
         prompt: (count, sizeKnown, formatted) => `نقل ${count} عنصر (${sizeKnown ? formatted : 'الحجم غير مقاس'}) إلى الحجر الصحي؟`,
         cancel: 'إلغاء',
         confirmButton: "نقل إلى الحجر الصحي",
-        promptDelete: (count, sizeKnown, formatted) => `Delete ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'})? This can't be undone.`,
-        deleteButton: 'Delete',
-        promptRecycle: (count, sizeKnown, formatted) => `Move ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'}) to the Recycle Bin?`,
-        recycleButton: 'Move to Recycle Bin',
-        wipeNote: 'Includes wiping free disk space, which can take hours.',
+        promptDelete: (count, sizeKnown, formatted) => `حذف ${count === 1 ? 'عنصر واحد' : count === 2 ? 'عنصرين' : (count % 100 >= 3 && count % 100 <= 10) ? `${count} عناصر` : `${count} عنصرًا`} (${sizeKnown ? formatted : 'الحجم غير مقاس'})؟ لا يمكن التراجع عن ذلك.`,
+        deleteButton: "حذف",
+        promptRecycle: (count, sizeKnown, formatted) => `نقل ${count === 1 ? 'عنصر واحد' : count === 2 ? 'عنصرين' : (count % 100 >= 3 && count % 100 <= 10) ? `${count} عناصر` : `${count} عنصرًا`} (${sizeKnown ? formatted : 'الحجم غير مقاس'}) إلى سلة المحذوفات؟`,
+        recycleButton: "نقل إلى سلة المحذوفات",
+        wipeNote: "يتضمن مسح المساحة الفارغة على القرص، وقد يستغرق ساعات.",
         cleaning: 'جارٍ التنظيف…'
       },
       wipe: {
-        title: 'Wipe free disk space',
-        body: "This overwrites the free space on the drive with zeros, then deletes the filler, so files you deleted earlier can't be recovered. It frees no space.",
-        ssdWarning: 'On an SSD with TRIM this does nothing useful and adds write wear. Use it on a hard disk, or when you know you need it.',
-        driveLine: (drive) => `Drive: ${drive}`,
-        writeLine: (size) => `About ${size} will be written.`,
-        timeLine: (duration, speed) => `Roughly ${duration}, from a one-second write test at ${speed}. The drive slows as it fills, so it can take longer.`,
-        duration: (hours, minutes) => (hours > 0 ? `${hours} h ${minutes} min` : `${minutes} min`),
-        reserveLine: (size) => `${size} always stays free so Windows keeps working.`,
-        stopNote: 'Stop ends it at once and deletes the filler.',
-        measuring: 'Measuring the drive…',
-        estimateFailed: (error) => `Couldn't measure the drive: ${error}`,
-        cancel: 'Cancel',
-        confirm: 'Add to this clean'
+        title: "مسح المساحة الفارغة على القرص",
+        body: "يكتب هذا أصفارًا فوق المساحة الفارغة في القرص ثم يحذف ملف التعبئة، فلا يمكن استرداد الملفات التي حذفتها سابقًا. ولا يحرر أي مساحة.",
+        ssdWarning: "على قرص SSD يدعم TRIM لا يفيد هذا بشيء ويزيد من تآكل الكتابة. استخدمه على قرص صلب، أو عندما تعرف أنك بحاجة إليه.",
+        driveLine: (drive) => `القرص: ${drive}`,
+        writeLine: (size) => `ستُكتب نحو ${size}.`,
+        timeLine: (duration, speed) => `نحو ${duration}، استنادًا إلى اختبار كتابة مدته ثانية واحدة بسرعة ${speed}. يتباطأ القرص كلما امتلأ، فقد يستغرق الأمر وقتًا أطول.`,
+        duration: (hours, minutes) => (hours > 0 ? `${hours} س ${minutes} د` : `${minutes} د`),
+        reserveLine: (size) => `تبقى ${size} فارغة دائمًا ليواصل Windows عمله.`,
+        stopNote: "يُنهي الإيقاف العملية فورًا ويحذف ملف التعبئة.",
+        measuring: "جارٍ قياس القرص…",
+        estimateFailed: (error) => `تعذر قياس القرص: ${error}`,
+        cancel: "إلغاء",
+        confirm: "إضافة إلى هذا التنظيف"
       },
       stop: 'إيقاف',
       rescan: 'إعادة الفحص',
       clean: 'تنظيف',
       tree: {
         selectCategoryAriaLabel: (category) => `تحديد كل ما تحت ${category}`,
-        atLeast: (size) => `at least ${size}`,
-        longRunning: 'Takes a long time',
+        atLeast: (size) => `${size} على الأقل`,
+        longRunning: "يستغرق وقتًا طويلًا",
         losesData: 'يفقد بيانات',
         needsAdmin: 'يتطلب صلاحيات المسؤول',
         notInstalled: 'غير مثبت',
@@ -2446,7 +2446,7 @@ export const CATALOG = {
       },
       log: {
         scan: {
-          partial: (size) => `${size}, partial`,
+          partial: (size) => `${size}، جزئي`,
           nothingToMeasure: "لا شيء للقياس",
           needsAdmin: "يتطلب صلاحيات المسؤول",
           notInstalled: "غير مثبت",
@@ -2454,10 +2454,10 @@ export const CATALOG = {
         },
         execute: {
           delete: (name) => `حذف ${name}`,
-          wipe: (name) => `Wipe ${name}`,
-          wiped: (size) => `${size} written`,
-          wipeStopped: (size) => `stopped after ${size}`,
-          quarantine: (name) => `Quarantine ${name}`,
+          wipe: (name) => `مسح ${name}`,
+          wiped: (size) => `تمت كتابة ${size}`,
+          wipeStopped: (size) => `توقفت بعد ${size}`,
+          quarantine: (name) => `نقل ${name} إلى الحجر الصحي`,
           recycle: (name) => `إرسال ${name} إلى سلة المحذوفات`,
           clear: (name) => `مسح ${name}`,
           compact: (name) => `ضغط ${name}`,
@@ -2708,17 +2708,17 @@ export const CATALOG = {
         description: "Dibuixa l'espai lliure del disc com un bloc més quan escanejes un disc sencer, de manera que cada carpeta es llegeix com una part del disc en lloc de l'espai en ús."
       },
       deepCleanRemoval: {
-        title: 'When Deep Clean removes files',
+        title: "Quan la Neteja profunda elimina fitxers",
         quarantine: {
-          label: 'Move to Quarantine (you can put it back)',
-          description: "Nothing is deleted. Files go into Prune's Quarantine and the drive gets the space back when you empty it."
+          label: "Mou a la Quarantena (ho pots tornar a posar)",
+          description: "No s'elimina res. Els fitxers van a la Quarantena del Prune i la unitat recupera l'espai quan la buides."
         },
         delete: {
-          label: "Delete now (frees the space, can't be undone — like BleachBit)",
-          description: 'Files are removed as soon as you confirm, so the space is free straight away. Rules that lose data still ask first.'
+          label: "Elimina ara (allibera l'espai, no es pot desfer — com BleachBit)",
+          description: "Els fitxers s'eliminen tan bon punt ho confirmes, de manera que l'espai queda lliure a l'instant. Les regles que fan perdre dades continuen preguntant primer."
         },
-        deleteWarning: "With Delete now, Clean can't be undone. Scheduled cleans still move files to Quarantine.",
-        autoQuarantineNote: 'Not used while Deep Clean deletes files immediately.'
+        deleteWarning: "Amb Elimina ara, Neteja no es pot desfer. Les neteges programades continuen movent els fitxers a la Quarantena.",
+        autoQuarantineNote: "No s'utilitza mentre la Neteja profunda elimina els fitxers immediatament."
       },
       autoQuarantine: {
         title: "Quarantena automàtica",
@@ -3236,13 +3236,13 @@ export const CATALOG = {
     deepClean: {
       title: "Neteja profunda",
       subtitle: "Cada memòria cau, registre, bolcat i resta que Prune sap trobar, mesurat en aquesta màquina en lloc d'estimat. Res s'elimina directament — tot el que Neteja treu va primer a la Quarantena, on el pots tornar a posar.",
-      subtitleDelete: "Every cache, log, dump and leftover Prune knows how to find, measured on this machine rather than estimated. Clean deletes what you tick immediately and frees the space, the way BleachBit does. It can't be undone.",
+      subtitleDelete: "Cada memòria cau, registre, bolcat i resta que Prune sap trobar, mesurat en aquesta màquina en lloc d'estimat. Neteja elimina immediatament el que marques i allibera l'espai, com fa BleachBit. No es pot desfer.",
       scanLog: {
         header: 'Sortida de l\'escaneig',
         scanningAnnounce: (total) => `Escanejant ${total} ubicacions.`,
         finishedAnnounce: (scanned, total) => `Escaneig finalitzat. ${scanned} de ${total} ubicacions mesurades.`,
-        searching: (items) => `Searching your profile… ${items} items checked`,
-        wiping: (written, total) => `Writing zeros… ${written} of ${total}`,
+        searching: (items) => `Cercant al teu perfil… ${items} elements comprovats`,
+        wiping: (written, total) => `Escrivint zeros… ${written} de ${total}`,
         starting: 'Iniciant…',
         idle: "Prem Previsualitza per mesurar què es pot netejar."
       },
@@ -3251,11 +3251,11 @@ export const CATALOG = {
       cleanErrorPrefix: (error) => `No s'ha pogut netejar: ${error}`,
       cleanupComplete: 'Neteja completada.',
       resultFreed: (formatted) => `${formatted} alliberats`,
-      resultMoved: (formatted) => `Moved ${formatted} to Quarantine. The space comes back when you empty it.`,
-      resultRecycled: (formatted) => `Moved ${formatted} to the Recycle Bin. The space comes back when you empty it.`,
-      openQuarantine: 'Open Quarantine',
-      resultWiped: (size) => `Wrote ${size} of zeros over the free space, then deleted it. No space was freed.`,
-      resultWipeStopped: (size) => `Stopped after writing ${size} of zeros over the free space. The filler was deleted.`,
+      resultMoved: (formatted) => `S'han mogut ${formatted} a la Quarantena. L'espai es recupera quan la buides.`,
+      resultRecycled: (formatted) => `S'han mogut ${formatted} a la Paperera. L'espai es recupera quan la buides.`,
+      openQuarantine: "Obre la Quarantena",
+      resultWiped: (size) => `S'han escrit ${size} de zeros sobre l'espai lliure i després s'han eliminat. No s'ha alliberat cap espai.`,
+      resultWipeStopped: (size) => `Aturat després d'escriure ${size} de zeros sobre l'espai lliure. El fitxer de farciment s'ha eliminat.`,
       resultLockedSuffix: (count) => ` — ${count} ${count === 1 ? 'fitxer bloquejat omès' : 'fitxers bloquejats omesos'}`,
       before: {
         body: 'El Prune mesura cada categoria al disc de veritat en lloc d\'estimar-la, cosa que triga uns trenta segons.',
@@ -3268,9 +3268,9 @@ export const CATALOG = {
         notMeasuredYet: 'encara no mesurat',
         previewFirst: "Previsualitza primer per veure què s'alliberarà.",
         unmeasuredSuffix: (count) => ` · ${count} sense mesurar`,
-        modeQuarantine: 'Moves to Quarantine.',
-        modeRecycle: 'Moves to the Recycle Bin.',
-        modeDelete: 'Deletes immediately.',
+        modeQuarantine: "Es mou a la Quarantena.",
+        modeRecycle: "Es mou a la Paperera.",
+        modeDelete: "S'elimina immediatament.",
         selectEverything: 'Selecciona-ho tot',
         clear: 'Neteja',
         selectedCount: (count) => `${count} seleccionats`
@@ -3279,35 +3279,35 @@ export const CATALOG = {
         prompt: (count, sizeKnown, formatted) => `Vols moure ${count} element${count === 1 ? '' : 's'} (${sizeKnown ? formatted : 'mida no mesurada'}) a la Quarantena?`,
         cancel: 'Cancel·la',
         confirmButton: "Mou a la Quarantena",
-        promptDelete: (count, sizeKnown, formatted) => `Delete ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'})? This can't be undone.`,
-        deleteButton: 'Delete',
-        promptRecycle: (count, sizeKnown, formatted) => `Move ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'}) to the Recycle Bin?`,
-        recycleButton: 'Move to Recycle Bin',
-        wipeNote: 'Includes wiping free disk space, which can take hours.',
+        promptDelete: (count, sizeKnown, formatted) => `Vols eliminar ${count} element${count === 1 ? '' : 's'} (${sizeKnown ? formatted : 'mida no mesurada'})? Això no es pot desfer.`,
+        deleteButton: "Elimina",
+        promptRecycle: (count, sizeKnown, formatted) => `Vols moure ${count} element${count === 1 ? '' : 's'} (${sizeKnown ? formatted : 'mida no mesurada'}) a la Paperera?`,
+        recycleButton: "Mou a la Paperera",
+        wipeNote: "Inclou sobreescriure l'espai lliure del disc, cosa que pot trigar hores.",
         cleaning: 'Netejant…'
       },
       wipe: {
-        title: 'Wipe free disk space',
-        body: "This overwrites the free space on the drive with zeros, then deletes the filler, so files you deleted earlier can't be recovered. It frees no space.",
-        ssdWarning: 'On an SSD with TRIM this does nothing useful and adds write wear. Use it on a hard disk, or when you know you need it.',
-        driveLine: (drive) => `Drive: ${drive}`,
-        writeLine: (size) => `About ${size} will be written.`,
-        timeLine: (duration, speed) => `Roughly ${duration}, from a one-second write test at ${speed}. The drive slows as it fills, so it can take longer.`,
+        title: "Sobreescriu l'espai lliure del disc",
+        body: "Sobreescriu l'espai lliure de la unitat amb zeros i després elimina el fitxer de farciment, de manera que els fitxers que hagis eliminat abans no es puguin recuperar. No allibera espai.",
+        ssdWarning: "En un SSD amb TRIM no serveix de res i augmenta el desgast per escriptura. Fes-ho servir en un disc dur, o quan sàpigues que ho necessites.",
+        driveLine: (drive) => `Unitat: ${drive}`,
+        writeLine: (size) => `S'escriuran uns ${size}.`,
+        timeLine: (duration, speed) => `Aproximadament ${duration}, segons una prova d'escriptura d'un segon a ${speed}. La unitat va més lenta a mesura que s'omple, així que pot trigar més.`,
         duration: (hours, minutes) => (hours > 0 ? `${hours} h ${minutes} min` : `${minutes} min`),
-        reserveLine: (size) => `${size} always stays free so Windows keeps working.`,
-        stopNote: 'Stop ends it at once and deletes the filler.',
-        measuring: 'Measuring the drive…',
-        estimateFailed: (error) => `Couldn't measure the drive: ${error}`,
-        cancel: 'Cancel',
-        confirm: 'Add to this clean'
+        reserveLine: (size) => `Sempre es deixen lliures ${size} perquè Windows continuï funcionant.`,
+        stopNote: "Atura ho interromp a l'instant i elimina el fitxer de farciment.",
+        measuring: "Mesurant la unitat…",
+        estimateFailed: (error) => `No s'ha pogut mesurar la unitat: ${error}`,
+        cancel: "Cancel·la",
+        confirm: "Afegeix a aquesta neteja"
       },
       stop: 'Atura',
       rescan: 'Torna a escanejar',
       clean: 'Neteja',
       tree: {
         selectCategoryAriaLabel: (category) => `Selecciona-ho tot sota ${category}`,
-        atLeast: (size) => `at least ${size}`,
-        longRunning: 'Takes a long time',
+        atLeast: (size) => `almenys ${size}`,
+        longRunning: "Triga molt",
         losesData: 'Perd dades',
         needsAdmin: 'necessita administrador',
         notInstalled: 'no instal·lat',
@@ -3324,7 +3324,7 @@ export const CATALOG = {
       },
       log: {
         scan: {
-          partial: (size) => `${size}, partial`,
+          partial: (size) => `${size}, parcial`,
           nothingToMeasure: "res per mesurar",
           needsAdmin: "necessita administrador",
           notInstalled: "no instal·lat",
@@ -3332,10 +3332,10 @@ export const CATALOG = {
         },
         execute: {
           delete: (name) => `Elimina ${name}`,
-          wipe: (name) => `Wipe ${name}`,
-          wiped: (size) => `${size} written`,
-          wipeStopped: (size) => `stopped after ${size}`,
-          quarantine: (name) => `Quarantine ${name}`,
+          wipe: (name) => `Sobreescriu ${name}`,
+          wiped: (size) => `escrit: ${size}`,
+          wipeStopped: (size) => `aturat després de ${size}`,
+          quarantine: (name) => `Mou a la Quarantena: ${name}`,
           recycle: (name) => `Envia ${name} a la Paperera`,
           clear: (name) => `Neteja ${name}`,
           compact: (name) => `Compacta ${name}`,
@@ -3586,17 +3586,17 @@ export const CATALOG = {
         description: 'Vykreslí volné místo na disku jako další blok při skenování celého disku, takže se každá složka čte jako podíl na disku, nikoli na využitém místě.'
       },
       deepCleanRemoval: {
-        title: 'When Deep Clean removes files',
+        title: "Co Důkladné čištění dělá se soubory",
         quarantine: {
-          label: 'Move to Quarantine (you can put it back)',
-          description: "Nothing is deleted. Files go into Prune's Quarantine and the drive gets the space back when you empty it."
+          label: "Přesunout do karantény (lze vrátit zpět)",
+          description: "Nic se nesmaže. Soubory jdou do karantény aplikace Prune a místo na disku se uvolní, až karanténu vyprázdníte."
         },
         delete: {
-          label: "Delete now (frees the space, can't be undone — like BleachBit)",
-          description: 'Files are removed as soon as you confirm, so the space is free straight away. Rules that lose data still ask first.'
+          label: "Smazat hned (uvolní místo, nelze vrátit zpět — jako BleachBit)",
+          description: "Soubory se smažou hned po potvrzení, takže se místo uvolní okamžitě. Čističe, které způsobují ztrátu dat, se stále nejdřív zeptají."
         },
-        deleteWarning: "With Delete now, Clean can't be undone. Scheduled cleans still move files to Quarantine.",
-        autoQuarantineNote: 'Not used while Deep Clean deletes files immediately.'
+        deleteWarning: "Při volbě „Smazat hned“ nelze čištění vrátit zpět. Naplánovaná čištění stále přesouvají soubory do karantény.",
+        autoQuarantineNote: "Nepoužije se, dokud Důkladné čištění maže soubory hned."
       },
       autoQuarantine: {
         title: 'Automatická karanténa',
@@ -4114,13 +4114,13 @@ export const CATALOG = {
     deepClean: {
       title: 'Důkladné čištění',
       subtitle: "Každá mezipaměť, protokol, výpis a zbytek, které Prune umí najít, změřené na tomto počítači místo odhadu. Nic se rovnou nesmaže — vše, co Čištění odebere, jde nejprve do Karantény, odkud to lze vrátit zpět.",
-      subtitleDelete: "Every cache, log, dump and leftover Prune knows how to find, measured on this machine rather than estimated. Clean deletes what you tick immediately and frees the space, the way BleachBit does. It can't be undone.",
+      subtitleDelete: "Každá mezipaměť, protokol, výpis a zbytek, které Prune umí najít, změřené na tomto počítači místo odhadu. Čištění hned smaže to, co zaškrtnete, a uvolní místo, stejně jako BleachBit. Nelze to vrátit zpět.",
       scanLog: {
         header: 'Výstup skenování',
         scanningAnnounce: (total) => `Skenování ${total} umístění.`,
         finishedAnnounce: (scanned, total) => `Skenování dokončeno. Změřeno ${scanned} z ${total} umístění.`,
-        searching: (items) => `Searching your profile… ${items} items checked`,
-        wiping: (written, total) => `Writing zeros… ${written} of ${total}`,
+        searching: (items) => `Prohledávání profilu… zkontrolováno položek: ${items}`,
+        wiping: (written, total) => `Zapisování nul… ${written} z ${total}`,
         starting: 'Spouštění…',
         idle: "Klikněte na Náhled a zjistěte, co lze vyčistit."
       },
@@ -4129,11 +4129,11 @@ export const CATALOG = {
       cleanErrorPrefix: (error) => `Čištění se nezdařilo: ${error}`,
       cleanupComplete: 'Čištění dokončeno.',
       resultFreed: (formatted) => `Uvolněno ${formatted}`,
-      resultMoved: (formatted) => `Moved ${formatted} to Quarantine. The space comes back when you empty it.`,
-      resultRecycled: (formatted) => `Moved ${formatted} to the Recycle Bin. The space comes back when you empty it.`,
-      openQuarantine: 'Open Quarantine',
-      resultWiped: (size) => `Wrote ${size} of zeros over the free space, then deleted it. No space was freed.`,
-      resultWipeStopped: (size) => `Stopped after writing ${size} of zeros over the free space. The filler was deleted.`,
+      resultMoved: (formatted) => `Přesunuto do karantény: ${formatted}. Místo se uvolní, až karanténu vyprázdníte.`,
+      resultRecycled: (formatted) => `Přesunuto do koše: ${formatted}. Místo se uvolní, až koš vyprázdníte.`,
+      openQuarantine: "Otevřít karanténu",
+      resultWiped: (size) => `Volné místo bylo přepsáno nulami (${size}) a vyplňovací soubor byl smazán. Žádné místo se neuvolnilo.`,
+      resultWipeStopped: (size) => `Zastaveno po zapsání nul (${size}) do volného místa. Vyplňovací soubor byl smazán.`,
       resultLockedSuffix: (count) => ` — přeskočeno ${count} ${count === 1 ? 'uzamčený soubor' : (count >= 2 && count <= 4) ? 'uzamčené soubory' : 'uzamčených souborů'}`,
       before: {
         body: 'Prune měří každou kategorii na disku skutečně, místo aby ji odhadoval, což trvá zhruba půl minuty.',
@@ -4146,9 +4146,9 @@ export const CATALOG = {
         notMeasuredYet: 'zatím nezměřeno',
         previewFirst: "Nejdřív klikněte na Náhled, abyste viděli, co se uvolní.",
         unmeasuredSuffix: (count) => ` · nezměřeno: ${count}`,
-        modeQuarantine: 'Moves to Quarantine.',
-        modeRecycle: 'Moves to the Recycle Bin.',
-        modeDelete: 'Deletes immediately.',
+        modeQuarantine: "Přesune do karantény.",
+        modeRecycle: "Přesune do koše.",
+        modeDelete: "Maže hned.",
         selectEverything: 'Vybrat vše',
         clear: 'Vymazat',
         selectedCount: (count) => `Vybráno: ${count}`
@@ -4157,35 +4157,35 @@ export const CATALOG = {
         prompt: (count, sizeKnown, formatted) => `Přesunout ${count} ${count === 1 ? 'položku' : (count >= 2 && count <= 4) ? 'položky' : 'položek'} (${sizeKnown ? formatted : 'velikost nezměřena'}) do karantény?`,
         cancel: 'Zrušit',
         confirmButton: "Přesunout do karantény",
-        promptDelete: (count, sizeKnown, formatted) => `Delete ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'})? This can't be undone.`,
-        deleteButton: 'Delete',
-        promptRecycle: (count, sizeKnown, formatted) => `Move ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'}) to the Recycle Bin?`,
-        recycleButton: 'Move to Recycle Bin',
-        wipeNote: 'Includes wiping free disk space, which can take hours.',
+        promptDelete: (count, sizeKnown, formatted) => `Smazat ${count} ${count === 1 ? 'položku' : (count >= 2 && count <= 4) ? 'položky' : 'položek'} (${sizeKnown ? formatted : 'velikost nezměřena'})? Nelze to vrátit zpět.`,
+        deleteButton: "Smazat",
+        promptRecycle: (count, sizeKnown, formatted) => `Přesunout ${count} ${count === 1 ? 'položku' : (count >= 2 && count <= 4) ? 'položky' : 'položek'} (${sizeKnown ? formatted : 'velikost nezměřena'}) do koše?`,
+        recycleButton: "Přesunout do koše",
+        wipeNote: "Zahrnuje přepsání volného místa na disku, které může trvat hodiny.",
         cleaning: 'Čištění…'
       },
       wipe: {
-        title: 'Wipe free disk space',
-        body: "This overwrites the free space on the drive with zeros, then deletes the filler, so files you deleted earlier can't be recovered. It frees no space.",
-        ssdWarning: 'On an SSD with TRIM this does nothing useful and adds write wear. Use it on a hard disk, or when you know you need it.',
-        driveLine: (drive) => `Drive: ${drive}`,
-        writeLine: (size) => `About ${size} will be written.`,
-        timeLine: (duration, speed) => `Roughly ${duration}, from a one-second write test at ${speed}. The drive slows as it fills, so it can take longer.`,
+        title: "Přepsat volné místo na disku",
+        body: "Přepíše volné místo na disku nulami a poté smaže vyplňovací soubor, takže dříve smazané soubory nelze obnovit. Neuvolní žádné místo.",
+        ssdWarning: "Na SSD s TRIM to nemá žádný užitek a zvyšuje opotřebení zápisem. Použijte to na pevném disku nebo když víte, že to potřebujete.",
+        driveLine: (drive) => `Jednotka: ${drive}`,
+        writeLine: (size) => `Zapíše se přibližně ${size}.`,
+        timeLine: (duration, speed) => `Zhruba ${duration} podle jednosekundového testu zápisu (${speed}). S plněním se disk zpomaluje, takže to může trvat déle.`,
         duration: (hours, minutes) => (hours > 0 ? `${hours} h ${minutes} min` : `${minutes} min`),
-        reserveLine: (size) => `${size} always stays free so Windows keeps working.`,
-        stopNote: 'Stop ends it at once and deletes the filler.',
-        measuring: 'Measuring the drive…',
-        estimateFailed: (error) => `Couldn't measure the drive: ${error}`,
-        cancel: 'Cancel',
-        confirm: 'Add to this clean'
+        reserveLine: (size) => `Vždy zůstane volných ${size}, aby Windows fungoval dál.`,
+        stopNote: "Zastavit to ukončí okamžitě a smaže vyplňovací soubor.",
+        measuring: "Měření jednotky…",
+        estimateFailed: (error) => `Jednotku se nepodařilo změřit: ${error}`,
+        cancel: "Zrušit",
+        confirm: "Přidat k tomuto čištění"
       },
       stop: 'Zastavit',
       rescan: 'Znovu skenovat',
       clean: 'Vyčistit',
       tree: {
         selectCategoryAriaLabel: (category) => `Vybrat vše v kategorii ${category}`,
-        atLeast: (size) => `at least ${size}`,
-        longRunning: 'Takes a long time',
+        atLeast: (size) => `nejméně ${size}`,
+        longRunning: "Trvá dlouho",
         losesData: 'Ztráta dat',
         needsAdmin: 'vyžaduje správce',
         notInstalled: 'není nainstalováno',
@@ -4202,7 +4202,7 @@ export const CATALOG = {
       },
       log: {
         scan: {
-          partial: (size) => `${size}, partial`,
+          partial: (size) => `${size}, částečně`,
           nothingToMeasure: "není co měřit",
           needsAdmin: "vyžaduje správce",
           notInstalled: "není nainstalováno",
@@ -4210,10 +4210,10 @@ export const CATALOG = {
         },
         execute: {
           delete: (name) => `Odstranit ${name}`,
-          wipe: (name) => `Wipe ${name}`,
-          wiped: (size) => `${size} written`,
-          wipeStopped: (size) => `stopped after ${size}`,
-          quarantine: (name) => `Quarantine ${name}`,
+          wipe: (name) => `Přepsat ${name}`,
+          wiped: (size) => `zapsáno ${size}`,
+          wipeStopped: (size) => `zastaveno po ${size}`,
+          quarantine: (name) => `Odeslat ${name} do karantény`,
           recycle: (name) => `Odeslat ${name} do koše`,
           clear: (name) => `Vymazat ${name}`,
           compact: (name) => `Zhutnit ${name}`,
@@ -4462,17 +4462,17 @@ export const CATALOG = {
         description: "Yn tynnu lle rhydd y ddisg fel bloc arall pan fyddwch yn sganio disg gyfan, fel bod pob ffolder yn darllen fel cyfran o'r ddisg yn hytrach na'r lle sy'n cael ei ddefnyddio."
       },
       deepCleanRemoval: {
-        title: 'When Deep Clean removes files',
+        title: "Pan fydd Glanhau Dwfn yn tynnu ffeiliau",
         quarantine: {
-          label: 'Move to Quarantine (you can put it back)',
-          description: "Nothing is deleted. Files go into Prune's Quarantine and the drive gets the space back when you empty it."
+          label: "Symud i'r Cwarantin (gallwch eu rhoi'n ôl)",
+          description: "Ni chaiff dim ei ddileu. Mae'r ffeiliau'n mynd i'r Cwarantin yn Prune, ac mae'r gyriant yn cael y lle'n ôl pan fyddwch yn ei wacáu."
         },
         delete: {
-          label: "Delete now (frees the space, can't be undone — like BleachBit)",
-          description: 'Files are removed as soon as you confirm, so the space is free straight away. Rules that lose data still ask first.'
+          label: "Dileu nawr (yn rhyddhau'r lle, ni ellir ei ddadwneud — fel BleachBit)",
+          description: "Caiff ffeiliau eu tynnu cyn gynted ag y byddwch yn cadarnhau, felly mae'r lle'n rhydd ar unwaith. Mae rheolau sy'n colli data yn dal i ofyn yn gyntaf."
         },
-        deleteWarning: "With Delete now, Clean can't be undone. Scheduled cleans still move files to Quarantine.",
-        autoQuarantineNote: 'Not used while Deep Clean deletes files immediately.'
+        deleteWarning: "Gyda Dileu nawr, ni ellir dadwneud Glanhau. Mae glanhau wedi'i amserlennu yn dal i symud ffeiliau i'r Cwarantin.",
+        autoQuarantineNote: "Ni chaiff ei ddefnyddio tra bydd Glanhau Dwfn yn dileu ffeiliau ar unwaith."
       },
       autoQuarantine: {
         title: 'Cwarantin Awtomatig',
@@ -4990,13 +4990,13 @@ export const CATALOG = {
     deepClean: {
       title: 'Glanhau Dwfn',
       subtitle: "Pob storfa dros dro, log, dympiad ac olion mae Prune yn gwybod sut i'w canfod, wedi'u mesur ar y peiriant hwn yn hytrach nag amcangyfrif. Ni chaiff dim ei ddileu'n uniongyrchol — mae popeth mae Glanhau yn ei gymryd yn mynd i'r Cwarantin yn gyntaf, lle gallwch ei roi'n ôl.",
-      subtitleDelete: "Every cache, log, dump and leftover Prune knows how to find, measured on this machine rather than estimated. Clean deletes what you tick immediately and frees the space, the way BleachBit does. It can't be undone.",
+      subtitleDelete: "Pob storfa dros dro, log, dympiad ac olion mae Prune yn gwybod sut i'w canfod, wedi'u mesur ar y peiriant hwn yn hytrach nag amcangyfrif. Mae Glanhau yn dileu'r hyn rydych wedi'i ddewis ar unwaith ac yn rhyddhau'r lle, fel y mae BleachBit yn ei wneud. Ni ellir ei ddadwneud.",
       scanLog: {
         header: 'Allbwn sgan',
         scanningAnnounce: (total) => `Sganio ${total} lleoliad.`,
         finishedAnnounce: (scanned, total) => `Sgan wedi gorffen. ${scanned} o ${total} lleoliad wedi'u mesur.`,
-        searching: (items) => `Searching your profile… ${items} items checked`,
-        wiping: (written, total) => `Writing zeros… ${written} of ${total}`,
+        searching: (items) => `Chwilio drwy eich proffil… ${items} eitem wedi'u gwirio`,
+        wiping: (written, total) => `Ysgrifennu seroau… ${written} o ${total}`,
         starting: 'Yn dechrau…',
         idle: "Pwyswch Rhagolwg i fesur beth y gellir ei lanhau."
       },
@@ -5005,11 +5005,11 @@ export const CATALOG = {
       cleanErrorPrefix: (error) => `Methu glanhau: ${error}`,
       cleanupComplete: 'Glanhau wedi\'i gwblhau.',
       resultFreed: (formatted) => `Wedi rhyddhau ${formatted}`,
-      resultMoved: (formatted) => `Moved ${formatted} to Quarantine. The space comes back when you empty it.`,
-      resultRecycled: (formatted) => `Moved ${formatted} to the Recycle Bin. The space comes back when you empty it.`,
-      openQuarantine: 'Open Quarantine',
-      resultWiped: (size) => `Wrote ${size} of zeros over the free space, then deleted it. No space was freed.`,
-      resultWipeStopped: (size) => `Stopped after writing ${size} of zeros over the free space. The filler was deleted.`,
+      resultMoved: (formatted) => `Symudwyd ${formatted} i'r Cwarantin. Daw'r lle'n ôl pan fyddwch yn ei wacáu.`,
+      resultRecycled: (formatted) => `Symudwyd ${formatted} i'r Bin Ailgylchu. Daw'r lle'n ôl pan fyddwch yn ei wacáu.`,
+      openQuarantine: "Agor y Cwarantin",
+      resultWiped: (size) => `Ysgrifennwyd ${size} o seroau dros y lle rhydd, yna cawsant eu dileu. Ni ryddhawyd unrhyw le.`,
+      resultWipeStopped: (size) => `Stopiwyd ar ôl ysgrifennu ${size} o seroau dros y lle rhydd. Dilëwyd y ffeil llenwi.`,
       resultLockedSuffix: (count) => ` — ${count} ffeil ar glo wedi'u hepgor`,
       before: {
         body: "Mae Prune yn mesur pob categori ar y ddisg go iawn yn hytrach na dyfalu, sy'n cymryd tua hanner munud.",
@@ -5022,9 +5022,9 @@ export const CATALOG = {
         notMeasuredYet: 'heb ei fesur eto',
         previewFirst: "Cymerwch Ragolwg yn gyntaf i weld beth a ryddheir.",
         unmeasuredSuffix: (count) => ` · ${count} heb eu mesur`,
-        modeQuarantine: 'Moves to Quarantine.',
-        modeRecycle: 'Moves to the Recycle Bin.',
-        modeDelete: 'Deletes immediately.',
+        modeQuarantine: "Yn symud i'r Cwarantin.",
+        modeRecycle: "Yn symud i'r Bin Ailgylchu.",
+        modeDelete: "Yn dileu ar unwaith.",
         selectEverything: 'Dewis popeth',
         clear: 'Clirio',
         selectedCount: (count) => `${count} wedi'u dewis`
@@ -5033,35 +5033,35 @@ export const CATALOG = {
         prompt: (count, sizeKnown, formatted) => `Symud ${count} eitem (${sizeKnown ? formatted : "maint heb ei fesur"}) i'r Cwarantin?`,
         cancel: 'Diddymu',
         confirmButton: "Symud i'r Cwarantin",
-        promptDelete: (count, sizeKnown, formatted) => `Delete ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'})? This can't be undone.`,
-        deleteButton: 'Delete',
-        promptRecycle: (count, sizeKnown, formatted) => `Move ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'}) to the Recycle Bin?`,
-        recycleButton: 'Move to Recycle Bin',
-        wipeNote: 'Includes wiping free disk space, which can take hours.',
+        promptDelete: (count, sizeKnown, formatted) => `Dileu ${count} eitem (${sizeKnown ? formatted : 'maint heb ei fesur'})? Ni ellir dadwneud hyn.`,
+        deleteButton: "Dileu",
+        promptRecycle: (count, sizeKnown, formatted) => `Symud ${count} eitem (${sizeKnown ? formatted : 'maint heb ei fesur'}) i'r Bin Ailgylchu?`,
+        recycleButton: "Symud i'r Bin Ailgylchu",
+        wipeNote: "Yn cynnwys trosysgrifo lle rhydd ar y ddisg, a all gymryd oriau.",
         cleaning: 'Glanhau…'
       },
       wipe: {
-        title: 'Wipe free disk space',
-        body: "This overwrites the free space on the drive with zeros, then deletes the filler, so files you deleted earlier can't be recovered. It frees no space.",
-        ssdWarning: 'On an SSD with TRIM this does nothing useful and adds write wear. Use it on a hard disk, or when you know you need it.',
-        driveLine: (drive) => `Drive: ${drive}`,
-        writeLine: (size) => `About ${size} will be written.`,
-        timeLine: (duration, speed) => `Roughly ${duration}, from a one-second write test at ${speed}. The drive slows as it fills, so it can take longer.`,
-        duration: (hours, minutes) => (hours > 0 ? `${hours} h ${minutes} min` : `${minutes} min`),
-        reserveLine: (size) => `${size} always stays free so Windows keeps working.`,
-        stopNote: 'Stop ends it at once and deletes the filler.',
-        measuring: 'Measuring the drive…',
-        estimateFailed: (error) => `Couldn't measure the drive: ${error}`,
-        cancel: 'Cancel',
-        confirm: 'Add to this clean'
+        title: "Trosysgrifo lle rhydd ar y ddisg",
+        body: "Mae hyn yn trosysgrifo'r lle rhydd ar y gyriant â seroau, yna'n dileu'r ffeil llenwi, fel na ellir adfer ffeiliau y gwnaethoch eu dileu'n gynt. Nid yw'n rhyddhau unrhyw le.",
+        ssdWarning: "Ar SSD gyda TRIM nid yw hyn yn gwneud dim defnyddiol ac mae'n ychwanegu at draul ysgrifennu. Defnyddiwch ef ar ddisg galed, neu pan fyddwch yn gwybod bod ei angen arnoch.",
+        driveLine: (drive) => `Gyriant: ${drive}`,
+        writeLine: (size) => `Caiff tua ${size} ei ysgrifennu.`,
+        timeLine: (duration, speed) => `Tua ${duration}, yn seiliedig ar brawf ysgrifennu un eiliad ar ${speed}. Mae'r gyriant yn arafu wrth iddo lenwi, felly gall gymryd yn hirach.`,
+        duration: (hours, minutes) => (hours > 0 ? `${hours} awr ${minutes} mun` : `${minutes} mun`),
+        reserveLine: (size) => `Mae ${size} bob amser yn aros yn rhydd fel bod Windows yn dal i weithio.`,
+        stopNote: "Mae Stopio yn ei ddiweddu ar unwaith ac yn dileu'r ffeil llenwi.",
+        measuring: "Mesur y gyriant…",
+        estimateFailed: (error) => `Methu mesur y gyriant: ${error}`,
+        cancel: "Diddymu",
+        confirm: "Ychwanegu at y glanhau hwn"
       },
       stop: 'Stopio',
       rescan: 'Ailsganio',
       clean: 'Glanhau',
       tree: {
         selectCategoryAriaLabel: (category) => `Dewis popeth o dan ${category}`,
-        atLeast: (size) => `at least ${size}`,
-        longRunning: 'Takes a long time',
+        atLeast: (size) => `o leiaf ${size}`,
+        longRunning: "Yn cymryd amser hir",
         losesData: 'Yn colli data',
         needsAdmin: 'angen gweinyddwr',
         notInstalled: "heb ei osod",
@@ -5078,7 +5078,7 @@ export const CATALOG = {
       },
       log: {
         scan: {
-          partial: (size) => `${size}, partial`,
+          partial: (size) => `${size}, rhannol`,
           nothingToMeasure: "dim i'w fesur",
           needsAdmin: "angen gweinyddwr",
           notInstalled: "heb ei osod",
@@ -5086,10 +5086,10 @@ export const CATALOG = {
         },
         execute: {
           delete: (name) => `Dileu ${name}`,
-          wipe: (name) => `Wipe ${name}`,
-          wiped: (size) => `${size} written`,
-          wipeStopped: (size) => `stopped after ${size}`,
-          quarantine: (name) => `Quarantine ${name}`,
+          wipe: (name) => `Trosysgrifo ${name}`,
+          wiped: (size) => `${size} wedi'u hysgrifennu`,
+          wipeStopped: (size) => `wedi stopio ar ôl ${size}`,
+          quarantine: (name) => `Symud i'r Cwarantin: ${name}`,
           recycle: (name) => `Anfon ${name} i'r Bin Ailgylchu`,
           clear: (name) => `Clirio ${name}`,
           compact: (name) => `Cywasgu ${name}`,
@@ -5340,17 +5340,17 @@ export const CATALOG = {
         description: 'Tegner drevets ledige plads som endnu en blok, når du scanner et helt drev, så hver mappe læses som en andel af drevet i stedet for af den plads, der er i brug.'
       },
       deepCleanRemoval: {
-        title: 'When Deep Clean removes files',
+        title: "Når Dybderensning fjerner filer",
         quarantine: {
-          label: 'Move to Quarantine (you can put it back)',
-          description: "Nothing is deleted. Files go into Prune's Quarantine and the drive gets the space back when you empty it."
+          label: "Flyt til karantæne (du kan sætte det tilbage)",
+          description: "Intet slettes. Filerne går i Prunes karantæne, og drevet får pladsen tilbage, når du tømmer den."
         },
         delete: {
-          label: "Delete now (frees the space, can't be undone — like BleachBit)",
-          description: 'Files are removed as soon as you confirm, so the space is free straight away. Rules that lose data still ask first.'
+          label: "Slet nu (frigør pladsen, kan ikke fortrydes — som BleachBit)",
+          description: "Filer fjernes, så snart du bekræfter, så pladsen er ledig med det samme. Regler, der mister data, spørger stadig først."
         },
-        deleteWarning: "With Delete now, Clean can't be undone. Scheduled cleans still move files to Quarantine.",
-        autoQuarantineNote: 'Not used while Deep Clean deletes files immediately.'
+        deleteWarning: "Med Slet nu kan Rens ikke fortrydes. Planlagte rensninger flytter stadig filer til karantæne.",
+        autoQuarantineNote: "Bruges ikke, mens Dybderensning sletter filer med det samme."
       },
       autoQuarantine: {
         title: 'Auto-karantæne',
@@ -5868,13 +5868,13 @@ export const CATALOG = {
     deepClean: {
       title: 'Dybderensning',
       subtitle: "Alle caches, logfiler, dumps og rester, som Prune kan finde, målt på denne maskine i stedet for anslået. Intet slettes direkte — alt, hvad Rens tager, går først til Karantæne, hvor du kan sætte det tilbage.",
-      subtitleDelete: "Every cache, log, dump and leftover Prune knows how to find, measured on this machine rather than estimated. Clean deletes what you tick immediately and frees the space, the way BleachBit does. It can't be undone.",
+      subtitleDelete: "Alle caches, logfiler, dumps og rester, som Prune kan finde, målt på denne maskine i stedet for anslået. Rens sletter det, du har markeret, med det samme og frigør pladsen, på samme måde som BleachBit. Det kan ikke fortrydes.",
       scanLog: {
         header: 'Scanningsoutput',
         scanningAnnounce: (total) => `Scanner ${total} placeringer.`,
         finishedAnnounce: (scanned, total) => `Scanning færdig. ${scanned} af ${total} placeringer målt.`,
-        searching: (items) => `Searching your profile… ${items} items checked`,
-        wiping: (written, total) => `Writing zeros… ${written} of ${total}`,
+        searching: (items) => `Søger i din profil… ${items} emner tjekket`,
+        wiping: (written, total) => `Skriver nuller… ${written} af ${total}`,
         starting: 'Starter…',
         idle: "Tryk på Forhåndsvisning for at måle, hvad der kan renses."
       },
@@ -5883,11 +5883,11 @@ export const CATALOG = {
       cleanErrorPrefix: (error) => `Kunne ikke rense: ${error}`,
       cleanupComplete: 'Oprydning fuldført.',
       resultFreed: (formatted) => `Frigjorde ${formatted}`,
-      resultMoved: (formatted) => `Moved ${formatted} to Quarantine. The space comes back when you empty it.`,
-      resultRecycled: (formatted) => `Moved ${formatted} to the Recycle Bin. The space comes back when you empty it.`,
-      openQuarantine: 'Open Quarantine',
-      resultWiped: (size) => `Wrote ${size} of zeros over the free space, then deleted it. No space was freed.`,
-      resultWipeStopped: (size) => `Stopped after writing ${size} of zeros over the free space. The filler was deleted.`,
+      resultMoved: (formatted) => `Flyttede ${formatted} til karantæne. Pladsen kommer tilbage, når du tømmer den.`,
+      resultRecycled: (formatted) => `Flyttede ${formatted} til Papirkurven. Pladsen kommer tilbage, når du tømmer den.`,
+      openQuarantine: "Åbn karantæne",
+      resultWiped: (size) => `Skrev ${size} nuller over den ledige plads og slettede dem derefter. Der blev ikke frigjort plads.`,
+      resultWipeStopped: (size) => `Stoppet efter at have skrevet ${size} nuller over den ledige plads. Fyldfilen blev slettet.`,
       resultLockedSuffix: (count) => ` — sprang ${count} ${count === 1 ? 'låst fil' : 'låste filer'} over`,
       before: {
         body: "Prune måler hver kategori på disken i stedet for at anslå. Det tager cirka et halvt minut.",
@@ -5900,9 +5900,9 @@ export const CATALOG = {
         notMeasuredYet: 'ikke målt endnu',
         previewFirst: "Se først en forhåndsvisning for at se, hvad der frigøres.",
         unmeasuredSuffix: (count) => ` · ${count} ikke målt`,
-        modeQuarantine: 'Moves to Quarantine.',
-        modeRecycle: 'Moves to the Recycle Bin.',
-        modeDelete: 'Deletes immediately.',
+        modeQuarantine: "Flytter til karantæne.",
+        modeRecycle: "Flytter til Papirkurven.",
+        modeDelete: "Sletter med det samme.",
         selectEverything: 'Vælg alt',
         clear: 'Ryd',
         selectedCount: (count) => `${count} valgt`
@@ -5911,35 +5911,35 @@ export const CATALOG = {
         prompt: (count, sizeKnown, formatted) => `Flyt ${count} ${count === 1 ? 'emne' : 'emner'} (${sizeKnown ? formatted : 'størrelse ikke målt'}) til karantæne?`,
         cancel: 'Annuller',
         confirmButton: "Flyt til karantæne",
-        promptDelete: (count, sizeKnown, formatted) => `Delete ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'})? This can't be undone.`,
-        deleteButton: 'Delete',
-        promptRecycle: (count, sizeKnown, formatted) => `Move ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'}) to the Recycle Bin?`,
-        recycleButton: 'Move to Recycle Bin',
-        wipeNote: 'Includes wiping free disk space, which can take hours.',
+        promptDelete: (count, sizeKnown, formatted) => `Slet ${count} ${count === 1 ? 'emne' : 'emner'} (${sizeKnown ? formatted : 'størrelse ikke målt'})? Det kan ikke fortrydes.`,
+        deleteButton: "Slet",
+        promptRecycle: (count, sizeKnown, formatted) => `Flyt ${count} ${count === 1 ? 'emne' : 'emner'} (${sizeKnown ? formatted : 'størrelse ikke målt'}) til Papirkurven?`,
+        recycleButton: "Flyt til Papirkurven",
+        wipeNote: "Omfatter overskrivning af ledig diskplads, hvilket kan tage timer.",
         cleaning: 'Renser…'
       },
       wipe: {
-        title: 'Wipe free disk space',
-        body: "This overwrites the free space on the drive with zeros, then deletes the filler, so files you deleted earlier can't be recovered. It frees no space.",
-        ssdWarning: 'On an SSD with TRIM this does nothing useful and adds write wear. Use it on a hard disk, or when you know you need it.',
-        driveLine: (drive) => `Drive: ${drive}`,
-        writeLine: (size) => `About ${size} will be written.`,
-        timeLine: (duration, speed) => `Roughly ${duration}, from a one-second write test at ${speed}. The drive slows as it fills, so it can take longer.`,
-        duration: (hours, minutes) => (hours > 0 ? `${hours} h ${minutes} min` : `${minutes} min`),
-        reserveLine: (size) => `${size} always stays free so Windows keeps working.`,
-        stopNote: 'Stop ends it at once and deletes the filler.',
-        measuring: 'Measuring the drive…',
-        estimateFailed: (error) => `Couldn't measure the drive: ${error}`,
-        cancel: 'Cancel',
-        confirm: 'Add to this clean'
+        title: "Overskriv ledig diskplads",
+        body: "Dette overskriver den ledige plads på drevet med nuller og sletter derefter fyldfilen, så filer, du tidligere har slettet, ikke kan gendannes. Det frigør ingen plads.",
+        ssdWarning: "På en SSD med TRIM gør det ingen nytte og øger slitagen ved skrivning. Brug det på en harddisk, eller når du ved, at du har brug for det.",
+        driveLine: (drive) => `Drev: ${drive}`,
+        writeLine: (size) => `Der skrives omkring ${size}.`,
+        timeLine: (duration, speed) => `Cirka ${duration}, ud fra en skrivetest på ét sekund ved ${speed}. Drevet bliver langsommere, efterhånden som det fyldes, så det kan tage længere tid.`,
+        duration: (hours, minutes) => (hours > 0 ? `${hours} t ${minutes} min` : `${minutes} min`),
+        reserveLine: (size) => `${size} forbliver altid ledig, så Windows kan fortsætte med at virke.`,
+        stopNote: "Stop afbryder det med det samme og sletter fyldfilen.",
+        measuring: "Måler drevet…",
+        estimateFailed: (error) => `Kunne ikke måle drevet: ${error}`,
+        cancel: "Annuller",
+        confirm: "Føj til denne rensning"
       },
       stop: 'Stop',
       rescan: 'Scan igen',
       clean: 'Rens',
       tree: {
         selectCategoryAriaLabel: (category) => `Vælg alt under ${category}`,
-        atLeast: (size) => `at least ${size}`,
-        longRunning: 'Takes a long time',
+        atLeast: (size) => `mindst ${size}`,
+        longRunning: "Tager lang tid",
         losesData: 'Mister data',
         needsAdmin: 'kræver administrator',
         notInstalled: 'ikke installeret',
@@ -5956,7 +5956,7 @@ export const CATALOG = {
       },
       log: {
         scan: {
-          partial: (size) => `${size}, partial`,
+          partial: (size) => `${size}, delvis`,
           nothingToMeasure: "intet at måle",
           needsAdmin: "kræver administrator",
           notInstalled: "ikke installeret",
@@ -5964,10 +5964,10 @@ export const CATALOG = {
         },
         execute: {
           delete: (name) => `Slet ${name}`,
-          wipe: (name) => `Wipe ${name}`,
-          wiped: (size) => `${size} written`,
-          wipeStopped: (size) => `stopped after ${size}`,
-          quarantine: (name) => `Quarantine ${name}`,
+          wipe: (name) => `Overskriv ${name}`,
+          wiped: (size) => `${size} skrevet`,
+          wipeStopped: (size) => `stoppet efter ${size}`,
+          quarantine: (name) => `Flyt til karantæne: ${name}`,
           recycle: (name) => `Send ${name} til papirkurven`,
           clear: (name) => `Ryd ${name}`,
           compact: (name) => `Komprimer ${name}`,
@@ -6218,17 +6218,17 @@ export const CATALOG = {
         description: 'Zeichnet den freien Speicherplatz des Laufwerks als weiteren Block, wenn du ein ganzes Laufwerk scannst, sodass jeder Ordner als Anteil des Laufwerks statt des belegten Speicherplatzes gelesen wird.'
       },
       deepCleanRemoval: {
-        title: 'When Deep Clean removes files',
+        title: "Wenn die Gründliche Bereinigung Dateien entfernt",
         quarantine: {
-          label: 'Move to Quarantine (you can put it back)',
-          description: "Nothing is deleted. Files go into Prune's Quarantine and the drive gets the space back when you empty it."
+          label: "In Quarantäne verschieben (du kannst es zurückholen)",
+          description: "Nichts wird gelöscht. Die Dateien wandern in Prunes Quarantäne, und das Laufwerk bekommt den Speicherplatz zurück, wenn du sie leerst."
         },
         delete: {
-          label: "Delete now (frees the space, can't be undone — like BleachBit)",
-          description: 'Files are removed as soon as you confirm, so the space is free straight away. Rules that lose data still ask first.'
+          label: "Sofort löschen (gibt den Speicherplatz frei, nicht rückgängig zu machen – wie BleachBit)",
+          description: "Die Dateien werden entfernt, sobald du bestätigst, der Speicherplatz ist also sofort frei. Regeln, bei denen Daten verloren gehen, fragen weiterhin vorher nach."
         },
-        deleteWarning: "With Delete now, Clean can't be undone. Scheduled cleans still move files to Quarantine.",
-        autoQuarantineNote: 'Not used while Deep Clean deletes files immediately.'
+        deleteWarning: "Bei „Sofort löschen“ lässt sich das Bereinigen nicht rückgängig machen. Geplante Bereinigungen verschieben Dateien weiterhin in die Quarantäne.",
+        autoQuarantineNote: "Wird nicht verwendet, solange die Gründliche Bereinigung Dateien sofort löscht."
       },
       autoQuarantine: {
         title: 'Auto-Quarantäne',
@@ -6746,13 +6746,13 @@ export const CATALOG = {
     deepClean: {
       title: "Gründliche Bereinigung",
       subtitle: "Jeder Cache, jedes Protokoll, jeder Dump und jeder Rückstand, den Prune finden kann, auf diesem Rechner gemessen statt geschätzt. Nichts wird sofort gelöscht — alles, was die Reinigung mitnimmt, wandert zuerst in die Quarantäne, wo du es zurückholen kannst.",
-      subtitleDelete: "Every cache, log, dump and leftover Prune knows how to find, measured on this machine rather than estimated. Clean deletes what you tick immediately and frees the space, the way BleachBit does. It can't be undone.",
+      subtitleDelete: "Jeder Cache, jedes Protokoll, jeder Dump und jeder Rückstand, den Prune finden kann, auf diesem Rechner gemessen statt geschätzt. Bereinigen löscht, was du ankreuzt, sofort und gibt den Speicherplatz frei, so wie BleachBit es tut. Das lässt sich nicht rückgängig machen.",
       scanLog: {
         header: 'Scan-Ausgabe',
         scanningAnnounce: (total) => `${total} Orte werden gescannt.`,
         finishedAnnounce: (scanned, total) => `Scan abgeschlossen. ${scanned} von ${total} Orten gemessen.`,
-        searching: (items) => `Searching your profile… ${items} items checked`,
-        wiping: (written, total) => `Writing zeros… ${written} of ${total}`,
+        searching: (items) => `Dein Profil wird durchsucht… ${items} Elemente geprüft`,
+        wiping: (written, total) => `Nullen werden geschrieben… ${written} von ${total}`,
         starting: 'Wird gestartet…',
         idle: "Klicke auf Vorschau, um zu messen, was sich bereinigen lässt."
       },
@@ -6761,11 +6761,11 @@ export const CATALOG = {
       cleanErrorPrefix: (error) => `Reinigung fehlgeschlagen: ${error}`,
       cleanupComplete: 'Bereinigung abgeschlossen.',
       resultFreed: (formatted) => `${formatted} freigegeben`,
-      resultMoved: (formatted) => `Moved ${formatted} to Quarantine. The space comes back when you empty it.`,
-      resultRecycled: (formatted) => `Moved ${formatted} to the Recycle Bin. The space comes back when you empty it.`,
-      openQuarantine: 'Open Quarantine',
-      resultWiped: (size) => `Wrote ${size} of zeros over the free space, then deleted it. No space was freed.`,
-      resultWipeStopped: (size) => `Stopped after writing ${size} of zeros over the free space. The filler was deleted.`,
+      resultMoved: (formatted) => `${formatted} in die Quarantäne verschoben. Der Speicherplatz wird frei, wenn du sie leerst.`,
+      resultRecycled: (formatted) => `${formatted} in den Papierkorb verschoben. Der Speicherplatz wird frei, wenn du ihn leerst.`,
+      openQuarantine: "Quarantäne öffnen",
+      resultWiped: (size) => `${size} an Nullen über den freien Speicherplatz geschrieben und anschließend gelöscht. Es wurde kein Speicherplatz freigegeben.`,
+      resultWipeStopped: (size) => `Abgebrochen, nachdem ${size} an Nullen in den freien Speicherplatz geschrieben wurden. Die Fülldatei wurde gelöscht.`,
       resultLockedSuffix: (count) => ` — ${count} gesperrte Datei${count === 1 ? '' : 'en'} übersprungen`,
       before: {
         body: "Prune misst jede Kategorie tatsächlich auf der Festplatte, statt zu schätzen. Das dauert etwa eine halbe Minute.",
@@ -6778,9 +6778,9 @@ export const CATALOG = {
         notMeasuredYet: 'noch nicht gemessen',
         previewFirst: "Sieh dir zuerst die Vorschau an, was freigegeben wird.",
         unmeasuredSuffix: (count) => ` · ${count} nicht gemessen`,
-        modeQuarantine: 'Moves to Quarantine.',
-        modeRecycle: 'Moves to the Recycle Bin.',
-        modeDelete: 'Deletes immediately.',
+        modeQuarantine: "Verschiebt in die Quarantäne.",
+        modeRecycle: "Verschiebt in den Papierkorb.",
+        modeDelete: "Löscht sofort.",
         selectEverything: 'Alles auswählen',
         clear: "Abwählen",
         selectedCount: (count) => `${count} ausgewählt`
@@ -6789,35 +6789,35 @@ export const CATALOG = {
         prompt: (count, sizeKnown, formatted) => `${count} Element${count === 1 ? '' : 'e'} (${sizeKnown ? formatted : 'Größe nicht gemessen'}) in Quarantäne verschieben?`,
         cancel: 'Abbrechen',
         confirmButton: "In Quarantäne verschieben",
-        promptDelete: (count, sizeKnown, formatted) => `Delete ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'})? This can't be undone.`,
-        deleteButton: 'Delete',
-        promptRecycle: (count, sizeKnown, formatted) => `Move ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'}) to the Recycle Bin?`,
-        recycleButton: 'Move to Recycle Bin',
-        wipeNote: 'Includes wiping free disk space, which can take hours.',
+        promptDelete: (count, sizeKnown, formatted) => `${count} Element${count === 1 ? '' : 'e'} (${sizeKnown ? formatted : 'Größe nicht gemessen'}) sofort löschen? Das lässt sich nicht rückgängig machen.`,
+        deleteButton: "Sofort löschen",
+        promptRecycle: (count, sizeKnown, formatted) => `${count} Element${count === 1 ? '' : 'e'} (${sizeKnown ? formatted : 'Größe nicht gemessen'}) in den Papierkorb verschieben?`,
+        recycleButton: "In den Papierkorb verschieben",
+        wipeNote: "Enthält das Überschreiben des freien Speicherplatzes, was Stunden dauern kann.",
         cleaning: 'Wird bereinigt…'
       },
       wipe: {
-        title: 'Wipe free disk space',
-        body: "This overwrites the free space on the drive with zeros, then deletes the filler, so files you deleted earlier can't be recovered. It frees no space.",
-        ssdWarning: 'On an SSD with TRIM this does nothing useful and adds write wear. Use it on a hard disk, or when you know you need it.',
-        driveLine: (drive) => `Drive: ${drive}`,
-        writeLine: (size) => `About ${size} will be written.`,
-        timeLine: (duration, speed) => `Roughly ${duration}, from a one-second write test at ${speed}. The drive slows as it fills, so it can take longer.`,
+        title: "Freien Speicherplatz überschreiben",
+        body: "Dabei wird der freie Speicherplatz auf dem Laufwerk mit Nullen überschrieben und die Fülldatei anschließend gelöscht, sodass früher gelöschte Dateien nicht mehr wiederhergestellt werden können. Es wird kein Speicherplatz freigegeben.",
+        ssdWarning: "Auf einer SSD mit TRIM bringt das nichts und erhöht den Schreibverschleiß. Nutze es auf einer Festplatte oder wenn du weißt, dass du es brauchst.",
+        driveLine: (drive) => `Laufwerk: ${drive}`,
+        writeLine: (size) => `Es werden etwa ${size} geschrieben.`,
+        timeLine: (duration, speed) => `Etwa ${duration}, hochgerechnet aus einem Schreibtest von einer Sekunde mit ${speed}. Das Laufwerk wird langsamer, je voller es wird, daher kann es länger dauern.`,
         duration: (hours, minutes) => (hours > 0 ? `${hours} h ${minutes} min` : `${minutes} min`),
-        reserveLine: (size) => `${size} always stays free so Windows keeps working.`,
-        stopNote: 'Stop ends it at once and deletes the filler.',
-        measuring: 'Measuring the drive…',
-        estimateFailed: (error) => `Couldn't measure the drive: ${error}`,
-        cancel: 'Cancel',
-        confirm: 'Add to this clean'
+        reserveLine: (size) => `${size} bleiben immer frei, damit Windows weiter funktioniert.`,
+        stopNote: "Stopp beendet den Vorgang sofort und löscht die Fülldatei.",
+        measuring: "Laufwerk wird gemessen…",
+        estimateFailed: (error) => `Das Laufwerk konnte nicht gemessen werden: ${error}`,
+        cancel: "Abbrechen",
+        confirm: "Zu dieser Bereinigung hinzufügen"
       },
       stop: 'Stopp',
       rescan: 'Erneut scannen',
       clean: 'Bereinigen',
       tree: {
         selectCategoryAriaLabel: (category) => `Alles unter ${category} auswählen`,
-        atLeast: (size) => `at least ${size}`,
-        longRunning: 'Takes a long time',
+        atLeast: (size) => `mindestens ${size}`,
+        longRunning: "Dauert lange",
         losesData: 'Datenverlust',
         needsAdmin: 'benötigt Administrator',
         notInstalled: 'nicht installiert',
@@ -6834,7 +6834,7 @@ export const CATALOG = {
       },
       log: {
         scan: {
-          partial: (size) => `${size}, partial`,
+          partial: (size) => `${size}, teilweise`,
           nothingToMeasure: "nichts zu messen",
           needsAdmin: "benötigt Administrator",
           notInstalled: "nicht installiert",
@@ -6842,10 +6842,10 @@ export const CATALOG = {
         },
         execute: {
           delete: (name) => `${name} löschen`,
-          wipe: (name) => `Wipe ${name}`,
-          wiped: (size) => `${size} written`,
-          wipeStopped: (size) => `stopped after ${size}`,
-          quarantine: (name) => `Quarantine ${name}`,
+          wipe: (name) => `Überschreiben: ${name}`,
+          wiped: (size) => `${size} geschrieben`,
+          wipeStopped: (size) => `nach ${size} abgebrochen`,
+          quarantine: (name) => `${name} in die Quarantäne`,
           recycle: (name) => `${name} in den Papierkorb`,
           clear: (name) => `${name} leeren`,
           compact: (name) => `${name} verdichten`,
@@ -7096,17 +7096,17 @@ export const CATALOG = {
         description: 'Σχεδιάζει τον ελεύθερο χώρο του δίσκου ως ένα ακόμα μπλοκ όταν σαρώνετε έναν ολόκληρο δίσκο, ώστε κάθε φάκελος να διαβάζεται ως μερίδιο του δίσκου αντί του χώρου σε χρήση.'
       },
       deepCleanRemoval: {
-        title: 'When Deep Clean removes files',
+        title: "Όταν ο Βαθύς καθαρισμός αφαιρεί αρχεία",
         quarantine: {
-          label: 'Move to Quarantine (you can put it back)',
-          description: "Nothing is deleted. Files go into Prune's Quarantine and the drive gets the space back when you empty it."
+          label: "Μετακίνηση στην Καραντίνα (μπορείτε να τα επαναφέρετε)",
+          description: "Τίποτα δεν διαγράφεται. Τα αρχεία μπαίνουν στην Καραντίνα του Prune και ο δίσκος ανακτά τον χώρο όταν την αδειάσετε."
         },
         delete: {
-          label: "Delete now (frees the space, can't be undone — like BleachBit)",
-          description: 'Files are removed as soon as you confirm, so the space is free straight away. Rules that lose data still ask first.'
+          label: "Διαγραφή τώρα (ελευθερώνει τον χώρο, δεν αναιρείται — όπως το BleachBit)",
+          description: "Τα αρχεία αφαιρούνται μόλις επιβεβαιώσετε, οπότε ο χώρος ελευθερώνεται αμέσως. Οι κανόνες που χάνουν δεδομένα ρωτούν πάντα πρώτα."
         },
-        deleteWarning: "With Delete now, Clean can't be undone. Scheduled cleans still move files to Quarantine.",
-        autoQuarantineNote: 'Not used while Deep Clean deletes files immediately.'
+        deleteWarning: "Με τη «Διαγραφή τώρα», ο Καθαρισμός δεν αναιρείται. Οι προγραμματισμένοι καθαρισμοί εξακολουθούν να μετακινούν τα αρχεία στην Καραντίνα.",
+        autoQuarantineNote: "Δεν χρησιμοποιείται όσο ο Βαθύς καθαρισμός διαγράφει τα αρχεία απευθείας."
       },
       autoQuarantine: {
         title: 'Αυτόματη Καραντίνα',
@@ -7624,13 +7624,13 @@ export const CATALOG = {
     deepClean: {
       title: "Βαθύς καθαρισμός",
       subtitle: 'Κάθε κρυφή μνήμη, αρχείο καταγραφής, dump και κατάλοιπο που το Prune ξέρει να βρίσκει, μετρημένο σε αυτό το μηχάνημα αντί να εκτιμάται. Τίποτα δεν διαγράφεται απευθείας — οτιδήποτε παίρνει ο Καθαρισμός πηγαίνει πρώτα σε καραντίνα, όπου μπορείτε να το επαναφέρετε.',
-      subtitleDelete: "Every cache, log, dump and leftover Prune knows how to find, measured on this machine rather than estimated. Clean deletes what you tick immediately and frees the space, the way BleachBit does. It can't be undone.",
+      subtitleDelete: "Κάθε κρυφή μνήμη, αρχείο καταγραφής, dump και κατάλοιπο που το Prune ξέρει να βρίσκει, μετρημένο σε αυτό το μηχάνημα αντί να εκτιμάται. Ο Καθαρισμός διαγράφει αμέσως ό,τι επιλέξετε και ελευθερώνει τον χώρο, όπως κάνει το BleachBit. Δεν αναιρείται.",
       scanLog: {
         header: 'Έξοδος σάρωσης',
         scanningAnnounce: (total) => `Σάρωση ${total} τοποθεσιών.`,
         finishedAnnounce: (scanned, total) => `Η σάρωση ολοκληρώθηκε. Μετρήθηκαν ${scanned} από ${total} τοποθεσίες.`,
-        searching: (items) => `Searching your profile… ${items} items checked`,
-        wiping: (written, total) => `Writing zeros… ${written} of ${total}`,
+        searching: (items) => `Αναζήτηση στο προφίλ σας… ελέγχθηκαν ${items} στοιχεία`,
+        wiping: (written, total) => `Εγγραφή μηδενικών… ${written} από ${total}`,
         starting: 'Έναρξη…',
         idle: "Πατήστε Προεπισκόπηση για να μετρήσετε τι μπορεί να καθαριστεί."
       },
@@ -7639,11 +7639,11 @@ export const CATALOG = {
       cleanErrorPrefix: (error) => `Αδυναμία καθαρισμού: ${error}`,
       cleanupComplete: 'Ο καθαρισμός ολοκληρώθηκε.',
       resultFreed: (formatted) => `Ελευθερώθηκαν ${formatted}`,
-      resultMoved: (formatted) => `Moved ${formatted} to Quarantine. The space comes back when you empty it.`,
-      resultRecycled: (formatted) => `Moved ${formatted} to the Recycle Bin. The space comes back when you empty it.`,
-      openQuarantine: 'Open Quarantine',
-      resultWiped: (size) => `Wrote ${size} of zeros over the free space, then deleted it. No space was freed.`,
-      resultWipeStopped: (size) => `Stopped after writing ${size} of zeros over the free space. The filler was deleted.`,
+      resultMoved: (formatted) => `Μετακινήθηκαν ${formatted} στην Καραντίνα. Ο χώρος ανακτάται όταν την αδειάσετε.`,
+      resultRecycled: (formatted) => `Μετακινήθηκαν ${formatted} στον Κάδο Ανακύκλωσης. Ο χώρος ανακτάται όταν τον αδειάσετε.`,
+      openQuarantine: "Άνοιγμα Καραντίνας",
+      resultWiped: (size) => `Γράφτηκαν μηδενικά συνολικού μεγέθους ${size} πάνω από τον ελεύθερο χώρο και στη συνέχεια διαγράφηκαν. Δεν ελευθερώθηκε χώρος.`,
+      resultWipeStopped: (size) => `Διακόπηκε μετά την εγγραφή μηδενικών συνολικού μεγέθους ${size} πάνω από τον ελεύθερο χώρο. Το αρχείο πλήρωσης διαγράφηκε.`,
       resultLockedSuffix: (count) => ` — παραλείφθηκ${count === 1 ? 'ε' : 'αν'} ${count} κλειδωμέν${count === 1 ? 'ο αρχείο' : 'α αρχεία'}`,
       before: {
         body: 'Το Prune μετρά κάθε κατηγορία πραγματικά στον δίσκο αντί να εκτιμά, κάτι που διαρκεί περίπου μισό λεπτό.',
@@ -7656,9 +7656,9 @@ export const CATALOG = {
         notMeasuredYet: 'δεν έχει μετρηθεί ακόμα',
         previewFirst: "Κάντε πρώτα προεπισκόπηση για να δείτε τι θα ελευθερωθεί.",
         unmeasuredSuffix: (count) => ` · ${count} χωρίς μέτρηση`,
-        modeQuarantine: 'Moves to Quarantine.',
-        modeRecycle: 'Moves to the Recycle Bin.',
-        modeDelete: 'Deletes immediately.',
+        modeQuarantine: "Μετακινεί στην Καραντίνα.",
+        modeRecycle: "Μετακινεί στον Κάδο Ανακύκλωσης.",
+        modeDelete: "Διαγράφει αμέσως.",
         selectEverything: 'Επιλογή όλων',
         clear: 'Απαλοιφή',
         selectedCount: (count) => `${count} ${count === 1 ? 'επιλέχθηκε' : 'επιλέχθηκαν'}`
@@ -7667,35 +7667,35 @@ export const CATALOG = {
         prompt: (count, sizeKnown, formatted) => `Μετακίνηση ${count} ${count === 1 ? 'στοιχείου' : 'στοιχείων'} (${sizeKnown ? formatted : 'το μέγεθος δεν μετρήθηκε'}) σε καραντίνα;`,
         cancel: 'Ακύρωση',
         confirmButton: "Μετακίνηση σε καραντίνα",
-        promptDelete: (count, sizeKnown, formatted) => `Delete ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'})? This can't be undone.`,
-        deleteButton: 'Delete',
-        promptRecycle: (count, sizeKnown, formatted) => `Move ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'}) to the Recycle Bin?`,
-        recycleButton: 'Move to Recycle Bin',
-        wipeNote: 'Includes wiping free disk space, which can take hours.',
+        promptDelete: (count, sizeKnown, formatted) => `Διαγραφή ${count} ${count === 1 ? 'στοιχείου' : 'στοιχείων'} (${sizeKnown ? formatted : 'το μέγεθος δεν μετρήθηκε'}); Η ενέργεια δεν αναιρείται.`,
+        deleteButton: "Διαγραφή τώρα",
+        promptRecycle: (count, sizeKnown, formatted) => `Μετακίνηση ${count} ${count === 1 ? 'στοιχείου' : 'στοιχείων'} (${sizeKnown ? formatted : 'το μέγεθος δεν μετρήθηκε'}) στον Κάδο Ανακύκλωσης;`,
+        recycleButton: "Μετακίνηση στον Κάδο Ανακύκλωσης",
+        wipeNote: "Περιλαμβάνει την αντικατάσταση του ελεύθερου χώρου δίσκου με μηδενικά, που μπορεί να διαρκέσει ώρες.",
         cleaning: 'Καθαρισμός…'
       },
       wipe: {
-        title: 'Wipe free disk space',
-        body: "This overwrites the free space on the drive with zeros, then deletes the filler, so files you deleted earlier can't be recovered. It frees no space.",
-        ssdWarning: 'On an SSD with TRIM this does nothing useful and adds write wear. Use it on a hard disk, or when you know you need it.',
-        driveLine: (drive) => `Drive: ${drive}`,
-        writeLine: (size) => `About ${size} will be written.`,
-        timeLine: (duration, speed) => `Roughly ${duration}, from a one-second write test at ${speed}. The drive slows as it fills, so it can take longer.`,
+        title: "Αντικατάσταση ελεύθερου χώρου με μηδενικά",
+        body: "Αντικαθιστά τον ελεύθερο χώρο του δίσκου με μηδενικά και μετά διαγράφει το αρχείο πλήρωσης, ώστε τα αρχεία που έχετε διαγράψει παλαιότερα να μην μπορούν να ανακτηθούν. Δεν ελευθερώνει χώρο.",
+        ssdWarning: "Σε SSD με TRIM αυτό δεν προσφέρει τίποτα χρήσιμο και προσθέτει φθορά εγγραφής. Χρησιμοποιήστε το σε σκληρό δίσκο ή όταν ξέρετε ότι το χρειάζεστε.",
+        driveLine: (drive) => `Μονάδα: ${drive}`,
+        writeLine: (size) => `Θα γραφτούν περίπου ${size}.`,
+        timeLine: (duration, speed) => `Περίπου ${duration}, με βάση δοκιμή εγγραφής ενός δευτερολέπτου στα ${speed}. Ο δίσκος επιβραδύνεται όσο γεμίζει, οπότε μπορεί να πάρει περισσότερο.`,
         duration: (hours, minutes) => (hours > 0 ? `${hours} h ${minutes} min` : `${minutes} min`),
-        reserveLine: (size) => `${size} always stays free so Windows keeps working.`,
-        stopNote: 'Stop ends it at once and deletes the filler.',
-        measuring: 'Measuring the drive…',
-        estimateFailed: (error) => `Couldn't measure the drive: ${error}`,
-        cancel: 'Cancel',
-        confirm: 'Add to this clean'
+        reserveLine: (size) => `Πάντα μένουν ελεύθερα ${size}, ώστε να συνεχίσουν να λειτουργούν τα Windows.`,
+        stopNote: "Η Διακοπή τερματίζει τη διαδικασία αμέσως και διαγράφει το αρχείο πλήρωσης.",
+        measuring: "Μέτρηση του δίσκου…",
+        estimateFailed: (error) => `Αδυναμία μέτρησης του δίσκου: ${error}`,
+        cancel: "Ακύρωση",
+        confirm: "Προσθήκη σε αυτόν τον καθαρισμό"
       },
       stop: 'Διακοπή',
       rescan: 'Επανασάρωση',
       clean: 'Καθαρισμός',
       tree: {
         selectCategoryAriaLabel: (category) => `Επιλογή όλων στην κατηγορία ${category}`,
-        atLeast: (size) => `at least ${size}`,
-        longRunning: 'Takes a long time',
+        atLeast: (size) => `τουλάχιστον ${size}`,
+        longRunning: "Διαρκεί πολύ",
         losesData: 'Χάνει δεδομένα',
         needsAdmin: 'απαιτεί διαχειριστή',
         notInstalled: 'δεν είναι εγκατεστημένο',
@@ -7712,7 +7712,7 @@ export const CATALOG = {
       },
       log: {
         scan: {
-          partial: (size) => `${size}, partial`,
+          partial: (size) => `${size}, μερικό`,
           nothingToMeasure: "τίποτα προς μέτρηση",
           needsAdmin: "απαιτεί διαχειριστή",
           notInstalled: "δεν είναι εγκατεστημένο",
@@ -7720,10 +7720,10 @@ export const CATALOG = {
         },
         execute: {
           delete: (name) => `Διαγραφή: ${name}`,
-          wipe: (name) => `Wipe ${name}`,
-          wiped: (size) => `${size} written`,
-          wipeStopped: (size) => `stopped after ${size}`,
-          quarantine: (name) => `Quarantine ${name}`,
+          wipe: (name) => `Αντικατάσταση: ${name}`,
+          wiped: (size) => `γράφτηκαν ${size}`,
+          wipeStopped: (size) => `διακόπηκε μετά από ${size}`,
+          quarantine: (name) => `Μεταφορά στην Καραντίνα: ${name}`,
           recycle: (name) => `Αποστολή στον Κάδο: ${name}`,
           clear: (name) => `Καθαρισμός: ${name}`,
           compact: (name) => `Συμπίεση: ${name}`,
@@ -7974,17 +7974,17 @@ export const CATALOG = {
         description: "Dibuja el espacio libre de la unidad como un bloque más al escanear una unidad completa, para que cada carpeta se lea como una parte de la unidad y no del espacio en uso."
       },
       deepCleanRemoval: {
-        title: 'When Deep Clean removes files',
+        title: "Cuando la Limpieza profunda quita archivos",
         quarantine: {
-          label: 'Move to Quarantine (you can put it back)',
-          description: "Nothing is deleted. Files go into Prune's Quarantine and the drive gets the space back when you empty it."
+          label: "Mover a Cuarentena (puedes restaurarlos)",
+          description: "No se elimina nada. Los archivos van a la Cuarentena de Prune y la unidad recupera el espacio cuando la vacías."
         },
         delete: {
-          label: "Delete now (frees the space, can't be undone — like BleachBit)",
-          description: 'Files are removed as soon as you confirm, so the space is free straight away. Rules that lose data still ask first.'
+          label: "Eliminar ahora (libera el espacio, no se puede deshacer, como BleachBit)",
+          description: "Los archivos se quitan en cuanto confirmas, así que el espacio queda libre al instante. Las reglas que pierden datos siguen preguntando antes."
         },
-        deleteWarning: "With Delete now, Clean can't be undone. Scheduled cleans still move files to Quarantine.",
-        autoQuarantineNote: 'Not used while Deep Clean deletes files immediately.'
+        deleteWarning: "Con Eliminar ahora, Limpiar no se puede deshacer. Las limpiezas programadas siguen moviendo los archivos a Cuarentena.",
+        autoQuarantineNote: "No se usa mientras la Limpieza profunda elimina los archivos directamente."
       },
       autoQuarantine: {
         title: 'Cuarentena automática',
@@ -8502,13 +8502,13 @@ export const CATALOG = {
     deepClean: {
       title: "Limpieza profunda",
       subtitle: "Cada caché, registro, volcado y resto que Prune sabe encontrar, medido en esta máquina en lugar de estimado. Nada se elimina directamente — todo lo que Limpieza toma va primero a Cuarentena, donde puedes restaurarlo.",
-      subtitleDelete: "Every cache, log, dump and leftover Prune knows how to find, measured on this machine rather than estimated. Clean deletes what you tick immediately and frees the space, the way BleachBit does. It can't be undone.",
+      subtitleDelete: "Cada caché, registro, volcado y resto que Prune sabe encontrar, medido en esta máquina en lugar de estimado. Limpiar elimina al instante lo que marques y libera el espacio, como hace BleachBit. No se puede deshacer.",
       scanLog: {
         header: 'Salida del escaneo',
         scanningAnnounce: (total) => `Escaneando ${total} ubicaciones.`,
         finishedAnnounce: (scanned, total) => `Escaneo terminado. ${scanned} de ${total} ubicaciones medidas.`,
-        searching: (items) => `Searching your profile… ${items} items checked`,
-        wiping: (written, total) => `Writing zeros… ${written} of ${total}`,
+        searching: (items) => `Buscando en tu perfil… ${items} elementos revisados`,
+        wiping: (written, total) => `Escribiendo ceros… ${written} de ${total}`,
         starting: 'Iniciando…',
         idle: "Pulsa Vista previa para medir qué se puede limpiar."
       },
@@ -8517,11 +8517,11 @@ export const CATALOG = {
       cleanErrorPrefix: (error) => `No se pudo limpiar: ${error}`,
       cleanupComplete: 'Limpieza completada.',
       resultFreed: (formatted) => `${formatted} liberados`,
-      resultMoved: (formatted) => `Moved ${formatted} to Quarantine. The space comes back when you empty it.`,
-      resultRecycled: (formatted) => `Moved ${formatted} to the Recycle Bin. The space comes back when you empty it.`,
-      openQuarantine: 'Open Quarantine',
-      resultWiped: (size) => `Wrote ${size} of zeros over the free space, then deleted it. No space was freed.`,
-      resultWipeStopped: (size) => `Stopped after writing ${size} of zeros over the free space. The filler was deleted.`,
+      resultMoved: (formatted) => `Se movieron ${formatted} a Cuarentena. El espacio se recupera cuando la vacías.`,
+      resultRecycled: (formatted) => `Se movieron ${formatted} a la Papelera de reciclaje. El espacio se recupera cuando la vacías.`,
+      openQuarantine: "Abrir Cuarentena",
+      resultWiped: (size) => `Se escribieron ${size} de ceros sobre el espacio libre y luego se eliminaron. No se liberó espacio.`,
+      resultWipeStopped: (size) => `Detenido tras escribir ${size} de ceros sobre el espacio libre. El archivo de relleno se eliminó.`,
       resultLockedSuffix: (count) => ` — ${count} archivo${count === 1 ? '' : 's'} bloqueado${count === 1 ? '' : 's'} omitido${count === 1 ? '' : 's'}`,
       before: {
         body: 'Prune mide cada categoría realmente en el disco en lugar de estimarla, lo que toma alrededor de medio minuto.',
@@ -8534,9 +8534,9 @@ export const CATALOG = {
         notMeasuredYet: 'aún no medido',
         previewFirst: "Usa primero la vista previa para ver qué se liberará.",
         unmeasuredSuffix: (count) => ` · ${count} sin medir`,
-        modeQuarantine: 'Moves to Quarantine.',
-        modeRecycle: 'Moves to the Recycle Bin.',
-        modeDelete: 'Deletes immediately.',
+        modeQuarantine: "Mueve a Cuarentena.",
+        modeRecycle: "Mueve a la Papelera de reciclaje.",
+        modeDelete: "Elimina al instante.",
         selectEverything: 'Seleccionar todo',
         clear: "Deseleccionar",
         selectedCount: (count) => `${count} ${count === 1 ? 'seleccionado' : 'seleccionados'}`
@@ -8545,35 +8545,35 @@ export const CATALOG = {
         prompt: (count, sizeKnown, formatted) => `¿Mover ${count} elemento${count === 1 ? '' : 's'} (${sizeKnown ? formatted : 'tamaño no medido'}) a cuarentena?`,
         cancel: 'Cancelar',
         confirmButton: "Mover a cuarentena",
-        promptDelete: (count, sizeKnown, formatted) => `Delete ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'})? This can't be undone.`,
-        deleteButton: 'Delete',
-        promptRecycle: (count, sizeKnown, formatted) => `Move ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'}) to the Recycle Bin?`,
-        recycleButton: 'Move to Recycle Bin',
-        wipeNote: 'Includes wiping free disk space, which can take hours.',
+        promptDelete: (count, sizeKnown, formatted) => `¿Eliminar ${count} elemento${count === 1 ? '' : 's'} (${sizeKnown ? formatted : 'tamaño no medido'})? No se puede deshacer.`,
+        deleteButton: "Eliminar ahora",
+        promptRecycle: (count, sizeKnown, formatted) => `¿Mover ${count} elemento${count === 1 ? '' : 's'} (${sizeKnown ? formatted : 'tamaño no medido'}) a la Papelera de reciclaje?`,
+        recycleButton: "Mover a la Papelera de reciclaje",
+        wipeNote: "Incluye sobrescribir el espacio libre del disco, lo que puede tardar horas.",
         cleaning: 'Limpiando…'
       },
       wipe: {
-        title: 'Wipe free disk space',
-        body: "This overwrites the free space on the drive with zeros, then deletes the filler, so files you deleted earlier can't be recovered. It frees no space.",
-        ssdWarning: 'On an SSD with TRIM this does nothing useful and adds write wear. Use it on a hard disk, or when you know you need it.',
-        driveLine: (drive) => `Drive: ${drive}`,
-        writeLine: (size) => `About ${size} will be written.`,
-        timeLine: (duration, speed) => `Roughly ${duration}, from a one-second write test at ${speed}. The drive slows as it fills, so it can take longer.`,
+        title: "Sobrescribir el espacio libre del disco",
+        body: "Esto sobrescribe el espacio libre de la unidad con ceros y luego elimina el archivo de relleno, de modo que los archivos que eliminaste antes no se puedan recuperar. No libera espacio.",
+        ssdWarning: "En un SSD con TRIM esto no sirve de nada y añade desgaste de escritura. Úsalo en un disco duro o cuando sepas que lo necesitas.",
+        driveLine: (drive) => `Unidad: ${drive}`,
+        writeLine: (size) => `Se escribirán unos ${size}.`,
+        timeLine: (duration, speed) => `Unos ${duration}, según una prueba de escritura de un segundo a ${speed}. La unidad se ralentiza a medida que se llena, así que puede tardar más.`,
         duration: (hours, minutes) => (hours > 0 ? `${hours} h ${minutes} min` : `${minutes} min`),
-        reserveLine: (size) => `${size} always stays free so Windows keeps working.`,
-        stopNote: 'Stop ends it at once and deletes the filler.',
-        measuring: 'Measuring the drive…',
-        estimateFailed: (error) => `Couldn't measure the drive: ${error}`,
-        cancel: 'Cancel',
-        confirm: 'Add to this clean'
+        reserveLine: (size) => `Siempre se mantienen ${size} libres para que Windows siga funcionando.`,
+        stopNote: "Detener lo termina al instante y elimina el archivo de relleno.",
+        measuring: "Midiendo la unidad…",
+        estimateFailed: (error) => `No se pudo medir la unidad: ${error}`,
+        cancel: "Cancelar",
+        confirm: "Añadir a esta limpieza"
       },
       stop: 'Detener',
       rescan: 'Volver a escanear',
       clean: 'Limpiar',
       tree: {
         selectCategoryAriaLabel: (category) => `Seleccionar todo en ${category}`,
-        atLeast: (size) => `at least ${size}`,
-        longRunning: 'Takes a long time',
+        atLeast: (size) => `al menos ${size}`,
+        longRunning: "Tarda mucho",
         losesData: 'Pierde datos',
         needsAdmin: 'necesita administrador',
         notInstalled: 'no instalado',
@@ -8590,7 +8590,7 @@ export const CATALOG = {
       },
       log: {
         scan: {
-          partial: (size) => `${size}, partial`,
+          partial: (size) => `${size}, parcial`,
           nothingToMeasure: "nada que medir",
           needsAdmin: "necesita administrador",
           notInstalled: "no instalado",
@@ -8598,10 +8598,10 @@ export const CATALOG = {
         },
         execute: {
           delete: (name) => `Eliminar ${name}`,
-          wipe: (name) => `Wipe ${name}`,
-          wiped: (size) => `${size} written`,
-          wipeStopped: (size) => `stopped after ${size}`,
-          quarantine: (name) => `Quarantine ${name}`,
+          wipe: (name) => `Sobrescribir ${name}`,
+          wiped: (size) => `${size} escritos`,
+          wipeStopped: (size) => `detenido tras ${size}`,
+          quarantine: (name) => `Mover ${name} a Cuarentena`,
           recycle: (name) => `Enviar ${name} a la Papelera`,
           clear: (name) => `Limpiar ${name}`,
           compact: (name) => `Compactar ${name}`,
@@ -8852,17 +8852,17 @@ export const CATALOG = {
         description: 'Joonistab terve ketta skannimisel vaba ruumi ühe lisaplokina, nii et iga kaust loetakse ketta, mitte kasutuses oleva ruumi osana.'
       },
       deepCleanRemoval: {
-        title: 'When Deep Clean removes files',
+        title: "Kui Süvapuhastus faile eemaldab",
         quarantine: {
-          label: 'Move to Quarantine (you can put it back)',
-          description: "Nothing is deleted. Files go into Prune's Quarantine and the drive gets the space back when you empty it."
+          label: "Teisalda karantiini (saad selle tagasi panna)",
+          description: "Midagi ei kustutata. Failid lähevad Prune'i karantiini ja ketas saab ruumi tagasi, kui selle tühjendad."
         },
         delete: {
-          label: "Delete now (frees the space, can't be undone — like BleachBit)",
-          description: 'Files are removed as soon as you confirm, so the space is free straight away. Rules that lose data still ask first.'
+          label: "Kustuta kohe (vabastab ruumi, ei saa tagasi võtta — nagu BleachBit)",
+          description: "Failid eemaldatakse kohe pärast kinnitamist, nii et ruum vabaneb otsekohe. Andmeid kaotavad reeglid küsivad ikkagi enne."
         },
-        deleteWarning: "With Delete now, Clean can't be undone. Scheduled cleans still move files to Quarantine.",
-        autoQuarantineNote: 'Not used while Deep Clean deletes files immediately.'
+        deleteWarning: "Valiku Kustuta kohe korral ei saa Puhastust tagasi võtta. Ajastatud puhastused teisaldavad failid endiselt karantiini.",
+        autoQuarantineNote: "Ei kasutata, kui Süvapuhastus kustutab failid kohe."
       },
       autoQuarantine: {
         title: 'Automaatne karantiin',
@@ -9380,13 +9380,13 @@ export const CATALOG = {
     deepClean: {
       title: "Süvapuhastus",
       subtitle: 'Iga vahemälu, logi, tõmmis ja jääk, mida Prune oskab leida, mõõdetud sellel masinal, mitte hinnatud. Midagi ei kustutata otsekohe — kõik, mida Puhastus võtab, läheb esmalt Karantiini, kust saad selle tagasi panna.',
-      subtitleDelete: "Every cache, log, dump and leftover Prune knows how to find, measured on this machine rather than estimated. Clean deletes what you tick immediately and frees the space, the way BleachBit does. It can't be undone.",
+      subtitleDelete: "Iga vahemälu, logi, tõmmis ja jääk, mida Prune oskab leida, mõõdetud sellel masinal, mitte hinnatud. Puhasta kustutab valitud kohe ja vabastab ruumi, nagu BleachBit. Seda ei saa tagasi võtta.",
       scanLog: {
         header: 'Skannimise väljund',
         scanningAnnounce: (total) => `Skannitakse ${total} asukohta.`,
         finishedAnnounce: (scanned, total) => `Skannimine lõpetatud. Mõõdetud ${scanned} asukohta ${total}-st.`,
-        searching: (items) => `Searching your profile… ${items} items checked`,
-        wiping: (written, total) => `Writing zeros… ${written} of ${total}`,
+        searching: (items) => `Otsitakse sinu profiilist… ${items} üksust kontrollitud`,
+        wiping: (written, total) => `Kirjutatakse nulle… ${written} / ${total}`,
         starting: 'Alustamine…',
         idle: "Vajuta Eelvaade, et näha, mida saab puhastada."
       },
@@ -9395,11 +9395,11 @@ export const CATALOG = {
       cleanErrorPrefix: (error) => `Puhastamine ebaõnnestus: ${error}`,
       cleanupComplete: 'Puhastamine lõpetatud.',
       resultFreed: (formatted) => `Vabastati ${formatted}`,
-      resultMoved: (formatted) => `Moved ${formatted} to Quarantine. The space comes back when you empty it.`,
-      resultRecycled: (formatted) => `Moved ${formatted} to the Recycle Bin. The space comes back when you empty it.`,
-      openQuarantine: 'Open Quarantine',
-      resultWiped: (size) => `Wrote ${size} of zeros over the free space, then deleted it. No space was freed.`,
-      resultWipeStopped: (size) => `Stopped after writing ${size} of zeros over the free space. The filler was deleted.`,
+      resultMoved: (formatted) => `Teisaldati ${formatted} karantiini. Ruum vabaneb, kui selle tühjendad.`,
+      resultRecycled: (formatted) => `Teisaldati ${formatted} prügikasti. Ruum vabaneb, kui selle tühjendad.`,
+      openQuarantine: "Ava karantiin",
+      resultWiped: (size) => `Vabale ruumile kirjutati ${size} nulle ja need kustutati seejärel. Ruumi ei vabanenud.`,
+      resultWipeStopped: (size) => `Peatati pärast seda, kui vabale ruumile oli kirjutatud ${size} nulle. Täitefail kustutati.`,
       resultLockedSuffix: (count) => ` — jäeti vahele ${count} lukustatud fail${count === 1 ? '' : 'i'}`,
       before: {
         body: 'Prune mõõdab iga kategooriat kettal tegelikult, mitte ei hinda seda, mis võtab aega umbes pool minutit.',
@@ -9412,9 +9412,9 @@ export const CATALOG = {
         notMeasuredYet: 'veel mõõtmata',
         previewFirst: "Vaata kõigepealt Eelvaadet, et näha, mis vabaneb.",
         unmeasuredSuffix: (count) => ` · ${count} mõõtmata`,
-        modeQuarantine: 'Moves to Quarantine.',
-        modeRecycle: 'Moves to the Recycle Bin.',
-        modeDelete: 'Deletes immediately.',
+        modeQuarantine: "Teisaldab karantiini.",
+        modeRecycle: "Teisaldab prügikasti.",
+        modeDelete: "Kustutab kohe.",
         selectEverything: 'Vali kõik',
         clear: 'Tühjenda',
         selectedCount: (count) => `${count} valitud`
@@ -9423,35 +9423,35 @@ export const CATALOG = {
         prompt: (count, sizeKnown, formatted) => `Teisaldada ${count} ${count === 1 ? 'üksus' : 'üksust'} (${sizeKnown ? formatted : 'suurus mõõtmata'}) karantiini?`,
         cancel: 'Tühista',
         confirmButton: "Teisalda karantiini",
-        promptDelete: (count, sizeKnown, formatted) => `Delete ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'})? This can't be undone.`,
-        deleteButton: 'Delete',
-        promptRecycle: (count, sizeKnown, formatted) => `Move ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'}) to the Recycle Bin?`,
-        recycleButton: 'Move to Recycle Bin',
-        wipeNote: 'Includes wiping free disk space, which can take hours.',
+        promptDelete: (count, sizeKnown, formatted) => `Kustutada ${count} ${count === 1 ? 'üksus' : 'üksust'} (${sizeKnown ? formatted : 'suurus mõõtmata'})? Seda ei saa tagasi võtta.`,
+        deleteButton: "Kustuta",
+        promptRecycle: (count, sizeKnown, formatted) => `Teisaldada ${count} ${count === 1 ? 'üksus' : 'üksust'} (${sizeKnown ? formatted : 'suurus mõõtmata'}) prügikasti?`,
+        recycleButton: "Teisalda prügikasti",
+        wipeNote: "Sisaldab vaba kettaruumi ülekirjutamist, mis võib võtta tunde.",
         cleaning: 'Puhastamine…'
       },
       wipe: {
-        title: 'Wipe free disk space',
-        body: "This overwrites the free space on the drive with zeros, then deletes the filler, so files you deleted earlier can't be recovered. It frees no space.",
-        ssdWarning: 'On an SSD with TRIM this does nothing useful and adds write wear. Use it on a hard disk, or when you know you need it.',
-        driveLine: (drive) => `Drive: ${drive}`,
-        writeLine: (size) => `About ${size} will be written.`,
-        timeLine: (duration, speed) => `Roughly ${duration}, from a one-second write test at ${speed}. The drive slows as it fills, so it can take longer.`,
+        title: "Kirjuta vaba kettaruum üle",
+        body: "See kirjutab ketta vaba ruumi nullidega üle ja kustutab seejärel täitefaili, nii et varem kustutatud faile ei saa taastada. See ei vabasta ruumi.",
+        ssdWarning: "TRIMiga SSD-l pole sellest kasu ja see suurendab kirjutuskulumit. Kasuta seda kõvakettal või siis, kui tead, et vajad seda.",
+        driveLine: (drive) => `Ketas: ${drive}`,
+        writeLine: (size) => `Kirjutatakse umbes ${size}.`,
+        timeLine: (duration, speed) => `Umbes ${duration}, ühesekundilise kirjutustesti põhjal kiirusel ${speed}. Ketas aeglustub täitudes, nii et see võib kauem võtta.`,
         duration: (hours, minutes) => (hours > 0 ? `${hours} h ${minutes} min` : `${minutes} min`),
-        reserveLine: (size) => `${size} always stays free so Windows keeps working.`,
-        stopNote: 'Stop ends it at once and deletes the filler.',
-        measuring: 'Measuring the drive…',
-        estimateFailed: (error) => `Couldn't measure the drive: ${error}`,
-        cancel: 'Cancel',
-        confirm: 'Add to this clean'
+        reserveLine: (size) => `${size} jääb alati vabaks, et Windows töötaks edasi.`,
+        stopNote: "Peata lõpetab selle kohe ja kustutab täitefaili.",
+        measuring: "Mõõdetakse ketast…",
+        estimateFailed: (error) => `Ketast ei õnnestunud mõõta: ${error}`,
+        cancel: "Tühista",
+        confirm: "Lisa sellele puhastusele"
       },
       stop: 'Peata',
       rescan: 'Skanni uuesti',
       clean: 'Puhasta',
       tree: {
         selectCategoryAriaLabel: (category) => `Vali kõik kategoorias ${category}`,
-        atLeast: (size) => `at least ${size}`,
-        longRunning: 'Takes a long time',
+        atLeast: (size) => `vähemalt ${size}`,
+        longRunning: "Võtab kaua aega",
         losesData: 'Kaotab andmeid',
         needsAdmin: 'vajab administraatorit',
         notInstalled: 'pole installitud',
@@ -9468,7 +9468,7 @@ export const CATALOG = {
       },
       log: {
         scan: {
-          partial: (size) => `${size}, partial`,
+          partial: (size) => `${size}, osaline`,
           nothingToMeasure: "pole midagi mõõta",
           needsAdmin: "vajab administraatorit",
           notInstalled: "pole installitud",
@@ -9476,10 +9476,10 @@ export const CATALOG = {
         },
         execute: {
           delete: (name) => `Kustuta ${name}`,
-          wipe: (name) => `Wipe ${name}`,
-          wiped: (size) => `${size} written`,
-          wipeStopped: (size) => `stopped after ${size}`,
-          quarantine: (name) => `Quarantine ${name}`,
+          wipe: (name) => `Kirjuta üle: ${name}`,
+          wiped: (size) => `${size} kirjutatud`,
+          wipeStopped: (size) => `peatatud pärast ${size}`,
+          quarantine: (name) => `Teisalda karantiini: ${name}`,
           recycle: (name) => `Saada ${name} prügikasti`,
           clear: (name) => `Tühjenda ${name}`,
           compact: (name) => `Tihenda ${name}`,
@@ -9730,17 +9730,17 @@ export const CATALOG = {
         description: 'Piirtää levyn vapaan tilan yhtenä lisälohkona koko levyä skannattaessa, jotta jokainen kansio näkyy osuutena levystä eikä käytössä olevasta tilasta.'
       },
       deepCleanRemoval: {
-        title: 'When Deep Clean removes files',
+        title: "Kun Syväpuhdistus poistaa tiedostoja",
         quarantine: {
-          label: 'Move to Quarantine (you can put it back)',
-          description: "Nothing is deleted. Files go into Prune's Quarantine and the drive gets the space back when you empty it."
+          label: "Siirrä karanteeniin (voit palauttaa ne)",
+          description: "Mitään ei poisteta. Tiedostot siirtyvät Prunen karanteeniin, ja asema saa tilan takaisin, kun tyhjennät sen."
         },
         delete: {
-          label: "Delete now (frees the space, can't be undone — like BleachBit)",
-          description: 'Files are removed as soon as you confirm, so the space is free straight away. Rules that lose data still ask first.'
+          label: "Poista heti (vapauttaa tilan, ei voi peruuttaa — kuten BleachBit)",
+          description: "Tiedostot poistetaan heti vahvistettuasi, joten tila vapautuu saman tien. Tietoja menettävät säännöt kysyvät silti ensin."
         },
-        deleteWarning: "With Delete now, Clean can't be undone. Scheduled cleans still move files to Quarantine.",
-        autoQuarantineNote: 'Not used while Deep Clean deletes files immediately.'
+        deleteWarning: "Kun Poista heti on käytössä, Puhdistusta ei voi peruuttaa. Ajastetut puhdistukset siirtävät tiedostot edelleen karanteeniin.",
+        autoQuarantineNote: "Ei käytössä, kun Syväpuhdistus poistaa tiedostot heti."
       },
       autoQuarantine: {
         title: 'Automaattinen karanteeni',
@@ -10258,13 +10258,13 @@ export const CATALOG = {
     deepClean: {
       title: 'Syväpuhdistus',
       subtitle: 'Jokainen välimuisti, loki, vedos ja jäänne, jonka Prune osaa löytää, mitattu tällä koneella arvioinnin sijaan. Mitään ei poisteta suoraan — kaikki, mitä Puhdistus vie, menee ensin Karanteeniin, josta sen voi palauttaa.',
-      subtitleDelete: "Every cache, log, dump and leftover Prune knows how to find, measured on this machine rather than estimated. Clean deletes what you tick immediately and frees the space, the way BleachBit does. It can't be undone.",
+      subtitleDelete: "Jokainen välimuisti, loki, vedos ja jäänne, jonka Prune osaa löytää, mitattu tällä koneella arvioinnin sijaan. Puhdista poistaa valitsemasi heti ja vapauttaa tilan, kuten BleachBit. Sitä ei voi peruuttaa.",
       scanLog: {
         header: 'Skannauksen tuloste',
         scanningAnnounce: (total) => `Skannataan ${total} sijaintia.`,
         finishedAnnounce: (scanned, total) => `Skannaus valmis. ${scanned}/${total} sijaintia mitattu.`,
-        searching: (items) => `Searching your profile… ${items} items checked`,
-        wiping: (written, total) => `Writing zeros… ${written} of ${total}`,
+        searching: (items) => `Etsitään profiilistasi… ${items} kohdetta tarkistettu`,
+        wiping: (written, total) => `Kirjoitetaan nollia… ${written} / ${total}`,
         starting: 'Aloitetaan…',
         idle: "Paina Esikatselu, niin näet, mitä voi puhdistaa."
       },
@@ -10273,11 +10273,11 @@ export const CATALOG = {
       cleanErrorPrefix: (error) => `Puhdistus epäonnistui: ${error}`,
       cleanupComplete: 'Puhdistus valmis.',
       resultFreed: (formatted) => `Vapautettiin ${formatted}`,
-      resultMoved: (formatted) => `Moved ${formatted} to Quarantine. The space comes back when you empty it.`,
-      resultRecycled: (formatted) => `Moved ${formatted} to the Recycle Bin. The space comes back when you empty it.`,
-      openQuarantine: 'Open Quarantine',
-      resultWiped: (size) => `Wrote ${size} of zeros over the free space, then deleted it. No space was freed.`,
-      resultWipeStopped: (size) => `Stopped after writing ${size} of zeros over the free space. The filler was deleted.`,
+      resultMoved: (formatted) => `Siirrettiin ${formatted} karanteeniin. Tila palautuu, kun tyhjennät sen.`,
+      resultRecycled: (formatted) => `Siirrettiin ${formatted} roskakoriin. Tila palautuu, kun tyhjennät sen.`,
+      openQuarantine: "Avaa karanteeni",
+      resultWiped: (size) => `Vapaan tilan päälle kirjoitettiin ${size} nollia, minkä jälkeen ne poistettiin. Tilaa ei vapautunut.`,
+      resultWipeStopped: (size) => `Pysäytettiin, kun vapaan tilan päälle oli kirjoitettu ${size} nollia. Täytetiedosto poistettiin.`,
       resultLockedSuffix: (count) => ` — ohitettiin ${count} ${count === 1 ? 'lukittu tiedosto' : 'lukittua tiedostoa'}`,
       before: {
         body: "Prune mittaa jokaisen kategorian levyltä oikeasti arvioimisen sijaan. Siihen menee noin puoli minuuttia.",
@@ -10290,9 +10290,9 @@ export const CATALOG = {
         notMeasuredYet: 'ei vielä mitattu',
         previewFirst: "Esikatsele ensin nähdäksesi, mitä vapautuu.",
         unmeasuredSuffix: (count) => ` · ${count} mittaamatta`,
-        modeQuarantine: 'Moves to Quarantine.',
-        modeRecycle: 'Moves to the Recycle Bin.',
-        modeDelete: 'Deletes immediately.',
+        modeQuarantine: "Siirtää karanteeniin.",
+        modeRecycle: "Siirtää roskakoriin.",
+        modeDelete: "Poistaa heti.",
         selectEverything: 'Valitse kaikki',
         clear: 'Tyhjennä',
         selectedCount: (count) => `${count} valittu`
@@ -10301,35 +10301,35 @@ export const CATALOG = {
         prompt: (count, sizeKnown, formatted) => `Siirretäänkö ${count} kohdetta (${sizeKnown ? formatted : 'kokoa ei mitattu'}) karanteeniin?`,
         cancel: 'Peruuta',
         confirmButton: "Siirrä karanteeniin",
-        promptDelete: (count, sizeKnown, formatted) => `Delete ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'})? This can't be undone.`,
-        deleteButton: 'Delete',
-        promptRecycle: (count, sizeKnown, formatted) => `Move ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'}) to the Recycle Bin?`,
-        recycleButton: 'Move to Recycle Bin',
-        wipeNote: 'Includes wiping free disk space, which can take hours.',
+        promptDelete: (count, sizeKnown, formatted) => `Poistetaanko ${count} ${count === 1 ? 'kohde' : 'kohdetta'} (${sizeKnown ? formatted : 'kokoa ei mitattu'})? Tätä ei voi peruuttaa.`,
+        deleteButton: "Poista",
+        promptRecycle: (count, sizeKnown, formatted) => `Siirretäänkö ${count} ${count === 1 ? 'kohde' : 'kohdetta'} (${sizeKnown ? formatted : 'kokoa ei mitattu'}) roskakoriin?`,
+        recycleButton: "Siirrä roskakoriin",
+        wipeNote: "Sisältää vapaan levytilan pyyhkimisen, mikä voi kestää tunteja.",
         cleaning: 'Puhdistetaan…'
       },
       wipe: {
-        title: 'Wipe free disk space',
-        body: "This overwrites the free space on the drive with zeros, then deletes the filler, so files you deleted earlier can't be recovered. It frees no space.",
-        ssdWarning: 'On an SSD with TRIM this does nothing useful and adds write wear. Use it on a hard disk, or when you know you need it.',
-        driveLine: (drive) => `Drive: ${drive}`,
-        writeLine: (size) => `About ${size} will be written.`,
-        timeLine: (duration, speed) => `Roughly ${duration}, from a one-second write test at ${speed}. The drive slows as it fills, so it can take longer.`,
+        title: "Pyyhi vapaa levytila",
+        body: "Tämä ylikirjoittaa aseman vapaan tilan nollilla ja poistaa sitten täytetiedoston, jotta aiemmin poistettuja tiedostoja ei voi palauttaa. Se ei vapauta tilaa.",
+        ssdWarning: "SSD-levyllä, jossa on TRIM, tästä ei ole hyötyä ja se lisää kirjoituskulumaa. Käytä sitä kiintolevyllä tai kun tiedät tarvitsevasi sitä.",
+        driveLine: (drive) => `Asema: ${drive}`,
+        writeLine: (size) => `Kirjoitettavaa on noin ${size}.`,
+        timeLine: (duration, speed) => `Suunnilleen ${duration}, yhden sekunnin kirjoitustestin perusteella (${speed}). Asema hidastuu täyttyessään, joten se voi kestää kauemmin.`,
         duration: (hours, minutes) => (hours > 0 ? `${hours} h ${minutes} min` : `${minutes} min`),
-        reserveLine: (size) => `${size} always stays free so Windows keeps working.`,
-        stopNote: 'Stop ends it at once and deletes the filler.',
-        measuring: 'Measuring the drive…',
-        estimateFailed: (error) => `Couldn't measure the drive: ${error}`,
-        cancel: 'Cancel',
-        confirm: 'Add to this clean'
+        reserveLine: (size) => `${size} pysyy aina vapaana, jotta Windows toimii.`,
+        stopNote: "Pysäytä lopettaa sen heti ja poistaa täytetiedoston.",
+        measuring: "Mitataan asemaa…",
+        estimateFailed: (error) => `Asemaa ei voitu mitata: ${error}`,
+        cancel: "Peruuta",
+        confirm: "Lisää tähän puhdistukseen"
       },
       stop: 'Pysäytä',
       rescan: 'Skannaa uudelleen',
       clean: 'Puhdista',
       tree: {
         selectCategoryAriaLabel: (category) => `Valitse kaikki kategoriassa ${category}`,
-        atLeast: (size) => `at least ${size}`,
-        longRunning: 'Takes a long time',
+        atLeast: (size) => `vähintään ${size}`,
+        longRunning: "Kestää kauan",
         losesData: 'Menettää tietoja',
         needsAdmin: "vaatii järjestelmänvalvojan",
         notInstalled: 'ei asennettu',
@@ -10346,7 +10346,7 @@ export const CATALOG = {
       },
       log: {
         scan: {
-          partial: (size) => `${size}, partial`,
+          partial: (size) => `${size}, osittainen`,
           nothingToMeasure: "ei mitattavaa",
           needsAdmin: "vaatii järjestelmänvalvojan",
           notInstalled: "ei asennettu",
@@ -10354,10 +10354,10 @@ export const CATALOG = {
         },
         execute: {
           delete: (name) => `Poista ${name}`,
-          wipe: (name) => `Wipe ${name}`,
-          wiped: (size) => `${size} written`,
-          wipeStopped: (size) => `stopped after ${size}`,
-          quarantine: (name) => `Quarantine ${name}`,
+          wipe: (name) => `Pyyhi ${name}`,
+          wiped: (size) => `${size} kirjoitettu`,
+          wipeStopped: (size) => `pysäytetty, kun ${size} oli kirjoitettu`,
+          quarantine: (name) => `Siirrä karanteeniin: ${name}`,
           recycle: (name) => `Lähetä ${name} roskakoriin`,
           clear: (name) => `Tyhjennä ${name}`,
           compact: (name) => `Tiivistä ${name}`,
@@ -10608,17 +10608,17 @@ export const CATALOG = {
         description: "Dessine l'espace libre du lecteur comme un bloc de plus lors de l'analyse d'un lecteur entier, afin que chaque dossier se lise comme une part du lecteur plutôt que de l'espace utilisé."
       },
       deepCleanRemoval: {
-        title: 'When Deep Clean removes files',
+        title: "Quand le Nettoyage approfondi retire des fichiers",
         quarantine: {
-          label: 'Move to Quarantine (you can put it back)',
-          description: "Nothing is deleted. Files go into Prune's Quarantine and the drive gets the space back when you empty it."
+          label: "Déplacer vers la Quarantaine (vous pouvez les remettre)",
+          description: "Rien n'est supprimé. Les fichiers vont dans la Quarantaine de Prune et le disque récupère l'espace quand vous la videz."
         },
         delete: {
-          label: "Delete now (frees the space, can't be undone — like BleachBit)",
-          description: 'Files are removed as soon as you confirm, so the space is free straight away. Rules that lose data still ask first.'
+          label: "Supprimer maintenant (libère l'espace, irréversible, comme BleachBit)",
+          description: "Les fichiers sont retirés dès que vous confirmez, l'espace est donc libéré immédiatement. Les règles qui font perdre des données demandent toujours confirmation avant."
         },
-        deleteWarning: "With Delete now, Clean can't be undone. Scheduled cleans still move files to Quarantine.",
-        autoQuarantineNote: 'Not used while Deep Clean deletes files immediately.'
+        deleteWarning: "Avec Supprimer maintenant, Nettoyer est irréversible. Les nettoyages planifiés déplacent toujours les fichiers vers la Quarantaine.",
+        autoQuarantineNote: "Inutilisé tant que le Nettoyage approfondi supprime les fichiers immédiatement."
       },
       autoQuarantine: {
         title: 'Quarantaine automatique',
@@ -11136,13 +11136,13 @@ export const CATALOG = {
     deepClean: {
       title: "Nettoyage approfondi",
       subtitle: "Chaque cache, journal, vidage et résidu que Prune sait trouver, mesuré sur cette machine plutôt qu'estimé. Rien n'est supprimé directement — tout ce que Nettoyer prend va d'abord en quarantaine, d'où vous pouvez le restaurer.",
-      subtitleDelete: "Every cache, log, dump and leftover Prune knows how to find, measured on this machine rather than estimated. Clean deletes what you tick immediately and frees the space, the way BleachBit does. It can't be undone.",
+      subtitleDelete: "Chaque cache, journal, vidage et résidu que Prune sait trouver, mesuré sur cette machine plutôt qu'estimé. Nettoyer supprime immédiatement ce que vous cochez et libère l'espace, comme le fait BleachBit. C'est irréversible.",
       scanLog: {
         header: 'Sortie de l\'analyse',
         scanningAnnounce: (total) => `Analyse de ${total} emplacements.`,
         finishedAnnounce: (scanned, total) => `Analyse terminée. ${scanned} emplacements mesurés sur ${total}.`,
-        searching: (items) => `Searching your profile… ${items} items checked`,
-        wiping: (written, total) => `Writing zeros… ${written} of ${total}`,
+        searching: (items) => `Recherche dans votre profil… ${items} éléments vérifiés`,
+        wiping: (written, total) => `Écriture de zéros… ${written} sur ${total}`,
         starting: 'Démarrage…',
         idle: "Appuyez sur Aperçu pour mesurer ce qui peut être nettoyé."
       },
@@ -11151,11 +11151,11 @@ export const CATALOG = {
       cleanErrorPrefix: (error) => `Impossible de nettoyer : ${error}`,
       cleanupComplete: 'Nettoyage terminé.',
       resultFreed: (formatted) => `${formatted} libérés`,
-      resultMoved: (formatted) => `Moved ${formatted} to Quarantine. The space comes back when you empty it.`,
-      resultRecycled: (formatted) => `Moved ${formatted} to the Recycle Bin. The space comes back when you empty it.`,
-      openQuarantine: 'Open Quarantine',
-      resultWiped: (size) => `Wrote ${size} of zeros over the free space, then deleted it. No space was freed.`,
-      resultWipeStopped: (size) => `Stopped after writing ${size} of zeros over the free space. The filler was deleted.`,
+      resultMoved: (formatted) => `${formatted} déplacés vers la Quarantaine. L'espace revient quand vous la videz.`,
+      resultRecycled: (formatted) => `${formatted} déplacés vers la Corbeille. L'espace revient quand vous la videz.`,
+      openQuarantine: "Ouvrir la Quarantaine",
+      resultWiped: (size) => `${size} de zéros écrits sur l'espace libre, puis supprimés. Aucun espace n'a été libéré.`,
+      resultWipeStopped: (size) => `Arrêté après l'écriture de ${size} de zéros sur l'espace libre. Le fichier de remplissage a été supprimé.`,
       resultLockedSuffix: (count) => ` — ${count} fichier${count === 1 ? '' : 's'} verrouillé${count === 1 ? '' : 's'} ignoré${count === 1 ? '' : 's'}`,
       before: {
         body: "Prune mesure réellement chaque catégorie sur le disque plutôt que de l'estimer, ce qui prend environ une demi-minute.",
@@ -11168,9 +11168,9 @@ export const CATALOG = {
         notMeasuredYet: 'pas encore mesuré',
         previewFirst: "Faites d'abord un aperçu pour voir ce qui sera libéré.",
         unmeasuredSuffix: (count) => ` · ${count} non mesurés`,
-        modeQuarantine: 'Moves to Quarantine.',
-        modeRecycle: 'Moves to the Recycle Bin.',
-        modeDelete: 'Deletes immediately.',
+        modeQuarantine: "Déplace vers la Quarantaine.",
+        modeRecycle: "Déplace vers la Corbeille.",
+        modeDelete: "Supprime immédiatement.",
         selectEverything: 'Tout sélectionner',
         clear: "Désélectionner",
         selectedCount: (count) => `${count} ${count === 1 ? 'sélectionné' : 'sélectionnés'}`
@@ -11179,35 +11179,35 @@ export const CATALOG = {
         prompt: (count, sizeKnown, formatted) => `Déplacer ${count} élément${count === 1 ? '' : 's'} (${sizeKnown ? formatted : 'taille non mesurée'}) vers la quarantaine ?`,
         cancel: 'Annuler',
         confirmButton: "Déplacer vers la quarantaine",
-        promptDelete: (count, sizeKnown, formatted) => `Delete ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'})? This can't be undone.`,
-        deleteButton: 'Delete',
-        promptRecycle: (count, sizeKnown, formatted) => `Move ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'}) to the Recycle Bin?`,
-        recycleButton: 'Move to Recycle Bin',
-        wipeNote: 'Includes wiping free disk space, which can take hours.',
+        promptDelete: (count, sizeKnown, formatted) => `Supprimer ${count} élément${count === 1 ? '' : 's'} (${sizeKnown ? formatted : 'taille non mesurée'}) ? C'est irréversible.`,
+        deleteButton: "Supprimer maintenant",
+        promptRecycle: (count, sizeKnown, formatted) => `Déplacer ${count} élément${count === 1 ? '' : 's'} (${sizeKnown ? formatted : 'taille non mesurée'}) vers la Corbeille ?`,
+        recycleButton: "Déplacer vers la Corbeille",
+        wipeNote: "Comprend l'écrasement de l'espace disque libre, qui peut prendre des heures.",
         cleaning: 'Nettoyage…'
       },
       wipe: {
-        title: 'Wipe free disk space',
-        body: "This overwrites the free space on the drive with zeros, then deletes the filler, so files you deleted earlier can't be recovered. It frees no space.",
-        ssdWarning: 'On an SSD with TRIM this does nothing useful and adds write wear. Use it on a hard disk, or when you know you need it.',
-        driveLine: (drive) => `Drive: ${drive}`,
-        writeLine: (size) => `About ${size} will be written.`,
-        timeLine: (duration, speed) => `Roughly ${duration}, from a one-second write test at ${speed}. The drive slows as it fills, so it can take longer.`,
+        title: "Écraser l'espace disque libre",
+        body: "Cela écrase l'espace libre du lecteur avec des zéros, puis supprime le fichier de remplissage, de sorte que les fichiers que vous avez supprimés auparavant ne puissent pas être récupérés. Aucun espace n'est libéré.",
+        ssdWarning: "Sur un SSD avec TRIM, cela ne sert à rien et ajoute de l'usure en écriture. Utilisez-le sur un disque dur, ou quand vous savez que vous en avez besoin.",
+        driveLine: (drive) => `Lecteur : ${drive}`,
+        writeLine: (size) => `Environ ${size} seront écrits.`,
+        timeLine: (duration, speed) => `Environ ${duration}, d'après un test d'écriture d'une seconde à ${speed}. Le lecteur ralentit en se remplissant, cela peut donc durer plus longtemps.`,
         duration: (hours, minutes) => (hours > 0 ? `${hours} h ${minutes} min` : `${minutes} min`),
-        reserveLine: (size) => `${size} always stays free so Windows keeps working.`,
-        stopNote: 'Stop ends it at once and deletes the filler.',
-        measuring: 'Measuring the drive…',
-        estimateFailed: (error) => `Couldn't measure the drive: ${error}`,
-        cancel: 'Cancel',
-        confirm: 'Add to this clean'
+        reserveLine: (size) => `${size} restent toujours libres pour que Windows continue de fonctionner.`,
+        stopNote: "Arrêter y met fin immédiatement et supprime le fichier de remplissage.",
+        measuring: "Mesure du lecteur…",
+        estimateFailed: (error) => `Impossible de mesurer le lecteur : ${error}`,
+        cancel: "Annuler",
+        confirm: "Ajouter à ce nettoyage"
       },
       stop: 'Arrêter',
       rescan: 'Réanalyser',
       clean: 'Nettoyer',
       tree: {
         selectCategoryAriaLabel: (category) => `Tout sélectionner sous ${category}`,
-        atLeast: (size) => `at least ${size}`,
-        longRunning: 'Takes a long time',
+        atLeast: (size) => `au moins ${size}`,
+        longRunning: "Prend beaucoup de temps",
         losesData: 'Perte de données',
         needsAdmin: "nécessite les droits administrateur",
         notInstalled: 'non installé',
@@ -11224,7 +11224,7 @@ export const CATALOG = {
       },
       log: {
         scan: {
-          partial: (size) => `${size}, partial`,
+          partial: (size) => `${size}, partiel`,
           nothingToMeasure: "rien à mesurer",
           needsAdmin: "nécessite les droits administrateur",
           notInstalled: "non installé",
@@ -11232,10 +11232,10 @@ export const CATALOG = {
         },
         execute: {
           delete: (name) => `Supprimer ${name}`,
-          wipe: (name) => `Wipe ${name}`,
-          wiped: (size) => `${size} written`,
-          wipeStopped: (size) => `stopped after ${size}`,
-          quarantine: (name) => `Quarantine ${name}`,
+          wipe: (name) => `Écraser ${name}`,
+          wiped: (size) => `${size} écrits`,
+          wipeStopped: (size) => `arrêté après ${size}`,
+          quarantine: (name) => `Déplacer ${name} vers la Quarantaine`,
           recycle: (name) => `Envoyer ${name} à la Corbeille`,
           clear: (name) => `Effacer ${name}`,
           compact: (name) => `Compacter ${name}`,
@@ -11486,17 +11486,17 @@ export const CATALOG = {
         description: 'מצייר את השטח הפנוי בכונן כבלוק נוסף כשסורקים כונן שלם, כך שכל תיקייה נקראת כחלק מהכונן ולא מהשטח בשימוש.'
       },
       deepCleanRemoval: {
-        title: 'When Deep Clean removes files',
+        title: "כשניקוי מעמיק מסיר קבצים",
         quarantine: {
-          label: 'Move to Quarantine (you can put it back)',
-          description: "Nothing is deleted. Files go into Prune's Quarantine and the drive gets the space back when you empty it."
+          label: "העברה להסגר (אפשר להחזיר)",
+          description: "שום דבר לא נמחק. הקבצים עוברים להסגר של Prune, והכונן מקבל את המקום בחזרה כשתרוקן אותו."
         },
         delete: {
-          label: "Delete now (frees the space, can't be undone — like BleachBit)",
-          description: 'Files are removed as soon as you confirm, so the space is free straight away. Rules that lose data still ask first.'
+          label: "מחיקה מיידית (משחררת מקום, אי אפשר לבטל — כמו BleachBit)",
+          description: "הקבצים מוסרים ברגע שתאשר, ולכן המקום מתפנה מיד. כללים שמאבדים נתונים עדיין שואלים קודם."
         },
-        deleteWarning: "With Delete now, Clean can't be undone. Scheduled cleans still move files to Quarantine.",
-        autoQuarantineNote: 'Not used while Deep Clean deletes files immediately.'
+        deleteWarning: "עם מחיקה מיידית אי אפשר לבטל את הניקוי. ניקויים מתוזמנים עדיין מעבירים קבצים להסגר.",
+        autoQuarantineNote: "לא בשימוש כל עוד ניקוי מעמיק מוחק קבצים מיד."
       },
       autoQuarantine: {
         title: 'הסגר אוטומטי',
@@ -12014,13 +12014,13 @@ export const CATALOG = {
     deepClean: {
       title: 'ניקוי מעמיק',
       subtitle: "כל מטמון, יומן, קובץ dump ושארית ש-Prune יודע למצוא, נמדד במכשיר הזה במקום להיות מוערך. שום דבר לא נמחק לצמיתות — כל מה שהניקוי לוקח עובר קודם להסגר, שם ניתן לשחזר אותו.",
-      subtitleDelete: "Every cache, log, dump and leftover Prune knows how to find, measured on this machine rather than estimated. Clean deletes what you tick immediately and frees the space, the way BleachBit does. It can't be undone.",
+      subtitleDelete: "כל מטמון, יומן, קובץ dump ושארית ש-Prune יודע למצוא, נמדד במכשיר הזה במקום להיות מוערך. הניקוי מוחק מיד את מה שסימנת ומשחרר את המקום, כמו ש-BleachBit עושה. אי אפשר לבטל את זה.",
       scanLog: {
         header: 'פלט הסריקה',
         scanningAnnounce: (total) => total === 1 ? 'סורק מיקום אחד.' : total === 2 ? 'סורק שני מיקומים.' : `סורק ${total} מיקומים.`,
         finishedAnnounce: (scanned, total) => `הסריקה הסתיימה. נמדדו ${scanned} מתוך ${total} מיקומים.`,
-        searching: (items) => `Searching your profile… ${items} items checked`,
-        wiping: (written, total) => `Writing zeros… ${written} of ${total}`,
+        searching: (items) => `מחפש בפרופיל שלך… נבדקו ${items} פריטים`,
+        wiping: (written, total) => `כותב אפסים… ${written} מתוך ${total}`,
         starting: 'מתחיל…',
         idle: "לחץ על ״תצוגה מקדימה״ כדי למדוד מה אפשר לנקות."
       },
@@ -12029,11 +12029,11 @@ export const CATALOG = {
       cleanErrorPrefix: (error) => `לא ניתן היה לנקות: ${error}`,
       cleanupComplete: 'הניקוי הושלם.',
       resultFreed: (formatted) => `פונו ${formatted}`,
-      resultMoved: (formatted) => `Moved ${formatted} to Quarantine. The space comes back when you empty it.`,
-      resultRecycled: (formatted) => `Moved ${formatted} to the Recycle Bin. The space comes back when you empty it.`,
-      openQuarantine: 'Open Quarantine',
-      resultWiped: (size) => `Wrote ${size} of zeros over the free space, then deleted it. No space was freed.`,
-      resultWipeStopped: (size) => `Stopped after writing ${size} of zeros over the free space. The filler was deleted.`,
+      resultMoved: (formatted) => `הועבר להסגר: ${formatted}. המקום מתפנה כשתרוקן אותו.`,
+      resultRecycled: (formatted) => `הועבר לסל המיחזור: ${formatted}. המקום מתפנה כשתרוקן אותו.`,
+      openQuarantine: "פתח את ההסגר",
+      resultWiped: (size) => `נכתבו אפסים בנפח ${size} על השטח הפנוי, ואז נמחקו. לא שוחרר מקום.`,
+      resultWipeStopped: (size) => `נעצר אחרי שנכתבו אפסים בנפח ${size} על השטח הפנוי. קובץ המילוי נמחק.`,
       resultLockedSuffix: (count) => count === 1 ? ' — דולג קובץ נעול אחד' : count === 2 ? ' — דולגו שני קבצים נעולים' : ` — דולגו ${count} קבצים נעולים`,
       before: {
         body: 'Prune מודד כל קטגוריה על הדיסק בפועל במקום להעריך, מה שלוקח כחצי דקה.',
@@ -12046,9 +12046,9 @@ export const CATALOG = {
         notMeasuredYet: 'טרם נמדד',
         previewFirst: "לחץ קודם על ״תצוגה מקדימה״ כדי לראות מה יפונה.",
         unmeasuredSuffix: (count) => ` · ${count} לא נמדד`,
-        modeQuarantine: 'Moves to Quarantine.',
-        modeRecycle: 'Moves to the Recycle Bin.',
-        modeDelete: 'Deletes immediately.',
+        modeQuarantine: "עובר להסגר.",
+        modeRecycle: "עובר לסל המיחזור.",
+        modeDelete: "נמחק מיד.",
         selectEverything: 'בחר הכל',
         clear: 'נקה',
         selectedCount: (count) => count === 1 ? '1 נבחר' : `${count} נבחרו`
@@ -12057,35 +12057,35 @@ export const CATALOG = {
         prompt: (count, sizeKnown, formatted) => `להעביר ${count === 1 ? 'פריט אחד' : count === 2 ? 'שני פריטים' : count + ' פריטים'} (${sizeKnown ? formatted : 'הגודל לא נמדד'}) להסגר?`,
         cancel: 'ביטול',
         confirmButton: "העברה להסגר",
-        promptDelete: (count, sizeKnown, formatted) => `Delete ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'})? This can't be undone.`,
-        deleteButton: 'Delete',
-        promptRecycle: (count, sizeKnown, formatted) => `Move ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'}) to the Recycle Bin?`,
-        recycleButton: 'Move to Recycle Bin',
-        wipeNote: 'Includes wiping free disk space, which can take hours.',
+        promptDelete: (count, sizeKnown, formatted) => `למחוק ${count === 1 ? 'פריט אחד' : count === 2 ? 'שני פריטים' : count + ' פריטים'} (${sizeKnown ? formatted : 'הגודל לא נמדד'})? אי אפשר לבטל את הפעולה.`,
+        deleteButton: "מחק",
+        promptRecycle: (count, sizeKnown, formatted) => `להעביר ${count === 1 ? 'פריט אחד' : count === 2 ? 'שני פריטים' : count + ' פריטים'} (${sizeKnown ? formatted : 'הגודל לא נמדד'}) לסל המיחזור?`,
+        recycleButton: "העברה לסל המיחזור",
+        wipeNote: "כולל דריסת השטח הפנוי בכונן, שעשויה להימשך שעות.",
         cleaning: 'מנקה…'
       },
       wipe: {
-        title: 'Wipe free disk space',
-        body: "This overwrites the free space on the drive with zeros, then deletes the filler, so files you deleted earlier can't be recovered. It frees no space.",
-        ssdWarning: 'On an SSD with TRIM this does nothing useful and adds write wear. Use it on a hard disk, or when you know you need it.',
-        driveLine: (drive) => `Drive: ${drive}`,
-        writeLine: (size) => `About ${size} will be written.`,
-        timeLine: (duration, speed) => `Roughly ${duration}, from a one-second write test at ${speed}. The drive slows as it fills, so it can take longer.`,
-        duration: (hours, minutes) => (hours > 0 ? `${hours} h ${minutes} min` : `${minutes} min`),
-        reserveLine: (size) => `${size} always stays free so Windows keeps working.`,
-        stopNote: 'Stop ends it at once and deletes the filler.',
-        measuring: 'Measuring the drive…',
-        estimateFailed: (error) => `Couldn't measure the drive: ${error}`,
-        cancel: 'Cancel',
-        confirm: 'Add to this clean'
+        title: "דריסת השטח הפנוי בכונן",
+        body: "הפעולה כותבת אפסים על השטח הפנוי בכונן ואז מוחקת את קובץ המילוי, כך שאי אפשר לשחזר קבצים שמחקת קודם. היא לא משחררת מקום.",
+        ssdWarning: "בכונן SSD עם TRIM אין בכך שום תועלת, וזה רק מוסיף שחיקת כתיבה. השתמש בזה בדיסק קשיח, או כשאתה יודע שאתה צריך.",
+        driveLine: (drive) => `כונן: ${drive}`,
+        writeLine: (size) => `יכתבו בערך ${size}.`,
+        timeLine: (duration, speed) => `בערך ${duration}, לפי בדיקת כתיבה של שנייה אחת ב-${speed}. הכונן מאט ככל שהוא מתמלא, ולכן זה עשוי להימשך יותר.`,
+        duration: (hours, minutes) => (hours > 0 ? `${hours} שע׳ ${minutes} דק׳` : `${minutes} דק׳`),
+        reserveLine: (size) => `תמיד נשאר פנוי מקום של ${size} כדי ש-Windows ימשיך לעבוד.`,
+        stopNote: "עצירה מסיימת את הפעולה מיד ומוחקת את קובץ המילוי.",
+        measuring: "מודד את הכונן…",
+        estimateFailed: (error) => `לא ניתן היה למדוד את הכונן: ${error}`,
+        cancel: "ביטול",
+        confirm: "הוסף לניקוי הזה"
       },
       stop: 'עצור',
       rescan: 'סרוק שוב',
       clean: 'נקה',
       tree: {
         selectCategoryAriaLabel: (category) => `בחר הכל תחת ${category}`,
-        atLeast: (size) => `at least ${size}`,
-        longRunning: 'Takes a long time',
+        atLeast: (size) => `לפחות ${size}`,
+        longRunning: "לוקח זמן רב",
         losesData: 'מאבד נתונים',
         needsAdmin: 'דורש הרשאות מנהל',
         notInstalled: 'לא מותקן',
@@ -12102,7 +12102,7 @@ export const CATALOG = {
       },
       log: {
         scan: {
-          partial: (size) => `${size}, partial`,
+          partial: (size) => `${size}, חלקי`,
           nothingToMeasure: "אין מה למדוד",
           needsAdmin: "דורש הרשאות מנהל",
           notInstalled: "לא מותקן",
@@ -12110,10 +12110,10 @@ export const CATALOG = {
         },
         execute: {
           delete: (name) => `מחק ${name}`,
-          wipe: (name) => `Wipe ${name}`,
-          wiped: (size) => `${size} written`,
-          wipeStopped: (size) => `stopped after ${size}`,
-          quarantine: (name) => `Quarantine ${name}`,
+          wipe: (name) => `דריסת ${name}`,
+          wiped: (size) => `נכתבו ${size}`,
+          wipeStopped: (size) => `נעצר אחרי ${size}`,
+          quarantine: (name) => `העבר ${name} להסגר`,
           recycle: (name) => `שלח ${name} לסל המיחזור`,
           clear: (name) => `נקה ${name}`,
           compact: (name) => `דחוס ${name}`,
@@ -12364,17 +12364,17 @@ export const CATALOG = {
         description: 'A meghajtó szabad helyét egy további blokként rajzolja ki egy teljes meghajtó vizsgálatakor, így minden mappa a meghajtó, nem pedig a használt hely arányaként olvasható.'
       },
       deepCleanRemoval: {
-        title: 'When Deep Clean removes files',
+        title: "Amikor a Mélytisztítás eltávolít fájlokat",
         quarantine: {
-          label: 'Move to Quarantine (you can put it back)',
-          description: "Nothing is deleted. Files go into Prune's Quarantine and the drive gets the space back when you empty it."
+          label: "Áthelyezés a karanténba (visszateheted)",
+          description: "Semmi sem törlődik. A fájlok a Prune karanténjába kerülnek, a meghajtó pedig akkor kapja vissza a helyet, amikor kiüríted a karanténot."
         },
         delete: {
-          label: "Delete now (frees the space, can't be undone — like BleachBit)",
-          description: 'Files are removed as soon as you confirm, so the space is free straight away. Rules that lose data still ask first.'
+          label: "Törlés azonnal (felszabadítja a helyet, nem vonható vissza — mint a BleachBit)",
+          description: "A fájlok a megerősítéssel egy időben törlődnek, így a hely rögtön felszabadul. Az adatvesztéssel járó szabályok ettől még előbb rákérdeznek."
         },
-        deleteWarning: "With Delete now, Clean can't be undone. Scheduled cleans still move files to Quarantine.",
-        autoQuarantineNote: 'Not used while Deep Clean deletes files immediately.'
+        deleteWarning: "Az Azonnali törlés mellett a Tisztítás nem vonható vissza. Az ütemezett tisztítások továbbra is a karanténba helyezik a fájlokat.",
+        autoQuarantineNote: "Nem érvényes, amíg a Mélytisztítás azonnal töröl."
       },
       autoQuarantine: {
         title: 'Automatikus karantén',
@@ -12892,13 +12892,13 @@ export const CATALOG = {
     deepClean: {
       title: 'Mélytisztítás',
       subtitle: "Minden gyorsítótár, napló, memóriakép és maradvány, amit a Prune képes megtalálni, ezen a gépen mérve, nem becsülve. Semmi sem törlődik azonnal — minden, amit a Tisztítás elvisz, először a Karanténba kerül, ahonnan visszaállíthatod.",
-      subtitleDelete: "Every cache, log, dump and leftover Prune knows how to find, measured on this machine rather than estimated. Clean deletes what you tick immediately and frees the space, the way BleachBit does. It can't be undone.",
+      subtitleDelete: "Minden gyorsítótár, napló, memóriakép és maradvány, amit a Prune képes megtalálni, ezen a gépen mérve, nem becsülve. A Tisztítás azonnal törli, amit bejelölsz, és felszabadítja a helyet, ahogy a BleachBit is. Nem vonható vissza.",
       scanLog: {
         header: 'Vizsgálati kimenet',
         scanningAnnounce: (total) => `${total} hely vizsgálata.`,
         finishedAnnounce: (scanned, total) => `A vizsgálat befejeződött. ${scanned}/${total} hely megmérve.`,
-        searching: (items) => `Searching your profile… ${items} items checked`,
-        wiping: (written, total) => `Writing zeros… ${written} of ${total}`,
+        searching: (items) => `A profilod keresése… ${items} elem ellenőrizve`,
+        wiping: (written, total) => `Nullák írása… ${written} / ${total}`,
         starting: 'Indítás…',
         idle: "Nyomd meg az Előnézet gombot, hogy megmérd, mi tisztítható."
       },
@@ -12907,11 +12907,11 @@ export const CATALOG = {
       cleanErrorPrefix: (error) => `Nem sikerült a tisztítás: ${error}`,
       cleanupComplete: 'A tisztítás befejeződött.',
       resultFreed: (formatted) => `${formatted} felszabadítva`,
-      resultMoved: (formatted) => `Moved ${formatted} to Quarantine. The space comes back when you empty it.`,
-      resultRecycled: (formatted) => `Moved ${formatted} to the Recycle Bin. The space comes back when you empty it.`,
-      openQuarantine: 'Open Quarantine',
-      resultWiped: (size) => `Wrote ${size} of zeros over the free space, then deleted it. No space was freed.`,
-      resultWipeStopped: (size) => `Stopped after writing ${size} of zeros over the free space. The filler was deleted.`,
+      resultMoved: (formatted) => `${formatted} a karanténba helyezve. A hely akkor szabadul fel, amikor kiüríted a karanténot.`,
+      resultRecycled: (formatted) => `${formatted} a Lomtárba helyezve. A hely akkor szabadul fel, amikor kiüríted a Lomtárat.`,
+      openQuarantine: "Karantén megnyitása",
+      resultWiped: (size) => `A szabad terület felülírva ${size} nullával, majd a kitöltőfájl törlődött. Nem szabadult fel hely.`,
+      resultWipeStopped: (size) => `Leállítva ${size} nulla kiírása után. A kitöltőfájl törlődött.`,
       resultLockedSuffix: (count) => ` — ${count} zárolt fájl kihagyva`,
       before: {
         body: 'A Prune ténylegesen méri a lemezen minden kategóriát becslés helyett, ami körülbelül fél percet vesz igénybe.',
@@ -12924,9 +12924,9 @@ export const CATALOG = {
         notMeasuredYet: 'még nincs megmérve',
         previewFirst: "Előbb nézd meg az előnézetet, hogy lásd, mi szabadul fel.",
         unmeasuredSuffix: (count) => ` · ${count} nem mért`,
-        modeQuarantine: 'Moves to Quarantine.',
-        modeRecycle: 'Moves to the Recycle Bin.',
-        modeDelete: 'Deletes immediately.',
+        modeQuarantine: "Karanténba kerül.",
+        modeRecycle: "A Lomtárba kerül.",
+        modeDelete: "Azonnal törlődik.",
         selectEverything: 'Összes kijelölése',
         clear: 'Törlés',
         selectedCount: (count) => `${count} kijelölve`
@@ -12935,35 +12935,35 @@ export const CATALOG = {
         prompt: (count, sizeKnown, formatted) => `Áthelyezed ${count} elemet (${sizeKnown ? formatted : 'a méret nincs megmérve'}) a karanténba?`,
         cancel: 'Mégse',
         confirmButton: "Áthelyezés a karanténba",
-        promptDelete: (count, sizeKnown, formatted) => `Delete ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'})? This can't be undone.`,
-        deleteButton: 'Delete',
-        promptRecycle: (count, sizeKnown, formatted) => `Move ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'}) to the Recycle Bin?`,
-        recycleButton: 'Move to Recycle Bin',
-        wipeNote: 'Includes wiping free disk space, which can take hours.',
+        promptDelete: (count, sizeKnown, formatted) => `Törlöd ${count} elemet (${sizeKnown ? formatted : 'a méret nincs megmérve'})? Ez nem vonható vissza.`,
+        deleteButton: "Törlés",
+        promptRecycle: (count, sizeKnown, formatted) => `Áthelyezed ${count} elemet (${sizeKnown ? formatted : 'a méret nincs megmérve'}) a Lomtárba?`,
+        recycleButton: "Áthelyezés a Lomtárba",
+        wipeNote: "A szabad lemezterület felülírását is tartalmazza, ami órákig tarthat.",
         cleaning: 'Tisztítás…'
       },
       wipe: {
-        title: 'Wipe free disk space',
-        body: "This overwrites the free space on the drive with zeros, then deletes the filler, so files you deleted earlier can't be recovered. It frees no space.",
-        ssdWarning: 'On an SSD with TRIM this does nothing useful and adds write wear. Use it on a hard disk, or when you know you need it.',
-        driveLine: (drive) => `Drive: ${drive}`,
-        writeLine: (size) => `About ${size} will be written.`,
-        timeLine: (duration, speed) => `Roughly ${duration}, from a one-second write test at ${speed}. The drive slows as it fills, so it can take longer.`,
-        duration: (hours, minutes) => (hours > 0 ? `${hours} h ${minutes} min` : `${minutes} min`),
-        reserveLine: (size) => `${size} always stays free so Windows keeps working.`,
-        stopNote: 'Stop ends it at once and deletes the filler.',
-        measuring: 'Measuring the drive…',
-        estimateFailed: (error) => `Couldn't measure the drive: ${error}`,
-        cancel: 'Cancel',
-        confirm: 'Add to this clean'
+        title: "Szabad lemezterület felülírása",
+        body: "Ez nullákkal írja felül a meghajtó szabad területét, majd törli a kitöltőfájlt, így a korábban törölt fájlok nem állíthatók helyre. Nem szabadít fel helyet.",
+        ssdWarning: "TRIM-mel rendelkező SSD-n ennek nincs értelme, és növeli az írási kopást. Merevlemezen használd, vagy ha tudod, hogy szükséged van rá.",
+        driveLine: (drive) => `Meghajtó: ${drive}`,
+        writeLine: (size) => `Nagyjából ${size} lesz kiírva.`,
+        timeLine: (duration, speed) => `Nagyjából ${duration}, egy egymásodperces, ${speed} sebességű írási teszt alapján. A meghajtó a telítődéssel lassul, ezért tovább is tarthat.`,
+        duration: (hours, minutes) => (hours > 0 ? `${hours} ó ${minutes} perc` : `${minutes} perc`),
+        reserveLine: (size) => `Mindig marad ${size} szabadon, hogy a Windows tovább működjön.`,
+        stopNote: "A Leállítás azonnal befejezi a műveletet, és törli a kitöltőfájlt.",
+        measuring: "A meghajtó mérése…",
+        estimateFailed: (error) => `Nem sikerült megmérni a meghajtót: ${error}`,
+        cancel: "Mégse",
+        confirm: "Hozzáadás ehhez a tisztításhoz"
       },
       stop: 'Leállítás',
       rescan: 'Újbóli vizsgálat',
       clean: 'Tisztítás',
       tree: {
         selectCategoryAriaLabel: (category) => `Összes kijelölése itt: ${category}`,
-        atLeast: (size) => `at least ${size}`,
-        longRunning: 'Takes a long time',
+        atLeast: (size) => `legalább ${size}`,
+        longRunning: "Sokáig tart",
         losesData: 'Adatvesztés',
         needsAdmin: 'rendszergazda szükséges',
         notInstalled: 'nincs telepítve',
@@ -12980,7 +12980,7 @@ export const CATALOG = {
       },
       log: {
         scan: {
-          partial: (size) => `${size}, partial`,
+          partial: (size) => `${size}, részleges`,
           nothingToMeasure: "nincs mit mérni",
           needsAdmin: "rendszergazda szükséges",
           notInstalled: "nincs telepítve",
@@ -12988,10 +12988,10 @@ export const CATALOG = {
         },
         execute: {
           delete: (name) => `Törlés: ${name}`,
-          wipe: (name) => `Wipe ${name}`,
-          wiped: (size) => `${size} written`,
-          wipeStopped: (size) => `stopped after ${size}`,
-          quarantine: (name) => `Quarantine ${name}`,
+          wipe: (name) => `Felülírás: ${name}`,
+          wiped: (size) => `${size} kiírva`,
+          wipeStopped: (size) => `leállítva ${size} után`,
+          quarantine: (name) => `Karanténba helyezés: ${name}`,
           recycle: (name) => `Lomtárba küldés: ${name}`,
           clear: (name) => `Ürítés: ${name}`,
           compact: (name) => `Tömörítés: ${name}`,
@@ -13242,17 +13242,17 @@ export const CATALOG = {
         description: 'Menggambar ruang kosong drive sebagai satu blok tambahan saat memindai seluruh drive, sehingga setiap folder terbaca sebagai bagian dari drive, bukan dari ruang yang terpakai.'
       },
       deepCleanRemoval: {
-        title: 'When Deep Clean removes files',
+        title: "Saat Pembersihan Mendalam menyingkirkan file",
         quarantine: {
-          label: 'Move to Quarantine (you can put it back)',
-          description: "Nothing is deleted. Files go into Prune's Quarantine and the drive gets the space back when you empty it."
+          label: "Pindahkan ke Karantina (bisa dikembalikan)",
+          description: "Tidak ada yang dihapus. File masuk ke Karantina Prune, dan drive mendapatkan kembali ruangnya saat kamu mengosongkan Karantina."
         },
         delete: {
-          label: "Delete now (frees the space, can't be undone — like BleachBit)",
-          description: 'Files are removed as soon as you confirm, so the space is free straight away. Rules that lose data still ask first.'
+          label: "Hapus sekarang (membebaskan ruang, tidak bisa dibatalkan — seperti BleachBit)",
+          description: "File dihapus begitu kamu mengonfirmasi, sehingga ruang langsung bebas. Aturan yang menyebabkan kehilangan data tetap bertanya dulu."
         },
-        deleteWarning: "With Delete now, Clean can't be undone. Scheduled cleans still move files to Quarantine.",
-        autoQuarantineNote: 'Not used while Deep Clean deletes files immediately.'
+        deleteWarning: "Dengan Hapus sekarang, pembersihan tidak bisa dibatalkan. Pembersihan terjadwal tetap memindahkan file ke Karantina.",
+        autoQuarantineNote: "Tidak dipakai selama Pembersihan Mendalam langsung menghapus file."
       },
       autoQuarantine: {
         title: 'Karantina otomatis',
@@ -13770,13 +13770,13 @@ export const CATALOG = {
     deepClean: {
       title: 'Pembersihan Mendalam',
       subtitle: 'Setiap cache, log, dump, dan sisa yang diketahui Prune cara menemukannya, diukur di komputer ini alih-alih diperkirakan. Tidak ada yang langsung dihapus — semua yang diambil Bersihkan pergi ke Karantina terlebih dahulu, tempat Anda dapat mengembalikannya.',
-      subtitleDelete: "Every cache, log, dump and leftover Prune knows how to find, measured on this machine rather than estimated. Clean deletes what you tick immediately and frees the space, the way BleachBit does. It can't be undone.",
+      subtitleDelete: "Setiap cache, log, dump, dan sisa yang diketahui Prune cara menemukannya, diukur di komputer ini alih-alih diperkirakan. Bersihkan langsung menghapus apa yang Anda centang dan membebaskan ruangnya, seperti yang dilakukan BleachBit. Tidak bisa dibatalkan.",
       scanLog: {
         header: 'Output pemindaian',
         scanningAnnounce: (total) => `Memindai ${total} lokasi.`,
         finishedAnnounce: (scanned, total) => `Pemindaian selesai. ${scanned} dari ${total} lokasi diukur.`,
-        searching: (items) => `Searching your profile… ${items} items checked`,
-        wiping: (written, total) => `Writing zeros… ${written} of ${total}`,
+        searching: (items) => `Mencari di profil Anda… ${items} item diperiksa`,
+        wiping: (written, total) => `Menulis angka nol… ${written} dari ${total}`,
         starting: 'Memulai…',
         idle: "Tekan Pratinjau untuk mengukur apa yang bisa dibersihkan."
       },
@@ -13785,11 +13785,11 @@ export const CATALOG = {
       cleanErrorPrefix: (error) => `Tidak dapat membersihkan: ${error}`,
       cleanupComplete: 'Pembersihan selesai.',
       resultFreed: (formatted) => `Membebaskan ${formatted}`,
-      resultMoved: (formatted) => `Moved ${formatted} to Quarantine. The space comes back when you empty it.`,
-      resultRecycled: (formatted) => `Moved ${formatted} to the Recycle Bin. The space comes back when you empty it.`,
-      openQuarantine: 'Open Quarantine',
-      resultWiped: (size) => `Wrote ${size} of zeros over the free space, then deleted it. No space was freed.`,
-      resultWipeStopped: (size) => `Stopped after writing ${size} of zeros over the free space. The filler was deleted.`,
+      resultMoved: (formatted) => `${formatted} dipindahkan ke Karantina. Ruangnya kembali saat Anda mengosongkan Karantina.`,
+      resultRecycled: (formatted) => `${formatted} dipindahkan ke Recycle Bin. Ruangnya kembali saat Anda mengosongkan Recycle Bin.`,
+      openQuarantine: "Buka Karantina",
+      resultWiped: (size) => `${size} angka nol ditulis menimpa ruang kosong, lalu dihapus. Tidak ada ruang yang dibebaskan.`,
+      resultWipeStopped: (size) => `Dihentikan setelah menulis ${size} angka nol menimpa ruang kosong. File pengisi sudah dihapus.`,
       resultLockedSuffix: (count) => ` — melewati ${count} berkas terkunci`,
       before: {
         body: 'Prune benar-benar mengukur setiap kategori di disk alih-alih memperkirakan, yang memakan waktu sekitar setengah menit.',
@@ -13802,9 +13802,9 @@ export const CATALOG = {
         notMeasuredYet: 'belum diukur',
         previewFirst: "Klik Pratinjau dulu untuk melihat apa yang akan dibebaskan.",
         unmeasuredSuffix: (count) => ` · ${count} tidak terukur`,
-        modeQuarantine: 'Moves to Quarantine.',
-        modeRecycle: 'Moves to the Recycle Bin.',
-        modeDelete: 'Deletes immediately.',
+        modeQuarantine: "Dipindahkan ke Karantina.",
+        modeRecycle: "Dipindahkan ke Recycle Bin.",
+        modeDelete: "Langsung dihapus.",
         selectEverything: 'Pilih semua',
         clear: "Hapus pilihan",
         selectedCount: (count) => `${count} dipilih`
@@ -13813,35 +13813,35 @@ export const CATALOG = {
         prompt: (count, sizeKnown, formatted) => `Pindahkan ${count} item (${sizeKnown ? formatted : 'ukuran tidak terukur'}) ke Karantina?`,
         cancel: 'Batal',
         confirmButton: "Pindahkan ke Karantina",
-        promptDelete: (count, sizeKnown, formatted) => `Delete ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'})? This can't be undone.`,
-        deleteButton: 'Delete',
-        promptRecycle: (count, sizeKnown, formatted) => `Move ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'}) to the Recycle Bin?`,
-        recycleButton: 'Move to Recycle Bin',
-        wipeNote: 'Includes wiping free disk space, which can take hours.',
+        promptDelete: (count, sizeKnown, formatted) => `Hapus ${count} item (${sizeKnown ? formatted : 'ukuran tidak terukur'})? Tindakan ini tidak bisa dibatalkan.`,
+        deleteButton: "Hapus",
+        promptRecycle: (count, sizeKnown, formatted) => `Pindahkan ${count} item (${sizeKnown ? formatted : 'ukuran tidak terukur'}) ke Recycle Bin?`,
+        recycleButton: "Pindahkan ke Recycle Bin",
+        wipeNote: "Termasuk menimpa ruang disk kosong, yang bisa memakan waktu berjam-jam.",
         cleaning: 'Membersihkan…'
       },
       wipe: {
-        title: 'Wipe free disk space',
-        body: "This overwrites the free space on the drive with zeros, then deletes the filler, so files you deleted earlier can't be recovered. It frees no space.",
-        ssdWarning: 'On an SSD with TRIM this does nothing useful and adds write wear. Use it on a hard disk, or when you know you need it.',
+        title: "Timpa ruang disk kosong",
+        body: "Ini menimpa ruang kosong di drive dengan angka nol, lalu menghapus file pengisinya, sehingga file yang sudah Anda hapus sebelumnya tidak bisa dipulihkan. Ini tidak membebaskan ruang.",
+        ssdWarning: "Pada SSD dengan TRIM, ini tidak berguna dan menambah keausan tulis. Gunakan pada hard disk, atau saat Anda tahu memang membutuhkannya.",
         driveLine: (drive) => `Drive: ${drive}`,
-        writeLine: (size) => `About ${size} will be written.`,
-        timeLine: (duration, speed) => `Roughly ${duration}, from a one-second write test at ${speed}. The drive slows as it fills, so it can take longer.`,
-        duration: (hours, minutes) => (hours > 0 ? `${hours} h ${minutes} min` : `${minutes} min`),
-        reserveLine: (size) => `${size} always stays free so Windows keeps working.`,
-        stopNote: 'Stop ends it at once and deletes the filler.',
-        measuring: 'Measuring the drive…',
-        estimateFailed: (error) => `Couldn't measure the drive: ${error}`,
-        cancel: 'Cancel',
-        confirm: 'Add to this clean'
+        writeLine: (size) => `Sekitar ${size} akan ditulis.`,
+        timeLine: (duration, speed) => `Kira-kira ${duration}, berdasarkan uji tulis satu detik pada ${speed}. Drive melambat saat terisi, jadi bisa lebih lama.`,
+        duration: (hours, minutes) => (hours > 0 ? `${hours} jam ${minutes} mnt` : `${minutes} mnt`),
+        reserveLine: (size) => `${size} selalu dibiarkan kosong agar Windows tetap berjalan.`,
+        stopNote: "Berhenti mengakhirinya seketika dan menghapus file pengisi.",
+        measuring: "Mengukur drive…",
+        estimateFailed: (error) => `Tidak dapat mengukur drive: ${error}`,
+        cancel: "Batal",
+        confirm: "Tambahkan ke pembersihan ini"
       },
       stop: 'Hentikan',
       rescan: 'Pindai ulang',
       clean: 'Bersihkan',
       tree: {
         selectCategoryAriaLabel: (category) => `Pilih semua di bawah ${category}`,
-        atLeast: (size) => `at least ${size}`,
-        longRunning: 'Takes a long time',
+        atLeast: (size) => `minimal ${size}`,
+        longRunning: "Butuh waktu lama",
         losesData: 'Kehilangan data',
         needsAdmin: 'memerlukan admin',
         notInstalled: 'tidak terpasang',
@@ -13858,7 +13858,7 @@ export const CATALOG = {
       },
       log: {
         scan: {
-          partial: (size) => `${size}, partial`,
+          partial: (size) => `${size}, sebagian`,
           nothingToMeasure: "tidak ada yang diukur",
           needsAdmin: "memerlukan admin",
           notInstalled: "tidak terpasang",
@@ -13866,10 +13866,10 @@ export const CATALOG = {
         },
         execute: {
           delete: (name) => `Hapus ${name}`,
-          wipe: (name) => `Wipe ${name}`,
-          wiped: (size) => `${size} written`,
-          wipeStopped: (size) => `stopped after ${size}`,
-          quarantine: (name) => `Quarantine ${name}`,
+          wipe: (name) => `Timpa ${name}`,
+          wiped: (size) => `${size} ditulis`,
+          wipeStopped: (size) => `berhenti setelah ${size}`,
+          quarantine: (name) => `Karantina ${name}`,
           recycle: (name) => `Kirim ${name} ke Recycle Bin`,
           clear: (name) => `Bersihkan ${name}`,
           compact: (name) => `Padatkan ${name}`,
@@ -14120,17 +14120,17 @@ export const CATALOG = {
         description: 'Teiknar laust pláss drifsins sem einn blokk til viðbótar þegar heilt drif er skannað, svo hver mappa lesist sem hlutfall af drifinu frekar en af notuðu plássi.'
       },
       deepCleanRemoval: {
-        title: 'When Deep Clean removes files',
+        title: "Þegar Djúphreinsun fjarlægir skrár",
         quarantine: {
-          label: 'Move to Quarantine (you can put it back)',
-          description: "Nothing is deleted. Files go into Prune's Quarantine and the drive gets the space back when you empty it."
+          label: "Færa í sóttkví (þú getur sett það til baka)",
+          description: "Engu er eytt. Skrárnar fara í sóttkví Prune og drifið fær plássið aftur þegar þú tæmir hana."
         },
         delete: {
-          label: "Delete now (frees the space, can't be undone — like BleachBit)",
-          description: 'Files are removed as soon as you confirm, so the space is free straight away. Rules that lose data still ask first.'
+          label: "Eyða núna (losar plássið, ekki hægt að afturkalla — eins og BleachBit)",
+          description: "Skrár eru fjarlægðar um leið og þú staðfestir, þannig að plássið losnar strax. Reglur sem tapa gögnum spyrja samt fyrst."
         },
-        deleteWarning: "With Delete now, Clean can't be undone. Scheduled cleans still move files to Quarantine.",
-        autoQuarantineNote: 'Not used while Deep Clean deletes files immediately.'
+        deleteWarning: "Með Eyða núna er ekki hægt að afturkalla Hreinsun. Tímasettar hreinsanir færa skrár áfram í sóttkví.",
+        autoQuarantineNote: "Ekki notað á meðan Djúphreinsun eyðir skrám strax."
       },
       autoQuarantine: {
         title: 'Sjálfvirk sóttkví',
@@ -14648,13 +14648,13 @@ export const CATALOG = {
     deepClean: {
       title: 'Djúphreinsun',
       subtitle: 'Öll skyndiminni, annálar, dumpar og leifar sem Prune kann að finna, mæld á þessari vél frekar en áætluð. Engu er eytt beint — allt sem Hreinsun tekur fer fyrst í sóttkví, þar sem þú getur sett það til baka.',
-      subtitleDelete: "Every cache, log, dump and leftover Prune knows how to find, measured on this machine rather than estimated. Clean deletes what you tick immediately and frees the space, the way BleachBit does. It can't be undone.",
+      subtitleDelete: "Öll skyndiminni, annálar, dumpar og leifar sem Prune kann að finna, mæld á þessari vél frekar en áætluð. Hreinsun eyðir því sem þú hakar við strax og losar plássið, eins og BleachBit gerir. Ekki er hægt að afturkalla það.",
       scanLog: {
         header: 'Úttak skönnunar',
         scanningAnnounce: (total) => `Skanna ${total} staðsetningar.`,
         finishedAnnounce: (scanned, total) => `Skönnun lokið. ${scanned} af ${total} staðsetningum mældar.`,
-        searching: (items) => `Searching your profile… ${items} items checked`,
-        wiping: (written, total) => `Writing zeros… ${written} of ${total}`,
+        searching: (items) => `Leita í prófílnum þínum… ${items} atriði athuguð`,
+        wiping: (written, total) => `Skrifa núll… ${written} af ${total}`,
         starting: 'Er að byrja…',
         idle: "Ýttu á Forskoðun til að mæla hvað er hægt að hreinsa."
       },
@@ -14663,11 +14663,11 @@ export const CATALOG = {
       cleanErrorPrefix: (error) => `Ekki tókst að hreinsa: ${error}`,
       cleanupComplete: 'Hreinsun lokið.',
       resultFreed: (formatted) => `Losaði ${formatted}`,
-      resultMoved: (formatted) => `Moved ${formatted} to Quarantine. The space comes back when you empty it.`,
-      resultRecycled: (formatted) => `Moved ${formatted} to the Recycle Bin. The space comes back when you empty it.`,
-      openQuarantine: 'Open Quarantine',
-      resultWiped: (size) => `Wrote ${size} of zeros over the free space, then deleted it. No space was freed.`,
-      resultWipeStopped: (size) => `Stopped after writing ${size} of zeros over the free space. The filler was deleted.`,
+      resultMoved: (formatted) => `Færði ${formatted} í sóttkví. Plássið losnar þegar þú tæmir hana.`,
+      resultRecycled: (formatted) => `Færði ${formatted} í ruslafötuna. Plássið losnar þegar þú tæmir hana.`,
+      openQuarantine: "Opna sóttkví",
+      resultWiped: (size) => `Skrifaði ${size} af núllum yfir laust pláss og eyddi þeim síðan. Ekkert pláss losnaði.`,
+      resultWipeStopped: (size) => `Stöðvað eftir að ${size} af núllum voru skrifuð yfir laust pláss. Fyllingarskránni var eytt.`,
       resultLockedSuffix: (count) => ` — sleppti ${count} ${count === 1 ? 'læstri skrá' : 'læstum skrám'}`,
       before: {
         body: 'Prune mælir hvern flokk raunverulega á disknum frekar en að áætla, sem tekur um hálfa mínútu.',
@@ -14680,9 +14680,9 @@ export const CATALOG = {
         notMeasuredYet: 'ekki mælt enn',
         previewFirst: "Skoðaðu forskoðun fyrst til að sjá hvað losnar.",
         unmeasuredSuffix: (count) => ` · ${count} ómælt`,
-        modeQuarantine: 'Moves to Quarantine.',
-        modeRecycle: 'Moves to the Recycle Bin.',
-        modeDelete: 'Deletes immediately.',
+        modeQuarantine: "Færir í sóttkví.",
+        modeRecycle: "Færir í ruslafötuna.",
+        modeDelete: "Eyðir strax.",
         selectEverything: 'Velja allt',
         clear: 'Hreinsa',
         selectedCount: (count) => `${count} valin`
@@ -14691,35 +14691,35 @@ export const CATALOG = {
         prompt: (count, sizeKnown, formatted) => `Flytja ${count} atriði (${sizeKnown ? formatted : 'stærð ómæld'}) í sóttkví?`,
         cancel: 'Hætta við',
         confirmButton: "Færa í sóttkví",
-        promptDelete: (count, sizeKnown, formatted) => `Delete ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'})? This can't be undone.`,
-        deleteButton: 'Delete',
-        promptRecycle: (count, sizeKnown, formatted) => `Move ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'}) to the Recycle Bin?`,
-        recycleButton: 'Move to Recycle Bin',
-        wipeNote: 'Includes wiping free disk space, which can take hours.',
+        promptDelete: (count, sizeKnown, formatted) => `Eyða ${count} ${count % 10 === 1 && count % 100 !== 11 ? 'atriði' : 'atriðum'} (${sizeKnown ? formatted : 'stærð ómæld'})? Ekki er hægt að afturkalla þetta.`,
+        deleteButton: "Eyða",
+        promptRecycle: (count, sizeKnown, formatted) => `Flytja ${count} atriði (${sizeKnown ? formatted : 'stærð ómæld'}) í ruslafötuna?`,
+        recycleButton: "Færa í ruslafötuna",
+        wipeNote: "Felur í sér að skrifa yfir laust diskpláss, sem getur tekið klukkustundir.",
         cleaning: 'Hreinsar…'
       },
       wipe: {
-        title: 'Wipe free disk space',
-        body: "This overwrites the free space on the drive with zeros, then deletes the filler, so files you deleted earlier can't be recovered. It frees no space.",
-        ssdWarning: 'On an SSD with TRIM this does nothing useful and adds write wear. Use it on a hard disk, or when you know you need it.',
-        driveLine: (drive) => `Drive: ${drive}`,
-        writeLine: (size) => `About ${size} will be written.`,
-        timeLine: (duration, speed) => `Roughly ${duration}, from a one-second write test at ${speed}. The drive slows as it fills, so it can take longer.`,
-        duration: (hours, minutes) => (hours > 0 ? `${hours} h ${minutes} min` : `${minutes} min`),
-        reserveLine: (size) => `${size} always stays free so Windows keeps working.`,
-        stopNote: 'Stop ends it at once and deletes the filler.',
-        measuring: 'Measuring the drive…',
-        estimateFailed: (error) => `Couldn't measure the drive: ${error}`,
-        cancel: 'Cancel',
-        confirm: 'Add to this clean'
+        title: "Skrifa yfir laust diskpláss",
+        body: "Þetta skrifar núll yfir laust pláss á drifinu og eyðir síðan fyllingarskránni, þannig að ekki sé hægt að endurheimta skrár sem þú eyddir áður. Það losar ekkert pláss.",
+        ssdWarning: "Á SSD-drifi með TRIM gagnast þetta ekki og eykur slit vegna skrifa. Notaðu það á harðan disk eða þegar þú veist að þú þarft á því að halda.",
+        driveLine: (drive) => `Drif: ${drive}`,
+        writeLine: (size) => `Um það bil ${size} verður skrifað.`,
+        timeLine: (duration, speed) => `Um það bil ${duration}, út frá eins sekúndu skriftarprófi á ${speed}. Drifið hægist eftir því sem það fyllist, þannig að þetta getur tekið lengri tíma.`,
+        duration: (hours, minutes) => (hours > 0 ? `${hours} klst. ${minutes} mín.` : `${minutes} mín.`),
+        reserveLine: (size) => `Alltaf er ${size} haldið lausu svo Windows haldi áfram að virka.`,
+        stopNote: "Stöðva lýkur þessu strax og eyðir fyllingarskránni.",
+        measuring: "Mæli drifið…",
+        estimateFailed: (error) => `Ekki tókst að mæla drifið: ${error}`,
+        cancel: "Hætta við",
+        confirm: "Bæta við þessa hreinsun"
       },
       stop: 'Stöðva',
       rescan: 'Skanna aftur',
       clean: 'Hreinsa',
       tree: {
         selectCategoryAriaLabel: (category) => `Velja allt undir ${category}`,
-        atLeast: (size) => `at least ${size}`,
-        longRunning: 'Takes a long time',
+        atLeast: (size) => `að minnsta kosti ${size}`,
+        longRunning: "Tekur langan tíma",
         losesData: 'Tapar gögnum',
         needsAdmin: 'þarf kerfisstjóra',
         notInstalled: 'ekki uppsett',
@@ -14736,7 +14736,7 @@ export const CATALOG = {
       },
       log: {
         scan: {
-          partial: (size) => `${size}, partial`,
+          partial: (size) => `${size}, að hluta`,
           nothingToMeasure: "ekkert til að mæla",
           needsAdmin: "þarf kerfisstjóra",
           notInstalled: "ekki uppsett",
@@ -14744,10 +14744,10 @@ export const CATALOG = {
         },
         execute: {
           delete: (name) => `Eyða ${name}`,
-          wipe: (name) => `Wipe ${name}`,
-          wiped: (size) => `${size} written`,
-          wipeStopped: (size) => `stopped after ${size}`,
-          quarantine: (name) => `Quarantine ${name}`,
+          wipe: (name) => `Skrifa yfir ${name}`,
+          wiped: (size) => `skrifað: ${size}`,
+          wipeStopped: (size) => `stöðvað eftir ${size}`,
+          quarantine: (name) => `Færa í sóttkví: ${name}`,
           recycle: (name) => `Senda ${name} í ruslafötuna`,
           clear: (name) => `Hreinsa ${name}`,
           compact: (name) => `Þjappa ${name}`,
@@ -14998,17 +14998,17 @@ export const CATALOG = {
         description: "Disegna lo spazio libero dell'unità come un blocco in più quando scansioni un'intera unità, così ogni cartella si legge come una quota dell'unità anziché dello spazio in uso."
       },
       deepCleanRemoval: {
-        title: 'When Deep Clean removes files',
+        title: "Quando la Pulizia approfondita rimuove i file",
         quarantine: {
-          label: 'Move to Quarantine (you can put it back)',
-          description: "Nothing is deleted. Files go into Prune's Quarantine and the drive gets the space back when you empty it."
+          label: "Sposta in Quarantena (puoi rimetterli a posto)",
+          description: "Non viene eliminato nulla. I file vanno nella Quarantena di Prune e l'unità riottiene lo spazio quando la svuoti."
         },
         delete: {
-          label: "Delete now (frees the space, can't be undone — like BleachBit)",
-          description: 'Files are removed as soon as you confirm, so the space is free straight away. Rules that lose data still ask first.'
+          label: "Elimina subito (libera lo spazio, non si può annullare, come BleachBit)",
+          description: "I file vengono rimossi appena confermi, quindi lo spazio è libero subito. Le regole che fanno perdere dati chiedono comunque prima conferma."
         },
-        deleteWarning: "With Delete now, Clean can't be undone. Scheduled cleans still move files to Quarantine.",
-        autoQuarantineNote: 'Not used while Deep Clean deletes files immediately.'
+        deleteWarning: "Con Elimina subito, Pulisci non si può annullare. Le pulizie pianificate continuano a spostare i file in Quarantena.",
+        autoQuarantineNote: "Non usato finché la Pulizia approfondita elimina i file immediatamente."
       },
       autoQuarantine: {
         title: 'Quarantena automatica',
@@ -15526,13 +15526,13 @@ export const CATALOG = {
     deepClean: {
       title: "Pulizia approfondita",
       subtitle: "Ogni cache, log, dump e residuo che Prune sa trovare, misurato su questo computer anziché stimato. Nulla viene eliminato direttamente — tutto ciò che Pulisci prende va prima in quarantena, da dove puoi ripristinarlo.",
-      subtitleDelete: "Every cache, log, dump and leftover Prune knows how to find, measured on this machine rather than estimated. Clean deletes what you tick immediately and frees the space, the way BleachBit does. It can't be undone.",
+      subtitleDelete: "Ogni cache, log, dump e residuo che Prune sa trovare, misurato su questo computer anziché stimato. Pulisci elimina subito ciò che selezioni e libera lo spazio, come fa BleachBit. Non si può annullare.",
       scanLog: {
         header: 'Output della scansione',
         scanningAnnounce: (total) => `Scansione di ${total} posizioni.`,
         finishedAnnounce: (scanned, total) => `Scansione completata. ${scanned} di ${total} posizioni misurate.`,
-        searching: (items) => `Searching your profile… ${items} items checked`,
-        wiping: (written, total) => `Writing zeros… ${written} of ${total}`,
+        searching: (items) => `Ricerca nel tuo profilo… ${items} elementi controllati`,
+        wiping: (written, total) => `Scrittura di zeri… ${written} di ${total}`,
         starting: 'Avvio…',
         idle: "Premi Anteprima per misurare cosa si può pulire."
       },
@@ -15541,11 +15541,11 @@ export const CATALOG = {
       cleanErrorPrefix: (error) => `Impossibile pulire: ${error}`,
       cleanupComplete: 'Pulizia completata.',
       resultFreed: (formatted) => `Liberati ${formatted}`,
-      resultMoved: (formatted) => `Moved ${formatted} to Quarantine. The space comes back when you empty it.`,
-      resultRecycled: (formatted) => `Moved ${formatted} to the Recycle Bin. The space comes back when you empty it.`,
-      openQuarantine: 'Open Quarantine',
-      resultWiped: (size) => `Wrote ${size} of zeros over the free space, then deleted it. No space was freed.`,
-      resultWipeStopped: (size) => `Stopped after writing ${size} of zeros over the free space. The filler was deleted.`,
+      resultMoved: (formatted) => `Spostati ${formatted} in Quarantena. Lo spazio torna disponibile quando la svuoti.`,
+      resultRecycled: (formatted) => `Spostati ${formatted} nel Cestino. Lo spazio torna disponibile quando lo svuoti.`,
+      openQuarantine: "Apri Quarantena",
+      resultWiped: (size) => `Scritti ${size} di zeri sullo spazio libero, poi eliminati. Non è stato liberato spazio.`,
+      resultWipeStopped: (size) => `Interrotto dopo aver scritto ${size} di zeri sullo spazio libero. Il file di riempimento è stato eliminato.`,
       resultLockedSuffix: (count) => ` — ${count === 1 ? 'saltato' : 'saltati'} ${count} ${count === 1 ? 'file bloccato' : 'file bloccati'}`,
       before: {
         body: 'Prune misura davvero ogni categoria sul disco anziché stimarla, il che richiede circa mezzo minuto.',
@@ -15558,9 +15558,9 @@ export const CATALOG = {
         notMeasuredYet: 'non ancora misurato',
         previewFirst: "Guarda prima l'anteprima per vedere cosa verrà liberato.",
         unmeasuredSuffix: (count) => ` · ${count} non misurati`,
-        modeQuarantine: 'Moves to Quarantine.',
-        modeRecycle: 'Moves to the Recycle Bin.',
-        modeDelete: 'Deletes immediately.',
+        modeQuarantine: "Sposta in Quarantena.",
+        modeRecycle: "Sposta nel Cestino.",
+        modeDelete: "Elimina subito.",
         selectEverything: 'Seleziona tutto',
         clear: "Deseleziona",
         selectedCount: (count) => `${count} ${count === 1 ? 'selezionato' : 'selezionati'}`
@@ -15569,35 +15569,35 @@ export const CATALOG = {
         prompt: (count, sizeKnown, formatted) => `Spostare ${count} ${count === 1 ? 'elemento' : 'elementi'} (${sizeKnown ? formatted : 'dimensione non misurata'}) in quarantena?`,
         cancel: 'Annulla',
         confirmButton: "Sposta in quarantena",
-        promptDelete: (count, sizeKnown, formatted) => `Delete ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'})? This can't be undone.`,
-        deleteButton: 'Delete',
-        promptRecycle: (count, sizeKnown, formatted) => `Move ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'}) to the Recycle Bin?`,
-        recycleButton: 'Move to Recycle Bin',
-        wipeNote: 'Includes wiping free disk space, which can take hours.',
+        promptDelete: (count, sizeKnown, formatted) => `Eliminare subito ${count} element${count === 1 ? 'o' : 'i'} (${sizeKnown ? formatted : 'dimensione non misurata'})? Non si può annullare.`,
+        deleteButton: "Elimina subito",
+        promptRecycle: (count, sizeKnown, formatted) => `Spostare ${count} element${count === 1 ? 'o' : 'i'} (${sizeKnown ? formatted : 'dimensione non misurata'}) nel Cestino?`,
+        recycleButton: "Sposta nel Cestino",
+        wipeNote: "Include la sovrascrittura dello spazio libero sul disco, che può richiedere ore.",
         cleaning: 'Pulizia…'
       },
       wipe: {
-        title: 'Wipe free disk space',
-        body: "This overwrites the free space on the drive with zeros, then deletes the filler, so files you deleted earlier can't be recovered. It frees no space.",
-        ssdWarning: 'On an SSD with TRIM this does nothing useful and adds write wear. Use it on a hard disk, or when you know you need it.',
-        driveLine: (drive) => `Drive: ${drive}`,
-        writeLine: (size) => `About ${size} will be written.`,
-        timeLine: (duration, speed) => `Roughly ${duration}, from a one-second write test at ${speed}. The drive slows as it fills, so it can take longer.`,
+        title: "Sovrascrivi lo spazio libero sul disco",
+        body: "Sovrascrive con zeri lo spazio libero dell'unità e poi elimina il file di riempimento, così i file eliminati in precedenza non possono essere recuperati. Non libera spazio.",
+        ssdWarning: "Su un SSD con TRIM non serve a nulla e aggiunge usura da scrittura. Usalo su un disco rigido, o quando sai di averne bisogno.",
+        driveLine: (drive) => `Unità: ${drive}`,
+        writeLine: (size) => `Verranno scritti circa ${size}.`,
+        timeLine: (duration, speed) => `Circa ${duration}, in base a un test di scrittura di un secondo a ${speed}. L'unità rallenta man mano che si riempie, quindi può richiedere di più.`,
         duration: (hours, minutes) => (hours > 0 ? `${hours} h ${minutes} min` : `${minutes} min`),
-        reserveLine: (size) => `${size} always stays free so Windows keeps working.`,
-        stopNote: 'Stop ends it at once and deletes the filler.',
-        measuring: 'Measuring the drive…',
-        estimateFailed: (error) => `Couldn't measure the drive: ${error}`,
-        cancel: 'Cancel',
-        confirm: 'Add to this clean'
+        reserveLine: (size) => `${size} restano sempre liberi, così Windows continua a funzionare.`,
+        stopNote: "Interrompi la ferma subito ed elimina il file di riempimento.",
+        measuring: "Misurazione dell'unità…",
+        estimateFailed: (error) => `Impossibile misurare l'unità: ${error}`,
+        cancel: "Annulla",
+        confirm: "Aggiungi a questa pulizia"
       },
       stop: 'Interrompi',
       rescan: 'Nuova scansione',
       clean: 'Pulisci',
       tree: {
         selectCategoryAriaLabel: (category) => `Seleziona tutto in ${category}`,
-        atLeast: (size) => `at least ${size}`,
-        longRunning: 'Takes a long time',
+        atLeast: (size) => `almeno ${size}`,
+        longRunning: "Richiede molto tempo",
         losesData: 'Perde dati',
         needsAdmin: 'richiede amministratore',
         notInstalled: 'non installato',
@@ -15614,7 +15614,7 @@ export const CATALOG = {
       },
       log: {
         scan: {
-          partial: (size) => `${size}, partial`,
+          partial: (size) => `${size}, parziale`,
           nothingToMeasure: "niente da misurare",
           needsAdmin: "richiede amministratore",
           notInstalled: "non installato",
@@ -15622,10 +15622,10 @@ export const CATALOG = {
         },
         execute: {
           delete: (name) => `Elimina ${name}`,
-          wipe: (name) => `Wipe ${name}`,
-          wiped: (size) => `${size} written`,
-          wipeStopped: (size) => `stopped after ${size}`,
-          quarantine: (name) => `Quarantine ${name}`,
+          wipe: (name) => `Sovrascrivi ${name}`,
+          wiped: (size) => `${size} scritti`,
+          wipeStopped: (size) => `interrotto dopo ${size}`,
+          quarantine: (name) => `Sposta ${name} in Quarantena`,
           recycle: (name) => `Invia ${name} al Cestino`,
           clear: (name) => `Pulisci ${name}`,
           compact: (name) => `Compatta ${name}`,
@@ -15876,17 +15876,17 @@ export const CATALOG = {
         description: 'ドライブ全体をスキャンするとき、ドライブの空き容量をもう一つのブロックとして描画し、各フォルダが使用中の容量ではなくドライブ全体に対する割合として表示されるようにします。'
       },
       deepCleanRemoval: {
-        title: 'When Deep Clean removes files',
+        title: "ディープクリーンがファイルを取り除くとき",
         quarantine: {
-          label: 'Move to Quarantine (you can put it back)',
-          description: "Nothing is deleted. Files go into Prune's Quarantine and the drive gets the space back when you empty it."
+          label: "隔離に移動（元に戻せます）",
+          description: "何も削除されません。ファイルは Prune の隔離に入り、隔離を空にするとドライブに空き容量が戻ります。"
         },
         delete: {
-          label: "Delete now (frees the space, can't be undone — like BleachBit)",
-          description: 'Files are removed as soon as you confirm, so the space is free straight away. Rules that lose data still ask first.'
+          label: "今すぐ削除（空き容量を確保、元に戻せません — BleachBit と同様）",
+          description: "確認するとすぐにファイルが削除され、空き容量がその場で確保されます。データを失うルールは、引き続き事前に確認します。"
         },
-        deleteWarning: "With Delete now, Clean can't be undone. Scheduled cleans still move files to Quarantine.",
-        autoQuarantineNote: 'Not used while Deep Clean deletes files immediately.'
+        deleteWarning: "「今すぐ削除」では、クリーンを元に戻せません。スケジュールされたクリーンは、引き続きファイルを隔離に移動します。",
+        autoQuarantineNote: "ディープクリーンがファイルをすぐに削除する間は使用されません。"
       },
       autoQuarantine: {
         title: '自動隔離',
@@ -16404,13 +16404,13 @@ export const CATALOG = {
     deepClean: {
       title: 'ディープクリーン',
       subtitle: "Prune が見つけ方を知っているすべてのキャッシュ、ログ、ダンプ、残留物を、推定ではなくこのマシンで実測します。何も即座には削除されません — クリーンが取り除くものはすべて、まず隔離に移動し、そこから復元できます。",
-      subtitleDelete: "Every cache, log, dump and leftover Prune knows how to find, measured on this machine rather than estimated. Clean deletes what you tick immediately and frees the space, the way BleachBit does. It can't be undone.",
+      subtitleDelete: "Prune が見つけ方を知っているすべてのキャッシュ、ログ、ダンプ、残留物を、推定ではなくこのマシンで実測します。クリーンはチェックした項目をすぐに削除して空き容量を確保します（BleachBit と同じ方式）。元に戻すことはできません。",
       scanLog: {
         header: 'スキャン出力',
         scanningAnnounce: (total) => `${total} 件の場所をスキャン中。`,
         finishedAnnounce: (scanned, total) => `スキャン完了。${total} 件中 ${scanned} 件の場所を測定しました。`,
-        searching: (items) => `Searching your profile… ${items} items checked`,
-        wiping: (written, total) => `Writing zeros… ${written} of ${total}`,
+        searching: (items) => `プロファイルを検索中… ${items} 件を確認済み`,
+        wiping: (written, total) => `ゼロを書き込み中… ${written} / ${total}`,
         starting: '開始中…',
         idle: "「プレビュー」を押すと、クリーンアップできる量を測定します。"
       },
@@ -16419,11 +16419,11 @@ export const CATALOG = {
       cleanErrorPrefix: (error) => `クリーンできませんでした: ${error}`,
       cleanupComplete: 'クリーンアップが完了しました。',
       resultFreed: (formatted) => `${formatted} を解放しました`,
-      resultMoved: (formatted) => `Moved ${formatted} to Quarantine. The space comes back when you empty it.`,
-      resultRecycled: (formatted) => `Moved ${formatted} to the Recycle Bin. The space comes back when you empty it.`,
-      openQuarantine: 'Open Quarantine',
-      resultWiped: (size) => `Wrote ${size} of zeros over the free space, then deleted it. No space was freed.`,
-      resultWipeStopped: (size) => `Stopped after writing ${size} of zeros over the free space. The filler was deleted.`,
+      resultMoved: (formatted) => `${formatted} を隔離に移動しました。隔離を空にすると空き容量が戻ります。`,
+      resultRecycled: (formatted) => `${formatted} をごみ箱に移動しました。ごみ箱を空にすると空き容量が戻ります。`,
+      openQuarantine: "隔離を開く",
+      resultWiped: (size) => `空き領域に ${size} のゼロを書き込み、書き込みに使った一時ファイルを削除しました。解放された容量はありません。`,
+      resultWipeStopped: (size) => `空き領域への ${size} のゼロの書き込み後に停止しました。書き込みに使った一時ファイルは削除されました。`,
       resultLockedSuffix: (count) => ` — ロックされたファイルを ${count} 件スキップしました`,
       before: {
         body: 'Prune は推定ではなく、ディスク上のすべてのカテゴリを実際に測定します。これには約30秒かかります。',
@@ -16436,9 +16436,9 @@ export const CATALOG = {
         notMeasuredYet: '未測定',
         previewFirst: "まずプレビューで、解放される量を確認してください。",
         unmeasuredSuffix: (count) => ` · 未測定 ${count} 件`,
-        modeQuarantine: 'Moves to Quarantine.',
-        modeRecycle: 'Moves to the Recycle Bin.',
-        modeDelete: 'Deletes immediately.',
+        modeQuarantine: "隔離に移動します。",
+        modeRecycle: "ごみ箱に移動します。",
+        modeDelete: "すぐに削除します。",
         selectEverything: 'すべて選択',
         clear: 'クリア',
         selectedCount: (count) => `${count} 件選択中`
@@ -16447,35 +16447,35 @@ export const CATALOG = {
         prompt: (count, sizeKnown, formatted) => `${count} 件の項目（${sizeKnown ? formatted : 'サイズ未測定'}）を隔離に移動しますか?`,
         cancel: 'キャンセル',
         confirmButton: "隔離に移動",
-        promptDelete: (count, sizeKnown, formatted) => `Delete ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'})? This can't be undone.`,
-        deleteButton: 'Delete',
-        promptRecycle: (count, sizeKnown, formatted) => `Move ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'}) to the Recycle Bin?`,
-        recycleButton: 'Move to Recycle Bin',
-        wipeNote: 'Includes wiping free disk space, which can take hours.',
+        promptDelete: (count, sizeKnown, formatted) => `${count} 件の項目（${sizeKnown ? formatted : 'サイズ未測定'}）を削除しますか? 元に戻せません。`,
+        deleteButton: "削除",
+        promptRecycle: (count, sizeKnown, formatted) => `${count} 件の項目（${sizeKnown ? formatted : 'サイズ未測定'}）をごみ箱に移動しますか?`,
+        recycleButton: "ごみ箱に移動",
+        wipeNote: "空きディスク領域の消去を含みます。数時間かかることがあります。",
         cleaning: 'クリーン中…'
       },
       wipe: {
-        title: 'Wipe free disk space',
-        body: "This overwrites the free space on the drive with zeros, then deletes the filler, so files you deleted earlier can't be recovered. It frees no space.",
-        ssdWarning: 'On an SSD with TRIM this does nothing useful and adds write wear. Use it on a hard disk, or when you know you need it.',
-        driveLine: (drive) => `Drive: ${drive}`,
-        writeLine: (size) => `About ${size} will be written.`,
-        timeLine: (duration, speed) => `Roughly ${duration}, from a one-second write test at ${speed}. The drive slows as it fills, so it can take longer.`,
-        duration: (hours, minutes) => (hours > 0 ? `${hours} h ${minutes} min` : `${minutes} min`),
-        reserveLine: (size) => `${size} always stays free so Windows keeps working.`,
-        stopNote: 'Stop ends it at once and deletes the filler.',
-        measuring: 'Measuring the drive…',
-        estimateFailed: (error) => `Couldn't measure the drive: ${error}`,
-        cancel: 'Cancel',
-        confirm: 'Add to this clean'
+        title: "空きディスク領域を消去",
+        body: "ドライブの空き領域をゼロで上書きしてから、書き込みに使った一時ファイルを削除します。これにより、以前に削除したファイルは復元できなくなります。空き容量は増えません。",
+        ssdWarning: "TRIM が有効な SSD では、これは意味がなく、書き込みによる摩耗を増やすだけです。ハードディスクで使うか、必要だと分かっている場合にのみ使ってください。",
+        driveLine: (drive) => `ドライブ: ${drive}`,
+        writeLine: (size) => `約 ${size} が書き込まれます。`,
+        timeLine: (duration, speed) => `約 ${duration}（1 秒間の書き込みテストで ${speed} を計測）。ドライブは埋まるにつれて遅くなるため、さらに時間がかかることがあります。`,
+        duration: (hours, minutes) => (hours > 0 ? `${hours} 時間 ${minutes} 分` : `${minutes} 分`),
+        reserveLine: (size) => `Windows が動作し続けるよう、常に ${size} を空けておきます。`,
+        stopNote: "「停止」を押すとすぐに終了し、書き込みに使った一時ファイルを削除します。",
+        measuring: "ドライブを測定中…",
+        estimateFailed: (error) => `ドライブを測定できませんでした: ${error}`,
+        cancel: "キャンセル",
+        confirm: "このクリーンに追加"
       },
       stop: '停止',
       rescan: '再スキャン',
       clean: 'クリーン',
       tree: {
         selectCategoryAriaLabel: (category) => `${category} の下をすべて選択`,
-        atLeast: (size) => `at least ${size}`,
-        longRunning: 'Takes a long time',
+        atLeast: (size) => `${size} 以上`,
+        longRunning: "時間がかかります",
         losesData: 'データを失う',
         needsAdmin: '管理者権限が必要',
         notInstalled: '未インストール',
@@ -16492,7 +16492,7 @@ export const CATALOG = {
       },
       log: {
         scan: {
-          partial: (size) => `${size}, partial`,
+          partial: (size) => `${size}（一部）`,
           nothingToMeasure: "測定対象なし",
           needsAdmin: "管理者権限が必要",
           notInstalled: "未インストール",
@@ -16500,10 +16500,10 @@ export const CATALOG = {
         },
         execute: {
           delete: (name) => `${name}を削除`,
-          wipe: (name) => `Wipe ${name}`,
-          wiped: (size) => `${size} written`,
-          wipeStopped: (size) => `stopped after ${size}`,
-          quarantine: (name) => `Quarantine ${name}`,
+          wipe: (name) => `${name}を消去`,
+          wiped: (size) => `${size} 書き込み済み`,
+          wipeStopped: (size) => `${size} 書き込み後に停止`,
+          quarantine: (name) => `${name}を隔離に移動`,
           recycle: (name) => `${name}をごみ箱へ送る`,
           clear: (name) => `${name}をクリア`,
           compact: (name) => `${name}を圧縮`,
@@ -16754,17 +16754,17 @@ export const CATALOG = {
         description: "전체 드라이브를 검사할 때 드라이브의 여유 공간을 하나의 추가 블록으로 그려서, 각 폴더가 사용 중인 공간이 아닌 드라이브의 비율로 표시되도록 합니다."
       },
       deepCleanRemoval: {
-        title: 'When Deep Clean removes files',
+        title: "딥 클린이 파일을 제거할 때",
         quarantine: {
-          label: 'Move to Quarantine (you can put it back)',
-          description: "Nothing is deleted. Files go into Prune's Quarantine and the drive gets the space back when you empty it."
+          label: "격리로 이동 (되돌릴 수 있음)",
+          description: "아무것도 삭제되지 않습니다. 파일은 Prune의 격리로 들어가며, 격리를 비우면 드라이브에 공간이 돌아옵니다."
         },
         delete: {
-          label: "Delete now (frees the space, can't be undone — like BleachBit)",
-          description: 'Files are removed as soon as you confirm, so the space is free straight away. Rules that lose data still ask first.'
+          label: "지금 삭제 (공간 확보, 되돌릴 수 없음 — BleachBit처럼)",
+          description: "확인하는 즉시 파일이 삭제되어 공간이 바로 확보됩니다. 데이터 손실이 있는 규칙은 여전히 먼저 확인합니다."
         },
-        deleteWarning: "With Delete now, Clean can't be undone. Scheduled cleans still move files to Quarantine.",
-        autoQuarantineNote: 'Not used while Deep Clean deletes files immediately.'
+        deleteWarning: "지금 삭제를 선택하면 정리를 되돌릴 수 없습니다. 예약된 정리는 계속 파일을 격리로 이동합니다.",
+        autoQuarantineNote: "딥 클린이 파일을 즉시 삭제하는 동안에는 사용되지 않습니다."
       },
       autoQuarantine: {
         title: '자동 격리',
@@ -17282,13 +17282,13 @@ export const CATALOG = {
     deepClean: {
       title: "딥 클린",
       subtitle: "Prune이 찾는 방법을 아는 모든 캐시, 로그, 덤프 및 남은 항목을 추정이 아니라 이 컴퓨터에서 직접 측정합니다. 아무것도 즉시 삭제되지 않습니다 — 정리가 가져가는 모든 항목은 먼저 격리로 이동하며, 그곳에서 복원할 수 있습니다.",
-      subtitleDelete: "Every cache, log, dump and leftover Prune knows how to find, measured on this machine rather than estimated. Clean deletes what you tick immediately and frees the space, the way BleachBit does. It can't be undone.",
+      subtitleDelete: "Prune이 찾는 방법을 아는 모든 캐시, 로그, 덤프 및 남은 항목을 추정이 아니라 이 컴퓨터에서 직접 측정합니다. 정리는 선택한 항목을 즉시 삭제하고 BleachBit처럼 공간을 확보합니다. 되돌릴 수 없습니다.",
       scanLog: {
         header: "검사 출력",
         scanningAnnounce: (total) => `${total}개 위치를 검사 중입니다.`,
         finishedAnnounce: (scanned, total) => `검사 완료. ${total}개 중 ${scanned}개 위치가 측정되었습니다.`,
-        searching: (items) => `Searching your profile… ${items} items checked`,
-        wiping: (written, total) => `Writing zeros… ${written} of ${total}`,
+        searching: (items) => `프로필을 검색하는 중… 항목 ${items}개 확인함`,
+        wiping: (written, total) => `0을 기록하는 중… ${written} / ${total}`,
         starting: '시작 중…',
         idle: "미리보기를 눌러 정리할 수 있는 양을 측정하세요."
       },
@@ -17297,11 +17297,11 @@ export const CATALOG = {
       cleanErrorPrefix: (error) => `정리할 수 없습니다: ${error}`,
       cleanupComplete: '정리가 완료되었습니다.',
       resultFreed: (formatted) => `${formatted} 확보됨`,
-      resultMoved: (formatted) => `Moved ${formatted} to Quarantine. The space comes back when you empty it.`,
-      resultRecycled: (formatted) => `Moved ${formatted} to the Recycle Bin. The space comes back when you empty it.`,
-      openQuarantine: 'Open Quarantine',
-      resultWiped: (size) => `Wrote ${size} of zeros over the free space, then deleted it. No space was freed.`,
-      resultWipeStopped: (size) => `Stopped after writing ${size} of zeros over the free space. The filler was deleted.`,
+      resultMoved: (formatted) => `${formatted}을(를) 격리로 이동했습니다. 격리를 비우면 공간이 돌아옵니다.`,
+      resultRecycled: (formatted) => `${formatted}을(를) 휴지통으로 이동했습니다. 휴지통을 비우면 공간이 돌아옵니다.`,
+      openQuarantine: "격리 열기",
+      resultWiped: (size) => `빈 공간에 0을 ${size}만큼 기록한 뒤 채우기용 파일을 삭제했습니다. 확보된 공간은 없습니다.`,
+      resultWipeStopped: (size) => `빈 공간에 0을 ${size}만큼 기록한 뒤 중지했습니다. 채우기용 파일은 삭제되었습니다.`,
       resultLockedSuffix: (count) => ` — 잠긴 파일 ${count}개를 건너뜀`,
       before: {
         body: 'Prune은 추정하지 않고 디스크의 모든 카테고리를 실제로 측정하며, 약 30초 정도 걸립니다.',
@@ -17314,9 +17314,9 @@ export const CATALOG = {
         notMeasuredYet: '아직 측정되지 않음',
         previewFirst: "먼저 미리보기로 확보될 공간을 확인하세요.",
         unmeasuredSuffix: (count) => ` · 측정되지 않음 ${count}개`,
-        modeQuarantine: 'Moves to Quarantine.',
-        modeRecycle: 'Moves to the Recycle Bin.',
-        modeDelete: 'Deletes immediately.',
+        modeQuarantine: "격리로 이동합니다.",
+        modeRecycle: "휴지통으로 이동합니다.",
+        modeDelete: "즉시 삭제합니다.",
         selectEverything: '모두 선택',
         clear: '지우기',
         selectedCount: (count) => `${count}개 선택됨`
@@ -17325,35 +17325,35 @@ export const CATALOG = {
         prompt: (count, sizeKnown, formatted) => `${count}개 항목(${sizeKnown ? formatted : '크기 측정되지 않음'})을 격리로 이동하시겠습니까?`,
         cancel: '취소',
         confirmButton: "격리로 이동",
-        promptDelete: (count, sizeKnown, formatted) => `Delete ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'})? This can't be undone.`,
-        deleteButton: 'Delete',
-        promptRecycle: (count, sizeKnown, formatted) => `Move ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'}) to the Recycle Bin?`,
-        recycleButton: 'Move to Recycle Bin',
-        wipeNote: 'Includes wiping free disk space, which can take hours.',
+        promptDelete: (count, sizeKnown, formatted) => `${count}개 항목(${sizeKnown ? formatted : '크기 측정되지 않음'})을 삭제하시겠습니까? 되돌릴 수 없습니다.`,
+        deleteButton: "삭제",
+        promptRecycle: (count, sizeKnown, formatted) => `${count}개 항목(${sizeKnown ? formatted : '크기 측정되지 않음'})을 휴지통으로 이동하시겠습니까?`,
+        recycleButton: "휴지통으로 이동",
+        wipeNote: "빈 디스크 공간 지우기가 포함되며, 몇 시간이 걸릴 수 있습니다.",
         cleaning: '정리 중…'
       },
       wipe: {
-        title: 'Wipe free disk space',
-        body: "This overwrites the free space on the drive with zeros, then deletes the filler, so files you deleted earlier can't be recovered. It frees no space.",
-        ssdWarning: 'On an SSD with TRIM this does nothing useful and adds write wear. Use it on a hard disk, or when you know you need it.',
-        driveLine: (drive) => `Drive: ${drive}`,
-        writeLine: (size) => `About ${size} will be written.`,
-        timeLine: (duration, speed) => `Roughly ${duration}, from a one-second write test at ${speed}. The drive slows as it fills, so it can take longer.`,
-        duration: (hours, minutes) => (hours > 0 ? `${hours} h ${minutes} min` : `${minutes} min`),
-        reserveLine: (size) => `${size} always stays free so Windows keeps working.`,
-        stopNote: 'Stop ends it at once and deletes the filler.',
-        measuring: 'Measuring the drive…',
-        estimateFailed: (error) => `Couldn't measure the drive: ${error}`,
-        cancel: 'Cancel',
-        confirm: 'Add to this clean'
+        title: "빈 디스크 공간 지우기",
+        body: "드라이브의 빈 공간을 0으로 덮어쓴 뒤 채우기용 파일을 삭제하므로, 이전에 삭제한 파일을 복구할 수 없게 됩니다. 공간은 확보되지 않습니다.",
+        ssdWarning: "TRIM이 있는 SSD에서는 아무 소용이 없고 쓰기 마모만 늘어납니다. 하드 디스크에서 사용하거나 필요하다고 확신할 때만 사용하세요.",
+        driveLine: (drive) => `드라이브: ${drive}`,
+        writeLine: (size) => `기록량: 약 ${size}`,
+        timeLine: (duration, speed) => `약 ${duration} 소요 (1초간 쓰기 테스트 결과 ${speed} 기준). 드라이브는 찰수록 느려지므로 더 오래 걸릴 수 있습니다.`,
+        duration: (hours, minutes) => (hours > 0 ? `${hours}시간 ${minutes}분` : `${minutes}분`),
+        reserveLine: (size) => `Windows가 계속 작동하도록 항상 ${size}의 여유 공간을 남겨 둡니다.`,
+        stopNote: "중지를 누르면 즉시 끝나고 채우기용 파일이 삭제됩니다.",
+        measuring: "드라이브를 측정하는 중…",
+        estimateFailed: (error) => `드라이브를 측정할 수 없습니다: ${error}`,
+        cancel: "취소",
+        confirm: "이번 정리에 추가"
       },
       stop: '중지',
       rescan: "다시 검사",
       clean: '정리',
       tree: {
         selectCategoryAriaLabel: (category) => `${category} 아래 모두 선택`,
-        atLeast: (size) => `at least ${size}`,
-        longRunning: 'Takes a long time',
+        atLeast: (size) => `최소 ${size}`,
+        longRunning: "오래 걸림",
         losesData: '데이터 손실',
         needsAdmin: '관리자 권한 필요',
         notInstalled: '설치되지 않음',
@@ -17370,7 +17370,7 @@ export const CATALOG = {
       },
       log: {
         scan: {
-          partial: (size) => `${size}, partial`,
+          partial: (size) => `${size}, 일부`,
           nothingToMeasure: "측정할 항목 없음",
           needsAdmin: "관리자 권한 필요",
           notInstalled: "설치되지 않음",
@@ -17378,10 +17378,10 @@ export const CATALOG = {
         },
         execute: {
           delete: (name) => `${name} 삭제`,
-          wipe: (name) => `Wipe ${name}`,
-          wiped: (size) => `${size} written`,
-          wipeStopped: (size) => `stopped after ${size}`,
-          quarantine: (name) => `Quarantine ${name}`,
+          wipe: (name) => `${name} 지우기`,
+          wiped: (size) => `${size} 기록됨`,
+          wipeStopped: (size) => `${size} 기록 후 중지됨`,
+          quarantine: (name) => `${name} 격리로 이동`,
           recycle: (name) => `${name} 휴지통으로 이동`,
           clear: (name) => `${name} 지우기`,
           compact: (name) => `${name} 압축`,
@@ -17632,17 +17632,17 @@ export const CATALOG = {
         description: 'Nuskaitant visą diską, piešia disko laisvą vietą kaip dar vieną bloką, todėl kiekvienas aplankas skaitomas kaip disko, o ne naudojamos vietos dalis.'
       },
       deepCleanRemoval: {
-        title: 'When Deep Clean removes files',
+        title: "Kai Gilus valymas šalina failus",
         quarantine: {
-          label: 'Move to Quarantine (you can put it back)',
-          description: "Nothing is deleted. Files go into Prune's Quarantine and the drive gets the space back when you empty it."
+          label: "Perkelti į karantiną (galėsite grąžinti)",
+          description: "Niekas neištrinama. Failai patenka į „Prune“ karantiną, o diskas vietą atgauna, kai karantiną ištuštinate."
         },
         delete: {
-          label: "Delete now (frees the space, can't be undone — like BleachBit)",
-          description: 'Files are removed as soon as you confirm, so the space is free straight away. Rules that lose data still ask first.'
+          label: "Ištrinti dabar (atlaisvina vietą, negrįžtama — kaip BleachBit)",
+          description: "Failai pašalinami, vos patvirtinus, todėl vieta atlaisvinama iš karto. Taisyklės, dėl kurių prarandami duomenys, vis tiek pirmiausia paklausia."
         },
-        deleteWarning: "With Delete now, Clean can't be undone. Scheduled cleans still move files to Quarantine.",
-        autoQuarantineNote: 'Not used while Deep Clean deletes files immediately.'
+        deleteWarning: "Pasirinkus Ištrinti dabar, Valymo atšaukti negalima. Suplanuoti valymai failus vis tiek perkelia į karantiną.",
+        autoQuarantineNote: "Nenaudojama, kol Gilus valymas failus ištrina iškart."
       },
       autoQuarantine: {
         title: 'Automatinis karantinas',
@@ -18160,13 +18160,13 @@ export const CATALOG = {
     deepClean: {
       title: 'Gilus valymas',
       subtitle: "Viskas, ką „Prune“ moka rasti — talpyklos, žurnalai, išklotinės ir liekanos — išmatuota šiame kompiuteryje, o ne apskaičiuota. Niekas nėra iškart ištrinama — viskas, ką paima Valymas, pirmiausia keliauja į Karantiną, iš kur galite tai atkurti.",
-      subtitleDelete: "Every cache, log, dump and leftover Prune knows how to find, measured on this machine rather than estimated. Clean deletes what you tick immediately and frees the space, the way BleachBit does. It can't be undone.",
+      subtitleDelete: "Viskas, ką „Prune“ moka rasti — talpyklos, žurnalai, išklotinės ir liekanos — išmatuota šiame kompiuteryje, o ne apskaičiuota. Valymas iškart ištrina tai, ką pažymėjote, ir atlaisvina vietą, kaip ir BleachBit. To atšaukti negalima.",
       scanLog: {
         header: 'Nuskaitymo išvestis',
         scanningAnnounce: (total) => `Nuskaitoma vietų: ${total}.`,
         finishedAnnounce: (scanned, total) => `Nuskaitymas baigtas. Išmatuota ${scanned} iš ${total} vietų.`,
-        searching: (items) => `Searching your profile… ${items} items checked`,
-        wiping: (written, total) => `Writing zeros… ${written} of ${total}`,
+        searching: (items) => `Ieškoma jūsų profilyje… patikrinta elementų: ${items}`,
+        wiping: (written, total) => `Rašomi nuliai… ${written} iš ${total}`,
         starting: 'Pradedama…',
         idle: "Paspauskite Peržiūra, kad išmatuotumėte, ką galima išvalyti."
       },
@@ -18175,11 +18175,11 @@ export const CATALOG = {
       cleanErrorPrefix: (error) => `Nepavyko išvalyti: ${error}`,
       cleanupComplete: 'Valymas baigtas.',
       resultFreed: (formatted) => `Atlaisvinta ${formatted}`,
-      resultMoved: (formatted) => `Moved ${formatted} to Quarantine. The space comes back when you empty it.`,
-      resultRecycled: (formatted) => `Moved ${formatted} to the Recycle Bin. The space comes back when you empty it.`,
-      openQuarantine: 'Open Quarantine',
-      resultWiped: (size) => `Wrote ${size} of zeros over the free space, then deleted it. No space was freed.`,
-      resultWipeStopped: (size) => `Stopped after writing ${size} of zeros over the free space. The filler was deleted.`,
+      resultMoved: (formatted) => `Į karantiną perkelta: ${formatted}. Vieta grįš, kai ištuštinsite karantiną.`,
+      resultRecycled: (formatted) => `Į šiukšlinę perkelta: ${formatted}. Vieta grįš, kai ištuštinsite šiukšlinę.`,
+      openQuarantine: "Atidaryti karantiną",
+      resultWiped: (size) => `Laisva vieta perrašyta nuliais (${size}), po to užpildymo failas ištrintas. Vieta neatlaisvinta.`,
+      resultWipeStopped: (size) => `Sustabdyta po to, kai laisva vieta perrašyta nuliais (${size}). Užpildymo failas ištrintas.`,
       resultLockedSuffix: (count) => ` — praleista užrakintų failų: ${count}`,
       before: {
         body: '„Prune“ realiai matuoja kiekvieną kategoriją diske, o ne apskaičiuoja, o tai užtrunka apie pusę minutės.',
@@ -18192,9 +18192,9 @@ export const CATALOG = {
         notMeasuredYet: 'dar neišmatuota',
         previewFirst: "Pirmiausia peržiūrėkite, kad pamatytumėte, kas bus atlaisvinta.",
         unmeasuredSuffix: (count) => ` · ${count} neišmatuota`,
-        modeQuarantine: 'Moves to Quarantine.',
-        modeRecycle: 'Moves to the Recycle Bin.',
-        modeDelete: 'Deletes immediately.',
+        modeQuarantine: "Perkeliama į karantiną.",
+        modeRecycle: "Perkeliama į šiukšlinę.",
+        modeDelete: "Ištrinama iškart.",
         selectEverything: 'Pasirinkti viską',
         clear: 'Išvalyti',
         selectedCount: (count) => `${count} pasirinkta`
@@ -18203,35 +18203,35 @@ export const CATALOG = {
         prompt: (count, sizeKnown, formatted) => { const lt = (n, a, b, c) => n % 10 === 1 && n % 100 !== 11 ? a : (n % 10 === 0 || (n % 100 >= 11 && n % 100 <= 19)) ? c : b; return `Perkelti ${count} ${lt(count, 'elementą', 'elementus', 'elementų')} (${sizeKnown ? formatted : 'dydis neišmatuotas'}) į karantiną?`; },
         cancel: 'Atšaukti',
         confirmButton: "Perkelti į karantiną",
-        promptDelete: (count, sizeKnown, formatted) => `Delete ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'})? This can't be undone.`,
-        deleteButton: 'Delete',
-        promptRecycle: (count, sizeKnown, formatted) => `Move ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'}) to the Recycle Bin?`,
-        recycleButton: 'Move to Recycle Bin',
-        wipeNote: 'Includes wiping free disk space, which can take hours.',
+        promptDelete: (count, sizeKnown, formatted) => { const lt = (n, a, b, c) => n % 10 === 1 && n % 100 !== 11 ? a : (n % 10 === 0 || (n % 100 >= 11 && n % 100 <= 19)) ? c : b; return `Ištrinti ${count} ${lt(count, 'elementą', 'elementus', 'elementų')} (${sizeKnown ? formatted : 'dydis neišmatuotas'})? To atšaukti nebus galima.`; },
+        deleteButton: "Ištrinti",
+        promptRecycle: (count, sizeKnown, formatted) => { const lt = (n, a, b, c) => n % 10 === 1 && n % 100 !== 11 ? a : (n % 10 === 0 || (n % 100 >= 11 && n % 100 <= 19)) ? c : b; return `Perkelti ${count} ${lt(count, 'elementą', 'elementus', 'elementų')} (${sizeKnown ? formatted : 'dydis neišmatuotas'}) į šiukšlinę?`; },
+        recycleButton: "Perkelti į šiukšlinę",
+        wipeNote: "Apima laisvos disko vietos perrašymą, kuris gali užtrukti kelias valandas.",
         cleaning: 'Valoma…'
       },
       wipe: {
-        title: 'Wipe free disk space',
-        body: "This overwrites the free space on the drive with zeros, then deletes the filler, so files you deleted earlier can't be recovered. It frees no space.",
-        ssdWarning: 'On an SSD with TRIM this does nothing useful and adds write wear. Use it on a hard disk, or when you know you need it.',
-        driveLine: (drive) => `Drive: ${drive}`,
-        writeLine: (size) => `About ${size} will be written.`,
-        timeLine: (duration, speed) => `Roughly ${duration}, from a one-second write test at ${speed}. The drive slows as it fills, so it can take longer.`,
-        duration: (hours, minutes) => (hours > 0 ? `${hours} h ${minutes} min` : `${minutes} min`),
-        reserveLine: (size) => `${size} always stays free so Windows keeps working.`,
-        stopNote: 'Stop ends it at once and deletes the filler.',
-        measuring: 'Measuring the drive…',
-        estimateFailed: (error) => `Couldn't measure the drive: ${error}`,
-        cancel: 'Cancel',
-        confirm: 'Add to this clean'
+        title: "Perrašyti laisvą disko vietą",
+        body: "Tai užrašo nulius ant laisvos disko vietos, po to ištrina užpildymo failą, todėl anksčiau ištrintų failų atkurti nebeįmanoma. Vietos neatlaisvina.",
+        ssdWarning: "SSD diske su TRIM tai nieko naudingo nedaro ir didina rašymo nusidėvėjimą. Naudokite standžiajame diske arba kai žinote, kad to reikia.",
+        driveLine: (drive) => `Diskas: ${drive}`,
+        writeLine: (size) => `Bus įrašyta maždaug ${size}.`,
+        timeLine: (duration, speed) => `Maždaug ${duration}, remiantis vienos sekundės rašymo testu (${speed}). Diskui pildantis jis lėtėja, todėl gali užtrukti ilgiau.`,
+        duration: (hours, minutes) => (hours > 0 ? `${hours} val. ${minutes} min.` : `${minutes} min.`),
+        reserveLine: (size) => `Visada lieka laisva ${size}, kad „Windows“ toliau veiktų.`,
+        stopNote: "Stabdyti iškart nutraukia procesą ir ištrina užpildymo failą.",
+        measuring: "Matuojamas diskas…",
+        estimateFailed: (error) => `Nepavyko išmatuoti disko: ${error}`,
+        cancel: "Atšaukti",
+        confirm: "Pridėti prie šio valymo"
       },
       stop: 'Stabdyti',
       rescan: 'Nuskaityti iš naujo',
       clean: 'Valyti',
       tree: {
         selectCategoryAriaLabel: (category) => `Pasirinkti viską skiltyje ${category}`,
-        atLeast: (size) => `at least ${size}`,
-        longRunning: 'Takes a long time',
+        atLeast: (size) => `bent ${size}`,
+        longRunning: "Užtrunka ilgai",
         losesData: 'Prarandami duomenys',
         needsAdmin: 'reikia administratoriaus',
         notInstalled: 'neįdiegta',
@@ -18248,7 +18248,7 @@ export const CATALOG = {
       },
       log: {
         scan: {
-          partial: (size) => `${size}, partial`,
+          partial: (size) => `${size}, dalinai`,
           nothingToMeasure: "nėra ką matuoti",
           needsAdmin: "reikia administratoriaus",
           notInstalled: "neįdiegta",
@@ -18256,10 +18256,10 @@ export const CATALOG = {
         },
         execute: {
           delete: (name) => `Ištrinti ${name}`,
-          wipe: (name) => `Wipe ${name}`,
-          wiped: (size) => `${size} written`,
-          wipeStopped: (size) => `stopped after ${size}`,
-          quarantine: (name) => `Quarantine ${name}`,
+          wipe: (name) => `Perrašyti ${name}`,
+          wiped: (size) => `įrašyta ${size}`,
+          wipeStopped: (size) => `sustabdyta po ${size}`,
+          quarantine: (name) => `Perkelti ${name} į karantiną`,
           recycle: (name) => `Siųsti ${name} į šiukšlinę`,
           clear: (name) => `Išvalyti ${name}`,
           compact: (name) => `Suglaudinti ${name}`,
@@ -18508,17 +18508,17 @@ export const CATALOG = {
         description: 'Melukis ruang bebas pemacu sebagai satu lagi blok apabila anda mengimbas keseluruhan pemacu, supaya setiap folder dibaca sebagai bahagian pemacu dan bukannya ruang yang digunakan.'
       },
       deepCleanRemoval: {
-        title: 'When Deep Clean removes files',
+        title: "Apabila Pembersihan Mendalam mengeluarkan fail",
         quarantine: {
-          label: 'Move to Quarantine (you can put it back)',
-          description: "Nothing is deleted. Files go into Prune's Quarantine and the drive gets the space back when you empty it."
+          label: "Alih ke Kuarantin (anda boleh mengembalikannya)",
+          description: "Tiada apa dipadam. Fail dialihkan ke Kuarantin Prune dan pemacu mendapat semula ruang apabila anda mengosongkannya."
         },
         delete: {
-          label: "Delete now (frees the space, can't be undone — like BleachBit)",
-          description: 'Files are removed as soon as you confirm, so the space is free straight away. Rules that lose data still ask first.'
+          label: "Padam sekarang (membebaskan ruang, tidak boleh dibuat asal — seperti BleachBit)",
+          description: "Fail dikeluarkan sebaik sahaja anda mengesahkan, jadi ruang dibebaskan serta-merta. Peraturan yang menyebabkan kehilangan data tetap bertanya dahulu."
         },
-        deleteWarning: "With Delete now, Clean can't be undone. Scheduled cleans still move files to Quarantine.",
-        autoQuarantineNote: 'Not used while Deep Clean deletes files immediately.'
+        deleteWarning: "Dengan Padam sekarang, Bersih tidak boleh dibuat asal. Pembersihan berjadual masih mengalihkan fail ke Kuarantin.",
+        autoQuarantineNote: "Tidak digunakan semasa Pembersihan Mendalam memadam fail serta-merta."
       },
       autoQuarantine: {
         title: 'Kuarantin automatik',
@@ -19036,13 +19036,13 @@ export const CATALOG = {
     deepClean: {
       title: 'Pembersihan Mendalam',
       subtitle: 'Setiap cache, log, dump dan baki yang diketahui Prune cara mencarinya, diukur pada mesin ini bukannya dianggarkan. Tiada apa dipadamkan serta-merta — segala yang diambil oleh Bersih pergi ke Kuarantin dahulu, di mana anda boleh mengembalikannya.',
-      subtitleDelete: "Every cache, log, dump and leftover Prune knows how to find, measured on this machine rather than estimated. Clean deletes what you tick immediately and frees the space, the way BleachBit does. It can't be undone.",
+      subtitleDelete: "Setiap cache, log, dump dan baki yang diketahui Prune cara mencarinya, diukur pada mesin ini bukannya dianggarkan. Bersih memadam apa yang anda tandakan serta-merta dan membebaskan ruang, seperti BleachBit. Ia tidak boleh dibuat asal.",
       scanLog: {
         header: 'Output imbasan',
         scanningAnnounce: (total) => `Mengimbas ${total} lokasi.`,
         finishedAnnounce: (scanned, total) => `Imbasan selesai. ${scanned} daripada ${total} lokasi diukur.`,
-        searching: (items) => `Searching your profile… ${items} items checked`,
-        wiping: (written, total) => `Writing zeros… ${written} of ${total}`,
+        searching: (items) => `Mencari dalam profil anda… ${items} item disemak`,
+        wiping: (written, total) => `Menulis sifar… ${written} daripada ${total}`,
         starting: 'Memulakan…',
         idle: "Tekan Pratonton untuk mengukur apa yang boleh dibersihkan."
       },
@@ -19051,11 +19051,11 @@ export const CATALOG = {
       cleanErrorPrefix: (error) => `Tidak dapat membersihkan: ${error}`,
       cleanupComplete: 'Pembersihan selesai.',
       resultFreed: (formatted) => `${formatted} dibebaskan`,
-      resultMoved: (formatted) => `Moved ${formatted} to Quarantine. The space comes back when you empty it.`,
-      resultRecycled: (formatted) => `Moved ${formatted} to the Recycle Bin. The space comes back when you empty it.`,
-      openQuarantine: 'Open Quarantine',
-      resultWiped: (size) => `Wrote ${size} of zeros over the free space, then deleted it. No space was freed.`,
-      resultWipeStopped: (size) => `Stopped after writing ${size} of zeros over the free space. The filler was deleted.`,
+      resultMoved: (formatted) => `${formatted} dialihkan ke Kuarantin. Ruang kembali apabila anda mengosongkannya.`,
+      resultRecycled: (formatted) => `${formatted} dialihkan ke Tong Kitar Semula. Ruang kembali apabila anda mengosongkannya.`,
+      openQuarantine: "Buka Kuarantin",
+      resultWiped: (size) => `${size} sifar ditulis ke atas ruang kosong, kemudian dipadam. Tiada ruang dibebaskan.`,
+      resultWipeStopped: (size) => `Dihentikan selepas menulis ${size} sifar ke atas ruang kosong. Fail pengisi telah dipadam.`,
       resultLockedSuffix: (count) => ` — ${count} fail yang dikunci dilangkau`,
       before: {
         body: 'Prune mengukur setiap kategori pada cakera secara sebenar bukannya menganggar, yang mengambil masa kira-kira setengah minit.',
@@ -19068,9 +19068,9 @@ export const CATALOG = {
         notMeasuredYet: 'belum diukur',
         previewFirst: "Pratonton dahulu untuk melihat apa yang akan dibebaskan.",
         unmeasuredSuffix: (count) => ` · ${count} tidak diukur`,
-        modeQuarantine: 'Moves to Quarantine.',
-        modeRecycle: 'Moves to the Recycle Bin.',
-        modeDelete: 'Deletes immediately.',
+        modeQuarantine: "Mengalihkan ke Kuarantin.",
+        modeRecycle: "Mengalihkan ke Tong Kitar Semula.",
+        modeDelete: "Memadam serta-merta.",
         selectEverything: 'Pilih semua',
         clear: 'Kosongkan',
         selectedCount: (count) => `${count} dipilih`
@@ -19079,35 +19079,35 @@ export const CATALOG = {
         prompt: (count, sizeKnown, formatted) => `Alih ${count} item (${sizeKnown ? formatted : 'saiz tidak diukur'}) ke Kuarantin?`,
         cancel: 'Batal',
         confirmButton: "Alih ke Kuarantin",
-        promptDelete: (count, sizeKnown, formatted) => `Delete ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'})? This can't be undone.`,
-        deleteButton: 'Delete',
-        promptRecycle: (count, sizeKnown, formatted) => `Move ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'}) to the Recycle Bin?`,
-        recycleButton: 'Move to Recycle Bin',
-        wipeNote: 'Includes wiping free disk space, which can take hours.',
+        promptDelete: (count, sizeKnown, formatted) => `Padam ${count} item (${sizeKnown ? formatted : 'saiz tidak diukur'})? Ini tidak boleh dibuat asal.`,
+        deleteButton: "Padam",
+        promptRecycle: (count, sizeKnown, formatted) => `Alih ${count} item (${sizeKnown ? formatted : 'saiz tidak diukur'}) ke Tong Kitar Semula?`,
+        recycleButton: "Alih ke Tong Kitar Semula",
+        wipeNote: "Termasuk menimpa ruang cakera kosong, yang boleh mengambil masa berjam-jam.",
         cleaning: 'Membersihkan…'
       },
       wipe: {
-        title: 'Wipe free disk space',
-        body: "This overwrites the free space on the drive with zeros, then deletes the filler, so files you deleted earlier can't be recovered. It frees no space.",
-        ssdWarning: 'On an SSD with TRIM this does nothing useful and adds write wear. Use it on a hard disk, or when you know you need it.',
-        driveLine: (drive) => `Drive: ${drive}`,
-        writeLine: (size) => `About ${size} will be written.`,
-        timeLine: (duration, speed) => `Roughly ${duration}, from a one-second write test at ${speed}. The drive slows as it fills, so it can take longer.`,
-        duration: (hours, minutes) => (hours > 0 ? `${hours} h ${minutes} min` : `${minutes} min`),
-        reserveLine: (size) => `${size} always stays free so Windows keeps working.`,
-        stopNote: 'Stop ends it at once and deletes the filler.',
-        measuring: 'Measuring the drive…',
-        estimateFailed: (error) => `Couldn't measure the drive: ${error}`,
-        cancel: 'Cancel',
-        confirm: 'Add to this clean'
+        title: "Timpa ruang cakera kosong",
+        body: "Ini menimpa ruang kosong pada pemacu dengan sifar, kemudian memadam fail pengisi, supaya fail yang anda padam sebelum ini tidak boleh dipulihkan. Ia tidak membebaskan ruang.",
+        ssdWarning: "Pada SSD dengan TRIM, ini tidak berguna dan menambah kehausan tulis. Gunakannya pada cakera keras, atau apabila anda tahu anda memerlukannya.",
+        driveLine: (drive) => `Pemacu: ${drive}`,
+        writeLine: (size) => `Kira-kira ${size} akan ditulis.`,
+        timeLine: (duration, speed) => `Kira-kira ${duration}, berdasarkan ujian tulis satu saat pada ${speed}. Pemacu menjadi perlahan apabila semakin penuh, jadi ia mungkin mengambil masa lebih lama.`,
+        duration: (hours, minutes) => (hours > 0 ? `${hours} jam ${minutes} min` : `${minutes} min`),
+        reserveLine: (size) => `${size} sentiasa dibiarkan kosong supaya Windows terus berfungsi.`,
+        stopNote: "Henti menamatkannya serta-merta dan memadam fail pengisi.",
+        measuring: "Mengukur pemacu…",
+        estimateFailed: (error) => `Tidak dapat mengukur pemacu: ${error}`,
+        cancel: "Batal",
+        confirm: "Tambah pada pembersihan ini"
       },
       stop: 'Henti',
       rescan: 'Imbas semula',
       clean: 'Bersihkan',
       tree: {
         selectCategoryAriaLabel: (category) => `Pilih semua di bawah ${category}`,
-        atLeast: (size) => `at least ${size}`,
-        longRunning: 'Takes a long time',
+        atLeast: (size) => `sekurang-kurangnya ${size}`,
+        longRunning: "Mengambil masa yang lama",
         losesData: 'Kehilangan data',
         needsAdmin: 'perlu pentadbir',
         notInstalled: 'tidak dipasang',
@@ -19124,7 +19124,7 @@ export const CATALOG = {
       },
       log: {
         scan: {
-          partial: (size) => `${size}, partial`,
+          partial: (size) => `${size}, separa`,
           nothingToMeasure: "tiada apa untuk diukur",
           needsAdmin: "perlu pentadbir",
           notInstalled: "tidak dipasang",
@@ -19132,10 +19132,10 @@ export const CATALOG = {
         },
         execute: {
           delete: (name) => `Padam ${name}`,
-          wipe: (name) => `Wipe ${name}`,
-          wiped: (size) => `${size} written`,
-          wipeStopped: (size) => `stopped after ${size}`,
-          quarantine: (name) => `Quarantine ${name}`,
+          wipe: (name) => `Timpa ${name}`,
+          wiped: (size) => `${size} ditulis`,
+          wipeStopped: (size) => `dihentikan selepas ${size}`,
+          quarantine: (name) => `Alih ke Kuarantin: ${name}`,
           recycle: (name) => `Hantar ${name} ke Tong Kitar Semula`,
           clear: (name) => `Kosongkan ${name}`,
           compact: (name) => `Padatkan ${name}`,
@@ -19386,17 +19386,17 @@ export const CATALOG = {
         description: 'Tegner stasjonens ledige plass som enda en blokk når du skanner en hel stasjon, slik at hver mappe leses som en andel av stasjonen i stedet for av plassen som er i bruk.'
       },
       deepCleanRemoval: {
-        title: 'When Deep Clean removes files',
+        title: "Når Grundig opprydding fjerner filer",
         quarantine: {
-          label: 'Move to Quarantine (you can put it back)',
-          description: "Nothing is deleted. Files go into Prune's Quarantine and the drive gets the space back when you empty it."
+          label: "Flytt til karantene (du kan legge det tilbake)",
+          description: "Ingenting slettes. Filene går til Prunes karantene, og stasjonen får plassen tilbake når du tømmer den."
         },
         delete: {
-          label: "Delete now (frees the space, can't be undone — like BleachBit)",
-          description: 'Files are removed as soon as you confirm, so the space is free straight away. Rules that lose data still ask first.'
+          label: "Slett nå (frigjør plassen, kan ikke angres — som BleachBit)",
+          description: "Filene fjernes så snart du bekrefter, så plassen er ledig med en gang. Regler som mister data spør fortsatt først."
         },
-        deleteWarning: "With Delete now, Clean can't be undone. Scheduled cleans still move files to Quarantine.",
-        autoQuarantineNote: 'Not used while Deep Clean deletes files immediately.'
+        deleteWarning: "Med Slett nå kan Rens ikke angres. Planlagte rensinger flytter fortsatt filer til karantene.",
+        autoQuarantineNote: "Brukes ikke mens Grundig opprydding sletter filer umiddelbart."
       },
       autoQuarantine: {
         title: 'Automatisk karantene',
@@ -19914,13 +19914,13 @@ export const CATALOG = {
     deepClean: {
       title: "Grundig opprydding",
       subtitle: 'Hver hurtigbuffer, logg, dump og rest Prune vet hvordan man finner, målt på denne maskinen i stedet for anslått. Ingenting slettes umiddelbart — alt Rens tar går først til Karantene, hvor du kan legge det tilbake.',
-      subtitleDelete: "Every cache, log, dump and leftover Prune knows how to find, measured on this machine rather than estimated. Clean deletes what you tick immediately and frees the space, the way BleachBit does. It can't be undone.",
+      subtitleDelete: "Hver hurtigbuffer, logg, dump og rest Prune vet hvordan man finner, målt på denne maskinen i stedet for anslått. Rens sletter det du huker av umiddelbart og frigjør plassen, slik BleachBit gjør. Det kan ikke angres.",
       scanLog: {
         header: 'Skanningsutdata',
         scanningAnnounce: (total) => `Skanner ${total} steder.`,
         finishedAnnounce: (scanned, total) => `Skanning ferdig. ${scanned} av ${total} steder målt.`,
-        searching: (items) => `Searching your profile… ${items} items checked`,
-        wiping: (written, total) => `Writing zeros… ${written} of ${total}`,
+        searching: (items)=>`Søker gjennom profilen din… ${items} elementer sjekket`,
+        wiping: (written,total)=>`Skriver nuller… ${written} av ${total}`,
         starting: 'Starter…',
         idle: "Klikk på Forhåndsvisning for å måle hva som kan renses."
       },
@@ -19929,11 +19929,11 @@ export const CATALOG = {
       cleanErrorPrefix: (error) => `Kunne ikke rense: ${error}`,
       cleanupComplete: 'Opprydding fullført.',
       resultFreed: (formatted) => `Frigjorde ${formatted}`,
-      resultMoved: (formatted) => `Moved ${formatted} to Quarantine. The space comes back when you empty it.`,
-      resultRecycled: (formatted) => `Moved ${formatted} to the Recycle Bin. The space comes back when you empty it.`,
-      openQuarantine: 'Open Quarantine',
-      resultWiped: (size) => `Wrote ${size} of zeros over the free space, then deleted it. No space was freed.`,
-      resultWipeStopped: (size) => `Stopped after writing ${size} of zeros over the free space. The filler was deleted.`,
+      resultMoved: (formatted)=>`Flyttet ${formatted} til karantene. Plassen kommer tilbake når du tømmer den.`,
+      resultRecycled: (formatted)=>`Flyttet ${formatted} til papirkurven. Plassen kommer tilbake når du tømmer den.`,
+      openQuarantine: "Åpne karantene",
+      resultWiped: (size)=>`Skrev ${size} nuller over den ledige plassen og slettet deretter fyllfilen. Ingen plass ble frigjort.`,
+      resultWipeStopped: (size)=>`Stoppet etter å ha skrevet ${size} nuller over den ledige plassen. Fyllfilen ble slettet.`,
       resultLockedSuffix: (count) => ` — hoppet over ${count} ${count === 1 ? 'låst fil' : 'låste filer'}`,
       before: {
         body: 'Prune måler hver kategori faktisk på disken i stedet for å anslå, noe som tar rundt et halvt minutt.',
@@ -19946,9 +19946,9 @@ export const CATALOG = {
         notMeasuredYet: 'ikke målt ennå',
         previewFirst: "Forhåndsvis først for å se hva som frigjøres.",
         unmeasuredSuffix: (count) => ` · ${count} ikke målt`,
-        modeQuarantine: 'Moves to Quarantine.',
-        modeRecycle: 'Moves to the Recycle Bin.',
-        modeDelete: 'Deletes immediately.',
+        modeQuarantine: "Flyttes til karantene.",
+        modeRecycle: "Flyttes til papirkurven.",
+        modeDelete: "Slettes umiddelbart.",
         selectEverything: 'Velg alt',
         clear: "Fjern merking",
         selectedCount: (count) => `${count} valgt`
@@ -19957,35 +19957,35 @@ export const CATALOG = {
         prompt: (count, sizeKnown, formatted) => `Flytt ${count} ${count === 1 ? 'element' : 'elementer'} (${sizeKnown ? formatted : 'størrelse ikke målt'}) til karantene?`,
         cancel: 'Avbryt',
         confirmButton: "Flytt til Karantene",
-        promptDelete: (count, sizeKnown, formatted) => `Delete ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'})? This can't be undone.`,
-        deleteButton: 'Delete',
-        promptRecycle: (count, sizeKnown, formatted) => `Move ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'}) to the Recycle Bin?`,
-        recycleButton: 'Move to Recycle Bin',
-        wipeNote: 'Includes wiping free disk space, which can take hours.',
+        promptDelete: (count,sizeKnown,formatted)=>`Slett ${count} ${count === 1 ? 'element' : 'elementer'} (${sizeKnown ? formatted : 'størrelse ikke målt'})? Dette kan ikke angres.`,
+        deleteButton: "Slett",
+        promptRecycle: (count,sizeKnown,formatted)=>`Flytt ${count} ${count === 1 ? 'element' : 'elementer'} (${sizeKnown ? formatted : 'størrelse ikke målt'}) til papirkurven?`,
+        recycleButton: "Flytt til papirkurven",
+        wipeNote: "Inkluderer overskriving av ledig diskplass, noe som kan ta timer.",
         cleaning: 'Renser…'
       },
       wipe: {
-        title: 'Wipe free disk space',
-        body: "This overwrites the free space on the drive with zeros, then deletes the filler, so files you deleted earlier can't be recovered. It frees no space.",
-        ssdWarning: 'On an SSD with TRIM this does nothing useful and adds write wear. Use it on a hard disk, or when you know you need it.',
-        driveLine: (drive) => `Drive: ${drive}`,
-        writeLine: (size) => `About ${size} will be written.`,
-        timeLine: (duration, speed) => `Roughly ${duration}, from a one-second write test at ${speed}. The drive slows as it fills, so it can take longer.`,
-        duration: (hours, minutes) => (hours > 0 ? `${hours} h ${minutes} min` : `${minutes} min`),
-        reserveLine: (size) => `${size} always stays free so Windows keeps working.`,
-        stopNote: 'Stop ends it at once and deletes the filler.',
-        measuring: 'Measuring the drive…',
-        estimateFailed: (error) => `Couldn't measure the drive: ${error}`,
-        cancel: 'Cancel',
-        confirm: 'Add to this clean'
+        title: "Skriv over ledig diskplass",
+        body: "Dette skriver over den ledige plassen på stasjonen med nuller og sletter deretter fyllfilen, slik at filer du slettet tidligere ikke kan gjenopprettes. Det frigjør ingen plass.",
+        ssdWarning: "På en SSD med TRIM gjør dette ingen nytte og gir bare ekstra skriveslitasje. Bruk det på en harddisk, eller når du vet at du trenger det.",
+        driveLine: (drive)=>`Stasjon: ${drive}`,
+        writeLine: (size)=>`Omtrent ${size} blir skrevet.`,
+        timeLine: (duration,speed)=>`Omtrent ${duration}, basert på en skrivetest på ett sekund med ${speed}. Stasjonen blir tregere etter hvert som den fylles, så det kan ta lengre tid.`,
+        duration: (hours,minutes)=>(hours > 0 ? `${hours} t ${minutes} min` : `${minutes} min`),
+        reserveLine: (size)=>`${size} forblir alltid ledig slik at Windows fortsetter å fungere.`,
+        stopNote: "Stopp avslutter det umiddelbart og sletter fyllfilen.",
+        measuring: "Måler stasjonen…",
+        estimateFailed: (error)=>`Kunne ikke måle stasjonen: ${error}`,
+        cancel: "Avbryt",
+        confirm: "Legg til i denne rensingen"
       },
       stop: 'Stopp',
       rescan: 'Skann på nytt',
       clean: 'Rens',
       tree: {
         selectCategoryAriaLabel: (category) => `Velg alt under ${category}`,
-        atLeast: (size) => `at least ${size}`,
-        longRunning: 'Takes a long time',
+        atLeast: (size)=>`minst ${size}`,
+        longRunning: "Tar lang tid",
         losesData: 'Mister data',
         needsAdmin: 'krever administrator',
         notInstalled: 'ikke installert',
@@ -20002,7 +20002,7 @@ export const CATALOG = {
       },
       log: {
         scan: {
-          partial: (size) => `${size}, partial`,
+          partial: (size)=>`${size}, delvis`,
           nothingToMeasure: "ingenting å måle",
           needsAdmin: "krever administrator",
           notInstalled: "ikke installert",
@@ -20010,10 +20010,10 @@ export const CATALOG = {
         },
         execute: {
           delete: (name) => `Slett ${name}`,
-          wipe: (name) => `Wipe ${name}`,
-          wiped: (size) => `${size} written`,
-          wipeStopped: (size) => `stopped after ${size}`,
-          quarantine: (name) => `Quarantine ${name}`,
+          wipe: (name)=>`Skriv over ${name}`,
+          wiped: (size)=>`${size} skrevet`,
+          wipeStopped: (size)=>`stoppet etter ${size}`,
+          quarantine: (name)=>`Flytt ${name} til karantene`,
           recycle: (name) => `Send ${name} til papirkurven`,
           clear: (name) => `Tøm ${name}`,
           compact: (name) => `Komprimer ${name}`,
@@ -20262,17 +20262,17 @@ export const CATALOG = {
         description: 'Tekent de vrije ruimte van de schijf als nog een blok wanneer je een hele schijf scant, zodat elke map leesbaar is als een aandeel van de schijf in plaats van de gebruikte ruimte.'
       },
       deepCleanRemoval: {
-        title: 'When Deep Clean removes files',
+        title: "Wanneer Grondige opschoning bestanden verwijdert",
         quarantine: {
-          label: 'Move to Quarantine (you can put it back)',
-          description: "Nothing is deleted. Files go into Prune's Quarantine and the drive gets the space back when you empty it."
+          label: "Naar Quarantaine verplaatsen (je kunt ze terugzetten)",
+          description: "Er wordt niets verwijderd. Bestanden gaan naar de Quarantaine van Prune en de schijf krijgt de ruimte terug zodra je die leegmaakt."
         },
         delete: {
-          label: "Delete now (frees the space, can't be undone — like BleachBit)",
-          description: 'Files are removed as soon as you confirm, so the space is free straight away. Rules that lose data still ask first.'
+          label: "Nu verwijderen (maakt de ruimte vrij, kan niet ongedaan worden gemaakt — zoals BleachBit)",
+          description: "Bestanden worden verwijderd zodra je bevestigt, dus de ruimte is meteen vrij. Regels die gegevens verliezen vragen nog steeds eerst."
         },
-        deleteWarning: "With Delete now, Clean can't be undone. Scheduled cleans still move files to Quarantine.",
-        autoQuarantineNote: 'Not used while Deep Clean deletes files immediately.'
+        deleteWarning: "Met Nu verwijderen kan Opschonen niet ongedaan worden gemaakt. Geplande opschoningen verplaatsen bestanden nog steeds naar Quarantaine.",
+        autoQuarantineNote: "Niet in gebruik zolang Grondige opschoning bestanden direct verwijdert."
       },
       autoQuarantine: {
         title: 'Automatische quarantaine',
@@ -20790,13 +20790,13 @@ export const CATALOG = {
     deepClean: {
       title: "Grondige opschoning",
       subtitle: "Elke cache, log, dump en elk restant dat Prune weet te vinden, gemeten op deze machine in plaats van geschat. Niets wordt direct verwijderd — alles wat Opschonen meeneemt gaat eerst naar Quarantaine, waar je het kunt terugzetten.",
-      subtitleDelete: "Every cache, log, dump and leftover Prune knows how to find, measured on this machine rather than estimated. Clean deletes what you tick immediately and frees the space, the way BleachBit does. It can't be undone.",
+      subtitleDelete: "Elke cache, log, dump en elk restant dat Prune weet te vinden, gemeten op deze machine in plaats van geschat. Opschonen verwijdert wat je aanvinkt direct en maakt de ruimte vrij, zoals BleachBit dat doet. Het kan niet ongedaan worden gemaakt.",
       scanLog: {
         header: 'Scanuitvoer',
         scanningAnnounce: (total) => `${total} locaties worden gescand.`,
         finishedAnnounce: (scanned, total) => `Scan voltooid. ${scanned} van ${total} locaties gemeten.`,
-        searching: (items) => `Searching your profile… ${items} items checked`,
-        wiping: (written, total) => `Writing zeros… ${written} of ${total}`,
+        searching: (items)=>`Je profiel wordt doorzocht… ${items} items gecontroleerd`,
+        wiping: (written,total)=>`Nullen schrijven… ${written} van ${total}`,
         starting: 'Wordt gestart…',
         idle: "Klik op Voorbeeld om te meten wat er kan worden opgeruimd."
       },
@@ -20805,11 +20805,11 @@ export const CATALOG = {
       cleanErrorPrefix: (error) => `Kon niet opschonen: ${error}`,
       cleanupComplete: 'Opschonen voltooid.',
       resultFreed: (formatted) => `${formatted} vrijgemaakt`,
-      resultMoved: (formatted) => `Moved ${formatted} to Quarantine. The space comes back when you empty it.`,
-      resultRecycled: (formatted) => `Moved ${formatted} to the Recycle Bin. The space comes back when you empty it.`,
-      openQuarantine: 'Open Quarantine',
-      resultWiped: (size) => `Wrote ${size} of zeros over the free space, then deleted it. No space was freed.`,
-      resultWipeStopped: (size) => `Stopped after writing ${size} of zeros over the free space. The filler was deleted.`,
+      resultMoved: (formatted)=>`${formatted} naar Quarantaine verplaatst. De ruimte komt terug zodra je die leegmaakt.`,
+      resultRecycled: (formatted)=>`${formatted} naar de Prullenbak verplaatst. De ruimte komt terug zodra je die leegmaakt.`,
+      openQuarantine: "Quarantaine openen",
+      resultWiped: (size)=>`${size} aan nullen over de vrije ruimte geschreven en daarna het opvulbestand verwijderd. Er is geen ruimte vrijgemaakt.`,
+      resultWipeStopped: (size)=>`Gestopt na het schrijven van ${size} aan nullen over de vrije ruimte. Het opvulbestand is verwijderd.`,
       resultLockedSuffix: (count) => ` — ${count} vergrendeld${count === 1 ? ' bestand' : 'e bestanden'} overgeslagen`,
       before: {
         body: 'Prune meet elke categorie daadwerkelijk op de schijf in plaats van te schatten, wat ongeveer een halve minuut duurt.',
@@ -20822,9 +20822,9 @@ export const CATALOG = {
         notMeasuredYet: 'nog niet gemeten',
         previewFirst: "Bekijk eerst het voorbeeld om te zien wat er wordt vrijgemaakt.",
         unmeasuredSuffix: (count) => ` · ${count} niet gemeten`,
-        modeQuarantine: 'Moves to Quarantine.',
-        modeRecycle: 'Moves to the Recycle Bin.',
-        modeDelete: 'Deletes immediately.',
+        modeQuarantine: "Verplaatst naar Quarantaine.",
+        modeRecycle: "Verplaatst naar de Prullenbak.",
+        modeDelete: "Verwijdert direct.",
         selectEverything: 'Alles selecteren',
         clear: 'Wissen',
         selectedCount: (count) => `${count} geselecteerd`
@@ -20833,35 +20833,35 @@ export const CATALOG = {
         prompt: (count, sizeKnown, formatted) => `${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'grootte niet gemeten'}) naar Quarantaine verplaatsen?`,
         cancel: 'Annuleren',
         confirmButton: "Naar Quarantaine verplaatsen",
-        promptDelete: (count, sizeKnown, formatted) => `Delete ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'})? This can't be undone.`,
-        deleteButton: 'Delete',
-        promptRecycle: (count, sizeKnown, formatted) => `Move ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'}) to the Recycle Bin?`,
-        recycleButton: 'Move to Recycle Bin',
-        wipeNote: 'Includes wiping free disk space, which can take hours.',
+        promptDelete: (count,sizeKnown,formatted)=>`${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'grootte niet gemeten'}) verwijderen? Dit kan niet ongedaan worden gemaakt.`,
+        deleteButton: "Verwijderen",
+        promptRecycle: (count,sizeKnown,formatted)=>`${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'grootte niet gemeten'}) naar de Prullenbak verplaatsen?`,
+        recycleButton: "Naar Prullenbak verplaatsen",
+        wipeNote: "Omvat het overschrijven van vrije schijfruimte, wat uren kan duren.",
         cleaning: 'Bezig met opschonen…'
       },
       wipe: {
-        title: 'Wipe free disk space',
-        body: "This overwrites the free space on the drive with zeros, then deletes the filler, so files you deleted earlier can't be recovered. It frees no space.",
-        ssdWarning: 'On an SSD with TRIM this does nothing useful and adds write wear. Use it on a hard disk, or when you know you need it.',
-        driveLine: (drive) => `Drive: ${drive}`,
-        writeLine: (size) => `About ${size} will be written.`,
-        timeLine: (duration, speed) => `Roughly ${duration}, from a one-second write test at ${speed}. The drive slows as it fills, so it can take longer.`,
-        duration: (hours, minutes) => (hours > 0 ? `${hours} h ${minutes} min` : `${minutes} min`),
-        reserveLine: (size) => `${size} always stays free so Windows keeps working.`,
-        stopNote: 'Stop ends it at once and deletes the filler.',
-        measuring: 'Measuring the drive…',
-        estimateFailed: (error) => `Couldn't measure the drive: ${error}`,
-        cancel: 'Cancel',
-        confirm: 'Add to this clean'
+        title: "Vrije schijfruimte overschrijven",
+        body: "Dit overschrijft de vrije ruimte op de schijf met nullen en verwijdert daarna het opvulbestand, zodat eerder verwijderde bestanden niet kunnen worden hersteld. Het maakt geen ruimte vrij.",
+        ssdWarning: "Op een SSD met TRIM heeft dit geen nut en zorgt het voor extra slijtage door schrijfacties. Gebruik het op een harde schijf, of als je zeker weet dat je het nodig hebt.",
+        driveLine: (drive)=>`Schijf: ${drive}`,
+        writeLine: (size)=>`Er wordt ongeveer ${size} geschreven.`,
+        timeLine: (duration,speed)=>`Ongeveer ${duration}, op basis van een schrijftest van één seconde met ${speed}. De schijf wordt trager naarmate hij vol raakt, dus het kan langer duren.`,
+        duration: (hours,minutes)=>(hours > 0 ? `${hours} u ${minutes} min` : `${minutes} min`),
+        reserveLine: (size)=>`${size} blijft altijd vrij, zodat Windows blijft werken.`,
+        stopNote: "Stoppen beëindigt het meteen en verwijdert het opvulbestand.",
+        measuring: "De schijf wordt gemeten…",
+        estimateFailed: (error)=>`De schijf kon niet worden gemeten: ${error}`,
+        cancel: "Annuleren",
+        confirm: "Toevoegen aan deze opschoning"
       },
       stop: 'Stoppen',
       rescan: 'Opnieuw scannen',
       clean: 'Opschonen',
       tree: {
         selectCategoryAriaLabel: (category) => `Alles selecteren onder ${category}`,
-        atLeast: (size) => `at least ${size}`,
-        longRunning: 'Takes a long time',
+        atLeast: (size)=>`minstens ${size}`,
+        longRunning: "Duurt lang",
         losesData: 'Verliest gegevens',
         needsAdmin: 'heeft beheerder nodig',
         notInstalled: 'niet geïnstalleerd',
@@ -20878,7 +20878,7 @@ export const CATALOG = {
       },
       log: {
         scan: {
-          partial: (size) => `${size}, partial`,
+          partial: (size)=>`${size}, gedeeltelijk`,
           nothingToMeasure: "niets te meten",
           needsAdmin: "heeft beheerder nodig",
           notInstalled: "niet geïnstalleerd",
@@ -20886,10 +20886,10 @@ export const CATALOG = {
         },
         execute: {
           delete: (name) => `${name} verwijderen`,
-          wipe: (name) => `Wipe ${name}`,
-          wiped: (size) => `${size} written`,
-          wipeStopped: (size) => `stopped after ${size}`,
-          quarantine: (name) => `Quarantine ${name}`,
+          wipe: (name)=>`${name} overschrijven`,
+          wiped: (size)=>`${size} geschreven`,
+          wipeStopped: (size)=>`gestopt na ${size}`,
+          quarantine: (name)=>`${name} naar Quarantaine verplaatsen`,
           recycle: (name) => `${name} naar de Prullenbak`,
           clear: (name) => `${name} wissen`,
           compact: (name) => `${name} comprimeren`,
@@ -21138,17 +21138,17 @@ export const CATALOG = {
         description: 'Rysuje wolne miejsce dysku jako jeszcze jeden blok podczas skanowania całego dysku, dzięki czemu każdy folder jest odczytywany jako udział dysku, a nie zajętego miejsca.'
       },
       deepCleanRemoval: {
-        title: 'When Deep Clean removes files',
+        title: "Co Głębokie czyszczenie robi z plikami",
         quarantine: {
-          label: 'Move to Quarantine (you can put it back)',
-          description: "Nothing is deleted. Files go into Prune's Quarantine and the drive gets the space back when you empty it."
+          label: "Przenieś do kwarantanny (możesz je przywrócić)",
+          description: "Nic nie jest usuwane. Pliki trafiają do kwarantanny Prune, a miejsce na dysku zwolni się po jej opróżnieniu."
         },
         delete: {
-          label: "Delete now (frees the space, can't be undone — like BleachBit)",
-          description: 'Files are removed as soon as you confirm, so the space is free straight away. Rules that lose data still ask first.'
+          label: "Usuń od razu (zwalnia miejsce, nie można cofnąć — jak w BleachBit)",
+          description: "Pliki są usuwane zaraz po potwierdzeniu, więc miejsce zwalnia się natychmiast. Moduły powodujące utratę danych nadal najpierw pytają."
         },
-        deleteWarning: "With Delete now, Clean can't be undone. Scheduled cleans still move files to Quarantine.",
-        autoQuarantineNote: 'Not used while Deep Clean deletes files immediately.'
+        deleteWarning: "Przy opcji „Usuń od razu” czyszczenia nie można cofnąć. Zaplanowane czyszczenia nadal przenoszą pliki do kwarantanny.",
+        autoQuarantineNote: "Nie ma zastosowania, gdy Głębokie czyszczenie usuwa pliki od razu."
       },
       autoQuarantine: {
         title: 'Automatyczna kwarantanna',
@@ -21666,13 +21666,13 @@ export const CATALOG = {
     deepClean: {
       title: 'Głębokie czyszczenie',
       subtitle: "Każda pamięć podręczna, dziennik, zrzut i pozostałość, które Prune potrafi znaleźć, zmierzone na tym komputerze zamiast szacowane. Nic nie jest usuwane od razu — wszystko, co usuwa Czyszczenie, trafia najpierw do kwarantanny, skąd można to przywrócić.",
-      subtitleDelete: "Every cache, log, dump and leftover Prune knows how to find, measured on this machine rather than estimated. Clean deletes what you tick immediately and frees the space, the way BleachBit does. It can't be undone.",
+      subtitleDelete: "Każda pamięć podręczna, dziennik, zrzut i pozostałość, które Prune potrafi znaleźć, zmierzone na tym komputerze zamiast szacowane. Czyszczenie od razu usuwa zaznaczone elementy i zwalnia miejsce, tak jak robi to BleachBit. Nie można tego cofnąć.",
       scanLog: {
         header: 'Wynik skanowania',
         scanningAnnounce: (total) => `Skanowanie lokalizacji: ${total}.`,
         finishedAnnounce: (scanned, total) => `Skanowanie zakończone. Zmierzono ${scanned} z ${total} lokalizacji.`,
-        searching: (items) => `Searching your profile… ${items} items checked`,
-        wiping: (written, total) => `Writing zeros… ${written} of ${total}`,
+        searching: (items) => `Przeszukiwanie profilu… sprawdzone elementy: ${items}`,
+        wiping: (written, total) => `Zapisywanie zer… ${written} z ${total}`,
         starting: 'Uruchamianie…',
         idle: "Kliknij Podgląd, aby zmierzyć, co można wyczyścić."
       },
@@ -21681,11 +21681,11 @@ export const CATALOG = {
       cleanErrorPrefix: (error) => `Nie udało się wyczyścić: ${error}`,
       cleanupComplete: 'Czyszczenie zakończone.',
       resultFreed: (formatted) => `Zwolniono ${formatted}`,
-      resultMoved: (formatted) => `Moved ${formatted} to Quarantine. The space comes back when you empty it.`,
-      resultRecycled: (formatted) => `Moved ${formatted} to the Recycle Bin. The space comes back when you empty it.`,
-      openQuarantine: 'Open Quarantine',
-      resultWiped: (size) => `Wrote ${size} of zeros over the free space, then deleted it. No space was freed.`,
-      resultWipeStopped: (size) => `Stopped after writing ${size} of zeros over the free space. The filler was deleted.`,
+      resultMoved: (formatted) => `Przeniesiono do kwarantanny: ${formatted}. Miejsce zwolni się po jej opróżnieniu.`,
+      resultRecycled: (formatted) => `Przeniesiono do Kosza: ${formatted}. Miejsce zwolni się po jego opróżnieniu.`,
+      openQuarantine: "Otwórz kwarantannę",
+      resultWiped: (size) => `Wolne miejsce nadpisano zerami (${size}), po czym plik wypełniający usunięto. Nie zwolniono miejsca.`,
+      resultWipeStopped: (size) => `Zatrzymano po zapisaniu zer (${size}) w wolnym miejscu. Plik wypełniający usunięto.`,
       resultLockedSuffix: (count) => { const m10 = count % 10, m100 = count % 100; const w = count === 1 ? 'zablokowany plik' : (m10 >= 2 && m10 <= 4 && (m100 < 12 || m100 > 14)) ? 'zablokowane pliki' : 'zablokowanych plików'; return ` — pominięto ${count} ${w}`; },
       before: {
         body: 'Prune rzeczywiście mierzy każdą kategorię na dysku zamiast ją szacować, co zajmuje około pół minuty.',
@@ -21698,9 +21698,9 @@ export const CATALOG = {
         notMeasuredYet: 'jeszcze nie zmierzono',
         previewFirst: "Najpierw użyj Podglądu, aby zobaczyć, co zostanie zwolnione.",
         unmeasuredSuffix: (count) => ` · niezmierzone: ${count}`,
-        modeQuarantine: 'Moves to Quarantine.',
-        modeRecycle: 'Moves to the Recycle Bin.',
-        modeDelete: 'Deletes immediately.',
+        modeQuarantine: "Przenosi do kwarantanny.",
+        modeRecycle: "Przenosi do Kosza.",
+        modeDelete: "Usuwa od razu.",
         selectEverything: 'Zaznacz wszystko',
         clear: 'Wyczyść',
         selectedCount: (count) => `Wybrano: ${count}`
@@ -21709,35 +21709,35 @@ export const CATALOG = {
         prompt: (count, sizeKnown, formatted) => { const m10 = count % 10, m100 = count % 100; const w = count === 1 ? 'element' : (m10 >= 2 && m10 <= 4 && (m100 < 12 || m100 > 14)) ? 'elementy' : 'elementów'; return `Przenieść ${count} ${w} (${sizeKnown ? formatted : 'rozmiar niezmierzony'}) do kwarantanny?`; },
         cancel: 'Anuluj',
         confirmButton: "Przenieś do kwarantanny",
-        promptDelete: (count, sizeKnown, formatted) => `Delete ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'})? This can't be undone.`,
-        deleteButton: 'Delete',
-        promptRecycle: (count, sizeKnown, formatted) => `Move ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'}) to the Recycle Bin?`,
-        recycleButton: 'Move to Recycle Bin',
-        wipeNote: 'Includes wiping free disk space, which can take hours.',
+        promptDelete: (count, sizeKnown, formatted) => { const m10 = count % 10, m100 = count % 100; const w = count === 1 ? 'element' : (m10 >= 2 && m10 <= 4 && (m100 < 12 || m100 > 14)) ? 'elementy' : 'elementów'; return `Usunąć ${count} ${w} (${sizeKnown ? formatted : 'rozmiar niezmierzony'})? Nie można tego cofnąć.`; },
+        deleteButton: "Usuń",
+        promptRecycle: (count, sizeKnown, formatted) => { const m10 = count % 10, m100 = count % 100; const w = count === 1 ? 'element' : (m10 >= 2 && m10 <= 4 && (m100 < 12 || m100 > 14)) ? 'elementy' : 'elementów'; return `Przenieść ${count} ${w} (${sizeKnown ? formatted : 'rozmiar niezmierzony'}) do Kosza?`; },
+        recycleButton: "Przenieś do Kosza",
+        wipeNote: "Obejmuje nadpisanie wolnego miejsca na dysku, co może potrwać kilka godzin.",
         cleaning: 'Czyszczenie…'
       },
       wipe: {
-        title: 'Wipe free disk space',
-        body: "This overwrites the free space on the drive with zeros, then deletes the filler, so files you deleted earlier can't be recovered. It frees no space.",
-        ssdWarning: 'On an SSD with TRIM this does nothing useful and adds write wear. Use it on a hard disk, or when you know you need it.',
-        driveLine: (drive) => `Drive: ${drive}`,
-        writeLine: (size) => `About ${size} will be written.`,
-        timeLine: (duration, speed) => `Roughly ${duration}, from a one-second write test at ${speed}. The drive slows as it fills, so it can take longer.`,
-        duration: (hours, minutes) => (hours > 0 ? `${hours} h ${minutes} min` : `${minutes} min`),
-        reserveLine: (size) => `${size} always stays free so Windows keeps working.`,
-        stopNote: 'Stop ends it at once and deletes the filler.',
-        measuring: 'Measuring the drive…',
-        estimateFailed: (error) => `Couldn't measure the drive: ${error}`,
-        cancel: 'Cancel',
-        confirm: 'Add to this clean'
+        title: "Nadpisz wolne miejsce na dysku",
+        body: "Nadpisuje wolne miejsce na dysku zerami, a potem usuwa plik wypełniający, dzięki czemu wcześniej usuniętych plików nie da się odzyskać. Nie zwalnia miejsca.",
+        ssdWarning: "Na dysku SSD z TRIM nie daje to nic pożytecznego, a zwiększa zużycie przez zapis. Użyj tego na dysku twardym lub gdy wiesz, że tego potrzebujesz.",
+        driveLine: (drive) => `Dysk: ${drive}`,
+        writeLine: (size) => `Zostanie zapisane około ${size}.`,
+        timeLine: (duration, speed) => `Około ${duration}, na podstawie jednosekundowego testu zapisu (${speed}). W miarę zapełniania dysk zwalnia, więc może to potrwać dłużej.`,
+        duration: (hours, minutes) => (hours > 0 ? `${hours} godz. ${minutes} min` : `${minutes} min`),
+        reserveLine: (size) => `Zawsze pozostaje wolne ${size}, aby Windows nadal działał.`,
+        stopNote: "Zatrzymaj kończy to natychmiast i usuwa plik wypełniający.",
+        measuring: "Mierzenie dysku…",
+        estimateFailed: (error) => `Nie udało się zmierzyć dysku: ${error}`,
+        cancel: "Anuluj",
+        confirm: "Dodaj do tego czyszczenia"
       },
       stop: 'Zatrzymaj',
       rescan: 'Skanuj ponownie',
       clean: 'Wyczyść',
       tree: {
         selectCategoryAriaLabel: (category) => `Zaznacz wszystko w kategorii ${category}`,
-        atLeast: (size) => `at least ${size}`,
-        longRunning: 'Takes a long time',
+        atLeast: (size) => `co najmniej ${size}`,
+        longRunning: "Trwa długo",
         losesData: 'Utrata danych',
         needsAdmin: 'wymaga administratora',
         notInstalled: 'niezainstalowane',
@@ -21754,7 +21754,7 @@ export const CATALOG = {
       },
       log: {
         scan: {
-          partial: (size) => `${size}, partial`,
+          partial: (size) => `${size}, częściowo`,
           nothingToMeasure: "nic do zmierzenia",
           needsAdmin: "wymaga administratora",
           notInstalled: "niezainstalowane",
@@ -21762,10 +21762,10 @@ export const CATALOG = {
         },
         execute: {
           delete: (name) => `Usuń ${name}`,
-          wipe: (name) => `Wipe ${name}`,
-          wiped: (size) => `${size} written`,
-          wipeStopped: (size) => `stopped after ${size}`,
-          quarantine: (name) => `Quarantine ${name}`,
+          wipe: (name) => `Nadpisz ${name}`,
+          wiped: (size) => `zapisano ${size}`,
+          wipeStopped: (size) => `zatrzymano po ${size}`,
+          quarantine: (name) => `Wyślij ${name} do kwarantanny`,
           recycle: (name) => `Wyślij ${name} do kosza`,
           clear: (name) => `Wyczyść ${name}`,
           compact: (name) => `Skompaktuj ${name}`,
@@ -22014,17 +22014,17 @@ export const CATALOG = {
         description: 'د بشپړ ډرایو سکین کولو پر مهال د ډرایو خالي ځای د یو نور بلاک په توګه رسموي، ترڅو هر فولډر د کارول شوي ځای پرځای د ډرایو یوه برخه وګڼل شي.'
       },
       deepCleanRemoval: {
-        title: 'When Deep Clean removes files',
+        title: "کله چې ژور پاکول فایلونه لرې کوي",
         quarantine: {
-          label: 'Move to Quarantine (you can put it back)',
-          description: "Nothing is deleted. Files go into Prune's Quarantine and the drive gets the space back when you empty it."
+          label: "قرنطین ته لیږدول (بیرته یې ایښودلی شئ)",
+          description: "هیڅ شی نه ړنګیږي. فایلونه د Prune قرنطین ته ځي، او کله چې تاسو یې خالي کړئ، ډرایو خپل ځای بیرته ترلاسه کوي."
         },
         delete: {
-          label: "Delete now (frees the space, can't be undone — like BleachBit)",
-          description: 'Files are removed as soon as you confirm, so the space is free straight away. Rules that lose data still ask first.'
+          label: "همدا اوس ړنګول (ځای خلاصوي، بیرته نشي راتلی — لکه BleachBit)",
+          description: "فایلونه هماغه شېبه لرې کیږي چې تاسو تایید کړئ، نو ځای سملاسي خلاصیږي. هغه قاعدې چې ډیټا له لاسه ورکوي بیا هم لومړی پوښتنه کوي."
         },
-        deleteWarning: "With Delete now, Clean can't be undone. Scheduled cleans still move files to Quarantine.",
-        autoQuarantineNote: 'Not used while Deep Clean deletes files immediately.'
+        deleteWarning: "د «همدا اوس ړنګول» سره، پاکول بیرته نشي راتلی. مهالویش شوي پاکونه بیا هم فایلونه قرنطین ته لیږدوي.",
+        autoQuarantineNote: "تر هغه چې ژور پاکول فایلونه سملاسي ړنګوي، نه کارول کیږي."
       },
       autoQuarantine: {
         title: 'اتومات قرنطین',
@@ -22542,13 +22542,13 @@ export const CATALOG = {
     deepClean: {
       title: 'ژور پاکول',
       subtitle: "هره کیشه، لاگ، ډمپ او پاتې شونې چې Prune یې موندلو ته پوهیږي، پدې ماشین کې اندازه شوې نه چې اټکل شوې. هیڅ شی د تل لپاره نه ړنګیږي — هر هغه څه چې پاکول یې اخلي لومړی قرنطین ته ځي، چیرې چې تاسو یې بیرته راوستلی شئ.",
-      subtitleDelete: "Every cache, log, dump and leftover Prune knows how to find, measured on this machine rather than estimated. Clean deletes what you tick immediately and frees the space, the way BleachBit does. It can't be undone.",
+      subtitleDelete: "هره کیشه، لاگ، ډمپ او پاتې شونې چې Prune یې موندلو ته پوهیږي، پدې ماشین کې اندازه شوې نه چې اټکل شوې. پاکول هغه څه سملاسي ړنګوي چې تاسو یې نښه کړي او ځای خلاصوي، لکه څنګه چې BleachBit کوي. دا بیرته نشي راتلی.",
       scanLog: {
         header: "د سکین محصول",
         scanningAnnounce: (total) => `${total} ځایونه سکین کیږي.`,
         finishedAnnounce: (scanned, total) => `سکین بشپړ شو. د ${total} څخه ${scanned} ځایونه اندازه شوي.`,
-        searching: (items) => `Searching your profile… ${items} items checked`,
-        wiping: (written, total) => `Writing zeros… ${written} of ${total}`,
+        searching: (items) => `ستاسو په پروفایل کې لټون کیږي… ${items} توکي وکتل شول`,
+        wiping: (written, total) => `صفرونه لیکل کیږي… ${written} له ${total} څخه`,
         starting: 'پیل کیږي…',
         idle: "د پاکولو وړ شیانو د اندازه کولو لپاره «مخکتنه» کېکاږئ."
       },
@@ -22557,11 +22557,11 @@ export const CATALOG = {
       cleanErrorPrefix: (error) => `پاکول ونشوای شي: ${error}`,
       cleanupComplete: 'پاکول بشپړ شول.',
       resultFreed: (formatted) => `${formatted} خلاص شو`,
-      resultMoved: (formatted) => `Moved ${formatted} to Quarantine. The space comes back when you empty it.`,
-      resultRecycled: (formatted) => `Moved ${formatted} to the Recycle Bin. The space comes back when you empty it.`,
-      openQuarantine: 'Open Quarantine',
-      resultWiped: (size) => `Wrote ${size} of zeros over the free space, then deleted it. No space was freed.`,
-      resultWipeStopped: (size) => `Stopped after writing ${size} of zeros over the free space. The filler was deleted.`,
+      resultMoved: (formatted) => `${formatted} قرنطین ته ولیږدول شو. کله چې یې خالي کړئ، ځای بیرته خلاصیږي.`,
+      resultRecycled: (formatted) => `${formatted} ردي بکس ته ولیږدول شو. کله چې یې خالي کړئ، ځای بیرته خلاصیږي.`,
+      openQuarantine: "قرنطین پرانیستل",
+      resultWiped: (size) => `په وړیا ځای کې ${size} صفرونه ولیکل شول او بیا ړنګ شول. هیڅ ځای نه دی خلاص شوی.`,
+      resultWipeStopped: (size) => `په وړیا ځای کې د ${size} صفرونو لیکلو وروسته ودرول شو. ډکوونکی فایل ړنګ شو.`,
       resultLockedSuffix: (count) => count === 1 ? ' — 1 تړل شوی فایل پریښودل شو' : ` — ${count} تړل شوي فایلونه پریښودل شوي`,
       before: {
         body: 'Prune په دیسک کې هره کټګوري واقعیا اندازه کوي نه چې اټکل یې کوي، دا شاوخوا نیم دقیقه وخت نیسي.',
@@ -22574,9 +22574,9 @@ export const CATALOG = {
         notMeasuredYet: 'تراوسه اندازه شوی نه دی',
         previewFirst: "لومړی «مخکتنه» کېکاږئ چې وګورئ څه به خلاص شي.",
         unmeasuredSuffix: (count) => ` · ${count} نامعلومه اندازه`,
-        modeQuarantine: 'Moves to Quarantine.',
-        modeRecycle: 'Moves to the Recycle Bin.',
-        modeDelete: 'Deletes immediately.',
+        modeQuarantine: "قرنطین ته ځي.",
+        modeRecycle: "ردي بکس ته ځي.",
+        modeDelete: "سملاسي ړنګیږي.",
         selectEverything: 'هر څه ټاکل',
         clear: 'پاک کول',
         selectedCount: (count) => `${count} ټاکل شوي`
@@ -22585,35 +22585,35 @@ export const CATALOG = {
         prompt: (count, sizeKnown, formatted) => `${count === 1 ? '1 توکی' : count + ' توکي'} (${sizeKnown ? formatted : 'اندازه نامعلومه'}) قرنطین ته لیږدول شي؟`,
         cancel: 'لغوه کول',
         confirmButton: "قرنطین ته لیږدول",
-        promptDelete: (count, sizeKnown, formatted) => `Delete ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'})? This can't be undone.`,
-        deleteButton: 'Delete',
-        promptRecycle: (count, sizeKnown, formatted) => `Move ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'}) to the Recycle Bin?`,
-        recycleButton: 'Move to Recycle Bin',
-        wipeNote: 'Includes wiping free disk space, which can take hours.',
+        promptDelete: (count, sizeKnown, formatted) => `${count === 1 ? '1 توکی' : count + ' توکي'} (${sizeKnown ? formatted : 'اندازه نامعلومه'}) ړنګ شي؟ دا بیرته نشي راتلی.`,
+        deleteButton: "ړنګول",
+        promptRecycle: (count, sizeKnown, formatted) => `${count === 1 ? '1 توکی' : count + ' توکي'} (${sizeKnown ? formatted : 'اندازه نامعلومه'}) ردي بکس ته ولیږدول شي؟`,
+        recycleButton: "ردي بکس ته لیږدول",
+        wipeNote: "په کې د وړیا ډیسک ځای بیا لیکل شامل دي، چې ښایي څو ساعته ونیسي.",
         cleaning: 'پاکول کیږي…'
       },
       wipe: {
-        title: 'Wipe free disk space',
-        body: "This overwrites the free space on the drive with zeros, then deletes the filler, so files you deleted earlier can't be recovered. It frees no space.",
-        ssdWarning: 'On an SSD with TRIM this does nothing useful and adds write wear. Use it on a hard disk, or when you know you need it.',
-        driveLine: (drive) => `Drive: ${drive}`,
-        writeLine: (size) => `About ${size} will be written.`,
-        timeLine: (duration, speed) => `Roughly ${duration}, from a one-second write test at ${speed}. The drive slows as it fills, so it can take longer.`,
-        duration: (hours, minutes) => (hours > 0 ? `${hours} h ${minutes} min` : `${minutes} min`),
-        reserveLine: (size) => `${size} always stays free so Windows keeps working.`,
-        stopNote: 'Stop ends it at once and deletes the filler.',
-        measuring: 'Measuring the drive…',
-        estimateFailed: (error) => `Couldn't measure the drive: ${error}`,
-        cancel: 'Cancel',
-        confirm: 'Add to this clean'
+        title: "د وړیا ډیسک ځای بیا لیکل",
+        body: "دا د ډرایو وړیا ځای په صفرونو بیا لیکي، بیا ډکوونکی فایل ړنګوي، نو هغه فایلونه چې تاسو مخکې ړنګ کړي بیرته نشي ترلاسه کیدی. دا هیڅ ځای نه خلاصوي.",
+        ssdWarning: "په SSD کې چې TRIM ولري دا هیڅ ګټور کار نه کوي او د لیکلو ماتېدنه زیاتوي. دا په هارډ ډیسک کې وکاروئ، یا کله چې پوهیږئ ورته اړتیا لرئ.",
+        driveLine: (drive) => `ډرایو: ${drive}`,
+        writeLine: (size) => `شاوخوا ${size} به ولیکل شي.`,
+        timeLine: (duration, speed) => `شاوخوا ${duration}، د یوې ثانیې د لیکلو ازموینې له مخې په ${speed}. ډرایو د ډکیدو سره ورو کیږي، نو ښایي ډیر وخت ونیسي.`,
+        duration: (hours, minutes) => (hours > 0 ? `${hours} س ${minutes} د` : `${minutes} د`),
+        reserveLine: (size) => `${size} تل وړیا پاتې کیږي څو Windows کار ته دوام ورکړي.`,
+        stopNote: "درول سملاسي پای ته رسوي او ډکوونکی فایل ړنګوي.",
+        measuring: "ډرایو اندازه کیږي…",
+        estimateFailed: (error) => `ډرایو اندازه نشو کړای: ${error}`,
+        cancel: "لغوه کول",
+        confirm: "دې پاکول ته اضافه کول"
       },
       stop: 'ودرول',
       rescan: 'بیا سکین کول',
       clean: 'پاکول',
       tree: {
         selectCategoryAriaLabel: (category) => `د ${category} لاندې هر څه ټاکل`,
-        atLeast: (size) => `at least ${size}`,
-        longRunning: 'Takes a long time',
+        atLeast: (size) => `لږ تر لږه ${size}`,
+        longRunning: "ډیر وخت نیسي",
         losesData: 'ډیټا له لاسه ورکوي',
         needsAdmin: 'اډمین ته اړتیا لري',
         notInstalled: 'نصب شوی نه دی',
@@ -22630,7 +22630,7 @@ export const CATALOG = {
       },
       log: {
         scan: {
-          partial: (size) => `${size}, partial`,
+          partial: (size) => `${size}، جزوي`,
           nothingToMeasure: "د اندازه کولو لپاره هیڅ نشته",
           needsAdmin: "اډمین ته اړتیا لري",
           notInstalled: "نصب شوی نه دی",
@@ -22638,10 +22638,10 @@ export const CATALOG = {
         },
         execute: {
           delete: (name) => `${name} ړنګول`,
-          wipe: (name) => `Wipe ${name}`,
-          wiped: (size) => `${size} written`,
-          wipeStopped: (size) => `stopped after ${size}`,
-          quarantine: (name) => `Quarantine ${name}`,
+          wipe: (name) => `${name} بیا لیکل`,
+          wiped: (size) => `${size} ولیکل شول`,
+          wipeStopped: (size) => `له ${size} وروسته ودرول شو`,
+          quarantine: (name) => `${name} قرنطین ته لیږدول`,
           recycle: (name) => `${name} ردي بکس ته لیږل`,
           clear: (name) => `${name} پاکول`,
           compact: (name) => `${name} فشرول`,
@@ -22892,17 +22892,17 @@ export const CATALOG = {
         description: "Desenha o espaço livre da unidade como mais um bloco ao verificar uma unidade inteira, para que cada pasta seja lida como uma parcela da unidade em vez do espaço em uso."
       },
       deepCleanRemoval: {
-        title: 'When Deep Clean removes files',
+        title: "Quando a Limpeza profunda remove arquivos",
         quarantine: {
-          label: 'Move to Quarantine (you can put it back)',
-          description: "Nothing is deleted. Files go into Prune's Quarantine and the drive gets the space back when you empty it."
+          label: "Mover para a Quarentena (você pode devolver)",
+          description: "Nada é excluído. Os arquivos vão para a Quarentena do Prune e a unidade recupera o espaço quando você a esvazia."
         },
         delete: {
-          label: "Delete now (frees the space, can't be undone — like BleachBit)",
-          description: 'Files are removed as soon as you confirm, so the space is free straight away. Rules that lose data still ask first.'
+          label: "Excluir agora (libera o espaço, não pode ser desfeito — como o BleachBit)",
+          description: "Os arquivos são removidos assim que você confirma, então o espaço fica livre na hora. Regras que perdem dados ainda perguntam antes."
         },
-        deleteWarning: "With Delete now, Clean can't be undone. Scheduled cleans still move files to Quarantine.",
-        autoQuarantineNote: 'Not used while Deep Clean deletes files immediately.'
+        deleteWarning: "Com Excluir agora, a Limpeza não pode ser desfeita. As limpezas agendadas ainda movem os arquivos para a Quarentena.",
+        autoQuarantineNote: "Não é usado enquanto a Limpeza profunda exclui arquivos imediatamente."
       },
       autoQuarantine: {
         title: 'Quarentena automática',
@@ -23420,13 +23420,13 @@ export const CATALOG = {
     deepClean: {
       title: "Limpeza profunda",
       subtitle: "Cada cache, log, dump e resíduo que o Prune sabe encontrar, medido nesta máquina em vez de estimado. Nada é excluído diretamente — tudo o que a Limpeza pega vai primeiro para a Quarentena, de onde você pode devolvê-lo.",
-      subtitleDelete: "Every cache, log, dump and leftover Prune knows how to find, measured on this machine rather than estimated. Clean deletes what you tick immediately and frees the space, the way BleachBit does. It can't be undone.",
+      subtitleDelete: "Cada cache, log, dump e resíduo que o Prune sabe encontrar, medido nesta máquina em vez de estimado. A Limpeza exclui na hora o que você marcar e libera o espaço, como faz o BleachBit. Não pode ser desfeito.",
       scanLog: {
         header: "Saída da verificação",
         scanningAnnounce: (total) => `Verificando ${total} locais.`,
         finishedAnnounce: (scanned, total) => `Verificação concluída. ${scanned} de ${total} locais medidos.`,
-        searching: (items) => `Searching your profile… ${items} items checked`,
-        wiping: (written, total) => `Writing zeros… ${written} of ${total}`,
+        searching: (items)=>`Procurando no seu perfil… ${items} itens verificados`,
+        wiping: (written,total)=>`Gravando zeros… ${written} de ${total}`,
         starting: 'Iniciando…',
         idle: "Clique em Prévia para medir o que pode ser limpo."
       },
@@ -23435,11 +23435,11 @@ export const CATALOG = {
       cleanErrorPrefix: (error) => `Não foi possível limpar: ${error}`,
       cleanupComplete: 'Limpeza concluída.',
       resultFreed: (formatted) => `Liberados ${formatted}`,
-      resultMoved: (formatted) => `Moved ${formatted} to Quarantine. The space comes back when you empty it.`,
-      resultRecycled: (formatted) => `Moved ${formatted} to the Recycle Bin. The space comes back when you empty it.`,
-      openQuarantine: 'Open Quarantine',
-      resultWiped: (size) => `Wrote ${size} of zeros over the free space, then deleted it. No space was freed.`,
-      resultWipeStopped: (size) => `Stopped after writing ${size} of zeros over the free space. The filler was deleted.`,
+      resultMoved: (formatted)=>`Movido para a Quarentena: ${formatted}. O espaço volta quando você a esvaziar.`,
+      resultRecycled: (formatted)=>`Enviado para a Lixeira: ${formatted}. O espaço volta quando você a esvaziar.`,
+      openQuarantine: "Abrir Quarentena",
+      resultWiped: (size)=>`Foram gravados ${size} de zeros sobre o espaço livre e o arquivo de preenchimento foi excluído em seguida. Nenhum espaço foi liberado.`,
+      resultWipeStopped: (size)=>`Interrompido após gravar ${size} de zeros sobre o espaço livre. O arquivo de preenchimento foi excluído.`,
       resultLockedSuffix: (count) => ` — ${count} arquivo${count === 1 ? '' : 's'} bloqueado${count === 1 ? '' : 's'} ignorado${count === 1 ? '' : 's'}`,
       before: {
         body: 'O Prune mede de fato cada categoria no disco em vez de estimar, o que leva cerca de meio minuto.',
@@ -23452,9 +23452,9 @@ export const CATALOG = {
         notMeasuredYet: 'ainda não medido',
         previewFirst: "Faça a prévia primeiro para ver o que será liberado.",
         unmeasuredSuffix: (count) => ` · ${count} não medido${count === 1 ? '' : 's'}`,
-        modeQuarantine: 'Moves to Quarantine.',
-        modeRecycle: 'Moves to the Recycle Bin.',
-        modeDelete: 'Deletes immediately.',
+        modeQuarantine: "Move para a Quarentena.",
+        modeRecycle: "Envia para a Lixeira.",
+        modeDelete: "Exclui imediatamente.",
         selectEverything: 'Selecionar tudo',
         clear: 'Limpar',
         selectedCount: (count) => `${count} selecionado${count === 1 ? '' : 's'}`
@@ -23463,35 +23463,35 @@ export const CATALOG = {
         prompt: (count, sizeKnown, formatted) => `Mover ${count} ${count === 1 ? 'item' : 'itens'} (${sizeKnown ? formatted : 'tamanho não medido'}) para a Quarentena?`,
         cancel: 'Cancelar',
         confirmButton: "Mover para a Quarentena",
-        promptDelete: (count, sizeKnown, formatted) => `Delete ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'})? This can't be undone.`,
-        deleteButton: 'Delete',
-        promptRecycle: (count, sizeKnown, formatted) => `Move ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'}) to the Recycle Bin?`,
-        recycleButton: 'Move to Recycle Bin',
-        wipeNote: 'Includes wiping free disk space, which can take hours.',
+        promptDelete: (count,sizeKnown,formatted)=>`Excluir ${count} ${count === 1 ? 'item' : 'itens'} (${sizeKnown ? formatted : 'tamanho não medido'})? Isso não pode ser desfeito.`,
+        deleteButton: "Excluir",
+        promptRecycle: (count,sizeKnown,formatted)=>`Enviar ${count} ${count === 1 ? 'item' : 'itens'} (${sizeKnown ? formatted : 'tamanho não medido'}) para a Lixeira?`,
+        recycleButton: "Enviar para a Lixeira",
+        wipeNote: "Inclui sobrescrever o espaço livre do disco, o que pode levar horas.",
         cleaning: 'Limpando…'
       },
       wipe: {
-        title: 'Wipe free disk space',
-        body: "This overwrites the free space on the drive with zeros, then deletes the filler, so files you deleted earlier can't be recovered. It frees no space.",
-        ssdWarning: 'On an SSD with TRIM this does nothing useful and adds write wear. Use it on a hard disk, or when you know you need it.',
-        driveLine: (drive) => `Drive: ${drive}`,
-        writeLine: (size) => `About ${size} will be written.`,
-        timeLine: (duration, speed) => `Roughly ${duration}, from a one-second write test at ${speed}. The drive slows as it fills, so it can take longer.`,
-        duration: (hours, minutes) => (hours > 0 ? `${hours} h ${minutes} min` : `${minutes} min`),
-        reserveLine: (size) => `${size} always stays free so Windows keeps working.`,
-        stopNote: 'Stop ends it at once and deletes the filler.',
-        measuring: 'Measuring the drive…',
-        estimateFailed: (error) => `Couldn't measure the drive: ${error}`,
-        cancel: 'Cancel',
-        confirm: 'Add to this clean'
+        title: "Sobrescrever o espaço livre do disco",
+        body: "Isso grava zeros sobre o espaço livre da unidade e depois exclui o arquivo de preenchimento, para que arquivos excluídos antes não possam ser recuperados. Não libera espaço.",
+        ssdWarning: "Em um SSD com TRIM, isso não serve para nada e aumenta o desgaste de gravação. Use em um disco rígido ou quando souber que precisa.",
+        driveLine: (drive)=>`Unidade: ${drive}`,
+        writeLine: (size)=>`Serão gravados cerca de ${size}.`,
+        timeLine: (duration,speed)=>`Aproximadamente ${duration}, com base em um teste de gravação de um segundo a ${speed}. A unidade fica mais lenta ao encher, então pode levar mais tempo.`,
+        duration: (hours,minutes)=>(hours > 0 ? `${hours} h ${minutes} min` : `${minutes} min`),
+        reserveLine: (size)=>`${size} sempre continuam livres para o Windows continuar funcionando.`,
+        stopNote: "Parar encerra na hora e exclui o arquivo de preenchimento.",
+        measuring: "Medindo a unidade…",
+        estimateFailed: (error)=>`Não foi possível medir a unidade: ${error}`,
+        cancel: "Cancelar",
+        confirm: "Adicionar a esta limpeza"
       },
       stop: 'Parar',
       rescan: 'Verificar novamente',
       clean: 'Limpar',
       tree: {
         selectCategoryAriaLabel: (category) => `Selecionar tudo em ${category}`,
-        atLeast: (size) => `at least ${size}`,
-        longRunning: 'Takes a long time',
+        atLeast: (size)=>`pelo menos ${size}`,
+        longRunning: "Demora bastante",
         losesData: 'Perde dados',
         needsAdmin: 'precisa de administrador',
         notInstalled: 'não instalado',
@@ -23508,7 +23508,7 @@ export const CATALOG = {
       },
       log: {
         scan: {
-          partial: (size) => `${size}, partial`,
+          partial: (size)=>`${size}, parcial`,
           nothingToMeasure: "nada a medir",
           needsAdmin: "precisa de administrador",
           notInstalled: "não instalado",
@@ -23516,10 +23516,10 @@ export const CATALOG = {
         },
         execute: {
           delete: (name) => `Excluir ${name}`,
-          wipe: (name) => `Wipe ${name}`,
-          wiped: (size) => `${size} written`,
-          wipeStopped: (size) => `stopped after ${size}`,
-          quarantine: (name) => `Quarantine ${name}`,
+          wipe: (name)=>`Sobrescrever ${name}`,
+          wiped: (size)=>`${size} gravados`,
+          wipeStopped: (size)=>`interrompido após ${size}`,
+          quarantine: (name)=>`Mover ${name} para a Quarentena`,
           recycle: (name) => `Enviar ${name} para a Lixeira`,
           clear: (name) => `Limpar ${name}`,
           compact: (name) => `Compactar ${name}`,
@@ -23768,17 +23768,17 @@ export const CATALOG = {
         description: 'Desenha o espaço livre da unidade como mais um bloco ao analisar uma unidade inteira, para que cada pasta seja lida como uma parcela da unidade em vez do espaço em uso.'
       },
       deepCleanRemoval: {
-        title: 'When Deep Clean removes files',
+        title: "Quando a Limpeza profunda remove ficheiros",
         quarantine: {
-          label: 'Move to Quarantine (you can put it back)',
-          description: "Nothing is deleted. Files go into Prune's Quarantine and the drive gets the space back when you empty it."
+          label: "Mover para a Quarentena (pode devolvê-los)",
+          description: "Nada é eliminado. Os ficheiros vão para a Quarentena do Prune e a unidade recupera o espaço quando a esvaziar."
         },
         delete: {
-          label: "Delete now (frees the space, can't be undone — like BleachBit)",
-          description: 'Files are removed as soon as you confirm, so the space is free straight away. Rules that lose data still ask first.'
+          label: "Eliminar agora (liberta o espaço, não pode ser desfeito — como o BleachBit)",
+          description: "Os ficheiros são removidos assim que confirmar, pelo que o espaço fica livre de imediato. As regras que perdem dados continuam a perguntar primeiro."
         },
-        deleteWarning: "With Delete now, Clean can't be undone. Scheduled cleans still move files to Quarantine.",
-        autoQuarantineNote: 'Not used while Deep Clean deletes files immediately.'
+        deleteWarning: "Com Eliminar agora, a Limpeza não pode ser desfeita. As limpezas agendadas continuam a mover os ficheiros para a Quarentena.",
+        autoQuarantineNote: "Não é usado enquanto a Limpeza profunda elimina ficheiros de imediato."
       },
       autoQuarantine: {
         title: 'Quarentena automática',
@@ -24296,13 +24296,13 @@ export const CATALOG = {
     deepClean: {
       title: "Limpeza profunda",
       subtitle: 'Cada cache, registo, dump e resíduo que o Prune sabe encontrar, medido nesta máquina em vez de estimado. Nada é eliminado diretamente — tudo o que a Limpeza retira vai primeiro para a Quarentena, de onde pode devolvê-lo.',
-      subtitleDelete: "Every cache, log, dump and leftover Prune knows how to find, measured on this machine rather than estimated. Clean deletes what you tick immediately and frees the space, the way BleachBit does. It can't be undone.",
+      subtitleDelete: "Cada cache, registo, dump e resíduo que o Prune sabe encontrar, medido nesta máquina em vez de estimado. A Limpeza elimina de imediato o que selecionar e liberta o espaço, tal como o BleachBit. Não pode ser desfeito.",
       scanLog: {
         header: "Saída da análise",
         scanningAnnounce: (total) => `A analisar ${total} localizações.`,
         finishedAnnounce: (scanned, total) => `Análise concluída. ${scanned} de ${total} localizações medidas.`,
-        searching: (items) => `Searching your profile… ${items} items checked`,
-        wiping: (written, total) => `Writing zeros… ${written} of ${total}`,
+        searching: (items)=>`A pesquisar no seu perfil… ${items} itens verificados`,
+        wiping: (written,total)=>`A escrever zeros… ${written} de ${total}`,
         starting: 'A iniciar…',
         idle: "Clique em Pré-visualização para medir o que pode ser limpo."
       },
@@ -24311,11 +24311,11 @@ export const CATALOG = {
       cleanErrorPrefix: (error) => `Não foi possível limpar: ${error}`,
       cleanupComplete: 'Limpeza concluída.',
       resultFreed: (formatted) => `Libertados ${formatted}`,
-      resultMoved: (formatted) => `Moved ${formatted} to Quarantine. The space comes back when you empty it.`,
-      resultRecycled: (formatted) => `Moved ${formatted} to the Recycle Bin. The space comes back when you empty it.`,
-      openQuarantine: 'Open Quarantine',
-      resultWiped: (size) => `Wrote ${size} of zeros over the free space, then deleted it. No space was freed.`,
-      resultWipeStopped: (size) => `Stopped after writing ${size} of zeros over the free space. The filler was deleted.`,
+      resultMoved: (formatted)=>`Movido para a Quarentena: ${formatted}. O espaço volta quando a esvaziar.`,
+      resultRecycled: (formatted)=>`Enviado para a Reciclagem: ${formatted}. O espaço volta quando a esvaziar.`,
+      openQuarantine: "Abrir Quarentena",
+      resultWiped: (size)=>`Foram escritos ${size} de zeros sobre o espaço livre e o ficheiro de preenchimento foi eliminado a seguir. Não foi libertado espaço.`,
+      resultWipeStopped: (size)=>`Interrompido depois de escrever ${size} de zeros sobre o espaço livre. O ficheiro de preenchimento foi eliminado.`,
       resultLockedSuffix: (count) => ` — ${count} ficheiro${count === 1 ? '' : 's'} bloqueado${count === 1 ? '' : 's'} ignorado${count === 1 ? '' : 's'}`,
       before: {
         body: 'O Prune mede de facto cada categoria no disco em vez de a estimar, o que demora cerca de meio minuto.',
@@ -24328,9 +24328,9 @@ export const CATALOG = {
         notMeasuredYet: 'ainda não medido',
         previewFirst: "Faça primeiro a pré-visualização para ver o que será libertado.",
         unmeasuredSuffix: (count) => ` · ${count} não medido${count === 1 ? '' : 's'}`,
-        modeQuarantine: 'Moves to Quarantine.',
-        modeRecycle: 'Moves to the Recycle Bin.',
-        modeDelete: 'Deletes immediately.',
+        modeQuarantine: "Move para a Quarentena.",
+        modeRecycle: "Envia para a Reciclagem.",
+        modeDelete: "Elimina de imediato.",
         selectEverything: 'Selecionar tudo',
         clear: 'Limpar',
         selectedCount: (count) => `${count} selecionado${count === 1 ? '' : 's'}`
@@ -24339,35 +24339,35 @@ export const CATALOG = {
         prompt: (count, sizeKnown, formatted) => `Mover ${count} ${count === 1 ? 'item' : 'itens'} (${sizeKnown ? formatted : 'tamanho não medido'}) para a Quarentena?`,
         cancel: 'Cancelar',
         confirmButton: "Mover para a Quarentena",
-        promptDelete: (count, sizeKnown, formatted) => `Delete ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'})? This can't be undone.`,
-        deleteButton: 'Delete',
-        promptRecycle: (count, sizeKnown, formatted) => `Move ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'}) to the Recycle Bin?`,
-        recycleButton: 'Move to Recycle Bin',
-        wipeNote: 'Includes wiping free disk space, which can take hours.',
+        promptDelete: (count,sizeKnown,formatted)=>`Eliminar ${count} ${count === 1 ? 'item' : 'itens'} (${sizeKnown ? formatted : 'tamanho não medido'})? Isto não pode ser desfeito.`,
+        deleteButton: "Eliminar",
+        promptRecycle: (count,sizeKnown,formatted)=>`Enviar ${count} ${count === 1 ? 'item' : 'itens'} (${sizeKnown ? formatted : 'tamanho não medido'}) para a Reciclagem?`,
+        recycleButton: "Enviar para a Reciclagem",
+        wipeNote: "Inclui sobrescrever o espaço livre do disco, o que pode demorar horas.",
         cleaning: 'A limpar…'
       },
       wipe: {
-        title: 'Wipe free disk space',
-        body: "This overwrites the free space on the drive with zeros, then deletes the filler, so files you deleted earlier can't be recovered. It frees no space.",
-        ssdWarning: 'On an SSD with TRIM this does nothing useful and adds write wear. Use it on a hard disk, or when you know you need it.',
-        driveLine: (drive) => `Drive: ${drive}`,
-        writeLine: (size) => `About ${size} will be written.`,
-        timeLine: (duration, speed) => `Roughly ${duration}, from a one-second write test at ${speed}. The drive slows as it fills, so it can take longer.`,
-        duration: (hours, minutes) => (hours > 0 ? `${hours} h ${minutes} min` : `${minutes} min`),
-        reserveLine: (size) => `${size} always stays free so Windows keeps working.`,
-        stopNote: 'Stop ends it at once and deletes the filler.',
-        measuring: 'Measuring the drive…',
-        estimateFailed: (error) => `Couldn't measure the drive: ${error}`,
-        cancel: 'Cancel',
-        confirm: 'Add to this clean'
+        title: "Sobrescrever o espaço livre do disco",
+        body: "Isto escreve zeros sobre o espaço livre da unidade e depois elimina o ficheiro de preenchimento, para que os ficheiros eliminados anteriormente não possam ser recuperados. Não liberta espaço.",
+        ssdWarning: "Num SSD com TRIM, isto não serve de nada e aumenta o desgaste de escrita. Use-o num disco rígido ou quando souber que precisa.",
+        driveLine: (drive)=>`Unidade: ${drive}`,
+        writeLine: (size)=>`Serão escritos cerca de ${size}.`,
+        timeLine: (duration,speed)=>`Cerca de ${duration}, com base num teste de escrita de um segundo a ${speed}. A unidade fica mais lenta à medida que enche, pelo que pode demorar mais.`,
+        duration: (hours,minutes)=>(hours > 0 ? `${hours} h ${minutes} min` : `${minutes} min`),
+        reserveLine: (size)=>`${size} ficam sempre livres para que o Windows continue a funcionar.`,
+        stopNote: "Parar termina de imediato e elimina o ficheiro de preenchimento.",
+        measuring: "A medir a unidade…",
+        estimateFailed: (error)=>`Não foi possível medir a unidade: ${error}`,
+        cancel: "Cancelar",
+        confirm: "Adicionar a esta limpeza"
       },
       stop: 'Parar',
       rescan: "Analisar novamente",
       clean: 'Limpar',
       tree: {
         selectCategoryAriaLabel: (category) => `Selecionar tudo em ${category}`,
-        atLeast: (size) => `at least ${size}`,
-        longRunning: 'Takes a long time',
+        atLeast: (size)=>`pelo menos ${size}`,
+        longRunning: "Demora muito tempo",
         losesData: 'Perde dados',
         needsAdmin: 'precisa de administrador',
         notInstalled: 'não instalado',
@@ -24384,7 +24384,7 @@ export const CATALOG = {
       },
       log: {
         scan: {
-          partial: (size) => `${size}, partial`,
+          partial: (size)=>`${size}, parcial`,
           nothingToMeasure: "nada a medir",
           needsAdmin: "precisa de administrador",
           notInstalled: "não instalado",
@@ -24392,10 +24392,10 @@ export const CATALOG = {
         },
         execute: {
           delete: (name) => `Eliminar ${name}`,
-          wipe: (name) => `Wipe ${name}`,
-          wiped: (size) => `${size} written`,
-          wipeStopped: (size) => `stopped after ${size}`,
-          quarantine: (name) => `Quarantine ${name}`,
+          wipe: (name)=>`Sobrescrever ${name}`,
+          wiped: (size)=>`${size} escritos`,
+          wipeStopped: (size)=>`interrompido após ${size}`,
+          quarantine: (name)=>`Mover ${name} para a Quarentena`,
           recycle: (name) => `Enviar ${name} para a Reciclagem`,
           clear: (name) => `Limpar ${name}`,
           compact: (name) => `Compactar ${name}`,
@@ -24646,17 +24646,17 @@ export const CATALOG = {
         description: 'Desenează spațiul liber al unității ca încă un bloc atunci când scanezi o unitate întreagă, astfel încât fiecare folder să se citească drept o cotă a unității, nu a spațiului utilizat.'
       },
       deepCleanRemoval: {
-        title: 'When Deep Clean removes files',
+        title: "Când Curățarea profundă elimină fișiere",
         quarantine: {
-          label: 'Move to Quarantine (you can put it back)',
-          description: "Nothing is deleted. Files go into Prune's Quarantine and the drive gets the space back when you empty it."
+          label: "Mută în Carantină (le poți pune la loc)",
+          description: "Nu se șterge nimic. Fișierele merg în Carantina din Prune, iar unitatea recuperează spațiul când golești Carantina."
         },
         delete: {
-          label: "Delete now (frees the space, can't be undone — like BleachBit)",
-          description: 'Files are removed as soon as you confirm, so the space is free straight away. Rules that lose data still ask first.'
+          label: "Șterge acum (eliberează spațiul, nu se poate anula — ca BleachBit)",
+          description: "Fișierele sunt eliminate imediat ce confirmi, deci spațiul se eliberează pe loc. Regulile care pierd date tot te întreabă mai întâi."
         },
-        deleteWarning: "With Delete now, Clean can't be undone. Scheduled cleans still move files to Quarantine.",
-        autoQuarantineNote: 'Not used while Deep Clean deletes files immediately.'
+        deleteWarning: "Cu Șterge acum, Curățarea nu se poate anula. Curățările programate mută în continuare fișierele în Carantină.",
+        autoQuarantineNote: "Nu se folosește cât timp Curățarea profundă șterge fișierele imediat."
       },
       autoQuarantine: {
         title: 'Carantină automată',
@@ -25174,13 +25174,13 @@ export const CATALOG = {
     deepClean: {
       title: 'Curățare profundă',
       subtitle: "Fiecare cache, jurnal, dump și rest pe care Prune știe să-l găsească, măsurat pe acest calculator în loc să fie estimat. Nimic nu este șters direct — tot ce ia Curățarea merge mai întâi în Carantină, de unde îl poți restaura.",
-      subtitleDelete: "Every cache, log, dump and leftover Prune knows how to find, measured on this machine rather than estimated. Clean deletes what you tick immediately and frees the space, the way BleachBit does. It can't be undone.",
+      subtitleDelete: "Fiecare cache, jurnal, dump și rest pe care Prune știe să-l găsească, măsurat pe acest calculator în loc să fie estimat. Curățarea șterge imediat ce bifezi și eliberează spațiul, la fel ca BleachBit. Nu se poate anula.",
       scanLog: {
         header: 'Rezultatul scanării',
         scanningAnnounce: (total) => { const d = total % 100 >= 1 && total % 100 < 20 ? '' : 'de '; return total === 1 ? 'Se scanează o locație.' : `Se scanează ${total} ${d}locații.`; },
         finishedAnnounce: (scanned, total) => `Scanare finalizată. ${scanned} din ${total} locații măsurate.`,
-        searching: (items) => `Searching your profile… ${items} items checked`,
-        wiping: (written, total) => `Writing zeros… ${written} of ${total}`,
+        searching: (items) => `Se caută în profilul tău… ${items} elemente verificate`,
+        wiping: (written, total) => `Se scriu zerouri… ${written} din ${total}`,
         starting: 'Se pornește…',
         idle: "Apasă Previzualizare pentru a măsura ce se poate curăța."
       },
@@ -25189,11 +25189,11 @@ export const CATALOG = {
       cleanErrorPrefix: (error) => `Curățarea a eșuat: ${error}`,
       cleanupComplete: 'Curățare finalizată.',
       resultFreed: (formatted) => `Eliberat ${formatted}`,
-      resultMoved: (formatted) => `Moved ${formatted} to Quarantine. The space comes back when you empty it.`,
-      resultRecycled: (formatted) => `Moved ${formatted} to the Recycle Bin. The space comes back when you empty it.`,
-      openQuarantine: 'Open Quarantine',
-      resultWiped: (size) => `Wrote ${size} of zeros over the free space, then deleted it. No space was freed.`,
-      resultWipeStopped: (size) => `Stopped after writing ${size} of zeros over the free space. The filler was deleted.`,
+      resultMoved: (formatted) => `S-au mutat ${formatted} în Carantină. Spațiul revine când golești Carantina.`,
+      resultRecycled: (formatted) => `S-au mutat ${formatted} în Coșul de reciclare. Spațiul revine când golești coșul.`,
+      openQuarantine: "Deschide Carantina",
+      resultWiped: (size) => `S-au scris ${size} de zerouri peste spațiul liber, apoi fișierul de umplere a fost șters. Nu s-a eliberat spațiu.`,
+      resultWipeStopped: (size) => `Oprit după ce s-au scris ${size} de zerouri peste spațiul liber. Fișierul de umplere a fost șters.`,
       resultLockedSuffix: (count) => { const d = count % 100 >= 1 && count % 100 < 20 ? '' : 'de '; return count === 1 ? ' — s-a omis 1 fișier blocat' : ` — s-au omis ${count} ${d}fișiere blocate`; },
       before: {
         body: 'Prune măsoară efectiv fiecare categorie de pe disc în loc să o estimeze, ceea ce durează aproximativ jumătate de minut.',
@@ -25206,9 +25206,9 @@ export const CATALOG = {
         notMeasuredYet: 'încă nemăsurat',
         previewFirst: "Previzualizează mai întâi ca să vezi ce va fi eliberat.",
         unmeasuredSuffix: (count) => count === 1 ? ' · 1 nemăsurat' : ` · ${count} nemăsurate`,
-        modeQuarantine: 'Moves to Quarantine.',
-        modeRecycle: 'Moves to the Recycle Bin.',
-        modeDelete: 'Deletes immediately.',
+        modeQuarantine: "Se mută în Carantină.",
+        modeRecycle: "Se mută în Coșul de reciclare.",
+        modeDelete: "Se șterge imediat.",
         selectEverything: 'Selectează tot',
         clear: 'Golește',
         selectedCount: (count) => `${count} ${count === 1 ? 'selectat' : 'selectate'}`
@@ -25217,35 +25217,35 @@ export const CATALOG = {
         prompt: (count, sizeKnown, formatted) => { const d = count % 100 >= 1 && count % 100 < 20 ? '' : 'de '; return `Muți ${count === 1 ? 'un element' : `${count} ${d}elemente`} (${sizeKnown ? formatted : 'dimensiune nemăsurată'}) în carantină?`; },
         cancel: 'Anulează',
         confirmButton: "Mută în carantină",
-        promptDelete: (count, sizeKnown, formatted) => `Delete ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'})? This can't be undone.`,
-        deleteButton: 'Delete',
-        promptRecycle: (count, sizeKnown, formatted) => `Move ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'}) to the Recycle Bin?`,
-        recycleButton: 'Move to Recycle Bin',
-        wipeNote: 'Includes wiping free disk space, which can take hours.',
+        promptDelete: (count, sizeKnown, formatted) => { const d = count % 100 >= 1 && count % 100 < 20 ? '' : 'de '; return `Ștergi ${count === 1 ? 'un element' : `${count} ${d}elemente`} (${sizeKnown ? formatted : 'dimensiune nemăsurată'})? Nu se poate anula.`; },
+        deleteButton: "Șterge",
+        promptRecycle: (count, sizeKnown, formatted) => { const d = count % 100 >= 1 && count % 100 < 20 ? '' : 'de '; return `Muți ${count === 1 ? 'un element' : `${count} ${d}elemente`} (${sizeKnown ? formatted : 'dimensiune nemăsurată'}) în Coșul de reciclare?`; },
+        recycleButton: "Mută în Coșul de reciclare",
+        wipeNote: "Include suprascrierea spațiului liber pe disc, ceea ce poate dura ore.",
         cleaning: 'Se curăță…'
       },
       wipe: {
-        title: 'Wipe free disk space',
-        body: "This overwrites the free space on the drive with zeros, then deletes the filler, so files you deleted earlier can't be recovered. It frees no space.",
-        ssdWarning: 'On an SSD with TRIM this does nothing useful and adds write wear. Use it on a hard disk, or when you know you need it.',
-        driveLine: (drive) => `Drive: ${drive}`,
-        writeLine: (size) => `About ${size} will be written.`,
-        timeLine: (duration, speed) => `Roughly ${duration}, from a one-second write test at ${speed}. The drive slows as it fills, so it can take longer.`,
+        title: "Suprascrie spațiul liber pe disc",
+        body: "Aceasta scrie zerouri peste spațiul liber de pe unitate, apoi șterge fișierul de umplere, astfel încât fișierele șterse mai devreme să nu mai poată fi recuperate. Nu eliberează spațiu.",
+        ssdWarning: "Pe un SSD cu TRIM nu ajută la nimic și adaugă uzură de scriere. Folosește-o pe un hard disk sau când știi că ai nevoie de ea.",
+        driveLine: (drive) => `Unitate: ${drive}`,
+        writeLine: (size) => `Se vor scrie aproximativ ${size}.`,
+        timeLine: (duration, speed) => `Aproximativ ${duration}, după un test de scriere de o secundă la ${speed}. Unitatea încetinește pe măsură ce se umple, deci poate dura mai mult.`,
         duration: (hours, minutes) => (hours > 0 ? `${hours} h ${minutes} min` : `${minutes} min`),
-        reserveLine: (size) => `${size} always stays free so Windows keeps working.`,
-        stopNote: 'Stop ends it at once and deletes the filler.',
-        measuring: 'Measuring the drive…',
-        estimateFailed: (error) => `Couldn't measure the drive: ${error}`,
-        cancel: 'Cancel',
-        confirm: 'Add to this clean'
+        reserveLine: (size) => `Mereu rămân libere ${size}, ca Windows să continue să funcționeze.`,
+        stopNote: "Oprește încheie imediat operația și șterge fișierul de umplere.",
+        measuring: "Se măsoară unitatea…",
+        estimateFailed: (error) => `Nu s-a putut măsura unitatea: ${error}`,
+        cancel: "Anulează",
+        confirm: "Adaugă la această curățare"
       },
       stop: 'Oprește',
       rescan: 'Rescanează',
       clean: 'Curăță',
       tree: {
         selectCategoryAriaLabel: (category) => `Selectează tot din ${category}`,
-        atLeast: (size) => `at least ${size}`,
-        longRunning: 'Takes a long time',
+        atLeast: (size) => `cel puțin ${size}`,
+        longRunning: "Durează mult",
         losesData: 'Pierde date',
         needsAdmin: 'necesită administrator',
         notInstalled: 'neinstalat',
@@ -25262,7 +25262,7 @@ export const CATALOG = {
       },
       log: {
         scan: {
-          partial: (size) => `${size}, partial`,
+          partial: (size) => `${size}, parțial`,
           nothingToMeasure: "nimic de măsurat",
           needsAdmin: "necesită administrator",
           notInstalled: "neinstalat",
@@ -25270,10 +25270,10 @@ export const CATALOG = {
         },
         execute: {
           delete: (name) => `Șterge ${name}`,
-          wipe: (name) => `Wipe ${name}`,
-          wiped: (size) => `${size} written`,
-          wipeStopped: (size) => `stopped after ${size}`,
-          quarantine: (name) => `Quarantine ${name}`,
+          wipe: (name) => `Suprascrie ${name}`,
+          wiped: (size) => `s-au scris ${size}`,
+          wipeStopped: (size) => `oprit după ${size}`,
+          quarantine: (name) => `Mută ${name} în Carantină`,
           recycle: (name) => `Trimite ${name} în Coșul de reciclare`,
           clear: (name) => `Curăță ${name}`,
           compact: (name) => `Compactează ${name}`,
@@ -25524,17 +25524,17 @@ export const CATALOG = {
         description: 'Рисует свободное место диска как ещё один блок при сканировании всего диска, чтобы каждая папка читалась как доля диска, а не занятого пространства.'
       },
       deepCleanRemoval: {
-        title: 'When Deep Clean removes files',
+        title: "Как Глубокая очистка убирает файлы",
         quarantine: {
-          label: 'Move to Quarantine (you can put it back)',
-          description: "Nothing is deleted. Files go into Prune's Quarantine and the drive gets the space back when you empty it."
+          label: "Переместить в карантин (можно вернуть)",
+          description: "Ничего не удаляется. Файлы попадают в карантин Prune, а место на диске освободится, когда вы очистите карантин."
         },
         delete: {
-          label: "Delete now (frees the space, can't be undone — like BleachBit)",
-          description: 'Files are removed as soon as you confirm, so the space is free straight away. Rules that lose data still ask first.'
+          label: "Удалить сразу (место освобождается, отменить нельзя — как в BleachBit)",
+          description: "Файлы удаляются сразу после подтверждения, поэтому место освобождается немедленно. Средства очистки, теряющие данные, по-прежнему спрашивают заранее."
         },
-        deleteWarning: "With Delete now, Clean can't be undone. Scheduled cleans still move files to Quarantine.",
-        autoQuarantineNote: 'Not used while Deep Clean deletes files immediately.'
+        deleteWarning: "В режиме «Удалить сразу» очистку нельзя отменить. Очистки по расписанию по-прежнему перемещают файлы в карантин.",
+        autoQuarantineNote: "Не действует, пока Глубокая очистка удаляет файлы сразу."
       },
       autoQuarantine: {
         title: 'Автоматический карантин',
@@ -26052,13 +26052,13 @@ export const CATALOG = {
     deepClean: {
       title: 'Глубокая очистка',
       subtitle: 'Каждый кэш, журнал, дамп и остаток, которые умеет находить Prune, измеряются на этом компьютере, а не оцениваются. Ничего не удаляется сразу — всё, что забирает Очистка, сначала попадает в карантин, откуда это можно вернуть.',
-      subtitleDelete: "Every cache, log, dump and leftover Prune knows how to find, measured on this machine rather than estimated. Clean deletes what you tick immediately and frees the space, the way BleachBit does. It can't be undone.",
+      subtitleDelete: "Каждый кэш, журнал, дамп и остаток, которые умеет находить Prune, измеряются на этом компьютере, а не оцениваются. Очистка сразу удаляет отмеченное и освобождает место — так же, как это делает BleachBit. Отменить это нельзя.",
       scanLog: {
         header: 'Вывод сканирования',
         scanningAnnounce: (total) => `Сканирование расположений: ${total}.`,
         finishedAnnounce: (scanned, total) => `Сканирование завершено. Измерено ${scanned} из ${total} расположений.`,
-        searching: (items) => `Searching your profile… ${items} items checked`,
-        wiping: (written, total) => `Writing zeros… ${written} of ${total}`,
+        searching: (items) => `Поиск в вашем профиле… проверено элементов: ${items}`,
+        wiping: (written, total) => `Запись нулей… ${written} из ${total}`,
         starting: 'Запуск…',
         idle: "Нажмите «Предпросмотр», чтобы измерить, что можно очистить."
       },
@@ -26067,11 +26067,11 @@ export const CATALOG = {
       cleanErrorPrefix: (error) => `Не удалось выполнить очистку: ${error}`,
       cleanupComplete: 'Очистка завершена.',
       resultFreed: (formatted) => `Освобождено ${formatted}`,
-      resultMoved: (formatted) => `Moved ${formatted} to Quarantine. The space comes back when you empty it.`,
-      resultRecycled: (formatted) => `Moved ${formatted} to the Recycle Bin. The space comes back when you empty it.`,
-      openQuarantine: 'Open Quarantine',
-      resultWiped: (size) => `Wrote ${size} of zeros over the free space, then deleted it. No space was freed.`,
-      resultWipeStopped: (size) => `Stopped after writing ${size} of zeros over the free space. The filler was deleted.`,
+      resultMoved: (formatted) => `Перемещено в карантин: ${formatted}. Место освободится, когда вы очистите карантин.`,
+      resultRecycled: (formatted) => `Перемещено в Корзину: ${formatted}. Место освободится, когда вы очистите Корзину.`,
+      openQuarantine: "Открыть карантин",
+      resultWiped: (size) => `Свободное место перезаписано нулями (${size}), после чего файл-заполнитель удалён. Место не освобождено.`,
+      resultWipeStopped: (size) => `Остановлено после записи нулей (${size}) в свободное место. Файл-заполнитель удалён.`,
       resultLockedSuffix: (count) => ` — пропущено заблокированных файлов: ${count}`,
       before: {
         body: "Prune действительно измеряет каждую категорию на диске, а не оценивает её, что занимает около полуминуты.",
@@ -26084,9 +26084,9 @@ export const CATALOG = {
         notMeasuredYet: 'ещё не измерено',
         previewFirst: "Сначала выполните предпросмотр, чтобы увидеть, что будет освобождено.",
         unmeasuredSuffix: (count) => ` · не измерено: ${count}`,
-        modeQuarantine: 'Moves to Quarantine.',
-        modeRecycle: 'Moves to the Recycle Bin.',
-        modeDelete: 'Deletes immediately.',
+        modeQuarantine: "Перемещает в карантин.",
+        modeRecycle: "Перемещает в Корзину.",
+        modeDelete: "Удаляет сразу.",
         selectEverything: 'Выбрать всё',
         clear: 'Очистить',
         selectedCount: (count) => `Выбрано: ${count}`
@@ -26095,35 +26095,35 @@ export const CATALOG = {
         prompt: (count, sizeKnown, formatted) => `Переместить элементов: ${count} (${sizeKnown ? formatted : 'размер не измерен'}) в карантин?`,
         cancel: 'Отмена',
         confirmButton: "Переместить в карантин",
-        promptDelete: (count, sizeKnown, formatted) => `Delete ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'})? This can't be undone.`,
-        deleteButton: 'Delete',
-        promptRecycle: (count, sizeKnown, formatted) => `Move ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'}) to the Recycle Bin?`,
-        recycleButton: 'Move to Recycle Bin',
-        wipeNote: 'Includes wiping free disk space, which can take hours.',
+        promptDelete: (count, sizeKnown, formatted) => `Удалить элементов: ${count} (${sizeKnown ? formatted : 'размер не измерен'})? Отменить это нельзя.`,
+        deleteButton: "Удалить",
+        promptRecycle: (count, sizeKnown, formatted) => `Переместить элементов: ${count} (${sizeKnown ? formatted : 'размер не измерен'}) в Корзину?`,
+        recycleButton: "Переместить в Корзину",
+        wipeNote: "Включает затирание свободного места на диске, которое может занять несколько часов.",
         cleaning: 'Очистка…'
       },
       wipe: {
-        title: 'Wipe free disk space',
-        body: "This overwrites the free space on the drive with zeros, then deletes the filler, so files you deleted earlier can't be recovered. It frees no space.",
-        ssdWarning: 'On an SSD with TRIM this does nothing useful and adds write wear. Use it on a hard disk, or when you know you need it.',
-        driveLine: (drive) => `Drive: ${drive}`,
-        writeLine: (size) => `About ${size} will be written.`,
-        timeLine: (duration, speed) => `Roughly ${duration}, from a one-second write test at ${speed}. The drive slows as it fills, so it can take longer.`,
-        duration: (hours, minutes) => (hours > 0 ? `${hours} h ${minutes} min` : `${minutes} min`),
-        reserveLine: (size) => `${size} always stays free so Windows keeps working.`,
-        stopNote: 'Stop ends it at once and deletes the filler.',
-        measuring: 'Measuring the drive…',
-        estimateFailed: (error) => `Couldn't measure the drive: ${error}`,
-        cancel: 'Cancel',
-        confirm: 'Add to this clean'
+        title: "Затереть свободное место на диске",
+        body: "Свободное место на диске перезаписывается нулями, после чего файл-заполнитель удаляется, чтобы ранее удалённые файлы нельзя было восстановить. Место при этом не освобождается.",
+        ssdWarning: "На SSD с TRIM это бесполезно и лишь ускоряет износ при записи. Используйте на жёстком диске или если точно знаете, что это нужно.",
+        driveLine: (drive) => `Диск: ${drive}`,
+        writeLine: (size) => `Будет записано около ${size}.`,
+        timeLine: (duration, speed) => `Примерно ${duration} — по результату односекундного теста записи (${speed}). По мере заполнения диск замедляется, поэтому может занять больше времени.`,
+        duration: (hours, minutes) => (hours > 0 ? `${hours} ч ${minutes} мин` : `${minutes} мин`),
+        reserveLine: (size) => `Свободным всегда остаётся ${size}, чтобы Windows продолжала работать.`,
+        stopNote: "«Остановить» немедленно прерывает процесс и удаляет файл-заполнитель.",
+        measuring: "Измерение диска…",
+        estimateFailed: (error) => `Не удалось измерить диск: ${error}`,
+        cancel: "Отмена",
+        confirm: "Добавить в эту очистку"
       },
       stop: 'Остановить',
       rescan: 'Пересканировать',
       clean: 'Очистить',
       tree: {
         selectCategoryAriaLabel: (category) => `Выбрать всё в категории ${category}`,
-        atLeast: (size) => `at least ${size}`,
-        longRunning: 'Takes a long time',
+        atLeast: (size) => `не менее ${size}`,
+        longRunning: "Занимает много времени",
         losesData: 'Потеря данных',
         needsAdmin: 'требуется администратор',
         notInstalled: 'не установлено',
@@ -26140,7 +26140,7 @@ export const CATALOG = {
       },
       log: {
         scan: {
-          partial: (size) => `${size}, partial`,
+          partial: (size) => `${size}, частично`,
           nothingToMeasure: "нечего измерять",
           needsAdmin: "требуется администратор",
           notInstalled: "не установлено",
@@ -26148,10 +26148,10 @@ export const CATALOG = {
         },
         execute: {
           delete: (name) => `Удалить ${name}`,
-          wipe: (name) => `Wipe ${name}`,
-          wiped: (size) => `${size} written`,
-          wipeStopped: (size) => `stopped after ${size}`,
-          quarantine: (name) => `Quarantine ${name}`,
+          wipe: (name) => `Затереть ${name}`,
+          wiped: (size) => `записано ${size}`,
+          wipeStopped: (size) => `остановлено после ${size}`,
+          quarantine: (name) => `Отправить ${name} в карантин`,
           recycle: (name) => `Отправить ${name} в корзину`,
           clear: (name) => `Очистить ${name}`,
           compact: (name) => `Сжать ${name}`,
@@ -26400,17 +26400,17 @@ export const CATALOG = {
         description: 'Pri skenovaní celej jednotky vykreslí voľné miesto jednotky ako ďalší blok, takže každý priečinok sa číta ako podiel jednotky, nie ako podiel využitého miesta.'
       },
       deepCleanRemoval: {
-        title: 'When Deep Clean removes files',
+        title: "Čo Hĺbkové čistenie robí so súbormi",
         quarantine: {
-          label: 'Move to Quarantine (you can put it back)',
-          description: "Nothing is deleted. Files go into Prune's Quarantine and the drive gets the space back when you empty it."
+          label: "Presunúť do karantény (môžete to vrátiť)",
+          description: "Nič sa neodstráni. Súbory idú do karantény Prune a miesto na disku sa uvoľní, keď karanténu vyprázdnite."
         },
         delete: {
-          label: "Delete now (frees the space, can't be undone — like BleachBit)",
-          description: 'Files are removed as soon as you confirm, so the space is free straight away. Rules that lose data still ask first.'
+          label: "Odstrániť hneď (uvoľní miesto, nemožno vrátiť — ako BleachBit)",
+          description: "Súbory sa odstránia hneď po potvrdení, takže sa miesto uvoľní okamžite. Čističe, ktoré spôsobujú stratu dát, sa stále najprv opýtajú."
         },
-        deleteWarning: "With Delete now, Clean can't be undone. Scheduled cleans still move files to Quarantine.",
-        autoQuarantineNote: 'Not used while Deep Clean deletes files immediately.'
+        deleteWarning: "Pri voľbe „Odstrániť hneď“ sa čistenie nedá vrátiť. Naplánované čistenia stále presúvajú súbory do karantény.",
+        autoQuarantineNote: "Nepoužije sa, kým Hĺbkové čistenie odstraňuje súbory hneď."
       },
       autoQuarantine: {
         title: 'Automatická karanténa',
@@ -26928,13 +26928,13 @@ export const CATALOG = {
     deepClean: {
       title: 'Hĺbkové čistenie',
       subtitle: "Každá vyrovnávacia pamäť, protokol, výpis a zvyšok, ktoré Prune vie nájsť, zmerané na tomto počítači namiesto odhadu. Nič sa hneď nevymaže — všetko, čo Čistenie odstráni, ide najprv do karantény, odkiaľ to môžete vrátiť.",
-      subtitleDelete: "Every cache, log, dump and leftover Prune knows how to find, measured on this machine rather than estimated. Clean deletes what you tick immediately and frees the space, the way BleachBit does. It can't be undone.",
+      subtitleDelete: "Každá vyrovnávacia pamäť, protokol, výpis a zvyšok, ktoré Prune vie nájsť, zmerané na tomto počítači namiesto odhadu. Čistenie hneď odstráni to, čo zaškrtnete, a uvoľní miesto, rovnako ako BleachBit. Nemožno to vrátiť.",
       scanLog: {
         header: 'Výstup skenovania',
         scanningAnnounce: (total) => `Skenovanie miest: ${total}.`,
         finishedAnnounce: (scanned, total) => `Skenovanie dokončené. Zmerané miesta: ${scanned} z ${total}.`,
-        searching: (items) => `Searching your profile… ${items} items checked`,
-        wiping: (written, total) => `Writing zeros… ${written} of ${total}`,
+        searching: (items) => `Prehľadávanie profilu… skontrolované položky: ${items}`,
+        wiping: (written, total) => `Zapisovanie núl… ${written} z ${total}`,
         starting: 'Spúšťanie…',
         idle: "Kliknite na Náhľad a zistite, čo sa dá vyčistiť."
       },
@@ -26943,11 +26943,11 @@ export const CATALOG = {
       cleanErrorPrefix: (error) => `Čistenie zlyhalo: ${error}`,
       cleanupComplete: 'Čistenie dokončené.',
       resultFreed: (formatted) => `Uvoľnené ${formatted}`,
-      resultMoved: (formatted) => `Moved ${formatted} to Quarantine. The space comes back when you empty it.`,
-      resultRecycled: (formatted) => `Moved ${formatted} to the Recycle Bin. The space comes back when you empty it.`,
-      openQuarantine: 'Open Quarantine',
-      resultWiped: (size) => `Wrote ${size} of zeros over the free space, then deleted it. No space was freed.`,
-      resultWipeStopped: (size) => `Stopped after writing ${size} of zeros over the free space. The filler was deleted.`,
+      resultMoved: (formatted) => `Presunuté do karantény: ${formatted}. Miesto sa uvoľní, keď karanténu vyprázdnite.`,
+      resultRecycled: (formatted) => `Presunuté do koša: ${formatted}. Miesto sa uvoľní, keď kôš vyprázdnite.`,
+      openQuarantine: "Otvoriť karanténu",
+      resultWiped: (size) => `Voľné miesto bolo prepísané nulami (${size}) a vypĺňací súbor bol odstránený. Žiadne miesto sa neuvoľnilo.`,
+      resultWipeStopped: (size) => `Zastavené po zapísaní núl (${size}) do voľného miesta. Vypĺňací súbor bol odstránený.`,
       resultLockedSuffix: (count) => ` — preskočené uzamknuté súbory: ${count}`,
       before: {
         body: 'Prune skutočne meria každú kategóriu na disku namiesto odhadu, čo trvá približne pol minúty.',
@@ -26960,9 +26960,9 @@ export const CATALOG = {
         notMeasuredYet: 'zatiaľ nezmerané',
         previewFirst: "Najprv kliknite na Náhľad, aby ste videli, čo sa uvoľní.",
         unmeasuredSuffix: (count) => ` · nezmerané: ${count}`,
-        modeQuarantine: 'Moves to Quarantine.',
-        modeRecycle: 'Moves to the Recycle Bin.',
-        modeDelete: 'Deletes immediately.',
+        modeQuarantine: "Presunie do karantény.",
+        modeRecycle: "Presunie do koša.",
+        modeDelete: "Odstráni hneď.",
         selectEverything: 'Vybrať všetko',
         clear: 'Vymazať',
         selectedCount: (count) => `Vybrané: ${count}`
@@ -26971,35 +26971,35 @@ export const CATALOG = {
         prompt: (count, sizeKnown, formatted) => `Presunúť ${count} ${count === 1 ? 'položku' : (count >= 2 && count <= 4) ? 'položky' : 'položiek'} (${sizeKnown ? formatted : 'veľkosť nezmeraná'}) do karantény?`,
         cancel: 'Zrušiť',
         confirmButton: "Presunúť do karantény",
-        promptDelete: (count, sizeKnown, formatted) => `Delete ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'})? This can't be undone.`,
-        deleteButton: 'Delete',
-        promptRecycle: (count, sizeKnown, formatted) => `Move ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'}) to the Recycle Bin?`,
-        recycleButton: 'Move to Recycle Bin',
-        wipeNote: 'Includes wiping free disk space, which can take hours.',
+        promptDelete: (count, sizeKnown, formatted) => `Odstrániť ${count} ${count === 1 ? 'položku' : (count >= 2 && count <= 4) ? 'položky' : 'položiek'} (${sizeKnown ? formatted : 'veľkosť nezmeraná'})? Nemožno to vrátiť.`,
+        deleteButton: "Odstrániť",
+        promptRecycle: (count, sizeKnown, formatted) => `Presunúť ${count} ${count === 1 ? 'položku' : (count >= 2 && count <= 4) ? 'položky' : 'položiek'} (${sizeKnown ? formatted : 'veľkosť nezmeraná'}) do koša?`,
+        recycleButton: "Presunúť do koša",
+        wipeNote: "Zahŕňa prepísanie voľného miesta na disku, ktoré môže trvať hodiny.",
         cleaning: 'Čistenie…'
       },
       wipe: {
-        title: 'Wipe free disk space',
-        body: "This overwrites the free space on the drive with zeros, then deletes the filler, so files you deleted earlier can't be recovered. It frees no space.",
-        ssdWarning: 'On an SSD with TRIM this does nothing useful and adds write wear. Use it on a hard disk, or when you know you need it.',
-        driveLine: (drive) => `Drive: ${drive}`,
-        writeLine: (size) => `About ${size} will be written.`,
-        timeLine: (duration, speed) => `Roughly ${duration}, from a one-second write test at ${speed}. The drive slows as it fills, so it can take longer.`,
+        title: "Prepísať voľné miesto na disku",
+        body: "Prepíše voľné miesto na disku nulami a potom odstráni vypĺňací súbor, takže skôr odstránené súbory nemožno obnoviť. Neuvoľní žiadne miesto.",
+        ssdWarning: "Na SSD s TRIM to nemá žiadny úžitok a zvyšuje opotrebenie zápisom. Použite to na pevnom disku alebo keď viete, že to potrebujete.",
+        driveLine: (drive) => `Jednotka: ${drive}`,
+        writeLine: (size) => `Zapíše sa približne ${size}.`,
+        timeLine: (duration, speed) => `Zhruba ${duration} podľa jednosekundového testu zápisu (${speed}). Pri zapĺňaní sa jednotka spomaľuje, takže to môže trvať dlhšie.`,
         duration: (hours, minutes) => (hours > 0 ? `${hours} h ${minutes} min` : `${minutes} min`),
-        reserveLine: (size) => `${size} always stays free so Windows keeps working.`,
-        stopNote: 'Stop ends it at once and deletes the filler.',
-        measuring: 'Measuring the drive…',
-        estimateFailed: (error) => `Couldn't measure the drive: ${error}`,
-        cancel: 'Cancel',
-        confirm: 'Add to this clean'
+        reserveLine: (size) => `Vždy zostane voľných ${size}, aby Windows fungoval ďalej.`,
+        stopNote: "Zastaviť to ukončí okamžite a odstráni vypĺňací súbor.",
+        measuring: "Meranie jednotky…",
+        estimateFailed: (error) => `Jednotku sa nepodarilo zmerať: ${error}`,
+        cancel: "Zrušiť",
+        confirm: "Pridať k tomuto čisteniu"
       },
       stop: 'Zastaviť',
       rescan: 'Skenovať znova',
       clean: 'Vyčistiť',
       tree: {
         selectCategoryAriaLabel: (category) => `Vybrať všetko v kategórii ${category}`,
-        atLeast: (size) => `at least ${size}`,
-        longRunning: 'Takes a long time',
+        atLeast: (size) => `aspoň ${size}`,
+        longRunning: "Trvá dlho",
         losesData: 'Strata dát',
         needsAdmin: 'vyžaduje správcu',
         notInstalled: 'nenainštalované',
@@ -27016,7 +27016,7 @@ export const CATALOG = {
       },
       log: {
         scan: {
-          partial: (size) => `${size}, partial`,
+          partial: (size) => `${size}, čiastočne`,
           nothingToMeasure: "nie je čo merať",
           needsAdmin: "vyžaduje správcu",
           notInstalled: "nenainštalované",
@@ -27024,10 +27024,10 @@ export const CATALOG = {
         },
         execute: {
           delete: (name) => `Odstrániť ${name}`,
-          wipe: (name) => `Wipe ${name}`,
-          wiped: (size) => `${size} written`,
-          wipeStopped: (size) => `stopped after ${size}`,
-          quarantine: (name) => `Quarantine ${name}`,
+          wipe: (name) => `Prepísať ${name}`,
+          wiped: (size) => `zapísané ${size}`,
+          wipeStopped: (size) => `zastavené po ${size}`,
+          quarantine: (name) => `Odoslať ${name} do karantény`,
           recycle: (name) => `Odoslať ${name} do koša`,
           clear: (name) => `Vymazať ${name}`,
           compact: (name) => `Zhutniť ${name}`,
@@ -27276,17 +27276,17 @@ export const CATALOG = {
         description: "Vizaton hapësirën e lirë të diskut si edhe një bllok tjetër kur skanon një disk të tërë, kështu që çdo dosje lexohet si pjesë e diskut në vend të hapësirës në përdorim."
       },
       deepCleanRemoval: {
-        title: 'When Deep Clean removes files',
+        title: "Kur Pastrimi i thellë heq skedarë",
         quarantine: {
-          label: 'Move to Quarantine (you can put it back)',
-          description: "Nothing is deleted. Files go into Prune's Quarantine and the drive gets the space back when you empty it."
+          label: "Zhvendos në Karantinë (mund t'i kthesh mbrapsht)",
+          description: "Asgjë nuk fshihet. Skedarët shkojnë në Karantinën e Prune-it dhe disku e rimerr hapësirën kur e zbraz."
         },
         delete: {
-          label: "Delete now (frees the space, can't be undone — like BleachBit)",
-          description: 'Files are removed as soon as you confirm, so the space is free straight away. Rules that lose data still ask first.'
+          label: "Fshi tani (liron hapësirën, nuk mund të zhbëhet — si BleachBit)",
+          description: "Skedarët hiqen sapo të konfirmosh, kështu që hapësira lirohet menjëherë. Rregullat që humbin të dhëna pyesin prapë fillimisht."
         },
-        deleteWarning: "With Delete now, Clean can't be undone. Scheduled cleans still move files to Quarantine.",
-        autoQuarantineNote: 'Not used while Deep Clean deletes files immediately.'
+        deleteWarning: "Me Fshi tani, Pastrimi nuk mund të zhbëhet. Pastrimet e planifikuara vazhdojnë t'i zhvendosin skedarët në Karantinë.",
+        autoQuarantineNote: "Nuk përdoret ndërsa Pastrimi i thellë i fshin skedarët menjëherë."
       },
       autoQuarantine: {
         title: 'Karantinë automatike',
@@ -27804,13 +27804,13 @@ export const CATALOG = {
     deepClean: {
       title: 'Pastrim i thellë',
       subtitle: "Çdo memorie e fshehtë, ditar, dump dhe mbetje që Prune di t'i gjejë, e matur në këtë kompjuter në vend të vlerësuar. Asgjë nuk fshihet menjëherë — çdo gjë që merr Pastrimi shkon fillimisht në Karantinë, ku mund ta rikthesh.",
-      subtitleDelete: "Every cache, log, dump and leftover Prune knows how to find, measured on this machine rather than estimated. Clean deletes what you tick immediately and frees the space, the way BleachBit does. It can't be undone.",
+      subtitleDelete: "Çdo memorie e fshehtë, ditar, dump dhe mbetje që Prune di t'i gjejë, e matur në këtë kompjuter në vend të vlerësuar. Pastro fshin menjëherë atë që ke shënuar dhe liron hapësirën, si BleachBit. Nuk mund të zhbëhet.",
       scanLog: {
         header: 'Rezultati i skanimit',
         scanningAnnounce: (total) => `Duke skanuar ${total} vendndodhje.`,
         finishedAnnounce: (scanned, total) => `Skanimi përfundoi. U matën ${scanned} nga ${total} vendndodhje.`,
-        searching: (items) => `Searching your profile… ${items} items checked`,
-        wiping: (written, total) => `Writing zeros… ${written} of ${total}`,
+        searching: (items) => `Po kërkohet në profilin tënd… ${items} artikuj të kontrolluar`,
+        wiping: (written, total) => `Po shkruhen zero… ${written} nga ${total}`,
         starting: 'Duke filluar…',
         idle: "Shtyp Pamje paraprake për të matur çfarë mund të pastrohet."
       },
@@ -27819,11 +27819,11 @@ export const CATALOG = {
       cleanErrorPrefix: (error) => `Pastrimi dështoi: ${error}`,
       cleanupComplete: 'Pastrimi përfundoi.',
       resultFreed: (formatted) => `U liruan ${formatted}`,
-      resultMoved: (formatted) => `Moved ${formatted} to Quarantine. The space comes back when you empty it.`,
-      resultRecycled: (formatted) => `Moved ${formatted} to the Recycle Bin. The space comes back when you empty it.`,
-      openQuarantine: 'Open Quarantine',
-      resultWiped: (size) => `Wrote ${size} of zeros over the free space, then deleted it. No space was freed.`,
-      resultWipeStopped: (size) => `Stopped after writing ${size} of zeros over the free space. The filler was deleted.`,
+      resultMoved: (formatted) => `U zhvendosën ${formatted} në Karantinë. Hapësira kthehet kur e zbraz.`,
+      resultRecycled: (formatted) => `U zhvendosën ${formatted} në Koshin e Riciklimit. Hapësira kthehet kur e zbraz.`,
+      openQuarantine: "Hap Karantinën",
+      resultWiped: (size) => `U shkruan ${size} zero mbi hapësirën e lirë, pastaj u fshinë. Nuk u lirua hapësirë.`,
+      resultWipeStopped: (size) => `U ndal pasi u shkruan ${size} zero mbi hapësirën e lirë. Skedari mbushës u fshi.`,
       resultLockedSuffix: (count) => ` — ${count === 1 ? 'u anashkalua' : 'u anashkaluan'} ${count} ${count === 1 ? 'skedar i kyçur' : 'skedarë të kyçur'}`,
       before: {
         body: 'Prune mat vërtet çdo kategori në disk në vend që ta vlerësojë, gjë që zgjat rreth gjysmë minute.',
@@ -27836,9 +27836,9 @@ export const CATALOG = {
         notMeasuredYet: 'ende e pamatur',
         previewFirst: "Shiko fillimisht Pamjen paraprake për të parë çfarë do të lirohet.",
         unmeasuredSuffix: (count) => ` · ${count} të pamatura`,
-        modeQuarantine: 'Moves to Quarantine.',
-        modeRecycle: 'Moves to the Recycle Bin.',
-        modeDelete: 'Deletes immediately.',
+        modeQuarantine: "Zhvendos në Karantinë.",
+        modeRecycle: "Zhvendos në Koshin e Riciklimit.",
+        modeDelete: "Fshin menjëherë.",
         selectEverything: 'Zgjidh gjithçka',
         clear: 'Pastro',
         selectedCount: (count) => `${count} të zgjedhura`
@@ -27847,35 +27847,35 @@ export const CATALOG = {
         prompt: (count, sizeKnown, formatted) => `${count === 1 ? 'Të lëvizet' : 'Të lëvizen'} ${count} ${count === 1 ? 'artikull' : 'artikuj'} (${sizeKnown ? formatted : 'madhësia e pamatur'}) në Karantinë?`,
         cancel: 'Anulo',
         confirmButton: "Zhvendos në Karantinë",
-        promptDelete: (count, sizeKnown, formatted) => `Delete ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'})? This can't be undone.`,
-        deleteButton: 'Delete',
-        promptRecycle: (count, sizeKnown, formatted) => `Move ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'}) to the Recycle Bin?`,
-        recycleButton: 'Move to Recycle Bin',
-        wipeNote: 'Includes wiping free disk space, which can take hours.',
+        promptDelete: (count, sizeKnown, formatted) => `${count === 1 ? 'Të fshihet' : 'Të fshihen'} ${count} ${count === 1 ? 'artikull' : 'artikuj'} (${sizeKnown ? formatted : 'madhësia e pamatur'})? Kjo nuk mund të zhbëhet.`,
+        deleteButton: "Fshi",
+        promptRecycle: (count, sizeKnown, formatted) => `${count === 1 ? 'Të zhvendoset' : 'Të zhvendosen'} ${count} ${count === 1 ? 'artikull' : 'artikuj'} (${sizeKnown ? formatted : 'madhësia e pamatur'}) në Koshin e Riciklimit?`,
+        recycleButton: "Zhvendos në Koshin e Riciklimit",
+        wipeNote: "Përfshin mbishkrimin e hapësirës së lirë të diskut, që mund të zgjasë orë të tëra.",
         cleaning: 'Duke pastruar…'
       },
       wipe: {
-        title: 'Wipe free disk space',
-        body: "This overwrites the free space on the drive with zeros, then deletes the filler, so files you deleted earlier can't be recovered. It frees no space.",
-        ssdWarning: 'On an SSD with TRIM this does nothing useful and adds write wear. Use it on a hard disk, or when you know you need it.',
-        driveLine: (drive) => `Drive: ${drive}`,
-        writeLine: (size) => `About ${size} will be written.`,
-        timeLine: (duration, speed) => `Roughly ${duration}, from a one-second write test at ${speed}. The drive slows as it fills, so it can take longer.`,
-        duration: (hours, minutes) => (hours > 0 ? `${hours} h ${minutes} min` : `${minutes} min`),
-        reserveLine: (size) => `${size} always stays free so Windows keeps working.`,
-        stopNote: 'Stop ends it at once and deletes the filler.',
-        measuring: 'Measuring the drive…',
-        estimateFailed: (error) => `Couldn't measure the drive: ${error}`,
-        cancel: 'Cancel',
-        confirm: 'Add to this clean'
+        title: "Mbishkruaj hapësirën e lirë të diskut",
+        body: "Kjo mbishkruan hapësirën e lirë të diskut me zero, pastaj fshin skedarin mbushës, që skedarët që ke fshirë më parë të mos mund të rikthehen. Nuk liron hapësirë.",
+        ssdWarning: "Në një SSD me TRIM kjo nuk bën asgjë të dobishme dhe shton konsumimin nga shkrimi. Përdore në një hard disk, ose kur e di që të nevojitet.",
+        driveLine: (drive) => `Disku: ${drive}`,
+        writeLine: (size) => `Do të shkruhen rreth ${size}.`,
+        timeLine: (duration, speed) => `Afërsisht ${duration}, bazuar në një provë shkrimi një-sekondëshe me ${speed}. Disku ngadalësohet ndërsa mbushet, ndaj mund të zgjasë më shumë.`,
+        duration: (hours, minutes) => (hours > 0 ? `${hours} orë ${minutes} min` : `${minutes} min`),
+        reserveLine: (size) => `Gjithmonë lihen të lira ${size}, që Windows të vazhdojë të funksionojë.`,
+        stopNote: "Ndalo e përfundon menjëherë dhe fshin skedarin mbushës.",
+        measuring: "Po matet disku…",
+        estimateFailed: (error) => `Disku nuk u mat dot: ${error}`,
+        cancel: "Anulo",
+        confirm: "Shto në këtë pastrim"
       },
       stop: 'Ndalo',
       rescan: 'Riskano',
       clean: 'Pastro',
       tree: {
         selectCategoryAriaLabel: (category) => `Zgjidh gjithçka nën ${category}`,
-        atLeast: (size) => `at least ${size}`,
-        longRunning: 'Takes a long time',
+        atLeast: (size) => `të paktën ${size}`,
+        longRunning: "Zgjat shumë",
         losesData: 'Humbet të dhëna',
         needsAdmin: 'kërkon administrator',
         notInstalled: 'i painstaluar',
@@ -27892,7 +27892,7 @@ export const CATALOG = {
       },
       log: {
         scan: {
-          partial: (size) => `${size}, partial`,
+          partial: (size) => `${size}, pjesërisht`,
           nothingToMeasure: "asgjë për t'u matur",
           needsAdmin: "kërkon administrator",
           notInstalled: "i painstaluar",
@@ -27900,10 +27900,10 @@ export const CATALOG = {
         },
         execute: {
           delete: (name) => `Fshi ${name}`,
-          wipe: (name) => `Wipe ${name}`,
-          wiped: (size) => `${size} written`,
-          wipeStopped: (size) => `stopped after ${size}`,
-          quarantine: (name) => `Quarantine ${name}`,
+          wipe: (name) => `Mbishkruaj ${name}`,
+          wiped: (size) => `${size} të shkruara`,
+          wipeStopped: (size) => `u ndal pas ${size}`,
+          quarantine: (name) => `Zhvendos në Karantinë: ${name}`,
           recycle: (name) => `Dërgo ${name} në Koshin e Riciklimit`,
           clear: (name) => `Pastro ${name}`,
           compact: (name) => `Ngjeshe ${name}`,
@@ -28154,17 +28154,17 @@ export const CATALOG = {
         description: "Исцртава слободан простор диска као још један блок када скенирате цео диск, тако да се свака фасцикла чита као удео диска, а не заузетог простора."
       },
       deepCleanRemoval: {
-        title: 'When Deep Clean removes files',
+        title: "Када Дубоко чишћење уклања датотеке",
         quarantine: {
-          label: 'Move to Quarantine (you can put it back)',
-          description: "Nothing is deleted. Files go into Prune's Quarantine and the drive gets the space back when you empty it."
+          label: "Премести у карантин (можете их вратити)",
+          description: "Ништа се не брише. Датотеке иду у Prune карантин, а диск враћа простор када испразните карантин."
         },
         delete: {
-          label: "Delete now (frees the space, can't be undone — like BleachBit)",
-          description: 'Files are removed as soon as you confirm, so the space is free straight away. Rules that lose data still ask first.'
+          label: "Обриши одмах (ослобађа простор, не може да се опозове — као BleachBit)",
+          description: "Датотеке се уклањају чим потврдите, па се простор ослобађа одмах. Правила која губе податке и даље прво питају."
         },
-        deleteWarning: "With Delete now, Clean can't be undone. Scheduled cleans still move files to Quarantine.",
-        autoQuarantineNote: 'Not used while Deep Clean deletes files immediately.'
+        deleteWarning: "Уз Обриши одмах, Чишћење не може да се опозове. Заказана чишћења и даље премештају датотеке у карантин.",
+        autoQuarantineNote: "Не користи се док Дубоко чишћење брише датотеке одмах."
       },
       autoQuarantine: {
         title: "Аутоматски карантин",
@@ -28682,13 +28682,13 @@ export const CATALOG = {
     deepClean: {
       title: 'Дубоко чишћење',
       subtitle: "Све што Prune зна да пронађе — кеш меморије, дневнике, дампове и остатке — мери се на овом рачунару уместо да се процењује. Ништа се не брише одмах — све што Чишћење узме иде прво у карантин, одакле то можете вратити.",
-      subtitleDelete: "Every cache, log, dump and leftover Prune knows how to find, measured on this machine rather than estimated. Clean deletes what you tick immediately and frees the space, the way BleachBit does. It can't be undone.",
+      subtitleDelete: "Све што Prune зна да пронађе — кеш меморије, дневнике, дампове и остатке — мери се на овом рачунару уместо да се процењује. Чишћење одмах брише оно што означите и ослобађа простор, као што то ради BleachBit. Не може да се опозове.",
       scanLog: {
         header: 'Излаз скенирања',
         scanningAnnounce: (total) => `Скенирање ${total} локација.`,
         finishedAnnounce: (scanned, total) => `Скенирање завршено. Измерено ${scanned} од ${total} локација.`,
-        searching: (items) => `Searching your profile… ${items} items checked`,
-        wiping: (written, total) => `Writing zeros… ${written} of ${total}`,
+        searching: (items) => `Претражује се ваш профил… проверено ставки: ${items}`,
+        wiping: (written, total) => `Уписују се нуле… ${written} од ${total}`,
         starting: 'Покретање…',
         idle: "Притисните Преглед да измерите шта се може очистити."
       },
@@ -28697,11 +28697,11 @@ export const CATALOG = {
       cleanErrorPrefix: (error) => `Чишћење није успело: ${error}`,
       cleanupComplete: 'Чишћење завршено.',
       resultFreed: (formatted) => `Ослобођено ${formatted}`,
-      resultMoved: (formatted) => `Moved ${formatted} to Quarantine. The space comes back when you empty it.`,
-      resultRecycled: (formatted) => `Moved ${formatted} to the Recycle Bin. The space comes back when you empty it.`,
-      openQuarantine: 'Open Quarantine',
-      resultWiped: (size) => `Wrote ${size} of zeros over the free space, then deleted it. No space was freed.`,
-      resultWipeStopped: (size) => `Stopped after writing ${size} of zeros over the free space. The filler was deleted.`,
+      resultMoved: (formatted) => `Премештено у карантин: ${formatted}. Простор се враћа када испразните карантин.`,
+      resultRecycled: (formatted) => `Премештено у корпу за отпатке: ${formatted}. Простор се враћа када испразните корпу.`,
+      openQuarantine: "Отвори карантин",
+      resultWiped: (size) => `Слободан простор је преписан нулама (${size}), а затим је датотека за попуну обрисана. Простор није ослобођен.`,
+      resultWipeStopped: (size) => `Заустављено након што је слободан простор преписан нулама (${size}). Датотека за попуну је обрисана.`,
       resultLockedSuffix: (count) => ` — прескочено закључаних датотека: ${count}`,
       before: {
         body: 'Prune заиста мери сваку категорију на диску уместо да је процењује, што траје око пола минута.',
@@ -28714,9 +28714,9 @@ export const CATALOG = {
         notMeasuredYet: 'још није измерено',
         previewFirst: "Прво погледајте преглед да видите шта ће бити ослобођено.",
         unmeasuredSuffix: (count) => ` · ${count} немерено`,
-        modeQuarantine: 'Moves to Quarantine.',
-        modeRecycle: 'Moves to the Recycle Bin.',
-        modeDelete: 'Deletes immediately.',
+        modeQuarantine: "Премешта се у карантин.",
+        modeRecycle: "Премешта се у корпу за отпатке.",
+        modeDelete: "Брише се одмах.",
         selectEverything: 'Изабери све',
         clear: 'Обриши',
         selectedCount: (count) => `${count} изабрано`
@@ -28725,35 +28725,35 @@ export const CATALOG = {
         prompt: (count, sizeKnown, formatted) => { const p = (n, a, b, c) => n % 10 === 1 && n % 100 !== 11 ? a : (n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14)) ? b : c; return `Преместити ${count} ${p(count, 'ставку', 'ставке', 'ставки')} (${sizeKnown ? formatted : 'величина није измерена'}) у карантин?`; },
         cancel: 'Откажи',
         confirmButton: "Премести у карантин",
-        promptDelete: (count, sizeKnown, formatted) => `Delete ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'})? This can't be undone.`,
-        deleteButton: 'Delete',
-        promptRecycle: (count, sizeKnown, formatted) => `Move ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'}) to the Recycle Bin?`,
-        recycleButton: 'Move to Recycle Bin',
-        wipeNote: 'Includes wiping free disk space, which can take hours.',
+        promptDelete: (count, sizeKnown, formatted) => { const p = (n, a, b, c) => n % 10 === 1 && n % 100 !== 11 ? a : (n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14)) ? b : c; return `Обрисати ${count} ${p(count, 'ставку', 'ставке', 'ставки')} (${sizeKnown ? formatted : 'величина није измерена'})? Ово не може да се опозове.`; },
+        deleteButton: "Обриши",
+        promptRecycle: (count, sizeKnown, formatted) => { const p = (n, a, b, c) => n % 10 === 1 && n % 100 !== 11 ? a : (n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14)) ? b : c; return `Преместити ${count} ${p(count, 'ставку', 'ставке', 'ставки')} (${sizeKnown ? formatted : 'величина није измерена'}) у корпу за отпатке?`; },
+        recycleButton: "Премести у корпу за отпатке",
+        wipeNote: "Укључује преписивање слободног простора на диску, што може трајати сатима.",
         cleaning: 'Чишћење…'
       },
       wipe: {
-        title: 'Wipe free disk space',
-        body: "This overwrites the free space on the drive with zeros, then deletes the filler, so files you deleted earlier can't be recovered. It frees no space.",
-        ssdWarning: 'On an SSD with TRIM this does nothing useful and adds write wear. Use it on a hard disk, or when you know you need it.',
-        driveLine: (drive) => `Drive: ${drive}`,
-        writeLine: (size) => `About ${size} will be written.`,
-        timeLine: (duration, speed) => `Roughly ${duration}, from a one-second write test at ${speed}. The drive slows as it fills, so it can take longer.`,
-        duration: (hours, minutes) => (hours > 0 ? `${hours} h ${minutes} min` : `${minutes} min`),
-        reserveLine: (size) => `${size} always stays free so Windows keeps working.`,
-        stopNote: 'Stop ends it at once and deletes the filler.',
-        measuring: 'Measuring the drive…',
-        estimateFailed: (error) => `Couldn't measure the drive: ${error}`,
-        cancel: 'Cancel',
-        confirm: 'Add to this clean'
+        title: "Препиши слободан простор на диску",
+        body: "Ово преписује слободан простор на диску нулама, а затим брише датотеку за попуну, па се раније обрисане датотеке не могу повратити. Не ослобађа простор.",
+        ssdWarning: "На SSD-у са TRIM-ом ово није ни од какве користи и повећава хабање услед писања. Користите на чврстом диску или када знате да вам је потребно.",
+        driveLine: (drive) => `Диск: ${drive}`,
+        writeLine: (size) => `Биће уписано око ${size}.`,
+        timeLine: (duration, speed) => `Отприлике ${duration}, према једносекундном тесту писања при ${speed}. Диск успорава како се пуни, па може трајати дуже.`,
+        duration: (hours, minutes) => (hours > 0 ? `${hours} ч ${minutes} мин` : `${minutes} мин`),
+        reserveLine: (size) => `Увек остаје слободно ${size} да би Windows наставио да ради.`,
+        stopNote: "Заустави одмах прекида поступак и брише датотеку за попуну.",
+        measuring: "Мери се диск…",
+        estimateFailed: (error) => `Диск није могао да се измери: ${error}`,
+        cancel: "Откажи",
+        confirm: "Додај овом чишћењу"
       },
       stop: 'Заустави',
       rescan: 'Поново скенирај',
       clean: 'Очисти',
       tree: {
         selectCategoryAriaLabel: (category) => `Изабери све у категорији ${category}`,
-        atLeast: (size) => `at least ${size}`,
-        longRunning: 'Takes a long time',
+        atLeast: (size) => `најмање ${size}`,
+        longRunning: "Дуго траје",
         losesData: 'Губи податке',
         needsAdmin: 'захтева администратора',
         notInstalled: 'није инсталирано',
@@ -28770,7 +28770,7 @@ export const CATALOG = {
       },
       log: {
         scan: {
-          partial: (size) => `${size}, partial`,
+          partial: (size) => `${size}, делимично`,
           nothingToMeasure: "нема шта да се мери",
           needsAdmin: "захтева администратора",
           notInstalled: "није инсталирано",
@@ -28778,10 +28778,10 @@ export const CATALOG = {
         },
         execute: {
           delete: (name) => `Обриши ${name}`,
-          wipe: (name) => `Wipe ${name}`,
-          wiped: (size) => `${size} written`,
-          wipeStopped: (size) => `stopped after ${size}`,
-          quarantine: (name) => `Quarantine ${name}`,
+          wipe: (name) => `Препиши ${name}`,
+          wiped: (size) => `уписано ${size}`,
+          wipeStopped: (size) => `заустављено након ${size}`,
+          quarantine: (name) => `Премести ${name} у карантин`,
           recycle: (name) => `Пошаљи ${name} у корпу за отпатке`,
           clear: (name) => `Испразни ${name}`,
           compact: (name) => `Сажми ${name}`,
@@ -29030,17 +29030,17 @@ export const CATALOG = {
         description: 'Ritar enhetens lediga utrymme som ytterligare ett block när du skannar en hel enhet, så att varje mapp läses som en andel av enheten i stället för av det använda utrymmet.'
       },
       deepCleanRemoval: {
-        title: 'When Deep Clean removes files',
+        title: "När Grundlig rensning tar bort filer",
         quarantine: {
-          label: 'Move to Quarantine (you can put it back)',
-          description: "Nothing is deleted. Files go into Prune's Quarantine and the drive gets the space back when you empty it."
+          label: "Flytta till karantän (du kan lägga tillbaka dem)",
+          description: "Inget raderas. Filerna hamnar i Prunes karantän och enheten får tillbaka utrymmet när du tömmer den."
         },
         delete: {
-          label: "Delete now (frees the space, can't be undone — like BleachBit)",
-          description: 'Files are removed as soon as you confirm, so the space is free straight away. Rules that lose data still ask first.'
+          label: "Radera nu (frigör utrymmet, kan inte ångras — som BleachBit)",
+          description: "Filerna tas bort så fort du bekräftar, så utrymmet är ledigt direkt. Regler som förlorar data frågar fortfarande först."
         },
-        deleteWarning: "With Delete now, Clean can't be undone. Scheduled cleans still move files to Quarantine.",
-        autoQuarantineNote: 'Not used while Deep Clean deletes files immediately.'
+        deleteWarning: "Med Radera nu kan Rensa inte ångras. Schemalagda rensningar flyttar fortfarande filer till karantän.",
+        autoQuarantineNote: "Används inte medan Grundlig rensning raderar filer direkt."
       },
       autoQuarantine: {
         title: 'Automatisk karantän',
@@ -29558,13 +29558,13 @@ export const CATALOG = {
     deepClean: {
       title: "Grundlig rensning",
       subtitle: "Varje cache, logg, dump och rest som Prune vet hur man hittar, uppmätt på den här datorn i stället för uppskattat. Inget tas bort direkt — allt som Rensa tar går först till Karantän, där du kan lägga tillbaka det.",
-      subtitleDelete: "Every cache, log, dump and leftover Prune knows how to find, measured on this machine rather than estimated. Clean deletes what you tick immediately and frees the space, the way BleachBit does. It can't be undone.",
+      subtitleDelete: "Varje cache, logg, dump och rest som Prune vet hur man hittar, uppmätt på den här datorn i stället för uppskattat. Rensa raderar det du kryssar i direkt och frigör utrymmet, som BleachBit gör. Det kan inte ångras.",
       scanLog: {
         header: 'Skanningsutdata',
         scanningAnnounce: (total) => `Skannar ${total} platser.`,
         finishedAnnounce: (scanned, total) => `Skanning klar. ${scanned} av ${total} platser mätta.`,
-        searching: (items) => `Searching your profile… ${items} items checked`,
-        wiping: (written, total) => `Writing zeros… ${written} of ${total}`,
+        searching: (items)=>`Söker igenom din profil… ${items} objekt kontrollerade`,
+        wiping: (written,total)=>`Skriver nollor… ${written} av ${total}`,
         starting: 'Startar…',
         idle: "Klicka på Förhandsgranska för att mäta vad som kan rensas."
       },
@@ -29573,11 +29573,11 @@ export const CATALOG = {
       cleanErrorPrefix: (error) => `Kunde inte rensa: ${error}`,
       cleanupComplete: 'Rensning klar.',
       resultFreed: (formatted) => `Frigjorde ${formatted}`,
-      resultMoved: (formatted) => `Moved ${formatted} to Quarantine. The space comes back when you empty it.`,
-      resultRecycled: (formatted) => `Moved ${formatted} to the Recycle Bin. The space comes back when you empty it.`,
-      openQuarantine: 'Open Quarantine',
-      resultWiped: (size) => `Wrote ${size} of zeros over the free space, then deleted it. No space was freed.`,
-      resultWipeStopped: (size) => `Stopped after writing ${size} of zeros over the free space. The filler was deleted.`,
+      resultMoved: (formatted)=>`Flyttade ${formatted} till karantän. Utrymmet kommer tillbaka när du tömmer den.`,
+      resultRecycled: (formatted)=>`Flyttade ${formatted} till papperskorgen. Utrymmet kommer tillbaka när du tömmer den.`,
+      openQuarantine: "Öppna karantän",
+      resultWiped: (size)=>`Skrev ${size} nollor över det lediga utrymmet och raderade sedan fyllnadsfilen. Inget utrymme frigjordes.`,
+      resultWipeStopped: (size)=>`Stoppade efter att ha skrivit ${size} nollor över det lediga utrymmet. Fyllnadsfilen raderades.`,
       resultLockedSuffix: (count) => ` — hoppade över ${count} ${count === 1 ? 'låst fil' : 'låsta filer'}`,
       before: {
         body: 'Prune mäter faktiskt varje kategori på disken i stället för att uppskatta, vilket tar ungefär en halv minut.',
@@ -29590,9 +29590,9 @@ export const CATALOG = {
         notMeasuredYet: 'inte mätt än',
         previewFirst: "Förhandsgranska först för att se vad som frigörs.",
         unmeasuredSuffix: (count) => ` · ${count} ej ${count === 1 ? 'mätt' : 'mätta'}`,
-        modeQuarantine: 'Moves to Quarantine.',
-        modeRecycle: 'Moves to the Recycle Bin.',
-        modeDelete: 'Deletes immediately.',
+        modeQuarantine: "Flyttas till karantän.",
+        modeRecycle: "Flyttas till papperskorgen.",
+        modeDelete: "Raderas direkt.",
         selectEverything: 'Markera allt',
         clear: 'Rensa',
         selectedCount: (count) => `${count} ${count === 1 ? 'vald' : 'valda'}`
@@ -29601,35 +29601,35 @@ export const CATALOG = {
         prompt: (count, sizeKnown, formatted) => `Flytta ${count} objekt (${sizeKnown ? formatted : 'storlek ej mätt'}) till karantän?`,
         cancel: 'Avbryt',
         confirmButton: "Flytta till Karantän",
-        promptDelete: (count, sizeKnown, formatted) => `Delete ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'})? This can't be undone.`,
-        deleteButton: 'Delete',
-        promptRecycle: (count, sizeKnown, formatted) => `Move ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'}) to the Recycle Bin?`,
-        recycleButton: 'Move to Recycle Bin',
-        wipeNote: 'Includes wiping free disk space, which can take hours.',
+        promptDelete: (count,sizeKnown,formatted)=>`Radera ${count} objekt (${sizeKnown ? formatted : 'storlek ej mätt'})? Det kan inte ångras.`,
+        deleteButton: "Radera",
+        promptRecycle: (count,sizeKnown,formatted)=>`Flytta ${count} objekt (${sizeKnown ? formatted : 'storlek ej mätt'}) till papperskorgen?`,
+        recycleButton: "Flytta till papperskorgen",
+        wipeNote: "Inkluderar överskrivning av ledigt diskutrymme, vilket kan ta timmar.",
         cleaning: 'Rensar…'
       },
       wipe: {
-        title: 'Wipe free disk space',
-        body: "This overwrites the free space on the drive with zeros, then deletes the filler, so files you deleted earlier can't be recovered. It frees no space.",
-        ssdWarning: 'On an SSD with TRIM this does nothing useful and adds write wear. Use it on a hard disk, or when you know you need it.',
-        driveLine: (drive) => `Drive: ${drive}`,
-        writeLine: (size) => `About ${size} will be written.`,
-        timeLine: (duration, speed) => `Roughly ${duration}, from a one-second write test at ${speed}. The drive slows as it fills, so it can take longer.`,
-        duration: (hours, minutes) => (hours > 0 ? `${hours} h ${minutes} min` : `${minutes} min`),
-        reserveLine: (size) => `${size} always stays free so Windows keeps working.`,
-        stopNote: 'Stop ends it at once and deletes the filler.',
-        measuring: 'Measuring the drive…',
-        estimateFailed: (error) => `Couldn't measure the drive: ${error}`,
-        cancel: 'Cancel',
-        confirm: 'Add to this clean'
+        title: "Skriv över ledigt diskutrymme",
+        body: "Detta skriver över det lediga utrymmet på enheten med nollor och raderar sedan fyllnadsfilen, så att filer du raderat tidigare inte kan återställas. Det frigör inget utrymme.",
+        ssdWarning: "På en SSD med TRIM gör detta ingen nytta och ger bara extra skrivslitage. Använd det på en hårddisk, eller när du vet att du behöver det.",
+        driveLine: (drive)=>`Enhet: ${drive}`,
+        writeLine: (size)=>`Ungefär ${size} kommer att skrivas.`,
+        timeLine: (duration,speed)=>`Ungefär ${duration}, utifrån ett skrivtest på en sekund med ${speed}. Enheten blir långsammare när den fylls, så det kan ta längre tid.`,
+        duration: (hours,minutes)=>(hours > 0 ? `${hours} h ${minutes} min` : `${minutes} min`),
+        reserveLine: (size)=>`${size} förblir alltid ledigt så att Windows fortsätter fungera.`,
+        stopNote: "Stopp avslutar det direkt och raderar fyllnadsfilen.",
+        measuring: "Mäter enheten…",
+        estimateFailed: (error)=>`Det gick inte att mäta enheten: ${error}`,
+        cancel: "Avbryt",
+        confirm: "Lägg till i den här rensningen"
       },
       stop: 'Stoppa',
       rescan: 'Skanna igen',
       clean: 'Rensa',
       tree: {
         selectCategoryAriaLabel: (category) => `Markera allt under ${category}`,
-        atLeast: (size) => `at least ${size}`,
-        longRunning: 'Takes a long time',
+        atLeast: (size)=>`minst ${size}`,
+        longRunning: "Tar lång tid",
         losesData: 'Förlorar data',
         needsAdmin: 'kräver administratör',
         notInstalled: 'inte installerad',
@@ -29646,7 +29646,7 @@ export const CATALOG = {
       },
       log: {
         scan: {
-          partial: (size) => `${size}, partial`,
+          partial: (size)=>`${size}, delvis`,
           nothingToMeasure: "inget att mäta",
           needsAdmin: "kräver administratör",
           notInstalled: "inte installerad",
@@ -29654,10 +29654,10 @@ export const CATALOG = {
         },
         execute: {
           delete: (name) => `Ta bort ${name}`,
-          wipe: (name) => `Wipe ${name}`,
-          wiped: (size) => `${size} written`,
-          wipeStopped: (size) => `stopped after ${size}`,
-          quarantine: (name) => `Quarantine ${name}`,
+          wipe: (name)=>`Skriv över ${name}`,
+          wiped: (size)=>`${size} skrivet`,
+          wipeStopped: (size)=>`stoppad efter ${size}`,
+          quarantine: (name)=>`Flytta ${name} till karantän`,
           recycle: (name) => `Skicka ${name} till papperskorgen`,
           clear: (name) => `Rensa ${name}`,
           compact: (name) => `Komprimera ${name}`,
@@ -29906,17 +29906,17 @@ export const CATALOG = {
         description: 'วาดพื้นที่ว่างของไดรฟ์เป็นอีกหนึ่งบล็อกเมื่อคุณสแกนไดรฟ์ทั้งหมด เพื่อให้แต่ละโฟลเดอร์อ่านเป็นสัดส่วนของไดรฟ์แทนที่จะเป็นพื้นที่ที่ใช้งานอยู่'
       },
       deepCleanRemoval: {
-        title: 'When Deep Clean removes files',
+        title: "เมื่อทำความสะอาดเชิงลึกนำไฟล์ออก",
         quarantine: {
-          label: 'Move to Quarantine (you can put it back)',
-          description: "Nothing is deleted. Files go into Prune's Quarantine and the drive gets the space back when you empty it."
+          label: "ย้ายไปยังกักกัน (นำกลับมาได้)",
+          description: "ไม่มีอะไรถูกลบ ไฟล์จะเข้าไปอยู่ในกักกันของ Prune และไดรฟ์จะได้พื้นที่คืนเมื่อคุณล้างกักกัน"
         },
         delete: {
-          label: "Delete now (frees the space, can't be undone — like BleachBit)",
-          description: 'Files are removed as soon as you confirm, so the space is free straight away. Rules that lose data still ask first.'
+          label: "ลบทันที (เพิ่มพื้นที่ว่าง แต่ย้อนกลับไม่ได้ — เหมือน BleachBit)",
+          description: "ไฟล์จะถูกนำออกทันทีที่คุณยืนยัน พื้นที่จึงว่างขึ้นในทันที กฎที่ทำให้สูญเสียข้อมูลจะยังถามก่อนเสมอ"
         },
-        deleteWarning: "With Delete now, Clean can't be undone. Scheduled cleans still move files to Quarantine.",
-        autoQuarantineNote: 'Not used while Deep Clean deletes files immediately.'
+        deleteWarning: "เมื่อใช้ลบทันที จะย้อนกลับการล้างไม่ได้ ส่วนการล้างตามกำหนดเวลายังคงย้ายไฟล์ไปยังกักกัน",
+        autoQuarantineNote: "ไม่มีผลขณะที่ทำความสะอาดเชิงลึกลบไฟล์ทันที"
       },
       autoQuarantine: {
         title: 'กักกันอัตโนมัติ',
@@ -30434,13 +30434,13 @@ export const CATALOG = {
     deepClean: {
       title: "ทำความสะอาดเชิงลึก",
       subtitle: "แคช บันทึก ดัมพ์ และสิ่งตกค้างทุกอย่างที่ Prune รู้วิธีค้นหา วัดผลจริงบนเครื่องนี้แทนการประมาณ ไม่มีอะไรถูกลบทันที — ทุกอย่างที่การล้างเก็บไปจะไปที่กักกันก่อน ซึ่งคุณสามารถนำกลับมาได้",
-      subtitleDelete: "Every cache, log, dump and leftover Prune knows how to find, measured on this machine rather than estimated. Clean deletes what you tick immediately and frees the space, the way BleachBit does. It can't be undone.",
+      subtitleDelete: "แคช บันทึก ดัมพ์ และสิ่งตกค้างทุกอย่างที่ Prune รู้วิธีค้นหา วัดผลจริงบนเครื่องนี้แทนการประมาณ การล้างจะลบสิ่งที่คุณเลือกไว้ทันทีและเพิ่มพื้นที่ว่างให้ เหมือนที่ BleachBit ทำ ย้อนกลับไม่ได้",
       scanLog: {
         header: 'ผลลัพธ์การสแกน',
         scanningAnnounce: (total) => `กำลังสแกน ${total} ตำแหน่ง`,
         finishedAnnounce: (scanned, total) => `สแกนเสร็จสิ้น วัดผลแล้ว ${scanned} จาก ${total} ตำแหน่ง`,
-        searching: (items) => `Searching your profile… ${items} items checked`,
-        wiping: (written, total) => `Writing zeros… ${written} of ${total}`,
+        searching: (items) => `กำลังค้นหาในโปรไฟล์ของคุณ… ตรวจแล้ว ${items} รายการ`,
+        wiping: (written, total) => `กำลังเขียนเลขศูนย์… ${written} จาก ${total}`,
         starting: 'กำลังเริ่ม…',
         idle: "กด \"ดูตัวอย่าง\" เพื่อวัดว่าล้างอะไรได้บ้าง"
       },
@@ -30449,11 +30449,11 @@ export const CATALOG = {
       cleanErrorPrefix: (error) => `ไม่สามารถล้างได้: ${error}`,
       cleanupComplete: 'การล้างข้อมูลเสร็จสมบูรณ์',
       resultFreed: (formatted) => `เพิ่มพื้นที่ว่าง ${formatted}`,
-      resultMoved: (formatted) => `Moved ${formatted} to Quarantine. The space comes back when you empty it.`,
-      resultRecycled: (formatted) => `Moved ${formatted} to the Recycle Bin. The space comes back when you empty it.`,
-      openQuarantine: 'Open Quarantine',
-      resultWiped: (size) => `Wrote ${size} of zeros over the free space, then deleted it. No space was freed.`,
-      resultWipeStopped: (size) => `Stopped after writing ${size} of zeros over the free space. The filler was deleted.`,
+      resultMoved: (formatted) => `ย้าย ${formatted} ไปยังกักกันแล้ว พื้นที่จะกลับมาเมื่อคุณล้างกักกัน`,
+      resultRecycled: (formatted) => `ย้าย ${formatted} ไปยังถังรีไซเคิลแล้ว พื้นที่จะกลับมาเมื่อคุณล้างถัง`,
+      openQuarantine: "เปิดกักกัน",
+      resultWiped: (size) => `เขียนเลขศูนย์ ${size} ทับพื้นที่ว่างแล้วลบทิ้ง ไม่ได้เพิ่มพื้นที่ว่างแต่อย่างใด`,
+      resultWipeStopped: (size) => `หยุดหลังจากเขียนเลขศูนย์ ${size} ทับพื้นที่ว่าง ไฟล์ที่ใช้เติมพื้นที่ถูกลบแล้ว`,
       resultLockedSuffix: (count) => ` — ข้าม ${count} ไฟล์ที่ถูกล็อก`,
       before: {
         body: 'Prune วัดผลแต่ละหมวดหมู่บนดิสก์จริง แทนการประมาณ ซึ่งใช้เวลาประมาณครึ่งนาที',
@@ -30466,9 +30466,9 @@ export const CATALOG = {
         notMeasuredYet: 'ยังไม่ได้วัดผล',
         previewFirst: "กด \"ดูตัวอย่าง\" ก่อนเพื่อดูว่าจะเพิ่มพื้นที่ว่างได้เท่าใด",
         unmeasuredSuffix: (count) => ` · ไม่ได้วัดผล ${count} รายการ`,
-        modeQuarantine: 'Moves to Quarantine.',
-        modeRecycle: 'Moves to the Recycle Bin.',
-        modeDelete: 'Deletes immediately.',
+        modeQuarantine: "ย้ายไปยังกักกัน",
+        modeRecycle: "ย้ายไปยังถังรีไซเคิล",
+        modeDelete: "ลบทันที",
         selectEverything: 'เลือกทั้งหมด',
         clear: 'ล้าง',
         selectedCount: (count) => `เลือก ${count} รายการ`
@@ -30477,35 +30477,35 @@ export const CATALOG = {
         prompt: (count, sizeKnown, formatted) => `ย้าย ${count} รายการ (${sizeKnown ? formatted : 'ไม่ได้วัดขนาด'}) ไปยังกักกันหรือไม่`,
         cancel: 'ยกเลิก',
         confirmButton: "ย้ายไปยังกักกัน",
-        promptDelete: (count, sizeKnown, formatted) => `Delete ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'})? This can't be undone.`,
-        deleteButton: 'Delete',
-        promptRecycle: (count, sizeKnown, formatted) => `Move ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'}) to the Recycle Bin?`,
-        recycleButton: 'Move to Recycle Bin',
-        wipeNote: 'Includes wiping free disk space, which can take hours.',
+        promptDelete: (count, sizeKnown, formatted) => `ลบ ${count} รายการ (${sizeKnown ? formatted : 'ไม่ได้วัดขนาด'}) หรือไม่ ย้อนกลับไม่ได้`,
+        deleteButton: "ลบ",
+        promptRecycle: (count, sizeKnown, formatted) => `ย้าย ${count} รายการ (${sizeKnown ? formatted : 'ไม่ได้วัดขนาด'}) ไปยังถังรีไซเคิลหรือไม่`,
+        recycleButton: "ย้ายไปยังถังรีไซเคิล",
+        wipeNote: "รวมการเขียนทับพื้นที่ว่างของดิสก์ ซึ่งอาจใช้เวลาหลายชั่วโมง",
         cleaning: 'กำลังล้าง…'
       },
       wipe: {
-        title: 'Wipe free disk space',
-        body: "This overwrites the free space on the drive with zeros, then deletes the filler, so files you deleted earlier can't be recovered. It frees no space.",
-        ssdWarning: 'On an SSD with TRIM this does nothing useful and adds write wear. Use it on a hard disk, or when you know you need it.',
-        driveLine: (drive) => `Drive: ${drive}`,
-        writeLine: (size) => `About ${size} will be written.`,
-        timeLine: (duration, speed) => `Roughly ${duration}, from a one-second write test at ${speed}. The drive slows as it fills, so it can take longer.`,
-        duration: (hours, minutes) => (hours > 0 ? `${hours} h ${minutes} min` : `${minutes} min`),
-        reserveLine: (size) => `${size} always stays free so Windows keeps working.`,
-        stopNote: 'Stop ends it at once and deletes the filler.',
-        measuring: 'Measuring the drive…',
-        estimateFailed: (error) => `Couldn't measure the drive: ${error}`,
-        cancel: 'Cancel',
-        confirm: 'Add to this clean'
+        title: "เขียนทับพื้นที่ว่างของดิสก์",
+        body: "การทำงานนี้จะเขียนเลขศูนย์ทับพื้นที่ว่างบนไดรฟ์ แล้วลบไฟล์ที่ใช้เติมพื้นที่ทิ้ง ทำให้กู้คืนไฟล์ที่ลบไปก่อนหน้านี้ไม่ได้ และไม่ได้เพิ่มพื้นที่ว่าง",
+        ssdWarning: "บน SSD ที่มี TRIM สิ่งนี้ไม่มีประโยชน์และเพิ่มการสึกหรอจากการเขียน ควรใช้กับฮาร์ดดิสก์ หรือเมื่อคุณรู้ว่าจำเป็น",
+        driveLine: (drive) => `ไดรฟ์: ${drive}`,
+        writeLine: (size) => `จะเขียนประมาณ ${size}`,
+        timeLine: (duration, speed) => `ประมาณ ${duration} จากการทดสอบเขียนหนึ่งวินาทีที่ ${speed} ไดรฟ์จะช้าลงเมื่อเต็มขึ้น จึงอาจใช้เวลานานกว่านี้`,
+        duration: (hours, minutes) => (hours > 0 ? `${hours} ชม. ${minutes} นาที` : `${minutes} นาที`),
+        reserveLine: (size) => `จะเหลือพื้นที่ว่างไว้ ${size} เสมอ เพื่อให้ Windows ทำงานต่อได้`,
+        stopNote: "การกดหยุดจะสิ้นสุดทันทีและลบไฟล์ที่ใช้เติมพื้นที่",
+        measuring: "กำลังวัดไดรฟ์…",
+        estimateFailed: (error) => `วัดไดรฟ์ไม่ได้: ${error}`,
+        cancel: "ยกเลิก",
+        confirm: "เพิ่มในการล้างครั้งนี้"
       },
       stop: 'หยุด',
       rescan: 'สแกนใหม่',
       clean: 'ล้าง',
       tree: {
         selectCategoryAriaLabel: (category) => `เลือกทั้งหมดภายใต้ ${category}`,
-        atLeast: (size) => `at least ${size}`,
-        longRunning: 'Takes a long time',
+        atLeast: (size) => `อย่างน้อย ${size}`,
+        longRunning: "ใช้เวลานาน",
         losesData: 'สูญเสียข้อมูล',
         needsAdmin: 'ต้องการสิทธิ์ผู้ดูแลระบบ',
         notInstalled: 'ไม่ได้ติดตั้ง',
@@ -30522,7 +30522,7 @@ export const CATALOG = {
       },
       log: {
         scan: {
-          partial: (size) => `${size}, partial`,
+          partial: (size) => `${size} (บางส่วน)`,
           nothingToMeasure: "ไม่มีอะไรให้วัด",
           needsAdmin: "ต้องการสิทธิ์ผู้ดูแลระบบ",
           notInstalled: "ไม่ได้ติดตั้ง",
@@ -30530,10 +30530,10 @@ export const CATALOG = {
         },
         execute: {
           delete: (name) => `ลบ ${name}`,
-          wipe: (name) => `Wipe ${name}`,
-          wiped: (size) => `${size} written`,
-          wipeStopped: (size) => `stopped after ${size}`,
-          quarantine: (name) => `Quarantine ${name}`,
+          wipe: (name) => `เขียนทับ ${name}`,
+          wiped: (size) => `เขียนแล้ว ${size}`,
+          wipeStopped: (size) => `หยุดหลังจาก ${size}`,
+          quarantine: (name) => `ย้าย ${name} ไปยังกักกัน`,
           recycle: (name) => `ส่ง ${name} ไปยังถังรีไซเคิล`,
           clear: (name) => `ล้าง ${name}`,
           compact: (name) => `บีบอัด ${name}`,
@@ -30784,17 +30784,17 @@ export const CATALOG = {
         description: 'Tüm bir sürücüyü tararken sürücünün boş alanını bir blok daha olarak çizer, böylece her klasör kullanılan alanın değil, sürücünün bir payı olarak okunur.'
       },
       deepCleanRemoval: {
-        title: 'When Deep Clean removes files',
+        title: "Derin Temizlik dosyaları kaldırırken",
         quarantine: {
-          label: 'Move to Quarantine (you can put it back)',
-          description: "Nothing is deleted. Files go into Prune's Quarantine and the drive gets the space back when you empty it."
+          label: "Karantinaya taşı (geri koyabilirsiniz)",
+          description: "Hiçbir şey silinmez. Dosyalar Prune'un Karantinasına gider; siz Karantinayı boşalttığınızda sürücü alanı geri alır."
         },
         delete: {
-          label: "Delete now (frees the space, can't be undone — like BleachBit)",
-          description: 'Files are removed as soon as you confirm, so the space is free straight away. Rules that lose data still ask first.'
+          label: "Şimdi sil (alanı boşaltır, geri alınamaz — BleachBit gibi)",
+          description: "Dosyalar onayladığınız anda kaldırılır, böylece alan hemen boşalır. Veri kaybettiren kurallar yine de önce sorar."
         },
-        deleteWarning: "With Delete now, Clean can't be undone. Scheduled cleans still move files to Quarantine.",
-        autoQuarantineNote: 'Not used while Deep Clean deletes files immediately.'
+        deleteWarning: "Şimdi sil seçiliyken Temizle geri alınamaz. Zamanlanmış temizlikler dosyaları yine Karantinaya taşır.",
+        autoQuarantineNote: "Derin Temizlik dosyaları hemen sildiği sürece kullanılmaz."
       },
       autoQuarantine: {
         title: 'Otomatik karantina',
@@ -31312,13 +31312,13 @@ export const CATALOG = {
     deepClean: {
       title: 'Derin Temizlik',
       subtitle: "Prune'un bulmayı bildiği her önbellek, günlük, döküm ve kalıntı, tahmin edilmek yerine bu makinede ölçülür. Hiçbir şey hemen silinmez — Temizle'nin aldığı her şey önce Karantina'ya gider, oradan geri yükleyebilirsiniz.",
-      subtitleDelete: "Every cache, log, dump and leftover Prune knows how to find, measured on this machine rather than estimated. Clean deletes what you tick immediately and frees the space, the way BleachBit does. It can't be undone.",
+      subtitleDelete: "Prune'un bulmayı bildiği her önbellek, günlük, döküm ve kalıntı, tahmin edilmek yerine bu makinede ölçülür. Temizle, işaretlediklerinizi hemen siler ve alanı boşaltır, tıpkı BleachBit gibi. Geri alınamaz.",
       scanLog: {
         header: 'Tarama çıktısı',
         scanningAnnounce: (total) => `${total} konum taranıyor.`,
         finishedAnnounce: (scanned, total) => `Tarama tamamlandı. ${total} konumdan ${scanned} tanesi ölçüldü.`,
-        searching: (items) => `Searching your profile… ${items} items checked`,
-        wiping: (written, total) => `Writing zeros… ${written} of ${total}`,
+        searching: (items) => `Profiliniz aranıyor… ${items} öğe denetlendi`,
+        wiping: (written, total) => `Sıfırlar yazılıyor… ${written} / ${total}`,
         starting: 'Başlatılıyor…',
         idle: "Nelerin temizlenebileceğini ölçmek için Önizleme'ye basın."
       },
@@ -31327,11 +31327,11 @@ export const CATALOG = {
       cleanErrorPrefix: (error) => `Temizlenemedi: ${error}`,
       cleanupComplete: 'Temizlik tamamlandı.',
       resultFreed: (formatted) => `${formatted} boşaltıldı`,
-      resultMoved: (formatted) => `Moved ${formatted} to Quarantine. The space comes back when you empty it.`,
-      resultRecycled: (formatted) => `Moved ${formatted} to the Recycle Bin. The space comes back when you empty it.`,
-      openQuarantine: 'Open Quarantine',
-      resultWiped: (size) => `Wrote ${size} of zeros over the free space, then deleted it. No space was freed.`,
-      resultWipeStopped: (size) => `Stopped after writing ${size} of zeros over the free space. The filler was deleted.`,
+      resultMoved: (formatted) => `${formatted} Karantinaya taşındı. Alan, Karantinayı boşalttığınızda geri gelir.`,
+      resultRecycled: (formatted) => `${formatted} Geri Dönüşüm Kutusuna taşındı. Alan, kutuyu boşalttığınızda geri gelir.`,
+      openQuarantine: "Karantinayı aç",
+      resultWiped: (size) => `Boş alanın üzerine ${size} sıfır yazıldı, ardından bu dolgu dosyası silindi. Hiç alan boşaltılmadı.`,
+      resultWipeStopped: (size) => `Boş alanın üzerine ${size} sıfır yazıldıktan sonra durduruldu. Dolgu dosyası silindi.`,
       resultLockedSuffix: (count) => ` — ${count} kilitli dosya atlandı`,
       before: {
         body: "Prune, tahmin etmek yerine diskteki her kategoriyi gerçekten ölçer, bu da yaklaşık yarım dakika sürer.",
@@ -31344,9 +31344,9 @@ export const CATALOG = {
         notMeasuredYet: 'henüz ölçülmedi',
         previewFirst: "Nelerin boşaltılacağını görmek için önce önizleyin.",
         unmeasuredSuffix: (count) => ` · ${count} ölçülmedi`,
-        modeQuarantine: 'Moves to Quarantine.',
-        modeRecycle: 'Moves to the Recycle Bin.',
-        modeDelete: 'Deletes immediately.',
+        modeQuarantine: "Karantinaya taşınır.",
+        modeRecycle: "Geri Dönüşüm Kutusuna taşınır.",
+        modeDelete: "Hemen silinir.",
         selectEverything: 'Tümünü seç',
         clear: 'Temizle',
         selectedCount: (count) => `${count} seçildi`
@@ -31355,35 +31355,35 @@ export const CATALOG = {
         prompt: (count, sizeKnown, formatted) => `${count} öğe (${sizeKnown ? formatted : 'boyut ölçülmedi'}) karantinaya taşınsın mı?`,
         cancel: 'İptal',
         confirmButton: "Karantinaya taşı",
-        promptDelete: (count, sizeKnown, formatted) => `Delete ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'})? This can't be undone.`,
-        deleteButton: 'Delete',
-        promptRecycle: (count, sizeKnown, formatted) => `Move ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'}) to the Recycle Bin?`,
-        recycleButton: 'Move to Recycle Bin',
-        wipeNote: 'Includes wiping free disk space, which can take hours.',
+        promptDelete: (count, sizeKnown, formatted) => `${count} öğe (${sizeKnown ? formatted : 'boyut ölçülmedi'}) silinsin mi? Bu işlem geri alınamaz.`,
+        deleteButton: "Sil",
+        promptRecycle: (count, sizeKnown, formatted) => `${count} öğe (${sizeKnown ? formatted : 'boyut ölçülmedi'}) Geri Dönüşüm Kutusuna taşınsın mı?`,
+        recycleButton: "Geri Dönüşüm Kutusuna taşı",
+        wipeNote: "Boş disk alanının üzerine yazmayı da içerir; bu saatler sürebilir.",
         cleaning: 'Temizleniyor…'
       },
       wipe: {
-        title: 'Wipe free disk space',
-        body: "This overwrites the free space on the drive with zeros, then deletes the filler, so files you deleted earlier can't be recovered. It frees no space.",
-        ssdWarning: 'On an SSD with TRIM this does nothing useful and adds write wear. Use it on a hard disk, or when you know you need it.',
-        driveLine: (drive) => `Drive: ${drive}`,
-        writeLine: (size) => `About ${size} will be written.`,
-        timeLine: (duration, speed) => `Roughly ${duration}, from a one-second write test at ${speed}. The drive slows as it fills, so it can take longer.`,
-        duration: (hours, minutes) => (hours > 0 ? `${hours} h ${minutes} min` : `${minutes} min`),
-        reserveLine: (size) => `${size} always stays free so Windows keeps working.`,
-        stopNote: 'Stop ends it at once and deletes the filler.',
-        measuring: 'Measuring the drive…',
-        estimateFailed: (error) => `Couldn't measure the drive: ${error}`,
-        cancel: 'Cancel',
-        confirm: 'Add to this clean'
+        title: "Boş disk alanının üzerine yaz",
+        body: "Bu, sürücüdeki boş alanın üzerine sıfırlar yazar, ardından dolgu dosyasını siler; böylece daha önce sildiğiniz dosyalar kurtarılamaz. Hiç alan boşaltmaz.",
+        ssdWarning: "TRIM'li bir SSD'de bu işe yaramaz ve yazma aşınmasını artırır. Sabit diskte veya gerektiğini biliyorsanız kullanın.",
+        driveLine: (drive) => `Sürücü: ${drive}`,
+        writeLine: (size) => `Yaklaşık ${size} yazılacak.`,
+        timeLine: (duration, speed) => `${speed} hızındaki bir saniyelik yazma testine göre yaklaşık ${duration}. Sürücü doldukça yavaşlar, bu yüzden daha uzun sürebilir.`,
+        duration: (hours, minutes) => (hours > 0 ? `${hours} sa ${minutes} dk` : `${minutes} dk`),
+        reserveLine: (size) => `Windows çalışmaya devam etsin diye her zaman ${size} boş kalır.`,
+        stopNote: "Durdur, işlemi hemen sonlandırır ve dolgu dosyasını siler.",
+        measuring: "Sürücü ölçülüyor…",
+        estimateFailed: (error) => `Sürücü ölçülemedi: ${error}`,
+        cancel: "İptal",
+        confirm: "Bu temizliğe ekle"
       },
       stop: 'Durdur',
       rescan: 'Yeniden tara',
       clean: 'Temizle',
       tree: {
         selectCategoryAriaLabel: (category) => `${category} altındaki her şeyi seç`,
-        atLeast: (size) => `at least ${size}`,
-        longRunning: 'Takes a long time',
+        atLeast: (size) => `en az ${size}`,
+        longRunning: "Uzun sürer",
         losesData: 'Veri kaybı',
         needsAdmin: 'yönetici gerektirir',
         notInstalled: 'yüklü değil',
@@ -31400,7 +31400,7 @@ export const CATALOG = {
       },
       log: {
         scan: {
-          partial: (size) => `${size}, partial`,
+          partial: (size) => `${size}, kısmi`,
           nothingToMeasure: "ölçülecek bir şey yok",
           needsAdmin: "yönetici gerektirir",
           notInstalled: "yüklü değil",
@@ -31408,10 +31408,10 @@ export const CATALOG = {
         },
         execute: {
           delete: (name) => `${name} sil`,
-          wipe: (name) => `Wipe ${name}`,
-          wiped: (size) => `${size} written`,
-          wipeStopped: (size) => `stopped after ${size}`,
-          quarantine: (name) => `Quarantine ${name}`,
+          wipe: (name) => `${name} üzerine yaz`,
+          wiped: (size) => `${size} yazıldı`,
+          wipeStopped: (size) => `${size} yazıldıktan sonra durduruldu`,
+          quarantine: (name) => `${name} karantinaya taşı`,
           recycle: (name) => `${name} Geri Dönüşüm Kutusuna gönder`,
           clear: (name) => `${name} temizle`,
           compact: (name) => `${name} sıkıştır`,
@@ -31662,17 +31662,17 @@ export const CATALOG = {
         description: 'Малює вільне місце диска як ще один блок під час сканування всього диска, щоб кожна папка читалася як частка диска, а не зайнятого простору.'
       },
       deepCleanRemoval: {
-        title: 'When Deep Clean removes files',
+        title: "Як Глибоке очищення прибирає файли",
         quarantine: {
-          label: 'Move to Quarantine (you can put it back)',
-          description: "Nothing is deleted. Files go into Prune's Quarantine and the drive gets the space back when you empty it."
+          label: "Перемістити в карантин (можна повернути)",
+          description: "Нічого не видаляється. Файли потрапляють у карантин Prune, а місце на диску звільниться, коли ви очистите карантин."
         },
         delete: {
-          label: "Delete now (frees the space, can't be undone — like BleachBit)",
-          description: 'Files are removed as soon as you confirm, so the space is free straight away. Rules that lose data still ask first.'
+          label: "Видалити одразу (місце звільняється, скасувати не можна — як у BleachBit)",
+          description: "Файли видаляються одразу після підтвердження, тож місце звільняється негайно. Засоби очищення, що призводять до втрати даних, і далі питають наперед."
         },
-        deleteWarning: "With Delete now, Clean can't be undone. Scheduled cleans still move files to Quarantine.",
-        autoQuarantineNote: 'Not used while Deep Clean deletes files immediately.'
+        deleteWarning: "У режимі «Видалити одразу» очищення не можна скасувати. Очищення за розкладом і далі переміщують файли в карантин.",
+        autoQuarantineNote: "Не діє, поки Глибоке очищення видаляє файли одразу."
       },
       autoQuarantine: {
         title: 'Автоматичний карантин',
@@ -32190,13 +32190,13 @@ export const CATALOG = {
     deepClean: {
       title: 'Глибоке очищення',
       subtitle: 'Кожен кеш, журнал, дамп і залишок, які вміє знаходити Prune, вимірюється на цьому комп\'ютері, а не оцінюється. Нічого не видаляється одразу — усе, що забирає Очищення, спершу потрапляє в карантин, звідки це можна повернути.',
-      subtitleDelete: "Every cache, log, dump and leftover Prune knows how to find, measured on this machine rather than estimated. Clean deletes what you tick immediately and frees the space, the way BleachBit does. It can't be undone.",
+      subtitleDelete: "Кожен кеш, журнал, дамп і залишок, які вміє знаходити Prune, вимірюється на цьому комп'ютері, а не оцінюється. Очищення одразу видаляє позначене й звільняє місце — так само, як це робить BleachBit. Скасувати це не можна.",
       scanLog: {
         header: 'Вивід сканування',
         scanningAnnounce: (total) => `Сканування місць: ${total}.`,
         finishedAnnounce: (scanned, total) => `Сканування завершено. Виміряно місць: ${scanned} з ${total}.`,
-        searching: (items) => `Searching your profile… ${items} items checked`,
-        wiping: (written, total) => `Writing zeros… ${written} of ${total}`,
+        searching: (items) => `Пошук у вашому профілі… перевірено елементів: ${items}`,
+        wiping: (written, total) => `Запис нулів… ${written} із ${total}`,
         starting: 'Запуск…',
         idle: "Натисніть «Попередній перегляд», щоб виміряти, що можна очистити."
       },
@@ -32205,11 +32205,11 @@ export const CATALOG = {
       cleanErrorPrefix: (error) => `Не вдалося виконати очищення: ${error}`,
       cleanupComplete: 'Очищення завершено.',
       resultFreed: (formatted) => `Звільнено ${formatted}`,
-      resultMoved: (formatted) => `Moved ${formatted} to Quarantine. The space comes back when you empty it.`,
-      resultRecycled: (formatted) => `Moved ${formatted} to the Recycle Bin. The space comes back when you empty it.`,
-      openQuarantine: 'Open Quarantine',
-      resultWiped: (size) => `Wrote ${size} of zeros over the free space, then deleted it. No space was freed.`,
-      resultWipeStopped: (size) => `Stopped after writing ${size} of zeros over the free space. The filler was deleted.`,
+      resultMoved: (formatted) => `Переміщено в карантин: ${formatted}. Місце звільниться, коли ви очистите карантин.`,
+      resultRecycled: (formatted) => `Переміщено в Кошик: ${formatted}. Місце звільниться, коли ви очистите Кошик.`,
+      openQuarantine: "Відкрити карантин",
+      resultWiped: (size) => `Вільне місце перезаписано нулями (${size}), після чого файл-заповнювач видалено. Місце не звільнено.`,
+      resultWipeStopped: (size) => `Зупинено після запису нулів (${size}) у вільне місце. Файл-заповнювач видалено.`,
       resultLockedSuffix: (count) => ` — пропущено заблокованих файлів: ${count}`,
       before: {
         body: 'Prune справді вимірює кожну категорію на диску, а не оцінює її, що займає близько півхвилини.',
@@ -32222,9 +32222,9 @@ export const CATALOG = {
         notMeasuredYet: 'ще не виміряно',
         previewFirst: "Спочатку виконайте попередній перегляд, щоб побачити, що буде звільнено.",
         unmeasuredSuffix: (count) => ` · не виміряно: ${count}`,
-        modeQuarantine: 'Moves to Quarantine.',
-        modeRecycle: 'Moves to the Recycle Bin.',
-        modeDelete: 'Deletes immediately.',
+        modeQuarantine: "Переміщує в карантин.",
+        modeRecycle: "Переміщує в Кошик.",
+        modeDelete: "Видаляє одразу.",
         selectEverything: 'Вибрати все',
         clear: 'Очистити',
         selectedCount: (count) => `Вибрано: ${count}`
@@ -32233,35 +32233,35 @@ export const CATALOG = {
         prompt: (count, sizeKnown, formatted) => `Перемістити елементів: ${count} (${sizeKnown ? formatted : 'розмір не виміряно'}) у карантин?`,
         cancel: 'Скасувати',
         confirmButton: "Перемістити в карантин",
-        promptDelete: (count, sizeKnown, formatted) => `Delete ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'})? This can't be undone.`,
-        deleteButton: 'Delete',
-        promptRecycle: (count, sizeKnown, formatted) => `Move ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'}) to the Recycle Bin?`,
-        recycleButton: 'Move to Recycle Bin',
-        wipeNote: 'Includes wiping free disk space, which can take hours.',
+        promptDelete: (count, sizeKnown, formatted) => `Видалити елементів: ${count} (${sizeKnown ? formatted : 'розмір не виміряно'})? Скасувати це не можна.`,
+        deleteButton: "Видалити",
+        promptRecycle: (count, sizeKnown, formatted) => `Перемістити елементів: ${count} (${sizeKnown ? formatted : 'розмір не виміряно'}) у Кошик?`,
+        recycleButton: "Перемістити в Кошик",
+        wipeNote: "Включає затирання вільного місця на диску, що може тривати кілька годин.",
         cleaning: 'Очищення…'
       },
       wipe: {
-        title: 'Wipe free disk space',
-        body: "This overwrites the free space on the drive with zeros, then deletes the filler, so files you deleted earlier can't be recovered. It frees no space.",
-        ssdWarning: 'On an SSD with TRIM this does nothing useful and adds write wear. Use it on a hard disk, or when you know you need it.',
-        driveLine: (drive) => `Drive: ${drive}`,
-        writeLine: (size) => `About ${size} will be written.`,
-        timeLine: (duration, speed) => `Roughly ${duration}, from a one-second write test at ${speed}. The drive slows as it fills, so it can take longer.`,
-        duration: (hours, minutes) => (hours > 0 ? `${hours} h ${minutes} min` : `${minutes} min`),
-        reserveLine: (size) => `${size} always stays free so Windows keeps working.`,
-        stopNote: 'Stop ends it at once and deletes the filler.',
-        measuring: 'Measuring the drive…',
-        estimateFailed: (error) => `Couldn't measure the drive: ${error}`,
-        cancel: 'Cancel',
-        confirm: 'Add to this clean'
+        title: "Затерти вільне місце на диску",
+        body: "Вільне місце на диску перезаписується нулями, після чого файл-заповнювач видаляється, щоб раніше видалені файли не можна було відновити. Місце при цьому не звільняється.",
+        ssdWarning: "На SSD із TRIM це нічого корисного не дає й лише збільшує знос від запису. Використовуйте на жорсткому диску або якщо точно знаєте, що це потрібно.",
+        driveLine: (drive) => `Диск: ${drive}`,
+        writeLine: (size) => `Буде записано приблизно ${size}.`,
+        timeLine: (duration, speed) => `Приблизно ${duration} — за результатом односекундного тесту запису (${speed}). У міру заповнення диск сповільнюється, тому це може тривати довше.`,
+        duration: (hours, minutes) => (hours > 0 ? `${hours} год ${minutes} хв` : `${minutes} хв`),
+        reserveLine: (size) => `Вільним завжди залишається ${size}, щоб Windows продовжувала працювати.`,
+        stopNote: "«Зупинити» негайно припиняє процес і видаляє файл-заповнювач.",
+        measuring: "Вимірювання диска…",
+        estimateFailed: (error) => `Не вдалося виміряти диск: ${error}`,
+        cancel: "Скасувати",
+        confirm: "Додати до цього очищення"
       },
       stop: 'Зупинити',
       rescan: 'Пересканувати',
       clean: 'Очистити',
       tree: {
         selectCategoryAriaLabel: (category) => `Вибрати все в категорії ${category}`,
-        atLeast: (size) => `at least ${size}`,
-        longRunning: 'Takes a long time',
+        atLeast: (size) => `принаймні ${size}`,
+        longRunning: "Триває довго",
         losesData: 'Втрата даних',
         needsAdmin: 'потрібні права адміністратора',
         notInstalled: 'не встановлено',
@@ -32278,7 +32278,7 @@ export const CATALOG = {
       },
       log: {
         scan: {
-          partial: (size) => `${size}, partial`,
+          partial: (size) => `${size}, частково`,
           nothingToMeasure: "нічого вимірювати",
           needsAdmin: "потрібні права адміністратора",
           notInstalled: "не встановлено",
@@ -32286,10 +32286,10 @@ export const CATALOG = {
         },
         execute: {
           delete: (name) => `Видалити ${name}`,
-          wipe: (name) => `Wipe ${name}`,
-          wiped: (size) => `${size} written`,
-          wipeStopped: (size) => `stopped after ${size}`,
-          quarantine: (name) => `Quarantine ${name}`,
+          wipe: (name) => `Затерти ${name}`,
+          wiped: (size) => `записано ${size}`,
+          wipeStopped: (size) => `зупинено після ${size}`,
+          quarantine: (name) => `Надіслати ${name} у карантин`,
           recycle: (name) => `Надіслати ${name} у кошик`,
           clear: (name) => `Очистити ${name}`,
           compact: (name) => `Стиснути ${name}`,
@@ -32538,17 +32538,17 @@ export const CATALOG = {
         description: 'Vẽ dung lượng trống của ổ đĩa như một khối khác khi bạn quét toàn bộ ổ đĩa, để mỗi thư mục được đọc như một phần của ổ đĩa thay vì của dung lượng đang sử dụng.'
       },
       deepCleanRemoval: {
-        title: 'When Deep Clean removes files',
+        title: "Khi Dọn dẹp sâu loại bỏ tệp",
         quarantine: {
-          label: 'Move to Quarantine (you can put it back)',
-          description: "Nothing is deleted. Files go into Prune's Quarantine and the drive gets the space back when you empty it."
+          label: "Chuyển vào khu cách ly (có thể khôi phục)",
+          description: "Không có gì bị xóa. Tệp được chuyển vào khu cách ly của Prune, và ổ đĩa chỉ lấy lại dung lượng khi bạn làm trống khu cách ly."
         },
         delete: {
-          label: "Delete now (frees the space, can't be undone — like BleachBit)",
-          description: 'Files are removed as soon as you confirm, so the space is free straight away. Rules that lose data still ask first.'
+          label: "Xóa ngay (giải phóng dung lượng, không thể hoàn tác — giống BleachBit)",
+          description: "Tệp bị xóa ngay khi bạn xác nhận nên dung lượng được giải phóng tức thì. Các quy tắc làm mất dữ liệu vẫn hỏi trước."
         },
-        deleteWarning: "With Delete now, Clean can't be undone. Scheduled cleans still move files to Quarantine.",
-        autoQuarantineNote: 'Not used while Deep Clean deletes files immediately.'
+        deleteWarning: "Với Xóa ngay, không thể hoàn tác thao tác Dọn dẹp. Các lần dọn dẹp theo lịch vẫn chuyển tệp vào khu cách ly.",
+        autoQuarantineNote: "Không dùng khi Dọn dẹp sâu xóa tệp ngay lập tức."
       },
       autoQuarantine: {
         title: 'Cách ly tự động',
@@ -33066,13 +33066,13 @@ export const CATALOG = {
     deepClean: {
       title: 'Dọn dẹp sâu',
       subtitle: "Mọi bộ nhớ đệm, nhật ký, tệp dump và tệp sót lại mà Prune biết cách tìm, được đo trên máy này thay vì ước tính. Không có gì bị xóa ngay lập tức — mọi thứ mà Dọn dẹp lấy đi đều vào khu cách ly trước, nơi bạn có thể khôi phục nó.",
-      subtitleDelete: "Every cache, log, dump and leftover Prune knows how to find, measured on this machine rather than estimated. Clean deletes what you tick immediately and frees the space, the way BleachBit does. It can't be undone.",
+      subtitleDelete: "Mọi bộ nhớ đệm, nhật ký, tệp dump và tệp sót lại mà Prune biết cách tìm, được đo trên máy này thay vì ước tính. Dọn dẹp xóa ngay những gì bạn đã chọn và giải phóng dung lượng, giống cách BleachBit làm. Không thể hoàn tác.",
       scanLog: {
         header: 'Kết quả quét',
         scanningAnnounce: (total) => `Đang quét ${total} vị trí.`,
         finishedAnnounce: (scanned, total) => `Quét hoàn tất. Đã đo ${scanned} trong số ${total} vị trí.`,
-        searching: (items) => `Searching your profile… ${items} items checked`,
-        wiping: (written, total) => `Writing zeros… ${written} of ${total}`,
+        searching: (items) => `Đang tìm trong hồ sơ của bạn… đã kiểm tra ${items} mục`,
+        wiping: (written, total) => `Đang ghi số 0… ${written} / ${total}`,
         starting: 'Đang bắt đầu…',
         idle: "Nhấn Xem trước để đo những gì có thể dọn dẹp."
       },
@@ -33081,11 +33081,11 @@ export const CATALOG = {
       cleanErrorPrefix: (error) => `Không thể dọn dẹp: ${error}`,
       cleanupComplete: 'Dọn dẹp hoàn tất.',
       resultFreed: (formatted) => `Đã giải phóng ${formatted}`,
-      resultMoved: (formatted) => `Moved ${formatted} to Quarantine. The space comes back when you empty it.`,
-      resultRecycled: (formatted) => `Moved ${formatted} to the Recycle Bin. The space comes back when you empty it.`,
-      openQuarantine: 'Open Quarantine',
-      resultWiped: (size) => `Wrote ${size} of zeros over the free space, then deleted it. No space was freed.`,
-      resultWipeStopped: (size) => `Stopped after writing ${size} of zeros over the free space. The filler was deleted.`,
+      resultMoved: (formatted) => `Đã chuyển ${formatted} vào khu cách ly. Dung lượng chỉ được trả lại khi bạn làm trống khu cách ly.`,
+      resultRecycled: (formatted) => `Đã chuyển ${formatted} vào Thùng rác. Dung lượng chỉ được trả lại khi bạn làm trống Thùng rác.`,
+      openQuarantine: "Mở khu cách ly",
+      resultWiped: (size) => `Đã ghi ${size} số 0 đè lên dung lượng trống, rồi xóa tệp đệm. Không có dung lượng nào được giải phóng.`,
+      resultWipeStopped: (size) => `Đã dừng sau khi ghi ${size} số 0 đè lên dung lượng trống. Tệp đệm đã được xóa.`,
       resultLockedSuffix: (count) => ` — đã bỏ qua ${count} tệp bị khóa`,
       before: {
         body: 'Prune thực sự đo từng danh mục trên đĩa thay vì ước tính, việc này mất khoảng nửa phút.',
@@ -33098,9 +33098,9 @@ export const CATALOG = {
         notMeasuredYet: 'chưa đo',
         previewFirst: "Hãy xem trước để biết sẽ giải phóng được bao nhiêu.",
         unmeasuredSuffix: (count) => ` · ${count} chưa đo`,
-        modeQuarantine: 'Moves to Quarantine.',
-        modeRecycle: 'Moves to the Recycle Bin.',
-        modeDelete: 'Deletes immediately.',
+        modeQuarantine: "Chuyển vào khu cách ly.",
+        modeRecycle: "Chuyển vào Thùng rác.",
+        modeDelete: "Xóa ngay lập tức.",
         selectEverything: 'Chọn tất cả',
         clear: 'Xóa',
         selectedCount: (count) => `${count} đã chọn`
@@ -33109,35 +33109,35 @@ export const CATALOG = {
         prompt: (count, sizeKnown, formatted) => `Chuyển ${count} mục (${sizeKnown ? formatted : 'chưa đo kích thước'}) vào khu cách ly?`,
         cancel: 'Hủy',
         confirmButton: "Chuyển vào khu cách ly",
-        promptDelete: (count, sizeKnown, formatted) => `Delete ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'})? This can't be undone.`,
-        deleteButton: 'Delete',
-        promptRecycle: (count, sizeKnown, formatted) => `Move ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'}) to the Recycle Bin?`,
-        recycleButton: 'Move to Recycle Bin',
-        wipeNote: 'Includes wiping free disk space, which can take hours.',
+        promptDelete: (count, sizeKnown, formatted) => `Xóa ${count} mục (${sizeKnown ? formatted : 'chưa đo kích thước'})? Không thể hoàn tác.`,
+        deleteButton: "Xóa",
+        promptRecycle: (count, sizeKnown, formatted) => `Chuyển ${count} mục (${sizeKnown ? formatted : 'chưa đo kích thước'}) vào Thùng rác?`,
+        recycleButton: "Chuyển vào Thùng rác",
+        wipeNote: "Bao gồm xóa sạch dung lượng đĩa trống, có thể mất hàng giờ.",
         cleaning: 'Đang dọn dẹp…'
       },
       wipe: {
-        title: 'Wipe free disk space',
-        body: "This overwrites the free space on the drive with zeros, then deletes the filler, so files you deleted earlier can't be recovered. It frees no space.",
-        ssdWarning: 'On an SSD with TRIM this does nothing useful and adds write wear. Use it on a hard disk, or when you know you need it.',
-        driveLine: (drive) => `Drive: ${drive}`,
-        writeLine: (size) => `About ${size} will be written.`,
-        timeLine: (duration, speed) => `Roughly ${duration}, from a one-second write test at ${speed}. The drive slows as it fills, so it can take longer.`,
-        duration: (hours, minutes) => (hours > 0 ? `${hours} h ${minutes} min` : `${minutes} min`),
-        reserveLine: (size) => `${size} always stays free so Windows keeps working.`,
-        stopNote: 'Stop ends it at once and deletes the filler.',
-        measuring: 'Measuring the drive…',
-        estimateFailed: (error) => `Couldn't measure the drive: ${error}`,
-        cancel: 'Cancel',
-        confirm: 'Add to this clean'
+        title: "Xóa sạch dung lượng đĩa trống",
+        body: "Thao tác này ghi đè dung lượng trống trên ổ đĩa bằng số 0, rồi xóa tệp đệm, để các tệp bạn đã xóa trước đó không thể khôi phục. Nó không giải phóng thêm dung lượng.",
+        ssdWarning: "Trên SSD có TRIM, việc này không có tác dụng gì và làm tăng hao mòn do ghi. Hãy dùng cho ổ cứng HDD, hoặc khi bạn biết mình cần.",
+        driveLine: (drive) => `Ổ đĩa: ${drive}`,
+        writeLine: (size) => `Sẽ ghi khoảng ${size}.`,
+        timeLine: (duration, speed) => `Khoảng ${duration}, dựa trên bài kiểm tra ghi trong một giây ở tốc độ ${speed}. Ổ đĩa chậm dần khi đầy nên có thể lâu hơn.`,
+        duration: (hours, minutes) => (hours > 0 ? `${hours} giờ ${minutes} phút` : `${minutes} phút`),
+        reserveLine: (size) => `Luôn để trống ${size} để Windows tiếp tục hoạt động.`,
+        stopNote: "Nhấn Dừng sẽ kết thúc ngay và xóa tệp đệm.",
+        measuring: "Đang đo ổ đĩa…",
+        estimateFailed: (error) => `Không thể đo ổ đĩa: ${error}`,
+        cancel: "Hủy",
+        confirm: "Thêm vào lần dọn dẹp này"
       },
       stop: 'Dừng',
       rescan: 'Quét lại',
       clean: 'Dọn dẹp',
       tree: {
         selectCategoryAriaLabel: (category) => `Chọn tất cả trong ${category}`,
-        atLeast: (size) => `at least ${size}`,
-        longRunning: 'Takes a long time',
+        atLeast: (size) => `ít nhất ${size}`,
+        longRunning: "Mất nhiều thời gian",
         losesData: 'Mất dữ liệu',
         needsAdmin: 'cần quyền quản trị',
         notInstalled: 'chưa cài đặt',
@@ -33154,7 +33154,7 @@ export const CATALOG = {
       },
       log: {
         scan: {
-          partial: (size) => `${size}, partial`,
+          partial: (size) => `${size}, một phần`,
           nothingToMeasure: "không có gì để đo",
           needsAdmin: "cần quyền quản trị",
           notInstalled: "chưa cài đặt",
@@ -33162,10 +33162,10 @@ export const CATALOG = {
         },
         execute: {
           delete: (name) => `Xóa ${name}`,
-          wipe: (name) => `Wipe ${name}`,
-          wiped: (size) => `${size} written`,
-          wipeStopped: (size) => `stopped after ${size}`,
-          quarantine: (name) => `Quarantine ${name}`,
+          wipe: (name) => `Xóa sạch ${name}`,
+          wiped: (size) => `đã ghi ${size}`,
+          wipeStopped: (size) => `đã dừng sau ${size}`,
+          quarantine: (name) => `Chuyển ${name} vào khu cách ly`,
           recycle: (name) => `Gửi ${name} vào Thùng rác`,
           clear: (name) => `Dọn sạch ${name}`,
           compact: (name) => `Nén ${name}`,
@@ -33416,17 +33416,17 @@ export const CATALOG = {
         description: '扫描整个驱动器时，将驱动器的可用空间绘制为另一个色块，这样每个文件夹显示的就是占驱动器的比例，而不是占已用空间的比例。'
       },
       deepCleanRemoval: {
-        title: 'When Deep Clean removes files',
+        title: "深度清理移除文件时",
         quarantine: {
-          label: 'Move to Quarantine (you can put it back)',
-          description: "Nothing is deleted. Files go into Prune's Quarantine and the drive gets the space back when you empty it."
+          label: "移至隔离区（可以恢复）",
+          description: "不会删除任何内容。文件会进入 Prune 的隔离区，清空隔离区后，磁盘才会腾出空间。"
         },
         delete: {
-          label: "Delete now (frees the space, can't be undone — like BleachBit)",
-          description: 'Files are removed as soon as you confirm, so the space is free straight away. Rules that lose data still ask first.'
+          label: "立即删除（释放空间，无法撤销——与 BleachBit 相同）",
+          description: "确认后文件会立即被删除，空间马上释放。会丢失数据的规则仍会先询问。"
         },
-        deleteWarning: "With Delete now, Clean can't be undone. Scheduled cleans still move files to Quarantine.",
-        autoQuarantineNote: 'Not used while Deep Clean deletes files immediately.'
+        deleteWarning: "选择“立即删除”后，清理无法撤销。计划清理仍会将文件移至隔离区。",
+        autoQuarantineNote: "深度清理立即删除文件时，此项不适用。"
       },
       autoQuarantine: {
         title: '自动隔离',
@@ -33944,13 +33944,13 @@ export const CATALOG = {
     deepClean: {
       title: '深度清理',
       subtitle: "Prune 知道如何查找的每一个缓存、日志、转储和残留项，都是在这台机器上实际测量的，而非估算。没有任何内容会被直接删除——清理所取走的一切都会先进入隔离区，你可以从那里恢复。",
-      subtitleDelete: "Every cache, log, dump and leftover Prune knows how to find, measured on this machine rather than estimated. Clean deletes what you tick immediately and frees the space, the way BleachBit does. It can't be undone.",
+      subtitleDelete: "Prune 知道如何查找的每一个缓存、日志、转储和残留项，都是在这台机器上实际测量的，而非估算。清理会立即删除你勾选的内容并释放空间，与 BleachBit 的做法相同。此操作无法撤销。",
       scanLog: {
         header: '扫描输出',
         scanningAnnounce: (total) => `正在扫描 ${total} 个位置。`,
         finishedAnnounce: (scanned, total) => `扫描完成。已测量 ${total} 个位置中的 ${scanned} 个。`,
-        searching: (items) => `Searching your profile… ${items} items checked`,
-        wiping: (written, total) => `Writing zeros… ${written} of ${total}`,
+        searching: (items) => `正在搜索你的用户配置文件… 已检查 ${items} 项`,
+        wiping: (written, total) => `正在写入零… ${written} / ${total}`,
         starting: '正在开始…',
         idle: "点击“预览”以测量可清理的内容。"
       },
@@ -33959,11 +33959,11 @@ export const CATALOG = {
       cleanErrorPrefix: (error) => `无法清理：${error}`,
       cleanupComplete: '清理完成。',
       resultFreed: (formatted) => `已释放 ${formatted}`,
-      resultMoved: (formatted) => `Moved ${formatted} to Quarantine. The space comes back when you empty it.`,
-      resultRecycled: (formatted) => `Moved ${formatted} to the Recycle Bin. The space comes back when you empty it.`,
-      openQuarantine: 'Open Quarantine',
-      resultWiped: (size) => `Wrote ${size} of zeros over the free space, then deleted it. No space was freed.`,
-      resultWipeStopped: (size) => `Stopped after writing ${size} of zeros over the free space. The filler was deleted.`,
+      resultMoved: (formatted) => `已将 ${formatted} 移至隔离区。清空隔离区后才会腾出空间。`,
+      resultRecycled: (formatted) => `已将 ${formatted} 移至回收站。清空回收站后才会腾出空间。`,
+      openQuarantine: "打开隔离区",
+      resultWiped: (size) => `已用零覆盖可用空间（共写入 ${size}），随后删除了填充文件。未释放任何空间。`,
+      resultWipeStopped: (size) => `已在向可用空间写入 ${size} 的零后停止，填充文件已删除。`,
       resultLockedSuffix: (count) => ` — 跳过了 ${count} 个被锁定的文件`,
       before: {
         body: 'Prune 会实际测量磁盘上的每个类别，而不是估算，这大约需要半分钟。',
@@ -33976,9 +33976,9 @@ export const CATALOG = {
         notMeasuredYet: '尚未测量',
         previewFirst: "请先预览，查看将释放多少空间。",
         unmeasuredSuffix: (count) => ` · ${count} 项未测量`,
-        modeQuarantine: 'Moves to Quarantine.',
-        modeRecycle: 'Moves to the Recycle Bin.',
-        modeDelete: 'Deletes immediately.',
+        modeQuarantine: "移至隔离区。",
+        modeRecycle: "移至回收站。",
+        modeDelete: "立即删除。",
         selectEverything: '全选',
         clear: '清除',
         selectedCount: (count) => `已选 ${count} 项`
@@ -33987,35 +33987,35 @@ export const CATALOG = {
         prompt: (count, sizeKnown, formatted) => `要将 ${count} 个项目（${sizeKnown ? formatted : '大小未测量'}）移至隔离区吗？`,
         cancel: '取消',
         confirmButton: "移至隔离区",
-        promptDelete: (count, sizeKnown, formatted) => `Delete ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'})? This can't be undone.`,
-        deleteButton: 'Delete',
-        promptRecycle: (count, sizeKnown, formatted) => `Move ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'}) to the Recycle Bin?`,
-        recycleButton: 'Move to Recycle Bin',
-        wipeNote: 'Includes wiping free disk space, which can take hours.',
+        promptDelete: (count, sizeKnown, formatted) => `要删除 ${count} 个项目（${sizeKnown ? formatted : '大小未测量'}）吗？此操作无法撤销。`,
+        deleteButton: "删除",
+        promptRecycle: (count, sizeKnown, formatted) => `要将 ${count} 个项目（${sizeKnown ? formatted : '大小未测量'}）移至回收站吗？`,
+        recycleButton: "移至回收站",
+        wipeNote: "包含擦除可用磁盘空间，可能需要数小时。",
         cleaning: '正在清理…'
       },
       wipe: {
-        title: 'Wipe free disk space',
-        body: "This overwrites the free space on the drive with zeros, then deletes the filler, so files you deleted earlier can't be recovered. It frees no space.",
-        ssdWarning: 'On an SSD with TRIM this does nothing useful and adds write wear. Use it on a hard disk, or when you know you need it.',
-        driveLine: (drive) => `Drive: ${drive}`,
-        writeLine: (size) => `About ${size} will be written.`,
-        timeLine: (duration, speed) => `Roughly ${duration}, from a one-second write test at ${speed}. The drive slows as it fills, so it can take longer.`,
-        duration: (hours, minutes) => (hours > 0 ? `${hours} h ${minutes} min` : `${minutes} min`),
-        reserveLine: (size) => `${size} always stays free so Windows keeps working.`,
-        stopNote: 'Stop ends it at once and deletes the filler.',
-        measuring: 'Measuring the drive…',
-        estimateFailed: (error) => `Couldn't measure the drive: ${error}`,
-        cancel: 'Cancel',
-        confirm: 'Add to this clean'
+        title: "擦除可用磁盘空间",
+        body: "这会用零覆盖驱动器上的可用空间，然后删除填充文件，使你之前删除的文件无法恢复。它不会释放任何空间。",
+        ssdWarning: "在支持 TRIM 的 SSD 上，这没有实际作用，还会增加写入损耗。请用于机械硬盘，或在你确定需要时使用。",
+        driveLine: (drive) => `驱动器：${drive}`,
+        writeLine: (size) => `将写入约 ${size}。`,
+        timeLine: (duration, speed) => `预计约 ${duration}（根据一秒钟的写入测试，速度为 ${speed}）。驱动器写得越满速度越慢，因此实际可能更久。`,
+        duration: (hours, minutes) => (hours > 0 ? `${hours} 小时 ${minutes} 分钟` : `${minutes} 分钟`),
+        reserveLine: (size) => `始终保留 ${size} 的可用空间，确保 Windows 正常运行。`,
+        stopNote: "点击“停止”会立即结束，并删除填充文件。",
+        measuring: "正在测量驱动器…",
+        estimateFailed: (error) => `无法测量驱动器：${error}`,
+        cancel: "取消",
+        confirm: "添加到本次清理"
       },
       stop: '停止',
       rescan: '重新扫描',
       clean: '清理',
       tree: {
         selectCategoryAriaLabel: (category) => `全选 ${category} 下的所有项`,
-        atLeast: (size) => `at least ${size}`,
-        longRunning: 'Takes a long time',
+        atLeast: (size) => `至少 ${size}`,
+        longRunning: "耗时较长",
         losesData: '会丢失数据',
         needsAdmin: '需要管理员权限',
         notInstalled: '未安装',
@@ -34032,7 +34032,7 @@ export const CATALOG = {
       },
       log: {
         scan: {
-          partial: (size) => `${size}, partial`,
+          partial: (size) => `${size}，部分`,
           nothingToMeasure: "无可测量内容",
           needsAdmin: "需要管理员权限",
           notInstalled: "未安装",
@@ -34040,10 +34040,10 @@ export const CATALOG = {
         },
         execute: {
           delete: (name) => `删除${name}`,
-          wipe: (name) => `Wipe ${name}`,
-          wiped: (size) => `${size} written`,
-          wipeStopped: (size) => `stopped after ${size}`,
-          quarantine: (name) => `Quarantine ${name}`,
+          wipe: (name) => `擦除${name}`,
+          wiped: (size) => `已写入 ${size}`,
+          wipeStopped: (size) => `写入 ${size} 后已停止`,
+          quarantine: (name) => `将${name}移至隔离区`,
           recycle: (name) => `将${name}移至回收站`,
           clear: (name) => `清除${name}`,
           compact: (name) => `压缩${name}`,
@@ -34294,17 +34294,17 @@ export const CATALOG = {
         description: '掃描整個磁碟機時，將磁碟機的可用空間繪製為另一個區塊，讓每個資料夾顯示的是佔磁碟機的比例，而不是佔已用空間的比例。'
       },
       deepCleanRemoval: {
-        title: 'When Deep Clean removes files',
+        title: "深度清理移除檔案時",
         quarantine: {
-          label: 'Move to Quarantine (you can put it back)',
-          description: "Nothing is deleted. Files go into Prune's Quarantine and the drive gets the space back when you empty it."
+          label: "移至隔離區（可以還原）",
+          description: "不會刪除任何內容。檔案會進入 Prune 的隔離區，清空隔離區後，磁碟才會釋出空間。"
         },
         delete: {
-          label: "Delete now (frees the space, can't be undone — like BleachBit)",
-          description: 'Files are removed as soon as you confirm, so the space is free straight away. Rules that lose data still ask first.'
+          label: "立即刪除（釋放空間，無法復原——與 BleachBit 相同）",
+          description: "確認後檔案會立即刪除，空間馬上釋出。會遺失資料的規則仍會先詢問。"
         },
-        deleteWarning: "With Delete now, Clean can't be undone. Scheduled cleans still move files to Quarantine.",
-        autoQuarantineNote: 'Not used while Deep Clean deletes files immediately.'
+        deleteWarning: "選擇「立即刪除」後，清理無法復原。排程清理仍會將檔案移至隔離區。",
+        autoQuarantineNote: "深度清理立即刪除檔案時，不會使用此項。"
       },
       autoQuarantine: {
         title: '自動隔離',
@@ -34822,13 +34822,13 @@ export const CATALOG = {
     deepClean: {
       title: '深度清理',
       subtitle: "Prune 知道如何尋找的每一個快取、記錄、傾印檔與殘留項目，都是在這台機器上實際測量的，而非估算。沒有任何內容會被直接刪除——清理所取走的一切都會先進入隔離區，你可以從那裡還原。",
-      subtitleDelete: "Every cache, log, dump and leftover Prune knows how to find, measured on this machine rather than estimated. Clean deletes what you tick immediately and frees the space, the way BleachBit does. It can't be undone.",
+      subtitleDelete: "Prune 知道如何尋找的每一個快取、記錄、傾印檔與殘留項目，都是在這台機器上實際測量的，而非估算。清理會立即刪除你勾選的內容並釋放空間，與 BleachBit 的做法相同。此動作無法復原。",
       scanLog: {
         header: '掃描輸出',
         scanningAnnounce: (total) => `正在掃描 ${total} 個位置。`,
         finishedAnnounce: (scanned, total) => `掃描完成。已測量 ${total} 個位置中的 ${scanned} 個。`,
-        searching: (items) => `Searching your profile… ${items} items checked`,
-        wiping: (written, total) => `Writing zeros… ${written} of ${total}`,
+        searching: (items) => `正在搜尋你的使用者設定檔… 已檢查 ${items} 項`,
+        wiping: (written, total) => `正在寫入零… ${written} / ${total}`,
         starting: '正在開始…',
         idle: "按一下「預覽」以測量可清理的內容。"
       },
@@ -34837,11 +34837,11 @@ export const CATALOG = {
       cleanErrorPrefix: (error) => `無法清理：${error}`,
       cleanupComplete: '清理完成。',
       resultFreed: (formatted) => `已釋放 ${formatted}`,
-      resultMoved: (formatted) => `Moved ${formatted} to Quarantine. The space comes back when you empty it.`,
-      resultRecycled: (formatted) => `Moved ${formatted} to the Recycle Bin. The space comes back when you empty it.`,
-      openQuarantine: 'Open Quarantine',
-      resultWiped: (size) => `Wrote ${size} of zeros over the free space, then deleted it. No space was freed.`,
-      resultWipeStopped: (size) => `Stopped after writing ${size} of zeros over the free space. The filler was deleted.`,
+      resultMoved: (formatted) => `已將 ${formatted} 移至隔離區。清空隔離區後才會釋出空間。`,
+      resultRecycled: (formatted) => `已將 ${formatted} 移至資源回收筒。清空資源回收筒後才會釋出空間。`,
+      openQuarantine: "開啟隔離區",
+      resultWiped: (size) => `已用零覆寫可用空間（共寫入 ${size}），隨後刪除了填充檔案。未釋放任何空間。`,
+      resultWipeStopped: (size) => `已在向可用空間寫入 ${size} 的零後停止，填充檔案已刪除。`,
       resultLockedSuffix: (count) => ` — 略過了 ${count} 個被鎖定的檔案`,
       before: {
         body: 'Prune 會實際測量磁碟上的每個類別，而不是估算，這大約需要半分鐘。',
@@ -34854,9 +34854,9 @@ export const CATALOG = {
         notMeasuredYet: '尚未測量',
         previewFirst: "請先預覽，查看將釋放多少空間。",
         unmeasuredSuffix: (count) => ` · ${count} 項未測量`,
-        modeQuarantine: 'Moves to Quarantine.',
-        modeRecycle: 'Moves to the Recycle Bin.',
-        modeDelete: 'Deletes immediately.',
+        modeQuarantine: "移至隔離區。",
+        modeRecycle: "移至資源回收筒。",
+        modeDelete: "立即刪除。",
         selectEverything: '全選',
         clear: '清除',
         selectedCount: (count) => `已選 ${count} 項`
@@ -34865,35 +34865,35 @@ export const CATALOG = {
         prompt: (count, sizeKnown, formatted) => `要將 ${count} 個項目（${sizeKnown ? formatted : '大小未測量'}）移至隔離區嗎？`,
         cancel: '取消',
         confirmButton: "移至隔離區",
-        promptDelete: (count, sizeKnown, formatted) => `Delete ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'})? This can't be undone.`,
-        deleteButton: 'Delete',
-        promptRecycle: (count, sizeKnown, formatted) => `Move ${count} ${count === 1 ? 'item' : 'items'} (${sizeKnown ? formatted : 'size not measured'}) to the Recycle Bin?`,
-        recycleButton: 'Move to Recycle Bin',
-        wipeNote: 'Includes wiping free disk space, which can take hours.',
+        promptDelete: (count, sizeKnown, formatted) => `要刪除 ${count} 個項目（${sizeKnown ? formatted : '大小未測量'}）嗎？此動作無法復原。`,
+        deleteButton: "刪除",
+        promptRecycle: (count, sizeKnown, formatted) => `要將 ${count} 個項目（${sizeKnown ? formatted : '大小未測量'}）移至資源回收筒嗎？`,
+        recycleButton: "移至資源回收筒",
+        wipeNote: "包含清除可用磁碟空間，可能需要數小時。",
         cleaning: '正在清理…'
       },
       wipe: {
-        title: 'Wipe free disk space',
-        body: "This overwrites the free space on the drive with zeros, then deletes the filler, so files you deleted earlier can't be recovered. It frees no space.",
-        ssdWarning: 'On an SSD with TRIM this does nothing useful and adds write wear. Use it on a hard disk, or when you know you need it.',
-        driveLine: (drive) => `Drive: ${drive}`,
-        writeLine: (size) => `About ${size} will be written.`,
-        timeLine: (duration, speed) => `Roughly ${duration}, from a one-second write test at ${speed}. The drive slows as it fills, so it can take longer.`,
-        duration: (hours, minutes) => (hours > 0 ? `${hours} h ${minutes} min` : `${minutes} min`),
-        reserveLine: (size) => `${size} always stays free so Windows keeps working.`,
-        stopNote: 'Stop ends it at once and deletes the filler.',
-        measuring: 'Measuring the drive…',
-        estimateFailed: (error) => `Couldn't measure the drive: ${error}`,
-        cancel: 'Cancel',
-        confirm: 'Add to this clean'
+        title: "清除可用磁碟空間",
+        body: "這會用零覆寫磁碟機上的可用空間，然後刪除填充檔案，讓你先前刪除的檔案無法還原。它不會釋放任何空間。",
+        ssdWarning: "在支援 TRIM 的 SSD 上，這沒有實際作用，還會增加寫入損耗。請用於傳統硬碟，或在你確定需要時使用。",
+        driveLine: (drive) => `磁碟機：${drive}`,
+        writeLine: (size) => `將寫入約 ${size}。`,
+        timeLine: (duration, speed) => `預計約 ${duration}（根據一秒鐘的寫入測試，速度為 ${speed}）。磁碟機寫得越滿速度越慢，因此實際可能更久。`,
+        duration: (hours, minutes) => (hours > 0 ? `${hours} 小時 ${minutes} 分鐘` : `${minutes} 分鐘`),
+        reserveLine: (size) => `一律保留 ${size} 的可用空間，確保 Windows 正常運作。`,
+        stopNote: "按一下「停止」會立即結束，並刪除填充檔案。",
+        measuring: "正在測量磁碟機…",
+        estimateFailed: (error) => `無法測量磁碟機：${error}`,
+        cancel: "取消",
+        confirm: "加入本次清理"
       },
       stop: '停止',
       rescan: '重新掃描',
       clean: '清理',
       tree: {
         selectCategoryAriaLabel: (category) => `全選 ${category} 下的所有項`,
-        atLeast: (size) => `at least ${size}`,
-        longRunning: 'Takes a long time',
+        atLeast: (size) => `至少 ${size}`,
+        longRunning: "耗時較長",
         losesData: '會遺失資料',
         needsAdmin: '需要系統管理員權限',
         notInstalled: '未安裝',
@@ -34910,7 +34910,7 @@ export const CATALOG = {
       },
       log: {
         scan: {
-          partial: (size) => `${size}, partial`,
+          partial: (size) => `${size}，部分`,
           nothingToMeasure: "沒有可測量的內容",
           needsAdmin: "需要系統管理員權限",
           notInstalled: "未安裝",
@@ -34918,10 +34918,10 @@ export const CATALOG = {
         },
         execute: {
           delete: (name) => `刪除${name}`,
-          wipe: (name) => `Wipe ${name}`,
-          wiped: (size) => `${size} written`,
-          wipeStopped: (size) => `stopped after ${size}`,
-          quarantine: (name) => `Quarantine ${name}`,
+          wipe: (name) => `清除${name}`,
+          wiped: (size) => `已寫入 ${size}`,
+          wipeStopped: (size) => `寫入 ${size} 後已停止`,
+          quarantine: (name) => `將${name}移至隔離區`,
           recycle: (name) => `將${name}移至資源回收筒`,
           clear: (name) => `清除${name}`,
           compact: (name) => `壓縮${name}`,

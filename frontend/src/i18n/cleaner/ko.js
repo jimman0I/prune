@@ -82,6 +82,7 @@ export default {
     league_of_legends_logs: { name: "게임 로그", description: "경기별 클라이언트 및 게임 로그입니다. 무기한 보관되지만 거의 읽히지 않습니다." },
     recycle_bin: { name: "휴지통", description: "이미 삭제한 파일이며, 휴지통을 비울 때까지 공간을 차지하고 있습니다. 비우는 것이 목적이므로 여기 있는 항목은 저절로 복구되지 않습니다." },
     user_temp: { name: "Temp 폴더", description: "Windows, 설치 관리자, 그리고 컴퓨터의 많은 프로그램이 파일을 기록하고 좀처럼 정리하지 않는 작업용 폴더입니다." },
+    system_empty_space: { name: "빈 디스크 공간", description: "드라이브의 빈 공간을 0으로 덮어쓴 뒤 채우기용 파일을 삭제하므로, 이전에 삭제한 파일을 복구할 수 없게 됩니다. 몇 시간이 걸릴 수 있습니다. 공간은 확보되지 않으며, TRIM이 있는 SSD에서는 아무 소용이 없고 쓰기 마모만 늘어납니다." },
     defender_history: { name: "검사 기록", description: "과거 Defender 검사의 저장된 결과와 이를 나열한 로그입니다. 보호 기능은 영향을 받지 않으며, Defender는 다음 검사부터 새 기록을 시작합니다." },
     defender_temp: { name: "임시 파일", description: "Defender가 사용한 뒤 Windows의 임시 및 업데이트 폴더에 남겨 둔 업데이트 설치 관리자와 로그입니다." },
     defender_quarantine: { name: "격리된 파일", description: "Defender가 탐지해 격리한 파일입니다. 격리는 Defender가 잘못 탐지한 파일을 되돌려 주는 방법이므로, 이 항목을 비우면 오탐을 다시는 복원할 수 없습니다." },
@@ -89,12 +90,11 @@ export default {
     defender_logs: { name: "로그", description: "Defender 자체의 서비스 및 진단 로그입니다. Defender 자체의 문제를 해결할 때만 유용하며, 실행되는 동안 새 로그가 기록됩니다." },
     winrar_history: { name: "기록", description: "WinRAR이 기억하는 압축 파일 이름, 압축 해제 폴더, 검색어입니다. 압축 파일 자체는 영향을 받지 않습니다." },
     winrar_temp: { name: "임시 파일", description: "WinRAR이 자체 프로그램 폴더에 남겨 둔 임시 파일입니다. 압축 파일과 설정은 영향을 받지 않습니다." },
-    deepscan_backup: { name: "Backup files", description: "Files ending in .bak, or in up to four letters and a tilde (such as notes.txt~), anywhere in your user folder. Editors often leave the only copy of something behind as a backup, so check the preview for anything you want to keep." },
-    deepscan_tmp: { name: "Office temporary files", description: "Word (~wr and four digits) and PowerPoint (ppt and four digits) working files, anywhere in your user folder. After a crash, one can hold the only copy of unsaved work." },
-    deepscan_vim_swap: { name: "Vim swap files", description: "Vim's .swp, .swo and .swn files, anywhere in your user folder. Vim writes them while you edit, and after a crash they hold the unsaved changes." },
-    deepscan_ds_store: { name: ".DS_Store files", description: "Folder-view files that macOS leaves in folders copied from a Mac. Nothing reads them on Windows." },
-    deepscan_thumbs_db: { name: "Thumbs.db files", description: "Thumbnail caches that older versions of Windows left in picture folders. Explorer builds new ones if it needs them." },
-    system_empty_space: { name: "Free disk space", description: "Overwrites the free space on the drive with zeros, then deletes the filler, so files you deleted earlier can't be recovered. It can take hours. It frees no space, does nothing useful on an SSD with TRIM, and adds write wear." },
+    deepscan_backup: { name: "백업 파일", description: "사용자 폴더 안 어디에 있든 .bak으로 끝나는 파일과, 최대 네 글자 뒤에 물결표(~)가 붙는 파일(예: notes.txt~)입니다. 편집기는 유일한 사본을 백업으로 남겨 두는 경우가 많으니, 보관하고 싶은 항목이 없는지 미리보기에서 확인하세요." },
+    deepscan_tmp: { name: "Office 임시 파일", description: "사용자 폴더 안 어디에 있든 Word(~wr와 숫자 네 자리)와 PowerPoint(ppt와 숫자 네 자리)의 작업 파일입니다. 충돌 후에는 저장하지 않은 작업의 유일한 사본이 들어 있을 수 있습니다." },
+    deepscan_vim_swap: { name: "Vim 스왑 파일", description: "사용자 폴더 안 어디에 있든 Vim의 .swp, .swo, .swn 파일입니다. Vim은 편집하는 동안 이 파일을 기록하며, 충돌 후에는 저장하지 않은 변경 내용이 여기에 남아 있습니다." },
+    deepscan_ds_store: { name: ".DS_Store 파일", description: "Mac에서 복사한 폴더에 macOS가 남기는 폴더 보기 파일입니다. Windows에서는 아무도 읽지 않습니다." },
+    deepscan_thumbs_db: { name: "Thumbs.db 파일", description: "이전 버전의 Windows가 사진 폴더에 남긴 썸네일 캐시입니다. 필요하면 Explorer가 새로 만듭니다." },
   },
   categories: {
     "Brave": "Brave",
@@ -128,6 +128,6 @@ export default {
     "League of Legends": "League of Legends",
     "Windows Defender": "Windows Defender",
     "WinRAR": "WinRAR",
-    "Deep scan": "Deep scan",
+    "Deep scan": "딥 검사",
   }
 };

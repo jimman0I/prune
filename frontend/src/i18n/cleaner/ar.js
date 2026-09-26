@@ -82,6 +82,7 @@ export default {
     league_of_legends_logs: { name: "سجلات اللعبة", description: "سجلات العميل واللعبة لكل مباراة. تُحفظ إلى أجل غير مسمى وتُقرأ نادرًا جدًا." },
     recycle_bin: { name: "سلة المحذوفات", description: "ملفات حذفتها بالفعل وما زالت تشغل المساحة حتى تُفرَّغ السلة. إفراغها هو المقصود، فلا يعود أي شيء هنا من تلقاء نفسه." },
     user_temp: { name: "مجلد Temp", description: "المجلد المؤقت الذي يكتب فيه Windows وبرامج التثبيت ونصف البرامج على الجهاز، ونادرًا ما تنظّف بعدها." },
+    system_empty_space: { name: "المساحة الفارغة على القرص", description: "يكتب أصفارًا فوق المساحة الفارغة في القرص ثم يحذف ملف التعبئة، فلا يمكن استرداد الملفات التي حذفتها سابقًا. قد يستغرق ساعات. لا يحرر أي مساحة، ولا يفيد بشيء على قرص SSD يدعم TRIM، ويزيد من تآكل الكتابة." },
     defender_history: { name: "سجل الفحص", description: "نتائج فحوصات Defender السابقة المخزّنة والسجل الذي يسردها. الحماية لا تتأثر؛ يبدأ Defender سجلًا جديدًا مع فحصه التالي." },
     defender_temp: { name: "ملفات مؤقتة", description: "مثبّتات التحديث والسجلات التي يتركها Defender في مجلدي Temp والتحديث بعد استخدامها." },
     defender_quarantine: { name: "الملفات في الحجر الصحي", description: "ملفات رصدها Defender وعزلها. الحجر الصحي هو ما يتيح لـ Defender إعادة ملف وُسم خطأً — وبعد مسح هذا الخيار لا يمكن استعادة أي إيجابية كاذبة أبدًا." },
@@ -89,12 +90,11 @@ export default {
     defender_logs: { name: "السجلات", description: "سجلات خدمة Defender والتشخيص. مفيدة فقط عند استكشاف أخطاء Defender نفسه؛ يكتب سجلات جديدة أثناء عمله." },
     winrar_history: { name: "السجل", description: "أسماء الأرشيفات ومجلدات الاستخراج وعبارات البحث التي يتذكرها WinRAR. الأرشيفات نفسها لا تُمس." },
     winrar_temp: { name: "ملفات مؤقتة", description: "ملفات مؤقتة تركها WinRAR في مجلد برنامجه. الأرشيفات والإعدادات لا تُمس." },
-    deepscan_backup: { name: "Backup files", description: "Files ending in .bak, or in up to four letters and a tilde (such as notes.txt~), anywhere in your user folder. Editors often leave the only copy of something behind as a backup, so check the preview for anything you want to keep." },
-    deepscan_tmp: { name: "Office temporary files", description: "Word (~wr and four digits) and PowerPoint (ppt and four digits) working files, anywhere in your user folder. After a crash, one can hold the only copy of unsaved work." },
-    deepscan_vim_swap: { name: "Vim swap files", description: "Vim's .swp, .swo and .swn files, anywhere in your user folder. Vim writes them while you edit, and after a crash they hold the unsaved changes." },
-    deepscan_ds_store: { name: ".DS_Store files", description: "Folder-view files that macOS leaves in folders copied from a Mac. Nothing reads them on Windows." },
-    deepscan_thumbs_db: { name: "Thumbs.db files", description: "Thumbnail caches that older versions of Windows left in picture folders. Explorer builds new ones if it needs them." },
-    system_empty_space: { name: "Free disk space", description: "Overwrites the free space on the drive with zeros, then deletes the filler, so files you deleted earlier can't be recovered. It can take hours. It frees no space, does nothing useful on an SSD with TRIM, and adds write wear." },
+    deepscan_backup: { name: "الملفات الاحتياطية", description: "ملفات تنتهي بـ ‎.bak، أو بما يصل إلى أربعة أحرف ثم علامة ~ (مثل notes.txt~)، في أي مكان داخل مجلد المستخدم. كثيرًا ما تترك المحررات النسخة الوحيدة من شيء ما في صورة ملف احتياطي، فتحقق من المعاينة بحثًا عن أي شيء تريد الاحتفاظ به." },
+    deepscan_tmp: { name: "ملفات Office المؤقتة", description: "ملفات العمل الخاصة بـ Word (‎~wr ثم أربعة أرقام) وPowerPoint (‏ppt ثم أربعة أرقام) في أي مكان داخل مجلد المستخدم. بعد حدوث عطل، قد يحتوي أحدها على النسخة الوحيدة من عمل لم يُحفظ." },
+    deepscan_vim_swap: { name: "ملفات التبديل الخاصة بـ Vim", description: "ملفات Vim ذات الامتدادات ‎.swp و‎.swo و‎.swn، في أي مكان داخل مجلد المستخدم. يكتبها Vim أثناء التحرير، وبعد حدوث عطل تحتفظ بالتغييرات غير المحفوظة." },
+    deepscan_ds_store: { name: "ملفات ‎.DS_Store", description: "ملفات عرض المجلدات التي يتركها macOS في المجلدات المنسوخة من جهاز Mac. لا شيء يقرؤها على Windows." },
+    deepscan_thumbs_db: { name: "ملفات Thumbs.db", description: "ذاكرات مؤقتة للصور المصغرة تركتها الإصدارات الأقدم من Windows في مجلدات الصور. ينشئ Explorer ذاكرات جديدة إذا احتاج إليها." },
   },
   categories: {
     "Brave": "Brave",
@@ -128,6 +128,6 @@ export default {
     "League of Legends": "League of Legends",
     "Windows Defender": "Windows Defender",
     "WinRAR": "WinRAR",
-    "Deep scan": "Deep scan",
+    "Deep scan": "الفحص العميق",
   }
 };

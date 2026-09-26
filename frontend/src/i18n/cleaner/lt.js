@@ -82,6 +82,7 @@ export default {
     league_of_legends_logs: { name: "Žaidimo žurnalai", description: "Kiekvienų rungtynių kliento ir žaidimo žurnalai. Saugomi neribotai, beveik niekada neskaitomi." },
     recycle_bin: { name: "Šiukšlinė", description: "Jau ištrinti failai, kurie vis dar užima vietą, kol šiukšlinė neištuštinta. Tuštinimas ir yra tikslas, todėl čia nieko savaime negrįžta." },
     user_temp: { name: "Laikinasis aplankas", description: "Darbinis aplankas, į kurį rašo „Windows“, diegimo programos ir pusė kompiuteryje esančių programų ir kurį retai išvalo po savęs." },
+    system_empty_space: { name: "Laisva disko vieta", description: "Užrašo nulius ant laisvos disko vietos, po to ištrina užpildymo failą, todėl anksčiau ištrintų failų atkurti nebeįmanoma. Gali užtrukti kelias valandas. Vietos neatlaisvina, SSD diske su TRIM nieko naudingo nedaro ir didina rašymo nusidėvėjimą." },
     defender_history: { name: "Nuskaitymo istorija", description: "Ankstesnių „Defender“ nuskaitymų išsaugoti rezultatai ir juos išvardijantis žurnalas. Apsauga neliečiama; „Defender“ per kitą nuskaitymą pradeda naują įrašą." },
     defender_temp: { name: "Laikinieji failai", description: "Naujinimų diegimo programos ir žurnalai, kuriuos „Defender“ panaudojęs palieka „Windows“ laikinuosiuose ir naujinimų aplankuose." },
     defender_quarantine: { name: "Karantine esantys failai", description: "Failai, kuriuos „Defender“ pagavo ir užrakino. Karantinas yra būdas, kuriuo „Defender“ grąžina per klaidą pažymėtą failą — kai tai išvalyta, klaidingai teigiamo aptikimo failo atkurti nebegalima." },
@@ -89,12 +90,11 @@ export default {
     defender_logs: { name: "Žurnalai", description: "Paties „Defender“ paslaugos ir diagnostikos žurnalai. Naudingi tik gedimus šalinant patį „Defender“; veikdamas jis rašo naujus." },
     winrar_history: { name: "Istorija", description: "„WinRAR“ įsimintų archyvų pavadinimai, išskleidimo aplankai ir paieškos frazės. Pačių archyvų neliečia." },
     winrar_temp: { name: "Laikinieji failai", description: "Laikinieji failai, kuriuos „WinRAR“ paliko savo programos aplanke. Archyvai ir nustatymai neliečiami." },
-    deepscan_backup: { name: "Backup files", description: "Files ending in .bak, or in up to four letters and a tilde (such as notes.txt~), anywhere in your user folder. Editors often leave the only copy of something behind as a backup, so check the preview for anything you want to keep." },
-    deepscan_tmp: { name: "Office temporary files", description: "Word (~wr and four digits) and PowerPoint (ppt and four digits) working files, anywhere in your user folder. After a crash, one can hold the only copy of unsaved work." },
-    deepscan_vim_swap: { name: "Vim swap files", description: "Vim's .swp, .swo and .swn files, anywhere in your user folder. Vim writes them while you edit, and after a crash they hold the unsaved changes." },
-    deepscan_ds_store: { name: ".DS_Store files", description: "Folder-view files that macOS leaves in folders copied from a Mac. Nothing reads them on Windows." },
-    deepscan_thumbs_db: { name: "Thumbs.db files", description: "Thumbnail caches that older versions of Windows left in picture folders. Explorer builds new ones if it needs them." },
-    system_empty_space: { name: "Free disk space", description: "Overwrites the free space on the drive with zeros, then deletes the filler, so files you deleted earlier can't be recovered. It can take hours. It frees no space, does nothing useful on an SSD with TRIM, and adds write wear." },
+    deepscan_backup: { name: "Atsarginių kopijų failai", description: "Failai, kurių pavadinimas baigiasi .bak arba iki keturių raidžių ir tilde (pavyzdžiui, notes.txt~), bet kur jūsų naudotojo aplanke. Redaktoriai kartais palieka vienintelę ko nors kopiją kaip atsarginį failą, todėl peržiūroje patikrinkite, ar nėra ko nors, ką norite pasilikti." },
+    deepscan_tmp: { name: "Laikinieji „Office“ failai", description: "„Word“ (~wr ir keturi skaitmenys) ir „PowerPoint“ (ppt ir keturi skaitmenys) darbo failai bet kur jūsų naudotojo aplanke. Po strigimo vienas jų gali būti vienintelė neišsaugoto darbo kopija." },
+    deepscan_vim_swap: { name: "„Vim“ apkeitimo failai", description: "„Vim“ .swp, .swo ir .swn failai bet kur jūsų naudotojo aplanke. „Vim“ juos rašo, kol redaguojate, o po strigimo juose lieka neišsaugoti pakeitimai." },
+    deepscan_ds_store: { name: ".DS_Store failai", description: "Aplanko rodinio failai, kuriuos „macOS“ palieka iš „Mac“ nukopijuotuose aplankuose. „Windows“ sistemoje jų niekas neskaito." },
+    deepscan_thumbs_db: { name: "Thumbs.db failai", description: "Miniatiūrų talpyklos, kurias senesnės „Windows“ versijos paliko paveikslėlių aplankuose. „Explorer“ sukuria naujas, jei prireikia." },
   },
   categories: {
     "Brave": "Brave",
@@ -128,6 +128,6 @@ export default {
     "League of Legends": "League of Legends",
     "Windows Defender": "Windows Defender",
     "WinRAR": "WinRAR",
-    "Deep scan": "Deep scan",
+    "Deep scan": "Gilus nuskaitymas",
   }
 };

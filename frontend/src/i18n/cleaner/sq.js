@@ -82,6 +82,7 @@ export default {
     league_of_legends_logs: { name: "Regjistrat e lojës", description: "Regjistra të klientit dhe të lojës për çdo ndeshje. Ruhen pa afat dhe lexohen pothuajse asnjëherë." },
     recycle_bin: { name: "Koshi i Riciklimit", description: "Skedarë që i keni fshirë tashmë, por që ende zënë vend derisa të zbrazet koshi. Zbrazja është pikërisht qëllimi, ndaj asgjë këtu nuk kthehet vetë." },
     user_temp: { name: "Dosja Temp", description: "Dosja e punës ku shkruajnë Windows, instaluesit dhe gjysma e programeve të makinës dhe që rrallë e pastrojnë pas vetes." },
+    system_empty_space: { name: "Hapësira e lirë e diskut", description: "Mbishkruan hapësirën e lirë të diskut me zero, pastaj fshin skedarin mbushës, që skedarët që ke fshirë më parë të mos mund të rikthehen. Mund të zgjasë orë të tëra. Nuk liron hapësirë, nuk bën asgjë të dobishme në një SSD me TRIM dhe shton konsumimin nga shkrimi." },
     defender_history: { name: "Historia e skanimeve", description: "Rezultatet e ruajtura të skanimeve të mëparshme të Defender dhe regjistri që i liston. Mbrojtja nuk preket; Defender fillon një regjistrim të ri me skanimin e radhës." },
     defender_temp: { name: "Skedarë të përkohshëm", description: "Instalues përditësimesh dhe regjistra që Defender i lë në dosjet e përkohshme dhe të përditësimeve të Windows pasi i ka përdorur." },
     defender_quarantine: { name: "Skedarë në karantinë", description: "Skedarë që Defender i ka kapur dhe i ka mbyllur. Karantina është mënyra si Defender kthen një skedar të shënuar gabimisht — pasi kjo pastrohet, një pozitiv i rremë nuk mund të rikuperohet kurrë." },
@@ -89,12 +90,11 @@ export default {
     defender_logs: { name: "Regjistrat", description: "Regjistrat e shërbimit dhe të diagnostikimit të vetë Defender. Të dobishëm vetëm kur zgjidhen probleme të vetë Defender; ai shkruan të rinj ndërsa punon." },
     winrar_history: { name: "Historia", description: "Emrat e arkivave, dosjet e nxjerrjes dhe termat e kërkimit që mban mend WinRAR. Vetë arkivat nuk preken." },
     winrar_temp: { name: "Skedarë të përkohshëm", description: "Skedarë temp që WinRAR i ka lënë në dosjen e vet të programit. Arkivat dhe cilësimet nuk preken." },
-    deepscan_backup: { name: "Backup files", description: "Files ending in .bak, or in up to four letters and a tilde (such as notes.txt~), anywhere in your user folder. Editors often leave the only copy of something behind as a backup, so check the preview for anything you want to keep." },
-    deepscan_tmp: { name: "Office temporary files", description: "Word (~wr and four digits) and PowerPoint (ppt and four digits) working files, anywhere in your user folder. After a crash, one can hold the only copy of unsaved work." },
-    deepscan_vim_swap: { name: "Vim swap files", description: "Vim's .swp, .swo and .swn files, anywhere in your user folder. Vim writes them while you edit, and after a crash they hold the unsaved changes." },
-    deepscan_ds_store: { name: ".DS_Store files", description: "Folder-view files that macOS leaves in folders copied from a Mac. Nothing reads them on Windows." },
-    deepscan_thumbs_db: { name: "Thumbs.db files", description: "Thumbnail caches that older versions of Windows left in picture folders. Explorer builds new ones if it needs them." },
-    system_empty_space: { name: "Free disk space", description: "Overwrites the free space on the drive with zeros, then deletes the filler, so files you deleted earlier can't be recovered. It can take hours. It frees no space, does nothing useful on an SSD with TRIM, and adds write wear." },
+    deepscan_backup: { name: "Skedarë rezervë", description: "Skedarë që mbarojnë me .bak, ose me deri në katër shkronja dhe një tildë (si notes.txt~), kudo në dosjen tënde të përdoruesit. Redaktuesit shpesh lënë si kopje rezervë të vetmen kopje të diçkaje, ndaj kontrollo pamjen paraprake për gjithçka që do të ruash." },
+    deepscan_tmp: { name: "Skedarë të përkohshëm të Office", description: "Skedarë pune të Word (~wr dhe katër shifra) dhe PowerPoint (ppt dhe katër shifra), kudo në dosjen tënde të përdoruesit. Pas një prishjeje, njëri prej tyre mund të mbajë të vetmen kopje të punës së paruajtur." },
+    deepscan_vim_swap: { name: "Skedarë swap të Vim", description: "Skedarët .swp, .swo dhe .swn të Vim, kudo në dosjen tënde të përdoruesit. Vim i shkruan ndërsa redakton dhe pas një prishjeje ata mbajnë ndryshimet e paruajtura." },
+    deepscan_ds_store: { name: "Skedarë .DS_Store", description: "Skedarë të pamjes së dosjes që macOS i lë në dosjet e kopjuara nga një Mac. Në Windows asgjë nuk i lexon." },
+    deepscan_thumbs_db: { name: "Skedarë Thumbs.db", description: "Memorie e fshehtë miniaturash që versionet e vjetra të Windows i lanë në dosjet e fotove. Explorer ndërton të reja nëse i duhen." },
   },
   categories: {
     "Brave": "Brave",
@@ -128,6 +128,6 @@ export default {
     "League of Legends": "League of Legends",
     "Windows Defender": "Windows Defender",
     "WinRAR": "WinRAR",
-    "Deep scan": "Deep scan",
+    "Deep scan": "Skanim i thellë",
   }
 };

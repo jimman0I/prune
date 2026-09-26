@@ -82,6 +82,7 @@ export default {
     league_of_legends_logs: { name: "Jurnale de joc", description: "Jurnale de client și de joc pentru fiecare meci. Păstrate la nesfârșit, aproape niciodată citite." },
     recycle_bin: { name: "Coșul de reciclare", description: "Fișiere pe care le-ai șters deja, dar care ocupă în continuare spațiu până când golești coșul. Golirea este scopul, deci nimic de aici nu revine de la sine." },
     user_temp: { name: "Folder temporar", description: "Folderul de lucru în care scriu Windows, programele de instalare și jumătate dintre programele de pe calculator și pe care rareori îl curăță după ele." },
+    system_empty_space: { name: "Spațiu liber pe disc", description: "Scrie zerouri peste spațiul liber de pe unitate, apoi șterge fișierul de umplere, astfel încât fișierele șterse mai devreme să nu mai poată fi recuperate. Poate dura ore. Nu eliberează spațiu, nu ajută la nimic pe un SSD cu TRIM și adaugă uzură de scriere." },
     defender_history: { name: "Istoric scanări", description: "Rezultatele salvate ale scanărilor Defender anterioare și jurnalul care le listează. Protecția nu este afectată; Defender începe o înregistrare nouă la următoarea scanare." },
     defender_temp: { name: "Fișiere temporare", description: "Programe de instalare pentru actualizări și jurnale pe care Defender le lasă în folderele temporare și de actualizare Windows după ce le-a folosit." },
     defender_quarantine: { name: "Fișiere în carantină", description: "Fișiere prinse și blocate de Defender. Carantina este modul prin care Defender îți dă înapoi un fișier semnalat din greșeală — odată golită, un fals pozitiv nu mai poate fi restaurat niciodată." },
@@ -89,12 +90,11 @@ export default {
     defender_logs: { name: "Jurnale", description: "Jurnalele de serviciu și de diagnosticare ale Defender. Utile doar la depanarea Defender însuși; scrie altele noi pe măsură ce rulează." },
     winrar_history: { name: "Istoric", description: "Numele arhivelor, folderele de extragere și termenii de căutare reținute de WinRAR. Arhivele în sine nu sunt afectate." },
     winrar_temp: { name: "Fișiere temporare", description: "Fișiere temporare lăsate de WinRAR în propriul folder de program. Arhivele și setările nu sunt afectate." },
-    deepscan_backup: { name: "Backup files", description: "Files ending in .bak, or in up to four letters and a tilde (such as notes.txt~), anywhere in your user folder. Editors often leave the only copy of something behind as a backup, so check the preview for anything you want to keep." },
-    deepscan_tmp: { name: "Office temporary files", description: "Word (~wr and four digits) and PowerPoint (ppt and four digits) working files, anywhere in your user folder. After a crash, one can hold the only copy of unsaved work." },
-    deepscan_vim_swap: { name: "Vim swap files", description: "Vim's .swp, .swo and .swn files, anywhere in your user folder. Vim writes them while you edit, and after a crash they hold the unsaved changes." },
-    deepscan_ds_store: { name: ".DS_Store files", description: "Folder-view files that macOS leaves in folders copied from a Mac. Nothing reads them on Windows." },
-    deepscan_thumbs_db: { name: "Thumbs.db files", description: "Thumbnail caches that older versions of Windows left in picture folders. Explorer builds new ones if it needs them." },
-    system_empty_space: { name: "Free disk space", description: "Overwrites the free space on the drive with zeros, then deletes the filler, so files you deleted earlier can't be recovered. It can take hours. It frees no space, does nothing useful on an SSD with TRIM, and adds write wear." },
+    deepscan_backup: { name: "Fișiere de rezervă", description: "Fișiere care se termină în .bak sau în cel mult patru litere și un tilde (de exemplu notes.txt~), oriunde în folderul tău de utilizator. Editoarele lasă uneori singura copie a unui document ca fișier de rezervă, așa că verifică previzualizarea pentru tot ce vrei să păstrezi." },
+    deepscan_tmp: { name: "Fișiere temporare Office", description: "Fișiere de lucru Word (~wr și patru cifre) și PowerPoint (ppt și patru cifre), oriunde în folderul tău de utilizator. După o blocare, unul poate conține singura copie a muncii nesalvate." },
+    deepscan_vim_swap: { name: "Fișiere swap Vim", description: "Fișierele .swp, .swo și .swn ale Vim, oriunde în folderul tău de utilizator. Vim le scrie cât editezi, iar după o blocare conțin modificările nesalvate." },
+    deepscan_ds_store: { name: "Fișiere .DS_Store", description: "Fișiere cu vizualizarea folderului pe care macOS le lasă în folderele copiate de pe un Mac. În Windows nu le citește nimic." },
+    deepscan_thumbs_db: { name: "Fișiere Thumbs.db", description: "Cache-uri de miniaturi lăsate de versiunile mai vechi de Windows în folderele cu imagini. Explorer le reconstruiește dacă are nevoie." },
   },
   categories: {
     "Brave": "Brave",
@@ -128,6 +128,6 @@ export default {
     "League of Legends": "League of Legends",
     "Windows Defender": "Windows Defender",
     "WinRAR": "WinRAR",
-    "Deep scan": "Deep scan",
+    "Deep scan": "Scanare profundă",
   }
 };
