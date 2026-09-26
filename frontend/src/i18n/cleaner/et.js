@@ -82,6 +82,7 @@ export default {
     league_of_legends_logs: { name: "Mängulogid", description: "Mängupõhised kliendi ja mängu logid. Säilivad määramata ajaks, loetakse peaaegu mitte kunagi." },
     recycle_bin: { name: "Prügikast", description: "Failid, mille oled juba kustutanud ja mis võtavad ruumi, kuni prügikast tühjendatakse. Tühjendamine ongi eesmärk, seega miski siit iseenesest tagasi ei tule." },
     user_temp: { name: "Temp-kaust", description: "Töökaust, kuhu Windows, installerid ja pooled masina programmid kirjutavad ning mida nad harva pärast enda järel koristavad." },
+    system_empty_space: { name: "Vaba kettaruum", description: "Kirjutab ketta vaba ruumi nullidega üle ja kustutab seejärel täitefaili, nii et varem kustutatud faile ei saa taastada. See võib võtta tunde. See ei vabasta ruumi, pole TRIMiga SSD-l kasulik ja suurendab kirjutuskulumit." },
     defender_history: { name: "Skannimisajalugu", description: "Defenderi varasemate skannimiste salvestatud tulemused ja neid loetlev logi. Kaitse ei muutu; Defender alustab uut kirjet järgmise skannimisega." },
     defender_temp: { name: "Ajutised failid", description: "Värskenduste installerid ja logid, mille Defender jätab Windowsi ajutistesse ja värskenduste kaustadesse pärast nende kasutamist." },
     defender_quarantine: { name: "Karantiinis failid", description: "Failid, mille Defender on tabanud ja ära lukustanud. Karantiin on viis, kuidas Defender annab eksikombel märgitud faili tagasi — kui see tühjendatakse, ei saa valehäiret enam kunagi taastada." },
@@ -89,12 +90,11 @@ export default {
     defender_logs: { name: "Logid", description: "Defenderi enda teenuse- ja diagnostikalogid. Kasulikud ainult Defenderi enda tõrkeotsinguks; see kirjutab töötades uusi." },
     winrar_history: { name: "Ajalugu", description: "WinRARi meelespeetud arhiivinimed, lahtipakkimiskaustad ja otsingusõnad. Arhiive endid ei puudutata." },
     winrar_temp: { name: "Ajutised failid", description: "Ajutised failid, mille WinRAR jättis oma programmikausta. Arhiive ja seadeid ei puudutata." },
-    deepscan_backup: { name: "Backup files", description: "Files ending in .bak, or in up to four letters and a tilde (such as notes.txt~), anywhere in your user folder. Editors often leave the only copy of something behind as a backup, so check the preview for anything you want to keep." },
-    deepscan_tmp: { name: "Office temporary files", description: "Word (~wr and four digits) and PowerPoint (ppt and four digits) working files, anywhere in your user folder. After a crash, one can hold the only copy of unsaved work." },
-    deepscan_vim_swap: { name: "Vim swap files", description: "Vim's .swp, .swo and .swn files, anywhere in your user folder. Vim writes them while you edit, and after a crash they hold the unsaved changes." },
-    deepscan_ds_store: { name: ".DS_Store files", description: "Folder-view files that macOS leaves in folders copied from a Mac. Nothing reads them on Windows." },
-    deepscan_thumbs_db: { name: "Thumbs.db files", description: "Thumbnail caches that older versions of Windows left in picture folders. Explorer builds new ones if it needs them." },
-    system_empty_space: { name: "Free disk space", description: "Overwrites the free space on the drive with zeros, then deletes the filler, so files you deleted earlier can't be recovered. It can take hours. It frees no space, does nothing useful on an SSD with TRIM, and adds write wear." },
+    deepscan_backup: { name: "Varukoopiafailid", description: "Failid, mis lõpevad .bak-iga või kuni nelja tähe ja tildega (nt notes.txt~), kõikjal sinu kasutajakaustas. Redaktorid jätavad sageli millegi ainsa koopia varukoopiana maha, seega vaata eelvaatest üle, kas seal on midagi, mida tahad alles hoida." },
+    deepscan_tmp: { name: "Office'i ajutised failid", description: "Wordi (~wr ja neli numbrit) ja PowerPointi (ppt ja neli numbrit) tööfailid kõikjal sinu kasutajakaustas. Krahhi järel võib üks neist sisaldada salvestamata töö ainsat koopiat." },
+    deepscan_vim_swap: { name: "Vimi swap-failid", description: "Vimi .swp-, .swo- ja .swn-failid kõikjal sinu kasutajakaustas. Vim kirjutab need redigeerimise ajal ja krahhi järel sisaldavad need salvestamata muudatusi." },
+    deepscan_ds_store: { name: ".DS_Store-failid", description: "Kaustavaate failid, mille macOS jätab Macist kopeeritud kaustadesse. Windowsis ei loe neid miski." },
+    deepscan_thumbs_db: { name: "Thumbs.db-failid", description: "Pisipiltide vahemälud, mida Windowsi vanemad versioonid piltidega kaustadesse jätsid. Explorer ehitab vajaduse korral uued." },
   },
   categories: {
     "Brave": "Brave",
@@ -128,6 +128,6 @@ export default {
     "League of Legends": "League of Legends",
     "Windows Defender": "Windows Defender",
     "WinRAR": "WinRAR",
-    "Deep scan": "Deep scan",
+    "Deep scan": "Süvaskannimine",
   }
 };

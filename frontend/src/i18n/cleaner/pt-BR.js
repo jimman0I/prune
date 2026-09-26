@@ -82,6 +82,7 @@ export default {
     league_of_legends_logs: { name: "Logs de jogo", description: "Logs do cliente e do jogo de cada partida. Mantidos indefinidamente, quase nunca lidos." },
     recycle_bin: { name: "Lixeira", description: "Arquivos que você já excluiu e que continuam ocupando espaço até a lixeira ser esvaziada. Esvaziá-la é justamente o objetivo, então nada aqui volta sozinho." },
     user_temp: { name: "Pasta Temp", description: "A pasta de rascunho em que o Windows, os instaladores e metade dos programas da máquina gravam e que raramente limpam depois." },
+    system_empty_space: { name: "Espaço livre do disco", description: "Sobrescreve o espaço livre da unidade com zeros e depois exclui o arquivo de preenchimento, para que arquivos excluídos antes não possam ser recuperados. Pode levar horas. Não libera espaço, não serve para nada em um SSD com TRIM e aumenta o desgaste de gravação." },
     defender_history: { name: "Histórico de verificações", description: "Resultados armazenados de verificações anteriores do Defender e o log que os lista. A proteção não é afetada; o Defender começa um novo registro na próxima verificação." },
     defender_temp: { name: "Arquivos temporários", description: "Instaladores de atualização e logs que o Defender deixa nas pastas temporárias e de atualização do Windows depois de usá-los." },
     defender_quarantine: { name: "Arquivos em quarentena", description: "Arquivos que o Defender capturou e trancou. A quarentena é como o Defender devolve um arquivo sinalizado por engano — depois que isto for limpo, um falso positivo nunca poderá ser restaurado." },
@@ -89,12 +90,11 @@ export default {
     defender_logs: { name: "Logs", description: "Os logs de serviço e de diagnóstico do próprio Defender. Úteis apenas para solucionar problemas do próprio Defender; ele grava novos enquanto executa." },
     winrar_history: { name: "Histórico", description: "Os nomes de arquivos compactados, pastas de extração e termos de pesquisa lembrados pelo WinRAR. Os arquivos compactados em si não são afetados." },
     winrar_temp: { name: "Arquivos temporários", description: "Arquivos temporários que o WinRAR deixou na própria pasta do programa. Arquivos compactados e configurações não são afetados." },
-    deepscan_backup: { name: "Backup files", description: "Files ending in .bak, or in up to four letters and a tilde (such as notes.txt~), anywhere in your user folder. Editors often leave the only copy of something behind as a backup, so check the preview for anything you want to keep." },
-    deepscan_tmp: { name: "Office temporary files", description: "Word (~wr and four digits) and PowerPoint (ppt and four digits) working files, anywhere in your user folder. After a crash, one can hold the only copy of unsaved work." },
-    deepscan_vim_swap: { name: "Vim swap files", description: "Vim's .swp, .swo and .swn files, anywhere in your user folder. Vim writes them while you edit, and after a crash they hold the unsaved changes." },
-    deepscan_ds_store: { name: ".DS_Store files", description: "Folder-view files that macOS leaves in folders copied from a Mac. Nothing reads them on Windows." },
-    deepscan_thumbs_db: { name: "Thumbs.db files", description: "Thumbnail caches that older versions of Windows left in picture folders. Explorer builds new ones if it needs them." },
-    system_empty_space: { name: "Free disk space", description: "Overwrites the free space on the drive with zeros, then deletes the filler, so files you deleted earlier can't be recovered. It can take hours. It frees no space, does nothing useful on an SSD with TRIM, and adds write wear." },
+    deepscan_backup: { name: "Arquivos de backup", description: "Arquivos terminados em .bak, ou em até quatro letras e um til (como notes.txt~), em qualquer lugar da sua pasta de usuário. Editores costumam deixar a única cópia de algo como backup, então confira a prévia para ver se há algo que você queira manter." },
+    deepscan_tmp: { name: "Arquivos temporários do Office", description: "Arquivos de trabalho do Word (~wr e quatro dígitos) e do PowerPoint (ppt e quatro dígitos), em qualquer lugar da sua pasta de usuário. Após uma falha, um deles pode conter a única cópia de trabalho não salvo." },
+    deepscan_vim_swap: { name: "Arquivos de swap do Vim", description: "Arquivos .swp, .swo e .swn do Vim, em qualquer lugar da sua pasta de usuário. O Vim os grava enquanto você edita e, após uma falha, eles guardam as alterações não salvas." },
+    deepscan_ds_store: { name: "Arquivos .DS_Store", description: "Arquivos de exibição de pasta que o macOS deixa em pastas copiadas de um Mac. Nada os lê no Windows." },
+    deepscan_thumbs_db: { name: "Arquivos Thumbs.db", description: "Caches de miniaturas que versões mais antigas do Windows deixavam em pastas de imagens. O Explorer cria novos se precisar." },
   },
   categories: {
     "Brave": "Brave",
@@ -128,6 +128,6 @@ export default {
     "League of Legends": "League of Legends",
     "Windows Defender": "Windows Defender",
     "WinRAR": "WinRAR",
-    "Deep scan": "Deep scan",
+    "Deep scan": "Verificação profunda",
   }
 };

@@ -82,6 +82,7 @@ export default {
     league_of_legends_logs: { name: "Αρχεία καταγραφής παιχνιδιού", description: "Αρχεία καταγραφής client και παιχνιδιού ανά αγώνα. Διατηρούνται επ’ αόριστον και σχεδόν ποτέ δεν διαβάζονται." },
     recycle_bin: { name: "Κάδος Ανακύκλωσης", description: "Αρχεία που έχετε ήδη διαγράψει και εξακολουθούν να καταλαμβάνουν χώρο μέχρι να αδειάσει ο κάδος. Το άδειασμα είναι ο σκοπός, οπότε τίποτα από εδώ δεν επιστρέφει από μόνο του." },
     user_temp: { name: "Φάκελος Temp", description: "Ο φάκελος εργασίας στον οποίο γράφουν τα Windows, τα προγράμματα εγκατάστασης και τα μισά προγράμματα του υπολογιστή, και που σπάνια καθαρίζουν μετά." },
+    system_empty_space: { name: "Ελεύθερος χώρος δίσκου", description: "Αντικαθιστά τον ελεύθερο χώρο του δίσκου με μηδενικά και μετά διαγράφει το αρχείο πλήρωσης, ώστε τα αρχεία που έχετε διαγράψει παλαιότερα να μην μπορούν να ανακτηθούν. Μπορεί να διαρκέσει ώρες. Δεν ελευθερώνει χώρο, δεν προσφέρει τίποτα χρήσιμο σε SSD με TRIM και προσθέτει φθορά εγγραφής." },
     defender_history: { name: "Ιστορικό σαρώσεων", description: "Αποθηκευμένα αποτελέσματα προηγούμενων σαρώσεων του Defender και το αρχείο που τα καταγράφει. Η προστασία δεν επηρεάζεται· ο Defender ξεκινά νέα εγγραφή με την επόμενη σάρωση." },
     defender_temp: { name: "Προσωρινά αρχεία", description: "Προγράμματα εγκατάστασης ενημερώσεων και αρχεία καταγραφής που ο Defender αφήνει στους φακέλους temp και ενημερώσεων των Windows αφού τα χρησιμοποιήσει." },
     defender_quarantine: { name: "Αρχεία σε καραντίνα", description: "Αρχεία που εντόπισε και κλείδωσε ο Defender. Μέσω της καραντίνας ο Defender επιστρέφει ένα αρχείο που επισήμανε κατά λάθος — μόλις καθαριστεί, ένα ψευδώς θετικό δεν μπορεί ποτέ να επαναφερθεί." },
@@ -89,12 +90,11 @@ export default {
     defender_logs: { name: "Αρχεία καταγραφής", description: "Τα δικά του αρχεία καταγραφής υπηρεσίας και διάγνωσης του Defender. Χρήσιμα μόνο για αντιμετώπιση προβλημάτων του ίδιου του Defender· γράφει νέα καθώς λειτουργεί." },
     winrar_history: { name: "Ιστορικό", description: "Τα ονόματα συμπιεσμένων αρχείων, οι φάκελοι εξαγωγής και οι όροι αναζήτησης που θυμάται το WinRAR. Τα ίδια τα συμπιεσμένα αρχεία δεν επηρεάζονται." },
     winrar_temp: { name: "Προσωρινά αρχεία", description: "Προσωρινά αρχεία που άφησε το WinRAR στον δικό του φάκελο προγράμματος. Τα συμπιεσμένα αρχεία και οι ρυθμίσεις δεν επηρεάζονται." },
-    deepscan_backup: { name: "Backup files", description: "Files ending in .bak, or in up to four letters and a tilde (such as notes.txt~), anywhere in your user folder. Editors often leave the only copy of something behind as a backup, so check the preview for anything you want to keep." },
-    deepscan_tmp: { name: "Office temporary files", description: "Word (~wr and four digits) and PowerPoint (ppt and four digits) working files, anywhere in your user folder. After a crash, one can hold the only copy of unsaved work." },
-    deepscan_vim_swap: { name: "Vim swap files", description: "Vim's .swp, .swo and .swn files, anywhere in your user folder. Vim writes them while you edit, and after a crash they hold the unsaved changes." },
-    deepscan_ds_store: { name: ".DS_Store files", description: "Folder-view files that macOS leaves in folders copied from a Mac. Nothing reads them on Windows." },
-    deepscan_thumbs_db: { name: "Thumbs.db files", description: "Thumbnail caches that older versions of Windows left in picture folders. Explorer builds new ones if it needs them." },
-    system_empty_space: { name: "Free disk space", description: "Overwrites the free space on the drive with zeros, then deletes the filler, so files you deleted earlier can't be recovered. It can take hours. It frees no space, does nothing useful on an SSD with TRIM, and adds write wear." },
+    deepscan_backup: { name: "Αρχεία αντιγράφων ασφαλείας", description: "Αρχεία που τελειώνουν σε .bak ή σε έως τέσσερα γράμματα και μια περισπωμένη (όπως notes.txt~), οπουδήποτε στον φάκελο χρήστη σας. Οι επεξεργαστές κειμένου αφήνουν συχνά πίσω ως αντίγραφο ασφαλείας το μοναδικό αντίγραφο κάποιου αρχείου, γι' αυτό ελέγξτε την προεπισκόπηση για ό,τι θέλετε να κρατήσετε." },
+    deepscan_tmp: { name: "Προσωρινά αρχεία Office", description: "Αρχεία εργασίας του Word (~wr και τέσσερα ψηφία) και του PowerPoint (ppt και τέσσερα ψηφία), οπουδήποτε στον φάκελο χρήστη σας. Μετά από κατάρρευση, ένα από αυτά μπορεί να περιέχει το μοναδικό αντίγραφο εργασίας που δεν αποθηκεύτηκε." },
+    deepscan_vim_swap: { name: "Αρχεία swap του Vim", description: "Τα αρχεία .swp, .swo και .swn του Vim, οπουδήποτε στον φάκελο χρήστη σας. Το Vim τα γράφει όσο επεξεργάζεστε και, μετά από κατάρρευση, περιέχουν τις αλλαγές που δεν αποθηκεύτηκαν." },
+    deepscan_ds_store: { name: "Αρχεία .DS_Store", description: "Αρχεία προβολής φακέλου που το macOS αφήνει σε φακέλους αντιγραμμένους από Mac. Στα Windows δεν τα διαβάζει τίποτα." },
+    deepscan_thumbs_db: { name: "Αρχεία Thumbs.db", description: "Κρυφές μνήμες μικρογραφιών που οι παλαιότερες εκδόσεις των Windows άφηναν σε φακέλους εικόνων. Ο Explorer δημιουργεί νέες αν τις χρειαστεί." },
   },
   categories: {
     "Brave": "Brave",
@@ -128,6 +128,6 @@ export default {
     "League of Legends": "League of Legends",
     "Windows Defender": "Windows Defender",
     "WinRAR": "WinRAR",
-    "Deep scan": "Deep scan",
+    "Deep scan": "Βαθιά σάρωση",
   }
 };

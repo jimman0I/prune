@@ -82,6 +82,7 @@ export default {
     league_of_legends_logs: { name: "Gamelogs", description: "Client- en gamelogs per match. Worden onbeperkt bewaard en bijna nooit gelezen." },
     recycle_bin: { name: "Prullenbak", description: "Bestanden die je al hebt verwijderd en die nog ruimte innemen tot de prullenbak wordt geleegd. Leegmaken is juist de bedoeling, dus niets hier komt vanzelf terug." },
     user_temp: { name: "Temp-map", description: "De kladmap waar Windows, installatieprogramma's en de helft van de programma's op de machine naar schrijven en die ze zelden zelf opruimen." },
+    system_empty_space: { name: "Vrije schijfruimte", description: "Overschrijft de vrije ruimte op de schijf met nullen en verwijdert daarna het opvulbestand, zodat eerder verwijderde bestanden niet kunnen worden hersteld. Het kan uren duren. Het maakt geen ruimte vrij, heeft geen nut op een SSD met TRIM en zorgt voor extra slijtage door schrijfacties." },
     defender_history: { name: "Scangeschiedenis", description: "Opgeslagen resultaten van eerdere Defender-scans en het logboek waarin ze staan. De bescherming blijft ongemoeid; Defender begint bij de volgende scan een nieuw overzicht." },
     defender_temp: { name: "Tijdelijke bestanden", description: "Updateprogramma's en logs die Defender na gebruik achterlaat in de tijdelijke map en updatemappen van Windows." },
     defender_quarantine: { name: "Bestanden in quarantaine", description: "Bestanden die Defender heeft onderschept en opgeborgen. Via quarantaine geeft Defender een ten onrechte gemarkeerd bestand terug; als dit is gewist, kan een valse melding nooit meer worden hersteld." },
@@ -89,12 +90,11 @@ export default {
     defender_logs: { name: "Logs", description: "De eigen service- en diagnostische logs van Defender. Alleen nuttig bij het oplossen van problemen met Defender zelf; er worden nieuwe geschreven terwijl het draait." },
     winrar_history: { name: "Geschiedenis", description: "De onthouden archiefnamen, uitpakmappen en zoektermen van WinRAR. De archieven zelf blijven ongemoeid." },
     winrar_temp: { name: "Tijdelijke bestanden", description: "Tijdelijke bestanden die WinRAR in zijn eigen programmamap heeft achtergelaten. Archieven en instellingen blijven ongemoeid." },
-    deepscan_backup: { name: "Backup files", description: "Files ending in .bak, or in up to four letters and a tilde (such as notes.txt~), anywhere in your user folder. Editors often leave the only copy of something behind as a backup, so check the preview for anything you want to keep." },
-    deepscan_tmp: { name: "Office temporary files", description: "Word (~wr and four digits) and PowerPoint (ppt and four digits) working files, anywhere in your user folder. After a crash, one can hold the only copy of unsaved work." },
-    deepscan_vim_swap: { name: "Vim swap files", description: "Vim's .swp, .swo and .swn files, anywhere in your user folder. Vim writes them while you edit, and after a crash they hold the unsaved changes." },
-    deepscan_ds_store: { name: ".DS_Store files", description: "Folder-view files that macOS leaves in folders copied from a Mac. Nothing reads them on Windows." },
-    deepscan_thumbs_db: { name: "Thumbs.db files", description: "Thumbnail caches that older versions of Windows left in picture folders. Explorer builds new ones if it needs them." },
-    system_empty_space: { name: "Free disk space", description: "Overwrites the free space on the drive with zeros, then deletes the filler, so files you deleted earlier can't be recovered. It can take hours. It frees no space, does nothing useful on an SSD with TRIM, and adds write wear." },
+    deepscan_backup: { name: "Back-upbestanden", description: "Bestanden die eindigen op .bak, of op maximaal vier letters en een tilde (zoals notes.txt~), overal in je gebruikersmap. Editors laten vaak de enige kopie van iets achter als back-up, dus controleer het voorbeeld op alles wat je wilt bewaren." },
+    deepscan_tmp: { name: "Tijdelijke Office-bestanden", description: "Werkbestanden van Word (~wr en vier cijfers) en PowerPoint (ppt en vier cijfers), overal in je gebruikersmap. Na een crash kan zo'n bestand de enige kopie van niet-opgeslagen werk bevatten." },
+    deepscan_vim_swap: { name: "Vim-swapbestanden", description: "De .swp-, .swo- en .swn-bestanden van Vim, overal in je gebruikersmap. Vim schrijft ze terwijl je bewerkt, en na een crash bevatten ze de niet-opgeslagen wijzigingen." },
+    deepscan_ds_store: { name: ".DS_Store-bestanden", description: "Mapweergavebestanden die macOS achterlaat in mappen die vanaf een Mac zijn gekopieerd. Windows leest ze nergens voor." },
+    deepscan_thumbs_db: { name: "Thumbs.db-bestanden", description: "Miniatuurcaches die oudere versies van Windows achterlieten in afbeeldingsmappen. Explorer bouwt zo nodig nieuwe." },
   },
   categories: {
     "Brave": "Brave",
@@ -128,6 +128,6 @@ export default {
     "League of Legends": "League of Legends",
     "Windows Defender": "Windows Defender",
     "WinRAR": "WinRAR",
-    "Deep scan": "Deep scan",
+    "Deep scan": "Grondige scan",
   }
 };

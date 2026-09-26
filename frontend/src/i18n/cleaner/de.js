@@ -82,6 +82,7 @@ export default {
     league_of_legends_logs: { name: "Spielprotokolle", description: "Client- und Spielprotokolle pro Match. Werden unbegrenzt aufbewahrt und fast nie gelesen." },
     recycle_bin: { name: "Papierkorb", description: "Dateien, die du bereits gelöscht hast und die weiter Speicherplatz belegen, bis der Papierkorb geleert wird. Genau das Leeren ist der Zweck – nichts hier kommt von selbst zurück." },
     user_temp: { name: "Temp-Ordner", description: "Der Arbeitsordner, in den Windows, Installationsprogramme und die Hälfte aller Programme auf dem Rechner schreiben und den sie selten hinterher aufräumen." },
+    system_empty_space: { name: "Freier Speicherplatz", description: "Überschreibt den freien Speicherplatz auf dem Laufwerk mit Nullen und löscht die Fülldatei anschließend, sodass früher gelöschte Dateien nicht mehr wiederhergestellt werden können. Das kann Stunden dauern. Es gibt keinen Speicherplatz frei, bringt auf einer SSD mit TRIM nichts und erhöht den Schreibverschleiß." },
     defender_history: { name: "Scanverlauf", description: "Gespeicherte Ergebnisse früherer Defender-Scans und das Protokoll, das sie auflistet. Der Schutz bleibt unberührt; Defender legt mit dem nächsten Scan einen neuen Eintrag an." },
     defender_temp: { name: "Temporäre Dateien", description: "Update-Installer und Protokolle, die Defender in den Temp- und Update-Ordnern von Windows zurücklässt, sobald er sie verwendet hat." },
     defender_quarantine: { name: "Dateien in Quarantäne", description: "Dateien, die Defender erkannt und weggesperrt hat. Über die Quarantäne gibt Defender eine fälschlich markierte Datei zurück – nach dem Leeren lässt sich ein Fehlalarm nie mehr wiederherstellen." },
@@ -89,12 +90,11 @@ export default {
     defender_logs: { name: "Protokolle", description: "Defenders eigene Dienst- und Diagnoseprotokolle. Nur bei der Fehlersuche an Defender selbst nützlich; neue werden während des Betriebs geschrieben." },
     winrar_history: { name: "Verlauf", description: "Die von WinRAR gemerkten Archivnamen, Zielordner zum Entpacken und Suchbegriffe. Die Archive selbst bleiben unberührt." },
     winrar_temp: { name: "Temporäre Dateien", description: "Temp-Dateien, die WinRAR im eigenen Programmordner zurückgelassen hat. Archive und Einstellungen bleiben unberührt." },
-    deepscan_backup: { name: "Backup files", description: "Files ending in .bak, or in up to four letters and a tilde (such as notes.txt~), anywhere in your user folder. Editors often leave the only copy of something behind as a backup, so check the preview for anything you want to keep." },
-    deepscan_tmp: { name: "Office temporary files", description: "Word (~wr and four digits) and PowerPoint (ppt and four digits) working files, anywhere in your user folder. After a crash, one can hold the only copy of unsaved work." },
-    deepscan_vim_swap: { name: "Vim swap files", description: "Vim's .swp, .swo and .swn files, anywhere in your user folder. Vim writes them while you edit, and after a crash they hold the unsaved changes." },
-    deepscan_ds_store: { name: ".DS_Store files", description: "Folder-view files that macOS leaves in folders copied from a Mac. Nothing reads them on Windows." },
-    deepscan_thumbs_db: { name: "Thumbs.db files", description: "Thumbnail caches that older versions of Windows left in picture folders. Explorer builds new ones if it needs them." },
-    system_empty_space: { name: "Free disk space", description: "Overwrites the free space on the drive with zeros, then deletes the filler, so files you deleted earlier can't be recovered. It can take hours. It frees no space, does nothing useful on an SSD with TRIM, and adds write wear." },
+    deepscan_backup: { name: "Sicherungsdateien", description: "Dateien, die auf .bak enden oder auf bis zu vier Buchstaben und eine Tilde (etwa notes.txt~), überall in deinem Benutzerordner. Editoren lassen als Sicherung oft die einzige Kopie von etwas zurück, sieh dir also die Vorschau an, ob etwas dabei ist, das du behalten willst." },
+    deepscan_tmp: { name: "Temporäre Office-Dateien", description: "Arbeitsdateien von Word (~wr und vier Ziffern) und PowerPoint (ppt und vier Ziffern), überall in deinem Benutzerordner. Nach einem Absturz kann eine davon die einzige Kopie ungespeicherter Arbeit enthalten." },
+    deepscan_vim_swap: { name: "Vim-Swap-Dateien", description: "Die Dateien .swp, .swo und .swn von Vim, überall in deinem Benutzerordner. Vim schreibt sie während du bearbeitest, und nach einem Absturz enthalten sie die ungespeicherten Änderungen." },
+    deepscan_ds_store: { name: ".DS_Store-Dateien", description: "Ordneransicht-Dateien, die macOS in von einem Mac kopierten Ordnern hinterlässt. Unter Windows liest sie nichts." },
+    deepscan_thumbs_db: { name: "Thumbs.db-Dateien", description: "Thumbnail-Caches, die ältere Windows-Versionen in Bilderordnern hinterlassen haben. Der Explorer baut bei Bedarf neue auf." },
   },
   categories: {
     "Brave": "Brave",
@@ -128,6 +128,6 @@ export default {
     "League of Legends": "League of Legends",
     "Windows Defender": "Windows Defender",
     "WinRAR": "WinRAR",
-    "Deep scan": "Deep scan",
+    "Deep scan": "Gründlicher Scan",
   }
 };

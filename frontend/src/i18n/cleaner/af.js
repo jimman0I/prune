@@ -82,6 +82,7 @@ export default {
     league_of_legends_logs: { name: "Speletjielogs", description: "Kliënt- en speletjielogs per wedstryd. Word onbepaald bewaar, byna nooit gelees nie." },
     recycle_bin: { name: "Asblik", description: "Lêers wat jy reeds uitgevee het en steeds spasie gebruik totdat die asblik leeggemaak word. Om dit leeg te maak is die doel, so niks hier kom uit eie beweging terug nie." },
     user_temp: { name: "Temp-gids", description: "Die krapgids waarin Windows, installeerders en die helfte van die masjien se programme skryf en selde agterna opruim." },
+    system_empty_space: { name: "Vrye skyfspasie", description: "Oorskryf die vrye spasie op die aandrywer met nulle en verwyder dan die vullêer, sodat lêers wat jy vroeër verwyder het nie herstel kan word nie. Dit kan ure neem. Dit maak geen spasie vry nie, doen niks nuttigs op 'n SSD met TRIM nie en verhoog skryfslytasie." },
     defender_history: { name: "Skandeergeskiedenis", description: "Gestoorde resultate van vorige Defender-skanderings en die log wat hulle lys. Beskerming word nie geraak nie; Defender begin 'n nuwe rekord met sy volgende skandering." },
     defender_temp: { name: "Tydelike lêers", description: "Opdateringsinstalleerders en logs wat Defender in Windows se temp- en opdateringsgidse agterlaat nadat dit dit gebruik het." },
     defender_quarantine: { name: "Lêers in karantyn", description: "Lêers wat Defender gevang en weggesluit het. Karantyn is hoe Defender 'n lêer teruggee wat per ongeluk gemerk is — sodra dit skoongemaak is, kan 'n vals positief nooit herstel word nie." },
@@ -89,12 +90,11 @@ export default {
     defender_logs: { name: "Logs", description: "Defender se eie diens- en diagnoselogs. Slegs nuttig wanneer Defender self probleemoplos word; dit skryf nuwes soos dit loop." },
     winrar_history: { name: "Geskiedenis", description: "WinRAR se onthoude argiefname, onttrek-na-gidse en soekterme. Die argiewe self word nie geraak nie." },
     winrar_temp: { name: "Tydelike lêers", description: "Tydelike lêers wat WinRAR in sy eie programgids agtergelaat het. Argiewe en instellings word nie geraak nie." },
-    deepscan_backup: { name: "Backup files", description: "Files ending in .bak, or in up to four letters and a tilde (such as notes.txt~), anywhere in your user folder. Editors often leave the only copy of something behind as a backup, so check the preview for anything you want to keep." },
-    deepscan_tmp: { name: "Office temporary files", description: "Word (~wr and four digits) and PowerPoint (ppt and four digits) working files, anywhere in your user folder. After a crash, one can hold the only copy of unsaved work." },
-    deepscan_vim_swap: { name: "Vim swap files", description: "Vim's .swp, .swo and .swn files, anywhere in your user folder. Vim writes them while you edit, and after a crash they hold the unsaved changes." },
-    deepscan_ds_store: { name: ".DS_Store files", description: "Folder-view files that macOS leaves in folders copied from a Mac. Nothing reads them on Windows." },
-    deepscan_thumbs_db: { name: "Thumbs.db files", description: "Thumbnail caches that older versions of Windows left in picture folders. Explorer builds new ones if it needs them." },
-    system_empty_space: { name: "Free disk space", description: "Overwrites the free space on the drive with zeros, then deletes the filler, so files you deleted earlier can't be recovered. It can take hours. It frees no space, does nothing useful on an SSD with TRIM, and adds write wear." },
+    deepscan_backup: { name: "Rugsteunlêers", description: "Lêers wat op .bak eindig, of op tot vier letters en 'n tilde (soos notes.txt~), oral in jou gebruikersgids. Redigeerders laat dikwels die enigste kopie van iets as 'n rugsteun agter, so kyk in die voorskou vir alles wat jy wil hou." },
+    deepscan_tmp: { name: "Tydelike Office-lêers", description: "Word- (~wr en vier syfers) en PowerPoint-werklêers (ppt en vier syfers), oral in jou gebruikersgids. Ná 'n ineenstorting kan een die enigste kopie van werk bevat wat nie gestoor is nie." },
+    deepscan_vim_swap: { name: "Vim-ruillêers", description: "Vim se .swp-, .swo- en .swn-lêers, oral in jou gebruikersgids. Vim skryf dit terwyl jy wysig, en ná 'n ineenstorting bevat hulle die veranderinge wat nie gestoor is nie." },
+    deepscan_ds_store: { name: ".DS_Store-lêers", description: "Gidsaansig-lêers wat macOS agterlaat in gidse wat vanaf 'n Mac gekopieer is. Niks lees dit op Windows nie." },
+    deepscan_thumbs_db: { name: "Thumbs.db-lêers", description: "Duimnaelkas wat ouer weergawes van Windows in prentjiegidse agtergelaat het. Explorer bou nuwes as dit dit nodig het." },
   },
   categories: {
     "Brave": "Brave",
@@ -128,6 +128,6 @@ export default {
     "League of Legends": "League of Legends",
     "Windows Defender": "Windows Defender",
     "WinRAR": "WinRAR",
-    "Deep scan": "Deep scan",
+    "Deep scan": "Diepskandering",
   }
 };

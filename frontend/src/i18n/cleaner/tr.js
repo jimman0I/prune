@@ -82,6 +82,7 @@ export default {
     league_of_legends_logs: { name: "Oyun günlükleri", description: "Maç başına istemci ve oyun günlükleri. Süresiz saklanır, neredeyse hiç okunmaz." },
     recycle_bin: { name: "Geri Dönüşüm Kutusu", description: "Zaten sildiğiniz dosyalar, kutu boşaltılana kadar yer kaplamaya devam eder. Amaç kutuyu boşaltmaktır, bu yüzden buradaki hiçbir şey kendiliğinden geri gelmez." },
     user_temp: { name: "Geçici klasör", description: "Windows'un, yükleyicilerin ve makinedeki programların yarısının içine yazıp nadiren arkasını topladığı çalışma klasörü." },
+    system_empty_space: { name: "Boş disk alanı", description: "Sürücüdeki boş alanın üzerine sıfırlar yazar, ardından dolgu dosyasını siler; böylece daha önce sildiğiniz dosyalar kurtarılamaz. Saatler sürebilir. Hiç alan boşaltmaz, TRIM'li bir SSD'de işe yaramaz ve yazma aşınmasını artırır." },
     defender_history: { name: "Tarama geçmişi", description: "Geçmiş Defender taramalarının saklanan sonuçları ve bunları listeleyen günlük. Koruma etkilenmez; Defender bir sonraki taramasında yeni bir kayıt başlatır." },
     defender_temp: { name: "Geçici dosyalar", description: "Defender'ın kullandıktan sonra Windows'un geçici ve güncelleme klasörlerinde bıraktığı güncelleme yükleyicileri ve günlükler." },
     defender_quarantine: { name: "Karantinaya alınan dosyalar", description: "Defender'ın yakalayıp kilitlediği dosyalar. Karantina, Defender'ın yanlışlıkla işaretlediği bir dosyayı geri vermesinin yoludur; bu temizlendiğinde yanlış pozitif bir dosya bir daha geri yüklenemez." },
@@ -89,12 +90,11 @@ export default {
     defender_logs: { name: "Günlükler", description: "Defender'ın kendi hizmet ve tanılama günlükleri. Yalnızca Defender'ın kendisinde sorun giderirken işe yarar; çalışırken yenilerini yazar." },
     winrar_history: { name: "Geçmiş", description: "WinRAR'ın hatırladığı arşiv adları, çıkarma klasörleri ve arama terimleri. Arşivlerin kendisine dokunulmaz." },
     winrar_temp: { name: "Geçici dosyalar", description: "WinRAR'ın kendi program klasöründe geride bıraktığı geçici dosyalar. Arşivlere ve ayarlara dokunulmaz." },
-    deepscan_backup: { name: "Backup files", description: "Files ending in .bak, or in up to four letters and a tilde (such as notes.txt~), anywhere in your user folder. Editors often leave the only copy of something behind as a backup, so check the preview for anything you want to keep." },
-    deepscan_tmp: { name: "Office temporary files", description: "Word (~wr and four digits) and PowerPoint (ppt and four digits) working files, anywhere in your user folder. After a crash, one can hold the only copy of unsaved work." },
-    deepscan_vim_swap: { name: "Vim swap files", description: "Vim's .swp, .swo and .swn files, anywhere in your user folder. Vim writes them while you edit, and after a crash they hold the unsaved changes." },
-    deepscan_ds_store: { name: ".DS_Store files", description: "Folder-view files that macOS leaves in folders copied from a Mac. Nothing reads them on Windows." },
-    deepscan_thumbs_db: { name: "Thumbs.db files", description: "Thumbnail caches that older versions of Windows left in picture folders. Explorer builds new ones if it needs them." },
-    system_empty_space: { name: "Free disk space", description: "Overwrites the free space on the drive with zeros, then deletes the filler, so files you deleted earlier can't be recovered. It can take hours. It frees no space, does nothing useful on an SSD with TRIM, and adds write wear." },
+    deepscan_backup: { name: "Yedek dosyalar", description: "Kullanıcı klasörünüzün her yerinde .bak ile veya en fazla dört harf ve bir tilde ile biten dosyalar (notes.txt~ gibi). Düzenleyiciler bazen bir şeyin tek kopyasını yedek olarak bırakır, bu yüzden saklamak istediğiniz bir şey olup olmadığını önizlemede kontrol edin." },
+    deepscan_tmp: { name: "Office geçici dosyaları", description: "Kullanıcı klasörünüzün her yerindeki Word (~wr ve dört rakam) ve PowerPoint (ppt ve dört rakam) çalışma dosyaları. Çökmeden sonra biri, kaydedilmemiş çalışmanın tek kopyasını tutuyor olabilir." },
+    deepscan_vim_swap: { name: "Vim takas dosyaları", description: "Vim'in kullanıcı klasörünüzün her yerindeki .swp, .swo ve .swn dosyaları. Vim bunları siz düzenlerken yazar; çökmeden sonra kaydedilmemiş değişiklikleri tutarlar." },
+    deepscan_ds_store: { name: ".DS_Store dosyaları", description: "macOS'in bir Mac'ten kopyalanan klasörlere bıraktığı klasör görünümü dosyaları. Windows'ta hiçbir şey bunları okumaz." },
+    deepscan_thumbs_db: { name: "Thumbs.db dosyaları", description: "Windows'un eski sürümlerinin resim klasörlerine bıraktığı küçük resim önbellekleri. Gerekirse Explorer yenilerini oluşturur." },
   },
   categories: {
     "Brave": "Brave",
@@ -128,6 +128,6 @@ export default {
     "League of Legends": "League of Legends",
     "Windows Defender": "Windows Defender",
     "WinRAR": "WinRAR",
-    "Deep scan": "Deep scan",
+    "Deep scan": "Derin tarama",
   }
 };

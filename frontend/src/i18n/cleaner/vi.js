@@ -82,6 +82,7 @@ export default {
     league_of_legends_logs: { name: "Nhật ký trò chơi", description: "Nhật ký ứng dụng và trò chơi của từng trận đấu. Được giữ vô thời hạn và hầu như không bao giờ được đọc." },
     recycle_bin: { name: "Thùng rác", description: "Các tệp bạn đã xóa, vẫn chiếm dung lượng cho đến khi bạn dọn sạch thùng rác. Dọn sạch chính là mục đích, nên những gì ở đây sẽ không tự quay trở lại." },
     user_temp: { name: "Thư mục Temp", description: "Thư mục nháp mà Windows, trình cài đặt và rất nhiều chương trình trên máy ghi vào rồi hiếm khi tự dọn dẹp." },
+    system_empty_space: { name: "Dung lượng đĩa trống", description: "Ghi đè dung lượng trống trên ổ đĩa bằng số 0, rồi xóa tệp đệm, để các tệp bạn đã xóa trước đó không thể khôi phục. Có thể mất hàng giờ. Nó không giải phóng thêm dung lượng, không có tác dụng gì trên SSD có TRIM và làm tăng hao mòn do ghi." },
     defender_history: { name: "Lịch sử quét", description: "Kết quả đã lưu của các lần quét Defender trước đây và nhật ký liệt kê chúng. Khả năng bảo vệ không bị ảnh hưởng; Defender sẽ bắt đầu bản ghi mới ở lần quét tiếp theo." },
     defender_temp: { name: "Tệp tạm", description: "Trình cài đặt bản cập nhật và nhật ký mà Defender bỏ lại trong thư mục tạm và thư mục cập nhật của Windows sau khi dùng xong." },
     defender_quarantine: { name: "Tệp bị cách ly", description: "Các tệp Defender đã phát hiện và khóa lại. Cách ly là cách Defender trả lại tệp bị đánh dấu nhầm — khi mục này đã bị xóa, một cảnh báo sai sẽ không bao giờ khôi phục được." },
@@ -89,12 +90,11 @@ export default {
     defender_logs: { name: "Nhật ký", description: "Nhật ký dịch vụ và chẩn đoán của chính Defender. Chỉ hữu ích khi khắc phục sự cố với Defender; nó sẽ ghi nhật ký mới khi chạy." },
     winrar_history: { name: "Lịch sử", description: "Tên tệp nén, thư mục giải nén và từ khóa tìm kiếm mà WinRAR ghi nhớ. Bản thân các tệp nén không bị ảnh hưởng." },
     winrar_temp: { name: "Tệp tạm", description: "Tệp tạm mà WinRAR bỏ lại trong thư mục chương trình của nó. Tệp nén và cài đặt không bị ảnh hưởng." },
-    deepscan_backup: { name: "Backup files", description: "Files ending in .bak, or in up to four letters and a tilde (such as notes.txt~), anywhere in your user folder. Editors often leave the only copy of something behind as a backup, so check the preview for anything you want to keep." },
-    deepscan_tmp: { name: "Office temporary files", description: "Word (~wr and four digits) and PowerPoint (ppt and four digits) working files, anywhere in your user folder. After a crash, one can hold the only copy of unsaved work." },
-    deepscan_vim_swap: { name: "Vim swap files", description: "Vim's .swp, .swo and .swn files, anywhere in your user folder. Vim writes them while you edit, and after a crash they hold the unsaved changes." },
-    deepscan_ds_store: { name: ".DS_Store files", description: "Folder-view files that macOS leaves in folders copied from a Mac. Nothing reads them on Windows." },
-    deepscan_thumbs_db: { name: "Thumbs.db files", description: "Thumbnail caches that older versions of Windows left in picture folders. Explorer builds new ones if it needs them." },
-    system_empty_space: { name: "Free disk space", description: "Overwrites the free space on the drive with zeros, then deletes the filler, so files you deleted earlier can't be recovered. It can take hours. It frees no space, does nothing useful on an SSD with TRIM, and adds write wear." },
+    deepscan_backup: { name: "Tệp sao lưu", description: "Các tệp có đuôi .bak, hoặc kết thúc bằng tối đa bốn chữ cái rồi đến dấu ngã (như notes.txt~), ở bất kỳ đâu trong thư mục người dùng của bạn. Trình soạn thảo thường để lại bản duy nhất của một thứ dưới dạng tệp sao lưu, nên hãy xem phần xem trước để tìm những gì bạn muốn giữ." },
+    deepscan_tmp: { name: "Tệp tạm của Office", description: "Các tệp đang làm việc của Word (~wr và bốn chữ số) và PowerPoint (ppt và bốn chữ số), ở bất kỳ đâu trong thư mục người dùng của bạn. Sau sự cố, một tệp có thể chứa bản duy nhất của công việc chưa lưu." },
+    deepscan_vim_swap: { name: "Tệp hoán đổi Vim", description: "Các tệp .swp, .swo và .swn của Vim, ở bất kỳ đâu trong thư mục người dùng của bạn. Vim ghi chúng khi bạn chỉnh sửa, và sau sự cố chúng chứa các thay đổi chưa lưu." },
+    deepscan_ds_store: { name: "Tệp .DS_Store", description: "Các tệp hiển thị thư mục mà macOS để lại trong những thư mục sao chép từ máy Mac. Trên Windows không có gì đọc chúng." },
+    deepscan_thumbs_db: { name: "Tệp Thumbs.db", description: "Bộ nhớ đệm hình thu nhỏ mà các phiên bản Windows cũ để lại trong thư mục ảnh. Explorer sẽ tạo bản mới nếu cần." },
   },
   categories: {
     "Brave": "Brave",
@@ -128,6 +128,6 @@ export default {
     "League of Legends": "League of Legends",
     "Windows Defender": "Windows Defender",
     "WinRAR": "WinRAR",
-    "Deep scan": "Deep scan",
+    "Deep scan": "Quét sâu",
   }
 };

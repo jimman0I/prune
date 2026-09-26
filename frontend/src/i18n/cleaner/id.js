@@ -82,6 +82,7 @@ export default {
     league_of_legends_logs: { name: "Log game", description: "Log klien dan game per pertandingan. Disimpan tanpa batas waktu, hampir tidak pernah dibaca." },
     recycle_bin: { name: "Recycle Bin", description: "Berkas yang sudah dihapus tetapi masih memakai ruang sampai bin dikosongkan. Mengosongkannya memang tujuannya, jadi tidak ada yang kembali dengan sendirinya." },
     user_temp: { name: "Folder Temp", description: "Folder sementara tempat Windows, penginstal, dan separuh program di komputer menulis dan jarang membersihkannya sendiri." },
+    system_empty_space: { name: "Ruang disk kosong", description: "Menimpa ruang kosong di drive dengan angka nol, lalu menghapus file pengisinya, sehingga file yang sudah Anda hapus sebelumnya tidak bisa dipulihkan. Bisa memakan waktu berjam-jam. Tidak membebaskan ruang, tidak berguna pada SSD dengan TRIM, dan menambah keausan tulis." },
     defender_history: { name: "Riwayat pemindaian", description: "Hasil tersimpan dari pemindaian Defender sebelumnya beserta log yang mendaftarkannya. Perlindungan tidak terpengaruh; Defender memulai catatan baru pada pemindaian berikutnya." },
     defender_temp: { name: "Berkas sementara", description: "Penginstal pembaruan dan log yang ditinggalkan Defender di folder Temp dan pembaruan Windows setelah dipakai." },
     defender_quarantine: { name: "Berkas dikarantina", description: "Berkas yang ditangkap dan dikunci Defender. Karantina adalah cara Defender mengembalikan berkas yang keliru ditandai — setelah ini dibersihkan, positif palsu tidak akan pernah bisa dipulihkan." },
@@ -89,12 +90,11 @@ export default {
     defender_logs: { name: "Log", description: "Log layanan dan diagnostik Defender sendiri. Hanya berguna saat memecahkan masalah Defender; log baru ditulis saat berjalan." },
     winrar_history: { name: "Riwayat", description: "Nama arsip, folder tujuan ekstrak, dan kata pencarian yang diingat WinRAR. Arsipnya sendiri tidak tersentuh." },
     winrar_temp: { name: "Berkas sementara", description: "Berkas sementara yang ditinggalkan WinRAR di folder programnya sendiri. Arsip dan pengaturan tidak tersentuh." },
-    deepscan_backup: { name: "Backup files", description: "Files ending in .bak, or in up to four letters and a tilde (such as notes.txt~), anywhere in your user folder. Editors often leave the only copy of something behind as a backup, so check the preview for anything you want to keep." },
-    deepscan_tmp: { name: "Office temporary files", description: "Word (~wr and four digits) and PowerPoint (ppt and four digits) working files, anywhere in your user folder. After a crash, one can hold the only copy of unsaved work." },
-    deepscan_vim_swap: { name: "Vim swap files", description: "Vim's .swp, .swo and .swn files, anywhere in your user folder. Vim writes them while you edit, and after a crash they hold the unsaved changes." },
-    deepscan_ds_store: { name: ".DS_Store files", description: "Folder-view files that macOS leaves in folders copied from a Mac. Nothing reads them on Windows." },
-    deepscan_thumbs_db: { name: "Thumbs.db files", description: "Thumbnail caches that older versions of Windows left in picture folders. Explorer builds new ones if it needs them." },
-    system_empty_space: { name: "Free disk space", description: "Overwrites the free space on the drive with zeros, then deletes the filler, so files you deleted earlier can't be recovered. It can take hours. It frees no space, does nothing useful on an SSD with TRIM, and adds write wear." },
+    deepscan_backup: { name: "File cadangan", description: "File berakhiran .bak, atau berakhiran hingga empat huruf lalu tanda tilde (seperti notes.txt~), di mana saja dalam folder pengguna Anda. Editor sering meninggalkan satu-satunya salinan sesuatu sebagai file cadangan, jadi periksa pratinjau untuk apa pun yang ingin Anda simpan." },
+    deepscan_tmp: { name: "File sementara Office", description: "File kerja Word (~wr dan empat digit) dan PowerPoint (ppt dan empat digit), di mana saja dalam folder pengguna Anda. Setelah crash, salah satunya bisa menyimpan satu-satunya salinan pekerjaan yang belum disimpan." },
+    deepscan_vim_swap: { name: "File swap Vim", description: "File .swp, .swo, dan .swn milik Vim, di mana saja dalam folder pengguna Anda. Vim menulisnya saat Anda mengedit, dan setelah crash file itu menyimpan perubahan yang belum disimpan." },
+    deepscan_ds_store: { name: "File .DS_Store", description: "File tampilan folder yang ditinggalkan macOS di folder yang disalin dari Mac. Tidak ada yang membacanya di Windows." },
+    deepscan_thumbs_db: { name: "File Thumbs.db", description: "Cache thumbnail yang ditinggalkan Windows versi lama di folder gambar. Explorer membuat yang baru jika membutuhkannya." },
   },
   categories: {
     "Brave": "Brave",
@@ -128,6 +128,6 @@ export default {
     "League of Legends": "League of Legends",
     "Windows Defender": "Windows Defender",
     "WinRAR": "WinRAR",
-    "Deep scan": "Deep scan",
+    "Deep scan": "Pemindaian mendalam",
   }
 };

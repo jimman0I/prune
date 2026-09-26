@@ -82,6 +82,7 @@ export default {
     league_of_legends_logs: { name: "Spelloggar", description: "Klient- och spelloggar för varje match. Sparas på obestämd tid och läses nästan aldrig." },
     recycle_bin: { name: "Papperskorgen", description: "Filer du redan har raderat och som fortfarande tar plats tills papperskorgen töms. Att tömma den är poängen, så inget här kommer tillbaka av sig självt." },
     user_temp: { name: "Temp-mapp", description: "Kladdmappen som Windows, installationsprogram och hälften av programmen på datorn skriver till och sällan städar upp efter sig i." },
+    system_empty_space: { name: "Ledigt diskutrymme", description: "Skriver över det lediga utrymmet på enheten med nollor och raderar sedan fyllnadsfilen, så att filer du raderat tidigare inte kan återställas. Det kan ta timmar. Det frigör inget utrymme, gör ingen nytta på en SSD med TRIM och ger extra skrivslitage." },
     defender_history: { name: "Skanningshistorik", description: "Sparade resultat från tidigare Defender-skanningar och loggen som listar dem. Skyddet påverkas inte; Defender startar en ny post vid nästa skanning." },
     defender_temp: { name: "Tillfälliga filer", description: "Uppdateringsinstallerare och loggar som Defender lämnar kvar i Windows temp- och uppdateringsmappar när den har använt dem." },
     defender_quarantine: { name: "Filer i karantän", description: "Filer som Defender fångat och låst in. Karantän är sättet Defender ger tillbaka en fil som felaktigt flaggats – när detta är rensat kan ett falsklarm aldrig återställas." },
@@ -89,12 +90,11 @@ export default {
     defender_logs: { name: "Loggar", description: "Defenders egna tjänst- och diagnosloggar. Bara användbara vid felsökning av Defender själv; den skriver nya medan den körs." },
     winrar_history: { name: "Historik", description: "Arkivnamn, utpackningsmappar och söktermer som WinRAR kommer ihåg. Själva arkiven rörs inte." },
     winrar_temp: { name: "Tillfälliga filer", description: "Temp-filer som WinRAR lämnat kvar i sin egen programmapp. Arkiv och inställningar rörs inte." },
-    deepscan_backup: { name: "Backup files", description: "Files ending in .bak, or in up to four letters and a tilde (such as notes.txt~), anywhere in your user folder. Editors often leave the only copy of something behind as a backup, so check the preview for anything you want to keep." },
-    deepscan_tmp: { name: "Office temporary files", description: "Word (~wr and four digits) and PowerPoint (ppt and four digits) working files, anywhere in your user folder. After a crash, one can hold the only copy of unsaved work." },
-    deepscan_vim_swap: { name: "Vim swap files", description: "Vim's .swp, .swo and .swn files, anywhere in your user folder. Vim writes them while you edit, and after a crash they hold the unsaved changes." },
-    deepscan_ds_store: { name: ".DS_Store files", description: "Folder-view files that macOS leaves in folders copied from a Mac. Nothing reads them on Windows." },
-    deepscan_thumbs_db: { name: "Thumbs.db files", description: "Thumbnail caches that older versions of Windows left in picture folders. Explorer builds new ones if it needs them." },
-    system_empty_space: { name: "Free disk space", description: "Overwrites the free space on the drive with zeros, then deletes the filler, so files you deleted earlier can't be recovered. It can take hours. It frees no space, does nothing useful on an SSD with TRIM, and adds write wear." },
+    deepscan_backup: { name: "Säkerhetskopiefiler", description: "Filer som slutar på .bak, eller på upp till fyra bokstäver och en tilde (som notes.txt~), var som helst i din användarmapp. Redigerare lämnar ofta den enda kopian av något kvar som en säkerhetskopia, så kontrollera förhandsgranskningen efter sådant du vill behålla." },
+    deepscan_tmp: { name: "Tillfälliga Office-filer", description: "Arbetsfiler från Word (~wr och fyra siffror) och PowerPoint (ppt och fyra siffror), var som helst i din användarmapp. Efter en krasch kan en sådan fil innehålla den enda kopian av osparat arbete." },
+    deepscan_vim_swap: { name: "Vims swap-filer", description: "Vims .swp-, .swo- och .swn-filer, var som helst i din användarmapp. Vim skriver dem medan du redigerar, och efter en krasch innehåller de de osparade ändringarna." },
+    deepscan_ds_store: { name: ".DS_Store-filer", description: "Mappvisningsfiler som macOS lämnar i mappar som kopierats från en Mac. Ingenting läser dem i Windows." },
+    deepscan_thumbs_db: { name: "Thumbs.db-filer", description: "Miniatyrbildscacher som äldre versioner av Windows lämnade i bildmappar. Explorer bygger nya om den behöver dem." },
   },
   categories: {
     "Brave": "Brave",
@@ -128,6 +128,6 @@ export default {
     "League of Legends": "League of Legends",
     "Windows Defender": "Windows Defender",
     "WinRAR": "WinRAR",
-    "Deep scan": "Deep scan",
+    "Deep scan": "Grundlig skanning",
   }
 };

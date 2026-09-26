@@ -82,6 +82,7 @@ export default {
     league_of_legends_logs: { name: "Pelilokit", description: "Ottelukohtaiset asiakasohjelman ja pelin lokit. Säilyvät ikuisesti, luetaan lähes koskaan." },
     recycle_bin: { name: "Roskakori", description: "Jo poistamasi tiedostot, jotka vievät yhä tilaa, kunnes roskakori tyhjennetään. Tyhjennys on juuri tarkoitus, joten mikään täältä ei palaa itsestään." },
     user_temp: { name: "Temp-kansio", description: "Työkansio, johon Windows, asennusohjelmat ja puolet koneen ohjelmista kirjoittavat ja jota ne harvoin siivoavat jälkeensä." },
+    system_empty_space: { name: "Vapaa levytila", description: "Ylikirjoittaa aseman vapaan tilan nollilla ja poistaa sitten täytetiedoston, jotta aiemmin poistettuja tiedostoja ei voi palauttaa. Se voi kestää tunteja. Se ei vapauta tilaa, siitä ei ole hyötyä SSD-levyllä, jossa on TRIM, ja se lisää kirjoituskulumaa." },
     defender_history: { name: "Skannaushistoria", description: "Defenderin aiempien skannausten tallennetut tulokset ja niitä luetteloiva loki. Suojaus ei muutu; Defender aloittaa uuden tallenteen seuraavassa skannauksessa." },
     defender_temp: { name: "Väliaikaiset tiedostot", description: "Päivitysasennusohjelmat ja lokit, jotka Defender jättää Windowsin temp- ja päivityskansioihin käytettyään ne." },
     defender_quarantine: { name: "Karanteenissa olevat tiedostot", description: "Tiedostot, jotka Defender on siepannut ja lukinnut pois. Karanteenin kautta Defender palauttaa erehdyksessä merkityn tiedoston — kun tämä tyhjennetään, virheellistä hälytystä ei voi enää palauttaa." },
@@ -89,12 +90,11 @@ export default {
     defender_logs: { name: "Lokit", description: "Defenderin omat palvelu- ja diagnostiikkalokit. Hyödyllisiä vain Defenderin itsensä vianmäärityksessä; se kirjoittaa uusia toimiessaan." },
     winrar_history: { name: "Historia", description: "WinRARin muistamat arkistojen nimet, purkukansiot ja hakusanat. Itse arkistoihin ei kosketa." },
     winrar_temp: { name: "Väliaikaiset tiedostot", description: "Väliaikaiset tiedostot, jotka WinRAR jätti omaan ohjelmakansioonsa. Arkistoihin ja asetuksiin ei kosketa." },
-    deepscan_backup: { name: "Backup files", description: "Files ending in .bak, or in up to four letters and a tilde (such as notes.txt~), anywhere in your user folder. Editors often leave the only copy of something behind as a backup, so check the preview for anything you want to keep." },
-    deepscan_tmp: { name: "Office temporary files", description: "Word (~wr and four digits) and PowerPoint (ppt and four digits) working files, anywhere in your user folder. After a crash, one can hold the only copy of unsaved work." },
-    deepscan_vim_swap: { name: "Vim swap files", description: "Vim's .swp, .swo and .swn files, anywhere in your user folder. Vim writes them while you edit, and after a crash they hold the unsaved changes." },
-    deepscan_ds_store: { name: ".DS_Store files", description: "Folder-view files that macOS leaves in folders copied from a Mac. Nothing reads them on Windows." },
-    deepscan_thumbs_db: { name: "Thumbs.db files", description: "Thumbnail caches that older versions of Windows left in picture folders. Explorer builds new ones if it needs them." },
-    system_empty_space: { name: "Free disk space", description: "Overwrites the free space on the drive with zeros, then deletes the filler, so files you deleted earlier can't be recovered. It can take hours. It frees no space, does nothing useful on an SSD with TRIM, and adds write wear." },
+    deepscan_backup: { name: "Varmuuskopiotiedostot", description: "Tiedostot, joiden pääte on .bak tai enintään neljä kirjainta ja aaltoviiva (kuten notes.txt~), missä tahansa käyttäjäkansiossasi. Muokkaimet jättävät usein jälkeensä varmuuskopion, joka on ainoa kopio jostakin, joten tarkista esikatselusta, ettei mukana ole mitään säilytettävää." },
+    deepscan_tmp: { name: "Officen väliaikaistiedostot", description: "Wordin (~wr ja neljä numeroa) ja PowerPointin (ppt ja neljä numeroa) työtiedostot missä tahansa käyttäjäkansiossasi. Kaatumisen jälkeen tällainen tiedosto voi sisältää ainoan kopion tallentamattomasta työstä." },
+    deepscan_vim_swap: { name: "Vimin swap-tiedostot", description: "Vimin .swp-, .swo- ja .swn-tiedostot missä tahansa käyttäjäkansiossasi. Vim kirjoittaa ne muokkauksen aikana, ja kaatumisen jälkeen ne sisältävät tallentamattomat muutokset." },
+    deepscan_ds_store: { name: ".DS_Store-tiedostot", description: "Kansionäkymän tiedostot, joita macOS jättää Macilta kopioituihin kansioihin. Windowsissa mikään ei lue niitä." },
+    deepscan_thumbs_db: { name: "Thumbs.db-tiedostot", description: "Pikkukuvien välimuistit, joita Windowsin vanhemmat versiot jättivät kuvakansioihin. Explorer luo uudet, jos tarvitsee." },
   },
   categories: {
     "Brave": "Brave",
@@ -128,6 +128,6 @@ export default {
     "League of Legends": "League of Legends",
     "Windows Defender": "Windows Defender",
     "WinRAR": "WinRAR",
-    "Deep scan": "Deep scan",
+    "Deep scan": "Syväskannaus",
   }
 };

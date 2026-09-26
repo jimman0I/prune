@@ -82,6 +82,7 @@ export default {
     league_of_legends_logs: { name: "Registres de partides", description: "Registres del client i del joc per partida. Es conserven indefinidament i gairebé mai es llegeixen." },
     recycle_bin: { name: "Paperera", description: "Fitxers que ja has eliminat i que continuen ocupant espai fins que es buida la paperera. Buidar-la és precisament el que es busca, així que res d'això no torna per si sol." },
     user_temp: { name: "Carpeta temporal", description: "La carpeta de treball on escriuen Windows, els instal·ladors i la meitat dels programes de la màquina, i que rarament neteguen després." },
+    system_empty_space: { name: "Espai lliure del disc", description: "Sobreescriu l'espai lliure de la unitat amb zeros i després elimina el fitxer de farciment, de manera que els fitxers que hagis eliminat abans no es puguin recuperar. Pot trigar hores. No allibera espai, no serveix de res en un SSD amb TRIM i augmenta el desgast per escriptura." },
     defender_history: { name: "Historial d'anàlisis", description: "Resultats desats d'anàlisis anteriors de Defender i el registre que els enumera. La protecció no es veu afectada; Defender comença un registre nou amb la propera anàlisi." },
     defender_temp: { name: "Fitxers temporals", description: "Instal·ladors d'actualització i registres que Defender deixa a les carpetes temporals i d'actualització de Windows un cop els ha fet servir." },
     defender_quarantine: { name: "Fitxers en quarantena", description: "Fitxers que Defender ha detectat i bloquejat. La quarantena és la manera com Defender retorna un fitxer marcat per error: un cop buidada, un fals positiu ja no es pot restaurar mai." },
@@ -89,12 +90,11 @@ export default {
     defender_logs: { name: "Registres", description: "Registres de servei i de diagnòstic del mateix Defender. Només són útils per solucionar problemes del propi Defender; en va escrivint de nous mentre s'executa." },
     winrar_history: { name: "Historial", description: "Els noms d'arxius, les carpetes d'extracció i els termes de cerca que recorda WinRAR. Els arxius en si no es toquen." },
     winrar_temp: { name: "Fitxers temporals", description: "Fitxers temporals que WinRAR ha deixat a la seva pròpia carpeta de programa. Els arxius i la configuració no es toquen." },
-    deepscan_backup: { name: "Backup files", description: "Files ending in .bak, or in up to four letters and a tilde (such as notes.txt~), anywhere in your user folder. Editors often leave the only copy of something behind as a backup, so check the preview for anything you want to keep." },
-    deepscan_tmp: { name: "Office temporary files", description: "Word (~wr and four digits) and PowerPoint (ppt and four digits) working files, anywhere in your user folder. After a crash, one can hold the only copy of unsaved work." },
-    deepscan_vim_swap: { name: "Vim swap files", description: "Vim's .swp, .swo and .swn files, anywhere in your user folder. Vim writes them while you edit, and after a crash they hold the unsaved changes." },
-    deepscan_ds_store: { name: ".DS_Store files", description: "Folder-view files that macOS leaves in folders copied from a Mac. Nothing reads them on Windows." },
-    deepscan_thumbs_db: { name: "Thumbs.db files", description: "Thumbnail caches that older versions of Windows left in picture folders. Explorer builds new ones if it needs them." },
-    system_empty_space: { name: "Free disk space", description: "Overwrites the free space on the drive with zeros, then deletes the filler, so files you deleted earlier can't be recovered. It can take hours. It frees no space, does nothing useful on an SSD with TRIM, and adds write wear." },
+    deepscan_backup: { name: "Fitxers de còpia de seguretat", description: "Fitxers que acaben en .bak, o en fins a quatre lletres i una titlla (com notes.txt~), a qualsevol lloc de la teva carpeta d'usuari. Els editors sovint deixen com a còpia de seguretat l'única còpia d'alguna cosa, així que revisa la previsualització per si hi ha res que vulguis conservar." },
+    deepscan_tmp: { name: "Fitxers temporals d'Office", description: "Fitxers de treball de Word (~wr i quatre dígits) i de PowerPoint (ppt i quatre dígits), a qualsevol lloc de la teva carpeta d'usuari. Després d'una fallada, un d'ells pot contenir l'única còpia de feina sense desar." },
+    deepscan_vim_swap: { name: "Fitxers d'intercanvi de Vim", description: "Els fitxers .swp, .swo i .swn de Vim, a qualsevol lloc de la teva carpeta d'usuari. Vim els escriu mentre edites i, després d'una fallada, contenen els canvis sense desar." },
+    deepscan_ds_store: { name: "Fitxers .DS_Store", description: "Fitxers de vista de carpeta que macOS deixa a les carpetes copiades d'un Mac. A Windows no els llegeix res." },
+    deepscan_thumbs_db: { name: "Fitxers Thumbs.db", description: "Memòries cau de miniatures que les versions antigues de Windows deixaven a les carpetes d'imatges. L'Explorer en crea de noves si les necessita." },
   },
   categories: {
     "Brave": "Brave",
@@ -128,6 +128,6 @@ export default {
     "League of Legends": "League of Legends",
     "Windows Defender": "Windows Defender",
     "WinRAR": "WinRAR",
-    "Deep scan": "Deep scan",
+    "Deep scan": "Escaneig profund",
   }
 };

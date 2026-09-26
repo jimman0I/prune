@@ -82,6 +82,7 @@ export default {
     league_of_legends_logs: { name: "Logiau gêm", description: "Logiau cleient a gêm ar gyfer pob gêm. Yn cael eu cadw am gyfnod amhenodol, ond prin byth yn cael eu darllen." },
     recycle_bin: { name: "Y Bin Ailgylchu", description: "Ffeiliau rydych eisoes wedi'u dileu, sy'n dal i ddefnyddio lle nes bod y bin yn cael ei wagio. Gwagio yw'r pwynt, felly ni ddaw dim byd yma'n ôl ohono'i hun." },
     user_temp: { name: "Cyfeiriadur Temp", description: "Y cyfeiriadur crafu y mae Windows, gosodwyr a hanner rhaglenni'r peiriant yn ysgrifennu iddo ac yn anaml yn clirio ar eu holau." },
+    system_empty_space: { name: "Lle rhydd ar y ddisg", description: "Yn trosysgrifo'r lle rhydd ar y gyriant â seroau, yna'n dileu'r ffeil llenwi, fel na ellir adfer ffeiliau y gwnaethoch eu dileu'n gynt. Gall gymryd oriau. Nid yw'n rhyddhau unrhyw le, nid yw'n gwneud dim defnyddiol ar SSD gyda TRIM, ac mae'n ychwanegu at draul ysgrifennu." },
     defender_history: { name: "Hanes sganio", description: "Canlyniadau sganiau Defender blaenorol sydd wedi'u cadw a'r log sy'n eu rhestru. Ni effeithir ar y diogelwch; mae Defender yn dechrau cofnod newydd gyda'i sgan nesaf." },
     defender_temp: { name: "Ffeiliau dros dro", description: "Gosodwyr diweddaru a logiau y mae Defender yn eu gadael yng nghyfeiriaduron dros dro a diweddaru Windows unwaith y bydd wedi'u defnyddio." },
     defender_quarantine: { name: "Ffeiliau mewn cwarantin", description: "Ffeiliau y mae Defender wedi'u dal a'u cloi i ffwrdd. Cwarantin yw'r ffordd y mae Defender yn rhoi ffeil yn ôl a farciwyd ar gam — unwaith y caiff hwn ei glirio, ni ellir byth adfer positif ffug." },
@@ -89,12 +90,11 @@ export default {
     defender_logs: { name: "Logiau", description: "Logiau gwasanaeth a diagnostig Defender ei hun. Defnyddiol dim ond wrth ddatrys problemau gyda Defender ei hun; mae'n ysgrifennu rhai newydd wrth iddo redeg." },
     winrar_history: { name: "Hanes", description: "Enwau archifau, cyfeiriaduron echdynnu a thermau chwilio y mae WinRAR yn eu cofio. Ni chyffyrddir â'r archifau eu hunain." },
     winrar_temp: { name: "Ffeiliau dros dro", description: "Ffeiliau dros dro a adawodd WinRAR yn ei gyfeiriadur rhaglen ei hun. Ni chyffyrddir ag archifau na gosodiadau." },
-    deepscan_backup: { name: "Backup files", description: "Files ending in .bak, or in up to four letters and a tilde (such as notes.txt~), anywhere in your user folder. Editors often leave the only copy of something behind as a backup, so check the preview for anything you want to keep." },
-    deepscan_tmp: { name: "Office temporary files", description: "Word (~wr and four digits) and PowerPoint (ppt and four digits) working files, anywhere in your user folder. After a crash, one can hold the only copy of unsaved work." },
-    deepscan_vim_swap: { name: "Vim swap files", description: "Vim's .swp, .swo and .swn files, anywhere in your user folder. Vim writes them while you edit, and after a crash they hold the unsaved changes." },
-    deepscan_ds_store: { name: ".DS_Store files", description: "Folder-view files that macOS leaves in folders copied from a Mac. Nothing reads them on Windows." },
-    deepscan_thumbs_db: { name: "Thumbs.db files", description: "Thumbnail caches that older versions of Windows left in picture folders. Explorer builds new ones if it needs them." },
-    system_empty_space: { name: "Free disk space", description: "Overwrites the free space on the drive with zeros, then deletes the filler, so files you deleted earlier can't be recovered. It can take hours. It frees no space, does nothing useful on an SSD with TRIM, and adds write wear." },
+    deepscan_backup: { name: "Ffeiliau wrth gefn", description: "Ffeiliau sy'n gorffen yn .bak, neu mewn hyd at bedair llythyren a thilde (fel notes.txt~), unrhyw le yn eich ffolder defnyddiwr. Mae golygyddion yn aml yn gadael yr unig gopi o rywbeth ar ôl fel copi wrth gefn, felly gwiriwch y rhagolwg am unrhyw beth rydych am ei gadw." },
+    deepscan_tmp: { name: "Ffeiliau dros dro Office", description: "Ffeiliau gwaith Word (~wr a phedwar digid) a PowerPoint (ppt a phedwar digid), unrhyw le yn eich ffolder defnyddiwr. Ar ôl damwain, gall un ohonynt ddal yr unig gopi o waith heb ei gadw." },
+    deepscan_vim_swap: { name: "Ffeiliau cyfnewid Vim", description: "Ffeiliau .swp, .swo a .swn Vim, unrhyw le yn eich ffolder defnyddiwr. Mae Vim yn eu hysgrifennu wrth i chi olygu, ac ar ôl damwain maent yn dal y newidiadau heb eu cadw." },
+    deepscan_ds_store: { name: "Ffeiliau .DS_Store", description: "Ffeiliau golwg ffolder y mae macOS yn eu gadael mewn ffolderi a gopïwyd o Mac. Nid oes dim yn eu darllen ar Windows." },
+    deepscan_thumbs_db: { name: "Ffeiliau Thumbs.db", description: "Storfeydd dros dro mân-luniau yr oedd fersiynau hŷn o Windows yn eu gadael mewn ffolderi lluniau. Mae Explorer yn adeiladu rhai newydd os oes eu hangen." },
   },
   categories: {
     "Brave": "Brave",
@@ -128,6 +128,6 @@ export default {
     "League of Legends": "League of Legends",
     "Windows Defender": "Windows Defender",
     "WinRAR": "WinRAR",
-    "Deep scan": "Deep scan",
+    "Deep scan": "Sganio Dwfn",
   }
 };

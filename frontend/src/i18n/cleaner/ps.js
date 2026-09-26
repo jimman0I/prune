@@ -82,6 +82,7 @@ export default {
     league_of_legends_logs: { name: "د لوبې لاګونه", description: "د هر لوبې د کلاینټ او لوبې لاګونه. په نامعلوم وخت ساتل کیږي، تقریبا هیڅکله نه لوستل کیږي." },
     recycle_bin: { name: "ردي بکس", description: "هغه فایلونه چې تاسو مخکې ړنګ کړي، خو ځای لا هم نیسي تر څو چې بکس تش نه شي. تش کول هدف دی، نو دلته هیڅ شی په خپله نه بیرته راځي." },
     user_temp: { name: "د Temp فولډر", description: "هغه سکریچ فولډر چې Windows، نصبونکي او د ماشین نیمایي پروګرامونه پکې لیکي او په ندرت سره یې پاکوي." },
+    system_empty_space: { name: "د ډیسک وړیا ځای", description: "د ډرایو وړیا ځای په صفرونو بیا لیکي، بیا ډکوونکی فایل ړنګوي، نو هغه فایلونه چې تاسو مخکې ړنګ کړي بیرته نشي ترلاسه کیدی. ښایي څو ساعته ونیسي. دا هیڅ ځای نه خلاصوي، په SSD کې چې TRIM ولري هیڅ ګټور کار نه کوي، او د لیکلو ماتېدنه زیاتوي." },
     defender_history: { name: "د سکین تاریخچه", description: "د Defender د تیرو سکینونو زیرمه شوي پایلې او هغه لاګ چې دوی لیست کوي. ساتنه اغیزمنه نه ده؛ Defender په راتلونکي سکین کې نوی ریکارډ پیلوي." },
     defender_temp: { name: "لنډمهاله فایلونه", description: "د تازه کولو نصبونکي او لاګونه چې Defender یې وروسته له کارولو د Windows په Temp او تازه کولو فولډرونو کې پریږدي." },
     defender_quarantine: { name: "قرنطین شوي فایلونه", description: "هغه فایلونه چې Defender نیولي او بند کړي. قرنطین هغه لار ده چې Defender پکې هغه فایل بیرته ورکوي چې په غلطۍ نښه شوی — یوځل چې دا پاک شي، غلط مثبت هیڅکله بیرته نه شي راوستل کیدی." },
@@ -89,12 +90,11 @@ export default {
     defender_logs: { name: "لاګونه", description: "د Defender خپل خدمت او تشخیصي لاګونه. یوازې د Defender پخپله د ستونزو حل لپاره ګټور؛ کله چې چلیږي نوي لیکي." },
     winrar_history: { name: "تاریخچه", description: "د WinRAR یاد شوي آرشیف نومونه، د استخراج فولډرونه او د لټون اصطلاحات. پخپله آرشیفونه نه لمسیږي." },
     winrar_temp: { name: "لنډمهاله فایلونه", description: "هغه لنډمهاله فایلونه چې WinRAR د خپل پروګرام په فولډر کې پریښي. آرشیفونه او تنظیمات نه لمسیږي." },
-    deepscan_backup: { name: "Backup files", description: "Files ending in .bak, or in up to four letters and a tilde (such as notes.txt~), anywhere in your user folder. Editors often leave the only copy of something behind as a backup, so check the preview for anything you want to keep." },
-    deepscan_tmp: { name: "Office temporary files", description: "Word (~wr and four digits) and PowerPoint (ppt and four digits) working files, anywhere in your user folder. After a crash, one can hold the only copy of unsaved work." },
-    deepscan_vim_swap: { name: "Vim swap files", description: "Vim's .swp, .swo and .swn files, anywhere in your user folder. Vim writes them while you edit, and after a crash they hold the unsaved changes." },
-    deepscan_ds_store: { name: ".DS_Store files", description: "Folder-view files that macOS leaves in folders copied from a Mac. Nothing reads them on Windows." },
-    deepscan_thumbs_db: { name: "Thumbs.db files", description: "Thumbnail caches that older versions of Windows left in picture folders. Explorer builds new ones if it needs them." },
-    system_empty_space: { name: "Free disk space", description: "Overwrites the free space on the drive with zeros, then deletes the filler, so files you deleted earlier can't be recovered. It can take hours. It frees no space, does nothing useful on an SSD with TRIM, and adds write wear." },
+    deepscan_backup: { name: "د بیک اپ فایلونه", description: "هغه فایلونه چې په .bak پای ته رسیږي، یا تر څلورو توریو وروسته ټیلډ (لکه notes.txt~) لري، ستاسو د کارن په فولډر کې په هر ځای کې. ایډیټرونه ډیری وخت د یو څه یوازینی کاپي د بیک اپ په توګه پریږدي، نو په مخکتنه کې وګورئ چې آیا څه غواړئ وساتئ." },
+    deepscan_tmp: { name: "د Office لنډمهاله فایلونه", description: "د Word (~wr او څلور عددونه) او PowerPoint (ppt او څلور عددونه) کاري فایلونه، ستاسو د کارن په فولډر کې په هر ځای کې. له کریش وروسته، یو یې کولی شي د ناخوندي شوي کار یوازینی کاپي ولري." },
+    deepscan_vim_swap: { name: "د Vim swap فایلونه", description: "د Vim .swp، .swo او .swn فایلونه، ستاسو د کارن په فولډر کې په هر ځای کې. Vim یې د سمولو پر مهال لیکي، او له کریش وروسته دا ناخوندي شوي بدلونونه ساتي." },
+    deepscan_ds_store: { name: ".DS_Store فایلونه", description: "د فولډر د لید فایلونه چې macOS یې د Mac څخه کاپي شویو فولډرونو کې پریږدي. په Windows کې یې هیڅ شی نه لولي." },
+    deepscan_thumbs_db: { name: "Thumbs.db فایلونه", description: "د کوچنیو انځورونو کیشې چې د Windows زړو نسخو د انځورونو په فولډرونو کې پریښودې. که Explorer ورته اړتیا ولري، نوې جوړوي." },
   },
   categories: {
     "Brave": "Brave",
@@ -128,6 +128,6 @@ export default {
     "League of Legends": "League of Legends",
     "Windows Defender": "Windows Defender",
     "WinRAR": "WinRAR",
-    "Deep scan": "Deep scan",
+    "Deep scan": "ژور سکین",
   }
 };
