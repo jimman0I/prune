@@ -7,6 +7,15 @@ see v1.0.1 below) are documented here.
 
 ### Changed
 
+- **The Dashboard now answers one question: where is my space going?** One bar
+  splits the drive into installed programs, everything else and free, with every
+  figure repeated as text, and the five largest programs sit under it, each a
+  link into Applications. Drive health, junk files and programs left behind are
+  one quiet row instead of three cards, and the glowing Deep Clean button is
+  gone. Nothing is drawn until it is measured: the program split waits for the
+  program sizes rather than appearing and then changing, and Junk files has its
+  own Measure button that walks the recommended cleaners and shows the total.
+  The health ring and SMART table are behind a Drive details toggle.
 - **The right-click menu no longer starts on Uninstall.** It opens with focus
   on the menu itself, so pressing Enter straight after the right-click does
   nothing. Down and Up step in from the first and last choice, and Uninstall
