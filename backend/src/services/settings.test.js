@@ -38,7 +38,7 @@ describe('getSettings', () => {
     expect(settings.excludeExtensions).toEqual([]);
     expect(settings.updateCheck).toBe(false);          // nothing leaves the machine
     expect(settings.leftoverDestination).toBe('quarantine'); // leftovers can be put back
-    expect(settings.preselectLeftovers).toBe(true);    // today's behaviour, unchanged
+    expect(settings.preselectLeftovers).toBe(false);   // the review opens with nothing ticked
     expect(settings.scanLeftoversAfterUninstall).toBe(true);
     expect(settings.keepUninstallHistory).toBe(true);
     expect(settings.restorePointBeforeUninstall).toBe(false);   // needs admin, slow
@@ -207,5 +207,25 @@ describe('hideUnavailableRules on an existing settings file', () => {
     await write({ hideUnavailableRules: false });
     await updateSettings({ hideUnavailableRules: false });
     expect((await getSettings()).hideUnavailableRules).toBe(false);
+  });
+});
+
+describe('preselectLeftovers on an existing settings file', () => {
+  const write = (obj) => writeFile(process.env.UNREVO_SETTINGS_PATH, JSON.stringify(obj), 'utf8');
+
+  it('starts off for a brand-new install', async () => {
+    expect((await getSettings()).preselectLeftovers).toBe(false);
+  });
+
+  it('keeps an explicit choice, on or off', async () => {
+    await write({ preselectLeftovers: true });
+    expect((await getSettings()).preselectLeftovers).toBe(true);
+    await write({ preselectLeftovers: false });
+    expect((await getSettings()).preselectLeftovers).toBe(false);
+  });
+
+  it('keeps the old behaviour for a file that never recorded a choice, rather than flipping it unasked', async () => {
+    await write({ autoQuarantine: true });
+    expect((await getSettings()).preselectLeftovers).toBe(true);
   });
 });

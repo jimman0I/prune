@@ -586,6 +586,7 @@ export const CATALOG = {
       footer: {
         totalLabel: 'Total space to free:',
         notMeasuredYet: 'not measured yet',
+        previewFirst: 'Preview first to see what will be freed.',
         unmeasuredSuffix: (count) => ` · ${count} not measured`,
         selectEverything: 'Select everything',
         clear: 'Clear',
@@ -1386,6 +1387,7 @@ export const CATALOG = {
       footer: {
         totalLabel: 'Totale spasie om vry te maak:',
         notMeasuredYet: 'nog nie gemeet nie',
+        previewFirst: 'Preview first to see what will be freed.',
         unmeasuredSuffix: (count) => ` · ${count} nie gemeet nie`,
         selectEverything: 'Kies alles',
         clear: 'Maak skoon',
@@ -2186,6 +2188,7 @@ export const CATALOG = {
       footer: {
         totalLabel: 'إجمالي المساحة المراد تحريرها:',
         notMeasuredYet: 'لم يتم قياسها بعد',
+        previewFirst: 'Preview first to see what will be freed.',
         unmeasuredSuffix: (count) => ` · ${count} غير مقاس`,
         selectEverything: 'تحديد الكل',
         clear: 'مسح',
@@ -2986,6 +2989,7 @@ export const CATALOG = {
       footer: {
         totalLabel: 'Espai total a alliberar:',
         notMeasuredYet: 'encara no mesurat',
+        previewFirst: 'Preview first to see what will be freed.',
         unmeasuredSuffix: (count) => ` · ${count} sense mesurar`,
         selectEverything: 'Selecciona-ho tot',
         clear: 'Neteja',
@@ -3786,6 +3790,7 @@ export const CATALOG = {
       footer: {
         totalLabel: 'Celkový prostor k uvolnění:',
         notMeasuredYet: 'zatím nezměřeno',
+        previewFirst: 'Preview first to see what will be freed.',
         unmeasuredSuffix: (count) => ` · nezměřeno: ${count}`,
         selectEverything: 'Vybrat vše',
         clear: 'Vymazat',
@@ -4584,6 +4589,7 @@ export const CATALOG = {
       footer: {
         totalLabel: "Cyfanswm lle i'w ryddhau:",
         notMeasuredYet: 'heb ei fesur eto',
+        previewFirst: 'Preview first to see what will be freed.',
         unmeasuredSuffix: (count) => ` · ${count} heb eu mesur`,
         selectEverything: 'Dewis popeth',
         clear: 'Clirio',
@@ -5384,6 +5390,7 @@ export const CATALOG = {
       footer: {
         totalLabel: 'Samlet plads at frigøre:',
         notMeasuredYet: 'ikke målt endnu',
+        previewFirst: 'Preview first to see what will be freed.',
         unmeasuredSuffix: (count) => ` · ${count} ikke målt`,
         selectEverything: 'Vælg alt',
         clear: 'Ryd',
@@ -6184,6 +6191,7 @@ export const CATALOG = {
       footer: {
         totalLabel: 'Gesamt freizugebender Speicherplatz:',
         notMeasuredYet: 'noch nicht gemessen',
+        previewFirst: 'Preview first to see what will be freed.',
         unmeasuredSuffix: (count) => ` · ${count} nicht gemessen`,
         selectEverything: 'Alles auswählen',
         clear: "Abwählen",
@@ -6984,6 +6992,7 @@ export const CATALOG = {
       footer: {
         totalLabel: 'Συνολικός χώρος προς απελευθέρωση:',
         notMeasuredYet: 'δεν έχει μετρηθεί ακόμα',
+        previewFirst: 'Preview first to see what will be freed.',
         unmeasuredSuffix: (count) => ` · ${count} χωρίς μέτρηση`,
         selectEverything: 'Επιλογή όλων',
         clear: 'Απαλοιφή',
@@ -7784,6 +7793,7 @@ export const CATALOG = {
       footer: {
         totalLabel: 'Espacio total a liberar:',
         notMeasuredYet: 'aún no medido',
+        previewFirst: 'Preview first to see what will be freed.',
         unmeasuredSuffix: (count) => ` · ${count} sin medir`,
         selectEverything: 'Seleccionar todo',
         clear: "Deseleccionar",
@@ -8584,6 +8594,7 @@ export const CATALOG = {
       footer: {
         totalLabel: 'Vabastatav ruum kokku:',
         notMeasuredYet: 'veel mõõtmata',
+        previewFirst: 'Preview first to see what will be freed.',
         unmeasuredSuffix: (count) => ` · ${count} mõõtmata`,
         selectEverything: 'Vali kõik',
         clear: 'Tühjenda',
@@ -9384,6 +9395,7 @@ export const CATALOG = {
       footer: {
         totalLabel: 'Vapautettava tila yhteensä:',
         notMeasuredYet: 'ei vielä mitattu',
+        previewFirst: 'Preview first to see what will be freed.',
         unmeasuredSuffix: (count) => ` · ${count} mittaamatta`,
         selectEverything: 'Valitse kaikki',
         clear: 'Tyhjennä',
@@ -10184,6 +10196,7 @@ export const CATALOG = {
       footer: {
         totalLabel: 'Espace total à libérer :',
         notMeasuredYet: 'pas encore mesuré',
+        previewFirst: 'Preview first to see what will be freed.',
         unmeasuredSuffix: (count) => ` · ${count} non mesurés`,
         selectEverything: 'Tout sélectionner',
         clear: "Désélectionner",
@@ -10984,6 +10997,7 @@ export const CATALOG = {
       footer: {
         totalLabel: 'סה"כ שטח לפינוי:',
         notMeasuredYet: 'טרם נמדד',
+        previewFirst: 'Preview first to see what will be freed.',
         unmeasuredSuffix: (count) => ` · ${count} לא נמדד`,
         selectEverything: 'בחר הכל',
         clear: 'נקה',
@@ -11784,6 +11798,7 @@ export const CATALOG = {
       footer: {
         totalLabel: 'Felszabadítható hely összesen:',
         notMeasuredYet: 'még nincs megmérve',
+        previewFirst: 'Preview first to see what will be freed.',
         unmeasuredSuffix: (count) => ` · ${count} nem mért`,
         selectEverything: 'Összes kijelölése',
         clear: 'Törlés',
@@ -12584,6 +12599,7 @@ export const CATALOG = {
       footer: {
         totalLabel: 'Total ruang yang akan dibebaskan:',
         notMeasuredYet: 'belum diukur',
+        previewFirst: 'Preview first to see what will be freed.',
         unmeasuredSuffix: (count) => ` · ${count} tidak terukur`,
         selectEverything: 'Pilih semua',
         clear: "Hapus pilihan",
@@ -13384,6 +13400,7 @@ export const CATALOG = {
       footer: {
         totalLabel: 'Heildarrými til að losa:',
         notMeasuredYet: 'ekki mælt enn',
+        previewFirst: 'Preview first to see what will be freed.',
         unmeasuredSuffix: (count) => ` · ${count} ómælt`,
         selectEverything: 'Velja allt',
         clear: 'Hreinsa',
@@ -14184,6 +14201,7 @@ export const CATALOG = {
       footer: {
         totalLabel: 'Spazio totale da liberare:',
         notMeasuredYet: 'non ancora misurato',
+        previewFirst: 'Preview first to see what will be freed.',
         unmeasuredSuffix: (count) => ` · ${count} non misurati`,
         selectEverything: 'Seleziona tutto',
         clear: "Deseleziona",
@@ -14984,6 +15002,7 @@ export const CATALOG = {
       footer: {
         totalLabel: '解放される容量の合計:',
         notMeasuredYet: '未測定',
+        previewFirst: 'Preview first to see what will be freed.',
         unmeasuredSuffix: (count) => ` · 未測定 ${count} 件`,
         selectEverything: 'すべて選択',
         clear: 'クリア',
@@ -15784,6 +15803,7 @@ export const CATALOG = {
       footer: {
         totalLabel: '확보할 총 공간:',
         notMeasuredYet: '아직 측정되지 않음',
+        previewFirst: 'Preview first to see what will be freed.',
         unmeasuredSuffix: (count) => ` · 측정되지 않음 ${count}개`,
         selectEverything: '모두 선택',
         clear: '지우기',
@@ -16584,6 +16604,7 @@ export const CATALOG = {
       footer: {
         totalLabel: 'Iš viso atlaisvinama vietos:',
         notMeasuredYet: 'dar neišmatuota',
+        previewFirst: 'Preview first to see what will be freed.',
         unmeasuredSuffix: (count) => ` · ${count} neišmatuota`,
         selectEverything: 'Pasirinkti viską',
         clear: 'Išvalyti',
@@ -17382,6 +17403,7 @@ export const CATALOG = {
       footer: {
         totalLabel: 'Jumlah ruang untuk dibebaskan:',
         notMeasuredYet: 'belum diukur',
+        previewFirst: 'Preview first to see what will be freed.',
         unmeasuredSuffix: (count) => ` · ${count} tidak diukur`,
         selectEverything: 'Pilih semua',
         clear: 'Kosongkan',
@@ -18182,6 +18204,7 @@ export const CATALOG = {
       footer: {
         totalLabel: 'Total plass å frigjøre:',
         notMeasuredYet: 'ikke målt ennå',
+        previewFirst: 'Preview first to see what will be freed.',
         unmeasuredSuffix: (count) => ` · ${count} ikke målt`,
         selectEverything: 'Velg alt',
         clear: "Fjern merking",
@@ -18980,6 +19003,7 @@ export const CATALOG = {
       footer: {
         totalLabel: 'Totale vrij te maken ruimte:',
         notMeasuredYet: 'nog niet gemeten',
+        previewFirst: 'Preview first to see what will be freed.',
         unmeasuredSuffix: (count) => ` · ${count} niet gemeten`,
         selectEverything: 'Alles selecteren',
         clear: 'Wissen',
@@ -19778,6 +19802,7 @@ export const CATALOG = {
       footer: {
         totalLabel: 'Łączna ilość miejsca do zwolnienia:',
         notMeasuredYet: 'jeszcze nie zmierzono',
+        previewFirst: 'Preview first to see what will be freed.',
         unmeasuredSuffix: (count) => ` · niezmierzone: ${count}`,
         selectEverything: 'Zaznacz wszystko',
         clear: 'Wyczyść',
@@ -20576,6 +20601,7 @@ export const CATALOG = {
       footer: {
         totalLabel: 'د خلاصولو ټول ځای:',
         notMeasuredYet: 'تراوسه اندازه شوی نه دی',
+        previewFirst: 'Preview first to see what will be freed.',
         unmeasuredSuffix: (count) => ` · ${count} نامعلومه اندازه`,
         selectEverything: 'هر څه ټاکل',
         clear: 'پاک کول',
@@ -21376,6 +21402,7 @@ export const CATALOG = {
       footer: {
         totalLabel: 'Espaço total a liberar:',
         notMeasuredYet: 'ainda não medido',
+        previewFirst: 'Preview first to see what will be freed.',
         unmeasuredSuffix: (count) => ` · ${count} não medido${count === 1 ? '' : 's'}`,
         selectEverything: 'Selecionar tudo',
         clear: 'Limpar',
@@ -22174,6 +22201,7 @@ export const CATALOG = {
       footer: {
         totalLabel: 'Espaço total a libertar:',
         notMeasuredYet: 'ainda não medido',
+        previewFirst: 'Preview first to see what will be freed.',
         unmeasuredSuffix: (count) => ` · ${count} não medido${count === 1 ? '' : 's'}`,
         selectEverything: 'Selecionar tudo',
         clear: 'Limpar',
@@ -22974,6 +23002,7 @@ export const CATALOG = {
       footer: {
         totalLabel: 'Spațiu total de eliberat:',
         notMeasuredYet: 'încă nemăsurat',
+        previewFirst: 'Preview first to see what will be freed.',
         unmeasuredSuffix: (count) => count === 1 ? ' · 1 nemăsurat' : ` · ${count} nemăsurate`,
         selectEverything: 'Selectează tot',
         clear: 'Golește',
@@ -23774,6 +23803,7 @@ export const CATALOG = {
       footer: {
         totalLabel: 'Всего места будет освобождено:',
         notMeasuredYet: 'ещё не измерено',
+        previewFirst: 'Preview first to see what will be freed.',
         unmeasuredSuffix: (count) => ` · не измерено: ${count}`,
         selectEverything: 'Выбрать всё',
         clear: 'Очистить',
@@ -24572,6 +24602,7 @@ export const CATALOG = {
       footer: {
         totalLabel: 'Celkové miesto na uvoľnenie:',
         notMeasuredYet: 'zatiaľ nezmerané',
+        previewFirst: 'Preview first to see what will be freed.',
         unmeasuredSuffix: (count) => ` · nezmerané: ${count}`,
         selectEverything: 'Vybrať všetko',
         clear: 'Vymazať',
@@ -25370,6 +25401,7 @@ export const CATALOG = {
       footer: {
         totalLabel: 'Hapësira totale për t\'u liruar:',
         notMeasuredYet: 'ende e pamatur',
+        previewFirst: 'Preview first to see what will be freed.',
         unmeasuredSuffix: (count) => ` · ${count} të pamatura`,
         selectEverything: 'Zgjidh gjithçka',
         clear: 'Pastro',
@@ -26170,6 +26202,7 @@ export const CATALOG = {
       footer: {
         totalLabel: 'Укупно простора за ослобађање:',
         notMeasuredYet: 'још није измерено',
+        previewFirst: 'Preview first to see what will be freed.',
         unmeasuredSuffix: (count) => ` · ${count} немерено`,
         selectEverything: 'Изабери све',
         clear: 'Обриши',
@@ -26968,6 +27001,7 @@ export const CATALOG = {
       footer: {
         totalLabel: 'Totalt utrymme att frigöra:',
         notMeasuredYet: 'inte mätt än',
+        previewFirst: 'Preview first to see what will be freed.',
         unmeasuredSuffix: (count) => ` · ${count} ej ${count === 1 ? 'mätt' : 'mätta'}`,
         selectEverything: 'Markera allt',
         clear: 'Rensa',
@@ -27766,6 +27800,7 @@ export const CATALOG = {
       footer: {
         totalLabel: 'พื้นที่ทั้งหมดที่จะเพิ่มว่าง:',
         notMeasuredYet: 'ยังไม่ได้วัดผล',
+        previewFirst: 'Preview first to see what will be freed.',
         unmeasuredSuffix: (count) => ` · ไม่ได้วัดผล ${count} รายการ`,
         selectEverything: 'เลือกทั้งหมด',
         clear: 'ล้าง',
@@ -28566,6 +28601,7 @@ export const CATALOG = {
       footer: {
         totalLabel: 'Boşaltılacak toplam alan:',
         notMeasuredYet: 'henüz ölçülmedi',
+        previewFirst: 'Preview first to see what will be freed.',
         unmeasuredSuffix: (count) => ` · ${count} ölçülmedi`,
         selectEverything: 'Tümünü seç',
         clear: 'Temizle',
@@ -29366,6 +29402,7 @@ export const CATALOG = {
       footer: {
         totalLabel: 'Загальний обсяг місця для звільнення:',
         notMeasuredYet: 'ще не виміряно',
+        previewFirst: 'Preview first to see what will be freed.',
         unmeasuredSuffix: (count) => ` · не виміряно: ${count}`,
         selectEverything: 'Вибрати все',
         clear: 'Очистити',
@@ -30164,6 +30201,7 @@ export const CATALOG = {
       footer: {
         totalLabel: 'Tổng dung lượng sẽ giải phóng:',
         notMeasuredYet: 'chưa đo',
+        previewFirst: 'Preview first to see what will be freed.',
         unmeasuredSuffix: (count) => ` · ${count} chưa đo`,
         selectEverything: 'Chọn tất cả',
         clear: 'Xóa',
@@ -30964,6 +31002,7 @@ export const CATALOG = {
       footer: {
         totalLabel: '可释放的总空间：',
         notMeasuredYet: '尚未测量',
+        previewFirst: 'Preview first to see what will be freed.',
         unmeasuredSuffix: (count) => ` · ${count} 项未测量`,
         selectEverything: '全选',
         clear: '清除',
@@ -31764,6 +31803,7 @@ export const CATALOG = {
       footer: {
         totalLabel: '可釋放的總空間：',
         notMeasuredYet: '尚未測量',
+        previewFirst: 'Preview first to see what will be freed.',
         unmeasuredSuffix: (count) => ` · ${count} 項未測量`,
         selectEverything: '全選',
         clear: '清除',

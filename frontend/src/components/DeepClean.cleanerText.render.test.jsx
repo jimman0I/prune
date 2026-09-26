@@ -7,6 +7,7 @@ import { ThemeProvider } from '../hooks/useTheme.jsx';
 import { LanguageProvider } from '../i18n/LanguageContext.jsx';
 import { ToastProvider } from '../hooks/useToasts.jsx';
 import { makeTestClient } from '../testSupport/renderScreen.jsx';
+import { measuredScan, runMeasuredPreview } from '../testSupport/deepCleanPreview.js';
 
 /** Deep Clean's rule names, descriptions and category headings follow the
  * language, and the English stays a working fallback and a working search
@@ -181,6 +182,9 @@ describe('Deep Clean rule text, in Greek', () => {
     mount();
     await ready();
     await screen.findByText(CACHE_EL);
+    // Clean stays disabled until a Preview has measured something.
+    streamDeepCleanScan.mockImplementation(measuredScan(rules));
+    await runMeasuredPreview(user, streamDeepCleanScan, 'Προεπισκόπηση');
     await user.click(screen.getByRole('checkbox', { name: CACHE_EL }));
     await user.click(await screen.findByRole('button', { name: 'Καθαρισμός' }));
     await user.click(screen.getByRole('button', { name: 'Μετακίνηση σε καραντίνα' }));

@@ -36,7 +36,7 @@ beforeEach(() => {
   vi.clearAllMocks();
   streamUninstall.mockResolvedValue();
   scanForLeftovers.mockResolvedValue(found);
-  fetchSettings.mockResolvedValue({});
+  fetchSettings.mockResolvedValue({ preselectLeftovers: true });
 });
 
 const run = async () => {
@@ -58,7 +58,7 @@ const run = async () => {
 
 describe('a batch and the leftover settings', () => {
   it('sends the destination the review showed', async () => {
-    fetchSettings.mockResolvedValue({ leftoverDestination: 'permanent' });
+    fetchSettings.mockResolvedValue({ preselectLeftovers: true, leftoverDestination: 'permanent' });
     removeQuarantined.mockResolvedValue({ destination: 'permanent', files: [{ originalPath: 'x', sizeBytes: 2048 }], registryKeys: [], failedFiles: [], totalSizeBytes: 2048 });
     const user = await run();
 
@@ -69,12 +69,24 @@ describe('a batch and the leftover settings', () => {
   });
 
   it('skips the leftover scans when they are turned off, and says so', async () => {
-    fetchSettings.mockResolvedValue({ scanLeftoversAfterUninstall: false });
+    fetchSettings.mockResolvedValue({ preselectLeftovers: true, scanLeftoversAfterUninstall: false });
     await run();
 
     expect(await screen.findByText(/leftover scan is turned off/i)).toBeTruthy();
     expect(scanForLeftovers).not.toHaveBeenCalled();
     expect(screen.getByRole('button', { name: 'Done' })).toBeTruthy();
+  });
+
+  it('starts with nothing ticked when no choice was recorded either', async () => {
+    fetchSettings.mockResolvedValue({});
+    await run();
+    expect(await screen.findByText(/^0$/)).toBeTruthy();
+  });
+
+  it('starts with everything ticked only when the setting is on', async () => {
+    fetchSettings.mockResolvedValue({ preselectLeftovers: true });
+    await run();
+    expect(await screen.findByText(/^1$/)).toBeTruthy();
   });
 
   it('starts with nothing ticked when the setting is off', async () => {

@@ -425,6 +425,10 @@ function DeepClean() {
   };
 
   const cleanTotal = selectionTotal(categories, selected);
+  // Nothing can be cleaned blind: a completed Preview that measured at least
+  // one ticked item is the precondition, and a running scan or clean is not.
+  const canClean = Boolean(categories) && hasScanned && !scanning && !cleaning
+    && selected.size > 0 && cleanTotal.anyMeasured;
 
   return (
     <div className="h-full flex flex-col">
@@ -669,16 +673,30 @@ function DeepClean() {
                 </button>
               ) : (
                 <button
-                  className="btn-ghost px-4 py-2 rounded-lg text-[12.5px] font-medium"
+                  // Until a Preview has measured something, Preview is the
+                  // one action worth taking, so it carries the accent.
+                  className={`${hasScanned ? 'btn-ghost rounded-lg' : 'btn-primary'} px-4 py-2 text-[12.5px] font-medium`}
                   onClick={() => runPreview()}
                 >
                   {hasScanned ? t('deepClean.rescan') : t('deepClean.before.preview')}
                 </button>
               )}
+              {/* Visible text rather than a tooltip: the reason Clean is
+                  off is worth reading without hovering over it. */}
+              {!hasScanned && !scanning && categories && (
+                <span id="deep-clean-preview-first" className="text-[11.5px] text-[color:var(--text-muted)]">
+                  {t('deepClean.footer.previewFirst')}
+                </span>
+              )}
               <button
-                className="btn-primary px-5 py-2 text-[12.5px] font-medium disabled:opacity-50"
+                // Clean is enabled only once a Preview has measured at
+                // least one ticked item: 37 pre-ticked rules and a total
+                // reading "not measured yet" is not a decision anyone can
+                // make. It takes the accent only when it can be pressed.
+                className={`${canClean ? 'btn-primary' : 'btn-ghost rounded-lg'} px-5 py-2 text-[12.5px] font-medium disabled:opacity-50`}
                 onClick={() => setConfirmClean(true)}
-                disabled={!categories || selected.size === 0}
+                disabled={!canClean}
+                aria-describedby={!hasScanned ? 'deep-clean-preview-first' : undefined}
               >
                 {t('deepClean.clean')}
               </button>

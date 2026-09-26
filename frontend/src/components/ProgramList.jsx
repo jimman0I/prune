@@ -775,21 +775,6 @@ export default function ProgramList({ programs: initialPrograms, extensions = []
 export function rowMenuItems(program, { t, toasts, onUninstall, onRemoveStoreApp }) {
   const items = [];
 
-  if (program.source === 'store' && program.nonRemovable) {
-    items.push({
-      label: t('applications.inWindows.button'),
-      onSelect: () => { openInstalledAppsSettings().catch(() => {}); }
-    });
-  } else if (program.source === 'store') {
-    items.push({ label: t('applications.uninstall'), danger: true, onSelect: () => onRemoveStoreApp?.(program) });
-  } else if (program.source !== 'extension') {
-    items.push({
-      label: program.health?.orphaned ? t('applications.forceRemove') : t('applications.uninstall'),
-      danger: true,
-      onSelect: () => onUninstall?.(program)
-    });
-  }
-
   if (program.installLocation) {
     items.push({
       label: t('applications.openFolder'),
@@ -807,6 +792,28 @@ export function rowMenuItems(program, { t, toasts, onUninstall, onRemoveStoreApp
         .catch(() => toasts.error(t('applications.copyFailed')))
     });
   }
+
+  // The removal goes LAST, set apart and in the danger style: the menu opens
+  // with focus on the menu itself, and the choice that deletes is the one a
+  // stray arrow key should reach last, not first.
+  const removal = [];
+  if (program.source === 'store' && program.nonRemovable) {
+    removal.push({
+      label: t('applications.inWindows.button'),
+      onSelect: () => { openInstalledAppsSettings().catch(() => {}); }
+    });
+  } else if (program.source === 'store') {
+    removal.push({ label: t('applications.uninstall'), danger: true, onSelect: () => onRemoveStoreApp?.(program) });
+  } else if (program.source !== 'extension') {
+    removal.push({
+      label: program.health?.orphaned ? t('applications.forceRemove') : t('applications.uninstall'),
+      danger: true,
+      onSelect: () => onUninstall?.(program)
+    });
+  }
+  // A divider above a lone item would separate it from nothing.
+  if (items.length > 0) removal.forEach((item) => { item.separated = true; });
+  items.push(...removal);
 
   return items;
 }

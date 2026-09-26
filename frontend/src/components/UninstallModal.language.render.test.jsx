@@ -38,7 +38,7 @@ beforeEach(() => {
   streamUninstall.mockResolvedValue();
   scanForLeftovers.mockResolvedValue(found);
   removeQuarantined.mockResolvedValue({ destination: 'quarantine', files: [{ originalPath: 'x', sizeBytes: 2048 }], registryKeys: ['k'], totalSizeBytes: 2048 });
-  fetchSettings.mockResolvedValue({ language: 'el' });
+  fetchSettings.mockResolvedValue({ preselectLeftovers: true, language: 'el' });
 });
 
 /** `settings.language` resolves through the same async query every other
@@ -155,7 +155,7 @@ describe('the uninstall dialog, in Greek', () => {
   });
 
   it('translates the removing phase for the recycle bin', async () => {
-    fetchSettings.mockResolvedValue({ language: 'el', leftoverDestination: 'recycle' });
+    fetchSettings.mockResolvedValue({ preselectLeftovers: true, language: 'el', leftoverDestination: 'recycle' });
     let resolveRemoval;
     removeQuarantined.mockReturnValue(new Promise((resolve) => { resolveRemoval = resolve; }));
     const { user } = await openAndScan();
@@ -166,7 +166,7 @@ describe('the uninstall dialog, in Greek', () => {
   });
 
   it('translates the removing phase for permanent deletion', async () => {
-    fetchSettings.mockResolvedValue({ language: 'el', leftoverDestination: 'permanent' });
+    fetchSettings.mockResolvedValue({ preselectLeftovers: true, language: 'el', leftoverDestination: 'permanent' });
     let resolveRemoval;
     removeQuarantined.mockReturnValue(new Promise((resolve) => { resolveRemoval = resolve; }));
     const { user } = await openAndScan();
@@ -195,7 +195,7 @@ describe('the uninstall dialog, in Greek', () => {
   });
 
   it('translates the noScan step', async () => {
-    fetchSettings.mockResolvedValue({ language: 'el', scanLeftoversAfterUninstall: false });
+    fetchSettings.mockResolvedValue({ preselectLeftovers: true, language: 'el', scanLeftoversAfterUninstall: false });
     await openAndUninstall();
     expect(await screen.findByText(/Η σάρωση καταλοίπων είναι απενεργοποιημένη στις Ρυθμίσεις/)).toBeTruthy();
     expect(screen.getByRole('button', { name: 'Τέλος' })).toBeTruthy();
@@ -276,7 +276,7 @@ describe('the uninstall dialog, in Greek', () => {
   });
 
   it('translates the recycle-bin done summary', async () => {
-    fetchSettings.mockResolvedValue({ language: 'el', leftoverDestination: 'recycle' });
+    fetchSettings.mockResolvedValue({ preselectLeftovers: true, language: 'el', leftoverDestination: 'recycle' });
     removeQuarantined.mockResolvedValue({ destination: 'recycle', files: [{ originalPath: 'x', sizeBytes: 2048 }], registryKeys: ['k'], totalSizeBytes: 2048 });
     const { user } = await openAndScan();
     await user.click(await screen.findByRole('button', { name: 'Αφαίρεση επιλεγμένων' }));
@@ -284,7 +284,7 @@ describe('the uninstall dialog, in Greek', () => {
   });
 
   it('translates the permanent-deletion done summary', async () => {
-    fetchSettings.mockResolvedValue({ language: 'el', leftoverDestination: 'permanent' });
+    fetchSettings.mockResolvedValue({ preselectLeftovers: true, language: 'el', leftoverDestination: 'permanent' });
     removeQuarantined.mockResolvedValue({ destination: 'permanent', files: [{ originalPath: 'x', sizeBytes: 2048 }], registryKeys: ['k'], totalSizeBytes: 2048 });
     const { user } = await openAndScan();
     await user.click(await screen.findByRole('button', { name: 'Οριστική διαγραφή' }));
@@ -292,7 +292,7 @@ describe('the uninstall dialog, in Greek', () => {
   });
 
   it('translates the failed-files section on the done step', async () => {
-    fetchSettings.mockResolvedValue({ language: 'el', leftoverDestination: 'permanent' });
+    fetchSettings.mockResolvedValue({ preselectLeftovers: true, language: 'el', leftoverDestination: 'permanent' });
     removeQuarantined.mockResolvedValue({
       destination: 'permanent', files: [], registryKeys: [], totalSizeBytes: 0,
       failedFiles: [{ path: 'C:\\Users\\jim\\AppData\\Roaming\\Thing', reason: 'The file is in use.' }]

@@ -237,7 +237,7 @@ describe('the row context menu', () => {
   it('offers Uninstall, Open folder and Copy uninstall command for an ordinary program', async () => {
     render();
     const menu = await openMenu('Steam');
-    expect(within(menu).getAllByRole('menuitem').map((b) => b.textContent)).toEqual(['Uninstall', 'Open folder', 'Copy uninstall command']);
+    expect(within(menu).getAllByRole('menuitem').map((b) => b.textContent)).toEqual(['Open folder', 'Copy uninstall command', 'Uninstall']);
   });
 
   it('Uninstall hands the program to the same handler as the button, and only opens the dialog (removes nothing itself)', async () => {
@@ -312,6 +312,29 @@ describe('the row context menu', () => {
     const t = (key) => key;
     const items = rowMenuItems(program({ installLocation: null, uninstallString: undefined }), { t, toasts: {}, onUninstall: vi.fn(), onRemoveStoreApp: vi.fn() });
     expect(items.map((i) => i.label)).toEqual(['applications.uninstall']);
+  });
+
+  it('rowMenuItems puts the safe choices first and the destructive one last, set apart', () => {
+    const t = (key) => key;
+    const items = rowMenuItems(program(), { t, toasts: {}, onUninstall: vi.fn(), onRemoveStoreApp: vi.fn() });
+    expect(items.map((i) => i.label)).toEqual(['applications.openFolder', 'applications.copyUninstallCommand', 'applications.uninstall']);
+    const last = items[items.length - 1];
+    expect(last.danger).toBe(true);
+    expect(last.separated).toBe(true);
+    expect(items.slice(0, -1).some((i) => i.danger)).toBe(false);
+  });
+
+  it('a menu with only the destructive choice does not draw a divider above it', () => {
+    const t = (key) => key;
+    const [only] = rowMenuItems(program({ installLocation: null, uninstallString: undefined }), { t, toasts: {}, onUninstall: vi.fn(), onRemoveStoreApp: vi.fn() });
+    expect(only.separated).toBeFalsy();
+  });
+
+  it('right-clicking a row leaves focus on the menu, not on Uninstall', async () => {
+    render();
+    const menu = await openMenu('Steam');
+    await waitFor(() => expect(document.activeElement).toBe(menu));
+    expect(document.activeElement.getAttribute('role')).toBe('menu');
   });
 });
 

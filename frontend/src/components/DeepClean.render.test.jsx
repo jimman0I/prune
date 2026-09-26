@@ -4,6 +4,7 @@ import { screen, waitFor, within, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { renderScreen } from '../testSupport/renderScreen.jsx';
 import { isCopyable } from '../testSupport/copyable.js';
+import { measuredScan, runMeasuredPreview } from '../testSupport/deepCleanPreview.js';
 
 /** The Deep Clean screen, rendered.
  *
@@ -92,6 +93,13 @@ beforeEach(() => {
 
 const cleanButton = () => screen.getByRole('button', { name: 'Clean' });
 
+// Clean stays disabled until a Preview has measured something, so anything
+// that goes on to press it starts from a completed, measured scan.
+const previewFirst = async (user) => {
+  streamDeepCleanScan.mockImplementation(measuredScan(rules));
+  await runMeasuredPreview(user, streamDeepCleanScan);
+};
+
 describe('the Deep Clean screen', () => {
   it('shows the rules before any scan has run', async () => {
     // The screen used to be empty until a scan finished. The tree is the
@@ -122,10 +130,71 @@ describe('the Deep Clean screen', () => {
     await user.click(screen.getByRole('button', { name: 'Select everything' }));
 
     expect(screen.getByText('2 selected')).toBeTruthy();
+    // Ticked, but nothing has been measured: still not cleanable.
+    expect(cleanButton().disabled).toBe(true);
+    await previewFirst(user);
     expect(cleanButton().disabled).toBe(false);
     for (const box of screen.getAllByRole('checkbox')) {
       expect(box.getAttribute('aria-checked')).toBe('true');
     }
+  });
+});
+
+describe('Clean waits for a Preview', () => {
+  const tickAll = async (user) => {
+    await screen.findByText('Temporary files');
+    await user.click(screen.getByRole('button', { name: 'Select everything' }));
+  };
+
+  it('is disabled, and Preview is the primary button, until a Preview has run', async () => {
+    const user = userEvent.setup();
+    renderScreen(<DeepClean />);
+    await tickAll(user);
+
+    expect(cleanButton().disabled).toBe(true);
+    expect(cleanButton().className).not.toMatch(/btn-primary/);
+    const preview = screen.getAllByRole('button', { name: 'Preview' });
+    expect(preview.every((b) => /btn-primary/.test(b.className))).toBe(true);
+  });
+
+  it('says why in visible text, and the button points at it', async () => {
+    const user = userEvent.setup();
+    renderScreen(<DeepClean />);
+    await tickAll(user);
+
+    const hint = screen.getByText('Preview first to see what will be freed.');
+    expect(hint.id).toBeTruthy();
+    expect(cleanButton().getAttribute('aria-describedby')).toBe(hint.id);
+    expect(cleanButton().getAttribute('title')).toBeNull();
+  });
+
+  it('becomes the primary button, and the hint goes, once a Preview has measured the selection', async () => {
+    const user = userEvent.setup();
+    renderScreen(<DeepClean />);
+    await tickAll(user);
+    await previewFirst(user);
+
+    expect(cleanButton().disabled).toBe(false);
+    expect(cleanButton().className).toMatch(/btn-primary/);
+    expect(screen.queryByText('Preview first to see what will be freed.')).toBeNull();
+    const rescan = screen.getByRole('button', { name: 'Rescan' });
+    expect(rescan.className).not.toMatch(/btn-primary/);
+  });
+
+  it('stays disabled after a Preview that measured nothing that is ticked', async () => {
+    // Everything listed came back unmeasured: a completed scan with no
+    // size for any ticked item is still nothing to confirm.
+    streamDeepCleanScan.mockImplementation(async (onEvent) => {
+      onEvent('start', { total: 2 });
+      onEvent('rule', { id: 'temp', category: 'Windows', name: 'Temporary files', sizeBytes: null, present: true, accessible: true });
+      onEvent('rule', { id: 'thumbs', category: 'Windows', name: 'Thumbnail cache', sizeBytes: null, present: true, accessible: true });
+    });
+    const user = userEvent.setup();
+    renderScreen(<DeepClean />);
+    await tickAll(user);
+    await runMeasuredPreview(user, streamDeepCleanScan);
+
+    expect(cleanButton().disabled).toBe(true);
   });
 });
 
@@ -155,6 +224,7 @@ describe('the scan-in-progress spinner', () => {
 describe('the gate in front of a clean', () => {
   const selectSomething = async (user) => {
     await screen.findByText('Temporary files');
+    await previewFirst(user);
     const boxes = screen.getAllByRole('checkbox');
     await user.click(boxes[boxes.length - 1]);
     await waitFor(() => expect(cleanButton().disabled).toBe(false));
@@ -172,8 +242,9 @@ describe('the gate in front of a clean', () => {
 
   it('says how much, not just how many, before it will run', async () => {
     // "Move 47 items to Quarantine?" is not a decision anyone can make.
-    // And when nothing has been measured it says so, rather than omitting
-    // the number and letting the reader assume it is small.
+    // A Preview has to have measured it first, so the number is always a
+    // real one here (the "size not measured" wording is still catalogued
+    // for the confirm bar, but Clean can no longer reach it unmeasured).
     const user = userEvent.setup();
     renderScreen(<DeepClean />);
     await selectSomething(user);
@@ -183,7 +254,7 @@ describe('the gate in front of a clean', () => {
     // deepClean.confirm.prompt in catalog.js) rather than JSX fragments
     // around their own <span>, so this matches the whole phrase instead
     // of a standalone "size not measured" node.
-    expect(screen.getByText(/\(size not measured\) to Quarantine\?/)).toBeTruthy();
+    expect(screen.getByText(/Move 1 item \(1 KB\) to Quarantine\?/)).toBeTruthy();
   });
 
   it('backs out on Cancel, having cleaned nothing', async () => {
@@ -235,6 +306,7 @@ describe('the gate in front of a clean', () => {
 describe('the clean-in-progress output', () => {
   const selectSomething = async (user) => {
     await screen.findByText('Temporary files');
+    await previewFirst(user);
     const boxes = screen.getAllByRole('checkbox');
     await user.click(boxes[boxes.length - 1]); // 'thumbs'
     await waitFor(() => expect(cleanButton().disabled).toBe(false));
@@ -319,6 +391,7 @@ describe('what can be copied', () => {
     const user = userEvent.setup();
     renderScreen(<DeepClean />);
     await screen.findByText('Temporary files');
+    await previewFirst(user);
     const boxes = screen.getAllByRole('checkbox');
     await user.click(boxes[boxes.length - 1]);
     await waitFor(() => expect(cleanButton().disabled).toBe(false));
@@ -489,6 +562,7 @@ describe('the tree/log split while a clean runs', () => {
   // `260px` nor `calc(100% - 380px)` means anything on a stacked layout.
   const selectSomething = async (user) => {
     await screen.findByText('Temporary files');
+    await previewFirst(user);
     const boxes = screen.getAllByRole('checkbox');
     await user.click(boxes[boxes.length - 1]);
     await waitFor(() => expect(cleanButton().disabled).toBe(false));
@@ -545,6 +619,7 @@ describe('the tree/log split while a clean runs', () => {
     const user = userEvent.setup();
     renderScreen(<DeepClean />);
     await screen.findByText('Temporary files');
+    await previewFirst(user);
 
     // Select BOTH rules, by their own label rather than array position --
     // there is also a category-heading checkbox on screen.
