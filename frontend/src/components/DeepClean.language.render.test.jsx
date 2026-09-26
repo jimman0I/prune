@@ -7,6 +7,7 @@ import { ThemeProvider } from '../hooks/useTheme.jsx';
 import { LanguageProvider } from '../i18n/LanguageContext.jsx';
 import { ToastProvider } from '../hooks/useToasts.jsx';
 import { makeTestClient } from '../testSupport/renderScreen.jsx';
+import { measuredScan, runMeasuredPreview } from '../testSupport/deepCleanPreview.js';
 import ToastHost from './ToastHost.jsx';
 
 /** The Deep Clean screen's own copy follows the chosen language -- the
@@ -118,6 +119,12 @@ beforeEach(() => {
 const ready = () => screen.findByRole('heading', { name: 'Βαθύς καθαρισμός' });
 const cleanButton = () => screen.getByRole('button', { name: 'Καθαρισμός' });
 
+// Clean stays disabled until a Preview has measured something.
+const previewFirst = async (user) => {
+  streamDeepCleanScan.mockImplementation(measuredScan(rules));
+  await runMeasuredPreview(user, streamDeepCleanScan, 'Προεπισκόπηση');
+};
+
 describe('the Deep Clean screen, in Greek', () => {
   it('translates the title and subtitle', async () => {
     mount();
@@ -207,6 +214,7 @@ describe('the Deep Clean screen, in Greek', () => {
     mount();
     await ready();
     await screen.findByText('Temporary files');
+    await previewFirst(user);
     const boxes = screen.getAllByRole('checkbox');
     await user.click(boxes[boxes.length - 1]);
     await waitFor(() => expect(cleanButton().disabled).toBe(false));
@@ -302,12 +310,13 @@ describe('the Deep Clean screen, in Greek', () => {
     mount();
     await ready();
     await screen.findByText('Temporary files');
+    await previewFirst(user);
     const boxes = screen.getAllByRole('checkbox');
     await user.click(boxes[boxes.length - 1]);
     await waitFor(() => expect(cleanButton().disabled).toBe(false));
     await user.click(cleanButton());
 
-    expect(screen.getByText(/Μετακίνηση 1 στοιχείου \(το μέγεθος δεν μετρήθηκε\) σε καραντίνα;/)).toBeTruthy();
+    expect(screen.getByText(/Μετακίνηση 1 στοιχείου \(1 KB\) σε καραντίνα;/)).toBeTruthy();
     expect(screen.getByRole('button', { name: 'Ακύρωση' })).toBeTruthy();
     expect(screen.getByRole('button', { name: 'Μετακίνηση σε καραντίνα' })).toBeTruthy();
   });
@@ -323,6 +332,7 @@ describe('the Deep Clean screen, in Greek', () => {
     mount();
     await ready();
     await screen.findByText('Temporary files');
+    await previewFirst(user);
     const boxes = screen.getAllByRole('checkbox');
     await user.click(boxes[boxes.length - 1]);
     await waitFor(() => expect(cleanButton().disabled).toBe(false));
@@ -352,6 +362,7 @@ describe('the Deep Clean screen, in Greek', () => {
     mount();
     await ready();
     await screen.findByText('Temporary files');
+    await previewFirst(user);
     const boxes = screen.getAllByRole('checkbox');
     await user.click(boxes[boxes.length - 1]);
     await waitFor(() => expect(cleanButton().disabled).toBe(false));
@@ -447,6 +458,7 @@ describe('the Deep Clean live logs, in Greek', () => {
     mount();
     await ready();
     await screen.findByText('Temporary files');
+    await previewFirst(user);
     const boxes = screen.getAllByRole('checkbox');
     await user.click(boxes[boxes.length - 1]);
     await waitFor(() => expect(cleanButton().disabled).toBe(false));

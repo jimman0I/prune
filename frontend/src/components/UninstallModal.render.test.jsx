@@ -37,7 +37,7 @@ beforeEach(() => {
   streamUninstall.mockResolvedValue();
   scanForLeftovers.mockResolvedValue(found);
   removeQuarantined.mockResolvedValue({ destination: 'quarantine', files: [{ originalPath: 'x', sizeBytes: 2048 }], registryKeys: ['k'], totalSizeBytes: 2048 });
-  fetchSettings.mockResolvedValue({});
+  fetchSettings.mockResolvedValue({ preselectLeftovers: true });
 });
 
 const uninstall = async () => {
@@ -50,7 +50,7 @@ const uninstall = async () => {
 
 describe('where the leftovers go', () => {
   it('sends the destination from settings, the one the review showed', async () => {
-    fetchSettings.mockResolvedValue({ leftoverDestination: 'permanent' });
+    fetchSettings.mockResolvedValue({ preselectLeftovers: true, leftoverDestination: 'permanent' });
     removeQuarantined.mockResolvedValue({ destination: 'permanent', files: [{ originalPath: 'x', sizeBytes: 2048 }], registryKeys: [], failedFiles: [], totalSizeBytes: 2048 });
     const { user } = await uninstall();
 
@@ -68,13 +68,15 @@ describe('where the leftovers go', () => {
     const { user } = await uninstall();
 
     await user.click(await screen.findByRole('button', { name: 'Scan for leftovers' }));
+    // Unreadable settings also mean nothing is pre-ticked, so pick them.
+    await user.click((await screen.findAllByRole('checkbox'))[0]);
     await user.click(await screen.findByRole('button', { name: 'Remove selected' }));
     await waitFor(() => expect(removeQuarantined).toHaveBeenCalledTimes(1));
     expect(removeQuarantined.mock.calls[0][0].destination).toBe('quarantine');
   });
 
   it('says the Recycle Bin when that is where they went', async () => {
-    fetchSettings.mockResolvedValue({ leftoverDestination: 'recycle' });
+    fetchSettings.mockResolvedValue({ preselectLeftovers: true, leftoverDestination: 'recycle' });
     removeQuarantined.mockResolvedValue({ destination: 'recycle', files: [{ originalPath: 'x', sizeBytes: 2048 }], registryKeys: ['k'], failedFiles: [], totalSizeBytes: 2048 });
     const { user } = await uninstall();
 
@@ -84,7 +86,7 @@ describe('where the leftovers go', () => {
   });
 
   it('names what could not be removed', async () => {
-    fetchSettings.mockResolvedValue({ leftoverDestination: 'permanent' });
+    fetchSettings.mockResolvedValue({ preselectLeftovers: true, leftoverDestination: 'permanent' });
     removeQuarantined.mockResolvedValue({
       destination: 'permanent', files: [], registryKeys: [], totalSizeBytes: 0,
       failedFiles: [{ path: 'C:\\Users\\jim\\AppData\\Roaming\\Thing', reason: 'The file is in use.' }]
@@ -135,7 +137,7 @@ describe('what can be copied', () => {
   });
 
   it('each item that could not be removed, and why', async () => {
-    fetchSettings.mockResolvedValue({ leftoverDestination: 'permanent' });
+    fetchSettings.mockResolvedValue({ preselectLeftovers: true, leftoverDestination: 'permanent' });
     removeQuarantined.mockResolvedValue({
       destination: 'permanent', files: [], registryKeys: [], totalSizeBytes: 0,
       failedFiles: [{ path: 'C:\\Users\\jim\\AppData\\Roaming\\Thing', reason: 'The file is in use.' }]
@@ -149,13 +151,21 @@ describe('what can be copied', () => {
 });
 
 describe('ticking leftovers', () => {
-  it('starts with everything ticked, as it always has', async () => {
+  it('starts with nothing ticked by default, so the person chooses', async () => {
+    fetchSettings.mockResolvedValue({});
+    const { user } = await uninstall();
+    await user.click(await screen.findByRole('button', { name: 'Scan for leftovers' }));
+    expect(await screen.findByText(/^0$/)).toBeTruthy();
+  });
+
+  it('starts with everything ticked when the setting is on', async () => {
+    fetchSettings.mockResolvedValue({ preselectLeftovers: true });
     const { user } = await uninstall();
     await user.click(await screen.findByRole('button', { name: 'Scan for leftovers' }));
     expect(await screen.findByText(/^2$/)).toBeTruthy();
   });
 
-  it('starts with nothing ticked when the setting is off', async () => {
+  it('starts with nothing ticked when the setting is explicitly off', async () => {
     fetchSettings.mockResolvedValue({ preselectLeftovers: false });
     const { user } = await uninstall();
     await user.click(await screen.findByRole('button', { name: 'Scan for leftovers' }));
@@ -165,7 +175,7 @@ describe('ticking leftovers', () => {
 
 describe('the leftover scan', () => {
   it('is skipped when turned off, and the dialog says so', async () => {
-    fetchSettings.mockResolvedValue({ scanLeftoversAfterUninstall: false });
+    fetchSettings.mockResolvedValue({ preselectLeftovers: true, scanLeftoversAfterUninstall: false });
     await uninstall();
 
     expect(await screen.findByText(/leftover scan is turned off/i)).toBeTruthy();
@@ -188,6 +198,7 @@ describe('the leftover scan', () => {
   });
 
   it('only scans once Scan is clicked on the readyToScan step, then proceeds through scanning to review', async () => {
+    fetchSettings.mockResolvedValue({ preselectLeftovers: true });
     const { user } = await uninstall();
 
     const scanButton = await screen.findByRole('button', { name: 'Scan for leftovers' });

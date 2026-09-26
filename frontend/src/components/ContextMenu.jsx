@@ -32,14 +32,18 @@ export default function ContextMenu({ open, x, y, items, onClose }) {
    * The menu is portaled to the end of <body>, so without this a keyboard
    * user who pressed Enter on a row's "..." button stayed on that button
    * with the menu somewhere they could only reach by tabbing through the
-   * rest of the page. Opening moves focus onto the first choice, Up/Down/
-   * Home/End move between choices, Tab leaves (closing it), and closing
+   * rest of the page. Opening moves focus onto the menu (not a choice), Down
+   * and Up step in at the first and last choice, Up/Down/Home/End then move
+   * between choices, Tab leaves (closing it), and closing
    * hands focus back to what opened it -- unless something else (the
    * confirmation dialog a choice raises) has already taken it. */
   useEffect(() => {
     if (!open) return undefined;
     openerRef.current = document.activeElement;
-    enabledItems(ref.current ?? document.body)[0]?.focus();
+    // The menu itself, never an item: the list is often ordered with a
+    // destructive choice in it, and focus on any item means one Enter right
+    // after the right-click chooses it. Arrow keys step in from here.
+    ref.current?.focus();
     return () => {
       const opener = openerRef.current;
       const active = document.activeElement;
@@ -57,6 +61,7 @@ export default function ContextMenu({ open, x, y, items, onClose }) {
     if (list.length === 0) return;
     const at = list.indexOf(document.activeElement);
     let next;
+    // Focus is on the menu itself (at < 0): Down enters at the top, Up at the bottom.
     if (event.key === 'Home') next = 0;
     else if (event.key === 'End') next = list.length - 1;
     else if (event.key === 'ArrowDown') next = at < 0 ? 0 : (at + 1) % list.length;
@@ -90,7 +95,7 @@ export default function ContextMenu({ open, x, y, items, onClose }) {
     };
   }, [open, onClose]);
 
-  const height = (items?.length ?? 0) * ITEM_HEIGHT + 12;
+  const height = (items?.length ?? 0) * ITEM_HEIGHT + 12 + (items ?? []).filter((i) => i.separated).length * 9;
   const left = Math.min(x, window.innerWidth - WIDTH - 8);
   const top = Math.min(y, window.innerHeight - height - 8);
 
@@ -107,6 +112,7 @@ export default function ContextMenu({ open, x, y, items, onClose }) {
           key="context-menu"
           ref={ref}
           role="menu"
+          tabIndex={-1}
           onKeyDown={onMenuKeyDown}
           initial={{ opacity: 0, scale: 0.96, y: -4 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -115,7 +121,7 @@ export default function ContextMenu({ open, x, y, items, onClose }) {
           // Grows from the cursor rather than from its own centre, so it
           // reads as coming out of the thing that was clicked.
           style={{ left: Math.max(8, left), top: Math.max(8, top), width: WIDTH, transformOrigin: 'top left' }}
-          className="glass-panel fixed z-tooltip py-1.5"
+          className="glass-panel fixed z-tooltip py-1.5 outline-none"
         >
           {items.map((item) => (
             <button
@@ -124,6 +130,8 @@ export default function ContextMenu({ open, x, y, items, onClose }) {
               disabled={item.disabled}
               onClick={() => { onClose(); item.onSelect(); }}
               className={`w-full text-left px-3.5 py-1.5 text-[12.5px] flex items-center justify-between gap-3 transition-colors ${
+                item.separated ? 'border-t border-[color:var(--border-subtle)] mt-1 pt-2' : ''
+              } ${
                 item.disabled
                   ? 'text-[color:var(--text-muted)] opacity-50 cursor-not-allowed'
                   : item.danger

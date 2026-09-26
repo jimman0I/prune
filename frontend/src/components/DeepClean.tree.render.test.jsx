@@ -3,6 +3,7 @@ import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { renderScreen } from '../testSupport/renderScreen.jsx';
+import { measuredScan, runMeasuredPreview } from '../testSupport/deepCleanPreview.js';
 
 /** Deep Clean as a whole, for what the tree's new interaction layer must
  * not break: the risky-rule question and the focus it hands back, and above
@@ -73,6 +74,12 @@ beforeEach(() => {
 });
 
 afterEach(() => window.localStorage.clear());
+
+// Clean stays disabled until a Preview has measured something.
+const previewFirst = async (user) => {
+  streamDeepCleanScan.mockImplementation(measuredScan(RULES));
+  await runMeasuredPreview(user, streamDeepCleanScan);
+};
 
 const box = (name) => screen.getByRole('checkbox', { name });
 const ticked = (name) => box(name).getAttribute('aria-checked') === 'true';
@@ -160,17 +167,20 @@ describe('a filter never changes what Clean acts on', () => {
     const user = userEvent.setup();
     renderScreen(<DeepClean />);
     await screen.findByText('Temporary files');
+    await previewFirst(user);
 
     await user.click(screen.getByRole('button', { name: 'Select everything' }));
     await waitFor(() => expect(ticked('Temporary files')).toBe(true));
 
     // Hide everything but one rule.
     await user.type(filterBox(), 'thumbnail');
-    expect(screen.queryByText('Temporary files')).toBeNull();
-    expect(screen.getByText('Thumbnail cache')).toBeTruthy();
+    // By role: the scan log the Preview just wrote names every rule too.
+    expect(screen.queryByRole('checkbox', { name: 'Temporary files' })).toBeNull();
+    expect(screen.getByRole('checkbox', { name: 'Thumbnail cache' })).toBeTruthy();
 
     // The footer, the header and the count still describe the real selection.
-    expect(screen.getByText('3 of 4 selected')).toBeTruthy();
+    // (The Preview has measured them, so the summary now carries the size.)
+    expect(screen.getByText(/^3 of 4 selected/)).toBeTruthy();
     expect(screen.getByText('3 selected')).toBeTruthy();
 
     await user.click(screen.getByRole('button', { name: 'Clean' }));
@@ -216,7 +226,8 @@ describe('the confirm step', () => {
     const user = userEvent.setup();
     renderScreen(<DeepClean />);
     await screen.findByText('Temporary files');
-    await user.click(screen.getByText('Temporary files'));
+    await previewFirst(user);
+    await user.click(screen.getByRole('checkbox', { name: 'Temporary files' }));
     await user.click(screen.getByRole('button', { name: 'Clean' }));
 
     expect(screen.getByRole('button', { name: 'Move to Quarantine' })).toBeTruthy();

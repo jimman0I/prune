@@ -173,13 +173,40 @@ describe('where it lands', () => {
 });
 
 describe('keyboard', () => {
-  it('moves focus to the first available item when it opens, so the menu can be used without a mouse', () => {
+  it('opens with focus on the menu itself, never on an item, so Enter straight after opening cannot choose anything', () => {
     open();
-    expect(document.activeElement).toBe(screen.getByRole('menuitem', { name: /^Open folder/ }));
+    expect(document.activeElement).toBe(screen.getByRole('menu'));
+    expect(screen.getByRole('menu').getAttribute('tabindex')).toBe('-1');
+  });
+
+  it('Enter and Space with the menu itself focused do nothing', async () => {
+    const onSelect = vi.fn();
+    const user = userEvent.setup();
+    const { onClose } = open({ items: [{ label: 'Go', onSelect }, { label: 'Delete', danger: true, onSelect }] });
+
+    await user.keyboard('{Enter}');
+    await user.keyboard(' ');
+
+    expect(onSelect).not.toHaveBeenCalled();
+    expect(onClose).not.toHaveBeenCalled();
+  });
+
+  it('ArrowDown from the menu lands on the first item, ArrowUp on the last', () => {
+    open();
+    const menu = screen.getByRole('menu');
+
+    fireEvent.keyDown(menu, { key: 'ArrowDown' });
+    expect(document.activeElement.textContent).toContain('Open folder');
+
+    menu.focus();
+    fireEvent.keyDown(menu, { key: 'ArrowUp' });
+    // Restore is disabled, so the last stop is Delete.
+    expect(document.activeElement.textContent).toContain('Delete');
   });
 
   it('skips a disabled first item', () => {
     open({ items: [{ label: 'Off', disabled: true, onSelect: vi.fn() }, { label: 'On', onSelect: vi.fn() }] });
+    fireEvent.keyDown(screen.getByRole('menu'), { key: 'ArrowDown' });
     expect(document.activeElement).toBe(screen.getByRole('menuitem', { name: 'On' }));
   });
 
@@ -188,6 +215,8 @@ describe('keyboard', () => {
     const menu = screen.getByRole('menu');
     const focused = () => document.activeElement.textContent;
 
+    fireEvent.keyDown(menu, { key: 'ArrowDown' });
+    expect(focused()).toContain('Open folder');
     fireEvent.keyDown(menu, { key: 'ArrowDown' });
     expect(focused()).toContain('Copy path');
     fireEvent.keyDown(menu, { key: 'ArrowDown' });
@@ -209,11 +238,12 @@ describe('keyboard', () => {
     expect(document.activeElement.textContent).toContain('Open folder');
   });
 
-  it('Enter on the focused item runs it and closes', async () => {
+  it('Enter on an item the user has moved to runs it and closes', async () => {
     const onSelect = vi.fn();
     const user = userEvent.setup();
     const { onClose } = open({ items: [{ label: 'Go', onSelect }] });
 
+    await user.keyboard('{ArrowDown}');
     await user.keyboard('{Enter}');
 
     expect(onClose).toHaveBeenCalled();

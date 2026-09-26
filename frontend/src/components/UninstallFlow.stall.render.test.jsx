@@ -49,7 +49,7 @@ beforeEach(() => {
   streamUninstall.mockReset();
   scanForLeftovers.mockResolvedValue({ files: { ok: true, items: [{ path: 'C:\\x', sizeBytes: 1 }] }, registryKeys: { ok: true, items: [] }, scheduledTasks: { ok: true, items: [] } });
   removeQuarantined.mockResolvedValue({ destination: 'quarantine', files: [], registryKeys: [], totalSizeBytes: 0 });
-  fetchSettings.mockResolvedValue({});
+  fetchSettings.mockResolvedValue({ preselectLeftovers: true });
 });
 afterEach(() => { vi.useRealTimers(); });
 
@@ -183,7 +183,7 @@ describe('batch dialog', () => {
 
 describe('in Greek', () => {
   it('translates both lines', async () => {
-    fetchSettings.mockResolvedValue({ language: 'el' });
+    fetchSettings.mockResolvedValue({ preselectLeftovers: true, language: 'el' });
     const run = deferred();
     streamUninstall.mockReturnValue(run.promise);
     renderScreen(<UninstallModal program={thing} onClose={vi.fn()} />);
@@ -196,7 +196,7 @@ describe('in Greek', () => {
   });
 
   it('translates the batch line', async () => {
-    fetchSettings.mockResolvedValue({ language: 'el' });
+    fetchSettings.mockResolvedValue({ preselectLeftovers: true, language: 'el' });
     streamUninstall.mockReturnValue(new Promise(() => {}));
     renderScreen(<BatchUninstallModal programs={[thing, mk('b', 'Bee')]} onClose={vi.fn()} />);
     const startBtn = await screen.findByRole('button', { name: 'Έναρξη απεγκατάστασης' });

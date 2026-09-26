@@ -123,7 +123,7 @@ export default function UninstallModal({ program, running = false, onClose, onBu
   // that failed leaves the dialog behaving exactly as it always did.
   const { settings } = useSettings();
   const destination = leftoverDestinationFrom(settings);
-  const preselect = settings?.preselectLeftovers !== false;
+  const preselect = settings?.preselectLeftovers === true;
   const scanAfter = settings?.scanLeftoversAfterUninstall !== false;
   const [progressTitle, setProgressTitle] = useState(null);
 
@@ -179,8 +179,8 @@ export default function UninstallModal({ program, running = false, onClose, onBu
   };
 
   const selectEverythingIn = (result) => {
-    // Revo's "Check mark all leftovers by default", which it ships off.
-    // Prune keeps its behaviour unless the user turns it off.
+    // Revo's "Check mark all leftovers by default", which it ships off, and
+    // so does Prune now: nothing ticked unless the user turned it on.
     if (!preselect) { setSelected(new Set()); return; }
     setSelected(allFoundIn(result));
   };

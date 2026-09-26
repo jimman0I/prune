@@ -130,7 +130,7 @@ export default function BatchUninstallModal({ programs, onClose, onFinished, onB
   // same way: a failed settings request leaves the batch as it always was.
   const { settings } = useSettings();
   const destination = leftoverDestinationFrom(settings);
-  const preselect = settings?.preselectLeftovers !== false;
+  const preselect = settings?.preselectLeftovers === true;
   const scanAfter = settings?.scanLeftoversAfterUninstall !== false;
 
   const summary = batchSummary(programs);

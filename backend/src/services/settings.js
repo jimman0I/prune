@@ -118,10 +118,12 @@ const DEFAULT_SETTINGS = {
      says it; the backend acts on what the dialog sent, never on this
      directly. See services/leftoverRemoval.js. */
   leftoverDestination: 'quarantine',
-  /* Whether the leftover review starts with everything ticked, as it
-     always has. Revo ships this off; Prune keeps its behaviour and lets
-     the user choose, which matters more once 'permanent' exists. */
-  preselectLeftovers: true,
+  /* Whether the leftover review starts with everything ticked. Off, as Revo
+     ships it: the review opens with nothing ticked and the person chooses,
+     so the dangerous thing is never the easy thing. It was on until this
+     changed; a settings file saved before then keeps what it had (see
+     getSettings), only a NEW install starts unticked. */
+  preselectLeftovers: false,
   // Revo's "Only run the built-in uninstaller", the other way round.
   scanLeftoversAfterUninstall: true,
   // Revo's "Disable Uninstall History", the other way round.
@@ -242,6 +244,10 @@ export async function getSettings({ detectLanguage = detectDefaultLanguage } = {
       stored.hideUnavailableRules = true;
       stored.hideUnavailableDefaultApplied = true;
     }
+    // Same reasoning for the leftover-ticking default, which used to be on.
+    // A file that never recorded a choice was behaving as "on", and flipping
+    // it would change what an existing install does without being asked.
+    if (!('preselectLeftovers' in stored)) stored.preselectLeftovers = true;
     return { ...DEFAULT_SETTINGS, ...stored };
   } catch {
     // A corrupted settings file must not crash every screen that reads

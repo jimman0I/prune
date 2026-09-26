@@ -266,7 +266,7 @@ describe('the Uninstall tab', () => {
     ['Create a restore point before uninstalling', { restorePointBeforeUninstall: true }],
     ['Back up the registry before uninstalling', { registryBackupBeforeUninstall: true }],
     ['Scan for leftovers after uninstalling', { scanLeftoversAfterUninstall: false }],
-    ['Tick every leftover by default', { preselectLeftovers: false }],
+    ['Tick every leftover by default', { preselectLeftovers: true }],
     ['Delete locked files on next restart', { deleteLockedFilesOnRestart: true }],
     ['Keep an uninstall history', { keepUninstallHistory: false }]
   ])('saves "%s" when it is switched', async (label, expected) => {

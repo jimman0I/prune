@@ -49,7 +49,7 @@ beforeEach(() => {
   streamUninstall.mockResolvedValue();
   scanForLeftovers.mockResolvedValue(found);
   removeQuarantined.mockResolvedValue({ destination: 'quarantine', files: [{ originalPath: 'x' }], registryKeys: [], totalSizeBytes: 1 });
-  fetchSettings.mockResolvedValue({});
+  fetchSettings.mockResolvedValue({ preselectLeftovers: true });
 });
 
 describe('busy state is reported and Close refuses while it holds', () => {
@@ -109,7 +109,7 @@ describe('the auto-remove shortcut is for Quarantine only', () => {
   const box = () => screen.queryByRole('checkbox', { name: /Automatically remove/ });
 
   it.each([['recycle'], ['permanent']])('is not offered when leftovers go to %s', async (leftoverDestination) => {
-    fetchSettings.mockResolvedValue({ leftoverDestination });
+    fetchSettings.mockResolvedValue({ preselectLeftovers: true, leftoverDestination });
     renderScreen(<UninstallModal program={thing} onClose={vi.fn()} />);
     // Settings arrive after the first paint; wait for the box to be gone
     // (it is offered for the default destination until they do).

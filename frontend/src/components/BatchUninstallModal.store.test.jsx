@@ -42,7 +42,7 @@ vi.mock('../lib/api.js', () => ({
   scanForcedUninstall: vi.fn(),
   // The dialog reads settings now (where leftovers go, whether they
   // start ticked). Empty settings are the defaults it always had.
-  fetchSettings: vi.fn(async () => ({})),
+  fetchSettings: vi.fn(async () => ({ preselectLeftovers: true })),
   updateSettings: vi.fn()
 }));
 

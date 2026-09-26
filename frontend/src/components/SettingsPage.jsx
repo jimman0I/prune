@@ -645,8 +645,8 @@ function SettingsPage({ onReportBug = null }) {
                   <SettingRow
                     title={t('settings.uninstallTab.preselect.title')}
                     description={t('settings.uninstallTab.preselect.description')}
-                    checked={isOn('preselectLeftovers')}
-                    onChange={() => save({ preselectLeftovers: !isOn('preselectLeftovers') })}
+                    checked={isOnlyIfTrue('preselectLeftovers')}
+                    onChange={() => save({ preselectLeftovers: !isOnlyIfTrue('preselectLeftovers') })}
                   />
                   <SettingRow
                     title={t('settings.uninstallTab.deleteLockedFiles.title')}

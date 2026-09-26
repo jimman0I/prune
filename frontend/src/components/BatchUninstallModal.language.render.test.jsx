@@ -40,7 +40,7 @@ beforeEach(() => {
   removeStoreApp.mockResolvedValue();
   scanForLeftovers.mockResolvedValue(found);
   removeQuarantined.mockResolvedValue({ destination: 'quarantine', files: [{ originalPath: 'x', sizeBytes: 512 }], registryKeys: [], totalSizeBytes: 512 });
-  fetchSettings.mockResolvedValue({ language: 'el' });
+  fetchSettings.mockResolvedValue({ preselectLeftovers: true, language: 'el' });
 });
 
 /** Same Greek-anchor pattern as every other language test file: the
@@ -180,7 +180,7 @@ describe('the batch uninstall dialog, in Greek', () => {
   });
 
   it('translates the removing-phase line for the recycle bin', async () => {
-    fetchSettings.mockResolvedValue({ language: 'el', leftoverDestination: 'recycle' });
+    fetchSettings.mockResolvedValue({ preselectLeftovers: true, language: 'el', leftoverDestination: 'recycle' });
     let resolveRemoval;
     removeQuarantined.mockReturnValue(new Promise((resolve) => { resolveRemoval = resolve; }));
     const { user } = await run();
@@ -190,7 +190,7 @@ describe('the batch uninstall dialog, in Greek', () => {
   });
 
   it('translates the removing-phase line for permanent deletion', async () => {
-    fetchSettings.mockResolvedValue({ language: 'el', leftoverDestination: 'permanent' });
+    fetchSettings.mockResolvedValue({ preselectLeftovers: true, language: 'el', leftoverDestination: 'permanent' });
     let resolveRemoval;
     removeQuarantined.mockReturnValue(new Promise((resolve) => { resolveRemoval = resolve; }));
     const { user } = await run();
@@ -219,7 +219,7 @@ describe('the batch uninstall dialog, in Greek', () => {
   });
 
   it('translates the settings-off no-scan message and its Done button', async () => {
-    fetchSettings.mockResolvedValue({ language: 'el', scanLeftoversAfterUninstall: false });
+    fetchSettings.mockResolvedValue({ preselectLeftovers: true, language: 'el', scanLeftoversAfterUninstall: false });
     await run();
     expect(await screen.findByText(/Η σάρωση καταλοίπων είναι απενεργοποιημένη στις Ρυθμίσεις/)).toBeTruthy();
     expect(screen.getByRole('button', { name: 'Τέλος' })).toBeTruthy();
@@ -276,7 +276,7 @@ describe('the batch uninstall dialog, in Greek', () => {
   });
 
   it('translates the permanent-deletion done summary', async () => {
-    fetchSettings.mockResolvedValue({ language: 'el', leftoverDestination: 'permanent' });
+    fetchSettings.mockResolvedValue({ preselectLeftovers: true, language: 'el', leftoverDestination: 'permanent' });
     removeQuarantined.mockResolvedValue({ destination: 'permanent', files: [{ originalPath: 'x', sizeBytes: 512 }], registryKeys: [], totalSizeBytes: 512 });
     const { user } = await run();
     await user.click(await screen.findByRole('button', { name: 'Οριστική διαγραφή' }));
