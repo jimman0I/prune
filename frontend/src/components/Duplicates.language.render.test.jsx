@@ -151,7 +151,7 @@ describe('the duplicates screen, in Greek', () => {
     // Tick both files in the only group -- the guard against emptying it.
     for (const box of screen.getAllByRole('checkbox')) await user.click(box);
     expect(await screen.findByText('Κάθε αντίγραφο σε αυτό το σετ είναι επιλεγμένο — αποεπιλέξτε ένα για να το κρατήσετε.')).toBeTruthy();
-    expect(screen.getByRole('button', { name: /θα έχαναν κάθε αντίγραφο/ }).disabled).toBe(true);
+    expect(screen.getByRole('button', { name: /1 σετ θα έχανε κάθε αντίγραφο/ }).disabled).toBe(true);
   });
 
   it('translates the footer selection line and opens the translated confirm modal', async () => {
