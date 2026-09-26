@@ -90,7 +90,7 @@ function ToastCard({ toast, onDismiss, onPause, onResume }) {
           {/* The repeat count, when the same thing happened again. Shown
               rather than stacking four identical cards. */}
           {toast.count > 1 && (
-            <span className="ml-1.5 text-[10.5px] font-mono text-[color:var(--text-muted)]">
+            <span className="ml-1.5 text-[11px] font-mono text-[color:var(--text-muted)]">
               ×{toast.count}
             </span>
           )}
@@ -107,7 +107,7 @@ function ToastCard({ toast, onDismiss, onPause, onResume }) {
         {toast.paths?.length > 0 && (
           <ul className="mt-1.5 space-y-0.5">
             {toast.paths.map((path) => (
-              <li key={path} className="text-[10.5px] font-mono text-[color:var(--text-muted)] truncate">
+              <li key={path} className="text-[11px] font-mono text-[color:var(--text-muted)] truncate">
                 {path}
               </li>
             ))}

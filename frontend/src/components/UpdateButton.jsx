@@ -141,10 +141,10 @@ export default function UpdateButton() {
       {/* What is happening, under the icon rather than in a flyout: a
           download the user started should not need a hover to be seen. */}
       {phase === 'downloading' && (
-        <span className="mt-1 text-[10px] font-mono text-[color:var(--text-secondary)]">{`${percent}%`}</span>
+        <span className="mt-1 text-[11px] font-mono text-[color:var(--text-secondary)]">{`${percent}%`}</span>
       )}
       {phase === 'installing' && (
-        <span className="mt-1 text-[10px] text-[color:var(--text-secondary)]">{t('updateButton.restarting')}</span>
+        <span className="mt-1 text-[11px] text-[color:var(--text-secondary)]">{t('updateButton.restarting')}</span>
       )}
 
       {/* The name, on hover and on keyboard focus, the same way every

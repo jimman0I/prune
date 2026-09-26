@@ -112,7 +112,7 @@ export default function LeftoverReview({ scanResult, selected, onToggle, onConfi
                 <span className="text-[13px] font-medium">{label}</span>
                 <span className="text-[11px] text-[color:var(--text-muted)] font-mono">({group.items.length})</span>
                 {!removable && (
-                  <span className="text-[10.5px] text-[color:var(--text-muted)] ml-auto">{t('leftoverReview.notRemoved')}</span>
+                  <span className="text-[11px] text-[color:var(--text-muted)] ml-auto">{t('leftoverReview.notRemoved')}</span>
                 )}
               </button>
               {open && (
@@ -148,7 +148,7 @@ export default function LeftoverReview({ scanResult, selected, onToggle, onConfi
                             // makes Windows list the program at all, and a
                             // value's path is a key shared with every
                             // other program that starts with Windows.
-                            <div className="text-[10.5px] text-[color:var(--text-secondary)] mt-0.5">
+                            <div className="text-[11px] text-[color:var(--text-secondary)] mt-0.5">
                               {leftoverItemNote(item, t('leftoverReview.itemNote'))}
                             </div>
                           )}

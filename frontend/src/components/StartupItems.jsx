@@ -191,7 +191,7 @@ function StartupIcon({ item, src }) {
  * Not running. */
 function StatusPill({ item }) {
   const { t } = useLanguage();
-  const base = 'text-[10.5px] font-mono uppercase tracking-wider px-1.5 py-px rounded border shrink-0';
+  const base = 'text-[11px] font-mono uppercase tracking-wider px-1.5 py-px rounded border shrink-0';
 
   if (item.exists === false) {
     return (
@@ -206,7 +206,7 @@ function StatusPill({ item }) {
   // put every word in it below the contrast floor and made the one thing you
   // came here to read (the name) the hardest to read.
   if (item.enabled === false) {
-    return <span className="text-[10.5px] font-mono text-[color:var(--text-secondary)]">{t('startup.status.off')}</span>;
+    return <span className="text-[11px] font-mono text-[color:var(--text-secondary)]">{t('startup.status.off')}</span>;
   }
   if (item.running) {
     return (
@@ -224,7 +224,7 @@ function StatusPill({ item }) {
       </span>
     );
   }
-  return <span className="text-[10.5px] font-mono text-[color:var(--text-muted)]">{t('startup.status.notRunning')}</span>;
+  return <span className="text-[11px] font-mono text-[color:var(--text-muted)]">{t('startup.status.notRunning')}</span>;
 }
 
 function StartupRow({ item, iconSrc, pending, error, onToggle }) {
@@ -245,12 +245,12 @@ function StartupRow({ item, iconSrc, pending, error, onToggle }) {
             so they are written out rather than hidden behind a hover --
             a reason nobody can find is the same as no reason. */}
         {item.toggleNote && (
-          <div className="text-[10.5px] text-[color:var(--text-muted)] leading-snug mt-0.5">
+          <div className="text-[11px] text-[color:var(--text-muted)] leading-snug mt-0.5">
             {item.toggleNote}
           </div>
         )}
         {error && (
-          <div className="text-[10.5px] text-[color:var(--danger)] leading-snug mt-0.5 select-text">{error}</div>
+          <div className="text-[11px] text-[color:var(--danger)] leading-snug mt-0.5 select-text">{error}</div>
         )}
       </div>
 
@@ -379,7 +379,7 @@ function StartupItems() {
                 <span
                   key={col.key}
                   role="columnheader"
-                  className={`${col.wideOnly ? `${WIDE_ONLY_CELL} ` : ''}text-[10.5px] font-mono uppercase tracking-[0.13em] text-[color:var(--text-muted)]`}
+                  className={`${col.wideOnly ? `${WIDE_ONLY_CELL} ` : ''}text-[11px] font-mono uppercase tracking-[0.13em] text-[color:var(--text-muted)]`}
                 >
                   {COLUMN_KEYS[col.key] ? t(COLUMN_KEYS[col.key]) : ''}
                 </span>

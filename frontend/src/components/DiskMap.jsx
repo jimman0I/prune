@@ -107,7 +107,7 @@ function ScanOption({ title, badge, explain, note, recommended, children }) {
       <div className="flex items-center gap-2">
         <h3 className="text-[15px] font-semibold text-[color:var(--text-primary)]">{title}</h3>
         {badge && (
-          <span className="text-[10.5px] font-medium px-1.5 py-0.5 rounded-full border border-[color:var(--control-border)] text-[color:var(--text-secondary)]">
+          <span className="text-[11px] font-medium px-1.5 py-0.5 rounded-full border border-[color:var(--control-border)] text-[color:var(--text-secondary)]">
             {badge}
           </span>
         )}
@@ -619,7 +619,7 @@ function FolderTable({ folderRows, onDrillDown, onContextMenu }) {
               <button
                 onClick={() => setSort((s) => nextFolderSort(s, col.key))}
                 // 32 px tall: a sortable header is a control, not a label.
-                className={`flex items-center gap-1 min-h-8 text-[10.5px] font-mono uppercase tracking-[0.12em] text-[color:var(--text-muted)] hover:text-[color:var(--text-primary)] transition-colors ${
+                className={`flex items-center gap-1 min-h-8 text-[11px] font-mono uppercase tracking-[0.12em] text-[color:var(--text-muted)] hover:text-[color:var(--text-primary)] transition-colors ${
                   col.align === 'right' ? 'justify-end' : ''
                 }`}
               >
@@ -676,7 +676,7 @@ function FolderTable({ folderRows, onDrillDown, onContextMenu }) {
                   row.name
                 )}
                 {!row.scanned && (
-                  <span className="ml-2 text-[10px] font-mono uppercase tracking-wider text-[color:var(--text-muted)]">
+                  <span className="ml-2 text-[11px] font-mono uppercase tracking-wider text-[color:var(--text-muted)]">
                     {t('diskMap.folderTable.notScanned')}
                   </span>
                 )}

@@ -301,7 +301,7 @@ function Duplicates() {
                               name would otherwise change every time the box is ticked. */}
                           <span
                             aria-hidden="true"
-                            className={`shrink-0 text-[10.5px] font-mono uppercase tracking-wider px-1.5 py-px rounded border ${
+                            className={`shrink-0 text-[11px] font-mono uppercase tracking-wider px-1.5 py-px rounded border ${
                               toQuarantine
                                 ? 'text-[color:var(--text-primary)] border-[color:var(--control-border)] bg-[color:var(--surface-hover)]'
                                 : 'text-[color:var(--text-secondary)] border-[color:var(--border-subtle)]'

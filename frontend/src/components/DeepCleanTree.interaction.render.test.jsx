@@ -139,6 +139,27 @@ describe('the heading checkbox hit area', () => {
   });
 });
 
+describe('click targets are at least 24 px', () => {
+  it("gives every rule's checkbox a 24x24 target around the 14x14 box that is drawn", () => {
+    draw();
+    const box = screen.getByRole('checkbox', { name: 'Cookies' });
+    expect(box.style.width).toBe('24px');
+    expect(box.style.height).toBe('24px');
+    const visual = box.querySelector('[data-checkbox-visual]');
+    expect(visual.style.width).toBe('14px');
+    expect(visual.style.height).toBe('14px');
+  });
+
+  it('is 24 px tall on the category heading button, without a taller row', () => {
+    draw();
+    const heading = screen.getByRole('button', { name: /Brave/ });
+    expect(heading.className).toContain('min-h-6');
+    // Negative margin hands back what min-h-6 adds, so the heading row
+    // does not grow by 8 px for each of the 29 categories.
+    expect(heading.className).toContain('-my-1');
+  });
+});
+
 describe('state colours', () => {
   const sized = (over) => draw({ categories: [{ category: 'C', items: [rule({ id: 's', name: 'Rule', ...over })] }] });
 
@@ -155,9 +176,9 @@ describe('state colours', () => {
     expect(label.querySelector('svg[data-lock]')).toBeTruthy();
   });
 
-  it('marks the loses-data badge at 10px, not 8.5px', () => {
+  it('marks the loses-data badge at 11px, not 8.5px', () => {
     draw();
-    expect(screen.getByText('Loses data').className).toMatch(/text-\[10px\]/);
+    expect(screen.getByText('Loses data').className).toMatch(/text-\[11px\]/);
     expect(screen.getByText('Loses data').className).not.toMatch(/8\.5/);
   });
 

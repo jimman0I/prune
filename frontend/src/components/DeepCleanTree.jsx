@@ -159,7 +159,7 @@ function CategoryIcon({ category, src }) {
 
   return (
     <div
-      className="w-[18px] h-[18px] rounded-[4px] flex items-center justify-center text-[10px] font-bold shrink-0"
+      className="w-[18px] h-[18px] rounded-[4px] flex items-center justify-center text-[11px] font-bold shrink-0"
       style={{ background: tileColor(category), color: TILE_INK }}
     >
       {tileLetter(category)}
@@ -202,7 +202,10 @@ function CategorySection({ category, items, allItems = items, iconSrc, selected,
           type="button"
           onClick={() => onToggleCollapsed(category)}
           aria-expanded={isExpanded}
-          className="flex items-center gap-2 min-w-0 flex-1 text-left"
+          // min-h-6 is the 24 px floor for a click target; the negative
+          // vertical margin gives back what it adds, so the heading stays the
+          // 28 px row it always was.
+          className="flex items-center gap-2 min-w-0 flex-1 text-left min-h-6 -my-1"
         >
           <svg
             width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
@@ -213,7 +216,7 @@ function CategorySection({ category, items, allItems = items, iconSrc, selected,
           </svg>
           <CategoryIcon category={category} src={iconSrc} />
           <span className="text-[12.5px] font-medium text-[color:var(--text-primary)] truncate">{categoryLabel}</span>
-          <span className="text-[10.5px] text-[color:var(--text-muted)] font-mono shrink-0">{allItems.length}</span>
+          <span className="text-[11px] text-[color:var(--text-muted)] font-mono shrink-0">{allItems.length}</span>
         </button>
         {/* Negative margins so the 28 px target costs the row nothing: it
             is the same 28 px tall row and the drawn box sits where it did. */}
@@ -287,7 +290,7 @@ function CategorySection({ category, items, allItems = items, iconSrc, selected,
                   not a surprise a cleaning tool should spring on anyone.
                   None of these is ticked by default; this says why. */}
               {item.risky && (
-                <span className="text-[10px] font-mono uppercase tracking-wider px-1 rounded bg-[color:var(--warning-soft)] text-[color:var(--warning)] border border-[color:var(--warning)]/25 shrink-0">
+                <span className="text-[11px] font-mono uppercase tracking-wider px-1 rounded bg-[color:var(--warning-soft)] text-[color:var(--warning)] border border-[color:var(--warning)]/25 shrink-0">
                   {t('deepClean.tree.losesData')}
                 </span>
               )}
@@ -322,6 +325,11 @@ function CategorySection({ category, items, allItems = items, iconSrc, selected,
               <Checkbox
                 state={selected.has(item.id) ? 'all' : 'none'}
                 size={14}
+                // A 24 px target around the 14 px box, and the negative
+                // margins hand back the 5 px it adds on every side, so the
+                // row is the height it was and the box sits where it did.
+                hit={24}
+                className="-my-1 -mx-[5px]"
                 disabled={receiptMode}
                 label={cleaner.ruleName(item)}
                 onChange={() => onToggle(item.id)}

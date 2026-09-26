@@ -168,7 +168,7 @@ describe('a disabled entry', () => {
 });
 
 describe('small text', () => {
-  it('the status pills are 10.5 px, and the fallback tile letter is 11 px', async () => {
+  it('the status pills are 11 px, and the fallback tile letter is 11 px', async () => {
     fetchStartupItems.mockResolvedValue([
       entry({ id: 'g', name: 'Ghost', exists: false }),
       entry({ id: 'r', name: 'Runner', running: true })
@@ -178,7 +178,7 @@ describe('small text', () => {
 
     for (const label of ['Invalid', 'Running']) {
       const pill = screen.getByText(label);
-      expect(pill.className).toContain('text-[10.5px]');
+      expect(pill.className).toContain('text-[11px]');
     }
     expect(container.innerHTML).not.toContain('text-[9px]');
     const tile = container.querySelector('div.font-bold');

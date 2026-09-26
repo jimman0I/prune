@@ -25,7 +25,7 @@ export default function TableSkeleton({ columns, rows = 8, label }) {
         {columns.map((col) => (
           <span
             key={col.key}
-            className="text-[10.5px] font-mono uppercase tracking-[0.13em] text-[color:var(--text-muted)]"
+            className="text-[11px] font-mono uppercase tracking-[0.13em] text-[color:var(--text-muted)]"
           >
             {col.label}
           </span>
