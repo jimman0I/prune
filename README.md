@@ -95,8 +95,8 @@ measured sizes, and a warning before removing something that is running.
 Batches run without a wizard per program — the vendor's own silent command
 where one is published, and the right flag for MSI, NSIS, Squirrel and
 closed Chromium browsers otherwise — and a game is removed before the
-launcher it uninstalls through. Optional, as in Revo: a restore point or a
-full registry backup before each uninstall, and a choice of where leftover
+launcher it uninstalls through. Optional: a restore point or a full
+registry backup before each uninstall, and a choice of where leftover
 files go.
 
 </td>
@@ -112,15 +112,14 @@ Cleaners for software that isn't installed are hidden, and rules that lose
 something (history, cookies, sessions) are marked and never ticked by
 default. Includes Windows Defender and WinRAR cleaners.
 
-**Deep Clean vs BleachBit.** Same idea, same measured preview, and the same
-deep-scan patterns for backup, Office temp, Vim swap, .DS_Store and Thumbs.db
-files. Two things differ on purpose. By default Clean moves files into
+**Two removal modes, on purpose.** By default Clean moves files into
 Quarantine so you can put them back, which frees no space until you empty it;
 Prune says *Moved*, not *Freed*, when that is what happened. Settings › Cleanup
-can switch Deep Clean to **Delete now**, which removes files outright and frees
-the space at once, as BleachBit does. The free-space wipe (BleachBit's
-*Free disk space*) is there but off by default and asks every time: it frees
-nothing, it does nothing useful on an SSD with TRIM, and it adds write wear.
+can switch Deep Clean to **Delete now**, which removes files outright and
+frees the space at once, plus deep-scan patterns for backup, Office temp, Vim
+swap, .DS_Store and Thumbs.db files. A *Free disk space* wipe is there too,
+off by default and asking every time: it frees nothing, it does nothing
+useful on an SSD with TRIM, and it adds write wear.
 
 </td>
 </tr>
@@ -130,8 +129,8 @@ nothing, it does nothing useful on an SSD with TRIM, and it adds write wear.
 ### 🗺️ Disk Map
 
 An interactive treemap of what is actually using the disk, from a
-full-drive scan that reads the NTFS MFT directly (the way WizTree does).
-Largest files, a folder table and a breakdown by type beside the map.
+full-drive scan that reads the NTFS MFT directly. Largest files, a folder
+table and a breakdown by type beside the map.
 
 Scans show real progress and time left: files scanned and bytes processed
 as they happen, and — for a whole-drive walk of `C:` — a percentage that is
@@ -246,7 +245,7 @@ off. [SECURITY.md](SECURITY.md) says exactly what the updater trusts.
 
 ## 📰 What's New in 2.9
 
-- **Deep Clean like BleachBit** — an opt-in *Delete now* mode that frees space straight away (Quarantine stays the default), *Deep scan* rules for backup, Office temp, Vim swap, `.DS_Store` and `Thumbs.db` files, and an opt-in free-space wipe.
+- **Two Deep Clean removal modes** — an opt-in *Delete now* mode that frees space straight away (Quarantine stays the default), *Deep scan* rules for backup, Office temp, Vim swap, `.DS_Store` and `Thumbs.db` files, and an opt-in free-space wipe.
 - **A Dashboard that answers one question** — where is my space going? One bar, your five largest programs, and drive health on demand.
 - **Safer by default** — Clean waits for a Preview, leftovers start unticked, and the right-click menu no longer opens on Uninstall.
 - **All 39 translations reviewed** for consistent terms.

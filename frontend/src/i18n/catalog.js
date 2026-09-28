@@ -75,7 +75,7 @@ export const CATALOG = {
           description: "Nothing is deleted. Files go into Prune's Quarantine and the drive gets the space back when you empty it."
         },
         delete: {
-          label: "Delete now (frees the space, can't be undone — like BleachBit)",
+          label: "Delete now (frees the space, can't be undone)",
           description: 'Files are removed as soon as you confirm, so the space is free straight away. Rules that lose data still ask first.'
         },
         deleteWarning: "With Delete now, Clean can't be undone. Scheduled cleans still move files to Quarantine.",
@@ -602,7 +602,7 @@ export const CATALOG = {
     deepClean: {
       title: 'Deep Clean',
       subtitle: 'Every cache, log, dump and leftover Prune knows how to find, measured on this machine rather than estimated. Nothing is deleted outright — everything Clean takes goes to Quarantine first, where you can put it back.',
-      subtitleDelete: "Every cache, log, dump and leftover Prune knows how to find, measured on this machine rather than estimated. Clean deletes what you tick immediately and frees the space, the way BleachBit does. It can't be undone.",
+      subtitleDelete: "Every cache, log, dump and leftover Prune knows how to find, measured on this machine rather than estimated. Clean deletes what you tick immediately and frees the space. It can't be undone.",
       scanLog: {
         header: 'Scan output',
         scanningAnnounce: (total) => `Scanning ${total} locations.`,
@@ -958,7 +958,7 @@ export const CATALOG = {
           description: "Niks word verwyder nie. Lêers gaan na Prune se Karantyn en die aandrywer kry die spasie terug wanneer jy dit leegmaak."
         },
         delete: {
-          label: "Verwyder nou (maak die spasie vry, kan nie ongedaan gemaak word nie — soos BleachBit)",
+          label: "Verwyder nou (maak die spasie vry, kan nie ongedaan gemaak word nie)",
           description: "Lêers word verwyder sodra jy bevestig, so die spasie is dadelik vry. Reëls wat data verloor vra steeds eers."
         },
         deleteWarning: "Met Verwyder nou kan Skoonmaak nie ongedaan gemaak word nie. Geskeduleerde skoonmaakwerk skuif lêers steeds na Karantyn.",
@@ -1480,7 +1480,7 @@ export const CATALOG = {
     deepClean: {
       title: 'Diep Skoonmaak',
       subtitle: 'Elke kas, log, dump en oorblyfsel wat Prune weet om te vind, gemeet op hierdie masjien in plaas van beraam. Niks word summier verwyder nie — alles wat Skoonmaak vat gaan eers na Karantyn, waar jy dit kan terugsit.',
-      subtitleDelete: "Elke kas, log, dump en oorblyfsel wat Prune weet om te vind, gemeet op hierdie masjien in plaas van beraam. Skoonmaak verwyder dít wat jy aangemerk het onmiddellik en maak die spasie vry, soos BleachBit. Dit kan nie ongedaan gemaak word nie.",
+      subtitleDelete: "Elke kas, log, dump en oorblyfsel wat Prune weet om te vind, gemeet op hierdie masjien in plaas van beraam. Skoonmaak verwyder dít wat jy aangemerk het onmiddellik en maak die spasie vry. Dit kan nie ongedaan gemaak word nie.",
       scanLog: {
         header: 'Skanderingsuitset',
         scanningAnnounce: (total) => `Skandeer ${total} plekke.`,
@@ -1836,7 +1836,7 @@ export const CATALOG = {
           description: "لا يُحذف شيء. تنتقل الملفات إلى الحجر الصحي في Prune، وتعود المساحة إلى القرص عند إفراغه."
         },
         delete: {
-          label: "الحذف الآن (يحرر المساحة، ولا يمكن التراجع عنه — مثل BleachBit)",
+          label: "الحذف الآن (يحرر المساحة، ولا يمكن التراجع عنه)",
           description: "تُزال الملفات بمجرد تأكيدك، فتتحرر المساحة فورًا. القواعد التي تفقد بيانات تسأل أولًا كالمعتاد."
         },
         deleteWarning: "مع «الحذف الآن» لا يمكن التراجع عن التنظيف. أما عمليات التنظيف المجدولة فما زالت تنقل الملفات إلى الحجر الصحي.",
@@ -2358,7 +2358,7 @@ export const CATALOG = {
     deepClean: {
       title: "تنظيف عميق",
       subtitle: "كل ذاكرة تخزين مؤقت وسجل وملف تفريغ وكل ما خلّفته البرامج يعرف Prune كيف يجدها، مقاسة على هذا الجهاز بدلاً من تقديرها. لا يُحذف شيء نهائيًا — كل ما يأخذه التنظيف ينتقل أولاً إلى الحجر الصحي، حيث يمكنك استعادته.",
-      subtitleDelete: "كل ذاكرة تخزين مؤقت وسجل وملف تفريغ وكل ما خلّفته البرامج يعرف Prune كيف يجدها، مقاسة على هذا الجهاز بدلاً من تقديرها. يحذف التنظيف ما حددته فورًا ويحرر المساحة، كما يفعل BleachBit. لا يمكن التراجع عن ذلك.",
+      subtitleDelete: "كل ذاكرة تخزين مؤقت وسجل وملف تفريغ وكل ما خلّفته البرامج يعرف Prune كيف يجدها، مقاسة على هذا الجهاز بدلاً من تقديرها. يحذف التنظيف ما حددته فورًا ويحرر المساحة. لا يمكن التراجع عن ذلك.",
       scanLog: {
         header: 'مخرجات الفحص',
         scanningAnnounce: (total) => `جارٍ فحص ${total} موقعًا.`,
@@ -2714,7 +2714,7 @@ export const CATALOG = {
           description: "No s'elimina res. Els fitxers van a la Quarantena del Prune i la unitat recupera l'espai quan la buides."
         },
         delete: {
-          label: "Elimina ara (allibera l'espai, no es pot desfer — com BleachBit)",
+          label: "Elimina ara (allibera l'espai, no es pot desfer)",
           description: "Els fitxers s'eliminen tan bon punt ho confirmes, de manera que l'espai queda lliure a l'instant. Les regles que fan perdre dades continuen preguntant primer."
         },
         deleteWarning: "Amb Elimina ara, Neteja no es pot desfer. Les neteges programades continuen movent els fitxers a la Quarantena.",
@@ -3236,7 +3236,7 @@ export const CATALOG = {
     deepClean: {
       title: "Neteja profunda",
       subtitle: "Cada memòria cau, registre, bolcat i resta que Prune sap trobar, mesurat en aquesta màquina en lloc d'estimat. Res s'elimina directament — tot el que Neteja treu va primer a la Quarantena, on el pots tornar a posar.",
-      subtitleDelete: "Cada memòria cau, registre, bolcat i resta que Prune sap trobar, mesurat en aquesta màquina en lloc d'estimat. Neteja elimina immediatament el que marques i allibera l'espai, com fa BleachBit. No es pot desfer.",
+      subtitleDelete: "Cada memòria cau, registre, bolcat i resta que Prune sap trobar, mesurat en aquesta màquina en lloc d'estimat. Neteja elimina immediatament el que marques i allibera l'espai. No es pot desfer.",
       scanLog: {
         header: 'Sortida de l\'escaneig',
         scanningAnnounce: (total) => `Escanejant ${total} ubicacions.`,
@@ -3592,7 +3592,7 @@ export const CATALOG = {
           description: "Nic se nesmaže. Soubory jdou do karantény aplikace Prune a místo na disku se uvolní, až karanténu vyprázdníte."
         },
         delete: {
-          label: "Smazat hned (uvolní místo, nelze vrátit zpět — jako BleachBit)",
+          label: "Smazat hned (uvolní místo, nelze vrátit zpět)",
           description: "Soubory se smažou hned po potvrzení, takže se místo uvolní okamžitě. Čističe, které způsobují ztrátu dat, se stále nejdřív zeptají."
         },
         deleteWarning: "Při volbě „Smazat hned“ nelze čištění vrátit zpět. Naplánovaná čištění stále přesouvají soubory do karantény.",
@@ -4114,7 +4114,7 @@ export const CATALOG = {
     deepClean: {
       title: 'Důkladné čištění',
       subtitle: "Každá mezipaměť, protokol, výpis a zbytek, které Prune umí najít, změřené na tomto počítači místo odhadu. Nic se rovnou nesmaže — vše, co Čištění odebere, jde nejprve do Karantény, odkud to lze vrátit zpět.",
-      subtitleDelete: "Každá mezipaměť, protokol, výpis a zbytek, které Prune umí najít, změřené na tomto počítači místo odhadu. Čištění hned smaže to, co zaškrtnete, a uvolní místo, stejně jako BleachBit. Nelze to vrátit zpět.",
+      subtitleDelete: "Každá mezipaměť, protokol, výpis a zbytek, které Prune umí najít, změřené na tomto počítači místo odhadu. Čištění hned smaže to, co zaškrtnete, a uvolní místo. Nelze to vrátit zpět.",
       scanLog: {
         header: 'Výstup skenování',
         scanningAnnounce: (total) => `Skenování ${total} umístění.`,
@@ -4468,7 +4468,7 @@ export const CATALOG = {
           description: "Ni chaiff dim ei ddileu. Mae'r ffeiliau'n mynd i'r Cwarantin yn Prune, ac mae'r gyriant yn cael y lle'n ôl pan fyddwch yn ei wacáu."
         },
         delete: {
-          label: "Dileu nawr (yn rhyddhau'r lle, ni ellir ei ddadwneud — fel BleachBit)",
+          label: "Dileu nawr (yn rhyddhau'r lle, ni ellir ei ddadwneud)",
           description: "Caiff ffeiliau eu tynnu cyn gynted ag y byddwch yn cadarnhau, felly mae'r lle'n rhydd ar unwaith. Mae rheolau sy'n colli data yn dal i ofyn yn gyntaf."
         },
         deleteWarning: "Gyda Dileu nawr, ni ellir dadwneud Glanhau. Mae glanhau wedi'i amserlennu yn dal i symud ffeiliau i'r Cwarantin.",
@@ -4990,7 +4990,7 @@ export const CATALOG = {
     deepClean: {
       title: 'Glanhau Dwfn',
       subtitle: "Pob storfa dros dro, log, dympiad ac olion mae Prune yn gwybod sut i'w canfod, wedi'u mesur ar y peiriant hwn yn hytrach nag amcangyfrif. Ni chaiff dim ei ddileu'n uniongyrchol — mae popeth mae Glanhau yn ei gymryd yn mynd i'r Cwarantin yn gyntaf, lle gallwch ei roi'n ôl.",
-      subtitleDelete: "Pob storfa dros dro, log, dympiad ac olion mae Prune yn gwybod sut i'w canfod, wedi'u mesur ar y peiriant hwn yn hytrach nag amcangyfrif. Mae Glanhau yn dileu'r hyn rydych wedi'i ddewis ar unwaith ac yn rhyddhau'r lle, fel y mae BleachBit yn ei wneud. Ni ellir ei ddadwneud.",
+      subtitleDelete: "Pob storfa dros dro, log, dympiad ac olion mae Prune yn gwybod sut i'w canfod, wedi'u mesur ar y peiriant hwn yn hytrach nag amcangyfrif. Mae Glanhau yn dileu'r hyn rydych wedi'i ddewis ar unwaith ac yn rhyddhau'r lle. Ni ellir ei ddadwneud.",
       scanLog: {
         header: 'Allbwn sgan',
         scanningAnnounce: (total) => `Sganio ${total} lleoliad.`,
@@ -5346,7 +5346,7 @@ export const CATALOG = {
           description: "Intet slettes. Filerne går i Prunes karantæne, og drevet får pladsen tilbage, når du tømmer den."
         },
         delete: {
-          label: "Slet nu (frigør pladsen, kan ikke fortrydes — som BleachBit)",
+          label: "Slet nu (frigør pladsen, kan ikke fortrydes)",
           description: "Filer fjernes, så snart du bekræfter, så pladsen er ledig med det samme. Regler, der mister data, spørger stadig først."
         },
         deleteWarning: "Med Slet nu kan Rens ikke fortrydes. Planlagte rensninger flytter stadig filer til karantæne.",
@@ -5868,7 +5868,7 @@ export const CATALOG = {
     deepClean: {
       title: 'Dybderensning',
       subtitle: "Alle caches, logfiler, dumps og rester, som Prune kan finde, målt på denne maskine i stedet for anslået. Intet slettes direkte — alt, hvad Rens tager, går først til Karantæne, hvor du kan sætte det tilbage.",
-      subtitleDelete: "Alle caches, logfiler, dumps og rester, som Prune kan finde, målt på denne maskine i stedet for anslået. Rens sletter det, du har markeret, med det samme og frigør pladsen, på samme måde som BleachBit. Det kan ikke fortrydes.",
+      subtitleDelete: "Alle caches, logfiler, dumps og rester, som Prune kan finde, målt på denne maskine i stedet for anslået. Rens sletter det, du har markeret, med det samme og frigør pladsen. Det kan ikke fortrydes.",
       scanLog: {
         header: 'Scanningsoutput',
         scanningAnnounce: (total) => `Scanner ${total} placeringer.`,
@@ -6224,7 +6224,7 @@ export const CATALOG = {
           description: "Nichts wird gelöscht. Die Dateien wandern in Prunes Quarantäne, und das Laufwerk bekommt den Speicherplatz zurück, wenn du sie leerst."
         },
         delete: {
-          label: "Sofort löschen (gibt den Speicherplatz frei, nicht rückgängig zu machen – wie BleachBit)",
+          label: "Sofort löschen (gibt den Speicherplatz frei, nicht rückgängig zu machen)",
           description: "Die Dateien werden entfernt, sobald du bestätigst, der Speicherplatz ist also sofort frei. Regeln, bei denen Daten verloren gehen, fragen weiterhin vorher nach."
         },
         deleteWarning: "Bei „Sofort löschen“ lässt sich das Bereinigen nicht rückgängig machen. Geplante Bereinigungen verschieben Dateien weiterhin in die Quarantäne.",
@@ -6746,7 +6746,7 @@ export const CATALOG = {
     deepClean: {
       title: "Gründliche Bereinigung",
       subtitle: "Jeder Cache, jedes Protokoll, jeder Dump und jeder Rückstand, den Prune finden kann, auf diesem Rechner gemessen statt geschätzt. Nichts wird sofort gelöscht — alles, was die Reinigung mitnimmt, wandert zuerst in die Quarantäne, wo du es zurückholen kannst.",
-      subtitleDelete: "Jeder Cache, jedes Protokoll, jeder Dump und jeder Rückstand, den Prune finden kann, auf diesem Rechner gemessen statt geschätzt. Bereinigen löscht, was du ankreuzt, sofort und gibt den Speicherplatz frei, so wie BleachBit es tut. Das lässt sich nicht rückgängig machen.",
+      subtitleDelete: "Jeder Cache, jedes Protokoll, jeder Dump und jeder Rückstand, den Prune finden kann, auf diesem Rechner gemessen statt geschätzt. Bereinigen löscht, was du ankreuzt, sofort und gibt den Speicherplatz frei. Das lässt sich nicht rückgängig machen.",
       scanLog: {
         header: 'Scan-Ausgabe',
         scanningAnnounce: (total) => `${total} Orte werden gescannt.`,
@@ -7102,7 +7102,7 @@ export const CATALOG = {
           description: "Τίποτα δεν διαγράφεται. Τα αρχεία μπαίνουν στην Καραντίνα του Prune και ο δίσκος ανακτά τον χώρο όταν την αδειάσετε."
         },
         delete: {
-          label: "Διαγραφή τώρα (ελευθερώνει τον χώρο, δεν αναιρείται — όπως το BleachBit)",
+          label: "Διαγραφή τώρα (ελευθερώνει τον χώρο, δεν αναιρείται)",
           description: "Τα αρχεία αφαιρούνται μόλις επιβεβαιώσετε, οπότε ο χώρος ελευθερώνεται αμέσως. Οι κανόνες που χάνουν δεδομένα ρωτούν πάντα πρώτα."
         },
         deleteWarning: "Με τη «Διαγραφή τώρα», ο Καθαρισμός δεν αναιρείται. Οι προγραμματισμένοι καθαρισμοί εξακολουθούν να μετακινούν τα αρχεία στην Καραντίνα.",
@@ -7624,7 +7624,7 @@ export const CATALOG = {
     deepClean: {
       title: "Βαθύς καθαρισμός",
       subtitle: 'Κάθε κρυφή μνήμη, αρχείο καταγραφής, dump και κατάλοιπο που το Prune ξέρει να βρίσκει, μετρημένο σε αυτό το μηχάνημα αντί να εκτιμάται. Τίποτα δεν διαγράφεται απευθείας — οτιδήποτε παίρνει ο Καθαρισμός πηγαίνει πρώτα σε καραντίνα, όπου μπορείτε να το επαναφέρετε.',
-      subtitleDelete: "Κάθε κρυφή μνήμη, αρχείο καταγραφής, dump και κατάλοιπο που το Prune ξέρει να βρίσκει, μετρημένο σε αυτό το μηχάνημα αντί να εκτιμάται. Ο Καθαρισμός διαγράφει αμέσως ό,τι επιλέξετε και ελευθερώνει τον χώρο, όπως κάνει το BleachBit. Δεν αναιρείται.",
+      subtitleDelete: "Κάθε κρυφή μνήμη, αρχείο καταγραφής, dump και κατάλοιπο που το Prune ξέρει να βρίσκει, μετρημένο σε αυτό το μηχάνημα αντί να εκτιμάται. Ο Καθαρισμός διαγράφει αμέσως ό,τι επιλέξετε και ελευθερώνει τον χώρο. Δεν αναιρείται.",
       scanLog: {
         header: 'Έξοδος σάρωσης',
         scanningAnnounce: (total) => `Σάρωση ${total} τοποθεσιών.`,
@@ -7980,7 +7980,7 @@ export const CATALOG = {
           description: "No se elimina nada. Los archivos van a la Cuarentena de Prune y la unidad recupera el espacio cuando la vacías."
         },
         delete: {
-          label: "Eliminar ahora (libera el espacio, no se puede deshacer, como BleachBit)",
+          label: "Eliminar ahora (libera el espacio, no se puede deshacer)",
           description: "Los archivos se quitan en cuanto confirmas, así que el espacio queda libre al instante. Las reglas que pierden datos siguen preguntando antes."
         },
         deleteWarning: "Con Eliminar ahora, Limpiar no se puede deshacer. Las limpiezas programadas siguen moviendo los archivos a Cuarentena.",
@@ -8502,7 +8502,7 @@ export const CATALOG = {
     deepClean: {
       title: "Limpieza profunda",
       subtitle: "Cada caché, registro, volcado y resto que Prune sabe encontrar, medido en esta máquina en lugar de estimado. Nada se elimina directamente — todo lo que Limpieza toma va primero a Cuarentena, donde puedes restaurarlo.",
-      subtitleDelete: "Cada caché, registro, volcado y resto que Prune sabe encontrar, medido en esta máquina en lugar de estimado. Limpiar elimina al instante lo que marques y libera el espacio, como hace BleachBit. No se puede deshacer.",
+      subtitleDelete: "Cada caché, registro, volcado y resto que Prune sabe encontrar, medido en esta máquina en lugar de estimado. Limpiar elimina al instante lo que marques y libera el espacio. No se puede deshacer.",
       scanLog: {
         header: 'Salida del escaneo',
         scanningAnnounce: (total) => `Escaneando ${total} ubicaciones.`,
@@ -8858,7 +8858,7 @@ export const CATALOG = {
           description: "Midagi ei kustutata. Failid lähevad Prune'i karantiini ja ketas saab ruumi tagasi, kui selle tühjendad."
         },
         delete: {
-          label: "Kustuta kohe (vabastab ruumi, ei saa tagasi võtta — nagu BleachBit)",
+          label: "Kustuta kohe (vabastab ruumi, ei saa tagasi võtta)",
           description: "Failid eemaldatakse kohe pärast kinnitamist, nii et ruum vabaneb otsekohe. Andmeid kaotavad reeglid küsivad ikkagi enne."
         },
         deleteWarning: "Valiku Kustuta kohe korral ei saa Puhastust tagasi võtta. Ajastatud puhastused teisaldavad failid endiselt karantiini.",
@@ -9380,7 +9380,7 @@ export const CATALOG = {
     deepClean: {
       title: "Süvapuhastus",
       subtitle: 'Iga vahemälu, logi, tõmmis ja jääk, mida Prune oskab leida, mõõdetud sellel masinal, mitte hinnatud. Midagi ei kustutata otsekohe — kõik, mida Puhastus võtab, läheb esmalt Karantiini, kust saad selle tagasi panna.',
-      subtitleDelete: "Iga vahemälu, logi, tõmmis ja jääk, mida Prune oskab leida, mõõdetud sellel masinal, mitte hinnatud. Puhasta kustutab valitud kohe ja vabastab ruumi, nagu BleachBit. Seda ei saa tagasi võtta.",
+      subtitleDelete: "Iga vahemälu, logi, tõmmis ja jääk, mida Prune oskab leida, mõõdetud sellel masinal, mitte hinnatud. Puhasta kustutab valitud kohe ja vabastab ruumi. Seda ei saa tagasi võtta.",
       scanLog: {
         header: 'Skannimise väljund',
         scanningAnnounce: (total) => `Skannitakse ${total} asukohta.`,
@@ -9736,7 +9736,7 @@ export const CATALOG = {
           description: "Mitään ei poisteta. Tiedostot siirtyvät Prunen karanteeniin, ja asema saa tilan takaisin, kun tyhjennät sen."
         },
         delete: {
-          label: "Poista heti (vapauttaa tilan, ei voi peruuttaa — kuten BleachBit)",
+          label: "Poista heti (vapauttaa tilan, ei voi peruuttaa)",
           description: "Tiedostot poistetaan heti vahvistettuasi, joten tila vapautuu saman tien. Tietoja menettävät säännöt kysyvät silti ensin."
         },
         deleteWarning: "Kun Poista heti on käytössä, Puhdistusta ei voi peruuttaa. Ajastetut puhdistukset siirtävät tiedostot edelleen karanteeniin.",
@@ -10258,7 +10258,7 @@ export const CATALOG = {
     deepClean: {
       title: 'Syväpuhdistus',
       subtitle: 'Jokainen välimuisti, loki, vedos ja jäänne, jonka Prune osaa löytää, mitattu tällä koneella arvioinnin sijaan. Mitään ei poisteta suoraan — kaikki, mitä Puhdistus vie, menee ensin Karanteeniin, josta sen voi palauttaa.',
-      subtitleDelete: "Jokainen välimuisti, loki, vedos ja jäänne, jonka Prune osaa löytää, mitattu tällä koneella arvioinnin sijaan. Puhdista poistaa valitsemasi heti ja vapauttaa tilan, kuten BleachBit. Sitä ei voi peruuttaa.",
+      subtitleDelete: "Jokainen välimuisti, loki, vedos ja jäänne, jonka Prune osaa löytää, mitattu tällä koneella arvioinnin sijaan. Puhdista poistaa valitsemasi heti ja vapauttaa tilan. Sitä ei voi peruuttaa.",
       scanLog: {
         header: 'Skannauksen tuloste',
         scanningAnnounce: (total) => `Skannataan ${total} sijaintia.`,
@@ -10614,7 +10614,7 @@ export const CATALOG = {
           description: "Rien n'est supprimé. Les fichiers vont dans la Quarantaine de Prune et le disque récupère l'espace quand vous la videz."
         },
         delete: {
-          label: "Supprimer maintenant (libère l'espace, irréversible, comme BleachBit)",
+          label: "Supprimer maintenant (libère l'espace, irréversible)",
           description: "Les fichiers sont retirés dès que vous confirmez, l'espace est donc libéré immédiatement. Les règles qui font perdre des données demandent toujours confirmation avant."
         },
         deleteWarning: "Avec Supprimer maintenant, Nettoyer est irréversible. Les nettoyages planifiés déplacent toujours les fichiers vers la Quarantaine.",
@@ -11136,7 +11136,7 @@ export const CATALOG = {
     deepClean: {
       title: "Nettoyage approfondi",
       subtitle: "Chaque cache, journal, vidage et résidu que Prune sait trouver, mesuré sur cette machine plutôt qu'estimé. Rien n'est supprimé directement — tout ce que Nettoyer prend va d'abord en quarantaine, d'où vous pouvez le restaurer.",
-      subtitleDelete: "Chaque cache, journal, vidage et résidu que Prune sait trouver, mesuré sur cette machine plutôt qu'estimé. Nettoyer supprime immédiatement ce que vous cochez et libère l'espace, comme le fait BleachBit. C'est irréversible.",
+      subtitleDelete: "Chaque cache, journal, vidage et résidu que Prune sait trouver, mesuré sur cette machine plutôt qu'estimé. Nettoyer supprime immédiatement ce que vous cochez et libère l'espace. C'est irréversible.",
       scanLog: {
         header: 'Sortie de l\'analyse',
         scanningAnnounce: (total) => `Analyse de ${total} emplacements.`,
@@ -11492,7 +11492,7 @@ export const CATALOG = {
           description: "שום דבר לא נמחק. הקבצים עוברים להסגר של Prune, והכונן מקבל את המקום בחזרה כשתרוקן אותו."
         },
         delete: {
-          label: "מחיקה מיידית (משחררת מקום, אי אפשר לבטל — כמו BleachBit)",
+          label: "מחיקה מיידית (משחררת מקום, אי אפשר לבטל)",
           description: "הקבצים מוסרים ברגע שתאשר, ולכן המקום מתפנה מיד. כללים שמאבדים נתונים עדיין שואלים קודם."
         },
         deleteWarning: "עם מחיקה מיידית אי אפשר לבטל את הניקוי. ניקויים מתוזמנים עדיין מעבירים קבצים להסגר.",
@@ -12014,7 +12014,7 @@ export const CATALOG = {
     deepClean: {
       title: 'ניקוי מעמיק',
       subtitle: "כל מטמון, יומן, קובץ dump ושארית ש-Prune יודע למצוא, נמדד במכשיר הזה במקום להיות מוערך. שום דבר לא נמחק לצמיתות — כל מה שהניקוי לוקח עובר קודם להסגר, שם ניתן לשחזר אותו.",
-      subtitleDelete: "כל מטמון, יומן, קובץ dump ושארית ש-Prune יודע למצוא, נמדד במכשיר הזה במקום להיות מוערך. הניקוי מוחק מיד את מה שסימנת ומשחרר את המקום, כמו ש-BleachBit עושה. אי אפשר לבטל את זה.",
+      subtitleDelete: "כל מטמון, יומן, קובץ dump ושארית ש-Prune יודע למצוא, נמדד במכשיר הזה במקום להיות מוערך. הניקוי מוחק מיד את מה שסימנת ומשחרר את המקום. אי אפשר לבטל את זה.",
       scanLog: {
         header: 'פלט הסריקה',
         scanningAnnounce: (total) => total === 1 ? 'סורק מיקום אחד.' : total === 2 ? 'סורק שני מיקומים.' : `סורק ${total} מיקומים.`,
@@ -12370,7 +12370,7 @@ export const CATALOG = {
           description: "Semmi sem törlődik. A fájlok a Prune karanténjába kerülnek, a meghajtó pedig akkor kapja vissza a helyet, amikor kiüríted a karanténot."
         },
         delete: {
-          label: "Törlés azonnal (felszabadítja a helyet, nem vonható vissza — mint a BleachBit)",
+          label: "Törlés azonnal (felszabadítja a helyet, nem vonható vissza)",
           description: "A fájlok a megerősítéssel egy időben törlődnek, így a hely rögtön felszabadul. Az adatvesztéssel járó szabályok ettől még előbb rákérdeznek."
         },
         deleteWarning: "Az Azonnali törlés mellett a Tisztítás nem vonható vissza. Az ütemezett tisztítások továbbra is a karanténba helyezik a fájlokat.",
@@ -12892,7 +12892,7 @@ export const CATALOG = {
     deepClean: {
       title: 'Mélytisztítás',
       subtitle: "Minden gyorsítótár, napló, memóriakép és maradvány, amit a Prune képes megtalálni, ezen a gépen mérve, nem becsülve. Semmi sem törlődik azonnal — minden, amit a Tisztítás elvisz, először a Karanténba kerül, ahonnan visszaállíthatod.",
-      subtitleDelete: "Minden gyorsítótár, napló, memóriakép és maradvány, amit a Prune képes megtalálni, ezen a gépen mérve, nem becsülve. A Tisztítás azonnal törli, amit bejelölsz, és felszabadítja a helyet, ahogy a BleachBit is. Nem vonható vissza.",
+      subtitleDelete: "Minden gyorsítótár, napló, memóriakép és maradvány, amit a Prune képes megtalálni, ezen a gépen mérve, nem becsülve. A Tisztítás azonnal törli, amit bejelölsz, és felszabadítja a helyet. Nem vonható vissza.",
       scanLog: {
         header: 'Vizsgálati kimenet',
         scanningAnnounce: (total) => `${total} hely vizsgálata.`,
@@ -13248,7 +13248,7 @@ export const CATALOG = {
           description: "Tidak ada yang dihapus. File masuk ke Karantina Prune, dan drive mendapatkan kembali ruangnya saat kamu mengosongkan Karantina."
         },
         delete: {
-          label: "Hapus sekarang (membebaskan ruang, tidak bisa dibatalkan — seperti BleachBit)",
+          label: "Hapus sekarang (membebaskan ruang, tidak bisa dibatalkan)",
           description: "File dihapus begitu kamu mengonfirmasi, sehingga ruang langsung bebas. Aturan yang menyebabkan kehilangan data tetap bertanya dulu."
         },
         deleteWarning: "Dengan Hapus sekarang, pembersihan tidak bisa dibatalkan. Pembersihan terjadwal tetap memindahkan file ke Karantina.",
@@ -13770,7 +13770,7 @@ export const CATALOG = {
     deepClean: {
       title: 'Pembersihan Mendalam',
       subtitle: 'Setiap cache, log, dump, dan sisa yang diketahui Prune cara menemukannya, diukur di komputer ini alih-alih diperkirakan. Tidak ada yang langsung dihapus — semua yang diambil Bersihkan pergi ke Karantina terlebih dahulu, tempat Anda dapat mengembalikannya.',
-      subtitleDelete: "Setiap cache, log, dump, dan sisa yang diketahui Prune cara menemukannya, diukur di komputer ini alih-alih diperkirakan. Bersihkan langsung menghapus apa yang Anda centang dan membebaskan ruangnya, seperti yang dilakukan BleachBit. Tidak bisa dibatalkan.",
+      subtitleDelete: "Setiap cache, log, dump, dan sisa yang diketahui Prune cara menemukannya, diukur di komputer ini alih-alih diperkirakan. Bersihkan langsung menghapus apa yang Anda centang dan membebaskan ruangnya. Tidak bisa dibatalkan.",
       scanLog: {
         header: 'Output pemindaian',
         scanningAnnounce: (total) => `Memindai ${total} lokasi.`,
@@ -14126,7 +14126,7 @@ export const CATALOG = {
           description: "Engu er eytt. Skrárnar fara í sóttkví Prune og drifið fær plássið aftur þegar þú tæmir hana."
         },
         delete: {
-          label: "Eyða núna (losar plássið, ekki hægt að afturkalla — eins og BleachBit)",
+          label: "Eyða núna (losar plássið, ekki hægt að afturkalla)",
           description: "Skrár eru fjarlægðar um leið og þú staðfestir, þannig að plássið losnar strax. Reglur sem tapa gögnum spyrja samt fyrst."
         },
         deleteWarning: "Með Eyða núna er ekki hægt að afturkalla Hreinsun. Tímasettar hreinsanir færa skrár áfram í sóttkví.",
@@ -14648,7 +14648,7 @@ export const CATALOG = {
     deepClean: {
       title: 'Djúphreinsun',
       subtitle: 'Öll skyndiminni, annálar, dumpar og leifar sem Prune kann að finna, mæld á þessari vél frekar en áætluð. Engu er eytt beint — allt sem Hreinsun tekur fer fyrst í sóttkví, þar sem þú getur sett það til baka.',
-      subtitleDelete: "Öll skyndiminni, annálar, dumpar og leifar sem Prune kann að finna, mæld á þessari vél frekar en áætluð. Hreinsun eyðir því sem þú hakar við strax og losar plássið, eins og BleachBit gerir. Ekki er hægt að afturkalla það.",
+      subtitleDelete: "Öll skyndiminni, annálar, dumpar og leifar sem Prune kann að finna, mæld á þessari vél frekar en áætluð. Hreinsun eyðir því sem þú hakar við strax og losar plássið. Ekki er hægt að afturkalla það.",
       scanLog: {
         header: 'Úttak skönnunar',
         scanningAnnounce: (total) => `Skanna ${total} staðsetningar.`,
@@ -15004,7 +15004,7 @@ export const CATALOG = {
           description: "Non viene eliminato nulla. I file vanno nella Quarantena di Prune e l'unità riottiene lo spazio quando la svuoti."
         },
         delete: {
-          label: "Elimina subito (libera lo spazio, non si può annullare, come BleachBit)",
+          label: "Elimina subito (libera lo spazio, non si può annullare)",
           description: "I file vengono rimossi appena confermi, quindi lo spazio è libero subito. Le regole che fanno perdere dati chiedono comunque prima conferma."
         },
         deleteWarning: "Con Elimina subito, Pulisci non si può annullare. Le pulizie pianificate continuano a spostare i file in Quarantena.",
@@ -15526,7 +15526,7 @@ export const CATALOG = {
     deepClean: {
       title: "Pulizia approfondita",
       subtitle: "Ogni cache, log, dump e residuo che Prune sa trovare, misurato su questo computer anziché stimato. Nulla viene eliminato direttamente — tutto ciò che Pulisci prende va prima in quarantena, da dove puoi ripristinarlo.",
-      subtitleDelete: "Ogni cache, log, dump e residuo che Prune sa trovare, misurato su questo computer anziché stimato. Pulisci elimina subito ciò che selezioni e libera lo spazio, come fa BleachBit. Non si può annullare.",
+      subtitleDelete: "Ogni cache, log, dump e residuo che Prune sa trovare, misurato su questo computer anziché stimato. Pulisci elimina subito ciò che selezioni e libera lo spazio. Non si può annullare.",
       scanLog: {
         header: 'Output della scansione',
         scanningAnnounce: (total) => `Scansione di ${total} posizioni.`,
@@ -15882,7 +15882,7 @@ export const CATALOG = {
           description: "何も削除されません。ファイルは Prune の隔離に入り、隔離を空にするとドライブに空き容量が戻ります。"
         },
         delete: {
-          label: "今すぐ削除（空き容量を確保、元に戻せません — BleachBit と同様）",
+          label: "今すぐ削除（空き容量を確保、元に戻せません）",
           description: "確認するとすぐにファイルが削除され、空き容量がその場で確保されます。データを失うルールは、引き続き事前に確認します。"
         },
         deleteWarning: "「今すぐ削除」では、クリーンを元に戻せません。スケジュールされたクリーンは、引き続きファイルを隔離に移動します。",
@@ -16404,7 +16404,7 @@ export const CATALOG = {
     deepClean: {
       title: 'ディープクリーン',
       subtitle: "Prune が見つけ方を知っているすべてのキャッシュ、ログ、ダンプ、残留物を、推定ではなくこのマシンで実測します。何も即座には削除されません — クリーンが取り除くものはすべて、まず隔離に移動し、そこから復元できます。",
-      subtitleDelete: "Prune が見つけ方を知っているすべてのキャッシュ、ログ、ダンプ、残留物を、推定ではなくこのマシンで実測します。クリーンはチェックした項目をすぐに削除して空き容量を確保します（BleachBit と同じ方式）。元に戻すことはできません。",
+      subtitleDelete: "Prune が見つけ方を知っているすべてのキャッシュ、ログ、ダンプ、残留物を、推定ではなくこのマシンで実測します。クリーンはチェックした項目をすぐに削除して空き容量を確保します。元に戻すことはできません。",
       scanLog: {
         header: 'スキャン出力',
         scanningAnnounce: (total) => `${total} 件の場所をスキャン中。`,
@@ -16760,7 +16760,7 @@ export const CATALOG = {
           description: "아무것도 삭제되지 않습니다. 파일은 Prune의 격리로 들어가며, 격리를 비우면 드라이브에 공간이 돌아옵니다."
         },
         delete: {
-          label: "지금 삭제 (공간 확보, 되돌릴 수 없음 — BleachBit처럼)",
+          label: "지금 삭제 (공간 확보, 되돌릴 수 없음)",
           description: "확인하는 즉시 파일이 삭제되어 공간이 바로 확보됩니다. 데이터 손실이 있는 규칙은 여전히 먼저 확인합니다."
         },
         deleteWarning: "지금 삭제를 선택하면 정리를 되돌릴 수 없습니다. 예약된 정리는 계속 파일을 격리로 이동합니다.",
@@ -17282,7 +17282,7 @@ export const CATALOG = {
     deepClean: {
       title: "딥 클린",
       subtitle: "Prune이 찾는 방법을 아는 모든 캐시, 로그, 덤프 및 남은 항목을 추정이 아니라 이 컴퓨터에서 직접 측정합니다. 아무것도 즉시 삭제되지 않습니다 — 정리가 가져가는 모든 항목은 먼저 격리로 이동하며, 그곳에서 복원할 수 있습니다.",
-      subtitleDelete: "Prune이 찾는 방법을 아는 모든 캐시, 로그, 덤프 및 남은 항목을 추정이 아니라 이 컴퓨터에서 직접 측정합니다. 정리는 선택한 항목을 즉시 삭제하고 BleachBit처럼 공간을 확보합니다. 되돌릴 수 없습니다.",
+      subtitleDelete: "Prune이 찾는 방법을 아는 모든 캐시, 로그, 덤프 및 남은 항목을 추정이 아니라 이 컴퓨터에서 직접 측정합니다. 정리는 선택한 항목을 즉시 삭제하고 공간을 확보합니다. 되돌릴 수 없습니다.",
       scanLog: {
         header: "검사 출력",
         scanningAnnounce: (total) => `${total}개 위치를 검사 중입니다.`,
@@ -17638,7 +17638,7 @@ export const CATALOG = {
           description: "Niekas neištrinama. Failai patenka į „Prune“ karantiną, o diskas vietą atgauna, kai karantiną ištuštinate."
         },
         delete: {
-          label: "Ištrinti dabar (atlaisvina vietą, negrįžtama — kaip BleachBit)",
+          label: "Ištrinti dabar (atlaisvina vietą, negrįžtama)",
           description: "Failai pašalinami, vos patvirtinus, todėl vieta atlaisvinama iš karto. Taisyklės, dėl kurių prarandami duomenys, vis tiek pirmiausia paklausia."
         },
         deleteWarning: "Pasirinkus Ištrinti dabar, Valymo atšaukti negalima. Suplanuoti valymai failus vis tiek perkelia į karantiną.",
@@ -18160,7 +18160,7 @@ export const CATALOG = {
     deepClean: {
       title: 'Gilus valymas',
       subtitle: "Viskas, ką „Prune“ moka rasti — talpyklos, žurnalai, išklotinės ir liekanos — išmatuota šiame kompiuteryje, o ne apskaičiuota. Niekas nėra iškart ištrinama — viskas, ką paima Valymas, pirmiausia keliauja į Karantiną, iš kur galite tai atkurti.",
-      subtitleDelete: "Viskas, ką „Prune“ moka rasti — talpyklos, žurnalai, išklotinės ir liekanos — išmatuota šiame kompiuteryje, o ne apskaičiuota. Valymas iškart ištrina tai, ką pažymėjote, ir atlaisvina vietą, kaip ir BleachBit. To atšaukti negalima.",
+      subtitleDelete: "Viskas, ką „Prune“ moka rasti — talpyklos, žurnalai, išklotinės ir liekanos — išmatuota šiame kompiuteryje, o ne apskaičiuota. Valymas iškart ištrina tai, ką pažymėjote, ir atlaisvina vietą. To atšaukti negalima.",
       scanLog: {
         header: 'Nuskaitymo išvestis',
         scanningAnnounce: (total) => `Nuskaitoma vietų: ${total}.`,
@@ -18514,7 +18514,7 @@ export const CATALOG = {
           description: "Tiada apa dipadam. Fail dialihkan ke Kuarantin Prune dan pemacu mendapat semula ruang apabila anda mengosongkannya."
         },
         delete: {
-          label: "Padam sekarang (membebaskan ruang, tidak boleh dibuat asal — seperti BleachBit)",
+          label: "Padam sekarang (membebaskan ruang, tidak boleh dibuat asal)",
           description: "Fail dikeluarkan sebaik sahaja anda mengesahkan, jadi ruang dibebaskan serta-merta. Peraturan yang menyebabkan kehilangan data tetap bertanya dahulu."
         },
         deleteWarning: "Dengan Padam sekarang, Bersih tidak boleh dibuat asal. Pembersihan berjadual masih mengalihkan fail ke Kuarantin.",
@@ -19036,7 +19036,7 @@ export const CATALOG = {
     deepClean: {
       title: 'Pembersihan Mendalam',
       subtitle: 'Setiap cache, log, dump dan baki yang diketahui Prune cara mencarinya, diukur pada mesin ini bukannya dianggarkan. Tiada apa dipadamkan serta-merta — segala yang diambil oleh Bersih pergi ke Kuarantin dahulu, di mana anda boleh mengembalikannya.',
-      subtitleDelete: "Setiap cache, log, dump dan baki yang diketahui Prune cara mencarinya, diukur pada mesin ini bukannya dianggarkan. Bersih memadam apa yang anda tandakan serta-merta dan membebaskan ruang, seperti BleachBit. Ia tidak boleh dibuat asal.",
+      subtitleDelete: "Setiap cache, log, dump dan baki yang diketahui Prune cara mencarinya, diukur pada mesin ini bukannya dianggarkan. Bersih memadam apa yang anda tandakan serta-merta dan membebaskan ruang. Ia tidak boleh dibuat asal.",
       scanLog: {
         header: 'Output imbasan',
         scanningAnnounce: (total) => `Mengimbas ${total} lokasi.`,
@@ -19392,7 +19392,7 @@ export const CATALOG = {
           description: "Ingenting slettes. Filene går til Prunes karantene, og stasjonen får plassen tilbake når du tømmer den."
         },
         delete: {
-          label: "Slett nå (frigjør plassen, kan ikke angres — som BleachBit)",
+          label: "Slett nå (frigjør plassen, kan ikke angres)",
           description: "Filene fjernes så snart du bekrefter, så plassen er ledig med en gang. Regler som mister data spør fortsatt først."
         },
         deleteWarning: "Med Slett nå kan Rens ikke angres. Planlagte rensinger flytter fortsatt filer til karantene.",
@@ -19914,7 +19914,7 @@ export const CATALOG = {
     deepClean: {
       title: "Grundig opprydding",
       subtitle: 'Hver hurtigbuffer, logg, dump og rest Prune vet hvordan man finner, målt på denne maskinen i stedet for anslått. Ingenting slettes umiddelbart — alt Rens tar går først til Karantene, hvor du kan legge det tilbake.',
-      subtitleDelete: "Hver hurtigbuffer, logg, dump og rest Prune vet hvordan man finner, målt på denne maskinen i stedet for anslått. Rens sletter det du huker av umiddelbart og frigjør plassen, slik BleachBit gjør. Det kan ikke angres.",
+      subtitleDelete: "Hver hurtigbuffer, logg, dump og rest Prune vet hvordan man finner, målt på denne maskinen i stedet for anslått. Rens sletter det du huker av umiddelbart og frigjør plassen. Det kan ikke angres.",
       scanLog: {
         header: 'Skanningsutdata',
         scanningAnnounce: (total) => `Skanner ${total} steder.`,
@@ -20268,7 +20268,7 @@ export const CATALOG = {
           description: "Er wordt niets verwijderd. Bestanden gaan naar de Quarantaine van Prune en de schijf krijgt de ruimte terug zodra je die leegmaakt."
         },
         delete: {
-          label: "Nu verwijderen (maakt de ruimte vrij, kan niet ongedaan worden gemaakt — zoals BleachBit)",
+          label: "Nu verwijderen (maakt de ruimte vrij, kan niet ongedaan worden gemaakt)",
           description: "Bestanden worden verwijderd zodra je bevestigt, dus de ruimte is meteen vrij. Regels die gegevens verliezen vragen nog steeds eerst."
         },
         deleteWarning: "Met Nu verwijderen kan Opschonen niet ongedaan worden gemaakt. Geplande opschoningen verplaatsen bestanden nog steeds naar Quarantaine.",
@@ -20790,7 +20790,7 @@ export const CATALOG = {
     deepClean: {
       title: "Grondige opschoning",
       subtitle: "Elke cache, log, dump en elk restant dat Prune weet te vinden, gemeten op deze machine in plaats van geschat. Niets wordt direct verwijderd — alles wat Opschonen meeneemt gaat eerst naar Quarantaine, waar je het kunt terugzetten.",
-      subtitleDelete: "Elke cache, log, dump en elk restant dat Prune weet te vinden, gemeten op deze machine in plaats van geschat. Opschonen verwijdert wat je aanvinkt direct en maakt de ruimte vrij, zoals BleachBit dat doet. Het kan niet ongedaan worden gemaakt.",
+      subtitleDelete: "Elke cache, log, dump en elk restant dat Prune weet te vinden, gemeten op deze machine in plaats van geschat. Opschonen verwijdert wat je aanvinkt direct en maakt de ruimte vrij. Het kan niet ongedaan worden gemaakt.",
       scanLog: {
         header: 'Scanuitvoer',
         scanningAnnounce: (total) => `${total} locaties worden gescand.`,
@@ -21144,7 +21144,7 @@ export const CATALOG = {
           description: "Nic nie jest usuwane. Pliki trafiają do kwarantanny Prune, a miejsce na dysku zwolni się po jej opróżnieniu."
         },
         delete: {
-          label: "Usuń od razu (zwalnia miejsce, nie można cofnąć — jak w BleachBit)",
+          label: "Usuń od razu (zwalnia miejsce, nie można cofnąć)",
           description: "Pliki są usuwane zaraz po potwierdzeniu, więc miejsce zwalnia się natychmiast. Moduły powodujące utratę danych nadal najpierw pytają."
         },
         deleteWarning: "Przy opcji „Usuń od razu” czyszczenia nie można cofnąć. Zaplanowane czyszczenia nadal przenoszą pliki do kwarantanny.",
@@ -21666,7 +21666,7 @@ export const CATALOG = {
     deepClean: {
       title: 'Głębokie czyszczenie',
       subtitle: "Każda pamięć podręczna, dziennik, zrzut i pozostałość, które Prune potrafi znaleźć, zmierzone na tym komputerze zamiast szacowane. Nic nie jest usuwane od razu — wszystko, co usuwa Czyszczenie, trafia najpierw do kwarantanny, skąd można to przywrócić.",
-      subtitleDelete: "Każda pamięć podręczna, dziennik, zrzut i pozostałość, które Prune potrafi znaleźć, zmierzone na tym komputerze zamiast szacowane. Czyszczenie od razu usuwa zaznaczone elementy i zwalnia miejsce, tak jak robi to BleachBit. Nie można tego cofnąć.",
+      subtitleDelete: "Każda pamięć podręczna, dziennik, zrzut i pozostałość, które Prune potrafi znaleźć, zmierzone na tym komputerze zamiast szacowane. Czyszczenie od razu usuwa zaznaczone elementy i zwalnia miejsce. Nie można tego cofnąć.",
       scanLog: {
         header: 'Wynik skanowania',
         scanningAnnounce: (total) => `Skanowanie lokalizacji: ${total}.`,
@@ -22020,7 +22020,7 @@ export const CATALOG = {
           description: "هیڅ شی نه ړنګیږي. فایلونه د Prune قرنطین ته ځي، او کله چې تاسو یې خالي کړئ، ډرایو خپل ځای بیرته ترلاسه کوي."
         },
         delete: {
-          label: "همدا اوس ړنګول (ځای خلاصوي، بیرته نشي راتلی — لکه BleachBit)",
+          label: "همدا اوس ړنګول (ځای خلاصوي، بیرته نشي راتلی)",
           description: "فایلونه هماغه شېبه لرې کیږي چې تاسو تایید کړئ، نو ځای سملاسي خلاصیږي. هغه قاعدې چې ډیټا له لاسه ورکوي بیا هم لومړی پوښتنه کوي."
         },
         deleteWarning: "د «همدا اوس ړنګول» سره، پاکول بیرته نشي راتلی. مهالویش شوي پاکونه بیا هم فایلونه قرنطین ته لیږدوي.",
@@ -22542,7 +22542,7 @@ export const CATALOG = {
     deepClean: {
       title: 'ژور پاکول',
       subtitle: "هره کیشه، لاگ، ډمپ او پاتې شونې چې Prune یې موندلو ته پوهیږي، پدې ماشین کې اندازه شوې نه چې اټکل شوې. هیڅ شی د تل لپاره نه ړنګیږي — هر هغه څه چې پاکول یې اخلي لومړی قرنطین ته ځي، چیرې چې تاسو یې بیرته راوستلی شئ.",
-      subtitleDelete: "هره کیشه، لاگ، ډمپ او پاتې شونې چې Prune یې موندلو ته پوهیږي، پدې ماشین کې اندازه شوې نه چې اټکل شوې. پاکول هغه څه سملاسي ړنګوي چې تاسو یې نښه کړي او ځای خلاصوي، لکه څنګه چې BleachBit کوي. دا بیرته نشي راتلی.",
+      subtitleDelete: "هره کیشه، لاگ، ډمپ او پاتې شونې چې Prune یې موندلو ته پوهیږي، پدې ماشین کې اندازه شوې نه چې اټکل شوې. پاکول هغه څه سملاسي ړنګوي چې تاسو یې نښه کړي او ځای خلاصوي. دا بیرته نشي راتلی.",
       scanLog: {
         header: "د سکین محصول",
         scanningAnnounce: (total) => `${total} ځایونه سکین کیږي.`,
@@ -22898,7 +22898,7 @@ export const CATALOG = {
           description: "Nada é excluído. Os arquivos vão para a Quarentena do Prune e a unidade recupera o espaço quando você a esvazia."
         },
         delete: {
-          label: "Excluir agora (libera o espaço, não pode ser desfeito — como o BleachBit)",
+          label: "Excluir agora (libera o espaço, não pode ser desfeito)",
           description: "Os arquivos são removidos assim que você confirma, então o espaço fica livre na hora. Regras que perdem dados ainda perguntam antes."
         },
         deleteWarning: "Com Excluir agora, a Limpeza não pode ser desfeita. As limpezas agendadas ainda movem os arquivos para a Quarentena.",
@@ -23420,7 +23420,7 @@ export const CATALOG = {
     deepClean: {
       title: "Limpeza profunda",
       subtitle: "Cada cache, log, dump e resíduo que o Prune sabe encontrar, medido nesta máquina em vez de estimado. Nada é excluído diretamente — tudo o que a Limpeza pega vai primeiro para a Quarentena, de onde você pode devolvê-lo.",
-      subtitleDelete: "Cada cache, log, dump e resíduo que o Prune sabe encontrar, medido nesta máquina em vez de estimado. A Limpeza exclui na hora o que você marcar e libera o espaço, como faz o BleachBit. Não pode ser desfeito.",
+      subtitleDelete: "Cada cache, log, dump e resíduo que o Prune sabe encontrar, medido nesta máquina em vez de estimado. A Limpeza exclui na hora o que você marcar e libera o espaço. Não pode ser desfeito.",
       scanLog: {
         header: "Saída da verificação",
         scanningAnnounce: (total) => `Verificando ${total} locais.`,
@@ -23774,7 +23774,7 @@ export const CATALOG = {
           description: "Nada é eliminado. Os ficheiros vão para a Quarentena do Prune e a unidade recupera o espaço quando a esvaziar."
         },
         delete: {
-          label: "Eliminar agora (liberta o espaço, não pode ser desfeito — como o BleachBit)",
+          label: "Eliminar agora (liberta o espaço, não pode ser desfeito)",
           description: "Os ficheiros são removidos assim que confirmar, pelo que o espaço fica livre de imediato. As regras que perdem dados continuam a perguntar primeiro."
         },
         deleteWarning: "Com Eliminar agora, a Limpeza não pode ser desfeita. As limpezas agendadas continuam a mover os ficheiros para a Quarentena.",
@@ -24296,7 +24296,7 @@ export const CATALOG = {
     deepClean: {
       title: "Limpeza profunda",
       subtitle: 'Cada cache, registo, dump e resíduo que o Prune sabe encontrar, medido nesta máquina em vez de estimado. Nada é eliminado diretamente — tudo o que a Limpeza retira vai primeiro para a Quarentena, de onde pode devolvê-lo.',
-      subtitleDelete: "Cada cache, registo, dump e resíduo que o Prune sabe encontrar, medido nesta máquina em vez de estimado. A Limpeza elimina de imediato o que selecionar e liberta o espaço, tal como o BleachBit. Não pode ser desfeito.",
+      subtitleDelete: "Cada cache, registo, dump e resíduo que o Prune sabe encontrar, medido nesta máquina em vez de estimado. A Limpeza elimina de imediato o que selecionar e liberta o espaço. Não pode ser desfeito.",
       scanLog: {
         header: "Saída da análise",
         scanningAnnounce: (total) => `A analisar ${total} localizações.`,
@@ -24652,7 +24652,7 @@ export const CATALOG = {
           description: "Nu se șterge nimic. Fișierele merg în Carantina din Prune, iar unitatea recuperează spațiul când golești Carantina."
         },
         delete: {
-          label: "Șterge acum (eliberează spațiul, nu se poate anula — ca BleachBit)",
+          label: "Șterge acum (eliberează spațiul, nu se poate anula)",
           description: "Fișierele sunt eliminate imediat ce confirmi, deci spațiul se eliberează pe loc. Regulile care pierd date tot te întreabă mai întâi."
         },
         deleteWarning: "Cu Șterge acum, Curățarea nu se poate anula. Curățările programate mută în continuare fișierele în Carantină.",
@@ -25174,7 +25174,7 @@ export const CATALOG = {
     deepClean: {
       title: 'Curățare profundă',
       subtitle: "Fiecare cache, jurnal, dump și rest pe care Prune știe să-l găsească, măsurat pe acest calculator în loc să fie estimat. Nimic nu este șters direct — tot ce ia Curățarea merge mai întâi în Carantină, de unde îl poți restaura.",
-      subtitleDelete: "Fiecare cache, jurnal, dump și rest pe care Prune știe să-l găsească, măsurat pe acest calculator în loc să fie estimat. Curățarea șterge imediat ce bifezi și eliberează spațiul, la fel ca BleachBit. Nu se poate anula.",
+      subtitleDelete: "Fiecare cache, jurnal, dump și rest pe care Prune știe să-l găsească, măsurat pe acest calculator în loc să fie estimat. Curățarea șterge imediat ce bifezi și eliberează spațiul. Nu se poate anula.",
       scanLog: {
         header: 'Rezultatul scanării',
         scanningAnnounce: (total) => { const d = total % 100 >= 1 && total % 100 < 20 ? '' : 'de '; return total === 1 ? 'Se scanează o locație.' : `Se scanează ${total} ${d}locații.`; },
@@ -25530,7 +25530,7 @@ export const CATALOG = {
           description: "Ничего не удаляется. Файлы попадают в карантин Prune, а место на диске освободится, когда вы очистите карантин."
         },
         delete: {
-          label: "Удалить сразу (место освобождается, отменить нельзя — как в BleachBit)",
+          label: "Удалить сразу (место освобождается, отменить нельзя)",
           description: "Файлы удаляются сразу после подтверждения, поэтому место освобождается немедленно. Средства очистки, теряющие данные, по-прежнему спрашивают заранее."
         },
         deleteWarning: "В режиме «Удалить сразу» очистку нельзя отменить. Очистки по расписанию по-прежнему перемещают файлы в карантин.",
@@ -26052,7 +26052,7 @@ export const CATALOG = {
     deepClean: {
       title: 'Глубокая очистка',
       subtitle: 'Каждый кэш, журнал, дамп и остаток, которые умеет находить Prune, измеряются на этом компьютере, а не оцениваются. Ничего не удаляется сразу — всё, что забирает Очистка, сначала попадает в карантин, откуда это можно вернуть.',
-      subtitleDelete: "Каждый кэш, журнал, дамп и остаток, которые умеет находить Prune, измеряются на этом компьютере, а не оцениваются. Очистка сразу удаляет отмеченное и освобождает место — так же, как это делает BleachBit. Отменить это нельзя.",
+      subtitleDelete: "Каждый кэш, журнал, дамп и остаток, которые умеет находить Prune, измеряются на этом компьютере, а не оцениваются. Очистка сразу удаляет отмеченное и освобождает место. Отменить это нельзя.",
       scanLog: {
         header: 'Вывод сканирования',
         scanningAnnounce: (total) => `Сканирование расположений: ${total}.`,
@@ -26406,7 +26406,7 @@ export const CATALOG = {
           description: "Nič sa neodstráni. Súbory idú do karantény Prune a miesto na disku sa uvoľní, keď karanténu vyprázdnite."
         },
         delete: {
-          label: "Odstrániť hneď (uvoľní miesto, nemožno vrátiť — ako BleachBit)",
+          label: "Odstrániť hneď (uvoľní miesto, nemožno vrátiť)",
           description: "Súbory sa odstránia hneď po potvrdení, takže sa miesto uvoľní okamžite. Čističe, ktoré spôsobujú stratu dát, sa stále najprv opýtajú."
         },
         deleteWarning: "Pri voľbe „Odstrániť hneď“ sa čistenie nedá vrátiť. Naplánované čistenia stále presúvajú súbory do karantény.",
@@ -26928,7 +26928,7 @@ export const CATALOG = {
     deepClean: {
       title: 'Hĺbkové čistenie',
       subtitle: "Každá vyrovnávacia pamäť, protokol, výpis a zvyšok, ktoré Prune vie nájsť, zmerané na tomto počítači namiesto odhadu. Nič sa hneď nevymaže — všetko, čo Čistenie odstráni, ide najprv do karantény, odkiaľ to môžete vrátiť.",
-      subtitleDelete: "Každá vyrovnávacia pamäť, protokol, výpis a zvyšok, ktoré Prune vie nájsť, zmerané na tomto počítači namiesto odhadu. Čistenie hneď odstráni to, čo zaškrtnete, a uvoľní miesto, rovnako ako BleachBit. Nemožno to vrátiť.",
+      subtitleDelete: "Každá vyrovnávacia pamäť, protokol, výpis a zvyšok, ktoré Prune vie nájsť, zmerané na tomto počítači namiesto odhadu. Čistenie hneď odstráni to, čo zaškrtnete, a uvoľní miesto. Nemožno to vrátiť.",
       scanLog: {
         header: 'Výstup skenovania',
         scanningAnnounce: (total) => `Skenovanie miest: ${total}.`,
@@ -27282,7 +27282,7 @@ export const CATALOG = {
           description: "Asgjë nuk fshihet. Skedarët shkojnë në Karantinën e Prune-it dhe disku e rimerr hapësirën kur e zbraz."
         },
         delete: {
-          label: "Fshi tani (liron hapësirën, nuk mund të zhbëhet — si BleachBit)",
+          label: "Fshi tani (liron hapësirën, nuk mund të zhbëhet)",
           description: "Skedarët hiqen sapo të konfirmosh, kështu që hapësira lirohet menjëherë. Rregullat që humbin të dhëna pyesin prapë fillimisht."
         },
         deleteWarning: "Me Fshi tani, Pastrimi nuk mund të zhbëhet. Pastrimet e planifikuara vazhdojnë t'i zhvendosin skedarët në Karantinë.",
@@ -27804,7 +27804,7 @@ export const CATALOG = {
     deepClean: {
       title: 'Pastrim i thellë',
       subtitle: "Çdo memorie e fshehtë, ditar, dump dhe mbetje që Prune di t'i gjejë, e matur në këtë kompjuter në vend të vlerësuar. Asgjë nuk fshihet menjëherë — çdo gjë që merr Pastrimi shkon fillimisht në Karantinë, ku mund ta rikthesh.",
-      subtitleDelete: "Çdo memorie e fshehtë, ditar, dump dhe mbetje që Prune di t'i gjejë, e matur në këtë kompjuter në vend të vlerësuar. Pastro fshin menjëherë atë që ke shënuar dhe liron hapësirën, si BleachBit. Nuk mund të zhbëhet.",
+      subtitleDelete: "Çdo memorie e fshehtë, ditar, dump dhe mbetje që Prune di t'i gjejë, e matur në këtë kompjuter në vend të vlerësuar. Pastro fshin menjëherë atë që ke shënuar dhe liron hapësirën. Nuk mund të zhbëhet.",
       scanLog: {
         header: 'Rezultati i skanimit',
         scanningAnnounce: (total) => `Duke skanuar ${total} vendndodhje.`,
@@ -28160,7 +28160,7 @@ export const CATALOG = {
           description: "Ништа се не брише. Датотеке иду у Prune карантин, а диск враћа простор када испразните карантин."
         },
         delete: {
-          label: "Обриши одмах (ослобађа простор, не може да се опозове — као BleachBit)",
+          label: "Обриши одмах (ослобађа простор, не може да се опозове)",
           description: "Датотеке се уклањају чим потврдите, па се простор ослобађа одмах. Правила која губе податке и даље прво питају."
         },
         deleteWarning: "Уз Обриши одмах, Чишћење не може да се опозове. Заказана чишћења и даље премештају датотеке у карантин.",
@@ -28682,7 +28682,7 @@ export const CATALOG = {
     deepClean: {
       title: 'Дубоко чишћење',
       subtitle: "Све што Prune зна да пронађе — кеш меморије, дневнике, дампове и остатке — мери се на овом рачунару уместо да се процењује. Ништа се не брише одмах — све што Чишћење узме иде прво у карантин, одакле то можете вратити.",
-      subtitleDelete: "Све што Prune зна да пронађе — кеш меморије, дневнике, дампове и остатке — мери се на овом рачунару уместо да се процењује. Чишћење одмах брише оно што означите и ослобађа простор, као што то ради BleachBit. Не може да се опозове.",
+      subtitleDelete: "Све што Prune зна да пронађе — кеш меморије, дневнике, дампове и остатке — мери се на овом рачунару уместо да се процењује. Чишћење одмах брише оно што означите и ослобађа простор. Не може да се опозове.",
       scanLog: {
         header: 'Излаз скенирања',
         scanningAnnounce: (total) => `Скенирање ${total} локација.`,
@@ -29036,7 +29036,7 @@ export const CATALOG = {
           description: "Inget raderas. Filerna hamnar i Prunes karantän och enheten får tillbaka utrymmet när du tömmer den."
         },
         delete: {
-          label: "Radera nu (frigör utrymmet, kan inte ångras — som BleachBit)",
+          label: "Radera nu (frigör utrymmet, kan inte ångras)",
           description: "Filerna tas bort så fort du bekräftar, så utrymmet är ledigt direkt. Regler som förlorar data frågar fortfarande först."
         },
         deleteWarning: "Med Radera nu kan Rensa inte ångras. Schemalagda rensningar flyttar fortfarande filer till karantän.",
@@ -29558,7 +29558,7 @@ export const CATALOG = {
     deepClean: {
       title: "Grundlig rensning",
       subtitle: "Varje cache, logg, dump och rest som Prune vet hur man hittar, uppmätt på den här datorn i stället för uppskattat. Inget tas bort direkt — allt som Rensa tar går först till Karantän, där du kan lägga tillbaka det.",
-      subtitleDelete: "Varje cache, logg, dump och rest som Prune vet hur man hittar, uppmätt på den här datorn i stället för uppskattat. Rensa raderar det du kryssar i direkt och frigör utrymmet, som BleachBit gör. Det kan inte ångras.",
+      subtitleDelete: "Varje cache, logg, dump och rest som Prune vet hur man hittar, uppmätt på den här datorn i stället för uppskattat. Rensa raderar det du kryssar i direkt och frigör utrymmet. Det kan inte ångras.",
       scanLog: {
         header: 'Skanningsutdata',
         scanningAnnounce: (total) => `Skannar ${total} platser.`,
@@ -29912,7 +29912,7 @@ export const CATALOG = {
           description: "ไม่มีอะไรถูกลบ ไฟล์จะเข้าไปอยู่ในกักกันของ Prune และไดรฟ์จะได้พื้นที่คืนเมื่อคุณล้างกักกัน"
         },
         delete: {
-          label: "ลบทันที (เพิ่มพื้นที่ว่าง แต่ย้อนกลับไม่ได้ — เหมือน BleachBit)",
+          label: "ลบทันที (เพิ่มพื้นที่ว่าง แต่ย้อนกลับไม่ได้)",
           description: "ไฟล์จะถูกนำออกทันทีที่คุณยืนยัน พื้นที่จึงว่างขึ้นในทันที กฎที่ทำให้สูญเสียข้อมูลจะยังถามก่อนเสมอ"
         },
         deleteWarning: "เมื่อใช้ลบทันที จะย้อนกลับการล้างไม่ได้ ส่วนการล้างตามกำหนดเวลายังคงย้ายไฟล์ไปยังกักกัน",
@@ -30434,7 +30434,7 @@ export const CATALOG = {
     deepClean: {
       title: "ทำความสะอาดเชิงลึก",
       subtitle: "แคช บันทึก ดัมพ์ และสิ่งตกค้างทุกอย่างที่ Prune รู้วิธีค้นหา วัดผลจริงบนเครื่องนี้แทนการประมาณ ไม่มีอะไรถูกลบทันที — ทุกอย่างที่การล้างเก็บไปจะไปที่กักกันก่อน ซึ่งคุณสามารถนำกลับมาได้",
-      subtitleDelete: "แคช บันทึก ดัมพ์ และสิ่งตกค้างทุกอย่างที่ Prune รู้วิธีค้นหา วัดผลจริงบนเครื่องนี้แทนการประมาณ การล้างจะลบสิ่งที่คุณเลือกไว้ทันทีและเพิ่มพื้นที่ว่างให้ เหมือนที่ BleachBit ทำ ย้อนกลับไม่ได้",
+      subtitleDelete: "แคช บันทึก ดัมพ์ และสิ่งตกค้างทุกอย่างที่ Prune รู้วิธีค้นหา วัดผลจริงบนเครื่องนี้แทนการประมาณ การล้างจะลบสิ่งที่คุณเลือกไว้ทันทีและเพิ่มพื้นที่ว่างให้ ย้อนกลับไม่ได้",
       scanLog: {
         header: 'ผลลัพธ์การสแกน',
         scanningAnnounce: (total) => `กำลังสแกน ${total} ตำแหน่ง`,
@@ -30790,7 +30790,7 @@ export const CATALOG = {
           description: "Hiçbir şey silinmez. Dosyalar Prune'un Karantinasına gider; siz Karantinayı boşalttığınızda sürücü alanı geri alır."
         },
         delete: {
-          label: "Şimdi sil (alanı boşaltır, geri alınamaz — BleachBit gibi)",
+          label: "Şimdi sil (alanı boşaltır, geri alınamaz)",
           description: "Dosyalar onayladığınız anda kaldırılır, böylece alan hemen boşalır. Veri kaybettiren kurallar yine de önce sorar."
         },
         deleteWarning: "Şimdi sil seçiliyken Temizle geri alınamaz. Zamanlanmış temizlikler dosyaları yine Karantinaya taşır.",
@@ -31312,7 +31312,7 @@ export const CATALOG = {
     deepClean: {
       title: 'Derin Temizlik',
       subtitle: "Prune'un bulmayı bildiği her önbellek, günlük, döküm ve kalıntı, tahmin edilmek yerine bu makinede ölçülür. Hiçbir şey hemen silinmez — Temizle'nin aldığı her şey önce Karantina'ya gider, oradan geri yükleyebilirsiniz.",
-      subtitleDelete: "Prune'un bulmayı bildiği her önbellek, günlük, döküm ve kalıntı, tahmin edilmek yerine bu makinede ölçülür. Temizle, işaretlediklerinizi hemen siler ve alanı boşaltır, tıpkı BleachBit gibi. Geri alınamaz.",
+      subtitleDelete: "Prune'un bulmayı bildiği her önbellek, günlük, döküm ve kalıntı, tahmin edilmek yerine bu makinede ölçülür. Temizle, işaretlediklerinizi hemen siler ve alanı boşaltır. Geri alınamaz.",
       scanLog: {
         header: 'Tarama çıktısı',
         scanningAnnounce: (total) => `${total} konum taranıyor.`,
@@ -31668,7 +31668,7 @@ export const CATALOG = {
           description: "Нічого не видаляється. Файли потрапляють у карантин Prune, а місце на диску звільниться, коли ви очистите карантин."
         },
         delete: {
-          label: "Видалити одразу (місце звільняється, скасувати не можна — як у BleachBit)",
+          label: "Видалити одразу (місце звільняється, скасувати не можна)",
           description: "Файли видаляються одразу після підтвердження, тож місце звільняється негайно. Засоби очищення, що призводять до втрати даних, і далі питають наперед."
         },
         deleteWarning: "У режимі «Видалити одразу» очищення не можна скасувати. Очищення за розкладом і далі переміщують файли в карантин.",
@@ -32190,7 +32190,7 @@ export const CATALOG = {
     deepClean: {
       title: 'Глибоке очищення',
       subtitle: 'Кожен кеш, журнал, дамп і залишок, які вміє знаходити Prune, вимірюється на цьому комп\'ютері, а не оцінюється. Нічого не видаляється одразу — усе, що забирає Очищення, спершу потрапляє в карантин, звідки це можна повернути.',
-      subtitleDelete: "Кожен кеш, журнал, дамп і залишок, які вміє знаходити Prune, вимірюється на цьому комп'ютері, а не оцінюється. Очищення одразу видаляє позначене й звільняє місце — так само, як це робить BleachBit. Скасувати це не можна.",
+      subtitleDelete: "Кожен кеш, журнал, дамп і залишок, які вміє знаходити Prune, вимірюється на цьому комп'ютері, а не оцінюється. Очищення одразу видаляє позначене й звільняє місце. Скасувати це не можна.",
       scanLog: {
         header: 'Вивід сканування',
         scanningAnnounce: (total) => `Сканування місць: ${total}.`,
@@ -32544,7 +32544,7 @@ export const CATALOG = {
           description: "Không có gì bị xóa. Tệp được chuyển vào khu cách ly của Prune, và ổ đĩa chỉ lấy lại dung lượng khi bạn làm trống khu cách ly."
         },
         delete: {
-          label: "Xóa ngay (giải phóng dung lượng, không thể hoàn tác — giống BleachBit)",
+          label: "Xóa ngay (giải phóng dung lượng, không thể hoàn tác)",
           description: "Tệp bị xóa ngay khi bạn xác nhận nên dung lượng được giải phóng tức thì. Các quy tắc làm mất dữ liệu vẫn hỏi trước."
         },
         deleteWarning: "Với Xóa ngay, không thể hoàn tác thao tác Dọn dẹp. Các lần dọn dẹp theo lịch vẫn chuyển tệp vào khu cách ly.",
@@ -33066,7 +33066,7 @@ export const CATALOG = {
     deepClean: {
       title: 'Dọn dẹp sâu',
       subtitle: "Mọi bộ nhớ đệm, nhật ký, tệp dump và tệp sót lại mà Prune biết cách tìm, được đo trên máy này thay vì ước tính. Không có gì bị xóa ngay lập tức — mọi thứ mà Dọn dẹp lấy đi đều vào khu cách ly trước, nơi bạn có thể khôi phục nó.",
-      subtitleDelete: "Mọi bộ nhớ đệm, nhật ký, tệp dump và tệp sót lại mà Prune biết cách tìm, được đo trên máy này thay vì ước tính. Dọn dẹp xóa ngay những gì bạn đã chọn và giải phóng dung lượng, giống cách BleachBit làm. Không thể hoàn tác.",
+      subtitleDelete: "Mọi bộ nhớ đệm, nhật ký, tệp dump và tệp sót lại mà Prune biết cách tìm, được đo trên máy này thay vì ước tính. Dọn dẹp xóa ngay những gì bạn đã chọn và giải phóng dung lượng. Không thể hoàn tác.",
       scanLog: {
         header: 'Kết quả quét',
         scanningAnnounce: (total) => `Đang quét ${total} vị trí.`,
@@ -33422,7 +33422,7 @@ export const CATALOG = {
           description: "不会删除任何内容。文件会进入 Prune 的隔离区，清空隔离区后，磁盘才会腾出空间。"
         },
         delete: {
-          label: "立即删除（释放空间，无法撤销——与 BleachBit 相同）",
+          label: "立即删除（释放空间，无法撤销）",
           description: "确认后文件会立即被删除，空间马上释放。会丢失数据的规则仍会先询问。"
         },
         deleteWarning: "选择“立即删除”后，清理无法撤销。计划清理仍会将文件移至隔离区。",
@@ -33944,7 +33944,7 @@ export const CATALOG = {
     deepClean: {
       title: '深度清理',
       subtitle: "Prune 知道如何查找的每一个缓存、日志、转储和残留项，都是在这台机器上实际测量的，而非估算。没有任何内容会被直接删除——清理所取走的一切都会先进入隔离区，你可以从那里恢复。",
-      subtitleDelete: "Prune 知道如何查找的每一个缓存、日志、转储和残留项，都是在这台机器上实际测量的，而非估算。清理会立即删除你勾选的内容并释放空间，与 BleachBit 的做法相同。此操作无法撤销。",
+      subtitleDelete: "Prune 知道如何查找的每一个缓存、日志、转储和残留项，都是在这台机器上实际测量的，而非估算。清理会立即删除你勾选的内容并释放空间。此操作无法撤销。",
       scanLog: {
         header: '扫描输出',
         scanningAnnounce: (total) => `正在扫描 ${total} 个位置。`,
@@ -34300,7 +34300,7 @@ export const CATALOG = {
           description: "不會刪除任何內容。檔案會進入 Prune 的隔離區，清空隔離區後，磁碟才會釋出空間。"
         },
         delete: {
-          label: "立即刪除（釋放空間，無法復原——與 BleachBit 相同）",
+          label: "立即刪除（釋放空間，無法復原）",
           description: "確認後檔案會立即刪除，空間馬上釋出。會遺失資料的規則仍會先詢問。"
         },
         deleteWarning: "選擇「立即刪除」後，清理無法復原。排程清理仍會將檔案移至隔離區。",
@@ -34822,7 +34822,7 @@ export const CATALOG = {
     deepClean: {
       title: '深度清理',
       subtitle: "Prune 知道如何尋找的每一個快取、記錄、傾印檔與殘留項目，都是在這台機器上實際測量的，而非估算。沒有任何內容會被直接刪除——清理所取走的一切都會先進入隔離區，你可以從那裡還原。",
-      subtitleDelete: "Prune 知道如何尋找的每一個快取、記錄、傾印檔與殘留項目，都是在這台機器上實際測量的，而非估算。清理會立即刪除你勾選的內容並釋放空間，與 BleachBit 的做法相同。此動作無法復原。",
+      subtitleDelete: "Prune 知道如何尋找的每一個快取、記錄、傾印檔與殘留項目，都是在這台機器上實際測量的，而非估算。清理會立即刪除你勾選的內容並釋放空間。此動作無法復原。",
       scanLog: {
         header: '掃描輸出',
         scanningAnnounce: (total) => `正在掃描 ${total} 個位置。`,
