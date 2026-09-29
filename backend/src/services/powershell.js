@@ -12,6 +12,16 @@ export function runPowerShellJson(script, { timeoutMs = TIMEOUT_MS, retries = 1 
   return attempt(script, timeoutMs, retries);
 }
 
+/** Same invocation (UTF-8 forced, no profile, timeout + one retry) but
+ * returns the raw trimmed stdout instead of parsing it as JSON — for a
+ * caller whose script prints plain text (`reg query`'s own format, for
+ * instance) rather than `ConvertTo-Json`. Empty output resolves to an
+ * empty string, same "no matches is not an error" rule runPowerShellJson
+ * follows. */
+export function runPowerShellText(script, { timeoutMs = TIMEOUT_MS, retries = 1 } = {}) {
+  return attemptText(script, timeoutMs, retries);
+}
+
 /** Forces UTF-8 on the way out.
  *
  * powershell.exe is Windows PowerShell 5.1, and it writes its output in
@@ -54,6 +64,27 @@ function attempt(script, timeoutMs, retriesLeft) {
         } catch (parseErr) {
           reject(new Error(`PowerShell returned non-JSON output: ${parseErr.message}`));
         }
+      }
+    );
+  });
+}
+
+function attemptText(script, timeoutMs, retriesLeft) {
+  return new Promise((resolve, reject) => {
+    execFile(
+      'powershell.exe',
+      ['-NoProfile', '-NonInteractive', '-Command', UTF8_PREAMBLE + script],
+      { timeout: timeoutMs, maxBuffer: 32 * 1024 * 1024 },
+      (err, stdout, stderr) => {
+        if (err) {
+          if (retriesLeft > 0) {
+            attemptText(script, timeoutMs, retriesLeft - 1).then(resolve, reject);
+            return;
+          }
+          reject(new Error(`PowerShell command failed: ${err.message}${stderr ? ` — ${stderr.trim()}` : ''}`));
+          return;
+        }
+        resolve(stdout.trim());
       }
     );
   });

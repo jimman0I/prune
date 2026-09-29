@@ -3,9 +3,16 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 const runPowerShellJsonMock = vi.fn();
 vi.mock('./powershell.js', () => ({ runPowerShellJson: (...args) => runPowerShellJsonMock(...args) }));
 
+const listInstalledProgramsViaRegMock = vi.fn();
+vi.mock('./programsRegFallback.js', () => ({
+  listInstalledProgramsViaReg: (...args) => listInstalledProgramsViaRegMock(...args)
+}));
+
 let listInstalledPrograms, normalizeProgram, dedupeIds, toPowerShellRegistryPath;
 beforeEach(async () => {
   runPowerShellJsonMock.mockReset();
+  listInstalledProgramsViaRegMock.mockReset();
+  listInstalledProgramsViaRegMock.mockResolvedValue([]);
   ({ listInstalledPrograms, normalizeProgram, dedupeIds, toPowerShellRegistryPath } = await import('./programs.js'));
 });
 
@@ -66,9 +73,42 @@ describe('normalizeProgram', () => {
 });
 
 describe('listInstalledPrograms', () => {
-  it('returns an empty array when the registry query finds nothing', async () => {
+  it('returns an empty array when the registry query and the reg.exe fallback both find nothing', async () => {
     runPowerShellJsonMock.mockResolvedValue(null);
     expect(await listInstalledPrograms()).toEqual([]);
+    // Retried once before giving up, then handed to the fallback.
+    expect(runPowerShellJsonMock).toHaveBeenCalledTimes(2);
+    expect(listInstalledProgramsViaRegMock).toHaveBeenCalledTimes(1);
+  });
+
+  it('retries the primary query once on an empty result, and does not fall back if the retry succeeds', async () => {
+    runPowerShellJsonMock
+      .mockResolvedValueOnce(null)
+      .mockResolvedValueOnce([{ id: 'a', name: 'A' }]);
+    const result = await listInstalledPrograms();
+    expect(result.map((p) => p.name)).toEqual(['A']);
+    expect(runPowerShellJsonMock).toHaveBeenCalledTimes(2);
+    expect(listInstalledProgramsViaRegMock).not.toHaveBeenCalled();
+  });
+
+  it('falls back to reg.exe when the primary query is empty twice, and uses its result', async () => {
+    runPowerShellJsonMock.mockResolvedValue(null);
+    listInstalledProgramsViaRegMock.mockResolvedValue([{ id: 'b', name: 'B' }]);
+    const result = await listInstalledPrograms();
+    expect(result.map((p) => p.name)).toEqual(['B']);
+  });
+
+  it('does not let a fallback failure become an unhandled rejection', async () => {
+    runPowerShellJsonMock.mockResolvedValue(null);
+    listInstalledProgramsViaRegMock.mockRejectedValue(new Error('reg.exe not found'));
+    await expect(listInstalledPrograms()).resolves.toEqual([]);
+  });
+
+  it('never calls the fallback when the primary query succeeds on the first try', async () => {
+    runPowerShellJsonMock.mockResolvedValue([{ id: 'a', name: 'A' }]);
+    await listInstalledPrograms();
+    expect(runPowerShellJsonMock).toHaveBeenCalledTimes(1);
+    expect(listInstalledProgramsViaRegMock).not.toHaveBeenCalled();
   });
 
   it('normalizes a single-object result (PowerShell collapses a 1-item array) into a 1-item array', async () => {

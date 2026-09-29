@@ -42,6 +42,43 @@ describe('what can be copied', () => {
   });
 });
 
+/** Real bug, reported live (2026-09-29): a fresh Windows 10 install
+ * showed this screen as empty, and the backend's own registry read had
+ * failed silently -- no thrown error, just zero programs. With no search
+ * and no filter active, "all" never filters anything out, so this exact
+ * combination (0 programs, empty query, filter 'all') is the one case
+ * where an empty list is never a filter the user forgot. It gets its own
+ * message and a Retry button instead of "Nothing matches", which blames
+ * a filter that was never set. */
+describe('the case where nothing came back at all', () => {
+  it('shows a distinct message and a Retry button, not "Nothing matches"', async () => {
+    render({ programs: [] });
+    expect(await screen.findByText(/Couldn't find any installed programs/)).toBeTruthy();
+    expect(screen.queryByText('Nothing matches.')).toBeNull();
+    expect(screen.getByRole('button', { name: 'Retry' })).toBeTruthy();
+  });
+
+  it('still blames the search term when one is active, even with zero total programs', async () => {
+    const user = userEvent.setup();
+    render({ programs: [] });
+    await user.type(screen.getByPlaceholderText(/Search applications/), 'chrome');
+    expect(await screen.findByText('Nothing matches "chrome".')).toBeTruthy();
+    expect(screen.queryByText(/Couldn't find any installed programs/)).toBeNull();
+  });
+
+  it('Retry re-fetches, and a program found on retry replaces the empty state', async () => {
+    const user = userEvent.setup();
+    const { fetchPrograms } = await import('../lib/api.js');
+    fetchPrograms.mockResolvedValueOnce([program({ name: 'Found After Retry' })]);
+    render({ programs: [] });
+
+    await user.click(await screen.findByRole('button', { name: 'Retry' }));
+
+    expect(await screen.findByText('Found After Retry')).toBeTruthy();
+    expect(fetchPrograms).toHaveBeenCalledTimes(1);
+  });
+});
+
 /* `uninstallString` is on the base fixture because a program without one
  * is batch-INELIGIBLE (see lib/batchSelection.js), and leaving it off made
  * every row unselectable -- which is how the first version of the

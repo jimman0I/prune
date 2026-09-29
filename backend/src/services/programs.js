@@ -1,5 +1,6 @@
 import { runPowerShellJson } from './powershell.js';
 import { assessProgramHealth } from './programHealth.js';
+import { listInstalledProgramsViaReg } from './programsRegFallback.js';
 
 // Reads all three Uninstall registry locations Windows actually uses:
 // HKLM 64-bit (machine-wide), HKLM WOW6432Node (32-bit apps on 64-bit
@@ -26,13 +27,39 @@ Get-ItemProperty -Path $paths -ErrorAction SilentlyContinue |
   ConvertTo-Json -Compress
 `;
 
-/** Real installed programs, normalized. PowerShell's ConvertTo-Json
- * returns a single OBJECT (not an array) when exactly one result
- * matches — normalized to always return an array. */
-export async function listInstalledPrograms() {
+async function enumerateViaPowerShell() {
   const raw = await runPowerShellJson(ENUMERATE_SCRIPT);
   if (!raw) return [];
-  const items = Array.isArray(raw) ? raw : [raw];
+  // PowerShell's ConvertTo-Json returns a single OBJECT (not an array)
+  // when exactly one result matches — normalized to always return an array.
+  return Array.isArray(raw) ? raw : [raw];
+}
+
+/** Real installed programs, normalized.
+ *
+ * A real Windows machine always has dozens of Uninstall registry entries
+ * -- an empty result here almost never means "this computer has no
+ * software installed"; it means the read failed without throwing.
+ * Reported live (2026-09): a fresh Windows 10 install showed Applications
+ * as empty while the same registry read worked fine on Windows 11 --
+ * root cause unconfirmed (Get-ItemProperty's pipeline can fail silently
+ * partway through Select-Object's computed properties without tripping
+ * runPowerShellJson's own error handling, which only fires on a spawn
+ * failure or a JSON parse error, neither of which an empty-but-valid
+ * result triggers).
+ *
+ * So an empty result is treated as a probable failure, not a fact:
+ * retried once (first-boot antivirus registry contention is a real,
+ * self-resolving cause), then, if still empty, handed to a fallback that
+ * reads the exact same three hives through `reg.exe`'s own text output
+ * instead of Get-ItemProperty -- no cmdlet pipeline, no computed
+ * properties, a genuinely different failure mode. Only if that also
+ * comes back empty does the list end up empty, which by then really
+ * would mean the machine has nothing in Add/Remove Programs. */
+export async function listInstalledPrograms() {
+  let items = await enumerateViaPowerShell();
+  if (items.length === 0) items = await enumerateViaPowerShell();
+  if (items.length === 0) items = await listInstalledProgramsViaReg().catch(() => []);
   // The health check is a couple of existsSync calls per program -- a few
   // milliseconds across a whole machine's worth of entries, cheap enough
   // to run on every list rather than making callers ask for it separately.
