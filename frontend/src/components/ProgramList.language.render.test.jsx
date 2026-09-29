@@ -299,11 +299,12 @@ describe('checkbox labels and translated batch reasons, in Greek', () => {
 });
 
 describe('the empty state, in every Greek variant', () => {
-  it('translates the plain variant when there is nothing at all to show', async () => {
+  it('translates the genuinely-empty variant (no search, no filter) with its Retry button', async () => {
     render({ programs: [], extensions: [] });
-    expect(await screen.findByText('Τίποτα δεν ταιριάζει.')).toBeTruthy();
-    expect(screen.getByText(/0 καταχωρίσεις είναι κρυμμένες/)).toBeTruthy();
-    expect(screen.getByRole('button', { name: 'Απαλοιφή αναζήτησης και φίλτρων' })).toBeTruthy();
+    expect(await screen.findByText(
+      'Δεν ήταν δυνατή η εύρεση εγκατεστημένων προγραμμάτων. Αυτό είναι ασυνήθιστο σε μια πραγματική εγκατάσταση Windows — δοκιμάστε ξανά.'
+    )).toBeTruthy();
+    expect(screen.getByRole('button', { name: 'Δοκιμή ξανά' })).toBeTruthy();
   });
 
   it('translates the query-only variant, with the term quoted inside the sentence', async () => {

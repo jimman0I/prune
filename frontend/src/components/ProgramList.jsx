@@ -463,20 +463,26 @@ export default function ProgramList({ programs: initialPrograms, extensions = []
   // The row the arrow keys are on: the one Tab stop in the list.
   const [cursorId, setCursorId] = useState(null);
   const rowsRef = useRef(null);
+  // Bumped by the "genuinely nothing came back" retry button below.
+  // Past 0 it always re-fetches, even in a test/caller that seeded
+  // initialPrograms -- clicking Retry is an explicit ask for a fresh read.
+  const [retryTick, setRetryTick] = useState(0);
 
   useEffect(() => {
-    if (initialPrograms) {
+    if (initialPrograms && retryTick === 0) {
       setPrograms(initialPrograms);
       setLoading(false);
     } else {
       let cancelled = false;
+      setLoading(true);
+      setError(null);
       fetchPrograms()
         .then((result) => { if (!cancelled) setPrograms(result); })
         .catch((err) => { if (!cancelled) setError(err.message); })
         .finally(() => { if (!cancelled) setLoading(false); });
       return () => { cancelled = true; };
     }
-  }, [initialPrograms]);
+  }, [initialPrograms, retryTick]);
 
   const brokenCount = useMemo(() => programs.filter(p => p.health?.orphaned).length, [programs]);
   const storeCount = useMemo(() => programs.filter(p => p.source === 'store').length, [programs]);
@@ -724,30 +730,52 @@ export default function ProgramList({ programs: initialPrograms, extensions = []
 
         <div className="divide-y divide-[color:var(--border-subtle)]">
           {filtered.length === 0 && (
-            // An empty result on this screen is almost always a filter the
-            // user forgot, not an empty machine -- there are 210 programs
-            // behind it. So it says which filter is responsible and offers
-            // to undo it, rather than reporting the absence and stopping.
-            <div className="text-center py-16 px-6">
-              <p className="text-[13px] text-[color:var(--text-secondary)]">
-                {query.trim() && filter !== 'all'
-                  ? t('applications.empty.withQueryAndFilter', query.trim(), t(`applications.filters.${filter}`))
-                  : query.trim()
-                    ? t('applications.empty.withQuery', query.trim())
-                    : filter !== 'all'
-                      ? t('applications.empty.withFilter', t(`applications.filters.${filter}`))
-                      : t('applications.empty.plain')}
-              </p>
-              <p className="text-[12.5px] text-[color:var(--text-muted)] mt-1.5">
-                {t('applications.empty.hiddenCount', (filter === 'extensions' ? extensions : programs).length)}
-              </p>
-              <button
-                className="btn-ghost mt-4 px-3.5 py-2 rounded-lg text-[12.5px] font-medium"
-                onClick={() => { setQuery(''); setFilter('all'); }}
-              >
-                {t('applications.empty.clear')}
-              </button>
-            </div>
+            // An empty result with no search and no filter is a different
+            // situation from all the others below it: 'all' plus an empty
+            // query never filters anything out, so this exact combination
+            // means the backend itself found zero programs -- and a real
+            // Windows install always has dozens. Reported live (2026-09):
+            // a fresh Windows 10 machine showed this screen empty because
+            // the registry read failed silently. The backend now retries
+            // and falls back before giving up, but if it still comes back
+            // empty, saying so plainly and offering Retry beats "Nothing
+            // matches", which blames a filter that was never set.
+            query.trim() === '' && filter === 'all' && programs.length === 0 ? (
+              <div className="text-center py-16 px-6">
+                <p className="text-[13px] text-[color:var(--text-secondary)]">
+                  {t('applications.empty.noPrograms')}
+                </p>
+                <button
+                  className="btn-ghost mt-4 px-3.5 py-2 rounded-lg text-[12.5px] font-medium"
+                  onClick={() => setRetryTick((n) => n + 1)}
+                >
+                  {t('applications.retry')}
+                </button>
+              </div>
+            ) : (
+              // Any other empty result on this screen is almost always a
+              // filter the user forgot, not an empty machine. So it says
+              // which filter is responsible and offers to undo it, rather
+              // than reporting the absence and stopping.
+              <div className="text-center py-16 px-6">
+                <p className="text-[13px] text-[color:var(--text-secondary)]">
+                  {query.trim() && filter !== 'all'
+                    ? t('applications.empty.withQueryAndFilter', query.trim(), t(`applications.filters.${filter}`))
+                    : query.trim()
+                      ? t('applications.empty.withQuery', query.trim())
+                      : t('applications.empty.withFilter', t(`applications.filters.${filter}`))}
+                </p>
+                <p className="text-[12.5px] text-[color:var(--text-muted)] mt-1.5">
+                  {t('applications.empty.hiddenCount', (filter === 'extensions' ? extensions : programs).length)}
+                </p>
+                <button
+                  className="btn-ghost mt-4 px-3.5 py-2 rounded-lg text-[12.5px] font-medium"
+                  onClick={() => { setQuery(''); setFilter('all'); }}
+                >
+                  {t('applications.empty.clear')}
+                </button>
+              </div>
+            )
           )}
         </div>
         </div>
