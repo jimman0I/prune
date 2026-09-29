@@ -3,6 +3,25 @@
 All notable changes to Prune (formerly named unrevo -- rebranded 2026-09-01,
 see v1.0.1 below) are documented here.
 
+## v2.9.1
+
+### Fixed
+
+- **Applications no longer trusts an empty program list at face value.**
+  Reported live: a fresh Windows 10 install showed Applications as
+  completely empty. A real Windows machine always has dozens of Uninstall
+  registry entries, so an empty result from the primary read is now
+  retried once, then handed to a fallback that reads the same three
+  registry hives through `reg.exe`'s own text output instead of
+  PowerShell's `Get-ItemProperty` -- a different code path for a different
+  failure mode. If it still comes back empty, Applications says so
+  plainly with a Retry button, instead of "Nothing matches", which used
+  to blame a filter that was never set. Translated into all 39 languages.
+- **Removed competitor names from user-visible text.** The Delete now
+  label and Deep Clean's delete-mode subtitle named BleachBit in every
+  language, and the README named BleachBit, WizTree and Revo. Reworded
+  without naming any of them, keeping the same facts.
+
 ## v2.9.0
 
 A design pass over the whole app. The Dashboard now answers one question,
