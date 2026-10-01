@@ -92,7 +92,7 @@ export function loadCleanerRules() {
 export function normalizeRule(rule) {
   if (rule.actions) return rule;
   if (rule.command) return { ...rule, actions: [{ type: 'shell', command: rule.command }] };
-  if (rule.paths) return { ...rule, actions: [{ type: 'delete', paths: rule.paths }] };
+  if (rule.paths) return { ...rule, actions: [{ type: 'delete', paths: rule.paths, excludeNames: rule.excludeNames }] };
   throw new Error(`normalizeRule: rule "${rule?.id}" has none of actions/command/paths`);
 }
 
@@ -158,7 +158,7 @@ export function scanRule(rule, guards = {}) {
       // sizeBytes/fileCount stay null -- a shell action has nothing to measure.
     } else if (action.type === 'delete') {
       const expandedPaths = action.paths.map(expandPath);
-      const result = deleteAction.scan({ expandedPaths }, guards);
+      const result = deleteAction.scan({ expandedPaths, excludeNames: action.excludeNames }, guards);
       sizeBytes = (sizeBytes ?? 0) + result.sizeBytes;
       fileCount = (fileCount ?? 0) + result.fileCount;
       heldCount += result.heldCount;
@@ -450,7 +450,7 @@ export async function executeRule(rule, guards = {}) {
       if (result.error) error = result.error;
     } else if (action.type === 'delete') {
       const expandedPaths = action.paths.map(expandPath);
-      const result = await deleteAction.execute({ expandedPaths }, rule.name, guards);
+      const result = await deleteAction.execute({ expandedPaths, excludeNames: action.excludeNames }, rule.name, guards);
       tally(result);
       skipped.push(...result.skipped);
       if (result.recycled) recycled = true;

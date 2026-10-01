@@ -865,12 +865,13 @@
     "id": "recent_items_jumplists",
     "category": "Windows",
     "name": "Recent Items & Jump Lists",
-    "description": "The recently-opened file list Explorer and taskbar jump lists show. Removes traces of which files you opened, not the files.",
+    "description": "The recently-opened file list Explorer and taskbar jump lists show. Removes traces of which files you opened, not the files. Leaves File Explorer's own jump list alone, since that file is also where Quick Access's pinned folders live, not just recently-opened ones.",
     "paths": [
       "%APPDATA%\\Microsoft\\Windows\\Recent\\*.lnk",
       "%APPDATA%\\Microsoft\\Windows\\Recent\\AutomaticDestinations",
       "%APPDATA%\\Microsoft\\Windows\\Recent\\CustomDestinations"
     ],
+    "excludeNames": ["5f7b5f1e01b83767.automaticDestinations-ms"],
     "is_safe": true,
     "recommended": false
   },

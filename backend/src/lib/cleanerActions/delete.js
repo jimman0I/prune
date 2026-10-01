@@ -90,7 +90,7 @@ function isAccessDenied(err) {
  * (permission error, gone by the time it's visited), it contributes
  * nothing -- same partial-over-total-failure convention cleanup.js's own
  * dirSize/leftoverScan.js already use. */
-export function collectFiles(targetPath, out, denied) {
+export function collectFiles(targetPath, out, denied, excludeBasenames = null) {
   let st;
   try {
     st = statSync(targetPath);
@@ -116,9 +116,16 @@ export function collectFiles(targetPath, out, denied) {
     return;
   }
   for (const entry of entries) {
+    // A rule-authored exclusion (e.g. Explorer's own jump-list file,
+    // whose AppID-named entry inside AutomaticDestinations also carries
+    // Quick Access's pinned folders, not just "recently opened" traces).
+    // Checked by basename only, case-insensitively, before the entry is
+    // even stat'd -- it must never appear in a scan or a quarantine
+    // batch, not just be re-excluded at execute time.
+    if (excludeBasenames && excludeBasenames.has(entry.name.toLowerCase())) continue;
     const full = join(targetPath, entry.name);
     if (entry.isDirectory()) {
-      collectFiles(full, out, denied);
+      collectFiles(full, out, denied, excludeBasenames);
     } else if (entry.isFile()) {
       try {
         // mtime as well as size: the "ignore anything touched in the
@@ -141,9 +148,12 @@ export function collectFiles(targetPath, out, denied) {
  * free. `paths` here are already environment-expanded by the caller
  * (cleanerRules.js's expandPath stays there -- it's shared by every
  * action type, not `delete`-specific). */
-export function resolveActionFiles(expandedPaths, guards = {}) {
+export function resolveActionFiles(expandedPaths, guards = {}, excludeNames = null) {
   const files = [];
   const denied = [];
+  const excludeBasenames = excludeNames && excludeNames.length
+    ? new Set(excludeNames.map((n) => n.toLowerCase()))
+    : null;
   for (const expanded of expandedPaths) {
     // Real bug, found running this: path.join('', 'C:') on win32 does NOT
     // return 'C:' -- it returns 'C:.', and every join() after that
@@ -154,7 +164,7 @@ export function resolveActionFiles(expandedPaths, guards = {}) {
     const [driveSegment, ...rest] = pathToSegments(expanded);
     if (!driveSegment) continue;
     for (const match of resolveGlob(driveSegment, rest)) {
-      collectFiles(match, files, denied);
+      collectFiles(match, files, denied, excludeBasenames);
     }
   }
 
@@ -203,7 +213,7 @@ async function isFileAccessible(filePath) {
  * anything. `action.expandedPaths` is pre-expanded (see
  * resolveActionFiles). */
 export function scan(action, guards = {}) {
-  const { files, denied, held } = resolveActionFiles(action.expandedPaths, guards);
+  const { files, denied, held } = resolveActionFiles(action.expandedPaths, guards, action.excludeNames);
   return {
     sizeBytes: files.reduce((sum, f) => sum + f.sizeBytes, 0),
     fileCount: files.length,
@@ -223,7 +233,7 @@ export function scan(action, guards = {}) {
  * moved, not deleted outright, so a bad match is always recoverable the
  * same way an uninstall's own leftover removal already is. */
 export async function execute(action, ruleName, guards = {}) {
-  const { files, held } = resolveActionFiles(action.expandedPaths, guards);
+  const { files, held } = resolveActionFiles(action.expandedPaths, guards, action.excludeNames);
   return executeFiles(files, held, ruleName, guards);
 }
 
