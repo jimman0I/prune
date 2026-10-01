@@ -472,6 +472,19 @@ function DeepClean({ onNavigate }) {
       const result = await runClean([...selected]);
       setCleanResult(result);
 
+      // Stop is a user action, not a completion: whatever was cleaned
+      // before the click already happened (and is reflected below, same
+      // as a finished run), but the selection that was still queued is
+      // real work the user asked for and hasn't gotten yet -- clearing it
+      // here would silently discard that intent, and the next launch
+      // would seed back to the defaults instead of what they'd actually
+      // picked (the selection persists on every change, including this
+      // one -- see the effect below).
+      if (result.aborted) {
+        toasts.warn(`${t('deepClean.cleanupStopped')} ${resultSentence(result)}`);
+        return;
+      }
+
       // Say what happened, and say it in numbers. The freed figure used
       // to be the whole story and the failures were a passive clause
       // appended to it -- "some files were skipped (in use)" -- with no
