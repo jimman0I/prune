@@ -178,18 +178,29 @@ describe('the two rail widths', () => {
     // truncated "Applications" at the 200px rail width.
     renderScreen(<NavRail screen="dashboard" onNavigate={() => {}} />);
     const button = screen.getByRole('button', { name: 'Applications' });
-    const rowSpans = [...button.children].filter((el) => el.tagName === 'SPAN' && !el.querySelector('svg'));
+    const rowSpans = [...button.children].filter(
+      (el) => el.tagName === 'SPAN' && !el.querySelector('svg') && el.textContent !== ''
+    );
     expect(rowSpans.map((el) => el.textContent)).toEqual(['Applications']);
   });
 });
 
 describe('the active mark', () => {
-  it('is a 3px pill on the active item only, alongside the sliding tint', () => {
+  // Always mounted now, one per nav item, toggled by opacity rather than
+  // conditional rendering (see NavRail.jsx's own comment on why: a
+  // shared layoutId measured and transformed this element, and that
+  // measurement could land on a different sub-pixel boundary than the
+  // icon beside it under fractional OS display scaling). So every item
+  // has its own pill in the DOM; exactly one is visible.
+  it('is a 3px pill on the active item only, alongside the tint', () => {
     const { container } = renderScreen(<NavRail screen="quarantine" onNavigate={() => {}} />);
-    const pills = container.querySelectorAll('span[class*="w-[3px]"]');
-    expect(pills).toHaveLength(1);
-    expect(screen.getByRole('button', { name: 'Quarantine' }).contains(pills[0])).toBe(true);
-    expect(pills[0].getAttribute('aria-hidden')).toBe('true');
+    const pills = [...container.querySelectorAll('span[class*="w-[3px]"]')];
+    expect(pills).toHaveLength(LABELS.length);
+    const visible = pills.filter((p) => p.className.includes('opacity-100'));
+    expect(visible).toHaveLength(1);
+    expect(screen.getByRole('button', { name: 'Quarantine' }).contains(visible[0])).toBe(true);
+    expect(visible[0].getAttribute('aria-hidden')).toBe('true');
+    expect(pills.filter((p) => p !== visible[0]).every((p) => p.className.includes('opacity-0'))).toBe(true);
   });
 });
 

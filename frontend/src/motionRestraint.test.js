@@ -73,10 +73,18 @@ describe('button motion', () => {
 describe('nav motion', () => {
   const nav = read('src/components/NavRail.jsx');
 
-  it('has no hover motion: only a tap, and the sliding indicator stays', () => {
+  it('has no hover motion: only a tap, and the active mark stays', () => {
     expect(nav).not.toContain('whileHover');
     expect(nav).toMatch(/whileTap=\{\{ scale: 0\.96 \}\}/);
-    expect(nav).toContain('layoutId="nav-active"');
+    // The active tint/pill used to be framer-motion `layoutId` elements
+    // that slid between buttons -- dropped because that mechanism
+    // measures a DOM rect and bakes it into a `transform`, which could
+    // land on a different sub-pixel boundary than the icon beside it
+    // under fractional OS display scaling (confirmed broken at Windows'
+    // 150%) and visibly drift from it. Opacity on an always-mounted,
+    // statically-positioned span can't desync that way.
+    expect(nav).not.toContain('layoutId=');
+    expect(nav).toMatch(/opacity-100.*:.*opacity-0/);
   });
 
   it('does not use a spring on the nav buttons', () => {
