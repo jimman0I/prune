@@ -3,6 +3,36 @@
 All notable changes to Prune (formerly named unrevo -- rebranded 2026-09-01,
 see v1.0.1 below) are documented here.
 
+## v2.9.2
+
+### Added
+
+- **Report a bug now includes this session's installed-programs count.**
+  Whenever Applications has actually loaded this session, the report lists
+  a 4th fact, "Installed programs found: N" -- never a fresh read of its
+  own, so the dialog stays instant. Most reports never touch Applications,
+  so the row only appears when something is actually known. Translated
+  into all 39 languages, with the "nothing else is collected" line
+  reworded to stay accurate.
+
+### Changed
+
+- **Five Applications-only reads no longer run on every screen.** Icon
+  extraction (around 90 executables), binary versions, install dates,
+  browser extensions and the running-process poll used to fire the moment
+  the app opened, including a session that never visits Applications at
+  all -- the running-process poll was the worst of these, repeating every
+  15 seconds for as long as the app stayed open. All five now wait until
+  Applications has actually been opened once. Dashboard's own space
+  breakdown and largest-programs list still load immediately, since
+  nothing about them changed.
+
+### Fixed
+
+- Cleared 6 Dependabot alerts, all a nested `undici` only ever reachable
+  while installing build tooling (downloading Electron's binary,
+  compiling native modules), never shipped in the built app.
+
 ## v2.9.1
 
 ### Fixed
