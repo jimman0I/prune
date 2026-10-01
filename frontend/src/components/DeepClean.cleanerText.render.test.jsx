@@ -160,15 +160,16 @@ describe('Deep Clean rule text, in Greek', () => {
   });
 
   it('the scan log names a rule by its translated name', async () => {
+    // The scan now starts automatically the moment the tree loads, so
+    // this mock -- the only implementation in play -- measures through
+    // THAT run; there is no separate manual click left to drive it.
     streamDeepCleanScan.mockImplementation(async (onEvent) => {
       onEvent('start', { total: 1 });
       onEvent('rule', { ...rules[0].items[0], present: true, accessible: true, sizeBytes: 2048 });
     });
-    const user = userEvent.setup();
     mount();
     await ready();
     await screen.findByText(CACHE_EL);
-    await user.click(screen.getAllByRole('button', { name: 'Προεπισκόπηση' })[0]);
     // The tree row says the bare name; the log line leads with the category,
     // because three rules are all called Cache.
     expect(await screen.findByText(`${BRAVE_EL} · ${CACHE_EL}`)).toBeTruthy();
@@ -185,7 +186,7 @@ describe('Deep Clean rule text, in Greek', () => {
     await screen.findByText(CACHE_EL);
     // Clean stays disabled until a Preview has measured something.
     streamDeepCleanScan.mockImplementation(measuredScan(rules));
-    await runMeasuredPreview(user, streamDeepCleanScan, 'Προεπισκόπηση');
+    await runMeasuredPreview(user, streamDeepCleanScan, ['Προεπισκόπηση', 'Επανασάρωση']);
     await user.click(screen.getByRole('checkbox', { name: CACHE_EL }));
     await user.click(await screen.findByRole('button', { name: 'Καθαρισμός' }));
     await user.click(screen.getByRole('button', { name: 'Μετακίνηση σε καραντίνα' }));

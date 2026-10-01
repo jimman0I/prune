@@ -123,7 +123,7 @@ const cleanButton = () => screen.getByRole('button', { name: 'Καθαρισμό
 // Clean stays disabled until a Preview has measured something.
 const previewFirst = async (user) => {
   streamDeepCleanScan.mockImplementation(measuredScan(rules));
-  await runMeasuredPreview(user, streamDeepCleanScan, 'Προεπισκόπηση');
+  await runMeasuredPreview(user, streamDeepCleanScan, ['Προεπισκόπηση', 'Επανασάρωση']);
 };
 
 describe('the Deep Clean screen, in Greek', () => {
@@ -176,6 +176,10 @@ describe('the Deep Clean screen, in Greek', () => {
     // Only 'temp' gets a 'rule' event; 'thumbs' stays at its listed
     // sizeBytes: null. Selecting both after the scan finishes exercises
     // the mixed measured/unmeasured total the footer's suffix reports on.
+    //
+    // Set before mount, so the automatic scan is what runs this -- not a
+    // manual click afterwards, which this mock's own `start` event would
+    // have already raced past by the time anyone could press anything.
     let announceScanning;
     streamDeepCleanScan.mockImplementation(async (onEvent) => {
       onEvent('start', { total: 2 });
@@ -186,7 +190,6 @@ describe('the Deep Clean screen, in Greek', () => {
     mount();
     await ready();
     await screen.findByText('Temporary files');
-    await user.click(screen.getByRole('button', { name: 'Προεπισκόπηση' }));
 
     await waitFor(() => expect(announceScanning).toBeTruthy());
     expect(await screen.findByText('Η σάρωση ολοκληρώθηκε. Μετρήθηκαν 1 από 2 τοποθεσίες.')).toBeTruthy();
@@ -197,15 +200,16 @@ describe('the Deep Clean screen, in Greek', () => {
   });
 
   it('translates the scan-error message, with the raw error interpolated', async () => {
+    // The automatic scan on mount is the one call this `...Once` override
+    // actually reaches now; a manual click afterwards would start a
+    // second, clean scan and clear the very error this test checks for.
     streamDeepCleanScan.mockImplementationOnce(async (onEvent) => {
       onEvent('error', { message: 'Access is denied: C:\\Windows\\Prefetch' });
     });
-    const user = userEvent.setup();
     mount();
     await ready();
     await screen.findByText('Temporary files');
 
-    await user.click(screen.getAllByRole('button', { name: 'Προεπισκόπηση' })[0]);
     expect(await screen.findByText(/Αδυναμία σάρωσης: Access is denied/)).toBeTruthy();
   });
 
@@ -345,12 +349,13 @@ describe('the Deep Clean screen, in Greek', () => {
   });
 
   it('translates Stop while scanning, and Rescan once a scan has finished', async () => {
+    // Hangs forever, and -- set before mount -- is what the automatic
+    // scan runs into immediately, so Stop is already on screen by the
+    // time the tree itself is; no click needed to reach it.
     streamDeepCleanScan.mockImplementation(() => new Promise(() => {}));
-    const user = userEvent.setup();
     mount();
     await ready();
     await screen.findByText('Temporary files');
-    await user.click(screen.getAllByRole('button', { name: 'Προεπισκόπηση' })[0]);
 
     expect(await screen.findByRole('button', { name: 'Διακοπή' })).toBeTruthy();
   });
@@ -428,16 +433,16 @@ describe('the warning dialog, in Greek', () => {
 
 describe('the Deep Clean live logs, in Greek', () => {
   it('words a scan log line in Greek', async () => {
+    // Set before mount, so the automatic scan runs this -- it is the only
+    // implementation in play, and there is no manual click left to drive.
     streamDeepCleanScan.mockImplementation(async (onEvent) => {
       onEvent('start', { total: 2 });
       onEvent('rule', { id: 'temp', category: 'Sample OS', name: 'Temporary files', sizeBytes: 0, present: false });
       onEvent('rule', { id: 'thumbs', category: 'Sample OS', name: 'Thumbnail cache', sizeBytes: 0, present: true, accessible: false });
     });
-    const user = userEvent.setup();
     mount();
     await ready();
     await screen.findByText('Temporary files');
-    await user.click(screen.getByRole('button', { name: 'Προεπισκόπηση' }));
 
     const log = (await screen.findByText('Έξοδος σάρωσης')).closest('[class*="border-b"]').parentElement;
     expect(await within(log).findByText('δεν είναι εγκατεστημένο')).toBeTruthy();

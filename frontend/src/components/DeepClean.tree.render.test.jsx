@@ -243,6 +243,11 @@ describe('the scan log before anything has run', () => {
   it('says what to do next instead of repeating "nothing scanned"', async () => {
     renderScreen(<DeepClean />);
     await screen.findByText('Temporary files');
+    // A scan now starts automatically the moment the tree loads, and this
+    // suite's default mock measures nothing -- let it settle before
+    // reading the idle message underneath, since "Starting…" (not idle)
+    // is what the log shows for as long as that first scan is in flight.
+    await waitFor(() => expect(document.querySelector('.animate-spin')).toBeNull());
 
     expect(screen.getByText('Press Preview to measure what can be cleaned.')).toBeTruthy();
   });

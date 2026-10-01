@@ -1,7 +1,6 @@
 // @vitest-environment jsdom
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { screen, waitFor, within, act } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import { renderScreen } from '../testSupport/renderScreen.jsx';
 import { isCopyable } from '../testSupport/copyable.js';
 import { measuredScan, runMeasuredPreview } from '../testSupport/deepCleanPreview.js';
@@ -109,6 +108,11 @@ const previewFirst = async (user) => {
 
 describe('a profile-wide search', () => {
   it('says what it is doing while it runs, with a live count, and clears it when the rule is measured', async () => {
+    // The scan now starts automatically the moment the tree loads, so
+    // this hanging mock -- set before render -- belongs to THAT scan, not
+    // to a manual click afterwards (which would find Stop in Preview's
+    // spot, not a button named Preview, for as long as this one is still
+    // in flight).
     let emit;
     let finish;
     streamDeepCleanScan.mockImplementation((onEvent) => {
@@ -116,10 +120,8 @@ describe('a profile-wide search', () => {
       onEvent('start', { total: 3 });
       return new Promise((resolve) => { finish = resolve; });
     });
-    const user = userEvent.setup();
     renderScreen(<DeepClean />);
     await screen.findByText('Backup files');
-    await user.click(screen.getAllByRole('button', { name: 'Preview' })[0]);
     await waitFor(() => expect(emit).toBeTruthy());
 
     act(() => { emit('progress', { id: 'deepscan_backup', dirs: 40, entries: 12345, matches: 2 }); });
@@ -132,14 +134,14 @@ describe('a profile-wide search', () => {
   });
 
   it('labels a partial measurement as at least, never as the total', async () => {
+    // Same persistent implementation serves the automatic scan too (set
+    // before render), so there is nothing left for a manual click to add.
     streamDeepCleanScan.mockImplementation(async (onEvent) => {
       onEvent('start', { total: 3 });
       onEvent('rule', { id: 'deepscan_backup', category: 'Deep scan', name: 'Backup files', sizeBytes: 2048, fileCount: 3, present: true, accessible: true, incomplete: 'time' });
     });
-    const user = userEvent.setup();
     renderScreen(<DeepClean />);
     await screen.findByText('Backup files');
-    await user.click(screen.getAllByRole('button', { name: 'Preview' })[0]);
     expect(await screen.findByText('at least 2 KB')).toBeTruthy();
     expect(screen.getAllByText('2 KB, partial').length).toBeGreaterThan(0);
   });
