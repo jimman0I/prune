@@ -7,13 +7,11 @@ see v1.0.1 below) are documented here.
 
 ### Added
 
-- **Report a bug now includes this session's installed-programs count.**
-  Whenever Applications has actually loaded this session, the report lists
-  a 4th fact, "Installed programs found: N" -- never a fresh read of its
-  own, so the dialog stays instant. Most reports never touch Applications,
-  so the row only appears when something is actually known. Translated
-  into all 39 languages, with the "nothing else is collected" line
-  reworded to stay accurate.
+- **Report a bug now includes the installed-programs count.** Within about
+  a second of launch, the report lists a 4th fact, "Installed programs
+  found: N" -- never a fresh read of its own, so the dialog stays instant.
+  Translated into all 39 languages, with the "nothing else is collected"
+  line reworded to stay accurate.
 
 ### Changed
 

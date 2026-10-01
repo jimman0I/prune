@@ -29,6 +29,7 @@ import { useScreenFade } from './hooks/useScreenFade.js';
 import { useWindowActivity } from './hooks/useWindowActivity.js';
 import { useLanguage } from './i18n/LanguageContext.jsx';
 import { applicationsSummary } from './lib/applicationsSummary.js';
+import { setLastProgramsCount } from './lib/lastProgramsCount.js';
 
 function formatBytes(bytes) {
   if (bytes === null || bytes === undefined) return '—';
@@ -80,6 +81,17 @@ export default function App() {
   // until that screen has actually been opened once this session.
   const { programs, icons, totalSize, extensions, running, loading, error, sizesSettled, refresh: refreshPrograms } =
     useProgramData({ loadDecorations: visited.has('applications') });
+
+  // Bug report diagnostic (lib/lastProgramsCount.js). The base list query
+  // is eager regardless of screen (Dashboard needs it too), so this is
+  // known within about a second of launch -- not gated on an Applications
+  // visit. Real bug this caught in its own first live check: an earlier
+  // version of this set it from ProgramList's own local fetch fallback,
+  // which App.jsx's `programs` prop makes unreachable in the shipped app,
+  // so the count silently never showed up at all.
+  useEffect(() => {
+    if (!loading && !error) setLastProgramsCount(programs.length);
+  }, [loading, error, programs.length]);
 
   /* What every one of the three dialogs does when it closes, however it was
    * closed (its own button, Escape, a Done). The single-program dialog used to

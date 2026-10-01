@@ -6,7 +6,6 @@ import { sizeBadgeTone } from '../lib/sizeBadgeTone.js';
 import { sortPrograms, nextSortState } from '../lib/sortPrograms.js';
 import { canBatchUninstall, batchIneligibleReason, batchSummary } from '../lib/batchSelection.js';
 import { isRecentlyInstalled, RECENT_DAYS } from '../lib/recentPrograms.js';
-import { setLastProgramsCount } from '../lib/lastProgramsCount.js';
 import TableSkeleton from './TableSkeleton.jsx';
 import { tileLetter } from '../lib/iconTileLetter.js';
 import { tileColor, TILE_INK } from '../lib/programTileColor.js';
@@ -478,12 +477,7 @@ export default function ProgramList({ programs: initialPrograms, extensions = []
       setLoading(true);
       setError(null);
       fetchPrograms()
-        .then((result) => {
-          if (!cancelled) setPrograms(result);
-          // A real read, whatever it found -- recorded even when it's 0,
-          // which is the one value that matters most for a bug report.
-          setLastProgramsCount(result.length);
-        })
+        .then((result) => { if (!cancelled) setPrograms(result); })
         .catch((err) => { if (!cancelled) setError(err.message); })
         .finally(() => { if (!cancelled) setLoading(false); });
       return () => { cancelled = true; };
