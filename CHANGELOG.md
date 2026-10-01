@@ -3,6 +3,42 @@
 All notable changes to Prune (formerly named unrevo -- rebranded 2026-09-01,
 see v1.0.1 below) are documented here.
 
+## v2.9.3
+
+### Added
+
+- **Low power mode (Settings -> General).** Pauses the background
+  animation, flattens the glass panels to solid ones, and shortens
+  transitions to near-instant -- the same treatment `prefers-reduced-
+  transparency`/`prefers-reduced-motion` already get, reused rather than
+  reinvented. Turned on automatically, once, the first time Prune is
+  installed on a PC with under 8 GiB of RAM, under 4 logical cores, or a
+  GPU Chromium itself falls back to software compositing on -- generous
+  thresholds on purpose. A real choice made afterwards, in Settings or by
+  a file that already recorded one, is never silently overridden later.
+  Translated into all 39 languages.
+
+### Fixed
+
+- **The installer's "who should this be installed for?" page was stuck in
+  English for 19 of Prune's 40 languages**, even though the person had
+  just picked their own language on the screen before it -- electron-
+  builder ships its own translations for this page, but only for about
+  20 languages. Patched the missing 19 by hand, matching how Windows'
+  own installers and UAC prompts phrase "all users / just me / admin
+  credentials" in each.
+
+### Changed
+
+- **Six screens and the Applications list no longer load until opened.**
+  Icon extraction aside, Deep Clean, Disk Map, Settings, Startup,
+  Duplicates, Quarantine and Applications together were over 5,000 lines
+  of JavaScript bundled into the one file every launch had to parse
+  before Dashboard could show anything, whether or not that session ever
+  opened them. Deep Clean's own 754 KB and Disk Map's 294 KB alone cut
+  about 1.1 MB off the initial bundle. Dashboard itself is unaffected --
+  it's the one screen every launch shows regardless.
+
 ## v2.9.2
 
 ### Added

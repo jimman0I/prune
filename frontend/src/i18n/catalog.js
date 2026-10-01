@@ -48,6 +48,10 @@ export const CATALOG = {
         title: 'Minimize to tray',
         description: 'Closing the window sends Prune to the system tray instead of quitting.'
       },
+      lowPowerMode: {
+        title: 'Low power mode',
+        description: 'Pauses the background animation, flattens the glass panels, and shortens transitions to near-instant. Turned on automatically at install if this PC looks like it would benefit; change it here anytime.'
+      },
       updateCheck: {
         title: 'Check for updates',
         description: 'Once a day, Prune asks api.github.com whether a newer release exists. It is the only request Prune makes to anywhere but this machine, and GitHub sees your IP address as any website would. When there is one, an update button appears at the bottom of the side bar, and nothing is downloaded or installed until you click it.'
@@ -934,6 +938,10 @@ export const CATALOG = {
         title: "Minimeer na kennisgewingarea",
         description: 'Om die venster toe te maak stuur Prune na die stelselskinkbord in plaas daarvan om af te sluit.'
       },
+      lowPowerMode: {
+        title: "Energiebesparingsmodus",
+        description: "Onderbreek die agtergrondanimasie, maak die deurskynende glaspanele plat na soliede panele, en verkort oorgange tot byna onmiddellik. Word outomaties aangeskakel tydens installering as hierdie rekenaar waarskynlik daarby sal baat; verander dit enige tyd hier."
+      },
       updateCheck: {
         title: 'Soek vir opdaterings',
         description: 'Een keer per dag vra Prune vir api.github.com of \'n nuwer weergawe bestaan. Dit is die enigste versoek wat Prune na enige plek behalwe hierdie masjien maak, en GitHub sien jou IP-adres soos enige webwerf sou. Wanneer daar een is, verskyn \'n opdateringsknoppie onderaan die kantbalk, en niks word afgelaai of geïnstalleer voordat jy daarop klik nie.'
@@ -1814,6 +1822,10 @@ export const CATALOG = {
       minimizeToTray: {
         title: 'تصغير إلى علبة النظام',
         description: 'إغلاق النافذة يرسل Prune إلى علبة النظام بدلاً من الإنهاء.'
+      },
+      lowPowerMode: {
+        title: "وضع توفير الطاقة",
+        description: "يوقف الرسم المتحرك في الخلفية مؤقتًا، ويحوّل اللوحات الزجاجية الشفافة إلى لوحات صلبة، ويقصّر الانتقالات لتصبح شبه فورية. يُفعَّل تلقائيًا عند التثبيت إذا بدا أن هذا الجهاز سيستفيد منه؛ يمكنك تغييره هنا في أي وقت."
       },
       updateCheck: {
         title: 'التحقق من وجود تحديثات',
@@ -2696,6 +2708,10 @@ export const CATALOG = {
         title: "Minimitza a la safata del sistema",
         description: 'Tancar la finestra envia el Prune a la safata del sistema en lloc de sortir-ne.'
       },
+      lowPowerMode: {
+        title: "Mode de baix consum",
+        description: "Posa en pausa l'animació de fons, aplana els panells de vidre en panells sòlids i escurça les transicions perquè siguin gairebé instantànies. S'activa automàticament en instal·lar-se si aquest ordinador sembla que se'n beneficiaria; canvia-ho aquí quan vulguis."
+      },
       updateCheck: {
         title: 'Comprova si hi ha actualitzacions',
         description: "Una vegada al dia, el Prune pregunta a api.github.com si hi ha una versió més nova. És l'única sol·licitud que el Prune fa a qualsevol lloc que no sigui aquesta màquina, i GitHub veu la teva adreça IP com ho faria qualsevol lloc web. Quan n'hi ha una, apareix un botó d'actualització a la part inferior de la barra lateral, i no es descarrega ni instal·la res fins que hi facis clic."
@@ -3577,6 +3593,10 @@ export const CATALOG = {
         title: 'Minimalizovat do systémové lišty',
         description: 'Zavření okna pošle Prune do systémové lišty místo ukončení.'
       },
+      lowPowerMode: {
+        title: "Režim nízké spotřeby",
+        description: "Pozastaví animaci na pozadí, zploští skleněné panely na plné barvy a zkrátí přechody téměř na okamžité. Při instalaci se automaticky zapne, pokud se zdá, že by tomuto počítači prospěl; kdykoli to tu můžete změnit."
+      },
       updateCheck: {
         title: 'Vyhledávat aktualizace',
         description: 'Jednou denně se Prune zeptá api.github.com, zda existuje novější verze. Je to jediný požadavek, který Prune posílá kamkoli mimo tento počítač, a GitHub vidí vaši IP adresu stejně jako jakýkoli web. Když nějaká existuje, dole na postranním panelu se zobrazí tlačítko aktualizace a nic se nestáhne ani nenainstaluje, dokud na něj neklepnete.'
@@ -4455,6 +4475,10 @@ export const CATALOG = {
       minimizeToTray: {
         title: "Lleihau i'r hambwrdd system",
         description: 'Mae cau\'r ffenestr yn anfon Prune i hambwrdd y system yn lle gadael.'
+      },
+      lowPowerMode: {
+        title: "Modd pŵer isel",
+        description: "Mae'n oedi'r animeiddiad cefndir, yn gwastatu'r paneli gwydr yn baneli solet, ac yn byrhau trosiadau i fod bron yn syth. Caiff ei droi ymlaen yn awtomatig wrth osod os yw'n ymddangos y byddai'r cyfrifiadur hwn yn elwa; newidiwch hyn yma unrhyw bryd."
       },
       updateCheck: {
         title: "Gwirio am ddiweddariadau",
@@ -5337,6 +5361,10 @@ export const CATALOG = {
         title: 'Minimer til statusfeltet',
         description: 'At lukke vinduet sender Prune til statusfeltet i stedet for at afslutte.'
       },
+      lowPowerMode: {
+        title: "Strømsparetilstand",
+        description: "Sætter baggrundsanimationen på pause, gør de gennemsigtige glaspaneler til ensfarvede paneler og forkorter overgange til næsten øjeblikkelige. Slås automatisk til ved installation, hvis denne pc ser ud til at have gavn af det; du kan ændre det her når som helst."
+      },
       updateCheck: {
         title: 'Søg efter opdateringer',
         description: 'En gang om dagen spørger Prune api.github.com, om der findes en nyere udgivelse. Det er den eneste anmodning, Prune sender andre steder end denne maskine, og GitHub ser din IP-adresse, som enhver hjemmeside ville. Når der er en, vises en opdateringsknap nederst i sidepanelet, og intet downloades eller installeres, før du klikker på den.'
@@ -6217,6 +6245,10 @@ export const CATALOG = {
       minimizeToTray: {
         title: "In den Infobereich minimieren",
         description: "Das Schließen des Fensters schickt Prune in den Infobereich, statt es zu beenden."
+      },
+      lowPowerMode: {
+        title: "Stromsparmodus",
+        description: "Pausiert die Hintergrundanimation, macht die durchscheinenden Glaspanels blickdicht und verkürzt Übergänge auf fast augenblicklich. Wird bei der Installation automatisch aktiviert, wenn dieser PC vermutlich davon profitiert; du kannst es hier jederzeit ändern."
       },
       updateCheck: {
         title: 'Nach Updates suchen',
@@ -7099,6 +7131,10 @@ export const CATALOG = {
         title: 'Ελαχιστοποίηση στη γραμμή συστήματος',
         description: 'Το κλείσιμο του παραθύρου στέλνει το Prune στη γραμμή συστήματος αντί να τερματίζεται.'
       },
+      lowPowerMode: {
+        title: "Λειτουργία χαμηλής κατανάλωσης",
+        description: "Παύει το κινούμενο φόντο, μετατρέπει τους διάφανους γυάλινους πίνακες σε συμπαγείς και συντομεύει τις μεταβάσεις σχεδόν σε στιγμιαίες. Ενεργοποιείται αυτόματα κατά την εγκατάσταση αν αυτός ο υπολογιστής φαίνεται πως θα ωφεληθεί· μπορείτε να το αλλάξετε εδώ όποτε θέλετε."
+      },
       updateCheck: {
         title: 'Έλεγχος για ενημερώσεις',
         description: "Μία φορά την ημέρα, το Prune ρωτά το api.github.com αν υπάρχει νεότερη έκδοση. Είναι το μόνο αίτημα που στέλνει το Prune προς οπουδήποτε εκτός από αυτό το μηχάνημα, και το GitHub βλέπει τη διεύθυνση IP σας όπως θα την έβλεπε οποιαδήποτε ιστοσελίδα. Όταν υπάρχει νεότερη έκδοση, εμφανίζεται ένα κουμπί ενημέρωσης στο κάτω μέρος της πλαϊνής γραμμής, και τίποτα δεν πραγματοποιεί λήψη ή εγκατάσταση μέχρι να κάνετε κλικ σε αυτό."
@@ -7979,6 +8015,10 @@ export const CATALOG = {
       minimizeToTray: {
         title: "Minimizar a la bandeja del sistema",
         description: 'Cerrar la ventana envía Prune a la bandeja del sistema en lugar de cerrarlo.'
+      },
+      lowPowerMode: {
+        title: "Modo de bajo consumo",
+        description: "Pausa la animación de fondo, convierte los paneles de cristal translúcidos en paneles sólidos y acorta las transiciones hasta casi instantáneas. Se activa automáticamente al instalar si este equipo parece beneficiarse de ello; puedes cambiarlo aquí cuando quieras."
       },
       updateCheck: {
         title: 'Buscar actualizaciones',
@@ -8861,6 +8901,10 @@ export const CATALOG = {
         title: "Minimeeri teavitusalasse",
         description: 'Akna sulgemine saadab Prune süsteemisalve, mitte ei sulge seda.'
       },
+      lowPowerMode: {
+        title: "Energiasäästurežiim",
+        description: "Peatab taustal oleva animatsiooni, muudab läbipaistvad klaaspaneelid ühtlaseks ja lühendab üleminekud peaaegu hetkeliseks. Lülitatakse paigaldamisel automaatselt sisse, kui see arvuti näib sellest kasu saavat; saad seda siin igal ajal muuta."
+      },
       updateCheck: {
         title: 'Kontrolli uuendusi',
         description: 'Kord päevas küsib Prune api.github.com-ilt, kas uuem versioon on olemas. See on ainus päring, mille Prune teeb kuhugi mujale kui sellesse arvutisse, ja GitHub näeb sinu IP-aadressi nagu iga veebisait. Kui uuendus on olemas, ilmub külgriba alaossa uuendusnupp ja midagi ei laadita alla ega paigaldata, enne kui sellel klõpsad.'
@@ -9741,6 +9785,10 @@ export const CATALOG = {
       minimizeToTray: {
         title: 'Pienennä ilmaisinalueelle',
         description: 'Ikkunan sulkeminen lähettää Prunen ilmaisinalueelle sen sulkemisen sijaan.'
+      },
+      lowPowerMode: {
+        title: "Virransäästötila",
+        description: "Keskeyttää taustalla pyörivän animaation, muuttaa läpikuultavat lasipaneelit yksivärisiksi ja lyhentää siirtymät lähes välittömiksi. Otetaan automaattisesti käyttöön asennuksen yhteydessä, jos tämä tietokone näyttää hyötyvän siitä; voit muuttaa tätä täällä milloin tahansa."
       },
       updateCheck: {
         title: 'Tarkista päivitykset',
@@ -10623,6 +10671,10 @@ export const CATALOG = {
         title: "Réduire dans la zone de notification",
         description: "Fermer la fenêtre envoie Prune dans la zone de notification au lieu de le quitter."
       },
+      lowPowerMode: {
+        title: "Mode basse consommation",
+        description: "Met en pause l'animation d'arrière-plan, rend opaques les panneaux vitrés translucides et raccourcit les transitions pour les rendre quasi instantanées. Activé automatiquement à l'installation si cet ordinateur semble pouvoir en profiter ; vous pouvez le modifier ici à tout moment."
+      },
       updateCheck: {
         title: 'Vérifier les mises à jour',
         description: "Une fois par jour, Prune demande à api.github.com si une version plus récente existe. C'est la seule requête que Prune fait ailleurs que sur cette machine, et GitHub voit votre adresse IP comme n'importe quel site le ferait. S'il y en a une, un bouton de mise à jour apparaît en bas de la barre latérale, et rien n'est téléchargé ni installé avant que vous cliquiez dessus."
@@ -11503,6 +11555,10 @@ export const CATALOG = {
       minimizeToTray: {
         title: 'מזעור למגש המערכת',
         description: 'סגירת החלון שולחת את Prune למגש המערכת במקום לסגור אותו.'
+      },
+      lowPowerMode: {
+        title: "מצב צריכת חשמל נמוכה",
+        description: "משהה את האנימציה שברקע, הופך את הפאנלים השקופים לפאנלים אטומים, ומקצר את המעברים כך שיהיו כמעט מיידיים. מופעל אוטומטית בהתקנה אם נראה שהמחשב הזה ייהנה מכך; אפשר לשנות זאת כאן בכל עת."
       },
       updateCheck: {
         title: 'בדוק עדכונים',
@@ -12385,6 +12441,10 @@ export const CATALOG = {
         title: 'Kicsinyítés a tálcára',
         description: 'Az ablak bezárása a Prune-t a rendszertálcára küldi bezárás helyett.'
       },
+      lowPowerMode: {
+        title: "Alacsony fogyasztású mód",
+        description: "Szünetelteti a háttéranimációt, egyszínűvé alakítja az áttetsző üvegpaneleket, és szinte azonnalira rövidíti az átmeneteket. Telepítéskor automatikusan bekapcsol, ha úgy tűnik, ez a gép profitálna belőle; itt bármikor módosíthatod."
+      },
       updateCheck: {
         title: 'Frissítések keresése',
         description: 'Naponta egyszer a Prune megkérdezi az api.github.com-ot, létezik-e újabb verzió. Ez az egyetlen kérés, amit a Prune bárhová máshova küld ezen a gépen kívül, és a GitHub látja az IP-címedet, ahogy bármely weboldal is látná. Ha van új verzió, egy frissítés gomb jelenik meg az oldalsáv alján, és semmi nem kerül letöltésre vagy telepítésre, amíg rá nem kattintasz.'
@@ -13265,6 +13325,10 @@ export const CATALOG = {
       minimizeToTray: {
         title: 'Perkecil ke baki sistem',
         description: 'Menutup jendela mengirim Prune ke baki sistem alih-alih menutupnya sepenuhnya.'
+      },
+      lowPowerMode: {
+        title: "Mode Daya Rendah",
+        description: "Menjeda animasi latar belakang, mengubah panel kaca tembus pandang menjadi panel solid, dan mempersingkat transisi hingga hampir instan. Diaktifkan secara otomatis saat pemasangan jika komputer ini tampak akan diuntungkan; ubah kapan saja di sini."
       },
       updateCheck: {
         title: 'Periksa pembaruan',
@@ -14147,6 +14211,10 @@ export const CATALOG = {
         title: 'Lágmarka í kerfisbakka',
         description: 'Að loka glugganum sendir Prune í kerfisbakkann í stað þess að hætta.'
       },
+      lowPowerMode: {
+        title: "Orkusparnaðarstilling",
+        description: "Gerir hlé á bakgrunnshreyfimyndinni, breytir hálfgagnsæjum glerspjöldum í heilum lit og styttir umskipti svo þau verði nánast samstundis. Kveikt sjálfkrafa við uppsetningu ef þessi tölva virðist hagnast á því; þú getur breytt þessu hér hvenær sem er."
+      },
       updateCheck: {
         title: 'Athuga uppfærslur',
         description: 'Einu sinni á dag spyr Prune api.github.com hvort nýrri útgáfa sé til. Þetta er eina beiðnin sem Prune sendir eitthvað annað en þessa vél, og GitHub sér IP-tölu þína eins og hvaða vefsíða sem er. Þegar ein er til birtist uppfærsluhnappur neðst í hliðarslánni, og ekkert er sótt eða sett upp fyrr en þú smellir á hann.'
@@ -15027,6 +15095,10 @@ export const CATALOG = {
       minimizeToTray: {
         title: "Riduci a icona nell'area di notifica",
         description: "Chiudere la finestra invia Prune nell'area di notifica invece di chiuderlo."
+      },
+      lowPowerMode: {
+        title: "Modalità a basso consumo",
+        description: "Mette in pausa l'animazione di sfondo, rende opachi i pannelli di vetro traslucidi e accorcia le transizioni fino a renderle quasi istantanee. Si attiva automaticamente durante l'installazione se questo PC sembra poterne trarre vantaggio; puoi modificarla qui in qualsiasi momento."
       },
       updateCheck: {
         title: 'Controlla aggiornamenti',
@@ -15909,6 +15981,10 @@ export const CATALOG = {
         title: 'システムトレイに最小化',
         description: 'ウィンドウを閉じると、Prune は終了せずにシステムトレイに送られます。'
       },
+      lowPowerMode: {
+        title: "低電力モード",
+        description: "背景のアニメーションを一時停止し、半透明のガラスパネルを単色に変え、画面切り替えをほぼ瞬時に短縮します。このPCが恩恵を受けそうな場合はインストール時に自動でオンになります。ここでいつでも変更できます。"
+      },
       updateCheck: {
         title: 'アップデートを確認',
         description: '1日に一度、Prune は api.github.com に新しいバージョンがあるか尋ねます。これは Prune がこのマシン以外に送る唯一のリクエストで、GitHub はどのウェブサイトでもそうするように、あなたの IP アドレスを見ます。新しいバージョンがある場合、サイドバーの下部にアップデートボタンが表示され、クリックするまで何もダウンロードやインストールされません。'
@@ -16789,6 +16865,10 @@ export const CATALOG = {
       minimizeToTray: {
         title: '시스템 트레이로 최소화',
         description: '창을 닫으면 Prune이 종료되지 않고 시스템 트레이로 이동합니다.'
+      },
+      lowPowerMode: {
+        title: "저전력 모드",
+        description: "배경 애니메이션을 일시 중지하고, 반투명 유리 패널을 단색으로 바꾸고, 전환 효과를 거의 즉각적으로 단축합니다. 이 PC에 도움이 될 것 같으면 설치 시 자동으로 켜집니다. 여기서 언제든지 변경할 수 있습니다."
       },
       updateCheck: {
         title: '업데이트 확인',
@@ -17671,6 +17751,10 @@ export const CATALOG = {
         title: "Sumažinti į sistemos dėklą",
         description: 'Lango uždarymas išsiunčia Prune į sistemos dėklą, o ne uždaro jį.'
       },
+      lowPowerMode: {
+        title: "Taupus energijos režimas",
+        description: "Pristabdo fono animaciją, permatomus stiklinius skydelius paverčia vientisais ir sutrumpina perėjimus iki beveik akimirksninių. Diegimo metu įjungiamas automatiškai, jei atrodo, kad šis kompiuteris iš to turėtų naudos; čia galite tai pakeisti bet kada."
+      },
       updateCheck: {
         title: 'Tikrinti atnaujinimus',
         description: "Kartą per dieną Prune paklausia api.github.com, ar yra naujesnė versija. Tai vienintelis prašymas, kurį Prune siunčia bet kur už šio kompiuterio ribų, ir GitHub mato jūsų IP adresą taip pat, kaip bet kuri svetainė. Kai naujesnė versija yra, šoninės juostos apačioje atsiranda atnaujinimo mygtukas, ir niekas nesisiunčia ar nediegiama, kol jo nepaspausite."
@@ -18549,6 +18633,10 @@ export const CATALOG = {
       minimizeToTray: {
         title: 'Kecilkan ke dulang sistem',
         description: 'Menutup tetingkap menghantar Prune ke dulang sistem dan bukannya keluar.'
+      },
+      lowPowerMode: {
+        title: "Mod Kuasa Rendah",
+        description: "Menjeda animasi latar belakang, menukar panel kaca lut sinar kepada panel pejal, dan memendekkan peralihan hingga hampir serta-merta. Dihidupkan secara automatik semasa pemasangan jika PC ini kelihatan akan mendapat manfaat; anda boleh menukarnya di sini pada bila-bila masa."
       },
       updateCheck: {
         title: 'Semak kemas kini',
@@ -19431,6 +19519,10 @@ export const CATALOG = {
         title: 'Minimer til systemstatusfelt',
         description: 'Å lukke vinduet sender Prune til systemstatusfeltet i stedet for å avslutte det.'
       },
+      lowPowerMode: {
+        title: "Strømsparemodus",
+        description: "Setter bakgrunnsanimasjonen på pause, gjør de gjennomsiktige glasspanelene heldekkende, og forkorter overganger til nesten øyeblikkelige. Slås automatisk på ved installasjon hvis denne PC-en ser ut til å dra nytte av det; du kan endre det her når som helst."
+      },
       updateCheck: {
         title: 'Se etter oppdateringer',
         description: 'Én gang om dagen spør Prune api.github.com om en nyere versjon finnes. Det er den eneste forespørselen Prune gjør til noe annet enn denne maskinen, og GitHub ser IP-adressen din slik alle nettsteder ville gjort. Når det finnes en, vises en oppdateringsknapp nederst i sidefeltet, og ingenting lastes ned eller installeres før du klikker på den.'
@@ -20309,6 +20401,10 @@ export const CATALOG = {
       minimizeToTray: {
         title: 'Minimaliseren naar systeemvak',
         description: 'Het venster sluiten stuurt Prune naar het systeemvak in plaats van het af te sluiten.'
+      },
+      lowPowerMode: {
+        title: "Energiebesparingsmodus",
+        description: "Pauzeert de achtergrondanimatie, maakt de doorschijnende glazen panelen ondoorzichtig en verkort overgangen tot bijna direct. Wordt automatisch ingeschakeld bij installatie als deze pc hier baat bij lijkt te hebben; je kunt dit hier altijd wijzigen."
       },
       updateCheck: {
         title: 'Controleren op updates',
@@ -21189,6 +21285,10 @@ export const CATALOG = {
         title: 'Minimalizuj do zasobnika systemowego',
         description: 'Zamknięcie okna wysyła Prune do zasobnika systemowego zamiast go zamykać.'
       },
+      lowPowerMode: {
+        title: "Tryb niskiego poboru mocy",
+        description: "Wstrzymuje animację w tle, zamienia półprzezroczyste szklane panele na jednolite i skraca przejścia niemal do natychmiastowych. Włączany automatycznie podczas instalacji, jeśli wygląda na to, że ten komputer na tym skorzysta; możesz to tutaj zmienić w dowolnym momencie."
+      },
       updateCheck: {
         title: 'Sprawdzaj aktualizacje',
         description: "Raz dziennie Prune pyta api.github.com, czy istnieje nowsza wersja. To jedyne żądanie, które Prune wysyła gdziekolwiek poza tym komputerem, a GitHub widzi Twój adres IP tak, jak zrobiłaby to każda strona internetowa. Gdy jest nowa wersja, na dole paska bocznego pojawia się przycisk aktualizacji i nic nie jest pobierane ani instalowane, dopóki go nie klikniesz."
@@ -22067,6 +22167,10 @@ export const CATALOG = {
       minimizeToTray: {
         title: 'د سیسټم ټرې ته کوچنی کول',
         description: 'د کړکۍ بندول Prune د سیسټم ټرې ته لیږي پرځای دې چې بند شي.'
+      },
+      lowPowerMode: {
+        title: "د ټیټ ځواک حالت",
+        description: "د شاليد سمبالیزیشن (انیمیشن) ودروي، د روڼو شیشه یي پینلونو پر ټینګو (یو رنګه) پینلونو بدلوي، او لېږدونه تقریبا سمدستي کوي. که دا کمپیوټر ګټه پکې ښکاري، نو په نصبولو کې پخپله فعالیږي؛ تاسو کولی شئ دا هر وخت دلته بدل کړئ."
       },
       updateCheck: {
         title: "د اپډیټونو چیک کول",
@@ -22949,6 +23053,10 @@ export const CATALOG = {
         title: 'Minimizar para a bandeja',
         description: 'Fechar a janela envia o Prune para a bandeja do sistema em vez de encerrá-lo.'
       },
+      lowPowerMode: {
+        title: "Modo de baixa energia",
+        description: "Pausa a animação de fundo, transforma os painéis de vidro translúcidos em painéis sólidos e encurta as transições para quase instantâneas. É ativado automaticamente na instalação se este computador parecer se beneficiar disso; você pode alterar isso aqui a qualquer momento."
+      },
       updateCheck: {
         title: 'Verificar atualizações',
         description: 'Uma vez por dia, o Prune pergunta ao api.github.com se existe uma versão mais recente. É a única solicitação que o Prune faz para qualquer lugar além desta máquina, e o GitHub vê seu endereço IP como qualquer site veria. Quando há uma, um botão de atualização aparece na parte inferior da barra lateral, e nada é baixado ou instalado até você clicar nele.'
@@ -23827,6 +23935,10 @@ export const CATALOG = {
       minimizeToTray: {
         title: 'Minimizar para a bandeja',
         description: 'Fechar a janela envia o Prune para a bandeja do sistema em vez de o fechar.'
+      },
+      lowPowerMode: {
+        title: "Modo de baixo consumo",
+        description: "Pausa a animação de fundo, transforma os painéis de vidro translúcidos em painéis sólidos e encurta as transições para quase instantâneas. É ativado automaticamente na instalação se este computador parecer beneficiar disso; pode alterá-lo aqui a qualquer momento."
       },
       updateCheck: {
         title: 'Verificar atualizações',
@@ -24709,6 +24821,10 @@ export const CATALOG = {
         title: 'Minimizează în bara de sistem',
         description: 'Închiderea ferestrei trimite Prune în bara de sistem în loc să-l închidă.'
       },
+      lowPowerMode: {
+        title: "Mod consum redus",
+        description: "Pune pe pauză animația de fundal, transformă panourile de sticlă translucide în panouri solide și scurtează tranzițiile până aproape de instantaneu. Se activează automat la instalare dacă acest calculator pare să aibă de câștigat; îl poți schimba oricând aici."
+      },
       updateCheck: {
         title: 'Verifică actualizările',
         description: 'O dată pe zi, Prune întreabă api.github.com dacă există o versiune mai nouă. Este singura cerere pe care Prune o face oriunde altundeva decât pe acest calculator, iar GitHub îți vede adresa IP așa cum ar face-o orice site web. Când există una, apare un buton de actualizare în partea de jos a barei laterale, și nimic nu este descărcat sau instalat până când nu dai clic pe el.'
@@ -25590,6 +25706,10 @@ export const CATALOG = {
         title: 'Свернуть в системный трей',
         description: 'Закрытие окна отправляет Prune в системный трей вместо выхода.'
       },
+      lowPowerMode: {
+        title: "Режим энергосбережения",
+        description: "Приостанавливает фоновую анимацию, делает полупрозрачные стеклянные панели сплошными и сокращает переходы почти до мгновенных. Включается автоматически при установке, если этому компьютеру это может пригодиться; вы можете изменить это здесь в любой момент."
+      },
       updateCheck: {
         title: 'Проверять обновления',
         description: "Раз в день Prune спрашивает api.github.com, существует ли более новая версия. Это единственный запрос, который Prune делает куда-либо, кроме этого компьютера, и GitHub видит ваш IP-адрес так же, как это сделал бы любой сайт. Если новая версия есть, внизу боковой панели появляется кнопка обновления, и ничего не скачивается и не устанавливается, пока вы на неё не нажмёте."
@@ -26469,6 +26589,10 @@ export const CATALOG = {
         title: 'Minimalizovať do systémovej lišty',
         description: 'Zatvorenie okna pošle Prune do systémovej lišty namiesto ukončenia.'
       },
+      lowPowerMode: {
+        title: "Režim nízkej spotreby",
+        description: "Pozastaví animáciu na pozadí, zjednotí priehľadné sklenené panely na plné a skráti prechody takmer na okamžité. Pri inštalácii sa automaticky zapne, ak sa zdá, že by tomuto počítaču prospel; kedykoľvek to tu môžete zmeniť."
+      },
       updateCheck: {
         title: 'Kontrolovať aktualizácie',
         description: 'Raz denne sa Prune pýta api.github.com, či existuje novšia verzia. Je to jediná požiadavka, ktorú Prune posiela kamkoľvek okrem tohto počítača, a GitHub vidí vašu IP adresu tak, ako by to urobila akákoľvek webová stránka. Keď je k dispozícii, na spodku bočného panela sa zobrazí tlačidlo aktualizácie a nič sa nesťahuje ani neinštaluje, kým naň nekliknete.'
@@ -27347,6 +27471,10 @@ export const CATALOG = {
       minimizeToTray: {
         title: "Minimizo në zonën e njoftimeve",
         description: 'Mbyllja e dritares e dërgon Prune-in në tabakanë e sistemit në vend që ta mbyllë.'
+      },
+      lowPowerMode: {
+        title: "Modaliteti i energjisë së ulët",
+        description: "E ndalon përkohësisht animacionin në sfond, i bën panelet e xhamit gjysmëtejdukshëm në panele solide, dhe i shkurton kalimet pothuajse në çast. Aktivizohet automatikisht gjatë instalimit nëse ky kompjuter duket se do të përfitonte; mund ta ndryshosh këtu kurdoherë."
       },
       updateCheck: {
         title: 'Kontrollo për përditësime',
@@ -28229,6 +28357,10 @@ export const CATALOG = {
         title: 'Умањи у системску касету',
         description: 'Затварање прозора шаље Prune у системску касету уместо да га затвори.'
       },
+      lowPowerMode: {
+        title: "Режим ниске потрошње енергије",
+        description: "Паузира анимацију у позадини, претвара полупровидне стаклене панеле у пуне, и скраћује прелазе на готово тренутне. Укључује се аутоматски при инсталацији ако изгледа да ће овом рачунару то користити; то можете променити овде у било ком тренутку."
+      },
       updateCheck: {
         title: 'Провери ажурирања',
         description: 'Једном дневно, Prune пита api.github.com да ли постоји новија верзија. То је једини захтев који Prune шаље било где осим овог рачунара, а GitHub види вашу IP адресу као што би то учинио сваки веб-сајт. Када постоји нова верзија, на дну бочне траке се појављује дугме за ажурирање, и ништа се не преузима нити инсталира док на њега не кликнете.'
@@ -29108,6 +29240,10 @@ export const CATALOG = {
         title: "Minimera till systemfältet",
         description: 'Att stänga fönstret skickar Prune till systemfältet i stället för att avsluta det.'
       },
+      lowPowerMode: {
+        title: "Energisparläge",
+        description: "Pausar bakgrundsanimationen, gör de halvgenomskinliga glaspanelerna heltäckande och förkortar övergångar till nästan omedelbara. Slås på automatiskt vid installationen om den här datorn verkar ha nytta av det; du kan ändra det här när som helst."
+      },
       updateCheck: {
         title: 'Sök efter uppdateringar',
         description: 'En gång om dagen frågar Prune api.github.com om det finns en nyare version. Det är den enda begäran Prune gör någon annanstans än till den här datorn, och GitHub ser din IP-adress som vilken webbplats som helst skulle göra. När det finns en dyker en uppdateringsknapp upp längst ner i sidofältet, och inget laddas ner eller installeras förrän du klickar på den.'
@@ -29986,6 +30122,10 @@ export const CATALOG = {
       minimizeToTray: {
         title: 'ย่อไปที่ถาดระบบ',
         description: 'การปิดหน้าต่างจะส่ง Prune ไปที่ถาดระบบแทนที่จะปิดโปรแกรม'
+      },
+      lowPowerMode: {
+        title: "โหมดประหยัดพลังงาน",
+        description: "หยุดภาพเคลื่อนไหวพื้นหลังชั่วคราว เปลี่ยนแผงกระจกโปร่งแสงให้เป็นสีทึบ และย่นระยะเวลาการเปลี่ยนหน้าจอให้เกือบจะทันที เปิดใช้งานโดยอัตโนมัติตอนติดตั้งหากพีซีเครื่องนี้ดูเหมือนจะได้ประโยชน์ เปลี่ยนได้ที่นี่ทุกเมื่อ"
       },
       updateCheck: {
         title: 'ตรวจสอบการอัปเดต',
@@ -30868,6 +31008,10 @@ export const CATALOG = {
         title: 'Sistem tepsisine küçült',
         description: 'Pencereyi kapatmak, Prune\'u kapatmak yerine sistem tepsisine gönderir.'
       },
+      lowPowerMode: {
+        title: "Düşük Güç Modu",
+        description: "Arka plan animasyonunu duraklatır, yarı saydam cam panelleri düz hale getirir ve geçişleri neredeyse anlık olacak şekilde kısaltır. Bu bilgisayarın bundan fayda göreceği düşünülüyorsa kurulumda otomatik olarak açılır; buradan istediğiniz zaman değiştirebilirsiniz."
+      },
       updateCheck: {
         title: 'Güncellemeleri denetle',
         description: 'Günde bir kez, Prune api.github.com\'a daha yeni bir sürüm olup olmadığını sorar. Bu, Prune\'un bu makine dışında herhangi bir yere yaptığı tek istektir ve GitHub, herhangi bir web sitesinin göreceği gibi IP adresinizi görür. Yeni bir sürüm olduğunda, kenar çubuğunun altında bir güncelleme düğmesi belirir ve siz tıklayana kadar hiçbir şey indirilmez veya yüklenmez.'
@@ -31749,6 +31893,10 @@ export const CATALOG = {
         title: 'Згорнути в системний трей',
         description: 'Закриття вікна надсилає Prune у системний трей замість завершення роботи.'
       },
+      lowPowerMode: {
+        title: "Режим низького енергоспоживання",
+        description: "Призупиняє фонову анімацію, перетворює напівпрозорі скляні панелі на суцільні й скорочує переходи майже до миттєвих. Вмикається автоматично під час встановлення, якщо цьому комп'ютеру це може знадобитися; ви можете змінити це тут у будь-який час."
+      },
       updateCheck: {
         title: 'Перевіряти оновлення',
         description: "Раз на день Prune запитує api.github.com, чи існує новіша версія. Це єдиний запит, який Prune надсилає кудись, окрім цього комп'ютера, і GitHub бачить вашу IP-адресу так само, як будь-який сайт. Коли доступна нова версія, унизу бічної панелі з'являється кнопка оновлення, і нічого не завантажується та не встановлюється, поки ви на неї не натиснете."
@@ -32627,6 +32775,10 @@ export const CATALOG = {
       minimizeToTray: {
         title: 'Thu nhỏ vào khay hệ thống',
         description: 'Đóng cửa sổ sẽ gửi Prune vào khay hệ thống thay vì thoát ứng dụng.'
+      },
+      lowPowerMode: {
+        title: "Chế độ tiết kiệm năng lượng",
+        description: "Tạm dừng ảnh động nền, biến các bảng kính trong mờ thành bảng đặc màu, và rút ngắn hiệu ứng chuyển cảnh gần như tức thì. Tự động bật khi cài đặt nếu máy tính này có vẻ sẽ được hưởng lợi; bạn có thể thay đổi điều này tại đây bất cứ lúc nào."
       },
       updateCheck: {
         title: 'Kiểm tra cập nhật',
@@ -33509,6 +33661,10 @@ export const CATALOG = {
         title: '最小化到系统托盘',
         description: '关闭窗口会将 Prune 发送到系统托盘，而不是退出程序。'
       },
+      lowPowerMode: {
+        title: "低功耗模式",
+        description: "暂停背景动画，将半透明玻璃面板改为纯色面板，并将过渡效果缩短至几乎瞬时完成。安装时如果这台电脑看起来会受益，会自动开启；你可以随时在这里更改。"
+      },
       updateCheck: {
         title: '检查更新',
         description: 'Prune 每天向 api.github.com 询问一次是否有更新版本。这是 Prune 向本机以外的任何地方发出的唯一请求，GitHub 会像任何网站一样看到你的 IP 地址。如果有新版本，侧边栏底部会出现一个更新按钮，在你点击它之前不会下载或安装任何内容。'
@@ -34389,6 +34545,10 @@ export const CATALOG = {
       minimizeToTray: {
         title: '最小化到系統匣',
         description: '關閉視窗會將 Prune 傳送到系統匣，而不是結束程式。'
+      },
+      lowPowerMode: {
+        title: "低耗電模式",
+        description: "暫停背景動畫，將半透明玻璃面板改為純色面板，並將轉場效果縮短至幾乎即時完成。安裝時如果這台電腦看起來會受益，會自動開啟；你可以隨時在這裡更改。"
       },
       updateCheck: {
         title: '檢查更新',

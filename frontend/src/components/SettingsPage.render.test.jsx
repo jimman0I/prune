@@ -44,6 +44,7 @@ const DEFAULTS = {
   autoQuarantine: true,
   theme: 'dark',
   minimizeToTray: true,
+  lowPowerMode: false,
   skipRecentHours: 24,
   createRestorePoint: true,
   hideUnavailableRules: false,
@@ -78,6 +79,30 @@ beforeEach(() => {
   vi.clearAllMocks();
   fetchSettings.mockResolvedValue({ ...DEFAULTS });
   fetchUpdateCheck.mockResolvedValue({ enabled: false, current: '2.3.4' });
+});
+
+describe('low power mode', () => {
+  const theSwitch = () => screen.findByRole('switch', { name: 'Low power mode' });
+
+  it('reflects the persisted setting', async () => {
+    fetchSettings.mockResolvedValue({ ...DEFAULTS, lowPowerMode: true });
+    renderScreen(<SettingsPage />);
+    expect((await theSwitch()).getAttribute('aria-checked')).toBe('true');
+  });
+
+  it('is off when the setting is false, and off (not crashed) when the key is missing entirely', async () => {
+    fetchSettings.mockResolvedValue({ ...DEFAULTS, lowPowerMode: false });
+    renderScreen(<SettingsPage />);
+    expect((await theSwitch()).getAttribute('aria-checked')).toBe('false');
+  });
+
+  it('saves the toggled value as lowPowerMode', async () => {
+    const user = userEvent.setup();
+    fetchSettings.mockResolvedValue({ ...DEFAULTS, lowPowerMode: false });
+    renderScreen(<SettingsPage />);
+    await user.click(await theSwitch());
+    await waitFor(() => expect(lastSaved()).toEqual({ lowPowerMode: true }));
+  });
 });
 
 describe('the update check', () => {

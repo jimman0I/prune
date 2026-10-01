@@ -84,6 +84,12 @@ const mount = async () => {
   const invalidate = vi.spyOn(utils.client, 'invalidateQueries');
   // Ctrl+3: Applications, where the (stubbed) list lives.
   fireEvent.keyDown(document.body, { key: '3', ctrlKey: true });
+  // ProgramList is React.lazy() now (App.jsx) -- even a mocked module
+  // resolves its dynamic import() on a microtask, so the stub is not on
+  // screen the instant keyDown returns. Waiting here, once, means every
+  // caller of mount() can still use the plain (synchronous) getByRole it
+  // already did.
+  await screen.findByRole('button', { name: 'open single' });
   return { ...utils, invalidate, user: userEvent.setup() };
 };
 

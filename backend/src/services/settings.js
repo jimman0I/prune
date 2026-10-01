@@ -75,6 +75,16 @@ const DEFAULT_SETTINGS = {
   deepCleanRemoval: 'quarantine',
   theme: 'dark',
   minimizeToTray: false,
+  /* Pauses the background animation, flattens the glass panels to solid
+     ones, and collapses transitions to near-instant -- the same visual
+     treatment `prefers-reduced-transparency`/`prefers-reduced-motion`
+     already get, reused rather than reinvented (see index.css). Detected
+     once, the same way `language` is -- see detectLowPowerDefault() below
+     -- and never touched again after that: a real choice in Settings, or
+     a file that already recorded one either way, is never silently
+     overridden by hardware that might change (an eGPU unplugged, a laptop
+     undocked). */
+  lowPowerMode: false,
   skipRecentHours: 24,
   createRestorePoint: true,
   hideUnavailableRules: true,
@@ -238,17 +248,59 @@ async function detectDefaultLanguage() {
   }
 }
 
+/** Below 8 GiB of RAM or 4 logical cores, this machine is doing the same
+ * work as every other PC on noticeably less of it -- generous thresholds
+ * on purpose, since the cost of guessing wrong is a few saved watts versus
+ * a visibly different app on a normal laptop.
+ *
+ * A pure function, exported, unlike detectLowPowerDefault() below: no
+ * Electron import to make it untestable here, so its math gets its own
+ * direct tests instead of only the integration-level injection tests. */
+export function isLowSpecHardware(totalMemBytes, coreCount) {
+  return totalMemBytes < 8 * 1024 ** 3 || coreCount < 4;
+}
+
+/** Same "ask once, at first run" shape as detectDefaultLanguage() above,
+ * and the same real-vs-standalone split: `app.getGPUFeatureStatus()` is
+ * only meaningful once Electron's GPU process has actually started, which
+ * main.cjs guarantees by calling this from inside app.whenReady() (see
+ * startBackend()) -- the dynamic import's failure mode (running
+ * standalone, or this test suite) covers the rest.
+ *
+ * RAM and CPU core count are real signals with no Electron dependency at
+ * all, so they still count even where the GPU check cannot run.
+ * `gpu_compositing` short of "enabled" means Chromium itself fell back to
+ * software rendering -- the clearest first-party signal that animating a
+ * blurred, moving, full-viewport layer is not free on this GPU. */
+async function detectLowPowerDefault() {
+  const os = await import('node:os');
+  const lowSpec = isLowSpecHardware(os.totalmem(), os.cpus().length);
+  let weakGpu = false;
+  try {
+    const { app } = await import('electron');
+    weakGpu = app ? app.getGPUFeatureStatus()?.gpu_compositing !== 'enabled' : false;
+  } catch {
+    // Standalone / tests: no Electron, no GPU signal -- RAM and CPU decide alone.
+  }
+  return lowSpec || weakGpu;
+}
+
 /** Persisted app settings, or the default shape if nothing has ever been
  * saved. Never throws on a missing file -- "never configured" is a normal,
  * expected state, not an error.
  *
- * `detectLanguage` is injectable so a test can prove the DETECTED value
- * actually reaches the returned settings, rather than merely matching
- * `detectDefaultLanguage()`'s own real-environment answer by coincidence
- * -- the default parameter is what every real caller gets. */
-export async function getSettings({ detectLanguage = detectDefaultLanguage } = {}) {
+ * `detectLanguage`/`detectLowPower` are injectable so a test can prove the
+ * DETECTED value actually reaches the returned settings, rather than
+ * merely matching the real-environment answer by coincidence -- the
+ * default parameters are what every real caller gets. */
+export async function getSettings({
+  detectLanguage = detectDefaultLanguage,
+  detectLowPower = detectLowPowerDefault
+} = {}) {
   const path = settingsPath();
-  if (!existsSync(path)) return { ...DEFAULT_SETTINGS, language: await detectLanguage() };
+  if (!existsSync(path)) {
+    return { ...DEFAULT_SETTINGS, language: await detectLanguage(), lowPowerMode: await detectLowPower() };
+  }
   try {
     const stored = JSON.parse(await readFile(path, 'utf8'));
     // Older files carry `hideUnavailableRules: false`, saved when that was
