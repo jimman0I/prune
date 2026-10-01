@@ -125,6 +125,19 @@
     "recommended": false
   },
   {
+    "id": "brave_sync",
+    "category": "Brave",
+    "name": "Sync data",
+    "description": "Signs you out of Brave Sync and stops sharing bookmarks, passwords and settings with your other devices until you sign in again.",
+    "paths": [
+      "%LOCALAPPDATA%\\BraveSoftware\\Brave-Browser\\User Data\\*\\Sync Data",
+      "%LOCALAPPDATA%\\BraveSoftware\\Brave-Browser\\User Data\\*\\Sync Data Backup"
+    ],
+    "is_safe": false,
+    "risky": true,
+    "recommended": false
+  },
+  {
     "id": "chrome_cache",
     "category": "Chrome",
     "name": "Cache",
@@ -248,6 +261,34 @@
     "is_safe": false,
     "risky": true,
     "recommended": false
+  },
+  {
+    "id": "chrome_sync",
+    "category": "Chrome",
+    "name": "Sync data",
+    "description": "Signs you out of Chrome Sync and stops sharing bookmarks, passwords and settings with your other devices until you sign in again.",
+    "paths": [
+      "%LOCALAPPDATA%\\Google\\Chrome\\User Data\\*\\Sync Data",
+      "%LOCALAPPDATA%\\Google\\Chrome\\User Data\\*\\Sync Data Backup"
+    ],
+    "is_safe": false,
+    "risky": true,
+    "recommended": false
+  },
+  {
+    "id": "chrome_ai",
+    "category": "Chrome",
+    "name": "On-device AI models",
+    "description": "Downloaded machine-learning models Chrome uses for on-device suggestions and page analysis. Re-downloaded if the feature needs them again.",
+    "paths": [
+      "%LOCALAPPDATA%\\Google\\Chrome\\User Data\\OnDeviceHeadSuggestModel",
+      "%LOCALAPPDATA%\\Google\\Chrome\\User Data\\*\\OptGuideOnDeviceModel",
+      "%LOCALAPPDATA%\\Google\\Chrome\\User Data\\OptGuideOnDeviceModel",
+      "%LOCALAPPDATA%\\Google\\Chrome\\User Data\\*\\OptGuideOnDeviceClassifierModel",
+      "%LOCALAPPDATA%\\Google\\Chrome\\User Data\\OptGuideOnDeviceClassifierModel"
+    ],
+    "is_safe": true,
+    "recommended": true
   },
   {
     "id": "edge_cache",
@@ -375,6 +416,19 @@
     "recommended": false
   },
   {
+    "id": "edge_sync",
+    "category": "Edge",
+    "name": "Sync data",
+    "description": "Signs you out of Edge Sync and stops sharing favorites, passwords and settings with your other devices until you sign in again.",
+    "paths": [
+      "%LOCALAPPDATA%\\Microsoft\\Edge\\User Data\\*\\Sync Data",
+      "%LOCALAPPDATA%\\Microsoft\\Edge\\User Data\\*\\Sync Data Backup"
+    ],
+    "is_safe": false,
+    "risky": true,
+    "recommended": false
+  },
+  {
     "id": "discord_cache",
     "category": "Discord",
     "name": "Discord Cache",
@@ -398,6 +452,34 @@
     ],
     "is_safe": true,
     "recommended": true
+  },
+  {
+    "id": "discord_cookies",
+    "category": "Discord",
+    "name": "Cookies",
+    "description": "Signs you out of Discord and resets its window preferences.",
+    "paths": [
+      "%APPDATA%\\discord\\Cookies",
+      "%APPDATA%\\discord\\Cookies-journal",
+      "%APPDATA%\\discord\\Preferences"
+    ],
+    "is_safe": false,
+    "risky": true,
+    "recommended": false
+  },
+  {
+    "id": "discord_history",
+    "category": "Discord",
+    "name": "Browsing history",
+    "description": "Session and connection-security data Discord's embedded browser keeps.",
+    "paths": [
+      "%APPDATA%\\discord\\TransportSecurity",
+      "%APPDATA%\\discord\\Session Storage",
+      "%APPDATA%\\discord\\VideoDecodeStats"
+    ],
+    "is_safe": false,
+    "risky": true,
+    "recommended": false
   },
   {
     "id": "spotify_cache",
@@ -477,6 +559,18 @@
     ],
     "is_safe": true,
     "recommended": true
+  },
+  {
+    "id": "vscode_backup",
+    "category": "Visual Studio Code",
+    "name": "Local file history",
+    "description": "VS Code's own record of earlier versions of files you've edited, shown in the Timeline view. Loses the ability to restore an older version through VS Code -- doesn't touch the files themselves.",
+    "paths": [
+      "%APPDATA%\\Code\\User\\History"
+    ],
+    "is_safe": false,
+    "risky": true,
+    "recommended": false
   },
   {
     "id": "telegram_cache",
@@ -698,6 +792,18 @@
     "recommended": false
   },
   {
+    "id": "vim_history",
+    "category": "Developer tools",
+    "name": "Vim History",
+    "description": "Vim's file, command and search history, plus open buffers -- ~/.viminfo.",
+    "paths": [
+      "~\\.viminfo",
+      "~\\_viminfo"
+    ],
+    "is_safe": true,
+    "recommended": false
+  },
+  {
     "id": "opera_cache",
     "category": "Opera",
     "name": "Opera Cache",
@@ -850,6 +956,48 @@
     "recommended": true
   },
   {
+    "id": "internet_explorer_cookies",
+    "category": "Windows",
+    "name": "Internet Explorer / WinINet Cookies",
+    "description": "Signs you out of anything still using the legacy IE/WinINet cookie store -- some older Windows components do.",
+    "paths": [
+      "~\\Cookies",
+      "%APPDATA%\\Microsoft\\Windows\\Cookies",
+      "%LOCALAPPDATA%\\Microsoft\\Internet Explorer\\DOMStore",
+      "%LOCALAPPDATA%\\Microsoft\\Windows\\INetCookies"
+    ],
+    "is_safe": false,
+    "risky": true,
+    "recommended": false
+  },
+  {
+    "id": "internet_explorer_history",
+    "category": "Windows",
+    "name": "Internet Explorer / WinINet History",
+    "description": "The legacy browsing history list still used by some older Windows components.",
+    "paths": [
+      "%LOCALAPPDATA%\\Microsoft\\Windows\\History",
+      "%LOCALAPPDATA%\\Microsoft\\Internet Explorer\\Recovery\\Active",
+      "%LOCALAPPDATA%\\Microsoft\\Internet Explorer\\Recovery\\Immersive\\Active",
+      "%LOCALAPPDATA%\\Microsoft\\Internet Explorer\\Recovery\\Last Active"
+    ],
+    "is_safe": false,
+    "risky": true,
+    "recommended": false
+  },
+  {
+    "id": "internet_explorer_logs",
+    "category": "Windows",
+    "name": "Internet Explorer Logs",
+    "description": "A small branding log IE writes. Diagnostic only.",
+    "paths": [
+      "%LOCALAPPDATA%\\Microsoft\\Internet Explorer\\brndlog.txt",
+      "%LOCALAPPDATA%\\Microsoft\\Internet Explorer\\brndlog.bak"
+    ],
+    "is_safe": true,
+    "recommended": true
+  },
+  {
     "id": "windows_cbs_logs",
     "category": "Windows",
     "name": "Component Store (CBS) Logs",
@@ -874,6 +1022,64 @@
     "excludeNames": ["5f7b5f1e01b83767.automaticDestinations-ms"],
     "is_safe": true,
     "recommended": false
+  },
+  {
+    "id": "windows_explorer_mru",
+    "category": "Windows",
+    "name": "Explorer Typed Paths & Dialog History",
+    "description": "Registry traces of folders you typed into Explorer's address bar and files/folders picked in common Open/Save/Browse dialogs. Removes the history list, not any files.",
+    "actions": [
+      { "type": "winreg", "key": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\TypedPaths" },
+      { "type": "winreg", "key": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\ComDlg32\\LastVisitedPidlMRU" },
+      { "type": "winreg", "key": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\ComDlg32\\OpenSavePidlMRU" },
+      { "type": "winreg", "key": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Doc Find Spec MRU" },
+      { "type": "winreg", "key": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\FindComputerMRU" },
+      { "type": "winreg", "key": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Map Network Drive MRU" },
+      { "type": "winreg", "key": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\PrnPortsMRU" }
+    ],
+    "is_safe": true,
+    "recommended": false
+  },
+  {
+    "id": "windows_explorer_run",
+    "category": "Windows",
+    "name": "Explorer Run Dialog History",
+    "description": "Command history from the Win+R Run dialog.",
+    "actions": [
+      { "type": "winreg", "key": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\RunMRU" }
+    ],
+    "is_safe": true,
+    "recommended": true
+  },
+  {
+    "id": "windows_explorer_shellbags",
+    "category": "Windows",
+    "name": "Explorer Shellbags",
+    "description": "Per-folder Explorer window settings (size, position, view mode) Windows keeps for every folder you've ever opened, including deleted ones. Can reveal folder paths that no longer exist on disk.",
+    "risky": true,
+    "actions": [
+      { "type": "winreg", "key": "HKCU\\Software\\Microsoft\\Windows\\Shell\\Bags" },
+      { "type": "winreg", "key": "HKCU\\Software\\Microsoft\\Windows\\Shell\\BagMRU" },
+      { "type": "winreg", "key": "HKCU\\Software\\Microsoft\\Windows\\ShellNoRoam\\Bags" },
+      { "type": "winreg", "key": "HKCU\\Software\\Microsoft\\Windows\\ShellNoRoam\\BagMRU" },
+      { "type": "winreg", "key": "HKCU\\Software\\Classes\\Local Settings\\Software\\Microsoft\\Windows\\Shell\\Bags" },
+      { "type": "winreg", "key": "HKCU\\Software\\Classes\\Local Settings\\Software\\Microsoft\\Windows\\Shell\\BagMRU" },
+      { "type": "winreg", "key": "HKCU\\Software\\Classes\\Wow6432Node\\Local Settings\\Software\\Microsoft\\Windows\\Shell\\Bags" },
+      { "type": "winreg", "key": "HKCU\\Software\\Classes\\Wow6432Node\\Local Settings\\Software\\Microsoft\\Windows\\Shell\\BagMRU" }
+    ],
+    "is_safe": false,
+    "recommended": false
+  },
+  {
+    "id": "windows_explorer_recent_documents",
+    "category": "Windows",
+    "name": "Explorer Recent Documents (Registry)",
+    "description": "The registry-side list backing the Recent Documents menu. The on-disk jump-list files it mirrors are already covered by Recent Items & Jump Lists, which protects pinned Quick Access folders; this rule only clears the registry list itself.",
+    "actions": [
+      { "type": "winreg", "key": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\RecentDocs" }
+    ],
+    "is_safe": true,
+    "recommended": true
   },
   {
     "id": "windows_installer_orphans",
@@ -950,6 +1156,17 @@
     "paths": [
       "%LOCALAPPDATA%\\Microsoft\\Office\\16.0\\WebServiceCache",
       "%LOCALAPPDATA%\\Microsoft\\Office\\16.0\\OfficeFileCache"
+    ],
+    "is_safe": true,
+    "recommended": true
+  },
+  {
+    "id": "office_mru",
+    "category": "Microsoft Office",
+    "name": "Recently used documents",
+    "description": "The shortcuts Office shows for files you've recently opened. Not the files themselves.",
+    "paths": [
+      "%APPDATA%\\Microsoft\\Office\\Recent"
     ],
     "is_safe": true,
     "recommended": true
