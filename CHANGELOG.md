@@ -3,10 +3,15 @@
 All notable changes to Prune (formerly named unrevo -- rebranded 2026-09-01,
 see v1.0.1 below) are documented here.
 
-## v2.9.3
+## v2.9.2
 
 ### Added
 
+- **Report a bug now includes the installed-programs count.** Within about
+  a second of launch, the report lists a 4th fact, "Installed programs
+  found: N" -- never a fresh read of its own, so the dialog stays instant.
+  Translated into all 39 languages, with the "nothing else is collected"
+  line reworded to stay accurate.
 - **Low power mode (Settings -> General).** Pauses the background
   animation, flattens the glass panels to solid ones, and shortens
   transitions to near-instant -- the same treatment `prefers-reduced-
@@ -17,37 +22,6 @@ see v1.0.1 below) are documented here.
   thresholds on purpose. A real choice made afterwards, in Settings or by
   a file that already recorded one, is never silently overridden later.
   Translated into all 39 languages.
-
-### Fixed
-
-- **The installer's "who should this be installed for?" page was stuck in
-  English for 19 of Prune's 40 languages**, even though the person had
-  just picked their own language on the screen before it -- electron-
-  builder ships its own translations for this page, but only for about
-  20 languages. Patched the missing 19 by hand, matching how Windows'
-  own installers and UAC prompts phrase "all users / just me / admin
-  credentials" in each.
-
-### Changed
-
-- **Six screens and the Applications list no longer load until opened.**
-  Icon extraction aside, Deep Clean, Disk Map, Settings, Startup,
-  Duplicates, Quarantine and Applications together were over 5,000 lines
-  of JavaScript bundled into the one file every launch had to parse
-  before Dashboard could show anything, whether or not that session ever
-  opened them. Deep Clean's own 754 KB and Disk Map's 294 KB alone cut
-  about 1.1 MB off the initial bundle. Dashboard itself is unaffected --
-  it's the one screen every launch shows regardless.
-
-## v2.9.2
-
-### Added
-
-- **Report a bug now includes the installed-programs count.** Within about
-  a second of launch, the report lists a 4th fact, "Installed programs
-  found: N" -- never a fresh read of its own, so the dialog stays instant.
-  Translated into all 39 languages, with the "nothing else is collected"
-  line reworded to stay accurate.
 
 ### Changed
 
@@ -60,12 +34,27 @@ see v1.0.1 below) are documented here.
   Applications has actually been opened once. Dashboard's own space
   breakdown and largest-programs list still load immediately, since
   nothing about them changed.
+- **Six screens and the Applications list no longer load until opened
+  either.** Icon extraction aside, Deep Clean, Disk Map, Settings,
+  Startup, Duplicates, Quarantine and Applications together were over
+  5,000 lines of JavaScript bundled into the one file every launch had to
+  parse before Dashboard could show anything, whether or not that
+  session ever opened them. Deep Clean's own 754 KB and Disk Map's 294 KB
+  alone cut about 1.1 MB off the initial bundle. Dashboard itself is
+  unaffected -- it's the one screen every launch shows regardless.
 
 ### Fixed
 
 - Cleared 6 Dependabot alerts, all a nested `undici` only ever reachable
   while installing build tooling (downloading Electron's binary,
   compiling native modules), never shipped in the built app.
+- **The installer's "who should this be installed for?" page was stuck in
+  English for 19 of Prune's 40 languages**, even though the person had
+  just picked their own language on the screen before it -- electron-
+  builder ships its own translations for this page, but only for about
+  20 languages. Patched the missing 19 by hand, matching how Windows'
+  own installers and UAC prompts phrase "all users / just me / admin
+  credentials" in each.
 
 ## v2.9.1
 
