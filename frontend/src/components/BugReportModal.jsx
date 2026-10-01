@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import ModalOverlay from './ModalOverlay.jsx';
 import { fetchBugReportInfo, openBugReport } from '../lib/api.js';
+import { getLastProgramsCount } from '../lib/lastProgramsCount.js';
 import { useSingleFlight } from '../hooks/useSingleFlight.js';
 import { useLanguage } from '../i18n/LanguageContext.jsx';
 
@@ -31,6 +32,9 @@ export default function BugReportModal({ onClose }) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [info, setInfo] = useState(null);
+  // Read once, like info: a plain value, not something that changes while
+  // this dialog is open.
+  const [programsFound] = useState(() => getLastProgramsCount());
   const [state, setState] = useState('editing'); // editing | opening | opened
   const [error, setError] = useState(null);
   const [copied, setCopied] = useState(false);
@@ -78,7 +82,7 @@ export default function BugReportModal({ onClose }) {
     setState('opening');
     setError(null);
     try {
-      await openBugReport({ title: cleanTitle, description: cleanDescription });
+      await openBugReport({ title: cleanTitle, description: cleanDescription, programsFound });
       setState('opened');
     } catch (err) {
       setState('editing');
@@ -87,7 +91,8 @@ export default function BugReportModal({ onClose }) {
   });
 
   const copyReport = async () => {
-    const footer = info ? `\n\n---\nPrune ${info.version} · ${info.windows} · ${info.arch}` : '';
+    const programsLine = programsFound != null ? ` · ${t('bugReport.includedProgramsFound', programsFound)}` : '';
+    const footer = info ? `\n\n---\nPrune ${info.version} · ${info.windows} · ${info.arch}${programsLine}` : '';
     const text = `${cleanTitle ? `${cleanTitle}\n\n` : ''}${cleanDescription}${footer}`;
     try {
       await navigator.clipboard.writeText(text);
@@ -98,7 +103,10 @@ export default function BugReportModal({ onClose }) {
   const facts = [
     [t('bugReport.includedVersion'), info?.version],
     [t('bugReport.includedWindows'), info?.windows],
-    [t('bugReport.includedArch'), info?.arch]
+    [t('bugReport.includedArch'), info?.arch],
+    // Only when Applications has actually loaded this session -- most
+    // reports never touch that screen, and "unknown" is not worth a row.
+    ...(programsFound != null ? [[t('bugReport.includedProgramsFound', programsFound), null]] : [])
   ];
 
   return (

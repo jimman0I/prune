@@ -26,9 +26,9 @@ router.get('/info', (req, res) => {
  * this API, so the address is built here, on Prune's own repository only.
  * Input that cannot make a report is the caller's mistake, a 400. */
 router.post('/open', async (req, res) => {
-  const { title, description } = req.body ?? {};
+  const { title, description, programsFound } = req.body ?? {};
   try {
-    res.json(await openBugReport({ title, description }));
+    res.json(await openBugReport({ title, description, programsFound }));
   } catch (err) {
     res.status(400).json({ error: err.message });
   }

@@ -50,6 +50,12 @@ describe('POST /bug-report/open', () => {
     expect(opener.mock.calls[0][1].at(-1)).toBe(res.body.opened);
   });
 
+  it('includes the programs-found count the frontend sends, in the opened issue', async () => {
+    const res = await post({ title: 't', description: 'd', programsFound: 0 });
+    expect(res.status).toBe(200);
+    expect(new URL(res.body.opened).searchParams.get('body')).toContain('Programs found: 0');
+  });
+
   it('ignores any address sent with the request', async () => {
     /* Same rule as /update-check/open: the endpoint must never be an "open
      * anything in the browser" button for code that can reach this API. */
