@@ -173,6 +173,16 @@ describe('Clean waits for a Preview', () => {
     expect(screen.queryByRole('button', { name: PREVIEW_OR_RESCAN })).toBeNull();
     expect(cleanButton().disabled).toBe(true);
     expect(cleanButton().className).not.toMatch(/btn-primary/);
+
+    // Found live: `aria-describedby` used to be gated on `!hasScanned`
+    // alone, which stays true for this whole window (hasScanned only
+    // flips once the scan ends) -- but the hint span it names is gated on
+    // `!hasScanned && !scanning`, so it never mounts while a scan is
+    // running. That left the button pointing screen readers at an id
+    // that was never in the DOM, for as long as the automatic scan
+    // takes -- now the common case, not a brief startup flicker.
+    expect(cleanButton().getAttribute('aria-describedby')).toBeNull();
+    expect(document.getElementById('deep-clean-preview-first')).toBeNull();
   });
 
   it('stays disabled, without a stale hint, once the automatic scan has run and measured nothing', async () => {

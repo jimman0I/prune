@@ -901,7 +901,12 @@ function DeepClean({ onNavigate }) {
                 className={`${canClean ? 'btn-primary' : 'btn-ghost rounded-lg'} px-5 py-2 text-[12.5px] font-medium disabled:opacity-50`}
                 onClick={() => setConfirmClean(true)}
                 disabled={!canClean}
-                aria-describedby={!hasScanned ? 'deep-clean-preview-first' : undefined}
+                // Must match the span's own render condition exactly --
+                // the automatic scan means `!hasScanned` alone is true for
+                // a while BEFORE `!scanning` is, and pointing this at an
+                // id that isn't in the DOM yet is a dangling
+                // aria-describedby, which is worse than none at all.
+                aria-describedby={!hasScanned && !scanning ? 'deep-clean-preview-first' : undefined}
               >
                 {t('deepClean.clean')}
               </button>
