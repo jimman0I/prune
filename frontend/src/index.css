@@ -490,6 +490,25 @@ body::before {
   }
 }
 
+/* Low power mode (Settings -> General). Same collapse as the OS-level
+   `prefers-reduced-motion` above, duplicated rather than shared because an
+   attribute selector cannot be combined with a media query -- the two
+   stay identical on purpose, so low power mode LOOKS like the reduced-
+   motion state it already works correctly in, rather than a third,
+   untested one. useLowPowerMode.js stamps the attribute from the
+   persisted setting, auto-detected once on first install
+   (settings.js's detectLowPowerDefault). */
+:root[data-low-power] *,
+:root[data-low-power] *::before,
+:root[data-low-power] *::after {
+  animation-duration: 1ms !important;
+  animation-iteration-count: 1 !important;
+  animation-delay: -1ms !important;
+  transition-duration: 1ms !important;
+  transition-delay: 0ms !important;
+  scroll-behavior: auto !important;
+}
+
 /* The loading skeleton's one piece of motion: a slow fade in place, not a
    sweeping shimmer. A shimmer conveys nothing the row count below it does
    not already say, and this is a tool people open when something is wrong
@@ -906,6 +925,14 @@ input[type="checkbox"].prune-check:active:not(:disabled),
   .btn-danger:active:not(:disabled) { transform: none; }
 }
 
+/* Low power mode -- same as the reduced-motion block directly above. */
+:root[data-low-power] .skeleton-shimmer { animation: none; background-image: none; background-color: var(--surface-hover); }
+:root[data-low-power] body::before, :root[data-low-power] body::after { animation: none; }
+:root[data-low-power] .btn-primary:hover:not(:disabled),
+:root[data-low-power] .btn-primary:active:not(:disabled),
+:root[data-low-power] .btn-ghost:active:not(:disabled),
+:root[data-low-power] .btn-danger:active:not(:disabled) { transform: none; }
+
 /* The Disk Map scan card's bar (DiskScanProgress.jsx).
  *
  * scan-shimmer is a soft highlight sweeping across the filled part, so the
@@ -939,12 +966,21 @@ input[type="checkbox"].prune-check:active:not(:disabled),
   .scan-indeterminate { animation: none; width: 100% !important; opacity: 0.35; }
 }
 
+/* Low power mode -- same as the reduced-motion block directly above. */
+:root[data-low-power] .scan-shimmer { animation: none; background: none; }
+:root[data-low-power] .scan-indeterminate { animation: none; width: 100% !important; opacity: 0.35; }
+
 /* Reduced transparency (Windows "Transparency effects" off, macOS "Reduce
  * transparency"). The glass surfaces lose their blur and sit on the solid
  * panel colour, and the two aurora layers behind everything go, because
  * they only exist to give the blur something to show. Contrast is the
  * point: text on a blurred, tinted, moving backdrop has no fixed ground to
- * be measured against. */
+ * be measured against.
+ *
+ * Low power mode (Settings -> General) asks for this exact same look on
+ * purpose, not an OS preference -- duplicated below it rather than
+ * combined into one selector list, since a media query and an attribute
+ * selector cannot share a rule. */
 @media (prefers-reduced-transparency: reduce) {
   .glass-panel,
   .diskmap-tooltip {
@@ -955,6 +991,15 @@ input[type="checkbox"].prune-check:active:not(:disabled),
   body::before,
   body::after { display: none; }
 }
+
+:root[data-low-power] .glass-panel,
+:root[data-low-power] .diskmap-tooltip {
+  background: var(--bg-panel);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+:root[data-low-power] body::before,
+:root[data-low-power] body::after { display: none; }
 
 /* Forced colours (Windows High Contrast). The browser replaces every
  * author colour with the user's palette, and anything that was drawn ONLY

@@ -3,7 +3,7 @@ import { mkdtempSync, rmSync } from 'node:fs';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join, dirname } from 'node:path';
-import { getSettings, updateSettings, cleanGuardsFrom } from './settings.js';
+import { getSettings, updateSettings, cleanGuardsFrom, isLowSpecHardware } from './settings.js';
 
 let dir;
 beforeEach(() => {
@@ -145,6 +145,68 @@ describe('the default language', () => {
     // change the answer if it ran a second time.
     await updateSettings({ autoQuarantine: false });
     expect((await getSettings({ detectLanguage: async () => 'el' })).language).not.toBe('el');
+  });
+});
+
+describe('isLowSpecHardware', () => {
+  const GB = 1024 ** 3;
+
+  it('is false for a normal modern machine', () => {
+    expect(isLowSpecHardware(16 * GB, 8)).toBe(false);
+  });
+
+  it('is true under 8 GiB of RAM even with plenty of cores', () => {
+    expect(isLowSpecHardware(4 * GB, 16)).toBe(true);
+  });
+
+  it('is true under 4 cores even with plenty of RAM', () => {
+    expect(isLowSpecHardware(32 * GB, 2)).toBe(true);
+  });
+
+  it('is false exactly at both thresholds -- generous on purpose, not a trap at the boundary', () => {
+    expect(isLowSpecHardware(8 * GB, 4)).toBe(false);
+  });
+
+  it('is true just under either threshold', () => {
+    expect(isLowSpecHardware(8 * GB - 1, 4)).toBe(true);
+    expect(isLowSpecHardware(8 * GB, 3)).toBe(true);
+  });
+});
+
+describe('the default low-power mode', () => {
+  it('is false when there is no Electron GPU signal and this machine is not low-spec -- the common case', async () => {
+    // Same real-failure-path reasoning as detectDefaultLanguage's own
+    // test: no injected detector, the real detectLowPowerDefault() runs,
+    // 'electron' fails to import, and it falls back to RAM/CPU alone.
+    // Not asserted here (this test suite's machine is not low-spec, but a
+    // CI runner's might genuinely be) -- what IS asserted is the shape:
+    // a boolean reaches the settings either way, proven properly by the
+    // injected-detector tests below.
+    expect(typeof (await getSettings()).lowPowerMode).toBe('boolean');
+  });
+
+  it('uses whatever detectLowPower answers for a brand-new settings file', async () => {
+    expect((await getSettings({ detectLowPower: async () => true })).lowPowerMode).toBe(true);
+    expect((await getSettings({ detectLowPower: async () => false })).lowPowerMode).toBe(false);
+  });
+
+  it('falls back to the settings.js default when the settings.json on disk predates it entirely', async () => {
+    await mkdir(dirname(process.env.UNREVO_SETTINGS_PATH), { recursive: true });
+    await writeFile(process.env.UNREVO_SETTINGS_PATH, JSON.stringify({ autoQuarantine: false }), 'utf8');
+    expect((await getSettings()).lowPowerMode).toBe(false);
+  });
+
+  it('is only consulted once -- an existing file is never re-detected', async () => {
+    await updateSettings({ autoQuarantine: false });
+    expect((await getSettings({ detectLowPower: async () => true })).lowPowerMode).not.toBe(true);
+  });
+
+  it('a real choice in Settings survives even if the detector would now answer differently', async () => {
+    // The scenario the module comment calls out by name: an eGPU
+    // unplugged, a laptop undocked. Hardware changing later must never
+    // flip a setting the user explicitly set.
+    await updateSettings({ lowPowerMode: false });
+    expect((await getSettings({ detectLowPower: async () => true })).lowPowerMode).toBe(false);
   });
 });
 

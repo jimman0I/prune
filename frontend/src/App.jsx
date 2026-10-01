@@ -1,10 +1,9 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback, lazy, Suspense } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { keys } from './lib/queryClient.js';
 import NavRail from './components/NavRail.jsx';
 import TitleBar from './components/TitleBar.jsx';
 import Dashboard from './components/Dashboard.jsx';
-import DiskMap from './components/DiskMap.jsx';
 import Screen from './components/Screen.jsx';
 import Page from './components/Page.jsx';
 import { useProgramData } from './hooks/usePrograms.js';
@@ -13,23 +12,36 @@ import UpdateButton from './components/UpdateButton.jsx';
 import ShortcutsModal from './components/ShortcutsModal.jsx';
 import BugReportModal from './components/BugReportModal.jsx';
 import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts.js';
-import ProgramList from './components/ProgramList.jsx';
 import BatchUninstallModal from './components/BatchUninstallModal.jsx';
 import ModalOverlay from './components/ModalOverlay.jsx';
 import UninstallModal from './components/UninstallModal.jsx';
 import StoreRemoveDialog from './components/StoreRemoveDialog.jsx';
-import QuarantineManager from './components/QuarantineManager.jsx';
-import SettingsPage from './components/SettingsPage.jsx';
-import DeepClean from './components/DeepClean.jsx';
-import Duplicates from './components/Duplicates.jsx';
-import StartupItems from './components/StartupItems.jsx';
 import { rememberVisited } from './lib/visitedScreens.js';
 import { useIdlePrefetch } from './hooks/useIdlePrefetch.js';
 import { useScreenFade } from './hooks/useScreenFade.js';
 import { useWindowActivity } from './hooks/useWindowActivity.js';
+import { useLowPowerMode } from './hooks/useLowPowerMode.js';
+import { useSettings } from './hooks/useSystemQueries.js';
 import { useLanguage } from './i18n/LanguageContext.jsx';
 import { applicationsSummary } from './lib/applicationsSummary.js';
 import { setLastProgramsCount } from './lib/lastProgramsCount.js';
+
+/* Every screen but Dashboard, loaded on first visit rather than bundled
+ * into the initial chunk. Dashboard's own ~530 lines stay a static import
+ * -- it's the one screen every launch shows regardless -- but these seven
+ * together are over 5,000 lines, more than half the app, for six screens
+ * and Applications' own list that are frequently never opened in a given
+ * session at all. Screen.jsx already returns null until `visited`, so
+ * none of these begin loading before that; the Suspense fallback below
+ * each one only shows for the brief first fetch of its chunk, a local
+ * file in the packaged app rather than a network request. */
+const DiskMap = lazy(() => import('./components/DiskMap.jsx'));
+const ProgramList = lazy(() => import('./components/ProgramList.jsx'));
+const QuarantineManager = lazy(() => import('./components/QuarantineManager.jsx'));
+const SettingsPage = lazy(() => import('./components/SettingsPage.jsx'));
+const DeepClean = lazy(() => import('./components/DeepClean.jsx'));
+const Duplicates = lazy(() => import('./components/Duplicates.jsx'));
+const StartupItems = lazy(() => import('./components/StartupItems.jsx'));
 
 function formatBytes(bytes) {
   if (bytes === null || bytes === undefined) return '—';
@@ -122,6 +134,14 @@ export default function App() {
   // Pauses the aurora while the window is unfocused or hidden.
   useWindowActivity();
 
+  // Settings -> General -> Low power mode (and the same auto-detected
+  // default a brand-new install already picks -- see backend's
+  // detectLowPowerDefault()). A second useSettings() call, same query
+  // key as SettingsPage's own, so React Query serves it from cache
+  // rather than a second request.
+  const { settings: appSettings } = useSettings();
+  useLowPowerMode(appSettings?.lowPowerMode === true);
+
   const [showShortcuts, setShowShortcuts] = useState(false);
   // One dialog, opened from the rail and from Settings > About. Stable, so
   // the memoised SettingsPage that receives it does not re-render with App.
@@ -172,12 +192,24 @@ export default function App() {
         <Screen active={screen === 'dashboard'} visited={visited.has('dashboard')}>
           <Dashboard programs={programs} programsMeasured={sizesSettled} onNavigate={setScreen} />
         </Screen>
-        <Screen active={screen === 'diskmap'} visited={visited.has('diskmap')}><DiskMap /></Screen>
-        <Screen active={screen === 'quarantine'} visited={visited.has('quarantine')}><QuarantineManager /></Screen>
-        <Screen active={screen === 'settings'} visited={visited.has('settings')}><SettingsPage onReportBug={openBugReport} /></Screen>
-        <Screen active={screen === 'startup'} visited={visited.has('startup')}><StartupItems /></Screen>
-        <Screen active={screen === 'deepclean'} visited={visited.has('deepclean')}><DeepClean onNavigate={setScreen} /></Screen>
-        <Screen active={screen === 'duplicates'} visited={visited.has('duplicates')}><Duplicates /></Screen>
+        <Screen active={screen === 'diskmap'} visited={visited.has('diskmap')}>
+          <Suspense fallback={null}><DiskMap /></Suspense>
+        </Screen>
+        <Screen active={screen === 'quarantine'} visited={visited.has('quarantine')}>
+          <Suspense fallback={null}><QuarantineManager /></Suspense>
+        </Screen>
+        <Screen active={screen === 'settings'} visited={visited.has('settings')}>
+          <Suspense fallback={null}><SettingsPage onReportBug={openBugReport} /></Suspense>
+        </Screen>
+        <Screen active={screen === 'startup'} visited={visited.has('startup')}>
+          <Suspense fallback={null}><StartupItems /></Suspense>
+        </Screen>
+        <Screen active={screen === 'deepclean'} visited={visited.has('deepclean')}>
+          <Suspense fallback={null}><DeepClean onNavigate={setScreen} /></Suspense>
+        </Screen>
+        <Screen active={screen === 'duplicates'} visited={visited.has('duplicates')}>
+          <Suspense fallback={null}><Duplicates /></Suspense>
+        </Screen>
         <Screen active={screen === 'applications'} visited={visited.has('applications')}>
           <Page className="h-full flex flex-col min-h-0">
             <div className="flex items-baseline justify-between mb-6 shrink-0">
@@ -191,16 +223,18 @@ export default function App() {
               </div>
               <button className="btn-ghost" onClick={() => setScreen('quarantine')}>{t('nav.quarantine')}</button>
             </div>
-            <ProgramList
-              programs={programs}
-              extensions={extensions}
-              running={running}
-              icons={icons}
-              onUninstall={setSelectedProgram}
-              onBatchUninstall={setBatchPrograms}
-              onRemoveStoreApp={setStoreAppToRemove}
-              onViewChange={setAppsView}
-            />
+            <Suspense fallback={null}>
+              <ProgramList
+                programs={programs}
+                extensions={extensions}
+                running={running}
+                icons={icons}
+                onUninstall={setSelectedProgram}
+                onBatchUninstall={setBatchPrograms}
+                onRemoveStoreApp={setStoreAppToRemove}
+                onViewChange={setAppsView}
+              />
+            </Suspense>
           </Page>
         </Screen>
       </div>

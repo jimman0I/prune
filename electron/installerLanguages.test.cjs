@@ -74,6 +74,83 @@ test('every installer language has every string the update page shows', () => {
   assert.deepEqual(missing, []);
 });
 
+// The stock "who should this be installed for" page (electron-builder's
+// own MultiUser install-mode page) ships translations for only about 20
+// of Prune's 40 installer languages; these 19 are the ones build/
+// installer.nsh patches by hand -- see the comment above its own copy of
+// this list. Reported directly: the page right after the language choice
+// stayed in English for a language the installer otherwise offers fully.
+const INSTALL_MODE_LANGS = [
+  'AFRIKAANS', 'ARABIC', 'CATALAN', 'WELSH', 'GREEK', 'ESTONIAN', 'HEBREW',
+  'INDONESIAN', 'ICELANDIC', 'LITHUANIAN', 'MALAY', 'PASHTO', 'PORTUGUESE',
+  'ROMANIAN', 'ALBANIAN', 'SERBIAN', 'THAI', 'UKRAINIAN', 'VIETNAMESE'
+];
+const INSTALL_MODE_STRINGS = [
+  'whoShouldThisApplicationBeInstalledFor', 'chooseInstallationOptions',
+  'chooseUninstallationOptions', 'selectUserMode', 'whichInstallationRemove',
+  'whichInstallationShouldBeRemoved', 'forAll', 'onlyForMe', 'perMachineInstall',
+  'perMachineInstallExists', 'perUserInstall', 'perUserInstallExists',
+  'reinstallUpgrade', 'uninstall', 'loginWithAdminAccount', 'freshInstallForAll',
+  'freshInstallForCurrent'
+];
+
+// electron-builder's own app-builder-lib/templates/nsis/assistedMessages.yml
+// ships real translations for these 20 (uppercased NSIS display names,
+// same special-casing nsisLang.js's own createAddLangsMacro uses: zh_CN
+// -> SimpChinese, zh_TW -> TradChinese, nb_NO -> Norwegian, pt_BR ->
+// PortugueseBR, es -> SpanishInternational). Read directly from that file
+// by the test below, not copied here, so this list cannot drift from it.
+function assistedMessagesCoverage() {
+  const file = require.resolve('app-builder-lib/templates/nsis/assistedMessages.yml');
+  const yaml = readFileSync(file, 'utf8');
+  const { load } = require('js-yaml');
+  const data = load(yaml);
+  const codes = new Set();
+  for (const translations of Object.values(data)) {
+    for (const code of Object.keys(translations)) if (code !== 'en') codes.add(code);
+  }
+  const SPECIAL = { zh_CN: 'SIMPCHINESE', zh_TW: 'TRADCHINESE', nb_NO: 'NORWEGIAN', no: 'NORWEGIAN', pt_BR: 'PORTUGUESEBR', es: 'SPANISHINTERNATIONAL' };
+  const { langIdToName } = require('app-builder-lib/out/util/langs');
+  const names = new Set();
+  for (const code of codes) {
+    if (SPECIAL[code]) { names.add(SPECIAL[code]); continue; }
+    const lang = code.includes('_') ? code.slice(0, code.indexOf('_')) : code;
+    const name = langIdToName[lang];
+    if (name) names.add(name.toUpperCase());
+  }
+  return names;
+}
+const EB_COVERED = assistedMessagesCoverage();
+
+test('every language the install-mode page patch covers has every one of its strings', () => {
+  const missing = [];
+  for (const lang of INSTALL_MODE_LANGS) {
+    for (const id of INSTALL_MODE_STRINGS) {
+      const found = langStrings.find((s) => s.id === id && s.lang === lang);
+      if (!found || !found.text.trim()) missing.push(`${lang}: ${id}`);
+    }
+  }
+  assert.deepEqual(missing, []);
+});
+
+test('every one of Prune\'s 40 installer languages gets the install-mode page patched or already has it from electron-builder', () => {
+  // electron-builder's own assistedMessages.yml (not read here -- it's
+  // inside node_modules, not this repo) covers a fixed set of languages
+  // on its own; this file's job is only the languages it does NOT cover.
+  // The one thing worth guarding here is that this set never silently
+  // drifts out of sync with Prune's real installerLanguages list -- a
+  // language added to one without the other either patches a language
+  // the installer no longer offers (harmless but stale) or leaves a
+  // newly-added language unpatched (the exact bug this file exists to
+  // catch). electron-builder's own coverage is assumed stable; if it
+  // ever ships a translation for one of these 19, this patch simply
+  // becomes redundant (NSIS takes the LAST declaration), not wrong.
+  const offered = new Set(nsisLanguageNames().map((name) => name.toUpperCase()));
+  const patched = new Set(INSTALL_MODE_LANGS);
+  const offeredButUnaccountedFor = [...offered].filter((name) => name !== 'ENGLISH' && !patched.has(name) && !EB_COVERED.has(name));
+  assert.deepEqual(offeredButUnaccountedFor, [], 'a language the installer offers is neither patched here nor known to be covered by electron-builder');
+});
+
 test('has no strings for a language the installer does not load', () => {
   // A LangString for a language that was never added is a build error.
   const loaded = new Set(nsisLanguageNames().map((name) => name.toUpperCase()));

@@ -328,6 +328,22 @@ function SettingsPage({ onReportBug = null }) {
                 </div>
               </div>
 
+              <div className="glass-panel p-6">
+                <div className="flex items-center justify-between gap-4">
+                  <div className="min-w-0">
+                    <div className="text-[14px] font-medium text-[color:var(--text-primary)]">{t('settings.lowPowerMode.title')}</div>
+                    <p className="text-[12.5px] text-[color:var(--text-secondary)] mt-1 leading-relaxed max-w-[62ch]">
+                      {t('settings.lowPowerMode.description')}
+                    </p>
+                  </div>
+                  <Toggle
+                    checked={settings.lowPowerMode === true}
+                    onChange={() => save({ lowPowerMode: !settings.lowPowerMode })}
+                    label={t('settings.lowPowerMode.title')}
+                  />
+                </div>
+              </div>
+
               {/* The one setting that lets anything leave the machine, so
                   it says exactly what, to whom and how often before it is
                   switched on -- and it is off until someone does. */}
