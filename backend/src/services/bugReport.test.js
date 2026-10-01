@@ -85,6 +85,34 @@ describe('buildIssueUrl', () => {
     expect(body).toMatch(/---\nPrune /); // the footer survives the clamp
   });
 
+  // Real bug, found live (2026-09-29): a fresh Windows 10 install showed
+  // Applications as completely empty, with nothing in the report to say
+  // so -- the count the frontend already has from the last Applications
+  // load (not re-read here) now rides along in the same footer.
+  it('appends the programs-found count to the footer when given one', () => {
+    const { version, windows, arch } = bugReportInfo();
+    const params = parse(buildIssueUrl({ title: 't', description: 'd', programsFound: 0 }));
+    expect(params.get('body')).toBe(`d\n\n---\nPrune ${version} · ${windows} · ${arch} · Programs found: 0`);
+  });
+
+  it('includes a non-zero count the same way', () => {
+    const params = parse(buildIssueUrl({ title: 't', description: 'd', programsFound: 214 }));
+    expect(params.get('body')).toContain('Programs found: 214');
+  });
+
+  it('omits the programs-found line entirely when none is given', () => {
+    const params = parse(buildIssueUrl({ title: 't', description: 'd' }));
+    expect(params.get('body')).not.toContain('Programs found');
+  });
+
+  it.each([-1, 1.5, '12', null, NaN, Infinity])(
+    'drops a malformed programsFound (%p) rather than refuse the report',
+    (programsFound) => {
+      const params = parse(buildIssueUrl({ title: 't', description: 'd', programsFound }));
+      expect(params.get('body')).not.toContain('Programs found');
+    }
+  );
+
   it('rejects an empty or whitespace-only description', () => {
     for (const description of ['', '   \n\t ', undefined, null, 5, {}]) {
       expect(() => buildIssueUrl({ title: 't', description })).toThrow(/describe/i);

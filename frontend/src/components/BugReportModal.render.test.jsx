@@ -4,6 +4,7 @@ import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { renderScreen } from '../testSupport/renderScreen.jsx';
 import { isCopyable } from '../testSupport/copyable.js';
+import { setLastProgramsCount } from '../lib/lastProgramsCount.js';
 
 /** The "Report a bug" dialog: what it shows before anything leaves, and
  * what it does when the user opens the report. */
@@ -23,6 +24,7 @@ beforeEach(() => {
   vi.clearAllMocks();
   fetchBugReportInfo.mockResolvedValue({ version: '2.8.0', windows: 'Windows 11 (build 26200)', arch: 'x64' });
   openBugReport.mockResolvedValue({ ok: true, opened: 'https://github.com/jimman0I/prune/issues/new?x=1' });
+  setLastProgramsCount(null); // nothing known, as if Applications was never opened this session
 });
 
 /** ModalOverlay moves focus to its first control a frame after mounting.
@@ -43,9 +45,62 @@ describe('BugReportModal', () => {
     expect(await screen.findByText('Prune version: 2.8.0')).toBeTruthy();
     expect(screen.getByText('Windows version: Windows 11 (build 26200)')).toBeTruthy();
     expect(screen.getByText('Architecture: x64')).toBeTruthy();
-    expect(screen.getByText(/no file paths, no scan results, no user name/i)).toBeTruthy();
+    expect(screen.getByText(/no file paths, no file names, no user name/i)).toBeTruthy();
     expect(screen.getByText(/public/i)).toBeTruthy();
     expect(screen.getByText(/free GitHub account/i)).toBeTruthy();
+  });
+
+  // Real bug, found live (2026-09-29): a fresh Windows 10 install showed
+  // Applications as completely empty, and nothing in a bug report would
+  // have said so. Most reports never touch that screen, so the row only
+  // appears once something is actually known.
+  describe('the programs-found count', () => {
+    it('says nothing about it when Applications was never opened this session', async () => {
+      renderScreen(<BugReportModal onClose={() => {}} />);
+      await screen.findByText('Prune version: 2.8.0');
+      expect(screen.queryByText(/installed programs found/i)).toBeNull();
+    });
+
+    it('lists it, including a count of zero, once Applications has loaded', async () => {
+      setLastProgramsCount(0);
+      renderScreen(<BugReportModal onClose={() => {}} />);
+      expect(await screen.findByText('Installed programs found: 0')).toBeTruthy();
+    });
+
+    it('lists an ordinary count the same way', async () => {
+      setLastProgramsCount(214);
+      renderScreen(<BugReportModal onClose={() => {}} />);
+      expect(await screen.findByText('Installed programs found: 214')).toBeTruthy();
+    });
+
+    it('sends it along when the report opens', async () => {
+      const user = userEvent.setup();
+      setLastProgramsCount(0);
+      renderScreen(<BugReportModal onClose={() => {}} />);
+      await settled();
+      await user.type(screen.getByLabelText('What went wrong?'), 'Applications is empty');
+      await user.click(openButton());
+
+      await waitFor(() => expect(openBugReport).toHaveBeenCalledTimes(1));
+      expect(openBugReport.mock.calls[0][0].programsFound).toBe(0);
+    });
+
+    it('includes it in the copied report too', async () => {
+      const user = userEvent.setup();
+      const writeText = vi.fn(async () => {});
+      Object.defineProperty(navigator, 'clipboard', { value: { writeText }, configurable: true });
+      openBugReport.mockRejectedValue(new Error('explorer.exe not found'));
+      setLastProgramsCount(0);
+      renderScreen(<BugReportModal onClose={() => {}} />);
+      await settled();
+
+      await user.type(screen.getByLabelText('What went wrong?'), 'Applications is empty');
+      await user.click(openButton());
+      await screen.findByRole('alert');
+      await user.click(screen.getByRole('button', { name: 'Copy report' }));
+
+      expect(writeText.mock.calls[0][0]).toContain('Installed programs found: 0');
+    });
   });
 
   it('keeps Open on GitHub disabled until something is written', async () => {
@@ -72,7 +127,11 @@ describe('BugReportModal', () => {
     await user.click(openButton());
 
     await waitFor(() => expect(openBugReport).toHaveBeenCalledTimes(1));
-    expect(openBugReport).toHaveBeenCalledWith({ title: 'Scan crashes', description: 'I ran a scan & it closed.' });
+    expect(openBugReport).toHaveBeenCalledWith({
+      title: 'Scan crashes',
+      description: 'I ran a scan & it closed.',
+      programsFound: null
+    });
     expect(await screen.findByRole('status')).toBeTruthy();
 
     await user.click(screen.getByRole('button', { name: 'Close' }));

@@ -396,12 +396,14 @@ export async function fetchBugReportInfo() {
 }
 
 /** Opens a prefilled GitHub issue in the browser. Sends the user's title
- * and description and no address: the backend builds the URL itself. */
-export async function openBugReport({ title, description }) {
+ * and description, this session's last known Applications count (if any
+ * -- see lib/lastProgramsCount.js) and no address: the backend builds the
+ * URL itself. */
+export async function openBugReport({ title, description, programsFound }) {
   const res = await fetch(`${API_URL}/bug-report/open`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ title, description })
+    body: JSON.stringify({ title, description, programsFound })
   });
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);

@@ -43,9 +43,12 @@ export function bugReportInfo() {
 }
 
 const urlFor = (title, description, info) => {
+  const programsLine = Number.isInteger(info.programsFound) && info.programsFound >= 0
+    ? ` · Programs found: ${info.programsFound}`
+    : '';
   const params = new URLSearchParams({
     title,
-    body: `${description}\n\n---\nPrune ${info.version} · ${info.windows} · ${info.arch}`
+    body: `${description}\n\n---\nPrune ${info.version} · ${info.windows} · ${info.arch}${programsLine}`
   });
   return `${ISSUE_BASE}${params}`;
 };
@@ -59,13 +62,26 @@ const urlFor = (title, description, info) => {
  * the part that is cut. */
 export function buildIssueUrl(input) {
   if (!input || typeof input !== 'object') throw new Error('Describe what went wrong first.');
-  const { title = '', description } = input;
+  const { title = '', description, programsFound } = input;
   if (typeof title !== 'string') throw new Error('The title must be text.');
   if (typeof description !== 'string' || description.trim() === '') {
     throw new Error('Describe what went wrong first.');
   }
 
-  const info = bugReportInfo();
+  // Optional, and never required: the frontend's own count of installed
+  // programs from the last time Applications loaded this session, not a
+  // fresh read -- a bug report must stay instant, and re-running the same
+  // registry enumeration that might be exactly what is broken would not be.
+  // Found live (2026-09): a report that already said "Programs found: 0"
+  // would have made a silently-empty Applications list obvious on sight,
+  // instead of needing a back-and-forth to even notice it was a real bug.
+  // Anything that is not a plain non-negative integer is dropped rather
+  // than rejected -- a malformed diagnostic value is never a reason to
+  // refuse the report itself.
+  const info = {
+    ...bugReportInfo(),
+    programsFound: Number.isInteger(programsFound) && programsFound >= 0 ? programsFound : undefined
+  };
   const cleanTitle = title.trim().slice(0, MAX_TITLE);
   let text = description.trim().slice(0, MAX_DESCRIPTION);
 
