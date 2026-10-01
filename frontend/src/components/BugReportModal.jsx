@@ -104,8 +104,9 @@ export default function BugReportModal({ onClose }) {
     [t('bugReport.includedVersion'), info?.version],
     [t('bugReport.includedWindows'), info?.windows],
     [t('bugReport.includedArch'), info?.arch],
-    // Only when Applications has actually loaded this session -- most
-    // reports never touch that screen, and "unknown" is not worth a row.
+    // Known within about a second of launch (App.jsx sets it once the base
+    // program list resolves) -- null only in the brief window before that,
+    // or if the read itself failed, and "unknown" is not worth a row.
     ...(programsFound != null ? [[t('bugReport.includedProgramsFound', programsFound), null]] : [])
   ];
 

@@ -3,6 +3,7 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { renderScreen } from './testSupport/renderScreen.jsx';
+import { getLastProgramsCount, setLastProgramsCount } from './lib/lastProgramsCount.js';
 
 /** Five of useProgramData's eight queries only feed Applications: icons,
  * versions, install dates, extensions, and the running-process poll.
@@ -78,7 +79,10 @@ vi.mock('./lib/api.js', () => ({
 
 const App = (await import('./App.jsx')).default;
 
-beforeEach(() => { vi.clearAllMocks(); });
+beforeEach(() => {
+  vi.clearAllMocks();
+  setLastProgramsCount(null);
+});
 
 const goToApplications = async (user) => {
   const nav = await screen.findByRole('navigation', { name: 'Main' });
@@ -138,5 +142,40 @@ describe('deferred Applications-only reads', () => {
     // Still enabled: a real poll keeps running rather than having been
     // torn down by the trip back to Dashboard.
     expect(fetchRunningPrograms).toHaveBeenCalledTimes(1);
+  });
+});
+
+/** Real bug, found live during this feature's own first manual check
+ * (2026-10-01): an earlier version set this from ProgramList's own local
+ * fetchPrograms() fallback, which only runs when ProgramList gets no
+ * `programs` prop -- App.jsx always passes one (from the real
+ * useProgramData() above), so that branch never ran in the shipped app
+ * and the count silently stayed null forever, on every screen. Fixed by
+ * setting it from App.jsx's own real `programs`/`loading` -- the same
+ * values the rest of the app already uses -- instead. */
+describe('the programs-found count App.jsx hands to the bug report', () => {
+  it('is known within a render of the base list resolving, on Dashboard, without visiting Applications', async () => {
+    fetchPrograms.mockResolvedValue(Array.from({ length: 128 }, (_, i) => ({ id: `p${i}`, name: `P${i}` })));
+    renderScreen(<App />);
+
+    await waitFor(() => expect(getLastProgramsCount()).toBe(128));
+  });
+
+  it('reflects zero, not null, when the real machine genuinely has none', async () => {
+    fetchPrograms.mockResolvedValue([]);
+    renderScreen(<App />);
+
+    await waitFor(() => expect(fetchPrograms).toHaveBeenCalled());
+    await waitFor(() => expect(getLastProgramsCount()).toBe(0));
+  });
+
+  it('stays null while the list is still loading, never a stale value from a previous run', async () => {
+    let resolveFetch;
+    fetchPrograms.mockReturnValue(new Promise((resolve) => { resolveFetch = resolve; }));
+    renderScreen(<App />);
+
+    expect(getLastProgramsCount()).toBeNull();
+    resolveFetch([{ id: 'a', name: 'A' }]);
+    await waitFor(() => expect(getLastProgramsCount()).toBe(1));
   });
 });
