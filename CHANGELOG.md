@@ -3,6 +3,55 @@
 All notable changes to Prune (formerly named unrevo -- rebranded 2026-09-01,
 see v1.0.1 below) are documented here.
 
+## v3.0.0
+
+### Added
+
+- **BleachBit parity: 16 new cleaner rules, grounded in a live scan.**
+  Rather than trust BleachBit's CleanerML XML at face value, every new
+  rule here was checked against a real `bleachbit_console.exe -p` run
+  (265/265 cleaner options, each invoked as its own process so deletes
+  could be attributed precisely) before being written. Covers
+  Brave/Chrome/Edge sync data, Chrome's on-device AI models, Discord
+  cookies/history, VS Code local file history, Vim history, Office
+  recent-docs, legacy Internet Explorer cookies/history/logs, and four
+  Explorer registry traces (typed paths/dialog MRU, Run history,
+  shellbags, recent documents). Deliberately skipped: anything already
+  covered by an existing rule, anything needing a directory-whole-match
+  capability Prune doesn't have yet, and every `claude.*` option, since
+  that's real conversation history, not a general-purpose cache.
+- **"Clean as administrator" for rules that need it.** A locked file no
+  longer forces a full admin relaunch of the app. Deep Clean now shows a
+  targeted elevation button only for the specific rules that hit a
+  permissions wall, running just those through a one-shot elevated
+  helper process instead.
+
+### Changed
+
+- **Deep Clean scans automatically instead of waiting for Preview.**
+  Opening the screen now starts the scan immediately; Preview still
+  exists for re-scanning after changing settings, but the
+  scan-then-clean two-step for a first look is gone.
+
+### Fixed
+
+- **Deep Clean's Recent Items rule no longer deletes Quick Access pins.**
+  The rule was a bare folder-exists delete that happened to sweep up the
+  same jump-list file File Explorer uses to remember pinned Quick Access
+  folders. The shared delete path now supports excluding specific
+  filenames by name, and Recent Items uses it.
+- **Stopping Deep Clean mid-run no longer wipes the saved selection.**
+  Stop now leaves whatever was checked intact and reports "stopped"
+  rather than quietly resetting the screen to its defaults.
+- **The nav rail's active-page mark no longer drifts from its icon at
+  fractional display scaling** (confirmed at 150%). The mark was a
+  Framer Motion shared-layout animation computing its own position from
+  measured pixels, which could desync from its statically-laid-out
+  sibling under a non-integer DPR; replaced with a plain opacity toggle
+  that can't drift.
+- **The "scan to see results" hint no longer points at a screen reader
+  element that's already gone** once the automatic scan has finished.
+
 ## v2.9.2
 
 ### Added
