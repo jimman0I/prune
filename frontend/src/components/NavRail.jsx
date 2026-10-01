@@ -142,35 +142,34 @@ function NavItem({ item, screen, onNavigate, label }) {
           active ? 'text-[color:var(--accent-primary)]' : 'text-[color:var(--text-secondary)] hover:text-[color:var(--text-primary)] hover:bg-[color:var(--surface-hover)]'
         }`}
       >
-        {/* The active tint is its own element with a shared layoutId, so
-            framer-motion animates it BETWEEN buttons rather than fading
-            one out and another in -- the mark slides down the rail to the
-            tab you picked. Only one of these exists at a time, which is
-            what makes the shared layout work.
+        {/* The active tint and the edge pill below, always mounted and
+            toggled by opacity rather than a shared layoutId.
 
-            Behind the glyph and aria-hidden: it is decoration for a state
-            `aria-current` already reports. */}
-        {active && (
-          <motion.span
-            layoutId="nav-active"
-            aria-hidden="true"
-            className="absolute inset-0 rounded-xl bg-[color:var(--accent-primary-soft)]"
-            transition={{ type: 'spring', stiffness: 420, damping: 34 }}
-          />
-        )}
+            Used to be `layoutId`-animated so framer-motion would slide the
+            mark down the rail between buttons instead of fading. Dropped:
+            that mechanism measures each element's rect with
+            getBoundingClientRect() and bakes the result into a `transform`
+            matrix to FLIP from the old position to the new one, and under
+            fractional OS display scaling (confirmed broken at Windows'
+            150%) that measurement can land on a different sub-pixel
+            boundary than the icon beside it, which stays in plain static
+            layout and is rounded by the browser's own layout engine
+            instead -- the two drift apart, visibly. inset-0 already pins
+            this element exactly to its own button's box in ordinary CSS,
+            with no JS-measured rect in between; opacity cannot desync
+            from that the way a transform can. Behind the glyph and
+            aria-hidden: it is decoration for a state `aria-current`
+            already reports. */}
+        <span
+          aria-hidden="true"
+          className={`absolute inset-0 rounded-xl bg-[color:var(--accent-primary-soft)] transition-opacity duration-150 ${active ? 'opacity-100' : 'opacity-0'}`}
+        />
         {/* The 3px pill at the rail's edge: the tint alone is a faint wash
-            in light mode, and this is the mark that survives squinting. It
-            slides with the tint on its own layoutId. Positioned with
-            explicit offsets, NOT a -translate-y-1/2 class: framer writes
-            `transform` on layout animations and would clobber it. */}
-        {active && (
-          <motion.span
-            layoutId="nav-pill"
-            aria-hidden="true"
-            className="absolute -left-[10px] min-[1100px]:-left-[8px] top-3 h-5 w-[3px] rounded-full bg-[color:var(--accent-primary)]"
-            transition={{ type: 'spring', stiffness: 420, damping: 34 }}
-          />
-        )}
+            in light mode, and this is the mark that survives squinting. */}
+        <span
+          aria-hidden="true"
+          className={`absolute -left-[10px] min-[1100px]:-left-[8px] top-3 h-5 w-[3px] rounded-full bg-[color:var(--accent-primary)] transition-opacity duration-150 ${active ? 'opacity-100' : 'opacity-0'}`}
+        />
         <span className="relative">{item.icon}</span>
         <span aria-hidden="true" className="relative hidden min-[1100px]:block min-w-0 text-left text-[13px] leading-[1.15] font-medium [display:-webkit-box] [-webkit-line-clamp:2] [-webkit-box-orient:vertical] overflow-hidden">
           {label}
