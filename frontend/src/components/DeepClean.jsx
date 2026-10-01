@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState, memo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { visibleCategories, hiddenRuleCount } from '../lib/visibleRules.js';
-import { fetchCleanerCategoryIcons } from '../lib/api.js';
+import { fetchCleanerCategoryIcons, executeDeepCleanElevated } from '../lib/api.js';
 import { keys } from '../lib/queryClient.js';
 import { useDeepCleanScan } from '../hooks/useDeepCleanScan.js';
 import { useDeepCleanExecute } from '../hooks/useDeepCleanExecute.js';
@@ -176,6 +176,8 @@ function DeepClean({ onNavigate }) {
   const [confirmClean, setConfirmClean] = useState(false);
   const [cleanResult, setCleanResult] = useState(null);
   const [cleanError, setCleanError] = useState(null);
+  const [elevating, setElevating] = useState(false);
+  const [elevatedResult, setElevatedResult] = useState(null);
   // A frozen copy of `selected`, taken the instant Clean actually starts.
   // receiptMode filters the tree against THIS, not the live `selected` --
   // nothing currently stops a checkbox click or "Clear" from mutating
@@ -305,6 +307,23 @@ function DeepClean({ onNavigate }) {
     if (reselect) setCleanResult(null);
     await start();
   };
+
+  // Scans itself, once, the first time the screen has something to scan
+  // -- the same scan a manual Preview click starts, just not waiting for
+  // that click. Opening Deep Clean used to mean a dead screen until you
+  // pressed Preview and sat through it; now that wait happens while
+  // you're still reading the screen rather than after you've decided to
+  // act on it. Clean itself is untouched -- it still needs a real
+  // measured total before it's enabled (see canClean below) and a
+  // confirm with that number before anything moves, because scanning
+  // automatically is "show me sooner", not "skip deciding".
+  const autoScanRef = useRef(false);
+  useEffect(() => {
+    if (autoScanRef.current || !categories || !settings || hasScanned || scanning) return;
+    autoScanRef.current = true;
+    start();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [categories, settings, hasScanned, scanning]);
 
   // Once a scan has measured everything, drop any tick the scan proved
   // there is no point cleaning. Before a scan the tree is listed but
@@ -515,6 +534,41 @@ function DeepClean({ onNavigate }) {
     }
   };
 
+  // What a scan already proved Windows won't even LIST without
+  // administrator (accessible: false -- Prefetch, the Defender log
+  // folders), as opposed to a file another process has open, which
+  // elevation does not fix either way. Only these rules are ever offered
+  // the elevated button below; it is not a general "run everything as
+  // admin" switch.
+  const needsAdminIds = useMemo(
+    () => (categories ?? []).flatMap((g) => g.items).filter((i) => i.accessible === false).map((i) => i.id),
+    [categories]
+  );
+
+  const handleElevatedClean = async () => {
+    setElevatedResult(null);
+    setElevating(true);
+    try {
+      const result = await executeDeepCleanElevated(needsAdminIds);
+      setElevatedResult(result);
+      if (result.ok) {
+        toasts.success(`${t('deepClean.cleanupComplete')} ${resultSentence(result.data)}`);
+        // Same reasoning as the ordinary clean's own re-scan: the numbers
+        // on screen should reflect what is actually left on disk, not a
+        // stale pre-clean snapshot, and the rules just cleaned no longer
+        // need the elevated button once they are gone.
+        await runPreview({ reselect: false });
+      } else if (!result.cancelled) {
+        toasts.warn(result.error || t('deepClean.cleanErrorPrefix', ''));
+      }
+    } catch (err) {
+      setElevatedResult({ ok: false, error: err.message });
+      toasts.warn(err.message);
+    } finally {
+      setElevating(false);
+    }
+  };
+
   const cleanTotal = selectionTotal(categories, selected);
   // Nothing can be cleaned blind: a completed Preview that measured at least
   // one ticked item is the precondition, and a running scan or clean is not.
@@ -568,6 +622,34 @@ function DeepClean({ onNavigate }) {
                 {t('deepClean.openQuarantine')}
               </button>
             )}
+          </div>
+        )}
+
+        {/* Only for rules a scan already proved need administrator to even
+            look inside -- never shown just because a scan is running, and
+            gone again once runPreview() (after a successful elevated
+            clean) no longer reports any. One UAC prompt, raised only from
+            this button, covering only these rules. */}
+        {needsAdminIds.length > 0 && !scanning && !cleaning && (
+          <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 mb-5 px-3.5 py-3 rounded-xl bg-[color:var(--bg-panel)] border border-[color:var(--border-subtle)]">
+            <p className="text-[12.5px] text-[color:var(--text-secondary)]">
+              {t('deepClean.needsAdminBanner', needsAdminIds.length)}
+            </p>
+            <button
+              className="btn-ghost px-3.5 py-1.5 rounded-lg text-[12.5px] font-medium shrink-0"
+              onClick={handleElevatedClean}
+              disabled={elevating}
+            >
+              {elevating ? t('deepClean.confirm.cleaning') : t('deepClean.cleanAsAdmin')}
+            </button>
+          </div>
+        )}
+
+        {elevatedResult && !elevatedResult.ok && !elevatedResult.cancelled && (
+          <div className="mb-5 px-3.5 py-3 rounded-xl bg-[color:var(--danger-soft)] border border-[color:var(--danger)]/25">
+            <p className="text-[12.5px] text-[color:var(--danger)] select-text">
+              {t('deepClean.cleanErrorPrefix', elevatedResult.error)}
+            </p>
           </div>
         )}
 

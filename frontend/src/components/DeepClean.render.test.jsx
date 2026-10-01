@@ -92,6 +92,14 @@ beforeEach(() => {
 });
 
 const cleanButton = () => screen.getByRole('button', { name: 'Clean' });
+// Deep Clean scans automatically the moment its tree loads (see
+// DeepClean.jsx's own autoScanRef effect), so the button in this spot has
+// usually already flipped from Preview to Rescan by the time a test can
+// look -- and shows neither label at all for as long as that automatic
+// scan is still running (Stop takes its place). Tests below that still
+// need to find "whichever of the two is showing" match this instead of
+// a literal 'Preview'.
+const PREVIEW_OR_RESCAN = /^(Preview|Rescan)$/;
 
 // Clean stays disabled until a Preview has measured something, so anything
 // that goes on to press it starts from a completed, measured scan.
@@ -101,14 +109,18 @@ const previewFirst = async (user) => {
 };
 
 describe('the Deep Clean screen', () => {
-  it('shows the rules before any scan has run', async () => {
+  it('shows the rules before the automatic scan finishes', async () => {
     // The screen used to be empty until a scan finished. The tree is the
     // answer to "what does this even clean", and that question should not
-    // cost nineteen seconds.
+    // cost nineteen seconds -- now doubly true, since a scan also starts
+    // on its own the instant the tree loads. Held open deliberately, so
+    // the assertion lands while that scan is still genuinely in flight.
+    streamDeepCleanScan.mockImplementation(() => new Promise(() => {}));
     renderScreen(<DeepClean />);
     expect(await screen.findByText('Temporary files')).toBeTruthy();
     expect(screen.getByText('Thumbnail cache')).toBeTruthy();
-    expect(streamDeepCleanScan).not.toHaveBeenCalled();
+    // The automatic scan has started, not been skipped.
+    await waitFor(() => expect(streamDeepCleanScan).toHaveBeenCalled());
   });
 
   it('cannot clean with nothing selected', async () => {
@@ -146,25 +158,39 @@ describe('Clean waits for a Preview', () => {
     await user.click(screen.getByRole('button', { name: 'Select everything' }));
   };
 
-  it('is disabled, and Preview is the primary button, until a Preview has run', async () => {
+  it('stays disabled while the automatic scan is still running, with Stop where Preview used to be', async () => {
+    // Preview used to be the one action worth taking, and carried the
+    // accent, before anything had run. A scan now starts on its own the
+    // instant the tree loads, so that same spot shows Stop for as long as
+    // it's in flight -- Clean still is not an option, and there is no
+    // "Preview" button on screen to call primary.
+    streamDeepCleanScan.mockImplementation(() => new Promise(() => {}));
     const user = userEvent.setup();
     renderScreen(<DeepClean />);
     await tickAll(user);
 
+    expect(await screen.findByRole('button', { name: 'Stop' })).toBeTruthy();
+    expect(screen.queryByRole('button', { name: PREVIEW_OR_RESCAN })).toBeNull();
     expect(cleanButton().disabled).toBe(true);
     expect(cleanButton().className).not.toMatch(/btn-primary/);
-    const preview = screen.getAllByRole('button', { name: 'Preview' });
-    expect(preview.every((b) => /btn-primary/.test(b.className))).toBe(true);
   });
 
-  it('says why in visible text, and the button points at it', async () => {
+  it('stays disabled, without a stale hint, once the automatic scan has run and measured nothing', async () => {
+    // "Preview first to see what will be freed" used to be the only
+    // explanation while Clean was off. The scan that hint pointed at now
+    // runs automatically and has usually already finished by the time
+    // anyone can read the screen, so the hint (and the aria-describedby
+    // that named it) correctly goes with it -- Clean must still refuse to
+    // open, just without a leftover sentence about a step that already
+    // happened.
     const user = userEvent.setup();
     renderScreen(<DeepClean />);
     await tickAll(user);
+    await waitFor(() => expect(document.querySelector('.animate-spin')).toBeNull());
 
-    const hint = screen.getByText('Preview first to see what will be freed.');
-    expect(hint.id).toBeTruthy();
-    expect(cleanButton().getAttribute('aria-describedby')).toBe(hint.id);
+    expect(cleanButton().disabled).toBe(true);
+    expect(screen.queryByText('Preview first to see what will be freed.')).toBeNull();
+    expect(cleanButton().getAttribute('aria-describedby')).toBeNull();
     expect(cleanButton().getAttribute('title')).toBeNull();
   });
 
@@ -204,16 +230,18 @@ describe('the scan-in-progress spinner', () => {
     // a scan paused between two rules looked identical to one that had
     // stopped. This is the one element in the panel that moves on its
     // own for as long as the scan is actually running.
+    //
+    // Set before render, so the automatic scan is what runs into this --
+    // no manual click needed, or even possible: Stop, not Preview, is
+    // what's on screen for as long as this stays unresolved.
     let finish;
     streamDeepCleanScan.mockImplementation((onEvent) => {
       onEvent('start', { total: 2 });
       return new Promise((resolve) => { finish = resolve; });
     });
-    const user = userEvent.setup();
     renderScreen(<DeepClean />);
     await screen.findByText('Temporary files');
 
-    await user.click(screen.getAllByRole('button', { name: 'Preview' })[0]);
     await waitFor(() => expect(document.querySelector('.animate-spin')).toBeTruthy());
 
     await act(async () => { finish(); });
@@ -375,14 +403,15 @@ describe('the clean-in-progress output', () => {
 
 describe('what can be copied', () => {
   it('the reason a scan failed', async () => {
+    // The automatic scan on mount is the one call this `...Once` override
+    // actually reaches now; a manual click afterwards would start a
+    // second, clean scan and clear the very error this test checks for.
     streamDeepCleanScan.mockImplementationOnce(async (onEvent) => {
       onEvent('error', { message: 'Access is denied: C:\\Windows\\Prefetch' });
     });
-    const user = userEvent.setup();
     renderScreen(<DeepClean />);
     await screen.findByText('Temporary files');
 
-    await user.click(screen.getAllByRole('button', { name: 'Preview' })[0]);
     expect(isCopyable(await screen.findByText(/Couldn't scan: Access is denied/))).toBe(true);
   });
 
@@ -723,7 +752,8 @@ describe('what a finished scan does to the selection', () => {
     await waitFor(() =>
       expect(screen.getByRole('checkbox', { name: 'Cookies' }).getAttribute('aria-checked')).toBe('true'));
 
-    await user.click(screen.getByRole('button', { name: 'Preview' }));
+    await waitFor(() => expect(screen.getAllByRole('button', { name: PREVIEW_OR_RESCAN }).length).toBeGreaterThan(0));
+    await user.click(screen.getByRole('button', { name: PREVIEW_OR_RESCAN }));
 
     // Still ticked. The scan measured it; the user chose it; neither of
     // those is a reason to drop it.
