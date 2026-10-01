@@ -46,6 +46,11 @@ vi.mock('../services/settings.js', () => ({
   updateSettings: async (p) => p
 }));
 
+const executeRulesElevated = vi.fn(async (ruleIds) => ({ ok: true, data: { freedBytes: 5 * ruleIds.length, movedBytes: 0, results: [] } }));
+vi.mock('../services/elevatedClean.js', () => ({
+  executeRulesElevated: (...a) => executeRulesElevated(...a)
+}));
+
 const estimateWipe = vi.fn(async () => ({ drive: 'C:', freeBytes: 10, totalBytes: 100, reserveBytes: 2, bytesToWrite: 8, bytesPerSecond: 4, seconds: 2 }));
 let wipeRunning = false;
 vi.mock('../lib/cleanerActions/wipeFreeSpace.js', () => ({
@@ -101,6 +106,41 @@ describe('POST /deep-clean/execute', () => {
     const res = await server.call('/deep-clean/execute');
     expect(res.status).toBe(404);
     expect(executeRules).not.toHaveBeenCalled();
+  });
+});
+
+const executeElevated = (body) => server.call('/deep-clean/execute-elevated', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: body === undefined ? undefined : JSON.stringify(body)
+});
+
+describe('POST /deep-clean/execute-elevated', () => {
+  it('refuses anything that is not a non-empty list of rules', async () => {
+    for (const body of [undefined, {}, { ruleIds: [] }, { ruleIds: 'temp' }, { ruleIds: null }]) {
+      const res = await executeElevated(body);
+      expect(res.status, JSON.stringify(body)).toBe(400);
+    }
+    expect(executeRulesElevated).not.toHaveBeenCalled();
+  });
+
+  it("carries the user's exclusions into the elevated deletion, same as the unelevated route", async () => {
+    const res = await executeElevated({ ruleIds: ['windows_prefetch'] });
+    expect(res.status).toBe(200);
+    expect(executeRulesElevated).toHaveBeenCalledWith(['windows_prefetch'], guards);
+  });
+
+  it('passes a declined UAC prompt straight through, not as a 500', async () => {
+    executeRulesElevated.mockResolvedValueOnce({ ok: false, cancelled: true });
+    const res = await executeElevated({ ruleIds: ['windows_prefetch'] });
+    expect(res.status).toBe(200);
+    expect(res.body).toEqual({ ok: false, cancelled: true });
+  });
+
+  it('is not reachable by a GET', async () => {
+    const res = await server.call('/deep-clean/execute-elevated');
+    expect(res.status).toBe(404);
+    expect(executeRulesElevated).not.toHaveBeenCalled();
   });
 });
 

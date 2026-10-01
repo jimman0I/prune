@@ -556,6 +556,25 @@ export async function executeDeepClean(ruleIds) {
   return data;
 }
 
+/** The same clean, run elevated -- for the rules a scan already marked
+ * `accessible: false` (a folder Windows won't list without
+ * administrator). Raises a real UAC prompt every call; only ever reached
+ * from a button the user pressed after seeing which rules it covers.
+ * Returns the discriminated { ok, data } / { ok:false, cancelled } /
+ * { ok:false, error } shape elevated.js's callers all use -- a declined
+ * prompt is a normal outcome, not a thrown error, so this never throws
+ * on `cancelled`. */
+export async function executeDeepCleanElevated(ruleIds) {
+  const res = await fetch(`${API_URL}/deep-clean/execute-elevated`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ ruleIds })
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
+  return data;
+}
+
 export async function fetchDiskHealth() {
   const res = await fetch(`${API_URL}/disk-health`);
   const data = await res.json();
