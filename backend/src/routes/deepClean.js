@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { scanAllRules, executeRules, executeRulesProgressively, scanRulesProgressively, loadCleanerRules, rulePathsExist } from '../lib/cleanerRules.js';
 import { getSettings, cleanGuardsFrom } from '../services/settings.js';
+import { executeRulesElevated } from '../services/elevatedClean.js';
 import { getCleanerCategoryIcons } from '../services/cleanerCategoryIcons.js';
 import { listCookieDomains } from '../lib/cleanerActions/cookieDomains.js';
 import { listInstalledPrograms } from '../services/programs.js';
@@ -215,6 +216,27 @@ router.post('/execute', async (req, res) => {
   }
   try {
     res.json(await executeRules(ruleIds, cleanGuardsFrom(await getSettings())));
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+/** The same clean as POST /execute, but from an elevated process -- for
+ * the specific rules a scan already reported `accessible: false` on
+ * (Prefetch, the Defender log folders: directories Windows won't even
+ * list without administrator). Raises a real UAC prompt every call; the
+ * frontend only ever reaches this from a button the user pressed after
+ * seeing which rules it covers, never automatically. A declined prompt
+ * is an ordinary outcome (`cancelled: true`), not a 500. */
+router.post('/execute-elevated', async (req, res) => {
+  const { ruleIds } = req.body || {};
+  if (!Array.isArray(ruleIds) || ruleIds.length === 0) {
+    res.status(400).json({ error: 'ruleIds (a non-empty array) is required' });
+    return;
+  }
+  try {
+    const result = await executeRulesElevated(ruleIds, cleanGuardsFrom(await getSettings()));
+    res.json(result);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

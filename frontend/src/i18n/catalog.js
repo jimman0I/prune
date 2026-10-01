@@ -630,6 +630,8 @@ export const CATALOG = {
       resultWiped: (size) => `Wrote ${size} of zeros over the free space, then deleted it. No space was freed.`,
       resultWipeStopped: (size) => `Stopped after writing ${size} of zeros over the free space. The filler was deleted.`,
       resultLockedSuffix: (count) => ` — skipped ${count} locked ${count === 1 ? 'file' : 'files'}`,
+      needsAdminBanner: (count) => `${count} ${count === 1 ? 'item needs' : 'items need'} administrator access to measure and clean.`,
+      cleanAsAdmin: 'Clean as administrator',
       before: {
         body: 'Prune measures every category on disk for real rather than estimating, which takes about half a minute.',
         scanning: 'Scanning…',
@@ -1516,6 +1518,8 @@ export const CATALOG = {
       resultWiped: (size) => `${size} nulle oor die vrye spasie geskryf en dit daarna verwyder. Geen spasie is vrygemaak nie.`,
       resultWipeStopped: (size) => `Gestop nadat ${size} nulle oor die vrye spasie geskryf is. Die vullêer is verwyder.`,
       resultLockedSuffix: (count) => ` — ${count} geslote lêer${count === 1 ? '' : 's'} oorgeslaan`,
+      needsAdminBanner: (count) => `${count} item${count === 1 ? '' : 's'} het administrateurtoegang nodig om te meet en skoon te maak.`,
+      cleanAsAdmin: 'Skoonmaak as administrateur',
       before: {
         body: 'Prune meet elke kategorie regtig op skyf eerder as om te beraam, wat omtrent \'n halwe minuut neem.',
         scanning: 'Skandeer tans…',
@@ -2402,6 +2406,8 @@ export const CATALOG = {
       resultWiped: (size) => `تمت كتابة ${size} من الأصفار فوق المساحة الفارغة ثم حُذفت. لم تتحرر أي مساحة.`,
       resultWipeStopped: (size) => `توقفت العملية بعد كتابة ${size} من الأصفار فوق المساحة الفارغة. وقد حُذف ملف التعبئة.`,
       resultLockedSuffix: (count) => ` — تم تخطي ${count} ملف مقفل`,
+      needsAdminBanner: (count) => `يحتاج ${count} ${count === 1 ? 'عنصر' : 'عناصر'} إلى صلاحيات المسؤول للقياس والتنظيف.`,
+      cleanAsAdmin: 'التنظيف كمسؤول',
       before: {
         body: 'يقيس Prune كل فئة على القرص فعليًا بدلاً من التقدير، وهو ما يستغرق حوالي نصف دقيقة.',
         scanning: 'جارٍ الفحص…',
@@ -3288,6 +3294,8 @@ export const CATALOG = {
       resultWiped: (size) => `S'han escrit ${size} de zeros sobre l'espai lliure i després s'han eliminat. No s'ha alliberat cap espai.`,
       resultWipeStopped: (size) => `Aturat després d'escriure ${size} de zeros sobre l'espai lliure. El fitxer de farciment s'ha eliminat.`,
       resultLockedSuffix: (count) => ` — ${count} ${count === 1 ? 'fitxer bloquejat omès' : 'fitxers bloquejats omesos'}`,
+      needsAdminBanner: (count) => `${count} ${count === 1 ? "element necessita" : 'elements necessiten'} accés d'administrador per mesurar-lo i netejar-lo.`,
+      cleanAsAdmin: 'Neteja com a administrador',
       before: {
         body: 'El Prune mesura cada categoria al disc de veritat en lloc d\'estimar-la, cosa que triga uns trenta segons.',
         scanning: 'Escanejant…',
@@ -4174,6 +4182,8 @@ export const CATALOG = {
       resultWiped: (size) => `Volné místo bylo přepsáno nulami (${size}) a vyplňovací soubor byl smazán. Žádné místo se neuvolnilo.`,
       resultWipeStopped: (size) => `Zastaveno po zapsání nul (${size}) do volného místa. Vyplňovací soubor byl smazán.`,
       resultLockedSuffix: (count) => ` — přeskočeno ${count} ${count === 1 ? 'uzamčený soubor' : (count >= 2 && count <= 4) ? 'uzamčené soubory' : 'uzamčených souborů'}`,
+      needsAdminBanner: (count) => { const w = count === 1 ? 'položka vyžaduje' : (count >= 2 && count <= 4) ? 'položky vyžadují' : 'položek vyžaduje'; return `${count} ${w} oprávnění správce k změření a vyčištění.`; },
+      cleanAsAdmin: 'Vyčistit jako správce',
       before: {
         body: 'Prune měří každou kategorii na disku skutečně, místo aby ji odhadoval, což trvá zhruba půl minuty.',
         scanning: 'Skenování…',
@@ -5058,6 +5068,8 @@ export const CATALOG = {
       resultWiped: (size) => `Ysgrifennwyd ${size} o seroau dros y lle rhydd, yna cawsant eu dileu. Ni ryddhawyd unrhyw le.`,
       resultWipeStopped: (size) => `Stopiwyd ar ôl ysgrifennu ${size} o seroau dros y lle rhydd. Dilëwyd y ffeil llenwi.`,
       resultLockedSuffix: (count) => ` — ${count} ffeil ar glo wedi'u hepgor`,
+      needsAdminBanner: (count) => `Mae angen mynediad gweinyddwr ar ${count} eitem i'w mesur a'u glanhau.`,
+      cleanAsAdmin: 'Glanhau fel gweinyddwr',
       before: {
         body: "Mae Prune yn mesur pob categori ar y ddisg go iawn yn hytrach na dyfalu, sy'n cymryd tua hanner munud.",
         scanning: 'Sganio…',
@@ -5944,6 +5956,8 @@ export const CATALOG = {
       resultWiped: (size) => `Skrev ${size} nuller over den ledige plads og slettede dem derefter. Der blev ikke frigjort plads.`,
       resultWipeStopped: (size) => `Stoppet efter at have skrevet ${size} nuller over den ledige plads. Fyldfilen blev slettet.`,
       resultLockedSuffix: (count) => ` — sprang ${count} ${count === 1 ? 'låst fil' : 'låste filer'} over`,
+      needsAdminBanner: (count) => `${count} ${count === 1 ? 'element kræver' : 'elementer kræver'} administratoradgang for at blive målt og ryddet op.`,
+      cleanAsAdmin: 'Ryd op som administrator',
       before: {
         body: "Prune måler hver kategori på disken i stedet for at anslå. Det tager cirka et halvt minut.",
         scanning: 'Scanner…',
@@ -6830,6 +6844,8 @@ export const CATALOG = {
       resultWiped: (size) => `${size} an Nullen über den freien Speicherplatz geschrieben und anschließend gelöscht. Es wurde kein Speicherplatz freigegeben.`,
       resultWipeStopped: (size) => `Abgebrochen, nachdem ${size} an Nullen in den freien Speicherplatz geschrieben wurden. Die Fülldatei wurde gelöscht.`,
       resultLockedSuffix: (count) => ` — ${count} gesperrte Datei${count === 1 ? '' : 'en'} übersprungen`,
+      needsAdminBanner: (count) => `${count} Element${count === 1 ? '' : 'e'} benötig${count === 1 ? 't' : 'en'} Administratorrechte zum Messen und Bereinigen.`,
+      cleanAsAdmin: 'Als Administrator bereinigen',
       before: {
         body: "Prune misst jede Kategorie tatsächlich auf der Festplatte, statt zu schätzen. Das dauert etwa eine halbe Minute.",
         scanning: 'Wird gescannt…',
@@ -7716,6 +7732,8 @@ export const CATALOG = {
       resultWiped: (size) => `Γράφτηκαν μηδενικά συνολικού μεγέθους ${size} πάνω από τον ελεύθερο χώρο και στη συνέχεια διαγράφηκαν. Δεν ελευθερώθηκε χώρος.`,
       resultWipeStopped: (size) => `Διακόπηκε μετά την εγγραφή μηδενικών συνολικού μεγέθους ${size} πάνω από τον ελεύθερο χώρο. Το αρχείο πλήρωσης διαγράφηκε.`,
       resultLockedSuffix: (count) => ` — παραλείφθηκ${count === 1 ? 'ε' : 'αν'} ${count} κλειδωμέν${count === 1 ? 'ο αρχείο' : 'α αρχεία'}`,
+      needsAdminBanner: (count) => `${count} στοιχε${count === 1 ? 'ίο χρειάζεται' : 'ία χρειάζονται'} δικαιώματα διαχειριστή για μέτρηση και καθαρισμό.`,
+      cleanAsAdmin: 'Καθαρισμός ως διαχειριστής',
       before: {
         body: 'Το Prune μετρά κάθε κατηγορία πραγματικά στον δίσκο αντί να εκτιμά, κάτι που διαρκεί περίπου μισό λεπτό.',
         scanning: 'Σάρωση…',
@@ -8602,6 +8620,8 @@ export const CATALOG = {
       resultWiped: (size) => `Se escribieron ${size} de ceros sobre el espacio libre y luego se eliminaron. No se liberó espacio.`,
       resultWipeStopped: (size) => `Detenido tras escribir ${size} de ceros sobre el espacio libre. El archivo de relleno se eliminó.`,
       resultLockedSuffix: (count) => ` — ${count} archivo${count === 1 ? '' : 's'} bloqueado${count === 1 ? '' : 's'} omitido${count === 1 ? '' : 's'}`,
+      needsAdminBanner: (count) => `${count} elemento${count === 1 ? '' : 's'} necesita${count === 1 ? '' : 'n'} acceso de administrador para medirse y limpiarse.`,
+      cleanAsAdmin: 'Limpiar como administrador',
       before: {
         body: 'Prune mide cada categoría realmente en el disco en lugar de estimarla, lo que toma alrededor de medio minuto.',
         scanning: 'Escaneando…',
@@ -9488,6 +9508,8 @@ export const CATALOG = {
       resultWiped: (size) => `Vabale ruumile kirjutati ${size} nulle ja need kustutati seejärel. Ruumi ei vabanenud.`,
       resultWipeStopped: (size) => `Peatati pärast seda, kui vabale ruumile oli kirjutatud ${size} nulle. Täitefail kustutati.`,
       resultLockedSuffix: (count) => ` — jäeti vahele ${count} lukustatud fail${count === 1 ? '' : 'i'}`,
+      needsAdminBanner: (count) => `${count} üksus${count === 1 ? '' : 't'} vajab mõõtmiseks ja puhastamiseks administraatoriõigusi.`,
+      cleanAsAdmin: 'Puhasta administraatorina',
       before: {
         body: 'Prune mõõdab iga kategooriat kettal tegelikult, mitte ei hinda seda, mis võtab aega umbes pool minutit.',
         scanning: 'Skannimine…',
@@ -10374,6 +10396,8 @@ export const CATALOG = {
       resultWiped: (size) => `Vapaan tilan päälle kirjoitettiin ${size} nollia, minkä jälkeen ne poistettiin. Tilaa ei vapautunut.`,
       resultWipeStopped: (size) => `Pysäytettiin, kun vapaan tilan päälle oli kirjoitettu ${size} nollia. Täytetiedosto poistettiin.`,
       resultLockedSuffix: (count) => ` — ohitettiin ${count} ${count === 1 ? 'lukittu tiedosto' : 'lukittua tiedostoa'}`,
+      needsAdminBanner: (count) => `${count} ${count === 1 ? 'kohde tarvitsee' : 'kohdetta tarvitsee'} järjestelmänvalvojan oikeudet mittaamista ja puhdistamista varten.`,
+      cleanAsAdmin: 'Puhdista järjestelmänvalvojana',
       before: {
         body: "Prune mittaa jokaisen kategorian levyltä oikeasti arvioimisen sijaan. Siihen menee noin puoli minuuttia.",
         scanning: 'Skannataan…',
@@ -11260,6 +11284,8 @@ export const CATALOG = {
       resultWiped: (size) => `${size} de zéros écrits sur l'espace libre, puis supprimés. Aucun espace n'a été libéré.`,
       resultWipeStopped: (size) => `Arrêté après l'écriture de ${size} de zéros sur l'espace libre. Le fichier de remplissage a été supprimé.`,
       resultLockedSuffix: (count) => ` — ${count} fichier${count === 1 ? '' : 's'} verrouillé${count === 1 ? '' : 's'} ignoré${count === 1 ? '' : 's'}`,
+      needsAdminBanner: (count) => `${count} élément${count === 1 ? '' : 's'} nécessite${count === 1 ? '' : 'nt'} un accès administrateur pour être mesuré${count === 1 ? '' : 's'} et nettoyé${count === 1 ? '' : 's'}.`,
+      cleanAsAdmin: 'Nettoyer en tant qu\'administrateur',
       before: {
         body: "Prune mesure réellement chaque catégorie sur le disque plutôt que de l'estimer, ce qui prend environ une demi-minute.",
         scanning: 'Analyse en cours…',
@@ -12146,6 +12172,8 @@ export const CATALOG = {
       resultWiped: (size) => `נכתבו אפסים בנפח ${size} על השטח הפנוי, ואז נמחקו. לא שוחרר מקום.`,
       resultWipeStopped: (size) => `נעצר אחרי שנכתבו אפסים בנפח ${size} על השטח הפנוי. קובץ המילוי נמחק.`,
       resultLockedSuffix: (count) => count === 1 ? ' — דולג קובץ נעול אחד' : count === 2 ? ' — דולגו שני קבצים נעולים' : ` — דולגו ${count} קבצים נעולים`,
+      needsAdminBanner: (count) => count === 1 ? 'פריט אחד דורש הרשאות מנהל כדי למדוד ולנקות אותו.' : `${count} פריטים דורשים הרשאות מנהל כדי למדוד ולנקות אותם.`,
+      cleanAsAdmin: 'נקה כמנהל',
       before: {
         body: 'Prune מודד כל קטגוריה על הדיסק בפועל במקום להעריך, מה שלוקח כחצי דקה.',
         scanning: 'סורק…',
@@ -13032,6 +13060,8 @@ export const CATALOG = {
       resultWiped: (size) => `A szabad terület felülírva ${size} nullával, majd a kitöltőfájl törlődött. Nem szabadult fel hely.`,
       resultWipeStopped: (size) => `Leállítva ${size} nulla kiírása után. A kitöltőfájl törlődött.`,
       resultLockedSuffix: (count) => ` — ${count} zárolt fájl kihagyva`,
+      needsAdminBanner: (count) => `${count} elemhez rendszergazdai jogosultság szükséges a méréshez és a tisztításhoz.`,
+      cleanAsAdmin: 'Tisztítás rendszergazdaként',
       before: {
         body: 'A Prune ténylegesen méri a lemezen minden kategóriát becslés helyett, ami körülbelül fél percet vesz igénybe.',
         scanning: 'Vizsgálat…',
@@ -13918,6 +13948,8 @@ export const CATALOG = {
       resultWiped: (size) => `${size} angka nol ditulis menimpa ruang kosong, lalu dihapus. Tidak ada ruang yang dibebaskan.`,
       resultWipeStopped: (size) => `Dihentikan setelah menulis ${size} angka nol menimpa ruang kosong. File pengisi sudah dihapus.`,
       resultLockedSuffix: (count) => ` — melewati ${count} berkas terkunci`,
+      needsAdminBanner: (count) => `${count} item memerlukan akses administrator untuk diukur dan dibersihkan.`,
+      cleanAsAdmin: 'Bersihkan sebagai administrator',
       before: {
         body: 'Prune benar-benar mengukur setiap kategori di disk alih-alih memperkirakan, yang memakan waktu sekitar setengah menit.',
         scanning: 'Memindai…',
@@ -14804,6 +14836,8 @@ export const CATALOG = {
       resultWiped: (size) => `Skrifaði ${size} af núllum yfir laust pláss og eyddi þeim síðan. Ekkert pláss losnaði.`,
       resultWipeStopped: (size) => `Stöðvað eftir að ${size} af núllum voru skrifuð yfir laust pláss. Fyllingarskránni var eytt.`,
       resultLockedSuffix: (count) => ` — sleppti ${count} ${count === 1 ? 'læstri skrá' : 'læstum skrám'}`,
+      needsAdminBanner: (count) => `${count} ${count === 1 ? 'atriði þarf' : 'atriði þurfa'} stjórnandaaðgang til að mæla og hreinsa.`,
+      cleanAsAdmin: 'Hreinsa sem stjórnandi',
       before: {
         body: 'Prune mælir hvern flokk raunverulega á disknum frekar en að áætla, sem tekur um hálfa mínútu.',
         scanning: 'Skanna…',
@@ -15690,6 +15724,8 @@ export const CATALOG = {
       resultWiped: (size) => `Scritti ${size} di zeri sullo spazio libero, poi eliminati. Non è stato liberato spazio.`,
       resultWipeStopped: (size) => `Interrotto dopo aver scritto ${size} di zeri sullo spazio libero. Il file di riempimento è stato eliminato.`,
       resultLockedSuffix: (count) => ` — ${count === 1 ? 'saltato' : 'saltati'} ${count} ${count === 1 ? 'file bloccato' : 'file bloccati'}`,
+      needsAdminBanner: (count) => `${count} element${count === 1 ? 'o richiede' : 'i richiedono'} accesso come amministratore per essere misurat${count === 1 ? 'o' : 'i'} e pulit${count === 1 ? 'o' : 'i'}.`,
+      cleanAsAdmin: 'Pulisci come amministratore',
       before: {
         body: 'Prune misura davvero ogni categoria sul disco anziché stimarla, il che richiede circa mezzo minuto.',
         scanning: 'Scansione…',
@@ -16576,6 +16612,8 @@ export const CATALOG = {
       resultWiped: (size) => `空き領域に ${size} のゼロを書き込み、書き込みに使った一時ファイルを削除しました。解放された容量はありません。`,
       resultWipeStopped: (size) => `空き領域への ${size} のゼロの書き込み後に停止しました。書き込みに使った一時ファイルは削除されました。`,
       resultLockedSuffix: (count) => ` — ロックされたファイルを ${count} 件スキップしました`,
+      needsAdminBanner: (count) => `${count} 件の項目を測定・削除するには管理者権限が必要です。`,
+      cleanAsAdmin: '管理者として削除',
       before: {
         body: 'Prune は推定ではなく、ディスク上のすべてのカテゴリを実際に測定します。これには約30秒かかります。',
         scanning: 'スキャン中…',
@@ -17462,6 +17500,8 @@ export const CATALOG = {
       resultWiped: (size) => `빈 공간에 0을 ${size}만큼 기록한 뒤 채우기용 파일을 삭제했습니다. 확보된 공간은 없습니다.`,
       resultWipeStopped: (size) => `빈 공간에 0을 ${size}만큼 기록한 뒤 중지했습니다. 채우기용 파일은 삭제되었습니다.`,
       resultLockedSuffix: (count) => ` — 잠긴 파일 ${count}개를 건너뜀`,
+      needsAdminBanner: (count) => `${count}개 항목을 측정하고 정리하려면 관리자 권한이 필요합니다.`,
+      cleanAsAdmin: '관리자로 정리',
       before: {
         body: 'Prune은 추정하지 않고 디스크의 모든 카테고리를 실제로 측정하며, 약 30초 정도 걸립니다.',
         scanning: "검사 중…",
@@ -18348,6 +18388,8 @@ export const CATALOG = {
       resultWiped: (size) => `Laisva vieta perrašyta nuliais (${size}), po to užpildymo failas ištrintas. Vieta neatlaisvinta.`,
       resultWipeStopped: (size) => `Sustabdyta po to, kai laisva vieta perrašyta nuliais (${size}). Užpildymo failas ištrintas.`,
       resultLockedSuffix: (count) => ` — praleista užrakintų failų: ${count}`,
+      needsAdminBanner: (count) => `${count} element${count === 1 ? 'ui reikia' : 'ams reikia'} administratoriaus teisių, kad būtų galima išmatuoti ir išvalyti.`,
+      cleanAsAdmin: 'Valyti administratoriaus teisėmis',
       before: {
         body: '„Prune“ realiai matuoja kiekvieną kategoriją diske, o ne apskaičiuoja, o tai užtrunka apie pusę minutės.',
         scanning: 'Nuskaitoma…',
@@ -19232,6 +19274,8 @@ export const CATALOG = {
       resultWiped: (size) => `${size} sifar ditulis ke atas ruang kosong, kemudian dipadam. Tiada ruang dibebaskan.`,
       resultWipeStopped: (size) => `Dihentikan selepas menulis ${size} sifar ke atas ruang kosong. Fail pengisi telah dipadam.`,
       resultLockedSuffix: (count) => ` — ${count} fail yang dikunci dilangkau`,
+      needsAdminBanner: (count) => `${count} item memerlukan akses pentadbir untuk diukur dan dibersihkan.`,
+      cleanAsAdmin: 'Bersihkan sebagai pentadbir',
       before: {
         body: 'Prune mengukur setiap kategori pada cakera secara sebenar bukannya menganggar, yang mengambil masa kira-kira setengah minit.',
         scanning: 'Mengimbas…',
@@ -20118,6 +20162,8 @@ export const CATALOG = {
       resultWiped: (size)=>`Skrev ${size} nuller over den ledige plassen og slettet deretter fyllfilen. Ingen plass ble frigjort.`,
       resultWipeStopped: (size)=>`Stoppet etter å ha skrevet ${size} nuller over den ledige plassen. Fyllfilen ble slettet.`,
       resultLockedSuffix: (count) => ` — hoppet over ${count} ${count === 1 ? 'låst fil' : 'låste filer'}`,
+      needsAdminBanner: (count) => `${count} ${count === 1 ? 'element krever' : 'elementer krever'} administratortilgang for å bli målt og ryddet opp.`,
+      cleanAsAdmin: 'Rydd opp som administrator',
       before: {
         body: 'Prune måler hver kategori faktisk på disken i stedet for å anslå, noe som tar rundt et halvt minutt.',
         scanning: 'Skanner…',
@@ -21002,6 +21048,8 @@ export const CATALOG = {
       resultWiped: (size)=>`${size} aan nullen over de vrije ruimte geschreven en daarna het opvulbestand verwijderd. Er is geen ruimte vrijgemaakt.`,
       resultWipeStopped: (size)=>`Gestopt na het schrijven van ${size} aan nullen over de vrije ruimte. Het opvulbestand is verwijderd.`,
       resultLockedSuffix: (count) => ` — ${count} vergrendeld${count === 1 ? ' bestand' : 'e bestanden'} overgeslagen`,
+      needsAdminBanner: (count) => `${count} item${count === 1 ? '' : 's'} ${count === 1 ? 'heeft' : 'hebben'} beheerderstoegang nodig om gemeten en opgeschoond te worden.`,
+      cleanAsAdmin: 'Opschonen als beheerder',
       before: {
         body: 'Prune meet elke categorie daadwerkelijk op de schijf in plaats van te schatten, wat ongeveer een halve minuut duurt.',
         scanning: 'Bezig met scannen…',
@@ -21886,6 +21934,8 @@ export const CATALOG = {
       resultWiped: (size) => `Wolne miejsce nadpisano zerami (${size}), po czym plik wypełniający usunięto. Nie zwolniono miejsca.`,
       resultWipeStopped: (size) => `Zatrzymano po zapisaniu zer (${size}) w wolnym miejscu. Plik wypełniający usunięto.`,
       resultLockedSuffix: (count) => { const m10 = count % 10, m100 = count % 100; const w = count === 1 ? 'zablokowany plik' : (m10 >= 2 && m10 <= 4 && (m100 < 12 || m100 > 14)) ? 'zablokowane pliki' : 'zablokowanych plików'; return ` — pominięto ${count} ${w}`; },
+      needsAdminBanner: (count) => { const m10 = count % 10, m100 = count % 100; const w = count === 1 ? 'element wymaga' : (m10 >= 2 && m10 <= 4 && (m100 < 12 || m100 > 14)) ? 'elementy wymagają' : 'elementów wymaga'; return `${count} ${w} uprawnień administratora do zmierzenia i wyczyszczenia.`; },
+      cleanAsAdmin: 'Wyczyść jako administrator',
       before: {
         body: 'Prune rzeczywiście mierzy każdą kategorię na dysku zamiast ją szacować, co zajmuje około pół minuty.',
         scanning: 'Skanowanie…',
@@ -22770,6 +22820,8 @@ export const CATALOG = {
       resultWiped: (size) => `په وړیا ځای کې ${size} صفرونه ولیکل شول او بیا ړنګ شول. هیڅ ځای نه دی خلاص شوی.`,
       resultWipeStopped: (size) => `په وړیا ځای کې د ${size} صفرونو لیکلو وروسته ودرول شو. ډکوونکی فایل ړنګ شو.`,
       resultLockedSuffix: (count) => count === 1 ? ' — 1 تړل شوی فایل پریښودل شو' : ` — ${count} تړل شوي فایلونه پریښودل شوي`,
+      needsAdminBanner: (count) => count === 1 ? 'یو توکي ته د اندازه کولو او پاکولو لپاره د مدیر لاسرسی ته اړتیا ده.' : `${count} توکو ته د اندازه کولو او پاکولو لپاره د مدیر لاسرسی ته اړتیا ده.`,
+      cleanAsAdmin: 'د مدیر په توګه پاکول',
       before: {
         body: 'Prune په دیسک کې هره کټګوري واقعیا اندازه کوي نه چې اټکل یې کوي، دا شاوخوا نیم دقیقه وخت نیسي.',
         scanning: "سکین کیږي…",
@@ -23656,6 +23708,8 @@ export const CATALOG = {
       resultWiped: (size)=>`Foram gravados ${size} de zeros sobre o espaço livre e o arquivo de preenchimento foi excluído em seguida. Nenhum espaço foi liberado.`,
       resultWipeStopped: (size)=>`Interrompido após gravar ${size} de zeros sobre o espaço livre. O arquivo de preenchimento foi excluído.`,
       resultLockedSuffix: (count) => ` — ${count} arquivo${count === 1 ? '' : 's'} bloqueado${count === 1 ? '' : 's'} ignorado${count === 1 ? '' : 's'}`,
+      needsAdminBanner: (count) => `${count} ${count === 1 ? 'item precisa' : 'itens precisam'} de acesso de administrador para serem medidos e limpos.`,
+      cleanAsAdmin: 'Limpar como administrador',
       before: {
         body: 'O Prune mede de fato cada categoria no disco em vez de estimar, o que leva cerca de meio minuto.',
         scanning: 'Verificando…',
@@ -24540,6 +24594,8 @@ export const CATALOG = {
       resultWiped: (size)=>`Foram escritos ${size} de zeros sobre o espaço livre e o ficheiro de preenchimento foi eliminado a seguir. Não foi libertado espaço.`,
       resultWipeStopped: (size)=>`Interrompido depois de escrever ${size} de zeros sobre o espaço livre. O ficheiro de preenchimento foi eliminado.`,
       resultLockedSuffix: (count) => ` — ${count} ficheiro${count === 1 ? '' : 's'} bloqueado${count === 1 ? '' : 's'} ignorado${count === 1 ? '' : 's'}`,
+      needsAdminBanner: (count) => `${count} ${count === 1 ? 'item precisa' : 'itens precisam'} de acesso de administrador para serem medidos e limpos.`,
+      cleanAsAdmin: 'Limpar como administrador',
       before: {
         body: 'O Prune mede de facto cada categoria no disco em vez de a estimar, o que demora cerca de meio minuto.',
         scanning: "A analisar…",
@@ -25426,6 +25482,8 @@ export const CATALOG = {
       resultWiped: (size) => `S-au scris ${size} de zerouri peste spațiul liber, apoi fișierul de umplere a fost șters. Nu s-a eliberat spațiu.`,
       resultWipeStopped: (size) => `Oprit după ce s-au scris ${size} de zerouri peste spațiul liber. Fișierul de umplere a fost șters.`,
       resultLockedSuffix: (count) => { const d = count % 100 >= 1 && count % 100 < 20 ? '' : 'de '; return count === 1 ? ' — s-a omis 1 fișier blocat' : ` — s-au omis ${count} ${d}fișiere blocate`; },
+      needsAdminBanner: (count) => { const d = count % 100 >= 1 && count % 100 < 20 ? '' : 'de '; return count === 1 ? '1 element necesită acces de administrator pentru a fi măsurat și curățat.' : `${count} ${d}elemente necesită acces de administrator pentru a fi măsurate și curățate.`; },
+      cleanAsAdmin: 'Curăță ca administrator',
       before: {
         body: 'Prune măsoară efectiv fiecare categorie de pe disc în loc să o estimeze, ceea ce durează aproximativ jumătate de minut.',
         scanning: 'Se scanează…',
@@ -26312,6 +26370,8 @@ export const CATALOG = {
       resultWiped: (size) => `Свободное место перезаписано нулями (${size}), после чего файл-заполнитель удалён. Место не освобождено.`,
       resultWipeStopped: (size) => `Остановлено после записи нулей (${size}) в свободное место. Файл-заполнитель удалён.`,
       resultLockedSuffix: (count) => ` — пропущено заблокированных файлов: ${count}`,
+      needsAdminBanner: (count) => `Элементов, которым нужны права администратора для измерения и очистки: ${count}`,
+      cleanAsAdmin: 'Очистить от имени администратора',
       before: {
         body: "Prune действительно измеряет каждую категорию на диске, а не оценивает её, что занимает около полуминуты.",
         scanning: 'Сканирование…',
@@ -27196,6 +27256,8 @@ export const CATALOG = {
       resultWiped: (size) => `Voľné miesto bolo prepísané nulami (${size}) a vypĺňací súbor bol odstránený. Žiadne miesto sa neuvoľnilo.`,
       resultWipeStopped: (size) => `Zastavené po zapísaní núl (${size}) do voľného miesta. Vypĺňací súbor bol odstránený.`,
       resultLockedSuffix: (count) => ` — preskočené uzamknuté súbory: ${count}`,
+      needsAdminBanner: (count) => `Položiek, ktoré vyžadujú oprávnenia správcu na zmeranie a vyčistenie: ${count}`,
+      cleanAsAdmin: 'Vyčistiť ako správca',
       before: {
         body: 'Prune skutočne meria každú kategóriu na disku namiesto odhadu, čo trvá približne pol minúty.',
         scanning: 'Skenovanie…',
@@ -28080,6 +28142,8 @@ export const CATALOG = {
       resultWiped: (size) => `U shkruan ${size} zero mbi hapësirën e lirë, pastaj u fshinë. Nuk u lirua hapësirë.`,
       resultWipeStopped: (size) => `U ndal pasi u shkruan ${size} zero mbi hapësirën e lirë. Skedari mbushës u fshi.`,
       resultLockedSuffix: (count) => ` — ${count === 1 ? 'u anashkalua' : 'u anashkaluan'} ${count} ${count === 1 ? 'skedar i kyçur' : 'skedarë të kyçur'}`,
+      needsAdminBanner: (count) => `${count} ${count === 1 ? 'element kërkon' : 'elemente kërkojnë'} qasje si administrator për t'u matur dhe pastruar.`,
+      cleanAsAdmin: 'Pastro si administrator',
       before: {
         body: 'Prune mat vërtet çdo kategori në disk në vend që ta vlerësojë, gjë që zgjat rreth gjysmë minute.',
         scanning: 'Duke skanuar…',
@@ -28966,6 +29030,8 @@ export const CATALOG = {
       resultWiped: (size) => `Слободан простор је преписан нулама (${size}), а затим је датотека за попуну обрисана. Простор није ослобођен.`,
       resultWipeStopped: (size) => `Заустављено након што је слободан простор преписан нулама (${size}). Датотека за попуну је обрисана.`,
       resultLockedSuffix: (count) => ` — прескочено закључаних датотека: ${count}`,
+      needsAdminBanner: (count) => `Ставки којима су потребна администраторска права за мерење и чишћење: ${count}`,
+      cleanAsAdmin: 'Очисти као администратор',
       before: {
         body: 'Prune заиста мери сваку категорију на диску уместо да је процењује, што траје око пола минута.',
         scanning: 'Скенирање…',
@@ -29850,6 +29916,8 @@ export const CATALOG = {
       resultWiped: (size)=>`Skrev ${size} nollor över det lediga utrymmet och raderade sedan fyllnadsfilen. Inget utrymme frigjordes.`,
       resultWipeStopped: (size)=>`Stoppade efter att ha skrivit ${size} nollor över det lediga utrymmet. Fyllnadsfilen raderades.`,
       resultLockedSuffix: (count) => ` — hoppade över ${count} ${count === 1 ? 'låst fil' : 'låsta filer'}`,
+      needsAdminBanner: (count) => `${count} objekt behöver administratörsbehörighet för att mätas och rensas.`,
+      cleanAsAdmin: 'Rensa som administratör',
       before: {
         body: 'Prune mäter faktiskt varje kategori på disken i stället för att uppskatta, vilket tar ungefär en halv minut.',
         scanning: 'Skannar…',
@@ -30734,6 +30802,8 @@ export const CATALOG = {
       resultWiped: (size) => `เขียนเลขศูนย์ ${size} ทับพื้นที่ว่างแล้วลบทิ้ง ไม่ได้เพิ่มพื้นที่ว่างแต่อย่างใด`,
       resultWipeStopped: (size) => `หยุดหลังจากเขียนเลขศูนย์ ${size} ทับพื้นที่ว่าง ไฟล์ที่ใช้เติมพื้นที่ถูกลบแล้ว`,
       resultLockedSuffix: (count) => ` — ข้าม ${count} ไฟล์ที่ถูกล็อก`,
+      needsAdminBanner: (count) => `${count} รายการต้องการสิทธิ์ผู้ดูแลระบบเพื่อวัดและล้างข้อมูล`,
+      cleanAsAdmin: 'ล้างข้อมูลในฐานะผู้ดูแลระบบ',
       before: {
         body: 'Prune วัดผลแต่ละหมวดหมู่บนดิสก์จริง แทนการประมาณ ซึ่งใช้เวลาประมาณครึ่งนาที',
         scanning: 'กำลังสแกน…',
@@ -31620,6 +31690,8 @@ export const CATALOG = {
       resultWiped: (size) => `Boş alanın üzerine ${size} sıfır yazıldı, ardından bu dolgu dosyası silindi. Hiç alan boşaltılmadı.`,
       resultWipeStopped: (size) => `Boş alanın üzerine ${size} sıfır yazıldıktan sonra durduruldu. Dolgu dosyası silindi.`,
       resultLockedSuffix: (count) => ` — ${count} kilitli dosya atlandı`,
+      needsAdminBanner: (count) => `${count} öge ölçülüp temizlenmek için yönetici erişimi gerektiriyor.`,
+      cleanAsAdmin: 'Yönetici olarak temizle',
       before: {
         body: "Prune, tahmin etmek yerine diskteki her kategoriyi gerçekten ölçer, bu da yaklaşık yarım dakika sürer.",
         scanning: 'Taranıyor…',
@@ -32506,6 +32578,8 @@ export const CATALOG = {
       resultWiped: (size) => `Вільне місце перезаписано нулями (${size}), після чого файл-заповнювач видалено. Місце не звільнено.`,
       resultWipeStopped: (size) => `Зупинено після запису нулів (${size}) у вільне місце. Файл-заповнювач видалено.`,
       resultLockedSuffix: (count) => ` — пропущено заблокованих файлів: ${count}`,
+      needsAdminBanner: (count) => `Елементів, яким потрібні права адміністратора для вимірювання й очищення: ${count}`,
+      cleanAsAdmin: 'Очистити від імені адміністратора',
       before: {
         body: 'Prune справді вимірює кожну категорію на диску, а не оцінює її, що займає близько півхвилини.',
         scanning: 'Сканування…',
@@ -33390,6 +33464,8 @@ export const CATALOG = {
       resultWiped: (size) => `Đã ghi ${size} số 0 đè lên dung lượng trống, rồi xóa tệp đệm. Không có dung lượng nào được giải phóng.`,
       resultWipeStopped: (size) => `Đã dừng sau khi ghi ${size} số 0 đè lên dung lượng trống. Tệp đệm đã được xóa.`,
       resultLockedSuffix: (count) => ` — đã bỏ qua ${count} tệp bị khóa`,
+      needsAdminBanner: (count) => `${count} mục cần quyền quản trị viên để đo và dọn dẹp.`,
+      cleanAsAdmin: 'Dọn dẹp với quyền quản trị viên',
       before: {
         body: 'Prune thực sự đo từng danh mục trên đĩa thay vì ước tính, việc này mất khoảng nửa phút.',
         scanning: 'Đang quét…',
@@ -34276,6 +34352,8 @@ export const CATALOG = {
       resultWiped: (size) => `已用零覆盖可用空间（共写入 ${size}），随后删除了填充文件。未释放任何空间。`,
       resultWipeStopped: (size) => `已在向可用空间写入 ${size} 的零后停止，填充文件已删除。`,
       resultLockedSuffix: (count) => ` — 跳过了 ${count} 个被锁定的文件`,
+      needsAdminBanner: (count) => `${count} 个项目需要管理员权限才能测量和清理。`,
+      cleanAsAdmin: '以管理员身份清理',
       before: {
         body: 'Prune 会实际测量磁盘上的每个类别，而不是估算，这大约需要半分钟。',
         scanning: '正在扫描…',
@@ -35162,6 +35240,8 @@ export const CATALOG = {
       resultWiped: (size) => `已用零覆寫可用空間（共寫入 ${size}），隨後刪除了填充檔案。未釋放任何空間。`,
       resultWipeStopped: (size) => `已在向可用空間寫入 ${size} 的零後停止，填充檔案已刪除。`,
       resultLockedSuffix: (count) => ` — 略過了 ${count} 個被鎖定的檔案`,
+      needsAdminBanner: (count) => `${count} 個項目需要管理員權限才能測量和清理。`,
+      cleanAsAdmin: '以系統管理員身分清理',
       before: {
         body: 'Prune 會實際測量磁碟上的每個類別，而不是估算，這大約需要半分鐘。',
         scanning: '正在掃描…',
