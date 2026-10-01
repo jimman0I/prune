@@ -73,8 +73,13 @@ export default function App() {
   // backend, so a warmed one can reply before the program list does, and
   // folding them into shared state used to let the slow list overwrite
   // the fast answer.
+  //
+  // Five of the eight only feed Applications (icons, versions, install
+  // dates, extensions, the running-process poll) and stay off, via
+  // `visited` -- the same tracking that decides which screens to mount --
+  // until that screen has actually been opened once this session.
   const { programs, icons, totalSize, extensions, running, loading, error, sizesSettled, refresh: refreshPrograms } =
-    useProgramData();
+    useProgramData({ loadDecorations: visited.has('applications') });
 
   /* What every one of the three dialogs does when it closes, however it was
    * closed (its own button, Escape, a Done). The single-program dialog used to

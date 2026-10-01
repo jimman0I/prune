@@ -37,23 +37,39 @@ import { keys } from '../lib/queryClient.js';
  * storm, and their absence is a supported state rather than an error. */
 const DECORATION = { retry: 1 };
 
-export function useProgramData() {
+/** `loadDecorations`: false defers every query below that only Applications
+ * itself can show -- icons, versions, install dates, extensions, and the
+ * running-process poll -- until that screen has actually been opened once
+ * (App.jsx passes `visited.has('applications')`, the same tracking it
+ * already keeps for which screens to mount).
+ *
+ * The list, the measured sizes and the Store apps stay eager regardless:
+ * Dashboard's own space breakdown and largest-programs list need them
+ * immediately, and `sizesSettled` below already gates Dashboard's drawing
+ * on the two that matter to it. Nothing downstream of those three changes.
+ *
+ * The running-process query is the one worth deferring most: unlike the
+ * others, it is not a one-time read but a poll every 15 seconds, for as
+ * long as the app is open -- paid forever, in a session that may never
+ * open Applications at all, for a badge only that screen shows. */
+export function useProgramData({ loadDecorations = true } = {}) {
   const queryClient = useQueryClient();
+  const DEFERRED = { ...DECORATION, enabled: loadDecorations };
 
   const programsQuery = useQuery({ queryKey: keys.programs, queryFn: fetchPrograms });
   const storeQuery = useQuery({ queryKey: keys.storeApps, queryFn: fetchStoreApps, ...DECORATION });
   const sizesQuery = useQuery({ queryKey: keys.programSizes, queryFn: fetchProgramSizes, ...DECORATION });
-  const versionsQuery = useQuery({ queryKey: keys.programVersions, queryFn: fetchProgramVersions, ...DECORATION });
-  const datesQuery = useQuery({ queryKey: keys.installDates, queryFn: fetchProgramInstallDates, ...DECORATION });
-  const extensionsQuery = useQuery({ queryKey: keys.extensions, queryFn: fetchBrowserExtensions, ...DECORATION });
+  const versionsQuery = useQuery({ queryKey: keys.programVersions, queryFn: fetchProgramVersions, ...DEFERRED });
+  const datesQuery = useQuery({ queryKey: keys.installDates, queryFn: fetchProgramInstallDates, ...DEFERRED });
+  const extensionsQuery = useQuery({ queryKey: keys.extensions, queryFn: fetchBrowserExtensions, ...DEFERRED });
 
   // Two icon sources, one map. They come from genuinely different places
   // -- extracted from binaries, versus files sitting inside a package or
   // extension folder -- and the old code merged them into shared state
   // with a note that whichever landed second must not drop the first.
   // As two caches merged at render, that hazard does not exist.
-  const programIconsQuery = useQuery({ queryKey: keys.programIcons, queryFn: fetchProgramIcons, ...DECORATION });
-  const packageIconsQuery = useQuery({ queryKey: keys.packageIcons, queryFn: fetchPackageIcons, ...DECORATION });
+  const programIconsQuery = useQuery({ queryKey: keys.programIcons, queryFn: fetchProgramIcons, ...DEFERRED });
+  const packageIconsQuery = useQuery({ queryKey: keys.packageIcons, queryFn: fetchPackageIcons, ...DEFERRED });
 
   // The one thing that changes while the app is open. Everything else
   // here is stable for the session, so this is the only query that polls.
@@ -63,7 +79,7 @@ export function useProgramData() {
     queryFn: fetchRunningPrograms,
     refetchInterval: 15000,
     staleTime: 0,
-    ...DECORATION
+    ...DEFERRED
   });
 
   const programs = useMemo(() => [
