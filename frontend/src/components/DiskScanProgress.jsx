@@ -228,7 +228,7 @@ function Scanning({ path, percent, files, bytes, mode, elapsedMs, remainingMs, r
           <WalkTimeLeft remainingMs={remainingMs} remainingAt={remainingAt} />
           {showCounters && <Counters files={files} bytes={bytes} />}
           <p className="text-[12px] text-[color:var(--text-secondary)] mt-3 max-w-[52ch]">
-            {t('diskMap.loading.note')}
+            {t('diskMapV3.crawl.note')}
           </p>
           {!Number.isFinite(percent) && (
             <p className="text-[12px] text-[color:var(--text-muted)] mt-1.5 max-w-[52ch]">

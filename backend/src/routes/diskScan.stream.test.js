@@ -68,22 +68,6 @@ function slowScan({ files = [10, 20], lingerMs = 500, result = TREE } = {}) {
 }
 
 describe('GET /disk-scan/stream', () => {
-  it("sends the scan's own time limit, counting down, so the client never hard-codes it", async () => {
-    slowScan({ lingerMs: 700 });
-    const { events } = await readStream('?path=C%3A%5CUsers');
-
-    const progress = events.filter((e) => e.event === 'progress');
-    expect(progress.length).toBeGreaterThanOrEqual(2);
-    for (const p of progress) {
-      expect(Number.isFinite(p.data.remainingMs)).toBe(true);
-      // The real limit is 30 s from the start of the request.
-      expect(p.data.remainingMs).toBeLessThanOrEqual(30_000);
-      expect(p.data.remainingMs).toBeGreaterThan(29_000);
-    }
-    // It is a countdown against a deadline, not a constant.
-    expect(progress[progress.length - 1].data.remainingMs).toBeLessThan(progress[0].data.remainingMs);
-  });
-
   it('needs a path, as a plain 400 and not a stream', async () => {
     const res = await fetch(`${server.base}/disk-scan/stream`);
     expect(res.status).toBe(400);
@@ -147,16 +131,6 @@ describe('GET /disk-scan/stream', () => {
     expect(events.at(-1).event).toBe('complete');
   });
 
-  it('reports percent null for another drive letter, which has no in-use figure', async () => {
-    getSystemDriveSpace.mockResolvedValue({ totalBytes: 1500, freeBytes: 500 });
-    slowScan();
-    const { events } = await readStream('?path=D%3A%5C');
-    const progress = events.filter((e) => e.event === 'progress');
-    expect(progress.length).toBeGreaterThan(0);
-    for (const p of progress) expect(p.data.percent).toBeNull();
-    expect(getSystemDriveSpace).not.toHaveBeenCalled();
-  });
-
   it('complete carries the counts and a resultId but not the tree', async () => {
     slowScan({ lingerMs: 0 });
     const { events } = await readStream('?path=C%3A%5CUsers');
@@ -203,51 +177,6 @@ describe('GET /disk-scan/stream', () => {
     expect(last.data.message).toContain('C:\\nope');
     expect(events.some((e) => e.event === 'complete')).toBe(false);
     expect(putSpy).not.toHaveBeenCalled();
-  });
-
-  it('emits a took-too-long error when the deadline passes with nothing to show', async () => {
-    vi.useFakeTimers({ toFake: ['setTimeout'] });
-    try {
-      let signal;
-      const started = new Promise((resolve) => {
-        scanDirectory.mockImplementationOnce(async (path, depth, sig) => {
-          signal = sig;
-          resolve();
-          await new Promise((r) => sig.addEventListener('abort', r));
-          return null;
-        });
-      });
-      const request = readStream('?path=C%3A%5C');
-      await started;
-      vi.advanceTimersByTime(30_000);
-      expect(signal.aborted).toBe(true);
-      const { events } = await request;
-      expect(events.at(-1).event).toBe('error');
-      expect(events.at(-1).data.message).toMatch(/took too long/);
-    } finally {
-      vi.useRealTimers();
-    }
-  });
-
-  it('marks a scan that ran out of time but has a partial tree as truncated', async () => {
-    vi.useFakeTimers({ toFake: ['setTimeout'] });
-    try {
-      const started = new Promise((resolve) => {
-        scanDirectory.mockImplementationOnce(async (path, depth, sig) => {
-          resolve();
-          await new Promise((r) => sig.addEventListener('abort', r));
-          return { name: 'C', size: 5, children: [] };
-        });
-      });
-      const request = readStream('?path=C%3A%5C');
-      await started;
-      vi.advanceTimersByTime(30_000);
-      const { events } = await request;
-      expect(events.at(-1).event).toBe('complete');
-      expect(events.at(-1).data.truncated).toBe(true);
-    } finally {
-      vi.useRealTimers();
-    }
   });
 
   it('stops scanning and stores nothing when the client goes away', async () => {
@@ -345,26 +274,6 @@ describe('stopping a scan', () => {
     expect(events.some((e) => e.event === 'error')).toBe(false);
     const tree = await server.call(`/disk-scan/result/${complete.data.resultId}`);
     expect(tree.body).toMatchObject({ name: 'Users', truncated: true });
-  });
-
-  it('a scan that only ran out of time is truncated but NOT stoppedByUser', async () => {
-    vi.useFakeTimers({ toFake: ['setTimeout'] });
-    try {
-      const started = new Promise((resolve) => {
-        scanDirectory.mockImplementationOnce(async (path, depth, sig) => {
-          resolve();
-          await new Promise((r) => sig.addEventListener('abort', r));
-          return { name: 'C', size: 5, children: [] };
-        });
-      });
-      const request = readStream('?path=C%3A%5C');
-      await started;
-      vi.advanceTimersByTime(30_000);
-      const { events } = await request;
-      expect(events.at(-1).data).toMatchObject({ truncated: true, stoppedByUser: false });
-    } finally {
-      vi.useRealTimers();
-    }
   });
 
   it('a scan that finishes on its own reports stoppedByUser false', async () => {

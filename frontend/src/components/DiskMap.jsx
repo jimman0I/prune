@@ -27,6 +27,7 @@ import { FolderTable } from './FolderTable.jsx';
 import { SearchBox } from './SearchBox.jsx';
 import { PropertiesDialog } from './PropertiesDialog.jsx';
 import { SavedScansPanel } from './SavedScansPanel.jsx';
+import { prepareSnapshot } from '../lib/liveSnapshot.js';
 import { compactTree, expandArchive } from '../lib/compactTree.js';
 import { ExportButtons } from './ExportButtons.jsx';
 import { rowsToCsv, exportFileName } from '../lib/exportCsv.js';
@@ -233,7 +234,7 @@ export function DriveRootPrompt({ path, onFastScan, fastScanning, onCrawl, other
         <ScanOption
           title={t('diskMap.driveRootPrompt.crawlTitle')}
           explain={t('diskMap.driveRootPrompt.crawlExplain')}
-          note={t('diskMap.driveRootPrompt.crawlLimit')}
+          note={t('diskMapV3.crawl.limit')}
         >
           <button
             className={`${crawlFirst ? 'btn-primary px-4 text-[13px]' : 'btn-ghost px-3.5 text-[12.5px]'} py-2 rounded-lg font-medium`}
@@ -764,12 +765,26 @@ function DiskMap() {
   // The block for the part the scan never reached carries a stable English
   // key as its stored name; what is drawn is the catalog's wording.
   const unscannedLabel = t('diskMap.unscannedLabel');
-  const rawTree = fastSubtree ?? scanQuery.data ?? null;
-  const tree = useMemo(() => localizeUnscanned(rawTree, unscannedLabel), [rawTree, unscannedLabel]);
   const loading = shouldScan && scanQuery.isFetching;
   // Progress belongs to one path; a reading left over from another folder's
   // scan is never shown against this one.
   const progressHere = scanProgress?.path === currentPath ? scanProgress : null;
+  // While a folder walk runs, what it has read so far, drawn like any scan.
+  // It replaces whatever an earlier run left in the cache: during a re-scan the
+  // old picture would be stale and the new one is the live truth.
+  const liveSnapshot = loading ? progressHere?.snapshot ?? null : null;
+  const partialTree = useMemo(
+    () => prepareSnapshot(liveSnapshot, {
+      rootPath: currentPath,
+      usedBytes: usedBytesRef.current[currentLetter] ?? null,
+      atDriveRoot: isDriveRoot(currentPath),
+      aggregateLabel: (count) => t('diskMap.aggregateCell', count)
+    }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [liveSnapshot, currentPath, t]
+  );
+  const rawTree = fastSubtree ?? (loading ? partialTree : scanQuery.data) ?? null;
+  const tree = useMemo(() => localizeUnscanned(rawTree, unscannedLabel), [rawTree, unscannedLabel]);
   // A failed crawl is not worth reporting once the fast scan has answered
   // the same question -- the old code cleared this by hand after the MFT
   // read succeeded, and a derived error has to account for that itself.
@@ -777,6 +792,9 @@ function DiskMap() {
   const error = (!fastSubtree && scanQuery.error && !/abort/i.test(scanQuery.error.message || ''))
     ? scanQuery.error.message
     : null;
+  // The views are shown for a finished scan and, while one runs, for the
+  // partial picture of it. A scan that has read nothing yet shows only its card.
+  const showViews = !error && Boolean(tree) && (!loading || Boolean(partialTree));
 
 
   // Capped: a folder like System32 has ~1,900 direct children, and
@@ -1257,7 +1275,11 @@ function DiskMap() {
           The flat file list stays a tab, exactly as it is in WizTree: it is
           not a reading of this folder, it is a different question ("which
           single file is biggest") asked of the whole subtree. */}
-      {!loading && !error && tree && (
+      {showViews && loading && (
+        <p className="text-[12px] text-[color:var(--text-secondary)] mb-3">{t('diskMapV3.crawl.partialNote')}</p>
+      )}
+
+      {showViews && (
         <div className="flex items-start justify-between flex-wrap gap-x-4 gap-y-2 mb-3">
         <div className="flex items-center gap-1">
           {[['map', t('diskMap.view.tree')], ['files', t('diskMap.view.files')]].map(([key, label]) => (
@@ -1282,11 +1304,11 @@ function DiskMap() {
         </div>
       )}
 
-      {!loading && !error && tree && view === 'files' && (
+      {showViews && view === 'files' && (
         <LargestFilesView files={topFiles} icons={typeIcons} onContextMenu={handleContextMenu} onVisibleRows={onVisibleFileRows} searchText={filter.active ? searchText : ''} />
       )}
 
-      {!loading && !error && tree && view !== 'files' && (
+      {showViews && view !== 'files' && (
         <div className="flex flex-col gap-4">
           {/* Folder table and file types side by side, the map full width
               beneath them -- WizTree's proportions, and the right ones: the
