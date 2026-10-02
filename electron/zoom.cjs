@@ -18,6 +18,23 @@ const ZOOM_STEP = 0.5;
 const ZOOM_MIN = -2;
 const ZOOM_MAX = 3;
 
+/** The titleBarOverlay height in main.cjs (40) is a native-window DIP
+ * measurement that Electron only rescales for the OS's own display-scale
+ * setting -- it has no idea Chromium's page zoom exists, so it never
+ * tracks it. The CSS title bar (TitleBar.jsx, `h-10`) is ordinary page
+ * content and DOES scale with zoom, so at any level other than 0 the two
+ * drift apart and Windows' own minimize/maximize/close glyphs end up
+ * floating above or below the app's bar instead of centered in it.
+ * main.cjs calls win.setTitleBarOverlay({ height: ... }) with this any
+ * time the zoom level changes, keeping the native strip's real height in
+ * lockstep with the CSS one.
+ *
+ * 1.2 per whole step matches Chromium's own zoom-level-to-factor curve
+ * (the same ratio the file-level comment above already describes), so
+ * this produces exactly the factor the page is actually rendered at. */
+const TITLEBAR_BASE_HEIGHT = 40;
+const titleBarOverlayHeight = (level) => Math.round(TITLEBAR_BASE_HEIGHT * 1.2 ** level);
+
 const clamp = (level) => Math.min(ZOOM_MAX, Math.max(ZOOM_MIN, level));
 
 /** Snapped to a whole step so repeated float additions can never drift
@@ -65,4 +82,13 @@ function resolveSavedZoom(saved) {
   return clamp(snap(level));
 }
 
-module.exports = { zoomActionForInput, applyZoomAction, resolveSavedZoom, ZOOM_STEP, ZOOM_MIN, ZOOM_MAX };
+module.exports = {
+  zoomActionForInput,
+  applyZoomAction,
+  resolveSavedZoom,
+  titleBarOverlayHeight,
+  ZOOM_STEP,
+  ZOOM_MIN,
+  ZOOM_MAX,
+  TITLEBAR_BASE_HEIGHT
+};

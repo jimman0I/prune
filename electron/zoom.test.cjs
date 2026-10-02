@@ -1,6 +1,15 @@
 const { test } = require('node:test');
 const assert = require('node:assert/strict');
-const { zoomActionForInput, applyZoomAction, resolveSavedZoom, ZOOM_MIN, ZOOM_MAX, ZOOM_STEP } = require('./zoom.cjs');
+const {
+  zoomActionForInput,
+  applyZoomAction,
+  resolveSavedZoom,
+  titleBarOverlayHeight,
+  ZOOM_MIN,
+  ZOOM_MAX,
+  ZOOM_STEP,
+  TITLEBAR_BASE_HEIGHT
+} = require('./zoom.cjs');
 
 const key = (k, extra = {}) => ({ type: 'keyDown', key: k, control: true, meta: false, alt: false, shift: false, isAutoRepeat: false, ...extra });
 
@@ -68,6 +77,28 @@ test('resolveSavedZoom -- anything unusable means 100%, never a crash or NaN zoo
   for (const bad of [null, undefined, {}, { zoomLevel: 'big' }, { zoomLevel: NaN }, { zoomLevel: Infinity }, 'x', 4]) {
     assert.equal(resolveSavedZoom(bad), 0);
   }
+});
+
+test('titleBarOverlayHeight -- 40 at 100%, and tracks Chromium\'s 1.2x-per-step curve', () => {
+  assert.equal(titleBarOverlayHeight(0), TITLEBAR_BASE_HEIGHT);
+  assert.equal(titleBarOverlayHeight(1), Math.round(TITLEBAR_BASE_HEIGHT * 1.2));
+  assert.equal(titleBarOverlayHeight(-1), Math.round(TITLEBAR_BASE_HEIGHT / 1.2));
+});
+
+test('titleBarOverlayHeight -- strictly increasing across the whole zoom range, never a flat or backwards step', () => {
+  let previous = titleBarOverlayHeight(ZOOM_MIN);
+  for (let level = ZOOM_MIN + ZOOM_STEP; level <= ZOOM_MAX; level += ZOOM_STEP) {
+    const height = titleBarOverlayHeight(level);
+    assert.ok(height > previous, `height at ${level} (${height}) should exceed height at ${level - ZOOM_STEP} (${previous})`);
+    previous = height;
+  }
+});
+
+test('main.cjs wiring -- resyncs the native titleBarOverlay height to every zoom change, not just the CSS bar', () => {
+  const src = require('node:fs').readFileSync(require('node:path').join(__dirname, 'main.cjs'), 'utf8');
+  assert.match(src, /titleBarOverlayHeight/);
+  assert.match(src, /win\.setTitleBarOverlay\(\{ height: titleBarOverlayHeight\(level\) \}\)/);
+  assert.match(src, /height: titleBarOverlayHeight\(resolveSavedZoom\(saved\)\)/, 'the window must not open one frame at the wrong overlay height');
 });
 
 test('main.cjs wiring -- routes keys and Ctrl+wheel through zoom.cjs and persists the level', () => {

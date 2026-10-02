@@ -5,7 +5,7 @@ const { pathToFileURL } = require('node:url');
 const { autoUpdater } = require('electron-updater');
 const { createUpdater } = require('./updater.cjs');
 const { resolveWindowState, loadWindowState, saveWindowState, saveWindowStateSync } = require('./windowState.cjs');
-const { zoomActionForInput, applyZoomAction, resolveSavedZoom } = require('./zoom.cjs');
+const { zoomActionForInput, applyZoomAction, resolveSavedZoom, titleBarOverlayHeight } = require('./zoom.cjs');
 
 const BACKEND_PORT = 3101;
 
@@ -217,7 +217,13 @@ async function createWindow() {
       // dense -- tables, a treemap, a 55-row startup list -- and 20px of
       // permanent vertical chrome costs more here than on a page with one
       // panel in the middle of it.
-      height: 40
+      //
+      // Seeded from the SAVED zoom level, not the bare 40 -- a window
+      // reopening at a saved non-100% zoom must not paint one frame with
+      // native buttons sized for 100% before the zoom-restore handler
+      // below corrects it. See titleBarOverlayHeight's own comment in
+      // zoom.cjs for why this needs tracking at all.
+      height: titleBarOverlayHeight(resolveSavedZoom(saved))
     },
     webPreferences: {
       contextIsolation: true,
@@ -250,6 +256,15 @@ async function createWindow() {
     if (wc.isDestroyed()) return;
     zoomLevel = level;
     wc.setZoomLevel(level);
+    // Chromium's page zoom and the native titleBarOverlay are two
+    // unrelated scales -- setZoomLevel above resizes the CSS title bar,
+    // this keeps Windows' own minimize/maximize/close buttons matched to
+    // it. Same non-Windows guard as the theme repaint below.
+    try {
+      win.setTitleBarOverlay({ height: titleBarOverlayHeight(level) });
+    } catch {
+      // Only Windows implements titleBarOverlay at all.
+    }
     onZoomChanged();
   };
   wc.on('before-input-event', (event, input) => {
