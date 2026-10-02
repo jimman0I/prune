@@ -13,6 +13,19 @@ export default {
         safeHint: "Only this program's own install folder and registry key.",
         moderateHint: "The usual places, matched by name. Recommended.",
         advancedHint: "Searches many more places, several folders deep. Finds more, but more of it needs a careful look. Slower."
+      },
+      review: {
+        services: "Services",
+        tier: {
+          certain: "Certain",
+          likely: "Likely",
+          possible: "Possible",
+          certainHint: "Inside the program's own folder, or named by its own entries.",
+          likelyHint: "Named after the program.",
+          possibleHint: "Matched only by the publisher's name or one word of the program's. Not ticked; check each one."
+        },
+        protectedNote: (n) => `Left out because they belong to Windows or to other installed programs: ${n}.`,
+        truncatedNote: "The search stopped early to stay quick, so there may be more."
       }
     }
   },
@@ -26,6 +39,19 @@ export default {
         safeHint: "Slegs hierdie program se eie installasiegids en registersleutel.",
         moderateHint: "Die gewone plekke, volgens naam gepas. Aanbeveel.",
         advancedHint: "Deursoek baie meer plekke, verskeie vouers diep. Vind meer, maar meer daarvan moet noukeurig nagegaan word. Stadiger."
+      },
+      review: {
+        services: "Dienste",
+        tier: {
+          certain: "Seker",
+          likely: "Waarskynlik",
+          possible: "Moontlik",
+          certainHint: "In die program se eie gids, of deur sy eie inskrywings genoem.",
+          likelyHint: "Na die program vernoem.",
+          possibleHint: "Slegs met die uitgewer se naam of een woord van die program se naam gepas. Nie gemerk nie; gaan elkeen na."
+        },
+        protectedNote: (n) => `Uitgelaat omdat hulle aan Windows of ander geïnstalleerde programme behoort: ${n}.`,
+        truncatedNote: "Die soektog het vroeg gestop om vinnig te bly, so daar kan meer wees."
       }
     }
   },
@@ -39,6 +65,19 @@ export default {
         safeHint: "مجلد التثبيت الخاص بهذا البرنامج ومفتاح السجل الخاص به فقط.",
         moderateHint: "الأماكن المعتادة، بالمطابقة حسب الاسم. موصى به.",
         advancedHint: "يبحث في أماكن أكثر بكثير وعلى عدة مستويات من المجلدات. يجد المزيد، لكن يحتاج الكثير منه إلى مراجعة دقيقة. أبطأ."
+      },
+      review: {
+        services: "الخدمات",
+        tier: {
+          certain: "مؤكد",
+          likely: "مرجّح",
+          possible: "محتمل",
+          certainHint: "داخل مجلد البرنامج نفسه، أو مذكور في إدخالاته الخاصة.",
+          likelyHint: "يحمل اسم البرنامج.",
+          possibleHint: "مطابق فقط لاسم الناشر أو لكلمة واحدة من اسم البرنامج. غير محدد؛ راجع كل عنصر."
+        },
+        protectedNote: (n) => `تم استبعادها لأنها تخص Windows أو برامج مثبتة أخرى: ${n}.`,
+        truncatedNote: "توقف البحث مبكرًا للحفاظ على السرعة، لذا قد يوجد المزيد."
       }
     }
   },
@@ -52,6 +91,19 @@ export default {
         safeHint: "Només la carpeta d'instal·lació del programa i la seva clau del registre.",
         moderateHint: "Els llocs habituals, per coincidència de nom. Recomanat.",
         advancedHint: "Cerca en molts més llocs, a diversos nivells de carpetes. Troba més coses, però cal revisar-ne més. Més lent."
+      },
+      review: {
+        services: "Serveis",
+        tier: {
+          certain: "Cert",
+          likely: "Probable",
+          possible: "Possible",
+          certainHint: "Dins la carpeta del programa, o assenyalat per les seves pròpies entrades.",
+          likelyHint: "Porta el nom del programa.",
+          possibleHint: "Coincideix només amb el nom de l'editor o una paraula del programa. No marcat; revisa'ls un per un."
+        },
+        protectedNote: (n) => `Exclosos perquè pertanyen a Windows o a altres programes instal·lats: ${n}.`,
+        truncatedNote: "La cerca s'ha aturat abans per ser ràpida, així que pot haver-hi més coses."
       }
     }
   },
@@ -65,6 +117,19 @@ export default {
         safeHint: "Jen vlastní instalační složka programu a jeho klíč v registru.",
         moderateHint: "Obvyklá místa, hledání podle názvu. Doporučeno.",
         advancedHint: "Prohledá mnohem více míst do několika úrovní složek. Najde víc, ale víc z toho je třeba pečlivě zkontrolovat. Pomalejší."
+      },
+      review: {
+        services: "Služby",
+        tier: {
+          certain: "Jisté",
+          likely: "Pravděpodobné",
+          possible: "Možné",
+          certainHint: "Uvnitř vlastní složky programu nebo uvedeno v jeho vlastních záznamech.",
+          likelyHint: "Pojmenováno podle programu.",
+          possibleHint: "Shoda jen podle jména vydavatele nebo jednoho slova z názvu programu. Není zaškrtnuto; zkontrolujte každé zvlášť."
+        },
+        protectedNote: (n) => `Vynecháno, protože patří Windows nebo jiným nainstalovaným programům: ${n}.`,
+        truncatedNote: "Hledání se předčasně zastavilo, aby zůstalo rychlé, takže může být více výsledků."
       }
     }
   },
@@ -78,6 +143,19 @@ export default {
         safeHint: "Ffolder gosod y rhaglen ei hun a'i allwedd cofrestrfa yn unig.",
         moderateHint: "Y llefydd arferol, wedi'u paru yn ôl enw. Argymhellir.",
         advancedHint: "Yn chwilio llawer mwy o lefydd, sawl ffolder o ddyfnder. Yn dod o hyd i fwy, ond mae angen edrych yn ofalus ar fwy ohono. Arafach."
+      },
+      review: {
+        services: "Gwasanaethau",
+        tier: {
+          certain: "Sicr",
+          likely: "Tebygol",
+          possible: "Posibl",
+          certainHint: "Y tu mewn i ffolder y rhaglen ei hun, neu wedi'i enwi gan ei gofnodion ei hun.",
+          likelyHint: "Wedi'i enwi ar ôl y rhaglen.",
+          possibleHint: "Wedi'i baru dim ond ag enw'r cyhoeddwr neu un gair o enw'r rhaglen. Heb ei dicio; gwiriwch bob un."
+        },
+        protectedNote: (n) => `Wedi'u gadael allan am eu bod yn perthyn i Windows neu i raglenni eraill a osodwyd: ${n}.`,
+        truncatedNote: "Stopiodd y chwiliad yn gynnar i aros yn gyflym, felly efallai bod mwy."
       }
     }
   },
@@ -91,6 +169,19 @@ export default {
         safeHint: "Kun programmets egen installationsmappe og registreringsdatabasenøgle.",
         moderateHint: "De sædvanlige steder, fundet via navn. Anbefalet.",
         advancedHint: "Søger mange flere steder, flere mapper dybt. Finder mere, men mere af det kræver et nøje kig. Langsommere."
+      },
+      review: {
+        services: "Tjenester",
+        tier: {
+          certain: "Vist",
+          likely: "Sandsynlige",
+          possible: "Muligt",
+          certainHint: "Inde i programmets egen mappe eller nævnt af dets egne poster.",
+          likelyHint: "Opkaldt efter programmet.",
+          possibleHint: "Matchet kun på udgiverens navn eller ét ord af programmets. Ikke afkrydset; tjek hver enkelt."
+        },
+        protectedNote: (n) => `Udeladt, fordi de tilhører Windows eller andre installerede programmer: ${n}.`,
+        truncatedNote: "Søgningen stoppede tidligt for at holde tempoet, så der kan være mere."
       }
     }
   },
@@ -104,6 +195,19 @@ export default {
         safeHint: "Nur der eigene Installationsordner des Programms und sein Registrierungsschlüssel.",
         moderateHint: "Die üblichen Orte, per Namensabgleich. Empfohlen.",
         advancedHint: "Durchsucht deutlich mehr Orte, mehrere Ordnerebenen tief. Findet mehr, doch mehr davon muss genau geprüft werden. Langsamer."
+      },
+      review: {
+        services: "Dienste",
+        tier: {
+          certain: "Eindeutig",
+          likely: "Wahrscheinlich",
+          possible: "Möglich",
+          certainHint: "Im eigenen Ordner des Programms oder von dessen eigenen Einträgen genannt.",
+          likelyHint: "Nach dem Programm benannt.",
+          possibleHint: "Nur über den Namen des Herausgebers oder ein Wort des Programmnamens gefunden. Nicht angehakt; prüfen Sie jeden Eintrag."
+        },
+        protectedNote: (n) => `Ausgelassen, weil sie zu Windows oder anderen installierten Programmen gehören: ${n}.`,
+        truncatedNote: "Die Suche wurde vorzeitig beendet, um schnell zu bleiben – es kann also mehr geben."
       }
     }
   },
@@ -117,6 +221,19 @@ export default {
         safeHint: "Μόνο ο φάκελος εγκατάστασης του προγράμματος και το κλειδί μητρώου του.",
         moderateHint: "Οι συνηθισμένες τοποθεσίες, με αντιστοίχιση ονόματος. Προτείνεται.",
         advancedHint: "Αναζητά σε πολύ περισσότερες τοποθεσίες, σε πολλά επίπεδα φακέλων. Βρίσκει περισσότερα, αλλά περισσότερα χρειάζονται προσεκτικό έλεγχο. Πιο αργή."
+      },
+      review: {
+        services: "Υπηρεσίες",
+        tier: {
+          certain: "Βέβαιο",
+          likely: "Πιθανό",
+          possible: "Ενδεχόμενο",
+          certainHint: "Μέσα στον φάκελο του ίδιου του προγράμματος ή αναφέρεται από τις δικές του εγγραφές.",
+          likelyHint: "Φέρει το όνομα του προγράμματος.",
+          possibleHint: "Αντιστοιχίστηκε μόνο με το όνομα του εκδότη ή μία λέξη του προγράμματος. Δεν είναι επιλεγμένο· ελέγξτε το καθένα."
+        },
+        protectedNote: (n) => `Παραλείφθηκαν επειδή ανήκουν στα Windows ή σε άλλα εγκατεστημένα προγράμματα: ${n}.`,
+        truncatedNote: "Η αναζήτηση σταμάτησε νωρίτερα για να μείνει γρήγορη, οπότε μπορεί να υπάρχουν κι άλλα."
       }
     }
   },
@@ -130,6 +247,19 @@ export default {
         safeHint: "Solo la carpeta de instalación del programa y su clave del registro.",
         moderateHint: "Los lugares habituales, por coincidencia de nombre. Recomendado.",
         advancedHint: "Busca en muchos más lugares, varios niveles de carpetas. Encuentra más, pero hay que revisar más con cuidado. Más lento."
+      },
+      review: {
+        services: "Servicios",
+        tier: {
+          certain: "Confirmado",
+          likely: "Probable",
+          possible: "Posible",
+          certainHint: "Dentro de la carpeta del propio programa, o indicado por sus propias entradas.",
+          likelyHint: "Lleva el nombre del programa.",
+          possibleHint: "Coincide solo con el nombre del editor o una palabra del programa. Sin marcar; revisa cada uno."
+        },
+        protectedNote: (n) => `Omitidos porque pertenecen a Windows o a otros programas instalados: ${n}.`,
+        truncatedNote: "La búsqueda se detuvo antes para ser rápida, así que puede haber más."
       }
     }
   },
@@ -143,6 +273,19 @@ export default {
         safeHint: "Ainult programmi enda paigalduskaust ja registrivõti.",
         moderateHint: "Tavalised kohad, nime järgi sobitatud. Soovitatav.",
         advancedHint: "Otsib palju rohkem kohti, mitme kaustataseme sügavuselt. Leiab rohkem, kuid suuremat osa tuleb hoolikalt üle vaadata. Aeglasem."
+      },
+      review: {
+        services: "Teenused",
+        tier: {
+          certain: "Kindel",
+          likely: "Tõenäoline",
+          possible: "Võimalik",
+          certainHint: "Programmi enda kaustas või selle enda kirjetes nimetatud.",
+          likelyHint: "Programmi järgi nimetatud.",
+          possibleHint: "Sobib ainult väljaandja nime või ühe programminime sõnaga. Märkimata; kontrolli igaüht."
+        },
+        protectedNote: (n) => `Välja jäetud, sest need kuuluvad Windowsile või teistele installitud programmidele: ${n}.`,
+        truncatedNote: "Otsing peatati varakult, et see püsiks kiire, seega võib leide olla rohkem."
       }
     }
   },
@@ -156,6 +299,19 @@ export default {
         safeHint: "Vain ohjelman oma asennuskansio ja rekisteriavain.",
         moderateHint: "Tavalliset paikat, nimen perusteella. Suositeltu.",
         advancedHint: "Etsii paljon useammista paikoista, usean kansiotason syvyydeltä. Löytää enemmän, mutta suurempi osa vaatii tarkkaa harkintaa. Hitaampi."
+      },
+      review: {
+        services: "Palvelut",
+        tier: {
+          certain: "Varma",
+          likely: "Todennäköinen",
+          possible: "Mahdollinen",
+          certainHint: "Ohjelman omassa kansiossa tai sen omien merkintöjen mainitsema.",
+          likelyHint: "Nimetty ohjelman mukaan.",
+          possibleHint: "Vastaa vain julkaisijan nimeä tai yhtä ohjelman nimen sanaa. Ei valittu; tarkista jokainen."
+        },
+        protectedNote: (n) => `Jätetty pois, koska ne kuuluvat Windowsille tai muille asennetuille ohjelmille: ${n}.`,
+        truncatedNote: "Haku pysähtyi aikaisin nopeuden säilyttämiseksi, joten löytyvää voi olla enemmän."
       }
     }
   },
@@ -169,6 +325,19 @@ export default {
         safeHint: "Uniquement le dossier d'installation du programme et sa clé de registre.",
         moderateHint: "Les emplacements habituels, repérés par le nom. Recommandé.",
         advancedHint: "Explore bien plus d'emplacements, sur plusieurs niveaux de dossiers. Trouve davantage, mais il faut examiner de plus près. Plus lent."
+      },
+      review: {
+        services: "Services",
+        tier: {
+          certain: "Certain",
+          likely: "Probable",
+          possible: "Possible",
+          certainHint: "Dans le dossier du programme lui-même, ou désigné par ses propres entrées.",
+          likelyHint: "Porte le nom du programme.",
+          possibleHint: "Trouvé uniquement par le nom de l'éditeur ou un mot du nom du programme. Non coché ; vérifiez chaque élément."
+        },
+        protectedNote: (n) => `Écartés car ils appartiennent à Windows ou à d'autres programmes installés : ${n}.`,
+        truncatedNote: "La recherche s'est arrêtée plus tôt pour rester rapide ; il peut donc y avoir davantage."
       }
     }
   },
@@ -182,6 +351,19 @@ export default {
         safeHint: "רק תיקיית ההתקנה של התוכנה ומפתח הרישום שלה.",
         moderateHint: "המקומות הרגילים, לפי התאמת שם. מומלץ.",
         advancedHint: "מחפש במקומות רבים יותר, כמה רמות עומק של תיקיות. מוצא יותר, אבל חלק גדול יותר ממנו דורש בדיקה זהירה. איטי יותר."
+      },
+      review: {
+        services: "שירותים",
+        tier: {
+          certain: "ודאי",
+          likely: "סביר",
+          possible: "אפשרי",
+          certainHint: "בתוך התיקייה של התוכנה עצמה, או מצוין ברשומות שלה.",
+          likelyHint: "נושא את שם התוכנה.",
+          possibleHint: "הותאם רק לשם המפרסם או למילה אחת משם התוכנה. לא מסומן; בדקו כל פריט."
+        },
+        protectedNote: (n) => `הושמטו כי הם שייכים ל-Windows או לתוכנות מותקנות אחרות: ${n}.`,
+        truncatedNote: "החיפוש נעצר מוקדם כדי להישאר מהיר, לכן ייתכן שיש עוד."
       }
     }
   },
@@ -195,6 +377,19 @@ export default {
         safeHint: "Csak a program saját telepítési mappája és beállításjegyzék-kulcsa.",
         moderateHint: "A szokásos helyek, név alapján egyeztetve. Ajánlott.",
         advancedHint: "Sokkal több helyen keres, több mappaszint mélyen. Többet talál, de többet kell közülük gondosan átnézni. Lassabb."
+      },
+      review: {
+        services: "Szolgáltatások",
+        tier: {
+          certain: "Biztos",
+          likely: "Valószínű",
+          possible: "Lehetséges",
+          certainHint: "A program saját mappájában, vagy a program saját bejegyzései nevezik meg.",
+          likelyHint: "A programról elnevezve.",
+          possibleHint: "Csak a kiadó nevével vagy a program nevének egy szavával egyezik. Nincs bejelölve; ellenőrizze mindegyiket."
+        },
+        protectedNote: (n) => `Kihagyva, mert a Windowshoz vagy más telepített programokhoz tartoznak: ${n}.`,
+        truncatedNote: "A keresés korán leállt, hogy gyors maradjon, így lehet, hogy van még találat."
       }
     }
   },
@@ -208,6 +403,19 @@ export default {
         safeHint: "Hanya folder instalasi dan kunci registri milik program itu sendiri.",
         moderateHint: "Lokasi yang umum, dicocokkan berdasarkan nama. Disarankan.",
         advancedHint: "Mencari di lebih banyak lokasi, beberapa tingkat folder ke dalam. Menemukan lebih banyak, tetapi lebih banyak yang perlu diperiksa dengan cermat. Lebih lambat."
+      },
+      review: {
+        services: "Layanan",
+        tier: {
+          certain: "Pasti",
+          likely: "Kemungkinan besar",
+          possible: "Mungkin",
+          certainHint: "Di dalam folder program itu sendiri, atau disebut oleh entri miliknya.",
+          likelyHint: "Dinamai sesuai program.",
+          possibleHint: "Hanya cocok dengan nama penerbit atau satu kata dari nama program. Tidak dicentang; periksa satu per satu."
+        },
+        protectedNote: (n) => `Dilewati karena milik Windows atau program lain yang terpasang: ${n}.`,
+        truncatedNote: "Pencarian dihentikan lebih awal agar tetap cepat, jadi mungkin masih ada lagi."
       }
     }
   },
@@ -221,6 +429,19 @@ export default {
         safeHint: "Aðeins uppsetningarmappa forritsins sjálfs og skrárlykill þess.",
         moderateHint: "Venjulegir staðir, pöruð eftir nafni. Mælt með.",
         advancedHint: "Leitar á mun fleiri stöðum, nokkur möppustig niður. Finnur meira, en meira af því þarf vandlega skoðun. Hægari."
+      },
+      review: {
+        services: "Þjónustur",
+        tier: {
+          certain: "Víst",
+          likely: "Líklegt",
+          possible: "Mögulegt",
+          certainHint: "Inni í möppu forritsins sjálfs eða nefnt í eigin færslum þess.",
+          likelyHint: "Heitir eftir forritinu.",
+          possibleHint: "Pöruð aðeins við nafn útgefanda eða eitt orð úr nafni forritsins. Ekki hakað við; athugaðu hvert og eitt."
+        },
+        protectedNote: (n) => `Sleppt því þau tilheyra Windows eða öðrum uppsettum forritum: ${n}.`,
+        truncatedNote: "Leitin stöðvaðist snemma til að vera hröð, svo það gæti verið meira."
       }
     }
   },
@@ -234,6 +455,19 @@ export default {
         safeHint: "Solo la cartella di installazione del programma e la sua chiave del registro.",
         moderateHint: "I posti consueti, individuati per nome. Consigliata.",
         advancedHint: "Cerca in molte più posizioni, a più livelli di cartelle. Trova di più, ma richiede più attenzione. Più lenta."
+      },
+      review: {
+        services: "Servizi",
+        tier: {
+          certain: "Certo",
+          likely: "Probabile",
+          possible: "Possibile",
+          certainHint: "Dentro la cartella del programma stesso, o indicato dalle sue voci.",
+          likelyHint: "Porta il nome del programma.",
+          possibleHint: "Trovato solo dal nome del produttore o da una parola del nome del programma. Non selezionato; controlla ogni voce."
+        },
+        protectedNote: (n) => `Esclusi perché appartengono a Windows o ad altri programmi installati: ${n}.`,
+        truncatedNote: "La ricerca si è fermata prima per restare veloce, quindi potrebbe esserci altro."
       }
     }
   },
@@ -247,6 +481,19 @@ export default {
         safeHint: "プログラム自身のインストール フォルダーとレジストリ キーのみ。",
         moderateHint: "一般的な場所を名前の一致で検索します。推奨。",
         advancedHint: "はるかに多くの場所を、複数階層のフォルダーまで検索します。多く見つかりますが、慎重な確認が必要なものも増えます。時間がかかります。"
+      },
+      review: {
+        services: "サービス",
+        tier: {
+          certain: "確実",
+          likely: "可能性が高い",
+          possible: "可能性あり",
+          certainHint: "プログラム自身のフォルダー内にある、またはプログラム自身の登録項目で指定されています。",
+          likelyHint: "プログラム名が付いています。",
+          possibleHint: "発行元の名前、またはプログラム名の一語のみに一致しました。オフになっています。1 件ずつ確認してください。"
+        },
+        protectedNote: (n) => `Windows または他のインストール済みプログラムのものであるため除外した項目: ${n} 件。`,
+        truncatedNote: "速度を保つために検索を途中で止めたため、ほかにも残っている可能性があります。"
       }
     }
   },
@@ -260,6 +507,19 @@ export default {
         safeHint: "프로그램 자체의 설치 폴더와 레지스트리 키만 검사합니다.",
         moderateHint: "일반적인 위치를 이름으로 일치시켜 검사합니다. 권장.",
         advancedHint: "훨씬 더 많은 위치를 여러 단계의 폴더까지 검색합니다. 더 많이 찾지만 신중한 확인이 필요한 항목도 늘어납니다. 더 느립니다."
+      },
+      review: {
+        services: "서비스",
+        tier: {
+          certain: "확실",
+          likely: "가능성 높음",
+          possible: "가능성 있음",
+          certainHint: "프로그램 자체 폴더 안에 있거나 프로그램 자신의 항목이 가리키는 항목입니다.",
+          likelyHint: "프로그램 이름을 따른 항목입니다.",
+          possibleHint: "게시자 이름 또는 프로그램 이름의 한 단어와만 일치합니다. 선택되지 않았으니 하나씩 확인하세요."
+        },
+        protectedNote: (n) => `Windows 또는 다른 설치된 프로그램에 속해 제외된 항목: ${n}개.`,
+        truncatedNote: "속도를 유지하려고 검색을 일찍 멈췄으므로 더 있을 수 있습니다."
       }
     }
   },
@@ -273,6 +533,19 @@ export default {
         safeHint: "Tik pačios programos diegimo aplankas ir registro raktas.",
         moderateHint: "Įprastos vietos, ieškoma pagal pavadinimą. Rekomenduojama.",
         advancedHint: "Ieško daug daugiau vietų, kelis aplankų lygius gilyn. Randa daugiau, bet daugiau ko reikia atidžiai peržiūrėti. Lėčiau."
+      },
+      review: {
+        services: "Tarnybos",
+        tier: {
+          certain: "Tikri",
+          likely: "Tikėtina",
+          possible: "Galima",
+          certainHint: "Pačios programos aplanke arba nurodyta jos pačios įrašų.",
+          likelyHint: "Pavadinta pagal programą.",
+          possibleHint: "Atitinka tik leidėjo pavadinimą arba vieną programos pavadinimo žodį. Nepažymėta; patikrinkite kiekvieną."
+        },
+        protectedNote: (n) => `Praleista, nes priklauso „Windows“ arba kitoms įdiegtoms programoms: ${n}.`,
+        truncatedNote: "Paieška sustabdyta anksčiau, kad išliktų greita, todėl gali būti daugiau."
       }
     }
   },
@@ -286,6 +559,19 @@ export default {
         safeHint: "Hanya folder pemasangan dan kunci pendaftaran program itu sendiri.",
         moderateHint: "Lokasi biasa, dipadankan mengikut nama. Disyorkan.",
         advancedHint: "Mencari di lebih banyak lokasi, beberapa peringkat folder ke dalam. Menjumpai lebih banyak, tetapi lebih banyak yang perlu disemak dengan teliti. Lebih perlahan."
+      },
+      review: {
+        services: "Perkhidmatan",
+        tier: {
+          certain: "Pasti",
+          likely: "Berkemungkinan besar",
+          possible: "Mungkin",
+          certainHint: "Di dalam folder program itu sendiri, atau disebut oleh entrinya sendiri.",
+          likelyHint: "Dinamakan sempena program.",
+          possibleHint: "Hanya sepadan dengan nama penerbit atau satu perkataan nama program. Tidak ditanda; semak satu demi satu."
+        },
+        protectedNote: (n) => `Ditinggalkan kerana milik Windows atau program lain yang dipasang: ${n}.`,
+        truncatedNote: "Carian dihentikan awal untuk kekal pantas, jadi mungkin ada lagi."
       }
     }
   },
@@ -299,6 +585,19 @@ export default {
         safeHint: "Bare programmets egen installasjonsmappe og registernøkkel.",
         moderateHint: "De vanlige stedene, funnet etter navn. Anbefalt.",
         advancedHint: "Søker på mange flere steder, flere mappenivåer ned. Finner mer, men mer av det må sjekkes nøye. Tregere."
+      },
+      review: {
+        services: "Tjenester",
+        tier: {
+          certain: "Helt sikker",
+          likely: "Sannsynlig",
+          possible: "Mulig",
+          certainHint: "Inne i programmets egen mappe eller nevnt av dets egne oppføringer.",
+          likelyHint: "Oppkalt etter programmet.",
+          possibleHint: "Samsvarer bare med utgiverens navn eller ett ord i programnavnet. Ikke avmerket; sjekk hver enkelt."
+        },
+        protectedNote: (n) => `Utelatt fordi de tilhører Windows eller andre installerte programmer: ${n}.`,
+        truncatedNote: "Søket stoppet tidlig for å holde tempoet, så det kan finnes mer."
       }
     }
   },
@@ -312,6 +611,19 @@ export default {
         safeHint: "Alleen de eigen installatiemap van het programma en de registersleutel.",
         moderateHint: "De gebruikelijke plekken, gevonden op naam. Aanbevolen.",
         advancedHint: "Doorzoekt veel meer plekken, meerdere mapniveaus diep. Vindt meer, maar meer ervan moet zorgvuldig bekeken worden. Langzamer."
+      },
+      review: {
+        services: "Services",
+        tier: {
+          certain: "Zeker",
+          likely: "Waarschijnlijk",
+          possible: "Mogelijk",
+          certainHint: "In de eigen map van het programma, of genoemd door de eigen items.",
+          likelyHint: "Genoemd naar het programma.",
+          possibleHint: "Alleen gevonden op de naam van de uitgever of één woord van de programmanaam. Niet aangevinkt; controleer elk item."
+        },
+        protectedNote: (n) => `Weggelaten omdat ze bij Windows of andere geïnstalleerde programma's horen: ${n}.`,
+        truncatedNote: "De zoekopdracht stopte eerder om snel te blijven, dus er kan meer zijn."
       }
     }
   },
@@ -325,6 +637,19 @@ export default {
         safeHint: "Tylko własny folder instalacyjny programu i jego klucz rejestru.",
         moderateHint: "Zwykłe miejsca, dopasowanie po nazwie. Zalecane.",
         advancedHint: "Przeszukuje znacznie więcej miejsc, na kilka poziomów w głąb folderów. Znajduje więcej, ale więcej wymaga uważnego przejrzenia. Wolniej."
+      },
+      review: {
+        services: "Usługi",
+        tier: {
+          certain: "Pewne",
+          likely: "Prawdopodobne",
+          possible: "Możliwe",
+          certainHint: "Wewnątrz własnego folderu programu lub wskazane przez jego własne wpisy.",
+          likelyHint: "Nazwane od programu.",
+          possibleHint: "Dopasowane tylko do nazwy wydawcy lub jednego słowa z nazwy programu. Niezaznaczone; sprawdź każdy element."
+        },
+        protectedNote: (n) => `Pominięto, ponieważ należą do systemu Windows lub innych zainstalowanych programów: ${n}.`,
+        truncatedNote: "Wyszukiwanie zatrzymano wcześniej, aby było szybkie, więc może być tego więcej."
       }
     }
   },
@@ -338,6 +663,19 @@ export default {
         safeHint: "یوازې د برنامې خپل د نصبولو فولډر او د راجستر کیلي.",
         moderateHint: "عادي ځایونه، د نوم په اساس مطابقت. وړاندیز شوی.",
         advancedHint: "ډېر نور ځایونه په څو سطحو فولډرونو کې لټوي. ډېر پیدا کوي، خو ډېر یې ته دقیق کتنه په کار ده. ورو."
+      },
+      review: {
+        services: "خدمتونه",
+        tier: {
+          certain: "ډاډمن",
+          likely: "احتمالي",
+          possible: "ممکن",
+          certainHint: "د برنامې په خپل فولډر کې، یا د هغې په خپلو ننوتنو کې یاد شوی.",
+          likelyHint: "د برنامې په نوم نومول شوی.",
+          possibleHint: "یوازې د خپرونکي له نوم یا د برنامې د نوم له یوې کلمې سره سمون خوري. نښه شوی نه دی؛ هر یو وګورئ."
+        },
+        protectedNote: (n) => `پرېښودل شوي ځکه چې د Windows یا نورو نصب شویو برنامو دي: ${n}.`,
+        truncatedNote: "لټون د چټکتیا لپاره مخکې ودرول شو، نو ښايي نور هم وي."
       }
     }
   },
@@ -351,6 +689,19 @@ export default {
         safeHint: "Somente a pasta de instalação do próprio programa e a chave dele no registro.",
         moderateHint: "Os lugares de costume, localizados pelo nome. Recomendado.",
         advancedHint: "Procura em muitos outros lugares, vários níveis de pastas. Encontra mais, mas mais itens precisam de uma análise cuidadosa. Mais lento."
+      },
+      review: {
+        services: "Serviços",
+        tier: {
+          certain: "Certo",
+          likely: "Provável",
+          possible: "Possível",
+          certainHint: "Dentro da pasta do próprio programa, ou indicado pelas entradas dele.",
+          likelyHint: "Tem o nome do programa.",
+          possibleHint: "Encontrado só pelo nome do editor ou por uma palavra do nome do programa. Sem marcação; confira cada um."
+        },
+        protectedNote: (n) => `Deixados de fora porque pertencem ao Windows ou a outros programas instalados: ${n}.`,
+        truncatedNote: "A busca parou antes para continuar rápida, então pode haver mais."
       }
     }
   },
@@ -364,6 +715,19 @@ export default {
         safeHint: "Apenas a pasta de instalação do próprio programa e a respetiva chave de registo.",
         moderateHint: "Os locais habituais, encontrados pelo nome. Recomendado.",
         advancedHint: "Procura em muitos mais locais, vários níveis de pastas. Encontra mais, mas há mais itens que exigem uma análise cuidadosa. Mais lento."
+      },
+      review: {
+        services: "Serviços",
+        tier: {
+          certain: "Certo",
+          likely: "Provável",
+          possible: "Possível",
+          certainHint: "Dentro da pasta do próprio programa, ou indicado pelas respetivas entradas.",
+          likelyHint: "Tem o nome do programa.",
+          possibleHint: "Encontrado apenas pelo nome do editor ou por uma palavra do nome do programa. Sem marca; verifique cada um."
+        },
+        protectedNote: (n) => `Deixados de fora porque pertencem ao Windows ou a outros programas instalados: ${n}.`,
+        truncatedNote: "A pesquisa parou mais cedo para se manter rápida, por isso pode haver mais."
       }
     }
   },
@@ -377,6 +741,19 @@ export default {
         safeHint: "Doar folderul de instalare al programului și cheia lui de registru.",
         moderateHint: "Locurile obișnuite, potrivite după nume. Recomandat.",
         advancedHint: "Caută în mult mai multe locuri, pe mai multe niveluri de foldere. Găsește mai mult, dar mai multe elemente trebuie verificate cu atenție. Mai lent."
+      },
+      review: {
+        services: "Servicii",
+        tier: {
+          certain: "Cert",
+          likely: "Probabil",
+          possible: "Posibil",
+          certainHint: "În folderul programului însuși sau menționat de intrările lui.",
+          likelyHint: "Poartă numele programului.",
+          possibleHint: "Potrivit doar după numele editorului sau un cuvânt din numele programului. Nebifat; verifică fiecare element."
+        },
+        protectedNote: (n) => `Omise deoarece aparțin Windows sau altor programe instalate: ${n}.`,
+        truncatedNote: "Căutarea s-a oprit mai devreme pentru a rămâne rapidă, deci pot exista mai multe."
       }
     }
   },
@@ -390,6 +767,19 @@ export default {
         safeHint: "Только собственная папка установки программы и её раздел реестра.",
         moderateHint: "Обычные места, поиск по названию. Рекомендуется.",
         advancedHint: "Ищет в гораздо большем числе мест, на несколько уровней вглубь папок. Находит больше, но больше результатов нужно проверять внимательно. Медленнее."
+      },
+      review: {
+        services: "Службы",
+        tier: {
+          certain: "Точно",
+          likely: "Вероятно",
+          possible: "Возможно",
+          certainHint: "Внутри собственной папки программы или указано в её собственных записях.",
+          likelyHint: "Названо по имени программы.",
+          possibleHint: "Совпало только с именем издателя или одним словом из названия программы. Не отмечено; проверьте каждый пункт."
+        },
+        protectedNote: (n) => `Пропущено, так как относится к Windows или другим установленным программам: ${n}.`,
+        truncatedNote: "Поиск остановлен раньше, чтобы не затягиваться, поэтому результатов может быть больше."
       }
     }
   },
@@ -403,6 +793,19 @@ export default {
         safeHint: "Iba vlastný inštalačný priečinok programu a jeho kľúč v registri.",
         moderateHint: "Obvyklé miesta, hľadanie podľa názvu. Odporúčané.",
         advancedHint: "Prehľadá oveľa viac miest do niekoľkých úrovní priečinkov. Nájde viac, ale viac z toho treba starostlivo skontrolovať. Pomalšie."
+      },
+      review: {
+        services: "Služby",
+        tier: {
+          certain: "Isté",
+          likely: "Pravdepodobné",
+          possible: "Možné",
+          certainHint: "Vo vlastnom priečinku programu alebo uvedené v jeho vlastných záznamoch.",
+          likelyHint: "Pomenované podľa programu.",
+          possibleHint: "Zhoda iba podľa mena vydavateľa alebo jedného slova z názvu programu. Nie je zaškrtnuté; skontrolujte každé zvlášť."
+        },
+        protectedNote: (n) => `Vynechané, pretože patria Windowsu alebo iným nainštalovaným programom: ${n}.`,
+        truncatedNote: "Hľadanie sa predčasne zastavilo, aby zostalo rýchle, takže môže byť viac výsledkov."
       }
     }
   },
@@ -416,6 +819,19 @@ export default {
         safeHint: "Vetëm dosja e instalimit të vetë programit dhe çelësi i tij në regjistër.",
         moderateHint: "Vendet e zakonshme, të përputhura sipas emrit. E rekomanduar.",
         advancedHint: "Kërkon në shumë më tepër vende, disa nivele dosjesh në thellësi. Gjen më shumë, por më shumë prej tyre kërkojnë shqyrtim të kujdesshëm. Më ngadalë."
+      },
+      review: {
+        services: "Shërbimet",
+        tier: {
+          certain: "E konfirmuar",
+          likely: "Me gjasë",
+          possible: "E mundur",
+          certainHint: "Brenda dosjes së vetë programit, ose e përmendur nga shënimet e tij.",
+          likelyHint: "Mban emrin e programit.",
+          possibleHint: "U përputh vetëm me emrin e botuesit ose një fjalë të emrit të programit. Pa shenjë; kontrolloji një nga një."
+        },
+        protectedNote: (n) => `Lënë jashtë sepse i përkasin Windows ose programeve të tjera të instaluara: ${n}.`,
+        truncatedNote: "Kërkimi u ndal herët për të mbetur i shpejtë, kështu që mund të ketë më shumë."
       }
     }
   },
@@ -429,6 +845,19 @@ export default {
         safeHint: "Само инсталациона фасцикла програма и његов кључ у регистру.",
         moderateHint: "Уобичајена места, претрага по називу. Препоручено.",
         advancedHint: "Претражује знатно више места, неколико нивоа фасцикли у дубину. Налази више, али више тога треба пажљиво прегледати. Спорије."
+      },
+      review: {
+        services: "Услуге",
+        tier: {
+          certain: "Сигурно",
+          likely: "Вероватно",
+          possible: "Могуће",
+          certainHint: "Унутар фасцикле самог програма или наведено у његовим уносима.",
+          likelyHint: "Назван по програму.",
+          possibleHint: "Поклапа се само са именом издавача или једном речју из назива програма. Није означено; проверите сваку ставку."
+        },
+        protectedNote: (n) => `Изостављено јер припада Windows-у или другим инсталираним програмима: ${n}.`,
+        truncatedNote: "Претрага је стала раније да би остала брза, па може бити још резултата."
       }
     }
   },
@@ -442,6 +871,19 @@ export default {
         safeHint: "Bara programmets egen installationsmapp och registernyckel.",
         moderateHint: "De vanliga platserna, matchade på namn. Rekommenderas.",
         advancedHint: "Söker på många fler platser, flera mappnivåer ner. Hittar mer, men mer av det behöver granskas noga. Långsammare."
+      },
+      review: {
+        services: "Tjänster",
+        tier: {
+          certain: "Visst",
+          likely: "Sannolikt",
+          possible: "Möjligt",
+          certainHint: "Inne i programmets egen mapp eller nämnt av dess egna poster.",
+          likelyHint: "Uppkallat efter programmet.",
+          possibleHint: "Matchar bara utgivarens namn eller ett ord i programnamnet. Inte ikryssat; kontrollera varje."
+        },
+        protectedNote: (n) => `Utelämnade eftersom de tillhör Windows eller andra installerade program: ${n}.`,
+        truncatedNote: "Sökningen stoppades tidigt för att hålla farten, så det kan finnas mer."
       }
     }
   },
@@ -455,6 +897,19 @@ export default {
         safeHint: "เฉพาะโฟลเดอร์ติดตั้งของโปรแกรมเองและคีย์รีจิสทรีของมัน",
         moderateHint: "ตำแหน่งที่พบบ่อย จับคู่ตามชื่อ แนะนำ",
         advancedHint: "ค้นหาในตำแหน่งอีกมากมาย ลึกหลายระดับโฟลเดอร์ พบมากขึ้น แต่ต้องตรวจสอบอย่างระมัดระวังมากขึ้น ช้ากว่า"
+      },
+      review: {
+        services: "บริการ",
+        tier: {
+          certain: "แน่นอน",
+          likely: "น่าจะใช่",
+          possible: "อาจใช่",
+          certainHint: "อยู่ในโฟลเดอร์ของโปรแกรมเอง หรือถูกระบุโดยรายการของโปรแกรมเอง",
+          likelyHint: "ตั้งชื่อตามโปรแกรม",
+          possibleHint: "ตรงกับชื่อผู้เผยแพร่หรือคำเดียวในชื่อโปรแกรมเท่านั้น ไม่ได้ติ๊กไว้ ตรวจสอบทีละรายการ"
+        },
+        protectedNote: (n) => `ข้ามไปเพราะเป็นของ Windows หรือโปรแกรมอื่นที่ติดตั้งไว้: ${n}`,
+        truncatedNote: "การค้นหาหยุดก่อนเวลาเพื่อให้ยังเร็วอยู่ จึงอาจยังมีอีก"
       }
     }
   },
@@ -468,6 +923,19 @@ export default {
         safeHint: "Yalnızca programın kendi kurulum klasörü ve kayıt defteri anahtarı.",
         moderateHint: "Olağan yerler, ada göre eşleştirilir. Önerilir.",
         advancedHint: "Çok daha fazla yerde, birkaç klasör derinliğinde arar. Daha çok şey bulur, ancak bunların daha fazlası dikkatle incelenmeli. Daha yavaş."
+      },
+      review: {
+        services: "Hizmetler",
+        tier: {
+          certain: "Kesin",
+          likely: "Muhtemel",
+          possible: "Olası",
+          certainHint: "Programın kendi klasörünün içinde veya kendi girdileriyle belirtilmiş.",
+          likelyHint: "Programın adını taşıyor.",
+          possibleHint: "Yalnızca yayıncı adıyla veya program adının tek bir sözcüğüyle eşleşti. İşaretli değil; her birini kontrol edin."
+        },
+        protectedNote: (n) => `Windows'a veya yüklü diğer programlara ait oldukları için dışarıda bırakıldı: ${n}.`,
+        truncatedNote: "Arama hızlı kalması için erken durduruldu, bu yüzden daha fazlası olabilir."
       }
     }
   },
@@ -481,6 +949,19 @@ export default {
         safeHint: "Лише власна папка встановлення програми та її розділ реєстру.",
         moderateHint: "Звичайні місця, пошук за назвою. Рекомендовано.",
         advancedHint: "Шукає в набагато більшій кількості місць, на кілька рівнів углиб папок. Знаходить більше, але більше результатів потрібно уважно перевіряти. Повільніше."
+      },
+      review: {
+        services: "Служби",
+        tier: {
+          certain: "Точно",
+          likely: "Імовірно",
+          possible: "Можливо",
+          certainHint: "Усередині власної папки програми або вказано у її власних записах.",
+          likelyHint: "Названо за іменем програми.",
+          possibleHint: "Збіг лише з іменем видавця або одним словом із назви програми. Не позначено; перевірте кожен пункт."
+        },
+        protectedNote: (n) => `Пропущено, бо належить Windows або іншим встановленим програмам: ${n}.`,
+        truncatedNote: "Пошук зупинено раніше, щоб він лишався швидким, тож результатів може бути більше."
       }
     }
   },
@@ -494,6 +975,19 @@ export default {
         safeHint: "Chỉ thư mục cài đặt và khóa registry của chính chương trình.",
         moderateHint: "Các vị trí thông thường, khớp theo tên. Khuyên dùng.",
         advancedHint: "Tìm ở nhiều vị trí hơn, sâu nhiều cấp thư mục. Tìm được nhiều hơn, nhưng cần xem xét cẩn thận hơn. Chậm hơn."
+      },
+      review: {
+        services: "Dịch vụ",
+        tier: {
+          certain: "Chắc chắn",
+          likely: "Nhiều khả năng",
+          possible: "Có thể",
+          certainHint: "Nằm trong thư mục của chính chương trình, hoặc được các mục của nó chỉ định.",
+          likelyHint: "Được đặt tên theo chương trình.",
+          possibleHint: "Chỉ khớp với tên nhà phát hành hoặc một từ trong tên chương trình. Chưa đánh dấu; hãy kiểm tra từng mục."
+        },
+        protectedNote: (n) => `Đã bỏ qua vì thuộc về Windows hoặc chương trình khác đã cài: ${n}.`,
+        truncatedNote: "Việc tìm kiếm dừng sớm để giữ tốc độ, nên có thể còn nhiều hơn."
       }
     }
   },
@@ -507,6 +1001,19 @@ export default {
         safeHint: "仅限程序自身的安装文件夹及其注册表项。",
         moderateHint: "常见位置，按名称匹配。推荐。",
         advancedHint: "搜索更多位置，深入多层文件夹。能找到更多，但需要仔细核对的也更多。速度较慢。"
+      },
+      review: {
+        services: "服务",
+        tier: {
+          certain: "确定",
+          likely: "很可能",
+          possible: "可能",
+          certainHint: "位于程序自身的文件夹内，或由程序自己的条目指明。",
+          likelyHint: "以该程序命名。",
+          possibleHint: "仅与发布者名称或程序名称中的一个词匹配。未勾选，请逐项检查。"
+        },
+        protectedNote: (n) => `因属于 Windows 或其他已安装程序而排除：${n} 项。`,
+        truncatedNote: "为保持速度，搜索提前停止，因此可能还有更多。"
       }
     }
   },
@@ -520,6 +1027,19 @@ export default {
         safeHint: "僅限程式本身的安裝資料夾與其登錄機碼。",
         moderateHint: "常見位置，依名稱比對。建議使用。",
         advancedHint: "搜尋更多位置，深入多層資料夾。能找到更多，但需要仔細確認的也更多。速度較慢。"
+      },
+      review: {
+        services: "服務",
+        tier: {
+          certain: "確定",
+          likely: "很可能",
+          possible: "可能",
+          certainHint: "位於程式本身的資料夾內，或由程式自己的項目指明。",
+          likelyHint: "以該程式命名。",
+          possibleHint: "僅與發行者名稱或程式名稱中的一個詞相符。未勾選，請逐項檢查。"
+        },
+        protectedNote: (n) => `因屬於 Windows 或其他已安裝程式而排除：${n} 項。`,
+        truncatedNote: "為保持速度，搜尋提前停止，因此可能還有更多。"
       }
     }
   }

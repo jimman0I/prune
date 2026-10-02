@@ -9,6 +9,7 @@ import { getSettings } from '../services/settings.js';
 import { enforceQuarantineLimits } from '../services/quarantineLimits.js';
 import { quarantineTotals, maxBytesFrom } from '../services/quarantineSizeCap.js';
 import { quarantinePath } from '../services/quarantinePath.js';
+import { listInstalledPrograms } from '../services/programs.js';
 
 // Real bug, found dogfooding Phase 4 (2026-09-01): `manifest.batchDir` (the
 // field every list/restore/delete client-side call keys off) is the FULL
@@ -56,7 +57,10 @@ router.post('/remove', async (req, res) => {
       : await tryCreateRestorePoint(`Prune: forced removal of ${programName}`);
     const manifest = await removeLeftovers({
       programName, files: files || [], registryKeys: registryKeys || [], destination,
-      deleteLockedFilesOnRestart: settings.deleteLockedFilesOnRestart === true
+      deleteLockedFilesOnRestart: settings.deleteLockedFilesOnRestart === true,
+      // So a removal can refuse another installed program's folder. A failed
+      // read is an empty list: the protections that need no list still hold.
+      installedPrograms: await listInstalledPrograms().catch(() => [])
     });
     // The moment the quarantine grows is the moment it can exceed what
     // the user allowed it to hold, so the limits are applied here rather

@@ -166,18 +166,19 @@ foreach ($root in ${psArray(SOFTWARE_ROOTS)}) {
 # Advanced: COM registrations, on the label and on the server they load.
 foreach ($root in ${psArray(CLSID_ROOTS)}) {
   foreach ($key in (Get-ChildItem -Path $root -ErrorAction SilentlyContinue)) {
-    $hit = ([string]$key.GetValue('')) -match $pattern
-    if (-not $hit) {
-      foreach ($server in 'InprocServer32','LocalServer32') {
-        $sub = $key.OpenSubKey($server)
-        if ($sub) {
-          $command = [string]$sub.GetValue('')
-          $sub.Close()
-          if ($command -match $pattern) { $hit = $true; break }
-        }
+    $label = [string]$key.GetValue('')
+    $hit = $label -match $pattern
+    $how = 'name'
+    foreach ($server in 'InprocServer32','LocalServer32') {
+      $sub = $key.OpenSubKey($server)
+      if ($sub) {
+        $command = [string]$sub.GetValue('')
+        $sub.Close()
+        if (Test-Anchored $command) { $hit = $true; $how = 'anchor'; break }
+        if (-not $hit -and $command -match $pattern) { $hit = $true }
       }
     }
-    if ($hit) { Add-Found $key.Name $null $false }
+    if ($hit) { Add-Found $key.Name $null $false $how $label }
   }
 }
 
@@ -187,7 +188,7 @@ foreach ($root in ${psArray(REGISTERED_APPLICATIONS_ROOTS)}) {
   if ($key) {
     foreach ($valueName in $key.GetValueNames()) {
       if ($valueName -match $pattern -or ([string]$key.GetValue($valueName)) -match $pattern) {
-        Add-Found $key.Name $valueName $false
+        Add-Found $key.Name $valueName $false 'name' $valueName
       }
     }
   }
@@ -200,13 +201,25 @@ foreach ($root in ${psArray(REGISTERED_APPLICATIONS_ROOTS)}) {
  * powershell.exe would spend more time starting processes than searching.
  * Exported so a test can run it against real PowerShell -- a mocked test
  * cannot see a script that does not parse. */
-export function buildRegistryScript(pattern, { advanced = false } = {}) {
+export function buildRegistryScript(pattern, { advanced = false, anchors = [] } = {}) {
   return `
 $ErrorActionPreference = 'SilentlyContinue'
 $pattern = '${psQuote(pattern)}'
+# The program's own folders, lower-cased with a trailing separator, so that a
+# command line merely CONTAINING one is anchored and "...\\foo\\" never matches
+# "...\\foobar\\".
+$anchors = ${anchors.length > 0 ? `@(${anchors.map((a) => `'${psQuote(String(a).toLowerCase().replace(/[\\/]+$/, ''))}\\'`).join(',')})` : '@()'}
 $found = New-Object System.Collections.ArrayList
-function Add-Found($path, $valueName, $isUninstall) {
-  [void]$found.Add([pscustomobject]@{ path = $path; valueName = $valueName; isUninstallEntry = $isUninstall })
+function Add-Found($path, $valueName, $isUninstall, $how, $text) {
+  [void]$found.Add([pscustomobject]@{ path = $path; valueName = $valueName; isUninstallEntry = $isUninstall; how = $how; text = $text })
+}
+function Test-Anchored($value) {
+  if (-not $value) { return $false }
+  # A trailing separator is added so that a value naming the folder itself
+  # ("C:\\Apps\\Foo") is anchored by "c:\\apps\\foo\\" too.
+  $lower = ([string]$value).ToLowerInvariant().TrimEnd('\\') + '\\'
+  foreach ($anchor in $anchors) { if ($lower.Contains($anchor)) { return $true } }
+  return $false
 }
 
 # Vendor and product keys named for the program, one level down.
@@ -234,15 +247,18 @@ ${advanced ? ADVANCED_REGISTRY_PASSES : ''}
 foreach ($root in ${psArray(UNINSTALL_ROOTS)}) {
   foreach ($key in (Get-ChildItem -Path $root -ErrorAction SilentlyContinue)) {
     $display = [string]$key.GetValue('DisplayName')
-    if ($key.PSChildName -match $pattern -or $display -match $pattern) {
-      Add-Found $key.Name $null $true
+    if ((Test-Anchored $key.GetValue('InstallLocation')) -or (Test-Anchored $key.GetValue('UninstallString')) -or (Test-Anchored $key.GetValue('DisplayIcon'))) {
+      Add-Found $key.Name $null $true 'anchor' $display
+    } elseif ($key.PSChildName -match $pattern -or $display -match $pattern) {
+      Add-Found $key.Name $null $true 'name' $display
     }
   }
 }
 
 foreach ($root in ${psArray(APP_PATH_ROOTS)}) {
   foreach ($key in (Get-ChildItem -Path $root -ErrorAction SilentlyContinue)) {
-    if ($key.PSChildName -match $pattern) { Add-Found $key.Name $null $false }
+    if (Test-Anchored $key.GetValue('')) { Add-Found $key.Name $null $false 'anchor' $null }
+    elseif ($key.PSChildName -match $pattern) { Add-Found $key.Name $null $false 'name' $null }
   }
 }
 
@@ -254,8 +270,10 @@ foreach ($root in ${psArray(RUN_ROOTS)}) {
   if ($key) {
     foreach ($valueName in $key.GetValueNames()) {
       $data = [string]$key.GetValue($valueName)
-      if ($valueName -match $pattern -or $data -match $pattern) {
-        Add-Found $key.Name $valueName $false
+      if (Test-Anchored $data) {
+        Add-Found $key.Name $valueName $false 'anchor' ($valueName + ' ' + $data)
+      } elseif ($valueName -match $pattern -or $data -match $pattern) {
+        Add-Found $key.Name $valueName $false 'name' ($valueName + ' ' + $data)
       }
     }
   }
@@ -275,7 +293,10 @@ export function normalizeRegistryItems(raw) {
   const seen = new Set();
   const items = [];
 
-  for (const entry of raw || []) {
+  // An entry the program's own folder vouches for comes first, so when the
+  // same key was also reached by name it is the anchored one that survives.
+  const ordered = [...(raw || [])].sort((a, b) => (b?.how === 'anchor') - (a?.how === 'anchor'));
+  for (const entry of ordered) {
     const path = typeof entry?.path === 'string' ? entry.path.trim() : '';
     if (!path) continue;
     const valueName = typeof entry?.valueName === 'string' && entry.valueName !== '' ? entry.valueName : null;
@@ -288,6 +309,11 @@ export function normalizeRegistryItems(raw) {
     const item = { path };
     if (valueName !== null) item.valueName = valueName;
     if (entry.isUninstallEntry === true) item.isUninstallEntry = true;
+    // What the scan matched on, for the confidence tier. `anchored` means the
+    // program's own folder is named in it; `text` is the label or command
+    // that matched. Both are consumed by leftoverScan and not shown.
+    if (entry.how === 'anchor') item.anchored = true;
+    if (typeof entry.text === 'string' && entry.text.trim() !== '') item.text = entry.text.slice(0, 300);
     items.push(item);
   }
 
@@ -298,16 +324,19 @@ export function normalizeRegistryItems(raw) {
  *
  * Same contract as the other leftover scans: { ok, items }, and a failure
  * is the caller's to downgrade rather than this function's to hide. */
-export async function scanRegistryLeftovers(name, publisher, { advanced = false, extraPattern = null } = {}) {
+export async function scanRegistryLeftovers(name, publisher, { advanced = false, extraPattern = null, anchorDirs = [] } = {}) {
   const base = buildSearchPattern(name, publisher);
-  // An empty pattern matches every key on the machine.
-  if (base === null) return { ok: true, items: [] };
-  const pattern = advanced && extraPattern ? `${base}|${extraPattern}` : base;
+  // An empty pattern matches every key on the machine. With nothing to match
+  // on by name the sweep can still run on the program's folders alone, with a
+  // pattern that matches nothing.
+  if (base === null && anchorDirs.length === 0) return { ok: true, items: [] };
+  const named = base ?? '(?!)';
+  const pattern = advanced && extraPattern ? `${named}|${extraPattern}` : named;
 
   // The Advanced sweep reads thousands of COM keys; the default 15 seconds
   // and a retry would time it out and then do the whole thing over again.
   const options = advanced ? { timeoutMs: 120000, retries: 0 } : undefined;
-  const raw = await runPowerShellJson(buildRegistryScript(pattern, { advanced }), options);
+  const raw = await runPowerShellJson(buildRegistryScript(pattern, { advanced, anchors: anchorDirs }), options);
   const list = raw ? (Array.isArray(raw) ? raw : [raw]) : [];
   return { ok: true, items: normalizeRegistryItems(list) };
 }

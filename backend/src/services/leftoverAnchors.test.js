@@ -35,6 +35,33 @@ describe('anchorDirectories (the program\'s own InstallLocation)', () => {
     }
   });
 
+  it('also anchors on the folders of the program\'s icon and uninstaller, deduplicated', () => {
+    // Most installers register no InstallLocation, but every one registers an
+    // uninstaller -- and that sits in the program's own folder.
+    const dirs = anchorDirectories({
+      installLocation: null,
+      displayIcon: '"D:\\Apps\\Acme\\acme.exe",0',
+      uninstallString: '"D:\\Apps\\Acme\\unins000.exe" /SILENT'
+    });
+    expect(dirs).toEqual(['D:\\Apps\\Acme']);
+  });
+
+  it('adds a different folder when the icon lives somewhere else', () => {
+    const dirs = anchorDirectories({ installLocation: 'D:\\Apps\\Acme', displayIcon: 'D:\\Apps\\AcmeTools\\icon.ico' });
+    expect(dirs).toEqual(['D:\\Apps\\Acme', 'D:\\Apps\\AcmeTools']);
+  });
+
+  it('gets nothing from a command that has no path, or that lives in Windows', () => {
+    expect(anchorDirectories({ uninstallString: 'MsiExec.exe /X{GUID}' })).toEqual([]);
+    expect(anchorDirectories({ uninstallString: 'C:\\Windows\\System32\\msiexec.exe /x {GUID}' })).toEqual([]);
+  });
+
+  it('refuses a Windows or Microsoft component named as the location', () => {
+    for (const installLocation of ['C:\\Program Files\\Windows Defender', 'C:\\ProgramData\\Microsoft', 'C:\\Program Files\\WindowsApps\\X']) {
+      expect(anchorDirectories({ installLocation }), installLocation).toEqual([]);
+    }
+  });
+
   it('copes with no anchors at all', () => {
     expect(anchorDirectories(undefined)).toEqual([]);
     expect(anchorDirectories({})).toEqual([]);

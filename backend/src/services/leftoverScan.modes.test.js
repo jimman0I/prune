@@ -32,7 +32,7 @@ describe('scan mode: Safe', () => {
       name: 'Acme', publisher: 'Acme Inc', mode: 'safe', anchors: { installLocation: own }
     });
 
-    expect(result.files).toEqual({ ok: true, items: [{ path: own, sizeBytes: 100 }] });
+    expect(result.files).toEqual({ ok: true, items: [{ path: own, sizeBytes: 100, confidence: 'certain' }] });
     expect(result.mode).toBe('safe');
   });
 
@@ -50,7 +50,7 @@ describe('scan mode: Safe', () => {
     const result = await scanForLeftovers({
       name: 'Acme', publisher: '', mode: 'safe', anchors: { registryKey: 'HKCU:\\Software\\Acme' }
     });
-    expect(result.registryKeys.items).toEqual([{ path: 'HKEY_CURRENT_USER\\Software\\Acme', isUninstallEntry: true }]);
+    expect(result.registryKeys.items).toEqual([{ path: 'HKEY_CURRENT_USER\\Software\\Acme', isUninstallEntry: true, confidence: 'certain' }]);
   });
 
   it('finds nothing when the program recorded no anchors, rather than falling back to guessing', async () => {
@@ -128,7 +128,7 @@ describe('scan mode: Advanced', () => {
       .mockResolvedValueOnce([{ name: 'AcmeSvc', displayName: 'Acme Service', pathName: 'C:\\Acme\\svc.exe' }]);
     const result = await scanForLeftovers({ name: 'Acme', publisher: '', mode: 'advanced', fileRoots: [] });
     expect(runPowerShellJsonMock.mock.calls[0][0]).toContain('CLSID');
-    expect(result.services.items).toEqual([{ name: 'AcmeSvc', displayName: 'Acme Service', pathName: 'C:\\Acme\\svc.exe' }]);
+    expect(result.services.items).toEqual([{ name: 'AcmeSvc', displayName: 'Acme Service', pathName: 'C:\\Acme\\svc.exe', confidence: 'likely' }]);
   });
 
   it('leaves services out of Safe and Moderate', async () => {

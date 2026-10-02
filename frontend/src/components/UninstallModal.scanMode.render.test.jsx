@@ -104,7 +104,11 @@ describe('what the scan is sent', () => {
     await waitFor(() => expect(scanForLeftovers).toHaveBeenCalledTimes(1));
     expect(scanForLeftovers).toHaveBeenCalledWith('Thing', 'Acme', {
       mode: 'advanced',
-      anchors: { installLocation: 'C:\\Program Files\\Thing', registryKey: 'HKLM:\\SOFTWARE\\Thing' }
+      anchors: {
+        installLocation: 'C:\\Program Files\\Thing', registryKey: 'HKLM:\\SOFTWARE\\Thing',
+        uninstallString: '"C:\\Program Files\\Thing\\uninst.exe"'
+      },
+      programId: 'thing'
     });
   });
 
@@ -117,7 +121,7 @@ describe('what the scan is sent', () => {
     await waitFor(() => expect(scanForcedUninstall).toHaveBeenCalledTimes(1));
     expect(scanForcedUninstall.mock.calls[0][0]).toMatchObject({
       name: 'Thing', mode: 'safe', registryKey: 'HKLM:\\SOFTWARE\\Thing',
-      anchors: { installLocation: 'C:\\Program Files\\Thing' }
+      anchors: expect.objectContaining({ installLocation: 'C:\\Program Files\\Thing' })
     });
   });
 
