@@ -150,6 +150,12 @@ const MODE_TEXT = {
   delete: 'deepClean.footer.modeDelete'
 };
 
+/** Whether any file was skipped because scheduling its deletion at restart
+ * needed administrator rights (see lib/cleanerActions/delete.js). */
+function schedulingNeedsAdmin(result) {
+  return (result?.results ?? []).some((r) => (r?.skipped ?? []).some((s) => /needs administrator/.test(s?.reason ?? '')));
+}
+
 function formatBytes(bytes) {
   if (bytes === null || bytes === undefined) return '—';
   if (bytes === 0) return '0 B';
@@ -475,6 +481,10 @@ function DeepClean({ onNavigate }) {
         ? t('deepClean.resultRecycled', formatBytes(movedBytes))
         : t('deepClean.resultMoved', formatBytes(movedBytes)));
     }
+    // Locked files handed to Windows to delete at the next restart: still on
+    // the disk, so neither freed nor skipped.
+    const scheduled = (result?.results ?? []).reduce((n, r) => n + (Number(r?.scheduledForRestart) || 0), 0);
+    if (scheduled > 0) sentences.push(t('deepCleanV3.locked.scheduled', scheduled));
     return sentences;
   };
   // Freed and moved read as separate sentences; "Freed 5 KB. Moved 3 MB to ..."
@@ -632,6 +642,12 @@ function DeepClean({ onNavigate }) {
                   naturally instead of having a sentence mangled at
                   runtime. */}
               {lockedFileSummary(cleanResult) && t('deepClean.resultLockedSuffix', lockedFileSummary(cleanResult).count)}
+              {/* The setting was on but Windows refused the scheduling for
+                  want of administrator rights: said here, not left to look
+                  like an ordinary skip. */}
+              {schedulingNeedsAdmin(cleanResult) && (
+                <span className="block mt-1 text-[color:var(--warning)]">{t('deepCleanV3.locked.needsAdmin')}</span>
+              )}
             </div>
             {/* The space is not back until Quarantine is emptied, so the
                 way there is one click away -- but a way, not the deed:

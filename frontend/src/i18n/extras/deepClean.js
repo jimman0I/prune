@@ -44,6 +44,10 @@ export default {
         progressPass: (a, b, c, d) => `Pass ${a} of ${b}: writing random data… ${c} of ${d}`,
         resultRandom: (a, b) => `Wrote ${a} of random data over the free space in ${b} passes, then deleted it. No space was freed.`,
         resultRandomStopped: (a) => `Stopped after writing ${a} of random data over the free space. The filler was deleted.`
+      },
+      locked: {
+        scheduled: (a) => `Locked files to be deleted at the next restart: ${a}.`,
+        needsAdmin: "Some locked files could not be scheduled for deletion at restart, because that needs administrator rights."
       }
     }
   },
@@ -89,6 +93,10 @@ export default {
         progressPass: (a, b, c, d) => `Deurgang ${a} van ${b}: skryf ewekansige data… ${c} van ${d}`,
         resultRandom: (a, b) => `${a} ewekansige data in ${b} deurgange oor die vrye spasie geskryf en dit daarna verwyder. Geen spasie is vrygemaak nie.`,
         resultRandomStopped: (a) => `Gestop nadat ${a} ewekansige data oor die vrye spasie geskryf is. Die vullêer is verwyder.`
+      },
+      locked: {
+        scheduled: (a) => `Gesluite lêers wat by die volgende herbegin verwyder sal word: ${a}.`,
+        needsAdmin: "Sommige gesluite lêers kon nie vir verwydering by herbegin geskeduleer word nie, omdat dit administrateurregte vereis."
       }
     }
   },
@@ -134,6 +142,10 @@ export default {
         progressPass: (a, b, c, d) => `المرة ${a} من ${b}: جارٍ كتابة بيانات عشوائية… ${c} من ${d}`,
         resultRandom: (a, b) => `تمت كتابة ${a} من البيانات العشوائية فوق المساحة الفارغة على ${b} مرات ثم حُذفت. لم تتحرر أي مساحة.`,
         resultRandomStopped: (a) => `توقفت العملية بعد كتابة ${a} من البيانات العشوائية فوق المساحة الفارغة. وقد حُذف ملف التعبئة.`
+      },
+      locked: {
+        scheduled: (a) => `الملفات المقفلة التي ستُحذف عند إعادة التشغيل التالية: ${a}.`,
+        needsAdmin: "تعذّرت جدولة بعض الملفات المقفلة للحذف عند إعادة التشغيل لأن ذلك يتطلب صلاحيات المسؤول."
       }
     }
   },
@@ -179,6 +191,10 @@ export default {
         progressPass: (a, b, c, d) => `Passada ${a} de ${b}: escrivint dades aleatòries… ${c} de ${d}`,
         resultRandom: (a, b) => `S'han escrit ${a} de dades aleatòries sobre l'espai lliure en ${b} passades i després s'han eliminat. No s'ha alliberat cap espai.`,
         resultRandomStopped: (a) => `Aturat després d'escriure ${a} de dades aleatòries sobre l'espai lliure. El fitxer de farciment s'ha eliminat.`
+      },
+      locked: {
+        scheduled: (a) => `Fitxers bloquejats que se suprimiran en el següent reinici: ${a}.`,
+        needsAdmin: "Alguns fitxers bloquejats no s'han pogut programar per suprimir-se en el reinici, perquè cal tenir permisos d'administrador."
       }
     }
   },
@@ -224,6 +240,10 @@ export default {
         progressPass: (a, b, c, d) => `Přepis ${a} z ${b}: zapisování náhodných dat… ${c} z ${d}`,
         resultRandom: (a, b) => `Volné místo bylo přepsáno náhodnými daty (${a}) ve ${b} přepisech a vyplňovací soubor byl smazán. Žádné místo se neuvolnilo.`,
         resultRandomStopped: (a) => `Zastaveno po zapsání náhodných dat (${a}) do volného místa. Vyplňovací soubor byl smazán.`
+      },
+      locked: {
+        scheduled: (a) => `Uzamčené soubory, které se odstraní při příštím restartu: ${a}.`,
+        needsAdmin: "Některé uzamčené soubory se nepodařilo naplánovat k odstranění při restartu, protože to vyžaduje práva správce."
       }
     }
   },
@@ -269,6 +289,10 @@ export default {
         progressPass: (a, b, c, d) => `Pas ${a} o ${b}: ysgrifennu data ar hap… ${c} o ${d}`,
         resultRandom: (a, b) => `Ysgrifennwyd ${a} o ddata ar hap dros y lle rhydd mewn ${b} pas, yna cawsant eu dileu. Ni ryddhawyd unrhyw le.`,
         resultRandomStopped: (a) => `Stopiwyd ar ôl ysgrifennu ${a} o ddata ar hap dros y lle rhydd. Dilëwyd y ffeil llenwi.`
+      },
+      locked: {
+        scheduled: (a) => `Ffeiliau wedi'u cloi i'w dileu adeg yr ailgychwyn nesaf: ${a}.`,
+        needsAdmin: "Ni ellid trefnu rhai ffeiliau wedi'u cloi i'w dileu adeg ailgychwyn, oherwydd bod angen hawliau gweinyddwr."
       }
     }
   },
@@ -314,6 +338,10 @@ export default {
         progressPass: (a, b, c, d) => `Pas ${a} af ${b}: skriver tilfældige data… ${c} af ${d}`,
         resultRandom: (a, b) => `Skrev ${a} tilfældige data over den ledige plads i ${b} pas og slettede dem derefter. Der blev ikke frigjort plads.`,
         resultRandomStopped: (a) => `Stoppet efter at have skrevet ${a} tilfældige data over den ledige plads. Fyldfilen blev slettet.`
+      },
+      locked: {
+        scheduled: (a) => `Låste filer, der slettes ved næste genstart: ${a}.`,
+        needsAdmin: "Nogle låste filer kunne ikke planlægges slettet ved genstart, fordi det kræver administratorrettigheder."
       }
     }
   },
@@ -359,6 +387,10 @@ export default {
         progressPass: (a, b, c, d) => `Durchgang ${a} von ${b}: Zufallsdaten werden geschrieben… ${c} von ${d}`,
         resultRandom: (a, b) => `${a} an Zufallsdaten in ${b} Durchgängen über den freien Speicherplatz geschrieben und anschließend gelöscht. Es wurde kein Speicherplatz freigegeben.`,
         resultRandomStopped: (a) => `Abgebrochen, nachdem ${a} an Zufallsdaten in den freien Speicherplatz geschrieben wurden. Die Fülldatei wurde gelöscht.`
+      },
+      locked: {
+        scheduled: (a) => `Gesperrte Dateien, die beim nächsten Neustart gelöscht werden: ${a}.`,
+        needsAdmin: "Einige gesperrte Dateien ließen sich nicht für das Löschen beim Neustart vormerken, da dafür Administratorrechte nötig sind."
       }
     }
   },
@@ -404,6 +436,10 @@ export default {
         progressPass: (a, b, c, d) => `Πέρασμα ${a} από ${b}: εγγραφή τυχαίων δεδομένων… ${c} από ${d}`,
         resultRandom: (a, b) => `Γράφτηκαν τυχαία δεδομένα συνολικού μεγέθους ${a} πάνω από τον ελεύθερο χώρο σε ${b} περάσματα και στη συνέχεια διαγράφηκαν. Δεν ελευθερώθηκε χώρος.`,
         resultRandomStopped: (a) => `Διακόπηκε μετά την εγγραφή τυχαίων δεδομένων συνολικού μεγέθους ${a} πάνω από τον ελεύθερο χώρο. Το αρχείο πλήρωσης διαγράφηκε.`
+      },
+      locked: {
+        scheduled: (a) => `Κλειδωμένα αρχεία που θα διαγραφούν στην επόμενη επανεκκίνηση: ${a}.`,
+        needsAdmin: "Ορισμένα κλειδωμένα αρχεία δεν μπόρεσαν να προγραμματιστούν για διαγραφή στην επανεκκίνηση, επειδή απαιτούνται δικαιώματα διαχειριστή."
       }
     }
   },
@@ -449,6 +485,10 @@ export default {
         progressPass: (a, b, c, d) => `Pasada ${a} de ${b}: escribiendo datos aleatorios… ${c} de ${d}`,
         resultRandom: (a, b) => `Se escribieron ${a} de datos aleatorios sobre el espacio libre en ${b} pasadas y luego se eliminaron. No se liberó espacio.`,
         resultRandomStopped: (a) => `Detenido tras escribir ${a} de datos aleatorios sobre el espacio libre. El archivo de relleno se eliminó.`
+      },
+      locked: {
+        scheduled: (a) => `Archivos bloqueados que se eliminarán en el próximo reinicio: ${a}.`,
+        needsAdmin: "No se pudieron programar algunos archivos bloqueados para eliminarse al reiniciar, porque eso requiere permisos de administrador."
       }
     }
   },
@@ -494,6 +534,10 @@ export default {
         progressPass: (a, b, c, d) => `Käik ${a} / ${b}: kirjutatakse juhuslikke andmeid… ${c} / ${d}`,
         resultRandom: (a, b) => `Vabale ruumile kirjutati ${b} käiguga ${a} juhuslikke andmeid ja need kustutati seejärel. Ruumi ei vabanenud.`,
         resultRandomStopped: (a) => `Peatati pärast seda, kui vabale ruumile oli kirjutatud ${a} juhuslikke andmeid. Täitefail kustutati.`
+      },
+      locked: {
+        scheduled: (a) => `Lukustatud failid, mis kustutatakse järgmisel taaskäivitusel: ${a}.`,
+        needsAdmin: "Mõnda lukustatud faili ei saanud taaskäivitusel kustutamiseks ajastada, sest see nõuab administraatoriõigusi."
       }
     }
   },
@@ -539,6 +583,10 @@ export default {
         progressPass: (a, b, c, d) => `Kierros ${a} / ${b}: kirjoitetaan satunnaisdataa… ${c} / ${d}`,
         resultRandom: (a, b) => `Vapaan tilan päälle kirjoitettiin ${a} satunnaisdataa ${b} kierroksella, minkä jälkeen ne poistettiin. Tilaa ei vapautunut.`,
         resultRandomStopped: (a) => `Pysäytettiin, kun vapaan tilan päälle oli kirjoitettu ${a} satunnaisdataa. Täytetiedosto poistettiin.`
+      },
+      locked: {
+        scheduled: (a) => `Lukitut tiedostot, jotka poistetaan seuraavassa uudelleenkäynnistyksessä: ${a}.`,
+        needsAdmin: "Joitakin lukittuja tiedostoja ei voitu ajoittaa poistettavaksi uudelleenkäynnistyksessä, koska se vaatii järjestelmänvalvojan oikeudet."
       }
     }
   },
@@ -584,6 +632,10 @@ export default {
         progressPass: (a, b, c, d) => `Passe ${a} sur ${b} : écriture de données aléatoires… ${c} sur ${d}`,
         resultRandom: (a, b) => `${a} de données aléatoires écrits sur l’espace libre en ${b} passes, puis supprimés. Aucun espace n’a été libéré.`,
         resultRandomStopped: (a) => `Arrêté après l’écriture de ${a} de données aléatoires sur l’espace libre. Le fichier de remplissage a été supprimé.`
+      },
+      locked: {
+        scheduled: (a) => `Fichiers verrouillés qui seront supprimés au prochain redémarrage : ${a}.`,
+        needsAdmin: "Certains fichiers verrouillés n'ont pas pu être programmés pour suppression au redémarrage, car cela exige des droits d'administrateur."
       }
     }
   },
@@ -629,6 +681,10 @@ export default {
         progressPass: (a, b, c, d) => `מעבר ${a} מתוך ${b}: כותב נתונים אקראיים… ${c} מתוך ${d}`,
         resultRandom: (a, b) => `נכתבו נתונים אקראיים בנפח ${a} על השטח הפנוי ב-${b} מעברים, ואז נמחקו. לא שוחרר מקום.`,
         resultRandomStopped: (a) => `נעצר אחרי שנכתבו נתונים אקראיים בנפח ${a} על השטח הפנוי. קובץ המילוי נמחק.`
+      },
+      locked: {
+        scheduled: (a) => `קבצים נעולים שיימחקו בהפעלה מחדש הבאה: ${a}.`,
+        needsAdmin: "לא ניתן היה לתזמן חלק מהקבצים הנעולים למחיקה בהפעלה מחדש, כי הדבר דורש הרשאות מנהל."
       }
     }
   },
@@ -674,6 +730,10 @@ export default {
         progressPass: (a, b, c, d) => `${a}. menet / ${b}: véletlen adatok írása… ${c} / ${d}`,
         resultRandom: (a, b) => `A szabad terület felülírva ${a} véletlen adattal ${b} menetben, majd a kitöltőfájl törlődött. Nem szabadult fel hely.`,
         resultRandomStopped: (a) => `Leállítva ${a} véletlen adat kiírása után. A kitöltőfájl törlődött.`
+      },
+      locked: {
+        scheduled: (a) => `A következő újraindításkor törlődő zárolt fájlok: ${a}.`,
+        needsAdmin: "Néhány zárolt fájl törlését nem sikerült az újraindításra ütemezni, mert ehhez rendszergazdai jogosultság kell."
       }
     }
   },
@@ -719,6 +779,10 @@ export default {
         progressPass: (a, b, c, d) => `Lintasan ${a} dari ${b}: menulis data acak… ${c} dari ${d}`,
         resultRandom: (a, b) => `${a} data acak ditulis menimpa ruang kosong dalam ${b} lintasan, lalu dihapus. Tidak ada ruang yang dibebaskan.`,
         resultRandomStopped: (a) => `Dihentikan setelah menulis ${a} data acak menimpa ruang kosong. File pengisi sudah dihapus.`
+      },
+      locked: {
+        scheduled: (a) => `File terkunci yang akan dihapus saat restart berikutnya: ${a}.`,
+        needsAdmin: "Beberapa file terkunci tidak dapat dijadwalkan untuk dihapus saat restart, karena itu memerlukan hak administrator."
       }
     }
   },
@@ -764,6 +828,10 @@ export default {
         progressPass: (a, b, c, d) => `Umferð ${a} af ${b}: skrifa handahófskennd gögn… ${c} af ${d}`,
         resultRandom: (a, b) => `Skrifaði ${a} af handahófskenndum gögnum yfir laust pláss í ${b} umferðum og eyddi þeim síðan. Ekkert pláss losnaði.`,
         resultRandomStopped: (a) => `Stöðvað eftir að ${a} af handahófskenndum gögnum voru skrifuð yfir laust pláss. Fyllingarskránni var eytt.`
+      },
+      locked: {
+        scheduled: (a) => `Læstar skrár sem verður eytt við næstu endurræsingu: ${a}.`,
+        needsAdmin: "Ekki tókst að tímasetja eyðingu sumra læstra skráa við endurræsingu því það krefst stjórnandaréttinda."
       }
     }
   },
@@ -809,6 +877,10 @@ export default {
         progressPass: (a, b, c, d) => `Passaggio ${a} di ${b}: scrittura di dati casuali… ${c} di ${d}`,
         resultRandom: (a, b) => `Scritti ${a} di dati casuali sullo spazio libero in ${b} passaggi, poi eliminati. Non è stato liberato spazio.`,
         resultRandomStopped: (a) => `Interrotto dopo aver scritto ${a} di dati casuali sullo spazio libero. Il file di riempimento è stato eliminato.`
+      },
+      locked: {
+        scheduled: (a) => `File bloccati che verranno eliminati al prossimo riavvio: ${a}.`,
+        needsAdmin: "Alcuni file bloccati non hanno potuto essere programmati per l'eliminazione al riavvio, perché servono i diritti di amministratore."
       }
     }
   },
@@ -854,6 +926,10 @@ export default {
         progressPass: (a, b, c, d) => `${b} 回中 ${a} 回目：ランダムデータを書き込み中… ${c} / ${d}`,
         resultRandom: (a, b) => `空き領域に ${a} のランダムデータを ${b} 回に分けて書き込み、書き込みに使った一時ファイルを削除しました。解放された容量はありません。`,
         resultRandomStopped: (a) => `空き領域への ${a} のランダムデータの書き込み後に停止しました。書き込みに使った一時ファイルは削除されました。`
+      },
+      locked: {
+        scheduled: (a) => `次回の再起動時に削除されるロック中のファイル：${a}。`,
+        needsAdmin: "一部のロック中のファイルは、再起動時の削除を予約できませんでした。予約には管理者権限が必要です。"
       }
     }
   },
@@ -899,6 +975,10 @@ export default {
         progressPass: (a, b, c, d) => `${b}회 중 ${a}회차: 무작위 데이터를 기록하는 중… ${c} / ${d}`,
         resultRandom: (a, b) => `빈 공간에 무작위 데이터를 ${b}회에 걸쳐 ${a}만큼 기록한 뒤 삭제했습니다. 확보된 공간은 없습니다.`,
         resultRandomStopped: (a) => `빈 공간에 무작위 데이터를 ${a}만큼 기록한 뒤 중지했습니다. 채우기용 파일은 삭제되었습니다.`
+      },
+      locked: {
+        scheduled: (a) => `다음 다시 시작할 때 삭제될 잠긴 파일: ${a}개.`,
+        needsAdmin: "일부 잠긴 파일은 관리자 권한이 필요하여 다시 시작할 때 삭제하도록 예약하지 못했습니다."
       }
     }
   },
@@ -944,6 +1024,10 @@ export default {
         progressPass: (a, b, c, d) => `Ciklas ${a} iš ${b}: rašomi atsitiktiniai duomenys… ${c} iš ${d}`,
         resultRandom: (a, b) => `Laisva vieta perrašyta atsitiktiniais duomenimis (${a}) per ${b} ciklus, po to užpildymo failas ištrintas. Vieta neatlaisvinta.`,
         resultRandomStopped: (a) => `Sustabdyta po to, kai laisva vieta perrašyta atsitiktiniais duomenimis (${a}). Užpildymo failas ištrintas.`
+      },
+      locked: {
+        scheduled: (a) => `Užrakinti failai, kurie bus ištrinti kitą kartą paleidus iš naujo: ${a}.`,
+        needsAdmin: "Kai kurių užrakintų failų nepavyko suplanuoti ištrinti paleidus iš naujo, nes tam reikia administratoriaus teisių."
       }
     }
   },
@@ -989,6 +1073,10 @@ export default {
         progressPass: (a, b, c, d) => `Laluan ${a} daripada ${b}: menulis data rawak… ${c} daripada ${d}`,
         resultRandom: (a, b) => `${a} data rawak ditulis ke atas ruang kosong dalam ${b} laluan, kemudian dipadam. Tiada ruang dibebaskan.`,
         resultRandomStopped: (a) => `Dihentikan selepas menulis ${a} data rawak ke atas ruang kosong. Fail pengisi telah dipadam.`
+      },
+      locked: {
+        scheduled: (a) => `Fail terkunci yang akan dipadam pada mula semula seterusnya: ${a}.`,
+        needsAdmin: "Sesetengah fail terkunci tidak dapat dijadualkan untuk dipadam semasa mula semula, kerana itu memerlukan hak pentadbir."
       }
     }
   },
@@ -1034,6 +1122,10 @@ export default {
         progressPass: (a, b, c, d) => `Pass ${a} av ${b}: skriver tilfeldige data… ${c} av ${d}`,
         resultRandom: (a, b) => `Skrev ${a} tilfeldige data over den ledige plassen i ${b} pass og slettet dem deretter. Ingen plass ble frigjort.`,
         resultRandomStopped: (a) => `Stoppet etter å ha skrevet ${a} tilfeldige data over den ledige plassen. Fyllfilen ble slettet.`
+      },
+      locked: {
+        scheduled: (a) => `Låste filer som slettes ved neste omstart: ${a}.`,
+        needsAdmin: "Noen låste filer kunne ikke planlegges slettet ved omstart, fordi det krever administratorrettigheter."
       }
     }
   },
@@ -1079,6 +1171,10 @@ export default {
         progressPass: (a, b, c, d) => `Ronde ${a} van ${b}: willekeurige gegevens schrijven… ${c} van ${d}`,
         resultRandom: (a, b) => `${a} aan willekeurige gegevens in ${b} rondes over de vrije ruimte geschreven en daarna verwijderd. Er is geen ruimte vrijgemaakt.`,
         resultRandomStopped: (a) => `Gestopt na het schrijven van ${a} aan willekeurige gegevens over de vrije ruimte. Het opvulbestand is verwijderd.`
+      },
+      locked: {
+        scheduled: (a) => `Vergrendelde bestanden die bij de volgende herstart worden verwijderd: ${a}.`,
+        needsAdmin: "Sommige vergrendelde bestanden konden niet worden gepland voor verwijdering bij het herstarten, omdat daarvoor beheerdersrechten nodig zijn."
       }
     }
   },
@@ -1124,6 +1220,10 @@ export default {
         progressPass: (a, b, c, d) => `Przebieg ${a} z ${b}: zapisywanie danych losowych… ${c} z ${d}`,
         resultRandom: (a, b) => `Wolne miejsce nadpisano danymi losowymi (${a}) w ${b} przebiegach, po czym plik wypełniający usunięto. Nie zwolniono miejsca.`,
         resultRandomStopped: (a) => `Zatrzymano po zapisaniu danych losowych (${a}) w wolnym miejscu. Plik wypełniający usunięto.`
+      },
+      locked: {
+        scheduled: (a) => `Zablokowane pliki, które zostaną usunięte przy następnym restarcie: ${a}.`,
+        needsAdmin: "Nie udało się zaplanować usunięcia niektórych zablokowanych plików przy restarcie, ponieważ wymaga to uprawnień administratora."
       }
     }
   },
@@ -1169,6 +1269,10 @@ export default {
         progressPass: (a, b, c, d) => `${a} پړاو له ${b} څخه: تصادفي معلومات لیکل کیږي… ${c} له ${d} څخه`,
         resultRandom: (a, b) => `په وړیا ځای کې ${a} تصادفي معلومات په ${b} پړاوونو کې ولیکل شول او بیا ړنګ شول. هیڅ ځای نه دی خلاص شوی.`,
         resultRandomStopped: (a) => `په وړیا ځای کې د ${a} تصادفي معلوماتو لیکلو وروسته ودرول شو. ډکوونکی فایل ړنګ شو.`
+      },
+      locked: {
+        scheduled: (a) => `تړل شوي فایلونه چې په راتلونکي بیا پیلولو کې ړنګیږي: ${a}.`,
+        needsAdmin: "ځینې تړل شوي فایلونه د بیا پیلولو پر مهال د ړنګولو لپاره مهال ویش نشول، ځکه چې دا د مدیر حقونه غواړي."
       }
     }
   },
@@ -1214,6 +1318,10 @@ export default {
         progressPass: (a, b, c, d) => `Passagem ${a} de ${b}: gravando dados aleatórios… ${c} de ${d}`,
         resultRandom: (a, b) => `Foram gravados ${a} de dados aleatórios sobre o espaço livre em ${b} passagens e depois excluídos. Nenhum espaço foi liberado.`,
         resultRandomStopped: (a) => `Interrompido após gravar ${a} de dados aleatórios sobre o espaço livre. O arquivo de preenchimento foi excluído.`
+      },
+      locked: {
+        scheduled: (a) => `Arquivos bloqueados que serão excluídos na próxima reinicialização: ${a}.`,
+        needsAdmin: "Não foi possível agendar alguns arquivos bloqueados para exclusão na reinicialização, pois isso exige direitos de administrador."
       }
     }
   },
@@ -1259,6 +1367,10 @@ export default {
         progressPass: (a, b, c, d) => `Passagem ${a} de ${b}: a escrever dados aleatórios… ${c} de ${d}`,
         resultRandom: (a, b) => `Foram escritos ${a} de dados aleatórios sobre o espaço livre em ${b} passagens e depois eliminados. Não foi libertado espaço.`,
         resultRandomStopped: (a) => `Interrompido depois de escrever ${a} de dados aleatórios sobre o espaço livre. O ficheiro de preenchimento foi eliminado.`
+      },
+      locked: {
+        scheduled: (a) => `Ficheiros bloqueados que serão eliminados no próximo reinício: ${a}.`,
+        needsAdmin: "Não foi possível agendar alguns ficheiros bloqueados para eliminação no reinício, porque isso exige direitos de administrador."
       }
     }
   },
@@ -1304,6 +1416,10 @@ export default {
         progressPass: (a, b, c, d) => `Trecerea ${a} din ${b}: se scriu date aleatorii… ${c} din ${d}`,
         resultRandom: (a, b) => `S-au scris ${a} de date aleatorii peste spațiul liber în ${b} treceri, apoi au fost șterse. Nu s-a eliberat spațiu.`,
         resultRandomStopped: (a) => `Oprit după ce s-au scris ${a} de date aleatorii peste spațiul liber. Fișierul de umplere a fost șters.`
+      },
+      locked: {
+        scheduled: (a) => `Fișiere blocate care vor fi șterse la următoarea repornire: ${a}.`,
+        needsAdmin: "Unele fișiere blocate nu au putut fi programate pentru ștergere la repornire, deoarece aceasta necesită drepturi de administrator."
       }
     }
   },
@@ -1349,6 +1465,10 @@ export default {
         progressPass: (a, b, c, d) => `Проход ${a} из ${b}: запись случайных данных… ${c} из ${d}`,
         resultRandom: (a, b) => `Свободное место перезаписано случайными данными (${a}) за ${b} прохода, после чего файл-заполнитель удалён. Место не освобождено.`,
         resultRandomStopped: (a) => `Остановлено после записи случайных данных (${a}) в свободное место. Файл-заполнитель удалён.`
+      },
+      locked: {
+        scheduled: (a) => `Заблокированные файлы, которые будут удалены при следующей перезагрузке: ${a}.`,
+        needsAdmin: "Некоторые заблокированные файлы не удалось запланировать на удаление при перезагрузке: для этого нужны права администратора."
       }
     }
   },
@@ -1394,6 +1514,10 @@ export default {
         progressPass: (a, b, c, d) => `Prepis ${a} z ${b}: zapisovanie náhodných údajov… ${c} z ${d}`,
         resultRandom: (a, b) => `Voľné miesto bolo prepísané náhodnými údajmi (${a}) v ${b} prepisoch a vypĺňací súbor bol odstránený. Žiadne miesto sa neuvoľnilo.`,
         resultRandomStopped: (a) => `Zastavené po zapísaní náhodných údajov (${a}) do voľného miesta. Vypĺňací súbor bol odstránený.`
+      },
+      locked: {
+        scheduled: (a) => `Uzamknuté súbory, ktoré sa odstránia pri najbližšom reštarte: ${a}.`,
+        needsAdmin: "Niektoré uzamknuté súbory sa nepodarilo naplánovať na odstránenie pri reštarte, pretože to vyžaduje oprávnenia správcu."
       }
     }
   },
@@ -1439,6 +1563,10 @@ export default {
         progressPass: (a, b, c, d) => `Kalimi ${a} nga ${b}: po shkruhen të dhëna të rastësishme… ${c} nga ${d}`,
         resultRandom: (a, b) => `U shkruan ${a} të dhëna të rastësishme mbi hapësirën e lirë në ${b} kalime, pastaj u fshinë. Nuk u lirua hapësirë.`,
         resultRandomStopped: (a) => `U ndal pasi u shkruan ${a} të dhëna të rastësishme mbi hapësirën e lirë. Skedari mbushës u fshi.`
+      },
+      locked: {
+        scheduled: (a) => `Skedarë të bllokuar që do të fshihen në rinisjen tjetër: ${a}.`,
+        needsAdmin: "Disa skedarë të bllokuar nuk mund të planifikoheshin për fshirje gjatë rinisjes, sepse kjo kërkon të drejta administratori."
       }
     }
   },
@@ -1484,6 +1612,10 @@ export default {
         progressPass: (a, b, c, d) => `Пролаз ${a} од ${b}: уписују се насумични подаци… ${c} од ${d}`,
         resultRandom: (a, b) => `Слободан простор је преписан насумичним подацима (${a}) у ${b} пролаза, а затим је датотека за попуну обрисана. Простор није ослобођен.`,
         resultRandomStopped: (a) => `Заустављено након што је слободан простор преписан насумичним подацима (${a}). Датотека за попуну је обрисана.`
+      },
+      locked: {
+        scheduled: (a) => `Закључане датотеке које ће бити обрисане при следећем поновном покретању: ${a}.`,
+        needsAdmin: "Неке закључане датотеке није било могуће заказати за брисање при поновном покретању, јер је за то потребно администраторско право."
       }
     }
   },
@@ -1529,6 +1661,10 @@ export default {
         progressPass: (a, b, c, d) => `Pass ${a} av ${b}: skriver slumpmässiga data… ${c} av ${d}`,
         resultRandom: (a, b) => `Skrev ${a} slumpmässiga data över det lediga utrymmet i ${b} pass och raderade dem sedan. Inget utrymme frigjordes.`,
         resultRandomStopped: (a) => `Stoppade efter att ha skrivit ${a} slumpmässiga data över det lediga utrymmet. Fyllnadsfilen raderades.`
+      },
+      locked: {
+        scheduled: (a) => `Låsta filer som raderas vid nästa omstart: ${a}.`,
+        needsAdmin: "Vissa låsta filer kunde inte schemaläggas för radering vid omstart, eftersom det kräver administratörsbehörighet."
       }
     }
   },
@@ -1574,6 +1710,10 @@ export default {
         progressPass: (a, b, c, d) => `รอบที่ ${a} จาก ${b}: กำลังเขียนข้อมูลสุ่ม… ${c} จาก ${d}`,
         resultRandom: (a, b) => `เขียนข้อมูลสุ่ม ${a} ทับพื้นที่ว่างใน ${b} รอบแล้วลบทิ้ง ไม่ได้เพิ่มพื้นที่ว่างแต่อย่างใด`,
         resultRandomStopped: (a) => `หยุดหลังจากเขียนข้อมูลสุ่ม ${a} ทับพื้นที่ว่าง ไฟล์ที่ใช้เติมพื้นที่ถูกลบแล้ว`
+      },
+      locked: {
+        scheduled: (a) => `ไฟล์ที่ถูกล็อกซึ่งจะถูกลบเมื่อรีสตาร์ตครั้งถัดไป: ${a}`,
+        needsAdmin: "ไม่สามารถตั้งเวลาลบไฟล์ที่ถูกล็อกบางไฟล์เมื่อรีสตาร์ตได้ เพราะต้องใช้สิทธิ์ผู้ดูแลระบบ"
       }
     }
   },
@@ -1619,6 +1759,10 @@ export default {
         progressPass: (a, b, c, d) => `Geçiş ${a} / ${b}: rastgele veri yazılıyor… ${c} / ${d}`,
         resultRandom: (a, b) => `Boş alanın üzerine ${b} geçişte ${a} rastgele veri yazıldı, ardından silindi. Hiç alan boşaltılmadı.`,
         resultRandomStopped: (a) => `Boş alanın üzerine ${a} rastgele veri yazıldıktan sonra durduruldu. Dolgu dosyası silindi.`
+      },
+      locked: {
+        scheduled: (a) => `Bir sonraki yeniden başlatmada silinecek kilitli dosyalar: ${a}.`,
+        needsAdmin: "Bazı kilitli dosyalar yeniden başlatmada silinmek üzere zamanlanamadı, çünkü bunun için yönetici hakları gerekir."
       }
     }
   },
@@ -1664,6 +1808,10 @@ export default {
         progressPass: (a, b, c, d) => `Прохід ${a} із ${b}: запис випадкових даних… ${c} із ${d}`,
         resultRandom: (a, b) => `Вільне місце перезаписано випадковими даними (${a}) за ${b} проходи, після чого файл-заповнювач видалено. Місце не звільнено.`,
         resultRandomStopped: (a) => `Зупинено після запису випадкових даних (${a}) у вільне місце. Файл-заповнювач видалено.`
+      },
+      locked: {
+        scheduled: (a) => `Заблоковані файли, які буде видалено під час наступного перезавантаження: ${a}.`,
+        needsAdmin: "Деякі заблоковані файли не вдалося запланувати на видалення під час перезавантаження, бо для цього потрібні права адміністратора."
       }
     }
   },
@@ -1709,6 +1857,10 @@ export default {
         progressPass: (a, b, c, d) => `Lượt ${a}/${b}: đang ghi dữ liệu ngẫu nhiên… ${c} / ${d}`,
         resultRandom: (a, b) => `Đã ghi ${a} dữ liệu ngẫu nhiên đè lên dung lượng trống qua ${b} lượt, rồi xóa tệp đệm. Không có dung lượng nào được giải phóng.`,
         resultRandomStopped: (a) => `Đã dừng sau khi ghi ${a} dữ liệu ngẫu nhiên đè lên dung lượng trống. Tệp đệm đã được xóa.`
+      },
+      locked: {
+        scheduled: (a) => `Các tệp bị khóa sẽ bị xóa ở lần khởi động lại tiếp theo: ${a}.`,
+        needsAdmin: "Không thể lên lịch xóa một số tệp bị khóa khi khởi động lại, vì việc đó cần quyền quản trị viên."
       }
     }
   },
@@ -1754,6 +1906,10 @@ export default {
         progressPass: (a, b, c, d) => `第 ${a} 次，共 ${b} 次：正在写入随机数据… ${c} / ${d}`,
         resultRandom: (a, b) => `已用随机数据覆盖可用空间（共写入 ${a}，分 ${b} 次），随后删除了填充文件。未释放任何空间。`,
         resultRandomStopped: (a) => `已在向可用空间写入 ${a} 的随机数据后停止，填充文件已删除。`
+      },
+      locked: {
+        scheduled: (a) => `将在下次重启时删除的被锁定文件：${a}。`,
+        needsAdmin: "部分被锁定的文件无法安排在重启时删除，因为这需要管理员权限。"
       }
     }
   },
@@ -1799,6 +1955,10 @@ export default {
         progressPass: (a, b, c, d) => `第 ${a} 次，共 ${b} 次：正在寫入隨機資料… ${c} / ${d}`,
         resultRandom: (a, b) => `已用隨機資料覆寫可用空間（共寫入 ${a}，分 ${b} 次），隨後刪除了填充檔案。未釋放任何空間。`,
         resultRandomStopped: (a) => `已在向可用空間寫入 ${a} 的隨機資料後停止，填充檔案已刪除。`
+      },
+      locked: {
+        scheduled: (a) => `將在下次重新啟動時刪除的被鎖定檔案：${a}。`,
+        needsAdmin: "部分被鎖定的檔案無法安排在重新啟動時刪除，因為這需要系統管理員權限。"
       }
     }
   }

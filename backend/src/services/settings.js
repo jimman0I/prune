@@ -229,7 +229,10 @@ export function cleanGuardsFrom(settings) {
     // 0 means "just delete"; 1 or 3 is how many overwrite passes come first.
     overwritePasses: settings?.overwriteBeforeDelete === true ? normalizePasses(settings?.overwritePasses) : 0,
     wipeDrive: normalizeWipeDrive(settings?.wipeDrive),
-    wipePasses: normalizePasses(settings?.wipePasses)
+    wipePasses: normalizePasses(settings?.wipePasses),
+    // The same switch the Uninstall tab has. Only an exact true: it makes a
+    // machine-wide registry write that needs administrator.
+    deleteLockedOnRestart: settings?.deleteLockedFilesOnRestart === true
   };
 }
 
