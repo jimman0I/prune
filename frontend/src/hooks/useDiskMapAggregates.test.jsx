@@ -2,9 +2,7 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { renderHook, waitFor } from '@testing-library/react';
 import { useDiskMapAggregates } from './useDiskMapAggregates.js';
-import { extensionBreakdown } from '../lib/extensionBreakdown.js';
-import { largestFiles } from '../lib/largestFiles.js';
-import { folderTableRows } from '../lib/folderTable.js';
+import { createAggregator } from '../lib/aggregator.js';
 
 /** Disk Map's three heaviest tree-derived views, moved off the main
  * thread. See diskMapAggregates.worker.js's own comment for why: a
@@ -37,6 +35,9 @@ class FakeWorker {
   constructor() {
     this.listeners = new Set();
     this.terminated = false;
+    // The real worker keeps the tree it was sent; so does this one.
+    this.handle = createAggregator();
+    FakeWorker.posted = [];
   }
 
   addEventListener(type, fn) {
@@ -48,17 +49,13 @@ class FakeWorker {
   }
 
   postMessage(data) {
+    FakeWorker.posted.push(data);
     // Deferred, not synchronous: a real worker's answer never arrives in
     // the same tick as the postMessage that asked for it, and the stale-
     // response test below depends on that gap being real.
     queueMicrotask(() => {
       if (this.terminated) return;
-      const result = {
-        requestId: data.requestId,
-        extensionBreakdown: extensionBreakdown(data.tree),
-        largestFiles: largestFiles(data.tree, { limit: data.fileLimit }),
-        folderRows: folderTableRows(data.tree)
-      };
+      const result = this.handle(data);
       for (const fn of this.listeners) fn({ data: result });
     });
   }
@@ -141,5 +138,40 @@ describe('without a Worker (every test environment, and this hook\'s own fallbac
     expect(result.current.computing).toBe(false);
     expect(result.current.result.extensionBreakdown.totalFiles).toBe(2);
     expect(result.current.result.largestFiles.map((f) => f.name)).toEqual(['b.log', 'a.txt']);
+  });
+});
+
+describe('a search while a Worker holds the tree', () => {
+  it('sends the tree once, then only the search text', async () => {
+    const { result, rerender } = renderHook(({ filterText }) => useDiskMapAggregates(smallTree, { filterText }), {
+      initialProps: { filterText: '' }
+    });
+    await waitFor(() => expect(result.current.computing).toBe(false));
+
+    rerender({ filterText: '*.txt' });
+    await waitFor(() => expect(result.current.result.largestFiles.map((f) => f.name)).toEqual(['a.txt']));
+
+    expect(FakeWorker.posted).toHaveLength(2);
+    expect(FakeWorker.posted[0].tree).toBe(smallTree);
+    expect('tree' in FakeWorker.posted[1]).toBe(false);
+    expect(FakeWorker.posted[1].filterText).toBe('*.txt');
+  });
+
+  it('sends the tree again when the tree changes', async () => {
+    const other = { ...smallTree, children: [{ type: 'file', name: 'z.iso', size: 5, fullPath: 'C:\\z.iso' }] };
+    const { result, rerender } = renderHook(({ tree }) => useDiskMapAggregates(tree), { initialProps: { tree: smallTree } });
+    await waitFor(() => expect(result.current.computing).toBe(false));
+    rerender({ tree: other });
+    await waitFor(() => expect(result.current.result.largestFiles[0].name).toBe('z.iso'));
+    expect(FakeWorker.posted.filter((m) => m.tree).length).toBe(2);
+  });
+});
+
+describe('a search without a Worker', () => {
+  it('filters the largest files synchronously', () => {
+    delete globalThis.Worker;
+    const { result } = renderHook(() => useDiskMapAggregates(smallTree, { filterText: 'log' }));
+    expect(result.current.result.largestFiles.map((f) => f.name)).toEqual(['b.log']);
+    expect(result.current.result.extensionBreakdown.totalFiles).toBe(2);
   });
 });
