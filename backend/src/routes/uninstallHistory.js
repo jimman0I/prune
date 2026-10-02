@@ -1,7 +1,8 @@
 import { Router } from 'express';
 import {
-  getRecentHistory, getAllHistory, appendHistoryEntry, updateHistoryEntry, clearHistory, cleanEntryFields
+  getRecentHistory, getAllHistory, appendHistoryEntry, updateHistoryEntry, clearHistory
 } from '../services/uninstallHistory.js';
+import { cleanEntryFields } from '../services/historyFields.js';
 import { getSettings } from '../services/settings.js';
 
 const router = Router();

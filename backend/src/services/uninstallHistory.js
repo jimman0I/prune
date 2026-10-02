@@ -2,6 +2,10 @@ import { appendFile, mkdir, readFile, writeFile, rename, rm } from 'node:fs/prom
 import { existsSync } from 'node:fs';
 import { randomBytes } from 'node:crypto';
 import { dirname, join } from 'node:path';
+import { cleanEntryFields } from './historyFields.js';
+
+export { cleanEntryFields };
+
 
 /** Path to the history file. A function, not a constant -- read at call
  * time so tests can point it at a scratch file via UNREVO_HISTORY_FILE,
@@ -9,36 +13,6 @@ import { dirname, join } from 'node:path';
 function historyFilePath() {
   return process.env.UNREVO_HISTORY_FILE
     || join(process.env.LOCALAPPDATA || process.cwd(), 'Prune', 'uninstall-history.jsonl');
-}
-
-/** What an entry may carry. The log started as { programName, publisher,
- * sizeBytes, timestamp }; it now records what happened too -- the scan mode,
- * how many leftovers were found and removed, where they went, and which
- * safety nets existed -- so the History view can say more than a name.
- * Everything arrives from a request body, so only these fields, only of the
- * right type, are ever written. */
-const STRING_FIELDS = [
-  'programName', 'publisher', 'version', 'scanMode', 'destination', 'outcome', 'kind',
-  'quarantineBatch', 'registryBackup'
-];
-const NUMBER_FIELDS = ['sizeBytes', 'leftoversFound', 'leftoversRemoved', 'bytesFreed', 'tasksRemoved', 'failedCount'];
-const MAX_TEXT = 500;
-
-export function cleanEntryFields(input) {
-  const out = {};
-  if (!input || typeof input !== 'object') return out;
-  for (const field of STRING_FIELDS) {
-    if (typeof input[field] === 'string') out[field] = input[field].slice(0, MAX_TEXT);
-  }
-  for (const field of NUMBER_FIELDS) {
-    if (typeof input[field] === 'number' && Number.isFinite(input[field])) out[field] = input[field];
-  }
-  const restore = input.restorePoint;
-  if (restore && typeof restore === 'object' && typeof restore.created === 'boolean') {
-    out.restorePoint = { created: restore.created };
-    if (typeof restore.reason === 'string') out.restorePoint.reason = restore.reason.slice(0, MAX_TEXT);
-  }
-  return out;
 }
 
 const newId = () => randomBytes(6).toString('hex');
