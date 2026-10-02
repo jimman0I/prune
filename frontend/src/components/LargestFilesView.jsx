@@ -25,7 +25,7 @@ const SORT_COLUMNS = [
   ['name', 'diskMapV3.columns.name']
 ];
 
-export function LargestFilesView({ files, icons, onContextMenu }) {
+export function LargestFilesView({ files, icons, onContextMenu, searchText = '' }) {
   const { t } = useLanguage();
   const [sort, setSort] = useState({ column: 'size', direction: 'desc' });
   const rows = useMemo(() => sortFiles(files, sort.column, sort.direction), [files, sort]);
@@ -33,7 +33,7 @@ export function LargestFilesView({ files, icons, onContextMenu }) {
   if (files.length === 0) {
     return (
       <div className="glass-panel p-6 text-[13px] text-[color:var(--text-muted)]">
-        {t('diskMap.largestFiles.empty')}
+        {searchText.trim() ? t('diskMapV3.search.noMatches', searchText.trim()) : t('diskMap.largestFiles.empty')}
       </div>
     );
   }

@@ -1,3 +1,5 @@
+import { compileFilter } from './searchFilter.js';
+
 /** The biggest individual files the scan found, largest first.
  *
  * WizTree's second tab, and the one that answers "what do I actually
@@ -14,8 +16,12 @@
  * would matter at millions of files; at the 68,000 a real scan produces
  * here, sorting the whole list takes a few milliseconds and the simpler
  * code is worth more than the saving. */
-export function largestFiles(tree, { limit = 100 } = {}) {
+export function largestFiles(tree, { limit = 100, filterText = '' } = {}) {
   const files = [];
+  // The search box, applied here rather than to the finished list: the
+  // biggest files MATCHING the search, across the whole tree, are what
+  // someone searching wants -- not the matches among the 60 biggest files.
+  const filter = compileFilter(filterText);
 
   const stack = [tree];
   while (stack.length > 0) {
@@ -34,6 +40,7 @@ export function largestFiles(tree, { limit = 100 } = {}) {
 
     const size = typeof node.size === 'number' ? node.size : 0;
     if (size <= 0) continue;
+    if (filter.active && !filter.match(node.name, node.fullPath)) continue;
 
     files.push({
       name: node.name,

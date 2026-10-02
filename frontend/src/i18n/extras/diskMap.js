@@ -35,6 +35,13 @@ export default {
       },
       filesView: {
         sortBy: "Sort by"
+      },
+      search: {
+        label: "Search names",
+        placeholder: "Text, * ? or /regex/",
+        clear: "Clear search",
+        invalid: "That pattern is not valid.",
+        noMatches: (a) => `Nothing here matches "${a}".`
       }
     }
   },
@@ -71,6 +78,13 @@ export default {
       },
       filesView: {
         sortBy: "Sorteer volgens"
+      },
+      search: {
+        label: "Soek name",
+        placeholder: "Teks, * ? of /regex/",
+        clear: "Maak soektog skoon",
+        invalid: "Daardie patroon is nie geldig nie.",
+        noMatches: (a) => `Niks hier pas by "${a}" nie.`
       }
     }
   },
@@ -107,6 +121,13 @@ export default {
       },
       filesView: {
         sortBy: "ترتيب حسب"
+      },
+      search: {
+        label: "البحث في الأسماء",
+        placeholder: "نص أو * ? أو /regex/",
+        clear: "مسح البحث",
+        invalid: "هذا النمط غير صالح.",
+        noMatches: (a) => `لا شيء هنا يطابق "${a}".`
       }
     }
   },
@@ -143,6 +164,13 @@ export default {
       },
       filesView: {
         sortBy: "Ordena per"
+      },
+      search: {
+        label: "Cerca noms",
+        placeholder: "Text, * ? o /regex/",
+        clear: "Esborra la cerca",
+        invalid: "Aquest patró no és vàlid.",
+        noMatches: (a) => `Res d’aquí coincideix amb "${a}".`
       }
     }
   },
@@ -179,6 +207,13 @@ export default {
       },
       filesView: {
         sortBy: "Seřadit podle"
+      },
+      search: {
+        label: "Hledat názvy",
+        placeholder: "Text, * ? nebo /regex/",
+        clear: "Vymazat hledání",
+        invalid: "Tento vzor není platný.",
+        noMatches: (a) => `Nic zde neodpovídá výrazu "${a}".`
       }
     }
   },
@@ -215,6 +250,13 @@ export default {
       },
       filesView: {
         sortBy: "Trefnu yn ôl"
+      },
+      search: {
+        label: "Chwilio enwau",
+        placeholder: "Testun, * ? neu /regex/",
+        clear: "Clirio’r chwiliad",
+        invalid: "Nid yw’r patrwm hwnnw’n ddilys.",
+        noMatches: (a) => `Nid oes dim yma’n cyfateb i "${a}".`
       }
     }
   },
@@ -251,6 +293,13 @@ export default {
       },
       filesView: {
         sortBy: "Sortér efter"
+      },
+      search: {
+        label: "Søg i navne",
+        placeholder: "Tekst, * ? eller /regex/",
+        clear: "Ryd søgning",
+        invalid: "Det mønster er ikke gyldigt.",
+        noMatches: (a) => `Intet her matcher "${a}".`
       }
     }
   },
@@ -287,6 +336,13 @@ export default {
       },
       filesView: {
         sortBy: "Sortieren nach"
+      },
+      search: {
+        label: "Namen durchsuchen",
+        placeholder: "Text, * ? oder /regex/",
+        clear: "Suche löschen",
+        invalid: "Dieses Muster ist ungültig.",
+        noMatches: (a) => `Hier passt nichts zu "${a}".`
       }
     }
   },
@@ -323,6 +379,13 @@ export default {
       },
       filesView: {
         sortBy: "Ταξινόμηση κατά"
+      },
+      search: {
+        label: "Αναζήτηση ονομάτων",
+        placeholder: "Κείμενο, * ? ή /regex/",
+        clear: "Εκκαθάριση αναζήτησης",
+        invalid: "Αυτό το μοτίβο δεν είναι έγκυρο.",
+        noMatches: (a) => `Τίποτα εδώ δεν ταιριάζει με "${a}".`
       }
     }
   },
@@ -359,6 +422,13 @@ export default {
       },
       filesView: {
         sortBy: "Ordenar por"
+      },
+      search: {
+        label: "Buscar nombres",
+        placeholder: "Texto, * ? o /regex/",
+        clear: "Borrar búsqueda",
+        invalid: "Ese patrón no es válido.",
+        noMatches: (a) => `Nada aquí coincide con "${a}".`
       }
     }
   },
@@ -395,6 +465,13 @@ export default {
       },
       filesView: {
         sortBy: "Sorteeri"
+      },
+      search: {
+        label: "Otsi nimesid",
+        placeholder: "Tekst, * ? või /regex/",
+        clear: "Tühjenda otsing",
+        invalid: "See muster ei ole kehtiv.",
+        noMatches: (a) => `Siin pole midagi, mis vastaks päringule "${a}".`
       }
     }
   },
@@ -431,6 +508,13 @@ export default {
       },
       filesView: {
         sortBy: "Lajittelu"
+      },
+      search: {
+        label: "Hae nimiä",
+        placeholder: "Teksti, * ? tai /regex/",
+        clear: "Tyhjennä haku",
+        invalid: "Tämä lauseke ei kelpaa.",
+        noMatches: (a) => `Mikään täällä ei vastaa hakua "${a}".`
       }
     }
   },
@@ -467,6 +551,13 @@ export default {
       },
       filesView: {
         sortBy: "Trier par"
+      },
+      search: {
+        label: "Rechercher des noms",
+        placeholder: "Texte, * ? ou /regex/",
+        clear: "Effacer la recherche",
+        invalid: "Ce motif n’est pas valide.",
+        noMatches: (a) => `Rien ici ne correspond à "${a}".`
       }
     }
   },
@@ -503,6 +594,13 @@ export default {
       },
       filesView: {
         sortBy: "מיין לפי"
+      },
+      search: {
+        label: "חיפוש שמות",
+        placeholder: "טקסט, * ? או /regex/",
+        clear: "נקה חיפוש",
+        invalid: "התבנית הזו אינה תקינה.",
+        noMatches: (a) => `שום דבר כאן לא תואם ל-"${a}".`
       }
     }
   },
@@ -539,6 +637,13 @@ export default {
       },
       filesView: {
         sortBy: "Rendezés"
+      },
+      search: {
+        label: "Nevek keresése",
+        placeholder: "Szöveg, * ? vagy /regex/",
+        clear: "Keresés törlése",
+        invalid: "Ez a minta érvénytelen.",
+        noMatches: (a) => `Itt semmi sem egyezik ezzel: "${a}".`
       }
     }
   },
@@ -575,6 +680,13 @@ export default {
       },
       filesView: {
         sortBy: "Urutkan menurut"
+      },
+      search: {
+        label: "Cari nama",
+        placeholder: "Teks, * ? atau /regex/",
+        clear: "Hapus pencarian",
+        invalid: "Pola itu tidak valid.",
+        noMatches: (a) => `Tidak ada yang cocok dengan "${a}" di sini.`
       }
     }
   },
@@ -611,6 +723,13 @@ export default {
       },
       filesView: {
         sortBy: "Raða eftir"
+      },
+      search: {
+        label: "Leita að heitum",
+        placeholder: "Texti, * ? eða /regex/",
+        clear: "Hreinsa leit",
+        invalid: "Þetta mynstur er ekki gilt.",
+        noMatches: (a) => `Ekkert hér passar við "${a}".`
       }
     }
   },
@@ -647,6 +766,13 @@ export default {
       },
       filesView: {
         sortBy: "Ordina per"
+      },
+      search: {
+        label: "Cerca nei nomi",
+        placeholder: "Testo, * ? o /regex/",
+        clear: "Cancella ricerca",
+        invalid: "Questo schema non è valido.",
+        noMatches: (a) => `Nulla qui corrisponde a "${a}".`
       }
     }
   },
@@ -683,6 +809,13 @@ export default {
       },
       filesView: {
         sortBy: "並べ替え"
+      },
+      search: {
+        label: "名前を検索",
+        placeholder: "テキスト、* ?、または /regex/",
+        clear: "検索をクリア",
+        invalid: "このパターンは無効です。",
+        noMatches: (a) => `ここには "${a}" に一致するものがありません。`
       }
     }
   },
@@ -719,6 +852,13 @@ export default {
       },
       filesView: {
         sortBy: "정렬 기준"
+      },
+      search: {
+        label: "이름 검색",
+        placeholder: "텍스트, * ? 또는 /regex/",
+        clear: "검색 지우기",
+        invalid: "이 패턴은 올바르지 않습니다.",
+        noMatches: (a) => `여기에는 "${a}"와(과) 일치하는 항목이 없습니다.`
       }
     }
   },
@@ -755,6 +895,13 @@ export default {
       },
       filesView: {
         sortBy: "Rikiuoti pagal"
+      },
+      search: {
+        label: "Ieškoti pavadinimų",
+        placeholder: "Tekstas, * ? arba /regex/",
+        clear: "Išvalyti paiešką",
+        invalid: "Šis šablonas netinkamas.",
+        noMatches: (a) => `Čia nieko, kas atitiktų "${a}".`
       }
     }
   },
@@ -791,6 +938,13 @@ export default {
       },
       filesView: {
         sortBy: "Isih mengikut"
+      },
+      search: {
+        label: "Cari nama",
+        placeholder: "Teks, * ? atau /regex/",
+        clear: "Kosongkan carian",
+        invalid: "Corak itu tidak sah.",
+        noMatches: (a) => `Tiada yang sepadan dengan "${a}" di sini.`
       }
     }
   },
@@ -827,6 +981,13 @@ export default {
       },
       filesView: {
         sortBy: "Sorter etter"
+      },
+      search: {
+        label: "Søk i navn",
+        placeholder: "Tekst, * ? eller /regex/",
+        clear: "Tøm søk",
+        invalid: "Det mønsteret er ikke gyldig.",
+        noMatches: (a) => `Ingenting her samsvarer med "${a}".`
       }
     }
   },
@@ -863,6 +1024,13 @@ export default {
       },
       filesView: {
         sortBy: "Sorteren op"
+      },
+      search: {
+        label: "Namen zoeken",
+        placeholder: "Tekst, * ? of /regex/",
+        clear: "Zoekopdracht wissen",
+        invalid: "Dat patroon is ongeldig.",
+        noMatches: (a) => `Niets hier komt overeen met "${a}".`
       }
     }
   },
@@ -899,6 +1067,13 @@ export default {
       },
       filesView: {
         sortBy: "Sortuj według"
+      },
+      search: {
+        label: "Szukaj nazw",
+        placeholder: "Tekst, * ? lub /regex/",
+        clear: "Wyczyść wyszukiwanie",
+        invalid: "Ten wzorzec jest nieprawidłowy.",
+        noMatches: (a) => `Nic tutaj nie pasuje do "${a}".`
       }
     }
   },
@@ -935,6 +1110,13 @@ export default {
       },
       filesView: {
         sortBy: "ترتیب د مخې"
+      },
+      search: {
+        label: "نومونه ولټوئ",
+        placeholder: "متن، * ? یا /regex/",
+        clear: "لټون پاک کړئ",
+        invalid: "دا نمونه سمه نه ده.",
+        noMatches: (a) => `دلته هیڅ شی له "${a}" سره سمون نه لري.`
       }
     }
   },
@@ -971,6 +1153,13 @@ export default {
       },
       filesView: {
         sortBy: "Ordenar por"
+      },
+      search: {
+        label: "Pesquisar nomes",
+        placeholder: "Texto, * ? ou /regex/",
+        clear: "Limpar pesquisa",
+        invalid: "Esse padrão não é válido.",
+        noMatches: (a) => `Nada aqui corresponde a "${a}".`
       }
     }
   },
@@ -1007,6 +1196,13 @@ export default {
       },
       filesView: {
         sortBy: "Ordenar por"
+      },
+      search: {
+        label: "Pesquisar nomes",
+        placeholder: "Texto, * ? ou /regex/",
+        clear: "Limpar pesquisa",
+        invalid: "Esse padrão não é válido.",
+        noMatches: (a) => `Nada aqui corresponde a "${a}".`
       }
     }
   },
@@ -1043,6 +1239,13 @@ export default {
       },
       filesView: {
         sortBy: "Sortează după"
+      },
+      search: {
+        label: "Caută nume",
+        placeholder: "Text, * ? sau /regex/",
+        clear: "Șterge căutarea",
+        invalid: "Acest model nu este valid.",
+        noMatches: (a) => `Nimic de aici nu se potrivește cu "${a}".`
       }
     }
   },
@@ -1079,6 +1282,13 @@ export default {
       },
       filesView: {
         sortBy: "Сортировка"
+      },
+      search: {
+        label: "Поиск по именам",
+        placeholder: "Текст, * ? или /regex/",
+        clear: "Очистить поиск",
+        invalid: "Недопустимый шаблон.",
+        noMatches: (a) => `Здесь нет совпадений с "${a}".`
       }
     }
   },
@@ -1115,6 +1325,13 @@ export default {
       },
       filesView: {
         sortBy: "Zoradiť podľa"
+      },
+      search: {
+        label: "Hľadať názvy",
+        placeholder: "Text, * ? alebo /regex/",
+        clear: "Vymazať hľadanie",
+        invalid: "Tento vzor nie je platný.",
+        noMatches: (a) => `Nič tu nezodpovedá výrazu "${a}".`
       }
     }
   },
@@ -1151,6 +1368,13 @@ export default {
       },
       filesView: {
         sortBy: "Rendit sipas"
+      },
+      search: {
+        label: "Kërko emra",
+        placeholder: "Tekst, * ? ose /regex/",
+        clear: "Pastro kërkimin",
+        invalid: "Ky model nuk është i vlefshëm.",
+        noMatches: (a) => `Asgjë këtu nuk përputhet me "${a}".`
       }
     }
   },
@@ -1187,6 +1411,13 @@ export default {
       },
       filesView: {
         sortBy: "Сортирај по"
+      },
+      search: {
+        label: "Претражи називе",
+        placeholder: "Текст, * ? или /regex/",
+        clear: "Обриши претрагу",
+        invalid: "Тај образац није исправан.",
+        noMatches: (a) => `Овде ништа не одговара изразу "${a}".`
       }
     }
   },
@@ -1223,6 +1454,13 @@ export default {
       },
       filesView: {
         sortBy: "Sortera efter"
+      },
+      search: {
+        label: "Sök bland namn",
+        placeholder: "Text, * ? eller /regex/",
+        clear: "Rensa sökning",
+        invalid: "Det mönstret är inte giltigt.",
+        noMatches: (a) => `Inget här matchar "${a}".`
       }
     }
   },
@@ -1259,6 +1497,13 @@ export default {
       },
       filesView: {
         sortBy: "เรียงตาม"
+      },
+      search: {
+        label: "ค้นหาชื่อ",
+        placeholder: "ข้อความ, * ? หรือ /regex/",
+        clear: "ล้างการค้นหา",
+        invalid: "รูปแบบนี้ไม่ถูกต้อง",
+        noMatches: (a) => `ไม่มีรายการที่ตรงกับ "${a}" ที่นี่`
       }
     }
   },
@@ -1295,6 +1540,13 @@ export default {
       },
       filesView: {
         sortBy: "Sırala"
+      },
+      search: {
+        label: "Adlarda ara",
+        placeholder: "Metin, * ? veya /regex/",
+        clear: "Aramayı temizle",
+        invalid: "Bu desen geçerli değil.",
+        noMatches: (a) => `Burada "${a}" ile eşleşen bir şey yok.`
       }
     }
   },
@@ -1331,6 +1583,13 @@ export default {
       },
       filesView: {
         sortBy: "Сортувати за"
+      },
+      search: {
+        label: "Пошук за назвами",
+        placeholder: "Текст, * ? або /regex/",
+        clear: "Очистити пошук",
+        invalid: "Недійсний шаблон.",
+        noMatches: (a) => `Тут немає збігів із "${a}".`
       }
     }
   },
@@ -1367,6 +1626,13 @@ export default {
       },
       filesView: {
         sortBy: "Sắp xếp theo"
+      },
+      search: {
+        label: "Tìm theo tên",
+        placeholder: "Văn bản, * ? hoặc /regex/",
+        clear: "Xóa tìm kiếm",
+        invalid: "Mẫu này không hợp lệ.",
+        noMatches: (a) => `Không có mục nào ở đây khớp với "${a}".`
       }
     }
   },
@@ -1403,6 +1669,13 @@ export default {
       },
       filesView: {
         sortBy: "排序方式"
+      },
+      search: {
+        label: "搜索名称",
+        placeholder: "文本、* ? 或 /regex/",
+        clear: "清除搜索",
+        invalid: "此模式无效。",
+        noMatches: (a) => `这里没有与 "${a}" 匹配的内容。`
       }
     }
   },
@@ -1439,6 +1712,13 @@ export default {
       },
       filesView: {
         sortBy: "排序方式"
+      },
+      search: {
+        label: "搜尋名稱",
+        placeholder: "文字、* ? 或 /regex/",
+        clear: "清除搜尋",
+        invalid: "此模式無效。",
+        noMatches: (a) => `這裡沒有符合 "${a}" 的項目。`
       }
     }
   }

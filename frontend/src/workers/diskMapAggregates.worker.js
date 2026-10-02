@@ -1,6 +1,4 @@
-import { extensionBreakdown } from '../lib/extensionBreakdown.js';
-import { largestFiles } from '../lib/largestFiles.js';
-import { folderTableRows } from '../lib/folderTable.js';
+import { createAggregator } from '../lib/aggregator.js';
 
 /** Computes Disk Map's three heaviest tree-derived views off the main
  * thread: the file-type breakdown, the largest-files list, and the
@@ -23,17 +21,14 @@ import { folderTableRows } from '../lib/folderTable.js';
  * algorithmically faster. It makes them not block window drags, other
  * tabs, or anything else sharing the renderer's one JS thread while they
  * run. `useDiskMapAggregates.js` is what posts to this and what falls
- * back to calling these same three functions directly (synchronously)
- * wherever `Worker` does not exist -- Node's test environment, most
- * notably, which is also why this file imports the three plain functions
- * rather than duplicating their logic: both paths must call the exact
- * same code to ever produce the exact same numbers. */
+ * back to the same handler (synchronously) wherever `Worker` does not
+ * exist -- Node's test environment, most notably -- so both paths must
+ * produce the exact same numbers.
+ *
+ * The tree is posted once and remembered (see lib/aggregator.js); a search
+ * after that sends only its text. */
+const handle = createAggregator();
+
 self.onmessage = (event) => {
-  const { requestId, tree, fileLimit } = event.data;
-  self.postMessage({
-    requestId,
-    extensionBreakdown: extensionBreakdown(tree),
-    largestFiles: largestFiles(tree, { limit: fileLimit }),
-    folderRows: folderTableRows(tree)
-  });
+  self.postMessage(handle(event.data));
 };

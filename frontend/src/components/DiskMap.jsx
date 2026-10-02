@@ -24,6 +24,9 @@ import { useLanguage } from '../i18n/LanguageContext.jsx';
 import DiskScanProgress from './DiskScanProgress.jsx';
 import { DrivePicker } from './DrivePicker.jsx';
 import { FolderTable } from './FolderTable.jsx';
+import { SearchBox } from './SearchBox.jsx';
+import { compileFilter } from '../lib/searchFilter.js';
+import { useDebouncedValue } from '../hooks/useDebouncedValue.js';
 import { LargestFilesView } from './LargestFilesView.jsx';
 import { RowActionsButton } from './RowActionsButton.jsx';
 import { useDrives } from '../hooks/useDrives.js';
@@ -268,7 +271,7 @@ const EMPTY_BREAKDOWN = { rows: [], totalBytes: 0, totalFiles: 0, treeBytes: 0, 
 const EMPTY_FILES = [];
 const EMPTY_FOLDER_ROWS = [];
 
-function TreemapCell({ x, y, width, height, depth, name, size, type, scanned, aggregated, fullPath, icons, typeColors, onHover, onLeave, onDrillDown, onContextMenu }) {
+function TreemapCell({ x, y, width, height, depth, name, size, type, scanned, aggregated, fullPath, searchMatch, icons, typeColors, onHover, onLeave, onDrillDown, onContextMenu }) {
   const { t } = useLanguage();
   if (depth === 0 || !(width > 0) || !(height > 0)) return null;
   const fill = colorForNode({ name, type, scanned: scanned === false || aggregated ? false : scanned }, typeColors);
@@ -293,6 +296,10 @@ function TreemapCell({ x, y, width, height, depth, name, size, type, scanned, ag
 
   return (
     <g
+      // The search box's verdict on this cell, when there is a search:
+      // "true" for a match, "false" for everything else. Absent otherwise.
+      data-name={name}
+      data-search-match={searchMatch === undefined ? undefined : String(searchMatch)}
       className={`treemap-cell${canDrillDown ? ' treemap-cell--clickable' : ''}`}
       // ONE style prop. There were briefly two -- an animationDelay added
       // beside the existing cursor -- and JSX silently keeps the last, so
@@ -356,7 +363,15 @@ function TreemapCell({ x, y, width, height, depth, name, size, type, scanned, ag
         onContextMenu({ name, size, fullPath, type }, e);
       }}
     >
-      <rect x={x} y={y} width={width} height={height} fill={fill} stroke="var(--bg-base)" strokeWidth={1.5} rx={3} />
+      <rect
+        x={x} y={y} width={width} height={height} fill={fill} rx={3}
+        // A match gets a ring in the accent colour; everything else steps
+        // back. The ring is a stroke, not an opacity change, so a match still
+        // reads at full strength next to dimmed neighbours.
+        stroke={searchMatch === true ? 'var(--accent-primary)' : 'var(--bg-base)'}
+        strokeWidth={searchMatch === true ? 3 : 1.5}
+        opacity={searchMatch === false ? 0.22 : undefined}
+      />
       {showIcon && (
         <image
           href={iconSrc}
@@ -773,7 +788,17 @@ function DiskMap() {
   // useDiskMapAggregates falls back to computing these synchronously
   // wherever there is no Worker to post to (every test environment,
   // notably), so this still returns the exact same shapes there.
-  const aggregates = useDiskMapAggregates(tree, { fileLimit: FILE_ROWS });
+  // The search box. The folder rows and the map answer to every keystroke
+  // (a screenful of items); the whole-tree search behind the File view waits
+  // for a pause in typing, and is not run at all for an invalid pattern.
+  const [searchText, setSearchText] = useState('');
+  const filter = useMemo(() => compileFilter(searchText), [searchText]);
+  const fileFilterText = useDebouncedValue(filter.active ? searchText : '', 250);
+  const markedCells = useMemo(
+    () => (filter.active ? cells.map((cell) => ({ ...cell, searchMatch: !cell.aggregated && filter.match(cell.name, cell.fullPath) })) : cells),
+    [cells, filter]
+  );
+  const aggregates = useDiskMapAggregates(tree, { fileLimit: FILE_ROWS, filterText: fileFilterText });
   const breakdown = aggregates.result?.extensionBreakdown ?? EMPTY_BREAKDOWN;
   const shownExtensions = useMemo(() => breakdown.rows.slice(0, PANEL_ROWS), [breakdown]);
 
@@ -1097,7 +1122,8 @@ function DiskMap() {
           not a reading of this folder, it is a different question ("which
           single file is biggest") asked of the whole subtree. */}
       {!loading && !error && tree && (
-        <div className="flex items-center gap-1 mb-3">
+        <div className="flex items-start justify-between flex-wrap gap-x-4 gap-y-2 mb-3">
+        <div className="flex items-center gap-1">
           {[['map', t('diskMap.view.tree')], ['files', t('diskMap.view.files')]].map(([key, label]) => (
             <button
               key={key}
@@ -1113,10 +1139,12 @@ function DiskMap() {
             </button>
           ))}
         </div>
+          <SearchBox value={searchText} onChange={setSearchText} invalid={!filter.ok} />
+        </div>
       )}
 
       {!loading && !error && tree && view === 'files' && (
-        <LargestFilesView files={topFiles} icons={typeIcons} onContextMenu={handleContextMenu} />
+        <LargestFilesView files={topFiles} icons={typeIcons} onContextMenu={handleContextMenu} searchText={filter.active ? searchText : ''} />
       )}
 
       {!loading && !error && tree && view !== 'files' && (
@@ -1131,14 +1159,14 @@ function DiskMap() {
               last column is sliced off, as it was between 1024 and 1207 before
               the rail widened. Below the breakpoint they stack. */}
           <div className="grid gap-4 min-[1400px]:grid-cols-[minmax(0,1fr)_360px] items-start">
-            <FolderTable folderRows={aggregates.result?.folderRows ?? EMPTY_FOLDER_ROWS} onDrillDown={handleDrillDown} onContextMenu={handleContextMenu} />
+            <FolderTable folderRows={aggregates.result?.folderRows ?? EMPTY_FOLDER_ROWS} onDrillDown={handleDrillDown} onContextMenu={handleContextMenu} filter={filter} searchText={searchText} />
             <ExtensionPanel breakdown={breakdown} shown={shownExtensions} icons={typeIcons} typeColors={typeColors} />
           </div>
 
           <div className="glass-panel p-4 treemap-cells" style={{ position: 'relative' }} onMouseMove={handleContainerMouseMove}>
             <ResponsiveContainer width="100%" height={420}>
               <Treemap
-                data={cells}
+                data={markedCells}
                 dataKey="size"
                 isAnimationActive={false}
                 content={<TreemapCell icons={typeIcons} typeColors={typeColors} onHover={handleHover} onLeave={handleLeave} onDrillDown={handleDrillDown} onContextMenu={handleContextMenu} />}

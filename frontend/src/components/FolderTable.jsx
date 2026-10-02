@@ -58,7 +58,7 @@ function Count({ value }) {
   return <>{value.toLocaleString()}</>;
 }
 
-export function FolderTable({ folderRows, onDrillDown, onContextMenu }) {
+export function FolderTable({ folderRows: allRows, onDrillDown, onContextMenu, filter = null, searchText = '' }) {
   const { t } = useLanguage();
   const [sort, setSort] = useState({ column: 'size', direction: 'desc' });
   // The counts themselves are computed off the main thread (see
@@ -66,6 +66,12 @@ export function FolderTable({ folderRows, onDrillDown, onContextMenu }) {
   // countSubtree walk covers every node in the tree; only the SORT of the
   // already-computed rows happens here, which is cheap regardless of how
   // large the tree behind them was.
+  // The search box narrows the rows to the names that match; the columns and
+  // their sums are of what is shown, not of what the search hid.
+  const folderRows = useMemo(
+    () => (filter?.active ? allRows.filter((r) => filter.match(r.name, r.fullPath)) : allRows),
+    [allRows, filter]
+  );
   const rows = useMemo(
     () => sortFolderRows(folderRows, sort.column, sort.direction),
     [folderRows, sort]
@@ -81,7 +87,7 @@ export function FolderTable({ folderRows, onDrillDown, onContextMenu }) {
   if (rows.length === 0) {
     return (
       <div className="glass-panel p-6 text-[13px] text-[color:var(--text-muted)]">
-        {t('diskMap.folderTable.empty')}
+        {filter?.active ? t('diskMapV3.search.noMatches', searchText.trim()) : t('diskMap.folderTable.empty')}
       </div>
     );
   }
