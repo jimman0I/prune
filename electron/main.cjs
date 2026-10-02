@@ -6,6 +6,8 @@ const { autoUpdater } = require('electron-updater');
 const { createUpdater } = require('./updater.cjs');
 const { resolveWindowState, loadWindowState, saveWindowState, saveWindowStateSync } = require('./windowState.cjs');
 const { zoomActionForInput, applyZoomAction, resolveSavedZoom, titleBarOverlayHeight } = require('./zoom.cjs');
+const { execFile } = require('node:child_process');
+const { createAdminRelaunch, parseRelaunchArg, waitForParentExit } = require('./relaunchAdmin.cjs');
 
 const BACKEND_PORT = 3101;
 
@@ -343,6 +345,23 @@ async function createWindow() {
   }
 }
 
+/** A request counts only if it came from one of Prune's own windows. */
+function fromPrune(event) {
+  if (!BrowserWindow.fromWebContents(event.sender)) throw new Error('Not a request from Prune.');
+}
+
+/* Restart as administrator (see preload.cjs and relaunchAdmin.cjs).
+ *
+ * Two fixed requests, neither of which takes an argument from the window:
+ * whether a restart is possible here, and the restart itself. What gets
+ * launched is this app's own executable and nothing the renderer sends can
+ * change it. Registered once, like the update handlers below. */
+function registerAdminHandlers() {
+  const admin = createAdminRelaunch({ app, execFile });
+  ipcMain.handle('prune:admin:can-relaunch', (event) => { fromPrune(event); return admin.canRelaunch(); });
+  ipcMain.handle('prune:admin:relaunch', (event) => { fromPrune(event); return admin.relaunch(); });
+}
+
 /* The update button's three requests (see preload.cjs and updater.cjs).
  *
  * Registered once, not per window, because ipcMain.handle refuses a
@@ -360,9 +379,6 @@ function registerUpdateHandlers() {
       }
     }
   });
-  const fromPrune = (event) => {
-    if (!BrowserWindow.fromWebContents(event.sender)) throw new Error('Not a request from Prune.');
-  };
   ipcMain.handle('prune:update:prepare', (event, version) => { fromPrune(event); return updater.prepare(version); });
   ipcMain.handle('prune:update:install', (event) => { fromPrune(event); updater.install(); });
   ipcMain.handle('prune:update:install-on-quit', (event, enabled) => { fromPrune(event); updater.installOnQuit(enabled); });
@@ -389,9 +405,15 @@ app.whenReady().then(async () => {
    * that later await still sees and surfaces the original rejection,
    * since `.catch(() => {})` returns a new promise without altering
    * `backendReady` itself. */
-  const backendReady = startBackend().then(() => waitForBackend());
+  // An instance started by 'Restart as administrator' waits for the one that
+  // started it to exit first: both would otherwise want the backend's port.
+  const relaunchedFrom = parseRelaunchArg(process.argv);
+  const backendReady = (relaunchedFrom ? waitForParentExit(relaunchedFrom) : Promise.resolve())
+    .then(() => startBackend())
+    .then(() => waitForBackend());
   backendReady.catch(() => {});
   registerUpdateHandlers();
+  registerAdminHandlers();
 
   await createWindow();
   await backendReady;

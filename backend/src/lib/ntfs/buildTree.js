@@ -1,3 +1,5 @@
+import { createExclusionMatcher } from '../diskExclusions.js';
+
 /** MFT record 5 is always the volume root directory. */
 export const ROOT_RECORD = 5;
 
@@ -12,6 +14,11 @@ const ORPHAN_BUCKET = 'Unknown (orphaned entries)';
  * by linking children to parents in one pass and then summing sizes
  * upward -- never by walking parent pointers per file, which on 800,000
  * records would be quadratic.
+ *
+ * Each node carries `size` (the logical length) and, when the records
+ * carried it, `allocated` (what the item occupies on disk). A file with no
+ * clusters of its own (data inside the MFT record) simply has no
+ * `allocated`; a directory always does, as the sum of what is below it.
  *
  * Two properties matter more than they look:
  *
@@ -28,11 +35,28 @@ const ORPHAN_BUCKET = 'Unknown (orphaned entries)';
  *    to prevent. Everything the root walk didn't account for is swept
  *    into a visible bucket instead.
  *
+ * `exclusions` ({ excludeFolders, excludeExtensions }, the user's Settings) are
+ * honoured here exactly as the folder walk honours them: an excluded entry is
+ * kept in the tree as a marked, empty placeholder and contributes nothing to
+ * any total, and everything beneath an excluded folder is accounted for so the
+ * orphan sweep cannot bring it back. `report`, if given, is filled with what
+ * was left out (excludedItems / excludedSizeBytes / excludedAllocatedBytes) so
+ * the omission is stated rather than silent.
+ *
  * `maxDepth` bounds only the SHAPE of the returned tree. The walk always
  * descends to the leaves, so a file twenty levels down still counts
  * toward every ancestor's total -- same contract the recursive scanner's
  * own DEFAULT_MAX_DEPTH already has. */
-export function buildTree(records, { name = 'C:', maxDepth = 12 } = {}) {
+export function buildTree(records, { name = 'C:', maxDepth = 12, exclusions = null, report = null } = {}) {
+  const isExcluded = createExclusionMatcher(exclusions);
+  if (report) { report.excludedItems = 0; report.excludedSizeBytes = 0; report.excludedAllocatedBytes = 0; }
+  // Only report allocation if the records carry it at all: a tree from an
+  // older reader must not claim that everything occupies zero bytes.
+  let hasAllocation = false;
+  for (const entry of records.values()) {
+    if (entry.allocatedBytes !== undefined) { hasAllocation = true; break; }
+  }
+
   const childrenOf = new Map();
   for (const [recordNumber, entry] of records) {
     if (recordNumber === ROOT_RECORD) continue; // the root names itself "." and parents itself
@@ -51,43 +75,88 @@ export function buildTree(records, { name = 'C:', maxDepth = 12 } = {}) {
   // parent cycle terminate rather than recurse until the stack dies.
   const onPath = new Set();
 
-  function nodeFor(recordNumber, depthRemaining) {
+  const fileNode = (entry) => {
+    const node = { name: entry.name, size: entry.sizeBytes, type: 'file' };
+    if (hasAllocation && entry.allocatedBytes > 0) node.allocated = entry.allocatedBytes;
+    if (entry.hardLinks) node.links = entry.hardLinks;
+    if (typeof entry.modified === 'number') node.modified = entry.modified;
+    return node;
+  };
+
+  /** Accounts for an excluded entry and everything below it, without
+   * building nodes for any of it. Iterative, with the accounted set as the
+   * visited guard, so a parent cycle inside an excluded folder terminates. */
+  function leaveOut(recordNumber) {
+    const stack = [recordNumber];
+    while (stack.length > 0) {
+      const current = stack.pop();
+      const entry = records.get(current);
+      if (!entry || (accounted.has(current) && current !== recordNumber)) continue;
+      accounted.add(current);
+      if (report) {
+        report.excludedItems += 1;
+        report.excludedSizeBytes += entry.isDirectory ? 0 : entry.sizeBytes;
+        report.excludedAllocatedBytes += entry.allocatedBytes ?? 0;
+      }
+      for (const child of childrenOf.get(current) || []) if (!accounted.has(child)) stack.push(child);
+    }
+  }
+
+  function nodeFor(recordNumber, depthRemaining, parentPath) {
     const entry = records.get(recordNumber);
     if (!entry) return null;
     accounted.add(recordNumber);
 
-    if (!entry.isDirectory) {
-      return { name: entry.name, size: entry.sizeBytes, type: 'file' };
+    const path = isExcluded ? `${parentPath}\\${entry.name}` : '';
+    if (isExcluded && isExcluded(path)) {
+      accounted.delete(recordNumber);
+      leaveOut(recordNumber);
+      const placeholder = entry.isDirectory
+        ? { name: entry.name, size: 0, type: 'directory', excluded: true, children: [] }
+        : { name: entry.name, size: 0, type: 'file', excluded: true };
+      if (hasAllocation && entry.isDirectory) placeholder.allocated = 0;
+      return placeholder;
     }
+
+    if (!entry.isDirectory) return fileNode(entry);
     if (onPath.has(recordNumber)) {
       // Already its own ancestor. Stop here; whatever is below stays
       // unaccounted and the sweep will pick it up.
-      return { name: entry.name, size: 0, type: 'directory' };
+      return hasAllocation
+        ? { name: entry.name, size: 0, allocated: 0, type: 'directory' }
+        : { name: entry.name, size: 0, type: 'directory' };
     }
 
     onPath.add(recordNumber);
     const children = [];
     let size = 0;
+    // A directory's own index buffers sit on disk too.
+    let allocated = entry.allocatedBytes ?? 0;
     for (const childRecord of childrenOf.get(recordNumber) || []) {
-      const child = nodeFor(childRecord, depthRemaining - 1);
+      const child = nodeFor(childRecord, depthRemaining - 1, path);
       if (!child) continue;
       size += child.size;
+      allocated += child.allocated ?? 0;
       children.push(child);
     }
     onPath.delete(recordNumber);
 
     children.sort((a, b) => b.size - a.size);
-    return depthRemaining > 0
-      ? { name: entry.name, size, type: 'directory', children }
-      : { name: entry.name, size, type: 'directory' };
+    const node = { name: entry.name, size, type: 'directory' };
+    if (hasAllocation) node.allocated = allocated;
+    if (typeof entry.modified === 'number') node.modified = entry.modified;
+    if (depthRemaining > 0) node.children = children;
+    return node;
   }
 
   const children = [];
   let total = 0;
+  let totalAllocated = records.get(ROOT_RECORD)?.allocatedBytes ?? 0;
   for (const childRecord of childrenOf.get(ROOT_RECORD) || []) {
-    const child = nodeFor(childRecord, maxDepth - 1);
+    const child = nodeFor(childRecord, maxDepth - 1, name);
     if (!child) continue;
     total += child.size;
+    totalAllocated += child.allocated ?? 0;
     children.push(child);
   }
 
@@ -98,22 +167,31 @@ export function buildTree(records, { name = 'C:', maxDepth = 12 } = {}) {
   const strays = [];
   for (const [recordNumber, entry] of records) {
     if (recordNumber === ROOT_RECORD || accounted.has(recordNumber)) continue;
-    strays.push(entry.isDirectory
-      ? { name: entry.name, size: 0, type: 'directory' }
-      : { name: entry.name, size: entry.sizeBytes, type: 'file' });
+    if (entry.isDirectory) {
+      const node = { name: entry.name, size: 0, type: 'directory' };
+      if (hasAllocation) node.allocated = entry.allocatedBytes ?? 0;
+      if (typeof entry.modified === 'number') node.modified = entry.modified;
+      strays.push(node);
+    } else {
+      strays.push(fileNode(entry));
+    }
   }
 
   if (strays.length > 0) {
     const straySize = strays.reduce((sum, n) => sum + n.size, 0);
+    const strayAllocated = strays.reduce((sum, n) => sum + (n.allocated ?? 0), 0);
     total += straySize;
-    children.push({
-      name: ORPHAN_BUCKET,
-      size: straySize,
-      type: 'directory',
-      children: strays.sort((a, b) => b.size - a.size)
-    });
+    totalAllocated += strayAllocated;
+    const bucket = { name: ORPHAN_BUCKET, size: straySize, type: 'directory', children: strays.sort((a, b) => b.size - a.size) };
+    if (hasAllocation) bucket.allocated = strayAllocated;
+    children.push(bucket);
   }
 
   children.sort((a, b) => b.size - a.size);
-  return { name, size: total, type: 'directory', children };
+  const root = { name, size: total, type: 'directory' };
+  if (hasAllocation) root.allocated = totalAllocated;
+  const rootModified = records.get(ROOT_RECORD)?.modified;
+  if (typeof rootModified === 'number') root.modified = rootModified;
+  root.children = children;
+  return root;
 }

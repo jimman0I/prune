@@ -1,4 +1,4 @@
-import { ATTR_DATA, ATTR_FILE_NAME } from './record.js';
+import { ATTR_DATA, ATTR_FILE_NAME, ATTR_INDEX_ALLOCATION } from './record.js';
 
 /** Builds a real, byte-accurate NTFS volume image in memory: boot sector,
  * an MFT whose record 0 describes itself with a proper runlist, and one
@@ -19,14 +19,38 @@ const SECTORS_PER_CLUSTER = 8;
 const BYTES_PER_CLUSTER = BYTES_PER_SECTOR * SECTORS_PER_CLUSTER;
 const BYTES_PER_RECORD = 1024;
 const MFT_CLUSTER = 4;
+/** Real data lives somewhere on a volume; nothing here reads it back, so any
+ * cluster will do for a file's extent. */
+const FILE_LCN = 20;
 
-/** `entries` is [{ record, name, parent, size, isDirectory }]. Record 0 is
- * the MFT itself and record 5 the root; both are added automatically. */
-export function buildFakeVolume(entries, { totalClusters = 256, mftRunClusters = null } = {}) {
+/** `entries` is [{ record, name, parent, size, isDirectory, ... }]. Record 0
+ * is the MFT itself and record 5 the root; both are added automatically.
+ *
+ * Optional per entry:
+ *   allocated   bytes really allocated (default: size rounded up to clusters)
+ *   holes       sparse clusters appended to the file's runlist
+ *   sparse      set the sparse flag on the data attribute
+ *   resident    keep the data inside the record (no clusters)
+ *   modified    last-write time, ms since the Unix epoch ($STANDARD_INFORMATION)
+ *   links       [parentRecord, ...] extra hard-link names (header count follows)
+ *   streams     [{ name, clusters }] alternate data streams
+ *   indexClusters  a directory's index buffers
+ *
+ * `usedClusters` makes record 6 an honest $Bitmap with that many clusters
+ * marked in use -- the volume's own ground truth for "space in use". */
+export function buildFakeVolume(entries, { totalClusters = 256, mftRunClusters = null, usedClusters = null } = {}) {
   const allEntries = [
     { record: 5, name: '.', parent: 5, size: 0, isDirectory: true },
     ...entries
   ];
+  const bitmapLcn = totalClusters - 2;
+  if (usedClusters !== null && !allEntries.some((e) => e.record === 6)) {
+    allEntries.push({
+      record: 6, name: '$Bitmap', parent: 5, isDirectory: false, resident: false,
+      size: Math.ceil(totalClusters / 8), bitmapLcn
+    });
+  }
+
   const highestRecord = allEntries.reduce((max, e) => Math.max(max, e.record), 0);
   const recordCount = highestRecord + 1;
   const mftBytes = recordCount * BYTES_PER_RECORD;
@@ -41,6 +65,12 @@ export function buildFakeVolume(entries, { totalClusters = 256, mftRunClusters =
 
   for (const entry of allEntries) {
     writeRecord(volume, mftOffset + entry.record * BYTES_PER_RECORD, fileRecordFor(entry));
+  }
+
+  if (usedClusters !== null) {
+    const bits = Buffer.alloc(Math.ceil(totalClusters / 8));
+    for (let i = 0; i < usedClusters; i++) bits[i >> 3] |= 1 << (i & 7);
+    bits.copy(volume, bitmapLcn * BYTES_PER_CLUSTER);
   }
 
   return {
@@ -108,7 +138,12 @@ function mftSelfRecord(mftClusters, mftBytes) {
   return b;
 }
 
-function fileRecordFor({ record, name, parent, size, allocated, isDirectory, dataInExtension, baseRecord, startingVcn = 0 }) {
+/** Windows FILETIME (100 ns since 1601) for a Unix-epoch millisecond value. */
+function toFiletime(ms) {
+  return BigInt(Math.round(ms)) * 10000n + 116444736000000000n;
+}
+
+function fileRecordFor({ record, name, parent, size = 0, allocated, holes = 0, sparse = false, resident = false, isDirectory, dataInExtension, baseRecord, startingVcn = 0, modified, links = [], streams = [], indexClusters = 0, bitmapLcn }) {
   const b = emptyRecord();
 
   // An extension record: attributes belonging to `baseRecord`, no name of
@@ -117,20 +152,47 @@ function fileRecordFor({ record, name, parent, size, allocated, isDirectory, dat
   if (baseRecord !== undefined) {
     b.writeUInt16LE(0x0001, 0x16);
     b.writeBigUInt64LE(BigInt(baseRecord) | (3n << 48n), 0x20);
-    const end = 0x38 + writeDataAttribute(b, 0x38, size, startingVcn, allocated);
+    const end = 0x38 + writeDataAttribute(b, 0x38, { size, startingVcn, allocated, holes, sparse });
     b.writeUInt32LE(0xffffffff, end);
     return b;
   }
 
   b.writeUInt16LE(isDirectory ? 0x0003 : 0x0001, 0x16);
+  b.writeUInt16LE(1 + links.length, 0x12); // hard link count
 
   let o = 0x38;
+  if (modified !== undefined) o += writeStandardInformation(b, o, modified);
   o += writeFileNameAttribute(b, o, { name, parent });
+  for (const linkParent of links) o += writeFileNameAttribute(b, o, { name: `${name}.link${linkParent}`, parent: linkParent });
   // `dataInExtension` leaves the base record with a name and no size at
   // all, exactly as a real volume does once $DATA has moved out.
-  if (!isDirectory && !dataInExtension) o += writeDataAttribute(b, o, size, 0, allocated);
+  if (!isDirectory && !dataInExtension) {
+    o += resident
+      ? writeResidentData(b, o, size)
+      : writeDataAttribute(b, o, { size, startingVcn: 0, allocated, holes, sparse, lcn: bitmapLcn });
+  }
+  for (const stream of streams) o += writeStream(b, o, stream);
+  if (indexClusters > 0) o += writeIndexAllocation(b, o, indexClusters);
   b.writeUInt32LE(0xffffffff, o);
   return b;
+}
+
+function writeStandardInformation(record, offset, modified) {
+  const valueLength = 0x30;
+  const headerLength = 0x18;
+  const length = align8(headerLength + valueLength);
+  record.writeUInt32LE(0x10, offset);
+  record.writeUInt32LE(length, offset + 4);
+  record.writeUInt8(0, offset + 8);
+  record.writeUInt32LE(valueLength, offset + 0x10);
+  record.writeUInt16LE(headerLength, offset + 0x14);
+  const v = offset + headerLength;
+  // creation, modification, MFT change, access -- 8 bytes each.
+  record.writeBigUInt64LE(toFiletime(modified - 1000), v);
+  record.writeBigUInt64LE(toFiletime(modified), v + 8);
+  record.writeBigUInt64LE(toFiletime(modified + 1000), v + 0x10);
+  record.writeBigUInt64LE(toFiletime(modified + 2000), v + 0x18);
+  return length;
 }
 
 function writeFileNameAttribute(record, offset, { name, parent }) {
@@ -158,22 +220,98 @@ function writeFileNameAttribute(record, offset, { name, parent }) {
   return length;
 }
 
-function writeDataAttribute(record, offset, size, startingVcn = 0, allocated) {
+function writeResidentData(record, offset, size) {
+  const headerLength = 0x18;
+  const length = align8(headerLength + size);
+  record.writeUInt32LE(ATTR_DATA, offset);
+  record.writeUInt32LE(length, offset + 4);
+  record.writeUInt8(0, offset + 8);
+  record.writeUInt32LE(size, offset + 0x10);
+  record.writeUInt16LE(headerLength, offset + 0x14);
+  return length;
+}
+
+/** The runlist of a stream: real clusters, then optional holes. */
+function runlistFor(allocatedBytes, holes, lcn = FILE_LCN) {
+  const clusters = Math.ceil(allocatedBytes / BYTES_PER_CLUSTER);
+  const bytes = [];
+  const lengthField = (n) => {
+    const width = n > 0xffffff ? 4 : n > 0xffff ? 3 : n > 0xff ? 2 : 1;
+    return [width, Array.from({ length: width }, (_, i) => Math.floor(n / 256 ** i) % 256)];
+  };
+  if (clusters > 0) {
+    const [width, field] = lengthField(clusters);
+    // header: 2 offset bytes in the high nibble, `width` length bytes low.
+    bytes.push(0x20 | width, ...field, lcn & 0xff, (lcn >> 8) & 0xff);
+  }
+  if (holes > 0) {
+    const [width, field] = lengthField(holes);
+    bytes.push(width, ...field); // no offset bytes: a sparse run
+  }
+  bytes.push(0);
+  return Buffer.from(bytes);
+}
+
+function writeDataAttribute(record, offset, { size, startingVcn = 0, allocated, holes = 0, sparse = false, lcn, name = '' }) {
   // Real volumes round allocated size up to whole clusters; a caller that
   // doesn't care gets that default rather than a zero that would look
   // like a sparse file.
   const onDisk = allocated === undefined ? Math.ceil(size / BYTES_PER_CLUSTER) * BYTES_PER_CLUSTER : allocated;
-  const length = 0x50;
+  const runs = runlistFor(onDisk, holes, lcn);
+  const length = align8(0x48 + runs.length);
   record.writeUInt32LE(ATTR_DATA, offset);
   record.writeUInt32LE(length, offset + 4);
   record.writeUInt8(1, offset + 8);                    // non-resident
   record.writeUInt8(0, offset + 9);                    // unnamed
+  if (sparse) record.writeUInt16LE(0x8000, offset + 0x0c);
   // Only the fragment starting at VCN 0 states the file's real size; the
   // rest report zero, exactly as on disk.
   record.writeBigUInt64LE(BigInt(startingVcn), offset + 0x10);
   record.writeUInt16LE(0x48, offset + 0x20);
-  record.writeBigUInt64LE(BigInt(startingVcn === 0 ? onDisk : 0), offset + 0x28);
+  // The header's allocated-size field counts holes too (the very trap that
+  // once summed to 1270 GB), so the fake does the same.
+  const headerAllocated = onDisk + holes * BYTES_PER_CLUSTER;
+  record.writeBigUInt64LE(BigInt(startingVcn === 0 ? headerAllocated : 0), offset + 0x28);
   record.writeBigUInt64LE(BigInt(startingVcn === 0 ? size : 0), offset + 0x30);
+  runs.copy(record, offset + 0x48);
+  return length;
+}
+
+function writeStream(record, offset, { name, clusters }) {
+  const runs = Buffer.from([0x31, clusters & 0xff, FILE_LCN & 0xff, (FILE_LCN >> 8) & 0xff, 0]);
+  const nameBuffer = Buffer.from(name, 'utf16le');
+  const nameOffset = 0x48;
+  const runOffset = align8(nameOffset + nameBuffer.length);
+  const length = align8(runOffset + runs.length);
+  record.writeUInt32LE(ATTR_DATA, offset);
+  record.writeUInt32LE(length, offset + 4);
+  record.writeUInt8(1, offset + 8);
+  record.writeUInt8(name.length, offset + 9);
+  record.writeUInt16LE(nameOffset, offset + 10);
+  record.writeUInt16LE(runOffset, offset + 0x20);
+  record.writeBigUInt64LE(BigInt(clusters * BYTES_PER_CLUSTER), offset + 0x28);
+  record.writeBigUInt64LE(BigInt(clusters * BYTES_PER_CLUSTER), offset + 0x30);
+  nameBuffer.copy(record, offset + nameOffset);
+  runs.copy(record, offset + runOffset);
+  return length;
+}
+
+function writeIndexAllocation(record, offset, clusters) {
+  const name = '$I30';
+  const runs = Buffer.from([0x31, clusters & 0xff, FILE_LCN & 0xff, (FILE_LCN >> 8) & 0xff, 0]);
+  const nameBuffer = Buffer.from(name, 'utf16le');
+  const nameOffset = 0x48;
+  const runOffset = align8(nameOffset + nameBuffer.length);
+  const length = align8(runOffset + runs.length);
+  record.writeUInt32LE(ATTR_INDEX_ALLOCATION, offset);
+  record.writeUInt32LE(length, offset + 4);
+  record.writeUInt8(1, offset + 8);
+  record.writeUInt8(name.length, offset + 9);
+  record.writeUInt16LE(nameOffset, offset + 10);
+  record.writeUInt16LE(runOffset, offset + 0x20);
+  record.writeBigUInt64LE(BigInt(clusters * BYTES_PER_CLUSTER), offset + 0x28);
+  nameBuffer.copy(record, offset + nameOffset);
+  runs.copy(record, offset + runOffset);
   return length;
 }
 

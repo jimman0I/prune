@@ -122,7 +122,7 @@ describe('the Disk Map in another language, before any scan has run', () => {
     expect(screen.getByText('Χρήση δίσκου: τι καταλαμβάνει χώρο σε αυτόν τον δίσκο και πού.')).toBeTruthy();
     expect(screen.getByText('Ανάγνωση ολόκληρου του δίσκου')).toBeTruthy();
     expect(screen.getByText(/κάθε αρχείο στο C: μέσα σε λίγα δευτερόλεπτα/)).toBeTruthy();
-    expect(screen.getByText(/Δεν μπορεί να ολοκληρωθεί σε ολόκληρο δίσκο/)).toBeTruthy();
+    expect(screen.getByText(/Δεν χρειάζεται άδεια/)).toBeTruthy();
     expect(screen.getByRole('button', { name: 'Γρήγορη σάρωση (διαχειριστής)' })).toBeTruthy();
     expect(screen.getByRole('button', { name: "Διατρέξτε τους φακέλους αντ' αυτού" })).toBeTruthy();
   });
@@ -137,7 +137,7 @@ describe('the Disk Map in another language, before any scan has run', () => {
     // The scan card labels itself "Σάρωση: <path>" in one element now
     // (it used to be a heading plus a separate path line).
     expect(await screen.findByText('Σάρωση: C:\\')).toBeTruthy();
-    expect(screen.getByText(/Έναν κατάλογο τη φορά/)).toBeTruthy();
+    expect(screen.getByText(/Διαβάζει κάθε φάκελο/)).toBeTruthy();
     expect(screen.getByRole('button', { name: "Ανάγνωση του ευρετηρίου δίσκου αντ' αυτού (διαχειριστής)" })).toBeTruthy();
   });
 
