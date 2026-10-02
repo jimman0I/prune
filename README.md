@@ -99,12 +99,20 @@ launcher it uninstalls through. Optional: a restore point or a full
 registry backup before each uninstall, and a choice of where leftover
 files go.
 
+A leftover scan in three depths — **Safe**, **Moderate** and **Advanced** —
+with results tiered *certain / likely / possible* and never offering
+Windows, Microsoft components or another program's folder. **Forced
+uninstall** for software that isn't listed, **Hunter** (click a window to
+identify its program), **Install with monitoring** so a later uninstall is
+exact, a **Backups** tab to restore registry and task backups, and a full
+**History**.
+
 </td>
 <td width="50%" valign="top">
 
 ### 🧹 Deep Clean
 
-**93 rules across 32 categories**, scanned one at a time so the tree fills
+**109 rules across 32 categories**, scanned one at a time so the tree fills
 in as it goes. A rule that cannot be measured says whether the software is
 missing or the read needs admin — never `0 B`.
 
@@ -120,6 +128,13 @@ frees the space at once, plus deep-scan patterns for backup, Office temp, Vim
 swap, .DS_Store and Thumbs.db files. A *Free disk space* wipe is there too,
 off by default and asking every time: it frees nothing, it does nothing
 useful on an SSD with TRIM, and it adds write wear.
+
+Also: an opt-in **overwrite before deleting** (1 or 3 passes), a **Shred
+files…** tool, a free-space wipe on any local drive, locked files deleted at
+the next restart, a per-rule list of the biggest files in Preview, your own
+**Custom locations**, **BleachBit cleaner import**, and a `prune-cli` command
+line (`list`, `preview`, `clean`). Overwriting is not reliable on SSDs; Prune
+says so where you turn it on.
 
 </td>
 </tr>
@@ -137,6 +152,11 @@ as they happen, and — for a whole-drive walk of `C:` — a percentage that is
 a true ratio of bytes read to bytes in use. Where no total is known there is
 no percentage, only a moving bar. Motion respects Windows' reduce-motion
 setting.
+
+Scan any local drive (several NTFS drives in one administrator prompt, or
+no prompt at all when Prune runs as administrator), see size *and* size on
+disk with hard links counted once, modified dates, search by text, wildcard
+or regex, export CSV and PNG, and save scans to compare later.
 
 </td>
 <td width="50%" valign="top">
@@ -243,7 +263,15 @@ off. [SECURITY.md](SECURITY.md) says exactly what the updater trusts.
 
 <br/>
 
-## 📰 What's New in 2.9
+## 📰 What's New in 3.0
+
+- **The sidebar is icons only until you point at it**, then widens over the page.
+- **Disk Map like WizTree** — any drive, size on disk, modified dates, search, export, saved scans and compare.
+- **Deep Clean like BleachBit** — overwrite and shred, any-drive free-space wipe, a command line, custom locations and BleachBit cleaner import, plus 16 new rules.
+- **Uninstaller like Revo** — Safe / Moderate / Advanced scans, confidence tiers, Forced uninstall, Hunter, install monitoring, Backups and History.
+- **Fixes** — Quick Access pins are no longer deleted, Stop keeps your ticks, the window controls stay aligned at any zoom, and Prune no longer sometimes opens in English.
+
+## What's New in 2.9
 
 - **Two Deep Clean removal modes** — an opt-in *Delete now* mode that frees space straight away (Quarantine stays the default), *Deep scan* rules for backup, Office temp, Vim swap, `.DS_Store` and `Thumbs.db` files, and an opt-in free-space wipe.
 - **A Dashboard that answers one question** — where is my space going? One bar, your five largest programs, and drive health on demand.
