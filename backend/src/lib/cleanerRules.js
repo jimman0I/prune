@@ -16,6 +16,7 @@ import * as mozillaUrlHistoryAction from './cleanerActions/mozillaUrlHistory.js'
 import * as mozillaFaviconsAction from './cleanerActions/mozillaFavicons.js';
 import * as deepscanAction from './cleanerActions/deepscan.js';
 import * as wipeFreeSpaceAction from './cleanerActions/wipeFreeSpace.js';
+import { mergeTopFiles } from './topFiles.js';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const CLEANERS_JSON_PATH = join(here, '..', 'data', 'cleaners.json');
@@ -154,6 +155,9 @@ export function scanRule(rule, guards = {}) {
   // promise about the delete half; don't read it as "everything in this
   // rule, registry key included, is reachable."
   let sizeBytes = null, fileCount = null, heldCount = 0, accessible = true, present = false;
+  // The biggest files each file-listing action found, for the per-file preview.
+  const fileLists = [];
+  let filesListed = false;
 
   for (const action of normalized.actions) {
     if (action.type === 'shell') {
@@ -166,6 +170,8 @@ export function scanRule(rule, guards = {}) {
       fileCount = (fileCount ?? 0) + result.fileCount;
       heldCount += result.heldCount;
       accessible = accessible && result.accessible;
+      fileLists.push(result.files);
+      filesListed = true;
       if (expandedPaths.some((p) => rulePathsExistFor(p))) present = true;
     } else if (action.type === 'sqlite.vacuum') {
       const result = sqliteVacuumAction.scan({ expandedPath: expandPath(action.path) });
@@ -232,7 +238,10 @@ export function scanRule(rule, guards = {}) {
     }
   }
 
-  return { id: rule.id, sizeBytes, fileCount, heldCount, present, accessible };
+  return {
+    id: rule.id, sizeBytes, fileCount, heldCount, present, accessible,
+    ...(filesListed ? { files: mergeTopFiles(fileLists), filesListed: true } : {})
+  };
 }
 
 /** The scan for a rule that includes a `deepscan` action, which walks the
@@ -252,6 +261,7 @@ export async function scanRuleAsync(rule, guards = {}) {
     ? scanRule({ ...normalized, actions: others }, guards)
     : { id: rule.id, sizeBytes: null, fileCount: null, heldCount: 0, present: false, accessible: true };
   let { sizeBytes, fileCount, heldCount, accessible } = base;
+  const fileLists = [base.files];
   let incomplete;
 
   for (const action of deepActions) {
@@ -260,9 +270,14 @@ export async function scanRuleAsync(rule, guards = {}) {
     fileCount = (fileCount ?? 0) + result.fileCount;
     heldCount += result.heldCount;
     accessible = accessible && result.accessible;
+    fileLists.push(result.files);
     if (result.incomplete) incomplete = result.incomplete;
   }
-  return { id: rule.id, sizeBytes, fileCount, heldCount, present: true, accessible, ...(incomplete ? { incomplete } : {}) };
+  return {
+    id: rule.id, sizeBytes, fileCount, heldCount, present: true, accessible,
+    files: mergeTopFiles(fileLists), filesListed: true,
+    ...(incomplete ? { incomplete } : {})
+  };
 }
 
 /** A deepscan action as the action module wants it: the root already

@@ -18,6 +18,7 @@ import DeepCleanTree from './DeepCleanTree.jsx';
 import CleanWarningDialog from './CleanWarningDialog.jsx';
 import WipeFreeSpaceDialog from './WipeFreeSpaceDialog.jsx';
 import ShredDialog from './ShredDialog.jsx';
+import { biggestSelected, fileName } from '../lib/biggestFiles.js';
 import { useLanguage } from '../i18n/LanguageContext.jsx';
 import { useCleanerText } from '../i18n/cleanerText.js';
 
@@ -589,6 +590,10 @@ function DeepClean({ onNavigate }) {
   };
 
   const cleanTotal = selectionTotal(categories, selected);
+  const biggest = useMemo(
+    () => (removalMode === 'delete' && confirmClean ? biggestSelected(categories, selected, 3) : []),
+    [removalMode, confirmClean, categories, selected]
+  );
   // Nothing can be cleaned blind: a completed Preview that measured at least
   // one ticked item is the precondition, and a running scan or clean is not.
   // The free-space wipe frees nothing and so is never "measured"; ticking it
@@ -861,6 +866,13 @@ function DeepClean({ onNavigate }) {
               <span className="text-[12.5px] text-[color:var(--text-primary)] mr-1">
                 {t(CONFIRM_PROMPT[removalMode], selected.size, cleanTotal.anyMeasured, formatBytes(cleanTotal.bytes))}
                 {wipeSelected && <> {t('deepClean.confirm.wipeNote')}</>}
+                {/* Only where it cannot be undone: naming the biggest items
+                    is what lets someone tell a cache from a game install. */}
+                {removalMode === 'delete' && biggest.length > 0 && (
+                  <span className="block mt-0.5 text-[11.5px] text-[color:var(--text-secondary)]">
+                    {t('deepCleanV3.files.biggest', biggest.map((f) => `${fileName(f.path)} (${formatBytes(f.sizeBytes)})`).join(', '))}
+                  </span>
+                )}
               </span>
               {/* Once the delete is actually in flight, Cancel no longer
                   means anything -- rules already finished stay cleaned.

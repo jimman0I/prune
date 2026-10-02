@@ -1,7 +1,8 @@
 import * as fs from 'node:fs';
 import { readdirSync, statSync } from 'node:fs';
 import { join } from 'node:path';
-import { partitionCleanableFiles } from '../cleanGuards.js';
+import { partitionCleanableFiles, holdReason } from '../cleanGuards.js';
+import { createTopFiles, FILE_LIST_LIMIT } from '../topFiles.js';
 import { quarantineAndDelete } from '../../services/quarantine.js';
 import { sendToRecycleBin } from '../../services/recycleBin.js';
 import { removePermanently } from '../../services/leftoverRemoval.js';
@@ -225,17 +226,52 @@ const LOCKED_CODES = new Set(['EBUSY', 'EPERM']);
  * anything. `action.expandedPaths` is pre-expanded (see
  * resolveActionFiles). */
 export function scan(action, guards = {}) {
-  const { files, denied, held } = resolveActionFiles(action.expandedPaths, guards, action.excludeNames);
+  // Judged file by file as the walk finds them, through the same checks
+  // resolveActionFiles applies to its list: the totals and the 200 biggest
+  // are kept, the files themselves are not. A rule can match millions.
+  const top = createTopFiles(FILE_LIST_LIMIT);
+  const now = Date.now();
+  const options = { ...guards, now };
+  let sizeBytes = 0;
+  let fileCount = 0;
+  let heldCount = 0;
+  // Only `**` can reach one file by two roads; everything else cannot, and
+  // a Set of every path in a million-file rule would cost what this avoids.
+  const dedupe = action.expandedPaths.some((p) => /(^|[\\/])\*\*([\\/]|$)/.test(p)) ? new Set() : null;
+  const sink = {
+    push(file) {
+      if (dedupe) {
+        const key = file.path.toLowerCase();
+        if (dedupe.has(key)) return;
+        dedupe.add(key);
+      }
+      if (holdReason(file, options)) { heldCount += 1; return; }
+      sizeBytes += file.sizeBytes;
+      fileCount += 1;
+      top.add(file.path, file.sizeBytes);
+    }
+  };
+  const denied = [];
+  const excludeBasenames = action.excludeNames && action.excludeNames.length
+    ? new Set(action.excludeNames.map((n) => n.toLowerCase()))
+    : null;
+  for (const expanded of action.expandedPaths) {
+    const [driveSegment, ...rest] = pathToSegments(expanded);
+    if (!driveSegment) continue;
+    for (const match of resolveGlob(driveSegment, rest)) collectFiles(match, sink, denied, excludeBasenames);
+  }
   return {
-    sizeBytes: files.reduce((sum, f) => sum + f.sizeBytes, 0),
-    fileCount: files.length,
+    sizeBytes,
+    fileCount,
     // What the guards held back, so the panel can say "and 12 files left
     // alone" rather than quietly reporting a smaller number than the user
     // can see in Explorer.
-    heldCount: held.length,
+    heldCount,
     // False means "this exists but Windows wouldn't let us look inside",
     // which the UI must show as needing admin rather than as 0 bytes.
-    accessible: denied.length === 0
+    accessible: denied.length === 0,
+    // The biggest files a Clean would take, for the per-file preview.
+    files: top.toArray()
   };
 }
 
