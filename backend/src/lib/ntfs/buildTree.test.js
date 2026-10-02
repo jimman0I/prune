@@ -115,3 +115,53 @@ describe('buildTree', () => {
     expect(tree).toEqual({ name: 'C:', size: 0, type: 'directory', children: [] });
   });
 });
+
+describe('buildTree allocated size', () => {
+  const withAlloc = (rows) => {
+    const map = new Map();
+    for (const [record, name, parentRecord, sizeBytes, isDirectory, allocatedBytes, extra] of rows) {
+      map.set(record, { name, parentRecord, sizeBytes, isDirectory, allocatedBytes, ...extra });
+    }
+    return map;
+  };
+
+  it('sums allocated size upward beside the logical size', () => {
+    const tree = buildTree(withAlloc([
+      [ROOT_RECORD, '.', ROOT_RECORD, 0, true, 0],
+      [10, 'Games', ROOT_RECORD, 0, true, 4096],
+      [11, 'save.dat', 10, 500, false, 4096],
+      [12, 'mod.bin', 10, 9000, false, 12288]
+    ]), { name: 'C:' });
+    const games = tree.children[0];
+    expect(games.size).toBe(9500);
+    expect(games.allocated).toBe(4096 + 4096 + 12288);
+    expect(tree.allocated).toBe(games.allocated);
+  });
+
+  it('keeps a stray\'s allocation in the total as well as its size', () => {
+    const tree = buildTree(withAlloc([
+      [ROOT_RECORD, '.', ROOT_RECORD, 0, true, 0],
+      [11, 'orphan.bin', 9999, 250, false, 4096]
+    ]), { name: 'C:' });
+    expect(tree.size).toBe(250);
+    expect(tree.allocated).toBe(4096);
+  });
+
+  it('leaves out a file\'s allocation when it has none, and notes extra hard-link names', () => {
+    const tree = buildTree(withAlloc([
+      [ROOT_RECORD, '.', ROOT_RECORD, 0, true, 0],
+      [10, 'tiny.txt', ROOT_RECORD, 12, false, 0],
+      [11, 'linked.dll', ROOT_RECORD, 8000, false, 8192, { hardLinks: 3 }]
+    ]), { name: 'C:' });
+    const tiny = tree.children.find((n) => n.name === 'tiny.txt');
+    const linked = tree.children.find((n) => n.name === 'linked.dll');
+    expect('allocated' in tiny).toBe(false);
+    expect(linked.allocated).toBe(8192);
+    expect(linked.links).toBe(3);
+  });
+
+  it('gives a tree built without allocation data no allocated field at all', () => {
+    const tree = buildTree(entries([[ROOT_RECORD, '.', ROOT_RECORD, 0, true], [10, 'a', ROOT_RECORD, 5, false]]), { name: 'C:' });
+    expect(tree.allocated).toBeUndefined();
+  });
+});

@@ -16,7 +16,6 @@ import { attachFullPaths, topLevelCells } from '../lib/diskMapTree.js';
 import { subtreeForPath } from '../lib/mftSubtree.js';
 import { NO_EXTENSION } from '../lib/extensionBreakdown.js';
 import { useDiskMapAggregates } from '../hooks/useDiskMapAggregates.js';
-import { sortFolderRows, nextFolderSort } from '../lib/sortFolderRows.js';
 import { withUnscannedRemainder, scanCoverage, localizeUnscanned } from '../lib/unscannedRemainder.js';
 import { buildTypeColors, colorForExtension, colorForNode, inkForFill, NO_EXTENSION_COLOR } from '../lib/fileTypeColors.js';
 import { iconKeyForNode, extensionsInCells, extensionOf, GENERIC_FILE_KEY } from '../lib/fileTypeIcon.js';
@@ -24,6 +23,8 @@ import { limitCells } from '../lib/limitCells.js';
 import { useLanguage } from '../i18n/LanguageContext.jsx';
 import DiskScanProgress from './DiskScanProgress.jsx';
 import { DrivePicker } from './DrivePicker.jsx';
+import { FolderTable } from './FolderTable.jsx';
+import { RowActionsButton } from './RowActionsButton.jsx';
 import { useDrives } from '../hooks/useDrives.js';
 import { useAdminAccess } from '../hooks/useAdminAccess.js';
 import { readScanMode, writeScanMode } from '../lib/scanMode.js';
@@ -494,33 +495,6 @@ function ExtensionPanel({ breakdown, shown, icons, typeColors }) {
  * Paths are shown in full and are the point of the view: this is the list
  * you act on, and "FactoryGame-Windows.ucas" without its folder is not
  * something anyone can find again. */
-/** The "..." on a row: the same menu a right-click on the map opens, for
- * people who do not right-click (keyboard, touch, or simply nobody told
- * them). The menu opens beside the button, not at the pointer, so it lands
- * in the same place whatever opened it. 24 px square, the WCAG 2.2 floor. */
-function RowActionsButton({ name, onOpen }) {
-  const { t } = useLanguage();
-  return (
-    <button
-      type="button"
-      aria-haspopup="menu"
-      aria-label={t('diskMap.rowActionsLabel', name)}
-      onClick={(e) => {
-        e.stopPropagation();
-        const box = e.currentTarget.getBoundingClientRect();
-        onOpen({ clientX: box.right, clientY: box.bottom });
-      }}
-      className="w-6 h-6 shrink-0 rounded-md flex items-center justify-center text-[color:var(--text-secondary)] hover:text-[color:var(--text-primary)] hover:bg-[color:var(--surface-hover)] transition-colors"
-    >
-      <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-        <circle cx="5" cy="12" r="2" />
-        <circle cx="12" cy="12" r="2" />
-        <circle cx="19" cy="12" r="2" />
-      </svg>
-    </button>
-  );
-}
-
 export function LargestFilesView({ files, icons, onContextMenu }) {
   const { t } = useLanguage();
 
@@ -580,53 +554,6 @@ export function LargestFilesView({ files, icons, onContextMenu }) {
 }
 
 
-/** WizTree's Tree View: what is directly inside the folder in view, as a
- * sortable table.
- *
- * The map answers "which of these is big" and nothing else. It cannot say
- * that a 29 GB folder holds 52,780 items, or when it was last touched,
- * and those are what decide whether a folder is worth opening.
- *
- * Two of WizTree's columns are deliberately absent. Allocated size was
- * measured in this project and thrown out -- it summed to 1270 GB on a
- * 952.9 GB volume, so it fails its own sanity check. Windows file
- * attributes are not on a Node stat and nothing in the scan carries them.
- * An empty column would be worse than no column. */
-/** Sized to fit beside the file-type panel rather than to a comfortable
- * ideal. All seven columns at their old widths came to 840px in a pane
- * that is about 680px wide, so Folders and Modified were sliced off the
- * right edge and the table carried a horizontal scrollbar it should never
- * have needed -- the same overflow the Applications table had, in a pane
- * that is narrower because the type panel sits beside it.
- *
- * Every width here is measured against the content: "3.6%", "29.4 GB",
- * "59,502" and "8/17/2026" are the widest real values in their columns. */
-const FOLDER_COLUMNS = [
-  { key: 'name', align: 'left', width: 'minmax(150px,1fr)' },
-  { key: 'percentOfParent', align: 'right', width: '54px' },
-  { key: 'size', align: 'right', width: '84px' },
-  { key: 'items', align: 'right', width: '68px' },
-  { key: 'files', align: 'right', width: '64px' },
-  { key: 'folders', align: 'right', width: '68px' },
-  { key: 'modified', align: 'right', width: '84px' },
-  // The "..." menu. No header word: it is an action column, not data.
-  { key: 'actions', align: 'right', width: '24px' }
-];
-
-// percentOfParent is the one column with no word to translate -- "%" is
-// the same symbol in every language this app ships.
-const FOLDER_COLUMN_KEYS = {
-  name: 'diskMap.folderTable.columns.folder',
-  size: 'diskMap.folderTable.columns.size',
-  items: 'diskMap.folderTable.columns.items',
-  files: 'diskMap.folderTable.columns.files',
-  folders: 'diskMap.folderTable.columns.folders',
-  modified: 'diskMap.folderTable.columns.modified'
-};
-
-const FOLDER_GRID = FOLDER_COLUMNS.map((c) => c.width).join(' ');
-
-/** A count that was never taken reads as a dash, never as zero. */
 /** Why a folder could not be scanned, naming the folder it was reading.
  * Exported so it can be tested without scanning a real drive. */
 export function ScanFailure({ path, error, onRetry }) {
@@ -641,151 +568,6 @@ export function FastScanNote({ note }) {
   return (
     <div className="mb-5 px-3.5 py-3 rounded-xl bg-[color:var(--warning-soft)] border border-[color:var(--warning)]/25">
       <p className="text-[12.5px] text-[color:var(--warning)] select-text">{note}</p>
-    </div>
-  );
-}
-
-function Count({ value }) {
-  if (value === null || value === undefined) {
-    return <span className="text-[color:var(--text-muted)]">—</span>;
-  }
-  return <>{value.toLocaleString()}</>;
-}
-
-function FolderTable({ folderRows, onDrillDown, onContextMenu }) {
-  const { t } = useLanguage();
-  const [sort, setSort] = useState({ column: 'size', direction: 'desc' });
-  // The counts themselves are computed off the main thread (see
-  // useDiskMapAggregates.js) since a folder like a drive root's own
-  // countSubtree walk covers every node in the tree; only the SORT of the
-  // already-computed rows happens here, which is cheap regardless of how
-  // large the tree behind them was.
-  const rows = useMemo(
-    () => sortFolderRows(folderRows, sort.column, sort.direction),
-    [folderRows, sort]
-  );
-
-  if (rows.length === 0) {
-    return (
-      <div className="glass-panel p-6 text-[13px] text-[color:var(--text-muted)]">
-        {t('diskMap.folderTable.empty')}
-      </div>
-    );
-  }
-
-  return (
-    // A real table to assistive tech: the rows are divs in a grid (a native
-    // <table> cannot give a truncating flexible first column), so the
-    // semantics are stated instead of assumed.
-    <div className="glass-panel overflow-hidden min-w-0" role="table" aria-label={t('diskMap.folderTable.columns.folder')}>
-      <div
-        role="row"
-        className="grid gap-2.5 px-4 py-2 border-b border-[color:var(--border-subtle)] bg-[color:var(--surface-subtle)]"
-        style={{ gridTemplateColumns: FOLDER_GRID }}
-      >
-        {FOLDER_COLUMNS.map((col) => {
-          if (col.key === 'actions') return <span key={col.key} role="presentation" />;
-          const sorted = sort.column === col.key;
-          return (
-            <div
-              key={col.key}
-              role="columnheader"
-              aria-sort={sorted ? (sort.direction === 'asc' ? 'ascending' : 'descending') : undefined}
-              className={col.align === 'right' ? 'flex justify-end' : 'flex'}
-            >
-              <button
-                onClick={() => setSort((s) => nextFolderSort(s, col.key))}
-                // 32 px tall: a sortable header is a control, not a label.
-                className={`flex items-center gap-1 min-h-8 text-[11px] font-mono uppercase tracking-[0.12em] text-[color:var(--text-muted)] hover:text-[color:var(--text-primary)] transition-colors ${
-                  col.align === 'right' ? 'justify-end' : ''
-                }`}
-              >
-                {col.key === 'percentOfParent' ? '%' : t(FOLDER_COLUMN_KEYS[col.key])}
-                {sorted && (
-                  <svg aria-hidden="true" width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.2" className="shrink-0">
-                    {sort.direction === 'asc' ? <polyline points="18 15 12 9 6 15" /> : <polyline points="6 9 12 15 18 9" />}
-                  </svg>
-                )}
-              </button>
-            </div>
-          );
-        })}
-      </div>
-
-      <div role="rowgroup" className="max-h-[520px] overflow-y-auto divide-y divide-[color:var(--border-subtle)]">
-        {rows.map((row) => {
-          // Only a folder the scan actually opened is worth drilling into --
-          // clicking an unscanned block would scan a path we have no
-          // evidence even exists.
-          const drillable = row.scanned && row.type === 'directory' && Boolean(row.fullPath);
-          // The same test as the map's menu: a real, measured place.
-          const actionable = row.scanned && Boolean(row.fullPath);
-          const node = { name: row.name, size: row.size, fullPath: row.fullPath, type: row.type };
-          return (
-            <div
-              role="row"
-              key={row.fullPath || row.name}
-              className={`grid gap-2.5 px-4 py-[7px] items-center ${
-                drillable ? 'cursor-pointer hover:bg-[color:var(--surface-hover)] transition-colors' : ''
-              }`}
-              style={{ gridTemplateColumns: FOLDER_GRID }}
-              onClick={() => { if (drillable) onDrillDown(row.fullPath); }}
-              onContextMenu={(e) => {
-                if (!actionable || !onContextMenu) return;
-                e.preventDefault();
-                onContextMenu(node, e);
-              }}
-            >
-              <div role="cell" className="text-[12.5px] text-[color:var(--text-primary)] truncate min-w-0">
-                {drillable ? (
-                  // The row's keyboard door. A mouse click anywhere on the row
-                  // drills (the row's own handler); this is the same action for
-                  // Tab, Enter and Space, named with what it opens and how big
-                  // it is. Its click bubbles to the row, so there is one path.
-                  <button
-                    type="button"
-                    aria-label={t('diskMap.folderTable.rowLabel', row.name, formatBytes(row.size))}
-                    className="max-w-full truncate text-left"
-                  >
-                    {row.name}
-                  </button>
-                ) : (
-                  row.name
-                )}
-                {!row.scanned && (
-                  <span className="ml-2 text-[11px] font-mono uppercase tracking-wider text-[color:var(--text-muted)]">
-                    {t('diskMap.folderTable.notScanned')}
-                  </span>
-                )}
-              </div>
-              <div role="cell" className="text-[11.5px] font-mono text-right text-[color:var(--text-muted)]" style={{ fontVariantNumeric: 'tabular-nums' }}>
-                {row.scanned ? `${row.percentOfParent.toFixed(1)}%` : '—'}
-              </div>
-              {/* Text colour, not the cyan that also marks buttons and ticks. */}
-              <div role="cell" className="text-[12px] font-mono text-right text-[color:var(--text-primary)]" style={{ fontVariantNumeric: 'tabular-nums' }}>
-                {row.scanned ? formatBytes(row.size) : '—'}
-              </div>
-              <div role="cell" className="text-[11.5px] font-mono text-right text-[color:var(--text-secondary)]" style={{ fontVariantNumeric: 'tabular-nums' }}>
-                <Count value={row.items} />
-              </div>
-              <div role="cell" className="text-[11.5px] font-mono text-right text-[color:var(--text-secondary)]" style={{ fontVariantNumeric: 'tabular-nums' }}>
-                <Count value={row.files} />
-              </div>
-              <div role="cell" className="text-[11.5px] font-mono text-right text-[color:var(--text-secondary)]" style={{ fontVariantNumeric: 'tabular-nums' }}>
-                <Count value={row.folders} />
-              </div>
-              <div role="cell" className="text-[11.5px] font-mono text-right text-[color:var(--text-muted)]" style={{ fontVariantNumeric: 'tabular-nums' }}>
-                {row.modified ? new Date(row.modified).toLocaleDateString() : '—'}
-              </div>
-              <div role="cell" className="flex justify-end">
-                {actionable && onContextMenu && (
-                  <RowActionsButton name={row.name} onOpen={(pos) => onContextMenu(node, pos)} />
-                )}
-              </div>
-            </div>
-          );
-        })}
-      </div>
     </div>
   );
 }
@@ -1209,6 +991,18 @@ function DiskMap() {
               {fastStats.mftComplete === false && (
                 <span className="text-[color:var(--warning)]">
                   {' '}{t('diskMap.indexIncomplete')}
+                </span>
+              )}
+              {/* The numbers to hold the scan against the drive itself: what
+                  was counted, what it occupies on disk, and what the volume
+                  says is in use. A mismatch is visible here rather than
+                  trusted. */}
+              {typeof fastStats.allocatedBytes === 'number' && (
+                <span className="block mt-0.5 font-mono text-[11.5px] text-[color:var(--text-muted)]" data-testid="scan-totals">
+                  {typeof fastStats.bitmapUsedBytes === 'number'
+                    ? t('diskMapV3.totals.line', formatBytes(fastStats.totalBytes), formatBytes(fastStats.allocatedBytes), formatBytes(fastStats.bitmapUsedBytes))
+                    : t('diskMapV3.totals.lineNoVolume', formatBytes(fastStats.totalBytes), formatBytes(fastStats.allocatedBytes))}
+                  {fastStats.hardLinkedFiles > 0 && <> {t('diskMapV3.totals.hardLinkNote', fastStats.hardLinkedFiles.toLocaleString())}</>}
                 </span>
               )}
             </p>

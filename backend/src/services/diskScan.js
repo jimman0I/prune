@@ -16,7 +16,7 @@ import { matchesExtension } from '../lib/exclusionInput.js';
 
 export const DEFAULT_MAX_DEPTH = 12;
 
-async function scanNode(entryPath, name, depthRemaining, signal, exclusions, onFile) {
+async function scanNode(entryPath, name, depthRemaining, signal, exclusions, onFile, seenLinks) {
   // Checked BEFORE starting new work, not just relied on to reject an
   // in-flight fs call -- an already-aborted signal should stop growing the
   // tree immediately rather than spend one more stat/readdir round-trip
@@ -40,7 +40,9 @@ async function scanNode(entryPath, name, depthRemaining, signal, exclusions, onF
 
   let stat;
   try {
-    stat = await fs.stat(entryPath, { signal });
+    // bigint: a file id (dev + ino) does not fit a double, and a hard link is
+    // recognised by that id alone.
+    stat = await fs.stat(entryPath, { signal, bigint: true });
   } catch {
     // Covers real permission errors (EPERM/EACCES/gone by the time we got
     // here) AND an abort that landed mid-call -- fs.promises rejects with
@@ -51,8 +53,26 @@ async function scanNode(entryPath, name, depthRemaining, signal, exclusions, onF
   }
 
   if (!stat.isDirectory()) {
-    onFile?.(stat.size);
-    return { name, size: stat.size, type: 'file' };
+    // A file with several names (WinSxS is full of them) is one file on disk.
+    // Counting it under every name over-states both its size and the folders
+    // it appears in, so only the first sighting carries the bytes; the others
+    // are listed, marked, and free. The MFT scan has the same rule for the
+    // same reason: one record, one file.
+    if (Number(stat.nlink) > 1 && stat.ino !== 0n) {
+      const id = `${stat.dev}:${stat.ino}`;
+      if (seenLinks.has(id)) {
+        onFile?.(0);
+        return { name, size: 0, type: 'file', hardLink: true };
+      }
+      seenLinks.add(id);
+    }
+    const size = Number(stat.size);
+    onFile?.(size);
+    // What the file occupies on disk. libuv reports the allocation in 512-byte
+    // blocks, already net of sparse holes and compression; a file small
+    // enough to live inside its MFT record has none.
+    const allocated = Number(stat.blocks) * 512;
+    return allocated > 0 ? { name, size, allocated, type: 'file' } : { name, size, type: 'file' };
   }
 
   let entryNames;
@@ -104,10 +124,11 @@ async function scanNode(entryPath, name, depthRemaining, signal, exclusions, onF
       break;
     }
     const entryName = entryNames[i];
-    const child = await scanNode(join(entryPath, entryName), entryName, depthRemaining - 1, signal, exclusions, onFile);
+    const child = await scanNode(join(entryPath, entryName), entryName, depthRemaining - 1, signal, exclusions, onFile, seenLinks);
     if (child) children.push(child);
   }
   const size = children.reduce((sum, c) => sum + c.size, 0);
+  const allocated = children.reduce((sum, c) => sum + (c.allocated ?? 0), 0);
 
   // When a directory was last written, for the folder table. Free: the
   // stat above already ran and this value was being discarded.
@@ -115,8 +136,9 @@ async function scanNode(entryPath, name, depthRemaining, signal, exclusions, onF
   // Directories ONLY, deliberately. The same field on every file node
   // would add roughly a megabyte to a 4.4 MB response for data no folder
   // table ever shows -- and the tree is sent whole.
-  const modified = Number.isFinite(stat.mtimeMs) && stat.mtimeMs > 0
-    ? Math.round(stat.mtimeMs)
+  const mtimeMs = Number(stat.mtimeMs);
+  const modified = Number.isFinite(mtimeMs) && mtimeMs > 0
+    ? Math.round(mtimeMs)
     : null;
 
   // `type: 'directory'` still applies at the depth cap (no `children` key)
@@ -124,8 +146,8 @@ async function scanNode(entryPath, name, depthRemaining, signal, exclusions, onF
   // fresh scan to go deeper) apart from a plain file (never has children),
   // since both would otherwise collapse to the same { name, size } shape.
   return depthRemaining > 0
-    ? { name, size, type: 'directory', modified, children }
-    : { name, size, type: 'directory', modified };
+    ? { name, size, allocated, type: 'directory', modified, children }
+    : { name, size, allocated, type: 'directory', modified };
 }
 
 /** Recursively scans `dirPath`, returning a hierarchical
@@ -149,7 +171,7 @@ async function scanNode(entryPath, name, depthRemaining, signal, exclusions, onF
  * The walk visits files below the depth cap too, so the count reflects work
  * done, not what the returned tree shows. */
 export async function scanDirectory(dirPath, maxDepth = DEFAULT_MAX_DEPTH, signal, exclusions = null, onFile) {
-  return scanNode(dirPath, basename(dirPath) || dirPath, maxDepth, signal, exclusions, onFile);
+  return scanNode(dirPath, basename(dirPath) || dirPath, maxDepth, signal, exclusions, onFile, new Set());
 }
 
 /** Whether the scanner should skip this entry outright.
