@@ -36,10 +36,10 @@ describe('tiers', () => {
 
 describe('preselectKeys', () => {
   it('ticks certain and likely items and never possible ones', () => {
-    expect([...preselectKeys(scan)].sort()).toEqual(['files:0', 'files:1', 'registryKeys:1'].sort());
+    expect([...preselectKeys(scan)].sort()).toEqual(['files:0', 'files:1', 'registryKeys:1', 'scheduledTasks:0'].sort());
   });
 
-  it('can be asked about other groups too', () => {
+  it('can be limited to some groups', () => {
     expect([...preselectKeys(scan, ['scheduledTasks'])]).toEqual(['scheduledTasks:0']);
   });
 

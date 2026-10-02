@@ -233,15 +233,30 @@ describe('the uninstall dialog, in Greek', () => {
     expect(screen.getByText('ανακτήσιμο', { exact: false })).toBeTruthy();
   });
 
-  it('translates the "not removed" badge on the scheduled-tasks group', async () => {
+  // Scheduled tasks used to be the group that was listed and never removed;
+  // they are removable now (with their definition backed up). Services are
+  // what is still only listed, so the badge is checked there.
+  it('translates the "not removed" badge on the services group', async () => {
+    scanForLeftovers.mockResolvedValue({
+      files: { ok: true, items: [] },
+      registryKeys: { ok: true, items: [] },
+      scheduledTasks: { ok: true, items: [] },
+      services: { ok: true, items: [{ name: 'ThingSvc', displayName: 'Thing Service', pathName: 'C:\\Thing\\svc.exe', confidence: 'certain' }] }
+    });
+    await openAndScan();
+    expect(await screen.findByText('βρέθηκε, δεν αφαιρέθηκε')).toBeTruthy();
+    expect(screen.getByText('Υπηρεσίες')).toBeTruthy();
+  });
+
+  it('shows a scheduled task as a group that can be ticked', async () => {
     scanForLeftovers.mockResolvedValue({
       files: { ok: true, items: [] },
       registryKeys: { ok: true, items: [] },
       scheduledTasks: { ok: true, items: [{ name: 'ThingUpdaterTask', path: '\\' }] }
     });
     await openAndScan();
-    expect(await screen.findByText('βρέθηκε, δεν αφαιρέθηκε')).toBeTruthy();
-    expect(screen.getByText('Προγραμματισμένες εργασίες')).toBeTruthy();
+    expect(await screen.findByText('Προγραμματισμένες εργασίες')).toBeTruthy();
+    expect(screen.queryByText('βρέθηκε, δεν αφαιρέθηκε')).toBeNull();
   });
 
   it('translates the clean, no-leftovers state', async () => {

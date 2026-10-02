@@ -26,6 +26,10 @@ export default {
         },
         protectedNote: (n) => `Left out because they belong to Windows or to other installed programs: ${n}.`,
         truncatedNote: "The search stopped early to stay quick, so there may be more."
+      },
+      tasks: {
+        removed: (n) => `Scheduled tasks removed: ${n}. Their definitions are saved under Backups on the Quarantine screen, where they can be restored.`,
+        failedHeading: (n) => `Scheduled tasks that could not be removed: ${n}`
       }
     }
   },
@@ -52,6 +56,10 @@ export default {
         },
         protectedNote: (n) => `Uitgelaat omdat hulle aan Windows of ander geïnstalleerde programme behoort: ${n}.`,
         truncatedNote: "Die soektog het vroeg gestop om vinnig te bly, so daar kan meer wees."
+      },
+      tasks: {
+        removed: (n) => `Geskeduleerde take verwyder: ${n}. Hul definisies is gestoor onder Rugsteun op die Karantyn-skerm, waar hulle herstel kan word.`,
+        failedHeading: (n) => `Geskeduleerde take wat nie verwyder kon word nie: ${n}`
       }
     }
   },
@@ -78,6 +86,10 @@ export default {
         },
         protectedNote: (n) => `تم استبعادها لأنها تخص Windows أو برامج مثبتة أخرى: ${n}.`,
         truncatedNote: "توقف البحث مبكرًا للحفاظ على السرعة، لذا قد يوجد المزيد."
+      },
+      tasks: {
+        removed: (n) => `المهام المجدولة المحذوفة: ${n}. تم حفظ تعريفاتها ضمن النسخ الاحتياطية في شاشة الحجر الصحي، حيث يمكن استعادتها.`,
+        failedHeading: (n) => `المهام المجدولة التي تعذّرت إزالتها: ${n}`
       }
     }
   },
@@ -104,6 +116,10 @@ export default {
         },
         protectedNote: (n) => `Exclosos perquè pertanyen a Windows o a altres programes instal·lats: ${n}.`,
         truncatedNote: "La cerca s'ha aturat abans per ser ràpida, així que pot haver-hi més coses."
+      },
+      tasks: {
+        removed: (n) => `Tasques programades eliminades: ${n}. Les seves definicions es desen a Còpies de seguretat, a la pantalla Quarantena, on es poden restaurar.`,
+        failedHeading: (n) => `Tasques programades que no s'han pogut eliminar: ${n}`
       }
     }
   },
@@ -130,6 +146,10 @@ export default {
         },
         protectedNote: (n) => `Vynecháno, protože patří Windows nebo jiným nainstalovaným programům: ${n}.`,
         truncatedNote: "Hledání se předčasně zastavilo, aby zůstalo rychlé, takže může být více výsledků."
+      },
+      tasks: {
+        removed: (n) => `Odebrané naplánované úlohy: ${n}. Jejich definice jsou uloženy v části Zálohy na obrazovce Karanténa, odkud je lze obnovit.`,
+        failedHeading: (n) => `Naplánované úlohy, které se nepodařilo odebrat: ${n}`
       }
     }
   },
@@ -156,6 +176,10 @@ export default {
         },
         protectedNote: (n) => `Wedi'u gadael allan am eu bod yn perthyn i Windows neu i raglenni eraill a osodwyd: ${n}.`,
         truncatedNote: "Stopiodd y chwiliad yn gynnar i aros yn gyflym, felly efallai bod mwy."
+      },
+      tasks: {
+        removed: (n) => `Tasgau wedi'u hamserlennu a dynnwyd: ${n}. Mae eu diffiniadau wedi'u cadw o dan Copïau wrth gefn ar sgrin Cwarantin, lle gellir eu hadfer.`,
+        failedHeading: (n) => `Tasgau wedi'u hamserlennu na ellid eu tynnu: ${n}`
       }
     }
   },
@@ -182,6 +206,10 @@ export default {
         },
         protectedNote: (n) => `Udeladt, fordi de tilhører Windows eller andre installerede programmer: ${n}.`,
         truncatedNote: "Søgningen stoppede tidligt for at holde tempoet, så der kan være mere."
+      },
+      tasks: {
+        removed: (n) => `Fjernede planlagte opgaver: ${n}. Deres definitioner er gemt under Sikkerhedskopier på skærmen Karantæne, hvor de kan gendannes.`,
+        failedHeading: (n) => `Planlagte opgaver, der ikke kunne fjernes: ${n}`
       }
     }
   },
@@ -208,6 +236,10 @@ export default {
         },
         protectedNote: (n) => `Ausgelassen, weil sie zu Windows oder anderen installierten Programmen gehören: ${n}.`,
         truncatedNote: "Die Suche wurde vorzeitig beendet, um schnell zu bleiben – es kann also mehr geben."
+      },
+      tasks: {
+        removed: (n) => `Entfernte geplante Aufgaben: ${n}. Ihre Definitionen sind unter „Sicherungen“ auf der Seite „Quarantäne“ gespeichert und können dort wiederhergestellt werden.`,
+        failedHeading: (n) => `Geplante Aufgaben, die nicht entfernt werden konnten: ${n}`
       }
     }
   },
@@ -234,6 +266,10 @@ export default {
         },
         protectedNote: (n) => `Παραλείφθηκαν επειδή ανήκουν στα Windows ή σε άλλα εγκατεστημένα προγράμματα: ${n}.`,
         truncatedNote: "Η αναζήτηση σταμάτησε νωρίτερα για να μείνει γρήγορη, οπότε μπορεί να υπάρχουν κι άλλα."
+      },
+      tasks: {
+        removed: (n) => `Προγραμματισμένες εργασίες που αφαιρέθηκαν: ${n}. Οι ορισμοί τους αποθηκεύτηκαν στην ενότητα Αντίγραφα ασφαλείας της οθόνης Καραντίνα, όπου μπορούν να επαναφερθούν.`,
+        failedHeading: (n) => `Προγραμματισμένες εργασίες που δεν αφαιρέθηκαν: ${n}`
       }
     }
   },
@@ -260,6 +296,10 @@ export default {
         },
         protectedNote: (n) => `Omitidos porque pertenecen a Windows o a otros programas instalados: ${n}.`,
         truncatedNote: "La búsqueda se detuvo antes para ser rápida, así que puede haber más."
+      },
+      tasks: {
+        removed: (n) => `Tareas programadas eliminadas: ${n}. Sus definiciones se guardan en Copias de seguridad, en la pantalla Cuarentena, donde se pueden restaurar.`,
+        failedHeading: (n) => `Tareas programadas que no se pudieron eliminar: ${n}`
       }
     }
   },
@@ -286,6 +326,10 @@ export default {
         },
         protectedNote: (n) => `Välja jäetud, sest need kuuluvad Windowsile või teistele installitud programmidele: ${n}.`,
         truncatedNote: "Otsing peatati varakult, et see püsiks kiire, seega võib leide olla rohkem."
+      },
+      tasks: {
+        removed: (n) => `Eemaldatud ajastatud toimingud: ${n}. Nende definitsioonid on salvestatud jaotisse Varukoopiad ekraanil Karantiin, kust neid saab taastada.`,
+        failedHeading: (n) => `Ajastatud toimingud, mida ei saanud eemaldada: ${n}`
       }
     }
   },
@@ -312,6 +356,10 @@ export default {
         },
         protectedNote: (n) => `Jätetty pois, koska ne kuuluvat Windowsille tai muille asennetuille ohjelmille: ${n}.`,
         truncatedNote: "Haku pysähtyi aikaisin nopeuden säilyttämiseksi, joten löytyvää voi olla enemmän."
+      },
+      tasks: {
+        removed: (n) => `Poistetut ajastetut tehtävät: ${n}. Niiden määritykset on tallennettu kohtaan Varmuuskopiot näkymässä Karanteeni, josta ne voi palauttaa.`,
+        failedHeading: (n) => `Ajastetut tehtävät, joita ei voitu poistaa: ${n}`
       }
     }
   },
@@ -338,6 +386,10 @@ export default {
         },
         protectedNote: (n) => `Écartés car ils appartiennent à Windows ou à d'autres programmes installés : ${n}.`,
         truncatedNote: "La recherche s'est arrêtée plus tôt pour rester rapide ; il peut donc y avoir davantage."
+      },
+      tasks: {
+        removed: (n) => `Tâches planifiées supprimées : ${n}. Leurs définitions sont enregistrées dans Sauvegardes, sur l'écran Quarantaine, où elles peuvent être restaurées.`,
+        failedHeading: (n) => `Tâches planifiées qui n'ont pas pu être supprimées : ${n}`
       }
     }
   },
@@ -364,6 +416,10 @@ export default {
         },
         protectedNote: (n) => `הושמטו כי הם שייכים ל-Windows או לתוכנות מותקנות אחרות: ${n}.`,
         truncatedNote: "החיפוש נעצר מוקדם כדי להישאר מהיר, לכן ייתכן שיש עוד."
+      },
+      tasks: {
+        removed: (n) => `משימות מתוזמנות שהוסרו: ${n}. ההגדרות שלהן נשמרו תחת גיבויים במסך הסגר, ושם אפשר לשחזר אותן.`,
+        failedHeading: (n) => `משימות מתוזמנות שלא ניתן היה להסיר: ${n}`
       }
     }
   },
@@ -390,6 +446,10 @@ export default {
         },
         protectedNote: (n) => `Kihagyva, mert a Windowshoz vagy más telepített programokhoz tartoznak: ${n}.`,
         truncatedNote: "A keresés korán leállt, hogy gyors maradjon, így lehet, hogy van még találat."
+      },
+      tasks: {
+        removed: (n) => `Eltávolított ütemezett feladatok: ${n}. A definíciójuk a(z) Karantén képernyő Biztonsági mentések részében van mentve, onnan visszaállíthatók.`,
+        failedHeading: (n) => `Nem eltávolítható ütemezett feladatok: ${n}`
       }
     }
   },
@@ -416,6 +476,10 @@ export default {
         },
         protectedNote: (n) => `Dilewati karena milik Windows atau program lain yang terpasang: ${n}.`,
         truncatedNote: "Pencarian dihentikan lebih awal agar tetap cepat, jadi mungkin masih ada lagi."
+      },
+      tasks: {
+        removed: (n) => `Tugas terjadwal yang dihapus: ${n}. Definisinya disimpan di Cadangan pada layar Karantina, tempat tugas dapat dipulihkan.`,
+        failedHeading: (n) => `Tugas terjadwal yang tidak dapat dihapus: ${n}`
       }
     }
   },
@@ -442,6 +506,10 @@ export default {
         },
         protectedNote: (n) => `Sleppt því þau tilheyra Windows eða öðrum uppsettum forritum: ${n}.`,
         truncatedNote: "Leitin stöðvaðist snemma til að vera hröð, svo það gæti verið meira."
+      },
+      tasks: {
+        removed: (n) => `Áætluð verkefni fjarlægð: ${n}. Skilgreiningar þeirra eru vistaðar undir Afrit á skjánum Sóttkví, þar sem hægt er að endurheimta þau.`,
+        failedHeading: (n) => `Áætluð verkefni sem ekki tókst að fjarlægja: ${n}`
       }
     }
   },
@@ -468,6 +536,10 @@ export default {
         },
         protectedNote: (n) => `Esclusi perché appartengono a Windows o ad altri programmi installati: ${n}.`,
         truncatedNote: "La ricerca si è fermata prima per restare veloce, quindi potrebbe esserci altro."
+      },
+      tasks: {
+        removed: (n) => `Attività pianificate rimosse: ${n}. Le loro definizioni sono salvate in Backup, nella schermata Quarantena, da cui si possono ripristinare.`,
+        failedHeading: (n) => `Attività pianificate che non è stato possibile rimuovere: ${n}`
       }
     }
   },
@@ -494,6 +566,10 @@ export default {
         },
         protectedNote: (n) => `Windows または他のインストール済みプログラムのものであるため除外した項目: ${n} 件。`,
         truncatedNote: "速度を保つために検索を途中で止めたため、ほかにも残っている可能性があります。"
+      },
+      tasks: {
+        removed: (n) => `削除したタスク スケジューラのタスク: ${n} 件。定義は「隔離」画面の「バックアップ」に保存されており、復元できます。`,
+        failedHeading: (n) => `削除できなかったタスク スケジューラのタスク: ${n} 件`
       }
     }
   },
@@ -520,6 +596,10 @@ export default {
         },
         protectedNote: (n) => `Windows 또는 다른 설치된 프로그램에 속해 제외된 항목: ${n}개.`,
         truncatedNote: "속도를 유지하려고 검색을 일찍 멈췄으므로 더 있을 수 있습니다."
+      },
+      tasks: {
+        removed: (n) => `제거된 예약 작업: ${n}개. 정의는 격리 화면의 백업에 저장되어 있으며 복원할 수 있습니다.`,
+        failedHeading: (n) => `제거하지 못한 예약 작업: ${n}개`
       }
     }
   },
@@ -546,6 +626,10 @@ export default {
         },
         protectedNote: (n) => `Praleista, nes priklauso „Windows“ arba kitoms įdiegtoms programoms: ${n}.`,
         truncatedNote: "Paieška sustabdyta anksčiau, kad išliktų greita, todėl gali būti daugiau."
+      },
+      tasks: {
+        removed: (n) => `Pašalintos suplanuotos užduotys: ${n}. Jų apibrėžtys išsaugotos skiltyje „Atsarginės kopijos“ ekrane „Karantinas“, iš kur jas galima atkurti.`,
+        failedHeading: (n) => `Suplanuotos užduotys, kurių nepavyko pašalinti: ${n}`
       }
     }
   },
@@ -572,6 +656,10 @@ export default {
         },
         protectedNote: (n) => `Ditinggalkan kerana milik Windows atau program lain yang dipasang: ${n}.`,
         truncatedNote: "Carian dihentikan awal untuk kekal pantas, jadi mungkin ada lagi."
+      },
+      tasks: {
+        removed: (n) => `Tugas berjadual dialihkan: ${n}. Takrifannya disimpan di bawah Sandaran pada skrin Kuarantin, tempat ia boleh dipulihkan.`,
+        failedHeading: (n) => `Tugas berjadual yang tidak dapat dialihkan: ${n}`
       }
     }
   },
@@ -598,6 +686,10 @@ export default {
         },
         protectedNote: (n) => `Utelatt fordi de tilhører Windows eller andre installerte programmer: ${n}.`,
         truncatedNote: "Søket stoppet tidlig for å holde tempoet, så det kan finnes mer."
+      },
+      tasks: {
+        removed: (n) => `Fjernede planlagte oppgaver: ${n}. Definisjonene er lagret under Sikkerhetskopier på skjermen Karantene, hvor de kan gjenopprettes.`,
+        failedHeading: (n) => `Planlagte oppgaver som ikke kunne fjernes: ${n}`
       }
     }
   },
@@ -624,6 +716,10 @@ export default {
         },
         protectedNote: (n) => `Weggelaten omdat ze bij Windows of andere geïnstalleerde programma's horen: ${n}.`,
         truncatedNote: "De zoekopdracht stopte eerder om snel te blijven, dus er kan meer zijn."
+      },
+      tasks: {
+        removed: (n) => `Verwijderde geplande taken: ${n}. De definities zijn opgeslagen onder Back-ups op het scherm Quarantaine, waar ze kunnen worden hersteld.`,
+        failedHeading: (n) => `Geplande taken die niet verwijderd konden worden: ${n}`
       }
     }
   },
@@ -650,6 +746,10 @@ export default {
         },
         protectedNote: (n) => `Pominięto, ponieważ należą do systemu Windows lub innych zainstalowanych programów: ${n}.`,
         truncatedNote: "Wyszukiwanie zatrzymano wcześniej, aby było szybkie, więc może być tego więcej."
+      },
+      tasks: {
+        removed: (n) => `Usunięte zaplanowane zadania: ${n}. Ich definicje zapisano w sekcji Kopie zapasowe na ekranie Kwarantanna, skąd można je przywrócić.`,
+        failedHeading: (n) => `Zaplanowane zadania, których nie udało się usunąć: ${n}`
       }
     }
   },
@@ -676,6 +776,10 @@ export default {
         },
         protectedNote: (n) => `پرېښودل شوي ځکه چې د Windows یا نورو نصب شویو برنامو دي: ${n}.`,
         truncatedNote: "لټون د چټکتیا لپاره مخکې ودرول شو، نو ښايي نور هم وي."
+      },
+      tasks: {
+        removed: (n) => `لرې شوې مهالویش شوې دندې: ${n}. تعریفونه یې د قرنطین په پرده کې د بیک‌اپونه لاندې خوندي شوي، چې له هغه ځایه بیرته راګرځول کېدای شي.`,
+        failedHeading: (n) => `مهالویش شوې دندې چې لرې نه شوې: ${n}`
       }
     }
   },
@@ -702,6 +806,10 @@ export default {
         },
         protectedNote: (n) => `Deixados de fora porque pertencem ao Windows ou a outros programas instalados: ${n}.`,
         truncatedNote: "A busca parou antes para continuar rápida, então pode haver mais."
+      },
+      tasks: {
+        removed: (n) => `Tarefas agendadas removidas: ${n}. As definições foram salvas em Backups, na tela Quarentena, onde podem ser restauradas.`,
+        failedHeading: (n) => `Tarefas agendadas que não puderam ser removidas: ${n}`
       }
     }
   },
@@ -728,6 +836,10 @@ export default {
         },
         protectedNote: (n) => `Deixados de fora porque pertencem ao Windows ou a outros programas instalados: ${n}.`,
         truncatedNote: "A pesquisa parou mais cedo para se manter rápida, por isso pode haver mais."
+      },
+      tasks: {
+        removed: (n) => `Tarefas agendadas removidas: ${n}. As definições ficaram guardadas em Cópias de segurança, no ecrã Quarentena, onde podem ser restauradas.`,
+        failedHeading: (n) => `Tarefas agendadas que não puderam ser removidas: ${n}`
       }
     }
   },
@@ -754,6 +866,10 @@ export default {
         },
         protectedNote: (n) => `Omise deoarece aparțin Windows sau altor programe instalate: ${n}.`,
         truncatedNote: "Căutarea s-a oprit mai devreme pentru a rămâne rapidă, deci pot exista mai multe."
+      },
+      tasks: {
+        removed: (n) => `Sarcini programate eliminate: ${n}. Definițiile lor sunt salvate în Copii de rezervă, pe ecranul Carantină, de unde pot fi restaurate.`,
+        failedHeading: (n) => `Sarcini programate care nu au putut fi eliminate: ${n}`
       }
     }
   },
@@ -780,6 +896,10 @@ export default {
         },
         protectedNote: (n) => `Пропущено, так как относится к Windows или другим установленным программам: ${n}.`,
         truncatedNote: "Поиск остановлен раньше, чтобы не затягиваться, поэтому результатов может быть больше."
+      },
+      tasks: {
+        removed: (n) => `Удалено запланированных задач: ${n}. Их описания сохранены в разделе «Резервные копии» на экране «Карантин», откуда их можно восстановить.`,
+        failedHeading: (n) => `Запланированные задачи, которые не удалось удалить: ${n}`
       }
     }
   },
@@ -806,6 +926,10 @@ export default {
         },
         protectedNote: (n) => `Vynechané, pretože patria Windowsu alebo iným nainštalovaným programom: ${n}.`,
         truncatedNote: "Hľadanie sa predčasne zastavilo, aby zostalo rýchle, takže môže byť viac výsledkov."
+      },
+      tasks: {
+        removed: (n) => `Odstránené naplánované úlohy: ${n}. Ich definície sú uložené v časti Zálohy na obrazovke Karanténa, odkiaľ sa dajú obnoviť.`,
+        failedHeading: (n) => `Naplánované úlohy, ktoré sa nepodarilo odstrániť: ${n}`
       }
     }
   },
@@ -832,6 +956,10 @@ export default {
         },
         protectedNote: (n) => `Lënë jashtë sepse i përkasin Windows ose programeve të tjera të instaluara: ${n}.`,
         truncatedNote: "Kërkimi u ndal herët për të mbetur i shpejtë, kështu që mund të ketë më shumë."
+      },
+      tasks: {
+        removed: (n) => `Detyra të planifikuara të hequra: ${n}. Përkufizimet e tyre ruhen te Kopjet rezervë në ekranin Karantina, ku mund të rikthehen.`,
+        failedHeading: (n) => `Detyra të planifikuara që nuk u hoqën: ${n}`
       }
     }
   },
@@ -858,6 +986,10 @@ export default {
         },
         protectedNote: (n) => `Изостављено јер припада Windows-у или другим инсталираним програмима: ${n}.`,
         truncatedNote: "Претрага је стала раније да би остала брза, па може бити још резултата."
+      },
+      tasks: {
+        removed: (n) => `Уклоњени заказани задаци: ${n}. Њихове дефиниције су сачуване у одељку Резервне копије на екрану Карантин, одакле се могу вратити.`,
+        failedHeading: (n) => `Заказани задаци који нису могли да се уклоне: ${n}`
       }
     }
   },
@@ -884,6 +1016,10 @@ export default {
         },
         protectedNote: (n) => `Utelämnade eftersom de tillhör Windows eller andra installerade program: ${n}.`,
         truncatedNote: "Sökningen stoppades tidigt för att hålla farten, så det kan finnas mer."
+      },
+      tasks: {
+        removed: (n) => `Borttagna schemalagda aktiviteter: ${n}. Deras definitioner är sparade under Säkerhetskopior på skärmen Karantän, där de kan återställas.`,
+        failedHeading: (n) => `Schemalagda aktiviteter som inte kunde tas bort: ${n}`
       }
     }
   },
@@ -910,6 +1046,10 @@ export default {
         },
         protectedNote: (n) => `ข้ามไปเพราะเป็นของ Windows หรือโปรแกรมอื่นที่ติดตั้งไว้: ${n}`,
         truncatedNote: "การค้นหาหยุดก่อนเวลาเพื่อให้ยังเร็วอยู่ จึงอาจยังมีอีก"
+      },
+      tasks: {
+        removed: (n) => `งานที่ตั้งเวลาไว้ที่นำออก: ${n} รายการ คำจำกัดความถูกบันทึกไว้ในการสำรองข้อมูล บนหน้ากักกัน ซึ่งสามารถกู้คืนได้`,
+        failedHeading: (n) => `งานที่ตั้งเวลาไว้ที่นำออกไม่ได้: ${n} รายการ`
       }
     }
   },
@@ -936,6 +1076,10 @@ export default {
         },
         protectedNote: (n) => `Windows'a veya yüklü diğer programlara ait oldukları için dışarıda bırakıldı: ${n}.`,
         truncatedNote: "Arama hızlı kalması için erken durduruldu, bu yüzden daha fazlası olabilir."
+      },
+      tasks: {
+        removed: (n) => `Kaldırılan zamanlanmış görevler: ${n}. Tanımları Karantina ekranındaki Yedekler bölümüne kaydedildi; oradan geri yüklenebilir.`,
+        failedHeading: (n) => `Kaldırılamayan zamanlanmış görevler: ${n}`
       }
     }
   },
@@ -962,6 +1106,10 @@ export default {
         },
         protectedNote: (n) => `Пропущено, бо належить Windows або іншим встановленим програмам: ${n}.`,
         truncatedNote: "Пошук зупинено раніше, щоб він лишався швидким, тож результатів може бути більше."
+      },
+      tasks: {
+        removed: (n) => `Вилучено запланованих завдань: ${n}. Їхні описи збережено в розділі «Резервні копії» на екрані «Карантин», звідки їх можна відновити.`,
+        failedHeading: (n) => `Запланованих завдань, які не вдалося вилучити: ${n}`
       }
     }
   },
@@ -988,6 +1136,10 @@ export default {
         },
         protectedNote: (n) => `Đã bỏ qua vì thuộc về Windows hoặc chương trình khác đã cài: ${n}.`,
         truncatedNote: "Việc tìm kiếm dừng sớm để giữ tốc độ, nên có thể còn nhiều hơn."
+      },
+      tasks: {
+        removed: (n) => `Tác vụ đã lên lịch đã gỡ: ${n}. Định nghĩa của chúng được lưu trong Bản sao lưu trên màn hình Khu cách ly, nơi có thể khôi phục.`,
+        failedHeading: (n) => `Tác vụ đã lên lịch không thể gỡ: ${n}`
       }
     }
   },
@@ -1014,6 +1166,10 @@ export default {
         },
         protectedNote: (n) => `因属于 Windows 或其他已安装程序而排除：${n} 项。`,
         truncatedNote: "为保持速度，搜索提前停止，因此可能还有更多。"
+      },
+      tasks: {
+        removed: (n) => `已移除的计划任务：${n} 个。其定义已保存到“隔离区”页面的“备份”中，可从那里还原。`,
+        failedHeading: (n) => `无法移除的计划任务：${n} 个`
       }
     }
   },
@@ -1040,6 +1196,10 @@ export default {
         },
         protectedNote: (n) => `因屬於 Windows 或其他已安裝程式而排除：${n} 項。`,
         truncatedNote: "為保持速度，搜尋提前停止，因此可能還有更多。"
+      },
+      tasks: {
+        removed: (n) => `已移除的排程工作：${n} 個。其定義已儲存到「隔離區」頁面的「備份」中，可從那裡還原。`,
+        failedHeading: (n) => `無法移除的排程工作：${n} 個`
       }
     }
   }

@@ -28,6 +28,9 @@ vi.mock('./quarantine.js', async (importOriginal) => ({
 const sendToRecycleBin = vi.fn();
 vi.mock('./recycleBin.js', () => ({ sendToRecycleBin: (...a) => sendToRecycleBin(...a) }));
 
+const removeScheduledTasks = vi.fn();
+vi.mock('./scheduledTaskRemoval.js', () => ({ removeScheduledTasks: (...a) => removeScheduledTasks(...a) }));
+
 const { removeLeftovers, permanentDeletionRefusal } = await import('./leftoverRemoval.js');
 
 let dir;
@@ -82,6 +85,36 @@ describe('what no destination will remove (regression: shared-component protecti
     });
     expect(quarantineAndDelete.mock.calls[0][0].files).toEqual([mine]);
     expect(result.failedFiles).toHaveLength(1);
+  });
+});
+
+describe('scheduled tasks', () => {
+  it('are removed, with their definitions saved, whichever destination the files go to', async () => {
+    removeScheduledTasks.mockResolvedValue({ removed: [{ name: 'T', path: '\\' }], failed: [], backupDir: 'B:\\tasks', elevated: false });
+    for (const destination of ['quarantine', 'recycle', 'permanent']) {
+      sendToRecycleBin.mockResolvedValue({ recycled: [], failed: [] });
+      const result = await removeLeftovers({
+        programName: 'Thing', files: [], registryKeys: [], destination, scheduledTasks: [{ name: 'T', path: '\\' }]
+      });
+      expect(result.scheduledTasks.removed).toEqual([{ name: 'T', path: '\\' }]);
+    }
+    expect(removeScheduledTasks).toHaveBeenCalledTimes(3);
+    expect(removeScheduledTasks).toHaveBeenCalledWith({ programName: 'Thing', tasks: [{ name: 'T', path: '\\' }] });
+  });
+
+  it('are not touched when none were chosen', async () => {
+    const result = await removeLeftovers({ programName: 'Thing', files: ['C:\\a'], registryKeys: [], destination: 'quarantine' });
+    expect(removeScheduledTasks).not.toHaveBeenCalled();
+    expect(result.scheduledTasks).toBeUndefined();
+  });
+
+  it('report a failure of their own without undoing the files', async () => {
+    removeScheduledTasks.mockRejectedValue(new Error('powershell died'));
+    const result = await removeLeftovers({
+      programName: 'Thing', files: ['C:\\a'], registryKeys: [], destination: 'quarantine', scheduledTasks: [{ name: 'T', path: '\\' }]
+    });
+    expect(result.files).toHaveLength(1);
+    expect(result.scheduledTasks.failed).toEqual([{ name: 'T', path: '\\', reason: 'powershell died' }]);
   });
 });
 

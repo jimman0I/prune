@@ -35,11 +35,9 @@ export default function LeftoverReview({ scanResult, selected, onToggle, onConfi
   const GROUPS = [
     { key: 'files', label: t('leftoverReview.groups.files') },
     { key: 'registryKeys', label: t('leftoverReview.groups.registryKeys') },
-    // Reported, never removed. Quarantine works by moving files and
-    // exporting registry keys, both of which a restore can put back; a
-    // scheduled task has no equivalent reversible operation, so offering a
-    // checkbox here would promise something the removal can't deliver.
-    { key: 'scheduledTasks', label: t('leftoverReview.groups.scheduledTasks'), removable: false },
+    // Removable: the backend saves the task's definition to the Backup
+    // Manager before it unregisters it, so it can be put back.
+    { key: 'scheduledTasks', label: t('leftoverReview.groups.scheduledTasks') },
     // Advanced scan only, and listed rather than removed: a service is taken
     // out with `sc delete` and administrator rights, and the wrong one can
     // stop Windows starting.

@@ -4,6 +4,7 @@ import { scanForLeftovers, scanForcedUninstall, streamUninstall, removeQuarantin
 import { deriveSearchTerm } from '../lib/searchTerm.js';
 import LeftoverReview from './LeftoverReview.jsx';
 import ScanModePicker from './ScanModePicker.jsx';
+import TaskRemovalNotice from './TaskRemovalNotice.jsx';
 import { scanModeFrom, anchorsFor } from '../lib/scanMode.js';
 import { preselectKeys } from '../lib/leftoverTiers.js';
 import { useSettings } from '../hooks/useSystemQueries.js';
@@ -65,17 +66,22 @@ export function removalSummary(removal, messages = DEFAULT_REMOVAL_SUMMARY_MESSA
 }
 
 /** Turns the review's "group:index" selection keys back into the real
- * paths the removal call takes. Scheduled tasks are deliberately absent:
- * the quarantine system moves files and exports registry keys, and there
- * is no equivalent reversible operation for a scheduled task, so they are
- * reported but never removed (LeftoverReview says so on screen). */
+ * paths the removal call takes. A scheduled task has no Recycle Bin, so the
+ * backend exports its definition to the Backup Manager before unregistering
+ * it; here it travels as the { name, path } pair that identifies it, and the
+ * key is absent when no task was ticked. */
 export function selectionToRemoval(scanResult, selected) {
   const chosen = (groupKey) =>
     (scanResult[groupKey]?.items || [])
       .filter((_, i) => selected.has(`${groupKey}:${i}`))
       .filter((item) => item.path);
+  const tasks = (scanResult.scheduledTasks?.items || [])
+    .filter((_, i) => selected.has(`scheduledTasks:${i}`))
+    .filter((task) => typeof task.name === 'string' && task.name && typeof task.path === 'string')
+    .map((task) => ({ name: task.name, path: task.path }));
 
   return {
+    ...(tasks.length > 0 ? { scheduledTasks: tasks } : {}),
     files: chosen('files').map((item) => item.path),
     // A whole key travels as a bare path, the way it always has -- there
     // is nothing for an object form to carry, and wrapping it would make
@@ -261,8 +267,8 @@ export default function UninstallModal({ program, running = false, onClose, onBu
         setSelected(full);
         setStep('removing');
         try {
-          const { files, registryKeys } = selectionToRemoval(result, full);
-          const manifest = await removeQuarantined({ programName: program.name, files, registryKeys, destination });
+          const { files, registryKeys, scheduledTasks } = selectionToRemoval(result, full);
+          const manifest = await removeQuarantined({ programName: program.name, files, registryKeys, ...(scheduledTasks ? { scheduledTasks } : {}), destination });
           setRemoval(manifest);
           setStep('done');
         } catch (err) {
@@ -320,12 +326,12 @@ export default function UninstallModal({ program, running = false, onClose, onBu
    * This one creates a quarantine batch, so a second pass would make a
    * second batch and then fail finding the files already moved. */
   const handleConfirm = useSingleFlight(async () => {
-    const { files, registryKeys } = selectionToRemoval(scanResult, selected);
-    if (files.length === 0 && registryKeys.length === 0) { onClose(); return; }
+    const { files, registryKeys, scheduledTasks } = selectionToRemoval(scanResult, selected);
+    if (files.length === 0 && registryKeys.length === 0 && !scheduledTasks) { onClose(); return; }
     setError(null);
     setStep('removing');
     try {
-      const manifest = await removeQuarantined({ programName: program.name, files, registryKeys, destination });
+      const manifest = await removeQuarantined({ programName: program.name, files, registryKeys, ...(scheduledTasks ? { scheduledTasks } : {}), destination });
       setRemoval(manifest);
       setStep('done');
     } catch (err) {
@@ -527,6 +533,8 @@ export default function UninstallModal({ program, running = false, onClose, onBu
                 </div>
               </div>
             )}
+
+            <TaskRemovalNotice result={removal.scheduledTasks} />
 
             {removal.restorePoint?.created === false && (
               <p className="text-[12px] text-[color:var(--text-muted)] mb-5">
