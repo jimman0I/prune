@@ -653,6 +653,44 @@ export async function fetchMftStatus() {
   return data;
 }
 
+/* ---- saved Disk Map scans (backend/src/routes/savedScans.js) ----------- */
+
+async function savedScansRequest(path, options) {
+  const res = await fetch(`${API_URL}/saved-scans${path}`, options);
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
+  return data;
+}
+
+/** What the list shows, newest first. */
+export async function fetchSavedScans() {
+  return (await savedScansRequest('')).scans ?? [];
+}
+
+/** Saves a compact archive (lib/compactTree.js); resolves to its list entry. */
+export async function saveDiskScan({ label, source, truncated, archive }) {
+  const data = await savedScansRequest('', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ label, source, truncated, archive })
+  });
+  return data.scan;
+}
+
+/** { scan, archive } for one saved scan. */
+export async function loadSavedScan(id) {
+  return savedScansRequest(`/${encodeURIComponent(id)}`);
+}
+
+export async function deleteSavedScan(id) {
+  await savedScansRequest(`/${encodeURIComponent(id)}`, { method: 'DELETE' });
+}
+
+/** Which folders changed between two saved scans. */
+export async function compareSavedScans(a, b, limit = 25) {
+  return savedScansRequest(`/compare?a=${encodeURIComponent(a)}&b=${encodeURIComponent(b)}&limit=${limit}`);
+}
+
 /** The local drives the Disk Map can scan, and which one holds Windows:
  * { systemDrive: 'C', drives: [{ letter, label, fileSystem, totalBytes,
  * freeBytes, removable, system, ntfs }] }. */

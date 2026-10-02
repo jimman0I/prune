@@ -48,6 +48,10 @@ export function extensionBreakdown(tree) {
       continue;
     }
 
+    // A reopened saved scan stands in for the files it did not keep with one
+    // block; it is a count of unnamed files, not a file with a type.
+    if (node.aggregated) continue;
+
     // Directories carry the sum of their children, so counting them too
     // would report every byte at least twice. Only leaves are files.
     if (node.type !== 'file') continue;

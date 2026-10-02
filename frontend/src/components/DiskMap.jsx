@@ -8,7 +8,7 @@ import { Treemap, ResponsiveContainer } from 'recharts';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { keys } from '../lib/queryClient.js';
 import { breadcrumbTrail } from '../lib/breadcrumbTrail.js';
-import { fetchDiskScan, stopDiskScan, scanDriveFast, fetchFileTypeIcons, quarantineDiskPath, revealInExplorer } from '../lib/api.js';
+import { saveDiskScan, loadSavedScan, fetchDiskScan, stopDiskScan, scanDriveFast, fetchFileTypeIcons, quarantineDiskPath, revealInExplorer } from '../lib/api.js';
 import { useToasts } from '../hooks/useToasts.jsx';
 import ContextMenu from './ContextMenu.jsx';
 import ModalOverlay from './ModalOverlay.jsx';
@@ -26,6 +26,8 @@ import { DrivePicker } from './DrivePicker.jsx';
 import { FolderTable } from './FolderTable.jsx';
 import { SearchBox } from './SearchBox.jsx';
 import { PropertiesDialog } from './PropertiesDialog.jsx';
+import { SavedScansPanel } from './SavedScansPanel.jsx';
+import { compactTree, expandArchive } from '../lib/compactTree.js';
 import { ExportButtons } from './ExportButtons.jsx';
 import { rowsToCsv, exportFileName } from '../lib/exportCsv.js';
 import { svgToPngBlob } from '../lib/exportPng.js';
@@ -674,7 +676,13 @@ function DiskMap() {
   // Already have the whole drive in memory? Then this folder is a lookup,
   // not a scan. Falling through to the recursive scanner here would undo
   // the entire point of having read the MFT.
-  const fastEntry = currentLetter ? fastTrees[currentLetter] ?? null : null;
+  // A reopened saved scan stands in for its drive's live tree while it is open.
+  const [savedView, setSavedView] = useState(null);
+  const [savedOpen, setSavedOpen] = useState(false);
+  const savedHere = savedView && savedView.letter === currentLetter ? savedView : null;
+  const fastEntry = savedHere
+    ? { tree: savedHere.tree, stats: null }
+    : currentLetter ? fastTrees[currentLetter] ?? null : null;
   const fastStats = fastEntry?.stats ?? null;
   const scannedLetters = useMemo(() => new Set(Object.keys(fastTrees)), [fastTrees]);
   const fastSubtree = useMemo(
@@ -695,6 +703,7 @@ function DiskMap() {
   // elevation request -- a UAC prompt that appears because a tab was
   // opened is how software teaches people to click Yes without reading.
   const shouldScan = Boolean(currentPath)
+    && !savedHere
     && !fastSubtree
     && !(isDriveRoot(currentPath) && !crawlRoot);
   const nonNtfsRoot = isDriveRoot(currentPath) && currentDrive !== null && currentDrive.ntfs === false;
@@ -918,6 +927,34 @@ function DiskMap() {
     setMenu({ node, x: event.clientX, y: event.clientY });
   }, []);
 
+  /* Saved scans. What gets saved is the LIVE tree of the drive in view: the
+   * fast scan's, or a folder walk of that drive's root if that is what ran. A
+   * scan that is itself a reopened saved one is never re-saved. */
+  const liveRoot = currentLetter
+    ? fastTrees[currentLetter]?.tree ?? queryClient.getQueryData(keys.diskScan(rootOfDrive(currentLetter))) ?? null
+    : null;
+
+  const handleSaveScan = async (label) => {
+    const fromFast = Boolean(fastTrees[currentLetter]);
+    const archive = compactTree(liveRoot, { rootName: `${currentLetter}:` });
+    const meta = await saveDiskScan({ label, source: fromFast ? 'fast' : 'crawl', truncated: Boolean(liveRoot.truncated), archive });
+    toasts.success(t('diskMapV3.saved.saved', meta.label));
+  };
+
+  const handleOpenSaved = async (scan) => {
+    try {
+      const letter = /^([A-Z]):$/.exec(scan.root)?.[1];
+      if (!letter) throw new Error(scan.root);
+      const { archive } = await loadSavedScan(scan.id);
+      const tree = expandArchive(archive, { rootPath: rootOfDrive(letter), aggregateLabel: (count) => t('diskMap.aggregateCell', count) });
+      setSavedView({ letter, tree, label: scan.label, savedAt: scan.savedAt });
+      setCurrentPath(rootOfDrive(letter));
+      setSavedOpen(false);
+    } catch (err) {
+      toasts.error(t('diskMapV3.saved.failed', err.message));
+    }
+  };
+
   /** Adds a folder to Settings -> exclusions. It takes effect on the NEXT scan
    * (the picture on screen is of a scan already made), which the confirmation
    * says. The same list the Settings screen edits, matched the same way. */
@@ -1052,6 +1089,13 @@ function DiskMap() {
             </p>
           )}
         </div>
+        <div className="flex items-start gap-2 shrink-0">
+        <button
+          className="btn-ghost px-3.5 py-2 rounded-lg text-[12.5px] font-medium shrink-0"
+          onClick={() => setSavedOpen(true)}
+        >
+          {t('diskMapV3.saved.title')}
+        </button>
         {/* Hidden exactly where the panel below is offering the same thing.
             Two "(admin)" buttons on one screen is not two ways to do it,
             it's a question about whether they do the same thing. That is
@@ -1066,7 +1110,19 @@ function DiskMap() {
             {fastScanning ? t('diskMap.scanningDrive') : fastStats ? t('diskMap.rescanButton') : t('diskMap.fastScanButton')}
           </button>
         )}
+        </div>
       </div>
+
+      {savedHere && (
+        <div role="status" className="flex items-center gap-3 flex-wrap mb-5 px-3.5 py-3 rounded-xl bg-[color:var(--warning-soft)] border border-[color:var(--warning)]/25">
+          <p className="flex-1 min-w-0 text-[12.5px] text-[color:var(--warning)] select-text">
+            {t('diskMapV3.saved.viewing', savedHere.label, new Date(savedHere.savedAt).toLocaleString())}
+          </p>
+          <button type="button" className="btn-ghost px-3 py-1.5 rounded-lg text-[12px] font-medium" onClick={() => setSavedView(null)}>
+            {t('diskMapV3.saved.closeView')}
+          </button>
+        </div>
+      )}
 
       {fastNote && (
         <FastScanNote note={fastNote} />
@@ -1336,16 +1392,26 @@ function DiskMap() {
             label: t('diskMapV3.menu.exclude'),
             onSelect: () => handleExclude(menu.node)
           }] : []),
-          {
+          ...(savedHere ? [] : [{
             label: t('diskMap.contextMenu.moveToQuarantineMenu'),
             danger: true,
             // Never removed straight from the menu. A right-click is one
             // gesture and this is the only removal in the app aimed at
             // whatever happened to be under the cursor.
             onSelect: () => setPendingRemoval(menu.node)
-          }
+          }])
         ] : []}
       />
+
+      {savedOpen && (
+        <SavedScansPanel
+          onClose={() => setSavedOpen(false)}
+          canSave={Boolean(liveRoot) && !savedHere}
+          defaultLabel={`${currentLetter ?? ''}: ${new Date().toLocaleString()}`}
+          onSave={handleSaveScan}
+          onOpen={handleOpenSaved}
+        />
+      )}
 
       {properties && (
         <PropertiesDialog

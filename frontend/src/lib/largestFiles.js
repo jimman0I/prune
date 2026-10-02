@@ -36,6 +36,7 @@ export function largestFiles(tree, { limit = 100, filterText = '' } = {}) {
     // directory carrying hundreds of gigabytes. It would otherwise top
     // this list, and it is not a file anyone can delete.
     if (node.scanned === false) continue;
+    if (node.aggregated) continue;
     if (node.type !== 'file') continue;
 
     const size = typeof node.size === 'number' ? node.size : 0;
