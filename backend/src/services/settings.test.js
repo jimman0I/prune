@@ -316,3 +316,23 @@ describe('deepCleanRemoval', () => {
     expect(cleanGuardsFrom({ deepCleanRemoval: 'nonsense' }).removal).toBe('quarantine');
   });
 });
+
+describe('updateSettings under concurrency', () => {
+  it('keeps every change when saves overlap, instead of the last writer erasing the rest', async () => {
+    await updateSettings({ language: 'el' });
+    const keys = Array.from({ length: 12 }, (_, i) => `k${i}`);
+    await Promise.all(keys.map((key) => updateSettings({ [key]: true })));
+    const settings = await getSettings();
+    for (const key of keys) expect(settings[key], key).toBe(true);
+    expect(settings.language).toBe('el');
+  });
+
+  it('never lets a read during a save see a half-written file and fall back to English defaults', async () => {
+    await updateSettings({ language: 'el' });
+    const seen = [];
+    const writers = Array.from({ length: 25 }, (_, i) => updateSettings({ skipRecentHours: i }));
+    const readers = Array.from({ length: 60 }, async () => { seen.push((await getSettings()).language); });
+    await Promise.all([...writers, ...readers]);
+    expect(new Set(seen)).toEqual(new Set(['el']));
+  });
+});

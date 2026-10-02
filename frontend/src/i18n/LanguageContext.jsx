@@ -1,9 +1,28 @@
-import { createContext, useContext, useMemo } from 'react';
+import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import { useSettings } from '../hooks/useSystemQueries.js';
 import { CATALOG } from './catalog.js';
 import { LANGUAGES, isSupportedLanguage } from './languages.js';
 
 const LanguageContext = createContext(null);
+
+const REMEMBERED_KEY = 'prune.language';
+
+function readRemembered() {
+  try {
+    const value = window.localStorage.getItem(REMEMBERED_KEY);
+    return isSupportedLanguage(value) ? value : null;
+  } catch {
+    return null;
+  }
+}
+
+function remember(language) {
+  try {
+    window.localStorage.setItem(REMEMBERED_KEY, language);
+  } catch {
+    // Storage blocked or full: the app just falls back to asking settings.
+  }
+}
 
 /** Walks a dotted path ("settings.language.title") down a catalog object.
  * Undefined at any step, rather than throwing -- callers decide what a
@@ -33,7 +52,18 @@ export function translate(language, path) {
  * services/installerChoices.js for where that value first arrives. */
 export function LanguageProvider({ children }) {
   const { settings } = useSettings();
-  const language = isSupportedLanguage(settings?.language) ? settings.language : 'en';
+  // settings.language arrives over HTTP after the first paint, and may
+  // never arrive (backend still starting, one failed request). Without a
+  // fallback of its own the window opened in English for that whole gap --
+  // or for good -- whatever language was chosen. The last language seen is
+  // kept locally, like the theme, and used until settings answer.
+  const [remembered] = useState(readRemembered);
+  const fromSettings = isSupportedLanguage(settings?.language) ? settings.language : null;
+  const language = fromSettings ?? remembered ?? 'en';
+
+  useEffect(() => {
+    if (fromSettings) remember(fromSettings);
+  }, [fromSettings]);
 
   const value = useMemo(() => ({
     language,
