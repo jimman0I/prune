@@ -15,7 +15,7 @@ export function tierOf(item) {
 const GROUPS = ['files', 'registryKeys', 'scheduledTasks'];
 
 /** The groups the removal can act on, and so the only ones worth ticking. */
-export const REMOVABLE_GROUPS = ['files', 'registryKeys'];
+export const REMOVABLE_GROUPS = ['files', 'registryKeys', 'scheduledTasks'];
 
 /** Whether any item in the scan says how sure it is. */
 export function hasTiers(scanResult) {

@@ -37,7 +37,7 @@ function resolveBatchDir(rawParam) {
 const router = Router();
 
 router.post('/remove', async (req, res) => {
-  const { programName, files, registryKeys, destination = 'quarantine' } = req.body || {};
+  const { programName, files, registryKeys, scheduledTasks, destination = 'quarantine' } = req.body || {};
   if (!programName) { res.status(400).json({ error: 'programName is required' }); return; }
   // From the request -- the dialog that told the user where the files
   // would go -- and never from settings. Anything unrecognised is refused
@@ -57,6 +57,11 @@ router.post('/remove', async (req, res) => {
       : await tryCreateRestorePoint(`Prune: forced removal of ${programName}`);
     const manifest = await removeLeftovers({
       programName, files: files || [], registryKeys: registryKeys || [], destination,
+      // Only { name, path } pairs, and a sane number of them; the removal
+      // refuses Windows' own tasks again regardless.
+      scheduledTasks: Array.isArray(scheduledTasks)
+        ? scheduledTasks.slice(0, 500).filter((t) => t && typeof t.name === 'string' && typeof t.path === 'string').map((t) => ({ name: t.name, path: t.path }))
+        : [],
       deleteLockedFilesOnRestart: settings.deleteLockedFilesOnRestart === true,
       // So a removal can refuse another installed program's folder. A failed
       // read is an empty list: the protections that need no list still hold.

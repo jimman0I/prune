@@ -51,8 +51,13 @@ describe('POST /quarantine/remove destination', () => {
     expect(res.status).toBe(200);
     expect(removeLeftovers).toHaveBeenCalledWith({
       programName: 'Thing', files: ['C:\\x'], registryKeys: [], destination: 'quarantine',
-      deleteLockedFilesOnRestart: false, installedPrograms: installed
+      deleteLockedFilesOnRestart: false, installedPrograms: installed, scheduledTasks: []
     });
+  });
+
+  it('passes the scheduled tasks to remove, as name/path pairs only', async () => {
+    await remove({ scheduledTasks: [{ name: 'T', path: '\\A\\', extra: 'x' }, { name: 5 }, null, 'nope'] });
+    expect(removeLeftovers.mock.calls[0][0].scheduledTasks).toEqual([{ name: 'T', path: '\\A\\' }]);
   });
 
   it.each(['quarantine', 'recycle', 'permanent'])('passes %s through', async (destination) => {

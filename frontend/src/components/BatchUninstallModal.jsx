@@ -6,6 +6,7 @@ import { mergeLeftovers } from '../lib/mergeLeftovers.js';
 import { batchSummary } from '../lib/batchSelection.js';
 import { orderBatch } from '../lib/batchOrder.js';
 import LeftoverReview from './LeftoverReview.jsx';
+import TaskRemovalNotice from './TaskRemovalNotice.jsx';
 import { selectionToRemoval } from './UninstallModal.jsx';
 import { useSettings } from '../hooks/useSystemQueries.js';
 import { leftoverDestinationFrom } from '../lib/leftoverDestination.js';
@@ -287,8 +288,8 @@ export default function BatchUninstallModal({ programs, onClose, onFinished, onB
    * This one creates a quarantine batch, so a second pass would make a
    * second batch and then fail finding the files already moved. */
   const handleRemoveLeftovers = useSingleFlight(async () => {
-    const { files, registryKeys } = selectionToRemoval(leftovers, selected);
-    if (files.length === 0 && registryKeys.length === 0) {
+    const { files, registryKeys, scheduledTasks } = selectionToRemoval(leftovers, selected);
+    if (files.length === 0 && registryKeys.length === 0 && !scheduledTasks) {
       onFinished?.();
       onClose();
       return;
@@ -300,6 +301,7 @@ export default function BatchUninstallModal({ programs, onClose, onFinished, onB
         programName: t('batchUninstallModal.historyLabel', programs.length),
         files,
         registryKeys,
+        ...(scheduledTasks ? { scheduledTasks } : {}),
         destination
       });
       setRemoval(manifest);
@@ -576,6 +578,8 @@ export default function BatchUninstallModal({ programs, onClose, onFinished, onB
                 </p>
               </div>
             )}
+
+            <TaskRemovalNotice result={removal.scheduledTasks} />
 
             <button className="btn-primary" onClick={() => { onFinished?.(); onClose(); }}>{t('batchUninstallModal.done')}</button>
           </div>

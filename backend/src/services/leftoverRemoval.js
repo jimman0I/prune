@@ -4,6 +4,7 @@ import { join } from 'node:path';
 import { quarantineAndDelete, quarantineRoot } from './quarantine.js';
 import { sendToRecycleBin } from './recycleBin.js';
 import { protectionReason } from './pathGuard.js';
+import { removeScheduledTasks } from './scheduledTaskRemoval.js';
 import { osComponentRefusal, buildFootprints, footprintRefusal } from './leftoverProtection.js';
 
 /** Where an uninstall's leftover files go.
@@ -134,7 +135,21 @@ export async function removePermanently(candidates) {
  * `sendToRecycleBin`/`rm` instead), so there is no locked FILE for that
  * call to ever need to schedule. A no-op for those two destinations,
  * not a bug. */
-export async function removeLeftovers({
+export async function removeLeftovers({ scheduledTasks = [], ...rest }) {
+  const result = await removeFilesAndKeys(rest);
+  if (!Array.isArray(scheduledTasks) || scheduledTasks.length === 0) return result;
+  // Independent of the destination: a task has no Recycle Bin, so its
+  // definition is always exported to the Backup Manager first. A failure
+  // here is reported in the result and never undoes the files and keys.
+  const tasks = await removeScheduledTasks({ programName: rest.programName, tasks: scheduledTasks })
+    .catch((err) => ({
+      removed: [], backupDir: null, elevated: false,
+      failed: scheduledTasks.map((t) => ({ name: t?.name, path: t?.path, reason: err.message }))
+    }));
+  return { ...result, scheduledTasks: tasks };
+}
+
+async function removeFilesAndKeys({
   programName, files = [], registryKeys = [], destination = 'quarantine', deleteLockedFilesOnRestart = false,
   installedPrograms = []
 }) {

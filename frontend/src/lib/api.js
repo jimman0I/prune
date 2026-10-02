@@ -299,13 +299,18 @@ export async function scanForcedUninstall({ name, publisher, registryKey, mode, 
   return data;
 }
 
-export async function removeQuarantined({ programName, files, registryKeys, destination }) {
+export async function removeQuarantined({ programName, files, registryKeys, scheduledTasks, destination }) {
   const res = await fetch(`${API_URL}/quarantine/remove`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     // Only when the dialog chose one. The backend reads its absence as
-    // Quarantine, which is what every caller before this meant.
-    body: JSON.stringify({ programName, files, registryKeys, ...(destination ? { destination } : {}) })
+    // Quarantine, which is what every caller before this meant. Scheduled
+    // tasks ({ name, path } pairs) likewise only when some were ticked.
+    body: JSON.stringify({
+      programName, files, registryKeys,
+      ...(scheduledTasks?.length ? { scheduledTasks } : {}),
+      ...(destination ? { destination } : {})
+    })
   });
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
