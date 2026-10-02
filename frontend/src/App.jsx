@@ -118,6 +118,16 @@ export default function App() {
     queryClient.invalidateQueries({ queryKey: keys.quarantine });
   };
 
+  // The Dashboard's "view all" opens the Quarantine screen on its History tab.
+  // Asked for by a state value rather than a call so the screen, kept mounted
+  // once visited, can follow it.
+  // The nonce makes a second request for the same tab count as a request.
+  const [quarantineTab, setQuarantineTab] = useState({ tab: 'quarantine', nonce: 0 });
+  const openHistory = useCallback(() => {
+    setQuarantineTab((current) => ({ tab: 'history', nonce: current.nonce + 1 }));
+    setScreen('quarantine');
+  }, []);
+
   // The Applications tools (forced uninstall and the rest) change what is on
   // the machine and what is in Quarantine; this is what closing one does.
   const handleToolsChanged = useCallback(() => {
@@ -198,13 +208,13 @@ export default function App() {
       <NavRail screen={screen} onNavigate={setScreen} footer={<UpdateButton />} onReportBug={openBugReport} />
       <div ref={stageRef} className="flex-1 overflow-y-auto min-h-0">
         <Screen active={screen === 'dashboard'} visited={visited.has('dashboard')}>
-          <Dashboard programs={programs} programsMeasured={sizesSettled} onNavigate={setScreen} />
+          <Dashboard programs={programs} programsMeasured={sizesSettled} onNavigate={setScreen} onOpenHistory={openHistory} />
         </Screen>
         <Screen active={screen === 'diskmap'} visited={visited.has('diskmap')}>
           <Suspense fallback={null}><DiskMap /></Suspense>
         </Screen>
         <Screen active={screen === 'quarantine'} visited={visited.has('quarantine')}>
-          <Suspense fallback={null}><QuarantineManager /></Suspense>
+          <Suspense fallback={null}><QuarantineManager initialTab={quarantineTab.tab} tabNonce={quarantineTab.nonce} /></Suspense>
         </Screen>
         <Screen active={screen === 'settings'} visited={visited.has('settings')}>
           <Suspense fallback={null}><SettingsPage onReportBug={openBugReport} /></Suspense>

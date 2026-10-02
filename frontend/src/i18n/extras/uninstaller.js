@@ -119,6 +119,50 @@ export default {
         restored: (n, c) => `Items restored from the backup of ${n}: ${c}.`,
         failedHeading: (n) => `Not restored: ${n}`,
         loadError: (m) => `Couldn't load the backups: ${m}`
+      },
+      history: {
+        tab: "History",
+        count: (n) => `Uninstalls recorded: ${n}`,
+        emptyHeading: "No uninstalls recorded yet",
+        emptyBody: "Each program you uninstall with Prune is listed here, with how its leftover scan went.",
+        clear: "Clear history",
+        clearConfirm: "Delete every entry? This cannot be undone.",
+        clearNow: "Delete all",
+        selectPrompt: "Select an entry to see its details.",
+        details: "Details",
+        loadError: (m) => `Couldn't load the history: ${m}`,
+        viewAll: "View all history",
+        kind: {
+          uninstall: "Uninstall",
+          forced: "Forced uninstall",
+          store: "Store app",
+          batch: "Batch uninstall"
+        },
+        outcome: {
+          uninstalled: "Uninstalled",
+          removed: "Leftovers removed",
+          partial: "Partly removed"
+        },
+        destination: {
+          quarantine: "Quarantine",
+          recycle: "Recycle Bin",
+          permanent: "Deleted permanently"
+        },
+        field: {
+          date: "Date",
+          kind: "Type",
+          outcome: "Outcome",
+          found: "Leftovers found",
+          removed: "Leftovers removed",
+          freed: "Space freed",
+          destination: "Sent to",
+          tasks: "Scheduled tasks removed",
+          restorePoint: "Restore point",
+          registryBackup: "Registry backup",
+          quarantineBatch: "Quarantine batch"
+        },
+        restoreCreated: "Created",
+        restoreNotCreated: (r) => (r ? `Not created (${r})` : 'Not created')
       }
     }
   },
@@ -238,6 +282,50 @@ export default {
         restored: (n, c) => `Items herstel uit die rugsteun van ${n}: ${c}.`,
         failedHeading: (n) => `Nie herstel nie: ${n}`,
         loadError: (m) => `Kon nie die rugsteun laai nie: ${m}`
+      },
+      history: {
+        tab: "Geskiedenis",
+        count: (n) => `Opgetekende deïnstalleerings: ${n}`,
+        emptyHeading: "Nog geen deïnstalleerings opgeteken nie",
+        emptyBody: "Elke program wat jy met Prune deïnstalleer, word hier gelys, met hoe sy oorblyfsel-skandering verloop het.",
+        clear: "Vee geskiedenis uit",
+        clearConfirm: "Alle inskrywings uitvee? Dit kan nie ontdoen word nie.",
+        clearNow: "Vee alles uit",
+        selectPrompt: "Kies 'n inskrywing om sy besonderhede te sien.",
+        details: "Besonderhede",
+        loadError: (m) => `Kon nie die geskiedenis laai nie: ${m}`,
+        viewAll: "Sien alle geskiedenis",
+        kind: {
+          uninstall: "Deïnstalleer",
+          forced: "Gedwonge deïnstallering",
+          store: "Winkel-toepassing",
+          batch: "Bondel-deïnstallering"
+        },
+        outcome: {
+          uninstalled: "Gedeïnstalleer",
+          removed: "Oorblyfsels verwyder",
+          partial: "Gedeeltelik verwyder"
+        },
+        destination: {
+          quarantine: "Karantyn",
+          recycle: "Snippermandjie",
+          permanent: "Permanent uitgevee"
+        },
+        field: {
+          date: "Datum",
+          kind: "Tipe",
+          outcome: "Uitkoms",
+          found: "Oorblyfsels gevind",
+          removed: "Oorblyfsels verwyder",
+          freed: "Spasie vrygemaak",
+          destination: "Gestuur na",
+          tasks: "Geskeduleerde take verwyder",
+          restorePoint: "Herstelpunt",
+          registryBackup: "Registerrugsteun",
+          quarantineBatch: "Karantynlot"
+        },
+        restoreCreated: "Geskep",
+        restoreNotCreated: (r) => (r ? `Nie geskep nie (${r})` : 'Nie geskep nie')
       }
     }
   },
@@ -357,6 +445,50 @@ export default {
         restored: (n, c) => `العناصر المستعادة من نسخة ${n}: ${c}.`,
         failedHeading: (n) => `لم تُستعد: ${n}`,
         loadError: (m) => `تعذّر تحميل النسخ الاحتياطية: ${m}`
+      },
+      history: {
+        tab: "السجل",
+        count: (n) => `عمليات إلغاء التثبيت المسجلة: ${n}`,
+        emptyHeading: "لم تُسجَّل أي عمليات إلغاء تثبيت بعد",
+        emptyBody: "يُدرج هنا كل برنامج تلغي تثبيته باستخدام Prune، مع نتيجة فحص المخلفات.",
+        clear: "مسح السجل",
+        clearConfirm: "حذف كل الإدخالات؟ لا يمكن التراجع عن ذلك.",
+        clearNow: "حذف الكل",
+        selectPrompt: "اختر إدخالًا لعرض تفاصيله.",
+        details: "التفاصيل",
+        loadError: (m) => `تعذّر تحميل السجل: ${m}`,
+        viewAll: "عرض السجل بالكامل",
+        kind: {
+          uninstall: "إلغاء تثبيت",
+          forced: "إلغاء تثبيت إجباري",
+          store: "تطبيق المتجر",
+          batch: "إلغاء تثبيت دفعي"
+        },
+        outcome: {
+          uninstalled: "تم إلغاء التثبيت",
+          removed: "أُزيلت المخلفات",
+          partial: "أُزيل جزئيًا"
+        },
+        destination: {
+          quarantine: "الحجر الصحي",
+          recycle: "سلة المحذوفات",
+          permanent: "حُذفت نهائيًا"
+        },
+        field: {
+          date: "التاريخ",
+          kind: "النوع",
+          outcome: "النتيجة",
+          found: "المخلفات المعثور عليها",
+          removed: "المخلفات المُزالة",
+          freed: "المساحة المحرَّرة",
+          destination: "أُرسلت إلى",
+          tasks: "المهام المجدولة المُزالة",
+          restorePoint: "نقطة الاستعادة",
+          registryBackup: "نسخة السجل الاحتياطية",
+          quarantineBatch: "دفعة الحجر الصحي"
+        },
+        restoreCreated: "تم إنشاؤها",
+        restoreNotCreated: (r) => (r ? `لم يتم إنشاؤها (${r})` : 'لم يتم إنشاؤها')
       }
     }
   },
@@ -476,6 +608,50 @@ export default {
         restored: (n, c) => `Elements restaurats de la còpia de ${n}: ${c}.`,
         failedHeading: (n) => `No restaurats: ${n}`,
         loadError: (m) => `No s'han pogut carregar les còpies: ${m}`
+      },
+      history: {
+        tab: "Historial",
+        count: (n) => `Desinstal·lacions registrades: ${n}`,
+        emptyHeading: "Encara no hi ha desinstal·lacions registrades",
+        emptyBody: "Cada programa que desinstal·lis amb Prune apareixerà aquí, amb com ha anat la cerca de restes.",
+        clear: "Esborra l'historial",
+        clearConfirm: "Vols eliminar totes les entrades? No es pot desfer.",
+        clearNow: "Elimina-ho tot",
+        selectPrompt: "Selecciona una entrada per veure'n els detalls.",
+        details: "Detalls",
+        loadError: (m) => `No s'ha pogut carregar l'historial: ${m}`,
+        viewAll: "Mostra tot l'historial",
+        kind: {
+          uninstall: "Desinstal·lació",
+          forced: "Desinstal·lació forçada",
+          store: "Aplicació de la botiga",
+          batch: "Desinstal·lació per lots"
+        },
+        outcome: {
+          uninstalled: "Desinstal·lat",
+          removed: "Restes eliminades",
+          partial: "Eliminat en part"
+        },
+        destination: {
+          quarantine: "Quarantena",
+          recycle: "Paperera de reciclatge",
+          permanent: "Eliminat definitivament"
+        },
+        field: {
+          date: "Data",
+          kind: "Tipus",
+          outcome: "Resultat",
+          found: "Restes trobades",
+          removed: "Restes eliminades",
+          freed: "Espai alliberat",
+          destination: "Enviat a",
+          tasks: "Tasques programades eliminades",
+          restorePoint: "Punt de restauració",
+          registryBackup: "Còpia del registre",
+          quarantineBatch: "Lot de quarantena"
+        },
+        restoreCreated: "Creat",
+        restoreNotCreated: (r) => (r ? `No creat (${r})` : 'No creat')
       }
     }
   },
@@ -595,6 +771,50 @@ export default {
         restored: (n, c) => `Položek obnoveno ze zálohy ${n}: ${c}.`,
         failedHeading: (n) => `Neobnoveno: ${n}`,
         loadError: (m) => `Zálohy se nepodařilo načíst: ${m}`
+      },
+      history: {
+        tab: "Historie",
+        count: (n) => `Zaznamenaná odinstalování: ${n}`,
+        emptyHeading: "Zatím nejsou zaznamenána žádná odinstalování",
+        emptyBody: "Každý program odinstalovaný pomocí Prune je zde uveden spolu s výsledkem hledání zbytků.",
+        clear: "Vymazat historii",
+        clearConfirm: "Smazat všechny záznamy? Nelze vrátit zpět.",
+        clearNow: "Smazat vše",
+        selectPrompt: "Vyberte záznam a zobrazí se jeho podrobnosti.",
+        details: "Podrobnosti",
+        loadError: (m) => `Historii se nepodařilo načíst: ${m}`,
+        viewAll: "Zobrazit celou historii",
+        kind: {
+          uninstall: "Odinstalování",
+          forced: "Vynucené odinstalování",
+          store: "Aplikace z Obchodu",
+          batch: "Hromadné odinstalování"
+        },
+        outcome: {
+          uninstalled: "Odinstalováno",
+          removed: "Zbytky odebrány",
+          partial: "Částečně odebráno"
+        },
+        destination: {
+          quarantine: "Karanténa",
+          recycle: "Koš",
+          permanent: "Trvale smazáno"
+        },
+        field: {
+          date: "Datum",
+          kind: "Typ",
+          outcome: "Výsledek",
+          found: "Nalezené zbytky",
+          removed: "Odebrané zbytky",
+          freed: "Uvolněné místo",
+          destination: "Přesunuto do",
+          tasks: "Odebrané naplánované úlohy",
+          restorePoint: "Bod obnovení",
+          registryBackup: "Záloha registru",
+          quarantineBatch: "Dávka v karanténě"
+        },
+        restoreCreated: "Vytvořen",
+        restoreNotCreated: (r) => (r ? `Nevytvořen (${r})` : 'Nevytvořen')
       }
     }
   },
@@ -714,6 +934,50 @@ export default {
         restored: (n, c) => `Eitemau a adferwyd o gopi wrth gefn ${n}: ${c}.`,
         failedHeading: (n) => `Heb eu hadfer: ${n}`,
         loadError: (m) => `Methu llwytho'r copïau wrth gefn: ${m}`
+      },
+      history: {
+        tab: "Hanes",
+        count: (n) => `Dadosodiadau a gofnodwyd: ${n}`,
+        emptyHeading: "Dim dadosodiadau wedi'u cofnodi eto",
+        emptyBody: "Mae pob rhaglen rydych yn ei dadosod gyda Prune wedi'i rhestru yma, gyda sut aeth y sganio am olion.",
+        clear: "Clirio'r hanes",
+        clearConfirm: "Dileu pob cofnod? Ni ellir dadwneud hyn.",
+        clearNow: "Dileu popeth",
+        selectPrompt: "Dewiswch gofnod i weld ei fanylion.",
+        details: "Manylion",
+        loadError: (m) => `Methu llwytho'r hanes: ${m}`,
+        viewAll: "Gweld yr holl hanes",
+        kind: {
+          uninstall: "Dadosod",
+          forced: "Dadosod gorfodol",
+          store: "Ap Storfa",
+          batch: "Dadosod swp"
+        },
+        outcome: {
+          uninstalled: "Dadosodwyd",
+          removed: "Olion wedi'u tynnu",
+          partial: "Wedi'i dynnu yn rhannol"
+        },
+        destination: {
+          quarantine: "Cwarantin",
+          recycle: "Bin Ailgylchu",
+          permanent: "Dilëwyd am byth"
+        },
+        field: {
+          date: "Dyddiad",
+          kind: "Math",
+          outcome: "Canlyniad",
+          found: "Olion a ganfuwyd",
+          removed: "Olion a dynnwyd",
+          freed: "Lle a ryddhawyd",
+          destination: "Anfonwyd i",
+          tasks: "Tasgau wedi'u hamserlennu a dynnwyd",
+          restorePoint: "Pwynt adfer",
+          registryBackup: "Copi wrth gefn y gofrestrfa",
+          quarantineBatch: "Swp cwarantin"
+        },
+        restoreCreated: "Crëwyd",
+        restoreNotCreated: (r) => (r ? `Heb ei greu (${r})` : 'Heb ei greu')
       }
     }
   },
@@ -833,6 +1097,50 @@ export default {
         restored: (n, c) => `Elementer gendannet fra sikkerhedskopien af ${n}: ${c}.`,
         failedHeading: (n) => `Ikke gendannet: ${n}`,
         loadError: (m) => `Sikkerhedskopierne kunne ikke indlæses: ${m}`
+      },
+      history: {
+        tab: "Historik",
+        count: (n) => `Registrerede afinstallationer: ${n}`,
+        emptyHeading: "Ingen afinstallationer registreret endnu",
+        emptyBody: "Hvert program, du afinstallerer med Prune, vises her sammen med resultatet af scanningen efter rester.",
+        clear: "Ryd historik",
+        clearConfirm: "Slet alle poster? Det kan ikke fortrydes.",
+        clearNow: "Slet alle",
+        selectPrompt: "Vælg en post for at se detaljerne.",
+        details: "Detaljer",
+        loadError: (m) => `Historikken kunne ikke indlæses: ${m}`,
+        viewAll: "Se al historik",
+        kind: {
+          uninstall: "Afinstallation",
+          forced: "Gennemtvungen afinstallation",
+          store: "Store-app",
+          batch: "Batch-afinstallation"
+        },
+        outcome: {
+          uninstalled: "Afinstalleret",
+          removed: "Rester fjernet",
+          partial: "Delvist fjernet"
+        },
+        destination: {
+          quarantine: "Karantæne",
+          recycle: "Papirkurv",
+          permanent: "Slettet permanent"
+        },
+        field: {
+          date: "Dato",
+          kind: "Type",
+          outcome: "Resultat",
+          found: "Rester fundet",
+          removed: "Rester fjernet",
+          freed: "Plads frigjort",
+          destination: "Sendt til",
+          tasks: "Planlagte opgaver fjernet",
+          restorePoint: "Gendannelsespunkt",
+          registryBackup: "Registreringssikkerhedskopi",
+          quarantineBatch: "Karantænebatch"
+        },
+        restoreCreated: "Oprettet",
+        restoreNotCreated: (r) => (r ? `Ikke oprettet (${r})` : 'Ikke oprettet')
       }
     }
   },
@@ -952,6 +1260,50 @@ export default {
         restored: (n, c) => `Aus der Sicherung von ${n} wiederhergestellte Elemente: ${c}.`,
         failedHeading: (n) => `Nicht wiederhergestellt: ${n}`,
         loadError: (m) => `Die Sicherungen konnten nicht geladen werden: ${m}`
+      },
+      history: {
+        tab: "Verlauf",
+        count: (n) => `Aufgezeichnete Deinstallationen: ${n}`,
+        emptyHeading: "Noch keine Deinstallationen aufgezeichnet",
+        emptyBody: "Jedes Programm, das Sie mit Prune deinstallieren, wird hier aufgeführt – samt Ergebnis der Rückstandssuche.",
+        clear: "Verlauf löschen",
+        clearConfirm: "Alle Einträge löschen? Das lässt sich nicht rückgängig machen.",
+        clearNow: "Alle löschen",
+        selectPrompt: "Wählen Sie einen Eintrag, um die Details zu sehen.",
+        details: "Details",
+        loadError: (m) => `Der Verlauf konnte nicht geladen werden: ${m}`,
+        viewAll: "Gesamten Verlauf anzeigen",
+        kind: {
+          uninstall: "Deinstallation",
+          forced: "Erzwungene Deinstallation",
+          store: "Store-App",
+          batch: "Mehrfachdeinstallation"
+        },
+        outcome: {
+          uninstalled: "Deinstalliert",
+          removed: "Rückstände entfernt",
+          partial: "Teilweise entfernt"
+        },
+        destination: {
+          quarantine: "Quarantäne",
+          recycle: "Papierkorb",
+          permanent: "Endgültig gelöscht"
+        },
+        field: {
+          date: "Datum",
+          kind: "Art",
+          outcome: "Ergebnis",
+          found: "Gefundene Rückstände",
+          removed: "Entfernte Rückstände",
+          freed: "Freigegebener Speicher",
+          destination: "Verschoben nach",
+          tasks: "Entfernte geplante Aufgaben",
+          restorePoint: "Wiederherstellungspunkt",
+          registryBackup: "Registrierungssicherung",
+          quarantineBatch: "Quarantäne-Charge"
+        },
+        restoreCreated: "Erstellt",
+        restoreNotCreated: (r) => (r ? `Nicht erstellt (${r})` : 'Nicht erstellt')
       }
     }
   },
@@ -1071,6 +1423,50 @@ export default {
         restored: (n, c) => `Στοιχεία που επαναφέρθηκαν από το αντίγραφο του ${n}: ${c}.`,
         failedHeading: (n) => `Δεν επαναφέρθηκαν: ${n}`,
         loadError: (m) => `Δεν ήταν δυνατή η φόρτωση των αντιγράφων ασφαλείας: ${m}`
+      },
+      history: {
+        tab: "Ιστορικό",
+        count: (n) => `Καταγεγραμμένες απεγκαταστάσεις: ${n}`,
+        emptyHeading: "Δεν έχουν καταγραφεί ακόμη απεγκαταστάσεις",
+        emptyBody: "Κάθε πρόγραμμα που απεγκαθιστάτε με το Prune εμφανίζεται εδώ, μαζί με το πώς πήγε η σάρωση καταλοίπων.",
+        clear: "Εκκαθάριση ιστορικού",
+        clearConfirm: "Διαγραφή όλων των εγγραφών; Δεν αναιρείται.",
+        clearNow: "Διαγραφή όλων",
+        selectPrompt: "Επιλέξτε μια εγγραφή για να δείτε τις λεπτομέρειές της.",
+        details: "Λεπτομέρειες",
+        loadError: (m) => `Δεν ήταν δυνατή η φόρτωση του ιστορικού: ${m}`,
+        viewAll: "Προβολή όλου του ιστορικού",
+        kind: {
+          uninstall: "Απεγκατάσταση",
+          forced: "Αναγκαστική απεγκατάσταση",
+          store: "Εφαρμογή Store",
+          batch: "Μαζική απεγκατάσταση"
+        },
+        outcome: {
+          uninstalled: "Απεγκαταστάθηκε",
+          removed: "Κατάλοιπα αφαιρέθηκαν",
+          partial: "Αφαιρέθηκε εν μέρει"
+        },
+        destination: {
+          quarantine: "Καραντίνα",
+          recycle: "Κάδος Ανακύκλωσης",
+          permanent: "Διαγράφηκε οριστικά"
+        },
+        field: {
+          date: "Ημερομηνία",
+          kind: "Τύπος",
+          outcome: "Αποτέλεσμα",
+          found: "Κατάλοιπα που βρέθηκαν",
+          removed: "Κατάλοιπα που αφαιρέθηκαν",
+          freed: "Χώρος που ελευθερώθηκε",
+          destination: "Στάλθηκαν σε",
+          tasks: "Προγραμματισμένες εργασίες που αφαιρέθηκαν",
+          restorePoint: "Σημείο επαναφοράς",
+          registryBackup: "Αντίγραφο ασφαλείας μητρώου",
+          quarantineBatch: "Δέσμη καραντίνας"
+        },
+        restoreCreated: "Δημιουργήθηκε",
+        restoreNotCreated: (r) => (r ? `Δεν δημιουργήθηκε (${r})` : 'Δεν δημιουργήθηκε')
       }
     }
   },
@@ -1190,6 +1586,50 @@ export default {
         restored: (n, c) => `Elementos restaurados de la copia de ${n}: ${c}.`,
         failedHeading: (n) => `No restaurados: ${n}`,
         loadError: (m) => `No se pudieron cargar las copias de seguridad: ${m}`
+      },
+      history: {
+        tab: "Historial",
+        count: (n) => `Desinstalaciones registradas: ${n}`,
+        emptyHeading: "Aún no hay desinstalaciones registradas",
+        emptyBody: "Cada programa que desinstales con Prune aparece aquí, con el resultado de la búsqueda de restos.",
+        clear: "Borrar historial",
+        clearConfirm: "¿Eliminar todas las entradas? No se puede deshacer.",
+        clearNow: "Eliminar todo",
+        selectPrompt: "Selecciona una entrada para ver sus detalles.",
+        details: "Detalles",
+        loadError: (m) => `No se pudo cargar el historial: ${m}`,
+        viewAll: "Ver todo el historial",
+        kind: {
+          uninstall: "Desinstalación",
+          forced: "Desinstalación forzada",
+          store: "Aplicación de la Tienda",
+          batch: "Desinstalación por lotes"
+        },
+        outcome: {
+          uninstalled: "Desinstalado",
+          removed: "Restos eliminados",
+          partial: "Eliminado en parte"
+        },
+        destination: {
+          quarantine: "Cuarentena",
+          recycle: "Papelera de reciclaje",
+          permanent: "Eliminado definitivamente"
+        },
+        field: {
+          date: "Fecha",
+          kind: "Tipo",
+          outcome: "Resultado",
+          found: "Restos encontrados",
+          removed: "Restos eliminados",
+          freed: "Espacio liberado",
+          destination: "Enviado a",
+          tasks: "Tareas programadas eliminadas",
+          restorePoint: "Punto de restauración",
+          registryBackup: "Copia del registro",
+          quarantineBatch: "Lote de cuarentena"
+        },
+        restoreCreated: "Creado",
+        restoreNotCreated: (r) => (r ? `No creado (${r})` : 'No creado')
       }
     }
   },
@@ -1309,6 +1749,50 @@ export default {
         restored: (n, c) => `Taastatud kirjeid ${n} varukoopiast: ${c}.`,
         failedHeading: (n) => `Taastamata: ${n}`,
         loadError: (m) => `Varukoopiaid ei saanud laadida: ${m}`
+      },
+      history: {
+        tab: "Ajalugu",
+        count: (n) => `Salvestatud eemaldamisi: ${n}`,
+        emptyHeading: "Eemaldamisi pole veel salvestatud",
+        emptyBody: "Iga Prune'iga eemaldatud programm on siin loetletud koos jääkide otsingu tulemusega.",
+        clear: "Tühjenda ajalugu",
+        clearConfirm: "Kas kustutada kõik kirjed? Seda ei saa tagasi võtta.",
+        clearNow: "Kustuta kõik",
+        selectPrompt: "Valige kirje, et näha selle üksikasju.",
+        details: "Üksikasjad",
+        loadError: (m) => `Ajalugu ei saanud laadida: ${m}`,
+        viewAll: "Vaata kogu ajalugu",
+        kind: {
+          uninstall: "Eemaldamine",
+          forced: "Sundeemaldamine",
+          store: "Poe rakendus",
+          batch: "Hulgi eemaldamine"
+        },
+        outcome: {
+          uninstalled: "Eemaldatud",
+          removed: "Jäägid eemaldatud",
+          partial: "Osaliselt eemaldatud"
+        },
+        destination: {
+          quarantine: "Karantiin",
+          recycle: "Prügikast",
+          permanent: "Lõplikult kustutatud"
+        },
+        field: {
+          date: "Kuupäev",
+          kind: "Liik",
+          outcome: "Tulemus",
+          found: "Leitud jäägid",
+          removed: "Eemaldatud jäägid",
+          freed: "Vabastatud ruum",
+          destination: "Saadetud",
+          tasks: "Eemaldatud ajastatud toimingud",
+          restorePoint: "Taastepunkt",
+          registryBackup: "Registri varukoopia",
+          quarantineBatch: "Karantiinipartii"
+        },
+        restoreCreated: "Loodud",
+        restoreNotCreated: (r) => (r ? `Loomata (${r})` : 'Loomata')
       }
     }
   },
@@ -1428,6 +1912,50 @@ export default {
         restored: (n, c) => `Kohteita palautettu ${n}:n varmuuskopiosta: ${c}.`,
         failedHeading: (n) => `Palauttamatta: ${n}`,
         loadError: (m) => `Varmuuskopioita ei voitu ladata: ${m}`
+      },
+      history: {
+        tab: "Historia",
+        count: (n) => `Tallennettuja poistoja: ${n}`,
+        emptyHeading: "Poistoja ei ole vielä tallennettu",
+        emptyBody: "Jokainen Prunella poistettu ohjelma on listattu tässä sekä jäänteiden haun tulos.",
+        clear: "Tyhjennä historia",
+        clearConfirm: "Poistetaanko kaikki merkinnät? Tätä ei voi perua.",
+        clearNow: "Poista kaikki",
+        selectPrompt: "Valitse merkintä nähdäksesi sen tiedot.",
+        details: "Tiedot",
+        loadError: (m) => `Historiaa ei voitu ladata: ${m}`,
+        viewAll: "Näytä koko historia",
+        kind: {
+          uninstall: "Poisto",
+          forced: "Pakotettu poisto",
+          store: "Store-sovellus",
+          batch: "Eräpoisto"
+        },
+        outcome: {
+          uninstalled: "Poistettu",
+          removed: "Jäänteet poistettu",
+          partial: "Osittain poistettu"
+        },
+        destination: {
+          quarantine: "Karanteeni",
+          recycle: "Roskakori",
+          permanent: "Poistettu pysyvästi"
+        },
+        field: {
+          date: "Päivämäärä",
+          kind: "Tyyppi",
+          outcome: "Lopputulos",
+          found: "Löydetyt jäänteet",
+          removed: "Poistetut jäänteet",
+          freed: "Vapautettu tila",
+          destination: "Siirretty",
+          tasks: "Poistetut ajastetut tehtävät",
+          restorePoint: "Palautuspiste",
+          registryBackup: "Rekisterin varmuuskopio",
+          quarantineBatch: "Karanteee-erä"
+        },
+        restoreCreated: "Luotu",
+        restoreNotCreated: (r) => (r ? `Ei luotu (${r})` : 'Ei luotu')
       }
     }
   },
@@ -1547,6 +2075,50 @@ export default {
         restored: (n, c) => `Éléments restaurés depuis la sauvegarde de ${n} : ${c}.`,
         failedHeading: (n) => `Non restaurés : ${n}`,
         loadError: (m) => `Impossible de charger les sauvegardes : ${m}`
+      },
+      history: {
+        tab: "Historique",
+        count: (n) => `Désinstallations enregistrées : ${n}`,
+        emptyHeading: "Aucune désinstallation enregistrée pour l'instant",
+        emptyBody: "Chaque programme désinstallé avec Prune est listé ici, avec le résultat de la recherche de résidus.",
+        clear: "Effacer l'historique",
+        clearConfirm: "Supprimer toutes les entrées ? Cette action est irréversible.",
+        clearNow: "Tout supprimer",
+        selectPrompt: "Sélectionnez une entrée pour en voir le détail.",
+        details: "Détails",
+        loadError: (m) => `Impossible de charger l'historique : ${m}`,
+        viewAll: "Voir tout l'historique",
+        kind: {
+          uninstall: "Désinstallation",
+          forced: "Désinstallation forcée",
+          store: "Application du Store",
+          batch: "Désinstallation par lot"
+        },
+        outcome: {
+          uninstalled: "Désinstallé",
+          removed: "Résidus supprimés",
+          partial: "Partiellement supprimé"
+        },
+        destination: {
+          quarantine: "Quarantaine",
+          recycle: "Corbeille",
+          permanent: "Supprimé définitivement"
+        },
+        field: {
+          date: "Date",
+          kind: "Type",
+          outcome: "Résultat",
+          found: "Résidus trouvés",
+          removed: "Résidus supprimés",
+          freed: "Espace libéré",
+          destination: "Envoyé vers",
+          tasks: "Tâches planifiées supprimées",
+          restorePoint: "Point de restauration",
+          registryBackup: "Sauvegarde du registre",
+          quarantineBatch: "Lot de quarantaine"
+        },
+        restoreCreated: "Créé",
+        restoreNotCreated: (r) => (r ? `Non créé (${r})` : 'Non créé')
       }
     }
   },
@@ -1666,6 +2238,50 @@ export default {
         restored: (n, c) => `פריטים ששוחזרו מהגיבוי של ${n}: ${c}.`,
         failedHeading: (n) => `לא שוחזרו: ${n}`,
         loadError: (m) => `לא ניתן לטעון את הגיבויים: ${m}`
+      },
+      history: {
+        tab: "היסטוריה",
+        count: (n) => `הסרות שתועדו: ${n}`,
+        emptyHeading: "עדיין לא תועדו הסרות",
+        emptyBody: "כל תוכנה שתסירו באמצעות Prune מופיעה כאן, עם תוצאות סריקת השאריות.",
+        clear: "ניקוי היסטוריה",
+        clearConfirm: "למחוק את כל הרשומות? אי אפשר לבטל זאת.",
+        clearNow: "מחק הכול",
+        selectPrompt: "בחרו רשומה כדי לראות את פרטיה.",
+        details: "פרטים",
+        loadError: (m) => `לא ניתן לטעון את ההיסטוריה: ${m}`,
+        viewAll: "הצגת כל ההיסטוריה",
+        kind: {
+          uninstall: "הסרה",
+          forced: "הסרה כפויה",
+          store: "אפליקציית חנות",
+          batch: "הסרה מרובה"
+        },
+        outcome: {
+          uninstalled: "הוסר",
+          removed: "השאריות הוסרו",
+          partial: "הוסר חלקית"
+        },
+        destination: {
+          quarantine: "הסגר",
+          recycle: "סל המחזור",
+          permanent: "נמחק לצמיתות"
+        },
+        field: {
+          date: "תאריך",
+          kind: "סוג",
+          outcome: "תוצאה",
+          found: "שאריות שנמצאו",
+          removed: "שאריות שהוסרו",
+          freed: "מקום שהתפנה",
+          destination: "נשלח אל",
+          tasks: "משימות מתוזמנות שהוסרו",
+          restorePoint: "נקודת שחזור",
+          registryBackup: "גיבוי רישום",
+          quarantineBatch: "אצוות הסגר"
+        },
+        restoreCreated: "נוצרה",
+        restoreNotCreated: (r) => (r ? `לא נוצרה (${r})` : 'לא נוצרה')
       }
     }
   },
@@ -1785,6 +2401,50 @@ export default {
         restored: (n, c) => `A(z) ${n} mentéséből visszaállított elemek: ${c}.`,
         failedHeading: (n) => `Nem állítva vissza: ${n}`,
         loadError: (m) => `A mentések nem tölthetők be: ${m}`
+      },
+      history: {
+        tab: "Előzmények",
+        count: (n) => `Rögzített eltávolítások: ${n}`,
+        emptyHeading: "Még nincs rögzített eltávolítás",
+        emptyBody: "Minden Prune-nal eltávolított program itt szerepel, a maradványkeresés eredményével együtt.",
+        clear: "Előzmények törlése",
+        clearConfirm: "Törli az összes bejegyzést? Ez nem vonható vissza.",
+        clearNow: "Összes törlése",
+        selectPrompt: "Válasszon ki egy bejegyzést a részletek megtekintéséhez.",
+        details: "Részletek",
+        loadError: (m) => `Az előzmények nem tölthetők be: ${m}`,
+        viewAll: "Összes előzmény megtekintése",
+        kind: {
+          uninstall: "Eltávolítás",
+          forced: "Kényszerített eltávolítás",
+          store: "Store-alkalmazás",
+          batch: "Tömeges eltávolítás"
+        },
+        outcome: {
+          uninstalled: "Eltávolítva",
+          removed: "Maradványok eltávolítva",
+          partial: "Részben eltávolítva"
+        },
+        destination: {
+          quarantine: "Karantén",
+          recycle: "Lomtár",
+          permanent: "Véglegesen törölve"
+        },
+        field: {
+          date: "Dátum",
+          kind: "Típus",
+          outcome: "Eredmény",
+          found: "Talált maradványok",
+          removed: "Eltávolított maradványok",
+          freed: "Felszabadított hely",
+          destination: "Ide került",
+          tasks: "Eltávolított ütemezett feladatok",
+          restorePoint: "Visszaállítási pont",
+          registryBackup: "Beállításjegyzék-mentés",
+          quarantineBatch: "Karanténköteg"
+        },
+        restoreCreated: "Létrehozva",
+        restoreNotCreated: (r) => (r ? `Nem jött létre (${r})` : 'Nem jött létre')
       }
     }
   },
@@ -1904,6 +2564,50 @@ export default {
         restored: (n, c) => `Item dipulihkan dari cadangan ${n}: ${c}.`,
         failedHeading: (n) => `Tidak dipulihkan: ${n}`,
         loadError: (m) => `Tidak dapat memuat cadangan: ${m}`
+      },
+      history: {
+        tab: "Riwayat",
+        count: (n) => `Pencopotan tercatat: ${n}`,
+        emptyHeading: "Belum ada pencopotan yang tercatat",
+        emptyBody: "Setiap program yang Anda copot dengan Prune tercantum di sini, beserta hasil pemindaian sisanya.",
+        clear: "Hapus riwayat",
+        clearConfirm: "Hapus semua entri? Ini tidak dapat dibatalkan.",
+        clearNow: "Hapus semua",
+        selectPrompt: "Pilih entri untuk melihat detailnya.",
+        details: "Detail",
+        loadError: (m) => `Tidak dapat memuat riwayat: ${m}`,
+        viewAll: "Lihat semua riwayat",
+        kind: {
+          uninstall: "Pencopotan",
+          forced: "Uninstal paksa",
+          store: "Aplikasi Store",
+          batch: "Pencopotan massal"
+        },
+        outcome: {
+          uninstalled: "Dicopot",
+          removed: "Sisa dihapus",
+          partial: "Sebagian dihapus"
+        },
+        destination: {
+          quarantine: "Karantina",
+          recycle: "Recycle Bin",
+          permanent: "Dihapus permanen"
+        },
+        field: {
+          date: "Tanggal",
+          kind: "Jenis",
+          outcome: "Hasil",
+          found: "Sisa ditemukan",
+          removed: "Sisa dihapus",
+          freed: "Ruang dibebaskan",
+          destination: "Dikirim ke",
+          tasks: "Tugas terjadwal dihapus",
+          restorePoint: "Titik pemulihan",
+          registryBackup: "Cadangan registri",
+          quarantineBatch: "Kelompok karantina"
+        },
+        restoreCreated: "Dibuat",
+        restoreNotCreated: (r) => (r ? `Tidak dibuat (${r})` : 'Tidak dibuat')
       }
     }
   },
@@ -2023,6 +2727,50 @@ export default {
         restored: (n, c) => `Atriði endurheimt úr afriti ${n}: ${c}.`,
         failedHeading: (n) => `Ekki endurheimt: ${n}`,
         loadError: (m) => `Ekki tókst að hlaða afritunum: ${m}`
+      },
+      history: {
+        tab: "Saga",
+        count: (n) => `Skráðar fjarlægingar: ${n}`,
+        emptyHeading: "Engar fjarlægingar skráðar enn",
+        emptyBody: "Hvert forrit sem þú fjarlægir með Prune birtist hér ásamt niðurstöðu leitarinnar að leifum.",
+        clear: "Hreinsa sögu",
+        clearConfirm: "Eyða öllum færslum? Ekki er hægt að afturkalla það.",
+        clearNow: "Eyða öllu",
+        selectPrompt: "Veldu færslu til að sjá nánari upplýsingar.",
+        details: "Upplýsingar",
+        loadError: (m) => `Ekki tókst að hlaða söguna: ${m}`,
+        viewAll: "Skoða alla sögu",
+        kind: {
+          uninstall: "Fjarlæging",
+          forced: "Þvinguð fjarlæging",
+          store: "Store-forrit",
+          batch: "Magnfjarlæging"
+        },
+        outcome: {
+          uninstalled: "Fjarlægt",
+          removed: "Leifar fjarlægðar",
+          partial: "Fjarlægt að hluta"
+        },
+        destination: {
+          quarantine: "Sóttkví",
+          recycle: "Ruslakarfa",
+          permanent: "Eytt varanlega"
+        },
+        field: {
+          date: "Dagsetning",
+          kind: "Tegund",
+          outcome: "Niðurstaða",
+          found: "Leifar fundnar",
+          removed: "Leifar fjarlægðar",
+          freed: "Pláss losað",
+          destination: "Sent í",
+          tasks: "Áætluð verkefni fjarlægð",
+          restorePoint: "Endurheimtarpunktur",
+          registryBackup: "Afrit af skrá",
+          quarantineBatch: "Sóttkvíarlota"
+        },
+        restoreCreated: "Búið til",
+        restoreNotCreated: (r) => (r ? `Ekki búið til (${r})` : 'Ekki búið til')
       }
     }
   },
@@ -2142,6 +2890,50 @@ export default {
         restored: (n, c) => `Elementi ripristinati dal backup di ${n}: ${c}.`,
         failedHeading: (n) => `Non ripristinati: ${n}`,
         loadError: (m) => `Impossibile caricare i backup: ${m}`
+      },
+      history: {
+        tab: "Cronologia",
+        count: (n) => `Disinstallazioni registrate: ${n}`,
+        emptyHeading: "Nessuna disinstallazione registrata",
+        emptyBody: "Ogni programma disinstallato con Prune è elencato qui, con l'esito della ricerca dei residui.",
+        clear: "Cancella cronologia",
+        clearConfirm: "Eliminare tutte le voci? L'operazione non è reversibile.",
+        clearNow: "Elimina tutto",
+        selectPrompt: "Seleziona una voce per vederne i dettagli.",
+        details: "Dettagli",
+        loadError: (m) => `Impossibile caricare la cronologia: ${m}`,
+        viewAll: "Mostra tutta la cronologia",
+        kind: {
+          uninstall: "Disinstallazione",
+          forced: "Disinstallazione forzata",
+          store: "App dello Store",
+          batch: "Disinstallazione multipla"
+        },
+        outcome: {
+          uninstalled: "Disinstallato",
+          removed: "Residui rimossi",
+          partial: "Rimosso in parte"
+        },
+        destination: {
+          quarantine: "Quarantena",
+          recycle: "Cestino",
+          permanent: "Eliminato definitivamente"
+        },
+        field: {
+          date: "Data",
+          kind: "Tipo",
+          outcome: "Esito",
+          found: "Residui trovati",
+          removed: "Residui rimossi",
+          freed: "Spazio liberato",
+          destination: "Inviato a",
+          tasks: "Attività pianificate rimosse",
+          restorePoint: "Punto di ripristino",
+          registryBackup: "Backup del registro",
+          quarantineBatch: "Lotto di quarantena"
+        },
+        restoreCreated: "Creato",
+        restoreNotCreated: (r) => (r ? `Non creato (${r})` : 'Non creato')
       }
     }
   },
@@ -2261,6 +3053,50 @@ export default {
         restored: (n, c) => `${n} のバックアップから復元した項目: ${c} 件。`,
         failedHeading: (n) => `復元されなかった項目: ${n} 件`,
         loadError: (m) => `バックアップを読み込めませんでした: ${m}`
+      },
+      history: {
+        tab: "履歴",
+        count: (n) => `記録されたアンインストール: ${n} 件`,
+        emptyHeading: "アンインストールの記録はまだありません",
+        emptyBody: "Prune でアンインストールしたプログラムが、残留物スキャンの結果とともにここに表示されます。",
+        clear: "履歴を消去",
+        clearConfirm: "すべてのエントリを削除しますか? 元に戻せません。",
+        clearNow: "すべて削除",
+        selectPrompt: "エントリを選ぶと詳細が表示されます。",
+        details: "詳細",
+        loadError: (m) => `履歴を読み込めませんでした: ${m}`,
+        viewAll: "すべての履歴を表示",
+        kind: {
+          uninstall: "アンインストール",
+          forced: "強制アンインストール",
+          store: "ストア アプリ",
+          batch: "一括アンインストール"
+        },
+        outcome: {
+          uninstalled: "アンインストール済み",
+          removed: "残留物を削除済み",
+          partial: "一部のみ削除"
+        },
+        destination: {
+          quarantine: "隔離",
+          recycle: "ごみ箱",
+          permanent: "完全に削除"
+        },
+        field: {
+          date: "日時",
+          kind: "種類",
+          outcome: "結果",
+          found: "見つかった残留物",
+          removed: "削除した残留物",
+          freed: "解放した容量",
+          destination: "移動先",
+          tasks: "削除したタスク",
+          restorePoint: "復元ポイント",
+          registryBackup: "レジストリのバックアップ",
+          quarantineBatch: "隔離バッチ"
+        },
+        restoreCreated: "作成済み",
+        restoreNotCreated: (r) => (r ? `作成されませんでした (${r})` : '作成されませんでした')
       }
     }
   },
@@ -2380,6 +3216,50 @@ export default {
         restored: (n, c) => `${n} 백업에서 복원된 항목: ${c}개.`,
         failedHeading: (n) => `복원되지 않음: ${n}개`,
         loadError: (m) => `백업을 불러올 수 없습니다: ${m}`
+      },
+      history: {
+        tab: "기록",
+        count: (n) => `기록된 제거: ${n}개`,
+        emptyHeading: "기록된 제거가 아직 없습니다",
+        emptyBody: "Prune으로 제거한 각 프로그램이 남은 항목 검사 결과와 함께 여기에 표시됩니다.",
+        clear: "기록 지우기",
+        clearConfirm: "모든 항목을 삭제할까요? 되돌릴 수 없습니다.",
+        clearNow: "모두 삭제",
+        selectPrompt: "항목을 선택하면 세부 정보가 표시됩니다.",
+        details: "세부 정보",
+        loadError: (m) => `기록을 불러올 수 없습니다: ${m}`,
+        viewAll: "전체 기록 보기",
+        kind: {
+          uninstall: "제거",
+          forced: "강제 제거",
+          store: "스토어 앱",
+          batch: "일괄 제거"
+        },
+        outcome: {
+          uninstalled: "제거됨",
+          removed: "남은 항목 제거됨",
+          partial: "일부만 제거됨"
+        },
+        destination: {
+          quarantine: "격리",
+          recycle: "휴지통",
+          permanent: "영구 삭제됨"
+        },
+        field: {
+          date: "날짜",
+          kind: "유형",
+          outcome: "결과",
+          found: "발견된 남은 항목",
+          removed: "제거된 남은 항목",
+          freed: "확보한 공간",
+          destination: "보낸 위치",
+          tasks: "제거된 예약 작업",
+          restorePoint: "복원 지점",
+          registryBackup: "레지스트리 백업",
+          quarantineBatch: "격리 배치"
+        },
+        restoreCreated: "생성됨",
+        restoreNotCreated: (r) => (r ? `생성되지 않음 (${r})` : '생성되지 않음')
       }
     }
   },
@@ -2499,6 +3379,50 @@ export default {
         restored: (n, c) => `Iš ${n} kopijos atkurta elementų: ${c}.`,
         failedHeading: (n) => `Neatkurta: ${n}`,
         loadError: (m) => `Nepavyko įkelti kopijų: ${m}`
+      },
+      history: {
+        tab: "Istorija",
+        count: (n) => `Įrašyta pašalinimų: ${n}`,
+        emptyHeading: "Pašalinimų dar neįrašyta",
+        emptyBody: "Kiekviena su „Prune“ pašalinta programa čia išvardyta kartu su liekanų paieškos rezultatu.",
+        clear: "Išvalyti istoriją",
+        clearConfirm: "Ištrinti visus įrašus? To atšaukti negalima.",
+        clearNow: "Ištrinti viską",
+        selectPrompt: "Pasirinkite įrašą, kad pamatytumėte jo informaciją.",
+        details: "Informacija",
+        loadError: (m) => `Nepavyko įkelti istorijos: ${m}`,
+        viewAll: "Peržiūrėti visą istoriją",
+        kind: {
+          uninstall: "Pašalinimas",
+          forced: "Priverstinis pašalinimas",
+          store: "Parduotuvės programa",
+          batch: "Grupinis pašalinimas"
+        },
+        outcome: {
+          uninstalled: "Pašalinta",
+          removed: "Liekanos pašalintos",
+          partial: "Pašalinta iš dalies"
+        },
+        destination: {
+          quarantine: "Karantinas",
+          recycle: "Šiukšlinė",
+          permanent: "Ištrinta visam laikui"
+        },
+        field: {
+          date: "Data",
+          kind: "Tipas",
+          outcome: "Rezultatas",
+          found: "Rastos liekanos",
+          removed: "Pašalintos liekanos",
+          freed: "Atlaisvinta vietos",
+          destination: "Perkelta į",
+          tasks: "Pašalintos suplanuotos užduotys",
+          restorePoint: "Atkūrimo taškas",
+          registryBackup: "Registro atsarginė kopija",
+          quarantineBatch: "Karantino partija"
+        },
+        restoreCreated: "Sukurtas",
+        restoreNotCreated: (r) => (r ? `Nesukurtas (${r})` : 'Nesukurtas')
       }
     }
   },
@@ -2618,6 +3542,50 @@ export default {
         restored: (n, c) => `Item dipulihkan daripada sandaran ${n}: ${c}.`,
         failedHeading: (n) => `Tidak dipulihkan: ${n}`,
         loadError: (m) => `Tidak dapat memuatkan sandaran: ${m}`
+      },
+      history: {
+        tab: "Sejarah",
+        count: (n) => `Nyahpasang direkodkan: ${n}`,
+        emptyHeading: "Belum ada nyahpasang yang direkodkan",
+        emptyBody: "Setiap program yang anda nyahpasang dengan Prune disenaraikan di sini, bersama hasil imbasan baki.",
+        clear: "Kosongkan sejarah",
+        clearConfirm: "Padam semua entri? Ini tidak boleh dibuat asal.",
+        clearNow: "Padam semua",
+        selectPrompt: "Pilih entri untuk melihat butirannya.",
+        details: "Butiran",
+        loadError: (m) => `Tidak dapat memuatkan sejarah: ${m}`,
+        viewAll: "Lihat semua sejarah",
+        kind: {
+          uninstall: "Nyahpasang",
+          forced: "Nyahpasang paksa",
+          store: "Aplikasi Store",
+          batch: "Nyahpasang kelompok"
+        },
+        outcome: {
+          uninstalled: "Dinyahpasang",
+          removed: "Baki dialihkan",
+          partial: "Sebahagian dialihkan"
+        },
+        destination: {
+          quarantine: "Kuarantin",
+          recycle: "Tong Kitar Semula",
+          permanent: "Dipadam selama-lamanya"
+        },
+        field: {
+          date: "Tarikh",
+          kind: "Jenis",
+          outcome: "Hasil",
+          found: "Baki ditemui",
+          removed: "Baki dialihkan",
+          freed: "Ruang dibebaskan",
+          destination: "Dihantar ke",
+          tasks: "Tugas berjadual dialihkan",
+          restorePoint: "Titik pemulihan",
+          registryBackup: "Sandaran pendaftaran",
+          quarantineBatch: "Kelompok kuarantin"
+        },
+        restoreCreated: "Dicipta",
+        restoreNotCreated: (r) => (r ? `Tidak dicipta (${r})` : 'Tidak dicipta')
       }
     }
   },
@@ -2737,6 +3705,50 @@ export default {
         restored: (n, c) => `Elementer gjenopprettet fra sikkerhetskopien av ${n}: ${c}.`,
         failedHeading: (n) => `Ikke gjenopprettet: ${n}`,
         loadError: (m) => `Kunne ikke laste sikkerhetskopiene: ${m}`
+      },
+      history: {
+        tab: "Logg",
+        count: (n) => `Registrerte avinstallasjoner: ${n}`,
+        emptyHeading: "Ingen avinstallasjoner registrert ennå",
+        emptyBody: "Hvert program du avinstallerer med Prune vises her, med resultatet av søket etter rester.",
+        clear: "Tøm loggen",
+        clearConfirm: "Slette alle oppføringer? Dette kan ikke angres.",
+        clearNow: "Slett alle",
+        selectPrompt: "Velg en oppføring for å se detaljene.",
+        details: "Detaljer",
+        loadError: (m) => `Kunne ikke laste loggen: ${m}`,
+        viewAll: "Se hele loggen",
+        kind: {
+          uninstall: "Avinstallasjon",
+          forced: "Tvunget avinstallering",
+          store: "Store-app",
+          batch: "Samleavinstallasjon"
+        },
+        outcome: {
+          uninstalled: "Avinstallert",
+          removed: "Rester fjernet",
+          partial: "Delvis fjernet"
+        },
+        destination: {
+          quarantine: "Karantene",
+          recycle: "Papirkurv",
+          permanent: "Slettet permanent"
+        },
+        field: {
+          date: "Dato",
+          kind: "Type",
+          outcome: "Resultat",
+          found: "Rester funnet",
+          removed: "Rester fjernet",
+          freed: "Plass frigjort",
+          destination: "Sendt til",
+          tasks: "Planlagte oppgaver fjernet",
+          restorePoint: "Gjenopprettingspunkt",
+          registryBackup: "Registersikkerhetskopi",
+          quarantineBatch: "Karantenebatch"
+        },
+        restoreCreated: "Opprettet",
+        restoreNotCreated: (r) => (r ? `Ikke opprettet (${r})` : 'Ikke opprettet')
       }
     }
   },
@@ -2856,6 +3868,50 @@ export default {
         restored: (n, c) => `Uit de back-up van ${n} herstelde items: ${c}.`,
         failedHeading: (n) => `Niet hersteld: ${n}`,
         loadError: (m) => `De back-ups konden niet worden geladen: ${m}`
+      },
+      history: {
+        tab: "Geschiedenis",
+        count: (n) => `Vastgelegde verwijderingen: ${n}`,
+        emptyHeading: "Nog geen verwijderingen vastgelegd",
+        emptyBody: "Elk programma dat u met Prune verwijdert, staat hier met het resultaat van de scan op restanten.",
+        clear: "Geschiedenis wissen",
+        clearConfirm: "Alle items verwijderen? Dit kan niet ongedaan worden gemaakt.",
+        clearNow: "Alles verwijderen",
+        selectPrompt: "Selecteer een item om de details te zien.",
+        details: "Details",
+        loadError: (m) => `De geschiedenis kon niet worden geladen: ${m}`,
+        viewAll: "Alle geschiedenis weergeven",
+        kind: {
+          uninstall: "Verwijdering",
+          forced: "Geforceerd verwijderen",
+          store: "Store-app",
+          batch: "Batchverwijdering"
+        },
+        outcome: {
+          uninstalled: "Verwijderd",
+          removed: "Restanten verwijderd",
+          partial: "Gedeeltelijk verwijderd"
+        },
+        destination: {
+          quarantine: "Quarantaine",
+          recycle: "Prullenbak",
+          permanent: "Definitief verwijderd"
+        },
+        field: {
+          date: "Datum",
+          kind: "Type",
+          outcome: "Resultaat",
+          found: "Gevonden restanten",
+          removed: "Verwijderde restanten",
+          freed: "Vrijgemaakte ruimte",
+          destination: "Verplaatst naar",
+          tasks: "Verwijderde geplande taken",
+          restorePoint: "Herstelpunt",
+          registryBackup: "Registerback-up",
+          quarantineBatch: "Quarantainebatch"
+        },
+        restoreCreated: "Aangemaakt",
+        restoreNotCreated: (r) => (r ? `Niet aangemaakt (${r})` : 'Niet aangemaakt')
       }
     }
   },
@@ -2975,6 +4031,50 @@ export default {
         restored: (n, c) => `Elementy przywrócone z kopii ${n}: ${c}.`,
         failedHeading: (n) => `Nie przywrócono: ${n}`,
         loadError: (m) => `Nie można wczytać kopii zapasowych: ${m}`
+      },
+      history: {
+        tab: "Historia",
+        count: (n) => `Zapisane odinstalowania: ${n}`,
+        emptyHeading: "Nie zapisano jeszcze żadnych odinstalowań",
+        emptyBody: "Każdy program odinstalowany w Prune jest tu wymieniony wraz z wynikiem skanowania pozostałości.",
+        clear: "Wyczyść historię",
+        clearConfirm: "Usunąć wszystkie wpisy? Nie można tego cofnąć.",
+        clearNow: "Usuń wszystko",
+        selectPrompt: "Wybierz wpis, aby zobaczyć szczegóły.",
+        details: "Szczegóły",
+        loadError: (m) => `Nie można wczytać historii: ${m}`,
+        viewAll: "Pokaż całą historię",
+        kind: {
+          uninstall: "Odinstalowanie",
+          forced: "Wymuszone odinstalowanie",
+          store: "Aplikacja ze Sklepu",
+          batch: "Zbiorcze odinstalowanie"
+        },
+        outcome: {
+          uninstalled: "Odinstalowano",
+          removed: "Pozostałości usunięte",
+          partial: "Usunięto częściowo"
+        },
+        destination: {
+          quarantine: "Kwarantanna",
+          recycle: "Kosz",
+          permanent: "Usunięto trwale"
+        },
+        field: {
+          date: "Data",
+          kind: "Typ",
+          outcome: "Wynik",
+          found: "Znalezione pozostałości",
+          removed: "Usunięte pozostałości",
+          freed: "Zwolnione miejsce",
+          destination: "Przeniesiono do",
+          tasks: "Usunięte zaplanowane zadania",
+          restorePoint: "Punkt przywracania",
+          registryBackup: "Kopia rejestru",
+          quarantineBatch: "Partia kwarantanny"
+        },
+        restoreCreated: "Utworzono",
+        restoreNotCreated: (r) => (r ? `Nie utworzono (${r})` : 'Nie utworzono')
       }
     }
   },
@@ -3094,6 +4194,50 @@ export default {
         restored: (n, c) => `د ${n} له بیک‌اپ څخه بیرته راوړل شوي توکي: ${c}.`,
         failedHeading: (n) => `بیرته نه دي راوړل شوي: ${n}`,
         loadError: (m) => `بیک‌اپونه نه شول پورته کېدای: ${m}`
+      },
+      history: {
+        tab: "تاریخچه",
+        count: (n) => `ثبت شوې لرې کول: ${n}`,
+        emptyHeading: "تر اوسه هیڅ لرې کول نه دي ثبت شوي",
+        emptyBody: "هره برنامه چې تاسو د Prune سره لرې کړئ دلته لیست کېږي، د پاتې شونو سکین پایلې سره.",
+        clear: "تاریخچه پاکه کړئ",
+        clearConfirm: "ټولې ننوتنې ړنګې کړئ؟ دا بیرته نه شي کېدای.",
+        clearNow: "ټول ړنګ کړئ",
+        selectPrompt: "د جزییاتو لیدلو لپاره یوه ننوتنه وټاکئ.",
+        details: "جزییات",
+        loadError: (m) => `تاریخچه نه شوه پورته کېدای: ${m}`,
+        viewAll: "ټوله تاریخچه وګورئ",
+        kind: {
+          uninstall: "لرې کول",
+          forced: "جبري لرې کول",
+          store: "د پلورنځي اپ",
+          batch: "ډله ایز لرې کول"
+        },
+        outcome: {
+          uninstalled: "لرې شو",
+          removed: "پاتې شوني لرې شول",
+          partial: "یوه برخه لرې شوه"
+        },
+        destination: {
+          quarantine: "قرنطین",
+          recycle: "ریسایکل بن",
+          permanent: "په تلپاتې ډول ړنګ شو"
+        },
+        field: {
+          date: "نیټه",
+          kind: "ډول",
+          outcome: "پایله",
+          found: "موندل شوي پاتې شوني",
+          removed: "لرې شوي پاتې شوني",
+          freed: "خالي شوې ځای",
+          destination: "ولېږل شو",
+          tasks: "لرې شوې مهالویش شوې دندې",
+          restorePoint: "د بیرته راګرځولو ټکی",
+          registryBackup: "د راجستر بیک‌اپ",
+          quarantineBatch: "د قرنطین ډله"
+        },
+        restoreCreated: "جوړ شو",
+        restoreNotCreated: (r) => (r ? `نه دی جوړ شوی (${r})` : 'نه دی جوړ شوی')
       }
     }
   },
@@ -3213,6 +4357,50 @@ export default {
         restored: (n, c) => `Itens restaurados do backup de ${n}: ${c}.`,
         failedHeading: (n) => `Não restaurados: ${n}`,
         loadError: (m) => `Não foi possível carregar os backups: ${m}`
+      },
+      history: {
+        tab: "Histórico",
+        count: (n) => `Desinstalações registradas: ${n}`,
+        emptyHeading: "Nenhuma desinstalação registrada ainda",
+        emptyBody: "Cada programa que você desinstala com o Prune aparece aqui, com o resultado da verificação de resíduos.",
+        clear: "Limpar histórico",
+        clearConfirm: "Excluir todas as entradas? Isso não pode ser desfeito.",
+        clearNow: "Excluir tudo",
+        selectPrompt: "Selecione uma entrada para ver os detalhes.",
+        details: "Detalhes",
+        loadError: (m) => `Não foi possível carregar o histórico: ${m}`,
+        viewAll: "Ver todo o histórico",
+        kind: {
+          uninstall: "Desinstalação",
+          forced: "Desinstalação forçada",
+          store: "Aplicativo da Loja",
+          batch: "Desinstalação em lote"
+        },
+        outcome: {
+          uninstalled: "Desinstalado",
+          removed: "Resíduos removidos",
+          partial: "Removido em parte"
+        },
+        destination: {
+          quarantine: "Quarentena",
+          recycle: "Lixeira",
+          permanent: "Excluído permanentemente"
+        },
+        field: {
+          date: "Data",
+          kind: "Tipo",
+          outcome: "Resultado",
+          found: "Resíduos encontrados",
+          removed: "Resíduos removidos",
+          freed: "Espaço liberado",
+          destination: "Enviado para",
+          tasks: "Tarefas agendadas removidas",
+          restorePoint: "Ponto de restauração",
+          registryBackup: "Backup do registro",
+          quarantineBatch: "Lote da quarentena"
+        },
+        restoreCreated: "Criado",
+        restoreNotCreated: (r) => (r ? `Não criado (${r})` : 'Não criado')
       }
     }
   },
@@ -3332,6 +4520,50 @@ export default {
         restored: (n, c) => `Itens restaurados da cópia de ${n}: ${c}.`,
         failedHeading: (n) => `Não restaurados: ${n}`,
         loadError: (m) => `Não foi possível carregar as cópias de segurança: ${m}`
+      },
+      history: {
+        tab: "Histórico",
+        count: (n) => `Desinstalações registadas: ${n}`,
+        emptyHeading: "Ainda não há desinstalações registadas",
+        emptyBody: "Cada programa que desinstalar com o Prune aparece aqui, com o resultado da análise de resíduos.",
+        clear: "Limpar histórico",
+        clearConfirm: "Eliminar todas as entradas? Isto não pode ser anulado.",
+        clearNow: "Eliminar tudo",
+        selectPrompt: "Selecione uma entrada para ver os detalhes.",
+        details: "Detalhes",
+        loadError: (m) => `Não foi possível carregar o histórico: ${m}`,
+        viewAll: "Ver todo o histórico",
+        kind: {
+          uninstall: "Desinstalação",
+          forced: "Desinstalação forçada",
+          store: "Aplicação da Loja",
+          batch: "Desinstalação em lote"
+        },
+        outcome: {
+          uninstalled: "Desinstalado",
+          removed: "Resíduos removidos",
+          partial: "Removido em parte"
+        },
+        destination: {
+          quarantine: "Quarentena",
+          recycle: "Reciclagem",
+          permanent: "Eliminado permanentemente"
+        },
+        field: {
+          date: "Data",
+          kind: "Tipo",
+          outcome: "Resultado",
+          found: "Resíduos encontrados",
+          removed: "Resíduos removidos",
+          freed: "Espaço libertado",
+          destination: "Enviado para",
+          tasks: "Tarefas agendadas removidas",
+          restorePoint: "Ponto de restauro",
+          registryBackup: "Cópia do registo",
+          quarantineBatch: "Lote da quarentena"
+        },
+        restoreCreated: "Criado",
+        restoreNotCreated: (r) => (r ? `Não criado (${r})` : 'Não criado')
       }
     }
   },
@@ -3451,6 +4683,50 @@ export default {
         restored: (n, c) => `Elemente restaurate din copia ${n}: ${c}.`,
         failedHeading: (n) => `Nerestaurate: ${n}`,
         loadError: (m) => `Nu s-au putut încărca copiile de rezervă: ${m}`
+      },
+      history: {
+        tab: "Istoric",
+        count: (n) => `Dezinstalări înregistrate: ${n}`,
+        emptyHeading: "Nu există încă dezinstalări înregistrate",
+        emptyBody: "Fiecare program dezinstalat cu Prune apare aici, cu rezultatul scanării resturilor.",
+        clear: "Șterge istoricul",
+        clearConfirm: "Ștergi toate intrările? Nu se poate anula.",
+        clearNow: "Șterge tot",
+        selectPrompt: "Selectează o intrare pentru a vedea detaliile.",
+        details: "Detalii",
+        loadError: (m) => `Nu s-a putut încărca istoricul: ${m}`,
+        viewAll: "Vezi tot istoricul",
+        kind: {
+          uninstall: "Dezinstalare",
+          forced: "Dezinstalare forțată",
+          store: "Aplicație din Store",
+          batch: "Dezinstalare în lot"
+        },
+        outcome: {
+          uninstalled: "Dezinstalat",
+          removed: "Resturi eliminate",
+          partial: "Eliminat parțial"
+        },
+        destination: {
+          quarantine: "Carantină",
+          recycle: "Coș de reciclare",
+          permanent: "Șters definitiv"
+        },
+        field: {
+          date: "Data",
+          kind: "Tip",
+          outcome: "Rezultat",
+          found: "Resturi găsite",
+          removed: "Resturi eliminate",
+          freed: "Spațiu eliberat",
+          destination: "Trimis în",
+          tasks: "Sarcini programate eliminate",
+          restorePoint: "Punct de restaurare",
+          registryBackup: "Copie de rezervă a registrului",
+          quarantineBatch: "Lot de carantină"
+        },
+        restoreCreated: "Creat",
+        restoreNotCreated: (r) => (r ? `Necreat (${r})` : 'Necreat')
       }
     }
   },
@@ -3570,6 +4846,50 @@ export default {
         restored: (n, c) => `Элементов восстановлено из копии ${n}: ${c}.`,
         failedHeading: (n) => `Не восстановлено: ${n}`,
         loadError: (m) => `Не удалось загрузить резервные копии: ${m}`
+      },
+      history: {
+        tab: "История",
+        count: (n) => `Записано удалений: ${n}`,
+        emptyHeading: "Удалений пока не записано",
+        emptyBody: "Каждая программа, удалённая с помощью Prune, показана здесь вместе с результатом поиска остатков.",
+        clear: "Очистить историю",
+        clearConfirm: "Удалить все записи? Это нельзя отменить.",
+        clearNow: "Удалить всё",
+        selectPrompt: "Выберите запись, чтобы увидеть подробности.",
+        details: "Подробности",
+        loadError: (m) => `Не удалось загрузить историю: ${m}`,
+        viewAll: "Показать всю историю",
+        kind: {
+          uninstall: "Удаление",
+          forced: "Принудительное удаление",
+          store: "Приложение из Store",
+          batch: "Пакетное удаление"
+        },
+        outcome: {
+          uninstalled: "Удалено",
+          removed: "Остатки удалены",
+          partial: "Удалено частично"
+        },
+        destination: {
+          quarantine: "Карантин",
+          recycle: "Корзина",
+          permanent: "Удалено навсегда"
+        },
+        field: {
+          date: "Дата",
+          kind: "Тип",
+          outcome: "Результат",
+          found: "Найдено остатков",
+          removed: "Удалено остатков",
+          freed: "Освобождено места",
+          destination: "Перемещено в",
+          tasks: "Удалено запланированных задач",
+          restorePoint: "Точка восстановления",
+          registryBackup: "Резервная копия реестра",
+          quarantineBatch: "Пакет карантина"
+        },
+        restoreCreated: "Создана",
+        restoreNotCreated: (r) => (r ? `Не создана (${r})` : 'Не создана')
       }
     }
   },
@@ -3689,6 +5009,50 @@ export default {
         restored: (n, c) => `Položiek obnovených zo zálohy ${n}: ${c}.`,
         failedHeading: (n) => `Neobnovené: ${n}`,
         loadError: (m) => `Zálohy sa nepodarilo načítať: ${m}`
+      },
+      history: {
+        tab: "História",
+        count: (n) => `Zaznamenané odinštalovania: ${n}`,
+        emptyHeading: "Zatiaľ žiadne zaznamenané odinštalovania",
+        emptyBody: "Každý program odinštalovaný cez Prune je tu uvedený spolu s výsledkom hľadania zvyškov.",
+        clear: "Vymazať históriu",
+        clearConfirm: "Odstrániť všetky záznamy? Nedá sa to vrátiť späť.",
+        clearNow: "Odstrániť všetko",
+        selectPrompt: "Vyberte záznam a zobrazia sa jeho podrobnosti.",
+        details: "Podrobnosti",
+        loadError: (m) => `Históriu sa nepodarilo načítať: ${m}`,
+        viewAll: "Zobraziť celú históriu",
+        kind: {
+          uninstall: "Odinštalovanie",
+          forced: "Vynútené odinštalovanie",
+          store: "Aplikácia z Obchodu",
+          batch: "Hromadné odinštalovanie"
+        },
+        outcome: {
+          uninstalled: "Odinštalované",
+          removed: "Zvyšky odstránené",
+          partial: "Čiastočne odstránené"
+        },
+        destination: {
+          quarantine: "Karanténa",
+          recycle: "Kôš",
+          permanent: "Natrvalo odstránené"
+        },
+        field: {
+          date: "Dátum",
+          kind: "Typ",
+          outcome: "Výsledok",
+          found: "Nájdené zvyšky",
+          removed: "Odstránené zvyšky",
+          freed: "Uvoľnené miesto",
+          destination: "Presunuté do",
+          tasks: "Odstránené naplánované úlohy",
+          restorePoint: "Bod obnovenia",
+          registryBackup: "Záloha registra",
+          quarantineBatch: "Dávka v karanténe"
+        },
+        restoreCreated: "Vytvorený",
+        restoreNotCreated: (r) => (r ? `Nevytvorený (${r})` : 'Nevytvorený')
       }
     }
   },
@@ -3808,6 +5172,50 @@ export default {
         restored: (n, c) => `Elemente të rikthyera nga kopja e ${n}: ${c}.`,
         failedHeading: (n) => `Të parikthyera: ${n}`,
         loadError: (m) => `Kopjet rezervë nuk u ngarkuan dot: ${m}`
+      },
+      history: {
+        tab: "Historiku",
+        count: (n) => `Çinstalime të regjistruara: ${n}`,
+        emptyHeading: "Ende nuk ka çinstalime të regjistruara",
+        emptyBody: "Çdo program që çinstaloni me Prune renditet këtu, bashkë me rezultatin e skanimit të mbetjeve.",
+        clear: "Pastro historikun",
+        clearConfirm: "Të fshihen të gjitha shënimet? Kjo nuk zhbëhet.",
+        clearNow: "Fshi të gjitha",
+        selectPrompt: "Zgjidhni një shënim për të parë detajet.",
+        details: "Detajet",
+        loadError: (m) => `Historiku nuk u ngarkua dot: ${m}`,
+        viewAll: "Shiko të gjithë historikun",
+        kind: {
+          uninstall: "Çinstalim",
+          forced: "Çinstalim i detyruar",
+          store: "Aplikacion i Dyqanit",
+          batch: "Çinstalim në grup"
+        },
+        outcome: {
+          uninstalled: "U çinstalua",
+          removed: "Mbetjet u hoqën",
+          partial: "U hoq pjesërisht"
+        },
+        destination: {
+          quarantine: "Karantina",
+          recycle: "Koshi i riciklimit",
+          permanent: "U fshi përgjithmonë"
+        },
+        field: {
+          date: "Data",
+          kind: "Lloji",
+          outcome: "Rezultati",
+          found: "Mbetje të gjetura",
+          removed: "Mbetje të hequra",
+          freed: "Hapësira e liruar",
+          destination: "Dërguar te",
+          tasks: "Detyra të planifikuara të hequra",
+          restorePoint: "Pika e rikthimit",
+          registryBackup: "Kopja rezervë e regjistrit",
+          quarantineBatch: "Grupi i karantinës"
+        },
+        restoreCreated: "U krijua",
+        restoreNotCreated: (r) => (r ? `Nuk u krijua (${r})` : 'Nuk u krijua')
       }
     }
   },
@@ -3927,6 +5335,50 @@ export default {
         restored: (n, c) => `Ставки враћене из копије ${n}: ${c}.`,
         failedHeading: (n) => `Није враћено: ${n}`,
         loadError: (m) => `Није могуће учитати резервне копије: ${m}`
+      },
+      history: {
+        tab: "Историја",
+        count: (n) => `Забележене деинсталације: ${n}`,
+        emptyHeading: "Још нема забележених деинсталација",
+        emptyBody: "Сваки програм који деинсталирате помоћу Prune-а наведен је овде, са исходом претраге остатака.",
+        clear: "Обриши историју",
+        clearConfirm: "Обрисати све уносе? Ово се не може опозвати.",
+        clearNow: "Обриши све",
+        selectPrompt: "Изаберите унос да бисте видели детаље.",
+        details: "Детаљи",
+        loadError: (m) => `Није могуће учитати историју: ${m}`,
+        viewAll: "Прикажи целу историју",
+        kind: {
+          uninstall: "Деинсталација",
+          forced: "Принудна деинсталација",
+          store: "Апликација из продавнице",
+          batch: "Групна деинсталација"
+        },
+        outcome: {
+          uninstalled: "Деинсталирано",
+          removed: "Остаци уклоњени",
+          partial: "Делимично уклоњено"
+        },
+        destination: {
+          quarantine: "Карантин",
+          recycle: "Корпа за отпатке",
+          permanent: "Трајно обрисано"
+        },
+        field: {
+          date: "Датум",
+          kind: "Врста",
+          outcome: "Исход",
+          found: "Пронађени остаци",
+          removed: "Уклоњени остаци",
+          freed: "Ослобођен простор",
+          destination: "Послато у",
+          tasks: "Уклоњени заказани задаци",
+          restorePoint: "Тачка враћања",
+          registryBackup: "Резервна копија регистра",
+          quarantineBatch: "Карантински пакет"
+        },
+        restoreCreated: "Креирана",
+        restoreNotCreated: (r) => (r ? `Није креирана (${r})` : 'Није креирана')
       }
     }
   },
@@ -4046,6 +5498,50 @@ export default {
         restored: (n, c) => `Objekt återställda från säkerhetskopian av ${n}: ${c}.`,
         failedHeading: (n) => `Inte återställda: ${n}`,
         loadError: (m) => `Det gick inte att läsa in säkerhetskopiorna: ${m}`
+      },
+      history: {
+        tab: "Historik",
+        count: (n) => `Registrerade avinstallationer: ${n}`,
+        emptyHeading: "Inga avinstallationer registrerade ännu",
+        emptyBody: "Varje program du avinstallerar med Prune visas här, med resultatet av sökningen efter rester.",
+        clear: "Rensa historiken",
+        clearConfirm: "Ta bort alla poster? Det går inte att ångra.",
+        clearNow: "Ta bort alla",
+        selectPrompt: "Välj en post för att se detaljerna.",
+        details: "Detaljer",
+        loadError: (m) => `Det gick inte att läsa in historiken: ${m}`,
+        viewAll: "Visa hela historiken",
+        kind: {
+          uninstall: "Avinstallation",
+          forced: "Påtvingad avinstallation",
+          store: "Store-app",
+          batch: "Gruppavinstallation"
+        },
+        outcome: {
+          uninstalled: "Avinstallerad",
+          removed: "Rester borttagna",
+          partial: "Delvis borttaget"
+        },
+        destination: {
+          quarantine: "Karantän",
+          recycle: "Papperskorg",
+          permanent: "Permanent borttaget"
+        },
+        field: {
+          date: "Datum",
+          kind: "Typ",
+          outcome: "Resultat",
+          found: "Rester hittade",
+          removed: "Rester borttagna",
+          freed: "Frigjort utrymme",
+          destination: "Skickat till",
+          tasks: "Borttagna schemalagda aktiviteter",
+          restorePoint: "Återställningspunkt",
+          registryBackup: "Registersäkerhetskopia",
+          quarantineBatch: "Karantänsats"
+        },
+        restoreCreated: "Skapad",
+        restoreNotCreated: (r) => (r ? `Inte skapad (${r})` : 'Inte skapad')
       }
     }
   },
@@ -4165,6 +5661,50 @@ export default {
         restored: (n, c) => `รายการที่กู้คืนจากข้อมูลสำรองของ ${n}: ${c}`,
         failedHeading: (n) => `ที่กู้คืนไม่ได้: ${n}`,
         loadError: (m) => `โหลดข้อมูลสำรองไม่ได้: ${m}`
+      },
+      history: {
+        tab: "ประวัติ",
+        count: (n) => `การถอนการติดตั้งที่บันทึกไว้: ${n}`,
+        emptyHeading: "ยังไม่มีการถอนการติดตั้งที่บันทึกไว้",
+        emptyBody: "โปรแกรมที่คุณถอนการติดตั้งด้วย Prune ทุกตัวจะแสดงที่นี่ พร้อมผลการสแกนสิ่งตกค้าง",
+        clear: "ล้างประวัติ",
+        clearConfirm: "ลบทุกรายการหรือไม่ ไม่สามารถย้อนกลับได้",
+        clearNow: "ลบทั้งหมด",
+        selectPrompt: "เลือกรายการเพื่อดูรายละเอียด",
+        details: "รายละเอียด",
+        loadError: (m) => `โหลดประวัติไม่ได้: ${m}`,
+        viewAll: "ดูประวัติทั้งหมด",
+        kind: {
+          uninstall: "ถอนการติดตั้ง",
+          forced: "บังคับถอนการติดตั้ง",
+          store: "แอป Store",
+          batch: "ถอนการติดตั้งเป็นชุด"
+        },
+        outcome: {
+          uninstalled: "ถอนการติดตั้งแล้ว",
+          removed: "นำสิ่งตกค้างออกแล้ว",
+          partial: "นำออกบางส่วน"
+        },
+        destination: {
+          quarantine: "กักกัน",
+          recycle: "ถังรีไซเคิล",
+          permanent: "ลบถาวรแล้ว"
+        },
+        field: {
+          date: "วันที่",
+          kind: "ประเภท",
+          outcome: "ผลลัพธ์",
+          found: "สิ่งตกค้างที่พบ",
+          removed: "สิ่งตกค้างที่นำออก",
+          freed: "พื้นที่ที่ว่างขึ้น",
+          destination: "ส่งไปยัง",
+          tasks: "งานที่ตั้งเวลาไว้ที่นำออก",
+          restorePoint: "จุดคืนค่า",
+          registryBackup: "ข้อมูลสำรองรีจิสทรี",
+          quarantineBatch: "ชุดกักกัน"
+        },
+        restoreCreated: "สร้างแล้ว",
+        restoreNotCreated: (r) => (r ? `ไม่ได้สร้าง (${r})` : 'ไม่ได้สร้าง')
       }
     }
   },
@@ -4284,6 +5824,50 @@ export default {
         restored: (n, c) => `${n} yedeğinden geri yüklenen öğe: ${c}.`,
         failedHeading: (n) => `Geri yüklenemeyen: ${n}`,
         loadError: (m) => `Yedekler yüklenemedi: ${m}`
+      },
+      history: {
+        tab: "Geçmiş",
+        count: (n) => `Kaydedilen kaldırmalar: ${n}`,
+        emptyHeading: "Henüz kaydedilmiş kaldırma yok",
+        emptyBody: "Prune ile kaldırdığınız her program, artık tarama sonucuyla birlikte burada listelenir.",
+        clear: "Geçmişi temizle",
+        clearConfirm: "Tüm girdiler silinsin mi? Bu geri alınamaz.",
+        clearNow: "Tümünü sil",
+        selectPrompt: "Ayrıntıları görmek için bir girdi seçin.",
+        details: "Ayrıntılar",
+        loadError: (m) => `Geçmiş yüklenemedi: ${m}`,
+        viewAll: "Tüm geçmişi göster",
+        kind: {
+          uninstall: "Kaldırma",
+          forced: "Zorla kaldırma",
+          store: "Mağaza uygulaması",
+          batch: "Toplu kaldırma"
+        },
+        outcome: {
+          uninstalled: "Kaldırıldı",
+          removed: "Artıklar kaldırıldı",
+          partial: "Kısmen kaldırıldı"
+        },
+        destination: {
+          quarantine: "Karantina",
+          recycle: "Geri Dönüşüm Kutusu",
+          permanent: "Kalıcı olarak silindi"
+        },
+        field: {
+          date: "Tarih",
+          kind: "Tür",
+          outcome: "Sonuç",
+          found: "Bulunan artıklar",
+          removed: "Kaldırılan artıklar",
+          freed: "Boşaltılan alan",
+          destination: "Gönderildiği yer",
+          tasks: "Kaldırılan zamanlanmış görevler",
+          restorePoint: "Geri yükleme noktası",
+          registryBackup: "Kayıt defteri yedeği",
+          quarantineBatch: "Karantina grubu"
+        },
+        restoreCreated: "Oluşturuldu",
+        restoreNotCreated: (r) => (r ? `Oluşturulmadı (${r})` : 'Oluşturulmadı')
       }
     }
   },
@@ -4403,6 +5987,50 @@ export default {
         restored: (n, c) => `Елементів відновлено з копії ${n}: ${c}.`,
         failedHeading: (n) => `Не відновлено: ${n}`,
         loadError: (m) => `Не вдалося завантажити резервні копії: ${m}`
+      },
+      history: {
+        tab: "Історія",
+        count: (n) => `Записано видалень: ${n}`,
+        emptyHeading: "Видалень ще не записано",
+        emptyBody: "Кожну програму, видалену за допомогою Prune, показано тут разом із результатом пошуку залишків.",
+        clear: "Очистити історію",
+        clearConfirm: "Видалити всі записи? Це не можна скасувати.",
+        clearNow: "Видалити все",
+        selectPrompt: "Виберіть запис, щоб побачити подробиці.",
+        details: "Подробиці",
+        loadError: (m) => `Не вдалося завантажити історію: ${m}`,
+        viewAll: "Показати всю історію",
+        kind: {
+          uninstall: "Видалення",
+          forced: "Примусове видалення",
+          store: "Застосунок зі Store",
+          batch: "Пакетне видалення"
+        },
+        outcome: {
+          uninstalled: "Видалено",
+          removed: "Залишки вилучено",
+          partial: "Вилучено частково"
+        },
+        destination: {
+          quarantine: "Карантин",
+          recycle: "Кошик",
+          permanent: "Видалено назавжди"
+        },
+        field: {
+          date: "Дата",
+          kind: "Тип",
+          outcome: "Результат",
+          found: "Знайдено залишків",
+          removed: "Вилучено залишків",
+          freed: "Звільнено місця",
+          destination: "Переміщено до",
+          tasks: "Вилучено запланованих завдань",
+          restorePoint: "Точка відновлення",
+          registryBackup: "Резервна копія реєстру",
+          quarantineBatch: "Пакет карантину"
+        },
+        restoreCreated: "Створено",
+        restoreNotCreated: (r) => (r ? `Не створено (${r})` : 'Не створено')
       }
     }
   },
@@ -4522,6 +6150,50 @@ export default {
         restored: (n, c) => `Mục đã khôi phục từ bản sao lưu của ${n}: ${c}.`,
         failedHeading: (n) => `Chưa khôi phục: ${n}`,
         loadError: (m) => `Không tải được các bản sao lưu: ${m}`
+      },
+      history: {
+        tab: "Lịch sử",
+        count: (n) => `Lần gỡ cài đặt đã ghi: ${n}`,
+        emptyHeading: "Chưa có lần gỡ cài đặt nào được ghi",
+        emptyBody: "Mỗi chương trình bạn gỡ bằng Prune được liệt kê ở đây, cùng kết quả quét tệp sót lại.",
+        clear: "Xóa lịch sử",
+        clearConfirm: "Xóa mọi mục? Không thể hoàn tác.",
+        clearNow: "Xóa tất cả",
+        selectPrompt: "Chọn một mục để xem chi tiết.",
+        details: "Chi tiết",
+        loadError: (m) => `Không tải được lịch sử: ${m}`,
+        viewAll: "Xem toàn bộ lịch sử",
+        kind: {
+          uninstall: "Gỡ cài đặt",
+          forced: "Gỡ cài đặt cưỡng bức",
+          store: "Ứng dụng Store",
+          batch: "Gỡ cài đặt hàng loạt"
+        },
+        outcome: {
+          uninstalled: "Đã gỡ cài đặt",
+          removed: "Đã xóa tệp sót lại",
+          partial: "Xóa một phần"
+        },
+        destination: {
+          quarantine: "Khu cách ly",
+          recycle: "Thùng rác",
+          permanent: "Đã xóa vĩnh viễn"
+        },
+        field: {
+          date: "Ngày",
+          kind: "Loại",
+          outcome: "Kết quả",
+          found: "Tệp sót lại tìm thấy",
+          removed: "Tệp sót lại đã xóa",
+          freed: "Dung lượng giải phóng",
+          destination: "Đã chuyển tới",
+          tasks: "Tác vụ đã lên lịch đã gỡ",
+          restorePoint: "Điểm khôi phục",
+          registryBackup: "Bản sao lưu registry",
+          quarantineBatch: "Lô cách ly"
+        },
+        restoreCreated: "Đã tạo",
+        restoreNotCreated: (r) => (r ? `Không tạo được (${r})` : 'Không tạo được')
       }
     }
   },
@@ -4641,6 +6313,50 @@ export default {
         restored: (n, c) => `已从 ${n} 的备份还原的项目：${c} 个。`,
         failedHeading: (n) => `未还原：${n} 个`,
         loadError: (m) => `无法加载备份：${m}`
+      },
+      history: {
+        tab: "历史记录",
+        count: (n) => `已记录的卸载：${n} 次`,
+        emptyHeading: "还没有卸载记录",
+        emptyBody: "你用 Prune 卸载的每个程序都会列在这里，并附带残留项扫描的结果。",
+        clear: "清除历史记录",
+        clearConfirm: "删除所有条目？此操作无法撤销。",
+        clearNow: "全部删除",
+        selectPrompt: "选择一个条目以查看详细信息。",
+        details: "详细信息",
+        loadError: (m) => `无法加载历史记录：${m}`,
+        viewAll: "查看全部历史记录",
+        kind: {
+          uninstall: "卸载",
+          forced: "强制卸载",
+          store: "应用商店应用",
+          batch: "批量卸载"
+        },
+        outcome: {
+          uninstalled: "已卸载",
+          removed: "已移除残留项",
+          partial: "部分移除"
+        },
+        destination: {
+          quarantine: "隔离区",
+          recycle: "回收站",
+          permanent: "已永久删除"
+        },
+        field: {
+          date: "日期",
+          kind: "类型",
+          outcome: "结果",
+          found: "发现的残留项",
+          removed: "已移除的残留项",
+          freed: "释放的空间",
+          destination: "去向",
+          tasks: "已移除的计划任务",
+          restorePoint: "还原点",
+          registryBackup: "注册表备份",
+          quarantineBatch: "隔离批次"
+        },
+        restoreCreated: "已创建",
+        restoreNotCreated: (r) => (r ? `未创建（${r}）` : '未创建')
       }
     }
   },
@@ -4760,6 +6476,50 @@ export default {
         restored: (n, c) => `已從 ${n} 的備份還原的項目：${c} 個。`,
         failedHeading: (n) => `未還原：${n} 個`,
         loadError: (m) => `無法載入備份：${m}`
+      },
+      history: {
+        tab: "歷程記錄",
+        count: (n) => `已記錄的解除安裝：${n} 次`,
+        emptyHeading: "還沒有解除安裝記錄",
+        emptyBody: "你用 Prune 解除安裝的每個程式都會列在這裡，並附上殘留項目掃描的結果。",
+        clear: "清除歷程記錄",
+        clearConfirm: "刪除所有項目？此操作無法復原。",
+        clearNow: "全部刪除",
+        selectPrompt: "選擇一個項目以檢視詳細資料。",
+        details: "詳細資料",
+        loadError: (m) => `無法載入歷程記錄：${m}`,
+        viewAll: "檢視全部歷程記錄",
+        kind: {
+          uninstall: "解除安裝",
+          forced: "強制解除安裝",
+          store: "市集應用程式",
+          batch: "批次解除安裝"
+        },
+        outcome: {
+          uninstalled: "已解除安裝",
+          removed: "已移除殘留項目",
+          partial: "部分移除"
+        },
+        destination: {
+          quarantine: "隔離區",
+          recycle: "資源回收筒",
+          permanent: "已永久刪除"
+        },
+        field: {
+          date: "日期",
+          kind: "類型",
+          outcome: "結果",
+          found: "找到的殘留項目",
+          removed: "已移除的殘留項目",
+          freed: "釋放的空間",
+          destination: "去向",
+          tasks: "已移除的排程工作",
+          restorePoint: "還原點",
+          registryBackup: "登錄備份",
+          quarantineBatch: "隔離批次"
+        },
+        restoreCreated: "已建立",
+        restoreNotCreated: (r) => (r ? `未建立（${r}）` : '未建立')
       }
     }
   }

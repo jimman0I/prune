@@ -38,7 +38,7 @@ describe('the Backups tab', () => {
   it('sits beside Quarantine, which stays the first tab', async () => {
     renderScreen(<QuarantineManager />);
     const tabs = screen.getAllByRole('tab');
-    expect(tabs.map((t) => t.textContent)).toEqual(['Quarantine', 'Backups']);
+    expect(tabs.map((t) => t.textContent)).toEqual(['Quarantine', 'Backups', 'History']);
     expect(tabs[0].getAttribute('aria-selected')).toBe('true');
   });
 

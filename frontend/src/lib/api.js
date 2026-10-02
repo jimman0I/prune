@@ -783,19 +783,45 @@ async function fetchDiskScanStreamed(path, signal, onProgress) {
   return data;
 }
 
-export async function fetchUninstallHistory() {
-  const res = await fetch(`${API_URL}/uninstall-history`);
+/** The five latest entries (the Dashboard), or every one with { all: true }
+ * (the History view). */
+export async function fetchUninstallHistory({ all = false } = {}) {
+  const res = await fetch(`${API_URL}/uninstall-history${all ? '?all=1' : ''}`);
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
   return data.entries ?? [];
 }
 
-export async function appendHistoryEntry({ programName, publisher, sizeBytes }) {
+/** Writes one history entry. Takes whatever the entry knows -- the backend
+ * keeps only the fields it recognises -- and resolves { ok, id }, or
+ * { ok, skipped } when the history is turned off. */
+export async function appendHistoryEntry(fields) {
   const res = await fetch(`${API_URL}/uninstall-history`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ programName, publisher, sizeBytes })
+    body: JSON.stringify(fields)
   });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
+  return data;
+}
+
+/** Adds what became known after the entry was written (how the leftover
+ * review went). */
+export async function updateHistoryEntry(id, fields) {
+  const res = await fetch(`${API_URL}/uninstall-history/${encodeURIComponent(id)}`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(fields)
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
+  return data;
+}
+
+/** Deletes the whole history. */
+export async function clearUninstallHistory() {
+  const res = await fetch(`${API_URL}/uninstall-history`, { method: 'DELETE' });
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
   return data;

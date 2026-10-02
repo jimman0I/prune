@@ -2,6 +2,7 @@ import { useEffect, useState, memo } from 'react';
 import Page from './Page.jsx';
 import { useQuarantine } from '../hooks/useSystemQueries.js';
 import BackupManager from './BackupManager.jsx';
+import HistoryView from './HistoryView.jsx';
 import { useLanguage } from '../i18n/LanguageContext.jsx';
 
 // Duplicated locally rather than imported from Dashboard.jsx/DeepClean.jsx
@@ -63,14 +64,16 @@ export const FILES_COLLAPSED = 5;
 /** The tabs on this screen. Quarantine is what it always was; the others hold
  * what Prune saved before changing something with no Recycle Bin (Backups)
  * and what it has uninstalled (History). */
-export const TABS = ['quarantine', 'backups'];
+export const TABS = ['quarantine', 'backups', 'history'];
 
-function QuarantineManager({ initialTab = 'quarantine' }) {
+function QuarantineManager({ initialTab = 'quarantine', tabNonce = 0 }) {
   const { t } = useLanguage();
   const [tab, setTab] = useState(TABS.includes(initialTab) ? initialTab : 'quarantine');
-  // Asked to show a tab from outside (a link on another screen).
-  useEffect(() => { if (TABS.includes(initialTab)) setTab(initialTab); }, [initialTab]);
-  const tabLabels = { quarantine: t('nav.quarantine'), backups: t('uninstallerV3.backups.tab') };
+  // Asked to show a tab from outside (a link on another screen). The nonce
+  // lets a repeat request for the same tab take effect after the person has
+  // clicked elsewhere in between.
+  useEffect(() => { if (TABS.includes(initialTab)) setTab(initialTab); }, [initialTab, tabNonce]);
+  const tabLabels = { quarantine: t('nav.quarantine'), backups: t('uninstallerV3.backups.tab'), history: t('uninstallerV3.history.tab') };
   const onTabKeyDown = (event) => {
     const step = { ArrowRight: 1, ArrowLeft: -1 }[event.key];
     if (!step) return;
@@ -223,6 +226,12 @@ function QuarantineManager({ initialTab = 'quarantine' }) {
       {tab === 'backups' && (
         <div role="tabpanel" id="quarantine-panel-backups" aria-labelledby="quarantine-tab-backups">
           <BackupManager />
+        </div>
+      )}
+
+      {tab === 'history' && (
+        <div role="tabpanel" id="quarantine-panel-history" aria-labelledby="quarantine-tab-history">
+          <HistoryView />
         </div>
       )}
 

@@ -4,7 +4,8 @@ import {
   fetchStartupItems, fetchStartupIcons, setStartupItemEnabled,
   fetchQuarantineBatches, restoreQuarantineBatch, deleteQuarantineBatch, emptyQuarantine,
   fetchSettings, updateSettings, fetchUpdateCheck,
-  fetchDiskSpace, fetchDiskHealth, fetchInstallTraces, fetchBackups, restoreBackup, deleteBackup
+  fetchDiskSpace, fetchDiskHealth, fetchInstallTraces, fetchBackups, restoreBackup, deleteBackup,
+  fetchUninstallHistory, clearUninstallHistory
 } from '../lib/api.js';
 import { keys } from '../lib/queryClient.js';
 import { applyEnabled, toggleOutcome, enabledStateOf } from '../lib/startupToggleState.js';
@@ -179,6 +180,25 @@ export function useBackups() {
     error: backups.error ? backups.error.message : null,
     restore: useMutation({ mutationFn: (id) => restoreBackup(id), onSuccess: invalidate }),
     remove: useMutation({ mutationFn: (id) => deleteBackup(id), onSuccess: invalidate })
+  };
+}
+
+/* -------------------------------------------------------------- history */
+
+/** Every uninstall Prune has recorded, for the History view. The Dashboard
+ * reads its own five. Clearing re-reads the list; it also refreshes the
+ * Dashboard's key, which shares the prefix. */
+export function useUninstallHistory() {
+  const queryClient = useQueryClient();
+  const query = useQuery({ queryKey: [...keys.uninstallHistory, 'all'], queryFn: () => fetchUninstallHistory({ all: true }) });
+  return {
+    entries: query.data ?? [],
+    loading: query.isPending,
+    error: query.error ? query.error.message : null,
+    clear: useMutation({
+      mutationFn: () => clearUninstallHistory(),
+      onSuccess: () => queryClient.invalidateQueries({ queryKey: keys.uninstallHistory })
+    })
   };
 }
 
