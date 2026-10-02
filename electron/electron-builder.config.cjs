@@ -49,7 +49,10 @@ module.exports = {
   //
   // zoom.cjs is the same trap a fifth time: main.cjs requires it for the
   // text-zoom keys, and installerLanguages.test.cjs fails if it is missing.
-  files: ['main.cjs', 'preload.cjs', 'updater.cjs', 'windowState.cjs', 'zoom.cjs'],
+  //
+  // pathPicker.cjs is the same trap a sixth time: main.cjs requires it for
+  // the Shred tool's file chooser.
+  files: ['main.cjs', 'preload.cjs', 'updater.cjs', 'windowState.cjs', 'zoom.cjs', 'pathPicker.cjs'],
   extraResources: [
     // NOTE the source: this copies from ../backend/src DIRECTLY, not from
     // the build/backend-prod/ staging directory build-installer.mjs

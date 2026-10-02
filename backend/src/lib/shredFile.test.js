@@ -200,6 +200,21 @@ describe('shredPaths', () => {
     expect(existsSync(join(dir, 'tree'))).toBe(false);
   });
 
+  it('leaves alone anything the refuse() guard names, and keeps the folder that holds it', async () => {
+    await mkdir(join(dir, 'tree', 'protected'), { recursive: true });
+    await writeFile(join(dir, 'tree', 'junk.txt'), 'junk');
+    await writeFile(join(dir, 'tree', 'protected', 'keep.txt'), 'keep');
+
+    const result = await shredPaths([join(dir, 'tree')], 1, {
+      refuse: (path) => (path.endsWith('protected') ? 'protected folder' : null)
+    });
+
+    expect(result.held).toEqual([{ path: join(dir, 'tree', 'protected'), reason: 'protected folder' }]);
+    expect(result.shredded).toHaveLength(1);
+    expect(existsSync(join(dir, 'tree', 'protected', 'keep.txt'))).toBe(true);
+    expect(existsSync(join(dir, 'tree', 'junk.txt'))).toBe(false);
+  });
+
   it('a path that does not exist is a failure entry, not a throw', async () => {
     const result = await shredPaths([join(dir, 'nope.txt')], 1);
     expect(result.shredded).toEqual([]);

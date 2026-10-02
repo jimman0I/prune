@@ -1,4 +1,4 @@
-const { contextBridge, ipcRenderer } = require('electron');
+const { contextBridge, ipcRenderer, webUtils } = require('electron');
 
 /** The whole bridge between the window and the main process.
  *
@@ -18,9 +18,19 @@ const { contextBridge, ipcRenderer } = require('electron');
  * electron/updater.cjs, which refuses any other. It cannot pass a URL, a
  * path or a command: where the update comes from is fixed in the build
  * (the GitHub release), not chosen here.
+ *
+ * pickPaths / pathForFile -- Deep Clean's "Shred files...". pickPaths asks
+ * the main process for a native chooser ('files' or 'folders') and gets
+ * path strings back. pathForFile turns a dropped File into its real path
+ * (a sandboxed page cannot read it any other way); it only reads, and
+ * what is done with the path is decided by the backend's own guards.
  */
 contextBridge.exposeInMainWorld('pruneWindow', {
   setTheme: (theme) => ipcRenderer.send('prune:theme', theme),
+  pickPaths: (kind) => ipcRenderer.invoke('prune:pick-paths', kind),
+  pathForFile: (file) => {
+    try { return webUtils.getPathForFile(file) || ''; } catch { return ''; }
+  },
   updates: {
     prepare: (version) => ipcRenderer.invoke('prune:update:prepare', version),
     install: () => ipcRenderer.invoke('prune:update:install'),

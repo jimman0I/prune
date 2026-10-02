@@ -17,6 +17,7 @@ import { removalModeFrom, cleanOutcome } from '../lib/cleanOutcome.js';
 import DeepCleanTree from './DeepCleanTree.jsx';
 import CleanWarningDialog from './CleanWarningDialog.jsx';
 import WipeFreeSpaceDialog from './WipeFreeSpaceDialog.jsx';
+import ShredDialog from './ShredDialog.jsx';
 import { useLanguage } from '../i18n/LanguageContext.jsx';
 import { useCleanerText } from '../i18n/cleanerText.js';
 
@@ -174,6 +175,7 @@ function DeepClean({ onNavigate }) {
     retry: 1
   });
   const [confirmClean, setConfirmClean] = useState(false);
+  const [shredOpen, setShredOpen] = useState(false);
   const [cleanResult, setCleanResult] = useState(null);
   const [cleanError, setCleanError] = useState(null);
   const [elevating, setElevating] = useState(false);
@@ -581,7 +583,20 @@ function DeepClean({ onNavigate }) {
   return (
     <div className="h-full flex flex-col">
       <div className="flex-1 flex flex-col min-h-0 overflow-y-auto px-12 pt-10 pb-6 max-w-[1600px] w-full">
-        <h1 className="display-heading text-[30px] leading-none mb-2">{t('deepClean.title')}</h1>
+        <div className="flex items-start justify-between gap-4 mb-2">
+          <h1 className="display-heading text-[30px] leading-none">{t('deepClean.title')}</h1>
+          {/* A tool, not a rule: it acts on what the person picks, so it
+              lives beside the title rather than in the list of presets
+              where a Select everything could reach it. */}
+          <button
+            type="button"
+            className="btn-ghost px-3.5 py-1.5 rounded-lg text-[12.5px] font-medium shrink-0 disabled:opacity-50"
+            onClick={() => setShredOpen(true)}
+            disabled={cleaning}
+          >
+            {t('deepCleanV3.shred.open')}
+          </button>
+        </div>
         <p className="text-[13px] text-[color:var(--text-secondary)] mb-6 max-w-[110ch]">
           {removalMode === 'delete' ? t('deepClean.subtitleDelete') : t('deepClean.subtitle')}
         </p>
@@ -914,6 +929,8 @@ function DeepClean({ onNavigate }) {
           )}
         </div>
       </div>
+
+      {shredOpen && <ShredDialog onClose={() => setShredOpen(false)} />}
 
       {warnAbout && (warnAbout.confirmEveryTime ? (
         <WipeFreeSpaceDialog onCancel={dismissWarning} onConfirm={confirmWarning} />

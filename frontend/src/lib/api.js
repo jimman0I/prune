@@ -459,9 +459,13 @@ export async function streamDeepCleanExecute(ruleIds, onEvent, signal) {
  * Shared by both Deep Clean streams above: same line-buffered parsing
  * (a chunk boundary lands mid-event often enough that parsing whatever
  * arrived would drop rules at random), same signal-driven cancellation. */
-async function streamSSE(url, onEvent, signal) {
-  const res = await fetch(url, { signal });
-  if (!res.ok || !res.body) throw new Error(`Request failed: ${res.status}`);
+async function streamSSE(url, onEvent, signal, init = {}) {
+  const res = await fetch(url, { ...init, signal });
+  if (!res.ok || !res.body) {
+    // A refused POST carries its reason as JSON; a dropped stream has none.
+    const detail = await res.json?.().then((d) => d?.error).catch(() => null);
+    throw new Error(detail || `Request failed: ${res.status}`);
+  }
 
   const reader = res.body.getReader();
   const decoder = new TextDecoder();
@@ -483,6 +487,35 @@ async function streamSSE(url, onEvent, signal) {
       else if (parsed.field === 'data') onEvent(currentEvent, JSON.parse(parsed.value));
     }
   }
+}
+
+/** What shredding these paths would destroy, counted without touching
+ * anything: { files, bytes, refused: [{path, reason}], refusedCount,
+ * truncated }. The confirmation step shows it before anything is shredded. */
+export async function previewShred(paths) {
+  const res = await fetch(`${API_URL}/shred/preview`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ paths })
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
+  return data;
+}
+
+/** Shreds the paths, streaming progress. `passes` is 1 or 3. The request
+ * always says `confirmed: true` -- this is only ever called after the
+ * confirmation step, and the backend refuses anything without it.
+ *
+ * Events: 'start' { passes }, 'progress' { filesDone, bytesDone,
+ * currentPath }, 'done' { shreddedFiles, bytes, aborted, failed, held,
+ * failedCount, heldCount }, 'error' { message }. */
+export async function streamShred(paths, passes, onEvent, signal) {
+  await streamSSE(`${API_URL}/shred`, onEvent, signal, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ paths, passes, confirmed: true })
+  });
 }
 
 /** The rule list, grouped, with no sizes.
