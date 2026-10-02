@@ -25,7 +25,18 @@ describe('scanForcedUninstall', () => {
   it('passes the name and publisher through to the existing leftover scanner', async () => {
     scanForLeftoversMock.mockResolvedValue(emptyScan);
     await scanForcedUninstall({ name: 'Dead App', publisher: 'Nobody' });
-    expect(scanForLeftoversMock).toHaveBeenCalledWith({ name: 'Dead App', publisher: 'Nobody' });
+    expect(scanForLeftoversMock).toHaveBeenCalledWith(expect.objectContaining({ name: 'Dead App', publisher: 'Nobody' }));
+  });
+
+  it('forwards the scan mode and the anchors, adding the program\'s own registry key to them', async () => {
+    scanForLeftoversMock.mockResolvedValue(emptyScan);
+    await scanForcedUninstall({
+      name: 'Dead App', mode: 'safe', registryKey: 'HKCU:\\SOFTWARE\\Dead', anchors: { installLocation: 'D:\\Dead' }
+    });
+    expect(scanForLeftoversMock).toHaveBeenCalledWith({
+      name: 'Dead App', publisher: undefined, mode: 'safe',
+      anchors: { installLocation: 'D:\\Dead', registryKey: 'HKCU:\\SOFTWARE\\Dead' }
+    });
   });
 
   it('includes the program\'s own Add/Remove entry as a removable registry item', async () => {

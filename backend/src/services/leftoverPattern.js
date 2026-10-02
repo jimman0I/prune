@@ -43,6 +43,15 @@ const WORD_START = '(?<![A-Za-z0-9])';
 const SHORT_TERM_LENGTH = 3;
 const WORD_END = '(?![A-Za-z0-9])';
 
+/** A value as the inside of a PowerShell single-quoted string. The only
+ * escape in one is a doubled quote, and a program called "Baldur's Gate 3"
+ * or "Don't Starve" would otherwise end the string early and turn the whole
+ * generated script into a parse error -- which reads as "nothing left
+ * behind". Every scan script embeds its pattern through this. */
+export function psQuote(text) {
+  return String(text).replace(/'/g, "''");
+}
+
 function escapeForRegex(text) {
   return text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
