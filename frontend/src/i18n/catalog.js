@@ -16,6 +16,8 @@
  * One file rather than 40, and no code-splitting: even at full size this
  * is plain short text, not an asset a desktop app need economise on the
  * way a web page would its network payload. */
+import { EXTRAS } from './extras/index.js';
+
 export const CATALOG = {
   en: {
     nav: {
@@ -35528,3 +35530,29 @@ export const CATALOG = {
     }
   }
 };
+
+/** New UI text lives in extras/<feature>.js, one file per feature, each a
+ * `{ en: {...}, af: {...}, ... }` tree of just its own keys, and is merged
+ * in here. A 35,000-line file that every feature edits is a merge conflict
+ * waiting to happen; a feature's own file is not. The completeness tests
+ * (catalog.test.js) run over the merged result, so an extras file still has
+ * to give every key in all 40 languages. A key may not be defined twice. */
+function mergeExtra(target, source, path) {
+  for (const [key, value] of Object.entries(source)) {
+    const here = `${path}.${key}`;
+    if (value !== null && typeof value === 'object') {
+      if (typeof target[key] === 'function') throw new Error(`catalog extras: ${here} would replace a function`);
+      mergeExtra((target[key] ??= {}), value, here);
+    } else {
+      if (key in target) throw new Error(`catalog extras: ${here} is already defined`);
+      target[key] = value;
+    }
+  }
+}
+
+for (const extra of EXTRAS) {
+  for (const [language, tree] of Object.entries(extra)) {
+    if (!CATALOG[language]) throw new Error(`catalog extras: unknown language "${language}"`);
+    mergeExtra(CATALOG[language], tree, language);
+  }
+}
