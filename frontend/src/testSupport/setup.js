@@ -1,3 +1,4 @@
+import { afterEach } from 'vitest';
 import { configure } from '@testing-library/react';
 
 // Testing Library's findBy*/waitFor give up after 1000 ms by default. Run
@@ -9,3 +10,10 @@ import { configure } from '@testing-library/react';
 // resolves the moment its element exists, and a genuinely missing element
 // still fails, just after 5 s instead of 1.
 configure({ asyncUtilTimeout: 5000 });
+
+// jsdom keeps localStorage for the life of a test file, so anything one test
+// stores (the remembered language, the theme) would be read back by the next
+// as if the app had been used before. Each test starts from a first launch.
+afterEach(() => {
+  if (typeof window !== 'undefined') window.localStorage.clear();
+});

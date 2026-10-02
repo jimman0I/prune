@@ -31,7 +31,40 @@ const mount = (client = makeTestClient()) => render(
   </QueryClientProvider>
 );
 
-beforeEach(() => { vi.clearAllMocks(); });
+beforeEach(() => { vi.clearAllMocks(); window.localStorage.clear(); });
+
+describe('LanguageProvider remembers the last language', () => {
+  it('shows it straight away instead of English while settings are still loading', () => {
+    window.localStorage.setItem('prune.language', 'el');
+    fetchSettings.mockReturnValue(new Promise(() => {})); // never arrives
+    mount();
+    expect(screen.getByTestId('language').textContent).toBe('el');
+    expect(screen.getByTestId('nav').textContent).toBe('Πίνακας ελέγχου');
+  });
+
+  it('keeps it when the settings request fails, instead of dropping to English', async () => {
+    window.localStorage.setItem('prune.language', 'el');
+    fetchSettings.mockRejectedValue(new Error('backend not ready'));
+    mount();
+    await new Promise((resolve) => setTimeout(resolve, 20));
+    expect(screen.getByTestId('language').textContent).toBe('el');
+  });
+
+  it('saves the language settings report, and lets settings win over what was remembered', async () => {
+    window.localStorage.setItem('prune.language', 'el');
+    fetchSettings.mockResolvedValue({ language: 'de' });
+    mount();
+    await waitFor(() => expect(screen.getByTestId('language').textContent).toBe('de'));
+    expect(window.localStorage.getItem('prune.language')).toBe('de');
+  });
+
+  it('ignores a remembered code this build does not have', () => {
+    window.localStorage.setItem('prune.language', 'xx');
+    fetchSettings.mockReturnValue(new Promise(() => {}));
+    mount();
+    expect(screen.getByTestId('language').textContent).toBe('en');
+  });
+});
 
 describe('LanguageProvider', () => {
   it('follows settings.language once settings arrive', async () => {

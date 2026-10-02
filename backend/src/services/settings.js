@@ -1,4 +1,4 @@
-import { readFile, writeFile, mkdir } from 'node:fs/promises';
+import { readFile, writeFile, mkdir, rename } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { matchLanguage } from './languages.js';
@@ -329,12 +329,30 @@ export async function getSettings({
  * silently reset to the default. Returns the full updated settings object,
  * not just what was passed in, so a caller never has to guess what the
  * merge produced. */
-export async function updateSettings(partial) {
+export function updateSettings(partial) {
+  // Queued, so two overlapping saves each merge onto the other's result
+  // instead of both reading the same old file and the later write erasing
+  // the earlier change. A failed save must not wedge the queue.
+  const run = saveQueue.then(() => saveSettings(partial));
+  saveQueue = run.catch(() => {});
+  return run;
+}
+
+let saveQueue = Promise.resolve();
+
+async function saveSettings(partial) {
   const current = await getSettings();
   const updated = { ...current, ...partial };
   updated.deepCleanRemoval = normalizeRemoval(updated.deepCleanRemoval);
   const path = settingsPath();
   await mkdir(dirname(path), { recursive: true });
-  await writeFile(path, JSON.stringify(updated, null, 2), 'utf8');
+  // Written beside the real file then renamed over it, so a reader (or a
+  // crash mid-write) sees the old file or the new one, never a truncated
+  // half. A truncated read parses as corrupt, which getSettings() answers
+  // with DEFAULT_SETTINGS -- language 'en' -- and the next save would then
+  // persist those defaults over the person's real choices.
+  const tmp = `${path}.${process.pid}.tmp`;
+  await writeFile(tmp, JSON.stringify(updated, null, 2), 'utf8');
+  await rename(tmp, path);
   return updated;
 }
