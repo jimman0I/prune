@@ -46,6 +46,45 @@ function makeLeftoverFolder(name = 'Vendor') {
   return folder;
 }
 
+describe('what no destination will remove (regression: shared-component protection)', () => {
+  it('refuses Windows, Microsoft components and drive roots even to Quarantine', async () => {
+    // Real paths that exist on any Windows machine, so the existence check
+    // does not excuse them. Nothing is moved: quarantine is mocked, and the
+    // point is what it is NOT asked to move.
+    const windows = process.env.SystemRoot || 'C:\\Windows';
+    const programData = join(process.env.ProgramData || 'C:\\ProgramData', 'Microsoft');
+    const result = await removeLeftovers({
+      programName: 'Thing', files: [windows, programData, 'C:\\'], registryKeys: [], destination: 'quarantine'
+    });
+    expect(quarantineAndDelete.mock.calls[0][0].files).toEqual([]);
+    expect(result.failedFiles.map((f) => f.path).sort()).toEqual([windows, programData, 'C:\\'].sort());
+    for (const failure of result.failedFiles) expect(failure.reason).toBeTruthy();
+  });
+
+  it('refuses another installed program\'s folder, and a folder holding one, to every destination', async () => {
+    const vendor = makeLeftoverFolder('Vendor');
+    const other = join(vendor, 'OtherProduct');
+    mkdirSync(other);
+    const installedPrograms = [{ id: 'o', name: 'Other Product', installLocation: other }];
+
+    for (const destination of ['quarantine', 'permanent']) {
+      const result = await removeLeftovers({ programName: 'Thing', files: [vendor, other], registryKeys: [], destination, installedPrograms });
+      expect(result.failedFiles.map((f) => f.path).sort(), destination).toEqual([vendor, other].sort());
+      expect(result.failedFiles.every((f) => /Other Product/.test(f.reason))).toBe(true);
+      expect(existsSync(other)).toBe(true);
+    }
+  });
+
+  it('still removes an ordinary leftover alongside a refused one', async () => {
+    const mine = makeLeftoverFolder('Mine');
+    const result = await removeLeftovers({
+      programName: 'Thing', files: [mine, process.env.SystemRoot || 'C:\\Windows'], registryKeys: [], destination: 'quarantine'
+    });
+    expect(quarantineAndDelete.mock.calls[0][0].files).toEqual([mine]);
+    expect(result.failedFiles).toHaveLength(1);
+  });
+});
+
 describe('to Quarantine', () => {
   it('is exactly the quarantine call it always was', async () => {
     const result = await removeLeftovers({

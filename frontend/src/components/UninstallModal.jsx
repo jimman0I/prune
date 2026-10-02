@@ -5,6 +5,7 @@ import { deriveSearchTerm } from '../lib/searchTerm.js';
 import LeftoverReview from './LeftoverReview.jsx';
 import ScanModePicker from './ScanModePicker.jsx';
 import { scanModeFrom, anchorsFor } from '../lib/scanMode.js';
+import { preselectKeys } from '../lib/leftoverTiers.js';
 import { useSettings } from '../hooks/useSystemQueries.js';
 import { leftoverDestinationFrom } from '../lib/leftoverDestination.js';
 import { useLanguage } from '../i18n/LanguageContext.jsx';
@@ -176,18 +177,13 @@ export default function UninstallModal({ program, running = false, onClose, onBu
   // as hidden, so a box ticked before the setting changed cannot skip it.
   const autoRemoveOffered = destination === 'quarantine';
 
-  // Every "group:index" key a scan result contains, regardless of any
-  // setting -- the one shape both selectEverythingIn (gated by the
-  // preselectLeftovers setting) and the auto-remove path (which ignores
-  // that setting on purpose: "remove ALL found leftovers" means literally
-  // everything) need to build.
-  const allFoundIn = (result) => {
-    const keys = [];
-    for (const groupKey of ['files', 'registryKeys']) {
-      (result[groupKey]?.items || []).forEach((_, i) => keys.push(`${groupKey}:${i}`));
-    }
-    return new Set(keys);
-  };
+  // The "group:index" keys the scan is confident enough to tick: certain and
+  // likely, never possible. The one set both selectEverythingIn (gated by
+  // the preselectLeftovers setting) and the auto-remove path (which ignores
+  // that setting on purpose) build. A "possible" item is a guess shared with
+  // other programs -- a publisher folder, one word of a name -- and is left
+  // for the person to choose even when everything else is removed unreviewed.
+  const allFoundIn = (result) => preselectKeys(result);
 
   const selectEverythingIn = (result) => {
     // Revo's "Check mark all leftovers by default", which it ships off, and
@@ -251,7 +247,8 @@ export default function UninstallModal({ program, running = false, onClose, onBu
       // so its leftover sweep found registry keys and never files.
       const result = await scanForLeftovers(deriveSearchTerm(program.name), program.publisher, {
         mode: scanMode,
-        anchors: anchorsFor(program)
+        anchors: anchorsFor(program),
+        programId: program.id
       });
       setScanResult(result);
       // Revo's "Automatically delete all found leftovers": skip the manual

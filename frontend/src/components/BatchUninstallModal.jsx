@@ -10,6 +10,7 @@ import { selectionToRemoval } from './UninstallModal.jsx';
 import { useSettings } from '../hooks/useSystemQueries.js';
 import { leftoverDestinationFrom } from '../lib/leftoverDestination.js';
 import { scanModeFrom, anchorsFor } from '../lib/scanMode.js';
+import { preselectKeys } from '../lib/leftoverTiers.js';
 
 /** How long one uninstaller may run before the dialog says it is still
  * waiting and puts Stop in front. Unlike the single-program dialog, this one
@@ -263,18 +264,16 @@ export default function BatchUninstallModal({ programs, onClose, onFinished, onB
           // The depth chosen in the single-program dialog and remembered in
           // settings. A batch has no picker of its own: it follows it.
           mode: scanModeFrom(settings),
-          anchors: anchorsFor(program)
+          anchors: anchorsFor(program),
+          programId: program.id
         });
         scans.push({ program: program.name, scan });
       }
       setScanCount(scans.length);
       const merged = mergeLeftovers(scans);
       setLeftovers(merged);
-      const keys = [];
-      for (const group of ['files', 'registryKeys']) {
-        (merged[group]?.items || []).forEach((_, i) => keys.push(`${group}:${i}`));
-      }
-      setSelected(new Set(preselect ? keys : []));
+      // Certain and likely only; a "possible" item is never ticked for you.
+      setSelected(preselect ? preselectKeys(merged) : new Set());
       setPhase('review');
     } catch (err) {
       setError(err.message);

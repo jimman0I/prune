@@ -24,6 +24,11 @@ describe('anchorsFor', () => {
       .toEqual({ installLocation: 'D:\\Games\\Acme', registryKey: 'HKCU:\\Software\\Acme' });
   });
 
+  it('adds the icon and uninstall command, whose folders are the program\'s when no location was recorded', () => {
+    expect(anchorsFor({ displayIcon: 'D:\\A\\a.exe,0', uninstallString: '"D:\\A\\u.exe" /S' }))
+      .toEqual({ displayIcon: 'D:\\A\\a.exe,0', uninstallString: '"D:\\A\\u.exe" /S' });
+  });
+
   it('leaves out what the program does not have', () => {
     expect(anchorsFor({ name: 'Acme', installLocation: null, registryKey: '' })).toEqual({});
     expect(anchorsFor(undefined)).toEqual({});

@@ -18,9 +18,9 @@ describe('scanForLeftovers', () => {
 
     const result = await scanForLeftovers({ name: 'OldApp', publisher: 'Old Inc' });
 
-    expect(result.files).toEqual({ ok: true, items: [{ path: 'C:\\ProgramData\\OldApp', sizeBytes: 4096 }] });
-    expect(result.registryKeys).toEqual({ ok: true, items: [{ path: 'HKCU:\\Software\\OldApp' }] });
-    expect(result.scheduledTasks).toEqual({ ok: true, items: [{ name: 'OldAppUpdater', path: '\\OldApp\\' }] });
+    expect(result.files).toEqual({ ok: true, items: [{ path: 'C:\\ProgramData\\OldApp', sizeBytes: 4096, confidence: 'likely' }] });
+    expect(result.registryKeys).toEqual({ ok: true, items: [{ path: 'HKCU:\\Software\\OldApp', confidence: 'likely' }] });
+    expect(result.scheduledTasks).toEqual({ ok: true, items: [{ name: 'OldAppUpdater', path: '\\OldApp\\', confidence: 'likely' }] });
   });
 
   it('degrades one failing sub-scan to ok:false without failing the others', async () => {

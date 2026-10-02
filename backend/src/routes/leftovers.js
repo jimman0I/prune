@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { scanForLeftovers } from '../services/leftoverScan.js';
 import { normalizeScanMode } from '../services/leftoverModes.js';
+import { listInstalledPrograms } from '../services/programs.js';
 import { getSettings } from '../services/settings.js';
 import { normalizePath, toExcludePattern } from '../lib/cleanGuards.js';
 
@@ -37,10 +38,10 @@ export function anchorsFrom(value) {
   for (const key of ANCHOR_KEYS) if (typeof value[key] === 'string') anchors[key] = value[key];
   return anchors;
 }
-const ANCHOR_KEYS = ['installLocation', 'registryKey'];
+const ANCHOR_KEYS = ['installLocation', 'registryKey', 'displayIcon', 'uninstallString'];
 
 router.post('/scan', async (req, res) => {
-  const { name, publisher, mode, anchors } = req.body || {};
+  const { name, publisher, mode, anchors, programId } = req.body || {};
   if (!name) { res.status(400).json({ error: 'name is required' }); return; }
   try {
     const settings = await getSettings().catch(() => ({}));
@@ -49,7 +50,12 @@ router.post('/scan', async (req, res) => {
     const result = await scanForLeftovers({
       name, publisher,
       mode: normalizeScanMode(mode ?? settings?.leftoverScanMode),
-      anchors: anchorsFrom(anchors)
+      anchors: anchorsFrom(anchors),
+      // The other installed programs are what the scan must not damage. The
+      // list is read alongside the search and awaited only when the results
+      // are filtered; a failed read is an empty list, never a failed scan.
+      installedPrograms: listInstalledPrograms().catch(() => []),
+      selfId: typeof programId === 'string' ? programId : undefined
     });
     res.json(withoutExcluded(result, settings?.excludeFolders));
   } catch (err) {

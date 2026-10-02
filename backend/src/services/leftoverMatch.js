@@ -1,3 +1,5 @@
+import { buildSearchPattern } from './leftoverPattern.js';
+
 /** What the Advanced scan searches on beyond the full product name.
  *
  * Moderate searches for the whole derived name ("Adobe Photoshop") and the
@@ -41,6 +43,28 @@ export function productTokens(...texts) {
     }
   }
   return tokens;
+}
+
+/** The three regexes a result is judged by: the product name, the publisher
+ * and the distinctive words. Each is null when there is nothing to match, so
+ * a missing term can never match everything. */
+export function buildMatchers({ name, publisher, tokens }) {
+  const compile = (source) => (source ? new RegExp(source, 'i') : null);
+  return {
+    name: compile(buildSearchPattern(name)),
+    publisher: compile(buildSearchPattern(publisher)),
+    token: compile(buildTokenPattern(tokens))
+  };
+}
+
+/** How sure a name match is. The product's own name is likely; only the
+ * publisher's name, or a single word of the product's, is merely possible --
+ * a publisher folder is shared by everything the publisher makes, and a
+ * word is shared by anything that uses it. Whatever matched, at best this is
+ * "likely": certainty comes from the program's own folders, not from names. */
+export function classifyLabel(label, matchers) {
+  if (typeof label === 'string' && matchers.name?.test(label)) return 'likely';
+  return 'possible';
 }
 
 /** A regex source matching any of the tokens as a whole word, or null when

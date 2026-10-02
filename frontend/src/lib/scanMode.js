@@ -20,5 +20,11 @@ export function anchorsFor(program) {
   if (typeof program?.registryKey === 'string' && program.registryKey.trim()) {
     anchors.registryKey = program.registryKey;
   }
+  // The folders of the icon and the uninstaller: most installers register no
+  // InstallLocation, but every one registers these. Read by the backend for
+  // the folder they sit in; never run.
+  for (const [anchor, field] of [['displayIcon', 'displayIcon'], ['uninstallString', 'uninstallString']]) {
+    if (typeof program?.[field] === 'string' && program[field].trim()) anchors[anchor] = program[field];
+  }
   return anchors;
 }

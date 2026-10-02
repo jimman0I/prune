@@ -18,7 +18,7 @@ import { canonicalKeyPath } from './registryLeftovers.js';
  * one addition is the Add/Remove Programs entry itself, which the normal
  * path never has to remove (a working uninstaller removes its own key) and
  * which is the whole reason a dead entry lingers in the list. */
-export async function scanForcedUninstall({ name, publisher, registryKey, mode, anchors }) {
+export async function scanForcedUninstall({ name, publisher, registryKey, mode, anchors, installedPrograms }) {
   const trimmed = typeof name === 'string' ? name.trim() : '';
   // An empty pattern makes the scanner's regex match every directory under
   // Program Files and every key under HKLM\Software -- it would present
@@ -27,7 +27,8 @@ export async function scanForcedUninstall({ name, publisher, registryKey, mode, 
 
   const scan = await scanForLeftovers({
     name: trimmed, publisher, mode,
-    anchors: { ...anchors, ...(registryKey ? { registryKey } : {}) }
+    anchors: { ...anchors, ...(registryKey ? { registryKey } : {}) },
+    installedPrograms
   });
 
   const items = scan.registryKeys.items.map((item) => ({ ...item }));

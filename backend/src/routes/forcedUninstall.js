@@ -3,6 +3,7 @@ import { scanForcedUninstall } from '../services/forcedUninstall.js';
 import { normalizeScanMode } from '../services/leftoverModes.js';
 import { getSettings } from '../services/settings.js';
 import { anchorsFrom } from './leftovers.js';
+import { listInstalledPrograms } from '../services/programs.js';
 
 const router = Router();
 
@@ -18,7 +19,8 @@ router.post('/scan', async (req, res) => {
     res.json(await scanForcedUninstall({
       name, publisher, registryKey,
       mode: normalizeScanMode(mode ?? settings?.leftoverScanMode),
-      anchors: anchorsFrom(anchors)
+      anchors: anchorsFrom(anchors),
+      installedPrograms: listInstalledPrograms().catch(() => [])
     }));
   } catch (err) {
     // A missing name is the caller's mistake, not a server fault.

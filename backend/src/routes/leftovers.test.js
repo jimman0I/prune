@@ -13,6 +13,9 @@ import { startTestServer } from '../testSupport/routeServer.js';
 const scanForLeftovers = vi.fn();
 vi.mock('../services/leftoverScan.js', () => ({ scanForLeftovers: (...a) => scanForLeftovers(...a) }));
 
+const listInstalledPrograms = vi.fn(async () => [{ id: 'other', name: 'Other' }]);
+vi.mock('../services/programs.js', () => ({ listInstalledPrograms: (...a) => listInstalledPrograms(...a) }));
+
 let settings = {};
 vi.mock('../services/settings.js', () => ({
   getSettings: async () => settings,
@@ -68,6 +71,27 @@ describe('POST /leftovers/scan: mode and anchors', () => {
     expect(scanForLeftovers).toHaveBeenCalledWith(expect.objectContaining({
       anchors: { installLocation: 'D:\\Games\\Thing', registryKey: 'HKCU:\\Software\\Thing' }
     }));
+  });
+
+  it('also carries the icon and uninstaller paths, which anchor a program with no install location', async () => {
+    await scan({ anchors: { displayIcon: 'D:\\A\\a.exe,0', uninstallString: '"D:\\A\\u.exe"' } });
+    expect(scanForLeftovers).toHaveBeenCalledWith(expect.objectContaining({
+      anchors: { displayIcon: 'D:\\A\\a.exe,0', uninstallString: '"D:\\A\\u.exe"' }
+    }));
+  });
+
+  it('gives the scanner the installed programs, and the id of the one being uninstalled', async () => {
+    await scan({ programId: 'thing-id' });
+    const args = scanForLeftovers.mock.calls[0][0];
+    expect(await args.installedPrograms).toEqual([{ id: 'other', name: 'Other' }]);
+    expect(args.selfId).toBe('thing-id');
+  });
+
+  it('still scans when the installed list cannot be read', async () => {
+    listInstalledPrograms.mockRejectedValueOnce(new Error('registry unreadable'));
+    const res = await scan();
+    expect(res.status).toBe(200);
+    expect(await scanForLeftovers.mock.calls[0][0].installedPrograms).toEqual([]);
   });
 
   it('copes with anchors that are not an object', async () => {

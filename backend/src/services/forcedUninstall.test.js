@@ -35,7 +35,8 @@ describe('scanForcedUninstall', () => {
     });
     expect(scanForLeftoversMock).toHaveBeenCalledWith({
       name: 'Dead App', publisher: undefined, mode: 'safe',
-      anchors: { installLocation: 'D:\\Dead', registryKey: 'HKCU:\\SOFTWARE\\Dead' }
+      anchors: { installLocation: 'D:\\Dead', registryKey: 'HKCU:\\SOFTWARE\\Dead' },
+      installedPrograms: undefined
     });
   });
 

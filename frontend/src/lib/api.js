@@ -267,11 +267,14 @@ export async function fetchRunningPrograms() {
 /** Leftover scan. `mode` ('safe' | 'moderate' | 'advanced') and `anchors`
  * (the program's own install location and registry key) are optional: left
  * out, the backend uses the remembered mode and searches by name alone. */
-export async function scanForLeftovers(name, publisher, { mode, anchors } = {}) {
+export async function scanForLeftovers(name, publisher, { mode, anchors, programId } = {}) {
   const res = await fetch(`${API_URL}/leftovers/scan`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ name, publisher, ...(mode ? { mode } : {}), ...(anchors ? { anchors } : {}) })
+    body: JSON.stringify({
+      name, publisher,
+      ...(mode ? { mode } : {}), ...(anchors ? { anchors } : {}), ...(programId ? { programId } : {})
+    })
   });
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
