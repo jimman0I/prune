@@ -84,9 +84,9 @@ describe('removing one Store app', () => {
     await user.click(screen.getByRole('button', { name: 'Remove app' }));
 
     await waitFor(() => expect(appendHistoryEntry).toHaveBeenCalledTimes(1));
-    expect(appendHistoryEntry).toHaveBeenCalledWith({
-      programName: 'Calculator', publisher: 'Microsoft Corporation', sizeBytes: 4096
-    });
+    expect(appendHistoryEntry).toHaveBeenCalledWith(expect.objectContaining({
+      programName: 'Calculator', publisher: 'Microsoft Corporation', sizeBytes: 4096, kind: 'store'
+    }));
   });
 
   it('shows Windows\' own reason when it refuses, and logs nothing', async () => {

@@ -45,7 +45,7 @@ export default function StoreRemoveDialog({ app, onClose, onRemoved, onBusyChang
       // past removals freed does not depend on which dialog was used. And
       // like every other removal, a logging failure never turns a removal
       // that worked into an error -- the app is gone either way.
-      appendHistoryEntry({ programName: app.name, publisher: app.publisher, sizeBytes: app.sizeBytes })
+      appendHistoryEntry({ kind: 'store', programName: app.name, publisher: app.publisher, version: app.version, sizeBytes: app.sizeBytes ?? undefined, outcome: 'uninstalled' })
         .catch(() => {});
       setState('done');
       onRemoved?.(app);

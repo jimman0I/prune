@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useSingleFlight } from '../hooks/useSingleFlight.js';
-import { scanForLeftovers, scanForcedUninstall, streamUninstall, removeQuarantined, appendHistoryEntry } from '../lib/api.js';
+import { scanForLeftovers, scanForcedUninstall, streamUninstall, removeQuarantined } from '../lib/api.js';
+import { recordHistory, patchHistory, removalFields } from '../lib/historyRecord.js';
 import { deriveSearchTerm } from '../lib/searchTerm.js';
 import LeftoverReview from './LeftoverReview.jsx';
 import ScanModePicker from './ScanModePicker.jsx';
@@ -213,6 +214,9 @@ export default function UninstallModal({ program, running = false, onClose, onBu
     setError(null);
     setStep('uninstalling');
     try {
+      // The safety nets taken before the uninstaller ran, for the history.
+      let restorePoint = null;
+      let registryBackup = null;
       await streamUninstall(program.id, (type, data) => {
         // The before-uninstall steps announce themselves, so the dialog
         // says what it is waiting on instead of "running the uninstaller"
@@ -222,14 +226,26 @@ export default function UninstallModal({ program, running = false, onClose, onBu
         } else if (type !== 'restorePoint' && type !== 'registryBackup') {
           setProgressTitle(null);
         }
+        if (type === 'restorePoint' && typeof data?.created === 'boolean') {
+          restorePoint = { created: data.created, ...(typeof data.reason === 'string' ? { reason: data.reason } : {}) };
+        }
+        if (type === 'registryBackup' && data?.ok && typeof data.dir === 'string') registryBackup = data.dir;
       });
       // Recorded even if the dialog was closed while it ran: the program
       // really was uninstalled, and this is a log of that, not a next step.
-      appendHistoryEntry({ programName: program.name, publisher: program.publisher, sizeBytes: program.sizeBytes }).catch(() => {
-        // Best-effort logging -- a failed history write must never block
-        // or fail the uninstall flow itself, the uninstall already
-        // genuinely succeeded by this point.
-      });
+      // Best-effort -- see historyRecord.js: a failed history write must
+      // never block or fail the uninstall flow, which has already succeeded.
+      recordHistory({
+        kind: program.source === 'store' ? 'store' : 'uninstall',
+        programName: program.name,
+        publisher: program.publisher,
+        version: program.version,
+        sizeBytes: program.sizeBytes ?? undefined,
+        ...(scanAfter ? { scanMode } : {}),
+        ...(restorePoint ? { restorePoint } : {}),
+        ...(registryBackup ? { registryBackup } : {}),
+        outcome: 'uninstalled'
+      }).then((id) => { historyId.current = id; });
       if (!alive.current) return;
       if (!scanAfter) { setStep('noScan'); return; }
       // Revo's own screen after the real uninstaller runs: it does not
@@ -267,6 +283,7 @@ export default function UninstallModal({ program, running = false, onClose, onBu
         ...(monitored ? { traceId: monitored.id } : {})
       });
       setScanResult(result);
+      patchHistory(historyId.current, { leftoversFound: foundCount(result) });
       // Revo's "Automatically delete all found leftovers": skip the manual
       // review screen and remove everything the scan just found, straight
       // away. It still goes through the exact same quarantine call the
@@ -280,6 +297,7 @@ export default function UninstallModal({ program, running = false, onClose, onBu
           const { files, registryKeys, scheduledTasks } = selectionToRemoval(result, full);
           const manifest = await removeQuarantined({ programName: program.name, files, registryKeys, ...(scheduledTasks ? { scheduledTasks } : {}), destination });
           setRemoval(manifest);
+          recordRemoval(manifest, result);
           setStep('done');
         } catch (err) {
           setError(err.message);
@@ -294,6 +312,25 @@ export default function UninstallModal({ program, running = false, onClose, onBu
       setStep('readyToScan');
     }
   });
+
+  // The history entry this uninstall wrote, so the review's outcome can be
+  // added to it. A forced removal has no earlier entry (nothing was
+  // uninstalled), so it writes one of its own when the removal is done.
+  const historyId = useRef(null);
+  const foundCount = (result) => ['files', 'registryKeys', 'scheduledTasks']
+    .reduce((sum, group) => sum + (result?.[group]?.items?.length ?? 0), 0);
+  const recordRemoval = (manifest, result) => {
+    const fields = removalFields(manifest, result);
+    if (historyId.current) {
+      patchHistory(historyId.current, fields);
+    } else {
+      recordHistory({
+        kind: 'forced',
+        programName: program.name, publisher: program.publisher, version: program.version,
+        sizeBytes: program.sizeBytes ?? undefined, scanMode, ...fields
+      });
+    }
+  };
 
   const startForcedScan = async () => {
     setError(null);
@@ -343,6 +380,7 @@ export default function UninstallModal({ program, running = false, onClose, onBu
     try {
       const manifest = await removeQuarantined({ programName: program.name, files, registryKeys, ...(scheduledTasks ? { scheduledTasks } : {}), destination });
       setRemoval(manifest);
+      recordRemoval(manifest, scanResult);
       setStep('done');
     } catch (err) {
       setError(err.message);

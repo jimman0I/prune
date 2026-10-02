@@ -203,9 +203,12 @@ export default function BatchUninstallModal({ programs, onClose, onFinished, onB
           await streamUninstall(program.id, () => {});
         }
         appendHistoryEntry({
+          kind: program.source === 'store' ? 'store' : 'batch',
           programName: program.name,
           publisher: program.publisher,
-          sizeBytes: program.sizeBytes
+          version: program.version,
+          sizeBytes: program.sizeBytes ?? undefined,
+          outcome: 'uninstalled'
         }).catch(() => { /* logging must never fail an uninstall that worked */ });
         setStatus(program.id, { state: 'done' });
         succeeded.push(program);
