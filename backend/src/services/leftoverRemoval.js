@@ -4,6 +4,7 @@ import { join } from 'node:path';
 import { quarantineAndDelete, quarantineRoot } from './quarantine.js';
 import { sendToRecycleBin } from './recycleBin.js';
 import { protectionReason } from './pathGuard.js';
+import { shredPaths } from '../lib/shredFile.js';
 
 /** Where an uninstall's leftover files go.
  *
@@ -108,12 +109,25 @@ async function pathSize(path) {
  * through here, so there is a single implementation of what "gone" means.
  * Each caller decides what it may hand over; this only removes, and reports
  * a file it could not remove (locked, permission) rather than throwing. */
-export async function removePermanently(candidates) {
+export async function removePermanently(candidates, { overwritePasses = 0 } = {}) {
   const removed = [];
   const failed = [];
   for (const { path, sizeBytes } of candidates) {
     try {
-      await rm(path, { recursive: true, force: false });
+      if (overwritePasses > 0) {
+        // "Overwrite files before deleting" is on: every byte is written
+        // over first (see lib/shredFile.js, including what it cannot
+        // promise on an SSD). A file that cannot be overwritten is left in
+        // place and reported -- quietly falling back to a plain delete
+        // would be doing less than was asked for while saying it was done.
+        const result = await shredPaths([path], overwritePasses);
+        if (result.failed.length > 0) {
+          failed.push(...result.failed);
+          continue;
+        }
+      } else {
+        await rm(path, { recursive: true, force: false });
+      }
       removed.push({ originalPath: path, sizeBytes });
     } catch (err) {
       failed.push({ path, reason: err.message });
@@ -133,7 +147,7 @@ export async function removePermanently(candidates) {
  * `sendToRecycleBin`/`rm` instead), so there is no locked FILE for that
  * call to ever need to schedule. A no-op for those two destinations,
  * not a bug. */
-export async function removeLeftovers({ programName, files = [], registryKeys = [], destination = 'quarantine', deleteLockedFilesOnRestart = false }) {
+export async function removeLeftovers({ programName, files = [], registryKeys = [], destination = 'quarantine', deleteLockedFilesOnRestart = false, overwritePasses = 0 }) {
   if (destination === 'quarantine') {
     return { ...(await quarantineAndDelete({ programName, files, registryKeys, deleteLockedFilesOnRestart })), destination };
   }
@@ -171,7 +185,7 @@ export async function removeLeftovers({ programName, files = [], registryKeys = 
       }
     }
   } else {
-    const result = await removePermanently(candidates);
+    const result = await removePermanently(candidates, { overwritePasses });
     removed.push(...result.removed);
     failedFiles.push(...result.failed);
   }

@@ -487,6 +487,45 @@ function SettingsPage({ onReportBug = null }) {
                     checked={settings.hideUnavailableRules}
                     onChange={() => save({ hideUnavailableRules: !settings.hideUnavailableRules })}
                   />
+                  {/* Overwrite-then-delete. The description is the honest
+                      part: it says where the overwrite does not work, because
+                      a switch called "overwrite" that quietly fails on an SSD
+                      is worse than none. Only an exact true counts as on. */}
+                  <SettingRow
+                    title={t('deepCleanV3.overwrite.title')}
+                    description={t('deepCleanV3.overwrite.description')}
+                    checked={isOnlyIfTrue('overwriteBeforeDelete')}
+                    onChange={() => save({ overwriteBeforeDelete: !isOnlyIfTrue('overwriteBeforeDelete') })}
+                  />
+                  {isOnlyIfTrue('overwriteBeforeDelete') && (
+                    <SettingRow
+                      title={t('deepCleanV3.overwrite.passes')}
+                      control={(
+                        <div role="radiogroup" aria-label={t('deepCleanV3.overwrite.passes')} className="flex flex-col gap-2 shrink-0">
+                          {[1, 3].map((passes) => (
+                            <label key={passes} className="flex items-center gap-2 cursor-pointer text-[12.5px] text-[color:var(--text-primary)]">
+                              <input
+                                type="radio"
+                                name="overwrite-passes"
+                                checked={(settings.overwritePasses === 3 ? 3 : 1) === passes}
+                                onChange={() => save({ overwritePasses: passes })}
+                                className="accent-[color:var(--accent-primary)]"
+                              />
+                              {t(`deepCleanV3.overwrite.pass${passes}`)}
+                            </label>
+                          ))}
+                        </div>
+                      )}
+                    />
+                  )}
+                  {/* The same switch the Uninstall tab has: one setting, honoured
+                      by Deep Clean's locked files as well as an uninstall's. */}
+                  <SettingRow
+                    title={t('settings.uninstallTab.deleteLockedFiles.title')}
+                    description={t('settings.uninstallTab.deleteLockedFiles.description')}
+                    checked={isOnlyIfTrue('deleteLockedFilesOnRestart')}
+                    onChange={() => save({ deleteLockedFilesOnRestart: !isOnlyIfTrue('deleteLockedFilesOnRestart') })}
+                  />
                 </div>
               </div>
 

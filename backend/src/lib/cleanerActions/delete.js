@@ -261,7 +261,7 @@ export async function executeFiles(candidates, held, ruleName, guards = {}) {
   // through the one delete implementation the uninstall flow's "Delete
   // permanently" also uses. autoQuarantine is deliberately not consulted:
   // it chooses between Quarantine and the Recycle Bin, and this is neither.
-  if (guards.removal === 'delete') return deletePermanently(accessible, candidates, skipped);
+  if (guards.removal === 'delete') return deletePermanently(accessible, candidates, skipped, guards);
 
   // The other half of `autoQuarantine`, which used to be a switch in
   // Settings that decided nothing at all. Off means the Recycle Bin rather
@@ -312,7 +312,7 @@ function deleteRefusal(path) {
   return protectionReason(path, { systemRoot: '', programFiles: '', programFilesX86: '' });
 }
 
-async function deletePermanently(accessible, candidates, skipped) {
+async function deletePermanently(accessible, candidates, skipped, guards = {}) {
   const sizeOf = new Map(candidates.map((f) => [f.path, f.sizeBytes]));
   const allowed = [];
   for (const path of accessible) {
@@ -320,7 +320,11 @@ async function deletePermanently(accessible, candidates, skipped) {
     if (refusal) skipped.push({ path, reason: refusal });
     else allowed.push({ path, sizeBytes: sizeOf.get(path) || 0 });
   }
-  const { removed, failed } = await removePermanently(allowed);
+  // `overwritePasses` is 0 unless "Overwrite files before deleting" is on
+  // (settings.js). Only here, where the file is destroyed: Quarantine and
+  // the Recycle Bin keep the file, and overwriting it first would wreck the
+  // copy the user is being promised they can get back.
+  const { removed, failed } = await removePermanently(allowed, { overwritePasses: guards.overwritePasses || 0 });
   for (const { path, reason } of failed) skipped.push({ path, reason });
   return {
     // Summed from what was actually removed, not from what was asked for.

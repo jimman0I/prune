@@ -9,6 +9,7 @@ import { getSettings } from '../services/settings.js';
 import { enforceQuarantineLimits } from '../services/quarantineLimits.js';
 import { quarantineTotals, maxBytesFrom } from '../services/quarantineSizeCap.js';
 import { quarantinePath } from '../services/quarantinePath.js';
+import { normalizePasses } from '../lib/shredFile.js';
 
 // Real bug, found dogfooding Phase 4 (2026-09-01): `manifest.batchDir` (the
 // field every list/restore/delete client-side call keys off) is the FULL
@@ -56,7 +57,10 @@ router.post('/remove', async (req, res) => {
       : await tryCreateRestorePoint(`Prune: forced removal of ${programName}`);
     const manifest = await removeLeftovers({
       programName, files: files || [], registryKeys: registryKeys || [], destination,
-      deleteLockedFilesOnRestart: settings.deleteLockedFilesOnRestart === true
+      deleteLockedFilesOnRestart: settings.deleteLockedFilesOnRestart === true,
+      // "Overwrite files before deleting" -- only the permanent destination
+      // acts on it. 0 when the switch is off.
+      overwritePasses: settings.overwriteBeforeDelete === true ? normalizePasses(settings.overwritePasses) : 0
     });
     // The moment the quarantine grows is the moment it can exceed what
     // the user allowed it to hold, so the limits are applied here rather

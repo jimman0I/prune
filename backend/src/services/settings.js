@@ -2,6 +2,7 @@ import { readFile, writeFile, mkdir, rename } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { matchLanguage } from './languages.js';
+import { normalizePasses } from '../lib/shredFile.js';
 
 /** Path to the settings file. A function, not a constant -- read at call
  * time, not import time -- so tests can point it at a scratch temp file
@@ -73,6 +74,15 @@ const DEFAULT_SETTINGS = {
      choice in Settings and never anything else's side effect. Read from
      here by the backend, never from a request. See normalizeRemoval. */
   deepCleanRemoval: 'quarantine',
+  /* "Overwrite files before deleting": when Prune removes something for
+     good -- Deep Clean's Delete now, an uninstall's "Delete permanently" --
+     it first writes over every byte (lib/shredFile.js). Off by default: it
+     is slow, and on an SSD, a copy-on-write or journaling filesystem it
+     does not reliably reach the old data, which the Settings text says.
+     `overwritePasses` is 1 (zeros) or 3 (random data) and means nothing
+     while the switch is off. Only an exact `true` turns it on. */
+  overwriteBeforeDelete: false,
+  overwritePasses: 1,
   theme: 'dark',
   minimizeToTray: false,
   /* Pauses the background animation, flattens the glass panels to solid
@@ -208,7 +218,9 @@ export function cleanGuardsFrom(settings) {
     // Only an explicit false turns quarantining off. A settings file
     // written before this key existed must keep the safer behaviour.
     autoQuarantine: settings?.autoQuarantine !== false,
-    removal: normalizeRemoval(settings?.deepCleanRemoval)
+    removal: normalizeRemoval(settings?.deepCleanRemoval),
+    // 0 means "just delete"; 1 or 3 is how many overwrite passes come first.
+    overwritePasses: settings?.overwriteBeforeDelete === true ? normalizePasses(settings?.overwritePasses) : 0
   };
 }
 
@@ -217,6 +229,17 @@ export function cleanGuardsFrom(settings) {
  * one. The choice that cannot be undone never comes from a fallback. */
 export function normalizeRemoval(value) {
   return value === 'delete' ? 'delete' : 'quarantine';
+}
+
+/** The settings whose value must be one of a fixed few, repaired wherever
+ * settings are read or written: a hand-edited or corrupted file can never
+ * smuggle a destructive value past the switch that guards it. */
+function normalizedChoices(settings) {
+  return {
+    deepCleanRemoval: normalizeRemoval(settings.deepCleanRemoval),
+    overwriteBeforeDelete: settings.overwriteBeforeDelete === true,
+    overwritePasses: normalizePasses(settings.overwritePasses)
+  };
 }
 
 /** The language Prune opens in before anyone -- the installer included --
@@ -316,7 +339,7 @@ export async function getSettings({
     // A file that never recorded a choice was behaving as "on", and flipping
     // it would change what an existing install does without being asked.
     if (!('preselectLeftovers' in stored)) stored.preselectLeftovers = true;
-    return { ...DEFAULT_SETTINGS, ...stored, deepCleanRemoval: normalizeRemoval(stored.deepCleanRemoval) };
+    return { ...DEFAULT_SETTINGS, ...stored, ...normalizedChoices({ ...DEFAULT_SETTINGS, ...stored }) };
   } catch {
     // A corrupted settings file must not crash every screen that reads
     // settings -- fall back to defaults, same as "never configured".
@@ -343,7 +366,7 @@ let saveQueue = Promise.resolve();
 async function saveSettings(partial) {
   const current = await getSettings();
   const updated = { ...current, ...partial };
-  updated.deepCleanRemoval = normalizeRemoval(updated.deepCleanRemoval);
+  Object.assign(updated, normalizedChoices(updated));
   const path = settingsPath();
   await mkdir(dirname(path), { recursive: true });
   // Written beside the real file then renamed over it, so a reader (or a
