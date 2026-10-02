@@ -7,6 +7,57 @@ see v1.0.1 below) are documented here.
 
 ### Added
 
+**Disk Map, like WizTree**
+
+- Choose any local drive; several NTFS drives are scanned under one
+  administrator prompt. The fast scan needs no prompt when Prune already
+  runs as administrator, and offers a one-click "Restart Prune as
+  administrator".
+- Tree view shows size on disk (Allocated) beside size; hard-linked files
+  are counted once; the scan reports totals so they can be checked against
+  the drive. Modified dates come from the MFT and are sortable.
+- Excluded folders and file types are honoured by the fast scan too.
+- Search by text, `*`/`?` wildcard or `/regex/` over the Tree and File
+  views, with matches marked on the map. Export the view as CSV and the map
+  as PNG.
+- Tree rows and map blocks highlight each other; right-click gains
+  Properties and Exclude this folder.
+- Save, reopen, delete and compare Disk Map scans.
+- The folder walk now runs to completion, shows results as it goes and has
+  no time limit.
+
+**Deep Clean, like BleachBit**
+
+- "Overwrite files before deleting" (1 or 3 passes, off by default) for
+  Delete now and an uninstall's permanent delete; a **Shred files…** tool
+  for files and folders, with confirmation and protected-path guards.
+  Overwriting is not reliable on SSDs, and the setting says so.
+- Free-space wipe: any local drive, 1 zero pass or 3 random passes.
+- Locked files can be deleted at the next restart.
+- A `prune-cli` command line (`list`, `preview`, `clean`, `--json`),
+  shipped as `prune-cli.cmd` next to Prune.exe.
+- Preview lists each rule's biggest files, and the Delete-now confirmation
+  names the biggest items.
+- **Custom locations**: add your own paths to Deep Clean. **Import a
+  BleachBit cleaner (.xml)**; the import reports exactly what it skipped.
+
+**Uninstaller, like Revo**
+
+- A Safe / Moderate / Advanced leftover scan in the uninstall dialog,
+  remembered between uninstalls. Leftovers are tiered certain / likely /
+  possible; Windows, Microsoft components and other installed programs'
+  folders are never offered.
+- Scheduled-task leftovers can be removed, with their XML saved first.
+- **Forced uninstall** for software that isn't listed.
+- **Install with monitoring…** records an install so uninstalling it later
+  is exact. **Hunter** identifies a program by clicking its window.
+- Quarantine gains **Backups** (restore registry and task backups) and
+  **History** tabs. Browser extensions have a Manage button, since Prune
+  cannot remove them itself.
+- Fixed: program names with an apostrophe broke the leftover scan.
+
+**Cleaner rules**
+
 - **BleachBit parity: 16 new cleaner rules, grounded in a live scan.**
   Rather than trust BleachBit's CleanerML XML at face value, every new
   rule here was checked against a real `bleachbit_console.exe -p` run
