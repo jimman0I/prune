@@ -66,11 +66,13 @@ async function scanNode(entryPath, name, depthRemaining, signal, exclusions, onF
       seenLinks.add(id);
     }
     const size = Number(stat.size);
-    onFile?.(size);
     // What the file occupies on disk. libuv reports the allocation in 512-byte
     // blocks, already net of sparse holes and compression; a file small
     // enough to live inside its MFT record has none.
     const allocated = Number(stat.blocks) * 512;
+    // Where it is and what it occupies ride along for a caller that keeps a
+    // running picture (routes/diskScan.js); a caller that only counts ignores them.
+    onFile?.(size, { path: entryPath, allocated });
     const fileNode = { name, size, type: 'file' };
     if (allocated > 0) fileNode.allocated = allocated;
     // Last written, for the Tree and File views. Files carry it now: the MFT

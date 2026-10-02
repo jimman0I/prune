@@ -73,3 +73,20 @@ describe('scanDirectory sizes', () => {
     if ('allocated' in tiny) expect(tiny.allocated).toBeGreaterThan(0);
   });
 });
+
+describe('scanDirectory onFile detail', () => {
+  let dir;
+  beforeEach(() => { dir = mkdtempSync(join(tmpdir(), 'prune-diskscan-detail-')); });
+  afterEach(() => { rmSync(dir, { recursive: true, force: true }); });
+
+  it('says where each file is and what it occupies, for a running picture of the walk', async () => {
+    mkdirSync(join(dir, 'sub'));
+    writeFileSync(join(dir, 'sub', 'a.bin'), Buffer.alloc(20_000, 1));
+    const seen = [];
+    await scanDirectory(dir, 12, undefined, null, (size, info) => seen.push({ size, info }));
+    expect(seen).toHaveLength(1);
+    expect(seen[0].size).toBe(20_000);
+    expect(seen[0].info.path).toBe(join(dir, 'sub', 'a.bin'));
+    expect(seen[0].info.allocated).toBeGreaterThanOrEqual(20_000);
+  });
+});

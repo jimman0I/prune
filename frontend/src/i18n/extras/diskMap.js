@@ -92,6 +92,11 @@ export default {
         none: "Nothing in this group.",
         back: "Back to the list",
         loading: "Comparing…"
+      },
+      crawl: {
+        note: "Reads every folder, one at a time. A whole drive takes a while: results appear as they are found, and you can stop at any time and keep what was read.",
+        limit: "Needs no permission. A whole drive takes much longer than the fast scan, but you see results as they arrive and can stop whenever you like.",
+        partialNote: "Showing what has been read so far. Sizes keep growing until the scan finishes."
       }
     }
   },
@@ -185,6 +190,11 @@ export default {
         none: "Niks in hierdie groep nie.",
         back: "Terug na die lys",
         loading: "Vergelyk tans…"
+      },
+      crawl: {
+        note: "Lees elke vouer, een op ’n slag. ’n Hele skyf neem ’n rukkie: resultate verskyn soos hulle gevind word, en jy kan enige tyd stop en behou wat gelees is.",
+        limit: "Geen toestemming nodig nie. ’n Hele skyf neem baie langer as die vinnige skandering, maar jy sien resultate soos hulle aankom en kan enige tyd stop.",
+        partialNote: "Wys wat tot dusver gelees is. Groottes bly groei totdat die skandering klaar is."
       }
     }
   },
@@ -278,6 +288,11 @@ export default {
         none: "لا شيء في هذه المجموعة.",
         back: "العودة إلى القائمة",
         loading: "جارٍ المقارنة…"
+      },
+      crawl: {
+        note: "يقرأ كل مجلد على حدة. يستغرق محرك كامل بعض الوقت: تظهر النتائج فور العثور عليها، ويمكنك الإيقاف في أي وقت مع الاحتفاظ بما تمت قراءته.",
+        limit: "لا يحتاج إلى إذن. يستغرق محرك كامل وقتًا أطول بكثير من الفحص السريع، لكنك ترى النتائج فور وصولها ويمكنك الإيقاف متى شئت.",
+        partialNote: "يعرض ما تمت قراءته حتى الآن. تستمر الأحجام في الازدياد حتى ينتهي الفحص."
       }
     }
   },
@@ -371,6 +386,11 @@ export default {
         none: "Res en aquest grup.",
         back: "Torna a la llista",
         loading: "Comparant…"
+      },
+      crawl: {
+        note: "Llegeix cada carpeta, una per una. Una unitat sencera triga una estona: els resultats apareixen a mesura que es troben i pots aturar-ho en qualsevol moment i conservar el que s’ha llegit.",
+        limit: "No cal cap permís. Una unitat sencera triga molt més que l’escaneig ràpid, però veus els resultats a mesura que arriben i pots aturar-ho quan vulguis.",
+        partialNote: "Es mostra el que s’ha llegit fins ara. Les mides continuen creixent fins que acaba l’escaneig."
       }
     }
   },
@@ -464,6 +484,11 @@ export default {
         none: "V této skupině nic není.",
         back: "Zpět na seznam",
         loading: "Porovnává se…"
+      },
+      crawl: {
+        note: "Čte každou složku postupně. Celý disk chvíli trvá: výsledky se objevují průběžně a kdykoli můžete skenování zastavit a ponechat si, co se přečetlo.",
+        limit: "Nevyžaduje oprávnění. Celý disk trvá mnohem déle než rychlé skenování, ale výsledky vidíte průběžně a můžete kdykoli zastavit.",
+        partialNote: "Zobrazuje se, co se zatím přečetlo. Velikosti rostou, dokud skenování neskončí."
       }
     }
   },
@@ -557,6 +582,11 @@ export default {
         none: "Dim byd yn y grŵp hwn.",
         back: "Yn ôl i’r rhestr",
         loading: "Yn cymharu…"
+      },
+      crawl: {
+        note: "Yn darllen pob ffolder, un ar y tro. Mae gyriant cyfan yn cymryd amser: mae canlyniadau’n ymddangos wrth iddynt gael eu canfod, a gallwch stopio unrhyw bryd a chadw’r hyn a ddarllenwyd.",
+        limit: "Dim angen caniatâd. Mae gyriant cyfan yn cymryd llawer mwy o amser na’r sgan cyflym, ond gwelwch ganlyniadau wrth iddynt gyrraedd a gallwch stopio pryd bynnag y dymunwch.",
+        partialNote: "Yn dangos yr hyn a ddarllenwyd hyd yma. Mae meintiau’n parhau i dyfu nes bod y sgan wedi gorffen."
       }
     }
   },
@@ -650,6 +680,11 @@ export default {
         none: "Intet i denne gruppe.",
         back: "Tilbage til listen",
         loading: "Sammenligner…"
+      },
+      crawl: {
+        note: "Læser hver mappe, én ad gangen. Et helt drev tager et stykke tid: resultaterne vises, efterhånden som de findes, og du kan stoppe når som helst og beholde det, der er læst.",
+        limit: "Kræver ingen tilladelse. Et helt drev tager meget længere end hurtigscanning, men du ser resultaterne, mens de kommer, og kan stoppe, når du vil.",
+        partialNote: "Viser det, der er læst indtil nu. Størrelserne vokser, indtil scanningen er færdig."
       }
     }
   },
@@ -743,6 +778,11 @@ export default {
         none: "Nichts in dieser Gruppe.",
         back: "Zurück zur Liste",
         loading: "Wird verglichen …"
+      },
+      crawl: {
+        note: "Liest jeden Ordner einzeln. Ein ganzes Laufwerk dauert eine Weile: Ergebnisse erscheinen, sobald sie gefunden werden, und Sie können jederzeit stoppen und das Gelesene behalten.",
+        limit: "Braucht keine Berechtigung. Ein ganzes Laufwerk dauert viel länger als der Schnellscan, aber Sie sehen die Ergebnisse laufend und können jederzeit stoppen.",
+        partialNote: "Zeigt, was bisher gelesen wurde. Die Größen wachsen weiter, bis der Scan fertig ist."
       }
     }
   },
@@ -836,6 +876,11 @@ export default {
         none: "Τίποτα σε αυτήν την ομάδα.",
         back: "Επιστροφή στη λίστα",
         loading: "Σύγκριση…"
+      },
+      crawl: {
+        note: "Διαβάζει κάθε φάκελο, έναν-έναν. Μια ολόκληρη μονάδα παίρνει χρόνο: τα αποτελέσματα εμφανίζονται όπως βρίσκονται και μπορείτε να σταματήσετε ανά πάσα στιγμή κρατώντας ό,τι διαβάστηκε.",
+        limit: "Δεν χρειάζεται άδεια. Μια ολόκληρη μονάδα παίρνει πολύ περισσότερο από τη γρήγορη σάρωση, αλλά βλέπετε τα αποτελέσματα όπως φτάνουν και μπορείτε να σταματήσετε όποτε θέλετε.",
+        partialNote: "Εμφανίζεται ό,τι έχει διαβαστεί μέχρι τώρα. Τα μεγέθη συνεχίζουν να αυξάνονται μέχρι να ολοκληρωθεί η σάρωση."
       }
     }
   },
@@ -929,6 +974,11 @@ export default {
         none: "Nada en este grupo.",
         back: "Volver a la lista",
         loading: "Comparando…"
+      },
+      crawl: {
+        note: "Lee cada carpeta, una a una. Una unidad entera tarda un rato: los resultados aparecen a medida que se encuentran y puedes detenerlo cuando quieras y conservar lo leído.",
+        limit: "No necesita permiso. Una unidad entera tarda mucho más que el escaneo rápido, pero ves los resultados a medida que llegan y puedes detenerlo cuando quieras.",
+        partialNote: "Se muestra lo leído hasta ahora. Los tamaños siguen creciendo hasta que termine el escaneo."
       }
     }
   },
@@ -1022,6 +1072,11 @@ export default {
         none: "Selles rühmas pole midagi.",
         back: "Tagasi loendisse",
         loading: "Võrdlemine…"
+      },
+      crawl: {
+        note: "Loeb iga kausta ükshaaval. Terve draiv võtab aega: tulemused ilmuvad leidmise järel ning saate igal ajal peatada ja säilitada loetu.",
+        limit: "Luba pole vaja. Terve draiv võtab palju kauem kui kiirskann, kuid näete tulemusi jooksvalt ja saate peatada millal tahes.",
+        partialNote: "Näidatakse seni loetut. Suurused kasvavad, kuni skannimine lõpeb."
       }
     }
   },
@@ -1115,6 +1170,11 @@ export default {
         none: "Tässä ryhmässä ei ole mitään.",
         back: "Takaisin luetteloon",
         loading: "Verrataan…"
+      },
+      crawl: {
+        note: "Lukee jokaisen kansion yksi kerrallaan. Koko asema vie aikansa: tulokset näkyvät sitä mukaa kuin niitä löytyy, ja voit pysäyttää milloin tahansa ja säilyttää luetun.",
+        limit: "Ei vaadi lupaa. Koko asema kestää paljon pidempään kuin pikaskannaus, mutta näet tulokset sitä mukaa kuin ne saapuvat ja voit pysäyttää milloin haluat.",
+        partialNote: "Näytetään tähän mennessä luettu. Koot kasvavat, kunnes skannaus on valmis."
       }
     }
   },
@@ -1208,6 +1268,11 @@ export default {
         none: "Rien dans ce groupe.",
         back: "Retour à la liste",
         loading: "Comparaison…"
+      },
+      crawl: {
+        note: "Lit chaque dossier, un à la fois. Un lecteur entier prend du temps : les résultats apparaissent au fur et à mesure et vous pouvez arrêter à tout moment en gardant ce qui a été lu.",
+        limit: "Ne demande aucune autorisation. Un lecteur entier prend bien plus de temps que l’analyse rapide, mais vous voyez les résultats au fur et à mesure et pouvez arrêter quand vous voulez.",
+        partialNote: "Affichage de ce qui a été lu jusqu’ici. Les tailles continuent de croître jusqu’à la fin de l’analyse."
       }
     }
   },
@@ -1301,6 +1366,11 @@ export default {
         none: "אין דבר בקבוצה זו.",
         back: "חזרה לרשימה",
         loading: "משווה…"
+      },
+      crawl: {
+        note: "קורא כל תיקייה, אחת אחת. כונן שלם לוקח זמן: התוצאות מופיעות תוך כדי מציאתן, ואפשר לעצור בכל רגע ולשמור את מה שנקרא.",
+        limit: "לא דורש הרשאה. כונן שלם לוקח הרבה יותר זמן מהסריקה המהירה, אבל התוצאות מופיעות תוך כדי ואפשר לעצור מתי שרוצים.",
+        partialNote: "מוצג מה שנקרא עד כה. הגדלים ממשיכים לגדול עד שהסריקה מסתיימת."
       }
     }
   },
@@ -1394,6 +1464,11 @@ export default {
         none: "Ebben a csoportban nincs semmi.",
         back: "Vissza a listához",
         loading: "Összehasonlítás…"
+      },
+      crawl: {
+        note: "Egyesével olvassa be az összes mappát. Egy teljes meghajtó eltart egy ideig: az eredmények megjelennek, ahogy előkerülnek, és bármikor leállíthatja, megtartva az addig beolvasottakat.",
+        limit: "Nem kér engedélyt. Egy teljes meghajtó sokkal tovább tart, mint a gyors vizsgálat, de az eredményeket menet közben látja, és bármikor leállíthatja.",
+        partialNote: "A eddig beolvasottakat mutatja. A méretek a vizsgálat végéig tovább nőnek."
       }
     }
   },
@@ -1487,6 +1562,11 @@ export default {
         none: "Tidak ada apa pun di grup ini.",
         back: "Kembali ke daftar",
         loading: "Membandingkan…"
+      },
+      crawl: {
+        note: "Membaca setiap folder, satu per satu. Satu drive penuh butuh waktu: hasil muncul saat ditemukan, dan Anda dapat berhenti kapan saja serta menyimpan yang sudah dibaca.",
+        limit: "Tidak memerlukan izin. Satu drive penuh jauh lebih lama daripada pemindaian cepat, tetapi hasil terlihat saat tiba dan Anda dapat berhenti kapan saja.",
+        partialNote: "Menampilkan yang sudah dibaca sejauh ini. Ukuran terus bertambah hingga pemindaian selesai."
       }
     }
   },
@@ -1580,6 +1660,11 @@ export default {
         none: "Ekkert í þessum hópi.",
         back: "Aftur á listann",
         loading: "Ber saman…"
+      },
+      crawl: {
+        note: "Les hverja möppu, eina í einu. Heilt drif tekur tíma: niðurstöður birtast jafnóðum og þú getur stöðvað hvenær sem er og haldið því sem var lesið.",
+        limit: "Krefst einskis leyfis. Heilt drif tekur mun lengri tíma en hraðskönnun, en þú sérð niðurstöður jafnóðum og getur stöðvað hvenær sem þú vilt.",
+        partialNote: "Sýnir það sem hefur verið lesið hingað til. Stærðir halda áfram að vaxa þar til skönnuninni lýkur."
       }
     }
   },
@@ -1673,6 +1758,11 @@ export default {
         none: "Niente in questo gruppo.",
         back: "Torna all’elenco",
         loading: "Confronto…"
+      },
+      crawl: {
+        note: "Legge ogni cartella, una alla volta. Un’unità intera richiede un po’ di tempo: i risultati compaiono man mano e puoi fermarti in qualsiasi momento conservando quanto letto.",
+        limit: "Non richiede autorizzazioni. Un’unità intera richiede molto più tempo della scansione rapida, ma vedi i risultati man mano che arrivano e puoi fermarti quando vuoi.",
+        partialNote: "Mostra quanto letto finora. Le dimensioni continuano a crescere fino al termine della scansione."
       }
     }
   },
@@ -1766,6 +1856,11 @@ export default {
         none: "このグループには何もありません。",
         back: "一覧に戻る",
         loading: "比較しています…"
+      },
+      crawl: {
+        note: "フォルダーを 1 つずつ読み取ります。ドライブ全体には時間がかかりますが、結果は見つかるたびに表示され、いつでも停止して読み取り済みの内容を残せます。",
+        limit: "権限は不要です。ドライブ全体は高速スキャンよりずっと時間がかかりますが、結果は届いた順に表示され、好きなときに停止できます。",
+        partialNote: "ここまでに読み取った内容を表示しています。サイズはスキャンが終わるまで増え続けます。"
       }
     }
   },
@@ -1859,6 +1954,11 @@ export default {
         none: "이 그룹에는 항목이 없습니다.",
         back: "목록으로 돌아가기",
         loading: "비교하는 중…"
+      },
+      crawl: {
+        note: "폴더를 하나씩 읽습니다. 드라이브 전체는 시간이 걸리지만 결과는 찾는 대로 표시되며, 언제든 중지하고 읽은 내용을 유지할 수 있습니다.",
+        limit: "권한이 필요 없습니다. 드라이브 전체는 빠른 검사보다 훨씬 오래 걸리지만 결과가 도착하는 대로 표시되며 원할 때 언제든 중지할 수 있습니다.",
+        partialNote: "지금까지 읽은 내용을 표시하고 있습니다. 검사가 끝날 때까지 크기가 계속 늘어납니다."
       }
     }
   },
@@ -1952,6 +2052,11 @@ export default {
         none: "Šioje grupėje nieko nėra.",
         back: "Grįžti į sąrašą",
         loading: "Lyginama…"
+      },
+      crawl: {
+        note: "Skaito kiekvieną aplanką po vieną. Visas diskas užtrunka: rezultatai rodomi, kai randami, o sustabdyti galite bet kada, išsaugodami perskaitytą dalį.",
+        limit: "Leidimo nereikia. Visas diskas užtrunka daug ilgiau nei greitasis nuskaitymas, bet rezultatus matote iškart ir galite sustabdyti, kada norite.",
+        partialNote: "Rodoma tai, kas perskaityta iki šiol. Dydžiai auga, kol nuskaitymas baigsis."
       }
     }
   },
@@ -2045,6 +2150,11 @@ export default {
         none: "Tiada apa-apa dalam kumpulan ini.",
         back: "Kembali ke senarai",
         loading: "Membandingkan…"
+      },
+      crawl: {
+        note: "Membaca setiap folder, satu demi satu. Seluruh pemacu mengambil masa: hasil muncul semasa ditemui, dan anda boleh berhenti bila-bila masa serta mengekalkan yang telah dibaca.",
+        limit: "Tidak memerlukan kebenaran. Seluruh pemacu mengambil masa jauh lebih lama daripada imbasan pantas, tetapi anda melihat hasil semasa ia tiba dan boleh berhenti bila-bila masa.",
+        partialNote: "Memaparkan yang telah dibaca setakat ini. Saiz terus bertambah sehingga imbasan selesai."
       }
     }
   },
@@ -2138,6 +2248,11 @@ export default {
         none: "Ingenting i denne gruppen.",
         back: "Tilbake til listen",
         loading: "Sammenligner…"
+      },
+      crawl: {
+        note: "Leser hver mappe, én om gangen. En hel stasjon tar en stund: resultatene vises etter hvert som de finnes, og du kan stoppe når som helst og beholde det som er lest.",
+        limit: "Krever ingen tillatelse. En hel stasjon tar mye lengre tid enn hurtigskanning, men du ser resultatene etter hvert og kan stoppe når du vil.",
+        partialNote: "Viser det som er lest så langt. Størrelsene vokser til skanningen er ferdig."
       }
     }
   },
@@ -2231,6 +2346,11 @@ export default {
         none: "Niets in deze groep.",
         back: "Terug naar de lijst",
         loading: "Vergelijken…"
+      },
+      crawl: {
+        note: "Leest elke map, één voor één. Een hele schijf kost tijd: resultaten verschijnen zodra ze gevonden zijn, en u kunt op elk moment stoppen en behouden wat gelezen is.",
+        limit: "Vereist geen toestemming. Een hele schijf duurt veel langer dan de snelle scan, maar u ziet resultaten zodra ze binnenkomen en kunt stoppen wanneer u wilt.",
+        partialNote: "Toont wat tot nu toe is gelezen. De groottes blijven groeien tot de scan klaar is."
       }
     }
   },
@@ -2324,6 +2444,11 @@ export default {
         none: "Nic w tej grupie.",
         back: "Wróć do listy",
         loading: "Porównywanie…"
+      },
+      crawl: {
+        note: "Czyta każdy folder po kolei. Cały dysk zajmuje chwilę: wyniki pojawiają się na bieżąco, a w dowolnym momencie możesz przerwać i zachować to, co odczytano.",
+        limit: "Nie wymaga uprawnień. Cały dysk trwa znacznie dłużej niż szybkie skanowanie, ale wyniki widać na bieżąco i można przerwać w dowolnej chwili.",
+        partialNote: "Pokazuje to, co dotąd odczytano. Rozmiary rosną do zakończenia skanowania."
       }
     }
   },
@@ -2417,6 +2542,11 @@ export default {
         none: "پدې ګروپ کې هیڅ نشته.",
         back: "لیست ته ستنیدل",
         loading: "پرتله کیږي…"
+      },
+      crawl: {
+        note: "هر فولډر یو په یو لولي. بشپړ ډرایو یو څه وخت نیسي: پایلې د موندلو سره سم ښکاره کیږي، او تاسو کولی شئ هر وخت ودروئ او هغه څه وساتئ چې لوستل شوي.",
+        limit: "اجازې ته اړتیا نشته. بشپړ ډرایو د چټک سکین په پرتله ډېر وخت نیسي، خو تاسو پایلې د رارسېدو سره سم ګورئ او هر وخت ودرولی شئ.",
+        partialNote: "هغه څه ښیي چې تر اوسه لوستل شوي. اندازې تر هغه وخته وده کوي چې سکین پای ته ورسیږي."
       }
     }
   },
@@ -2510,6 +2640,11 @@ export default {
         none: "Nada neste grupo.",
         back: "Voltar à lista",
         loading: "Comparando…"
+      },
+      crawl: {
+        note: "Lê cada pasta, uma de cada vez. Uma unidade inteira leva um tempo: os resultados aparecem à medida que são encontrados, e você pode parar a qualquer momento e manter o que foi lido.",
+        limit: "Não precisa de permissão. Uma unidade inteira leva muito mais tempo do que a verificação rápida, mas você vê os resultados conforme chegam e pode parar quando quiser.",
+        partialNote: "Mostrando o que foi lido até agora. Os tamanhos continuam crescendo até a verificação terminar."
       }
     }
   },
@@ -2603,6 +2738,11 @@ export default {
         none: "Nada neste grupo.",
         back: "Voltar à lista",
         loading: "A comparar…"
+      },
+      crawl: {
+        note: "Lê cada pasta, uma de cada vez. Uma unidade inteira demora algum tempo: os resultados aparecem à medida que são encontrados e pode parar a qualquer momento, mantendo o que foi lido.",
+        limit: "Não precisa de permissão. Uma unidade inteira demora muito mais do que a análise rápida, mas vê os resultados à medida que chegam e pode parar quando quiser.",
+        partialNote: "A mostrar o que foi lido até agora. Os tamanhos continuam a crescer até a análise terminar."
       }
     }
   },
@@ -2696,6 +2836,11 @@ export default {
         none: "Nimic în acest grup.",
         back: "Înapoi la listă",
         loading: "Se compară…"
+      },
+      crawl: {
+        note: "Citește fiecare folder, pe rând. O unitate întreagă durează: rezultatele apar pe măsură ce sunt găsite, iar puteți opri oricând și păstra ce s-a citit.",
+        limit: "Nu necesită permisiune. O unitate întreagă durează mult mai mult decât scanarea rapidă, dar vedeți rezultatele pe măsură ce sosesc și puteți opri oricând.",
+        partialNote: "Se afișează ce s-a citit până acum. Dimensiunile continuă să crească până se termină scanarea."
       }
     }
   },
@@ -2789,6 +2934,11 @@ export default {
         none: "В этой группе ничего нет.",
         back: "Назад к списку",
         loading: "Сравнение…"
+      },
+      crawl: {
+        note: "Читает папки по одной. Целый диск занимает время: результаты появляются по мере обнаружения, а остановить сканирование можно в любой момент, сохранив прочитанное.",
+        limit: "Права не нужны. Целый диск занимает намного больше времени, чем быстрое сканирование, но результаты видны по мере поступления, а остановить можно в любой момент.",
+        partialNote: "Показано то, что прочитано к этому моменту. Размеры растут, пока сканирование не завершится."
       }
     }
   },
@@ -2882,6 +3032,11 @@ export default {
         none: "V tejto skupine nič nie je.",
         back: "Späť na zoznam",
         loading: "Porovnáva sa…"
+      },
+      crawl: {
+        note: "Číta každý priečinok postupne. Celý disk chvíľu trvá: výsledky sa objavujú priebežne a kedykoľvek môžete skenovanie zastaviť a ponechať si prečítané.",
+        limit: "Nevyžaduje oprávnenie. Celý disk trvá oveľa dlhšie než rýchle skenovanie, ale výsledky vidíte priebežne a môžete kedykoľvek zastaviť.",
+        partialNote: "Zobrazuje sa, čo sa doteraz prečítalo. Veľkosti rastú, kým skenovanie neskončí."
       }
     }
   },
@@ -2975,6 +3130,11 @@ export default {
         none: "Asgjë në këtë grup.",
         back: "Kthehu te lista",
         loading: "Po krahasohet…"
+      },
+      crawl: {
+        note: "Lexon çdo dosje, një nga një. Një disk i tërë kërkon kohë: rezultatet shfaqen sa gjenden dhe mund të ndaloni kurdo, duke mbajtur çfarë u lexua.",
+        limit: "Nuk kërkon leje. Një disk i tërë zgjat shumë më shumë se skanimi i shpejtë, por i shihni rezultatet sa vijnë dhe mund të ndaloni kurdo.",
+        partialNote: "Po shfaqet çfarë është lexuar deri tani. Madhësitë vazhdojnë të rriten deri sa skanimi të përfundojë."
       }
     }
   },
@@ -3068,6 +3228,11 @@ export default {
         none: "Нема ничега у овој групи.",
         back: "Назад на листу",
         loading: "Поређење…"
+      },
+      crawl: {
+        note: "Чита сваку фасциклу, једну по једну. Цео диск траје: резултати се појављују како се проналазе, а можете да станете у било ком тренутку и задржите прочитано.",
+        limit: "Не тражи дозволу. Цео диск траје много дуже од брзог скенирања, али резултате видите како стижу и можете стати кад желите.",
+        partialNote: "Приказује се оно што је до сада прочитано. Величине расту док се скенирање не заврши."
       }
     }
   },
@@ -3161,6 +3326,11 @@ export default {
         none: "Inget i den här gruppen.",
         back: "Tillbaka till listan",
         loading: "Jämför…"
+      },
+      crawl: {
+        note: "Läser varje mapp, en i taget. En hel enhet tar en stund: resultaten visas allt eftersom de hittas, och du kan stoppa när som helst och behålla det som lästs.",
+        limit: "Kräver ingen behörighet. En hel enhet tar mycket längre tid än snabbskanning, men du ser resultaten allt eftersom och kan stoppa när du vill.",
+        partialNote: "Visar det som lästs hittills. Storlekarna växer tills skanningen är klar."
       }
     }
   },
@@ -3254,6 +3424,11 @@ export default {
         none: "ไม่มีรายการในกลุ่มนี้",
         back: "กลับไปที่รายการ",
         loading: "กำลังเปรียบเทียบ…"
+      },
+      crawl: {
+        note: "อ่านทีละโฟลเดอร์ ทั้งไดรฟ์ใช้เวลาสักพัก ผลลัพธ์จะแสดงทันทีที่พบ และคุณหยุดได้ทุกเมื่อโดยเก็บสิ่งที่อ่านไปแล้วไว้",
+        limit: "ไม่ต้องใช้สิทธิ์ ทั้งไดรฟ์ใช้เวลานานกว่าการสแกนแบบเร็วมาก แต่คุณเห็นผลลัพธ์ทันทีที่มาถึงและหยุดได้ตามต้องการ",
+        partialNote: "แสดงสิ่งที่อ่านได้จนถึงตอนนี้ ขนาดจะเพิ่มขึ้นเรื่อย ๆ จนกว่าการสแกนจะเสร็จ"
       }
     }
   },
@@ -3347,6 +3522,11 @@ export default {
         none: "Bu grupta hiçbir şey yok.",
         back: "Listeye dön",
         loading: "Karşılaştırılıyor…"
+      },
+      crawl: {
+        note: "Her klasörü tek tek okur. Tüm bir sürücü biraz zaman alır: sonuçlar bulundukça görünür ve istediğiniz zaman durdurup okunanları koruyabilirsiniz.",
+        limit: "İzin gerektirmez. Tüm bir sürücü hızlı taramadan çok daha uzun sürer, ancak sonuçları geldikçe görürsünüz ve istediğiniz an durdurabilirsiniz.",
+        partialNote: "Şimdiye kadar okunanlar gösteriliyor. Tarama bitene kadar boyutlar artmaya devam eder."
       }
     }
   },
@@ -3440,6 +3620,11 @@ export default {
         none: "У цій групі нічого немає.",
         back: "Назад до списку",
         loading: "Порівняння…"
+      },
+      crawl: {
+        note: "Читає папки по одній. Цілий диск потребує часу: результати з’являються в міру знаходження, а зупинити можна будь-коли, зберігши прочитане.",
+        limit: "Прав не потрібно. Цілий диск займає значно більше часу, ніж швидке сканування, але результати видно в міру надходження, а зупинити можна будь-коли.",
+        partialNote: "Показано те, що прочитано на цей момент. Розміри зростають, доки сканування не завершиться."
       }
     }
   },
@@ -3533,6 +3718,11 @@ export default {
         none: "Không có gì trong nhóm này.",
         back: "Quay lại danh sách",
         loading: "Đang so sánh…"
+      },
+      crawl: {
+        note: "Đọc từng thư mục một. Cả ổ đĩa cần một lúc: kết quả hiện ra ngay khi tìm thấy, và bạn có thể dừng bất cứ lúc nào để giữ phần đã đọc.",
+        limit: "Không cần cấp quyền. Cả ổ đĩa mất nhiều thời gian hơn quét nhanh rất nhiều, nhưng bạn thấy kết quả ngay khi có và có thể dừng bất cứ lúc nào.",
+        partialNote: "Đang hiển thị phần đã đọc đến lúc này. Kích thước tiếp tục tăng cho đến khi quét xong."
       }
     }
   },
@@ -3626,6 +3816,11 @@ export default {
         none: "此组中没有内容。",
         back: "返回列表",
         loading: "正在比较…"
+      },
+      crawl: {
+        note: "逐个读取文件夹。整个驱动器需要一些时间：结果会边找到边显示，您可随时停止并保留已读取的内容。",
+        limit: "无需权限。整个驱动器比快速扫描慢得多，但结果会实时显示，您可随时停止。",
+        partialNote: "显示目前已读取的内容。在扫描完成之前，大小会持续增长。"
       }
     }
   },
@@ -3719,6 +3914,11 @@ export default {
         none: "此群組中沒有內容。",
         back: "返回清單",
         loading: "正在比較…"
+      },
+      crawl: {
+        note: "逐一讀取資料夾。整個磁碟機需要一些時間：結果會邊找到邊顯示，您可隨時停止並保留已讀取的內容。",
+        limit: "不需要權限。整個磁碟機比快速掃描慢得多，但結果會即時顯示，您可隨時停止。",
+        partialNote: "顯示目前已讀取的內容。在掃描完成前，大小會持續增加。"
       }
     }
   }
