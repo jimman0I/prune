@@ -34,7 +34,7 @@ const BITMAP_RECORD = 6;
  * records were read, how many were unreadable, whether the MFT's own
  * runlist covered the whole table, and the totals a caller needs to check
  * the result against the volume itself (see the comment on `stats`). */
-export function scanVolume({ readAt, driveLabel = 'C:', maxDepth = 12, onProgress } = {}) {
+export function scanVolume({ readAt, driveLabel = 'C:', maxDepth = 12, exclusions = null, onProgress } = {}) {
   const bootBuffer = Buffer.alloc(512);
   readAt(bootBuffer, 0);
   const geometry = parseBootSector(bootBuffer);
@@ -122,7 +122,9 @@ export function scanVolume({ readAt, driveLabel = 'C:', maxDepth = 12, onProgres
   }
 
   const tally = tallyEntries(records);
-  const tree = buildTree(records, { name: driveLabel, maxDepth });
+  // What the user's exclusions left out is reported, not silently dropped.
+  const left = {};
+  const tree = buildTree(records, { name: driveLabel, maxDepth, exclusions, report: left });
 
   return {
     tree,
@@ -155,6 +157,12 @@ export function scanVolume({ readAt, driveLabel = 'C:', maxDepth = 12, onProgres
       sparseOrCompressedFiles: tally.sparse,
       hardLinkedFiles: tally.hardLinked,
       hardLinkExtraNames: tally.extraNames,
+      // Left out by the user's Settings -> exclusions: still on the volume, in
+      // none of the totals above. (The file/stream/index split above is of
+      // the whole volume, exclusions or not.)
+      excludedItems: left.excludedItems,
+      excludedSizeBytes: left.excludedSizeBytes,
+      excludedAllocatedBytes: left.excludedAllocatedBytes,
       volumeBytes: geometry.volumeBytes,
       // The volume's own record of space in use ($Bitmap), the ground truth
       // allocatedBytes should land just under. null when it could not be read.

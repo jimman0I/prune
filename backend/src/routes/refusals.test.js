@@ -74,7 +74,7 @@ describe('a malformed request is a 400', () => {
   it('defaults the MFT scan to C when the body names no drive', async () => {
     const res = await post('/mft-scan', {});
     expect(res.status).toBe(200);
-    expect(scanDrivesViaMft).toHaveBeenCalledWith({ driveLetters: ['C'], maxDepth: expect.any(Number) });
+    expect(scanDrivesViaMft).toHaveBeenCalledWith(expect.objectContaining({ driveLetters: ['C'], maxDepth: expect.any(Number) }));
   });
 
   it('needs a program name to scan for leftovers', async () => {

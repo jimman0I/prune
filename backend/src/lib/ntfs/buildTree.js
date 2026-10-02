@@ -1,3 +1,5 @@
+import { createExclusionMatcher } from '../diskExclusions.js';
+
 /** MFT record 5 is always the volume root directory. */
 export const ROOT_RECORD = 5;
 
@@ -33,11 +35,21 @@ const ORPHAN_BUCKET = 'Unknown (orphaned entries)';
  *    to prevent. Everything the root walk didn't account for is swept
  *    into a visible bucket instead.
  *
+ * `exclusions` ({ excludeFolders, excludeExtensions }, the user's Settings) are
+ * honoured here exactly as the folder walk honours them: an excluded entry is
+ * kept in the tree as a marked, empty placeholder and contributes nothing to
+ * any total, and everything beneath an excluded folder is accounted for so the
+ * orphan sweep cannot bring it back. `report`, if given, is filled with what
+ * was left out (excludedItems / excludedSizeBytes / excludedAllocatedBytes) so
+ * the omission is stated rather than silent.
+ *
  * `maxDepth` bounds only the SHAPE of the returned tree. The walk always
  * descends to the leaves, so a file twenty levels down still counts
  * toward every ancestor's total -- same contract the recursive scanner's
  * own DEFAULT_MAX_DEPTH already has. */
-export function buildTree(records, { name = 'C:', maxDepth = 12 } = {}) {
+export function buildTree(records, { name = 'C:', maxDepth = 12, exclusions = null, report = null } = {}) {
+  const isExcluded = createExclusionMatcher(exclusions);
+  if (report) { report.excludedItems = 0; report.excludedSizeBytes = 0; report.excludedAllocatedBytes = 0; }
   // Only report allocation if the records carry it at all: a tree from an
   // older reader must not claim that everything occupies zero bytes.
   let hasAllocation = false;
@@ -71,10 +83,40 @@ export function buildTree(records, { name = 'C:', maxDepth = 12 } = {}) {
     return node;
   };
 
-  function nodeFor(recordNumber, depthRemaining) {
+  /** Accounts for an excluded entry and everything below it, without
+   * building nodes for any of it. Iterative, with the accounted set as the
+   * visited guard, so a parent cycle inside an excluded folder terminates. */
+  function leaveOut(recordNumber) {
+    const stack = [recordNumber];
+    while (stack.length > 0) {
+      const current = stack.pop();
+      const entry = records.get(current);
+      if (!entry || (accounted.has(current) && current !== recordNumber)) continue;
+      accounted.add(current);
+      if (report) {
+        report.excludedItems += 1;
+        report.excludedSizeBytes += entry.isDirectory ? 0 : entry.sizeBytes;
+        report.excludedAllocatedBytes += entry.allocatedBytes ?? 0;
+      }
+      for (const child of childrenOf.get(current) || []) if (!accounted.has(child)) stack.push(child);
+    }
+  }
+
+  function nodeFor(recordNumber, depthRemaining, parentPath) {
     const entry = records.get(recordNumber);
     if (!entry) return null;
     accounted.add(recordNumber);
+
+    const path = isExcluded ? `${parentPath}\\${entry.name}` : '';
+    if (isExcluded && isExcluded(path)) {
+      accounted.delete(recordNumber);
+      leaveOut(recordNumber);
+      const placeholder = entry.isDirectory
+        ? { name: entry.name, size: 0, type: 'directory', excluded: true, children: [] }
+        : { name: entry.name, size: 0, type: 'file', excluded: true };
+      if (hasAllocation && entry.isDirectory) placeholder.allocated = 0;
+      return placeholder;
+    }
 
     if (!entry.isDirectory) return fileNode(entry);
     if (onPath.has(recordNumber)) {
@@ -91,7 +133,7 @@ export function buildTree(records, { name = 'C:', maxDepth = 12 } = {}) {
     // A directory's own index buffers sit on disk too.
     let allocated = entry.allocatedBytes ?? 0;
     for (const childRecord of childrenOf.get(recordNumber) || []) {
-      const child = nodeFor(childRecord, depthRemaining - 1);
+      const child = nodeFor(childRecord, depthRemaining - 1, path);
       if (!child) continue;
       size += child.size;
       allocated += child.allocated ?? 0;
@@ -111,7 +153,7 @@ export function buildTree(records, { name = 'C:', maxDepth = 12 } = {}) {
   let total = 0;
   let totalAllocated = records.get(ROOT_RECORD)?.allocatedBytes ?? 0;
   for (const childRecord of childrenOf.get(ROOT_RECORD) || []) {
-    const child = nodeFor(childRecord, maxDepth - 1);
+    const child = nodeFor(childRecord, maxDepth - 1, name);
     if (!child) continue;
     total += child.size;
     totalAllocated += child.allocated ?? 0;

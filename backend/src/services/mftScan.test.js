@@ -31,7 +31,7 @@ describe('scanDrivesViaMft', () => {
     const [workerPath, args, options] = runElevatedNodeJsonMock.mock.calls[0];
     expect(workerPath).toMatch(/mftWorker\.js$/);
     expect(args).toEqual([]);
-    expect(options.input).toEqual({ drives: ['C', 'D'], maxDepth: 5 });
+    expect(options.input).toEqual({ drives: ['C', 'D'], maxDepth: 5, excludeFolders: [], excludeExtensions: [] });
   });
 
   it('defaults to the C drive', async () => {
@@ -126,7 +126,7 @@ describe('scanDrivesViaMft when Prune is already running as administrator', () =
     const [workerPath, args, options] = runNodeJsonMock.mock.calls[0];
     expect(workerPath).toMatch(/mftWorker\.js$/);
     expect(args).toEqual([]);
-    expect(options.input).toEqual({ drives: ['C'], maxDepth: 12 });
+    expect(options.input).toEqual({ drives: ['C'], maxDepth: 12, excludeFolders: [], excludeExtensions: [] });
   });
 
   it('reports a real failure of the direct run as an error', async () => {
@@ -141,5 +141,14 @@ describe('scanDrivesViaMft when Prune is not elevated', () => {
     await scanDrivesViaMft({});
     expect(runElevatedNodeJsonMock).toHaveBeenCalledTimes(1);
     expect(runNodeJsonMock).not.toHaveBeenCalled();
+  });
+});
+describe('scanDrivesViaMft exclusions', () => {
+  it("hands the user's exclusions to the helper, which cannot read Prune's settings itself", async () => {
+    runElevatedNodeJsonMock.mockResolvedValue({ ok: true, data: { drives: [okDrive('C')] } });
+    await scanDrivesViaMft({ excludeFolders: ['D:\\Games'], excludeExtensions: ['.iso'] });
+    const { input } = runElevatedNodeJsonMock.mock.calls[0][2];
+    expect(input.excludeFolders).toEqual(['D:\\Games']);
+    expect(input.excludeExtensions).toEqual(['.iso']);
   });
 });

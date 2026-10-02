@@ -29,6 +29,12 @@ export function runMftJob(job, { openVolume }) {
   if (letters.length === 0) throw new Error('No drive letter was given.');
 
   const maxDepth = Number(job?.maxDepth) || 12;
+  // The user's exclusions travel in the job: the helper has no way to read
+  // Prune's settings itself, and the scan has to obey them.
+  const exclusions = {
+    excludeFolders: Array.isArray(job?.excludeFolders) ? job.excludeFolders.filter((f) => typeof f === 'string') : [],
+    excludeExtensions: Array.isArray(job?.excludeExtensions) ? job.excludeExtensions.filter((e) => typeof e === 'string') : []
+  };
 
   const drives = letters.map((letter) => {
     let volume;
@@ -40,7 +46,7 @@ export function runMftJob(job, { openVolume }) {
     try {
       return {
         driveLetter: letter,
-        ...scanVolume({ readAt: volume.readAt, driveLabel: `${letter}:`, maxDepth })
+        ...scanVolume({ readAt: volume.readAt, driveLabel: `${letter}:`, maxDepth, exclusions })
       };
     } catch (err) {
       return { driveLetter: letter, error: err.message };

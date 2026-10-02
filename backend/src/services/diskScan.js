@@ -11,8 +11,7 @@ import { join, basename } from 'node:path';
  * directory blows past any depth cap in file count, not depth) -- that's
  * what the `signal` parameter below is for. See the route's own
  * SCAN_TIMEOUT_MS for the real time budget. */
-import { normalizePath, toExcludePattern } from '../lib/cleanGuards.js';
-import { matchesExtension } from '../lib/exclusionInput.js';
+import { createExclusionMatcher } from '../lib/diskExclusions.js';
 
 export const DEFAULT_MAX_DEPTH = 12;
 
@@ -34,7 +33,7 @@ async function scanNode(entryPath, name, depthRemaining, signal, exclusions, onF
   // total with no trace is the same dishonesty as an unreadable folder
   // reported as empty, and the map already has a shape for "present but
   // not counted".
-  if (isExcludedEntry(entryPath, exclusions)) {
+  if (exclusions?.(entryPath)) {
     return { name, size: 0, type: 'directory', excluded: true, children: [] };
   }
 
@@ -178,29 +177,5 @@ async function scanNode(entryPath, name, depthRemaining, signal, exclusions, onF
  * The walk visits files below the depth cap too, so the count reflects work
  * done, not what the returned tree shows. */
 export async function scanDirectory(dirPath, maxDepth = DEFAULT_MAX_DEPTH, signal, exclusions = null, onFile) {
-  return scanNode(dirPath, basename(dirPath) || dirPath, maxDepth, signal, exclusions, onFile, new Set());
-}
-
-/** Whether the scanner should skip this entry outright.
- *
- * Only the USER's own exclusions, not cleanGuards' DEFAULT_EXCLUDED. Those
- * defaults exist to stop a cleaner taking files out of places like
- * WinSxS; they are not a statement that the disk map should pretend
- * WinSxS is empty. A disk map that hid the component store would be
- * lying about where the space went, which is the one thing it is for.
- *
- * Null exclusions means the caller did not ask for any -- every existing
- * test and the MFT path included -- so the walk behaves exactly as before.
- */
-function isExcludedEntry(entryPath, exclusions) {
-  if (!exclusions) return false;
-  const folders = exclusions.excludeFolders ?? [];
-  const extensions = exclusions.excludeExtensions ?? [];
-  if (folders.length === 0 && extensions.length === 0) return false;
-
-  if (matchesExtension(entryPath, extensions)) return true;
-
-  const haystack = normalizePath(entryPath);
-  if (haystack === '') return false;
-  return folders.map(toExcludePattern).filter(Boolean).some((p) => haystack.includes(p));
+  return scanNode(dirPath, basename(dirPath) || dirPath, maxDepth, signal, createExclusionMatcher(exclusions), onFile, new Set());
 }
