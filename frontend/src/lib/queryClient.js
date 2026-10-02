@@ -57,6 +57,8 @@ export const keys = {
   startupIcons: ['startup', 'icons'],
   quarantine: ['quarantine'],
   installTraces: ['install-traces'],
+  backups: ['backups'],
+  uninstallHistory: ['uninstall-history'],
   settings: ['settings'],
   updateCheck: ['update-check'],
   automation: ['automation'],

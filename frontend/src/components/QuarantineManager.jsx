@@ -1,6 +1,7 @@
 import { useEffect, useState, memo } from 'react';
 import Page from './Page.jsx';
 import { useQuarantine } from '../hooks/useSystemQueries.js';
+import BackupManager from './BackupManager.jsx';
 import { useLanguage } from '../i18n/LanguageContext.jsx';
 
 // Duplicated locally rather than imported from Dashboard.jsx/DeepClean.jsx
@@ -59,8 +60,25 @@ function useArmed(key, delayMs = ARM_DELAY_MS) {
  * clean can hold thousands; the screen used to be a wall of them. */
 export const FILES_COLLAPSED = 5;
 
-function QuarantineManager() {
+/** The tabs on this screen. Quarantine is what it always was; the others hold
+ * what Prune saved before changing something with no Recycle Bin (Backups)
+ * and what it has uninstalled (History). */
+export const TABS = ['quarantine', 'backups'];
+
+function QuarantineManager({ initialTab = 'quarantine' }) {
   const { t } = useLanguage();
+  const [tab, setTab] = useState(TABS.includes(initialTab) ? initialTab : 'quarantine');
+  // Asked to show a tab from outside (a link on another screen).
+  useEffect(() => { if (TABS.includes(initialTab)) setTab(initialTab); }, [initialTab]);
+  const tabLabels = { quarantine: t('nav.quarantine'), backups: t('uninstallerV3.backups.tab') };
+  const onTabKeyDown = (event) => {
+    const step = { ArrowRight: 1, ArrowLeft: -1 }[event.key];
+    if (!step) return;
+    event.preventDefault();
+    const next = TABS[(TABS.indexOf(tab) + step + TABS.length) % TABS.length];
+    setTab(next);
+    document.getElementById(`quarantine-tab-${next}`)?.focus();
+  };
   const [actionError, setActionError] = useState(null);
   const [confirmDeleteDir, setConfirmDeleteDir] = useState(null);
   const [confirmEmpty, setConfirmEmpty] = useState(false);
@@ -121,7 +139,7 @@ function QuarantineManager() {
       <div className="flex items-baseline justify-between mb-8">
         <div>
           <h1 className="display-heading text-[30px] leading-none">{t('quarantine.title')}</h1>
-          {!loading && !error && (
+          {tab === 'quarantine' && !loading && !error && (
             <>
             <p className="text-[13px] text-[color:var(--text-secondary)] mt-2.5">
               {/* "at least" (the third argument below) when a batch carries
@@ -157,7 +175,7 @@ function QuarantineManager() {
           )}
         </div>
 
-        {!loading && !error && (
+        {tab === 'quarantine' && !loading && !error && (
           confirmEmpty ? (
             <div className="flex items-center gap-2">
               <span className="text-[12.5px] text-[color:var(--danger)]">{t('quarantine.confirmEmptyPrompt')}</span>
@@ -185,7 +203,30 @@ function QuarantineManager() {
         )}
       </div>
 
-      {loading && (
+      <div role="tablist" aria-label={t('nav.quarantine')} onKeyDown={onTabKeyDown} className="inline-flex items-center gap-1 p-1 mb-6 bg-[color:var(--bg-panel)] border border-[color:var(--border-subtle)] rounded-xl">
+        {TABS.map((id) => (
+          <button
+            key={id}
+            id={`quarantine-tab-${id}`}
+            role="tab"
+            aria-selected={tab === id}
+            aria-controls={`quarantine-panel-${id}`}
+            tabIndex={tab === id ? 0 : -1}
+            onClick={() => setTab(id)}
+            className={`px-3 py-1.5 rounded-lg text-[12.5px] font-medium transition ${tab === id ? 'pill-selected bg-[color:var(--surface-hover)] text-[color:var(--text-primary)]' : 'text-[color:var(--text-muted)] hover:text-[color:var(--text-primary)]'}`}
+          >
+            {tabLabels[id]}
+          </button>
+        ))}
+      </div>
+
+      {tab === 'backups' && (
+        <div role="tabpanel" id="quarantine-panel-backups" aria-labelledby="quarantine-tab-backups">
+          <BackupManager />
+        </div>
+      )}
+
+      {tab === 'quarantine' && loading && (
         <div className="glass-panel flex flex-col items-center justify-center py-16">
           <div className="w-14 h-14 rounded-2xl bg-[color:var(--accent-primary)]/10 border border-[color:var(--accent-primary)]/25 flex items-center justify-center mb-5">
             <div className="w-6 h-6 border-2 border-[color:var(--accent-primary)] border-t-transparent rounded-full animate-spin"></div>
@@ -194,13 +235,13 @@ function QuarantineManager() {
         </div>
       )}
 
-      {!loading && error && (
+      {tab === 'quarantine' && !loading && error && (
         <div className="glass-panel p-6">
           <p className="text-[13px] text-[color:var(--danger)] select-text">{t('quarantine.loadError', error)}</p>
         </div>
       )}
 
-      {!loading && !error && (
+      {tab === 'quarantine' && !loading && !error && (
         <>
           {notice && (
             <div role="status" className="mb-5 px-3.5 py-3 rounded-xl bg-[color:var(--success)]/10 border border-[color:var(--success)]/25">
@@ -322,8 +363,8 @@ function QuarantineManager() {
  * switches, once per switch, and that cost grows with every tab the user
  * has visited.
  *
- * Safe here specifically because this component takes no props at all, so
- * the comparison is between two empty objects and can never produce a
- * stale screen. A component with unstable props would gain nothing from
- * this and is deliberately left alone. */
+ * Safe here specifically because its only prop is a string (which tab to
+ * open), so the comparison can never produce a stale screen. A component
+ * with unstable props would gain nothing from this and is deliberately
+ * left alone. */
 export default memo(QuarantineManager);

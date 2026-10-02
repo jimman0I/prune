@@ -1,4 +1,4 @@
-import { mkdir, rm, readdir, stat } from 'node:fs/promises';
+import { mkdir, rm, readdir, stat, writeFile } from 'node:fs/promises';
 import { join, dirname } from 'node:path';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
@@ -65,11 +65,19 @@ export async function createRegistryBackup({ programName, root = registryBackupR
   try {
     await mkdir(dir, { recursive: true });
     let sizeBytes = 0;
+    const files = [];
     for (const [i, key] of REGISTRY_BACKUP_KEYS.entries()) {
-      const file = join(dir, `${i + 1}-${key.replace(/\\/g, '_')}.reg`);
+      const name = `${i + 1}-${key.replace(/\\/g, '_')}.reg`;
+      const file = join(dir, name);
       await exportKey(key, file);
       sizeBytes += (await stat(file)).size;
+      files.push(name);
     }
+    // What the Backup Manager reads to list this and put it back. Written
+    // last, so a backup that failed halfway (removed below) never has one.
+    await writeFile(join(dir, 'backup.json'), JSON.stringify({
+      kind: 'registry', programName, createdAt: now(), files
+    }, null, 2), 'utf8');
     const pruned = await pruneOldBackups(root, name);
     return { ok: true, dir, sizeBytes, pruned };
   } catch (err) {
