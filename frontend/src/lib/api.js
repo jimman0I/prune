@@ -299,6 +299,16 @@ export async function scanForcedUninstall({ name, publisher, registryKey, mode, 
   return data;
 }
 
+/** Shows a native dialog ('folder' or 'installer') and resolves { path },
+ * where path is null if it was cancelled. The dialog is the backend's, not
+ * the window's: the renderer has no file API. */
+export async function pickPath(kind) {
+  const res = await fetch(`${API_URL}/picker/${encodeURIComponent(kind)}`, { method: 'POST' });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
+  return data;
+}
+
 export async function removeQuarantined({ programName, files, registryKeys, scheduledTasks, destination }) {
   const res = await fetch(`${API_URL}/quarantine/remove`, {
     method: 'POST',

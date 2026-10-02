@@ -134,11 +134,15 @@ export default function UninstallModal({ program, running = false, onClose, onBu
   // The depth of the leftover scan, chosen here and remembered. Until the
   // person touches the picker it is whatever settings last held; touching it
   // takes effect at once and is saved for the next uninstall.
-  const [modeChoice, setModeChoice] = useState(null);
+  // A standalone forced uninstall (software that is not listed at all) starts
+  // on Advanced -- there is no registry entry to anchor a shallower search --
+  // and its choice is not remembered: it is about this one program.
+  const standalone = program.standalone === true;
+  const [modeChoice, setModeChoice] = useState(standalone ? 'advanced' : null);
   const scanMode = modeChoice ?? scanModeFrom(settings);
   const chooseScanMode = (next) => {
     setModeChoice(next);
-    saveSettings?.mutate({ leftoverScanMode: next });
+    if (!standalone) saveSettings?.mutate({ leftoverScanMode: next });
   };
   const destination = leftoverDestinationFrom(settings);
   const preselect = settings?.preselectLeftovers === true;
@@ -351,7 +355,9 @@ export default function UninstallModal({ program, running = false, onClose, onBu
     <div data-modal-panel className="glass-panel rounded-2xl overflow-hidden max-w-[680px] w-full flex flex-col max-h-[85vh]">
       <div className="flex items-center justify-between gap-4 px-6 py-5 border-b border-[color:var(--border-subtle)] shrink-0">
         <h2 className="text-[15px] font-semibold tracking-tight text-[color:var(--text-primary)] truncate">
-          {broken ? t('uninstallModal.titleForce', program.name) : t('uninstallModal.titleNormal', program.name)}
+          {standalone
+            ? t('uninstallerV3.forced.modalTitle', program.name)
+            : broken ? t('uninstallModal.titleForce', program.name) : t('uninstallModal.titleNormal', program.name)}
         </h2>
         <button
           onClick={onClose}
@@ -384,19 +390,32 @@ export default function UninstallModal({ program, running = false, onClose, onBu
             )}
             {broken ? (
               <>
-                <div className="flex items-start gap-2.5 mb-5 px-3.5 py-3 rounded-xl bg-[color:var(--warning-soft)] border border-[color:var(--warning)]/25">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="text-[color:var(--warning)] mt-0.5 shrink-0">
-                    <circle cx="12" cy="12" r="10"></circle>
-                    <line x1="12" y1="8" x2="12" y2="12"></line>
-                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
-                  </svg>
-                  <div className="text-[12.5px] text-[color:var(--warning)] leading-relaxed">
-                    {t('uninstallModal.orphanedWarning', program.health.reason)}
-                  </div>
-                </div>
-                <p className="text-[13px] text-[color:var(--text-secondary)] mb-4">
-                  {t('uninstallModal.brokenIntro')}
-                </p>
+                {standalone ? (
+                  <>
+                    <p className="text-[13px] text-[color:var(--text-secondary)] mb-3">{t('uninstallerV3.forced.scanIntro')}</p>
+                    {program.installLocation && (
+                      <p className="text-[11.5px] text-[color:var(--text-muted)] font-mono mb-4 break-all select-text">
+                        {t('uninstallerV3.forced.folderLine', program.installLocation)}
+                      </p>
+                    )}
+                  </>
+                ) : (
+                  <>
+                    <div className="flex items-start gap-2.5 mb-5 px-3.5 py-3 rounded-xl bg-[color:var(--warning-soft)] border border-[color:var(--warning)]/25">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="text-[color:var(--warning)] mt-0.5 shrink-0">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="8" x2="12" y2="12"></line>
+                        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                      </svg>
+                      <div className="text-[12.5px] text-[color:var(--warning)] leading-relaxed">
+                        {t('uninstallModal.orphanedWarning', program.health.reason)}
+                      </div>
+                    </div>
+                    <p className="text-[13px] text-[color:var(--text-secondary)] mb-4">
+                      {t('uninstallModal.brokenIntro')}
+                    </p>
+                  </>
+                )}
 
                 <label className="block text-[11px] text-[color:var(--text-muted)] font-mono uppercase tracking-[0.14em] mb-1.5">
                   {t('uninstallModal.searchForLabel')}
@@ -406,9 +425,12 @@ export default function UninstallModal({ program, running = false, onClose, onBu
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="w-full bg-[color:var(--bg-panel)] border border-[color:var(--border-subtle)] rounded-xl px-3.5 py-2.5 text-[13px] font-mono focus:outline-none focus:border-[color:var(--accent-primary)] focus:ring-4 focus:ring-[color:var(--accent-primary)]/10 transition"
                 />
-                <p className="text-[12px] text-[color:var(--text-muted)] mt-1.5 mb-5">
-                  {t('uninstallModal.searchHint', program.name)}
-                </p>
+                {!standalone && (
+                  <p className="text-[12px] text-[color:var(--text-muted)] mt-1.5 mb-5">
+                    {t('uninstallModal.searchHint', program.name)}
+                  </p>
+                )}
+                {standalone && <div className="mb-5" />}
 
                 <ScanModePicker mode={scanMode} onChange={chooseScanMode} />
 

@@ -19,11 +19,16 @@ import { canonicalKeyPath } from './registryLeftovers.js';
  * path never has to remove (a working uninstaller removes its own key) and
  * which is the whole reason a dead entry lingers in the list. */
 export async function scanForcedUninstall({ name, publisher, registryKey, mode, anchors, installedPrograms }) {
-  const trimmed = typeof name === 'string' ? name.trim() : '';
+  const typed = typeof name === 'string' ? name.trim() : '';
+  // The standalone forced uninstall may give only a folder. Its last segment
+  // is then the name to search for -- installers name folders after the
+  // product -- and the folder itself is the scan's anchor either way.
+  const folder = typeof anchors?.installLocation === 'string' ? anchors.installLocation.trim().replace(/[\\/]+$/, '') : '';
+  const trimmed = typed || folder.split(/[\\/]/).pop() || '';
   // An empty pattern makes the scanner's regex match every directory under
   // Program Files and every key under HKLM\Software -- it would present
   // the entire machine as removable leftovers.
-  if (!trimmed) throw new Error('A program name is required to scan for leftovers.');
+  if (!trimmed) throw new Error('A program name or folder is required to scan for leftovers.');
 
   const scan = await scanForLeftovers({
     name: trimmed, publisher, mode,
