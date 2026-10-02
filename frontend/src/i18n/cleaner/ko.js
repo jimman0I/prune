@@ -82,7 +82,7 @@ export default {
     league_of_legends_logs: { name: "게임 로그", description: "경기별 클라이언트 및 게임 로그입니다. 무기한 보관되지만 거의 읽히지 않습니다." },
     recycle_bin: { name: "휴지통", description: "이미 삭제한 파일이며, 휴지통을 비울 때까지 공간을 차지하고 있습니다. 비우는 것이 목적이므로 여기 있는 항목은 저절로 복구되지 않습니다." },
     user_temp: { name: "Temp 폴더", description: "Windows, 설치 관리자, 그리고 컴퓨터의 많은 프로그램이 파일을 기록하고 좀처럼 정리하지 않는 작업용 폴더입니다." },
-    system_empty_space: { name: "빈 디스크 공간", description: "드라이브의 빈 공간을 0으로 덮어쓴 뒤 채우기용 파일을 삭제하므로, 이전에 삭제한 파일을 복구할 수 없게 됩니다. 몇 시간이 걸릴 수 있습니다. 공간은 확보되지 않으며, TRIM이 있는 SSD에서는 아무 소용이 없고 쓰기 마모만 늘어납니다." },
+    system_empty_space: { name: "빈 디스크 공간", description: "선택한 드라이브의 빈 공간을 0 또는 무작위 데이터 3회로 덮어쓴 뒤 채우기용 파일을 삭제하므로, 이전에 삭제한 파일을 복구할 수 없게 됩니다. 몇 시간이 걸릴 수 있습니다. 공간은 확보되지 않으며, TRIM이 있는 SSD에서는 아무 소용이 없고 쓰기 마모만 늘어납니다." },
     defender_history: { name: "검사 기록", description: "과거 Defender 검사의 저장된 결과와 이를 나열한 로그입니다. 보호 기능은 영향을 받지 않으며, Defender는 다음 검사부터 새 기록을 시작합니다." },
     defender_temp: { name: "임시 파일", description: "Defender가 사용한 뒤 Windows의 임시 및 업데이트 폴더에 남겨 둔 업데이트 설치 관리자와 로그입니다." },
     defender_quarantine: { name: "격리된 파일", description: "Defender가 탐지해 격리한 파일입니다. 격리는 Defender가 잘못 탐지한 파일을 되돌려 주는 방법이므로, 이 항목을 비우면 오탐을 다시는 복원할 수 없습니다." },

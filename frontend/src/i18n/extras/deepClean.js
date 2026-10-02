@@ -36,6 +36,14 @@ export default {
         failedHeading: (a) => `Could not be shredded: ${a}`,
         done: "Done",
         error: (a) => `Shredding failed: ${a}`
+      },
+      wipe: {
+        body: "This overwrites the free space on the drive you choose, then deletes the filler, so files you deleted earlier can't be recovered. It frees no space.",
+        driveLabel: "Drive to wipe",
+        driveOption: (a, b, c) => `${a} · ${b} free of ${c}`,
+        progressPass: (a, b, c, d) => `Pass ${a} of ${b}: writing random data… ${c} of ${d}`,
+        resultRandom: (a, b) => `Wrote ${a} of random data over the free space in ${b} passes, then deleted it. No space was freed.`,
+        resultRandomStopped: (a) => `Stopped after writing ${a} of random data over the free space. The filler was deleted.`
       }
     }
   },
@@ -73,6 +81,14 @@ export default {
         failedHeading: (a) => `Kon nie versnipper word nie: ${a}`,
         done: "Klaar",
         error: (a) => `Versnippering het misluk: ${a}`
+      },
+      wipe: {
+        body: "Dit oorskryf die vrye spasie op die aandrywer wat jy kies en verwyder dan die vullêer, sodat lêers wat jy vroeër verwyder het nie herstel kan word nie. Dit maak geen spasie vry nie.",
+        driveLabel: "Aandrywer om te wis",
+        driveOption: (a, b, c) => `${a} · ${b} vry van ${c}`,
+        progressPass: (a, b, c, d) => `Deurgang ${a} van ${b}: skryf ewekansige data… ${c} van ${d}`,
+        resultRandom: (a, b) => `${a} ewekansige data in ${b} deurgange oor die vrye spasie geskryf en dit daarna verwyder. Geen spasie is vrygemaak nie.`,
+        resultRandomStopped: (a) => `Gestop nadat ${a} ewekansige data oor die vrye spasie geskryf is. Die vullêer is verwyder.`
       }
     }
   },
@@ -110,6 +126,14 @@ export default {
         failedHeading: (a) => `تعذّر تمزيقها: ${a}`,
         done: "تم",
         error: (a) => `فشل التمزيق: ${a}`
+      },
+      wipe: {
+        body: "يكتب هذا فوق المساحة الفارغة في القرص الذي تختاره ثم يحذف ملف التعبئة، فلا يمكن استرداد الملفات التي حذفتها سابقًا. ولا يحرر أي مساحة.",
+        driveLabel: "القرص المراد مسحه",
+        driveOption: (a, b, c) => `${a} · ${b} فارغة من أصل ${c}`,
+        progressPass: (a, b, c, d) => `المرة ${a} من ${b}: جارٍ كتابة بيانات عشوائية… ${c} من ${d}`,
+        resultRandom: (a, b) => `تمت كتابة ${a} من البيانات العشوائية فوق المساحة الفارغة على ${b} مرات ثم حُذفت. لم تتحرر أي مساحة.`,
+        resultRandomStopped: (a) => `توقفت العملية بعد كتابة ${a} من البيانات العشوائية فوق المساحة الفارغة. وقد حُذف ملف التعبئة.`
       }
     }
   },
@@ -147,6 +171,14 @@ export default {
         failedHeading: (a) => `No s’han pogut triturar: ${a}`,
         done: "Fet",
         error: (a) => `La trituració ha fallat: ${a}`
+      },
+      wipe: {
+        body: "Sobreescriu l'espai lliure de la unitat que triïs i després elimina el fitxer de farciment, de manera que els fitxers que hagis eliminat abans no es puguin recuperar. No allibera espai.",
+        driveLabel: "Unitat que s’ha de netejar",
+        driveOption: (a, b, c) => `${a} · ${b} lliures de ${c}`,
+        progressPass: (a, b, c, d) => `Passada ${a} de ${b}: escrivint dades aleatòries… ${c} de ${d}`,
+        resultRandom: (a, b) => `S'han escrit ${a} de dades aleatòries sobre l'espai lliure en ${b} passades i després s'han eliminat. No s'ha alliberat cap espai.`,
+        resultRandomStopped: (a) => `Aturat després d'escriure ${a} de dades aleatòries sobre l'espai lliure. El fitxer de farciment s'ha eliminat.`
       }
     }
   },
@@ -184,6 +216,14 @@ export default {
         failedHeading: (a) => `Nelze skartovat: ${a}`,
         done: "Hotovo",
         error: (a) => `Skartování se nezdařilo: ${a}`
+      },
+      wipe: {
+        body: "Přepíše volné místo na zvolené jednotce a poté smaže vyplňovací soubor, takže dříve smazané soubory nelze obnovit. Neuvolní žádné místo.",
+        driveLabel: "Jednotka k vymazání",
+        driveOption: (a, b, c) => `${a} · ${b} volných z ${c}`,
+        progressPass: (a, b, c, d) => `Přepis ${a} z ${b}: zapisování náhodných dat… ${c} z ${d}`,
+        resultRandom: (a, b) => `Volné místo bylo přepsáno náhodnými daty (${a}) ve ${b} přepisech a vyplňovací soubor byl smazán. Žádné místo se neuvolnilo.`,
+        resultRandomStopped: (a) => `Zastaveno po zapsání náhodných dat (${a}) do volného místa. Vyplňovací soubor byl smazán.`
       }
     }
   },
@@ -221,6 +261,14 @@ export default {
         failedHeading: (a) => `Methwyd â'u rhwygo: ${a}`,
         done: "Wedi gorffen",
         error: (a) => `Methodd y rhwygo: ${a}`
+      },
+      wipe: {
+        body: "Mae hyn yn trosysgrifo'r lle rhydd ar y gyriant a ddewiswch, yna'n dileu'r ffeil llenwi, fel na ellir adfer ffeiliau y gwnaethoch eu dileu'n gynt. Nid yw'n rhyddhau unrhyw le.",
+        driveLabel: "Gyriant i’w sychu",
+        driveOption: (a, b, c) => `${a} · ${b} yn rhydd o ${c}`,
+        progressPass: (a, b, c, d) => `Pas ${a} o ${b}: ysgrifennu data ar hap… ${c} o ${d}`,
+        resultRandom: (a, b) => `Ysgrifennwyd ${a} o ddata ar hap dros y lle rhydd mewn ${b} pas, yna cawsant eu dileu. Ni ryddhawyd unrhyw le.`,
+        resultRandomStopped: (a) => `Stopiwyd ar ôl ysgrifennu ${a} o ddata ar hap dros y lle rhydd. Dilëwyd y ffeil llenwi.`
       }
     }
   },
@@ -258,6 +306,14 @@ export default {
         failedHeading: (a) => `Kunne ikke makuleres: ${a}`,
         done: "Færdig",
         error: (a) => `Makuleringen mislykkedes: ${a}`
+      },
+      wipe: {
+        body: "Dette overskriver den ledige plads på det drev, du vælger, og sletter derefter fyldfilen, så filer, du tidligere har slettet, ikke kan gendannes. Det frigør ingen plads.",
+        driveLabel: "Drev, der skal overskrives",
+        driveOption: (a, b, c) => `${a} · ${b} ledig af ${c}`,
+        progressPass: (a, b, c, d) => `Pas ${a} af ${b}: skriver tilfældige data… ${c} af ${d}`,
+        resultRandom: (a, b) => `Skrev ${a} tilfældige data over den ledige plads i ${b} pas og slettede dem derefter. Der blev ikke frigjort plads.`,
+        resultRandomStopped: (a) => `Stoppet efter at have skrevet ${a} tilfældige data over den ledige plads. Fyldfilen blev slettet.`
       }
     }
   },
@@ -295,6 +351,14 @@ export default {
         failedHeading: (a) => `Konnten nicht geschreddert werden: ${a}`,
         done: "Fertig",
         error: (a) => `Schreddern fehlgeschlagen: ${a}`
+      },
+      wipe: {
+        body: "Dabei wird der freie Speicherplatz auf dem gewählten Laufwerk überschrieben und die Fülldatei anschließend gelöscht, sodass früher gelöschte Dateien nicht mehr wiederhergestellt werden können. Es wird kein Speicherplatz freigegeben.",
+        driveLabel: "Zu überschreibendes Laufwerk",
+        driveOption: (a, b, c) => `${a} · ${b} frei von ${c}`,
+        progressPass: (a, b, c, d) => `Durchgang ${a} von ${b}: Zufallsdaten werden geschrieben… ${c} von ${d}`,
+        resultRandom: (a, b) => `${a} an Zufallsdaten in ${b} Durchgängen über den freien Speicherplatz geschrieben und anschließend gelöscht. Es wurde kein Speicherplatz freigegeben.`,
+        resultRandomStopped: (a) => `Abgebrochen, nachdem ${a} an Zufallsdaten in den freien Speicherplatz geschrieben wurden. Die Fülldatei wurde gelöscht.`
       }
     }
   },
@@ -332,6 +396,14 @@ export default {
         failedHeading: (a) => `Δεν ήταν δυνατός ο τεμαχισμός: ${a}`,
         done: "Ολοκληρώθηκε",
         error: (a) => `Ο τεμαχισμός απέτυχε: ${a}`
+      },
+      wipe: {
+        body: "Αντικαθιστά τον ελεύθερο χώρο της μονάδας που επιλέγετε και μετά διαγράφει το αρχείο πλήρωσης, ώστε τα αρχεία που έχετε διαγράψει παλαιότερα να μην μπορούν να ανακτηθούν. Δεν ελευθερώνει χώρο.",
+        driveLabel: "Μονάδα προς αντικατάσταση",
+        driveOption: (a, b, c) => `${a} · ${b} ελεύθερα από ${c}`,
+        progressPass: (a, b, c, d) => `Πέρασμα ${a} από ${b}: εγγραφή τυχαίων δεδομένων… ${c} από ${d}`,
+        resultRandom: (a, b) => `Γράφτηκαν τυχαία δεδομένα συνολικού μεγέθους ${a} πάνω από τον ελεύθερο χώρο σε ${b} περάσματα και στη συνέχεια διαγράφηκαν. Δεν ελευθερώθηκε χώρος.`,
+        resultRandomStopped: (a) => `Διακόπηκε μετά την εγγραφή τυχαίων δεδομένων συνολικού μεγέθους ${a} πάνω από τον ελεύθερο χώρο. Το αρχείο πλήρωσης διαγράφηκε.`
       }
     }
   },
@@ -369,6 +441,14 @@ export default {
         failedHeading: (a) => `No se pudieron triturar: ${a}`,
         done: "Listo",
         error: (a) => `Error al triturar: ${a}`
+      },
+      wipe: {
+        body: "Esto sobrescribe el espacio libre de la unidad que elijas y luego elimina el archivo de relleno, de modo que los archivos que eliminaste antes no se puedan recuperar. No libera espacio.",
+        driveLabel: "Unidad que se sobrescribirá",
+        driveOption: (a, b, c) => `${a} · ${b} libres de ${c}`,
+        progressPass: (a, b, c, d) => `Pasada ${a} de ${b}: escribiendo datos aleatorios… ${c} de ${d}`,
+        resultRandom: (a, b) => `Se escribieron ${a} de datos aleatorios sobre el espacio libre en ${b} pasadas y luego se eliminaron. No se liberó espacio.`,
+        resultRandomStopped: (a) => `Detenido tras escribir ${a} de datos aleatorios sobre el espacio libre. El archivo de relleno se eliminó.`
       }
     }
   },
@@ -406,6 +486,14 @@ export default {
         failedHeading: (a) => `Ei õnnestunud hävitada: ${a}`,
         done: "Valmis",
         error: (a) => `Hävitamine ebaõnnestus: ${a}`
+      },
+      wipe: {
+        body: "See kirjutab valitud ketta vaba ruumi üle ja kustutab seejärel täitefaili, nii et varem kustutatud faile ei saa taastada. See ei vabasta ruumi.",
+        driveLabel: "Ülekirjutatav ketas",
+        driveOption: (a, b, c) => `${a} · ${b} vaba, kokku ${c}`,
+        progressPass: (a, b, c, d) => `Käik ${a} / ${b}: kirjutatakse juhuslikke andmeid… ${c} / ${d}`,
+        resultRandom: (a, b) => `Vabale ruumile kirjutati ${b} käiguga ${a} juhuslikke andmeid ja need kustutati seejärel. Ruumi ei vabanenud.`,
+        resultRandomStopped: (a) => `Peatati pärast seda, kui vabale ruumile oli kirjutatud ${a} juhuslikke andmeid. Täitefail kustutati.`
       }
     }
   },
@@ -443,6 +531,14 @@ export default {
         failedHeading: (a) => `Murskaus epäonnistui: ${a}`,
         done: "Valmis",
         error: (a) => `Murskaus epäonnistui: ${a}`
+      },
+      wipe: {
+        body: "Tämä ylikirjoittaa valitsemasi aseman vapaan tilan ja poistaa sitten täytetiedoston, jotta aiemmin poistettuja tiedostoja ei voi palauttaa. Se ei vapauta tilaa.",
+        driveLabel: "Pyyhittävä asema",
+        driveOption: (a, b, c) => `${a} · ${b} vapaana, yhteensä ${c}`,
+        progressPass: (a, b, c, d) => `Kierros ${a} / ${b}: kirjoitetaan satunnaisdataa… ${c} / ${d}`,
+        resultRandom: (a, b) => `Vapaan tilan päälle kirjoitettiin ${a} satunnaisdataa ${b} kierroksella, minkä jälkeen ne poistettiin. Tilaa ei vapautunut.`,
+        resultRandomStopped: (a) => `Pysäytettiin, kun vapaan tilan päälle oli kirjoitettu ${a} satunnaisdataa. Täytetiedosto poistettiin.`
       }
     }
   },
@@ -480,6 +576,14 @@ export default {
         failedHeading: (a) => `Impossible à détruire : ${a}`,
         done: "Terminé",
         error: (a) => `Échec de la destruction : ${a}`
+      },
+      wipe: {
+        body: "Cela écrase l'espace libre du lecteur que vous choisissez, puis supprime le fichier de remplissage, de sorte que les fichiers que vous avez supprimés auparavant ne puissent pas être récupérés. Aucun espace n'est libéré.",
+        driveLabel: "Lecteur à écraser",
+        driveOption: (a, b, c) => `${a} · ${b} libres sur ${c}`,
+        progressPass: (a, b, c, d) => `Passe ${a} sur ${b} : écriture de données aléatoires… ${c} sur ${d}`,
+        resultRandom: (a, b) => `${a} de données aléatoires écrits sur l’espace libre en ${b} passes, puis supprimés. Aucun espace n’a été libéré.`,
+        resultRandomStopped: (a) => `Arrêté après l’écriture de ${a} de données aléatoires sur l’espace libre. Le fichier de remplissage a été supprimé.`
       }
     }
   },
@@ -517,6 +621,14 @@ export default {
         failedHeading: (a) => `לא ניתן היה למחוק: ${a}`,
         done: "סיום",
         error: (a) => `המחיקה נכשלה: ${a}`
+      },
+      wipe: {
+        body: "הפעולה כותבת על השטח הפנוי בכונן שבחרת ואז מוחקת את קובץ המילוי, כך שאי אפשר לשחזר קבצים שמחקת קודם. היא לא משחררת מקום.",
+        driveLabel: "כונן למחיקה",
+        driveOption: (a, b, c) => `${a} · ${b} פנויים מתוך ${c}`,
+        progressPass: (a, b, c, d) => `מעבר ${a} מתוך ${b}: כותב נתונים אקראיים… ${c} מתוך ${d}`,
+        resultRandom: (a, b) => `נכתבו נתונים אקראיים בנפח ${a} על השטח הפנוי ב-${b} מעברים, ואז נמחקו. לא שוחרר מקום.`,
+        resultRandomStopped: (a) => `נעצר אחרי שנכתבו נתונים אקראיים בנפח ${a} על השטח הפנוי. קובץ המילוי נמחק.`
       }
     }
   },
@@ -554,6 +666,14 @@ export default {
         failedHeading: (a) => `Nem sikerült megsemmisíteni: ${a}`,
         done: "Kész",
         error: (a) => `A megsemmisítés nem sikerült: ${a}`
+      },
+      wipe: {
+        body: "Ez felülírja a kiválasztott meghajtó szabad területét, majd törli a kitöltőfájlt, így a korábban törölt fájlok nem állíthatók helyre. Nem szabadít fel helyet.",
+        driveLabel: "Felülírandó meghajtó",
+        driveOption: (a, b, c) => `${a} · ${b} szabad, összesen ${c}`,
+        progressPass: (a, b, c, d) => `${a}. menet / ${b}: véletlen adatok írása… ${c} / ${d}`,
+        resultRandom: (a, b) => `A szabad terület felülírva ${a} véletlen adattal ${b} menetben, majd a kitöltőfájl törlődött. Nem szabadult fel hely.`,
+        resultRandomStopped: (a) => `Leállítva ${a} véletlen adat kiírása után. A kitöltőfájl törlődött.`
       }
     }
   },
@@ -591,6 +711,14 @@ export default {
         failedHeading: (a) => `Tidak dapat dihancurkan: ${a}`,
         done: "Selesai",
         error: (a) => `Penghancuran gagal: ${a}`
+      },
+      wipe: {
+        body: "Ini menimpa ruang kosong di drive yang Anda pilih, lalu menghapus file pengisinya, sehingga file yang sudah Anda hapus sebelumnya tidak bisa dipulihkan. Ini tidak membebaskan ruang.",
+        driveLabel: "Drive yang ditimpa",
+        driveOption: (a, b, c) => `${a} · ${b} kosong dari ${c}`,
+        progressPass: (a, b, c, d) => `Lintasan ${a} dari ${b}: menulis data acak… ${c} dari ${d}`,
+        resultRandom: (a, b) => `${a} data acak ditulis menimpa ruang kosong dalam ${b} lintasan, lalu dihapus. Tidak ada ruang yang dibebaskan.`,
+        resultRandomStopped: (a) => `Dihentikan setelah menulis ${a} data acak menimpa ruang kosong. File pengisi sudah dihapus.`
       }
     }
   },
@@ -628,6 +756,14 @@ export default {
         failedHeading: (a) => `Tókst ekki að tæta: ${a}`,
         done: "Lokið",
         error: (a) => `Tæting mistókst: ${a}`
+      },
+      wipe: {
+        body: "Þetta skrifar yfir laust pláss á drifinu sem þú velur og eyðir síðan fyllingarskránni, þannig að ekki sé hægt að endurheimta skrár sem þú eyddir áður. Það losar ekkert pláss.",
+        driveLabel: "Drif til að skrifa yfir",
+        driveOption: (a, b, c) => `${a} · ${b} laust af ${c}`,
+        progressPass: (a, b, c, d) => `Umferð ${a} af ${b}: skrifa handahófskennd gögn… ${c} af ${d}`,
+        resultRandom: (a, b) => `Skrifaði ${a} af handahófskenndum gögnum yfir laust pláss í ${b} umferðum og eyddi þeim síðan. Ekkert pláss losnaði.`,
+        resultRandomStopped: (a) => `Stöðvað eftir að ${a} af handahófskenndum gögnum voru skrifuð yfir laust pláss. Fyllingarskránni var eytt.`
       }
     }
   },
@@ -665,6 +801,14 @@ export default {
         failedHeading: (a) => `Impossibile distruggere: ${a}`,
         done: "Fatto",
         error: (a) => `Distruzione non riuscita: ${a}`
+      },
+      wipe: {
+        body: "Sovrascrive lo spazio libero dell'unità scelta e poi elimina il file di riempimento, così i file eliminati in precedenza non possono essere recuperati. Non libera spazio.",
+        driveLabel: "Unità da sovrascrivere",
+        driveOption: (a, b, c) => `${a} · ${b} liberi su ${c}`,
+        progressPass: (a, b, c, d) => `Passaggio ${a} di ${b}: scrittura di dati casuali… ${c} di ${d}`,
+        resultRandom: (a, b) => `Scritti ${a} di dati casuali sullo spazio libero in ${b} passaggi, poi eliminati. Non è stato liberato spazio.`,
+        resultRandomStopped: (a) => `Interrotto dopo aver scritto ${a} di dati casuali sullo spazio libero. Il file di riempimento è stato eliminato.`
       }
     }
   },
@@ -702,6 +846,14 @@ export default {
         failedHeading: (a) => `シュレッダー処理できなかった項目：${a}`,
         done: "完了",
         error: (a) => `シュレッダー処理に失敗しました：${a}`
+      },
+      wipe: {
+        body: "選択したドライブの空き領域を上書きしてから、書き込みに使った一時ファイルを削除します。これにより、以前に削除したファイルは復元できなくなります。空き容量は増えません。",
+        driveLabel: "消去するドライブ",
+        driveOption: (a, b, c) => `${a} · 空き ${b} / ${c}`,
+        progressPass: (a, b, c, d) => `${b} 回中 ${a} 回目：ランダムデータを書き込み中… ${c} / ${d}`,
+        resultRandom: (a, b) => `空き領域に ${a} のランダムデータを ${b} 回に分けて書き込み、書き込みに使った一時ファイルを削除しました。解放された容量はありません。`,
+        resultRandomStopped: (a) => `空き領域への ${a} のランダムデータの書き込み後に停止しました。書き込みに使った一時ファイルは削除されました。`
       }
     }
   },
@@ -739,6 +891,14 @@ export default {
         failedHeading: (a) => `완전 삭제하지 못한 항목: ${a}`,
         done: "완료",
         error: (a) => `완전 삭제에 실패했습니다: ${a}`
+      },
+      wipe: {
+        body: "선택한 드라이브의 빈 공간을 덮어쓴 뒤 채우기용 파일을 삭제하므로, 이전에 삭제한 파일을 복구할 수 없게 됩니다. 공간은 확보되지 않습니다.",
+        driveLabel: "지울 드라이브",
+        driveOption: (a, b, c) => `${a} · ${c} 중 ${b} 사용 가능`,
+        progressPass: (a, b, c, d) => `${b}회 중 ${a}회차: 무작위 데이터를 기록하는 중… ${c} / ${d}`,
+        resultRandom: (a, b) => `빈 공간에 무작위 데이터를 ${b}회에 걸쳐 ${a}만큼 기록한 뒤 삭제했습니다. 확보된 공간은 없습니다.`,
+        resultRandomStopped: (a) => `빈 공간에 무작위 데이터를 ${a}만큼 기록한 뒤 중지했습니다. 채우기용 파일은 삭제되었습니다.`
       }
     }
   },
@@ -776,6 +936,14 @@ export default {
         failedHeading: (a) => `Nepavyko sunaikinti: ${a}`,
         done: "Baigta",
         error: (a) => `Sunaikinti nepavyko: ${a}`
+      },
+      wipe: {
+        body: "Tai perrašo pasirinkto disko laisvą vietą, po to ištrina užpildymo failą, todėl anksčiau ištrintų failų atkurti nebeįmanoma. Vietos neatlaisvina.",
+        driveLabel: "Perrašomas diskas",
+        driveOption: (a, b, c) => `${a} · ${b} laisva iš ${c}`,
+        progressPass: (a, b, c, d) => `Ciklas ${a} iš ${b}: rašomi atsitiktiniai duomenys… ${c} iš ${d}`,
+        resultRandom: (a, b) => `Laisva vieta perrašyta atsitiktiniais duomenimis (${a}) per ${b} ciklus, po to užpildymo failas ištrintas. Vieta neatlaisvinta.`,
+        resultRandomStopped: (a) => `Sustabdyta po to, kai laisva vieta perrašyta atsitiktiniais duomenimis (${a}). Užpildymo failas ištrintas.`
       }
     }
   },
@@ -813,6 +981,14 @@ export default {
         failedHeading: (a) => `Tidak dapat dicarik: ${a}`,
         done: "Selesai",
         error: (a) => `Pencarikan gagal: ${a}`
+      },
+      wipe: {
+        body: "Ini menimpa ruang kosong pada pemacu yang anda pilih, kemudian memadam fail pengisi, supaya fail yang anda padam sebelum ini tidak boleh dipulihkan. Ia tidak membebaskan ruang.",
+        driveLabel: "Pemacu untuk ditimpa",
+        driveOption: (a, b, c) => `${a} · ${b} bebas daripada ${c}`,
+        progressPass: (a, b, c, d) => `Laluan ${a} daripada ${b}: menulis data rawak… ${c} daripada ${d}`,
+        resultRandom: (a, b) => `${a} data rawak ditulis ke atas ruang kosong dalam ${b} laluan, kemudian dipadam. Tiada ruang dibebaskan.`,
+        resultRandomStopped: (a) => `Dihentikan selepas menulis ${a} data rawak ke atas ruang kosong. Fail pengisi telah dipadam.`
       }
     }
   },
@@ -850,6 +1026,14 @@ export default {
         failedHeading: (a) => `Kunne ikke makuleres: ${a}`,
         done: "Ferdig",
         error: (a) => `Makuleringen mislyktes: ${a}`
+      },
+      wipe: {
+        body: "Dette skriver over den ledige plassen på stasjonen du velger og sletter deretter fyllfilen, slik at filer du slettet tidligere ikke kan gjenopprettes. Det frigjør ingen plass.",
+        driveLabel: "Stasjon som skal skrives over",
+        driveOption: (a, b, c) => `${a} · ${b} ledig av ${c}`,
+        progressPass: (a, b, c, d) => `Pass ${a} av ${b}: skriver tilfeldige data… ${c} av ${d}`,
+        resultRandom: (a, b) => `Skrev ${a} tilfeldige data over den ledige plassen i ${b} pass og slettet dem deretter. Ingen plass ble frigjort.`,
+        resultRandomStopped: (a) => `Stoppet etter å ha skrevet ${a} tilfeldige data over den ledige plassen. Fyllfilen ble slettet.`
       }
     }
   },
@@ -887,6 +1071,14 @@ export default {
         failedHeading: (a) => `Kon niet worden versnipperd: ${a}`,
         done: "Klaar",
         error: (a) => `Versnipperen mislukt: ${a}`
+      },
+      wipe: {
+        body: "Dit overschrijft de vrije ruimte op de schijf die je kiest en verwijdert daarna het opvulbestand, zodat eerder verwijderde bestanden niet kunnen worden hersteld. Het maakt geen ruimte vrij.",
+        driveLabel: "Schijf om te overschrijven",
+        driveOption: (a, b, c) => `${a} · ${b} vrij van ${c}`,
+        progressPass: (a, b, c, d) => `Ronde ${a} van ${b}: willekeurige gegevens schrijven… ${c} van ${d}`,
+        resultRandom: (a, b) => `${a} aan willekeurige gegevens in ${b} rondes over de vrije ruimte geschreven en daarna verwijderd. Er is geen ruimte vrijgemaakt.`,
+        resultRandomStopped: (a) => `Gestopt na het schrijven van ${a} aan willekeurige gegevens over de vrije ruimte. Het opvulbestand is verwijderd.`
       }
     }
   },
@@ -924,6 +1116,14 @@ export default {
         failedHeading: (a) => `Nie udało się zniszczyć: ${a}`,
         done: "Gotowe",
         error: (a) => `Niszczenie nie powiodło się: ${a}`
+      },
+      wipe: {
+        body: "Nadpisuje wolne miejsce na wybranym dysku, a potem usuwa plik wypełniający, dzięki czemu wcześniej usuniętych plików nie da się odzyskać. Nie zwalnia miejsca.",
+        driveLabel: "Dysk do nadpisania",
+        driveOption: (a, b, c) => `${a} · ${b} wolne z ${c}`,
+        progressPass: (a, b, c, d) => `Przebieg ${a} z ${b}: zapisywanie danych losowych… ${c} z ${d}`,
+        resultRandom: (a, b) => `Wolne miejsce nadpisano danymi losowymi (${a}) w ${b} przebiegach, po czym plik wypełniający usunięto. Nie zwolniono miejsca.`,
+        resultRandomStopped: (a) => `Zatrzymano po zapisaniu danych losowych (${a}) w wolnym miejscu. Plik wypełniający usunięto.`
       }
     }
   },
@@ -961,6 +1161,14 @@ export default {
         failedHeading: (a) => `ټوټه نشول: ${a}`,
         done: "بشپړ شو",
         error: (a) => `ټوټه کول ناکام شول: ${a}`
+      },
+      wipe: {
+        body: "دا د هغه ډرایو وړیا ځای بیا لیکي چې تاسو یې غوره کوئ، بیا ډکوونکی فایل ړنګوي، نو هغه فایلونه چې تاسو مخکې ړنګ کړي بیرته نشي ترلاسه کیدی. دا هیڅ ځای نه خلاصوي.",
+        driveLabel: "ډرایو چې باید پاک شي",
+        driveOption: (a, b, c) => `${a} · له ${c} څخه ${b} وړیا`,
+        progressPass: (a, b, c, d) => `${a} پړاو له ${b} څخه: تصادفي معلومات لیکل کیږي… ${c} له ${d} څخه`,
+        resultRandom: (a, b) => `په وړیا ځای کې ${a} تصادفي معلومات په ${b} پړاوونو کې ولیکل شول او بیا ړنګ شول. هیڅ ځای نه دی خلاص شوی.`,
+        resultRandomStopped: (a) => `په وړیا ځای کې د ${a} تصادفي معلوماتو لیکلو وروسته ودرول شو. ډکوونکی فایل ړنګ شو.`
       }
     }
   },
@@ -998,6 +1206,14 @@ export default {
         failedHeading: (a) => `Não foi possível triturar: ${a}`,
         done: "Concluído",
         error: (a) => `Falha ao triturar: ${a}`
+      },
+      wipe: {
+        body: "Isso grava sobre o espaço livre da unidade escolhida e depois exclui o arquivo de preenchimento, para que arquivos excluídos antes não possam ser recuperados. Não libera espaço.",
+        driveLabel: "Unidade a sobrescrever",
+        driveOption: (a, b, c) => `${a} · ${b} livres de ${c}`,
+        progressPass: (a, b, c, d) => `Passagem ${a} de ${b}: gravando dados aleatórios… ${c} de ${d}`,
+        resultRandom: (a, b) => `Foram gravados ${a} de dados aleatórios sobre o espaço livre em ${b} passagens e depois excluídos. Nenhum espaço foi liberado.`,
+        resultRandomStopped: (a) => `Interrompido após gravar ${a} de dados aleatórios sobre o espaço livre. O arquivo de preenchimento foi excluído.`
       }
     }
   },
@@ -1035,6 +1251,14 @@ export default {
         failedHeading: (a) => `Não foi possível triturar: ${a}`,
         done: "Concluído",
         error: (a) => `Falha ao triturar: ${a}`
+      },
+      wipe: {
+        body: "Isto escreve sobre o espaço livre da unidade escolhida e depois elimina o ficheiro de preenchimento, para que os ficheiros eliminados anteriormente não possam ser recuperados. Não liberta espaço.",
+        driveLabel: "Unidade a sobrescrever",
+        driveOption: (a, b, c) => `${a} · ${b} livres de ${c}`,
+        progressPass: (a, b, c, d) => `Passagem ${a} de ${b}: a escrever dados aleatórios… ${c} de ${d}`,
+        resultRandom: (a, b) => `Foram escritos ${a} de dados aleatórios sobre o espaço livre em ${b} passagens e depois eliminados. Não foi libertado espaço.`,
+        resultRandomStopped: (a) => `Interrompido depois de escrever ${a} de dados aleatórios sobre o espaço livre. O ficheiro de preenchimento foi eliminado.`
       }
     }
   },
@@ -1072,6 +1296,14 @@ export default {
         failedHeading: (a) => `Nu au putut fi distruse: ${a}`,
         done: "Gata",
         error: (a) => `Distrugerea a eșuat: ${a}`
+      },
+      wipe: {
+        body: "Aceasta scrie peste spațiul liber de pe unitatea aleasă, apoi șterge fișierul de umplere, astfel încât fișierele șterse mai devreme să nu mai poată fi recuperate. Nu eliberează spațiu.",
+        driveLabel: "Unitatea de suprascris",
+        driveOption: (a, b, c) => `${a} · ${b} liberi din ${c}`,
+        progressPass: (a, b, c, d) => `Trecerea ${a} din ${b}: se scriu date aleatorii… ${c} din ${d}`,
+        resultRandom: (a, b) => `S-au scris ${a} de date aleatorii peste spațiul liber în ${b} treceri, apoi au fost șterse. Nu s-a eliberat spațiu.`,
+        resultRandomStopped: (a) => `Oprit după ce s-au scris ${a} de date aleatorii peste spațiul liber. Fișierul de umplere a fost șters.`
       }
     }
   },
@@ -1109,6 +1341,14 @@ export default {
         failedHeading: (a) => `Не удалось уничтожить: ${a}`,
         done: "Готово",
         error: (a) => `Не удалось уничтожить: ${a}`
+      },
+      wipe: {
+        body: "Свободное место на выбранном диске перезаписывается, после чего файл-заполнитель удаляется, чтобы ранее удалённые файлы нельзя было восстановить. Место при этом не освобождается.",
+        driveLabel: "Диск для затирания",
+        driveOption: (a, b, c) => `${a} · свободно ${b} из ${c}`,
+        progressPass: (a, b, c, d) => `Проход ${a} из ${b}: запись случайных данных… ${c} из ${d}`,
+        resultRandom: (a, b) => `Свободное место перезаписано случайными данными (${a}) за ${b} прохода, после чего файл-заполнитель удалён. Место не освобождено.`,
+        resultRandomStopped: (a) => `Остановлено после записи случайных данных (${a}) в свободное место. Файл-заполнитель удалён.`
       }
     }
   },
@@ -1146,6 +1386,14 @@ export default {
         failedHeading: (a) => `Nepodarilo sa skartovať: ${a}`,
         done: "Hotovo",
         error: (a) => `Skartovanie zlyhalo: ${a}`
+      },
+      wipe: {
+        body: "Prepíše voľné miesto na zvolenej jednotke a potom odstráni vypĺňací súbor, takže skôr odstránené súbory nemožno obnoviť. Neuvoľní žiadne miesto.",
+        driveLabel: "Jednotka na prepísanie",
+        driveOption: (a, b, c) => `${a} · ${b} voľných z ${c}`,
+        progressPass: (a, b, c, d) => `Prepis ${a} z ${b}: zapisovanie náhodných údajov… ${c} z ${d}`,
+        resultRandom: (a, b) => `Voľné miesto bolo prepísané náhodnými údajmi (${a}) v ${b} prepisoch a vypĺňací súbor bol odstránený. Žiadne miesto sa neuvoľnilo.`,
+        resultRandomStopped: (a) => `Zastavené po zapísaní náhodných údajov (${a}) do voľného miesta. Vypĺňací súbor bol odstránený.`
       }
     }
   },
@@ -1183,6 +1431,14 @@ export default {
         failedHeading: (a) => `Nuk u shkatërruan dot: ${a}`,
         done: "U krye",
         error: (a) => `Shkatërrimi dështoi: ${a}`
+      },
+      wipe: {
+        body: "Kjo mbishkruan hapësirën e lirë të diskut që zgjedh, pastaj fshin skedarin mbushës, që skedarët që ke fshirë më parë të mos mund të rikthehen. Nuk liron hapësirë.",
+        driveLabel: "Disku që do të mbishkruhet",
+        driveOption: (a, b, c) => `${a} · ${b} të lira nga ${c}`,
+        progressPass: (a, b, c, d) => `Kalimi ${a} nga ${b}: po shkruhen të dhëna të rastësishme… ${c} nga ${d}`,
+        resultRandom: (a, b) => `U shkruan ${a} të dhëna të rastësishme mbi hapësirën e lirë në ${b} kalime, pastaj u fshinë. Nuk u lirua hapësirë.`,
+        resultRandomStopped: (a) => `U ndal pasi u shkruan ${a} të dhëna të rastësishme mbi hapësirën e lirë. Skedari mbushës u fshi.`
       }
     }
   },
@@ -1220,6 +1476,14 @@ export default {
         failedHeading: (a) => `Није могло да се уништи: ${a}`,
         done: "Готово",
         error: (a) => `Уништавање није успело: ${a}`
+      },
+      wipe: {
+        body: "Ово преписује слободан простор на изабраном диску, а затим брише датотеку за попуну, па се раније обрисане датотеке не могу повратити. Не ослобађа простор.",
+        driveLabel: "Диск за преписивање",
+        driveOption: (a, b, c) => `${a} · ${b} слободно од ${c}`,
+        progressPass: (a, b, c, d) => `Пролаз ${a} од ${b}: уписују се насумични подаци… ${c} од ${d}`,
+        resultRandom: (a, b) => `Слободан простор је преписан насумичним подацима (${a}) у ${b} пролаза, а затим је датотека за попуну обрисана. Простор није ослобођен.`,
+        resultRandomStopped: (a) => `Заустављено након што је слободан простор преписан насумичним подацима (${a}). Датотека за попуну је обрисана.`
       }
     }
   },
@@ -1257,6 +1521,14 @@ export default {
         failedHeading: (a) => `Kunde inte strimlas: ${a}`,
         done: "Klart",
         error: (a) => `Strimlingen misslyckades: ${a}`
+      },
+      wipe: {
+        body: "Detta skriver över det lediga utrymmet på enheten du väljer och raderar sedan fyllnadsfilen, så att filer du raderat tidigare inte kan återställas. Det frigör inget utrymme.",
+        driveLabel: "Enhet att skriva över",
+        driveOption: (a, b, c) => `${a} · ${b} ledigt av ${c}`,
+        progressPass: (a, b, c, d) => `Pass ${a} av ${b}: skriver slumpmässiga data… ${c} av ${d}`,
+        resultRandom: (a, b) => `Skrev ${a} slumpmässiga data över det lediga utrymmet i ${b} pass och raderade dem sedan. Inget utrymme frigjordes.`,
+        resultRandomStopped: (a) => `Stoppade efter att ha skrivit ${a} slumpmässiga data över det lediga utrymmet. Fyllnadsfilen raderades.`
       }
     }
   },
@@ -1294,6 +1566,14 @@ export default {
         failedHeading: (a) => `ทำลายไม่ได้: ${a}`,
         done: "เสร็จสิ้น",
         error: (a) => `การทำลายล้มเหลว: ${a}`
+      },
+      wipe: {
+        body: "การทำงานนี้จะเขียนทับพื้นที่ว่างบนไดรฟ์ที่คุณเลือก แล้วลบไฟล์ที่ใช้เติมพื้นที่ทิ้ง ทำให้กู้คืนไฟล์ที่ลบไปก่อนหน้านี้ไม่ได้ และไม่ได้เพิ่มพื้นที่ว่าง",
+        driveLabel: "ไดรฟ์ที่จะเขียนทับ",
+        driveOption: (a, b, c) => `${a} · ว่าง ${b} จาก ${c}`,
+        progressPass: (a, b, c, d) => `รอบที่ ${a} จาก ${b}: กำลังเขียนข้อมูลสุ่ม… ${c} จาก ${d}`,
+        resultRandom: (a, b) => `เขียนข้อมูลสุ่ม ${a} ทับพื้นที่ว่างใน ${b} รอบแล้วลบทิ้ง ไม่ได้เพิ่มพื้นที่ว่างแต่อย่างใด`,
+        resultRandomStopped: (a) => `หยุดหลังจากเขียนข้อมูลสุ่ม ${a} ทับพื้นที่ว่าง ไฟล์ที่ใช้เติมพื้นที่ถูกลบแล้ว`
       }
     }
   },
@@ -1331,6 +1611,14 @@ export default {
         failedHeading: (a) => `Parçalanamadı: ${a}`,
         done: "Bitti",
         error: (a) => `Parçalama başarısız oldu: ${a}`
+      },
+      wipe: {
+        body: "Bu, seçtiğiniz sürücüdeki boş alanın üzerine yazar, ardından dolgu dosyasını siler; böylece daha önce sildiğiniz dosyalar kurtarılamaz. Hiç alan boşaltmaz.",
+        driveLabel: "Üzerine yazılacak sürücü",
+        driveOption: (a, b, c) => `${a} · ${c} içinde ${b} boş`,
+        progressPass: (a, b, c, d) => `Geçiş ${a} / ${b}: rastgele veri yazılıyor… ${c} / ${d}`,
+        resultRandom: (a, b) => `Boş alanın üzerine ${b} geçişte ${a} rastgele veri yazıldı, ardından silindi. Hiç alan boşaltılmadı.`,
+        resultRandomStopped: (a) => `Boş alanın üzerine ${a} rastgele veri yazıldıktan sonra durduruldu. Dolgu dosyası silindi.`
       }
     }
   },
@@ -1368,6 +1656,14 @@ export default {
         failedHeading: (a) => `Не вдалося знищити: ${a}`,
         done: "Готово",
         error: (a) => `Не вдалося знищити: ${a}`
+      },
+      wipe: {
+        body: "Вільне місце на вибраному диску перезаписується, після чого файл-заповнювач видаляється, щоб раніше видалені файли не можна було відновити. Місце при цьому не звільняється.",
+        driveLabel: "Диск для затирання",
+        driveOption: (a, b, c) => `${a} · вільно ${b} із ${c}`,
+        progressPass: (a, b, c, d) => `Прохід ${a} із ${b}: запис випадкових даних… ${c} із ${d}`,
+        resultRandom: (a, b) => `Вільне місце перезаписано випадковими даними (${a}) за ${b} проходи, після чого файл-заповнювач видалено. Місце не звільнено.`,
+        resultRandomStopped: (a) => `Зупинено після запису випадкових даних (${a}) у вільне місце. Файл-заповнювач видалено.`
       }
     }
   },
@@ -1405,6 +1701,14 @@ export default {
         failedHeading: (a) => `Không thể hủy: ${a}`,
         done: "Xong",
         error: (a) => `Hủy thất bại: ${a}`
+      },
+      wipe: {
+        body: "Thao tác này ghi đè dung lượng trống trên ổ đĩa bạn chọn, rồi xóa tệp đệm, để các tệp bạn đã xóa trước đó không thể khôi phục. Nó không giải phóng thêm dung lượng.",
+        driveLabel: "Ổ đĩa cần ghi đè",
+        driveOption: (a, b, c) => `${a} · còn trống ${b} trên ${c}`,
+        progressPass: (a, b, c, d) => `Lượt ${a}/${b}: đang ghi dữ liệu ngẫu nhiên… ${c} / ${d}`,
+        resultRandom: (a, b) => `Đã ghi ${a} dữ liệu ngẫu nhiên đè lên dung lượng trống qua ${b} lượt, rồi xóa tệp đệm. Không có dung lượng nào được giải phóng.`,
+        resultRandomStopped: (a) => `Đã dừng sau khi ghi ${a} dữ liệu ngẫu nhiên đè lên dung lượng trống. Tệp đệm đã được xóa.`
       }
     }
   },
@@ -1442,6 +1746,14 @@ export default {
         failedHeading: (a) => `无法粉碎：${a}`,
         done: "完成",
         error: (a) => `粉碎失败：${a}`
+      },
+      wipe: {
+        body: "这会覆盖你所选驱动器上的可用空间，然后删除填充文件，使你之前删除的文件无法恢复。它不会释放任何空间。",
+        driveLabel: "要擦除的驱动器",
+        driveOption: (a, b, c) => `${a} · 可用 ${b}，共 ${c}`,
+        progressPass: (a, b, c, d) => `第 ${a} 次，共 ${b} 次：正在写入随机数据… ${c} / ${d}`,
+        resultRandom: (a, b) => `已用随机数据覆盖可用空间（共写入 ${a}，分 ${b} 次），随后删除了填充文件。未释放任何空间。`,
+        resultRandomStopped: (a) => `已在向可用空间写入 ${a} 的随机数据后停止，填充文件已删除。`
       }
     }
   },
@@ -1479,6 +1791,14 @@ export default {
         failedHeading: (a) => `無法粉碎：${a}`,
         done: "完成",
         error: (a) => `粉碎失敗：${a}`
+      },
+      wipe: {
+        body: "這會覆寫你所選磁碟機上的可用空間，然後刪除填充檔案，讓你先前刪除的檔案無法還原。它不會釋放任何空間。",
+        driveLabel: "要清除的磁碟機",
+        driveOption: (a, b, c) => `${a} · 可用 ${b}，共 ${c}`,
+        progressPass: (a, b, c, d) => `第 ${a} 次，共 ${b} 次：正在寫入隨機資料… ${c} / ${d}`,
+        resultRandom: (a, b) => `已用隨機資料覆寫可用空間（共寫入 ${a}，分 ${b} 次），隨後刪除了填充檔案。未釋放任何空間。`,
+        resultRandomStopped: (a) => `已在向可用空間寫入 ${a} 的隨機資料後停止，填充檔案已刪除。`
       }
     }
   }

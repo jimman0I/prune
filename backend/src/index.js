@@ -2,7 +2,8 @@ import { createServer } from 'node:http';
 import { createApp } from './app.js';
 import { startScheduler, checkSchedule } from './services/scheduleRunner.js';
 import { enforceQuarantineLimits } from './services/quarantineLimits.js';
-import { cleanupWipeLeftovers } from './lib/cleanerActions/wipeFreeSpace.js';
+import { cleanupAllWipeLeftovers } from './lib/cleanerActions/wipeFreeSpace.js';
+import { listFixedDrives } from './services/localDrives.js';
 import { getSettings } from './services/settings.js';
 import { applyInstallerChoices } from './services/installerChoices.js';
 import { initTray } from './lib/trayManager.js';
@@ -38,7 +39,12 @@ checkSchedule().catch(() => { /* a failed check must never stop the server booti
 // leaves its zero-filled files on the drive, and until they are deleted the
 // drive is nearly full. They live in a folder of their own under a name only
 // the wipe uses, so removing them is safe and happens on every start.
-cleanupWipeLeftovers()
+// The wipe can now target any local fixed drive, so the sweep looks in each
+// one's own Prune-wipe folder as well as the profile's. A drive list that
+// cannot be read just means only the profile's folder is swept this start.
+listFixedDrives()
+  .catch(() => [])
+  .then((drives) => cleanupAllWipeLeftovers({ drives: drives.map((d) => d.drive) }))
   .then((removed) => {
     if (removed.files > 0) console.log(`Removed ${removed.files} leftover free-space wipe files (${removed.bytes} bytes).`);
   })

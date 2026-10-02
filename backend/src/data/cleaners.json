@@ -1243,7 +1243,7 @@
     "id": "system_empty_space",
     "category": "Windows",
     "name": "Free disk space",
-    "description": "Overwrites the free space on the drive with zeros, then deletes the filler, so files you deleted earlier can't be recovered. It can take hours. It frees no space, does nothing useful on an SSD with TRIM, and adds write wear.",
+    "description": "Overwrites the free space on a drive you choose (with zeros, or three passes of random data), then deletes the filler, so files you deleted earlier can't be recovered. It can take hours. It frees no space, does nothing useful on an SSD with TRIM, and adds write wear.",
     "actions": [
       { "type": "wipe.freespace" }
     ],

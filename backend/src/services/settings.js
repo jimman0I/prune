@@ -83,6 +83,13 @@ const DEFAULT_SETTINGS = {
      while the switch is off. Only an exact `true` turns it on. */
   overwriteBeforeDelete: false,
   overwritePasses: 1,
+  /* The free-space wipe's own choices, made in the dialog that asks about it
+     every time: which local drive ('D:', or null for the profile's own) and
+     how many passes (1 = zeros, 3 = random data). They are settings rather
+     than request fields because the wipe runs inside an ordinary Clean,
+     which carries only rule ids. Never ticks the wipe itself. */
+  wipeDrive: null,
+  wipePasses: 1,
   theme: 'dark',
   minimizeToTray: false,
   /* Pauses the background animation, flattens the glass panels to solid
@@ -220,8 +227,16 @@ export function cleanGuardsFrom(settings) {
     autoQuarantine: settings?.autoQuarantine !== false,
     removal: normalizeRemoval(settings?.deepCleanRemoval),
     // 0 means "just delete"; 1 or 3 is how many overwrite passes come first.
-    overwritePasses: settings?.overwriteBeforeDelete === true ? normalizePasses(settings?.overwritePasses) : 0
+    overwritePasses: settings?.overwriteBeforeDelete === true ? normalizePasses(settings?.overwritePasses) : 0,
+    wipeDrive: normalizeWipeDrive(settings?.wipeDrive),
+    wipePasses: normalizePasses(settings?.wipePasses)
   };
+}
+
+/** 'D:' for a bare drive letter, null for anything else (including nothing).
+ * The wipe fills this drive, so a typo or a path is never passed on. */
+export function normalizeWipeDrive(value) {
+  return typeof value === 'string' && /^[A-Za-z]:$/.test(value.trim()) ? value.trim().toUpperCase() : null;
 }
 
 /** 'delete' only when it is exactly that. Anything else -- a missing key, a
@@ -238,7 +253,9 @@ function normalizedChoices(settings) {
   return {
     deepCleanRemoval: normalizeRemoval(settings.deepCleanRemoval),
     overwriteBeforeDelete: settings.overwriteBeforeDelete === true,
-    overwritePasses: normalizePasses(settings.overwritePasses)
+    overwritePasses: normalizePasses(settings.overwritePasses),
+    wipeDrive: normalizeWipeDrive(settings.wipeDrive),
+    wipePasses: normalizePasses(settings.wipePasses)
   };
 }
 
