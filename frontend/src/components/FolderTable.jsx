@@ -58,7 +58,7 @@ function Count({ value }) {
   return <>{value.toLocaleString()}</>;
 }
 
-export function FolderTable({ folderRows: allRows, onDrillDown, onContextMenu, onVisibleRows, filter = null, searchText = '' }) {
+export function FolderTable({ folderRows: allRows, onDrillDown, onContextMenu, onVisibleRows, selectedPath = null, onSelect, filter = null, searchText = '' }) {
   const { t } = useLanguage();
   const [sort, setSort] = useState({ column: 'size', direction: 'desc' });
   // The counts themselves are computed off the main thread (see
@@ -142,14 +142,25 @@ export function FolderTable({ folderRows: allRows, onDrillDown, onContextMenu, o
           const drillable = row.scanned && row.type === 'directory' && Boolean(row.fullPath);
           // The same test as the map's menu: a real, measured place.
           const actionable = row.scanned && Boolean(row.fullPath);
-          const node = { name: row.name, size: row.size, fullPath: row.fullPath, type: row.type };
+          const node = {
+            name: row.name, size: row.size, allocated: row.allocated, modified: row.modified,
+            files: row.files, folders: row.folders, fullPath: row.fullPath, type: row.type
+          };
+          const selected = Boolean(row.fullPath) && row.fullPath === selectedPath;
           return (
             <div
               role="row"
               key={row.fullPath || row.name}
+              // Pointing at or focusing a row selects it, and the map block for the
+              // same folder lights up (and the other way round).
+              data-selected={selected ? 'true' : undefined}
+              onMouseEnter={() => { if (actionable) onSelect?.(row.fullPath); }}
+              onMouseLeave={() => onSelect?.(null)}
+              onFocus={() => { if (actionable) onSelect?.(row.fullPath); }}
+              onBlur={() => onSelect?.(null)}
               className={`grid gap-2 px-4 py-[7px] items-center ${
                 drillable ? 'cursor-pointer hover:bg-[color:var(--surface-hover)] transition-colors' : ''
-              }`}
+              } ${selected ? 'bg-[color:var(--surface-hover)] shadow-[inset_2px_0_0_var(--accent-primary)]' : ''}`}
               style={{ gridTemplateColumns: grid }}
               onClick={() => { if (drillable) onDrillDown(row.fullPath); }}
               onContextMenu={(e) => {

@@ -25,6 +25,7 @@ import DiskScanProgress from './DiskScanProgress.jsx';
 import { DrivePicker } from './DrivePicker.jsx';
 import { FolderTable } from './FolderTable.jsx';
 import { SearchBox } from './SearchBox.jsx';
+import { PropertiesDialog } from './PropertiesDialog.jsx';
 import { ExportButtons } from './ExportButtons.jsx';
 import { rowsToCsv, exportFileName } from '../lib/exportCsv.js';
 import { svgToPngBlob } from '../lib/exportPng.js';
@@ -275,7 +276,7 @@ const EMPTY_BREAKDOWN = { rows: [], totalBytes: 0, totalFiles: 0, treeBytes: 0, 
 const EMPTY_FILES = [];
 const EMPTY_FOLDER_ROWS = [];
 
-function TreemapCell({ x, y, width, height, depth, name, size, type, scanned, aggregated, fullPath, searchMatch, icons, typeColors, onHover, onLeave, onDrillDown, onContextMenu }) {
+function TreemapCell({ x, y, width, height, depth, name, size, allocated, modified, type, scanned, aggregated, fullPath, searchMatch, selected, onSelect, icons, typeColors, onHover, onLeave, onDrillDown, onContextMenu }) {
   const { t } = useLanguage();
   if (depth === 0 || !(width > 0) || !(height > 0)) return null;
   const fill = colorForNode({ name, type, scanned: scanned === false || aggregated ? false : scanned }, typeColors);
@@ -304,6 +305,7 @@ function TreemapCell({ x, y, width, height, depth, name, size, type, scanned, ag
       // "true" for a match, "false" for everything else. Absent otherwise.
       data-name={name}
       data-search-match={searchMatch === undefined ? undefined : String(searchMatch)}
+      data-selected={selected ? 'true' : undefined}
       className={`treemap-cell${canDrillDown ? ' treemap-cell--clickable' : ''}`}
       // ONE style prop. There were briefly two -- an animationDelay added
       // beside the existing cursor -- and JSX silently keeps the last, so
@@ -346,8 +348,9 @@ function TreemapCell({ x, y, width, height, depth, name, size, type, scanned, ag
           clientX: box.left + box.width / 2,
           clientY: box.top + box.height / 2
         });
+        if (fullPath && !aggregated && scanned !== false) onSelect?.(fullPath);
       }}
-      onBlur={onLeave}
+      onBlur={() => { onLeave(); onSelect?.(null); }}
       onKeyDown={(e) => {
         if (!canDrillDown) return;
         if (e.key === 'Enter' || e.key === ' ') {
@@ -355,8 +358,8 @@ function TreemapCell({ x, y, width, height, depth, name, size, type, scanned, ag
           onDrillDown(fullPath);
         }
       }}
-      onMouseEnter={(e) => onHover({ name, size, fullPath, type, scanned, aggregated }, e)}
-      onMouseLeave={onLeave}
+      onMouseEnter={(e) => { onHover({ name, size, fullPath, type, scanned, aggregated }, e); if (fullPath && !aggregated && scanned !== false) onSelect?.(fullPath); }}
+      onMouseLeave={() => { onLeave(); onSelect?.(null); }}
       onClick={() => canDrillDown && onDrillDown(fullPath)}
       // An unscanned or aggregate block is not a place -- there is no path
       // to open, copy or remove -- so it gets no menu rather than a menu
@@ -364,7 +367,7 @@ function TreemapCell({ x, y, width, height, depth, name, size, type, scanned, ag
       onContextMenu={(e) => {
         if (!fullPath || aggregated || scanned === false) return;
         e.preventDefault();
-        onContextMenu({ name, size, fullPath, type }, e);
+        onContextMenu({ name, size, allocated, modified, fullPath, type }, e);
       }}
     >
       <rect
@@ -372,8 +375,8 @@ function TreemapCell({ x, y, width, height, depth, name, size, type, scanned, ag
         // A match gets a ring in the accent colour; everything else steps
         // back. The ring is a stroke, not an opacity change, so a match still
         // reads at full strength next to dimmed neighbours.
-        stroke={searchMatch === true ? 'var(--accent-primary)' : 'var(--bg-base)'}
-        strokeWidth={searchMatch === true ? 3 : 1.5}
+        stroke={searchMatch === true || selected ? 'var(--accent-primary)' : 'var(--bg-base)'}
+        strokeWidth={searchMatch === true || selected ? 3 : 1.5}
         opacity={searchMatch === false ? 0.22 : undefined}
       />
       {showIcon && (
@@ -650,7 +653,7 @@ function DiskMap() {
    * unscanned-remainder calculation, and holding it in state would
    * re-render the whole treemap when it lands. */
   const { diskSpace } = useDiskSpace();
-  const { settings } = useSettings();
+  const { settings, save: saveSettings } = useSettings();
   useEffect(() => {
     const used = { ...usedBytesRef.current };
     // The API reports free and total; used is the subtraction. Read off
@@ -795,12 +798,25 @@ function DiskMap() {
   // The search box. The folder rows and the map answer to every keystroke
   // (a screenful of items); the whole-tree search behind the File view waits
   // for a pause in typing, and is not run at all for an invalid pattern.
+  // The item pointed at or focused, in either the Tree rows or the map. Held
+  // here so each side can light up the other. A right-click menu holds it
+  // while it is open, so moving to the menu does not drop what it acts on.
+  const [selectedPath, setSelectedPath] = useState(null);
+  const menuOpenRef = useRef(false);
+  const handleSelect = useCallback((path) => {
+    if (path === null && menuOpenRef.current) return;
+    setSelectedPath(path);
+  }, []);
   const [searchText, setSearchText] = useState('');
   const filter = useMemo(() => compileFilter(searchText), [searchText]);
   const fileFilterText = useDebouncedValue(filter.active ? searchText : '', 250);
   const markedCells = useMemo(
-    () => (filter.active ? cells.map((cell) => ({ ...cell, searchMatch: !cell.aggregated && filter.match(cell.name, cell.fullPath) })) : cells),
-    [cells, filter]
+    () => cells.map((cell) => ({
+      ...cell,
+      searchMatch: filter.active ? !cell.aggregated && filter.match(cell.name, cell.fullPath) : undefined,
+      selected: Boolean(cell.fullPath) && cell.fullPath === selectedPath
+    })),
+    [cells, filter, selectedPath]
   );
   const aggregates = useDiskMapAggregates(tree, { fileLimit: FILE_ROWS, filterText: fileFilterText });
   const breakdown = aggregates.result?.extensionBreakdown ?? EMPTY_BREAKDOWN;
@@ -894,9 +910,31 @@ function DiskMap() {
   const toasts = useToasts();
   const queryClient = useQueryClient();
 
+  menuOpenRef.current = Boolean(menu);
+  const [properties, setProperties] = useState(null);
+
   const handleContextMenu = useCallback((node, event) => {
+    setSelectedPath(node.fullPath ?? null);
     setMenu({ node, x: event.clientX, y: event.clientY });
   }, []);
+
+  /** Adds a folder to Settings -> exclusions. It takes effect on the NEXT scan
+   * (the picture on screen is of a scan already made), which the confirmation
+   * says. The same list the Settings screen edits, matched the same way. */
+  const handleExclude = async (node) => {
+    const existing = Array.isArray(settings?.excludeFolders) ? settings.excludeFolders : [];
+    const same = (p) => String(p).replace(/[\\/]+$/, '').toLowerCase();
+    if (existing.some((p) => same(p) === same(node.fullPath))) {
+      toasts.info(t('diskMapV3.toasts.alreadyExcluded', node.fullPath));
+      return;
+    }
+    try {
+      await saveSettings.mutateAsync({ excludeFolders: [...existing, node.fullPath] });
+      toasts.success(t('diskMapV3.toasts.excluded', node.fullPath));
+    } catch {
+      toasts.error(t('diskMapV3.toasts.excludeFailed'));
+    }
+  };
 
   /** Removal goes to quarantine and is confirmed first.
    *
@@ -1204,7 +1242,7 @@ function DiskMap() {
               last column is sliced off, as it was between 1024 and 1207 before
               the rail widened. Below the breakpoint they stack. */}
           <div className="grid gap-4 min-[1400px]:grid-cols-[minmax(0,1fr)_360px] items-start">
-            <FolderTable folderRows={aggregates.result?.folderRows ?? EMPTY_FOLDER_ROWS} onDrillDown={handleDrillDown} onContextMenu={handleContextMenu} onVisibleRows={onVisibleTreeRows} filter={filter} searchText={searchText} />
+            <FolderTable folderRows={aggregates.result?.folderRows ?? EMPTY_FOLDER_ROWS} onDrillDown={handleDrillDown} onContextMenu={handleContextMenu} onVisibleRows={onVisibleTreeRows} selectedPath={selectedPath} onSelect={handleSelect} filter={filter} searchText={searchText} />
             <ExtensionPanel breakdown={breakdown} shown={shownExtensions} icons={typeIcons} typeColors={typeColors} />
           </div>
 
@@ -1214,7 +1252,7 @@ function DiskMap() {
                 data={markedCells}
                 dataKey="size"
                 isAnimationActive={false}
-                content={<TreemapCell icons={typeIcons} typeColors={typeColors} onHover={handleHover} onLeave={handleLeave} onDrillDown={handleDrillDown} onContextMenu={handleContextMenu} />}
+                content={<TreemapCell icons={typeIcons} typeColors={typeColors} onHover={handleHover} onLeave={handleLeave} onDrillDown={handleDrillDown} onContextMenu={handleContextMenu} onSelect={handleSelect} />}
               />
             </ResponsiveContainer>
           </div>
@@ -1277,7 +1315,7 @@ function DiskMap() {
         open={Boolean(menu)}
         x={menu?.x ?? 0}
         y={menu?.y ?? 0}
-        onClose={() => setMenu(null)}
+        onClose={() => { setMenu(null); setSelectedPath(null); }}
         items={menu ? [
           {
             label: t('diskMap.contextMenu.openInExplorer'),
@@ -1291,6 +1329,14 @@ function DiskMap() {
               .catch(() => toasts.error(t('diskMap.toasts.copyFailed')))
           },
           {
+            label: t('diskMapV3.menu.properties'),
+            onSelect: () => setProperties(menu.node)
+          },
+          ...(menu.node.type === 'directory' && menu.node.fullPath && !isDriveRoot(menu.node.fullPath) ? [{
+            label: t('diskMapV3.menu.exclude'),
+            onSelect: () => handleExclude(menu.node)
+          }] : []),
+          {
             label: t('diskMap.contextMenu.moveToQuarantineMenu'),
             danger: true,
             // Never removed straight from the menu. A right-click is one
@@ -1300,6 +1346,13 @@ function DiskMap() {
           }
         ] : []}
       />
+
+      {properties && (
+        <PropertiesDialog
+          info={{ ...properties, ...(aggregates.result?.folderRows?.find((r) => r.fullPath === properties.fullPath) ?? {}) }}
+          onClose={() => setProperties(null)}
+        />
+      )}
 
       {pendingRemoval && (
         <ModalOverlay label={t('diskMap.removeModal.label')} onClose={() => setPendingRemoval(null)}>

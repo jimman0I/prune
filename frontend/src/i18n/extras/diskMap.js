@@ -48,6 +48,20 @@ export default {
         png: "Save map as PNG",
         failed: (a) => `Could not export: ${a}`,
         done: (a) => `Exported ${a}`
+      },
+      menu: {
+        properties: "Properties",
+        exclude: "Exclude this folder"
+      },
+      props: {
+        path: "Path",
+        type: "Type",
+        close: "Close"
+      },
+      toasts: {
+        excluded: (a) => `${a} will be skipped by future scans.`,
+        alreadyExcluded: (a) => `${a} is already excluded.`,
+        excludeFailed: "Could not save that exclusion."
       }
     }
   },
@@ -97,6 +111,20 @@ export default {
         png: "Stoor kaart as PNG",
         failed: (a) => `Kon nie uitvoer nie: ${a}`,
         done: (a) => `Uitgevoer: ${a}`
+      },
+      menu: {
+        properties: "Eienskappe",
+        exclude: "Sluit hierdie vouer uit"
+      },
+      props: {
+        path: "Pad",
+        type: "Tipe",
+        close: "Maak toe"
+      },
+      toasts: {
+        excluded: (a) => `${a} word deur toekomstige skanderings oorgeslaan.`,
+        alreadyExcluded: (a) => `${a} is reeds uitgesluit.`,
+        excludeFailed: "Kon nie daardie uitsluiting stoor nie."
       }
     }
   },
@@ -146,6 +174,20 @@ export default {
         png: "حفظ الخريطة كصورة PNG",
         failed: (a) => `تعذّر التصدير: ${a}`,
         done: (a) => `تم التصدير: ${a}`
+      },
+      menu: {
+        properties: "خصائص",
+        exclude: "استبعاد هذا المجلد"
+      },
+      props: {
+        path: "المسار",
+        type: "النوع",
+        close: "إغلاق"
+      },
+      toasts: {
+        excluded: (a) => `سيتم تخطي ${a} في عمليات الفحص القادمة.`,
+        alreadyExcluded: (a) => `${a} مستبعد بالفعل.`,
+        excludeFailed: "تعذّر حفظ هذا الاستبعاد."
       }
     }
   },
@@ -195,6 +237,20 @@ export default {
         png: "Desa el mapa com a PNG",
         failed: (a) => `No s’ha pogut exportar: ${a}`,
         done: (a) => `Exportat: ${a}`
+      },
+      menu: {
+        properties: "Propietats",
+        exclude: "Exclou aquesta carpeta"
+      },
+      props: {
+        path: "Camí",
+        type: "Tipus",
+        close: "Tanca"
+      },
+      toasts: {
+        excluded: (a) => `${a} s’ometrà en els escanejos futurs.`,
+        alreadyExcluded: (a) => `${a} ja està exclòs.`,
+        excludeFailed: "No s’ha pogut desar aquesta exclusió."
       }
     }
   },
@@ -244,6 +300,20 @@ export default {
         png: "Uložit mapu jako PNG",
         failed: (a) => `Export se nezdařil: ${a}`,
         done: (a) => `Exportováno: ${a}`
+      },
+      menu: {
+        properties: "Vlastnosti",
+        exclude: "Vyloučit tuto složku"
+      },
+      props: {
+        path: "Cesta",
+        type: "Typ",
+        close: "Zavřít"
+      },
+      toasts: {
+        excluded: (a) => `${a} budou budoucí skeny přeskakovat.`,
+        alreadyExcluded: (a) => `${a} už je vyloučeno.`,
+        excludeFailed: "Toto vyloučení se nepodařilo uložit."
       }
     }
   },
@@ -293,6 +363,20 @@ export default {
         png: "Cadw’r map fel PNG",
         failed: (a) => `Methwyd allforio: ${a}`,
         done: (a) => `Allforiwyd: ${a}`
+      },
+      menu: {
+        properties: "Priodweddau",
+        exclude: "Eithrio’r ffolder hon"
+      },
+      props: {
+        path: "Llwybr",
+        type: "Math",
+        close: "Cau"
+      },
+      toasts: {
+        excluded: (a) => `Bydd sganiau yn y dyfodol yn hepgor ${a}.`,
+        alreadyExcluded: (a) => `Mae ${a} eisoes wedi’i eithrio.`,
+        excludeFailed: "Methwyd cadw’r eithriad hwnnw."
       }
     }
   },
@@ -342,6 +426,20 @@ export default {
         png: "Gem kort som PNG",
         failed: (a) => `Kunne ikke eksportere: ${a}`,
         done: (a) => `Eksporteret: ${a}`
+      },
+      menu: {
+        properties: "Egenskaber",
+        exclude: "Udeluk denne mappe"
+      },
+      props: {
+        path: "Sti",
+        type: "Type",
+        close: "Luk"
+      },
+      toasts: {
+        excluded: (a) => `${a} springes over ved fremtidige scanninger.`,
+        alreadyExcluded: (a) => `${a} er allerede udeladt.`,
+        excludeFailed: "Kunne ikke gemme den udeladelse."
       }
     }
   },
@@ -391,6 +489,20 @@ export default {
         png: "Karte als PNG speichern",
         failed: (a) => `Export nicht möglich: ${a}`,
         done: (a) => `Exportiert: ${a}`
+      },
+      menu: {
+        properties: "Eigenschaften",
+        exclude: "Diesen Ordner ausschließen"
+      },
+      props: {
+        path: "Pfad",
+        type: "Typ",
+        close: "Schließen"
+      },
+      toasts: {
+        excluded: (a) => `${a} wird bei künftigen Scans übersprungen.`,
+        alreadyExcluded: (a) => `${a} ist bereits ausgeschlossen.`,
+        excludeFailed: "Der Ausschluss konnte nicht gespeichert werden."
       }
     }
   },
@@ -440,6 +552,20 @@ export default {
         png: "Αποθήκευση χάρτη ως PNG",
         failed: (a) => `Η εξαγωγή απέτυχε: ${a}`,
         done: (a) => `Έγινε εξαγωγή: ${a}`
+      },
+      menu: {
+        properties: "Ιδιότητες",
+        exclude: "Εξαίρεση αυτού του φακέλου"
+      },
+      props: {
+        path: "Διαδρομή",
+        type: "Τύπος",
+        close: "Κλείσιμο"
+      },
+      toasts: {
+        excluded: (a) => `Το ${a} θα παραλείπεται στις επόμενες σαρώσεις.`,
+        alreadyExcluded: (a) => `Το ${a} έχει ήδη εξαιρεθεί.`,
+        excludeFailed: "Δεν ήταν δυνατή η αποθήκευση της εξαίρεσης."
       }
     }
   },
@@ -489,6 +615,20 @@ export default {
         png: "Guardar mapa como PNG",
         failed: (a) => `No se pudo exportar: ${a}`,
         done: (a) => `Exportado: ${a}`
+      },
+      menu: {
+        properties: "Propiedades",
+        exclude: "Excluir esta carpeta"
+      },
+      props: {
+        path: "Ruta",
+        type: "Tipo",
+        close: "Cerrar"
+      },
+      toasts: {
+        excluded: (a) => `${a} se omitirá en los próximos escaneos.`,
+        alreadyExcluded: (a) => `${a} ya está excluido.`,
+        excludeFailed: "No se pudo guardar esa exclusión."
       }
     }
   },
@@ -538,6 +678,20 @@ export default {
         png: "Salvesta kaart PNG-na",
         failed: (a) => `Eksport ebaõnnestus: ${a}`,
         done: (a) => `Eksporditud: ${a}`
+      },
+      menu: {
+        properties: "Atribuudid",
+        exclude: "Välista see kaust"
+      },
+      props: {
+        path: "Asukoht",
+        type: "Tüüp",
+        close: "Sulge"
+      },
+      toasts: {
+        excluded: (a) => `${a} jäetakse edasistel skannimistel vahele.`,
+        alreadyExcluded: (a) => `${a} on juba välistatud.`,
+        excludeFailed: "Välistust ei õnnestunud salvestada."
       }
     }
   },
@@ -587,6 +741,20 @@ export default {
         png: "Tallenna kartta PNG-kuvana",
         failed: (a) => `Vienti epäonnistui: ${a}`,
         done: (a) => `Viety: ${a}`
+      },
+      menu: {
+        properties: "Ominaisuudet",
+        exclude: "Sulje tämä kansio pois"
+      },
+      props: {
+        path: "Polku",
+        type: "Tyyppi",
+        close: "Sulje"
+      },
+      toasts: {
+        excluded: (a) => `${a} ohitetaan tulevissa skannauksissa.`,
+        alreadyExcluded: (a) => `${a} on jo suljettu pois.`,
+        excludeFailed: "Poissulkemisen tallennus epäonnistui."
       }
     }
   },
@@ -636,6 +804,20 @@ export default {
         png: "Enregistrer la carte en PNG",
         failed: (a) => `Échec de l’exportation : ${a}`,
         done: (a) => `Exporté : ${a}`
+      },
+      menu: {
+        properties: "Propriétés",
+        exclude: "Exclure ce dossier"
+      },
+      props: {
+        path: "Chemin",
+        type: "Type",
+        close: "Fermer"
+      },
+      toasts: {
+        excluded: (a) => `${a} sera ignoré lors des prochaines analyses.`,
+        alreadyExcluded: (a) => `${a} est déjà exclu.`,
+        excludeFailed: "Impossible d’enregistrer cette exclusion."
       }
     }
   },
@@ -685,6 +867,20 @@ export default {
         png: "שמור מפה כ-PNG",
         failed: (a) => `הייצוא נכשל: ${a}`,
         done: (a) => `יוצא: ${a}`
+      },
+      menu: {
+        properties: "מאפיינים",
+        exclude: "החרג תיקייה זו"
+      },
+      props: {
+        path: "נתיב",
+        type: "סוג",
+        close: "סגור"
+      },
+      toasts: {
+        excluded: (a) => `${a} ידולג בסריקות עתידיות.`,
+        alreadyExcluded: (a) => `${a} כבר מוחרג.`,
+        excludeFailed: "לא ניתן לשמור את ההחרגה."
       }
     }
   },
@@ -734,6 +930,20 @@ export default {
         png: "Térkép mentése PNG-ként",
         failed: (a) => `Az exportálás nem sikerült: ${a}`,
         done: (a) => `Exportálva: ${a}`
+      },
+      menu: {
+        properties: "Tulajdonságok",
+        exclude: "Mappa kizárása"
+      },
+      props: {
+        path: "Elérési út",
+        type: "Típus",
+        close: "Bezárás"
+      },
+      toasts: {
+        excluded: (a) => `A(z) ${a} kimarad a következő vizsgálatokból.`,
+        alreadyExcluded: (a) => `A(z) ${a} már ki van zárva.`,
+        excludeFailed: "A kizárást nem sikerült menteni."
       }
     }
   },
@@ -783,6 +993,20 @@ export default {
         png: "Simpan peta sebagai PNG",
         failed: (a) => `Gagal mengekspor: ${a}`,
         done: (a) => `Diekspor: ${a}`
+      },
+      menu: {
+        properties: "Properti",
+        exclude: "Kecualikan folder ini"
+      },
+      props: {
+        path: "Jalur",
+        type: "Jenis",
+        close: "Tutup"
+      },
+      toasts: {
+        excluded: (a) => `${a} akan dilewati pada pemindaian berikutnya.`,
+        alreadyExcluded: (a) => `${a} sudah dikecualikan.`,
+        excludeFailed: "Tidak dapat menyimpan pengecualian itu."
       }
     }
   },
@@ -832,6 +1056,20 @@ export default {
         png: "Vista kort sem PNG",
         failed: (a) => `Útflutningur mistókst: ${a}`,
         done: (a) => `Flutt út: ${a}`
+      },
+      menu: {
+        properties: "Eiginleikar",
+        exclude: "Útiloka þessa möppu"
+      },
+      props: {
+        path: "Slóð",
+        type: "Gerð",
+        close: "Loka"
+      },
+      toasts: {
+        excluded: (a) => `${a} verður sleppt í framtíðarskönnunum.`,
+        alreadyExcluded: (a) => `${a} er þegar útilokað.`,
+        excludeFailed: "Ekki tókst að vista þessa útilokun."
       }
     }
   },
@@ -881,6 +1119,20 @@ export default {
         png: "Salva la mappa come PNG",
         failed: (a) => `Esportazione non riuscita: ${a}`,
         done: (a) => `Esportato: ${a}`
+      },
+      menu: {
+        properties: "Proprietà",
+        exclude: "Escludi questa cartella"
+      },
+      props: {
+        path: "Percorso",
+        type: "Tipo",
+        close: "Chiudi"
+      },
+      toasts: {
+        excluded: (a) => `${a} verrà ignorata nelle prossime scansioni.`,
+        alreadyExcluded: (a) => `${a} è già esclusa.`,
+        excludeFailed: "Impossibile salvare l’esclusione."
       }
     }
   },
@@ -930,6 +1182,20 @@ export default {
         png: "マップを PNG で保存",
         failed: (a) => `書き出せませんでした: ${a}`,
         done: (a) => `書き出しました: ${a}`
+      },
+      menu: {
+        properties: "プロパティ",
+        exclude: "このフォルダーを除外"
+      },
+      props: {
+        path: "パス",
+        type: "種類",
+        close: "閉じる"
+      },
+      toasts: {
+        excluded: (a) => `${a} は今後のスキャンでスキップされます。`,
+        alreadyExcluded: (a) => `${a} はすでに除外されています。`,
+        excludeFailed: "除外を保存できませんでした。"
       }
     }
   },
@@ -979,6 +1245,20 @@ export default {
         png: "맵을 PNG로 저장",
         failed: (a) => `내보낼 수 없습니다: ${a}`,
         done: (a) => `내보냄: ${a}`
+      },
+      menu: {
+        properties: "속성",
+        exclude: "이 폴더 제외"
+      },
+      props: {
+        path: "경로",
+        type: "형식",
+        close: "닫기"
+      },
+      toasts: {
+        excluded: (a) => `${a}은(는) 이후 검사에서 건너뜁니다.`,
+        alreadyExcluded: (a) => `${a}은(는) 이미 제외되었습니다.`,
+        excludeFailed: "제외 항목을 저장할 수 없습니다."
       }
     }
   },
@@ -1028,6 +1308,20 @@ export default {
         png: "Įrašyti žemėlapį kaip PNG",
         failed: (a) => `Eksportuoti nepavyko: ${a}`,
         done: (a) => `Eksportuota: ${a}`
+      },
+      menu: {
+        properties: "Ypatybės",
+        exclude: "Neįtraukti šio aplanko"
+      },
+      props: {
+        path: "Kelias",
+        type: "Tipas",
+        close: "Uždaryti"
+      },
+      toasts: {
+        excluded: (a) => `${a} bus praleista būsimuose nuskaitymuose.`,
+        alreadyExcluded: (a) => `${a} jau neįtraukta.`,
+        excludeFailed: "Nepavyko išsaugoti šios išimties."
       }
     }
   },
@@ -1077,6 +1371,20 @@ export default {
         png: "Simpan peta sebagai PNG",
         failed: (a) => `Eksport gagal: ${a}`,
         done: (a) => `Dieksport: ${a}`
+      },
+      menu: {
+        properties: "Sifat",
+        exclude: "Kecualikan folder ini"
+      },
+      props: {
+        path: "Laluan",
+        type: "Jenis",
+        close: "Tutup"
+      },
+      toasts: {
+        excluded: (a) => `${a} akan dilangkau dalam imbasan akan datang.`,
+        alreadyExcluded: (a) => `${a} sudah dikecualikan.`,
+        excludeFailed: "Tidak dapat menyimpan pengecualian itu."
       }
     }
   },
@@ -1126,6 +1434,20 @@ export default {
         png: "Lagre kartet som PNG",
         failed: (a) => `Eksport mislyktes: ${a}`,
         done: (a) => `Eksportert: ${a}`
+      },
+      menu: {
+        properties: "Egenskaper",
+        exclude: "Ekskluder denne mappen"
+      },
+      props: {
+        path: "Sti",
+        type: "Type",
+        close: "Lukk"
+      },
+      toasts: {
+        excluded: (a) => `${a} hoppes over i fremtidige skanninger.`,
+        alreadyExcluded: (a) => `${a} er allerede ekskludert.`,
+        excludeFailed: "Kunne ikke lagre ekskluderingen."
       }
     }
   },
@@ -1175,6 +1497,20 @@ export default {
         png: "Kaart opslaan als PNG",
         failed: (a) => `Exporteren mislukt: ${a}`,
         done: (a) => `Geëxporteerd: ${a}`
+      },
+      menu: {
+        properties: "Eigenschappen",
+        exclude: "Deze map uitsluiten"
+      },
+      props: {
+        path: "Pad",
+        type: "Type",
+        close: "Sluiten"
+      },
+      toasts: {
+        excluded: (a) => `${a} wordt bij toekomstige scans overgeslagen.`,
+        alreadyExcluded: (a) => `${a} is al uitgesloten.`,
+        excludeFailed: "De uitsluiting kon niet worden opgeslagen."
       }
     }
   },
@@ -1224,6 +1560,20 @@ export default {
         png: "Zapisz mapę jako PNG",
         failed: (a) => `Eksport się nie powiódł: ${a}`,
         done: (a) => `Wyeksportowano: ${a}`
+      },
+      menu: {
+        properties: "Właściwości",
+        exclude: "Wyklucz ten folder"
+      },
+      props: {
+        path: "Ścieżka",
+        type: "Typ",
+        close: "Zamknij"
+      },
+      toasts: {
+        excluded: (a) => `${a} będzie pomijany w przyszłych skanowaniach.`,
+        alreadyExcluded: (a) => `${a} jest już wykluczony.`,
+        excludeFailed: "Nie udało się zapisać wykluczenia."
       }
     }
   },
@@ -1273,6 +1623,20 @@ export default {
         png: "نقشه د PNG په توګه خوندي کړئ",
         failed: (a) => `صادرول ونه شول: ${a}`,
         done: (a) => `صادر شو: ${a}`
+      },
+      menu: {
+        properties: "ځانګړتیاوې",
+        exclude: "دا فولډر وباسئ"
+      },
+      props: {
+        path: "لاره",
+        type: "ډول",
+        close: "بندول"
+      },
+      toasts: {
+        excluded: (a) => `${a} به په راتلونکو سکینونو کې پریښودل شي.`,
+        alreadyExcluded: (a) => `${a} دمخه وایستل شوی.`,
+        excludeFailed: "دا استثنا خوندي نشوه."
       }
     }
   },
@@ -1322,6 +1686,20 @@ export default {
         png: "Salvar mapa como PNG",
         failed: (a) => `Falha ao exportar: ${a}`,
         done: (a) => `Exportado: ${a}`
+      },
+      menu: {
+        properties: "Propriedades",
+        exclude: "Excluir esta pasta"
+      },
+      props: {
+        path: "Caminho",
+        type: "Tipo",
+        close: "Fechar"
+      },
+      toasts: {
+        excluded: (a) => `${a} será ignorado nas próximas verificações.`,
+        alreadyExcluded: (a) => `${a} já está excluído.`,
+        excludeFailed: "Não foi possível salvar essa exclusão."
       }
     }
   },
@@ -1371,6 +1749,20 @@ export default {
         png: "Guardar mapa como PNG",
         failed: (a) => `Falha ao exportar: ${a}`,
         done: (a) => `Exportado: ${a}`
+      },
+      menu: {
+        properties: "Propriedades",
+        exclude: "Excluir esta pasta"
+      },
+      props: {
+        path: "Caminho",
+        type: "Tipo",
+        close: "Fechar"
+      },
+      toasts: {
+        excluded: (a) => `${a} será ignorado nas próximas análises.`,
+        alreadyExcluded: (a) => `${a} já está excluído.`,
+        excludeFailed: "Não foi possível guardar essa exclusão."
       }
     }
   },
@@ -1420,6 +1812,20 @@ export default {
         png: "Salvează harta ca PNG",
         failed: (a) => `Exportul a eșuat: ${a}`,
         done: (a) => `Exportat: ${a}`
+      },
+      menu: {
+        properties: "Proprietăți",
+        exclude: "Exclude acest folder"
+      },
+      props: {
+        path: "Cale",
+        type: "Tip",
+        close: "Închide"
+      },
+      toasts: {
+        excluded: (a) => `${a} va fi omis la scanările viitoare.`,
+        alreadyExcluded: (a) => `${a} este deja exclus.`,
+        excludeFailed: "Nu s-a putut salva excluderea."
       }
     }
   },
@@ -1469,6 +1875,20 @@ export default {
         png: "Сохранить карту как PNG",
         failed: (a) => `Не удалось экспортировать: ${a}`,
         done: (a) => `Экспортировано: ${a}`
+      },
+      menu: {
+        properties: "Свойства",
+        exclude: "Исключить эту папку"
+      },
+      props: {
+        path: "Путь",
+        type: "Тип",
+        close: "Закрыть"
+      },
+      toasts: {
+        excluded: (a) => `${a} будет пропускаться при следующих сканированиях.`,
+        alreadyExcluded: (a) => `${a} уже исключено.`,
+        excludeFailed: "Не удалось сохранить исключение."
       }
     }
   },
@@ -1518,6 +1938,20 @@ export default {
         png: "Uložiť mapu ako PNG",
         failed: (a) => `Export zlyhal: ${a}`,
         done: (a) => `Exportované: ${a}`
+      },
+      menu: {
+        properties: "Vlastnosti",
+        exclude: "Vylúčiť tento priečinok"
+      },
+      props: {
+        path: "Cesta",
+        type: "Typ",
+        close: "Zavrieť"
+      },
+      toasts: {
+        excluded: (a) => `${a} sa pri budúcich skenovaniach preskočí.`,
+        alreadyExcluded: (a) => `${a} už je vylúčené.`,
+        excludeFailed: "Výnimku sa nepodarilo uložiť."
       }
     }
   },
@@ -1567,6 +2001,20 @@ export default {
         png: "Ruaj hartën si PNG",
         failed: (a) => `Eksportimi dështoi: ${a}`,
         done: (a) => `U eksportua: ${a}`
+      },
+      menu: {
+        properties: "Vetitë",
+        exclude: "Përjashto këtë dosje"
+      },
+      props: {
+        path: "Shtegu",
+        type: "Lloji",
+        close: "Mbyll"
+      },
+      toasts: {
+        excluded: (a) => `${a} do të anashkalohet në skanimet e ardhshme.`,
+        alreadyExcluded: (a) => `${a} është tashmë i përjashtuar.`,
+        excludeFailed: "Përjashtimi nuk u ruajt dot."
       }
     }
   },
@@ -1616,6 +2064,20 @@ export default {
         png: "Сачувај мапу као PNG",
         failed: (a) => `Извоз није успео: ${a}`,
         done: (a) => `Извезено: ${a}`
+      },
+      menu: {
+        properties: "Својства",
+        exclude: "Искључи ову фасциклу"
+      },
+      props: {
+        path: "Путања",
+        type: "Врста",
+        close: "Затвори"
+      },
+      toasts: {
+        excluded: (a) => `${a} ће бити прескочено у будућим скенирањима.`,
+        alreadyExcluded: (a) => `${a} је већ искључено.`,
+        excludeFailed: "Није могуће сачувати изузетак."
       }
     }
   },
@@ -1665,6 +2127,20 @@ export default {
         png: "Spara kartan som PNG",
         failed: (a) => `Exporten misslyckades: ${a}`,
         done: (a) => `Exporterat: ${a}`
+      },
+      menu: {
+        properties: "Egenskaper",
+        exclude: "Exkludera den här mappen"
+      },
+      props: {
+        path: "Sökväg",
+        type: "Typ",
+        close: "Stäng"
+      },
+      toasts: {
+        excluded: (a) => `${a} hoppas över vid framtida skanningar.`,
+        alreadyExcluded: (a) => `${a} är redan exkluderad.`,
+        excludeFailed: "Det gick inte att spara undantaget."
       }
     }
   },
@@ -1714,6 +2190,20 @@ export default {
         png: "บันทึกแผนที่เป็น PNG",
         failed: (a) => `ส่งออกไม่สำเร็จ: ${a}`,
         done: (a) => `ส่งออกแล้ว: ${a}`
+      },
+      menu: {
+        properties: "คุณสมบัติ",
+        exclude: "ยกเว้นโฟลเดอร์นี้"
+      },
+      props: {
+        path: "เส้นทาง",
+        type: "ประเภท",
+        close: "ปิด"
+      },
+      toasts: {
+        excluded: (a) => `${a} จะถูกข้ามในการสแกนครั้งต่อไป`,
+        alreadyExcluded: (a) => `${a} ถูกยกเว้นอยู่แล้ว`,
+        excludeFailed: "บันทึกการยกเว้นไม่ได้"
       }
     }
   },
@@ -1763,6 +2253,20 @@ export default {
         png: "Haritayı PNG olarak kaydet",
         failed: (a) => `Dışa aktarılamadı: ${a}`,
         done: (a) => `Dışa aktarıldı: ${a}`
+      },
+      menu: {
+        properties: "Özellikler",
+        exclude: "Bu klasörü hariç tut"
+      },
+      props: {
+        path: "Yol",
+        type: "Tür",
+        close: "Kapat"
+      },
+      toasts: {
+        excluded: (a) => `${a} sonraki taramalarda atlanacak.`,
+        alreadyExcluded: (a) => `${a} zaten hariç tutuluyor.`,
+        excludeFailed: "Bu hariç tutma kaydedilemedi."
       }
     }
   },
@@ -1812,6 +2316,20 @@ export default {
         png: "Зберегти карту як PNG",
         failed: (a) => `Не вдалося експортувати: ${a}`,
         done: (a) => `Експортовано: ${a}`
+      },
+      menu: {
+        properties: "Властивості",
+        exclude: "Виключити цю папку"
+      },
+      props: {
+        path: "Шлях",
+        type: "Тип",
+        close: "Закрити"
+      },
+      toasts: {
+        excluded: (a) => `${a} буде пропущено під час наступних сканувань.`,
+        alreadyExcluded: (a) => `${a} уже виключено.`,
+        excludeFailed: "Не вдалося зберегти виняток."
       }
     }
   },
@@ -1861,6 +2379,20 @@ export default {
         png: "Lưu bản đồ dạng PNG",
         failed: (a) => `Xuất không thành công: ${a}`,
         done: (a) => `Đã xuất: ${a}`
+      },
+      menu: {
+        properties: "Thuộc tính",
+        exclude: "Loại trừ thư mục này"
+      },
+      props: {
+        path: "Đường dẫn",
+        type: "Loại",
+        close: "Đóng"
+      },
+      toasts: {
+        excluded: (a) => `${a} sẽ bị bỏ qua trong các lần quét sau.`,
+        alreadyExcluded: (a) => `${a} đã được loại trừ.`,
+        excludeFailed: "Không thể lưu mục loại trừ đó."
       }
     }
   },
@@ -1910,6 +2442,20 @@ export default {
         png: "将地图另存为 PNG",
         failed: (a) => `导出失败：${a}`,
         done: (a) => `已导出：${a}`
+      },
+      menu: {
+        properties: "属性",
+        exclude: "排除此文件夹"
+      },
+      props: {
+        path: "路径",
+        type: "类型",
+        close: "关闭"
+      },
+      toasts: {
+        excluded: (a) => `后续扫描将跳过 ${a}。`,
+        alreadyExcluded: (a) => `${a} 已被排除。`,
+        excludeFailed: "无法保存该排除项。"
       }
     }
   },
@@ -1959,6 +2505,20 @@ export default {
         png: "將地圖另存為 PNG",
         failed: (a) => `匯出失敗：${a}`,
         done: (a) => `已匯出：${a}`
+      },
+      menu: {
+        properties: "內容",
+        exclude: "排除此資料夾"
+      },
+      props: {
+        path: "路徑",
+        type: "類型",
+        close: "關閉"
+      },
+      toasts: {
+        excluded: (a) => `後續掃描將略過 ${a}。`,
+        alreadyExcluded: (a) => `${a} 已被排除。`,
+        excludeFailed: "無法儲存該排除項目。"
       }
     }
   }
