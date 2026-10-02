@@ -459,9 +459,13 @@ export async function streamDeepCleanExecute(ruleIds, onEvent, signal) {
  * Shared by both Deep Clean streams above: same line-buffered parsing
  * (a chunk boundary lands mid-event often enough that parsing whatever
  * arrived would drop rules at random), same signal-driven cancellation. */
-async function streamSSE(url, onEvent, signal) {
-  const res = await fetch(url, { signal });
-  if (!res.ok || !res.body) throw new Error(`Request failed: ${res.status}`);
+async function streamSSE(url, onEvent, signal, init = {}) {
+  const res = await fetch(url, { ...init, signal });
+  if (!res.ok || !res.body) {
+    // A refused POST carries its reason as JSON; a dropped stream has none.
+    const detail = await res.json?.().then((d) => d?.error).catch(() => null);
+    throw new Error(detail || `Request failed: ${res.status}`);
+  }
 
   const reader = res.body.getReader();
   const decoder = new TextDecoder();
@@ -485,6 +489,84 @@ async function streamSSE(url, onEvent, signal) {
   }
 }
 
+/** What shredding these paths would destroy, counted without touching
+ * anything: { files, bytes, refused: [{path, reason}], refusedCount,
+ * truncated }. The confirmation step shows it before anything is shredded. */
+export async function previewShred(paths) {
+  const res = await fetch(`${API_URL}/shred/preview`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ paths })
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
+  return data;
+}
+
+/** Shreds the paths, streaming progress. `passes` is 1 or 3. The request
+ * always says `confirmed: true` -- this is only ever called after the
+ * confirmation step, and the backend refuses anything without it.
+ *
+ * Events: 'start' { passes }, 'progress' { filesDone, bytesDone,
+ * currentPath }, 'done' { shreddedFiles, bytes, aborted, failed, held,
+ * failedCount, heldCount }, 'error' { message }. */
+export async function streamShred(paths, passes, onEvent, signal) {
+  await streamSSE(`${API_URL}/shred`, onEvent, signal, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ paths, passes, confirmed: true })
+  });
+}
+
+/** Reads a JSON reply, and on failure throws an Error that also carries the
+ * server's machine-readable `reason` / `code`, so the screen can answer in
+ * the person's language instead of showing English from the backend. */
+async function jsonOrThrow(res) {
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    const error = new Error(data.error || `Request failed: ${res.status}`);
+    if (data.reason) error.reason = data.reason;
+    // 413: the body was bigger than the server will read at all.
+    if (data.code) error.code = data.code; else if (res.status === 413) error.code = 'tooLarge';
+    throw error;
+  }
+  return data;
+}
+
+/** The user's Custom locations and their imported BleachBit cleaners:
+ * { locations: [path], imported: [{id, label, source, importedAt,
+ * ruleCount, report}] }. */
+export async function fetchCustomCleaners() {
+  return jsonOrThrow(await fetch(`${API_URL}/custom-cleaners`));
+}
+
+/** Adds a Custom location. Refused ones throw with `.reason` (empty |
+ * relative | climb | protected | wildcard | long). */
+export async function addCustomLocation(path) {
+  return jsonOrThrow(await fetch(`${API_URL}/custom-cleaners/locations`, {
+    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ path })
+  }));
+}
+
+export async function removeCustomLocation(path) {
+  return jsonOrThrow(await fetch(`${API_URL}/custom-cleaners/locations/remove`, {
+    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ path })
+  }));
+}
+
+/** Imports a BleachBit cleaner file. `text` is the file's contents, sent as
+ * plain text (it can be bigger than the JSON body limit). Resolves
+ * { imported, cleaner, report }; a refused file throws with `.code`. */
+export async function importCleaner(name, text) {
+  return jsonOrThrow(await fetch(`${API_URL}/custom-cleaners/import?name=${encodeURIComponent(name)}`, {
+    method: 'POST', headers: { 'Content-Type': 'text/plain' }, body: text
+  }));
+}
+
+export async function removeImportedCleaner(id) {
+  return jsonOrThrow(await fetch(`${API_URL}/custom-cleaners/imported/${encodeURIComponent(id)}`, { method: 'DELETE' }));
+}
+
 /** The rule list, grouped, with no sizes.
  *
  * Reads a JSON file and touches no disk, so it comes back in a few tens
@@ -501,8 +583,22 @@ export async function fetchDeepCleanRules() {
 /** What a free-space wipe would do on this machine -- the drive, how much it
  * would write and a time estimate from a real ~1 second write test -- for
  * the confirm dialog. Not called until that dialog opens. */
-export async function fetchWipeEstimate() {
-  const res = await fetch(`${API_URL}/deep-clean/wipe-estimate`);
+export async function fetchWipeEstimate({ drive, passes } = {}) {
+  const params = new URLSearchParams();
+  if (drive) params.set('drive', drive);
+  if (passes) params.set('passes', String(passes));
+  const query = params.toString();
+  const res = await fetch(`${API_URL}/deep-clean/wipe-estimate${query ? `?${query}` : ''}`);
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
+  return data;
+}
+
+/** The local fixed drives the wipe can be pointed at, plus the profile drive
+ * it uses when none is chosen: { drives: [{drive, label, totalBytes,
+ * freeBytes}], profileDrive }. */
+export async function fetchWipeDrives() {
+  const res = await fetch(`${API_URL}/deep-clean/wipe-drives`);
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
   return data;

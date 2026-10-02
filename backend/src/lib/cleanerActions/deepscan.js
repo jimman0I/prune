@@ -2,6 +2,7 @@ import { readdir, lstat } from 'node:fs/promises';
 import { join, dirname } from 'node:path';
 import { partitionCleanableFiles, isExcluded, normalizePath } from '../cleanGuards.js';
 import { executeFiles } from './delete.js';
+import { createTopFiles, FILE_LIST_LIMIT } from '../topFiles.js';
 import { quarantineRoot } from '../../services/quarantine.js';
 import { settingsPath } from '../../services/settings.js';
 
@@ -188,7 +189,10 @@ function walkOptions(action, guards) {
 export async function scan(action, guards = {}) {
   const found = await findFiles(action.expandedRoot, walkOptions(action, guards));
   const { cleanable, held } = guarded(found, guards);
+  const top = createTopFiles(FILE_LIST_LIMIT);
+  for (const file of cleanable) top.add(file.path, file.sizeBytes);
   return {
+    files: top.toArray(),
     sizeBytes: cleanable.reduce((sum, f) => sum + f.sizeBytes, 0),
     fileCount: cleanable.length,
     heldCount: held.length,

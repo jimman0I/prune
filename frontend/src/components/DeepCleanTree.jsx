@@ -168,6 +168,33 @@ function CategoryIcon({ category, src }) {
   );
 }
 
+/** The files a rule would take, biggest first -- at most the scan's 200 --
+ * with how many that is of the true total. Full paths, wrapped rather than
+ * cut: the folder is the part that tells you what the file is. */
+function RuleFiles({ item }) {
+  const { t } = useLanguage();
+  const captionId = `rule-files-${item.id}`;
+  const total = Math.max(item.fileCount ?? 0, item.files.length);
+  return (
+    <div className="pl-[38px] pr-3 pb-2">
+      <p id={captionId} className="text-[11px] text-[color:var(--text-muted)] mb-1">
+        {t('deepCleanV3.files.heading', item.files.length.toLocaleString(), total.toLocaleString())}
+      </p>
+      <ul
+        aria-labelledby={captionId}
+        className="max-h-56 overflow-y-auto rounded-lg border border-[color:var(--border-subtle)] divide-y divide-[color:var(--border-subtle)]"
+      >
+        {item.files.map((file) => (
+          <li key={file.path} className="flex items-baseline gap-3 px-2.5 py-1 text-[11.5px] font-mono">
+            <span className="flex-1 min-w-0 break-all text-[color:var(--text-secondary)] select-text">{file.path}</span>
+            <span className="shrink-0 text-[color:var(--text-primary)]">{formatBytes(file.sizeBytes)}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
 function CategorySection({ category, items, allItems = items, iconSrc, selected, onToggle, onToggleCategory, activeId, receiptMode = false, collapsed, onToggleCollapsed, filtering = false }) {
   const { t } = useLanguage();
   // Display only: `category` and item.id stay the keys for icons, collapse
@@ -184,6 +211,14 @@ function CategorySection({ category, items, allItems = items, iconSrc, selected,
   // tick (or raise a risky-rule dialog for) rules the user cannot see.
   // Unfiltered, `items` is the whole category.
   const state = categorySelectionState(items, selected);
+  // Which rules have their file list open. Local and forgotten with the
+  // screen: it is a way of looking, not a setting.
+  const [openFiles, setOpenFiles] = useState(() => new Set());
+  const toggleFiles = (id) => setOpenFiles((current) => {
+    const next = new Set(current);
+    if (next.has(id)) next.delete(id); else next.add(id);
+    return next;
+  });
 
   return (
     <div>
@@ -246,9 +281,14 @@ function CategorySection({ category, items, allItems = items, iconSrc, selected,
         <div>
           {items.map((item) => {
           const measured = item.sizeBytes !== null && item.sizeBytes !== undefined;
+          // A rule that listed its files (see the scan's `files`) can be
+          // opened to show them. Nothing to open for an empty list, a rule
+          // that does not delete files, or one not measured yet.
+          const listed = measured && Array.isArray(item.files) && item.files.length > 0;
+          const filesOpen = listed && !receiptMode && openFiles.has(item.id);
           return (
+            <div key={item.id}>
             <div
-              key={item.id}
               // The whole row toggles the rule -- the box alone is 14 px.
               // Focus goes to the row's own checkbox first because a click
               // on a plain div focuses nothing, and a risky rule opens a
@@ -295,6 +335,13 @@ function CategorySection({ category, items, allItems = items, iconSrc, selected,
                   {t('deepClean.tree.losesData')}
                 </span>
               )}
+              {/* A rule the user brought in from a BleachBit file, so it is
+                  clear it was not written (or curated) by Prune. */}
+              {item.imported && (
+                <span className="text-[11px] font-mono uppercase tracking-wider px-1 rounded bg-[color:var(--surface-hover)] text-[color:var(--text-secondary)] border border-[color:var(--border-subtle)] shrink-0">
+                  {t('deepCleanV3.imported.badge')}
+                </span>
+              )}
               {/* The wipe loses nothing; what it costs is time and, on an
                   SSD, wear. A different fact gets a different badge. */}
               {item.confirmEveryTime && (
@@ -330,6 +377,26 @@ function CategorySection({ category, items, allItems = items, iconSrc, selected,
               )}
               {!(measured && item.description) && <span className="flex-1" />}
 
+              {listed && !receiptMode && (
+                <button
+                  type="button"
+                  aria-expanded={filesOpen}
+                  aria-label={t(filesOpen ? 'deepCleanV3.files.hide' : 'deepCleanV3.files.show', cleaner.ruleName(item))}
+                  // Opening the list must not tick the rule, which the row
+                  // around it would otherwise do.
+                  onClick={(event) => { event.stopPropagation(); toggleFiles(item.id); }}
+                  className="inline-flex items-center justify-center w-6 h-6 -my-1 shrink-0 rounded text-[color:var(--text-muted)] hover:text-[color:var(--text-primary)] hover:bg-[color:var(--surface-hover)]"
+                >
+                  <svg
+                    aria-hidden="true" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
+                    style={{ transform: filesOpen ? 'rotate(90deg)' : 'rotate(0deg)' }}
+                  >
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                  </svg>
+                </button>
+              )}
+
               <SizeLabel key={item.sizeBytes === null ? 'pending' : 'measured'} item={item} />
 
               <Checkbox
@@ -344,6 +411,8 @@ function CategorySection({ category, items, allItems = items, iconSrc, selected,
                 label={cleaner.ruleName(item)}
                 onChange={() => onToggle(item.id)}
               />
+            </div>
+            {filesOpen && <RuleFiles item={item} />}
             </div>
           );
           })}

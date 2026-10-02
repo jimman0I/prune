@@ -59,6 +59,7 @@ const updateSettings = vi.fn(async (partial) => {
 vi.mock('../lib/api.js', () => ({
   fetchDeepCleanRules: (...a) => fetchDeepCleanRules(...a),
   fetchWipeEstimate: (...a) => fetchWipeEstimate(...a),
+  fetchWipeDrives: vi.fn(async () => ({ profileDrive: 'C:', drives: [] })),
   streamDeepCleanScan: (...a) => streamDeepCleanScan(...a),
   streamDeepCleanExecute: (...a) => streamDeepCleanExecute(...a),
   fetchSettings: (...a) => fetchSettings(...a),
