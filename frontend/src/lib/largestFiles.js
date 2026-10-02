@@ -38,7 +38,11 @@ export function largestFiles(tree, { limit = 100 } = {}) {
     files.push({
       name: node.name,
       fullPath: node.fullPath || null,
-      size
+      size,
+      // Carried for the File view's date column and Properties; absent from a
+      // scan that did not measure them.
+      allocated: typeof node.allocated === 'number' ? node.allocated : null,
+      modified: typeof node.modified === 'number' ? node.modified : null
     });
   }
 

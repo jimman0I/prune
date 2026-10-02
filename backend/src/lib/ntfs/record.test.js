@@ -419,3 +419,59 @@ function applyFixupsInPlaceForTest(record) {
     record.writeUInt16LE(sequence, (i + 1) * SECTOR - 2);
   }
 }
+
+/* ---- $STANDARD_INFORMATION: when the file was last written ------------- */
+
+/** Windows FILETIME: 100 ns ticks since 1601-01-01. */
+const filetime = (ms) => BigInt(Math.round(ms)) * 10000n + 116444736000000000n;
+
+function standardInformation({ created = 0, modified = 0, changed = 0, accessed = 0, short = false }) {
+  const value = Buffer.alloc(short ? 0x10 : 0x30);
+  value.writeBigUInt64LE(filetime(created), 0);
+  value.writeBigUInt64LE(filetime(modified), 8);
+  if (!short) {
+    value.writeBigUInt64LE(filetime(changed), 0x10);
+    value.writeBigUInt64LE(filetime(accessed), 0x18);
+  }
+  return residentAttribute(0x10, value);
+}
+
+describe('modified time', () => {
+  const WHEN = Date.UTC(2026, 6, 4, 12, 30, 15, 250);
+
+  it('reads the last-write time from $STANDARD_INFORMATION as Unix milliseconds', () => {
+    const r = parse([standardInformation({ created: WHEN - 5000, modified: WHEN, changed: WHEN + 1000, accessed: WHEN + 2000 })]);
+    // 100 ns ticks lose a sub-millisecond digit at most; to the millisecond is exact here.
+    expect(r.modified).toBe(WHEN);
+  });
+
+  it('takes the write time, not the creation, MFT-change or access time', () => {
+    const r = parse([standardInformation({ created: 1000, modified: WHEN, changed: 3000, accessed: 4000 })]);
+    expect(r.modified).toBe(WHEN);
+  });
+
+  it('is null when the record has no $STANDARD_INFORMATION', () => {
+    expect(parse([]).modified).toBeNull();
+  });
+
+  it('is null for a zero time rather than 1601', () => {
+    const value = Buffer.alloc(0x30);
+    expect(parse([residentAttribute(0x10, value)]).modified).toBeNull();
+  });
+
+  it('is null for a value too short to hold the time', () => {
+    expect(parse([residentAttribute(0x10, Buffer.alloc(8))]).modified).toBeNull();
+  });
+
+  it('is null for a time that is not plausible (a corrupt record), not a date in the year 30000', () => {
+    const value = Buffer.alloc(0x30);
+    value.writeBigUInt64LE(0x7fffffffffffffffn, 8);
+    expect(parse([residentAttribute(0x10, value)]).modified).toBeNull();
+  });
+
+  it('works for a directory too', () => {
+    const record = fileRecord({ attributes: [standardInformation({ modified: WHEN }), fileNameAttribute({ name: 'Windows' })] });
+    record.writeUInt16LE(0x0003, 0x16);
+    expect(parseFileRecord(record, SECTOR, CLUSTER).modified).toBe(WHEN);
+  });
+});

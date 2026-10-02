@@ -72,7 +72,14 @@ async function scanNode(entryPath, name, depthRemaining, signal, exclusions, onF
     // blocks, already net of sparse holes and compression; a file small
     // enough to live inside its MFT record has none.
     const allocated = Number(stat.blocks) * 512;
-    return allocated > 0 ? { name, size, allocated, type: 'file' } : { name, size, type: 'file' };
+    const fileNode = { name, size, type: 'file' };
+    if (allocated > 0) fileNode.allocated = allocated;
+    // Last written, for the Tree and File views. Files carry it now: the MFT
+    // path reads it from the same record that names the file, so it costs no
+    // extra pass there, and the stat above already ran here.
+    const fileModified = Number(stat.mtimeMs);
+    if (Number.isFinite(fileModified) && fileModified > 0) fileNode.modified = Math.round(fileModified);
+    return fileNode;
   }
 
   let entryNames;

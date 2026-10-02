@@ -67,6 +67,7 @@ export function buildTree(records, { name = 'C:', maxDepth = 12 } = {}) {
     const node = { name: entry.name, size: entry.sizeBytes, type: 'file' };
     if (hasAllocation && entry.allocatedBytes > 0) node.allocated = entry.allocatedBytes;
     if (entry.hardLinks) node.links = entry.hardLinks;
+    if (typeof entry.modified === 'number') node.modified = entry.modified;
     return node;
   };
 
@@ -101,6 +102,7 @@ export function buildTree(records, { name = 'C:', maxDepth = 12 } = {}) {
     children.sort((a, b) => b.size - a.size);
     const node = { name: entry.name, size, type: 'directory' };
     if (hasAllocation) node.allocated = allocated;
+    if (typeof entry.modified === 'number') node.modified = entry.modified;
     if (depthRemaining > 0) node.children = children;
     return node;
   }
@@ -126,6 +128,7 @@ export function buildTree(records, { name = 'C:', maxDepth = 12 } = {}) {
     if (entry.isDirectory) {
       const node = { name: entry.name, size: 0, type: 'directory' };
       if (hasAllocation) node.allocated = entry.allocatedBytes ?? 0;
+      if (typeof entry.modified === 'number') node.modified = entry.modified;
       strays.push(node);
     } else {
       strays.push(fileNode(entry));
@@ -145,6 +148,8 @@ export function buildTree(records, { name = 'C:', maxDepth = 12 } = {}) {
   children.sort((a, b) => b.size - a.size);
   const root = { name, size: total, type: 'directory' };
   if (hasAllocation) root.allocated = totalAllocated;
+  const rootModified = records.get(ROOT_RECORD)?.modified;
+  if (typeof rootModified === 'number') root.modified = rootModified;
   root.children = children;
   return root;
 }

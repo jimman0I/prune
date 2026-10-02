@@ -1,5 +1,6 @@
 import { decodeRunlist } from './runlist.js';
 
+export const ATTR_STANDARD_INFORMATION = 0x10;
 export const ATTR_FILE_NAME = 0x30;
 export const ATTR_DATA = 0x80;
 export const ATTR_INDEX_ALLOCATION = 0xa0;
@@ -92,6 +93,7 @@ export function parseFileRecord(record, bytesPerSector, bytesPerCluster = 0) {
 
   let best = null;      // best $FILE_NAME seen so far
   let sizeBytes = 0;
+  let modified = null;
   const allocation = { data: 0, streams: 0, index: 0, sparse: false };
   let position = record.readUInt16LE(0x14);
 
@@ -104,7 +106,9 @@ export function parseFileRecord(record, bytesPerSector, bytesPerCluster = 0) {
     // absurd one would read past the buffer.
     if (length < 8 || position + length > record.length) break;
 
-    if (type === ATTR_FILE_NAME) {
+    if (type === ATTR_STANDARD_INFORMATION) {
+      if (!isExtension) modified = readModifiedTime(record, position);
+    } else if (type === ATTR_FILE_NAME) {
       if (!isExtension) {
         const candidate = readFileName(record, position);
         if (candidate && isBetterName(candidate, best)) best = candidate;
@@ -155,8 +159,40 @@ export function parseFileRecord(record, bytesPerSector, bytesPerCluster = 0) {
     indexAllocatedBytes: bytesPerCluster > 0 ? allocation.index : undefined,
     sparse: allocation.sparse,
     hardLinks: links > 1 ? links : undefined,
+    modified,
     isDirectory
   };
+}
+
+// 1601-01-01 to 1970-01-01, in milliseconds: the offset between a Windows
+// FILETIME and a Unix timestamp.
+const FILETIME_EPOCH_OFFSET_MS = 11644473600000;
+// A last-write time outside these is a corrupt record, not a date: nothing
+// real was written before the FAT era or after the end of this century.
+const EARLIEST_PLAUSIBLE_MS = Date.UTC(1980, 0, 1);
+const LATEST_PLAUSIBLE_MS = Date.UTC(2100, 0, 1);
+
+/** When the file was last written, as Unix milliseconds, from the resident
+ * $STANDARD_INFORMATION: four FILETIMEs in a row (created, MODIFIED, MFT
+ * changed, accessed), the second being the one Explorer calls "Date
+ * modified". Null when absent, too short, zero or implausible -- a missing
+ * date is shown as a dash, never as 1601.
+ *
+ * Read as two 32-bit halves rather than a BigInt: this runs once per
+ * record, on millions of them, and a double holds 100 ns ticks since 1601 to
+ * well under a millisecond. */
+function readModifiedTime(record, attributeOffset) {
+  if (record.readUInt8(attributeOffset + 8) !== 0) return null; // always resident
+  const valueLength = record.readUInt32LE(attributeOffset + 0x10);
+  const valueOffset = attributeOffset + record.readUInt16LE(attributeOffset + 0x14);
+  if (valueLength < 16 || valueOffset + 16 > record.length) return null;
+
+  const low = record.readUInt32LE(valueOffset + 8);
+  const high = record.readUInt32LE(valueOffset + 12);
+  if (low === 0 && high === 0) return null;
+
+  const ms = Math.round((high * 4294967296 + low) / 10000) - FILETIME_EPOCH_OFFSET_MS;
+  return ms >= EARLIEST_PLAUSIBLE_MS && ms <= LATEST_PLAUSIBLE_MS ? ms : null;
 }
 
 function addAllocation(allocation, found, bucket) {
