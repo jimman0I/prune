@@ -101,6 +101,24 @@ export default {
         ended: (n) => `${n} was ended.`,
         endFailed: (m) => `Couldn't end the process: ${m}`,
         again: "Hunt again"
+      },
+      backups: {
+        tab: "Backups",
+        intro: "What Prune saved before it changed something that has no Recycle Bin: full registry exports taken before an uninstall, and the definitions of scheduled tasks it removed. Quarantine holds the leftover files and keys.",
+        emptyHeading: "No backups yet",
+        emptyBody: "Turn on the registry backup before uninstalling in Settings, or remove a scheduled task, and the backup appears here.",
+        kindRegistry: "Registry export",
+        kindTask: "Scheduled tasks",
+        items: (n) => `Items: ${n}`,
+        restoring: "Restoring…",
+        confirmRestoreRegistry: "This imports the saved registry export back. It merges: what the backup holds is restored and nothing added since is removed. Machine-wide keys may ask for administrator approval. Large exports can take a minute.",
+        confirmRestoreTask: "This registers the saved scheduled tasks again. A task that needs administrator rights will ask for approval.",
+        restoreNow: "Restore now",
+        confirmDelete: "Delete this backup for good? Nothing can restore it afterward.",
+        deleteNow: "Delete backup",
+        restored: (n, c) => `Items restored from the backup of ${n}: ${c}.`,
+        failedHeading: (n) => `Not restored: ${n}`,
+        loadError: (m) => `Couldn't load the backups: ${m}`
       }
     }
   },
@@ -202,6 +220,24 @@ export default {
         ended: (n) => `${n} is beëindig.`,
         endFailed: (m) => `Kon nie die proses beëindig nie: ${m}`,
         again: "Jag weer"
+      },
+      backups: {
+        tab: "Rugsteun",
+        intro: "Wat Prune gestoor het voordat dit iets verander het wat geen Snippermandjie het nie: volledige registeruitvoere voor 'n deïnstallering en die definisies van geskeduleerde take wat dit verwyder het. Karantyn hou die oorblywende lêers en sleutels.",
+        emptyHeading: "Nog geen rugsteun nie",
+        emptyBody: "Skakel die registerrugsteun voor deïnstallering in Instellings aan, of verwyder 'n geskeduleerde taak, en die rugsteun verskyn hier.",
+        kindRegistry: "Registeruitvoer",
+        kindTask: "Geskeduleerde take",
+        items: (n) => `Items: ${n}`,
+        restoring: "Herstel tans…",
+        confirmRestoreRegistry: "Dit voer die gestoorde registeruitvoer weer in. Dit voeg saam: wat die rugsteun bevat word herstel en niks wat sedertdien bygevoeg is, word verwyder nie. Masjienwye sleutels kan administrateurgoedkeuring vra. Groot uitvoere kan 'n minuut neem.",
+        confirmRestoreTask: "Dit registreer die gestoorde geskeduleerde take weer. 'n Taak wat administrateurregte nodig het, sal om goedkeuring vra.",
+        restoreNow: "Herstel nou",
+        confirmDelete: "Vee hierdie rugsteun vir goed uit? Niks kan dit daarna herstel nie.",
+        deleteNow: "Vee rugsteun uit",
+        restored: (n, c) => `Items herstel uit die rugsteun van ${n}: ${c}.`,
+        failedHeading: (n) => `Nie herstel nie: ${n}`,
+        loadError: (m) => `Kon nie die rugsteun laai nie: ${m}`
       }
     }
   },
@@ -303,6 +339,24 @@ export default {
         ended: (n) => `تم إنهاء ${n}.`,
         endFailed: (m) => `تعذّر إنهاء العملية: ${m}`,
         again: "اصطد مجددًا"
+      },
+      backups: {
+        tab: "النسخ الاحتياطية",
+        intro: "ما حفظه Prune قبل أن يغيّر شيئًا لا يملك سلة محذوفات: نسخ كاملة من السجل قبل إلغاء التثبيت، وتعريفات المهام المجدولة التي أزالها. يحتفظ الحجر الصحي بالملفات والمفاتيح المتبقية.",
+        emptyHeading: "لا توجد نسخ احتياطية بعد",
+        emptyBody: "فعّل النسخ الاحتياطي للسجل قبل إلغاء التثبيت من الإعدادات، أو أزل مهمة مجدولة، وستظهر النسخة هنا.",
+        kindRegistry: "تصدير السجل",
+        kindTask: "المهام المجدولة",
+        items: (n) => `العناصر: ${n}`,
+        restoring: "جارٍ الاستعادة…",
+        confirmRestoreRegistry: "يستورد هذا تصدير السجل المحفوظ مجددًا. وهو يدمج: يُستعاد ما تحتويه النسخة ولا يُزال شيء أُضيف منذ ذلك الحين. قد تطلب المفاتيح على مستوى الجهاز موافقة المسؤول. قد تستغرق النسخ الكبيرة دقيقة.",
+        confirmRestoreTask: "يسجّل هذا المهام المجدولة المحفوظة من جديد. المهمة التي تحتاج إلى صلاحيات المسؤول ستطلب الموافقة.",
+        restoreNow: "استعد الآن",
+        confirmDelete: "حذف هذه النسخة نهائيًا؟ لن يستطيع شيء استعادتها بعد ذلك.",
+        deleteNow: "حذف النسخة",
+        restored: (n, c) => `العناصر المستعادة من نسخة ${n}: ${c}.`,
+        failedHeading: (n) => `لم تُستعد: ${n}`,
+        loadError: (m) => `تعذّر تحميل النسخ الاحتياطية: ${m}`
       }
     }
   },
@@ -404,6 +458,24 @@ export default {
         ended: (n) => `S'ha finalitzat ${n}.`,
         endFailed: (m) => `No s'ha pogut finalitzar el procés: ${m}`,
         again: "Torna a caçar"
+      },
+      backups: {
+        tab: "Còpies de seguretat",
+        intro: "El que Prune va desar abans de canviar alguna cosa sense paperera: exportacions completes del registre abans d'una desinstal·lació i les definicions de les tasques programades que va eliminar. La quarantena conté els fitxers i les claus restants.",
+        emptyHeading: "Encara no hi ha còpies de seguretat",
+        emptyBody: "Activa la còpia del registre abans de desinstal·lar a Configuració, o elimina una tasca programada, i la còpia apareixerà aquí.",
+        kindRegistry: "Exportació del registre",
+        kindTask: "Tasques programades",
+        items: (n) => `Elements: ${n}`,
+        restoring: "Restaurant…",
+        confirmRestoreRegistry: "Això torna a importar l'exportació del registre desada. Fusiona: es restaura el que conté la còpia i no s'elimina res afegit des d'aleshores. Les claus de tot l'equip poden demanar aprovació d'administrador. Les exportacions grans poden trigar un minut.",
+        confirmRestoreTask: "Això torna a registrar les tasques programades desades. Una tasca que necessiti drets d'administrador demanarà aprovació.",
+        restoreNow: "Restaura ara",
+        confirmDelete: "Vols eliminar aquesta còpia definitivament? Després no es podrà restaurar.",
+        deleteNow: "Elimina la còpia",
+        restored: (n, c) => `Elements restaurats de la còpia de ${n}: ${c}.`,
+        failedHeading: (n) => `No restaurats: ${n}`,
+        loadError: (m) => `No s'han pogut carregar les còpies: ${m}`
       }
     }
   },
@@ -505,6 +577,24 @@ export default {
         ended: (n) => `Proces ${n} byl ukončen.`,
         endFailed: (m) => `Proces se nepodařilo ukončit: ${m}`,
         again: "Lovit znovu"
+      },
+      backups: {
+        tab: "Zálohy",
+        intro: "Co Prune uložil, než změnil něco, co nemá koš: úplné exporty registru před odinstalací a definice naplánovaných úloh, které odebral. Karanténa uchovává zbylé soubory a klíče.",
+        emptyHeading: "Zatím žádné zálohy",
+        emptyBody: "Zapněte v Nastavení zálohu registru před odinstalací nebo odeberte naplánovanou úlohu a záloha se objeví tady.",
+        kindRegistry: "Export registru",
+        kindTask: "Naplánované úlohy",
+        items: (n) => `Položek: ${n}`,
+        restoring: "Obnovování…",
+        confirmRestoreRegistry: "Tím se uložený export registru naimportuje zpět. Slučuje se: obnoví se, co záloha obsahuje, a nic, co přibylo od té doby, se neodebere. Klíče pro celý počítač mohou vyžadovat souhlas správce. Velké exporty mohou trvat minutu.",
+        confirmRestoreTask: "Tím se uložené naplánované úlohy znovu zaregistrují. Úloha, která vyžaduje práva správce, požádá o souhlas.",
+        restoreNow: "Obnovit nyní",
+        confirmDelete: "Smazat tuto zálohu natrvalo? Poté ji nepůjde obnovit.",
+        deleteNow: "Smazat zálohu",
+        restored: (n, c) => `Položek obnoveno ze zálohy ${n}: ${c}.`,
+        failedHeading: (n) => `Neobnoveno: ${n}`,
+        loadError: (m) => `Zálohy se nepodařilo načíst: ${m}`
       }
     }
   },
@@ -606,6 +696,24 @@ export default {
         ended: (n) => `Terfynwyd ${n}.`,
         endFailed: (m) => `Methu terfynu'r proses: ${m}`,
         again: "Hela eto"
+      },
+      backups: {
+        tab: "Copïau wrth gefn",
+        intro: "Yr hyn a gadwodd Prune cyn newid rhywbeth heb Fin Ailgylchu: allforion cofrestrfa llawn a gymerwyd cyn dadosod, a diffiniadau'r tasgau wedi'u hamserlennu a dynnodd. Mae Cwarantin yn cadw'r ffeiliau a'r allweddi sy'n weddill.",
+        emptyHeading: "Dim copïau wrth gefn eto",
+        emptyBody: "Trowch y copi wrth gefn o'r gofrestrfa ymlaen cyn dadosod yn y Gosodiadau, neu tynnwch dasg wedi'i hamserlennu, a bydd y copi yn ymddangos yma.",
+        kindRegistry: "Allforio cofrestrfa",
+        kindTask: "Tasgau wedi'u hamserlennu",
+        items: (n) => `Eitemau: ${n}`,
+        restoring: "Yn adfer…",
+        confirmRestoreRegistry: "Mae hyn yn mewnforio'r allforio cofrestrfa a gadwyd. Mae'n uno: caiff yr hyn y mae'r copi yn ei ddal ei adfer ac ni thynnir dim a ychwanegwyd ers hynny. Gall allweddi ar draws y peiriant ofyn am gymeradwyaeth gweinyddwr. Gall allforion mawr gymryd munud.",
+        confirmRestoreTask: "Mae hyn yn cofrestru'r tasgau wedi'u hamserlennu a gadwyd eto. Bydd tasg sydd angen hawliau gweinyddwr yn gofyn am gymeradwyaeth.",
+        restoreNow: "Adfer nawr",
+        confirmDelete: "Dileu'r copi wrth gefn hwn am byth? Ni all dim ei adfer wedyn.",
+        deleteNow: "Dileu'r copi wrth gefn",
+        restored: (n, c) => `Eitemau a adferwyd o gopi wrth gefn ${n}: ${c}.`,
+        failedHeading: (n) => `Heb eu hadfer: ${n}`,
+        loadError: (m) => `Methu llwytho'r copïau wrth gefn: ${m}`
       }
     }
   },
@@ -707,6 +815,24 @@ export default {
         ended: (n) => `${n} blev afsluttet.`,
         endFailed: (m) => `Processen kunne ikke afsluttes: ${m}`,
         again: "Jag igen"
+      },
+      backups: {
+        tab: "Sikkerhedskopier",
+        intro: "Det Prune gemte, før det ændrede noget uden papirkurv: fuldstændige registreringseksporter før en afinstallation og definitionerne af planlagte opgaver, det fjernede. Karantæne rummer de efterladte filer og nøgler.",
+        emptyHeading: "Ingen sikkerhedskopier endnu",
+        emptyBody: "Slå sikkerhedskopiering af registreringsdatabasen før afinstallation til i Indstillinger, eller fjern en planlagt opgave, så vises sikkerhedskopien her.",
+        kindRegistry: "Registreringseksport",
+        kindTask: "Planlagte opgaver",
+        items: (n) => `Elementer: ${n}`,
+        restoring: "Gendanner…",
+        confirmRestoreRegistry: "Dette importerer den gemte registreringseksport igen. Den flettes sammen: det sikkerhedskopien rummer genoprettes, og intet tilføjet siden fjernes. Nøgler for hele maskinen kan bede om administratorgodkendelse. Store eksporter kan tage et minut.",
+        confirmRestoreTask: "Dette registrerer de gemte planlagte opgaver igen. En opgave, der kræver administratorrettigheder, beder om godkendelse.",
+        restoreNow: "Gendan nu",
+        confirmDelete: "Slet denne sikkerhedskopi for altid? Intet kan gendanne den bagefter.",
+        deleteNow: "Slet sikkerhedskopi",
+        restored: (n, c) => `Elementer gendannet fra sikkerhedskopien af ${n}: ${c}.`,
+        failedHeading: (n) => `Ikke gendannet: ${n}`,
+        loadError: (m) => `Sikkerhedskopierne kunne ikke indlæses: ${m}`
       }
     }
   },
@@ -808,6 +934,24 @@ export default {
         ended: (n) => `${n} wurde beendet.`,
         endFailed: (m) => `Der Prozess konnte nicht beendet werden: ${m}`,
         again: "Erneut jagen"
+      },
+      backups: {
+        tab: "Sicherungen",
+        intro: "Was Prune gesichert hat, bevor es etwas geändert hat, das keinen Papierkorb hat: vollständige Registrierungsexporte vor einer Deinstallation und die Definitionen entfernter geplanter Aufgaben. Die Quarantäne enthält die übrigen Dateien und Schlüssel.",
+        emptyHeading: "Noch keine Sicherungen",
+        emptyBody: "Aktivieren Sie in den Einstellungen die Registrierungssicherung vor der Deinstallation oder entfernen Sie eine geplante Aufgabe – die Sicherung erscheint dann hier.",
+        kindRegistry: "Registrierungsexport",
+        kindTask: "Geplante Aufgaben",
+        items: (n) => `Elemente: ${n}`,
+        restoring: "Wird wiederhergestellt…",
+        confirmRestoreRegistry: "Dies importiert den gespeicherten Registrierungsexport zurück. Es wird zusammengeführt: Was die Sicherung enthält, wird wiederhergestellt, und nichts, was seitdem hinzukam, wird entfernt. Computerweite Schlüssel können die Zustimmung eines Administrators erfordern. Große Exporte können eine Minute dauern.",
+        confirmRestoreTask: "Dies registriert die gespeicherten geplanten Aufgaben erneut. Eine Aufgabe, die Administratorrechte braucht, fragt nach Zustimmung.",
+        restoreNow: "Jetzt wiederherstellen",
+        confirmDelete: "Diese Sicherung endgültig löschen? Danach lässt sie sich nicht mehr wiederherstellen.",
+        deleteNow: "Sicherung löschen",
+        restored: (n, c) => `Aus der Sicherung von ${n} wiederhergestellte Elemente: ${c}.`,
+        failedHeading: (n) => `Nicht wiederhergestellt: ${n}`,
+        loadError: (m) => `Die Sicherungen konnten nicht geladen werden: ${m}`
       }
     }
   },
@@ -909,6 +1053,24 @@ export default {
         ended: (n) => `Το ${n} τερματίστηκε.`,
         endFailed: (m) => `Δεν ήταν δυνατός ο τερματισμός της διεργασίας: ${m}`,
         again: "Νέο κυνήγι"
+      },
+      backups: {
+        tab: "Αντίγραφα ασφαλείας",
+        intro: "Ό,τι αποθήκευσε το Prune πριν αλλάξει κάτι χωρίς Κάδο Ανακύκλωσης: πλήρεις εξαγωγές μητρώου πριν από απεγκατάσταση και οι ορισμοί των προγραμματισμένων εργασιών που αφαίρεσε. Η Καραντίνα κρατά τα αρχεία και τα κλειδιά που έμειναν.",
+        emptyHeading: "Δεν υπάρχουν ακόμη αντίγραφα ασφαλείας",
+        emptyBody: "Ενεργοποιήστε στις Ρυθμίσεις το αντίγραφο ασφαλείας μητρώου πριν από την απεγκατάσταση ή αφαιρέστε μια προγραμματισμένη εργασία και το αντίγραφο θα εμφανιστεί εδώ.",
+        kindRegistry: "Εξαγωγή μητρώου",
+        kindTask: "Προγραμματισμένες εργασίες",
+        items: (n) => `Στοιχεία: ${n}`,
+        restoring: "Επαναφορά…",
+        confirmRestoreRegistry: "Αυτό εισάγει ξανά την αποθηκευμένη εξαγωγή μητρώου. Συγχωνεύει: ό,τι περιέχει το αντίγραφο επαναφέρεται και τίποτα από όσα προστέθηκαν έκτοτε δεν αφαιρείται. Τα κλειδιά ολόκληρου του υπολογιστή μπορεί να ζητήσουν έγκριση διαχειριστή. Οι μεγάλες εξαγωγές μπορεί να διαρκέσουν ένα λεπτό.",
+        confirmRestoreTask: "Αυτό καταχωρεί ξανά τις αποθηκευμένες προγραμματισμένες εργασίες. Μια εργασία που χρειάζεται δικαιώματα διαχειριστή θα ζητήσει έγκριση.",
+        restoreNow: "Επαναφορά τώρα",
+        confirmDelete: "Να διαγραφεί οριστικά αυτό το αντίγραφο; Μετά δεν θα μπορεί να επαναφερθεί.",
+        deleteNow: "Διαγραφή αντιγράφου",
+        restored: (n, c) => `Στοιχεία που επαναφέρθηκαν από το αντίγραφο του ${n}: ${c}.`,
+        failedHeading: (n) => `Δεν επαναφέρθηκαν: ${n}`,
+        loadError: (m) => `Δεν ήταν δυνατή η φόρτωση των αντιγράφων ασφαλείας: ${m}`
       }
     }
   },
@@ -1010,6 +1172,24 @@ export default {
         ended: (n) => `Se finalizó ${n}.`,
         endFailed: (m) => `No se pudo finalizar el proceso: ${m}`,
         again: "Cazar de nuevo"
+      },
+      backups: {
+        tab: "Copias de seguridad",
+        intro: "Lo que Prune guardó antes de cambiar algo que no tiene papelera: exportaciones completas del registro antes de una desinstalación y las definiciones de las tareas programadas que eliminó. La cuarentena guarda los archivos y claves restantes.",
+        emptyHeading: "Aún no hay copias de seguridad",
+        emptyBody: "Activa en Configuración la copia del registro antes de desinstalar, o elimina una tarea programada, y la copia aparecerá aquí.",
+        kindRegistry: "Exportación del registro",
+        kindTask: "Tareas programadas",
+        items: (n) => `Elementos: ${n}`,
+        restoring: "Restaurando…",
+        confirmRestoreRegistry: "Esto vuelve a importar la exportación del registro guardada. Se fusiona: se restaura lo que contiene la copia y no se elimina nada añadido desde entonces. Las claves de todo el equipo pueden pedir aprobación de administrador. Las exportaciones grandes pueden tardar un minuto.",
+        confirmRestoreTask: "Esto vuelve a registrar las tareas programadas guardadas. Una tarea que necesite derechos de administrador pedirá aprobación.",
+        restoreNow: "Restaurar ahora",
+        confirmDelete: "¿Eliminar esta copia definitivamente? Después no se podrá restaurar.",
+        deleteNow: "Eliminar copia",
+        restored: (n, c) => `Elementos restaurados de la copia de ${n}: ${c}.`,
+        failedHeading: (n) => `No restaurados: ${n}`,
+        loadError: (m) => `No se pudieron cargar las copias de seguridad: ${m}`
       }
     }
   },
@@ -1111,6 +1291,24 @@ export default {
         ended: (n) => `${n} lõpetati.`,
         endFailed: (m) => `Protsessi ei saanud lõpetada: ${m}`,
         again: "Jaga uuesti"
+      },
+      backups: {
+        tab: "Varukoopiad",
+        intro: "Mida Prune salvestas enne, kui muutis midagi, millel pole prügikasti: täielikud registriekspordid enne eemaldamist ja eemaldatud ajastatud toimingute definitsioonid. Karantiin hoiab jäänud failid ja võtmed.",
+        emptyHeading: "Varukoopiaid pole veel",
+        emptyBody: "Lülita Seadetes sisse registri varundamine enne eemaldamist või eemalda ajastatud toiming, ja varukoopia ilmub siia.",
+        kindRegistry: "Registri eksport",
+        kindTask: "Ajastatud toimingud",
+        items: (n) => `Kirjeid: ${n}`,
+        restoring: "Taastan…",
+        confirmRestoreRegistry: "See impordib salvestatud registriekspordi tagasi. See liidab: varukoopia sisu taastatakse ja midagi vahepeal lisatut ei eemaldata. Kogu arvutit hõlmavad võtmed võivad küsida administraatori nõusolekut. Suured ekspordid võivad võtta minuti.",
+        confirmRestoreTask: "See registreerib salvestatud ajastatud toimingud uuesti. Administraatoriõigusi vajav toiming küsib nõusolekut.",
+        restoreNow: "Taasta kohe",
+        confirmDelete: "Kas kustutada see varukoopia lõplikult? Hiljem seda taastada ei saa.",
+        deleteNow: "Kustuta varukoopia",
+        restored: (n, c) => `Taastatud kirjeid ${n} varukoopiast: ${c}.`,
+        failedHeading: (n) => `Taastamata: ${n}`,
+        loadError: (m) => `Varukoopiaid ei saanud laadida: ${m}`
       }
     }
   },
@@ -1212,6 +1410,24 @@ export default {
         ended: (n) => `${n} lopetettiin.`,
         endFailed: (m) => `Prosessia ei voitu lopettaa: ${m}`,
         again: "Metsästä uudelleen"
+      },
+      backups: {
+        tab: "Varmuuskopiot",
+        intro: "Mitä Prune tallensi ennen kuin muutti jotain, jolla ei ole roskakoria: täydet rekisterivientit ennen poistoa ja poistettujen ajastettujen tehtävien määritykset. Karanteeni sisältää jäljelle jääneet tiedostot ja avaimet.",
+        emptyHeading: "Ei vielä varmuuskopioita",
+        emptyBody: "Ota Asetuksissa käyttöön rekisterin varmuuskopio ennen poistoa tai poista ajastettu tehtävä, niin varmuuskopio ilmestyy tähän.",
+        kindRegistry: "Rekisterivienti",
+        kindTask: "Ajastetut tehtävät",
+        items: (n) => `Kohteita: ${n}`,
+        restoring: "Palautetaan…",
+        confirmRestoreRegistry: "Tämä tuo tallennetun rekisterivientin takaisin. Se yhdistää: varmuuskopion sisältö palautetaan, eikä mitään sen jälkeen lisättyä poisteta. Koko koneen avaimet voivat pyytää järjestelmänvalvojan hyväksyntää. Suuret viennit voivat kestää minuutin.",
+        confirmRestoreTask: "Tämä rekisteröi tallennetut ajastetut tehtävät uudelleen. Tehtävä, joka tarvitsee järjestelmänvalvojan oikeudet, pyytää hyväksyntää.",
+        restoreNow: "Palauta nyt",
+        confirmDelete: "Poistetaanko tämä varmuuskopio lopullisesti? Sitä ei voi sen jälkeen palauttaa.",
+        deleteNow: "Poista varmuuskopio",
+        restored: (n, c) => `Kohteita palautettu ${n}:n varmuuskopiosta: ${c}.`,
+        failedHeading: (n) => `Palauttamatta: ${n}`,
+        loadError: (m) => `Varmuuskopioita ei voitu ladata: ${m}`
       }
     }
   },
@@ -1313,6 +1529,24 @@ export default {
         ended: (n) => `${n} a été terminé.`,
         endFailed: (m) => `Impossible de terminer le processus : ${m}`,
         again: "Chasser à nouveau"
+      },
+      backups: {
+        tab: "Sauvegardes",
+        intro: "Ce que Prune a enregistré avant de modifier quelque chose qui n'a pas de corbeille : exports complets du registre avant une désinstallation et définitions des tâches planifiées supprimées. La quarantaine contient les fichiers et clés résiduels.",
+        emptyHeading: "Aucune sauvegarde pour l'instant",
+        emptyBody: "Activez la sauvegarde du registre avant désinstallation dans les Paramètres, ou supprimez une tâche planifiée, et la sauvegarde apparaîtra ici.",
+        kindRegistry: "Export du registre",
+        kindTask: "Tâches planifiées",
+        items: (n) => `Éléments : ${n}`,
+        restoring: "Restauration…",
+        confirmRestoreRegistry: "Cela réimporte l'export du registre enregistré. Il fusionne : ce que contient la sauvegarde est restauré et rien de ce qui a été ajouté depuis n'est supprimé. Les clés valables pour tout l'ordinateur peuvent demander l'approbation d'un administrateur. Les gros exports peuvent prendre une minute.",
+        confirmRestoreTask: "Cela réenregistre les tâches planifiées sauvegardées. Une tâche nécessitant des droits d'administrateur demandera une approbation.",
+        restoreNow: "Restaurer maintenant",
+        confirmDelete: "Supprimer définitivement cette sauvegarde ? Rien ne pourra la restaurer ensuite.",
+        deleteNow: "Supprimer la sauvegarde",
+        restored: (n, c) => `Éléments restaurés depuis la sauvegarde de ${n} : ${c}.`,
+        failedHeading: (n) => `Non restaurés : ${n}`,
+        loadError: (m) => `Impossible de charger les sauvegardes : ${m}`
       }
     }
   },
@@ -1414,6 +1648,24 @@ export default {
         ended: (n) => `${n} הסתיים.`,
         endFailed: (m) => `לא ניתן לסיים את התהליך: ${m}`,
         again: "צוד שוב"
+      },
+      backups: {
+        tab: "גיבויים",
+        intro: "מה ש-Prune שמר לפני ששינה משהו שאין לו סל מחזור: ייצוא מלא של הרישום לפני הסרה, והגדרות של משימות מתוזמנות שהוסרו. ההסגר מחזיק את הקבצים והמפתחות שנותרו.",
+        emptyHeading: "עדיין אין גיבויים",
+        emptyBody: "הפעילו בהגדרות את גיבוי הרישום לפני הסרה, או הסירו משימה מתוזמנת, והגיבוי יופיע כאן.",
+        kindRegistry: "ייצוא רישום",
+        kindTask: "משימות מתוזמנות",
+        items: (n) => `פריטים: ${n}`,
+        restoring: "משחזר…",
+        confirmRestoreRegistry: "פעולה זו מייבאת בחזרה את ייצוא הרישום השמור. היא ממזגת: מה שהגיבוי מכיל משוחזר ושום דבר שנוסף מאז לא יוסר. מפתחות ברמת המחשב עשויים לבקש אישור מנהל. ייצוא גדול עלול לקחת דקה.",
+        confirmRestoreTask: "פעולה זו רושמת מחדש את המשימות המתוזמנות השמורות. משימה הדורשת הרשאות מנהל תבקש אישור.",
+        restoreNow: "שחזר עכשיו",
+        confirmDelete: "למחוק את הגיבוי הזה סופית? לא ניתן יהיה לשחזר אותו אחר כך.",
+        deleteNow: "מחק גיבוי",
+        restored: (n, c) => `פריטים ששוחזרו מהגיבוי של ${n}: ${c}.`,
+        failedHeading: (n) => `לא שוחזרו: ${n}`,
+        loadError: (m) => `לא ניתן לטעון את הגיבויים: ${m}`
       }
     }
   },
@@ -1515,6 +1767,24 @@ export default {
         ended: (n) => `A(z) ${n} befejeződött.`,
         endFailed: (m) => `A folyamat nem fejezhető be: ${m}`,
         again: "Újabb vadászat"
+      },
+      backups: {
+        tab: "Biztonsági mentések",
+        intro: "Amit a Prune elmentett, mielőtt olyat módosított, aminek nincs lomtára: teljes beállításjegyzék-exportok eltávolítás előtt, és az eltávolított ütemezett feladatok definíciói. A karantén a megmaradt fájlokat és kulcsokat tartalmazza.",
+        emptyHeading: "Még nincs biztonsági mentés",
+        emptyBody: "Kapcsolja be a Beállításokban a beállításjegyzék mentését eltávolítás előtt, vagy távolítson el egy ütemezett feladatot, és a mentés itt jelenik meg.",
+        kindRegistry: "Beállításjegyzék-export",
+        kindTask: "Ütemezett feladatok",
+        items: (n) => `Elemek: ${n}`,
+        restoring: "Visszaállítás…",
+        confirmRestoreRegistry: "Ez visszaimportálja a mentett beállításjegyzék-exportot. Egyesít: a mentés tartalma visszaállítódik, és semmi, ami azóta hozzáadódott, nem törlődik. A gépre vonatkozó kulcsok rendszergazdai jóváhagyást kérhetnek. A nagy exportok egy percig is tarthatnak.",
+        confirmRestoreTask: "Ez újra regisztrálja a mentett ütemezett feladatokat. A rendszergazdai jogot igénylő feladat jóváhagyást kér.",
+        restoreNow: "Visszaállítás most",
+        confirmDelete: "Véglegesen törli ezt a mentést? Utána semmi sem tudja visszaállítani.",
+        deleteNow: "Mentés törlése",
+        restored: (n, c) => `A(z) ${n} mentéséből visszaállított elemek: ${c}.`,
+        failedHeading: (n) => `Nem állítva vissza: ${n}`,
+        loadError: (m) => `A mentések nem tölthetők be: ${m}`
       }
     }
   },
@@ -1616,6 +1886,24 @@ export default {
         ended: (n) => `${n} telah diakhiri.`,
         endFailed: (m) => `Tidak dapat mengakhiri proses: ${m}`,
         again: "Berburu lagi"
+      },
+      backups: {
+        tab: "Cadangan",
+        intro: "Apa yang disimpan Prune sebelum mengubah sesuatu yang tidak punya Recycle Bin: ekspor registri penuh sebelum pencopotan dan definisi tugas terjadwal yang dihapus. Karantina menyimpan berkas dan kunci sisa.",
+        emptyHeading: "Belum ada cadangan",
+        emptyBody: "Aktifkan pencadangan registri sebelum pencopotan di Pengaturan, atau hapus tugas terjadwal, dan cadangan akan muncul di sini.",
+        kindRegistry: "Ekspor registri",
+        kindTask: "Tugas terjadwal",
+        items: (n) => `Item: ${n}`,
+        restoring: "Memulihkan…",
+        confirmRestoreRegistry: "Ini mengimpor kembali ekspor registri yang tersimpan. Sifatnya menggabungkan: isi cadangan dipulihkan dan tidak ada yang ditambahkan sejak itu yang dihapus. Kunci tingkat mesin dapat meminta persetujuan administrator. Ekspor besar bisa memakan waktu semenit.",
+        confirmRestoreTask: "Ini mendaftarkan kembali tugas terjadwal yang tersimpan. Tugas yang memerlukan hak administrator akan meminta persetujuan.",
+        restoreNow: "Pulihkan sekarang",
+        confirmDelete: "Hapus cadangan ini secara permanen? Tidak ada yang dapat memulihkannya setelahnya.",
+        deleteNow: "Hapus cadangan",
+        restored: (n, c) => `Item dipulihkan dari cadangan ${n}: ${c}.`,
+        failedHeading: (n) => `Tidak dipulihkan: ${n}`,
+        loadError: (m) => `Tidak dapat memuat cadangan: ${m}`
       }
     }
   },
@@ -1717,6 +2005,24 @@ export default {
         ended: (n) => `${n} var lokað.`,
         endFailed: (m) => `Ekki tókst að ljúka ferlinu: ${m}`,
         again: "Veiða aftur"
+      },
+      backups: {
+        tab: "Afrit",
+        intro: "Það sem Prune vistaði áður en það breytti einhverju sem er ekki með ruslakörfu: full skrárafrit fyrir fjarlægingu og skilgreiningar áætlaðra verkefna sem það fjarlægði. Sóttkví geymir leifarnar af skrám og lyklum.",
+        emptyHeading: "Engin afrit enn",
+        emptyBody: "Kveiktu á afritun skrárinnar fyrir fjarlægingu í Stillingum, eða fjarlægðu áætlað verkefni, og afritið birtist hér.",
+        kindRegistry: "Skrárafrit",
+        kindTask: "Áætluð verkefni",
+        items: (n) => `Atriði: ${n}`,
+        restoring: "Endurheimti…",
+        confirmRestoreRegistry: "Þetta flytur vistaða skrárafritið aftur inn. Það sameinar: það sem afritið geymir er endurheimt og engu sem bætt hefur verið við síðan er eytt. Lyklar fyrir alla tölvuna geta beðið um samþykki stjórnanda. Stór afrit geta tekið mínútu.",
+        confirmRestoreTask: "Þetta skráir vistuð áætluð verkefni aftur. Verkefni sem þarf réttindi stjórnanda biður um samþykki.",
+        restoreNow: "Endurheimta núna",
+        confirmDelete: "Eyða þessu afriti fyrir fullt og allt? Ekkert getur endurheimt það eftir það.",
+        deleteNow: "Eyða afriti",
+        restored: (n, c) => `Atriði endurheimt úr afriti ${n}: ${c}.`,
+        failedHeading: (n) => `Ekki endurheimt: ${n}`,
+        loadError: (m) => `Ekki tókst að hlaða afritunum: ${m}`
       }
     }
   },
@@ -1818,6 +2124,24 @@ export default {
         ended: (n) => `${n} è stato terminato.`,
         endFailed: (m) => `Impossibile terminare il processo: ${m}`,
         again: "Caccia ancora"
+      },
+      backups: {
+        tab: "Backup",
+        intro: "Ciò che Prune ha salvato prima di modificare qualcosa senza cestino: esportazioni complete del registro prima di una disinstallazione e definizioni delle attività pianificate rimosse. La quarantena contiene i file e le chiavi residui.",
+        emptyHeading: "Ancora nessun backup",
+        emptyBody: "Attiva nelle Impostazioni il backup del registro prima della disinstallazione, oppure rimuovi un'attività pianificata, e il backup comparirà qui.",
+        kindRegistry: "Esportazione del registro",
+        kindTask: "Attività pianificate",
+        items: (n) => `Elementi: ${n}`,
+        restoring: "Ripristino…",
+        confirmRestoreRegistry: "Reimporta l'esportazione del registro salvata. Unisce: ciò che contiene il backup viene ripristinato e nulla di quanto aggiunto da allora viene rimosso. Le chiavi valide per tutto il computer possono richiedere l'approvazione di un amministratore. Le esportazioni grandi possono richiedere un minuto.",
+        confirmRestoreTask: "Registra di nuovo le attività pianificate salvate. Un'attività che richiede diritti di amministratore chiederà l'approvazione.",
+        restoreNow: "Ripristina ora",
+        confirmDelete: "Eliminare definitivamente questo backup? Dopo non si potrà ripristinare.",
+        deleteNow: "Elimina backup",
+        restored: (n, c) => `Elementi ripristinati dal backup di ${n}: ${c}.`,
+        failedHeading: (n) => `Non ripristinati: ${n}`,
+        loadError: (m) => `Impossibile caricare i backup: ${m}`
       }
     }
   },
@@ -1919,6 +2243,24 @@ export default {
         ended: (n) => `${n} を終了しました。`,
         endFailed: (m) => `プロセスを終了できませんでした: ${m}`,
         again: "もう一度"
+      },
+      backups: {
+        tab: "バックアップ",
+        intro: "ごみ箱のないものを変更する前に Prune が保存したもの: アンインストール前のレジストリの完全なエクスポートと、削除したタスクの定義です。残ったファイルとキーは「隔離」にあります。",
+        emptyHeading: "バックアップはまだありません",
+        emptyBody: "設定でアンインストール前のレジストリ バックアップをオンにするか、タスクを削除すると、バックアップがここに表示されます。",
+        kindRegistry: "レジストリのエクスポート",
+        kindTask: "タスク",
+        items: (n) => `項目: ${n}`,
+        restoring: "復元中…",
+        confirmRestoreRegistry: "保存されたレジストリのエクスポートをインポートし直します。結合されるため、バックアップの内容は復元され、その後に追加されたものは削除されません。コンピューター全体のキーは管理者の承認を求めることがあります。大きなエクスポートは 1 分ほどかかる場合があります。",
+        confirmRestoreTask: "保存されたタスクを再登録します。管理者権限が必要なタスクは承認を求めます。",
+        restoreNow: "今すぐ復元",
+        confirmDelete: "このバックアップを完全に削除しますか? 削除後は復元できません。",
+        deleteNow: "バックアップを削除",
+        restored: (n, c) => `${n} のバックアップから復元した項目: ${c} 件。`,
+        failedHeading: (n) => `復元されなかった項目: ${n} 件`,
+        loadError: (m) => `バックアップを読み込めませんでした: ${m}`
       }
     }
   },
@@ -2020,6 +2362,24 @@ export default {
         ended: (n) => `${n}을(를) 끝냈습니다.`,
         endFailed: (m) => `프로세스를 끝낼 수 없습니다: ${m}`,
         again: "다시 사냥"
+      },
+      backups: {
+        tab: "백업",
+        intro: "휴지통이 없는 항목을 변경하기 전에 Prune이 저장한 것: 제거 전 전체 레지스트리 내보내기와 제거한 예약 작업의 정의입니다. 남은 파일과 키는 격리에 있습니다.",
+        emptyHeading: "아직 백업이 없습니다",
+        emptyBody: "설정에서 제거 전 레지스트리 백업을 켜거나 예약 작업을 제거하면 백업이 여기에 나타납니다.",
+        kindRegistry: "레지스트리 내보내기",
+        kindTask: "예약 작업",
+        items: (n) => `항목: ${n}`,
+        restoring: "복원 중…",
+        confirmRestoreRegistry: "저장된 레지스트리 내보내기를 다시 가져옵니다. 병합 방식이므로 백업에 있는 내용은 복원되고 그 이후 추가된 것은 제거되지 않습니다. 컴퓨터 전체 키는 관리자 승인을 요청할 수 있습니다. 큰 내보내기는 1분 정도 걸릴 수 있습니다.",
+        confirmRestoreTask: "저장된 예약 작업을 다시 등록합니다. 관리자 권한이 필요한 작업은 승인을 요청합니다.",
+        restoreNow: "지금 복원",
+        confirmDelete: "이 백업을 영구적으로 삭제할까요? 이후에는 복원할 수 없습니다.",
+        deleteNow: "백업 삭제",
+        restored: (n, c) => `${n} 백업에서 복원된 항목: ${c}개.`,
+        failedHeading: (n) => `복원되지 않음: ${n}개`,
+        loadError: (m) => `백업을 불러올 수 없습니다: ${m}`
       }
     }
   },
@@ -2121,6 +2481,24 @@ export default {
         ended: (n) => `${n} užbaigta.`,
         endFailed: (m) => `Nepavyko baigti proceso: ${m}`,
         again: "Medžioti dar kartą"
+      },
+      backups: {
+        tab: "Atsarginės kopijos",
+        intro: "Ką „Prune“ išsaugojo prieš pakeisdama tai, kas neturi šiukšlinės: pilni registro eksportai prieš pašalinimą ir pašalintų suplanuotų užduočių apibrėžtys. Karantine laikomi likę failai ir raktai.",
+        emptyHeading: "Atsarginių kopijų dar nėra",
+        emptyBody: "Nustatymuose įjunkite registro atsarginę kopiją prieš pašalinimą arba pašalinkite suplanuotą užduotį, ir kopija atsiras čia.",
+        kindRegistry: "Registro eksportas",
+        kindTask: "Suplanuotos užduotys",
+        items: (n) => `Elementų: ${n}`,
+        restoring: "Atkuriama…",
+        confirmRestoreRegistry: "Tai iš naujo importuoja išsaugotą registro eksportą. Jis sujungia: atkuriama tai, ką turi kopija, o nieko, kas pridėta nuo to laiko, nepašalina. Visam kompiuteriui skirti raktai gali paprašyti administratoriaus patvirtinimo. Dideli eksportai gali užtrukti minutę.",
+        confirmRestoreTask: "Tai iš naujo užregistruoja išsaugotas suplanuotas užduotis. Užduotis, kuriai reikia administratoriaus teisių, paprašys patvirtinimo.",
+        restoreNow: "Atkurti dabar",
+        confirmDelete: "Ištrinti šią atsarginę kopiją visam laikui? Vėliau jos atkurti nebus galima.",
+        deleteNow: "Ištrinti kopiją",
+        restored: (n, c) => `Iš ${n} kopijos atkurta elementų: ${c}.`,
+        failedHeading: (n) => `Neatkurta: ${n}`,
+        loadError: (m) => `Nepavyko įkelti kopijų: ${m}`
       }
     }
   },
@@ -2222,6 +2600,24 @@ export default {
         ended: (n) => `${n} telah ditamatkan.`,
         endFailed: (m) => `Tidak dapat menamatkan proses: ${m}`,
         again: "Memburu semula"
+      },
+      backups: {
+        tab: "Sandaran",
+        intro: "Apa yang Prune simpan sebelum mengubah sesuatu yang tiada Tong Kitar Semula: eksport pendaftaran penuh sebelum nyahpasang dan takrifan tugas berjadual yang dialihkan. Kuarantin menyimpan fail dan kunci yang tinggal.",
+        emptyHeading: "Belum ada sandaran",
+        emptyBody: "Hidupkan sandaran pendaftaran sebelum nyahpasang dalam Tetapan, atau alihkan tugas berjadual, dan sandaran akan muncul di sini.",
+        kindRegistry: "Eksport pendaftaran",
+        kindTask: "Tugas berjadual",
+        items: (n) => `Item: ${n}`,
+        restoring: "Memulihkan…",
+        confirmRestoreRegistry: "Ini mengimport semula eksport pendaftaran yang disimpan. Ia bergabung: apa yang ada dalam sandaran dipulihkan dan tiada apa-apa yang ditambah sejak itu dialihkan. Kunci seluruh mesin mungkin meminta kelulusan pentadbir. Eksport besar boleh mengambil masa seminit.",
+        confirmRestoreTask: "Ini mendaftarkan semula tugas berjadual yang disimpan. Tugas yang memerlukan hak pentadbir akan meminta kelulusan.",
+        restoreNow: "Pulihkan sekarang",
+        confirmDelete: "Padam sandaran ini selama-lamanya? Tiada apa-apa yang boleh memulihkannya selepas itu.",
+        deleteNow: "Padam sandaran",
+        restored: (n, c) => `Item dipulihkan daripada sandaran ${n}: ${c}.`,
+        failedHeading: (n) => `Tidak dipulihkan: ${n}`,
+        loadError: (m) => `Tidak dapat memuatkan sandaran: ${m}`
       }
     }
   },
@@ -2323,6 +2719,24 @@ export default {
         ended: (n) => `${n} ble avsluttet.`,
         endFailed: (m) => `Kunne ikke avslutte prosessen: ${m}`,
         again: "Jakt igjen"
+      },
+      backups: {
+        tab: "Sikkerhetskopier",
+        intro: "Det Prune lagret før det endret noe som ikke har papirkurv: fullstendige registereksporter før en avinstallering og definisjonene av planlagte oppgaver som ble fjernet. Karantene rommer de gjenværende filene og nøklene.",
+        emptyHeading: "Ingen sikkerhetskopier ennå",
+        emptyBody: "Slå på registersikkerhetskopi før avinstallering i Innstillinger, eller fjern en planlagt oppgave, så vises sikkerhetskopien her.",
+        kindRegistry: "Registereksport",
+        kindTask: "Planlagte oppgaver",
+        items: (n) => `Elementer: ${n}`,
+        restoring: "Gjenoppretter…",
+        confirmRestoreRegistry: "Dette importerer den lagrede registereksporten på nytt. Den slås sammen: det sikkerhetskopien inneholder gjenopprettes, og ingenting lagt til siden fjernes. Nøkler for hele maskinen kan be om administratorgodkjenning. Store eksporter kan ta et minutt.",
+        confirmRestoreTask: "Dette registrerer de lagrede planlagte oppgavene på nytt. En oppgave som trenger administratorrettigheter, ber om godkjenning.",
+        restoreNow: "Gjenopprett nå",
+        confirmDelete: "Slette denne sikkerhetskopien for godt? Ingenting kan gjenopprette den etterpå.",
+        deleteNow: "Slett sikkerhetskopi",
+        restored: (n, c) => `Elementer gjenopprettet fra sikkerhetskopien av ${n}: ${c}.`,
+        failedHeading: (n) => `Ikke gjenopprettet: ${n}`,
+        loadError: (m) => `Kunne ikke laste sikkerhetskopiene: ${m}`
       }
     }
   },
@@ -2424,6 +2838,24 @@ export default {
         ended: (n) => `${n} is beëindigd.`,
         endFailed: (m) => `Het proces kon niet worden beëindigd: ${m}`,
         again: "Opnieuw jagen"
+      },
+      backups: {
+        tab: "Back-ups",
+        intro: "Wat Prune heeft bewaard voordat het iets wijzigde zonder prullenbak: volledige registerexports vóór een verwijdering en de definities van verwijderde geplande taken. De quarantaine bevat de overgebleven bestanden en sleutels.",
+        emptyHeading: "Nog geen back-ups",
+        emptyBody: "Schakel in Instellingen de registerback-up vóór het verwijderen in, of verwijder een geplande taak, en de back-up verschijnt hier.",
+        kindRegistry: "Registerexport",
+        kindTask: "Geplande taken",
+        items: (n) => `Items: ${n}`,
+        restoring: "Herstellen…",
+        confirmRestoreRegistry: "Dit importeert de opgeslagen registerexport opnieuw. Het wordt samengevoegd: wat de back-up bevat wordt hersteld en niets wat sindsdien is toegevoegd wordt verwijderd. Sleutels voor de hele computer kunnen om goedkeuring van een beheerder vragen. Grote exports kunnen een minuut duren.",
+        confirmRestoreTask: "Dit registreert de opgeslagen geplande taken opnieuw. Een taak die beheerdersrechten nodig heeft, vraagt om goedkeuring.",
+        restoreNow: "Nu herstellen",
+        confirmDelete: "Deze back-up definitief verwijderen? Daarna kan hij niet meer worden hersteld.",
+        deleteNow: "Back-up verwijderen",
+        restored: (n, c) => `Uit de back-up van ${n} herstelde items: ${c}.`,
+        failedHeading: (n) => `Niet hersteld: ${n}`,
+        loadError: (m) => `De back-ups konden niet worden geladen: ${m}`
       }
     }
   },
@@ -2525,6 +2957,24 @@ export default {
         ended: (n) => `Zakończono ${n}.`,
         endFailed: (m) => `Nie można zakończyć procesu: ${m}`,
         again: "Poluj ponownie"
+      },
+      backups: {
+        tab: "Kopie zapasowe",
+        intro: "Co Prune zapisał, zanim zmienił coś, co nie ma kosza: pełne eksporty rejestru przed odinstalowaniem oraz definicje usuniętych zaplanowanych zadań. Kwarantanna przechowuje pozostałe pliki i klucze.",
+        emptyHeading: "Brak kopii zapasowych",
+        emptyBody: "Włącz w Ustawieniach kopię rejestru przed odinstalowaniem albo usuń zaplanowane zadanie, a kopia pojawi się tutaj.",
+        kindRegistry: "Eksport rejestru",
+        kindTask: "Zaplanowane zadania",
+        items: (n) => `Elementów: ${n}`,
+        restoring: "Przywracanie…",
+        confirmRestoreRegistry: "To ponownie importuje zapisany eksport rejestru. Dane są scalane: to, co zawiera kopia, zostaje przywrócone, a nic z dodanych od tego czasu nie jest usuwane. Klucze dla całego komputera mogą wymagać zgody administratora. Duże eksporty mogą trwać minutę.",
+        confirmRestoreTask: "To ponownie rejestruje zapisane zaplanowane zadania. Zadanie wymagające uprawnień administratora poprosi o zgodę.",
+        restoreNow: "Przywróć teraz",
+        confirmDelete: "Usunąć tę kopię zapasową na stałe? Później nie będzie można jej przywrócić.",
+        deleteNow: "Usuń kopię",
+        restored: (n, c) => `Elementy przywrócone z kopii ${n}: ${c}.`,
+        failedHeading: (n) => `Nie przywrócono: ${n}`,
+        loadError: (m) => `Nie można wczytać kopii zapasowych: ${m}`
       }
     }
   },
@@ -2626,6 +3076,24 @@ export default {
         ended: (n) => `${n} پای ته ورسېد.`,
         endFailed: (m) => `پروسه نه شوه پای ته رسېدای: ${m}`,
         again: "بیا ښکار وکړئ"
+      },
+      backups: {
+        tab: "بیک‌اپونه",
+        intro: "هغه څه چې Prune خوندي کړل مخکې له دې چې داسې څه بدل کړي چې ریسایکل بن نه لري: د لرې کولو دمخه د راجستر بشپړ صادرات او د لرې شویو مهالویش شویو دندو تعریفونه. قرنطین پاتې دوتنې او کیلي ساتي.",
+        emptyHeading: "تر اوسه بیک‌اپونه نشته",
+        emptyBody: "په امستنو کې د لرې کولو دمخه د راجستر بیک‌اپ فعال کړئ، یا یوه مهالویش شوې دنده لرې کړئ، او بیک‌اپ به دلته ښکاره شي.",
+        kindRegistry: "د راجستر صادرات",
+        kindTask: "مهالویش شوې دندې",
+        items: (n) => `توکي: ${n}`,
+        restoring: "بیرته راګرځول کېږي…",
+        confirmRestoreRegistry: "دا خوندي شوی د راجستر صادرات بیا واردوي. دا ګډوي: هغه څه چې بیک‌اپ لري بیرته راځي او له هغه وروسته اضافه شوی هیڅ نه لرې کېږي. د ټول ماشین کیلي ښايي د اداري تایید وغواړي. لوی صادرات ښايي یوه دقیقه ونیسي.",
+        confirmRestoreTask: "دا خوندي شوې مهالویش شوې دندې بیا ثبتوي. هغه دنده چې د اداري حقونو ته اړتیا لري، تایید به وغواړي.",
+        restoreNow: "همدا اوس بیرته راوګرځئ",
+        confirmDelete: "دا بیک‌اپ په تلپاتې ډول ړنګ کړئ؟ وروسته به هیڅ نه شي کولای بیرته یې راولي.",
+        deleteNow: "بیک‌اپ ړنګ کړئ",
+        restored: (n, c) => `د ${n} له بیک‌اپ څخه بیرته راوړل شوي توکي: ${c}.`,
+        failedHeading: (n) => `بیرته نه دي راوړل شوي: ${n}`,
+        loadError: (m) => `بیک‌اپونه نه شول پورته کېدای: ${m}`
       }
     }
   },
@@ -2727,6 +3195,24 @@ export default {
         ended: (n) => `${n} foi encerrado.`,
         endFailed: (m) => `Não foi possível encerrar o processo: ${m}`,
         again: "Caçar de novo"
+      },
+      backups: {
+        tab: "Backups",
+        intro: "O que o Prune salvou antes de alterar algo que não tem lixeira: exportações completas do registro antes de uma desinstalação e as definições das tarefas agendadas removidas. A quarentena guarda os arquivos e chaves restantes.",
+        emptyHeading: "Ainda não há backups",
+        emptyBody: "Ative nas Configurações o backup do registro antes de desinstalar, ou remova uma tarefa agendada, e o backup aparecerá aqui.",
+        kindRegistry: "Exportação do registro",
+        kindTask: "Tarefas agendadas",
+        items: (n) => `Itens: ${n}`,
+        restoring: "Restaurando…",
+        confirmRestoreRegistry: "Isso importa de volta a exportação do registro salva. Ela mescla: o que o backup contém é restaurado e nada adicionado desde então é removido. Chaves de todo o computador podem pedir aprovação de administrador. Exportações grandes podem levar um minuto.",
+        confirmRestoreTask: "Isso registra de novo as tarefas agendadas salvas. Uma tarefa que precise de direitos de administrador pedirá aprovação.",
+        restoreNow: "Restaurar agora",
+        confirmDelete: "Excluir este backup definitivamente? Depois nada poderá restaurá-lo.",
+        deleteNow: "Excluir backup",
+        restored: (n, c) => `Itens restaurados do backup de ${n}: ${c}.`,
+        failedHeading: (n) => `Não restaurados: ${n}`,
+        loadError: (m) => `Não foi possível carregar os backups: ${m}`
       }
     }
   },
@@ -2828,6 +3314,24 @@ export default {
         ended: (n) => `${n} foi terminado.`,
         endFailed: (m) => `Não foi possível terminar o processo: ${m}`,
         again: "Caçar novamente"
+      },
+      backups: {
+        tab: "Cópias de segurança",
+        intro: "O que o Prune guardou antes de alterar algo que não tem reciclagem: exportações completas do registo antes de uma desinstalação e as definições das tarefas agendadas removidas. A quarentena guarda os ficheiros e chaves restantes.",
+        emptyHeading: "Ainda não há cópias de segurança",
+        emptyBody: "Ative nas Definições a cópia do registo antes de desinstalar, ou remova uma tarefa agendada, e a cópia aparecerá aqui.",
+        kindRegistry: "Exportação do registo",
+        kindTask: "Tarefas agendadas",
+        items: (n) => `Itens: ${n}`,
+        restoring: "A restaurar…",
+        confirmRestoreRegistry: "Isto importa de novo a exportação do registo guardada. Funde: o que a cópia contém é restaurado e nada acrescentado desde então é removido. As chaves de todo o computador podem pedir aprovação de administrador. As exportações grandes podem demorar um minuto.",
+        confirmRestoreTask: "Isto regista de novo as tarefas agendadas guardadas. Uma tarefa que precise de direitos de administrador pedirá aprovação.",
+        restoreNow: "Restaurar agora",
+        confirmDelete: "Eliminar esta cópia definitivamente? Depois não será possível restaurá-la.",
+        deleteNow: "Eliminar cópia",
+        restored: (n, c) => `Itens restaurados da cópia de ${n}: ${c}.`,
+        failedHeading: (n) => `Não restaurados: ${n}`,
+        loadError: (m) => `Não foi possível carregar as cópias de segurança: ${m}`
       }
     }
   },
@@ -2929,6 +3433,24 @@ export default {
         ended: (n) => `${n} a fost încheiat.`,
         endFailed: (m) => `Procesul nu a putut fi încheiat: ${m}`,
         again: "Vânează din nou"
+      },
+      backups: {
+        tab: "Copii de rezervă",
+        intro: "Ce a salvat Prune înainte să modifice ceva fără Coș de reciclare: exporturi complete ale registrului înainte de o dezinstalare și definițiile sarcinilor programate eliminate. Carantina păstrează fișierele și cheile rămase.",
+        emptyHeading: "Încă nu există copii de rezervă",
+        emptyBody: "Activează în Setări copia de rezervă a registrului înainte de dezinstalare sau elimină o sarcină programată, iar copia va apărea aici.",
+        kindRegistry: "Export de registru",
+        kindTask: "Sarcini programate",
+        items: (n) => `Elemente: ${n}`,
+        restoring: "Se restaurează…",
+        confirmRestoreRegistry: "Aceasta importă din nou exportul de registru salvat. Se îmbină: ce conține copia este restaurat și nimic din ce s-a adăugat de atunci nu este eliminat. Cheile la nivel de computer pot cere aprobarea unui administrator. Exporturile mari pot dura un minut.",
+        confirmRestoreTask: "Aceasta înregistrează din nou sarcinile programate salvate. O sarcină care necesită drepturi de administrator va cere aprobare.",
+        restoreNow: "Restaurează acum",
+        confirmDelete: "Ștergi definitiv această copie de rezervă? Ulterior nu o va mai putea restaura nimic.",
+        deleteNow: "Șterge copia",
+        restored: (n, c) => `Elemente restaurate din copia ${n}: ${c}.`,
+        failedHeading: (n) => `Nerestaurate: ${n}`,
+        loadError: (m) => `Nu s-au putut încărca copiile de rezervă: ${m}`
       }
     }
   },
@@ -3030,6 +3552,24 @@ export default {
         ended: (n) => `${n} завершён.`,
         endFailed: (m) => `Не удалось завершить процесс: ${m}`,
         again: "Охота снова"
+      },
+      backups: {
+        tab: "Резервные копии",
+        intro: "Что Prune сохранил, прежде чем изменить то, у чего нет корзины: полные экспорты реестра перед удалением и описания удалённых запланированных задач. В карантине хранятся оставшиеся файлы и ключи.",
+        emptyHeading: "Резервных копий пока нет",
+        emptyBody: "Включите в настройках резервную копию реестра перед удалением или удалите запланированную задачу — копия появится здесь.",
+        kindRegistry: "Экспорт реестра",
+        kindTask: "Запланированные задачи",
+        items: (n) => `Элементов: ${n}`,
+        restoring: "Восстановление…",
+        confirmRestoreRegistry: "Это снова импортирует сохранённый экспорт реестра. Данные объединяются: то, что есть в копии, восстанавливается, а добавленное с тех пор не удаляется. Ключи для всего компьютера могут запросить подтверждение администратора. Большие экспорты могут занять минуту.",
+        confirmRestoreTask: "Это снова регистрирует сохранённые запланированные задачи. Задача, которой нужны права администратора, запросит подтверждение.",
+        restoreNow: "Восстановить сейчас",
+        confirmDelete: "Удалить эту копию навсегда? После этого восстановить её будет нельзя.",
+        deleteNow: "Удалить копию",
+        restored: (n, c) => `Элементов восстановлено из копии ${n}: ${c}.`,
+        failedHeading: (n) => `Не восстановлено: ${n}`,
+        loadError: (m) => `Не удалось загрузить резервные копии: ${m}`
       }
     }
   },
@@ -3131,6 +3671,24 @@ export default {
         ended: (n) => `Proces ${n} bol ukončený.`,
         endFailed: (m) => `Proces sa nepodarilo ukončiť: ${m}`,
         again: "Loviť znova"
+      },
+      backups: {
+        tab: "Zálohy",
+        intro: "Čo Prune uložil predtým, než zmenil niečo, čo nemá kôš: úplné exporty registra pred odinštalovaním a definície odstránených naplánovaných úloh. Karanténa uchováva zvyšné súbory a kľúče.",
+        emptyHeading: "Zatiaľ žiadne zálohy",
+        emptyBody: "Zapnite v Nastaveniach zálohu registra pred odinštalovaním alebo odstráňte naplánovanú úlohu a záloha sa zobrazí tu.",
+        kindRegistry: "Export registra",
+        kindTask: "Naplánované úlohy",
+        items: (n) => `Položiek: ${n}`,
+        restoring: "Obnovuje sa…",
+        confirmRestoreRegistry: "Týmto sa uložený export registra naimportuje späť. Zlučuje sa: obnoví sa, čo záloha obsahuje, a nič, čo od tej doby pribudlo, sa neodstráni. Kľúče pre celý počítač môžu vyžadovať súhlas správcu. Veľké exporty môžu trvať minútu.",
+        confirmRestoreTask: "Týmto sa uložené naplánované úlohy znova zaregistrujú. Úloha, ktorá vyžaduje práva správcu, požiada o súhlas.",
+        restoreNow: "Obnoviť teraz",
+        confirmDelete: "Odstrániť túto zálohu natrvalo? Potom ju nepôjde obnoviť.",
+        deleteNow: "Odstrániť zálohu",
+        restored: (n, c) => `Položiek obnovených zo zálohy ${n}: ${c}.`,
+        failedHeading: (n) => `Neobnovené: ${n}`,
+        loadError: (m) => `Zálohy sa nepodarilo načítať: ${m}`
       }
     }
   },
@@ -3232,6 +3790,24 @@ export default {
         ended: (n) => `${n} u përfundua.`,
         endFailed: (m) => `Procesi nuk u përfundua dot: ${m}`,
         again: "Gjuaj sërish"
+      },
+      backups: {
+        tab: "Kopjet rezervë",
+        intro: "Çfarë ruajti Prune para se të ndryshonte diçka pa Kosh Riciklimi: eksporte të plota të regjistrit para çinstalimit dhe përkufizimet e detyrave të planifikuara të hequra. Karantina mban skedarët dhe çelësat e mbetur.",
+        emptyHeading: "Ende nuk ka kopje rezervë",
+        emptyBody: "Aktivizoni te Cilësimet kopjen rezervë të regjistrit para çinstalimit, ose hiqni një detyrë të planifikuar, dhe kopja do të shfaqet këtu.",
+        kindRegistry: "Eksport regjistri",
+        kindTask: "Detyra të planifikuara",
+        items: (n) => `Elemente: ${n}`,
+        restoring: "Po rikthehet…",
+        confirmRestoreRegistry: "Kjo importon sërish eksportin e ruajtur të regjistrit. Ai bashkon: rikthehet ç'ka kopja dhe nuk hiqet asgjë e shtuar që atëherë. Çelësat për gjithë kompjuterin mund të kërkojnë miratimin e administratorit. Eksportet e mëdha mund të zgjasin një minutë.",
+        confirmRestoreTask: "Kjo regjistron sërish detyrat e planifikuara të ruajtura. Një detyrë që kërkon të drejta administratori do të kërkojë miratim.",
+        restoreNow: "Rikthe tani",
+        confirmDelete: "Ta fshini përgjithmonë këtë kopje rezervë? Pas kësaj nuk do të rikthehet dot.",
+        deleteNow: "Fshi kopjen",
+        restored: (n, c) => `Elemente të rikthyera nga kopja e ${n}: ${c}.`,
+        failedHeading: (n) => `Të parikthyera: ${n}`,
+        loadError: (m) => `Kopjet rezervë nuk u ngarkuan dot: ${m}`
       }
     }
   },
@@ -3333,6 +3909,24 @@ export default {
         ended: (n) => `${n} је завршен.`,
         endFailed: (m) => `Није могуће завршити процес: ${m}`,
         again: "Лови поново"
+      },
+      backups: {
+        tab: "Резервне копије",
+        intro: "Шта је Prune сачувао пре него што је променио нешто без корпе за отпатке: потпуне извозе регистра пре деинсталације и дефиниције уклоњених заказаних задатака. Карантин чува преостале датотеке и кључеве.",
+        emptyHeading: "Још нема резервних копија",
+        emptyBody: "Укључите у Подешавањима резервну копију регистра пре деинсталације или уклоните заказани задатак и копија ће се појавити овде.",
+        kindRegistry: "Извоз регистра",
+        kindTask: "Заказани задаци",
+        items: (n) => `Ставки: ${n}`,
+        restoring: "Враћање…",
+        confirmRestoreRegistry: "Ово поново увози сачувани извоз регистра. Спаја се: враћа се оно што копија садржи, а ништа што је од тада додато не уклања се. Кључеви за цео рачунар могу тражити одобрење администратора. Велики извози могу потрајати минут.",
+        confirmRestoreTask: "Ово поново региструје сачуване заказане задатке. Задатак који захтева администраторска права тражиће одобрење.",
+        restoreNow: "Врати сада",
+        confirmDelete: "Обрисати ову резервну копију заувек? Касније је ништа не може вратити.",
+        deleteNow: "Обриши копију",
+        restored: (n, c) => `Ставки враћене из копије ${n}: ${c}.`,
+        failedHeading: (n) => `Није враћено: ${n}`,
+        loadError: (m) => `Није могуће учитати резервне копије: ${m}`
       }
     }
   },
@@ -3434,6 +4028,24 @@ export default {
         ended: (n) => `${n} avslutades.`,
         endFailed: (m) => `Det gick inte att avsluta processen: ${m}`,
         again: "Jaga igen"
+      },
+      backups: {
+        tab: "Säkerhetskopior",
+        intro: "Vad Prune sparade innan det ändrade något som saknar papperskorg: fullständiga registerexporter före en avinstallation och definitionerna av borttagna schemalagda aktiviteter. Karantän rymmer de kvarvarande filerna och nycklarna.",
+        emptyHeading: "Inga säkerhetskopior ännu",
+        emptyBody: "Slå på registersäkerhetskopiering före avinstallation i Inställningar, eller ta bort en schemalagd aktivitet, så visas säkerhetskopian här.",
+        kindRegistry: "Registerexport",
+        kindTask: "Schemalagda aktiviteter",
+        items: (n) => `Objekt: ${n}`,
+        restoring: "Återställer…",
+        confirmRestoreRegistry: "Detta importerar den sparade registerexporten igen. Den slås ihop: det säkerhetskopian innehåller återställs och inget som lagts till sedan dess tas bort. Nycklar för hela datorn kan be om administratörsgodkännande. Stora exporter kan ta en minut.",
+        confirmRestoreTask: "Detta registrerar de sparade schemalagda aktiviteterna igen. En aktivitet som kräver administratörsrättigheter ber om godkännande.",
+        restoreNow: "Återställ nu",
+        confirmDelete: "Ta bort den här säkerhetskopian för gott? Inget kan återställa den efteråt.",
+        deleteNow: "Ta bort säkerhetskopia",
+        restored: (n, c) => `Objekt återställda från säkerhetskopian av ${n}: ${c}.`,
+        failedHeading: (n) => `Inte återställda: ${n}`,
+        loadError: (m) => `Det gick inte att läsa in säkerhetskopiorna: ${m}`
       }
     }
   },
@@ -3535,6 +4147,24 @@ export default {
         ended: (n) => `สิ้นสุด ${n} แล้ว`,
         endFailed: (m) => `สิ้นสุดกระบวนการไม่ได้: ${m}`,
         again: "ล่าอีกครั้ง"
+      },
+      backups: {
+        tab: "การสำรองข้อมูล",
+        intro: "สิ่งที่ Prune บันทึกไว้ก่อนเปลี่ยนสิ่งที่ไม่มีถังรีไซเคิล: การส่งออกรีจิสทรีทั้งหมดก่อนถอนการติดตั้ง และคำจำกัดความของงานที่ตั้งเวลาไว้ที่นำออก ส่วนกักกันเก็บไฟล์และคีย์ที่ตกค้าง",
+        emptyHeading: "ยังไม่มีการสำรองข้อมูล",
+        emptyBody: "เปิดการสำรองรีจิสทรีก่อนถอนการติดตั้งในการตั้งค่า หรือนำงานที่ตั้งเวลาไว้ออก แล้วข้อมูลสำรองจะปรากฏที่นี่",
+        kindRegistry: "การส่งออกรีจิสทรี",
+        kindTask: "งานที่ตั้งเวลาไว้",
+        items: (n) => `รายการ: ${n}`,
+        restoring: "กำลังกู้คืน…",
+        confirmRestoreRegistry: "การดำเนินการนี้นำเข้าการส่งออกรีจิสทรีที่บันทึกไว้กลับมา โดยจะรวมเข้าด้วยกัน: สิ่งที่ข้อมูลสำรองมีจะถูกกู้คืน และสิ่งที่เพิ่มมาตั้งแต่นั้นจะไม่ถูกลบ คีย์ระดับเครื่องอาจขออนุมัติจากผู้ดูแลระบบ การส่งออกขนาดใหญ่อาจใช้เวลาประมาณหนึ่งนาที",
+        confirmRestoreTask: "การดำเนินการนี้ลงทะเบียนงานที่ตั้งเวลาไว้ที่บันทึกไว้อีกครั้ง งานที่ต้องใช้สิทธิ์ผู้ดูแลระบบจะขออนุมัติ",
+        restoreNow: "กู้คืนทันที",
+        confirmDelete: "ลบข้อมูลสำรองนี้ถาวรหรือไม่ หลังจากนั้นจะกู้คืนไม่ได้",
+        deleteNow: "ลบข้อมูลสำรอง",
+        restored: (n, c) => `รายการที่กู้คืนจากข้อมูลสำรองของ ${n}: ${c}`,
+        failedHeading: (n) => `ที่กู้คืนไม่ได้: ${n}`,
+        loadError: (m) => `โหลดข้อมูลสำรองไม่ได้: ${m}`
       }
     }
   },
@@ -3636,6 +4266,24 @@ export default {
         ended: (n) => `${n} sonlandırıldı.`,
         endFailed: (m) => `İşlem sonlandırılamadı: ${m}`,
         again: "Yeniden avla"
+      },
+      backups: {
+        tab: "Yedekler",
+        intro: "Prune'un geri dönüşüm kutusu olmayan bir şeyi değiştirmeden önce kaydettikleri: kaldırmadan önceki tam kayıt defteri dışa aktarımları ve kaldırdığı zamanlanmış görevlerin tanımları. Karantina artık dosya ve anahtarları tutar.",
+        emptyHeading: "Henüz yedek yok",
+        emptyBody: "Ayarlar'da kaldırmadan önce kayıt defteri yedeğini açın veya zamanlanmış bir görevi kaldırın; yedek burada görünür.",
+        kindRegistry: "Kayıt defteri dışa aktarımı",
+        kindTask: "Zamanlanmış görevler",
+        items: (n) => `Öğe: ${n}`,
+        restoring: "Geri yükleniyor…",
+        confirmRestoreRegistry: "Bu, kaydedilen kayıt defteri dışa aktarımını geri içe aktarır. Birleştirir: yedeğin içindekiler geri yüklenir, o günden sonra eklenenlerin hiçbiri kaldırılmaz. Makine genelindeki anahtarlar yönetici onayı isteyebilir. Büyük dışa aktarımlar bir dakika sürebilir.",
+        confirmRestoreTask: "Bu, kaydedilen zamanlanmış görevleri yeniden kaydeder. Yönetici hakları gerektiren bir görev onay isteyecektir.",
+        restoreNow: "Şimdi geri yükle",
+        confirmDelete: "Bu yedek kalıcı olarak silinsin mi? Sonrasında hiçbir şey onu geri getiremez.",
+        deleteNow: "Yedeği sil",
+        restored: (n, c) => `${n} yedeğinden geri yüklenen öğe: ${c}.`,
+        failedHeading: (n) => `Geri yüklenemeyen: ${n}`,
+        loadError: (m) => `Yedekler yüklenemedi: ${m}`
       }
     }
   },
@@ -3737,6 +4385,24 @@ export default {
         ended: (n) => `${n} завершено.`,
         endFailed: (m) => `Не вдалося завершити процес: ${m}`,
         again: "Полювати знову"
+      },
+      backups: {
+        tab: "Резервні копії",
+        intro: "Що Prune зберіг, перш ніж змінити те, у чого немає кошика: повні експорти реєстру перед видаленням і описи вилучених запланованих завдань. У карантині лежать залишені файли й ключі.",
+        emptyHeading: "Резервних копій ще немає",
+        emptyBody: "Увімкніть у налаштуваннях резервну копію реєстру перед видаленням або видаліть заплановане завдання — копія з’явиться тут.",
+        kindRegistry: "Експорт реєстру",
+        kindTask: "Заплановані завдання",
+        items: (n) => `Елементів: ${n}`,
+        restoring: "Відновлення…",
+        confirmRestoreRegistry: "Це знову імпортує збережений експорт реєстру. Дані об’єднуються: те, що є в копії, відновлюється, а додане відтоді не видаляється. Ключі для всього комп’ютера можуть запросити підтвердження адміністратора. Великі експорти можуть тривати хвилину.",
+        confirmRestoreTask: "Це знову реєструє збережені заплановані завдання. Завдання, якому потрібні права адміністратора, запросить підтвердження.",
+        restoreNow: "Відновити зараз",
+        confirmDelete: "Видалити цю копію назавжди? Після цього відновити її буде неможливо.",
+        deleteNow: "Видалити копію",
+        restored: (n, c) => `Елементів відновлено з копії ${n}: ${c}.`,
+        failedHeading: (n) => `Не відновлено: ${n}`,
+        loadError: (m) => `Не вдалося завантажити резервні копії: ${m}`
       }
     }
   },
@@ -3838,6 +4504,24 @@ export default {
         ended: (n) => `Đã kết thúc ${n}.`,
         endFailed: (m) => `Không kết thúc được tiến trình: ${m}`,
         again: "Săn lại"
+      },
+      backups: {
+        tab: "Bản sao lưu",
+        intro: "Những gì Prune đã lưu trước khi thay đổi thứ không có Thùng rác: bản xuất registry đầy đủ trước khi gỡ cài đặt và định nghĩa của các tác vụ đã lên lịch bị gỡ. Khu cách ly giữ các tệp và khóa còn sót lại.",
+        emptyHeading: "Chưa có bản sao lưu",
+        emptyBody: "Bật sao lưu registry trước khi gỡ cài đặt trong Cài đặt, hoặc gỡ một tác vụ đã lên lịch, và bản sao lưu sẽ hiện ở đây.",
+        kindRegistry: "Bản xuất registry",
+        kindTask: "Tác vụ đã lên lịch",
+        items: (n) => `Mục: ${n}`,
+        restoring: "Đang khôi phục…",
+        confirmRestoreRegistry: "Thao tác này nhập lại bản xuất registry đã lưu. Nó hợp nhất: những gì bản sao lưu có sẽ được khôi phục và không có gì được thêm từ đó bị xóa. Khóa áp dụng cho cả máy có thể yêu cầu quản trị viên chấp thuận. Bản xuất lớn có thể mất một phút.",
+        confirmRestoreTask: "Thao tác này đăng ký lại các tác vụ đã lên lịch đã lưu. Tác vụ cần quyền quản trị sẽ yêu cầu chấp thuận.",
+        restoreNow: "Khôi phục ngay",
+        confirmDelete: "Xóa vĩnh viễn bản sao lưu này? Sau đó không gì có thể khôi phục nó.",
+        deleteNow: "Xóa bản sao lưu",
+        restored: (n, c) => `Mục đã khôi phục từ bản sao lưu của ${n}: ${c}.`,
+        failedHeading: (n) => `Chưa khôi phục: ${n}`,
+        loadError: (m) => `Không tải được các bản sao lưu: ${m}`
       }
     }
   },
@@ -3939,6 +4623,24 @@ export default {
         ended: (n) => `已结束 ${n}。`,
         endFailed: (m) => `无法结束进程：${m}`,
         again: "再次搜寻"
+      },
+      backups: {
+        tab: "备份",
+        intro: "Prune 在更改无回收站可用的内容之前保存的东西：卸载前的完整注册表导出，以及已移除计划任务的定义。残留的文件和注册表项在隔离区中。",
+        emptyHeading: "还没有备份",
+        emptyBody: "在“设置”中开启卸载前的注册表备份，或移除一个计划任务，备份就会出现在这里。",
+        kindRegistry: "注册表导出",
+        kindTask: "计划任务",
+        items: (n) => `项目：${n}`,
+        restoring: "正在还原…",
+        confirmRestoreRegistry: "这会重新导入已保存的注册表导出。它采用合并方式：备份中的内容会被还原，此后新增的内容不会被移除。适用于整台电脑的项可能需要管理员批准。较大的导出可能需要一分钟。",
+        confirmRestoreTask: "这会重新注册已保存的计划任务。需要管理员权限的任务会请求批准。",
+        restoreNow: "立即还原",
+        confirmDelete: "永久删除此备份？之后将无法还原。",
+        deleteNow: "删除备份",
+        restored: (n, c) => `已从 ${n} 的备份还原的项目：${c} 个。`,
+        failedHeading: (n) => `未还原：${n} 个`,
+        loadError: (m) => `无法加载备份：${m}`
       }
     }
   },
@@ -4040,6 +4742,24 @@ export default {
         ended: (n) => `已結束 ${n}。`,
         endFailed: (m) => `無法結束處理程序：${m}`,
         again: "再次搜尋"
+      },
+      backups: {
+        tab: "備份",
+        intro: "Prune 在變更沒有資源回收筒的內容之前儲存的東西：解除安裝前的完整登錄匯出，以及已移除排程工作的定義。殘留的檔案和登錄機碼在隔離區中。",
+        emptyHeading: "還沒有備份",
+        emptyBody: "在「設定」中開啟解除安裝前的登錄備份，或移除一個排程工作，備份就會出現在這裡。",
+        kindRegistry: "登錄匯出",
+        kindTask: "排程工作",
+        items: (n) => `項目：${n}`,
+        restoring: "正在還原…",
+        confirmRestoreRegistry: "這會重新匯入已儲存的登錄匯出。它採合併方式：備份中的內容會被還原，此後新增的內容不會被移除。適用於整台電腦的項目可能需要系統管理員核准。較大的匯出可能需要一分鐘。",
+        confirmRestoreTask: "這會重新註冊已儲存的排程工作。需要系統管理員權限的工作會要求核准。",
+        restoreNow: "立即還原",
+        confirmDelete: "永久刪除此備份？之後將無法還原。",
+        deleteNow: "刪除備份",
+        restored: (n, c) => `已從 ${n} 的備份還原的項目：${c} 個。`,
+        failedHeading: (n) => `未還原：${n} 個`,
+        loadError: (m) => `無法載入備份：${m}`
       }
     }
   }

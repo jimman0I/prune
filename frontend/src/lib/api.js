@@ -301,6 +301,24 @@ export async function scanForcedUninstall({ name, publisher, registryKey, mode, 
   return data;
 }
 
+/* ------------------------------------------------------------ backups */
+
+async function backupCall(path, options) {
+  const res = await fetch(`${API_URL}/backups${path}`, options);
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
+  return data;
+}
+
+/** Registry exports and scheduled-task definitions Prune saved before it
+ * changed something with no Recycle Bin, newest first. */
+export async function fetchBackups() {
+  return (await backupCall('')).backups ?? [];
+}
+/** Puts one back. Resolves { kind, restored, failed: [...], elevated }. */
+export const restoreBackup = (id) => backupCall(`/${encodeURIComponent(id)}/restore`, { method: 'POST' });
+export const deleteBackup = (id) => backupCall(`/${encodeURIComponent(id)}`, { method: 'DELETE' });
+
 /* ------------------------------------------------------------- hunter */
 
 async function hunterCall(path) {

@@ -4,7 +4,7 @@ import {
   fetchStartupItems, fetchStartupIcons, setStartupItemEnabled,
   fetchQuarantineBatches, restoreQuarantineBatch, deleteQuarantineBatch, emptyQuarantine,
   fetchSettings, updateSettings, fetchUpdateCheck,
-  fetchDiskSpace, fetchDiskHealth, fetchInstallTraces
+  fetchDiskSpace, fetchDiskHealth, fetchInstallTraces, fetchBackups, restoreBackup, deleteBackup
 } from '../lib/api.js';
 import { keys } from '../lib/queryClient.js';
 import { applyEnabled, toggleOutcome, enabledStateOf } from '../lib/startupToggleState.js';
@@ -162,6 +162,23 @@ export function useQuarantine() {
     restore: useMutation({ mutationFn: restoreQuarantineBatch, onSuccess: invalidate }),
     remove: useMutation({ mutationFn: deleteQuarantineBatch, onSuccess: invalidate }),
     empty: useMutation({ mutationFn: emptyQuarantine, onSuccess: invalidate })
+  };
+}
+
+/* -------------------------------------------------------------- backups */
+
+/** The Backup Manager's list, and restoring or deleting one. Each action
+ * re-reads the list rather than splicing the row out, like the quarantine. */
+export function useBackups() {
+  const queryClient = useQueryClient();
+  const invalidate = () => queryClient.invalidateQueries({ queryKey: keys.backups });
+  const backups = useQuery({ queryKey: keys.backups, queryFn: () => fetchBackups() });
+  return {
+    backups: backups.data ?? [],
+    loading: backups.isPending,
+    error: backups.error ? backups.error.message : null,
+    restore: useMutation({ mutationFn: (id) => restoreBackup(id), onSuccess: invalidate }),
+    remove: useMutation({ mutationFn: (id) => deleteBackup(id), onSuccess: invalidate })
   };
 }
 
