@@ -63,6 +63,20 @@ describe('overwrite before deleting', () => {
   });
 });
 
+describe('delete locked files at the next restart', () => {
+  it('is off by default', async () => {
+    expect((await getSettings()).deleteLockedFilesOnRestart).toBe(false);
+    expect(cleanGuardsFrom({}).deleteLockedOnRestart).toBe(false);
+  });
+
+  it('reaches the cleaner only for an exact true -- it is a machine-wide registry write', () => {
+    expect(cleanGuardsFrom({ deleteLockedFilesOnRestart: true }).deleteLockedOnRestart).toBe(true);
+    for (const junk of ['true', 1, 'yes', {}, null]) {
+      expect(cleanGuardsFrom({ deleteLockedFilesOnRestart: junk }).deleteLockedOnRestart).toBe(false);
+    }
+  });
+});
+
 describe('the free-space wipe choices', () => {
   it('default to the profile drive and one pass', async () => {
     const settings = await getSettings();

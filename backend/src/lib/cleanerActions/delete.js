@@ -6,6 +6,7 @@ import { quarantineAndDelete } from '../../services/quarantine.js';
 import { sendToRecycleBin } from '../../services/recycleBin.js';
 import { removePermanently } from '../../services/leftoverRemoval.js';
 import { protectionReason } from '../../services/pathGuard.js';
+import { schedulePendingDelete } from '../../services/pendingReboot.js';
 
 /** Converts one `*`-bearing path SEGMENT (not a full path) into a
  * case-insensitive RegExp matching a filename/dirname against it --
@@ -200,14 +201,25 @@ export function resolveActionFiles(expandedPaths, guards = {}, excludeNames = nu
  * locked files are kept out of its input entirely instead of trying to
  * make it tolerate them. */
 async function isFileAccessible(filePath) {
+  return (await lockError(filePath)) === null;
+}
+
+/** null when the file can be opened for read+write, else the error code
+ * Windows gave (EBUSY for a sharing violation, EPERM for access denied). */
+async function lockError(filePath) {
   try {
     const handle = await fs.promises.open(filePath, 'r+');
     await handle.close();
-    return true;
-  } catch {
-    return false;
+    return null;
+  } catch (err) {
+    return err?.code ?? 'UNKNOWN';
   }
 }
+
+/** The codes that mean "another program has this open", as opposed to a
+ * file that is gone or a disk that failed. Only these are worth handing to
+ * Windows to delete at the next boot. */
+const LOCKED_CODES = new Set(['EBUSY', 'EPERM']);
 
 /** Scans a `delete` action: how much it would free, without touching
  * anything. `action.expandedPaths` is pre-expanded (see
@@ -248,12 +260,37 @@ export async function executeFiles(candidates, held, ruleName, guards = {}) {
   // Reported rather than dropped: the only way a user ever discovers that
   // their own exclusion is what held a file back is being told.
   const skipped = [...held];
+  // Files handed to Windows to delete at the next restart. Not `skipped`
+  // (they will go) and not freed (they have not yet): reported on their own.
+  const scheduledForRestart = [];
+  // Set after the first scheduling failure that looks like missing
+  // administrator rights -- the rest would fail the same way, slowly (two
+  // reg.exe calls each), so they are skipped with the same honest reason.
+  let scheduleBlocked = null;
   for (const file of candidates) {
-    if (await isFileAccessible(file.path)) accessible.push(file.path);
-    else skipped.push({ path: file.path, reason: 'locked or inaccessible' });
-  }
+    const code = await lockError(file.path);
+    if (code === null) { accessible.push(file.path); continue; }
 
-  if (accessible.length === 0) return { freedBytes: 0, skipped };
+    if (guards.deleteLockedOnRestart === true && LOCKED_CODES.has(code) && !deleteRefusal(file.path)) {
+      if (!scheduleBlocked) {
+        try {
+          await schedulePendingDelete(file.path);
+          scheduledForRestart.push(file.path);
+          continue;
+        } catch (err) {
+          scheduleBlocked = /denied|administrator|privilege|permission/i.test(err?.message ?? '')
+            ? 'needs administrator'
+            : (err?.message || 'failed');
+        }
+      }
+      skipped.push({ path: file.path, reason: `locked, and could not be scheduled for deletion at restart (${scheduleBlocked})` });
+      continue;
+    }
+    skipped.push({ path: file.path, reason: 'locked or inaccessible' });
+  }
+  const withScheduled = (result) => (scheduledForRestart.length > 0 ? { ...result, scheduledForRestart } : result);
+
+  if (accessible.length === 0) return withScheduled({ freedBytes: 0, skipped });
 
   // 'Delete now' -- BleachBit's behaviour, chosen in Settings and read from
   // there by the route, never sent by a client. The same guards have already
@@ -261,7 +298,7 @@ export async function executeFiles(candidates, held, ruleName, guards = {}) {
   // through the one delete implementation the uninstall flow's "Delete
   // permanently" also uses. autoQuarantine is deliberately not consulted:
   // it chooses between Quarantine and the Recycle Bin, and this is neither.
-  if (guards.removal === 'delete') return deletePermanently(accessible, candidates, skipped, guards);
+  if (guards.removal === 'delete') return withScheduled(await deletePermanently(accessible, candidates, skipped, guards));
 
   // The other half of `autoQuarantine`, which used to be a switch in
   // Settings that decided nothing at all. Off means the Recycle Bin rather
@@ -273,12 +310,12 @@ export async function executeFiles(candidates, held, ruleName, guards = {}) {
     const sizeOf = new Map(candidates.map((f) => [f.path, f.sizeBytes]));
     const { recycled, failed, error } = await sendToRecycleBin(accessible);
     for (const path of failed) skipped.push({ path, reason: error ? `could not be recycled: ${error}` : 'could not be recycled' });
-    return {
+    return withScheduled({
       // Summed from what actually went, not from what was asked for.
       freedBytes: recycled.reduce((sum, path) => sum + (sizeOf.get(path) || 0), 0),
       recycled: true,
       skipped
-    };
+    });
   }
 
   try {
@@ -287,16 +324,16 @@ export async function executeFiles(candidates, held, ruleName, guards = {}) {
       files: accessible,
       registryKeys: []
     });
-    return { freedBytes: manifest.totalSizeBytes, quarantineBatch: manifest.batchDir, skipped };
+    return withScheduled({ freedBytes: manifest.totalSizeBytes, quarantineBatch: manifest.batchDir, skipped });
   } catch (err) {
     // Rare, given the accessibility pre-check above -- if it still
     // happens, nothing in this batch was safely quarantined, so report the
     // whole set as skipped rather than guessing at a partial freedBytes
     // the manifest never actually confirmed.
-    return {
+    return withScheduled({
       freedBytes: 0,
       skipped: [...skipped, ...accessible.map((p) => ({ path: p, reason: err.message }))]
-    };
+    });
   }
 }
 

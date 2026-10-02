@@ -442,6 +442,8 @@ export async function executeRule(rule, guards = {}) {
   let registryKeysRemoved;
   const skipped = [];
   let recycled, quarantineBatch, ranCommand, error, vacuumed, edited, wiped;
+  // Locked files handed to Windows to delete at the next restart.
+  let scheduledForRestart = 0;
 
   for (const action of normalized.actions) {
     if (action.type === 'shell') {
@@ -453,6 +455,7 @@ export async function executeRule(rule, guards = {}) {
       const result = await deleteAction.execute({ expandedPaths, excludeNames: action.excludeNames }, rule.name, guards);
       tally(result);
       skipped.push(...result.skipped);
+      scheduledForRestart += result.scheduledForRestart?.length || 0;
       if (result.recycled) recycled = true;
       if (result.quarantineBatch) quarantineBatch = result.quarantineBatch;
     } else if (action.type === 'sqlite.vacuum') {
@@ -471,6 +474,7 @@ export async function executeRule(rule, guards = {}) {
       const result = await deepscanAction.execute(deepscanTarget(action), rule.name, deepscanGuards(rule, guards));
       tally(result);
       skipped.push(...result.skipped);
+      scheduledForRestart += result.scheduledForRestart?.length || 0;
       if (result.recycled) recycled = true;
       if (result.quarantineBatch) quarantineBatch = result.quarantineBatch;
     } else if (action.type === 'wipe.freespace') {
@@ -562,6 +566,7 @@ export async function executeRule(rule, guards = {}) {
     ...(vacuumed ? { vacuumed } : {}),
     ...(edited ? { edited } : {}),
     ...(wiped ? { wiped } : {}),
+    ...(scheduledForRestart > 0 ? { scheduledForRestart } : {}),
     ...(recycled ? { recycled } : {}),
     ...(quarantineBatch ? { quarantineBatch } : {}),
     ...(ranCommand ? { ranCommand } : {}),
