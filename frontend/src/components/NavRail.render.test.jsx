@@ -51,12 +51,12 @@ function flyoutFor(label) {
 }
 
 describe('nav rail flyout labels', () => {
-  it('names every destination and the key that goes to it', () => {
+  it('shows the key that goes to every destination', () => {
     renderScreen(<NavRail screen="dashboard" onNavigate={() => {}} />);
     LABELS.forEach((label, index) => {
-      // "Dashboard" + "Ctrl+1": the icon-only rail's tooltip is the one
-      // place its key is shown.
-      expect(flyoutFor(label).flyout.textContent).toBe(`${label}Ctrl+${index + 1}`);
+      // The chip beside the widened rail is the one place the key is
+      // shown; the name is printed in the row itself.
+      expect(flyoutFor(label).flyout.textContent).toBe(`Ctrl+${index + 1}`);
     });
   });
 
@@ -137,40 +137,46 @@ describe('the rail order', () => {
   });
 });
 
-describe('the two rail widths', () => {
+describe('the hover rail', () => {
   // jsdom evaluates no CSS, so what is checkable is which classes carry each
-  // state. The behaviour itself -- the switch at 1100px of window width --
-  // is a media query Tailwind emits from `min-[1100px]:`, verified live.
-  it('is icons only by default and widens from 1100px', () => {
+  // state. The behaviour itself -- collapsed at rest, widening over the page
+  // on hover or keyboard focus -- is verified live.
+  const panelOf = (container) => container.querySelector('nav > div');
+
+  it('reserves a 72px column and widens an overlay panel, never the column itself', () => {
     const { container } = renderScreen(<NavRail screen="dashboard" onNavigate={() => {}} />);
     const nav = container.querySelector('nav');
     expect(classesOf(nav)).toContain('w-[72px]');
-    expect(classesOf(nav)).toContain('min-[1100px]:w-[200px]');
+    expect(classesOf(nav).join(' ')).not.toMatch(/hover:w-/);
+    const panel = panelOf(container);
+    expect(classesOf(panel)).toContain('absolute');
+    expect(classesOf(panel)).toContain('w-[72px]');
+    expect(classesOf(panel)).toContain('hover:w-[200px]');
+    expect(classesOf(panel)).toContain('transition-[width]');
   });
 
-  it('prints the label in the row only when wide, and keeps it out of the accessible name', () => {
+  it('also widens for keyboard focus, but not for a click that merely left focus behind', () => {
+    const { container } = renderScreen(<NavRail screen="dashboard" onNavigate={() => {}} />);
+    const panel = classesOf(panelOf(container));
+    expect(panel).toContain('has-[:focus-visible]:w-[200px]');
+    expect(panel.join(' ')).not.toMatch(/focus-within:w-/);
+  });
+
+  it('never keys layout to the window width any more: one rail, one behaviour', () => {
+    const { container } = renderScreen(<NavRail screen="dashboard" onNavigate={() => {}} />);
+    expect(container.innerHTML).not.toContain('min-[1100px]');
+  });
+
+  it('always has the label in the row, hidden until the rail opens, and out of the accessible name', () => {
     renderScreen(<NavRail screen="dashboard" onNavigate={() => {}} />);
     const button = screen.getByRole('button', { name: 'Applications' });
     const rowLabel = [...button.querySelectorAll('span')].find((el) => el.textContent === 'Applications');
-    expect(classesOf(rowLabel)).toContain('hidden');
-    expect(classesOf(rowLabel)).toContain('min-[1100px]:block');
-    // The button's name is its aria-label; the printed copy is decoration.
+    expect(classesOf(rowLabel)).toContain('opacity-0');
+    expect(classesOf(rowLabel)).toContain('group-hover/rail:opacity-100');
+    expect(classesOf(rowLabel)).toContain('group-has-[:focus-visible]/rail:opacity-100');
+    // At rest it overflows the 72px column invisibly; it must not catch clicks meant for the page.
+    expect(classesOf(rowLabel)).toContain('pointer-events-none');
     expect(rowLabel.getAttribute('aria-hidden')).toBe('true');
-  });
-
-  it('keeps only the key in the flyout when wide, since the name is already in the row', () => {
-    renderScreen(<NavRail screen="dashboard" onNavigate={() => {}} />);
-    LABELS.forEach((label, index) => {
-      const { flyout } = flyoutFor(label);
-      const [name, key] = flyout.children;
-      expect(name.textContent).toBe(label);
-      expect(classesOf(name)).toContain('min-[1100px]:hidden');
-      expect(key.textContent).toBe(`Ctrl+${index + 1}`);
-      expect(classesOf(key)).not.toContain('min-[1100px]:hidden');
-      // Still the hover / keyboard-focus tooltip, not a permanent chip.
-      expect(classesOf(flyout)).toContain('opacity-0');
-      expect(classesOf(flyout)).not.toContain('min-[1100px]:hidden');
-    });
   });
 
   it('gives the in-row label the room it needs: nothing else sits in the row after it', () => {

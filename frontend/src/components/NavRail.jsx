@@ -102,21 +102,26 @@ const SETTINGS_ITEM = { id: 'settings', icon: (
 
 /** One place in the rail.
  *
- * TWO LAYOUTS FROM ONE ELEMENT, chosen by window width in CSS rather than
- * in JavaScript: icons only below 1100px, and from 1100px a ~200px rail
- * with the label written out beside each icon. Class-based (`min-[1100px]:`)
- * because the breakpoint is about the window and needs no resize listener,
- * no state, and no first-paint flash of the wrong rail.
+ * The rail is icons only at rest and widens over the page on hover (see
+ * NavRail below), so each row is ONE layout used in both states: the button
+ * always fills the row, the icon always sits 14px in from the row's left
+ * edge, and the label is always there at a fixed width, revealed by opacity.
+ * Nothing about the icon moves while the rail grows -- its centre is x=36
+ * collapsed and expanded, which is also where the title bar's logo
+ * (TitleBar.jsx) sits over it. TitleBar.render.test.jsx reads these numbers
+ * out of this file and fails if the two ever disagree.
  *
- * The icon's centre is x=36 in BOTH states -- centred in the 72px column
- * when narrow, and 12px gutter + 14px inset + half the 20px glyph when
- * wide -- so the title bar's logo (TitleBar.jsx) sits over it either way.
- * TitleBar.render.test.jsx reads these numbers out of this file and fails
- * if the two states ever disagree.
+ * The label has a fixed width on purpose. Left to size itself it would
+ * re-wrap on every frame of the width transition.
  *
- * The flyout is for the icon-only state (a glyph alone is a memory test)
- * and carries the name and the Ctrl+N key; from 1100px the name is printed
- * in the row, so the flyout keeps only the key. */
+ * The flyout carries only the Ctrl+N key: the name is already printed in
+ * the row the moment the pointer or keyboard focus reaches the rail. */
+/** The in-row label. Fixed width (see NavItem), faded in by the rail's own
+ * hover or keyboard focus, and `pointer-events-none` because at rest it
+ * overflows the 72px column invisibly and must never catch a click meant
+ * for the page underneath. */
+const LABEL_CLASS = 'relative w-[118px] shrink-0 pointer-events-none text-left text-[13px] leading-[1.15] font-medium [display:-webkit-box] [-webkit-line-clamp:2] [-webkit-box-orient:vertical] overflow-hidden opacity-0 transition-opacity duration-200 group-hover/rail:opacity-100 group-has-[:focus-visible]/rail:opacity-100';
+
 function NavItem({ item, screen, onNavigate, label }) {
   const active = screen === item.id;
   const number = SCREEN_ORDER.indexOf(item.id) + 1;
@@ -138,7 +143,7 @@ function NavItem({ item, screen, onNavigate, label }) {
         aria-current={active ? 'page' : undefined}
         aria-label={label}
         aria-keyshortcuts={`Control+${number}`}
-        className={`peer relative w-11 h-11 rounded-xl flex items-center justify-center min-[1100px]:w-full min-[1100px]:justify-start min-[1100px]:gap-3 min-[1100px]:pl-[14px] min-[1100px]:pr-3 transition-colors ${
+        className={`peer relative w-full h-11 rounded-xl flex items-center justify-start gap-3 pl-[14px] pr-3 transition-colors ${
           active ? 'text-[color:var(--accent-primary)]' : 'text-[color:var(--text-secondary)] hover:text-[color:var(--text-primary)] hover:bg-[color:var(--surface-hover)]'
         }`}
       >
@@ -168,47 +173,28 @@ function NavItem({ item, screen, onNavigate, label }) {
             in light mode, and this is the mark that survives squinting. */}
         <span
           aria-hidden="true"
-          className={`absolute -left-[10px] min-[1100px]:-left-[8px] top-3 h-5 w-[3px] rounded-full bg-[color:var(--accent-primary)] transition-opacity duration-150 ${active ? 'opacity-100' : 'opacity-0'}`}
+          className={`absolute -left-[8px] top-3 h-5 w-[3px] rounded-full bg-[color:var(--accent-primary)] transition-opacity duration-150 ${active ? 'opacity-100' : 'opacity-0'}`}
         />
         <span className="relative">{item.icon}</span>
-        <span aria-hidden="true" className="relative hidden min-[1100px]:block min-w-0 text-left text-[13px] leading-[1.15] font-medium [display:-webkit-box] [-webkit-line-clamp:2] [-webkit-box-orient:vertical] overflow-hidden">
+        <span aria-hidden="true" className={LABEL_CLASS}>
           {label}
         </span>
       </motion.button>
 
-      {/* Shown on hover AND on keyboard focus: someone tabbing the rail
-          needs the name at least as much as someone pointing at it.
-          `pointer-events-none` so it can never sit between the cursor and
-          the button underneath it.
-
-          The keyboard half is `peer-focus-visible`, not
-          `group-focus-within`, and the difference was a real bug: clicking
-          a nav button focuses it, and that focus outlives the pointer
-          leaving, so the label of whichever screen you had just opened sat
-          there over the content until you clicked something else.
-          `:focus-within` cannot tell those apart -- it is `:focus`, which a
-          mouse sets. Chromium already draws the distinction we want
-          (measured live: after a click, `:focus-within` true,
-          `:focus-visible` false), so asking for `:focus-visible` keeps the
-          label for the tabbing user and drops it for the clicking one.
-
-          It hangs off `peer` rather than the wrapper's `group` because the
-          group is a div: only the button can be focused, and only an
-          element that matches the pseudo-class can drive a variant. Hover
-          stays on the group, which is the whole target area.
-
-          In the wide rail the label is already printed in the row, so the
-          flyout drops the name (`min-[1100px]:hidden` on it) and keeps only
-          the key: a small chip beside the rail on hover or focus. Putting
-          the key IN the row instead reserved ~38px the label needed -- at
-          200px it truncated "Applications". Labels wrap to two lines rather than
-          truncate: a longer translation (Greek "Αναφορά σφάλματος") lost its tail. */}
+      {/* The key chip, beside the widened rail. Hover on the whole item,
+          and keyboard focus via `peer-focus-visible` -- not
+          `group-focus-within`: clicking a nav button focuses it, that focus
+          outlives the pointer leaving, and the chip of whichever screen you
+          had just opened sat over the content until you clicked elsewhere.
+          `:focus-visible` is what Chromium already draws the mouse/keyboard
+          distinction with. It hangs off `peer` rather than the wrapper's
+          `group` because only the button can be focused. The name is not
+          here: the row already prints it. */}
       <span
         aria-hidden="true"
-        className="pointer-events-none absolute left-full top-1/2 -translate-y-1/2 ml-2 px-2 py-1 rounded-md whitespace-nowrap text-[11.5px] font-medium bg-[color:var(--bg-panel)] text-[color:var(--text-primary)] border border-[color:var(--border-subtle)] shadow-lg opacity-0 group-hover:opacity-100 peer-focus-visible:opacity-100 transition-opacity duration-150 z-flyout"
+        className="pointer-events-none absolute left-full top-1/2 -translate-y-1/2 ml-2 px-2 py-1 rounded-md whitespace-nowrap font-mono text-[11px] text-[color:var(--text-muted)] bg-[color:var(--bg-panel)] border border-[color:var(--border-subtle)] shadow-lg opacity-0 group-hover:opacity-100 peer-focus-visible:opacity-100 transition-opacity duration-150 z-flyout"
       >
-        <span className="min-[1100px]:hidden">{label}</span>
-        <span className="ml-2 min-[1100px]:ml-0 font-mono text-[11px] text-[color:var(--text-muted)]">{shortcut}</span>
+        {shortcut}
       </span>
     </div>
   );
@@ -219,8 +205,7 @@ function NavItem({ item, screen, onNavigate, label }) {
  * An action, not a place: it opens a dialog, so it has no Ctrl+N key, no
  * route and no active state, and is left out of SCREEN_ORDER. It borrows the
  * rail rows' geometry (same 44px button, same icon centre at x=36) so the
- * footer reads as one column, and the same label flyout for the icon-only
- * rail -- minus the key chip, since there is no chord to show. */
+ * footer reads as one column. No key chip: there is no chord to show. */
 // A beetle: legs, antennae and a split shell. The first version was a chat
 // bubble with a "!", which reads as "message" or "alert" rather than "bug".
 const REPORT_ICON = (
@@ -247,19 +232,13 @@ function ActionItem({ icon, label, onClick }) {
         onClick={onClick}
         aria-label={label}
         aria-haspopup="dialog"
-        className="peer relative w-11 h-11 rounded-xl flex items-center justify-center min-[1100px]:w-full min-[1100px]:justify-start min-[1100px]:gap-3 min-[1100px]:pl-[14px] min-[1100px]:pr-3 transition-colors text-[color:var(--text-secondary)] hover:text-[color:var(--text-primary)] hover:bg-[color:var(--surface-hover)]"
+        className="peer relative w-full h-11 rounded-xl flex items-center justify-start gap-3 pl-[14px] pr-3 transition-colors text-[color:var(--text-secondary)] hover:text-[color:var(--text-primary)] hover:bg-[color:var(--surface-hover)]"
       >
         <span className="relative">{icon}</span>
-        <span aria-hidden="true" className="relative hidden min-[1100px]:block min-w-0 text-left text-[13px] leading-[1.15] font-medium [display:-webkit-box] [-webkit-line-clamp:2] [-webkit-box-orient:vertical] overflow-hidden">
+        <span aria-hidden="true" className={LABEL_CLASS}>
           {label}
         </span>
       </button>
-      <span
-        aria-hidden="true"
-        className="min-[1100px]:hidden pointer-events-none absolute left-full top-1/2 -translate-y-1/2 ml-2 px-2 py-1 rounded-md whitespace-nowrap text-[11.5px] font-medium bg-[color:var(--bg-panel)] text-[color:var(--text-primary)] border border-[color:var(--border-subtle)] shadow-lg opacity-0 group-hover:opacity-100 peer-focus-visible:opacity-100 transition-opacity duration-150 z-flyout"
-      >
-        {label}
-      </span>
     </div>
   );
 }
@@ -267,37 +246,38 @@ function ActionItem({ icon, label, onClick }) {
 export default function NavRail({ screen, onNavigate, footer = null, onReportBug = null }) {
   const { t } = useLanguage();
   return (
-    <nav className="relative flex flex-col items-center min-[1100px]:items-stretch gap-2 py-6 w-[72px] min-[1100px]:w-[200px] min-[1100px]:px-[12px] shrink-0" aria-label={t('nav.landmark')}>
-      {/* The glass is a background LAYER here, not the container itself.
-          `backdrop-filter` establishes a containing block and clips
-          absolutely positioned descendants to its own border box, so with
-          .glass-panel on the <nav> every flyout label was sliced off at
-          the rail's edge -- visible as "Deep Cle". The same property
-          already caught this codebase once, in the treemap tooltip, which
-          escapes via a portal. A nav label does not need a portal; it
-          needs the blurred surface to be a sibling rather than an
-          ancestor. */}
-      <div className="glass-panel absolute inset-0" aria-hidden="true" />
-      {/* The mark used to be here, alone, because a 72px rail is too
-          narrow for the wordmark beside it without shrinking one or
-          wrapping the other. The window's own title bar is full width and
-          has room for both, so the logo moved there (TitleBar.jsx) and
-          the rail got the 52px back for the things it exists for. Two
-          copies of the same mark, one directly above the other, was the
-          alternative and said nothing twice. */}
-      {ITEMS.map((item) => (
-        <NavItem key={item.id} item={item} screen={screen} onNavigate={onNavigate} label={t(NAV_KEYS[item.id])} />
-      ))}
-      {/* Pushed to the bottom of the rail, below every destination: the
-          update button (App passes it in, a slot rather than the button
-          itself so the rail makes no requests of its own) and Settings
-          beneath it. The slot's left edge is nudged 2px in the wide rail so
-          its 44px button lines up with the rows above (12px gutter + 2 =
-          the 14px the icons' buttons start at). */}
-      <div className="relative mt-auto flex flex-col items-center min-[1100px]:items-stretch gap-2">
-        {footer && <div className="flex flex-col items-center min-[1100px]:items-start min-[1100px]:pl-[2px]">{footer}</div>}
-        {onReportBug && <ActionItem icon={REPORT_ICON} label={t('nav.reportBug')} onClick={onReportBug} />}
-        <NavItem item={SETTINGS_ITEM} screen={screen} onNavigate={onNavigate} label={t(NAV_KEYS.settings)} />
+    // The <nav> only RESERVES the 72px column the page lays out beside.
+    // The panel inside it is what grows, absolutely positioned so it widens
+    // OVER the page: animating the width of something in the flow would
+    // re-lay-out every screen, tables and treemap included, on every frame
+    // of every hover. Opens on pointer hover or on keyboard focus
+    // (`:focus-visible`, not `:focus-within` -- see the key chip in
+    // NavItem), and closes the moment both are gone.
+    <nav className="relative z-flyout w-[72px] shrink-0" aria-label={t('nav.landmark')}>
+      <div className="group/rail absolute inset-y-0 left-0 w-[72px] hover:w-[200px] has-[:focus-visible]:w-[200px] flex flex-col items-stretch gap-2 py-6 px-[12px] transition-[width] duration-200 ease-[cubic-bezier(0.16,1,0.3,1)]">
+        {/* The glass is a background LAYER here, not the container itself.
+            `backdrop-filter` establishes a containing block and clips
+            absolutely positioned descendants to its own border box, so with
+            .glass-panel on this element the key chips were sliced off at
+            the rail's edge. A chip does not need a portal; it needs the
+            blurred surface to be a sibling rather than an ancestor. */}
+        <div className="glass-panel absolute inset-0" aria-hidden="true" />
+        {/* The mark lives in the window's title bar (TitleBar.jsx), which is
+            full width and has room for the wordmark; the rail's 72px does
+            not. */}
+        {ITEMS.map((item) => (
+          <NavItem key={item.id} item={item} screen={screen} onNavigate={onNavigate} label={t(NAV_KEYS[item.id])} />
+        ))}
+        {/* Pushed to the bottom, below every destination: the update button
+            (App passes it in, a slot rather than the button itself so the
+            rail makes no requests of its own) and Settings beneath it. The
+            slot is nudged 2px so its 44px button's icon lands on the same
+            x=36 centre as the rows above (12px gutter + 2). */}
+        <div className="relative mt-auto flex flex-col items-stretch gap-2">
+          {footer && <div className="flex flex-col items-start pl-[2px]">{footer}</div>}
+          {onReportBug && <ActionItem icon={REPORT_ICON} label={t('nav.reportBug')} onClick={onReportBug} />}
+          <NavItem item={SETTINGS_ITEM} screen={screen} onNavigate={onNavigate} label={t(NAV_KEYS.settings)} />
+        </div>
       </div>
     </nav>
   );
