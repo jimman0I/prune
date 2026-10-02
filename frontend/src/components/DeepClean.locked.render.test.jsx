@@ -54,6 +54,49 @@ async function cleanWith(ruleEvent) {
   return screen.findByTestId('deep-clean-result');
 }
 
+describe('the Delete confirmation names the biggest items', () => {
+  it('lists the largest files of the ticked rules, and only in Delete now mode', async () => {
+    streamDeepCleanScan.mockImplementation(async (onEvent) => {
+      onEvent('start', { total: 1 });
+      onEvent('rule', {
+        id: 'temp', category: 'Windows', name: 'Temporary files', sizeBytes: 5 * 1024 * 1024, fileCount: 3, present: true, accessible: true,
+        filesListed: true,
+        files: [
+          { path: 'C:\\Temp\\installer.cab', sizeBytes: 4 * 1024 * 1024 },
+          { path: 'C:\\Temp\\dump.dmp', sizeBytes: 900 * 1024 },
+          { path: 'C:\\Temp\\a.tmp', sizeBytes: 100 * 1024 },
+          { path: 'C:\\Temp\\tiny.tmp', sizeBytes: 10 }
+        ]
+      });
+    });
+    const user = userEvent.setup();
+    renderScreen(<DeepClean />);
+    await screen.findByText('Temporary files');
+    await runMeasuredPreview(user, streamDeepCleanScan);
+    await user.click(screen.getByRole('button', { name: 'Clean' }));
+    expect(await screen.findByText(/Largest: installer\.cab \(4 MB\), dump\.dmp \(900 KB\), a\.tmp \(100 KB\)/)).toBeTruthy();
+    expect(screen.queryByText(/tiny\.tmp/)).toBeNull();
+  });
+
+  it('says nothing about files in Quarantine mode, where nothing is lost', async () => {
+    settingsRecord = { ...settingsRecord, deepCleanRemoval: 'quarantine' };
+    streamDeepCleanScan.mockImplementation(async (onEvent) => {
+      onEvent('start', { total: 1 });
+      onEvent('rule', {
+        id: 'temp', category: 'Windows', name: 'Temporary files', sizeBytes: 2048, fileCount: 1, present: true, accessible: true,
+        filesListed: true, files: [{ path: 'C:\\Temp\\installer.cab', sizeBytes: 2048 }]
+      });
+    });
+    const user = userEvent.setup();
+    renderScreen(<DeepClean />);
+    await screen.findByText('Temporary files');
+    await runMeasuredPreview(user, streamDeepCleanScan);
+    await user.click(screen.getByRole('button', { name: 'Clean' }));
+    await screen.findByRole('button', { name: 'Move to Quarantine' });
+    expect(screen.queryByText(/Largest:/)).toBeNull();
+  });
+});
+
 describe('locked files scheduled for restart', () => {
   it('says how many will be deleted at the next restart', async () => {
     const banner = await cleanWith({ freedBytes: 2048, scheduledForRestart: 3 });

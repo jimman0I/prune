@@ -48,6 +48,12 @@ export default {
       locked: {
         scheduled: (a) => `Locked files to be deleted at the next restart: ${a}.`,
         needsAdmin: "Some locked files could not be scheduled for deletion at restart, because that needs administrator rights."
+      },
+      files: {
+        show: (a) => `Show files in ${a}`,
+        hide: (a) => `Hide files in ${a}`,
+        heading: (a, b) => `Largest files first: showing ${a} of ${b}`,
+        biggest: (a) => `Largest: ${a}`
       }
     }
   },
@@ -97,6 +103,12 @@ export default {
       locked: {
         scheduled: (a) => `Gesluite lêers wat by die volgende herbegin verwyder sal word: ${a}.`,
         needsAdmin: "Sommige gesluite lêers kon nie vir verwydering by herbegin geskeduleer word nie, omdat dit administrateurregte vereis."
+      },
+      files: {
+        show: (a) => `Wys lêers in ${a}`,
+        hide: (a) => `Versteek lêers in ${a}`,
+        heading: (a, b) => `Grootste lêers eerste: toon ${a} van ${b}`,
+        biggest: (a) => `Grootste: ${a}`
       }
     }
   },
@@ -146,6 +158,12 @@ export default {
       locked: {
         scheduled: (a) => `الملفات المقفلة التي ستُحذف عند إعادة التشغيل التالية: ${a}.`,
         needsAdmin: "تعذّرت جدولة بعض الملفات المقفلة للحذف عند إعادة التشغيل لأن ذلك يتطلب صلاحيات المسؤول."
+      },
+      files: {
+        show: (a) => `عرض الملفات في ${a}`,
+        hide: (a) => `إخفاء الملفات في ${a}`,
+        heading: (a, b) => `الأكبر حجمًا أولًا: عرض ${a} من ${b}`,
+        biggest: (a) => `الأكبر: ${a}`
       }
     }
   },
@@ -195,6 +213,12 @@ export default {
       locked: {
         scheduled: (a) => `Fitxers bloquejats que se suprimiran en el següent reinici: ${a}.`,
         needsAdmin: "Alguns fitxers bloquejats no s'han pogut programar per suprimir-se en el reinici, perquè cal tenir permisos d'administrador."
+      },
+      files: {
+        show: (a) => `Mostra els fitxers de ${a}`,
+        hide: (a) => `Amaga els fitxers de ${a}`,
+        heading: (a, b) => `Primer els fitxers més grans: se'n mostren ${a} de ${b}`,
+        biggest: (a) => `Més grans: ${a}`
       }
     }
   },
@@ -244,6 +268,12 @@ export default {
       locked: {
         scheduled: (a) => `Uzamčené soubory, které se odstraní při příštím restartu: ${a}.`,
         needsAdmin: "Některé uzamčené soubory se nepodařilo naplánovat k odstranění při restartu, protože to vyžaduje práva správce."
+      },
+      files: {
+        show: (a) => `Zobrazit soubory v ${a}`,
+        hide: (a) => `Skrýt soubory v ${a}`,
+        heading: (a, b) => `Od největších souborů: zobrazeno ${a} z ${b}`,
+        biggest: (a) => `Největší: ${a}`
       }
     }
   },
@@ -293,6 +323,12 @@ export default {
       locked: {
         scheduled: (a) => `Ffeiliau wedi'u cloi i'w dileu adeg yr ailgychwyn nesaf: ${a}.`,
         needsAdmin: "Ni ellid trefnu rhai ffeiliau wedi'u cloi i'w dileu adeg ailgychwyn, oherwydd bod angen hawliau gweinyddwr."
+      },
+      files: {
+        show: (a) => `Dangos ffeiliau yn ${a}`,
+        hide: (a) => `Cuddio ffeiliau yn ${a}`,
+        heading: (a, b) => `Y ffeiliau mwyaf yn gyntaf: dangos ${a} o ${b}`,
+        biggest: (a) => `Mwyaf: ${a}`
       }
     }
   },
@@ -342,6 +378,12 @@ export default {
       locked: {
         scheduled: (a) => `Låste filer, der slettes ved næste genstart: ${a}.`,
         needsAdmin: "Nogle låste filer kunne ikke planlægges slettet ved genstart, fordi det kræver administratorrettigheder."
+      },
+      files: {
+        show: (a) => `Vis filer i ${a}`,
+        hide: (a) => `Skjul filer i ${a}`,
+        heading: (a, b) => `Største filer først: viser ${a} af ${b}`,
+        biggest: (a) => `Største: ${a}`
       }
     }
   },
@@ -391,6 +433,12 @@ export default {
       locked: {
         scheduled: (a) => `Gesperrte Dateien, die beim nächsten Neustart gelöscht werden: ${a}.`,
         needsAdmin: "Einige gesperrte Dateien ließen sich nicht für das Löschen beim Neustart vormerken, da dafür Administratorrechte nötig sind."
+      },
+      files: {
+        show: (a) => `Dateien in ${a} anzeigen`,
+        hide: (a) => `Dateien in ${a} ausblenden`,
+        heading: (a, b) => `Größte Dateien zuerst: ${a} von ${b} angezeigt`,
+        biggest: (a) => `Größte: ${a}`
       }
     }
   },
@@ -440,6 +488,12 @@ export default {
       locked: {
         scheduled: (a) => `Κλειδωμένα αρχεία που θα διαγραφούν στην επόμενη επανεκκίνηση: ${a}.`,
         needsAdmin: "Ορισμένα κλειδωμένα αρχεία δεν μπόρεσαν να προγραμματιστούν για διαγραφή στην επανεκκίνηση, επειδή απαιτούνται δικαιώματα διαχειριστή."
+      },
+      files: {
+        show: (a) => `Εμφάνιση αρχείων στο ${a}`,
+        hide: (a) => `Απόκρυψη αρχείων στο ${a}`,
+        heading: (a, b) => `Πρώτα τα μεγαλύτερα αρχεία: εμφάνιση ${a} από ${b}`,
+        biggest: (a) => `Μεγαλύτερα: ${a}`
       }
     }
   },
@@ -489,6 +543,12 @@ export default {
       locked: {
         scheduled: (a) => `Archivos bloqueados que se eliminarán en el próximo reinicio: ${a}.`,
         needsAdmin: "No se pudieron programar algunos archivos bloqueados para eliminarse al reiniciar, porque eso requiere permisos de administrador."
+      },
+      files: {
+        show: (a) => `Mostrar los archivos de ${a}`,
+        hide: (a) => `Ocultar los archivos de ${a}`,
+        heading: (a, b) => `Primero los archivos más grandes: se muestran ${a} de ${b}`,
+        biggest: (a) => `Más grandes: ${a}`
       }
     }
   },
@@ -538,6 +598,12 @@ export default {
       locked: {
         scheduled: (a) => `Lukustatud failid, mis kustutatakse järgmisel taaskäivitusel: ${a}.`,
         needsAdmin: "Mõnda lukustatud faili ei saanud taaskäivitusel kustutamiseks ajastada, sest see nõuab administraatoriõigusi."
+      },
+      files: {
+        show: (a) => `Näita ${a} faile`,
+        hide: (a) => `Peida ${a} failid`,
+        heading: (a, b) => `Suurimad failid esimesena: näidatud ${a} / ${b}`,
+        biggest: (a) => `Suurimad: ${a}`
       }
     }
   },
@@ -587,6 +653,12 @@ export default {
       locked: {
         scheduled: (a) => `Lukitut tiedostot, jotka poistetaan seuraavassa uudelleenkäynnistyksessä: ${a}.`,
         needsAdmin: "Joitakin lukittuja tiedostoja ei voitu ajoittaa poistettavaksi uudelleenkäynnistyksessä, koska se vaatii järjestelmänvalvojan oikeudet."
+      },
+      files: {
+        show: (a) => `Näytä kohteen ${a} tiedostot`,
+        hide: (a) => `Piilota kohteen ${a} tiedostot`,
+        heading: (a, b) => `Suurimmat tiedostot ensin: näytetään ${a} / ${b}`,
+        biggest: (a) => `Suurimmat: ${a}`
       }
     }
   },
@@ -636,6 +708,12 @@ export default {
       locked: {
         scheduled: (a) => `Fichiers verrouillés qui seront supprimés au prochain redémarrage : ${a}.`,
         needsAdmin: "Certains fichiers verrouillés n'ont pas pu être programmés pour suppression au redémarrage, car cela exige des droits d'administrateur."
+      },
+      files: {
+        show: (a) => `Afficher les fichiers de ${a}`,
+        hide: (a) => `Masquer les fichiers de ${a}`,
+        heading: (a, b) => `Plus gros fichiers d’abord : ${a} affichés sur ${b}`,
+        biggest: (a) => `Plus gros : ${a}`
       }
     }
   },
@@ -685,6 +763,12 @@ export default {
       locked: {
         scheduled: (a) => `קבצים נעולים שיימחקו בהפעלה מחדש הבאה: ${a}.`,
         needsAdmin: "לא ניתן היה לתזמן חלק מהקבצים הנעולים למחיקה בהפעלה מחדש, כי הדבר דורש הרשאות מנהל."
+      },
+      files: {
+        show: (a) => `הצג קבצים ב-${a}`,
+        hide: (a) => `הסתר קבצים ב-${a}`,
+        heading: (a, b) => `הקבצים הגדולים ביותר קודם: מוצגים ${a} מתוך ${b}`,
+        biggest: (a) => `הגדולים ביותר: ${a}`
       }
     }
   },
@@ -734,6 +818,12 @@ export default {
       locked: {
         scheduled: (a) => `A következő újraindításkor törlődő zárolt fájlok: ${a}.`,
         needsAdmin: "Néhány zárolt fájl törlését nem sikerült az újraindításra ütemezni, mert ehhez rendszergazdai jogosultság kell."
+      },
+      files: {
+        show: (a) => `${a} fájljainak megjelenítése`,
+        hide: (a) => `${a} fájljainak elrejtése`,
+        heading: (a, b) => `A legnagyobb fájlok elöl: ${a} megjelenítve ${b}-ből`,
+        biggest: (a) => `Legnagyobbak: ${a}`
       }
     }
   },
@@ -783,6 +873,12 @@ export default {
       locked: {
         scheduled: (a) => `File terkunci yang akan dihapus saat restart berikutnya: ${a}.`,
         needsAdmin: "Beberapa file terkunci tidak dapat dijadwalkan untuk dihapus saat restart, karena itu memerlukan hak administrator."
+      },
+      files: {
+        show: (a) => `Tampilkan file di ${a}`,
+        hide: (a) => `Sembunyikan file di ${a}`,
+        heading: (a, b) => `File terbesar lebih dulu: menampilkan ${a} dari ${b}`,
+        biggest: (a) => `Terbesar: ${a}`
       }
     }
   },
@@ -832,6 +928,12 @@ export default {
       locked: {
         scheduled: (a) => `Læstar skrár sem verður eytt við næstu endurræsingu: ${a}.`,
         needsAdmin: "Ekki tókst að tímasetja eyðingu sumra læstra skráa við endurræsingu því það krefst stjórnandaréttinda."
+      },
+      files: {
+        show: (a) => `Sýna skrár í ${a}`,
+        hide: (a) => `Fela skrár í ${a}`,
+        heading: (a, b) => `Stærstu skrárnar fyrst: sýni ${a} af ${b}`,
+        biggest: (a) => `Stærst: ${a}`
       }
     }
   },
@@ -881,6 +983,12 @@ export default {
       locked: {
         scheduled: (a) => `File bloccati che verranno eliminati al prossimo riavvio: ${a}.`,
         needsAdmin: "Alcuni file bloccati non hanno potuto essere programmati per l'eliminazione al riavvio, perché servono i diritti di amministratore."
+      },
+      files: {
+        show: (a) => `Mostra i file di ${a}`,
+        hide: (a) => `Nascondi i file di ${a}`,
+        heading: (a, b) => `Prima i file più grandi: ne vengono mostrati ${a} su ${b}`,
+        biggest: (a) => `Più grandi: ${a}`
       }
     }
   },
@@ -930,6 +1038,12 @@ export default {
       locked: {
         scheduled: (a) => `次回の再起動時に削除されるロック中のファイル：${a}。`,
         needsAdmin: "一部のロック中のファイルは、再起動時の削除を予約できませんでした。予約には管理者権限が必要です。"
+      },
+      files: {
+        show: (a) => `${a} のファイルを表示`,
+        hide: (a) => `${a} のファイルを非表示`,
+        heading: (a, b) => `大きい順に表示：${b} 件中 ${a} 件`,
+        biggest: (a) => `最大：${a}`
       }
     }
   },
@@ -979,6 +1093,12 @@ export default {
       locked: {
         scheduled: (a) => `다음 다시 시작할 때 삭제될 잠긴 파일: ${a}개.`,
         needsAdmin: "일부 잠긴 파일은 관리자 권한이 필요하여 다시 시작할 때 삭제하도록 예약하지 못했습니다."
+      },
+      files: {
+        show: (a) => `${a}의 파일 보기`,
+        hide: (a) => `${a}의 파일 숨기기`,
+        heading: (a, b) => `큰 파일 순서: ${b}개 중 ${a}개 표시`,
+        biggest: (a) => `가장 큰 항목: ${a}`
       }
     }
   },
@@ -1028,6 +1148,12 @@ export default {
       locked: {
         scheduled: (a) => `Užrakinti failai, kurie bus ištrinti kitą kartą paleidus iš naujo: ${a}.`,
         needsAdmin: "Kai kurių užrakintų failų nepavyko suplanuoti ištrinti paleidus iš naujo, nes tam reikia administratoriaus teisių."
+      },
+      files: {
+        show: (a) => `Rodyti failus: ${a}`,
+        hide: (a) => `Slėpti failus: ${a}`,
+        heading: (a, b) => `Pirma didžiausi failai: rodoma ${a} iš ${b}`,
+        biggest: (a) => `Didžiausi: ${a}`
       }
     }
   },
@@ -1077,6 +1203,12 @@ export default {
       locked: {
         scheduled: (a) => `Fail terkunci yang akan dipadam pada mula semula seterusnya: ${a}.`,
         needsAdmin: "Sesetengah fail terkunci tidak dapat dijadualkan untuk dipadam semasa mula semula, kerana itu memerlukan hak pentadbir."
+      },
+      files: {
+        show: (a) => `Tunjukkan fail dalam ${a}`,
+        hide: (a) => `Sembunyikan fail dalam ${a}`,
+        heading: (a, b) => `Fail terbesar dahulu: menunjukkan ${a} daripada ${b}`,
+        biggest: (a) => `Terbesar: ${a}`
       }
     }
   },
@@ -1126,6 +1258,12 @@ export default {
       locked: {
         scheduled: (a) => `Låste filer som slettes ved neste omstart: ${a}.`,
         needsAdmin: "Noen låste filer kunne ikke planlegges slettet ved omstart, fordi det krever administratorrettigheter."
+      },
+      files: {
+        show: (a) => `Vis filer i ${a}`,
+        hide: (a) => `Skjul filer i ${a}`,
+        heading: (a, b) => `Største filer først: viser ${a} av ${b}`,
+        biggest: (a) => `Største: ${a}`
       }
     }
   },
@@ -1175,6 +1313,12 @@ export default {
       locked: {
         scheduled: (a) => `Vergrendelde bestanden die bij de volgende herstart worden verwijderd: ${a}.`,
         needsAdmin: "Sommige vergrendelde bestanden konden niet worden gepland voor verwijdering bij het herstarten, omdat daarvoor beheerdersrechten nodig zijn."
+      },
+      files: {
+        show: (a) => `Bestanden in ${a} tonen`,
+        hide: (a) => `Bestanden in ${a} verbergen`,
+        heading: (a, b) => `Grootste bestanden eerst: ${a} van ${b} getoond`,
+        biggest: (a) => `Grootste: ${a}`
       }
     }
   },
@@ -1224,6 +1368,12 @@ export default {
       locked: {
         scheduled: (a) => `Zablokowane pliki, które zostaną usunięte przy następnym restarcie: ${a}.`,
         needsAdmin: "Nie udało się zaplanować usunięcia niektórych zablokowanych plików przy restarcie, ponieważ wymaga to uprawnień administratora."
+      },
+      files: {
+        show: (a) => `Pokaż pliki w: ${a}`,
+        hide: (a) => `Ukryj pliki w: ${a}`,
+        heading: (a, b) => `Najpierw największe pliki: pokazano ${a} z ${b}`,
+        biggest: (a) => `Największe: ${a}`
       }
     }
   },
@@ -1273,6 +1423,12 @@ export default {
       locked: {
         scheduled: (a) => `تړل شوي فایلونه چې په راتلونکي بیا پیلولو کې ړنګیږي: ${a}.`,
         needsAdmin: "ځینې تړل شوي فایلونه د بیا پیلولو پر مهال د ړنګولو لپاره مهال ویش نشول، ځکه چې دا د مدیر حقونه غواړي."
+      },
+      files: {
+        show: (a) => `په ${a} کې فایلونه ښکاره کړئ`,
+        hide: (a) => `په ${a} کې فایلونه پټ کړئ`,
+        heading: (a, b) => `لوی فایلونه لومړی: ${b} څخه ${a} ښودل کیږي`,
+        biggest: (a) => `تر ټولو لوی: ${a}`
       }
     }
   },
@@ -1322,6 +1478,12 @@ export default {
       locked: {
         scheduled: (a) => `Arquivos bloqueados que serão excluídos na próxima reinicialização: ${a}.`,
         needsAdmin: "Não foi possível agendar alguns arquivos bloqueados para exclusão na reinicialização, pois isso exige direitos de administrador."
+      },
+      files: {
+        show: (a) => `Mostrar arquivos em ${a}`,
+        hide: (a) => `Ocultar arquivos em ${a}`,
+        heading: (a, b) => `Maiores arquivos primeiro: mostrando ${a} de ${b}`,
+        biggest: (a) => `Maiores: ${a}`
       }
     }
   },
@@ -1371,6 +1533,12 @@ export default {
       locked: {
         scheduled: (a) => `Ficheiros bloqueados que serão eliminados no próximo reinício: ${a}.`,
         needsAdmin: "Não foi possível agendar alguns ficheiros bloqueados para eliminação no reinício, porque isso exige direitos de administrador."
+      },
+      files: {
+        show: (a) => `Mostrar ficheiros em ${a}`,
+        hide: (a) => `Ocultar ficheiros em ${a}`,
+        heading: (a, b) => `Maiores ficheiros primeiro: a mostrar ${a} de ${b}`,
+        biggest: (a) => `Maiores: ${a}`
       }
     }
   },
@@ -1420,6 +1588,12 @@ export default {
       locked: {
         scheduled: (a) => `Fișiere blocate care vor fi șterse la următoarea repornire: ${a}.`,
         needsAdmin: "Unele fișiere blocate nu au putut fi programate pentru ștergere la repornire, deoarece aceasta necesită drepturi de administrator."
+      },
+      files: {
+        show: (a) => `Afișează fișierele din ${a}`,
+        hide: (a) => `Ascunde fișierele din ${a}`,
+        heading: (a, b) => `Cele mai mari fișiere primele: se afișează ${a} din ${b}`,
+        biggest: (a) => `Cele mai mari: ${a}`
       }
     }
   },
@@ -1469,6 +1643,12 @@ export default {
       locked: {
         scheduled: (a) => `Заблокированные файлы, которые будут удалены при следующей перезагрузке: ${a}.`,
         needsAdmin: "Некоторые заблокированные файлы не удалось запланировать на удаление при перезагрузке: для этого нужны права администратора."
+      },
+      files: {
+        show: (a) => `Показать файлы: ${a}`,
+        hide: (a) => `Скрыть файлы: ${a}`,
+        heading: (a, b) => `Сначала самые большие файлы: показано ${a} из ${b}`,
+        biggest: (a) => `Самые большие: ${a}`
       }
     }
   },
@@ -1518,6 +1698,12 @@ export default {
       locked: {
         scheduled: (a) => `Uzamknuté súbory, ktoré sa odstránia pri najbližšom reštarte: ${a}.`,
         needsAdmin: "Niektoré uzamknuté súbory sa nepodarilo naplánovať na odstránenie pri reštarte, pretože to vyžaduje oprávnenia správcu."
+      },
+      files: {
+        show: (a) => `Zobraziť súbory v ${a}`,
+        hide: (a) => `Skryť súbory v ${a}`,
+        heading: (a, b) => `Najväčšie súbory ako prvé: zobrazených ${a} z ${b}`,
+        biggest: (a) => `Najväčšie: ${a}`
       }
     }
   },
@@ -1567,6 +1753,12 @@ export default {
       locked: {
         scheduled: (a) => `Skedarë të bllokuar që do të fshihen në rinisjen tjetër: ${a}.`,
         needsAdmin: "Disa skedarë të bllokuar nuk mund të planifikoheshin për fshirje gjatë rinisjes, sepse kjo kërkon të drejta administratori."
+      },
+      files: {
+        show: (a) => `Shfaq skedarët në ${a}`,
+        hide: (a) => `Fshih skedarët në ${a}`,
+        heading: (a, b) => `Skedarët më të mëdhenj së pari: po shfaqen ${a} nga ${b}`,
+        biggest: (a) => `Më të mëdhenjtë: ${a}`
       }
     }
   },
@@ -1616,6 +1808,12 @@ export default {
       locked: {
         scheduled: (a) => `Закључане датотеке које ће бити обрисане при следећем поновном покретању: ${a}.`,
         needsAdmin: "Неке закључане датотеке није било могуће заказати за брисање при поновном покретању, јер је за то потребно администраторско право."
+      },
+      files: {
+        show: (a) => `Прикажи датотеке у ${a}`,
+        hide: (a) => `Сакриј датотеке у ${a}`,
+        heading: (a, b) => `Прво највеће датотеке: приказано ${a} од ${b}`,
+        biggest: (a) => `Највеће: ${a}`
       }
     }
   },
@@ -1665,6 +1863,12 @@ export default {
       locked: {
         scheduled: (a) => `Låsta filer som raderas vid nästa omstart: ${a}.`,
         needsAdmin: "Vissa låsta filer kunde inte schemaläggas för radering vid omstart, eftersom det kräver administratörsbehörighet."
+      },
+      files: {
+        show: (a) => `Visa filer i ${a}`,
+        hide: (a) => `Dölj filer i ${a}`,
+        heading: (a, b) => `Största filerna först: visar ${a} av ${b}`,
+        biggest: (a) => `Störst: ${a}`
       }
     }
   },
@@ -1714,6 +1918,12 @@ export default {
       locked: {
         scheduled: (a) => `ไฟล์ที่ถูกล็อกซึ่งจะถูกลบเมื่อรีสตาร์ตครั้งถัดไป: ${a}`,
         needsAdmin: "ไม่สามารถตั้งเวลาลบไฟล์ที่ถูกล็อกบางไฟล์เมื่อรีสตาร์ตได้ เพราะต้องใช้สิทธิ์ผู้ดูแลระบบ"
+      },
+      files: {
+        show: (a) => `แสดงไฟล์ใน ${a}`,
+        hide: (a) => `ซ่อนไฟล์ใน ${a}`,
+        heading: (a, b) => `ไฟล์ใหญ่สุดก่อน: แสดง ${a} จาก ${b}`,
+        biggest: (a) => `ใหญ่สุด: ${a}`
       }
     }
   },
@@ -1763,6 +1973,12 @@ export default {
       locked: {
         scheduled: (a) => `Bir sonraki yeniden başlatmada silinecek kilitli dosyalar: ${a}.`,
         needsAdmin: "Bazı kilitli dosyalar yeniden başlatmada silinmek üzere zamanlanamadı, çünkü bunun için yönetici hakları gerekir."
+      },
+      files: {
+        show: (a) => `${a} içindeki dosyaları göster`,
+        hide: (a) => `${a} içindeki dosyaları gizle`,
+        heading: (a, b) => `Önce en büyük dosyalar: ${b} içinden ${a} gösteriliyor`,
+        biggest: (a) => `En büyükler: ${a}`
       }
     }
   },
@@ -1812,6 +2028,12 @@ export default {
       locked: {
         scheduled: (a) => `Заблоковані файли, які буде видалено під час наступного перезавантаження: ${a}.`,
         needsAdmin: "Деякі заблоковані файли не вдалося запланувати на видалення під час перезавантаження, бо для цього потрібні права адміністратора."
+      },
+      files: {
+        show: (a) => `Показати файли: ${a}`,
+        hide: (a) => `Сховати файли: ${a}`,
+        heading: (a, b) => `Спочатку найбільші файли: показано ${a} із ${b}`,
+        biggest: (a) => `Найбільші: ${a}`
       }
     }
   },
@@ -1861,6 +2083,12 @@ export default {
       locked: {
         scheduled: (a) => `Các tệp bị khóa sẽ bị xóa ở lần khởi động lại tiếp theo: ${a}.`,
         needsAdmin: "Không thể lên lịch xóa một số tệp bị khóa khi khởi động lại, vì việc đó cần quyền quản trị viên."
+      },
+      files: {
+        show: (a) => `Hiện các tệp trong ${a}`,
+        hide: (a) => `Ẩn các tệp trong ${a}`,
+        heading: (a, b) => `Tệp lớn nhất trước: hiển thị ${a} trên ${b}`,
+        biggest: (a) => `Lớn nhất: ${a}`
       }
     }
   },
@@ -1910,6 +2138,12 @@ export default {
       locked: {
         scheduled: (a) => `将在下次重启时删除的被锁定文件：${a}。`,
         needsAdmin: "部分被锁定的文件无法安排在重启时删除，因为这需要管理员权限。"
+      },
+      files: {
+        show: (a) => `显示 ${a} 中的文件`,
+        hide: (a) => `隐藏 ${a} 中的文件`,
+        heading: (a, b) => `按大小降序：显示 ${b} 个中的 ${a} 个`,
+        biggest: (a) => `最大：${a}`
       }
     }
   },
@@ -1959,6 +2193,12 @@ export default {
       locked: {
         scheduled: (a) => `將在下次重新啟動時刪除的被鎖定檔案：${a}。`,
         needsAdmin: "部分被鎖定的檔案無法安排在重新啟動時刪除，因為這需要系統管理員權限。"
+      },
+      files: {
+        show: (a) => `顯示 ${a} 中的檔案`,
+        hide: (a) => `隱藏 ${a} 中的檔案`,
+        heading: (a, b) => `依大小遞減：顯示 ${b} 個中的 ${a} 個`,
+        biggest: (a) => `最大：${a}`
       }
     }
   }
