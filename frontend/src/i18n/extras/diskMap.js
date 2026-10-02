@@ -23,6 +23,14 @@ export default {
         restarting: "Restarting…",
         restartDeclined: "Not approved — Prune is still running as before.",
         restartFailed: (a) => `Could not restart as administrator: ${a}`
+      },
+      columns: {
+        allocated: "Allocated"
+      },
+      totals: {
+        line: (a, b, c) => `${a} counted · ${b} on disk · ${c} in use on the volume`,
+        lineNoVolume: (a, b) => `${a} counted · ${b} on disk`,
+        hardLinkNote: (a) => `${a} files with several names are counted once.`
       }
     }
   },
@@ -47,6 +55,14 @@ export default {
         restarting: "Herbegin tans…",
         restartDeclined: "Nie goedgekeur nie — Prune loop steeds soos voorheen.",
         restartFailed: (a) => `Kon nie as administrateur herbegin nie: ${a}`
+      },
+      columns: {
+        allocated: "Toegewys"
+      },
+      totals: {
+        line: (a, b, c) => `${a} getel · ${b} op skyf · ${c} in gebruik op die volume`,
+        lineNoVolume: (a, b) => `${a} getel · ${b} op skyf`,
+        hardLinkNote: (a) => `${a} lêers met verskeie name word een keer getel.`
       }
     }
   },
@@ -71,6 +87,14 @@ export default {
         restarting: "جارٍ إعادة التشغيل…",
         restartDeclined: "لم تتم الموافقة — ما زال Prune يعمل كما كان.",
         restartFailed: (a) => `تعذّرت إعادة التشغيل كمسؤول: ${a}`
+      },
+      columns: {
+        allocated: "المخصص"
+      },
+      totals: {
+        line: (a, b, c) => `تم احتساب ${a} · ${b} على القرص · ${c} قيد الاستخدام على وحدة التخزين`,
+        lineNoVolume: (a, b) => `تم احتساب ${a} · ${b} على القرص`,
+        hardLinkNote: (a) => `يُحتسب ${a} من الملفات ذات الأسماء المتعددة مرة واحدة فقط.`
       }
     }
   },
@@ -95,6 +119,14 @@ export default {
         restarting: "Reiniciant…",
         restartDeclined: "No aprovat — Prune continua executant-se com abans.",
         restartFailed: (a) => `No s’ha pogut reiniciar com a administrador: ${a}`
+      },
+      columns: {
+        allocated: "Assignat"
+      },
+      totals: {
+        line: (a, b, c) => `${a} comptats · ${b} al disc · ${c} en ús al volum`,
+        lineNoVolume: (a, b) => `${a} comptats · ${b} al disc`,
+        hardLinkNote: (a) => `${a} fitxers amb diversos noms es compten una sola vegada.`
       }
     }
   },
@@ -119,6 +151,14 @@ export default {
         restarting: "Restartuje se…",
         restartDeclined: "Nepotvrzeno — Prune běží dál jako dřív.",
         restartFailed: (a) => `Restart jako správce se nezdařil: ${a}`
+      },
+      columns: {
+        allocated: "Přidělené"
+      },
+      totals: {
+        line: (a, b, c) => `${a} započítáno · ${b} na disku · ${c} využito na svazku`,
+        lineNoVolume: (a, b) => `${a} započítáno · ${b} na disku`,
+        hardLinkNote: (a) => `${a} souborů s více názvy se počítá jen jednou.`
       }
     }
   },
@@ -143,6 +183,14 @@ export default {
         restarting: "Yn ailgychwyn…",
         restartDeclined: "Heb ei gymeradwyo — mae Prune yn dal i redeg fel o’r blaen.",
         restartFailed: (a) => `Methwyd ailgychwyn fel gweinyddwr: ${a}`
+      },
+      columns: {
+        allocated: "Dyrannwyd"
+      },
+      totals: {
+        line: (a, b, c) => `${a} wedi’u cyfrif · ${b} ar y ddisg · ${c} yn cael eu defnyddio ar y gyfrol`,
+        lineNoVolume: (a, b) => `${a} wedi’u cyfrif · ${b} ar y ddisg`,
+        hardLinkNote: (a) => `Mae ${a} ffeil â sawl enw yn cael eu cyfrif unwaith.`
       }
     }
   },
@@ -167,6 +215,14 @@ export default {
         restarting: "Genstarter…",
         restartDeclined: "Ikke godkendt — Prune kører stadig som før.",
         restartFailed: (a) => `Kunne ikke genstarte som administrator: ${a}`
+      },
+      columns: {
+        allocated: "Allokeret"
+      },
+      totals: {
+        line: (a, b, c) => `${a} talt med · ${b} på disken · ${c} i brug på volumen`,
+        lineNoVolume: (a, b) => `${a} talt med · ${b} på disken`,
+        hardLinkNote: (a) => `${a} filer med flere navne tælles kun én gang.`
       }
     }
   },
@@ -191,6 +247,14 @@ export default {
         restarting: "Wird neu gestartet …",
         restartDeclined: "Nicht genehmigt — Prune läuft weiter wie bisher.",
         restartFailed: (a) => `Neustart als Administrator nicht möglich: ${a}`
+      },
+      columns: {
+        allocated: "Belegt"
+      },
+      totals: {
+        line: (a, b, c) => `${a} gezählt · ${b} auf dem Datenträger · ${c} belegt auf dem Volume`,
+        lineNoVolume: (a, b) => `${a} gezählt · ${b} auf dem Datenträger`,
+        hardLinkNote: (a) => `${a} Dateien mit mehreren Namen werden nur einmal gezählt.`
       }
     }
   },
@@ -215,6 +279,14 @@ export default {
         restarting: "Επανεκκίνηση…",
         restartDeclined: "Δεν εγκρίθηκε — το Prune εξακολουθεί να εκτελείται όπως πριν.",
         restartFailed: (a) => `Δεν ήταν δυνατή η επανεκκίνηση ως διαχειριστής: ${a}`
+      },
+      columns: {
+        allocated: "Εκχωρημένο"
+      },
+      totals: {
+        line: (a, b, c) => `${a} καταμετρημένα · ${b} στον δίσκο · ${c} σε χρήση στον τόμο`,
+        lineNoVolume: (a, b) => `${a} καταμετρημένα · ${b} στον δίσκο`,
+        hardLinkNote: (a) => `${a} αρχεία με πολλά ονόματα μετρώνται μία φορά.`
       }
     }
   },
@@ -239,6 +311,14 @@ export default {
         restarting: "Reiniciando…",
         restartDeclined: "No aprobado: Prune sigue ejecutándose como antes.",
         restartFailed: (a) => `No se pudo reiniciar como administrador: ${a}`
+      },
+      columns: {
+        allocated: "Asignado"
+      },
+      totals: {
+        line: (a, b, c) => `${a} contados · ${b} en disco · ${c} en uso en el volumen`,
+        lineNoVolume: (a, b) => `${a} contados · ${b} en disco`,
+        hardLinkNote: (a) => `${a} archivos con varios nombres se cuentan una sola vez.`
       }
     }
   },
@@ -263,6 +343,14 @@ export default {
         restarting: "Taaskäivitamine…",
         restartDeclined: "Pole heaks kiidetud — Prune töötab edasi nagu varem.",
         restartFailed: (a) => `Administraatorina taaskäivitamine ebaõnnestus: ${a}`
+      },
+      columns: {
+        allocated: "Eraldatud"
+      },
+      totals: {
+        line: (a, b, c) => `${a} loetud · ${b} kettal · ${c} köites kasutusel`,
+        lineNoVolume: (a, b) => `${a} loetud · ${b} kettal`,
+        hardLinkNote: (a) => `${a} mitme nimega faili loetakse ainult üks kord.`
       }
     }
   },
@@ -287,6 +375,14 @@ export default {
         restarting: "Käynnistetään uudelleen…",
         restartDeclined: "Ei hyväksytty — Prune toimii edelleen entiseen tapaan.",
         restartFailed: (a) => `Uudelleenkäynnistys järjestelmänvalvojana epäonnistui: ${a}`
+      },
+      columns: {
+        allocated: "Varattu"
+      },
+      totals: {
+        line: (a, b, c) => `${a} laskettu · ${b} levyllä · ${c} käytössä taltiolla`,
+        lineNoVolume: (a, b) => `${a} laskettu · ${b} levyllä`,
+        hardLinkNote: (a) => `${a} useamman nimen tiedostoa lasketaan vain kerran.`
       }
     }
   },
@@ -311,6 +407,14 @@ export default {
         restarting: "Redémarrage…",
         restartDeclined: "Non approuvé : Prune continue de fonctionner comme avant.",
         restartFailed: (a) => `Impossible de redémarrer en administrateur : ${a}`
+      },
+      columns: {
+        allocated: "Alloué"
+      },
+      totals: {
+        line: (a, b, c) => `${a} comptabilisés · ${b} sur le disque · ${c} utilisés sur le volume`,
+        lineNoVolume: (a, b) => `${a} comptabilisés · ${b} sur le disque`,
+        hardLinkNote: (a) => `${a} fichiers portant plusieurs noms ne sont comptés qu’une fois.`
       }
     }
   },
@@ -335,6 +439,14 @@ export default {
         restarting: "מופעל מחדש…",
         restartDeclined: "לא אושר — Prune ממשיך לפעול כמו קודם.",
         restartFailed: (a) => `לא ניתן להפעיל מחדש כמנהל: ${a}`
+      },
+      columns: {
+        allocated: "מוקצה"
+      },
+      totals: {
+        line: (a, b, c) => `${a} נספרו · ${b} בדיסק · ${c} בשימוש בנפח`,
+        lineNoVolume: (a, b) => `${a} נספרו · ${b} בדיסק`,
+        hardLinkNote: (a) => `${a} קבצים עם כמה שמות נספרים פעם אחת בלבד.`
       }
     }
   },
@@ -359,6 +471,14 @@ export default {
         restarting: "Újraindítás…",
         restartDeclined: "Nincs jóváhagyva — a Prune tovább fut, ahogy eddig.",
         restartFailed: (a) => `A rendszergazdai újraindítás nem sikerült: ${a}`
+      },
+      columns: {
+        allocated: "Lefoglalt"
+      },
+      totals: {
+        line: (a, b, c) => `${a} megszámolva · ${b} lemezen · ${c} használatban a köteten`,
+        lineNoVolume: (a, b) => `${a} megszámolva · ${b} lemezen`,
+        hardLinkNote: (a) => `${a} több névvel rendelkező fájlt csak egyszer számol.`
       }
     }
   },
@@ -383,6 +503,14 @@ export default {
         restarting: "Memulai ulang…",
         restartDeclined: "Tidak disetujui — Prune tetap berjalan seperti sebelumnya.",
         restartFailed: (a) => `Tidak dapat memulai ulang sebagai administrator: ${a}`
+      },
+      columns: {
+        allocated: "Dialokasikan"
+      },
+      totals: {
+        line: (a, b, c) => `${a} dihitung · ${b} di disk · ${c} terpakai pada volume`,
+        lineNoVolume: (a, b) => `${a} dihitung · ${b} di disk`,
+        hardLinkNote: (a) => `${a} file dengan beberapa nama dihitung sekali saja.`
       }
     }
   },
@@ -407,6 +535,14 @@ export default {
         restarting: "Endurræsir…",
         restartDeclined: "Ekki samþykkt — Prune keyrir áfram eins og áður.",
         restartFailed: (a) => `Ekki tókst að endurræsa sem kerfisstjóri: ${a}`
+      },
+      columns: {
+        allocated: "Úthlutað"
+      },
+      totals: {
+        line: (a, b, c) => `${a} talið · ${b} á disknum · ${c} í notkun á bindinu`,
+        lineNoVolume: (a, b) => `${a} talið · ${b} á disknum`,
+        hardLinkNote: (a) => `${a} skrár með mörg nöfn eru aðeins talin einu sinni.`
       }
     }
   },
@@ -431,6 +567,14 @@ export default {
         restarting: "Riavvio…",
         restartDeclined: "Non approvato: Prune continua a funzionare come prima.",
         restartFailed: (a) => `Impossibile riavviare come amministratore: ${a}`
+      },
+      columns: {
+        allocated: "Allocato"
+      },
+      totals: {
+        line: (a, b, c) => `${a} conteggiati · ${b} su disco · ${c} in uso sul volume`,
+        lineNoVolume: (a, b) => `${a} conteggiati · ${b} su disco`,
+        hardLinkNote: (a) => `${a} file con più nomi vengono conteggiati una sola volta.`
       }
     }
   },
@@ -455,6 +599,14 @@ export default {
         restarting: "再起動しています…",
         restartDeclined: "承認されませんでした。Prune はこれまでどおり実行されています。",
         restartFailed: (a) => `管理者として再起動できませんでした: ${a}`
+      },
+      columns: {
+        allocated: "割り当て済み"
+      },
+      totals: {
+        line: (a, b, c) => `カウント ${a} · ディスク上 ${b} · ボリューム使用中 ${c}`,
+        lineNoVolume: (a, b) => `カウント ${a} · ディスク上 ${b}`,
+        hardLinkNote: (a) => `複数の名前を持つ ${a} 個のファイルは 1 回だけ数えています。`
       }
     }
   },
@@ -479,6 +631,14 @@ export default {
         restarting: "다시 시작하는 중…",
         restartDeclined: "승인되지 않았습니다. Prune은 이전과 같이 계속 실행 중입니다.",
         restartFailed: (a) => `관리자 권한으로 다시 시작할 수 없습니다: ${a}`
+      },
+      columns: {
+        allocated: "할당됨"
+      },
+      totals: {
+        line: (a, b, c) => `집계 ${a} · 디스크 ${b} · 볼륨 사용 중 ${c}`,
+        lineNoVolume: (a, b) => `집계 ${a} · 디스크 ${b}`,
+        hardLinkNote: (a) => `이름이 여러 개인 파일 ${a}개는 한 번만 집계됩니다.`
       }
     }
   },
@@ -503,6 +663,14 @@ export default {
         restarting: "Paleidžiama iš naujo…",
         restartDeclined: "Nepatvirtinta — „Prune“ ir toliau veikia kaip anksčiau.",
         restartFailed: (a) => `Nepavyko paleisti iš naujo kaip administratoriaus: ${a}`
+      },
+      columns: {
+        allocated: "Priskirta"
+      },
+      totals: {
+        line: (a, b, c) => `${a} suskaičiuota · ${b} diske · ${c} naudojama tome`,
+        lineNoVolume: (a, b) => `${a} suskaičiuota · ${b} diske`,
+        hardLinkNote: (a) => `${a} failai su keliais pavadinimais skaičiuojami tik vieną kartą.`
       }
     }
   },
@@ -527,6 +695,14 @@ export default {
         restarting: "Memulakan semula…",
         restartDeclined: "Tidak diluluskan — Prune masih berjalan seperti sebelumnya.",
         restartFailed: (a) => `Tidak dapat memulakan semula sebagai pentadbir: ${a}`
+      },
+      columns: {
+        allocated: "Diperuntukkan"
+      },
+      totals: {
+        line: (a, b, c) => `${a} dikira · ${b} pada cakera · ${c} digunakan pada volum`,
+        lineNoVolume: (a, b) => `${a} dikira · ${b} pada cakera`,
+        hardLinkNote: (a) => `${a} fail dengan beberapa nama dikira sekali sahaja.`
       }
     }
   },
@@ -551,6 +727,14 @@ export default {
         restarting: "Starter på nytt…",
         restartDeclined: "Ikke godkjent — Prune kjører fortsatt som før.",
         restartFailed: (a) => `Kunne ikke starte på nytt som administrator: ${a}`
+      },
+      columns: {
+        allocated: "Allokert"
+      },
+      totals: {
+        line: (a, b, c) => `${a} talt · ${b} på disken · ${c} i bruk på volumet`,
+        lineNoVolume: (a, b) => `${a} talt · ${b} på disken`,
+        hardLinkNote: (a) => `${a} filer med flere navn telles bare én gang.`
       }
     }
   },
@@ -575,6 +759,14 @@ export default {
         restarting: "Opnieuw starten…",
         restartDeclined: "Niet goedgekeurd — Prune draait nog steeds zoals eerder.",
         restartFailed: (a) => `Opnieuw starten als beheerder is mislukt: ${a}`
+      },
+      columns: {
+        allocated: "Toegewezen"
+      },
+      totals: {
+        line: (a, b, c) => `${a} geteld · ${b} op schijf · ${c} in gebruik op het volume`,
+        lineNoVolume: (a, b) => `${a} geteld · ${b} op schijf`,
+        hardLinkNote: (a) => `${a} bestanden met meerdere namen worden maar één keer geteld.`
       }
     }
   },
@@ -599,6 +791,14 @@ export default {
         restarting: "Ponowne uruchamianie…",
         restartDeclined: "Nie zatwierdzono — Prune działa nadal jak wcześniej.",
         restartFailed: (a) => `Nie udało się uruchomić ponownie jako administrator: ${a}`
+      },
+      columns: {
+        allocated: "Przydzielone"
+      },
+      totals: {
+        line: (a, b, c) => `${a} policzone · ${b} na dysku · ${c} zajęte na woluminie`,
+        lineNoVolume: (a, b) => `${a} policzone · ${b} na dysku`,
+        hardLinkNote: (a) => `${a} plików z wieloma nazwami jest liczonych tylko raz.`
       }
     }
   },
@@ -623,6 +823,14 @@ export default {
         restarting: "بیا پیلیږي…",
         restartDeclined: "ونه منل شو — Prune لا هم پخوا په څیر چلیږي.",
         restartFailed: (a) => `د اډمین په توګه بیا پیل نشو: ${a}`
+      },
+      columns: {
+        allocated: "ځانګړی شوی"
+      },
+      totals: {
+        line: (a, b, c) => `${a} شمیرل شوي · ${b} په ډیسک کې · ${c} په حجم کې کارول شوي`,
+        lineNoVolume: (a, b) => `${a} شمیرل شوي · ${b} په ډیسک کې`,
+        hardLinkNote: (a) => `${a} فایلونه چې څو نومونه لري یوازې یو ځل شمیرل کیږي.`
       }
     }
   },
@@ -647,6 +855,14 @@ export default {
         restarting: "Reiniciando…",
         restartDeclined: "Não aprovado — o Prune continua em execução como antes.",
         restartFailed: (a) => `Não foi possível reiniciar como administrador: ${a}`
+      },
+      columns: {
+        allocated: "Alocado"
+      },
+      totals: {
+        line: (a, b, c) => `${a} contados · ${b} em disco · ${c} em uso no volume`,
+        lineNoVolume: (a, b) => `${a} contados · ${b} em disco`,
+        hardLinkNote: (a) => `${a} arquivos com vários nomes são contados uma única vez.`
       }
     }
   },
@@ -671,6 +887,14 @@ export default {
         restarting: "A reiniciar…",
         restartDeclined: "Não aprovado — o Prune continua a ser executado como antes.",
         restartFailed: (a) => `Não foi possível reiniciar como administrador: ${a}`
+      },
+      columns: {
+        allocated: "Alocado"
+      },
+      totals: {
+        line: (a, b, c) => `${a} contabilizados · ${b} em disco · ${c} em utilização no volume`,
+        lineNoVolume: (a, b) => `${a} contabilizados · ${b} em disco`,
+        hardLinkNote: (a) => `${a} ficheiros com vários nomes são contabilizados uma única vez.`
       }
     }
   },
@@ -695,6 +919,14 @@ export default {
         restarting: "Se repornește…",
         restartDeclined: "Neaprobat — Prune rulează în continuare ca înainte.",
         restartFailed: (a) => `Nu s-a putut reporni ca administrator: ${a}`
+      },
+      columns: {
+        allocated: "Alocat"
+      },
+      totals: {
+        line: (a, b, c) => `${a} contorizați · ${b} pe disc · ${c} utilizați pe volum`,
+        lineNoVolume: (a, b) => `${a} contorizați · ${b} pe disc`,
+        hardLinkNote: (a) => `${a} fișiere cu mai multe nume sunt numărate o singură dată.`
       }
     }
   },
@@ -719,6 +951,14 @@ export default {
         restarting: "Перезапуск…",
         restartDeclined: "Не подтверждено — Prune продолжает работать как раньше.",
         restartFailed: (a) => `Не удалось перезапустить от имени администратора: ${a}`
+      },
+      columns: {
+        allocated: "Выделено"
+      },
+      totals: {
+        line: (a, b, c) => `${a} учтено · ${b} на диске · ${c} занято на томе`,
+        lineNoVolume: (a, b) => `${a} учтено · ${b} на диске`,
+        hardLinkNote: (a) => `${a} файлов с несколькими именами учтены один раз.`
       }
     }
   },
@@ -743,6 +983,14 @@ export default {
         restarting: "Reštartuje sa…",
         restartDeclined: "Nepotvrdené — Prune beží naďalej ako predtým.",
         restartFailed: (a) => `Reštart ako správca sa nepodaril: ${a}`
+      },
+      columns: {
+        allocated: "Pridelené"
+      },
+      totals: {
+        line: (a, b, c) => `${a} započítané · ${b} na disku · ${c} využité na zväzku`,
+        lineNoVolume: (a, b) => `${a} započítané · ${b} na disku`,
+        hardLinkNote: (a) => `${a} súborov s viacerými názvami sa počíta iba raz.`
       }
     }
   },
@@ -767,6 +1015,14 @@ export default {
         restarting: "Po rindizet…",
         restartDeclined: "Nuk u miratua — Prune vazhdon të ekzekutohet si më parë.",
         restartFailed: (a) => `Nuk u rindez dot si administrator: ${a}`
+      },
+      columns: {
+        allocated: "Të alokuara"
+      },
+      totals: {
+        line: (a, b, c) => `${a} të numëruara · ${b} në disk · ${c} në përdorim në vëllim`,
+        lineNoVolume: (a, b) => `${a} të numëruara · ${b} në disk`,
+        hardLinkNote: (a) => `${a} skedarë me disa emra numërohen vetëm një herë.`
       }
     }
   },
@@ -791,6 +1047,14 @@ export default {
         restarting: "Поновно покретање…",
         restartDeclined: "Није одобрено — Prune и даље ради као раније.",
         restartFailed: (a) => `Није могуће поново покренути као администратор: ${a}`
+      },
+      columns: {
+        allocated: "Додељено"
+      },
+      totals: {
+        line: (a, b, c) => `${a} урачунато · ${b} на диску · ${c} у употреби на волумену`,
+        lineNoVolume: (a, b) => `${a} урачунато · ${b} на диску`,
+        hardLinkNote: (a) => `${a} датотека са више имена рачуна се само једном.`
       }
     }
   },
@@ -815,6 +1079,14 @@ export default {
         restarting: "Startar om…",
         restartDeclined: "Inte godkänt — Prune körs fortfarande som förut.",
         restartFailed: (a) => `Det gick inte att starta om som administratör: ${a}`
+      },
+      columns: {
+        allocated: "Allokerat"
+      },
+      totals: {
+        line: (a, b, c) => `${a} räknade · ${b} på disken · ${c} används på volymen`,
+        lineNoVolume: (a, b) => `${a} räknade · ${b} på disken`,
+        hardLinkNote: (a) => `${a} filer med flera namn räknas bara en gång.`
       }
     }
   },
@@ -839,6 +1111,14 @@ export default {
         restarting: "กำลังรีสตาร์ท…",
         restartDeclined: "ไม่ได้รับอนุมัติ — Prune ยังทำงานเหมือนเดิม",
         restartFailed: (a) => `รีสตาร์ทในฐานะผู้ดูแลระบบไม่ได้: ${a}`
+      },
+      columns: {
+        allocated: "จัดสรรแล้ว"
+      },
+      totals: {
+        line: (a, b, c) => `นับได้ ${a} · บนดิสก์ ${b} · ใช้อยู่บนวอลุ่ม ${c}`,
+        lineNoVolume: (a, b) => `นับได้ ${a} · บนดิสก์ ${b}`,
+        hardLinkNote: (a) => `ไฟล์ ${a} ไฟล์ที่มีหลายชื่อจะนับเพียงครั้งเดียว`
       }
     }
   },
@@ -863,6 +1143,14 @@ export default {
         restarting: "Yeniden başlatılıyor…",
         restartDeclined: "Onaylanmadı — Prune eskisi gibi çalışmaya devam ediyor.",
         restartFailed: (a) => `Yönetici olarak yeniden başlatılamadı: ${a}`
+      },
+      columns: {
+        allocated: "Ayrılan"
+      },
+      totals: {
+        line: (a, b, c) => `${a} sayıldı · ${b} diskte · ${c} birimde kullanımda`,
+        lineNoVolume: (a, b) => `${a} sayıldı · ${b} diskte`,
+        hardLinkNote: (a) => `Birden fazla adı olan ${a} dosya yalnızca bir kez sayılır.`
       }
     }
   },
@@ -887,6 +1175,14 @@ export default {
         restarting: "Перезапуск…",
         restartDeclined: "Не підтверджено — Prune працює як і раніше.",
         restartFailed: (a) => `Не вдалося перезапустити від імені адміністратора: ${a}`
+      },
+      columns: {
+        allocated: "Виділено"
+      },
+      totals: {
+        line: (a, b, c) => `${a} враховано · ${b} на диску · ${c} зайнято на томі`,
+        lineNoVolume: (a, b) => `${a} враховано · ${b} на диску`,
+        hardLinkNote: (a) => `${a} файлів із кількома іменами враховано лише раз.`
       }
     }
   },
@@ -911,6 +1207,14 @@ export default {
         restarting: "Đang khởi động lại…",
         restartDeclined: "Chưa được chấp thuận — Prune vẫn chạy như trước.",
         restartFailed: (a) => `Không thể khởi động lại với quyền quản trị: ${a}`
+      },
+      columns: {
+        allocated: "Đã cấp phát"
+      },
+      totals: {
+        line: (a, b, c) => `${a} đã tính · ${b} trên đĩa · ${c} đang dùng trên ổ`,
+        lineNoVolume: (a, b) => `${a} đã tính · ${b} trên đĩa`,
+        hardLinkNote: (a) => `${a} tệp có nhiều tên chỉ được tính một lần.`
       }
     }
   },
@@ -935,6 +1239,14 @@ export default {
         restarting: "正在重启…",
         restartDeclined: "未获批准 — Prune 仍照常运行。",
         restartFailed: (a) => `无法以管理员身份重启：${a}`
+      },
+      columns: {
+        allocated: "已分配"
+      },
+      totals: {
+        line: (a, b, c) => `已统计 ${a} · 磁盘占用 ${b} · 卷已用 ${c}`,
+        lineNoVolume: (a, b) => `已统计 ${a} · 磁盘占用 ${b}`,
+        hardLinkNote: (a) => `${a} 个有多个名称的文件只计算一次。`
       }
     }
   },
@@ -959,6 +1271,14 @@ export default {
         restarting: "正在重新啟動…",
         restartDeclined: "未獲核准 — Prune 仍照常執行。",
         restartFailed: (a) => `無法以系統管理員身分重新啟動：${a}`
+      },
+      columns: {
+        allocated: "已配置"
+      },
+      totals: {
+        line: (a, b, c) => `已統計 ${a} · 磁碟占用 ${b} · 磁碟區已使用 ${c}`,
+        lineNoVolume: (a, b) => `已統計 ${a} · 磁碟占用 ${b}`,
+        hardLinkNote: (a) => `${a} 個有多個名稱的檔案只計算一次。`
       }
     }
   }

@@ -200,3 +200,30 @@ describe('the Disk Map drive picker', () => {
     expect(screen.queryByRole('group', { name: 'Drives' })).toBeNull();
   });
 });
+
+describe('the Disk Map scan totals', () => {
+  it('lays the counted size, the size on disk and the volume\'s own used figure side by side', async () => {
+    scanDriveFast.mockResolvedValue({
+      drives: [{
+        driveLetter: 'C', tree: treeFor('C:', 'c-file.bin'),
+        stats: { recordsRead: 5, totalBytes: 10 * GB, allocatedBytes: 11 * GB, bitmapUsedBytes: 12 * GB, hardLinkedFiles: 3 }
+      }]
+    });
+    const user = userEvent.setup();
+    mount();
+    await user.click(await screen.findByRole('button', { name: 'Fast scan (admin)' }));
+    const totals = await screen.findByTestId('scan-totals');
+    expect(totals.textContent).toContain('10 GB counted · 11 GB on disk · 12 GB in use on the volume');
+    expect(totals.textContent).toContain('3 files with several names are counted once.');
+  });
+
+  it('says nothing about the volume when it could not be read', async () => {
+    scanDriveFast.mockResolvedValue({
+      drives: [{ driveLetter: 'C', tree: treeFor('C:', 'c-file.bin'), stats: { totalBytes: 10 * GB, allocatedBytes: 11 * GB, bitmapUsedBytes: null } }]
+    });
+    const user = userEvent.setup();
+    mount();
+    await user.click(await screen.findByRole('button', { name: 'Fast scan (admin)' }));
+    expect((await screen.findByTestId('scan-totals')).textContent).toBe('10 GB counted · 11 GB on disk');
+  });
+});
