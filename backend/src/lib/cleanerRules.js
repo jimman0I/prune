@@ -73,7 +73,10 @@ export function resolveBespokeActionPaths(expandedPath) {
  * small and this is never a hot path, so there's no reason to cache it
  * and risk serving a stale copy after an edit. */
 export function loadCleanerRules() {
-  return JSON.parse(readFileSync(CLEANERS_JSON_PATH, 'utf8'));
+  // UNREVO_CLEANERS_PATH swaps in another rule set -- how the command line's
+  // tests run a real clean against a temp folder instead of the real rules.
+  // Same env-override pattern as UNREVO_SETTINGS_PATH.
+  return JSON.parse(readFileSync(process.env.UNREVO_CLEANERS_PATH || CLEANERS_JSON_PATH, 'utf8'));
 }
 
 /** Gives every rule an `actions` array, synthesizing one from the legacy
