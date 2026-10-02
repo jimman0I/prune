@@ -114,30 +114,29 @@ describe('the logo, which has to line up with the nav rail underneath it', () =>
     expect(logoCenter).toBe(narrowIconCenter);
   });
 
-  it('also lines up with the icon column of the wide, labelled rail (1100px and up)', () => {
-    /* The wide rail is ~200px with the label beside each icon, and its icons
-     * are LEFT-aligned rather than centred -- so the centre is the sum of
-     * the rail's side gutter, the button's own left padding, and half the
-     * glyph. That sum has to land on the same x as the logo, or the mark
-     * jumps sideways relative to the icons the moment the window crosses
-     * 1100px. Read from the same source, for the same reason as above. */
+  it('also lines up with the icon column once the rail has widened on hover', () => {
+    /* The rail widens over the page, but its icons are LEFT-aligned in a
+     * fixed gutter: the centre is the panel's side padding, plus the
+     * button's own left padding, plus half the glyph. That sum has to
+     * land on the same x as the logo and on the collapsed 72px column's
+     * centre, or the icons slide sideways while the rail grows. Read from
+     * the same source, for the same reason as above. */
     render(<TitleBar />);
     const logoLeft = Number(screen.getByRole('banner').className.match(/pl-\[(\d+)px\]/)[1]);
     const logoCenter = logoLeft + Number(document.querySelector('img').className.match(/w-(\d+)/)[1]) * 4 / 2;
 
     const navSource = readFileSync(resolve(process.cwd(), 'src/components/NavRail.jsx'), 'utf8');
-    const gutter = navSource.match(/<nav[^>]*\bmin-\[1100px\]:px-\[(\d+)px\]/);
-    const inset = navSource.match(/<motion\.button[\s\S]*?min-\[1100px\]:pl-\[(\d+)px\]/);
-    const wideWidth = navSource.match(/<nav[^>]*\bmin-\[1100px\]:w-\[(\d+)px\]/);
-    expect(gutter, 'expected min-[1100px]:px-[Npx] on the nav').toBeTruthy();
-    expect(inset, 'expected min-[1100px]:pl-[Npx] on the nav button').toBeTruthy();
-    expect(wideWidth, 'expected min-[1100px]:w-[Npx] on the nav').toBeTruthy();
+    const gutter = navSource.match(/group\/rail[^"]*\spx-\[(\d+)px\]/);
+    const inset = navSource.match(/<motion\.button[\s\S]*?\spl-\[(\d+)px\]/);
+    const expanded = navSource.match(/group\/rail[^"]*\shover:w-\[(\d+)px\]/);
+    expect(gutter, 'expected px-[Npx] on the rail panel').toBeTruthy();
+    expect(inset, 'expected pl-[Npx] on the nav button').toBeTruthy();
+    expect(expanded, 'expected hover:w-[Npx] on the rail panel').toBeTruthy();
     const iconWidth = Number(navSource.match(/<svg[^>]*width="(\d+)"/)[1]);
 
-    const wideIconCenter = Number(gutter[1]) + Number(inset[1]) + iconWidth / 2;
-    expect(wideIconCenter).toBe(logoCenter);
-    // And the wide rail is wider than the narrow one, or the breakpoint does nothing.
-    expect(Number(wideWidth[1])).toBeGreaterThan(Number(navSource.match(/<nav[^>]*?\sw-\[(\d+)px\]/)[1]));
+    expect(Number(gutter[1]) + Number(inset[1]) + iconWidth / 2).toBe(logoCenter);
+    // And the expanded rail is wider than the collapsed one, or hovering does nothing.
+    expect(Number(expanded[1])).toBeGreaterThan(Number(navSource.match(/<nav[^>]*?\sw-\[(\d+)px\]/)[1]));
   });
 });
 
@@ -159,11 +158,17 @@ describe('the height, which two files have to agree on', () => {
 
     // From the vitest root (frontend/), not from import.meta.url -- which
     // is not a file: URL under the jsdom environment's transform.
-    const mainPath = resolve(process.cwd(), '../electron/main.cjs');
-    const declared = readFileSync(mainPath, 'utf8').match(/titleBarOverlay:\s*\{[\s\S]*?height:\s*(\d+)/);
-
-    expect(declared, 'titleBarOverlay.height not found in electron/main.cjs').toBeTruthy();
+    const electronDir = resolve(process.cwd(), '../electron');
+    // The overlay height is no longer a literal in main.cjs: it is the
+    // base height scaled by the page zoom (zoom.cjs), so the native
+    // buttons stay matched to this bar at every zoom level. The base is
+    // the number that has to equal h-10; main.cjs has to actually use it.
+    const base = readFileSync(resolve(electronDir, 'zoom.cjs'), 'utf8').match(/TITLEBAR_BASE_HEIGHT\s*=\s*(\d+)/);
+    expect(base, 'TITLEBAR_BASE_HEIGHT not found in electron/zoom.cjs').toBeTruthy();
     // h-10 is Tailwind's 2.5rem, which is 40px at the default root size.
-    expect(Number(declared[1])).toBe(40);
+    expect(Number(base[1])).toBe(40);
+
+    const main = readFileSync(resolve(electronDir, 'main.cjs'), 'utf8');
+    expect(main).toMatch(/titleBarOverlay:\s*\{[\s\S]*?height:\s*titleBarOverlayHeight\(/);
   });
 });

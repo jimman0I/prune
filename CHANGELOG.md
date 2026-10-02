@@ -28,6 +28,13 @@ see v1.0.1 below) are documented here.
 
 ### Changed
 
+- **The sidebar is icons only until you point at it.** It rests at 72px
+  and widens over the page, with a short transition, when the pointer
+  enters it or keyboard focus lands in it, then folds back. It widens
+  over the content rather than pushing it, so no screen re-lays-out as
+  you pass the mouse across. Icons never move while it opens. This
+  replaces the old behaviour where the labelled sidebar appeared only
+  in windows 1100px or wider.
 - **Deep Clean scans automatically instead of waiting for Preview.**
   Opening the screen now starts the scan immediately; Preview still
   exists for re-scanning after changing settings, but the
@@ -35,6 +42,21 @@ see v1.0.1 below) are documented here.
 
 ### Fixed
 
+- **Prune no longer sometimes opens in English.** Two causes. The screen
+  painted English until the settings request came back and stayed English
+  if that request failed (the backend still starting); the last language
+  is now remembered locally, as the theme is, and used until settings
+  answer. And settings were saved by writing the file in place with no
+  queue, so a read landing mid-save saw a half-written file, fell back to
+  English defaults, and the next save could write those defaults over your
+  real choices; saves are now queued and written atomically, which also
+  stops two overlapping saves from losing one of the changes.
+- **Minimize, maximize and close stay aligned with the title bar when you
+  zoom** (Ctrl+minus, Ctrl+plus, Ctrl+scroll). Windows draws those buttons
+  at a fixed height that knew nothing about the app's own zoom, so any
+  zoom other than 100% left them off-centre against the bar.
+- **The 16 new cleaner rules now have names and descriptions in all 39
+  languages** instead of showing English.
 - **Deep Clean's Recent Items rule no longer deletes Quick Access pins.**
   The rule was a bare folder-exists delete that happened to sweep up the
   same jump-list file File Explorer uses to remember pinned Quick Access
