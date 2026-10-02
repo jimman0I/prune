@@ -25,12 +25,16 @@ export default {
         restartFailed: (a) => `Could not restart as administrator: ${a}`
       },
       columns: {
-        allocated: "Allocated"
+        allocated: "Allocated",
+        name: "Name"
       },
       totals: {
         line: (a, b, c) => `${a} counted · ${b} on disk · ${c} in use on the volume`,
         lineNoVolume: (a, b) => `${a} counted · ${b} on disk`,
         hardLinkNote: (a) => `${a} files with several names are counted once.`
+      },
+      filesView: {
+        sortBy: "Sort by"
       }
     }
   },
@@ -57,12 +61,16 @@ export default {
         restartFailed: (a) => `Kon nie as administrateur herbegin nie: ${a}`
       },
       columns: {
-        allocated: "Toegewys"
+        allocated: "Toegewys",
+        name: "Naam"
       },
       totals: {
         line: (a, b, c) => `${a} getel · ${b} op skyf · ${c} in gebruik op die volume`,
         lineNoVolume: (a, b) => `${a} getel · ${b} op skyf`,
         hardLinkNote: (a) => `${a} lêers met verskeie name word een keer getel.`
+      },
+      filesView: {
+        sortBy: "Sorteer volgens"
       }
     }
   },
@@ -89,12 +97,16 @@ export default {
         restartFailed: (a) => `تعذّرت إعادة التشغيل كمسؤول: ${a}`
       },
       columns: {
-        allocated: "المخصص"
+        allocated: "المخصص",
+        name: "الاسم"
       },
       totals: {
         line: (a, b, c) => `تم احتساب ${a} · ${b} على القرص · ${c} قيد الاستخدام على وحدة التخزين`,
         lineNoVolume: (a, b) => `تم احتساب ${a} · ${b} على القرص`,
         hardLinkNote: (a) => `يُحتسب ${a} من الملفات ذات الأسماء المتعددة مرة واحدة فقط.`
+      },
+      filesView: {
+        sortBy: "ترتيب حسب"
       }
     }
   },
@@ -121,12 +133,16 @@ export default {
         restartFailed: (a) => `No s’ha pogut reiniciar com a administrador: ${a}`
       },
       columns: {
-        allocated: "Assignat"
+        allocated: "Assignat",
+        name: "Nom"
       },
       totals: {
         line: (a, b, c) => `${a} comptats · ${b} al disc · ${c} en ús al volum`,
         lineNoVolume: (a, b) => `${a} comptats · ${b} al disc`,
         hardLinkNote: (a) => `${a} fitxers amb diversos noms es compten una sola vegada.`
+      },
+      filesView: {
+        sortBy: "Ordena per"
       }
     }
   },
@@ -153,12 +169,16 @@ export default {
         restartFailed: (a) => `Restart jako správce se nezdařil: ${a}`
       },
       columns: {
-        allocated: "Přidělené"
+        allocated: "Přidělené",
+        name: "Název"
       },
       totals: {
         line: (a, b, c) => `${a} započítáno · ${b} na disku · ${c} využito na svazku`,
         lineNoVolume: (a, b) => `${a} započítáno · ${b} na disku`,
         hardLinkNote: (a) => `${a} souborů s více názvy se počítá jen jednou.`
+      },
+      filesView: {
+        sortBy: "Seřadit podle"
       }
     }
   },
@@ -185,12 +205,16 @@ export default {
         restartFailed: (a) => `Methwyd ailgychwyn fel gweinyddwr: ${a}`
       },
       columns: {
-        allocated: "Dyrannwyd"
+        allocated: "Dyrannwyd",
+        name: "Enw"
       },
       totals: {
         line: (a, b, c) => `${a} wedi’u cyfrif · ${b} ar y ddisg · ${c} yn cael eu defnyddio ar y gyfrol`,
         lineNoVolume: (a, b) => `${a} wedi’u cyfrif · ${b} ar y ddisg`,
         hardLinkNote: (a) => `Mae ${a} ffeil â sawl enw yn cael eu cyfrif unwaith.`
+      },
+      filesView: {
+        sortBy: "Trefnu yn ôl"
       }
     }
   },
@@ -217,12 +241,16 @@ export default {
         restartFailed: (a) => `Kunne ikke genstarte som administrator: ${a}`
       },
       columns: {
-        allocated: "Allokeret"
+        allocated: "Allokeret",
+        name: "Navn"
       },
       totals: {
         line: (a, b, c) => `${a} talt med · ${b} på disken · ${c} i brug på volumen`,
         lineNoVolume: (a, b) => `${a} talt med · ${b} på disken`,
         hardLinkNote: (a) => `${a} filer med flere navne tælles kun én gang.`
+      },
+      filesView: {
+        sortBy: "Sortér efter"
       }
     }
   },
@@ -249,12 +277,16 @@ export default {
         restartFailed: (a) => `Neustart als Administrator nicht möglich: ${a}`
       },
       columns: {
-        allocated: "Belegt"
+        allocated: "Belegt",
+        name: "Name"
       },
       totals: {
         line: (a, b, c) => `${a} gezählt · ${b} auf dem Datenträger · ${c} belegt auf dem Volume`,
         lineNoVolume: (a, b) => `${a} gezählt · ${b} auf dem Datenträger`,
         hardLinkNote: (a) => `${a} Dateien mit mehreren Namen werden nur einmal gezählt.`
+      },
+      filesView: {
+        sortBy: "Sortieren nach"
       }
     }
   },
@@ -281,12 +313,16 @@ export default {
         restartFailed: (a) => `Δεν ήταν δυνατή η επανεκκίνηση ως διαχειριστής: ${a}`
       },
       columns: {
-        allocated: "Εκχωρημένο"
+        allocated: "Εκχωρημένο",
+        name: "Όνομα"
       },
       totals: {
         line: (a, b, c) => `${a} καταμετρημένα · ${b} στον δίσκο · ${c} σε χρήση στον τόμο`,
         lineNoVolume: (a, b) => `${a} καταμετρημένα · ${b} στον δίσκο`,
         hardLinkNote: (a) => `${a} αρχεία με πολλά ονόματα μετρώνται μία φορά.`
+      },
+      filesView: {
+        sortBy: "Ταξινόμηση κατά"
       }
     }
   },
@@ -313,12 +349,16 @@ export default {
         restartFailed: (a) => `No se pudo reiniciar como administrador: ${a}`
       },
       columns: {
-        allocated: "Asignado"
+        allocated: "Asignado",
+        name: "Nombre"
       },
       totals: {
         line: (a, b, c) => `${a} contados · ${b} en disco · ${c} en uso en el volumen`,
         lineNoVolume: (a, b) => `${a} contados · ${b} en disco`,
         hardLinkNote: (a) => `${a} archivos con varios nombres se cuentan una sola vez.`
+      },
+      filesView: {
+        sortBy: "Ordenar por"
       }
     }
   },
@@ -345,12 +385,16 @@ export default {
         restartFailed: (a) => `Administraatorina taaskäivitamine ebaõnnestus: ${a}`
       },
       columns: {
-        allocated: "Eraldatud"
+        allocated: "Eraldatud",
+        name: "Nimi"
       },
       totals: {
         line: (a, b, c) => `${a} loetud · ${b} kettal · ${c} köites kasutusel`,
         lineNoVolume: (a, b) => `${a} loetud · ${b} kettal`,
         hardLinkNote: (a) => `${a} mitme nimega faili loetakse ainult üks kord.`
+      },
+      filesView: {
+        sortBy: "Sorteeri"
       }
     }
   },
@@ -377,12 +421,16 @@ export default {
         restartFailed: (a) => `Uudelleenkäynnistys järjestelmänvalvojana epäonnistui: ${a}`
       },
       columns: {
-        allocated: "Varattu"
+        allocated: "Varattu",
+        name: "Nimi"
       },
       totals: {
         line: (a, b, c) => `${a} laskettu · ${b} levyllä · ${c} käytössä taltiolla`,
         lineNoVolume: (a, b) => `${a} laskettu · ${b} levyllä`,
         hardLinkNote: (a) => `${a} useamman nimen tiedostoa lasketaan vain kerran.`
+      },
+      filesView: {
+        sortBy: "Lajittelu"
       }
     }
   },
@@ -409,12 +457,16 @@ export default {
         restartFailed: (a) => `Impossible de redémarrer en administrateur : ${a}`
       },
       columns: {
-        allocated: "Alloué"
+        allocated: "Alloué",
+        name: "Nom"
       },
       totals: {
         line: (a, b, c) => `${a} comptabilisés · ${b} sur le disque · ${c} utilisés sur le volume`,
         lineNoVolume: (a, b) => `${a} comptabilisés · ${b} sur le disque`,
         hardLinkNote: (a) => `${a} fichiers portant plusieurs noms ne sont comptés qu’une fois.`
+      },
+      filesView: {
+        sortBy: "Trier par"
       }
     }
   },
@@ -441,12 +493,16 @@ export default {
         restartFailed: (a) => `לא ניתן להפעיל מחדש כמנהל: ${a}`
       },
       columns: {
-        allocated: "מוקצה"
+        allocated: "מוקצה",
+        name: "שם"
       },
       totals: {
         line: (a, b, c) => `${a} נספרו · ${b} בדיסק · ${c} בשימוש בנפח`,
         lineNoVolume: (a, b) => `${a} נספרו · ${b} בדיסק`,
         hardLinkNote: (a) => `${a} קבצים עם כמה שמות נספרים פעם אחת בלבד.`
+      },
+      filesView: {
+        sortBy: "מיין לפי"
       }
     }
   },
@@ -473,12 +529,16 @@ export default {
         restartFailed: (a) => `A rendszergazdai újraindítás nem sikerült: ${a}`
       },
       columns: {
-        allocated: "Lefoglalt"
+        allocated: "Lefoglalt",
+        name: "Név"
       },
       totals: {
         line: (a, b, c) => `${a} megszámolva · ${b} lemezen · ${c} használatban a köteten`,
         lineNoVolume: (a, b) => `${a} megszámolva · ${b} lemezen`,
         hardLinkNote: (a) => `${a} több névvel rendelkező fájlt csak egyszer számol.`
+      },
+      filesView: {
+        sortBy: "Rendezés"
       }
     }
   },
@@ -505,12 +565,16 @@ export default {
         restartFailed: (a) => `Tidak dapat memulai ulang sebagai administrator: ${a}`
       },
       columns: {
-        allocated: "Dialokasikan"
+        allocated: "Dialokasikan",
+        name: "Nama"
       },
       totals: {
         line: (a, b, c) => `${a} dihitung · ${b} di disk · ${c} terpakai pada volume`,
         lineNoVolume: (a, b) => `${a} dihitung · ${b} di disk`,
         hardLinkNote: (a) => `${a} file dengan beberapa nama dihitung sekali saja.`
+      },
+      filesView: {
+        sortBy: "Urutkan menurut"
       }
     }
   },
@@ -537,12 +601,16 @@ export default {
         restartFailed: (a) => `Ekki tókst að endurræsa sem kerfisstjóri: ${a}`
       },
       columns: {
-        allocated: "Úthlutað"
+        allocated: "Úthlutað",
+        name: "Heiti"
       },
       totals: {
         line: (a, b, c) => `${a} talið · ${b} á disknum · ${c} í notkun á bindinu`,
         lineNoVolume: (a, b) => `${a} talið · ${b} á disknum`,
         hardLinkNote: (a) => `${a} skrár með mörg nöfn eru aðeins talin einu sinni.`
+      },
+      filesView: {
+        sortBy: "Raða eftir"
       }
     }
   },
@@ -569,12 +637,16 @@ export default {
         restartFailed: (a) => `Impossibile riavviare come amministratore: ${a}`
       },
       columns: {
-        allocated: "Allocato"
+        allocated: "Allocato",
+        name: "Nome"
       },
       totals: {
         line: (a, b, c) => `${a} conteggiati · ${b} su disco · ${c} in uso sul volume`,
         lineNoVolume: (a, b) => `${a} conteggiati · ${b} su disco`,
         hardLinkNote: (a) => `${a} file con più nomi vengono conteggiati una sola volta.`
+      },
+      filesView: {
+        sortBy: "Ordina per"
       }
     }
   },
@@ -601,12 +673,16 @@ export default {
         restartFailed: (a) => `管理者として再起動できませんでした: ${a}`
       },
       columns: {
-        allocated: "割り当て済み"
+        allocated: "割り当て済み",
+        name: "名前"
       },
       totals: {
         line: (a, b, c) => `カウント ${a} · ディスク上 ${b} · ボリューム使用中 ${c}`,
         lineNoVolume: (a, b) => `カウント ${a} · ディスク上 ${b}`,
         hardLinkNote: (a) => `複数の名前を持つ ${a} 個のファイルは 1 回だけ数えています。`
+      },
+      filesView: {
+        sortBy: "並べ替え"
       }
     }
   },
@@ -633,12 +709,16 @@ export default {
         restartFailed: (a) => `관리자 권한으로 다시 시작할 수 없습니다: ${a}`
       },
       columns: {
-        allocated: "할당됨"
+        allocated: "할당됨",
+        name: "이름"
       },
       totals: {
         line: (a, b, c) => `집계 ${a} · 디스크 ${b} · 볼륨 사용 중 ${c}`,
         lineNoVolume: (a, b) => `집계 ${a} · 디스크 ${b}`,
         hardLinkNote: (a) => `이름이 여러 개인 파일 ${a}개는 한 번만 집계됩니다.`
+      },
+      filesView: {
+        sortBy: "정렬 기준"
       }
     }
   },
@@ -665,12 +745,16 @@ export default {
         restartFailed: (a) => `Nepavyko paleisti iš naujo kaip administratoriaus: ${a}`
       },
       columns: {
-        allocated: "Priskirta"
+        allocated: "Priskirta",
+        name: "Pavadinimas"
       },
       totals: {
         line: (a, b, c) => `${a} suskaičiuota · ${b} diske · ${c} naudojama tome`,
         lineNoVolume: (a, b) => `${a} suskaičiuota · ${b} diske`,
         hardLinkNote: (a) => `${a} failai su keliais pavadinimais skaičiuojami tik vieną kartą.`
+      },
+      filesView: {
+        sortBy: "Rikiuoti pagal"
       }
     }
   },
@@ -697,12 +781,16 @@ export default {
         restartFailed: (a) => `Tidak dapat memulakan semula sebagai pentadbir: ${a}`
       },
       columns: {
-        allocated: "Diperuntukkan"
+        allocated: "Diperuntukkan",
+        name: "Nama"
       },
       totals: {
         line: (a, b, c) => `${a} dikira · ${b} pada cakera · ${c} digunakan pada volum`,
         lineNoVolume: (a, b) => `${a} dikira · ${b} pada cakera`,
         hardLinkNote: (a) => `${a} fail dengan beberapa nama dikira sekali sahaja.`
+      },
+      filesView: {
+        sortBy: "Isih mengikut"
       }
     }
   },
@@ -729,12 +817,16 @@ export default {
         restartFailed: (a) => `Kunne ikke starte på nytt som administrator: ${a}`
       },
       columns: {
-        allocated: "Allokert"
+        allocated: "Allokert",
+        name: "Navn"
       },
       totals: {
         line: (a, b, c) => `${a} talt · ${b} på disken · ${c} i bruk på volumet`,
         lineNoVolume: (a, b) => `${a} talt · ${b} på disken`,
         hardLinkNote: (a) => `${a} filer med flere navn telles bare én gang.`
+      },
+      filesView: {
+        sortBy: "Sorter etter"
       }
     }
   },
@@ -761,12 +853,16 @@ export default {
         restartFailed: (a) => `Opnieuw starten als beheerder is mislukt: ${a}`
       },
       columns: {
-        allocated: "Toegewezen"
+        allocated: "Toegewezen",
+        name: "Naam"
       },
       totals: {
         line: (a, b, c) => `${a} geteld · ${b} op schijf · ${c} in gebruik op het volume`,
         lineNoVolume: (a, b) => `${a} geteld · ${b} op schijf`,
         hardLinkNote: (a) => `${a} bestanden met meerdere namen worden maar één keer geteld.`
+      },
+      filesView: {
+        sortBy: "Sorteren op"
       }
     }
   },
@@ -793,12 +889,16 @@ export default {
         restartFailed: (a) => `Nie udało się uruchomić ponownie jako administrator: ${a}`
       },
       columns: {
-        allocated: "Przydzielone"
+        allocated: "Przydzielone",
+        name: "Nazwa"
       },
       totals: {
         line: (a, b, c) => `${a} policzone · ${b} na dysku · ${c} zajęte na woluminie`,
         lineNoVolume: (a, b) => `${a} policzone · ${b} na dysku`,
         hardLinkNote: (a) => `${a} plików z wieloma nazwami jest liczonych tylko raz.`
+      },
+      filesView: {
+        sortBy: "Sortuj według"
       }
     }
   },
@@ -825,12 +925,16 @@ export default {
         restartFailed: (a) => `د اډمین په توګه بیا پیل نشو: ${a}`
       },
       columns: {
-        allocated: "ځانګړی شوی"
+        allocated: "ځانګړی شوی",
+        name: "نوم"
       },
       totals: {
         line: (a, b, c) => `${a} شمیرل شوي · ${b} په ډیسک کې · ${c} په حجم کې کارول شوي`,
         lineNoVolume: (a, b) => `${a} شمیرل شوي · ${b} په ډیسک کې`,
         hardLinkNote: (a) => `${a} فایلونه چې څو نومونه لري یوازې یو ځل شمیرل کیږي.`
+      },
+      filesView: {
+        sortBy: "ترتیب د مخې"
       }
     }
   },
@@ -857,12 +961,16 @@ export default {
         restartFailed: (a) => `Não foi possível reiniciar como administrador: ${a}`
       },
       columns: {
-        allocated: "Alocado"
+        allocated: "Alocado",
+        name: "Nome"
       },
       totals: {
         line: (a, b, c) => `${a} contados · ${b} em disco · ${c} em uso no volume`,
         lineNoVolume: (a, b) => `${a} contados · ${b} em disco`,
         hardLinkNote: (a) => `${a} arquivos com vários nomes são contados uma única vez.`
+      },
+      filesView: {
+        sortBy: "Ordenar por"
       }
     }
   },
@@ -889,12 +997,16 @@ export default {
         restartFailed: (a) => `Não foi possível reiniciar como administrador: ${a}`
       },
       columns: {
-        allocated: "Alocado"
+        allocated: "Alocado",
+        name: "Nome"
       },
       totals: {
         line: (a, b, c) => `${a} contabilizados · ${b} em disco · ${c} em utilização no volume`,
         lineNoVolume: (a, b) => `${a} contabilizados · ${b} em disco`,
         hardLinkNote: (a) => `${a} ficheiros com vários nomes são contabilizados uma única vez.`
+      },
+      filesView: {
+        sortBy: "Ordenar por"
       }
     }
   },
@@ -921,12 +1033,16 @@ export default {
         restartFailed: (a) => `Nu s-a putut reporni ca administrator: ${a}`
       },
       columns: {
-        allocated: "Alocat"
+        allocated: "Alocat",
+        name: "Nume"
       },
       totals: {
         line: (a, b, c) => `${a} contorizați · ${b} pe disc · ${c} utilizați pe volum`,
         lineNoVolume: (a, b) => `${a} contorizați · ${b} pe disc`,
         hardLinkNote: (a) => `${a} fișiere cu mai multe nume sunt numărate o singură dată.`
+      },
+      filesView: {
+        sortBy: "Sortează după"
       }
     }
   },
@@ -953,12 +1069,16 @@ export default {
         restartFailed: (a) => `Не удалось перезапустить от имени администратора: ${a}`
       },
       columns: {
-        allocated: "Выделено"
+        allocated: "Выделено",
+        name: "Имя"
       },
       totals: {
         line: (a, b, c) => `${a} учтено · ${b} на диске · ${c} занято на томе`,
         lineNoVolume: (a, b) => `${a} учтено · ${b} на диске`,
         hardLinkNote: (a) => `${a} файлов с несколькими именами учтены один раз.`
+      },
+      filesView: {
+        sortBy: "Сортировка"
       }
     }
   },
@@ -985,12 +1105,16 @@ export default {
         restartFailed: (a) => `Reštart ako správca sa nepodaril: ${a}`
       },
       columns: {
-        allocated: "Pridelené"
+        allocated: "Pridelené",
+        name: "Názov"
       },
       totals: {
         line: (a, b, c) => `${a} započítané · ${b} na disku · ${c} využité na zväzku`,
         lineNoVolume: (a, b) => `${a} započítané · ${b} na disku`,
         hardLinkNote: (a) => `${a} súborov s viacerými názvami sa počíta iba raz.`
+      },
+      filesView: {
+        sortBy: "Zoradiť podľa"
       }
     }
   },
@@ -1017,12 +1141,16 @@ export default {
         restartFailed: (a) => `Nuk u rindez dot si administrator: ${a}`
       },
       columns: {
-        allocated: "Të alokuara"
+        allocated: "Të alokuara",
+        name: "Emri"
       },
       totals: {
         line: (a, b, c) => `${a} të numëruara · ${b} në disk · ${c} në përdorim në vëllim`,
         lineNoVolume: (a, b) => `${a} të numëruara · ${b} në disk`,
         hardLinkNote: (a) => `${a} skedarë me disa emra numërohen vetëm një herë.`
+      },
+      filesView: {
+        sortBy: "Rendit sipas"
       }
     }
   },
@@ -1049,12 +1177,16 @@ export default {
         restartFailed: (a) => `Није могуће поново покренути као администратор: ${a}`
       },
       columns: {
-        allocated: "Додељено"
+        allocated: "Додељено",
+        name: "Назив"
       },
       totals: {
         line: (a, b, c) => `${a} урачунато · ${b} на диску · ${c} у употреби на волумену`,
         lineNoVolume: (a, b) => `${a} урачунато · ${b} на диску`,
         hardLinkNote: (a) => `${a} датотека са више имена рачуна се само једном.`
+      },
+      filesView: {
+        sortBy: "Сортирај по"
       }
     }
   },
@@ -1081,12 +1213,16 @@ export default {
         restartFailed: (a) => `Det gick inte att starta om som administratör: ${a}`
       },
       columns: {
-        allocated: "Allokerat"
+        allocated: "Allokerat",
+        name: "Namn"
       },
       totals: {
         line: (a, b, c) => `${a} räknade · ${b} på disken · ${c} används på volymen`,
         lineNoVolume: (a, b) => `${a} räknade · ${b} på disken`,
         hardLinkNote: (a) => `${a} filer med flera namn räknas bara en gång.`
+      },
+      filesView: {
+        sortBy: "Sortera efter"
       }
     }
   },
@@ -1113,12 +1249,16 @@ export default {
         restartFailed: (a) => `รีสตาร์ทในฐานะผู้ดูแลระบบไม่ได้: ${a}`
       },
       columns: {
-        allocated: "จัดสรรแล้ว"
+        allocated: "จัดสรรแล้ว",
+        name: "ชื่อ"
       },
       totals: {
         line: (a, b, c) => `นับได้ ${a} · บนดิสก์ ${b} · ใช้อยู่บนวอลุ่ม ${c}`,
         lineNoVolume: (a, b) => `นับได้ ${a} · บนดิสก์ ${b}`,
         hardLinkNote: (a) => `ไฟล์ ${a} ไฟล์ที่มีหลายชื่อจะนับเพียงครั้งเดียว`
+      },
+      filesView: {
+        sortBy: "เรียงตาม"
       }
     }
   },
@@ -1145,12 +1285,16 @@ export default {
         restartFailed: (a) => `Yönetici olarak yeniden başlatılamadı: ${a}`
       },
       columns: {
-        allocated: "Ayrılan"
+        allocated: "Ayrılan",
+        name: "Ad"
       },
       totals: {
         line: (a, b, c) => `${a} sayıldı · ${b} diskte · ${c} birimde kullanımda`,
         lineNoVolume: (a, b) => `${a} sayıldı · ${b} diskte`,
         hardLinkNote: (a) => `Birden fazla adı olan ${a} dosya yalnızca bir kez sayılır.`
+      },
+      filesView: {
+        sortBy: "Sırala"
       }
     }
   },
@@ -1177,12 +1321,16 @@ export default {
         restartFailed: (a) => `Не вдалося перезапустити від імені адміністратора: ${a}`
       },
       columns: {
-        allocated: "Виділено"
+        allocated: "Виділено",
+        name: "Назва"
       },
       totals: {
         line: (a, b, c) => `${a} враховано · ${b} на диску · ${c} зайнято на томі`,
         lineNoVolume: (a, b) => `${a} враховано · ${b} на диску`,
         hardLinkNote: (a) => `${a} файлів із кількома іменами враховано лише раз.`
+      },
+      filesView: {
+        sortBy: "Сортувати за"
       }
     }
   },
@@ -1209,12 +1357,16 @@ export default {
         restartFailed: (a) => `Không thể khởi động lại với quyền quản trị: ${a}`
       },
       columns: {
-        allocated: "Đã cấp phát"
+        allocated: "Đã cấp phát",
+        name: "Tên"
       },
       totals: {
         line: (a, b, c) => `${a} đã tính · ${b} trên đĩa · ${c} đang dùng trên ổ`,
         lineNoVolume: (a, b) => `${a} đã tính · ${b} trên đĩa`,
         hardLinkNote: (a) => `${a} tệp có nhiều tên chỉ được tính một lần.`
+      },
+      filesView: {
+        sortBy: "Sắp xếp theo"
       }
     }
   },
@@ -1241,12 +1393,16 @@ export default {
         restartFailed: (a) => `无法以管理员身份重启：${a}`
       },
       columns: {
-        allocated: "已分配"
+        allocated: "已分配",
+        name: "名称"
       },
       totals: {
         line: (a, b, c) => `已统计 ${a} · 磁盘占用 ${b} · 卷已用 ${c}`,
         lineNoVolume: (a, b) => `已统计 ${a} · 磁盘占用 ${b}`,
         hardLinkNote: (a) => `${a} 个有多个名称的文件只计算一次。`
+      },
+      filesView: {
+        sortBy: "排序方式"
       }
     }
   },
@@ -1273,12 +1429,16 @@ export default {
         restartFailed: (a) => `無法以系統管理員身分重新啟動：${a}`
       },
       columns: {
-        allocated: "已配置"
+        allocated: "已配置",
+        name: "名稱"
       },
       totals: {
         line: (a, b, c) => `已統計 ${a} · 磁碟占用 ${b} · 磁碟區已使用 ${c}`,
         lineNoVolume: (a, b) => `已統計 ${a} · 磁碟占用 ${b}`,
         hardLinkNote: (a) => `${a} 個有多個名稱的檔案只計算一次。`
+      },
+      filesView: {
+        sortBy: "排序方式"
       }
     }
   }

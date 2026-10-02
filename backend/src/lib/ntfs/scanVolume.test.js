@@ -246,3 +246,23 @@ describe('scanVolume sizes on disk', () => {
     expect(stats.bitmapUsedBytes).toBeNull();
   });
 });
+
+describe('scanVolume modified dates', () => {
+  const WHEN = Date.UTC(2026, 2, 9, 8, 7, 6, 0);
+
+  it('puts the last-write time on files and folders', () => {
+    const { readAt } = buildFakeVolume([
+      { record: 10, name: 'Games', parent: 5, isDirectory: true, modified: WHEN },
+      { record: 11, name: 'save.dat', parent: 10, size: 10, isDirectory: false, modified: WHEN + 60_000 }
+    ]);
+    const { tree } = scanVolume({ readAt });
+    const games = tree.children.find((n) => n.name === 'Games');
+    expect(games.modified).toBe(WHEN);
+    expect(games.children[0].modified).toBe(WHEN + 60_000);
+  });
+
+  it('leaves the field off an item whose record carried no date', () => {
+    const { readAt } = buildFakeVolume([{ record: 10, name: 'a.bin', parent: 5, size: 1, isDirectory: false }]);
+    expect('modified' in scanVolume({ readAt }).tree.children[0]).toBe(false);
+  });
+});

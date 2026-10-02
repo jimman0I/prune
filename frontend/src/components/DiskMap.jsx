@@ -24,6 +24,7 @@ import { useLanguage } from '../i18n/LanguageContext.jsx';
 import DiskScanProgress from './DiskScanProgress.jsx';
 import { DrivePicker } from './DrivePicker.jsx';
 import { FolderTable } from './FolderTable.jsx';
+import { LargestFilesView } from './LargestFilesView.jsx';
 import { RowActionsButton } from './RowActionsButton.jsx';
 import { useDrives } from '../hooks/useDrives.js';
 import { useAdminAccess } from '../hooks/useAdminAccess.js';
@@ -485,74 +486,8 @@ function ExtensionPanel({ breakdown, shown, icons, typeColors }) {
 }
 
 
-/** The biggest individual files, WizTree's second tab.
- *
- * A treemap is good at showing that a folder is enormous and bad at
- * showing that one file inside it is the reason. Satisfactory's 8.4 GB
- * .ucas is a quarter of everything scanned here and the map draws it as
- * an indistinguishable slab inside Games.
- *
- * Paths are shown in full and are the point of the view: this is the list
- * you act on, and "FactoryGame-Windows.ucas" without its folder is not
- * something anyone can find again. */
-export function LargestFilesView({ files, icons, onContextMenu }) {
-  const { t } = useLanguage();
-
-  if (files.length === 0) {
-    return (
-      <div className="glass-panel p-6 text-[13px] text-[color:var(--text-muted)]">
-        {t('diskMap.largestFiles.empty')}
-      </div>
-    );
-  }
-
-  return (
-    <div className="glass-panel p-4 min-w-0">
-      <div className="flex flex-col">
-        {files.map((file) => (
-          <div
-            key={file.fullPath || file.name}
-            className="flex items-center gap-2.5 py-[5px] border-b border-[color:var(--border-subtle)] last:border-b-0"
-            onContextMenu={(e) => {
-              if (!onContextMenu || !file.fullPath) return;
-              e.preventDefault();
-              onContextMenu({ name: file.name, size: file.size, fullPath: file.fullPath, type: 'file' }, e);
-            }}
-          >
-            {icons?.[extensionOf(file.name) ?? GENERIC_FILE_KEY] ? (
-              <img
-                src={icons[extensionOf(file.name) ?? GENERIC_FILE_KEY]}
-                alt="" width={16} height={16}
-                className="w-4 h-4 shrink-0 object-contain"
-              />
-            ) : (
-              <div className="w-4 h-4 shrink-0" />
-            )}
-            <div
-              className="font-mono text-[12px] text-[color:var(--text-primary)] w-[86px] text-right shrink-0"
-              style={{ fontVariantNumeric: 'tabular-nums' }}
-            >
-              {formatBytes(file.size)}
-            </div>
-            <div className="min-w-0 flex-1">
-              <div className="text-[12.5px] text-[color:var(--text-primary)] truncate">{file.name}</div>
-              {file.fullPath && (
-                <div className="text-[11px] font-mono text-[color:var(--text-muted)] truncate select-text">{file.fullPath}</div>
-              )}
-            </div>
-            {onContextMenu && file.fullPath && (
-              <RowActionsButton
-                name={file.name}
-                onOpen={(pos) => onContextMenu({ name: file.name, size: file.size, fullPath: file.fullPath, type: 'file' }, pos)}
-              />
-            )}
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
+// Re-exported: the render tests (and anything else) have always imported it from here.
+export { LargestFilesView };
 
 /** Why a folder could not be scanned, naming the folder it was reading.
  * Exported so it can be tested without scanning a real drive. */
