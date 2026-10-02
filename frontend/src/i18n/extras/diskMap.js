@@ -42,6 +42,12 @@ export default {
         clear: "Clear search",
         invalid: "That pattern is not valid.",
         noMatches: (a) => `Nothing here matches "${a}".`
+      },
+      export: {
+        csv: "Export CSV",
+        png: "Save map as PNG",
+        failed: (a) => `Could not export: ${a}`,
+        done: (a) => `Exported ${a}`
       }
     }
   },
@@ -85,6 +91,12 @@ export default {
         clear: "Maak soektog skoon",
         invalid: "Daardie patroon is nie geldig nie.",
         noMatches: (a) => `Niks hier pas by "${a}" nie.`
+      },
+      export: {
+        csv: "Voer CSV uit",
+        png: "Stoor kaart as PNG",
+        failed: (a) => `Kon nie uitvoer nie: ${a}`,
+        done: (a) => `Uitgevoer: ${a}`
       }
     }
   },
@@ -128,6 +140,12 @@ export default {
         clear: "مسح البحث",
         invalid: "هذا النمط غير صالح.",
         noMatches: (a) => `لا شيء هنا يطابق "${a}".`
+      },
+      export: {
+        csv: "تصدير CSV",
+        png: "حفظ الخريطة كصورة PNG",
+        failed: (a) => `تعذّر التصدير: ${a}`,
+        done: (a) => `تم التصدير: ${a}`
       }
     }
   },
@@ -171,6 +189,12 @@ export default {
         clear: "Esborra la cerca",
         invalid: "Aquest patró no és vàlid.",
         noMatches: (a) => `Res d’aquí coincideix amb "${a}".`
+      },
+      export: {
+        csv: "Exporta a CSV",
+        png: "Desa el mapa com a PNG",
+        failed: (a) => `No s’ha pogut exportar: ${a}`,
+        done: (a) => `Exportat: ${a}`
       }
     }
   },
@@ -214,6 +238,12 @@ export default {
         clear: "Vymazat hledání",
         invalid: "Tento vzor není platný.",
         noMatches: (a) => `Nic zde neodpovídá výrazu "${a}".`
+      },
+      export: {
+        csv: "Exportovat CSV",
+        png: "Uložit mapu jako PNG",
+        failed: (a) => `Export se nezdařil: ${a}`,
+        done: (a) => `Exportováno: ${a}`
       }
     }
   },
@@ -257,6 +287,12 @@ export default {
         clear: "Clirio’r chwiliad",
         invalid: "Nid yw’r patrwm hwnnw’n ddilys.",
         noMatches: (a) => `Nid oes dim yma’n cyfateb i "${a}".`
+      },
+      export: {
+        csv: "Allforio CSV",
+        png: "Cadw’r map fel PNG",
+        failed: (a) => `Methwyd allforio: ${a}`,
+        done: (a) => `Allforiwyd: ${a}`
       }
     }
   },
@@ -300,6 +336,12 @@ export default {
         clear: "Ryd søgning",
         invalid: "Det mønster er ikke gyldigt.",
         noMatches: (a) => `Intet her matcher "${a}".`
+      },
+      export: {
+        csv: "Eksportér CSV",
+        png: "Gem kort som PNG",
+        failed: (a) => `Kunne ikke eksportere: ${a}`,
+        done: (a) => `Eksporteret: ${a}`
       }
     }
   },
@@ -343,6 +385,12 @@ export default {
         clear: "Suche löschen",
         invalid: "Dieses Muster ist ungültig.",
         noMatches: (a) => `Hier passt nichts zu "${a}".`
+      },
+      export: {
+        csv: "CSV exportieren",
+        png: "Karte als PNG speichern",
+        failed: (a) => `Export nicht möglich: ${a}`,
+        done: (a) => `Exportiert: ${a}`
       }
     }
   },
@@ -386,6 +434,12 @@ export default {
         clear: "Εκκαθάριση αναζήτησης",
         invalid: "Αυτό το μοτίβο δεν είναι έγκυρο.",
         noMatches: (a) => `Τίποτα εδώ δεν ταιριάζει με "${a}".`
+      },
+      export: {
+        csv: "Εξαγωγή CSV",
+        png: "Αποθήκευση χάρτη ως PNG",
+        failed: (a) => `Η εξαγωγή απέτυχε: ${a}`,
+        done: (a) => `Έγινε εξαγωγή: ${a}`
       }
     }
   },
@@ -429,6 +483,12 @@ export default {
         clear: "Borrar búsqueda",
         invalid: "Ese patrón no es válido.",
         noMatches: (a) => `Nada aquí coincide con "${a}".`
+      },
+      export: {
+        csv: "Exportar CSV",
+        png: "Guardar mapa como PNG",
+        failed: (a) => `No se pudo exportar: ${a}`,
+        done: (a) => `Exportado: ${a}`
       }
     }
   },
@@ -472,6 +532,12 @@ export default {
         clear: "Tühjenda otsing",
         invalid: "See muster ei ole kehtiv.",
         noMatches: (a) => `Siin pole midagi, mis vastaks päringule "${a}".`
+      },
+      export: {
+        csv: "Ekspordi CSV",
+        png: "Salvesta kaart PNG-na",
+        failed: (a) => `Eksport ebaõnnestus: ${a}`,
+        done: (a) => `Eksporditud: ${a}`
       }
     }
   },
@@ -515,6 +581,12 @@ export default {
         clear: "Tyhjennä haku",
         invalid: "Tämä lauseke ei kelpaa.",
         noMatches: (a) => `Mikään täällä ei vastaa hakua "${a}".`
+      },
+      export: {
+        csv: "Vie CSV",
+        png: "Tallenna kartta PNG-kuvana",
+        failed: (a) => `Vienti epäonnistui: ${a}`,
+        done: (a) => `Viety: ${a}`
       }
     }
   },
@@ -558,6 +630,12 @@ export default {
         clear: "Effacer la recherche",
         invalid: "Ce motif n’est pas valide.",
         noMatches: (a) => `Rien ici ne correspond à "${a}".`
+      },
+      export: {
+        csv: "Exporter en CSV",
+        png: "Enregistrer la carte en PNG",
+        failed: (a) => `Échec de l’exportation : ${a}`,
+        done: (a) => `Exporté : ${a}`
       }
     }
   },
@@ -601,6 +679,12 @@ export default {
         clear: "נקה חיפוש",
         invalid: "התבנית הזו אינה תקינה.",
         noMatches: (a) => `שום דבר כאן לא תואם ל-"${a}".`
+      },
+      export: {
+        csv: "ייצוא CSV",
+        png: "שמור מפה כ-PNG",
+        failed: (a) => `הייצוא נכשל: ${a}`,
+        done: (a) => `יוצא: ${a}`
       }
     }
   },
@@ -644,6 +728,12 @@ export default {
         clear: "Keresés törlése",
         invalid: "Ez a minta érvénytelen.",
         noMatches: (a) => `Itt semmi sem egyezik ezzel: "${a}".`
+      },
+      export: {
+        csv: "CSV exportálása",
+        png: "Térkép mentése PNG-ként",
+        failed: (a) => `Az exportálás nem sikerült: ${a}`,
+        done: (a) => `Exportálva: ${a}`
       }
     }
   },
@@ -687,6 +777,12 @@ export default {
         clear: "Hapus pencarian",
         invalid: "Pola itu tidak valid.",
         noMatches: (a) => `Tidak ada yang cocok dengan "${a}" di sini.`
+      },
+      export: {
+        csv: "Ekspor CSV",
+        png: "Simpan peta sebagai PNG",
+        failed: (a) => `Gagal mengekspor: ${a}`,
+        done: (a) => `Diekspor: ${a}`
       }
     }
   },
@@ -730,6 +826,12 @@ export default {
         clear: "Hreinsa leit",
         invalid: "Þetta mynstur er ekki gilt.",
         noMatches: (a) => `Ekkert hér passar við "${a}".`
+      },
+      export: {
+        csv: "Flytja út CSV",
+        png: "Vista kort sem PNG",
+        failed: (a) => `Útflutningur mistókst: ${a}`,
+        done: (a) => `Flutt út: ${a}`
       }
     }
   },
@@ -773,6 +875,12 @@ export default {
         clear: "Cancella ricerca",
         invalid: "Questo schema non è valido.",
         noMatches: (a) => `Nulla qui corrisponde a "${a}".`
+      },
+      export: {
+        csv: "Esporta CSV",
+        png: "Salva la mappa come PNG",
+        failed: (a) => `Esportazione non riuscita: ${a}`,
+        done: (a) => `Esportato: ${a}`
       }
     }
   },
@@ -816,6 +924,12 @@ export default {
         clear: "検索をクリア",
         invalid: "このパターンは無効です。",
         noMatches: (a) => `ここには "${a}" に一致するものがありません。`
+      },
+      export: {
+        csv: "CSV を書き出し",
+        png: "マップを PNG で保存",
+        failed: (a) => `書き出せませんでした: ${a}`,
+        done: (a) => `書き出しました: ${a}`
       }
     }
   },
@@ -859,6 +973,12 @@ export default {
         clear: "검색 지우기",
         invalid: "이 패턴은 올바르지 않습니다.",
         noMatches: (a) => `여기에는 "${a}"와(과) 일치하는 항목이 없습니다.`
+      },
+      export: {
+        csv: "CSV 내보내기",
+        png: "맵을 PNG로 저장",
+        failed: (a) => `내보낼 수 없습니다: ${a}`,
+        done: (a) => `내보냄: ${a}`
       }
     }
   },
@@ -902,6 +1022,12 @@ export default {
         clear: "Išvalyti paiešką",
         invalid: "Šis šablonas netinkamas.",
         noMatches: (a) => `Čia nieko, kas atitiktų "${a}".`
+      },
+      export: {
+        csv: "Eksportuoti CSV",
+        png: "Įrašyti žemėlapį kaip PNG",
+        failed: (a) => `Eksportuoti nepavyko: ${a}`,
+        done: (a) => `Eksportuota: ${a}`
       }
     }
   },
@@ -945,6 +1071,12 @@ export default {
         clear: "Kosongkan carian",
         invalid: "Corak itu tidak sah.",
         noMatches: (a) => `Tiada yang sepadan dengan "${a}" di sini.`
+      },
+      export: {
+        csv: "Eksport CSV",
+        png: "Simpan peta sebagai PNG",
+        failed: (a) => `Eksport gagal: ${a}`,
+        done: (a) => `Dieksport: ${a}`
       }
     }
   },
@@ -988,6 +1120,12 @@ export default {
         clear: "Tøm søk",
         invalid: "Det mønsteret er ikke gyldig.",
         noMatches: (a) => `Ingenting her samsvarer med "${a}".`
+      },
+      export: {
+        csv: "Eksporter CSV",
+        png: "Lagre kartet som PNG",
+        failed: (a) => `Eksport mislyktes: ${a}`,
+        done: (a) => `Eksportert: ${a}`
       }
     }
   },
@@ -1031,6 +1169,12 @@ export default {
         clear: "Zoekopdracht wissen",
         invalid: "Dat patroon is ongeldig.",
         noMatches: (a) => `Niets hier komt overeen met "${a}".`
+      },
+      export: {
+        csv: "CSV exporteren",
+        png: "Kaart opslaan als PNG",
+        failed: (a) => `Exporteren mislukt: ${a}`,
+        done: (a) => `Geëxporteerd: ${a}`
       }
     }
   },
@@ -1074,6 +1218,12 @@ export default {
         clear: "Wyczyść wyszukiwanie",
         invalid: "Ten wzorzec jest nieprawidłowy.",
         noMatches: (a) => `Nic tutaj nie pasuje do "${a}".`
+      },
+      export: {
+        csv: "Eksportuj CSV",
+        png: "Zapisz mapę jako PNG",
+        failed: (a) => `Eksport się nie powiódł: ${a}`,
+        done: (a) => `Wyeksportowano: ${a}`
       }
     }
   },
@@ -1117,6 +1267,12 @@ export default {
         clear: "لټون پاک کړئ",
         invalid: "دا نمونه سمه نه ده.",
         noMatches: (a) => `دلته هیڅ شی له "${a}" سره سمون نه لري.`
+      },
+      export: {
+        csv: "CSV صادر کړئ",
+        png: "نقشه د PNG په توګه خوندي کړئ",
+        failed: (a) => `صادرول ونه شول: ${a}`,
+        done: (a) => `صادر شو: ${a}`
       }
     }
   },
@@ -1160,6 +1316,12 @@ export default {
         clear: "Limpar pesquisa",
         invalid: "Esse padrão não é válido.",
         noMatches: (a) => `Nada aqui corresponde a "${a}".`
+      },
+      export: {
+        csv: "Exportar CSV",
+        png: "Salvar mapa como PNG",
+        failed: (a) => `Falha ao exportar: ${a}`,
+        done: (a) => `Exportado: ${a}`
       }
     }
   },
@@ -1203,6 +1365,12 @@ export default {
         clear: "Limpar pesquisa",
         invalid: "Esse padrão não é válido.",
         noMatches: (a) => `Nada aqui corresponde a "${a}".`
+      },
+      export: {
+        csv: "Exportar CSV",
+        png: "Guardar mapa como PNG",
+        failed: (a) => `Falha ao exportar: ${a}`,
+        done: (a) => `Exportado: ${a}`
       }
     }
   },
@@ -1246,6 +1414,12 @@ export default {
         clear: "Șterge căutarea",
         invalid: "Acest model nu este valid.",
         noMatches: (a) => `Nimic de aici nu se potrivește cu "${a}".`
+      },
+      export: {
+        csv: "Exportă CSV",
+        png: "Salvează harta ca PNG",
+        failed: (a) => `Exportul a eșuat: ${a}`,
+        done: (a) => `Exportat: ${a}`
       }
     }
   },
@@ -1289,6 +1463,12 @@ export default {
         clear: "Очистить поиск",
         invalid: "Недопустимый шаблон.",
         noMatches: (a) => `Здесь нет совпадений с "${a}".`
+      },
+      export: {
+        csv: "Экспорт в CSV",
+        png: "Сохранить карту как PNG",
+        failed: (a) => `Не удалось экспортировать: ${a}`,
+        done: (a) => `Экспортировано: ${a}`
       }
     }
   },
@@ -1332,6 +1512,12 @@ export default {
         clear: "Vymazať hľadanie",
         invalid: "Tento vzor nie je platný.",
         noMatches: (a) => `Nič tu nezodpovedá výrazu "${a}".`
+      },
+      export: {
+        csv: "Exportovať CSV",
+        png: "Uložiť mapu ako PNG",
+        failed: (a) => `Export zlyhal: ${a}`,
+        done: (a) => `Exportované: ${a}`
       }
     }
   },
@@ -1375,6 +1561,12 @@ export default {
         clear: "Pastro kërkimin",
         invalid: "Ky model nuk është i vlefshëm.",
         noMatches: (a) => `Asgjë këtu nuk përputhet me "${a}".`
+      },
+      export: {
+        csv: "Eksporto CSV",
+        png: "Ruaj hartën si PNG",
+        failed: (a) => `Eksportimi dështoi: ${a}`,
+        done: (a) => `U eksportua: ${a}`
       }
     }
   },
@@ -1418,6 +1610,12 @@ export default {
         clear: "Обриши претрагу",
         invalid: "Тај образац није исправан.",
         noMatches: (a) => `Овде ништа не одговара изразу "${a}".`
+      },
+      export: {
+        csv: "Извези CSV",
+        png: "Сачувај мапу као PNG",
+        failed: (a) => `Извоз није успео: ${a}`,
+        done: (a) => `Извезено: ${a}`
       }
     }
   },
@@ -1461,6 +1659,12 @@ export default {
         clear: "Rensa sökning",
         invalid: "Det mönstret är inte giltigt.",
         noMatches: (a) => `Inget här matchar "${a}".`
+      },
+      export: {
+        csv: "Exportera CSV",
+        png: "Spara kartan som PNG",
+        failed: (a) => `Exporten misslyckades: ${a}`,
+        done: (a) => `Exporterat: ${a}`
       }
     }
   },
@@ -1504,6 +1708,12 @@ export default {
         clear: "ล้างการค้นหา",
         invalid: "รูปแบบนี้ไม่ถูกต้อง",
         noMatches: (a) => `ไม่มีรายการที่ตรงกับ "${a}" ที่นี่`
+      },
+      export: {
+        csv: "ส่งออก CSV",
+        png: "บันทึกแผนที่เป็น PNG",
+        failed: (a) => `ส่งออกไม่สำเร็จ: ${a}`,
+        done: (a) => `ส่งออกแล้ว: ${a}`
       }
     }
   },
@@ -1547,6 +1757,12 @@ export default {
         clear: "Aramayı temizle",
         invalid: "Bu desen geçerli değil.",
         noMatches: (a) => `Burada "${a}" ile eşleşen bir şey yok.`
+      },
+      export: {
+        csv: "CSV olarak dışa aktar",
+        png: "Haritayı PNG olarak kaydet",
+        failed: (a) => `Dışa aktarılamadı: ${a}`,
+        done: (a) => `Dışa aktarıldı: ${a}`
       }
     }
   },
@@ -1590,6 +1806,12 @@ export default {
         clear: "Очистити пошук",
         invalid: "Недійсний шаблон.",
         noMatches: (a) => `Тут немає збігів із "${a}".`
+      },
+      export: {
+        csv: "Експортувати в CSV",
+        png: "Зберегти карту як PNG",
+        failed: (a) => `Не вдалося експортувати: ${a}`,
+        done: (a) => `Експортовано: ${a}`
       }
     }
   },
@@ -1633,6 +1855,12 @@ export default {
         clear: "Xóa tìm kiếm",
         invalid: "Mẫu này không hợp lệ.",
         noMatches: (a) => `Không có mục nào ở đây khớp với "${a}".`
+      },
+      export: {
+        csv: "Xuất CSV",
+        png: "Lưu bản đồ dạng PNG",
+        failed: (a) => `Xuất không thành công: ${a}`,
+        done: (a) => `Đã xuất: ${a}`
       }
     }
   },
@@ -1676,6 +1904,12 @@ export default {
         clear: "清除搜索",
         invalid: "此模式无效。",
         noMatches: (a) => `这里没有与 "${a}" 匹配的内容。`
+      },
+      export: {
+        csv: "导出 CSV",
+        png: "将地图另存为 PNG",
+        failed: (a) => `导出失败：${a}`,
+        done: (a) => `已导出：${a}`
       }
     }
   },
@@ -1719,6 +1953,12 @@ export default {
         clear: "清除搜尋",
         invalid: "此模式無效。",
         noMatches: (a) => `這裡沒有符合 "${a}" 的項目。`
+      },
+      export: {
+        csv: "匯出 CSV",
+        png: "將地圖另存為 PNG",
+        failed: (a) => `匯出失敗：${a}`,
+        done: (a) => `已匯出：${a}`
       }
     }
   }

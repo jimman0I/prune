@@ -25,6 +25,10 @@ import DiskScanProgress from './DiskScanProgress.jsx';
 import { DrivePicker } from './DrivePicker.jsx';
 import { FolderTable } from './FolderTable.jsx';
 import { SearchBox } from './SearchBox.jsx';
+import { ExportButtons } from './ExportButtons.jsx';
+import { rowsToCsv, exportFileName } from '../lib/exportCsv.js';
+import { svgToPngBlob } from '../lib/exportPng.js';
+import { saveBlob } from '../lib/download.js';
 import { compileFilter } from '../lib/searchFilter.js';
 import { useDebouncedValue } from '../hooks/useDebouncedValue.js';
 import { LargestFilesView } from './LargestFilesView.jsx';
@@ -934,6 +938,44 @@ function DiskMap() {
     else toasts.error(result.error || t('diskMap.toasts.moveFailed'), { detail: node.fullPath });
   }, [pendingRemoval, toasts, queryClient, currentPath, t]));
 
+  /* Exports. Made in the window and handed to the browser layer as a download:
+   * no request to the backend and no new way for the window to write files.
+   * The CSV is the rows as they are on screen -- filtered by the search box and
+   * in the order the column sort gave them. */
+  const visibleRows = useRef({ tree: [], files: [] });
+  const onVisibleTreeRows = useCallback((rows) => { visibleRows.current.tree = rows; }, []);
+  const onVisibleFileRows = useCallback((rows) => { visibleRows.current.files = rows; }, []);
+  const treemapPanelRef = useRef(null);
+  const [exporting, setExporting] = useState(false);
+
+  const handleExportCsv = () => {
+    try {
+      const rows = view === 'files'
+        ? visibleRows.current.files.map((f) => ({ ...f, files: 1, folders: 0 }))
+        : visibleRows.current.tree;
+      const filename = exportFileName(currentPath, 'csv');
+      saveBlob(new Blob([rowsToCsv(rows)], { type: 'text/csv;charset=utf-8' }), filename);
+      toasts.success(t('diskMapV3.export.done', filename));
+    } catch (err) {
+      toasts.error(t('diskMapV3.export.failed', err.message));
+    }
+  };
+
+  const handleExportPng = async () => {
+    setExporting(true);
+    try {
+      const svg = treemapPanelRef.current?.querySelector('svg');
+      if (!svg) throw new Error('There is no map to save.');
+      const filename = exportFileName(currentPath, 'png');
+      saveBlob(await svgToPngBlob(svg), filename);
+      toasts.success(t('diskMapV3.export.done', filename));
+    } catch (err) {
+      toasts.error(t('diskMapV3.export.failed', err.message));
+    } finally {
+      setExporting(false);
+    }
+  };
+
   const handleDrillDown = useCallback((fullPath) => {
     setHovered(null);
     setCurrentPath(fullPath);
@@ -1139,12 +1181,15 @@ function DiskMap() {
             </button>
           ))}
         </div>
-          <SearchBox value={searchText} onChange={setSearchText} invalid={!filter.ok} />
+          <div className="flex items-start gap-3 flex-wrap">
+            <SearchBox value={searchText} onChange={setSearchText} invalid={!filter.ok} />
+            <ExportButtons onCsv={handleExportCsv} onPng={view === 'files' ? undefined : handleExportPng} busy={exporting} />
+          </div>
         </div>
       )}
 
       {!loading && !error && tree && view === 'files' && (
-        <LargestFilesView files={topFiles} icons={typeIcons} onContextMenu={handleContextMenu} searchText={filter.active ? searchText : ''} />
+        <LargestFilesView files={topFiles} icons={typeIcons} onContextMenu={handleContextMenu} onVisibleRows={onVisibleFileRows} searchText={filter.active ? searchText : ''} />
       )}
 
       {!loading && !error && tree && view !== 'files' && (
@@ -1159,11 +1204,11 @@ function DiskMap() {
               last column is sliced off, as it was between 1024 and 1207 before
               the rail widened. Below the breakpoint they stack. */}
           <div className="grid gap-4 min-[1400px]:grid-cols-[minmax(0,1fr)_360px] items-start">
-            <FolderTable folderRows={aggregates.result?.folderRows ?? EMPTY_FOLDER_ROWS} onDrillDown={handleDrillDown} onContextMenu={handleContextMenu} filter={filter} searchText={searchText} />
+            <FolderTable folderRows={aggregates.result?.folderRows ?? EMPTY_FOLDER_ROWS} onDrillDown={handleDrillDown} onContextMenu={handleContextMenu} onVisibleRows={onVisibleTreeRows} filter={filter} searchText={searchText} />
             <ExtensionPanel breakdown={breakdown} shown={shownExtensions} icons={typeIcons} typeColors={typeColors} />
           </div>
 
-          <div className="glass-panel p-4 treemap-cells" style={{ position: 'relative' }} onMouseMove={handleContainerMouseMove}>
+          <div ref={treemapPanelRef} className="glass-panel p-4 treemap-cells" style={{ position: 'relative' }} onMouseMove={handleContainerMouseMove}>
             <ResponsiveContainer width="100%" height={420}>
               <Treemap
                 data={markedCells}
