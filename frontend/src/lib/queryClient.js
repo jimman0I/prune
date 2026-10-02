@@ -61,6 +61,7 @@ export const keys = {
   automation: ['automation'],
   diskSpace: ['disk', 'space'],
   drives: ['disk', 'drives'],
+  mftStatus: ['disk', 'mftStatus'],
   deepCleanRules: ['deepClean', 'rules'],
   deepCleanScan: ['deepClean', 'scan'],
   deepCleanCategoryIcons: ['deepClean', 'categoryIcons'],

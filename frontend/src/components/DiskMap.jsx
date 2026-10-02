@@ -25,6 +25,8 @@ import { useLanguage } from '../i18n/LanguageContext.jsx';
 import DiskScanProgress from './DiskScanProgress.jsx';
 import { DrivePicker } from './DrivePicker.jsx';
 import { useDrives } from '../hooks/useDrives.js';
+import { useAdminAccess } from '../hooks/useAdminAccess.js';
+import { readScanMode, writeScanMode } from '../lib/scanMode.js';
 import { driveLetterOf, rootOfDrive, drivesFromScan } from '../lib/driveRoot.js';
 import { readFastScanMs, writeFastScanMs } from '../lib/fastScanDuration.js';
 
@@ -116,7 +118,7 @@ function ScanOption({ title, badge, explain, note, recommended, children }) {
         )}
       </div>
       <p className="text-[13px] text-[color:var(--text-primary)]">{explain}</p>
-      <p className="text-[12.5px] text-[color:var(--text-secondary)] mb-3">{note}</p>
+      {typeof note === 'string' ? <p className="text-[12.5px] text-[color:var(--text-secondary)] mb-3">{note}</p> : note}
       <div className="mt-auto">{children}</div>
     </div>
   );
@@ -152,8 +154,47 @@ function AlsoScanDrives({ drives, alsoScan, onToggle }) {
   );
 }
 
-export function DriveRootPrompt({ path, onFastScan, fastScanning, onCrawl, otherDrives, alsoScan, onToggleAlso, fastUnavailable }) {
+/** What the fast scan needs, said plainly: nothing when Prune already has
+ * administrator rights, otherwise the reason and the one-time fix. */
+function AdminAccessNote({ admin }) {
   const { t } = useLanguage();
+  if (admin.elevated) {
+    return <p className="text-[12.5px] text-[color:var(--text-secondary)] mb-3">{t('diskMapV3.elevation.runningAsAdmin')}</p>;
+  }
+  return (
+    <div className="mb-3 flex flex-col gap-1.5">
+      <p className="text-[12.5px] text-[color:var(--text-secondary)]">{t('diskMap.driveRootPrompt.fastNeeds')}</p>
+      <p className="text-[12.5px] text-[color:var(--text-secondary)]">{t('diskMapV3.elevation.why')}</p>
+      {admin.canRestart && (
+        <>
+          <p className="text-[12.5px] text-[color:var(--text-secondary)]">{t('diskMapV3.elevation.restartHint')}</p>
+          <div>
+            <button
+              type="button"
+              className="btn-ghost px-3.5 py-2 rounded-lg text-[12.5px] font-medium disabled:opacity-50"
+              onClick={admin.onRestart}
+              disabled={admin.restarting}
+            >
+              {admin.restarting ? t('diskMapV3.elevation.restarting') : t('diskMapV3.elevation.restartButton')}
+            </button>
+          </div>
+        </>
+      )}
+      {admin.outcome?.kind === 'declined' && (
+        <p role="status" className="text-[12.5px] text-[color:var(--warning)]">{t('diskMapV3.elevation.restartDeclined')}</p>
+      )}
+      {admin.outcome?.kind === 'failed' && (
+        <p role="status" className="text-[12.5px] text-[color:var(--warning)] select-text">
+          {t('diskMapV3.elevation.restartFailed', admin.outcome.error)}
+        </p>
+      )}
+    </div>
+  );
+}
+
+export function DriveRootPrompt({ path, onFastScan, fastScanning, onCrawl, otherDrives, alsoScan, onToggleAlso, fastUnavailable, admin, lastMode }) {
+  const { t } = useLanguage();
+  const crawlFirst = lastMode === 'crawl';
   return (
     <section className="w-full max-w-[860px] leading-[1.55] [overflow-wrap:anywhere]">
       <h2 className="text-[18px] font-semibold text-[color:var(--text-primary)] mb-4">
@@ -165,12 +206,12 @@ export function DriveRootPrompt({ path, onFastScan, fastScanning, onCrawl, other
           title={t('diskMap.driveRootPrompt.fastTitle')}
           badge={fastUnavailable ? undefined : t('diskMap.driveRootPrompt.recommended')}
           explain={t('diskMap.driveRootPrompt.fastExplain', path.replace(/\\+$/, ''))}
-          note={fastUnavailable ? t('diskMapV3.drives.notNtfs') : t('diskMap.driveRootPrompt.fastNeeds')}
+          note={fastUnavailable ? t('diskMapV3.drives.notNtfs') : admin ? <AdminAccessNote admin={admin} /> : t('diskMap.driveRootPrompt.fastNeeds')}
         >
           {!fastUnavailable && otherDrives && onToggleAlso && (
             <AlsoScanDrives drives={otherDrives} alsoScan={alsoScan ?? new Set()} onToggle={onToggleAlso} />
           )}
-          <button className="btn-primary px-4 py-2 rounded-lg text-[13px] font-medium disabled:opacity-50"
+          <button className={`${crawlFirst ? 'btn-ghost px-3.5 text-[12.5px]' : 'btn-primary px-4 text-[13px]'} py-2 rounded-lg font-medium disabled:opacity-50`}
             onClick={onFastScan}
             disabled={fastScanning || fastUnavailable}
           >
@@ -183,7 +224,7 @@ export function DriveRootPrompt({ path, onFastScan, fastScanning, onCrawl, other
           note={t('diskMap.driveRootPrompt.crawlLimit')}
         >
           <button
-            className="btn-ghost px-3.5 py-2 rounded-lg text-[12.5px] font-medium"
+            className={`${crawlFirst ? 'btn-primary px-4 text-[13px]' : 'btn-ghost px-3.5 text-[12.5px]'} py-2 rounded-lg font-medium`}
             onClick={onCrawl}
           >
             {t('diskMap.driveRootPrompt.crawlButton')}
@@ -786,6 +827,11 @@ function DiskMap() {
   const [crawlRoots, setCrawlRoots] = useState(() => new Set());
 
   const { drives, systemDrive } = useDrives();
+  const admin = useAdminAccess();
+  // How the user last chose to scan, so the chooser leads with it. It only
+  // emphasises a button; it never starts a scan.
+  const [lastMode, setLastMode] = useState(() => readScanMode(safeStorage()));
+  const rememberMode = (mode) => { writeScanMode(safeStorage(), mode); setLastMode(mode); };
   const currentLetter = driveLetterOf(currentPath);
   const crawlRoot = crawlRoots.has(currentLetter);
   const currentDrive = drives?.find((d) => d.letter === currentLetter) ?? null;
@@ -804,6 +850,7 @@ function DiskMap() {
    * live in an effect -- see api.js. Every drive ticked goes in ONE request,
    * so it is one prompt however many are chosen. */
   const handleFastScan = async () => {
+    rememberMode('fast');
     setFastScanning(true);
     setFastNote(null);
     // What the last successful fast scan took, read fresh at the click: the
@@ -1240,7 +1287,9 @@ function DiskMap() {
           path={currentPath}
           onFastScan={handleFastScan}
           fastScanning={fastScanning}
-          onCrawl={() => setCrawlRoots((prev) => new Set(prev).add(currentLetter))}
+          onCrawl={() => { rememberMode('crawl'); setCrawlRoots((prev) => new Set(prev).add(currentLetter)); }}
+          admin={{ ...admin, onRestart: admin.restart }}
+          lastMode={lastMode}
           otherDrives={(drives ?? []).filter((d) => d.letter !== currentLetter && d.ntfs)}
           alsoScan={alsoScan}
           onToggleAlso={handleToggleAlso}

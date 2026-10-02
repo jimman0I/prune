@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { scanDrivesViaMft } from '../services/mftScan.js';
 import { DEFAULT_MAX_DEPTH } from '../services/diskScan.js';
+import { isElevated } from '../lib/privilege.js';
 
 const router = Router();
 
@@ -16,6 +17,17 @@ function lettersFrom(body) {
   if (!raw.every((l) => /^[a-z]$/i.test(String(l)))) return null;
   return [...new Set(raw.map((l) => String(l).toUpperCase()))];
 }
+
+/** Whether the fast scan can run without asking. The Disk Map reads this to
+ * decide what to tell the user: nothing to approve when Prune already runs
+ * as administrator, an explanation (and a restart button) when it does not. */
+router.get('/status', async (_req, res) => {
+  try {
+    res.json({ elevated: await isElevated() });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 
 /** POST because it raises a UAC prompt, exactly like /disk-health/elevated.
  * That's not a REST technicality -- a GET is something a browser, a

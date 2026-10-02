@@ -4,6 +4,9 @@ import { startTestServer } from '../testSupport/routeServer.js';
 const scanDrivesViaMft = vi.fn();
 vi.mock('../services/mftScan.js', () => ({ scanDrivesViaMft: (...a) => scanDrivesViaMft(...a) }));
 
+const isElevated = vi.fn(async () => false);
+vi.mock('../lib/privilege.js', () => ({ isElevated: (...a) => isElevated(...a) }));
+
 let server;
 beforeAll(async () => { server = await startTestServer(); });
 afterAll(async () => { await server.close(); });
@@ -69,5 +72,21 @@ describe('POST /mft-scan', () => {
     const res = await post({ driveLetters: ['E'] });
     expect(res.status).toBe(500);
     expect(res.body.error).toBe('Not an NTFS volume');
+  });
+});
+
+describe('GET /mft-scan/status', () => {
+  it('says whether Prune already runs as administrator', async () => {
+    isElevated.mockResolvedValueOnce(true);
+    expect((await server.call('/mft-scan/status')).body).toEqual({ elevated: true });
+    isElevated.mockResolvedValueOnce(false);
+    expect((await server.call('/mft-scan/status')).body).toEqual({ elevated: false });
+  });
+
+  // Reading the status must never be able to start a scan: the scan itself
+  // stays POST-only, because it can raise a consent dialog.
+  it('does not make the scan itself reachable by GET', async () => {
+    expect([404, 405]).toContain((await server.call('/mft-scan')).status);
+    expect(scanDrivesViaMft).not.toHaveBeenCalled();
   });
 });

@@ -1,13 +1,20 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
 const runElevatedNodeJsonMock = vi.fn();
+const runNodeJsonMock = vi.fn();
 vi.mock('../lib/elevated.js', () => ({
-  runElevatedNodeJson: (...args) => runElevatedNodeJsonMock(...args)
+  runElevatedNodeJson: (...args) => runElevatedNodeJsonMock(...args),
+  runNodeJson: (...args) => runNodeJsonMock(...args)
 }));
+const isElevatedMock = vi.fn(async () => false);
+vi.mock('../lib/privilege.js', () => ({ isElevated: (...a) => isElevatedMock(...a) }));
 
 let scanDrivesViaMft;
 beforeEach(async () => {
   runElevatedNodeJsonMock.mockReset();
+  runNodeJsonMock.mockReset();
+  isElevatedMock.mockReset();
+  isElevatedMock.mockResolvedValue(false);
   ({ scanDrivesViaMft } = await import('./mftScan.js'));
 });
 
@@ -99,5 +106,40 @@ describe('scanDrivesViaMft', () => {
   it('survives a response with no data at all', async () => {
     runElevatedNodeJsonMock.mockResolvedValue({ ok: true });
     expect((await scanDrivesViaMft({})).ok).toBe(false);
+  });
+});
+
+describe('scanDrivesViaMft when Prune is already running as administrator', () => {
+  beforeEach(() => { isElevatedMock.mockResolvedValue(true); });
+
+  // The point of running Prune elevated. Asking Windows for consent the
+  // user gave by starting Prune this way, on every scan, would make the
+  // restart pointless.
+  it('runs the helper directly and raises no prompt', async () => {
+    runNodeJsonMock.mockResolvedValue({ ok: true, data: { drives: [okDrive('C')] } });
+
+    const result = await scanDrivesViaMft({ driveLetters: ['C'] });
+
+    expect(result.ok).toBe(true);
+    expect(runElevatedNodeJsonMock).not.toHaveBeenCalled();
+    expect(runNodeJsonMock).toHaveBeenCalledTimes(1);
+    const [workerPath, args, options] = runNodeJsonMock.mock.calls[0];
+    expect(workerPath).toMatch(/mftWorker\.js$/);
+    expect(args).toEqual([]);
+    expect(options.input).toEqual({ drives: ['C'], maxDepth: 12 });
+  });
+
+  it('reports a real failure of the direct run as an error', async () => {
+    runNodeJsonMock.mockResolvedValue({ ok: false, error: 'Access is denied' });
+    expect(await scanDrivesViaMft({})).toEqual({ ok: false, error: 'Access is denied' });
+  });
+});
+
+describe('scanDrivesViaMft when Prune is not elevated', () => {
+  it('goes through the UAC prompt as before', async () => {
+    runElevatedNodeJsonMock.mockResolvedValue({ ok: true, data: { drives: [okDrive('C')] } });
+    await scanDrivesViaMft({});
+    expect(runElevatedNodeJsonMock).toHaveBeenCalledTimes(1);
+    expect(runNodeJsonMock).not.toHaveBeenCalled();
   });
 });
