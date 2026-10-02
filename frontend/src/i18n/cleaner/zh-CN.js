@@ -82,7 +82,7 @@ export default {
     league_of_legends_logs: { name: "游戏日志", description: "每场对局的客户端和游戏日志。会被无限期保留，却几乎从不被读取。" },
     recycle_bin: { name: "回收站", description: "你已删除的文件，在清空回收站之前仍占用着空间。清空正是目的所在，所以这里的内容不会自行恢复。" },
     user_temp: { name: "Temp 文件夹", description: "Windows、安装程序和机器上许多程序写入、却很少自行清理的临时工作文件夹。" },
-    system_empty_space: { name: "可用磁盘空间", description: "用零覆盖驱动器上的可用空间，然后删除填充文件，使你之前删除的文件无法恢复。可能需要数小时。它不会释放任何空间，在支持 TRIM 的 SSD 上没有实际作用，还会增加写入损耗。" },
+    system_empty_space: { name: "可用磁盘空间", description: "覆盖你所选驱动器上的可用空间（用零，或用三次随机数据），然后删除填充文件，使你之前删除的文件无法恢复。可能需要数小时。它不会释放任何空间，在支持 TRIM 的 SSD 上没有实际作用，还会增加写入损耗。" },
     defender_history: { name: "扫描历史记录", description: "Defender 过往扫描的已保存结果及列出它们的日志。不影响防护；Defender 会在下次扫描时开始新的记录。" },
     defender_temp: { name: "临时文件", description: "Defender 用完后遗留在 Windows 临时文件夹和更新文件夹中的更新安装程序和日志。" },
     defender_quarantine: { name: "已隔离的文件", description: "Defender 检测到并锁定隔离的文件。隔离是 Defender 归还被误报文件的方式——一旦清除，误报的文件就再也无法恢复。" },

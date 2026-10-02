@@ -6,6 +6,7 @@ import AutomationSettings from './AutomationSettings.jsx';
 import ThemeToggle from './ThemeToggle.jsx';
 import Toggle from './Toggle.jsx';
 import CookieKeepListSettings from './CookieKeepListSettings.jsx';
+import CustomCleanersSettings from './CustomCleanersSettings.jsx';
 import { useSettings, useUpdateCheck } from '../hooks/useSystemQueries.js';
 import { leftoverDestinationFrom } from '../lib/leftoverDestination.js';
 import { removalModeFrom } from '../lib/cleanOutcome.js';
@@ -487,8 +488,51 @@ function SettingsPage({ onReportBug = null }) {
                     checked={settings.hideUnavailableRules}
                     onChange={() => save({ hideUnavailableRules: !settings.hideUnavailableRules })}
                   />
+                  {/* Overwrite-then-delete. The description is the honest
+                      part: it says where the overwrite does not work, because
+                      a switch called "overwrite" that quietly fails on an SSD
+                      is worse than none. Only an exact true counts as on. */}
+                  <SettingRow
+                    title={t('deepCleanV3.overwrite.title')}
+                    description={t('deepCleanV3.overwrite.description')}
+                    checked={isOnlyIfTrue('overwriteBeforeDelete')}
+                    onChange={() => save({ overwriteBeforeDelete: !isOnlyIfTrue('overwriteBeforeDelete') })}
+                  />
+                  {isOnlyIfTrue('overwriteBeforeDelete') && (
+                    <SettingRow
+                      title={t('deepCleanV3.overwrite.passes')}
+                      control={(
+                        <div role="radiogroup" aria-label={t('deepCleanV3.overwrite.passes')} className="flex flex-col gap-2 shrink-0">
+                          {[1, 3].map((passes) => (
+                            <label key={passes} className="flex items-center gap-2 cursor-pointer text-[12.5px] text-[color:var(--text-primary)]">
+                              <input
+                                type="radio"
+                                name="overwrite-passes"
+                                checked={(settings.overwritePasses === 3 ? 3 : 1) === passes}
+                                onChange={() => save({ overwritePasses: passes })}
+                                className="accent-[color:var(--accent-primary)]"
+                              />
+                              {t(`deepCleanV3.overwrite.pass${passes}`)}
+                            </label>
+                          ))}
+                        </div>
+                      )}
+                    />
+                  )}
+                  {/* The same switch the Uninstall tab has: one setting, honoured
+                      by Deep Clean's locked files as well as an uninstall's. */}
+                  <SettingRow
+                    title={t('settings.uninstallTab.deleteLockedFiles.title')}
+                    description={t('settings.uninstallTab.deleteLockedFiles.description')}
+                    checked={isOnlyIfTrue('deleteLockedFilesOnRestart')}
+                    onChange={() => save({ deleteLockedFilesOnRestart: !isOnlyIfTrue('deleteLockedFilesOnRestart') })}
+                  />
                 </div>
               </div>
+
+              {/* The user's own rules: Custom locations, and BleachBit
+                  cleaners they import. Two panels of their own. */}
+              <CustomCleanersSettings />
 
               {/* The two limits on the quarantine. Both empty by default,
                   and both read "blank means keep everything" -- the same

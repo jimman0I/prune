@@ -22,6 +22,7 @@ const fetchAutomation = vi.fn(async () => ({ enabled: false, nextRun: null }));
 const runSandboxTest = vi.fn();
 
 vi.mock('../lib/api.js', () => ({
+  fetchCustomCleaners: vi.fn(async () => ({ locations: [], imported: [] })),
   fetchSettings: (...a) => fetchSettings(...a),
   updateSettings: (...a) => updateSettings(...a),
   fetchUpdateCheck: (...a) => fetchUpdateCheck(...a),
@@ -285,12 +286,12 @@ describe('the settings screen, in Greek', () => {
 
       const input = screen.getByLabelText('Διαδρομή φακέλου ή τύπος αρχείου προς εξαίρεση');
       await user.type(input, 'notavalidvalue');
-      await user.click(screen.getByRole('button', { name: 'Προσθήκη' }));
+      await user.click(screen.getAllByRole('button', { name: 'Προσθήκη' }).at(-1));
       expect(screen.getByText(/Γράψτε μια πλήρη διαδρομή φακέλου/)).toBeTruthy();
 
       await user.clear(input);
       await user.type(input, '*.iso');
-      await user.click(screen.getByRole('button', { name: 'Προσθήκη' }));
+      await user.click(screen.getAllByRole('button', { name: 'Προσθήκη' }).at(-1));
 
       // classifyExclusion normalizes "*.iso" to the stored value ".iso".
       expect(await screen.findByText('Τύπος')).toBeTruthy();

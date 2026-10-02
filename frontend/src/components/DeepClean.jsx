@@ -17,6 +17,8 @@ import { removalModeFrom, cleanOutcome } from '../lib/cleanOutcome.js';
 import DeepCleanTree from './DeepCleanTree.jsx';
 import CleanWarningDialog from './CleanWarningDialog.jsx';
 import WipeFreeSpaceDialog from './WipeFreeSpaceDialog.jsx';
+import ShredDialog from './ShredDialog.jsx';
+import { biggestSelected, fileName } from '../lib/biggestFiles.js';
 import { useLanguage } from '../i18n/LanguageContext.jsx';
 import { useCleanerText } from '../i18n/cleanerText.js';
 
@@ -108,7 +110,9 @@ function ScanLog({ lines, scanning, scanned, total, progress }) {
       {scanning && progress && (
         <p data-testid="deep-clean-progress" className="px-4 pt-3 text-[12px] font-mono text-[color:var(--text-secondary)] shrink-0">
           {progress.wipe
-            ? t('deepClean.scanLog.wiping', formatBytes(progress.bytesWritten), formatBytes(progress.totalBytes))
+            ? (progress.passes > 1
+              ? t('deepCleanV3.wipe.progressPass', progress.pass, progress.passes, formatBytes(progress.bytesWritten), formatBytes(progress.totalBytes))
+              : t('deepClean.scanLog.wiping', formatBytes(progress.bytesWritten), formatBytes(progress.totalBytes)))
             : t('deepClean.scanLog.searching', progress.entries.toLocaleString())}
         </p>
       )}
@@ -147,6 +151,12 @@ const MODE_TEXT = {
   delete: 'deepClean.footer.modeDelete'
 };
 
+/** Whether any file was skipped because scheduling its deletion at restart
+ * needed administrator rights (see lib/cleanerActions/delete.js). */
+function schedulingNeedsAdmin(result) {
+  return (result?.results ?? []).some((r) => (r?.skipped ?? []).some((s) => /needs administrator/.test(s?.reason ?? '')));
+}
+
 function formatBytes(bytes) {
   if (bytes === null || bytes === undefined) return '—';
   if (bytes === 0) return '0 B';
@@ -174,6 +184,7 @@ function DeepClean({ onNavigate }) {
     retry: 1
   });
   const [confirmClean, setConfirmClean] = useState(false);
+  const [shredOpen, setShredOpen] = useState(false);
   const [cleanResult, setCleanResult] = useState(null);
   const [cleanError, setCleanError] = useState(null);
   const [elevating, setElevating] = useState(false);
@@ -459,13 +470,22 @@ function DeepClean({ onNavigate }) {
     // A wipe frees nothing, so "Freed 0 B" beside it would only mislead.
     if (freedBytes > 0 || (movedBytes === 0 && !wipe)) sentences.push(t('deepClean.resultFreed', formatBytes(freedBytes)));
     if (wipe) {
-      sentences.push(t(wipe.aborted ? 'deepClean.resultWipeStopped' : 'deepClean.resultWiped', formatBytes(wipe.bytesWritten)));
+      // Three passes write random data, and the sentence must say so: the
+      // zeros wording would be untrue.
+      const key = wipe.pattern === 'random'
+        ? (wipe.aborted ? 'deepCleanV3.wipe.resultRandomStopped' : 'deepCleanV3.wipe.resultRandom')
+        : (wipe.aborted ? 'deepClean.resultWipeStopped' : 'deepClean.resultWiped');
+      sentences.push(t(key, formatBytes(wipe.bytesWritten), wipe.passes));
     }
     if (movedBytes > 0) {
       sentences.push(movedTo === 'recycle'
         ? t('deepClean.resultRecycled', formatBytes(movedBytes))
         : t('deepClean.resultMoved', formatBytes(movedBytes)));
     }
+    // Locked files handed to Windows to delete at the next restart: still on
+    // the disk, so neither freed nor skipped.
+    const scheduled = (result?.results ?? []).reduce((n, r) => n + (Number(r?.scheduledForRestart) || 0), 0);
+    if (scheduled > 0) sentences.push(t('deepCleanV3.locked.scheduled', scheduled));
     return sentences;
   };
   // Freed and moved read as separate sentences; "Freed 5 KB. Moved 3 MB to ..."
@@ -570,6 +590,10 @@ function DeepClean({ onNavigate }) {
   };
 
   const cleanTotal = selectionTotal(categories, selected);
+  const biggest = useMemo(
+    () => (removalMode === 'delete' && confirmClean ? biggestSelected(categories, selected, 3) : []),
+    [removalMode, confirmClean, categories, selected]
+  );
   // Nothing can be cleaned blind: a completed Preview that measured at least
   // one ticked item is the precondition, and a running scan or clean is not.
   // The free-space wipe frees nothing and so is never "measured"; ticking it
@@ -581,7 +605,20 @@ function DeepClean({ onNavigate }) {
   return (
     <div className="h-full flex flex-col">
       <div className="flex-1 flex flex-col min-h-0 overflow-y-auto px-12 pt-10 pb-6 max-w-[1600px] w-full">
-        <h1 className="display-heading text-[30px] leading-none mb-2">{t('deepClean.title')}</h1>
+        <div className="flex items-start justify-between gap-4 mb-2">
+          <h1 className="display-heading text-[30px] leading-none">{t('deepClean.title')}</h1>
+          {/* A tool, not a rule: it acts on what the person picks, so it
+              lives beside the title rather than in the list of presets
+              where a Select everything could reach it. */}
+          <button
+            type="button"
+            className="btn-ghost px-3.5 py-1.5 rounded-lg text-[12.5px] font-medium shrink-0 disabled:opacity-50"
+            onClick={() => setShredOpen(true)}
+            disabled={cleaning}
+          >
+            {t('deepCleanV3.shred.open')}
+          </button>
+        </div>
         <p className="text-[13px] text-[color:var(--text-secondary)] mb-6 max-w-[110ch]">
           {removalMode === 'delete' ? t('deepClean.subtitleDelete') : t('deepClean.subtitle')}
         </p>
@@ -610,6 +647,12 @@ function DeepClean({ onNavigate }) {
                   naturally instead of having a sentence mangled at
                   runtime. */}
               {lockedFileSummary(cleanResult) && t('deepClean.resultLockedSuffix', lockedFileSummary(cleanResult).count)}
+              {/* The setting was on but Windows refused the scheduling for
+                  want of administrator rights: said here, not left to look
+                  like an ordinary skip. */}
+              {schedulingNeedsAdmin(cleanResult) && (
+                <span className="block mt-1 text-[color:var(--warning)]">{t('deepCleanV3.locked.needsAdmin')}</span>
+              )}
             </div>
             {/* The space is not back until Quarantine is emptied, so the
                 way there is one click away -- but a way, not the deed:
@@ -823,6 +866,13 @@ function DeepClean({ onNavigate }) {
               <span className="text-[12.5px] text-[color:var(--text-primary)] mr-1">
                 {t(CONFIRM_PROMPT[removalMode], selected.size, cleanTotal.anyMeasured, formatBytes(cleanTotal.bytes))}
                 {wipeSelected && <> {t('deepClean.confirm.wipeNote')}</>}
+                {/* Only where it cannot be undone: naming the biggest items
+                    is what lets someone tell a cache from a game install. */}
+                {removalMode === 'delete' && biggest.length > 0 && (
+                  <span className="block mt-0.5 text-[11.5px] text-[color:var(--text-secondary)]">
+                    {t('deepCleanV3.files.biggest', biggest.map((f) => `${fileName(f.path)} (${formatBytes(f.sizeBytes)})`).join(', '))}
+                  </span>
+                )}
               </span>
               {/* Once the delete is actually in flight, Cancel no longer
                   means anything -- rules already finished stay cleaned.
@@ -914,6 +964,8 @@ function DeepClean({ onNavigate }) {
           )}
         </div>
       </div>
+
+      {shredOpen && <ShredDialog onClose={() => setShredOpen(false)} />}
 
       {warnAbout && (warnAbout.confirmEveryTime ? (
         <WipeFreeSpaceDialog onCancel={dismissWarning} onConfirm={confirmWarning} />

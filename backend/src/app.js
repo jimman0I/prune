@@ -34,6 +34,8 @@ import savedScansRoutes from './routes/savedScans.js';
 import fileIconsRoutes from './routes/fileIcons.js';
 import updateCheckRoutes from './routes/updateCheck.js';
 import bugReportRoutes from './routes/bugReport.js';
+import shredRoutes from './routes/shred.js';
+import customCleanersRoutes from './routes/customCleaners.js';
 
 export function createApp({ port } = {}) {
   const app = express();
@@ -90,6 +92,8 @@ export function createApp({ port } = {}) {
   app.use('/api/file-icons', fileIconsRoutes);
   app.use('/api/update-check', updateCheckRoutes);
   app.use('/api/bug-report', bugReportRoutes);
+  app.use('/api/shred', shredRoutes);
+  app.use('/api/custom-cleaners', customCleanersRoutes);
 
   /** Anything still unanswered is a path this app does not serve. After
    * every route, so it can only see what none of them matched. */

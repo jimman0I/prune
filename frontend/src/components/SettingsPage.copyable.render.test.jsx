@@ -16,6 +16,7 @@ const fetchUpdateCheck = vi.fn();
 const runSandboxTest = vi.fn();
 
 vi.mock('../lib/api.js', () => ({
+  fetchCustomCleaners: vi.fn(async () => ({ locations: [], imported: [] })),
   fetchSettings: (...a) => fetchSettings(...a),
   updateSettings: vi.fn(async (partial) => partial),
   fetchUpdateCheck: (...a) => fetchUpdateCheck(...a),

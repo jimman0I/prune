@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from 'react';
-import { useLanguage } from './LanguageContext.jsx';
+import { useLanguage, translate } from './LanguageContext.jsx';
 import { CLEANER_TEXT } from './cleaner/index.js';
 
 /** Deep Clean's rule names, descriptions and category labels in the user's
@@ -17,6 +17,10 @@ const usable = (text) => (typeof text === 'string' && text.trim() !== '' ? text 
 /** `field` is 'name' or 'description'. */
 function ruleField(language, item, field) {
   const own = item?.[field] ?? '';
+  // The user's Custom locations rule is not in cleaners.json, so its words
+  // live in the catalog (deepCleanV3.custom). Imported rules keep the
+  // English the file gave them: the file is the author.
+  if (item?.custom) return translate(language, field === 'name' ? 'deepCleanV3.custom.ruleName' : 'deepCleanV3.custom.ruleDescription');
   const rules = CLEANER_TEXT[language]?.rules;
   // hasOwn: an id like "constructor" must not resolve to Object.prototype.
   const translated = item?.id != null && rules && Object.hasOwn(rules, item.id) ? rules[item.id]?.[field] : null;
@@ -28,6 +32,7 @@ export const ruleDescription = (language, item) => ruleField(language, item, 'de
 
 export function categoryName(language, category) {
   const own = category ?? '';
+  if (category === 'Custom') return translate(language, 'deepCleanV3.custom.category');
   const labels = CLEANER_TEXT[language]?.categories;
   return usable(labels && Object.hasOwn(labels, category) ? labels[category] : null) ?? own;
 }

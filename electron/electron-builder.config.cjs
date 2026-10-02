@@ -52,7 +52,9 @@ module.exports = {
   //
   // relaunchAdmin.cjs is the sixth: main.cjs requires it for the Disk Map's
   // 'Restart Prune as administrator', and the same test catches its absence.
-  files: ['main.cjs', 'preload.cjs', 'updater.cjs', 'windowState.cjs', 'zoom.cjs', 'relaunchAdmin.cjs'],
+  // pathPicker.cjs is the same trap a seventh time: main.cjs requires it for
+  // the Shred tool's file chooser.
+  files: ['main.cjs', 'preload.cjs', 'updater.cjs', 'windowState.cjs', 'zoom.cjs', 'relaunchAdmin.cjs', 'pathPicker.cjs'],
   extraResources: [
     // NOTE the source: this copies from ../backend/src DIRECTLY, not from
     // the build/backend-prod/ staging directory build-installer.mjs
@@ -111,6 +113,15 @@ module.exports = {
      * At the root of resources/ rather than beside the backend, because
      * it covers the whole application and not one part of it. */
     { from: '../LICENSE', to: 'LICENSE' }
+  ],
+  /* The command line's launcher, beside Prune.exe (extraFiles lands in the
+   * app folder itself, not in resources/). The CLI proper is
+   * backend/src/cli.js, which the backend entry above already ships;
+   * prune-cli.cmd runs it through Prune.exe with ELECTRON_RUN_AS_NODE=1
+   * because a windowed exe cannot print to a console. Both the installer
+   * and the zip get it. electron/cli.test.cjs checks all of this. */
+  extraFiles: [
+    { from: 'build/prune-cli.cmd', to: 'prune-cli.cmd' }
   ],
   // Both an NSIS installer (.exe) and a portable build (.zip) -- Phase 5's
   // explicit requirement. electron-builder does not auto-detect this

@@ -23,6 +23,7 @@ const fetchUpdateCheck = vi.fn();
 const openUpdatePage = vi.fn(async () => ({ ok: true }));
 
 vi.mock('../lib/api.js', () => ({
+  fetchCustomCleaners: vi.fn(async () => ({ locations: [], imported: [] })),
   fetchSettings: (...a) => fetchSettings(...a),
   updateSettings: (...a) => updateSettings(...a),
   fetchUpdateCheck: (...a) => fetchUpdateCheck(...a),

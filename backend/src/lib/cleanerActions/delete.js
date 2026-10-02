@@ -1,11 +1,13 @@
 import * as fs from 'node:fs';
 import { readdirSync, statSync } from 'node:fs';
 import { join } from 'node:path';
-import { partitionCleanableFiles } from '../cleanGuards.js';
+import { partitionCleanableFiles, holdReason } from '../cleanGuards.js';
+import { createTopFiles, FILE_LIST_LIMIT } from '../topFiles.js';
 import { quarantineAndDelete } from '../../services/quarantine.js';
 import { sendToRecycleBin } from '../../services/recycleBin.js';
 import { removePermanently } from '../../services/leftoverRemoval.js';
 import { protectionReason } from '../../services/pathGuard.js';
+import { schedulePendingDelete } from '../../services/pendingReboot.js';
 
 /** Converts one `*`-bearing path SEGMENT (not a full path) into a
  * case-insensitive RegExp matching a filename/dirname against it --
@@ -90,7 +92,7 @@ function isAccessDenied(err) {
  * (permission error, gone by the time it's visited), it contributes
  * nothing -- same partial-over-total-failure convention cleanup.js's own
  * dirSize/leftoverScan.js already use. */
-export function collectFiles(targetPath, out, denied, excludeBasenames = null) {
+export function collectFiles(targetPath, out, denied, excludeBasenames = null, options = {}) {
   let st;
   try {
     st = statSync(targetPath);
@@ -103,6 +105,9 @@ export function collectFiles(targetPath, out, denied, excludeBasenames = null) {
     return;
   }
   if (!st.isDirectory()) return;
+  // BleachBit's search=file / glob take files. A folder that matches the
+  // pattern is not walked: the rule named a file, not a tree.
+  if (options.filesOnly) return;
   let entries;
   try {
     entries = readdirSync(targetPath, { withFileTypes: true });
@@ -125,7 +130,7 @@ export function collectFiles(targetPath, out, denied, excludeBasenames = null) {
     if (excludeBasenames && excludeBasenames.has(entry.name.toLowerCase())) continue;
     const full = join(targetPath, entry.name);
     if (entry.isDirectory()) {
-      collectFiles(full, out, denied, excludeBasenames);
+      collectFiles(full, out, denied, excludeBasenames, options);
     } else if (entry.isFile()) {
       try {
         // mtime as well as size: the "ignore anything touched in the
@@ -148,7 +153,7 @@ export function collectFiles(targetPath, out, denied, excludeBasenames = null) {
  * free. `paths` here are already environment-expanded by the caller
  * (cleanerRules.js's expandPath stays there -- it's shared by every
  * action type, not `delete`-specific). */
-export function resolveActionFiles(expandedPaths, guards = {}, excludeNames = null) {
+export function resolveActionFiles(expandedPaths, guards = {}, excludeNames = null, { filesOnly = false, userDefined = false } = {}) {
   const files = [];
   const denied = [];
   const excludeBasenames = excludeNames && excludeNames.length
@@ -164,7 +169,7 @@ export function resolveActionFiles(expandedPaths, guards = {}, excludeNames = nu
     const [driveSegment, ...rest] = pathToSegments(expanded);
     if (!driveSegment) continue;
     for (const match of resolveGlob(driveSegment, rest)) {
-      collectFiles(match, files, denied, excludeBasenames);
+      collectFiles(match, files, denied, excludeBasenames, { filesOnly });
     }
   }
 
@@ -186,7 +191,9 @@ export function resolveActionFiles(expandedPaths, guards = {}, excludeNames = nu
     return true;
   });
   const uniqueDenied = [...new Map(denied.map((p) => [p.toLowerCase(), p])).values()];
-  const { cleanable, held } = partitionCleanableFiles(uniqueFiles, guards);
+  // `userDefined` rules (the user's own locations, imported cleaners) also
+  // keep out of every protected place -- see holdReason.
+  const { cleanable, held } = partitionCleanableFiles(uniqueFiles, userDefined ? { ...guards, protectPaths: true } : guards);
   return { files: cleanable, denied: uniqueDenied, held };
 }
 
@@ -200,30 +207,76 @@ export function resolveActionFiles(expandedPaths, guards = {}, excludeNames = nu
  * locked files are kept out of its input entirely instead of trying to
  * make it tolerate them. */
 async function isFileAccessible(filePath) {
+  return (await lockError(filePath)) === null;
+}
+
+/** null when the file can be opened for read+write, else the error code
+ * Windows gave (EBUSY for a sharing violation, EPERM for access denied). */
+async function lockError(filePath) {
   try {
     const handle = await fs.promises.open(filePath, 'r+');
     await handle.close();
-    return true;
-  } catch {
-    return false;
+    return null;
+  } catch (err) {
+    return err?.code ?? 'UNKNOWN';
   }
 }
+
+/** The codes that mean "another program has this open", as opposed to a
+ * file that is gone or a disk that failed. Only these are worth handing to
+ * Windows to delete at the next boot. */
+const LOCKED_CODES = new Set(['EBUSY', 'EPERM']);
 
 /** Scans a `delete` action: how much it would free, without touching
  * anything. `action.expandedPaths` is pre-expanded (see
  * resolveActionFiles). */
 export function scan(action, guards = {}) {
-  const { files, denied, held } = resolveActionFiles(action.expandedPaths, guards, action.excludeNames);
+  // Judged file by file as the walk finds them, through the same checks
+  // resolveActionFiles applies to its list: the totals and the 200 biggest
+  // are kept, the files themselves are not. A rule can match millions.
+  const top = createTopFiles(FILE_LIST_LIMIT);
+  const now = Date.now();
+  const options = { ...guards, now, ...(action.userDefined ? { protectPaths: true } : {}) };
+  let sizeBytes = 0;
+  let fileCount = 0;
+  let heldCount = 0;
+  // Only `**` can reach one file by two roads; everything else cannot, and
+  // a Set of every path in a million-file rule would cost what this avoids.
+  const dedupe = action.expandedPaths.some((p) => /(^|[\\/])\*\*([\\/]|$)/.test(p)) ? new Set() : null;
+  const sink = {
+    push(file) {
+      if (dedupe) {
+        const key = file.path.toLowerCase();
+        if (dedupe.has(key)) return;
+        dedupe.add(key);
+      }
+      if (holdReason(file, options)) { heldCount += 1; return; }
+      sizeBytes += file.sizeBytes;
+      fileCount += 1;
+      top.add(file.path, file.sizeBytes);
+    }
+  };
+  const denied = [];
+  const excludeBasenames = action.excludeNames && action.excludeNames.length
+    ? new Set(action.excludeNames.map((n) => n.toLowerCase()))
+    : null;
+  for (const expanded of action.expandedPaths) {
+    const [driveSegment, ...rest] = pathToSegments(expanded);
+    if (!driveSegment) continue;
+    for (const match of resolveGlob(driveSegment, rest)) collectFiles(match, sink, denied, excludeBasenames, { filesOnly: action.filesOnly === true });
+  }
   return {
-    sizeBytes: files.reduce((sum, f) => sum + f.sizeBytes, 0),
-    fileCount: files.length,
+    sizeBytes,
+    fileCount,
     // What the guards held back, so the panel can say "and 12 files left
     // alone" rather than quietly reporting a smaller number than the user
     // can see in Explorer.
-    heldCount: held.length,
+    heldCount,
     // False means "this exists but Windows wouldn't let us look inside",
     // which the UI must show as needing admin rather than as 0 bytes.
-    accessible: denied.length === 0
+    accessible: denied.length === 0,
+    // The biggest files a Clean would take, for the per-file preview.
+    files: top.toArray()
   };
 }
 
@@ -233,7 +286,9 @@ export function scan(action, guards = {}) {
  * moved, not deleted outright, so a bad match is always recoverable the
  * same way an uninstall's own leftover removal already is. */
 export async function execute(action, ruleName, guards = {}) {
-  const { files, held } = resolveActionFiles(action.expandedPaths, guards, action.excludeNames);
+  const { files, held } = resolveActionFiles(action.expandedPaths, guards, action.excludeNames, {
+    filesOnly: action.filesOnly === true, userDefined: action.userDefined === true
+  });
   return executeFiles(files, held, ruleName, guards);
 }
 
@@ -248,12 +303,37 @@ export async function executeFiles(candidates, held, ruleName, guards = {}) {
   // Reported rather than dropped: the only way a user ever discovers that
   // their own exclusion is what held a file back is being told.
   const skipped = [...held];
+  // Files handed to Windows to delete at the next restart. Not `skipped`
+  // (they will go) and not freed (they have not yet): reported on their own.
+  const scheduledForRestart = [];
+  // Set after the first scheduling failure that looks like missing
+  // administrator rights -- the rest would fail the same way, slowly (two
+  // reg.exe calls each), so they are skipped with the same honest reason.
+  let scheduleBlocked = null;
   for (const file of candidates) {
-    if (await isFileAccessible(file.path)) accessible.push(file.path);
-    else skipped.push({ path: file.path, reason: 'locked or inaccessible' });
-  }
+    const code = await lockError(file.path);
+    if (code === null) { accessible.push(file.path); continue; }
 
-  if (accessible.length === 0) return { freedBytes: 0, skipped };
+    if (guards.deleteLockedOnRestart === true && LOCKED_CODES.has(code) && !deleteRefusal(file.path)) {
+      if (!scheduleBlocked) {
+        try {
+          await schedulePendingDelete(file.path);
+          scheduledForRestart.push(file.path);
+          continue;
+        } catch (err) {
+          scheduleBlocked = /denied|administrator|privilege|permission/i.test(err?.message ?? '')
+            ? 'needs administrator'
+            : (err?.message || 'failed');
+        }
+      }
+      skipped.push({ path: file.path, reason: `locked, and could not be scheduled for deletion at restart (${scheduleBlocked})` });
+      continue;
+    }
+    skipped.push({ path: file.path, reason: 'locked or inaccessible' });
+  }
+  const withScheduled = (result) => (scheduledForRestart.length > 0 ? { ...result, scheduledForRestart } : result);
+
+  if (accessible.length === 0) return withScheduled({ freedBytes: 0, skipped });
 
   // 'Delete now' -- BleachBit's behaviour, chosen in Settings and read from
   // there by the route, never sent by a client. The same guards have already
@@ -261,7 +341,7 @@ export async function executeFiles(candidates, held, ruleName, guards = {}) {
   // through the one delete implementation the uninstall flow's "Delete
   // permanently" also uses. autoQuarantine is deliberately not consulted:
   // it chooses between Quarantine and the Recycle Bin, and this is neither.
-  if (guards.removal === 'delete') return deletePermanently(accessible, candidates, skipped);
+  if (guards.removal === 'delete') return withScheduled(await deletePermanently(accessible, candidates, skipped, guards));
 
   // The other half of `autoQuarantine`, which used to be a switch in
   // Settings that decided nothing at all. Off means the Recycle Bin rather
@@ -273,12 +353,12 @@ export async function executeFiles(candidates, held, ruleName, guards = {}) {
     const sizeOf = new Map(candidates.map((f) => [f.path, f.sizeBytes]));
     const { recycled, failed, error } = await sendToRecycleBin(accessible);
     for (const path of failed) skipped.push({ path, reason: error ? `could not be recycled: ${error}` : 'could not be recycled' });
-    return {
+    return withScheduled({
       // Summed from what actually went, not from what was asked for.
       freedBytes: recycled.reduce((sum, path) => sum + (sizeOf.get(path) || 0), 0),
       recycled: true,
       skipped
-    };
+    });
   }
 
   try {
@@ -287,16 +367,16 @@ export async function executeFiles(candidates, held, ruleName, guards = {}) {
       files: accessible,
       registryKeys: []
     });
-    return { freedBytes: manifest.totalSizeBytes, quarantineBatch: manifest.batchDir, skipped };
+    return withScheduled({ freedBytes: manifest.totalSizeBytes, quarantineBatch: manifest.batchDir, skipped });
   } catch (err) {
     // Rare, given the accessibility pre-check above -- if it still
     // happens, nothing in this batch was safely quarantined, so report the
     // whole set as skipped rather than guessing at a partial freedBytes
     // the manifest never actually confirmed.
-    return {
+    return withScheduled({
       freedBytes: 0,
       skipped: [...skipped, ...accessible.map((p) => ({ path: p, reason: err.message }))]
-    };
+    });
   }
 }
 
@@ -312,7 +392,7 @@ function deleteRefusal(path) {
   return protectionReason(path, { systemRoot: '', programFiles: '', programFilesX86: '' });
 }
 
-async function deletePermanently(accessible, candidates, skipped) {
+async function deletePermanently(accessible, candidates, skipped, guards = {}) {
   const sizeOf = new Map(candidates.map((f) => [f.path, f.sizeBytes]));
   const allowed = [];
   for (const path of accessible) {
@@ -320,7 +400,11 @@ async function deletePermanently(accessible, candidates, skipped) {
     if (refusal) skipped.push({ path, reason: refusal });
     else allowed.push({ path, sizeBytes: sizeOf.get(path) || 0 });
   }
-  const { removed, failed } = await removePermanently(allowed);
+  // `overwritePasses` is 0 unless "Overwrite files before deleting" is on
+  // (settings.js). Only here, where the file is destroyed: Quarantine and
+  // the Recycle Bin keep the file, and overwriting it first would wreck the
+  // copy the user is being promised they can get back.
+  const { removed, failed } = await removePermanently(allowed, { overwritePasses: guards.overwritePasses || 0 });
   for (const { path, reason } of failed) skipped.push({ path, reason });
   return {
     // Summed from what was actually removed, not from what was asked for.

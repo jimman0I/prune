@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, nativeTheme, screen } = require('electron');
+const { app, BrowserWindow, ipcMain, nativeTheme, screen, dialog } = require('electron');
 const path = require('node:path');
 const http = require('node:http');
 const { pathToFileURL } = require('node:url');
@@ -8,6 +8,7 @@ const { resolveWindowState, loadWindowState, saveWindowState, saveWindowStateSyn
 const { zoomActionForInput, applyZoomAction, resolveSavedZoom, titleBarOverlayHeight } = require('./zoom.cjs');
 const { execFile } = require('node:child_process');
 const { createAdminRelaunch, parseRelaunchArg, waitForParentExit } = require('./relaunchAdmin.cjs');
+const { pickPaths } = require('./pathPicker.cjs');
 
 const BACKEND_PORT = 3101;
 
@@ -384,6 +385,18 @@ function registerUpdateHandlers() {
   ipcMain.handle('prune:update:install-on-quit', (event, enabled) => { fromPrune(event); updater.installOnQuit(enabled); });
 }
 
+/* The file/folder chooser behind Deep Clean's "Shred files...". The page
+ * names a kind ('files' or 'folders'); pathPicker.cjs turns anything else
+ * into "nothing chosen", and only path strings go back. Like the update
+ * handlers, it answers Prune's own windows only. */
+function registerPickerHandler() {
+  ipcMain.handle('prune:pick-paths', (event, kind) => {
+    const win = BrowserWindow.fromWebContents(event.sender);
+    if (!win) throw new Error('Not a request from Prune.');
+    return pickPaths({ dialog, win, kind });
+  });
+}
+
 app.whenReady().then(async () => {
   /* Backend startup and window creation used to run strictly one after
    * the other: start the backend, POLL it every 300ms until it answers,
@@ -414,6 +427,7 @@ app.whenReady().then(async () => {
   backendReady.catch(() => {});
   registerUpdateHandlers();
   registerAdminHandlers();
+  registerPickerHandler();
 
   await createWindow();
   await backendReady;

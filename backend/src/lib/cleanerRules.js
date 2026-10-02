@@ -1,5 +1,4 @@
 import { readFileSync, statSync } from 'node:fs';
-import { homedir } from 'node:os';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import * as deleteAction from './cleanerActions/delete.js';
@@ -15,43 +14,18 @@ import * as chromeHistoryAction from './cleanerActions/chromeHistory.js';
 import * as mozillaUrlHistoryAction from './cleanerActions/mozillaUrlHistory.js';
 import * as mozillaFaviconsAction from './cleanerActions/mozillaFavicons.js';
 import * as deepscanAction from './cleanerActions/deepscan.js';
+import { expandPath } from './expandPath.js';
 import * as wipeFreeSpaceAction from './cleanerActions/wipeFreeSpace.js';
+import { mergeTopFiles } from './topFiles.js';
+import { loadUserRules } from './userRules.js';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const CLEANERS_JSON_PATH = join(here, '..', 'data', 'cleaners.json');
 
-/** Expands the environment-variable tokens and leading `~` a cleaners.json
- * path may contain. Deliberately supports only the handful of tokens the
- * rule set actually uses -- APPDATA/LOCALAPPDATA/SYSTEMROOT/PROGRAMFILES
- * variants are always real Windows env vars, never something a rule
- * author needs to invent. A token whose env var isn't set expands to ''
- * (matches non-Windows/misconfigured environments gracefully -- the
- * resulting path just won't exist, which scanRule already treats as 0
- * bytes, not an error). Exported and independently testable. */
-export function expandPath(rawPath) {
-  let expanded = rawPath
-    .replace(/%APPDATA%/gi, process.env.APPDATA || '')
-    .replace(/%LOCALAPPDATA%/gi, process.env.LOCALAPPDATA || '')
-    .replace(/%SYSTEMROOT%/gi, process.env.SYSTEMROOT || process.env.WINDIR || '')
-    // %WINDIR% is the same folder under its other name, and Windows
-    // accepts both everywhere. Left out originally, which made a rule
-    // written with it fail silently: the token stayed in the string, the
-    // path never matched, and the rule reported itself as "not installed"
-    // rather than as broken.
-    .replace(/%WINDIR%/gi, process.env.WINDIR || process.env.SYSTEMROOT || '')
-    .replace(/%PROGRAMDATA%/gi, process.env.ProgramData || '')
-    // "C:" with no trailing separator, which is how Windows itself sets it.
-    // The Recycle Bin is the only rule that needs it, and it needs it
-    // because the bin lives at the root of each volume rather than
-    // anywhere under a profile.
-    .replace(/%SYSTEMDRIVE%/gi, process.env.SystemDrive || (process.env.SYSTEMROOT || 'C:').slice(0, 2))
-    .replace(/%PROGRAMFILES\(X86\)%/gi, process.env['ProgramFiles(x86)'] || '')
-    .replace(/%PROGRAMFILES%/gi, process.env.ProgramFiles || '');
-  if (expanded.startsWith('~')) {
-    expanded = join(homedir(), expanded.slice(1).replace(/^[\\/]/, ''));
-  }
-  return expanded;
-}
+// Lives in its own module so the settings and import code can use it without
+// importing the whole rule engine. Re-exported: it has always been imported
+// from here.
+export { expandPath };
 
 /** Resolves one bespoke action's `path` (already environment-expanded)
  * into every REAL concrete path it currently matches -- a `*` wildcard
@@ -73,7 +47,15 @@ export function resolveBespokeActionPaths(expandedPath) {
  * small and this is never a hot path, so there's no reason to cache it
  * and risk serving a stale copy after an edit. */
 export function loadCleanerRules() {
-  return JSON.parse(readFileSync(CLEANERS_JSON_PATH, 'utf8'));
+  // UNREVO_CLEANERS_PATH swaps in another rule set -- how the command line's
+  // tests run a real clean against a temp folder instead of the real rules.
+  // Same env-override pattern as UNREVO_SETTINGS_PATH. It is the WHOLE set:
+  // the user's own rules are not added to it.
+  if (process.env.UNREVO_CLEANERS_PATH) return JSON.parse(readFileSync(process.env.UNREVO_CLEANERS_PATH, 'utf8'));
+  // Prune's rules, then the user's: the Custom locations rule and any
+  // imported BleachBit cleaners (lib/userRules.js). Read fresh every time,
+  // like the file above, so an import shows on the next scan.
+  return [...JSON.parse(readFileSync(CLEANERS_JSON_PATH, 'utf8')), ...loadUserRules()];
 }
 
 /** Gives every rule an `actions` array, synthesizing one from the legacy
@@ -151,6 +133,9 @@ export function scanRule(rule, guards = {}) {
   // promise about the delete half; don't read it as "everything in this
   // rule, registry key included, is reachable."
   let sizeBytes = null, fileCount = null, heldCount = 0, accessible = true, present = false;
+  // The biggest files each file-listing action found, for the per-file preview.
+  const fileLists = [];
+  let filesListed = false;
 
   for (const action of normalized.actions) {
     if (action.type === 'shell') {
@@ -158,11 +143,13 @@ export function scanRule(rule, guards = {}) {
       // sizeBytes/fileCount stay null -- a shell action has nothing to measure.
     } else if (action.type === 'delete') {
       const expandedPaths = action.paths.map(expandPath);
-      const result = deleteAction.scan({ expandedPaths, excludeNames: action.excludeNames }, guards);
+      const result = deleteAction.scan({ expandedPaths, excludeNames: action.excludeNames, filesOnly: action.filesOnly, userDefined: action.userDefined }, guards);
       sizeBytes = (sizeBytes ?? 0) + result.sizeBytes;
       fileCount = (fileCount ?? 0) + result.fileCount;
       heldCount += result.heldCount;
       accessible = accessible && result.accessible;
+      fileLists.push(result.files);
+      filesListed = true;
       if (expandedPaths.some((p) => rulePathsExistFor(p))) present = true;
     } else if (action.type === 'sqlite.vacuum') {
       const result = sqliteVacuumAction.scan({ expandedPath: expandPath(action.path) });
@@ -229,7 +216,10 @@ export function scanRule(rule, guards = {}) {
     }
   }
 
-  return { id: rule.id, sizeBytes, fileCount, heldCount, present, accessible };
+  return {
+    id: rule.id, sizeBytes, fileCount, heldCount, present, accessible,
+    ...(filesListed ? { files: mergeTopFiles(fileLists), filesListed: true } : {})
+  };
 }
 
 /** The scan for a rule that includes a `deepscan` action, which walks the
@@ -249,6 +239,7 @@ export async function scanRuleAsync(rule, guards = {}) {
     ? scanRule({ ...normalized, actions: others }, guards)
     : { id: rule.id, sizeBytes: null, fileCount: null, heldCount: 0, present: false, accessible: true };
   let { sizeBytes, fileCount, heldCount, accessible } = base;
+  const fileLists = [base.files];
   let incomplete;
 
   for (const action of deepActions) {
@@ -257,9 +248,14 @@ export async function scanRuleAsync(rule, guards = {}) {
     fileCount = (fileCount ?? 0) + result.fileCount;
     heldCount += result.heldCount;
     accessible = accessible && result.accessible;
+    fileLists.push(result.files);
     if (result.incomplete) incomplete = result.incomplete;
   }
-  return { id: rule.id, sizeBytes, fileCount, heldCount, present: true, accessible, ...(incomplete ? { incomplete } : {}) };
+  return {
+    id: rule.id, sizeBytes, fileCount, heldCount, present: true, accessible,
+    files: mergeTopFiles(fileLists), filesListed: true,
+    ...(incomplete ? { incomplete } : {})
+  };
 }
 
 /** A deepscan action as the action module wants it: the root already
@@ -442,6 +438,8 @@ export async function executeRule(rule, guards = {}) {
   let registryKeysRemoved;
   const skipped = [];
   let recycled, quarantineBatch, ranCommand, error, vacuumed, edited, wiped;
+  // Locked files handed to Windows to delete at the next restart.
+  let scheduledForRestart = 0;
 
   for (const action of normalized.actions) {
     if (action.type === 'shell') {
@@ -450,9 +448,10 @@ export async function executeRule(rule, guards = {}) {
       if (result.error) error = result.error;
     } else if (action.type === 'delete') {
       const expandedPaths = action.paths.map(expandPath);
-      const result = await deleteAction.execute({ expandedPaths, excludeNames: action.excludeNames }, rule.name, guards);
+      const result = await deleteAction.execute({ expandedPaths, excludeNames: action.excludeNames, filesOnly: action.filesOnly, userDefined: action.userDefined }, rule.name, guards);
       tally(result);
       skipped.push(...result.skipped);
+      scheduledForRestart += result.scheduledForRestart?.length || 0;
       if (result.recycled) recycled = true;
       if (result.quarantineBatch) quarantineBatch = result.quarantineBatch;
     } else if (action.type === 'sqlite.vacuum') {
@@ -471,6 +470,7 @@ export async function executeRule(rule, guards = {}) {
       const result = await deepscanAction.execute(deepscanTarget(action), rule.name, deepscanGuards(rule, guards));
       tally(result);
       skipped.push(...result.skipped);
+      scheduledForRestart += result.scheduledForRestart?.length || 0;
       if (result.recycled) recycled = true;
       if (result.quarantineBatch) quarantineBatch = result.quarantineBatch;
     } else if (action.type === 'wipe.freespace') {
@@ -562,6 +562,7 @@ export async function executeRule(rule, guards = {}) {
     ...(vacuumed ? { vacuumed } : {}),
     ...(edited ? { edited } : {}),
     ...(wiped ? { wiped } : {}),
+    ...(scheduledForRestart > 0 ? { scheduledForRestart } : {}),
     ...(recycled ? { recycled } : {}),
     ...(quarantineBatch ? { quarantineBatch } : {}),
     ...(ranCommand ? { ranCommand } : {}),
