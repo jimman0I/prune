@@ -58,6 +58,16 @@ vi.mock('../lib/cleanerActions/wipeFreeSpace.js', () => ({
   wipeInProgress: () => wipeRunning
 }));
 
+const GB = 1024 ** 3;
+const listFixedDrives = vi.fn(async () => [
+  { drive: 'C:', label: 'Windows', totalBytes: 500 * GB, freeBytes: 40 * GB },
+  { drive: 'D:', label: 'Games', totalBytes: 1000 * GB, freeBytes: 400 * GB }
+]);
+vi.mock('../services/localDrives.js', () => ({
+  listFixedDrives: (...a) => listFixedDrives(...a),
+  profileDrive: () => 'C:'
+}));
+
 const listCookieDomains = vi.fn(async () => ({ domains: [{ domain: 'example.com', count: 3 }], errors: [] }));
 vi.mock('../lib/cleanerActions/cookieDomains.js', () => ({
   listCookieDomains: (...a) => listCookieDomains(...a)
@@ -163,6 +173,46 @@ describe('GET /deep-clean/wipe-estimate', () => {
     const res = await server.call('/deep-clean/wipe-estimate');
     expect(res.status).toBe(500);
     expect(res.body.error).toBe('no drive');
+  });
+
+  it('measures the drive and passes asked for', async () => {
+    const res = await server.call('/deep-clean/wipe-estimate?drive=d%3A&passes=3');
+    expect(res.status).toBe(200);
+    expect(estimateWipe).toHaveBeenCalledWith({ drive: 'D:', passes: 3 });
+  });
+
+  it('measures the profile drive and one pass when none is asked for', async () => {
+    await server.call('/deep-clean/wipe-estimate');
+    expect(estimateWipe).toHaveBeenCalledWith({ drive: null, passes: 1 });
+  });
+
+  it('treats a passes value other than 3 as 1', async () => {
+    await server.call('/deep-clean/wipe-estimate?passes=2');
+    expect(estimateWipe.mock.calls[0][0].passes).toBe(1);
+  });
+
+  it('refuses a drive that is not one of the local fixed disks, and writes nothing there', async () => {
+    for (const drive of ['Z:', 'C:%5CWindows', '%5C%5Cserver%5Cshare', '..', 'CD%3A']) {
+      const res = await server.call(`/deep-clean/wipe-estimate?drive=${drive}`);
+      expect(res.status, drive).toBe(400);
+    }
+    expect(estimateWipe).not.toHaveBeenCalled();
+  });
+});
+
+describe('GET /deep-clean/wipe-drives', () => {
+  it('lists the local fixed drives and says which is the profile drive', async () => {
+    const res = await server.call('/deep-clean/wipe-drives');
+    expect(res.status).toBe(200);
+    expect(res.body.profileDrive).toBe('C:');
+    expect(res.body.drives.map((d) => d.drive)).toEqual(['C:', 'D:']);
+    expect(res.body.drives[1]).toMatchObject({ label: 'Games', totalBytes: 1000 * GB, freeBytes: 400 * GB });
+  });
+
+  it('reports a failure as 500', async () => {
+    listFixedDrives.mockRejectedValueOnce(new Error('powershell failed'));
+    const res = await server.call('/deep-clean/wipe-drives');
+    expect(res.status).toBe(500);
   });
 });
 

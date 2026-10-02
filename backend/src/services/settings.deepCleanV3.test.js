@@ -62,3 +62,41 @@ describe('overwrite before deleting', () => {
     expect((await updateSettings({ overwriteBeforeDelete: 'true' })).overwriteBeforeDelete).toBe(false);
   });
 });
+
+describe('the free-space wipe choices', () => {
+  it('default to the profile drive and one pass', async () => {
+    const settings = await getSettings();
+    expect(settings.wipeDrive).toBeNull();
+    expect(settings.wipePasses).toBe(1);
+  });
+
+  it('reach the cleaner as guards.wipeDrive and guards.wipePasses', () => {
+    expect(cleanGuardsFrom({}).wipeDrive).toBeNull();
+    expect(cleanGuardsFrom({}).wipePasses).toBe(1);
+    expect(cleanGuardsFrom({ wipeDrive: 'd:', wipePasses: 3 })).toMatchObject({ wipeDrive: 'D:', wipePasses: 3 });
+  });
+
+  it('accept only a bare drive letter -- the wipe fills whatever this names', () => {
+    for (const bad of ['C:\\Windows', 'C', 'CD:', '\\\\server\\share', '..', '/', 7, {}, true, '']) {
+      expect(cleanGuardsFrom({ wipeDrive: bad }).wipeDrive, String(bad)).toBeNull();
+    }
+  });
+
+  it('turn any passes value other than 3 into 1', async () => {
+    for (const junk of [0, 2, 99, 'many', null]) expect(cleanGuardsFrom({ wipePasses: junk }).wipePasses).toBe(1);
+    expect((await updateSettings({ wipePasses: 3 })).wipePasses).toBe(3);
+    expect((await updateSettings({ wipePasses: 5 })).wipePasses).toBe(1);
+  });
+
+  it('are repaired when a hand-edited file holds nonsense', async () => {
+    await writeRaw({ wipeDrive: 'C:\\Windows', wipePasses: 12 });
+    const settings = await getSettings();
+    expect(settings.wipeDrive).toBeNull();
+    expect(settings.wipePasses).toBe(1);
+  });
+
+  it('save a drive letter in upper case', async () => {
+    expect((await updateSettings({ wipeDrive: 'e:' })).wipeDrive).toBe('E:');
+    expect((await updateSettings({ wipeDrive: null })).wipeDrive).toBeNull();
+  });
+});

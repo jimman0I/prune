@@ -534,8 +534,22 @@ export async function fetchDeepCleanRules() {
 /** What a free-space wipe would do on this machine -- the drive, how much it
  * would write and a time estimate from a real ~1 second write test -- for
  * the confirm dialog. Not called until that dialog opens. */
-export async function fetchWipeEstimate() {
-  const res = await fetch(`${API_URL}/deep-clean/wipe-estimate`);
+export async function fetchWipeEstimate({ drive, passes } = {}) {
+  const params = new URLSearchParams();
+  if (drive) params.set('drive', drive);
+  if (passes) params.set('passes', String(passes));
+  const query = params.toString();
+  const res = await fetch(`${API_URL}/deep-clean/wipe-estimate${query ? `?${query}` : ''}`);
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
+  return data;
+}
+
+/** The local fixed drives the wipe can be pointed at, plus the profile drive
+ * it uses when none is chosen: { drives: [{drive, label, totalBytes,
+ * freeBytes}], profileDrive }. */
+export async function fetchWipeDrives() {
+  const res = await fetch(`${API_URL}/deep-clean/wipe-drives`);
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
   return data;

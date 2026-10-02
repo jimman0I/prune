@@ -109,7 +109,9 @@ function ScanLog({ lines, scanning, scanned, total, progress }) {
       {scanning && progress && (
         <p data-testid="deep-clean-progress" className="px-4 pt-3 text-[12px] font-mono text-[color:var(--text-secondary)] shrink-0">
           {progress.wipe
-            ? t('deepClean.scanLog.wiping', formatBytes(progress.bytesWritten), formatBytes(progress.totalBytes))
+            ? (progress.passes > 1
+              ? t('deepCleanV3.wipe.progressPass', progress.pass, progress.passes, formatBytes(progress.bytesWritten), formatBytes(progress.totalBytes))
+              : t('deepClean.scanLog.wiping', formatBytes(progress.bytesWritten), formatBytes(progress.totalBytes)))
             : t('deepClean.scanLog.searching', progress.entries.toLocaleString())}
         </p>
       )}
@@ -461,7 +463,12 @@ function DeepClean({ onNavigate }) {
     // A wipe frees nothing, so "Freed 0 B" beside it would only mislead.
     if (freedBytes > 0 || (movedBytes === 0 && !wipe)) sentences.push(t('deepClean.resultFreed', formatBytes(freedBytes)));
     if (wipe) {
-      sentences.push(t(wipe.aborted ? 'deepClean.resultWipeStopped' : 'deepClean.resultWiped', formatBytes(wipe.bytesWritten)));
+      // Three passes write random data, and the sentence must say so: the
+      // zeros wording would be untrue.
+      const key = wipe.pattern === 'random'
+        ? (wipe.aborted ? 'deepCleanV3.wipe.resultRandomStopped' : 'deepCleanV3.wipe.resultRandom')
+        : (wipe.aborted ? 'deepClean.resultWipeStopped' : 'deepClean.resultWiped');
+      sentences.push(t(key, formatBytes(wipe.bytesWritten), wipe.passes));
     }
     if (movedBytes > 0) {
       sentences.push(movedTo === 'recycle'

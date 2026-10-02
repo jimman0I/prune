@@ -6,6 +6,8 @@ import { getCleanerCategoryIcons } from '../services/cleanerCategoryIcons.js';
 import { listCookieDomains } from '../lib/cleanerActions/cookieDomains.js';
 import { listInstalledPrograms } from '../services/programs.js';
 import { estimateWipe, wipeInProgress } from '../lib/cleanerActions/wipeFreeSpace.js';
+import { listFixedDrives, profileDrive } from '../services/localDrives.js';
+import { normalizePasses } from '../lib/shredFile.js';
 
 const router = Router();
 
@@ -146,7 +148,28 @@ router.get('/wipe-estimate', async (req, res) => {
     return;
   }
   try {
-    res.json(await estimateWipe());
+    // `drive` is checked against the machine's own list of fixed disks,
+    // not just against a pattern: the estimate creates a folder and writes
+    // a file there.
+    const asked = typeof req.query.drive === 'string' && req.query.drive !== '' ? req.query.drive.trim().toUpperCase() : null;
+    if (asked !== null) {
+      const fixed = await listFixedDrives();
+      if (!/^[A-Z]:$/.test(asked) || !fixed.some((d) => d.drive === asked)) {
+        res.status(400).json({ error: 'That is not a local drive.' });
+        return;
+      }
+    }
+    res.json(await estimateWipe({ drive: asked, passes: normalizePasses(req.query.passes) }));
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+/** The local fixed drives the wipe can be pointed at, for the dialog's
+ * picker, and which one it uses when none is chosen. */
+router.get('/wipe-drives', async (req, res) => {
+  try {
+    res.json({ drives: await listFixedDrives(), profileDrive: profileDrive() });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
