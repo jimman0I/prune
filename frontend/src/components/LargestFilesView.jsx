@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useLanguage } from '../i18n/LanguageContext.jsx';
 import { formatBytes } from '../lib/formatBytes.js';
 import { sortFiles } from '../lib/sortFiles.js';
@@ -25,10 +25,12 @@ const SORT_COLUMNS = [
   ['name', 'diskMapV3.columns.name']
 ];
 
-export function LargestFilesView({ files, icons, onContextMenu, searchText = '' }) {
+export function LargestFilesView({ files, icons, onContextMenu, onVisibleRows, searchText = '' }) {
   const { t } = useLanguage();
   const [sort, setSort] = useState({ column: 'size', direction: 'desc' });
   const rows = useMemo(() => sortFiles(files, sort.column, sort.direction), [files, sort]);
+  // What is on screen, in the order it is on screen, for the CSV export.
+  useEffect(() => { onVisibleRows?.(rows); }, [rows, onVisibleRows]);
 
   if (files.length === 0) {
     return (

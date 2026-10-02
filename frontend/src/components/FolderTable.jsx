@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useLanguage } from '../i18n/LanguageContext.jsx';
 import { formatBytes } from '../lib/formatBytes.js';
 import { sortFolderRows, nextFolderSort } from '../lib/sortFolderRows.js';
@@ -58,7 +58,7 @@ function Count({ value }) {
   return <>{value.toLocaleString()}</>;
 }
 
-export function FolderTable({ folderRows: allRows, onDrillDown, onContextMenu, filter = null, searchText = '' }) {
+export function FolderTable({ folderRows: allRows, onDrillDown, onContextMenu, onVisibleRows, filter = null, searchText = '' }) {
   const { t } = useLanguage();
   const [sort, setSort] = useState({ column: 'size', direction: 'desc' });
   // The counts themselves are computed off the main thread (see
@@ -76,6 +76,9 @@ export function FolderTable({ folderRows: allRows, onDrillDown, onContextMenu, f
     () => sortFolderRows(folderRows, sort.column, sort.direction),
     [folderRows, sort]
   );
+
+  // What is on screen, in the order it is on screen, for the CSV export.
+  useEffect(() => { onVisibleRows?.(rows); }, [rows, onVisibleRows]);
 
   const measured = useMemo(() => folderRows.some((r) => typeof r.allocated === 'number'), [folderRows]);
   const columns = useMemo(
