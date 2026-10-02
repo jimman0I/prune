@@ -267,13 +267,15 @@ export async function fetchRunningPrograms() {
 /** Leftover scan. `mode` ('safe' | 'moderate' | 'advanced') and `anchors`
  * (the program's own install location and registry key) are optional: left
  * out, the backend uses the remembered mode and searches by name alone. */
-export async function scanForLeftovers(name, publisher, { mode, anchors, programId } = {}) {
+export async function scanForLeftovers(name, publisher, { mode, anchors, programId, traceId } = {}) {
   const res = await fetch(`${API_URL}/leftovers/scan`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       name, publisher,
-      ...(mode ? { mode } : {}), ...(anchors ? { anchors } : {}), ...(programId ? { programId } : {})
+      ...(mode ? { mode } : {}), ...(anchors ? { anchors } : {}), ...(programId ? { programId } : {}),
+      // The id of the install monitor's record of this program, when it has one.
+      ...(traceId ? { traceId } : {})
     })
   });
   const data = await res.json();
@@ -298,6 +300,34 @@ export async function scanForcedUninstall({ name, publisher, registryKey, mode, 
   if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
   return data;
 }
+
+/* ---------------------------------------------------- install monitor */
+
+async function monitorCall(path, options) {
+  const res = await fetch(`${API_URL}/install-monitor${path}`, options);
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
+  return data;
+}
+
+/** Takes the "before" snapshot and starts the installer. Resolves once the
+ * installer is running; the snapshot makes that take several seconds. */
+export function startInstallMonitor(installerPath) {
+  return monitorCall('/start', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ installerPath })
+  });
+}
+/** Where the monitor is: { state: 'idle' | 'installing' | 'exited' | 'analyzing' | 'done' | 'failed', ... }. */
+export const fetchInstallMonitor = () => monitorCall('/session');
+/** "Done installing". Answers at once; poll fetchInstallMonitor for the result. */
+export const finishInstallMonitor = () => monitorCall('/session/finish', { method: 'POST' });
+export const cancelInstallMonitor = () => monitorCall('/session/cancel', { method: 'POST' });
+
+export async function fetchInstallTraces() {
+  const data = await monitorCall('/traces');
+  return data.traces ?? [];
+}
+export const deleteInstallTrace = (id) => monitorCall(`/traces/${encodeURIComponent(id)}`, { method: 'DELETE' });
 
 /** Shows a native dialog ('folder' or 'installer') and resolves { path },
  * where path is null if it was cancelled. The dialog is the backend's, not

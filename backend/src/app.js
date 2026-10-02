@@ -33,6 +33,7 @@ import fileIconsRoutes from './routes/fileIcons.js';
 import updateCheckRoutes from './routes/updateCheck.js';
 import bugReportRoutes from './routes/bugReport.js';
 import pickerRoutes from './routes/picker.js';
+import installMonitorRoutes from './routes/installMonitor.js';
 
 export function createApp({ port } = {}) {
   const app = express();
@@ -84,6 +85,7 @@ export function createApp({ port } = {}) {
   app.use('/api/update-check', updateCheckRoutes);
   app.use('/api/bug-report', bugReportRoutes);
   app.use('/api/picker', pickerRoutes);
+  app.use('/api/install-monitor', installMonitorRoutes);
 
   /** Anything still unanswered is a path this app does not serve. After
    * every route, so it can only see what none of them matched. */
