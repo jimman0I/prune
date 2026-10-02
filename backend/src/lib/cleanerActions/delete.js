@@ -92,7 +92,7 @@ function isAccessDenied(err) {
  * (permission error, gone by the time it's visited), it contributes
  * nothing -- same partial-over-total-failure convention cleanup.js's own
  * dirSize/leftoverScan.js already use. */
-export function collectFiles(targetPath, out, denied, excludeBasenames = null) {
+export function collectFiles(targetPath, out, denied, excludeBasenames = null, options = {}) {
   let st;
   try {
     st = statSync(targetPath);
@@ -105,6 +105,9 @@ export function collectFiles(targetPath, out, denied, excludeBasenames = null) {
     return;
   }
   if (!st.isDirectory()) return;
+  // BleachBit's search=file / glob take files. A folder that matches the
+  // pattern is not walked: the rule named a file, not a tree.
+  if (options.filesOnly) return;
   let entries;
   try {
     entries = readdirSync(targetPath, { withFileTypes: true });
@@ -127,7 +130,7 @@ export function collectFiles(targetPath, out, denied, excludeBasenames = null) {
     if (excludeBasenames && excludeBasenames.has(entry.name.toLowerCase())) continue;
     const full = join(targetPath, entry.name);
     if (entry.isDirectory()) {
-      collectFiles(full, out, denied, excludeBasenames);
+      collectFiles(full, out, denied, excludeBasenames, options);
     } else if (entry.isFile()) {
       try {
         // mtime as well as size: the "ignore anything touched in the
@@ -150,7 +153,7 @@ export function collectFiles(targetPath, out, denied, excludeBasenames = null) {
  * free. `paths` here are already environment-expanded by the caller
  * (cleanerRules.js's expandPath stays there -- it's shared by every
  * action type, not `delete`-specific). */
-export function resolveActionFiles(expandedPaths, guards = {}, excludeNames = null) {
+export function resolveActionFiles(expandedPaths, guards = {}, excludeNames = null, { filesOnly = false, userDefined = false } = {}) {
   const files = [];
   const denied = [];
   const excludeBasenames = excludeNames && excludeNames.length
@@ -166,7 +169,7 @@ export function resolveActionFiles(expandedPaths, guards = {}, excludeNames = nu
     const [driveSegment, ...rest] = pathToSegments(expanded);
     if (!driveSegment) continue;
     for (const match of resolveGlob(driveSegment, rest)) {
-      collectFiles(match, files, denied, excludeBasenames);
+      collectFiles(match, files, denied, excludeBasenames, { filesOnly });
     }
   }
 
@@ -188,7 +191,9 @@ export function resolveActionFiles(expandedPaths, guards = {}, excludeNames = nu
     return true;
   });
   const uniqueDenied = [...new Map(denied.map((p) => [p.toLowerCase(), p])).values()];
-  const { cleanable, held } = partitionCleanableFiles(uniqueFiles, guards);
+  // `userDefined` rules (the user's own locations, imported cleaners) also
+  // keep out of every protected place -- see holdReason.
+  const { cleanable, held } = partitionCleanableFiles(uniqueFiles, userDefined ? { ...guards, protectPaths: true } : guards);
   return { files: cleanable, denied: uniqueDenied, held };
 }
 
@@ -231,7 +236,7 @@ export function scan(action, guards = {}) {
   // are kept, the files themselves are not. A rule can match millions.
   const top = createTopFiles(FILE_LIST_LIMIT);
   const now = Date.now();
-  const options = { ...guards, now };
+  const options = { ...guards, now, ...(action.userDefined ? { protectPaths: true } : {}) };
   let sizeBytes = 0;
   let fileCount = 0;
   let heldCount = 0;
@@ -258,7 +263,7 @@ export function scan(action, guards = {}) {
   for (const expanded of action.expandedPaths) {
     const [driveSegment, ...rest] = pathToSegments(expanded);
     if (!driveSegment) continue;
-    for (const match of resolveGlob(driveSegment, rest)) collectFiles(match, sink, denied, excludeBasenames);
+    for (const match of resolveGlob(driveSegment, rest)) collectFiles(match, sink, denied, excludeBasenames, { filesOnly: action.filesOnly === true });
   }
   return {
     sizeBytes,
@@ -281,7 +286,9 @@ export function scan(action, guards = {}) {
  * moved, not deleted outright, so a bad match is always recoverable the
  * same way an uninstall's own leftover removal already is. */
 export async function execute(action, ruleName, guards = {}) {
-  const { files, held } = resolveActionFiles(action.expandedPaths, guards, action.excludeNames);
+  const { files, held } = resolveActionFiles(action.expandedPaths, guards, action.excludeNames, {
+    filesOnly: action.filesOnly === true, userDefined: action.userDefined === true
+  });
   return executeFiles(files, held, ruleName, guards);
 }
 

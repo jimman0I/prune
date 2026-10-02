@@ -17,6 +17,7 @@ const updateSettings = vi.fn(async (partial) => partial);
 const fetchSettings = vi.fn();
 
 vi.mock('../lib/api.js', () => ({
+  fetchCustomCleaners: vi.fn(async () => ({ locations: [], imported: [] })),
   fetchSettings: (...a) => fetchSettings(...a),
   updateSettings: (...a) => updateSettings(...a),
   fetchUpdateCheck: vi.fn(async () => ({ enabled: false, current: '2.3.4' })),

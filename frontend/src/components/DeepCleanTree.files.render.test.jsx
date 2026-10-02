@@ -35,6 +35,13 @@ function show(items, props = {}) {
   return { onToggle };
 }
 
+describe('the Imported badge', () => {
+  it('marks a rule brought in from a BleachBit file, and only that', () => {
+    show([item({ id: 'imp_x_cache', name: 'Imported cache', imported: true }), item({ id: 'own', name: 'Own rule' })]);
+    expect(screen.getAllByText('Imported')).toHaveLength(1);
+  });
+});
+
 describe('expanding a rule to see its files', () => {
   it('offers an expander on a rule that listed files, collapsed to begin with', () => {
     show([item()]);

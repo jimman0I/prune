@@ -1,5 +1,4 @@
 import { readFileSync, statSync } from 'node:fs';
-import { homedir } from 'node:os';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import * as deleteAction from './cleanerActions/delete.js';
@@ -15,44 +14,18 @@ import * as chromeHistoryAction from './cleanerActions/chromeHistory.js';
 import * as mozillaUrlHistoryAction from './cleanerActions/mozillaUrlHistory.js';
 import * as mozillaFaviconsAction from './cleanerActions/mozillaFavicons.js';
 import * as deepscanAction from './cleanerActions/deepscan.js';
+import { expandPath } from './expandPath.js';
 import * as wipeFreeSpaceAction from './cleanerActions/wipeFreeSpace.js';
 import { mergeTopFiles } from './topFiles.js';
+import { loadUserRules } from './userRules.js';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const CLEANERS_JSON_PATH = join(here, '..', 'data', 'cleaners.json');
 
-/** Expands the environment-variable tokens and leading `~` a cleaners.json
- * path may contain. Deliberately supports only the handful of tokens the
- * rule set actually uses -- APPDATA/LOCALAPPDATA/SYSTEMROOT/PROGRAMFILES
- * variants are always real Windows env vars, never something a rule
- * author needs to invent. A token whose env var isn't set expands to ''
- * (matches non-Windows/misconfigured environments gracefully -- the
- * resulting path just won't exist, which scanRule already treats as 0
- * bytes, not an error). Exported and independently testable. */
-export function expandPath(rawPath) {
-  let expanded = rawPath
-    .replace(/%APPDATA%/gi, process.env.APPDATA || '')
-    .replace(/%LOCALAPPDATA%/gi, process.env.LOCALAPPDATA || '')
-    .replace(/%SYSTEMROOT%/gi, process.env.SYSTEMROOT || process.env.WINDIR || '')
-    // %WINDIR% is the same folder under its other name, and Windows
-    // accepts both everywhere. Left out originally, which made a rule
-    // written with it fail silently: the token stayed in the string, the
-    // path never matched, and the rule reported itself as "not installed"
-    // rather than as broken.
-    .replace(/%WINDIR%/gi, process.env.WINDIR || process.env.SYSTEMROOT || '')
-    .replace(/%PROGRAMDATA%/gi, process.env.ProgramData || '')
-    // "C:" with no trailing separator, which is how Windows itself sets it.
-    // The Recycle Bin is the only rule that needs it, and it needs it
-    // because the bin lives at the root of each volume rather than
-    // anywhere under a profile.
-    .replace(/%SYSTEMDRIVE%/gi, process.env.SystemDrive || (process.env.SYSTEMROOT || 'C:').slice(0, 2))
-    .replace(/%PROGRAMFILES\(X86\)%/gi, process.env['ProgramFiles(x86)'] || '')
-    .replace(/%PROGRAMFILES%/gi, process.env.ProgramFiles || '');
-  if (expanded.startsWith('~')) {
-    expanded = join(homedir(), expanded.slice(1).replace(/^[\\/]/, ''));
-  }
-  return expanded;
-}
+// Lives in its own module so the settings and import code can use it without
+// importing the whole rule engine. Re-exported: it has always been imported
+// from here.
+export { expandPath };
 
 /** Resolves one bespoke action's `path` (already environment-expanded)
  * into every REAL concrete path it currently matches -- a `*` wildcard
@@ -76,8 +49,13 @@ export function resolveBespokeActionPaths(expandedPath) {
 export function loadCleanerRules() {
   // UNREVO_CLEANERS_PATH swaps in another rule set -- how the command line's
   // tests run a real clean against a temp folder instead of the real rules.
-  // Same env-override pattern as UNREVO_SETTINGS_PATH.
-  return JSON.parse(readFileSync(process.env.UNREVO_CLEANERS_PATH || CLEANERS_JSON_PATH, 'utf8'));
+  // Same env-override pattern as UNREVO_SETTINGS_PATH. It is the WHOLE set:
+  // the user's own rules are not added to it.
+  if (process.env.UNREVO_CLEANERS_PATH) return JSON.parse(readFileSync(process.env.UNREVO_CLEANERS_PATH, 'utf8'));
+  // Prune's rules, then the user's: the Custom locations rule and any
+  // imported BleachBit cleaners (lib/userRules.js). Read fresh every time,
+  // like the file above, so an import shows on the next scan.
+  return [...JSON.parse(readFileSync(CLEANERS_JSON_PATH, 'utf8')), ...loadUserRules()];
 }
 
 /** Gives every rule an `actions` array, synthesizing one from the legacy
@@ -165,7 +143,7 @@ export function scanRule(rule, guards = {}) {
       // sizeBytes/fileCount stay null -- a shell action has nothing to measure.
     } else if (action.type === 'delete') {
       const expandedPaths = action.paths.map(expandPath);
-      const result = deleteAction.scan({ expandedPaths, excludeNames: action.excludeNames }, guards);
+      const result = deleteAction.scan({ expandedPaths, excludeNames: action.excludeNames, filesOnly: action.filesOnly, userDefined: action.userDefined }, guards);
       sizeBytes = (sizeBytes ?? 0) + result.sizeBytes;
       fileCount = (fileCount ?? 0) + result.fileCount;
       heldCount += result.heldCount;
@@ -470,7 +448,7 @@ export async function executeRule(rule, guards = {}) {
       if (result.error) error = result.error;
     } else if (action.type === 'delete') {
       const expandedPaths = action.paths.map(expandPath);
-      const result = await deleteAction.execute({ expandedPaths, excludeNames: action.excludeNames }, rule.name, guards);
+      const result = await deleteAction.execute({ expandedPaths, excludeNames: action.excludeNames, filesOnly: action.filesOnly, userDefined: action.userDefined }, rule.name, guards);
       tally(result);
       skipped.push(...result.skipped);
       scheduledForRestart += result.scheduledForRestart?.length || 0;

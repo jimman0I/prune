@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { fetchDeepCleanRules, streamDeepCleanScan } from '../lib/api.js';
 import { mergeScannedRule, scanLogLine } from '../lib/scanLog.js';
@@ -61,7 +61,20 @@ export function useDeepCleanScan(nameOf, messages) {
   // for silence to look like a hang, so it reports while it works.
   const [progress, setProgress] = useState(null);
 
-  const tree = scannedTree ?? rulesQuery.data ?? null;
+  // A rule added or removed since the last scan (a Custom location, an
+  // imported cleaner) makes that scan out of date: its tree would hide the
+  // new rule, or keep showing one that is gone. The listed tree takes over
+  // again, unmeasured, until the next Preview.
+  const listedIds = (rulesQuery.data ?? []).flatMap((group) => group.items.map((item) => item.id)).sort().join('\n');
+  const scannedIds = (scannedTree ?? []).flatMap((group) => group.items.map((item) => item.id)).sort().join('\n');
+  const ruleSetChanged = scannedTree !== null && listedIds !== '' && listedIds !== scannedIds;
+  useEffect(() => {
+    if (!ruleSetChanged) return;
+    setScannedTree(null);
+    setHasScanned(false);
+  }, [ruleSetChanged]);
+
+  const tree = (ruleSetChanged ? null : scannedTree) ?? rulesQuery.data ?? null;
 
   /* Stable identity, so the consumer's effect can list it as a dependency
    * and mean it. Returned as a fresh arrow before this, which forced

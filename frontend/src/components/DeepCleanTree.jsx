@@ -335,6 +335,13 @@ function CategorySection({ category, items, allItems = items, iconSrc, selected,
                   {t('deepClean.tree.losesData')}
                 </span>
               )}
+              {/* A rule the user brought in from a BleachBit file, so it is
+                  clear it was not written (or curated) by Prune. */}
+              {item.imported && (
+                <span className="text-[11px] font-mono uppercase tracking-wider px-1 rounded bg-[color:var(--surface-hover)] text-[color:var(--text-secondary)] border border-[color:var(--border-subtle)] shrink-0">
+                  {t('deepCleanV3.imported.badge')}
+                </span>
+              )}
               {/* The wipe loses nothing; what it costs is time and, on an
                   SSD, wear. A different fact gets a different badge. */}
               {item.confirmEveryTime && (
