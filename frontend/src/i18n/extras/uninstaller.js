@@ -163,6 +163,12 @@ export default {
         },
         restoreCreated: "Created",
         restoreNotCreated: (r) => (r ? `Not created (${r})` : 'Not created')
+      },
+      extensions: {
+        manage: "Manage",
+        manageAria: (n) => `Manage ${n} in its browser`,
+        opened: (b) => `Opened the extensions page in ${b}. Prune can't remove an extension itself; remove it there.`,
+        failed: "Couldn't open the browser's extensions page"
       }
     }
   },
@@ -326,6 +332,12 @@ export default {
         },
         restoreCreated: "Geskep",
         restoreNotCreated: (r) => (r ? `Nie geskep nie (${r})` : 'Nie geskep nie')
+      },
+      extensions: {
+        manage: "Bestuur",
+        manageAria: (n) => `Bestuur ${n} in sy blaaier`,
+        opened: (b) => `Die uitbreidingsbladsy in ${b} is oopgemaak. Prune kan nie self 'n uitbreiding verwyder nie; verwyder dit daar.`,
+        failed: "Kon nie die blaaier se uitbreidingsbladsy oopmaak nie"
       }
     }
   },
@@ -489,6 +501,12 @@ export default {
         },
         restoreCreated: "تم إنشاؤها",
         restoreNotCreated: (r) => (r ? `لم يتم إنشاؤها (${r})` : 'لم يتم إنشاؤها')
+      },
+      extensions: {
+        manage: "إدارة",
+        manageAria: (n) => `إدارة ${n} في متصفحه`,
+        opened: (b) => `تم فتح صفحة الإضافات في ${b}. لا يستطيع Prune إزالة الإضافة بنفسه؛ أزلها من هناك.`,
+        failed: "تعذّر فتح صفحة إضافات المتصفح"
       }
     }
   },
@@ -652,6 +670,12 @@ export default {
         },
         restoreCreated: "Creat",
         restoreNotCreated: (r) => (r ? `No creat (${r})` : 'No creat')
+      },
+      extensions: {
+        manage: "Gestiona",
+        manageAria: (n) => `Gestiona ${n} al seu navegador`,
+        opened: (b) => `S'ha obert la pàgina d'extensions a ${b}. Prune no pot eliminar una extensió per si mateix; elimina-la allà.`,
+        failed: "No s'ha pogut obrir la pàgina d'extensions del navegador"
       }
     }
   },
@@ -815,6 +839,12 @@ export default {
         },
         restoreCreated: "Vytvořen",
         restoreNotCreated: (r) => (r ? `Nevytvořen (${r})` : 'Nevytvořen')
+      },
+      extensions: {
+        manage: "Spravovat",
+        manageAria: (n) => `Spravovat ${n} v jeho prohlížeči`,
+        opened: (b) => `Stránka rozšíření se otevřela v prohlížeči ${b}. Prune rozšíření sám odebrat nemůže; odeberte je tam.`,
+        failed: "Stránku rozšíření prohlížeče se nepodařilo otevřít"
       }
     }
   },
@@ -978,6 +1008,12 @@ export default {
         },
         restoreCreated: "Crëwyd",
         restoreNotCreated: (r) => (r ? `Heb ei greu (${r})` : 'Heb ei greu')
+      },
+      extensions: {
+        manage: "Rheoli",
+        manageAria: (n) => `Rheoli ${n} yn ei borwr`,
+        opened: (b) => `Agorwyd tudalen yr estyniadau yn ${b}. Ni all Prune dynnu estyniad ei hun; tynnwch ef yno.`,
+        failed: "Methu agor tudalen estyniadau'r porwr"
       }
     }
   },
@@ -1141,6 +1177,12 @@ export default {
         },
         restoreCreated: "Oprettet",
         restoreNotCreated: (r) => (r ? `Ikke oprettet (${r})` : 'Ikke oprettet')
+      },
+      extensions: {
+        manage: "Administrer",
+        manageAria: (n) => `Administrer ${n} i dens browser`,
+        opened: (b) => `Udvidelsessiden er åbnet i ${b}. Prune kan ikke selv fjerne en udvidelse; fjern den dér.`,
+        failed: "Browserens udvidelsesside kunne ikke åbnes"
       }
     }
   },
@@ -1304,6 +1346,12 @@ export default {
         },
         restoreCreated: "Erstellt",
         restoreNotCreated: (r) => (r ? `Nicht erstellt (${r})` : 'Nicht erstellt')
+      },
+      extensions: {
+        manage: "Verwalten",
+        manageAria: (n) => `${n} in seinem Browser verwalten`,
+        opened: (b) => `Die Erweiterungsseite wurde in ${b} geöffnet. Prune kann eine Erweiterung nicht selbst entfernen; entfernen Sie sie dort.`,
+        failed: "Die Erweiterungsseite des Browsers konnte nicht geöffnet werden"
       }
     }
   },
@@ -1467,6 +1515,12 @@ export default {
         },
         restoreCreated: "Δημιουργήθηκε",
         restoreNotCreated: (r) => (r ? `Δεν δημιουργήθηκε (${r})` : 'Δεν δημιουργήθηκε')
+      },
+      extensions: {
+        manage: "Διαχείριση",
+        manageAria: (n) => `Διαχείριση του ${n} στο πρόγραμμα περιήγησής του`,
+        opened: (b) => `Άνοιξε η σελίδα επεκτάσεων στο ${b}. Το Prune δεν μπορεί να αφαιρέσει μόνο του μια επέκταση· αφαιρέστε την εκεί.`,
+        failed: "Δεν ήταν δυνατό το άνοιγμα της σελίδας επεκτάσεων του προγράμματος περιήγησης"
       }
     }
   },
@@ -1630,6 +1684,12 @@ export default {
         },
         restoreCreated: "Creado",
         restoreNotCreated: (r) => (r ? `No creado (${r})` : 'No creado')
+      },
+      extensions: {
+        manage: "Administrar",
+        manageAria: (n) => `Administrar ${n} en su navegador`,
+        opened: (b) => `Se abrió la página de extensiones en ${b}. Prune no puede quitar una extensión por sí mismo; quítala allí.`,
+        failed: "No se pudo abrir la página de extensiones del navegador"
       }
     }
   },
@@ -1793,6 +1853,12 @@ export default {
         },
         restoreCreated: "Loodud",
         restoreNotCreated: (r) => (r ? `Loomata (${r})` : 'Loomata')
+      },
+      extensions: {
+        manage: "Halda",
+        manageAria: (n) => `Halda ${n} selle brauseris`,
+        opened: (b) => `Laienduste leht avati brauseris ${b}. Prune ei saa laiendust ise eemaldada; eemalda see seal.`,
+        failed: "Brauseri laienduste lehte ei saanud avada"
       }
     }
   },
@@ -1956,6 +2022,12 @@ export default {
         },
         restoreCreated: "Luotu",
         restoreNotCreated: (r) => (r ? `Ei luotu (${r})` : 'Ei luotu')
+      },
+      extensions: {
+        manage: "Hallitse",
+        manageAria: (n) => `Hallitse ${n} sen selaimessa`,
+        opened: (b) => `Laajennussivu avattiin selaimessa ${b}. Prune ei voi poistaa laajennusta itse; poista se siellä.`,
+        failed: "Selaimen laajennussivua ei voitu avata"
       }
     }
   },
@@ -2119,6 +2191,12 @@ export default {
         },
         restoreCreated: "Créé",
         restoreNotCreated: (r) => (r ? `Non créé (${r})` : 'Non créé')
+      },
+      extensions: {
+        manage: "Gérer",
+        manageAria: (n) => `Gérer ${n} dans son navigateur`,
+        opened: (b) => `La page des extensions est ouverte dans ${b}. Prune ne peut pas supprimer une extension lui-même ; supprimez-la là-bas.`,
+        failed: "Impossible d'ouvrir la page des extensions du navigateur"
       }
     }
   },
@@ -2282,6 +2360,12 @@ export default {
         },
         restoreCreated: "נוצרה",
         restoreNotCreated: (r) => (r ? `לא נוצרה (${r})` : 'לא נוצרה')
+      },
+      extensions: {
+        manage: "ניהול",
+        manageAria: (n) => `ניהול ${n} בדפדפן שלו`,
+        opened: (b) => `דף התוספים נפתח ב-${b}. Prune אינו יכול להסיר תוסף בעצמו; הסירו אותו שם.`,
+        failed: "לא ניתן לפתוח את דף התוספים של הדפדפן"
       }
     }
   },
@@ -2445,6 +2529,12 @@ export default {
         },
         restoreCreated: "Létrehozva",
         restoreNotCreated: (r) => (r ? `Nem jött létre (${r})` : 'Nem jött létre')
+      },
+      extensions: {
+        manage: "Kezelés",
+        manageAria: (n) => `${n} kezelése a böngészőjében`,
+        opened: (b) => `Megnyílt a bővítmények oldala itt: ${b}. A Prune nem tudja maga eltávolítani a bővítményt; távolítsa el ott.`,
+        failed: "A böngésző bővítményoldala nem nyitható meg"
       }
     }
   },
@@ -2608,6 +2698,12 @@ export default {
         },
         restoreCreated: "Dibuat",
         restoreNotCreated: (r) => (r ? `Tidak dibuat (${r})` : 'Tidak dibuat')
+      },
+      extensions: {
+        manage: "Kelola",
+        manageAria: (n) => `Kelola ${n} di peramban-nya`,
+        opened: (b) => `Halaman ekstensi dibuka di ${b}. Prune tidak dapat menghapus ekstensi sendiri; hapus di sana.`,
+        failed: "Tidak dapat membuka halaman ekstensi peramban"
       }
     }
   },
@@ -2771,6 +2867,12 @@ export default {
         },
         restoreCreated: "Búið til",
         restoreNotCreated: (r) => (r ? `Ekki búið til (${r})` : 'Ekki búið til')
+      },
+      extensions: {
+        manage: "Stjórna",
+        manageAria: (n) => `Stjórna ${n} í vafranum sínum`,
+        opened: (b) => `Viðbótasíðan var opnuð í ${b}. Prune getur ekki fjarlægt viðbót sjálft; fjarlægðu hana þar.`,
+        failed: "Ekki tókst að opna viðbótasíðu vafrans"
       }
     }
   },
@@ -2934,6 +3036,12 @@ export default {
         },
         restoreCreated: "Creato",
         restoreNotCreated: (r) => (r ? `Non creato (${r})` : 'Non creato')
+      },
+      extensions: {
+        manage: "Gestisci",
+        manageAria: (n) => `Gestisci ${n} nel suo browser`,
+        opened: (b) => `La pagina delle estensioni è stata aperta in ${b}. Prune non può rimuovere un'estensione da solo; rimuovila lì.`,
+        failed: "Impossibile aprire la pagina delle estensioni del browser"
       }
     }
   },
@@ -3097,6 +3205,12 @@ export default {
         },
         restoreCreated: "作成済み",
         restoreNotCreated: (r) => (r ? `作成されませんでした (${r})` : '作成されませんでした')
+      },
+      extensions: {
+        manage: "管理",
+        manageAria: (n) => `${n} をブラウザーで管理`,
+        opened: (b) => `${b} で拡張機能のページを開きました。Prune 自身では拡張機能を削除できないため、そこで削除してください。`,
+        failed: "ブラウザーの拡張機能ページを開けませんでした"
       }
     }
   },
@@ -3260,6 +3374,12 @@ export default {
         },
         restoreCreated: "생성됨",
         restoreNotCreated: (r) => (r ? `생성되지 않음 (${r})` : '생성되지 않음')
+      },
+      extensions: {
+        manage: "관리",
+        manageAria: (n) => `${n}을(를) 해당 브라우저에서 관리`,
+        opened: (b) => `${b}에서 확장 프로그램 페이지를 열었습니다. Prune은 확장 프로그램을 직접 제거할 수 없으니 그곳에서 제거하세요.`,
+        failed: "브라우저의 확장 프로그램 페이지를 열 수 없습니다"
       }
     }
   },
@@ -3423,6 +3543,12 @@ export default {
         },
         restoreCreated: "Sukurtas",
         restoreNotCreated: (r) => (r ? `Nesukurtas (${r})` : 'Nesukurtas')
+      },
+      extensions: {
+        manage: "Tvarkyti",
+        manageAria: (n) => `Tvarkyti ${n} jo naršyklėje`,
+        opened: (b) => `Plėtinių puslapis atidarytas naršyklėje ${b}. „Prune“ pati negali pašalinti plėtinio; pašalinkite jį ten.`,
+        failed: "Nepavyko atidaryti naršyklės plėtinių puslapio"
       }
     }
   },
@@ -3586,6 +3712,12 @@ export default {
         },
         restoreCreated: "Dicipta",
         restoreNotCreated: (r) => (r ? `Tidak dicipta (${r})` : 'Tidak dicipta')
+      },
+      extensions: {
+        manage: "Urus",
+        manageAria: (n) => `Urus ${n} dalam pelayar-nya`,
+        opened: (b) => `Halaman sambungan dibuka dalam ${b}. Prune tidak boleh mengalih keluar sambungan sendiri; alihkan di sana.`,
+        failed: "Tidak dapat membuka halaman sambungan pelayar"
       }
     }
   },
@@ -3749,6 +3881,12 @@ export default {
         },
         restoreCreated: "Opprettet",
         restoreNotCreated: (r) => (r ? `Ikke opprettet (${r})` : 'Ikke opprettet')
+      },
+      extensions: {
+        manage: "Administrer",
+        manageAria: (n) => `Administrer ${n} i nettleseren`,
+        opened: (b) => `Utvidelsessiden er åpnet i ${b}. Prune kan ikke fjerne en utvidelse selv; fjern den der.`,
+        failed: "Kunne ikke åpne nettleserens utvidelsesside"
       }
     }
   },
@@ -3912,6 +4050,12 @@ export default {
         },
         restoreCreated: "Aangemaakt",
         restoreNotCreated: (r) => (r ? `Niet aangemaakt (${r})` : 'Niet aangemaakt')
+      },
+      extensions: {
+        manage: "Beheren",
+        manageAria: (n) => `${n} beheren in de browser`,
+        opened: (b) => `De extensiepagina is geopend in ${b}. Prune kan een extensie niet zelf verwijderen; verwijder hem daar.`,
+        failed: "De extensiepagina van de browser kon niet worden geopend"
       }
     }
   },
@@ -4075,6 +4219,12 @@ export default {
         },
         restoreCreated: "Utworzono",
         restoreNotCreated: (r) => (r ? `Nie utworzono (${r})` : 'Nie utworzono')
+      },
+      extensions: {
+        manage: "Zarządzaj",
+        manageAria: (n) => `Zarządzaj ${n} w jego przeglądarce`,
+        opened: (b) => `Otwarto stronę rozszerzeń w ${b}. Prune nie może samodzielnie usunąć rozszerzenia; usuń je tam.`,
+        failed: "Nie można otworzyć strony rozszerzeń przeglądarki"
       }
     }
   },
@@ -4238,6 +4388,12 @@ export default {
         },
         restoreCreated: "جوړ شو",
         restoreNotCreated: (r) => (r ? `نه دی جوړ شوی (${r})` : 'نه دی جوړ شوی')
+      },
+      extensions: {
+        manage: "اداره کول",
+        manageAria: (n) => `${n} د هغه په براوزر کې اداره کړئ`,
+        opened: (b) => `په ${b} کې د توسیعونو پاڼه پرانستل شوه. Prune پخپله توسیع نه شي لرې کولای؛ هلته یې لرې کړئ.`,
+        failed: "د براوزر د توسیعونو پاڼه نه شوه پرانستل کېدای"
       }
     }
   },
@@ -4401,6 +4557,12 @@ export default {
         },
         restoreCreated: "Criado",
         restoreNotCreated: (r) => (r ? `Não criado (${r})` : 'Não criado')
+      },
+      extensions: {
+        manage: "Gerenciar",
+        manageAria: (n) => `Gerenciar ${n} no navegador dele`,
+        opened: (b) => `A página de extensões foi aberta no ${b}. O Prune não pode remover uma extensão sozinho; remova-a lá.`,
+        failed: "Não foi possível abrir a página de extensões do navegador"
       }
     }
   },
@@ -4564,6 +4726,12 @@ export default {
         },
         restoreCreated: "Criado",
         restoreNotCreated: (r) => (r ? `Não criado (${r})` : 'Não criado')
+      },
+      extensions: {
+        manage: "Gerir",
+        manageAria: (n) => `Gerir ${n} no respetivo navegador`,
+        opened: (b) => `A página de extensões foi aberta no ${b}. O Prune não pode remover uma extensão sozinho; remova-a aí.`,
+        failed: "Não foi possível abrir a página de extensões do navegador"
       }
     }
   },
@@ -4727,6 +4895,12 @@ export default {
         },
         restoreCreated: "Creat",
         restoreNotCreated: (r) => (r ? `Necreat (${r})` : 'Necreat')
+      },
+      extensions: {
+        manage: "Gestionează",
+        manageAria: (n) => `Gestionează ${n} în browserul său`,
+        opened: (b) => `Pagina de extensii s-a deschis în ${b}. Prune nu poate elimina singur o extensie; elimin-o acolo.`,
+        failed: "Nu s-a putut deschide pagina de extensii a browserului"
       }
     }
   },
@@ -4890,6 +5064,12 @@ export default {
         },
         restoreCreated: "Создана",
         restoreNotCreated: (r) => (r ? `Не создана (${r})` : 'Не создана')
+      },
+      extensions: {
+        manage: "Управление",
+        manageAria: (n) => `Управление ${n} в его браузере`,
+        opened: (b) => `Страница расширений открыта в ${b}. Prune не может сам удалить расширение — удалите его там.`,
+        failed: "Не удалось открыть страницу расширений браузера"
       }
     }
   },
@@ -5053,6 +5233,12 @@ export default {
         },
         restoreCreated: "Vytvorený",
         restoreNotCreated: (r) => (r ? `Nevytvorený (${r})` : 'Nevytvorený')
+      },
+      extensions: {
+        manage: "Spravovať",
+        manageAria: (n) => `Spravovať ${n} v jeho prehliadači`,
+        opened: (b) => `Stránka rozšírení sa otvorila v prehliadači ${b}. Prune rozšírenie sám odstrániť nemôže; odstráňte ho tam.`,
+        failed: "Stránku rozšírení prehliadača sa nepodarilo otvoriť"
       }
     }
   },
@@ -5216,6 +5402,12 @@ export default {
         },
         restoreCreated: "U krijua",
         restoreNotCreated: (r) => (r ? `Nuk u krijua (${r})` : 'Nuk u krijua')
+      },
+      extensions: {
+        manage: "Menaxho",
+        manageAria: (n) => `Menaxho ${n} në shfletuesin e tij`,
+        opened: (b) => `Faqja e zgjerimeve u hap në ${b}. Prune nuk mund ta heqë vetë një zgjerim; hiqeni atje.`,
+        failed: "Faqja e zgjerimeve të shfletuesit nuk u hap dot"
       }
     }
   },
@@ -5379,6 +5571,12 @@ export default {
         },
         restoreCreated: "Креирана",
         restoreNotCreated: (r) => (r ? `Није креирана (${r})` : 'Није креирана')
+      },
+      extensions: {
+        manage: "Управљај",
+        manageAria: (n) => `Управљај ${n} у његовом прегледачу`,
+        opened: (b) => `Страница проширења је отворена у ${b}. Prune не може сам да уклони проширење; уклоните га тамо.`,
+        failed: "Није могуће отворити страницу проширења прегледача"
       }
     }
   },
@@ -5542,6 +5740,12 @@ export default {
         },
         restoreCreated: "Skapad",
         restoreNotCreated: (r) => (r ? `Inte skapad (${r})` : 'Inte skapad')
+      },
+      extensions: {
+        manage: "Hantera",
+        manageAria: (n) => `Hantera ${n} i dess webbläsare`,
+        opened: (b) => `Tilläggssidan öppnades i ${b}. Prune kan inte ta bort ett tillägg själv; ta bort det där.`,
+        failed: "Det gick inte att öppna webbläsarens tilläggssida"
       }
     }
   },
@@ -5705,6 +5909,12 @@ export default {
         },
         restoreCreated: "สร้างแล้ว",
         restoreNotCreated: (r) => (r ? `ไม่ได้สร้าง (${r})` : 'ไม่ได้สร้าง')
+      },
+      extensions: {
+        manage: "จัดการ",
+        manageAria: (n) => `จัดการ ${n} ในเบราว์เซอร์ของมัน`,
+        opened: (b) => `เปิดหน้าส่วนขยายใน ${b} แล้ว Prune ลบส่วนขยายด้วยตัวเองไม่ได้ ให้ลบที่นั่น`,
+        failed: "เปิดหน้าส่วนขยายของเบราว์เซอร์ไม่ได้"
       }
     }
   },
@@ -5868,6 +6078,12 @@ export default {
         },
         restoreCreated: "Oluşturuldu",
         restoreNotCreated: (r) => (r ? `Oluşturulmadı (${r})` : 'Oluşturulmadı')
+      },
+      extensions: {
+        manage: "Yönet",
+        manageAria: (n) => `${n} uzantısını tarayıcısında yönet`,
+        opened: (b) => `Uzantılar sayfası ${b} içinde açıldı. Prune bir uzantıyı kendisi kaldıramaz; orada kaldırın.`,
+        failed: "Tarayıcının uzantılar sayfası açılamadı"
       }
     }
   },
@@ -6031,6 +6247,12 @@ export default {
         },
         restoreCreated: "Створено",
         restoreNotCreated: (r) => (r ? `Не створено (${r})` : 'Не створено')
+      },
+      extensions: {
+        manage: "Керувати",
+        manageAria: (n) => `Керувати ${n} у його браузері`,
+        opened: (b) => `Сторінку розширень відкрито в ${b}. Prune не може сам видалити розширення — видаліть його там.`,
+        failed: "Не вдалося відкрити сторінку розширень браузера"
       }
     }
   },
@@ -6194,6 +6416,12 @@ export default {
         },
         restoreCreated: "Đã tạo",
         restoreNotCreated: (r) => (r ? `Không tạo được (${r})` : 'Không tạo được')
+      },
+      extensions: {
+        manage: "Quản lý",
+        manageAria: (n) => `Quản lý ${n} trong trình duyệt của nó`,
+        opened: (b) => `Đã mở trang tiện ích mở rộng trong ${b}. Prune không thể tự gỡ tiện ích; hãy gỡ tại đó.`,
+        failed: "Không mở được trang tiện ích mở rộng của trình duyệt"
       }
     }
   },
@@ -6357,6 +6585,12 @@ export default {
         },
         restoreCreated: "已创建",
         restoreNotCreated: (r) => (r ? `未创建（${r}）` : '未创建')
+      },
+      extensions: {
+        manage: "管理",
+        manageAria: (n) => `在浏览器中管理 ${n}`,
+        opened: (b) => `已在 ${b} 中打开扩展程序页面。Prune 无法自行移除扩展程序，请在那里移除。`,
+        failed: "无法打开浏览器的扩展程序页面"
       }
     }
   },
@@ -6520,6 +6754,12 @@ export default {
         },
         restoreCreated: "已建立",
         restoreNotCreated: (r) => (r ? `未建立（${r}）` : '未建立')
+      },
+      extensions: {
+        manage: "管理",
+        manageAria: (n) => `在瀏覽器中管理 ${n}`,
+        opened: (b) => `已在 ${b} 中開啟擴充功能頁面。Prune 無法自行移除擴充功能，請在那裡移除。`,
+        failed: "無法開啟瀏覽器的擴充功能頁面"
       }
     }
   }

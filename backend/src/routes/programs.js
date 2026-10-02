@@ -7,6 +7,7 @@ import { getProgramInstallDates } from '../services/installDates.js';
 import { getStoreApps } from '../services/storeApps.js';
 import { removeStoreApp } from '../services/removeStoreApp.js';
 import { getBrowserExtensions } from '../services/browserExtensions.js';
+import { manageExtension } from '../services/browserLauncher.js';
 import { getStartupItems, getStartupEntries } from '../services/startupItems.js';
 import { setStartupEnabled } from '../services/startupToggle.js';
 import { getStartupIcons } from '../services/startupIcons.js';
@@ -121,6 +122,34 @@ router.get('/extensions', async (req, res) => {
     res.json({ extensions: await getBrowserExtensions() });
   } catch (err) {
     res.status(500).json({ error: err.message });
+  }
+});
+
+/** Opens the browser on one extension's own page ("Manage").
+ *
+ * Prune cannot silently remove a browser extension, and says so; this takes
+ * the person to the page where the browser removes it. The body names an
+ * extension by its row id and nothing else -- the browser, the profile and
+ * the extension id are looked up again from a fresh read of the profiles, so
+ * a request cannot make this launch a browser with arguments of its own. */
+router.post('/extensions/manage', async (req, res) => {
+  const { id } = req.body || {};
+  if (typeof id !== 'string' || !id) {
+    res.status(400).json({ ok: false, error: 'An extension id is required.' });
+    return;
+  }
+  try {
+    const extension = (await getBrowserExtensions()).find((entry) => entry.id === id);
+    if (!extension) {
+      res.status(404).json({ ok: false, error: 'That extension is no longer installed.' });
+      return;
+    }
+    const result = await manageExtension({
+      browser: extension.browser, extensionId: extension.extensionId, profile: extension.profile
+    });
+    res.status(result.ok ? 200 : 409).json(result);
+  } catch (err) {
+    res.status(500).json({ ok: false, error: err.message });
   }
 });
 
