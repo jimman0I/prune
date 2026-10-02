@@ -230,7 +230,7 @@ export default function App() {
                 </p>
               </div>
               <div className="flex items-center gap-2">
-                <ApplicationsTools onChanged={handleToolsChanged} />
+                <ApplicationsTools programs={programs} onChanged={handleToolsChanged} onUninstall={setSelectedProgram} />
                 <button className="btn-ghost" onClick={() => setScreen('quarantine')}>{t('nav.quarantine')}</button>
               </div>
             </div>

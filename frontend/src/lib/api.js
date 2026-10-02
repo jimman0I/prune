@@ -301,6 +301,34 @@ export async function scanForcedUninstall({ name, publisher, registryKey, mode, 
   return data;
 }
 
+/* ------------------------------------------------------------- hunter */
+
+async function hunterCall(path) {
+  const res = await fetch(`${API_URL}/hunter${path}`, { method: 'POST' });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
+  return data;
+}
+
+/** Starts a hunt and resolves when a window was clicked, the hunt was
+ * cancelled, or it timed out (about 30 seconds): { status, ... }. A picked
+ * window comes with `program` and `startupItems` when they are known. */
+export const startHunt = () => hunterCall('/start');
+export const cancelHunt = () => hunterCall('/cancel');
+
+/** Ends the process Hunter named. Never throws for a refusal: resolves
+ * { ok: false, error } so the screen can say why. */
+export async function endHuntedProcess(pid, exePath) {
+  try {
+    const res = await fetch(`${API_URL}/hunter/end-process`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ pid, exePath })
+    });
+    return await res.json();
+  } catch (err) {
+    return { ok: false, error: err.message };
+  }
+}
+
 /* ---------------------------------------------------- install monitor */
 
 async function monitorCall(path, options) {
