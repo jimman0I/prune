@@ -112,6 +112,15 @@ module.exports = {
      * it covers the whole application and not one part of it. */
     { from: '../LICENSE', to: 'LICENSE' }
   ],
+  /* The command line's launcher, beside Prune.exe (extraFiles lands in the
+   * app folder itself, not in resources/). The CLI proper is
+   * backend/src/cli.js, which the backend entry above already ships;
+   * prune-cli.cmd runs it through Prune.exe with ELECTRON_RUN_AS_NODE=1
+   * because a windowed exe cannot print to a console. Both the installer
+   * and the zip get it. electron/cli.test.cjs checks all of this. */
+  extraFiles: [
+    { from: 'build/prune-cli.cmd', to: 'prune-cli.cmd' }
+  ],
   // Both an NSIS installer (.exe) and a portable build (.zip) -- Phase 5's
   // explicit requirement. electron-builder does not auto-detect this
   // .cjs file; it must always be invoked with `-c electron-builder.config.cjs`
