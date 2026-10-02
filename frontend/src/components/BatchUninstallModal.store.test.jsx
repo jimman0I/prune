@@ -102,9 +102,9 @@ describe('a Store app in a batch', () => {
     await startBatch([calculator]);
 
     await waitFor(() => expect(appendHistoryEntry).toHaveBeenCalledTimes(1));
-    expect(appendHistoryEntry).toHaveBeenCalledWith({
-      programName: 'Calculator', publisher: 'Microsoft Corporation', sizeBytes: 1024
-    });
+    expect(appendHistoryEntry).toHaveBeenCalledWith(expect.objectContaining({
+      programName: 'Calculator', publisher: 'Microsoft Corporation', sizeBytes: 1024, kind: 'store'
+    }));
   });
 
   it('does not stop the rest of the batch when Windows refuses it', async () => {

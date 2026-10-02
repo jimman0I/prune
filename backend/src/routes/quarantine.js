@@ -10,6 +10,7 @@ import { enforceQuarantineLimits } from '../services/quarantineLimits.js';
 import { quarantineTotals, maxBytesFrom } from '../services/quarantineSizeCap.js';
 import { quarantinePath } from '../services/quarantinePath.js';
 import { normalizePasses } from '../lib/shredFile.js';
+import { listInstalledPrograms } from '../services/programs.js';
 
 // Real bug, found dogfooding Phase 4 (2026-09-01): `manifest.batchDir` (the
 // field every list/restore/delete client-side call keys off) is the FULL
@@ -37,7 +38,7 @@ function resolveBatchDir(rawParam) {
 const router = Router();
 
 router.post('/remove', async (req, res) => {
-  const { programName, files, registryKeys, destination = 'quarantine' } = req.body || {};
+  const { programName, files, registryKeys, scheduledTasks, destination = 'quarantine' } = req.body || {};
   if (!programName) { res.status(400).json({ error: 'programName is required' }); return; }
   // From the request -- the dialog that told the user where the files
   // would go -- and never from settings. Anything unrecognised is refused
@@ -57,10 +58,18 @@ router.post('/remove', async (req, res) => {
       : await tryCreateRestorePoint(`Prune: forced removal of ${programName}`);
     const manifest = await removeLeftovers({
       programName, files: files || [], registryKeys: registryKeys || [], destination,
+      // Only { name, path } pairs, and a sane number of them; the removal
+      // refuses Windows' own tasks again regardless.
+      scheduledTasks: Array.isArray(scheduledTasks)
+        ? scheduledTasks.slice(0, 500).filter((t) => t && typeof t.name === 'string' && typeof t.path === 'string').map((t) => ({ name: t.name, path: t.path }))
+        : [],
       deleteLockedFilesOnRestart: settings.deleteLockedFilesOnRestart === true,
       // "Overwrite files before deleting" -- only the permanent destination
       // acts on it. 0 when the switch is off.
-      overwritePasses: settings.overwriteBeforeDelete === true ? normalizePasses(settings.overwritePasses) : 0
+      overwritePasses: settings.overwriteBeforeDelete === true ? normalizePasses(settings.overwritePasses) : 0,
+      // So a removal can refuse another installed program's folder. A failed
+      // read is an empty list: the protections that need no list still hold.
+      installedPrograms: await listInstalledPrograms().catch(() => [])
     });
     // The moment the quarantine grows is the moment it can exceed what
     // the user allowed it to hold, so the limits are applied here rather

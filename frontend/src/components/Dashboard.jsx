@@ -220,7 +220,7 @@ function Chevron({ open }) {
   );
 }
 
-export default function Dashboard({ programs, programsMeasured = false, onNavigate = () => {} }) {
+export default function Dashboard({ programs, programsMeasured = false, onNavigate = () => {}, onOpenHistory }) {
   const { t } = useLanguage();
 
   /* Programs left behind by a failed uninstall: an entry whose uninstaller
@@ -514,7 +514,7 @@ export default function Dashboard({ programs, programsMeasured = false, onNaviga
             ) : (
               <div className="divide-y divide-[color:var(--border-subtle)]">
                 {history.map((entry) => (
-                  <div key={entry.timestamp} className="flex items-center justify-between py-2.5">
+                  <div key={entry.id ?? entry.timestamp} className="flex items-center justify-between py-2.5">
                     <div>
                       <div className="text-[13px] text-[color:var(--text-primary)]">{entry.programName}</div>
                       <div className="text-[11px] text-[color:var(--text-muted)] font-mono">{formatRelativeTime(entry.timestamp)}</div>
@@ -523,6 +523,10 @@ export default function Dashboard({ programs, programsMeasured = false, onNaviga
                   </div>
                 ))}
               </div>
+            )}
+            {/* Only five are shown here; the rest, with detail, are one click away. */}
+            {history.length > 0 && onOpenHistory && (
+              <button className="btn-ghost mt-3" onClick={onOpenHistory}>{t('uninstallerV3.history.viewAll')}</button>
             )}
           </div>
         )}

@@ -22,10 +22,40 @@ describe('scanForcedUninstall', () => {
     expect(scanForLeftoversMock).not.toHaveBeenCalled();
   });
 
+  it('searches on the last folder name when only a folder is given', async () => {
+    scanForLeftoversMock.mockResolvedValue(emptyScan);
+    await scanForcedUninstall({ anchors: { installLocation: 'D:\\Old Stuff\\Some App\\' }, mode: 'advanced' });
+    expect(scanForLeftoversMock.mock.calls[0][0].name).toBe('Some App');
+    expect(scanForLeftoversMock.mock.calls[0][0].anchors.installLocation).toBe('D:\\Old Stuff\\Some App\\');
+  });
+
+  it('prefers the name that was typed over the folder\'s', async () => {
+    scanForLeftoversMock.mockResolvedValue(emptyScan);
+    await scanForcedUninstall({ name: 'Typed Name', anchors: { installLocation: 'D:\\Folder' } });
+    expect(scanForLeftoversMock.mock.calls[0][0].name).toBe('Typed Name');
+  });
+
+  it('still needs one of the two', async () => {
+    await expect(scanForcedUninstall({ name: ' ', anchors: {} })).rejects.toThrow(/required/i);
+    await expect(scanForcedUninstall({ anchors: { installLocation: '   ' } })).rejects.toThrow(/required/i);
+  });
+
   it('passes the name and publisher through to the existing leftover scanner', async () => {
     scanForLeftoversMock.mockResolvedValue(emptyScan);
     await scanForcedUninstall({ name: 'Dead App', publisher: 'Nobody' });
-    expect(scanForLeftoversMock).toHaveBeenCalledWith({ name: 'Dead App', publisher: 'Nobody' });
+    expect(scanForLeftoversMock).toHaveBeenCalledWith(expect.objectContaining({ name: 'Dead App', publisher: 'Nobody' }));
+  });
+
+  it('forwards the scan mode and the anchors, adding the program\'s own registry key to them', async () => {
+    scanForLeftoversMock.mockResolvedValue(emptyScan);
+    await scanForcedUninstall({
+      name: 'Dead App', mode: 'safe', registryKey: 'HKCU:\\SOFTWARE\\Dead', anchors: { installLocation: 'D:\\Dead' }
+    });
+    expect(scanForLeftoversMock).toHaveBeenCalledWith({
+      name: 'Dead App', publisher: undefined, mode: 'safe',
+      anchors: { installLocation: 'D:\\Dead', registryKey: 'HKCU:\\SOFTWARE\\Dead' },
+      installedPrograms: undefined
+    });
   });
 
   it('includes the program\'s own Add/Remove entry as a removable registry item', async () => {

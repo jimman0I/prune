@@ -5,6 +5,8 @@ import { quarantineAndDelete, quarantineRoot } from './quarantine.js';
 import { sendToRecycleBin } from './recycleBin.js';
 import { protectionReason } from './pathGuard.js';
 import { shredPaths } from '../lib/shredFile.js';
+import { removeScheduledTasks } from './scheduledTaskRemoval.js';
+import { osComponentRefusal, buildFootprints, footprintRefusal } from './leftoverProtection.js';
 
 /** Where an uninstall's leftover files go.
  *
@@ -147,21 +149,55 @@ export async function removePermanently(candidates, { overwritePasses = 0 } = {}
  * `sendToRecycleBin`/`rm` instead), so there is no locked FILE for that
  * call to ever need to schedule. A no-op for those two destinations,
  * not a bug. */
-export async function removeLeftovers({ programName, files = [], registryKeys = [], destination = 'quarantine', deleteLockedFilesOnRestart = false, overwritePasses = 0 }) {
+export async function removeLeftovers({ scheduledTasks = [], ...rest }) {
+  const result = await removeFilesAndKeys(rest);
+  if (!Array.isArray(scheduledTasks) || scheduledTasks.length === 0) return result;
+  // Independent of the destination: a task has no Recycle Bin, so its
+  // definition is always exported to the Backup Manager first. A failure
+  // here is reported in the result and never undoes the files and keys.
+  const tasks = await removeScheduledTasks({ programName: rest.programName, tasks: scheduledTasks })
+    .catch((err) => ({
+      removed: [], backupDir: null, elevated: false,
+      failed: scheduledTasks.map((t) => ({ name: t?.name, path: t?.path, reason: err.message }))
+    }));
+  return { ...result, scheduledTasks: tasks };
+}
+
+async function removeFilesAndKeys({
+  programName, files = [], registryKeys = [], destination = 'quarantine', deleteLockedFilesOnRestart = false,
+  overwritePasses = 0, installedPrograms = []
+}) {
+  /* The same protections the scan applies, applied again here because this is
+   * the last step before the disk and the route can be called with a list the
+   * scan never produced: Windows and its components, drive roots and profile
+   * folders, and any other installed program's folder. They hold for every
+   * destination, the reversible one included -- a Quarantine restore puts a
+   * deleted program back, it does not make deleting it right. */
+  const footprints = buildFootprints(installedPrograms);
+  const refusedFiles = [];
+  const allowed = [];
+  for (const path of files) {
+    if (typeof path !== 'string') continue;
+    // Something already gone is nothing to refuse; the removal below skips it.
+    if (!existsSync(path)) { allowed.push(path); continue; }
+    const refusal = permanentDeletionRefusal(path) || osComponentRefusal(path) || footprintRefusal(path, footprints);
+    if (refusal) refusedFiles.push({ path, reason: refusal });
+    else allowed.push(path);
+  }
+
   if (destination === 'quarantine') {
-    return { ...(await quarantineAndDelete({ programName, files, registryKeys, deleteLockedFilesOnRestart })), destination };
+    const manifest = await quarantineAndDelete({ programName, files: allowed, registryKeys, deleteLockedFilesOnRestart });
+    return { ...manifest, failedFiles: [...refusedFiles, ...(manifest.failedFiles || [])], destination };
   }
 
   const removed = [];
-  const failedFiles = [];
+  const failedFiles = [...refusedFiles];
   const candidates = [];
 
-  // Guarded before anything is measured, let alone moved. Sizing C:\Windows
-  // on the way to refusing it would take minutes.
-  for (const path of files) {
-    if (typeof path !== 'string' || !existsSync(path)) continue;
-    const refusal = permanentDeletionRefusal(path);
-    if (refusal) { failedFiles.push({ path, reason: refusal }); continue; }
+  // Sized only after the guards, never before. Sizing C:\Windows on the way
+  // to refusing it would take minutes.
+  for (const path of allowed) {
+    if (!existsSync(path)) continue;
     candidates.push({ path, sizeBytes: await pathSize(path).catch(() => 0) });
   }
 

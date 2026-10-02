@@ -36,6 +36,10 @@ import updateCheckRoutes from './routes/updateCheck.js';
 import bugReportRoutes from './routes/bugReport.js';
 import shredRoutes from './routes/shred.js';
 import customCleanersRoutes from './routes/customCleaners.js';
+import pickerRoutes from './routes/picker.js';
+import installMonitorRoutes from './routes/installMonitor.js';
+import hunterRoutes from './routes/hunter.js';
+import backupsRoutes from './routes/backups.js';
 
 export function createApp({ port } = {}) {
   const app = express();
@@ -94,6 +98,10 @@ export function createApp({ port } = {}) {
   app.use('/api/bug-report', bugReportRoutes);
   app.use('/api/shred', shredRoutes);
   app.use('/api/custom-cleaners', customCleanersRoutes);
+  app.use('/api/picker', pickerRoutes);
+  app.use('/api/install-monitor', installMonitorRoutes);
+  app.use('/api/hunter', hunterRoutes);
+  app.use('/api/backups', backupsRoutes);
 
   /** Anything still unanswered is a path this app does not serve. After
    * every route, so it can only see what none of them matched. */

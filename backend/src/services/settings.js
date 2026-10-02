@@ -4,6 +4,7 @@ import { dirname, join } from 'node:path';
 import { matchLanguage } from './languages.js';
 import { normalizePasses } from '../lib/shredFile.js';
 import { normalizeCustomLocations } from '../lib/customLocations.js';
+import { normalizeScanMode } from './leftoverModes.js';
 
 /** Path to the settings file. A function, not a constant -- read at call
  * time, not import time -- so tests can point it at a scratch temp file
@@ -167,6 +168,10 @@ const DEFAULT_SETTINGS = {
   preselectLeftovers: false,
   // Revo's "Only run the built-in uninstaller", the other way round.
   scanLeftoversAfterUninstall: true,
+  /* How far the leftover scan looks: 'safe', 'moderate' or 'advanced' -- see
+     services/leftoverModes.js. Chosen in the uninstall dialog and remembered
+     here; anything unrecognised reads as the default, 'moderate'. */
+  leftoverScanMode: 'moderate',
   // Revo's "Disable Uninstall History", the other way round.
   keepUninstallHistory: true,
   /* Before the program's own uninstaller runs, as Revo does. Off: a
@@ -366,7 +371,10 @@ export async function getSettings({
     // A file that never recorded a choice was behaving as "on", and flipping
     // it would change what an existing install does without being asked.
     if (!('preselectLeftovers' in stored)) stored.preselectLeftovers = true;
-    return { ...DEFAULT_SETTINGS, ...stored, ...normalizedChoices({ ...DEFAULT_SETTINGS, ...stored }) };
+    return {
+      ...DEFAULT_SETTINGS, ...stored, ...normalizedChoices({ ...DEFAULT_SETTINGS, ...stored }),
+      leftoverScanMode: normalizeScanMode(stored.leftoverScanMode)
+    };
   } catch {
     // A corrupted settings file must not crash every screen that reads
     // settings -- fall back to defaults, same as "never configured".
@@ -394,6 +402,7 @@ async function saveSettings(partial) {
   const current = await getSettings();
   const updated = { ...current, ...partial };
   Object.assign(updated, normalizedChoices(updated));
+  updated.leftoverScanMode = normalizeScanMode(updated.leftoverScanMode);
   const path = settingsPath();
   await mkdir(dirname(path), { recursive: true });
   // Written beside the real file then renamed over it, so a reader (or a

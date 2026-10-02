@@ -6,9 +6,13 @@ import { mergeLeftovers } from '../lib/mergeLeftovers.js';
 import { batchSummary } from '../lib/batchSelection.js';
 import { orderBatch } from '../lib/batchOrder.js';
 import LeftoverReview from './LeftoverReview.jsx';
+import TaskRemovalNotice from './TaskRemovalNotice.jsx';
 import { selectionToRemoval } from './UninstallModal.jsx';
-import { useSettings } from '../hooks/useSystemQueries.js';
+import { useSettings, useInstallTraces } from '../hooks/useSystemQueries.js';
+import { traceForProgram } from '../lib/installTraces.js';
 import { leftoverDestinationFrom } from '../lib/leftoverDestination.js';
+import { scanModeFrom, anchorsFor } from '../lib/leftoverScanMode.js';
+import { preselectKeys } from '../lib/leftoverTiers.js';
 
 /** How long one uninstaller may run before the dialog says it is still
  * waiting and puts Stop in front. Unlike the single-program dialog, this one
@@ -129,6 +133,7 @@ export default function BatchUninstallModal({ programs, onClose, onFinished, onB
   // The same three settings the single-program dialog follows, read the
   // same way: a failed settings request leaves the batch as it always was.
   const { settings } = useSettings();
+  const { traces } = useInstallTraces();
   const destination = leftoverDestinationFrom(settings);
   const preselect = settings?.preselectLeftovers === true;
   const scanAfter = settings?.scanLeftoversAfterUninstall !== false;
@@ -198,9 +203,12 @@ export default function BatchUninstallModal({ programs, onClose, onFinished, onB
           await streamUninstall(program.id, () => {});
         }
         appendHistoryEntry({
+          kind: program.source === 'store' ? 'store' : 'batch',
           programName: program.name,
           publisher: program.publisher,
-          sizeBytes: program.sizeBytes
+          version: program.version,
+          sizeBytes: program.sizeBytes ?? undefined,
+          outcome: 'uninstalled'
         }).catch(() => { /* logging must never fail an uninstall that worked */ });
         setStatus(program.id, { state: 'done' });
         succeeded.push(program);
@@ -258,17 +266,21 @@ export default function BatchUninstallModal({ programs, onClose, onFinished, onB
       // own de-duplication and per-item program attribution are unchanged
       // by when the scan runs, only by what order it runs in.
       for (const program of scannable) {
-        const scan = await scanForLeftovers(deriveSearchTerm(program.name), program.publisher);
+        const scan = await scanForLeftovers(deriveSearchTerm(program.name), program.publisher, {
+          // The depth chosen in the single-program dialog and remembered in
+          // settings. A batch has no picker of its own: it follows it.
+          mode: scanModeFrom(settings),
+          anchors: anchorsFor(program),
+          programId: program.id,
+          ...(traceForProgram(program, traces) ? { traceId: traceForProgram(program, traces).id } : {})
+        });
         scans.push({ program: program.name, scan });
       }
       setScanCount(scans.length);
       const merged = mergeLeftovers(scans);
       setLeftovers(merged);
-      const keys = [];
-      for (const group of ['files', 'registryKeys']) {
-        (merged[group]?.items || []).forEach((_, i) => keys.push(`${group}:${i}`));
-      }
-      setSelected(new Set(preselect ? keys : []));
+      // Certain and likely only; a "possible" item is never ticked for you.
+      setSelected(preselect ? preselectKeys(merged) : new Set());
       setPhase('review');
     } catch (err) {
       setError(err.message);
@@ -282,8 +294,8 @@ export default function BatchUninstallModal({ programs, onClose, onFinished, onB
    * This one creates a quarantine batch, so a second pass would make a
    * second batch and then fail finding the files already moved. */
   const handleRemoveLeftovers = useSingleFlight(async () => {
-    const { files, registryKeys } = selectionToRemoval(leftovers, selected);
-    if (files.length === 0 && registryKeys.length === 0) {
+    const { files, registryKeys, scheduledTasks } = selectionToRemoval(leftovers, selected);
+    if (files.length === 0 && registryKeys.length === 0 && !scheduledTasks) {
       onFinished?.();
       onClose();
       return;
@@ -295,6 +307,7 @@ export default function BatchUninstallModal({ programs, onClose, onFinished, onB
         programName: t('batchUninstallModal.historyLabel', programs.length),
         files,
         registryKeys,
+        ...(scheduledTasks ? { scheduledTasks } : {}),
         destination
       });
       setRemoval(manifest);
@@ -571,6 +584,8 @@ export default function BatchUninstallModal({ programs, onClose, onFinished, onB
                 </p>
               </div>
             )}
+
+            <TaskRemovalNotice result={removal.scheduledTasks} />
 
             <button className="btn-primary" onClick={() => { onFinished?.(); onClose(); }}>{t('batchUninstallModal.done')}</button>
           </div>

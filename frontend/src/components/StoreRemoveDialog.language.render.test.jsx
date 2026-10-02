@@ -88,8 +88,8 @@ describe('the store remove dialog, in Greek', () => {
 
     await waitFor(() => expect(onRemoved).toHaveBeenCalledTimes(1));
     expect(removeStoreApp).toHaveBeenCalledWith(app.packageFullName);
-    expect(appendHistoryEntry).toHaveBeenCalledWith({
-      programName: 'Calculator', publisher: 'Microsoft Corporation', sizeBytes: 4096
-    });
+    expect(appendHistoryEntry).toHaveBeenCalledWith(expect.objectContaining({
+      programName: 'Calculator', publisher: 'Microsoft Corporation', sizeBytes: 4096, kind: 'store'
+    }));
   });
 });

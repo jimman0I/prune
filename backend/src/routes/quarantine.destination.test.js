@@ -19,6 +19,11 @@ vi.mock('../services/leftoverRemoval.js', () => ({
 
 vi.mock('../services/restorePoint.js', () => ({ tryCreateRestorePoint: async () => ({ created: true }) }));
 
+// The route reads the installed programs so the removal can refuse another
+// program's folder. Not the real registry read, which takes seconds.
+const installed = [{ id: 'other', name: 'Other', installLocation: 'D:\\Other' }];
+vi.mock('../services/programs.js', () => ({ listInstalledPrograms: async () => installed }));
+
 let settings = {};
 vi.mock('../services/settings.js', () => ({
   getSettings: async () => settings,
@@ -46,8 +51,13 @@ describe('POST /quarantine/remove destination', () => {
     expect(res.status).toBe(200);
     expect(removeLeftovers).toHaveBeenCalledWith({
       programName: 'Thing', files: ['C:\\x'], registryKeys: [], destination: 'quarantine',
-      deleteLockedFilesOnRestart: false, overwritePasses: 0
+      deleteLockedFilesOnRestart: false, overwritePasses: 0, installedPrograms: installed, scheduledTasks: []
     });
+  });
+
+  it('passes the scheduled tasks to remove, as name/path pairs only', async () => {
+    await remove({ scheduledTasks: [{ name: 'T', path: '\\A\\', extra: 'x' }, { name: 5 }, null, 'nope'] });
+    expect(removeLeftovers.mock.calls[0][0].scheduledTasks).toEqual([{ name: 'T', path: '\\A\\' }]);
   });
 
   it.each(['quarantine', 'recycle', 'permanent'])('passes %s through', async (destination) => {

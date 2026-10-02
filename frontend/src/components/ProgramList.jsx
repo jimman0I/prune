@@ -1,7 +1,11 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import ContextMenu from './ContextMenu.jsx';
 import { useToasts } from '../hooks/useToasts.jsx';
-import { fetchPrograms, revealInExplorer, openInstalledAppsSettings } from '../lib/api.js';
+import { fetchPrograms, revealInExplorer, openInstalledAppsSettings, deleteInstallTrace, manageBrowserExtension } from '../lib/api.js';
+import { useQueryClient } from '@tanstack/react-query';
+import { keys } from '../lib/queryClient.js';
+import { useInstallTraces } from '../hooks/useSystemQueries.js';
+import { traceForProgram } from '../lib/installTraces.js';
 import { sizeBadgeTone } from '../lib/sizeBadgeTone.js';
 import { sortPrograms, nextSortState } from '../lib/sortPrograms.js';
 import { canBatchUninstall, batchIneligibleReason, batchSummary } from '../lib/batchSelection.js';
@@ -262,7 +266,39 @@ function RevealButton({ program }) {
   );
 }
 
-function ProgramRow({ program, iconSrc, checked, running, isNew, tabStop, onFocusRow, onToggle, onUninstall, onRemoveStoreApp, onContextMenu }) {
+/** Opens the browser on this extension's own page.
+ *
+ * Prune cannot silently remove a browser extension: the browser owns its
+ * profile files and repairs anything edited from outside. So the button takes
+ * the person to the page where the browser does it, and says so when it has
+ * -- the sentence is shown at the moment it matters, not hidden in a hover. */
+function ManageExtensionButton({ program }) {
+  const { t } = useLanguage();
+  const toasts = useToasts();
+  const [busy, setBusy] = useState(false);
+  return (
+    <button
+      disabled={busy}
+      onClick={async () => {
+        setBusy(true);
+        try {
+          const result = await manageBrowserExtension(program.id);
+          toasts.info(t('uninstallerV3.extensions.opened', result.browser || program.browser));
+        } catch (error) {
+          toasts.error(t('uninstallerV3.extensions.failed'), { detail: error.message });
+        } finally {
+          setBusy(false);
+        }
+      }}
+      aria-label={t('uninstallerV3.extensions.manageAria', program.name)}
+      className="btn-ghost px-2 py-1 rounded-md text-[11px] font-medium disabled:opacity-50"
+    >
+      {t('uninstallerV3.extensions.manage')}
+    </button>
+  );
+}
+
+function ProgramRow({ program, iconSrc, checked, running, isNew, monitored = false, tabStop, onFocusRow, onToggle, onUninstall, onRemoveStoreApp, onContextMenu }) {
   const { t } = useLanguage();
   return (
     <div
@@ -325,6 +361,13 @@ function ProgramRow({ program, iconSrc, checked, running, isNew, tabStop, onFocu
       {program.source === 'extension' && program.enabled === false && (
         <span className="text-[11px] font-mono uppercase tracking-wider px-1 py-px rounded bg-[color:var(--surface-hover)] text-[color:var(--text-muted)] border border-[color:var(--border-subtle)] shrink-0">
           {t('applications.badges.disabled')}
+        </span>
+      )}
+      {/* Installed under the install monitor: Prune holds its installer's own
+          record of what it created, so removing it can be exact. */}
+      {monitored && (
+        <span className="text-[11px] font-mono uppercase tracking-wider px-1 py-px rounded bg-[color:var(--accent-primary)]/10 text-[color:var(--accent-primary)] border border-[color:var(--accent-primary)]/25 shrink-0">
+          {t('uninstallerV3.monitor.badge')}
         </span>
       )}
       {program.unused && !program.health?.orphaned && (
@@ -393,9 +436,10 @@ function ProgramRow({ program, iconSrc, checked, running, isNew, tabStop, onFocu
     <div role="cell" className={`${STICKY_ACTION} text-right flex items-center justify-end gap-1.5`}>
       {program.source === 'extension' ? (
         <>
-          {program.installLocation && (
-            <div data-action-backing className={ACTION_BACKING}><RevealButton program={program} /></div>
-          )}
+          <div data-action-backing className={ACTION_BACKING}>
+            <RevealButton program={program} />
+            <ManageExtensionButton program={program} />
+          </div>
           {/* Removing one is a browser operation, not an uninstaller. */}
           <span className="text-[11px] font-mono text-[color:var(--text-muted)]">{t('applications.viaBrowser')}</span>
         </>
@@ -447,6 +491,18 @@ function ProgramRow({ program, iconSrc, checked, running, isNew, tabStop, onFocu
 export default function ProgramList({ programs: initialPrograms, extensions = [], icons = {}, running = {}, onUninstall, onBatchUninstall, onRemoveStoreApp = () => {}, onViewChange }) {
   const { t } = useLanguage();
   const toasts = useToasts();
+  // Programs the install monitor has a record of, and how to forget one.
+  const { traces } = useInstallTraces();
+  const queryClient = useQueryClient();
+  const deleteTrace = async (trace) => {
+    try {
+      await deleteInstallTrace(trace.id);
+      toasts.info(t('uninstallerV3.monitor.traceDeleted'));
+    } catch (error) {
+      toasts.error(t('uninstallerV3.monitor.traceDeleteFailed'), { detail: error.message });
+    }
+    queryClient.invalidateQueries({ queryKey: keys.installTraces });
+  };
   // The row a right-click landed on, and where, for the context menu.
   const [menu, setMenu] = useState(null);
   const openMenu = (program, event) => {
@@ -547,6 +603,13 @@ export default function ProgramList({ programs: initialPrograms, extensions = []
     for (const program of filtered) if (isRecentlyInstalled(program)) ids.add(program.id);
     return ids;
   }, [filtered]);
+
+  // Decided once per render, like the New badge above.
+  const monitoredIds = useMemo(() => {
+    const ids = new Set();
+    for (const program of programs) if (traceForProgram(program, traces)) ids.add(program.id);
+    return ids;
+  }, [programs, traces]);
 
   // Only what's both selected AND still on screen. Selecting rows, then
   // filtering them away, then hitting Uninstall should not remove things
@@ -719,6 +782,7 @@ export default function ProgramList({ programs: initialPrograms, extensions = []
               checked={selected.has(program.id)}
               running={Boolean(running[program.id])}
               isNew={newIds.has(program.id)}
+              monitored={monitoredIds.has(program.id)}
               onToggle={() => toggleRow(program)}
               onUninstall={onUninstall}
               onRemoveStoreApp={onRemoveStoreApp}
@@ -838,7 +902,10 @@ export default function ProgramList({ programs: initialPrograms, extensions = []
         x={menu?.x ?? 0}
         y={menu?.y ?? 0}
         onClose={() => setMenu(null)}
-        items={menu ? rowMenuItems(menu.program, { t, toasts, onUninstall, onRemoveStoreApp }) : []}
+        items={menu ? rowMenuItems(menu.program, {
+          t, toasts, onUninstall, onRemoveStoreApp,
+          trace: traceForProgram(menu.program, traces), onDeleteTrace: deleteTrace
+        }) : []}
       />
     </div>
   );
@@ -851,7 +918,7 @@ export default function ProgramList({ programs: initialPrograms, extensions = []
  * dialog and removes nothing by itself), Open folder is the Folder button,
  * and Copy is a read. An item that has nothing to act on is left out rather
  * than shown dead. */
-export function rowMenuItems(program, { t, toasts, onUninstall, onRemoveStoreApp }) {
+export function rowMenuItems(program, { t, toasts, onUninstall, onRemoveStoreApp, trace = null, onDeleteTrace }) {
   const items = [];
 
   if (program.installLocation) {
@@ -870,6 +937,12 @@ export function rowMenuItems(program, { t, toasts, onUninstall, onRemoveStoreApp
         .then(() => toasts.info(t('applications.commandCopied')))
         .catch(() => toasts.error(t('applications.copyFailed')))
     });
+  }
+
+  // Forgetting what the install monitor recorded. It changes nothing on the
+  // machine; the program just loses its Monitored badge and its exactness.
+  if (trace && onDeleteTrace) {
+    items.push({ label: t('uninstallerV3.monitor.menuDelete'), onSelect: () => onDeleteTrace(trace) });
   }
 
   // The removal goes LAST, set apart and in the danger style: the menu opens

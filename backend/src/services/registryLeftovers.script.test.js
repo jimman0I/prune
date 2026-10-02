@@ -118,3 +118,58 @@ describe('buildRegistryScript (real PowerShell, real registry)', () => {
     expect(items).toEqual([]);
   }, 120000);
 });
+
+/** The program's own folder as evidence, with nothing about the NAME to go on.
+ * Plants an Add/Remove entry and a startup value whose only link to the
+ * program is a path inside its folder, and one that points at a sibling
+ * folder sharing the prefix. */
+describe('buildRegistryScript with anchors (real PowerShell, real registry)', () => {
+  const ANCHOR_DIR = 'C:\\PruneAnchorFixture9137';
+  const SIBLING = 'C:\\PruneAnchorFixture9137Other';
+  const ANCHOR_UNINSTALL = 'HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\PruneAnchorUninstall9137';
+  const OTHER_UNINSTALL = 'HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\PruneAnchorSibling9137';
+
+  beforeAll(async () => {
+    await reg(['add', ANCHOR_UNINSTALL, '/v', 'DisplayName', '/t', 'REG_SZ', '/d', 'Totally Unrelated Name', '/f']);
+    await reg(['add', ANCHOR_UNINSTALL, '/v', 'InstallLocation', '/t', 'REG_SZ', '/d', ANCHOR_DIR, '/f']);
+    await reg(['add', OTHER_UNINSTALL, '/v', 'DisplayName', '/t', 'REG_SZ', '/d', 'Another Unrelated Name', '/f']);
+    await reg(['add', OTHER_UNINSTALL, '/v', 'InstallLocation', '/t', 'REG_SZ', '/d', SIBLING, '/f']);
+    await reg(['add', RUN_KEY, '/v', 'PruneAnchorRun9137', '/t', 'REG_SZ', '/d', `"${ANCHOR_DIR}\\bin\\tray.exe" --minimized`, '/f']);
+    await reg(['add', RUN_KEY, '/v', 'PruneAnchorRunSibling9137', '/t', 'REG_SZ', '/d', `${SIBLING}\\tray.exe`, '/f']);
+  }, 60000);
+
+  afterAll(async () => {
+    for (const args of [
+      ['delete', ANCHOR_UNINSTALL, '/f'],
+      ['delete', OTHER_UNINSTALL, '/f'],
+      ['delete', RUN_KEY, '/v', 'PruneAnchorRun9137', '/f'],
+      ['delete', RUN_KEY, '/v', 'PruneAnchorRunSibling9137', '/f']
+    ]) await reg(args).catch(() => {});
+  }, 60000);
+
+  async function runAnchored() {
+    const { stdout, stderr } = await execFileAsync(
+      'powershell',
+      ['-NoProfile', '-NonInteractive', '-ExecutionPolicy', 'Bypass', '-Command',
+        buildRegistryScript('(?!)', { anchors: [ANCHOR_DIR] })],
+      { timeout: 90000, maxBuffer: 32 * 1024 * 1024 }
+    );
+    const trimmed = stdout.trim();
+    const parsed = trimmed ? JSON.parse(trimmed) : null;
+    return { stderr, items: normalizeRegistryItems(parsed ? (Array.isArray(parsed) ? parsed : [parsed]) : []) };
+  }
+
+  it('finds an entry that only the program\'s folder gives away, and not its sibling', async () => {
+    const { stderr, items } = await runAnchored();
+    expect(stderr).toBe('');
+
+    const uninstall = items.filter((i) => i.path.toUpperCase().includes('PRUNEANCHOR'));
+    expect(uninstall.map((i) => i.path.split('\\').pop())).toEqual(['PruneAnchorUninstall9137']);
+    expect(uninstall[0].anchored).toBe(true);
+    expect(uninstall[0].isUninstallEntry).toBe(true);
+
+    const run = items.filter((i) => i.valueName);
+    expect(run.map((i) => i.valueName)).toEqual(['PruneAnchorRun9137']);
+    expect(run[0].anchored).toBe(true);
+  }, 120000);
+});
