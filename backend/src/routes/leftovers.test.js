@@ -37,10 +37,45 @@ beforeEach(() => {
   });
 });
 
-const scan = () => server.call('/leftovers/scan', {
+const scan = (extra = {}) => server.call('/leftovers/scan', {
   method: 'POST',
   headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({ name: 'Thing', publisher: 'Acme' })
+  body: JSON.stringify({ name: 'Thing', publisher: 'Acme', ...extra })
+});
+
+describe('POST /leftovers/scan: mode and anchors', () => {
+  it('uses the mode in the request', async () => {
+    await scan({ mode: 'advanced' });
+    expect(scanForLeftovers).toHaveBeenCalledWith(expect.objectContaining({ mode: 'advanced' }));
+  });
+
+  it('falls back to the remembered mode, then to Moderate', async () => {
+    settings = { leftoverScanMode: 'safe' };
+    await scan();
+    expect(scanForLeftovers).toHaveBeenLastCalledWith(expect.objectContaining({ mode: 'safe' }));
+    settings = {};
+    await scan();
+    expect(scanForLeftovers).toHaveBeenLastCalledWith(expect.objectContaining({ mode: 'moderate' }));
+  });
+
+  it('turns an unrecognised mode into Moderate rather than passing it on', async () => {
+    await scan({ mode: 'everything' });
+    expect(scanForLeftovers).toHaveBeenCalledWith(expect.objectContaining({ mode: 'moderate' }));
+  });
+
+  it('hands the scanner the program\'s anchors, strings only', async () => {
+    await scan({ anchors: { installLocation: 'D:\\Games\\Thing', registryKey: 'HKCU:\\Software\\Thing', evil: 'x', displayIcon: 42 } });
+    expect(scanForLeftovers).toHaveBeenCalledWith(expect.objectContaining({
+      anchors: { installLocation: 'D:\\Games\\Thing', registryKey: 'HKCU:\\Software\\Thing' }
+    }));
+  });
+
+  it('copes with anchors that are not an object', async () => {
+    for (const anchors of ['D:\\x', 5, null, ['a']]) {
+      const res = await scan({ anchors });
+      expect(res.status).toBe(200);
+    }
+  });
 });
 
 describe('POST /leftovers/scan', () => {

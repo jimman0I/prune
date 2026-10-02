@@ -317,6 +317,26 @@ describe('deepCleanRemoval', () => {
   });
 });
 
+describe('leftoverScanMode', () => {
+  it('defaults to moderate', async () => {
+    expect((await getSettings()).leftoverScanMode).toBe('moderate');
+  });
+
+  it('remembers a valid choice', async () => {
+    expect((await updateSettings({ leftoverScanMode: 'advanced' })).leftoverScanMode).toBe('advanced');
+    expect((await getSettings()).leftoverScanMode).toBe('advanced');
+  });
+
+  it('reads anything else back as moderate, whether saved now or hand-edited', async () => {
+    for (const junk of ['ADVANCED', 'deep', '', null, 3]) {
+      expect((await updateSettings({ leftoverScanMode: junk })).leftoverScanMode).toBe('moderate');
+    }
+    await mkdir(dirname(process.env.UNREVO_SETTINGS_PATH), { recursive: true });
+    await writeFile(process.env.UNREVO_SETTINGS_PATH, JSON.stringify({ leftoverScanMode: 'yolo' }));
+    expect((await getSettings()).leftoverScanMode).toBe('moderate');
+  });
+});
+
 describe('updateSettings under concurrency', () => {
   it('keeps every change when saves overlap, instead of the last writer erasing the rest', async () => {
     await updateSettings({ language: 'el' });

@@ -264,11 +264,14 @@ export async function fetchRunningPrograms() {
   return data.running ?? {};
 }
 
-export async function scanForLeftovers(name, publisher) {
+/** Leftover scan. `mode` ('safe' | 'moderate' | 'advanced') and `anchors`
+ * (the program's own install location and registry key) are optional: left
+ * out, the backend uses the remembered mode and searches by name alone. */
+export async function scanForLeftovers(name, publisher, { mode, anchors } = {}) {
   const res = await fetch(`${API_URL}/leftovers/scan`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ name, publisher })
+    body: JSON.stringify({ name, publisher, ...(mode ? { mode } : {}), ...(anchors ? { anchors } : {}) })
   });
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
@@ -282,11 +285,11 @@ export async function scanForLeftovers(name, publisher) {
  *
  * Scans only. Removal is removeQuarantined below, the same call the
  * ordinary flow makes. */
-export async function scanForcedUninstall({ name, publisher, registryKey }) {
+export async function scanForcedUninstall({ name, publisher, registryKey, mode, anchors }) {
   const res = await fetch(`${API_URL}/forced-uninstall/scan`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ name, publisher, registryKey })
+    body: JSON.stringify({ name, publisher, registryKey, ...(mode ? { mode } : {}), ...(anchors ? { anchors } : {}) })
   });
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);

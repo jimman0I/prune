@@ -9,6 +9,7 @@ import LeftoverReview from './LeftoverReview.jsx';
 import { selectionToRemoval } from './UninstallModal.jsx';
 import { useSettings } from '../hooks/useSystemQueries.js';
 import { leftoverDestinationFrom } from '../lib/leftoverDestination.js';
+import { scanModeFrom, anchorsFor } from '../lib/scanMode.js';
 
 /** How long one uninstaller may run before the dialog says it is still
  * waiting and puts Stop in front. Unlike the single-program dialog, this one
@@ -258,7 +259,12 @@ export default function BatchUninstallModal({ programs, onClose, onFinished, onB
       // own de-duplication and per-item program attribution are unchanged
       // by when the scan runs, only by what order it runs in.
       for (const program of scannable) {
-        const scan = await scanForLeftovers(deriveSearchTerm(program.name), program.publisher);
+        const scan = await scanForLeftovers(deriveSearchTerm(program.name), program.publisher, {
+          // The depth chosen in the single-program dialog and remembered in
+          // settings. A batch has no picker of its own: it follows it.
+          mode: scanModeFrom(settings),
+          anchors: anchorsFor(program)
+        });
         scans.push({ program: program.name, scan });
       }
       setScanCount(scans.length);

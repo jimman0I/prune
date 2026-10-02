@@ -45,7 +45,8 @@ describe('scanForLeftovers', () => {
     expect(result).toEqual({
       files: { ok: true, items: [] },
       registryKeys: { ok: true, items: [] },
-      scheduledTasks: { ok: true, items: [] }
+      scheduledTasks: { ok: true, items: [] },
+      mode: 'moderate'
     });
     expect(runPowerShellJsonMock).not.toHaveBeenCalled();
   });

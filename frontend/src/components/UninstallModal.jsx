@@ -3,6 +3,8 @@ import { useSingleFlight } from '../hooks/useSingleFlight.js';
 import { scanForLeftovers, scanForcedUninstall, streamUninstall, removeQuarantined, appendHistoryEntry } from '../lib/api.js';
 import { deriveSearchTerm } from '../lib/searchTerm.js';
 import LeftoverReview from './LeftoverReview.jsx';
+import ScanModePicker from './ScanModePicker.jsx';
+import { scanModeFrom, anchorsFor } from '../lib/scanMode.js';
 import { useSettings } from '../hooks/useSystemQueries.js';
 import { leftoverDestinationFrom } from '../lib/leftoverDestination.js';
 import { useLanguage } from '../i18n/LanguageContext.jsx';
@@ -121,7 +123,16 @@ export default function UninstallModal({ program, running = false, onClose, onBu
 
   // Three settings shape this dialog, each read so that a settings request
   // that failed leaves the dialog behaving exactly as it always did.
-  const { settings } = useSettings();
+  const { settings, save: saveSettings } = useSettings();
+  // The depth of the leftover scan, chosen here and remembered. Until the
+  // person touches the picker it is whatever settings last held; touching it
+  // takes effect at once and is saved for the next uninstall.
+  const [modeChoice, setModeChoice] = useState(null);
+  const scanMode = modeChoice ?? scanModeFrom(settings);
+  const chooseScanMode = (next) => {
+    setModeChoice(next);
+    saveSettings?.mutate({ leftoverScanMode: next });
+  };
   const destination = leftoverDestinationFrom(settings);
   const preselect = settings?.preselectLeftovers === true;
   const scanAfter = settings?.scanLeftoversAfterUninstall !== false;
@@ -238,7 +249,10 @@ export default function UninstallModal({ program, running = false, onClose, onBu
       // same defect the forced path did: it searched for the full
       // DisplayName ("TriClaude 0.1.0"), which no folder is ever called,
       // so its leftover sweep found registry keys and never files.
-      const result = await scanForLeftovers(deriveSearchTerm(program.name), program.publisher);
+      const result = await scanForLeftovers(deriveSearchTerm(program.name), program.publisher, {
+        mode: scanMode,
+        anchors: anchorsFor(program)
+      });
       setScanResult(result);
       // Revo's "Automatically delete all found leftovers": skip the manual
       // review screen and remove everything the scan just found, straight
@@ -275,7 +289,9 @@ export default function UninstallModal({ program, running = false, onClose, onBu
       const result = await scanForcedUninstall({
         name: searchTerm.trim(),
         publisher: program.publisher,
-        registryKey: program.registryKey
+        registryKey: program.registryKey,
+        mode: scanMode,
+        anchors: anchorsFor(program)
       });
       setScanResult(result);
       selectEverythingIn(result);
@@ -387,9 +403,11 @@ export default function UninstallModal({ program, running = false, onClose, onBu
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="w-full bg-[color:var(--bg-panel)] border border-[color:var(--border-subtle)] rounded-xl px-3.5 py-2.5 text-[13px] font-mono focus:outline-none focus:border-[color:var(--accent-primary)] focus:ring-4 focus:ring-[color:var(--accent-primary)]/10 transition"
                 />
-                <p className="text-[12px] text-[color:var(--text-muted)] mt-1.5 mb-6">
+                <p className="text-[12px] text-[color:var(--text-muted)] mt-1.5 mb-5">
                   {t('uninstallModal.searchHint', program.name)}
                 </p>
+
+                <ScanModePicker mode={scanMode} onChange={chooseScanMode} />
 
                 {error && <p className="text-[12.5px] text-[color:var(--danger)] mb-4 select-text">{t('uninstallModal.scanFailed', error)}</p>}
                 <button className="btn-primary" onClick={startForcedScan} disabled={!searchTerm.trim()}>
@@ -403,6 +421,7 @@ export default function UninstallModal({ program, running = false, onClose, onBu
                 </p>
                 <p className="text-[11.5px] text-[color:var(--text-muted)] font-mono mb-6 break-all select-text">{command}</p>
                 {error && <p className="text-[12.5px] text-[color:var(--danger)] mb-4 select-text">{t('uninstallModal.uninstallFailed', error)}</p>}
+                {scanAfter && <ScanModePicker mode={scanMode} onChange={chooseScanMode} />}
                 {autoRemoveOffered && (
                   <label className="flex items-center gap-2.5 mb-5 cursor-pointer select-none">
                     <input
