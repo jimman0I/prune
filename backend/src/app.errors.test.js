@@ -26,8 +26,8 @@ vi.mock('./services/uninstallHistory.js', () => ({
   appendHistoryEntry: (...a) => appendHistoryEntry(...a)
 }));
 
-const scanDriveViaMft = vi.fn(async () => ({ ok: true, tree: {}, stats: {}, driveLetter: 'C' }));
-vi.mock('./services/mftScan.js', () => ({ scanDriveViaMft: (...a) => scanDriveViaMft(...a) }));
+const scanDrivesViaMft = vi.fn(async () => ({ ok: true, tree: {}, stats: {}, driveLetter: 'C' }));
+vi.mock('./services/mftScan.js', () => ({ scanDrivesViaMft: (...a) => scanDrivesViaMft(...a) }));
 
 const emptyQuarantine = vi.fn(async () => ({ ok: true }));
 vi.mock('./services/quarantine.js', async (importOriginal) => ({
@@ -175,7 +175,7 @@ describe('the handlers that had no try/catch of their own', () => {
   });
 
   it('answers when the MFT scan throws rather than returning a result', async () => {
-    scanDriveViaMft.mockRejectedValueOnce(new Error('elevation failed'));
+    scanDrivesViaMft.mockRejectedValueOnce(new Error('elevation failed'));
     const res = await server.call('/mft-scan', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },

@@ -16,8 +16,8 @@ import { startTestServer } from '../testSupport/routeServer.js';
  * or writes to disk, so all of them are mocked.
  */
 
-const scanDriveViaMft = vi.fn(async () => ({ ok: true, tree: {}, stats: {}, driveLetter: 'C' }));
-vi.mock('../services/mftScan.js', () => ({ scanDriveViaMft: (...a) => scanDriveViaMft(...a) }));
+const scanDrivesViaMft = vi.fn(async () => ({ ok: true, tree: {}, stats: {}, driveLetter: 'C' }));
+vi.mock('../services/mftScan.js', () => ({ scanDrivesViaMft: (...a) => scanDrivesViaMft(...a) }));
 
 const getDiskHealth = vi.fn(async () => ({ drives: [] }));
 const getElevatedDiskHealth = vi.fn(async () => ({ ok: true, drives: [] }));
@@ -68,13 +68,13 @@ describe('a malformed request is a 400', () => {
       const res = await post('/mft-scan', { driveLetter });
       expect(res.status, JSON.stringify(driveLetter)).toBe(400);
     }
-    expect(scanDriveViaMft).not.toHaveBeenCalled();
+    expect(scanDrivesViaMft).not.toHaveBeenCalled();
   });
 
   it('defaults the MFT scan to C when the body names no drive', async () => {
     const res = await post('/mft-scan', {});
     expect(res.status).toBe(200);
-    expect(scanDriveViaMft).toHaveBeenCalledWith({ driveLetter: 'C', maxDepth: expect.any(Number) });
+    expect(scanDrivesViaMft).toHaveBeenCalledWith({ driveLetters: ['C'], maxDepth: expect.any(Number) });
   });
 
   it('needs a program name to scan for leftovers', async () => {
@@ -142,7 +142,7 @@ describe('a declined UAC prompt is a 200 that says so', () => {
   });
 
   it('on the MFT scan', async () => {
-    scanDriveViaMft.mockResolvedValueOnce({ ok: false, cancelled: true });
+    scanDrivesViaMft.mockResolvedValueOnce({ ok: false, cancelled: true });
     const res = await post('/mft-scan', { driveLetter: 'C' });
     expect(res.status).toBe(200);
     expect(res.body).toEqual({ cancelled: true });
@@ -151,7 +151,7 @@ describe('a declined UAC prompt is a 200 that says so', () => {
   it('but a real elevation failure is still a 500', async () => {
     // The distinction the convention rests on. "You said no" and "it
     // broke" must not look the same.
-    scanDriveViaMft.mockResolvedValueOnce({ ok: false, error: 'MFT read failed' });
+    scanDrivesViaMft.mockResolvedValueOnce({ ok: false, error: 'MFT read failed' });
     const res = await post('/mft-scan', { driveLetter: 'C' });
     expect(res.status).toBe(500);
     expect(res.body.error).toBe('MFT read failed');
@@ -166,7 +166,7 @@ describe('what must never be reachable by a GET', () => {
       const res = await server.call(path);
       expect(res.status, path).toBe(404);
     }
-    expect(scanDriveViaMft).not.toHaveBeenCalled();
+    expect(scanDrivesViaMft).not.toHaveBeenCalled();
     expect(getElevatedDiskHealth).not.toHaveBeenCalled();
   });
 });
