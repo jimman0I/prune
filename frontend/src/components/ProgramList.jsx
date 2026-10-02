@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import ContextMenu from './ContextMenu.jsx';
 import { useToasts } from '../hooks/useToasts.jsx';
-import { fetchPrograms, revealInExplorer, openInstalledAppsSettings, deleteInstallTrace } from '../lib/api.js';
+import { fetchPrograms, revealInExplorer, openInstalledAppsSettings, deleteInstallTrace, manageBrowserExtension } from '../lib/api.js';
 import { useQueryClient } from '@tanstack/react-query';
 import { keys } from '../lib/queryClient.js';
 import { useInstallTraces } from '../hooks/useSystemQueries.js';
@@ -266,6 +266,38 @@ function RevealButton({ program }) {
   );
 }
 
+/** Opens the browser on this extension's own page.
+ *
+ * Prune cannot silently remove a browser extension: the browser owns its
+ * profile files and repairs anything edited from outside. So the button takes
+ * the person to the page where the browser does it, and says so when it has
+ * -- the sentence is shown at the moment it matters, not hidden in a hover. */
+function ManageExtensionButton({ program }) {
+  const { t } = useLanguage();
+  const toasts = useToasts();
+  const [busy, setBusy] = useState(false);
+  return (
+    <button
+      disabled={busy}
+      onClick={async () => {
+        setBusy(true);
+        try {
+          const result = await manageBrowserExtension(program.id);
+          toasts.info(t('uninstallerV3.extensions.opened', result.browser || program.browser));
+        } catch (error) {
+          toasts.error(t('uninstallerV3.extensions.failed'), { detail: error.message });
+        } finally {
+          setBusy(false);
+        }
+      }}
+      aria-label={t('uninstallerV3.extensions.manageAria', program.name)}
+      className="btn-ghost px-2 py-1 rounded-md text-[11px] font-medium disabled:opacity-50"
+    >
+      {t('uninstallerV3.extensions.manage')}
+    </button>
+  );
+}
+
 function ProgramRow({ program, iconSrc, checked, running, isNew, monitored = false, tabStop, onFocusRow, onToggle, onUninstall, onRemoveStoreApp, onContextMenu }) {
   const { t } = useLanguage();
   return (
@@ -404,9 +436,10 @@ function ProgramRow({ program, iconSrc, checked, running, isNew, monitored = fal
     <div role="cell" className={`${STICKY_ACTION} text-right flex items-center justify-end gap-1.5`}>
       {program.source === 'extension' ? (
         <>
-          {program.installLocation && (
-            <div data-action-backing className={ACTION_BACKING}><RevealButton program={program} /></div>
-          )}
+          <div data-action-backing className={ACTION_BACKING}>
+            <RevealButton program={program} />
+            <ManageExtensionButton program={program} />
+          </div>
           {/* Removing one is a browser operation, not an uninstaller. */}
           <span className="text-[11px] font-mono text-[color:var(--text-muted)]">{t('applications.viaBrowser')}</span>
         </>

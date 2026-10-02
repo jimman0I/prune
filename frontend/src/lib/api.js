@@ -301,6 +301,18 @@ export async function scanForcedUninstall({ name, publisher, registryKey, mode, 
   return data;
 }
 
+/** Opens the extension's own page in its browser. Takes the row id (the
+ * backend looks the browser, profile and extension up again) and resolves
+ * { ok, browser }. Prune cannot remove an extension itself. */
+export async function manageBrowserExtension(id) {
+  const res = await fetch(`${API_URL}/programs/extensions/manage`, {
+    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id })
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
+  return data;
+}
+
 /* ------------------------------------------------------------ backups */
 
 async function backupCall(path, options) {
