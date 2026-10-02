@@ -119,14 +119,18 @@ const reasonOf = (err) => (err && err.message) || String(err);
  * use, no permission -- is recorded in `failed` and the rest carry on; its
  * folder is kept because it is not empty.
  *
- * Resolves { shredded: [{path, bytes}], failed: [{path, reason}], bytes,
- * aborted }. `onProgress` is called after each file; `onBytes` (throttled)
- * while a large file is being overwritten. */
+ * `refuse(path)` returns a reason to leave a file or folder alone, or a
+ * falsy value to go ahead.
+ *
+ * Resolves { shredded: [{path, bytes}], failed: [{path, reason}], held:
+ * [{path, reason}], bytes, aborted }. `onProgress` is called after each
+ * file; `onBytes` (throttled) while a large file is being overwritten. */
 export async function shredPaths(paths, passes = 1, {
-  signal, onProgress, onBytes, chunkBytes, open, bytesEveryMs = 200
+  signal, onProgress, onBytes, onStage, refuse, chunkBytes, open, bytesEveryMs = 200
 } = {}) {
   const shredded = [];
   const failed = [];
+  const held = [];
   let bytes = 0;
   let aborted = false;
   let lastBytesReport = 0;
@@ -135,9 +139,10 @@ export async function shredPaths(paths, passes = 1, {
     chunkBytes,
     open,
     signal,
-    onStage: onBytes
-      ? (stage, _p, detail) => {
-        if (stage !== 'chunk') return;
+    onStage: (onBytes || onStage)
+      ? async (stage, p, detail) => {
+        await onStage?.(stage, p, detail);
+        if (!onBytes || stage !== 'chunk') return;
         const now = Date.now();
         if (now - lastBytesReport < bytesEveryMs) return;
         lastBytesReport = now;
@@ -163,6 +168,15 @@ export async function shredPaths(paths, passes = 1, {
 
   /** Returns true when everything below `path` is gone. */
   async function shredTree(path) {
+    // The caller's guard, asked about every file and folder before it is
+    // so much as opened. A refused path is held, not failed: nothing went
+    // wrong, it was never going to be touched -- and the folder above it
+    // stays, because it is not empty.
+    const reason = refuse?.(path);
+    if (reason) {
+      held.push({ path, reason });
+      return false;
+    }
     let info;
     try {
       info = await lstat(path);
@@ -199,5 +213,5 @@ export async function shredPaths(paths, passes = 1, {
     await shredTree(path);
   }
 
-  return { shredded, failed, bytes, aborted };
+  return { shredded, failed, held, bytes, aborted };
 }
