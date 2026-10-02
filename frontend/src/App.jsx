@@ -16,6 +16,7 @@ import BatchUninstallModal from './components/BatchUninstallModal.jsx';
 import ModalOverlay from './components/ModalOverlay.jsx';
 import UninstallModal from './components/UninstallModal.jsx';
 import StoreRemoveDialog from './components/StoreRemoveDialog.jsx';
+import ApplicationsTools from './components/ApplicationsTools.jsx';
 import { rememberVisited } from './lib/visitedScreens.js';
 import { useIdlePrefetch } from './hooks/useIdlePrefetch.js';
 import { useScreenFade } from './hooks/useScreenFade.js';
@@ -116,6 +117,13 @@ export default function App() {
     refreshPrograms();
     queryClient.invalidateQueries({ queryKey: keys.quarantine });
   };
+
+  // The Applications tools (forced uninstall and the rest) change what is on
+  // the machine and what is in Quarantine; this is what closing one does.
+  const handleToolsChanged = useCallback(() => {
+    refreshPrograms();
+    queryClient.invalidateQueries({ queryKey: keys.quarantine });
+  }, [refreshPrograms, queryClient]);
 
   /* Reads the startup screen's list and icons while the app is idle.
    *
@@ -221,7 +229,10 @@ export default function App() {
                   {applicationsSummary({ t, view: appsView, count: programs.length, sizeBytes: totalSize, format: formatBytes })}
                 </p>
               </div>
-              <button className="btn-ghost" onClick={() => setScreen('quarantine')}>{t('nav.quarantine')}</button>
+              <div className="flex items-center gap-2">
+                <ApplicationsTools onChanged={handleToolsChanged} />
+                <button className="btn-ghost" onClick={() => setScreen('quarantine')}>{t('nav.quarantine')}</button>
+              </div>
             </div>
             <Suspense fallback={null}>
               <ProgramList

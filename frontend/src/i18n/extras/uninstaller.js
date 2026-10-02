@@ -30,6 +30,22 @@ export default {
       tasks: {
         removed: (n) => `Scheduled tasks removed: ${n}. Their definitions are saved under Backups on the Quarantine screen, where they can be restored.`,
         failedHeading: (n) => `Scheduled tasks that could not be removed: ${n}`
+      },
+      forced: {
+        button: "Forced uninstall…",
+        title: "Forced uninstall",
+        modalTitle: (n) => `Forced uninstall of ${n}`,
+        intro: "For software that is not listed, or whose uninstaller is gone. Give its name, choose the folder it was installed in, or both, and Prune searches deeply for what it left behind. You review everything before anything is removed.",
+        nameLabel: "Program name",
+        namePlaceholder: "Optional if you choose a folder",
+        folderLabel: "Install folder",
+        folderPlaceholder: "Optional if you enter a name",
+        browse: "Browse…",
+        continue: "Continue",
+        needOne: "Enter a name or choose a folder to continue.",
+        pickFailed: (m) => `Couldn't open the folder dialog: ${m}`,
+        scanIntro: "Prune will search for files, registry entries and scheduled tasks that match this name and folder. Nothing is removed until you have reviewed it.",
+        folderLine: (f) => `Folder: ${f}`
       }
     }
   },
@@ -60,6 +76,22 @@ export default {
       tasks: {
         removed: (n) => `Geskeduleerde take verwyder: ${n}. Hul definisies is gestoor onder Rugsteun op die Karantyn-skerm, waar hulle herstel kan word.`,
         failedHeading: (n) => `Geskeduleerde take wat nie verwyder kon word nie: ${n}`
+      },
+      forced: {
+        button: "Gedwonge deïnstallering…",
+        title: "Gedwonge deïnstallering",
+        modalTitle: (n) => `Gedwonge deïnstallering van ${n}`,
+        intro: "Vir sagteware wat nie gelys is nie, of waarvan die deïnstalleerder weg is. Gee die naam, kies die gids waarin dit geïnstalleer is, of albei, en Prune soek diep na wat dit agtergelaat het. Jy hersien alles voordat iets verwyder word.",
+        nameLabel: "Programnaam",
+        namePlaceholder: "Opsioneel as jy 'n gids kies",
+        folderLabel: "Installasiegids",
+        folderPlaceholder: "Opsioneel as jy 'n naam invoer",
+        browse: "Blaai…",
+        continue: "Gaan voort",
+        needOne: "Voer 'n naam in of kies 'n gids om voort te gaan.",
+        pickFailed: (m) => `Kon nie die gidsdialoog open nie: ${m}`,
+        scanIntro: "Prune soek na lêers, registerinskrywings en geskeduleerde take wat by hierdie naam en gids pas. Niks word verwyder voordat jy dit hersien het nie.",
+        folderLine: (f) => `Gids: ${f}`
       }
     }
   },
@@ -90,6 +122,22 @@ export default {
       tasks: {
         removed: (n) => `المهام المجدولة المحذوفة: ${n}. تم حفظ تعريفاتها ضمن النسخ الاحتياطية في شاشة الحجر الصحي، حيث يمكن استعادتها.`,
         failedHeading: (n) => `المهام المجدولة التي تعذّرت إزالتها: ${n}`
+      },
+      forced: {
+        button: "إلغاء تثبيت إجباري…",
+        title: "إلغاء تثبيت إجباري",
+        modalTitle: (n) => `إلغاء تثبيت ${n} إجباريًا`,
+        intro: "للبرامج غير المدرجة أو التي فُقد برنامج إلغاء التثبيت الخاص بها. أدخل اسمها أو اختر المجلد الذي ثُبّتت فيه أو كليهما، وسيبحث Prune بعمق عما خلّفته. تراجع كل شيء قبل إزالة أي شيء.",
+        nameLabel: "اسم البرنامج",
+        namePlaceholder: "اختياري إذا اخترت مجلدًا",
+        folderLabel: "مجلد التثبيت",
+        folderPlaceholder: "اختياري إذا أدخلت اسمًا",
+        browse: "استعراض…",
+        continue: "متابعة",
+        needOne: "أدخل اسمًا أو اختر مجلدًا للمتابعة.",
+        pickFailed: (m) => `تعذّر فتح نافذة المجلد: ${m}`,
+        scanIntro: "سيبحث Prune عن الملفات وإدخالات السجل والمهام المجدولة المطابقة لهذا الاسم والمجلد. لن يُزال شيء قبل أن تراجعه.",
+        folderLine: (f) => `المجلد: ${f}`
       }
     }
   },
@@ -120,6 +168,22 @@ export default {
       tasks: {
         removed: (n) => `Tasques programades eliminades: ${n}. Les seves definicions es desen a Còpies de seguretat, a la pantalla Quarantena, on es poden restaurar.`,
         failedHeading: (n) => `Tasques programades que no s'han pogut eliminar: ${n}`
+      },
+      forced: {
+        button: "Desinstal·lació forçada…",
+        title: "Desinstal·lació forçada",
+        modalTitle: (n) => `Desinstal·lació forçada de ${n}`,
+        intro: "Per a programari que no apareix a la llista o que ha perdut el desinstal·lador. Indica el nom, tria la carpeta on es va instal·lar, o totes dues coses, i Prune cerca en profunditat el que ha deixat. Ho revises tot abans que s'elimini res.",
+        nameLabel: "Nom del programa",
+        namePlaceholder: "Opcional si tries una carpeta",
+        folderLabel: "Carpeta d'instal·lació",
+        folderPlaceholder: "Opcional si introdueixes un nom",
+        browse: "Explora…",
+        continue: "Continua",
+        needOne: "Introdueix un nom o tria una carpeta per continuar.",
+        pickFailed: (m) => `No s'ha pogut obrir el diàleg de carpetes: ${m}`,
+        scanIntro: "Prune cercarà fitxers, entrades del registre i tasques programades que coincideixin amb aquest nom i aquesta carpeta. No s'elimina res fins que ho hagis revisat.",
+        folderLine: (f) => `Carpeta: ${f}`
       }
     }
   },
@@ -150,6 +214,22 @@ export default {
       tasks: {
         removed: (n) => `Odebrané naplánované úlohy: ${n}. Jejich definice jsou uloženy v části Zálohy na obrazovce Karanténa, odkud je lze obnovit.`,
         failedHeading: (n) => `Naplánované úlohy, které se nepodařilo odebrat: ${n}`
+      },
+      forced: {
+        button: "Vynucené odinstalování…",
+        title: "Vynucené odinstalování",
+        modalTitle: (n) => `Vynucené odinstalování: ${n}`,
+        intro: "Pro software, který není v seznamu nebo jehož odinstalátor zmizel. Zadejte název, vyberte složku, do které byl nainstalován, nebo obojí, a Prune důkladně vyhledá, co po něm zůstalo. Před odebráním vše zkontrolujete.",
+        nameLabel: "Název programu",
+        namePlaceholder: "Volitelné, pokud vyberete složku",
+        folderLabel: "Instalační složka",
+        folderPlaceholder: "Volitelné, pokud zadáte název",
+        browse: "Procházet…",
+        continue: "Pokračovat",
+        needOne: "Pro pokračování zadejte název nebo vyberte složku.",
+        pickFailed: (m) => `Dialog složky se nepodařilo otevřít: ${m}`,
+        scanIntro: "Prune vyhledá soubory, položky registru a naplánované úlohy odpovídající tomuto názvu a složce. Nic se neodebere, dokud to nezkontrolujete.",
+        folderLine: (f) => `Složka: ${f}`
       }
     }
   },
@@ -180,6 +260,22 @@ export default {
       tasks: {
         removed: (n) => `Tasgau wedi'u hamserlennu a dynnwyd: ${n}. Mae eu diffiniadau wedi'u cadw o dan Copïau wrth gefn ar sgrin Cwarantin, lle gellir eu hadfer.`,
         failedHeading: (n) => `Tasgau wedi'u hamserlennu na ellid eu tynnu: ${n}`
+      },
+      forced: {
+        button: "Dadosod gorfodol…",
+        title: "Dadosod gorfodol",
+        modalTitle: (n) => `Dadosod gorfodol ${n}`,
+        intro: "Ar gyfer meddalwedd nad yw wedi'i restru, neu y mae ei ddadosodwr wedi mynd. Rhowch ei enw, dewiswch y ffolder y'i gosodwyd ynddo, neu'r ddau, a bydd Prune yn chwilio'n ddwfn am yr hyn a adawodd ar ôl. Rydych yn adolygu popeth cyn tynnu dim.",
+        nameLabel: "Enw'r rhaglen",
+        namePlaceholder: "Dewisol os dewiswch ffolder",
+        folderLabel: "Ffolder gosod",
+        folderPlaceholder: "Dewisol os rhowch enw",
+        browse: "Pori…",
+        continue: "Parhau",
+        needOne: "Rhowch enw neu dewiswch ffolder i barhau.",
+        pickFailed: (m) => `Methu agor y deialog ffolder: ${m}`,
+        scanIntro: "Bydd Prune yn chwilio am ffeiliau, cofnodion cofrestrfa a thasgau wedi'u hamserlennu sy'n cyfateb i'r enw a'r ffolder hwn. Ni chaiff dim ei dynnu nes i chi ei adolygu.",
+        folderLine: (f) => `Ffolder: ${f}`
       }
     }
   },
@@ -210,6 +306,22 @@ export default {
       tasks: {
         removed: (n) => `Fjernede planlagte opgaver: ${n}. Deres definitioner er gemt under Sikkerhedskopier på skærmen Karantæne, hvor de kan gendannes.`,
         failedHeading: (n) => `Planlagte opgaver, der ikke kunne fjernes: ${n}`
+      },
+      forced: {
+        button: "Gennemtvungen afinstallation…",
+        title: "Gennemtvungen afinstallation",
+        modalTitle: (n) => `Gennemtvungen afinstallation af ${n}`,
+        intro: "Til software, der ikke er på listen, eller hvis afinstallationsprogram er væk. Angiv navnet, vælg den mappe, det blev installeret i, eller begge dele, så søger Prune grundigt efter det, der er efterladt. Du gennemgår alt, før noget fjernes.",
+        nameLabel: "Programnavn",
+        namePlaceholder: "Valgfrit, hvis du vælger en mappe",
+        folderLabel: "Installationsmappe",
+        folderPlaceholder: "Valgfrit, hvis du angiver et navn",
+        browse: "Gennemse…",
+        continue: "Fortsæt",
+        needOne: "Angiv et navn, eller vælg en mappe for at fortsætte.",
+        pickFailed: (m) => `Mappedialogen kunne ikke åbnes: ${m}`,
+        scanIntro: "Prune søger efter filer, registreringsposter og planlagte opgaver, der matcher dette navn og denne mappe. Intet fjernes, før du har gennemgået det.",
+        folderLine: (f) => `Mappe: ${f}`
       }
     }
   },
@@ -240,6 +352,22 @@ export default {
       tasks: {
         removed: (n) => `Entfernte geplante Aufgaben: ${n}. Ihre Definitionen sind unter „Sicherungen“ auf der Seite „Quarantäne“ gespeichert und können dort wiederhergestellt werden.`,
         failedHeading: (n) => `Geplante Aufgaben, die nicht entfernt werden konnten: ${n}`
+      },
+      forced: {
+        button: "Erzwungene Deinstallation…",
+        title: "Erzwungene Deinstallation",
+        modalTitle: (n) => `Erzwungene Deinstallation von ${n}`,
+        intro: "Für Software, die nicht aufgelistet ist oder deren Deinstallationsprogramm fehlt. Geben Sie den Namen an, wählen Sie den Installationsordner oder beides – Prune sucht dann gründlich nach dem, was zurückgeblieben ist. Sie prüfen alles, bevor etwas entfernt wird.",
+        nameLabel: "Programmname",
+        namePlaceholder: "Optional, wenn Sie einen Ordner wählen",
+        folderLabel: "Installationsordner",
+        folderPlaceholder: "Optional, wenn Sie einen Namen eingeben",
+        browse: "Durchsuchen…",
+        continue: "Weiter",
+        needOne: "Geben Sie einen Namen ein oder wählen Sie einen Ordner, um fortzufahren.",
+        pickFailed: (m) => `Der Ordnerdialog konnte nicht geöffnet werden: ${m}`,
+        scanIntro: "Prune sucht nach Dateien, Registrierungseinträgen und geplanten Aufgaben, die zu diesem Namen und Ordner passen. Nichts wird entfernt, bevor Sie es geprüft haben.",
+        folderLine: (f) => `Ordner: ${f}`
       }
     }
   },
@@ -270,6 +398,22 @@ export default {
       tasks: {
         removed: (n) => `Προγραμματισμένες εργασίες που αφαιρέθηκαν: ${n}. Οι ορισμοί τους αποθηκεύτηκαν στην ενότητα Αντίγραφα ασφαλείας της οθόνης Καραντίνα, όπου μπορούν να επαναφερθούν.`,
         failedHeading: (n) => `Προγραμματισμένες εργασίες που δεν αφαιρέθηκαν: ${n}`
+      },
+      forced: {
+        button: "Αναγκαστική απεγκατάσταση…",
+        title: "Αναγκαστική απεγκατάσταση",
+        modalTitle: (n) => `Αναγκαστική απεγκατάσταση του ${n}`,
+        intro: "Για λογισμικό που δεν εμφανίζεται στη λίστα ή του οποίου λείπει το πρόγραμμα απεγκατάστασης. Δώστε το όνομα, επιλέξτε τον φάκελο εγκατάστασης ή και τα δύο, και το Prune αναζητά σε βάθος ό,τι άφησε πίσω του. Ελέγχετε τα πάντα πριν αφαιρεθεί οτιδήποτε.",
+        nameLabel: "Όνομα προγράμματος",
+        namePlaceholder: "Προαιρετικό αν επιλέξετε φάκελο",
+        folderLabel: "Φάκελος εγκατάστασης",
+        folderPlaceholder: "Προαιρετικό αν δώσετε όνομα",
+        browse: "Αναζήτηση…",
+        continue: "Συνέχεια",
+        needOne: "Δώστε όνομα ή επιλέξτε φάκελο για να συνεχίσετε.",
+        pickFailed: (m) => `Δεν ήταν δυνατό το άνοιγμα του διαλόγου φακέλου: ${m}`,
+        scanIntro: "Το Prune θα αναζητήσει αρχεία, εγγραφές μητρώου και προγραμματισμένες εργασίες που ταιριάζουν με αυτό το όνομα και φάκελο. Τίποτα δεν αφαιρείται πριν το ελέγξετε.",
+        folderLine: (f) => `Φάκελος: ${f}`
       }
     }
   },
@@ -300,6 +444,22 @@ export default {
       tasks: {
         removed: (n) => `Tareas programadas eliminadas: ${n}. Sus definiciones se guardan en Copias de seguridad, en la pantalla Cuarentena, donde se pueden restaurar.`,
         failedHeading: (n) => `Tareas programadas que no se pudieron eliminar: ${n}`
+      },
+      forced: {
+        button: "Desinstalación forzada…",
+        title: "Desinstalación forzada",
+        modalTitle: (n) => `Desinstalación forzada de ${n}`,
+        intro: "Para software que no aparece en la lista o cuyo desinstalador ya no existe. Indica el nombre, elige la carpeta donde se instaló, o ambas cosas, y Prune busca a fondo lo que dejó. Revisas todo antes de que se elimine nada.",
+        nameLabel: "Nombre del programa",
+        namePlaceholder: "Opcional si eliges una carpeta",
+        folderLabel: "Carpeta de instalación",
+        folderPlaceholder: "Opcional si escribes un nombre",
+        browse: "Examinar…",
+        continue: "Continuar",
+        needOne: "Escribe un nombre o elige una carpeta para continuar.",
+        pickFailed: (m) => `No se pudo abrir el cuadro de carpetas: ${m}`,
+        scanIntro: "Prune buscará archivos, entradas del registro y tareas programadas que coincidan con este nombre y carpeta. No se elimina nada hasta que lo hayas revisado.",
+        folderLine: (f) => `Carpeta: ${f}`
       }
     }
   },
@@ -330,6 +490,22 @@ export default {
       tasks: {
         removed: (n) => `Eemaldatud ajastatud toimingud: ${n}. Nende definitsioonid on salvestatud jaotisse Varukoopiad ekraanil Karantiin, kust neid saab taastada.`,
         failedHeading: (n) => `Ajastatud toimingud, mida ei saanud eemaldada: ${n}`
+      },
+      forced: {
+        button: "Sundeemaldamine…",
+        title: "Sundeemaldamine",
+        modalTitle: (n) => `${n} sundeemaldamine`,
+        intro: "Tarkvara jaoks, mida loendis pole või mille eemaldaja on kadunud. Sisesta nimi, vali kaust, kuhu see paigaldati, või mõlemad, ja Prune otsib põhjalikult, mis järele jäi. Sa vaatad kõik üle enne, kui midagi eemaldatakse.",
+        nameLabel: "Programmi nimi",
+        namePlaceholder: "Valikuline, kui valid kausta",
+        folderLabel: "Paigalduskaust",
+        folderPlaceholder: "Valikuline, kui sisestad nime",
+        browse: "Sirvi…",
+        continue: "Jätka",
+        needOne: "Jätkamiseks sisesta nimi või vali kaust.",
+        pickFailed: (m) => `Kausta dialoogi ei saanud avada: ${m}`,
+        scanIntro: "Prune otsib faile, registrikirjeid ja ajastatud toiminguid, mis sobivad selle nime ja kaustaga. Midagi ei eemaldata enne, kui oled selle üle vaadanud.",
+        folderLine: (f) => `Kaust: ${f}`
       }
     }
   },
@@ -360,6 +536,22 @@ export default {
       tasks: {
         removed: (n) => `Poistetut ajastetut tehtävät: ${n}. Niiden määritykset on tallennettu kohtaan Varmuuskopiot näkymässä Karanteeni, josta ne voi palauttaa.`,
         failedHeading: (n) => `Ajastetut tehtävät, joita ei voitu poistaa: ${n}`
+      },
+      forced: {
+        button: "Pakotettu poisto…",
+        title: "Pakotettu poisto",
+        modalTitle: (n) => `Pakotettu poisto: ${n}`,
+        intro: "Ohjelmille, joita ei ole luettelossa tai joiden poisto-ohjelma on kadonnut. Anna nimi, valitse kansio, johon ohjelma asennettiin, tai molemmat, niin Prune etsii perusteellisesti sen jättämät jäänteet. Tarkistat kaiken ennen kuin mitään poistetaan.",
+        nameLabel: "Ohjelman nimi",
+        namePlaceholder: "Valinnainen, jos valitset kansion",
+        folderLabel: "Asennuskansio",
+        folderPlaceholder: "Valinnainen, jos annat nimen",
+        browse: "Selaa…",
+        continue: "Jatka",
+        needOne: "Jatka antamalla nimi tai valitsemalla kansio.",
+        pickFailed: (m) => `Kansioikkunaa ei voitu avata: ${m}`,
+        scanIntro: "Prune etsii tiedostoja, rekisterimerkintöjä ja ajastettuja tehtäviä, jotka vastaavat tätä nimeä ja kansiota. Mitään ei poisteta ennen kuin olet tarkistanut sen.",
+        folderLine: (f) => `Kansio: ${f}`
       }
     }
   },
@@ -390,6 +582,22 @@ export default {
       tasks: {
         removed: (n) => `Tâches planifiées supprimées : ${n}. Leurs définitions sont enregistrées dans Sauvegardes, sur l'écran Quarantaine, où elles peuvent être restaurées.`,
         failedHeading: (n) => `Tâches planifiées qui n'ont pas pu être supprimées : ${n}`
+      },
+      forced: {
+        button: "Désinstallation forcée…",
+        title: "Désinstallation forcée",
+        modalTitle: (n) => `Désinstallation forcée de ${n}`,
+        intro: "Pour un logiciel qui n'est pas listé ou dont le désinstalleur a disparu. Indiquez son nom, choisissez le dossier où il a été installé, ou les deux, et Prune cherche en profondeur ce qu'il a laissé. Vous vérifiez tout avant que quoi que ce soit soit supprimé.",
+        nameLabel: "Nom du programme",
+        namePlaceholder: "Facultatif si vous choisissez un dossier",
+        folderLabel: "Dossier d'installation",
+        folderPlaceholder: "Facultatif si vous saisissez un nom",
+        browse: "Parcourir…",
+        continue: "Continuer",
+        needOne: "Saisissez un nom ou choisissez un dossier pour continuer.",
+        pickFailed: (m) => `Impossible d'ouvrir la boîte de dialogue de dossier : ${m}`,
+        scanIntro: "Prune recherchera les fichiers, entrées du registre et tâches planifiées correspondant à ce nom et à ce dossier. Rien n'est supprimé avant que vous l'ayez vérifié.",
+        folderLine: (f) => `Dossier : ${f}`
       }
     }
   },
@@ -420,6 +628,22 @@ export default {
       tasks: {
         removed: (n) => `משימות מתוזמנות שהוסרו: ${n}. ההגדרות שלהן נשמרו תחת גיבויים במסך הסגר, ושם אפשר לשחזר אותן.`,
         failedHeading: (n) => `משימות מתוזמנות שלא ניתן היה להסיר: ${n}`
+      },
+      forced: {
+        button: "הסרה כפויה…",
+        title: "הסרה כפויה",
+        modalTitle: (n) => `הסרה כפויה של ${n}`,
+        intro: "לתוכנות שאינן ברשימה או שתוכנית ההסרה שלהן נעלמה. הזינו שם, בחרו את תיקיית ההתקנה, או שניהם, ו-Prune יחפש לעומק מה שנשאר. תבדקו הכול לפני שמשהו יוסר.",
+        nameLabel: "שם התוכנה",
+        namePlaceholder: "אופציונלי אם בוחרים תיקייה",
+        folderLabel: "תיקיית התקנה",
+        folderPlaceholder: "אופציונלי אם מזינים שם",
+        browse: "עיון…",
+        continue: "המשך",
+        needOne: "הזינו שם או בחרו תיקייה כדי להמשיך.",
+        pickFailed: (m) => `לא ניתן לפתוח את חלון בחירת התיקייה: ${m}`,
+        scanIntro: "Prune יחפש קבצים, רשומות רישום ומשימות מתוזמנות התואמים לשם ולתיקייה האלה. שום דבר לא יוסר לפני שתבדקו אותו.",
+        folderLine: (f) => `תיקייה: ${f}`
       }
     }
   },
@@ -450,6 +674,22 @@ export default {
       tasks: {
         removed: (n) => `Eltávolított ütemezett feladatok: ${n}. A definíciójuk a(z) Karantén képernyő Biztonsági mentések részében van mentve, onnan visszaállíthatók.`,
         failedHeading: (n) => `Nem eltávolítható ütemezett feladatok: ${n}`
+      },
+      forced: {
+        button: "Kényszerített eltávolítás…",
+        title: "Kényszerített eltávolítás",
+        modalTitle: (n) => `${n} kényszerített eltávolítása`,
+        intro: "Olyan szoftverhez, amely nincs a listában, vagy amelynek az eltávolítója hiányzik. Adja meg a nevét, válassza ki a telepítési mappát, vagy mindkettőt, és a Prune alaposan átkutatja, mi maradt hátra. Mindent átnézhet, mielőtt bármi eltávolításra kerülne.",
+        nameLabel: "A program neve",
+        namePlaceholder: "Nem kötelező, ha mappát választ",
+        folderLabel: "Telepítési mappa",
+        folderPlaceholder: "Nem kötelező, ha nevet ad meg",
+        browse: "Tallózás…",
+        continue: "Tovább",
+        needOne: "A folytatáshoz adjon meg egy nevet, vagy válasszon egy mappát.",
+        pickFailed: (m) => `A mappaválasztó nem nyitható meg: ${m}`,
+        scanIntro: "A Prune fájlokat, beállításjegyzék-bejegyzéseket és ütemezett feladatokat keres, amelyek egyeznek ezzel a névvel és mappával. Semmi sem törlődik, amíg át nem nézte.",
+        folderLine: (f) => `Mappa: ${f}`
       }
     }
   },
@@ -480,6 +720,22 @@ export default {
       tasks: {
         removed: (n) => `Tugas terjadwal yang dihapus: ${n}. Definisinya disimpan di Cadangan pada layar Karantina, tempat tugas dapat dipulihkan.`,
         failedHeading: (n) => `Tugas terjadwal yang tidak dapat dihapus: ${n}`
+      },
+      forced: {
+        button: "Uninstal paksa…",
+        title: "Uninstal paksa",
+        modalTitle: (n) => `Uninstal paksa ${n}`,
+        intro: "Untuk perangkat lunak yang tidak terdaftar atau yang pencopotnya hilang. Masukkan namanya, pilih folder tempat program dipasang, atau keduanya, dan Prune akan mencari sisa-sisanya secara mendalam. Anda meninjau semuanya sebelum ada yang dihapus.",
+        nameLabel: "Nama program",
+        namePlaceholder: "Opsional jika Anda memilih folder",
+        folderLabel: "Folder instalasi",
+        folderPlaceholder: "Opsional jika Anda memasukkan nama",
+        browse: "Telusuri…",
+        continue: "Lanjutkan",
+        needOne: "Masukkan nama atau pilih folder untuk melanjutkan.",
+        pickFailed: (m) => `Tidak dapat membuka dialog folder: ${m}`,
+        scanIntro: "Prune akan mencari berkas, entri registri, dan tugas terjadwal yang cocok dengan nama dan folder ini. Tidak ada yang dihapus sebelum Anda meninjaunya.",
+        folderLine: (f) => `Folder: ${f}`
       }
     }
   },
@@ -510,6 +766,22 @@ export default {
       tasks: {
         removed: (n) => `Áætluð verkefni fjarlægð: ${n}. Skilgreiningar þeirra eru vistaðar undir Afrit á skjánum Sóttkví, þar sem hægt er að endurheimta þau.`,
         failedHeading: (n) => `Áætluð verkefni sem ekki tókst að fjarlægja: ${n}`
+      },
+      forced: {
+        button: "Þvinguð fjarlæging…",
+        title: "Þvinguð fjarlæging",
+        modalTitle: (n) => `Þvinguð fjarlæging á ${n}`,
+        intro: "Fyrir hugbúnað sem er ekki á listanum eða þar sem fjarlægingarforritið er horfið. Settu inn nafnið, veldu möppuna sem hann var settur upp í, eða hvort tveggja, og Prune leitar rækilega að því sem eftir varð. Þú ferð yfir allt áður en nokkuð er fjarlægt.",
+        nameLabel: "Heiti forrits",
+        namePlaceholder: "Valfrjálst ef þú velur möppu",
+        folderLabel: "Uppsetningarmappa",
+        folderPlaceholder: "Valfrjálst ef þú slærð inn nafn",
+        browse: "Vafra…",
+        continue: "Halda áfram",
+        needOne: "Sláðu inn nafn eða veldu möppu til að halda áfram.",
+        pickFailed: (m) => `Ekki tókst að opna möppugluggann: ${m}`,
+        scanIntro: "Prune leitar að skrám, skrárfærslum og áætluðum verkefnum sem passa við þetta nafn og þessa möppu. Engu er eytt fyrr en þú hefur farið yfir það.",
+        folderLine: (f) => `Mappa: ${f}`
       }
     }
   },
@@ -540,6 +812,22 @@ export default {
       tasks: {
         removed: (n) => `Attività pianificate rimosse: ${n}. Le loro definizioni sono salvate in Backup, nella schermata Quarantena, da cui si possono ripristinare.`,
         failedHeading: (n) => `Attività pianificate che non è stato possibile rimuovere: ${n}`
+      },
+      forced: {
+        button: "Disinstallazione forzata…",
+        title: "Disinstallazione forzata",
+        modalTitle: (n) => `Disinstallazione forzata di ${n}`,
+        intro: "Per il software che non è in elenco o il cui programma di disinstallazione non c'è più. Indica il nome, scegli la cartella in cui è stato installato, o entrambi, e Prune cerca a fondo ciò che ha lasciato. Controlli tutto prima che venga rimosso qualcosa.",
+        nameLabel: "Nome del programma",
+        namePlaceholder: "Facoltativo se scegli una cartella",
+        folderLabel: "Cartella di installazione",
+        folderPlaceholder: "Facoltativo se inserisci un nome",
+        browse: "Sfoglia…",
+        continue: "Continua",
+        needOne: "Inserisci un nome o scegli una cartella per continuare.",
+        pickFailed: (m) => `Impossibile aprire la finestra delle cartelle: ${m}`,
+        scanIntro: "Prune cercherà file, voci del registro e attività pianificate corrispondenti a questo nome e a questa cartella. Non viene rimosso nulla finché non l'hai controllato.",
+        folderLine: (f) => `Cartella: ${f}`
       }
     }
   },
@@ -570,6 +858,22 @@ export default {
       tasks: {
         removed: (n) => `削除したタスク スケジューラのタスク: ${n} 件。定義は「隔離」画面の「バックアップ」に保存されており、復元できます。`,
         failedHeading: (n) => `削除できなかったタスク スケジューラのタスク: ${n} 件`
+      },
+      forced: {
+        button: "強制アンインストール…",
+        title: "強制アンインストール",
+        modalTitle: (n) => `${n} の強制アンインストール`,
+        intro: "一覧にないソフトウェアや、アンインストーラーが失われたソフトウェア向けです。名前、インストール先フォルダー、またはその両方を指定すると、Prune が残っているものを詳しく検索します。何かを削除する前に、すべて確認できます。",
+        nameLabel: "プログラム名",
+        namePlaceholder: "フォルダーを選ぶ場合は省略できます",
+        folderLabel: "インストール フォルダー",
+        folderPlaceholder: "名前を入力する場合は省略できます",
+        browse: "参照…",
+        continue: "続行",
+        needOne: "続行するには、名前を入力するかフォルダーを選んでください。",
+        pickFailed: (m) => `フォルダー選択ダイアログを開けませんでした: ${m}`,
+        scanIntro: "この名前とフォルダーに一致するファイル、レジストリ エントリ、タスクを検索します。確認するまで何も削除されません。",
+        folderLine: (f) => `フォルダー: ${f}`
       }
     }
   },
@@ -600,6 +904,22 @@ export default {
       tasks: {
         removed: (n) => `제거된 예약 작업: ${n}개. 정의는 격리 화면의 백업에 저장되어 있으며 복원할 수 있습니다.`,
         failedHeading: (n) => `제거하지 못한 예약 작업: ${n}개`
+      },
+      forced: {
+        button: "강제 제거…",
+        title: "강제 제거",
+        modalTitle: (n) => `${n} 강제 제거`,
+        intro: "목록에 없거나 제거 프로그램이 사라진 소프트웨어용입니다. 이름, 설치된 폴더 또는 둘 다 지정하면 Prune이 남은 항목을 깊이 검색합니다. 무언가를 제거하기 전에 모든 항목을 직접 검토합니다.",
+        nameLabel: "프로그램 이름",
+        namePlaceholder: "폴더를 선택하면 생략할 수 있습니다",
+        folderLabel: "설치 폴더",
+        folderPlaceholder: "이름을 입력하면 생략할 수 있습니다",
+        browse: "찾아보기…",
+        continue: "계속",
+        needOne: "계속하려면 이름을 입력하거나 폴더를 선택하세요.",
+        pickFailed: (m) => `폴더 대화 상자를 열 수 없습니다: ${m}`,
+        scanIntro: "이 이름과 폴더에 일치하는 파일, 레지스트리 항목, 예약 작업을 검색합니다. 검토하기 전에는 아무것도 제거되지 않습니다.",
+        folderLine: (f) => `폴더: ${f}`
       }
     }
   },
@@ -630,6 +950,22 @@ export default {
       tasks: {
         removed: (n) => `Pašalintos suplanuotos užduotys: ${n}. Jų apibrėžtys išsaugotos skiltyje „Atsarginės kopijos“ ekrane „Karantinas“, iš kur jas galima atkurti.`,
         failedHeading: (n) => `Suplanuotos užduotys, kurių nepavyko pašalinti: ${n}`
+      },
+      forced: {
+        button: "Priverstinis pašalinimas…",
+        title: "Priverstinis pašalinimas",
+        modalTitle: (n) => `Priverstinis ${n} pašalinimas`,
+        intro: "Programinei įrangai, kurios nėra sąraše arba kurios šalinimo programos nebėra. Nurodykite pavadinimą, pasirinkite aplanką, kuriame ji įdiegta, arba abu – „Prune“ giliai ieškos, kas liko. Viską peržiūrite prieš ką nors pašalinant.",
+        nameLabel: "Programos pavadinimas",
+        namePlaceholder: "Neprivaloma, jei pasirinksite aplanką",
+        folderLabel: "Diegimo aplankas",
+        folderPlaceholder: "Neprivaloma, jei įvesite pavadinimą",
+        browse: "Naršyti…",
+        continue: "Tęsti",
+        needOne: "Norėdami tęsti, įveskite pavadinimą arba pasirinkite aplanką.",
+        pickFailed: (m) => `Nepavyko atidaryti aplanko dialogo: ${m}`,
+        scanIntro: "„Prune“ ieškos failų, registro įrašų ir suplanuotų užduočių, atitinkančių šį pavadinimą ir aplanką. Niekas nepašalinama, kol jūs to neperžiūrėsite.",
+        folderLine: (f) => `Aplankas: ${f}`
       }
     }
   },
@@ -660,6 +996,22 @@ export default {
       tasks: {
         removed: (n) => `Tugas berjadual dialihkan: ${n}. Takrifannya disimpan di bawah Sandaran pada skrin Kuarantin, tempat ia boleh dipulihkan.`,
         failedHeading: (n) => `Tugas berjadual yang tidak dapat dialihkan: ${n}`
+      },
+      forced: {
+        button: "Nyahpasang paksa…",
+        title: "Nyahpasang paksa",
+        modalTitle: (n) => `Nyahpasang paksa ${n}`,
+        intro: "Untuk perisian yang tidak disenaraikan atau pemasangnya telah hilang. Beri namanya, pilih folder tempat ia dipasang, atau kedua-duanya, dan Prune akan mencari sisanya dengan mendalam. Anda menyemak semuanya sebelum apa-apa dialihkan.",
+        nameLabel: "Nama program",
+        namePlaceholder: "Pilihan jika anda memilih folder",
+        folderLabel: "Folder pemasangan",
+        folderPlaceholder: "Pilihan jika anda memasukkan nama",
+        browse: "Semak imbas…",
+        continue: "Teruskan",
+        needOne: "Masukkan nama atau pilih folder untuk meneruskan.",
+        pickFailed: (m) => `Tidak dapat membuka dialog folder: ${m}`,
+        scanIntro: "Prune akan mencari fail, entri pendaftaran dan tugas berjadual yang sepadan dengan nama dan folder ini. Tiada apa-apa dialihkan sehingga anda menyemaknya.",
+        folderLine: (f) => `Folder: ${f}`
       }
     }
   },
@@ -690,6 +1042,22 @@ export default {
       tasks: {
         removed: (n) => `Fjernede planlagte oppgaver: ${n}. Definisjonene er lagret under Sikkerhetskopier på skjermen Karantene, hvor de kan gjenopprettes.`,
         failedHeading: (n) => `Planlagte oppgaver som ikke kunne fjernes: ${n}`
+      },
+      forced: {
+        button: "Tvunget avinstallering…",
+        title: "Tvunget avinstallering",
+        modalTitle: (n) => `Tvunget avinstallering av ${n}`,
+        intro: "For programvare som ikke står i listen, eller som mangler avinstalleringsprogram. Oppgi navnet, velg mappen den ble installert i, eller begge deler, så søker Prune grundig etter det som er igjen. Du ser gjennom alt før noe fjernes.",
+        nameLabel: "Programnavn",
+        namePlaceholder: "Valgfritt hvis du velger en mappe",
+        folderLabel: "Installasjonsmappe",
+        folderPlaceholder: "Valgfritt hvis du oppgir et navn",
+        browse: "Bla gjennom…",
+        continue: "Fortsett",
+        needOne: "Oppgi et navn eller velg en mappe for å fortsette.",
+        pickFailed: (m) => `Kunne ikke åpne mappedialogen: ${m}`,
+        scanIntro: "Prune søker etter filer, registeroppføringer og planlagte oppgaver som samsvarer med dette navnet og denne mappen. Ingenting fjernes før du har sett gjennom det.",
+        folderLine: (f) => `Mappe: ${f}`
       }
     }
   },
@@ -720,6 +1088,22 @@ export default {
       tasks: {
         removed: (n) => `Verwijderde geplande taken: ${n}. De definities zijn opgeslagen onder Back-ups op het scherm Quarantaine, waar ze kunnen worden hersteld.`,
         failedHeading: (n) => `Geplande taken die niet verwijderd konden worden: ${n}`
+      },
+      forced: {
+        button: "Geforceerd verwijderen…",
+        title: "Geforceerd verwijderen",
+        modalTitle: (n) => `${n} geforceerd verwijderen`,
+        intro: "Voor software die niet in de lijst staat of waarvan het verwijderprogramma weg is. Geef de naam op, kies de map waarin het is geïnstalleerd, of beide, en Prune zoekt grondig naar wat er is achtergebleven. U bekijkt alles voordat er iets wordt verwijderd.",
+        nameLabel: "Programmanaam",
+        namePlaceholder: "Optioneel als u een map kiest",
+        folderLabel: "Installatiemap",
+        folderPlaceholder: "Optioneel als u een naam invoert",
+        browse: "Bladeren…",
+        continue: "Doorgaan",
+        needOne: "Voer een naam in of kies een map om door te gaan.",
+        pickFailed: (m) => `Het mapdialoogvenster kon niet worden geopend: ${m}`,
+        scanIntro: "Prune zoekt naar bestanden, registervermeldingen en geplande taken die bij deze naam en map passen. Er wordt niets verwijderd voordat u het hebt bekeken.",
+        folderLine: (f) => `Map: ${f}`
       }
     }
   },
@@ -750,6 +1134,22 @@ export default {
       tasks: {
         removed: (n) => `Usunięte zaplanowane zadania: ${n}. Ich definicje zapisano w sekcji Kopie zapasowe na ekranie Kwarantanna, skąd można je przywrócić.`,
         failedHeading: (n) => `Zaplanowane zadania, których nie udało się usunąć: ${n}`
+      },
+      forced: {
+        button: "Wymuszone odinstalowanie…",
+        title: "Wymuszone odinstalowanie",
+        modalTitle: (n) => `Wymuszone odinstalowanie: ${n}`,
+        intro: "Dla oprogramowania, którego nie ma na liście lub którego dezinstalator zniknął. Podaj nazwę, wybierz folder instalacji albo jedno i drugie, a Prune dokładnie przeszuka to, co zostało. Wszystko przeglądasz, zanim cokolwiek zostanie usunięte.",
+        nameLabel: "Nazwa programu",
+        namePlaceholder: "Opcjonalne, jeśli wybierzesz folder",
+        folderLabel: "Folder instalacji",
+        folderPlaceholder: "Opcjonalne, jeśli podasz nazwę",
+        browse: "Przeglądaj…",
+        continue: "Dalej",
+        needOne: "Aby kontynuować, wpisz nazwę lub wybierz folder.",
+        pickFailed: (m) => `Nie można otworzyć okna wyboru folderu: ${m}`,
+        scanIntro: "Prune wyszuka pliki, wpisy rejestru i zaplanowane zadania pasujące do tej nazwy i folderu. Nic nie zostanie usunięte, dopóki tego nie przejrzysz.",
+        folderLine: (f) => `Folder: ${f}`
       }
     }
   },
@@ -780,6 +1180,22 @@ export default {
       tasks: {
         removed: (n) => `لرې شوې مهالویش شوې دندې: ${n}. تعریفونه یې د قرنطین په پرده کې د بیک‌اپونه لاندې خوندي شوي، چې له هغه ځایه بیرته راګرځول کېدای شي.`,
         failedHeading: (n) => `مهالویش شوې دندې چې لرې نه شوې: ${n}`
+      },
+      forced: {
+        button: "جبري لرې کول…",
+        title: "جبري لرې کول",
+        modalTitle: (n) => `د ${n} جبري لرې کول`,
+        intro: "د هغو سافټویرونو لپاره چې په لیست کې نشته یا لرې کوونکی یې ورک دی. نوم ورکړئ، هغه فولډر وټاکئ چې پکې نصب شوی، یا دواړه، او Prune به پاتې شوني ژور ولټوي. مخکې له دې چې څه لرې شي، هر څه بیاکتل کېږي.",
+        nameLabel: "د برنامې نوم",
+        namePlaceholder: "اختیاري که فولډر وټاکئ",
+        folderLabel: "د نصبولو فولډر",
+        folderPlaceholder: "اختیاري که نوم ولیکئ",
+        browse: "لټون…",
+        continue: "دوام ورکړئ",
+        needOne: "د دوام لپاره نوم ولیکئ یا فولډر وټاکئ.",
+        pickFailed: (m) => `د فولډر ډیالوګ نه شو پرانیستل: ${m}`,
+        scanIntro: "Prune به هغه دوتنې، د راجستر ننوتنې او مهالویش شوې دندې ولټوي چې له دې نوم او فولډر سره سمون لري. تر هغه چې تاسو یې بیاکتنه ونکړئ، هیڅ نه لرې کېږي.",
+        folderLine: (f) => `فولډر: ${f}`
       }
     }
   },
@@ -810,6 +1226,22 @@ export default {
       tasks: {
         removed: (n) => `Tarefas agendadas removidas: ${n}. As definições foram salvas em Backups, na tela Quarentena, onde podem ser restauradas.`,
         failedHeading: (n) => `Tarefas agendadas que não puderam ser removidas: ${n}`
+      },
+      forced: {
+        button: "Desinstalação forçada…",
+        title: "Desinstalação forçada",
+        modalTitle: (n) => `Desinstalação forçada de ${n}`,
+        intro: "Para software que não está na lista ou cujo desinstalador sumiu. Informe o nome, escolha a pasta onde foi instalado, ou os dois, e o Prune procura a fundo o que ficou para trás. Você confere tudo antes de qualquer coisa ser removida.",
+        nameLabel: "Nome do programa",
+        namePlaceholder: "Opcional se você escolher uma pasta",
+        folderLabel: "Pasta de instalação",
+        folderPlaceholder: "Opcional se você digitar um nome",
+        browse: "Procurar…",
+        continue: "Continuar",
+        needOne: "Digite um nome ou escolha uma pasta para continuar.",
+        pickFailed: (m) => `Não foi possível abrir a caixa de pastas: ${m}`,
+        scanIntro: "O Prune vai procurar arquivos, entradas do registro e tarefas agendadas que correspondam a este nome e pasta. Nada é removido até você revisar.",
+        folderLine: (f) => `Pasta: ${f}`
       }
     }
   },
@@ -840,6 +1272,22 @@ export default {
       tasks: {
         removed: (n) => `Tarefas agendadas removidas: ${n}. As definições ficaram guardadas em Cópias de segurança, no ecrã Quarentena, onde podem ser restauradas.`,
         failedHeading: (n) => `Tarefas agendadas que não puderam ser removidas: ${n}`
+      },
+      forced: {
+        button: "Desinstalação forçada…",
+        title: "Desinstalação forçada",
+        modalTitle: (n) => `Desinstalação forçada de ${n}`,
+        intro: "Para software que não está na lista ou cujo desinstalador desapareceu. Indique o nome, escolha a pasta onde foi instalado, ou ambos, e o Prune procura a fundo o que ficou para trás. Verifica tudo antes de ser removido o que quer que seja.",
+        nameLabel: "Nome do programa",
+        namePlaceholder: "Opcional se escolher uma pasta",
+        folderLabel: "Pasta de instalação",
+        folderPlaceholder: "Opcional se introduzir um nome",
+        browse: "Procurar…",
+        continue: "Continuar",
+        needOne: "Introduza um nome ou escolha uma pasta para continuar.",
+        pickFailed: (m) => `Não foi possível abrir a caixa de diálogo de pastas: ${m}`,
+        scanIntro: "O Prune vai procurar ficheiros, entradas do registo e tarefas agendadas que correspondam a este nome e pasta. Nada é removido até o verificar.",
+        folderLine: (f) => `Pasta: ${f}`
       }
     }
   },
@@ -870,6 +1318,22 @@ export default {
       tasks: {
         removed: (n) => `Sarcini programate eliminate: ${n}. Definițiile lor sunt salvate în Copii de rezervă, pe ecranul Carantină, de unde pot fi restaurate.`,
         failedHeading: (n) => `Sarcini programate care nu au putut fi eliminate: ${n}`
+      },
+      forced: {
+        button: "Dezinstalare forțată…",
+        title: "Dezinstalare forțată",
+        modalTitle: (n) => `Dezinstalare forțată a ${n}`,
+        intro: "Pentru programe care nu apar în listă sau al căror dezinstalator a dispărut. Introdu numele, alege folderul în care au fost instalate, sau ambele, iar Prune caută în profunzime ce a rămas. Verifici totul înainte de a se elimina ceva.",
+        nameLabel: "Numele programului",
+        namePlaceholder: "Opțional dacă alegi un folder",
+        folderLabel: "Folder de instalare",
+        folderPlaceholder: "Opțional dacă introduci un nume",
+        browse: "Răsfoiește…",
+        continue: "Continuă",
+        needOne: "Introdu un nume sau alege un folder pentru a continua.",
+        pickFailed: (m) => `Nu s-a putut deschide dialogul de foldere: ${m}`,
+        scanIntro: "Prune va căuta fișiere, intrări de registru și sarcini programate care se potrivesc cu acest nume și folder. Nimic nu este eliminat până nu verifici.",
+        folderLine: (f) => `Folder: ${f}`
       }
     }
   },
@@ -900,6 +1364,22 @@ export default {
       tasks: {
         removed: (n) => `Удалено запланированных задач: ${n}. Их описания сохранены в разделе «Резервные копии» на экране «Карантин», откуда их можно восстановить.`,
         failedHeading: (n) => `Запланированные задачи, которые не удалось удалить: ${n}`
+      },
+      forced: {
+        button: "Принудительное удаление…",
+        title: "Принудительное удаление",
+        modalTitle: (n) => `Принудительное удаление: ${n}`,
+        intro: "Для программ, которых нет в списке или у которых пропал деинсталлятор. Укажите название, выберите папку установки или то и другое, и Prune тщательно поищет оставшееся. Всё проверяется вами до удаления.",
+        nameLabel: "Название программы",
+        namePlaceholder: "Необязательно, если выбрана папка",
+        folderLabel: "Папка установки",
+        folderPlaceholder: "Необязательно, если указано название",
+        browse: "Обзор…",
+        continue: "Продолжить",
+        needOne: "Чтобы продолжить, укажите название или выберите папку.",
+        pickFailed: (m) => `Не удалось открыть диалог выбора папки: ${m}`,
+        scanIntro: "Prune найдёт файлы, записи реестра и запланированные задачи, соответствующие этому названию и папке. Ничего не удаляется, пока вы не проверите результаты.",
+        folderLine: (f) => `Папка: ${f}`
       }
     }
   },
@@ -930,6 +1410,22 @@ export default {
       tasks: {
         removed: (n) => `Odstránené naplánované úlohy: ${n}. Ich definície sú uložené v časti Zálohy na obrazovke Karanténa, odkiaľ sa dajú obnoviť.`,
         failedHeading: (n) => `Naplánované úlohy, ktoré sa nepodarilo odstrániť: ${n}`
+      },
+      forced: {
+        button: "Vynútené odinštalovanie…",
+        title: "Vynútené odinštalovanie",
+        modalTitle: (n) => `Vynútené odinštalovanie: ${n}`,
+        intro: "Pre softvér, ktorý nie je v zozname alebo ktorého odinštalátor zmizol. Zadajte názov, vyberte priečinok, do ktorého bol nainštalovaný, alebo oboje a Prune dôkladne vyhľadá, čo po ňom zostalo. Všetko skontrolujete, kým sa niečo odstráni.",
+        nameLabel: "Názov programu",
+        namePlaceholder: "Voliteľné, ak vyberiete priečinok",
+        folderLabel: "Inštalačný priečinok",
+        folderPlaceholder: "Voliteľné, ak zadáte názov",
+        browse: "Prehľadávať…",
+        continue: "Pokračovať",
+        needOne: "Ak chcete pokračovať, zadajte názov alebo vyberte priečinok.",
+        pickFailed: (m) => `Dialóg priečinka sa nepodarilo otvoriť: ${m}`,
+        scanIntro: "Prune vyhľadá súbory, položky registra a naplánované úlohy zodpovedajúce tomuto názvu a priečinku. Nič sa neodstráni, kým to nepreveríte.",
+        folderLine: (f) => `Priečinok: ${f}`
       }
     }
   },
@@ -960,6 +1456,22 @@ export default {
       tasks: {
         removed: (n) => `Detyra të planifikuara të hequra: ${n}. Përkufizimet e tyre ruhen te Kopjet rezervë në ekranin Karantina, ku mund të rikthehen.`,
         failedHeading: (n) => `Detyra të planifikuara që nuk u hoqën: ${n}`
+      },
+      forced: {
+        button: "Çinstalim i detyruar…",
+        title: "Çinstalim i detyruar",
+        modalTitle: (n) => `Çinstalim i detyruar i ${n}`,
+        intro: "Për softuer që nuk është në listë ose që ka humbur çinstaluesin. Jepni emrin, zgjidhni dosjen ku është instaluar, ose të dyja, dhe Prune kërkon thellë çfarë ka lënë pas. Çdo gjë e shqyrtoni para se të hiqet diçka.",
+        nameLabel: "Emri i programit",
+        namePlaceholder: "Opsionale nëse zgjidhni një dosje",
+        folderLabel: "Dosja e instalimit",
+        folderPlaceholder: "Opsionale nëse jepni një emër",
+        browse: "Shfleto…",
+        continue: "Vazhdo",
+        needOne: "Jepni një emër ose zgjidhni një dosje për të vazhduar.",
+        pickFailed: (m) => `Nuk u hap dot dialogu i dosjes: ${m}`,
+        scanIntro: "Prune do të kërkojë skedarë, shënime regjistri dhe detyra të planifikuara që përputhen me këtë emër dhe dosje. Asgjë nuk hiqet para se ta shqyrtoni.",
+        folderLine: (f) => `Dosja: ${f}`
       }
     }
   },
@@ -990,6 +1502,22 @@ export default {
       tasks: {
         removed: (n) => `Уклоњени заказани задаци: ${n}. Њихове дефиниције су сачуване у одељку Резервне копије на екрану Карантин, одакле се могу вратити.`,
         failedHeading: (n) => `Заказани задаци који нису могли да се уклоне: ${n}`
+      },
+      forced: {
+        button: "Принудна деинсталација…",
+        title: "Принудна деинсталација",
+        modalTitle: (n) => `Принудна деинсталација: ${n}`,
+        intro: "За софтвер којег нема на листи или коме је нестао програм за деинсталацију. Унесите назив, изаберите фасциклу у којој је инсталиран, или оба, а Prune ће темељно потражити шта је остало. Све прегледате пре него што се нешто уклони.",
+        nameLabel: "Назив програма",
+        namePlaceholder: "Необавезно ако изаберете фасциклу",
+        folderLabel: "Инсталациона фасцикла",
+        folderPlaceholder: "Необавезно ако унесете назив",
+        browse: "Прегледај…",
+        continue: "Настави",
+        needOne: "Унесите назив или изаберите фасциклу да бисте наставили.",
+        pickFailed: (m) => `Није могуће отворити дијалог фасцикле: ${m}`,
+        scanIntro: "Prune ће потражити датотеке, уносе у регистру и заказане задатке који одговарају овом називу и фасцикли. Ништа се не уклања док то не прегледате.",
+        folderLine: (f) => `Фасцикла: ${f}`
       }
     }
   },
@@ -1020,6 +1548,22 @@ export default {
       tasks: {
         removed: (n) => `Borttagna schemalagda aktiviteter: ${n}. Deras definitioner är sparade under Säkerhetskopior på skärmen Karantän, där de kan återställas.`,
         failedHeading: (n) => `Schemalagda aktiviteter som inte kunde tas bort: ${n}`
+      },
+      forced: {
+        button: "Påtvingad avinstallation…",
+        title: "Påtvingad avinstallation",
+        modalTitle: (n) => `Påtvingad avinstallation av ${n}`,
+        intro: "För programvara som inte finns i listan eller vars avinstallationsprogram saknas. Ange namnet, välj mappen den installerades i, eller båda, så söker Prune grundligt efter det som blev kvar. Du granskar allt innan något tas bort.",
+        nameLabel: "Programnamn",
+        namePlaceholder: "Valfritt om du väljer en mapp",
+        folderLabel: "Installationsmapp",
+        folderPlaceholder: "Valfritt om du anger ett namn",
+        browse: "Bläddra…",
+        continue: "Fortsätt",
+        needOne: "Ange ett namn eller välj en mapp för att fortsätta.",
+        pickFailed: (m) => `Det gick inte att öppna mappdialogen: ${m}`,
+        scanIntro: "Prune söker efter filer, registerposter och schemalagda aktiviteter som matchar detta namn och denna mapp. Inget tas bort innan du har granskat det.",
+        folderLine: (f) => `Mapp: ${f}`
       }
     }
   },
@@ -1050,6 +1594,22 @@ export default {
       tasks: {
         removed: (n) => `งานที่ตั้งเวลาไว้ที่นำออก: ${n} รายการ คำจำกัดความถูกบันทึกไว้ในการสำรองข้อมูล บนหน้ากักกัน ซึ่งสามารถกู้คืนได้`,
         failedHeading: (n) => `งานที่ตั้งเวลาไว้ที่นำออกไม่ได้: ${n} รายการ`
+      },
+      forced: {
+        button: "บังคับถอนการติดตั้ง…",
+        title: "บังคับถอนการติดตั้ง",
+        modalTitle: (n) => `บังคับถอนการติดตั้ง ${n}`,
+        intro: "สำหรับซอฟต์แวร์ที่ไม่อยู่ในรายการ หรือโปรแกรมถอนการติดตั้งหายไป ระบุชื่อ เลือกโฟลเดอร์ที่ติดตั้งไว้ หรือทั้งสองอย่าง แล้ว Prune จะค้นหาสิ่งที่ตกค้างอย่างละเอียด คุณตรวจสอบทุกอย่างก่อนที่จะมีสิ่งใดถูกนำออก",
+        nameLabel: "ชื่อโปรแกรม",
+        namePlaceholder: "ไม่บังคับหากเลือกโฟลเดอร์",
+        folderLabel: "โฟลเดอร์ติดตั้ง",
+        folderPlaceholder: "ไม่บังคับหากกรอกชื่อ",
+        browse: "เรียกดู…",
+        continue: "ดำเนินการต่อ",
+        needOne: "กรอกชื่อหรือเลือกโฟลเดอร์เพื่อดำเนินการต่อ",
+        pickFailed: (m) => `เปิดกล่องโต้ตอบโฟลเดอร์ไม่ได้: ${m}`,
+        scanIntro: "Prune จะค้นหาไฟล์ รายการรีจิสทรี และงานที่ตั้งเวลาไว้ซึ่งตรงกับชื่อและโฟลเดอร์นี้ จะไม่มีสิ่งใดถูกนำออกจนกว่าคุณจะตรวจสอบ",
+        folderLine: (f) => `โฟลเดอร์: ${f}`
       }
     }
   },
@@ -1080,6 +1640,22 @@ export default {
       tasks: {
         removed: (n) => `Kaldırılan zamanlanmış görevler: ${n}. Tanımları Karantina ekranındaki Yedekler bölümüne kaydedildi; oradan geri yüklenebilir.`,
         failedHeading: (n) => `Kaldırılamayan zamanlanmış görevler: ${n}`
+      },
+      forced: {
+        button: "Zorla kaldır…",
+        title: "Zorla kaldır",
+        modalTitle: (n) => `${n} zorla kaldırılıyor`,
+        intro: "Listede olmayan veya kaldırıcısı kaybolmuş yazılımlar için. Adını girin, kurulduğu klasörü seçin ya da ikisini birden yapın; Prune geride kalanları derinlemesine arar. Bir şey kaldırılmadan önce her şeyi siz gözden geçirirsiniz.",
+        nameLabel: "Program adı",
+        namePlaceholder: "Klasör seçerseniz isteğe bağlı",
+        folderLabel: "Kurulum klasörü",
+        folderPlaceholder: "Ad girerseniz isteğe bağlı",
+        browse: "Gözat…",
+        continue: "Devam",
+        needOne: "Devam etmek için bir ad girin veya bir klasör seçin.",
+        pickFailed: (m) => `Klasör iletişim kutusu açılamadı: ${m}`,
+        scanIntro: "Prune bu ad ve klasörle eşleşen dosyaları, kayıt defteri girdilerini ve zamanlanmış görevleri arar. Siz gözden geçirmeden hiçbir şey kaldırılmaz.",
+        folderLine: (f) => `Klasör: ${f}`
       }
     }
   },
@@ -1110,6 +1686,22 @@ export default {
       tasks: {
         removed: (n) => `Вилучено запланованих завдань: ${n}. Їхні описи збережено в розділі «Резервні копії» на екрані «Карантин», звідки їх можна відновити.`,
         failedHeading: (n) => `Запланованих завдань, які не вдалося вилучити: ${n}`
+      },
+      forced: {
+        button: "Примусове видалення…",
+        title: "Примусове видалення",
+        modalTitle: (n) => `Примусове видалення: ${n}`,
+        intro: "Для програм, яких немає у списку або в яких зник деінсталятор. Вкажіть назву, виберіть папку встановлення чи те й інше, і Prune ретельно пошукає залишки. Ви переглядаєте все до того, як щось буде видалено.",
+        nameLabel: "Назва програми",
+        namePlaceholder: "Необов’язково, якщо вибрано папку",
+        folderLabel: "Папка встановлення",
+        folderPlaceholder: "Необов’язково, якщо вказано назву",
+        browse: "Огляд…",
+        continue: "Продовжити",
+        needOne: "Щоб продовжити, вкажіть назву або виберіть папку.",
+        pickFailed: (m) => `Не вдалося відкрити діалог вибору папки: ${m}`,
+        scanIntro: "Prune знайде файли, записи реєстру та заплановані завдання, що відповідають цій назві й папці. Нічого не видаляється, доки ви не перевірите результати.",
+        folderLine: (f) => `Папка: ${f}`
       }
     }
   },
@@ -1140,6 +1732,22 @@ export default {
       tasks: {
         removed: (n) => `Tác vụ đã lên lịch đã gỡ: ${n}. Định nghĩa của chúng được lưu trong Bản sao lưu trên màn hình Khu cách ly, nơi có thể khôi phục.`,
         failedHeading: (n) => `Tác vụ đã lên lịch không thể gỡ: ${n}`
+      },
+      forced: {
+        button: "Gỡ cài đặt cưỡng bức…",
+        title: "Gỡ cài đặt cưỡng bức",
+        modalTitle: (n) => `Gỡ cài đặt cưỡng bức ${n}`,
+        intro: "Dành cho phần mềm không có trong danh sách hoặc đã mất trình gỡ cài đặt. Nhập tên, chọn thư mục đã cài đặt, hoặc cả hai, và Prune sẽ tìm kỹ những gì còn sót lại. Bạn xem lại mọi thứ trước khi có gì bị xóa.",
+        nameLabel: "Tên chương trình",
+        namePlaceholder: "Tùy chọn nếu bạn chọn thư mục",
+        folderLabel: "Thư mục cài đặt",
+        folderPlaceholder: "Tùy chọn nếu bạn nhập tên",
+        browse: "Duyệt…",
+        continue: "Tiếp tục",
+        needOne: "Nhập tên hoặc chọn thư mục để tiếp tục.",
+        pickFailed: (m) => `Không mở được hộp thoại thư mục: ${m}`,
+        scanIntro: "Prune sẽ tìm tệp, mục registry và tác vụ đã lên lịch khớp với tên và thư mục này. Không có gì bị xóa cho đến khi bạn xem lại.",
+        folderLine: (f) => `Thư mục: ${f}`
       }
     }
   },
@@ -1170,6 +1778,22 @@ export default {
       tasks: {
         removed: (n) => `已移除的计划任务：${n} 个。其定义已保存到“隔离区”页面的“备份”中，可从那里还原。`,
         failedHeading: (n) => `无法移除的计划任务：${n} 个`
+      },
+      forced: {
+        button: "强制卸载…",
+        title: "强制卸载",
+        modalTitle: (n) => `强制卸载 ${n}`,
+        intro: "适用于未列出或卸载程序已丢失的软件。输入名称、选择其安装文件夹，或两者都提供，Prune 会深入搜索其留下的内容。在移除任何内容之前，你都可以先全部检查。",
+        nameLabel: "程序名称",
+        namePlaceholder: "选择文件夹时可不填",
+        folderLabel: "安装文件夹",
+        folderPlaceholder: "输入名称时可不填",
+        browse: "浏览…",
+        continue: "继续",
+        needOne: "请输入名称或选择文件夹以继续。",
+        pickFailed: (m) => `无法打开文件夹对话框：${m}`,
+        scanIntro: "Prune 会搜索与此名称和文件夹匹配的文件、注册表项和计划任务。在你检查之前不会移除任何内容。",
+        folderLine: (f) => `文件夹：${f}`
       }
     }
   },
@@ -1200,6 +1824,22 @@ export default {
       tasks: {
         removed: (n) => `已移除的排程工作：${n} 個。其定義已儲存到「隔離區」頁面的「備份」中，可從那裡還原。`,
         failedHeading: (n) => `無法移除的排程工作：${n} 個`
+      },
+      forced: {
+        button: "強制解除安裝…",
+        title: "強制解除安裝",
+        modalTitle: (n) => `強制解除安裝 ${n}`,
+        intro: "適用於未列出或解除安裝程式已遺失的軟體。輸入名稱、選擇其安裝資料夾，或兩者都提供，Prune 會深入搜尋其留下的內容。在移除任何內容之前，你都可以先全部檢查。",
+        nameLabel: "程式名稱",
+        namePlaceholder: "選擇資料夾時可不填",
+        folderLabel: "安裝資料夾",
+        folderPlaceholder: "輸入名稱時可不填",
+        browse: "瀏覽…",
+        continue: "繼續",
+        needOne: "請輸入名稱或選擇資料夾以繼續。",
+        pickFailed: (m) => `無法開啟資料夾對話方塊：${m}`,
+        scanIntro: "Prune 會搜尋與此名稱和資料夾相符的檔案、登錄項目和排程工作。在你檢查之前不會移除任何內容。",
+        folderLine: (f) => `資料夾：${f}`
       }
     }
   }
