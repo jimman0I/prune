@@ -76,6 +76,12 @@ function countSubtree(node) {
   // A file is one item and no folder, and has nothing beneath it.
   if (node?.type === 'file') return { items: 1, files: 1, folders: 0 };
 
+  // A reopened saved scan keeps counts instead of every file: use them.
+  if (typeof node?.counts?.files === 'number') {
+    const { files, folders = 0 } = node.counts;
+    return { items: files + folders, files, folders };
+  }
+
   // A directory past the scan's depth cap has a real size but no
   // `children` array, so its contents were never enumerated.
   if (!Array.isArray(node?.children)) return { items: null, files: null, folders: null };

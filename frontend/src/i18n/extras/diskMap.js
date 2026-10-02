@@ -62,6 +62,36 @@ export default {
         excluded: (a) => `${a} will be skipped by future scans.`,
         alreadyExcluded: (a) => `${a} is already excluded.`,
         excludeFailed: "Could not save that exclusion."
+      },
+      saved: {
+        title: "Saved scans",
+        nameField: "Name for this scan",
+        save: "Save current scan",
+        saving: "Saving…",
+        saved: (a) => `Saved scan "${a}".`,
+        nothingToSave: "Scan a drive first, then you can save it here.",
+        empty: "No saved scans yet.",
+        load: "Open",
+        delete: "Delete",
+        deleteConfirm: (a) => `Delete "${a}" for good?`,
+        selectForCompare: (a) => `Select ${a} to compare`,
+        compare: "Compare selected",
+        pickTwo: "Pick two scans to compare.",
+        partial: "Partial",
+        viewing: (a, b) => `Viewing the saved scan "${a}" from ${b}. This is not your drive as it is now.`,
+        closeView: "Back to the live scan",
+        failed: (a) => `Saved scans: ${a}`
+      },
+      compare: {
+        title: (a, b) => `From "${a}" to "${b}"`,
+        total: (a) => `Total change: ${a}`,
+        grew: "Grew the most",
+        shrank: "Shrank the most",
+        added: "New folders",
+        removed: "Removed folders",
+        none: "Nothing in this group.",
+        back: "Back to the list",
+        loading: "Comparing…"
       }
     }
   },
@@ -125,6 +155,36 @@ export default {
         excluded: (a) => `${a} word deur toekomstige skanderings oorgeslaan.`,
         alreadyExcluded: (a) => `${a} is reeds uitgesluit.`,
         excludeFailed: "Kon nie daardie uitsluiting stoor nie."
+      },
+      saved: {
+        title: "Gestoorde skanderings",
+        nameField: "Naam vir hierdie skandering",
+        save: "Stoor huidige skandering",
+        saving: "Stoor tans…",
+        saved: (a) => `Skandering "${a}" gestoor.`,
+        nothingToSave: "Skandeer eers ’n skyf, dan kan jy dit hier stoor.",
+        empty: "Nog geen gestoorde skanderings nie.",
+        load: "Maak oop",
+        delete: "Verwyder",
+        deleteConfirm: (a) => `Vee "${a}" vir goed uit?`,
+        selectForCompare: (a) => `Kies ${a} om te vergelyk`,
+        compare: "Vergelyk gekose",
+        pickTwo: "Kies twee skanderings om te vergelyk.",
+        partial: "Gedeeltelik",
+        viewing: (a, b) => `Jy kyk na die gestoorde skandering "${a}" van ${b}. Dit is nie jou skyf soos dit nou is nie.`,
+        closeView: "Terug na die lewendige skandering",
+        failed: (a) => `Gestoorde skanderings: ${a}`
+      },
+      compare: {
+        title: (a, b) => `Van "${a}" na "${b}"`,
+        total: (a) => `Totale verandering: ${a}`,
+        grew: "Die meeste gegroei",
+        shrank: "Die meeste gekrimp",
+        added: "Nuwe vouers",
+        removed: "Verwyderde vouers",
+        none: "Niks in hierdie groep nie.",
+        back: "Terug na die lys",
+        loading: "Vergelyk tans…"
       }
     }
   },
@@ -188,6 +248,36 @@ export default {
         excluded: (a) => `سيتم تخطي ${a} في عمليات الفحص القادمة.`,
         alreadyExcluded: (a) => `${a} مستبعد بالفعل.`,
         excludeFailed: "تعذّر حفظ هذا الاستبعاد."
+      },
+      saved: {
+        title: "عمليات الفحص المحفوظة",
+        nameField: "اسم لهذا الفحص",
+        save: "حفظ الفحص الحالي",
+        saving: "جارٍ الحفظ…",
+        saved: (a) => `تم حفظ الفحص "${a}".`,
+        nothingToSave: "افحص محركًا أولًا، ثم يمكنك حفظه هنا.",
+        empty: "لا توجد عمليات فحص محفوظة بعد.",
+        load: "فتح",
+        delete: "حذف",
+        deleteConfirm: (a) => `حذف "${a}" نهائيًا؟`,
+        selectForCompare: (a) => `تحديد ${a} للمقارنة`,
+        compare: "مقارنة المحدد",
+        pickTwo: "اختر فحصين للمقارنة.",
+        partial: "جزئي",
+        viewing: (a, b) => `تعرض الفحص المحفوظ "${a}" من ${b}. هذا ليس محركك كما هو الآن.`,
+        closeView: "العودة إلى الفحص المباشر",
+        failed: (a) => `عمليات الفحص المحفوظة: ${a}`
+      },
+      compare: {
+        title: (a, b) => `من "${a}" إلى "${b}"`,
+        total: (a) => `إجمالي التغيير: ${a}`,
+        grew: "الأكثر نموًا",
+        shrank: "الأكثر تقلصًا",
+        added: "مجلدات جديدة",
+        removed: "مجلدات محذوفة",
+        none: "لا شيء في هذه المجموعة.",
+        back: "العودة إلى القائمة",
+        loading: "جارٍ المقارنة…"
       }
     }
   },
@@ -251,6 +341,36 @@ export default {
         excluded: (a) => `${a} s’ometrà en els escanejos futurs.`,
         alreadyExcluded: (a) => `${a} ja està exclòs.`,
         excludeFailed: "No s’ha pogut desar aquesta exclusió."
+      },
+      saved: {
+        title: "Escanejos desats",
+        nameField: "Nom d’aquest escaneig",
+        save: "Desa l’escaneig actual",
+        saving: "Desant…",
+        saved: (a) => `S’ha desat l’escaneig "${a}".`,
+        nothingToSave: "Escaneja primer una unitat i després podràs desar-la aquí.",
+        empty: "Encara no hi ha escanejos desats.",
+        load: "Obre",
+        delete: "Suprimeix",
+        deleteConfirm: (a) => `Voleu suprimir "${a}" definitivament?`,
+        selectForCompare: (a) => `Selecciona ${a} per comparar`,
+        compare: "Compara la selecció",
+        pickTwo: "Tria dos escanejos per comparar.",
+        partial: "Parcial",
+        viewing: (a, b) => `Esteu veient l’escaneig desat "${a}" del ${b}. Això no és la unitat tal com és ara.`,
+        closeView: "Torna a l’escaneig en directe",
+        failed: (a) => `Escanejos desats: ${a}`
+      },
+      compare: {
+        title: (a, b) => `De "${a}" a "${b}"`,
+        total: (a) => `Canvi total: ${a}`,
+        grew: "Han crescut més",
+        shrank: "Han minvat més",
+        added: "Carpetes noves",
+        removed: "Carpetes eliminades",
+        none: "Res en aquest grup.",
+        back: "Torna a la llista",
+        loading: "Comparant…"
       }
     }
   },
@@ -314,6 +434,36 @@ export default {
         excluded: (a) => `${a} budou budoucí skeny přeskakovat.`,
         alreadyExcluded: (a) => `${a} už je vyloučeno.`,
         excludeFailed: "Toto vyloučení se nepodařilo uložit."
+      },
+      saved: {
+        title: "Uložená skenování",
+        nameField: "Název tohoto skenování",
+        save: "Uložit aktuální skenování",
+        saving: "Ukládá se…",
+        saved: (a) => `Skenování "${a}" bylo uloženo.`,
+        nothingToSave: "Nejprve naskenujte disk, pak ho zde můžete uložit.",
+        empty: "Zatím žádná uložená skenování.",
+        load: "Otevřít",
+        delete: "Odstranit",
+        deleteConfirm: (a) => `Odstranit "${a}" natrvalo?`,
+        selectForCompare: (a) => `Vybrat ${a} k porovnání`,
+        compare: "Porovnat vybrané",
+        pickTwo: "Vyberte dvě skenování k porovnání.",
+        partial: "Částečné",
+        viewing: (a, b) => `Prohlížíte uložené skenování "${a}" z ${b}. Nejde o aktuální stav disku.`,
+        closeView: "Zpět k aktuálnímu skenování",
+        failed: (a) => `Uložená skenování: ${a}`
+      },
+      compare: {
+        title: (a, b) => `Od "${a}" k "${b}"`,
+        total: (a) => `Celková změna: ${a}`,
+        grew: "Nejvíce vzrostlo",
+        shrank: "Nejvíce kleslo",
+        added: "Nové složky",
+        removed: "Odstraněné složky",
+        none: "V této skupině nic není.",
+        back: "Zpět na seznam",
+        loading: "Porovnává se…"
       }
     }
   },
@@ -377,6 +527,36 @@ export default {
         excluded: (a) => `Bydd sganiau yn y dyfodol yn hepgor ${a}.`,
         alreadyExcluded: (a) => `Mae ${a} eisoes wedi’i eithrio.`,
         excludeFailed: "Methwyd cadw’r eithriad hwnnw."
+      },
+      saved: {
+        title: "Sganiau wedi’u cadw",
+        nameField: "Enw ar gyfer y sgan hwn",
+        save: "Cadw’r sgan presennol",
+        saving: "Yn cadw…",
+        saved: (a) => `Cadwyd y sgan "${a}".`,
+        nothingToSave: "Sganiwch yriant yn gyntaf, yna gallwch ei gadw yma.",
+        empty: "Dim sganiau wedi’u cadw eto.",
+        load: "Agor",
+        delete: "Dileu",
+        deleteConfirm: (a) => `Dileu "${a}" am byth?`,
+        selectForCompare: (a) => `Dewis ${a} i gymharu`,
+        compare: "Cymharu’r rhai a ddewiswyd",
+        pickTwo: "Dewiswch ddau sgan i’w cymharu.",
+        partial: "Rhannol",
+        viewing: (a, b) => `Rydych yn gweld y sgan "${a}" a gadwyd ar ${b}. Nid dyma’ch gyriant fel y mae nawr.`,
+        closeView: "Yn ôl i’r sgan byw",
+        failed: (a) => `Sganiau wedi’u cadw: ${a}`
+      },
+      compare: {
+        title: (a, b) => `O "${a}" i "${b}"`,
+        total: (a) => `Cyfanswm y newid: ${a}`,
+        grew: "Tyfodd fwyaf",
+        shrank: "Crebachodd fwyaf",
+        added: "Ffolderi newydd",
+        removed: "Ffolderi a dynnwyd",
+        none: "Dim byd yn y grŵp hwn.",
+        back: "Yn ôl i’r rhestr",
+        loading: "Yn cymharu…"
       }
     }
   },
@@ -440,6 +620,36 @@ export default {
         excluded: (a) => `${a} springes over ved fremtidige scanninger.`,
         alreadyExcluded: (a) => `${a} er allerede udeladt.`,
         excludeFailed: "Kunne ikke gemme den udeladelse."
+      },
+      saved: {
+        title: "Gemte scanninger",
+        nameField: "Navn til denne scanning",
+        save: "Gem nuværende scanning",
+        saving: "Gemmer…",
+        saved: (a) => `Scanningen "${a}" er gemt.`,
+        nothingToSave: "Scan først et drev, så kan du gemme det her.",
+        empty: "Ingen gemte scanninger endnu.",
+        load: "Åbn",
+        delete: "Slet",
+        deleteConfirm: (a) => `Slet "${a}" for altid?`,
+        selectForCompare: (a) => `Vælg ${a} til sammenligning`,
+        compare: "Sammenlign valgte",
+        pickTwo: "Vælg to scanninger at sammenligne.",
+        partial: "Delvis",
+        viewing: (a, b) => `Du ser den gemte scanning "${a}" fra ${b}. Det er ikke dit drev, som det er nu.`,
+        closeView: "Tilbage til den aktuelle scanning",
+        failed: (a) => `Gemte scanninger: ${a}`
+      },
+      compare: {
+        title: (a, b) => `Fra "${a}" til "${b}"`,
+        total: (a) => `Samlet ændring: ${a}`,
+        grew: "Voksede mest",
+        shrank: "Faldt mest",
+        added: "Nye mapper",
+        removed: "Fjernede mapper",
+        none: "Intet i denne gruppe.",
+        back: "Tilbage til listen",
+        loading: "Sammenligner…"
       }
     }
   },
@@ -503,6 +713,36 @@ export default {
         excluded: (a) => `${a} wird bei künftigen Scans übersprungen.`,
         alreadyExcluded: (a) => `${a} ist bereits ausgeschlossen.`,
         excludeFailed: "Der Ausschluss konnte nicht gespeichert werden."
+      },
+      saved: {
+        title: "Gespeicherte Scans",
+        nameField: "Name für diesen Scan",
+        save: "Aktuellen Scan speichern",
+        saving: "Wird gespeichert …",
+        saved: (a) => `Scan "${a}" gespeichert.`,
+        nothingToSave: "Scannen Sie zuerst ein Laufwerk, dann können Sie es hier speichern.",
+        empty: "Noch keine gespeicherten Scans.",
+        load: "Öffnen",
+        delete: "Löschen",
+        deleteConfirm: (a) => `"${a}" endgültig löschen?`,
+        selectForCompare: (a) => `${a} zum Vergleichen auswählen`,
+        compare: "Auswahl vergleichen",
+        pickTwo: "Wählen Sie zwei Scans zum Vergleichen aus.",
+        partial: "Unvollständig",
+        viewing: (a, b) => `Sie sehen den gespeicherten Scan "${a}" vom ${b}. Das ist nicht der aktuelle Stand des Laufwerks.`,
+        closeView: "Zurück zum aktuellen Scan",
+        failed: (a) => `Gespeicherte Scans: ${a}`
+      },
+      compare: {
+        title: (a, b) => `Von "${a}" zu "${b}"`,
+        total: (a) => `Gesamtänderung: ${a}`,
+        grew: "Am stärksten gewachsen",
+        shrank: "Am stärksten geschrumpft",
+        added: "Neue Ordner",
+        removed: "Entfernte Ordner",
+        none: "Nichts in dieser Gruppe.",
+        back: "Zurück zur Liste",
+        loading: "Wird verglichen …"
       }
     }
   },
@@ -566,6 +806,36 @@ export default {
         excluded: (a) => `Το ${a} θα παραλείπεται στις επόμενες σαρώσεις.`,
         alreadyExcluded: (a) => `Το ${a} έχει ήδη εξαιρεθεί.`,
         excludeFailed: "Δεν ήταν δυνατή η αποθήκευση της εξαίρεσης."
+      },
+      saved: {
+        title: "Αποθηκευμένες σαρώσεις",
+        nameField: "Όνομα για αυτήν τη σάρωση",
+        save: "Αποθήκευση τρέχουσας σάρωσης",
+        saving: "Αποθήκευση…",
+        saved: (a) => `Η σάρωση "${a}" αποθηκεύτηκε.`,
+        nothingToSave: "Σαρώστε πρώτα μια μονάδα και μετά μπορείτε να την αποθηκεύσετε εδώ.",
+        empty: "Δεν υπάρχουν ακόμη αποθηκευμένες σαρώσεις.",
+        load: "Άνοιγμα",
+        delete: "Διαγραφή",
+        deleteConfirm: (a) => `Να διαγραφεί οριστικά το "${a}";`,
+        selectForCompare: (a) => `Επιλογή του ${a} για σύγκριση`,
+        compare: "Σύγκριση επιλεγμένων",
+        pickTwo: "Επιλέξτε δύο σαρώσεις για σύγκριση.",
+        partial: "Μερική",
+        viewing: (a, b) => `Βλέπετε την αποθηκευμένη σάρωση "${a}" από ${b}. Δεν είναι η τρέχουσα κατάσταση της μονάδας.`,
+        closeView: "Επιστροφή στην τρέχουσα σάρωση",
+        failed: (a) => `Αποθηκευμένες σαρώσεις: ${a}`
+      },
+      compare: {
+        title: (a, b) => `Από "${a}" σε "${b}"`,
+        total: (a) => `Συνολική αλλαγή: ${a}`,
+        grew: "Αυξήθηκαν περισσότερο",
+        shrank: "Μειώθηκαν περισσότερο",
+        added: "Νέοι φάκελοι",
+        removed: "Φάκελοι που αφαιρέθηκαν",
+        none: "Τίποτα σε αυτήν την ομάδα.",
+        back: "Επιστροφή στη λίστα",
+        loading: "Σύγκριση…"
       }
     }
   },
@@ -629,6 +899,36 @@ export default {
         excluded: (a) => `${a} se omitirá en los próximos escaneos.`,
         alreadyExcluded: (a) => `${a} ya está excluido.`,
         excludeFailed: "No se pudo guardar esa exclusión."
+      },
+      saved: {
+        title: "Escaneos guardados",
+        nameField: "Nombre de este escaneo",
+        save: "Guardar el escaneo actual",
+        saving: "Guardando…",
+        saved: (a) => `Escaneo "${a}" guardado.`,
+        nothingToSave: "Primero escanea una unidad y después podrás guardarla aquí.",
+        empty: "Aún no hay escaneos guardados.",
+        load: "Abrir",
+        delete: "Eliminar",
+        deleteConfirm: (a) => `¿Eliminar "${a}" definitivamente?`,
+        selectForCompare: (a) => `Seleccionar ${a} para comparar`,
+        compare: "Comparar selección",
+        pickTwo: "Elige dos escaneos para comparar.",
+        partial: "Parcial",
+        viewing: (a, b) => `Estás viendo el escaneo guardado "${a}" del ${b}. No es la unidad tal como está ahora.`,
+        closeView: "Volver al escaneo actual",
+        failed: (a) => `Escaneos guardados: ${a}`
+      },
+      compare: {
+        title: (a, b) => `De "${a}" a "${b}"`,
+        total: (a) => `Cambio total: ${a}`,
+        grew: "Los que más crecieron",
+        shrank: "Los que más se redujeron",
+        added: "Carpetas nuevas",
+        removed: "Carpetas eliminadas",
+        none: "Nada en este grupo.",
+        back: "Volver a la lista",
+        loading: "Comparando…"
       }
     }
   },
@@ -692,6 +992,36 @@ export default {
         excluded: (a) => `${a} jäetakse edasistel skannimistel vahele.`,
         alreadyExcluded: (a) => `${a} on juba välistatud.`,
         excludeFailed: "Välistust ei õnnestunud salvestada."
+      },
+      saved: {
+        title: "Salvestatud skannimised",
+        nameField: "Selle skannimise nimi",
+        save: "Salvesta praegune skannimine",
+        saving: "Salvestamine…",
+        saved: (a) => `Skannimine "${a}" salvestati.`,
+        nothingToSave: "Skannige esmalt draiv, siis saate selle siia salvestada.",
+        empty: "Salvestatud skannimisi veel pole.",
+        load: "Ava",
+        delete: "Kustuta",
+        deleteConfirm: (a) => `Kas kustutada "${a}" jäädavalt?`,
+        selectForCompare: (a) => `Vali ${a} võrdlemiseks`,
+        compare: "Võrdle valitud",
+        pickTwo: "Valige võrdlemiseks kaks skannimist.",
+        partial: "Osaline",
+        viewing: (a, b) => `Vaatate salvestatud skannimist "${a}" kuupäevast ${b}. See ei ole draivi praegune seis.`,
+        closeView: "Tagasi praeguse skannimise juurde",
+        failed: (a) => `Salvestatud skannimised: ${a}`
+      },
+      compare: {
+        title: (a, b) => `Skannimiselt "${a}" skannimiseni "${b}"`,
+        total: (a) => `Kogumuutus: ${a}`,
+        grew: "Kasvas enim",
+        shrank: "Vähenes enim",
+        added: "Uued kaustad",
+        removed: "Eemaldatud kaustad",
+        none: "Selles rühmas pole midagi.",
+        back: "Tagasi loendisse",
+        loading: "Võrdlemine…"
       }
     }
   },
@@ -755,6 +1085,36 @@ export default {
         excluded: (a) => `${a} ohitetaan tulevissa skannauksissa.`,
         alreadyExcluded: (a) => `${a} on jo suljettu pois.`,
         excludeFailed: "Poissulkemisen tallennus epäonnistui."
+      },
+      saved: {
+        title: "Tallennetut skannaukset",
+        nameField: "Tämän skannauksen nimi",
+        save: "Tallenna nykyinen skannaus",
+        saving: "Tallennetaan…",
+        saved: (a) => `Skannaus "${a}" tallennettu.`,
+        nothingToSave: "Skannaa ensin asema, niin voit tallentaa sen tähän.",
+        empty: "Ei vielä tallennettuja skannauksia.",
+        load: "Avaa",
+        delete: "Poista",
+        deleteConfirm: (a) => `Poistetaanko "${a}" lopullisesti?`,
+        selectForCompare: (a) => `Valitse ${a} vertailuun`,
+        compare: "Vertaa valittuja",
+        pickTwo: "Valitse kaksi vertailtavaa skannausta.",
+        partial: "Osittainen",
+        viewing: (a, b) => `Katselet tallennettua skannausta "${a}" ajalta ${b}. Tämä ei ole aseman nykytila.`,
+        closeView: "Takaisin nykyiseen skannaukseen",
+        failed: (a) => `Tallennetut skannaukset: ${a}`
+      },
+      compare: {
+        title: (a, b) => `"${a}" → "${b}"`,
+        total: (a) => `Kokonaismuutos: ${a}`,
+        grew: "Kasvoi eniten",
+        shrank: "Pieneni eniten",
+        added: "Uudet kansiot",
+        removed: "Poistetut kansiot",
+        none: "Tässä ryhmässä ei ole mitään.",
+        back: "Takaisin luetteloon",
+        loading: "Verrataan…"
       }
     }
   },
@@ -818,6 +1178,36 @@ export default {
         excluded: (a) => `${a} sera ignoré lors des prochaines analyses.`,
         alreadyExcluded: (a) => `${a} est déjà exclu.`,
         excludeFailed: "Impossible d’enregistrer cette exclusion."
+      },
+      saved: {
+        title: "Analyses enregistrées",
+        nameField: "Nom de cette analyse",
+        save: "Enregistrer l’analyse actuelle",
+        saving: "Enregistrement…",
+        saved: (a) => `Analyse "${a}" enregistrée.`,
+        nothingToSave: "Analysez d’abord un lecteur, puis vous pourrez l’enregistrer ici.",
+        empty: "Aucune analyse enregistrée pour le moment.",
+        load: "Ouvrir",
+        delete: "Supprimer",
+        deleteConfirm: (a) => `Supprimer définitivement "${a}" ?`,
+        selectForCompare: (a) => `Sélectionner ${a} pour comparer`,
+        compare: "Comparer la sélection",
+        pickTwo: "Choisissez deux analyses à comparer.",
+        partial: "Partielle",
+        viewing: (a, b) => `Vous consultez l’analyse enregistrée "${a}" du ${b}. Ce n’est pas l’état actuel du lecteur.`,
+        closeView: "Retour à l’analyse en cours",
+        failed: (a) => `Analyses enregistrées : ${a}`
+      },
+      compare: {
+        title: (a, b) => `De "${a}" à "${b}"`,
+        total: (a) => `Variation totale : ${a}`,
+        grew: "Plus fortes hausses",
+        shrank: "Plus fortes baisses",
+        added: "Nouveaux dossiers",
+        removed: "Dossiers supprimés",
+        none: "Rien dans ce groupe.",
+        back: "Retour à la liste",
+        loading: "Comparaison…"
       }
     }
   },
@@ -881,6 +1271,36 @@ export default {
         excluded: (a) => `${a} ידולג בסריקות עתידיות.`,
         alreadyExcluded: (a) => `${a} כבר מוחרג.`,
         excludeFailed: "לא ניתן לשמור את ההחרגה."
+      },
+      saved: {
+        title: "סריקות שמורות",
+        nameField: "שם לסריקה זו",
+        save: "שמור את הסריקה הנוכחית",
+        saving: "שומר…",
+        saved: (a) => `הסריקה "${a}" נשמרה.`,
+        nothingToSave: "סרקו כונן קודם, ואז אפשר לשמור אותו כאן.",
+        empty: "עדיין אין סריקות שמורות.",
+        load: "פתח",
+        delete: "מחק",
+        deleteConfirm: (a) => `למחוק את "${a}" לצמיתות?`,
+        selectForCompare: (a) => `בחר את ${a} להשוואה`,
+        compare: "השווה את הנבחרים",
+        pickTwo: "בחרו שתי סריקות להשוואה.",
+        partial: "חלקית",
+        viewing: (a, b) => `אתם צופים בסריקה השמורה "${a}" מתאריך ${b}. זה לא מצב הכונן כעת.`,
+        closeView: "חזרה לסריקה הנוכחית",
+        failed: (a) => `סריקות שמורות: ${a}`
+      },
+      compare: {
+        title: (a, b) => `מ-"${a}" אל "${b}"`,
+        total: (a) => `שינוי כולל: ${a}`,
+        grew: "הגדלה הגדולה ביותר",
+        shrank: "הקטנה הגדולה ביותר",
+        added: "תיקיות חדשות",
+        removed: "תיקיות שהוסרו",
+        none: "אין דבר בקבוצה זו.",
+        back: "חזרה לרשימה",
+        loading: "משווה…"
       }
     }
   },
@@ -944,6 +1364,36 @@ export default {
         excluded: (a) => `A(z) ${a} kimarad a következő vizsgálatokból.`,
         alreadyExcluded: (a) => `A(z) ${a} már ki van zárva.`,
         excludeFailed: "A kizárást nem sikerült menteni."
+      },
+      saved: {
+        title: "Mentett vizsgálatok",
+        nameField: "A vizsgálat neve",
+        save: "Jelenlegi vizsgálat mentése",
+        saving: "Mentés…",
+        saved: (a) => `A(z) "${a}" vizsgálat elmentve.`,
+        nothingToSave: "Előbb vizsgáljon meg egy meghajtót, utána itt mentheti.",
+        empty: "Még nincs mentett vizsgálat.",
+        load: "Megnyitás",
+        delete: "Törlés",
+        deleteConfirm: (a) => `Véglegesen törli a(z) "${a}" elemet?`,
+        selectForCompare: (a) => `${a} kijelölése összehasonlításhoz`,
+        compare: "Kijelöltek összehasonlítása",
+        pickTwo: "Válasszon ki két vizsgálatot az összehasonlításhoz.",
+        partial: "Részleges",
+        viewing: (a, b) => `A mentett "${a}" vizsgálatot látja (${b}). Ez nem a meghajtó jelenlegi állapota.`,
+        closeView: "Vissza az élő vizsgálathoz",
+        failed: (a) => `Mentett vizsgálatok: ${a}`
+      },
+      compare: {
+        title: (a, b) => `"${a}" → "${b}"`,
+        total: (a) => `Teljes változás: ${a}`,
+        grew: "Legtöbbet nőtt",
+        shrank: "Legtöbbet csökkent",
+        added: "Új mappák",
+        removed: "Eltávolított mappák",
+        none: "Ebben a csoportban nincs semmi.",
+        back: "Vissza a listához",
+        loading: "Összehasonlítás…"
       }
     }
   },
@@ -1007,6 +1457,36 @@ export default {
         excluded: (a) => `${a} akan dilewati pada pemindaian berikutnya.`,
         alreadyExcluded: (a) => `${a} sudah dikecualikan.`,
         excludeFailed: "Tidak dapat menyimpan pengecualian itu."
+      },
+      saved: {
+        title: "Pemindaian tersimpan",
+        nameField: "Nama untuk pemindaian ini",
+        save: "Simpan pemindaian saat ini",
+        saving: "Menyimpan…",
+        saved: (a) => `Pemindaian "${a}" disimpan.`,
+        nothingToSave: "Pindai drive terlebih dahulu, lalu Anda dapat menyimpannya di sini.",
+        empty: "Belum ada pemindaian tersimpan.",
+        load: "Buka",
+        delete: "Hapus",
+        deleteConfirm: (a) => `Hapus "${a}" secara permanen?`,
+        selectForCompare: (a) => `Pilih ${a} untuk dibandingkan`,
+        compare: "Bandingkan yang dipilih",
+        pickTwo: "Pilih dua pemindaian untuk dibandingkan.",
+        partial: "Sebagian",
+        viewing: (a, b) => `Anda melihat pemindaian tersimpan "${a}" dari ${b}. Ini bukan kondisi drive saat ini.`,
+        closeView: "Kembali ke pemindaian langsung",
+        failed: (a) => `Pemindaian tersimpan: ${a}`
+      },
+      compare: {
+        title: (a, b) => `Dari "${a}" ke "${b}"`,
+        total: (a) => `Perubahan total: ${a}`,
+        grew: "Paling bertambah",
+        shrank: "Paling berkurang",
+        added: "Folder baru",
+        removed: "Folder dihapus",
+        none: "Tidak ada apa pun di grup ini.",
+        back: "Kembali ke daftar",
+        loading: "Membandingkan…"
       }
     }
   },
@@ -1070,6 +1550,36 @@ export default {
         excluded: (a) => `${a} verður sleppt í framtíðarskönnunum.`,
         alreadyExcluded: (a) => `${a} er þegar útilokað.`,
         excludeFailed: "Ekki tókst að vista þessa útilokun."
+      },
+      saved: {
+        title: "Vistaðar skannanir",
+        nameField: "Nafn á þessari skönnun",
+        save: "Vista núverandi skönnun",
+        saving: "Vistar…",
+        saved: (a) => `Skönnunin "${a}" var vistuð.`,
+        nothingToSave: "Skannaðu fyrst drif, þá geturðu vistað það hér.",
+        empty: "Engar vistaðar skannanir enn.",
+        load: "Opna",
+        delete: "Eyða",
+        deleteConfirm: (a) => `Eyða "${a}" fyrir fullt og allt?`,
+        selectForCompare: (a) => `Velja ${a} til samanburðar`,
+        compare: "Bera saman valið",
+        pickTwo: "Veldu tvær skannanir til að bera saman.",
+        partial: "Að hluta",
+        viewing: (a, b) => `Þú ert að skoða vistuðu skönnunina "${a}" frá ${b}. Þetta er ekki drifið eins og það er núna.`,
+        closeView: "Aftur í núverandi skönnun",
+        failed: (a) => `Vistaðar skannanir: ${a}`
+      },
+      compare: {
+        title: (a, b) => `Frá "${a}" til "${b}"`,
+        total: (a) => `Heildarbreyting: ${a}`,
+        grew: "Stækkaði mest",
+        shrank: "Minnkaði mest",
+        added: "Nýjar möppur",
+        removed: "Fjarlægðar möppur",
+        none: "Ekkert í þessum hópi.",
+        back: "Aftur á listann",
+        loading: "Ber saman…"
       }
     }
   },
@@ -1133,6 +1643,36 @@ export default {
         excluded: (a) => `${a} verrà ignorata nelle prossime scansioni.`,
         alreadyExcluded: (a) => `${a} è già esclusa.`,
         excludeFailed: "Impossibile salvare l’esclusione."
+      },
+      saved: {
+        title: "Scansioni salvate",
+        nameField: "Nome di questa scansione",
+        save: "Salva la scansione corrente",
+        saving: "Salvataggio…",
+        saved: (a) => `Scansione "${a}" salvata.`,
+        nothingToSave: "Scansiona prima un’unità, poi potrai salvarla qui.",
+        empty: "Nessuna scansione salvata finora.",
+        load: "Apri",
+        delete: "Elimina",
+        deleteConfirm: (a) => `Eliminare definitivamente "${a}"?`,
+        selectForCompare: (a) => `Seleziona ${a} per confrontare`,
+        compare: "Confronta selezione",
+        pickTwo: "Scegli due scansioni da confrontare.",
+        partial: "Parziale",
+        viewing: (a, b) => `Stai visualizzando la scansione salvata "${a}" del ${b}. Non è lo stato attuale dell’unità.`,
+        closeView: "Torna alla scansione corrente",
+        failed: (a) => `Scansioni salvate: ${a}`
+      },
+      compare: {
+        title: (a, b) => `Da "${a}" a "${b}"`,
+        total: (a) => `Variazione totale: ${a}`,
+        grew: "Cresciute di più",
+        shrank: "Diminuite di più",
+        added: "Cartelle nuove",
+        removed: "Cartelle rimosse",
+        none: "Niente in questo gruppo.",
+        back: "Torna all’elenco",
+        loading: "Confronto…"
       }
     }
   },
@@ -1196,6 +1736,36 @@ export default {
         excluded: (a) => `${a} は今後のスキャンでスキップされます。`,
         alreadyExcluded: (a) => `${a} はすでに除外されています。`,
         excludeFailed: "除外を保存できませんでした。"
+      },
+      saved: {
+        title: "保存したスキャン",
+        nameField: "このスキャンの名前",
+        save: "現在のスキャンを保存",
+        saving: "保存しています…",
+        saved: (a) => `スキャン "${a}" を保存しました。`,
+        nothingToSave: "先にドライブをスキャンすると、ここに保存できます。",
+        empty: "保存したスキャンはまだありません。",
+        load: "開く",
+        delete: "削除",
+        deleteConfirm: (a) => `"${a}" を完全に削除しますか？`,
+        selectForCompare: (a) => `比較する ${a} を選択`,
+        compare: "選択したものを比較",
+        pickTwo: "比較するスキャンを 2 つ選んでください。",
+        partial: "一部のみ",
+        viewing: (a, b) => `${b} に保存したスキャン "${a}" を表示しています。ドライブの現在の状態ではありません。`,
+        closeView: "現在のスキャンに戻る",
+        failed: (a) => `保存したスキャン: ${a}`
+      },
+      compare: {
+        title: (a, b) => `"${a}" から "${b}" へ`,
+        total: (a) => `合計の変化: ${a}`,
+        grew: "最も増加",
+        shrank: "最も減少",
+        added: "新しいフォルダー",
+        removed: "削除されたフォルダー",
+        none: "このグループには何もありません。",
+        back: "一覧に戻る",
+        loading: "比較しています…"
       }
     }
   },
@@ -1259,6 +1829,36 @@ export default {
         excluded: (a) => `${a}은(는) 이후 검사에서 건너뜁니다.`,
         alreadyExcluded: (a) => `${a}은(는) 이미 제외되었습니다.`,
         excludeFailed: "제외 항목을 저장할 수 없습니다."
+      },
+      saved: {
+        title: "저장된 검사",
+        nameField: "이 검사의 이름",
+        save: "현재 검사 저장",
+        saving: "저장하는 중…",
+        saved: (a) => `검사 "${a}"을(를) 저장했습니다.`,
+        nothingToSave: "먼저 드라이브를 검사하면 여기에 저장할 수 있습니다.",
+        empty: "저장된 검사가 아직 없습니다.",
+        load: "열기",
+        delete: "삭제",
+        deleteConfirm: (a) => `"${a}"을(를) 완전히 삭제할까요?`,
+        selectForCompare: (a) => `비교할 ${a} 선택`,
+        compare: "선택 항목 비교",
+        pickTwo: "비교할 검사를 두 개 선택하세요.",
+        partial: "부분",
+        viewing: (a, b) => `${b}에 저장된 검사 "${a}"을(를) 보고 있습니다. 드라이브의 현재 상태가 아닙니다.`,
+        closeView: "현재 검사로 돌아가기",
+        failed: (a) => `저장된 검사: ${a}`
+      },
+      compare: {
+        title: (a, b) => `"${a}"에서 "${b}"(으)로`,
+        total: (a) => `전체 변화: ${a}`,
+        grew: "가장 많이 늘어남",
+        shrank: "가장 많이 줄어듦",
+        added: "새 폴더",
+        removed: "삭제된 폴더",
+        none: "이 그룹에는 항목이 없습니다.",
+        back: "목록으로 돌아가기",
+        loading: "비교하는 중…"
       }
     }
   },
@@ -1322,6 +1922,36 @@ export default {
         excluded: (a) => `${a} bus praleista būsimuose nuskaitymuose.`,
         alreadyExcluded: (a) => `${a} jau neįtraukta.`,
         excludeFailed: "Nepavyko išsaugoti šios išimties."
+      },
+      saved: {
+        title: "Įrašyti nuskaitymai",
+        nameField: "Šio nuskaitymo pavadinimas",
+        save: "Įrašyti dabartinį nuskaitymą",
+        saving: "Įrašoma…",
+        saved: (a) => `Nuskaitymas "${a}" įrašytas.`,
+        nothingToSave: "Pirmiausia nuskaitykite diską, tada galėsite jį čia įrašyti.",
+        empty: "Įrašytų nuskaitymų dar nėra.",
+        load: "Atverti",
+        delete: "Ištrinti",
+        deleteConfirm: (a) => `Ištrinti "${a}" visam laikui?`,
+        selectForCompare: (a) => `Pasirinkti ${a} palyginimui`,
+        compare: "Palyginti pasirinktus",
+        pickTwo: "Pasirinkite du nuskaitymus palyginimui.",
+        partial: "Dalinis",
+        viewing: (a, b) => `Žiūrite įrašytą nuskaitymą "${a}" iš ${b}. Tai ne dabartinė disko būsena.`,
+        closeView: "Grįžti prie dabartinio nuskaitymo",
+        failed: (a) => `Įrašyti nuskaitymai: ${a}`
+      },
+      compare: {
+        title: (a, b) => `Nuo "${a}" iki "${b}"`,
+        total: (a) => `Bendras pokytis: ${a}`,
+        grew: "Labiausiai išaugo",
+        shrank: "Labiausiai sumažėjo",
+        added: "Nauji aplankai",
+        removed: "Pašalinti aplankai",
+        none: "Šioje grupėje nieko nėra.",
+        back: "Grįžti į sąrašą",
+        loading: "Lyginama…"
       }
     }
   },
@@ -1385,6 +2015,36 @@ export default {
         excluded: (a) => `${a} akan dilangkau dalam imbasan akan datang.`,
         alreadyExcluded: (a) => `${a} sudah dikecualikan.`,
         excludeFailed: "Tidak dapat menyimpan pengecualian itu."
+      },
+      saved: {
+        title: "Imbasan tersimpan",
+        nameField: "Nama untuk imbasan ini",
+        save: "Simpan imbasan semasa",
+        saving: "Menyimpan…",
+        saved: (a) => `Imbasan "${a}" disimpan.`,
+        nothingToSave: "Imbas pemacu dahulu, kemudian anda boleh menyimpannya di sini.",
+        empty: "Belum ada imbasan tersimpan.",
+        load: "Buka",
+        delete: "Padam",
+        deleteConfirm: (a) => `Padam "${a}" selama-lamanya?`,
+        selectForCompare: (a) => `Pilih ${a} untuk dibandingkan`,
+        compare: "Bandingkan yang dipilih",
+        pickTwo: "Pilih dua imbasan untuk dibandingkan.",
+        partial: "Separa",
+        viewing: (a, b) => `Anda melihat imbasan tersimpan "${a}" dari ${b}. Ini bukan keadaan pemacu sekarang.`,
+        closeView: "Kembali ke imbasan semasa",
+        failed: (a) => `Imbasan tersimpan: ${a}`
+      },
+      compare: {
+        title: (a, b) => `Daripada "${a}" kepada "${b}"`,
+        total: (a) => `Jumlah perubahan: ${a}`,
+        grew: "Paling bertambah",
+        shrank: "Paling berkurang",
+        added: "Folder baharu",
+        removed: "Folder dialih keluar",
+        none: "Tiada apa-apa dalam kumpulan ini.",
+        back: "Kembali ke senarai",
+        loading: "Membandingkan…"
       }
     }
   },
@@ -1448,6 +2108,36 @@ export default {
         excluded: (a) => `${a} hoppes over i fremtidige skanninger.`,
         alreadyExcluded: (a) => `${a} er allerede ekskludert.`,
         excludeFailed: "Kunne ikke lagre ekskluderingen."
+      },
+      saved: {
+        title: "Lagrede skanninger",
+        nameField: "Navn på denne skanningen",
+        save: "Lagre gjeldende skanning",
+        saving: "Lagrer…",
+        saved: (a) => `Skanningen "${a}" er lagret.`,
+        nothingToSave: "Skann en stasjon først, så kan du lagre den her.",
+        empty: "Ingen lagrede skanninger ennå.",
+        load: "Åpne",
+        delete: "Slett",
+        deleteConfirm: (a) => `Slette "${a}" for godt?`,
+        selectForCompare: (a) => `Velg ${a} for sammenligning`,
+        compare: "Sammenlign valgte",
+        pickTwo: "Velg to skanninger å sammenligne.",
+        partial: "Delvis",
+        viewing: (a, b) => `Du ser på den lagrede skanningen "${a}" fra ${b}. Dette er ikke stasjonen slik den er nå.`,
+        closeView: "Tilbake til gjeldende skanning",
+        failed: (a) => `Lagrede skanninger: ${a}`
+      },
+      compare: {
+        title: (a, b) => `Fra "${a}" til "${b}"`,
+        total: (a) => `Total endring: ${a}`,
+        grew: "Vokste mest",
+        shrank: "Krympet mest",
+        added: "Nye mapper",
+        removed: "Fjernede mapper",
+        none: "Ingenting i denne gruppen.",
+        back: "Tilbake til listen",
+        loading: "Sammenligner…"
       }
     }
   },
@@ -1511,6 +2201,36 @@ export default {
         excluded: (a) => `${a} wordt bij toekomstige scans overgeslagen.`,
         alreadyExcluded: (a) => `${a} is al uitgesloten.`,
         excludeFailed: "De uitsluiting kon niet worden opgeslagen."
+      },
+      saved: {
+        title: "Opgeslagen scans",
+        nameField: "Naam voor deze scan",
+        save: "Huidige scan opslaan",
+        saving: "Opslaan…",
+        saved: (a) => `Scan "${a}" opgeslagen.`,
+        nothingToSave: "Scan eerst een schijf, dan kunt u die hier opslaan.",
+        empty: "Nog geen opgeslagen scans.",
+        load: "Openen",
+        delete: "Verwijderen",
+        deleteConfirm: (a) => `"${a}" definitief verwijderen?`,
+        selectForCompare: (a) => `${a} selecteren om te vergelijken`,
+        compare: "Selectie vergelijken",
+        pickTwo: "Kies twee scans om te vergelijken.",
+        partial: "Onvolledig",
+        viewing: (a, b) => `U bekijkt de opgeslagen scan "${a}" van ${b}. Dit is niet de schijf zoals die nu is.`,
+        closeView: "Terug naar de huidige scan",
+        failed: (a) => `Opgeslagen scans: ${a}`
+      },
+      compare: {
+        title: (a, b) => `Van "${a}" naar "${b}"`,
+        total: (a) => `Totale wijziging: ${a}`,
+        grew: "Meest gegroeid",
+        shrank: "Meest gekrompen",
+        added: "Nieuwe mappen",
+        removed: "Verwijderde mappen",
+        none: "Niets in deze groep.",
+        back: "Terug naar de lijst",
+        loading: "Vergelijken…"
       }
     }
   },
@@ -1574,6 +2294,36 @@ export default {
         excluded: (a) => `${a} będzie pomijany w przyszłych skanowaniach.`,
         alreadyExcluded: (a) => `${a} jest już wykluczony.`,
         excludeFailed: "Nie udało się zapisać wykluczenia."
+      },
+      saved: {
+        title: "Zapisane skany",
+        nameField: "Nazwa tego skanu",
+        save: "Zapisz bieżący skan",
+        saving: "Zapisywanie…",
+        saved: (a) => `Zapisano skan "${a}".`,
+        nothingToSave: "Najpierw przeskanuj dysk, a potem zapiszesz go tutaj.",
+        empty: "Brak zapisanych skanów.",
+        load: "Otwórz",
+        delete: "Usuń",
+        deleteConfirm: (a) => `Usunąć "${a}" na stałe?`,
+        selectForCompare: (a) => `Wybierz ${a} do porównania`,
+        compare: "Porównaj zaznaczone",
+        pickTwo: "Wybierz dwa skany do porównania.",
+        partial: "Częściowy",
+        viewing: (a, b) => `Przeglądasz zapisany skan "${a}" z dnia ${b}. To nie jest obecny stan dysku.`,
+        closeView: "Wróć do bieżącego skanu",
+        failed: (a) => `Zapisane skany: ${a}`
+      },
+      compare: {
+        title: (a, b) => `Od "${a}" do "${b}"`,
+        total: (a) => `Łączna zmiana: ${a}`,
+        grew: "Najbardziej urosły",
+        shrank: "Najbardziej zmalały",
+        added: "Nowe foldery",
+        removed: "Usunięte foldery",
+        none: "Nic w tej grupie.",
+        back: "Wróć do listy",
+        loading: "Porównywanie…"
       }
     }
   },
@@ -1637,6 +2387,36 @@ export default {
         excluded: (a) => `${a} به په راتلونکو سکینونو کې پریښودل شي.`,
         alreadyExcluded: (a) => `${a} دمخه وایستل شوی.`,
         excludeFailed: "دا استثنا خوندي نشوه."
+      },
+      saved: {
+        title: "خوندي شوي سکینونه",
+        nameField: "د دې سکین نوم",
+        save: "اوسنی سکین خوندي کړئ",
+        saving: "خوندي کیږي…",
+        saved: (a) => `سکین "${a}" خوندي شو.`,
+        nothingToSave: "لومړی یو ډرایو سکین کړئ، بیا یې دلته خوندي کولی شئ.",
+        empty: "تر اوسه خوندي شوي سکینونه نشته.",
+        load: "خلاصول",
+        delete: "ړنګول",
+        deleteConfirm: (a) => `"${a}" تل لپاره ړنګ کړئ؟`,
+        selectForCompare: (a) => `${a} د پرتله کولو لپاره وټاکئ`,
+        compare: "ټاکل شوي پرتله کړئ",
+        pickTwo: "د پرتله کولو لپاره دوه سکینونه وټاکئ.",
+        partial: "نیمګړی",
+        viewing: (a, b) => `تاسو خوندي شوی سکین "${a}" له ${b} څخه ګورئ. دا ستاسو د ډرایو اوسنی حالت نه دی.`,
+        closeView: "اوسني سکین ته ستنیدل",
+        failed: (a) => `خوندي شوي سکینونه: ${a}`
+      },
+      compare: {
+        title: (a, b) => `له "${a}" څخه تر "${b}" پورې`,
+        total: (a) => `ټول بدلون: ${a}`,
+        grew: "ډېر ډېر وده",
+        shrank: "ډېر ډېر کمښت",
+        added: "نوي فولډرونه",
+        removed: "لرې شوي فولډرونه",
+        none: "پدې ګروپ کې هیڅ نشته.",
+        back: "لیست ته ستنیدل",
+        loading: "پرتله کیږي…"
       }
     }
   },
@@ -1700,6 +2480,36 @@ export default {
         excluded: (a) => `${a} será ignorado nas próximas verificações.`,
         alreadyExcluded: (a) => `${a} já está excluído.`,
         excludeFailed: "Não foi possível salvar essa exclusão."
+      },
+      saved: {
+        title: "Verificações salvas",
+        nameField: "Nome desta verificação",
+        save: "Salvar a verificação atual",
+        saving: "Salvando…",
+        saved: (a) => `Verificação "${a}" salva.`,
+        nothingToSave: "Verifique uma unidade primeiro; depois você poderá salvá-la aqui.",
+        empty: "Ainda não há verificações salvas.",
+        load: "Abrir",
+        delete: "Excluir",
+        deleteConfirm: (a) => `Excluir "${a}" definitivamente?`,
+        selectForCompare: (a) => `Selecionar ${a} para comparar`,
+        compare: "Comparar selecionadas",
+        pickTwo: "Escolha duas verificações para comparar.",
+        partial: "Parcial",
+        viewing: (a, b) => `Você está vendo a verificação salva "${a}" de ${b}. Esta não é a unidade como está agora.`,
+        closeView: "Voltar à verificação atual",
+        failed: (a) => `Verificações salvas: ${a}`
+      },
+      compare: {
+        title: (a, b) => `De "${a}" para "${b}"`,
+        total: (a) => `Alteração total: ${a}`,
+        grew: "Mais cresceram",
+        shrank: "Mais diminuíram",
+        added: "Pastas novas",
+        removed: "Pastas removidas",
+        none: "Nada neste grupo.",
+        back: "Voltar à lista",
+        loading: "Comparando…"
       }
     }
   },
@@ -1763,6 +2573,36 @@ export default {
         excluded: (a) => `${a} será ignorado nas próximas análises.`,
         alreadyExcluded: (a) => `${a} já está excluído.`,
         excludeFailed: "Não foi possível guardar essa exclusão."
+      },
+      saved: {
+        title: "Análises guardadas",
+        nameField: "Nome desta análise",
+        save: "Guardar a análise atual",
+        saving: "A guardar…",
+        saved: (a) => `Análise "${a}" guardada.`,
+        nothingToSave: "Analise primeiro uma unidade; depois poderá guardá-la aqui.",
+        empty: "Ainda não há análises guardadas.",
+        load: "Abrir",
+        delete: "Eliminar",
+        deleteConfirm: (a) => `Eliminar "${a}" definitivamente?`,
+        selectForCompare: (a) => `Selecionar ${a} para comparar`,
+        compare: "Comparar selecionadas",
+        pickTwo: "Escolha duas análises para comparar.",
+        partial: "Parcial",
+        viewing: (a, b) => `Está a ver a análise guardada "${a}" de ${b}. Este não é o estado atual da unidade.`,
+        closeView: "Voltar à análise atual",
+        failed: (a) => `Análises guardadas: ${a}`
+      },
+      compare: {
+        title: (a, b) => `De "${a}" para "${b}"`,
+        total: (a) => `Alteração total: ${a}`,
+        grew: "Mais cresceram",
+        shrank: "Mais diminuíram",
+        added: "Pastas novas",
+        removed: "Pastas removidas",
+        none: "Nada neste grupo.",
+        back: "Voltar à lista",
+        loading: "A comparar…"
       }
     }
   },
@@ -1826,6 +2666,36 @@ export default {
         excluded: (a) => `${a} va fi omis la scanările viitoare.`,
         alreadyExcluded: (a) => `${a} este deja exclus.`,
         excludeFailed: "Nu s-a putut salva excluderea."
+      },
+      saved: {
+        title: "Scanări salvate",
+        nameField: "Numele acestei scanări",
+        save: "Salvează scanarea curentă",
+        saving: "Se salvează…",
+        saved: (a) => `Scanarea "${a}" a fost salvată.`,
+        nothingToSave: "Scanați mai întâi o unitate, apoi o puteți salva aici.",
+        empty: "Nu există încă scanări salvate.",
+        load: "Deschide",
+        delete: "Șterge",
+        deleteConfirm: (a) => `Ștergeți definitiv "${a}"?`,
+        selectForCompare: (a) => `Selectează ${a} pentru comparare`,
+        compare: "Compară selecția",
+        pickTwo: "Alegeți două scanări de comparat.",
+        partial: "Parțială",
+        viewing: (a, b) => `Vizualizați scanarea salvată "${a}" din ${b}. Aceasta nu este starea actuală a unității.`,
+        closeView: "Înapoi la scanarea curentă",
+        failed: (a) => `Scanări salvate: ${a}`
+      },
+      compare: {
+        title: (a, b) => `De la "${a}" la "${b}"`,
+        total: (a) => `Modificare totală: ${a}`,
+        grew: "Cele mai mari creșteri",
+        shrank: "Cele mai mari scăderi",
+        added: "Foldere noi",
+        removed: "Foldere eliminate",
+        none: "Nimic în acest grup.",
+        back: "Înapoi la listă",
+        loading: "Se compară…"
       }
     }
   },
@@ -1889,6 +2759,36 @@ export default {
         excluded: (a) => `${a} будет пропускаться при следующих сканированиях.`,
         alreadyExcluded: (a) => `${a} уже исключено.`,
         excludeFailed: "Не удалось сохранить исключение."
+      },
+      saved: {
+        title: "Сохранённые сканирования",
+        nameField: "Название сканирования",
+        save: "Сохранить текущее сканирование",
+        saving: "Сохранение…",
+        saved: (a) => `Сканирование "${a}" сохранено.`,
+        nothingToSave: "Сначала просканируйте диск — потом его можно будет сохранить здесь.",
+        empty: "Сохранённых сканирований пока нет.",
+        load: "Открыть",
+        delete: "Удалить",
+        deleteConfirm: (a) => `Удалить "${a}" навсегда?`,
+        selectForCompare: (a) => `Выбрать ${a} для сравнения`,
+        compare: "Сравнить выбранные",
+        pickTwo: "Выберите два сканирования для сравнения.",
+        partial: "Частичное",
+        viewing: (a, b) => `Вы просматриваете сохранённое сканирование "${a}" от ${b}. Это не текущее состояние диска.`,
+        closeView: "Вернуться к текущему сканированию",
+        failed: (a) => `Сохранённые сканирования: ${a}`
+      },
+      compare: {
+        title: (a, b) => `От "${a}" к "${b}"`,
+        total: (a) => `Общее изменение: ${a}`,
+        grew: "Выросли сильнее всего",
+        shrank: "Уменьшились сильнее всего",
+        added: "Новые папки",
+        removed: "Удалённые папки",
+        none: "В этой группе ничего нет.",
+        back: "Назад к списку",
+        loading: "Сравнение…"
       }
     }
   },
@@ -1952,6 +2852,36 @@ export default {
         excluded: (a) => `${a} sa pri budúcich skenovaniach preskočí.`,
         alreadyExcluded: (a) => `${a} už je vylúčené.`,
         excludeFailed: "Výnimku sa nepodarilo uložiť."
+      },
+      saved: {
+        title: "Uložené skenovania",
+        nameField: "Názov tohto skenovania",
+        save: "Uložiť aktuálne skenovanie",
+        saving: "Ukladá sa…",
+        saved: (a) => `Skenovanie "${a}" bolo uložené.`,
+        nothingToSave: "Najprv naskenujte disk, potom ho tu môžete uložiť.",
+        empty: "Zatiaľ žiadne uložené skenovania.",
+        load: "Otvoriť",
+        delete: "Odstrániť",
+        deleteConfirm: (a) => `Odstrániť "${a}" natrvalo?`,
+        selectForCompare: (a) => `Vybrať ${a} na porovnanie`,
+        compare: "Porovnať vybrané",
+        pickTwo: "Vyberte dve skenovania na porovnanie.",
+        partial: "Čiastočné",
+        viewing: (a, b) => `Prezeráte si uložené skenovanie "${a}" z ${b}. Nie je to aktuálny stav disku.`,
+        closeView: "Späť na aktuálne skenovanie",
+        failed: (a) => `Uložené skenovania: ${a}`
+      },
+      compare: {
+        title: (a, b) => `Od "${a}" po "${b}"`,
+        total: (a) => `Celková zmena: ${a}`,
+        grew: "Najviac vzrástlo",
+        shrank: "Najviac kleslo",
+        added: "Nové priečinky",
+        removed: "Odstránené priečinky",
+        none: "V tejto skupine nič nie je.",
+        back: "Späť na zoznam",
+        loading: "Porovnáva sa…"
       }
     }
   },
@@ -2015,6 +2945,36 @@ export default {
         excluded: (a) => `${a} do të anashkalohet në skanimet e ardhshme.`,
         alreadyExcluded: (a) => `${a} është tashmë i përjashtuar.`,
         excludeFailed: "Përjashtimi nuk u ruajt dot."
+      },
+      saved: {
+        title: "Skanime të ruajtura",
+        nameField: "Emri i këtij skanimi",
+        save: "Ruaj skanimin aktual",
+        saving: "Po ruhet…",
+        saved: (a) => `Skanimi "${a}" u ruajt.`,
+        nothingToSave: "Skanoni fillimisht një disk, pastaj mund ta ruani këtu.",
+        empty: "Ende nuk ka skanime të ruajtura.",
+        load: "Hap",
+        delete: "Fshi",
+        deleteConfirm: (a) => `Ta fshini "${a}" përgjithmonë?`,
+        selectForCompare: (a) => `Zgjidh ${a} për krahasim`,
+        compare: "Krahaso të zgjedhurat",
+        pickTwo: "Zgjidhni dy skanime për t’i krahasuar.",
+        partial: "I pjesshëm",
+        viewing: (a, b) => `Po shihni skanimin e ruajtur "${a}" nga ${b}. Ky nuk është disku siç është tani.`,
+        closeView: "Kthehu te skanimi aktual",
+        failed: (a) => `Skanime të ruajtura: ${a}`
+      },
+      compare: {
+        title: (a, b) => `Nga "${a}" te "${b}"`,
+        total: (a) => `Ndryshimi total: ${a}`,
+        grew: "U rritën më shumë",
+        shrank: "U ulën më shumë",
+        added: "Dosje të reja",
+        removed: "Dosje të hequra",
+        none: "Asgjë në këtë grup.",
+        back: "Kthehu te lista",
+        loading: "Po krahasohet…"
       }
     }
   },
@@ -2078,6 +3038,36 @@ export default {
         excluded: (a) => `${a} ће бити прескочено у будућим скенирањима.`,
         alreadyExcluded: (a) => `${a} је већ искључено.`,
         excludeFailed: "Није могуће сачувати изузетак."
+      },
+      saved: {
+        title: "Сачувана скенирања",
+        nameField: "Назив овог скенирања",
+        save: "Сачувај тренутно скенирање",
+        saving: "Чување…",
+        saved: (a) => `Скенирање "${a}" је сачувано.`,
+        nothingToSave: "Прво скенирајте диск, па га можете сачувати овде.",
+        empty: "Још нема сачуваних скенирања.",
+        load: "Отвори",
+        delete: "Обриши",
+        deleteConfirm: (a) => `Обрисати "${a}" заувек?`,
+        selectForCompare: (a) => `Изабери ${a} за поређење`,
+        compare: "Упореди изабрано",
+        pickTwo: "Изаберите два скенирања за поређење.",
+        partial: "Делимично",
+        viewing: (a, b) => `Гледате сачувано скенирање "${a}" од ${b}. Ово није тренутно стање диска.`,
+        closeView: "Назад на тренутно скенирање",
+        failed: (a) => `Сачувана скенирања: ${a}`
+      },
+      compare: {
+        title: (a, b) => `Од "${a}" до "${b}"`,
+        total: (a) => `Укупна промена: ${a}`,
+        grew: "Највише порасло",
+        shrank: "Највише смањено",
+        added: "Нове фасцикле",
+        removed: "Уклоњене фасцикле",
+        none: "Нема ничега у овој групи.",
+        back: "Назад на листу",
+        loading: "Поређење…"
       }
     }
   },
@@ -2141,6 +3131,36 @@ export default {
         excluded: (a) => `${a} hoppas över vid framtida skanningar.`,
         alreadyExcluded: (a) => `${a} är redan exkluderad.`,
         excludeFailed: "Det gick inte att spara undantaget."
+      },
+      saved: {
+        title: "Sparade skanningar",
+        nameField: "Namn på den här skanningen",
+        save: "Spara nuvarande skanning",
+        saving: "Sparar…",
+        saved: (a) => `Skanningen "${a}" sparades.`,
+        nothingToSave: "Skanna först en enhet, så kan du spara den här.",
+        empty: "Inga sparade skanningar ännu.",
+        load: "Öppna",
+        delete: "Ta bort",
+        deleteConfirm: (a) => `Ta bort "${a}" för alltid?`,
+        selectForCompare: (a) => `Välj ${a} för jämförelse`,
+        compare: "Jämför valda",
+        pickTwo: "Välj två skanningar att jämföra.",
+        partial: "Ofullständig",
+        viewing: (a, b) => `Du tittar på den sparade skanningen "${a}" från ${b}. Det är inte enheten som den ser ut nu.`,
+        closeView: "Tillbaka till den aktuella skanningen",
+        failed: (a) => `Sparade skanningar: ${a}`
+      },
+      compare: {
+        title: (a, b) => `Från "${a}" till "${b}"`,
+        total: (a) => `Total förändring: ${a}`,
+        grew: "Ökade mest",
+        shrank: "Minskade mest",
+        added: "Nya mappar",
+        removed: "Borttagna mappar",
+        none: "Inget i den här gruppen.",
+        back: "Tillbaka till listan",
+        loading: "Jämför…"
       }
     }
   },
@@ -2204,6 +3224,36 @@ export default {
         excluded: (a) => `${a} จะถูกข้ามในการสแกนครั้งต่อไป`,
         alreadyExcluded: (a) => `${a} ถูกยกเว้นอยู่แล้ว`,
         excludeFailed: "บันทึกการยกเว้นไม่ได้"
+      },
+      saved: {
+        title: "การสแกนที่บันทึกไว้",
+        nameField: "ชื่อของการสแกนนี้",
+        save: "บันทึกการสแกนปัจจุบัน",
+        saving: "กำลังบันทึก…",
+        saved: (a) => `บันทึกการสแกน "${a}" แล้ว`,
+        nothingToSave: "สแกนไดรฟ์ก่อน แล้วจึงบันทึกที่นี่ได้",
+        empty: "ยังไม่มีการสแกนที่บันทึกไว้",
+        load: "เปิด",
+        delete: "ลบ",
+        deleteConfirm: (a) => `ลบ "${a}" ถาวรหรือไม่`,
+        selectForCompare: (a) => `เลือก ${a} เพื่อเปรียบเทียบ`,
+        compare: "เปรียบเทียบที่เลือก",
+        pickTwo: "เลือกการสแกนสองรายการเพื่อเปรียบเทียบ",
+        partial: "บางส่วน",
+        viewing: (a, b) => `คุณกำลังดูการสแกน "${a}" ที่บันทึกไว้เมื่อ ${b} นี่ไม่ใช่สถานะปัจจุบันของไดรฟ์`,
+        closeView: "กลับไปที่การสแกนปัจจุบัน",
+        failed: (a) => `การสแกนที่บันทึกไว้: ${a}`
+      },
+      compare: {
+        title: (a, b) => `จาก "${a}" ไปยัง "${b}"`,
+        total: (a) => `การเปลี่ยนแปลงรวม: ${a}`,
+        grew: "เพิ่มขึ้นมากที่สุด",
+        shrank: "ลดลงมากที่สุด",
+        added: "โฟลเดอร์ใหม่",
+        removed: "โฟลเดอร์ที่ถูกลบ",
+        none: "ไม่มีรายการในกลุ่มนี้",
+        back: "กลับไปที่รายการ",
+        loading: "กำลังเปรียบเทียบ…"
       }
     }
   },
@@ -2267,6 +3317,36 @@ export default {
         excluded: (a) => `${a} sonraki taramalarda atlanacak.`,
         alreadyExcluded: (a) => `${a} zaten hariç tutuluyor.`,
         excludeFailed: "Bu hariç tutma kaydedilemedi."
+      },
+      saved: {
+        title: "Kayıtlı taramalar",
+        nameField: "Bu taramanın adı",
+        save: "Geçerli taramayı kaydet",
+        saving: "Kaydediliyor…",
+        saved: (a) => `"${a}" taraması kaydedildi.`,
+        nothingToSave: "Önce bir sürücüyü tarayın, sonra burada kaydedebilirsiniz.",
+        empty: "Henüz kayıtlı tarama yok.",
+        load: "Aç",
+        delete: "Sil",
+        deleteConfirm: (a) => `"${a}" kalıcı olarak silinsin mi?`,
+        selectForCompare: (a) => `Karşılaştırmak için ${a} öğesini seç`,
+        compare: "Seçilenleri karşılaştır",
+        pickTwo: "Karşılaştırmak için iki tarama seçin.",
+        partial: "Kısmi",
+        viewing: (a, b) => `${b} tarihli kayıtlı "${a}" taramasını görüntülüyorsunuz. Bu, sürücünün şu anki hali değil.`,
+        closeView: "Geçerli taramaya dön",
+        failed: (a) => `Kayıtlı taramalar: ${a}`
+      },
+      compare: {
+        title: (a, b) => `"${a}" taramasından "${b}" taramasına`,
+        total: (a) => `Toplam değişim: ${a}`,
+        grew: "En çok büyüyenler",
+        shrank: "En çok küçülenler",
+        added: "Yeni klasörler",
+        removed: "Kaldırılan klasörler",
+        none: "Bu grupta hiçbir şey yok.",
+        back: "Listeye dön",
+        loading: "Karşılaştırılıyor…"
       }
     }
   },
@@ -2330,6 +3410,36 @@ export default {
         excluded: (a) => `${a} буде пропущено під час наступних сканувань.`,
         alreadyExcluded: (a) => `${a} уже виключено.`,
         excludeFailed: "Не вдалося зберегти виняток."
+      },
+      saved: {
+        title: "Збережені сканування",
+        nameField: "Назва цього сканування",
+        save: "Зберегти поточне сканування",
+        saving: "Збереження…",
+        saved: (a) => `Сканування "${a}" збережено.`,
+        nothingToSave: "Спершу просканіруйте диск — потім його можна буде зберегти тут.",
+        empty: "Збережених сканувань ще немає.",
+        load: "Відкрити",
+        delete: "Видалити",
+        deleteConfirm: (a) => `Видалити "${a}" назавжди?`,
+        selectForCompare: (a) => `Вибрати ${a} для порівняння`,
+        compare: "Порівняти вибране",
+        pickTwo: "Виберіть два сканування для порівняння.",
+        partial: "Часткове",
+        viewing: (a, b) => `Ви переглядаєте збережене сканування "${a}" від ${b}. Це не поточний стан диска.`,
+        closeView: "Назад до поточного сканування",
+        failed: (a) => `Збережені сканування: ${a}`
+      },
+      compare: {
+        title: (a, b) => `Від "${a}" до "${b}"`,
+        total: (a) => `Загальна зміна: ${a}`,
+        grew: "Зросли найбільше",
+        shrank: "Зменшилися найбільше",
+        added: "Нові папки",
+        removed: "Видалені папки",
+        none: "У цій групі нічого немає.",
+        back: "Назад до списку",
+        loading: "Порівняння…"
       }
     }
   },
@@ -2393,6 +3503,36 @@ export default {
         excluded: (a) => `${a} sẽ bị bỏ qua trong các lần quét sau.`,
         alreadyExcluded: (a) => `${a} đã được loại trừ.`,
         excludeFailed: "Không thể lưu mục loại trừ đó."
+      },
+      saved: {
+        title: "Các lần quét đã lưu",
+        nameField: "Tên cho lần quét này",
+        save: "Lưu lần quét hiện tại",
+        saving: "Đang lưu…",
+        saved: (a) => `Đã lưu lần quét "${a}".`,
+        nothingToSave: "Hãy quét một ổ đĩa trước, rồi bạn có thể lưu tại đây.",
+        empty: "Chưa có lần quét nào được lưu.",
+        load: "Mở",
+        delete: "Xóa",
+        deleteConfirm: (a) => `Xóa vĩnh viễn "${a}"?`,
+        selectForCompare: (a) => `Chọn ${a} để so sánh`,
+        compare: "So sánh mục đã chọn",
+        pickTwo: "Chọn hai lần quét để so sánh.",
+        partial: "Một phần",
+        viewing: (a, b) => `Bạn đang xem lần quét đã lưu "${a}" từ ${b}. Đây không phải trạng thái hiện tại của ổ đĩa.`,
+        closeView: "Quay lại lần quét hiện tại",
+        failed: (a) => `Các lần quét đã lưu: ${a}`
+      },
+      compare: {
+        title: (a, b) => `Từ "${a}" đến "${b}"`,
+        total: (a) => `Tổng thay đổi: ${a}`,
+        grew: "Tăng nhiều nhất",
+        shrank: "Giảm nhiều nhất",
+        added: "Thư mục mới",
+        removed: "Thư mục đã xóa",
+        none: "Không có gì trong nhóm này.",
+        back: "Quay lại danh sách",
+        loading: "Đang so sánh…"
       }
     }
   },
@@ -2456,6 +3596,36 @@ export default {
         excluded: (a) => `后续扫描将跳过 ${a}。`,
         alreadyExcluded: (a) => `${a} 已被排除。`,
         excludeFailed: "无法保存该排除项。"
+      },
+      saved: {
+        title: "已保存的扫描",
+        nameField: "此次扫描的名称",
+        save: "保存当前扫描",
+        saving: "正在保存…",
+        saved: (a) => `已保存扫描 "${a}"。`,
+        nothingToSave: "请先扫描一个驱动器，然后即可在此保存。",
+        empty: "还没有已保存的扫描。",
+        load: "打开",
+        delete: "删除",
+        deleteConfirm: (a) => `要永久删除 "${a}" 吗？`,
+        selectForCompare: (a) => `选择 ${a} 进行比较`,
+        compare: "比较所选项",
+        pickTwo: "请选择两个要比较的扫描。",
+        partial: "部分",
+        viewing: (a, b) => `您正在查看 ${b} 保存的扫描 "${a}"。这不是驱动器当前的状态。`,
+        closeView: "返回当前扫描",
+        failed: (a) => `已保存的扫描：${a}`
+      },
+      compare: {
+        title: (a, b) => `从 "${a}" 到 "${b}"`,
+        total: (a) => `总变化：${a}`,
+        grew: "增长最多",
+        shrank: "减少最多",
+        added: "新文件夹",
+        removed: "已删除的文件夹",
+        none: "此组中没有内容。",
+        back: "返回列表",
+        loading: "正在比较…"
       }
     }
   },
@@ -2519,6 +3689,36 @@ export default {
         excluded: (a) => `後續掃描將略過 ${a}。`,
         alreadyExcluded: (a) => `${a} 已被排除。`,
         excludeFailed: "無法儲存該排除項目。"
+      },
+      saved: {
+        title: "已儲存的掃描",
+        nameField: "此次掃描的名稱",
+        save: "儲存目前的掃描",
+        saving: "正在儲存…",
+        saved: (a) => `已儲存掃描 "${a}"。`,
+        nothingToSave: "請先掃描一個磁碟機，之後即可在此儲存。",
+        empty: "尚無已儲存的掃描。",
+        load: "開啟",
+        delete: "刪除",
+        deleteConfirm: (a) => `要永久刪除 "${a}" 嗎？`,
+        selectForCompare: (a) => `選擇 ${a} 進行比較`,
+        compare: "比較所選項目",
+        pickTwo: "請選擇兩個要比較的掃描。",
+        partial: "部分",
+        viewing: (a, b) => `您正在檢視 ${b} 儲存的掃描 "${a}"。這不是磁碟機目前的狀態。`,
+        closeView: "返回目前的掃描",
+        failed: (a) => `已儲存的掃描：${a}`
+      },
+      compare: {
+        title: (a, b) => `從 "${a}" 到 "${b}"`,
+        total: (a) => `總變化：${a}`,
+        grew: "增加最多",
+        shrank: "減少最多",
+        added: "新資料夾",
+        removed: "已移除的資料夾",
+        none: "此群組中沒有內容。",
+        back: "返回清單",
+        loading: "正在比較…"
       }
     }
   }
