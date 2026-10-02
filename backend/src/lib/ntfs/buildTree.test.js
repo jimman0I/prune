@@ -165,3 +165,52 @@ describe('buildTree allocated size', () => {
     expect(tree.allocated).toBeUndefined();
   });
 });
+
+
+describe('buildTree exclusions', () => {
+  const rows = () => entries([
+    [ROOT_RECORD, '.', ROOT_RECORD, 0, true],
+    [10, 'Games', ROOT_RECORD, 0, true],
+    [11, 'pak0.ucas', 10, 800, false],
+    [12, 'sub', 10, 0, true],
+    [13, 'pak1.ucas', 12, 100, false],
+    [14, 'Users', ROOT_RECORD, 0, true],
+    [15, 'win.iso', 14, 300, false],
+    [16, 'notes.txt', 14, 5, false]
+  ]);
+
+  it('marks an excluded folder and counts nothing from it, at any depth', () => {
+    const tree = buildTree(rows(), { name: 'C:', exclusions: { excludeFolders: ['C:\\Games'] } });
+    const games = tree.children.find((n) => n.name === 'Games');
+    expect(games).toEqual({ name: 'Games', size: 0, type: 'directory', excluded: true, children: [] });
+    expect(tree.size).toBe(305);
+  });
+
+  it("does not let an excluded folder's contents resurface in the orphan sweep", () => {
+    const tree = buildTree(rows(), { name: 'C:', exclusions: { excludeFolders: ['C:\\Games'] } });
+    expect(tree.children.find((n) => /orphan/i.test(n.name))).toBeUndefined();
+    expect(JSON.stringify(tree)).not.toContain('pak1.ucas');
+  });
+
+  it('leaves out files of an excluded type but keeps their siblings', () => {
+    const tree = buildTree(rows(), { name: 'C:', exclusions: { excludeExtensions: ['.iso'] } });
+    const users = tree.children.find((n) => n.name === 'Users');
+    expect(users.size).toBe(5);
+    expect(users.children.find((n) => n.name === 'win.iso')).toEqual({ name: 'win.iso', size: 0, type: 'file', excluded: true });
+    expect(users.children.find((n) => n.name === 'notes.txt').size).toBe(5);
+  });
+
+  it('reports what was left out, so the totals stay honest', () => {
+    const report = {};
+    buildTree(rows(), { name: 'C:', exclusions: { excludeFolders: ['C:\\Games'], excludeExtensions: ['.iso'] }, report });
+    expect(report.excludedSizeBytes).toBe(800 + 100 + 300);
+    expect(report.excludedItems).toBe(5); // Games, pak0, sub, pak1 and win.iso
+  });
+
+  it('behaves exactly as before with no exclusions', () => {
+    const plain = buildTree(rows(), { name: 'C:' });
+    const none = buildTree(rows(), { name: 'C:', exclusions: { excludeFolders: [], excludeExtensions: [] } });
+    expect(none).toEqual(plain);
+    expect(plain.size).toBe(1205);
+  });
+});

@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { scanDrivesViaMft } from '../services/mftScan.js';
 import { DEFAULT_MAX_DEPTH } from '../services/diskScan.js';
 import { isElevated } from '../lib/privilege.js';
+import { getSettings } from '../services/settings.js';
 
 const router = Router();
 
@@ -50,7 +51,18 @@ router.post('/', async (req, res) => {
   // this the request was never answered at all, which from the Disk Map
   // is indistinguishable from a scan still running.
   try {
-    const result = await scanDrivesViaMft({ driveLetters, maxDepth });
+    // The user's own exclusions, read per scan: the fast scan obeys them just
+    // as the folder walk does. A settings file that cannot be read must not
+    // stop a scan -- no exclusions is the safe reading, since nothing real is
+    // ever hidden by it.
+    let settings = {};
+    try { settings = (await getSettings()) ?? {}; } catch { /* fall through with none */ }
+    const result = await scanDrivesViaMft({
+      driveLetters,
+      maxDepth,
+      excludeFolders: Array.isArray(settings.excludeFolders) ? settings.excludeFolders : [],
+      excludeExtensions: Array.isArray(settings.excludeExtensions) ? settings.excludeExtensions : []
+    });
 
     // A declined prompt is a 200 carrying { cancelled: true }, not an
     // error status: the user answered the question, and the answer was

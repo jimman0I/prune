@@ -7,6 +7,14 @@ vi.mock('../services/mftScan.js', () => ({ scanDrivesViaMft: (...a) => scanDrive
 const isElevated = vi.fn(async () => false);
 vi.mock('../lib/privilege.js', () => ({ isElevated: (...a) => isElevated(...a) }));
 
+let settings = { excludeFolders: [], excludeExtensions: [] };
+vi.mock('../services/settings.js', () => ({
+  getSettings: async () => {
+    if (settings instanceof Error) throw settings;
+    return settings;
+  }
+}));
+
 let server;
 beforeAll(async () => { server = await startTestServer(); });
 afterAll(async () => { await server.close(); });
@@ -72,6 +80,32 @@ describe('POST /mft-scan', () => {
     const res = await post({ driveLetters: ['E'] });
     expect(res.status).toBe(500);
     expect(res.body.error).toBe('Not an NTFS volume');
+  });
+});
+
+describe('POST /mft-scan exclusions', () => {
+  it("passes the user's excluded folders and file types to the scan", async () => {
+    settings = { excludeFolders: ['D:\\Games'], excludeExtensions: ['.vhdx'] };
+    await post({ driveLetters: ['D'] });
+    const call = scanDrivesViaMft.mock.calls[0][0];
+    expect(call.excludeFolders).toEqual(['D:\\Games']);
+    expect(call.excludeExtensions).toEqual(['.vhdx']);
+  });
+
+  it('scans with no exclusions when the settings cannot be read, rather than not scanning', async () => {
+    settings = new Error('settings.json is locked');
+    const res = await post({ driveLetters: ['C'] });
+    expect(res.status).toBe(200);
+    expect(scanDrivesViaMft.mock.calls[0][0].excludeFolders).toEqual([]);
+    settings = { excludeFolders: [], excludeExtensions: [] };
+  });
+
+  it('ignores a setting that is not a list', async () => {
+    settings = { excludeFolders: 'D:\\Games', excludeExtensions: null };
+    await post({ driveLetters: ['C'] });
+    expect(scanDrivesViaMft.mock.calls[0][0].excludeFolders).toEqual([]);
+    expect(scanDrivesViaMft.mock.calls[0][0].excludeExtensions).toEqual([]);
+    settings = { excludeFolders: [], excludeExtensions: [] };
   });
 });
 

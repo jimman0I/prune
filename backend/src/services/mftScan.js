@@ -39,13 +39,13 @@ const MFT_TIMEOUT_MS = 15 * 60_000;
  *   { ok: false, cancelled: true }
  *   { ok: false, error }
  */
-export async function scanDrivesViaMft({ driveLetters = ['C'], maxDepth = 12, timeoutMs = MFT_TIMEOUT_MS } = {}) {
+export async function scanDrivesViaMft({ driveLetters = ['C'], maxDepth = 12, excludeFolders = [], excludeExtensions = [], timeoutMs = MFT_TIMEOUT_MS } = {}) {
   // Already Administrator? Then there is nothing to ask: run the helper in
   // this process's own token. Otherwise it goes through a UAC prompt.
   const run = (await isElevated()) ? runNodeJson : runElevatedNodeJson;
   const result = await run(WORKER_PATH, [], {
     timeoutMs,
-    input: { drives: driveLetters, maxDepth }
+    input: { drives: driveLetters, maxDepth, excludeFolders, excludeExtensions }
   });
 
   if (!result.ok) return result;
