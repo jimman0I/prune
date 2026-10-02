@@ -13,10 +13,11 @@ import UninstallModal from './UninstallModal.jsx';
  * leftover scan with nothing assumed from the registry, a review of every
  * result by confidence, and the usual quarantine and backup protections on
  * the way out. */
-export default function ForcedUninstallDialog({ onClose, onBusyChange }) {
+export default function ForcedUninstallDialog({ onClose, onBusyChange, initialName = '', initialFolder = '' }) {
   const { t } = useLanguage();
-  const [name, setName] = useState('');
-  const [folder, setFolder] = useState('');
+  // Hunter hands over what it identified; everything stays editable.
+  const [name, setName] = useState(initialName);
+  const [folder, setFolder] = useState(initialFolder);
   const [picking, setPicking] = useState(false);
   const [error, setError] = useState(null);
   const [target, setTarget] = useState(null);
