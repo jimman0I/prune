@@ -1,6 +1,7 @@
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { runElevatedNodeJson } from '../lib/elevated.js';
+import { runElevatedNodeJson, runNodeJson } from '../lib/elevated.js';
+import { isElevated } from '../lib/privilege.js';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const WORKER_PATH = join(here, '..', 'lib', 'ntfs', 'mftWorker.js');
@@ -21,9 +22,11 @@ const MFT_TIMEOUT_MS = 15 * 60_000;
  * WizTree uses, and the same reason WizTree asks for administrator:
  * Windows won't hand a raw volume handle to an unelevated process.
  *
- * Which is the whole design constraint here. The scan can only run behind
- * a deliberate user action, and a declined UAC prompt is an ordinary
- * answer rather than an error -- the recursive scanner still works.
+ * Which is the whole design constraint here. Unless Prune itself was started
+ * as Administrator -- in which case the helper runs directly and nothing is
+ * asked -- the scan can only run behind a deliberate user action, and a
+ * declined UAC prompt is an ordinary answer rather than an error: the
+ * recursive scanner still works.
  *
  * Every requested drive goes to the helper as ONE job, so choosing C: and
  * D: is one consent prompt, not two. A drive that cannot be read (not
@@ -37,7 +40,10 @@ const MFT_TIMEOUT_MS = 15 * 60_000;
  *   { ok: false, error }
  */
 export async function scanDrivesViaMft({ driveLetters = ['C'], maxDepth = 12, timeoutMs = MFT_TIMEOUT_MS } = {}) {
-  const result = await runElevatedNodeJson(WORKER_PATH, [], {
+  // Already Administrator? Then there is nothing to ask: run the helper in
+  // this process's own token. Otherwise it goes through a UAC prompt.
+  const run = (await isElevated()) ? runNodeJson : runElevatedNodeJson;
+  const result = await run(WORKER_PATH, [], {
     timeoutMs,
     input: { drives: driveLetters, maxDepth }
   });

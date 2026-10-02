@@ -644,6 +644,15 @@ export async function scanDriveFast(driveLetters = ['C']) {
   return data;
 }
 
+/** Whether the fast scan can run without a prompt, i.e. whether Prune itself
+ * was started as administrator: { elevated: boolean }. */
+export async function fetchMftStatus() {
+  const res = await fetch(`${API_URL}/mft-scan/status`);
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
+  return data;
+}
+
 /** The local drives the Disk Map can scan, and which one holds Windows:
  * { systemDrive: 'C', drives: [{ letter, label, fileSystem, totalBytes,
  * freeBytes, removable, system, ntfs }] }. */
