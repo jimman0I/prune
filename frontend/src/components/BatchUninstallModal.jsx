@@ -8,7 +8,8 @@ import { orderBatch } from '../lib/batchOrder.js';
 import LeftoverReview from './LeftoverReview.jsx';
 import TaskRemovalNotice from './TaskRemovalNotice.jsx';
 import { selectionToRemoval } from './UninstallModal.jsx';
-import { useSettings } from '../hooks/useSystemQueries.js';
+import { useSettings, useInstallTraces } from '../hooks/useSystemQueries.js';
+import { traceForProgram } from '../lib/installTraces.js';
 import { leftoverDestinationFrom } from '../lib/leftoverDestination.js';
 import { scanModeFrom, anchorsFor } from '../lib/scanMode.js';
 import { preselectKeys } from '../lib/leftoverTiers.js';
@@ -132,6 +133,7 @@ export default function BatchUninstallModal({ programs, onClose, onFinished, onB
   // The same three settings the single-program dialog follows, read the
   // same way: a failed settings request leaves the batch as it always was.
   const { settings } = useSettings();
+  const { traces } = useInstallTraces();
   const destination = leftoverDestinationFrom(settings);
   const preselect = settings?.preselectLeftovers === true;
   const scanAfter = settings?.scanLeftoversAfterUninstall !== false;
@@ -266,7 +268,8 @@ export default function BatchUninstallModal({ programs, onClose, onFinished, onB
           // settings. A batch has no picker of its own: it follows it.
           mode: scanModeFrom(settings),
           anchors: anchorsFor(program),
-          programId: program.id
+          programId: program.id,
+          ...(traceForProgram(program, traces) ? { traceId: traceForProgram(program, traces).id } : {})
         });
         scans.push({ program: program.name, scan });
       }

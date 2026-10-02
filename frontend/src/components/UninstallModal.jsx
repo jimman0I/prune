@@ -7,7 +7,8 @@ import ScanModePicker from './ScanModePicker.jsx';
 import TaskRemovalNotice from './TaskRemovalNotice.jsx';
 import { scanModeFrom, anchorsFor } from '../lib/scanMode.js';
 import { preselectKeys } from '../lib/leftoverTiers.js';
-import { useSettings } from '../hooks/useSystemQueries.js';
+import { useSettings, useInstallTraces } from '../hooks/useSystemQueries.js';
+import { traceForProgram } from '../lib/installTraces.js';
 import { leftoverDestinationFrom } from '../lib/leftoverDestination.js';
 import { useLanguage } from '../i18n/LanguageContext.jsx';
 
@@ -131,6 +132,8 @@ export default function UninstallModal({ program, running = false, onClose, onBu
   // Three settings shape this dialog, each read so that a settings request
   // that failed leaves the dialog behaving exactly as it always did.
   const { settings, save: saveSettings } = useSettings();
+  const { traces } = useInstallTraces();
+  const monitored = traceForProgram(program, traces);
   // The depth of the leftover scan, chosen here and remembered. Until the
   // person touches the picker it is whatever settings last held; touching it
   // takes effect at once and is saved for the next uninstall.
@@ -258,7 +261,10 @@ export default function UninstallModal({ program, running = false, onClose, onBu
       const result = await scanForLeftovers(deriveSearchTerm(program.name), program.publisher, {
         mode: scanMode,
         anchors: anchorsFor(program),
-        programId: program.id
+        programId: program.id,
+        // If this program was installed under the install monitor, its
+        // installer's own record of what it created joins the scan.
+        ...(monitored ? { traceId: monitored.id } : {})
       });
       setScanResult(result);
       // Revo's "Automatically delete all found leftovers": skip the manual

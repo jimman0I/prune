@@ -83,8 +83,18 @@ function isUnder(path, dirs) {
  * `fileRoots` and `walkOptions` exist so a test can point the Advanced walk
  * at a temporary tree. */
 export async function scanForLeftovers({
-  name, publisher, mode, anchors = {}, installedPrograms, selfId, fileRoots, walkOptions, extraFiles = []
+  name, publisher, mode, anchors = {}, installedPrograms, selfId, fileRoots, walkOptions, traceFindings
 } = {}) {
+  /* What the install monitor recorded for this program, if it was monitored:
+     the folders, keys, tasks and services its installer created that are still
+     on the machine. The installer's own record is the strongest evidence there
+     is, so every one of these is certain -- and, like everything else, still
+     passes the protections below. See installTraces.js. */
+  const trace = {
+    files: traceFindings?.files ?? [], registry: traceFindings?.registry ?? [],
+    tasks: traceFindings?.tasks ?? [], services: traceFindings?.services ?? []
+  };
+  const extraFiles = trace.files.map((f) => f.path);
   const scanMode = normalizeScanMode(mode);
   // For the disk, only folders that still exist. For the registry and the
   // task list, every folder the program named: an uninstaller removes the
@@ -106,10 +116,11 @@ export async function scanForLeftovers({
       scanRegistryAnchor(anchors?.registryKey).catch(FAILED)
     ]);
     return {
-      files: finishFiles(files, ctx),
-      registryKeys: finishRegistry(registryKeys, ctx),
-      scheduledTasks: EMPTY(),
-      mode: scanMode
+      files: finishFiles(addTraceFiles(files, trace.files), ctx),
+      registryKeys: finishRegistry(addTraceRegistry(registryKeys, trace.registry), ctx),
+      scheduledTasks: finishTasks(addTraceTasks(EMPTY(), trace.tasks), ctx),
+      mode: scanMode,
+      ...(trace.services.length > 0 ? { services: finishServices(addTraceServices(EMPTY(), trace.services), ctx) } : {})
     };
   }
 
@@ -128,13 +139,54 @@ export async function scanForLeftovers({
 
   const files = await withAnchorFiles(filesFound, anchorDirs);
   const result = {
-    files: finishFiles(files, ctx),
-    registryKeys: finishRegistry(registryKeys, ctx),
-    scheduledTasks: finishTasks(scheduledTasks, ctx),
+    files: finishFiles(addTraceFiles(files, trace.files), ctx),
+    registryKeys: finishRegistry(addTraceRegistry(registryKeys, trace.registry), ctx),
+    scheduledTasks: finishTasks(addTraceTasks(scheduledTasks, trace.tasks), ctx),
     mode: scanMode
   };
-  if (services) result.services = finishServices(services, ctx);
+  if (services || trace.services.length > 0) {
+    result.services = finishServices(addTraceServices(services || EMPTY(), trace.services), ctx);
+  }
   return result;
+}
+
+/* ---------------------------------------------------- install-monitor trace */
+
+const same = (a, b) => String(a).toLowerCase() === String(b).toLowerCase();
+
+/** Adds what the install trace listed to a group, without listing anything
+ * twice. A failed group stays failed: a trace does not make a scan that did
+ * not run into one that did. */
+function addTraceFiles(group, traced) {
+  if (!group?.ok || traced.length === 0) return group;
+  const items = [...group.items];
+  for (const entry of traced) if (!items.some((i) => same(i.path, entry.path))) items.push({ path: entry.path, sizeBytes: entry.sizeBytes || 0 });
+  return { ...group, items };
+}
+
+function addTraceRegistry(group, traced) {
+  if (!group?.ok || traced.length === 0) return group;
+  const items = [...group.items];
+  for (const entry of traced) {
+    const exists = items.some((i) => canonicalKeyPath(i.path) === canonicalKeyPath(entry.path) && (i.valueName || '') === (entry.valueName || ''));
+    if (!exists) items.push({ ...entry, anchored: true });
+    else for (const i of items) if (canonicalKeyPath(i.path) === canonicalKeyPath(entry.path) && (i.valueName || '') === (entry.valueName || '')) i.anchored = true;
+  }
+  return { ...group, items };
+}
+
+function addTraceTasks(group, traced) {
+  if (!group?.ok || traced.length === 0) return group;
+  const items = group.items.map((i) => (traced.some((t) => same(t.name, i.name) && same(t.path, i.path)) ? { ...i, how: 'anchor' } : i));
+  for (const entry of traced) if (!items.some((i) => same(i.name, entry.name) && same(i.path, entry.path))) items.push({ ...entry, how: 'anchor' });
+  return { ...group, items };
+}
+
+function addTraceServices(group, traced) {
+  if (!group?.ok || traced.length === 0) return group;
+  const items = group.items.map((i) => (traced.some((t) => same(t.name, i.name)) ? { ...i, how: 'anchor' } : i));
+  for (const entry of traced) if (!items.some((i) => same(i.name, entry.name))) items.push({ ...entry, how: 'anchor' });
+  return { ...group, items };
 }
 
 async function loadOtherPrograms(installedPrograms, options) {

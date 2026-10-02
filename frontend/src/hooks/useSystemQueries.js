@@ -4,7 +4,7 @@ import {
   fetchStartupItems, fetchStartupIcons, setStartupItemEnabled,
   fetchQuarantineBatches, restoreQuarantineBatch, deleteQuarantineBatch, emptyQuarantine,
   fetchSettings, updateSettings, fetchUpdateCheck,
-  fetchDiskSpace, fetchDiskHealth
+  fetchDiskSpace, fetchDiskHealth, fetchInstallTraces
 } from '../lib/api.js';
 import { keys } from '../lib/queryClient.js';
 import { applyEnabled, toggleOutcome, enabledStateOf } from '../lib/startupToggleState.js';
@@ -163,6 +163,17 @@ export function useQuarantine() {
     remove: useMutation({ mutationFn: deleteQuarantineBatch, onSuccess: invalidate }),
     empty: useMutation({ mutationFn: emptyQuarantine, onSuccess: invalidate })
   };
+}
+
+/* ------------------------------------------------------- install traces */
+
+/** The install monitor's records, for the Monitored badge and for finding the
+ * record of the program being uninstalled. A failed read is an empty list:
+ * without traces everything still works, just without the extra evidence. */
+export function useInstallTraces() {
+  // Called inside a function so the import is only touched when it runs.
+  const query = useQuery({ queryKey: keys.installTraces, queryFn: () => fetchInstallTraces(), retry: false });
+  return { traces: query.data ?? [], loading: query.isPending };
 }
 
 /* ------------------------------------------------------------- settings */

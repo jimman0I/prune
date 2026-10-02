@@ -16,6 +16,14 @@ vi.mock('../services/leftoverScan.js', () => ({ scanForLeftovers: (...a) => scan
 const listInstalledPrograms = vi.fn(async () => [{ id: 'other', name: 'Other' }]);
 vi.mock('../services/programs.js', () => ({ listInstalledPrograms: (...a) => listInstalledPrograms(...a) }));
 
+const getTrace = vi.fn(async () => null);
+const loadTraceFindings = vi.fn(async () => ({ files: [], registry: [], tasks: [], services: [] }));
+vi.mock('../services/installTraces.js', async (importOriginal) => ({
+  ...(await importOriginal()),
+  getTrace: (...a) => getTrace(...a),
+  loadTraceFindings: (...a) => loadTraceFindings(...a)
+}));
+
 let settings = {};
 vi.mock('../services/settings.js', () => ({
   getSettings: async () => settings,
@@ -92,6 +100,29 @@ describe('POST /leftovers/scan: mode and anchors', () => {
     const res = await scan();
     expect(res.status).toBe(200);
     expect(await scanForLeftovers.mock.calls[0][0].installedPrograms).toEqual([]);
+  });
+
+  it('hands the scanner what the install monitor recorded, for a valid trace id', async () => {
+    const id = 'ab12cd34ef56ab78';
+    getTrace.mockResolvedValueOnce({ id, files: [{ path: 'D:\\T' }] });
+    loadTraceFindings.mockResolvedValueOnce({ files: [{ path: 'D:\\T', sizeBytes: 1 }], registry: [], tasks: [], services: [] });
+    await scan({ traceId: id });
+    expect(getTrace).toHaveBeenCalledWith(id);
+    expect(scanForLeftovers.mock.calls[0][0].traceFindings.files).toEqual([{ path: 'D:\\T', sizeBytes: 1 }]);
+  });
+
+  it('ignores a trace id that is not one, without reading anything', async () => {
+    for (const traceId of ['..\\evil', '../evil', 'short', 42, {}]) await scan({ traceId });
+    expect(getTrace).not.toHaveBeenCalled();
+    expect(scanForLeftovers.mock.calls.every(([args]) => args.traceFindings === undefined)).toBe(true);
+  });
+
+  it('still scans when the trace cannot be read', async () => {
+    getTrace.mockResolvedValueOnce({ id: 'ab12cd34ef56ab78' });
+    loadTraceFindings.mockRejectedValueOnce(new Error('unreadable'));
+    const res = await scan({ traceId: 'ab12cd34ef56ab78' });
+    expect(res.status).toBe(200);
+    expect(scanForLeftovers.mock.calls[0][0].traceFindings).toBeUndefined();
   });
 
   it('copes with anchors that are not an object', async () => {
