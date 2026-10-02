@@ -46,7 +46,7 @@ describe('POST /quarantine/remove destination', () => {
     expect(res.status).toBe(200);
     expect(removeLeftovers).toHaveBeenCalledWith({
       programName: 'Thing', files: ['C:\\x'], registryKeys: [], destination: 'quarantine',
-      deleteLockedFilesOnRestart: false
+      deleteLockedFilesOnRestart: false, overwritePasses: 0
     });
   });
 
@@ -99,4 +99,17 @@ describe('POST /quarantine/remove destination', () => {
     await remove({});
     expect(removeLeftovers.mock.calls[0][0].deleteLockedFilesOnRestart).toBe(false);
   });
-});
+
+  it('passes the overwrite passes from settings through, 0 when the switch is off', async () => {
+    settings = { createRestorePoint: true, overwriteBeforeDelete: true, overwritePasses: 3 };
+    await remove({ destination: 'permanent' });
+    expect(removeLeftovers.mock.calls[0][0].overwritePasses).toBe(3);
+
+    settings = { createRestorePoint: true, overwriteBeforeDelete: false, overwritePasses: 3 };
+    await remove({ destination: 'permanent' });
+    expect(removeLeftovers.mock.calls[1][0].overwritePasses).toBe(0);
+
+    settings = { createRestorePoint: true, overwriteBeforeDelete: 'true', overwritePasses: 3 };
+    await remove({ destination: 'permanent' });
+    expect(removeLeftovers.mock.calls[2][0].overwritePasses).toBe(0);
+  });});
