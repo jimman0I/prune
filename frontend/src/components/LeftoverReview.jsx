@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useLanguage } from '../i18n/LanguageContext.jsx';
+import { TIERS, tierOf, hasTiers, protectedCount } from '../lib/leftoverTiers.js';
 
 function formatBytes(bytes) {
   if (!bytes) return null;
@@ -34,11 +35,13 @@ export default function LeftoverReview({ scanResult, selected, onToggle, onConfi
   const GROUPS = [
     { key: 'files', label: t('leftoverReview.groups.files') },
     { key: 'registryKeys', label: t('leftoverReview.groups.registryKeys') },
-    // Reported, never removed. Quarantine works by moving files and
-    // exporting registry keys, both of which a restore can put back; a
-    // scheduled task has no equivalent reversible operation, so offering a
-    // checkbox here would promise something the removal can't deliver.
-    { key: 'scheduledTasks', label: t('leftoverReview.groups.scheduledTasks'), removable: false }
+    // Removable: the backend saves the task's definition to the Backup
+    // Manager before it unregisters it, so it can be put back.
+    { key: 'scheduledTasks', label: t('leftoverReview.groups.scheduledTasks') },
+    // Advanced scan only, and listed rather than removed: a service is taken
+    // out with `sc delete` and administrator rights, and the wrong one can
+    // stop Windows starting.
+    { key: 'services', label: t('uninstallerV3.review.services'), removable: false }
   ];
 
   /** What the review says will happen to the ticked leftovers, by where the
@@ -51,14 +54,22 @@ export default function LeftoverReview({ scanResult, selected, onToggle, onConfi
     permanent: { text: t('leftoverReview.destinations.permanent.text'), button: t('leftoverReview.destinations.permanent.button'), danger: true }
   };
 
-  const [openGroups, setOpenGroups] = useState(() =>
-    Object.fromEntries(GROUPS.map(g => [g.key, true]))
-  );
+  /* Tiers: when the scan says how sure it is, the review is laid out by that
+     first -- what the program's own folder vouches for, then what its name
+     says, then the guesses -- and the type of leftover second. A scan with no
+     tiers (an older result) is the flat list it always was. Possible starts
+     collapsed: it is the part the person has to think about. */
+  const tiered = hasTiers(scanResult);
+  const sections = tiered ? TIERS : [null];
+  const [openGroups, setOpenGroups] = useState({});
+  const isOpen = (section, groupKey) => openGroups[`${section}:${groupKey}`] ?? section !== 'possible';
 
   const groupsWithItems = GROUPS
     .map(g => ({ ...g, group: scanResult[g.key] }))
     .filter(g => g.group?.ok && g.group.items.length > 0);
   const failedGroups = GROUPS.filter(g => scanResult[g.key] && !scanResult[g.key].ok);
+  const withheld = protectedCount(scanResult);
+  const searchedPartly = Boolean(scanResult?.files?.truncated);
 
   const totalItems = groupsWithItems.reduce((sum, g) => sum + g.group.items.length, 0);
   const selectedCount = selected.size;
@@ -97,27 +108,47 @@ export default function LeftoverReview({ scanResult, selected, onToggle, onConfi
         <p key={key} className="text-[12px] text-[color:var(--text-muted)] mb-2">{t('leftoverReview.checkFailed', label.toLowerCase())}</p>
       ))}
 
-      <div className="space-y-3">
-        {groupsWithItems.map(({ key, label, group, removable = true }) => {
-          const open = openGroups[key];
+      <div className="space-y-5">
+        {sections.map((section) => {
+          const rows = groupsWithItems
+            .map((g) => ({
+              ...g,
+              entries: g.group.items.map((item, i) => ({ item, i })).filter(({ item }) => section === null || tierOf(item) === section)
+            }))
+            .filter((g) => g.entries.length > 0);
+          if (rows.length === 0) return null;
+          return (
+        <section key={section ?? 'all'} data-tier={section ?? undefined}>
+          {section && (
+            <div className="mb-2 px-1">
+              <h3 className="text-[11px] font-mono uppercase tracking-[0.14em] text-[color:var(--text-primary)]">
+                {t(`uninstallerV3.review.tier.${section}`)}
+              </h3>
+              <p className="text-[12px] text-[color:var(--text-muted)] mt-0.5">{t(`uninstallerV3.review.tier.${section}Hint`)}</p>
+            </div>
+          )}
+        <div className="space-y-3">
+        {rows.map(({ key, label, group, removable = true, entries }) => {
+          const open = isOpen(section, key);
           return (
             <div key={key} className="rounded-xl border border-[color:var(--border-subtle)] overflow-hidden bg-[color:var(--bg-panel)]">
               <button
-                onClick={() => setOpenGroups(o => ({ ...o, [key]: !o[key] }))}
+                aria-expanded={open}
+                onClick={() => setOpenGroups(o => ({ ...o, [`${section}:${key}`]: !open }))}
                 className="w-full flex items-center gap-2 px-4 py-3 text-left hover:bg-[color:var(--surface-subtle)] transition"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className={`text-[color:var(--text-muted)] transition-transform ${open ? 'rotate-90' : ''}`}>
                   <polyline points="9 18 15 12 9 6"></polyline>
                 </svg>
                 <span className="text-[13px] font-medium">{label}</span>
-                <span className="text-[11px] text-[color:var(--text-muted)] font-mono">({group.items.length})</span>
+                <span className="text-[11px] text-[color:var(--text-muted)] font-mono">({entries.length})</span>
                 {!removable && (
                   <span className="text-[11px] text-[color:var(--text-muted)] ml-auto">{t('leftoverReview.notRemoved')}</span>
                 )}
               </button>
               {open && (
                 <div className="divide-y divide-[color:var(--border-subtle)] border-t border-[color:var(--border-subtle)]">
-                  {group.items.map((item, i) => {
+                  {entries.map(({ item, i }) => {
                     const itemKey = `${key}:${i}`;
                     const size = formatBytes(item.sizeBytes);
                     return (
@@ -164,8 +195,18 @@ export default function LeftoverReview({ scanResult, selected, onToggle, onConfi
             </div>
           );
         })}
+        </div>
+        </section>
+          );
+        })}
       </div>
 
+      {withheld > 0 && (
+        <p className="text-[12px] text-[color:var(--text-muted)] mt-4">{t('uninstallerV3.review.protectedNote', withheld)}</p>
+      )}
+      {searchedPartly && (
+        <p className="text-[12px] text-[color:var(--text-muted)] mt-2">{t('uninstallerV3.review.truncatedNote')}</p>
+      )}
       {excluded > 0 && (
         <p className="text-[12px] text-[color:var(--text-muted)] mt-4">
           {t('leftoverReview.excludedNote', excluded)}

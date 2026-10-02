@@ -20,14 +20,22 @@ describe('selectionToRemoval', () => {
     expect(selectionToRemoval(scanResult, new Set())).toEqual({ files: [], registryKeys: [] });
   });
 
-  // The quarantine system moves files and exports registry keys; there is
-  // no equivalent reversible operation for a scheduled task. Passing one
-  // through would either do nothing or delete something unrecoverably --
-  // so they are reported on screen and never included in a removal.
-  it('never includes scheduled tasks, even if one is somehow selected', () => {
+  // A scheduled task has no Recycle Bin, so the backend exports its XML to
+  // the Backup Manager before it unregisters it. A ticked task therefore
+  // travels as the { name, path } pair that identifies it -- and the key is
+  // left out entirely when none was ticked, so a removal that involves no
+  // task looks exactly as it always did.
+  it('sends a ticked scheduled task as its name and path', () => {
     const selected = new Set(['files:0', 'scheduledTasks:0']);
     const result = selectionToRemoval(scanResult, selected);
-    expect(result).toEqual({ files: ['C:\\Program Files\\Dead'], registryKeys: [] });
+    expect(result).toEqual({
+      files: ['C:\\Program Files\\Dead'], registryKeys: [], scheduledTasks: [{ name: 'DeadUpdater', path: '\\' }]
+    });
+  });
+
+  it('drops a task with no name rather than sending undefined to the remover', () => {
+    const odd = { scheduledTasks: { ok: true, items: [{ path: '\\' }] } };
+    expect(selectionToRemoval(odd, new Set(['scheduledTasks:0'])).scheduledTasks).toBeUndefined();
   });
 
   it('tolerates a scan group that failed and has no items', () => {

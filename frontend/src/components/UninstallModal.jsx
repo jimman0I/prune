@@ -1,9 +1,15 @@
 import { useEffect, useRef, useState } from 'react';
 import { useSingleFlight } from '../hooks/useSingleFlight.js';
-import { scanForLeftovers, scanForcedUninstall, streamUninstall, removeQuarantined, appendHistoryEntry } from '../lib/api.js';
+import { scanForLeftovers, scanForcedUninstall, streamUninstall, removeQuarantined } from '../lib/api.js';
+import { recordHistory, patchHistory, removalFields } from '../lib/historyRecord.js';
 import { deriveSearchTerm } from '../lib/searchTerm.js';
 import LeftoverReview from './LeftoverReview.jsx';
-import { useSettings } from '../hooks/useSystemQueries.js';
+import ScanModePicker from './ScanModePicker.jsx';
+import TaskRemovalNotice from './TaskRemovalNotice.jsx';
+import { scanModeFrom, anchorsFor } from '../lib/leftoverScanMode.js';
+import { preselectKeys } from '../lib/leftoverTiers.js';
+import { useSettings, useInstallTraces } from '../hooks/useSystemQueries.js';
+import { traceForProgram } from '../lib/installTraces.js';
 import { leftoverDestinationFrom } from '../lib/leftoverDestination.js';
 import { useLanguage } from '../i18n/LanguageContext.jsx';
 
@@ -62,17 +68,22 @@ export function removalSummary(removal, messages = DEFAULT_REMOVAL_SUMMARY_MESSA
 }
 
 /** Turns the review's "group:index" selection keys back into the real
- * paths the removal call takes. Scheduled tasks are deliberately absent:
- * the quarantine system moves files and exports registry keys, and there
- * is no equivalent reversible operation for a scheduled task, so they are
- * reported but never removed (LeftoverReview says so on screen). */
+ * paths the removal call takes. A scheduled task has no Recycle Bin, so the
+ * backend exports its definition to the Backup Manager before unregistering
+ * it; here it travels as the { name, path } pair that identifies it, and the
+ * key is absent when no task was ticked. */
 export function selectionToRemoval(scanResult, selected) {
   const chosen = (groupKey) =>
     (scanResult[groupKey]?.items || [])
       .filter((_, i) => selected.has(`${groupKey}:${i}`))
       .filter((item) => item.path);
+  const tasks = (scanResult.scheduledTasks?.items || [])
+    .filter((_, i) => selected.has(`scheduledTasks:${i}`))
+    .filter((task) => typeof task.name === 'string' && task.name && typeof task.path === 'string')
+    .map((task) => ({ name: task.name, path: task.path }));
 
   return {
+    ...(tasks.length > 0 ? { scheduledTasks: tasks } : {}),
     files: chosen('files').map((item) => item.path),
     // A whole key travels as a bare path, the way it always has -- there
     // is nothing for an object form to carry, and wrapping it would make
@@ -121,7 +132,22 @@ export default function UninstallModal({ program, running = false, onClose, onBu
 
   // Three settings shape this dialog, each read so that a settings request
   // that failed leaves the dialog behaving exactly as it always did.
-  const { settings } = useSettings();
+  const { settings, save: saveSettings } = useSettings();
+  const { traces } = useInstallTraces();
+  const monitored = traceForProgram(program, traces);
+  // The depth of the leftover scan, chosen here and remembered. Until the
+  // person touches the picker it is whatever settings last held; touching it
+  // takes effect at once and is saved for the next uninstall.
+  // A standalone forced uninstall (software that is not listed at all) starts
+  // on Advanced -- there is no registry entry to anchor a shallower search --
+  // and its choice is not remembered: it is about this one program.
+  const standalone = program.standalone === true;
+  const [modeChoice, setModeChoice] = useState(standalone ? 'advanced' : null);
+  const scanMode = modeChoice ?? scanModeFrom(settings);
+  const chooseScanMode = (next) => {
+    setModeChoice(next);
+    if (!standalone) saveSettings?.mutate({ leftoverScanMode: next });
+  };
   const destination = leftoverDestinationFrom(settings);
   const preselect = settings?.preselectLeftovers === true;
   const scanAfter = settings?.scanLeftoversAfterUninstall !== false;
@@ -165,18 +191,13 @@ export default function UninstallModal({ program, running = false, onClose, onBu
   // as hidden, so a box ticked before the setting changed cannot skip it.
   const autoRemoveOffered = destination === 'quarantine';
 
-  // Every "group:index" key a scan result contains, regardless of any
-  // setting -- the one shape both selectEverythingIn (gated by the
-  // preselectLeftovers setting) and the auto-remove path (which ignores
-  // that setting on purpose: "remove ALL found leftovers" means literally
-  // everything) need to build.
-  const allFoundIn = (result) => {
-    const keys = [];
-    for (const groupKey of ['files', 'registryKeys']) {
-      (result[groupKey]?.items || []).forEach((_, i) => keys.push(`${groupKey}:${i}`));
-    }
-    return new Set(keys);
-  };
+  // The "group:index" keys the scan is confident enough to tick: certain and
+  // likely, never possible. The one set both selectEverythingIn (gated by
+  // the preselectLeftovers setting) and the auto-remove path (which ignores
+  // that setting on purpose) build. A "possible" item is a guess shared with
+  // other programs -- a publisher folder, one word of a name -- and is left
+  // for the person to choose even when everything else is removed unreviewed.
+  const allFoundIn = (result) => preselectKeys(result);
 
   const selectEverythingIn = (result) => {
     // Revo's "Check mark all leftovers by default", which it ships off, and
@@ -193,6 +214,9 @@ export default function UninstallModal({ program, running = false, onClose, onBu
     setError(null);
     setStep('uninstalling');
     try {
+      // The safety nets taken before the uninstaller ran, for the history.
+      let restorePoint = null;
+      let registryBackup = null;
       await streamUninstall(program.id, (type, data) => {
         // The before-uninstall steps announce themselves, so the dialog
         // says what it is waiting on instead of "running the uninstaller"
@@ -202,14 +226,26 @@ export default function UninstallModal({ program, running = false, onClose, onBu
         } else if (type !== 'restorePoint' && type !== 'registryBackup') {
           setProgressTitle(null);
         }
+        if (type === 'restorePoint' && typeof data?.created === 'boolean') {
+          restorePoint = { created: data.created, ...(typeof data.reason === 'string' ? { reason: data.reason } : {}) };
+        }
+        if (type === 'registryBackup' && data?.ok && typeof data.dir === 'string') registryBackup = data.dir;
       });
       // Recorded even if the dialog was closed while it ran: the program
       // really was uninstalled, and this is a log of that, not a next step.
-      appendHistoryEntry({ programName: program.name, publisher: program.publisher, sizeBytes: program.sizeBytes }).catch(() => {
-        // Best-effort logging -- a failed history write must never block
-        // or fail the uninstall flow itself, the uninstall already
-        // genuinely succeeded by this point.
-      });
+      // Best-effort -- see historyRecord.js: a failed history write must
+      // never block or fail the uninstall flow, which has already succeeded.
+      recordHistory({
+        kind: program.source === 'store' ? 'store' : 'uninstall',
+        programName: program.name,
+        publisher: program.publisher,
+        version: program.version,
+        sizeBytes: program.sizeBytes ?? undefined,
+        ...(scanAfter ? { scanMode } : {}),
+        ...(restorePoint ? { restorePoint } : {}),
+        ...(registryBackup ? { registryBackup } : {}),
+        outcome: 'uninstalled'
+      }).then((id) => { historyId.current = id; });
       if (!alive.current) return;
       if (!scanAfter) { setStep('noScan'); return; }
       // Revo's own screen after the real uninstaller runs: it does not
@@ -238,8 +274,16 @@ export default function UninstallModal({ program, running = false, onClose, onBu
       // same defect the forced path did: it searched for the full
       // DisplayName ("TriClaude 0.1.0"), which no folder is ever called,
       // so its leftover sweep found registry keys and never files.
-      const result = await scanForLeftovers(deriveSearchTerm(program.name), program.publisher);
+      const result = await scanForLeftovers(deriveSearchTerm(program.name), program.publisher, {
+        mode: scanMode,
+        anchors: anchorsFor(program),
+        programId: program.id,
+        // If this program was installed under the install monitor, its
+        // installer's own record of what it created joins the scan.
+        ...(monitored ? { traceId: monitored.id } : {})
+      });
       setScanResult(result);
+      patchHistory(historyId.current, { leftoversFound: foundCount(result) });
       // Revo's "Automatically delete all found leftovers": skip the manual
       // review screen and remove everything the scan just found, straight
       // away. It still goes through the exact same quarantine call the
@@ -250,9 +294,10 @@ export default function UninstallModal({ program, running = false, onClose, onBu
         setSelected(full);
         setStep('removing');
         try {
-          const { files, registryKeys } = selectionToRemoval(result, full);
-          const manifest = await removeQuarantined({ programName: program.name, files, registryKeys, destination });
+          const { files, registryKeys, scheduledTasks } = selectionToRemoval(result, full);
+          const manifest = await removeQuarantined({ programName: program.name, files, registryKeys, ...(scheduledTasks ? { scheduledTasks } : {}), destination });
           setRemoval(manifest);
+          recordRemoval(manifest, result);
           setStep('done');
         } catch (err) {
           setError(err.message);
@@ -268,6 +313,25 @@ export default function UninstallModal({ program, running = false, onClose, onBu
     }
   });
 
+  // The history entry this uninstall wrote, so the review's outcome can be
+  // added to it. A forced removal has no earlier entry (nothing was
+  // uninstalled), so it writes one of its own when the removal is done.
+  const historyId = useRef(null);
+  const foundCount = (result) => ['files', 'registryKeys', 'scheduledTasks']
+    .reduce((sum, group) => sum + (result?.[group]?.items?.length ?? 0), 0);
+  const recordRemoval = (manifest, result) => {
+    const fields = removalFields(manifest, result);
+    if (historyId.current) {
+      patchHistory(historyId.current, fields);
+    } else {
+      recordHistory({
+        kind: 'forced',
+        programName: program.name, publisher: program.publisher, version: program.version,
+        sizeBytes: program.sizeBytes ?? undefined, scanMode, ...fields
+      });
+    }
+  };
+
   const startForcedScan = async () => {
     setError(null);
     setStep('scanning');
@@ -275,7 +339,9 @@ export default function UninstallModal({ program, running = false, onClose, onBu
       const result = await scanForcedUninstall({
         name: searchTerm.trim(),
         publisher: program.publisher,
-        registryKey: program.registryKey
+        registryKey: program.registryKey,
+        mode: scanMode,
+        anchors: anchorsFor(program)
       });
       setScanResult(result);
       selectEverythingIn(result);
@@ -307,13 +373,14 @@ export default function UninstallModal({ program, running = false, onClose, onBu
    * This one creates a quarantine batch, so a second pass would make a
    * second batch and then fail finding the files already moved. */
   const handleConfirm = useSingleFlight(async () => {
-    const { files, registryKeys } = selectionToRemoval(scanResult, selected);
-    if (files.length === 0 && registryKeys.length === 0) { onClose(); return; }
+    const { files, registryKeys, scheduledTasks } = selectionToRemoval(scanResult, selected);
+    if (files.length === 0 && registryKeys.length === 0 && !scheduledTasks) { onClose(); return; }
     setError(null);
     setStep('removing');
     try {
-      const manifest = await removeQuarantined({ programName: program.name, files, registryKeys, destination });
+      const manifest = await removeQuarantined({ programName: program.name, files, registryKeys, ...(scheduledTasks ? { scheduledTasks } : {}), destination });
       setRemoval(manifest);
+      recordRemoval(manifest, scanResult);
       setStep('done');
     } catch (err) {
       setError(err.message);
@@ -332,7 +399,9 @@ export default function UninstallModal({ program, running = false, onClose, onBu
     <div data-modal-panel className="glass-panel rounded-2xl overflow-hidden max-w-[680px] w-full flex flex-col max-h-[85vh]">
       <div className="flex items-center justify-between gap-4 px-6 py-5 border-b border-[color:var(--border-subtle)] shrink-0">
         <h2 className="text-[15px] font-semibold tracking-tight text-[color:var(--text-primary)] truncate">
-          {broken ? t('uninstallModal.titleForce', program.name) : t('uninstallModal.titleNormal', program.name)}
+          {standalone
+            ? t('uninstallerV3.forced.modalTitle', program.name)
+            : broken ? t('uninstallModal.titleForce', program.name) : t('uninstallModal.titleNormal', program.name)}
         </h2>
         <button
           onClick={onClose}
@@ -365,19 +434,32 @@ export default function UninstallModal({ program, running = false, onClose, onBu
             )}
             {broken ? (
               <>
-                <div className="flex items-start gap-2.5 mb-5 px-3.5 py-3 rounded-xl bg-[color:var(--warning-soft)] border border-[color:var(--warning)]/25">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="text-[color:var(--warning)] mt-0.5 shrink-0">
-                    <circle cx="12" cy="12" r="10"></circle>
-                    <line x1="12" y1="8" x2="12" y2="12"></line>
-                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
-                  </svg>
-                  <div className="text-[12.5px] text-[color:var(--warning)] leading-relaxed">
-                    {t('uninstallModal.orphanedWarning', program.health.reason)}
-                  </div>
-                </div>
-                <p className="text-[13px] text-[color:var(--text-secondary)] mb-4">
-                  {t('uninstallModal.brokenIntro')}
-                </p>
+                {standalone ? (
+                  <>
+                    <p className="text-[13px] text-[color:var(--text-secondary)] mb-3">{t('uninstallerV3.forced.scanIntro')}</p>
+                    {program.installLocation && (
+                      <p className="text-[11.5px] text-[color:var(--text-muted)] font-mono mb-4 break-all select-text">
+                        {t('uninstallerV3.forced.folderLine', program.installLocation)}
+                      </p>
+                    )}
+                  </>
+                ) : (
+                  <>
+                    <div className="flex items-start gap-2.5 mb-5 px-3.5 py-3 rounded-xl bg-[color:var(--warning-soft)] border border-[color:var(--warning)]/25">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="text-[color:var(--warning)] mt-0.5 shrink-0">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="8" x2="12" y2="12"></line>
+                        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                      </svg>
+                      <div className="text-[12.5px] text-[color:var(--warning)] leading-relaxed">
+                        {t('uninstallModal.orphanedWarning', program.health.reason)}
+                      </div>
+                    </div>
+                    <p className="text-[13px] text-[color:var(--text-secondary)] mb-4">
+                      {t('uninstallModal.brokenIntro')}
+                    </p>
+                  </>
+                )}
 
                 <label className="block text-[11px] text-[color:var(--text-muted)] font-mono uppercase tracking-[0.14em] mb-1.5">
                   {t('uninstallModal.searchForLabel')}
@@ -387,9 +469,14 @@ export default function UninstallModal({ program, running = false, onClose, onBu
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="w-full bg-[color:var(--bg-panel)] border border-[color:var(--border-subtle)] rounded-xl px-3.5 py-2.5 text-[13px] font-mono focus:outline-none focus:border-[color:var(--accent-primary)] focus:ring-4 focus:ring-[color:var(--accent-primary)]/10 transition"
                 />
-                <p className="text-[12px] text-[color:var(--text-muted)] mt-1.5 mb-6">
-                  {t('uninstallModal.searchHint', program.name)}
-                </p>
+                {!standalone && (
+                  <p className="text-[12px] text-[color:var(--text-muted)] mt-1.5 mb-5">
+                    {t('uninstallModal.searchHint', program.name)}
+                  </p>
+                )}
+                {standalone && <div className="mb-5" />}
+
+                <ScanModePicker mode={scanMode} onChange={chooseScanMode} />
 
                 {error && <p className="text-[12.5px] text-[color:var(--danger)] mb-4 select-text">{t('uninstallModal.scanFailed', error)}</p>}
                 <button className="btn-primary" onClick={startForcedScan} disabled={!searchTerm.trim()}>
@@ -403,6 +490,7 @@ export default function UninstallModal({ program, running = false, onClose, onBu
                 </p>
                 <p className="text-[11.5px] text-[color:var(--text-muted)] font-mono mb-6 break-all select-text">{command}</p>
                 {error && <p className="text-[12.5px] text-[color:var(--danger)] mb-4 select-text">{t('uninstallModal.uninstallFailed', error)}</p>}
+                {scanAfter && <ScanModePicker mode={scanMode} onChange={chooseScanMode} />}
                 {autoRemoveOffered && (
                   <label className="flex items-center gap-2.5 mb-5 cursor-pointer select-none">
                     <input
@@ -511,6 +599,8 @@ export default function UninstallModal({ program, running = false, onClose, onBu
                 </div>
               </div>
             )}
+
+            <TaskRemovalNotice result={removal.scheduledTasks} />
 
             {removal.restorePoint?.created === false && (
               <p className="text-[12px] text-[color:var(--text-muted)] mb-5">

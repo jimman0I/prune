@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { mkdtempSync, mkdirSync, readdirSync, existsSync, rmSync, writeFileSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, readdirSync, readFileSync, existsSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { createRegistryBackup, runPreUninstall, REGISTRY_BACKUP_KEYS, KEEP_BACKUPS } from './preUninstall.js';
@@ -34,6 +34,15 @@ describe('createRegistryBackup', () => {
     expect(result.dir.startsWith(root)).toBe(true);
     expect(readdirSync(result.dir).filter((f) => f.endsWith('.reg'))).toHaveLength(2);
     expect(result.sizeBytes).toBeGreaterThan(0);
+  });
+
+  it('writes the manifest the Backup Manager lists and restores from', async () => {
+    const result = await createRegistryBackup({ programName: 'Thing', root, exportKey: fakeExport, now: () => 1234 });
+    const manifest = JSON.parse(readFileSync(join(result.dir, 'backup.json'), 'utf8'));
+    expect(manifest).toEqual({
+      kind: 'registry', programName: 'Thing', createdAt: 1234,
+      files: ['1-HKLM_SOFTWARE.reg', '2-HKCU_Software.reg']
+    });
   });
 
   it('keeps only the newest few, because each one is about 140 MB', async () => {

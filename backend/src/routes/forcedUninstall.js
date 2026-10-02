@@ -1,5 +1,9 @@
 import { Router } from 'express';
 import { scanForcedUninstall } from '../services/forcedUninstall.js';
+import { normalizeScanMode } from '../services/leftoverModes.js';
+import { getSettings } from '../services/settings.js';
+import { anchorsFrom } from './leftovers.js';
+import { listInstalledPrograms } from '../services/programs.js';
 
 const router = Router();
 
@@ -9,9 +13,15 @@ const router = Router();
  * POST /api/quarantine/remove, which already exists and makes a restore
  * point first. */
 router.post('/scan', async (req, res) => {
-  const { name, publisher, registryKey } = req.body || {};
+  const { name, publisher, registryKey, mode, anchors } = req.body || {};
   try {
-    res.json(await scanForcedUninstall({ name, publisher, registryKey }));
+    const settings = await getSettings().catch(() => ({}));
+    res.json(await scanForcedUninstall({
+      name, publisher, registryKey,
+      mode: normalizeScanMode(mode ?? settings?.leftoverScanMode),
+      anchors: anchorsFrom(anchors),
+      installedPrograms: listInstalledPrograms().catch(() => [])
+    }));
   } catch (err) {
     // A missing name is the caller's mistake, not a server fault.
     const status = /required/i.test(err.message) ? 400 : 500;

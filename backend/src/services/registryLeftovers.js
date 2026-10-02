@@ -1,5 +1,5 @@
 import { runPowerShellJson } from './powershell.js';
-import { buildSearchPattern } from './leftoverPattern.js';
+import { buildSearchPattern, psQuote } from './leftoverPattern.js';
 
 /** Where a program's registry leftovers actually live.
  *
@@ -32,6 +32,18 @@ const SOFTWARE_ROOTS = [
 ];
 
 const CLASSES_ROOTS = ['HKCU:\\Software\\Classes', 'HKLM:\\Software\\Classes'];
+
+const CLSID_ROOTS = [
+  'HKCU:\\Software\\Classes\\CLSID',
+  'HKLM:\\Software\\Classes\\CLSID',
+  'HKLM:\\Software\\Classes\\WOW6432Node\\CLSID'
+];
+
+const REGISTERED_APPLICATIONS_ROOTS = [
+  'HKCU:\\Software\\RegisteredApplications',
+  'HKLM:\\Software\\RegisteredApplications',
+  'HKLM:\\Software\\WOW6432Node\\RegisteredApplications'
+];
 
 const UNINSTALL_ROOTS = [
   'HKLM:\\Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall',
@@ -88,6 +100,12 @@ export function canonicalKeyPath(path) {
  * one value out of the Run key is the entire point of reading it. */
 const PROTECTED_KEYS = new Set([
   ...SOFTWARE_ROOTS, ...CLASSES_ROOTS, ...UNINSTALL_ROOTS, ...APP_PATH_ROOTS, ...RUN_ROOTS,
+  ...CLSID_ROOTS, ...REGISTERED_APPLICATIONS_ROOTS,
+  'HKLM:\\Software\\Classes\\Installer',
+  'HKLM:\\Software\\Classes\\Interface',
+  'HKLM:\\Software\\Classes\\TypeLib',
+  'HKLM:\\Software\\Classes\\AppID',
+  'HKLM:\\Software\\Classes\\WOW6432Node',
   'HKLM:\\Software\\Microsoft',
   'HKCU:\\Software\\Microsoft',
   'HKLM:\\Software\\WOW6432Node\\Microsoft',
@@ -122,19 +140,86 @@ function psArray(paths) {
   return `@(${paths.map((p) => `'${p}'`).join(',')})`;
 }
 
+/** The extra passes only the Advanced scan makes.
+ *
+ *  - A third level under each vendor key, for software that nests deeper
+ *    than Vendor\Product. Microsoft and the policy hive are not entered:
+ *    they hold every other program's keys and a name match inside them is
+ *    far more likely to be Windows than a leftover.
+ *  - COM registrations. A program's CLSIDs outlive it and are named by GUID,
+ *    so they are matched on their label and on the path of the server they
+ *    load, which is where the program's name actually appears.
+ *  - RegisteredApplications, a list of values rather than keys. */
+const ADVANCED_REGISTRY_PASSES = `
+# Advanced: Vendor\\Product\\Sub, still without entering Microsoft.
+foreach ($root in ${psArray(SOFTWARE_ROOTS)}) {
+  foreach ($vendor in (Get-ChildItem -Path $root -ErrorAction SilentlyContinue)) {
+    if ($vendor.PSChildName -match '^(Classes|WOW6432Node|Microsoft|Policies)$') { continue }
+    foreach ($product in (Get-ChildItem -Path $vendor.PSPath -ErrorAction SilentlyContinue)) {
+      foreach ($key in (Get-ChildItem -Path $product.PSPath -ErrorAction SilentlyContinue)) {
+        if ($key.PSChildName -match $pattern) { Add-Found $key.Name $null $false }
+      }
+    }
+  }
+}
+
+# Advanced: COM registrations, on the label and on the server they load.
+foreach ($root in ${psArray(CLSID_ROOTS)}) {
+  foreach ($key in (Get-ChildItem -Path $root -ErrorAction SilentlyContinue)) {
+    $label = [string]$key.GetValue('')
+    $hit = $label -match $pattern
+    $how = 'name'
+    foreach ($server in 'InprocServer32','LocalServer32') {
+      $sub = $key.OpenSubKey($server)
+      if ($sub) {
+        $command = [string]$sub.GetValue('')
+        $sub.Close()
+        if (Test-Anchored $command) { $hit = $true; $how = 'anchor'; break }
+        if (-not $hit -and $command -match $pattern) { $hit = $true }
+      }
+    }
+    if ($hit) { Add-Found $key.Name $null $false $how $label }
+  }
+}
+
+# Advanced: RegisteredApplications values.
+foreach ($root in ${psArray(REGISTERED_APPLICATIONS_ROOTS)}) {
+  $key = Get-Item -Path $root -ErrorAction SilentlyContinue
+  if ($key) {
+    foreach ($valueName in $key.GetValueNames()) {
+      if ($valueName -match $pattern -or ([string]$key.GetValue($valueName)) -match $pattern) {
+        Add-Found $key.Name $valueName $false 'name' $valueName
+      }
+    }
+  }
+}
+`;
+
 /** The whole registry sweep as one script.
  *
  * One call rather than six: each pass is cheap, and six trips through
  * powershell.exe would spend more time starting processes than searching.
  * Exported so a test can run it against real PowerShell -- a mocked test
  * cannot see a script that does not parse. */
-export function buildRegistryScript(pattern) {
+export function buildRegistryScript(pattern, { advanced = false, anchors = [] } = {}) {
   return `
 $ErrorActionPreference = 'SilentlyContinue'
-$pattern = '${pattern}'
+$pattern = '${psQuote(pattern)}'
+# The program's own folders, lower-cased with a trailing separator, so that a
+# command line merely CONTAINING one is anchored and "...\\foo\\" never matches
+# "...\\foobar\\".
+$anchors = ${anchors.length > 0 ? `@(${anchors.map((a) => `'${psQuote(String(a).toLowerCase().replace(/[\\/]+$/, ''))}\\'`).join(',')})` : '@()'}
 $found = New-Object System.Collections.ArrayList
-function Add-Found($path, $valueName, $isUninstall) {
-  [void]$found.Add([pscustomobject]@{ path = $path; valueName = $valueName; isUninstallEntry = $isUninstall })
+function Add-Found($path, $valueName, $isUninstall, $how, $text) {
+  [void]$found.Add([pscustomobject]@{ path = $path; valueName = $valueName; isUninstallEntry = $isUninstall; how = $how; text = $text })
+}
+function Test-Anchored($value) {
+  if (-not $value) { return $false }
+  # A trailing separator is added so that a value naming the folder itself
+  # ("C:\\Apps\\Foo") is anchored by "c:\\apps\\foo\\" too.
+  $lower = ([string]$value).ToLowerInvariant().TrimEnd('\\') + '\\'
+  foreach ($anchor in $anchors) { if ($lower.Contains($anchor)) { return $true } }
+  return $false
 }
 
 # Vendor and product keys named for the program, one level down.
@@ -155,22 +240,25 @@ foreach ($root in ${psArray(SOFTWARE_ROOTS)}) {
     }
   }
 }
-
+${advanced ? ADVANCED_REGISTRY_PASSES : ''}
 # The Add/Remove Programs entry. GetValue on the key object rather than
 # Get-ItemProperty: this runs for every one of several hundred entries, and
 # the cmdlet costs far more per call than the method it wraps.
 foreach ($root in ${psArray(UNINSTALL_ROOTS)}) {
   foreach ($key in (Get-ChildItem -Path $root -ErrorAction SilentlyContinue)) {
     $display = [string]$key.GetValue('DisplayName')
-    if ($key.PSChildName -match $pattern -or $display -match $pattern) {
-      Add-Found $key.Name $null $true
+    if ((Test-Anchored $key.GetValue('InstallLocation')) -or (Test-Anchored $key.GetValue('UninstallString')) -or (Test-Anchored $key.GetValue('DisplayIcon'))) {
+      Add-Found $key.Name $null $true 'anchor' $display
+    } elseif ($key.PSChildName -match $pattern -or $display -match $pattern) {
+      Add-Found $key.Name $null $true 'name' $display
     }
   }
 }
 
 foreach ($root in ${psArray(APP_PATH_ROOTS)}) {
   foreach ($key in (Get-ChildItem -Path $root -ErrorAction SilentlyContinue)) {
-    if ($key.PSChildName -match $pattern) { Add-Found $key.Name $null $false }
+    if (Test-Anchored $key.GetValue('')) { Add-Found $key.Name $null $false 'anchor' $null }
+    elseif ($key.PSChildName -match $pattern) { Add-Found $key.Name $null $false 'name' $null }
   }
 }
 
@@ -182,8 +270,10 @@ foreach ($root in ${psArray(RUN_ROOTS)}) {
   if ($key) {
     foreach ($valueName in $key.GetValueNames()) {
       $data = [string]$key.GetValue($valueName)
-      if ($valueName -match $pattern -or $data -match $pattern) {
-        Add-Found $key.Name $valueName $false
+      if (Test-Anchored $data) {
+        Add-Found $key.Name $valueName $false 'anchor' ($valueName + ' ' + $data)
+      } elseif ($valueName -match $pattern -or $data -match $pattern) {
+        Add-Found $key.Name $valueName $false 'name' ($valueName + ' ' + $data)
       }
     }
   }
@@ -203,7 +293,10 @@ export function normalizeRegistryItems(raw) {
   const seen = new Set();
   const items = [];
 
-  for (const entry of raw || []) {
+  // An entry the program's own folder vouches for comes first, so when the
+  // same key was also reached by name it is the anchored one that survives.
+  const ordered = [...(raw || [])].sort((a, b) => (b?.how === 'anchor') - (a?.how === 'anchor'));
+  for (const entry of ordered) {
     const path = typeof entry?.path === 'string' ? entry.path.trim() : '';
     if (!path) continue;
     const valueName = typeof entry?.valueName === 'string' && entry.valueName !== '' ? entry.valueName : null;
@@ -216,6 +309,11 @@ export function normalizeRegistryItems(raw) {
     const item = { path };
     if (valueName !== null) item.valueName = valueName;
     if (entry.isUninstallEntry === true) item.isUninstallEntry = true;
+    // What the scan matched on, for the confidence tier. `anchored` means the
+    // program's own folder is named in it; `text` is the label or command
+    // that matched. Both are consumed by leftoverScan and not shown.
+    if (entry.how === 'anchor') item.anchored = true;
+    if (typeof entry.text === 'string' && entry.text.trim() !== '') item.text = entry.text.slice(0, 300);
     items.push(item);
   }
 
@@ -226,12 +324,42 @@ export function normalizeRegistryItems(raw) {
  *
  * Same contract as the other leftover scans: { ok, items }, and a failure
  * is the caller's to downgrade rather than this function's to hide. */
-export async function scanRegistryLeftovers(name, publisher) {
-  const pattern = buildSearchPattern(name, publisher);
-  // An empty pattern matches every key on the machine.
-  if (pattern === null) return { ok: true, items: [] };
+export async function scanRegistryLeftovers(name, publisher, { advanced = false, extraPattern = null, anchorDirs = [] } = {}) {
+  const base = buildSearchPattern(name, publisher);
+  // An empty pattern matches every key on the machine. With nothing to match
+  // on by name the sweep can still run on the program's folders alone, with a
+  // pattern that matches nothing.
+  if (base === null && anchorDirs.length === 0) return { ok: true, items: [] };
+  const named = base ?? '(?!)';
+  const pattern = advanced && extraPattern ? `${named}|${extraPattern}` : named;
 
-  const raw = await runPowerShellJson(buildRegistryScript(pattern));
+  // The Advanced sweep reads thousands of COM keys; the default 15 seconds
+  // and a retry would time it out and then do the whole thing over again.
+  const options = advanced ? { timeoutMs: 120000, retries: 0 } : undefined;
+  const raw = await runPowerShellJson(buildRegistryScript(pattern, { advanced, anchors: anchorDirs }), options);
+  const list = raw ? (Array.isArray(raw) ? raw : [raw]) : [];
+  return { ok: true, items: normalizeRegistryItems(list) };
+}
+
+/** Whether a key path is one this module may hand to PowerShell: a PowerShell
+ * drive path in one of the two hives a user program registers itself in. The
+ * path becomes a single-quoted literal, so the only character that needs
+ * care is the quote; control characters never occur in a real key path. */
+function isScannableKeyPath(path) {
+  return typeof path === 'string' && /^HK(LM|CU):\\[^\u0000-\u001f]+$/i.test(path);
+}
+
+/** The Safe scan's registry half: the program's own key and nothing else,
+ * reported only if it is still there. A working uninstaller removes its own
+ * key, so on a clean uninstall this is usually empty -- which is the
+ * correct, honest answer for a scan that guesses nothing. */
+export async function scanRegistryAnchor(registryKey) {
+  if (!isScannableKeyPath(registryKey)) return { ok: true, items: [] };
+  const literal = registryKey.replace(/'/g, "''");
+  const raw = await runPowerShellJson(`
+$key = Get-Item -LiteralPath '${literal}' -ErrorAction SilentlyContinue
+if ($key) { [pscustomobject]@{ path = $key.Name; valueName = $null; isUninstallEntry = $true } | ConvertTo-Json -Compress }
+`);
   const list = raw ? (Array.isArray(raw) ? raw : [raw]) : [];
   return { ok: true, items: normalizeRegistryItems(list) };
 }

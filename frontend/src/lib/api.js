@@ -264,11 +264,19 @@ export async function fetchRunningPrograms() {
   return data.running ?? {};
 }
 
-export async function scanForLeftovers(name, publisher) {
+/** Leftover scan. `mode` ('safe' | 'moderate' | 'advanced') and `anchors`
+ * (the program's own install location and registry key) are optional: left
+ * out, the backend uses the remembered mode and searches by name alone. */
+export async function scanForLeftovers(name, publisher, { mode, anchors, programId, traceId } = {}) {
   const res = await fetch(`${API_URL}/leftovers/scan`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ name, publisher })
+    body: JSON.stringify({
+      name, publisher,
+      ...(mode ? { mode } : {}), ...(anchors ? { anchors } : {}), ...(programId ? { programId } : {}),
+      // The id of the install monitor's record of this program, when it has one.
+      ...(traceId ? { traceId } : {})
+    })
   });
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
@@ -282,24 +290,125 @@ export async function scanForLeftovers(name, publisher) {
  *
  * Scans only. Removal is removeQuarantined below, the same call the
  * ordinary flow makes. */
-export async function scanForcedUninstall({ name, publisher, registryKey }) {
+export async function scanForcedUninstall({ name, publisher, registryKey, mode, anchors }) {
   const res = await fetch(`${API_URL}/forced-uninstall/scan`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ name, publisher, registryKey })
+    body: JSON.stringify({ name, publisher, registryKey, ...(mode ? { mode } : {}), ...(anchors ? { anchors } : {}) })
   });
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
   return data;
 }
 
-export async function removeQuarantined({ programName, files, registryKeys, destination }) {
+/** Opens the extension's own page in its browser. Takes the row id (the
+ * backend looks the browser, profile and extension up again) and resolves
+ * { ok, browser }. Prune cannot remove an extension itself. */
+export async function manageBrowserExtension(id) {
+  const res = await fetch(`${API_URL}/programs/extensions/manage`, {
+    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id })
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
+  return data;
+}
+
+/* ------------------------------------------------------------ backups */
+
+async function backupCall(path, options) {
+  const res = await fetch(`${API_URL}/backups${path}`, options);
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
+  return data;
+}
+
+/** Registry exports and scheduled-task definitions Prune saved before it
+ * changed something with no Recycle Bin, newest first. */
+export async function fetchBackups() {
+  return (await backupCall('')).backups ?? [];
+}
+/** Puts one back. Resolves { kind, restored, failed: [...], elevated }. */
+export const restoreBackup = (id) => backupCall(`/${encodeURIComponent(id)}/restore`, { method: 'POST' });
+export const deleteBackup = (id) => backupCall(`/${encodeURIComponent(id)}`, { method: 'DELETE' });
+
+/* ------------------------------------------------------------- hunter */
+
+async function hunterCall(path) {
+  const res = await fetch(`${API_URL}/hunter${path}`, { method: 'POST' });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
+  return data;
+}
+
+/** Starts a hunt and resolves when a window was clicked, the hunt was
+ * cancelled, or it timed out (about 30 seconds): { status, ... }. A picked
+ * window comes with `program` and `startupItems` when they are known. */
+export const startHunt = () => hunterCall('/start');
+export const cancelHunt = () => hunterCall('/cancel');
+
+/** Ends the process Hunter named. Never throws for a refusal: resolves
+ * { ok: false, error } so the screen can say why. */
+export async function endHuntedProcess(pid, exePath) {
+  try {
+    const res = await fetch(`${API_URL}/hunter/end-process`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ pid, exePath })
+    });
+    return await res.json();
+  } catch (err) {
+    return { ok: false, error: err.message };
+  }
+}
+
+/* ---------------------------------------------------- install monitor */
+
+async function monitorCall(path, options) {
+  const res = await fetch(`${API_URL}/install-monitor${path}`, options);
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
+  return data;
+}
+
+/** Takes the "before" snapshot and starts the installer. Resolves once the
+ * installer is running; the snapshot makes that take several seconds. */
+export function startInstallMonitor(installerPath) {
+  return monitorCall('/start', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ installerPath })
+  });
+}
+/** Where the monitor is: { state: 'idle' | 'installing' | 'exited' | 'analyzing' | 'done' | 'failed', ... }. */
+export const fetchInstallMonitor = () => monitorCall('/session');
+/** "Done installing". Answers at once; poll fetchInstallMonitor for the result. */
+export const finishInstallMonitor = () => monitorCall('/session/finish', { method: 'POST' });
+export const cancelInstallMonitor = () => monitorCall('/session/cancel', { method: 'POST' });
+
+export async function fetchInstallTraces() {
+  const data = await monitorCall('/traces');
+  return data.traces ?? [];
+}
+export const deleteInstallTrace = (id) => monitorCall(`/traces/${encodeURIComponent(id)}`, { method: 'DELETE' });
+
+/** Shows a native dialog ('folder' or 'installer') and resolves { path },
+ * where path is null if it was cancelled. The dialog is the backend's, not
+ * the window's: the renderer has no file API. */
+export async function pickPath(kind) {
+  const res = await fetch(`${API_URL}/picker/${encodeURIComponent(kind)}`, { method: 'POST' });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
+  return data;
+}
+
+export async function removeQuarantined({ programName, files, registryKeys, scheduledTasks, destination }) {
   const res = await fetch(`${API_URL}/quarantine/remove`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     // Only when the dialog chose one. The backend reads its absence as
-    // Quarantine, which is what every caller before this meant.
-    body: JSON.stringify({ programName, files, registryKeys, ...(destination ? { destination } : {}) })
+    // Quarantine, which is what every caller before this meant. Scheduled
+    // tasks ({ name, path } pairs) likewise only when some were ticked.
+    body: JSON.stringify({
+      programName, files, registryKeys,
+      ...(scheduledTasks?.length ? { scheduledTasks } : {}),
+      ...(destination ? { destination } : {})
+    })
   });
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
@@ -842,19 +951,45 @@ async function fetchDiskScanStreamed(path, signal, onProgress) {
   return data;
 }
 
-export async function fetchUninstallHistory() {
-  const res = await fetch(`${API_URL}/uninstall-history`);
+/** The five latest entries (the Dashboard), or every one with { all: true }
+ * (the History view). */
+export async function fetchUninstallHistory({ all = false } = {}) {
+  const res = await fetch(`${API_URL}/uninstall-history${all ? '?all=1' : ''}`);
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
   return data.entries ?? [];
 }
 
-export async function appendHistoryEntry({ programName, publisher, sizeBytes }) {
+/** Writes one history entry. Takes whatever the entry knows -- the backend
+ * keeps only the fields it recognises -- and resolves { ok, id }, or
+ * { ok, skipped } when the history is turned off. */
+export async function appendHistoryEntry(fields) {
   const res = await fetch(`${API_URL}/uninstall-history`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ programName, publisher, sizeBytes })
+    body: JSON.stringify(fields)
   });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
+  return data;
+}
+
+/** Adds what became known after the entry was written (how the leftover
+ * review went). */
+export async function updateHistoryEntry(id, fields) {
+  const res = await fetch(`${API_URL}/uninstall-history/${encodeURIComponent(id)}`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(fields)
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
+  return data;
+}
+
+/** Deletes the whole history. */
+export async function clearUninstallHistory() {
+  const res = await fetch(`${API_URL}/uninstall-history`, { method: 'DELETE' });
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
   return data;

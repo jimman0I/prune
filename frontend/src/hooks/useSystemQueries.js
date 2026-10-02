@@ -4,7 +4,8 @@ import {
   fetchStartupItems, fetchStartupIcons, setStartupItemEnabled,
   fetchQuarantineBatches, restoreQuarantineBatch, deleteQuarantineBatch, emptyQuarantine,
   fetchSettings, updateSettings, fetchUpdateCheck,
-  fetchDiskSpace, fetchDiskHealth
+  fetchDiskSpace, fetchDiskHealth, fetchInstallTraces, fetchBackups, restoreBackup, deleteBackup,
+  fetchUninstallHistory, clearUninstallHistory
 } from '../lib/api.js';
 import { keys } from '../lib/queryClient.js';
 import { applyEnabled, toggleOutcome, enabledStateOf } from '../lib/startupToggleState.js';
@@ -163,6 +164,53 @@ export function useQuarantine() {
     remove: useMutation({ mutationFn: deleteQuarantineBatch, onSuccess: invalidate }),
     empty: useMutation({ mutationFn: emptyQuarantine, onSuccess: invalidate })
   };
+}
+
+/* -------------------------------------------------------------- backups */
+
+/** The Backup Manager's list, and restoring or deleting one. Each action
+ * re-reads the list rather than splicing the row out, like the quarantine. */
+export function useBackups() {
+  const queryClient = useQueryClient();
+  const invalidate = () => queryClient.invalidateQueries({ queryKey: keys.backups });
+  const backups = useQuery({ queryKey: keys.backups, queryFn: () => fetchBackups() });
+  return {
+    backups: backups.data ?? [],
+    loading: backups.isPending,
+    error: backups.error ? backups.error.message : null,
+    restore: useMutation({ mutationFn: (id) => restoreBackup(id), onSuccess: invalidate }),
+    remove: useMutation({ mutationFn: (id) => deleteBackup(id), onSuccess: invalidate })
+  };
+}
+
+/* -------------------------------------------------------------- history */
+
+/** Every uninstall Prune has recorded, for the History view. The Dashboard
+ * reads its own five. Clearing re-reads the list; it also refreshes the
+ * Dashboard's key, which shares the prefix. */
+export function useUninstallHistory() {
+  const queryClient = useQueryClient();
+  const query = useQuery({ queryKey: [...keys.uninstallHistory, 'all'], queryFn: () => fetchUninstallHistory({ all: true }) });
+  return {
+    entries: query.data ?? [],
+    loading: query.isPending,
+    error: query.error ? query.error.message : null,
+    clear: useMutation({
+      mutationFn: () => clearUninstallHistory(),
+      onSuccess: () => queryClient.invalidateQueries({ queryKey: keys.uninstallHistory })
+    })
+  };
+}
+
+/* ------------------------------------------------------- install traces */
+
+/** The install monitor's records, for the Monitored badge and for finding the
+ * record of the program being uninstalled. A failed read is an empty list:
+ * without traces everything still works, just without the extra evidence. */
+export function useInstallTraces() {
+  // Called inside a function so the import is only touched when it runs.
+  const query = useQuery({ queryKey: keys.installTraces, queryFn: () => fetchInstallTraces(), retry: false });
+  return { traces: query.data ?? [], loading: query.isPending };
 }
 
 /* ------------------------------------------------------------- settings */
