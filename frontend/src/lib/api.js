@@ -630,12 +630,25 @@ export async function fetchDiskSpace() {
  *
  * A declined prompt resolves to { cancelled: true } rather than throwing.
  * The user answered the question; the answer was no. */
-export async function scanDriveFast(driveLetter = 'C') {
+export async function scanDriveFast(driveLetters = ['C']) {
+  // Every drive in ONE request: the backend hands them to a single helper,
+  // so choosing C: and D: is one consent prompt rather than two.
+  const letters = Array.isArray(driveLetters) ? driveLetters : [driveLetters];
   const res = await fetch(`${API_URL}/mft-scan`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ driveLetter })
+    body: JSON.stringify({ driveLetters: letters })
   });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
+  return data;
+}
+
+/** The local drives the Disk Map can scan, and which one holds Windows:
+ * { systemDrive: 'C', drives: [{ letter, label, fileSystem, totalBytes,
+ * freeBytes, removable, system, ntfs }] }. */
+export async function fetchDrives() {
+  const res = await fetch(`${API_URL}/drives`);
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
   return data;

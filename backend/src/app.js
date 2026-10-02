@@ -29,6 +29,7 @@ import deepCleanRoutes from './routes/deepClean.js';
 import diskHealthRoutes from './routes/diskHealth.js';
 import forcedUninstallRoutes from './routes/forcedUninstall.js';
 import mftScanRoutes from './routes/mftScan.js';
+import drivesRoutes from './routes/drives.js';
 import fileIconsRoutes from './routes/fileIcons.js';
 import updateCheckRoutes from './routes/updateCheck.js';
 import bugReportRoutes from './routes/bugReport.js';
@@ -79,6 +80,7 @@ export function createApp({ port } = {}) {
   app.use('/api/disk-health', diskHealthRoutes);
   app.use('/api/forced-uninstall', forcedUninstallRoutes);
   app.use('/api/mft-scan', mftScanRoutes);
+  app.use('/api/drives', drivesRoutes);
   app.use('/api/file-icons', fileIconsRoutes);
   app.use('/api/update-check', updateCheckRoutes);
   app.use('/api/bug-report', bugReportRoutes);

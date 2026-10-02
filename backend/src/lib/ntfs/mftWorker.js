@@ -1,24 +1,25 @@
-import { openSync, readSync, closeSync, writeFileSync } from 'node:fs';
-import { scanVolume } from './scanVolume.js';
+import { openSync, readSync, closeSync, readFileSync, writeFileSync } from 'node:fs';
+import { runMftJob } from './mftJob.js';
 
-/** The elevated half of the MFT scan, and the ONLY part that touches a
- * raw volume handle.
+/** The half of the MFT scan that touches a raw volume handle.
  *
- * It runs as a separate elevated process (see runElevatedNodeJson) rather
- * than inside the backend for the obvious reason: Windows will not open
- * `\\.\C:` for a process that isn't Administrator, and running all of
- * Prune elevated to read a disk map would be a far worse trade than one
- * UAC prompt when the user asks for a fast scan.
+ * It runs as a separate process -- elevated through a UAC prompt, or plain
+ * when the backend already is Administrator (see services/mftScan.js) --
+ * rather than inside the backend, because Windows will not open `\\.\C:`
+ * for a process that isn't Administrator, and running all of Prune
+ * elevated to read a disk map would be a far worse trade than one prompt
+ * when the user asks for a fast scan.
  *
- * Invoked as: mftWorker.js <driveLetter> <maxDepth> <outputPath>
- * Always writes JSON to <outputPath>, including on failure -- the
- * unelevated parent cannot see this process's stderr (it runs at a higher
- * integrity level), so an error that isn't written to the file is an
- * error nobody ever sees. */
-const [driveArg, depthArg, outPath] = process.argv.slice(2);
+ * Invoked as: mftWorker.js <jobPath> <outputPath>
+ * The job is JSON: { drives: ['C', 'D'], maxDepth }. Always writes JSON to
+ * <outputPath>, including on failure -- the unelevated parent cannot see
+ * this process's stderr (it runs at a higher integrity level), so an error
+ * that isn't written to the file is an error nobody ever sees. */
+const [jobPath, outPath] = process.argv.slice(2);
 
 try {
-  writeFileSync(outPath, JSON.stringify(run(driveArg, Number(depthArg) || 12)), 'utf8');
+  const job = JSON.parse(readFileSync(jobPath, 'utf8'));
+  writeFileSync(outPath, JSON.stringify(runMftJob(job, { openVolume })), 'utf8');
 } catch (err) {
   try {
     writeFileSync(outPath, JSON.stringify({ __error: err.message }), 'utf8');
@@ -26,24 +27,10 @@ try {
   process.exitCode = 1;
 }
 
-function run(driveLetter, maxDepth) {
-  const letter = String(driveLetter || 'C').replace(/[^a-z]/gi, '').slice(0, 1).toUpperCase();
-  if (!letter) throw new Error('No drive letter was given.');
-
-  // \\.\C: is the raw volume, as opposed to C:\ the mounted filesystem.
+/** \\.\C: is the raw volume, as opposed to C:\ the mounted filesystem. */
+function openVolume(letter) {
   const fd = openSync(`\\\\.\\${letter}:`, 'r');
-  try {
-    return {
-      driveLetter: letter,
-      ...scanVolume({
-        readAt: makeVolumeReader(fd),
-        driveLabel: `${letter}:`,
-        maxDepth
-      })
-    };
-  } finally {
-    closeSync(fd);
-  }
+  return { readAt: makeVolumeReader(fd), close: () => closeSync(fd) };
 }
 
 /** Reads from a raw volume handle into `buffer` at an absolute byte

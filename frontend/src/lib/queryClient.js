@@ -60,6 +60,7 @@ export const keys = {
   updateCheck: ['update-check'],
   automation: ['automation'],
   diskSpace: ['disk', 'space'],
+  drives: ['disk', 'drives'],
   deepCleanRules: ['deepClean', 'rules'],
   deepCleanScan: ['deepClean', 'scan'],
   deepCleanCategoryIcons: ['deepClean', 'categoryIcons'],

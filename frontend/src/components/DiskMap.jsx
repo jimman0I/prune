@@ -23,6 +23,9 @@ import { iconKeyForNode, extensionsInCells, extensionOf, GENERIC_FILE_KEY } from
 import { limitCells } from '../lib/limitCells.js';
 import { useLanguage } from '../i18n/LanguageContext.jsx';
 import DiskScanProgress from './DiskScanProgress.jsx';
+import { DrivePicker } from './DrivePicker.jsx';
+import { useDrives } from '../hooks/useDrives.js';
+import { driveLetterOf, rootOfDrive, drivesFromScan } from '../lib/driveRoot.js';
 import { readFastScanMs, writeFastScanMs } from '../lib/fastScanDuration.js';
 
 const DEFAULT_ROOT = 'C:\\';
@@ -119,7 +122,37 @@ function ScanOption({ title, badge, explain, note, recommended, children }) {
   );
 }
 
-export function DriveRootPrompt({ path, onFastScan, fastScanning, onCrawl }) {
+/** The other NTFS drives that can ride along on this fast scan, as
+ * checkboxes. They share the one administrator prompt the scan raises, which
+ * is the point of offering them here rather than as separate scans. */
+function AlsoScanDrives({ drives, alsoScan, onToggle }) {
+  const { t } = useLanguage();
+  if (!drives || drives.length === 0) return null;
+  return (
+    <fieldset className="mb-3 min-w-0">
+      <legend className="text-[12px] font-medium text-[color:var(--text-primary)] mb-1.5">
+        {t('diskMapV3.drives.alsoScan')}
+      </legend>
+      <div className="flex flex-wrap gap-x-4 gap-y-1">
+        {drives.map((drive) => (
+          <label key={drive.letter} className="flex items-center gap-1.5 text-[12.5px] text-[color:var(--text-secondary)] cursor-pointer">
+            <input
+              type="checkbox"
+              checked={alsoScan.has(drive.letter)}
+              onChange={() => onToggle(drive.letter)}
+              className="accent-[color:var(--accent-primary)]"
+            />
+            <span className="font-mono">{drive.letter}:</span>
+            {drive.label && <span className="truncate max-w-[14ch]">{drive.label}</span>}
+          </label>
+        ))}
+      </div>
+      <p className="text-[11.5px] text-[color:var(--text-muted)] mt-1.5">{t('diskMapV3.drives.alsoScanNote')}</p>
+    </fieldset>
+  );
+}
+
+export function DriveRootPrompt({ path, onFastScan, fastScanning, onCrawl, otherDrives, alsoScan, onToggleAlso, fastUnavailable }) {
   const { t } = useLanguage();
   return (
     <section className="w-full max-w-[860px] leading-[1.55] [overflow-wrap:anywhere]">
@@ -128,15 +161,18 @@ export function DriveRootPrompt({ path, onFastScan, fastScanning, onCrawl }) {
       </h2>
       <div className="grid gap-4 grid-cols-1 min-[640px]:grid-cols-2">
         <ScanOption
-          recommended
+          recommended={!fastUnavailable}
           title={t('diskMap.driveRootPrompt.fastTitle')}
-          badge={t('diskMap.driveRootPrompt.recommended')}
+          badge={fastUnavailable ? undefined : t('diskMap.driveRootPrompt.recommended')}
           explain={t('diskMap.driveRootPrompt.fastExplain', path.replace(/\\+$/, ''))}
-          note={t('diskMap.driveRootPrompt.fastNeeds')}
+          note={fastUnavailable ? t('diskMapV3.drives.notNtfs') : t('diskMap.driveRootPrompt.fastNeeds')}
         >
+          {!fastUnavailable && otherDrives && onToggleAlso && (
+            <AlsoScanDrives drives={otherDrives} alsoScan={alsoScan ?? new Set()} onToggle={onToggleAlso} />
+          )}
           <button className="btn-primary px-4 py-2 rounded-lg text-[13px] font-medium disabled:opacity-50"
             onClick={onFastScan}
-            disabled={fastScanning}
+            disabled={fastScanning || fastUnavailable}
           >
             {fastScanning ? t('diskMap.readingDrive') : t('diskMap.fastScanButton')}
           </button>
@@ -717,11 +753,12 @@ function DiskMap() {
   const { t } = useLanguage();
   const [currentPath, setCurrentPath] = useState(DEFAULT_ROOT);
   const [hovered, setHovered] = useState(null);
-  // The whole drive, read from the MFT in one pass. While this is set,
-  // browsing is pure navigation through data already in memory -- no
-  // further disk access at all.
-  const [fastTree, setFastTree] = useState(null);
-  const [fastStats, setFastStats] = useState(null);
+  // Whole drives, read from the MFT in one pass, by drive letter. While a
+  // drive is in here, browsing it is pure navigation through data already
+  // in memory -- no further disk access at all.
+  const [fastTrees, setFastTrees] = useState({});
+  // The other drives ticked to ride along on the next fast scan.
+  const [alsoScan, setAlsoScan] = useState(() => new Set());
   const [fastScanning, setFastScanning] = useState(false);
   const [fastNote, setFastNote] = useState(null);
   const [fastExpectedMs, setFastExpectedMs] = useState(null);
@@ -738,18 +775,34 @@ function DiskMap() {
   // flight and start the whole thing again. /api/disk-space answers in
   // milliseconds while the scan takes half a minute, so the value is
   // always here long before the scan's .then() reads it.
-  const usedBytesRef = useRef(null);
+  const usedBytesRef = useRef({});
   // Windows' own file-type icons, keyed by extension (plus "folder" and
   // "file"). Fetched for whatever is on screen and accumulated, so
   // drilling into a folder only ever asks about types not already held.
   const [typeIcons, setTypeIcons] = useState({});
   const [view, setView] = useState('map');
-  // Set only by the button that says so. A whole-drive crawl is opt-in
-  // now; see the effect below.
-  const [crawlRoot, setCrawlRoot] = useState(false);
+  // The drives whose root the user chose to walk. Set only by the button that
+  // says so: a whole-drive crawl is opt-in; see the effect below.
+  const [crawlRoots, setCrawlRoots] = useState(() => new Set());
+
+  const { drives, systemDrive } = useDrives();
+  const currentLetter = driveLetterOf(currentPath);
+  const crawlRoot = crawlRoots.has(currentLetter);
+  const currentDrive = drives?.find((d) => d.letter === currentLetter) ?? null;
+
+  // Opens on the drive Windows lives on, which is not always C:. Once, and
+  // only if nobody has chosen anything yet -- a drive picked before the list
+  // arrived must not be overridden by it.
+  const systemDriveApplied = useRef(false);
+  useEffect(() => {
+    if (!systemDrive || systemDriveApplied.current) return;
+    systemDriveApplied.current = true;
+    setCurrentPath((path) => (path === DEFAULT_ROOT ? rootOfDrive(systemDrive) : path));
+  }, [systemDrive]);
 
   /** Explicit click only. This raises a real UAC prompt, so it can never
-   * live in an effect -- see api.js. */
+   * live in an effect -- see api.js. Every drive ticked goes in ONE request,
+   * so it is one prompt however many are chosen. */
   const handleFastScan = async () => {
     setFastScanning(true);
     setFastNote(null);
@@ -757,24 +810,51 @@ function DiskMap() {
     // card estimates from it. Nothing remembered means no estimate.
     setFastExpectedMs(readFastScanMs(safeStorage()));
     const startedAt = Date.now();
+    const here = currentLetter ?? DEFAULT_ROOT.slice(0, 1);
+    const letters = [here, ...[...alsoScan].filter((l) => l !== here)];
     try {
-      const result = await scanDriveFast(DEFAULT_ROOT.slice(0, 1));
+      const result = await scanDriveFast(letters);
       if (result.cancelled) {
         setFastNote(t('diskMap.fastScanDeclined'));
         return;
       }
+      const { scanned, failures } = drivesFromScan(result, letters);
+      // A drive that could not be read is said so, by name, beside the ones
+      // that could -- the user approved a prompt for all of them.
+      if (failures.length > 0) {
+        setFastNote(failures.map((f) => t('diskMapV3.drives.failed', `${f.letter}:`, f.error)).join(' '));
+      }
+      if (scanned.length === 0) return;
       // Only a scan that actually finished is remembered. A declined prompt
       // (above) or a failure (the catch) would teach the estimate nonsense.
       writeFastScanMs(safeStorage(), Date.now() - startedAt);
-      setFastTree(attachFullPaths(result.tree, DEFAULT_ROOT));
-      setFastStats(result.stats);
-      setCurrentPath(DEFAULT_ROOT);
+      setFastTrees((prev) => {
+        const next = { ...prev };
+        for (const drive of scanned) {
+          next[drive.letter] = { tree: attachFullPaths(drive.tree, rootOfDrive(drive.letter)), stats: drive.stats };
+        }
+        return next;
+      });
+      setAlsoScan(new Set());
+      setCurrentPath(rootOfDrive(scanned.some((d) => d.letter === here) ? here : scanned[0].letter));
     } catch (err) {
       setFastNote(err.message);
     } finally {
       setFastScanning(false);
     }
   };
+
+  /** Switching drive only changes which root is on screen. */
+  const handleSelectDrive = (letter) => {
+    setHovered(null);
+    setAlsoScan(new Set());
+    setCurrentPath(rootOfDrive(letter));
+  };
+  const handleToggleAlso = (letter) => setAlsoScan((prev) => {
+    const next = new Set(prev);
+    if (next.has(letter)) next.delete(letter); else next.add(letter);
+    return next;
+  });
 
   /* Through the query layer, sharing the Dashboard's cached reading
    * rather than issuing a second request for the same numbers.
@@ -789,19 +869,31 @@ function DiskMap() {
   const { diskSpace } = useDiskSpace();
   const { settings } = useSettings();
   useEffect(() => {
+    const used = { ...usedBytesRef.current };
     // The API reports free and total; used is the subtraction. Read off
     // the response rather than assumed -- there is no `usedBytes` field,
-    // and reading one gave undefined silently.
-    if (typeof diskSpace?.totalBytes !== 'number' || typeof diskSpace?.freeBytes !== 'number') return;
-    usedBytesRef.current = diskSpace.totalBytes - diskSpace.freeBytes;
-  }, [diskSpace]);
+    // and reading one gave undefined silently. /api/disk-space is the C:
+    // figure; every drive in the picker brings its own.
+    if (typeof diskSpace?.totalBytes === 'number' && typeof diskSpace?.freeBytes === 'number') {
+      used.C = diskSpace.totalBytes - diskSpace.freeBytes;
+    }
+    for (const drive of drives ?? []) {
+      if (typeof drive.totalBytes === 'number' && typeof drive.freeBytes === 'number') {
+        used[drive.letter] = drive.totalBytes - drive.freeBytes;
+      }
+    }
+    usedBytesRef.current = used;
+  }, [diskSpace, drives]);
 
   // Already have the whole drive in memory? Then this folder is a lookup,
   // not a scan. Falling through to the recursive scanner here would undo
   // the entire point of having read the MFT.
+  const fastEntry = currentLetter ? fastTrees[currentLetter] ?? null : null;
+  const fastStats = fastEntry?.stats ?? null;
+  const scannedLetters = useMemo(() => new Set(Object.keys(fastTrees)), [fastTrees]);
   const fastSubtree = useMemo(
-    () => (fastTree ? subtreeForPath(fastTree, currentPath) : null),
-    [fastTree, currentPath]
+    () => (fastEntry ? subtreeForPath(fastEntry.tree, currentPath) : null),
+    [fastEntry, currentPath]
   );
 
   // A drive root is not worth crawling. Measured on this machine: the
@@ -819,6 +911,7 @@ function DiskMap() {
   const shouldScan = Boolean(currentPath)
     && !fastSubtree
     && !(isDriveRoot(currentPath) && !crawlRoot);
+  const nonNtfsRoot = isDriveRoot(currentPath) && currentDrive !== null && currentDrive.ntfs === false;
 
   // The signal this query provides is the whole reason it is a query.
   // Changing path or leaving the screen aborts it, which closes the HTTP
@@ -866,7 +959,7 @@ function DiskMap() {
         // Only at a drive root: a truncated scan of a subfolder has no
         // used-space figure to reconcile against.
         isDriveRoot(currentPath)
-          ? withUnscannedRemainder(stoppedByUser ? { ...result, stoppedByUser } : result, usedBytesRef.current)
+          ? withUnscannedRemainder(stoppedByUser ? { ...result, stoppedByUser } : result, usedBytesRef.current[driveLetterOf(currentPath)] ?? null)
           : (stoppedByUser ? { ...result, stoppedByUser } : result),
         currentPath
       );
@@ -902,7 +995,7 @@ function DiskMap() {
   const mapTree = mapTreeFor(tree, {
     enabled: settings?.showFreeSpaceOnMap,
     atDriveRoot: isDriveRoot(currentPath),
-    freeBytes: diskSpace?.freeBytes
+    freeBytes: currentLetter === 'C' && typeof diskSpace?.freeBytes === 'number' ? diskSpace.freeBytes : currentDrive?.freeBytes
   });
   const cells = mapTree ? limitCells(topLevelCells(mapTree), MAX_CELLS, (count) => t('diskMap.aggregateCell', count)) : [];
 
@@ -1098,6 +1191,13 @@ function DiskMap() {
         <FastScanNote note={fastNote} />
       )}
 
+      <DrivePicker
+        drives={drives}
+        current={currentLetter}
+        scanned={scannedLetters}
+        onSelect={handleSelectDrive}
+      />
+
       <div className="flex items-center flex-wrap gap-0.5 text-[12.5px] font-mono mb-6">
         {breadcrumbTrail(currentPath).map((seg, i, arr) => (
           <span key={seg.path} className="flex items-center gap-0.5">
@@ -1140,7 +1240,11 @@ function DiskMap() {
           path={currentPath}
           onFastScan={handleFastScan}
           fastScanning={fastScanning}
-          onCrawl={() => setCrawlRoot(true)}
+          onCrawl={() => setCrawlRoots((prev) => new Set(prev).add(currentLetter))}
+          otherDrives={(drives ?? []).filter((d) => d.letter !== currentLetter && d.ntfs)}
+          alsoScan={alsoScan}
+          onToggleAlso={handleToggleAlso}
+          fastUnavailable={nonNtfsRoot}
         />
       )}
 
