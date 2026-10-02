@@ -1,3 +1,5 @@
+import { compileFilter } from './searchFilter.js';
+
 /** The biggest individual files the scan found, largest first.
  *
  * WizTree's second tab, and the one that answers "what do I actually
@@ -14,8 +16,12 @@
  * would matter at millions of files; at the 68,000 a real scan produces
  * here, sorting the whole list takes a few milliseconds and the simpler
  * code is worth more than the saving. */
-export function largestFiles(tree, { limit = 100 } = {}) {
+export function largestFiles(tree, { limit = 100, filterText = '' } = {}) {
   const files = [];
+  // The search box, applied here rather than to the finished list: the
+  // biggest files MATCHING the search, across the whole tree, are what
+  // someone searching wants -- not the matches among the 60 biggest files.
+  const filter = compileFilter(filterText);
 
   const stack = [tree];
   while (stack.length > 0) {
@@ -30,15 +36,21 @@ export function largestFiles(tree, { limit = 100 } = {}) {
     // directory carrying hundreds of gigabytes. It would otherwise top
     // this list, and it is not a file anyone can delete.
     if (node.scanned === false) continue;
+    if (node.aggregated) continue;
     if (node.type !== 'file') continue;
 
     const size = typeof node.size === 'number' ? node.size : 0;
     if (size <= 0) continue;
+    if (filter.active && !filter.match(node.name, node.fullPath)) continue;
 
     files.push({
       name: node.name,
       fullPath: node.fullPath || null,
-      size
+      size,
+      // Carried for the File view's date column and Properties; absent from a
+      // scan that did not measure them.
+      allocated: typeof node.allocated === 'number' ? node.allocated : null,
+      modified: typeof node.modified === 'number' ? node.modified : null
     });
   }
 

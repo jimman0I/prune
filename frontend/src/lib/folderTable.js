@@ -5,12 +5,13 @@
  * folder is two files or two hundred thousand, and "how many things are
  * in here" is what decides whether a folder is worth opening.
  *
- * Columns deliberately NOT here, and why:
+ * Allocated (size on disk) is here again. The first attempt read the header
+ * field that counts a sparse file's holes and summed to 1270 GB on a
+ * 952.9 GB volume; it now comes from each stream's runlist (see
+ * backend/src/lib/ntfs/record.js), and the scan reports the volume's own
+ * used-space figure beside it so a wrong number can be caught.
  *
- *   Allocated -- WizTree shows it; this project measured it and threw it
- *     out. The allocated sizes summed to 1270 GB on a 952.9 GB volume
- *     while claiming no file was smaller allocated than logical. A number
- *     that fails its own sanity check is worse than an absent column.
+ * Columns deliberately NOT here, and why:
  *
  *   Attributes -- Windows file attributes are not on a Node stat, and
  *     nothing in this scan carries them. An empty column would be worse
@@ -26,6 +27,11 @@ export function folderTableRows(node) {
 
   const total = children.reduce((sum, child) => sum + (child.size || 0), 0);
 
+  // Whether this tree measured allocation at all. Only then is a file with no
+  // `allocated` known to occupy nothing (it lives inside the MFT record);
+  // otherwise it is simply unknown, and says so.
+  const measuresAllocation = typeof node.allocated === 'number';
+
   return children.map((child) => {
     const counted = countSubtree(child);
     return {
@@ -33,6 +39,11 @@ export function folderTableRows(node) {
       fullPath: child.fullPath || null,
       type: child.type,
       size: child.size || 0,
+      allocated: typeof child.allocated === 'number'
+        ? child.allocated
+        : (measuresAllocation && child.type === 'file' ? 0 : null),
+      // A name for a file whose bytes were charged to another name.
+      hardLink: child.hardLink === true,
       // Of the parent, not of the drive -- the question this column
       // answers is "how much of what I am looking at is this".
       percentOfParent: total > 0 ? ((child.size || 0) / total) * 100 : 0,
@@ -64,6 +75,12 @@ function countSubtree(node) {
 
   // A file is one item and no folder, and has nothing beneath it.
   if (node?.type === 'file') return { items: 1, files: 1, folders: 0 };
+
+  // A reopened saved scan keeps counts instead of every file: use them.
+  if (typeof node?.counts?.files === 'number') {
+    const { files, folders = 0 } = node.counts;
+    return { items: files + folders, files, folders };
+  }
 
   // A directory past the scan's depth cap has a real size but no
   // `children` array, so its contents were never enumerated.

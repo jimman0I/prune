@@ -40,7 +40,7 @@ describe('the drive-root chooser', () => {
     render();
     expect(await screen.findByText('Recommended')).toBeTruthy();
     expect(screen.getByText(/Needs administrator approval/)).toBeTruthy();
-    expect(screen.getByText(/cannot finish a whole drive/)).toBeTruthy();
+    expect(screen.getByText(/Needs no permission/)).toBeTruthy();
   });
 
   it('names the drive without its trailing backslash', async () => {

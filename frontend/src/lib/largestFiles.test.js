@@ -69,3 +69,22 @@ describe('largestFiles', () => {
     expect(largestFiles(null)).toEqual([]);
   });
 });
+
+describe('largestFiles dates and allocation', () => {
+  it('carries when each file was last written and what it occupies on disk', () => {
+    const files = largestFiles({
+      name: 'C:', type: 'directory', size: 900, fullPath: 'C:\\',
+      children: [{ name: 'a.bin', type: 'file', size: 900, allocated: 4096, modified: 1788000000000, fullPath: 'C:\\a.bin' }]
+    });
+    expect(files[0]).toMatchObject({ allocated: 4096, modified: 1788000000000 });
+  });
+
+  it('says null, not zero, for a file the scan gave no date or allocation', () => {
+    const [file] = largestFiles({
+      name: 'C:', type: 'directory', size: 5, fullPath: 'C:\\',
+      children: [{ name: 'a.bin', type: 'file', size: 5, fullPath: 'C:\\a.bin' }]
+    });
+    expect(file.allocated).toBeNull();
+    expect(file.modified).toBeNull();
+  });
+});

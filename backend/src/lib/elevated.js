@@ -129,7 +129,7 @@ ${script}
  *    trouble. A tiny .cmd shim sets the variable in the elevated process
  *    itself, where it definitely applies.
  */
-export async function runElevatedNodeJson(scriptPath, args = [], { timeoutMs = DEFAULT_TIMEOUT_MS } = {}) {
+export async function runElevatedNodeJson(scriptPath, args = [], { timeoutMs = DEFAULT_TIMEOUT_MS, input } = {}) {
   let workDir;
   try {
     workDir = mkdtempSync(join(tmpdir(), 'prune-elevated-node-'));
@@ -141,7 +141,17 @@ export async function runElevatedNodeJson(scriptPath, args = [], { timeoutMs = D
   const shimPath = join(workDir, 'run.cmd');
 
   try {
-    const quotedArgs = [scriptPath, ...args, outPath].map((a) => `"${a}"`).join(' ');
+    // A job too rich for a command line (a list of drives, the user's
+    // exclusions) travels as a file next to the output: arguments pass
+    // through a .cmd shim and a PowerShell quote, and a folder name with a
+    // quote or a percent sign in it must not be able to change what runs.
+    const jobArgs = [];
+    if (input !== undefined) {
+      const jobPath = join(workDir, 'job.json');
+      writeFileSync(jobPath, JSON.stringify(input), 'utf8');
+      jobArgs.push(jobPath);
+    }
+    const quotedArgs = [scriptPath, ...args, ...jobArgs, outPath].map((a) => `"${a}"`).join(' ');
     const shim = [
       '@echo off',
       'set ELECTRON_RUN_AS_NODE=1',
@@ -176,6 +186,73 @@ export async function runElevatedNodeJson(scriptPath, args = [], { timeoutMs = D
     if (parsed && parsed.__error) return { ok: false, error: parsed.__error };
 
     return { ok: true, data: parsed };
+  } finally {
+    try { rmSync(workDir, { recursive: true, force: true }); } catch { /* best-effort */ }
+  }
+}
+
+/** Runs the same Node worker as runElevatedNodeJson, in THIS process's own
+ * privilege level and without any prompt.
+ *
+ * For a backend that is already Administrator: spawning a second elevated
+ * process through RunAs would ask for consent the user already gave by
+ * starting Prune that way, every single scan. The worker is identical and
+ * so is the result shape, minus `cancelled` -- there is no dialog to
+ * decline here, so a run that produced nothing is an error, never a
+ * "no". */
+export async function runNodeJson(scriptPath, args = [], { timeoutMs = DEFAULT_TIMEOUT_MS, input } = {}) {
+  let workDir;
+  try {
+    workDir = mkdtempSync(join(tmpdir(), 'prune-node-'));
+  } catch (err) {
+    return { ok: false, error: `Couldn't create a temp directory: ${err.message}` };
+  }
+
+  const outPath = join(workDir, 'out.json');
+
+  try {
+    const jobArgs = [];
+    if (input !== undefined) {
+      const jobPath = join(workDir, 'job.json');
+      writeFileSync(jobPath, JSON.stringify(input), 'utf8');
+      jobArgs.push(jobPath);
+    }
+
+    let failure = null;
+    try {
+      await execFileAsync(process.execPath, [scriptPath, ...args, ...jobArgs, outPath], {
+        timeout: timeoutMs,
+        windowsHide: true,
+        maxBuffer: 1024 * 1024,
+        // In a packaged app process.execPath is Prune's own executable,
+        // which only acts as a plain Node interpreter with this set.
+        env: { ...process.env, ELECTRON_RUN_AS_NODE: '1' }
+      });
+    } catch (err) {
+      failure = err;
+    }
+
+    // The worker writes its own error to the output file before exiting
+    // non-zero, and that message is worth more than "Command failed".
+    if (existsSync(outPath)) {
+      const raw = readFileSync(outPath, 'utf8').trim();
+      if (raw) {
+        let parsed;
+        try {
+          parsed = JSON.parse(raw);
+        } catch (err) {
+          return { ok: false, error: `The helper returned non-JSON output: ${err.message}` };
+        }
+        if (parsed && parsed.__error) return { ok: false, error: parsed.__error };
+        if (!failure) return { ok: true, data: parsed };
+      }
+    }
+
+    if (failure) {
+      const detail = `${failure.stderr || ''}`.trim();
+      return { ok: false, error: `${`${failure.message || ''}`.trim() || 'The helper failed to run.'}${detail ? ` — ${detail}` : ''}` };
+    }
+    return { ok: false, error: 'The helper returned nothing.' };
   } finally {
     try { rmSync(workDir, { recursive: true, force: true }); } catch { /* best-effort */ }
   }

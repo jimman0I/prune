@@ -29,6 +29,8 @@ import deepCleanRoutes from './routes/deepClean.js';
 import diskHealthRoutes from './routes/diskHealth.js';
 import forcedUninstallRoutes from './routes/forcedUninstall.js';
 import mftScanRoutes from './routes/mftScan.js';
+import drivesRoutes from './routes/drives.js';
+import savedScansRoutes from './routes/savedScans.js';
 import fileIconsRoutes from './routes/fileIcons.js';
 import updateCheckRoutes from './routes/updateCheck.js';
 import bugReportRoutes from './routes/bugReport.js';
@@ -61,6 +63,10 @@ export function createApp({ port } = {}) {
     credentials: false
   }));
 
+  // A saved scan is a whole folder tree: megabytes of JSON, far past the
+  // default limit. Parsed here, ahead of the global parser (which skips a body
+  // that has already been read), and only for this one route.
+  app.use('/api/saved-scans', express.json({ limit: '256mb' }));
   app.use(express.json());
 
   app.get('/api/health', (req, res) => res.json({ ok: true }));
@@ -79,6 +85,8 @@ export function createApp({ port } = {}) {
   app.use('/api/disk-health', diskHealthRoutes);
   app.use('/api/forced-uninstall', forcedUninstallRoutes);
   app.use('/api/mft-scan', mftScanRoutes);
+  app.use('/api/drives', drivesRoutes);
+  app.use('/api/saved-scans', savedScansRoutes);
   app.use('/api/file-icons', fileIconsRoutes);
   app.use('/api/update-check', updateCheckRoutes);
   app.use('/api/bug-report', bugReportRoutes);

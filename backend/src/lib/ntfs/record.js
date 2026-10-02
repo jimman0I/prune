@@ -1,9 +1,17 @@
+import { decodeRunlist } from './runlist.js';
+
+export const ATTR_STANDARD_INFORMATION = 0x10;
 export const ATTR_FILE_NAME = 0x30;
 export const ATTR_DATA = 0x80;
+export const ATTR_INDEX_ALLOCATION = 0xa0;
 
 const FLAG_IN_USE = 0x0001;
 const FLAG_DIRECTORY = 0x0002;
 const END_OF_ATTRIBUTES = 0xffffffff;
+
+// Attribute flag bits (offset 0x0C of an attribute header).
+const ATTR_FLAG_COMPRESSED = 0x0001;
+const ATTR_FLAG_SPARSE = 0x8000;
 
 // $FILE_NAME namespaces. A file usually has two of these attributes: the
 // real name and an 8.3 alias. Preferring the alias fills a scan with
@@ -43,9 +51,9 @@ export function applyFixups(record, bytesPerSector) {
 
 /** Parses one MFT slot into one of three outcomes:
  *
- *   { kind: 'entry', name, parentRecord, sizeBytes, isDirectory }
+ *   { kind: 'entry', name, parentRecord, sizeBytes, allocatedBytes, isDirectory, ... }
  *       a real file or directory
- *   { kind: 'extension', baseRecord, sizeBytes }
+ *   { kind: 'extension', baseRecord, sizeBytes, allocatedBytes, ... }
  *       a continuation of another record -- not a file of its own, but it
  *       may carry the $DATA that names the base record's size
  *   null
@@ -56,8 +64,13 @@ export function applyFixups(record, bytesPerSector) {
  * (or is a deleted one still on disk), the record failed its fixup check
  * (torn write), or it has no $FILE_NAME so there is nothing to call it.
  *
+ * `bytesPerCluster` turns runlist cluster counts into bytes. Without it no
+ * allocation is reported (`allocatedBytes` is undefined), because a size on
+ * disk guessed from a default cluster size would be wrong on any volume
+ * formatted differently.
+ *
  * Mutates `record` (fixups are applied in place). */
-export function parseFileRecord(record, bytesPerSector) {
+export function parseFileRecord(record, bytesPerSector, bytesPerCluster = 0) {
   if (record.length < 0x30) return null;
   if (record.toString('latin1', 0, 4) !== 'FILE') return null;
   if (!applyFixups(record, bytesPerSector)) return null;
@@ -75,18 +88,13 @@ export function parseFileRecord(record, bytesPerSector) {
   // $DATA in their base record, and the extension records held 290 GB of
   // it. Every one of those files was being counted as zero bytes.
   const baseReference = record.readBigUInt64LE(0x20);
-  if (baseReference !== 0n) {
-    return {
-      kind: 'extension',
-      baseRecord: Number(baseReference & 0x0000ffffffffffffn),
-      sizeBytes: findUnnamedDataSize(record)
-    };
-  }
-
+  const isExtension = baseReference !== 0n;
   const isDirectory = (flags & FLAG_DIRECTORY) !== 0;
 
   let best = null;      // best $FILE_NAME seen so far
   let sizeBytes = 0;
+  let modified = null;
+  const allocation = { data: 0, streams: 0, index: 0, sparse: false };
   let position = record.readUInt16LE(0x14);
 
   while (position + 8 <= record.length) {
@@ -98,17 +106,47 @@ export function parseFileRecord(record, bytesPerSector) {
     // absurd one would read past the buffer.
     if (length < 8 || position + length > record.length) break;
 
-    if (type === ATTR_FILE_NAME) {
-      const candidate = readFileName(record, position);
-      if (candidate && isBetterName(candidate, best)) best = candidate;
-    } else if (type === ATTR_DATA && !isDirectory) {
-      const size = readUnnamedDataSize(record, position);
-      if (size !== null) sizeBytes = size;
+    if (type === ATTR_STANDARD_INFORMATION) {
+      if (!isExtension) modified = readModifiedTime(record, position);
+    } else if (type === ATTR_FILE_NAME) {
+      if (!isExtension) {
+        const candidate = readFileName(record, position);
+        if (candidate && isBetterName(candidate, best)) best = candidate;
+      }
+    } else if (type === ATTR_DATA) {
+      const named = record.readUInt8(position + 9) !== 0;
+      if (!named && !isDirectory) {
+        const size = readUnnamedDataSize(record, position);
+        if (size !== null) sizeBytes = size;
+      }
+      addAllocation(allocation, readStreamAllocation(record, position, length, bytesPerCluster), named ? 'streams' : 'data');
+    } else if (type === ATTR_INDEX_ALLOCATION) {
+      addAllocation(allocation, readStreamAllocation(record, position, length, bytesPerCluster), 'index');
     }
     position += length;
   }
 
+  const allocatedBytes = bytesPerCluster > 0 ? allocation.data + allocation.streams + allocation.index : undefined;
+
+  if (isExtension) {
+    return {
+      kind: 'extension',
+      baseRecord: Number(baseReference & 0x0000ffffffffffffn),
+      sizeBytes,
+      allocatedBytes,
+      streamAllocatedBytes: bytesPerCluster > 0 ? allocation.streams : undefined,
+      indexAllocatedBytes: bytesPerCluster > 0 ? allocation.index : undefined,
+      sparse: allocation.sparse
+    };
+  }
+
   if (!best) return null;
+
+  // The header's own count of names pointing at this file. A record with
+  // several $FILE_NAMEs is ONE file with several names: it is one entry here
+  // and its bytes are counted once, under one name -- never once per name.
+  const links = record.readUInt16LE(0x12);
+
   return {
     kind: 'entry',
     name: best.name,
@@ -116,27 +154,86 @@ export function parseFileRecord(record, bytesPerSector) {
     // A directory's size is the sum of what's inside it, computed by the
     // caller once the whole tree is known -- never its own $DATA.
     sizeBytes: isDirectory ? 0 : sizeBytes,
+    allocatedBytes,
+    streamAllocatedBytes: bytesPerCluster > 0 ? allocation.streams : undefined,
+    indexAllocatedBytes: bytesPerCluster > 0 ? allocation.index : undefined,
+    sparse: allocation.sparse,
+    hardLinks: links > 1 ? links : undefined,
+    modified,
     isDirectory
   };
 }
 
-/** Walks a record's attributes for the one unnamed $DATA that carries the
- * file's size. Used for extension records, where that attribute is the
- * only thing worth reading. */
-function findUnnamedDataSize(record) {
-  let position = record.readUInt16LE(0x14);
-  while (position + 8 <= record.length) {
-    const type = record.readUInt32LE(position);
-    if (type === END_OF_ATTRIBUTES) break;
-    const length = record.readUInt32LE(position + 4);
-    if (length < 8 || position + length > record.length) break;
-    if (type === ATTR_DATA) {
-      const size = readUnnamedDataSize(record, position);
-      if (size !== null) return size;
-    }
-    position += length;
-  }
-  return 0;
+// 1601-01-01 to 1970-01-01, in milliseconds: the offset between a Windows
+// FILETIME and a Unix timestamp.
+const FILETIME_EPOCH_OFFSET_MS = 11644473600000;
+// A last-write time outside these is a corrupt record, not a date: nothing
+// real was written before the FAT era or after the end of this century.
+const EARLIEST_PLAUSIBLE_MS = Date.UTC(1980, 0, 1);
+const LATEST_PLAUSIBLE_MS = Date.UTC(2100, 0, 1);
+
+/** When the file was last written, as Unix milliseconds, from the resident
+ * $STANDARD_INFORMATION: four FILETIMEs in a row (created, MODIFIED, MFT
+ * changed, accessed), the second being the one Explorer calls "Date
+ * modified". Null when absent, too short, zero or implausible -- a missing
+ * date is shown as a dash, never as 1601.
+ *
+ * Read as two 32-bit halves rather than a BigInt: this runs once per
+ * record, on millions of them, and a double holds 100 ns ticks since 1601 to
+ * well under a millisecond. */
+function readModifiedTime(record, attributeOffset) {
+  if (record.readUInt8(attributeOffset + 8) !== 0) return null; // always resident
+  const valueLength = record.readUInt32LE(attributeOffset + 0x10);
+  const valueOffset = attributeOffset + record.readUInt16LE(attributeOffset + 0x14);
+  if (valueLength < 16 || valueOffset + 16 > record.length) return null;
+
+  const low = record.readUInt32LE(valueOffset + 8);
+  const high = record.readUInt32LE(valueOffset + 12);
+  if (low === 0 && high === 0) return null;
+
+  const ms = Math.round((high * 4294967296 + low) / 10000) - FILETIME_EPOCH_OFFSET_MS;
+  return ms >= EARLIEST_PLAUSIBLE_MS && ms <= LATEST_PLAUSIBLE_MS ? ms : null;
+}
+
+function addAllocation(allocation, found, bucket) {
+  if (!found) return;
+  allocation[bucket] += found.bytes;
+  if (found.sparse) allocation.sparse = true;
+}
+
+/** The bytes one non-resident attribute fragment really occupies on disk,
+ * read from its RUNLIST: the clusters mapped to a real location, with holes
+ * left out.
+ *
+ * Not the header's own "allocated size" field (offset 0x28). That one is the
+ * cluster-rounded size of the whole stream, and for a sparse or compressed
+ * stream it still counts the holes. It was read from there once
+ * (2026-09-02) and the total came to 1270 GB on a 952.9 GB volume. The
+ * runlist is what NTFS itself consults to know which clusters are in use.
+ *
+ * Every fragment of a stream is summed (a stream split across attribute
+ * records has one runlist per record, over disjoint cluster ranges), where
+ * the logical size is taken from the first fragment only.
+ *
+ * Returns null for data that lives inside the MFT record (resident): it
+ * occupies no clusters of its own, the MFT's own allocation holds it. */
+function readStreamAllocation(record, attributeOffset, attributeLength, bytesPerCluster) {
+  if (record.readUInt8(attributeOffset + 8) === 0) return null; // resident
+  if (!(bytesPerCluster > 0)) return null;
+  if (attributeOffset + 0x28 > record.length) return null;
+
+  const runlistOffset = record.readUInt16LE(attributeOffset + 0x20);
+  if (runlistOffset < 0x40 || runlistOffset >= attributeLength) return { bytes: 0, sparse: false };
+  const runs = decodeRunlist(record.subarray(attributeOffset + runlistOffset, attributeOffset + attributeLength));
+
+  let clusters = 0;
+  for (const run of runs) if (!run.sparse) clusters += run.clusterCount;
+
+  const attributeFlags = record.readUInt16LE(attributeOffset + 0x0c);
+  return {
+    bytes: clusters * bytesPerCluster,
+    sparse: (attributeFlags & (ATTR_FLAG_SPARSE | ATTR_FLAG_COMPRESSED)) !== 0
+  };
 }
 
 /** The size an unnamed $DATA attribute contributes, or null when it
@@ -155,15 +252,8 @@ function findUnnamedDataSize(record) {
  *
  * This is the LOGICAL size -- the file's length, the same thing
  * Explorer's Size column and fs.stat() report, and therefore the same
- * thing the recursive scanner already reports.
- *
- * It is deliberately NOT the allocated "size on disk" figure. That was
- * implemented and then removed (2026-09-02): reading allocated size from
- * offset 0x28 summed to 1270 GB on a 952.9 GB volume, and claimed that
- * not one file on the drive had allocated below logical while 772,000
- * were flagged sparse. Those two cannot both be true, so the number was
- * wrong in a way that wasn't understood -- and a confidently wrong "size
- * on disk" is worse than not offering one. */
+ * thing the recursive scanner already reports. The size on disk is read
+ * separately, from the runlist (see readStreamAllocation). */
 function readUnnamedDataSize(record, attributeOffset) {
   if (record.readUInt8(attributeOffset + 9) !== 0) return null; // named stream
   const nonResident = record.readUInt8(attributeOffset + 8) !== 0;
@@ -228,4 +318,3 @@ function isBetterName(candidate, current) {
   if (!current) return true;
   return current.namespace === NAMESPACE_DOS && candidate.namespace !== NAMESPACE_DOS;
 }
-

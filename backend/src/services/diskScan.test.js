@@ -41,7 +41,8 @@ describe('scanDirectory (real file I/O, async)', () => {
   it('returns { name, size, type: "file" } for a single file', async () => {
     const filePath = join(dir, 'a.txt');
     writeFileSync(filePath, 'hello'); // 5 bytes
-    expect(await scanDirectory(filePath)).toEqual({ name: 'a.txt', size: 5, type: 'file' });
+    // A file carries its last-write time too (the Tree and File views show it).
+    expect(await scanDirectory(filePath)).toEqual({ name: 'a.txt', size: 5, type: 'file', modified: expect.any(Number) });
   });
 
   it('returns a hierarchical tree with correct total sizes and per-node types', async () => {
@@ -56,7 +57,7 @@ describe('scanDirectory (real file I/O, async)', () => {
     const sub = result.children.find(c => c.name === 'sub');
     expect(sub.type).toBe('directory');
     expect(sub.size).toBe(10);
-    expect(sub.children).toEqual([{ name: 'nested.txt', size: 10, type: 'file' }]);
+    expect(sub.children).toEqual([{ name: 'nested.txt', size: 10, type: 'file', modified: expect.any(Number) }]);
   });
 
   it('marks a depth-capped node as type "directory" even without a children array', async () => {
@@ -230,16 +231,16 @@ describe('directory timestamps', () => {
     expect(sub.modified).toBeGreaterThan(Date.now() - 60000);
   });
 
-  // Directories only. The same field on every file node would add about a
-  // megabyte to a 4.4 MB response, for data no folder table shows -- and
-  // the tree is sent whole.
-  it('does not put a timestamp on file nodes', async () => {
+  // Files too, now: the File view and the Tree view both show when a file was
+  // last written, and the MFT scan reads the same field for free.
+  it('reports when a file was last written', async () => {
     writeFileSync(join(dir, 'a.txt'), 'x');
 
     const tree = await scanDirectory(dir);
     const file = tree.children.find((c) => c.name === 'a.txt');
     expect(file.type).toBe('file');
-    expect(file.modified).toBeUndefined();
+    expect(typeof file.modified).toBe('number');
+    expect(file.modified).toBeGreaterThan(Date.now() - 60000);
   });
 });
 

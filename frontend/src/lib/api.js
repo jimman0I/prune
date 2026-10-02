@@ -630,12 +630,72 @@ export async function fetchDiskSpace() {
  *
  * A declined prompt resolves to { cancelled: true } rather than throwing.
  * The user answered the question; the answer was no. */
-export async function scanDriveFast(driveLetter = 'C') {
+export async function scanDriveFast(driveLetters = ['C']) {
+  // Every drive in ONE request: the backend hands them to a single helper,
+  // so choosing C: and D: is one consent prompt rather than two.
+  const letters = Array.isArray(driveLetters) ? driveLetters : [driveLetters];
   const res = await fetch(`${API_URL}/mft-scan`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ driveLetter })
+    body: JSON.stringify({ driveLetters: letters })
   });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
+  return data;
+}
+
+/** Whether the fast scan can run without a prompt, i.e. whether Prune itself
+ * was started as administrator: { elevated: boolean }. */
+export async function fetchMftStatus() {
+  const res = await fetch(`${API_URL}/mft-scan/status`);
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
+  return data;
+}
+
+/* ---- saved Disk Map scans (backend/src/routes/savedScans.js) ----------- */
+
+async function savedScansRequest(path, options) {
+  const res = await fetch(`${API_URL}/saved-scans${path}`, options);
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
+  return data;
+}
+
+/** What the list shows, newest first. */
+export async function fetchSavedScans() {
+  return (await savedScansRequest('')).scans ?? [];
+}
+
+/** Saves a compact archive (lib/compactTree.js); resolves to its list entry. */
+export async function saveDiskScan({ label, source, truncated, archive }) {
+  const data = await savedScansRequest('', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ label, source, truncated, archive })
+  });
+  return data.scan;
+}
+
+/** { scan, archive } for one saved scan. */
+export async function loadSavedScan(id) {
+  return savedScansRequest(`/${encodeURIComponent(id)}`);
+}
+
+export async function deleteSavedScan(id) {
+  await savedScansRequest(`/${encodeURIComponent(id)}`, { method: 'DELETE' });
+}
+
+/** Which folders changed between two saved scans. */
+export async function compareSavedScans(a, b, limit = 25) {
+  return savedScansRequest(`/compare?a=${encodeURIComponent(a)}&b=${encodeURIComponent(b)}&limit=${limit}`);
+}
+
+/** The local drives the Disk Map can scan, and which one holds Windows:
+ * { systemDrive: 'C', drives: [{ letter, label, fileSystem, totalBytes,
+ * freeBytes, removable, system, ntfs }] }. */
+export async function fetchDrives() {
+  const res = await fetch(`${API_URL}/drives`);
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
   return data;

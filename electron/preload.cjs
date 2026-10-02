@@ -13,6 +13,12 @@ const { contextBridge, ipcRenderer } = require('electron');
  * no minimize, maximize or close here: those stay Windows' own, which is
  * the reason this app kept Snap Layouts and correct edge hit-testing.
  *
+ * admin -- the Disk Map's 'Restart Prune as administrator'. Two requests,
+ * neither with an argument: whether a restart is possible here (a packaged
+ * build on Windows) and the restart itself. The main process starts its own
+ * executable elevated and quits only if that worked; the window cannot name
+ * a program, a path or a command (see relaunchAdmin.cjs).
+ *
  * updates -- the side-nav update button (components/UpdateButton.jsx).
  * The renderer names the version it showed the user; main.cjs hands it to
  * electron/updater.cjs, which refuses any other. It cannot pass a URL, a
@@ -21,6 +27,10 @@ const { contextBridge, ipcRenderer } = require('electron');
  */
 contextBridge.exposeInMainWorld('pruneWindow', {
   setTheme: (theme) => ipcRenderer.send('prune:theme', theme),
+  admin: {
+    canRelaunch: () => ipcRenderer.invoke('prune:admin:can-relaunch'),
+    relaunch: () => ipcRenderer.invoke('prune:admin:relaunch')
+  },
   updates: {
     prepare: (version) => ipcRenderer.invoke('prune:update:prepare', version),
     install: () => ipcRenderer.invoke('prune:update:install'),

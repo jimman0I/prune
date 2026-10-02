@@ -138,3 +138,36 @@ describe('directories Windows would not let us open', () => {
     expect(rows[0]).toMatchObject({ files: 1, folders: 1, items: 2 });
   });
 });
+
+describe('folderTableRows allocated size', () => {
+  const sized = {
+    name: 'C:', type: 'directory', size: 1000, allocated: 12288, fullPath: 'C:\\',
+    children: [
+      { name: 'Games', type: 'directory', size: 800, allocated: 8192, fullPath: 'C:\\Games', children: [] },
+      { name: 'big.bin', type: 'file', size: 150, allocated: 4096, fullPath: 'C:\\big.bin' },
+      { name: 'tiny.txt', type: 'file', size: 50, fullPath: 'C:\\tiny.txt' }
+    ]
+  };
+
+  it('carries what each row occupies on disk beside its size', () => {
+    const rows = folderTableRows(sized);
+    expect(rows.find((r) => r.name === 'Games').allocated).toBe(8192);
+    expect(rows.find((r) => r.name === 'big.bin').allocated).toBe(4096);
+  });
+
+  // A file with no clusters of its own (stored inside the MFT record) really
+  // occupies none, in a tree that measured allocation at all.
+  it('reads a file with no allocated field as zero when the tree measured allocation', () => {
+    expect(folderTableRows(sized).find((r) => r.name === 'tiny.txt').allocated).toBe(0);
+  });
+
+  it('reads nothing as zero in a tree that never measured allocation', () => {
+    const rows = folderTableRows(tree);
+    expect(rows.every((r) => r.allocated === null)).toBe(true);
+  });
+
+  it('marks a hard link counted elsewhere, so it is not mistaken for an empty file', () => {
+    const rows = folderTableRows({ ...sized, children: [{ name: 'x.dll', type: 'file', size: 0, hardLink: true, fullPath: 'C:\\x.dll' }] });
+    expect(rows[0].hardLink).toBe(true);
+  });
+});

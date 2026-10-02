@@ -8,7 +8,7 @@ import { Treemap, ResponsiveContainer } from 'recharts';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { keys } from '../lib/queryClient.js';
 import { breadcrumbTrail } from '../lib/breadcrumbTrail.js';
-import { fetchDiskScan, stopDiskScan, scanDriveFast, fetchFileTypeIcons, quarantineDiskPath, revealInExplorer } from '../lib/api.js';
+import { saveDiskScan, loadSavedScan, fetchDiskScan, stopDiskScan, scanDriveFast, fetchFileTypeIcons, quarantineDiskPath, revealInExplorer } from '../lib/api.js';
 import { useToasts } from '../hooks/useToasts.jsx';
 import ContextMenu from './ContextMenu.jsx';
 import ModalOverlay from './ModalOverlay.jsx';
@@ -16,13 +16,31 @@ import { attachFullPaths, topLevelCells } from '../lib/diskMapTree.js';
 import { subtreeForPath } from '../lib/mftSubtree.js';
 import { NO_EXTENSION } from '../lib/extensionBreakdown.js';
 import { useDiskMapAggregates } from '../hooks/useDiskMapAggregates.js';
-import { sortFolderRows, nextFolderSort } from '../lib/sortFolderRows.js';
 import { withUnscannedRemainder, scanCoverage, localizeUnscanned } from '../lib/unscannedRemainder.js';
 import { buildTypeColors, colorForExtension, colorForNode, inkForFill, NO_EXTENSION_COLOR } from '../lib/fileTypeColors.js';
 import { iconKeyForNode, extensionsInCells, extensionOf, GENERIC_FILE_KEY } from '../lib/fileTypeIcon.js';
 import { limitCells } from '../lib/limitCells.js';
 import { useLanguage } from '../i18n/LanguageContext.jsx';
 import DiskScanProgress from './DiskScanProgress.jsx';
+import { DrivePicker } from './DrivePicker.jsx';
+import { FolderTable } from './FolderTable.jsx';
+import { SearchBox } from './SearchBox.jsx';
+import { PropertiesDialog } from './PropertiesDialog.jsx';
+import { SavedScansPanel } from './SavedScansPanel.jsx';
+import { prepareSnapshot } from '../lib/liveSnapshot.js';
+import { compactTree, expandArchive } from '../lib/compactTree.js';
+import { ExportButtons } from './ExportButtons.jsx';
+import { rowsToCsv, exportFileName } from '../lib/exportCsv.js';
+import { svgToPngBlob } from '../lib/exportPng.js';
+import { saveBlob } from '../lib/download.js';
+import { compileFilter } from '../lib/searchFilter.js';
+import { useDebouncedValue } from '../hooks/useDebouncedValue.js';
+import { LargestFilesView } from './LargestFilesView.jsx';
+import { RowActionsButton } from './RowActionsButton.jsx';
+import { useDrives } from '../hooks/useDrives.js';
+import { useAdminAccess } from '../hooks/useAdminAccess.js';
+import { readScanMode, writeScanMode } from '../lib/scanMode.js';
+import { driveLetterOf, rootOfDrive, drivesFromScan } from '../lib/driveRoot.js';
 import { readFastScanMs, writeFastScanMs } from '../lib/fastScanDuration.js';
 
 const DEFAULT_ROOT = 'C:\\';
@@ -113,14 +131,83 @@ function ScanOption({ title, badge, explain, note, recommended, children }) {
         )}
       </div>
       <p className="text-[13px] text-[color:var(--text-primary)]">{explain}</p>
-      <p className="text-[12.5px] text-[color:var(--text-secondary)] mb-3">{note}</p>
+      {typeof note === 'string' ? <p className="text-[12.5px] text-[color:var(--text-secondary)] mb-3">{note}</p> : note}
       <div className="mt-auto">{children}</div>
     </div>
   );
 }
 
-export function DriveRootPrompt({ path, onFastScan, fastScanning, onCrawl }) {
+/** The other NTFS drives that can ride along on this fast scan, as
+ * checkboxes. They share the one administrator prompt the scan raises, which
+ * is the point of offering them here rather than as separate scans. */
+function AlsoScanDrives({ drives, alsoScan, onToggle }) {
   const { t } = useLanguage();
+  if (!drives || drives.length === 0) return null;
+  return (
+    <fieldset className="mb-3 min-w-0">
+      <legend className="text-[12px] font-medium text-[color:var(--text-primary)] mb-1.5">
+        {t('diskMapV3.drives.alsoScan')}
+      </legend>
+      <div className="flex flex-wrap gap-x-4 gap-y-1">
+        {drives.map((drive) => (
+          <label key={drive.letter} className="flex items-center gap-1.5 text-[12.5px] text-[color:var(--text-secondary)] cursor-pointer">
+            <input
+              type="checkbox"
+              checked={alsoScan.has(drive.letter)}
+              onChange={() => onToggle(drive.letter)}
+              className="accent-[color:var(--accent-primary)]"
+            />
+            <span className="font-mono">{drive.letter}:</span>
+            {drive.label && <span className="truncate max-w-[14ch]">{drive.label}</span>}
+          </label>
+        ))}
+      </div>
+      <p className="text-[11.5px] text-[color:var(--text-muted)] mt-1.5">{t('diskMapV3.drives.alsoScanNote')}</p>
+    </fieldset>
+  );
+}
+
+/** What the fast scan needs, said plainly: nothing when Prune already has
+ * administrator rights, otherwise the reason and the one-time fix. */
+function AdminAccessNote({ admin }) {
+  const { t } = useLanguage();
+  if (admin.elevated) {
+    return <p className="text-[12.5px] text-[color:var(--text-secondary)] mb-3">{t('diskMapV3.elevation.runningAsAdmin')}</p>;
+  }
+  return (
+    <div className="mb-3 flex flex-col gap-1.5">
+      <p className="text-[12.5px] text-[color:var(--text-secondary)]">{t('diskMap.driveRootPrompt.fastNeeds')}</p>
+      <p className="text-[12.5px] text-[color:var(--text-secondary)]">{t('diskMapV3.elevation.why')}</p>
+      {admin.canRestart && (
+        <>
+          <p className="text-[12.5px] text-[color:var(--text-secondary)]">{t('diskMapV3.elevation.restartHint')}</p>
+          <div>
+            <button
+              type="button"
+              className="btn-ghost px-3.5 py-2 rounded-lg text-[12.5px] font-medium disabled:opacity-50"
+              onClick={admin.onRestart}
+              disabled={admin.restarting}
+            >
+              {admin.restarting ? t('diskMapV3.elevation.restarting') : t('diskMapV3.elevation.restartButton')}
+            </button>
+          </div>
+        </>
+      )}
+      {admin.outcome?.kind === 'declined' && (
+        <p role="status" className="text-[12.5px] text-[color:var(--warning)]">{t('diskMapV3.elevation.restartDeclined')}</p>
+      )}
+      {admin.outcome?.kind === 'failed' && (
+        <p role="status" className="text-[12.5px] text-[color:var(--warning)] select-text">
+          {t('diskMapV3.elevation.restartFailed', admin.outcome.error)}
+        </p>
+      )}
+    </div>
+  );
+}
+
+export function DriveRootPrompt({ path, onFastScan, fastScanning, onCrawl, otherDrives, alsoScan, onToggleAlso, fastUnavailable, admin, lastMode }) {
+  const { t } = useLanguage();
+  const crawlFirst = lastMode === 'crawl';
   return (
     <section className="w-full max-w-[860px] leading-[1.55] [overflow-wrap:anywhere]">
       <h2 className="text-[18px] font-semibold text-[color:var(--text-primary)] mb-4">
@@ -128,15 +215,18 @@ export function DriveRootPrompt({ path, onFastScan, fastScanning, onCrawl }) {
       </h2>
       <div className="grid gap-4 grid-cols-1 min-[640px]:grid-cols-2">
         <ScanOption
-          recommended
+          recommended={!fastUnavailable}
           title={t('diskMap.driveRootPrompt.fastTitle')}
-          badge={t('diskMap.driveRootPrompt.recommended')}
+          badge={fastUnavailable ? undefined : t('diskMap.driveRootPrompt.recommended')}
           explain={t('diskMap.driveRootPrompt.fastExplain', path.replace(/\\+$/, ''))}
-          note={t('diskMap.driveRootPrompt.fastNeeds')}
+          note={fastUnavailable ? t('diskMapV3.drives.notNtfs') : admin ? <AdminAccessNote admin={admin} /> : t('diskMap.driveRootPrompt.fastNeeds')}
         >
-          <button className="btn-primary px-4 py-2 rounded-lg text-[13px] font-medium disabled:opacity-50"
+          {!fastUnavailable && otherDrives && onToggleAlso && (
+            <AlsoScanDrives drives={otherDrives} alsoScan={alsoScan ?? new Set()} onToggle={onToggleAlso} />
+          )}
+          <button className={`${crawlFirst ? 'btn-ghost px-3.5 text-[12.5px]' : 'btn-primary px-4 text-[13px]'} py-2 rounded-lg font-medium disabled:opacity-50`}
             onClick={onFastScan}
-            disabled={fastScanning}
+            disabled={fastScanning || fastUnavailable}
           >
             {fastScanning ? t('diskMap.readingDrive') : t('diskMap.fastScanButton')}
           </button>
@@ -144,10 +234,10 @@ export function DriveRootPrompt({ path, onFastScan, fastScanning, onCrawl }) {
         <ScanOption
           title={t('diskMap.driveRootPrompt.crawlTitle')}
           explain={t('diskMap.driveRootPrompt.crawlExplain')}
-          note={t('diskMap.driveRootPrompt.crawlLimit')}
+          note={t('diskMapV3.crawl.limit')}
         >
           <button
-            className="btn-ghost px-3.5 py-2 rounded-lg text-[12.5px] font-medium"
+            className={`${crawlFirst ? 'btn-primary px-4 text-[13px]' : 'btn-ghost px-3.5 text-[12.5px]'} py-2 rounded-lg font-medium`}
             onClick={onCrawl}
           >
             {t('diskMap.driveRootPrompt.crawlButton')}
@@ -189,7 +279,7 @@ const EMPTY_BREAKDOWN = { rows: [], totalBytes: 0, totalFiles: 0, treeBytes: 0, 
 const EMPTY_FILES = [];
 const EMPTY_FOLDER_ROWS = [];
 
-function TreemapCell({ x, y, width, height, depth, name, size, type, scanned, aggregated, fullPath, icons, typeColors, onHover, onLeave, onDrillDown, onContextMenu }) {
+function TreemapCell({ x, y, width, height, depth, name, size, allocated, modified, type, scanned, aggregated, fullPath, searchMatch, selected, onSelect, icons, typeColors, onHover, onLeave, onDrillDown, onContextMenu }) {
   const { t } = useLanguage();
   if (depth === 0 || !(width > 0) || !(height > 0)) return null;
   const fill = colorForNode({ name, type, scanned: scanned === false || aggregated ? false : scanned }, typeColors);
@@ -214,6 +304,11 @@ function TreemapCell({ x, y, width, height, depth, name, size, type, scanned, ag
 
   return (
     <g
+      // The search box's verdict on this cell, when there is a search:
+      // "true" for a match, "false" for everything else. Absent otherwise.
+      data-name={name}
+      data-search-match={searchMatch === undefined ? undefined : String(searchMatch)}
+      data-selected={selected ? 'true' : undefined}
       className={`treemap-cell${canDrillDown ? ' treemap-cell--clickable' : ''}`}
       // ONE style prop. There were briefly two -- an animationDelay added
       // beside the existing cursor -- and JSX silently keeps the last, so
@@ -256,8 +351,9 @@ function TreemapCell({ x, y, width, height, depth, name, size, type, scanned, ag
           clientX: box.left + box.width / 2,
           clientY: box.top + box.height / 2
         });
+        if (fullPath && !aggregated && scanned !== false) onSelect?.(fullPath);
       }}
-      onBlur={onLeave}
+      onBlur={() => { onLeave(); onSelect?.(null); }}
       onKeyDown={(e) => {
         if (!canDrillDown) return;
         if (e.key === 'Enter' || e.key === ' ') {
@@ -265,8 +361,8 @@ function TreemapCell({ x, y, width, height, depth, name, size, type, scanned, ag
           onDrillDown(fullPath);
         }
       }}
-      onMouseEnter={(e) => onHover({ name, size, fullPath, type, scanned, aggregated }, e)}
-      onMouseLeave={onLeave}
+      onMouseEnter={(e) => { onHover({ name, size, fullPath, type, scanned, aggregated }, e); if (fullPath && !aggregated && scanned !== false) onSelect?.(fullPath); }}
+      onMouseLeave={() => { onLeave(); onSelect?.(null); }}
       onClick={() => canDrillDown && onDrillDown(fullPath)}
       // An unscanned or aggregate block is not a place -- there is no path
       // to open, copy or remove -- so it gets no menu rather than a menu
@@ -274,10 +370,18 @@ function TreemapCell({ x, y, width, height, depth, name, size, type, scanned, ag
       onContextMenu={(e) => {
         if (!fullPath || aggregated || scanned === false) return;
         e.preventDefault();
-        onContextMenu({ name, size, fullPath, type }, e);
+        onContextMenu({ name, size, allocated, modified, fullPath, type }, e);
       }}
     >
-      <rect x={x} y={y} width={width} height={height} fill={fill} stroke="var(--bg-base)" strokeWidth={1.5} rx={3} />
+      <rect
+        x={x} y={y} width={width} height={height} fill={fill} rx={3}
+        // A match gets a ring in the accent colour; everything else steps
+        // back. The ring is a stroke, not an opacity change, so a match still
+        // reads at full strength next to dimmed neighbours.
+        stroke={searchMatch === true || selected ? 'var(--accent-primary)' : 'var(--bg-base)'}
+        strokeWidth={searchMatch === true || selected ? 3 : 1.5}
+        opacity={searchMatch === false ? 0.22 : undefined}
+      />
       {showIcon && (
         <image
           href={iconSrc}
@@ -407,149 +511,9 @@ function ExtensionPanel({ breakdown, shown, icons, typeColors }) {
 }
 
 
-/** The biggest individual files, WizTree's second tab.
- *
- * A treemap is good at showing that a folder is enormous and bad at
- * showing that one file inside it is the reason. Satisfactory's 8.4 GB
- * .ucas is a quarter of everything scanned here and the map draws it as
- * an indistinguishable slab inside Games.
- *
- * Paths are shown in full and are the point of the view: this is the list
- * you act on, and "FactoryGame-Windows.ucas" without its folder is not
- * something anyone can find again. */
-/** The "..." on a row: the same menu a right-click on the map opens, for
- * people who do not right-click (keyboard, touch, or simply nobody told
- * them). The menu opens beside the button, not at the pointer, so it lands
- * in the same place whatever opened it. 24 px square, the WCAG 2.2 floor. */
-function RowActionsButton({ name, onOpen }) {
-  const { t } = useLanguage();
-  return (
-    <button
-      type="button"
-      aria-haspopup="menu"
-      aria-label={t('diskMap.rowActionsLabel', name)}
-      onClick={(e) => {
-        e.stopPropagation();
-        const box = e.currentTarget.getBoundingClientRect();
-        onOpen({ clientX: box.right, clientY: box.bottom });
-      }}
-      className="w-6 h-6 shrink-0 rounded-md flex items-center justify-center text-[color:var(--text-secondary)] hover:text-[color:var(--text-primary)] hover:bg-[color:var(--surface-hover)] transition-colors"
-    >
-      <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-        <circle cx="5" cy="12" r="2" />
-        <circle cx="12" cy="12" r="2" />
-        <circle cx="19" cy="12" r="2" />
-      </svg>
-    </button>
-  );
-}
+// Re-exported: the render tests (and anything else) have always imported it from here.
+export { LargestFilesView };
 
-export function LargestFilesView({ files, icons, onContextMenu }) {
-  const { t } = useLanguage();
-
-  if (files.length === 0) {
-    return (
-      <div className="glass-panel p-6 text-[13px] text-[color:var(--text-muted)]">
-        {t('diskMap.largestFiles.empty')}
-      </div>
-    );
-  }
-
-  return (
-    <div className="glass-panel p-4 min-w-0">
-      <div className="flex flex-col">
-        {files.map((file) => (
-          <div
-            key={file.fullPath || file.name}
-            className="flex items-center gap-2.5 py-[5px] border-b border-[color:var(--border-subtle)] last:border-b-0"
-            onContextMenu={(e) => {
-              if (!onContextMenu || !file.fullPath) return;
-              e.preventDefault();
-              onContextMenu({ name: file.name, size: file.size, fullPath: file.fullPath, type: 'file' }, e);
-            }}
-          >
-            {icons?.[extensionOf(file.name) ?? GENERIC_FILE_KEY] ? (
-              <img
-                src={icons[extensionOf(file.name) ?? GENERIC_FILE_KEY]}
-                alt="" width={16} height={16}
-                className="w-4 h-4 shrink-0 object-contain"
-              />
-            ) : (
-              <div className="w-4 h-4 shrink-0" />
-            )}
-            <div
-              className="font-mono text-[12px] text-[color:var(--text-primary)] w-[86px] text-right shrink-0"
-              style={{ fontVariantNumeric: 'tabular-nums' }}
-            >
-              {formatBytes(file.size)}
-            </div>
-            <div className="min-w-0 flex-1">
-              <div className="text-[12.5px] text-[color:var(--text-primary)] truncate">{file.name}</div>
-              {file.fullPath && (
-                <div className="text-[11px] font-mono text-[color:var(--text-muted)] truncate select-text">{file.fullPath}</div>
-              )}
-            </div>
-            {onContextMenu && file.fullPath && (
-              <RowActionsButton
-                name={file.name}
-                onOpen={(pos) => onContextMenu({ name: file.name, size: file.size, fullPath: file.fullPath, type: 'file' }, pos)}
-              />
-            )}
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-
-/** WizTree's Tree View: what is directly inside the folder in view, as a
- * sortable table.
- *
- * The map answers "which of these is big" and nothing else. It cannot say
- * that a 29 GB folder holds 52,780 items, or when it was last touched,
- * and those are what decide whether a folder is worth opening.
- *
- * Two of WizTree's columns are deliberately absent. Allocated size was
- * measured in this project and thrown out -- it summed to 1270 GB on a
- * 952.9 GB volume, so it fails its own sanity check. Windows file
- * attributes are not on a Node stat and nothing in the scan carries them.
- * An empty column would be worse than no column. */
-/** Sized to fit beside the file-type panel rather than to a comfortable
- * ideal. All seven columns at their old widths came to 840px in a pane
- * that is about 680px wide, so Folders and Modified were sliced off the
- * right edge and the table carried a horizontal scrollbar it should never
- * have needed -- the same overflow the Applications table had, in a pane
- * that is narrower because the type panel sits beside it.
- *
- * Every width here is measured against the content: "3.6%", "29.4 GB",
- * "59,502" and "8/17/2026" are the widest real values in their columns. */
-const FOLDER_COLUMNS = [
-  { key: 'name', align: 'left', width: 'minmax(150px,1fr)' },
-  { key: 'percentOfParent', align: 'right', width: '54px' },
-  { key: 'size', align: 'right', width: '84px' },
-  { key: 'items', align: 'right', width: '68px' },
-  { key: 'files', align: 'right', width: '64px' },
-  { key: 'folders', align: 'right', width: '68px' },
-  { key: 'modified', align: 'right', width: '84px' },
-  // The "..." menu. No header word: it is an action column, not data.
-  { key: 'actions', align: 'right', width: '24px' }
-];
-
-// percentOfParent is the one column with no word to translate -- "%" is
-// the same symbol in every language this app ships.
-const FOLDER_COLUMN_KEYS = {
-  name: 'diskMap.folderTable.columns.folder',
-  size: 'diskMap.folderTable.columns.size',
-  items: 'diskMap.folderTable.columns.items',
-  files: 'diskMap.folderTable.columns.files',
-  folders: 'diskMap.folderTable.columns.folders',
-  modified: 'diskMap.folderTable.columns.modified'
-};
-
-const FOLDER_GRID = FOLDER_COLUMNS.map((c) => c.width).join(' ');
-
-/** A count that was never taken reads as a dash, never as zero. */
 /** Why a folder could not be scanned, naming the folder it was reading.
  * Exported so it can be tested without scanning a real drive. */
 export function ScanFailure({ path, error, onRetry }) {
@@ -568,160 +532,16 @@ export function FastScanNote({ note }) {
   );
 }
 
-function Count({ value }) {
-  if (value === null || value === undefined) {
-    return <span className="text-[color:var(--text-muted)]">—</span>;
-  }
-  return <>{value.toLocaleString()}</>;
-}
-
-function FolderTable({ folderRows, onDrillDown, onContextMenu }) {
-  const { t } = useLanguage();
-  const [sort, setSort] = useState({ column: 'size', direction: 'desc' });
-  // The counts themselves are computed off the main thread (see
-  // useDiskMapAggregates.js) since a folder like a drive root's own
-  // countSubtree walk covers every node in the tree; only the SORT of the
-  // already-computed rows happens here, which is cheap regardless of how
-  // large the tree behind them was.
-  const rows = useMemo(
-    () => sortFolderRows(folderRows, sort.column, sort.direction),
-    [folderRows, sort]
-  );
-
-  if (rows.length === 0) {
-    return (
-      <div className="glass-panel p-6 text-[13px] text-[color:var(--text-muted)]">
-        {t('diskMap.folderTable.empty')}
-      </div>
-    );
-  }
-
-  return (
-    // A real table to assistive tech: the rows are divs in a grid (a native
-    // <table> cannot give a truncating flexible first column), so the
-    // semantics are stated instead of assumed.
-    <div className="glass-panel overflow-hidden min-w-0" role="table" aria-label={t('diskMap.folderTable.columns.folder')}>
-      <div
-        role="row"
-        className="grid gap-2.5 px-4 py-2 border-b border-[color:var(--border-subtle)] bg-[color:var(--surface-subtle)]"
-        style={{ gridTemplateColumns: FOLDER_GRID }}
-      >
-        {FOLDER_COLUMNS.map((col) => {
-          if (col.key === 'actions') return <span key={col.key} role="presentation" />;
-          const sorted = sort.column === col.key;
-          return (
-            <div
-              key={col.key}
-              role="columnheader"
-              aria-sort={sorted ? (sort.direction === 'asc' ? 'ascending' : 'descending') : undefined}
-              className={col.align === 'right' ? 'flex justify-end' : 'flex'}
-            >
-              <button
-                onClick={() => setSort((s) => nextFolderSort(s, col.key))}
-                // 32 px tall: a sortable header is a control, not a label.
-                className={`flex items-center gap-1 min-h-8 text-[11px] font-mono uppercase tracking-[0.12em] text-[color:var(--text-muted)] hover:text-[color:var(--text-primary)] transition-colors ${
-                  col.align === 'right' ? 'justify-end' : ''
-                }`}
-              >
-                {col.key === 'percentOfParent' ? '%' : t(FOLDER_COLUMN_KEYS[col.key])}
-                {sorted && (
-                  <svg aria-hidden="true" width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.2" className="shrink-0">
-                    {sort.direction === 'asc' ? <polyline points="18 15 12 9 6 15" /> : <polyline points="6 9 12 15 18 9" />}
-                  </svg>
-                )}
-              </button>
-            </div>
-          );
-        })}
-      </div>
-
-      <div role="rowgroup" className="max-h-[520px] overflow-y-auto divide-y divide-[color:var(--border-subtle)]">
-        {rows.map((row) => {
-          // Only a folder the scan actually opened is worth drilling into --
-          // clicking an unscanned block would scan a path we have no
-          // evidence even exists.
-          const drillable = row.scanned && row.type === 'directory' && Boolean(row.fullPath);
-          // The same test as the map's menu: a real, measured place.
-          const actionable = row.scanned && Boolean(row.fullPath);
-          const node = { name: row.name, size: row.size, fullPath: row.fullPath, type: row.type };
-          return (
-            <div
-              role="row"
-              key={row.fullPath || row.name}
-              className={`grid gap-2.5 px-4 py-[7px] items-center ${
-                drillable ? 'cursor-pointer hover:bg-[color:var(--surface-hover)] transition-colors' : ''
-              }`}
-              style={{ gridTemplateColumns: FOLDER_GRID }}
-              onClick={() => { if (drillable) onDrillDown(row.fullPath); }}
-              onContextMenu={(e) => {
-                if (!actionable || !onContextMenu) return;
-                e.preventDefault();
-                onContextMenu(node, e);
-              }}
-            >
-              <div role="cell" className="text-[12.5px] text-[color:var(--text-primary)] truncate min-w-0">
-                {drillable ? (
-                  // The row's keyboard door. A mouse click anywhere on the row
-                  // drills (the row's own handler); this is the same action for
-                  // Tab, Enter and Space, named with what it opens and how big
-                  // it is. Its click bubbles to the row, so there is one path.
-                  <button
-                    type="button"
-                    aria-label={t('diskMap.folderTable.rowLabel', row.name, formatBytes(row.size))}
-                    className="max-w-full truncate text-left"
-                  >
-                    {row.name}
-                  </button>
-                ) : (
-                  row.name
-                )}
-                {!row.scanned && (
-                  <span className="ml-2 text-[11px] font-mono uppercase tracking-wider text-[color:var(--text-muted)]">
-                    {t('diskMap.folderTable.notScanned')}
-                  </span>
-                )}
-              </div>
-              <div role="cell" className="text-[11.5px] font-mono text-right text-[color:var(--text-muted)]" style={{ fontVariantNumeric: 'tabular-nums' }}>
-                {row.scanned ? `${row.percentOfParent.toFixed(1)}%` : '—'}
-              </div>
-              {/* Text colour, not the cyan that also marks buttons and ticks. */}
-              <div role="cell" className="text-[12px] font-mono text-right text-[color:var(--text-primary)]" style={{ fontVariantNumeric: 'tabular-nums' }}>
-                {row.scanned ? formatBytes(row.size) : '—'}
-              </div>
-              <div role="cell" className="text-[11.5px] font-mono text-right text-[color:var(--text-secondary)]" style={{ fontVariantNumeric: 'tabular-nums' }}>
-                <Count value={row.items} />
-              </div>
-              <div role="cell" className="text-[11.5px] font-mono text-right text-[color:var(--text-secondary)]" style={{ fontVariantNumeric: 'tabular-nums' }}>
-                <Count value={row.files} />
-              </div>
-              <div role="cell" className="text-[11.5px] font-mono text-right text-[color:var(--text-secondary)]" style={{ fontVariantNumeric: 'tabular-nums' }}>
-                <Count value={row.folders} />
-              </div>
-              <div role="cell" className="text-[11.5px] font-mono text-right text-[color:var(--text-muted)]" style={{ fontVariantNumeric: 'tabular-nums' }}>
-                {row.modified ? new Date(row.modified).toLocaleDateString() : '—'}
-              </div>
-              <div role="cell" className="flex justify-end">
-                {actionable && onContextMenu && (
-                  <RowActionsButton name={row.name} onOpen={(pos) => onContextMenu(node, pos)} />
-                )}
-              </div>
-            </div>
-          );
-        })}
-      </div>
-    </div>
-  );
-}
-
 function DiskMap() {
   const { t } = useLanguage();
   const [currentPath, setCurrentPath] = useState(DEFAULT_ROOT);
   const [hovered, setHovered] = useState(null);
-  // The whole drive, read from the MFT in one pass. While this is set,
-  // browsing is pure navigation through data already in memory -- no
-  // further disk access at all.
-  const [fastTree, setFastTree] = useState(null);
-  const [fastStats, setFastStats] = useState(null);
+  // Whole drives, read from the MFT in one pass, by drive letter. While a
+  // drive is in here, browsing it is pure navigation through data already
+  // in memory -- no further disk access at all.
+  const [fastTrees, setFastTrees] = useState({});
+  // The other drives ticked to ride along on the next fast scan.
+  const [alsoScan, setAlsoScan] = useState(() => new Set());
   const [fastScanning, setFastScanning] = useState(false);
   const [fastNote, setFastNote] = useState(null);
   const [fastExpectedMs, setFastExpectedMs] = useState(null);
@@ -738,43 +558,92 @@ function DiskMap() {
   // flight and start the whole thing again. /api/disk-space answers in
   // milliseconds while the scan takes half a minute, so the value is
   // always here long before the scan's .then() reads it.
-  const usedBytesRef = useRef(null);
+  const usedBytesRef = useRef({});
   // Windows' own file-type icons, keyed by extension (plus "folder" and
   // "file"). Fetched for whatever is on screen and accumulated, so
   // drilling into a folder only ever asks about types not already held.
   const [typeIcons, setTypeIcons] = useState({});
   const [view, setView] = useState('map');
-  // Set only by the button that says so. A whole-drive crawl is opt-in
-  // now; see the effect below.
-  const [crawlRoot, setCrawlRoot] = useState(false);
+  // The drives whose root the user chose to walk. Set only by the button that
+  // says so: a whole-drive crawl is opt-in; see the effect below.
+  const [crawlRoots, setCrawlRoots] = useState(() => new Set());
+
+  const { drives, systemDrive } = useDrives();
+  const admin = useAdminAccess();
+  // How the user last chose to scan, so the chooser leads with it. It only
+  // emphasises a button; it never starts a scan.
+  const [lastMode, setLastMode] = useState(() => readScanMode(safeStorage()));
+  const rememberMode = (mode) => { writeScanMode(safeStorage(), mode); setLastMode(mode); };
+  const currentLetter = driveLetterOf(currentPath);
+  const crawlRoot = crawlRoots.has(currentLetter);
+  const currentDrive = drives?.find((d) => d.letter === currentLetter) ?? null;
+
+  // Opens on the drive Windows lives on, which is not always C:. Once, and
+  // only if nobody has chosen anything yet -- a drive picked before the list
+  // arrived must not be overridden by it.
+  const systemDriveApplied = useRef(false);
+  useEffect(() => {
+    if (!systemDrive || systemDriveApplied.current) return;
+    systemDriveApplied.current = true;
+    setCurrentPath((path) => (path === DEFAULT_ROOT ? rootOfDrive(systemDrive) : path));
+  }, [systemDrive]);
 
   /** Explicit click only. This raises a real UAC prompt, so it can never
-   * live in an effect -- see api.js. */
+   * live in an effect -- see api.js. Every drive ticked goes in ONE request,
+   * so it is one prompt however many are chosen. */
   const handleFastScan = async () => {
+    rememberMode('fast');
     setFastScanning(true);
     setFastNote(null);
     // What the last successful fast scan took, read fresh at the click: the
     // card estimates from it. Nothing remembered means no estimate.
     setFastExpectedMs(readFastScanMs(safeStorage()));
     const startedAt = Date.now();
+    const here = currentLetter ?? DEFAULT_ROOT.slice(0, 1);
+    const letters = [here, ...[...alsoScan].filter((l) => l !== here)];
     try {
-      const result = await scanDriveFast(DEFAULT_ROOT.slice(0, 1));
+      const result = await scanDriveFast(letters);
       if (result.cancelled) {
         setFastNote(t('diskMap.fastScanDeclined'));
         return;
       }
+      const { scanned, failures } = drivesFromScan(result, letters);
+      // A drive that could not be read is said so, by name, beside the ones
+      // that could -- the user approved a prompt for all of them.
+      if (failures.length > 0) {
+        setFastNote(failures.map((f) => t('diskMapV3.drives.failed', `${f.letter}:`, f.error)).join(' '));
+      }
+      if (scanned.length === 0) return;
       // Only a scan that actually finished is remembered. A declined prompt
       // (above) or a failure (the catch) would teach the estimate nonsense.
       writeFastScanMs(safeStorage(), Date.now() - startedAt);
-      setFastTree(attachFullPaths(result.tree, DEFAULT_ROOT));
-      setFastStats(result.stats);
-      setCurrentPath(DEFAULT_ROOT);
+      setFastTrees((prev) => {
+        const next = { ...prev };
+        for (const drive of scanned) {
+          next[drive.letter] = { tree: attachFullPaths(drive.tree, rootOfDrive(drive.letter)), stats: drive.stats };
+        }
+        return next;
+      });
+      setAlsoScan(new Set());
+      setCurrentPath(rootOfDrive(scanned.some((d) => d.letter === here) ? here : scanned[0].letter));
     } catch (err) {
       setFastNote(err.message);
     } finally {
       setFastScanning(false);
     }
   };
+
+  /** Switching drive only changes which root is on screen. */
+  const handleSelectDrive = (letter) => {
+    setHovered(null);
+    setAlsoScan(new Set());
+    setCurrentPath(rootOfDrive(letter));
+  };
+  const handleToggleAlso = (letter) => setAlsoScan((prev) => {
+    const next = new Set(prev);
+    if (next.has(letter)) next.delete(letter); else next.add(letter);
+    return next;
+  });
 
   /* Through the query layer, sharing the Dashboard's cached reading
    * rather than issuing a second request for the same numbers.
@@ -787,21 +656,39 @@ function DiskMap() {
    * unscanned-remainder calculation, and holding it in state would
    * re-render the whole treemap when it lands. */
   const { diskSpace } = useDiskSpace();
-  const { settings } = useSettings();
+  const { settings, save: saveSettings } = useSettings();
   useEffect(() => {
+    const used = { ...usedBytesRef.current };
     // The API reports free and total; used is the subtraction. Read off
     // the response rather than assumed -- there is no `usedBytes` field,
-    // and reading one gave undefined silently.
-    if (typeof diskSpace?.totalBytes !== 'number' || typeof diskSpace?.freeBytes !== 'number') return;
-    usedBytesRef.current = diskSpace.totalBytes - diskSpace.freeBytes;
-  }, [diskSpace]);
+    // and reading one gave undefined silently. /api/disk-space is the C:
+    // figure; every drive in the picker brings its own.
+    if (typeof diskSpace?.totalBytes === 'number' && typeof diskSpace?.freeBytes === 'number') {
+      used.C = diskSpace.totalBytes - diskSpace.freeBytes;
+    }
+    for (const drive of drives ?? []) {
+      if (typeof drive.totalBytes === 'number' && typeof drive.freeBytes === 'number') {
+        used[drive.letter] = drive.totalBytes - drive.freeBytes;
+      }
+    }
+    usedBytesRef.current = used;
+  }, [diskSpace, drives]);
 
   // Already have the whole drive in memory? Then this folder is a lookup,
   // not a scan. Falling through to the recursive scanner here would undo
   // the entire point of having read the MFT.
+  // A reopened saved scan stands in for its drive's live tree while it is open.
+  const [savedView, setSavedView] = useState(null);
+  const [savedOpen, setSavedOpen] = useState(false);
+  const savedHere = savedView && savedView.letter === currentLetter ? savedView : null;
+  const fastEntry = savedHere
+    ? { tree: savedHere.tree, stats: null }
+    : currentLetter ? fastTrees[currentLetter] ?? null : null;
+  const fastStats = fastEntry?.stats ?? null;
+  const scannedLetters = useMemo(() => new Set(Object.keys(fastTrees)), [fastTrees]);
   const fastSubtree = useMemo(
-    () => (fastTree ? subtreeForPath(fastTree, currentPath) : null),
-    [fastTree, currentPath]
+    () => (fastEntry ? subtreeForPath(fastEntry.tree, currentPath) : null),
+    [fastEntry, currentPath]
   );
 
   // A drive root is not worth crawling. Measured on this machine: the
@@ -817,8 +704,10 @@ function DiskMap() {
   // elevation request -- a UAC prompt that appears because a tab was
   // opened is how software teaches people to click Yes without reading.
   const shouldScan = Boolean(currentPath)
+    && !savedHere
     && !fastSubtree
     && !(isDriveRoot(currentPath) && !crawlRoot);
+  const nonNtfsRoot = isDriveRoot(currentPath) && currentDrive !== null && currentDrive.ntfs === false;
 
   // The signal this query provides is the whole reason it is a query.
   // Changing path or leaving the screen aborts it, which closes the HTTP
@@ -866,7 +755,7 @@ function DiskMap() {
         // Only at a drive root: a truncated scan of a subfolder has no
         // used-space figure to reconcile against.
         isDriveRoot(currentPath)
-          ? withUnscannedRemainder(stoppedByUser ? { ...result, stoppedByUser } : result, usedBytesRef.current)
+          ? withUnscannedRemainder(stoppedByUser ? { ...result, stoppedByUser } : result, usedBytesRef.current[driveLetterOf(currentPath)] ?? null)
           : (stoppedByUser ? { ...result, stoppedByUser } : result),
         currentPath
       );
@@ -876,12 +765,26 @@ function DiskMap() {
   // The block for the part the scan never reached carries a stable English
   // key as its stored name; what is drawn is the catalog's wording.
   const unscannedLabel = t('diskMap.unscannedLabel');
-  const rawTree = fastSubtree ?? scanQuery.data ?? null;
-  const tree = useMemo(() => localizeUnscanned(rawTree, unscannedLabel), [rawTree, unscannedLabel]);
   const loading = shouldScan && scanQuery.isFetching;
   // Progress belongs to one path; a reading left over from another folder's
   // scan is never shown against this one.
   const progressHere = scanProgress?.path === currentPath ? scanProgress : null;
+  // While a folder walk runs, what it has read so far, drawn like any scan.
+  // It replaces whatever an earlier run left in the cache: during a re-scan the
+  // old picture would be stale and the new one is the live truth.
+  const liveSnapshot = loading ? progressHere?.snapshot ?? null : null;
+  const partialTree = useMemo(
+    () => prepareSnapshot(liveSnapshot, {
+      rootPath: currentPath,
+      usedBytes: usedBytesRef.current[currentLetter] ?? null,
+      atDriveRoot: isDriveRoot(currentPath),
+      aggregateLabel: (count) => t('diskMap.aggregateCell', count)
+    }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [liveSnapshot, currentPath, t]
+  );
+  const rawTree = fastSubtree ?? (loading ? partialTree : scanQuery.data) ?? null;
+  const tree = useMemo(() => localizeUnscanned(rawTree, unscannedLabel), [rawTree, unscannedLabel]);
   // A failed crawl is not worth reporting once the fast scan has answered
   // the same question -- the old code cleared this by hand after the MFT
   // read succeeded, and a derived error has to account for that itself.
@@ -889,6 +792,9 @@ function DiskMap() {
   const error = (!fastSubtree && scanQuery.error && !/abort/i.test(scanQuery.error.message || ''))
     ? scanQuery.error.message
     : null;
+  // The views are shown for a finished scan and, while one runs, for the
+  // partial picture of it. A scan that has read nothing yet shows only its card.
+  const showViews = !error && Boolean(tree) && (!loading || Boolean(partialTree));
 
 
   // Capped: a folder like System32 has ~1,900 direct children, and
@@ -902,7 +808,7 @@ function DiskMap() {
   const mapTree = mapTreeFor(tree, {
     enabled: settings?.showFreeSpaceOnMap,
     atDriveRoot: isDriveRoot(currentPath),
-    freeBytes: diskSpace?.freeBytes
+    freeBytes: currentLetter === 'C' && typeof diskSpace?.freeBytes === 'number' ? diskSpace.freeBytes : currentDrive?.freeBytes
   });
   const cells = mapTree ? limitCells(topLevelCells(mapTree), MAX_CELLS, (count) => t('diskMap.aggregateCell', count)) : [];
 
@@ -916,7 +822,30 @@ function DiskMap() {
   // useDiskMapAggregates falls back to computing these synchronously
   // wherever there is no Worker to post to (every test environment,
   // notably), so this still returns the exact same shapes there.
-  const aggregates = useDiskMapAggregates(tree, { fileLimit: FILE_ROWS });
+  // The search box. The folder rows and the map answer to every keystroke
+  // (a screenful of items); the whole-tree search behind the File view waits
+  // for a pause in typing, and is not run at all for an invalid pattern.
+  // The item pointed at or focused, in either the Tree rows or the map. Held
+  // here so each side can light up the other. A right-click menu holds it
+  // while it is open, so moving to the menu does not drop what it acts on.
+  const [selectedPath, setSelectedPath] = useState(null);
+  const menuOpenRef = useRef(false);
+  const handleSelect = useCallback((path) => {
+    if (path === null && menuOpenRef.current) return;
+    setSelectedPath(path);
+  }, []);
+  const [searchText, setSearchText] = useState('');
+  const filter = useMemo(() => compileFilter(searchText), [searchText]);
+  const fileFilterText = useDebouncedValue(filter.active ? searchText : '', 250);
+  const markedCells = useMemo(
+    () => cells.map((cell) => ({
+      ...cell,
+      searchMatch: filter.active ? !cell.aggregated && filter.match(cell.name, cell.fullPath) : undefined,
+      selected: Boolean(cell.fullPath) && cell.fullPath === selectedPath
+    })),
+    [cells, filter, selectedPath]
+  );
+  const aggregates = useDiskMapAggregates(tree, { fileLimit: FILE_ROWS, filterText: fileFilterText });
   const breakdown = aggregates.result?.extensionBreakdown ?? EMPTY_BREAKDOWN;
   const shownExtensions = useMemo(() => breakdown.rows.slice(0, PANEL_ROWS), [breakdown]);
 
@@ -1008,9 +937,59 @@ function DiskMap() {
   const toasts = useToasts();
   const queryClient = useQueryClient();
 
+  menuOpenRef.current = Boolean(menu);
+  const [properties, setProperties] = useState(null);
+
   const handleContextMenu = useCallback((node, event) => {
+    setSelectedPath(node.fullPath ?? null);
     setMenu({ node, x: event.clientX, y: event.clientY });
   }, []);
+
+  /* Saved scans. What gets saved is the LIVE tree of the drive in view: the
+   * fast scan's, or a folder walk of that drive's root if that is what ran. A
+   * scan that is itself a reopened saved one is never re-saved. */
+  const liveRoot = currentLetter
+    ? fastTrees[currentLetter]?.tree ?? queryClient.getQueryData(keys.diskScan(rootOfDrive(currentLetter))) ?? null
+    : null;
+
+  const handleSaveScan = async (label) => {
+    const fromFast = Boolean(fastTrees[currentLetter]);
+    const archive = compactTree(liveRoot, { rootName: `${currentLetter}:` });
+    const meta = await saveDiskScan({ label, source: fromFast ? 'fast' : 'crawl', truncated: Boolean(liveRoot.truncated), archive });
+    toasts.success(t('diskMapV3.saved.saved', meta.label));
+  };
+
+  const handleOpenSaved = async (scan) => {
+    try {
+      const letter = /^([A-Z]):$/.exec(scan.root)?.[1];
+      if (!letter) throw new Error(scan.root);
+      const { archive } = await loadSavedScan(scan.id);
+      const tree = expandArchive(archive, { rootPath: rootOfDrive(letter), aggregateLabel: (count) => t('diskMap.aggregateCell', count) });
+      setSavedView({ letter, tree, label: scan.label, savedAt: scan.savedAt });
+      setCurrentPath(rootOfDrive(letter));
+      setSavedOpen(false);
+    } catch (err) {
+      toasts.error(t('diskMapV3.saved.failed', err.message));
+    }
+  };
+
+  /** Adds a folder to Settings -> exclusions. It takes effect on the NEXT scan
+   * (the picture on screen is of a scan already made), which the confirmation
+   * says. The same list the Settings screen edits, matched the same way. */
+  const handleExclude = async (node) => {
+    const existing = Array.isArray(settings?.excludeFolders) ? settings.excludeFolders : [];
+    const same = (p) => String(p).replace(/[\\/]+$/, '').toLowerCase();
+    if (existing.some((p) => same(p) === same(node.fullPath))) {
+      toasts.info(t('diskMapV3.toasts.alreadyExcluded', node.fullPath));
+      return;
+    }
+    try {
+      await saveSettings.mutateAsync({ excludeFolders: [...existing, node.fullPath] });
+      toasts.success(t('diskMapV3.toasts.excluded', node.fullPath));
+    } catch {
+      toasts.error(t('diskMapV3.toasts.excludeFailed'));
+    }
+  };
 
   /** Removal goes to quarantine and is confirmed first.
    *
@@ -1052,6 +1031,44 @@ function DiskMap() {
     else toasts.error(result.error || t('diskMap.toasts.moveFailed'), { detail: node.fullPath });
   }, [pendingRemoval, toasts, queryClient, currentPath, t]));
 
+  /* Exports. Made in the window and handed to the browser layer as a download:
+   * no request to the backend and no new way for the window to write files.
+   * The CSV is the rows as they are on screen -- filtered by the search box and
+   * in the order the column sort gave them. */
+  const visibleRows = useRef({ tree: [], files: [] });
+  const onVisibleTreeRows = useCallback((rows) => { visibleRows.current.tree = rows; }, []);
+  const onVisibleFileRows = useCallback((rows) => { visibleRows.current.files = rows; }, []);
+  const treemapPanelRef = useRef(null);
+  const [exporting, setExporting] = useState(false);
+
+  const handleExportCsv = () => {
+    try {
+      const rows = view === 'files'
+        ? visibleRows.current.files.map((f) => ({ ...f, files: 1, folders: 0 }))
+        : visibleRows.current.tree;
+      const filename = exportFileName(currentPath, 'csv');
+      saveBlob(new Blob([rowsToCsv(rows)], { type: 'text/csv;charset=utf-8' }), filename);
+      toasts.success(t('diskMapV3.export.done', filename));
+    } catch (err) {
+      toasts.error(t('diskMapV3.export.failed', err.message));
+    }
+  };
+
+  const handleExportPng = async () => {
+    setExporting(true);
+    try {
+      const svg = treemapPanelRef.current?.querySelector('svg');
+      if (!svg) throw new Error('There is no map to save.');
+      const filename = exportFileName(currentPath, 'png');
+      saveBlob(await svgToPngBlob(svg), filename);
+      toasts.success(t('diskMapV3.export.done', filename));
+    } catch (err) {
+      toasts.error(t('diskMapV3.export.failed', err.message));
+    } finally {
+      setExporting(false);
+    }
+  };
+
   const handleDrillDown = useCallback((fullPath) => {
     setHovered(null);
     setCurrentPath(fullPath);
@@ -1071,6 +1088,18 @@ function DiskMap() {
                   {' '}{t('diskMap.indexIncomplete')}
                 </span>
               )}
+              {/* The numbers to hold the scan against the drive itself: what
+                  was counted, what it occupies on disk, and what the volume
+                  says is in use. A mismatch is visible here rather than
+                  trusted. */}
+              {typeof fastStats.allocatedBytes === 'number' && (
+                <span className="block mt-0.5 font-mono text-[11.5px] text-[color:var(--text-muted)]" data-testid="scan-totals">
+                  {typeof fastStats.bitmapUsedBytes === 'number'
+                    ? t('diskMapV3.totals.line', formatBytes(fastStats.totalBytes), formatBytes(fastStats.allocatedBytes), formatBytes(fastStats.bitmapUsedBytes))
+                    : t('diskMapV3.totals.lineNoVolume', formatBytes(fastStats.totalBytes), formatBytes(fastStats.allocatedBytes))}
+                  {fastStats.hardLinkedFiles > 0 && <> {t('diskMapV3.totals.hardLinkNote', fastStats.hardLinkedFiles.toLocaleString())}</>}
+                </span>
+              )}
             </p>
           ) : (
             <p className="text-[12px] text-[color:var(--text-secondary)] max-w-[110ch]">
@@ -1078,6 +1107,13 @@ function DiskMap() {
             </p>
           )}
         </div>
+        <div className="flex items-start gap-2 shrink-0">
+        <button
+          className="btn-ghost px-3.5 py-2 rounded-lg text-[12.5px] font-medium shrink-0"
+          onClick={() => setSavedOpen(true)}
+        >
+          {t('diskMapV3.saved.title')}
+        </button>
         {/* Hidden exactly where the panel below is offering the same thing.
             Two "(admin)" buttons on one screen is not two ways to do it,
             it's a question about whether they do the same thing. That is
@@ -1092,11 +1128,30 @@ function DiskMap() {
             {fastScanning ? t('diskMap.scanningDrive') : fastStats ? t('diskMap.rescanButton') : t('diskMap.fastScanButton')}
           </button>
         )}
+        </div>
       </div>
+
+      {savedHere && (
+        <div role="status" className="flex items-center gap-3 flex-wrap mb-5 px-3.5 py-3 rounded-xl bg-[color:var(--warning-soft)] border border-[color:var(--warning)]/25">
+          <p className="flex-1 min-w-0 text-[12.5px] text-[color:var(--warning)] select-text">
+            {t('diskMapV3.saved.viewing', savedHere.label, new Date(savedHere.savedAt).toLocaleString())}
+          </p>
+          <button type="button" className="btn-ghost px-3 py-1.5 rounded-lg text-[12px] font-medium" onClick={() => setSavedView(null)}>
+            {t('diskMapV3.saved.closeView')}
+          </button>
+        </div>
+      )}
 
       {fastNote && (
         <FastScanNote note={fastNote} />
       )}
+
+      <DrivePicker
+        drives={drives}
+        current={currentLetter}
+        scanned={scannedLetters}
+        onSelect={handleSelectDrive}
+      />
 
       <div className="flex items-center flex-wrap gap-0.5 text-[12.5px] font-mono mb-6">
         {breadcrumbTrail(currentPath).map((seg, i, arr) => (
@@ -1140,7 +1195,13 @@ function DiskMap() {
           path={currentPath}
           onFastScan={handleFastScan}
           fastScanning={fastScanning}
-          onCrawl={() => setCrawlRoot(true)}
+          onCrawl={() => { rememberMode('crawl'); setCrawlRoots((prev) => new Set(prev).add(currentLetter)); }}
+          admin={{ ...admin, onRestart: admin.restart }}
+          lastMode={lastMode}
+          otherDrives={(drives ?? []).filter((d) => d.letter !== currentLetter && d.ntfs)}
+          alsoScan={alsoScan}
+          onToggleAlso={handleToggleAlso}
+          fastUnavailable={nonNtfsRoot}
         />
       )}
 
@@ -1214,8 +1275,13 @@ function DiskMap() {
           The flat file list stays a tab, exactly as it is in WizTree: it is
           not a reading of this folder, it is a different question ("which
           single file is biggest") asked of the whole subtree. */}
-      {!loading && !error && tree && (
-        <div className="flex items-center gap-1 mb-3">
+      {showViews && loading && (
+        <p className="text-[12px] text-[color:var(--text-secondary)] mb-3">{t('diskMapV3.crawl.partialNote')}</p>
+      )}
+
+      {showViews && (
+        <div className="flex items-start justify-between flex-wrap gap-x-4 gap-y-2 mb-3">
+        <div className="flex items-center gap-1">
           {[['map', t('diskMap.view.tree')], ['files', t('diskMap.view.files')]].map(([key, label]) => (
             <button
               key={key}
@@ -1231,13 +1297,18 @@ function DiskMap() {
             </button>
           ))}
         </div>
+          <div className="flex items-start gap-3 flex-wrap">
+            <SearchBox value={searchText} onChange={setSearchText} invalid={!filter.ok} />
+            <ExportButtons onCsv={handleExportCsv} onPng={view === 'files' ? undefined : handleExportPng} busy={exporting} />
+          </div>
+        </div>
       )}
 
-      {!loading && !error && tree && view === 'files' && (
-        <LargestFilesView files={topFiles} icons={typeIcons} onContextMenu={handleContextMenu} />
+      {showViews && view === 'files' && (
+        <LargestFilesView files={topFiles} icons={typeIcons} onContextMenu={handleContextMenu} onVisibleRows={onVisibleFileRows} searchText={filter.active ? searchText : ''} />
       )}
 
-      {!loading && !error && tree && view !== 'files' && (
+      {showViews && view !== 'files' && (
         <div className="flex flex-col gap-4">
           {/* Folder table and file types side by side, the map full width
               beneath them -- WizTree's proportions, and the right ones: the
@@ -1249,17 +1320,17 @@ function DiskMap() {
               last column is sliced off, as it was between 1024 and 1207 before
               the rail widened. Below the breakpoint they stack. */}
           <div className="grid gap-4 min-[1400px]:grid-cols-[minmax(0,1fr)_360px] items-start">
-            <FolderTable folderRows={aggregates.result?.folderRows ?? EMPTY_FOLDER_ROWS} onDrillDown={handleDrillDown} onContextMenu={handleContextMenu} />
+            <FolderTable folderRows={aggregates.result?.folderRows ?? EMPTY_FOLDER_ROWS} onDrillDown={handleDrillDown} onContextMenu={handleContextMenu} onVisibleRows={onVisibleTreeRows} selectedPath={selectedPath} onSelect={handleSelect} filter={filter} searchText={searchText} />
             <ExtensionPanel breakdown={breakdown} shown={shownExtensions} icons={typeIcons} typeColors={typeColors} />
           </div>
 
-          <div className="glass-panel p-4 treemap-cells" style={{ position: 'relative' }} onMouseMove={handleContainerMouseMove}>
+          <div ref={treemapPanelRef} className="glass-panel p-4 treemap-cells" style={{ position: 'relative' }} onMouseMove={handleContainerMouseMove}>
             <ResponsiveContainer width="100%" height={420}>
               <Treemap
-                data={cells}
+                data={markedCells}
                 dataKey="size"
                 isAnimationActive={false}
-                content={<TreemapCell icons={typeIcons} typeColors={typeColors} onHover={handleHover} onLeave={handleLeave} onDrillDown={handleDrillDown} onContextMenu={handleContextMenu} />}
+                content={<TreemapCell icons={typeIcons} typeColors={typeColors} onHover={handleHover} onLeave={handleLeave} onDrillDown={handleDrillDown} onContextMenu={handleContextMenu} onSelect={handleSelect} />}
               />
             </ResponsiveContainer>
           </div>
@@ -1322,7 +1393,7 @@ function DiskMap() {
         open={Boolean(menu)}
         x={menu?.x ?? 0}
         y={menu?.y ?? 0}
-        onClose={() => setMenu(null)}
+        onClose={() => { setMenu(null); setSelectedPath(null); }}
         items={menu ? [
           {
             label: t('diskMap.contextMenu.openInExplorer'),
@@ -1336,15 +1407,40 @@ function DiskMap() {
               .catch(() => toasts.error(t('diskMap.toasts.copyFailed')))
           },
           {
+            label: t('diskMapV3.menu.properties'),
+            onSelect: () => setProperties(menu.node)
+          },
+          ...(menu.node.type === 'directory' && menu.node.fullPath && !isDriveRoot(menu.node.fullPath) ? [{
+            label: t('diskMapV3.menu.exclude'),
+            onSelect: () => handleExclude(menu.node)
+          }] : []),
+          ...(savedHere ? [] : [{
             label: t('diskMap.contextMenu.moveToQuarantineMenu'),
             danger: true,
             // Never removed straight from the menu. A right-click is one
             // gesture and this is the only removal in the app aimed at
             // whatever happened to be under the cursor.
             onSelect: () => setPendingRemoval(menu.node)
-          }
+          }])
         ] : []}
       />
+
+      {savedOpen && (
+        <SavedScansPanel
+          onClose={() => setSavedOpen(false)}
+          canSave={Boolean(liveRoot) && !savedHere}
+          defaultLabel={`${currentLetter ?? ''}: ${new Date().toLocaleString()}`}
+          onSave={handleSaveScan}
+          onOpen={handleOpenSaved}
+        />
+      )}
+
+      {properties && (
+        <PropertiesDialog
+          info={{ ...properties, ...(aggregates.result?.folderRows?.find((r) => r.fullPath === properties.fullPath) ?? {}) }}
+          onClose={() => setProperties(null)}
+        />
+      )}
 
       {pendingRemoval && (
         <ModalOverlay label={t('diskMap.removeModal.label')} onClose={() => setPendingRemoval(null)}>
