@@ -9,6 +9,7 @@ import { renderScreen } from '../testSupport/renderScreen.jsx';
  * given. */
 
 vi.mock('../lib/api.js', () => ({
+  fetchCustomCleaners: vi.fn(async () => ({ locations: [], imported: [] })),
   fetchSettings: vi.fn(async () => ({ updateCheck: false })),
   updateSettings: vi.fn(async (p) => p),
   fetchUpdateCheck: vi.fn(async () => ({ enabled: false, current: '2.3.4' })),

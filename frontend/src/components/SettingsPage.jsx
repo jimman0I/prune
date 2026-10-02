@@ -6,6 +6,7 @@ import AutomationSettings from './AutomationSettings.jsx';
 import ThemeToggle from './ThemeToggle.jsx';
 import Toggle from './Toggle.jsx';
 import CookieKeepListSettings from './CookieKeepListSettings.jsx';
+import CustomCleanersSettings from './CustomCleanersSettings.jsx';
 import { useSettings, useUpdateCheck } from '../hooks/useSystemQueries.js';
 import { leftoverDestinationFrom } from '../lib/leftoverDestination.js';
 import { removalModeFrom } from '../lib/cleanOutcome.js';
@@ -528,6 +529,10 @@ function SettingsPage({ onReportBug = null }) {
                   />
                 </div>
               </div>
+
+              {/* The user's own rules: Custom locations, and BleachBit
+                  cleaners they import. Two panels of their own. */}
+              <CustomCleanersSettings />
 
               {/* The two limits on the quarantine. Both empty by default,
                   and both read "blank means keep everything" -- the same

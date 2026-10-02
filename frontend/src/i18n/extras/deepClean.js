@@ -54,6 +54,50 @@ export default {
         hide: (a) => `Hide files in ${a}`,
         heading: (a, b) => `Largest files first: showing ${a} of ${b}`,
         biggest: (a) => `Largest: ${a}`
+      },
+      custom: {
+        category: "Custom",
+        ruleName: "Custom locations",
+        ruleDescription: "Files and folders you added yourself in Settings.",
+        description: "Add files, folders or patterns, such as D:\\Games\\Cache\\*.tmp, to Deep Clean. They appear as a rule of their own, never ticked by default, and still respect your exclusions, the recent-files guard and the protected places.",
+        ariaLabel: "Location to add",
+        remove: (a) => `Stop cleaning ${a}`,
+        empty: "No custom locations yet.",
+        error: {
+          empty: "Type a path first.",
+          relative: "Write a full path, such as D:\\Games\\Cache, or start with a variable like %LOCALAPPDATA%.",
+          climb: "A path with .. in it is not allowed.",
+          protected: "That is a protected place (Windows, Program Files, a whole drive or a user profile).",
+          wildcard: "Put the * lower down, inside a folder (D:\\Games\\Cache\\*), not at the top of a drive.",
+          long: "That path is too long.",
+          failed: (a) => `Couldn't save: ${a}`
+        }
+      },
+      imported: {
+        title: "Imported cleaners",
+        description: "Import a BleachBit cleaner file (.xml). Prune brings over its delete options and tells you exactly what it skipped. Imported rules are never ticked by default and stay out of protected places.",
+        button: "Import cleaner…",
+        empty: "No imported cleaners.",
+        meta: (a) => `Options imported: ${a}`,
+        remove: (a) => `Remove ${a}`,
+        badge: "Imported",
+        reportDone: (a, b, c, d, e) => `Imported ${a}. Options: ${b} imported, ${c} skipped. Actions: ${d} imported, ${e} skipped.`,
+        reportNothing: (a, b, c) => `Nothing was imported from ${a}. Options skipped: ${b}. Actions skipped: ${c}.`,
+        skip: {
+          command: (a, b) => `Unsupported command ${a}: ${b}`,
+          search: (a, b) => `Unsupported search type ${a}: ${b}`,
+          filter: (a, b) => `Actions with a regular-expression filter: ${b}`,
+          os: (a, b) => `Meant for another system (${a}): ${b}`,
+          variable: (a, b) => `Unknown variable ${a}: ${b}`,
+          path: (a, b) => `Unusable or unsafe paths: ${b}`
+        },
+        error: {
+          tooLarge: "That file is too large to be a cleaner.",
+          notXml: "That is not valid XML.",
+          notCleaner: "That is not a BleachBit cleaner file.",
+          noId: "That cleaner has no id.",
+          failed: (a) => `Couldn't import: ${a}`
+        }
       }
     }
   },
@@ -109,6 +153,50 @@ export default {
         hide: (a) => `Versteek lêers in ${a}`,
         heading: (a, b) => `Grootste lêers eerste: toon ${a} van ${b}`,
         biggest: (a) => `Grootste: ${a}`
+      },
+      custom: {
+        category: "Eie",
+        ruleName: "Eie liggings",
+        ruleDescription: "Lêers en vouers wat jy self in Instellings bygevoeg het.",
+        description: "Voeg lêers, vouers of patrone, soos D:\\Games\\Cache\\*.tmp, by Diep Skoonmaak. Dit verskyn as 'n reël van sy eie, word nooit by verstek gemerk nie en respekteer steeds jou uitsluitings, die onlangse-lêers-beskerming en die beskermde plekke.",
+        ariaLabel: "Ligging om by te voeg",
+        remove: (a) => `Hou op om ${a} skoon te maak`,
+        empty: "Nog geen eie liggings nie.",
+        error: {
+          empty: "Tik eers ’n pad in.",
+          relative: "Skryf ’n volledige pad, soos D:\\Games\\Cache, of begin met ’n veranderlike soos %LOCALAPPDATA%.",
+          climb: "’n Pad met .. daarin word nie toegelaat nie.",
+          protected: "Dit is ’n beskermde plek (Windows, Program Files, ’n hele aandrywer of ’n gebruikersprofiel).",
+          wildcard: "Plaas die * laer af, binne ’n vouer (D:\\Games\\Cache\\*), nie boaan ’n aandrywer nie.",
+          long: "Daardie pad is te lank.",
+          failed: (a) => `Kon nie stoor nie: ${a}`
+        }
+      },
+      imported: {
+        title: "Ingevoerde skoonmakers",
+        description: "Voer ’n BleachBit-skoonmaakléer (.xml) in. Prune bring sy uitvee-opsies oor en vertel jou presies wat dit oorgeslaan het. Ingevoerde reëls word nooit by verstek gemerk nie en bly weg van beskermde plekke.",
+        button: "Voer skoonmaker in…",
+        empty: "Geen ingevoerde skoonmakers nie.",
+        meta: (a) => `Opsies ingevoer: ${a}`,
+        remove: (a) => `Verwyder ${a}`,
+        badge: "Ingevoer",
+        reportDone: (a, b, c, d, e) => `${a} ingevoer. Opsies: ${b} ingevoer, ${c} oorgeslaan. Aksies: ${d} ingevoer, ${e} oorgeslaan.`,
+        reportNothing: (a, b, c) => `Niks is uit ${a} ingevoer nie. Opsies oorgeslaan: ${b}. Aksies oorgeslaan: ${c}.`,
+        skip: {
+          command: (a, b) => `Nie-ondersteunde opdrag ${a}: ${b}`,
+          search: (a, b) => `Nie-ondersteunde soektipe ${a}: ${b}`,
+          filter: (a, b) => `Aksies met ’n gewone-uitdrukking-filter: ${b}`,
+          os: (a, b) => `Bedoel vir ’n ander stelsel (${a}): ${b}`,
+          variable: (a, b) => `Onbekende veranderlike ${a}: ${b}`,
+          path: (a, b) => `Onbruikbare of onveilige paaie: ${b}`
+        },
+        error: {
+          tooLarge: "Daardie lêer is te groot om ’n skoonmaker te wees.",
+          notXml: "Dit is nie geldige XML nie.",
+          notCleaner: "Dit is nie ’n BleachBit-skoonmaakléer nie.",
+          noId: "Daardie skoonmaker het geen id nie.",
+          failed: (a) => `Kon nie invoer nie: ${a}`
+        }
       }
     }
   },
@@ -164,6 +252,50 @@ export default {
         hide: (a) => `إخفاء الملفات في ${a}`,
         heading: (a, b) => `الأكبر حجمًا أولًا: عرض ${a} من ${b}`,
         biggest: (a) => `الأكبر: ${a}`
+      },
+      custom: {
+        category: "مخصص",
+        ruleName: "مواقع مخصصة",
+        ruleDescription: "الملفات والمجلدات التي أضفتها بنفسك في الإعدادات.",
+        description: "أضف ملفات أو مجلدات أو أنماطًا، مثل D:\\Games\\Cache\\*.tmp، إلى التنظيف العميق. تظهر كقاعدة مستقلة، ولا يتم تحديدها افتراضيًا أبدًا، وتحترم استثناءاتك وحماية الملفات الحديثة والأماكن المحمية.",
+        ariaLabel: "الموقع المراد إضافته",
+        remove: (a) => `إيقاف تنظيف ${a}`,
+        empty: "لا توجد مواقع مخصصة بعد.",
+        error: {
+          empty: "اكتب مسارًا أولًا.",
+          relative: "اكتب مسارًا كاملًا، مثل D:\\Games\\Cache، أو ابدأ بمتغير مثل %LOCALAPPDATA%.",
+          climb: "غير مسموح بمسار يحتوي على ..",
+          protected: "هذا مكان محمي (Windows أو Program Files أو قرص كامل أو ملف تعريف مستخدم).",
+          wildcard: "ضع * في مستوى أدنى داخل مجلد (D:\\Games\\Cache\\*)، وليس في أعلى القرص.",
+          long: "هذا المسار طويل جدًا.",
+          failed: (a) => `تعذّر الحفظ: ${a}`
+        }
+      },
+      imported: {
+        title: "أدوات التنظيف المستوردة",
+        description: "استورد ملف منظِّف BleachBit (‎.xml). يجلب Prune خيارات الحذف فيه ويخبرك بالضبط بما تخطّاه. القواعد المستوردة لا تُحدَّد افتراضيًا أبدًا وتبقى بعيدة عن الأماكن المحمية.",
+        button: "استيراد منظِّف…",
+        empty: "لا توجد أدوات تنظيف مستوردة.",
+        meta: (a) => `الخيارات المستوردة: ${a}`,
+        remove: (a) => `إزالة ${a}`,
+        badge: "مستورد",
+        reportDone: (a, b, c, d, e) => `تم استيراد ${a}. الخيارات: ${b} مستوردة، ${c} متخطاة. الإجراءات: ${d} مستوردة، ${e} متخطاة.`,
+        reportNothing: (a, b, c) => `لم يتم استيراد أي شيء من ${a}. الخيارات المتخطاة: ${b}. الإجراءات المتخطاة: ${c}.`,
+        skip: {
+          command: (a, b) => `أمر غير مدعوم ${a}: ${b}`,
+          search: (a, b) => `نوع بحث غير مدعوم ${a}: ${b}`,
+          filter: (a, b) => `إجراءات بها مرشح تعبير نمطي: ${b}`,
+          os: (a, b) => `مخصص لنظام آخر (${a}): ${b}`,
+          variable: (a, b) => `متغير غير معروف ${a}: ${b}`,
+          path: (a, b) => `مسارات غير صالحة أو غير آمنة: ${b}`
+        },
+        error: {
+          tooLarge: "هذا الملف أكبر من أن يكون منظِّفًا.",
+          notXml: "هذا ليس XML صالحًا.",
+          notCleaner: "هذا ليس ملف منظِّف BleachBit.",
+          noId: "هذا المنظِّف ليس له معرّف.",
+          failed: (a) => `تعذّر الاستيراد: ${a}`
+        }
       }
     }
   },
@@ -219,6 +351,50 @@ export default {
         hide: (a) => `Amaga els fitxers de ${a}`,
         heading: (a, b) => `Primer els fitxers més grans: se'n mostren ${a} de ${b}`,
         biggest: (a) => `Més grans: ${a}`
+      },
+      custom: {
+        category: "Personalitzat",
+        ruleName: "Ubicacions personalitzades",
+        ruleDescription: "Fitxers i carpetes que has afegit tu mateix a Configuració.",
+        description: "Afegeix fitxers, carpetes o patrons, com ara D:\\Games\\Cache\\*.tmp, a la Neteja profunda. Apareixen com una regla pròpia, mai marcada per defecte, i continuen respectant les teves exclusions, la protecció de fitxers recents i els llocs protegits.",
+        ariaLabel: "Ubicació que s’ha d’afegir",
+        remove: (a) => `Deixa de netejar ${a}`,
+        empty: "Encara no hi ha ubicacions personalitzades.",
+        error: {
+          empty: "Escriu primer un camí.",
+          relative: "Escriu un camí complet, com ara D:\\Games\\Cache, o comença amb una variable com %LOCALAPPDATA%.",
+          climb: "No es permet un camí que contingui ..",
+          protected: "Aquest és un lloc protegit (Windows, Program Files, una unitat sencera o un perfil d’usuari).",
+          wildcard: "Posa el * més avall, dins d’una carpeta (D:\\Games\\Cache\\*), no a dalt de tot d’una unitat.",
+          long: "Aquest camí és massa llarg.",
+          failed: (a) => `No s’ha pogut desar: ${a}`
+        }
+      },
+      imported: {
+        title: "Netejadors importats",
+        description: "Importa un fitxer de netejador de BleachBit (.xml). Prune n’aprofita les opcions d’eliminació i et diu exactament què ha omès. Les regles importades mai no estan marcades per defecte i no toquen els llocs protegits.",
+        button: "Importa un netejador…",
+        empty: "Cap netejador importat.",
+        meta: (a) => `Opcions importades: ${a}`,
+        remove: (a) => `Elimina ${a}`,
+        badge: "Importat",
+        reportDone: (a, b, c, d, e) => `S’ha importat ${a}. Opcions: ${b} importades, ${c} omeses. Accions: ${d} importades, ${e} omeses.`,
+        reportNothing: (a, b, c) => `No s’ha importat res de ${a}. Opcions omeses: ${b}. Accions omeses: ${c}.`,
+        skip: {
+          command: (a, b) => `Ordre no admesa ${a}: ${b}`,
+          search: (a, b) => `Tipus de cerca no admès ${a}: ${b}`,
+          filter: (a, b) => `Accions amb un filtre d’expressió regular: ${b}`,
+          os: (a, b) => `Pensat per a un altre sistema (${a}): ${b}`,
+          variable: (a, b) => `Variable desconeguda ${a}: ${b}`,
+          path: (a, b) => `Camins inutilitzables o insegurs: ${b}`
+        },
+        error: {
+          tooLarge: "Aquest fitxer és massa gran per ser un netejador.",
+          notXml: "Això no és XML vàlid.",
+          notCleaner: "Aquest no és un fitxer de netejador de BleachBit.",
+          noId: "Aquest netejador no té cap identificador.",
+          failed: (a) => `No s’ha pogut importar: ${a}`
+        }
       }
     }
   },
@@ -274,6 +450,50 @@ export default {
         hide: (a) => `Skrýt soubory v ${a}`,
         heading: (a, b) => `Od největších souborů: zobrazeno ${a} z ${b}`,
         biggest: (a) => `Největší: ${a}`
+      },
+      custom: {
+        category: "Vlastní",
+        ruleName: "Vlastní umístění",
+        ruleDescription: "Soubory a složky, které jste sami přidali v Nastavení.",
+        description: "Přidejte do Důkladného čištění soubory, složky nebo vzory, například D:\\Games\\Cache\\*.tmp. Zobrazí se jako samostatné pravidlo, které není ve výchozím stavu zaškrtnuté a stále respektuje vaše výjimky, ochranu nedávných souborů a chráněná místa.",
+        ariaLabel: "Umístění k přidání",
+        remove: (a) => `Přestat čistit ${a}`,
+        empty: "Zatím žádná vlastní umístění.",
+        error: {
+          empty: "Nejprve zadejte cestu.",
+          relative: "Zadejte úplnou cestu, například D:\\Games\\Cache, nebo začněte proměnnou jako %LOCALAPPDATA%.",
+          climb: "Cesta obsahující .. není povolena.",
+          protected: "Toto je chráněné místo (Windows, Program Files, celý disk nebo uživatelský profil).",
+          wildcard: "Dejte * níže, do složky (D:\\Games\\Cache\\*), ne na začátek disku.",
+          long: "Tato cesta je příliš dlouhá.",
+          failed: (a) => `Nelze uložit: ${a}`
+        }
+      },
+      imported: {
+        title: "Importované čističe",
+        description: "Importujte soubor čističe BleachBit (.xml). Prune převezme jeho možnosti mazání a přesně vám řekne, co přeskočil. Importovaná pravidla nejsou ve výchozím stavu zaškrtnutá a nesahají na chráněná místa.",
+        button: "Importovat čistič…",
+        empty: "Žádné importované čističe.",
+        meta: (a) => `Importované možnosti: ${a}`,
+        remove: (a) => `Odebrat ${a}`,
+        badge: "Importováno",
+        reportDone: (a, b, c, d, e) => `Importováno: ${a}. Možnosti: ${b} importováno, ${c} přeskočeno. Akce: ${d} importováno, ${e} přeskočeno.`,
+        reportNothing: (a, b, c) => `Z ${a} nebylo nic importováno. Přeskočené možnosti: ${b}. Přeskočené akce: ${c}.`,
+        skip: {
+          command: (a, b) => `Nepodporovaný příkaz ${a}: ${b}`,
+          search: (a, b) => `Nepodporovaný typ hledání ${a}: ${b}`,
+          filter: (a, b) => `Akce s filtrem regulárním výrazem: ${b}`,
+          os: (a, b) => `Určeno pro jiný systém (${a}): ${b}`,
+          variable: (a, b) => `Neznámá proměnná ${a}: ${b}`,
+          path: (a, b) => `Nepoužitelné nebo nebezpečné cesty: ${b}`
+        },
+        error: {
+          tooLarge: "Tento soubor je příliš velký na to, aby to byl čistič.",
+          notXml: "Toto není platný XML.",
+          notCleaner: "Toto není soubor čističe BleachBit.",
+          noId: "Tento čistič nemá žádné id.",
+          failed: (a) => `Nelze importovat: ${a}`
+        }
       }
     }
   },
@@ -329,6 +549,50 @@ export default {
         hide: (a) => `Cuddio ffeiliau yn ${a}`,
         heading: (a, b) => `Y ffeiliau mwyaf yn gyntaf: dangos ${a} o ${b}`,
         biggest: (a) => `Mwyaf: ${a}`
+      },
+      custom: {
+        category: "Personol",
+        ruleName: "Lleoliadau personol",
+        ruleDescription: "Ffeiliau a ffolderi a ychwanegwyd gennych chi eich hun yn y Gosodiadau.",
+        description: "Ychwanegwch ffeiliau, ffolderi neu batrymau, fel D:\\Games\\Cache\\*.tmp, at Lanhau Dwfn. Maent yn ymddangos fel rheol ar wahân, byth wedi'u ticio yn ddiofyn, ac yn dal i barchu eich eithriadau, y gwarchodwr ffeiliau diweddar a'r lleoedd gwarchodedig.",
+        ariaLabel: "Lleoliad i’w ychwanegu",
+        remove: (a) => `Rhoi’r gorau i lanhau ${a}`,
+        empty: "Dim lleoliadau personol eto.",
+        error: {
+          empty: "Teipiwch lwybr yn gyntaf.",
+          relative: "Ysgrifennwch lwybr llawn, fel D:\\Games\\Cache, neu dechreuwch gyda newidyn fel %LOCALAPPDATA%.",
+          climb: "Ni chaniateir llwybr sy’n cynnwys ..",
+          protected: "Mae hwn yn lle gwarchodedig (Windows, Program Files, gyriant cyfan neu broffil defnyddiwr).",
+          wildcard: "Rhowch y * yn is i lawr, y tu mewn i ffolder (D:\\Games\\Cache\\*), nid ar frig gyriant.",
+          long: "Mae’r llwybr hwnnw’n rhy hir.",
+          failed: (a) => `Methwyd cadw: ${a}`
+        }
+      },
+      imported: {
+        title: "Glanhawyr wedi’u mewnforio",
+        description: "Mewnforiwch ffeil glanhawr BleachBit (.xml). Mae Prune yn dod â’i opsiynau dileu drosodd ac yn dweud wrthych yn union beth a hepgorodd. Ni thicir rheolau wedi’u mewnforio yn ddiofyn a maent yn aros allan o leoedd gwarchodedig.",
+        button: "Mewnforio glanhawr…",
+        empty: "Dim glanhawyr wedi’u mewnforio.",
+        meta: (a) => `Opsiynau wedi’u mewnforio: ${a}`,
+        remove: (a) => `Tynnu ${a}`,
+        badge: "Mewnforiwyd",
+        reportDone: (a, b, c, d, e) => `Mewnforiwyd ${a}. Opsiynau: ${b} wedi’u mewnforio, ${c} wedi’u hepgor. Gweithredoedd: ${d} wedi’u mewnforio, ${e} wedi’u hepgor.`,
+        reportNothing: (a, b, c) => `Ni fewnforiwyd dim o ${a}. Opsiynau a hepgorwyd: ${b}. Gweithredoedd a hepgorwyd: ${c}.`,
+        skip: {
+          command: (a, b) => `Gorchymyn heb ei gefnogi ${a}: ${b}`,
+          search: (a, b) => `Math o chwiliad heb ei gefnogi ${a}: ${b}`,
+          filter: (a, b) => `Gweithredoedd gyda hidlydd mynegiant rheolaidd: ${b}`,
+          os: (a, b) => `Wedi’i fwriadu ar gyfer system arall (${a}): ${b}`,
+          variable: (a, b) => `Newidyn anhysbys ${a}: ${b}`,
+          path: (a, b) => `Llwybrau anaddas neu anniogel: ${b}`
+        },
+        error: {
+          tooLarge: "Mae’r ffeil honno’n rhy fawr i fod yn lanhawr.",
+          notXml: "Nid yw hwnnw’n XML dilys.",
+          notCleaner: "Nid ffeil glanhawr BleachBit yw honno.",
+          noId: "Nid oes gan y glanhawr hwnnw id.",
+          failed: (a) => `Methwyd mewnforio: ${a}`
+        }
       }
     }
   },
@@ -384,6 +648,50 @@ export default {
         hide: (a) => `Skjul filer i ${a}`,
         heading: (a, b) => `Største filer først: viser ${a} af ${b}`,
         biggest: (a) => `Største: ${a}`
+      },
+      custom: {
+        category: "Brugerdefineret",
+        ruleName: "Brugerdefinerede placeringer",
+        ruleDescription: "Filer og mapper, du selv har tilføjet i Indstillinger.",
+        description: "Føj filer, mapper eller mønstre, f.eks. D:\\Games\\Cache\\*.tmp, til Dybderensning. De vises som en regel for sig, er aldrig afkrydset som standard og respekterer stadig dine undtagelser, beskyttelsen af nylige filer og de beskyttede steder.",
+        ariaLabel: "Placering, der skal tilføjes",
+        remove: (a) => `Stop med at rense ${a}`,
+        empty: "Ingen brugerdefinerede placeringer endnu.",
+        error: {
+          empty: "Skriv først en sti.",
+          relative: "Skriv en fuld sti, f.eks. D:\\Games\\Cache, eller begynd med en variabel som %LOCALAPPDATA%.",
+          climb: "En sti med .. er ikke tilladt.",
+          protected: "Dette er et beskyttet sted (Windows, Program Files, et helt drev eller en brugerprofil).",
+          wildcard: "Sæt * længere nede, inde i en mappe (D:\\Games\\Cache\\*), ikke øverst på et drev.",
+          long: "Den sti er for lang.",
+          failed: (a) => `Kunne ikke gemme: ${a}`
+        }
+      },
+      imported: {
+        title: "Importerede renseværktøjer",
+        description: "Importér en BleachBit-renseværktøjsfil (.xml). Prune henter dens sletteindstillinger og fortæller dig præcis, hvad den sprang over. Importerede regler er aldrig afkrydset som standard og holder sig fra beskyttede steder.",
+        button: "Importér renseværktøj…",
+        empty: "Ingen importerede renseværktøjer.",
+        meta: (a) => `Importerede indstillinger: ${a}`,
+        remove: (a) => `Fjern ${a}`,
+        badge: "Importeret",
+        reportDone: (a, b, c, d, e) => `${a} importeret. Indstillinger: ${b} importeret, ${c} sprunget over. Handlinger: ${d} importeret, ${e} sprunget over.`,
+        reportNothing: (a, b, c) => `Intet blev importeret fra ${a}. Indstillinger sprunget over: ${b}. Handlinger sprunget over: ${c}.`,
+        skip: {
+          command: (a, b) => `Ikke-understøttet kommando ${a}: ${b}`,
+          search: (a, b) => `Ikke-understøttet søgetype ${a}: ${b}`,
+          filter: (a, b) => `Handlinger med et regulært udtryk som filter: ${b}`,
+          os: (a, b) => `Beregnet til et andet system (${a}): ${b}`,
+          variable: (a, b) => `Ukendt variabel ${a}: ${b}`,
+          path: (a, b) => `Ubrugelige eller usikre stier: ${b}`
+        },
+        error: {
+          tooLarge: "Den fil er for stor til at være et renseværktøj.",
+          notXml: "Det er ikke gyldig XML.",
+          notCleaner: "Det er ikke en BleachBit-renseværktøjsfil.",
+          noId: "Det renseværktøj har intet id.",
+          failed: (a) => `Kunne ikke importere: ${a}`
+        }
       }
     }
   },
@@ -439,6 +747,50 @@ export default {
         hide: (a) => `Dateien in ${a} ausblenden`,
         heading: (a, b) => `Größte Dateien zuerst: ${a} von ${b} angezeigt`,
         biggest: (a) => `Größte: ${a}`
+      },
+      custom: {
+        category: "Benutzerdefiniert",
+        ruleName: "Eigene Speicherorte",
+        ruleDescription: "Dateien und Ordner, die du selbst in den Einstellungen hinzugefügt hast.",
+        description: "Füge der Gründlichen Bereinigung Dateien, Ordner oder Muster wie D:\\Games\\Cache\\*.tmp hinzu. Sie erscheinen als eigene Regel, sind nie standardmäßig angehakt und beachten weiterhin deine Ausnahmen, den Schutz kürzlich geänderter Dateien und die geschützten Orte.",
+        ariaLabel: "Hinzuzufügender Speicherort",
+        remove: (a) => `${a} nicht mehr bereinigen`,
+        empty: "Noch keine eigenen Speicherorte.",
+        error: {
+          empty: "Gib zuerst einen Pfad ein.",
+          relative: "Schreibe einen vollständigen Pfad wie D:\\Games\\Cache oder beginne mit einer Variablen wie %LOCALAPPDATA%.",
+          climb: "Ein Pfad mit .. ist nicht erlaubt.",
+          protected: "Das ist ein geschützter Ort (Windows, Programme, ein ganzes Laufwerk oder ein Benutzerprofil).",
+          wildcard: "Setze das * tiefer, in einen Ordner (D:\\Games\\Cache\\*), nicht an die Spitze eines Laufwerks.",
+          long: "Dieser Pfad ist zu lang.",
+          failed: (a) => `Speichern nicht möglich: ${a}`
+        }
+      },
+      imported: {
+        title: "Importierte Cleaner",
+        description: "Importiere eine BleachBit-Cleaner-Datei (.xml). Prune übernimmt ihre Löschoptionen und sagt dir genau, was übersprungen wurde. Importierte Regeln sind nie standardmäßig angehakt und bleiben von geschützten Orten fern.",
+        button: "Cleaner importieren…",
+        empty: "Keine importierten Cleaner.",
+        meta: (a) => `Importierte Optionen: ${a}`,
+        remove: (a) => `${a} entfernen`,
+        badge: "Importiert",
+        reportDone: (a, b, c, d, e) => `${a} importiert. Optionen: ${b} importiert, ${c} übersprungen. Aktionen: ${d} importiert, ${e} übersprungen.`,
+        reportNothing: (a, b, c) => `Aus ${a} wurde nichts importiert. Übersprungene Optionen: ${b}. Übersprungene Aktionen: ${c}.`,
+        skip: {
+          command: (a, b) => `Nicht unterstützter Befehl ${a}: ${b}`,
+          search: (a, b) => `Nicht unterstützte Suchart ${a}: ${b}`,
+          filter: (a, b) => `Aktionen mit einem Filter aus regulärem Ausdruck: ${b}`,
+          os: (a, b) => `Für ein anderes System gedacht (${a}): ${b}`,
+          variable: (a, b) => `Unbekannte Variable ${a}: ${b}`,
+          path: (a, b) => `Unbrauchbare oder unsichere Pfade: ${b}`
+        },
+        error: {
+          tooLarge: "Diese Datei ist zu groß für einen Cleaner.",
+          notXml: "Das ist kein gültiges XML.",
+          notCleaner: "Das ist keine BleachBit-Cleaner-Datei.",
+          noId: "Dieser Cleaner hat keine ID.",
+          failed: (a) => `Import nicht möglich: ${a}`
+        }
       }
     }
   },
@@ -494,6 +846,50 @@ export default {
         hide: (a) => `Απόκρυψη αρχείων στο ${a}`,
         heading: (a, b) => `Πρώτα τα μεγαλύτερα αρχεία: εμφάνιση ${a} από ${b}`,
         biggest: (a) => `Μεγαλύτερα: ${a}`
+      },
+      custom: {
+        category: "Προσαρμοσμένα",
+        ruleName: "Προσαρμοσμένες τοποθεσίες",
+        ruleDescription: "Αρχεία και φάκελοι που προσθέσατε εσείς στις Ρυθμίσεις.",
+        description: "Προσθέστε αρχεία, φακέλους ή μοτίβα, όπως D:\\Games\\Cache\\*.tmp, στον Βαθύ καθαρισμό. Εμφανίζονται ως ξεχωριστός κανόνας, δεν είναι ποτέ επιλεγμένα από προεπιλογή και εξακολουθούν να σέβονται τις εξαιρέσεις σας, την προστασία πρόσφατων αρχείων και τις προστατευμένες θέσεις.",
+        ariaLabel: "Τοποθεσία προς προσθήκη",
+        remove: (a) => `Διακοπή καθαρισμού του ${a}`,
+        empty: "Δεν υπάρχουν ακόμη προσαρμοσμένες τοποθεσίες.",
+        error: {
+          empty: "Πληκτρολογήστε πρώτα μια διαδρομή.",
+          relative: "Γράψτε μια πλήρη διαδρομή, όπως D:\\Games\\Cache, ή ξεκινήστε με μια μεταβλητή όπως %LOCALAPPDATA%.",
+          climb: "Δεν επιτρέπεται διαδρομή που περιέχει ..",
+          protected: "Αυτή είναι προστατευμένη θέση (Windows, Program Files, ολόκληρη μονάδα ή προφίλ χρήστη).",
+          wildcard: "Βάλτε το * πιο χαμηλά, μέσα σε έναν φάκελο (D:\\Games\\Cache\\*), όχι στην κορυφή μιας μονάδας.",
+          long: "Αυτή η διαδρομή είναι πολύ μεγάλη.",
+          failed: (a) => `Δεν ήταν δυνατή η αποθήκευση: ${a}`
+        }
+      },
+      imported: {
+        title: "Εισαγόμενοι καθαριστές",
+        description: "Εισαγάγετε ένα αρχείο καθαριστή BleachBit (.xml). Το Prune μεταφέρει τις επιλογές διαγραφής του και σας λέει ακριβώς τι παρέλειψε. Οι εισαγόμενοι κανόνες δεν είναι ποτέ επιλεγμένοι από προεπιλογή και μένουν μακριά από προστατευμένες θέσεις.",
+        button: "Εισαγωγή καθαριστή…",
+        empty: "Δεν υπάρχουν εισαγόμενοι καθαριστές.",
+        meta: (a) => `Εισαγόμενες επιλογές: ${a}`,
+        remove: (a) => `Αφαίρεση του ${a}`,
+        badge: "Εισαγόμενο",
+        reportDone: (a, b, c, d, e) => `Έγινε εισαγωγή του ${a}. Επιλογές: ${b} εισήχθησαν, ${c} παραλείφθηκαν. Ενέργειες: ${d} εισήχθησαν, ${e} παραλείφθηκαν.`,
+        reportNothing: (a, b, c) => `Δεν έγινε εισαγωγή τίποτα από το ${a}. Επιλογές που παραλείφθηκαν: ${b}. Ενέργειες που παραλείφθηκαν: ${c}.`,
+        skip: {
+          command: (a, b) => `Μη υποστηριζόμενη εντολή ${a}: ${b}`,
+          search: (a, b) => `Μη υποστηριζόμενος τύπος αναζήτησης ${a}: ${b}`,
+          filter: (a, b) => `Ενέργειες με φίλτρο κανονικής έκφρασης: ${b}`,
+          os: (a, b) => `Προορίζεται για άλλο σύστημα (${a}): ${b}`,
+          variable: (a, b) => `Άγνωστη μεταβλητή ${a}: ${b}`,
+          path: (a, b) => `Μη χρησιμοποιήσιμες ή μη ασφαλείς διαδρομές: ${b}`
+        },
+        error: {
+          tooLarge: "Αυτό το αρχείο είναι πολύ μεγάλο για να είναι καθαριστής.",
+          notXml: "Αυτό δεν είναι έγκυρο XML.",
+          notCleaner: "Αυτό δεν είναι αρχείο καθαριστή BleachBit.",
+          noId: "Αυτός ο καθαριστής δεν έχει αναγνωριστικό.",
+          failed: (a) => `Δεν ήταν δυνατή η εισαγωγή: ${a}`
+        }
       }
     }
   },
@@ -549,6 +945,50 @@ export default {
         hide: (a) => `Ocultar los archivos de ${a}`,
         heading: (a, b) => `Primero los archivos más grandes: se muestran ${a} de ${b}`,
         biggest: (a) => `Más grandes: ${a}`
+      },
+      custom: {
+        category: "Personalizado",
+        ruleName: "Ubicaciones personalizadas",
+        ruleDescription: "Archivos y carpetas que has añadido tú mismo en Configuración.",
+        description: "Añade a la Limpieza profunda archivos, carpetas o patrones, como D:\\Games\\Cache\\*.tmp. Aparecen como una regla propia, nunca marcada por defecto, y siguen respetando tus exclusiones, la protección de archivos recientes y los lugares protegidos.",
+        ariaLabel: "Ubicación que añadir",
+        remove: (a) => `Dejar de limpiar ${a}`,
+        empty: "Todavía no hay ubicaciones personalizadas.",
+        error: {
+          empty: "Escribe primero una ruta.",
+          relative: "Escribe una ruta completa, como D:\\Games\\Cache, o empieza con una variable como %LOCALAPPDATA%.",
+          climb: "No se permite una ruta que contenga ..",
+          protected: "Es un lugar protegido (Windows, Archivos de programa, una unidad completa o un perfil de usuario).",
+          wildcard: "Pon el * más abajo, dentro de una carpeta (D:\\Games\\Cache\\*), no en la raíz de una unidad.",
+          long: "Esa ruta es demasiado larga.",
+          failed: (a) => `No se pudo guardar: ${a}`
+        }
+      },
+      imported: {
+        title: "Limpiadores importados",
+        description: "Importa un archivo de limpiador de BleachBit (.xml). Prune incorpora sus opciones de eliminación y te dice exactamente qué omitió. Las reglas importadas nunca están marcadas por defecto y se mantienen fuera de los lugares protegidos.",
+        button: "Importar limpiador…",
+        empty: "No hay limpiadores importados.",
+        meta: (a) => `Opciones importadas: ${a}`,
+        remove: (a) => `Quitar ${a}`,
+        badge: "Importado",
+        reportDone: (a, b, c, d, e) => `Se importó ${a}. Opciones: ${b} importadas, ${c} omitidas. Acciones: ${d} importadas, ${e} omitidas.`,
+        reportNothing: (a, b, c) => `No se importó nada de ${a}. Opciones omitidas: ${b}. Acciones omitidas: ${c}.`,
+        skip: {
+          command: (a, b) => `Comando no compatible ${a}: ${b}`,
+          search: (a, b) => `Tipo de búsqueda no compatible ${a}: ${b}`,
+          filter: (a, b) => `Acciones con un filtro de expresión regular: ${b}`,
+          os: (a, b) => `Pensado para otro sistema (${a}): ${b}`,
+          variable: (a, b) => `Variable desconocida ${a}: ${b}`,
+          path: (a, b) => `Rutas inutilizables o inseguras: ${b}`
+        },
+        error: {
+          tooLarge: "Ese archivo es demasiado grande para ser un limpiador.",
+          notXml: "Eso no es XML válido.",
+          notCleaner: "Ese no es un archivo de limpiador de BleachBit.",
+          noId: "Ese limpiador no tiene id.",
+          failed: (a) => `No se pudo importar: ${a}`
+        }
       }
     }
   },
@@ -604,6 +1044,50 @@ export default {
         hide: (a) => `Peida ${a} failid`,
         heading: (a, b) => `Suurimad failid esimesena: näidatud ${a} / ${b}`,
         biggest: (a) => `Suurimad: ${a}`
+      },
+      custom: {
+        category: "Kohandatud",
+        ruleName: "Kohandatud asukohad",
+        ruleDescription: "Failid ja kaustad, mille lisasid ise seadetes.",
+        description: "Lisa süvapuhastusele faile, kaustu või mustreid, näiteks D:\\Games\\Cache\\*.tmp. Need ilmuvad eraldi reeglina, mida ei märgita vaikimisi, ning arvestavad ikka sinu erandeid, hiljutiste failide kaitset ja kaitstud kohti.",
+        ariaLabel: "Lisatav asukoht",
+        remove: (a) => `Lõpeta ${a} puhastamine`,
+        empty: "Kohandatud asukohti pole veel.",
+        error: {
+          empty: "Sisesta kõigepealt tee.",
+          relative: "Kirjuta täielik tee, näiteks D:\\Games\\Cache, või alusta muutujaga, näiteks %LOCALAPPDATA%.",
+          climb: "Tee, milles on .., pole lubatud.",
+          protected: "See on kaitstud koht (Windows, Program Files, terve ketas või kasutajaprofiil).",
+          wildcard: "Pane * madalamale, kausta sisse (D:\\Games\\Cache\\*), mitte ketta tippu.",
+          long: "See tee on liiga pikk.",
+          failed: (a) => `Salvestamine ebaõnnestus: ${a}`
+        }
+      },
+      imported: {
+        title: "Imporditud puhastajad",
+        description: "Impordi BleachBiti puhastaja fail (.xml). Prune võtab üle selle kustutamisvalikud ja ütleb sulle täpselt, mida ta vahele jättis. Imporditud reegleid ei märgita vaikimisi ning need jäävad kaitstud kohtadest eemale.",
+        button: "Impordi puhastaja…",
+        empty: "Imporditud puhastajaid pole.",
+        meta: (a) => `Imporditud valikuid: ${a}`,
+        remove: (a) => `Eemalda ${a}`,
+        badge: "Imporditud",
+        reportDone: (a, b, c, d, e) => `${a} imporditud. Valikud: ${b} imporditud, ${c} vahele jäetud. Toimingud: ${d} imporditud, ${e} vahele jäetud.`,
+        reportNothing: (a, b, c) => `Failist ${a} ei imporditud midagi. Vahele jäetud valikud: ${b}. Vahele jäetud toimingud: ${c}.`,
+        skip: {
+          command: (a, b) => `Toetamata käsk ${a}: ${b}`,
+          search: (a, b) => `Toetamata otsingutüüp ${a}: ${b}`,
+          filter: (a, b) => `Regulaaravaldise filtriga toimingud: ${b}`,
+          os: (a, b) => `Mõeldud teisele süsteemile (${a}): ${b}`,
+          variable: (a, b) => `Tundmatu muutuja ${a}: ${b}`,
+          path: (a, b) => `Kasutuskõlbmatud või ebaturvalised teed: ${b}`
+        },
+        error: {
+          tooLarge: "See fail on puhastajaks liiga suur.",
+          notXml: "See ei ole kehtiv XML.",
+          notCleaner: "See ei ole BleachBiti puhastaja fail.",
+          noId: "Sellel puhastajal pole id-d.",
+          failed: (a) => `Importimine ebaõnnestus: ${a}`
+        }
       }
     }
   },
@@ -659,6 +1143,50 @@ export default {
         hide: (a) => `Piilota kohteen ${a} tiedostot`,
         heading: (a, b) => `Suurimmat tiedostot ensin: näytetään ${a} / ${b}`,
         biggest: (a) => `Suurimmat: ${a}`
+      },
+      custom: {
+        category: "Omat",
+        ruleName: "Omat sijainnit",
+        ruleDescription: "Tiedostot ja kansiot, jotka olet itse lisännyt asetuksissa.",
+        description: "Lisää syväpuhdistukseen tiedostoja, kansioita tai kuvioita, kuten D:\\Games\\Cache\\*.tmp. Ne näkyvät omana sääntönään, joita ei koskaan valita oletuksena, ja ne noudattavat edelleen poikkeuksiasi, uusien tiedostojen suojausta ja suojattuja paikkoja.",
+        ariaLabel: "Lisättävä sijainti",
+        remove: (a) => `Lopeta kohteen ${a} puhdistus`,
+        empty: "Ei vielä omia sijainteja.",
+        error: {
+          empty: "Kirjoita ensin polku.",
+          relative: "Kirjoita koko polku, kuten D:\\Games\\Cache, tai aloita muuttujalla, kuten %LOCALAPPDATA%.",
+          climb: "Polku, jossa on .., ei ole sallittu.",
+          protected: "Tämä on suojattu paikka (Windows, Program Files, koko asema tai käyttäjäprofiili).",
+          wildcard: "Laita * alemmas, kansion sisään (D:\\Games\\Cache\\*), ei aseman ylätasolle.",
+          long: "Polku on liian pitkä.",
+          failed: (a) => `Tallennus epäonnistui: ${a}`
+        }
+      },
+      imported: {
+        title: "Tuodut puhdistimet",
+        description: "Tuo BleachBit-puhdistintiedosto (.xml). Prune tuo sen poistovaihtoehdot ja kertoo tarkalleen, mitä se ohitti. Tuotuja sääntöjä ei koskaan valita oletuksena, ja ne pysyvät poissa suojatuista paikoista.",
+        button: "Tuo puhdistin…",
+        empty: "Ei tuotuja puhdistimia.",
+        meta: (a) => `Tuodut vaihtoehdot: ${a}`,
+        remove: (a) => `Poista ${a}`,
+        badge: "Tuotu",
+        reportDone: (a, b, c, d, e) => `${a} tuotu. Vaihtoehdot: ${b} tuotu, ${c} ohitettu. Toiminnot: ${d} tuotu, ${e} ohitettu.`,
+        reportNothing: (a, b, c) => `Kohteesta ${a} ei tuotu mitään. Ohitetut vaihtoehdot: ${b}. Ohitetut toiminnot: ${c}.`,
+        skip: {
+          command: (a, b) => `Ei tuettu komento ${a}: ${b}`,
+          search: (a, b) => `Ei tuettu hakutyyppi ${a}: ${b}`,
+          filter: (a, b) => `Toiminnot, joissa on säännöllisen lausekkeen suodatin: ${b}`,
+          os: (a, b) => `Tarkoitettu toiselle järjestelmälle (${a}): ${b}`,
+          variable: (a, b) => `Tuntematon muuttuja ${a}: ${b}`,
+          path: (a, b) => `Käyttökelvottomat tai turvattomat polut: ${b}`
+        },
+        error: {
+          tooLarge: "Tiedosto on liian suuri ollakseen puhdistin.",
+          notXml: "Tämä ei ole kelvollista XML:ää.",
+          notCleaner: "Tämä ei ole BleachBit-puhdistintiedosto.",
+          noId: "Tällä puhdistimella ei ole tunnusta.",
+          failed: (a) => `Tuonti epäonnistui: ${a}`
+        }
       }
     }
   },
@@ -714,6 +1242,50 @@ export default {
         hide: (a) => `Masquer les fichiers de ${a}`,
         heading: (a, b) => `Plus gros fichiers d’abord : ${a} affichés sur ${b}`,
         biggest: (a) => `Plus gros : ${a}`
+      },
+      custom: {
+        category: "Personnalisé",
+        ruleName: "Emplacements personnalisés",
+        ruleDescription: "Fichiers et dossiers que vous avez ajoutés vous-même dans les Paramètres.",
+        description: "Ajoutez au Nettoyage approfondi des fichiers, dossiers ou motifs, comme D:\\Games\\Cache\\*.tmp. Ils apparaissent comme une règle à part, jamais cochée par défaut, et respectent toujours vos exclusions, la protection des fichiers récents et les emplacements protégés.",
+        ariaLabel: "Emplacement à ajouter",
+        remove: (a) => `Ne plus nettoyer ${a}`,
+        empty: "Aucun emplacement personnalisé pour l’instant.",
+        error: {
+          empty: "Saisissez d’abord un chemin.",
+          relative: "Écrivez un chemin complet, comme D:\\Games\\Cache, ou commencez par une variable comme %LOCALAPPDATA%.",
+          climb: "Un chemin contenant .. n’est pas autorisé.",
+          protected: "C’est un emplacement protégé (Windows, Program Files, un lecteur entier ou un profil utilisateur).",
+          wildcard: "Placez le * plus bas, dans un dossier (D:\\Games\\Cache\\*), et non à la racine d’un lecteur.",
+          long: "Ce chemin est trop long.",
+          failed: (a) => `Enregistrement impossible : ${a}`
+        }
+      },
+      imported: {
+        title: "Nettoyeurs importés",
+        description: "Importez un fichier de nettoyeur BleachBit (.xml). Prune reprend ses options de suppression et vous dit exactement ce qu’il a ignoré. Les règles importées ne sont jamais cochées par défaut et restent à l’écart des emplacements protégés.",
+        button: "Importer un nettoyeur…",
+        empty: "Aucun nettoyeur importé.",
+        meta: (a) => `Options importées : ${a}`,
+        remove: (a) => `Supprimer ${a}`,
+        badge: "Importé",
+        reportDone: (a, b, c, d, e) => `${a} importé. Options : ${b} importées, ${c} ignorées. Actions : ${d} importées, ${e} ignorées.`,
+        reportNothing: (a, b, c) => `Rien n’a été importé de ${a}. Options ignorées : ${b}. Actions ignorées : ${c}.`,
+        skip: {
+          command: (a, b) => `Commande non prise en charge ${a} : ${b}`,
+          search: (a, b) => `Type de recherche non pris en charge ${a} : ${b}`,
+          filter: (a, b) => `Actions avec un filtre par expression régulière : ${b}`,
+          os: (a, b) => `Prévu pour un autre système (${a}) : ${b}`,
+          variable: (a, b) => `Variable inconnue ${a} : ${b}`,
+          path: (a, b) => `Chemins inutilisables ou dangereux : ${b}`
+        },
+        error: {
+          tooLarge: "Ce fichier est trop volumineux pour être un nettoyeur.",
+          notXml: "Ce n’est pas du XML valide.",
+          notCleaner: "Ce n’est pas un fichier de nettoyeur BleachBit.",
+          noId: "Ce nettoyeur n’a pas d’identifiant.",
+          failed: (a) => `Importation impossible : ${a}`
+        }
       }
     }
   },
@@ -769,6 +1341,50 @@ export default {
         hide: (a) => `הסתר קבצים ב-${a}`,
         heading: (a, b) => `הקבצים הגדולים ביותר קודם: מוצגים ${a} מתוך ${b}`,
         biggest: (a) => `הגדולים ביותר: ${a}`
+      },
+      custom: {
+        category: "מותאם אישית",
+        ruleName: "מיקומים מותאמים אישית",
+        ruleDescription: "קבצים ותיקיות שהוספת בעצמך בהגדרות.",
+        description: "הוסף לניקוי המעמיק קבצים, תיקיות או תבניות, כמו D:\\Games\\Cache\\*.tmp. הם מופיעים ככלל נפרד, אף פעם לא מסומנים כברירת מחדל, ועדיין מכבדים את ההחרגות שלך, את ההגנה על קבצים אחרונים ואת המקומות המוגנים.",
+        ariaLabel: "מיקום להוספה",
+        remove: (a) => `הפסק לנקות את ${a}`,
+        empty: "עדיין אין מיקומים מותאמים אישית.",
+        error: {
+          empty: "הקלד נתיב קודם.",
+          relative: "כתוב נתיב מלא, כמו D:\\Games\\Cache, או התחל במשתנה כמו %LOCALAPPDATA%.",
+          climb: "נתיב שמכיל .. אינו מותר.",
+          protected: "זהו מקום מוגן (Windows, Program Files, כונן שלם או פרופיל משתמש).",
+          wildcard: "שים את ה-* ברמה נמוכה יותר, בתוך תיקייה (D:\\Games\\Cache\\*), ולא בראש הכונן.",
+          long: "הנתיב ארוך מדי.",
+          failed: (a) => `לא ניתן לשמור: ${a}`
+        }
+      },
+      imported: {
+        title: "מנקים שיובאו",
+        description: "ייבא קובץ מנקה של BleachBit (‎.xml). Prune מביא את אפשרויות המחיקה שלו ואומר לך בדיוק מה דולג. כללים מיובאים לעולם אינם מסומנים כברירת מחדל ונשארים מחוץ למקומות מוגנים.",
+        button: "ייבא מנקה…",
+        empty: "אין מנקים מיובאים.",
+        meta: (a) => `אפשרויות שיובאו: ${a}`,
+        remove: (a) => `הסר את ${a}`,
+        badge: "מיובא",
+        reportDone: (a, b, c, d, e) => `${a} יובא. אפשרויות: ${b} יובאו, ${c} דולגו. פעולות: ${d} יובאו, ${e} דולגו.`,
+        reportNothing: (a, b, c) => `לא יובא דבר מ-${a}. אפשרויות שדולגו: ${b}. פעולות שדולגו: ${c}.`,
+        skip: {
+          command: (a, b) => `פקודה לא נתמכת ${a}: ${b}`,
+          search: (a, b) => `סוג חיפוש לא נתמך ${a}: ${b}`,
+          filter: (a, b) => `פעולות עם מסנן ביטוי רגולרי: ${b}`,
+          os: (a, b) => `מיועד למערכת אחרת (${a}): ${b}`,
+          variable: (a, b) => `משתנה לא מוכר ${a}: ${b}`,
+          path: (a, b) => `נתיבים לא שמישים או לא בטוחים: ${b}`
+        },
+        error: {
+          tooLarge: "הקובץ גדול מדי מכדי להיות מנקה.",
+          notXml: "זה אינו XML תקין.",
+          notCleaner: "זה אינו קובץ מנקה של BleachBit.",
+          noId: "למנקה הזה אין מזהה.",
+          failed: (a) => `לא ניתן לייבא: ${a}`
+        }
       }
     }
   },
@@ -824,6 +1440,50 @@ export default {
         hide: (a) => `${a} fájljainak elrejtése`,
         heading: (a, b) => `A legnagyobb fájlok elöl: ${a} megjelenítve ${b}-ből`,
         biggest: (a) => `Legnagyobbak: ${a}`
+      },
+      custom: {
+        category: "Egyéni",
+        ruleName: "Egyéni helyek",
+        ruleDescription: "A Beállításokban általad hozzáadott fájlok és mappák.",
+        description: "Adj hozzá fájlokat, mappákat vagy mintákat, például D:\\Games\\Cache\\*.tmp, a Mélytisztításhoz. Önálló szabályként jelennek meg, alapértelmezetten soha nincsenek kipipálva, és továbbra is tiszteletben tartják a kivételeidet, a friss fájlok védelmét és a védett helyeket.",
+        ariaLabel: "Hozzáadandó hely",
+        remove: (a) => `${a} tisztításának leállítása`,
+        empty: "Még nincsenek egyéni helyek.",
+        error: {
+          empty: "Előbb írj be egy elérési utat.",
+          relative: "Írj be teljes elérési utat, például D:\\Games\\Cache, vagy kezdd változóval, például %LOCALAPPDATA%.",
+          climb: "A .. tartalmazó elérési út nem engedélyezett.",
+          protected: "Ez védett hely (Windows, Program Files, egy teljes meghajtó vagy egy felhasználói profil).",
+          wildcard: "A *-ot tedd lejjebb, egy mappán belülre (D:\\Games\\Cache\\*), ne a meghajtó tetejére.",
+          long: "Ez az elérési út túl hosszú.",
+          failed: (a) => `Nem sikerült menteni: ${a}`
+        }
+      },
+      imported: {
+        title: "Importált tisztítók",
+        description: "Importálj egy BleachBit-tisztítófájlt (.xml). A Prune átveszi a törlési lehetőségeit, és pontosan megmondja, mit hagyott ki. Az importált szabályok alapértelmezetten soha nincsenek kipipálva, és távol maradnak a védett helyektől.",
+        button: "Tisztító importálása…",
+        empty: "Nincsenek importált tisztítók.",
+        meta: (a) => `Importált lehetőségek: ${a}`,
+        remove: (a) => `${a} eltávolítása`,
+        badge: "Importált",
+        reportDone: (a, b, c, d, e) => `${a} importálva. Lehetőségek: ${b} importálva, ${c} kihagyva. Műveletek: ${d} importálva, ${e} kihagyva.`,
+        reportNothing: (a, b, c) => `A(z) ${a} fájlból semmi sem lett importálva. Kihagyott lehetőségek: ${b}. Kihagyott műveletek: ${c}.`,
+        skip: {
+          command: (a, b) => `Nem támogatott parancs ${a}: ${b}`,
+          search: (a, b) => `Nem támogatott keresési típus ${a}: ${b}`,
+          filter: (a, b) => `Reguláris kifejezéses szűrővel rendelkező műveletek: ${b}`,
+          os: (a, b) => `Másik rendszerre szánt (${a}): ${b}`,
+          variable: (a, b) => `Ismeretlen változó ${a}: ${b}`,
+          path: (a, b) => `Használhatatlan vagy nem biztonságos elérési utak: ${b}`
+        },
+        error: {
+          tooLarge: "Ez a fájl túl nagy ahhoz, hogy tisztító legyen.",
+          notXml: "Ez nem érvényes XML.",
+          notCleaner: "Ez nem BleachBit-tisztítófájl.",
+          noId: "Ennek a tisztítónak nincs azonosítója.",
+          failed: (a) => `Nem sikerült importálni: ${a}`
+        }
       }
     }
   },
@@ -879,6 +1539,50 @@ export default {
         hide: (a) => `Sembunyikan file di ${a}`,
         heading: (a, b) => `File terbesar lebih dulu: menampilkan ${a} dari ${b}`,
         biggest: (a) => `Terbesar: ${a}`
+      },
+      custom: {
+        category: "Kustom",
+        ruleName: "Lokasi kustom",
+        ruleDescription: "File dan folder yang Anda tambahkan sendiri di Pengaturan.",
+        description: "Tambahkan file, folder, atau pola, seperti D:\\Games\\Cache\\*.tmp, ke Pembersihan Mendalam. Semuanya muncul sebagai aturan tersendiri, tidak pernah dicentang secara default, dan tetap menghormati pengecualian Anda, perlindungan file terbaru, dan lokasi yang dilindungi.",
+        ariaLabel: "Lokasi yang akan ditambahkan",
+        remove: (a) => `Berhenti membersihkan ${a}`,
+        empty: "Belum ada lokasi kustom.",
+        error: {
+          empty: "Ketik path terlebih dahulu.",
+          relative: "Tulis path lengkap, seperti D:\\Games\\Cache, atau mulai dengan variabel seperti %LOCALAPPDATA%.",
+          climb: "Path yang mengandung .. tidak diizinkan.",
+          protected: "Itu lokasi yang dilindungi (Windows, Program Files, seluruh drive, atau profil pengguna).",
+          wildcard: "Letakkan * lebih dalam, di dalam folder (D:\\Games\\Cache\\*), bukan di bagian atas drive.",
+          long: "Path itu terlalu panjang.",
+          failed: (a) => `Tidak dapat menyimpan: ${a}`
+        }
+      },
+      imported: {
+        title: "Pembersih yang diimpor",
+        description: "Impor file pembersih BleachBit (.xml). Prune membawa opsi hapusnya dan memberi tahu Anda persis apa yang dilewati. Aturan yang diimpor tidak pernah dicentang secara default dan tidak menyentuh lokasi yang dilindungi.",
+        button: "Impor pembersih…",
+        empty: "Tidak ada pembersih yang diimpor.",
+        meta: (a) => `Opsi yang diimpor: ${a}`,
+        remove: (a) => `Hapus ${a}`,
+        badge: "Diimpor",
+        reportDone: (a, b, c, d, e) => `${a} diimpor. Opsi: ${b} diimpor, ${c} dilewati. Tindakan: ${d} diimpor, ${e} dilewati.`,
+        reportNothing: (a, b, c) => `Tidak ada yang diimpor dari ${a}. Opsi dilewati: ${b}. Tindakan dilewati: ${c}.`,
+        skip: {
+          command: (a, b) => `Perintah tidak didukung ${a}: ${b}`,
+          search: (a, b) => `Jenis pencarian tidak didukung ${a}: ${b}`,
+          filter: (a, b) => `Tindakan dengan filter ekspresi reguler: ${b}`,
+          os: (a, b) => `Ditujukan untuk sistem lain (${a}): ${b}`,
+          variable: (a, b) => `Variabel tidak dikenal ${a}: ${b}`,
+          path: (a, b) => `Path yang tidak dapat digunakan atau tidak aman: ${b}`
+        },
+        error: {
+          tooLarge: "File itu terlalu besar untuk menjadi pembersih.",
+          notXml: "Itu bukan XML yang valid.",
+          notCleaner: "Itu bukan file pembersih BleachBit.",
+          noId: "Pembersih itu tidak memiliki id.",
+          failed: (a) => `Tidak dapat mengimpor: ${a}`
+        }
       }
     }
   },
@@ -934,6 +1638,50 @@ export default {
         hide: (a) => `Fela skrár í ${a}`,
         heading: (a, b) => `Stærstu skrárnar fyrst: sýni ${a} af ${b}`,
         biggest: (a) => `Stærst: ${a}`
+      },
+      custom: {
+        category: "Sérsniðið",
+        ruleName: "Sérsniðnar staðsetningar",
+        ruleDescription: "Skrár og möppur sem þú bættir sjálf(ur) við í Stillingum.",
+        description: "Bættu skrám, möppum eða mynstrum, eins og D:\\Games\\Cache\\*.tmp, við Djúphreinsun. Þau birtast sem sérstök regla, eru aldrei hökuð sjálfgefið og virða áfram undantekningar þínar, vörnina fyrir nýlegar skrár og vernduðu staðina.",
+        ariaLabel: "Staðsetning til að bæta við",
+        remove: (a) => `Hætta að hreinsa ${a}`,
+        empty: "Engar sérsniðnar staðsetningar enn.",
+        error: {
+          empty: "Sláðu fyrst inn slóð.",
+          relative: "Skrifaðu fulla slóð, eins og D:\\Games\\Cache, eða byrjaðu á breytu eins og %LOCALAPPDATA%.",
+          climb: "Slóð með .. er ekki leyfð.",
+          protected: "Þetta er varinn staður (Windows, Program Files, heilt drif eða notandasnið).",
+          wildcard: "Settu * neðar, inni í möppu (D:\\Games\\Cache\\*), ekki efst á drifi.",
+          long: "Þessi slóð er of löng.",
+          failed: (a) => `Ekki tókst að vista: ${a}`
+        }
+      },
+      imported: {
+        title: "Innfluttir hreinsarar",
+        description: "Fluttu inn BleachBit hreinsiskrá (.xml). Prune tekur inn eyðingarvalkosti hennar og segir þér nákvæmlega hvað var sleppt. Innfluttar reglur eru aldrei hakaðar sjálfgefið og halda sig frá vernduðum stöðum.",
+        button: "Flytja inn hreinsara…",
+        empty: "Engir innfluttir hreinsarar.",
+        meta: (a) => `Innfluttir valkostir: ${a}`,
+        remove: (a) => `Fjarlægja ${a}`,
+        badge: "Innflutt",
+        reportDone: (a, b, c, d, e) => `${a} flutt inn. Valkostir: ${b} fluttir inn, ${c} sleppt. Aðgerðir: ${d} fluttar inn, ${e} sleppt.`,
+        reportNothing: (a, b, c) => `Engu var flutt inn úr ${a}. Valkostum sleppt: ${b}. Aðgerðum sleppt: ${c}.`,
+        skip: {
+          command: (a, b) => `Óstudd skipun ${a}: ${b}`,
+          search: (a, b) => `Óstudd leitargerð ${a}: ${b}`,
+          filter: (a, b) => `Aðgerðir með reglulegri segð sem síu: ${b}`,
+          os: (a, b) => `Ætlað öðru kerfi (${a}): ${b}`,
+          variable: (a, b) => `Óþekkt breyta ${a}: ${b}`,
+          path: (a, b) => `Ónothæfar eða óöruggar slóðir: ${b}`
+        },
+        error: {
+          tooLarge: "Skráin er of stór til að vera hreinsari.",
+          notXml: "Þetta er ekki gilt XML.",
+          notCleaner: "Þetta er ekki BleachBit hreinsiskrá.",
+          noId: "Þessi hreinsari er ekki með auðkenni.",
+          failed: (a) => `Ekki tókst að flytja inn: ${a}`
+        }
       }
     }
   },
@@ -989,6 +1737,50 @@ export default {
         hide: (a) => `Nascondi i file di ${a}`,
         heading: (a, b) => `Prima i file più grandi: ne vengono mostrati ${a} su ${b}`,
         biggest: (a) => `Più grandi: ${a}`
+      },
+      custom: {
+        category: "Personalizzato",
+        ruleName: "Posizioni personalizzate",
+        ruleDescription: "File e cartelle che hai aggiunto tu stesso nelle Impostazioni.",
+        description: "Aggiungi alla Pulizia approfondita file, cartelle o pattern, come D:\\Games\\Cache\\*.tmp. Compaiono come regola a sé, mai selezionata per impostazione predefinita, e rispettano comunque le tue esclusioni, la protezione dei file recenti e i percorsi protetti.",
+        ariaLabel: "Posizione da aggiungere",
+        remove: (a) => `Smetti di pulire ${a}`,
+        empty: "Ancora nessuna posizione personalizzata.",
+        error: {
+          empty: "Digita prima un percorso.",
+          relative: "Scrivi un percorso completo, come D:\\Games\\Cache, oppure inizia con una variabile come %LOCALAPPDATA%.",
+          climb: "Un percorso che contiene .. non è consentito.",
+          protected: "È un percorso protetto (Windows, Program Files, un’intera unità o un profilo utente).",
+          wildcard: "Metti il * più in basso, dentro una cartella (D:\\Games\\Cache\\*), non alla radice di un’unità.",
+          long: "Il percorso è troppo lungo.",
+          failed: (a) => `Impossibile salvare: ${a}`
+        }
+      },
+      imported: {
+        title: "Cleaner importati",
+        description: "Importa un file di cleaner BleachBit (.xml). Prune ne porta le opzioni di eliminazione e ti dice esattamente cosa ha saltato. Le regole importate non sono mai selezionate per impostazione predefinita e restano fuori dai percorsi protetti.",
+        button: "Importa cleaner…",
+        empty: "Nessun cleaner importato.",
+        meta: (a) => `Opzioni importate: ${a}`,
+        remove: (a) => `Rimuovi ${a}`,
+        badge: "Importato",
+        reportDone: (a, b, c, d, e) => `${a} importato. Opzioni: ${b} importate, ${c} saltate. Azioni: ${d} importate, ${e} saltate.`,
+        reportNothing: (a, b, c) => `Non è stato importato nulla da ${a}. Opzioni saltate: ${b}. Azioni saltate: ${c}.`,
+        skip: {
+          command: (a, b) => `Comando non supportato ${a}: ${b}`,
+          search: (a, b) => `Tipo di ricerca non supportato ${a}: ${b}`,
+          filter: (a, b) => `Azioni con un filtro a espressione regolare: ${b}`,
+          os: (a, b) => `Pensato per un altro sistema (${a}): ${b}`,
+          variable: (a, b) => `Variabile sconosciuta ${a}: ${b}`,
+          path: (a, b) => `Percorsi inutilizzabili o non sicuri: ${b}`
+        },
+        error: {
+          tooLarge: "Il file è troppo grande per essere un cleaner.",
+          notXml: "Non è un XML valido.",
+          notCleaner: "Non è un file di cleaner BleachBit.",
+          noId: "Quel cleaner non ha un id.",
+          failed: (a) => `Impossibile importare: ${a}`
+        }
       }
     }
   },
@@ -1044,6 +1836,50 @@ export default {
         hide: (a) => `${a} のファイルを非表示`,
         heading: (a, b) => `大きい順に表示：${b} 件中 ${a} 件`,
         biggest: (a) => `最大：${a}`
+      },
+      custom: {
+        category: "カスタム",
+        ruleName: "カスタムの場所",
+        ruleDescription: "設定で自分で追加したファイルとフォルダー。",
+        description: "D:\\Games\\Cache\\*.tmp のようなファイル、フォルダー、パターンをディープクリーンに追加します。独立したルールとして表示され、既定ではオンにならず、除外設定、最近のファイルの保護、保護された場所は引き続き守られます。",
+        ariaLabel: "追加する場所",
+        remove: (a) => `${a} のクリーンアップをやめる`,
+        empty: "カスタムの場所はまだありません。",
+        error: {
+          empty: "先にパスを入力してください。",
+          relative: "D:\\Games\\Cache のような完全なパスを入力するか、%LOCALAPPDATA% のような変数から始めてください。",
+          climb: ".. を含むパスは使えません。",
+          protected: "ここは保護された場所です（Windows、Program Files、ドライブ全体、ユーザー プロファイル）。",
+          wildcard: "* はドライブの最上位ではなく、フォルダーの中（D:\\Games\\Cache\\*）に置いてください。",
+          long: "パスが長すぎます。",
+          failed: (a) => `保存できませんでした：${a}`
+        }
+      },
+      imported: {
+        title: "インポートしたクリーナー",
+        description: "BleachBit のクリーナー ファイル（.xml）をインポートします。Prune は削除オプションを取り込み、スキップした内容を正確にお知らせします。インポートしたルールは既定ではオンにならず、保護された場所には触れません。",
+        button: "クリーナーをインポート…",
+        empty: "インポートしたクリーナーはありません。",
+        meta: (a) => `インポートしたオプション：${a}`,
+        remove: (a) => `${a} を削除`,
+        badge: "インポート済み",
+        reportDone: (a, b, c, d, e) => `${a} をインポートしました。オプション：${b} 件をインポート、${c} 件をスキップ。アクション：${d} 件をインポート、${e} 件をスキップ。`,
+        reportNothing: (a, b, c) => `${a} からは何もインポートされませんでした。スキップしたオプション：${b} 件。スキップしたアクション：${c} 件。`,
+        skip: {
+          command: (a, b) => `未対応のコマンド ${a}：${b}`,
+          search: (a, b) => `未対応の検索の種類 ${a}：${b}`,
+          filter: (a, b) => `正規表現フィルターを使うアクション：${b}`,
+          os: (a, b) => `別のシステム向け（${a}）：${b}`,
+          variable: (a, b) => `不明な変数 ${a}：${b}`,
+          path: (a, b) => `使用できない、または安全でないパス：${b}`
+        },
+        error: {
+          tooLarge: "ファイルが大きすぎて、クリーナーではありません。",
+          notXml: "有効な XML ではありません。",
+          notCleaner: "BleachBit のクリーナー ファイルではありません。",
+          noId: "このクリーナーには ID がありません。",
+          failed: (a) => `インポートできませんでした：${a}`
+        }
       }
     }
   },
@@ -1099,6 +1935,50 @@ export default {
         hide: (a) => `${a}의 파일 숨기기`,
         heading: (a, b) => `큰 파일 순서: ${b}개 중 ${a}개 표시`,
         biggest: (a) => `가장 큰 항목: ${a}`
+      },
+      custom: {
+        category: "사용자 지정",
+        ruleName: "사용자 지정 위치",
+        ruleDescription: "설정에서 직접 추가한 파일과 폴더입니다.",
+        description: "D:\\Games\\Cache\\*.tmp 같은 파일, 폴더 또는 패턴을 딥 클린에 추가합니다. 별도의 규칙으로 표시되며 기본적으로 선택되지 않고, 제외 항목, 최근 파일 보호, 보호된 위치를 계속 따릅니다.",
+        ariaLabel: "추가할 위치",
+        remove: (a) => `${a} 정리 중단`,
+        empty: "아직 사용자 지정 위치가 없습니다.",
+        error: {
+          empty: "먼저 경로를 입력하세요.",
+          relative: "D:\\Games\\Cache 같은 전체 경로를 쓰거나 %LOCALAPPDATA% 같은 변수로 시작하세요.",
+          climb: ".. 이 포함된 경로는 사용할 수 없습니다.",
+          protected: "보호된 위치입니다(Windows, Program Files, 드라이브 전체 또는 사용자 프로필).",
+          wildcard: "*는 드라이브 최상위가 아니라 폴더 안쪽(D:\\Games\\Cache\\*)에 넣으세요.",
+          long: "경로가 너무 깁니다.",
+          failed: (a) => `저장하지 못했습니다: ${a}`
+        }
+      },
+      imported: {
+        title: "가져온 클리너",
+        description: "BleachBit 클리너 파일(.xml)을 가져옵니다. Prune은 삭제 옵션을 가져오고 건너뛴 항목을 정확히 알려 줍니다. 가져온 규칙은 기본적으로 선택되지 않으며 보호된 위치에는 접근하지 않습니다.",
+        button: "클리너 가져오기…",
+        empty: "가져온 클리너가 없습니다.",
+        meta: (a) => `가져온 옵션: ${a}개`,
+        remove: (a) => `${a} 제거`,
+        badge: "가져옴",
+        reportDone: (a, b, c, d, e) => `${a}을(를) 가져왔습니다. 옵션: ${b}개 가져옴, ${c}개 건너뜀. 동작: ${d}개 가져옴, ${e}개 건너뜀.`,
+        reportNothing: (a, b, c) => `${a}에서 가져온 항목이 없습니다. 건너뛴 옵션: ${b}개. 건너뛴 동작: ${c}개.`,
+        skip: {
+          command: (a, b) => `지원하지 않는 명령 ${a}: ${b}`,
+          search: (a, b) => `지원하지 않는 검색 유형 ${a}: ${b}`,
+          filter: (a, b) => `정규식 필터가 있는 동작: ${b}`,
+          os: (a, b) => `다른 시스템용(${a}): ${b}`,
+          variable: (a, b) => `알 수 없는 변수 ${a}: ${b}`,
+          path: (a, b) => `사용할 수 없거나 안전하지 않은 경로: ${b}`
+        },
+        error: {
+          tooLarge: "파일이 너무 커서 클리너가 아닙니다.",
+          notXml: "올바른 XML이 아닙니다.",
+          notCleaner: "BleachBit 클리너 파일이 아닙니다.",
+          noId: "이 클리너에는 id가 없습니다.",
+          failed: (a) => `가져오지 못했습니다: ${a}`
+        }
       }
     }
   },
@@ -1154,6 +2034,50 @@ export default {
         hide: (a) => `Slėpti failus: ${a}`,
         heading: (a, b) => `Pirma didžiausi failai: rodoma ${a} iš ${b}`,
         biggest: (a) => `Didžiausi: ${a}`
+      },
+      custom: {
+        category: "Pasirinktinis",
+        ruleName: "Pasirinktinės vietos",
+        ruleDescription: "Failai ir aplankai, kuriuos pats pridėjote nustatymuose.",
+        description: "Pridėkite prie Gilaus valymo failus, aplankus ar šablonus, pvz., D:\\Games\\Cache\\*.tmp. Jie rodomi kaip atskira taisyklė, niekada nežymima pagal numatytuosius nustatymus ir vis tiek gerbia jūsų išimtis, naujausių failų apsaugą ir saugomas vietas.",
+        ariaLabel: "Pridedama vieta",
+        remove: (a) => `Nebevalyti ${a}`,
+        empty: "Pasirinktinių vietų dar nėra.",
+        error: {
+          empty: "Pirmiausia įveskite kelią.",
+          relative: "Įrašykite visą kelią, pvz., D:\\Games\\Cache, arba pradėkite kintamuoju, pvz., %LOCALAPPDATA%.",
+          climb: "Kelias su .. neleidžiamas.",
+          protected: "Tai saugoma vieta (Windows, Program Files, visas diskas ar naudotojo profilis).",
+          wildcard: "Įdėkite * giliau, į aplanko vidų (D:\\Games\\Cache\\*), o ne disko viršuje.",
+          long: "Tas kelias per ilgas.",
+          failed: (a) => `Nepavyko išsaugoti: ${a}`
+        }
+      },
+      imported: {
+        title: "Importuoti valikliai",
+        description: "Importuokite „BleachBit“ valiklio failą (.xml). „Prune“ perima jo trynimo parinktis ir tiksliai pasako, ką praleido. Importuotos taisyklės niekada nežymimos pagal numatytuosius nustatymus ir nesiartina prie saugomų vietų.",
+        button: "Importuoti valiklį…",
+        empty: "Importuotų valiklių nėra.",
+        meta: (a) => `Importuota parinkčių: ${a}`,
+        remove: (a) => `Pašalinti ${a}`,
+        badge: "Importuota",
+        reportDone: (a, b, c, d, e) => `Importuota: ${a}. Parinktys: ${b} importuota, ${c} praleista. Veiksmai: ${d} importuota, ${e} praleista.`,
+        reportNothing: (a, b, c) => `Iš ${a} niekas neimportuota. Praleista parinkčių: ${b}. Praleista veiksmų: ${c}.`,
+        skip: {
+          command: (a, b) => `Nepalaikoma komanda ${a}: ${b}`,
+          search: (a, b) => `Nepalaikomas paieškos tipas ${a}: ${b}`,
+          filter: (a, b) => `Veiksmai su reguliariosios išraiškos filtru: ${b}`,
+          os: (a, b) => `Skirta kitai sistemai (${a}): ${b}`,
+          variable: (a, b) => `Nežinomas kintamasis ${a}: ${b}`,
+          path: (a, b) => `Netinkami arba nesaugūs keliai: ${b}`
+        },
+        error: {
+          tooLarge: "Šis failas per didelis, kad būtų valiklis.",
+          notXml: "Tai nėra tinkamas XML.",
+          notCleaner: "Tai nėra „BleachBit“ valiklio failas.",
+          noId: "Šis valiklis neturi id.",
+          failed: (a) => `Nepavyko importuoti: ${a}`
+        }
       }
     }
   },
@@ -1209,6 +2133,50 @@ export default {
         hide: (a) => `Sembunyikan fail dalam ${a}`,
         heading: (a, b) => `Fail terbesar dahulu: menunjukkan ${a} daripada ${b}`,
         biggest: (a) => `Terbesar: ${a}`
+      },
+      custom: {
+        category: "Tersuai",
+        ruleName: "Lokasi tersuai",
+        ruleDescription: "Fail dan folder yang anda tambah sendiri dalam Tetapan.",
+        description: "Tambah fail, folder atau corak, seperti D:\\Games\\Cache\\*.tmp, ke Pembersihan Mendalam. Ia muncul sebagai peraturan tersendiri, tidak pernah ditanda secara lalai, dan masih menghormati pengecualian anda, perlindungan fail terkini dan tempat yang dilindungi.",
+        ariaLabel: "Lokasi untuk ditambah",
+        remove: (a) => `Berhenti membersihkan ${a}`,
+        empty: "Belum ada lokasi tersuai.",
+        error: {
+          empty: "Taip laluan dahulu.",
+          relative: "Tulis laluan penuh, seperti D:\\Games\\Cache, atau mulakan dengan pemboleh ubah seperti %LOCALAPPDATA%.",
+          climb: "Laluan yang mengandungi .. tidak dibenarkan.",
+          protected: "Itu tempat yang dilindungi (Windows, Program Files, seluruh pemacu atau profil pengguna).",
+          wildcard: "Letakkan * lebih bawah, di dalam folder (D:\\Games\\Cache\\*), bukan di bahagian atas pemacu.",
+          long: "Laluan itu terlalu panjang.",
+          failed: (a) => `Tidak dapat menyimpan: ${a}`
+        }
+      },
+      imported: {
+        title: "Pembersih yang diimport",
+        description: "Import fail pembersih BleachBit (.xml). Prune membawa masuk pilihan padamnya dan memberitahu anda dengan tepat apa yang dilangkau. Peraturan yang diimport tidak pernah ditanda secara lalai dan tidak menyentuh tempat yang dilindungi.",
+        button: "Import pembersih…",
+        empty: "Tiada pembersih yang diimport.",
+        meta: (a) => `Pilihan diimport: ${a}`,
+        remove: (a) => `Alih keluar ${a}`,
+        badge: "Diimport",
+        reportDone: (a, b, c, d, e) => `${a} diimport. Pilihan: ${b} diimport, ${c} dilangkau. Tindakan: ${d} diimport, ${e} dilangkau.`,
+        reportNothing: (a, b, c) => `Tiada apa-apa diimport daripada ${a}. Pilihan dilangkau: ${b}. Tindakan dilangkau: ${c}.`,
+        skip: {
+          command: (a, b) => `Arahan tidak disokong ${a}: ${b}`,
+          search: (a, b) => `Jenis carian tidak disokong ${a}: ${b}`,
+          filter: (a, b) => `Tindakan dengan penapis ungkapan nalar: ${b}`,
+          os: (a, b) => `Untuk sistem lain (${a}): ${b}`,
+          variable: (a, b) => `Pemboleh ubah tidak diketahui ${a}: ${b}`,
+          path: (a, b) => `Laluan yang tidak boleh digunakan atau tidak selamat: ${b}`
+        },
+        error: {
+          tooLarge: "Fail itu terlalu besar untuk menjadi pembersih.",
+          notXml: "Itu bukan XML yang sah.",
+          notCleaner: "Itu bukan fail pembersih BleachBit.",
+          noId: "Pembersih itu tiada id.",
+          failed: (a) => `Tidak dapat mengimport: ${a}`
+        }
       }
     }
   },
@@ -1264,6 +2232,50 @@ export default {
         hide: (a) => `Skjul filer i ${a}`,
         heading: (a, b) => `Største filer først: viser ${a} av ${b}`,
         biggest: (a) => `Største: ${a}`
+      },
+      custom: {
+        category: "Egendefinert",
+        ruleName: "Egendefinerte plasseringer",
+        ruleDescription: "Filer og mapper du selv la til i Innstillinger.",
+        description: "Legg til filer, mapper eller mønstre, for eksempel D:\\Games\\Cache\\*.tmp, i Grundig opprydding. De vises som en egen regel, er aldri avkrysset som standard og respekterer fortsatt unntakene dine, vernet av nylige filer og de beskyttede stedene.",
+        ariaLabel: "Plassering som skal legges til",
+        remove: (a) => `Slutt å rydde ${a}`,
+        empty: "Ingen egendefinerte plasseringer ennå.",
+        error: {
+          empty: "Skriv inn en sti først.",
+          relative: "Skriv en full sti, for eksempel D:\\Games\\Cache, eller begynn med en variabel som %LOCALAPPDATA%.",
+          climb: "En sti med .. er ikke tillatt.",
+          protected: "Dette er et beskyttet sted (Windows, Program Files, en hel stasjon eller en brukerprofil).",
+          wildcard: "Sett * lenger ned, inni en mappe (D:\\Games\\Cache\\*), ikke øverst på en stasjon.",
+          long: "Den stien er for lang.",
+          failed: (a) => `Kunne ikke lagre: ${a}`
+        }
+      },
+      imported: {
+        title: "Importerte renseverktøy",
+        description: "Importer en BleachBit-renseverktøyfil (.xml). Prune henter inn slettealternativene og forteller deg nøyaktig hva som ble hoppet over. Importerte regler er aldri avkrysset som standard og holder seg unna beskyttede steder.",
+        button: "Importer renseverktøy…",
+        empty: "Ingen importerte renseverktøy.",
+        meta: (a) => `Importerte alternativer: ${a}`,
+        remove: (a) => `Fjern ${a}`,
+        badge: "Importert",
+        reportDone: (a, b, c, d, e) => `${a} importert. Alternativer: ${b} importert, ${c} hoppet over. Handlinger: ${d} importert, ${e} hoppet over.`,
+        reportNothing: (a, b, c) => `Ingenting ble importert fra ${a}. Alternativer hoppet over: ${b}. Handlinger hoppet over: ${c}.`,
+        skip: {
+          command: (a, b) => `Ikke-støttet kommando ${a}: ${b}`,
+          search: (a, b) => `Ikke-støttet søketype ${a}: ${b}`,
+          filter: (a, b) => `Handlinger med et regulært uttrykk som filter: ${b}`,
+          os: (a, b) => `Ment for et annet system (${a}): ${b}`,
+          variable: (a, b) => `Ukjent variabel ${a}: ${b}`,
+          path: (a, b) => `Ubrukelige eller utrygge stier: ${b}`
+        },
+        error: {
+          tooLarge: "Den filen er for stor til å være et renseverktøy.",
+          notXml: "Det er ikke gyldig XML.",
+          notCleaner: "Det er ikke en BleachBit-renseverktøyfil.",
+          noId: "Det renseverktøyet har ingen id.",
+          failed: (a) => `Kunne ikke importere: ${a}`
+        }
       }
     }
   },
@@ -1319,6 +2331,50 @@ export default {
         hide: (a) => `Bestanden in ${a} verbergen`,
         heading: (a, b) => `Grootste bestanden eerst: ${a} van ${b} getoond`,
         biggest: (a) => `Grootste: ${a}`
+      },
+      custom: {
+        category: "Aangepast",
+        ruleName: "Aangepaste locaties",
+        ruleDescription: "Bestanden en mappen die je zelf hebt toegevoegd in Instellingen.",
+        description: "Voeg bestanden, mappen of patronen, zoals D:\\Games\\Cache\\*.tmp, toe aan Grondige opschoning. Ze verschijnen als een eigen regel, nooit standaard aangevinkt, en houden rekening met je uitzonderingen, de bescherming van recente bestanden en de beschermde plaatsen.",
+        ariaLabel: "Toe te voegen locatie",
+        remove: (a) => `Stoppen met opschonen van ${a}`,
+        empty: "Nog geen aangepaste locaties.",
+        error: {
+          empty: "Typ eerst een pad.",
+          relative: "Schrijf een volledig pad, zoals D:\\Games\\Cache, of begin met een variabele zoals %LOCALAPPDATA%.",
+          climb: "Een pad met .. is niet toegestaan.",
+          protected: "Dat is een beschermde plek (Windows, Program Files, een hele schijf of een gebruikersprofiel).",
+          wildcard: "Zet de * lager, in een map (D:\\Games\\Cache\\*), niet bovenaan een schijf.",
+          long: "Dat pad is te lang.",
+          failed: (a) => `Opslaan mislukt: ${a}`
+        }
+      },
+      imported: {
+        title: "Geïmporteerde cleaners",
+        description: "Importeer een BleachBit-cleanerbestand (.xml). Prune neemt de verwijderopties over en vertelt je precies wat is overgeslagen. Geïmporteerde regels zijn nooit standaard aangevinkt en blijven weg van beschermde plaatsen.",
+        button: "Cleaner importeren…",
+        empty: "Geen geïmporteerde cleaners.",
+        meta: (a) => `Geïmporteerde opties: ${a}`,
+        remove: (a) => `${a} verwijderen`,
+        badge: "Geïmporteerd",
+        reportDone: (a, b, c, d, e) => `${a} geïmporteerd. Opties: ${b} geïmporteerd, ${c} overgeslagen. Acties: ${d} geïmporteerd, ${e} overgeslagen.`,
+        reportNothing: (a, b, c) => `Er is niets geïmporteerd uit ${a}. Overgeslagen opties: ${b}. Overgeslagen acties: ${c}.`,
+        skip: {
+          command: (a, b) => `Niet-ondersteunde opdracht ${a}: ${b}`,
+          search: (a, b) => `Niet-ondersteund zoektype ${a}: ${b}`,
+          filter: (a, b) => `Acties met een filter met een reguliere expressie: ${b}`,
+          os: (a, b) => `Bedoeld voor een ander systeem (${a}): ${b}`,
+          variable: (a, b) => `Onbekende variabele ${a}: ${b}`,
+          path: (a, b) => `Onbruikbare of onveilige paden: ${b}`
+        },
+        error: {
+          tooLarge: "Dat bestand is te groot voor een cleaner.",
+          notXml: "Dat is geen geldige XML.",
+          notCleaner: "Dat is geen BleachBit-cleanerbestand.",
+          noId: "Die cleaner heeft geen id.",
+          failed: (a) => `Importeren mislukt: ${a}`
+        }
       }
     }
   },
@@ -1374,6 +2430,50 @@ export default {
         hide: (a) => `Ukryj pliki w: ${a}`,
         heading: (a, b) => `Najpierw największe pliki: pokazano ${a} z ${b}`,
         biggest: (a) => `Największe: ${a}`
+      },
+      custom: {
+        category: "Własne",
+        ruleName: "Własne lokalizacje",
+        ruleDescription: "Pliki i foldery dodane przez Ciebie w Ustawieniach.",
+        description: "Dodaj do Głębokiego czyszczenia pliki, foldery lub wzorce, takie jak D:\\Games\\Cache\\*.tmp. Pojawią się jako osobna reguła, nigdy domyślnie zaznaczona, i nadal będą respektować Twoje wykluczenia, ochronę ostatnich plików oraz chronione miejsca.",
+        ariaLabel: "Lokalizacja do dodania",
+        remove: (a) => `Przestań czyścić ${a}`,
+        empty: "Brak własnych lokalizacji.",
+        error: {
+          empty: "Najpierw wpisz ścieżkę.",
+          relative: "Wpisz pełną ścieżkę, na przykład D:\\Games\\Cache, lub zacznij od zmiennej, takiej jak %LOCALAPPDATA%.",
+          climb: "Ścieżka zawierająca .. jest niedozwolona.",
+          protected: "To miejsce chronione (Windows, Program Files, cały dysk lub profil użytkownika).",
+          wildcard: "Umieść * niżej, wewnątrz folderu (D:\\Games\\Cache\\*), a nie na szczycie dysku.",
+          long: "Ta ścieżka jest za długa.",
+          failed: (a) => `Nie udało się zapisać: ${a}`
+        }
+      },
+      imported: {
+        title: "Zaimportowane cleanery",
+        description: "Zaimportuj plik cleanera BleachBit (.xml). Prune przenosi jego opcje usuwania i dokładnie informuje, co pominął. Zaimportowane reguły nigdy nie są domyślnie zaznaczone i omijają chronione miejsca.",
+        button: "Importuj cleaner…",
+        empty: "Brak zaimportowanych cleanerów.",
+        meta: (a) => `Zaimportowane opcje: ${a}`,
+        remove: (a) => `Usuń ${a}`,
+        badge: "Zaimportowano",
+        reportDone: (a, b, c, d, e) => `Zaimportowano ${a}. Opcje: ${b} zaimportowano, ${c} pominięto. Akcje: ${d} zaimportowano, ${e} pominięto.`,
+        reportNothing: (a, b, c) => `Z ${a} nic nie zaimportowano. Pominięte opcje: ${b}. Pominięte akcje: ${c}.`,
+        skip: {
+          command: (a, b) => `Nieobsługiwane polecenie ${a}: ${b}`,
+          search: (a, b) => `Nieobsługiwany typ wyszukiwania ${a}: ${b}`,
+          filter: (a, b) => `Akcje z filtrem wyrażenia regularnego: ${b}`,
+          os: (a, b) => `Przeznaczone dla innego systemu (${a}): ${b}`,
+          variable: (a, b) => `Nieznana zmienna ${a}: ${b}`,
+          path: (a, b) => `Nieużyteczne lub niebezpieczne ścieżki: ${b}`
+        },
+        error: {
+          tooLarge: "Ten plik jest zbyt duży jak na cleaner.",
+          notXml: "To nie jest prawidłowy XML.",
+          notCleaner: "To nie jest plik cleanera BleachBit.",
+          noId: "Ten cleaner nie ma identyfikatora.",
+          failed: (a) => `Nie udało się zaimportować: ${a}`
+        }
       }
     }
   },
@@ -1429,6 +2529,50 @@ export default {
         hide: (a) => `په ${a} کې فایلونه پټ کړئ`,
         heading: (a, b) => `لوی فایلونه لومړی: ${b} څخه ${a} ښودل کیږي`,
         biggest: (a) => `تر ټولو لوی: ${a}`
+      },
+      custom: {
+        category: "دودیز",
+        ruleName: "دودیز ځایونه",
+        ruleDescription: "هغه فایلونه او پوښې چې تاسو پخپله په امستنو کې اضافه کړي.",
+        description: "فایلونه، پوښې یا نمونې، لکه D:\\Games\\Cache\\*.tmp، ژور پاکولو ته اضافه کړئ. دا د جلا قاعدې په توګه ښکاري، په ډیفالټ نه نښه کیږي، او بیا هم ستاسو استثناوې، د وروستیو فایلونو ساتنه او خوندي ځایونه رعایتوي.",
+        ariaLabel: "اضافه کولو لپاره ځای",
+        remove: (a) => `د ${a} پاکول ودروئ`,
+        empty: "تر اوسه دودیز ځایونه نشته.",
+        error: {
+          empty: "لومړی یوه لاره ولیکئ.",
+          relative: "بشپړه لاره ولیکئ، لکه D:\\Games\\Cache، یا په یوه متغیر لکه %LOCALAPPDATA% پیل کړئ.",
+          climb: "هغه لاره چې .. لري اجازه نلري.",
+          protected: "دا یو خوندي ځای دی (Windows، Program Files، بشپړ ډرایو یا د کارن پروفایل).",
+          wildcard: "د * نښه ښکته کې، په یوه پوښۍ کې (D:\\Games\\Cache\\*) کېږدئ، نه د ډرایو په سر کې.",
+          long: "دا لاره ډېره اوږده ده.",
+          failed: (a) => `خوندي نشو: ${a}`
+        }
+      },
+      imported: {
+        title: "وارد شوي پاکوونکي",
+        description: "د BleachBit د پاکوونکي فایل (.xml) وارد کړئ. Prune د هغه د ړنګولو اختیارونه راوړي او تاسو ته دقیقا وايي چې څه یې پریښودل. وارد شوې قاعدې په ډیفالټ نه نښه کیږي او له خوندي ځایونو لرې پاتې کیږي.",
+        button: "پاکوونکی وارد کړئ…",
+        empty: "هیڅ وارد شوی پاکوونکی نشته.",
+        meta: (a) => `وارد شوي اختیارونه: ${a}`,
+        remove: (a) => `${a} لرې کړئ`,
+        badge: "وارد شوی",
+        reportDone: (a, b, c, d, e) => `${a} وارد شو. اختیارونه: ${b} وارد شول، ${c} پریښودل شول. کړنې: ${d} وارد شول، ${e} پریښودل شول.`,
+        reportNothing: (a, b, c) => `له ${a} څخه هیڅ شی وارد نشو. پریښودل شوي اختیارونه: ${b}. پریښودل شوې کړنې: ${c}.`,
+        skip: {
+          command: (a, b) => `نامتمل قومانده ${a}: ${b}`,
+          search: (a, b) => `نامتمل د لټون ډول ${a}: ${b}`,
+          filter: (a, b) => `هغه کړنې چې د منظم اظهار فلټر لري: ${b}`,
+          os: (a, b) => `د بل سیسټم لپاره (${a}): ${b}`,
+          variable: (a, b) => `نامعلوم متغیر ${a}: ${b}`,
+          path: (a, b) => `نا کارول کیدونکې یا ناامنه لارې: ${b}`
+        },
+        error: {
+          tooLarge: "دا فایل د پاکوونکي لپاره ډېر لوی دی.",
+          notXml: "دا معتبر XML نه دی.",
+          notCleaner: "دا د BleachBit د پاکوونکي فایل نه دی.",
+          noId: "دا پاکوونکی هیڅ id نه لري.",
+          failed: (a) => `وارد نشو: ${a}`
+        }
       }
     }
   },
@@ -1484,6 +2628,50 @@ export default {
         hide: (a) => `Ocultar arquivos em ${a}`,
         heading: (a, b) => `Maiores arquivos primeiro: mostrando ${a} de ${b}`,
         biggest: (a) => `Maiores: ${a}`
+      },
+      custom: {
+        category: "Personalizado",
+        ruleName: "Locais personalizados",
+        ruleDescription: "Arquivos e pastas que você mesmo adicionou em Configurações.",
+        description: "Adicione à Limpeza profunda arquivos, pastas ou padrões, como D:\\Games\\Cache\\*.tmp. Eles aparecem como uma regra própria, nunca marcada por padrão, e continuam respeitando suas exclusões, a proteção de arquivos recentes e os locais protegidos.",
+        ariaLabel: "Local a adicionar",
+        remove: (a) => `Parar de limpar ${a}`,
+        empty: "Ainda não há locais personalizados.",
+        error: {
+          empty: "Digite um caminho primeiro.",
+          relative: "Escreva um caminho completo, como D:\\Games\\Cache, ou comece com uma variável como %LOCALAPPDATA%.",
+          climb: "Não é permitido um caminho com ..",
+          protected: "Esse é um local protegido (Windows, Arquivos de Programas, uma unidade inteira ou um perfil de usuário).",
+          wildcard: "Coloque o * mais abaixo, dentro de uma pasta (D:\\Games\\Cache\\*), não no topo de uma unidade.",
+          long: "Esse caminho é longo demais.",
+          failed: (a) => `Não foi possível salvar: ${a}`
+        }
+      },
+      imported: {
+        title: "Limpadores importados",
+        description: "Importe um arquivo de limpador do BleachBit (.xml). O Prune traz as opções de exclusão e diz exatamente o que foi ignorado. As regras importadas nunca vêm marcadas por padrão e ficam longe dos locais protegidos.",
+        button: "Importar limpador…",
+        empty: "Nenhum limpador importado.",
+        meta: (a) => `Opções importadas: ${a}`,
+        remove: (a) => `Remover ${a}`,
+        badge: "Importado",
+        reportDone: (a, b, c, d, e) => `${a} importado. Opções: ${b} importadas, ${c} ignoradas. Ações: ${d} importadas, ${e} ignoradas.`,
+        reportNothing: (a, b, c) => `Nada foi importado de ${a}. Opções ignoradas: ${b}. Ações ignoradas: ${c}.`,
+        skip: {
+          command: (a, b) => `Comando sem suporte ${a}: ${b}`,
+          search: (a, b) => `Tipo de busca sem suporte ${a}: ${b}`,
+          filter: (a, b) => `Ações com filtro de expressão regular: ${b}`,
+          os: (a, b) => `Feito para outro sistema (${a}): ${b}`,
+          variable: (a, b) => `Variável desconhecida ${a}: ${b}`,
+          path: (a, b) => `Caminhos inutilizáveis ou inseguros: ${b}`
+        },
+        error: {
+          tooLarge: "Esse arquivo é grande demais para ser um limpador.",
+          notXml: "Isso não é um XML válido.",
+          notCleaner: "Esse não é um arquivo de limpador do BleachBit.",
+          noId: "Esse limpador não tem id.",
+          failed: (a) => `Não foi possível importar: ${a}`
+        }
       }
     }
   },
@@ -1539,6 +2727,50 @@ export default {
         hide: (a) => `Ocultar ficheiros em ${a}`,
         heading: (a, b) => `Maiores ficheiros primeiro: a mostrar ${a} de ${b}`,
         biggest: (a) => `Maiores: ${a}`
+      },
+      custom: {
+        category: "Personalizado",
+        ruleName: "Localizações personalizadas",
+        ruleDescription: "Ficheiros e pastas que adicionou nas Definições.",
+        description: "Adicione à Limpeza profunda ficheiros, pastas ou padrões, como D:\\Games\\Cache\\*.tmp. Aparecem como uma regra própria, nunca assinalada por predefinição, e continuam a respeitar as suas exclusões, a proteção de ficheiros recentes e os locais protegidos.",
+        ariaLabel: "Localização a adicionar",
+        remove: (a) => `Deixar de limpar ${a}`,
+        empty: "Ainda não há localizações personalizadas.",
+        error: {
+          empty: "Escreva primeiro um caminho.",
+          relative: "Escreva um caminho completo, como D:\\Games\\Cache, ou comece com uma variável como %LOCALAPPDATA%.",
+          climb: "Não é permitido um caminho com ..",
+          protected: "Esse é um local protegido (Windows, Program Files, uma unidade inteira ou um perfil de utilizador).",
+          wildcard: "Coloque o * mais abaixo, dentro de uma pasta (D:\\Games\\Cache\\*), não no topo de uma unidade.",
+          long: "Esse caminho é demasiado longo.",
+          failed: (a) => `Não foi possível guardar: ${a}`
+        }
+      },
+      imported: {
+        title: "Limpadores importados",
+        description: "Importe um ficheiro de limpador do BleachBit (.xml). O Prune traz as opções de eliminação e diz exatamente o que foi ignorado. As regras importadas nunca vêm assinaladas por predefinição e ficam longe dos locais protegidos.",
+        button: "Importar limpador…",
+        empty: "Nenhum limpador importado.",
+        meta: (a) => `Opções importadas: ${a}`,
+        remove: (a) => `Remover ${a}`,
+        badge: "Importado",
+        reportDone: (a, b, c, d, e) => `${a} importado. Opções: ${b} importadas, ${c} ignoradas. Ações: ${d} importadas, ${e} ignoradas.`,
+        reportNothing: (a, b, c) => `Nada foi importado de ${a}. Opções ignoradas: ${b}. Ações ignoradas: ${c}.`,
+        skip: {
+          command: (a, b) => `Comando não suportado ${a}: ${b}`,
+          search: (a, b) => `Tipo de pesquisa não suportado ${a}: ${b}`,
+          filter: (a, b) => `Ações com filtro de expressão regular: ${b}`,
+          os: (a, b) => `Feito para outro sistema (${a}): ${b}`,
+          variable: (a, b) => `Variável desconhecida ${a}: ${b}`,
+          path: (a, b) => `Caminhos inutilizáveis ou inseguros: ${b}`
+        },
+        error: {
+          tooLarge: "Esse ficheiro é demasiado grande para ser um limpador.",
+          notXml: "Isso não é um XML válido.",
+          notCleaner: "Esse não é um ficheiro de limpador do BleachBit.",
+          noId: "Esse limpador não tem id.",
+          failed: (a) => `Não foi possível importar: ${a}`
+        }
       }
     }
   },
@@ -1594,6 +2826,50 @@ export default {
         hide: (a) => `Ascunde fișierele din ${a}`,
         heading: (a, b) => `Cele mai mari fișiere primele: se afișează ${a} din ${b}`,
         biggest: (a) => `Cele mai mari: ${a}`
+      },
+      custom: {
+        category: "Personalizat",
+        ruleName: "Locații personalizate",
+        ruleDescription: "Fișiere și foldere pe care le-ai adăugat chiar tu în Setări.",
+        description: "Adaugă la Curățarea profundă fișiere, foldere sau modele, cum ar fi D:\\Games\\Cache\\*.tmp. Apar ca o regulă separată, niciodată bifată implicit, și respectă în continuare excluderile tale, protecția fișierelor recente și locurile protejate.",
+        ariaLabel: "Locația de adăugat",
+        remove: (a) => `Nu mai curăța ${a}`,
+        empty: "Încă nu există locații personalizate.",
+        error: {
+          empty: "Introdu mai întâi o cale.",
+          relative: "Scrie o cale completă, cum ar fi D:\\Games\\Cache, sau începe cu o variabilă precum %LOCALAPPDATA%.",
+          climb: "O cale care conține .. nu este permisă.",
+          protected: "Acesta este un loc protejat (Windows, Program Files, o unitate întreagă sau un profil de utilizator).",
+          wildcard: "Pune * mai jos, într-un folder (D:\\Games\\Cache\\*), nu în vârful unei unități.",
+          long: "Calea este prea lungă.",
+          failed: (a) => `Nu s-a putut salva: ${a}`
+        }
+      },
+      imported: {
+        title: "Curățătoare importate",
+        description: "Importă un fișier de curățător BleachBit (.xml). Prune preia opțiunile lui de ștergere și îți spune exact ce a omis. Regulile importate nu sunt niciodată bifate implicit și rămân departe de locurile protejate.",
+        button: "Importă curățător…",
+        empty: "Niciun curățător importat.",
+        meta: (a) => `Opțiuni importate: ${a}`,
+        remove: (a) => `Elimină ${a}`,
+        badge: "Importat",
+        reportDone: (a, b, c, d, e) => `${a} importat. Opțiuni: ${b} importate, ${c} omise. Acțiuni: ${d} importate, ${e} omise.`,
+        reportNothing: (a, b, c) => `Nu s-a importat nimic din ${a}. Opțiuni omise: ${b}. Acțiuni omise: ${c}.`,
+        skip: {
+          command: (a, b) => `Comandă neacceptată ${a}: ${b}`,
+          search: (a, b) => `Tip de căutare neacceptat ${a}: ${b}`,
+          filter: (a, b) => `Acțiuni cu filtru de expresie regulată: ${b}`,
+          os: (a, b) => `Destinat altui sistem (${a}): ${b}`,
+          variable: (a, b) => `Variabilă necunoscută ${a}: ${b}`,
+          path: (a, b) => `Căi inutilizabile sau nesigure: ${b}`
+        },
+        error: {
+          tooLarge: "Fișierul este prea mare pentru a fi un curățător.",
+          notXml: "Acesta nu este XML valid.",
+          notCleaner: "Acesta nu este un fișier de curățător BleachBit.",
+          noId: "Acest curățător nu are id.",
+          failed: (a) => `Nu s-a putut importa: ${a}`
+        }
       }
     }
   },
@@ -1649,6 +2925,50 @@ export default {
         hide: (a) => `Скрыть файлы: ${a}`,
         heading: (a, b) => `Сначала самые большие файлы: показано ${a} из ${b}`,
         biggest: (a) => `Самые большие: ${a}`
+      },
+      custom: {
+        category: "Свои",
+        ruleName: "Свои расположения",
+        ruleDescription: "Файлы и папки, которые вы сами добавили в настройках.",
+        description: "Добавляйте в «Глубокую очистку» файлы, папки или шаблоны, например D:\\Games\\Cache\\*.tmp. Они появляются как отдельное правило, никогда не отмечаются по умолчанию и по-прежнему учитывают ваши исключения, защиту недавних файлов и защищённые места.",
+        ariaLabel: "Добавляемое расположение",
+        remove: (a) => `Больше не очищать ${a}`,
+        empty: "Своих расположений пока нет.",
+        error: {
+          empty: "Сначала введите путь.",
+          relative: "Введите полный путь, например D:\\Games\\Cache, или начните с переменной, например %LOCALAPPDATA%.",
+          climb: "Путь с .. не допускается.",
+          protected: "Это защищённое место (Windows, Program Files, диск целиком или профиль пользователя).",
+          wildcard: "Поставьте * ниже, внутри папки (D:\\Games\\Cache\\*), а не в корне диска.",
+          long: "Этот путь слишком длинный.",
+          failed: (a) => `Не удалось сохранить: ${a}`
+        }
+      },
+      imported: {
+        title: "Импортированные очистители",
+        description: "Импортируйте файл очистителя BleachBit (.xml). Prune переносит его параметры удаления и точно сообщает, что было пропущено. Импортированные правила никогда не отмечаются по умолчанию и не затрагивают защищённые места.",
+        button: "Импортировать очиститель…",
+        empty: "Импортированных очистителей нет.",
+        meta: (a) => `Импортировано параметров: ${a}`,
+        remove: (a) => `Удалить ${a}`,
+        badge: "Импорт",
+        reportDone: (a, b, c, d, e) => `Импортировано: ${a}. Параметры: импортировано ${b}, пропущено ${c}. Действия: импортировано ${d}, пропущено ${e}.`,
+        reportNothing: (a, b, c) => `Из ${a} ничего не импортировано. Пропущено параметров: ${b}. Пропущено действий: ${c}.`,
+        skip: {
+          command: (a, b) => `Неподдерживаемая команда ${a}: ${b}`,
+          search: (a, b) => `Неподдерживаемый тип поиска ${a}: ${b}`,
+          filter: (a, b) => `Действия с фильтром по регулярному выражению: ${b}`,
+          os: (a, b) => `Предназначено для другой системы (${a}): ${b}`,
+          variable: (a, b) => `Неизвестная переменная ${a}: ${b}`,
+          path: (a, b) => `Непригодные или небезопасные пути: ${b}`
+        },
+        error: {
+          tooLarge: "Этот файл слишком велик для очистителя.",
+          notXml: "Это не корректный XML.",
+          notCleaner: "Это не файл очистителя BleachBit.",
+          noId: "У этого очистителя нет id.",
+          failed: (a) => `Не удалось импортировать: ${a}`
+        }
       }
     }
   },
@@ -1704,6 +3024,50 @@ export default {
         hide: (a) => `Skryť súbory v ${a}`,
         heading: (a, b) => `Najväčšie súbory ako prvé: zobrazených ${a} z ${b}`,
         biggest: (a) => `Najväčšie: ${a}`
+      },
+      custom: {
+        category: "Vlastné",
+        ruleName: "Vlastné umiestnenia",
+        ruleDescription: "Súbory a priečinky, ktoré ste si sami pridali v Nastaveniach.",
+        description: "Pridajte do Hĺbkového čistenia súbory, priečinky alebo vzory, napríklad D:\\Games\\Cache\\*.tmp. Zobrazia sa ako samostatné pravidlo, ktoré nie je predvolene zaškrtnuté a stále rešpektuje vaše výnimky, ochranu nedávnych súborov a chránené miesta.",
+        ariaLabel: "Umiestnenie na pridanie",
+        remove: (a) => `Prestať čistiť ${a}`,
+        empty: "Zatiaľ žiadne vlastné umiestnenia.",
+        error: {
+          empty: "Najprv zadajte cestu.",
+          relative: "Zadajte úplnú cestu, napríklad D:\\Games\\Cache, alebo začnite premennou ako %LOCALAPPDATA%.",
+          climb: "Cesta obsahujúca .. nie je povolená.",
+          protected: "Toto je chránené miesto (Windows, Program Files, celý disk alebo používateľský profil).",
+          wildcard: "Dajte * nižšie, do priečinka (D:\\Games\\Cache\\*), nie na začiatok disku.",
+          long: "Táto cesta je príliš dlhá.",
+          failed: (a) => `Nepodarilo sa uložiť: ${a}`
+        }
+      },
+      imported: {
+        title: "Importované čističe",
+        description: "Importujte súbor čističa BleachBit (.xml). Prune prevezme jeho možnosti odstraňovania a presne vám povie, čo preskočil. Importované pravidlá nie sú predvolene zaškrtnuté a nesiahajú na chránené miesta.",
+        button: "Importovať čistič…",
+        empty: "Žiadne importované čističe.",
+        meta: (a) => `Importované možnosti: ${a}`,
+        remove: (a) => `Odstrániť ${a}`,
+        badge: "Importované",
+        reportDone: (a, b, c, d, e) => `Importované: ${a}. Možnosti: ${b} importovaných, ${c} preskočených. Akcie: ${d} importovaných, ${e} preskočených.`,
+        reportNothing: (a, b, c) => `Z ${a} sa nič neimportovalo. Preskočené možnosti: ${b}. Preskočené akcie: ${c}.`,
+        skip: {
+          command: (a, b) => `Nepodporovaný príkaz ${a}: ${b}`,
+          search: (a, b) => `Nepodporovaný typ vyhľadávania ${a}: ${b}`,
+          filter: (a, b) => `Akcie s filtrom regulárneho výrazu: ${b}`,
+          os: (a, b) => `Určené pre iný systém (${a}): ${b}`,
+          variable: (a, b) => `Neznáma premenná ${a}: ${b}`,
+          path: (a, b) => `Nepoužiteľné alebo nebezpečné cesty: ${b}`
+        },
+        error: {
+          tooLarge: "Tento súbor je príliš veľký na to, aby bol čističom.",
+          notXml: "Toto nie je platný XML.",
+          notCleaner: "Toto nie je súbor čističa BleachBit.",
+          noId: "Tento čistič nemá žiadne id.",
+          failed: (a) => `Nepodarilo sa importovať: ${a}`
+        }
       }
     }
   },
@@ -1759,6 +3123,50 @@ export default {
         hide: (a) => `Fshih skedarët në ${a}`,
         heading: (a, b) => `Skedarët më të mëdhenj së pari: po shfaqen ${a} nga ${b}`,
         biggest: (a) => `Më të mëdhenjtë: ${a}`
+      },
+      custom: {
+        category: "Të personalizuara",
+        ruleName: "Vende të personalizuara",
+        ruleDescription: "Skedarë dhe dosje që ke shtuar vetë te Cilësimet.",
+        description: "Shto te Pastrimi i thellë skedarë, dosje ose modele, si D:\\Games\\Cache\\*.tmp. Shfaqen si një rregull më vete, kurrë të shënuar si parazgjedhje, dhe respektojnë përjashtimet e tua, mbrojtjen e skedarëve të fundit dhe vendet e mbrojtura.",
+        ariaLabel: "Vendndodhja për t’u shtuar",
+        remove: (a) => `Mos e pastro më ${a}`,
+        empty: "Ende nuk ka vende të personalizuara.",
+        error: {
+          empty: "Shkruaj fillimisht një shteg.",
+          relative: "Shkruaj një shteg të plotë, si D:\\Games\\Cache, ose fillo me një ndryshore si %LOCALAPPDATA%.",
+          climb: "Një shteg me .. nuk lejohet.",
+          protected: "Ky është një vend i mbrojtur (Windows, Program Files, një disk i tërë ose një profil përdoruesi).",
+          wildcard: "Vendose * më poshtë, brenda një dosjeje (D:\\Games\\Cache\\*), jo në krye të një disku.",
+          long: "Ai shteg është shumë i gjatë.",
+          failed: (a) => `Nuk u ruajt dot: ${a}`
+        }
+      },
+      imported: {
+        title: "Pastrues të importuar",
+        description: "Importo një skedar pastruesi BleachBit (.xml). Prune sjell opsionet e tij të fshirjes dhe të tregon saktësisht çfarë anashkaloi. Rregullat e importuara nuk shënohen kurrë si parazgjedhje dhe qëndrojnë larg vendeve të mbrojtura.",
+        button: "Importo pastrues…",
+        empty: "Asnjë pastrues i importuar.",
+        meta: (a) => `Opsione të importuara: ${a}`,
+        remove: (a) => `Hiq ${a}`,
+        badge: "Importuar",
+        reportDone: (a, b, c, d, e) => `${a} u importua. Opsione: ${b} të importuara, ${c} të anashkaluara. Veprime: ${d} të importuara, ${e} të anashkaluara.`,
+        reportNothing: (a, b, c) => `Nuk u importua asgjë nga ${a}. Opsione të anashkaluara: ${b}. Veprime të anashkaluara: ${c}.`,
+        skip: {
+          command: (a, b) => `Komandë e pambështetur ${a}: ${b}`,
+          search: (a, b) => `Lloj kërkimi i pambështetur ${a}: ${b}`,
+          filter: (a, b) => `Veprime me filtër shprehjeje të rregullt: ${b}`,
+          os: (a, b) => `I menduar për një sistem tjetër (${a}): ${b}`,
+          variable: (a, b) => `Ndryshore e panjohur ${a}: ${b}`,
+          path: (a, b) => `Shtigje të papërdorshme ose të pasigurta: ${b}`
+        },
+        error: {
+          tooLarge: "Ai skedar është shumë i madh për të qenë pastrues.",
+          notXml: "Ky nuk është XML i vlefshëm.",
+          notCleaner: "Ky nuk është skedar pastruesi BleachBit.",
+          noId: "Ai pastrues nuk ka id.",
+          failed: (a) => `Nuk u importua dot: ${a}`
+        }
       }
     }
   },
@@ -1814,6 +3222,50 @@ export default {
         hide: (a) => `Сакриј датотеке у ${a}`,
         heading: (a, b) => `Прво највеће датотеке: приказано ${a} од ${b}`,
         biggest: (a) => `Највеће: ${a}`
+      },
+      custom: {
+        category: "Прилагођено",
+        ruleName: "Прилагођене локације",
+        ruleDescription: "Датотеке и фасцикле које сте сами додали у Подешавањима.",
+        description: "Додајте у Дубоко чишћење датотеке, фасцикле или обрасце, као што је D:\\Games\\Cache\\*.tmp. Појављују се као засебно правило, никад подразумевано означено, и и даље поштују ваше изузетке, заштиту недавних датотека и заштићена места.",
+        ariaLabel: "Локација за додавање",
+        remove: (a) => `Престани да чистиш ${a}`,
+        empty: "Још нема прилагођених локација.",
+        error: {
+          empty: "Прво унесите путању.",
+          relative: "Упишите пуну путању, на пример D:\\Games\\Cache, или почните променљивом као што је %LOCALAPPDATA%.",
+          climb: "Путања која садржи .. није дозвољена.",
+          protected: "Ово је заштићено место (Windows, Program Files, цео диск или кориснички профил).",
+          wildcard: "Ставите * ниже, унутар фасцикле (D:\\Games\\Cache\\*), а не на врх диска.",
+          long: "Та путања је предугачка.",
+          failed: (a) => `Није могло да се сачува: ${a}`
+        }
+      },
+      imported: {
+        title: "Увезени чистачи",
+        description: "Увезите датотеку чистача BleachBit (.xml). Prune преузима његове опције брисања и тачно вам каже шта је прескочио. Увезена правила никад нису подразумевано означена и остају ван заштићених места.",
+        button: "Увези чистач…",
+        empty: "Нема увезених чистача.",
+        meta: (a) => `Увезене опције: ${a}`,
+        remove: (a) => `Уклони ${a}`,
+        badge: "Увезено",
+        reportDone: (a, b, c, d, e) => `${a} је увезен. Опције: ${b} увезено, ${c} прескочено. Радње: ${d} увезено, ${e} прескочено.`,
+        reportNothing: (a, b, c) => `Из ${a} ништа није увезено. Прескочене опције: ${b}. Прескочене радње: ${c}.`,
+        skip: {
+          command: (a, b) => `Неподржана команда ${a}: ${b}`,
+          search: (a, b) => `Неподржана врста претраге ${a}: ${b}`,
+          filter: (a, b) => `Радње са филтером регуларног израза: ${b}`,
+          os: (a, b) => `Намењено другом систему (${a}): ${b}`,
+          variable: (a, b) => `Непозната променљива ${a}: ${b}`,
+          path: (a, b) => `Неупотребљиве или небезбедне путање: ${b}`
+        },
+        error: {
+          tooLarge: "Та датотека је превелика да би била чистач.",
+          notXml: "Ово није исправан XML.",
+          notCleaner: "Ово није датотека чистача BleachBit.",
+          noId: "Тај чистач нема id.",
+          failed: (a) => `Није могло да се увезе: ${a}`
+        }
       }
     }
   },
@@ -1869,6 +3321,50 @@ export default {
         hide: (a) => `Dölj filer i ${a}`,
         heading: (a, b) => `Största filerna först: visar ${a} av ${b}`,
         biggest: (a) => `Störst: ${a}`
+      },
+      custom: {
+        category: "Egna",
+        ruleName: "Egna platser",
+        ruleDescription: "Filer och mappar som du själv har lagt till i Inställningar.",
+        description: "Lägg till filer, mappar eller mönster, till exempel D:\\Games\\Cache\\*.tmp, i Grundlig rensning. De visas som en egen regel, är aldrig förbockade som standard och respekterar fortfarande dina undantag, skyddet för nyligen ändrade filer och de skyddade platserna.",
+        ariaLabel: "Plats att lägga till",
+        remove: (a) => `Sluta rensa ${a}`,
+        empty: "Inga egna platser ännu.",
+        error: {
+          empty: "Skriv först en sökväg.",
+          relative: "Skriv en fullständig sökväg, till exempel D:\\Games\\Cache, eller börja med en variabel som %LOCALAPPDATA%.",
+          climb: "En sökväg med .. är inte tillåten.",
+          protected: "Det här är en skyddad plats (Windows, Program Files, en hel enhet eller en användarprofil).",
+          wildcard: "Sätt * längre ner, inuti en mapp (D:\\Games\\Cache\\*), inte överst på en enhet.",
+          long: "Sökvägen är för lång.",
+          failed: (a) => `Det gick inte att spara: ${a}`
+        }
+      },
+      imported: {
+        title: "Importerade rensare",
+        description: "Importera en BleachBit-rensarfil (.xml). Prune tar över dess raderingsalternativ och berättar exakt vad som hoppades över. Importerade regler är aldrig förbockade som standard och håller sig borta från skyddade platser.",
+        button: "Importera rensare…",
+        empty: "Inga importerade rensare.",
+        meta: (a) => `Importerade alternativ: ${a}`,
+        remove: (a) => `Ta bort ${a}`,
+        badge: "Importerad",
+        reportDone: (a, b, c, d, e) => `${a} importerad. Alternativ: ${b} importerade, ${c} överhoppade. Åtgärder: ${d} importerade, ${e} överhoppade.`,
+        reportNothing: (a, b, c) => `Inget importerades från ${a}. Överhoppade alternativ: ${b}. Överhoppade åtgärder: ${c}.`,
+        skip: {
+          command: (a, b) => `Kommando som inte stöds ${a}: ${b}`,
+          search: (a, b) => `Söktyp som inte stöds ${a}: ${b}`,
+          filter: (a, b) => `Åtgärder med ett reguljärt uttryck som filter: ${b}`,
+          os: (a, b) => `Avsett för ett annat system (${a}): ${b}`,
+          variable: (a, b) => `Okänd variabel ${a}: ${b}`,
+          path: (a, b) => `Oanvändbara eller osäkra sökvägar: ${b}`
+        },
+        error: {
+          tooLarge: "Filen är för stor för att vara en rensare.",
+          notXml: "Det är inte giltig XML.",
+          notCleaner: "Det är inte en BleachBit-rensarfil.",
+          noId: "Den rensaren har inget id.",
+          failed: (a) => `Det gick inte att importera: ${a}`
+        }
       }
     }
   },
@@ -1924,6 +3420,50 @@ export default {
         hide: (a) => `ซ่อนไฟล์ใน ${a}`,
         heading: (a, b) => `ไฟล์ใหญ่สุดก่อน: แสดง ${a} จาก ${b}`,
         biggest: (a) => `ใหญ่สุด: ${a}`
+      },
+      custom: {
+        category: "กำหนดเอง",
+        ruleName: "ตำแหน่งที่กำหนดเอง",
+        ruleDescription: "ไฟล์และโฟลเดอร์ที่คุณเพิ่มเองในการตั้งค่า",
+        description: "เพิ่มไฟล์ โฟลเดอร์ หรือรูปแบบ เช่น D:\\Games\\Cache\\*.tmp ลงในการทำความสะอาดเชิงลึก รายการเหล่านี้จะแสดงเป็นกฎของตัวเอง ไม่ถูกเลือกโดยค่าเริ่มต้น และยังคงเคารพข้อยกเว้นของคุณ การป้องกันไฟล์ล่าสุด และตำแหน่งที่ได้รับการป้องกัน",
+        ariaLabel: "ตำแหน่งที่จะเพิ่ม",
+        remove: (a) => `เลิกทำความสะอาด ${a}`,
+        empty: "ยังไม่มีตำแหน่งที่กำหนดเอง",
+        error: {
+          empty: "พิมพ์พาธก่อน",
+          relative: "เขียนพาธแบบเต็ม เช่น D:\\Games\\Cache หรือขึ้นต้นด้วยตัวแปร เช่น %LOCALAPPDATA%",
+          climb: "ไม่อนุญาตพาธที่มี ..",
+          protected: "นี่เป็นตำแหน่งที่ได้รับการป้องกัน (Windows, Program Files, ไดรฟ์ทั้งไดรฟ์ หรือโปรไฟล์ผู้ใช้)",
+          wildcard: "ใส่ * ในระดับที่ลึกลงไป ภายในโฟลเดอร์ (D:\\Games\\Cache\\*) ไม่ใช่ที่ระดับบนสุดของไดรฟ์",
+          long: "พาธนั้นยาวเกินไป",
+          failed: (a) => `บันทึกไม่ได้: ${a}`
+        }
+      },
+      imported: {
+        title: "เครื่องมือล้างข้อมูลที่นำเข้า",
+        description: "นำเข้าไฟล์เครื่องมือล้างข้อมูลของ BleachBit (.xml) Prune จะนำตัวเลือกการลบมา และบอกคุณอย่างชัดเจนว่าข้ามอะไรไป กฎที่นำเข้าจะไม่ถูกเลือกโดยค่าเริ่มต้น และอยู่ห่างจากตำแหน่งที่ได้รับการป้องกัน",
+        button: "นำเข้าเครื่องมือล้างข้อมูล…",
+        empty: "ไม่มีเครื่องมือล้างข้อมูลที่นำเข้า",
+        meta: (a) => `ตัวเลือกที่นำเข้า: ${a}`,
+        remove: (a) => `เอา ${a} ออก`,
+        badge: "นำเข้า",
+        reportDone: (a, b, c, d, e) => `นำเข้า ${a} แล้ว ตัวเลือก: นำเข้า ${b} ข้าม ${c} การกระทำ: นำเข้า ${d} ข้าม ${e}`,
+        reportNothing: (a, b, c) => `ไม่มีอะไรถูกนำเข้าจาก ${a} ตัวเลือกที่ข้าม: ${b} การกระทำที่ข้าม: ${c}`,
+        skip: {
+          command: (a, b) => `คำสั่งที่ไม่รองรับ ${a}: ${b}`,
+          search: (a, b) => `ประเภทการค้นหาที่ไม่รองรับ ${a}: ${b}`,
+          filter: (a, b) => `การกระทำที่มีตัวกรองนิพจน์ปกติ: ${b}`,
+          os: (a, b) => `สำหรับระบบอื่น (${a}): ${b}`,
+          variable: (a, b) => `ตัวแปรที่ไม่รู้จัก ${a}: ${b}`,
+          path: (a, b) => `พาธที่ใช้ไม่ได้หรือไม่ปลอดภัย: ${b}`
+        },
+        error: {
+          tooLarge: "ไฟล์นั้นใหญ่เกินกว่าจะเป็นเครื่องมือล้างข้อมูล",
+          notXml: "นั่นไม่ใช่ XML ที่ถูกต้อง",
+          notCleaner: "นั่นไม่ใช่ไฟล์เครื่องมือล้างข้อมูลของ BleachBit",
+          noId: "เครื่องมือล้างข้อมูลนั้นไม่มี id",
+          failed: (a) => `นำเข้าไม่ได้: ${a}`
+        }
       }
     }
   },
@@ -1979,6 +3519,50 @@ export default {
         hide: (a) => `${a} içindeki dosyaları gizle`,
         heading: (a, b) => `Önce en büyük dosyalar: ${b} içinden ${a} gösteriliyor`,
         biggest: (a) => `En büyükler: ${a}`
+      },
+      custom: {
+        category: "Özel",
+        ruleName: "Özel konumlar",
+        ruleDescription: "Ayarlar'da kendinizin eklediği dosya ve klasörler.",
+        description: "Derin Temizlik'e D:\\Games\\Cache\\*.tmp gibi dosyalar, klasörler veya desenler ekleyin. Kendi başına bir kural olarak görünür, varsayılan olarak asla işaretlenmez ve istisnalarınıza, son dosyaları koruma önlemine ve korunan yerlere saygı göstermeye devam eder.",
+        ariaLabel: "Eklenecek konum",
+        remove: (a) => `${a} temizliğini bırak`,
+        empty: "Henüz özel konum yok.",
+        error: {
+          empty: "Önce bir yol yazın.",
+          relative: "D:\\Games\\Cache gibi tam bir yol yazın veya %LOCALAPPDATA% gibi bir değişkenle başlayın.",
+          climb: "İçinde .. bulunan bir yola izin verilmez.",
+          protected: "Burası korunan bir yer (Windows, Program Files, tüm bir sürücü veya bir kullanıcı profili).",
+          wildcard: "* karakterini bir sürücünün en üstüne değil, bir klasörün içine (D:\\Games\\Cache\\*) koyun.",
+          long: "Bu yol çok uzun.",
+          failed: (a) => `Kaydedilemedi: ${a}`
+        }
+      },
+      imported: {
+        title: "İçe aktarılan temizleyiciler",
+        description: "Bir BleachBit temizleyici dosyasını (.xml) içe aktarın. Prune silme seçeneklerini getirir ve nelerin atlandığını size tam olarak söyler. İçe aktarılan kurallar varsayılan olarak asla işaretlenmez ve korunan yerlerden uzak durur.",
+        button: "Temizleyici içe aktar…",
+        empty: "İçe aktarılmış temizleyici yok.",
+        meta: (a) => `İçe aktarılan seçenekler: ${a}`,
+        remove: (a) => `${a} öğesini kaldır`,
+        badge: "İçe aktarıldı",
+        reportDone: (a, b, c, d, e) => `${a} içe aktarıldı. Seçenekler: ${b} içe aktarıldı, ${c} atlandı. Eylemler: ${d} içe aktarıldı, ${e} atlandı.`,
+        reportNothing: (a, b, c) => `${a} dosyasından hiçbir şey içe aktarılmadı. Atlanan seçenekler: ${b}. Atlanan eylemler: ${c}.`,
+        skip: {
+          command: (a, b) => `Desteklenmeyen komut ${a}: ${b}`,
+          search: (a, b) => `Desteklenmeyen arama türü ${a}: ${b}`,
+          filter: (a, b) => `Düzenli ifade filtresi olan eylemler: ${b}`,
+          os: (a, b) => `Başka bir sistem için (${a}): ${b}`,
+          variable: (a, b) => `Bilinmeyen değişken ${a}: ${b}`,
+          path: (a, b) => `Kullanılamaz veya güvensiz yollar: ${b}`
+        },
+        error: {
+          tooLarge: "Bu dosya bir temizleyici olamayacak kadar büyük.",
+          notXml: "Bu geçerli bir XML değil.",
+          notCleaner: "Bu bir BleachBit temizleyici dosyası değil.",
+          noId: "Bu temizleyicinin kimliği yok.",
+          failed: (a) => `İçe aktarılamadı: ${a}`
+        }
       }
     }
   },
@@ -2034,6 +3618,50 @@ export default {
         hide: (a) => `Сховати файли: ${a}`,
         heading: (a, b) => `Спочатку найбільші файли: показано ${a} із ${b}`,
         biggest: (a) => `Найбільші: ${a}`
+      },
+      custom: {
+        category: "Власні",
+        ruleName: "Власні розташування",
+        ruleDescription: "Файли й теки, які ви самі додали в налаштуваннях.",
+        description: "Додайте до «Глибокого очищення» файли, теки або шаблони, наприклад D:\\Games\\Cache\\*.tmp. Вони з'являються як окреме правило, ніколи не позначаються за замовчуванням і, як і раніше, враховують ваші винятки, захист нещодавніх файлів і захищені місця.",
+        ariaLabel: "Розташування для додавання",
+        remove: (a) => `Більше не очищати ${a}`,
+        empty: "Власних розташувань поки немає.",
+        error: {
+          empty: "Спершу введіть шлях.",
+          relative: "Введіть повний шлях, наприклад D:\\Games\\Cache, або почніть зі змінної, як-от %LOCALAPPDATA%.",
+          climb: "Шлях із .. не допускається.",
+          protected: "Це захищене місце (Windows, Program Files, диск цілком або профіль користувача).",
+          wildcard: "Поставте * нижче, всередині теки (D:\\Games\\Cache\\*), а не в корені диска.",
+          long: "Цей шлях задовгий.",
+          failed: (a) => `Не вдалося зберегти: ${a}`
+        }
+      },
+      imported: {
+        title: "Імпортовані очисники",
+        description: "Імпортуйте файл очисника BleachBit (.xml). Prune переносить його параметри видалення й точно повідомляє, що було пропущено. Імпортовані правила ніколи не позначаються за замовчуванням і не зачіпають захищені місця.",
+        button: "Імпортувати очисник…",
+        empty: "Імпортованих очисників немає.",
+        meta: (a) => `Імпортовано параметрів: ${a}`,
+        remove: (a) => `Вилучити ${a}`,
+        badge: "Імпорт",
+        reportDone: (a, b, c, d, e) => `Імпортовано: ${a}. Параметри: імпортовано ${b}, пропущено ${c}. Дії: імпортовано ${d}, пропущено ${e}.`,
+        reportNothing: (a, b, c) => `З ${a} нічого не імпортовано. Пропущено параметрів: ${b}. Пропущено дій: ${c}.`,
+        skip: {
+          command: (a, b) => `Непідтримувана команда ${a}: ${b}`,
+          search: (a, b) => `Непідтримуваний тип пошуку ${a}: ${b}`,
+          filter: (a, b) => `Дії з фільтром за регулярним виразом: ${b}`,
+          os: (a, b) => `Призначено для іншої системи (${a}): ${b}`,
+          variable: (a, b) => `Невідома змінна ${a}: ${b}`,
+          path: (a, b) => `Непридатні або небезпечні шляхи: ${b}`
+        },
+        error: {
+          tooLarge: "Цей файл завеликий для очисника.",
+          notXml: "Це не коректний XML.",
+          notCleaner: "Це не файл очисника BleachBit.",
+          noId: "У цього очисника немає id.",
+          failed: (a) => `Не вдалося імпортувати: ${a}`
+        }
       }
     }
   },
@@ -2089,6 +3717,50 @@ export default {
         hide: (a) => `Ẩn các tệp trong ${a}`,
         heading: (a, b) => `Tệp lớn nhất trước: hiển thị ${a} trên ${b}`,
         biggest: (a) => `Lớn nhất: ${a}`
+      },
+      custom: {
+        category: "Tùy chỉnh",
+        ruleName: "Vị trí tùy chỉnh",
+        ruleDescription: "Các tệp và thư mục bạn tự thêm trong Cài đặt.",
+        description: "Thêm tệp, thư mục hoặc mẫu, chẳng hạn D:\\Games\\Cache\\*.tmp, vào Dọn dẹp sâu. Chúng xuất hiện như một quy tắc riêng, không bao giờ được chọn mặc định, và vẫn tôn trọng các ngoại lệ của bạn, cơ chế bảo vệ tệp gần đây và các vị trí được bảo vệ.",
+        ariaLabel: "Vị trí cần thêm",
+        remove: (a) => `Ngừng dọn ${a}`,
+        empty: "Chưa có vị trí tùy chỉnh.",
+        error: {
+          empty: "Hãy nhập đường dẫn trước.",
+          relative: "Hãy viết đường dẫn đầy đủ, chẳng hạn D:\\Games\\Cache, hoặc bắt đầu bằng một biến như %LOCALAPPDATA%.",
+          climb: "Không cho phép đường dẫn có chứa ..",
+          protected: "Đó là vị trí được bảo vệ (Windows, Program Files, cả ổ đĩa hoặc hồ sơ người dùng).",
+          wildcard: "Hãy đặt dấu * sâu hơn, bên trong một thư mục (D:\\Games\\Cache\\*), không phải ở đầu ổ đĩa.",
+          long: "Đường dẫn đó quá dài.",
+          failed: (a) => `Không thể lưu: ${a}`
+        }
+      },
+      imported: {
+        title: "Trình dọn dẹp đã nhập",
+        description: "Nhập một tệp trình dọn dẹp BleachBit (.xml). Prune đưa các tùy chọn xóa của nó vào và cho bạn biết chính xác những gì đã bị bỏ qua. Các quy tắc đã nhập không bao giờ được chọn mặc định và tránh xa các vị trí được bảo vệ.",
+        button: "Nhập trình dọn dẹp…",
+        empty: "Chưa có trình dọn dẹp nào được nhập.",
+        meta: (a) => `Tùy chọn đã nhập: ${a}`,
+        remove: (a) => `Xóa ${a}`,
+        badge: "Đã nhập",
+        reportDone: (a, b, c, d, e) => `Đã nhập ${a}. Tùy chọn: nhập ${b}, bỏ qua ${c}. Hành động: nhập ${d}, bỏ qua ${e}.`,
+        reportNothing: (a, b, c) => `Không có gì được nhập từ ${a}. Tùy chọn bị bỏ qua: ${b}. Hành động bị bỏ qua: ${c}.`,
+        skip: {
+          command: (a, b) => `Lệnh không được hỗ trợ ${a}: ${b}`,
+          search: (a, b) => `Kiểu tìm kiếm không được hỗ trợ ${a}: ${b}`,
+          filter: (a, b) => `Hành động có bộ lọc biểu thức chính quy: ${b}`,
+          os: (a, b) => `Dành cho hệ thống khác (${a}): ${b}`,
+          variable: (a, b) => `Biến không xác định ${a}: ${b}`,
+          path: (a, b) => `Đường dẫn không dùng được hoặc không an toàn: ${b}`
+        },
+        error: {
+          tooLarge: "Tệp đó quá lớn để là một trình dọn dẹp.",
+          notXml: "Đó không phải là XML hợp lệ.",
+          notCleaner: "Đó không phải là tệp trình dọn dẹp BleachBit.",
+          noId: "Trình dọn dẹp đó không có id.",
+          failed: (a) => `Không thể nhập: ${a}`
+        }
       }
     }
   },
@@ -2144,6 +3816,50 @@ export default {
         hide: (a) => `隐藏 ${a} 中的文件`,
         heading: (a, b) => `按大小降序：显示 ${b} 个中的 ${a} 个`,
         biggest: (a) => `最大：${a}`
+      },
+      custom: {
+        category: "自定义",
+        ruleName: "自定义位置",
+        ruleDescription: "你在“设置”中自行添加的文件和文件夹。",
+        description: "将文件、文件夹或模式（如 D:\\Games\\Cache\\*.tmp）添加到深度清理。它们会作为独立规则出现，默认永不勾选，并且仍会遵守你的排除项、近期文件保护和受保护的位置。",
+        ariaLabel: "要添加的位置",
+        remove: (a) => `不再清理 ${a}`,
+        empty: "尚无自定义位置。",
+        error: {
+          empty: "请先输入路径。",
+          relative: "请写完整路径，例如 D:\\Games\\Cache，或以 %LOCALAPPDATA% 这样的变量开头。",
+          climb: "不允许包含 .. 的路径。",
+          protected: "这是受保护的位置（Windows、Program Files、整个驱动器或用户配置文件）。",
+          wildcard: "请把 * 放在更深的位置，即文件夹内部（D:\\Games\\Cache\\*），不要放在驱动器顶层。",
+          long: "该路径太长。",
+          failed: (a) => `无法保存：${a}`
+        }
+      },
+      imported: {
+        title: "已导入的清理器",
+        description: "导入 BleachBit 清理器文件（.xml）。Prune 会带入其中的删除选项，并准确告诉你跳过了什么。导入的规则默认永不勾选，并且不会触及受保护的位置。",
+        button: "导入清理器…",
+        empty: "没有已导入的清理器。",
+        meta: (a) => `已导入的选项：${a}`,
+        remove: (a) => `移除 ${a}`,
+        badge: "已导入",
+        reportDone: (a, b, c, d, e) => `已导入 ${a}。选项：导入 ${b} 个，跳过 ${c} 个。操作：导入 ${d} 个，跳过 ${e} 个。`,
+        reportNothing: (a, b, c) => `未从 ${a} 导入任何内容。跳过的选项：${b} 个。跳过的操作：${c} 个。`,
+        skip: {
+          command: (a, b) => `不支持的命令 ${a}：${b}`,
+          search: (a, b) => `不支持的搜索类型 ${a}：${b}`,
+          filter: (a, b) => `带正则表达式筛选器的操作：${b}`,
+          os: (a, b) => `适用于其他系统（${a}）：${b}`,
+          variable: (a, b) => `未知变量 ${a}：${b}`,
+          path: (a, b) => `无法使用或不安全的路径：${b}`
+        },
+        error: {
+          tooLarge: "该文件太大，不可能是清理器。",
+          notXml: "这不是有效的 XML。",
+          notCleaner: "这不是 BleachBit 清理器文件。",
+          noId: "该清理器没有 id。",
+          failed: (a) => `无法导入：${a}`
+        }
       }
     }
   },
@@ -2199,6 +3915,50 @@ export default {
         hide: (a) => `隱藏 ${a} 中的檔案`,
         heading: (a, b) => `依大小遞減：顯示 ${b} 個中的 ${a} 個`,
         biggest: (a) => `最大：${a}`
+      },
+      custom: {
+        category: "自訂",
+        ruleName: "自訂位置",
+        ruleDescription: "你在「設定」中自行新增的檔案和資料夾。",
+        description: "將檔案、資料夾或模式（如 D:\\Games\\Cache\\*.tmp）加入深度清理。它們會以獨立規則顯示，預設永不勾選，並且仍會遵守你的排除項目、近期檔案保護和受保護的位置。",
+        ariaLabel: "要新增的位置",
+        remove: (a) => `不再清理 ${a}`,
+        empty: "尚無自訂位置。",
+        error: {
+          empty: "請先輸入路徑。",
+          relative: "請寫完整路徑，例如 D:\\Games\\Cache，或以 %LOCALAPPDATA% 這樣的變數開頭。",
+          climb: "不允許包含 .. 的路徑。",
+          protected: "這是受保護的位置（Windows、Program Files、整個磁碟機或使用者設定檔）。",
+          wildcard: "請把 * 放在更深的位置，也就是資料夾內部（D:\\Games\\Cache\\*），不要放在磁碟機頂層。",
+          long: "該路徑太長。",
+          failed: (a) => `無法儲存：${a}`
+        }
+      },
+      imported: {
+        title: "已匯入的清理器",
+        description: "匯入 BleachBit 清理器檔案（.xml）。Prune 會帶入其中的刪除選項，並準確告訴你略過了什麼。匯入的規則預設永不勾選，並且不會觸及受保護的位置。",
+        button: "匯入清理器…",
+        empty: "沒有已匯入的清理器。",
+        meta: (a) => `已匯入的選項：${a}`,
+        remove: (a) => `移除 ${a}`,
+        badge: "已匯入",
+        reportDone: (a, b, c, d, e) => `已匯入 ${a}。選項：匯入 ${b} 個，略過 ${c} 個。動作：匯入 ${d} 個，略過 ${e} 個。`,
+        reportNothing: (a, b, c) => `未從 ${a} 匯入任何內容。略過的選項：${b} 個。略過的動作：${c} 個。`,
+        skip: {
+          command: (a, b) => `不支援的命令 ${a}：${b}`,
+          search: (a, b) => `不支援的搜尋類型 ${a}：${b}`,
+          filter: (a, b) => `含正規表示式篩選器的動作：${b}`,
+          os: (a, b) => `適用於其他系統（${a}）：${b}`,
+          variable: (a, b) => `未知變數 ${a}：${b}`,
+          path: (a, b) => `無法使用或不安全的路徑：${b}`
+        },
+        error: {
+          tooLarge: "該檔案太大，不可能是清理器。",
+          notXml: "這不是有效的 XML。",
+          notCleaner: "這不是 BleachBit 清理器檔案。",
+          noId: "該清理器沒有 id。",
+          failed: (a) => `無法匯入：${a}`
+        }
       }
     }
   }

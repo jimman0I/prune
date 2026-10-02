@@ -1,4 +1,5 @@
 import { matchesExtension } from './exclusionInput.js';
+import { protectionReason } from '../services/pathGuard.js';
 
 /** The two things that stop a cleaner from taking a file it shouldn't.
  *
@@ -114,12 +115,12 @@ export function isTooRecent(mtimeMs, hours, now = Date.now()) {
  * six is the kind of small dishonesty that makes people stop trusting a
  * number, and the reason is also the only way anyone would ever discover
  * that their own exclusion is what held a file back. */
-export function partitionCleanableFiles(files, { excludeFolders = [], excludeExtensions = [], skipRecentHours = 0, now = Date.now() } = {}) {
+export function partitionCleanableFiles(files, { excludeFolders = [], excludeExtensions = [], skipRecentHours = 0, protectPaths = false, now = Date.now() } = {}) {
   const cleanable = [];
   const held = [];
 
   for (const file of files || []) {
-    const reason = holdReason(file, { excludeFolders, excludeExtensions, skipRecentHours, now });
+    const reason = holdReason(file, { excludeFolders, excludeExtensions, skipRecentHours, protectPaths, now });
     if (reason) held.push({ path: file.path, reason });
     else cleanable.push(file);
   }
@@ -135,7 +136,7 @@ export function partitionCleanableFiles(files, { excludeFolders = [], excludeExt
  * of files is the difference between a list and an out-of-memory error.
  * Same checks, same order, same wording as the partition: what Preview
  * lists must be exactly what Clean takes. */
-export function holdReason(file, { excludeFolders = [], excludeExtensions = [], skipRecentHours = 0, now = Date.now() } = {}) {
+export function holdReason(file, { excludeFolders = [], excludeExtensions = [], skipRecentHours = 0, protectPaths = false, now = Date.now() } = {}) {
   if (isExcluded(file?.path, excludeFolders, excludeExtensions)) {
     // The reason distinguishes the two, because they are fixed
     // differently: one is a folder the user listed, the other is a file
@@ -146,6 +147,15 @@ export function holdReason(file, { excludeFolders = [], excludeExtensions = [], 
   }
   if (isTooRecent(file?.mtimeMs, skipRecentHours, now)) {
     return `modified in the last ${skipRecentHours} hours`;
+  }
+  // For rules nobody curated -- the user's own locations and imported
+  // cleaners: nothing in Windows, Program Files, a profile's own folders or
+  // Prune's Quarantine, whatever the pattern matched. The curated rules
+  // legitimately clean under Windows (its Temp, Prefetch, logs) and so do
+  // not pass this.
+  if (protectPaths) {
+    const protectedReason = protectionReason(file?.path);
+    if (protectedReason) return `protected: ${protectedReason}`;
   }
   return null;
 }

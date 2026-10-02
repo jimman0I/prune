@@ -3,6 +3,7 @@ import { existsSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { matchLanguage } from './languages.js';
 import { normalizePasses } from '../lib/shredFile.js';
+import { normalizeCustomLocations } from '../lib/customLocations.js';
 
 /** Path to the settings file. A function, not a constant -- read at call
  * time, not import time -- so tests can point it at a scratch temp file
@@ -90,6 +91,11 @@ const DEFAULT_SETTINGS = {
      which carries only rule ids. Never ticks the wipe itself. */
   wipeDrive: null,
   wipePasses: 1,
+  /* Files, folders and patterns the user added under Settings -> Cleanup ->
+     Custom locations. They appear in Deep Clean as one rule of their own,
+     never ticked by default. Only valid entries are ever kept (see
+     lib/customLocations.js): a hand-edited file cannot add C:\Windows. */
+  customLocations: [],
   theme: 'dark',
   minimizeToTray: false,
   /* Pauses the background animation, flattens the glass panels to solid
@@ -258,7 +264,8 @@ function normalizedChoices(settings) {
     overwriteBeforeDelete: settings.overwriteBeforeDelete === true,
     overwritePasses: normalizePasses(settings.overwritePasses),
     wipeDrive: normalizeWipeDrive(settings.wipeDrive),
-    wipePasses: normalizePasses(settings.wipePasses)
+    wipePasses: normalizePasses(settings.wipePasses),
+    customLocations: normalizeCustomLocations(settings.customLocations)
   };
 }
 
