@@ -52,8 +52,12 @@ see v1.0.1 below) are documented here.
 - **Install with monitoring…** records an install so uninstalling it later
   is exact. **Hunter** identifies a program by clicking its window.
 - Quarantine gains **Backups** (restore registry and task backups) and
-  **History** tabs. Browser extensions have a Manage button, since Prune
-  cannot remove them itself.
+  **History** tabs. Browser extensions have a **Copy page address**
+  button, since Prune cannot remove them itself: paste the address into
+  that browser and remove the extension there. (Prune deliberately never
+  starts a browser; launching one with profile arguments made Microsoft
+  Defender flag it as `Behavior:Win32/WebBrowserCredAccess.E2`, and a test
+  now guards against it.)
 - Fixed: program names with an apostrophe broke the leftover scan.
 
 **Cleaner rules**
@@ -93,6 +97,16 @@ see v1.0.1 below) are documented here.
 
 ### Fixed
 
+- **Disk Map's fast scan works on drives with millions of files.** The scan
+  result was one JSON string, and with the added size-on-disk and modified
+  fields a large drive passed V8's ~512 MB string limit ("Invalid string
+  length"). Every folder is still listed, but each keeps only its 200
+  largest files; the rest appear as one "N smaller items" row with exact
+  totals, and file-type totals stay exact for the whole drive. On very
+  large drives, search finds only files that are not folded. A drive too
+  large even so says so plainly instead of showing a raw error.
+- "Restart Prune as administrator" is offered only once Prune has confirmed
+  it is not already elevated.
 - **Prune no longer sometimes opens in English.** Two causes. The screen
   painted English until the settings request came back and stayed English
   if that request failed (the backend still starting); the last language
