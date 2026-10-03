@@ -1,18 +1,31 @@
 // @vitest-environment jsdom
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { screen, waitFor } from '@testing-library/react';
+import { screen, waitFor, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { renderScreen } from '../testSupport/renderScreen.jsx';
 
-const api = { startHunt: vi.fn(), cancelHunt: vi.fn(), endHuntedProcess: vi.fn(), revealInExplorer: vi.fn(), setStartupItemEnabled: vi.fn(), fetchSettings: vi.fn() };
+const api = { endHuntedProcess: vi.fn(), revealInExplorer: vi.fn(), setStartupItemEnabled: vi.fn(), fetchSettings: vi.fn(), fetchMftStatus: vi.fn() };
 vi.mock('../lib/api.js', () => ({
-  startHunt: (...a) => api.startHunt(...a),
-  cancelHunt: (...a) => api.cancelHunt(...a),
   endHuntedProcess: (...a) => api.endHuntedProcess(...a),
   revealInExplorer: (...a) => api.revealInExplorer(...a),
   setStartupItemEnabled: (...a) => api.setStartupItemEnabled(...a),
   fetchSettings: (...a) => api.fetchSettings(...a),
+  fetchMftStatus: (...a) => api.fetchMftStatus(...a),
   updateSettings: vi.fn(async (p) => p)
+}));
+
+// The crosshair lives in the desktop app; here it is a bridge we drive by hand.
+const bridge = { start: vi.fn(), cancel: vi.fn(), listeners: [] };
+vi.mock('../lib/hunterBridge.js', () => ({
+  startHunter: (...a) => bridge.start(...a),
+  cancelHunter: (...a) => bridge.cancel(...a),
+  onHunterResult: (cb) => { bridge.listeners.push(cb); return () => { bridge.listeners = bridge.listeners.filter((l) => l !== cb); }; }
+}));
+
+const adminBridge = { canRestartAsAdmin: vi.fn(), restartAsAdmin: vi.fn() };
+vi.mock('../lib/adminRelaunch.js', () => ({
+  canRestartAsAdmin: (...a) => adminBridge.canRestartAsAdmin(...a),
+  restartAsAdmin: (...a) => adminBridge.restartAsAdmin(...a)
 }));
 
 const HunterDialog = (await import('./HunterDialog.jsx')).default;
@@ -25,27 +38,69 @@ const picked = (extra = {}) => ({
 
 beforeEach(() => {
   vi.clearAllMocks();
+  bridge.listeners = [];
+  bridge.start.mockResolvedValue({ ok: true });
+  bridge.cancel.mockResolvedValue({ ok: true, cancelled: true });
   api.fetchSettings.mockResolvedValue({});
-  api.cancelHunt.mockResolvedValue({ cancelled: true });
+  api.fetchMftStatus.mockResolvedValue({ elevated: false });
+  adminBridge.canRestartAsAdmin.mockResolvedValue(true);
+  adminBridge.restartAsAdmin.mockResolvedValue({ ok: true });
 });
 
+/** The crosshair reports back: what the main process sends once it was dropped. */
+const dropped = (result) => act(async () => { bridge.listeners.forEach((cb) => cb(result)); });
+
 const hunt = async (result, props = {}) => {
-  api.startHunt.mockResolvedValue(result);
   const user = userEvent.setup();
   const handlers = { onClose: vi.fn(), onUninstall: vi.fn(), onForced: vi.fn() };
   renderScreen(<HunterDialog programs={[program]} {...handlers} {...props} />);
   await user.click(screen.getByRole('button', { name: 'Start hunting' }));
+  await screen.findByText(/Drag the crosshair onto any window/);
+  if (result) await dropped(result);
   return { user, ...handlers };
 };
 
-describe('Hunter', () => {
-  it('explains what it will do before it does it', () => {
+describe('Hunter: starting', () => {
+  it('explains the drag before it opens anything', () => {
     renderScreen(<HunterDialog onClose={vi.fn()} />);
-    expect(screen.getByText(/catches the click so nothing in that window is pressed/)).toBeTruthy();
-    expect(api.startHunt).not.toHaveBeenCalled();
+    expect(screen.getByText(/crosshair/i)).toBeTruthy();
+    expect(screen.queryByText(/catches the click/)).toBeNull();
+    expect(bridge.start).not.toHaveBeenCalled();
   });
 
-  it('names the program the clicked window belongs to, and offers to uninstall it', async () => {
+  it('opens the crosshair with its two labels, in the current language, and waits for the drop', async () => {
+    await hunt();
+    expect(bridge.start).toHaveBeenCalledWith({ hint: 'Drag onto a window', cancel: 'Cancel' });
+    expect(screen.getByRole('status').textContent).toMatch(/Drag the crosshair onto any window/);
+    expect(screen.getByRole('button', { name: 'Cancel hunt' })).toBeTruthy();
+  });
+
+  it('cannot be closed while the crosshair is out', async () => {
+    await hunt();
+    expect(screen.getByRole('button', { name: 'Close' }).disabled).toBe(true);
+  });
+
+  it('says Hunter needs the desktop app when there is no crosshair to open', async () => {
+    bridge.start.mockResolvedValue({ ok: false, unsupported: true });
+    const user = userEvent.setup();
+    renderScreen(<HunterDialog onClose={vi.fn()} />);
+    await user.click(screen.getByRole('button', { name: 'Start hunting' }));
+    expect(await screen.findByText(/desktop app/)).toBeTruthy();
+    expect(screen.getByRole('button', { name: 'Start hunting' })).toBeTruthy();
+  });
+
+  it('reports a crosshair that could not open, and returns to the start', async () => {
+    bridge.start.mockResolvedValue({ ok: false, error: 'Prune\'s window is not available.' });
+    const user = userEvent.setup();
+    renderScreen(<HunterDialog onClose={vi.fn()} />);
+    await user.click(screen.getByRole('button', { name: 'Start hunting' }));
+    expect(await screen.findByText(/The hunt couldn.t run: Prune.s window is not available/)).toBeTruthy();
+    await waitFor(() => expect(screen.getByRole('button', { name: 'Start hunting' })).toBeTruthy());
+  });
+});
+
+describe('Hunter: the result of a drop', () => {
+  it('names the program the window belongs to, and offers to uninstall it', async () => {
     const { user, onUninstall } = await hunt(picked());
     expect(await screen.findByText('This window belongs to the installed program Thing.')).toBeTruthy();
     expect(screen.getByText('D:\\Apps\\Thing\\thing.exe')).toBeTruthy();
@@ -128,26 +183,74 @@ describe('Hunter', () => {
     await user.click(await screen.findByRole('button', { name: 'Open folder' }));
     expect(api.revealInExplorer).toHaveBeenCalledWith('D:\\Apps\\Thing\\thing.exe');
   });
+});
 
-  it('says so when nothing was clicked, and can hunt again', async () => {
-    const { user } = await hunt({ status: 'timeout' });
-    expect(await screen.findByText('Nothing was clicked in 30 seconds.')).toBeTruthy();
-    api.startHunt.mockResolvedValue(picked());
+describe('Hunter: when nothing useful was picked', () => {
+  it('says so when the crosshair was dropped on the desktop or the taskbar, and can hunt again', async () => {
+    const { user } = await hunt({ status: 'nothing' });
+    expect(await screen.findByText(/Nothing to identify there/)).toBeTruthy();
+    expect(screen.queryByRole('button', { name: 'Uninstall' })).toBeNull();
     await user.click(screen.getByRole('button', { name: 'Hunt again' }));
+    await dropped(picked());
     expect(await screen.findByText(/belongs to the installed program/)).toBeTruthy();
+    expect(bridge.start).toHaveBeenCalledTimes(2);
   });
 
-  it('says when the hunt was cancelled and when it could not run', async () => {
+  it('says when the crosshair was cancelled with Esc or its cross', async () => {
     await hunt({ status: 'cancelled' });
     expect(await screen.findByText('Hunt cancelled.')).toBeTruthy();
   });
 
-  it('reports a hunt that could not run, and returns to the start', async () => {
-    api.startHunt.mockRejectedValue(new Error('A hunt is already running.'));
+  it('says when the lookup failed', async () => {
+    await hunt({ status: 'failed', error: 'ECONNREFUSED' });
+    expect(await screen.findByText(/Couldn.t tell which window that was/)).toBeTruthy();
+  });
+
+  it('explains a window it could not read and offers to restart as administrator', async () => {
+    adminBridge.restartAsAdmin.mockResolvedValue({ ok: true });
+    const { user } = await hunt({ status: 'unreadable', pid: 900, name: null });
+    expect((await screen.findByRole('status')).textContent).toMatch(/runs as administrator/);
+    const restart = await screen.findByRole('button', { name: 'Restart Prune as administrator' });
+    await user.click(restart);
+    expect(adminBridge.restartAsAdmin).toHaveBeenCalledTimes(1);
+  });
+
+  it('does not offer the restart when Prune already runs as administrator', async () => {
+    api.fetchMftStatus.mockResolvedValue({ elevated: true });
+    await hunt({ status: 'unreadable', pid: 900, name: null });
+    expect((await screen.findByRole('status')).textContent).toMatch(/runs as administrator/);
+    await waitFor(() => expect(api.fetchMftStatus).toHaveBeenCalled());
+    expect(screen.queryByRole('button', { name: 'Restart Prune as administrator' })).toBeNull();
+  });
+});
+
+describe('Hunter: cancelling and leaving', () => {
+  it('Cancel hunt closes the crosshair through the main process and shows the cancel', async () => {
+    const { user } = await hunt();
+    await user.click(screen.getByRole('button', { name: 'Cancel hunt' }));
+    expect(bridge.cancel).toHaveBeenCalledTimes(1);
+    expect(await screen.findByText('Hunt cancelled.')).toBeTruthy();
+  });
+
+  it('closing the dialog while the crosshair is out puts the crosshair away', async () => {
     const user = userEvent.setup();
-    renderScreen(<HunterDialog onClose={vi.fn()} />);
+    const { unmount } = renderScreen(<HunterDialog onClose={vi.fn()} />);
     await user.click(screen.getByRole('button', { name: 'Start hunting' }));
-    expect(await screen.findByText(/The hunt couldn.t run: A hunt is already running/)).toBeTruthy();
-    await waitFor(() => expect(screen.getByRole('button', { name: 'Start hunting' })).toBeTruthy());
+    await screen.findByText(/Drag the crosshair onto any window/);
+    unmount();
+    expect(bridge.cancel).toHaveBeenCalledTimes(1);
+  });
+
+  it('leaving without ever starting does not touch the crosshair', () => {
+    const { unmount } = renderScreen(<HunterDialog onClose={vi.fn()} />);
+    unmount();
+    expect(bridge.cancel).not.toHaveBeenCalled();
+  });
+
+  it('stops listening for results once it is gone', () => {
+    const { unmount } = renderScreen(<HunterDialog onClose={vi.fn()} />);
+    expect(bridge.listeners).toHaveLength(1);
+    unmount();
+    expect(bridge.listeners).toHaveLength(0);
   });
 });

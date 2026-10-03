@@ -54,7 +54,17 @@ module.exports = {
   // 'Restart Prune as administrator', and the same test catches its absence.
   // pathPicker.cjs is the same trap a seventh time: main.cjs requires it for
   // the Shred tool's file chooser.
-  files: ['main.cjs', 'preload.cjs', 'updater.cjs', 'windowState.cjs', 'zoom.cjs', 'relaunchAdmin.cjs', 'pathPicker.cjs'],
+  //
+  // hunterWidget.cjs, hunterWidgetPreload.cjs and hunterWidget.html are the
+  // eighth, ninth and tenth: Hunter's crosshair window. The page and its
+  // preload are not required() by anything -- main.cjs only hands their paths
+  // to a BrowserWindow -- so a missing one would not fail a build or a dev
+  // run, and would fail in a packaged app as a crosshair that never appears.
+  // hunterWidget.test.cjs checks that every file main.cjs names is listed.
+  files: [
+    'main.cjs', 'preload.cjs', 'updater.cjs', 'windowState.cjs', 'zoom.cjs', 'relaunchAdmin.cjs', 'pathPicker.cjs',
+    'hunterWidget.cjs', 'hunterWidgetPreload.cjs', 'hunterWidget.html'
+  ],
   extraResources: [
     // NOTE the source: this copies from ../backend/src DIRECTLY, not from
     // the build/backend-prod/ staging directory build-installer.mjs

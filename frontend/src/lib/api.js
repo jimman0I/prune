@@ -335,18 +335,9 @@ export const deleteBackup = (id) => backupCall(`/${encodeURIComponent(id)}`, { m
 
 /* ------------------------------------------------------------- hunter */
 
-async function hunterCall(path) {
-  const res = await fetch(`${API_URL}/hunter${path}`, { method: 'POST' });
-  const data = await res.json();
-  if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
-  return data;
-}
-
-/** Starts a hunt and resolves when a window was clicked, the hunt was
- * cancelled, or it timed out (about 30 seconds): { status, ... }. A picked
- * window comes with `program` and `startupItems` when they are known. */
-export const startHunt = () => hunterCall('/start');
-export const cancelHunt = () => hunterCall('/cancel');
+/* Finding the window is not an API call from here: the crosshair lives in the
+ * desktop app (lib/hunterBridge.js), and its main process asks the backend
+ * what is at the drop point. Only what follows a result is fetched here. */
 
 /** Ends the process Hunter named. Never throws for a refusal: resolves
  * { ok: false, error } so the screen can say why. */

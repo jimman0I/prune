@@ -9,8 +9,13 @@ const { zoomActionForInput, applyZoomAction, resolveSavedZoom, titleBarOverlayHe
 const { execFile } = require('node:child_process');
 const { createAdminRelaunch, parseRelaunchArg, waitForParentExit } = require('./relaunchAdmin.cjs');
 const { pickPaths } = require('./pathPicker.cjs');
+const { createHunterWidget, registerHunterIpc, postJson, RESULT_CHANNEL } = require('./hunterWidget.cjs');
 
 const BACKEND_PORT = 3101;
+
+// Prune's one window, for the Hunter crosshair to minimise and bring back (see
+// registerHunterHandlers). Set when the window is created, cleared when it closes.
+let mainWindow = null;
 
 function backendEntryPath() {
   return app.isPackaged
@@ -238,6 +243,13 @@ async function createWindow() {
     }
   });
 
+  mainWindow = win;
+  win.once('closed', () => {
+    if (mainWindow === win) mainWindow = null;
+    // A crosshair left on screen would keep the app alive with no window.
+    hunter.dispose();
+  });
+
   // Electron's stock File/Edit/View/Window menu bar is a dev-tooling
   // default (Reload, Toggle DevTools, Zoom…) — nothing Prune's own UI
   // offers, and it doesn't belong on a native desktop utility that isn't a
@@ -397,6 +409,29 @@ function registerPickerHandler() {
   });
 }
 
+/* Hunter's crosshair (see hunterWidget.cjs). The page can ask for exactly two
+ * things -- start (with two short plain-text labels) and cancel -- and hears
+ * back on one one-way event. When the crosshair is dropped, the main process
+ * reads the pointer itself and asks the backend, over the same local API the
+ * window uses, what is at that point. The window, the page and the preload it
+ * loads are all packed (electron-builder.config.cjs `files`). */
+const hunter = createHunterWidget({
+  BrowserWindow,
+  screen,
+  getMainWindow: () => mainWindow,
+  askBackend: (point) => postJson({ http, port: BACKEND_PORT, path: '/api/hunter/at-point', body: point }),
+  send: (result) => {
+    if (mainWindow && !mainWindow.isDestroyed()) mainWindow.webContents.send(RESULT_CHANNEL, result);
+  },
+  pagePath: path.join(__dirname, 'hunterWidget.html'),
+  preloadPath: path.join(__dirname, 'hunterWidgetPreload.cjs')
+});
+
+function registerHunterHandlers() {
+  registerHunterIpc({ ipcMain, hunter, getMainWindow: () => mainWindow });
+  app.on('before-quit', () => hunter.dispose());
+}
+
 app.whenReady().then(async () => {
   /* Backend startup and window creation used to run strictly one after
    * the other: start the backend, POLL it every 300ms until it answers,
@@ -428,6 +463,7 @@ app.whenReady().then(async () => {
   registerUpdateHandlers();
   registerAdminHandlers();
   registerPickerHandler();
+  registerHunterHandlers();
 
   await createWindow();
   await backendReady;
