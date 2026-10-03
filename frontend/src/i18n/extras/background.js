@@ -24,6 +24,18 @@ export default {
       last: {
         clean: (a, b, c) => `Last automatic clean: ${a} — moved ${b}, freed ${c}`,
         errors: (a, b, c) => `Last automatic clean: ${a} — some rules failed; moved ${b}, freed ${c}`
+      },
+      startup: {
+        title: "Start Prune when I sign in to Windows",
+        description: "Adds Prune to the programs Windows starts when you sign in, for your account only and with no administrator rights. You can turn it off here at any time.",
+        minimizedTitle: "Start minimized to the tray",
+        minimizedNote: "Goes to the system tray when Minimize to tray is on, and to the taskbar when it is off.",
+        unsupported: "Available in the installed Prune app. This copy can't set it.",
+        disabledByWindows: "Windows has Prune's startup entry switched off (in Task Manager's Startup apps). Turn this on to switch it back on.",
+        foreign: "A different entry named Prune is already in your sign-in list. Turning this on replaces it.",
+        adminConflict: "Prune is also set to always run as administrator, and Windows won't start such a program silently when you sign in: it asks for approval every time, or doesn't start it. Turn one of the two off if you'd rather not.",
+        saveFailed: (a) => `Couldn't change this setting: ${a}`,
+        loadFailed: (a) => `Couldn't read this setting: ${a}`
       }
     }
   },
@@ -45,6 +57,18 @@ export default {
       last: {
         clean: (a, b, c) => `Laaste outomatiese skoonmaak: ${a} — ${b} geskuif, ${c} vrygemaak`,
         errors: (a, b, c) => `Laaste outomatiese skoonmaak: ${a} — sommige reëls het misluk; ${b} geskuif, ${c} vrygemaak`
+      },
+      startup: {
+        title: "Begin Prune wanneer ek by Windows aanmeld",
+        description: "Voeg Prune by die programme wat Windows begin wanneer jy aanmeld, net vir jou rekening en sonder administrateurregte. Jy kan dit enige tyd hier afskakel.",
+        minimizedTitle: "Begin geminimeer na die kennisgewingarea",
+        minimizedNote: "Gaan na die kennisgewingarea wanneer Minimeer na kennisgewingarea aan is, en na die taakbalk wanneer dit af is.",
+        unsupported: "Beskikbaar in die geïnstalleerde Prune-toepassing. Hierdie kopie kan dit nie stel nie.",
+        disabledByWindows: "Windows het Prune se opstartinskrywing afgeskakel (in Taakbestuurder se Opstart-programme). Skakel dit hier aan om dit weer aan te skakel.",
+        foreign: "’n Ander inskrywing met die naam Prune is reeds in jou aanmeldlys. As jy dit aanskakel, word dit vervang.",
+        adminConflict: "Prune is ook ingestel om altyd as administrateur te loop, en Windows begin nie so ’n program stilweg wanneer jy aanmeld nie: dit vra elke keer om goedkeuring, of begin dit nie. Skakel een van die twee af as jy dit liewer nie wil hê nie.",
+        saveFailed: (a) => `Kon nie hierdie instelling verander nie: ${a}`,
+        loadFailed: (a) => `Kon nie hierdie instelling lees nie: ${a}`
       }
     }
   },
@@ -66,6 +90,18 @@ export default {
       last: {
         clean: (a, b, c) => `آخر تنظيف تلقائي: ${a} — تم نقل ${b}، وتحرير ${c}`,
         errors: (a, b, c) => `آخر تنظيف تلقائي: ${a} — فشلت بعض القواعد؛ تم نقل ${b}، وتحرير ${c}`
+      },
+      startup: {
+        title: "تشغيل Prune عند تسجيل دخولي إلى Windows",
+        description: "يضيف Prune إلى البرامج التي يشغّلها Windows عند تسجيل الدخول، لحسابك فقط ودون صلاحيات المسؤول. يمكنك إيقافه هنا في أي وقت.",
+        minimizedTitle: "البدء مصغّرًا إلى علبة النظام",
+        minimizedNote: "ينتقل إلى علبة النظام عند تفعيل «تصغير إلى علبة النظام»، وإلى شريط المهام عند إيقافه.",
+        unsupported: "متاح في تطبيق Prune المثبّت. لا يمكن ضبطه من هذه النسخة.",
+        disabledByWindows: "أوقف Windows إدخال بدء تشغيل Prune (في بدء التشغيل ضمن إدارة المهام). فعّل هذا الخيار لإعادة تشغيله.",
+        foreign: "يوجد بالفعل إدخال آخر باسم Prune في قائمة تسجيل الدخول لديك. تفعيل هذا الخيار يستبدله.",
+        adminConflict: "تم ضبط Prune أيضًا على التشغيل دائمًا كمسؤول، ولا يشغّل Windows برنامجًا كهذا بصمت عند تسجيل الدخول: يطلب الموافقة في كل مرة أو لا يشغّله. أوقف أحد الخيارين إن أردت.",
+        saveFailed: (a) => `تعذّر تغيير هذا الإعداد: ${a}`,
+        loadFailed: (a) => `تعذّرت قراءة هذا الإعداد: ${a}`
       }
     }
   },
@@ -87,6 +123,18 @@ export default {
       last: {
         clean: (a, b, c) => `Última neteja automàtica: ${a} — ${b} moguts, ${c} alliberats`,
         errors: (a, b, c) => `Última neteja automàtica: ${a} — algunes regles han fallat; ${b} moguts, ${c} alliberats`
+      },
+      startup: {
+        title: "Inicia Prune quan iniciï la sessió a Windows",
+        description: "Afegeix Prune als programes que Windows inicia quan inicies la sessió, només per al teu compte i sense drets d'administrador. Ho pots desactivar aquí en qualsevol moment.",
+        minimizedTitle: "Inicia minimitzat a la safata del sistema",
+        minimizedNote: "Va a la safata del sistema quan Minimitza a la safata del sistema és activat, i a la barra de tasques quan és desactivat.",
+        unsupported: "Disponible a l'aplicació Prune instal·lada. Aquesta còpia no ho pot configurar.",
+        disabledByWindows: "Windows té desactivada l'entrada d'inici de Prune (a Aplicacions d'inici del Gestor de tasques). Activa això per tornar-la a activar.",
+        foreign: "Ja hi ha una altra entrada anomenada Prune a la llista d'inici de sessió. Si ho actives, es reemplaça.",
+        adminConflict: "Prune també està configurat per executar-se sempre com a administrador, i Windows no inicia aquest programa en silenci en iniciar la sessió: demana aprovació cada vegada o no l'inicia. Desactiva'n un dels dos si ho prefereixes.",
+        saveFailed: (a) => `No s'ha pogut canviar aquesta opció: ${a}`,
+        loadFailed: (a) => `No s'ha pogut llegir aquesta opció: ${a}`
       }
     }
   },
@@ -108,6 +156,18 @@ export default {
       last: {
         clean: (a, b, c) => `Poslední automatické čištění: ${a} — přesunuto ${b}, uvolněno ${c}`,
         errors: (a, b, c) => `Poslední automatické čištění: ${a} — některá pravidla selhala; přesunuto ${b}, uvolněno ${c}`
+      },
+      startup: {
+        title: "Spustit Prune po přihlášení do Windows",
+        description: "Přidá Prune mezi programy, které Windows spouští po přihlášení, jen pro váš účet a bez práv správce. Můžete to tady kdykoli vypnout.",
+        minimizedTitle: "Spustit minimalizovaně do systémové lišty",
+        minimizedNote: "Jde do systémové lišty, když je zapnuto Minimalizovat do systémové lišty, a na hlavní panel, když je vypnuto.",
+        unsupported: "K dispozici v nainstalované aplikaci Prune. Tato kopie to nastavit nemůže.",
+        disabledByWindows: "Windows má položku spuštění Prune vypnutou (na kartě Po spuštění ve Správci úloh). Zapnutím tady ji znovu zapnete.",
+        foreign: "V seznamu spouštěných po přihlášení už je jiná položka s názvem Prune. Zapnutím se nahradí.",
+        adminConflict: "Prune je také nastaven, aby vždy běžel jako správce, a Windows takový program po přihlášení tiše nespustí: pokaždé se zeptá na souhlas, nebo ho nespustí. Chcete-li, jednu z těchto možností vypněte.",
+        saveFailed: (a) => `Toto nastavení se nepodařilo změnit: ${a}`,
+        loadFailed: (a) => `Toto nastavení se nepodařilo přečíst: ${a}`
       }
     }
   },
@@ -129,6 +189,18 @@ export default {
       last: {
         clean: (a, b, c) => `Glanhau awtomatig diwethaf: ${a} — symudwyd ${b}, rhyddhawyd ${c}`,
         errors: (a, b, c) => `Glanhau awtomatig diwethaf: ${a} — methodd rhai rheolau; symudwyd ${b}, rhyddhawyd ${c}`
+      },
+      startup: {
+        title: "Dechrau Prune pan fyddaf yn mewngofnodi i Windows",
+        description: "Yn ychwanegu Prune at y rhaglenni mae Windows yn eu cychwyn pan fyddwch yn mewngofnodi, ar gyfer eich cyfrif chi yn unig a heb hawliau gweinyddwr. Gallwch ei ddiffodd yma ar unrhyw adeg.",
+        minimizedTitle: "Dechrau wedi'i leihau i'r hambwrdd system",
+        minimizedNote: "Yn mynd i'r hambwrdd system pan fo Lleihau i'r hambwrdd system ymlaen, ac i'r bar tasgau pan fo i ffwrdd.",
+        unsupported: "Ar gael yn yr ap Prune sydd wedi'i osod. Ni all y copi hwn ei osod.",
+        disabledByWindows: "Mae Windows wedi diffodd cofnod cychwyn Prune (yn Apiau cychwyn Rheolwr Tasgau). Trowch hwn ymlaen i'w droi ymlaen eto.",
+        foreign: "Mae cofnod arall o'r enw Prune eisoes yn eich rhestr mewngofnodi. Mae troi hwn ymlaen yn ei ddisodli.",
+        adminConflict: "Mae Prune hefyd wedi'i osod i redeg bob amser fel gweinyddwr, ac nid yw Windows yn cychwyn rhaglen o'r fath yn dawel wrth fewngofnodi: mae'n gofyn am gymeradwyaeth bob tro, neu nid yw'n ei chychwyn. Diffoddwch un o'r ddau os mai felly y byddai'n well gennych.",
+        saveFailed: (a) => `Methwyd newid y gosodiad hwn: ${a}`,
+        loadFailed: (a) => `Methwyd darllen y gosodiad hwn: ${a}`
       }
     }
   },
@@ -150,6 +222,18 @@ export default {
       last: {
         clean: (a, b, c) => `Seneste automatiske rensning: ${a} — flyttede ${b}, frigjorde ${c}`,
         errors: (a, b, c) => `Seneste automatiske rensning: ${a} — nogle regler mislykkedes; flyttede ${b}, frigjorde ${c}`
+      },
+      startup: {
+        title: "Start Prune, når jeg logger på Windows",
+        description: "Føjer Prune til de programmer, Windows starter, når du logger på, kun for din konto og uden administratorrettigheder. Du kan slå det fra her når som helst.",
+        minimizedTitle: "Start minimeret til statusfeltet",
+        minimizedNote: "Går til statusfeltet, når Minimer til statusfeltet er slået til, og til proceslinjen, når det er slået fra.",
+        unsupported: "Tilgængelig i den installerede Prune-app. Denne kopi kan ikke indstille det.",
+        disabledByWindows: "Windows har slået Prunes startpost fra (i Jobliste under Startapps). Slå dette til for at slå den til igen.",
+        foreign: "Der er allerede en anden post med navnet Prune på din liste over opstartsprogrammer. Hvis du slår dette til, erstattes den.",
+        adminConflict: "Prune er også indstillet til altid at køre som administrator, og Windows starter ikke sådan et program lydløst, når du logger på: det beder om godkendelse hver gang, eller starter det ikke. Slå en af de to fra, hvis du foretrækker det.",
+        saveFailed: (a) => `Kunne ikke ændre denne indstilling: ${a}`,
+        loadFailed: (a) => `Kunne ikke læse denne indstilling: ${a}`
       }
     }
   },
@@ -171,6 +255,18 @@ export default {
       last: {
         clean: (a, b, c) => `Letzte automatische Bereinigung: ${a} — ${b} verschoben, ${c} freigegeben`,
         errors: (a, b, c) => `Letzte automatische Bereinigung: ${a} — einige Regeln sind fehlgeschlagen; ${b} verschoben, ${c} freigegeben`
+      },
+      startup: {
+        title: "Prune beim Anmelden bei Windows starten",
+        description: "Nimmt Prune in die Programme auf, die Windows beim Anmelden startet, nur für dein Konto und ohne Administratorrechte. Du kannst es hier jederzeit ausschalten.",
+        minimizedTitle: "Minimiert im Infobereich starten",
+        minimizedNote: "Geht in den Infobereich, wenn „In den Infobereich minimieren“ eingeschaltet ist, sonst in die Taskleiste.",
+        unsupported: "Verfügbar in der installierten Prune-App. Diese Kopie kann es nicht einrichten.",
+        disabledByWindows: "Windows hat den Autostart-Eintrag von Prune ausgeschaltet (im Task-Manager unter Autostart). Schalte dies ein, um ihn wieder einzuschalten.",
+        foreign: "In deiner Anmeldeliste gibt es bereits einen anderen Eintrag namens Prune. Wenn du dies einschaltest, wird er ersetzt.",
+        adminConflict: "Prune ist außerdem so eingestellt, dass es immer als Administrator läuft, und Windows startet ein solches Programm beim Anmelden nicht still: Es fragt jedes Mal nach Zustimmung oder startet es nicht. Schalte eines der beiden aus, wenn du das nicht möchtest.",
+        saveFailed: (a) => `Diese Einstellung konnte nicht geändert werden: ${a}`,
+        loadFailed: (a) => `Diese Einstellung konnte nicht gelesen werden: ${a}`
       }
     }
   },
@@ -192,6 +288,18 @@ export default {
       last: {
         clean: (a, b, c) => `Τελευταίος αυτόματος καθαρισμός: ${a} — μετακινήθηκαν ${b}, ελευθερώθηκαν ${c}`,
         errors: (a, b, c) => `Τελευταίος αυτόματος καθαρισμός: ${a} — κάποιοι κανόνες απέτυχαν· μετακινήθηκαν ${b}, ελευθερώθηκαν ${c}`
+      },
+      startup: {
+        title: "Εκκίνηση του Prune όταν συνδέομαι στα Windows",
+        description: "Προσθέτει το Prune στα προγράμματα που ξεκινούν τα Windows όταν συνδέεστε, μόνο για τον λογαριασμό σας και χωρίς δικαιώματα διαχειριστή. Μπορείτε να το απενεργοποιήσετε εδώ ανά πάσα στιγμή.",
+        minimizedTitle: "Εκκίνηση ελαχιστοποιημένο στη γραμμή συστήματος",
+        minimizedNote: "Πηγαίνει στη γραμμή συστήματος όταν είναι ενεργή η Ελαχιστοποίηση στη γραμμή συστήματος, και στη γραμμή εργασιών όταν είναι ανενεργή.",
+        unsupported: "Διαθέσιμο στην εγκατεστημένη εφαρμογή Prune. Αυτό το αντίγραφο δεν μπορεί να το ρυθμίσει.",
+        disabledByWindows: "Τα Windows έχουν απενεργοποιήσει την καταχώριση εκκίνησης του Prune (στις Εφαρμογές εκκίνησης του Διαχειριστή εργασιών). Ενεργοποιήστε το για να την ενεργοποιήσετε ξανά.",
+        foreign: "Υπάρχει ήδη μια άλλη καταχώριση με το όνομα Prune στη λίστα εκκίνησης. Η ενεργοποίηση την αντικαθιστά.",
+        adminConflict: "Το Prune έχει επίσης ρυθμιστεί να εκτελείται πάντα ως διαχειριστής, και τα Windows δεν ξεκινούν αθόρυβα ένα τέτοιο πρόγραμμα κατά τη σύνδεση: ζητούν έγκριση κάθε φορά ή δεν το ξεκινούν. Απενεργοποιήστε το ένα από τα δύο, αν προτιμάτε.",
+        saveFailed: (a) => `Δεν ήταν δυνατή η αλλαγή αυτής της ρύθμισης: ${a}`,
+        loadFailed: (a) => `Δεν ήταν δυνατή η ανάγνωση αυτής της ρύθμισης: ${a}`
       }
     }
   },
@@ -213,6 +321,18 @@ export default {
       last: {
         clean: (a, b, c) => `Última limpieza automática: ${a} — ${b} movidos, ${c} liberados`,
         errors: (a, b, c) => `Última limpieza automática: ${a} — algunas reglas fallaron; ${b} movidos, ${c} liberados`
+      },
+      startup: {
+        title: "Iniciar Prune al iniciar sesión en Windows",
+        description: "Añade Prune a los programas que Windows inicia al iniciar sesión, solo para tu cuenta y sin derechos de administrador. Puedes desactivarlo aquí en cualquier momento.",
+        minimizedTitle: "Iniciar minimizado en la bandeja del sistema",
+        minimizedNote: "Va a la bandeja del sistema cuando Minimizar a la bandeja del sistema está activado, y a la barra de tareas cuando está desactivado.",
+        unsupported: "Disponible en la aplicación Prune instalada. Esta copia no puede configurarlo.",
+        disabledByWindows: "Windows tiene desactivada la entrada de inicio de Prune (en Aplicaciones de inicio del Administrador de tareas). Activa esto para volver a activarla.",
+        foreign: "Ya hay otra entrada llamada Prune en tu lista de inicio de sesión. Si lo activas, se reemplaza.",
+        adminConflict: "Prune también está configurado para ejecutarse siempre como administrador, y Windows no inicia un programa así en silencio al iniciar sesión: pide aprobación cada vez, o no lo inicia. Desactiva una de las dos opciones si lo prefieres.",
+        saveFailed: (a) => `No se pudo cambiar este ajuste: ${a}`,
+        loadFailed: (a) => `No se pudo leer este ajuste: ${a}`
       }
     }
   },
@@ -234,6 +354,18 @@ export default {
       last: {
         clean: (a, b, c) => `Viimane automaatne puhastus: ${a} — teisaldati ${b}, vabastati ${c}`,
         errors: (a, b, c) => `Viimane automaatne puhastus: ${a} — mõned reeglid ebaõnnestusid; teisaldati ${b}, vabastati ${c}`
+      },
+      startup: {
+        title: "Käivita Prune Windowsi sisselogimisel",
+        description: "Lisab Prune’i programmide hulka, mille Windows sisselogimisel käivitab, ainult sinu kontole ja ilma administraatoriõigusteta. Selle saab siin igal ajal välja lülitada.",
+        minimizedTitle: "Käivita minimeerituna teavitusalasse",
+        minimizedNote: "Läheb teavitusalasse, kui Minimeeri teavitusalasse on sees, ja tegumiribale, kui see on väljas.",
+        unsupported: "Saadaval paigaldatud Prune’i rakenduses. See koopia ei saa seda seadistada.",
+        disabledByWindows: "Windows on Prune’i käivituskirje välja lülitanud (Tegumihalduri käivitusrakendustes). Selle uuesti sisselülitamiseks lülita see siin sisse.",
+        foreign: "Sinu sisselogimisloendis on juba teine kirje nimega Prune. Selle sisselülitamine asendab selle.",
+        adminConflict: "Prune on seatud ka alati administraatorina töötama ning Windows ei käivita sellist programmi sisselogimisel vaikselt: see küsib iga kord kinnitust või ei käivita seda. Lülita üks neist välja, kui eelistad.",
+        saveFailed: (a) => `Seda seadet ei õnnestunud muuta: ${a}`,
+        loadFailed: (a) => `Seda seadet ei õnnestunud lugeda: ${a}`
       }
     }
   },
@@ -255,6 +387,18 @@ export default {
       last: {
         clean: (a, b, c) => `Viimeisin automaattinen siivous: ${a} — siirrettiin ${b}, vapautettiin ${c}`,
         errors: (a, b, c) => `Viimeisin automaattinen siivous: ${a} — jotkin säännöt epäonnistuivat; siirrettiin ${b}, vapautettiin ${c}`
+      },
+      startup: {
+        title: "Käynnistä Prune, kun kirjaudun Windowsiin",
+        description: "Lisää Prunen ohjelmiin, jotka Windows käynnistää kirjautuessasi, vain sinun tilillesi ja ilman järjestelmänvalvojan oikeuksia. Voit kytkeä sen pois täältä milloin tahansa.",
+        minimizedTitle: "Käynnistä pienennettynä ilmaisinalueelle",
+        minimizedNote: "Siirtyy ilmaisinalueelle, kun Pienennä ilmaisinalueelle on päällä, ja tehtäväpalkkiin, kun se on pois päältä.",
+        unsupported: "Käytettävissä asennetussa Prune-sovelluksessa. Tämä kopio ei voi asettaa sitä.",
+        disabledByWindows: "Windows on kytkenyt Prunen käynnistyskohteen pois päältä (Tehtävienhallinnan Käynnistyssovellukset). Kytke tämä päälle, niin se kytkeytyy takaisin.",
+        foreign: "Kirjautumisluettelossasi on jo toinen kohde nimeltä Prune. Tämän päälle kytkeminen korvaa sen.",
+        adminConflict: "Prune on myös asetettu aina suoritettavaksi järjestelmänvalvojana, eikä Windows käynnistä sellaista ohjelmaa äänettömästi kirjautuessa: se kysyy hyväksyntää joka kerta tai ei käynnistä sitä. Kytke toinen pois, jos haluat.",
+        saveFailed: (a) => `Asetuksen muuttaminen ei onnistunut: ${a}`,
+        loadFailed: (a) => `Asetuksen lukeminen ei onnistunut: ${a}`
       }
     }
   },
@@ -276,6 +420,18 @@ export default {
       last: {
         clean: (a, b, c) => `Dernier nettoyage automatique : ${a} — ${b} déplacés, ${c} libérés`,
         errors: (a, b, c) => `Dernier nettoyage automatique : ${a} — certaines règles ont échoué ; ${b} déplacés, ${c} libérés`
+      },
+      startup: {
+        title: "Démarrer Prune à l'ouverture de session Windows",
+        description: "Ajoute Prune aux programmes que Windows lance à l'ouverture de session, pour votre compte uniquement et sans droits d'administrateur. Vous pouvez le désactiver ici à tout moment.",
+        minimizedTitle: "Démarrer réduit dans la zone de notification",
+        minimizedNote: "Va dans la zone de notification quand Réduire dans la zone de notification est activé, et dans la barre des tâches sinon.",
+        unsupported: "Disponible dans l'application Prune installée. Cette copie ne peut pas le régler.",
+        disabledByWindows: "Windows a désactivé l'entrée de démarrage de Prune (dans Applications au démarrage du Gestionnaire des tâches). Activez ceci pour la réactiver.",
+        foreign: "Une autre entrée nommée Prune figure déjà dans votre liste d'ouverture de session. L'activer la remplace.",
+        adminConflict: "Prune est aussi réglé pour toujours s'exécuter en tant qu'administrateur, et Windows ne lance pas un tel programme silencieusement à l'ouverture de session : il demande une approbation à chaque fois, ou ne le lance pas. Désactivez l'un des deux si vous préférez.",
+        saveFailed: (a) => `Impossible de modifier ce réglage : ${a}`,
+        loadFailed: (a) => `Impossible de lire ce réglage : ${a}`
       }
     }
   },
@@ -297,6 +453,18 @@ export default {
       last: {
         clean: (a, b, c) => `הניקוי האוטומטי האחרון: ${a} — הועברו ${b}, פונו ${c}`,
         errors: (a, b, c) => `הניקוי האוטומטי האחרון: ${a} — חלק מהכללים נכשלו; הועברו ${b}, פונו ${c}`
+      },
+      startup: {
+        title: "הפעל את Prune בעת כניסה ל-Windows",
+        description: "מוסיף את Prune לתוכניות ש-Windows מפעיל בעת כניסה, עבור החשבון שלך בלבד וללא הרשאות מנהל. אפשר לכבות זאת כאן בכל עת.",
+        minimizedTitle: "התחל ממוזער למגש המערכת",
+        minimizedNote: "עובר למגש המערכת כשהאפשרות מזעור למגש המערכת פועלת, ולשורת המשימות כשהיא כבויה.",
+        unsupported: "זמין באפליקציית Prune המותקנת. עותק זה אינו יכול להגדיר זאת.",
+        disabledByWindows: "Windows כיבה את רשומת ההפעלה של Prune (בלשונית אפליקציות הפעלה במנהל המשימות). הפעל אפשרות זו כדי להפעיל אותה מחדש.",
+        foreign: "כבר קיימת ברשימת הכניסה שלך רשומה אחרת בשם Prune. הפעלת האפשרות תחליף אותה.",
+        adminConflict: "Prune מוגדר גם לפעול תמיד כמנהל, ו-Windows אינו מפעיל תוכנית כזו בשקט בעת כניסה: הוא מבקש אישור בכל פעם, או לא מפעיל אותה. כבה אחת משתי האפשרויות אם תעדיף.",
+        saveFailed: (a) => `לא ניתן היה לשנות הגדרה זו: ${a}`,
+        loadFailed: (a) => `לא ניתן היה לקרוא הגדרה זו: ${a}`
       }
     }
   },
@@ -318,6 +486,18 @@ export default {
       last: {
         clean: (a, b, c) => `Legutóbbi automatikus tisztítás: ${a} — áthelyezve ${b}, felszabadítva ${c}`,
         errors: (a, b, c) => `Legutóbbi automatikus tisztítás: ${a} — egyes szabályok sikertelenek voltak; áthelyezve ${b}, felszabadítva ${c}`
+      },
+      startup: {
+        title: "A Prune indítása a Windowsba való bejelentkezéskor",
+        description: "Hozzáadja a Prune-t a bejelentkezéskor induló programokhoz, csak a saját fiókodhoz, rendszergazdai jogok nélkül. Itt bármikor kikapcsolhatod.",
+        minimizedTitle: "Indítás kicsinyítve a tálcára",
+        minimizedNote: "A tálcára kerül, ha a Kicsinyítés a tálcára be van kapcsolva, különben a tálcán marad a feladatsávon.",
+        unsupported: "A telepített Prune alkalmazásban érhető el. Ez a példány nem tudja beállítani.",
+        disabledByWindows: "A Windows kikapcsolta a Prune indítási bejegyzését (a Feladatkezelő Indítópult lapján). Kapcsold be ezt, hogy újra bekapcsolódjon.",
+        foreign: "A bejelentkezési listádon már van egy másik, Prune nevű bejegyzés. A bekapcsolással lecseréled.",
+        adminConflict: "A Prune úgy is be van állítva, hogy mindig rendszergazdaként fusson, és a Windows az ilyen programot bejelentkezéskor nem indítja csendben: minden alkalommal jóváhagyást kér, vagy nem indítja el. Kapcsold ki a kettő egyikét, ha így szeretnéd.",
+        saveFailed: (a) => `Nem sikerült módosítani ezt a beállítást: ${a}`,
+        loadFailed: (a) => `Nem sikerült beolvasni ezt a beállítást: ${a}`
       }
     }
   },
@@ -339,6 +519,18 @@ export default {
       last: {
         clean: (a, b, c) => `Pembersihan otomatis terakhir: ${a} — ${b} dipindahkan, ${c} dibebaskan`,
         errors: (a, b, c) => `Pembersihan otomatis terakhir: ${a} — beberapa aturan gagal; ${b} dipindahkan, ${c} dibebaskan`
+      },
+      startup: {
+        title: "Mulai Prune saat saya masuk ke Windows",
+        description: "Menambahkan Prune ke program yang dimulai Windows saat Anda masuk, hanya untuk akun Anda dan tanpa hak administrator. Anda dapat mematikannya di sini kapan saja.",
+        minimizedTitle: "Mulai terkecil di baki sistem",
+        minimizedNote: "Masuk ke baki sistem saat Perkecil ke baki sistem aktif, dan ke bilah tugas saat nonaktif.",
+        unsupported: "Tersedia di aplikasi Prune yang terpasang. Salinan ini tidak bisa mengaturnya.",
+        disabledByWindows: "Windows mematikan entri startup Prune (di Aplikasi startup Pengelola Tugas). Nyalakan ini untuk menyalakannya kembali.",
+        foreign: "Entri lain bernama Prune sudah ada di daftar masuk Anda. Menyalakan ini akan menggantinya.",
+        adminConflict: "Prune juga diatur untuk selalu berjalan sebagai administrator, dan Windows tidak memulai program seperti itu secara diam-diam saat masuk: Windows meminta persetujuan setiap kali, atau tidak memulainya. Matikan salah satunya jika Anda mau.",
+        saveFailed: (a) => `Tidak dapat mengubah pengaturan ini: ${a}`,
+        loadFailed: (a) => `Tidak dapat membaca pengaturan ini: ${a}`
       }
     }
   },
@@ -360,6 +552,18 @@ export default {
       last: {
         clean: (a, b, c) => `Síðasta sjálfvirka hreinsun: ${a} — fært ${b}, losað ${c}`,
         errors: (a, b, c) => `Síðasta sjálfvirka hreinsun: ${a} — sumar reglur mistókust; fært ${b}, losað ${c}`
+      },
+      startup: {
+        title: "Ræsa Prune þegar ég skrái mig inn í Windows",
+        description: "Bætir Prune við forritin sem Windows ræsir þegar þú skráir þig inn, aðeins fyrir þinn aðgang og án stjórnandaréttinda. Þú getur slökkt á þessu hér hvenær sem er.",
+        minimizedTitle: "Ræsa lágmarkað í kerfisbakka",
+        minimizedNote: "Fer í kerfisbakkann þegar kveikt er á Lágmarka í kerfisbakka, annars á verkefnastikuna.",
+        unsupported: "Í boði í uppsettu Prune-forriti. Þetta eintak getur ekki stillt það.",
+        disabledByWindows: "Windows hefur slökkt á ræsifærslu Prune (í Ræsiforritum í Task Manager). Kveiktu á þessu til að kveikja aftur á henni.",
+        foreign: "Önnur færsla með nafninu Prune er nú þegar á innskráningarlistanum þínum. Ef þú kveikir á þessu kemur hún í staðinn.",
+        adminConflict: "Prune er líka stillt á að keyra alltaf sem stjórnandi og Windows ræsir slíkt forrit ekki hljóðlega við innskráningu: það biður um samþykki í hvert sinn eða ræsir það ekki. Slökktu á öðru hvoru ef þú vilt.",
+        saveFailed: (a) => `Ekki tókst að breyta þessari stillingu: ${a}`,
+        loadFailed: (a) => `Ekki tókst að lesa þessa stillingu: ${a}`
       }
     }
   },
@@ -381,6 +585,18 @@ export default {
       last: {
         clean: (a, b, c) => `Ultima pulizia automatica: ${a} — spostati ${b}, liberati ${c}`,
         errors: (a, b, c) => `Ultima pulizia automatica: ${a} — alcune regole non sono riuscite; spostati ${b}, liberati ${c}`
+      },
+      startup: {
+        title: "Avvia Prune all'accesso a Windows",
+        description: "Aggiunge Prune ai programmi che Windows avvia quando accedi, solo per il tuo account e senza diritti di amministratore. Puoi disattivarlo qui in qualsiasi momento.",
+        minimizedTitle: "Avvia ridotto a icona nell'area di notifica",
+        minimizedNote: "Va nell'area di notifica quando Riduci a icona nell'area di notifica è attivo, e nella barra delle applicazioni quando è disattivato.",
+        unsupported: "Disponibile nell'app Prune installata. Questa copia non può impostarlo.",
+        disabledByWindows: "Windows ha disattivato la voce di avvio di Prune (in App di avvio di Gestione attività). Attiva questa opzione per riattivarla.",
+        foreign: "Nell'elenco di accesso c'è già un'altra voce chiamata Prune. Attivando questa opzione viene sostituita.",
+        adminConflict: "Prune è anche impostato per essere sempre eseguito come amministratore, e Windows non avvia in silenzio un programma così all'accesso: chiede conferma ogni volta, oppure non lo avvia. Disattiva una delle due opzioni se preferisci.",
+        saveFailed: (a) => `Impossibile modificare questa impostazione: ${a}`,
+        loadFailed: (a) => `Impossibile leggere questa impostazione: ${a}`
       }
     }
   },
@@ -402,6 +618,18 @@ export default {
       last: {
         clean: (a, b, c) => `前回の自動クリーンアップ: ${a} — ${b} を移動、${c} を解放`,
         errors: (a, b, c) => `前回の自動クリーンアップ: ${a} — 一部のルールが失敗しました。${b} を移動、${c} を解放`
+      },
+      startup: {
+        title: "Windows にサインインしたら Prune を起動する",
+        description: "サインイン時に Windows が起動するプログラムに Prune を追加します。あなたのアカウント専用で、管理者権限は不要です。ここでいつでもオフにできます。",
+        minimizedTitle: "システムトレイに最小化して起動",
+        minimizedNote: "「システムトレイに最小化」がオンのときはシステムトレイへ、オフのときはタスクバーへ最小化されます。",
+        unsupported: "インストールした Prune アプリで利用できます。このコピーでは設定できません。",
+        disabledByWindows: "Windows が Prune のスタートアップ項目をオフにしています (タスク マネージャーのスタートアップ アプリ)。オンにすると再び有効になります。",
+        foreign: "Prune という名前の別の項目がすでにサインイン時の一覧にあります。オンにすると置き換えられます。",
+        adminConflict: "Prune は常に管理者として実行する設定にもなっており、Windows はそのようなプログラムをサインイン時に黙って起動しません。毎回承認を求めるか、起動しません。望まない場合はどちらかをオフにしてください。",
+        saveFailed: (a) => `この設定を変更できませんでした: ${a}`,
+        loadFailed: (a) => `この設定を読み取れませんでした: ${a}`
       }
     }
   },
@@ -423,6 +651,18 @@ export default {
       last: {
         clean: (a, b, c) => `마지막 자동 정리: ${a} — ${b} 이동, ${c} 확보`,
         errors: (a, b, c) => `마지막 자동 정리: ${a} — 일부 규칙 실패, ${b} 이동, ${c} 확보`
+      },
+      startup: {
+        title: "Windows에 로그인할 때 Prune 시작",
+        description: "로그인할 때 Windows가 시작하는 프로그램에 Prune을 추가합니다. 내 계정 전용이며 관리자 권한이 필요 없습니다. 여기서 언제든 끌 수 있습니다.",
+        minimizedTitle: "시스템 트레이로 최소화하여 시작",
+        minimizedNote: "시스템 트레이로 최소화가 켜져 있으면 시스템 트레이로, 꺼져 있으면 작업 표시줄로 갑니다.",
+        unsupported: "설치된 Prune 앱에서 사용할 수 있습니다. 이 사본에서는 설정할 수 없습니다.",
+        disabledByWindows: "Windows에서 Prune의 시작 항목이 꺼져 있습니다(작업 관리자의 시작 앱). 이 옵션을 켜면 다시 켜집니다.",
+        foreign: "Prune이라는 이름의 다른 항목이 이미 로그인 목록에 있습니다. 이 옵션을 켜면 대체됩니다.",
+        adminConflict: "Prune이 항상 관리자 권한으로 실행되도록도 설정되어 있으며, Windows는 이런 프로그램을 로그인 시 조용히 시작하지 않습니다. 매번 승인을 요청하거나 시작하지 않습니다. 원하지 않으면 둘 중 하나를 끄세요.",
+        saveFailed: (a) => `이 설정을 변경할 수 없습니다: ${a}`,
+        loadFailed: (a) => `이 설정을 읽을 수 없습니다: ${a}`
       }
     }
   },
@@ -444,6 +684,18 @@ export default {
       last: {
         clean: (a, b, c) => `Paskutinis automatinis valymas: ${a} — perkelta ${b}, atlaisvinta ${c}`,
         errors: (a, b, c) => `Paskutinis automatinis valymas: ${a} — kai kurios taisyklės nepavyko; perkelta ${b}, atlaisvinta ${c}`
+      },
+      startup: {
+        title: "Paleisti Prune, kai prisijungiu prie „Windows“",
+        description: "Prideda „Prune“ prie programų, kurias „Windows“ paleidžia prisijungiant, tik jūsų paskyrai ir be administratoriaus teisių. Galite bet kada išjungti čia.",
+        minimizedTitle: "Paleisti sumažintą į sistemos dėklą",
+        minimizedNote: "Pereina į sistemos dėklą, kai įjungta Sumažinti į sistemos dėklą, o kai išjungta – į užduočių juostą.",
+        unsupported: "Pasiekiama įdiegtoje „Prune“ programoje. Ši kopija negali to nustatyti.",
+        disabledByWindows: "„Windows“ išjungė „Prune“ paleisties įrašą („Task Manager“ skiltyje Paleisties programos). Įjunkite tai, kad jį vėl įjungtumėte.",
+        foreign: "Jūsų prisijungimo sąraše jau yra kitas įrašas, pavadintas Prune. Įjungus tai jis bus pakeistas.",
+        adminConflict: "„Prune“ taip pat nustatyta visada veikti kaip administratorius, o „Windows“ tokios programos prisijungiant tyliai nepaleidžia: kaskart prašo patvirtinimo arba jos nepaleidžia. Išjunkite vieną iš dviejų, jei norite.",
+        saveFailed: (a) => `Nepavyko pakeisti šio nustatymo: ${a}`,
+        loadFailed: (a) => `Nepavyko nuskaityti šio nustatymo: ${a}`
       }
     }
   },
@@ -465,6 +717,18 @@ export default {
       last: {
         clean: (a, b, c) => `Pembersihan automatik terakhir: ${a} — ${b} dialihkan, ${c} dibebaskan`,
         errors: (a, b, c) => `Pembersihan automatik terakhir: ${a} — sesetengah peraturan gagal; ${b} dialihkan, ${c} dibebaskan`
+      },
+      startup: {
+        title: "Mulakan Prune apabila saya log masuk ke Windows",
+        description: "Menambah Prune pada program yang dimulakan Windows apabila anda log masuk, untuk akaun anda sahaja dan tanpa hak pentadbir. Anda boleh mematikannya di sini pada bila-bila masa.",
+        minimizedTitle: "Mula dikecilkan ke dulang sistem",
+        minimizedNote: "Pergi ke dulang sistem apabila Kecilkan ke dulang sistem dihidupkan, dan ke bar tugas apabila dimatikan.",
+        unsupported: "Tersedia dalam aplikasi Prune yang dipasang. Salinan ini tidak boleh menetapkannya.",
+        disabledByWindows: "Windows telah mematikan entri permulaan Prune (dalam Apl permulaan Pengurus Tugas). Hidupkan ini untuk menghidupkannya semula.",
+        foreign: "Entri lain bernama Prune sudah ada dalam senarai log masuk anda. Menghidupkan ini akan menggantikannya.",
+        adminConflict: "Prune juga ditetapkan untuk sentiasa berjalan sebagai pentadbir, dan Windows tidak memulakan program sedemikian secara senyap semasa log masuk: ia meminta kelulusan setiap kali, atau tidak memulakannya. Matikan salah satu daripada kedua-duanya jika anda mahu.",
+        saveFailed: (a) => `Tidak dapat menukar tetapan ini: ${a}`,
+        loadFailed: (a) => `Tidak dapat membaca tetapan ini: ${a}`
       }
     }
   },
@@ -486,6 +750,18 @@ export default {
       last: {
         clean: (a, b, c) => `Siste automatiske rensing: ${a} — flyttet ${b}, frigjorde ${c}`,
         errors: (a, b, c) => `Siste automatiske rensing: ${a} — noen regler mislyktes; flyttet ${b}, frigjorde ${c}`
+      },
+      startup: {
+        title: "Start Prune når jeg logger på Windows",
+        description: "Legger Prune til blant programmene Windows starter når du logger på, bare for kontoen din og uten administratorrettigheter. Du kan slå det av her når som helst.",
+        minimizedTitle: "Start minimert til systemstatusfeltet",
+        minimizedNote: "Går til systemstatusfeltet når Minimer til systemstatusfelt er slått på, og til oppgavelinjen når det er slått av.",
+        unsupported: "Tilgjengelig i den installerte Prune-appen. Denne kopien kan ikke angi det.",
+        disabledByWindows: "Windows har slått av Prunes oppstartsoppføring (i Oppgavebehandling under Oppstartsapper). Slå dette på for å slå den på igjen.",
+        foreign: "Det finnes allerede en annen oppføring med navnet Prune i påloggingslisten din. Slår du dette på, erstattes den.",
+        adminConflict: "Prune er også satt til alltid å kjøre som administrator, og Windows starter ikke et slikt program stille ved pålogging: det ber om godkjenning hver gang, eller starter det ikke. Slå av en av de to hvis du foretrekker det.",
+        saveFailed: (a) => `Kunne ikke endre denne innstillingen: ${a}`,
+        loadFailed: (a) => `Kunne ikke lese denne innstillingen: ${a}`
       }
     }
   },
@@ -507,6 +783,18 @@ export default {
       last: {
         clean: (a, b, c) => `Laatste automatische opschoning: ${a} — ${b} verplaatst, ${c} vrijgemaakt`,
         errors: (a, b, c) => `Laatste automatische opschoning: ${a} — sommige regels zijn mislukt; ${b} verplaatst, ${c} vrijgemaakt`
+      },
+      startup: {
+        title: "Prune starten als ik me aanmeld bij Windows",
+        description: "Voegt Prune toe aan de programma's die Windows start wanneer je je aanmeldt, alleen voor jouw account en zonder beheerdersrechten. Je kunt dit hier altijd uitzetten.",
+        minimizedTitle: "Geminimaliseerd naar het systeemvak starten",
+        minimizedNote: "Gaat naar het systeemvak als Minimaliseren naar systeemvak aanstaat, en naar de taakbalk als het uitstaat.",
+        unsupported: "Beschikbaar in de geïnstalleerde Prune-app. Deze kopie kan het niet instellen.",
+        disabledByWindows: "Windows heeft het opstartitem van Prune uitgezet (in Taakbeheer onder Opstart-apps). Zet dit aan om het weer aan te zetten.",
+        foreign: "Er staat al een ander item met de naam Prune in je aanmeldlijst. Als je dit aanzet, wordt het vervangen.",
+        adminConflict: "Prune is ook ingesteld om altijd als beheerder te draaien, en Windows start zo'n programma niet stil bij het aanmelden: het vraagt elke keer om goedkeuring, of start het niet. Zet een van de twee uit als je dat liever hebt.",
+        saveFailed: (a) => `Deze instelling kon niet worden gewijzigd: ${a}`,
+        loadFailed: (a) => `Deze instelling kon niet worden gelezen: ${a}`
       }
     }
   },
@@ -528,6 +816,18 @@ export default {
       last: {
         clean: (a, b, c) => `Ostatnie automatyczne czyszczenie: ${a} — przeniesiono ${b}, zwolniono ${c}`,
         errors: (a, b, c) => `Ostatnie automatyczne czyszczenie: ${a} — niektóre reguły nie powiodły się; przeniesiono ${b}, zwolniono ${c}`
+      },
+      startup: {
+        title: "Uruchamiaj Prune po zalogowaniu do systemu Windows",
+        description: "Dodaje Prune do programów uruchamianych przez system Windows po zalogowaniu, tylko dla Twojego konta i bez uprawnień administratora. Możesz to w każdej chwili wyłączyć tutaj.",
+        minimizedTitle: "Uruchamiaj zminimalizowany do zasobnika systemowego",
+        minimizedNote: "Trafia do zasobnika systemowego, gdy włączona jest opcja Minimalizuj do zasobnika systemowego, a na pasek zadań, gdy jest wyłączona.",
+        unsupported: "Dostępne w zainstalowanej aplikacji Prune. Ta kopia nie może tego ustawić.",
+        disabledByWindows: "System Windows wyłączył wpis autostartu Prune (w Menedżerze zadań na karcie Aplikacje startowe). Włącz tę opcję, aby włączyć go ponownie.",
+        foreign: "Na liście uruchamianej po zalogowaniu jest już inny wpis o nazwie Prune. Włączenie tej opcji go zastąpi.",
+        adminConflict: "Prune jest też ustawiony tak, aby zawsze działał jako administrator, a Windows nie uruchamia takiego programu po cichu przy zalogowaniu: za każdym razem prosi o zgodę lub go nie uruchamia. Wyłącz jedną z tych opcji, jeśli wolisz.",
+        saveFailed: (a) => `Nie udało się zmienić tego ustawienia: ${a}`,
+        loadFailed: (a) => `Nie udało się odczytać tego ustawienia: ${a}`
       }
     }
   },
@@ -549,6 +849,18 @@ export default {
       last: {
         clean: (a, b, c) => `وروستی اتومات پاکول: ${a} — ${b} ولیږدول شول، ${c} خلاص شو`,
         errors: (a, b, c) => `وروستی اتومات پاکول: ${a} — ځینې قاعدې ناکامې شوې؛ ${b} ولیږدول شول، ${c} خلاص شو`
+      },
+      startup: {
+        title: "کله چې Windows ته ننوځم Prune پیل کړه",
+        description: "Prune هغو پروګرامونو ته زیاتوي چې Windows یې د ننوتلو پر مهال پیلوي، یوازې ستاسو د حساب لپاره او پرته له مدیر اجازې. تاسو یې هر وخت دلته بند کولی شئ.",
+        minimizedTitle: "کوچنی شوی د سیسټم ټرې ته پیل کړه",
+        minimizedNote: "کله چې د سیسټم ټرې ته کوچنی کول چالان وي، د سیسټم ټرې ته ځي، او کله چې بند وي، د دندو پټې ته.",
+        unsupported: "په نصب شوي Prune اپ کې شتون لري. دا کاپي یې نشي ټاکلی.",
+        disabledByWindows: "Windows د Prune د پیل ننوتنه بنده کړې ده (د Task Manager په پیل اپونو کې). دا چالان کړئ ترڅو بیا چالان شي.",
+        foreign: "ستاسو د ننوتلو په لیست کې لا دمخه Prune په نوم بله ننوتنه شته. دا چالانول یې ځای نیسي.",
+        adminConflict: "Prune همدارنګه ټاکل شوی چې تل د مدیر په توګه ولګیږي، او Windows دا ډول پروګرام د ننوتلو پر مهال په چوپه نه پیلوي: هر ځل تصویب غواړي، یا یې نه پیلوي. که غواړئ له دواړو څخه یو بند کړئ.",
+        saveFailed: (a) => `دا تنظیم بدل نشو: ${a}`,
+        loadFailed: (a) => `دا تنظیم ولوستل نشو: ${a}`
       }
     }
   },
@@ -570,6 +882,18 @@ export default {
       last: {
         clean: (a, b, c) => `Última limpeza automática: ${a} — ${b} movidos, ${c} liberados`,
         errors: (a, b, c) => `Última limpeza automática: ${a} — algumas regras falharam; ${b} movidos, ${c} liberados`
+      },
+      startup: {
+        title: "Iniciar o Prune quando eu entrar no Windows",
+        description: "Adiciona o Prune aos programas que o Windows inicia quando você entra, só para a sua conta e sem direitos de administrador. Você pode desativar aqui a qualquer momento.",
+        minimizedTitle: "Iniciar minimizado na bandeja",
+        minimizedNote: "Vai para a bandeja do sistema quando Minimizar para a bandeja está ativado, e para a barra de tarefas quando está desativado.",
+        unsupported: "Disponível no aplicativo Prune instalado. Esta cópia não consegue definir isso.",
+        disabledByWindows: "O Windows desativou a entrada de inicialização do Prune (em Aplicativos de inicialização do Gerenciador de Tarefas). Ative isto para reativá-la.",
+        foreign: "Já existe outra entrada chamada Prune na sua lista de inicialização. Ativar isto a substitui.",
+        adminConflict: "O Prune também está definido para sempre executar como administrador, e o Windows não inicia esse tipo de programa em silêncio ao entrar: pede aprovação toda vez, ou não o inicia. Desative um dos dois se preferir.",
+        saveFailed: (a) => `Não foi possível alterar esta configuração: ${a}`,
+        loadFailed: (a) => `Não foi possível ler esta configuração: ${a}`
       }
     }
   },
@@ -591,6 +915,18 @@ export default {
       last: {
         clean: (a, b, c) => `Última limpeza automática: ${a} — ${b} movidos, ${c} libertados`,
         errors: (a, b, c) => `Última limpeza automática: ${a} — algumas regras falharam; ${b} movidos, ${c} libertados`
+      },
+      startup: {
+        title: "Iniciar o Prune quando eu iniciar sessão no Windows",
+        description: "Adiciona o Prune aos programas que o Windows inicia quando inicia sessão, só para a sua conta e sem direitos de administrador. Pode desativar aqui a qualquer momento.",
+        minimizedTitle: "Iniciar minimizado na bandeja",
+        minimizedNote: "Vai para a bandeja do sistema quando Minimizar para a bandeja está ativado, e para a barra de tarefas quando está desativado.",
+        unsupported: "Disponível na aplicação Prune instalada. Esta cópia não consegue defini-lo.",
+        disabledByWindows: "O Windows desativou a entrada de arranque do Prune (em Aplicações de arranque do Gestor de Tarefas). Ative isto para a reativar.",
+        foreign: "Já existe outra entrada chamada Prune na sua lista de arranque. Ativar isto substitui-a.",
+        adminConflict: "O Prune também está definido para executar sempre como administrador, e o Windows não inicia esse tipo de programa em silêncio ao iniciar sessão: pede aprovação de cada vez, ou não o inicia. Desative um dos dois se preferir.",
+        saveFailed: (a) => `Não foi possível alterar esta definição: ${a}`,
+        loadFailed: (a) => `Não foi possível ler esta definição: ${a}`
       }
     }
   },
@@ -612,6 +948,18 @@ export default {
       last: {
         clean: (a, b, c) => `Ultima curățare automată: ${a} — ${b} mutați, ${c} eliberați`,
         errors: (a, b, c) => `Ultima curățare automată: ${a} — unele reguli au eșuat; ${b} mutați, ${c} eliberați`
+      },
+      startup: {
+        title: "Pornește Prune când mă conectez la Windows",
+        description: "Adaugă Prune la programele pe care Windows le pornește când te conectezi, doar pentru contul tău și fără drepturi de administrator. Îl poți dezactiva aici oricând.",
+        minimizedTitle: "Pornește minimizat în bara de sistem",
+        minimizedNote: "Merge în bara de sistem când Minimizează în bara de sistem este activat, și în bara de activități când este dezactivat.",
+        unsupported: "Disponibil în aplicația Prune instalată. Această copie nu îl poate seta.",
+        disabledByWindows: "Windows a dezactivat intrarea de pornire a Prune (în Aplicații de pornire din Task Manager). Activează aceasta pentru a o reactiva.",
+        foreign: "În lista ta de conectare există deja o altă intrare numită Prune. Activarea o înlocuiește.",
+        adminConflict: "Prune este setat și să ruleze mereu ca administrator, iar Windows nu pornește silențios un astfel de program la conectare: cere aprobare de fiecare dată sau nu îl pornește. Dezactivează una dintre cele două dacă preferi.",
+        saveFailed: (a) => `Nu s-a putut schimba această setare: ${a}`,
+        loadFailed: (a) => `Nu s-a putut citi această setare: ${a}`
       }
     }
   },
@@ -633,6 +981,18 @@ export default {
       last: {
         clean: (a, b, c) => `Последняя автоматическая очистка: ${a} — перемещено ${b}, освобождено ${c}`,
         errors: (a, b, c) => `Последняя автоматическая очистка: ${a} — некоторые правила завершились ошибкой; перемещено ${b}, освобождено ${c}`
+      },
+      startup: {
+        title: "Запускать Prune при входе в Windows",
+        description: "Добавляет Prune в программы, которые Windows запускает при входе, только для вашей учётной записи и без прав администратора. Это можно в любой момент отключить здесь.",
+        minimizedTitle: "Запускать свёрнутым в системный трей",
+        minimizedNote: "Уходит в системный трей, если включено «Свернуть в системный трей», и на панель задач, если выключено.",
+        unsupported: "Доступно в установленном приложении Prune. Эта копия не может это настроить.",
+        disabledByWindows: "Windows отключила запись автозагрузки Prune (в Диспетчере задач, на вкладке «Автозагрузка»). Включите этот параметр, чтобы включить её снова.",
+        foreign: "В вашем списке автозагрузки уже есть другая запись с именем Prune. Если включить этот параметр, она будет заменена.",
+        adminConflict: "Prune также настроен всегда запускаться от имени администратора, а Windows не запускает такую программу при входе тихо: каждый раз спрашивает подтверждение или не запускает её. Отключите один из двух параметров, если хотите.",
+        saveFailed: (a) => `Не удалось изменить этот параметр: ${a}`,
+        loadFailed: (a) => `Не удалось прочитать этот параметр: ${a}`
       }
     }
   },
@@ -654,6 +1014,18 @@ export default {
       last: {
         clean: (a, b, c) => `Posledné automatické čistenie: ${a} — presunuté ${b}, uvoľnené ${c}`,
         errors: (a, b, c) => `Posledné automatické čistenie: ${a} — niektoré pravidlá zlyhali; presunuté ${b}, uvoľnené ${c}`
+      },
+      startup: {
+        title: "Spustiť Prune po prihlásení do Windows",
+        description: "Pridá Prune medzi programy, ktoré Windows spúšťa po prihlásení, len pre váš účet a bez práv správcu. Môžete to tu kedykoľvek vypnúť.",
+        minimizedTitle: "Spustiť minimalizovane do systémovej lišty",
+        minimizedNote: "Ide do systémovej lišty, keď je zapnuté Minimalizovať do systémovej lišty, a na panel úloh, keď je vypnuté.",
+        unsupported: "Dostupné v nainštalovanej aplikácii Prune. Táto kópia to nemôže nastaviť.",
+        disabledByWindows: "Windows má položku spustenia Prune vypnutú (v Správcovi úloh na karte Po spustení). Zapnutím tu ju znova zapnete.",
+        foreign: "V zozname spúšťanom po prihlásení už je iná položka s názvom Prune. Zapnutím sa nahradí.",
+        adminConflict: "Prune je tiež nastavený tak, aby vždy bežal ako správca, a Windows takýto program po prihlásení ticho nespustí: zakaždým sa opýta na súhlas, alebo ho nespustí. Ak chcete, jednu z týchto možností vypnite.",
+        saveFailed: (a) => `Toto nastavenie sa nepodarilo zmeniť: ${a}`,
+        loadFailed: (a) => `Toto nastavenie sa nepodarilo prečítať: ${a}`
       }
     }
   },
@@ -675,6 +1047,18 @@ export default {
       last: {
         clean: (a, b, c) => `Pastrimi i fundit automatik: ${a} — u zhvendosën ${b}, u liruan ${c}`,
         errors: (a, b, c) => `Pastrimi i fundit automatik: ${a} — disa rregulla dështuan; u zhvendosën ${b}, u liruan ${c}`
+      },
+      startup: {
+        title: "Nise Prune kur hyj në Windows",
+        description: "E shton Prune te programet që Windows nis kur hyn, vetëm për llogarinë tënde dhe pa të drejta administratori. Mund ta çaktivizosh këtu në çdo kohë.",
+        minimizedTitle: "Nise të minimizuar në zonën e njoftimeve",
+        minimizedNote: "Shkon në zonën e njoftimeve kur Minimizo në zonën e njoftimeve është e aktivizuar, dhe në shiritin e detyrave kur është e çaktivizuar.",
+        unsupported: "Në dispozicion në aplikacionin Prune të instaluar. Ky kopje nuk mund ta caktojë.",
+        disabledByWindows: "Windows e ka çaktivizuar hyrjen e nisjes së Prune (te Aplikacionet e nisjes në Task Manager). Aktivizo këtë për ta aktivizuar sërish.",
+        foreign: "Në listën tënde të hyrjes ekziston tashmë një hyrje tjetër me emrin Prune. Aktivizimi i kësaj e zëvendëson.",
+        adminConflict: "Prune është caktuar gjithashtu të ekzekutohet gjithmonë si administrator, dhe Windows nuk e nis një program të tillë në heshtje kur hyn: kërkon miratim çdo herë, ose nuk e nis. Çaktivizo njërin nga të dyja nëse parapëlqen.",
+        saveFailed: (a) => `Ky cilësim nuk u ndryshua: ${a}`,
+        loadFailed: (a) => `Ky cilësim nuk u lexua: ${a}`
       }
     }
   },
@@ -696,6 +1080,18 @@ export default {
       last: {
         clean: (a, b, c) => `Последње аутоматско чишћење: ${a} — премештено ${b}, ослобођено ${c}`,
         errors: (a, b, c) => `Последње аутоматско чишћење: ${a} — нека правила нису успела; премештено ${b}, ослобођено ${c}`
+      },
+      startup: {
+        title: "Покрени Prune када се пријавим на Windows",
+        description: "Додаје Prune међу програме које Windows покреће при пријављивању, само за ваш налог и без администраторских права. Можете то у сваком тренутку искључити овде.",
+        minimizedTitle: "Покрени умањено у системску касету",
+        minimizedNote: "Иде у системску касету када је укључено Умањи у системску касету, а на траку задатака када је искључено.",
+        unsupported: "Доступно у инсталираној апликацији Prune. Ова копија то не може да подеси.",
+        disabledByWindows: "Windows је искључио ставку за покретање Prune (у Менаџеру задатака, у Апликацијама за покретање). Укључите ово да бисте је поново укључили.",
+        foreign: "На вашој листи за пријављивање већ постоји друга ставка под именом Prune. Укључивањем се замењује.",
+        adminConflict: "Prune је такође подешен да се увек извршава као администратор, а Windows такав програм при пријављивању не покреће тихо: сваки пут тражи одобрење или га не покреће. Искључите једно од то двоје ако желите.",
+        saveFailed: (a) => `Није могуће променити ово подешавање: ${a}`,
+        loadFailed: (a) => `Није могуће прочитати ово подешавање: ${a}`
       }
     }
   },
@@ -717,6 +1113,18 @@ export default {
       last: {
         clean: (a, b, c) => `Senaste automatiska rensning: ${a} — flyttade ${b}, frigjorde ${c}`,
         errors: (a, b, c) => `Senaste automatiska rensning: ${a} — vissa regler misslyckades; flyttade ${b}, frigjorde ${c}`
+      },
+      startup: {
+        title: "Starta Prune när jag loggar in i Windows",
+        description: "Lägger till Prune bland de program som Windows startar när du loggar in, bara för ditt konto och utan administratörsrättigheter. Du kan stänga av det här när som helst.",
+        minimizedTitle: "Starta minimerat till systemfältet",
+        minimizedNote: "Går till systemfältet när Minimera till systemfältet är på, och till aktivitetsfältet när det är av.",
+        unsupported: "Finns i den installerade Prune-appen. Den här kopian kan inte ställa in det.",
+        disabledByWindows: "Windows har stängt av Prunes startpost (i Aktivitetshanteraren under Startappar). Slå på detta för att slå på den igen.",
+        foreign: "Det finns redan en annan post med namnet Prune i din inloggningslista. Slår du på detta ersätts den.",
+        adminConflict: "Prune är också inställt på att alltid köras som administratör, och Windows startar inte ett sådant program tyst vid inloggning: det ber om godkännande varje gång, eller startar det inte. Stäng av ett av de två om du föredrar det.",
+        saveFailed: (a) => `Det gick inte att ändra den här inställningen: ${a}`,
+        loadFailed: (a) => `Det gick inte att läsa den här inställningen: ${a}`
       }
     }
   },
@@ -738,6 +1146,18 @@ export default {
       last: {
         clean: (a, b, c) => `การล้างข้อมูลอัตโนมัติครั้งล่าสุด: ${a} — ย้ายแล้ว ${b} เพิ่มพื้นที่ว่าง ${c}`,
         errors: (a, b, c) => `การล้างข้อมูลอัตโนมัติครั้งล่าสุด: ${a} — บางกฎล้มเหลว ย้ายแล้ว ${b} เพิ่มพื้นที่ว่าง ${c}`
+      },
+      startup: {
+        title: "เริ่ม Prune เมื่อฉันลงชื่อเข้าใช้ Windows",
+        description: "เพิ่ม Prune ลงในโปรแกรมที่ Windows เริ่มเมื่อคุณลงชื่อเข้าใช้ เฉพาะบัญชีของคุณและไม่ต้องใช้สิทธิ์ผู้ดูแลระบบ คุณปิดได้ที่นี่ทุกเมื่อ",
+        minimizedTitle: "เริ่มแบบย่อไปที่ถาดระบบ",
+        minimizedNote: "จะไปที่ถาดระบบเมื่อเปิด ย่อไปที่ถาดระบบ และไปที่แถบงานเมื่อปิดอยู่",
+        unsupported: "ใช้ได้ในแอป Prune ที่ติดตั้งแล้ว สำเนานี้ไม่สามารถตั้งค่าได้",
+        disabledByWindows: "Windows ปิดรายการเริ่มต้นระบบของ Prune ไว้ (ใน แอปเริ่มต้นระบบ ของตัวจัดการงาน) เปิดตัวเลือกนี้เพื่อเปิดใช้อีกครั้ง",
+        foreign: "มีรายการอื่นชื่อ Prune อยู่ในรายการลงชื่อเข้าใช้ของคุณแล้ว การเปิดตัวเลือกนี้จะแทนที่รายการนั้น",
+        adminConflict: "Prune ยังถูกตั้งให้ทำงานในฐานะผู้ดูแลระบบเสมอ และ Windows จะไม่เริ่มโปรแกรมแบบนี้อย่างเงียบ ๆ เมื่อลงชื่อเข้าใช้ แต่จะขออนุมัติทุกครั้ง หรือไม่เริ่มให้ ปิดตัวเลือกใดตัวเลือกหนึ่งหากต้องการ",
+        saveFailed: (a) => `เปลี่ยนการตั้งค่านี้ไม่ได้: ${a}`,
+        loadFailed: (a) => `อ่านการตั้งค่านี้ไม่ได้: ${a}`
       }
     }
   },
@@ -759,6 +1179,18 @@ export default {
       last: {
         clean: (a, b, c) => `Son otomatik temizlik: ${a} — ${b} taşındı, ${c} boşaltıldı`,
         errors: (a, b, c) => `Son otomatik temizlik: ${a} — bazı kurallar başarısız oldu; ${b} taşındı, ${c} boşaltıldı`
+      },
+      startup: {
+        title: "Windows’ta oturum açtığımda Prune’u başlat",
+        description: "Prune’u, oturum açtığınızda Windows’un başlattığı programlara ekler; yalnızca hesabınız için ve yönetici hakları olmadan. Buradan istediğiniz zaman kapatabilirsiniz.",
+        minimizedTitle: "Sistem tepsisine küçültülmüş başlat",
+        minimizedNote: "Sistem tepsisine küçült açıkken sistem tepsisine, kapalıyken görev çubuğuna gider.",
+        unsupported: "Yüklü Prune uygulamasında kullanılabilir. Bu kopya bunu ayarlayamaz.",
+        disabledByWindows: "Windows, Prune’un başlangıç girdisini kapattı (Görev Yöneticisi’nin Başlangıç uygulamaları bölümünde). Yeniden açmak için bunu açın.",
+        foreign: "Oturum açma listenizde Prune adlı başka bir girdi zaten var. Bunu açmak onun yerine geçer.",
+        adminConflict: "Prune ayrıca her zaman yönetici olarak çalışacak şekilde ayarlı ve Windows böyle bir programı oturum açılırken sessizce başlatmaz: her seferinde onay ister veya başlatmaz. İsterseniz ikisinden birini kapatın.",
+        saveFailed: (a) => `Bu ayar değiştirilemedi: ${a}`,
+        loadFailed: (a) => `Bu ayar okunamadı: ${a}`
       }
     }
   },
@@ -780,6 +1212,18 @@ export default {
       last: {
         clean: (a, b, c) => `Останнє автоматичне очищення: ${a} — переміщено ${b}, звільнено ${c}`,
         errors: (a, b, c) => `Останнє автоматичне очищення: ${a} — деякі правила завершилися помилкою; переміщено ${b}, звільнено ${c}`
+      },
+      startup: {
+        title: "Запускати Prune під час входу у Windows",
+        description: "Додає Prune до програм, які Windows запускає під час входу, лише для вашого облікового запису та без прав адміністратора. Це можна будь-коли вимкнути тут.",
+        minimizedTitle: "Запускати згорнутим у системний трей",
+        minimizedNote: "Іде в системний трей, коли ввімкнено «Згорнути в системний трей», і на панель завдань, коли вимкнено.",
+        unsupported: "Доступно в установленому застосунку Prune. Ця копія не може цього налаштувати.",
+        disabledByWindows: "Windows вимкнула запис автозавантаження Prune (у Диспетчері завдань, на вкладці «Автозавантаження»). Увімкніть цей параметр, щоб увімкнути його знову.",
+        foreign: "У вашому списку автозавантаження вже є інший запис з назвою Prune. Увімкнення замінить його.",
+        adminConflict: "Prune також налаштовано завжди запускатися від імені адміністратора, а Windows не запускає таку програму під час входу тихо: щоразу питає підтвердження або не запускає її. Вимкніть один із двох параметрів, якщо хочете.",
+        saveFailed: (a) => `Не вдалося змінити цей параметр: ${a}`,
+        loadFailed: (a) => `Не вдалося прочитати цей параметр: ${a}`
       }
     }
   },
@@ -801,6 +1245,18 @@ export default {
       last: {
         clean: (a, b, c) => `Lần dọn dẹp tự động gần nhất: ${a} — đã chuyển ${b}, đã giải phóng ${c}`,
         errors: (a, b, c) => `Lần dọn dẹp tự động gần nhất: ${a} — một số quy tắc thất bại; đã chuyển ${b}, đã giải phóng ${c}`
+      },
+      startup: {
+        title: "Khởi động Prune khi tôi đăng nhập Windows",
+        description: "Thêm Prune vào các chương trình Windows khởi động khi bạn đăng nhập, chỉ cho tài khoản của bạn và không cần quyền quản trị. Bạn có thể tắt tại đây bất cứ lúc nào.",
+        minimizedTitle: "Khởi động thu nhỏ vào khay hệ thống",
+        minimizedNote: "Vào khay hệ thống khi Thu nhỏ vào khay hệ thống đang bật, và vào thanh tác vụ khi đang tắt.",
+        unsupported: "Có trong ứng dụng Prune đã cài đặt. Bản sao này không thể đặt được.",
+        disabledByWindows: "Windows đã tắt mục khởi động của Prune (trong Ứng dụng khởi động của Trình quản lý tác vụ). Hãy bật tùy chọn này để bật lại.",
+        foreign: "Danh sách đăng nhập của bạn đã có một mục khác tên Prune. Bật tùy chọn này sẽ thay thế nó.",
+        adminConflict: "Prune cũng được đặt để luôn chạy với tư cách quản trị viên, và Windows không khởi động chương trình như vậy một cách im lặng khi đăng nhập: nó hỏi phê duyệt mỗi lần, hoặc không khởi động. Hãy tắt một trong hai nếu bạn muốn.",
+        saveFailed: (a) => `Không thể thay đổi thiết lập này: ${a}`,
+        loadFailed: (a) => `Không thể đọc thiết lập này: ${a}`
       }
     }
   },
@@ -822,6 +1278,18 @@ export default {
       last: {
         clean: (a, b, c) => `上次自动清理：${a} — 已移动 ${b}，已释放 ${c}`,
         errors: (a, b, c) => `上次自动清理：${a} — 部分规则失败；已移动 ${b}，已释放 ${c}`
+      },
+      startup: {
+        title: "登录 Windows 时启动 Prune",
+        description: "将 Prune 加入 Windows 在你登录时启动的程序，仅限你的账户，无需管理员权限。你可以随时在此关闭。",
+        minimizedTitle: "启动时最小化到系统托盘",
+        minimizedNote: "开启“最小化到系统托盘”时进入系统托盘，关闭时进入任务栏。",
+        unsupported: "在已安装的 Prune 应用中可用。此副本无法设置。",
+        disabledByWindows: "Windows 已关闭 Prune 的启动项（在任务管理器的“启动应用”中）。开启此选项可重新启用。",
+        foreign: "你的登录启动列表中已有另一个名为 Prune 的条目。开启此选项会替换它。",
+        adminConflict: "Prune 还被设置为始终以管理员身份运行，而 Windows 不会在登录时静默启动这样的程序：每次都会请求批准，或者不启动。如果你不想这样，请关闭其中一项。",
+        saveFailed: (a) => `无法更改此设置：${a}`,
+        loadFailed: (a) => `无法读取此设置：${a}`
       }
     }
   },
@@ -843,6 +1311,18 @@ export default {
       last: {
         clean: (a, b, c) => `上次自動清理：${a} — 已移動 ${b}，已釋放 ${c}`,
         errors: (a, b, c) => `上次自動清理：${a} — 部分規則失敗；已移動 ${b}，已釋放 ${c}`
+      },
+      startup: {
+        title: "登入 Windows 時啟動 Prune",
+        description: "將 Prune 加入 Windows 在你登入時啟動的程式，僅限你的帳戶，不需要系統管理員權限。你可以隨時在此關閉。",
+        minimizedTitle: "啟動時最小化到系統匣",
+        minimizedNote: "開啟「最小化到系統匣」時進入系統匣，關閉時進入工作列。",
+        unsupported: "在已安裝的 Prune 應用程式中可用。此副本無法設定。",
+        disabledByWindows: "Windows 已關閉 Prune 的啟動項目（在工作管理員的「啟動應用程式」中）。開啟此選項可重新啟用。",
+        foreign: "你的登入啟動清單中已有另一個名為 Prune 的項目。開啟此選項會取代它。",
+        adminConflict: "Prune 還被設定為一律以系統管理員身分執行，而 Windows 不會在登入時靜默啟動這樣的程式：每次都會要求核准，或是不啟動。如果你不想這樣，請關閉其中一項。",
+        saveFailed: (a) => `無法變更此設定：${a}`,
+        loadFailed: (a) => `無法讀取此設定：${a}`
       }
     }
   }

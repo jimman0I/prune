@@ -551,6 +551,31 @@ export async function setRunAsAdmin(enabled) {
   if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
   return data;
 }
+/** "Start Prune when I sign in to Windows" (Settings, General): the per-user Run
+ * entry Windows itself honours, read from the registry by the backend.
+ * { supported, enabled, minimized, stale, foreign, disabledByWindows,
+ * runAsAdmin } -- see backend/src/services/startWithWindows.js. */
+export async function fetchStartWithWindows() {
+  const res = await fetch(`${API_URL}/settings/start-with-windows`);
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
+  return data;
+}
+
+/** Sets or clears that entry (and, with `minimized`, whether it starts Prune
+ * minimised). Only booleans are sent; the backend decides what is written, and
+ * refuses it in a development build. Resolves the new state. */
+export async function setStartWithWindows({ enabled, minimized }) {
+  const res = await fetch(`${API_URL}/settings/start-with-windows`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(minimized === undefined ? { enabled } : { enabled, minimized })
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
+  return data;
+}
+
 /** The running version, and -- only when the user has turned the update
  * check on -- whether GitHub has a newer release. With the setting off the
  * backend answers from this machine alone. */

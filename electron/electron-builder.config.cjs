@@ -61,9 +61,12 @@ module.exports = {
   // to a BrowserWindow -- so a missing one would not fail a build or a dev
   // run, and would fail in a packaged app as a crosshair that never appears.
   // hunterWidget.test.cjs checks that every file main.cjs names is listed.
+  //
+  // startMinimized.cjs is the eleventh: main.cjs requires it for the
+  // --start-minimized decisions, and installerLanguages.test.cjs catches its absence.
   files: [
     'main.cjs', 'preload.cjs', 'updater.cjs', 'windowState.cjs', 'zoom.cjs', 'relaunchAdmin.cjs', 'pathPicker.cjs',
-    'hunterWidget.cjs', 'hunterWidgetPreload.cjs', 'hunterWidget.html'
+    'hunterWidget.cjs', 'hunterWidgetPreload.cjs', 'hunterWidget.html', 'startMinimized.cjs'
   ],
   extraResources: [
     // NOTE the source: this copies from ../backend/src DIRECTLY, not from

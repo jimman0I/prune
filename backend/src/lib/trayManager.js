@@ -123,6 +123,10 @@ export async function initTray() {
 
   const icon = nativeImage.createFromPath(iconPath(app));
   const tray = new Tray(icon);
+  // main.cjs waits for this before it leaves a --start-minimized window hidden:
+  // a hidden window with no tray icon would be a window nobody can get back.
+  // (Name: electron/startMinimized.cjs TRAY_READY_EVENT.)
+  app.emit?.('prune:tray-ready');
 
   const refreshTooltip = () => { buildTooltip().then((text) => tray.setToolTip(text)); };
   refreshTooltip();

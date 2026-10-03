@@ -2,7 +2,9 @@ import { describe, it, expect, beforeAll, afterAll, beforeEach, vi } from 'vites
 import { startTestServer } from '../testSupport/routeServer.js';
 
 const service = vi.hoisted(() => ({ getRunAsAdminStatus: vi.fn(), setRunAsAdmin: vi.fn() }));
-vi.mock('../services/runAsAdmin.js', () => service);
+// The real module's other exports stay: the start-with-windows service, which the
+// app also mounts, builds on its registry helpers.
+vi.mock('../services/runAsAdmin.js', async (importOriginal) => ({ ...(await importOriginal()), ...service }));
 
 let server;
 beforeAll(async () => { server = await startTestServer(); });

@@ -67,6 +67,18 @@ see v1.0.1 below) are documented here.
   the lifetime total once per run. `prune-cli` now reads the app's own settings
   and Quarantine folder when run from an install (it used a different folder
   before, so it ignored your exclusions) and gains `clean --report`.
+- **Start Prune when I sign in to Windows**, minimised to the tray. Settings
+  -> General has an opt-in, off-by-default switch and a "Start minimized to the
+  tray" choice. It writes one per-user Run value, `Prune`, holding the quoted
+  path of the installed Prune.exe and, if chosen, `--start-minimized` (nothing
+  else; refused in a development build), and reads the real entry back from the
+  registry, including when Task Manager has switched it off. A minimised start
+  goes to the tray when "Minimize to tray" is on and to the taskbar when it is
+  off or the tray icon does not appear, so the window is never lost. Prune now
+  runs one copy at a time: opening it again shows the running window. When
+  "Always run as administrator" is also on, a warning says Windows will not
+  start it silently. Turning the switch off, or uninstalling Prune, removes the
+  entry.
 - Preview lists each rule's biggest files, and the Delete-now confirmation
   names the biggest items.
 - **Custom locations**: add your own paths to Deep Clean. **Import a

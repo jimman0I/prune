@@ -10,12 +10,41 @@ const { execFile } = require('node:child_process');
 const { createAdminRelaunch, parseRelaunchArg, waitForParentExit } = require('./relaunchAdmin.cjs');
 const { pickPaths } = require('./pathPicker.cjs');
 const { createHunterWidget, registerHunterIpc, postJson, RESULT_CHANNEL } = require('./hunterWidget.cjs');
+const fs = require('node:fs');
+const {
+  TRAY_READY_EVENT, parseStartMinimized, decideStartMode, readMinimizeToTray, settleHiddenStart, revealSteps, shouldRevealForSecondInstance
+} = require('./startMinimized.cjs');
 
 const BACKEND_PORT = 3101;
 
 // Prune's one window, for the Hunter crosshair to minimise and bring back (see
 // registerHunterHandlers). Set when the window is created, cleared when it closes.
 let mainWindow = null;
+
+/* Starting minimised (see startMinimized.cjs). `trayReady` flips when the
+ * backend's tray manager announces its icon; `revealRequested` remembers a
+ * second launch that arrived before the window existed, or while it was still
+ * settling into the tray, so that launch is never swallowed. */
+let trayReady = false;
+let revealRequested = false;
+
+/** Brings the window back: restored if minimised, shown if hidden, focused. */
+function revealMainWindow() {
+  revealRequested = true;
+  const win = mainWindow;
+  if (!win || win.isDestroyed()) return;
+  for (const step of revealSteps({ isMinimized: win.isMinimized() })) win[step]();
+}
+
+/** Waits for the tray icon, giving up after `timeoutMs`. */
+function waitForTray(timeoutMs = 15000) {
+  if (trayReady) return Promise.resolve(true);
+  return new Promise((resolve) => {
+    const timer = setTimeout(() => { app.removeListener(TRAY_READY_EVENT, onReady); resolve(false); }, timeoutMs);
+    const onReady = () => { clearTimeout(timer); resolve(true); };
+    app.once(TRAY_READY_EVENT, onReady);
+  });
+}
 
 function backendEntryPath() {
   return app.isPackaged
@@ -181,7 +210,15 @@ async function createWindow() {
     displays: screen.getAllDisplays(),
     defaultBounds: { width: 1280, height: 860 }
   });
+  /* Signed in to Windows by the Run key: --start-minimized. The window is made
+   * hidden, never shown and then hidden, so nothing flashes on screen. Where it
+   * ends up (tray or taskbar) is decided in settleStart below. */
+  const startMode = decideStartMode({
+    startMinimized: parseStartMinimized(process.argv),
+    minimizeToTray: readMinimizeToTray(settingsPath(), (file) => fs.readFileSync(file, 'utf8'))
+  });
   const win = new BrowserWindow({
+    show: startMode === 'normal',
     width: resolvedBounds.width,
     height: resolvedBounds.height,
     x: resolvedBounds.x,
@@ -297,7 +334,28 @@ async function createWindow() {
   wc.on('dom-ready', restoreZoom);
   wc.on('did-finish-load', restoreZoom);
 
-  if (resolvedBounds.isMaximized) win.maximize();
+  if (resolvedBounds.isMaximized) {
+    if (startMode === 'normal') {
+      win.maximize();
+    } else {
+      // maximize() would show a hidden window. Apply it the first time the
+      // person brings the window back, by either route.
+      win.once('show', () => win.maximize());
+      win.once('restore', () => win.maximize());
+    }
+  }
+
+  /* A hidden start ends in the tray (if the icon really appears) or minimised
+   * in the taskbar. Not awaited: the tray is created by the backend a moment
+   * after this, and the page should load meanwhile. A second launch that
+   * already brought the window back wins over minimising it again. */
+  if (startMode !== 'normal') {
+    settleHiddenStart({ mode: startMode, trayReady: () => trayReady, waitForTray }).then((settled) => {
+      if (settled === 'taskbar' && !revealRequested && !win.isDestroyed()) win.minimize();
+    }).catch(() => { if (!win.isDestroyed()) win.minimize(); });
+    // A second launch that arrived before this window existed.
+    if (revealRequested) revealMainWindow();
+  }
 
   if (stateFile) {
     let saveTimer = null;
@@ -456,10 +514,20 @@ app.whenReady().then(async () => {
   // An instance started by 'Restart as administrator' waits for the one that
   // started it to exit first: both would otherwise want the backend's port.
   const relaunchedFrom = parseRelaunchArg(process.argv);
-  const backendReady = (relaunchedFrom ? waitForParentExit(relaunchedFrom) : Promise.resolve())
-    .then(() => startBackend())
-    .then(() => waitForBackend());
+  /* One Prune at a time. A second launch hands over to the running one (which
+   * shows its window) and quits, instead of fighting it for the backend's port.
+   * The instance started by 'Restart as administrator' asks only after the old
+   * one has gone, or it would find the lock still held and quit itself. */
+  app.on(TRAY_READY_EVENT, () => { trayReady = true; }); // before the backend can create it
+  const gotLock = (relaunchedFrom ? waitForParentExit(relaunchedFrom) : Promise.resolve())
+    .then(() => app.requestSingleInstanceLock());
+  const backendReady = gotLock
+    .then((acquired) => (acquired ? startBackend().then(() => waitForBackend()) : undefined));
   backendReady.catch(() => {});
+  if (!(await gotLock)) { app.quit(); return; }
+  app.on('second-instance', (_event, argv) => {
+    if (shouldRevealForSecondInstance(argv)) revealMainWindow();
+  });
   registerUpdateHandlers();
   registerAdminHandlers();
   registerPickerHandler();

@@ -44,6 +44,7 @@ import backupsRoutes from './routes/backups.js';
 import statsRoutes from './routes/stats.js';
 import lowDiskRoutes from './routes/lowDisk.js';
 import scheduledCleanRoutes from './routes/scheduledClean.js';
+import startWithWindowsRoutes from './routes/startWithWindows.js';
 
 export function createApp({ port } = {}) {
   const app = express();
@@ -91,6 +92,7 @@ export function createApp({ port } = {}) {
   app.use('/api/disk-scan', diskScanRoutes);
   // Before /api/settings so its own path is matched first, whatever that router grows.
   app.use('/api/settings/run-as-admin', runAsAdminRoutes);
+  app.use('/api/settings/start-with-windows', startWithWindowsRoutes);
   app.use('/api/settings', settingsRoutes);
   app.use('/api/sandbox-test', sandboxTestRoutes);
   app.use('/api/deep-clean', deepCleanRoutes);
