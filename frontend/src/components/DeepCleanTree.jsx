@@ -97,7 +97,7 @@ function Checkbox({ state, onChange, label, size = 16, hit = size, className = '
  * null vs not), which remounts this span exactly once, when the answer
  * first lands, and never again while the value it already has just sits
  * there. The bare dash gets no animation: nothing has arrived yet. */
-function SizeLabel({ item }) {
+function SizeLabel({ item, elevated = false }) {
   const { t } = useLanguage();
   if (item.sizeBytes === null) {
     return <span className="font-mono text-[11px] shrink-0 text-[color:var(--text-muted)]">—</span>;
@@ -111,7 +111,9 @@ function SizeLabel({ item }) {
           <rect x="4" y="11" width="16" height="10" rx="2" />
           <path d="M8 11V7a4 4 0 0 1 8 0v4" />
         </svg>
-        {t('deepClean.tree.needsAdmin')}
+        {/* Already elevated, so "needs admin" would be false: Windows
+            itself refuses the folder (SYSTEM / TrustedInstaller). */}
+        {elevated ? t('deepCleanV3.protected.item') : t('deepClean.tree.needsAdmin')}
       </span>
     );
   }
@@ -195,7 +197,7 @@ function RuleFiles({ item }) {
   );
 }
 
-function CategorySection({ category, items, allItems = items, iconSrc, selected, onToggle, onToggleCategory, activeId, receiptMode = false, collapsed, onToggleCollapsed, filtering = false }) {
+function CategorySection({ category, items, allItems = items, iconSrc, selected, onToggle, onToggleCategory, activeId, receiptMode = false, collapsed, onToggleCollapsed, filtering = false, elevated = false }) {
   const { t } = useLanguage();
   // Display only: `category` and item.id stay the keys for icons, collapse
   // state and selection.
@@ -397,7 +399,7 @@ function CategorySection({ category, items, allItems = items, iconSrc, selected,
                 </button>
               )}
 
-              <SizeLabel key={item.sizeBytes === null ? 'pending' : 'measured'} item={item} />
+              <SizeLabel key={item.sizeBytes === null ? 'pending' : 'measured'} item={item} elevated={elevated} />
 
               <Checkbox
                 state={selected.has(item.id) ? 'all' : 'none'}
@@ -428,7 +430,7 @@ function CategorySection({ category, items, allItems = items, iconSrc, selected,
  * sizeBytes, ...}] }]. `icons` is { category: dataUri } from
  * GET /api/deep-clean/category-icons, and is allowed to be empty or to
  * arrive late -- every heading renders either way. */
-export default function DeepCleanTree({ categories, selected, onToggle, onToggleCategory, icons = {}, activeId = null, receiptMode = false }) {
+export default function DeepCleanTree({ categories, selected, onToggle, onToggleCategory, icons = {}, activeId = null, receiptMode = false, elevated = false }) {
   const { t } = useLanguage();
   const { language } = useCleanerText();
   const [query, setQuery] = useState('');
@@ -518,6 +520,7 @@ export default function DeepCleanTree({ categories, selected, onToggle, onToggle
             collapsed={collapsed.has(group.category)}
             onToggleCollapsed={toggleCollapsed}
             filtering={filtering}
+            elevated={elevated}
           />
         ))}
       </div>
