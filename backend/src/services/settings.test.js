@@ -48,6 +48,18 @@ describe('getSettings', () => {
     expect(settings.autoInstallUpdates).toBe(false);   // nothing installs unasked
     expect(settings.language).toBe('en');              // no Electron in this test env to detect another
     expect(settings.showFreeSpaceOnMap).toBe(false);   // WizTree ships it off too
+    expect(settings.rememberDiskMapScans).toBe(true);  // on: it only keeps two small files per drive
+  });
+
+  it('reads anything but an explicit false as remembering Disk Map scans', async () => {
+    await mkdir(dirname(process.env.UNREVO_SETTINGS_PATH), { recursive: true });
+    for (const value of ['no', 0, null, undefined]) {
+      await writeFile(process.env.UNREVO_SETTINGS_PATH, JSON.stringify({ rememberDiskMapScans: value }));
+      expect((await getSettings()).rememberDiskMapScans, String(value)).toBe(true);
+    }
+    await writeFile(process.env.UNREVO_SETTINGS_PATH, JSON.stringify({ rememberDiskMapScans: false }));
+    expect((await getSettings()).rememberDiskMapScans).toBe(false);
+    expect((await updateSettings({ theme: 'light' })).rememberDiskMapScans).toBe(false);
   });
 
   it('returns every key the app reads, so a missing one fails here', async () => {
