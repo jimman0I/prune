@@ -237,6 +237,13 @@ see v1.0.1 below) are documented here.
 
 ### Fixed
 
+- **The installer can close an administrator Prune.** Reinstalling while
+  Prune ran as administrator showed "press OK to close it", and OK did
+  nothing, because Windows won't let a normal program end an elevated one.
+  The installer and uninstaller now leave a small flag file in Prune's data
+  folder and the running app quits itself within a second. (This applies from
+  the next update: the version already installed does not know to look for
+  the flag, so close it by hand once.)
 - **Dropdown lists are readable.** The open list of a dropdown (the
   automation schedule's "How often", for one) was light text on a white
   popup in the dark theme. Every dropdown now draws an opaque list in the

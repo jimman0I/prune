@@ -8,6 +8,7 @@ const { resolveWindowState, loadWindowState, saveWindowState, saveWindowStateSyn
 const { zoomActionForInput, applyZoomAction, resolveSavedZoom, titleBarOverlayHeight } = require('./zoom.cjs');
 const { execFile } = require('node:child_process');
 const { createAdminRelaunch, parseRelaunchArg, waitForParentExit } = require('./relaunchAdmin.cjs');
+const { createInstallerQuitWatcher } = require('./installerQuit.cjs');
 const { pickPaths } = require('./pathPicker.cjs');
 const { createHunterWidget, registerHunterIpc, postJson, RESULT_CHANNEL } = require('./hunterWidget.cjs');
 const fs = require('node:fs');
@@ -575,6 +576,9 @@ app.whenReady().then(async () => {
   registerAdminHandlers();
   registerPickerHandler();
   registerHunterHandlers();
+  // The installer cannot end an elevated Prune from outside, so it leaves a
+  // flag file and the app quits itself (see installerQuit.cjs).
+  if (app.isPackaged) createInstallerQuitWatcher({ dir: app.getPath('userData'), onQuit: () => app.quit() });
 
   await createWindow();
   await backendReady;
