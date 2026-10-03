@@ -72,5 +72,10 @@ export const keys = {
   deepCleanScan: ['deepClean', 'scan'],
   deepCleanCategoryIcons: ['deepClean', 'categoryIcons'],
   customCleaners: ['deepClean', 'custom'],
-  diskScan: (path) => ['disk', 'scan', path]
+  diskScan: (path) => ['disk', 'scan', path],
+  /* The Disk Map's automatic scans. autoScansAll is the prefix of the others. */
+  autoScansAll: ['disk', 'autoScans'],
+  autoScans: (letter) => ['disk', 'autoScans', 'list', letter],
+  autoScanTree: (id, language) => ['disk', 'autoScans', 'tree', id, language],
+  autoScanGrowth: (olderId, newerId) => ['disk', 'autoScans', 'growth', olderId, newerId]
 };
