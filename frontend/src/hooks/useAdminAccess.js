@@ -10,8 +10,12 @@ import { canRestartAsAdmin, restartAsAdmin } from '../lib/adminRelaunch.js';
  *
  * `elevated` is false while unknown or when the status cannot be read: the
  * safe reading, since claiming "no prompt" and then raising one would be the
- * worse surprise. `canRestart` is true only inside the packaged desktop app
- * and only while not elevated. */
+ * worse surprise. `canRestart` is the opposite kind of claim -- it offers a
+ * restart as administrator -- so it needs the status to have been READ and to
+ * say "not elevated": while the query is loading or has failed, "not elevated"
+ * is only a default, and offering the button then showed it to a Prune that was
+ * already running as administrator. It is also true only inside the packaged
+ * desktop app. */
 export function useAdminAccess() {
   const status = useQuery({
     queryKey: keys.mftStatus,
@@ -21,6 +25,8 @@ export function useAdminAccess() {
     staleTime: Infinity
   });
   const elevated = status.data?.elevated === true;
+  // Read and said no: the one state in which restarting would change anything.
+  const knownNotElevated = status.isSuccess && status.data?.elevated === false;
 
   const [bridgeCanRestart, setBridgeCanRestart] = useState(false);
   useEffect(() => {
@@ -43,5 +49,5 @@ export function useAdminAccess() {
     else setOutcome({ kind: 'failed', error: result.error || '' });
   }, []);
 
-  return { elevated, canRestart: bridgeCanRestart && !elevated, restarting, outcome, restart };
+  return { elevated, canRestart: bridgeCanRestart && knownNotElevated, restarting, outcome, restart };
 }
