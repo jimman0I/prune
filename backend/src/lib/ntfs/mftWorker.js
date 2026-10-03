@@ -1,5 +1,5 @@
-import { openSync, readSync, closeSync, readFileSync, writeFileSync } from 'node:fs';
-import { runMftJob } from './mftJob.js';
+import { openSync, readSync, closeSync } from 'node:fs';
+import { runWorker } from './mftWorkerRun.js';
 
 /** The half of the MFT scan that touches a raw volume handle.
  *
@@ -11,21 +11,12 @@ import { runMftJob } from './mftJob.js';
  * when the user asks for a fast scan.
  *
  * Invoked as: mftWorker.js <jobPath> <outputPath>
- * The job is JSON: { drives: ['C', 'D'], maxDepth }. Always writes JSON to
- * <outputPath>, including on failure -- the unelevated parent cannot see
- * this process's stderr (it runs at a higher integrity level), so an error
- * that isn't written to the file is an error nobody ever sees. */
-const [jobPath, outPath] = process.argv.slice(2);
-
-try {
-  const job = JSON.parse(readFileSync(jobPath, 'utf8'));
-  writeFileSync(outPath, JSON.stringify(runMftJob(job, { openVolume })), 'utf8');
-} catch (err) {
-  try {
-    writeFileSync(outPath, JSON.stringify({ __error: err.message }), 'utf8');
-  } catch { /* nothing left to try */ }
-  process.exitCode = 1;
-}
+ * The job is JSON: { drives: ['C', 'D'], maxDepth }. Writes one JSON line per
+ * drive to <outputPath> (see mftWorkerRun.js), and an error line on failure --
+ * the unelevated parent cannot see this process's stderr (it runs at a higher
+ * integrity level), so an error that isn't written to the file is an error
+ * nobody ever sees. */
+process.exitCode = runWorker(process.argv.slice(2), { openVolume });
 
 /** \\.\C: is the raw volume, as opposed to C:\ the mounted filesystem. */
 function openVolume(letter) {

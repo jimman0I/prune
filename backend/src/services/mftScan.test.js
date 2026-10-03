@@ -18,12 +18,69 @@ beforeEach(async () => {
   ({ scanDrivesViaMft } = await import('./mftScan.js'));
 });
 
+/** What the helper writes (lib/ntfs/mftWorkerRun.js), as the runner hands it
+ * over: a header line then the tree line for a drive that was read, one line
+ * for one that was not. */
+const asLines = (drives) => drives.flatMap((d) => (d.tree
+  ? [Buffer.from(JSON.stringify({ driveLetter: d.driveLetter, stats: d.stats, hasTree: true })), Buffer.from(JSON.stringify(d.tree))]
+  : [Buffer.from(JSON.stringify(d))]));
+const ran = (...drives) => ({ ok: true, lines: asLines(drives) });
+
 const okTree = { name: 'C:', size: 1234, type: 'directory', children: [] };
 const okDrive = (driveLetter = 'C', extra = {}) => ({ driveLetter, tree: { ...okTree, name: `${driveLetter}:` }, stats: {}, ...extra });
 
+describe('scanDrivesViaMft: failures that say why', () => {
+  it('words a drive too large for one scan as that, with a code, whatever the helper said', async () => {
+    runElevatedNodeJsonMock.mockResolvedValue({ ok: false, error: 'Invalid string length' });
+    const result = await scanDrivesViaMft({});
+    expect(result).toMatchObject({ ok: false, code: 'scan_too_large' });
+    expect(result.error).toMatch(/more files than Prune could hold in one scan/);
+    expect(result.error).not.toMatch(/Invalid string length/);
+  });
+
+  it('carries the code through when the worker itself named it', async () => {
+    runElevatedNodeJsonMock.mockResolvedValue({ ok: false, error: 'x', code: 'scan_too_large' });
+    expect(await scanDrivesViaMft({})).toMatchObject({ ok: false, code: 'scan_too_large' });
+  });
+
+  it('carries the code of a drive that could not be held when every drive failed', async () => {
+    runElevatedNodeJsonMock.mockResolvedValue(ran({ driveLetter: 'C', error: 'too big', code: 'scan_too_large' }));
+    expect(await scanDrivesViaMft({})).toMatchObject({ ok: false, code: 'scan_too_large', error: 'too big' });
+  });
+
+  it('keeps the code on the failed drive beside the one that worked', async () => {
+    runElevatedNodeJsonMock.mockResolvedValue(ran(okDrive('C'), { driveLetter: 'D', error: 'too big', code: 'scan_too_large' }));
+    const result = await scanDrivesViaMft({ driveLetters: ['C', 'D'] });
+    expect(result.ok).toBe(true);
+    expect(result.drives[1]).toEqual({ driveLetter: 'D', error: 'too big', code: 'scan_too_large' });
+  });
+
+  it('says a helper that stopped without a word probably ran out of memory, and points at the folder walk', async () => {
+    runElevatedNodeJsonMock.mockResolvedValue({ ok: false, error: 'The helper stopped before it finished.', code: 'crashed' });
+    const result = await scanDrivesViaMft({});
+    expect(result.ok).toBe(false);
+    expect(result.error).toMatch(/memory/);
+    expect(result.error).toMatch(/Walk folders/);
+  });
+
+  it('can hand each tree back as the bytes the helper wrote, unparsed', async () => {
+    runElevatedNodeJsonMock.mockResolvedValue(ran(okDrive('C')));
+    const result = await scanDrivesViaMft({ raw: true });
+    expect(Buffer.isBuffer(result.drives[0].treeJson)).toBe(true);
+    expect(result.drives[0].tree).toBeUndefined();
+    expect(JSON.parse(result.drives[0].treeJson.toString()).name).toBe('C:');
+  });
+
+  it('asks the runner for lines, not one document', async () => {
+    runElevatedNodeJsonMock.mockResolvedValue(ran(okDrive('C')));
+    await scanDrivesViaMft({});
+    expect(runElevatedNodeJsonMock.mock.calls[0][2].lines).toBe(true);
+  });
+});
+
 describe('scanDrivesViaMft', () => {
   it('hands the worker one job covering every drive, so there is a single elevation prompt', async () => {
-    runElevatedNodeJsonMock.mockResolvedValue({ ok: true, data: { drives: [okDrive('C'), okDrive('D')] } });
+    runElevatedNodeJsonMock.mockResolvedValue(ran(okDrive('C'), okDrive('D')));
 
     await scanDrivesViaMft({ driveLetters: ['C', 'D'], maxDepth: 5 });
 
@@ -35,16 +92,13 @@ describe('scanDrivesViaMft', () => {
   });
 
   it('defaults to the C drive', async () => {
-    runElevatedNodeJsonMock.mockResolvedValue({ ok: true, data: { drives: [okDrive('C')] } });
+    runElevatedNodeJsonMock.mockResolvedValue(ran(okDrive('C')));
     await scanDrivesViaMft({});
     expect(runElevatedNodeJsonMock.mock.calls[0][2].input.drives).toEqual(['C']);
   });
 
   it('returns every drive\'s tree and stats on success', async () => {
-    runElevatedNodeJsonMock.mockResolvedValue({
-      ok: true,
-      data: { drives: [okDrive('C', { stats: { recordsRead: 800000, mftComplete: true } }), okDrive('D')] }
-    });
+    runElevatedNodeJsonMock.mockResolvedValue(ran(okDrive('C', { stats: { recordsRead: 800000, mftComplete: true } }), okDrive('D')));
     const result = await scanDrivesViaMft({ driveLetters: ['C', 'D'] });
     expect(result.ok).toBe(true);
     expect(result.drives).toHaveLength(2);
@@ -54,7 +108,7 @@ describe('scanDrivesViaMft', () => {
 
   // A single-drive caller written before multi-drive existed reads these.
   it('also exposes the first drive at the top level, for single-drive callers', async () => {
-    runElevatedNodeJsonMock.mockResolvedValue({ ok: true, data: { drives: [okDrive('D', { stats: { recordsRead: 5 } })] } });
+    runElevatedNodeJsonMock.mockResolvedValue(ran(okDrive('D', { stats: { recordsRead: 5 } })));
     const result = await scanDrivesViaMft({ driveLetters: ['D'] });
     expect(result.driveLetter).toBe('D');
     expect(result.tree.name).toBe('D:');
@@ -62,20 +116,14 @@ describe('scanDrivesViaMft', () => {
   });
 
   it('keeps the drives that worked when one drive failed, and reports the failure on that drive', async () => {
-    runElevatedNodeJsonMock.mockResolvedValue({
-      ok: true,
-      data: { drives: [okDrive('C'), { driveLetter: 'E', error: 'Not an NTFS volume' }] }
-    });
+    runElevatedNodeJsonMock.mockResolvedValue(ran(okDrive('C'), { driveLetter: 'E', error: 'Not an NTFS volume' }));
     const result = await scanDrivesViaMft({ driveLetters: ['C', 'E'] });
     expect(result.ok).toBe(true);
     expect(result.drives[1]).toEqual({ driveLetter: 'E', error: 'Not an NTFS volume' });
   });
 
   it('fails as a whole only when every drive failed', async () => {
-    runElevatedNodeJsonMock.mockResolvedValue({
-      ok: true,
-      data: { drives: [{ driveLetter: 'E', error: 'Not an NTFS volume' }] }
-    });
+    runElevatedNodeJsonMock.mockResolvedValue(ran({ driveLetter: 'E', error: 'Not an NTFS volume' }));
     const result = await scanDrivesViaMft({ driveLetters: ['E'] });
     expect(result).toEqual({ ok: false, error: 'Not an NTFS volume' });
   });
@@ -97,7 +145,7 @@ describe('scanDrivesViaMft', () => {
   // well-formed payload with no tree in it would otherwise reach the UI
   // as a successful scan of an empty drive.
   it('rejects a well-formed response that carries no drives', async () => {
-    runElevatedNodeJsonMock.mockResolvedValue({ ok: true, data: { stats: {} } });
+    runElevatedNodeJsonMock.mockResolvedValue({ ok: true, lines: [Buffer.from(JSON.stringify({ stats: {} }))] });
     const result = await scanDrivesViaMft({});
     expect(result.ok).toBe(false);
     expect(result.error).toMatch(/no tree|no drives/i);
@@ -116,7 +164,7 @@ describe('scanDrivesViaMft when Prune is already running as administrator', () =
   // user gave by starting Prune this way, on every scan, would make the
   // restart pointless.
   it('runs the helper directly and raises no prompt', async () => {
-    runNodeJsonMock.mockResolvedValue({ ok: true, data: { drives: [okDrive('C')] } });
+    runNodeJsonMock.mockResolvedValue(ran(okDrive('C')));
 
     const result = await scanDrivesViaMft({ driveLetters: ['C'] });
 
@@ -137,7 +185,7 @@ describe('scanDrivesViaMft when Prune is already running as administrator', () =
 
 describe('scanDrivesViaMft when Prune is not elevated', () => {
   it('goes through the UAC prompt as before', async () => {
-    runElevatedNodeJsonMock.mockResolvedValue({ ok: true, data: { drives: [okDrive('C')] } });
+    runElevatedNodeJsonMock.mockResolvedValue(ran(okDrive('C')));
     await scanDrivesViaMft({});
     expect(runElevatedNodeJsonMock).toHaveBeenCalledTimes(1);
     expect(runNodeJsonMock).not.toHaveBeenCalled();
@@ -145,7 +193,7 @@ describe('scanDrivesViaMft when Prune is not elevated', () => {
 });
 describe('scanDrivesViaMft exclusions', () => {
   it("hands the user's exclusions to the helper, which cannot read Prune's settings itself", async () => {
-    runElevatedNodeJsonMock.mockResolvedValue({ ok: true, data: { drives: [okDrive('C')] } });
+    runElevatedNodeJsonMock.mockResolvedValue(ran(okDrive('C')));
     await scanDrivesViaMft({ excludeFolders: ['D:\\Games'], excludeExtensions: ['.iso'] });
     const { input } = runElevatedNodeJsonMock.mock.calls[0][2];
     expect(input.excludeFolders).toEqual(['D:\\Games']);

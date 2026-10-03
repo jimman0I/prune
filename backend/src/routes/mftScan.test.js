@@ -83,6 +83,56 @@ describe('POST /mft-scan', () => {
   });
 });
 
+describe('POST /mft-scan: the reply', () => {
+  const treeBytes = (name) => Buffer.from(JSON.stringify({ name, size: 9, type: 'directory', children: [], folded: { count: 3, size: 4 } }));
+
+  it('writes each tree as the bytes it was handed and still answers valid JSON', async () => {
+    scanDrivesViaMft.mockResolvedValueOnce({
+      ok: true,
+      drives: [
+        { driveLetter: 'C', stats: { recordsRead: 5 }, treeJson: treeBytes('C:') },
+        { driveLetter: 'E', error: 'Not an NTFS volume' },
+        { driveLetter: 'D', stats: {}, treeJson: treeBytes('D:') }
+      ],
+      driveLetter: 'C',
+      stats: { recordsRead: 5 }
+    });
+    const res = await post({ driveLetters: ['C', 'E', 'D'] });
+    expect(res.status).toBe(200);
+    expect(res.body.drives.map((d) => d.driveLetter)).toEqual(['C', 'E', 'D']);
+    expect(res.body.drives[0].tree.folded).toEqual({ count: 3, size: 4 });
+    expect(res.body.drives[0].stats.recordsRead).toBe(5);
+    expect(res.body.drives[1].error).toBe('Not an NTFS volume');
+    expect(res.body.drives[2].tree.name).toBe('D:');
+  });
+
+  it('asks the service for raw trees, so the main process never parses one only to print it again', async () => {
+    await post({ driveLetters: ['C'] });
+    expect(scanDrivesViaMft.mock.calls[0][0].raw).toBe(true);
+  });
+
+  it("no longer repeats the first drive's tree at the top level, which doubled the reply", async () => {
+    const res = await post({ driveLetters: ['C'] });
+    expect(res.body.tree).toBeUndefined();
+    expect(res.body.driveLetter).toBe('C');
+  });
+
+  it('passes the reason code on a failure so the screen can word it', async () => {
+    scanDrivesViaMft.mockResolvedValueOnce({ ok: false, error: 'The drive has more files than Prune could hold in one scan.', code: 'scan_too_large' });
+    const res = await post({ driveLetters: ['C'] });
+    expect(res.status).toBe(500);
+    expect(res.body.code).toBe('scan_too_large');
+  });
+
+  it('turns a RangeError thrown while answering into the same sentence', async () => {
+    scanDrivesViaMft.mockRejectedValueOnce(new RangeError('Invalid string length'));
+    const res = await post({ driveLetters: ['C'] });
+    expect(res.status).toBe(500);
+    expect(res.body.code).toBe('scan_too_large');
+    expect(res.body.error).not.toMatch(/Invalid string length/);
+  });
+});
+
 describe('POST /mft-scan exclusions', () => {
   it("passes the user's excluded folders and file types to the scan", async () => {
     settings = { excludeFolders: ['D:\\Games'], excludeExtensions: ['.vhdx'] };

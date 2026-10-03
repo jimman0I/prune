@@ -3,6 +3,7 @@ import { scanDrivesViaMft } from '../services/mftScan.js';
 import { DEFAULT_MAX_DEPTH } from '../services/diskScan.js';
 import { isElevated } from '../lib/privilege.js';
 import { getSettings } from '../services/settings.js';
+import { classifyScanError, SCAN_TOO_LARGE_MESSAGE } from '../lib/scanErrors.js';
 
 const router = Router();
 
@@ -61,7 +62,9 @@ router.post('/', async (req, res) => {
       driveLetters,
       maxDepth,
       excludeFolders: Array.isArray(settings.excludeFolders) ? settings.excludeFolders : [],
-      excludeExtensions: Array.isArray(settings.excludeExtensions) ? settings.excludeExtensions : []
+      excludeExtensions: Array.isArray(settings.excludeExtensions) ? settings.excludeExtensions : [],
+      // Each drive's tree stays the bytes the helper wrote; see sendScan.
+      raw: true
     });
 
     // A declined prompt is a 200 carrying { cancelled: true }, not an
@@ -69,18 +72,57 @@ router.post('/', async (req, res) => {
     // no. Same convention /disk-health/elevated already uses.
     if (!result.ok) {
       if (result.cancelled) return res.json({ cancelled: true });
-      return res.status(500).json({ error: result.error });
+      return res.status(500).json({ error: result.error, ...(result.code ? { code: result.code } : {}) });
     }
 
-    res.json({
-      drives: result.drives,
-      tree: result.tree,
-      stats: result.stats,
-      driveLetter: result.driveLetter
-    });
+    await sendScan(res, result);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    // A string past V8's limit is a RangeError with no useful message.
+    const code = classifyScanError(err);
+    if (res.headersSent) return res.destroy(err);
+    res.status(500).json(code ? { error: SCAN_TOO_LARGE_MESSAGE, code } : { error: err.message });
   }
 });
+
+/** Writes the scan reply: { drives: [{ driveLetter, stats, tree } | { driveLetter, error }], driveLetter, stats }.
+ *
+ * Each tree goes out as the bytes the helper wrote, in pieces, rather than as
+ * one res.json() of the parsed object. On a drive with millions of files the
+ * tree is a couple of hundred megabytes: parsed it is over a gigabyte of heap
+ * in the process that hosts the whole app, and serialized again it is another
+ * giant string. The top-level `tree` that used to repeat the first drive is
+ * gone for the same reason (it doubled the reply, and the Disk Map reads
+ * `drives`). */
+async function sendScan(res, result) {
+  // The single-drive shape ({ tree, stats, driveLetter }) is still understood.
+  const all = result.drives ?? [{ driveLetter: result.driveLetter, tree: result.tree, stats: result.stats }];
+  const hasRaw = all.some((d) => d.treeJson);
+  if (!hasRaw) {
+    const drives = all.map(({ treeJson, ...rest }) => rest);
+    return res.json({ drives, stats: result.stats, driveLetter: result.driveLetter });
+  }
+
+  res.status(200).set('Content-Type', 'application/json; charset=utf-8');
+  const write = (chunk) => new Promise((resolve, reject) => {
+    if (res.write(chunk)) return resolve();
+    res.once('drain', resolve);
+    res.once('error', reject);
+  });
+  await write('{"drives":[');
+  let first = true;
+  for (const drive of all) {
+    await write(first ? '' : ',');
+    first = false;
+    if (drive.treeJson) {
+      await write(`{"driveLetter":${JSON.stringify(drive.driveLetter)},"stats":${JSON.stringify(drive.stats ?? {})},"tree":`);
+      await write(drive.treeJson);
+      await write('}');
+    } else {
+      await write(JSON.stringify(drive));
+    }
+  }
+  await write(`],"driveLetter":${JSON.stringify(result.driveLetter)},"stats":${JSON.stringify(result.stats ?? {})}}`);
+  res.end();
+}
 
 export default router;

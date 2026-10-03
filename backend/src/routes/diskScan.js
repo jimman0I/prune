@@ -6,6 +6,7 @@ import { getDriveSpace, getSystemDriveSpace } from '../services/diskSpace.js';
 import { scanPercent } from '../lib/scanPercent.js';
 import { putScanResult, getScanResult } from '../lib/scanResults.js';
 import { createLiveTree, relativeSegments } from '../lib/liveTree.js';
+import { foldTreeFiles } from '../lib/foldFiles.js';
 
 const router = Router();
 
@@ -154,7 +155,9 @@ router.get('/stream', async (req, res) => {
 
     // Only ever true when the user pressed Stop: the walk has no deadline.
     const truncated = controller.signal.aborted;
-    const resultId = putScanResult({ ...result, truncated });
+    // A walk of a drive can reach millions of files; the tree handed to the
+    // client keeps each folder's largest and folds the rest (lib/foldFiles.js).
+    const resultId = putScanResult(foldTreeFiles({ ...result, truncated }));
     sendEvent(res, 'complete', { type: 'complete', totalFiles: files, totalBytes: bytes, truncated, stoppedByUser, resultId });
   } catch (err) {
     if (!clientGone) sendEvent(res, 'error', { type: 'error', message: err.message });
@@ -219,7 +222,7 @@ router.get('/', async (req, res) => {
     // -- when true, `size` totals are a real but possibly INCOMPLETE lower
     // bound (whatever was actually visited before the deadline), not
     // guaranteed-accurate the way an untruncated scan's totals are.
-    res.json({ ...result, truncated: controller.signal.aborted });
+    res.json(foldTreeFiles({ ...result, truncated: controller.signal.aborted }));
   } finally {
     clearTimeout(timeout);
   }
