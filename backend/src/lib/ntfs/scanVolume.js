@@ -34,7 +34,7 @@ const BITMAP_RECORD = 6;
  * records were read, how many were unreadable, whether the MFT's own
  * runlist covered the whole table, and the totals a caller needs to check
  * the result against the volume itself (see the comment on `stats`). */
-export function scanVolume({ readAt, driveLabel = 'C:', maxDepth = 12, exclusions = null, onProgress } = {}) {
+export function scanVolume({ readAt, driveLabel = 'C:', maxDepth = 12, exclusions = null, onProgress, keepFiles, nodeBudget } = {}) {
   const bootBuffer = Buffer.alloc(512);
   readAt(bootBuffer, 0);
   const geometry = parseBootSector(bootBuffer);
@@ -124,7 +124,7 @@ export function scanVolume({ readAt, driveLabel = 'C:', maxDepth = 12, exclusion
   const tally = tallyEntries(records);
   // What the user's exclusions left out is reported, not silently dropped.
   const left = {};
-  const tree = buildTree(records, { name: driveLabel, maxDepth, exclusions, report: left });
+  const tree = buildTree(records, { name: driveLabel, maxDepth, exclusions, report: left, keepFiles, nodeBudget });
 
   return {
     tree,
@@ -163,6 +163,15 @@ export function scanVolume({ readAt, driveLabel = 'C:', maxDepth = 12, exclusion
       excludedItems: left.excludedItems,
       excludedSizeBytes: left.excludedSizeBytes,
       excludedAllocatedBytes: left.excludedAllocatedBytes,
+      // Files folded into "(N smaller files)" blocks so the result stays a size
+      // the app can hold (see buildTree). They are in every total above; only
+      // their individual nodes are not in the tree. `sizeFloorBytes` is 0
+      // unless the drive was so large that even the per-folder cap left too many.
+      foldedFiles: left.foldedFiles,
+      foldedBytes: left.foldedBytes,
+      keepFilesPerFolder: left.keepFiles,
+      sizeFloorBytes: left.sizeFloorBytes,
+      estimatedBytes: left.estimatedBytes,
       volumeBytes: geometry.volumeBytes,
       // The volume's own record of space in use ($Bitmap), the ground truth
       // allocatedBytes should land just under. null when it could not be read.

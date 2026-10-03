@@ -1,4 +1,5 @@
 import { createExclusionMatcher } from '../diskExclusions.js';
+import { KEEP_FILES_PER_FOLDER, BYTE_BUDGET, FoldPlanner, keptCount, newAggregate, addToAggregate, mergeExts, foldedBlock } from '../foldFiles.js';
 
 /** MFT record 5 is always the volume root directory. */
 export const ROOT_RECORD = 5;
@@ -46,10 +47,26 @@ const ORPHAN_BUCKET = 'Unknown (orphaned entries)';
  * `maxDepth` bounds only the SHAPE of the returned tree. The walk always
  * descends to the leaves, so a file twenty levels down still counts
  * toward every ancestor's total -- same contract the recursive scanner's
- * own DEFAULT_MAX_DEPTH already has. */
-export function buildTree(records, { name = 'C:', maxDepth = 12, exclusions = null, report = null } = {}) {
+ * own DEFAULT_MAX_DEPTH already has.
+ *
+ * FILES ARE FOLDED, directories never are. A drive with millions of files
+ * produced a result past V8's ~512 MB string limit ("Invalid string length"),
+ * and a node per file is more than anything downstream can usefully hold. So
+ * each folder keeps its `keepFiles` largest files as nodes and the rest become
+ * one `folded` block on the folder carrying their size, allocation, count and
+ * a per-type breakdown (see lib/foldFiles.js). Nothing leaves a total: a
+ * folder's size is still the sum of everything in it.
+ *
+ * When even that leaves more than `byteBudget` (estimated, serialized), the
+ * smallest kept files are folded too: a size floor is searched for that makes
+ * the drive fit. `report` gets foldedFiles, foldedBytes, sizeFloorBytes and
+ * estimatedBytes so the omission is stated. */
+export function buildTree(records, { name = 'C:', maxDepth = 12, exclusions = null, report = null, keepFiles = KEEP_FILES_PER_FOLDER, byteBudget = BYTE_BUDGET } = {}) {
   const isExcluded = createExclusionMatcher(exclusions);
-  if (report) { report.excludedItems = 0; report.excludedSizeBytes = 0; report.excludedAllocatedBytes = 0; }
+  if (report) {
+    report.excludedItems = 0; report.excludedSizeBytes = 0; report.excludedAllocatedBytes = 0;
+    report.foldedFiles = 0; report.foldedBytes = 0; report.sizeFloorBytes = 0; report.keepFiles = keepFiles; report.estimatedBytes = 0;
+  }
   // Only report allocation if the records carry it at all: a tree from an
   // older reader must not claim that everything occupies zero bytes.
   let hasAllocation = false;
@@ -65,6 +82,42 @@ export function buildTree(records, { name = 'C:', maxDepth = 12, exclusions = nu
     if (!childrenOf.has(parent)) childrenOf.set(parent, []);
     childrenOf.get(parent).push(recordNumber);
   }
+
+  // The size floor: the smallest size a file may have and still be kept as a
+  // node. -1 (keep everything the per-folder cap allows) unless the drive's
+  // estimated tree would not fit the byte budget.
+  const planner = new FoldPlanner({ keep: keepFiles });
+  for (const kids of childrenOf.values()) {
+    let sizes = null;
+    for (const kid of kids) {
+      const entry = records.get(kid);
+      if (!entry.isDirectory) (sizes ??= []).push(entry.sizeBytes);
+    }
+    planner.addFolder(sizes);
+  }
+  const sizeFloor = planner.floorFor(byteBudget);
+  if (report) { report.sizeFloorBytes = Math.max(sizeFloor, 0); report.estimatedBytes = planner.estimate(sizeFloor); }
+
+  // Every file folded anywhere, by type: the whole-drive breakdown stays exact
+  // even for folds too small to carry their own.
+  const foldedExts = new Map();
+
+  /** Keeps a folder's largest files as nodes (pushed onto `nodes`) and
+   * returns the block for the rest, or null when nothing was folded. */
+  const foldFiles = (entries, nodes) => {
+    if (entries.length > keepFiles || sizeFloor >= 0) entries.sort((a, b) => b.sizeBytes - a.sizeBytes);
+    const kept = keptCount(entries.length, entries.map((e) => e.sizeBytes), sizeFloor, keepFiles);
+    for (let i = 0; i < kept; i++) nodes.push(fileNode(entries[i]));
+    if (kept === entries.length) return null;
+    const aggregate = newAggregate();
+    for (let i = kept; i < entries.length; i++) {
+      const entry = entries[i];
+      addToAggregate(aggregate, entry.name, entry.sizeBytes, hasAllocation ? entry.allocatedBytes ?? 0 : 0);
+    }
+    mergeExts(foldedExts, aggregate);
+    if (report) { report.foldedFiles += aggregate.count; report.foldedBytes += aggregate.size; }
+    return foldedBlock(aggregate, { withAllocation: hasAllocation });
+  };
 
   // Every record whose bytes the root walk already counted. The sweep at
   // the end uses this to add what's left exactly once -- getting this
@@ -132,7 +185,16 @@ export function buildTree(records, { name = 'C:', maxDepth = 12, exclusions = nu
     let size = 0;
     // A directory's own index buffers sit on disk too.
     let allocated = entry.allocatedBytes ?? 0;
+    const plainFiles = [];
     for (const childRecord of childrenOf.get(recordNumber) || []) {
+      const childEntry = records.get(childRecord);
+      // Plain files are collected and folded together below; directories and
+      // excluded files go through nodeFor as they always did.
+      if (childEntry && !childEntry.isDirectory && !(isExcluded && isExcluded(`${path}\\${childEntry.name}`))) {
+        accounted.add(childRecord);
+        plainFiles.push(childEntry);
+        continue;
+      }
       const child = nodeFor(childRecord, depthRemaining - 1, path);
       if (!child) continue;
       size += child.size;
@@ -141,11 +203,25 @@ export function buildTree(records, { name = 'C:', maxDepth = 12, exclusions = nu
     }
     onPath.delete(recordNumber);
 
+    let folded = null;
+    if (plainFiles.length > 0) {
+      for (const f of plainFiles) {
+        size += f.sizeBytes;
+        allocated += f.allocatedBytes ?? 0;
+      }
+      // Past the depth cap the files are not shown at all, so nothing is made
+      // of them: they are in the totals, which is all they need to be.
+      if (depthRemaining > 0) folded = foldFiles(plainFiles, children);
+    }
+
     children.sort((a, b) => b.size - a.size);
     const node = { name: entry.name, size, type: 'directory' };
     if (hasAllocation) node.allocated = allocated;
     if (typeof entry.modified === 'number') node.modified = entry.modified;
-    if (depthRemaining > 0) node.children = children;
+    if (depthRemaining > 0) {
+      node.children = children;
+      if (folded) node.folded = folded;
+    }
     return node;
   }
 
@@ -165,6 +241,7 @@ export function buildTree(records, { name = 'C:', maxDepth = 12, exclusions = nu
   // and the one thing that must hold here is that each stray record's
   // bytes are counted once and only once.
   const strays = [];
+  const strayFiles = [];
   for (const [recordNumber, entry] of records) {
     if (recordNumber === ROOT_RECORD || accounted.has(recordNumber)) continue;
     if (entry.isDirectory) {
@@ -173,17 +250,19 @@ export function buildTree(records, { name = 'C:', maxDepth = 12, exclusions = nu
       if (typeof entry.modified === 'number') node.modified = entry.modified;
       strays.push(node);
     } else {
-      strays.push(fileNode(entry));
+      strayFiles.push(entry);
     }
   }
+  const strayFolded = strayFiles.length > 0 ? foldFiles(strayFiles, strays) : null;
 
   if (strays.length > 0) {
-    const straySize = strays.reduce((sum, n) => sum + n.size, 0);
-    const strayAllocated = strays.reduce((sum, n) => sum + (n.allocated ?? 0), 0);
+    const straySize = strays.reduce((sum, n) => sum + n.size, 0) + (strayFolded?.size ?? 0);
+    const strayAllocated = strays.reduce((sum, n) => sum + (n.allocated ?? 0), 0) + (strayFolded?.allocated ?? 0);
     total += straySize;
     totalAllocated += strayAllocated;
     const bucket = { name: ORPHAN_BUCKET, size: straySize, type: 'directory', children: strays.sort((a, b) => b.size - a.size) };
     if (hasAllocation) bucket.allocated = strayAllocated;
+    if (strayFolded) bucket.folded = strayFolded;
     children.push(bucket);
   }
 
@@ -193,5 +272,6 @@ export function buildTree(records, { name = 'C:', maxDepth = 12, exclusions = nu
   const rootModified = records.get(ROOT_RECORD)?.modified;
   if (typeof rootModified === 'number') root.modified = rootModified;
   root.children = children;
+  if (foldedExts.size > 0) root.foldedExts = Object.fromEntries(foldedExts);
   return root;
 }
