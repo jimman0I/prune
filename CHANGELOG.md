@@ -23,6 +23,22 @@ see v1.0.1 below) are documented here.
 - Tree rows and map blocks highlight each other; right-click gains
   Properties and Exclude this folder.
 - Save, reopen, delete and compare Disk Map scans.
+- **The Disk Map remembers the last scan of each drive.** A finished fast
+  scan or folder walk is saved on its own (the latest two per drive, never
+  touching scans you saved by hand), and the Disk Map opens on it at once,
+  marked "Scanned 3 hours ago", with Fast scan and Walk folders one click
+  away. Nothing scans by itself, and moving files to Quarantine stays off
+  until you scan again. Each saved scan is the folder tree plus the biggest
+  files, gzipped: a few MB, about 25 MB for a drive with a million folders
+  (measured). A partial scan is never kept, since it would make the next
+  comparison look like everything shrank. Settings -> General has a switch
+  (on by default) and offers to delete the saved ones when you turn it off.
+- **What grew since the last scan.** Above the map: the drive's total change
+  and the five folders that grew most (new folders included, anything under
+  1 MB left out), each opening in the map. It uses the same comparison as
+  Compare saved scans and warns when either scan was partial, the drive
+  changed size, or one was a fast scan and the other a folder walk.
+  Collapsible, and it stays collapsed.
 - The folder walk now runs to completion, shows results as it goes and has
   no time limit.
 

@@ -8,7 +8,7 @@ import { Treemap, ResponsiveContainer } from 'recharts';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { keys } from '../lib/queryClient.js';
 import { breadcrumbTrail } from '../lib/breadcrumbTrail.js';
-import { saveDiskScan, loadSavedScan, fetchDiskScan, stopDiskScan, scanDriveFast, fetchFileTypeIcons, quarantineDiskPath, revealInExplorer } from '../lib/api.js';
+import { saveDiskScan, saveAutoDiskScan, loadSavedScan, fetchDiskScan, stopDiskScan, scanDriveFast, fetchFileTypeIcons, quarantineDiskPath, revealInExplorer } from '../lib/api.js';
 import { useToasts } from '../hooks/useToasts.jsx';
 import { useQuarantineUndo } from '../hooks/useQuarantineUndo.js';
 import ContextMenu from './ContextMenu.jsx';
@@ -29,6 +29,9 @@ import { FolderTable } from './FolderTable.jsx';
 import { SearchBox } from './SearchBox.jsx';
 import { PropertiesDialog } from './PropertiesDialog.jsx';
 import { SavedScansPanel } from './SavedScansPanel.jsx';
+import { LastScanBanner } from './LastScanBanner.jsx';
+import { GrowthSummary } from './GrowthSummary.jsx';
+import { useLastDiskScan } from '../hooks/useLastDiskScan.js';
 import { prepareSnapshot } from '../lib/liveSnapshot.js';
 import { compactTree, expandArchive } from '../lib/compactTree.js';
 import { ExportButtons } from './ExportButtons.jsx';
@@ -535,7 +538,7 @@ export function FastScanNote({ note }) {
 }
 
 function DiskMap() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [currentPath, setCurrentPath] = useState(DEFAULT_ROOT);
   const [hovered, setHovered] = useState(null);
   // Whole drives, read from the MFT in one pass, by drive letter. While a
@@ -569,6 +572,14 @@ function DiskMap() {
   // The drives whose root the user chose to walk. Set only by the button that
   // says so: a whole-drive crawl is opt-in; see the effect below.
   const [crawlRoots, setCrawlRoots] = useState(() => new Set());
+  // Saves a finished scan of a drive as its automatic scan. Assigned further
+  // down, where everything it needs exists; held in a ref so the scan's own
+  // callbacks always reach the current one.
+  const autoSaveRef = useRef(null);
+  // Per drive, the id of the automatic scan this window just saved. The growth
+  // summary only sits beside a live scan when the two latest saves are that
+  // scan and the one before it.
+  const [justSaved, setJustSaved] = useState({});
 
   const { drives, systemDrive } = useDrives();
   const admin = useAdminAccess();
@@ -619,13 +630,18 @@ function DiskMap() {
       // Only a scan that actually finished is remembered. A declined prompt
       // (above) or a failure (the catch) would teach the estimate nonsense.
       writeFastScanMs(safeStorage(), Date.now() - startedAt);
+      const withPaths = scanned.map((drive) => ({ drive, tree: attachFullPaths(drive.tree, rootOfDrive(drive.letter)) }));
       setFastTrees((prev) => {
         const next = { ...prev };
-        for (const drive of scanned) {
-          next[drive.letter] = { tree: attachFullPaths(drive.tree, rootOfDrive(drive.letter)), stats: drive.stats };
-        }
+        for (const { drive, tree } of withPaths) next[drive.letter] = { tree, stats: drive.stats };
         return next;
       });
+      // After the results have painted: reducing a big drive to its folder tree
+      // is real work, and the person is already looking at the scan.
+      for (const { drive, tree } of withPaths) {
+        const partial = drive.stats?.mftComplete === false || Boolean(tree.truncated);
+        setTimeout(() => { autoSaveRef.current?.(drive.letter, tree, 'fast', partial); }, 0);
+      }
       setAlsoScan(new Set());
       setCurrentPath(rootOfDrive(scanned.some((d) => d.letter === here) ? here : scanned[0].letter));
     } catch (err) {
@@ -634,6 +650,12 @@ function DiskMap() {
     } finally {
       setFastScanning(false);
     }
+  };
+
+  /** Walks the current drive's folders, from its root. Only ever from a click. */
+  const handleCrawlDrive = () => {
+    rememberMode('crawl');
+    setCrawlRoots((prev) => new Set(prev).add(currentLetter));
   };
 
   /** Switching drive only changes which root is on screen. */
@@ -659,7 +681,7 @@ function DiskMap() {
    * unscanned-remainder calculation, and holding it in state would
    * re-render the whole treemap when it lands. */
   const { diskSpace } = useDiskSpace();
-  const { settings, save: saveSettings } = useSettings();
+  const { settings, loading: settingsLoading, save: saveSettings } = useSettings();
   useEffect(() => {
     const used = { ...usedBytesRef.current };
     // The API reports free and total; used is the subtraction. Read off
@@ -683,7 +705,28 @@ function DiskMap() {
   // A reopened saved scan stands in for its drive's live tree while it is open.
   const [savedView, setSavedView] = useState(null);
   const [savedOpen, setSavedOpen] = useState(false);
-  const savedHere = savedView && savedView.letter === currentLetter ? savedView : null;
+  const manualHere = savedView && savedView.letter === currentLetter ? savedView : null;
+
+  /* The drive's last remembered scan, shown at once when nothing newer is on
+   * screen. It goes through the same `savedHere` as a scan reopened by hand,
+   * so everything that needs the live drive (moving to Quarantine) is off for
+   * it in exactly the same way. It steps aside the moment a fast scan of the
+   * drive lands or the folder walk is started. Nothing is scanned to show it. */
+  const rememberScans = !settingsLoading && settings?.rememberDiskMapScans !== false;
+  const wantLastScan = rememberScans && !manualHere && Boolean(currentLetter) && !fastTrees[currentLetter] && !crawlRoot;
+  const last = useLastDiskScan(currentLetter, {
+    enabled: rememberScans,
+    wantTree: wantLastScan,
+    language,
+    aggregateLabel: (count) => t('diskMap.aggregateCell', count)
+  });
+  const lastScanView = wantLastScan && last.tree && last.latest
+    ? { letter: currentLetter, tree: last.tree, label: last.latest.label, savedAt: last.latest.savedAt, auto: true }
+    : null;
+  const savedHere = manualHere ?? lastScanView;
+  // Finding out whether there is a last scan: the drive chooser waits for it
+  // rather than flashing up and being replaced.
+  const lookingForLastScan = settingsLoading || (wantLastScan && last.loading);
   const fastEntry = savedHere
     ? { tree: savedHere.tree, stats: null }
     : currentLetter ? fastTrees[currentLetter] ?? null : null;
@@ -754,7 +797,7 @@ function DiskMap() {
           }));
         }
       });
-      return attachFullPaths(
+      const finished = attachFullPaths(
         // Only at a drive root: a truncated scan of a subfolder has no
         // used-space figure to reconcile against.
         isDriveRoot(currentPath)
@@ -762,6 +805,14 @@ function DiskMap() {
           : (stoppedByUser ? { ...result, stoppedByUser } : result),
         currentPath
       );
+      // A whole drive walked to the end is remembered like a fast scan. A walk
+      // that was stopped or cut short is not: as the baseline of the next
+      // comparison it would make everything it missed look like it had shrunk.
+      if (isDriveRoot(currentPath) && !stoppedByUser && !result.truncated) {
+        const letter = driveLetterOf(currentPath);
+        setTimeout(() => { autoSaveRef.current?.(letter, finished, 'crawl', false); }, 0);
+      }
+      return finished;
     }
   });
 
@@ -957,6 +1008,30 @@ function DiskMap() {
     ? fastTrees[currentLetter]?.tree ?? queryClient.getQueryData(keys.diskScan(rootOfDrive(currentLetter))) ?? null
     : null;
 
+  /* Remembering a finished scan (Settings -> General). Always quiet: it is a
+   * convenience, and a failure -- no room, a backend that has gone, a drive too
+   * big to save -- must never cost the person the scan they are looking at. A
+   * partial scan is not saved at all (see where it is called). */
+  autoSaveRef.current = async (letter, tree, source, partial) => {
+    if (partial || !rememberScans) return;
+    try {
+      const archive = compactTree(tree, { rootName: `${letter}:` });
+      const capacity = drives?.find((d) => d.letter === letter)?.totalBytes
+        ?? (letter === 'C' ? diskSpace?.totalBytes : undefined);
+      const meta = await saveAutoDiskScan({
+        drive: letter,
+        label: t('diskMapQolV3.auto.label', `${letter}:`),
+        source,
+        truncated: false,
+        capacityBytes: typeof capacity === 'number' ? capacity : undefined,
+        archive
+      });
+      if (!meta) return;
+      setJustSaved((prev) => ({ ...prev, [letter]: meta.id }));
+      queryClient.invalidateQueries({ queryKey: keys.autoScansAll });
+    } catch { /* quietly: the scan on screen is unaffected */ }
+  };
+
   const handleSaveScan = async (label) => {
     const fromFast = Boolean(fastTrees[currentLetter]);
     const archive = compactTree(liveRoot, { rootName: `${currentLetter}:` });
@@ -1138,7 +1213,7 @@ function DiskMap() {
             it's a question about whether they do the same thing. That is
             true of the drive-root chooser AND of the scanning panel, which
             now carries its own escape hatch. */}
-        {!loading && !(!error && !tree && isDriveRoot(currentPath)) && (
+        {!loading && !savedHere?.auto && !(!error && !tree && isDriveRoot(currentPath)) && (
           <button
             className="btn-ghost px-3.5 py-2 rounded-lg text-[12.5px] font-medium shrink-0 disabled:opacity-50"
             onClick={handleFastScan}
@@ -1150,7 +1225,19 @@ function DiskMap() {
         </div>
       </div>
 
-      {savedHere && (
+      {savedHere?.auto && (
+        <LastScanBanner
+          drive={currentLetter}
+          savedAt={savedHere.savedAt}
+          onFastScan={handleFastScan}
+          onCrawl={handleCrawlDrive}
+          fastScanning={fastScanning}
+          fastUnavailable={nonNtfsRoot}
+          lastMode={lastMode}
+        />
+      )}
+
+      {savedHere && !savedHere.auto && (
         <div role="status" className="flex items-center gap-3 flex-wrap mb-5 px-3.5 py-3 rounded-xl bg-[color:var(--warning-soft)] border border-[color:var(--warning)]/25">
           <p className="flex-1 min-w-0 text-[12.5px] text-[color:var(--warning)] select-text">
             {t('diskMapV3.saved.viewing', savedHere.label, new Date(savedHere.savedAt).toLocaleString())}
@@ -1209,12 +1296,12 @@ function DiskMap() {
 
       {/* The drive root, before a choice has been made. Nothing is scanning
           and nothing is going to until one of these is pressed. */}
-      {!loading && !error && !tree && isDriveRoot(currentPath) && !fastScanning && (
+      {!loading && !error && !tree && isDriveRoot(currentPath) && !fastScanning && !lookingForLastScan && (
         <DriveRootPrompt
           path={currentPath}
           onFastScan={handleFastScan}
           fastScanning={fastScanning}
-          onCrawl={() => { rememberMode('crawl'); setCrawlRoots((prev) => new Set(prev).add(currentLetter)); }}
+          onCrawl={handleCrawlDrive}
           admin={{ ...admin, onRestart: admin.restart }}
           lastMode={lastMode}
           otherDrives={(drives ?? []).filter((d) => d.letter !== currentLetter && d.ntfs)}
@@ -1280,6 +1367,15 @@ function DiskMap() {
             </button>
           </div>
         </div>
+      )}
+
+      {/* What changed since the scan before this one: between the drive's two
+          latest remembered scans, whether that is the one on screen now or the
+          one this window just made. Absent without two, or beside a scan
+          opened by hand. */}
+      {showViews && !loading && rememberScans && !manualHere && last.latest && last.previous
+        && (savedHere?.auto || justSaved[currentLetter] === last.latest.id) && (
+        <GrowthSummary key={`${last.previous.id}:${last.latest.id}`} older={last.previous} newer={last.latest} onDrill={handleDrillDown} />
       )}
 
       {/* WizTree's own split, and only its own: Tree View and File View.

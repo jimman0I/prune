@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useLanguage } from '../i18n/LanguageContext.jsx';
 import { formatBytes } from '../lib/formatBytes.js';
+import { signedBytes as signed } from '../lib/growthSummary.js';
 import { fetchSavedScans, deleteSavedScan, compareSavedScans } from '../lib/api.js';
 import ModalOverlay from './ModalOverlay.jsx';
 
@@ -109,7 +110,14 @@ export function SavedScansPanel({ onClose, canSave, defaultLabel, onSave, onOpen
                     className="accent-[color:var(--accent-primary)]"
                   />
                   <div className="min-w-0 flex-1">
-                    <div className="text-[13px] text-[color:var(--text-primary)] truncate">{scan.label}</div>
+                    <div className="flex items-center gap-2 min-w-0">
+                      <span className="text-[13px] text-[color:var(--text-primary)] truncate">{scan.label}</span>
+                      {scan.auto === true && (
+                        <span className="text-[11px] font-medium px-1.5 py-0.5 rounded-full border border-[color:var(--control-border)] text-[color:var(--text-secondary)] shrink-0">
+                          {t('diskMapQolV3.auto.badge')}
+                        </span>
+                      )}
+                    </div>
                     <div className="text-[11.5px] font-mono text-[color:var(--text-muted)] truncate">
                       {dateOf(scan.savedAt)} · {sourceOf(scan)} · {formatBytes(scan.totalBytes)}
                       {scan.truncated && <> · {t('diskMapV3.saved.partial')}</>}
@@ -158,10 +166,6 @@ export function SavedScansPanel({ onClose, canSave, defaultLabel, onSave, onOpen
       </div>
     </ModalOverlay>
   );
-}
-
-function signed(bytes) {
-  return `${bytes > 0 ? '+' : bytes < 0 ? '−' : ''}${formatBytes(Math.abs(bytes))}`;
 }
 
 function ComparisonView({ comparison, onBack }) {

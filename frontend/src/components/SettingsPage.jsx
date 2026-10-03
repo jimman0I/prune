@@ -8,6 +8,7 @@ import Toggle from './Toggle.jsx';
 import CookieKeepListSettings from './CookieKeepListSettings.jsx';
 import CustomCleanersSettings from './CustomCleanersSettings.jsx';
 import RunAsAdminSetting from './RunAsAdminSetting.jsx';
+import RememberScansSetting from './RememberScansSetting.jsx';
 import { useSettings, useUpdateCheck } from '../hooks/useSystemQueries.js';
 import { leftoverDestinationFrom } from '../lib/leftoverDestination.js';
 import { removalModeFrom } from '../lib/cleanOutcome.js';
@@ -448,6 +449,10 @@ function SettingsPage({ onReportBug = null }) {
                   onChange={() => save({ showFreeSpaceOnMap: !isOnlyIfTrue('showFreeSpaceOnMap') })}
                 />
               </div>
+
+              {/* Keeps the Disk Map's last two scans of each drive, so it opens
+                  on one at once and can say what grew. On by default. */}
+              <RememberScansSetting remembering={isOn('rememberDiskMapScans')} onChange={(on) => save({ rememberDiskMapScans: on })} />
             </div>
           )}
 
