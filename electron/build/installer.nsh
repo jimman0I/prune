@@ -33,6 +33,41 @@
 ; electron/installerLanguages.test.cjs fails if a language the installer
 ; offers has no translation here.
 
+; Asking a running Prune to quit before the installer (or uninstaller) touches
+; its files.
+;
+; The stock check ends the process through Windows, and Windows refuses when
+; Prune runs as Administrator ("Always run as administrator", or "Restart Prune
+; as administrator") because this installer does not: the person got "press OK
+; to close it", pressed OK, and nothing closed. A same-user file is not subject
+; to that rule, so a flag file is left in Prune's data folder; the running app
+; (electron/installerQuit.cjs) sees it within a second and quits itself. Waits
+; up to ten seconds for that, then the stock check carries on exactly as
+; before for anything still running. Nothing here needs administrator rights.
+!macro PruneAskAppToQuit
+  nsExec::Exec '"$SYSDIR\cmd.exe" /C tasklist /FI "IMAGENAME eq ${APP_EXECUTABLE_FILENAME}" /NH | find /I "${APP_EXECUTABLE_FILENAME}"'
+  Pop $R8
+  ${if} $R8 == 0
+    CreateDirectory "$APPDATA\Prune"
+    FileOpen $R9 "$APPDATA\Prune\installer-quit.flag" w
+    FileWrite $R9 "quit"
+    FileClose $R9
+    StrCpy $R8 0
+    pruneQuitWait:
+      Sleep 500
+      IntOp $R8 $R8 + 1
+      nsExec::Exec '"$SYSDIR\cmd.exe" /C tasklist /FI "IMAGENAME eq ${APP_EXECUTABLE_FILENAME}" /NH | find /I "${APP_EXECUTABLE_FILENAME}"'
+      Pop $R9
+      ${if} $R9 == 0
+        ${if} $R8 < 20
+          Goto pruneQuitWait
+        ${endIf}
+      ${endIf}
+    ; Whatever happened, the flag must not outlive this run.
+    Delete "$APPDATA\Prune\installer-quit.flag"
+  ${endIf}
+!macroend
+
 !ifndef BUILD_UNINSTALLER
 
 !macro customHeader
@@ -639,6 +674,10 @@
   FunctionEnd
 !macroend
 
+!macro customInit
+  !insertmacro PruneAskAppToQuit
+!macroend
+
 !macro customPageAfterChangeDir
   Page custom updatesPageCreate updatesPageLeave
 !macroend
@@ -694,6 +733,10 @@
 ; installs the new version over it, and the task should survive that (the app
 ; also re-points it at the install folder on its next start).
 !ifdef BUILD_UNINSTALLER
+
+!macro customUnInit
+  !insertmacro PruneAskAppToQuit
+!macroend
 
 !macro customUnInstall
   ${ifNot} ${isUpdated}
