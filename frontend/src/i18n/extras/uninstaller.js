@@ -165,10 +165,10 @@ export default {
         restoreNotCreated: (r) => (r ? `Not created (${r})` : 'Not created')
       },
       extensions: {
-        manage: "Manage",
-        manageAria: (n) => `Manage ${n} in its browser`,
-        opened: (b) => `Opened the extensions page in ${b}. Prune can't remove an extension itself; remove it there.`,
-        failed: "Couldn't open the browser's extensions page"
+        manage: "Copy page address",
+        manageAria: (n) => `Copy page address for ${n}`,
+        copied: (b) => `Copied the extension's page address. Paste it into ${b}'s address bar. Prune can't remove an extension itself; remove it there.`,
+        failed: "Couldn't copy the page address"
       }
     }
   },
@@ -334,10 +334,10 @@ export default {
         restoreNotCreated: (r) => (r ? `Nie geskep nie (${r})` : 'Nie geskep nie')
       },
       extensions: {
-        manage: "Bestuur",
-        manageAria: (n) => `Bestuur ${n} in sy blaaier`,
-        opened: (b) => `Die uitbreidingsbladsy in ${b} is oopgemaak. Prune kan nie self 'n uitbreiding verwyder nie; verwyder dit daar.`,
-        failed: "Kon nie die blaaier se uitbreidingsbladsy oopmaak nie"
+        manage: "Kopieer bladsyadres",
+        manageAria: (n) => `Kopieer bladsyadres vir ${n}`,
+        copied: (b) => `Die uitbreiding se bladsyadres is gekopieer. Plak dit in die adresbalk van ${b}. Prune kan nie self 'n uitbreiding verwyder nie; verwyder dit daar.`,
+        failed: "Kon nie die bladsyadres kopieer nie"
       }
     }
   },
@@ -503,10 +503,10 @@ export default {
         restoreNotCreated: (r) => (r ? `لم يتم إنشاؤها (${r})` : 'لم يتم إنشاؤها')
       },
       extensions: {
-        manage: "إدارة",
-        manageAria: (n) => `إدارة ${n} في متصفحه`,
-        opened: (b) => `تم فتح صفحة الإضافات في ${b}. لا يستطيع Prune إزالة الإضافة بنفسه؛ أزلها من هناك.`,
-        failed: "تعذّر فتح صفحة إضافات المتصفح"
+        manage: "نسخ عنوان الصفحة",
+        manageAria: (n) => `نسخ عنوان الصفحة لـ ${n}`,
+        copied: (b) => `تم نسخ عنوان صفحة الإضافة. الصقه في شريط عنوان ${b}. لا يستطيع Prune إزالة الإضافة بنفسه؛ أزلها من هناك.`,
+        failed: "تعذّر نسخ عنوان الصفحة"
       }
     }
   },
@@ -672,10 +672,10 @@ export default {
         restoreNotCreated: (r) => (r ? `No creat (${r})` : 'No creat')
       },
       extensions: {
-        manage: "Gestiona",
-        manageAria: (n) => `Gestiona ${n} al seu navegador`,
-        opened: (b) => `S'ha obert la pàgina d'extensions a ${b}. Prune no pot eliminar una extensió per si mateix; elimina-la allà.`,
-        failed: "No s'ha pogut obrir la pàgina d'extensions del navegador"
+        manage: "Copia l'adreça de la pàgina",
+        manageAria: (n) => `Copia l'adreça de la pàgina de ${n}`,
+        copied: (b) => `S'ha copiat l'adreça de la pàgina de l'extensió. Enganxa-la a la barra d'adreces de ${b}. Prune no pot eliminar una extensió per si mateix; elimina-la allà.`,
+        failed: "No s'ha pogut copiar l'adreça de la pàgina"
       }
     }
   },
@@ -841,10 +841,10 @@ export default {
         restoreNotCreated: (r) => (r ? `Nevytvořen (${r})` : 'Nevytvořen')
       },
       extensions: {
-        manage: "Spravovat",
-        manageAria: (n) => `Spravovat ${n} v jeho prohlížeči`,
-        opened: (b) => `Stránka rozšíření se otevřela v prohlížeči ${b}. Prune rozšíření sám odebrat nemůže; odeberte je tam.`,
-        failed: "Stránku rozšíření prohlížeče se nepodařilo otevřít"
+        manage: "Kopírovat adresu stránky",
+        manageAria: (n) => `Kopírovat adresu stránky pro ${n}`,
+        copied: (b) => `Adresa stránky rozšíření byla zkopírována. Vložte ji do adresního řádku prohlížeče ${b}. Prune rozšíření sám odebrat nemůže; odeberte je tam.`,
+        failed: "Adresu stránky se nepodařilo zkopírovat"
       }
     }
   },
@@ -1010,10 +1010,10 @@ export default {
         restoreNotCreated: (r) => (r ? `Heb ei greu (${r})` : 'Heb ei greu')
       },
       extensions: {
-        manage: "Rheoli",
-        manageAria: (n) => `Rheoli ${n} yn ei borwr`,
-        opened: (b) => `Agorwyd tudalen yr estyniadau yn ${b}. Ni all Prune dynnu estyniad ei hun; tynnwch ef yno.`,
-        failed: "Methu agor tudalen estyniadau'r porwr"
+        manage: "Copïo cyfeiriad y dudalen",
+        manageAria: (n) => `Copïo cyfeiriad y dudalen ar gyfer ${n}`,
+        copied: (b) => `Copïwyd cyfeiriad tudalen yr estyniad. Gludwch ef ym mar cyfeiriad ${b}. Ni all Prune dynnu estyniad ei hun; tynnwch ef yno.`,
+        failed: "Methu copïo cyfeiriad y dudalen"
       }
     }
   },
@@ -1179,10 +1179,10 @@ export default {
         restoreNotCreated: (r) => (r ? `Ikke oprettet (${r})` : 'Ikke oprettet')
       },
       extensions: {
-        manage: "Administrer",
-        manageAria: (n) => `Administrer ${n} i dens browser`,
-        opened: (b) => `Udvidelsessiden er åbnet i ${b}. Prune kan ikke selv fjerne en udvidelse; fjern den dér.`,
-        failed: "Browserens udvidelsesside kunne ikke åbnes"
+        manage: "Kopiér sideadresse",
+        manageAria: (n) => `Kopiér sideadressen for ${n}`,
+        copied: (b) => `Udvidelsens sideadresse er kopieret. Sæt den ind i adresselinjen i ${b}. Prune kan ikke selv fjerne en udvidelse; fjern den dér.`,
+        failed: "Sideadressen kunne ikke kopieres"
       }
     }
   },
@@ -1348,10 +1348,10 @@ export default {
         restoreNotCreated: (r) => (r ? `Nicht erstellt (${r})` : 'Nicht erstellt')
       },
       extensions: {
-        manage: "Verwalten",
-        manageAria: (n) => `${n} in seinem Browser verwalten`,
-        opened: (b) => `Die Erweiterungsseite wurde in ${b} geöffnet. Prune kann eine Erweiterung nicht selbst entfernen; entfernen Sie sie dort.`,
-        failed: "Die Erweiterungsseite des Browsers konnte nicht geöffnet werden"
+        manage: "Seitenadresse kopieren",
+        manageAria: (n) => `Seitenadresse von ${n} kopieren`,
+        copied: (b) => `Die Adresse der Erweiterungsseite wurde kopiert. Fügen Sie sie in die Adressleiste von ${b} ein. Prune kann eine Erweiterung nicht selbst entfernen; entfernen Sie sie dort.`,
+        failed: "Die Seitenadresse konnte nicht kopiert werden"
       }
     }
   },
@@ -1517,10 +1517,10 @@ export default {
         restoreNotCreated: (r) => (r ? `Δεν δημιουργήθηκε (${r})` : 'Δεν δημιουργήθηκε')
       },
       extensions: {
-        manage: "Διαχείριση",
-        manageAria: (n) => `Διαχείριση του ${n} στο πρόγραμμα περιήγησής του`,
-        opened: (b) => `Άνοιξε η σελίδα επεκτάσεων στο ${b}. Το Prune δεν μπορεί να αφαιρέσει μόνο του μια επέκταση· αφαιρέστε την εκεί.`,
-        failed: "Δεν ήταν δυνατό το άνοιγμα της σελίδας επεκτάσεων του προγράμματος περιήγησης"
+        manage: "Αντιγραφή διεύθυνσης σελίδας",
+        manageAria: (n) => `Αντιγραφή διεύθυνσης σελίδας για το ${n}`,
+        copied: (b) => `Η διεύθυνση της σελίδας της επέκτασης αντιγράφηκε. Επικολλήστε την στη γραμμή διευθύνσεων του ${b}. Το Prune δεν μπορεί να αφαιρέσει μόνο του μια επέκταση· αφαιρέστε την εκεί.`,
+        failed: "Δεν ήταν δυνατή η αντιγραφή της διεύθυνσης σελίδας"
       }
     }
   },
@@ -1686,10 +1686,10 @@ export default {
         restoreNotCreated: (r) => (r ? `No creado (${r})` : 'No creado')
       },
       extensions: {
-        manage: "Administrar",
-        manageAria: (n) => `Administrar ${n} en su navegador`,
-        opened: (b) => `Se abrió la página de extensiones en ${b}. Prune no puede quitar una extensión por sí mismo; quítala allí.`,
-        failed: "No se pudo abrir la página de extensiones del navegador"
+        manage: "Copiar dirección de la página",
+        manageAria: (n) => `Copiar dirección de la página de ${n}`,
+        copied: (b) => `Se copió la dirección de la página de la extensión. Pégala en la barra de direcciones de ${b}. Prune no puede quitar una extensión por sí mismo; quítala allí.`,
+        failed: "No se pudo copiar la dirección de la página"
       }
     }
   },
@@ -1855,10 +1855,10 @@ export default {
         restoreNotCreated: (r) => (r ? `Loomata (${r})` : 'Loomata')
       },
       extensions: {
-        manage: "Halda",
-        manageAria: (n) => `Halda ${n} selle brauseris`,
-        opened: (b) => `Laienduste leht avati brauseris ${b}. Prune ei saa laiendust ise eemaldada; eemalda see seal.`,
-        failed: "Brauseri laienduste lehte ei saanud avada"
+        manage: "Kopeeri lehe aadress",
+        manageAria: (n) => `Kopeeri lehe aadress: ${n}`,
+        copied: (b) => `Laienduse lehe aadress kopeeriti. Kleebi see brauseri ${b} aadressiribale. Prune ei saa laiendust ise eemaldada; eemalda see seal.`,
+        failed: "Lehe aadressi ei saanud kopeerida"
       }
     }
   },
@@ -2024,10 +2024,10 @@ export default {
         restoreNotCreated: (r) => (r ? `Ei luotu (${r})` : 'Ei luotu')
       },
       extensions: {
-        manage: "Hallitse",
-        manageAria: (n) => `Hallitse ${n} sen selaimessa`,
-        opened: (b) => `Laajennussivu avattiin selaimessa ${b}. Prune ei voi poistaa laajennusta itse; poista se siellä.`,
-        failed: "Selaimen laajennussivua ei voitu avata"
+        manage: "Kopioi sivun osoite",
+        manageAria: (n) => `Kopioi sivun osoite: ${n}`,
+        copied: (b) => `Laajennuksen sivun osoite kopioitiin. Liitä se selaimen ${b} osoiteriville. Prune ei voi poistaa laajennusta itse; poista se siellä.`,
+        failed: "Sivun osoitetta ei voitu kopioida"
       }
     }
   },
@@ -2193,10 +2193,10 @@ export default {
         restoreNotCreated: (r) => (r ? `Non créé (${r})` : 'Non créé')
       },
       extensions: {
-        manage: "Gérer",
-        manageAria: (n) => `Gérer ${n} dans son navigateur`,
-        opened: (b) => `La page des extensions est ouverte dans ${b}. Prune ne peut pas supprimer une extension lui-même ; supprimez-la là-bas.`,
-        failed: "Impossible d'ouvrir la page des extensions du navigateur"
+        manage: "Copier l'adresse de la page",
+        manageAria: (n) => `Copier l'adresse de la page de ${n}`,
+        copied: (b) => `L'adresse de la page de l'extension est copiée. Collez-la dans la barre d'adresse de ${b}. Prune ne peut pas supprimer une extension lui-même ; supprimez-la là-bas.`,
+        failed: "Impossible de copier l'adresse de la page"
       }
     }
   },
@@ -2362,10 +2362,10 @@ export default {
         restoreNotCreated: (r) => (r ? `לא נוצרה (${r})` : 'לא נוצרה')
       },
       extensions: {
-        manage: "ניהול",
-        manageAria: (n) => `ניהול ${n} בדפדפן שלו`,
-        opened: (b) => `דף התוספים נפתח ב-${b}. Prune אינו יכול להסיר תוסף בעצמו; הסירו אותו שם.`,
-        failed: "לא ניתן לפתוח את דף התוספים של הדפדפן"
+        manage: "העתקת כתובת הדף",
+        manageAria: (n) => `העתקת כתובת הדף של ${n}`,
+        copied: (b) => `כתובת דף התוסף הועתקה. הדביקו אותה בשורת הכתובת של ${b}. Prune אינו יכול להסיר תוסף בעצמו; הסירו אותו שם.`,
+        failed: "לא ניתן להעתיק את כתובת הדף"
       }
     }
   },
@@ -2531,10 +2531,10 @@ export default {
         restoreNotCreated: (r) => (r ? `Nem jött létre (${r})` : 'Nem jött létre')
       },
       extensions: {
-        manage: "Kezelés",
-        manageAria: (n) => `${n} kezelése a böngészőjében`,
-        opened: (b) => `Megnyílt a bővítmények oldala itt: ${b}. A Prune nem tudja maga eltávolítani a bővítményt; távolítsa el ott.`,
-        failed: "A böngésző bővítményoldala nem nyitható meg"
+        manage: "Oldalcím másolása",
+        manageAria: (n) => `${n} oldalcímének másolása`,
+        copied: (b) => `A bővítmény oldalának címe a vágólapra másolva. Illessze be a(z) ${b} címsorába. A Prune nem tudja maga eltávolítani a bővítményt; távolítsa el ott.`,
+        failed: "Az oldalcím nem másolható"
       }
     }
   },
@@ -2700,10 +2700,10 @@ export default {
         restoreNotCreated: (r) => (r ? `Tidak dibuat (${r})` : 'Tidak dibuat')
       },
       extensions: {
-        manage: "Kelola",
-        manageAria: (n) => `Kelola ${n} di peramban-nya`,
-        opened: (b) => `Halaman ekstensi dibuka di ${b}. Prune tidak dapat menghapus ekstensi sendiri; hapus di sana.`,
-        failed: "Tidak dapat membuka halaman ekstensi peramban"
+        manage: "Salin alamat halaman",
+        manageAria: (n) => `Salin alamat halaman ${n}`,
+        copied: (b) => `Alamat halaman ekstensi disalin. Tempel ke bilah alamat ${b}. Prune tidak dapat menghapus ekstensi sendiri; hapus di sana.`,
+        failed: "Tidak dapat menyalin alamat halaman"
       }
     }
   },
@@ -2869,10 +2869,10 @@ export default {
         restoreNotCreated: (r) => (r ? `Ekki búið til (${r})` : 'Ekki búið til')
       },
       extensions: {
-        manage: "Stjórna",
-        manageAria: (n) => `Stjórna ${n} í vafranum sínum`,
-        opened: (b) => `Viðbótasíðan var opnuð í ${b}. Prune getur ekki fjarlægt viðbót sjálft; fjarlægðu hana þar.`,
-        failed: "Ekki tókst að opna viðbótasíðu vafrans"
+        manage: "Afrita slóð síðunnar",
+        manageAria: (n) => `Afrita slóð síðu ${n}`,
+        copied: (b) => `Slóð viðbótasíðunnar var afrituð. Límdu hana í veffangastiku vafrans ${b}. Prune getur ekki fjarlægt viðbót sjálft; fjarlægðu hana þar.`,
+        failed: "Ekki tókst að afrita slóð síðunnar"
       }
     }
   },
@@ -3038,10 +3038,10 @@ export default {
         restoreNotCreated: (r) => (r ? `Non creato (${r})` : 'Non creato')
       },
       extensions: {
-        manage: "Gestisci",
-        manageAria: (n) => `Gestisci ${n} nel suo browser`,
-        opened: (b) => `La pagina delle estensioni è stata aperta in ${b}. Prune non può rimuovere un'estensione da solo; rimuovila lì.`,
-        failed: "Impossibile aprire la pagina delle estensioni del browser"
+        manage: "Copia indirizzo pagina",
+        manageAria: (n) => `Copia l'indirizzo della pagina di ${n}`,
+        copied: (b) => `L'indirizzo della pagina dell'estensione è stato copiato. Incollalo nella barra degli indirizzi di ${b}. Prune non può rimuovere un'estensione da solo; rimuovila lì.`,
+        failed: "Impossibile copiare l'indirizzo della pagina"
       }
     }
   },
@@ -3207,10 +3207,10 @@ export default {
         restoreNotCreated: (r) => (r ? `作成されませんでした (${r})` : '作成されませんでした')
       },
       extensions: {
-        manage: "管理",
-        manageAria: (n) => `${n} をブラウザーで管理`,
-        opened: (b) => `${b} で拡張機能のページを開きました。Prune 自身では拡張機能を削除できないため、そこで削除してください。`,
-        failed: "ブラウザーの拡張機能ページを開けませんでした"
+        manage: "ページのアドレスをコピー",
+        manageAria: (n) => `${n} のページのアドレスをコピー`,
+        copied: (b) => `拡張機能のページのアドレスをコピーしました。${b} のアドレスバーに貼り付けてください。Prune 自身では拡張機能を削除できないため、そこで削除してください。`,
+        failed: "ページのアドレスをコピーできませんでした"
       }
     }
   },
@@ -3376,10 +3376,10 @@ export default {
         restoreNotCreated: (r) => (r ? `생성되지 않음 (${r})` : '생성되지 않음')
       },
       extensions: {
-        manage: "관리",
-        manageAria: (n) => `${n}을(를) 해당 브라우저에서 관리`,
-        opened: (b) => `${b}에서 확장 프로그램 페이지를 열었습니다. Prune은 확장 프로그램을 직접 제거할 수 없으니 그곳에서 제거하세요.`,
-        failed: "브라우저의 확장 프로그램 페이지를 열 수 없습니다"
+        manage: "페이지 주소 복사",
+        manageAria: (n) => `${n}의 페이지 주소 복사`,
+        copied: (b) => `확장 프로그램 페이지 주소를 복사했습니다. ${b}의 주소 표시줄에 붙여넣으세요. Prune은 확장 프로그램을 직접 제거할 수 없으니 그곳에서 제거하세요.`,
+        failed: "페이지 주소를 복사할 수 없습니다"
       }
     }
   },
@@ -3545,10 +3545,10 @@ export default {
         restoreNotCreated: (r) => (r ? `Nesukurtas (${r})` : 'Nesukurtas')
       },
       extensions: {
-        manage: "Tvarkyti",
-        manageAria: (n) => `Tvarkyti ${n} jo naršyklėje`,
-        opened: (b) => `Plėtinių puslapis atidarytas naršyklėje ${b}. „Prune“ pati negali pašalinti plėtinio; pašalinkite jį ten.`,
-        failed: "Nepavyko atidaryti naršyklės plėtinių puslapio"
+        manage: "Kopijuoti puslapio adresą",
+        manageAria: (n) => `Kopijuoti ${n} puslapio adresą`,
+        copied: (b) => `Plėtinio puslapio adresas nukopijuotas. Įklijuokite jį į naršyklės ${b} adreso juostą. „Prune“ pati negali pašalinti plėtinio; pašalinkite jį ten.`,
+        failed: "Nepavyko nukopijuoti puslapio adreso"
       }
     }
   },
@@ -3714,10 +3714,10 @@ export default {
         restoreNotCreated: (r) => (r ? `Tidak dicipta (${r})` : 'Tidak dicipta')
       },
       extensions: {
-        manage: "Urus",
-        manageAria: (n) => `Urus ${n} dalam pelayar-nya`,
-        opened: (b) => `Halaman sambungan dibuka dalam ${b}. Prune tidak boleh mengalih keluar sambungan sendiri; alihkan di sana.`,
-        failed: "Tidak dapat membuka halaman sambungan pelayar"
+        manage: "Salin alamat halaman",
+        manageAria: (n) => `Salin alamat halaman ${n}`,
+        copied: (b) => `Alamat halaman sambungan disalin. Tampalkannya ke bar alamat ${b}. Prune tidak boleh mengalih keluar sambungan sendiri; alihkan di sana.`,
+        failed: "Tidak dapat menyalin alamat halaman"
       }
     }
   },
@@ -3883,10 +3883,10 @@ export default {
         restoreNotCreated: (r) => (r ? `Ikke opprettet (${r})` : 'Ikke opprettet')
       },
       extensions: {
-        manage: "Administrer",
-        manageAria: (n) => `Administrer ${n} i nettleseren`,
-        opened: (b) => `Utvidelsessiden er åpnet i ${b}. Prune kan ikke fjerne en utvidelse selv; fjern den der.`,
-        failed: "Kunne ikke åpne nettleserens utvidelsesside"
+        manage: "Kopier sideadresse",
+        manageAria: (n) => `Kopier sideadressen til ${n}`,
+        copied: (b) => `Utvidelsens sideadresse er kopiert. Lim den inn i adressefeltet i ${b}. Prune kan ikke fjerne en utvidelse selv; fjern den der.`,
+        failed: "Kunne ikke kopiere sideadressen"
       }
     }
   },
@@ -4052,10 +4052,10 @@ export default {
         restoreNotCreated: (r) => (r ? `Niet aangemaakt (${r})` : 'Niet aangemaakt')
       },
       extensions: {
-        manage: "Beheren",
-        manageAria: (n) => `${n} beheren in de browser`,
-        opened: (b) => `De extensiepagina is geopend in ${b}. Prune kan een extensie niet zelf verwijderen; verwijder hem daar.`,
-        failed: "De extensiepagina van de browser kon niet worden geopend"
+        manage: "Paginaadres kopiëren",
+        manageAria: (n) => `Paginaadres van ${n} kopiëren`,
+        copied: (b) => `Het paginaadres van de extensie is gekopieerd. Plak het in de adresbalk van ${b}. Prune kan een extensie niet zelf verwijderen; verwijder hem daar.`,
+        failed: "Het paginaadres kon niet worden gekopieerd"
       }
     }
   },
@@ -4221,10 +4221,10 @@ export default {
         restoreNotCreated: (r) => (r ? `Nie utworzono (${r})` : 'Nie utworzono')
       },
       extensions: {
-        manage: "Zarządzaj",
-        manageAria: (n) => `Zarządzaj ${n} w jego przeglądarce`,
-        opened: (b) => `Otwarto stronę rozszerzeń w ${b}. Prune nie może samodzielnie usunąć rozszerzenia; usuń je tam.`,
-        failed: "Nie można otworzyć strony rozszerzeń przeglądarki"
+        manage: "Kopiuj adres strony",
+        manageAria: (n) => `Kopiuj adres strony rozszerzenia ${n}`,
+        copied: (b) => `Skopiowano adres strony rozszerzenia. Wklej go w pasku adresu przeglądarki ${b}. Prune nie może samodzielnie usunąć rozszerzenia; usuń je tam.`,
+        failed: "Nie można skopiować adresu strony"
       }
     }
   },
@@ -4390,10 +4390,10 @@ export default {
         restoreNotCreated: (r) => (r ? `نه دی جوړ شوی (${r})` : 'نه دی جوړ شوی')
       },
       extensions: {
-        manage: "اداره کول",
-        manageAria: (n) => `${n} د هغه په براوزر کې اداره کړئ`,
-        opened: (b) => `په ${b} کې د توسیعونو پاڼه پرانستل شوه. Prune پخپله توسیع نه شي لرې کولای؛ هلته یې لرې کړئ.`,
-        failed: "د براوزر د توسیعونو پاڼه نه شوه پرانستل کېدای"
+        manage: "د پاڼې پته کاپي کړئ",
+        manageAria: (n) => `د ${n} د پاڼې پته کاپي کړئ`,
+        copied: (b) => `د توسیع د پاڼې پته کاپي شوه. په ${b} کې یې د پتې په بار کې پیسټ کړئ. Prune پخپله توسیع نه شي لرې کولای؛ هلته یې لرې کړئ.`,
+        failed: "د پاڼې پته کاپي نه شوه"
       }
     }
   },
@@ -4559,10 +4559,10 @@ export default {
         restoreNotCreated: (r) => (r ? `Não criado (${r})` : 'Não criado')
       },
       extensions: {
-        manage: "Gerenciar",
-        manageAria: (n) => `Gerenciar ${n} no navegador dele`,
-        opened: (b) => `A página de extensões foi aberta no ${b}. O Prune não pode remover uma extensão sozinho; remova-a lá.`,
-        failed: "Não foi possível abrir a página de extensões do navegador"
+        manage: "Copiar endereço da página",
+        manageAria: (n) => `Copiar endereço da página de ${n}`,
+        copied: (b) => `O endereço da página da extensão foi copiado. Cole-o na barra de endereços do ${b}. O Prune não pode remover uma extensão sozinho; remova-a lá.`,
+        failed: "Não foi possível copiar o endereço da página"
       }
     }
   },
@@ -4728,10 +4728,10 @@ export default {
         restoreNotCreated: (r) => (r ? `Não criado (${r})` : 'Não criado')
       },
       extensions: {
-        manage: "Gerir",
-        manageAria: (n) => `Gerir ${n} no respetivo navegador`,
-        opened: (b) => `A página de extensões foi aberta no ${b}. O Prune não pode remover uma extensão sozinho; remova-a aí.`,
-        failed: "Não foi possível abrir a página de extensões do navegador"
+        manage: "Copiar endereço da página",
+        manageAria: (n) => `Copiar endereço da página de ${n}`,
+        copied: (b) => `O endereço da página da extensão foi copiado. Cole-o na barra de endereços do ${b}. O Prune não pode remover uma extensão sozinho; remova-a aí.`,
+        failed: "Não foi possível copiar o endereço da página"
       }
     }
   },
@@ -4897,10 +4897,10 @@ export default {
         restoreNotCreated: (r) => (r ? `Necreat (${r})` : 'Necreat')
       },
       extensions: {
-        manage: "Gestionează",
-        manageAria: (n) => `Gestionează ${n} în browserul său`,
-        opened: (b) => `Pagina de extensii s-a deschis în ${b}. Prune nu poate elimina singur o extensie; elimin-o acolo.`,
-        failed: "Nu s-a putut deschide pagina de extensii a browserului"
+        manage: "Copiază adresa paginii",
+        manageAria: (n) => `Copiază adresa paginii pentru ${n}`,
+        copied: (b) => `Adresa paginii extensiei a fost copiată. Lipește-o în bara de adrese din ${b}. Prune nu poate elimina singur o extensie; elimin-o acolo.`,
+        failed: "Nu s-a putut copia adresa paginii"
       }
     }
   },
@@ -5066,10 +5066,10 @@ export default {
         restoreNotCreated: (r) => (r ? `Не создана (${r})` : 'Не создана')
       },
       extensions: {
-        manage: "Управление",
-        manageAria: (n) => `Управление ${n} в его браузере`,
-        opened: (b) => `Страница расширений открыта в ${b}. Prune не может сам удалить расширение — удалите его там.`,
-        failed: "Не удалось открыть страницу расширений браузера"
+        manage: "Копировать адрес страницы",
+        manageAria: (n) => `Копировать адрес страницы для ${n}`,
+        copied: (b) => `Адрес страницы расширения скопирован. Вставьте его в адресную строку браузера ${b}. Prune не может сам удалить расширение — удалите его там.`,
+        failed: "Не удалось скопировать адрес страницы"
       }
     }
   },
@@ -5235,10 +5235,10 @@ export default {
         restoreNotCreated: (r) => (r ? `Nevytvorený (${r})` : 'Nevytvorený')
       },
       extensions: {
-        manage: "Spravovať",
-        manageAria: (n) => `Spravovať ${n} v jeho prehliadači`,
-        opened: (b) => `Stránka rozšírení sa otvorila v prehliadači ${b}. Prune rozšírenie sám odstrániť nemôže; odstráňte ho tam.`,
-        failed: "Stránku rozšírení prehliadača sa nepodarilo otvoriť"
+        manage: "Kopírovať adresu stránky",
+        manageAria: (n) => `Kopírovať adresu stránky pre ${n}`,
+        copied: (b) => `Adresa stránky rozšírenia bola skopírovaná. Vložte ju do adresného riadka prehliadača ${b}. Prune rozšírenie sám odstrániť nemôže; odstráňte ho tam.`,
+        failed: "Adresu stránky sa nepodarilo skopírovať"
       }
     }
   },
@@ -5404,10 +5404,10 @@ export default {
         restoreNotCreated: (r) => (r ? `Nuk u krijua (${r})` : 'Nuk u krijua')
       },
       extensions: {
-        manage: "Menaxho",
-        manageAria: (n) => `Menaxho ${n} në shfletuesin e tij`,
-        opened: (b) => `Faqja e zgjerimeve u hap në ${b}. Prune nuk mund ta heqë vetë një zgjerim; hiqeni atje.`,
-        failed: "Faqja e zgjerimeve të shfletuesit nuk u hap dot"
+        manage: "Kopjo adresën e faqes",
+        manageAria: (n) => `Kopjo adresën e faqes së ${n}`,
+        copied: (b) => `Adresa e faqes së zgjerimit u kopjua. Ngjiteni te shiriti i adresës i ${b}. Prune nuk mund ta heqë vetë një zgjerim; hiqeni atje.`,
+        failed: "Adresa e faqes nuk u kopjua dot"
       }
     }
   },
@@ -5573,10 +5573,10 @@ export default {
         restoreNotCreated: (r) => (r ? `Није креирана (${r})` : 'Није креирана')
       },
       extensions: {
-        manage: "Управљај",
-        manageAria: (n) => `Управљај ${n} у његовом прегледачу`,
-        opened: (b) => `Страница проширења је отворена у ${b}. Prune не може сам да уклони проширење; уклоните га тамо.`,
-        failed: "Није могуће отворити страницу проширења прегледача"
+        manage: "Копирај адресу странице",
+        manageAria: (n) => `Копирај адресу странице за ${n}`,
+        copied: (b) => `Адреса странице проширења је копирана. Налепите је у траку за адресу прегледача ${b}. Prune не може сам да уклони проширење; уклоните га тамо.`,
+        failed: "Није могуће копирати адресу странице"
       }
     }
   },
@@ -5742,10 +5742,10 @@ export default {
         restoreNotCreated: (r) => (r ? `Inte skapad (${r})` : 'Inte skapad')
       },
       extensions: {
-        manage: "Hantera",
-        manageAria: (n) => `Hantera ${n} i dess webbläsare`,
-        opened: (b) => `Tilläggssidan öppnades i ${b}. Prune kan inte ta bort ett tillägg själv; ta bort det där.`,
-        failed: "Det gick inte att öppna webbläsarens tilläggssida"
+        manage: "Kopiera sidadress",
+        manageAria: (n) => `Kopiera sidadressen för ${n}`,
+        copied: (b) => `Tilläggets sidadress har kopierats. Klistra in den i adressfältet i ${b}. Prune kan inte ta bort ett tillägg själv; ta bort det där.`,
+        failed: "Det gick inte att kopiera sidadressen"
       }
     }
   },
@@ -5911,10 +5911,10 @@ export default {
         restoreNotCreated: (r) => (r ? `ไม่ได้สร้าง (${r})` : 'ไม่ได้สร้าง')
       },
       extensions: {
-        manage: "จัดการ",
-        manageAria: (n) => `จัดการ ${n} ในเบราว์เซอร์ของมัน`,
-        opened: (b) => `เปิดหน้าส่วนขยายใน ${b} แล้ว Prune ลบส่วนขยายด้วยตัวเองไม่ได้ ให้ลบที่นั่น`,
-        failed: "เปิดหน้าส่วนขยายของเบราว์เซอร์ไม่ได้"
+        manage: "คัดลอกที่อยู่หน้า",
+        manageAria: (n) => `คัดลอกที่อยู่หน้าของ ${n}`,
+        copied: (b) => `คัดลอกที่อยู่หน้าส่วนขยายแล้ว วางลงในแถบที่อยู่ของ ${b} Prune ลบส่วนขยายด้วยตัวเองไม่ได้ ให้ลบที่นั่น`,
+        failed: "คัดลอกที่อยู่หน้าไม่ได้"
       }
     }
   },
@@ -6080,10 +6080,10 @@ export default {
         restoreNotCreated: (r) => (r ? `Oluşturulmadı (${r})` : 'Oluşturulmadı')
       },
       extensions: {
-        manage: "Yönet",
-        manageAria: (n) => `${n} uzantısını tarayıcısında yönet`,
-        opened: (b) => `Uzantılar sayfası ${b} içinde açıldı. Prune bir uzantıyı kendisi kaldıramaz; orada kaldırın.`,
-        failed: "Tarayıcının uzantılar sayfası açılamadı"
+        manage: "Sayfa adresini kopyala",
+        manageAria: (n) => `${n} uzantısının sayfa adresini kopyala`,
+        copied: (b) => `Uzantı sayfasının adresi kopyalandı. ${b} adres çubuğuna yapıştırın. Prune bir uzantıyı kendisi kaldıramaz; orada kaldırın.`,
+        failed: "Sayfa adresi kopyalanamadı"
       }
     }
   },
@@ -6249,10 +6249,10 @@ export default {
         restoreNotCreated: (r) => (r ? `Не створено (${r})` : 'Не створено')
       },
       extensions: {
-        manage: "Керувати",
-        manageAria: (n) => `Керувати ${n} у його браузері`,
-        opened: (b) => `Сторінку розширень відкрито в ${b}. Prune не може сам видалити розширення — видаліть його там.`,
-        failed: "Не вдалося відкрити сторінку розширень браузера"
+        manage: "Копіювати адресу сторінки",
+        manageAria: (n) => `Копіювати адресу сторінки для ${n}`,
+        copied: (b) => `Адресу сторінки розширення скопійовано. Вставте її в адресний рядок браузера ${b}. Prune не може сам видалити розширення — видаліть його там.`,
+        failed: "Не вдалося скопіювати адресу сторінки"
       }
     }
   },
@@ -6418,10 +6418,10 @@ export default {
         restoreNotCreated: (r) => (r ? `Không tạo được (${r})` : 'Không tạo được')
       },
       extensions: {
-        manage: "Quản lý",
-        manageAria: (n) => `Quản lý ${n} trong trình duyệt của nó`,
-        opened: (b) => `Đã mở trang tiện ích mở rộng trong ${b}. Prune không thể tự gỡ tiện ích; hãy gỡ tại đó.`,
-        failed: "Không mở được trang tiện ích mở rộng của trình duyệt"
+        manage: "Sao chép địa chỉ trang",
+        manageAria: (n) => `Sao chép địa chỉ trang của ${n}`,
+        copied: (b) => `Đã sao chép địa chỉ trang tiện ích mở rộng. Hãy dán vào thanh địa chỉ của ${b}. Prune không thể tự gỡ tiện ích; hãy gỡ tại đó.`,
+        failed: "Không sao chép được địa chỉ trang"
       }
     }
   },
@@ -6587,10 +6587,10 @@ export default {
         restoreNotCreated: (r) => (r ? `未创建（${r}）` : '未创建')
       },
       extensions: {
-        manage: "管理",
-        manageAria: (n) => `在浏览器中管理 ${n}`,
-        opened: (b) => `已在 ${b} 中打开扩展程序页面。Prune 无法自行移除扩展程序，请在那里移除。`,
-        failed: "无法打开浏览器的扩展程序页面"
+        manage: "复制页面地址",
+        manageAria: (n) => `复制 ${n} 的页面地址`,
+        copied: (b) => `已复制扩展程序页面地址。请粘贴到 ${b} 的地址栏中。Prune 无法自行移除扩展程序，请在那里移除。`,
+        failed: "无法复制页面地址"
       }
     }
   },
@@ -6756,10 +6756,10 @@ export default {
         restoreNotCreated: (r) => (r ? `未建立（${r}）` : '未建立')
       },
       extensions: {
-        manage: "管理",
-        manageAria: (n) => `在瀏覽器中管理 ${n}`,
-        opened: (b) => `已在 ${b} 中開啟擴充功能頁面。Prune 無法自行移除擴充功能，請在那裡移除。`,
-        failed: "無法開啟瀏覽器的擴充功能頁面"
+        manage: "複製頁面位址",
+        manageAria: (n) => `複製 ${n} 的頁面位址`,
+        copied: (b) => `已複製擴充功能頁面位址。請貼到 ${b} 的網址列中。Prune 無法自行移除擴充功能，請在那裡移除。`,
+        failed: "無法複製頁面位址"
       }
     }
   }

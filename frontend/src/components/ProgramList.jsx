@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import ContextMenu from './ContextMenu.jsx';
 import { useToasts } from '../hooks/useToasts.jsx';
-import { fetchPrograms, revealInExplorer, openInstalledAppsSettings, deleteInstallTrace, manageBrowserExtension } from '../lib/api.js';
+import { fetchPrograms, revealInExplorer, openInstalledAppsSettings, deleteInstallTrace, fetchExtensionPageAddress } from '../lib/api.js';
+import { copyText } from '../lib/copyText.js';
 import { useQueryClient } from '@tanstack/react-query';
 import { keys } from '../lib/queryClient.js';
 import { useInstallTraces } from '../hooks/useSystemQueries.js';
@@ -266,12 +267,17 @@ function RevealButton({ program }) {
   );
 }
 
-/** Opens the browser on this extension's own page.
+/** Copies this extension's own page address.
  *
  * Prune cannot silently remove a browser extension: the browser owns its
- * profile files and repairs anything edited from outside. So the button takes
- * the person to the page where the browser does it, and says so when it has
- * -- the sentence is shown at the moment it matters, not hidden in a hover. */
+ * profile files and repairs anything edited from outside. So the button hands
+ * the person the address of the page where the browser does it, and says so
+ * when it has -- the sentence is shown at the moment it matters, not hidden
+ * in a hover.
+ *
+ * It copies rather than opens on purpose. Prune never starts a browser: an
+ * unsigned program launching one with a profile argument is what antivirus
+ * calls credential theft (Defender: Behavior:Win32/WebBrowserCredAccess.E2). */
 function ManageExtensionButton({ program }) {
   const { t } = useLanguage();
   const toasts = useToasts();
@@ -282,8 +288,13 @@ function ManageExtensionButton({ program }) {
       onClick={async () => {
         setBusy(true);
         try {
-          const result = await manageBrowserExtension(program.id);
-          toasts.info(t('uninstallerV3.extensions.opened', result.browser || program.browser));
+          const result = await fetchExtensionPageAddress(program.id);
+          if (await copyText(result.address)) {
+            toasts.info(t('uninstallerV3.extensions.copied', result.browser || program.browser));
+          } else {
+            // Nothing could reach the clipboard: show the address so it can be typed.
+            toasts.error(t('uninstallerV3.extensions.failed'), { detail: result.address });
+          }
         } catch (error) {
           toasts.error(t('uninstallerV3.extensions.failed'), { detail: error.message });
         } finally {
