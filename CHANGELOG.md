@@ -101,6 +101,16 @@ see v1.0.1 below) are documented here.
   size cap). A move into Quarantine or the Recycle Bin counts nothing, so
   nothing is counted twice, and the line says so. A damaged file reads as
   zero instead of failing a clean.
+- **Low disk space warning.** When a local drive has less free space than
+  a chosen share of its size, the Dashboard shows a banner naming the
+  drive and what is free, with buttons to Deep Clean and Disk Map. Settings,
+  General has a small select: Off, 5%, 10% (the default) or 15%. A volume
+  under 8 GB is never watched (recovery partitions are full by design) and
+  a drive with 100 GB or more free is never flagged, so 10% of a 4 TB disk
+  does not nag. While Prune sits in the tray it also raises at most one
+  native notification per drive per day (and none while its window is the
+  one in front). It reads free space with one `statfs` per drive every five
+  minutes; the drive list comes from one PowerShell query an hour.
 
 ### Changed
 

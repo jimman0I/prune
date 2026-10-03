@@ -142,6 +142,16 @@ export async function fetchStats() {
   };
 }
 
+/** The local drives that are short of room: { percent, drives: [{ drive, label,
+ * freeBytes, totalBytes, percentFree }] }. The share is the backend's, read from
+ * Settings (0 is Off, and answers with no drives). */
+export async function fetchLowDisk() {
+  const res = await fetch(`${API_URL}/low-disk`);
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
+  return { percent: Number(data?.percent) || 0, drives: Array.isArray(data?.drives) ? data.drives : [] };
+}
+
 /** Catches up a run that is due. Deliberately not "run now": a button
  * that ignored the schedule would be a second, hidden way to clean, and
  * the Deep Clean screen already exists for that. */

@@ -64,6 +64,7 @@ export const keys = {
   updateCheck: ['update-check'],
   automation: ['automation'],
   stats: ['stats'],
+  lowDisk: ['disk', 'lowDisk'],
   diskSpace: ['disk', 'space'],
   drives: ['disk', 'drives'],
   mftStatus: ['disk', 'mftStatus'],

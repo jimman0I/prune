@@ -3,6 +3,9 @@ import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { getSystemDriveSpace } from '../services/diskSpace.js';
 import { recordFreed } from '../services/stats.js';
+import { findLowDrives } from '../services/lowDisk.js';
+import { normalizeLowDiskPercent } from './lowDiskChoices.js';
+import { createLowDiskWatcher, fileNotifiedStore, notifiedPath, makeNotifier } from '../services/lowDiskWatch.js';
 
 const here = dirname(fileURLToPath(import.meta.url));
 
@@ -54,6 +57,33 @@ export async function quickCleanTemp() {
   await recordFreed(result?.freedBytes);
 }
 
+/** Whether a Prune window is the one the person is looking at: shown, not
+ * minimised, and focused. The Dashboard already warns them then. */
+export function appIsInFront(BrowserWindow) {
+  return BrowserWindow.getAllWindows().some(
+    (win) => !win.isDestroyed() && win.isVisible() && !win.isMinimized() && win.isFocused()
+  );
+}
+
+/** The low-disk notification (see services/lowDiskWatch.js), wired to Electron's
+ * own Notification. Started from the tray because that is where Prune runs with
+ * nobody looking at it. The settings are read each time, so turning the warning
+ * off in Settings stops it without a restart. */
+export function startLowDiskNotifications({ Notification, BrowserWindow, showMainWindow, timing } = {}) {
+  const watcher = createLowDiskWatcher({
+    getPercent: async () => {
+      const { getSettings } = await import('../services/settings.js');
+      return normalizeLowDiskPercent((await getSettings()).lowDiskWarning);
+    },
+    findLow: (percent) => findLowDrives({ percent }),
+    notify: makeNotifier({ Notification, showWindow: showMainWindow }),
+    canNotify: () => !appIsInFront(BrowserWindow),
+    store: fileNotifiedStore(notifiedPath())
+  });
+  watcher.start(timing);
+  return watcher;
+}
+
 let initialized = false;
 
 /** Builds the system tray icon, its live RAM/disk tooltip, its context
@@ -87,7 +117,7 @@ export async function initTray() {
     return; // not running inside Electron -- standalone dev/test, expected
   }
 
-  const { app, Tray, Menu, nativeImage, BrowserWindow } = electron;
+  const { app, Tray, Menu, nativeImage, BrowserWindow, Notification } = electron;
   if (!app) return;
   await app.whenReady();
 
@@ -115,6 +145,13 @@ export async function initTray() {
   ]);
   tray.setContextMenu(menu);
   tray.on('click', showMainWindow);
+
+  // A native notification, at most once a day per drive, when a local drive is
+  // nearly full and the window is not the thing in front. Failing to start it
+  // must not cost the tray its icon.
+  try {
+    startLowDiskNotifications({ Notification, BrowserWindow, showMainWindow });
+  } catch { /* the Dashboard banner still warns */ }
 
   // Close-to-tray: preventDefault must run SYNCHRONOUSLY every time this
   // fires, before the async settings read below resolves -- otherwise the
