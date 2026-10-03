@@ -43,6 +43,10 @@ function isFocusVisible(element) {
 function ToastCard({ toast, onDismiss, onPause, onResume }) {
   const { t } = useLanguage();
   const tone = TONE[toast.tone] ?? TONE.info;
+  // The system's own request for less motion: the card fades in place instead
+  // of sliding and scaling, and does not animate its position when the stack
+  // moves. (index.css handles the CSS side; this is the JS-driven side.)
+  const reduce = Boolean(window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches);
 
   /* Held on screen while the pointer is over it OR focus is inside it.
    * Two independent reasons, so leaving with the mouse must not release a
@@ -53,11 +57,12 @@ function ToastCard({ toast, onDismiss, onPause, onResume }) {
 
   return (
     <motion.div
-      layout
-      initial={{ opacity: 0, x: 24, scale: 0.96 }}
-      animate={{ opacity: 1, x: 0, scale: 1 }}
-      exit={{ opacity: 0, x: 24, scale: 0.96 }}
-      transition={{ duration: 0.24, ease: EASE }}
+      layout={!reduce}
+      data-motion={reduce ? 'reduced' : 'full'}
+      initial={reduce ? { opacity: 0 } : { opacity: 0, x: 24, scale: 0.96 }}
+      animate={reduce ? { opacity: 1 } : { opacity: 1, x: 0, scale: 1 }}
+      exit={reduce ? { opacity: 0 } : { opacity: 0, x: 24, scale: 0.96 }}
+      transition={{ duration: reduce ? 0.01 : 0.24, ease: EASE }}
       className="glass-panel w-[330px] px-4 py-3 flex items-start gap-3 pointer-events-auto"
       style={{ borderColor: tone.soft }}
       onMouseEnter={() => { hovered.current = true; sync(); }}
@@ -99,6 +104,27 @@ function ToastCard({ toast, onDismiss, onPause, onResume }) {
         {toast.detail && (
           <div className="text-[11.5px] text-[color:var(--text-secondary)] mt-1 leading-snug">
             {toast.detail}
+          </div>
+        )}
+
+        {/* The one thing that can be done about it, within the toast's life
+            (Undo after a move into Quarantine). A real button: reachable with
+            Tab, pressed with Enter or Space, held open while it has keyboard
+            focus like the rest of the card. It takes the toast away first and
+            then acts, so a second press cannot fire it again. */}
+        {toast.action && (
+          <div className="mt-2">
+            <button
+              type="button"
+              aria-label={toast.action.ariaLabel}
+              onClick={() => {
+                onDismiss(toast.id);
+                toast.action.onClick?.();
+              }}
+              className="btn-ghost px-3 py-1 rounded-md text-[12px] font-medium min-h-[28px]"
+            >
+              {toast.action.label}
+            </button>
           </div>
         )}
 

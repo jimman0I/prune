@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import { describe, it, expect, afterEach, beforeEach, vi } from 'vitest';
-import { render, screen, cleanup, act } from '@testing-library/react';
+import { render, screen, cleanup, act, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ToastProvider, useToasts } from '../hooks/useToasts.jsx';
 import { renderScreen } from '../testSupport/renderScreen.jsx';
@@ -336,5 +336,131 @@ describe('hovering or focusing a toast holds it on screen', () => {
     await setup('warning');
     await wait(30_000);
     expect(count()).toBe('1');
+  });
+});
+
+describe('a toast with an action', () => {
+  function Count() {
+    const { toasts } = useToasts();
+    return <span data-testid="count">{toasts.length}</span>;
+  }
+  const count = () => screen.getByTestId('count').textContent;
+  const wait = (ms) => act(async () => { await vi.advanceTimersByTimeAsync(ms); });
+  const realMatches = Element.prototype.matches;
+
+  const setup = async ({ onClick = vi.fn(), label = 'Undo' } = {}) => {
+    vi.useFakeTimers({ shouldAdvanceTime: true });
+    const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+    renderScreen(
+      <ToastProvider>
+        <Push tone="success" message="Moved 3 MB to Quarantine" extra={{ action: { label, onClick } }} />
+        <Count />
+        <ToastHost />
+      </ToastProvider>
+    );
+    await user.click(screen.getByText('push'));
+    return { user, onClick };
+  };
+
+  afterEach(() => {
+    Element.prototype.matches = realMatches;
+    vi.useRealTimers();
+  });
+
+  it('draws the action as a button inside the toast', async () => {
+    await setup();
+    const status = screen.getByRole('status');
+    const button = within(status).getByRole('button', { name: 'Undo' });
+    expect(button.tagName).toBe('BUTTON');
+    expect(button.getAttribute('type')).toBe('button');
+  });
+
+  it('runs the action once on a click, and takes the toast away', async () => {
+    const { user, onClick } = await setup();
+    await user.click(screen.getByRole('button', { name: 'Undo' }));
+    expect(onClick).toHaveBeenCalledTimes(1);
+    expect(count()).toBe('0');
+  });
+
+  it('can be used from the keyboard: Tab reaches it, Enter and Space press it', async () => {
+    const { user, onClick } = await setup();
+    // The only controls are the action and Dismiss; the action comes first.
+    screen.getByText('push').focus();
+    await user.tab();
+    const button = screen.getByRole('button', { name: 'Undo' });
+    expect(document.activeElement).toBe(button);
+    await user.keyboard('{Enter}');
+    expect(onClick).toHaveBeenCalledTimes(1);
+  });
+
+  it('presses on Space too', async () => {
+    const { user, onClick } = await setup();
+    screen.getByRole('button', { name: 'Undo' }).focus();
+    await user.keyboard(' ');
+    expect(onClick).toHaveBeenCalledTimes(1);
+  });
+
+  it('is announced politely with the rest of the toast, not as an alert', async () => {
+    await setup();
+    const status = screen.getByRole('status');
+    expect(status.getAttribute('aria-live')).toBe('polite');
+    expect(within(status).getByText('Moved 3 MB to Quarantine')).toBeTruthy();
+    expect(screen.queryByRole('alert')).toBeNull();
+  });
+
+  it('stays long enough to use: past the ordinary five seconds, gone after its own life', async () => {
+    await setup();
+    await wait(10_000);
+    expect(count()).toBe('1');
+    await wait(10_000);
+    expect(count()).toBe('0');
+  });
+
+  it('is held while the action has keyboard focus', async () => {
+    Element.prototype.matches = function (selector) {
+      return selector === ':focus-visible' ? true : realMatches.call(this, selector);
+    };
+    await setup();
+    screen.getByRole('button', { name: 'Undo' }).focus();
+    await wait(60_000);
+    expect(count()).toBe('1');
+  });
+
+  it('can carry a label of its own, in any language', async () => {
+    await setup({ label: 'Rückgängig' });
+    expect(screen.getByRole('button', { name: 'Rückgängig' })).toBeTruthy();
+  });
+
+  it('draws no action button on an ordinary toast', async () => {
+    mount(<Push message="Plain" />);
+    await push();
+    const status = screen.getByRole('status');
+    expect(within(status).getAllByRole('button')).toHaveLength(1);
+  });
+});
+
+describe('motion', () => {
+  const realMatchMedia = window.matchMedia;
+  afterEach(() => { window.matchMedia = realMatchMedia; });
+
+  const stubReduced = (reduced) => {
+    window.matchMedia = (query) => ({
+      matches: reduced && /prefers-reduced-motion/.test(query),
+      media: query, addEventListener() {}, removeEventListener() {}, addListener() {}, removeListener() {}, dispatchEvent() { return false; }
+    });
+  };
+
+  it('slides and scales in normally', async () => {
+    stubReduced(false);
+    mount(<Push />);
+    await push();
+    expect(screen.getByRole('status').getAttribute('data-motion')).toBe('full');
+  });
+
+  it('only fades when the person asked the system for reduced motion', async () => {
+    stubReduced(true);
+    mount(<Push />);
+    await push();
+    expect(screen.getByRole('status').getAttribute('data-motion')).toBe('reduced');
   });
 });

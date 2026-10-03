@@ -169,6 +169,33 @@ export function useDeepCleanScan(nameOf, messages, { settings = null, appVersion
   }, []);
 
 
+  /** Puts the rows an Undo has just brought back to how they read before the
+   * clean: `previousTree` is the tree as it was, `ids` the rules whose files
+   * came back. The files are back, so a row that now says 0 B (or "cleaned") is
+   * no longer true, and the sizes from before are as good as they were then.
+   *
+   * Only while the rows are still the ones the clean left. If a scan has
+   * finished since (`scanAt` is the measurement time the caller saw when it
+   * cleaned), that scan measured the real disk and nothing here may overwrite it
+   * with an older picture. */
+  const revertRows = useCallback((previousTree, ids, scanAt) => {
+    const current = scannedTreeRef.current;
+    if (!current || !Array.isArray(previousTree) || ids.length === 0) return;
+    if ((lastScanAtRef.current ?? null) !== (scanAt ?? null)) return;
+    const wanted = new Set(ids);
+    const before = new Map(previousTree.flatMap((group) => group.items.map((item) => [item.id, item])));
+    const next = current.map((group) => ({
+      ...group,
+      items: group.items.map((item) => (wanted.has(item.id) && before.has(item.id) ? before.get(item.id) : item))
+    }));
+    scannedTreeRef.current = next;
+    setScannedTree(next);
+    if (fingerprintRef.current && lastScanAtRef.current) {
+      saveScanCache({ tree: next, fingerprint: fingerprintRef.current, savedAt: lastScanAtRef.current });
+      announceScanChange(sourceRef.current);
+    }
+  }, []);
+
   const scanQuery = useQuery({
     queryKey: keys.deepCleanScan,
     enabled: armed,
@@ -323,6 +350,7 @@ export function useDeepCleanScan(nameOf, messages, { settings = null, appVersion
      * scanned since: the scan log has nothing of its own to say. */
     restored,
     applyCleanResults,
+    revertRows,
     start,
     stop,
     /** The ids a scan proved are worth cleaning. Before a scan the tree

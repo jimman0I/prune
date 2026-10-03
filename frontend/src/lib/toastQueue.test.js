@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { addToast, dismissToast, expireToasts, pauseToast, resumeToast, MAX_TOASTS, DEFAULT_TTL } from './toastQueue.js';
+import { UNDO_TTL, addToast, dismissToast, expireToasts, pauseToast, resumeToast, MAX_TOASTS, DEFAULT_TTL } from './toastQueue.js';
 
 const NOW = 1_000_000;
 
@@ -161,5 +161,40 @@ describe('pausing expiry while a toast is hovered or focused', () => {
     const resumed = resumeToast(repeated, repeated[0].id, NOW + 9000);
     expect(expireToasts(resumed, NOW + 9000 + 4999)).toHaveLength(1);
     expect(expireToasts(resumed, NOW + 9000 + 5001)).toHaveLength(0);
+  });
+});
+
+describe('a toast with an action (Undo)', () => {
+  const action = { label: 'Undo', onClick: () => {} };
+
+  it('keeps the action on the toast', () => {
+    const [toast] = addToast([], { message: 'Moved', tone: 'success', action }, { now: NOW });
+    expect(toast.action).toBe(action);
+  });
+
+  it('lives long enough to be used: three times the default, unless the caller says otherwise', () => {
+    const [toast] = addToast([], { message: 'Moved', tone: 'success', action }, { now: NOW });
+    expect(UNDO_TTL).toBeGreaterThanOrEqual(DEFAULT_TTL * 3);
+    expect(toast.ttl).toBe(UNDO_TTL);
+    const [custom] = addToast([], { message: 'Moved', tone: 'success', action, ttl: 20000 }, { now: NOW });
+    expect(custom.ttl).toBe(20000);
+  });
+
+  it('does not change how long a toast without one lives', () => {
+    const [toast] = addToast([], { message: 'Moved', tone: 'success' }, { now: NOW });
+    expect(toast.ttl).toBe(DEFAULT_TTL);
+  });
+
+  it('is never merged into another: each Undo is for its own move', () => {
+    const first = addToast([], { message: 'Moved Cache', tone: 'success', action }, { now: NOW });
+    const second = addToast(first, { message: 'Moved Cache', tone: 'success', action: { label: 'Undo', onClick: () => {} } }, { now: NOW + 100 });
+    expect(second).toHaveLength(2);
+    expect(second.every((t) => t.count === 1)).toBe(true);
+  });
+
+  it('is not merged into a plain toast with the same words either', () => {
+    const plain = addToast([], { message: 'Moved Cache', tone: 'success' }, { now: NOW });
+    const withAction = addToast(plain, { message: 'Moved Cache', tone: 'success', action }, { now: NOW + 100 });
+    expect(withAction).toHaveLength(2);
   });
 });

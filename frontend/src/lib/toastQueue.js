@@ -15,6 +15,12 @@ export const MAX_TOASTS = 4;
  * actual bar -- people look up mid-way. */
 export const DEFAULT_TTL = 5000;
 
+/** Life of a toast that carries an action (Undo). Five seconds is long enough
+ * to read a sentence twice, not to read it, decide, and move to a button: this
+ * is the time somebody has to change their mind. Hovering or focusing it holds
+ * it for as long as they need. */
+export const UNDO_TTL = 15000;
+
 /** Tones that stay until dismissed. A warning is something to act on
  * ("protected by Windows", "3 files were locked"), and a failure is the
  * only account of what went wrong: neither should vanish because the
@@ -27,6 +33,10 @@ const DEDUPE_WINDOW = 8000;
 let sequence = 0;
 
 function sameToast(a, b) {
+  // An action belongs to one event: two moves into Quarantine with the same
+  // words are two Undo buttons for two different batches, and merging them
+  // would leave one batch with nothing to bring it back.
+  if (a.action || b.action) return false;
   // Tone is part of identity: "Cleanup complete" as a success and as a
   // failure are different events even if a caller words them alike.
   return a.message === b.message && (a.tone ?? 'info') === (b.tone ?? 'info');
@@ -48,7 +58,7 @@ export function addToast(toasts, toast, { now = Date.now(), max = MAX_TOASTS } =
     tone: 'info',
     // Stated by the caller wins; otherwise it depends on what kind of
     // notice this is.
-    ttl: PERSISTENT_TONES.has(tone) ? 0 : DEFAULT_TTL,
+    ttl: PERSISTENT_TONES.has(tone) ? 0 : toast.action ? UNDO_TTL : DEFAULT_TTL,
     ...toast,
     id: `t${++sequence}`,
     createdAt: now,

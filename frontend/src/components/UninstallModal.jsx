@@ -12,6 +12,8 @@ import { useSettings, useInstallTraces } from '../hooks/useSystemQueries.js';
 import { traceForProgram } from '../lib/installTraces.js';
 import { leftoverDestinationFrom } from '../lib/leftoverDestination.js';
 import { useLanguage } from '../i18n/LanguageContext.jsx';
+import { useQuarantineUndo } from '../hooks/useQuarantineUndo.js';
+import { batchDirOfManifest } from '../lib/undoQuarantine.js';
 
 /** Shared spinner + live-command UI for both the "running the native
  * uninstaller" and "scanning for leftovers" phases -- same treatment,
@@ -106,6 +108,12 @@ export const STALL_MS = 30000;
 
 export default function UninstallModal({ program, running = false, onClose, onBusyChange }) {
   const { t } = useLanguage();
+  const offerUndo = useQuarantineUndo();
+  // After leftovers went to Quarantine: the toast says so and can bring them back.
+  const offerLeftoversUndo = (manifest) => offerUndo(
+    t('dashboardQolV3.undo.movedLeftovers', program.name),
+    batchDirOfManifest(manifest)
+  );
 
   const REMOVING = {
     quarantine: { title: t('uninstallModal.removing.quarantine.title'), command: t('uninstallModal.removing.quarantine.command') },
@@ -298,6 +306,7 @@ export default function UninstallModal({ program, running = false, onClose, onBu
           const manifest = await removeQuarantined({ programName: program.name, files, registryKeys, ...(scheduledTasks ? { scheduledTasks } : {}), destination });
           setRemoval(manifest);
           recordRemoval(manifest, result);
+          offerLeftoversUndo(manifest);
           setStep('done');
         } catch (err) {
           setError(err.message);
@@ -381,6 +390,7 @@ export default function UninstallModal({ program, running = false, onClose, onBu
       const manifest = await removeQuarantined({ programName: program.name, files, registryKeys, ...(scheduledTasks ? { scheduledTasks } : {}), destination });
       setRemoval(manifest);
       recordRemoval(manifest, scanResult);
+      offerLeftoversUndo(manifest);
       setStep('done');
     } catch (err) {
       setError(err.message);
