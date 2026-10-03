@@ -39,6 +39,7 @@ import customCleanersRoutes from './routes/customCleaners.js';
 import pickerRoutes from './routes/picker.js';
 import installMonitorRoutes from './routes/installMonitor.js';
 import hunterRoutes from './routes/hunter.js';
+import runAsAdminRoutes from './routes/runAsAdmin.js';
 import backupsRoutes from './routes/backups.js';
 
 export function createApp({ port } = {}) {
@@ -85,6 +86,8 @@ export function createApp({ port } = {}) {
   app.use('/api/disk-space', diskSpaceRoutes);
   app.use('/api/uninstall-history', uninstallHistoryRoutes);
   app.use('/api/disk-scan', diskScanRoutes);
+  // Before /api/settings so its own path is matched first, whatever that router grows.
+  app.use('/api/settings/run-as-admin', runAsAdminRoutes);
   app.use('/api/settings', settingsRoutes);
   app.use('/api/sandbox-test', sandboxTestRoutes);
   app.use('/api/deep-clean', deepCleanRoutes);

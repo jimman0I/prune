@@ -94,6 +94,16 @@ see v1.0.1 below) are documented here.
   taskbar, on a window of an administrator program Prune cannot read,
   or on Prune itself each get an explanation; Esc or the crosshair's cross
   cancels. A test now fails if the key- or pointer-polling calls come back.
+- **Opt-in "Always run as administrator"** (Settings, General, off by
+  default). It sets Windows' own per-program "Run this program as
+  administrator" flag for this copy of Prune, so the fast Disk Map scan,
+  machine-wide leftovers and scheduled tasks need no extra prompts. The
+  help text lists what it costs: a UAC prompt on every start, no
+  drag-and-drop from a normal Explorer window, no silent start at sign-in,
+  and full rights for every action. It takes effect from the next start
+  (with a button to restart now) and warns if Prune also starts with
+  Windows. Turning it off removes only that flag and leaves any other
+  compatibility flags alone.
 - **The sidebar is icons only until you point at it.** It rests at 72px
   and widens over the page, with a short transition, when the pointer
   enters it or keyboard focus lands in it, then folds back. It widens
