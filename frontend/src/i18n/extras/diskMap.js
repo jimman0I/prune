@@ -4,6 +4,11 @@
 export default {
   en: {
     diskMapV3: {
+      large: {
+        tooLarge: "The drive has more files than Prune could hold in one scan. Use “undefined” to scan it a folder at a time, or exclude large folders in Settings.",
+        foldedNote: (a, b) => `Each folder lists its ${a} largest files; the other ${b} files are summed into one row per folder. They still count toward every total and the file-type figures.`,
+        foldedFloorNote: (a, b) => `This drive has so many files that only files of ${b} or larger are listed individually; the other ${a} files are summed into one row per folder. They still count toward every total and the file-type figures.`
+      },
       drives: {
         label: "Drives",
         system: "System",
@@ -102,6 +107,11 @@ export default {
   },
   af: {
     diskMapV3: {
+      large: {
+        tooLarge: "Die skyf het meer lêers as wat Prune in een skandering kan hou. Gebruik “undefined” om dit een vouer op ’n slag te skandeer, of sluit groot vouers in Instellings uit.",
+        foldedNote: (a, b) => `Elke vouer wys sy ${a} grootste lêers; die ander ${b} lêers word in een ry per vouer opgetel. Hulle tel steeds in elke totaal en in die lêertipe-syfers.`,
+        foldedFloorNote: (a, b) => `Hierdie skyf het soveel lêers dat net lêers van ${b} of groter individueel gelys word; die ander ${a} lêers word in een ry per vouer opgetel. Hulle tel steeds in elke totaal en in die lêertipe-syfers.`
+      },
       drives: {
         label: "Skywe",
         system: "Stelsel",
@@ -200,6 +210,11 @@ export default {
   },
   ar: {
     diskMapV3: {
+      large: {
+        tooLarge: "يحتوي هذا القرص على ملفات أكثر مما يستطيع Prune استيعابه في فحص واحد. استخدم “undefined” لفحصه مجلداً تلو الآخر، أو استبعد المجلدات الكبيرة من الإعدادات.",
+        foldedNote: (a, b) => `يعرض كل مجلد أكبر ${a} ملف فيه؛ أما الملفات الأخرى وعددها ${b} فتُجمع في صف واحد لكل مجلد. وتبقى محسوبة في كل إجمالي وفي أرقام أنواع الملفات.`,
+        foldedFloorNote: (a, b) => `يحتوي هذا القرص على عدد كبير من الملفات بحيث لا تُعرض فرادى إلا الملفات بحجم ${b} أو أكبر؛ أما الملفات الأخرى وعددها ${a} فتُجمع في صف واحد لكل مجلد. وتبقى محسوبة في كل إجمالي وفي أرقام أنواع الملفات.`
+      },
       drives: {
         label: "محركات الأقراص",
         system: "النظام",
@@ -298,6 +313,11 @@ export default {
   },
   ca: {
     diskMapV3: {
+      large: {
+        tooLarge: "La unitat té més fitxers dels que Prune pot gestionar en una sola exploració. Feu servir “undefined” per explorar-la carpeta a carpeta, o exclogueu carpetes grans a Configuració.",
+        foldedNote: (a, b) => `Cada carpeta mostra els seus ${a} fitxers més grans; els altres ${b} fitxers se sumen en una sola fila per carpeta. Continuen comptant en tots els totals i en les xifres per tipus de fitxer.`,
+        foldedFloorNote: (a, b) => `Aquesta unitat té tants fitxers que només es llisten un a un els de ${b} o més; els altres ${a} fitxers se sumen en una sola fila per carpeta. Continuen comptant en tots els totals i en les xifres per tipus de fitxer.`
+      },
       drives: {
         label: "Unitats",
         system: "Sistema",
@@ -396,6 +416,11 @@ export default {
   },
   cs: {
     diskMapV3: {
+      large: {
+        tooLarge: "Jednotka obsahuje více souborů, než kolik Prune dokáže zpracovat v jednom skenování. Použijte „undefined“ a skenujte ji složku po složce, nebo v Nastavení vyloučte velké složky.",
+        foldedNote: (a, b) => `Každá složka uvádí svých ${a} největších souborů; ostatních ${b} souborů je sečteno do jednoho řádku na složku. Do všech součtů a přehledů podle typu souboru se stále počítají.`,
+        foldedFloorNote: (a, b) => `Tato jednotka má tolik souborů, že se jednotlivě uvádějí jen soubory o velikosti ${b} a větší; ostatních ${a} souborů je sečteno do jednoho řádku na složku. Do všech součtů a přehledů podle typu souboru se stále počítají.`
+      },
       drives: {
         label: "Disky",
         system: "Systémový",
@@ -494,6 +519,11 @@ export default {
   },
   cy: {
     diskMapV3: {
+      large: {
+        tooLarge: "Mae mwy o ffeiliau ar y gyriant nag y gall Prune eu dal mewn un sgan. Defnyddiwch “undefined” i'w sganio un ffolder ar y tro, neu eithriwch ffolderi mawr yn y Gosodiadau.",
+        foldedNote: (a, b) => `Mae pob ffolder yn rhestru ei ${a} ffeil fwyaf; mae'r ${b} ffeil arall wedi'u cyfuno'n un rhes ar gyfer pob ffolder. Maen nhw'n dal i gyfrif ym mhob cyfanswm ac yn y ffigurau math o ffeil.`,
+        foldedFloorNote: (a, b) => `Mae cymaint o ffeiliau ar y gyriant hwn fel mai dim ond ffeiliau o ${b} neu fwy sy'n cael eu rhestru'n unigol; mae'r ${a} ffeil arall wedi'u cyfuno'n un rhes ar gyfer pob ffolder. Maen nhw'n dal i gyfrif ym mhob cyfanswm ac yn y ffigurau math o ffeil.`
+      },
       drives: {
         label: "Gyriannau",
         system: "System",
@@ -592,6 +622,11 @@ export default {
   },
   da: {
     diskMapV3: {
+      large: {
+        tooLarge: "Drevet har flere filer, end Prune kan rumme i én scanning. Brug “undefined” for at scanne det mappe for mappe, eller udeluk store mapper i Indstillinger.",
+        foldedNote: (a, b) => `Hver mappe viser sine ${a} største filer; de øvrige ${b} filer er lagt sammen i én række pr. mappe. De tæller stadig med i alle totaler og i filtypetallene.`,
+        foldedFloorNote: (a, b) => `Dette drev har så mange filer, at kun filer på ${b} eller derover vises enkeltvis; de øvrige ${a} filer er lagt sammen i én række pr. mappe. De tæller stadig med i alle totaler og i filtypetallene.`
+      },
       drives: {
         label: "Drev",
         system: "System",
@@ -690,6 +725,11 @@ export default {
   },
   de: {
     diskMapV3: {
+      large: {
+        tooLarge: "Das Laufwerk enthält mehr Dateien, als Prune in einem Scan verarbeiten kann. Mit „undefined“ lässt es sich Ordner für Ordner scannen, oder Sie schließen große Ordner in den Einstellungen aus.",
+        foldedNote: (a, b) => `Jeder Ordner listet seine ${a} größten Dateien auf; die übrigen ${b} Dateien sind pro Ordner in einer Zeile zusammengefasst. Sie zählen weiterhin in allen Summen und in den Dateityp-Zahlen mit.`,
+        foldedFloorNote: (a, b) => `Dieses Laufwerk hat so viele Dateien, dass nur Dateien ab ${b} einzeln aufgeführt werden; die übrigen ${a} Dateien sind pro Ordner in einer Zeile zusammengefasst. Sie zählen weiterhin in allen Summen und in den Dateityp-Zahlen mit.`
+      },
       drives: {
         label: "Laufwerke",
         system: "System",
@@ -788,6 +828,11 @@ export default {
   },
   el: {
     diskMapV3: {
+      large: {
+        tooLarge: "Ο δίσκος έχει περισσότερα αρχεία από όσα μπορεί να χειριστεί το Prune σε μία σάρωση. Χρησιμοποιήστε το «undefined» για να τον σαρώσετε φάκελο προς φάκελο ή εξαιρέστε μεγάλους φακέλους από τις Ρυθμίσεις.",
+        foldedNote: (a, b) => `Κάθε φάκελος εμφανίζει τα ${a} μεγαλύτερα αρχεία του· τα υπόλοιπα ${b} αρχεία αθροίζονται σε μία γραμμή ανά φάκελο. Εξακολουθούν να υπολογίζονται σε όλα τα σύνολα και στα στοιχεία ανά τύπο αρχείου.`,
+        foldedFloorNote: (a, b) => `Αυτός ο δίσκος έχει τόσα πολλά αρχεία που μόνο όσα έχουν μέγεθος ${b} ή μεγαλύτερο εμφανίζονται ξεχωριστά· τα υπόλοιπα ${a} αρχεία αθροίζονται σε μία γραμμή ανά φάκελο. Εξακολουθούν να υπολογίζονται σε όλα τα σύνολα και στα στοιχεία ανά τύπο αρχείου.`
+      },
       drives: {
         label: "Μονάδες δίσκου",
         system: "Σύστημα",
@@ -886,6 +931,11 @@ export default {
   },
   es: {
     diskMapV3: {
+      large: {
+        tooLarge: "La unidad tiene más archivos de los que Prune puede manejar en un solo análisis. Usa “undefined” para analizarla carpeta por carpeta, o excluye carpetas grandes en Ajustes.",
+        foldedNote: (a, b) => `Cada carpeta muestra sus ${a} archivos más grandes; los otros ${b} archivos se suman en una sola fila por carpeta. Siguen contando en todos los totales y en las cifras por tipo de archivo.`,
+        foldedFloorNote: (a, b) => `Esta unidad tiene tantos archivos que solo se muestran uno a uno los de ${b} o más; los otros ${a} archivos se suman en una sola fila por carpeta. Siguen contando en todos los totales y en las cifras por tipo de archivo.`
+      },
       drives: {
         label: "Unidades",
         system: "Sistema",
@@ -984,6 +1034,11 @@ export default {
   },
   et: {
     diskMapV3: {
+      large: {
+        tooLarge: "Draivil on rohkem faile, kui Prune ühe skannimisega suudab käsitleda. Kasuta valikut „undefined“, et skannida seda kaust kausta kaupa, või jäta seadetes suured kaustad välja.",
+        foldedNote: (a, b) => `Iga kaust loetleb oma ${a} suurimat faili; ülejäänud ${b} faili on kausta kohta liidetud üheks reaks. Need lähevad endiselt arvesse kõigis kogusummades ja failitüüpide arvudes.`,
+        foldedFloorNote: (a, b) => `Sellel draivil on nii palju faile, et eraldi loetletakse vaid vähemalt ${b} suurused failid; ülejäänud ${a} faili on kausta kohta liidetud üheks reaks. Need lähevad endiselt arvesse kõigis kogusummades ja failitüüpide arvudes.`
+      },
       drives: {
         label: "Draivid",
         system: "Süsteem",
@@ -1082,6 +1137,11 @@ export default {
   },
   fi: {
     diskMapV3: {
+      large: {
+        tooLarge: "Asemassa on enemmän tiedostoja kuin Prune pystyy käsittelemään yhdellä skannauksella. Käytä toimintoa “undefined” skannataksesi sen kansio kerrallaan, tai sulje suuret kansiot pois Asetuksissa.",
+        foldedNote: (a, b) => `Jokainen kansio luettelee ${a} suurinta tiedostoaan; muut ${b} tiedostoa on laskettu yhteen yhdelle riville kansiota kohti. Ne lasketaan edelleen mukaan kaikkiin summiin ja tiedostotyyppilukuihin.`,
+        foldedFloorNote: (a, b) => `Tässä asemassa on niin paljon tiedostoja, että vain ${b} tai suuremmat tiedostot luetellaan erikseen; muut ${a} tiedostoa on laskettu yhteen yhdelle riville kansiota kohti. Ne lasketaan edelleen mukaan kaikkiin summiin ja tiedostotyyppilukuihin.`
+      },
       drives: {
         label: "Asemat",
         system: "Järjestelmä",
@@ -1180,6 +1240,11 @@ export default {
   },
   fr: {
     diskMapV3: {
+      large: {
+        tooLarge: "Le lecteur contient plus de fichiers que Prune n’en peut gérer en une seule analyse. Utilisez « undefined » pour l’analyser dossier par dossier, ou excluez les gros dossiers dans les Paramètres.",
+        foldedNote: (a, b) => `Chaque dossier liste ses ${a} plus gros fichiers ; les ${b} autres fichiers sont additionnés sur une seule ligne par dossier. Ils comptent toujours dans tous les totaux et dans les chiffres par type de fichier.`,
+        foldedFloorNote: (a, b) => `Ce lecteur contient tant de fichiers que seuls ceux de ${b} ou plus sont listés individuellement ; les ${a} autres fichiers sont additionnés sur une seule ligne par dossier. Ils comptent toujours dans tous les totaux et dans les chiffres par type de fichier.`
+      },
       drives: {
         label: "Lecteurs",
         system: "Système",
@@ -1278,6 +1343,11 @@ export default {
   },
   he: {
     diskMapV3: {
+      large: {
+        tooLarge: "בכונן יש יותר קבצים ממה ש-Prune יכול להכיל בסריקה אחת. השתמשו ב“undefined” כדי לסרוק אותו תיקייה אחר תיקייה, או החריגו תיקיות גדולות בהגדרות.",
+        foldedNote: (a, b) => `כל תיקייה מציגה את ${a} הקבצים הגדולים ביותר שלה; ${b} הקבצים האחרים מסוכמים בשורה אחת לכל תיקייה. הם עדיין נספרים בכל הסכומים ובנתוני סוגי הקבצים.`,
+        foldedFloorNote: (a, b) => `בכונן הזה יש כל כך הרבה קבצים שרק קבצים בגודל ${b} ומעלה מוצגים בנפרד; ${a} הקבצים האחרים מסוכמים בשורה אחת לכל תיקייה. הם עדיין נספרים בכל הסכומים ובנתוני סוגי הקבצים.`
+      },
       drives: {
         label: "כוננים",
         system: "מערכת",
@@ -1376,6 +1446,11 @@ export default {
   },
   hu: {
     diskMapV3: {
+      large: {
+        tooLarge: "A meghajtón több fájl van, mint amennyit a Prune egyetlen vizsgálatban kezelni tud. A „undefined” használatával mappánként végigjárhatja, vagy a Beállításokban kizárhatja a nagy mappákat.",
+        foldedNote: (a, b) => `Minden mappa a ${a} legnagyobb fájlját sorolja fel; a többi ${b} fájl mappánként egyetlen sorba van összegezve. Ezek továbbra is beleszámítanak minden összegbe és a fájltípus-adatokba.`,
+        foldedFloorNote: (a, b) => `Ezen a meghajtón annyi fájl van, hogy csak a ${b} vagy annál nagyobb fájlok szerepelnek külön-külön; a többi ${a} fájl mappánként egyetlen sorba van összegezve. Ezek továbbra is beleszámítanak minden összegbe és a fájltípus-adatokba.`
+      },
       drives: {
         label: "Meghajtók",
         system: "Rendszer",
@@ -1474,6 +1549,11 @@ export default {
   },
   id: {
     diskMapV3: {
+      large: {
+        tooLarge: "Drive ini memiliki lebih banyak file daripada yang bisa ditampung Prune dalam satu pemindaian. Gunakan “undefined” untuk memindainya folder demi folder, atau kecualikan folder besar di Pengaturan.",
+        foldedNote: (a, b) => `Setiap folder menampilkan ${a} file terbesarnya; ${b} file lainnya dijumlahkan dalam satu baris per folder. File-file itu tetap dihitung dalam semua total dan angka jenis file.`,
+        foldedFloorNote: (a, b) => `Drive ini memiliki begitu banyak file sehingga hanya file berukuran ${b} atau lebih yang ditampilkan satu per satu; ${a} file lainnya dijumlahkan dalam satu baris per folder. File-file itu tetap dihitung dalam semua total dan angka jenis file.`
+      },
       drives: {
         label: "Drive",
         system: "Sistem",
@@ -1572,6 +1652,11 @@ export default {
   },
   is: {
     diskMapV3: {
+      large: {
+        tooLarge: "Drifið inniheldur fleiri skrár en Prune getur haldið utan um í einni skönnun. Notaðu „undefined“ til að skanna það eina möppu í einu, eða útilokaðu stórar möppur í Stillingum.",
+        foldedNote: (a, b) => `Hver mappa sýnir ${a} stærstu skrárnar sínar; hinar ${b} skrárnar eru lagðar saman í eina línu fyrir hverja möppu. Þær teljast enn með í öllum heildartölum og tölum eftir skráartegund.`,
+        foldedFloorNote: (a, b) => `Þetta drif inniheldur svo margar skrár að aðeins skrár sem eru ${b} eða stærri eru sýndar hver fyrir sig; hinar ${a} skrárnar eru lagðar saman í eina línu fyrir hverja möppu. Þær teljast enn með í öllum heildartölum og tölum eftir skráartegund.`
+      },
       drives: {
         label: "Drif",
         system: "Kerfi",
@@ -1670,6 +1755,11 @@ export default {
   },
   it: {
     diskMapV3: {
+      large: {
+        tooLarge: "L’unità contiene più file di quanti Prune ne possa gestire in una sola scansione. Usa “undefined” per analizzarla cartella per cartella, oppure escludi le cartelle grandi dalle Impostazioni.",
+        foldedNote: (a, b) => `Ogni cartella elenca i suoi ${a} file più grandi; gli altri ${b} file sono sommati in un’unica riga per cartella. Continuano a contare in tutti i totali e nelle cifre per tipo di file.`,
+        foldedFloorNote: (a, b) => `Questa unità contiene così tanti file che solo quelli di ${b} o più sono elencati singolarmente; gli altri ${a} file sono sommati in un’unica riga per cartella. Continuano a contare in tutti i totali e nelle cifre per tipo di file.`
+      },
       drives: {
         label: "Unità",
         system: "Sistema",
@@ -1768,6 +1858,11 @@ export default {
   },
   ja: {
     diskMapV3: {
+      large: {
+        tooLarge: "このドライブには、Prune が1回のスキャンで扱える数を超えるファイルがあります。「undefined」でフォルダーごとにスキャンするか、設定で大きなフォルダーを除外してください。",
+        foldedNote: (a, b) => `各フォルダーには大きい順に ${a} 個のファイルを表示し、残りの ${b} 個のファイルはフォルダーごとに1行にまとめています。すべての合計とファイルの種類別の数値には引き続き含まれます。`,
+        foldedFloorNote: (a, b) => `このドライブはファイル数が非常に多いため、${b} 以上のファイルのみ個別に表示しています。残りの ${a} 個のファイルはフォルダーごとに1行にまとめています。すべての合計とファイルの種類別の数値には引き続き含まれます。`
+      },
       drives: {
         label: "ドライブ",
         system: "システム",
@@ -1866,6 +1961,11 @@ export default {
   },
   ko: {
     diskMapV3: {
+      large: {
+        tooLarge: "이 드라이브에는 Prune이 한 번의 검사로 처리할 수 있는 것보다 많은 파일이 있습니다. “undefined”을(를) 사용해 폴더 단위로 검사하거나, 설정에서 큰 폴더를 제외하세요.",
+        foldedNote: (a, b) => `각 폴더에는 가장 큰 ${a}개의 파일을 표시하고, 나머지 ${b}개의 파일은 폴더당 한 줄로 합산합니다. 모든 합계와 파일 형식별 수치에는 그대로 포함됩니다.`,
+        foldedFloorNote: (a, b) => `이 드라이브는 파일이 매우 많아 ${b} 이상인 파일만 개별로 표시합니다. 나머지 ${a}개의 파일은 폴더당 한 줄로 합산합니다. 모든 합계와 파일 형식별 수치에는 그대로 포함됩니다.`
+      },
       drives: {
         label: "드라이브",
         system: "시스템",
@@ -1964,6 +2064,11 @@ export default {
   },
   lt: {
     diskMapV3: {
+      large: {
+        tooLarge: "Diske yra daugiau failų, nei „Prune“ gali apdoroti per vieną nuskaitymą. Naudokite „undefined“, kad nuskaitytumėte aplankas po aplanko, arba nustatymuose neįtraukite didelių aplankų.",
+        foldedNote: (a, b) => `Kiekvienas aplankas rodo ${a} didžiausių savo failų; likę ${b} failų sudėti į vieną eilutę kiekvienam aplankui. Jie vis tiek įskaičiuojami į visas sumas ir failų tipų skaičius.`,
+        foldedFloorNote: (a, b) => `Šiame diske tiek daug failų, kad pavieniui rodomi tik ${b} ar didesni failai; likę ${a} failų sudėti į vieną eilutę kiekvienam aplankui. Jie vis tiek įskaičiuojami į visas sumas ir failų tipų skaičius.`
+      },
       drives: {
         label: "Diskai",
         system: "Sistemos",
@@ -2062,6 +2167,11 @@ export default {
   },
   ms: {
     diskMapV3: {
+      large: {
+        tooLarge: "Pemacu ini mempunyai lebih banyak fail daripada yang boleh dikendalikan Prune dalam satu imbasan. Gunakan “undefined” untuk mengimbasnya folder demi folder, atau kecualikan folder besar dalam Tetapan.",
+        foldedNote: (a, b) => `Setiap folder menyenaraikan ${a} fail terbesarnya; ${b} fail lain dijumlahkan dalam satu baris setiap folder. Fail-fail itu masih dikira dalam semua jumlah dan angka jenis fail.`,
+        foldedFloorNote: (a, b) => `Pemacu ini mempunyai begitu banyak fail sehingga hanya fail bersaiz ${b} atau lebih disenaraikan satu persatu; ${a} fail lain dijumlahkan dalam satu baris setiap folder. Fail-fail itu masih dikira dalam semua jumlah dan angka jenis fail.`
+      },
       drives: {
         label: "Pemacu",
         system: "Sistem",
@@ -2160,6 +2270,11 @@ export default {
   },
   nb: {
     diskMapV3: {
+      large: {
+        tooLarge: "Stasjonen har flere filer enn Prune kan håndtere i én skanning. Bruk «undefined» for å skanne den mappe for mappe, eller ekskluder store mapper i Innstillinger.",
+        foldedNote: (a, b) => `Hver mappe viser de ${a} største filene sine; de øvrige ${b} filene er slått sammen i én rad per mappe. De teller fortsatt med i alle summer og i filtypetallene.`,
+        foldedFloorNote: (a, b) => `Denne stasjonen har så mange filer at bare filer på ${b} eller større vises enkeltvis; de øvrige ${a} filene er slått sammen i én rad per mappe. De teller fortsatt med i alle summer og i filtypetallene.`
+      },
       drives: {
         label: "Stasjoner",
         system: "System",
@@ -2258,6 +2373,11 @@ export default {
   },
   nl: {
     diskMapV3: {
+      large: {
+        tooLarge: "De schijf bevat meer bestanden dan Prune in één scan kan verwerken. Gebruik “undefined” om hem map voor map te scannen, of sluit grote mappen uit in Instellingen.",
+        foldedNote: (a, b) => `Elke map toont zijn ${a} grootste bestanden; de overige ${b} bestanden zijn samengevoegd in één rij per map. Ze tellen nog steeds mee in alle totalen en in de cijfers per bestandstype.`,
+        foldedFloorNote: (a, b) => `Deze schijf bevat zoveel bestanden dat alleen bestanden van ${b} of groter afzonderlijk worden getoond; de overige ${a} bestanden zijn samengevoegd in één rij per map. Ze tellen nog steeds mee in alle totalen en in de cijfers per bestandstype.`
+      },
       drives: {
         label: "Schijven",
         system: "Systeem",
@@ -2356,6 +2476,11 @@ export default {
   },
   pl: {
     diskMapV3: {
+      large: {
+        tooLarge: "Dysk zawiera więcej plików, niż Prune może obsłużyć w jednym skanowaniu. Użyj „undefined”, aby skanować go folder po folderze, lub wyklucz duże foldery w Ustawieniach.",
+        foldedNote: (a, b) => `Każdy folder wyświetla swoje ${a} największych plików; pozostałe ${b} plików zsumowano w jednym wierszu na folder. Nadal są wliczane do wszystkich sum i zestawień według typu pliku.`,
+        foldedFloorNote: (a, b) => `Ten dysk zawiera tak wiele plików, że osobno wyświetlane są tylko pliki o rozmiarze ${b} lub większe; pozostałe ${a} plików zsumowano w jednym wierszu na folder. Nadal są wliczane do wszystkich sum i zestawień według typu pliku.`
+      },
       drives: {
         label: "Dyski",
         system: "Systemowy",
@@ -2454,6 +2579,11 @@ export default {
   },
   ps: {
     diskMapV3: {
+      large: {
+        tooLarge: "په دې ډرایو کې له هغه ډېر فایلونه دي چې Prune یې په یوه سکین کې سمبالولی شي. د فولډر په فولډر سکین لپاره “undefined” وکاروئ، یا په تنظیماتو کې لوی فولډرونه ګوښه کړئ.",
+        foldedNote: (a, b) => `هر فولډر خپل ${a} تر ټولو لوی فایلونه ښیي؛ نور ${b} فایلونه د هر فولډر لپاره په یوه کتار کې راټول شوي دي. دوی لاهم په ټولو مجموعو او د فایل ډول په شمېرو کې حسابېږي.`,
+        foldedFloorNote: (a, b) => `په دې ډرایو کې دومره ډېر فایلونه دي چې یوازې ${b} یا له هغه لوی فایلونه جلا جلا ښودل کېږي؛ نور ${a} فایلونه د هر فولډر لپاره په یوه کتار کې راټول شوي دي. دوی لاهم په ټولو مجموعو او د فایل ډول په شمېرو کې حسابېږي.`
+      },
       drives: {
         label: "ډرایونه",
         system: "سیسټم",
@@ -2552,6 +2682,11 @@ export default {
   },
   "pt-BR": {
     diskMapV3: {
+      large: {
+        tooLarge: "A unidade tem mais arquivos do que o Prune consegue manter em uma única verificação. Use “undefined” para verificá-la pasta por pasta ou exclua pastas grandes em Configurações.",
+        foldedNote: (a, b) => `Cada pasta lista seus ${a} maiores arquivos; os outros ${b} arquivos são somados em uma única linha por pasta. Eles continuam contando em todos os totais e nos números por tipo de arquivo.`,
+        foldedFloorNote: (a, b) => `Esta unidade tem tantos arquivos que só os de ${b} ou mais são listados individualmente; os outros ${a} arquivos são somados em uma única linha por pasta. Eles continuam contando em todos os totais e nos números por tipo de arquivo.`
+      },
       drives: {
         label: "Unidades",
         system: "Sistema",
@@ -2650,6 +2785,11 @@ export default {
   },
   pt: {
     diskMapV3: {
+      large: {
+        tooLarge: "A unidade tem mais ficheiros do que o Prune consegue manter numa única análise. Utilize “undefined” para a analisar pasta a pasta ou exclua pastas grandes nas Definições.",
+        foldedNote: (a, b) => `Cada pasta lista os seus ${a} maiores ficheiros; os outros ${b} ficheiros são somados numa única linha por pasta. Continuam a contar em todos os totais e nos números por tipo de ficheiro.`,
+        foldedFloorNote: (a, b) => `Esta unidade tem tantos ficheiros que só os de ${b} ou mais são listados individualmente; os outros ${a} ficheiros são somados numa única linha por pasta. Continuam a contar em todos os totais e nos números por tipo de ficheiro.`
+      },
       drives: {
         label: "Unidades",
         system: "Sistema",
@@ -2748,6 +2888,11 @@ export default {
   },
   ro: {
     diskMapV3: {
+      large: {
+        tooLarge: "Unitatea are mai multe fișiere decât poate gestiona Prune într-o singură scanare. Folosiți „undefined” pentru a o scana folder cu folder sau excludeți folderele mari din Setări.",
+        foldedNote: (a, b) => `Fiecare folder listează cele mai mari ${a} fișiere ale sale; celelalte ${b} fișiere sunt însumate într-un singur rând per folder. Ele continuă să conteze în toate totalurile și în cifrele pe tipuri de fișiere.`,
+        foldedFloorNote: (a, b) => `Această unitate are atât de multe fișiere încât doar cele de ${b} sau mai mari sunt listate individual; celelalte ${a} fișiere sunt însumate într-un singur rând per folder. Ele continuă să conteze în toate totalurile și în cifrele pe tipuri de fișiere.`
+      },
       drives: {
         label: "Unități",
         system: "Sistem",
@@ -2846,6 +2991,11 @@ export default {
   },
   ru: {
     diskMapV3: {
+      large: {
+        tooLarge: "На диске больше файлов, чем Prune может обработать за одно сканирование. Используйте «undefined», чтобы сканировать его папка за папкой, или исключите большие папки в Настройках.",
+        foldedNote: (a, b) => `Каждая папка показывает ${a} самых больших файлов; остальные ${b} файлов объединены в одну строку на папку. Они по-прежнему учитываются во всех итогах и в данных по типам файлов.`,
+        foldedFloorNote: (a, b) => `На этом диске так много файлов, что по отдельности показаны только файлы размером ${b} и больше; остальные ${a} файлов объединены в одну строку на папку. Они по-прежнему учитываются во всех итогах и в данных по типам файлов.`
+      },
       drives: {
         label: "Диски",
         system: "Системный",
@@ -2944,6 +3094,11 @@ export default {
   },
   sk: {
     diskMapV3: {
+      large: {
+        tooLarge: "Jednotka obsahuje viac súborov, než dokáže Prune spracovať v jednom skenovaní. Použite „undefined“ a skenujte ju priečinok po priečinku, alebo v Nastaveniach vylúčte veľké priečinky.",
+        foldedNote: (a, b) => `Každý priečinok uvádza svojich ${a} najväčších súborov; ostatných ${b} súborov je zrátaných do jedného riadka na priečinok. Do všetkých súčtov a prehľadov podľa typu súboru sa stále počítajú.`,
+        foldedFloorNote: (a, b) => `Táto jednotka má toľko súborov, že samostatne sa uvádzajú iba súbory s veľkosťou ${b} a viac; ostatných ${a} súborov je zrátaných do jedného riadka na priečinok. Do všetkých súčtov a prehľadov podľa typu súboru sa stále počítajú.`
+      },
       drives: {
         label: "Disky",
         system: "Systémový",
@@ -3042,6 +3197,11 @@ export default {
   },
   sq: {
     diskMapV3: {
+      large: {
+        tooLarge: "Disku ka më shumë skedarë nga sa mund të mbajë Prune në një skanim të vetëm. Përdorni “undefined” për ta skanuar dosje pas dosjeje, ose përjashtoni dosjet e mëdha te Cilësimet.",
+        foldedNote: (a, b) => `Çdo dosje liston ${a} skedarët e saj më të mëdhenj; ${b} skedarët e tjerë mblidhen në një rresht të vetëm për dosje. Ata vazhdojnë të llogariten në të gjitha totalet dhe në shifrat sipas llojit të skedarit.`,
+        foldedFloorNote: (a, b) => `Ky disk ka kaq shumë skedarë sa vetëm skedarët me madhësi ${b} ose më të mëdhenj listohen një nga një; ${a} skedarët e tjerë mblidhen në një rresht të vetëm për dosje. Ata vazhdojnë të llogariten në të gjitha totalet dhe në shifrat sipas llojit të skedarit.`
+      },
       drives: {
         label: "Disqet",
         system: "Sistemi",
@@ -3140,6 +3300,11 @@ export default {
   },
   sr: {
     diskMapV3: {
+      large: {
+        tooLarge: "Диск има више датотека него што Prune може да обради у једном скенирању. Користите „undefined“ да га скенирате фасциклу по фасциклу или изузмите велике фасцикле у Подешавањима.",
+        foldedNote: (a, b) => `Свака фасцикла приказује својих ${a} највећих датотека; осталих ${b} датотека је сабрано у један ред по фасцикли. И даље се рачунају у све збирове и у бројеве по врсти датотеке.`,
+        foldedFloorNote: (a, b) => `Овај диск има толико датотека да се појединачно приказују само оне од ${b} или веће; осталих ${a} датотека је сабрано у један ред по фасцикли. И даље се рачунају у све збирове и у бројеве по врсти датотеке.`
+      },
       drives: {
         label: "Дискови",
         system: "Системски",
@@ -3238,6 +3403,11 @@ export default {
   },
   sv: {
     diskMapV3: {
+      large: {
+        tooLarge: "Enheten har fler filer än Prune kan hantera i en enda skanning. Använd ”undefined” för att skanna den mapp för mapp, eller undanta stora mappar i Inställningar.",
+        foldedNote: (a, b) => `Varje mapp visar sina ${a} största filer; de övriga ${b} filerna är sammanräknade på en rad per mapp. De räknas fortfarande med i alla summor och i filtypssiffrorna.`,
+        foldedFloorNote: (a, b) => `Den här enheten har så många filer att bara filer på ${b} eller större visas enskilt; de övriga ${a} filerna är sammanräknade på en rad per mapp. De räknas fortfarande med i alla summor och i filtypssiffrorna.`
+      },
       drives: {
         label: "Enheter",
         system: "System",
@@ -3336,6 +3506,11 @@ export default {
   },
   th: {
     diskMapV3: {
+      large: {
+        tooLarge: "ไดรฟ์นี้มีไฟล์มากกว่าที่ Prune จะรับได้ในการสแกนครั้งเดียว ใช้ “undefined” เพื่อสแกนทีละโฟลเดอร์ หรือยกเว้นโฟลเดอร์ขนาดใหญ่ในการตั้งค่า",
+        foldedNote: (a, b) => `แต่ละโฟลเดอร์แสดงไฟล์ที่ใหญ่ที่สุด ${a} ไฟล์ ส่วนไฟล์อื่นอีก ${b} ไฟล์ถูกรวมเป็นหนึ่งแถวต่อโฟลเดอร์ และยังคงนับรวมอยู่ในยอดรวมทุกรายการและตัวเลขตามประเภทไฟล์`,
+        foldedFloorNote: (a, b) => `ไดรฟ์นี้มีไฟล์จำนวนมากจนแสดงแยกเฉพาะไฟล์ขนาด ${b} ขึ้นไป ส่วนไฟล์อื่นอีก ${a} ไฟล์ถูกรวมเป็นหนึ่งแถวต่อโฟลเดอร์ และยังคงนับรวมอยู่ในยอดรวมทุกรายการและตัวเลขตามประเภทไฟล์`
+      },
       drives: {
         label: "ไดรฟ์",
         system: "ระบบ",
@@ -3434,6 +3609,11 @@ export default {
   },
   tr: {
     diskMapV3: {
+      large: {
+        tooLarge: "Sürücüde, Prune'un tek taramada işleyebileceğinden fazla dosya var. Klasör klasör taramak için “undefined” seçeneğini kullanın veya Ayarlar'da büyük klasörleri hariç tutun.",
+        foldedNote: (a, b) => `Her klasör en büyük ${a} dosyasını listeler; diğer ${b} dosya klasör başına tek satırda toplanır. Bunlar yine de tüm toplamlara ve dosya türü rakamlarına dahildir.`,
+        foldedFloorNote: (a, b) => `Bu sürücüde o kadar çok dosya var ki yalnızca ${b} ve üzeri boyuttaki dosyalar tek tek listelenir; diğer ${a} dosya klasör başına tek satırda toplanır. Bunlar yine de tüm toplamlara ve dosya türü rakamlarına dahildir.`
+      },
       drives: {
         label: "Sürücüler",
         system: "Sistem",
@@ -3532,6 +3712,11 @@ export default {
   },
   uk: {
     diskMapV3: {
+      large: {
+        tooLarge: "На диску більше файлів, ніж Prune може обробити за одне сканування. Скористайтеся «undefined», щоб сканувати його папка за папкою, або виключіть великі папки в Налаштуваннях.",
+        foldedNote: (a, b) => `Кожна папка показує ${a} найбільших файлів; решту ${b} файлів об’єднано в один рядок на папку. Вони й надалі враховуються в усіх підсумках і в даних за типами файлів.`,
+        foldedFloorNote: (a, b) => `На цьому диску так багато файлів, що окремо показано лише файли розміром ${b} і більше; решту ${a} файлів об’єднано в один рядок на папку. Вони й надалі враховуються в усіх підсумках і в даних за типами файлів.`
+      },
       drives: {
         label: "Диски",
         system: "Системний",
@@ -3630,6 +3815,11 @@ export default {
   },
   vi: {
     diskMapV3: {
+      large: {
+        tooLarge: "Ổ đĩa có nhiều tệp hơn mức Prune có thể xử lý trong một lần quét. Hãy dùng “undefined” để quét từng thư mục một, hoặc loại trừ các thư mục lớn trong Cài đặt.",
+        foldedNote: (a, b) => `Mỗi thư mục liệt kê ${a} tệp lớn nhất; ${b} tệp còn lại được cộng gộp thành một dòng cho mỗi thư mục. Chúng vẫn được tính vào mọi tổng số và số liệu theo loại tệp.`,
+        foldedFloorNote: (a, b) => `Ổ đĩa này có nhiều tệp đến mức chỉ các tệp từ ${b} trở lên được liệt kê riêng; ${a} tệp còn lại được cộng gộp thành một dòng cho mỗi thư mục. Chúng vẫn được tính vào mọi tổng số và số liệu theo loại tệp.`
+      },
       drives: {
         label: "Ổ đĩa",
         system: "Hệ thống",
@@ -3728,6 +3918,11 @@ export default {
   },
   "zh-CN": {
     diskMapV3: {
+      large: {
+        tooLarge: "此驱动器上的文件数量超过了 Prune 一次扫描所能容纳的上限。请使用“undefined”逐个文件夹扫描，或在设置中排除较大的文件夹。",
+        foldedNote: (a, b) => `每个文件夹列出其最大的 ${a} 个文件；其余 ${b} 个文件按文件夹合并为一行。它们仍计入所有合计和文件类型数据。`,
+        foldedFloorNote: (a, b) => `此驱动器上的文件太多，只有 ${b} 及以上的文件会单独列出；其余 ${a} 个文件按文件夹合并为一行。它们仍计入所有合计和文件类型数据。`
+      },
       drives: {
         label: "驱动器",
         system: "系统",
@@ -3826,6 +4021,11 @@ export default {
   },
   "zh-TW": {
     diskMapV3: {
+      large: {
+        tooLarge: "此磁碟機上的檔案數量超過 Prune 一次掃描所能容納的上限。請使用「undefined」逐一資料夾掃描，或在設定中排除較大的資料夾。",
+        foldedNote: (a, b) => `每個資料夾列出其最大的 ${a} 個檔案；其餘 ${b} 個檔案依資料夾合併為一列。它們仍計入所有總計和檔案類型數據。`,
+        foldedFloorNote: (a, b) => `此磁碟機上的檔案太多，只有 ${b} 以上的檔案會個別列出；其餘 ${a} 個檔案依資料夾合併為一列。它們仍計入所有總計和檔案類型數據。`
+      },
       drives: {
         label: "磁碟機",
         system: "系統",

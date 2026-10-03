@@ -22,10 +22,32 @@ export function attachFullPaths(node, rootPath) {
 }
 
 function attachPathsFrom(node, fullPath) {
-  const withPath = { ...node, fullPath };
+  const { folded, ...rest } = node;
+  const withPath = { ...rest, fullPath };
   if (!node.children) return withPath;
   withPath.children = node.children.map(child => attachPathsFrom(child, joinPath(fullPath, child.name)));
+  if (folded) withPath.children = withFoldedRow(withPath.children, folded);
   return withPath;
+}
+
+/** The scan folds a big folder's smaller files into one block on the folder
+ * ({ count, size, allocated, exts }, see backend/src/lib/foldFiles.js). Here it
+ * becomes the row everything else already knows: an `aggregated` file node,
+ * placed by size among its siblings, with no path (it is not a file anyone can
+ * open or delete). Its name is English; the screen shows the translation made
+ * from `count` (localizeUnscanned). */
+function withFoldedRow(children, folded) {
+  const row = {
+    name: `(${folded.count.toLocaleString('en-US')} smaller files)`,
+    size: folded.size,
+    type: 'file',
+    aggregated: true,
+    count: folded.count
+  };
+  if (typeof folded.allocated === 'number') row.allocated = folded.allocated;
+  if (folded.exts) row.exts = folded.exts;
+  const at = children.findIndex((c) => (c.size || 0) < row.size);
+  return at === -1 ? [...children, row] : [...children.slice(0, at), row, ...children.slice(at)];
 }
 
 /** A treemap given the WHOLE recursive tree renders every descendant as

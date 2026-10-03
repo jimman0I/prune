@@ -11,15 +11,25 @@ function isRemainder(node) {
   return node?.scanned === false && (node.unscannedRemainder === true || node.name === UNSCANNED_LABEL);
 }
 
+/** Whether a node is a "(N smaller files)" row: the files a big folder's scan
+ * folded into one block (see diskMapTree.js). Only these carry a `count`. */
+const isFoldedRow = (node) => node?.aggregated === true && typeof node.count === 'number';
+
 /** The tree with the remainder block renamed to `label` (the translated
- * string), and untouched -- same object -- when it has none, so a memo keyed
- * on the tree does not churn. Only the block's name changes; sizes and paths
- * are exactly what was measured. */
-export function localizeUnscanned(tree, label) {
-  if (!tree?.children?.some(isRemainder)) return tree;
+ * string), and the "(N smaller files)" rows named by `foldedLabel(count)` when
+ * given -- untouched, the same object, when it has neither, so a memo keyed on
+ * the tree does not churn. Only names change, and only on the children in view
+ * (they are all that is drawn); sizes and paths are exactly what was measured. */
+export function localizeUnscanned(tree, label, foldedLabel) {
+  const folded = foldedLabel ? tree?.children?.some(isFoldedRow) : false;
+  if (!tree?.children?.some(isRemainder) && !folded) return tree;
   return {
     ...tree,
-    children: tree.children.map((c) => (isRemainder(c) ? { ...c, name: label } : c))
+    children: tree.children.map((c) => {
+      if (isRemainder(c)) return { ...c, name: label };
+      if (folded && isFoldedRow(c)) return { ...c, name: foldedLabel(c.count) };
+      return c;
+    })
   };
 }
 
