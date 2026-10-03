@@ -15,6 +15,7 @@ import { selectionTotal } from '../lib/selectionTotal.js';
 import { needsWarning, rememberedWith } from '../lib/cleanWarning.js';
 import { categoryTickPlan } from '../lib/categoryTickPlan.js';
 import { removalModeFrom, cleanOutcome } from '../lib/cleanOutcome.js';
+import { formatRelativeTime } from '../lib/formatRelativeTime.js';
 import DeepCleanTree from './DeepCleanTree.jsx';
 import CleanWarningDialog from './CleanWarningDialog.jsx';
 import WipeFreeSpaceDialog from './WipeFreeSpaceDialog.jsx';
@@ -34,7 +35,7 @@ const LOG_TONE = {
  * into something you can watch. Auto-scrolls, but only while pinned to
  * the bottom -- yanking the view back down while someone is reading
  * further up is worse than not scrolling at all. */
-function ScanLog({ lines, scanning, scanned, total, progress }) {
+function ScanLog({ lines, scanning, scanned, total, progress, idleText = null }) {
   const { t } = useLanguage();
   const boxRef = useRef(null);
   const pinnedRef = useRef(true);
@@ -121,7 +122,7 @@ function ScanLog({ lines, scanning, scanned, total, progress }) {
       <div ref={boxRef} onScroll={onScroll} className="flex-1 overflow-y-auto min-h-0 px-4 py-3 space-y-1">
         {lines.length === 0 && (
           <p className="text-[12px] text-[color:var(--text-muted)] font-mono">
-            {scanning ? t('deepClean.scanLog.starting') : t('deepClean.scanLog.idle')}
+            {scanning ? t('deepClean.scanLog.starting') : (idleText ?? t('deepClean.scanLog.idle'))}
           </p>
         )}
         {lines.map((line, i) => (
@@ -168,10 +169,8 @@ function formatBytes(bytes) {
 }
 
 function DeepClean({ onNavigate }) {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const cleaner = useCleanerText();
-  // No auto-scan on mount, per spec -- the tree stays empty until the
-  // user explicitly clicks Preview.
   const [selected, setSelected] = useState(new Set());
 
   /* The application icon for each heading. Its own query, never blocking
@@ -229,16 +228,25 @@ function DeepClean({ onNavigate }) {
     categoryOf: (id) => categoryByRuleRef.current.get(id)
   }), [cleaner.ruleName, cleaner.categoryName]);
 
+  // BleachBit's "hide irrelevant cleaners". Most of a 74-rule list is for
+  // software this machine does not have.
+  const { settings, save: saveSettings } = useSettings();
+
   // The tree, the scan and its cancellation all live in the hook now --
   // see hooks/useDeepCleanScan.js. What useQuery buys here is the thing
   // the stream needed most: an AbortSignal with a real lifecycle, so Stop
   // still closes the connection and the backend still stops walking.
+  //
+  // It also remembers the last complete scan between launches, so the tree
+  // can open already measured; `settings` is what tells it whether that
+  // scan still applies.
   const {
     tree: categories, scanning, hasScanned, log: logLines,
     scanned, total, error: scanError, currentId: scanningId,
     progress: scanProgress,
+    lastScanAt, restored, applyCleanResults,
     start, stop: stopPreview, cleanableIds: scannedIds
-  } = useDeepCleanScan(logName, scanLogMessages);
+  } = useDeepCleanScan(logName, scanLogMessages, { settings, autoStart: true });
 
   // The clean itself, streamed the same way -- see hooks/useDeepCleanExecute.js.
   // `run` throws on a real failure (same contract the old one-shot
@@ -254,9 +262,6 @@ function DeepClean({ onNavigate }) {
     (categories ?? []).flatMap((group) => group.items.map((item) => [item.id, group.category]))
   );
 
-  // BleachBit's "hide irrelevant cleaners". Most of a 74-rule list is for
-  // software this machine does not have.
-  const { settings, save: saveSettings } = useSettings();
   const hideUnavailable = settings?.hideUnavailableRules === true;
   // What Clean will do to the files, read from settings only to say so
   // beforehand -- the backend decides for itself and takes no flag from here.
@@ -315,38 +320,32 @@ function DeepClean({ onNavigate }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selected]);
 
-  /** `reselect: false` is for the rescan that follows a clean -- the user
-   * just acted on those rules, and re-ticking them would invite doing it
-   * twice. It also gates clearing `cleanResult`: handleClean calls
-   * `setCleanResult(result)` and then this, with no `await` between them,
-   * so an unconditional `setCleanResult(null)` here ran in the SAME
-   * synchronous stack frame and React 18's automatic batching collapsed
-   * both into one commit -- the "Freed X" banner was overwritten by its
-   * own clear before it ever painted. A manual Preview/Rescan click
-   * (`reselect: true`, the default) still clears the stale PREVIOUS
-   * result immediately, which is correct there; only the post-clean
-   * rescan needs to leave the banner up until the next explicit preview. */
-  const runPreview = async ({ reselect = true } = {}) => {
-    if (reselect) setCleanResult(null);
+  /** A manual Preview / Rescan: clears the previous clean's "Freed X"
+   * banner, which describes a state the new scan is about to replace, and
+   * walks the disk. Nothing calls this after a clean any more -- the rows
+   * settle from the clean's own report (see handleClean) and the banner
+   * stays until the next explicit scan. */
+  const runPreview = async () => {
+    setCleanResult(null);
     await start();
   };
 
-  // Scans itself, once, the first time the screen has something to scan
-  // -- the same scan a manual Preview click starts, just not waiting for
-  // that click. Opening Deep Clean used to mean a dead screen until you
-  // pressed Preview and sat through it; now that wait happens while
-  // you're still reading the screen rather than after you've decided to
-  // act on it. Clean itself is untouched -- it still needs a real
-  // measured total before it's enabled (see canClean below) and a
-  // confirm with that number before anything moves, because scanning
-  // automatically is "show me sooner", not "skip deciding".
-  const autoScanRef = useRef(false);
-  useEffect(() => {
-    if (autoScanRef.current || !categories || !settings || hasScanned || scanning) return;
-    autoScanRef.current = true;
-    start();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [categories, settings, hasScanned, scanning]);
+  // The screen scans itself the first time it has something to scan -- the
+  // same scan a manual Preview click starts, just not waiting for that click.
+  // Opening Deep Clean used to mean a dead screen until you pressed Preview
+  // and sat through it; now that wait happens while you're still reading the
+  // screen rather than after you've decided to act on it. Clean itself is
+  // untouched -- it still needs a real measured total before it's enabled
+  // (see canClean below) and a confirm with that number before anything
+  // moves, because scanning automatically is "show me sooner", not "skip
+  // deciding".
+  //
+  // Only when there is nothing to show: a scan remembered from an earlier
+  // launch (and still valid for the current settings and rules) already fills
+  // the tree, and Clean works from it -- BleachBit scans once and then just
+  // cleans. The hook decides that (see `autoStart` in useDeepCleanScan.js),
+  // in the same step that looks for the remembered scan, so "there is none"
+  // is a fact rather than a first-render default.
 
   // Once a scan has measured everything, drop any tick the scan proved
   // there is no point cleaning. Before a scan the tree is listed but
@@ -358,19 +357,23 @@ function DeepClean({ onNavigate }) {
   // reading "Total space to free: 0 B" with Clean disabled: a nineteen
   // second wait ending in a dead end, which is how this got reported as
   // the feature not working at all.
+  //
+  // Runs when a whole scan lands -- fresh, or restored from the last launch --
+  // and not when a clean later settles rows (see the hook's cleanableIds). It
+  // reads the tree through a ref for that reason: listing `categories` here
+  // re-ran it after every clean, which ticked the defaults again on rows that
+  // had just been emptied.
+  const categoriesRef = useRef(categories);
+  categoriesRef.current = categories;
   useEffect(() => {
     if (!hasScanned || scanning) return;
     const validIds = scannedIds();
     if (validIds.size === 0) return;
     setSelected((prev) => {
       const kept = new Set([...prev].filter((id) => validIds.has(id)));
-      return kept.size > 0 ? kept : defaultSelection(categories ?? []);
+      return kept.size > 0 ? kept : defaultSelection(categoriesRef.current ?? []);
     });
-    // scannedIds and categories are both listed now that the hook returns
-    // a stable reader. They were omitted before, which happened to be
-    // correct only because of when this effect fires -- the kind of
-    // omission that stays right until someone changes the timing.
-  }, [hasScanned, scanning, scannedIds, categories]);
+  }, [hasScanned, scanning, scannedIds]);
 
   /** One rule by id, from the unfiltered set.
    *
@@ -532,6 +535,9 @@ function DeepClean({ onNavigate }) {
       // picked (the selection persists on every change, including this
       // one -- see the effect below).
       if (result.aborted) {
+        // Whatever finished before the click really happened, so those rows
+        // are brought up to date; the rest are exactly as they were.
+        applyCleanResults(result.results);
         toasts.warn(`${t('deepClean.cleanupStopped')} ${resultSentence(result)}`);
         return;
       }
@@ -551,12 +557,12 @@ function DeepClean({ onNavigate }) {
 
       setSelected(new Set());
       setConfirmClean(false);
-      // Re-scan so the numbers on screen reflect what's actually left on
-      // disk, not a stale pre-clean snapshot -- same convention Smart
-      // Cleanup's own handleClean already follows. Streamed like any other
-      // scan, so this one shows its progress too rather than freezing the
-      // screen for another nineteen seconds after the clean.
-      await runPreview({ reselect: false });
+      // No rescan. This used to walk the disk again so the numbers on screen
+      // were true; the clean already said, rule by rule, what it removed, and
+      // that settles the rows we can speak for (0 B, or what is left after
+      // locked files) and marks the rest "measure again" rather than guess.
+      // Rescan is still a button for anyone who wants a fresh measurement.
+      applyCleanResults(result.results);
       return;
     } catch (err) {
       setCleanError(err.message);
@@ -588,11 +594,11 @@ function DeepClean({ onNavigate }) {
       setElevatedResult(result);
       if (result.ok) {
         toasts.success(`${t('deepClean.cleanupComplete')} ${resultSentence(result.data)}`);
-        // Same reasoning as the ordinary clean's own re-scan: the numbers
-        // on screen should reflect what is actually left on disk, not a
-        // stale pre-clean snapshot, and the rules just cleaned no longer
-        // need the elevated button once they are gone.
-        await runPreview({ reselect: false });
+        // Same as the ordinary clean: the rows are settled from what was
+        // reported, not rescanned. A rule this cleaned stops being "needs
+        // administrator" (it was just read and emptied by one), so its banner
+        // and button go; if the folder stayed protected, nothing changed.
+        applyCleanResults(result.data?.results);
       } else if (!result.cancelled) {
         toasts.warn(result.error || t('deepClean.cleanErrorPrefix', ''));
       }
@@ -614,8 +620,13 @@ function DeepClean({ onNavigate }) {
   // The free-space wipe frees nothing and so is never "measured"; ticking it
   // is what makes a Clean worth allowing when it is all that is selected.
   const wipeSelected = (categories ?? []).some((g) => g.items.some((i) => i.confirmEveryTime && selected.has(i.id)));
+  // A remembered scan counts as measured (hasScanned is true for it, and its
+  // rows are marked fromCache): Clean does not need a scan to have run in this
+  // launch, only that something ticked has a measured size.
   const canClean = Boolean(categories) && hasScanned && !scanning && !cleaning
     && selected.size > 0 && (cleanTotal.anyMeasured || wipeSelected);
+  // The confirmation says so when a number in it is from an earlier scan.
+  const selectedFromCache = (categories ?? []).some((g) => g.items.some((i) => i.fromCache === true && selected.has(i.id)));
 
   return (
     <div className="h-full flex flex-col">
@@ -685,8 +696,8 @@ function DeepClean({ onNavigate }) {
 
         {/* Only for rules a scan already proved need administrator to even
             look inside -- never shown just because a scan is running, and
-            gone again once runPreview() (after a successful elevated
-            clean) no longer reports any. One UAC prompt, raised only from
+            gone again once a successful elevated clean has settled those
+            rows (they no longer read as unreadable). One UAC prompt, raised only from
             this button, covering only these rules. */}
         {needsAdminIds.length > 0 && !scanning && !cleaning && (
           <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 mb-5 px-3.5 py-3 rounded-xl bg-[color:var(--bg-panel)] border border-[color:var(--border-subtle)]">
@@ -805,6 +816,9 @@ function DeepClean({ onNavigate }) {
                 // the full browsable list while deciding what to clean.
                 receiptMode={cleaning}
                 elevated={elevated}
+                // Only a fresh scan carries each rule's biggest files, so a
+                // row restored from the last launch offers this instead.
+                onRescan={scanning || cleaning ? undefined : runPreview}
               />
             )}
           </div>
@@ -821,6 +835,9 @@ function DeepClean({ onNavigate }) {
             scanned={cleaning ? cleanExecuted : scanned}
             total={cleaning ? cleanTotalCount : total}
             progress={cleaning ? cleanProgress : scanProgress}
+            // The pane is empty when the tree was drawn from the last
+            // launch's scan, and "Press Preview" would be untrue of it.
+            idleText={restored ? t('deepCleanV3.cache.usingLastScan') : null}
           />
         </div>
       </div>
@@ -886,6 +903,14 @@ function DeepClean({ onNavigate }) {
               <span className="text-[12.5px] text-[color:var(--text-primary)] mr-1">
                 {t(CONFIRM_PROMPT[removalMode], selected.size, cleanTotal.anyMeasured, formatBytes(cleanTotal.bytes))}
                 {wipeSelected && <> {t('deepClean.confirm.wipeNote')}</>}
+                {/* The number in the prompt is from an earlier scan: said so,
+                    where it is read. Each rule is measured again as it is
+                    cleaned, and what actually happened is what gets reported. */}
+                {selectedFromCache && (
+                  <span data-testid="deep-clean-cache-note" className="block mt-0.5 text-[11.5px] text-[color:var(--text-secondary)]">
+                    {t('deepCleanV3.cache.confirmNote')}
+                  </span>
+                )}
                 {/* Only where it cannot be undone: naming the biggest items
                     is what lets someone tell a cache from a game install. */}
                 {removalMode === 'delete' && biggest.length > 0 && (
@@ -945,6 +970,14 @@ function DeepClean({ onNavigate }) {
                 >
                   {hasScanned ? t('deepClean.rescan') : t('deepClean.before.preview')}
                 </button>
+              )}
+              {/* When the sizes below were measured. Unobtrusive text beside
+                  the button that measures again, so "is this still true?" is
+                  answered where the person would go to refresh it. */}
+              {hasScanned && !scanning && lastScanAt && (
+                <span data-testid="deep-clean-last-measured" className="text-[11.5px] text-[color:var(--text-muted)]">
+                  {t('deepCleanV3.cache.lastMeasured', formatRelativeTime(lastScanAt, language))}
+                </span>
               )}
               {/* What Clean will do, in plain text next to the button that
                   does it -- not a tooltip, and not only in the confirm. */}

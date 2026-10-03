@@ -114,7 +114,27 @@ see v1.0.1 below) are documented here.
 - **Deep Clean scans automatically instead of waiting for Preview.**
   Opening the screen now starts the scan immediately; Preview still
   exists for re-scanning after changing settings, but the
-  scan-then-clean two-step for a first look is gone.
+  scan-then-clean two-step for a first look is gone. (Once a scan has been
+  remembered, opening the screen no longer starts one; see below.)
+- **Deep Clean scans once, remembers it, and then just cleans, like
+  BleachBit.** The last complete scan is kept across restarts, so the
+  screen opens already measured, with "Last measured 3 hours ago" beside
+  Rescan, and Clean works straight from it with no scan first. The
+  confirmation says the sizes are from the last scan; Clean still measures
+  each rule again as it runs and reports what actually happened. Only the
+  sizes are kept (not file lists or paths), and a remembered scan is
+  ignored and a new one made when your exclusions, the recent-files window,
+  custom locations, imported cleaners, the rule list or the app version
+  have changed since. Rescan always measures again and refreshes it. A
+  rule's biggest-files list needs a fresh scan, and says so.
+- **Deep Clean no longer rescans after every clean.** The rows are brought
+  up to date from what the clean reported: a rule that was emptied reads
+  0 B, one with locked files keeps what is left, and a rule where what
+  remains cannot be worked out (a browser database edited in place, a
+  profile search that stopped short) reads "Cleaned — rescan to measure"
+  instead of a guess. The same goes for "Clean as administrator". The
+  default rules are also no longer ticked again on the rows you just
+  cleaned.
 
 ### Fixed
 

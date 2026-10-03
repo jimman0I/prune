@@ -319,24 +319,26 @@ describe('the gate in front of a clean', () => {
     expect(ids.length).toBeGreaterThan(0);
   });
 
-  it('shows the Freed banner after a clean, and it survives the automatic rescan', async () => {
-    // Regression: handleClean called setCleanResult(result), then --
-    // with no await between them -- runPreview's setCleanResult(null),
-    // both in the same synchronous stack. React 18 batched them into one
-    // commit, so the banner was overwritten by its own clear before it
-    // ever painted. No test asserted on the banner's actual presence.
+  it('shows the Freed banner after a clean, and keeps it: nothing rescans to clear it', async () => {
+    // History: handleClean used to call setCleanResult(result) and then, with
+    // no await between them, runPreview's setCleanResult(null), so React 18
+    // batched them and the banner never painted. A clean no longer rescans at
+    // all (the rows settle from its own report), so the banner is simply
+    // there, and stays until the next explicit Preview/Rescan click.
     const user = userEvent.setup();
     renderScreen(<DeepClean />);
     await selectSomething(user);
+    const scansBeforeClean = streamDeepCleanScan.mock.calls.length;
     await user.click(cleanButton());
     await user.click(screen.getByRole('button', { name: 'Move to Quarantine' }));
 
     await waitFor(() => expect(streamDeepCleanExecute).toHaveBeenCalledTimes(1));
     expect(await screen.findByText('Freed 1 KB')).toBeTruthy();
 
-    // The post-clean rescan (runPreview({ reselect: false })) must not
-    // clear it either -- only an explicit Preview/Rescan click should.
-    await waitFor(() => expect(streamDeepCleanScan).toHaveBeenCalled());
+    // The clean started no scan of its own. Only an explicit Preview/Rescan
+    // click clears the banner.
+    await new Promise((resolve) => setTimeout(resolve, 50));
+    expect(streamDeepCleanScan).toHaveBeenCalledTimes(scansBeforeClean);
     expect(screen.getByText('Freed 1 KB')).toBeTruthy();
   });
 });
@@ -353,7 +355,7 @@ describe('the clean-in-progress output', () => {
   it('shows the BleachBit-style log as each rule is cleaned', async () => {
     // Deliberately never resolved -- same as the "Cleaning…" busy-state
     // test in DeepClean.language.render.test.jsx. A resolved stream lets
-    // handleClean run all the way through to the post-clean rescan inside
+    // handleClean run all the way through to the end of the clean inside
     // the same act() flush, which is exactly what this test should NOT
     // yet observe: the log line while the clean is still in progress.
     let onEventRef;

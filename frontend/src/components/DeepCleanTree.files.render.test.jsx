@@ -107,3 +107,42 @@ describe('expanding a rule to see its files', () => {
     expect(container.querySelector('[title]')).toBeNull();
   });
 });
+
+describe('rows that came from a remembered scan', () => {
+  const cached = (over = {}) => item({ files: undefined, fromCache: true, ...over });
+
+  it('offers the expander, and says the list needs a fresh scan instead of an empty box', async () => {
+    const user = userEvent.setup();
+    show([cached()]);
+    await user.click(screen.getByRole('button', { name: 'Show files in Temporary files' }));
+    expect(screen.getByTestId('rule-files-need-rescan').textContent).toBe('The list of largest files needs a fresh scan.');
+    expect(screen.queryByRole('list', { name: /Largest files first/ })).toBeNull();
+  });
+
+  it('puts a Rescan button in that note only when it was given something to call', async () => {
+    const user = userEvent.setup();
+    const onRescan = vi.fn();
+    show([cached()], { onRescan });
+    await user.click(screen.getByRole('button', { name: 'Show files in Temporary files' }));
+    await user.click(within(screen.getByTestId('rule-files-need-rescan').parentElement).getByRole('button', { name: 'Rescan' }));
+    expect(onRescan).toHaveBeenCalledTimes(1);
+
+    cleanup();
+    show([cached()]);
+    await user.click(screen.getByRole('button', { name: 'Show files in Temporary files' }));
+    expect(screen.queryByRole('button', { name: 'Rescan' })).toBeNull();
+  });
+
+  it('offers nothing for a remembered rule that never listed files, or is empty', () => {
+    show([cached({ filesListed: undefined }), cached({ id: 'e', name: 'Empty', sizeBytes: 0 })]);
+    expect(screen.queryByRole('button', { name: /Show files in/ })).toBeNull();
+  });
+});
+
+describe('a row a clean could not re-measure', () => {
+  it('says cleaned, rescan to measure, instead of a dash or a number', () => {
+    show([item({ files: undefined, filesListed: undefined, sizeBytes: null, fileCount: null, rescanNeeded: true })]);
+    expect(screen.getByText('Cleaned — rescan to measure')).toBeTruthy();
+    expect(screen.queryByText('—')).toBeNull();
+  });
+});

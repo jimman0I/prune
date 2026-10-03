@@ -380,18 +380,27 @@ describe('the Deep Clean screen, in Greek', () => {
     expect(screen.getByText('Κλείστε τις εφαρμογές που τα χρησιμοποιούν και καθαρίστε ξανά.')).toBeTruthy();
   });
 
-  // No test for the inline "Freed X" success-banner's own locked-files
-  // clause (t('deepClean.resultLockedSuffix')): handleClean() sets
-  // cleanResult, then -- still in the same synchronous stack, no await
-  // between them -- calls runPreview(), whose first line clears it again
-  // before its own await. React 18 batches both into one commit, so the
-  // banner never actually paints; confirmed by trying exactly this
-  // assertion and finding the banner's div simply absent afterward, while
-  // the corresponding success toast (a separate piece of state) renders
-  // fine. A genuine pre-existing bug unrelated to translation, flagged
-  // separately rather than fixed here -- see the spawned task on this
-  // session. deepClean.resultLockedSuffix is exercised as a plain
-  // function by validate_deepclean_blocks.mjs's syntax check instead.
+  it("words the success banner's locked-files clause in Greek", async () => {
+    // This used to be untestable: handleClean cleared the banner in the same
+    // synchronous stack that set it, through the rescan that followed a clean.
+    // A clean no longer rescans, so the banner paints and can be asserted on.
+    streamDeepCleanExecute.mockImplementation(async (ruleIds, onEvent) => {
+      onEvent('rule', { id: 'temp', name: 'temp', freedBytes: 1024, skipped: [{ path: 'C:\a.tmp', reason: 'locked' }] });
+    });
+    const user = userEvent.setup();
+    mount();
+    await ready();
+    await screen.findByText('Temporary files');
+    await previewFirst(user);
+    const boxes = screen.getAllByRole('checkbox');
+    await user.click(boxes[boxes.length - 1]);
+    await waitFor(() => expect(cleanButton().disabled).toBe(false));
+    await user.click(cleanButton());
+    await user.click(screen.getByRole('button', { name: 'Μετακίνηση σε καραντίνα' }));
+
+    const banner = await screen.findByTestId('deep-clean-result');
+    expect(banner.textContent).toContain(' — παραλείφθηκε 1 κλειδωμένο αρχείο');
+  });
 });
 
 describe('the warning dialog, in Greek', () => {
@@ -453,8 +462,8 @@ describe('the Deep Clean live logs, in Greek', () => {
   });
 
   it('words a clean log line in Greek', async () => {
-    // Held open so the clean log is still the panel on screen: a finished
-    // clean immediately re-scans and replaces it.
+    // Held open so the clean log is still the panel on screen: once a clean
+    // finishes, the panel hands itself back to the scan log.
     streamDeepCleanExecute.mockImplementation(async (ruleIds, onEvent) => {
       onEvent('start', { total: 1 });
       onEvent('rule', { id: 'temp', name: 'Temporary files', freedBytes: 1024, skipped: [{ path: 'C:\a.tmp', reason: 'locked' }] });

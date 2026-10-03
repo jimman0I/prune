@@ -99,6 +99,12 @@ function Checkbox({ state, onChange, label, size = 16, hit = size, className = '
  * there. The bare dash gets no animation: nothing has arrived yet. */
 function SizeLabel({ item, elevated = false }) {
   const { t } = useLanguage();
+  // Cleaned, but not by anything that can say how much is left (a database
+  // edited in place, a search that stopped short): no size is claimed, and
+  // the row says why instead of showing a bare dash.
+  if (item.rescanNeeded) {
+    return <span className="log-line-in font-mono text-[11px] shrink-0 text-[color:var(--text-muted)]">{t('deepCleanV3.cache.cleanedRescan')}</span>;
+  }
   if (item.sizeBytes === null) {
     return <span className="font-mono text-[11px] shrink-0 text-[color:var(--text-muted)]">—</span>;
   }
@@ -197,7 +203,31 @@ function RuleFiles({ item }) {
   );
 }
 
-function CategorySection({ category, items, allItems = items, iconSrc, selected, onToggle, onToggleCategory, activeId, receiptMode = false, collapsed, onToggleCollapsed, filtering = false, elevated = false }) {
+/** What a row's file list says when the sizes came from the last launch's
+ * scan: the biggest files are only gathered by a scan, and none was stored
+ * (a scan's file lists are most of its size). A way to get them rather than
+ * an empty box. */
+function RuleFilesNeedRescan({ onRescan }) {
+  const { t } = useLanguage();
+  return (
+    <div className="pl-[38px] pr-3 pb-2 flex flex-wrap items-center gap-x-3 gap-y-1">
+      <p data-testid="rule-files-need-rescan" className="text-[11px] text-[color:var(--text-muted)]">
+        {t('deepCleanV3.cache.filesNeedRescan')}
+      </p>
+      {onRescan && (
+        <button
+          type="button"
+          onClick={onRescan}
+          className="inline-flex items-center min-h-[24px] px-2 rounded text-[11.5px] text-[color:var(--text-secondary)] hover:text-[color:var(--accent-primary)] hover:bg-[color:var(--surface-hover)] transition-colors"
+        >
+          {t('deepClean.rescan')}
+        </button>
+      )}
+    </div>
+  );
+}
+
+function CategorySection({ category, items, allItems = items, iconSrc, selected, onToggle, onToggleCategory, activeId, receiptMode = false, collapsed, onToggleCollapsed, filtering = false, elevated = false, onRescan }) {
   const { t } = useLanguage();
   // Display only: `category` and item.id stay the keys for icons, collapse
   // state and selection.
@@ -287,7 +317,12 @@ function CategorySection({ category, items, allItems = items, iconSrc, selected,
           // opened to show them. Nothing to open for an empty list, a rule
           // that does not delete files, or one not measured yet.
           const listed = measured && Array.isArray(item.files) && item.files.length > 0;
-          const filesOpen = listed && !receiptMode && openFiles.has(item.id);
+          // A rule whose last scan DID list its files (`filesListed`) but
+          // whose numbers were remembered from an earlier launch: the list is
+          // not stored, so the expander is still offered, with a way to get it.
+          const listAfterRescan = !listed && measured && item.fromCache === true && item.filesListed === true && item.sizeBytes > 0;
+          const expandable = listed || listAfterRescan;
+          const filesOpen = expandable && !receiptMode && openFiles.has(item.id);
           return (
             <div key={item.id}>
             <div
@@ -379,7 +414,7 @@ function CategorySection({ category, items, allItems = items, iconSrc, selected,
               )}
               {!(measured && item.description) && <span className="flex-1" />}
 
-              {listed && !receiptMode && (
+              {expandable && !receiptMode && (
                 <button
                   type="button"
                   aria-expanded={filesOpen}
@@ -414,7 +449,7 @@ function CategorySection({ category, items, allItems = items, iconSrc, selected,
                 onChange={() => onToggle(item.id)}
               />
             </div>
-            {filesOpen && <RuleFiles item={item} />}
+            {filesOpen && (listed ? <RuleFiles item={item} /> : <RuleFilesNeedRescan onRescan={onRescan} />)}
             </div>
           );
           })}
@@ -430,7 +465,7 @@ function CategorySection({ category, items, allItems = items, iconSrc, selected,
  * sizeBytes, ...}] }]. `icons` is { category: dataUri } from
  * GET /api/deep-clean/category-icons, and is allowed to be empty or to
  * arrive late -- every heading renders either way. */
-export default function DeepCleanTree({ categories, selected, onToggle, onToggleCategory, icons = {}, activeId = null, receiptMode = false, elevated = false }) {
+export default function DeepCleanTree({ categories, selected, onToggle, onToggleCategory, icons = {}, activeId = null, receiptMode = false, elevated = false, onRescan }) {
   const { t } = useLanguage();
   const { language } = useCleanerText();
   const [query, setQuery] = useState('');
@@ -521,6 +556,7 @@ export default function DeepCleanTree({ categories, selected, onToggle, onToggle
             onToggleCollapsed={toggleCollapsed}
             filtering={filtering}
             elevated={elevated}
+            onRescan={onRescan}
           />
         ))}
       </div>
