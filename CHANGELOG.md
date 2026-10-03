@@ -52,6 +52,21 @@ see v1.0.1 below) are documented here.
 - Locked files can be deleted at the next restart.
 - A `prune-cli` command line (`list`, `preview`, `clean`, `--json`),
   shipped as `prune-cli.cmd` next to Prune.exe.
+- **A scheduled clean that runs while Prune is closed.** Settings -> Cleanup
+  has an opt-in, off-by-default switch, "Also run when Prune is closed", under
+  the schedule (installed app on Windows only). It adds one Task Scheduler task,
+  `Prune\Scheduled clean`, for your account only: run only when you are logged
+  on, no elevation, no stored password. The task runs
+  `prune-cli.cmd clean --preset recommended --report` at the schedule's time (no
+  second schedule to set), so it skips anything that loses data and keeps your
+  exclusions, protected paths and Quarantine setting. The switch reads the real
+  task from Windows, the in-app scheduler stands down while the task exists,
+  changing the schedule updates the task, and turning it off or uninstalling
+  Prune deletes it. The Dashboard and Settings show one line, "Last automatic
+  clean: 3 hours ago, moved 1.2 GB, freed 0 B", and the space really freed joins
+  the lifetime total once per run. `prune-cli` now reads the app's own settings
+  and Quarantine folder when run from an install (it used a different folder
+  before, so it ignored your exclusions) and gains `clean --report`.
 - Preview lists each rule's biggest files, and the Delete-now confirmation
   names the biggest items.
 - **Custom locations**: add your own paths to Deep Clean. **Import a

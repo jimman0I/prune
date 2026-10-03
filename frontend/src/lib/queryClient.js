@@ -63,6 +63,8 @@ export const keys = {
   runAsAdmin: ['settings', 'runAsAdmin'],
   updateCheck: ['update-check'],
   automation: ['automation'],
+  scheduledClean: ['scheduledClean'],
+  lastAutoClean: ['scheduledClean', 'last'],
   stats: ['stats'],
   lowDisk: ['disk', 'lowDisk'],
   diskSpace: ['disk', 'space'],

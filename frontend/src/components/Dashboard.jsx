@@ -14,6 +14,7 @@ import SpaceQuestion from './SpaceQuestion.jsx';
 import LargestPrograms from './LargestPrograms.jsx';
 import CleanRecommendedCard from './CleanRecommendedCard.jsx';
 import FreedTotal from './FreedTotal.jsx';
+import LastAutoClean from './LastAutoClean.jsx';
 import LowDiskBanner from './LowDiskBanner.jsx';
 import Page from './Page.jsx';
 
@@ -338,6 +339,8 @@ export default function Dashboard({ programs, programsMeasured = false, onNaviga
       <CleanRecommendedCard onNavigate={onNavigate}>
         {/* Quiet, under the card it follows from: what Prune has freed so far. */}
         <FreedTotal active={active} />
+        {/* And, when Windows has cleaned while Prune was closed, when and how much. */}
+        <LastAutoClean active={active} className="px-6 pb-3 -mt-1 text-[12px] text-[color:var(--text-muted)]" />
       </CleanRecommendedCard>
 
       {/* The quiet row. Three facts that are worth a glance and rarely worth

@@ -126,6 +126,40 @@ export async function fetchAutomation() {
   return data;
 }
 
+/** "Also run when Prune is closed": the Windows Task Scheduler task as Windows
+ * has it, for the schedule in Settings, plus the last unattended run.
+ * { supported, reason, exists, inSync, nextRun, lastRun, lastTaskResult,
+ * canEnable, lastClean }. See backend/src/services/scheduledCleanTask.js. */
+export async function fetchScheduledClean() {
+  const res = await fetch(`${API_URL}/scheduled-clean`);
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
+  return data;
+}
+
+/** Creates (true) or removes (false) that task. The backend decides what it
+ * runs and when; only the boolean is sent. Resolves the task's new state. */
+export async function setScheduledClean(enabled) {
+  const res = await fetch(`${API_URL}/scheduled-clean`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ enabled })
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
+  return data;
+}
+
+/** The last clean Windows ran while Prune was closed, or null:
+ * { at, ok, mode, movedBytes, freedBytes, rulesCleaned, rulesFailed }.
+ * Reading it also adds what that run really freed to the lifetime total. */
+export async function fetchLastAutoClean() {
+  const res = await fetch(`${API_URL}/scheduled-clean/last`);
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
+  return data?.lastClean ?? null;
+}
+
 /** The lifetime total behind "Prune has freed X since <date>": { freedBytes,
  * since }, where `since` is when the first byte was counted (ms) or null. Kept
  * by the backend, which counts only space that is really back -- never a move

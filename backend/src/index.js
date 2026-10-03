@@ -7,6 +7,9 @@ import { listFixedDrives } from './services/localDrives.js';
 import { getSettings } from './services/settings.js';
 import { applyInstallerChoices } from './services/installerChoices.js';
 import { initTray } from './lib/trayManager.js';
+import { ingestReport } from './services/scheduledCleanReport.js';
+import { recordFreed } from './services/stats.js';
+import { reconcileScheduledClean } from './services/scheduledCleanTask.js';
 import { getProgramIcons } from './services/programIcons.js';
 import { getProgramSizes } from './services/programSizes.js';
 import { getProgramVersions } from './services/programVersions.js';
@@ -34,6 +37,16 @@ const app = createApp({ port: PORT });
 // was off, and the app opening is the first moment anything can notice.
 startScheduler();
 checkSchedule().catch(() => { /* a failed check must never stop the server booting */ });
+
+// Whatever a clean started by Task Scheduler freed while Prune was closed is
+// added to the lifetime total now (once per run: see scheduledCleanReport.js),
+// and an existing task is put back in line with the schedule and with where
+// Prune is installed -- an update into a different folder would otherwise leave
+// it pointing at the old one. It never creates a task. Both are best-effort.
+ingestReport({ recordFreed }).catch(() => {});
+getSettings()
+  .then((settings) => reconcileScheduledClean(settings.automation))
+  .catch(() => { /* the Settings switch shows the task as it really is */ });
 
 // A free-space wipe that was killed mid-run (power cut, crash, task kill)
 // leaves its zero-filled files on the drive, and until they are deleted the

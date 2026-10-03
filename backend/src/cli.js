@@ -1,12 +1,13 @@
 import { parseArgs } from 'node:util';
-import { pathToFileURL } from 'node:url';
+import { pathToFileURL, fileURLToPath } from 'node:url';
+import { packagedDefaults } from './lib/cliPaths.js';
 
 /** The Prune command line: list, preview, clean.
  *
  *   prune-cli list    [--json]
  *   prune-cli preview [--rules a,b | --preset recommended] [--except x,y] [--json]
  *   prune-cli clean   (--rules a,b | --preset recommended) [--except x,y]
- *                     [--delete-now | --quarantine] [--json]
+ *                     [--delete-now | --quarantine] [--json] [--report]
  *
  * A Node script, not part of the Electron window: a GUI-subsystem exe cannot
  * print to a console, so the installer ships `prune-cli.cmd` beside Prune.exe,
@@ -46,6 +47,9 @@ Options
   --quarantine         Move to Quarantine for this run, overriding the setting.
                        With neither, the Deep Clean setting decides.
   --json               Machine-readable output.
+  --report             clean only: leave a short report (time, rules, moved and
+                       freed bytes, errors) beside the settings file, for Prune
+                       to read. What the scheduled clean uses.
   --settings <file>    Use this settings file.
   --quarantine-dir <d> Use this Quarantine folder.
   --cleaners <file>    Use this rule file instead of the built-in rules.
@@ -119,6 +123,7 @@ export async function runCli(argv, io = {}) {
         json: { type: 'boolean', default: false },
         'delete-now': { type: 'boolean', default: false },
         quarantine: { type: 'boolean', default: false },
+        report: { type: 'boolean', default: false },
         settings: { type: 'string' },
         'quarantine-dir': { type: 'string' },
         cleaners: { type: 'string' },
@@ -142,11 +147,25 @@ export async function runCli(argv, io = {}) {
     return 2;
   }
 
+  if (values.report && command !== 'clean') {
+    err('--report is only for clean.\n');
+    return 2;
+  }
+
   // Paths for the engine, read at call time by the modules below -- so they
   // are set before those modules are imported.
   if (values.settings) process.env.UNREVO_SETTINGS_PATH = values.settings;
   if (values['quarantine-dir']) process.env.UNREVO_QUARANTINE_ROOT = values['quarantine-dir'];
   if (values.cleaners) process.env.UNREVO_CLEANERS_PATH = values.cleaners;
+  // An installed copy that was told nothing uses the app's own data folder,
+  // not %LOCALAPPDATA%\Prune: otherwise a clean started by Windows would run
+  // with default guards and ignore the person's exclusions.
+  const installed = packagedDefaults({ cliPath: fileURLToPath(import.meta.url) });
+  if (installed) {
+    if (!process.env.UNREVO_SETTINGS_PATH) process.env.UNREVO_SETTINGS_PATH = installed.settings;
+    if (!process.env.UNREVO_QUARANTINE_ROOT) process.env.UNREVO_QUARANTINE_ROOT = installed.quarantine;
+    if (!process.env.UNREVO_SQLITE3_PATH) process.env.UNREVO_SQLITE3_PATH = installed.sqlite;
+  }
 
   const { loadCleanerRules, scanRuleAsync, executeRule, rulePathsExist } = await import('./lib/cleanerRules.js');
   const { getSettings, cleanGuardsFrom } = await import('./services/settings.js');
@@ -236,6 +255,7 @@ export async function runCli(argv, io = {}) {
   }
 
   // clean
+  const startedAt = Date.now();
   const rows = [];
   let failed = false;
   let freedBytes = 0;
@@ -254,6 +274,16 @@ export async function runCli(argv, io = {}) {
     } catch (e) {
       failed = true;
       rows.push({ id: rule.id, name: rule.name, freedBytes: 0, movedBytes: 0, skippedCount: 0, error: e.message });
+    }
+  }
+  if (values.report) {
+    // For the app to read later. A report that cannot be written is said, but
+    // does not turn a clean that worked into a failure.
+    try {
+      const { buildRun, appendRun } = await import('./services/scheduledCleanReport.js');
+      await appendRun(buildRun({ startedAt, finishedAt: Date.now(), mode: guards.removal, rows }));
+    } catch (e) {
+      err(`Could not write the report: ${e.message}\n`);
     }
   }
   emit({ mode: guards.removal, freedBytes, movedBytes, rules: rows }, () => {
