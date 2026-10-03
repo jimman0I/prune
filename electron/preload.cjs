@@ -34,6 +34,14 @@ const { contextBridge, ipcRenderer, webUtils } = require('electron');
  * supplies a coordinate, a path or a command -- the main process reads the
  * pointer itself and asks the backend.
  *
+ * onOpenRequest -- File Explorer's right-click entries ("Shred with Prune",
+ * "Find in Prune (uninstall)"). The main process reads them from the command
+ * line (explorerRequests.cjs) and sends each to the page on one one-way event:
+ * { kind: 'shred' | 'find-program', path }. The page can send back only one
+ * thing, whether it is listening (true/false), so a request that arrives while
+ * it loads waits instead of being lost. A request only ever opens a dialog; it
+ * does not make the main process do anything.
+ *
  * pickPaths / pathForFile -- Deep Clean's "Shred files...". pickPaths asks
  * the main process for a native chooser ('files' or 'folders') and gets
  * path strings back. pathForFile turns a dropped File into its real path
@@ -57,6 +65,19 @@ contextBridge.exposeInMainWorld('pruneWindow', {
       ipcRenderer.on('prune:hunter:result', listener);
       return () => ipcRenderer.removeListener('prune:hunter:result', listener);
     }
+  },
+  onOpenRequest: (callback) => {
+    const listener = (_event, request) => {
+      const kind = request && request.kind;
+      const path = request && request.path;
+      if ((kind === 'shred' || kind === 'find-program') && typeof path === 'string') callback({ kind, path });
+    };
+    ipcRenderer.on('prune:open-request', listener);
+    ipcRenderer.send('prune:open-request:ready', true);
+    return () => {
+      ipcRenderer.removeListener('prune:open-request', listener);
+      ipcRenderer.send('prune:open-request:ready', false);
+    };
   },
   pickPaths: (kind) => ipcRenderer.invoke('prune:pick-paths', kind),
   pathForFile: (file) => {

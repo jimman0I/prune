@@ -59,7 +59,14 @@ test('the uninstaller removes the sign-in entry and Windows\' mark for it, by th
   assert.ok(body.includes(`DeleteRegValue HKCU "Software\\Microsoft\\Windows\\CurrentVersion\\Run" "${name}"`));
   assert.ok(body.includes(`DeleteRegValue HKCU "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\StartupApproved\\Run" "${name}"`));
   // Only the one value: never the key itself, which every program shares.
-  assert.doesNotMatch(body, /DeleteRegKey/);
+  // The only keys it may delete are Prune's own right-click verbs (named for
+  // Prune, and checked against the app's list in explorer.test.cjs), and the
+  // `shell` key above them only if empty. Never the Run key, which every
+  // program shares.
+  const withoutVerbs = body
+    .replace(/DeleteRegKey HKCU "Software\\Classes\\[^"\r\n]+\\shell\\Prune(?:Shred|FindProgram)"/g, '')
+    .replace(/DeleteRegKey \/ifempty HKCU "Software\\Classes\\[^"\r\n]+\\shell"/g, '');
+  assert.doesNotMatch(withoutVerbs, /DeleteRegKey/);
 });
 
 test('the sign-in entry is also kept across an update, like the task', () => {
