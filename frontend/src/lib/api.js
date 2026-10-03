@@ -576,6 +576,47 @@ export async function setStartWithWindows({ enabled, minimized }) {
   return data;
 }
 
+/** "Add Prune to the right-click menu" (Settings, General): the four shell verbs
+ * in the per-user class registry, read back by the backend.
+ * { supported, reason?, enabled, incomplete, stale, foreign, captions } where
+ * `captions` are the two menu texts in use -- see
+ * backend/src/services/explorerMenu.js. */
+export async function fetchExplorerMenu() {
+  const res = await fetch(`${API_URL}/settings/explorer-menu`);
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
+  return data;
+}
+
+/** Adds or removes those verbs. Only the one boolean is sent; the backend
+ * decides what is written, and refuses it in a development build. Resolves the
+ * new state. */
+export async function setExplorerMenu(enabled) {
+  const res = await fetch(`${API_URL}/settings/explorer-menu`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ enabled })
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
+  return data;
+}
+
+/** Which installed program a .exe or a .lnk belongs to (the right-click menu's
+ * "Find in Prune", and dropping a file onto Applications). Looks only; resolves
+ * { status: 'matched' | 'unmatched' | 'windows' | 'unresolved', ... } -- see
+ * backend/src/services/programFinder.js. */
+export async function findProgramByFile(path) {
+  const res = await fetch(`${API_URL}/find-program`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ path })
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
+  return data;
+}
+
 /** The running version, and -- only when the user has turned the update
  * check on -- whether GitHub has a newer release. With the setting off the
  * backend answers from this machine alone. */

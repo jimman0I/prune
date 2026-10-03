@@ -9,6 +9,7 @@ import CookieKeepListSettings from './CookieKeepListSettings.jsx';
 import CustomCleanersSettings from './CustomCleanersSettings.jsx';
 import RunAsAdminSetting from './RunAsAdminSetting.jsx';
 import StartWithWindowsSetting from './StartWithWindowsSetting.jsx';
+import ExplorerMenuSetting from './ExplorerMenuSetting.jsx';
 import RememberScansSetting from './RememberScansSetting.jsx';
 import { useSettings, useUpdateCheck } from '../hooks/useSystemQueries.js';
 import { leftoverDestinationFrom } from '../lib/leftoverDestination.js';
@@ -336,6 +337,11 @@ function SettingsPage({ onReportBug = null }) {
                   tray switch its "minimised" choice follows. Reads the real
                   registry entry. See StartWithWindowsSetting.jsx. */}
               <StartWithWindowsSetting />
+
+              {/* Opt-in right-click entries in File Explorer (four per-user
+                  shell verbs): Shred with Prune, Find in Prune. Reads the real
+                  registry state. See ExplorerMenuSetting.jsx. */}
+              <ExplorerMenuSetting />
 
               {/* How little room a drive may have left before Prune says so: on
                   the Dashboard, and with a notification while it sits in the
