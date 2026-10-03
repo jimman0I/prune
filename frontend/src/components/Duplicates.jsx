@@ -4,6 +4,7 @@ import { fetchDuplicates, quarantineDiskPath } from '../lib/api.js';
 import { selectForRemoval, KEEP } from '../lib/duplicateSelection.js';
 import { splitPath } from '../lib/pathDisplay.js';
 import { useToasts } from '../hooks/useToasts.jsx';
+import { useQuarantineUndo } from '../hooks/useQuarantineUndo.js';
 import ModalOverlay from './ModalOverlay.jsx';
 import { useLanguage } from '../i18n/LanguageContext.jsx';
 
@@ -70,6 +71,7 @@ function Duplicates() {
   // an empty screen, which reads as "found nothing".
   const [stopped, setStopped] = useState(false);
   const toasts = useToasts();
+  const offerUndo = useQuarantineUndo();
   const queryClient = useQueryClient();
 
   const scan = useQuery({
@@ -125,10 +127,15 @@ function Duplicates() {
     setRemoving(true);
     let moved = 0;
     let failed = 0;
+    // Each file is its own Quarantine batch; Undo puts them all back.
+    const batches = [];
 
     for (const path of selected) {
       const result = await quarantineDiskPath(path, null);
-      if (result.ok) moved++; else failed++;
+      if (result.ok) {
+        moved++;
+        if (result.batch?.batchDir) batches.push(result.batch.batchDir);
+      } else failed++;
     }
 
     setRemoving(false);
@@ -137,8 +144,10 @@ function Duplicates() {
     queryClient.invalidateQueries({ queryKey: ['quarantine'] });
 
     if (moved > 0) {
-      toasts.success(t('duplicates.toasts.moved', moved), {
-        detail: t('duplicates.toasts.restoreHint')
+      offerUndo(t('duplicates.toasts.moved', moved), batches, {
+        detail: t('duplicates.toasts.restoreHint'),
+        // They are copies again: read the groups once more.
+        onRestored: () => queryClient.invalidateQueries({ queryKey: ['duplicates', armed] })
       });
     }
     if (failed > 0) {

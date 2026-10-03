@@ -10,6 +10,7 @@ import { keys } from '../lib/queryClient.js';
 import { breadcrumbTrail } from '../lib/breadcrumbTrail.js';
 import { saveDiskScan, loadSavedScan, fetchDiskScan, stopDiskScan, scanDriveFast, fetchFileTypeIcons, quarantineDiskPath, revealInExplorer } from '../lib/api.js';
 import { useToasts } from '../hooks/useToasts.jsx';
+import { useQuarantineUndo } from '../hooks/useQuarantineUndo.js';
 import ContextMenu from './ContextMenu.jsx';
 import ModalOverlay from './ModalOverlay.jsx';
 import { attachFullPaths, topLevelCells } from '../lib/diskMapTree.js';
@@ -938,6 +939,7 @@ function DiskMap() {
   const [menu, setMenu] = useState(null);
   const [pendingRemoval, setPendingRemoval] = useState(null);
   const toasts = useToasts();
+  const offerUndo = useQuarantineUndo();
   const queryClient = useQueryClient();
 
   menuOpenRef.current = Boolean(menu);
@@ -1017,8 +1019,12 @@ function DiskMap() {
     const result = await quarantineDiskPath(node.fullPath, node.size ?? null);
 
     if (result.ok) {
-      toasts.success(t('diskMap.toasts.moved', node.name), {
-        detail: t('diskMap.toasts.restoreHint')
+      // With Undo on the toast: the batch that was just made goes straight back.
+      offerUndo(t('diskMap.toasts.moved', node.name), result.batch?.batchDir ? [result.batch.batchDir] : [], {
+        detail: t('diskMap.toasts.restoreHint'),
+        doneMessage: t('quarantine.restored', node.name),
+        // The picture showed that folder gone; it is back now.
+        onRestored: () => queryClient.invalidateQueries({ queryKey: keys.diskScan(currentPath) })
       });
       // The picture is now wrong -- that folder is gone. Re-read rather
       // than splicing the cell out: the parent's size changed too.
@@ -1032,7 +1038,7 @@ function DiskMap() {
     // a generic error message in its place reads as the app being broken.
     if (result.protected) toasts.warn(result.error, { detail: node.fullPath, ttl: 0 });
     else toasts.error(result.error || t('diskMap.toasts.moveFailed'), { detail: node.fullPath });
-  }, [pendingRemoval, toasts, queryClient, currentPath, t]));
+  }, [pendingRemoval, toasts, offerUndo, queryClient, currentPath, t]));
 
   /* Exports. Made in the window and handed to the browser layer as a download:
    * no request to the backend and no new way for the window to write files.

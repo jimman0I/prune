@@ -33,6 +33,14 @@ export default {
           title: "Low disk space warning",
           description: "Warns on the Dashboard when a local drive has less free space than this share of its size, and with one notification a day while Prune sits in the tray. Drives with more than 100 GB free are never flagged."
         }
+      },
+      undo: {
+        action: "Undo",
+        done: "Restored from Quarantine.",
+        partial: (a, b) => `Put back ${a} of ${b}. The rest are no longer in Quarantine.`,
+        gone: "This is no longer in Quarantine, so it can't be restored.",
+        failed: (a) => `Couldn't restore: ${a}`,
+        movedLeftovers: (a) => `Leftovers of ${a} moved to Quarantine.`
       }
     }
   },
@@ -64,6 +72,14 @@ export default {
           title: "Waarskuwing vir min skyfspasie",
           description: "Waarsku op die Kontroleskerm wanneer 'n plaaslike skyf minder vrye spasie het as hierdie deel van sy grootte, en met een kennisgewing per dag terwyl Prune in die kennisgewingsarea sit. Skywe met meer as 100 GB vry word nooit gemerk nie."
         }
+      },
+      undo: {
+        action: "Maak ongedaan",
+        done: "Uit Karantyn herstel.",
+        partial: (a, b) => `${a} van ${b} teruggesit. Die res is nie meer in Karantyn nie.`,
+        gone: "Dit is nie meer in Karantyn nie en kan dus nie herstel word nie.",
+        failed: (a) => `Kon nie herstel nie: ${a}`,
+        movedLeftovers: (a) => `Oorblyfsels van ${a} na Karantyn geskuif.`
       }
     }
   },
@@ -95,6 +111,14 @@ export default {
           title: "تحذير انخفاض مساحة القرص",
           description: "يُحذّر في لوحة المعلومات عندما تقل المساحة الحرة في قرص محلي عن هذه النسبة من حجمه، وبإشعار واحد يوميًا أثناء بقاء Prune في منطقة الإشعارات. لا يُنبَّه أبدًا لقرص تزيد مساحته الحرة على 100 GB."
         }
+      },
+      undo: {
+        action: "تراجع",
+        done: "تمت الاستعادة من الحجر الصحي.",
+        partial: (a, b) => `أُعيد ${a} من ${b}. الباقي لم يعد في الحجر الصحي.`,
+        gone: "لم يعد هذا في الحجر الصحي، لذا لا يمكن استعادته.",
+        failed: (a) => `تعذّرت الاستعادة: ${a}`,
+        movedLeftovers: (a) => `تم نقل مخلفات ${a} إلى الحجر الصحي.`
       }
     }
   },
@@ -126,6 +150,14 @@ export default {
           title: "Avís de poc espai al disc",
           description: "Avisa al Tauler quan una unitat local té menys espai lliure que aquesta part de la seva mida, i amb una notificació al dia mentre Prune és a la safata. Mai no es marquen les unitats amb més de 100 GB lliures."
         }
+      },
+      undo: {
+        action: "Desfés",
+        done: "S'ha restaurat des de la Quarantena.",
+        partial: (a, b) => `S'han tornat ${a} de ${b}. La resta ja no és a la Quarantena.`,
+        gone: "Ja no és a la Quarantena, així que no es pot restaurar.",
+        failed: (a) => `No s'ha pogut restaurar: ${a}`,
+        movedLeftovers: (a) => `Les restes de ${a} s'han mogut a la Quarantena.`
       }
     }
   },
@@ -157,6 +189,14 @@ export default {
           title: "Upozornění na nedostatek místa na disku",
           description: "Upozorní na Přehledu, když má místní disk méně volného místa, než je tento podíl jeho velikosti, a jedním oznámením denně, dokud je Prune v oznamovací oblasti. Disky s více než 100 GB volného místa se nikdy neoznačí."
         }
+      },
+      undo: {
+        action: "Vrátit zpět",
+        done: "Obnoveno z karantény.",
+        partial: (a, b) => `Vráceno ${a} z ${b}. Zbytek už v karanténě není.`,
+        gone: "Už to v karanténě není, takže to nelze obnovit.",
+        failed: (a) => `Nepodařilo se obnovit: ${a}`,
+        movedLeftovers: (a) => `Zbytky po programu ${a} byly přesunuty do karantény.`
       }
     }
   },
@@ -188,6 +228,14 @@ export default {
           title: "Rhybudd lle disg isel",
           description: "Yn rhybuddio ar y Dangosfwrdd pan fydd gan yriant lleol llai o le rhydd na'r gyfran hon o'i faint, a gydag un hysbysiad y dydd tra bo Prune yn yr hambwrdd. Ni chaiff gyriannau â mwy na 100 GB yn rhydd byth eu nodi."
         }
+      },
+      undo: {
+        action: "Dadwneud",
+        done: "Adferwyd o'r Cwarantin.",
+        partial: (a, b) => `Rhoddwyd ${a} o ${b} yn ôl. Nid yw'r gweddill yn y Cwarantin mwyach.`,
+        gone: "Nid yw hyn yn y Cwarantin mwyach, felly ni ellir ei adfer.",
+        failed: (a) => `Methwyd adfer: ${a}`,
+        movedLeftovers: (a) => `Symudwyd olion ${a} i'r Cwarantin.`
       }
     }
   },
@@ -219,6 +267,14 @@ export default {
           title: "Advarsel om lav diskplads",
           description: "Advarer på Oversigten, når et lokalt drev har mindre ledig plads end denne andel af dets størrelse, og med én notifikation om dagen, mens Prune ligger i systembakken. Drev med mere end 100 GB ledig plads markeres aldrig."
         }
+      },
+      undo: {
+        action: "Fortryd",
+        done: "Gendannet fra karantæne.",
+        partial: (a, b) => `${a} af ${b} lagt tilbage. Resten er ikke længere i karantæne.`,
+        gone: "Det er ikke længere i karantæne og kan derfor ikke gendannes.",
+        failed: (a) => `Kunne ikke gendanne: ${a}`,
+        movedLeftovers: (a) => `Rester af ${a} flyttet til karantæne.`
       }
     }
   },
@@ -250,6 +306,14 @@ export default {
           title: "Warnung bei wenig Speicherplatz",
           description: "Warnt auf der Übersicht, wenn ein lokales Laufwerk weniger freien Speicherplatz hat als diesen Anteil seiner Größe, und mit einer Benachrichtigung pro Tag, solange Prune im Infobereich läuft. Laufwerke mit mehr als 100 GB frei werden nie markiert."
         }
+      },
+      undo: {
+        action: "Rückgängig",
+        done: "Aus der Quarantäne wiederhergestellt.",
+        partial: (a, b) => `${a} von ${b} zurückgelegt. Der Rest ist nicht mehr in der Quarantäne.`,
+        gone: "Das ist nicht mehr in der Quarantäne und kann deshalb nicht wiederhergestellt werden.",
+        failed: (a) => `Wiederherstellen fehlgeschlagen: ${a}`,
+        movedLeftovers: (a) => `Rückstände von ${a} in die Quarantäne verschoben.`
       }
     }
   },
@@ -281,6 +345,14 @@ export default {
           title: "Προειδοποίηση χαμηλού χώρου δίσκου",
           description: "Προειδοποιεί στον Πίνακα ελέγχου όταν ένας τοπικός δίσκος έχει λιγότερο ελεύθερο χώρο από αυτό το ποσοστό του μεγέθους του, και με μία ειδοποίηση την ημέρα όσο το Prune βρίσκεται στο δίσκο συστήματος. Δίσκοι με περισσότερα από 100 GB ελεύθερα δεν επισημαίνονται ποτέ."
         }
+      },
+      undo: {
+        action: "Αναίρεση",
+        done: "Έγινε επαναφορά από την Καραντίνα.",
+        partial: (a, b) => `Επαναφέρθηκαν ${a} από ${b}. Τα υπόλοιπα δεν βρίσκονται πλέον στην Καραντίνα.`,
+        gone: "Αυτό δεν βρίσκεται πλέον στην Καραντίνα, οπότε δεν μπορεί να γίνει επαναφορά.",
+        failed: (a) => `Αδυναμία επαναφοράς: ${a}`,
+        movedLeftovers: (a) => `Τα κατάλοιπα του ${a} μετακινήθηκαν στην Καραντίνα.`
       }
     }
   },
@@ -312,6 +384,14 @@ export default {
           title: "Aviso de poco espacio en disco",
           description: "Avisa en el Panel cuando una unidad local tiene menos espacio libre que esta parte de su tamaño, y con una notificación al día mientras Prune está en la bandeja. Las unidades con más de 100 GB libres nunca se marcan."
         }
+      },
+      undo: {
+        action: "Deshacer",
+        done: "Restaurado desde Cuarentena.",
+        partial: (a, b) => `Se devolvieron ${a} de ${b}. El resto ya no está en Cuarentena.`,
+        gone: "Ya no está en Cuarentena, así que no se puede restaurar.",
+        failed: (a) => `No se pudo restaurar: ${a}`,
+        movedLeftovers: (a) => `Los restos de ${a} se movieron a Cuarentena.`
       }
     }
   },
@@ -343,6 +423,14 @@ export default {
           title: "Hoiatus vähese kettaruumi kohta",
           description: "Hoiatab töölaual, kui kohalikul draivil on vähem vaba ruumi kui see osa selle suurusest, ning ühe teavitusega päevas, kui Prune on tegumiribal. Draive, millel on vaba üle 100 GB, ei märgita kunagi."
         }
+      },
+      undo: {
+        action: "Võta tagasi",
+        done: "Taastatud karantiinist.",
+        partial: (a, b) => `Tagasi pandud ${a} / ${b}. Ülejäänud pole enam karantiinis.`,
+        gone: "See pole enam karantiinis, seega ei saa seda taastada.",
+        failed: (a) => `Taastamine ebaõnnestus: ${a}`,
+        movedLeftovers: (a) => `Programmi ${a} jäägid teisaldati karantiini.`
       }
     }
   },
@@ -374,6 +462,14 @@ export default {
           title: "Varoitus vähäisestä levytilasta",
           description: "Varoittaa Yhteenvedossa, kun paikallisella asemalla on vapaata tilaa vähemmän kuin tämä osuus sen koosta, ja yhdellä ilmoituksella päivässä, kun Prune on ilmoitusalueella. Asemia, joilla on yli 100 GB vapaata, ei koskaan merkitä."
         }
+      },
+      undo: {
+        action: "Kumoa",
+        done: "Palautettu karanteenista.",
+        partial: (a, b) => `Palautettu ${a} / ${b}. Loput eivät ole enää karanteenissa.`,
+        gone: "Tämä ei ole enää karanteenissa, joten sitä ei voi palauttaa.",
+        failed: (a) => `Palautus epäonnistui: ${a}`,
+        movedLeftovers: (a) => `Ohjelman ${a} jäänteet siirrettiin karanteeniin.`
       }
     }
   },
@@ -405,6 +501,14 @@ export default {
           title: "Alerte d'espace disque faible",
           description: "Avertit sur le Tableau de bord lorsqu'un lecteur local a moins d'espace libre que cette part de sa taille, et par une notification par jour tant que Prune reste dans la zone de notification. Les lecteurs ayant plus de 100 Go libres ne sont jamais signalés."
         }
+      },
+      undo: {
+        action: "Annuler",
+        done: "Restauré depuis la Quarantaine.",
+        partial: (a, b) => `${a} sur ${b} remis en place. Le reste n'est plus en Quarantaine.`,
+        gone: "Ceci n'est plus en Quarantaine ; il ne peut donc pas être restauré.",
+        failed: (a) => `Impossible de restaurer : ${a}`,
+        movedLeftovers: (a) => `Résidus de ${a} déplacés vers la Quarantaine.`
       }
     }
   },
@@ -436,6 +540,14 @@ export default {
           title: "אזהרת מקום פנוי נמוך בדיסק",
           description: "מתריע בלוח המחוונים כשבכונן מקומי יש פחות מקום פנוי מהאחוז הזה מגודלו, ובהתראה אחת ביום כש-Prune נמצא במגש המערכת. כוננים עם יותר מ-100 GB פנויים לא יסומנו לעולם."
         }
+      },
+      undo: {
+        action: "בטל",
+        done: "שוחזר מההסגר.",
+        partial: (a, b) => `הוחזרו ${a} מתוך ${b}. השאר כבר לא בהסגר.`,
+        gone: "זה כבר לא בהסגר, ולכן אי אפשר לשחזר אותו.",
+        failed: (a) => `לא ניתן היה לשחזר: ${a}`,
+        movedLeftovers: (a) => `שאריות של ${a} הועברו להסגר.`
       }
     }
   },
@@ -467,6 +579,14 @@ export default {
           title: "Figyelmeztetés kevés lemezterületre",
           description: "Figyelmeztet az Áttekintés oldalon, ha egy helyi meghajtón kevesebb a szabad hely, mint méretének ez a hányada, és naponta egy értesítéssel, amíg a Prune a tálcán van. A 100 GB-nál több szabad hellyel rendelkező meghajtókat soha nem jelöli."
         }
+      },
+      undo: {
+        action: "Visszavonás",
+        done: "Visszaállítva a karanténból.",
+        partial: (a, b) => `${a} / ${b} visszahelyezve. A többi már nincs a karanténban.`,
+        gone: "Ez már nincs a karanténban, ezért nem állítható vissza.",
+        failed: (a) => `Nem sikerült visszaállítani: ${a}`,
+        movedLeftovers: (a) => `A(z) ${a} maradványai a karanténba kerültek.`
       }
     }
   },
@@ -498,6 +618,14 @@ export default {
           title: "Peringatan ruang disk rendah",
           description: "Memberi peringatan di Dasbor saat drive lokal memiliki ruang kosong kurang dari bagian ukurannya ini, dan dengan satu notifikasi per hari saat Prune berada di baki sistem. Drive dengan lebih dari 100 GB kosong tidak pernah ditandai."
         }
+      },
+      undo: {
+        action: "Urungkan",
+        done: "Dipulihkan dari Karantina.",
+        partial: (a, b) => `${a} dari ${b} dikembalikan. Sisanya sudah tidak ada di Karantina.`,
+        gone: "Ini sudah tidak ada di Karantina, jadi tidak dapat dipulihkan.",
+        failed: (a) => `Tidak dapat memulihkan: ${a}`,
+        movedLeftovers: (a) => `Sisa ${a} dipindahkan ke Karantina.`
       }
     }
   },
@@ -529,6 +657,14 @@ export default {
           title: "Viðvörun um lítið diskpláss",
           description: "Varar við á yfirlitinu þegar staðbundið drif hefur minna laust pláss en þetta hlutfall af stærð sinni, og með einni tilkynningu á dag á meðan Prune er í kerfisbakkanum. Drif með meira en 100 GB laust eru aldrei merkt."
         }
+      },
+      undo: {
+        action: "Afturkalla",
+        done: "Endurheimt úr sóttkví.",
+        partial: (a, b) => `${a} af ${b} sett aftur. Hitt er ekki lengur í sóttkví.`,
+        gone: "Þetta er ekki lengur í sóttkví og því ekki hægt að endurheimta það.",
+        failed: (a) => `Ekki tókst að endurheimta: ${a}`,
+        movedLeftovers: (a) => `Leifar ${a} fluttar í sóttkví.`
       }
     }
   },
@@ -560,6 +696,14 @@ export default {
           title: "Avviso di poco spazio su disco",
           description: "Avvisa nel Pannello quando un'unità locale ha meno spazio libero di questa quota della sua dimensione, e con una notifica al giorno mentre Prune è nell'area di notifica. Le unità con più di 100 GB liberi non vengono mai segnalate."
         }
+      },
+      undo: {
+        action: "Annulla",
+        done: "Ripristinato dalla Quarantena.",
+        partial: (a, b) => `Ripristinati ${a} di ${b}. Gli altri non sono più in Quarantena.`,
+        gone: "Non è più in Quarantena, quindi non può essere ripristinato.",
+        failed: (a) => `Impossibile ripristinare: ${a}`,
+        movedLeftovers: (a) => `Residui di ${a} spostati in Quarantena.`
       }
     }
   },
@@ -591,6 +735,14 @@ export default {
           title: "ディスク空き容量不足の警告",
           description: "ローカルドライブの空き容量が、そのサイズに対するこの割合を下回ると、ダッシュボードで警告します。Prune がトレイにある間は、1 日 1 回の通知も行います。空きが 100 GB を超えるドライブは警告の対象になりません。"
         }
+      },
+      undo: {
+        action: "元に戻す",
+        done: "隔離から復元しました。",
+        partial: (a, b) => `${b} 件中 ${a} 件を元に戻しました。残りはもう隔離にありません。`,
+        gone: "これはもう隔離にないため、復元できません。",
+        failed: (a) => `復元できませんでした: ${a}`,
+        movedLeftovers: (a) => `${a} の残留物を隔離に移動しました。`
       }
     }
   },
@@ -622,6 +774,14 @@ export default {
           title: "디스크 공간 부족 경고",
           description: "로컬 드라이브의 여유 공간이 크기 대비 이 비율보다 적으면 대시보드에서 경고하고, Prune이 트레이에 있는 동안에는 하루에 한 번 알림을 보냅니다. 여유 공간이 100 GB를 넘는 드라이브는 표시하지 않습니다."
         }
+      },
+      undo: {
+        action: "실행 취소",
+        done: "격리에서 복원했습니다.",
+        partial: (a, b) => `${b}개 중 ${a}개를 되돌렸습니다. 나머지는 더 이상 격리에 없습니다.`,
+        gone: "더 이상 격리에 없으므로 복원할 수 없습니다.",
+        failed: (a) => `복원할 수 없습니다: ${a}`,
+        movedLeftovers: (a) => `${a}의 남은 항목을 격리로 이동했습니다.`
       }
     }
   },
@@ -653,6 +813,14 @@ export default {
           title: "Įspėjimas apie mažai disko vietos",
           description: "Įspėja Valdymo skyde, kai vietiniame diske laisvos vietos yra mažiau nei ši jo dydžio dalis, ir vienu pranešimu per dieną, kol Prune yra sistemos dėkle. Diskai, kuriuose laisva daugiau nei 100 GB, niekada nežymimi."
         }
+      },
+      undo: {
+        action: "Anuliuoti",
+        done: "Atkurta iš karantino.",
+        partial: (a, b) => `Grąžinta ${a} iš ${b}. Likusių karantine jau nebėra.`,
+        gone: "Šito karantine jau nebėra, todėl jo atkurti negalima.",
+        failed: (a) => `Nepavyko atkurti: ${a}`,
+        movedLeftovers: (a) => `Programos ${a} liekanos perkeltos į karantiną.`
       }
     }
   },
@@ -684,6 +852,14 @@ export default {
           title: "Amaran ruang cakera rendah",
           description: "Memberi amaran pada Papan Pemuka apabila pemacu setempat mempunyai ruang kosong kurang daripada bahagian saiznya ini, dan dengan satu pemberitahuan sehari semasa Prune berada dalam dulang. Pemacu dengan lebih 100 GB kosong tidak pernah ditandakan."
         }
+      },
+      undo: {
+        action: "Buat asal",
+        done: "Dipulihkan daripada Kuarantin.",
+        partial: (a, b) => `${a} daripada ${b} dikembalikan. Selebihnya tiada lagi dalam Kuarantin.`,
+        gone: "Ini tiada lagi dalam Kuarantin, jadi tidak dapat dipulihkan.",
+        failed: (a) => `Tidak dapat memulihkan: ${a}`,
+        movedLeftovers: (a) => `Baki ${a} dialihkan ke Kuarantin.`
       }
     }
   },
@@ -715,6 +891,14 @@ export default {
           title: "Advarsel om lite diskplass",
           description: "Advarer på Oversikten når en lokal stasjon har mindre ledig plass enn denne andelen av størrelsen, og med ett varsel om dagen mens Prune ligger i systemfeltet. Stasjoner med mer enn 100 GB ledig plass flagges aldri."
         }
+      },
+      undo: {
+        action: "Angre",
+        done: "Gjenopprettet fra karantene.",
+        partial: (a, b) => `${a} av ${b} lagt tilbake. Resten er ikke lenger i karantene.`,
+        gone: "Dette er ikke lenger i karantene og kan derfor ikke gjenopprettes.",
+        failed: (a) => `Kunne ikke gjenopprette: ${a}`,
+        movedLeftovers: (a) => `Rester av ${a} flyttet til karantene.`
       }
     }
   },
@@ -746,6 +930,14 @@ export default {
           title: "Waarschuwing bij weinig schijfruimte",
           description: "Waarschuwt op het Dashboard wanneer een lokale schijf minder vrije ruimte heeft dan dit deel van de grootte, en met één melding per dag zolang Prune in het systeemvak staat. Schijven met meer dan 100 GB vrij worden nooit gemarkeerd."
         }
+      },
+      undo: {
+        action: "Ongedaan maken",
+        done: "Hersteld uit Quarantaine.",
+        partial: (a, b) => `${a} van ${b} teruggezet. De rest staat niet meer in Quarantaine.`,
+        gone: "Dit staat niet meer in Quarantaine en kan dus niet worden hersteld.",
+        failed: (a) => `Herstellen mislukt: ${a}`,
+        movedLeftovers: (a) => `Restanten van ${a} naar Quarantaine verplaatst.`
       }
     }
   },
@@ -777,6 +969,14 @@ export default {
           title: "Ostrzeżenie o małej ilości miejsca na dysku",
           description: "Ostrzega w Panelu, gdy lokalny dysk ma mniej wolnego miejsca niż ta część jego rozmiaru, oraz jednym powiadomieniem dziennie, gdy Prune działa w zasobniku. Dyski z ponad 100 GB wolnego miejsca nigdy nie są oznaczane."
         }
+      },
+      undo: {
+        action: "Cofnij",
+        done: "Przywrócono z kwarantanny.",
+        partial: (a, b) => `Przywrócono ${a} z ${b}. Reszty nie ma już w kwarantannie.`,
+        gone: "Tego nie ma już w kwarantannie, więc nie można tego przywrócić.",
+        failed: (a) => `Nie udało się przywrócić: ${a}`,
+        movedLeftovers: (a) => `Pozostałości programu ${a} przeniesiono do kwarantanny.`
       }
     }
   },
@@ -808,6 +1008,14 @@ export default {
           title: "د ډیسک د کم ځای خبرداری",
           description: "په ډشبورډ کې خبرداری ورکوي کله چې یو سیمه ایز ډرایو د خپل اندازې له دې برخې څخه لږ خالي ځای ولري، او په ورځ کې یوه خبرتیا سره کله چې Prune په ټرې کې وي. هغه ډرایونه چې له 100 GB څخه ډیر خالي ځای لري هیڅکله نښه نه کیږي."
         }
+      },
+      undo: {
+        action: "بیرته کول",
+        done: "له قرنطین څخه بیرته راوستل شو.",
+        partial: (a, b) => `له ${b} څخه ${a} بیرته کېښودل شول. پاتې په قرنطین کې نور نشته.`,
+        gone: "دا نور په قرنطین کې نشته، نو بیرته نشي راتلی.",
+        failed: (a) => `بیرته راوستل نشول: ${a}`,
+        movedLeftovers: (a) => `د ${a} پاتې شونې قرنطین ته ولیږدول شوې.`
       }
     }
   },
@@ -839,6 +1047,14 @@ export default {
           title: "Aviso de pouco espaço em disco",
           description: "Avisa no Painel quando uma unidade local tem menos espaço livre do que esta parte do seu tamanho, e com uma notificação por dia enquanto o Prune está na bandeja. Unidades com mais de 100 GB livres nunca são sinalizadas."
         }
+      },
+      undo: {
+        action: "Desfazer",
+        done: "Restaurado da Quarentena.",
+        partial: (a, b) => `${a} de ${b} devolvidos. O restante não está mais na Quarentena.`,
+        gone: "Isto não está mais na Quarentena, então não pode ser restaurado.",
+        failed: (a) => `Não foi possível restaurar: ${a}`,
+        movedLeftovers: (a) => `Resíduos de ${a} movidos para a Quarentena.`
       }
     }
   },
@@ -870,6 +1086,14 @@ export default {
           title: "Aviso de pouco espaço em disco",
           description: "Avisa no Painel quando uma unidade local tem menos espaço livre do que esta parte do seu tamanho, e com uma notificação por dia enquanto o Prune está na área de notificação. As unidades com mais de 100 GB livres nunca são assinaladas."
         }
+      },
+      undo: {
+        action: "Anular",
+        done: "Restaurado da Quarentena.",
+        partial: (a, b) => `${a} de ${b} repostos. O resto já não está na Quarentena.`,
+        gone: "Isto já não está na Quarentena, por isso não pode ser restaurado.",
+        failed: (a) => `Não foi possível restaurar: ${a}`,
+        movedLeftovers: (a) => `Resíduos de ${a} movidos para a Quarentena.`
       }
     }
   },
@@ -901,6 +1125,14 @@ export default {
           title: "Avertisment pentru spațiu redus pe disc",
           description: "Avertizează în Panou când o unitate locală are mai puțin spațiu liber decât această parte din dimensiunea sa, și cu o notificare pe zi cât timp Prune este în bara de sistem. Unitățile cu peste 100 GB liberi nu sunt niciodată semnalate."
         }
+      },
+      undo: {
+        action: "Anulează",
+        done: "Restaurat din Carantină.",
+        partial: (a, b) => `${a} din ${b} au fost puse la loc. Restul nu mai sunt în Carantină.`,
+        gone: "Acesta nu mai este în Carantină, deci nu poate fi restaurat.",
+        failed: (a) => `Nu s-a putut restaura: ${a}`,
+        movedLeftovers: (a) => `Resturile ${a} au fost mutate în Carantină.`
       }
     }
   },
@@ -932,6 +1164,14 @@ export default {
           title: "Предупреждение о нехватке места на диске",
           description: "Предупреждает на панели, когда на локальном диске свободного места меньше этой доли его размера, а также присылает одно уведомление в день, пока Prune работает в трее. Диски, на которых свободно более 100 ГБ, никогда не отмечаются."
         }
+      },
+      undo: {
+        action: "Отменить",
+        done: "Восстановлено из карантина.",
+        partial: (a, b) => `Возвращено ${a} из ${b}. Остальное уже не в карантине.`,
+        gone: "Этого больше нет в карантине, поэтому восстановить нельзя.",
+        failed: (a) => `Не удалось восстановить: ${a}`,
+        movedLeftovers: (a) => `Остатки программы ${a} перемещены в карантин.`
       }
     }
   },
@@ -963,6 +1203,14 @@ export default {
           title: "Upozornenie na nedostatok miesta na disku",
           description: "Upozorní na Prehľade, keď má lokálny disk menej voľného miesta, než je tento podiel jeho veľkosti, a jedným oznámením denne, kým je Prune v oznamovacej oblasti. Disky s viac než 100 GB voľného miesta sa nikdy neoznačia."
         }
+      },
+      undo: {
+        action: "Vrátiť späť",
+        done: "Obnovené z karantény.",
+        partial: (a, b) => `Vrátené ${a} z ${b}. Zvyšok už nie je v karanténe.`,
+        gone: "Toto už nie je v karanténe, takže to nemožno obnoviť.",
+        failed: (a) => `Nepodarilo sa obnoviť: ${a}`,
+        movedLeftovers: (a) => `Zvyšky programu ${a} boli presunuté do karantény.`
       }
     }
   },
@@ -994,6 +1242,14 @@ export default {
           title: "Paralajmërim për hapësirë të ulët në disk",
           description: "Paralajmëron te Paneli kur një disk lokal ka më pak hapësirë të lirë se kjo pjesë e madhësisë së tij, dhe me një njoftim në ditë ndërsa Prune është në tabaka. Disqet me më shumë se 100 GB të lira nuk shënohen kurrë."
         }
+      },
+      undo: {
+        action: "Zhbëj",
+        done: "U rikthye nga Karantina.",
+        partial: (a, b) => `U kthyen ${a} nga ${b}. Pjesa tjetër nuk është më në Karantinë.`,
+        gone: "Kjo nuk është më në Karantinë, kështu që nuk mund të rikthehet.",
+        failed: (a) => `Nuk u rikthye dot: ${a}`,
+        movedLeftovers: (a) => `Mbetjet e ${a} u zhvendosën në Karantinë.`
       }
     }
   },
@@ -1025,6 +1281,14 @@ export default {
           title: "Упозорење о малој количини простора на диску",
           description: "Упозорава на контролној табли када локални диск има мање слободног простора од овог дела своје величине, и једним обавештењем дневно док је Prune у системској палети. Дискови са више од 100 GB слободног простора никада се не означавају."
         }
+      },
+      undo: {
+        action: "Опозови",
+        done: "Враћено из карантина.",
+        partial: (a, b) => `Враћено ${a} од ${b}. Остало више није у карантину.`,
+        gone: "Ово више није у карантину, па се не може вратити.",
+        failed: (a) => `Није могуће вратити: ${a}`,
+        movedLeftovers: (a) => `Остаци програма ${a} премештени су у карантин.`
       }
     }
   },
@@ -1056,6 +1320,14 @@ export default {
           title: "Varning för lite diskutrymme",
           description: "Varnar på Översikten när en lokal enhet har mindre ledigt utrymme än denna andel av sin storlek, och med en avisering per dag medan Prune ligger i systemfältet. Enheter med mer än 100 GB ledigt flaggas aldrig."
         }
+      },
+      undo: {
+        action: "Ångra",
+        done: "Återställt från karantän.",
+        partial: (a, b) => `${a} av ${b} återlagda. Resten finns inte längre i karantän.`,
+        gone: "Det här finns inte längre i karantän och kan därför inte återställas.",
+        failed: (a) => `Det gick inte att återställa: ${a}`,
+        movedLeftovers: (a) => `Rester av ${a} flyttades till karantän.`
       }
     }
   },
@@ -1087,6 +1359,14 @@ export default {
           title: "คำเตือนพื้นที่ดิสก์เหลือน้อย",
           description: "เตือนในแดชบอร์ดเมื่อไดรฟ์ในเครื่องมีพื้นที่ว่างน้อยกว่าสัดส่วนนี้ของขนาดไดรฟ์ และแจ้งเตือนวันละหนึ่งครั้งขณะที่ Prune อยู่ในถาดระบบ ไดรฟ์ที่มีพื้นที่ว่างมากกว่า 100 GB จะไม่ถูกแจ้งเตือน"
         }
+      },
+      undo: {
+        action: "เลิกทำ",
+        done: "กู้คืนจากกักกันแล้ว",
+        partial: (a, b) => `นำกลับแล้ว ${a} จาก ${b} ส่วนที่เหลือไม่ได้อยู่ในกักกันอีกต่อไป`,
+        gone: "รายการนี้ไม่ได้อยู่ในกักกันอีกต่อไป จึงกู้คืนไม่ได้",
+        failed: (a) => `ไม่สามารถกู้คืนได้: ${a}`,
+        movedLeftovers: (a) => `ย้ายสิ่งตกค้างของ ${a} ไปยังกักกันแล้ว`
       }
     }
   },
@@ -1118,6 +1398,14 @@ export default {
           title: "Düşük disk alanı uyarısı",
           description: "Yerel bir sürücünün boş alanı, boyutunun bu oranından azsa Panel'de uyarır; Prune sistem tepsisindeyken günde bir bildirim de gösterir. 100 GB'tan fazla boş alanı olan sürücüler asla işaretlenmez."
         }
+      },
+      undo: {
+        action: "Geri al",
+        done: "Karantinadan geri yüklendi.",
+        partial: (a, b) => `${b} öğeden ${a} tanesi geri konuldu. Kalanlar artık Karantinada değil.`,
+        gone: "Bu artık Karantinada değil, bu yüzden geri yüklenemez.",
+        failed: (a) => `Geri yüklenemedi: ${a}`,
+        movedLeftovers: (a) => `${a} artıkları Karantinaya taşındı.`
       }
     }
   },
@@ -1149,6 +1437,14 @@ export default {
           title: "Попередження про брак місця на диску",
           description: "Попереджає на панелі, коли на локальному диску вільного місця менше за цю частку його розміру, а також надсилає одне сповіщення на день, поки Prune працює в треї. Диски, на яких вільно понад 100 ГБ, ніколи не позначаються."
         }
+      },
+      undo: {
+        action: "Скасувати",
+        done: "Відновлено з карантину.",
+        partial: (a, b) => `Повернуто ${a} із ${b}. Решти вже немає в карантині.`,
+        gone: "Цього вже немає в карантині, тож відновити не можна.",
+        failed: (a) => `Не вдалося відновити: ${a}`,
+        movedLeftovers: (a) => `Залишки програми ${a} переміщено в карантин.`
       }
     }
   },
@@ -1180,6 +1476,14 @@ export default {
           title: "Cảnh báo dung lượng đĩa thấp",
           description: "Cảnh báo trên Tổng quan khi ổ đĩa cục bộ có dung lượng trống thấp hơn tỷ lệ này so với kích thước của nó, và gửi một thông báo mỗi ngày khi Prune nằm ở khay hệ thống. Ổ đĩa còn trống hơn 100 GB sẽ không bao giờ bị đánh dấu."
         }
+      },
+      undo: {
+        action: "Hoàn tác",
+        done: "Đã khôi phục từ khu cách ly.",
+        partial: (a, b) => `Đã đặt lại ${a} trên ${b}. Phần còn lại không còn trong khu cách ly.`,
+        gone: "Mục này không còn trong khu cách ly nên không thể khôi phục.",
+        failed: (a) => `Không thể khôi phục: ${a}`,
+        movedLeftovers: (a) => `Tệp sót lại của ${a} đã được chuyển vào khu cách ly.`
       }
     }
   },
@@ -1211,6 +1515,14 @@ export default {
           title: "磁盘空间不足警告",
           description: "当本地驱动器的可用空间低于其容量的这一比例时，在仪表盘上发出警告；Prune 位于托盘时，每天另有一次通知。可用空间超过 100 GB 的驱动器不会被标记。"
         }
+      },
+      undo: {
+        action: "撤销",
+        done: "已从隔离区恢复。",
+        partial: (a, b) => `已放回 ${b} 项中的 ${a} 项。其余的已不在隔离区。`,
+        gone: "这已不在隔离区，因此无法恢复。",
+        failed: (a) => `无法恢复：${a}`,
+        movedLeftovers: (a) => `${a} 的残留项已移至隔离区。`
       }
     }
   },
@@ -1242,6 +1554,14 @@ export default {
           title: "磁碟空間不足警告",
           description: "當本機磁碟機的可用空間低於其容量的這個比例時，在儀表板上發出警告；Prune 位於系統匣時，每天另有一次通知。可用空間超過 100 GB 的磁碟機不會被標記。"
         }
+      },
+      undo: {
+        action: "復原",
+        done: "已從隔離區還原。",
+        partial: (a, b) => `已放回 ${b} 項中的 ${a} 項。其餘的已不在隔離區。`,
+        gone: "這已不在隔離區，因此無法還原。",
+        failed: (a) => `無法還原：${a}`,
+        movedLeftovers: (a) => `${a} 的殘留項目已移至隔離區。`
       }
     }
   }

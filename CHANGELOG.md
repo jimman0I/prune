@@ -111,6 +111,17 @@ see v1.0.1 below) are documented here.
   native notification per drive per day (and none while its window is the
   one in front). It reads free space with one `statfs` per drive every five
   minutes; the drive list comes from one PowerShell query an hour.
+- **Undo on the toast after a move to Quarantine.** Deep Clean (Quarantine
+  mode) and Clean recommended, an uninstall's or batch uninstall's
+  leftovers, Disk Map's "Move to quarantine" and the Duplicates screen now
+  end with a toast that has an **Undo** button. It restores through the
+  same API as the Quarantine screen, stays 15 seconds (held while hovered
+  or keyboard-focused), is a real button for Tab, Enter and Space, and
+  reports the result: put back, put back in part, no longer in Quarantine,
+  or why it failed. After an Undo, Deep Clean's rows and remembered scan go
+  back to how they read before the clean. Not offered after Delete now,
+  the Recycle Bin or Delete permanently, which keep nothing to restore. The
+  toast only fades, without sliding, when Windows asks for reduced motion.
 
 ### Changed
 

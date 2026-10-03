@@ -22,6 +22,8 @@ import { preselectKeys } from '../lib/leftoverTiers.js';
  * that is what the line says. */
 export const STALL_MS = 30000;
 import { useLanguage } from '../i18n/LanguageContext.jsx';
+import { useQuarantineUndo } from '../hooks/useQuarantineUndo.js';
+import { batchDirOfManifest } from '../lib/undoQuarantine.js';
 
 /** What a batch did, in the words of where its leftovers went. */
 export const DEFAULT_BATCH_SUMMARY_MESSAGES = {
@@ -91,6 +93,7 @@ const OUTCOME_BANNER = {
  * uninstalling them one at a time. */
 export default function BatchUninstallModal({ programs, onClose, onFinished, onBusyChange }) {
   const { t } = useLanguage();
+  const offerUndo = useQuarantineUndo();
 
   const REMOVING_LINE = {
     quarantine: t('batchUninstallModal.removingLine.quarantine'),
@@ -311,6 +314,11 @@ export default function BatchUninstallModal({ programs, onClose, onFinished, onB
         destination
       });
       setRemoval(manifest);
+      // Leftovers that went to Quarantine can be brought straight back.
+      offerUndo(
+        t('dashboardQolV3.undo.movedLeftovers', t('batchUninstallModal.historyLabel', programs.length)),
+        batchDirOfManifest(manifest)
+      );
       setPhase('done');
     } catch (err) {
       setError(err.message);

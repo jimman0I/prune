@@ -9,6 +9,8 @@ import { useLanguage } from '../i18n/LanguageContext.jsx';
 import { recommendedPlan } from '../lib/recommendedClean.js';
 import { removalModeFrom } from '../lib/cleanOutcome.js';
 import { cleanResultText } from '../lib/cleanResultText.js';
+import { batchDirsOfResults, ruleIdsOfBatches } from '../lib/undoQuarantine.js';
+import { useQuarantineUndo } from './useQuarantineUndo.js';
 import { lockedFileSummary } from '../lib/lockedFiles.js';
 
 const NO_PLAN = { ids: [], bytes: 0, count: 0, fromCache: false };
@@ -34,6 +36,7 @@ export function useCleanRecommended({ enabled = true } = {}) {
   const { t } = useLanguage();
   const toasts = useToasts();
   const queryClient = useQueryClient();
+  const offerUndo = useQuarantineUndo();
   const { settings } = useSettings();
   const scan = useDeepCleanScan(nameOf, undefined, { settings, enabled });
   const exec = useDeepCleanExecute(nameOf, undefined);
@@ -111,6 +114,9 @@ export function useCleanRecommended({ enabled = true } = {}) {
     if (phase !== 'confirm' || confirmPlan.ids.length === 0) return;
     setCleanError(null);
     setPhase('cleaning');
+    // The rows as they stand, for an Undo to put back (see revertRows).
+    const treeBefore = scan.tree;
+    const scanAtBefore = scan.lastScanAt;
     try {
       const outcome = await exec.run(confirmPlan.ids);
       setResult(outcome);
@@ -120,10 +126,13 @@ export function useCleanRecommended({ enabled = true } = {}) {
       // What a Delete now freed is already in the backend's lifetime total.
       queryClient.invalidateQueries({ queryKey: keys.stats });
       const text = cleanResultText(outcome, t);
+      // Undo only where the files can come back: never after Delete now.
+      const dirs = removalMode === 'delete' ? [] : batchDirsOfResults(outcome.results);
+      const onRestored = (restored) => scan.revertRows(treeBefore, ruleIdsOfBatches(outcome.results, restored), scanAtBefore);
       if (outcome.aborted) {
-        toasts.warn(`${t('deepClean.cleanupStopped')} ${text}`);
+        offerUndo(`${t('deepClean.cleanupStopped')} ${text}`, dirs, { tone: 'warning', onRestored });
       } else {
-        toasts.success(`${t('deepClean.cleanupComplete')} ${text}`);
+        offerUndo(`${t('deepClean.cleanupComplete')} ${text}`, dirs, { onRestored });
         const locked = lockedFileSummary(outcome, t('deepClean.locked'));
         if (locked) toasts.warn(locked.message, { detail: locked.detail, paths: locked.paths, ttl: 0 });
       }
@@ -132,7 +141,7 @@ export function useCleanRecommended({ enabled = true } = {}) {
     } finally {
       setPhase((current) => (current === 'cleaning' ? 'result' : current));
     }
-  }, [phase, confirmPlan, exec, scan, t, toasts, queryClient]);
+  }, [phase, confirmPlan, exec, scan, t, toasts, queryClient, offerUndo, removalMode]);
 
   return {
     phase,

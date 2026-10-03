@@ -16,6 +16,8 @@ import { needsWarning, rememberedWith } from '../lib/cleanWarning.js';
 import { categoryTickPlan } from '../lib/categoryTickPlan.js';
 import { removalModeFrom, cleanOutcome } from '../lib/cleanOutcome.js';
 import { cleanResultSentences, cleanResultText } from '../lib/cleanResultText.js';
+import { batchDirsOfResults, ruleIdsOfBatches } from '../lib/undoQuarantine.js';
+import { useQuarantineUndo } from '../hooks/useQuarantineUndo.js';
 import { formatRelativeTime } from '../lib/formatRelativeTime.js';
 import DeepCleanTree from './DeepCleanTree.jsx';
 import CleanWarningDialog from './CleanWarningDialog.jsx';
@@ -217,6 +219,7 @@ function DeepClean({ onNavigate }) {
   const [warnQueue, setWarnQueue] = useState([]);
   const warnAbout = warnQueue[0] ?? null;
   const toasts = useToasts();
+  const offerUndo = useQuarantineUndo();
 
   // How a rule is named in the two live logs: with its category in front, so
   // the three rules called "Cache" are told apart. A clean's results carry
@@ -245,7 +248,7 @@ function DeepClean({ onNavigate }) {
     tree: categories, scanning, hasScanned, log: logLines,
     scanned, total, error: scanError, currentId: scanningId,
     progress: scanProgress,
-    lastScanAt, restored, applyCleanResults,
+    lastScanAt, restored, applyCleanResults, revertRows,
     start, stop: stopPreview, cleanableIds: scannedIds
   } = useDeepCleanScan(logName, scanLogMessages, { settings, autoStart: true });
 
@@ -489,8 +492,26 @@ function DeepClean({ onNavigate }) {
     return sentences.length === 1 ? sentences[0] : resultSentence(result);
   };
 
+  /** The toast for a clean, with Undo when it moved files into Quarantine.
+   *
+   * Undo restores those batches through the Quarantine API, and the rows go back
+   * to how they read before the clean (see revertRows) -- the files are back, so
+   * "0 B" would no longer be true. Not offered after Delete now: that mode is a
+   * deliberate choice not to keep anything, and a partial undo of only the
+   * databases it edited in place would read as more than it is. */
+  const cleanToast = (message, cleaned, { treeBefore, scanAtBefore, tone }) => {
+    const dirs = removalMode === 'delete' ? [] : batchDirsOfResults(cleaned?.results);
+    offerUndo(message, dirs, {
+      tone,
+      onRestored: (restoredDirs) => revertRows(treeBefore, ruleIdsOfBatches(cleaned.results, restoredDirs), scanAtBefore)
+    });
+  };
+
   const handleClean = async () => {
     setCleanError(null);
+    // The rows as they stand, for an Undo to put back.
+    const treeBefore = categories;
+    const scanAtBefore = lastScanAt;
     try {
       // Freeze what's actually being handed to the backend before it can
       // change out from under the receipt -- see cleaningSelection's own
@@ -515,7 +536,7 @@ function DeepClean({ onNavigate }) {
         // Whatever finished before the click really happened, so those rows
         // are brought up to date; the rest are exactly as they were.
         applyCleanResults(result.results);
-        toasts.warn(`${t('deepClean.cleanupStopped')} ${resultSentence(result)}`);
+        cleanToast(`${t('deepClean.cleanupStopped')} ${resultSentence(result)}`, result, { treeBefore, scanAtBefore, tone: 'warning' });
         return;
       }
 
@@ -523,7 +544,7 @@ function DeepClean({ onNavigate }) {
       // to be the whole story and the failures were a passive clause
       // appended to it -- "some files were skipped (in use)" -- with no
       // count, no paths, and nothing to act on.
-      toasts.success(`${t('deepClean.cleanupComplete')} ${resultSentence(result)}`);
+      cleanToast(`${t('deepClean.cleanupComplete')} ${resultSentence(result)}`, result, { treeBefore, scanAtBefore, tone: 'success' });
       const locked = lockedFileSummary(result, t('deepClean.locked'));
       if (locked) {
         // A warning, and one that does not expire: the whole point is
@@ -566,11 +587,13 @@ function DeepClean({ onNavigate }) {
   const handleElevatedClean = async () => {
     setElevatedResult(null);
     setElevating(true);
+    const treeBefore = categories;
+    const scanAtBefore = lastScanAt;
     try {
       const result = await executeDeepCleanElevated(needsAdminIds);
       setElevatedResult(result);
       if (result.ok) {
-        toasts.success(`${t('deepClean.cleanupComplete')} ${resultSentence(result.data)}`);
+        cleanToast(`${t('deepClean.cleanupComplete')} ${resultSentence(result.data)}`, result.data, { treeBefore, scanAtBefore, tone: 'success' });
         // Same as the ordinary clean: the rows are settled from what was
         // reported, not rescanned. A rule this cleaned stops being "needs
         // administrator" (it was just read and emptied by one), so its banner
