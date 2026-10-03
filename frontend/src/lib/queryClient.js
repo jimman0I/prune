@@ -62,6 +62,7 @@ export const keys = {
   settings: ['settings'],
   runAsAdmin: ['settings', 'runAsAdmin'],
   startWithWindows: ['settings', 'startWithWindows'],
+  explorerMenu: ['settings', 'explorerMenu'],
   updateCheck: ['update-check'],
   automation: ['automation'],
   scheduledClean: ['scheduledClean'],
