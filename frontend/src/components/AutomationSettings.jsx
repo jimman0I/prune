@@ -3,6 +3,7 @@ import { fetchAutomation } from '../lib/api.js';
 import { keys } from '../lib/queryClient.js';
 import { useLanguage } from '../i18n/LanguageContext.jsx';
 import Toggle from './Toggle.jsx';
+import BackgroundCleanSetting from './BackgroundCleanSetting.jsx';
 
 /** The scheduled run, and an honest account of what it can do.
  *
@@ -136,7 +137,10 @@ export default function AutomationSettings({ settings, save }) {
                 {nextRun ? nextRun.toLocaleString() : '—'}
               </span>
             </p>
-            {lastResult && (
+            {/* While Windows' task owns the schedule, the in-app record is not
+                updated; the last-clean line below the switch is the one that
+                is true. */}
+            {lastResult && status.data?.delegatedToTask !== true && (
               <p>
                 {t('settings.automation.lastRun')}{' '}
                 <span className="font-mono text-[color:var(--text-primary)]">
@@ -149,6 +153,10 @@ export default function AutomationSettings({ settings, save }) {
               </p>
             )}
           </div>
+
+          {/* Opt-in: a Windows scheduled task for this schedule, so it also
+              runs while Prune is closed. Follows the fields above. */}
+          <BackgroundCleanSetting automation={automation} />
         </>
       )}
     </div>

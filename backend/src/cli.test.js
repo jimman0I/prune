@@ -1,6 +1,6 @@
-import { describe, it, expect, beforeAll, afterAll } from 'vitest';
+import { describe, it, expect, beforeAll, beforeEach, afterAll } from 'vitest';
 import { spawnSync } from 'node:child_process';
-import { mkdtempSync, mkdirSync, writeFileSync, existsSync, rmSync, readdirSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, existsSync, rmSync, readdirSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -246,6 +246,88 @@ describe('clean', () => {
     expect(r.code).toBe(0);
     expect(r.out).toMatch(/Fixture other/);
     expect(r.out).toMatch(/Freed/);
+  });
+});
+
+describe('clean --report (what Task Scheduler runs while Prune is closed)', () => {
+  const reportFile = () => join(root, 'scheduled-clean-report.json');
+  const readReport = () => JSON.parse(readFileSync(reportFile(), 'utf8'));
+  beforeEach(() => { rmSync(reportFile(), { force: true }); });
+
+  it('leaves a report beside settings.json: when, mode, rules and bytes', () => {
+    fill();
+    const before = Date.now();
+    const r = run(['clean', '--preset', 'recommended', '--report']);
+    expect(r.code).toBe(0);
+    const report = readReport();
+    expect(report.version).toBe(1);
+    expect(report.runs).toHaveLength(1);
+    const entry = report.runs[0];
+    expect(entry).toMatchObject({ mode: 'quarantine', ok: true, rulesFailed: 0, freedBytes: 0 });
+    expect(entry.movedBytes).toBe('cache/a.bin'.length + 'cache/b.bin'.length);
+    expect(entry.rulesCleaned).toBe(1);
+    expect(entry.at).toBeGreaterThanOrEqual(before);
+    expect(entry.startedAt).toBeLessThanOrEqual(entry.at);
+    expect(left('cache')).toEqual([]);
+    expect(left('logs')).toEqual(['x.log']); // the preset still skips what loses data
+  });
+
+  it('writes nothing without the flag', () => {
+    fill();
+    run(['clean', '--rules', 'fx_cache']);
+    expect(existsSync(reportFile())).toBe(false);
+  });
+
+  it('records bytes really freed when the setting is Delete now', () => {
+    fill();
+    run(['clean', '--rules', 'fx_other', '--delete-now', '--report']);
+    expect(readReport().runs[0]).toMatchObject({ mode: 'delete', freedBytes: 'other/o.dat'.length, movedBytes: 0 });
+  });
+
+  it('keeps earlier runs and adds the new one', () => {
+    fill();
+    run(['clean', '--rules', 'fx_cache', '--report']);
+    fill();
+    run(['clean', '--rules', 'fx_cache', '--report']);
+    expect(readReport().runs).toHaveLength(2);
+  });
+
+  it('a failing rule is in the report, and the exit code still says so', () => {
+    fill();
+    const r = run(['clean', '--rules', 'fx_cache,fx_broken', '--report']);
+    expect(r.code).toBe(1);
+    const entry = readReport().runs[0];
+    expect(entry.ok).toBe(false);
+    expect(entry.rulesFailed).toBe(1);
+    expect(entry.errors[0].id).toBe('fx_broken');
+  });
+
+  it('honours the settings file\'s guards: held-back files are skipped, not cleaned', () => {
+    fill();
+    const excluded = join(root, 'settings-report-excl.json');
+    writeFileSync(excluded, JSON.stringify({ skipRecentHours: 0, excludeFolders: [join(work, 'cache')] }));
+    const r = spawnSync(process.execPath, [CLI, 'clean', '--preset', 'recommended', '--report'], {
+      encoding: 'utf8',
+      env: { ...process.env, UNREVO_CLEANERS_PATH: cleanersFile, UNREVO_SETTINGS_PATH: excluded, UNREVO_QUARANTINE_ROOT: quarantineDir }
+    });
+    expect(r.status).toBe(0);
+    expect(left('cache')).toHaveLength(2);
+    // The report lands beside THAT settings file.
+    const report = JSON.parse(readFileSync(join(root, 'scheduled-clean-report.json'), 'utf8'));
+    expect(report.runs.at(-1).movedBytes).toBe(0);
+    rmSync(join(root, 'scheduled-clean-report.json'), { force: true });
+  });
+
+  it('is for clean only: preview and list refuse it', () => {
+    expect(run(['preview', '--report']).code).toBe(2);
+    expect(run(['list', '--report']).code).toBe(2);
+    expect(existsSync(reportFile())).toBe(false);
+  });
+
+  it('a usage error before any cleaning leaves no report', () => {
+    fill();
+    expect(run(['clean', '--rules', 'nope', '--report']).code).toBe(2);
+    expect(existsSync(reportFile())).toBe(false);
   });
 });
 

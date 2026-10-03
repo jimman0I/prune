@@ -242,7 +242,11 @@ export function useSettings() {
     // The server returns the FULL settings object, not the partial that
     // was sent, so the reply replaces the cache rather than merging into
     // it -- and it is authoritative over the optimistic guess above.
-    onSuccess: (updated) => queryClient.setQueryData(keys.settings, updated)
+    onSuccess: (updated, partial) => {
+      queryClient.setQueryData(keys.settings, updated);
+      // The backend moves or removes the Task Scheduler task with the schedule.
+      if (partial && 'automation' in partial) queryClient.invalidateQueries({ queryKey: keys.scheduledClean });
+    }
   });
 
   return { settings: settings.data ?? null, loading: settings.isPending, save };

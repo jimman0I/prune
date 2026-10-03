@@ -4,5 +4,6 @@ import uninstaller from './uninstaller.js';
 import runAsAdmin from './runAsAdmin.js';
 import dashboardQol from './dashboardQol.js';
 import diskMapQol from './diskMapQol.js';
+import background from './background.js';
 
-export const EXTRAS = [diskMap, deepClean, uninstaller, runAsAdmin, dashboardQol, diskMapQol];
+export const EXTRAS = [diskMap, deepClean, uninstaller, runAsAdmin, dashboardQol, diskMapQol, background];

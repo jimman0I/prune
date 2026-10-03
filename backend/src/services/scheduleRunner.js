@@ -2,18 +2,20 @@ import { getSettings, updateSettings, cleanGuardsFrom } from './settings.js';
 import { scanAllRules, executeRules } from '../lib/cleanerRules.js';
 import { dueRun } from '../lib/schedule.js';
 import { recordFreed } from './stats.js';
+import { scheduledCleanDelegates } from './scheduledCleanTask.js';
+import { latestRun } from './scheduledCleanReport.js';
 
 /** Running the scheduled task, when the app happens to be running.
  *
  * IN-APP, and that limitation is the honest one to state rather than to
- * hide. A Windows scheduled task would fire with Prune closed, but there
- * is nothing for it to invoke: the backend is an Express server Electron
- * starts, with no headless entry point. Registering a task that launches
- * the full desktop app at 2 AM to clean unattended would be worse than
- * this -- it puts a window on screen nobody asked for and deletes files
- * with nobody watching.
+ * hide. Launching the full desktop app at 2 AM to clean unattended would put
+ * a window on screen nobody asked for. Running while Prune is closed is a
+ * separate, opt-in thing: "Also run when Prune is closed" registers a Windows
+ * task that runs the command line (services/scheduledCleanTask.js), and while
+ * that task exists this scheduler stands down for the schedule (see
+ * handedToTask below).
  *
- * So the schedule catches up instead. The check runs on start and every
+ * Without it, the schedule catches up instead. The check runs on start and every
  * minute after, and a window that passed while the machine was off is
  * reported as missed rather than silently skipped. That is what the
  * Dashboard badge says, and it is the difference between "the feature is
@@ -63,6 +65,23 @@ async function runTask(task, guards) {
   return { ok: true, task: 'scan', freedBytes: 0, foundBytes: total, summary: 'Scan finished.' };
 }
 
+/** Whether Windows Task Scheduler owns this schedule.
+ *
+ * "Also run when Prune is closed" registers a task that runs the same clean
+ * from the command line, with or without Prune open. While that task exists
+ * the in-app scheduler must not ALSO run it: two cleans of one schedule, one
+ * of them behind the other's back. Only a schedule that cleans is ever handed
+ * over; one that only measures stays here. A task that cannot be read counts
+ * as no task, so the schedule keeps working. */
+async function handedToTask(automation) {
+  if (automation?.enabled !== true || automation?.task !== 'clean') return false;
+  try {
+    return await scheduledCleanDelegates();
+  } catch {
+    return false;
+  }
+}
+
 /** Checks whether a run is due, and runs it.
  *
  * Exported so a test and the route can drive it directly rather than
@@ -77,6 +96,7 @@ export async function checkSchedule(now = new Date()) {
   const automation = settings.automation;
   const status = dueRun(automation, automation?.lastRunAt ?? null, now);
   if (!status.due) return { ...status, ran: false };
+  if (await handedToTask(automation)) return { ...status, ran: false, deferred: 'scheduled task' };
 
   running = true;
   try {
@@ -127,13 +147,23 @@ export function stopScheduler() {
 export async function scheduleStatus(now = new Date()) {
   const settings = await getSettings();
   const automation = settings.automation ?? null;
-  const status = dueRun(automation, automation?.lastRunAt ?? null, now);
+  const delegated = await handedToTask(automation);
+  // The task keeps its own record (its report), so "missed" is measured from
+  // that, not from the in-app record the task never updates.
+  let lastRunAt = automation?.lastRunAt ?? null;
+  if (delegated) {
+    const run = await latestRun().catch(() => null);
+    if (run) lastRunAt = Math.max(lastRunAt ?? 0, run.at);
+  }
+  const status = dueRun(automation, lastRunAt, now);
   return {
     automation,
-    due: status.due,
+    // Not "due" for the app to catch up: the task is the one that runs it.
+    due: delegated ? false : status.due,
     missed: status.missed,
     nextRun: status.nextRun ? status.nextRun.getTime() : null,
-    lastRunAt: automation?.lastRunAt ?? null,
-    lastResult: automation?.lastResult ?? null
+    lastRunAt,
+    lastResult: automation?.lastResult ?? null,
+    delegatedToTask: delegated
   };
 }

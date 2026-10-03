@@ -678,3 +678,28 @@
 !macroend
 
 !endif
+
+; What Prune leaves with Windows outside its own folder, removed with it.
+;
+; "Also run when Prune is closed" (Settings) registers one Task Scheduler task
+; for the current user, \Prune\Scheduled clean, which runs this install's
+; prune-cli.cmd. The task exists only if the person switched it on, and it must
+; not outlive the program it runs: uninstalling Prune deletes it. This is
+; schtasks.exe with fixed arguments; a task that is not there is not an error,
+; and its exit code is ignored on purpose (the uninstall must never fail over
+; it). The name is the same one backend/src/services/scheduledCleanTask.js
+; registers; electron/background.test.cjs checks the two agree.
+;
+; NOT on an update: the updater runs the old uninstaller with --updated and then
+; installs the new version over it, and the task should survive that (the app
+; also re-points it at the install folder on its next start).
+!ifdef BUILD_UNINSTALLER
+
+!macro customUnInstall
+  ${ifNot} ${isUpdated}
+    nsExec::Exec '"$SYSDIR\schtasks.exe" /Delete /TN "Prune\Scheduled clean" /F'
+    Pop $0
+  ${endIf}
+!macroend
+
+!endif
