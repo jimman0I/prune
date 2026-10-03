@@ -6,6 +6,7 @@ import { keys } from '../lib/queryClient.js';
 import { useDeepCleanScan } from '../hooks/useDeepCleanScan.js';
 import { useDeepCleanExecute } from '../hooks/useDeepCleanExecute.js';
 import { useSettings } from '../hooks/useSystemQueries.js';
+import { useAdminAccess } from '../hooks/useAdminAccess.js';
 import { lockedFileSummary } from '../lib/lockedFiles.js';
 import { logRuleName } from '../lib/scanLog.js';
 import { useToasts } from '../hooks/useToasts.jsx';
@@ -189,6 +190,8 @@ function DeepClean({ onNavigate }) {
   const [cleanError, setCleanError] = useState(null);
   const [elevating, setElevating] = useState(false);
   const [elevatedResult, setElevatedResult] = useState(null);
+  // True only once the status was read and said so (see useAdminAccess).
+  const { elevated } = useAdminAccess();
   // A frozen copy of `selected`, taken the instant Clean actually starts.
   // receiptMode filters the tree against THIS, not the live `selected` --
   // nothing currently stops a checkbox click or "Clear" from mutating
@@ -559,7 +562,10 @@ function DeepClean({ onNavigate }) {
   // folders), as opposed to a file another process has open, which
   // elevation does not fix either way. Only these rules are ever offered
   // the elevated button below; it is not a general "run everything as
-  // admin" switch.
+  // admin" switch. When Prune is ALREADY elevated the same rules are not
+  // fixable by elevating again: Windows refuses even an administrator
+  // (SYSTEM / TrustedInstaller folders, Defender's tamper protection), so
+  // they are reported as protected and no button is offered.
   const needsAdminIds = useMemo(
     () => (categories ?? []).flatMap((g) => g.items).filter((i) => i.accessible === false).map((i) => i.id),
     [categories]
@@ -676,15 +682,19 @@ function DeepClean({ onNavigate }) {
         {needsAdminIds.length > 0 && !scanning && !cleaning && (
           <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 mb-5 px-3.5 py-3 rounded-xl bg-[color:var(--bg-panel)] border border-[color:var(--border-subtle)]">
             <p className="text-[12.5px] text-[color:var(--text-secondary)]">
-              {t('deepClean.needsAdminBanner', needsAdminIds.length)}
+              {elevated
+                ? t('deepCleanV3.protected.banner', needsAdminIds.length)
+                : t('deepClean.needsAdminBanner', needsAdminIds.length)}
             </p>
-            <button
-              className="btn-ghost px-3.5 py-1.5 rounded-lg text-[12.5px] font-medium shrink-0"
-              onClick={handleElevatedClean}
-              disabled={elevating}
-            >
-              {elevating ? t('deepClean.confirm.cleaning') : t('deepClean.cleanAsAdmin')}
-            </button>
+            {!elevated && (
+              <button
+                className="btn-ghost px-3.5 py-1.5 rounded-lg text-[12.5px] font-medium shrink-0"
+                onClick={handleElevatedClean}
+                disabled={elevating}
+              >
+                {elevating ? t('deepClean.confirm.cleaning') : t('deepClean.cleanAsAdmin')}
+              </button>
+            )}
           </div>
         )}
 
@@ -785,6 +795,7 @@ function DeepClean({ onNavigate }) {
                 // receipt -- only `cleaning`, never `scanning`, which stays
                 // the full browsable list while deciding what to clean.
                 receiptMode={cleaning}
+                elevated={elevated}
               />
             )}
           </div>

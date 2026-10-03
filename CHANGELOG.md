@@ -159,6 +159,11 @@ see v1.0.1 below) are documented here.
   that can't drift.
 - **The "scan to see results" hint no longer points at a screen reader
   element that's already gone** once the automatic scan has finished.
+- **Deep Clean no longer tells an administrator to run as administrator.**
+  Folders Windows refuses to list even when elevated (Defender's, owned by
+  SYSTEM and protected by tamper protection) kept showing "needs
+  administrator access" and a "Clean as administrator" button. When Prune is
+  already elevated they now read "protected by Windows", with no button.
 
 ## v2.9.2
 

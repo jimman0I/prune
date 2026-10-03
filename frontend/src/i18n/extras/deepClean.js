@@ -49,6 +49,10 @@ export default {
         scheduled: (a) => `Locked files to be deleted at the next restart: ${a}.`,
         needsAdmin: "Some locked files could not be scheduled for deletion at restart, because that needs administrator rights."
       },
+      protected: {
+        banner: (a) => `${a} ${a === 1 ? 'item is' : 'items are'} protected by Windows and can't be measured or cleaned, even as administrator.`,
+        item: "protected"
+      },
       files: {
         show: (a) => `Show files in ${a}`,
         hide: (a) => `Hide files in ${a}`,
@@ -147,6 +151,10 @@ export default {
       locked: {
         scheduled: (a) => `Gesluite lêers wat by die volgende herbegin verwyder sal word: ${a}.`,
         needsAdmin: "Sommige gesluite lêers kon nie vir verwydering by herbegin geskeduleer word nie, omdat dit administrateurregte vereis."
+      },
+      protected: {
+        banner: (a) => `${a} item${a === 1 ? '' : 's'} word deur Windows beskerm en kan nie gemeet of skoongemaak word nie, selfs nie as administrateur nie.`,
+        item: "beskerm"
       },
       files: {
         show: (a) => `Wys lêers in ${a}`,
@@ -247,6 +255,10 @@ export default {
         scheduled: (a) => `الملفات المقفلة التي ستُحذف عند إعادة التشغيل التالية: ${a}.`,
         needsAdmin: "تعذّرت جدولة بعض الملفات المقفلة للحذف عند إعادة التشغيل لأن ذلك يتطلب صلاحيات المسؤول."
       },
+      protected: {
+        banner: (a) => a === 1 ? 'عنصر واحد محمي بواسطة Windows ولا يمكن قياسه أو تنظيفه حتى بصلاحيات المسؤول.' : `${a} عناصر محمية بواسطة Windows ولا يمكن قياسها أو تنظيفها حتى بصلاحيات المسؤول.`,
+        item: "محمي"
+      },
       files: {
         show: (a) => `عرض الملفات في ${a}`,
         hide: (a) => `إخفاء الملفات في ${a}`,
@@ -345,6 +357,10 @@ export default {
       locked: {
         scheduled: (a) => `Fitxers bloquejats que se suprimiran en el següent reinici: ${a}.`,
         needsAdmin: "Alguns fitxers bloquejats no s'han pogut programar per suprimir-se en el reinici, perquè cal tenir permisos d'administrador."
+      },
+      protected: {
+        banner: (a) => a === 1 ? '1 element està protegit per Windows i no es pot mesurar ni netejar, ni tan sols com a administrador.' : `${a} elements estan protegits per Windows i no es poden mesurar ni netejar, ni tan sols com a administrador.`,
+        item: "protegit"
       },
       files: {
         show: (a) => `Mostra els fitxers de ${a}`,
@@ -445,6 +461,10 @@ export default {
         scheduled: (a) => `Uzamčené soubory, které se odstraní při příštím restartu: ${a}.`,
         needsAdmin: "Některé uzamčené soubory se nepodařilo naplánovat k odstranění při restartu, protože to vyžaduje práva správce."
       },
+      protected: {
+        banner: (a) => { const w = a === 1 ? 'položka je chráněna' : (a >= 2 && a <= 4) ? 'položky jsou chráněny' : 'položek je chráněno'; return `${a} ${w} systémem Windows a nelze změřit ani vyčistit, a to ani se správcovskými oprávněními.`; },
+        item: "chráněno"
+      },
       files: {
         show: (a) => `Zobrazit soubory v ${a}`,
         hide: (a) => `Skrýt soubory v ${a}`,
@@ -543,6 +563,10 @@ export default {
       locked: {
         scheduled: (a) => `Ffeiliau wedi'u cloi i'w dileu adeg yr ailgychwyn nesaf: ${a}.`,
         needsAdmin: "Ni ellid trefnu rhai ffeiliau wedi'u cloi i'w dileu adeg ailgychwyn, oherwydd bod angen hawliau gweinyddwr."
+      },
+      protected: {
+        banner: (a) => a === 1 ? `Mae ${a} eitem wedi'i diogelu gan Windows ac ni ellir ei mesur na'i glanhau, hyd yn oed fel gweinyddwr.` : `Mae ${a} eitem wedi'u diogelu gan Windows ac ni ellir eu mesur na'u glanhau, hyd yn oed fel gweinyddwr.`,
+        item: "wedi'i ddiogelu"
       },
       files: {
         show: (a) => `Dangos ffeiliau yn ${a}`,
@@ -643,6 +667,10 @@ export default {
         scheduled: (a) => `Låste filer, der slettes ved næste genstart: ${a}.`,
         needsAdmin: "Nogle låste filer kunne ikke planlægges slettet ved genstart, fordi det kræver administratorrettigheder."
       },
+      protected: {
+        banner: (a) => `${a} ${a === 1 ? 'element er' : 'elementer er'} beskyttet af Windows og kan ikke måles eller ryddes op, heller ikke som administrator.`,
+        item: "beskyttet"
+      },
       files: {
         show: (a) => `Vis filer i ${a}`,
         hide: (a) => `Skjul filer i ${a}`,
@@ -741,6 +769,10 @@ export default {
       locked: {
         scheduled: (a) => `Gesperrte Dateien, die beim nächsten Neustart gelöscht werden: ${a}.`,
         needsAdmin: "Einige gesperrte Dateien ließen sich nicht für das Löschen beim Neustart vormerken, da dafür Administratorrechte nötig sind."
+      },
+      protected: {
+        banner: (a) => a === 1 ? '1 Element ist durch Windows geschützt und kann auch als Administrator nicht gemessen oder bereinigt werden.' : `${a} Elemente sind durch Windows geschützt und können auch als Administrator nicht gemessen oder bereinigt werden.`,
+        item: "geschützt"
       },
       files: {
         show: (a) => `Dateien in ${a} anzeigen`,
@@ -841,6 +873,10 @@ export default {
         scheduled: (a) => `Κλειδωμένα αρχεία που θα διαγραφούν στην επόμενη επανεκκίνηση: ${a}.`,
         needsAdmin: "Ορισμένα κλειδωμένα αρχεία δεν μπόρεσαν να προγραμματιστούν για διαγραφή στην επανεκκίνηση, επειδή απαιτούνται δικαιώματα διαχειριστή."
       },
+      protected: {
+        banner: (a) => a === 1 ? '1 στοιχείο προστατεύεται από τα Windows και δεν μπορεί να μετρηθεί ή να καθαριστεί, ακόμη και ως διαχειριστής.' : `${a} στοιχεία προστατεύονται από τα Windows και δεν μπορούν να μετρηθούν ή να καθαριστούν, ακόμη και ως διαχειριστής.`,
+        item: "προστατευμένο"
+      },
       files: {
         show: (a) => `Εμφάνιση αρχείων στο ${a}`,
         hide: (a) => `Απόκρυψη αρχείων στο ${a}`,
@@ -939,6 +975,10 @@ export default {
       locked: {
         scheduled: (a) => `Archivos bloqueados que se eliminarán en el próximo reinicio: ${a}.`,
         needsAdmin: "No se pudieron programar algunos archivos bloqueados para eliminarse al reiniciar, porque eso requiere permisos de administrador."
+      },
+      protected: {
+        banner: (a) => a === 1 ? '1 elemento está protegido por Windows y no se puede medir ni limpiar, ni siquiera como administrador.' : `${a} elementos están protegidos por Windows y no se pueden medir ni limpiar, ni siquiera como administrador.`,
+        item: "protegido"
       },
       files: {
         show: (a) => `Mostrar los archivos de ${a}`,
@@ -1039,6 +1079,10 @@ export default {
         scheduled: (a) => `Lukustatud failid, mis kustutatakse järgmisel taaskäivitusel: ${a}.`,
         needsAdmin: "Mõnda lukustatud faili ei saanud taaskäivitusel kustutamiseks ajastada, sest see nõuab administraatoriõigusi."
       },
+      protected: {
+        banner: (a) => a === 1 ? '1 üksus on Windowsi poolt kaitstud ja seda ei saa mõõta ega puhastada, isegi administraatorina.' : `${a} üksust on Windowsi poolt kaitstud ja neid ei saa mõõta ega puhastada, isegi administraatorina.`,
+        item: "kaitstud"
+      },
       files: {
         show: (a) => `Näita ${a} faile`,
         hide: (a) => `Peida ${a} failid`,
@@ -1137,6 +1181,10 @@ export default {
       locked: {
         scheduled: (a) => `Lukitut tiedostot, jotka poistetaan seuraavassa uudelleenkäynnistyksessä: ${a}.`,
         needsAdmin: "Joitakin lukittuja tiedostoja ei voitu ajoittaa poistettavaksi uudelleenkäynnistyksessä, koska se vaatii järjestelmänvalvojan oikeudet."
+      },
+      protected: {
+        banner: (a) => a === 1 ? 'Windows suojaa 1 kohdetta, eikä sitä voi mitata tai puhdistaa edes järjestelmänvalvojana.' : `Windows suojaa ${a} kohdetta, eikä niitä voi mitata tai puhdistaa edes järjestelmänvalvojana.`,
+        item: "suojattu"
       },
       files: {
         show: (a) => `Näytä kohteen ${a} tiedostot`,
@@ -1237,6 +1285,10 @@ export default {
         scheduled: (a) => `Fichiers verrouillés qui seront supprimés au prochain redémarrage : ${a}.`,
         needsAdmin: "Certains fichiers verrouillés n'ont pas pu être programmés pour suppression au redémarrage, car cela exige des droits d'administrateur."
       },
+      protected: {
+        banner: (a) => a === 1 ? "1 élément est protégé par Windows et ne peut être ni mesuré ni nettoyé, même en tant qu'administrateur." : `${a} éléments sont protégés par Windows et ne peuvent être ni mesurés ni nettoyés, même en tant qu'administrateur.`,
+        item: "protégé"
+      },
       files: {
         show: (a) => `Afficher les fichiers de ${a}`,
         hide: (a) => `Masquer les fichiers de ${a}`,
@@ -1335,6 +1387,10 @@ export default {
       locked: {
         scheduled: (a) => `קבצים נעולים שיימחקו בהפעלה מחדש הבאה: ${a}.`,
         needsAdmin: "לא ניתן היה לתזמן חלק מהקבצים הנעולים למחיקה בהפעלה מחדש, כי הדבר דורש הרשאות מנהל."
+      },
+      protected: {
+        banner: (a) => a === 1 ? 'פריט אחד מוגן על ידי Windows ואי אפשר למדוד או לנקות אותו, גם לא כמנהל.' : `${a} פריטים מוגנים על ידי Windows ואי אפשר למדוד או לנקות אותם, גם לא כמנהל.`,
+        item: "מוגן"
       },
       files: {
         show: (a) => `הצג קבצים ב-${a}`,
@@ -1435,6 +1491,10 @@ export default {
         scheduled: (a) => `A következő újraindításkor törlődő zárolt fájlok: ${a}.`,
         needsAdmin: "Néhány zárolt fájl törlését nem sikerült az újraindításra ütemezni, mert ehhez rendszergazdai jogosultság kell."
       },
+      protected: {
+        banner: (a) => `A Windows ${a} elemet véd, ezért nem mérhető és nem tisztítható meg, még rendszergazdaként sem.`,
+        item: "védett"
+      },
       files: {
         show: (a) => `${a} fájljainak megjelenítése`,
         hide: (a) => `${a} fájljainak elrejtése`,
@@ -1533,6 +1593,10 @@ export default {
       locked: {
         scheduled: (a) => `File terkunci yang akan dihapus saat restart berikutnya: ${a}.`,
         needsAdmin: "Beberapa file terkunci tidak dapat dijadwalkan untuk dihapus saat restart, karena itu memerlukan hak administrator."
+      },
+      protected: {
+        banner: (a) => `${a} item dilindungi oleh Windows dan tidak dapat diukur atau dibersihkan, bahkan sebagai administrator.`,
+        item: "dilindungi"
       },
       files: {
         show: (a) => `Tampilkan file di ${a}`,
@@ -1633,6 +1697,10 @@ export default {
         scheduled: (a) => `Læstar skrár sem verður eytt við næstu endurræsingu: ${a}.`,
         needsAdmin: "Ekki tókst að tímasetja eyðingu sumra læstra skráa við endurræsingu því það krefst stjórnandaréttinda."
       },
+      protected: {
+        banner: (a) => a === 1 ? '1 atriði er varið af Windows og ekki er hægt að mæla það eða hreinsa, jafnvel sem stjórnandi.' : `${a} atriði eru vernduð af Windows og ekki er hægt að mæla þau eða hreinsa, jafnvel sem stjórnandi.`,
+        item: "varið"
+      },
       files: {
         show: (a) => `Sýna skrár í ${a}`,
         hide: (a) => `Fela skrár í ${a}`,
@@ -1731,6 +1799,10 @@ export default {
       locked: {
         scheduled: (a) => `File bloccati che verranno eliminati al prossimo riavvio: ${a}.`,
         needsAdmin: "Alcuni file bloccati non hanno potuto essere programmati per l'eliminazione al riavvio, perché servono i diritti di amministratore."
+      },
+      protected: {
+        banner: (a) => a === 1 ? '1 elemento è protetto da Windows e non può essere misurato né pulito, nemmeno come amministratore.' : `${a} elementi sono protetti da Windows e non possono essere misurati né puliti, nemmeno come amministratore.`,
+        item: "protetto"
       },
       files: {
         show: (a) => `Mostra i file di ${a}`,
@@ -1831,6 +1903,10 @@ export default {
         scheduled: (a) => `次回の再起動時に削除されるロック中のファイル：${a}。`,
         needsAdmin: "一部のロック中のファイルは、再起動時の削除を予約できませんでした。予約には管理者権限が必要です。"
       },
+      protected: {
+        banner: (a) => `${a} 件の項目は Windows によって保護されているため、管理者権限でも測定・削除できません。`,
+        item: "保護されています"
+      },
       files: {
         show: (a) => `${a} のファイルを表示`,
         hide: (a) => `${a} のファイルを非表示`,
@@ -1929,6 +2005,10 @@ export default {
       locked: {
         scheduled: (a) => `다음 다시 시작할 때 삭제될 잠긴 파일: ${a}개.`,
         needsAdmin: "일부 잠긴 파일은 관리자 권한이 필요하여 다시 시작할 때 삭제하도록 예약하지 못했습니다."
+      },
+      protected: {
+        banner: (a) => `${a}개 항목은 Windows에서 보호되어 있어 관리자 권한으로도 측정하거나 정리할 수 없습니다.`,
+        item: "보호됨"
       },
       files: {
         show: (a) => `${a}의 파일 보기`,
@@ -2029,6 +2109,10 @@ export default {
         scheduled: (a) => `Užrakinti failai, kurie bus ištrinti kitą kartą paleidus iš naujo: ${a}.`,
         needsAdmin: "Kai kurių užrakintų failų nepavyko suplanuoti ištrinti paleidus iš naujo, nes tam reikia administratoriaus teisių."
       },
+      protected: {
+        banner: (a) => `„Windows“ apsaugotų elementų, kurių negalima išmatuoti ar išvalyti net su administratoriaus teisėmis: ${a}`,
+        item: "apsaugota"
+      },
       files: {
         show: (a) => `Rodyti failus: ${a}`,
         hide: (a) => `Slėpti failus: ${a}`,
@@ -2127,6 +2211,10 @@ export default {
       locked: {
         scheduled: (a) => `Fail terkunci yang akan dipadam pada mula semula seterusnya: ${a}.`,
         needsAdmin: "Sesetengah fail terkunci tidak dapat dijadualkan untuk dipadam semasa mula semula, kerana itu memerlukan hak pentadbir."
+      },
+      protected: {
+        banner: (a) => `${a} item dilindungi oleh Windows dan tidak boleh diukur atau dibersihkan, walaupun sebagai pentadbir.`,
+        item: "dilindungi"
       },
       files: {
         show: (a) => `Tunjukkan fail dalam ${a}`,
@@ -2227,6 +2315,10 @@ export default {
         scheduled: (a) => `Låste filer som slettes ved neste omstart: ${a}.`,
         needsAdmin: "Noen låste filer kunne ikke planlegges slettet ved omstart, fordi det krever administratorrettigheter."
       },
+      protected: {
+        banner: (a) => `${a} ${a === 1 ? 'element er' : 'elementer er'} beskyttet av Windows og kan ikke måles eller ryddes opp, heller ikke som administrator.`,
+        item: "beskyttet"
+      },
       files: {
         show: (a) => `Vis filer i ${a}`,
         hide: (a) => `Skjul filer i ${a}`,
@@ -2325,6 +2417,10 @@ export default {
       locked: {
         scheduled: (a) => `Vergrendelde bestanden die bij de volgende herstart worden verwijderd: ${a}.`,
         needsAdmin: "Sommige vergrendelde bestanden konden niet worden gepland voor verwijdering bij het herstarten, omdat daarvoor beheerdersrechten nodig zijn."
+      },
+      protected: {
+        banner: (a) => a === 1 ? '1 item wordt beschermd door Windows en kan niet worden gemeten of opgeschoond, zelfs niet als beheerder.' : `${a} items worden beschermd door Windows en kunnen niet worden gemeten of opgeschoond, zelfs niet als beheerder.`,
+        item: "beveiligd"
       },
       files: {
         show: (a) => `Bestanden in ${a} tonen`,
@@ -2425,6 +2521,10 @@ export default {
         scheduled: (a) => `Zablokowane pliki, które zostaną usunięte przy następnym restarcie: ${a}.`,
         needsAdmin: "Nie udało się zaplanować usunięcia niektórych zablokowanych plików przy restarcie, ponieważ wymaga to uprawnień administratora."
       },
+      protected: {
+        banner: (a) => { const m10 = a % 10, m100 = a % 100; const w = a === 1 ? 'element jest chroniony' : (m10 >= 2 && m10 <= 4 && (m100 < 12 || m100 > 14)) ? 'elementy są chronione' : 'elementów jest chronionych'; return `${a} ${w} przez system Windows. Nie można ${a === 1 ? 'go' : 'ich'} zmierzyć ani wyczyścić, nawet jako administrator.`; },
+        item: "chronione"
+      },
       files: {
         show: (a) => `Pokaż pliki w: ${a}`,
         hide: (a) => `Ukryj pliki w: ${a}`,
@@ -2523,6 +2623,10 @@ export default {
       locked: {
         scheduled: (a) => `تړل شوي فایلونه چې په راتلونکي بیا پیلولو کې ړنګیږي: ${a}.`,
         needsAdmin: "ځینې تړل شوي فایلونه د بیا پیلولو پر مهال د ړنګولو لپاره مهال ویش نشول، ځکه چې دا د مدیر حقونه غواړي."
+      },
+      protected: {
+        banner: (a) => a === 1 ? 'یو توکی د Windows لخوا خوندي دی او حتی د مدیر په توګه هم نشي اندازه یا پاک کیدی.' : `${a} توکي د Windows لخوا خوندي دي او حتی د مدیر په توګه هم نشي اندازه یا پاک کیدی.`,
+        item: "خوندي"
       },
       files: {
         show: (a) => `په ${a} کې فایلونه ښکاره کړئ`,
@@ -2623,6 +2727,10 @@ export default {
         scheduled: (a) => `Arquivos bloqueados que serão excluídos na próxima reinicialização: ${a}.`,
         needsAdmin: "Não foi possível agendar alguns arquivos bloqueados para exclusão na reinicialização, pois isso exige direitos de administrador."
       },
+      protected: {
+        banner: (a) => a === 1 ? '1 item está protegido pelo Windows e não pode ser medido nem limpo, nem mesmo como administrador.' : `${a} itens estão protegidos pelo Windows e não podem ser medidos nem limpos, nem mesmo como administrador.`,
+        item: "protegido"
+      },
       files: {
         show: (a) => `Mostrar arquivos em ${a}`,
         hide: (a) => `Ocultar arquivos em ${a}`,
@@ -2721,6 +2829,10 @@ export default {
       locked: {
         scheduled: (a) => `Ficheiros bloqueados que serão eliminados no próximo reinício: ${a}.`,
         needsAdmin: "Não foi possível agendar alguns ficheiros bloqueados para eliminação no reinício, porque isso exige direitos de administrador."
+      },
+      protected: {
+        banner: (a) => a === 1 ? '1 item está protegido pelo Windows e não pode ser medido nem limpo, nem mesmo como administrador.' : `${a} itens estão protegidos pelo Windows e não podem ser medidos nem limpos, nem mesmo como administrador.`,
+        item: "protegido"
       },
       files: {
         show: (a) => `Mostrar ficheiros em ${a}`,
@@ -2821,6 +2933,10 @@ export default {
         scheduled: (a) => `Fișiere blocate care vor fi șterse la următoarea repornire: ${a}.`,
         needsAdmin: "Unele fișiere blocate nu au putut fi programate pentru ștergere la repornire, deoarece aceasta necesită drepturi de administrator."
       },
+      protected: {
+        banner: (a) => { const d = a % 100 >= 1 && a % 100 < 20 ? '' : 'de '; return a === 1 ? '1 element este protejat de Windows și nu poate fi măsurat sau curățat, nici măcar ca administrator.' : `${a} ${d}elemente sunt protejate de Windows și nu pot fi măsurate sau curățate, nici măcar ca administrator.`; },
+        item: "protejat"
+      },
       files: {
         show: (a) => `Afișează fișierele din ${a}`,
         hide: (a) => `Ascunde fișierele din ${a}`,
@@ -2919,6 +3035,10 @@ export default {
       locked: {
         scheduled: (a) => `Заблокированные файлы, которые будут удалены при следующей перезагрузке: ${a}.`,
         needsAdmin: "Некоторые заблокированные файлы не удалось запланировать на удаление при перезагрузке: для этого нужны права администратора."
+      },
+      protected: {
+        banner: (a) => `Элементов, защищённых Windows и недоступных для измерения и очистки даже от имени администратора: ${a}`,
+        item: "защищено"
       },
       files: {
         show: (a) => `Показать файлы: ${a}`,
@@ -3019,6 +3139,10 @@ export default {
         scheduled: (a) => `Uzamknuté súbory, ktoré sa odstránia pri najbližšom reštarte: ${a}.`,
         needsAdmin: "Niektoré uzamknuté súbory sa nepodarilo naplánovať na odstránenie pri reštarte, pretože to vyžaduje oprávnenia správcu."
       },
+      protected: {
+        banner: (a) => `Položiek chránených systémom Windows, ktoré sa nedajú zmerať ani vyčistiť ani ako správca: ${a}`,
+        item: "chránené"
+      },
       files: {
         show: (a) => `Zobraziť súbory v ${a}`,
         hide: (a) => `Skryť súbory v ${a}`,
@@ -3117,6 +3241,10 @@ export default {
       locked: {
         scheduled: (a) => `Skedarë të bllokuar që do të fshihen në rinisjen tjetër: ${a}.`,
         needsAdmin: "Disa skedarë të bllokuar nuk mund të planifikoheshin për fshirje gjatë rinisjes, sepse kjo kërkon të drejta administratori."
+      },
+      protected: {
+        banner: (a) => a === 1 ? '1 element mbrohet nga Windows dhe nuk mund të matet ose të pastrohet, madje as si administrator.' : `${a} elemente mbrohen nga Windows dhe nuk mund të maten ose të pastrohen, madje as si administrator.`,
+        item: "i mbrojtur"
       },
       files: {
         show: (a) => `Shfaq skedarët në ${a}`,
@@ -3217,6 +3345,10 @@ export default {
         scheduled: (a) => `Закључане датотеке које ће бити обрисане при следећем поновном покретању: ${a}.`,
         needsAdmin: "Неке закључане датотеке није било могуће заказати за брисање при поновном покретању, јер је за то потребно администраторско право."
       },
+      protected: {
+        banner: (a) => `Ставки заштићене системом Windows које се не могу мерити ни чистити ни као администратор: ${a}`,
+        item: "заштићено"
+      },
       files: {
         show: (a) => `Прикажи датотеке у ${a}`,
         hide: (a) => `Сакриј датотеке у ${a}`,
@@ -3315,6 +3447,10 @@ export default {
       locked: {
         scheduled: (a) => `Låsta filer som raderas vid nästa omstart: ${a}.`,
         needsAdmin: "Vissa låsta filer kunde inte schemaläggas för radering vid omstart, eftersom det kräver administratörsbehörighet."
+      },
+      protected: {
+        banner: (a) => `${a} objekt skyddas av Windows och kan inte mätas eller rensas, inte ens som administratör.`,
+        item: "skyddad"
       },
       files: {
         show: (a) => `Visa filer i ${a}`,
@@ -3415,6 +3551,10 @@ export default {
         scheduled: (a) => `ไฟล์ที่ถูกล็อกซึ่งจะถูกลบเมื่อรีสตาร์ตครั้งถัดไป: ${a}`,
         needsAdmin: "ไม่สามารถตั้งเวลาลบไฟล์ที่ถูกล็อกบางไฟล์เมื่อรีสตาร์ตได้ เพราะต้องใช้สิทธิ์ผู้ดูแลระบบ"
       },
+      protected: {
+        banner: (a) => `${a} รายการได้รับการป้องกันโดย Windows และไม่สามารถวัดหรือล้างข้อมูลได้ แม้ในฐานะผู้ดูแลระบบ`,
+        item: "ได้รับการป้องกัน"
+      },
       files: {
         show: (a) => `แสดงไฟล์ใน ${a}`,
         hide: (a) => `ซ่อนไฟล์ใน ${a}`,
@@ -3513,6 +3653,10 @@ export default {
       locked: {
         scheduled: (a) => `Bir sonraki yeniden başlatmada silinecek kilitli dosyalar: ${a}.`,
         needsAdmin: "Bazı kilitli dosyalar yeniden başlatmada silinmek üzere zamanlanamadı, çünkü bunun için yönetici hakları gerekir."
+      },
+      protected: {
+        banner: (a) => `${a} öge Windows tarafından korunuyor ve yönetici olarak bile ölçülemez veya temizlenemez.`,
+        item: "korumalı"
       },
       files: {
         show: (a) => `${a} içindeki dosyaları göster`,
@@ -3613,6 +3757,10 @@ export default {
         scheduled: (a) => `Заблоковані файли, які буде видалено під час наступного перезавантаження: ${a}.`,
         needsAdmin: "Деякі заблоковані файли не вдалося запланувати на видалення під час перезавантаження, бо для цього потрібні права адміністратора."
       },
+      protected: {
+        banner: (a) => `Елементів, захищених Windows і недоступних для вимірювання та очищення навіть від імені адміністратора: ${a}`,
+        item: "захищено"
+      },
       files: {
         show: (a) => `Показати файли: ${a}`,
         hide: (a) => `Сховати файли: ${a}`,
@@ -3711,6 +3859,10 @@ export default {
       locked: {
         scheduled: (a) => `Các tệp bị khóa sẽ bị xóa ở lần khởi động lại tiếp theo: ${a}.`,
         needsAdmin: "Không thể lên lịch xóa một số tệp bị khóa khi khởi động lại, vì việc đó cần quyền quản trị viên."
+      },
+      protected: {
+        banner: (a) => `${a} mục được Windows bảo vệ nên không thể đo hoặc dọn dẹp, kể cả với quyền quản trị viên.`,
+        item: "được bảo vệ"
       },
       files: {
         show: (a) => `Hiện các tệp trong ${a}`,
@@ -3811,6 +3963,10 @@ export default {
         scheduled: (a) => `将在下次重启时删除的被锁定文件：${a}。`,
         needsAdmin: "部分被锁定的文件无法安排在重启时删除，因为这需要管理员权限。"
       },
+      protected: {
+        banner: (a) => `${a} 个项目受 Windows 保护，即使以管理员身份也无法测量或清理。`,
+        item: "受保护"
+      },
       files: {
         show: (a) => `显示 ${a} 中的文件`,
         hide: (a) => `隐藏 ${a} 中的文件`,
@@ -3909,6 +4065,10 @@ export default {
       locked: {
         scheduled: (a) => `將在下次重新啟動時刪除的被鎖定檔案：${a}。`,
         needsAdmin: "部分被鎖定的檔案無法安排在重新啟動時刪除，因為這需要系統管理員權限。"
+      },
+      protected: {
+        banner: (a) => `${a} 個項目受 Windows 保護，即使以系統管理員身分也無法測量或清理。`,
+        item: "受保護"
       },
       files: {
         show: (a) => `顯示 ${a} 中的檔案`,
