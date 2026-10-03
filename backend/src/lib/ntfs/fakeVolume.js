@@ -84,6 +84,63 @@ export function buildFakeVolume(entries, { totalClusters = 256, mftRunClusters =
   };
 }
 
+/** The same volume as buildFakeVolume, for a table far too big to hold: each
+ * record's bytes are produced when the scan asks for them and never kept, so
+ * a million-record drive costs time, not gigabytes.
+ *
+ * `entryFor(record)` returns the entry for that record number (the fields
+ * buildFakeVolume takes) or null for an unused slot. Records 0 (the MFT) and
+ * 5 (the root) are supplied here. This is what lets the worker's memory and
+ * output size be measured against a drive of the size that broke it. */
+export function buildLazyFakeVolume({ recordCount, entryFor }) {
+  const mftBytes = recordCount * BYTES_PER_RECORD;
+  const mftClusters = Math.ceil(mftBytes / BYTES_PER_CLUSTER);
+  const totalClusters = MFT_CLUSTER + mftClusters + 16;
+  const mftOffset = MFT_CLUSTER * BYTES_PER_CLUSTER;
+
+  const boot = Buffer.alloc(mftOffset);
+  writeBootSector(boot, totalClusters);
+  const selfRecord = mftSelfRecord(mftClusters, mftBytes);
+  const scratch = Buffer.alloc(BYTES_PER_RECORD);
+
+  function recordInto(number, target, targetOffset) {
+    if (number === 0) {
+      writeRecord(target, targetOffset, selfRecord);
+      return;
+    }
+    const entry = number === 5 ? { record: 5, name: '.', parent: 5, size: 0, isDirectory: true } : entryFor(number);
+    if (!entry) { target.fill(0, targetOffset, targetOffset + BYTES_PER_RECORD); return; }
+    writeRecord(target, targetOffset, fileRecordFor({ ...entry, record: number }));
+  }
+
+  return {
+    volumeBytes: totalClusters * BYTES_PER_CLUSTER,
+    readAt(buffer, offset) {
+      buffer.fill(0);
+      if (offset < mftOffset) {
+        boot.copy(buffer, 0, offset, Math.min(boot.length, offset + buffer.length));
+        return;
+      }
+      const end = offset + buffer.length;
+      const mftEnd = mftOffset + mftBytes;
+      if (offset >= mftEnd) return;
+      const first = Math.floor((offset - mftOffset) / BYTES_PER_RECORD);
+      const last = Math.min(recordCount - 1, Math.floor((Math.min(end, mftEnd) - 1 - mftOffset) / BYTES_PER_RECORD));
+      for (let n = first; n <= last; n++) {
+        const at = mftOffset + n * BYTES_PER_RECORD;
+        if (at >= offset && at + BYTES_PER_RECORD <= end) {
+          recordInto(n, buffer, at - offset);
+        } else {
+          recordInto(n, scratch, 0);
+          const from = Math.max(at, offset);
+          const to = Math.min(at + BYTES_PER_RECORD, end);
+          scratch.copy(buffer, from - offset, from - at, to - at);
+        }
+      }
+    }
+  };
+}
+
 function writeBootSector(volume, totalClusters) {
   volume.write('NTFS    ', 3, 'latin1');
   volume.writeUInt16LE(BYTES_PER_SECTOR, 11);
@@ -131,8 +188,11 @@ function mftSelfRecord(mftClusters, mftBytes) {
   b.writeUInt8(0, o + 9);                 // unnamed
   b.writeUInt16LE(0x48, o + 0x20);        // runlist offset within the attribute
   b.writeBigUInt64LE(BigInt(mftBytes), o + 0x30);  // real size
-  // One run: 0x21 = 1 length byte, 2 offset bytes.
-  const runlist = Buffer.from([0x21, mftClusters & 0xff, MFT_CLUSTER, 0x00, 0x00]);
+  // One run. Small tables: 0x21 = 1 length byte, 2 offset bytes. A table past
+  // 255 clusters (the lazy volume below) needs a 4-byte length: 0x24.
+  const runlist = mftClusters <= 0xff
+    ? Buffer.from([0x21, mftClusters & 0xff, MFT_CLUSTER, 0x00, 0x00])
+    : Buffer.from([0x24, mftClusters & 0xff, (mftClusters >> 8) & 0xff, (mftClusters >> 16) & 0xff, (mftClusters >>> 24) & 0xff, MFT_CLUSTER, 0x00, 0x00]);
   runlist.copy(b, o + 0x48);
   b.writeUInt32LE(0xffffffff, o + attrLength);
   return b;
