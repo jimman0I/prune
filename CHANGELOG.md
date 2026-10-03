@@ -79,6 +79,21 @@ see v1.0.1 below) are documented here.
   "Always run as administrator" is also on, a warning says Windows will not
   start it silently. Turning the switch off, or uninstalling Prune, removes the
   entry.
+- **Right-click in File Explorer, and drop a program onto Prune.** Settings ->
+  General has an opt-in, off-by-default switch, "Add Prune to the right-click
+  menu". It adds four per-user menu entries (no administrator rights): "Shred
+  with Prune" on files and folders, and "Find in Prune (uninstall)" on programs
+  and shortcuts, each running the installed Prune.exe with one fixed option and
+  the file's path (nothing else; refused in a development build). The captions
+  follow Prune's language, the switch shows what the registry really holds, and
+  turning it off or uninstalling Prune removes every entry it made and nothing
+  else. A right-click never does anything by itself: Shred opens the Shred
+  dialog with the path filled in and still asks you to confirm, and Find looks
+  the program up (a shortcut is followed to its target) and opens the ordinary
+  uninstall dialog, or offers Forced uninstall when nothing installed matches.
+  Opening Prune this way while it is running shows the running window. You can
+  also drop a program (.exe) or shortcut (.lnk) on the Applications screen to
+  find it the same way.
 - Preview lists each rule's biggest files, and the Delete-now confirmation
   names the biggest items.
 - **Custom locations**: add your own paths to Deep Clean. **Import a
