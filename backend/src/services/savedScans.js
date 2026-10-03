@@ -26,8 +26,18 @@ export function scansDir() {
 const ID = /^[a-z0-9]{6,40}$/;
 export const isScanId = (id) => typeof id === 'string' && ID.test(id);
 
-/** Plenty to keep a history, bounded so the folder cannot grow forever. */
+/** Plenty to keep a history, bounded so the folder cannot grow forever.
+ * Counts the scans a person saved by hand; the automatic ones have a bound of
+ * their own (AUTO_KEEP per drive) and neither uses up the other's room. */
 export const MAX_SAVED_SCANS = 50;
+
+/** How many automatic scans of one drive are kept: the latest, and the one
+ * before it so the two can be compared. */
+export const AUTO_KEEP = 2;
+
+/** A scan file with no sidecar is the debris of a save that died between its
+ * two writes. One younger than this may belong to a save still in progress. */
+const ORPHAN_GRACE_MS = 10 * 60 * 1000;
 
 const archivePath = (id) => join(scansDir(), `${id}.scan.gz`);
 const metaPath = (id) => join(scansDir(), `${id}.meta.json`);
@@ -37,18 +47,17 @@ function cleanLabel(label, fallback) {
   return text || fallback;
 }
 
-/** Saves a compact scan. Returns { ok: true, meta } or { ok: false, error }. */
-export async function saveScan({ label, source, truncated, archive: input } = {}) {
-  const checked = normalizeArchive(input);
-  if (!checked.ok) return checked;
-  const { archive, nodeCount } = checked;
+/** Strictly increasing, so two saves in one millisecond still have an order. */
+let lastStamp = 0;
+function nextStamp() {
+  lastStamp = Math.max(Date.now(), lastStamp + 1);
+  return lastStamp;
+}
 
-  await fs.mkdir(scansDir(), { recursive: true });
-  if ((await listScans()).length >= MAX_SAVED_SCANS) {
-    return { ok: false, error: `Prune keeps ${MAX_SAVED_SCANS} saved scans. Delete one to save another.` };
-  }
-
-  const savedAt = Date.now();
+/** Writes a validated archive and its sidecar. `extra` is merged into the
+ * sidecar (the automatic scans add what keys them). */
+async function persist({ label, source, truncated, archive, nodeCount, extra }) {
+  const savedAt = nextStamp();
   const id = `${savedAt.toString(36)}${randomBytes(4).toString('hex')}`;
   const meta = {
     id,
@@ -59,7 +68,8 @@ export async function saveScan({ label, source, truncated, archive: input } = {}
     truncated: truncated === true,
     totalBytes: archive.root.s,
     allocatedBytes: typeof archive.root.a === 'number' ? archive.root.a : null,
-    folders: nodeCount
+    folders: nodeCount,
+    ...extra
   };
 
   // The archive first, the sidecar last: the sidecar is what makes a scan
@@ -67,7 +77,123 @@ export async function saveScan({ label, source, truncated, archive: input } = {}
   // rather than a listed scan that cannot be opened.
   await fs.writeFile(archivePath(id), await gzipAsync(JSON.stringify(archive)));
   await fs.writeFile(metaPath(id), JSON.stringify(meta));
-  return { ok: true, meta };
+  return meta;
+}
+
+/** Saves a compact scan. Returns { ok: true, meta } or { ok: false, error }. */
+export async function saveScan({ label, source, truncated, archive: input } = {}) {
+  const checked = normalizeArchive(input);
+  if (!checked.ok) return checked;
+  const { archive, nodeCount } = checked;
+
+  await fs.mkdir(scansDir(), { recursive: true });
+  // Only the ones saved by hand count against the limit.
+  if ((await listScans()).filter((m) => m.auto !== true).length >= MAX_SAVED_SCANS) {
+    return { ok: false, error: `Prune keeps ${MAX_SAVED_SCANS} saved scans. Delete one to save another.` };
+  }
+  return { ok: true, meta: await persist({ label, source, truncated, archive, nodeCount }) };
+}
+
+/** One automatic save at a time: two overlapping prunes of the same drive
+ * could otherwise each see the other's scan as the newest and keep too many
+ * or too few. */
+let autoQueue = Promise.resolve();
+
+const DRIVE = /^[A-Za-z]$/;
+
+/** Saves a drive's scan on its own, after a Disk Map scan finishes, and prunes
+ * that drive's automatic scans to the latest AUTO_KEEP. Scans saved by hand are
+ * never looked at. Returns { ok: true, meta, removed: [ids] } or
+ * { ok: false, error }. */
+export function saveAutoScan({ drive, label, source, truncated, capacityBytes, archive: input } = {}) {
+  const run = autoQueue.then(() => saveAutoScanNow({ drive, label, source, truncated, capacityBytes, archive: input }));
+  autoQueue = run.catch(() => {});
+  return run;
+}
+
+async function saveAutoScanNow({ drive, label, source, truncated, capacityBytes, archive: input }) {
+  if (typeof drive !== 'string' || !DRIVE.test(drive)) return { ok: false, error: 'An automatic scan needs a drive letter.' };
+  const letter = drive.toUpperCase();
+  const checked = normalizeArchive(input);
+  if (!checked.ok) return checked;
+  const { archive, nodeCount } = checked;
+  // Keyed by drive, so the scan has to be of that drive.
+  if (archive.root.n.replace(/[\\/]+$/, '').toUpperCase() !== `${letter}:`) {
+    return { ok: false, error: 'That scan is not of the drive it was saved for.' };
+  }
+
+  await fs.mkdir(scansDir(), { recursive: true });
+  const meta = await persist({
+    label, source, truncated, archive, nodeCount,
+    extra: {
+      auto: true,
+      drive: letter,
+      capacityBytes: typeof capacityBytes === 'number' && Number.isFinite(capacityBytes) && capacityBytes > 0 ? capacityBytes : null
+    }
+  });
+  const removed = await pruneAuto(letter);
+  await sweepOrphans();
+  return { ok: true, meta, removed };
+}
+
+const exists = (path) => fs.stat(path).then(() => true, () => false);
+
+/** Keeps the newest AUTO_KEEP automatic scans of a drive. A sidecar whose scan
+ * file has gone is debris, not a scan: it is removed first and does not count
+ * towards the two. Returns the ids it removed. */
+async function pruneAuto(letter) {
+  const removed = [];
+  const intact = [];
+  for (const meta of await listScans()) {
+    if (meta.auto !== true || meta.drive !== letter) continue;
+    if (await exists(archivePath(meta.id))) intact.push(meta);
+    else { await deleteScan(meta.id); removed.push(meta.id); }
+  }
+  for (const meta of intact.slice(AUTO_KEEP)) {
+    await deleteScan(meta.id);
+    removed.push(meta.id);
+  }
+  return removed;
+}
+
+/** Removes scan files that no sidecar claims and that have sat for a while. */
+async function sweepOrphans() {
+  let names;
+  try { names = await fs.readdir(scansDir()); } catch { return; }
+  const claimed = new Set(names.filter((n) => n.endsWith('.meta.json')).map((n) => n.slice(0, -'.meta.json'.length)));
+  for (const name of names.filter((n) => n.endsWith('.scan.gz'))) {
+    if (claimed.has(name.slice(0, -'.scan.gz'.length))) continue;
+    try {
+      const { mtimeMs } = await fs.stat(join(scansDir(), name));
+      if (Date.now() - mtimeMs > ORPHAN_GRACE_MS) await fs.unlink(join(scansDir(), name));
+    } catch { /* gone already */ }
+  }
+}
+
+/** The automatic scans, newest first, of one drive or of all, with how many
+ * there are and the disk they use. Only ones whose scan file is still there. */
+export async function listAutoScans({ drive } = {}) {
+  const letter = typeof drive === 'string' && DRIVE.test(drive) ? drive.toUpperCase() : null;
+  const scans = [];
+  let bytes = 0;
+  for (const meta of await listScans()) {
+    if (meta.auto !== true || (letter && meta.drive !== letter)) continue;
+    try {
+      const [archive, sidecar] = await Promise.all([fs.stat(archivePath(meta.id)), fs.stat(metaPath(meta.id))]);
+      bytes += archive.size + sidecar.size;
+      scans.push(meta);
+    } catch { /* the scan file is gone */ }
+  }
+  return { scans, count: scans.length, bytes };
+}
+
+/** Removes every automatic scan and nothing else. Returns how many. */
+export async function deleteAutoScans() {
+  let count = 0;
+  for (const meta of await listScans()) {
+    if (meta.auto === true && await deleteScan(meta.id)) count += 1;
+  }
+  return count;
 }
 
 /** Newest first. An unreadable sidecar is skipped rather than failing the list. */

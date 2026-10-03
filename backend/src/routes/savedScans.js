@@ -1,5 +1,8 @@
 import { Router } from 'express';
-import { saveScan, listScans, loadScan, deleteScan, compareSaved, isScanId } from '../services/savedScans.js';
+import {
+  saveScan, saveAutoScan, listScans, listAutoScans, deleteAutoScans, loadScan, deleteScan, compareSaved, isScanId
+} from '../services/savedScans.js';
+import { getSettings } from '../services/settings.js';
 
 const router = Router();
 
@@ -18,6 +21,26 @@ const guarded = (handler) => async (req, res) => {
 
 router.get('/', guarded(async (_req, res) => {
   res.json({ scans: await listScans() });
+}));
+
+/* The automatic scans: the Disk Map saves the latest two of each drive by
+ * itself when a scan finishes. Before '/:id', like "compare" below. */
+router.get('/auto', guarded(async (req, res) => {
+  res.json(await listAutoScans({ drive: req.query.drive }));
+}));
+
+router.post('/auto', guarded(async (req, res) => {
+  // Honoured here as well as in the window, so a window that has not yet
+  // heard the setting changed cannot keep saving.
+  if ((await getSettings()).rememberDiskMapScans === false) return res.json({ scan: null, skipped: 'off' });
+  const { drive, label, source, truncated, capacityBytes, archive } = req.body || {};
+  const result = await saveAutoScan({ drive, label, source, truncated, capacityBytes, archive });
+  if (!result.ok) return res.status(400).json({ error: result.error });
+  res.status(201).json({ scan: result.meta });
+}));
+
+router.delete('/auto', guarded(async (_req, res) => {
+  res.json({ deleted: await deleteAutoScans() });
 }));
 
 // Before '/:id', or "compare" would be taken for an id.

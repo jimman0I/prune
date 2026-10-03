@@ -203,6 +203,11 @@ const DEFAULT_SETTINGS = {
   /* WizTree's "Show Free Space on Treemap": a block for the drive's free
      space beside what the scan found. Off by default, as WizTree ships it. */
   showFreeSpaceOnMap: false,
+  /* Whether a finished Disk Map scan of a drive is saved automatically (the
+     latest two per drive; see services/savedScans.js) so the Disk Map opens on
+     it and can say what grew. On by default; only an explicit false turns it
+     off. Nothing leaves the PC either way. */
+  rememberDiskMapScans: true,
   /* What Prune's own screens are shown in -- one of languages.js's 40, or
      'en'. This default is only ever what a brand-new settings file gets;
      see detectDefaultLanguage() below for where a first-ever run actually
@@ -278,7 +283,8 @@ function normalizedChoices(settings) {
     overwritePasses: normalizePasses(settings.overwritePasses),
     wipeDrive: normalizeWipeDrive(settings.wipeDrive),
     wipePasses: normalizePasses(settings.wipePasses),
-    customLocations: normalizeCustomLocations(settings.customLocations)
+    customLocations: normalizeCustomLocations(settings.customLocations),
+    rememberDiskMapScans: settings.rememberDiskMapScans !== false
   };
 }
 
