@@ -1,15 +1,35 @@
 import { useEffect, useRef, useState } from 'react';
-import { startHunt, cancelHunt, endHuntedProcess, revealInExplorer, setStartupItemEnabled } from '../lib/api.js';
+import { endHuntedProcess, revealInExplorer, setStartupItemEnabled } from '../lib/api.js';
+import { startHunter, cancelHunter, onHunterResult } from '../lib/hunterBridge.js';
+import { useAdminAccess } from '../hooks/useAdminAccess.js';
+import AdminRestartButton from './AdminRestartButton.jsx';
 import { useLanguage } from '../i18n/LanguageContext.jsx';
 
-/** Hunter: click any window and Prune says which program it belongs to.
+/** A window Windows would not describe: usually one running as administrator
+ * while Prune is not. The restart offer is the useAdminAccess() rule -- only
+ * once the status was read and says Prune is not elevated. */
+function UnreadableResult() {
+  const { t } = useLanguage();
+  const admin = useAdminAccess();
+  return (
+    <>
+      <p role="status" className="text-[13px] text-[color:var(--text-secondary)] mb-4">{t('uninstallerV3.hunter.unreadable')}</p>
+      <div className="mb-5"><AdminRestartButton admin={admin} /></div>
+    </>
+  );
+}
+
+/** Hunter: drag a crosshair onto any window and Prune says which program it
+ * belongs to.
  *
- * Starting a hunt minimises Prune and covers the screen with a click-catching
- * overlay (see services/hunter.js), so what the person clicks is not
- * activated or pressed -- they are pointing, not using. Esc cancels, and it
- * stops by itself after about thirty seconds. Prune comes back with the
- * answer: the process, the installed program it belongs to if there is one,
- * and what can be done with it. */
+ * Starting a hunt asks the desktop app to minimise Prune and open a small
+ * always-on-top crosshair (electron/hunterWidget.cjs). The person drags it
+ * onto a window and lets go; Prune comes back with the answer: the process,
+ * the installed program it belongs to if there is one, and what can be done
+ * with it. Esc or the crosshair's cross cancels. Nothing is clicked in the
+ * window underneath, so hunting for a program cannot press that program's
+ * buttons. The answer arrives as an event from the main process, so this
+ * dialog only starts, waits, and shows. */
 export default function HunterDialog({ programs = [], onClose, onUninstall, onForced, onBusyChange }) {
   const { t } = useLanguage();
   const [phase, setPhase] = useState('intro'); // intro | hunting | result
@@ -22,10 +42,19 @@ export default function HunterDialog({ programs = [], onClose, onUninstall, onFo
 
   useEffect(() => {
     alive.current = true;
+    // One subscription for the life of the dialog: the main process sends the
+    // answer to the window, whenever the crosshair is dropped.
+    const stopListening = onHunterResult((outcome) => {
+      if (!alive.current) return;
+      hunting.current = false;
+      setResult(outcome);
+      setPhase('result');
+    });
     return () => {
       alive.current = false;
-      // Closing the dialog must not leave a click-catching overlay up.
-      if (hunting.current) cancelHunt().catch(() => {});
+      stopListening();
+      // Closing the dialog must not leave a crosshair on the screen.
+      if (hunting.current) cancelHunter();
     };
   }, []);
 
@@ -39,20 +68,23 @@ export default function HunterDialog({ programs = [], onClose, onUninstall, onFo
     setError(null); setNotice(null); setConfirmEnd(false); setResult(null);
     setPhase('hunting');
     hunting.current = true;
-    try {
-      const outcome = await startHunt();
-      if (!alive.current) return;
-      setResult(outcome);
-      setPhase('result');
-    } catch (err) {
-      if (!alive.current) return;
-      setError(t('uninstallerV3.hunter.failed', err.message));
-      setPhase('intro');
-    } finally {
-      hunting.current = false;
-    }
+    const outcome = await startHunter({
+      hint: t('uninstallerV3.hunter.widgetHint'),
+      cancel: t('uninstallerV3.hunter.widgetCancel')
+    });
+    if (!alive.current || outcome.ok) return;
+    hunting.current = false;
+    setError(outcome.unsupported ? t('uninstallerV3.hunter.needsApp') : t('uninstallerV3.hunter.failed', outcome.error || ''));
+    setPhase((current) => (current === 'hunting' ? 'intro' : current));
   };
 
+  const cancelHunt = async () => {
+    await cancelHunter();
+    if (!alive.current) return;
+    hunting.current = false;
+    setResult({ status: 'cancelled' });
+    setPhase('result');
+  };
   const picked = result?.status === 'picked' ? result : null;
   const program = picked?.program ? (programs.find((p) => p.id === picked.program.id) ?? picked.program) : null;
   const isPrune = picked?.endRefusal && /Prune itself/i.test(picked.endRefusal);
@@ -105,7 +137,7 @@ export default function HunterDialog({ programs = [], onClose, onUninstall, onFo
           <div role="status" className="flex flex-col items-center py-8">
             <div className="w-6 h-6 border-2 border-[color:var(--accent-primary)] border-t-transparent rounded-full animate-spin mb-4"></div>
             <p className="text-[13px] text-[color:var(--text-secondary)] text-center mb-4">{t('uninstallerV3.hunter.hunting')}</p>
-            <button type="button" className="btn-ghost px-3 py-1.5 rounded-lg text-[12px] font-medium" onClick={() => cancelHunt().catch(() => {})}>
+            <button type="button" className="btn-ghost px-3 py-1.5 rounded-lg text-[12px] font-medium" onClick={cancelHunt}>
               {t('uninstallerV3.hunter.cancel')}
             </button>
           </div>
@@ -113,9 +145,11 @@ export default function HunterDialog({ programs = [], onClose, onUninstall, onFo
 
         {phase === 'result' && result && (
           <>
-            {!picked && (
+            {result.status === 'unreadable' && <UnreadableResult />}
+
+            {!picked && result.status !== 'unreadable' && (
               <p role="status" className="text-[13px] text-[color:var(--text-secondary)] mb-5">
-                {result.status === 'timeout' ? t('uninstallerV3.hunter.timeout')
+                {result.status === 'nothing' ? t('uninstallerV3.hunter.nothing')
                   : result.status === 'cancelled' ? t('uninstallerV3.hunter.cancelled')
                     : t('uninstallerV3.hunter.noWindow')}
               </p>

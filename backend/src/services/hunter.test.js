@@ -4,82 +4,108 @@ import { promisify } from 'node:util';
 import { mkdtempSync, writeFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { buildHunterScript, startHunt, cancelHunt, describeHunt, endHuntedProcess, HUNT_SECONDS } from './hunter.js';
+import { validatePoint, buildPointScript, huntAtPoint, describeHunt, endHuntedProcess, COORD_LIMIT } from './hunter.js';
 
-/** The script cannot be clicked from here, so what is checked is everything
- * around the click: that it is valid PowerShell, that it uses the window
- * APIs it is meant to, that it is time-limited, and what is done with its
- * answer. */
+/** Hunter asks Windows one question -- "which window is at this point?" --
+ * about a point Electron chose. The crosshair cannot be dragged from here, so
+ * what is checked is everything around the drop: that the point is validated
+ * and bounded, that the script is valid PowerShell, that it uses only the
+ * window-lookup calls it is meant to, and what is done with its answer. */
 
-describe('buildHunterScript', () => {
-  it('uses the window APIs the hunt is built on', () => {
-    const script = buildHunterScript();
-    for (const api of ['GetCursorPos', 'WindowFromPoint', 'GetAncestor', 'GetWindowThreadProcessId', 'GetAsyncKeyState', 'Add-Type']) {
-      expect(script, api).toContain(api);
+describe('validatePoint', () => {
+  it('accepts integers, including the negative coordinates of a monitor left of the main one', () => {
+    expect(validatePoint({ x: 100, y: 200 })).toEqual({ x: 100, y: 200 });
+    expect(validatePoint({ x: -1920, y: -40 })).toEqual({ x: -1920, y: -40 });
+    expect(validatePoint({ x: 0, y: 0 })).toEqual({ x: 0, y: 0 });
+  });
+
+  it('refuses anything that is not a whole number in range', () => {
+    for (const bad of [
+      null, undefined, 5, 'x', [],
+      { x: 1 }, { y: 1 }, { x: '1', y: 2 }, { x: 1.5, y: 2 }, { x: NaN, y: 0 }, { x: Infinity, y: 0 },
+      { x: COORD_LIMIT + 1, y: 0 }, { x: 0, y: -COORD_LIMIT - 1 }, { x: {}, y: 1 }, { x: '1; calc', y: 1 }
+    ]) {
+      expect(validatePoint(bad), JSON.stringify(bad)).toBeNull();
     }
   });
+});
 
-  it('is time-limited to about thirty seconds, and cancellable with Esc', () => {
-    expect(HUNT_SECONDS).toBe(30);
-    expect(buildHunterScript()).toContain('AddSeconds(30)');
-    expect(buildHunterScript({ timeoutSec: 5 })).toContain('AddSeconds(5)');
-    expect(buildHunterScript()).toContain('0x1B');
+describe('buildPointScript', () => {
+  it('asks only the window-lookup questions, for the fixed point', () => {
+    const script = buildPointScript({ x: 640, y: -12 });
+    for (const api of ['WindowFromPoint', 'GetAncestor', 'GetWindowThreadProcessId', 'Add-Type']) {
+      expect(script, api).toContain(api);
+    }
+    expect(script).toContain('$point.X = 640');
+    expect(script).toContain('$point.Y = -12');
   });
 
-  it('restores Prune\'s window whatever happens, and only for real process ids', () => {
-    const script = buildHunterScript({ selfPids: [1234, 5678, -1, 'x', 0, 2] });
-    expect(script).toContain('@(1234,5678)');
-    expect(script).toMatch(/finally \{[^}]*ShowWindow\(\$handle, 9\)/);
+  it('polls nothing and watches no keys: no loop, no timer, no key state, no form', () => {
+    const script = buildPointScript({ x: 1, y: 2 });
+    expect(script).not.toMatch(/GetAsyncKeyState|GetCursorPos|GetKeyState|SetWindowsHookEx|Start-Sleep|Timer|ShowDialog|Windows\.Forms|\bwhile\b/i);
   });
 
-  it('only counts a press that lands on the overlay, not a click already in progress', () => {
-    const script = buildHunterScript();
-    expect(script).toContain('Add_MouseDown');
-    expect(script).toContain('if (-not $state.down) { return }');
+  it('declares exactly the user32 calls it needs', () => {
+    const imports = [...buildPointScript({ x: 1, y: 2 }).matchAll(/static extern \S+ (\w+)\(/g)].map((m) => m[1]).sort();
+    expect(imports).toEqual(['GetAncestor', 'GetClassName', 'GetWindowThreadProcessId', 'SetThreadDpiAwarenessContext', 'WindowFromPoint']);
   });
 
-  it('keeps the timeout within sane bounds', () => {
-    expect(buildHunterScript({ timeoutSec: 100000 })).toContain('AddSeconds(120)');
-    expect(buildHunterScript({ timeoutSec: 0 })).toContain('AddSeconds(1)');
-    expect(buildHunterScript({ timeoutSec: 'abc' })).toContain('AddSeconds(30)');
+  it('treats the desktop and the taskbar as "nothing identifiable"', () => {
+    const script = buildPointScript({ x: 1, y: 2 });
+    for (const cls of ['Progman', 'WorkerW', 'Shell_TrayWnd', 'Shell_SecondaryTrayWnd']) expect(script).toContain(cls);
+    expect(script).toContain("status = 'nothing'");
+  });
+
+  it('answers unreadable when Windows will not describe the process', () => {
+    expect(buildPointScript({ x: 1, y: 2 })).toContain("status = 'unreadable'");
+  });
+
+  it('refuses a point that is not a whole number instead of building a script around it', () => {
+    expect(() => buildPointScript({ x: '1; calc', y: 2 })).toThrow(/point/i);
+    expect(() => buildPointScript(null)).toThrow(/point/i);
   });
 
   it('parses as PowerShell (nothing is run)', async () => {
     const dir = mkdtempSync(join(tmpdir(), 'prune-hunter-'));
     try {
       const file = join(dir, 'hunter.ps1');
-      writeFileSync(file, buildHunterScript({ selfPids: [1234] }), 'utf8');
+      writeFileSync(file, buildPointScript({ x: -300, y: 450 }), 'utf8');
       const { stdout } = await promisify(execFile)('powershell', ['-NoProfile', '-NonInteractive', '-Command',
-        `$e = $null; [System.Management.Automation.Language.Parser]::ParseFile('${file}', [ref]$null, [ref]$e) | Out-Null; 'errors=' + @($e).Count`], { timeout: 30000 });
-      expect(stdout.trim()).toBe('errors=0');
+        `$s = Get-Content -Raw -LiteralPath '${file}'; $null = [scriptblock]::Create($s); 'ok'`], { timeout: 30000 });
+      expect(stdout.trim()).toBe('ok');
     } finally {
       rmSync(dir, { recursive: true, force: true });
     }
   }, 40000);
 });
 
-describe('startHunt', () => {
-  it('resolves the parsed result of the script', async () => {
+describe('huntAtPoint', () => {
+  it('runs the script for that point and resolves the parsed answer', async () => {
     const run = vi.fn(async () => '{"status":"picked","pid":42,"exePath":"C:\\\\a.exe","name":"a.exe","title":"A"}');
-    expect(await startHunt({ run })).toMatchObject({ status: 'picked', pid: 42, exePath: 'C:\\a.exe' });
-    expect(run.mock.calls[0][0]).toContain('PruneHunter');
+    expect(await huntAtPoint({ x: 10, y: 20 }, { run })).toMatchObject({ status: 'picked', pid: 42, exePath: 'C:\\a.exe' });
+    expect(run.mock.calls[0][0]).toContain('$point.X = 10');
   });
 
-  it('allows one hunt at a time, and another afterwards', async () => {
-    let release;
-    const first = startHunt({ run: () => new Promise((resolve) => { release = () => resolve('{"status":"timeout"}'); }) });
-    await expect(startHunt({ run: async () => '{}' })).rejects.toThrow(/already running/);
-    release();
-    expect(await first).toEqual({ status: 'timeout' });
-    expect(await startHunt({ run: async () => '{"status":"cancelled"}' })).toEqual({ status: 'cancelled' });
+  it('rejects a bad point without running anything', async () => {
+    const run = vi.fn();
+    await expect(huntAtPoint({ x: 'a', y: 1 }, { run })).rejects.toThrow(/point/i);
+    expect(run).not.toHaveBeenCalled();
+  });
+
+  it('passes nothing-there and unreadable through', async () => {
+    expect(await huntAtPoint({ x: 1, y: 1 }, { run: async () => '{"status":"nothing"}' })).toEqual({ status: 'nothing' });
+    expect(await huntAtPoint({ x: 1, y: 1 }, { run: async () => '{"status":"unreadable","pid":7,"name":"x.exe"}' }))
+      .toEqual({ status: 'unreadable', pid: 7, name: 'x.exe' });
   });
 
   it('is a failure, not an exception, when the script prints nonsense', async () => {
-    expect(await startHunt({ run: async () => 'garbage' })).toEqual({ status: 'failed' });
+    expect(await huntAtPoint({ x: 1, y: 1 }, { run: async () => 'garbage' })).toEqual({ status: 'failed' });
   });
 
-  it('cancelHunt says whether there was one to cancel', () => {
-    expect(cancelHunt()).toBe(false);
+  it('is a failure when PowerShell itself could not run', async () => {
+    const result = await huntAtPoint({ x: 1, y: 1 }, { run: async () => { throw new Error('spawn powershell.exe ENOENT'); } });
+    expect(result.status).toBe('failed');
+    expect(result.error).toMatch(/ENOENT/);
   });
 });
 
@@ -95,8 +121,18 @@ describe('describeHunt', () => {
     expect(described.endRefusal).toBeNull();
   });
 
-  it('passes a cancelled or timed-out hunt through untouched', () => {
-    expect(describeHunt({ status: 'timeout' }, {})).toEqual({ status: 'timeout' });
+  it('says it is Prune when the window was Prune\'s own', () => {
+    const described = describeHunt(
+      { status: 'picked', pid: process.pid, exePath: 'C:\\Users\\me\\AppData\\Local\\Programs\\Prune\\Prune.exe', name: 'Prune.exe', title: 'Prune' },
+      { programs: [], startupItems: [] }
+    );
+    expect(described.endRefusal).toBe('That is Prune itself.');
+  });
+
+  it('passes every other outcome through untouched', () => {
+    expect(describeHunt({ status: 'nothing' }, {})).toEqual({ status: 'nothing' });
+    expect(describeHunt({ status: 'unreadable', pid: 3, name: null }, {})).toEqual({ status: 'unreadable', pid: 3, name: null });
+    expect(describeHunt({ status: 'failed' }, {})).toEqual({ status: 'failed' });
   });
 });
 

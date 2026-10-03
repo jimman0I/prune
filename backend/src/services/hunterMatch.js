@@ -59,17 +59,27 @@ export function endProcessRefusal(target, { self = { pid: process.pid, ppid: pro
   return null;
 }
 
-/** What the Hunter script printed, as a result object. Anything that is not
- * one of the three outcomes it can produce is a failure, with no pid. */
+/** What the point-hit script printed, as a result object: 'picked' (a window
+ * and the program file behind it), 'nothing' (the desktop, the taskbar, no
+ * window), 'unreadable' (a window whose program Windows would not describe,
+ * usually because it runs as administrator and Prune does not), or 'failed'
+ * for anything else. A pick without an executable path is unreadable: there
+ * is no program to match, end or open. Cancelling is the crosshair's business
+ * (electron/hunterWidget.cjs), never this script's. */
 export function parseHunterOutput(text) {
   let data;
   try { data = JSON.parse(String(text).trim()); } catch { return { status: 'failed' }; }
-  if (data?.status === 'cancelled' || data?.status === 'timeout') return { status: data.status };
+  const name = typeof data?.name === 'string' && data.name ? data.name : null;
+  if (data?.status === 'nothing') return { status: 'nothing' };
+  if (data?.status === 'unreadable') {
+    return { status: 'unreadable', pid: Number.isInteger(data.pid) && data.pid > 0 ? data.pid : null, name };
+  }
   if (data?.status === 'picked' && Number.isInteger(data.pid) && data.pid > 0) {
+    if (typeof data.exePath !== 'string' || !data.exePath) return { status: 'unreadable', pid: data.pid, name };
     return {
       status: 'picked', pid: data.pid,
-      exePath: typeof data.exePath === 'string' && data.exePath ? data.exePath : null,
-      name: typeof data.name === 'string' ? data.name : null,
+      exePath: data.exePath,
+      name,
       title: typeof data.title === 'string' ? data.title : ''
     };
   }

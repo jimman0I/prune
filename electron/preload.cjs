@@ -25,6 +25,15 @@ const { contextBridge, ipcRenderer, webUtils } = require('electron');
  * path or a command: where the update comes from is fixed in the build
  * (the GitHub release), not chosen here.
  *
+ * hunter -- the Hunter dialog's drag-the-crosshair flow (hunterWidget.cjs).
+ * start opens the crosshair and minimises Prune; the only thing it carries
+ * is two short plain-text labels for the crosshair (a hint and a cancel word,
+ * already translated), which the main process cuts and cleans. cancel closes
+ * the crosshair. onResult hears the answer once, on a one-way event: what the
+ * crosshair was dropped on (or that it was cancelled). The window never
+ * supplies a coordinate, a path or a command -- the main process reads the
+ * pointer itself and asks the backend.
+ *
  * pickPaths / pathForFile -- Deep Clean's "Shred files...". pickPaths asks
  * the main process for a native chooser ('files' or 'folders') and gets
  * path strings back. pathForFile turns a dropped File into its real path
@@ -36,6 +45,18 @@ contextBridge.exposeInMainWorld('pruneWindow', {
   admin: {
     canRelaunch: () => ipcRenderer.invoke('prune:admin:can-relaunch'),
     relaunch: () => ipcRenderer.invoke('prune:admin:relaunch')
+  },
+  hunter: {
+    start: (labels) => ipcRenderer.invoke('prune:hunter:start', {
+      hint: labels && typeof labels.hint === 'string' ? labels.hint : '',
+      cancel: labels && typeof labels.cancel === 'string' ? labels.cancel : ''
+    }),
+    cancel: () => ipcRenderer.invoke('prune:hunter:cancel'),
+    onResult: (callback) => {
+      const listener = (_event, result) => callback(result);
+      ipcRenderer.on('prune:hunter:result', listener);
+      return () => ipcRenderer.removeListener('prune:hunter:result', listener);
+    }
   },
   pickPaths: (kind) => ipcRenderer.invoke('prune:pick-paths', kind),
   pathForFile: (file) => {

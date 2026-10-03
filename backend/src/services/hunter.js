@@ -1,149 +1,125 @@
 import { execFile } from 'node:child_process';
 import { parseHunterOutput, matchHunted, endProcessRefusal } from './hunterMatch.js';
 
-/** Hunter mode: click any window and Prune names the program.
+/** Hunter: drag the crosshair onto any window and Prune names the program.
  *
- * A time-limited PowerShell script (about 30 seconds, cancellable) does the
- * pointing. It minimises Prune's own window so the person can see what they
- * want to click, covers every screen with a nearly invisible topmost form
- * that SWALLOWS the click -- the window underneath never receives it, so
- * hunting for a program cannot press that program's buttons -- and on the
- * button release reads the cursor (GetCursorPos), finds the window under it
- * (WindowFromPoint), climbs to its top-level window (GetAncestor), and reads
- * its process (GetWindowThreadProcessId). Esc cancels
- * (GetAsyncKeyState). Prune's window is restored whatever happens.
+ * The pointing happens in Electron (electron/hunterWidget.cjs): a small
+ * crosshair window the person drags and drops. When it is dropped, the main
+ * process reads where the pointer is with Electron's own screen API, hides
+ * the crosshair, and asks this service about that one point. The question is
+ * answered by a short PowerShell script that does exactly three lookups for
+ * fixed coordinates -- the window at the point (WindowFromPoint), its
+ * top-level window (GetAncestor), and the process that owns it
+ * (GetWindowThreadProcessId) -- then reads that process's executable path.
+ *
+ * What it deliberately does not do, because that is how a keylogger or a
+ * click-stealer looks to antivirus (Microsoft Defender has already flagged an
+ * earlier Prune build for browser-credential behaviour): it never polls, never
+ * reads the keyboard or the pointer, never installs a hook and never draws an
+ * overlay. backend/src/services/noKeyPolling.test.js keeps it that way.
  *
  * It reports a process id and executable path; deciding which installed
  * program that is belongs to hunterMatch.js. Limits, stated: a Store app's
- * window belongs to ApplicationFrameHost, so it names that host, and an
- * elevated window cannot be inspected from a standard-rights process. */
+ * window belongs to ApplicationFrameHost, so it names that host, and a window
+ * of an elevated program may not be describable from a standard-rights
+ * process ('unreadable'). */
 
-export const HUNT_SECONDS = 30;
+/** Screen coordinates are 32-bit, but no desktop is larger than this; the
+ * bound only stops nonsense, it does not describe a real monitor layout. */
+export const COORD_LIMIT = 100000;
 
-const int = (value, fallback) => (Number.isInteger(value) && value >= 0 ? value : fallback);
+/** { x, y } when both are whole numbers within bounds, else null. */
+export function validatePoint(point) {
+  if (!point || typeof point !== 'object') return null;
+  const { x, y } = point;
+  const ok = (n) => Number.isInteger(n) && Math.abs(n) <= COORD_LIMIT;
+  return ok(x) && ok(y) ? { x, y } : null;
+}
 
-export function buildHunterScript({ timeoutSec = HUNT_SECONDS, selfPids = [] } = {}) {
-  const seconds = Math.min(120, Math.max(1, int(timeoutSec, HUNT_SECONDS)));
-  const pids = selfPids.filter((pid) => Number.isInteger(pid) && pid > 4);
+/** The script for one point. The coordinates are validated integers written
+ * into the text, never anything the caller supplied as a string. */
+export function buildPointScript(point) {
+  const checked = validatePoint(point);
+  if (!checked) throw new Error('A point needs whole-number x and y coordinates.');
   return `
 $ErrorActionPreference = 'Stop'
-Add-Type -AssemblyName System.Windows.Forms
 Add-Type @"
 using System;
 using System.Runtime.InteropServices;
+using System.Text;
 public class PruneHunter {
   [StructLayout(LayoutKind.Sequential)] public struct POINT { public int X; public int Y; }
-  [DllImport("user32.dll")] public static extern bool GetCursorPos(out POINT point);
   [DllImport("user32.dll")] public static extern IntPtr WindowFromPoint(POINT point);
   [DllImport("user32.dll")] public static extern IntPtr GetAncestor(IntPtr window, uint flags);
   [DllImport("user32.dll")] public static extern uint GetWindowThreadProcessId(IntPtr window, out uint processId);
-  [DllImport("user32.dll")] public static extern short GetAsyncKeyState(int key);
-  [DllImport("user32.dll")] public static extern bool ShowWindow(IntPtr window, int command);
+  [DllImport("user32.dll", CharSet = CharSet.Unicode)] public static extern int GetClassName(IntPtr window, StringBuilder name, int max);
+  [DllImport("user32.dll")] public static extern IntPtr SetThreadDpiAwarenessContext(IntPtr context);
+  public static string ClassOf(IntPtr window) { var name = new StringBuilder(256); GetClassName(window, name, 256); return name.ToString(); }
 }
 "@
 
-$state = @{ done = $false; status = 'timeout'; x = 0; y = 0; down = $false }
-$deadline = (Get-Date).AddSeconds(${seconds})
-$minimized = New-Object System.Collections.ArrayList
-foreach ($id in @(${pids.join(',')})) {
-  $p = Get-Process -Id $id -ErrorAction SilentlyContinue
-  if ($p -and $p.MainWindowHandle -ne [IntPtr]::Zero) {
-    [void][PruneHunter]::ShowWindow($p.MainWindowHandle, 6)
-    [void]$minimized.Add($p.MainWindowHandle)
-  }
-}
-try {
-  Start-Sleep -Milliseconds 400
-  $form = New-Object System.Windows.Forms.Form
-  $form.FormBorderStyle = 'None'
-  $form.StartPosition = 'Manual'
-  $form.Bounds = [System.Windows.Forms.SystemInformation]::VirtualScreen
-  $form.TopMost = $true
-  $form.ShowInTaskbar = $false
-  $form.Opacity = 0.01
-  $form.Cursor = [System.Windows.Forms.Cursors]::Cross
-  $form.Add_Shown({ $form.Activate() }.GetNewClosure())
-  # A click that began before the overlay appeared must not count: only a
-  # press that lands on the overlay, then its release, picks a window.
-  $form.Add_MouseDown({ $state.down = $true }.GetNewClosure())
-  $form.Add_MouseUp({
-    if (-not $state.down) { return }
-    $point = New-Object PruneHunter+POINT
-    [void][PruneHunter]::GetCursorPos([ref]$point)
-    $state.x = $point.X; $state.y = $point.Y
-    $state.status = 'picked'; $state.done = $true
-    $form.Close()
-  }.GetNewClosure())
-  $timer = New-Object System.Windows.Forms.Timer
-  $timer.Interval = 100
-  $timer.Add_Tick({
-    if (([PruneHunter]::GetAsyncKeyState(0x1B) -band 0x8000) -ne 0) { $state.status = 'cancelled'; $state.done = $true; $form.Close() }
-    elseif ((Get-Date) -gt $deadline) { $state.status = 'timeout'; $state.done = $true; $form.Close() }
-  }.GetNewClosure())
-  $timer.Start()
-  [void]$form.ShowDialog()
-  $timer.Stop()
-  $form.Dispose()
-} finally {
-  foreach ($handle in $minimized) { [void][PruneHunter]::ShowWindow($handle, 9) }
-}
+# The coordinates arrive in physical pixels. Without this a scaled display would
+# read them as logical ones and land on the wrong window. Awareness only: it
+# changes how the point is read, nothing else.
+try { [void][PruneHunter]::SetThreadDpiAwarenessContext([IntPtr](-4)) } catch { }
 
-if ($state.status -ne 'picked') { [pscustomobject]@{ status = $state.status } | ConvertTo-Json -Compress; exit 0 }
-
-Start-Sleep -Milliseconds 120
 $point = New-Object PruneHunter+POINT
-$point.X = $state.x; $point.Y = $state.y
+$point.X = ${checked.x}
+$point.Y = ${checked.y}
 $window = [PruneHunter]::WindowFromPoint($point)
-if ($window -eq [IntPtr]::Zero) { [pscustomobject]@{ status = 'failed' } | ConvertTo-Json -Compress; exit 0 }
+if ($window -eq [IntPtr]::Zero) { [pscustomobject]@{ status = 'nothing' } | ConvertTo-Json -Compress; exit 0 }
 $root = [PruneHunter]::GetAncestor($window, 2)
 if ($root -eq [IntPtr]::Zero) { $root = $window }
+
+# The desktop and the taskbar belong to Explorer, which would answer "Windows".
+# They are not a program the person meant.
+$class = [PruneHunter]::ClassOf($root)
+if (@('Progman', 'WorkerW', 'Shell_TrayWnd', 'Shell_SecondaryTrayWnd') -contains $class) {
+  [pscustomobject]@{ status = 'nothing' } | ConvertTo-Json -Compress; exit 0
+}
+
 $processId = [uint32]0
 [void][PruneHunter]::GetWindowThreadProcessId($root, [ref]$processId)
 $info = Get-CimInstance -ClassName Win32_Process -Filter ("ProcessId = " + $processId) -ErrorAction SilentlyContinue
+$path = $(if ($info) { [string]$info.ExecutablePath } else { '' })
+if (-not $path) {
+  [pscustomobject]@{ status = 'unreadable'; pid = [int]$processId; name = $(if ($info) { [string]$info.Name } else { $null }) } | ConvertTo-Json -Compress
+  exit 0
+}
 $proc = Get-Process -Id $processId -ErrorAction SilentlyContinue
 [pscustomobject]@{
   status = 'picked'
   pid = [int]$processId
-  exePath = $(if ($info) { [string]$info.ExecutablePath } else { $null })
-  name = $(if ($info) { [string]$info.Name } else { $null })
+  exePath = $path
+  name = [string]$info.Name
   title = $(if ($proc) { [string]$proc.MainWindowTitle } else { '' })
 } | ConvertTo-Json -Compress
 `;
 }
 
-let active = null;
-
-/** Runs one hunt and resolves its result: { status: 'picked' | 'cancelled' |
- * 'timeout' | 'failed', ... }. One at a time. `run` is injectable. */
-export function startHunt({ run, timeoutSec = HUNT_SECONDS, selfPids = [process.pid, process.ppid] } = {}) {
-  if (active) return Promise.reject(new Error('A hunt is already running.'));
-  const runner = run || ((script) => new Promise((resolve, reject) => {
-    const child = execFile(
+function defaultRun(script) {
+  return new Promise((resolve, reject) => {
+    execFile(
       'powershell.exe',
-      ['-NoProfile', '-NonInteractive', '-STA', '-Command', script],
-      { timeout: (timeoutSec + 15) * 1000, windowsHide: true, maxBuffer: 1024 * 1024 },
-      (err, stdout) => {
-        if (active?.child === child && active.cancelled) { resolve('{"status":"cancelled"}'); return; }
-        if (err && !stdout) reject(new Error(`The hunt could not run: ${err.message}`)); else resolve(stdout);
-      }
+      ['-NoProfile', '-NonInteractive', '-Command', script],
+      { timeout: 30_000, windowsHide: true, maxBuffer: 1024 * 1024 },
+      (err, stdout) => (err && !stdout ? reject(new Error(`The lookup could not run: ${err.message}`)) : resolve(stdout))
     );
-    active.child = child;
-  }));
-
-  active = { child: null, cancelled: false };
-  const finished = Promise.resolve()
-    .then(() => runner(buildHunterScript({ timeoutSec, selfPids })))
-    .then(parseHunterOutput)
-    .finally(() => { active = null; });
-  return finished;
+  });
 }
 
-/** Stops the running hunt; the pending startHunt then resolves cancelled. */
-export function cancelHunt() {
-  if (!active) return false;
-  active.cancelled = true;
-  active.child?.kill();
-  return true;
+/** What is at this screen point: { status: 'picked' | 'nothing' | 'unreadable'
+ * | 'failed', ... }. A bad point is rejected (the route answers 400 first);
+ * a lookup that could not run is a 'failed' result with the reason. */
+export async function huntAtPoint(point, { run = defaultRun } = {}) {
+  const script = buildPointScript(point);
+  let output;
+  try {
+    output = await run(script);
+  } catch (err) {
+    return { status: 'failed', error: err.message };
+  }
+  return parseHunterOutput(output);
 }
 
 /** Resolves a result to what the screen shows: the process, the installed

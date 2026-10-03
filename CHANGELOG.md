@@ -50,7 +50,8 @@ see v1.0.1 below) are documented here.
 - Scheduled-task leftovers can be removed, with their XML saved first.
 - **Forced uninstall** for software that isn't listed.
 - **Install with monitoring…** records an install so uninstalling it later
-  is exact. **Hunter** identifies a program by clicking its window.
+  is exact. **Hunter** identifies a program: drag its small crosshair onto
+  any window, as in Revo, and let go.
 - Quarantine gains **Backups** (restore registry and task backups) and
   **History** tabs. Browser extensions have a **Copy page address**
   button, since Prune cannot remove them itself: paste the address into
@@ -83,6 +84,16 @@ see v1.0.1 below) are documented here.
 
 ### Changed
 
+- **Hunter is a draggable crosshair, and no longer watches the keyboard.**
+  It used to run a 30-second PowerShell script that polled the key and
+  pointer state under a click-catching overlay, which is exactly what
+  antivirus reads as a keylogger. Now Prune minimizes and opens a small
+  always-on-top crosshair; you drag it onto any window and let go. Prune
+  reads the pointer once, at the drop, hides the crosshair, and asks
+  Windows which window is at that one point. Dropping on the desktop or
+  taskbar, on a window of an administrator program Prune cannot read,
+  or on Prune itself each get an explanation; Esc or the crosshair's cross
+  cancels. A test now fails if the key- or pointer-polling calls come back.
 - **The sidebar is icons only until you point at it.** It rests at 72px
   and widens over the page, with a short transition, when the pointer
   enters it or keyboard focus lands in it, then folds back. It widens

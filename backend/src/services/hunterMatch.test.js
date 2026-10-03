@@ -90,9 +90,24 @@ describe('parseHunterOutput', () => {
       .toEqual({ status: 'picked', pid: 42, exePath: 'C:\\a\\b.exe', name: 'b.exe', title: 'B' });
   });
 
-  it('reads cancelled and timed out', () => {
-    expect(parseHunterOutput('{"status":"cancelled"}')).toEqual({ status: 'cancelled' });
-    expect(parseHunterOutput('{"status":"timeout"}')).toEqual({ status: 'timeout' });
+  it('reads "nothing identifiable there" (desktop, taskbar, no window)', () => {
+    expect(parseHunterOutput('{"status":"nothing"}')).toEqual({ status: 'nothing' });
+  });
+
+  it('reads a window whose program could not be read, keeping the pid and name it has', () => {
+    expect(parseHunterOutput('{"status":"unreadable","pid":900,"name":"secure.exe"}'))
+      .toEqual({ status: 'unreadable', pid: 900, name: 'secure.exe' });
+    expect(parseHunterOutput('{"status":"unreadable"}')).toEqual({ status: 'unreadable', pid: null, name: null });
+  });
+
+  it('a pick that came back with no executable path is unreadable, not a program', () => {
+    expect(parseHunterOutput('{"status":"picked","pid":900,"exePath":null,"name":"System"}'))
+      .toEqual({ status: 'unreadable', pid: 900, name: 'System' });
+  });
+
+  it('no longer reads cancelled or timed out -- the backend never ends a hunt, the crosshair does', () => {
+    expect(parseHunterOutput('{"status":"cancelled"}').status).toBe('failed');
+    expect(parseHunterOutput('{"status":"timeout"}').status).toBe('failed');
   });
 
   it('treats garbage, or a pick with no usable pid, as a failure', () => {
