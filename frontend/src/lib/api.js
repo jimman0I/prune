@@ -468,6 +468,29 @@ export async function updateSettings(partial) {
   return data;
 }
 
+/** "Always run as administrator" (Settings, General): the flag Windows itself
+ * honours for this copy of Prune, read from the registry by the backend.
+ * { supported, enabled, elevatedNow, startsWithWindows } -- see
+ * backend/src/services/runAsAdmin.js. */
+export async function fetchRunAsAdmin() {
+  const res = await fetch(`${API_URL}/settings/run-as-admin`);
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
+  return data;
+}
+
+/** Sets or clears that flag; resolves the new state. It takes effect from the
+ * next start of Prune, and the backend refuses it in a development build. */
+export async function setRunAsAdmin(enabled) {
+  const res = await fetch(`${API_URL}/settings/run-as-admin`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ enabled })
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
+  return data;
+}
 /** The running version, and -- only when the user has turned the update
  * check on -- whether GitHub has a newer release. With the setting off the
  * backend answers from this machine alone. */

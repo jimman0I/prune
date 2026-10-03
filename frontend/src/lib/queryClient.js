@@ -60,6 +60,7 @@ export const keys = {
   backups: ['backups'],
   uninstallHistory: ['uninstall-history'],
   settings: ['settings'],
+  runAsAdmin: ['settings', 'runAsAdmin'],
   updateCheck: ['update-check'],
   automation: ['automation'],
   diskSpace: ['disk', 'space'],

@@ -7,6 +7,7 @@ import ThemeToggle from './ThemeToggle.jsx';
 import Toggle from './Toggle.jsx';
 import CookieKeepListSettings from './CookieKeepListSettings.jsx';
 import CustomCleanersSettings from './CustomCleanersSettings.jsx';
+import RunAsAdminSetting from './RunAsAdminSetting.jsx';
 import { useSettings, useUpdateCheck } from '../hooks/useSystemQueries.js';
 import { leftoverDestinationFrom } from '../lib/leftoverDestination.js';
 import { removalModeFrom } from '../lib/cleanOutcome.js';
@@ -344,6 +345,10 @@ function SettingsPage({ onReportBug = null }) {
                   />
                 </div>
               </div>
+
+              {/* Opt-in and honest about its costs; reads the flag Windows honours,
+                  not a copy in settings.json. See RunAsAdminSetting.jsx. */}
+              <RunAsAdminSetting />
 
               {/* The one setting that lets anything leave the machine, so
                   it says exactly what, to whom and how often before it is
