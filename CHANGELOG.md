@@ -237,6 +237,14 @@ see v1.0.1 below) are documented here.
 
 ### Fixed
 
+- **Dropdown lists are readable.** The open list of a dropdown (the
+  automation schedule's "How often", for one) was light text on a white
+  popup in the dark theme. Every dropdown now draws an opaque list in the
+  current theme's colours.
+- **Settings text no longer sits in a narrow column.** Descriptions in
+  Settings were capped near 62 characters, leaving a narrow block on a wide
+  window; they now use the same width as the other screens' descriptions.
+
 - **Disk Map's fast scan works on drives with millions of files.** The scan
   result was one JSON string, and with the added size-on-disk and modified
   fields a large drive passed V8's ~512 MB string limit ("Invalid string

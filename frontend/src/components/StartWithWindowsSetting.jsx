@@ -43,16 +43,16 @@ export default function StartWithWindowsSetting() {
   if (status.isError) notes.push(<p key="load" role="alert" className="text-[color:var(--danger)] select-text">{t('backgroundV3.startup.loadFailed', status.error.message)}</p>);
   if (change.isError) notes.push(<p key="save" role="alert" className="text-[color:var(--danger)] select-text">{t('backgroundV3.startup.saveFailed', change.error.message)}</p>);
   if (data && !supported) notes.push(<p key="unsupported" className="text-[color:var(--text-muted)]">{t('backgroundV3.startup.unsupported')}</p>);
-  if (supported && data.disabledByWindows) notes.push(<p key="windows" className="text-[color:var(--text-secondary)] max-w-[62ch]">{t('backgroundV3.startup.disabledByWindows')}</p>);
-  if (supported && data.foreign && !enabled) notes.push(<p key="foreign" className="text-[color:var(--text-secondary)] max-w-[62ch]">{t('backgroundV3.startup.foreign')}</p>);
-  if (enabled && data.runAsAdmin) notes.push(<p key="admin" role="status" className="text-[color:var(--warning)] max-w-[62ch]">{t('backgroundV3.startup.adminConflict')}</p>);
+  if (supported && data.disabledByWindows) notes.push(<p key="windows" className="text-[color:var(--text-secondary)] max-w-[110ch]">{t('backgroundV3.startup.disabledByWindows')}</p>);
+  if (supported && data.foreign && !enabled) notes.push(<p key="foreign" className="text-[color:var(--text-secondary)] max-w-[110ch]">{t('backgroundV3.startup.foreign')}</p>);
+  if (enabled && data.runAsAdmin) notes.push(<p key="admin" role="status" className="text-[color:var(--warning)] max-w-[110ch]">{t('backgroundV3.startup.adminConflict')}</p>);
 
   return (
     <div className="glass-panel p-6" data-testid="start-with-windows">
       <div data-setting-row className="flex items-center justify-between gap-4">
         <div className="min-w-0">
           <div className="text-[14px] font-medium text-[color:var(--text-primary)]">{title}</div>
-          <p className="text-[12.5px] text-[color:var(--text-secondary)] mt-1 leading-relaxed max-w-[62ch]">
+          <p className="text-[12.5px] text-[color:var(--text-secondary)] mt-1 leading-relaxed max-w-[110ch]">
             {t('backgroundV3.startup.description')}
           </p>
         </div>
@@ -69,7 +69,7 @@ export default function StartWithWindowsSetting() {
       <div data-setting-row className="mt-4 pt-4 border-t border-[color:var(--border-subtle)] flex items-center justify-between gap-4">
         <div className="min-w-0">
           <div className={`text-[13.5px] font-medium ${enabled ? 'text-[color:var(--text-primary)]' : 'text-[color:var(--text-muted)]'}`}>{minimizedTitle}</div>
-          <p className="text-[12.5px] text-[color:var(--text-secondary)] mt-1 leading-relaxed max-w-[62ch]">
+          <p className="text-[12.5px] text-[color:var(--text-secondary)] mt-1 leading-relaxed max-w-[110ch]">
             {t('backgroundV3.startup.minimizedNote')}
           </p>
         </div>

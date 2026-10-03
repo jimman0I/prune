@@ -47,18 +47,18 @@ export default function ExplorerMenuSetting() {
       </p>
     );
   }
-  if (supported && data.incomplete) notes.push(<p key="incomplete" className="text-[color:var(--text-secondary)] max-w-[62ch]">{t('explorerV3.menu.incomplete')}</p>);
-  if (supported && data.foreign) notes.push(<p key="foreign" className="text-[color:var(--text-secondary)] max-w-[62ch]">{t('explorerV3.menu.foreign')}</p>);
+  if (supported && data.incomplete) notes.push(<p key="incomplete" className="text-[color:var(--text-secondary)] max-w-[110ch]">{t('explorerV3.menu.incomplete')}</p>);
+  if (supported && data.foreign) notes.push(<p key="foreign" className="text-[color:var(--text-secondary)] max-w-[110ch]">{t('explorerV3.menu.foreign')}</p>);
 
   return (
     <div className="glass-panel p-6" data-testid="explorer-menu">
       <div data-setting-row className="flex items-center justify-between gap-4">
         <div className="min-w-0">
           <div className="text-[14px] font-medium text-[color:var(--text-primary)]">{title}</div>
-          <p className="text-[12.5px] text-[color:var(--text-secondary)] mt-1 leading-relaxed max-w-[62ch]">
+          <p className="text-[12.5px] text-[color:var(--text-secondary)] mt-1 leading-relaxed max-w-[110ch]">
             {t('explorerV3.menu.description', captions.shred, captions.find)}
           </p>
-          <p className="text-[12.5px] text-[color:var(--text-muted)] mt-1 leading-relaxed max-w-[62ch]">
+          <p className="text-[12.5px] text-[color:var(--text-muted)] mt-1 leading-relaxed max-w-[110ch]">
             {t('explorerV3.menu.showMore')}
           </p>
         </div>

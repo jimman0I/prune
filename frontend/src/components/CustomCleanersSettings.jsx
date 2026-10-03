@@ -120,7 +120,7 @@ export default function CustomCleanersSettings() {
     <>
       <div className="glass-panel p-6">
         <h2 className={`${HEADING_CLASS} mb-3`}>{t('deepCleanV3.custom.ruleName')}</h2>
-        <p className="text-[12.5px] text-[color:var(--text-secondary)] mb-4 max-w-[62ch]">{t('deepCleanV3.custom.description')}</p>
+        <p className="text-[12.5px] text-[color:var(--text-secondary)] mb-4 max-w-[110ch]">{t('deepCleanV3.custom.description')}</p>
 
         <div className="flex items-center gap-2 mb-1">
           <input
@@ -170,7 +170,7 @@ export default function CustomCleanersSettings() {
 
       <div className="glass-panel p-6">
         <h2 className={`${HEADING_CLASS} mb-3`}>{t('deepCleanV3.imported.title')}</h2>
-        <p className="text-[12.5px] text-[color:var(--text-secondary)] mb-4 max-w-[62ch]">{t('deepCleanV3.imported.description')}</p>
+        <p className="text-[12.5px] text-[color:var(--text-secondary)] mb-4 max-w-[110ch]">{t('deepCleanV3.imported.description')}</p>
 
         <input
           ref={fileRef}

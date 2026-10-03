@@ -59,7 +59,7 @@ export default function CookieKeepListSettings({ settings, save }) {
       <div className="text-[14px] font-medium text-[color:var(--text-primary)] mb-1">
         {t('settings.cookiesToPreserve.title')}
       </div>
-      <p className="text-[12.5px] text-[color:var(--text-secondary)] mb-4 max-w-[62ch]">
+      <p className="text-[12.5px] text-[color:var(--text-secondary)] mb-4 max-w-[110ch]">
         {t('settings.cookiesToPreserve.description')}
       </p>
 

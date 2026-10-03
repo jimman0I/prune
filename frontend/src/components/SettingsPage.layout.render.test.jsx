@@ -215,7 +215,7 @@ describe('heading and description consistency', () => {
     }
   });
 
-  it('caps every setting description at 62ch', async () => {
+  it('caps every setting description at 110ch, as wide as the page descriptions', async () => {
     await open();
     // General tab: rows that used to have no cap at all.
     const descriptions = [
@@ -224,7 +224,7 @@ describe('heading and description consistency', () => {
     ];
     for (const text of descriptions) {
       const p = (await screen.findByText(text)).closest('p');
-      expect(p.className).toContain('max-w-[62ch]');
+      expect(p.className).toContain('max-w-[110ch]');
     }
   });
 
@@ -232,7 +232,7 @@ describe('heading and description consistency', () => {
     await open('Cleanup');
     for (const text of [/Skip anything modified in the last few hours/, /A cap on the whole Quarantine folder/, /Everything Prune removes goes to Quarantine first/, /Folders and file types Prune will leave alone/]) {
       const p = (await screen.findByText(text)).closest('p');
-      expect(p.className).toContain('max-w-[62ch]');
+      expect(p.className).toContain('max-w-[110ch]');
     }
   });
 });
