@@ -130,6 +130,13 @@ describe('Deep Clean when Prune IS elevated', () => {
     expect(within(row).queryByText('needs admin')).toBeNull();
   });
 
+  it('does not say "needs admin" anywhere, the scan output included', async () => {
+    renderScreen(<DeepClean />);
+    await settled();
+    await waitFor(() => expect(screen.getAllByText('protected').length).toBeGreaterThan(0));
+    expect(screen.queryAllByText('needs admin')).toHaveLength(0);
+  });
+
   it('shows no banner at all when nothing is protected', async () => {
     fetchDeepCleanRules.mockResolvedValue([{ category: 'Windows', items: [RULES[0].items[2]] }]);
     renderScreen(<DeepClean />);

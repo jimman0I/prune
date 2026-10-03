@@ -192,6 +192,15 @@ function DeepClean({ onNavigate }) {
   const [elevatedResult, setElevatedResult] = useState(null);
   // True only once the status was read and said so (see useAdminAccess).
   const { elevated } = useAdminAccess();
+  // The scan log's per-rule line for a folder Windows will not list. Once
+  // Prune is elevated, "needs admin" would be untrue (elevating cannot help),
+  // so it says what the banner and the tree say.
+  const logMessages = t('deepClean.log');
+  const protectedItem = t('deepCleanV3.protected.item');
+  const scanLogMessages = useMemo(
+    () => (elevated ? { ...logMessages, scan: { ...logMessages.scan, needsAdmin: protectedItem } } : logMessages),
+    [elevated, logMessages, protectedItem]
+  );
   // A frozen copy of `selected`, taken the instant Clean actually starts.
   // receiptMode filters the tree against THIS, not the live `selected` --
   // nothing currently stops a checkbox click or "Clear" from mutating
@@ -229,7 +238,7 @@ function DeepClean({ onNavigate }) {
     scanned, total, error: scanError, currentId: scanningId,
     progress: scanProgress,
     start, stop: stopPreview, cleanableIds: scannedIds
-  } = useDeepCleanScan(logName, t('deepClean.log'));
+  } = useDeepCleanScan(logName, scanLogMessages);
 
   // The clean itself, streamed the same way -- see hooks/useDeepCleanExecute.js.
   // `run` throws on a real failure (same contract the old one-shot
