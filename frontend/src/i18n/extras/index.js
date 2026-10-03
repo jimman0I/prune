@@ -2,5 +2,6 @@ import diskMap from './diskMap.js';
 import deepClean from './deepClean.js';
 import uninstaller from './uninstaller.js';
 import runAsAdmin from './runAsAdmin.js';
+import dashboardQol from './dashboardQol.js';
 
-export const EXTRAS = [diskMap, deepClean, uninstaller, runAsAdmin];
+export const EXTRAS = [diskMap, deepClean, uninstaller, runAsAdmin, dashboardQol];

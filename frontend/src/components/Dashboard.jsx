@@ -12,6 +12,7 @@ import { spaceBreakdown, largestPrograms } from '../lib/spaceBreakdown.js';
 import { useJunkMeasure } from '../hooks/useJunkMeasure.js';
 import SpaceQuestion from './SpaceQuestion.jsx';
 import LargestPrograms from './LargestPrograms.jsx';
+import CleanRecommendedCard from './CleanRecommendedCard.jsx';
 import Page from './Page.jsx';
 
 /** Says something only when there is something to say.
@@ -324,6 +325,10 @@ export default function Dashboard({ programs, programsMeasured = false, onNaviga
         onOpenApplications={() => onNavigate('applications')}
         onOpenDiskMap={() => onNavigate('diskmap')}
       />
+
+      {/* One click to clean what Deep Clean marks recommended -- after a
+          confirmation that names the total and the destination. */}
+      <CleanRecommendedCard onNavigate={onNavigate} />
 
       {/* The quiet row. Three facts that are worth a glance and rarely worth
           a click, side by side under hairlines rather than in cards. Every

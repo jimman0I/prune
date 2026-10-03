@@ -15,6 +15,7 @@ import { selectionTotal } from '../lib/selectionTotal.js';
 import { needsWarning, rememberedWith } from '../lib/cleanWarning.js';
 import { categoryTickPlan } from '../lib/categoryTickPlan.js';
 import { removalModeFrom, cleanOutcome } from '../lib/cleanOutcome.js';
+import { cleanResultSentences, cleanResultText } from '../lib/cleanResultText.js';
 import { formatRelativeTime } from '../lib/formatRelativeTime.js';
 import DeepCleanTree from './DeepCleanTree.jsx';
 import CleanWarningDialog from './CleanWarningDialog.jsx';
@@ -476,35 +477,11 @@ function DeepClean({ onNavigate }) {
     if (plan.askAbout.length > 0) setWarnQueue(plan.askAbout);
   };
 
-  /** What a finished clean says: deleted bytes as "Freed", moved bytes as
-   * "Moved to ...". Never "Freed" for files that only changed folders. */
-  const resultSentences = (result) => {
-    const { freedBytes, movedBytes, movedTo } = cleanOutcome(result);
-    const sentences = [];
-    const wipe = (result?.results ?? []).map((r) => r?.wiped).find(Boolean);
-    // A wipe frees nothing, so "Freed 0 B" beside it would only mislead.
-    if (freedBytes > 0 || (movedBytes === 0 && !wipe)) sentences.push(t('deepClean.resultFreed', formatBytes(freedBytes)));
-    if (wipe) {
-      // Three passes write random data, and the sentence must say so: the
-      // zeros wording would be untrue.
-      const key = wipe.pattern === 'random'
-        ? (wipe.aborted ? 'deepCleanV3.wipe.resultRandomStopped' : 'deepCleanV3.wipe.resultRandom')
-        : (wipe.aborted ? 'deepClean.resultWipeStopped' : 'deepClean.resultWiped');
-      sentences.push(t(key, formatBytes(wipe.bytesWritten), wipe.passes));
-    }
-    if (movedBytes > 0) {
-      sentences.push(movedTo === 'recycle'
-        ? t('deepClean.resultRecycled', formatBytes(movedBytes))
-        : t('deepClean.resultMoved', formatBytes(movedBytes)));
-    }
-    // Locked files handed to Windows to delete at the next restart: still on
-    // the disk, so neither freed nor skipped.
-    const scheduled = (result?.results ?? []).reduce((n, r) => n + (Number(r?.scheduledForRestart) || 0), 0);
-    if (scheduled > 0) sentences.push(t('deepCleanV3.locked.scheduled', scheduled));
-    return sentences;
-  };
+  /** What a finished clean says: see lib/cleanResultText.js, shared with the
+   * Dashboard's Clean recommended. */
+  const resultSentences = (result) => cleanResultSentences(result, t);
   // Freed and moved read as separate sentences; "Freed 5 KB. Moved 3 MB to ..."
-  const resultSentence = (result) => resultSentences(result).map((x) => (/[.!?]$/.test(x) ? x : `${x}.`)).join(' ');
+  const resultSentence = (result) => cleanResultText(result, t);
   // The banner leaves a lone "Freed 5 KB" as it always read, and only adds
   // full stops once there are two sentences to tell apart.
   const bannerText = (result) => {

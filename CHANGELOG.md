@@ -82,6 +82,18 @@ see v1.0.1 below) are documented here.
   permissions wall, running just those through a one-shot elevated
   helper process instead.
 
+**Dashboard**
+
+- **Clean recommended, in one step.** A card on the Dashboard cleans the
+  Deep Clean rules marked recommended (never one that loses data) using
+  the removal mode you chose in Settings. It opens with Deep Clean's
+  remembered scan ("last measured") or, if there is none, measures first,
+  then always asks with the total and the destination before anything
+  moves; Delete now is styled as the danger it is. It shows progress, and
+  its result keeps Deep Clean's honesty: Moved to Quarantine is not
+  Freed. It shares the remembered scan with Deep Clean, so a clean in one
+  settles the rows in the other.
+
 ### Changed
 
 - **Hunter is a draggable crosshair, and no longer watches the keyboard.**
