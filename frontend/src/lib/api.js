@@ -301,11 +301,12 @@ export async function scanForcedUninstall({ name, publisher, registryKey, mode, 
   return data;
 }
 
-/** Opens the extension's own page in its browser. Takes the row id (the
- * backend looks the browser, profile and extension up again) and resolves
- * { ok, browser }. Prune cannot remove an extension itself. */
-export async function manageBrowserExtension(id) {
-  const res = await fetch(`${API_URL}/programs/extensions/manage`, {
+/** The address of the extension's own page in its browser, to copy and paste
+ * there. Takes the row id (the backend looks the browser and extension up
+ * again) and resolves { ok, browser, address }. Launches nothing: Prune never
+ * starts a browser, and cannot remove an extension itself. */
+export async function fetchExtensionPageAddress(id) {
+  const res = await fetch(`${API_URL}/programs/extensions/page-address`, {
     method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id })
   });
   const data = await res.json();
