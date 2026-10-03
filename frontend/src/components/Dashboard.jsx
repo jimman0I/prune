@@ -14,6 +14,7 @@ import SpaceQuestion from './SpaceQuestion.jsx';
 import LargestPrograms from './LargestPrograms.jsx';
 import CleanRecommendedCard from './CleanRecommendedCard.jsx';
 import FreedTotal from './FreedTotal.jsx';
+import LowDiskBanner from './LowDiskBanner.jsx';
 import Page from './Page.jsx';
 
 /** Says something only when there is something to say.
@@ -317,6 +318,9 @@ export default function Dashboard({ programs, programsMeasured = false, onNaviga
         <h1 className="display-heading text-[30px] leading-none">{t('nav.dashboard')}</h1>
         <ScheduleBadge onNavigate={onNavigate} />
       </div>
+
+      {/* A drive nearly full, said before the question of where the space went. */}
+      <LowDiskBanner active={active} onNavigate={onNavigate} />
 
       <SpaceQuestion diskSpaceError={diskSpaceError} breakdown={breakdown} driveLetter={driveLetter} />
 

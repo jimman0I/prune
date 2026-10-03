@@ -25,6 +25,14 @@ export default {
         freed: (a, b) => `Prune has freed ${a} since ${b}.`,
         freedNoDate: (a) => `Prune has freed ${a}.`,
         note: "Files moved to Quarantine count once you empty it."
+      },
+      lowDisk: {
+        banner: (a, b, c) => `Drive ${a} is running low on space: ${b} free (${c}%).`,
+        openDiskMap: "Open Disk Map",
+        setting: {
+          title: "Low disk space warning",
+          description: "Warns on the Dashboard when a local drive has less free space than this share of its size, and with one notification a day while Prune sits in the tray. Drives with more than 100 GB free are never flagged."
+        }
       }
     }
   },
@@ -48,6 +56,14 @@ export default {
         freed: (a, b) => `Prune het sedert ${b} ${a} vrygemaak.`,
         freedNoDate: (a) => `Prune het ${a} vrygemaak.`,
         note: "Lêers wat na Karantyn geskuif is, tel eers sodra jy dit leegmaak."
+      },
+      lowDisk: {
+        banner: (a, b, c) => `Skyf ${a} se spasie raak min: ${b} vry (${c}%).`,
+        openDiskMap: "Maak Skyfkaart oop",
+        setting: {
+          title: "Waarskuwing vir min skyfspasie",
+          description: "Waarsku op die Kontroleskerm wanneer 'n plaaslike skyf minder vrye spasie het as hierdie deel van sy grootte, en met een kennisgewing per dag terwyl Prune in die kennisgewingsarea sit. Skywe met meer as 100 GB vry word nooit gemerk nie."
+        }
       }
     }
   },
@@ -71,6 +87,14 @@ export default {
         freed: (a, b) => `حرّر Prune ما مقداره ${a} منذ ${b}.`,
         freedNoDate: (a) => `حرّر Prune ما مقداره ${a}.`,
         note: "لا تُحتسب الملفات المنقولة إلى الحجر الصحي إلا بعد إفراغه."
+      },
+      lowDisk: {
+        banner: (a, b, c) => `المساحة على القرص ${a} قاربت على النفاد: ${b} متاحة (${c}%).`,
+        openDiskMap: "فتح خريطة القرص",
+        setting: {
+          title: "تحذير انخفاض مساحة القرص",
+          description: "يُحذّر في لوحة المعلومات عندما تقل المساحة الحرة في قرص محلي عن هذه النسبة من حجمه، وبإشعار واحد يوميًا أثناء بقاء Prune في منطقة الإشعارات. لا يُنبَّه أبدًا لقرص تزيد مساحته الحرة على 100 GB."
+        }
       }
     }
   },
@@ -94,6 +118,14 @@ export default {
         freed: (a, b) => `Prune ha alliberat ${a} des del ${b}.`,
         freedNoDate: (a) => `Prune ha alliberat ${a}.`,
         note: "Els fitxers moguts a la Quarantena només es compten quan la buides."
+      },
+      lowDisk: {
+        banner: (a, b, c) => `La unitat ${a} s'està quedant sense espai: ${b} lliures (${c}%).`,
+        openDiskMap: "Obre Mapa del disc",
+        setting: {
+          title: "Avís de poc espai al disc",
+          description: "Avisa al Tauler quan una unitat local té menys espai lliure que aquesta part de la seva mida, i amb una notificació al dia mentre Prune és a la safata. Mai no es marquen les unitats amb més de 100 GB lliures."
+        }
       }
     }
   },
@@ -117,6 +149,14 @@ export default {
         freed: (a, b) => `Prune od ${b} uvolnil ${a}.`,
         freedNoDate: (a) => `Prune uvolnil ${a}.`,
         note: "Soubory přesunuté do karantény se započítají, až karanténu vyprázdníte."
+      },
+      lowDisk: {
+        banner: (a, b, c) => `Na disku ${a} dochází místo: volno ${b} (${c} %).`,
+        openDiskMap: "Otevřít Mapu disku",
+        setting: {
+          title: "Upozornění na nedostatek místa na disku",
+          description: "Upozorní na Přehledu, když má místní disk méně volného místa, než je tento podíl jeho velikosti, a jedním oznámením denně, dokud je Prune v oznamovací oblasti. Disky s více než 100 GB volného místa se nikdy neoznačí."
+        }
       }
     }
   },
@@ -140,6 +180,14 @@ export default {
         freed: (a, b) => `Mae Prune wedi rhyddhau ${a} ers ${b}.`,
         freedNoDate: (a) => `Mae Prune wedi rhyddhau ${a}.`,
         note: "Mae ffeiliau a symudir i'r Cwarantin yn cyfrif unwaith y byddwch yn ei wacáu."
+      },
+      lowDisk: {
+        banner: (a, b, c) => `Mae gyriant ${a} yn brin o le: ${b} yn rhydd (${c}%).`,
+        openDiskMap: "Agor Map Disg",
+        setting: {
+          title: "Rhybudd lle disg isel",
+          description: "Yn rhybuddio ar y Dangosfwrdd pan fydd gan yriant lleol llai o le rhydd na'r gyfran hon o'i faint, a gydag un hysbysiad y dydd tra bo Prune yn yr hambwrdd. Ni chaiff gyriannau â mwy na 100 GB yn rhydd byth eu nodi."
+        }
       }
     }
   },
@@ -163,6 +211,14 @@ export default {
         freed: (a, b) => `Prune har frigjort ${a} siden ${b}.`,
         freedNoDate: (a) => `Prune har frigjort ${a}.`,
         note: "Filer, der er flyttet til karantæne, tæller først, når du tømmer den."
+      },
+      lowDisk: {
+        banner: (a, b, c) => `Drev ${a} er ved at løbe tør for plads: ${b} ledig (${c} %).`,
+        openDiskMap: "Åbn Diskkort",
+        setting: {
+          title: "Advarsel om lav diskplads",
+          description: "Advarer på Oversigten, når et lokalt drev har mindre ledig plads end denne andel af dets størrelse, og med én notifikation om dagen, mens Prune ligger i systembakken. Drev med mere end 100 GB ledig plads markeres aldrig."
+        }
       }
     }
   },
@@ -186,6 +242,14 @@ export default {
         freed: (a, b) => `Prune hat seit ${b} ${a} freigegeben.`,
         freedNoDate: (a) => `Prune hat ${a} freigegeben.`,
         note: "In die Quarantäne verschobene Dateien zählen erst, wenn du sie leerst."
+      },
+      lowDisk: {
+        banner: (a, b, c) => `Laufwerk ${a} hat nur noch wenig freien Speicherplatz: ${b} frei (${c} %).`,
+        openDiskMap: "Festplattenkarte öffnen",
+        setting: {
+          title: "Warnung bei wenig Speicherplatz",
+          description: "Warnt auf der Übersicht, wenn ein lokales Laufwerk weniger freien Speicherplatz hat als diesen Anteil seiner Größe, und mit einer Benachrichtigung pro Tag, solange Prune im Infobereich läuft. Laufwerke mit mehr als 100 GB frei werden nie markiert."
+        }
       }
     }
   },
@@ -209,6 +273,14 @@ export default {
         freed: (a, b) => `Το Prune έχει ελευθερώσει ${a} από τις ${b}.`,
         freedNoDate: (a) => `Το Prune έχει ελευθερώσει ${a}.`,
         note: "Τα αρχεία που μετακινούνται στην Καραντίνα προσμετρώνται μόλις την αδειάσετε."
+      },
+      lowDisk: {
+        banner: (a, b, c) => `Ο δίσκος ${a} έχει λίγο ελεύθερο χώρο: ${b} ελεύθερα (${c}%).`,
+        openDiskMap: "Άνοιγμα του Χάρτη δίσκου",
+        setting: {
+          title: "Προειδοποίηση χαμηλού χώρου δίσκου",
+          description: "Προειδοποιεί στον Πίνακα ελέγχου όταν ένας τοπικός δίσκος έχει λιγότερο ελεύθερο χώρο από αυτό το ποσοστό του μεγέθους του, και με μία ειδοποίηση την ημέρα όσο το Prune βρίσκεται στο δίσκο συστήματος. Δίσκοι με περισσότερα από 100 GB ελεύθερα δεν επισημαίνονται ποτέ."
+        }
       }
     }
   },
@@ -232,6 +304,14 @@ export default {
         freed: (a, b) => `Prune ha liberado ${a} desde el ${b}.`,
         freedNoDate: (a) => `Prune ha liberado ${a}.`,
         note: "Los archivos movidos a Cuarentena cuentan cuando la vacías."
+      },
+      lowDisk: {
+        banner: (a, b, c) => `La unidad ${a} se está quedando sin espacio: ${b} libres (${c} %).`,
+        openDiskMap: "Abrir Mapa del disco",
+        setting: {
+          title: "Aviso de poco espacio en disco",
+          description: "Avisa en el Panel cuando una unidad local tiene menos espacio libre que esta parte de su tamaño, y con una notificación al día mientras Prune está en la bandeja. Las unidades con más de 100 GB libres nunca se marcan."
+        }
       }
     }
   },
@@ -255,6 +335,14 @@ export default {
         freed: (a, b) => `Prune on alates ${b} vabastanud ${a}.`,
         freedNoDate: (a) => `Prune on vabastanud ${a}.`,
         note: "Karantiini teisaldatud failid lähevad arvesse alles siis, kui karantiini tühjendad."
+      },
+      lowDisk: {
+        banner: (a, b, c) => `Draivil ${a} hakkab ruum otsa saama: vaba ${b} (${c}%).`,
+        openDiskMap: "Ava Kettakaart",
+        setting: {
+          title: "Hoiatus vähese kettaruumi kohta",
+          description: "Hoiatab töölaual, kui kohalikul draivil on vähem vaba ruumi kui see osa selle suurusest, ning ühe teavitusega päevas, kui Prune on tegumiribal. Draive, millel on vaba üle 100 GB, ei märgita kunagi."
+        }
       }
     }
   },
@@ -278,6 +366,14 @@ export default {
         freed: (a, b) => `Prune on vapauttanut ${a} päivästä ${b} lähtien.`,
         freedNoDate: (a) => `Prune on vapauttanut ${a}.`,
         note: "Karanteeniin siirretyt tiedostot lasketaan vasta, kun tyhjennät karanteenin."
+      },
+      lowDisk: {
+        banner: (a, b, c) => `Aseman ${a} tila on vähissä: vapaata ${b} (${c} %).`,
+        openDiskMap: "Avaa Levykartta",
+        setting: {
+          title: "Varoitus vähäisestä levytilasta",
+          description: "Varoittaa Yhteenvedossa, kun paikallisella asemalla on vapaata tilaa vähemmän kuin tämä osuus sen koosta, ja yhdellä ilmoituksella päivässä, kun Prune on ilmoitusalueella. Asemia, joilla on yli 100 GB vapaata, ei koskaan merkitä."
+        }
       }
     }
   },
@@ -301,6 +397,14 @@ export default {
         freed: (a, b) => `Prune a libéré ${a} depuis le ${b}.`,
         freedNoDate: (a) => `Prune a libéré ${a}.`,
         note: "Les fichiers déplacés vers la Quarantaine ne comptent qu'une fois celle-ci vidée."
+      },
+      lowDisk: {
+        banner: (a, b, c) => `Le lecteur ${a} manque bientôt d'espace : ${b} libres (${c} %).`,
+        openDiskMap: "Ouvrir Carte du disque",
+        setting: {
+          title: "Alerte d'espace disque faible",
+          description: "Avertit sur le Tableau de bord lorsqu'un lecteur local a moins d'espace libre que cette part de sa taille, et par une notification par jour tant que Prune reste dans la zone de notification. Les lecteurs ayant plus de 100 Go libres ne sont jamais signalés."
+        }
       }
     }
   },
@@ -324,6 +428,14 @@ export default {
         freed: (a, b) => `Prune שחרר ${a} מאז ${b}.`,
         freedNoDate: (a) => `Prune שחרר ${a}.`,
         note: "קבצים שהועברו להסגר נספרים רק לאחר שתרוקן אותו."
+      },
+      lowDisk: {
+        banner: (a, b, c) => `בכונן ${a} נשאר מעט מקום: ${b} פנויים (${c}%).`,
+        openDiskMap: "פתח מפת הדיסק",
+        setting: {
+          title: "אזהרת מקום פנוי נמוך בדיסק",
+          description: "מתריע בלוח המחוונים כשבכונן מקומי יש פחות מקום פנוי מהאחוז הזה מגודלו, ובהתראה אחת ביום כש-Prune נמצא במגש המערכת. כוננים עם יותר מ-100 GB פנויים לא יסומנו לעולם."
+        }
       }
     }
   },
@@ -347,6 +459,14 @@ export default {
         freed: (a, b) => `A Prune ${b} óta ${a} szabadított fel.`,
         freedNoDate: (a) => `A Prune ${a} szabadított fel.`,
         note: "A karanténba helyezett fájlok csak a karantén kiürítése után számítanak bele."
+      },
+      lowDisk: {
+        banner: (a, b, c) => `A(z) ${a} meghajtón fogy a hely: ${b} szabad (${c}%).`,
+        openDiskMap: "Lemeztérkép megnyitása",
+        setting: {
+          title: "Figyelmeztetés kevés lemezterületre",
+          description: "Figyelmeztet az Áttekintés oldalon, ha egy helyi meghajtón kevesebb a szabad hely, mint méretének ez a hányada, és naponta egy értesítéssel, amíg a Prune a tálcán van. A 100 GB-nál több szabad hellyel rendelkező meghajtókat soha nem jelöli."
+        }
       }
     }
   },
@@ -370,6 +490,14 @@ export default {
         freed: (a, b) => `Prune telah membebaskan ${a} sejak ${b}.`,
         freedNoDate: (a) => `Prune telah membebaskan ${a}.`,
         note: "File yang dipindahkan ke Karantina baru dihitung setelah Anda mengosongkannya."
+      },
+      lowDisk: {
+        banner: (a, b, c) => `Drive ${a} hampir penuh: sisa ${b} (${c}%).`,
+        openDiskMap: "Buka Peta Disk",
+        setting: {
+          title: "Peringatan ruang disk rendah",
+          description: "Memberi peringatan di Dasbor saat drive lokal memiliki ruang kosong kurang dari bagian ukurannya ini, dan dengan satu notifikasi per hari saat Prune berada di baki sistem. Drive dengan lebih dari 100 GB kosong tidak pernah ditandai."
+        }
       }
     }
   },
@@ -393,6 +521,14 @@ export default {
         freed: (a, b) => `Prune hefur losað ${a} frá ${b}.`,
         freedNoDate: (a) => `Prune hefur losað ${a}.`,
         note: "Skrár sem fluttar eru í sóttkví teljast með þegar þú tæmir hana."
+      },
+      lowDisk: {
+        banner: (a, b, c) => `Plássið á drifi ${a} er að verða lítið: ${b} laust (${c}%).`,
+        openDiskMap: "Opna Diskakort",
+        setting: {
+          title: "Viðvörun um lítið diskpláss",
+          description: "Varar við á yfirlitinu þegar staðbundið drif hefur minna laust pláss en þetta hlutfall af stærð sinni, og með einni tilkynningu á dag á meðan Prune er í kerfisbakkanum. Drif með meira en 100 GB laust eru aldrei merkt."
+        }
       }
     }
   },
@@ -416,6 +552,14 @@ export default {
         freed: (a, b) => `Prune ha liberato ${a} dal ${b}.`,
         freedNoDate: (a) => `Prune ha liberato ${a}.`,
         note: "I file spostati in Quarantena vengono conteggiati quando la svuoti."
+      },
+      lowDisk: {
+        banner: (a, b, c) => `L'unità ${a} sta esaurendo lo spazio: ${b} liberi (${c}%).`,
+        openDiskMap: "Apri Mappa del disco",
+        setting: {
+          title: "Avviso di poco spazio su disco",
+          description: "Avvisa nel Pannello quando un'unità locale ha meno spazio libero di questa quota della sua dimensione, e con una notifica al giorno mentre Prune è nell'area di notifica. Le unità con più di 100 GB liberi non vengono mai segnalate."
+        }
       }
     }
   },
@@ -439,6 +583,14 @@ export default {
         freed: (a, b) => `Prune は ${b} 以降、${a} を解放しました。`,
         freedNoDate: (a) => `Prune は ${a} を解放しました。`,
         note: "隔離に移動したファイルは、隔離を空にした時点で加算されます。"
+      },
+      lowDisk: {
+        banner: (a, b, c) => `ドライブ ${a} の空き容量が少なくなっています: 空き ${b} (${c}%)。`,
+        openDiskMap: "ディスクマップを開く",
+        setting: {
+          title: "ディスク空き容量不足の警告",
+          description: "ローカルドライブの空き容量が、そのサイズに対するこの割合を下回ると、ダッシュボードで警告します。Prune がトレイにある間は、1 日 1 回の通知も行います。空きが 100 GB を超えるドライブは警告の対象になりません。"
+        }
       }
     }
   },
@@ -462,6 +614,14 @@ export default {
         freed: (a, b) => `Prune은 ${b} 이후 ${a}을(를) 확보했습니다.`,
         freedNoDate: (a) => `Prune은 ${a}을(를) 확보했습니다.`,
         note: "격리로 이동한 파일은 격리를 비운 뒤에 합산됩니다."
+      },
+      lowDisk: {
+        banner: (a, b, c) => `드라이브 ${a}의 공간이 부족합니다: ${b} 남음 (${c}%).`,
+        openDiskMap: "디스크 맵 열기",
+        setting: {
+          title: "디스크 공간 부족 경고",
+          description: "로컬 드라이브의 여유 공간이 크기 대비 이 비율보다 적으면 대시보드에서 경고하고, Prune이 트레이에 있는 동안에는 하루에 한 번 알림을 보냅니다. 여유 공간이 100 GB를 넘는 드라이브는 표시하지 않습니다."
+        }
       }
     }
   },
@@ -485,6 +645,14 @@ export default {
         freed: (a, b) => `Nuo ${b} Prune atlaisvino ${a}.`,
         freedNoDate: (a) => `Prune atlaisvino ${a}.`,
         note: "Į karantiną perkelti failai įskaičiuojami, kai ištuštinate karantiną."
+      },
+      lowDisk: {
+        banner: (a, b, c) => `Diske ${a} baigiasi vieta: laisva ${b} (${c}%).`,
+        openDiskMap: "Atverti Disko žemėlapį",
+        setting: {
+          title: "Įspėjimas apie mažai disko vietos",
+          description: "Įspėja Valdymo skyde, kai vietiniame diske laisvos vietos yra mažiau nei ši jo dydžio dalis, ir vienu pranešimu per dieną, kol Prune yra sistemos dėkle. Diskai, kuriuose laisva daugiau nei 100 GB, niekada nežymimi."
+        }
       }
     }
   },
@@ -508,6 +676,14 @@ export default {
         freed: (a, b) => `Prune telah membebaskan ${a} sejak ${b}.`,
         freedNoDate: (a) => `Prune telah membebaskan ${a}.`,
         note: "Fail yang dialihkan ke Kuarantin hanya dikira apabila anda mengosongkannya."
+      },
+      lowDisk: {
+        banner: (a, b, c) => `Pemacu ${a} hampir kehabisan ruang: ${b} kosong (${c}%).`,
+        openDiskMap: "Buka Peta Cakera",
+        setting: {
+          title: "Amaran ruang cakera rendah",
+          description: "Memberi amaran pada Papan Pemuka apabila pemacu setempat mempunyai ruang kosong kurang daripada bahagian saiznya ini, dan dengan satu pemberitahuan sehari semasa Prune berada dalam dulang. Pemacu dengan lebih 100 GB kosong tidak pernah ditandakan."
+        }
       }
     }
   },
@@ -531,6 +707,14 @@ export default {
         freed: (a, b) => `Prune har frigjort ${a} siden ${b}.`,
         freedNoDate: (a) => `Prune har frigjort ${a}.`,
         note: "Filer som er flyttet til karantene, teller først når du tømmer den."
+      },
+      lowDisk: {
+        banner: (a, b, c) => `Stasjon ${a} går tom for plass: ${b} ledig (${c} %).`,
+        openDiskMap: "Åpne Diskkart",
+        setting: {
+          title: "Advarsel om lite diskplass",
+          description: "Advarer på Oversikten når en lokal stasjon har mindre ledig plass enn denne andelen av størrelsen, og med ett varsel om dagen mens Prune ligger i systemfeltet. Stasjoner med mer enn 100 GB ledig plass flagges aldri."
+        }
       }
     }
   },
@@ -554,6 +738,14 @@ export default {
         freed: (a, b) => `Prune heeft sinds ${b} ${a} vrijgemaakt.`,
         freedNoDate: (a) => `Prune heeft ${a} vrijgemaakt.`,
         note: "Bestanden die naar Quarantaine zijn verplaatst, tellen pas mee zodra je die leegmaakt."
+      },
+      lowDisk: {
+        banner: (a, b, c) => `Schijf ${a} raakt vol: ${b} vrij (${c}%).`,
+        openDiskMap: "Schijfkaart openen",
+        setting: {
+          title: "Waarschuwing bij weinig schijfruimte",
+          description: "Waarschuwt op het Dashboard wanneer een lokale schijf minder vrije ruimte heeft dan dit deel van de grootte, en met één melding per dag zolang Prune in het systeemvak staat. Schijven met meer dan 100 GB vrij worden nooit gemarkeerd."
+        }
       }
     }
   },
@@ -577,6 +769,14 @@ export default {
         freed: (a, b) => `Prune zwolnił ${a} od ${b}.`,
         freedNoDate: (a) => `Prune zwolnił ${a}.`,
         note: "Pliki przeniesione do kwarantanny są wliczane dopiero po jej opróżnieniu."
+      },
+      lowDisk: {
+        banner: (a, b, c) => `Na dysku ${a} kończy się miejsce: wolne ${b} (${c}%).`,
+        openDiskMap: "Otwórz Mapę dysku",
+        setting: {
+          title: "Ostrzeżenie o małej ilości miejsca na dysku",
+          description: "Ostrzega w Panelu, gdy lokalny dysk ma mniej wolnego miejsca niż ta część jego rozmiaru, oraz jednym powiadomieniem dziennie, gdy Prune działa w zasobniku. Dyski z ponad 100 GB wolnego miejsca nigdy nie są oznaczane."
+        }
       }
     }
   },
@@ -600,6 +800,14 @@ export default {
         freed: (a, b) => `Prune له ${b} راهیسې ${a} خلاص کړل.`,
         freedNoDate: (a) => `Prune ${a} خلاص کړل.`,
         note: "هغه فایلونه چې قرنطین ته لیږدول کیږي، یوازې هغه وخت شمیرل کیږي چې قرنطین خالي کړئ."
+      },
+      lowDisk: {
+        banner: (a, b, c) => `په ${a} ډرایو کې ځای کم دی: ${b} خالي (${c}%).`,
+        openDiskMap: "د ډیسک نقشه پرانیزئ",
+        setting: {
+          title: "د ډیسک د کم ځای خبرداری",
+          description: "په ډشبورډ کې خبرداری ورکوي کله چې یو سیمه ایز ډرایو د خپل اندازې له دې برخې څخه لږ خالي ځای ولري، او په ورځ کې یوه خبرتیا سره کله چې Prune په ټرې کې وي. هغه ډرایونه چې له 100 GB څخه ډیر خالي ځای لري هیڅکله نښه نه کیږي."
+        }
       }
     }
   },
@@ -623,6 +831,14 @@ export default {
         freed: (a, b) => `O Prune liberou ${a} desde ${b}.`,
         freedNoDate: (a) => `O Prune liberou ${a}.`,
         note: "Os arquivos movidos para a Quarentena só contam quando você a esvazia."
+      },
+      lowDisk: {
+        banner: (a, b, c) => `A unidade ${a} está com pouco espaço: ${b} livres (${c}%).`,
+        openDiskMap: "Abrir Mapa do disco",
+        setting: {
+          title: "Aviso de pouco espaço em disco",
+          description: "Avisa no Painel quando uma unidade local tem menos espaço livre do que esta parte do seu tamanho, e com uma notificação por dia enquanto o Prune está na bandeja. Unidades com mais de 100 GB livres nunca são sinalizadas."
+        }
       }
     }
   },
@@ -646,6 +862,14 @@ export default {
         freed: (a, b) => `O Prune libertou ${a} desde ${b}.`,
         freedNoDate: (a) => `O Prune libertou ${a}.`,
         note: "Os ficheiros movidos para a Quarentena só contam quando a esvaziar."
+      },
+      lowDisk: {
+        banner: (a, b, c) => `A unidade ${a} está com pouco espaço: ${b} livres (${c}%).`,
+        openDiskMap: "Abrir Mapa do disco",
+        setting: {
+          title: "Aviso de pouco espaço em disco",
+          description: "Avisa no Painel quando uma unidade local tem menos espaço livre do que esta parte do seu tamanho, e com uma notificação por dia enquanto o Prune está na área de notificação. As unidades com mais de 100 GB livres nunca são assinaladas."
+        }
       }
     }
   },
@@ -669,6 +893,14 @@ export default {
         freed: (a, b) => `Prune a eliberat ${a} din ${b}.`,
         freedNoDate: (a) => `Prune a eliberat ${a}.`,
         note: "Fișierele mutate în Carantină se numără abia după ce golești Carantina."
+      },
+      lowDisk: {
+        banner: (a, b, c) => `Unitatea ${a} rămâne fără spațiu: ${b} liber (${c}%).`,
+        openDiskMap: "Deschide Harta discului",
+        setting: {
+          title: "Avertisment pentru spațiu redus pe disc",
+          description: "Avertizează în Panou când o unitate locală are mai puțin spațiu liber decât această parte din dimensiunea sa, și cu o notificare pe zi cât timp Prune este în bara de sistem. Unitățile cu peste 100 GB liberi nu sunt niciodată semnalate."
+        }
       }
     }
   },
@@ -692,6 +924,14 @@ export default {
         freed: (a, b) => `Prune освободил ${a} с ${b}.`,
         freedNoDate: (a) => `Prune освободил ${a}.`,
         note: "Файлы, перемещённые в карантин, учитываются, когда вы очистите карантин."
+      },
+      lowDisk: {
+        banner: (a, b, c) => `На диске ${a} заканчивается место: свободно ${b} (${c} %).`,
+        openDiskMap: "Открыть «Карта диска»",
+        setting: {
+          title: "Предупреждение о нехватке места на диске",
+          description: "Предупреждает на панели, когда на локальном диске свободного места меньше этой доли его размера, а также присылает одно уведомление в день, пока Prune работает в трее. Диски, на которых свободно более 100 ГБ, никогда не отмечаются."
+        }
       }
     }
   },
@@ -715,6 +955,14 @@ export default {
         freed: (a, b) => `Prune od ${b} uvoľnil ${a}.`,
         freedNoDate: (a) => `Prune uvoľnil ${a}.`,
         note: "Súbory presunuté do karantény sa započítajú, až keď karanténu vyprázdnite."
+      },
+      lowDisk: {
+        banner: (a, b, c) => `Na disku ${a} dochádza miesto: voľných ${b} (${c} %).`,
+        openDiskMap: "Otvoriť Mapu disku",
+        setting: {
+          title: "Upozornenie na nedostatok miesta na disku",
+          description: "Upozorní na Prehľade, keď má lokálny disk menej voľného miesta, než je tento podiel jeho veľkosti, a jedným oznámením denne, kým je Prune v oznamovacej oblasti. Disky s viac než 100 GB voľného miesta sa nikdy neoznačia."
+        }
       }
     }
   },
@@ -738,6 +986,14 @@ export default {
         freed: (a, b) => `Prune ka liruar ${a} që nga ${b}.`,
         freedNoDate: (a) => `Prune ka liruar ${a}.`,
         note: "Skedarët e zhvendosur në Karantinë llogariten sapo ta zbrazni."
+      },
+      lowDisk: {
+        banner: (a, b, c) => `Disku ${a} po mbetet pa hapësirë: ${b} e lirë (${c}%).`,
+        openDiskMap: "Hap Hartën e Diskut",
+        setting: {
+          title: "Paralajmërim për hapësirë të ulët në disk",
+          description: "Paralajmëron te Paneli kur një disk lokal ka më pak hapësirë të lirë se kjo pjesë e madhësisë së tij, dhe me një njoftim në ditë ndërsa Prune është në tabaka. Disqet me më shumë se 100 GB të lira nuk shënohen kurrë."
+        }
       }
     }
   },
@@ -761,6 +1017,14 @@ export default {
         freed: (a, b) => `Prune је ослободио ${a} од ${b}.`,
         freedNoDate: (a) => `Prune је ослободио ${a}.`,
         note: "Датотеке премештене у карантин рачунају се када испразните карантин."
+      },
+      lowDisk: {
+        banner: (a, b, c) => `На диску ${a} понестаје простора: слободно ${b} (${c}%).`,
+        openDiskMap: "Отвори Мапу диска",
+        setting: {
+          title: "Упозорење о малој количини простора на диску",
+          description: "Упозорава на контролној табли када локални диск има мање слободног простора од овог дела своје величине, и једним обавештењем дневно док је Prune у системској палети. Дискови са више од 100 GB слободног простора никада се не означавају."
+        }
       }
     }
   },
@@ -784,6 +1048,14 @@ export default {
         freed: (a, b) => `Prune har frigjort ${a} sedan ${b}.`,
         freedNoDate: (a) => `Prune har frigjort ${a}.`,
         note: "Filer som flyttats till karantän räknas först när du tömmer den."
+      },
+      lowDisk: {
+        banner: (a, b, c) => `Enhet ${a} börjar ta slut på utrymme: ${b} ledigt (${c} %).`,
+        openDiskMap: "Öppna Diskkarta",
+        setting: {
+          title: "Varning för lite diskutrymme",
+          description: "Varnar på Översikten när en lokal enhet har mindre ledigt utrymme än denna andel av sin storlek, och med en avisering per dag medan Prune ligger i systemfältet. Enheter med mer än 100 GB ledigt flaggas aldrig."
+        }
       }
     }
   },
@@ -807,6 +1079,14 @@ export default {
         freed: (a, b) => `Prune เพิ่มพื้นที่ว่างแล้ว ${a} ตั้งแต่ ${b}`,
         freedNoDate: (a) => `Prune เพิ่มพื้นที่ว่างแล้ว ${a}`,
         note: "ไฟล์ที่ย้ายไปยังกักกันจะนับเมื่อคุณล้างกักกัน"
+      },
+      lowDisk: {
+        banner: (a, b, c) => `ไดรฟ์ ${a} มีพื้นที่เหลือน้อย: ว่าง ${b} (${c}%)`,
+        openDiskMap: "เปิดแผนที่ดิสก์",
+        setting: {
+          title: "คำเตือนพื้นที่ดิสก์เหลือน้อย",
+          description: "เตือนในแดชบอร์ดเมื่อไดรฟ์ในเครื่องมีพื้นที่ว่างน้อยกว่าสัดส่วนนี้ของขนาดไดรฟ์ และแจ้งเตือนวันละหนึ่งครั้งขณะที่ Prune อยู่ในถาดระบบ ไดรฟ์ที่มีพื้นที่ว่างมากกว่า 100 GB จะไม่ถูกแจ้งเตือน"
+        }
       }
     }
   },
@@ -830,6 +1110,14 @@ export default {
         freed: (a, b) => `Prune ${b} tarihinden bu yana ${a} boşalttı.`,
         freedNoDate: (a) => `Prune ${a} boşalttı.`,
         note: "Karantinaya taşınan dosyalar, Karantinayı boşalttığınızda sayılır."
+      },
+      lowDisk: {
+        banner: (a, b, c) => `${a} sürücüsünün alanı azalıyor: ${b} boş (${c}%).`,
+        openDiskMap: "Disk Haritası'nı aç",
+        setting: {
+          title: "Düşük disk alanı uyarısı",
+          description: "Yerel bir sürücünün boş alanı, boyutunun bu oranından azsa Panel'de uyarır; Prune sistem tepsisindeyken günde bir bildirim de gösterir. 100 GB'tan fazla boş alanı olan sürücüler asla işaretlenmez."
+        }
       }
     }
   },
@@ -853,6 +1141,14 @@ export default {
         freed: (a, b) => `Prune звільнив ${a} з ${b}.`,
         freedNoDate: (a) => `Prune звільнив ${a}.`,
         note: "Файли, переміщені в карантин, враховуються, коли ви очистите карантин."
+      },
+      lowDisk: {
+        banner: (a, b, c) => `На диску ${a} закінчується місце: вільно ${b} (${c} %).`,
+        openDiskMap: "Відкрити «Карта диска»",
+        setting: {
+          title: "Попередження про брак місця на диску",
+          description: "Попереджає на панелі, коли на локальному диску вільного місця менше за цю частку його розміру, а також надсилає одне сповіщення на день, поки Prune працює в треї. Диски, на яких вільно понад 100 ГБ, ніколи не позначаються."
+        }
       }
     }
   },
@@ -876,6 +1172,14 @@ export default {
         freed: (a, b) => `Prune đã giải phóng ${a} kể từ ${b}.`,
         freedNoDate: (a) => `Prune đã giải phóng ${a}.`,
         note: "Các tệp được chuyển vào khu cách ly chỉ được tính khi bạn làm trống khu cách ly."
+      },
+      lowDisk: {
+        banner: (a, b, c) => `Ổ đĩa ${a} sắp hết dung lượng: còn trống ${b} (${c}%).`,
+        openDiskMap: "Mở Bản đồ ổ đĩa",
+        setting: {
+          title: "Cảnh báo dung lượng đĩa thấp",
+          description: "Cảnh báo trên Tổng quan khi ổ đĩa cục bộ có dung lượng trống thấp hơn tỷ lệ này so với kích thước của nó, và gửi một thông báo mỗi ngày khi Prune nằm ở khay hệ thống. Ổ đĩa còn trống hơn 100 GB sẽ không bao giờ bị đánh dấu."
+        }
       }
     }
   },
@@ -899,6 +1203,14 @@ export default {
         freed: (a, b) => `自 ${b} 起，Prune 已释放 ${a}。`,
         freedNoDate: (a) => `Prune 已释放 ${a}。`,
         note: "移至隔离区的文件在清空隔离区后才会计入。"
+      },
+      lowDisk: {
+        banner: (a, b, c) => `驱动器 ${a} 的空间不足：剩余 ${b}（${c}%）。`,
+        openDiskMap: "打开磁盘地图",
+        setting: {
+          title: "磁盘空间不足警告",
+          description: "当本地驱动器的可用空间低于其容量的这一比例时，在仪表盘上发出警告；Prune 位于托盘时，每天另有一次通知。可用空间超过 100 GB 的驱动器不会被标记。"
+        }
       }
     }
   },
@@ -922,6 +1234,14 @@ export default {
         freed: (a, b) => `自 ${b} 起，Prune 已釋放 ${a}。`,
         freedNoDate: (a) => `Prune 已釋放 ${a}。`,
         note: "移至隔離區的檔案在清空隔離區後才會計入。"
+      },
+      lowDisk: {
+        banner: (a, b, c) => `磁碟機 ${a} 的空間不足：剩餘 ${b}（${c}%）。`,
+        openDiskMap: "開啟磁碟地圖",
+        setting: {
+          title: "磁碟空間不足警告",
+          description: "當本機磁碟機的可用空間低於其容量的這個比例時，在儀表板上發出警告；Prune 位於系統匣時，每天另有一次通知。可用空間超過 100 GB 的磁碟機不會被標記。"
+        }
       }
     }
   }

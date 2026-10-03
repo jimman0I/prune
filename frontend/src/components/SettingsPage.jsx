@@ -330,6 +330,31 @@ function SettingsPage({ onReportBug = null }) {
                 </div>
               </div>
 
+              {/* How little room a drive may have left before Prune says so: on
+                  the Dashboard, and with a notification while it sits in the
+                  tray. Off, 5, 10 or 15 percent; 10 until changed. */}
+              <div className="glass-panel p-6">
+                <div className="flex items-center justify-between gap-4">
+                  <div className="min-w-0">
+                    <div className="text-[14px] font-medium text-[color:var(--text-primary)]">{t('dashboardQolV3.lowDisk.setting.title')}</div>
+                    <p className="text-[12.5px] text-[color:var(--text-secondary)] mt-1 leading-relaxed max-w-[62ch]">
+                      {t('dashboardQolV3.lowDisk.setting.description')}
+                    </p>
+                  </div>
+                  <select
+                    value={[0, 5, 10, 15].includes(settings.lowDiskWarning) ? settings.lowDiskWarning : 10}
+                    onChange={(e) => save({ lowDiskWarning: Number(e.target.value) })}
+                    aria-label={t('dashboardQolV3.lowDisk.setting.title')}
+                    className="bg-[color:var(--bg-panel)] border border-[color:var(--border-subtle)] rounded-lg px-3 py-2 text-[12.5px] text-[color:var(--text-primary)] focus:border-[color:var(--accent-primary)] shrink-0"
+                  >
+                    <option value={0}>{t('settings.automation.off')}</option>
+                    {[5, 10, 15].map((percent) => (
+                      <option key={percent} value={percent}>{`${percent}%`}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
               <div className="glass-panel p-6">
                 <div className="flex items-center justify-between gap-4">
                   <div className="min-w-0">

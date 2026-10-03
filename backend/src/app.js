@@ -42,6 +42,7 @@ import hunterRoutes from './routes/hunter.js';
 import runAsAdminRoutes from './routes/runAsAdmin.js';
 import backupsRoutes from './routes/backups.js';
 import statsRoutes from './routes/stats.js';
+import lowDiskRoutes from './routes/lowDisk.js';
 
 export function createApp({ port } = {}) {
   const app = express();
@@ -107,6 +108,7 @@ export function createApp({ port } = {}) {
   app.use('/api/hunter', hunterRoutes);
   app.use('/api/backups', backupsRoutes);
   app.use('/api/stats', statsRoutes);
+  app.use('/api/low-disk', lowDiskRoutes);
 
   /** Anything still unanswered is a path this app does not serve. After
    * every route, so it can only see what none of them matched. */

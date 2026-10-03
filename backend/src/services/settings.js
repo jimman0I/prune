@@ -5,6 +5,7 @@ import { matchLanguage } from './languages.js';
 import { normalizePasses } from '../lib/shredFile.js';
 import { normalizeCustomLocations } from '../lib/customLocations.js';
 import { normalizeScanMode } from './leftoverModes.js';
+import { normalizeLowDiskPercent } from '../lib/lowDiskChoices.js';
 
 /** Path to the settings file. A function, not a constant -- read at call
  * time, not import time -- so tests can point it at a scratch temp file
@@ -99,6 +100,12 @@ const DEFAULT_SETTINGS = {
   customLocations: [],
   theme: 'dark',
   minimizeToTray: false,
+  /* The low-disk warning: how small a share of a drive may be free before the
+     Dashboard says so (and, while Prune sits in the tray, a notification does,
+     at most once a day per drive). 0 is Off; 5, 10 and 15 are percent. On at 10
+     by default -- it only ever talks, never deletes -- and anything else in the
+     file reads as the default, never as Off. See services/lowDisk.js. */
+  lowDiskWarning: 10,
   /* Pauses the background animation, flattens the glass panels to solid
      ones, and collapses transitions to near-instant -- the same visual
      treatment `prefers-reduced-transparency`/`prefers-reduced-motion`
@@ -266,6 +273,7 @@ export function normalizeRemoval(value) {
 function normalizedChoices(settings) {
   return {
     deepCleanRemoval: normalizeRemoval(settings.deepCleanRemoval),
+    lowDiskWarning: normalizeLowDiskPercent(settings.lowDiskWarning),
     overwriteBeforeDelete: settings.overwriteBeforeDelete === true,
     overwritePasses: normalizePasses(settings.overwritePasses),
     wipeDrive: normalizeWipeDrive(settings.wipeDrive),
