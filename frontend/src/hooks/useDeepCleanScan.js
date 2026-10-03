@@ -9,6 +9,7 @@ import {
   rulesSignature, joinFingerprint, readFreshScanCache, saveScanCache
 } from '../lib/deepCleanScanCache.js';
 import { settleScanAfterClean } from '../lib/deepCleanAfterClean.js';
+import { announceScanChange, onScanChange } from '../lib/deepCleanSync.js';
 
 /** What a fresh measurement of a rule overwrites on the row it lands on.
  * A row restored from the remembered scan, or settled after a clean, can carry
@@ -39,9 +40,11 @@ const FRESH = { fromCache: undefined, rescanNeeded: undefined, incomplete: undef
  * `settings` is read only for the fingerprint that says whether a remembered
  * scan still applies; until it has loaded, nothing is restored or saved.
  * `autoStart` is the caller asking for a scan whenever there is no remembered
- * one to open on -- the first look at the screen, as before.
+ * one to open on -- the first look at the screen, as before. `enabled: false`
+ * holds back even the (cheap) rule listing, for a caller -- the Dashboard's
+ * Clean recommended -- that waits until the app is idle to ask for it.
  */
-export function useDeepCleanScan(nameOf, messages, { settings = null, appVersion = APP_VERSION, autoStart = false } = {}) {
+export function useDeepCleanScan(nameOf, messages, { settings = null, appVersion = APP_VERSION, autoStart = false, enabled = true } = {}) {
   const queryClient = useQueryClient();
   // The log is built inside a long-lived stream callback; a ref keeps it
   // on the language current when each line lands rather than the one the
@@ -58,7 +61,14 @@ export function useDeepCleanScan(nameOf, messages, { settings = null, appVersion
   // Deep Clean used to open on an empty panel and stay there until
   // someone found Preview and waited half a minute, which is how it came
   // to be reported as not working.
-  const rulesQuery = useQuery({ queryKey: keys.deepCleanRules, queryFn: fetchDeepCleanRules });
+  // Called inside an arrow so the import is only touched when the query runs.
+  const rulesQuery = useQuery({ queryKey: keys.deepCleanRules, queryFn: () => fetchDeepCleanRules(), enabled });
+  const rulesDataRef = useRef(null);
+  rulesDataRef.current = rulesQuery.data ?? null;
+  // Who is speaking when this instance announces a change to the remembered
+  // scan (see lib/deepCleanSync.js).
+  const sourceRef = useRef(null);
+  if (sourceRef.current === null) sourceRef.current = Symbol('deepCleanScan');
 
   // What the scan has measured. Kept beside the listed tree rather than
   // overwriting it: a rule's size merges in by id, so the rules stay put
@@ -154,6 +164,7 @@ export function useDeepCleanScan(nameOf, messages, { settings = null, appVersion
     setScannedTree(next);
     if (fingerprintRef.current && lastScanAtRef.current) {
       saveScanCache({ tree: next, fingerprint: fingerprintRef.current, savedAt: lastScanAtRef.current });
+      announceScanChange(sourceRef.current);
     }
   }, []);
 
@@ -215,7 +226,9 @@ export function useDeepCleanScan(nameOf, messages, { settings = null, appVersion
       // measured looking as though they had been.
       if (!failed && received > 0 && (expected === null || received >= expected)) {
         const savedAt = Date.now();
-        if (fingerprintRef.current) saveScanCache({ tree: built, fingerprint: fingerprintRef.current, savedAt });
+        if (fingerprintRef.current && saveScanCache({ tree: built, fingerprint: fingerprintRef.current, savedAt })) {
+          announceScanChange(sourceRef.current);
+        }
         setLastScanAt(savedAt);
         setScanEpoch((n) => n + 1);
       }
@@ -244,6 +257,22 @@ export function useDeepCleanScan(nameOf, messages, { settings = null, appVersion
   }, [queryClient]);
 
   const scanning = armed && scanQuery.isFetching;
+  const scanningRef = useRef(false);
+  scanningRef.current = scanning;
+
+  // Another part of the app (the Dashboard's Clean recommended, or Deep Clean
+  // itself) changed the remembered scan: read it again so the rows here are not
+  // left showing sizes it has since cleaned. Never while this one is scanning --
+  // a scan in flight is about to say something newer.
+  useEffect(() => onScanChange(sourceRef.current, () => {
+    if (scanningRef.current || !fingerprintRef.current || !rulesDataRef.current) return;
+    const fresh = readFreshScanCache({ fingerprint: fingerprintRef.current, listedTree: rulesDataRef.current });
+    if (!fresh) return;
+    scannedTreeRef.current = fresh.tree;
+    setScannedTree(fresh.tree);
+    setHasScanned(true);
+    setLastScanAt(fresh.savedAt);
+  }), []);
 
   // Opens on the last complete scan, once, when there is one that still
   // applies. It waits for the settings (they are part of the fingerprint), so
