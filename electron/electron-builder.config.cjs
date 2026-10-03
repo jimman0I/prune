@@ -64,9 +64,13 @@ module.exports = {
   //
   // startMinimized.cjs is the eleventh: main.cjs requires it for the
   // --start-minimized decisions, and installerLanguages.test.cjs catches its absence.
+  //
+  // explorerRequests.cjs is the twelfth: main.cjs requires it to read the
+  // right-click menu's --shred / --find-program requests, and explorer.test.cjs
+  // catches its absence.
   files: [
     'main.cjs', 'preload.cjs', 'updater.cjs', 'windowState.cjs', 'zoom.cjs', 'relaunchAdmin.cjs', 'pathPicker.cjs',
-    'hunterWidget.cjs', 'hunterWidgetPreload.cjs', 'hunterWidget.html', 'startMinimized.cjs'
+    'hunterWidget.cjs', 'hunterWidgetPreload.cjs', 'hunterWidget.html', 'startMinimized.cjs', 'explorerRequests.cjs'
   ],
   extraResources: [
     // NOTE the source: this copies from ../backend/src DIRECTLY, not from

@@ -14,6 +14,9 @@ const fs = require('node:fs');
 const {
   TRAY_READY_EVENT, parseStartMinimized, decideStartMode, readMinimizeToTray, settleHiddenStart, revealSteps, shouldRevealForSecondInstance
 } = require('./startMinimized.cjs');
+const {
+  OPEN_REQUEST_CHANNEL, OPEN_REQUEST_READY_CHANNEL, parseOpenRequest, createOpenRequestRelay
+} = require('./explorerRequests.cjs');
 
 const BACKEND_PORT = 3101;
 
@@ -27,6 +30,19 @@ let mainWindow = null;
  * settling into the tray, so that launch is never swallowed. */
 let trayReady = false;
 let revealRequested = false;
+
+/* Requests from File Explorer's right-click menu (explorerRequests.cjs):
+ * `--shred <path>` and `--find-program <path>`, from this process's own command
+ * line or from a second launch. They are shown to the page as a one-way event;
+ * until the page says it is listening they wait here. Nothing is done with the
+ * path in this process -- the page opens a dialog, and the dialog asks. */
+const openRequests = createOpenRequestRelay({
+  send: (request) => {
+    const win = mainWindow;
+    if (!win || win.isDestroyed()) throw new Error('There is no window to show it in.');
+    win.webContents.send(OPEN_REQUEST_CHANNEL, request);
+  }
+});
 
 /** Brings the window back: restored if minimised, shown if hidden, focused. */
 function revealMainWindow() {
@@ -214,7 +230,9 @@ async function createWindow() {
    * hidden, never shown and then hidden, so nothing flashes on screen. Where it
    * ends up (tray or taskbar) is decided in settleStart below. */
   const startMode = decideStartMode({
-    startMinimized: parseStartMinimized(process.argv),
+    // A right-click request is for a window the person is looking at, so it
+    // never starts hidden.
+    startMinimized: parseStartMinimized(process.argv) && !parseOpenRequest(process.argv).request,
     minimizeToTray: readMinimizeToTray(settingsPath(), (file) => fs.readFileSync(file, 'utf8'))
   });
   const win = new BrowserWindow({
@@ -281,8 +299,12 @@ async function createWindow() {
   });
 
   mainWindow = win;
+  // A page that is loading (or reloading) is not listening yet; it says so when
+  // it is (see registerOpenRequestHandlers).
+  win.webContents.on('did-start-loading', () => openRequests.setReady(false));
   win.once('closed', () => {
     if (mainWindow === win) mainWindow = null;
+    openRequests.setReady(false);
     // A crosshair left on screen would keep the app alive with no window.
     hunter.dispose();
   });
@@ -433,6 +455,17 @@ function registerAdminHandlers() {
   ipcMain.handle('prune:admin:relaunch', (event) => { fromPrune(event); return admin.relaunch(); });
 }
 
+/* The page tells the main process when it is listening for right-click
+ * requests (preload.cjs `onOpenRequest`): one boolean, from the window itself.
+ * That is the only thing the page can say about them; what a request does is
+ * decided in the page, behind the dialogs' own confirmations. */
+function registerOpenRequestHandlers() {
+  ipcMain.on(OPEN_REQUEST_READY_CHANNEL, (event, ready) => {
+    if (!mainWindow || event.sender !== mainWindow.webContents) return;
+    openRequests.setReady(ready === true);
+  });
+}
+
 /* The update button's three requests (see preload.cjs and updater.cjs).
  *
  * Registered once, not per window, because ipcMain.handle refuses a
@@ -526,9 +559,19 @@ app.whenReady().then(async () => {
   backendReady.catch(() => {});
   if (!(await gotLock)) { app.quit(); return; }
   app.on('second-instance', (_event, argv) => {
-    if (shouldRevealForSecondInstance(argv)) revealMainWindow();
+    // A right-click entry launched Prune while it was running: show the window
+    // and pass the request on. A request that fails the strict reading is
+    // dropped; the window still comes forward.
+    const { request } = parseOpenRequest(argv);
+    if (request) openRequests.handle(request);
+    if (request || shouldRevealForSecondInstance(argv)) revealMainWindow();
   });
+  // Prune was started by a right-click entry: the same request, held until the
+  // page is up.
+  const firstRequest = parseOpenRequest(process.argv).request;
+  if (firstRequest) openRequests.handle(firstRequest);
   registerUpdateHandlers();
+  registerOpenRequestHandlers();
   registerAdminHandlers();
   registerPickerHandler();
   registerHunterHandlers();

@@ -705,6 +705,19 @@
     ; not there is not an error.
     DeleteRegValue HKCU "Software\Microsoft\Windows\CurrentVersion\Run" "Prune"
     DeleteRegValue HKCU "Software\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\Run" "Prune"
+    ; And the right-click menu entries from "Add Prune to the right-click menu":
+    ; four shell verbs in the per-user class registry, each named for Prune
+    ; (backend/src/services/explorerMenu.js lists them; electron/explorer.test.cjs
+    ; checks the two agree). Only those four keys, then the `shell` key above each
+    ; if (and only if) nothing else is in it. A key that is not there is not an error.
+    DeleteRegKey HKCU "Software\Classes\*\shell\PruneShred"
+    DeleteRegKey HKCU "Software\Classes\Directory\shell\PruneShred"
+    DeleteRegKey HKCU "Software\Classes\exefile\shell\PruneFindProgram"
+    DeleteRegKey HKCU "Software\Classes\lnkfile\shell\PruneFindProgram"
+    DeleteRegKey /ifempty HKCU "Software\Classes\*\shell"
+    DeleteRegKey /ifempty HKCU "Software\Classes\Directory\shell"
+    DeleteRegKey /ifempty HKCU "Software\Classes\exefile\shell"
+    DeleteRegKey /ifempty HKCU "Software\Classes\lnkfile\shell"
   ${endIf}
 !macroend
 
