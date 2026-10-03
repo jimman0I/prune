@@ -1,4 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
+import { keys } from '../lib/queryClient.js';
 import { useDeepCleanScan } from './useDeepCleanScan.js';
 import { useDeepCleanExecute } from './useDeepCleanExecute.js';
 import { useSettings } from './useSystemQueries.js';
@@ -31,6 +33,7 @@ const nameOf = (item) => item?.name ?? item?.id ?? '';
 export function useCleanRecommended({ enabled = true } = {}) {
   const { t } = useLanguage();
   const toasts = useToasts();
+  const queryClient = useQueryClient();
   const { settings } = useSettings();
   const scan = useDeepCleanScan(nameOf, undefined, { settings, enabled });
   const exec = useDeepCleanExecute(nameOf, undefined);
@@ -114,6 +117,8 @@ export function useCleanRecommended({ enabled = true } = {}) {
       // The rows settle from what the clean reported, and the remembered scan
       // is updated and announced -- exactly what Deep Clean does after its own.
       scan.applyCleanResults(outcome.results);
+      // What a Delete now freed is already in the backend's lifetime total.
+      queryClient.invalidateQueries({ queryKey: keys.stats });
       const text = cleanResultText(outcome, t);
       if (outcome.aborted) {
         toasts.warn(`${t('deepClean.cleanupStopped')} ${text}`);
@@ -127,7 +132,7 @@ export function useCleanRecommended({ enabled = true } = {}) {
     } finally {
       setPhase((current) => (current === 'cleaning' ? 'result' : current));
     }
-  }, [phase, confirmPlan, exec, scan, t, toasts]);
+  }, [phase, confirmPlan, exec, scan, t, toasts, queryClient]);
 
   return {
     phase,

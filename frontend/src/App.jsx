@@ -208,7 +208,7 @@ export default function App() {
       <NavRail screen={screen} onNavigate={setScreen} footer={<UpdateButton />} onReportBug={openBugReport} />
       <div ref={stageRef} className="flex-1 overflow-y-auto min-h-0">
         <Screen active={screen === 'dashboard'} visited={visited.has('dashboard')}>
-          <Dashboard programs={programs} programsMeasured={sizesSettled} onNavigate={setScreen} onOpenHistory={openHistory} />
+          <Dashboard programs={programs} programsMeasured={sizesSettled} onNavigate={setScreen} onOpenHistory={openHistory} active={screen === 'dashboard'} />
         </Screen>
         <Screen active={screen === 'diskmap'} visited={visited.has('diskmap')}>
           <Suspense fallback={null}><DiskMap /></Suspense>

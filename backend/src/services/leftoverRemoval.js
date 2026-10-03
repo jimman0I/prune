@@ -7,6 +7,7 @@ import { protectionReason } from './pathGuard.js';
 import { shredPaths } from '../lib/shredFile.js';
 import { removeScheduledTasks } from './scheduledTaskRemoval.js';
 import { osComponentRefusal, buildFootprints, footprintRefusal } from './leftoverProtection.js';
+import { recordFreed } from './stats.js';
 
 /** Where an uninstall's leftover files go.
  *
@@ -224,6 +225,10 @@ async function removeFilesAndKeys({
     const result = await removePermanently(candidates, { overwritePasses });
     removed.push(...result.removed);
     failedFiles.push(...result.failed);
+    // Gone for good, so the space is back: counted here rather than in
+    // removePermanently, which Deep Clean's Delete now shares and reports
+    // through its own result.
+    await recordFreed(result.removed.reduce((sum, f) => sum + (Number(f.sizeBytes) || 0), 0));
   }
 
   let registry = { registryKeys: [], failedRegistryKeys: [], batchDir: null };

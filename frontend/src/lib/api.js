@@ -126,6 +126,22 @@ export async function fetchAutomation() {
   return data;
 }
 
+/** The lifetime total behind "Prune has freed X since <date>": { freedBytes,
+ * since }, where `since` is when the first byte was counted (ms) or null. Kept
+ * by the backend, which counts only space that is really back -- never a move
+ * into Quarantine. A reply that is not numbers reads as nothing counted. */
+export async function fetchStats() {
+  const res = await fetch(`${API_URL}/stats`);
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
+  const freed = Number(data?.freedBytes);
+  const since = Number(data?.since);
+  return {
+    freedBytes: Number.isFinite(freed) && freed > 0 ? freed : 0,
+    since: Number.isFinite(since) && since > 0 ? since : null
+  };
+}
+
 /** Catches up a run that is due. Deliberately not "run now": a button
  * that ignored the schedule would be a second, hidden way to clean, and
  * the Deep Clean screen already exists for that. */

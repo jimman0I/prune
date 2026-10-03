@@ -1,4 +1,6 @@
 import { defineConfig } from 'vitest/config';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 
 export default defineConfig({
   test: {
@@ -18,6 +20,10 @@ export default defineConfig({
     // specifically testing real SQLite behavior via the real bundled
     // CLI, and a slower CI runner's process-spawn overhead is a real,
     // honest cost of that, not a hung test to paper over.
-    testTimeout: 30000
+    testTimeout: 30000,
+    // The lifetime "freed" total (services/stats.js) is bumped by every real
+    // removal a test performs. Pointed at a scratch file so none of them counts
+    // towards the total on the machine running the suite.
+    env: { UNREVO_STATS_PATH: join(tmpdir(), `prune-vitest-stats-${process.pid}.json`) }
   }
 });

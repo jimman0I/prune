@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { getSettings, cleanGuardsFrom } from '../services/settings.js';
 import { previewShred, shredRequested, validate } from '../services/shredTool.js';
 import { normalizePasses } from '../lib/shredFile.js';
+import { recordFreed } from '../services/stats.js';
 
 /** The Shred tool (BleachBit's "Shred files / folders").
  *
@@ -71,6 +72,9 @@ router.post('/', async (req, res) => {
       onProgress: (p) => { if (!controller.signal.aborted) sendEvent(res, 'progress', p); },
       onBytes: (p) => { if (!controller.signal.aborted) sendEvent(res, 'progress', p); }
     });
+    // Counted whether or not the client is still listening, and for a stopped
+    // shred too: the files it finished are gone.
+    await recordFreed(result.bytes);
     if (!controller.signal.aborted) {
       sendEvent(res, 'done', {
         passes,

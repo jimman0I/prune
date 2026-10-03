@@ -2,6 +2,7 @@ import { freemem, totalmem } from 'node:os';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { getSystemDriveSpace } from '../services/diskSpace.js';
+import { recordFreed } from '../services/stats.js';
 
 const here = dirname(fileURLToPath(import.meta.url));
 
@@ -37,6 +38,20 @@ async function buildTooltip() {
     // the fallback text rather than propagate.
   }
   return `Prune - System Optimizer\nRAM: ${formatGB(ramFree)} free / ${formatGB(ramTotal)}\n${diskLine}`;
+}
+
+/** The tray's "Quick Clean (Temp Files)": runs the Deep Clean rule rather than
+ * a category of its own. The Smart Cleanup screen this used to share code with
+ * is gone -- BleachBit's model, one list of everything with a checkbox each,
+ * replaced it -- and there is no reason for the tray to keep a second
+ * definition of "temp files" alive behind it. What it deletes counts towards
+ * the lifetime total like any other clean. */
+export async function quickCleanTemp() {
+  const { loadCleanerRules, executeRule } = await import('./cleanerRules.js');
+  const rule = loadCleanerRules().find((r) => r.id === 'user_temp');
+  if (!rule) return;
+  const result = await executeRule(rule);
+  await recordFreed(result?.freedBytes);
 }
 
 let initialized = false;
@@ -94,16 +109,7 @@ export async function initTray() {
     { label: 'Open Prune', click: showMainWindow },
     {
       label: 'Quick Clean (Temp Files)',
-      click: async () => {
-        // Runs the Deep Clean rule rather than a category of its own. The
-        // Smart Cleanup screen this used to share code with is gone --
-        // BleachBit's model, one list of everything with a checkbox each,
-        // replaced it -- and there is no reason for the tray to keep a
-        // second definition of "temp files" alive behind it.
-        const { loadCleanerRules, executeRule } = await import('./cleanerRules.js');
-        const rule = loadCleanerRules().find((r) => r.id === 'user_temp');
-        if (rule) await executeRule(rule);
-      }
+      click: () => { quickCleanTemp().catch(() => { /* a tray click has nowhere to report to */ }); }
     },
     { label: 'Quit', click: () => app.quit() }
   ]);

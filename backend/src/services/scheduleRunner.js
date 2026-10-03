@@ -1,6 +1,7 @@
 import { getSettings, updateSettings, cleanGuardsFrom } from './settings.js';
 import { scanAllRules, executeRules } from '../lib/cleanerRules.js';
 import { dueRun } from '../lib/schedule.js';
+import { recordFreed } from './stats.js';
 
 /** Running the scheduled task, when the app happens to be running.
  *
@@ -44,6 +45,7 @@ async function runTask(task, guards) {
     if (ids.length === 0) return { ok: true, task, summary: 'Nothing to clean.', freedBytes: 0 };
 
     const result = await executeRules(ids, guards);
+    await recordFreed(result.freedBytes);
     return {
       ok: true,
       task,
