@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import * as childProcess from 'node:child_process';
+import * as fs from 'node:fs';
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 
 vi.mock('node:child_process', async (importOriginal) => {
@@ -16,9 +17,11 @@ function shimTextFrom(command) {
   return match ? readFileSync(match[1], 'utf8') : '';
 }
 
-/** Pulls the quoted arguments back out of the shim's node command line. */
+/** Pulls the quoted arguments back out of the shim's node command line (the
+ * other lines, such as the crash fallback, quote things of their own). */
 function quotedArgs(shim) {
-  return [...shim.matchAll(/"([^"]*)"/g)].map((m) => m[1]);
+  const line = shim.split(/\r?\n/).find((l) => l.includes('--max-old-space-size')) ?? '';
+  return [...line.matchAll(/"([^"]*)"/g)].map((m) => m[1]);
 }
 
 describe('runElevatedNodeJson', () => {
@@ -43,6 +46,33 @@ describe('runElevatedNodeJson', () => {
     expect(seenJob).toEqual({ drives: ['C', 'D'], maxDepth: 4 });
     expect(args[1]).toBe('worker.js');
     expect(args).toHaveLength(4);
+  });
+
+  // Out of memory is a hard stop, not an exception: the helper dies without a
+  // word and leaves no file, which would otherwise read as a declined prompt.
+  it('has the shim leave a failure line if the helper dies without writing, so that is not mistaken for a declined prompt', async () => {
+    let shim;
+    childProcess.execFile.mockImplementation((file, argv, options, callback) => {
+      const done = typeof options === 'function' ? options : callback;
+      shim = shimTextFrom(argv[argv.length - 1]);
+      done(null, '', '');
+    });
+    // The shim never runs here (no real elevation), so no file: still "cancelled".
+    expect(await runElevatedNodeJson('worker.js', [], {})).toEqual({ ok: false, cancelled: true });
+    expect(shim).toMatch(/--max-old-space-size=\d+/);
+    expect(shim).toMatch(/if not exist ".*out\.json" echo .*__error.*crashed/);
+  });
+
+  it('reads a helper that wrote lines as separate, unparsed buffers', async () => {
+    childProcess.execFile.mockImplementation((file, argv, options, callback) => {
+      const done = typeof options === 'function' ? options : callback;
+      const args = quotedArgs(shimTextFrom(argv[argv.length - 1]));
+      writeFileSync(args[args.length - 1], '{"driveLetter":"C","hasTree":true}\n{"name":"C:"}\n', 'utf8');
+      done(null, '', '');
+    });
+    const result = await runElevatedNodeJson('worker.js', [], { lines: true });
+    expect(result.ok).toBe(true);
+    expect(result.lines.map((l) => l.toString())).toEqual(['{"driveLetter":"C","hasTree":true}', '{"name":"C:"}']);
   });
 
   it('removes the job and output files afterwards', async () => {
@@ -80,7 +110,7 @@ describe('runNodeJson (already elevated, no prompt)', () => {
     let job;
     mockRun(({ file, argv, options }) => {
       call = { file, argv, options };
-      job = JSON.parse(readFileSync(argv[1], 'utf8'));
+      job = JSON.parse(readFileSync(argv[2], 'utf8'));
       writeFileSync(argv[argv.length - 1], JSON.stringify({ drives: [{ driveLetter: 'C' }] }), 'utf8');
     });
 
@@ -88,7 +118,9 @@ describe('runNodeJson (already elevated, no prompt)', () => {
 
     expect(result).toEqual({ ok: true, data: { drives: [{ driveLetter: 'C' }] } });
     expect(call.file).toBe(process.execPath);
-    expect(call.argv[0]).toBe('worker.js');
+    // The helper gets a heap sized for a drive with millions of files.
+    expect(call.argv[0]).toMatch(/^--max-old-space-size=\d+$/);
+    expect(call.argv[1]).toBe('worker.js');
     expect(job).toEqual({ drives: ['C'] });
     expect(call.file).not.toMatch(/powershell/i);
     expect(call.argv.join(' ')).not.toMatch(/RunAs/);
@@ -103,6 +135,29 @@ describe('runNodeJson (already elevated, no prompt)', () => {
       done(Object.assign(new Error('exit 1'), { code: 1 }), '', '');
     });
     expect(await runNodeJson('worker.js', [], {})).toEqual({ ok: false, error: 'Access is denied' });
+  });
+
+  it('names a helper that ran out of memory, from what it printed as it died', async () => {
+    childProcess.execFile.mockImplementation((file, argv, options, callback) => {
+      const done = typeof options === 'function' ? options : callback;
+      done(Object.assign(new Error('Command failed'), { code: 134, stderr: 'FATAL ERROR: Reached heap limit Allocation failed - JavaScript heap out of memory' }), '', '');
+    });
+    const result = await runNodeJson('worker.js', [], {});
+    expect(result).toMatchObject({ ok: false, code: 'scan_too_large' });
+    expect(result.error).toMatch(/more files than Prune could hold/);
+  });
+
+  it('refuses an output file too big to read as one document, in words', async () => {
+    childProcess.execFile.mockImplementation((file, argv, options, callback) => {
+      const done = typeof options === 'function' ? options : callback;
+      // A sparse file: big on paper, nothing on disk.
+      const fd = fs.openSync(argv[argv.length - 1], 'w');
+      fs.ftruncateSync(fd, 450 * 1024 * 1024);
+      fs.closeSync(fd);
+      done(null, '', '');
+    });
+    const result = await runNodeJson('worker.js', [], {});
+    expect(result).toMatchObject({ ok: false, code: 'scan_too_large' });
   });
 
   it('reports a worker that crashed before writing anything as an error, not a cancel', async () => {

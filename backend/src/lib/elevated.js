@@ -1,8 +1,9 @@
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
-import { mkdtempSync, writeFileSync, readFileSync, rmSync, existsSync } from 'node:fs';
-import { tmpdir } from 'node:os';
+import { mkdtempSync, writeFileSync, readFileSync, rmSync, existsSync, statSync } from 'node:fs';
+import { tmpdir, totalmem } from 'node:os';
 import { join } from 'node:path';
+import { classifyScanError, SCAN_TOO_LARGE_MESSAGE } from './scanErrors.js';
 
 const execFileAsync = promisify(execFile);
 const DEFAULT_TIMEOUT_MS = 120_000;
@@ -129,7 +130,7 @@ ${script}
  *    trouble. A tiny .cmd shim sets the variable in the elevated process
  *    itself, where it definitely applies.
  */
-export async function runElevatedNodeJson(scriptPath, args = [], { timeoutMs = DEFAULT_TIMEOUT_MS, input } = {}) {
+export async function runElevatedNodeJson(scriptPath, args = [], { timeoutMs = DEFAULT_TIMEOUT_MS, input, lines = false } = {}) {
   let workDir;
   try {
     workDir = mkdtempSync(join(tmpdir(), 'prune-elevated-node-'));
@@ -152,10 +153,17 @@ export async function runElevatedNodeJson(scriptPath, args = [], { timeoutMs = D
       jobArgs.push(jobPath);
     }
     const quotedArgs = [scriptPath, ...args, ...jobArgs, outPath].map((a) => `"${a}"`).join(' ');
+    // The helper may die without writing anything (running out of memory is a
+    // hard stop, not an exception). A file that is missing after the shim ran
+    // would be read as a declined prompt, so the shim writes a failure line
+    // itself in that case. A declined prompt never runs the shim at all, so
+    // that reading stays true where it belongs.
+    const crashed = JSON.stringify({ __error: 'The helper stopped before it finished.', __code: 'crashed' });
     const shim = [
       '@echo off',
       'set ELECTRON_RUN_AS_NODE=1',
-      `"${process.execPath}" ${quotedArgs}`,
+      `"${process.execPath}" ${nodeFlags().join(' ')} ${quotedArgs}`,
+      `if not exist "${outPath}" echo ${crashed}> "${outPath}"`,
       ''
     ].join('\r\n');
     writeFileSync(shimPath, shim, 'utf8');
@@ -174,18 +182,7 @@ export async function runElevatedNodeJson(scriptPath, args = [], { timeoutMs = D
 
     if (!existsSync(outPath)) return { ok: false, cancelled: true };
 
-    const raw = readFileSync(outPath, 'utf8').trim();
-    if (!raw) return { ok: false, error: 'The elevated helper returned nothing.' };
-
-    let parsed;
-    try {
-      parsed = JSON.parse(raw);
-    } catch (err) {
-      return { ok: false, error: `The elevated helper returned non-JSON output: ${err.message}` };
-    }
-    if (parsed && parsed.__error) return { ok: false, error: parsed.__error };
-
-    return { ok: true, data: parsed };
+    return readOutput(outPath, { lines, who: 'The elevated helper' });
   } finally {
     try { rmSync(workDir, { recursive: true, force: true }); } catch { /* best-effort */ }
   }
@@ -200,7 +197,7 @@ export async function runElevatedNodeJson(scriptPath, args = [], { timeoutMs = D
  * so is the result shape, minus `cancelled` -- there is no dialog to
  * decline here, so a run that produced nothing is an error, never a
  * "no". */
-export async function runNodeJson(scriptPath, args = [], { timeoutMs = DEFAULT_TIMEOUT_MS, input } = {}) {
+export async function runNodeJson(scriptPath, args = [], { timeoutMs = DEFAULT_TIMEOUT_MS, input, lines = false } = {}) {
   let workDir;
   try {
     workDir = mkdtempSync(join(tmpdir(), 'prune-node-'));
@@ -220,10 +217,11 @@ export async function runNodeJson(scriptPath, args = [], { timeoutMs = DEFAULT_T
 
     let failure = null;
     try {
-      await execFileAsync(process.execPath, [scriptPath, ...args, ...jobArgs, outPath], {
+      await execFileAsync(process.execPath, [...nodeFlags(), scriptPath, ...args, ...jobArgs, outPath], {
         timeout: timeoutMs,
         windowsHide: true,
-        maxBuffer: 1024 * 1024,
+        // stderr is where a process that ran out of memory says so.
+        maxBuffer: 4 * 1024 * 1024,
         // In a packaged app process.execPath is Prune's own executable,
         // which only acts as a plain Node interpreter with this set.
         env: { ...process.env, ELECTRON_RUN_AS_NODE: '1' }
@@ -234,28 +232,90 @@ export async function runNodeJson(scriptPath, args = [], { timeoutMs = DEFAULT_T
 
     // The worker writes its own error to the output file before exiting
     // non-zero, and that message is worth more than "Command failed".
-    if (existsSync(outPath)) {
-      const raw = readFileSync(outPath, 'utf8').trim();
-      if (raw) {
-        let parsed;
-        try {
-          parsed = JSON.parse(raw);
-        } catch (err) {
-          return { ok: false, error: `The helper returned non-JSON output: ${err.message}` };
-        }
-        if (parsed && parsed.__error) return { ok: false, error: parsed.__error };
-        if (!failure) return { ok: true, data: parsed };
-      }
+    if (existsSync(outPath) && statSync(outPath).size > 0) {
+      const read = readOutput(outPath, { lines, who: 'The helper' });
+      if (!read.ok || !failure) return read;
     }
 
     if (failure) {
       const detail = `${failure.stderr || ''}`.trim();
+      // A heap that ran out is a fatal stop with no output file; its stderr is
+      // the only place that says so.
+      const code = classifyScanError(detail) ?? classifyScanError(failure.message || '');
+      if (code) return { ok: false, error: SCAN_TOO_LARGE_MESSAGE, code };
       return { ok: false, error: `${`${failure.message || ''}`.trim() || 'The helper failed to run.'}${detail ? ` — ${detail}` : ''}` };
     }
     return { ok: false, error: 'The helper returned nothing.' };
   } finally {
     try { rmSync(workDir, { recursive: true, force: true }); } catch { /* best-effort */ }
   }
+}
+
+/** The most a helper's output file may be before it is refused unread. The
+ * scan keeps its result far below this (files are folded, lib/foldFiles.js);
+ * this is the guard for the day something does not. The one-document form is
+ * bound by what a string can hold; the line form is not read as a string. */
+const MAX_DOCUMENT_BYTES = 400 * 1024 * 1024;
+const MAX_LINES_BYTES = 1500 * 1024 * 1024;
+
+/** Reads what a helper wrote: one JSON document, or with `lines` an array of
+ * Buffers, one per line, left unparsed (a line can be a whole drive's tree and
+ * the caller may only need to pass it on). A failure line ({"__error"...}) ends
+ * the read as a failure. */
+export function readOutput(outPath, { lines, who }) {
+  const size = statSync(outPath).size;
+  if (size > (lines ? MAX_LINES_BYTES : MAX_DOCUMENT_BYTES)) {
+    return { ok: false, error: SCAN_TOO_LARGE_MESSAGE, code: classifyScanError('Invalid string length') };
+  }
+  let raw;
+  try {
+    raw = readFileSync(outPath);
+  } catch (err) {
+    const code = classifyScanError(err);
+    return code ? { ok: false, error: SCAN_TOO_LARGE_MESSAGE, code } : { ok: false, error: `${who} left output that could not be read: ${err.message}` };
+  }
+  if (raw.length === 0 || raw.toString('utf8', 0, Math.min(raw.length, 64)).trim() === '') return { ok: false, error: `${who} returned nothing.` };
+
+  if (lines) {
+    const out = [];
+    for (let start = 0; start < raw.length;) {
+      let end = raw.indexOf(0x0a, start);
+      if (end === -1) end = raw.length;
+      if (end > start) {
+        const line = raw.subarray(start, end);
+        // A failure line is small; looking only at small lines avoids parsing a tree.
+        if (line.length < 4096 && line.indexOf('"__error"') !== -1) {
+          try {
+            const parsed = JSON.parse(line.toString('utf8'));
+            if (parsed?.__error) return { ok: false, error: parsed.__error, ...(parsed.__code ? { code: parsed.__code } : {}) };
+          } catch { /* not a failure line after all */ }
+        }
+        out.push(line);
+      }
+      start = end + 1;
+    }
+    return out.length === 0 ? { ok: false, error: `${who} returned nothing.` } : { ok: true, lines: out };
+  }
+
+  let parsed;
+  try {
+    parsed = JSON.parse(raw.toString('utf8').trim());
+  } catch (err) {
+    const code = classifyScanError(err);
+    return code ? { ok: false, error: SCAN_TOO_LARGE_MESSAGE, code } : { ok: false, error: `${who} returned non-JSON output: ${err.message}` };
+  }
+  if (parsed && parsed.__error) return { ok: false, error: parsed.__error, ...(parsed.__code ? { code: parsed.__code } : {}) };
+  return { ok: true, data: parsed };
+}
+
+/** Node flags for a helper process. A scan of a drive with millions of files
+ * holds a record per file while it works, and Node's default old-space limit
+ * (a quarter of RAM, at most 4 GB, less on a small machine) is not guaranteed
+ * to cover that, so the helper gets a generous one: three fifths of this
+ * machine's memory, between 2 and 8 GB. It only ever uses what it needs. */
+export function nodeFlags(memoryBytes = totalmem()) {
+  const mb = Math.min(8192, Math.max(2048, Math.floor((memoryBytes * 0.6) / (1024 * 1024))));
+  return [`--max-old-space-size=${mb}`];
 }
 
 /** PowerShell single-quoted literal: the only escape inside one is a
