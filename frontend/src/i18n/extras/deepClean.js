@@ -4,6 +4,13 @@
 export default {
   en: {
     deepCleanV3: {
+      cache: {
+        lastMeasured: (a) => `Last measured: ${a}`,
+        usingLastScan: "Showing the last scan. Rescan to measure again.",
+        confirmNote: "Sizes are from the last scan. Each item is checked again as it is cleaned.",
+        filesNeedRescan: "The list of largest files needs a fresh scan.",
+        cleanedRescan: "Cleaned — rescan to measure"
+      },
       overwrite: {
         title: "Overwrite files before deleting",
         description: "When Prune deletes something for good (Delete now, or Delete permanently after an uninstall), it first writes over the file's contents. This is slower, and it is not reliable on SSDs, copy-on-write or journaling file systems, or in synced or backed-up folders. It does not apply to Quarantine or the Recycle Bin.",
@@ -107,6 +114,13 @@ export default {
   },
   af: {
     deepCleanV3: {
+      cache: {
+        lastMeasured: (a) => `Laas gemeet: ${a}`,
+        usingLastScan: "Wys die laaste skandering. Skandeer weer om opnuut te meet.",
+        confirmNote: "Groottes is van die laaste skandering. Elke item word weer nagegaan wanneer dit skoongemaak word.",
+        filesNeedRescan: "Die lys van die grootste lêers het 'n nuwe skandering nodig.",
+        cleanedRescan: "Skoongemaak — skandeer weer om te meet"
+      },
       overwrite: {
         title: "Oorskryf lêers voor verwydering",
         description: "Wanneer Prune iets vir goed verwyder (Verwyder nou, of Verwyder permanent ná 'n deïnstallasie), skryf dit eers oor die lêer se inhoud. Dit is stadiger, en dit is nie betroubaar op SSD's, kopieer-met-skryf- of joernaliserende lêerstelsels, of in gesinkroniseerde of gerugsteunde vouers nie. Dit geld nie vir Karantyn of die Asblik nie.",
@@ -210,6 +224,13 @@ export default {
   },
   ar: {
     deepCleanV3: {
+      cache: {
+        lastMeasured: (a) => `آخر قياس: ${a}`,
+        usingLastScan: "يتم عرض آخر فحص. أعد الفحص للقياس مرة أخرى.",
+        confirmNote: "الأحجام من آخر فحص. يُعاد التحقق من كل عنصر أثناء تنظيفه.",
+        filesNeedRescan: "تحتاج قائمة أكبر الملفات إلى فحص جديد.",
+        cleanedRescan: "تم التنظيف — أعد الفحص للقياس"
+      },
       overwrite: {
         title: "الكتابة فوق الملفات قبل حذفها",
         description: "عندما يحذف Prune شيئًا نهائيًا (الحذف الآن، أو الحذف نهائيًا بعد إلغاء التثبيت)، فإنه يكتب أولًا فوق محتويات الملف. هذا أبطأ، وهو غير موثوق على أقراص SSD وأنظمة الملفات ذات النسخ عند الكتابة أو التسجيل في السجل، ولا في المجلدات المتزامنة أو المنسوخة احتياطيًا. ولا ينطبق على الحجر الصحي أو سلة المحذوفات.",
@@ -313,6 +334,13 @@ export default {
   },
   ca: {
     deepCleanV3: {
+      cache: {
+        lastMeasured: (a) => `Última mesura: ${a}`,
+        usingLastScan: "Es mostra l'últim escaneig. Torna a escanejar per mesurar de nou.",
+        confirmNote: "Les mides són de l'últim escaneig. Cada element es torna a comprovar mentre es neteja.",
+        filesNeedRescan: "La llista dels fitxers més grans necessita un escaneig nou.",
+        cleanedRescan: "Netejat — torna a escanejar per mesurar"
+      },
       overwrite: {
         title: "Sobreescriu els fitxers abans d'eliminar-los",
         description: "Quan Prune elimina alguna cosa per sempre (Elimina ara, o Elimina permanentment després d'una desinstal·lació), primer sobreescriu el contingut del fitxer. Això és més lent i no és fiable en SSD, sistemes de fitxers de còpia en escriure o amb registre per diari, ni en carpetes sincronitzades o amb còpia de seguretat. No s'aplica a la Quarantena ni a la Paperera.",
@@ -416,6 +444,13 @@ export default {
   },
   cs: {
     deepCleanV3: {
+      cache: {
+        lastMeasured: (a) => `Naposledy změřeno: ${a}`,
+        usingLastScan: "Zobrazeno poslední skenování. Skenujte znovu, abyste změřili aktuální stav.",
+        confirmNote: "Velikosti pocházejí z posledního skenování. Každá položka se při čištění znovu zkontroluje.",
+        filesNeedRescan: "Seznam největších souborů vyžaduje nové skenování.",
+        cleanedRescan: "Vyčištěno — skenujte znovu pro změření"
+      },
       overwrite: {
         title: "Přepsat soubory před smazáním",
         description: "Když Prune něco smaže natrvalo (Smazat hned, nebo Trvale odstranit po odinstalaci), nejprve přepíše obsah souboru. Je to pomalejší a nelze se na to spolehnout u SSD, souborových systémů s kopírováním při zápisu nebo žurnálováním ani ve složkách, které se synchronizují nebo zálohují. Netýká se karantény ani koše.",
@@ -519,6 +554,13 @@ export default {
   },
   cy: {
     deepCleanV3: {
+      cache: {
+        lastMeasured: (a) => `Mesurwyd ddiwethaf: ${a}`,
+        usingLastScan: "Yn dangos y sgan diwethaf. Ailsganiwch i fesur eto.",
+        confirmNote: "Daw'r meintiau o'r sgan diwethaf. Caiff pob eitem ei gwirio eto wrth ei glanhau.",
+        filesNeedRescan: "Mae angen sgan newydd ar y rhestr o'r ffeiliau mwyaf.",
+        cleanedRescan: "Wedi glanhau — ailsganiwch i fesur"
+      },
       overwrite: {
         title: "Trosysgrifo ffeiliau cyn eu dileu",
         description: "Pan fydd Prune yn dileu rhywbeth am byth (Dileu nawr, neu Dileu'n barhaol ar ôl dadosod), mae'n trosysgrifo cynnwys y ffeil yn gyntaf. Mae hyn yn arafach, ac nid yw'n ddibynadwy ar SSDau, systemau ffeiliau copi-wrth-ysgrifennu neu newyddiadurol, nac mewn ffolderi wedi'u cydweddu neu eu hategu. Nid yw'n berthnasol i Gwarantin na'r Bin Ailgylchu.",
@@ -622,6 +664,13 @@ export default {
   },
   da: {
     deepCleanV3: {
+      cache: {
+        lastMeasured: (a) => `Sidst målt: ${a}`,
+        usingLastScan: "Viser den seneste scanning. Scan igen for at måle på ny.",
+        confirmNote: "Størrelserne stammer fra den seneste scanning. Hvert element kontrolleres igen, mens det renses.",
+        filesNeedRescan: "Listen over de største filer kræver en ny scanning.",
+        cleanedRescan: "Renset — scan igen for at måle"
+      },
       overwrite: {
         title: "Overskriv filer før sletning",
         description: "Når Prune sletter noget for altid (Slet nu, eller Slet permanent efter en afinstallation), skriver det først over filens indhold. Det er langsommere, og det er ikke pålideligt på SSD'er, copy-on-write- eller journalførende filsystemer eller i synkroniserede eller sikkerhedskopierede mapper. Det gælder ikke Karantæne eller Papirkurven.",
@@ -725,6 +774,13 @@ export default {
   },
   de: {
     deepCleanV3: {
+      cache: {
+        lastMeasured: (a) => `Zuletzt gemessen: ${a}`,
+        usingLastScan: "Der letzte Scan wird angezeigt. Erneut scannen, um neu zu messen.",
+        confirmNote: "Die Größen stammen vom letzten Scan. Jedes Element wird beim Bereinigen erneut geprüft.",
+        filesNeedRescan: "Die Liste der größten Dateien benötigt einen neuen Scan.",
+        cleanedRescan: "Bereinigt — erneut scannen, um zu messen"
+      },
       overwrite: {
         title: "Dateien vor dem Löschen überschreiben",
         description: "Wenn Prune etwas endgültig löscht (Sofort löschen oder Dauerhaft löschen nach einer Deinstallation), überschreibt es zuvor den Inhalt der Datei. Das ist langsamer und auf SSDs, Dateisystemen mit Copy-on-Write oder Journaling sowie in synchronisierten oder gesicherten Ordnern nicht zuverlässig. Für die Quarantäne und den Papierkorb gilt es nicht.",
@@ -828,6 +884,13 @@ export default {
   },
   el: {
     deepCleanV3: {
+      cache: {
+        lastMeasured: (a) => `Τελευταία μέτρηση: ${a}`,
+        usingLastScan: "Εμφανίζεται η τελευταία σάρωση. Κάντε επανασάρωση για νέα μέτρηση.",
+        confirmNote: "Τα μεγέθη προέρχονται από την τελευταία σάρωση. Κάθε στοιχείο ελέγχεται ξανά καθώς καθαρίζεται.",
+        filesNeedRescan: "Η λίστα με τα μεγαλύτερα αρχεία χρειάζεται νέα σάρωση.",
+        cleanedRescan: "Καθαρίστηκε — κάντε επανασάρωση για μέτρηση"
+      },
       overwrite: {
         title: "Αντικατάσταση αρχείων πριν τη διαγραφή",
         description: "Όταν το Prune διαγράφει κάτι οριστικά (Διαγραφή τώρα ή Οριστική διαγραφή μετά από μια απεγκατάσταση), γράφει πρώτα πάνω από το περιεχόμενο του αρχείου. Αυτό είναι πιο αργό και δεν είναι αξιόπιστο σε SSD, σε συστήματα αρχείων copy-on-write ή με ημερολόγιο, ή σε φακέλους που συγχρονίζονται ή έχουν αντίγραφο ασφαλείας. Δεν ισχύει για την Καραντίνα ή τον Κάδο Ανακύκλωσης.",
@@ -931,6 +994,13 @@ export default {
   },
   es: {
     deepCleanV3: {
+      cache: {
+        lastMeasured: (a) => `Última medición: ${a}`,
+        usingLastScan: "Se muestra el último escaneo. Vuelve a escanear para medir de nuevo.",
+        confirmNote: "Los tamaños son del último escaneo. Cada elemento se comprueba de nuevo al limpiarlo.",
+        filesNeedRescan: "La lista de los archivos más grandes necesita un escaneo nuevo.",
+        cleanedRescan: "Limpiado — vuelve a escanear para medir"
+      },
       overwrite: {
         title: "Sobrescribir los archivos antes de eliminarlos",
         description: "Cuando Prune elimina algo de forma definitiva (Eliminar ahora, o Eliminar permanentemente tras una desinstalación), primero sobrescribe el contenido del archivo. Es más lento y no es fiable en SSD, en sistemas de archivos de copia en escritura o con registro por diario, ni en carpetas sincronizadas o con copia de seguridad. No se aplica a la Cuarentena ni a la Papelera de Reciclaje.",
@@ -1034,6 +1104,13 @@ export default {
   },
   et: {
     deepCleanV3: {
+      cache: {
+        lastMeasured: (a) => `Viimati mõõdetud: ${a}`,
+        usingLastScan: "Kuvatakse viimast skannimist. Skanni uuesti, et uuesti mõõta.",
+        confirmNote: "Suurused pärinevad viimasest skannimisest. Iga üksust kontrollitakse puhastamisel uuesti.",
+        filesNeedRescan: "Suurimate failide loend vajab uut skannimist.",
+        cleanedRescan: "Puhastatud — mõõtmiseks skanni uuesti"
+      },
       overwrite: {
         title: "Kirjuta failid enne kustutamist üle",
         description: "Kui Prune kustutab midagi jäädavalt (Kustuta kohe või Kustuta jäädavalt pärast eemaldamist), kirjutab ta esmalt faili sisu üle. See on aeglasem ning ei ole töökindel SSD-del, kirjutamisel kopeerivates või žurnaalitavates failisüsteemides ega sünkroonitud või varundatud kaustades. See ei kehti karantiini ega prügikasti kohta.",
@@ -1137,6 +1214,13 @@ export default {
   },
   fi: {
     deepCleanV3: {
+      cache: {
+        lastMeasured: (a) => `Viimeksi mitattu: ${a}`,
+        usingLastScan: "Näytetään viimeisin skannaus. Skannaa uudelleen mitataksesi uudestaan.",
+        confirmNote: "Koot ovat viimeisimmästä skannauksesta. Jokainen kohde tarkistetaan uudelleen puhdistettaessa.",
+        filesNeedRescan: "Suurimpien tiedostojen luettelo vaatii uuden skannauksen.",
+        cleanedRescan: "Puhdistettu — skannaa uudelleen mitataksesi"
+      },
       overwrite: {
         title: "Korvaa tiedostot ennen poistamista",
         description: "Kun Prune poistaa jotakin pysyvästi (Poista heti tai Poista pysyvästi ohjelman poiston jälkeen), se kirjoittaa ensin tiedoston sisällön päälle. Tämä on hitaampaa, eikä se ole luotettava SSD-levyillä, kirjoitettaessa kopioivissa tai päiväkirjaavissa tiedostojärjestelmissä eikä synkronoiduissa tai varmuuskopioiduissa kansioissa. Se ei koske karanteenia tai roskakoria.",
@@ -1240,6 +1324,13 @@ export default {
   },
   fr: {
     deepCleanV3: {
+      cache: {
+        lastMeasured: (a) => `Dernière mesure : ${a}`,
+        usingLastScan: "Affichage de la dernière analyse. Réanalysez pour mesurer à nouveau.",
+        confirmNote: "Les tailles proviennent de la dernière analyse. Chaque élément est vérifié de nouveau pendant le nettoyage.",
+        filesNeedRescan: "La liste des plus gros fichiers nécessite une nouvelle analyse.",
+        cleanedRescan: "Nettoyé — réanalysez pour mesurer"
+      },
       overwrite: {
         title: "Écraser les fichiers avant de les supprimer",
         description: "Quand Prune supprime quelque chose pour de bon (Supprimer maintenant, ou Supprimer définitivement après une désinstallation), il écrase d'abord le contenu du fichier. C'est plus lent, et ce n'est pas fiable sur les SSD, les systèmes de fichiers à copie sur écriture ou avec journal, ni dans les dossiers synchronisés ou sauvegardés. Cela ne s'applique pas à la Quarantaine ni à la Corbeille.",
@@ -1343,6 +1434,13 @@ export default {
   },
   he: {
     deepCleanV3: {
+      cache: {
+        lastMeasured: (a) => `נמדד לאחרונה: ${a}`,
+        usingLastScan: "מוצגת הסריקה האחרונה. סרוק שוב כדי למדוד מחדש.",
+        confirmNote: "הגדלים לקוחים מהסריקה האחרונה. כל פריט נבדק שוב בעת הניקוי.",
+        filesNeedRescan: "רשימת הקבצים הגדולים ביותר דורשת סריקה חדשה.",
+        cleanedRescan: "נוקה — סרוק שוב כדי למדוד"
+      },
       overwrite: {
         title: "דריסת קבצים לפני המחיקה",
         description: "כש-Prune מוחק משהו לצמיתות (מחיקה מיידית, או מחק לצמיתות לאחר הסרת התקנה), הוא כותב קודם על תוכן הקובץ. זה איטי יותר, ואינו אמין בכונני SSD, במערכות קבצים עם העתקה בעת כתיבה או עם יומן, או בתיקיות מסונכרנות או מגובות. זה לא חל על ההסגר או על סל המיחזור.",
@@ -1446,6 +1544,13 @@ export default {
   },
   hu: {
     deepCleanV3: {
+      cache: {
+        lastMeasured: (a) => `Utoljára megmérve: ${a}`,
+        usingLastScan: "Az utolsó vizsgálat látható. Új méréshez vizsgáld meg újra.",
+        confirmNote: "A méretek az utolsó vizsgálatból származnak. Minden elemet tisztítás közben újra ellenőriz a program.",
+        filesNeedRescan: "A legnagyobb fájlok listájához új vizsgálat kell.",
+        cleanedRescan: "Megtisztítva — méréshez vizsgáld meg újra"
+      },
       overwrite: {
         title: "Fájlok felülírása törlés előtt",
         description: "Amikor a Prune véglegesen töröl valamit (Törlés azonnal, vagy Végleges törlés eltávolítás után), előbb felülírja a fájl tartalmát. Ez lassabb, és nem megbízható SSD-ken, másolás-íráskor vagy naplózó fájlrendszereken, illetve szinkronizált vagy mentett mappákban. A Karanténra és a Lomtárra nem vonatkozik.",
@@ -1549,6 +1654,13 @@ export default {
   },
   id: {
     deepCleanV3: {
+      cache: {
+        lastMeasured: (a) => `Terakhir diukur: ${a}`,
+        usingLastScan: "Menampilkan pemindaian terakhir. Pindai ulang untuk mengukur lagi.",
+        confirmNote: "Ukuran berasal dari pemindaian terakhir. Setiap item diperiksa lagi saat dibersihkan.",
+        filesNeedRescan: "Daftar file terbesar memerlukan pemindaian baru.",
+        cleanedRescan: "Dibersihkan — pindai ulang untuk mengukur"
+      },
       overwrite: {
         title: "Timpa file sebelum dihapus",
         description: "Saat Prune menghapus sesuatu secara permanen (Hapus sekarang, atau Hapus permanen setelah pencopotan), file itu lebih dulu ditimpa isinya. Ini lebih lambat, dan tidak andal pada SSD, sistem file copy-on-write atau berjurnal, maupun folder yang disinkronkan atau dicadangkan. Ini tidak berlaku untuk Karantina atau Recycle Bin.",
@@ -1652,6 +1764,13 @@ export default {
   },
   is: {
     deepCleanV3: {
+      cache: {
+        lastMeasured: (a) => `Síðast mælt: ${a}`,
+        usingLastScan: "Síðasta skönnun er sýnd. Skannaðu aftur til að mæla upp á nýtt.",
+        confirmNote: "Stærðirnar eru úr síðustu skönnun. Hvert atriði er athugað aftur þegar það er hreinsað.",
+        filesNeedRescan: "Listi yfir stærstu skrárnar krefst nýrrar skönnunar.",
+        cleanedRescan: "Hreinsað — skannaðu aftur til að mæla"
+      },
       overwrite: {
         title: "Skrifa yfir skrár áður en þeim er eytt",
         description: "Þegar Prune eyðir einhverju fyrir fullt og allt (Eyða núna, eða Eyða varanlega eftir fjarlægingu) skrifar það fyrst yfir innihald skrárinnar. Þetta er hægara og er ekki áreiðanlegt á SSD-drifum, skráakerfum með afritun við skrif eða færsluskrá, né í möppum sem eru samstilltar eða afritaðar. Það á ekki við um Sóttkví eða Ruslafötuna.",
@@ -1755,6 +1874,13 @@ export default {
   },
   it: {
     deepCleanV3: {
+      cache: {
+        lastMeasured: (a) => `Ultima misurazione: ${a}`,
+        usingLastScan: "Viene mostrata l'ultima scansione. Esegui una nuova scansione per misurare di nuovo.",
+        confirmNote: "Le dimensioni provengono dall'ultima scansione. Ogni elemento viene ricontrollato durante la pulizia.",
+        filesNeedRescan: "L'elenco dei file più grandi richiede una nuova scansione.",
+        cleanedRescan: "Pulito — esegui una nuova scansione per misurare"
+      },
       overwrite: {
         title: "Sovrascrivi i file prima di eliminarli",
         description: "Quando Prune elimina qualcosa in modo definitivo (Elimina subito, o Elimina definitivamente dopo una disinstallazione), prima sovrascrive il contenuto del file. È più lento e non è affidabile su SSD, file system con copy-on-write o journaling, né in cartelle sincronizzate o con backup. Non si applica alla Quarantena né al Cestino.",
@@ -1858,6 +1984,13 @@ export default {
   },
   ja: {
     deepCleanV3: {
+      cache: {
+        lastMeasured: (a) => `最終測定：${a}`,
+        usingLastScan: "前回のスキャン結果を表示しています。再スキャンすると測定し直します。",
+        confirmNote: "サイズは前回のスキャンのものです。各項目はクリーン時にあらためて確認されます。",
+        filesNeedRescan: "最大ファイルの一覧には、新しいスキャンが必要です。",
+        cleanedRescan: "クリーン済み — 再スキャンして測定"
+      },
       overwrite: {
         title: "削除する前にファイルを上書きする",
         description: "Prune がファイルを完全に削除するとき（今すぐ削除、またはアンインストール後の完全に削除）、先にファイルの内容を上書きします。処理は遅くなり、SSD、コピーオンライトやジャーナリング方式のファイルシステム、同期またはバックアップされるフォルダーでは確実ではありません。隔離やごみ箱には適用されません。",
@@ -1961,6 +2094,13 @@ export default {
   },
   ko: {
     deepCleanV3: {
+      cache: {
+        lastMeasured: (a) => `마지막 측정: ${a}`,
+        usingLastScan: "마지막 검사 결과를 표시하고 있습니다. 다시 검사하면 새로 측정합니다.",
+        confirmNote: "크기는 마지막 검사 기준입니다. 각 항목은 정리할 때 다시 확인됩니다.",
+        filesNeedRescan: "가장 큰 파일 목록을 보려면 새로 검사해야 합니다.",
+        cleanedRescan: "정리됨 — 다시 검사하여 측정"
+      },
       overwrite: {
         title: "삭제하기 전에 파일 덮어쓰기",
         description: "Prune이 항목을 완전히 삭제할 때(지금 삭제 또는 제거 후 영구 삭제) 먼저 파일 내용을 덮어씁니다. 속도가 느려지며, SSD, 쓰기 시 복사 또는 저널링 파일 시스템, 동기화되거나 백업되는 폴더에서는 신뢰할 수 없습니다. 격리 및 휴지통에는 적용되지 않습니다.",
@@ -2064,6 +2204,13 @@ export default {
   },
   lt: {
     deepCleanV3: {
+      cache: {
+        lastMeasured: (a) => `Paskutinį kartą išmatuota: ${a}`,
+        usingLastScan: "Rodomas paskutinis nuskaitymas. Nuskaitykite iš naujo, kad išmatuotumėte dar kartą.",
+        confirmNote: "Dydžiai paimti iš paskutinio nuskaitymo. Kiekvienas elementas dar kartą tikrinamas valymo metu.",
+        filesNeedRescan: "Didžiausių failų sąrašui reikia naujo nuskaitymo.",
+        cleanedRescan: "Išvalyta — nuskaitykite iš naujo, kad išmatuotumėte"
+      },
       overwrite: {
         title: "Perrašyti failus prieš ištrinant",
         description: "Kai „Prune“ ką nors ištrina visam laikui (Ištrinti dabar arba Ištrinti negrįžtamai po pašalinimo), jis pirmiausia perrašo failo turinį. Tai lėčiau ir nėra patikima SSD diskuose, kopijavimo rašant ar žurnalinėse failų sistemose, taip pat sinchronizuojamuose ar atsarginėmis kopijomis saugomuose aplankuose. Tai netaikoma karantinui ar šiukšlinei.",
@@ -2167,6 +2314,13 @@ export default {
   },
   ms: {
     deepCleanV3: {
+      cache: {
+        lastMeasured: (a) => `Terakhir diukur: ${a}`,
+        usingLastScan: "Memaparkan imbasan terakhir. Imbas semula untuk mengukur sekali lagi.",
+        confirmNote: "Saiz adalah daripada imbasan terakhir. Setiap item disemak semula semasa dibersihkan.",
+        filesNeedRescan: "Senarai fail terbesar memerlukan imbasan baharu.",
+        cleanedRescan: "Dibersihkan — imbas semula untuk mengukur"
+      },
       overwrite: {
         title: "Timpa fail sebelum memadam",
         description: "Apabila Prune memadam sesuatu secara kekal (Padam sekarang, atau Padam secara kekal selepas nyahpasang), ia menimpa kandungan fail terlebih dahulu. Ini lebih perlahan, dan tidak boleh dipercayai pada SSD, sistem fail salin-semasa-tulis atau berjurnal, atau dalam folder yang disegerakkan atau disandarkan. Ia tidak terpakai untuk Kuarantin atau Tong Kitar Semula.",
@@ -2270,6 +2424,13 @@ export default {
   },
   nb: {
     deepCleanV3: {
+      cache: {
+        lastMeasured: (a) => `Sist målt: ${a}`,
+        usingLastScan: "Viser den siste skanningen. Skann på nytt for å måle på nytt.",
+        confirmNote: "Størrelsene er fra den siste skanningen. Hvert element kontrolleres på nytt når det renses.",
+        filesNeedRescan: "Listen over de største filene krever en ny skanning.",
+        cleanedRescan: "Renset — skann på nytt for å måle"
+      },
       overwrite: {
         title: "Skriv over filer før sletting",
         description: "Når Prune sletter noe for godt (Slett nå, eller Slett permanent etter en avinstallering), skriver det først over filens innhold. Dette er tregere, og det er ikke pålitelig på SSD-er, filsystemer med kopi-ved-skriving eller journalføring, eller i synkroniserte eller sikkerhetskopierte mapper. Det gjelder ikke Karantene eller Papirkurven.",
@@ -2373,6 +2534,13 @@ export default {
   },
   nl: {
     deepCleanV3: {
+      cache: {
+        lastMeasured: (a) => `Laatst gemeten: ${a}`,
+        usingLastScan: "De laatste scan wordt getoond. Scan opnieuw om opnieuw te meten.",
+        confirmNote: "De groottes komen van de laatste scan. Elk item wordt tijdens het opschonen opnieuw gecontroleerd.",
+        filesNeedRescan: "Voor de lijst met de grootste bestanden is een nieuwe scan nodig.",
+        cleanedRescan: "Opgeschoond — scan opnieuw om te meten"
+      },
       overwrite: {
         title: "Bestanden overschrijven vóór het verwijderen",
         description: "Wanneer Prune iets definitief verwijdert (Nu verwijderen, of Permanent verwijderen na een verwijdering van een programma), overschrijft het eerst de inhoud van het bestand. Dat is langzamer en niet betrouwbaar op SSD's, bestandssystemen met copy-on-write of journaling, of in gesynchroniseerde of gebackupte mappen. Het geldt niet voor Quarantaine of de Prullenbak.",
@@ -2476,6 +2644,13 @@ export default {
   },
   pl: {
     deepCleanV3: {
+      cache: {
+        lastMeasured: (a) => `Ostatni pomiar: ${a}`,
+        usingLastScan: "Wyświetlono ostatnie skanowanie. Skanuj ponownie, aby zmierzyć jeszcze raz.",
+        confirmNote: "Rozmiary pochodzą z ostatniego skanowania. Każdy element jest sprawdzany ponownie podczas czyszczenia.",
+        filesNeedRescan: "Lista największych plików wymaga nowego skanowania.",
+        cleanedRescan: "Wyczyszczono — skanuj ponownie, aby zmierzyć"
+      },
       overwrite: {
         title: "Nadpisz pliki przed usunięciem",
         description: "Gdy Prune usuwa coś bezpowrotnie (Usuń od razu lub Usuń trwale po odinstalowaniu), najpierw nadpisuje zawartość pliku. Jest to wolniejsze i niewiarygodne na dyskach SSD, w systemach plików z kopiowaniem przy zapisie lub księgowaniem oraz w folderach synchronizowanych lub objętych kopią zapasową. Nie dotyczy kwarantanny ani kosza.",
@@ -2579,6 +2754,13 @@ export default {
   },
   ps: {
     deepCleanV3: {
+      cache: {
+        lastMeasured: (a) => `وروستی ځل اندازه شوی: ${a}`,
+        usingLastScan: "وروستی سکین ښودل کیږي. بیا سکین کړئ ترڅو بیا اندازه شي.",
+        confirmNote: "اندازې د وروستي سکین څخه دي. هر توکی د پاکولو پر مهال بیا ازمویل کیږي.",
+        filesNeedRescan: "د تر ټولو لویو فایلونو لیست نوي سکین ته اړتیا لري.",
+        cleanedRescan: "پاک شو — د اندازه کولو لپاره بیا سکین کړئ"
+      },
       overwrite: {
         title: "د ړنګولو دمخه فایلونه بیا لیکل",
         description: "کله چې Prune یو څه د تل لپاره ړنګوي (همدا اوس ړنګول، یا له لرې کولو وروسته د تل لپاره ړنګول)، لومړی د فایل منځپانګه بیا لیکي. دا ورو دی، او په SSD، د لیکلو پر مهال کاپي یا ژورنالي فایل سیسټمونو، یا همغږي شویو یا بیک اپ شویو پوښو کې باوري نه دی. دا په قرنطین یا ردي بکس نه تطبیقیږي.",
@@ -2682,6 +2864,13 @@ export default {
   },
   "pt-BR": {
     deepCleanV3: {
+      cache: {
+        lastMeasured: (a) => `Última medição: ${a}`,
+        usingLastScan: "Mostrando a última verificação. Verifique novamente para medir de novo.",
+        confirmNote: "Os tamanhos são da última verificação. Cada item é conferido de novo durante a limpeza.",
+        filesNeedRescan: "A lista dos maiores arquivos precisa de uma nova verificação.",
+        cleanedRescan: "Limpo — verifique novamente para medir"
+      },
       overwrite: {
         title: "Sobrescrever os arquivos antes de excluir",
         description: "Quando o Prune exclui algo de vez (Excluir agora, ou Excluir permanentemente após uma desinstalação), ele primeiro sobrescreve o conteúdo do arquivo. Isso é mais lento e não é confiável em SSDs, em sistemas de arquivos com cópia na gravação ou com journaling, nem em pastas sincronizadas ou com backup. Não se aplica à Quarentena nem à Lixeira.",
@@ -2785,6 +2974,13 @@ export default {
   },
   pt: {
     deepCleanV3: {
+      cache: {
+        lastMeasured: (a) => `Última medição: ${a}`,
+        usingLastScan: "A mostrar a última análise. Analise novamente para medir de novo.",
+        confirmNote: "Os tamanhos são da última análise. Cada item é verificado de novo durante a limpeza.",
+        filesNeedRescan: "A lista dos maiores ficheiros precisa de uma nova análise.",
+        cleanedRescan: "Limpo — analise novamente para medir"
+      },
       overwrite: {
         title: "Sobrescrever os ficheiros antes de eliminar",
         description: "Quando o Prune elimina algo em definitivo (Eliminar agora, ou Eliminar permanentemente após uma desinstalação), primeiro sobrescreve o conteúdo do ficheiro. Isto é mais lento e não é fiável em SSD, em sistemas de ficheiros com cópia na escrita ou com registo em diário, nem em pastas sincronizadas ou com cópia de segurança. Não se aplica à Quarentena nem à Reciclagem.",
@@ -2888,6 +3084,13 @@ export default {
   },
   ro: {
     deepCleanV3: {
+      cache: {
+        lastMeasured: (a) => `Ultima măsurare: ${a}`,
+        usingLastScan: "Se afișează ultima scanare. Rescanează pentru a măsura din nou.",
+        confirmNote: "Dimensiunile provin din ultima scanare. Fiecare element este verificat din nou în timpul curățării.",
+        filesNeedRescan: "Lista celor mai mari fișiere necesită o scanare nouă.",
+        cleanedRescan: "Curățat — rescanează pentru a măsura"
+      },
       overwrite: {
         title: "Suprascrie fișierele înainte de ștergere",
         description: "Când Prune șterge ceva definitiv (Șterge acum sau Șterge definitiv după o dezinstalare), mai întâi suprascrie conținutul fișierului. Este mai lent și nu este fiabil pe SSD-uri, pe sisteme de fișiere cu copiere la scriere sau cu jurnal, nici în foldere sincronizate sau cu copie de rezervă. Nu se aplică Carantinei sau Coșului de reciclare.",
@@ -2991,6 +3194,13 @@ export default {
   },
   ru: {
     deepCleanV3: {
+      cache: {
+        lastMeasured: (a) => `Последнее измерение: ${a}`,
+        usingLastScan: "Показано последнее сканирование. Пересканируйте, чтобы измерить заново.",
+        confirmNote: "Размеры взяты из последнего сканирования. Каждый элемент проверяется ещё раз при очистке.",
+        filesNeedRescan: "Для списка самых больших файлов нужно новое сканирование.",
+        cleanedRescan: "Очищено — пересканируйте, чтобы измерить"
+      },
       overwrite: {
         title: "Перезаписывать файлы перед удалением",
         description: "Когда Prune удаляет что-то безвозвратно (Удалить сразу или Удалить навсегда после удаления программы), он сначала перезаписывает содержимое файла. Это медленнее и ненадёжно на SSD, в файловых системах с копированием при записи или журналированием, а также в синхронизируемых или резервируемых папках. К карантину и корзине это не относится.",
@@ -3094,6 +3304,13 @@ export default {
   },
   sk: {
     deepCleanV3: {
+      cache: {
+        lastMeasured: (a) => `Naposledy zmerané: ${a}`,
+        usingLastScan: "Zobrazuje sa posledné skenovanie. Skenujte znova, aby ste zmerali aktuálny stav.",
+        confirmNote: "Veľkosti pochádzajú z posledného skenovania. Každá položka sa pri čistení znova skontroluje.",
+        filesNeedRescan: "Zoznam najväčších súborov vyžaduje nové skenovanie.",
+        cleanedRescan: "Vyčistené — skenujte znova na zmeranie"
+      },
       overwrite: {
         title: "Prepísať súbory pred odstránením",
         description: "Keď Prune niečo odstráni natrvalo (Odstrániť hneď alebo Trvalo odstrániť po odinštalovaní), najprv prepíše obsah súboru. Je to pomalšie a nie je to spoľahlivé na SSD, v súborových systémoch s kopírovaním pri zápise alebo žurnálovaním ani v synchronizovaných či zálohovaných priečinkoch. Netýka sa karantény ani koša.",
@@ -3197,6 +3414,13 @@ export default {
   },
   sq: {
     deepCleanV3: {
+      cache: {
+        lastMeasured: (a) => `Matur së fundmi: ${a}`,
+        usingLastScan: "Po shfaqet skanimi i fundit. Riskano për të matur përsëri.",
+        confirmNote: "Madhësitë janë nga skanimi i fundit. Çdo element kontrollohet sërish gjatë pastrimit.",
+        filesNeedRescan: "Lista e skedarëve më të mëdhenj kërkon një skanim të ri.",
+        cleanedRescan: "U pastrua — riskano për të matur"
+      },
       overwrite: {
         title: "Mbishkruaj skedarët para fshirjes",
         description: "Kur Prune fshin diçka përgjithmonë (Fshi tani, ose Fshi përgjithmonë pas një çinstalimi), fillimisht shkruan mbi përmbajtjen e skedarit. Kjo është më e ngadaltë dhe nuk është e besueshme në SSD, në sisteme skedarësh me kopjim-gjatë-shkrimit ose me regjistër, as në dosje të sinkronizuara ose me kopje rezervë. Nuk vlen për Karantinën ose Koshin e Riciklimit.",
@@ -3300,6 +3524,13 @@ export default {
   },
   sr: {
     deepCleanV3: {
+      cache: {
+        lastMeasured: (a) => `Последње мерење: ${a}`,
+        usingLastScan: "Приказано је последње скенирање. Поново скенирајте да бисте опет мерили.",
+        confirmNote: "Величине су из последњег скенирања. Свака ставка се поново проверава током чишћења.",
+        filesNeedRescan: "За листу највећих фајлова потребно је ново скенирање.",
+        cleanedRescan: "Очишћено — поново скенирајте да бисте измерили"
+      },
       overwrite: {
         title: "Препиши датотеке пре брисања",
         description: "Када Prune нешто трајно брише (Обриши одмах или Трајно обриши након деинсталације), прво препише садржај датотеке. Ово је спорије и није поуздано на SSD-овима, у фајл системима са копирањем при писању или журналисањем, нити у синхронизованим или резервно копираним фасциклама. Не односи се на Карантин нити на Корпу за отпатке.",
@@ -3403,6 +3634,13 @@ export default {
   },
   sv: {
     deepCleanV3: {
+      cache: {
+        lastMeasured: (a) => `Senast mätt: ${a}`,
+        usingLastScan: "Visar den senaste skanningen. Skanna igen för att mäta på nytt.",
+        confirmNote: "Storlekarna kommer från den senaste skanningen. Varje objekt kontrolleras igen när det rensas.",
+        filesNeedRescan: "Listan över de största filerna kräver en ny skanning.",
+        cleanedRescan: "Rensat — skanna igen för att mäta"
+      },
       overwrite: {
         title: "Skriv över filer före radering",
         description: "När Prune raderar något för gott (Radera nu, eller Radera permanent efter en avinstallation) skriver det först över filens innehåll. Det är långsammare och inte pålitligt på SSD:er, filsystem med copy-on-write eller journalföring, eller i synkade eller säkerhetskopierade mappar. Det gäller inte Karantän eller Papperskorgen.",
@@ -3506,6 +3744,13 @@ export default {
   },
   th: {
     deepCleanV3: {
+      cache: {
+        lastMeasured: (a) => `วัดผลล่าสุด: ${a}`,
+        usingLastScan: "กำลังแสดงผลการสแกนครั้งล่าสุด สแกนใหม่เพื่อวัดผลอีกครั้ง",
+        confirmNote: "ขนาดมาจากการสแกนครั้งล่าสุด แต่ละรายการจะถูกตรวจสอบอีกครั้งขณะล้าง",
+        filesNeedRescan: "รายการไฟล์ใหญ่ที่สุดต้องสแกนใหม่",
+        cleanedRescan: "ล้างแล้ว — สแกนใหม่เพื่อวัดผล"
+      },
       overwrite: {
         title: "เขียนทับไฟล์ก่อนลบ",
         description: "เมื่อ Prune ลบบางสิ่งอย่างถาวร (ลบทันที หรือลบถาวรหลังการถอนการติดตั้ง) โปรแกรมจะเขียนทับเนื้อหาของไฟล์ก่อน วิธีนี้ช้ากว่า และไม่น่าเชื่อถือบน SSD ระบบไฟล์แบบ copy-on-write หรือแบบ journaling หรือในโฟลเดอร์ที่ซิงค์หรือสำรองข้อมูลไว้ ไม่มีผลกับการกักกันหรือถังรีไซเคิล",
@@ -3609,6 +3854,13 @@ export default {
   },
   tr: {
     deepCleanV3: {
+      cache: {
+        lastMeasured: (a) => `Son ölçüm: ${a}`,
+        usingLastScan: "Son tarama gösteriliyor. Yeniden ölçmek için yeniden tarayın.",
+        confirmNote: "Boyutlar son taramadandır. Her öğe temizlenirken yeniden kontrol edilir.",
+        filesNeedRescan: "En büyük dosyaların listesi yeni bir tarama gerektirir.",
+        cleanedRescan: "Temizlendi — ölçmek için yeniden tarayın"
+      },
       overwrite: {
         title: "Silmeden önce dosyaların üzerine yaz",
         description: "Prune bir şeyi kalıcı olarak sildiğinde (Şimdi sil veya kaldırmadan sonra Kalıcı olarak sil) önce dosyanın içeriğinin üzerine yazar. Bu daha yavaştır ve SSD'lerde, yazarken kopyalama veya günlüklü dosya sistemlerinde ya da eşitlenen veya yedeklenen klasörlerde güvenilir değildir. Karantina veya Geri Dönüşüm Kutusu için geçerli değildir.",
@@ -3712,6 +3964,13 @@ export default {
   },
   uk: {
     deepCleanV3: {
+      cache: {
+        lastMeasured: (a) => `Останнє вимірювання: ${a}`,
+        usingLastScan: "Показано останнє сканування. Перескануйте, щоб виміряти знову.",
+        confirmNote: "Розміри взято з останнього сканування. Кожен елемент перевіряється ще раз під час очищення.",
+        filesNeedRescan: "Для списку найбільших файлів потрібне нове сканування.",
+        cleanedRescan: "Очищено — перескануйте, щоб виміряти"
+      },
       overwrite: {
         title: "Перезаписувати файли перед видаленням",
         description: "Коли Prune видаляє щось остаточно (Видалити одразу або Видалити назавжди після видалення програми), він спершу перезаписує вміст файлу. Це повільніше й ненадійно на SSD, у файлових системах із копіюванням під час запису чи журналюванням, а також у синхронізованих або резервованих теках. До карантину й кошика це не стосується.",
@@ -3815,6 +4074,13 @@ export default {
   },
   vi: {
     deepCleanV3: {
+      cache: {
+        lastMeasured: (a) => `Đo lần cuối: ${a}`,
+        usingLastScan: "Đang hiển thị lần quét gần nhất. Quét lại để đo lại.",
+        confirmNote: "Dung lượng lấy từ lần quét gần nhất. Mỗi mục sẽ được kiểm tra lại khi dọn dẹp.",
+        filesNeedRescan: "Danh sách các tệp lớn nhất cần một lần quét mới.",
+        cleanedRescan: "Đã dọn dẹp — quét lại để đo"
+      },
       overwrite: {
         title: "Ghi đè tệp trước khi xóa",
         description: "Khi Prune xóa thứ gì đó vĩnh viễn (Xóa ngay, hoặc Xóa vĩnh viễn sau khi gỡ cài đặt), trước tiên nó ghi đè nội dung của tệp. Cách này chậm hơn và không đáng tin cậy trên SSD, hệ thống tệp sao chép khi ghi hoặc có nhật ký, cũng như trong các thư mục được đồng bộ hoặc sao lưu. Không áp dụng cho Khu cách ly hoặc Thùng rác.",
@@ -3918,6 +4184,13 @@ export default {
   },
   "zh-CN": {
     deepCleanV3: {
+      cache: {
+        lastMeasured: (a) => `上次测量：${a}`,
+        usingLastScan: "正在显示上次的扫描结果。重新扫描可再次测量。",
+        confirmNote: "大小来自上次扫描。清理时会再次检查每一项。",
+        filesNeedRescan: "最大文件列表需要重新扫描。",
+        cleanedRescan: "已清理 — 重新扫描以测量"
+      },
       overwrite: {
         title: "删除前覆盖文件",
         description: "Prune 永久删除内容时（立即删除，或卸载后的永久删除），会先覆盖文件内容。这样更慢，而且在 SSD、写时复制或日志式文件系统，以及同步或备份的文件夹中并不可靠。不适用于隔离区或回收站。",
@@ -4021,6 +4294,13 @@ export default {
   },
   "zh-TW": {
     deepCleanV3: {
+      cache: {
+        lastMeasured: (a) => `上次測量：${a}`,
+        usingLastScan: "正在顯示上次的掃描結果。重新掃描可再次測量。",
+        confirmNote: "大小來自上次掃描。清理時會再次檢查每一項。",
+        filesNeedRescan: "最大檔案清單需要重新掃描。",
+        cleanedRescan: "已清理 — 重新掃描以測量"
+      },
       overwrite: {
         title: "刪除前覆寫檔案",
         description: "Prune 永久刪除內容時（立即刪除，或解除安裝後的永久刪除），會先覆寫檔案內容。這樣較慢，而且在 SSD、寫入時複製或日誌式檔案系統，以及同步或備份的資料夾中並不可靠。不適用於隔離區或資源回收筒。",
