@@ -11,6 +11,7 @@ import { ingestReport } from './services/scheduledCleanReport.js';
 import { recordFreed } from './services/stats.js';
 import { reconcileScheduledClean } from './services/scheduledCleanTask.js';
 import { repairStartWithWindows } from './services/startWithWindows.js';
+import { repairExplorerMenu } from './services/explorerMenu.js';
 import { getProgramIcons } from './services/programIcons.js';
 import { getProgramSizes } from './services/programSizes.js';
 import { getProgramVersions } from './services/programVersions.js';
@@ -52,6 +53,10 @@ getSettings()
 // The sign-in entry, if the person turned it on, follows Prune into a new
 // install folder. Never creates one.
 repairStartWithWindows().catch(() => { /* the Settings switch shows it as it is */ });
+
+// The right-click menu entries, if the person turned them on, follow Prune into
+// a new install folder and into the app's language. Never creates one.
+repairExplorerMenu().catch(() => { /* the Settings switch shows it as it is */ });
 
 // A free-space wipe that was killed mid-run (power cut, crash, task kill)
 // leaves its zero-filled files on the drive, and until they are deleted the
