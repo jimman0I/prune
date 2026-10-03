@@ -13,7 +13,9 @@ describe('backgroundV3 in every language', () => {
     ['task.saveFailed', ['@@EACCES@@']],
     ['task.loadFailed', ['@@timed out@@']],
     ['last.clean', ['@@3h@@', '@@1.2 GB@@', '@@0 B@@']],
-    ['last.errors', ['@@3h@@', '@@1.2 GB@@', '@@0 B@@']]
+    ['last.errors', ['@@3h@@', '@@1.2 GB@@', '@@0 B@@']],
+    ['startup.saveFailed', ['@@EACCES@@']],
+    ['startup.loadFailed', ['@@timed out@@']]
   ];
   const get = (node, path) => path.split('.').reduce((current, key) => current?.[key], node);
 

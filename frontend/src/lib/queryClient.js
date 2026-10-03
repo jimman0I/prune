@@ -61,6 +61,7 @@ export const keys = {
   uninstallHistory: ['uninstall-history'],
   settings: ['settings'],
   runAsAdmin: ['settings', 'runAsAdmin'],
+  startWithWindows: ['settings', 'startWithWindows'],
   updateCheck: ['update-check'],
   automation: ['automation'],
   scheduledClean: ['scheduledClean'],

@@ -10,6 +10,7 @@ import { initTray } from './lib/trayManager.js';
 import { ingestReport } from './services/scheduledCleanReport.js';
 import { recordFreed } from './services/stats.js';
 import { reconcileScheduledClean } from './services/scheduledCleanTask.js';
+import { repairStartWithWindows } from './services/startWithWindows.js';
 import { getProgramIcons } from './services/programIcons.js';
 import { getProgramSizes } from './services/programSizes.js';
 import { getProgramVersions } from './services/programVersions.js';
@@ -47,6 +48,10 @@ ingestReport({ recordFreed }).catch(() => {});
 getSettings()
   .then((settings) => reconcileScheduledClean(settings.automation))
   .catch(() => { /* the Settings switch shows the task as it really is */ });
+
+// The sign-in entry, if the person turned it on, follows Prune into a new
+// install folder. Never creates one.
+repairStartWithWindows().catch(() => { /* the Settings switch shows it as it is */ });
 
 // A free-space wipe that was killed mid-run (power cut, crash, task kill)
 // leaves its zero-filled files on the drive, and until they are deleted the

@@ -8,6 +8,7 @@ import Toggle from './Toggle.jsx';
 import CookieKeepListSettings from './CookieKeepListSettings.jsx';
 import CustomCleanersSettings from './CustomCleanersSettings.jsx';
 import RunAsAdminSetting from './RunAsAdminSetting.jsx';
+import StartWithWindowsSetting from './StartWithWindowsSetting.jsx';
 import RememberScansSetting from './RememberScansSetting.jsx';
 import { useSettings, useUpdateCheck } from '../hooks/useSystemQueries.js';
 import { leftoverDestinationFrom } from '../lib/leftoverDestination.js';
@@ -330,6 +331,11 @@ function SettingsPage({ onReportBug = null }) {
                   />
                 </div>
               </div>
+
+              {/* Opt-in sign-in start (the per-user Run entry), right under the
+                  tray switch its "minimised" choice follows. Reads the real
+                  registry entry. See StartWithWindowsSetting.jsx. */}
+              <StartWithWindowsSetting />
 
               {/* How little room a drive may have left before Prune says so: on
                   the Dashboard, and with a notification while it sits in the

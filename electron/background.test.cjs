@@ -51,6 +51,42 @@ test('an update keeps the task: it is removed only when the program is really be
   assert.match(guarded, /schtasks/);
 });
 
+test('the uninstaller removes the sign-in entry and Windows\' mark for it, by the name the app writes', () => {
+  const startup = readFileSync(path.join(__dirname, '..', 'backend', 'src', 'services', 'startWithWindows.js'), 'utf8');
+  const name = /export const VALUE_NAME = '([^']+)'/.exec(startup)?.[1];
+  assert.ok(name, 'could not read VALUE_NAME from startWithWindows.js');
+  const body = unInstallMacro();
+  assert.ok(body.includes(`DeleteRegValue HKCU "Software\\Microsoft\\Windows\\CurrentVersion\\Run" "${name}"`));
+  assert.ok(body.includes(`DeleteRegValue HKCU "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\StartupApproved\\Run" "${name}"`));
+  // Only the one value: never the key itself, which every program shares.
+  assert.doesNotMatch(body, /DeleteRegKey/);
+});
+
+test('the sign-in entry is also kept across an update, like the task', () => {
+  const guarded = /\$\{ifNot\} \$\{isUpdated\}([\s\S]*?)\$\{endIf\}/i.exec(unInstallMacro())[1];
+  assert.match(guarded, /DeleteRegValue/);
+});
+
+test('main.cjs, the tray manager and the pure module agree on the tray-ready event', () => {
+  const { TRAY_READY_EVENT } = require('./startMinimized.cjs');
+  const tray = readFileSync(path.join(__dirname, '..', 'backend', 'src', 'lib', 'trayManager.js'), 'utf8');
+  assert.ok(tray.includes(`app.emit?.('${TRAY_READY_EVENT}')`), 'trayManager.js must announce the event main.cjs waits for');
+});
+
+test('main.cjs takes the single-instance lock and shows the running window for a second launch', () => {
+  const main = readFileSync(path.join(__dirname, 'main.cjs'), 'utf8');
+  assert.match(main, /requestSingleInstanceLock\(\)/);
+  assert.match(main, /app\.on\('second-instance'/);
+  assert.match(main, /shouldRevealForSecondInstance\(argv\)/);
+  // The elevated relaunch must wait for the old instance BEFORE asking for the lock.
+  assert.ok(main.indexOf('waitForParentExit(relaunchedFrom)') < main.indexOf('requestSingleInstanceLock()'));
+});
+
+test('main.cjs creates a --start-minimized window hidden, so nothing flashes', () => {
+  const main = readFileSync(path.join(__dirname, 'main.cjs'), 'utf8');
+  assert.match(main, /show: startMode === 'normal'/);
+});
+
 test('the macro is built into the uninstaller', () => {
   const start = nsh.indexOf('!macro customUnInstall');
   const before = nsh.slice(0, start);

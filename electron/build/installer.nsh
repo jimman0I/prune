@@ -699,6 +699,12 @@
   ${ifNot} ${isUpdated}
     nsExec::Exec '"$SYSDIR\schtasks.exe" /Delete /TN "Prune\Scheduled clean" /F'
     Pop $0
+    ; And the sign-in entry from "Start Prune when I sign in to Windows": the
+    ; per-user Run value named Prune, with Windows' mark for it. Both are the
+    ; app's own (backend/src/services/startWithWindows.js), and a value that is
+    ; not there is not an error.
+    DeleteRegValue HKCU "Software\Microsoft\Windows\CurrentVersion\Run" "Prune"
+    DeleteRegValue HKCU "Software\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\Run" "Prune"
   ${endIf}
 !macroend
 
