@@ -17,6 +17,8 @@ import ModalOverlay from './components/ModalOverlay.jsx';
 import UninstallModal from './components/UninstallModal.jsx';
 import StoreRemoveDialog from './components/StoreRemoveDialog.jsx';
 import ApplicationsTools from './components/ApplicationsTools.jsx';
+import ProgramDropZone from './components/ProgramDropZone.jsx';
+import { onOpenRequest } from './lib/openRequests.js';
 import { rememberVisited } from './lib/visitedScreens.js';
 import { useIdlePrefetch } from './hooks/useIdlePrefetch.js';
 import { useScreenFade } from './hooks/useScreenFade.js';
@@ -73,6 +75,33 @@ export default function App() {
   // heading's count. The list owns both; the heading only reads the result.
   const [appsView, setAppsView] = useState(null);
 
+  /* Requests from File Explorer's right-click menu ("Shred with Prune", "Find
+   * in Prune (uninstall)") and a program dropped on Applications. Each one only
+   * SHOWS something: the Shred dialog with the path filled in, or the find
+   * dialog -- nothing is shredded or uninstalled without those dialogs' own
+   * confirmations. A nonce makes a second request for the same file count.
+   *
+   * A find request waits while one of the three removal dialogs is open: handing
+   * a match to the uninstall dialog would swap the program a running uninstall
+   * is about. */
+  const requestCount = useRef(0);
+  const [shredRequest, setShredRequest] = useState(null);
+  const [findRequest, setFindRequest] = useState(null);
+  const [waitingFind, setWaitingFind] = useState(null);
+  const requestFind = useCallback((path) => {
+    setScreen('applications');
+    setWaitingFind(path);
+  }, []);
+  useEffect(() => onOpenRequest((open) => {
+    requestCount.current += 1;
+    if (open.kind === 'shred') {
+      setShredRequest({ paths: [open.path], nonce: requestCount.current });
+      setScreen('deepclean');
+    } else {
+      requestFind(open.path);
+    }
+  }), [requestFind]);
+
   /* Whether the open uninstall dialog is in the middle of something it
    * cannot take back: a running uninstaller, a scan, a removal. Only one of
    * the three dialogs is ever open, so one flag serves them. Each reports it
@@ -111,6 +140,14 @@ export default function App() {
    * close without telling anyone, so an uninstalled program stayed in the list
    * until something else refreshed it; and what a removal moved into
    * Quarantine was not on that screen until it was next fetched. */
+  const removalDialogOpen = Boolean(selectedProgram || batchPrograms || storeAppToRemove);
+  useEffect(() => {
+    if (!waitingFind || removalDialogOpen) return;
+    requestCount.current += 1;
+    setFindRequest({ path: waitingFind, nonce: requestCount.current });
+    setWaitingFind(null);
+  }, [waitingFind, removalDialogOpen]);
+
   const closeDialog = (clear) => () => {
     clear(null);
     setDialogBusy(false);
@@ -223,12 +260,15 @@ export default function App() {
           <Suspense fallback={null}><StartupItems /></Suspense>
         </Screen>
         <Screen active={screen === 'deepclean'} visited={visited.has('deepclean')}>
-          <Suspense fallback={null}><DeepClean onNavigate={setScreen} /></Suspense>
+          <Suspense fallback={null}><DeepClean onNavigate={setScreen} shredRequest={shredRequest} /></Suspense>
         </Screen>
         <Screen active={screen === 'duplicates'} visited={visited.has('duplicates')}>
           <Suspense fallback={null}><Duplicates /></Suspense>
         </Screen>
         <Screen active={screen === 'applications'} visited={visited.has('applications')}>
+          {/* A program (.exe) or shortcut (.lnk) dropped anywhere on this screen is
+              looked up like the right-click "Find in Prune". */}
+          <ProgramDropZone className="h-full" onProgramFile={requestFind}>
           <Page className="h-full flex flex-col min-h-0">
             <div className="flex items-baseline justify-between mb-6 shrink-0">
               <div>
@@ -240,7 +280,7 @@ export default function App() {
                 </p>
               </div>
               <div className="flex items-center gap-2">
-                <ApplicationsTools programs={programs} onChanged={handleToolsChanged} onUninstall={setSelectedProgram} />
+                <ApplicationsTools programs={programs} onChanged={handleToolsChanged} onUninstall={setSelectedProgram} findRequest={findRequest} />
                 <button className="btn-ghost" onClick={() => setScreen('quarantine')}>{t('nav.quarantine')}</button>
               </div>
             </div>
@@ -257,6 +297,7 @@ export default function App() {
               />
             </Suspense>
           </Page>
+          </ProgramDropZone>
         </Screen>
       </div>
       </div>
