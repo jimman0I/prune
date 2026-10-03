@@ -63,7 +63,7 @@ export default function BackgroundCleanSetting({ automation }) {
       <div data-setting-row className="flex items-center justify-between gap-4">
         <div className="min-w-0">
           <h3 className="text-[13.5px] font-medium text-[color:var(--text-primary)]">{title}</h3>
-          <p className="text-[12.5px] text-[color:var(--text-secondary)] mt-1 leading-relaxed max-w-[62ch]">
+          <p className="text-[12.5px] text-[color:var(--text-secondary)] mt-1 leading-relaxed max-w-[110ch]">
             {t('backgroundV3.task.description')}
           </p>
         </div>
@@ -73,9 +73,9 @@ export default function BackgroundCleanSetting({ automation }) {
       <div className="mt-3 flex flex-col gap-1.5 text-[12px]">
         {status.isError && <p role="alert" className="text-[color:var(--danger)] select-text">{t('backgroundV3.task.loadFailed', status.error.message)}</p>}
         {change.isError && <p role="alert" className="text-[color:var(--danger)] select-text">{t('backgroundV3.task.saveFailed', change.error.message)}</p>}
-        {reason && <p className="text-[color:var(--text-muted)] max-w-[62ch]">{reason}</p>}
-        {supported && <p className="text-[color:var(--text-secondary)] max-w-[62ch]">{t('backgroundV3.task.detail')}</p>}
-        {exists && data.inSync === false && <p className="text-[color:var(--warning)] max-w-[62ch]">{t('backgroundV3.task.outOfSync')}</p>}
+        {reason && <p className="text-[color:var(--text-muted)] max-w-[110ch]">{reason}</p>}
+        {supported && <p className="text-[color:var(--text-secondary)] max-w-[110ch]">{t('backgroundV3.task.detail')}</p>}
+        {exists && data.inSync === false && <p className="text-[color:var(--warning)] max-w-[110ch]">{t('backgroundV3.task.outOfSync')}</p>}
         {nextRun && (
           <p className="text-[color:var(--text-secondary)]">
             {t('backgroundV3.task.nextRun', nextRun)}

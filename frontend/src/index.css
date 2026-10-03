@@ -345,6 +345,19 @@ body {
 body { user-select: none; }
 input, textarea { user-select: text; }
 
+/* The open list of a native <select>. Windows draws it as its own popup and,
+ * where the select's background is translucent (the surface-hover wash many
+ * of ours use), paints that popup white while the text stays the theme's
+ * light colour: light-on-white, unreadable. An opaque panel colour on the
+ * options, plus the matching colour-scheme so the popup chrome follows the
+ * theme too, fixes every dropdown at once instead of each one. */
+select { color-scheme: dark; }
+:root[data-theme='light'] select { color-scheme: light; }
+select option {
+  background-color: var(--bg-panel);
+  color: var(--text-primary);
+}
+
 /* Real bug behind "the glass looks flat" (found auditing, 2026-09-01):
    every .glass-panel already used this exact recipe (--glass-bg,
    --glass-border, blur(24px) saturate(180%)) -- backdrop-filter was

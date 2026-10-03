@@ -55,7 +55,7 @@ export default function AutomationSettings({ settings, save }) {
       <div data-setting-row className="flex items-center justify-between gap-4 mb-4">
         <div className="min-w-0">
           <h2 className="text-[14px] font-medium text-[color:var(--text-primary)]">{t('settings.automation.title')}</h2>
-          <p className="text-[12.5px] text-[color:var(--text-secondary)] mt-1 leading-relaxed max-w-[62ch]">
+          <p className="text-[12.5px] text-[color:var(--text-secondary)] mt-1 leading-relaxed max-w-[110ch]">
             {t('settings.automation.description')}
           </p>
         </div>

@@ -50,13 +50,13 @@ export default function RunAsAdminSetting() {
   if (data && !supported) notes.push(<p key="unsupported" className="text-[color:var(--text-muted)]">{t('runAsAdminV3.unsupported')}</p>);
   if (elevatedNow) notes.push(<p key="running" className="text-[color:var(--text-primary)]">{t('runAsAdminV3.running')}</p>);
   if (supported && enabled !== elevatedNow) notes.push(<p key="next" className="text-[color:var(--text-secondary)]">{t('runAsAdminV3.nextStart')}</p>);
-  if (enabled && data?.startsWithWindows) notes.push(<p key="startup" className="text-[color:var(--warning)] max-w-[62ch]">{t('runAsAdminV3.startupConflict')}</p>);
+  if (enabled && data?.startsWithWindows) notes.push(<p key="startup" className="text-[color:var(--warning)] max-w-[110ch]">{t('runAsAdminV3.startupConflict')}</p>);
   return (
     <div className="glass-panel p-6">
       <div className="flex items-center justify-between gap-4">
         <div className="min-w-0">
           <div className="text-[14px] font-medium text-[color:var(--text-primary)]">{title}</div>
-          <p className="text-[12.5px] text-[color:var(--text-secondary)] mt-1 leading-relaxed max-w-[62ch]">
+          <p className="text-[12.5px] text-[color:var(--text-secondary)] mt-1 leading-relaxed max-w-[110ch]">
             {t('runAsAdminV3.description')}
           </p>
         </div>
@@ -70,7 +70,7 @@ export default function RunAsAdminSetting() {
 
       <div className="mt-4 pt-4 border-t border-[color:var(--border-subtle)]">
         <h3 className="text-[11px] font-mono uppercase tracking-[0.14em] text-[color:var(--text-muted)] mb-2">{t('runAsAdminV3.costsHeading')}</h3>
-        <ul className="list-disc pl-5 flex flex-col gap-1 text-[12.5px] text-[color:var(--text-secondary)] leading-relaxed max-w-[62ch]">
+        <ul className="list-disc pl-5 flex flex-col gap-1 text-[12.5px] text-[color:var(--text-secondary)] leading-relaxed max-w-[110ch]">
           <li>{t('runAsAdminV3.costUac')}</li>
           <li>{t('runAsAdminV3.costDragDrop')}</li>
           <li>{t('runAsAdminV3.costStartup')}</li>

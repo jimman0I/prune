@@ -45,11 +45,11 @@ function SettingRow({ title, description, checked, onChange, control, disabled =
       <div className="min-w-0">
         <div className="text-[13.5px] font-medium text-[color:var(--text-primary)]">{title}</div>
         {description && (
-          <p className="text-[12.5px] text-[color:var(--text-secondary)] mt-1 leading-relaxed max-w-[62ch]">{description}</p>
+          <p className="text-[12.5px] text-[color:var(--text-secondary)] mt-1 leading-relaxed max-w-[110ch]">{description}</p>
         )}
         {/* Why the control is off, in words: a greyed switch with no reason
             reads as broken. */}
-        {note && <p className="text-[12.5px] text-[color:var(--text-muted)] mt-1 max-w-[62ch]">{note}</p>}
+        {note && <p className="text-[12.5px] text-[color:var(--text-muted)] mt-1 max-w-[110ch]">{note}</p>}
       </div>
       {control ?? <Toggle checked={checked} onChange={onChange} label={title} disabled={disabled} />}
     </div>
@@ -255,7 +255,7 @@ function SettingsPage({ onReportBug = null }) {
             <div className="flex items-center justify-between gap-4">
               <div className="min-w-0">
                 <h2 className="text-[14px] font-medium text-[color:var(--text-primary)] mb-1">{t('settings.appearance.title')}</h2>
-                <p className="text-[12.5px] text-[color:var(--text-secondary)] leading-relaxed max-w-[62ch]">
+                <p className="text-[12.5px] text-[color:var(--text-secondary)] leading-relaxed max-w-[110ch]">
                   {t('settings.appearance.description')}
                 </p>
               </div>
@@ -300,7 +300,7 @@ function SettingsPage({ onReportBug = null }) {
                 <div className="flex items-center justify-between gap-4">
                   <div className="min-w-0">
                     <div className="text-[14px] font-medium text-[color:var(--text-primary)]">{t('settings.language.title')}</div>
-                    <p className="text-[12.5px] text-[color:var(--text-secondary)] mt-1 leading-relaxed max-w-[62ch]">
+                    <p className="text-[12.5px] text-[color:var(--text-secondary)] mt-1 leading-relaxed max-w-[110ch]">
                       {t('settings.language.description')}
                     </p>
                   </div>
@@ -321,7 +321,7 @@ function SettingsPage({ onReportBug = null }) {
                 <div className="flex items-center justify-between gap-4">
                   <div className="min-w-0">
                     <div className="text-[14px] font-medium text-[color:var(--text-primary)]">{t('settings.minimizeToTray.title')}</div>
-                    <p className="text-[12.5px] text-[color:var(--text-secondary)] mt-1 leading-relaxed max-w-[62ch]">
+                    <p className="text-[12.5px] text-[color:var(--text-secondary)] mt-1 leading-relaxed max-w-[110ch]">
                       {t('settings.minimizeToTray.description')}
                     </p>
                   </div>
@@ -350,7 +350,7 @@ function SettingsPage({ onReportBug = null }) {
                 <div className="flex items-center justify-between gap-4">
                   <div className="min-w-0">
                     <div className="text-[14px] font-medium text-[color:var(--text-primary)]">{t('dashboardQolV3.lowDisk.setting.title')}</div>
-                    <p className="text-[12.5px] text-[color:var(--text-secondary)] mt-1 leading-relaxed max-w-[62ch]">
+                    <p className="text-[12.5px] text-[color:var(--text-secondary)] mt-1 leading-relaxed max-w-[110ch]">
                       {t('dashboardQolV3.lowDisk.setting.description')}
                     </p>
                   </div>
@@ -372,7 +372,7 @@ function SettingsPage({ onReportBug = null }) {
                 <div className="flex items-center justify-between gap-4">
                   <div className="min-w-0">
                     <div className="text-[14px] font-medium text-[color:var(--text-primary)]">{t('settings.lowPowerMode.title')}</div>
-                    <p className="text-[12.5px] text-[color:var(--text-secondary)] mt-1 leading-relaxed max-w-[62ch]">
+                    <p className="text-[12.5px] text-[color:var(--text-secondary)] mt-1 leading-relaxed max-w-[110ch]">
                       {t('settings.lowPowerMode.description')}
                     </p>
                   </div>
@@ -395,7 +395,7 @@ function SettingsPage({ onReportBug = null }) {
                 <div className="flex items-center justify-between gap-4">
                   <div className="min-w-0">
                     <div className="text-[14px] font-medium text-[color:var(--text-primary)]">{t('settings.updateCheck.title')}</div>
-                    <p className="text-[12.5px] text-[color:var(--text-secondary)] mt-1 leading-relaxed max-w-[62ch]">
+                    <p className="text-[12.5px] text-[color:var(--text-secondary)] mt-1 leading-relaxed max-w-[110ch]">
                       {t('settings.updateCheck.description')}
                     </p>
                   </div>
@@ -415,7 +415,7 @@ function SettingsPage({ onReportBug = null }) {
                     <div className={`text-[13.5px] font-medium ${settings.updateCheck === true ? 'text-[color:var(--text-primary)]' : 'text-[color:var(--text-muted)]'}`}>
                       {t('settings.autoInstallUpdates.title')}
                     </div>
-                    <p className="text-[12.5px] text-[color:var(--text-secondary)] mt-1 leading-relaxed max-w-[62ch]">
+                    <p className="text-[12.5px] text-[color:var(--text-secondary)] mt-1 leading-relaxed max-w-[110ch]">
                       {t('settings.autoInstallUpdates.description')}
                     </p>
                   </div>
@@ -498,13 +498,13 @@ function SettingsPage({ onReportBug = null }) {
                         />
                         <span>
                           <span className="block text-[13.5px] font-medium text-[color:var(--text-primary)]">{option.label}</span>
-                          <span className="block text-[12.5px] text-[color:var(--text-secondary)] max-w-[62ch]">{option.description}</span>
+                          <span className="block text-[12.5px] text-[color:var(--text-secondary)] max-w-[110ch]">{option.description}</span>
                         </span>
                       </label>
                     ))}
                   </div>
                   {deleteNow && (
-                    <p className="mt-3 text-[12.5px] text-[color:var(--danger)] leading-relaxed max-w-[62ch]">
+                    <p className="mt-3 text-[12.5px] text-[color:var(--danger)] leading-relaxed max-w-[110ch]">
                       {t('settings.deepCleanRemoval.deleteWarning')}
                     </p>
                   )}
@@ -647,7 +647,7 @@ function SettingsPage({ onReportBug = null }) {
 
               <div className="glass-panel p-6">
                 <div className="text-[14px] font-medium text-[color:var(--text-primary)] mb-1">{t('settings.exclusions.title')}</div>
-                <p className="text-[12.5px] text-[color:var(--text-secondary)] mb-4 max-w-[62ch]">
+                <p className="text-[12.5px] text-[color:var(--text-secondary)] mb-4 max-w-[110ch]">
                   {t('settings.exclusions.description')}
                 </p>
 
@@ -706,7 +706,7 @@ function SettingsPage({ onReportBug = null }) {
 
               <div className="glass-panel p-6">
                 <div className="text-[14px] font-medium text-[color:var(--text-primary)] mb-1">{t('settings.sandboxTest.title')}</div>
-                <p className="text-[12.5px] text-[color:var(--text-secondary)] mb-4 max-w-[62ch]">
+                <p className="text-[12.5px] text-[color:var(--text-secondary)] mb-4 max-w-[110ch]">
                   {t('settings.sandboxTest.description')}
                 </p>
                 <button
@@ -833,17 +833,17 @@ function SettingsPage({ onReportBug = null }) {
                       />
                       <span>
                         <span className="block text-[13.5px] font-medium text-[color:var(--text-primary)]">{option.label}</span>
-                        <span className="block text-[12.5px] text-[color:var(--text-secondary)] max-w-[62ch]">{option.description}</span>
+                        <span className="block text-[12.5px] text-[color:var(--text-secondary)] max-w-[110ch]">{option.description}</span>
                       </span>
                     </label>
                   ))}
                 </div>
                 {destination === 'permanent' && (
-                  <p className="mt-4 text-[12.5px] text-[color:var(--danger)] leading-relaxed max-w-[62ch]">
+                  <p className="mt-4 text-[12.5px] text-[color:var(--danger)] leading-relaxed max-w-[110ch]">
                     {t('settings.uninstallTab.permanentWarning')}
                   </p>
                 )}
-                <p className="mt-3 text-[12px] text-[color:var(--text-muted)] max-w-[62ch]">
+                <p className="mt-3 text-[12px] text-[color:var(--text-muted)] max-w-[110ch]">
                   {t('settings.uninstallTab.registryNote')}
                 </p>
               </div>
@@ -856,7 +856,7 @@ function SettingsPage({ onReportBug = null }) {
               {update.data?.current && (
                 <p className="text-[12.5px] text-[color:var(--text-muted)] font-mono mb-4">{`v${update.data.current}`}</p>
               )}
-              <p className="text-[13px] text-[color:var(--text-secondary)] leading-relaxed max-w-[52ch]">
+              <p className="text-[13px] text-[color:var(--text-secondary)] leading-relaxed max-w-[110ch]">
                 {t('settings.about.description')}
               </p>
               {/* The dialog itself belongs to App, so the rail's item and
@@ -865,7 +865,7 @@ function SettingsPage({ onReportBug = null }) {
                 <div className="mt-5 pt-4 border-t border-[color:var(--border-subtle)] flex items-center justify-between gap-4">
                   <div className="min-w-0">
                     <div className="text-[13px] font-medium text-[color:var(--text-primary)]">{t('settings.about.reportTitle')}</div>
-                    <p className="text-[12px] text-[color:var(--text-muted)] mt-0.5 max-w-[52ch]">{t('settings.about.reportDescription')}</p>
+                    <p className="text-[12px] text-[color:var(--text-muted)] mt-0.5 max-w-[110ch]">{t('settings.about.reportDescription')}</p>
                   </div>
                   <button type="button" className="btn-ghost shrink-0 px-3 py-1.5 rounded-lg text-[12.5px] min-h-[24px]" onClick={onReportBug}>
                     {t('settings.about.reportButton')}
