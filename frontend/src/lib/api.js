@@ -946,6 +946,28 @@ export async function compareSavedScans(a, b, limit = 25) {
   return savedScansRequest(`/compare?a=${encodeURIComponent(a)}&b=${encodeURIComponent(b)}&limit=${limit}`);
 }
 
+/** The automatic scans -- the latest two of each drive, saved when a Disk Map
+ * scan finishes -- newest first: { scans, count, bytes }. */
+export async function fetchAutoScans(drive) {
+  return savedScansRequest(drive ? `/auto?drive=${encodeURIComponent(drive)}` : '/auto');
+}
+
+/** Saves a finished scan of one drive as its automatic scan. Resolves to the
+ * list entry, or null when Settings says not to remember scans. */
+export async function saveAutoDiskScan({ drive, label, source, truncated, capacityBytes, archive }) {
+  const data = await savedScansRequest('/auto', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ drive, label, source, truncated, capacityBytes, archive })
+  });
+  return data.scan ?? null;
+}
+
+/** Removes every automatic scan (never the ones saved by hand). Resolves to how many. */
+export async function deleteAutoScans() {
+  return (await savedScansRequest('/auto', { method: 'DELETE' })).deleted ?? 0;
+}
+
 /** The local drives the Disk Map can scan, and which one holds Windows:
  * { systemDrive: 'C', drives: [{ letter, label, fileSystem, totalBytes,
  * freeBytes, removable, system, ntfs }] }. */
