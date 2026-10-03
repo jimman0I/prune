@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import ModalOverlay from './ModalOverlay.jsx';
 import { previewShred, streamShred } from '../lib/api.js';
 import { useSettings } from '../hooks/useSystemQueries.js';
@@ -33,8 +33,16 @@ const bridge = () => (typeof window !== 'undefined' ? window.pruneWindow : undef
  * chooser (Electron only, see electron/pathPicker.cjs), files dropped on
  * the dialog (their real path read through the preload bridge), and plain
  * text -- which is also the only way in when the page is opened in a
- * browser, where none of the other two exist. */
-export default function ShredDialog({ onClose }) {
+ * browser, where none of the other two exist.
+ *
+ * A fourth way in is File Explorer's right-click "Shred with Prune":
+ * `requestedPaths` (with a `requestNonce` that changes with every request) puts
+ * the path in the list and nothing more. It never starts a check or a shred; the
+ * steps below stand exactly as for a path chosen here. A request that arrives
+ * while the person is reading the confirmation sends them back to choose (the
+ * list no longer matches what was read), and one that arrives mid-shred waits
+ * for it to finish -- a running shred is about the list it started with. */
+export default function ShredDialog({ onClose, requestedPaths = null, requestNonce = null }) {
   const { t } = useLanguage();
   const { settings } = useSettings();
   const [stage, setStage] = useState('choose'); // choose | checking | confirm | running | done
@@ -46,16 +54,19 @@ export default function ShredDialog({ onClose }) {
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
   const [dragging, setDragging] = useState(false);
+  const [pendingRequest, setPendingRequest] = useState(null);
+  const [fromExplorer, setFromExplorer] = useState(false);
   const abortRef = useRef(null);
   const latestProgress = useRef(progress);
 
   // The setting names the starting point; a choice made here wins.
   const passes = chosenPasses ?? (settings?.overwritePasses === 3 ? 3 : 1);
 
-  const addPaths = (incoming) => {
+  const addPaths = (incoming, { replace = false } = {}) => {
     setPaths((current) => {
-      const seen = new Set(current.map((p) => p.toLowerCase()));
-      const next = [...current];
+      const base = replace ? [] : current;
+      const seen = new Set(base.map((p) => p.toLowerCase()));
+      const next = [...base];
       for (const raw of incoming) {
         const path = cleanLine(String(raw ?? ''));
         if (!path || seen.has(path.toLowerCase())) continue;
@@ -65,6 +76,30 @@ export default function ShredDialog({ onClose }) {
       return next;
     });
   };
+
+  // A new request from File Explorer (a new nonce) waits here until it is safe
+  // to show: not while a check or a shred is in flight.
+  useEffect(() => {
+    if (requestNonce === null || !Array.isArray(requestedPaths)) return;
+    const usable = requestedPaths.map((raw) => cleanLine(String(raw ?? ''))).filter(Boolean);
+    if (usable.length > 0) setPendingRequest(usable);
+    // Only a new request matters, not a re-render with the same one.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [requestNonce]);
+
+  useEffect(() => {
+    if (!pendingRequest || stage === 'checking' || stage === 'running') return;
+    // After a finished shred the list is the old one's: start a new list.
+    addPaths(pendingRequest, { replace: stage === 'done' });
+    setPreview(null);
+    setResult(null);
+    setError(null);
+    setStage('choose');
+    setFromExplorer(true);
+    setPendingRequest(null);
+    // addPaths only calls setState; it is not a dependency.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pendingRequest, stage]);
 
   const addTyped = () => {
     addPaths(typed.split(/\r?\n/));
@@ -149,6 +184,9 @@ export default function ShredDialog({ onClose }) {
         {(stage === 'choose' || stage === 'checking') && (
           <>
             <p className="text-[13px] text-[color:var(--text-secondary)] mt-3">{t('deepCleanV3.shred.intro')}</p>
+            {fromExplorer && (
+              <p role="status" className="text-[12.5px] text-[color:var(--text-secondary)] mt-2">{t('explorerV3.shred.fromExplorer')}</p>
+            )}
 
             {/* A drop target, not just a hint: the whole box takes files and
                 folders. Plain borders and a tint -- nothing animates, so
