@@ -171,7 +171,7 @@ function formatBytes(bytes) {
   return `${parseFloat((bytes / Math.pow(k, i)).toFixed(1))} ${sizes[i]}`;
 }
 
-function DeepClean({ onNavigate }) {
+function DeepClean({ onNavigate, shredRequest = null }) {
   const { t, language } = useLanguage();
   const cleaner = useCleanerText();
   const [selected, setSelected] = useState(new Set());
@@ -188,6 +188,16 @@ function DeepClean({ onNavigate }) {
   });
   const [confirmClean, setConfirmClean] = useState(false);
   const [shredOpen, setShredOpen] = useState(false);
+  // What File Explorer's "Shred with Prune" asked for ({ paths, nonce }), while
+  // the dialog it opened is open. It only fills the list in; see ShredDialog.
+  const [shredSeed, setShredSeed] = useState(null);
+  useEffect(() => {
+    if (!shredRequest) return;
+    setShredSeed(shredRequest);
+    setShredOpen(true);
+    // A request is a new nonce, not a new object on every render.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [shredRequest?.nonce]);
   const [cleanResult, setCleanResult] = useState(null);
   const [cleanError, setCleanError] = useState(null);
   const [elevating, setElevating] = useState(false);
@@ -1018,7 +1028,13 @@ function DeepClean({ onNavigate }) {
         </div>
       </div>
 
-      {shredOpen && <ShredDialog onClose={() => setShredOpen(false)} />}
+      {shredOpen && (
+        <ShredDialog
+          requestedPaths={shredSeed?.paths ?? null}
+          requestNonce={shredSeed?.nonce ?? null}
+          onClose={() => { setShredOpen(false); setShredSeed(null); }}
+        />
+      )}
 
       {warnAbout && (warnAbout.confirmEveryTime ? (
         <WipeFreeSpaceDialog onCancel={dismissWarning} onConfirm={confirmWarning} />
