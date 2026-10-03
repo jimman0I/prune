@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { getSettings, updateSettings } from '../services/settings.js';
 import { reconcileScheduledClean } from '../services/scheduledCleanTask.js';
+import { repairExplorerMenu } from '../services/explorerMenu.js';
 
 const router = Router();
 
@@ -24,6 +25,14 @@ router.put('/', async (req, res) => {
     if ('automation' in body) {
       await reconcileScheduledClean(saved.automation).catch((err) => {
         console.error('Could not update the scheduled clean task:', err.message);
+      });
+    }
+    // The right-click menu's captions are text in the registry, in the app's
+    // language: a language change brings them along. Only entries that exist are
+    // rewritten (it never creates any), and a failure does not fail the save.
+    if ('language' in body) {
+      await repairExplorerMenu().catch((err) => {
+        console.error('Could not update the right-click menu captions:', err.message);
       });
     }
     res.json(saved);
