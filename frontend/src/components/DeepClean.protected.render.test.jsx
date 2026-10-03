@@ -49,9 +49,12 @@ beforeEach(() => {
   window.localStorage.clear();
   fetchDeepCleanRules.mockResolvedValue(RULES);
   // A scan that finishes, reporting each rule as listed: the banner only
-  // shows once no scan is running.
+  // shows once no scan is running. It reports the rules the LISTING has, as
+  // the backend does (both read the same rule file) -- a scan that returned
+  // rules the listing lacks would be read as "the rule set changed since", and
+  // the screen drops such a scan.
   streamDeepCleanScan.mockImplementation(async (onEvent) => {
-    const items = RULES.flatMap((g) => g.items);
+    const items = (await fetchDeepCleanRules()).flatMap((g) => g.items);
     onEvent('start', { total: items.length });
     for (const item of items) onEvent('rule', { present: true, ...item });
   });

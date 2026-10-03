@@ -4,6 +4,17 @@ import { fetchDeepCleanRules, streamDeepCleanScan } from '../lib/api.js';
 import { mergeScannedRule, scanLogLine } from '../lib/scanLog.js';
 import { cleanableIds } from '../lib/defaultSelection.js';
 import { keys } from '../lib/queryClient.js';
+import { APP_VERSION } from '../lib/appVersion.js';
+import {
+  rulesSignature, joinFingerprint, readFreshScanCache, saveScanCache
+} from '../lib/deepCleanScanCache.js';
+import { settleScanAfterClean } from '../lib/deepCleanAfterClean.js';
+
+/** What a fresh measurement of a rule overwrites on the row it lands on.
+ * A row restored from the remembered scan, or settled after a clean, can carry
+ * marks (`fromCache`, `rescanNeeded`) and a stale file list; merged by id, a
+ * new result would otherwise inherit them. */
+const FRESH = { fromCache: undefined, rescanNeeded: undefined, incomplete: undefined, files: undefined, filesListed: undefined };
 
 /** The Deep Clean tree, and the scan that measures it.
  *
@@ -20,9 +31,17 @@ import { keys } from '../lib/queryClient.js';
  * ignoring the rest of an answer that is still being computed.
  *
  * The scan is armed rather than automatic. It costs about nineteen
- * seconds of disk walking and must never start because a tab was opened.
+ * seconds of disk walking and must never start because a tab was opened --
+ * and when the last complete scan was remembered (lib/deepCleanScanCache.js)
+ * and nothing that affects it has changed, it does not need to start at all:
+ * the tree is drawn from that and `hasScanned` is true.
+ *
+ * `settings` is read only for the fingerprint that says whether a remembered
+ * scan still applies; until it has loaded, nothing is restored or saved.
+ * `autoStart` is the caller asking for a scan whenever there is no remembered
+ * one to open on -- the first look at the screen, as before.
  */
-export function useDeepCleanScan(nameOf, messages) {
+export function useDeepCleanScan(nameOf, messages, { settings = null, appVersion = APP_VERSION, autoStart = false } = {}) {
   const queryClient = useQueryClient();
   // The log is built inside a long-lived stream callback; a ref keeps it
   // on the language current when each line lands rather than the one the
@@ -45,7 +64,16 @@ export function useDeepCleanScan(nameOf, messages) {
   // overwriting it: a rule's size merges in by id, so the rules stay put
   // and readable while their numbers arrive.
   const [scannedTree, setScannedTree] = useState(null);
-  const [log, setLog] = useState([]);
+  // The raw results; the log lines are worded from them at render time, so a
+  // line is always in the language on screen rather than the one that happened
+  // to be current when its result arrived.
+  const [logItems, setLog] = useState([]);
+  const log = useMemo(
+    () => logItems.map((item) => scanLogLine(item, nameOfRef.current, messagesRef.current)),
+    // nameOf / messages change with the language; the refs hold the same values.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [logItems, nameOf, messages]
+  );
   const [scanned, setScanned] = useState(0);
   const [total, setTotal] = useState(0);
   const [hasScanned, setHasScanned] = useState(false);
@@ -60,6 +88,27 @@ export function useDeepCleanScan(nameOf, messages) {
   // matches } -- or null. It is the only rule kind that takes long enough
   // for silence to look like a hang, so it reports while it works.
   const [progress, setProgress] = useState(null);
+  // When the rows on screen were last measured (ms), or null. Rows a clean
+  // has since settled are newer than this; rows the clean did not touch are not.
+  const [lastScanAt, setLastScanAt] = useState(null);
+  const lastScanAtRef = useRef(null);
+  lastScanAtRef.current = lastScanAt;
+  // True while the tree is the remembered scan and no scan has run since.
+  const [restored, setRestored] = useState(false);
+  // Bumped whenever a whole scan lands (fresh or remembered), and nothing
+  // else: see stableCleanableIds.
+  const [scanEpoch, setScanEpoch] = useState(0);
+
+  // Everything that changes what a scan would find, as one string. The rules
+  // are hashed apart from the settings because hashing 90 rule definitions on
+  // every settings save (each tick saves one) would be work for nothing.
+  const rulesSig = useMemo(() => (rulesQuery.data ? rulesSignature(rulesQuery.data) : null), [rulesQuery.data]);
+  const fingerprint = useMemo(
+    () => (rulesSig && settings ? joinFingerprint({ rulesSig, settings, appVersion }) : null),
+    [rulesSig, settings, appVersion]
+  );
+  const fingerprintRef = useRef(fingerprint);
+  fingerprintRef.current = fingerprint;
 
   // A rule added or removed since the last scan (a Custom location, an
   // imported cleaner) makes that scan out of date: its tree would hide the
@@ -75,14 +124,39 @@ export function useDeepCleanScan(nameOf, messages) {
   }, [ruleSetChanged]);
 
   const tree = (ruleSetChanged ? null : scannedTree) ?? rulesQuery.data ?? null;
+  const scannedTreeRef = useRef(scannedTree);
+  scannedTreeRef.current = scannedTree;
 
   /* Stable identity, so the consumer's effect can list it as a dependency
    * and mean it. Returned as a fresh arrow before this, which forced
    * DeepClean's post-scan effect to omit it from its dependency array --
    * correct only by accident of when that effect happens to fire, and
    * exactly the kind of omission that hides a stale closure until
-   * something else changes. */
-  const stableCleanableIds = useCallback(() => cleanableIds(scannedTree ?? []), [scannedTree]);
+   * something else changes.
+   *
+   * It changes when a whole scan lands (fresh or remembered) and NOT when a
+   * clean settles rows afterwards: that effect prunes the selection to what a
+   * scan proved cleanable, and re-running it after a clean would tick the
+   * default rules again on rows that now read 0 B. */
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const stableCleanableIds = useCallback(() => cleanableIds(scannedTreeRef.current ?? []), [scanEpoch]);
+
+  /** Brings the rows up to date with what a clean reported (see
+   * lib/deepCleanAfterClean.js) and remembers the result, instead of walking
+   * the disk again. The measurement time is left alone: rows the clean did not
+   * touch were measured when they were. */
+  const applyCleanResults = useCallback((results) => {
+    const current = scannedTreeRef.current;
+    if (!current) return;
+    const next = settleScanAfterClean(current, results);
+    if (next === current) return;
+    scannedTreeRef.current = next;
+    setScannedTree(next);
+    if (fingerprintRef.current && lastScanAtRef.current) {
+      saveScanCache({ tree: next, fingerprint: fingerprintRef.current, savedAt: lastScanAtRef.current });
+    }
+  }, []);
+
 
   const scanQuery = useQuery({
     queryKey: keys.deepCleanScan,
@@ -96,6 +170,7 @@ export function useDeepCleanScan(nameOf, messages) {
 
     queryFn: async ({ signal }) => {
       setStreamError(null);
+      setRestored(false);
       setLog([]);
       setScanned(0);
       setTotal(0);
@@ -103,28 +178,31 @@ export function useDeepCleanScan(nameOf, messages) {
       setProgress(null);
 
       // Mirrors the tree outside state: the stream delivers forty events
-      // and the selection step afterwards needs the complete set, which a
-      // stale closure over React state would not have.
-      let built = [];
+      // and both the selection step and the remembered scan afterwards need
+      // the complete set, which a stale closure over React state would not
+      // have. It starts from what is on screen, so a Rescan replaces rows as
+      // their new results land rather than blanking the tree first.
+      let built = scannedTreeRef.current ?? rulesQuery.data ?? [];
+      let expected = null;
+      let received = 0;
+      let failed = false;
 
       await streamDeepCleanScan((type, data) => {
         if (type === 'start') {
+          expected = data.total;
           setTotal(data.total);
         } else if (type === 'rule') {
-          // Merged through the updater so each result lands on the tree
-          // actually on screen. Merging by id is idempotent, so React
-          // invoking this twice in development changes nothing.
-          setScannedTree((prev) => {
-            built = mergeScannedRule(prev ?? rulesQuery.data ?? [], data);
-            return built;
-          });
-          setLog((prev) => [...prev, scanLogLine(data, nameOfRef.current, messagesRef.current)]);
+          built = mergeScannedRule(built, { ...FRESH, ...data });
+          received += 1;
+          setScannedTree(built);
+          setLog((prev) => [...prev, data]);
           setScanned((n) => n + 1);
           setCurrentId(data.id);
           setProgress(null);
         } else if (type === 'progress') {
           setProgress(data);
         } else if (type === 'error') {
+          failed = true;
           setStreamError(data.message);
         }
       }, signal);
@@ -132,6 +210,15 @@ export function useDeepCleanScan(nameOf, messages) {
       setHasScanned(true);
       setCurrentId(null);
       setProgress(null);
+      // Only a COMPLETE scan is worth remembering: a stream that errored, or
+      // ended before every rule reported, would leave rows that were never
+      // measured looking as though they had been.
+      if (!failed && received > 0 && (expected === null || received >= expected)) {
+        const savedAt = Date.now();
+        if (fingerprintRef.current) saveScanCache({ tree: built, fingerprint: fingerprintRef.current, savedAt });
+        setLastScanAt(savedAt);
+        setScanEpoch((n) => n + 1);
+      }
       return built;
     }
   });
@@ -158,6 +245,30 @@ export function useDeepCleanScan(nameOf, messages) {
 
   const scanning = armed && scanQuery.isFetching;
 
+  // Opens on the last complete scan, once, when there is one that still
+  // applies. It waits for the settings (they are part of the fingerprint), so
+  // "no cache" is only ever concluded once there was something to compare.
+  //
+  // With `autoStart`, finding none also starts the scan, in this same effect:
+  // the screen used to scan the moment its tree loaded, and deciding that a
+  // render later (once a "checked" flag had come back through state) left a
+  // window with the tree on screen and no scan running yet.
+  const restoredRef = useRef(false);
+  useEffect(() => {
+    if (restoredRef.current || !fingerprint || !rulesQuery.data) return;
+    restoredRef.current = true;
+    const fresh = readFreshScanCache({ fingerprint, listedTree: rulesQuery.data });
+    if (fresh) {
+      setScannedTree(fresh.tree);
+      setHasScanned(true);
+      setLastScanAt(fresh.savedAt);
+      setScanEpoch((n) => n + 1);
+      setRestored(true);
+    } else if (autoStart) {
+      start();
+    }
+  }, [fingerprint, rulesQuery.data, autoStart, start]);
+
   // An abort is the user pressing Stop, not a failure. Whatever was
   // measured before that point is real and stays on screen.
   const error = useMemo(() => {
@@ -177,6 +288,12 @@ export function useDeepCleanScan(nameOf, messages) {
     error,
     currentId,
     progress,
+    /** When the rows were last measured (ms), or null before any scan. */
+    lastScanAt,
+    /** True while the tree shows the remembered scan and nothing has been
+     * scanned since: the scan log has nothing of its own to say. */
+    restored,
+    applyCleanResults,
     start,
     stop,
     /** The ids a scan proved are worth cleaning. Before a scan the tree
